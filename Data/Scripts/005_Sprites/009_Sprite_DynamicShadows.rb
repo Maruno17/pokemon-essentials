@@ -231,28 +231,28 @@ end
 def XPML_read(map,markup,event,max_param_number=0)
   parameter_list = nil
   return nil if !event || event.list == nil
-    for i in 0...event.list.size
-      if event.list[i].code == 108 &&
-         event.list[i].parameters[0].downcase == "begin " + markup.downcase
-        parameter_list = [] if parameter_list == nil
-        for j in i+1...event.list.size
-          if event.list[j].code == 108
-            parts = event.list[j].parameters[0].split
-            if parts.size != 1 && parts[0].downcase != "begin"
-              if parts[1].to_i != 0 || parts[1] == "0"
-                parameter_list.push(parts[1].to_i)
-              else
-                parameter_list.push(parts[1])
-              end
+  for i in 0...event.list.size
+    if event.list[i].code == 108 &&
+       event.list[i].parameters[0].downcase == "begin " + markup.downcase
+      parameter_list = [] if parameter_list == nil
+      for j in i+1...event.list.size
+        if event.list[j].code == 108
+          parts = event.list[j].parameters[0].split
+          if parts.size != 1 && parts[0].downcase != "begin"
+            if parts[1].to_i != 0 || parts[1] == "0"
+              parameter_list.push(parts[1].to_i)
             else
-              return parameter_list
+              parameter_list.push(parts[1])
             end
           else
             return parameter_list
           end
-          return parameter_list if max_param_number != 0 && j == i + max_param_number
+        else
+          return parameter_list
         end
+        return parameter_list if max_param_number != 0 && j == i + max_param_number
       end
     end
+  end
   return parameter_list
 end

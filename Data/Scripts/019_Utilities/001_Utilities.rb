@@ -271,57 +271,57 @@ def getRandomNameEx(type,variable,upper,maxLength=100)
     name = ""
     formats = []
     case type
-    when 0 then formats = %w( F5 BvE FE FE5 FEvE )              # Names for males
-    when 1 then formats = %w( vE6 vEvE6 BvE6 B4 v3 vEv3 Bv3 )   # Names for females
-    when 2 then formats = %w( WE WEU WEvE BvE BvEU BvEvE )      # Neutral gender names
+    when 0 then formats = %w[F5 BvE FE FE5 FEvE]              # Names for males
+    when 1 then formats = %w[vE6 vEvE6 BvE6 B4 v3 vEv3 Bv3]   # Names for females
+    when 2 then formats = %w[WE WEU WEvE BvE BvEU BvEvE]      # Neutral gender names
     else        return ""
     end
     format = formats[rand(formats.length)]
     format.scan(/./) { |c|
       case c
       when "c" # consonant
-        set = %w( b c d f g h j k l m n p r s t v w x z )
+        set = %w[b c d f g h j k l m n p r s t v w x z]
         name += set[rand(set.length)]
       when "v" # vowel
-        set = %w( a a a e e e i i i o o o u u u )
+        set = %w[a a a e e e i i i o o o u u u]
         name += set[rand(set.length)]
       when "W" # beginning vowel
-        set = %w( a a a e e e i i i o o o u u u au au ay ay ea ea ee ee oo oo ou ou )
+        set = %w[a a a e e e i i i o o o u u u au au ay ay ea ea ee ee oo oo ou ou]
         name += set[rand(set.length)]
       when "U" # ending vowel
-        set = %w( a a a a a e e e i i i o o o o o u u ay ay ie ie ee ue oo )
+        set = %w[a a a a a e e e i i i o o o o o u u ay ay ie ie ee ue oo]
         name += set[rand(set.length)]
       when "B" # beginning consonant
-        set1 = %w( b c d f g h j k l l m n n p r r s s t t v w y z )
-        set2 = %w( bl br ch cl cr dr fr fl gl gr kh kl kr ph pl pr sc sk sl
-           sm sn sp st sw th tr tw vl zh )
+        set1 = %w[b c d f g h j k l l m n n p r r s s t t v w y z]
+        set2 = %w[bl br ch cl cr dr fr fl gl gr kh kl kr ph pl pr sc sk sl
+                  sm sn sp st sw th tr tw vl zh]
         name += (rand(3)>0) ? set1[rand(set1.length)] : set2[rand(set2.length)]
       when "E" # ending consonant
-        set1 = %w( b c d f g h j k k l l m n n p r r s s t t v z )
-        set2 = %w( bb bs ch cs ds fs ft gs gg ld ls nd ng nk rn kt ks
-           ms ns ph pt ps sk sh sp ss st rd rn rp rm rt rk ns th zh)
+        set1 = %w[b c d f g h j k k l l m n n p r r s s t t v z]
+        set2 = %w[bb bs ch cs ds fs ft gs gg ld ls nd ng nk rn kt ks
+                  ms ns ph pt ps sk sh sp ss st rd rn rp rm rt rk ns th zh]
         name += (rand(3)>0) ? set1[rand(set1.length)] : set2[rand(set2.length)]
       when "f" # consonant and vowel
-        set = %w( iz us or )
+        set = %w[iz us or]
         name += set[rand(set.length)]
       when "F" # consonant and vowel
-        set = %w( bo ba be bu re ro si mi zho se nya gru gruu glee gra glo ra do zo ri
-           di ze go ga pree pro po pa ka ki ku de da ma mo le la li )
+        set = %w[bo ba be bu re ro si mi zho se nya gru gruu glee gra glo ra do zo ri
+                 di ze go ga pree pro po pa ka ki ku de da ma mo le la li]
         name += set[rand(set.length)]
       when "2"
-        set = %w( c f g k l p r s t )
+        set = %w[c f g k l p r s t]
         name += set[rand(set.length)]
       when "3"
-        set = %w( nka nda la li ndra sta cha chie )
+        set = %w[nka nda la li ndra sta cha chie]
         name += set[rand(set.length)]
       when "4"
-        set = %w( una ona ina ita ila ala ana ia iana )
+        set = %w[una ona ina ita ila ala ana ia iana]
         name += set[rand(set.length)]
       when "5"
-        set = %w( e e o o ius io u u ito io ius us )
+        set = %w[e e o o ius io u u ito io ius us]
         name += set[rand(set.length)]
       when "6"
-        set = %w( a a a elle ine ika ina ita ila ala ana )
+        set = %w[a a a elle ine ika ina ita ila ala ana]
         name += set[rand(set.length)]
       end
     }

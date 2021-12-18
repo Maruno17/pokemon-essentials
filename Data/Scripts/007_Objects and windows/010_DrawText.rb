@@ -65,18 +65,18 @@ def rgbToColor(param)
        ((baseint>>10)&0x1F)<<3
     )
   elsif param.length==1 # Color number
-     i=param.to_i
-     return Font.default_color if i>=8
-     return [
-        Color.new(255, 255, 255, 255),
-        Color.new(128, 128, 255, 255),
-        Color.new(255, 128, 128, 255),
-        Color.new(128, 255, 128, 255),
-        Color.new(128, 255, 255, 255),
-        Color.new(255, 128, 255, 255),
-        Color.new(255, 255, 128, 255),
-        Color.new(192, 192, 192, 255)
-     ][i]
+    i=param.to_i
+    return Font.default_color if i>=8
+    return [
+       Color.new(255, 255, 255, 255),
+       Color.new(128, 128, 255, 255),
+       Color.new(255, 128, 128, 255),
+       Color.new(128, 255, 128, 255),
+       Color.new(128, 255, 255, 255),
+       Color.new(255, 128, 255, 255),
+       Color.new(255, 255, 128, 255),
+       Color.new(192, 192, 192, 255)
+    ][i]
   else
     return Font.default_color
   end
@@ -199,7 +199,7 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
       if newlineBreaks   # treat newline as break
         havenl=true
         characters.push(["\n",x,y*lineheight+yDst,0,lineheight,false,false,
-           false,colorclone,nil,false,false,"",8,position,nil,0])
+                         false,colorclone,nil,false,false,"",8,position,nil,0])
         y+=1
         x=0
         hadspace=true
@@ -228,14 +228,15 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
          textchars[position],
          x+xStart,texty,width+2,lineheight,
          false,bold,italic,colorclone,nil,false,false,
-         defaultfontname,bitmap.font.size,position,nil,0])
+         defaultfontname,bitmap.font.size,position,nil,0
+      ])
     end
     x+=width
     if !explicitBreaksOnly && x+2>widthDst && lastword[1]!=0 &&
        (!hadnonspace || !hadspace)
       havenl=true
       characters.insert(lastword[0],["\n",x,y*lineheight+yDst,0,lineheight,
-         false,false,false,colorclone,nil,false,false,"",8,position])
+                                     false,false,false,colorclone,nil,false,false,"",8,position])
       lastword[0]+=1
       y+=1
       x=0
@@ -256,7 +257,7 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
       if characters[i][5]!=false # If not a character
         firstspace=-1
       elsif (characters[i][0]=="\n" || isWaitChar(characters[i][0])) &&
-         firstspace>=0
+            firstspace>=0
         for j in firstspace...i
           characters[j]=nil
         end
@@ -306,10 +307,10 @@ def getLastColors(colorstack,opacitystack,defaultcolors)
   colors=getLastParam(colorstack,defaultcolors)
   opacity=getLastParam(opacitystack,255)
   if opacity!=255
-    colors=[Color.new(colors[0].red,colors[0].green,colors[0].blue,
-       colors[0].alpha*opacity/255),
-       colors[1] ? Color.new(colors[1].red,colors[1].green,colors[1].blue,
-       colors[1].alpha*opacity/255) : nil]
+    colors = [
+      Color.new(colors[0].red, colors[0].green, colors[0].blue, colors[0].alpha * opacity / 255),
+      colors[1] ? Color.new(colors[1].red, colors[1].green, colors[1].blue, colors[1].alpha * opacity / 255) : nil
+    ]
   end
   return colors
 end
@@ -629,7 +630,7 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
     nextline.times do
       havenl=true
       characters.push(["\n",x,y*lineheight+yDst,0,lineheight,false,false,false,
-         defaultcolors[0],defaultcolors[1],false,false,"",8,position,nil,0])
+                       defaultcolors[0],defaultcolors[1],false,false,"",8,position,nil,0])
       charactersInternal.push([alignment,y,0])
       y+=1
       x=0
@@ -643,7 +644,7 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
         if nextline==0
           havenl=true
           characters.push(["\n",x,y*lineheight+yDst,0,lineheight,false,false,false,
-             defaultcolors[0],defaultcolors[1],false,false,"",8,position,nil,0])
+                           defaultcolors[0],defaultcolors[1],false,false,"",8,position,nil,0])
           charactersInternal.push([alignment,y,0])
           y+=1
           x=0
@@ -692,9 +693,10 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
     if !explicitBreaksOnly && x+2>widthDst && lastword[1]!=0 &&
        (!hadnonspace || !hadspace)
       havenl=true
-      characters.insert(lastword[0],["\n",x,y*lineheight+yDst,0,lineheight,false,
-         false,false,defaultcolors[0],defaultcolors[1],false,false,"",8,position,
-         nil])
+      characters.insert(lastword[0], ["\n", x, y * lineheight + yDst, 0, lineheight,
+                                      false, false, false,
+                                      defaultcolors[0], defaultcolors[1],
+                                      false, false, "", 8, position, nil])
       charactersInternal.insert(lastword[0],[alignment,y,0])
       lastword[0]+=1
       y+=1
@@ -763,7 +765,7 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
       if characters[i][5]!=false # If not a character
         firstspace=-1
       elsif (characters[i][0]=="\n" || isWaitChar(characters[i][0])) &&
-         firstspace>=0
+            firstspace>=0
         for j in firstspace...i
           characters[j]=nil
           charactersInternal[j]=nil

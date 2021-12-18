@@ -9,13 +9,13 @@ class SpriteAnimation
   %w[
      x y ox oy viewport flash src_rect opacity tone
   ].each_with_index do |s, _i|
-  eval <<-__END__
+    eval <<-__END__
 
   def #{s}(*arg)
     @sprite.#{s}(*arg)
   end
 
-  __END__
+    __END__
   end
 
   def self.clear

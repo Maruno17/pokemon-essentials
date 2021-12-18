@@ -7,6 +7,7 @@ module RPG
     attr_reader :max
     attr_reader :ox
     attr_reader :oy
+
     MAX_SPRITES              = 60
     FADE_OLD_TILES_START     = 0
     FADE_OLD_TILES_END       = 1

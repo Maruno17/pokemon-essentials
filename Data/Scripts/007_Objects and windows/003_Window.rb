@@ -322,8 +322,8 @@ class Window
 
   def ensureBitmap(bitmap,dwidth,dheight)
     if !bitmap||bitmap.disposed?||bitmap.width<dwidth||bitmap.height<dheight
-       bitmap.dispose if bitmap
-       bitmap=Bitmap.new([1,dwidth].max,[1,dheight].max)
+      bitmap.dispose if bitmap
+      bitmap=Bitmap.new([1,dwidth].max,[1,dheight].max)
     end
     return bitmap
   end
@@ -392,9 +392,9 @@ class Window
       @sprites["scroll0"].visible = @visible && hascontents && @oy > 0
       @sprites["scroll1"].visible = @visible && hascontents && @ox > 0
       @sprites["scroll2"].visible = @visible && hascontents &&
-         (@contents.width - @ox) > @width-32
+                                    (@contents.width - @ox) > @width-32
       @sprites["scroll3"].visible = @visible && hascontents &&
-         (@contents.height - @oy) > @height-32
+                                    (@contents.height - @oy) > @height-32
     else
       for i in 0...4
         @sprites["corner#{i}"].visible=false
@@ -454,19 +454,18 @@ class Window
     else
       @sprites["contents"].src_rect.set(0,0,0,0)
     end
-    pauseRects=[
-       trimX+32,trimY+64,
-       trimX+48,trimY+64,
-       trimX+32,trimY+80,
-       trimX+48,trimY+80,
+    pauseRects = [
+       trimX + 32, trimY + 64,
+       trimX + 48, trimY + 64,
+       trimX + 32, trimY + 80,
+       trimX + 48, trimY + 80
     ]
     pauseWidth=16
     pauseHeight=16
-    @sprites["pause"].src_rect.set(
-       pauseRects[@pauseframe*2],
-       pauseRects[@pauseframe*2+1],
-       pauseWidth,pauseHeight
-    )
+    @sprites["pause"].src_rect.set(pauseRects[@pauseframe * 2],
+                                   pauseRects[@pauseframe * 2 + 1],
+                                   pauseWidth,
+                                   pauseHeight)
     @sprites["pause"].x=@x+(@width/2)-(pauseWidth/2)
     @sprites["pause"].y=@y+@height-16 # 16 refers to skin margin
     @sprites["contents"].x=@x+16
@@ -547,8 +546,8 @@ class Window
         @sprites["cursor"].src_rect.set(0,0,0,0)
       end
       for i in 0...4
-        dwidth  = (i==0 || i==3) ? @width-32 : 16
-        dheight = (i==0 || i==3) ? 16 : @height-32
+        dwidth  = [0, 3].include?(i) ? @width - 32 : 16
+        dheight = [0, 3].include?(i) ? 16 : @height - 32
         @sidebitmaps[i]=ensureBitmap(@sidebitmaps[i],dwidth,dheight)
         @sprites["side#{i}"].bitmap=@sidebitmaps[i]
         @sprites["side#{i}"].src_rect.set(0,0,dwidth,dheight)

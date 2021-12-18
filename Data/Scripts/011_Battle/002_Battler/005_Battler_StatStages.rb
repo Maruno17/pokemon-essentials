@@ -55,7 +55,8 @@ class Battle::Battler
     arrStatTexts = [
        _INTL("{1}'s {2} rose!",pbThis,GameData::Stat.get(stat).name),
        _INTL("{1}'s {2} rose sharply!",pbThis,GameData::Stat.get(stat).name),
-       _INTL("{1}'s {2} rose drastically!",pbThis,GameData::Stat.get(stat).name)]
+       _INTL("{1}'s {2} rose drastically!",pbThis,GameData::Stat.get(stat).name)
+    ]
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat gain
     if abilityActive?
@@ -78,12 +79,14 @@ class Battle::Battler
       arrStatTexts = [
          _INTL("{1}'s {2} raised its {3}!",pbThis,cause,GameData::Stat.get(stat).name),
          _INTL("{1}'s {2} sharply raised its {3}!",pbThis,cause,GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} drastically raised its {3}!",pbThis,cause,GameData::Stat.get(stat).name)]
+         _INTL("{1}'s {2} drastically raised its {3}!",pbThis,cause,GameData::Stat.get(stat).name)
+      ]
     else
       arrStatTexts = [
          _INTL("{1}'s {2} raised {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name),
          _INTL("{1}'s {2} sharply raised {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} drastically raised {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name)]
+         _INTL("{1}'s {2} drastically raised {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name)
+      ]
     end
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat gain
@@ -214,7 +217,8 @@ class Battle::Battler
     arrStatTexts = [
        _INTL("{1}'s {2} fell!",pbThis,GameData::Stat.get(stat).name),
        _INTL("{1}'s {2} harshly fell!",pbThis,GameData::Stat.get(stat).name),
-       _INTL("{1}'s {2} severely fell!",pbThis,GameData::Stat.get(stat).name)]
+       _INTL("{1}'s {2} severely fell!",pbThis,GameData::Stat.get(stat).name)
+    ]
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat loss
     if abilityActive?
@@ -254,12 +258,14 @@ class Battle::Battler
       arrStatTexts = [
          _INTL("{1}'s {2} lowered its {3}!",pbThis,cause,GameData::Stat.get(stat).name),
          _INTL("{1}'s {2} harshly lowered its {3}!",pbThis,cause,GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} severely lowered its {3}!",pbThis,cause,GameData::Stat.get(stat).name)]
+         _INTL("{1}'s {2} severely lowered its {3}!",pbThis,cause,GameData::Stat.get(stat).name)
+      ]
     else
       arrStatTexts = [
          _INTL("{1}'s {2} lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name),
          _INTL("{1}'s {2} harshly lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} severely lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name)]
+         _INTL("{1}'s {2} severely lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name)
+      ]
     end
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat loss

@@ -3,6 +3,7 @@ class BugContestState
   attr_accessor :decision
   attr_accessor :lastPokemon
   attr_reader   :timer
+
   ContestantNames = [
      _INTL("Bug Catcher Ed"),
      _INTL("Bug Catcher Benny"),

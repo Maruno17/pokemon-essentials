@@ -239,7 +239,7 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
     when 1  # middle
       msgwindow.y=(Graphics.height/2)-(msgwindow.height/2)
     when 2
-     msgwindow.y=(Graphics.height)-(msgwindow.height)
+      msgwindow.y=(Graphics.height)-(msgwindow.height)
     end
     msgwindow.opacity = 0 if $game_system.message_frame != 0
   end
@@ -339,9 +339,9 @@ def getSkinColor(windowskin,color,isDarkSkin)
        "9040E8","B8A8E0",   # 9  Purple
        "F89818","F8C898",   # 10 Orange
        colorToRgb32(MessageConfig::DARK_TEXT_MAIN_COLOR),
-          colorToRgb32(MessageConfig::DARK_TEXT_SHADOW_COLOR),   # 11 Dark default
+       colorToRgb32(MessageConfig::DARK_TEXT_SHADOW_COLOR),   # 11 Dark default
        colorToRgb32(MessageConfig::LIGHT_TEXT_MAIN_COLOR),
-          colorToRgb32(MessageConfig::LIGHT_TEXT_SHADOW_COLOR)   # 12 Light default
+       colorToRgb32(MessageConfig::LIGHT_TEXT_SHADOW_COLOR)   # 12 Light default
     ]
     if color==0 || color>textcolors.length/2   # No special colour, use default
       if isDarkSkin   # Dark background, light text
@@ -616,10 +616,10 @@ def pbFadeOutInWithMusic(zViewport=99999)
   $game_system.bgs_pause(1.0)
   pos = $game_system.bgm_position
   pbFadeOutIn(zViewport) {
-     yield
-     $game_system.bgm_position = pos
-     $game_system.bgm_resume(playingBGM)
-     $game_system.bgs_resume(playingBGS)
+    yield
+    $game_system.bgm_position = pos
+    $game_system.bgm_resume(playingBGM)
+    $game_system.bgs_resume(playingBGS)
   }
 end
 

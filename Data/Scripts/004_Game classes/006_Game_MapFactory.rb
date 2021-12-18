@@ -175,7 +175,7 @@ class PokemonMapFactory
     # Check passability of tile
     if thisEvent.is_a?(Game_Player)
       return false unless ($DEBUG && Input.press?(Input::CTRL)) ||
-         map.passable?(x, y, 0, thisEvent)
+                          map.passable?(x, y, 0, thisEvent)
     else
       return false unless map.passable?(x, y, 0, thisEvent)
     end

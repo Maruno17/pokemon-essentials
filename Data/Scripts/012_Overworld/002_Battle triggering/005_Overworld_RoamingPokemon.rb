@@ -98,7 +98,7 @@ Events.onMapChange += proc { |_sender,e|
   # Get and compare map names
   mapInfos = pbLoadMapInfos
   next if mapInfos && oldMapID>0 && mapInfos[oldMapID] &&
-     mapInfos[oldMapID].name && $game_map.name==mapInfos[oldMapID].name
+          mapInfos[oldMapID].name && $game_map.name==mapInfos[oldMapID].name
   # Make roaming Pokémon roam
   pbRoamPokemon
   $PokemonGlobal.roamedAlready = false

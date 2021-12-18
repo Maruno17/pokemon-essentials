@@ -373,11 +373,11 @@ class Messages
 
   def self.stringToKey(str)
     if str && str[/[\r\n\t\1]|^\s+|\s+$|\s{2,}/]
-       key=str.clone
-       key.gsub!(/^\s+/,"")
-       key.gsub!(/\s+$/,"")
-       key.gsub!(/\s{2,}/," ")
-       return key
+      key = str.clone
+      key.gsub!(/^\s+/, "")
+      key.gsub!(/\s+$/, "")
+      key.gsub!(/\s{2,}/, " ")
+      return key
     end
     return str
   end

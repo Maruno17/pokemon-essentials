@@ -715,7 +715,7 @@ class PokemonPokedex_Scene
       end
       if mode!=0
         textpos.push([(mode==1) ? "-" : "----",
-           xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
+                      xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
       end
     when 2   # Type
       typerect = Rect.new(0,0,96,32)
@@ -724,7 +724,7 @@ class PokemonPokedex_Scene
         overlay.blt(xstart+14+(i%cols)*xgap,ystart+6+(i/cols).floor*ygap,@typebitmap.bitmap,typerect)
       end
       textpos.push(["----",
-         xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
+                    xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
     when 5   # Color
       for i in 0...cmds.length
         x = xstart+halfwidth+(i%cols)*xgap
@@ -732,7 +732,7 @@ class PokemonPokedex_Scene
         textpos.push([cmds[i].name,x,y,2,base,shadow,1])
       end
       textpos.push(["----",
-         xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
+                    xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
     when 6   # Shape
       shaperect = Rect.new(0, 0, 60, 60)
       for i in 0...cmds.length
@@ -1085,11 +1085,11 @@ class PokemonPokedex_Scene
     @orderCommands[MODETALLEST]   = _INTL("Tallest")
     @orderCommands[MODESMALLEST]  = _INTL("Smallest")
     @nameCommands = [_INTL("A"),_INTL("B"),_INTL("C"),_INTL("D"),_INTL("E"),
-                    _INTL("F"),_INTL("G"),_INTL("H"),_INTL("I"),_INTL("J"),
-                    _INTL("K"),_INTL("L"),_INTL("M"),_INTL("N"),_INTL("O"),
-                    _INTL("P"),_INTL("Q"),_INTL("R"),_INTL("S"),_INTL("T"),
-                    _INTL("U"),_INTL("V"),_INTL("W"),_INTL("X"),_INTL("Y"),
-                    _INTL("Z")]
+                     _INTL("F"),_INTL("G"),_INTL("H"),_INTL("I"),_INTL("J"),
+                     _INTL("K"),_INTL("L"),_INTL("M"),_INTL("N"),_INTL("O"),
+                     _INTL("P"),_INTL("Q"),_INTL("R"),_INTL("S"),_INTL("T"),
+                     _INTL("U"),_INTL("V"),_INTL("W"),_INTL("X"),_INTL("Y"),
+                     _INTL("Z")]
     @typeCommands = []
     GameData::Type.each { |t| @typeCommands.push(t) if !t.pseudo_type }
     @heightCommands = [1,2,3,4,5,6,7,8,9,10,

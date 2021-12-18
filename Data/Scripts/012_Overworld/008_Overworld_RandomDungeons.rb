@@ -154,7 +154,7 @@ module RandomDungeonGenerator
     end
 
     # Draws a cell's contents, which is an underlying pattern based on tile
-    #_layout and a rotation (the corridors), and possibly a room on top of that.
+    # _layout and a rotation (the corridors), and possibly a room on top of that.
     def paint_cell_contents(dungeon, xDst, yDst, tile_layout, rotation)
       return false if !tile_layout
       # Draw the corridors
@@ -224,6 +224,7 @@ module RandomDungeonGenerator
   #=============================================================================
   class Maze
     attr_accessor :cellWidth, :cellHeight, :nodeWidth, :nodeHeight
+
     DIRECTIONS = [EdgeMasks::North, EdgeMasks::South, EdgeMasks::East, EdgeMasks::West]
 
     def initialize(cw, ch)
@@ -438,7 +439,7 @@ module RandomDungeonGenerator
   class Dungeon
     class DungeonTable
       def initialize(dungeon)
-  	    @dungeon = dungeon
+        @dungeon = dungeon
       end
 
       def xsize; @dungeon.width;  end
@@ -452,6 +453,7 @@ module RandomDungeonGenerator
     end
 
     attr_accessor :width, :height
+
     BUFFER_X = 8
     BUFFER_Y = 6
 
@@ -501,15 +503,15 @@ module RandomDungeonGenerator
 
     # Unused
     def intersects?(r1, r2)
-    	return !(((r2[0] + r2[2] <= r1[0]) ||
-  	   	 (r2[0] >= r1[0] + r1[2]) ||
-  		   (r2[1] + r2[3] <= r1[1]) ||
-  		   (r2[1] >= r1[1] + r1[3])) &&
-  		   ((r1[0] <= r2[0] + r2[2])||
-  		   (r1[0] >= r2[0] + r2[2]) ||
-  		   (r1[1] + r1[3] <= r2[1]) ||
-  	   	 (r1[1] >= r2[1] + r2[3]))
-  		)
+      return !(((r2[0] + r2[2] <= r1[0]) ||
+                (r2[0] >= r1[0] + r1[2]) ||
+                (r2[1] + r2[3] <= r1[1]) ||
+                (r2[1] >= r1[1] + r1[3])) &&
+               ((r1[0] <= r2[0] + r2[2])||
+                (r1[0] >= r2[0] + r2[2]) ||
+                (r1[1] + r1[3] <= r2[1]) ||
+                (r1[1] >= r2[1] + r2[3]))
+              )
     end
 
     # Returns whether the given coordinates are a room floor that isn't too close
@@ -532,10 +534,10 @@ module RandomDungeonGenerator
     def isWall?(x, y)
       if value(x, y) == DungeonTile::VOID
         v1 = value(x, y + 1)
-        return true if v1 == DungeonTile::ROOM || v1 == DungeonTile::CORRIDOR
+        return true if [DungeonTile::ROOM, DungeonTile::CORRIDOR].include?(v1)
         if v1 == DungeonTile::VOID   # The tile below is void
           v1 = value(x, y + 2)
-          return true if v1 == DungeonTile::ROOM || v1 == DungeonTile::CORRIDOR
+          return true if [DungeonTile::ROOM, DungeonTile::CORRIDOR].include?(v1)
         end
       end
       return false

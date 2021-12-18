@@ -9,6 +9,7 @@ class Battle::Scene::MenuBase
   attr_reader   :color
   attr_reader   :index
   attr_reader   :mode
+
   # NOTE: Button width is half the width of the graphic containing them all.
   BUTTON_HEIGHT = 46
   TEXT_BASE_COLOR   = Battle::Scene::MESSAGE_BASE_COLOR
@@ -202,6 +203,7 @@ end
 class Battle::Scene::FightMenu < Battle::Scene::MenuBase
   attr_reader :battler
   attr_reader :shiftMode
+
   GET_MOVE_TEXT_COLOR_FROM_MOVE_BUTTON = true
 
   # If true, displays graphics from Graphics/Pictures/Battle/overlay_fight.png
@@ -408,7 +410,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
       ppFraction = [(4.0*move.pp/move.total_pp).ceil,3].min
       textPos = []
       textPos.push([_INTL("PP: {1}/{2}",move.pp,move.total_pp),
-         448,44,2,PP_COLORS[ppFraction*2],PP_COLORS[ppFraction*2+1]])
+                    448,44,2,PP_COLORS[ppFraction*2],PP_COLORS[ppFraction*2+1]])
       pbDrawTextPositions(@infoOverlay.bitmap,textPos)
     end
   end

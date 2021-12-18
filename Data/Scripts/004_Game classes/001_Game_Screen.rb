@@ -17,6 +17,7 @@ class Game_Screen
   attr_reader   :weather_type       # weather type
   attr_reader   :weather_max        # max number of weather sprites
   attr_accessor :weather_duration   # ticks in which the weather should fade in
+
   #-----------------------------------------------------------------------------
   # * Object Initialization
   #-----------------------------------------------------------------------------

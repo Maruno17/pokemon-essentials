@@ -435,8 +435,8 @@ def pbTrainerTypeEditorNew(default_name)
     return nil
   end
   # Choose a gender
-  gender = pbMessage(_INTL("Is the Trainer male, female or unknown?"), [
-     _INTL("Male"), _INTL("Female"), _INTL("Unknown")], 0)
+  gender = pbMessage(_INTL("Is the Trainer male, female or unknown?"),
+                     [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], 0)
   # Choose a base money value
   params = ChooseNumberParams.new
   params.setRange(0, 255)
@@ -564,7 +564,8 @@ def pbTrainerBattleEditor
           ret = pbMessage(_INTL("First, define the new trainer's type."), [
              _INTL("Use existing type"),
              _INTL("Create new type"),
-             _INTL("Cancel")], 3)
+             _INTL("Cancel")
+          ], 3)
           case ret
           when 0
             tr_type = pbListScreen(_INTL("TRAINER TYPE"), TrainerTypeLister.new(0, false))
@@ -620,7 +621,7 @@ end
 #===============================================================================
 module TrainerPokemonProperty
   def self.set(settingname,initsetting)
-    initsetting = {:species => nil, :level => 10} if !initsetting
+    initsetting = { :species => nil, :level => 10 } if !initsetting
     oldsetting = [
       initsetting[:species],
       initsetting[:level],
@@ -657,7 +658,7 @@ module TrainerPokemonProperty
     ]
     Pokemon::MAX_MOVES.times do |i|
       pkmn_properties.push([_INTL("Move {1}", i + 1),
-         MovePropertyForSpecies.new(oldsetting), _INTL("A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.")])
+                            MovePropertyForSpecies.new(oldsetting), _INTL("A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.")])
     end
     pkmn_properties.concat([
        [_INTL("Ability"),       AbilityProperty,                         _INTL("Ability of the Pokémon. Overrides the ability index.")],
@@ -766,7 +767,7 @@ def pbEditPlayerMetadata(player_id = 1)
       player_id = i
       break
     end
-    metadata = GameData::PlayerMetadata.new({:id => player_id})
+    metadata = GameData::PlayerMetadata.new({ :id => player_id })
   elsif !GameData::PlayerMetadata.exists?(player_id)
     pbMessage(_INTL("Metadata for player character {1} was not found.", player_id))
     return
@@ -815,7 +816,7 @@ def pbEditMapMetadata(map_id)
   data = []
   map_name = mapinfos[map_id].name
   metadata = GameData::MapMetadata.try_get(map_id)
-  metadata = GameData::MapMetadata.new({:id => map_id}) if !metadata
+  metadata = GameData::MapMetadata.new({ :id => map_id }) if !metadata
   properties = GameData::MapMetadata.editor_properties
   properties.each do |property|
     data.push(metadata.property_from_string(property[0]))

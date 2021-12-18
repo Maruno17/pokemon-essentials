@@ -38,13 +38,13 @@ class StorageSystemPC
     loop do
       command = pbShowCommandsWithHelp(nil,
          [_INTL("Organize Boxes"),
-         _INTL("Withdraw Pokémon"),
-         _INTL("Deposit Pokémon"),
-         _INTL("See ya!")],
+          _INTL("Withdraw Pokémon"),
+          _INTL("Deposit Pokémon"),
+          _INTL("See ya!")],
          [_INTL("Organize the Pokémon in Boxes and in your party."),
-         _INTL("Move Pokémon stored in Boxes to your party."),
-         _INTL("Store Pokémon in your party in Boxes."),
-         _INTL("Return to the previous menu.")],-1,command
+          _INTL("Move Pokémon stored in Boxes to your party."),
+          _INTL("Store Pokémon in your party in Boxes."),
+          _INTL("Return to the previous menu.")],-1,command
       )
       if command>=0 && command<3
         if command==1   # Withdraw
@@ -116,13 +116,13 @@ def pbPCItemStorage
   loop do
     command = pbShowCommandsWithHelp(nil,
        [_INTL("Withdraw Item"),
-       _INTL("Deposit Item"),
-       _INTL("Toss Item"),
-       _INTL("Exit")],
+        _INTL("Deposit Item"),
+        _INTL("Toss Item"),
+        _INTL("Exit")],
        [_INTL("Take out items from the PC."),
-       _INTL("Store items in the PC."),
-       _INTL("Throw away items stored in the PC."),
-       _INTL("Go back to the previous menu.")],-1,command
+        _INTL("Store items in the PC."),
+        _INTL("Throw away items stored in the PC."),
+        _INTL("Go back to the previous menu.")],-1,command
     )
     case command
     when 0   # Withdraw Item

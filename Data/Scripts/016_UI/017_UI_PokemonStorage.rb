@@ -564,6 +564,7 @@ end
 #===============================================================================
 class PokemonStorageScene
   attr_reader :quickswap
+
   MARK_WIDTH  = 16
   MARK_HEIGHT = 16
 

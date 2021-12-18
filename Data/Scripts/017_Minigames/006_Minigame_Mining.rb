@@ -77,6 +77,7 @@ class MiningGameCursor < BitmapSprite
   attr_accessor :position
   attr_accessor :hit
   attr_accessor :counter
+
   ToolPositions = [[1,0],[1,1],[1,1],[0,0],[0,0],
                    [0,2],[0,2],[0,0],[0,0],[0,2],[0,2]]   # Graphic, position
 

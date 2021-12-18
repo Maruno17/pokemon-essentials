@@ -76,10 +76,10 @@ class Battle
         ret = true
       else      # Chose a move to use
         next false if cmd<0 || !@battlers[idxBattler].moves[cmd] ||
-                               !@battlers[idxBattler].moves[cmd].id
+                      !@battlers[idxBattler].moves[cmd].id
         next false if !pbRegisterMove(idxBattler,cmd)
         next false if !singleBattle? &&
-           !pbChooseTarget(@battlers[idxBattler],@battlers[idxBattler].moves[cmd])
+                      !pbChooseTarget(@battlers[idxBattler],@battlers[idxBattler].moves[cmd])
         ret = true
       end
       next true

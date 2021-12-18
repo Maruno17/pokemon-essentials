@@ -71,7 +71,7 @@ module Battle::Scene::Animation::BallAnimationMixin
     when :ULTRABALL   then return Color.new(255, 255, 123)
     when :MASTERBALL  then return Color.new(189, 165, 231)
     when :NETBALL     then return Color.new(173, 255, 206)
-    when :DIVEBALL    then return Color.new( 99, 206, 247)
+    when :DIVEBALL    then return Color.new(99, 206, 247)
     when :NESTBALL    then return Color.new(247, 222,  82)
     when :REPEATBALL  then return Color.new(255, 198, 132)
     when :TIMERBALL   then return Color.new(239, 247, 247)

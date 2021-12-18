@@ -209,7 +209,7 @@ class Battle::Move
           target.damageState.focusBand = true
           damage -= 1
         elsif Settings::AFFECTION_EFFECTS && @battle.internalBattle &&
-           target.pbOwnedByPlayer? && !target.mega?
+              target.pbOwnedByPlayer? && !target.mega?
           chance = [0, 0, 0, 10, 15, 25][target.affection_level]
           if chance > 0 && @battle.pbRandom(100) < chance
             target.damageState.affection_endured = true

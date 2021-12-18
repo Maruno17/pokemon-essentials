@@ -13,7 +13,7 @@ class VoltorbFlip
     # Set initial level
     @level=1
     # Maximum and minimum total point values for each level
-    @levelRanges=[[ 20, 50],[ 50, 100],[ 100, 200],[ 200, 350],
+    @levelRanges=[[20, 50],[50, 100],[100, 200],[200, 350],
                   [350,600],[600,1000],[1000,2000],[2000,3500]]
     @firstRound=true
     pbNewGame

@@ -786,16 +786,18 @@ module Compiler
              PBMoveRoute::PlaySE,RPG::AudioFile.new("Door enter"),PBMoveRoute::Wait,2,
              PBMoveRoute::TurnLeft,PBMoveRoute::Wait,2,
              PBMoveRoute::TurnRight,PBMoveRoute::Wait,2,
-             PBMoveRoute::TurnUp,PBMoveRoute::Wait,2])
+             PBMoveRoute::TurnUp,PBMoveRoute::Wait,2
+          ])
           push_move_route_and_wait(list,-1,[   # Move Route for player entering door
-             PBMoveRoute::ThroughOn,PBMoveRoute::Up,PBMoveRoute::ThroughOff])
+             PBMoveRoute::ThroughOn,PBMoveRoute::Up,PBMoveRoute::ThroughOff
+          ])
           push_event(list,208,[0])   # Change Transparent Flag (invisible)
           push_script(list, "Followers.follow_into_door")
           push_event(list, 210, [], indent)   # Wait for Move's Completion
           push_move_route_and_wait(list,0,[PBMoveRoute::Wait,2,   # Move Route for door closing
-             PBMoveRoute::TurnRight,PBMoveRoute::Wait,2,
-             PBMoveRoute::TurnLeft,PBMoveRoute::Wait,2,
-             PBMoveRoute::TurnDown,PBMoveRoute::Wait,2])
+                                           PBMoveRoute::TurnRight,PBMoveRoute::Wait,2,
+                                           PBMoveRoute::TurnLeft,PBMoveRoute::Wait,2,
+                                           PBMoveRoute::TurnDown,PBMoveRoute::Wait,2])
           push_event(list,223,[Tone.new(-255,-255,-255),6])   # Change Screen Color Tone
           push_wait(list,8)   # Wait
           push_event(list,208,[1])   # Change Transparent Flag (visible)
@@ -809,14 +811,16 @@ module Compiler
           push_event(list,208,[0],1)   # Change Transparent Flag (invisible)
           push_script(list, "Followers.hide_followers", 1)
           push_move_route_and_wait(list,0,[   # Move Route for setting door to open
-             PBMoveRoute::TurnLeft,PBMoveRoute::Wait,6],1)
+             PBMoveRoute::TurnLeft,PBMoveRoute::Wait,6
+          ],1)
           push_event(list,208,[1],1)   # Change Transparent Flag (visible)
           push_move_route_and_wait(list,-1,[PBMoveRoute::Down],1)   # Move Route for player exiting door
           push_script(list, "Followers.put_followers_on_player", 1)
           push_move_route_and_wait(list,0,[   # Move Route for door closing
              PBMoveRoute::TurnUp,PBMoveRoute::Wait,2,
              PBMoveRoute::TurnRight,PBMoveRoute::Wait,2,
-             PBMoveRoute::TurnDown,PBMoveRoute::Wait,2],1)
+             PBMoveRoute::TurnDown,PBMoveRoute::Wait,2
+          ],1)
           push_branch_end(list,1)
           push_script(list,"setTempSwitchOn(\"A\")")
           push_end(list)
@@ -973,7 +977,6 @@ module Compiler
                 push_script(newEvents,"pbReceiveItem(:#{itemname})",oldIndent+1)
                 push_else(newEvents,oldIndent+1)
                 push_text(newEvents,_INTL("You have no room left in the Bag."),oldIndent+1)
-                push_branch_end(newEvents,oldIndent+1)
               else
                 push_event(newEvents,111,[7,cost,0],oldIndent)
                 push_branch(newEvents,"$bag.can_add?(:#{itemname})",oldIndent+1)
@@ -985,8 +988,8 @@ module Compiler
                 push_branch_end(newEvents,oldIndent+2)
                 push_else(newEvents,oldIndent+1)
                 push_text(newEvents,_INTL("\\GYou don't have enough money."),oldIndent+1)
-                push_branch_end(newEvents,oldIndent+1)
               end
+              push_branch_end(newEvents,oldIndent+1)
               list[i,0] = newEvents   # insert 'newEvents' at index 'i'
               changed = true
             end
@@ -1238,7 +1241,7 @@ module Compiler
               end
               # Find a punctuation mark to split at
               punct = [message.rindex(". "),message.rindex(".\n"),
-                 message.rindex("!"),message.rindex("?"),-1].compact.max
+                       message.rindex("!"),message.rindex("?"),-1].compact.max
               if punct==-1
                 punct = [message.rindex(", "),message.rindex(",\n"),-1].compact.max
               end

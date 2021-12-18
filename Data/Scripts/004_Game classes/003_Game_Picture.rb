@@ -20,6 +20,7 @@ class Game_Picture
   attr_reader   :blend_type               # blend method
   attr_reader   :tone                     # color tone
   attr_reader   :angle                    # rotation angle
+
   #-----------------------------------------------------------------------------
   # * Object Initialization
   #     number : picture number

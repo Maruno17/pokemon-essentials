@@ -426,6 +426,7 @@ class PBAnimation < Array
   attr_writer   :speed
   attr_reader   :array
   attr_reader   :timing
+
   MAX_SPRITES = 60
 
   def speed
@@ -698,6 +699,7 @@ end
 #===============================================================================
 class PBAnimationPlayerX
   attr_accessor :looping
+
   MAX_SPRITES = 60
 
   def initialize(animation,user,target,scene=nil,oppMove=false,inEditor=false)

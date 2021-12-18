@@ -251,8 +251,8 @@ def pbDebugDayCare
         msg = _INTL("Pokémon can breed (compatibility = {1}).", compat)
         # Show compatibility
         if day_care.egg_generated
-          case pbMessage("\\ts[]" + msg, [
-            _INTL("Collect egg"), _INTL("Clear egg"), _INTL("Cancel")], 3)
+          case pbMessage("\\ts[]" + msg,
+                         [_INTL("Collect egg"), _INTL("Clear egg"), _INTL("Cancel")], 3)
           when 0   # Collect egg
             if $player.party_full?
               pbMessage(_INTL("Party is full, can't collect the egg."))
@@ -274,8 +274,8 @@ def pbDebugDayCare
         end
       end
     elsif cmd == commands.length - 1   # Steps to next cycle
-      case pbMessage("\\ts[]" + _INTL("Change number of steps to next cycle?"), [
-         _INTL("Set to 1"), _INTL("Set to 256"), _INTL("Set to other value"), _INTL("Cancel")], 4)
+      case pbMessage("\\ts[]" + _INTL("Change number of steps to next cycle?"),
+                     [_INTL("Set to 1"), _INTL("Set to 256"), _INTL("Set to other value"), _INTL("Cancel")], 4)
       when 0   # Set to 1
         day_care.step_counter = 255
         need_refresh = true
@@ -302,8 +302,8 @@ def pbDebugDayCare
           msg += "\\n" + _INTL("Steps to next level: {1}", end_exp - pkmn.exp)
         end
         # Show level change and cost
-        case pbMessage("\\ts[]" + msg, [
-           _INTL("Summary"), _INTL("Withdraw"), _INTL("Cancel")], 3)
+        case pbMessage("\\ts[]" + msg,
+                       [_INTL("Summary"), _INTL("Withdraw"), _INTL("Cancel")], 3)
         when 0   # Summary
           pbFadeOutIn {
             scene = PokemonSummary_Scene.new
@@ -322,8 +322,8 @@ def pbDebugDayCare
           end
         end
       else
-        case pbMessage("\\ts[]" + _INTL("This slot is empty."), [
-           _INTL("Deposit"), _INTL("Cancel")], 2)
+        case pbMessage("\\ts[]" + _INTL("This slot is empty."),
+                       [_INTL("Deposit"), _INTL("Cancel")], 2)
         when 0   # Deposit
           if $player.party.empty?
             pbMessage(_INTL("Party is empty, can't deposit Pokémon."))
@@ -449,7 +449,6 @@ def pbDebugRoamers
         else
           $PokemonGlobal.roamPosition[cmdwindow.index] = pbDefaultMap
         end
-        cmdwindow.refresh
       else   # Roam to a random other map
         oldmap = $PokemonGlobal.roamPosition[cmdwindow.index]
         pbRoamPokemonOne(cmdwindow.index)
@@ -458,8 +457,8 @@ def pbDebugRoamers
           pbRoamPokemonOne(cmdwindow.index)
         end
         $PokemonGlobal.roamedAlready = false
-        cmdwindow.refresh
       end
+      cmdwindow.refresh
     elsif Input.trigger?(Input::BACK)
       pbPlayCancelSE
       break
@@ -476,7 +475,7 @@ def pbDebugRoamers
           $PokemonGlobal.roamPokemon[cmdwindow.index] = true
           $PokemonGlobal.roamPokemonCaught[cmdwindow.index] = false
         elsif $PokemonGlobal.roamPokemon[cmdwindow.index] == true &&
-           !$PokemonGlobal.roamPokemonCaught[cmdwindow.index]
+              !$PokemonGlobal.roamPokemonCaught[cmdwindow.index]
           # defeated -> caught
           $PokemonGlobal.roamPokemonCaught[cmdwindow.index] = true
         elsif pkmn[2]>0
@@ -614,7 +613,7 @@ def pbImportAllAnimations
       Graphics.update
       audios = []
       files = Dir.glob(folder+"/*.*")
-      %w( wav ogg mid wma ).each { |ext|   # mp3
+      %w[wav ogg mid wma].each { |ext|   # mp3
         upext = ext.upcase
         audios.concat(files.find_all { |f| f[f.length-3,3]==ext })
         audios.concat(files.find_all { |f| f[f.length-3,3]==upext })
@@ -623,7 +622,7 @@ def pbImportAllAnimations
         pbSafeCopyFile(audio,RTP.getAudioPath("Audio/SE/Anim/"+File.basename(audio)),"Audio/SE/Anim/"+File.basename(audio))
       end
       images = []
-      %w( png gif ).each { |ext|   # jpg jpeg bmp
+      %w[png gif].each { |ext|   # jpg jpeg bmp
         upext = ext.upcase
         images.concat(files.find_all { |f| f[f.length-3,3]==ext })
         images.concat(files.find_all { |f| f[f.length-3,3]==upext })

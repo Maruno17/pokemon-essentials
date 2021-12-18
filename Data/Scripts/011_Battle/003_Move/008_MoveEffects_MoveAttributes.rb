@@ -631,7 +631,7 @@ end
 class Battle::Move::DoublePowerIfTargetNotActed < Battle::Move
   def pbBaseDamage(baseDmg, user, target)
     if @battle.choices[target.index][0] == :None ||   # Switched in
-      ([:UseMove, :Shift].include?(@battle.choices[target.index][0]) && !target.movedThisRound?)
+       ([:UseMove, :Shift].include?(@battle.choices[target.index][0]) && !target.movedThisRound?)
       baseDmg *= 2
     end
     return baseDmg

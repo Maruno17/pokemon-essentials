@@ -99,7 +99,7 @@ class Window_PokemonBag < Window_DrawableCommand
   end
 
   def refresh
-    @item_max = itemCount()
+    @item_max = itemCount
     self.update_cursor_rect
     dwidth  = self.width-self.borderX
     dheight = self.height-self.borderY
@@ -320,7 +320,7 @@ class PokemonBag_Scene
     @sprites["itemicon"].item = itemlist.item
     # Set the selected item's description
     @sprites["itemtext"].text =
-       (itemlist.item) ? GameData::Item.get(itemlist.item).description : _INTL("Close bag.")
+      (itemlist.item) ? GameData::Item.get(itemlist.item).description : _INTL("Close bag.")
   end
 
   def pbRefreshFilter

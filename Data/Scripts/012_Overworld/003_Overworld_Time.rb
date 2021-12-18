@@ -147,7 +147,8 @@ def moonphase(time=nil) # in UTC
      16.6109562298125,
      20.3022798364375,
      23.9936034430625,
-     27.6849270496875]
+     27.6849270496875
+  ]
   yy = time.year-((12-time.mon)/10.0).floor
   j = (365.25*(4712+yy)).floor + (((time.mon+9)%12)*30.6+0.5).floor + time.day+59
   j -= (((yy/100.0)+49).floor*0.75).floor-38 if j>2299160
@@ -219,7 +220,8 @@ def pbIsWeekday(wdayVariable,*arg)
        _INTL("Wednesday"),
        _INTL("Thursday"),
        _INTL("Friday"),
-       _INTL("Saturday")][wday]
+       _INTL("Saturday")
+    ][wday]
     $game_map.need_refresh = true if $game_map
   end
   return ret
@@ -291,7 +293,8 @@ def pbIsSeason(seasonVariable,*arg)
        _INTL("Spring"),
        _INTL("Summer"),
        _INTL("Autumn"),
-       _INTL("Winter")][thisseason]
+       _INTL("Winter")
+    ][thisseason]
     $game_map.need_refresh = true if $game_map
   end
   return ret

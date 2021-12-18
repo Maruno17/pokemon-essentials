@@ -253,7 +253,7 @@ class Game_FollowerFactory
         if event.at_coordinate?($game_player.x, $game_player.y)   # Underneath player
           next if !event.over_trigger?
         elsif facing_tile && event.map.map_id == facing_tile[0] &&
-           event.at_coordinate?(facing_tile[1], facing_tile[2])   # On facing tile
+              event.at_coordinate?(facing_tile[1], facing_tile[2])   # On facing tile
           next if event.over_trigger?
         else   # Somewhere else
           next

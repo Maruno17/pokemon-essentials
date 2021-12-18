@@ -312,17 +312,17 @@ def pbDive
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     pbFadeOutIn {
-       $game_temp.player_new_map_id    = map_metadata.dive_map_id
-       $game_temp.player_new_x         = $game_player.x
-       $game_temp.player_new_y         = $game_player.y
-       $game_temp.player_new_direction = $game_player.direction
-       $PokemonGlobal.surfing = false
-       $PokemonGlobal.diving  = true
-       $stats.dive_count += 1
-       pbUpdateVehicle
-       $scene.transfer_player(false)
-       $game_map.autoplay
-       $game_map.refresh
+      $game_temp.player_new_map_id    = map_metadata.dive_map_id
+      $game_temp.player_new_x         = $game_player.x
+      $game_temp.player_new_y         = $game_player.y
+      $game_temp.player_new_direction = $game_player.direction
+      $PokemonGlobal.surfing = false
+      $PokemonGlobal.diving  = true
+      $stats.dive_count += 1
+      pbUpdateVehicle
+      $scene.transfer_player(false)
+      $game_map.autoplay
+      $game_map.refresh
     }
     return true
   end
@@ -350,17 +350,17 @@ def pbSurfacing
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     pbFadeOutIn {
-       $game_temp.player_new_map_id    = surface_map_id
-       $game_temp.player_new_x         = $game_player.x
-       $game_temp.player_new_y         = $game_player.y
-       $game_temp.player_new_direction = $game_player.direction
-       $PokemonGlobal.surfing = true
-       $PokemonGlobal.diving  = false
-       pbUpdateVehicle
-       $scene.transfer_player(false)
-       surfbgm = GameData::Metadata.get.surf_BGM
-       (surfbgm) ?  pbBGMPlay(surfbgm) : $game_map.autoplayAsCue
-       $game_map.refresh
+      $game_temp.player_new_map_id    = surface_map_id
+      $game_temp.player_new_x         = $game_player.x
+      $game_temp.player_new_y         = $game_player.y
+      $game_temp.player_new_direction = $game_player.direction
+      $PokemonGlobal.surfing = true
+      $PokemonGlobal.diving  = false
+      pbUpdateVehicle
+      $scene.transfer_player(false)
+      surfbgm = GameData::Metadata.get.surf_BGM
+      (surfbgm) ?  pbBGMPlay(surfbgm) : $game_map.autoplayAsCue
+      $game_map.refresh
     }
     return true
   end

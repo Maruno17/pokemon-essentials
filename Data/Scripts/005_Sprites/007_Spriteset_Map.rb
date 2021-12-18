@@ -33,6 +33,7 @@ end
 
 class Spriteset_Map
   attr_reader :map
+
   @@viewport0 = Viewport.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)   # Panorama
   @@viewport0.z = -100
   @@viewport1 = Viewport.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)   # Map, events, player, fog

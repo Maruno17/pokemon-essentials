@@ -198,7 +198,7 @@ module Battle::AbilityEffects
   end
 
   def self.triggerDamageCalcFromTargetNonIgnorable(ability, user, target, move, mults, base_damage, type)
-  DamageCalcFromTargetNonIgnorable.trigger(ability, user, target, move, mults, base_damage, type)
+    DamageCalcFromTargetNonIgnorable.trigger(ability, user, target, move, mults, base_damage, type)
   end
 
   def self.triggerDamageCalcFromTargetAlly(ability, user, target, move, mults, base_damage, type)

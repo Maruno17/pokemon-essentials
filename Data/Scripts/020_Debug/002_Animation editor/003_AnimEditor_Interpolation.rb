@@ -108,7 +108,7 @@ class PointPath
     return false if @points.length==0
     index=@points.length-1
     return @points[index][0]==x &&
-       @points[index][1]==y
+           @points[index][1]==y
   end
 
   def addPoint(x,y)

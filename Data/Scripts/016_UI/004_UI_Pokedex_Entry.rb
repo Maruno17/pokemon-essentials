@@ -30,8 +30,8 @@ class PokemonPokedexInfo_Scene
       if hidden[0]==@region && hidden[1]>0 && $game_switches[hidden[1]]
         pbDrawImagePositions(@sprites["areamap"].bitmap,[
            ["Graphics/Pictures/#{hidden[4]}",
-              hidden[2]*PokemonRegionMap_Scene::SQUARE_WIDTH,
-              hidden[3]*PokemonRegionMap_Scene::SQUARE_HEIGHT]
+            hidden[2]*PokemonRegionMap_Scene::SQUARE_WIDTH,
+            hidden[3]*PokemonRegionMap_Scene::SQUARE_HEIGHT]
         ])
       end
     end
@@ -219,7 +219,7 @@ class PokemonPokedexInfo_Scene
     end
     textpos = [
        [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
-          246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+        246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
     ]
     if @show_battled_count
       textpos.push([_INTL("Number Battled"), 314, 152, 0, base, shadow])
@@ -364,7 +364,7 @@ class PokemonPokedexInfo_Scene
     end
     textpos.push([pbGetMessage(MessageTypes::RegionNames,@region),414,38,2,base,shadow])
     textpos.push([_INTL("{1}'s area",GameData::Species.get(@species).name),
-       Graphics.width/2,346,2,base,shadow])
+                  Graphics.width/2,346,2,base,shadow])
     pbDrawTextPositions(overlay,textpos)
   end
 

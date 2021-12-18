@@ -72,7 +72,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     if $PokemonGlobal.surfing || $PokemonGlobal.diving
       location = 3
     elsif $game_temp.encounter_type &&
-       GameData::EncounterType.get($game_temp.encounter_type).type == :fishing
+          GameData::EncounterType.get($game_temp.encounter_type).type == :fishing
       location = 3
     elsif $PokemonEncounters.has_cave_encounters?
       location = 2
@@ -284,9 +284,9 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     trainername = foe[0].name
     textpos = [
        [$player.name, Graphics.width / 4, (Graphics.height / 1.5) + 4, 2,
-          Color.new(248, 248, 248), Color.new(72, 72, 72)],
+        Color.new(248, 248, 248), Color.new(72, 72, 72)],
        [trainername, (Graphics.width / 4) + (Graphics.width / 2), (Graphics.height / 1.5) + 4, 2,
-          Color.new(248, 248, 248), Color.new(72, 72, 72)]
+        Color.new(248, 248, 248), Color.new(72, 72, 72)]
     ]
     pbDrawTextPositions(overlay.bitmap, textpos)
     # Fade out flash, shudder Vs logo and expand it, and then fade to black

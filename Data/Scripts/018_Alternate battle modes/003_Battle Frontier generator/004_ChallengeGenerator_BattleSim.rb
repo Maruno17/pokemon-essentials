@@ -134,6 +134,7 @@ end
 #===============================================================================
 class PlayerRatingElo
   attr_reader :rating
+
   K_VALUE = 16
 
   def initialize

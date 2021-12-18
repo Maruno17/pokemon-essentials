@@ -469,7 +469,7 @@ def pbEncounter(enc_type)
   else
     pbWildBattle(encounter1[0], encounter1[1])
   end
-	$game_temp.encounter_type = nil
+  $game_temp.encounter_type = nil
   $game_temp.force_single_battle = false
   EncounterModifier.triggerEncounterEnd
   return true

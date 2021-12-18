@@ -10,7 +10,7 @@ class Dir
     filters = [filters] if !filters.is_a?(Array)
     self.chdir(dir) do
       for filter in filters
-        self.glob(filter){ |f| files.push(full ? (dir + "/" + f) : f) }
+        self.glob(filter) { |f| files.push(full ? (dir + "/" + f) : f) }
       end
     end
     return files.sort
@@ -294,7 +294,7 @@ end
 # NOTE: load_data checks anything added in MKXP's RTP setting,
 # and matching mount points added through System.mount
 def pbRgssOpen(file,mode=nil)
-  #File.open("debug.txt","ab") { |fw| fw.write([file,mode,Time.now.to_f].inspect+"\r\n") }
+  # File.open("debug.txt","ab") { |fw| fw.write([file,mode,Time.now.to_f].inspect+"\r\n") }
   if !safeExists?("./Game.rgssad")
     if block_given?
       File.open(file,mode) { |f| yield f }
@@ -374,7 +374,7 @@ class StringInput
   include Enumerable
 
   class << self
-    def new( str )
+    def new(str)
       if block_given?
         begin
           f = super
@@ -389,7 +389,7 @@ class StringInput
     alias open new
   end
 
-  def initialize( str )
+  def initialize(str)
     @string = str
     @pos = 0
     @closed = false
@@ -440,7 +440,7 @@ class StringInput
     @pos > @string.size
   end
 
-  def each( &block )
+  def each(&block)
     raise IOError, 'closed stream' if @closed
     begin
       @string.each(&block)
@@ -453,11 +453,11 @@ class StringInput
     raise IOError, 'closed stream' if @closed
     if idx = @string.index(?\n, @pos)
       idx += 1  # "\n".size
-      line = @string[ @pos ... idx ]
+      line = @string[@pos...idx]
       @pos = idx
       @pos += 1 if @pos == @string.size
     else
-      line = @string[ @pos .. -1 ]
+      line = @string[@pos..-1]
       @pos = @string.size + 1
     end
     @lineno += 1
@@ -472,11 +472,11 @@ class StringInput
     ch
   end
 
-  def read( len = nil )
+  def read(len = nil)
     raise IOError, 'closed stream' if @closed
     if !len
       return nil if eof?
-      rest = @string[@pos ... @string.size]
+      rest = @string[@pos...@string.size]
       @pos = @string.size + 1
       return rest
     end

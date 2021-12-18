@@ -167,6 +167,7 @@ class AnimationWindow < SpriteWrapper
   attr_reader :animbitmap
   attr_reader :start
   attr_reader :selected
+
   NUMFRAMES=5
 
   def initialize(x,y,width,height,viewport=nil)
@@ -358,6 +359,7 @@ class SpriteFrame < InvalidatableSprite
   attr_reader :locked
   attr_reader :selected
   attr_reader :sprite
+
   NUM_ROWS   = (PBAnimation::MAX_SPRITES.to_f/10).ceil   # 10 frame number icons in each row
 
   def initialize(id,sprite,viewport,previous=false)
@@ -431,6 +433,7 @@ class AnimationCanvas < Sprite
   attr_reader :animation # Currently selected animation
   attr_reader :animbitmap # Currently selected animation bitmap
   attr_accessor :pattern  # Currently selected pattern
+
   BORDERSIZE=64
 
   def initialize(animation,viewport=nil)
@@ -822,11 +825,11 @@ class AnimationCanvas < Sprite
     end
     currentFrame=getCurrentFrame
     if currentFrame && !@selecting &&
-      (Input.triggerex?(:TAB) || Input.repeatex?(:TAB))
+       (Input.triggerex?(:TAB) || Input.repeatex?(:TAB))
       currentFrame.length.times {
-         @currentcel+=1
-         @currentcel=0 if @currentcel>=currentFrame.length
-         break if currentFrame[@currentcel]
+        @currentcel+=1
+        @currentcel=0 if @currentcel>=currentFrame.length
+        break if currentFrame[@currentcel]
       }
       invalidate
       return

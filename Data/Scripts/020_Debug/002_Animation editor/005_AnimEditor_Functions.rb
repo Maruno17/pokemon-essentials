@@ -29,7 +29,7 @@ end
 def pbSelectAnim(canvas,animwin)
   animfiles=[]
   pbRgssChdir(File.join("Graphics", "Animations")) {
-     animfiles.concat(Dir.glob("*.png"))
+    animfiles.concat(Dir.glob("*.png"))
   }
   cmdwin=pbListWindow(animfiles,320)
   cmdwin.opacity=200
@@ -518,10 +518,10 @@ def pbSelectSE(canvas,audio)
   animfiles=[]
   ret=false
   pbRgssChdir(File.join("Audio", "SE", "Anim")) {
-     animfiles.concat(Dir.glob("*.wav"))
-#     animfiles.concat(Dir.glob("*.mp3"))
-     animfiles.concat(Dir.glob("*.ogg"))
-     animfiles.concat(Dir.glob("*.wma"))
+    animfiles.concat(Dir.glob("*.wav"))
+#    animfiles.concat(Dir.glob("*.mp3"))
+    animfiles.concat(Dir.glob("*.ogg"))
+    animfiles.concat(Dir.glob("*.wma"))
   }
   animfiles.sort! { |a,b| a.upcase<=>b.upcase }
   animfiles=[_INTL("[Play user's cry]")]+animfiles
@@ -950,11 +950,11 @@ end
 
 def pbAnimEditorHelpWindow
   helptext=""+
-     "To add a cel to the scene, click on the canvas. The selected cel will have a black "+
-     "frame. After a cel is selected, you can modify its properties using the keyboard:\n"+
-     "E, R - Rotate left/right.\nP - Open properties screen.\nArrow keys - Move cel 8 pixels "+
-     "(hold ALT for 2 pixels).\n+/- : Zoom in/out.\nL - Lock a cel. Locking a cel prevents it "+
-     "from being moved or deleted.\nDEL - Deletes the cel.\nAlso press TAB to switch the selected cel."
+           "To add a cel to the scene, click on the canvas. The selected cel will have a black "+
+           "frame. After a cel is selected, you can modify its properties using the keyboard:\n"+
+           "E, R - Rotate left/right.\nP - Open properties screen.\nArrow keys - Move cel 8 pixels "+
+           "(hold ALT for 2 pixels).\n+/- : Zoom in/out.\nL - Lock a cel. Locking a cel prevents it "+
+           "from being moved or deleted.\nDEL - Deletes the cel.\nAlso press TAB to switch the selected cel."
   cmdwin=Window_UnformattedTextPokemon.newWithSize("",0,0,640,512)
   cmdwin.opacity=224
   cmdwin.z=99999

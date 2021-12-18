@@ -185,7 +185,7 @@ class PokemonMart_Scene
       itemwindow = @sprites["itemwindow"]
       @sprites["icon"].item = itemwindow.item
       @sprites["itemtextwindow"].text =
-         (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
+        (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
       itemwindow.refresh
     end
     @sprites["moneywindow"].text = _INTL("Money:\r\n<r>{1}", @adapter.getMoneyString)
@@ -491,7 +491,7 @@ class PokemonMart_Scene
         if itemwindow.item != olditem
           @sprites["icon"].item = itemwindow.item
           @sprites["itemtextwindow"].text =
-             (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
+            (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
         end
         if Input.trigger?(Input::BACK)
           pbPlayCloseMenuSE

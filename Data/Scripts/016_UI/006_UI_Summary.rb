@@ -262,24 +262,24 @@ class PokemonSummary_Scene
   def pbShowCommands(commands,index=0)
     ret = -1
     using(cmdwindow = Window_CommandPokemon.new(commands)) {
-       cmdwindow.z = @viewport.z+1
-       cmdwindow.index = index
-       pbBottomRight(cmdwindow)
-       loop do
-         Graphics.update
-         Input.update
-         cmdwindow.update
-         pbUpdate
-         if Input.trigger?(Input::BACK)
-           pbPlayCancelSE
-           ret = -1
-           break
-         elsif Input.trigger?(Input::USE)
-           pbPlayDecisionSE
-           ret = cmdwindow.index
-           break
-         end
-       end
+      cmdwindow.z = @viewport.z+1
+      cmdwindow.index = index
+      pbBottomRight(cmdwindow)
+      loop do
+        Graphics.update
+        Input.update
+        cmdwindow.update
+        pbUpdate
+        if Input.trigger?(Input::BACK)
+          pbPlayCancelSE
+          ret = -1
+          break
+        elsif Input.trigger?(Input::USE)
+          pbPlayDecisionSE
+          ret = cmdwindow.index
+          break
+        end
+      end
     }
     return ret
   end
@@ -556,8 +556,7 @@ class PokemonSummary_Scene
                _INTL("Egg received."),
                _INTL("Traded at Lv. {1}.",@pokemon.obtain_level),
                "",
-               _INTL("Had a fateful encounter at Lv. {1}.",@pokemon.obtain_level)
-              ][@pokemon.obtain_method]
+               _INTL("Had a fateful encounter at Lv. {1}.",@pokemon.obtain_level)][@pokemon.obtain_method]
     memo += sprintf("<c3=404040,B0B0B0>%s\n",mettext) if mettext && mettext!=""
     # If Pokémon was hatched, write when and where it hatched
     if @pokemon.obtain_method == 1
@@ -849,8 +848,8 @@ class PokemonSummary_Scene
       ribbon_data = GameData::Ribbon.get(@pokemon.ribbons[i])
       ribn = ribbon_data.icon_position
       imagepos.push(["Graphics/Pictures/ribbons",
-         230 + 68 * (coord % 4), 78 + 68 * (coord / 4).floor,
-         64 * (ribn % 8), 64 * (ribn / 8).floor, 64, 64])
+                     230 + 68 * (coord % 4), 78 + 68 * (coord / 4).floor,
+                     64 * (ribn % 8), 64 * (ribn / 8).floor, 64, 64])
       coord += 1
     end
     # Draw all images

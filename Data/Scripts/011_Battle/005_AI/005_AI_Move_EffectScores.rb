@@ -78,8 +78,8 @@ class Battle::AI
          Effectiveness.ineffective?(pbCalcTypeMod(move.type,user,target)))
         score += 30
         if skill>=PBTrainerAI.mediumSkill
-           aspeed = pbRoughStat(user,:SPEED,skill)
-           ospeed = pbRoughStat(target,:SPEED,skill)
+          aspeed = pbRoughStat(user,:SPEED,skill)
+          ospeed = pbRoughStat(target,:SPEED,skill)
           if aspeed<ospeed
             score += 30
           elsif aspeed>ospeed
@@ -197,7 +197,7 @@ class Battle::AI
           if user.hp<user.totalhp/8
             score += 60
           elsif skill>=PBTrainerAI.highSkill &&
-             user.hp<(user.effects[PBEffects::Toxic]+1)*user.totalhp/16
+                user.hp<(user.effects[PBEffects::Toxic]+1)*user.totalhp/16
             score += 60
           end
         end
@@ -1353,7 +1353,7 @@ class Battle::AI
       if !user.canChangeType?
         score -= 90
       elsif !target.lastMoveUsed || !target.lastMoveUsedType ||
-         GameData::Type.get(target.lastMoveUsedType).pseudo_type
+            GameData::Type.get(target.lastMoveUsedType).pseudo_type
         score -= 90
       else
         aType = nil
@@ -1431,7 +1431,7 @@ class Battle::AI
       if !user.canChangeType? || target.pbTypes(true).length == 0
         score -= 90
       elsif user.pbTypes == target.pbTypes &&
-         user.effects[PBEffects::Type3] == target.effects[PBEffects::Type3]
+            user.effects[PBEffects::Type3] == target.effects[PBEffects::Type3]
         score -= 90
       end
     #---------------------------------------------------------------------------
@@ -1477,9 +1477,9 @@ class Battle::AI
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
         if !user.ability || user.ability==target.ability ||
-          [:MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability_id) ||
-          [:FLOWERGIFT, :FORECAST, :ILLUSION, :IMPOSTER, :MULTITYPE, :RKSSYSTEM,
-           :TRACE, :ZENMODE].include?(user.ability_id)
+           [:MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability_id) ||
+           [:FLOWERGIFT, :FORECAST, :ILLUSION, :IMPOSTER, :MULTITYPE, :RKSSYSTEM,
+            :TRACE, :ZENMODE].include?(user.ability_id)
           score -= 90
         end
         if skill>=PBTrainerAI.highSkill
@@ -1547,7 +1547,7 @@ class Battle::AI
     when "FixedDamageUserLevelRandom"
       score += 30 if target.hp<=user.level
     #---------------------------------------------------------------------------
-  when "OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"
+    when "OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"
       score -= 90 if target.hasActiveAbility?(:STURDY)
       score -= 90 if target.level>user.level
     #---------------------------------------------------------------------------
@@ -1764,7 +1764,7 @@ class Battle::AI
       score -= 40
       if skill>=PBTrainerAI.highSkill
         score -= 100 if !target.lastRegularMoveUsed ||
-           !GameData::Move.get(target.lastRegularMoveUsed).flags.any? { |f| f[/^CanMirrorMove$/i] }
+                        !GameData::Move.get(target.lastRegularMoveUsed).flags.any? { |f| f[/^CanMirrorMove$/i] }
       end
     #---------------------------------------------------------------------------
     when "UseLastMoveUsed"
@@ -1817,8 +1817,8 @@ class Battle::AI
              [:User, :BothSides].include?(moveData.target)
             score += 60
           elsif moveData.category != 2 &&   # Damaging move
-             moveData.target == :NearOther &&
-             Effectiveness.ineffective?(pbCalcTypeMod(moveData.type, target, user))
+                moveData.target == :NearOther &&
+                Effectiveness.ineffective?(pbCalcTypeMod(moveData.type, target, user))
             score += 60
           end
         end
@@ -2184,8 +2184,8 @@ class Battle::AI
       if target.pbCanParalyze?(user,false)
         score += 30
         if skill>=PBTrainerAI.mediumSkill
-           aspeed = pbRoughStat(user,:SPEED,skill)
-           ospeed = pbRoughStat(target,:SPEED,skill)
+          aspeed = pbRoughStat(user,:SPEED,skill)
+          ospeed = pbRoughStat(target,:SPEED,skill)
           if aspeed<ospeed
             score += 30
           elsif aspeed>ospeed
@@ -2874,8 +2874,8 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "NegateTargetAbilityIfTargetActed"
       if skill>=PBTrainerAI.mediumSkill
-         userSpeed   = pbRoughStat(user,:SPEED,skill)
-         targetSpeed = pbRoughStat(target,:SPEED,skill)
+        userSpeed   = pbRoughStat(user,:SPEED,skill)
+        targetSpeed = pbRoughStat(target,:SPEED,skill)
         if userSpeed<targetSpeed
           score += 30
         end
@@ -3311,7 +3311,7 @@ class Battle::AI
       if @battle.corrosiveGas[target.index % 2][target.pokemonIndex]
         score -= 100
       elsif !target.item || !target.itemActive? || target.unlosableItem?(target.item) ||
-         target.hasActiveAbility?(:STICKYHOLD)
+            target.hasActiveAbility?(:STICKYHOLD)
         score -= 90
       elsif target.effects[PBEffects::Substitute] > 0
         score -= 90

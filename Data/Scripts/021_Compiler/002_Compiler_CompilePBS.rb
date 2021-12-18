@@ -347,10 +347,11 @@ module Compiler
           GameData::Move.register(move_hash)
         end
         # Parse move
-        line = pbGetCsvRecord(line, line_no, [0, "snssueeuuueiss",
-           nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
-           nil, nil, nil, :Target, nil, nil, nil
-        ])
+        line = pbGetCsvRecord(line, line_no,
+           [0, "snssueeuuueiss",
+            nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
+            nil, nil, nil, :Target, nil, nil, nil]
+        )
         move_id = line[1].to_sym
         if GameData::Move::DATA[move_id]
           raise _INTL("Move ID '{1}' is used twice.\r\n{2}", move_id, FileLineData.linereport)
@@ -467,8 +468,10 @@ module Compiler
         # Add previous item's data to records
         GameData::Item.register(item_hash) if item_hash
         # Parse item
-        line = pbGetCsvRecord(line, line_no, [0, "snssvusuuUE", nil, nil, nil,
-           nil, nil, nil, nil, nil, nil, nil, :Move])
+        line = pbGetCsvRecord(line, line_no,
+           [0, "snssvusuuUE", nil, nil, nil,
+            nil, nil, nil, nil, nil, nil, nil, :Move]
+        )
         item_id = line[1].to_sym
         if GameData::Item.exists?(item_id)
           raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_id, FileLineData.linereport)
@@ -1337,12 +1340,14 @@ module Compiler
         # Add previous trainer type's data to records
         GameData::TrainerType.register(tr_type_hash) if tr_type_hash
         # Parse trainer type
-        line = pbGetCsvRecord(line, line_no, [0, "snsUSSSeUS",
-           nil, nil, nil, nil, nil, nil, nil, {
-           "Male"   => 0, "M" => 0, "0" => 0,
-           "Female" => 1, "F" => 1, "1" => 1,
-           "Mixed"  => 2, "X" => 2, "2" => 2, "" => 2
-           }, nil, nil])
+        line = pbGetCsvRecord(line, line_no,
+           [0, "snsUSSSeUS",
+            nil, nil, nil, nil, nil, nil, nil,
+            { "Male"   => 0, "M" => 0, "0" => 0,
+              "Female" => 1, "F" => 1, "1" => 1,
+              "Mixed"  => 2, "X" => 2, "2" => 2, "" => 2 },
+            nil, nil]
+        )
         tr_type_id = line[1].to_sym
         if GameData::TrainerType.exists?(tr_type_id)
           raise _INTL("Trainer Type ID '{1}' is used twice.\r\n{2}", tr_type_id, FileLineData.linereport)

@@ -38,12 +38,11 @@ class Interpolator
         when OPACITY
           @tweensteps[item[0]] = [sprite.opacity,item[1]-sprite.opacity]
         when COLOR
-          @tweensteps[item[0]] = [sprite.color.clone,Color.new(
-             item[1].red-sprite.color.red,
-             item[1].green-sprite.color.green,
-             item[1].blue-sprite.color.blue,
-             item[1].alpha-sprite.color.alpha
-          )]
+          @tweensteps[item[0]] = [sprite.color.clone,
+                                  Color.new(item[1].red - sprite.color.red,
+                                            item[1].green - sprite.color.green,
+                                            item[1].blue - sprite.color.blue,
+                                            item[1].alpha - sprite.color.alpha)]
         end
       end
       @tweening = true
@@ -68,12 +67,10 @@ class Interpolator
         when OPACITY
           @sprite.opacity = item[0]+item[1]*t
         when COLOR
-          @sprite.color = Color.new(
-             item[0].red+item[1].red*t,
-             item[0].green+item[1].green*t,
-             item[0].blue+item[1].blue*t,
-             item[0].alpha+item[1].alpha*t
-          )
+          @sprite.color = Color.new(item[0].red + item[1].red * t,
+                                    item[0].green + item[1].green * t,
+                                    item[0].blue + item[1].blue * t,
+                                    item[0].alpha + item[1].alpha * t)
         end
       end
       @step += 1

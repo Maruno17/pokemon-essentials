@@ -68,7 +68,7 @@ class BattlePalaceBattle < Battle
     if move.target == :User || move.function == "MultiTurnAttackBideThenReturnDoubleDamage"
       return 1
     elsif move.statusMove? ||
-       move.function == "CounterPhysicalDamage" || move.function == "CounterSpecialDamage"
+          move.function == "CounterPhysicalDamage" || move.function == "CounterSpecialDamage"
       return 2
     else
       return 0
@@ -194,7 +194,7 @@ class Battle::AI
     if thispkmn.effects[PBEffects::PerishSong]==1
       shouldswitch = true
     elsif !@battle.pbCanChooseAnyMove?(idxBattler) &&
-       thispkmn.turnCount && thispkmn.turnCount>5
+          thispkmn.turnCount && thispkmn.turnCount>5
       shouldswitch = true
     else
       hppercent = thispkmn.hp*100/thispkmn.totalhp

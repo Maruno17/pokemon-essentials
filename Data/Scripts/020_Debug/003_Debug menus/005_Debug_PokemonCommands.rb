@@ -163,10 +163,10 @@ PokemonDebugMenuCommands.register("setpokerus", {
       msg = [_INTL("{1} doesn't have Pokérus.", pkmn.name),
              _INTL("Has strain {1}, infectious for {2} more days.", pokerus / 16, pokerus % 16),
              _INTL("Has strain {1}, not infectious.", pokerus / 16)][pkmn.pokerusStage]
-      cmd = screen.pbShowCommands(msg, [
-         _INTL("Give random strain"),
-         _INTL("Make not infectious"),
-         _INTL("Clear Pokérus")], cmd)
+      cmd = screen.pbShowCommands(msg,
+         [_INTL("Give random strain"),
+          _INTL("Make not infectious"),
+          _INTL("Clear Pokérus")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Give random strain
@@ -257,10 +257,10 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
     cmd = 0
     loop do
       persid = sprintf("0x%08X", pkmn.personalID)
-      cmd = screen.pbShowCommands(_INTL("Personal ID is {1}.", persid), [
-           _INTL("Set EVs"),
-           _INTL("Set IVs"),
-           _INTL("Randomise pID")], cmd)
+      cmd = screen.pbShowCommands(_INTL("Personal ID is {1}.", persid),
+           [_INTL("Set EVs"),
+            _INTL("Set IVs"),
+            _INTL("Randomise pID")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Set EVs
@@ -574,10 +574,10 @@ PokemonDebugMenuCommands.register("setmovepp", {
           cmd2 = 0
           loop do
             msg = _INTL("{1}: PP {2}/{3} (PP Up {4}/3)", movename, move.pp, move.total_pp, move.ppup)
-            cmd2 = screen.pbShowCommands(msg, [
-               _INTL("Set PP"),
-               _INTL("Full PP"),
-               _INTL("Set PP Up")], cmd2)
+            cmd2 = screen.pbShowCommands(msg,
+               [_INTL("Set PP"),
+                _INTL("Full PP"),
+                _INTL("Set PP Up")], cmd2)
             break if cmd2 < 0
             case cmd2
             when 0   # Change PP
@@ -764,10 +764,10 @@ PokemonDebugMenuCommands.register("setgender", {
       cmd = 0
       loop do
         msg = [_INTL("Gender is male."), _INTL("Gender is female.")][pkmn.male? ? 0 : 1]
-        cmd = screen.pbShowCommands(msg, [
-           _INTL("Make male"),
-           _INTL("Make female"),
-           _INTL("Reset")], cmd)
+        cmd = screen.pbShowCommands(msg,
+           [_INTL("Make male"),
+            _INTL("Make female"),
+            _INTL("Reset")], cmd)
         break if cmd < 0
         case cmd
         when 0   # Make male
@@ -800,10 +800,10 @@ PokemonDebugMenuCommands.register("speciesform", {
     loop do
       msg = [_INTL("Species {1}, form {2}.", pkmn.speciesName, pkmn.form),
              _INTL("Species {1}, form {2} (forced).", pkmn.speciesName, pkmn.form)][(pkmn.forced_form.nil?) ? 0 : 1]
-      cmd = screen.pbShowCommands(msg, [
-         _INTL("Set species"),
-         _INTL("Set form"),
-         _INTL("Remove form override")], cmd)
+      cmd = screen.pbShowCommands(msg,
+         [_INTL("Set species"),
+          _INTL("Set form"),
+          _INTL("Remove form override")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Set species
@@ -869,11 +869,11 @@ PokemonDebugMenuCommands.register("setshininess", {
     loop do
       msg_idx = pkmn.shiny? ? (pkmn.super_shiny? ? 1 : 0) : 2
       msg = [_INTL("Is shiny."), _INTL("Is super shiny."), _INTL("Is normal (not shiny).")][msg_idx]
-      cmd = screen.pbShowCommands(msg, [
-           _INTL("Make shiny"),
-           _INTL("Make super shiny"),
-           _INTL("Make normal"),
-           _INTL("Reset")], cmd)
+      cmd = screen.pbShowCommands(msg,
+           [_INTL("Make shiny"),
+            _INTL("Make super shiny"),
+            _INTL("Make normal"),
+            _INTL("Reset")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make shiny
@@ -969,9 +969,7 @@ PokemonDebugMenuCommands.register("setnickname", {
       speciesname = pkmn.speciesName
       msg = [_INTL("{1} has the nickname {2}.", speciesname, pkmn.name),
              _INTL("{1} has no nickname.", speciesname)][pkmn.nicknamed? ? 0 : 1]
-      cmd = screen.pbShowCommands(msg, [
-           _INTL("Rename"),
-           _INTL("Erase name")], cmd)
+      cmd = screen.pbShowCommands(msg, [_INTL("Rename"), _INTL("Erase name")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Rename
@@ -997,15 +995,16 @@ PokemonDebugMenuCommands.register("ownership", {
     cmd = 0
     loop do
       gender = [_INTL("Male"), _INTL("Female"), _INTL("Unknown")][pkmn.owner.gender]
-      msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id),
-             _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id)
-            ][pkmn.foreign?($player) ? 1 : 0]
-      cmd = screen.pbShowCommands(msg, [
-           _INTL("Make player's"),
-           _INTL("Set OT's name"),
-           _INTL("Set OT's gender"),
-           _INTL("Random foreign ID"),
-           _INTL("Set foreign ID")], cmd)
+      msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})",
+                   pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id),
+             _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})",
+                   pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id)][pkmn.foreign?($player) ? 1 : 0]
+      cmd = screen.pbShowCommands(msg,
+           [_INTL("Make player's"),
+            _INTL("Set OT's name"),
+            _INTL("Set OT's gender"),
+            _INTL("Random foreign ID"),
+            _INTL("Set foreign ID")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make player's
@@ -1073,10 +1072,10 @@ PokemonDebugMenuCommands.register("setegg", {
     loop do
       msg = [_INTL("Not an egg"),
              _INTL("Egg (hatches in {1} steps).", pkmn.steps_to_hatch)][pkmn.egg? ? 1 : 0]
-      cmd = screen.pbShowCommands(msg, [
-           _INTL("Make egg"),
-           _INTL("Make Pokémon"),
-           _INTL("Set steps left to 1")], cmd)
+      cmd = screen.pbShowCommands(msg,
+           [_INTL("Make egg"),
+            _INTL("Make Pokémon"),
+            _INTL("Set steps left to 1")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make egg
@@ -1114,11 +1113,8 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
     cmd = 0
     loop do
       msg = [_INTL("Not a Shadow Pokémon."),
-             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heart_gauge, pkmn.heartStage)
-            ][pkmn.shadowPokemon? ? 1 : 0]
-      cmd = screen.pbShowCommands(msg, [
-         _INTL("Make Shadow"),
-         _INTL("Set heart gauge")], cmd)
+             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heart_gauge, pkmn.heartStage)][pkmn.shadowPokemon? ? 1 : 0]
+      cmd = screen.pbShowCommands(msg, [_INTL("Make Shadow"), _INTL("Set heart gauge")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make Shadow

@@ -405,15 +405,17 @@ class PokemonPartyPanel < SpriteWrapper
         end
         # Draw shiny icon
         if @pokemon.shiny?
-          pbDrawImagePositions(@overlaysprite.bitmap,[[
-             "Graphics/Pictures/shiny",80,48,0,0,16,16]])
+          pbDrawImagePositions(@overlaysprite.bitmap,
+             [["Graphics/Pictures/shiny", 80, 48, 0, 0, 16, 16]]
+          )
         end
       end
       pbDrawTextPositions(@overlaysprite.bitmap,textpos)
       # Draw level text
       if !@pokemon.egg?
-        pbDrawImagePositions(@overlaysprite.bitmap,[[
-           "Graphics/Pictures/Party/overlay_lv",20,70,0,0,22,14]])
+        pbDrawImagePositions(@overlaysprite.bitmap,
+           [["Graphics/Pictures/Party/overlay_lv", 20, 70, 0, 0, 22, 14]]
+        )
         pbSetSmallFont(@overlaysprite.bitmap)
         pbDrawTextPositions(@overlaysprite.bitmap,[
            [@pokemon.level.to_s,42,57,0,basecolor,shadowcolor]

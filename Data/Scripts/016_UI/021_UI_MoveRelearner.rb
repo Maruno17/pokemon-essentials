@@ -73,7 +73,7 @@ class MoveRelearner_Scene
         if moveData.total_pp>0
           textpos.push([_INTL("PP"),112,yPos+32,0,Color.new(64,64,64),Color.new(176,176,176)])
           textpos.push([_INTL("{1}/{1}",moveData.total_pp),230,yPos+32,1,
-             Color.new(64,64,64),Color.new(176,176,176)])
+                        Color.new(64,64,64),Color.new(176,176,176)])
         else
           textpos.push(["-",80,yPos,0,Color.new(64,64,64),Color.new(176,176,176)])
           textpos.push(["--",228,yPos+32,1,Color.new(64,64,64),Color.new(176,176,176)])
@@ -82,8 +82,8 @@ class MoveRelearner_Scene
       yPos+=64
     end
     imagepos.push(["Graphics/Pictures/reminderSel",
-       0,78+(@sprites["commands"].index-@sprites["commands"].top_item)*64,
-       0,0,258,72])
+                   0,78+(@sprites["commands"].index-@sprites["commands"].top_item)*64,
+                   0,0,258,72])
     selMoveData=GameData::Move.get(@moves[@sprites["commands"].index])
     basedamage = selMoveData.display_damage(@pokemon)
     category = selMoveData.display_category(@pokemon)
@@ -91,10 +91,10 @@ class MoveRelearner_Scene
     textpos.push([_INTL("CATEGORY"),272,108,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([_INTL("POWER"),272,140,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([basedamage<=1 ? basedamage==1 ? "???" : "---" : sprintf("%d",basedamage),
-          468,140,2,Color.new(64,64,64),Color.new(176,176,176)])
+                  468,140,2,Color.new(64,64,64),Color.new(176,176,176)])
     textpos.push([_INTL("ACCURACY"),272,172,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([accuracy==0 ? "---" : "#{accuracy}%",
-          468,172,2,Color.new(64,64,64),Color.new(176,176,176)])
+                  468,172,2,Color.new(64,64,64),Color.new(176,176,176)])
     pbDrawTextPositions(overlay,textpos)
     imagepos.push(["Graphics/Pictures/category",436,116,0,category*28,64,28])
     if @sprites["commands"].index<@moves.length-1

@@ -186,8 +186,8 @@ class SpriteWindow < Window
   end
 
   def active=(value)
-     @active=value
-     privRefresh(true)
+    @active=value
+    privRefresh(true)
   end
 
   def cursor_rect=(value)
@@ -519,9 +519,9 @@ class SpriteWindow < Window
       @sprites["back"].visible=@visible
       @sprites["contents"].visible=@visible && @openness==255
       @sprites["pause"].visible=supported && @visible && @pause &&
-         (@combat & CompatBits::ShowPause)
+                                (@combat & CompatBits::ShowPause)
       @sprites["cursor"].visible=supported && @visible && @openness==255 &&
-         (@combat & CompatBits::ShowCursor)
+                                 (@combat & CompatBits::ShowCursor)
       @sprites["scroll0"].visible = false
       @sprites["scroll1"].visible = false
       @sprites["scroll2"].visible = false
@@ -599,7 +599,7 @@ class SpriteWindow < Window
            pauseRects[@pauseframe*2],
            pauseRects[@pauseframe*2+1],
            pauseWidth,pauseHeight
-        )
+         )
       end
     else
       trimStartX=@trim[0]
@@ -850,7 +850,7 @@ class SpriteWindow_Base < SpriteWindow
 
   def __setWindowskin(skin)
     if skin && (skin.width==192 && skin.height==128) ||  # RPGXP Windowskin
-               (skin.width==128 && skin.height==128)     # RPGVX Windowskin
+       (skin.width==128 && skin.height==128)     # RPGVX Windowskin
       self.skinformat=0
     else
       self.skinformat=1

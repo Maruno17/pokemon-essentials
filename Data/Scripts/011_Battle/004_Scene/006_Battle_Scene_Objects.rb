@@ -256,7 +256,7 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
         s = GameData::Status.get(@battler.status).icon_position
       end
       imagePos.push(["Graphics/Pictures/Battle/icon_statuses",@spriteBaseX+24,36,
-         0, s * STATUS_ICON_HEIGHT, -1, STATUS_ICON_HEIGHT]) if s >= 0
+                     0, s * STATUS_ICON_HEIGHT, -1, STATUS_ICON_HEIGHT]) if s >= 0
     end
     pbDrawImagePositions(self.bitmap,imagePos)
     refreshHP
@@ -456,10 +456,10 @@ class Battle::Scene::AbilitySplashBar < SpriteWrapper
     textX = (@side==0) ? 10 : self.bitmap.width-8
     # Draw Pokémon's name
     textPos.push([_INTL("{1}'s",@battler.name),textX,-4,@side==1,
-       TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true])
+                  TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true])
     # Draw Pokémon's ability
     textPos.push([@battler.abilityName,textX,26,@side==1,
-       TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true])
+                  TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true])
     pbDrawTextPositions(self.bitmap,textPos)
   end
 

@@ -389,7 +389,7 @@ class PokemonEntryScene2
         for x in 0...ROWS
           pos = y * ROWS + x
           textPos.push([@@Characters[i][0][pos], 44 + x * 32, 12 + y * 38, 2,
-             Color.new(16, 24, 32), Color.new(160, 160, 160)])
+                        Color.new(16, 24, 32), Color.new(160, 160, 160)])
         end
       end
       pbDrawTextPositions(b, textPos)
@@ -773,15 +773,15 @@ def pbEnterText(helptext,minlength,maxlength,initialText="",mode=0,pokemon=nil,n
   ret=""
   if ($PokemonSystem.textinput==1 rescue false)   # Keyboard
     pbFadeOutIn(99999,nofadeout) {
-       sscene=PokemonEntryScene.new
-       sscreen=PokemonEntry.new(sscene)
-       ret=sscreen.pbStartScreen(helptext,minlength,maxlength,initialText,mode,pokemon)
+      sscene=PokemonEntryScene.new
+      sscreen=PokemonEntry.new(sscene)
+      ret=sscreen.pbStartScreen(helptext,minlength,maxlength,initialText,mode,pokemon)
     }
   else   # Cursor
     pbFadeOutIn(99999,nofadeout) {
-       sscene=PokemonEntryScene2.new
-       sscreen=PokemonEntry.new(sscene)
-       ret=sscreen.pbStartScreen(helptext,minlength,maxlength,initialText,mode,pokemon)
+      sscene=PokemonEntryScene2.new
+      sscreen=PokemonEntry.new(sscene)
+      ret=sscreen.pbStartScreen(helptext,minlength,maxlength,initialText,mode,pokemon)
     }
   end
   return ret

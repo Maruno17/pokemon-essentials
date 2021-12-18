@@ -56,7 +56,7 @@ class Battle::Battler
     end
     # Use the move
     PBDebug.log("[Move usage] #{pbThis} started using #{choice[2].name}")
-    PBDebug.logonerr{
+    PBDebug.logonerr {
       pbUseMove(choice,choice[2]==@battle.struggle)
     }
     @battle.pbJudge
@@ -173,7 +173,7 @@ class Battle::Battler
       choice[2] = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@currentMove))
       specialUsage = true
     elsif @effects[PBEffects::Encore]>0 && choice[1]>=0 &&
-       @battle.pbCanShowCommands?(@index)
+          @battle.pbCanShowCommands?(@index)
       idxEncoredMove = pbEncoredMoveIndex
       if idxEncoredMove>=0 && @battle.pbCanChooseMove?(@index,idxEncoredMove,false)
         if choice[1]!=idxEncoredMove   # Change move if battler was Encored mid-round
@@ -403,7 +403,7 @@ class Battle::Battler
             b.effects[PBEffects::MagicCoat] = false
             break
           elsif b.hasActiveAbility?(:MAGICBOUNCE) && !@battle.moldBreaker &&
-             !b.effects[PBEffects::MagicBounce]
+                !b.effects[PBEffects::MagicBounce]
             magicBouncer = b.index
             b.effects[PBEffects::MagicBounce] = true
             break
@@ -525,7 +525,7 @@ class Battle::Battler
       @battle.pbDisplay(_INTL("{1} used the move instructed by {2}!",b.pbThis,user.pbThis(true)))
       b.effects[PBEffects::Instructed] = true
       if b.pbCanChooseMove?(@moves[idxMove], false)
-        PBDebug.logonerr{
+        PBDebug.logonerr {
           b.pbUseMoveSimple(b.lastMoveUsed,b.lastRegularMoveTarget,idxMove,false)
         }
         b.lastRoundMoved = oldLastRoundMoved
@@ -561,7 +561,7 @@ class Battle::Battler
         end
         nextUser.effects[PBEffects::Dancer] = true
         if nextUser.pbCanChooseMove?(move, false)
-          PBDebug.logonerr{
+          PBDebug.logonerr {
             nextUser.pbUseMoveSimple(move.id,preTarget)
           }
           nextUser.lastRoundMoved = oldLastRoundMoved

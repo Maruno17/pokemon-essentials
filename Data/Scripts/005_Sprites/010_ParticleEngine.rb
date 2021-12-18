@@ -366,7 +366,7 @@ class Particle_Engine::Fire < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,1,20,40,0.5,-64,
-       Graphics.height,-64,Graphics.width,0.5,0.10,-5,-13,30,0])
+                   Graphics.height,-64,Graphics.width,0.5,0.10,-5,-13,30,0])
     initParticles("particle",250)
   end
 end
@@ -377,7 +377,7 @@ class Particle_Engine::Smoke < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,0,80,20,0.5,-64,
-       Graphics.height,-64,Graphics.width,0.5,0.10,-5,-15,5,80])
+                   Graphics.height,-64,Graphics.width,0.5,0.10,-5,-15,5,80])
     initParticles("smoke",250)
   end
 end
@@ -388,7 +388,7 @@ class Particle_Engine::Teleport < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([1,1,1,10,rand(360),1,-64,
-       Graphics.height,-64,Graphics.width,0,3,-8,-15,20,0])
+                   Graphics.height,-64,Graphics.width,0,3,-8,-15,20,0])
     initParticles("wideportal",250)
     for i in 0...@maxparticless
       @particles[i].ox = 16
@@ -403,7 +403,7 @@ class Particle_Engine::Spirit < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([1,0,1,20,rand(360),0.5,-64,
-       Graphics.height,-64,Graphics.width,0.5,0.10,-5,-13,30,0])
+                   Graphics.height,-64,Graphics.width,0.5,0.10,-5,-13,30,0])
     initParticles("particle",250)
   end
 end
@@ -413,8 +413,8 @@ end
 class Particle_Engine::Explosion < ParticleEffect_Event
   def initialize(event,viewport)
     super
-     setParameters([0,0,1,20,0,0.5,-64,
-        Graphics.height,-64,Graphics.width,0.5,0.10,-5,-13,30,0])
+    setParameters([0,0,1,20,0,0.5,-64,
+                   Graphics.height,-64,Graphics.width,0.5,0.10,-5,-13,30,0])
     initParticles("explosion",250)
   end
 end
@@ -425,7 +425,7 @@ class Particle_Engine::Aura < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,1,20,0,1,-64,
-       Graphics.height,-64,Graphics.width,2,2,-5,-13,30,0])
+                   Graphics.height,-64,Graphics.width,2,2,-5,-13,30,0])
     initParticles("particle",250)
   end
 end
@@ -436,7 +436,7 @@ class Particle_Engine::Soot < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,0,20,0,0.5,-64,
-       Graphics.height,-64,Graphics.width,0.5,0.10,-5,-15,5,80])
+                   Graphics.height,-64,Graphics.width,0.5,0.10,-5,-15,5,80])
     initParticles("smoke",100,0,2)
   end
 end
@@ -447,7 +447,7 @@ class Particle_Engine::SootSmoke < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,0,30,0,0.5,-64,
-       Graphics.height,-64,Graphics.width,0.5,0.10,-5,-15,5,80])
+                   Graphics.height,-64,Graphics.width,0.5,0.10,-5,-15,5,80])
     initParticles("smoke",100,0)
     for i in 0...@maxparticless
       @particles[i].blend_type = rand(6) < 3 ? 1 : 2
@@ -461,7 +461,7 @@ class Particle_Engine::Rocket < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,0,60,0,0.5,-64,
-       Graphics.height,-64,Graphics.width,0.5,0,-5,-15,5,80])
+                   Graphics.height,-64,Graphics.width,0.5,0,-5,-15,5,80])
     initParticles("smoke",100,-1)
   end
 end
@@ -472,7 +472,7 @@ class Particle_Engine::FixedTeleport < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([1,0,1,10,rand(360),1,
-       -Graphics.height,Graphics.height,0,Graphics.width,0,3,-8,-15,20,0])
+                   -Graphics.height,Graphics.height,0,Graphics.width,0,3,-8,-15,20,0])
     initParticles("wideportal",250)
     for i in 0...@maxparticless
       @particles[i].ox = 16
@@ -488,7 +488,7 @@ class Particle_Engine::StarTeleport < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,1,10,0,1,
-       -Graphics.height,Graphics.height,0,Graphics.width,0,3,-8,-15,10,0])
+                   -Graphics.height,Graphics.height,0,Graphics.width,0,3,-8,-15,10,0])
     initParticles("star",250)
     for i in 0...@maxparticless
       @particles[i].ox = 48
@@ -503,7 +503,7 @@ class Particle_Engine::Smokescreen < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,0,250,0,0.2,-64,
-       Graphics.height,-64,Graphics.width,0.8,0.8,-5,-15,5,80])
+                   Graphics.height,-64,Graphics.width,0.8,0.8,-5,-15,5,80])
     initParticles(nil,100)
     for i in 0...@maxparticless
       rnd = rand(3)
@@ -540,7 +540,7 @@ class Particle_Engine::Flare < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,1,30,10,1,-64,
-       Graphics.height,-64,Graphics.width,2,2,-5,-12,30,0])
+                   Graphics.height,-64,Graphics.width,2,2,-5,-12,30,0])
     initParticles("particle",255)
   end
 end
@@ -551,7 +551,7 @@ class Particle_Engine::Splash < ParticleEffect_Event
   def initialize(event,viewport)
     super
     setParameters([0,0,1,30,255,1,-64,
-       Graphics.height,-64,Graphics.width,4,2,-5,-12,30,0])
+                   Graphics.height,-64,Graphics.width,4,2,-5,-12,30,0])
     initParticles("smoke",50)
   end
 

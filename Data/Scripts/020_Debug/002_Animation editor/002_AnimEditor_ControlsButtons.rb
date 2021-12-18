@@ -412,7 +412,7 @@ class Slider < UIControl
       self.changed=(self.curvalue!=oldvalue)
       self.invalidate
     end
-    #Right arrow
+    # Right arrow
     if right.contains(mousepos[0],mousepos[1])
       if repeattime>2500
         self.curvalue+=10

@@ -17,7 +17,7 @@ class PokemonGlobalMetadata
   attr_writer :purifyChamber
 
   def purifyChamber
-    @purifyChamber = PurifyChamber.new() if !@purifyChamber
+    @purifyChamber = PurifyChamber.new if !@purifyChamber
     return @purifyChamber
   end
 end
@@ -157,10 +157,11 @@ end
 class PurifyChamber
   attr_reader :sets
   attr_reader :currentSet
+
   NUMSETS = 9
   SETSIZE = 4
 
-  def self.maximumTempo()   # Calculates the maximum possible tempo
+  def self.maximumTempo   # Calculates the maximum possible tempo
     x=SETSIZE+1
     return ((x*x+x)/2)-1
   end
@@ -233,7 +234,7 @@ class PurifyChamber
     return false if shadow.heart_gauge != 0
     # Define an exception for Lugia
     if shadow.isSpecies?(:LUGIA)
-      maxtempo=PurifyChamber.maximumTempo()
+      maxtempo=PurifyChamber.maximumTempo
       for i in 0...NUMSETS
         return false if @sets[i].tempo!=maxtempo
       end
@@ -423,13 +424,13 @@ class PurifyChamberScreen
       # array[0]==0 - a position was chosen
       # array[0]==1 - a new set was chosen
       # array[0]==2 - choose Pokemon command
-      cmd=@scene.pbSetScreen()
+      cmd=@scene.pbSetScreen
       if cmd[0]==0
         # Place Pokemon in the set
         curpkmn=PurifyChamberHelper.pbGetPokemon(@chamber,cmd[1])
         if curpkmn || heldpkmn
           commands=[_INTL("MOVE"),_INTL("SUMMARY"),
-             _INTL("WITHDRAW")]
+                    _INTL("WITHDRAW")]
           if curpkmn && heldpkmn
             commands[0]=_INTL("EXCHANGE")
           elsif heldpkmn
@@ -519,7 +520,7 @@ class PurifyChamberScreen
         @scene.pbChangeSet(cmd[1])
         chamber.currentSet=cmd[1]
       elsif cmd[0]==2 # Choose a Pokemon
-        pos=@scene.pbChoosePokemon()
+        pos=@scene.pbChoosePokemon
         pkmn=pos ? $PokemonStorage[pos[0],pos[1]] : nil
         heldpkmn=pkmn if pkmn
       else # cancel
@@ -532,13 +533,13 @@ class PurifyChamberScreen
         end
       end
     end
-    if pbCheckPurify()
+    if pbCheckPurify
       @scene.pbDisplay(_INTL("There is a Pokémon that is ready to open its heart!\1"))
-      @scene.pbCloseSetDetail()
-      pbDoPurify()
+      @scene.pbCloseSetDetail
+      pbDoPurify
       return false
     else
-      @scene.pbCloseSetDetail()
+      @scene.pbCloseSetDetail
       return true
     end
   end
@@ -576,27 +577,27 @@ class PurifyChamberScreen
       set=purifiables[i]
       @chamber.currentSet=set
       @scene.pbOpenSet(set)
-      @scene.pbPurify()
+      @scene.pbPurify
       pbPurify(@chamber[set].shadow,self)
       pbStorePokemon(@chamber[set].shadow)
       @chamber.setShadow(set,nil) # Remove shadow Pokemon from set
       if (i+1)!=purifiables.length
         @scene.pbDisplay(_INTL("There is another Pokémon that is ready to open its heart!"))
         if !@scene.pbConfirm("Would you like to switch sets?")
-          @scene.pbCloseSet()
+          @scene.pbCloseSet
           break
         end
       end
-      @scene.pbCloseSet()
+      @scene.pbCloseSet
     end
   end
 
   def pbStartPurify
     chamber=@chamber
     @scene.pbStart(chamber)
-    if pbCheckPurify()
-      pbDoPurify()
-      @scene.pbEnd()
+    if pbCheckPurify
+      pbDoPurify
+      @scene.pbEnd
       return
     end
     @scene.pbOpenSet(chamber.currentSet)
@@ -609,23 +610,24 @@ class PurifyChamberScreen
       else
         chamber.currentSet=set
         cmd=@scene.pbShowCommands(
-           _INTL("What do you want to do?"),[
-           _INTL("EDIT"),_INTL("SWITCH"),_INTL("CANCEL")])
-        if cmd==0 # edit
-          if !pbOpenSetDetail()
+           _INTL("What do you want to do?"),
+           [_INTL("EDIT"), _INTL("SWITCH"), _INTL("CANCEL")]
+        )
+        if cmd==0   # edit
+          if !pbOpenSetDetail
             break
           end
-        elsif cmd==1 # switch
+        elsif cmd==1   # switch
           chamber.currentSet=set
           newSet=@scene.pbSwitch(set)
           chamber.switch(set,newSet)
           chamber.currentSet=newSet
-          @scene.pbRefresh()
+          @scene.pbRefresh
         end
       end
     end
-    @scene.pbCloseSet()
-    @scene.pbEnd()
+    @scene.pbCloseSet
+    @scene.pbEnd
   end
 end
 
@@ -655,14 +657,14 @@ class Window_PurifyChamberSets < Window_DrawableCommand
     rect=drawCursor(index,rect)
     if index==@switching
       textpos.push([(index+1).to_s,rect.x,
-         rect.y-6,false,Color.new(248,0,0),self.shadowColor])
+                    rect.y-6,false,Color.new(248,0,0),self.shadowColor])
     else
       textpos.push([(index+1).to_s,rect.x,
-         rect.y-6,false,self.baseColor,self.shadowColor])
+                    rect.y-6,false,self.baseColor,self.shadowColor])
     end
     if @chamber.setCount(index)>0
       pbDrawGauge(self.contents,Rect.new(rect.x+16,rect.y+6,48,8),
-         Color.new(0,0,256),@chamber[index].tempo,PurifyChamber.maximumTempo())
+         Color.new(0,0,256),@chamber[index].tempo,PurifyChamber.maximumTempo)
     end
     if @chamber.getShadow(index)
       pbDrawGauge(self.contents, Rect.new(rect.x+16,rect.y+18,48,8),
@@ -792,7 +794,7 @@ class FlowDiagram
   def withinRange(angle,startAngle,endAngle)
     if startAngle>endAngle
       return (angle>=startAngle || angle<=endAngle) &&
-         (angle>=0 && angle<=360)
+             (angle>=0 && angle<=360)
     else
       return (angle>=startAngle && angle<=endAngle)
     end
@@ -822,7 +824,7 @@ class FlowDiagram
 
   def color=(value)
     for point in @points
-     point.color=value
+      point.color=value
     end
   end
 
@@ -867,7 +869,7 @@ class PurifyChamberSetView < SpriteWrapper
     refresh
   end
 
-  def refreshFlows()
+  def refreshFlows
     for flow in @flows
       flow.setFlowStrength(0)
     end
@@ -947,15 +949,15 @@ class PurifyChamberSetView < SpriteWrapper
       if pkmn.types.length == 1
         textpos.push([_INTL("{1}  Lv.{2}  {3}", pkmn.name, pkmn.level,
            GameData::Type.get(pkmn.types[0]).name),
-           2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
+                      2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       else
         textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}", pkmn.name, pkmn.level,
            GameData::Type.get(pkmn.types[0]).name,
            GameData::Type.get(pkmn.types[1]).name),
-           2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
+                      2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       end
       textpos.push([_INTL("FLOW"),2+@info.bitmap.width/2,18,0,
-         Color.new(248,248,248),Color.new(128,128,128)])
+                    Color.new(248,248,248),Color.new(128,128,128)])
       # draw heart gauge
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width*3/4,8,@info.bitmap.width*1/4,8),
                   Color.new(192,0,256), pkmn.heart_gauge, pkmn.max_gauge_size)
@@ -965,11 +967,11 @@ class PurifyChamberSetView < SpriteWrapper
     end
     if @chamber.setCount(@set)>0
       textpos.push([_INTL("TEMPO"),2,18,0,
-         Color.new(248,248,248),Color.new(128,128,128)])
+                    Color.new(248,248,248),Color.new(128,128,128)])
       # draw tempo gauge
       pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*1/4,24+8,@info.bitmap.width*1/4,8),
          Color.new(0,0,248),@chamber[@set].tempo,
-         PurifyChamber.maximumTempo())
+         PurifyChamber.maximumTempo)
     end
     pbDrawTextPositions(@info.bitmap,textpos)
     @info.x=Graphics.width-@info.bitmap.width
@@ -983,7 +985,7 @@ class PurifyChamberSetView < SpriteWrapper
     checkCursor(0)
     points=[@chamber.setCount(@set)*2,1].max
     setList=@chamber.setList(@set)
-    refreshFlows()
+    refreshFlows
     for i in 0...PurifyChamber::SETSIZE*2
       pkmn=(i%2==1 || i>=points) ? nil : setList[i/2]
       angle=360-(i*360/points)
@@ -1083,11 +1085,11 @@ end
 #
 #===============================================================================
 class PurifyChamberScene
-  def pbUpdate()
+  def pbUpdate
     pbUpdateSpriteHash(@sprites)
   end
 
-  def pbRefresh()
+  def pbRefresh
     if @sprites["setview"]
       @sprites["setview"].refresh
       @sprites["setwindow"].refresh
@@ -1098,7 +1100,7 @@ class PurifyChamberScene
     @chamber=chamber
   end
 
-  def pbEnd()
+  def pbEnd
   end
 
   def pbOpenSet(set)
@@ -1120,7 +1122,7 @@ class PurifyChamberScene
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
-  def pbCloseSet()
+  def pbCloseSet
     pbFadeOutAndHide(@sprites) { pbUpdate }
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
@@ -1133,20 +1135,20 @@ class PurifyChamberScene
     @sprites["setview"].cursor=0
   end
 
-  def pbCloseSetDetail()
+  def pbCloseSetDetail
   end
 
-  def pbPurify()
+  def pbPurify
     pbRefresh
   end
 
   def pbMove(_pos)
-    @sprites["setview"].heldpkmn=@sprites["setview"].getCurrent()
+    @sprites["setview"].heldpkmn=@sprites["setview"].getCurrent
     pbRefresh
   end
 
   def pbShift(_pos,_heldpoke)
-    @sprites["setview"].heldpkmn=@sprites["setview"].getCurrent()
+    @sprites["setview"].heldpkmn=@sprites["setview"].getCurrent
     pbRefresh
   end
 
@@ -1191,29 +1193,29 @@ class PurifyChamberScene
         btn=Input::RIGHT if Input.repeat?(Input::RIGHT)
         btn=Input::LEFT if Input.repeat?(Input::LEFT)
         if btn!=0
-          pbPlayCursorSE()
+          pbPlayCursorSE
           @sprites["setview"].moveCursor(btn)
         end
         if Input.repeat?(Input::JUMPUP)
           nextset=(@sprites["setview"].set==0) ? PurifyChamber::NUMSETS-1 : @sprites["setview"].set-1
-          pbPlayCursorSE()
+          pbPlayCursorSE
           return [1,nextset]
         elsif Input.repeat?(Input::JUMPDOWN)
           nextset=(@sprites["setview"].set==PurifyChamber::NUMSETS-1) ? 0 : @sprites["setview"].set+1
-          pbPlayCursorSE()
+          pbPlayCursorSE
           return [1,nextset]
         elsif Input.trigger?(Input::USE)
-          pbPlayDecisionSE()
+          pbPlayDecisionSE
           return [0,@sprites["setview"].cursor]
         elsif Input.trigger?(Input::BACK)
-          pbPlayCancelSE()
+          pbPlayCancelSE
           return [3,0]
         end
       end
     }
   end
 
-  def pbChooseSet()
+  def pbChooseSet
     pbActivateWindow(@sprites,"setwindow") {
       oldindex=@sprites["setwindow"].index
       loop do
@@ -1225,11 +1227,11 @@ class PurifyChamberScene
         Input.update
         pbUpdate
         if Input.trigger?(Input::USE)
-          pbPlayDecisionSE()
+          pbPlayDecisionSE
           return @sprites["setwindow"].index
         end
         if Input.trigger?(Input::BACK)
-          pbPlayCancelSE()
+          pbPlayCancelSE
           return -1
         end
       end
@@ -1238,7 +1240,7 @@ class PurifyChamberScene
 
   def pbSwitch(set)
     @sprites["setwindow"].switching=set
-    ret=pbChooseSet()
+    ret=pbChooseSet
     @sprites["setwindow"].switching=-1
     return ret<0 ? set : ret
   end
@@ -1285,11 +1287,11 @@ class PurifyChamberScene
     pbRefresh
   end
 
-  def pbChoosePokemon()
+  def pbChoosePokemon
     visible=pbFadeOutAndHide(@sprites)
-    scene=PokemonStorageScene.new()
+    scene=PokemonStorageScene.new
     screen=PokemonStorageScreen.new(scene,$PokemonStorage)
-    pos=screen.pbChoosePokemon()
+    pos=screen.pbChoosePokemon
     pbRefresh
     pbFadeInAndShow(@sprites,visible)
     return pos
@@ -1322,7 +1324,7 @@ class PurifyChamberPC
 
   def access
     pbMessage(_INTL("\\se[PC access]Accessed the Purify Chamber."))
-    pbPurifyChamber()
+    pbPurifyChamber
   end
 end
 

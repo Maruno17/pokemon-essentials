@@ -131,7 +131,7 @@ class HallOfFame_Scene
     $PokemonGlobal.hallOfFame.push(@hallEntry)
     $PokemonGlobal.hallOfFameLastNumber+=1
     $PokemonGlobal.hallOfFame.delete_at(0) if HALLLIMIT>-1 &&
-                                        $PokemonGlobal.hallOfFame.size>HALLLIMIT
+                                              $PokemonGlobal.hallOfFame.size>HALLLIMIT
   end
 
   # Return the x/y point position in screen for battler index number
@@ -314,9 +314,9 @@ class HallOfFame_Scene
        [dexnumber,32,Graphics.height-86,0,BASECOLOR,SHADOWCOLOR],
        [pokename,Graphics.width-192,Graphics.height-86,2,BASECOLOR,SHADOWCOLOR],
        [_INTL("Lv. {1}",pokemon.egg? ? "?" : pokemon.level),
-           64,Graphics.height-54,0,BASECOLOR,SHADOWCOLOR],
+        64,Graphics.height-54,0,BASECOLOR,SHADOWCOLOR],
        [_INTL("IDNo.{1}",pokemon.egg? ? "?????" : idno),
-           Graphics.width-192,Graphics.height-54,2,BASECOLOR,SHADOWCOLOR]
+        Graphics.width-192,Graphics.height-54,2,BASECOLOR,SHADOWCOLOR]
     ]
     if (hallNumber>-1)
       textPositions.push([_INTL("Hall of Fame No."),Graphics.width/2-104,-6,0,BASECOLOR,SHADOWCOLOR])
@@ -329,7 +329,7 @@ class HallOfFame_Scene
     overlay=@sprites["overlay"].bitmap
     overlay.clear
     pbDrawTextPositions(overlay,[[_INTL("Welcome to the Hall of Fame!"),
-       Graphics.width/2,Graphics.height-80,2,BASECOLOR,SHADOWCOLOR]])
+                                  Graphics.width/2,Graphics.height-80,2,BASECOLOR,SHADOWCOLOR]])
   end
 
   def pbAnimationLoop

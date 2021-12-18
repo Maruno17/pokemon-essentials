@@ -44,7 +44,7 @@ end
 def pbImportAnim(animations,canvas,animwin)
   animfiles=[]
   pbRgssChdir(".") {
-     animfiles.concat(Dir.glob("*.anm"))
+    animfiles.concat(Dir.glob("*.anm"))
   }
   cmdwin=pbListWindow(animfiles,320)
   cmdwin.opacity=200

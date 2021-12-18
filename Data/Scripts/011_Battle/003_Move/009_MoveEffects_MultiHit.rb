@@ -144,7 +144,8 @@ class Battle::Move::HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1 < Battle::Move
       2, 2, 2, 2, 2, 2, 2,
       3, 3, 3, 3, 3, 3, 3,
       4, 4, 4,
-      5, 5, 5]
+      5, 5, 5
+    ]
     r = @battle.pbRandom(hitChances.length)
     r = hitChances.length - 1 if user.hasActiveAbility?(:SKILLLINK)
     return hitChances[r]

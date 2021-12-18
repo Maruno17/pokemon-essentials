@@ -134,7 +134,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     @lastDrawnChar    = -1
     @fmtchars         = []
     @frameskipChanged = false
-    @frameskip        = MessageConfig.pbGetTextSpeed()
+    @frameskip        = MessageConfig.pbGetTextSpeed
     super(0,0,33,33)
     @pausesprite      = nil
     @text             = ""
@@ -679,7 +679,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     refresh if @frame%15==0
     if self.active
       if Input.repeat?(Input::UP) || Input.repeat?(Input::DOWN)
-        pbPlayCursorSE()
+        pbPlayCursorSE
         if @index==0 && @sign
           @negative=!@negative
         else
@@ -696,14 +696,14 @@ class Window_InputNumberPokemon < SpriteWindow_Base
         refresh
       elsif Input.repeat?(Input::RIGHT)
         if digits >= 2
-          pbPlayCursorSE()
+          pbPlayCursorSE
           @index = (@index + 1) % digits
           @frame=0
           refresh
         end
       elsif Input.repeat?(Input::LEFT)
         if digits >= 2
-          pbPlayCursorSE()
+          pbPlayCursorSE
           @index = (@index + digits - 1) % digits
           @frame=0
           refresh
@@ -847,7 +847,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
           oldindex = @index
           @index = (@index - @column_max + @item_max) % @item_max
           if @index!=oldindex
-            pbPlayCursorSE()
+            pbPlayCursorSE
             update_cursor_rect
           end
         end
@@ -857,7 +857,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
           oldindex = @index
           @index = (@index + @column_max) % @item_max
           if @index!=oldindex
-            pbPlayCursorSE()
+            pbPlayCursorSE
             update_cursor_rect
           end
         end
@@ -866,7 +866,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
           oldindex = @index
           @index -= 1
           if @index!=oldindex
-            pbPlayCursorSE()
+            pbPlayCursorSE
             update_cursor_rect
           end
         end
@@ -875,7 +875,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
           oldindex = @index
           @index += 1
           if @index!=oldindex
-            pbPlayCursorSE()
+            pbPlayCursorSE
             update_cursor_rect
           end
         end
@@ -884,7 +884,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
           oldindex = @index
           @index = [self.index-self.page_item_max, 0].max
           if @index!=oldindex
-            pbPlayCursorSE()
+            pbPlayCursorSE
             self.top_row -= self.page_row_max
             update_cursor_rect
           end
@@ -894,7 +894,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
           oldindex = @index
           @index = [self.index+self.page_item_max, @item_max-1].min
           if @index!=oldindex
-            pbPlayCursorSE()
+            pbPlayCursorSE
             self.top_row += self.page_row_max
             update_cursor_rect
           end
@@ -1092,8 +1092,8 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
       tmpbitmap.dispose
     end
     # Store suggested width and height of window
-    dims[0] = [self.borderX+1,(width*self.columns)+self.borderX+
-              (self.columns-1)*self.columnSpacing].max
+    dims[0] = [self.borderX + 1,
+               (width * self.columns) + self.borderX + (self.columns - 1) * self.columnSpacing].max
     dims[1] = [self.borderY+1,windowheight].max
     dims[1] = [dims[1],Graphics.height].min
   end
@@ -1117,11 +1117,10 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     return 0
   end
 
-  def drawItem(index,count,rect)   # to be implemented by derived classes
-  end
+  def drawItem(index, count, rect); end   # to be implemented by derived classes
 
   def refresh
-    @item_max = itemCount()
+    @item_max = itemCount
     dwidth  = self.width-self.borderX
     dheight = self.height-self.borderY
     self.contents = pbDoEnsureBitmap(self.contents,dwidth,dheight)

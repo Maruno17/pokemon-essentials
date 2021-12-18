@@ -11,11 +11,11 @@ class SlotMachineReel < BitmapSprite
   attr_accessor :spinning
   attr_accessor :stopping
   attr_accessor :slipping
+
   SCROLLSPEED = 16   # Must be a divisor of 48
   ICONSPOOL = [[0,0,0,0,1,1,2,2,3,3,3,4,4,4,5,5,6,6,7], # 0 - Easy
                [0,0,0,0,1,1,1,2,2,2,3,3,4,4,5,6,7],     # 1 - Medium (default)
-               [0,0,1,1,1,2,2,2,3,3,4,4,5,6,7]          # 2 - Hard
-              ]
+               [0,0,1,1,1,2,2,2,3,3,4,4,5,6,7]]         # 2 - Hard
   SLIPPING = [0,0,0,0,0,0,1,1,1,2,2,3]
 
   def initialize(x,y,difficulty=1)
@@ -132,8 +132,7 @@ class SlotMachineScene
                   [reel1[0],reel2[0],reel3[0]], # Top row
                   [reel1[2],reel2[2],reel3[2]], # Bottom row
                   [reel1[0],reel2[1],reel3[2]], # Diagonal top left -> bottom right
-                  [reel1[2],reel2[1],reel3[0]], # Diagonal bottom left -> top right
-                 ]
+                  [reel1[2],reel2[1],reel3[0]]] # Diagonal bottom left -> top right
     for i in 0...combinations.length
       break if i>=1 && @wager<=1 # One coin = centre row only
       break if i>=3 && @wager<=2 # Two coins = three rows only

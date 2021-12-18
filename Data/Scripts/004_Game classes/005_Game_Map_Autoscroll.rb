@@ -148,20 +148,20 @@ end
 class Game_Map
   def scroll_downright(distance)
     @display_x = [@display_x + distance,
-       (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X].min
+                  (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X].min
     @display_y = [@display_y + distance,
-       (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y].min
+                  (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y].min
   end
 
   def scroll_downleft(distance)
     @display_x = [@display_x - distance, 0].max
     @display_y = [@display_y + distance,
-       (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y].min
+                  (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y].min
   end
 
   def scroll_upright(distance)
     @display_x = [@display_x + distance,
-       (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X].min
+                  (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X].min
     @display_y = [@display_y - distance, 0].max
   end
 
