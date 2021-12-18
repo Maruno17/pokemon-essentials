@@ -47,7 +47,7 @@ module Battle::CatchAndStoreMixin
   #=============================================================================
   # Throw a Poké Ball
   #=============================================================================
-  def pbThrowPokeBall(idxBattler,ball,catch_rate=nil,showPlayer=false)
+  def pbThrowPokeBall(idxBattler,ball,catch_rate = nil,showPlayer = false)
     # Determine which Pokémon you're throwing the Poké Ball at
     battler = nil
     if opposes?(idxBattler)

@@ -2,7 +2,7 @@
 # Based on version 2 by Near Fantastica, 04.01.06
 # In turn based on the Particle Engine designed by PinkMan
 class Particle_Engine
-  def initialize(viewport=nil,map=nil)
+  def initialize(viewport = nil,map = nil)
     @map       = (map) ? map : $game_map
     @viewport  = viewport
     @effect    = []
@@ -177,7 +177,7 @@ end
 class ParticleEffect_Event < ParticleEffect
   attr_accessor :event
 
-  def initialize(event,viewport=nil)
+  def initialize(event,viewport = nil)
     @event     = event
     @viewport  = viewport
     @particles = []
@@ -202,7 +202,7 @@ class ParticleEffect_Event < ParticleEffect
     return bitmap
   end
 
-  def initParticles(filename,opacity,zOffset=0,blendtype=1)
+  def initParticles(filename,opacity,zOffset = 0,blendtype = 1)
     @particles = []
     @particlex = []
     @particley = []
@@ -570,7 +570,7 @@ class Game_Event < Game_Character
   attr_accessor :pe_refresh
 
   alias nf_particles_game_map_initialize initialize
-  def initialize(map_id,event,map=nil)
+  def initialize(map_id,event,map = nil)
     @pe_refresh = false
     begin
       nf_particles_game_map_initialize(map_id, event, map)

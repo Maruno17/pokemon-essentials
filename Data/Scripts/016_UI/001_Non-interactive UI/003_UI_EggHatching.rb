@@ -123,7 +123,7 @@ class PokemonEggHatch_Scene
     @sprites["hatch"].src_rect.x = index*@sprites["hatch"].src_rect.width
   end
 
-  def swingEgg(speed,swingTimes=1)
+  def swingEgg(speed,swingTimes = 1)
     @sprites["hatch"].visible = true
     speed = speed.to_f*20/Graphics.frame_rate
     amplitude = 8
@@ -147,7 +147,7 @@ class PokemonEggHatch_Scene
     @sprites["hatch"].x   = @sprites["pokemon"].x
   end
 
-  def updateScene(frames=1)   # Can be used for "wait" effect
+  def updateScene(frames = 1)   # Can be used for "wait" effect
     frames.times do
       Graphics.update
       Input.update

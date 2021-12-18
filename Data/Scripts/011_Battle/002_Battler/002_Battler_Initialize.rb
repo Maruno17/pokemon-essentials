@@ -57,7 +57,7 @@ class Battle::Battler
     @dummy        = true
   end
 
-  def pbInitialize(pkmn,idxParty,batonPass=false)
+  def pbInitialize(pkmn,idxParty,batonPass = false)
     pbInitPokemon(pkmn,idxParty)
     pbInitEffects(batonPass)
     @damageState.reset
@@ -288,7 +288,7 @@ class Battle::Battler
   #=============================================================================
   # Refreshing a battler's properties
   #=============================================================================
-  def pbUpdate(fullChange=false)
+  def pbUpdate(fullChange = false)
     return if !@pokemon
     @pokemon.calc_stats
     @level          = @pokemon.level

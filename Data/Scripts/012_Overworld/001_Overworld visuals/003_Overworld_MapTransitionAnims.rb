@@ -81,7 +81,7 @@ end
 #===============================================================================
 # Blacking out animation
 #===============================================================================
-def pbStartOver(gameover=false)
+def pbStartOver(gameover = false)
   if pbInBugContest?
     pbBugContestStartOver
     return

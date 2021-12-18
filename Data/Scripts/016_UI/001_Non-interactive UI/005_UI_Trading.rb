@@ -197,7 +197,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
+def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender = 0)
   $stats.trade_count += 1
   myPokemon = $player.party[pokemonIndex]
   yourPokemon = nil

@@ -180,7 +180,7 @@ end
 module RTP
   @rtpPaths = nil
 
-  def self.exists?(filename,extensions=[])
+  def self.exists?(filename,extensions = [])
     return false if nil_or_empty?(filename)
     eachPathFor(filename) { |path|
       return true if safeExists?(path)
@@ -199,7 +199,7 @@ module RTP
     return self.getPath(filename,["",".wav",".wma",".mid",".ogg",".midi"])   # ".mp3"
   end
 
-  def self.getPath(filename,extensions=[])
+  def self.getPath(filename,extensions = [])
     return filename if nil_or_empty?(filename)
     eachPathFor(filename) { |path|
       return path if safeExists?(path)
@@ -293,7 +293,7 @@ end
 
 # NOTE: load_data checks anything added in MKXP's RTP setting,
 # and matching mount points added through System.mount
-def pbRgssOpen(file,mode=nil)
+def pbRgssOpen(file,mode = nil)
   # File.open("debug.txt","ab") { |fw| fw.write([file,mode,Time.now.to_f].inspect+"\r\n") }
   if !safeExists?("./Game.rgssad")
     if block_given?
@@ -421,7 +421,7 @@ class StringInput
 
   def pos=(value); seek(value); end
 
-  def seek(offset, whence=IO::SEEK_SET)
+  def seek(offset, whence = IO::SEEK_SET)
     raise IOError, 'closed stream' if @closed
     case whence
     when IO::SEEK_SET then @pos = offset

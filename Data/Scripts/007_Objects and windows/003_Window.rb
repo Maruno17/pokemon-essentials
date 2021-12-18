@@ -75,7 +75,7 @@ class Window
     @_windowskin
   end
 
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @sprites={}
     @spritekeys=[
        "back",
@@ -345,7 +345,7 @@ class Window
     end
   end
 
-  def privRefresh(changeBitmap=false)
+  def privRefresh(changeBitmap = false)
     return if self.disposed?
     backopac=self.back_opacity*self.opacity/255
     contopac=self.contents_opacity

@@ -1721,7 +1721,7 @@ end
 class Battle::Move::UserStealTargetPositiveStatStages < Battle::Move
   def ignoresSubstitute?(user); return true; end
 
-  def pbCalcDamage(user,target,numTargets=1)
+  def pbCalcDamage(user,target,numTargets = 1)
     if target.hasRaisedStatStages?
       pbShowAnimation(@id,user,target,1)   # Stat stage-draining animation
       @battle.pbDisplay(_INTL("{1} stole the target's boosted stats!",user.pbThis))
@@ -1931,7 +1931,7 @@ class Battle::Move::StartSwapAllBattlersBaseDefensiveStats < Battle::Move
     end
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     return if @battle.field.effects[PBEffects::WonderRoom]>0   # No animation
     super
   end

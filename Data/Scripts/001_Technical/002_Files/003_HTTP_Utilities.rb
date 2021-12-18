@@ -3,7 +3,7 @@
 # HTTP utility functions
 #
 #############################
-def pbPostData(url, postdata, filename=nil, depth=0)
+def pbPostData(url, postdata, filename = nil, depth = 0)
   if url[/^http:\/\/([^\/]+)(.*)$/]
     host = $1
     path = $2

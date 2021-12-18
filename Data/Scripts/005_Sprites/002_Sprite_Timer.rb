@@ -1,5 +1,5 @@
 class Sprite_Timer
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @viewport=viewport
     @timer=nil
     @total_sec=nil

@@ -80,7 +80,7 @@ class Battle::Move::RandomlyDamageOrHealTarget < Battle::Move
     @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     hitNum = 1 if @presentDmg==0   # Healing anim
     super
   end
@@ -125,7 +125,7 @@ class Battle::Move::HealAllyOrDamageFoe < Battle::Move
     @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     hitNum = 1 if @healing   # Healing anim
     super
   end
@@ -193,7 +193,7 @@ class Battle::Move::CurseTargetOrLowerUserSpd1RaiseUserAtkDef1 < Battle::Move
     user.pbItemHPHealCheck
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     hitNum = 1 if !user.pbHasType?(:GHOST)   # Non-Ghost anim
     super
   end
@@ -288,7 +288,7 @@ class Battle::Move::EffectDependsOnEnvironment < Battle::Move
     end
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     id = :BODYSLAM   # Environment-specific anim
     case @secretPower
     when 1  then id = :THUNDERSHOCK if GameData::Move.exists?(:THUNDERSHOCK)
@@ -371,7 +371,7 @@ class Battle::Move::DoublePowerAfterFusionFlare < Battle::Move
     @battle.field.effects[PBEffects::FusionBolt] = true
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     hitNum = 1 if (targets.length>0 && targets[0].damageState.critical) ||
                   @doublePower   # Charged anim
     super
@@ -396,7 +396,7 @@ class Battle::Move::DoublePowerAfterFusionBolt < Battle::Move
     @battle.field.effects[PBEffects::FusionFlare] = true
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     hitNum = 1 if (targets.length>0 && targets[0].damageState.critical) ||
                   @doublePower   # Charged anim
     super
@@ -777,7 +777,7 @@ class Battle::Move::UseLastMoveUsedByTarget < Battle::Move
     user.pbUseMoveSimple(target.lastRegularMoveUsed,target.index)
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     # No animation
   end
 end

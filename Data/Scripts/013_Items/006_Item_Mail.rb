@@ -23,12 +23,12 @@ def pbMoveToMailbox(pokemon)
   return true
 end
 
-def pbStoreMail(pkmn,item,message,poke1=nil,poke2=nil,poke3=nil)
+def pbStoreMail(pkmn,item,message,poke1 = nil,poke2 = nil,poke3 = nil)
   raise _INTL("Pokémon already has mail") if pkmn.mail
   pkmn.mail = Mail.new(item, message, $player.name, poke1, poke2, poke3)
 end
 
-def pbDisplayMail(mail,_bearer=nil)
+def pbDisplayMail(mail,_bearer = nil)
   sprites = {}
   viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z = 99999

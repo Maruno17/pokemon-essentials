@@ -299,7 +299,7 @@ class Game_Map
     return false
   end
 
-  def terrain_tag(x,y,countBridge=false)
+  def terrain_tag(x,y,countBridge = false)
     if valid?(x, y)
       for i in [2, 1, 0]
         tile_id = data[x, y, i]

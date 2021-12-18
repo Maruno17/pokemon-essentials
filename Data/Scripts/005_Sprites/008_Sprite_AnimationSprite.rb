@@ -5,7 +5,7 @@ automatically when its animation is finished.
 Used for grass rustling and so forth.
 =end
 class AnimationSprite < RPG::Sprite
-  def initialize(animID,map,tileX,tileY,viewport=nil,tinting=false,height=3)
+  def initialize(animID,map,tileX,tileY,viewport = nil,tinting = false,height = 3)
     super(viewport)
     @tileX = tileX
     @tileY = tileY
@@ -45,12 +45,12 @@ class Spriteset_Map
   alias _animationSprite_update update
   alias _animationSprite_dispose dispose
 
-  def initialize(map=nil)
+  def initialize(map = nil)
     @usersprites=[]
     _animationSprite_initialize(map)
   end
 
-  def addUserAnimation(animID,x,y,tinting=false,height=3)
+  def addUserAnimation(animID,x,y,tinting = false,height = 3)
     sprite=AnimationSprite.new(animID,self.map,x,y,@@viewport1,tinting,height)
     addUserSprite(sprite)
     return sprite

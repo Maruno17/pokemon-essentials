@@ -5,7 +5,7 @@ class MoveSelectionSprite < SpriteWrapper
   attr_reader :preselected
   attr_reader :index
 
-  def initialize(viewport=nil,fifthmove=false)
+  def initialize(viewport = nil,fifthmove = false)
     super(viewport)
     @movesel = AnimatedBitmap.new("Graphics/Pictures/Summary/cursor_move")
     @frame = 0
@@ -59,7 +59,7 @@ end
 #
 #===============================================================================
 class RibbonSelectionSprite < MoveSelectionSprite
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(viewport)
     @movesel = AnimatedBitmap.new("Graphics/Pictures/Summary/cursor_ribbon")
     @frame = 0
@@ -109,7 +109,7 @@ class PokemonSummary_Scene
     pbUpdateSpriteHash(@sprites)
   end
 
-  def pbStartScene(party,partyindex,inbattle=false)
+  def pbStartScene(party,partyindex,inbattle = false)
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
     @party      = party
@@ -259,7 +259,7 @@ class PokemonSummary_Scene
     return ret
   end
 
-  def pbShowCommands(commands,index=0)
+  def pbShowCommands(commands,index = 0)
     ret = -1
     using(cmdwindow = Window_CommandPokemon.new(commands)) {
       cmdwindow.z = @viewport.z+1
@@ -1331,7 +1331,7 @@ end
 #
 #===============================================================================
 class PokemonSummaryScreen
-  def initialize(scene,inbattle=false)
+  def initialize(scene,inbattle = false)
     @scene = scene
     @inbattle = inbattle
   end

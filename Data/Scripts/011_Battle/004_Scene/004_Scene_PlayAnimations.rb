@@ -57,7 +57,7 @@ class Battle::Scene
   #=============================================================================
   # Animates a party lineup appearing for the given side
   #=============================================================================
-  def pbShowPartyLineup(side,fullAnim=false)
+  def pbShowPartyLineup(side,fullAnim = false)
     @animations.push(Animation::LineupAppear.new(@sprites,@viewport,
        side,@battle.pbParty(side),@battle.pbPartyStarts(side),fullAnim))
     if !fullAnim
@@ -88,7 +88,7 @@ class Battle::Scene
   # animation for it if relevant.
   # sendOuts is an array; each element is itself an array: [idxBattler,pkmn]
   #=============================================================================
-  def pbSendOutBattlers(sendOuts,startBattle=false)
+  def pbSendOutBattlers(sendOuts,startBattle = false)
     return if sendOuts.length==0
     # If party balls are still appearing, wait for them to finish showing up, as
     # the FadeAnimation will make them disappear.
@@ -216,7 +216,7 @@ class Battle::Scene
   #=============================================================================
   # Shows a HP-changing common animation and animates a data box's HP bar.
   # Called by def pbReduceHP, def pbRecoverHP.
-  def pbHPChanged(battler,oldHP,showAnim=false)
+  def pbHPChanged(battler,oldHP,showAnim = false)
     @briefMessage = false
     if battler.hp>oldHP
       pbCommonAnimation("HealthUp",battler) if showAnim && @battle.showAnims
@@ -229,7 +229,7 @@ class Battle::Scene
     end
   end
 
-  def pbDamageAnimation(battler,effectiveness=0)
+  def pbDamageAnimation(battler,effectiveness = 0)
     @briefMessage = false
     # Damage animation
     damageAnim = Animation::BattlerDamage.new(@sprites,@viewport,battler.index,effectiveness)
@@ -324,7 +324,7 @@ class Battle::Scene
   #=============================================================================
   # Animates throwing a Poké Ball at a Pokémon in an attempt to catch it
   #=============================================================================
-  def pbThrow(ball,shakes,critical,targetBattler,showPlayer=false)
+  def pbThrow(ball,shakes,critical,targetBattler,showPlayer = false)
     @briefMessage = false
     captureAnim = Animation::PokeballThrowCapture.new(@sprites,@viewport,
        ball,shakes,critical,@battle.battlers[targetBattler],showPlayer)
@@ -403,7 +403,7 @@ class Battle::Scene
   #=============================================================================
   # Returns the animation ID to use for a given move/user. Returns nil if that
   # move has no animations defined for it.
-  def pbFindMoveAnimDetails(move2anim,moveID,idxUser,hitNum=0)
+  def pbFindMoveAnimDetails(move2anim,moveID,idxUser,hitNum = 0)
     real_move_id = GameData::Move.get(moveID).id
     noFlip = false
     if (idxUser&1)==0   # On player's side
@@ -483,7 +483,7 @@ class Battle::Scene
   # Plays a move/common animation
   #=============================================================================
   # Plays a move animation.
-  def pbAnimation(moveID,user,targets,hitNum=0)
+  def pbAnimation(moveID,user,targets,hitNum = 0)
     animID = pbFindMoveAnimation(moveID,user.index,hitNum)
     return if !animID
     anim = animID[0]
@@ -500,7 +500,7 @@ class Battle::Scene
   end
 
   # Plays a common animation.
-  def pbCommonAnimation(animName,user=nil,target=nil)
+  def pbCommonAnimation(animName,user = nil,target = nil)
     return if nil_or_empty?(animName)
     target = target[0] if target && target.is_a?(Array)
     animations = pbLoadBattleAnimations
@@ -512,7 +512,7 @@ class Battle::Scene
     end
   end
 
-  def pbAnimationCore(animation,user,target,oppMove=false)
+  def pbAnimationCore(animation,user,target,oppMove = false)
     return if !animation
     @briefMessage = false
     userSprite   = (user) ? @sprites["pokemon_#{user.index}"] : nil

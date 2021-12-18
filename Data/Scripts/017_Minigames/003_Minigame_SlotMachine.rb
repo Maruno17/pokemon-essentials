@@ -18,7 +18,7 @@ class SlotMachineReel < BitmapSprite
                [0,0,1,1,1,2,2,2,3,3,4,4,5,6,7]]         # 2 - Hard
   SLIPPING = [0,0,0,0,0,0,1,1,1,2,2,3]
 
-  def initialize(x,y,difficulty=1)
+  def initialize(x,y,difficulty = 1)
     @viewport=Viewport.new(x,y,64,144)
     @viewport.z=99999
     super(64,144,@viewport)
@@ -41,7 +41,7 @@ class SlotMachineReel < BitmapSprite
     @spinning=true
   end
 
-  def stopSpinning(noslipping=false)
+  def stopSpinning(noslipping = false)
     @stopping=true
     @slipping=SLIPPING[rand(SLIPPING.length)]
     @slipping=0 if noslipping
@@ -84,7 +84,7 @@ end
 class SlotMachineScore < BitmapSprite
   attr_reader :score
 
-  def initialize(x,y,score=0)
+  def initialize(x,y,score = 0)
     @viewport=Viewport.new(x,y,70,22)
     @viewport.z=99999
     super(70,22,@viewport)
@@ -392,7 +392,7 @@ end
 
 
 
-def pbSlotMachine(difficulty=1)
+def pbSlotMachine(difficulty = 1)
   if !$bag.has?(:COINCASE)
     pbMessage(_INTL("It's a Slot Machine."))
   elsif $player.coins == 0

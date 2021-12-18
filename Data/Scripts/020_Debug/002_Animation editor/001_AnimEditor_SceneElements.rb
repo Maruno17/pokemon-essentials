@@ -78,7 +78,7 @@ end
 
 
 
-def pbSpriteHitTest(sprite,x,y,usealpha=true,wholecanvas=false)
+def pbSpriteHitTest(sprite,x,y,usealpha = true,wholecanvas = false)
   return false if !sprite || sprite.disposed?
   return false if !sprite.bitmap
   return false if !sprite.visible
@@ -170,7 +170,7 @@ class AnimationWindow < SpriteWrapper
 
   NUMFRAMES=5
 
-  def initialize(x,y,width,height,viewport=nil)
+  def initialize(x,y,width,height,viewport = nil)
     super(viewport)
     @animbitmap=nil
     @arrows=AnimatedBitmap.new("Graphics/Pictures/arrows")
@@ -306,7 +306,7 @@ class CanvasAnimationWindow < AnimationWindow
     return @canvas.animbitmap
   end
 
-  def initialize(canvas,x,y,width,height,viewport=nil)
+  def initialize(canvas,x,y,width,height,viewport = nil)
     @canvas=canvas
     super(x,y,width,height,viewport)
   end
@@ -318,7 +318,7 @@ end
 # Cel sprite
 ################################################################################
 class InvalidatableSprite < Sprite
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(viewport)
     @invalid=false
   end
@@ -362,7 +362,7 @@ class SpriteFrame < InvalidatableSprite
 
   NUM_ROWS   = (PBAnimation::MAX_SPRITES.to_f/10).ceil   # 10 frame number icons in each row
 
-  def initialize(id,sprite,viewport,previous=false)
+  def initialize(id,sprite,viewport,previous = false)
     super(viewport)
     @id=id
     @sprite=sprite
@@ -436,7 +436,7 @@ class AnimationCanvas < Sprite
 
   BORDERSIZE=64
 
-  def initialize(animation,viewport=nil)
+  def initialize(animation,viewport = nil)
     super(viewport)
     @currentframe=0
     @currentcel=-1
@@ -518,7 +518,7 @@ class AnimationCanvas < Sprite
     super
   end
 
-  def play(oppmove=false)
+  def play(oppmove = false)
     if !@playing
       @sprites["pokemon_0"]=Sprite.new(@viewport)
       @sprites["pokemon_0"].bitmap=@user
@@ -1005,7 +1005,7 @@ end
 
 
 class AnimationNameWindow
-  def initialize(canvas,x,y,width,height,viewport=nil)
+  def initialize(canvas,x,y,width,height,viewport = nil)
     @canvas=canvas
     @oldname=nil
     @window=Window_UnformattedTextPokemon.newWithSize(

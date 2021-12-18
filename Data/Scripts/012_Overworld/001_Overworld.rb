@@ -311,7 +311,7 @@ Events.onMapSceneChange += proc { |_sender, e|
 # Event locations, terrain tags
 #===============================================================================
 # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
-def pbFacingTile(direction=nil,event=nil)
+def pbFacingTile(direction = nil,event = nil)
   return $map_factory.getFacingTile(direction,event) if $map_factory
   return pbFacingTileRegular(direction,event)
 end
@@ -395,7 +395,7 @@ end
 #===============================================================================
 # Audio playing
 #===============================================================================
-def pbCueBGM(bgm,seconds,volume=nil,pitch=nil)
+def pbCueBGM(bgm,seconds,volume = nil,pitch = nil)
   return if !bgm
   bgm        = pbResolveAudioFile(bgm,volume,pitch)
   playingBGM = $game_system.playing_bgm
@@ -484,7 +484,7 @@ end
 
 
 
-def pbMoveRoute(event,commands,waitComplete=false)
+def pbMoveRoute(event,commands,waitComplete = false)
   route = RPG::MoveRoute.new
   route.repeat    = false
   route.skippable = true
@@ -612,7 +612,7 @@ def pbMoveTowardPlayer(event)
   $PokemonMap.addMovedEvent(event.id) if $PokemonMap
 end
 
-def pbJumpToward(dist=1,playSound=false,cancelSurf=false)
+def pbJumpToward(dist = 1,playSound = false,cancelSurf = false)
   x = $game_player.x
   y = $game_player.y
   case $game_player.direction
@@ -640,7 +640,7 @@ end
 #===============================================================================
 # Bridges, cave escape points, and setting the heal point
 #===============================================================================
-def pbBridgeOn(height=2)
+def pbBridgeOn(height = 2)
   $PokemonGlobal.bridge = height
 end
 
@@ -706,7 +706,7 @@ end
 #===============================================================================
 # Picking up an item found on the ground
 #===============================================================================
-def pbItemBall(item,quantity=1)
+def pbItemBall(item,quantity = 1)
   item = GameData::Item.get(item)
   return false if !item || quantity<1
   itemname = (quantity>1) ? item.name_plural : item.name
@@ -752,7 +752,7 @@ end
 #===============================================================================
 # Being given an item
 #===============================================================================
-def pbReceiveItem(item,quantity=1)
+def pbReceiveItem(item,quantity = 1)
   item = GameData::Item.get(item)
   return false if !item || quantity<1
   itemname = (quantity>1) ? item.name_plural : item.name

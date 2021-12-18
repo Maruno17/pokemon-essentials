@@ -59,7 +59,7 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
     refresh
   end
 
-  def shadowtext(x,y,w,h,t,align=0,colors=0)
+  def shadowtext(x,y,w,h,t,align = 0,colors = 0)
     width = self.contents.text_size(t).width
     if align==1 # Right aligned
       x += (w-width)
@@ -364,7 +364,7 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
     return self.roamerCount+2
   end
 
-  def shadowtext(t,x,y,w,h,align=0,colors=0)
+  def shadowtext(t,x,y,w,h,align = 0,colors = 0)
     width = self.contents.text_size(t).width
     if align==1
       x += (w-width)         # Right aligned
@@ -823,7 +823,7 @@ class PokemonDebugPartyScreen
     return ret
   end
 
-  def pbShowCommands(text,commands,index=0)
+  def pbShowCommands(text,commands,index = 0)
     ret = -1
     @helpWindow.visible = true
     using(cmdwindow = Window_CommandPokemonColor.new(commands)) {
@@ -852,7 +852,7 @@ class PokemonDebugPartyScreen
     return ret
   end
 
-  def pbChooseMove(pkmn,text,index=0)
+  def pbChooseMove(pkmn,text,index = 0)
     moveNames = []
     for i in pkmn.moves
       if i.total_pp<=0

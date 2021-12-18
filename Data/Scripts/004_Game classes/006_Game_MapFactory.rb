@@ -51,7 +51,7 @@ class PokemonMapFactory
     return -1
   end
 
-  def getMap(id,add=true)
+  def getMap(id,add = true)
     for map in @maps
       return map if map.map_id==id
     end
@@ -194,7 +194,7 @@ class PokemonMapFactory
   end
 
   # Only used by dependent events
-  def isPassableStrict?(mapID,x,y,thisEvent=nil)
+  def isPassableStrict?(mapID,x,y,thisEvent = nil)
     thisEvent = $game_player if !thisEvent
     map = getMapNoAdd(mapID)
     return false if !map
@@ -214,19 +214,19 @@ class PokemonMapFactory
     return true
   end
 
-  def getTerrainTag(mapid,x,y,countBridge=false)
+  def getTerrainTag(mapid,x,y,countBridge = false)
     map = getMapNoAdd(mapid)
     return map.terrain_tag(x,y,countBridge)
   end
 
   # NOTE: Assumes the event is 1x1 tile in size. Only returns one terrain tag.
-  def getFacingTerrainTag(dir=nil,event=nil)
+  def getFacingTerrainTag(dir = nil,event = nil)
     tile = getFacingTile(dir,event)
     return GameData::TerrainTag.get(:None) if !tile
     return getTerrainTag(tile[0],tile[1],tile[2])
   end
 
-  def getTerrainTagFromCoords(mapid,x,y,countBridge=false)
+  def getTerrainTagFromCoords(mapid,x,y,countBridge = false)
     tile = getRealTilePos(mapid,x,y)
     return GameData::TerrainTag.get(:None) if !tile
     return getTerrainTag(tile[0],tile[1],tile[2])
@@ -289,7 +289,7 @@ class PokemonMapFactory
   end
 
   # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
-  def getFacingTile(direction=nil,event=nil,steps=1)
+  def getFacingTile(direction = nil,event = nil,steps = 1)
     event = $game_player if event==nil
     return [0,0,0] if !event
     x = event.x
@@ -299,7 +299,7 @@ class PokemonMapFactory
     return getFacingTileFromPos(id,x,y,direction,steps)
   end
 
-  def getFacingTileFromPos(mapID,x,y,direction=0,steps=1)
+  def getFacingTileFromPos(mapID,x,y,direction = 0,steps = 1)
     id = mapID
     case direction
     when 1
@@ -354,7 +354,7 @@ class PokemonMapFactory
     return nil
   end
 
-  def getFacingCoords(x,y,direction=0,steps=1)
+  def getFacingCoords(x,y,direction = 0,steps = 1)
     case direction
     when 1
       x -= steps

@@ -344,7 +344,7 @@ class OrderedHash < Hash
     return ret
   end
 
-  def _dump(_depth=100)
+  def _dump(_depth = 100)
     values=[]
     for key in @keys
       values.push(self[key])
@@ -356,7 +356,7 @@ end
 
 
 class Messages
-  def initialize(filename=nil,delayLoad=false)
+  def initialize(filename = nil,delayLoad = false)
     @messages=nil
     @filename=filename
     if @filename && !delayLoad
@@ -410,7 +410,7 @@ class Messages
     return value
   end
 
-  def self.writeObject(f,msgs,secname,origMessages=nil)
+  def self.writeObject(f,msgs,secname,origMessages = nil)
     return if !msgs
     if msgs.is_a?(Array)
       f.write("[#{secname}]\r\n")
@@ -529,7 +529,7 @@ class Messages
     @messages[type]=Messages.addToHash(type,array,@messages[type])
   end
 
-  def saveMessages(filename=nil)
+  def saveMessages(filename = nil)
     filename="Data/messages.dat" if !filename
     File.open(filename,"wb") { |f| Marshal.dump(@messages,f) }
   end
@@ -675,7 +675,7 @@ module MessageTypes
     @@messages.setMessagesAsHash(type,array)
   end
 
-  def self.saveMessages(filename=nil)
+  def self.saveMessages(filename = nil)
     @@messages.saveMessages(filename)
   end
 

@@ -76,7 +76,7 @@ class RelicStoneScene
     @viewport.dispose
   end
 
-  def pbDisplay(msg,brief=false)
+  def pbDisplay(msg,brief = false)
     UIHelper.pbDisplay(@sprites["msgwindow"],msg,brief) { pbUpdate }
   end
 
@@ -170,7 +170,7 @@ end
 class Battle
   alias __shadow__pbCanUseItemOnPokemon? pbCanUseItemOnPokemon?
 
-  def pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages=true)
+  def pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages = true)
     ret = __shadow__pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages)
     if ret && pkmn.hyper_mode && ![:JOYSCENT, :EXCITESCENT, :VIVIDSCENT].include?(item)
       scene.pbDisplay(_INTL("This item can't be used on that Pokémon."))

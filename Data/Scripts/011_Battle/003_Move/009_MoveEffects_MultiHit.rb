@@ -19,9 +19,9 @@ end
 # accuracy if the target is Minimized. (Double Iron Bash)
 #===============================================================================
 class Battle::Move::HitTwoTimesFlinchTarget < Battle::Move::FlinchTarget
-  def multiHitMove?;              return true;                                end
-  def pbNumHits(user,targets);    return 2;                                   end
-  def tramplesMinimize?(param=1); return Settings::MECHANICS_GENERATION <= 7; end
+  def multiHitMove?;                return true;                                end
+  def pbNumHits(user, targets);     return 2;                                   end
+  def tramplesMinimize?(param = 1); return Settings::MECHANICS_GENERATION <= 7; end
 end
 
 #===============================================================================
@@ -615,7 +615,7 @@ class Battle::Move::MultiTurnAttackBideThenReturnDoubleDamage < Battle::Move::Fi
     user.effects[PBEffects::Bide] -= 1
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     hitNum = 1 if !@damagingTurn   # Charging anim
     super
   end

@@ -4,7 +4,7 @@
 class IconWindow < SpriteWindow_Base
   attr_reader :name
 
-  def initialize(x,y,width,height,viewport=nil)
+  def initialize(x,y,width,height,viewport = nil)
     super(x,y,width,height)
     self.viewport=viewport
     self.contents=nil
@@ -37,7 +37,7 @@ class IconWindow < SpriteWindow_Base
   end
 
   # Sets the icon's filename.
-  def setBitmap(file,hue=0)
+  def setBitmap(file,hue = 0)
     clearBitmaps()
     @name=file
     return if file==nil
@@ -91,7 +91,7 @@ class PictureWindow < SpriteWindow_Base
 
   # Sets the icon's bitmap or filename. (hue parameter
   # is ignored unless pathOrBitmap is a filename)
-  def setBitmap(pathOrBitmap,hue=0)
+  def setBitmap(pathOrBitmap,hue = 0)
     clearBitmaps()
     if pathOrBitmap!=nil && pathOrBitmap!=""
       if pathOrBitmap.is_a?(Bitmap)

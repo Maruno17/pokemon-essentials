@@ -116,7 +116,7 @@ class HallOfFame_Scene
   end
 
   # Change the pokémon sprites opacity except the index one
-  def setPokemonSpritesOpacity(index,opacity=255)
+  def setPokemonSpritesOpacity(index,opacity = 255)
     for n in 0...@hallEntry.size
       @sprites["pokemon#{n}"].opacity=(n==index) ? 255 : opacity if @sprites["pokemon#{n}"]
     end
@@ -199,7 +199,7 @@ class HallOfFame_Scene
     end
   end
 
-  def createBattlers(hide=true)
+  def createBattlers(hide = true)
     # Movement in animation
     for i in 0...6
       # Clear all 6 pokémon sprites and dispose the ones that exists every time
@@ -292,7 +292,7 @@ class HallOfFame_Scene
         _INTL("League champion!\nCongratulations!\\^"))
   end
 
-  def writePokemonData(pokemon,hallNumber=-1)
+  def writePokemonData(pokemon,hallNumber = -1)
     overlay=@sprites["overlay"].bitmap
     overlay.clear
     pokename=pokemon.name

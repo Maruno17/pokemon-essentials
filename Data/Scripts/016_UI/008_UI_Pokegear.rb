@@ -6,7 +6,7 @@ class PokegearButton < SpriteWrapper
   attr_reader :name
   attr_reader :selected
 
-  def initialize(command,x,y,viewport=nil)
+  def initialize(command,x,y,viewport = nil)
     super(viewport)
     @image = command[0]
     @name  = command[1]

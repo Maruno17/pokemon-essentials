@@ -14,7 +14,7 @@ end
 #===============================================================================
 # type: 0=Pokémon; 1 or higher=item (is the item's quantity).
 # item: The thing being turned into a Mystery Gift (Pokémon object or item ID).
-def pbEditMysteryGift(type,item,id=0,giftname="")
+def pbEditMysteryGift(type,item,id = 0,giftname = "")
   begin
     if type==0   # Pokémon
       commands=[_INTL("Mystery Gift"),

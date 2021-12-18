@@ -6,7 +6,7 @@ class Game_Event < Game_Character
   attr_reader   :tempSwitches   # Temporary self-switches
   attr_accessor :need_refresh
 
-  def initialize(map_id, event, map=nil)
+  def initialize(map_id, event, map = nil)
     super(map)
     @map_id       = map_id
     @event        = event
@@ -99,13 +99,13 @@ class Game_Event < Game_Character
     return $PokemonGlobal.eventvars[[@map_id,@event.id]].to_i
   end
 
-  def expired?(secs=86400)
+  def expired?(secs = 86400)
     ontime=self.variable
     time=pbGetTimeNow
     return ontime && (time.to_i>ontime+secs)
   end
 
-  def expiredDays?(days=1)
+  def expiredDays?(days = 1)
     ontime=self.variable.to_i
     return false if !ontime
     now=pbGetTimeNow
@@ -242,7 +242,7 @@ class Game_Event < Game_Character
     check_event_trigger_auto
   end
 
-  def should_update?(recalc=false)
+  def should_update?(recalc = false)
     return @to_update if !recalc
     return true if @trigger && (@trigger == 3 || @trigger == 4)
     return true if @move_route_forcing

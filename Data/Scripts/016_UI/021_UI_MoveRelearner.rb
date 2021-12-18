@@ -4,7 +4,7 @@
 class MoveRelearner_Scene
   VISIBLEMOVES = 4
 
-  def pbDisplay(msg,brief=false)
+  def pbDisplay(msg,brief = false)
     UIHelper.pbDisplay(@sprites["msgwindow"],msg,brief) { pbUpdate }
   end
 

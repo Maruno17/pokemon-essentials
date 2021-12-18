@@ -7,7 +7,7 @@ class ItemIconSprite < SpriteWrapper
   ANIM_ICON_SIZE   = 48
   FRAMES_PER_CYCLE = Graphics.frame_rate
 
-  def initialize(x,y,item,viewport=nil)
+  def initialize(x,y,item,viewport = nil)
     super(viewport)
     @animbitmap = nil
     @animframe = 0
@@ -42,7 +42,7 @@ class ItemIconSprite < SpriteWrapper
     @forceitemchange = false
   end
 
-  def setOffset(offset=PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::Center)
     @offset = offset
     changeOrigin
   end
@@ -116,7 +116,7 @@ end
 # Item held icon (used in the party screen)
 #===============================================================================
 class HeldItemIconSprite < SpriteWrapper
-  def initialize(x,y,pokemon,viewport=nil)
+  def initialize(x,y,pokemon,viewport = nil)
     super(viewport)
     self.x = x
     self.y = y

@@ -81,7 +81,7 @@ class MiningGameCursor < BitmapSprite
   ToolPositions = [[1,0],[1,1],[1,1],[0,0],[0,0],
                    [0,2],[0,2],[0,0],[0,0],[0,2],[0,2]]   # Graphic, position
 
-  def initialize(position=0,mode=0)   # mode: 0=pick, 1=hammer
+  def initialize(position = 0,mode = 0)   # mode: 0=pick, 1=hammer
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
     super(Graphics.width,Graphics.height,@viewport)

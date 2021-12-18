@@ -19,7 +19,7 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
   FEMALE_BASE_COLOR       = Color.new(248,88,40)
   FEMALE_SHADOW_COLOR     = NAME_SHADOW_COLOR
 
-  def initialize(battler,sideSize,viewport=nil)
+  def initialize(battler,sideSize,viewport = nil)
     super(viewport)
     @battler      = battler
     @sprites      = {}
@@ -193,7 +193,7 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
     pbSEPlay("Pkmn exp gain") if @showExp
   end
 
-  def pbDrawNumber(number,btmp,startX,startY,align=0)
+  def pbDrawNumber(number,btmp,startX,startY,align = 0)
     # -1 means draw the / character
     n = (number == -1) ? [10] : number.to_i.digits.reverse
     charWidth  = @numbersBitmap.width/11
@@ -363,7 +363,7 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
     end
   end
 
-  def update(frameCounter=0)
+  def update(frameCounter = 0)
     super()
     # Animate HP bar
     updateHPAnimation
@@ -386,7 +386,7 @@ class Battle::Scene::AbilitySplashBar < SpriteWrapper
   TEXT_BASE_COLOR   = Color.new(0,0,0)
   TEXT_SHADOW_COLOR = Color.new(248,248,248)
 
-  def initialize(side,viewport=nil)
+  def initialize(side,viewport = nil)
     super(viewport)
     @side    = side
     @battler = nil
@@ -550,7 +550,7 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
     @pkmn.species_data.apply_metrics_to_sprite(self, @index)
   end
 
-  def setPokemonBitmap(pkmn,back=false)
+  def setPokemonBitmap(pkmn,back = false)
     @pkmn = pkmn
     @_iconBitmap.dispose if @_iconBitmap
     @_iconBitmap = GameData::Species.sprite_bitmap_from_pokemon(@pkmn, back)
@@ -562,14 +562,14 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
   # this is just playing the Pokémon's cry, but you can expand on it. The
   # recommendation is to create a PictureEx animation and push it into
   # the @battleAnimations array.
-  def pbPlayIntroAnimation(pictureEx=nil)
+  def pbPlayIntroAnimation(pictureEx = nil)
     @pkmn.play_cry if @pkmn
   end
 
   QUARTER_ANIM_PERIOD = Graphics.frame_rate*3/20
   SIXTH_ANIM_PERIOD   = Graphics.frame_rate*2/20
 
-  def update(frameCounter=0)
+  def update(frameCounter = 0)
     return if !@_iconBitmap
     @updating = true
     # Update bitmap
@@ -653,7 +653,7 @@ class Battle::Scene::BattlerShadowSprite < RPG::Sprite
     pbSetPosition
   end
 
-  def update(frameCounter=0)
+  def update(frameCounter = 0)
     return if !@_iconBitmap
     # Update bitmap
     @_iconBitmap.update

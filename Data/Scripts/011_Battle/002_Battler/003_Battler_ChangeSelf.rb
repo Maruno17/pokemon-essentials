@@ -2,7 +2,7 @@ class Battle::Battler
   #=============================================================================
   # Change HP
   #=============================================================================
-  def pbReduceHP(amt,anim=true,registerDamage=true,anyAnim=true)
+  def pbReduceHP(amt,anim = true,registerDamage = true,anyAnim = true)
     amt = amt.round
     amt = @hp if amt>@hp
     amt = 1 if amt<1 && !fainted?
@@ -19,7 +19,7 @@ class Battle::Battler
     return amt
   end
 
-  def pbRecoverHP(amt,anim=true,anyAnim=true)
+  def pbRecoverHP(amt,anim = true,anyAnim = true)
     amt = amt.round
     amt = @totalhp-@hp if amt>@totalhp-@hp
     amt = 1 if amt<1 && @hp<@totalhp
@@ -33,7 +33,7 @@ class Battle::Battler
     return amt
   end
 
-  def pbRecoverHPFromDrain(amt,target,msg=nil)
+  def pbRecoverHPFromDrain(amt,target,msg = nil)
     if target.hasActiveAbility?(:LIQUIDOOZE)
       @battle.pbShowAbilitySplash(target)
       pbReduceHP(amt)
@@ -60,7 +60,7 @@ class Battle::Battler
     @droppedBelowHalfHP = false
   end
 
-  def pbFaint(showMessage=true)
+  def pbFaint(showMessage = true)
     if !fainted?
       PBDebug.log("!!!***Can't faint with HP greater than 0")
       return
@@ -227,7 +227,7 @@ class Battle::Battler
   # Checks the Pokémon's form and updates it if necessary. Used for when a
   # Pokémon enters battle (endOfRound=false) and at the end of each round
   # (endOfRound=true).
-  def pbCheckForm(endOfRound=false)
+  def pbCheckForm(endOfRound = false)
     return if fainted? || @effects[PBEffects::Transform]
     # Form changes upon entering battle and when the weather changes
     pbCheckFormOnWeatherChange if !endOfRound

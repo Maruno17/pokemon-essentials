@@ -80,7 +80,7 @@ class PokedexSearchSelectionSprite < SpriteWrapper
   attr_accessor :cmds
   attr_accessor :minmax
 
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(viewport)
     @selbitmap = AnimatedBitmap.new("Graphics/Pictures/Pokedex/cursor_search")
     self.bitmap = @selbitmap.bitmap
@@ -369,7 +369,7 @@ class PokemonPokedex_Scene
     return ret
   end
 
-  def pbRefreshDexList(index=0)
+  def pbRefreshDexList(index = 0)
     dexlist = pbGetDexList
     case $PokemonGlobal.pokedexMode
     when MODENUMERICAL

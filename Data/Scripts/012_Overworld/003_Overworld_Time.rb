@@ -39,31 +39,31 @@ module PBDayNight
   @oneOverSixty = 1/60.0
 
   # Returns true if it's day.
-  def self.isDay?(time=nil)
+  def self.isDay?(time = nil)
     time = pbGetTimeNow if !time
     return (time.hour>=5 && time.hour<20)
   end
 
   # Returns true if it's night.
-  def self.isNight?(time=nil)
+  def self.isNight?(time = nil)
     time = pbGetTimeNow if !time
     return (time.hour>=20 || time.hour<5)
   end
 
   # Returns true if it's morning.
-  def self.isMorning?(time=nil)
+  def self.isMorning?(time = nil)
     time = pbGetTimeNow if !time
     return (time.hour>=5 && time.hour<10)
   end
 
   # Returns true if it's the afternoon.
-  def self.isAfternoon?(time=nil)
+  def self.isAfternoon?(time = nil)
     time = pbGetTimeNow if !time
     return (time.hour>=14 && time.hour<17)
   end
 
   # Returns true if it's the evening.
-  def self.isEvening?(time=nil)
+  def self.isEvening?(time = nil)
     time = pbGetTimeNow if !time
     return (time.hour>=17 && time.hour<20)
   end
@@ -137,7 +137,7 @@ end
 # 5 - Waning Gibbous
 # 6 - Last Quarter
 # 7 - Waning Crescent
-def moonphase(time=nil) # in UTC
+def moonphase(time = nil) # in UTC
   time = pbGetTimeNow if !time
   transitions = [
      1.8456618033125,

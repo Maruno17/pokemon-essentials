@@ -152,7 +152,7 @@ class Battle::AI
   #=============================================================================
   # Get a score for the given move being used against the given target
   #=============================================================================
-  def pbGetMoveScore(move,user,target,skill=100)
+  def pbGetMoveScore(move,user,target,skill = 100)
     skill = PBTrainerAI.minimumSkill if skill<PBTrainerAI.minimumSkill
     score = 100
     score = pbGetMoveScoreFunctionCode(score,move,user,target,skill)

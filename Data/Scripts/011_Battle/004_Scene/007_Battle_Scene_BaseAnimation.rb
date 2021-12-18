@@ -17,7 +17,7 @@ class Battle::Scene::Animation
   def empty?; return @pictureEx.length==0; end
   def animDone?; return @animDone; end
 
-  def addSprite(s,origin=PictureOrigin::TopLeft)
+  def addSprite(s,origin = PictureOrigin::TopLeft)
     num = @pictureEx.length
     picture = PictureEx.new(s.z)
     picture.x       = s.x
@@ -31,7 +31,7 @@ class Battle::Scene::Animation
     return picture
   end
 
-  def addNewSprite(x,y,name,origin=PictureOrigin::TopLeft)
+  def addNewSprite(x,y,name,origin = PictureOrigin::TopLeft)
     num = @pictureEx.length
     picture = PictureEx.new(num)
     picture.setXY(0,x,y)
@@ -96,7 +96,7 @@ module Battle::Scene::Animation::BallAnimationMixin
     return ball
   end
 
-  def ballTracksHand(ball,traSprite,safariThrow=false)
+  def ballTracksHand(ball,traSprite,safariThrow = false)
     # Back sprite isn't animated, no hand-tracking needed
     if traSprite.bitmap.width<traSprite.bitmap.height*2
       ball.setVisible(7,true)

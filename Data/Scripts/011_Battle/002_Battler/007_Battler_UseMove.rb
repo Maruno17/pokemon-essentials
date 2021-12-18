@@ -2,7 +2,7 @@ class Battle::Battler
   #=============================================================================
   # Turn processing
   #=============================================================================
-  def pbProcessTurn(choice,tryFlee=true)
+  def pbProcessTurn(choice,tryFlee = true)
     return false if fainted?
     # Wild roaming Pokémon always flee if possible
     if tryFlee && wild? &&
@@ -144,7 +144,7 @@ class Battle::Battler
   # Simple "use move" method, used when a move calls another move and for Future
   # Sight's attack
   #=============================================================================
-  def pbUseMoveSimple(moveID,target=-1,idxMove=-1,specialUsage=true)
+  def pbUseMoveSimple(moveID,target = -1,idxMove = -1,specialUsage = true)
     choice = []
     choice[0] = :UseMove   # "Use move"
     choice[1] = idxMove    # Index of move to be used in user's moveset
@@ -162,7 +162,7 @@ class Battle::Battler
   #=============================================================================
   # Master "use move" method
   #=============================================================================
-  def pbUseMove(choice,specialUsage=false)
+  def pbUseMove(choice,specialUsage = false)
     # NOTE: This is intentionally determined before a multi-turn attack can
     #       set specialUsage to true.
     skipAccuracyCheck = (specialUsage && choice[2]!=@battle.struggle)

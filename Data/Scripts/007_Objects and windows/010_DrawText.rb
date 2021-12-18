@@ -157,7 +157,7 @@ def itemIconTag(item)
 end
 
 def getFormattedTextForDims(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
-                            newlineBreaks=true,explicitBreaksOnly=false)
+                            newlineBreaks = true,explicitBreaksOnly = false)
   text2=text.gsub(/<(\/?)(c|c2|c3|o|u|s)(\s*\=\s*([^>]*))?>/i,"")
   if newlineBreaks
     text2.gsub!(/<(\/?)(br)(\s*\=\s*([^>]*))?>/i,"\n")
@@ -169,7 +169,7 @@ def getFormattedTextForDims(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
 end
 
 def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
-                         newlineBreaks=true,explicitBreaksOnly=false)
+                         newlineBreaks = true,explicitBreaksOnly = false)
   x=y=0
   characters=[]
   textchunks=[]
@@ -385,9 +385,9 @@ To draw the characters, pass the returned array to the
 _drawFormattedChars_ function.
 =end
 
-def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
-                     newlineBreaks=true,explicitBreaksOnly=false,
-                     collapseAlignments=false)
+def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight = 32,
+                     newlineBreaks = true,explicitBreaksOnly = false,
+                     collapseAlignments = false)
   dummybitmap=nil
   if !bitmap || bitmap.disposed?   # allows function to be called with nil bitmap
     dummybitmap=Bitmap.new(1,1)
@@ -908,7 +908,7 @@ def getLineBrokenText(bitmap,value,width,dims)
   return ret
 end
 
-def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
+def getLineBrokenChunks(bitmap,value,width,dims,plain = false)
   x=0
   y=0
   ret=[]
@@ -962,7 +962,7 @@ def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
   return ret
 end
 
-def renderLineBrokenChunks(bitmap,xDst,yDst,normtext,maxheight=0)
+def renderLineBrokenChunks(bitmap,xDst,yDst,normtext,maxheight = 0)
   for i in 0...normtext.length
     width=normtext[i][3]
     textx=normtext[i][1]+xDst
@@ -1094,7 +1094,7 @@ def drawTextEx(bitmap,x,y,width,numlines,text,baseColor,shadowColor)
      baseColor,shadowColor)
 end
 
-def drawFormattedTextEx(bitmap,x,y,width,text,baseColor=nil,shadowColor=nil,lineheight=32)
+def drawFormattedTextEx(bitmap,x,y,width,text,baseColor = nil,shadowColor = nil,lineheight = 32)
   base=!baseColor ? Color.new(12*8,12*8,12*8) : baseColor.clone
   shadow=!shadowColor ? Color.new(26*8,26*8,25*8) : shadowColor.clone
   text="<c2="+colorToRgb16(base)+colorToRgb16(shadow)+">"+text
@@ -1108,7 +1108,7 @@ def pbDrawShadow(bitmap,x,y,width,height,string)
   pbDrawShadowText(bitmap,x,y,width,height,string,nil,bitmap.font.color)
 end
 
-def pbDrawShadowText(bitmap,x,y,width,height,string,baseColor,shadowColor=nil,align=0)
+def pbDrawShadowText(bitmap,x,y,width,height,string,baseColor,shadowColor = nil,align = 0)
   return if !bitmap || !string
   width=(width<0) ? bitmap.text_size(string).width+1 : width
   height=(height<0) ? bitmap.text_size(string).height+1 : height
@@ -1125,7 +1125,7 @@ def pbDrawShadowText(bitmap,x,y,width,height,string,baseColor,shadowColor=nil,al
   end
 end
 
-def pbDrawOutlineText(bitmap,x,y,width,height,string,baseColor,shadowColor=nil,align=0)
+def pbDrawOutlineText(bitmap,x,y,width,height,string,baseColor,shadowColor = nil,align = 0)
   return if !bitmap || !string
   width=(width<0) ? bitmap.text_size(string).width+4 : width
   height=(height<0) ? bitmap.text_size(string).height+4 : height
@@ -1179,7 +1179,7 @@ end
 #===============================================================================
 # Draw images on a bitmap
 #===============================================================================
-def pbCopyBitmap(dstbm,srcbm,x,y,opacity=255)
+def pbCopyBitmap(dstbm,srcbm,x,y,opacity = 255)
   rc = Rect.new(0,0,srcbm.width,srcbm.height)
   dstbm.blt(x,y,srcbm,rc,opacity)
 end

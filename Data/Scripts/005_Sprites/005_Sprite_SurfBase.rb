@@ -2,7 +2,7 @@ class Sprite_SurfBase
   attr_reader   :visible
   attr_accessor :event
 
-  def initialize(sprite,event,viewport=nil)
+  def initialize(sprite,event,viewport = nil)
     @rsprite  = sprite
     @sprite   = nil
     @event    = event

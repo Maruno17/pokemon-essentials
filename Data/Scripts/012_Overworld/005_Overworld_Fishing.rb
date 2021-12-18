@@ -37,7 +37,7 @@ def pbFishingEnd
   $PokemonGlobal.fishing = false
 end
 
-def pbFishing(hasEncounter,rodType=1)
+def pbFishing(hasEncounter,rodType = 1)
   $stats.fishing_count += 1
   speedup = ($player.first_pokemon && [:STICKYHOLD, :SUCTIONCUPS].include?($player.first_pokemon.ability_id))
   biteChance = 20+(25*rodType)   # 45, 70, 95

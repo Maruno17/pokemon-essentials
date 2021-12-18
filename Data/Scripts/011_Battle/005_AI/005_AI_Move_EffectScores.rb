@@ -2,7 +2,7 @@ class Battle::AI
   #=============================================================================
   # Get a score for the given move based on its effect
   #=============================================================================
-  def pbGetMoveScoreFunctionCode(score,move,user,target,skill=100)
+  def pbGetMoveScoreFunctionCode(score,move,user,target,skill = 100)
     case move.function
     #---------------------------------------------------------------------------
     when "None"   # No extra effect

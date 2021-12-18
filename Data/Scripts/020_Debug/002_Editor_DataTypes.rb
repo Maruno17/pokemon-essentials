@@ -681,7 +681,7 @@ end
 
 
 
-def chooseMapPoint(map,rgnmap=false)
+def chooseMapPoint(map,rgnmap = false)
   viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z=99999
   title = Window_UnformattedTextPokemon.newWithSize(_INTL("Click a point on the map."),
@@ -1546,7 +1546,7 @@ end
 #===============================================================================
 # Core property editor script
 #===============================================================================
-def pbPropertyList(title,data,properties,saveprompt=false)
+def pbPropertyList(title,data,properties,saveprompt = false)
   viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z = 99999
   list = pbListWindow([], Graphics.width / 2)

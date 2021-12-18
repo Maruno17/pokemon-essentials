@@ -23,7 +23,7 @@ class Battle::Scene
   #       2 = regular battle with "Call" (for Shadow Pokémon battles)
   #       3 = Safari Zone
   #       4 = Bug Catching Contest
-  def pbCommandMenuEx(idxBattler,texts,mode=0)
+  def pbCommandMenuEx(idxBattler,texts,mode = 0)
     pbShowWindow(COMMAND_BOX)
     cw = @sprites["commandWindow"]
     cw.setTexts(texts)
@@ -65,7 +65,7 @@ class Battle::Scene
   #=============================================================================
   # The player chooses a move for a Pokémon to use
   #=============================================================================
-  def pbFightMenu(idxBattler,megaEvoPossible=false)
+  def pbFightMenu(idxBattler,megaEvoPossible = false)
     battler = @battle.battlers[idxBattler]
     cw = @sprites["fightWindow"]
     cw.battler = battler
@@ -140,7 +140,7 @@ class Battle::Scene
   # Opens the party screen to choose a Pokémon to switch in (or just view its
   # summary screens)
   #=============================================================================
-  def pbPartyScreen(idxBattler,canCancel=false)
+  def pbPartyScreen(idxBattler,canCancel = false)
     # Fade out and hide all sprites
     visibleSprites = pbFadeOutAndHide(@sprites)
     # Get player's party
@@ -373,7 +373,7 @@ class Battle::Scene
     return idxBattler   # Target the user initially
   end
 
-  def pbChooseTarget(idxBattler,target_data,visibleSprites=nil)
+  def pbChooseTarget(idxBattler,target_data,visibleSprites = nil)
     pbShowWindow(TARGET_BOX)
     cw = @sprites["targetWindow"]
     # Create an array of battler names (only valid targets are named)

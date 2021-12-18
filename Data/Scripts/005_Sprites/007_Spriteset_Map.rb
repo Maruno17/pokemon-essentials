@@ -45,7 +45,7 @@ class Spriteset_Map
     return @@viewport1
   end
 
-  def initialize(map=nil)
+  def initialize(map = nil)
     @map = (map) ? map : $game_map
     $scene.map_renderer.add_tileset(@map.tileset_name)
     @map.autotile_names.each { |filename| $scene.map_renderer.add_autotile(filename) }

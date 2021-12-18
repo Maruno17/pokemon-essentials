@@ -1,7 +1,7 @@
 #===============================================================================
 # Register contacts
 #===============================================================================
-def pbPhoneRegisterNPC(ident,name,mapid,showmessage=true)
+def pbPhoneRegisterNPC(ident,name,mapid,showmessage = true)
   $PokemonGlobal.phoneNumbers = [] if !$PokemonGlobal.phoneNumbers
   exists = pbFindPhoneTrainer(ident,name)
   if exists

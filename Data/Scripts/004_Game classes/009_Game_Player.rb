@@ -179,7 +179,7 @@ class Game_Player < Game_Character
     triggerLeaveTile
   end
 
-  def pbTriggeredTrainerEvents(triggers,checkIfRunning=true)
+  def pbTriggeredTrainerEvents(triggers,checkIfRunning = true)
     result = []
     # If event is running
     return result if checkIfRunning && $game_system.map_interpreter.running?
@@ -196,7 +196,7 @@ class Game_Player < Game_Character
     return result
   end
 
-  def pbTriggeredCounterEvents(triggers,checkIfRunning=true)
+  def pbTriggeredCounterEvents(triggers,checkIfRunning = true)
     result = []
     # If event is running
     return result if checkIfRunning && $game_system.map_interpreter.running?
@@ -230,7 +230,7 @@ class Game_Player < Game_Character
     return $game_map.terrain_tag(@x, @y, countBridge)
   end
 
-  def pbFacingEvent(ignoreInterpreter=false)
+  def pbFacingEvent(ignoreInterpreter = false)
     return nil if $game_system.map_interpreter.running? && !ignoreInterpreter
     # Check the tile in front of the player for events
     new_x = @x + (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)

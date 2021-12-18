@@ -240,7 +240,7 @@ class Battle::Move
     return target.defense, target.stages[:DEFENSE]+6
   end
 
-  def pbCalcDamage(user,target,numTargets=1)
+  def pbCalcDamage(user,target,numTargets = 1)
     return if statusMove?
     if target.damageState.disguise || target.damageState.iceFace
       target.damageState.calcDamage = 1
@@ -476,7 +476,7 @@ class Battle::Move
   #=============================================================================
   # Additional effect chance
   #=============================================================================
-  def pbAdditionalEffectChance(user,target,effectChance=0)
+  def pbAdditionalEffectChance(user,target,effectChance = 0)
     return 0 if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
     ret = (effectChance>0) ? effectChance : @addlEffect
     if Settings::MECHANICS_GENERATION >= 6 || @function != "EffectDependsOnEnvironment"

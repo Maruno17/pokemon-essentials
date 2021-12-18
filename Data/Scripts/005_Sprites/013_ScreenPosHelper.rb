@@ -28,7 +28,7 @@ module ScreenPosHelper
     return h
   end
 
-  def self.pbScreenZ(ch,height=nil)
+  def self.pbScreenZ(ch,height = nil)
     if height==nil
       height=0
       if ch.tile_id > 0

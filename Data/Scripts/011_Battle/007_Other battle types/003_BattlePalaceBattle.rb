@@ -93,7 +93,7 @@ class BattlePalaceBattle < Battle
     return true
   end
 
-  def pbRegisterMove(idxBattler,idxMove,_showMessages=true)
+  def pbRegisterMove(idxBattler,idxMove,_showMessages = true)
     this_battler = @battlers[idxBattler]
     if idxMove==-2
       @choices[idxBattler][0] = :UseMove    # "Use move"

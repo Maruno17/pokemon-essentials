@@ -52,7 +52,7 @@ class SpriteWindow < Window
     privRefresh(true)
   end
 
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @sprites={}
     @spritekeys=[
        "back",
@@ -474,7 +474,7 @@ class SpriteWindow < Window
     @sprites["cursor"].opacity=cursoropac
   end
 
-  def privRefresh(changeBitmap=false)
+  def privRefresh(changeBitmap = false)
     return if !self || self.disposed?
     backopac=self.back_opacity*self.opacity/255
     contopac=self.contents_opacity

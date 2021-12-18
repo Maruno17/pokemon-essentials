@@ -644,7 +644,7 @@ class TriadScreen
     return ItemStorageHelper.remove(items, item, 1)
   end
 
-  def flipBoard(x,y,attackerParam=nil,recurse=false)
+  def flipBoard(x,y,attackerParam = nil,recurse = false)
     panels = [x-1,y,x+1,y,x,y-1,x,y+1]
     panels[0] = (@wrapAround ? @width-1 : 0) if panels[0]<0            # left
     panels[2] = (@wrapAround ? 0 : @width-1) if panels[2]>@width-1     # right
@@ -697,7 +697,7 @@ class TriadScreen
 
   # If pbStartScreen includes parameters, it should
   # pass the parameters to pbStartScene.
-  def pbStartScreen(opponentName,minLevel,maxLevel,rules=nil,oppdeck=nil,prize=nil)
+  def pbStartScreen(opponentName,minLevel,maxLevel,rules = nil,oppdeck = nil,prize = nil)
     raise _INTL("Minimum level must be 0 through 9.") if minLevel<0 || minLevel>9
     raise _INTL("Maximum level must be 0 through 9.") if maxLevel<0 || maxLevel>9
     raise _INTL("Maximum level shouldn't be less than the minimum level.") if maxLevel<minLevel
@@ -967,7 +967,7 @@ end
 #===============================================================================
 # Start duel
 #===============================================================================
-def pbTriadDuel(name,minLevel,maxLevel,rules=nil,oppdeck=nil,prize=nil)
+def pbTriadDuel(name,minLevel,maxLevel,rules = nil,oppdeck = nil,prize = nil)
   ret = 0
   pbFadeOutInWithMusic {
     scene = TriadScene.new

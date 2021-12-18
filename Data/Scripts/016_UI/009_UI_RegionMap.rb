@@ -58,7 +58,7 @@ class PokemonRegionMap_Scene
   SQUARE_WIDTH  = 16
   SQUARE_HEIGHT = 16
 
-  def initialize(region =- 1, wallmap = true)
+  def initialize(region = - 1, wallmap = true)
     @region  = region
     @wallmap = wallmap
   end

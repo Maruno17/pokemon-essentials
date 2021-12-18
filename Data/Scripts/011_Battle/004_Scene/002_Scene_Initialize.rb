@@ -150,7 +150,7 @@ class Battle::Scene
     cmdBarBG.z = 180
   end
 
-  def pbCreateTrainerBackSprite(idxTrainer,trainerType,numTrainers=1)
+  def pbCreateTrainerBackSprite(idxTrainer,trainerType,numTrainers = 1)
     if idxTrainer==0   # Player's sprite
       trainerFile = GameData::TrainerType.player_back_sprite_filename(trainerType)
     else   # Partner trainer's sprite
@@ -169,7 +169,7 @@ class Battle::Scene
     trainer.oy = trainer.bitmap.height
   end
 
-  def pbCreateTrainerFrontSprite(idxTrainer,trainerType,numTrainers=1)
+  def pbCreateTrainerFrontSprite(idxTrainer,trainerType,numTrainers = 1)
     trainerFile = GameData::TrainerType.front_sprite_filename(trainerType)
     spriteX, spriteY = Battle::Scene.pbTrainerPosition(1,idxTrainer,numTrainers)
     trainer = pbAddSprite("trainer_#{idxTrainer+1}",spriteX,spriteY,trainerFile,@viewport)

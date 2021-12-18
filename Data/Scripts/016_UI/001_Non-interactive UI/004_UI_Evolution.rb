@@ -31,7 +31,7 @@ class SpriteMetafile
     return @metafile[i]
   end
 
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @metafile=[]
     @values=[
        viewport,
@@ -230,7 +230,7 @@ end
 #
 #===============================================================================
 class SpriteMetafilePlayer
-  def initialize(metafile,sprite=nil)
+  def initialize(metafile,sprite = nil)
     @metafile=metafile
     @sprites=[]
     @playing=false
@@ -411,7 +411,7 @@ class PokemonEvolutionScene
 
   public
 
-  def pbUpdate(animating=false)
+  def pbUpdate(animating = false)
     if animating      # Pokémon shouldn't animate during the evolution animation
       @sprites["background"].update
     else
@@ -526,7 +526,7 @@ class PokemonEvolutionScene
   end
 
   # Opens the evolution screen
-  def pbEvolution(cancancel=true)
+  def pbEvolution(cancancel = true)
     metaplayer1 = SpriteMetafilePlayer.new(@metafile1,@sprites["rsprite1"])
     metaplayer2 = SpriteMetafilePlayer.new(@metafile2,@sprites["rsprite2"])
     metaplayer1.play

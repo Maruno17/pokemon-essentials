@@ -154,7 +154,7 @@ class PokemonStorage
     return -1
   end
 
-  def [](x,y=nil)
+  def [](x,y = nil)
     if y==nil
       return (x==-1) ? self.party : @boxes[x]
     else
@@ -338,7 +338,7 @@ class RegionalStorage
     getCurrentStorage.currentBox = value
   end
 
-  def [](x,y=nil)
+  def [](x,y = nil)
     getCurrentStorage[x,y]
   end
 

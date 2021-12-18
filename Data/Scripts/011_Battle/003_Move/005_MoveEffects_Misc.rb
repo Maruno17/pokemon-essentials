@@ -640,7 +640,7 @@ class Battle::Move::AttackTwoTurnsLater < Battle::Move
     end
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     hitNum = 1 if !@battle.futureSight   # Charging anim
     super
   end

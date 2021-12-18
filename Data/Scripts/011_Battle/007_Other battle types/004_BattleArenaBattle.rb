@@ -9,7 +9,7 @@ class Battle::SuccessState
 
   def initialize; clear; end
 
-  def clear(full=true)
+  def clear(full = true)
     @typeMod   = Effectiveness::NORMAL_EFFECTIVE
     @useState  = 0
     @protected = false
@@ -51,14 +51,14 @@ class BattleArenaBattle < Battle
     @battleAI.battleArena = true
   end
 
-  def pbCanSwitchLax?(idxBattler,_idxParty,partyScene=nil)
+  def pbCanSwitchLax?(idxBattler,_idxParty,partyScene = nil)
     if partyScene
       partyScene.pbDisplay(_INTL("{1} can't be switched out!",@battlers[idxBattler].pbThis))
     end
     return false
   end
 
-  def pbEORSwitch(favorDraws=false)
+  def pbEORSwitch(favorDraws = false)
     return if favorDraws && @decision==5
     return if !favorDraws && @decision>0
     pbJudge

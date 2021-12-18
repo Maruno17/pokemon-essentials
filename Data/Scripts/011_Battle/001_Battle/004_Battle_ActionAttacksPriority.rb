@@ -2,7 +2,7 @@ class Battle
   #=============================================================================
   # Choosing a move/target
   #=============================================================================
-  def pbCanChooseMove?(idxBattler,idxMove,showMessages,sleepTalk=false)
+  def pbCanChooseMove?(idxBattler,idxMove,showMessages,sleepTalk = false)
     battler = @battlers[idxBattler]
     move = battler.moves[idxMove]
     return false unless move
@@ -17,7 +17,7 @@ class Battle
     return battler.pbCanChooseMove?(move,true,showMessages,sleepTalk)
   end
 
-  def pbCanChooseAnyMove?(idxBattler,sleepTalk=false)
+  def pbCanChooseAnyMove?(idxBattler,sleepTalk = false)
     battler = @battlers[idxBattler]
     battler.eachMoveWithIndex do |m,i|
       next if m.pp==0 && m.total_pp>0 && !sleepTalk
@@ -33,7 +33,7 @@ class Battle
 
   # Called when the Pokémon is Encored, or if it can't use any of its moves.
   # Makes the Pokémon use the Encored move (if Encored), or Struggle.
-  def pbAutoChooseMove(idxBattler,showMessages=true)
+  def pbAutoChooseMove(idxBattler,showMessages = true)
     battler = @battlers[idxBattler]
     if battler.fainted?
       pbClearChoice(idxBattler)
@@ -67,7 +67,7 @@ class Battle
     return true
   end
 
-  def pbRegisterMove(idxBattler,idxMove,showMessages=true)
+  def pbRegisterMove(idxBattler,idxMove,showMessages = true)
     battler = @battlers[idxBattler]
     move = battler.moves[idxMove]
     return false if !pbCanChooseMove?(idxBattler,idxMove,showMessages)
@@ -133,7 +133,7 @@ class Battle
   #=============================================================================
   # Turn order calculation (priority)
   #=============================================================================
-  def pbCalculatePriority(fullCalc=false,indexArray=nil)
+  def pbCalculatePriority(fullCalc = false,indexArray = nil)
     needRearranging = false
     if fullCalc
       @priorityTrickRoom = (@field.effects[PBEffects::TrickRoom]>0)
@@ -231,7 +231,7 @@ class Battle
     end
   end
 
-  def pbPriority(onlySpeedSort=false)
+  def pbPriority(onlySpeedSort = false)
     ret = []
     if onlySpeedSort
       # Sort battlers by their speed stats and tie-breaker order only.

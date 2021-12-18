@@ -208,7 +208,7 @@ class Battle::Battler
     return (itm) ? itm.name : ""
   end
 
-  def pbThis(lowerCase=false)
+  def pbThis(lowerCase = false)
     if opposes?
       if @battle.trainerBattle?
         return lowerCase ? _INTL("the opposing {1}",name) : _INTL("The opposing {1}",name)
@@ -221,14 +221,14 @@ class Battle::Battler
     return name
   end
 
-  def pbTeam(lowerCase=false)
+  def pbTeam(lowerCase = false)
     if opposes?
       return lowerCase ? _INTL("the opposing team") : _INTL("The opposing team")
     end
     return lowerCase ? _INTL("your team") : _INTL("Your team")
   end
 
-  def pbOpposingTeam(lowerCase=false)
+  def pbOpposingTeam(lowerCase = false)
     if opposes?
       return lowerCase ? _INTL("your team") : _INTL("Your team")
     end
@@ -301,7 +301,7 @@ class Battle::Battler
 
   # Returns the active types of this Pokémon. The array should not include the
   # same type more than once, and should not include any invalid types.
-  def pbTypes(withType3=false)
+  def pbTypes(withType3 = false)
     ret = @types.uniq
     # Burn Up erases the Fire-type.
     ret.delete(:FIRE) if @effects[PBEffects::BurnUp]
@@ -413,7 +413,7 @@ class Battle::Battler
     return ability_blacklist.include?(abil.id)
   end
 
-  def itemActive?(ignoreFainted=false)
+  def itemActive?(ignoreFainted = false)
     return false if fainted? && !ignoreFainted
     return false if @effects[PBEffects::Embargo]>0
     return false if @battle.field.effects[PBEffects::MagicRoom]>0
@@ -509,7 +509,7 @@ class Battle::Battler
     return true
   end
 
-  def takesIndirectDamage?(showMsg=false)
+  def takesIndirectDamage?(showMsg = false)
     return false if fainted?
     if hasActiveAbility?(:MAGICGUARD)
       if showMsg
@@ -558,7 +558,7 @@ class Battle::Battler
     return ret
   end
 
-  def affectedByPowder?(showMsg=false)
+  def affectedByPowder?(showMsg = false)
     return false if fainted?
     if pbHasType?(:GRASS) && Settings::MORE_TYPE_EFFECTS
       @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis)) if showMsg
@@ -593,7 +593,7 @@ class Battle::Battler
     return true
   end
 
-  def affectedByContactEffect?(showMsg=false)
+  def affectedByContactEffect?(showMsg = false)
     return false if fainted?
     if hasActiveItem?(:PROTECTIVEPADS)
       @battle.pbDisplay(_INTL("{1} protected itself with the {2}!",pbThis,itemName)) if showMsg
@@ -687,7 +687,7 @@ class Battle::Battler
   # Methods relating to this battler's position on the battlefield
   #=============================================================================
   # Returns whether the given position belongs to the opposing Pokémon's side.
-  def opposes?(i=0)
+  def opposes?(i = 0)
     i = i.index if i.respond_to?("index")
     return (@index&1)!=(i&1)
   end
@@ -755,7 +755,7 @@ class Battle::Battler
 
   # Returns the battler that is most directly opposite to self. unfaintedOnly is
   # whether it should prefer to return a non-fainted battler.
-  def pbDirectOpposing(unfaintedOnly=false)
+  def pbDirectOpposing(unfaintedOnly = false)
     @battle.pbGetOpposingIndicesInOrder(@index).each do |i|
       next if !@battle.battlers[i]
       break if unfaintedOnly && @battle.battlers[i].fainted?

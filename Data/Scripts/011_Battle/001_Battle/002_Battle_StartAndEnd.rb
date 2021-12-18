@@ -491,7 +491,7 @@ class Battle
   #=============================================================================
   # Judging
   #=============================================================================
-  def pbJudgeCheckpoint(user,move=nil); end
+  def pbJudgeCheckpoint(user,move = nil); end
 
   def pbDecisionOnTime
     counts   = [0,0]

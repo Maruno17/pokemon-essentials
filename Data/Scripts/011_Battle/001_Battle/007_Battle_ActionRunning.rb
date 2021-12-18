@@ -27,7 +27,7 @@ class Battle
   #  1: Succeeded at fleeing, battle will end
   # duringBattle is true for replacing a fainted Pokémon during the End Of Round
   # phase, and false for choosing the Run command.
-  def pbRun(idxBattler,duringBattle=false)
+  def pbRun(idxBattler,duringBattle = false)
     battler = @battlers[idxBattler]
     if battler.opposes?
       return 0 if trainerBattle?

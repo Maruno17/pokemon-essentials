@@ -309,7 +309,7 @@ end
 # Standard methods that start a wild battle of various sizes
 #===============================================================================
 # Used when walking in tall grass, hence the additional code.
-def pbWildBattle(species, level, outcomeVar=1, canRun=true, canLose=false)
+def pbWildBattle(species, level, outcomeVar = 1, canRun = true, canLose = false)
   species = GameData::Species.get(species).id
   # Potentially call a different pbWildBattle-type method instead (for roaming
   # Pokémon, Safari battles, Bug Contest battles)
@@ -329,7 +329,7 @@ def pbWildBattle(species, level, outcomeVar=1, canRun=true, canLose=false)
 end
 
 def pbDoubleWildBattle(species1, level1, species2, level2,
-                       outcomeVar=1, canRun=true, canLose=false)
+                       outcomeVar = 1, canRun = true, canLose = false)
   # Set some battle rules
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
   setBattleRule("cannotRun") if !canRun
@@ -342,7 +342,7 @@ def pbDoubleWildBattle(species1, level1, species2, level2,
 end
 
 def pbTripleWildBattle(species1, level1, species2, level2, species3, level3,
-                       outcomeVar=1, canRun=true, canLose=false)
+                       outcomeVar = 1, canRun = true, canLose = false)
   # Set some battle rules
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
   setBattleRule("cannotRun") if !canRun
@@ -467,8 +467,8 @@ end
 # Used by most trainer events, which can be positioned in such a way that
 # multiple trainer events spot the player at once. The extra code in this method
 # deals with that case and can cause a double trainer battle instead.
-def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
-                    doubleBattle=false, trainerPartyID=0, canLose=false, outcomeVar=1)
+def pbTrainerBattle(trainerID, trainerName, endSpeech = nil,
+                    doubleBattle = false, trainerPartyID = 0, canLose = false, outcomeVar = 1)
   # If there is another NPC trainer who spotted the player at the same time, and
   # it is possible to have a double battle (the player has 2+ able Pokémon or
   # has a partner trainer), then record this first NPC trainer into
@@ -523,8 +523,8 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
 end
 
 def pbDoubleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
-                          trainerID2, trainerName2, trainerPartyID2=0, endSpeech2=nil,
-                          canLose=false, outcomeVar=1)
+                          trainerID2, trainerName2, trainerPartyID2 = 0, endSpeech2 = nil,
+                          canLose = false, outcomeVar = 1)
   # Set some battle rules
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
   setBattleRule("canLose") if canLose
@@ -540,8 +540,8 @@ end
 
 def pbTripleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
                           trainerID2, trainerName2, trainerPartyID2, endSpeech2,
-                          trainerID3, trainerName3, trainerPartyID3=0, endSpeech3=nil,
-                          canLose=false, outcomeVar=1)
+                          trainerID3, trainerName3, trainerPartyID3 = 0, endSpeech3 = nil,
+                          canLose = false, outcomeVar = 1)
   # Set some battle rules
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
   setBattleRule("canLose") if canLose

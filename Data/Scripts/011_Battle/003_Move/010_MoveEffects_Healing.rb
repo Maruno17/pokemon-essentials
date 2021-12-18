@@ -649,7 +649,7 @@ class Battle::Move::StartPerishCountsForAllBattlers < Battle::Move
     target.effects[PBEffects::PerishSongUser] = user.index
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     super
     @battle.pbDisplay(_INTL("All Pokémon that hear the song will faint in three turns!"))
   end

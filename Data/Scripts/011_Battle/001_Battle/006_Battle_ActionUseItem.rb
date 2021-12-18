@@ -2,7 +2,7 @@ class Battle
   #=============================================================================
   # Choosing to use an item
   #=============================================================================
-  def pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages=true)
+  def pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages = true)
     if !pkmn || pkmn.egg?
       scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
       return false
@@ -24,7 +24,7 @@ class Battle
     return false
   end
 
-  def pbRegisterItem(idxBattler,item,idxTarget=nil,idxMove=nil)
+  def pbRegisterItem(idxBattler,item,idxTarget = nil,idxMove = nil)
     # Register for use of item on a Pokémon in the party
     @choices[idxBattler][0] = :UseItem
     @choices[idxBattler][1] = item        # ID of item to be used

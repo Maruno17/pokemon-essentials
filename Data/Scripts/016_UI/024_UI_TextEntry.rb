@@ -5,7 +5,7 @@ class Window_CharacterEntry < Window_DrawableCommand
   XSIZE=13
   YSIZE=4
 
-  def initialize(charset,viewport=nil)
+  def initialize(charset,viewport = nil)
     @viewport=viewport
     @charset=charset
     @othercharset=""
@@ -76,7 +76,7 @@ class PokemonEntryScene
   ]
   USEKEYBOARD=true
 
-  def pbStartScene(helptext,minlength,maxlength,initialText,subject=0,pokemon=nil)
+  def pbStartScene(helptext,minlength,maxlength,initialText,subject = 0,pokemon = nil)
     @sprites={}
     @viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z=99999
@@ -373,7 +373,7 @@ class PokemonEntryScene2
 
 
 
-  def pbStartScene(helptext,minlength,maxlength,initialText,subject=0,pokemon=nil)
+  def pbStartScene(helptext,minlength,maxlength,initialText,subject = 0,pokemon = nil)
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @helptext = helptext
@@ -756,7 +756,7 @@ class PokemonEntry
     @scene=scene
   end
 
-  def pbStartScreen(helptext,minlength,maxlength,initialText,mode=-1,pokemon=nil)
+  def pbStartScreen(helptext,minlength,maxlength,initialText,mode = -1,pokemon = nil)
     @scene.pbStartScene(helptext,minlength,maxlength,initialText,mode,pokemon)
     ret=@scene.pbEntry
     @scene.pbEndScene
@@ -769,7 +769,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbEnterText(helptext,minlength,maxlength,initialText="",mode=0,pokemon=nil,nofadeout=false)
+def pbEnterText(helptext,minlength,maxlength,initialText = "",mode = 0,pokemon = nil,nofadeout = false)
   ret=""
   if ($PokemonSystem.textinput==1 rescue false)   # Keyboard
     pbFadeOutIn(99999,nofadeout) {
@@ -787,18 +787,18 @@ def pbEnterText(helptext,minlength,maxlength,initialText="",mode=0,pokemon=nil,n
   return ret
 end
 
-def pbEnterPlayerName(helptext,minlength,maxlength,initialText="",nofadeout=false)
+def pbEnterPlayerName(helptext,minlength,maxlength,initialText = "",nofadeout = false)
   return pbEnterText(helptext,minlength,maxlength,initialText,1,nil,nofadeout)
 end
 
-def pbEnterPokemonName(helptext,minlength,maxlength,initialText="",pokemon=nil,nofadeout=false)
+def pbEnterPokemonName(helptext,minlength,maxlength,initialText = "",pokemon = nil,nofadeout = false)
   return pbEnterText(helptext,minlength,maxlength,initialText,2,pokemon,nofadeout)
 end
 
-def pbEnterNPCName(helptext,minlength,maxlength,initialText="",id=0,nofadeout=false)
+def pbEnterNPCName(helptext,minlength,maxlength,initialText = "",id = 0,nofadeout = false)
   return pbEnterText(helptext,minlength,maxlength,initialText,3,id,nofadeout)
 end
 
-def pbEnterBoxName(helptext,minlength,maxlength,initialText="",nofadeout=false)
+def pbEnterBoxName(helptext,minlength,maxlength,initialText = "",nofadeout = false)
   return pbEnterText(helptext,minlength,maxlength,initialText,4,nil,nofadeout)
 end

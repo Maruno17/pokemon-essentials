@@ -130,7 +130,7 @@ class PictureEx
     end
   end
 
-  def setCallback(delay, cb=nil)
+  def setCallback(delay, cb = nil)
     delay = ensureDelayAndDuration(delay)
     @processes.push([nil,delay,0,0,cb])
   end
@@ -149,7 +149,7 @@ class PictureEx
     return ret.to_i
   end
 
-  def ensureDelayAndDuration(delay, duration=nil)
+  def ensureDelayAndDuration(delay, duration = nil)
     delay = self.totalDuration if delay<0
     delay *= Graphics.frame_rate/20.0
     if !duration.nil?
@@ -194,149 +194,149 @@ class PictureEx
     end
   end
 
-  def move(delay, duration, origin, x, y, zoom_x=100.0, zoom_y=100.0, opacity=255)
+  def move(delay, duration, origin, x, y, zoom_x = 100.0, zoom_y = 100.0, opacity = 255)
     setOrigin(delay,duration,origin)
     moveXY(delay,duration,x,y)
     moveZoomXY(delay,duration,zoom_x,zoom_y)
     moveOpacity(delay,duration,opacity)
   end
 
-  def moveXY(delay, duration, x, y, cb=nil)
+  def moveXY(delay, duration, x, y, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     @processes.push([Processes::XY,delay,duration,0,cb,@x,@y,x,y])
   end
 
-  def setXY(delay, x, y, cb=nil)
+  def setXY(delay, x, y, cb = nil)
     moveXY(delay,0,x,y,cb)
   end
 
-  def moveCurve(delay, duration, x1, y1, x2, y2, x3, y3, cb=nil)
+  def moveCurve(delay, duration, x1, y1, x2, y2, x3, y3, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     @processes.push([Processes::Curve,delay,duration,0,cb,[@x,@y,x1,y1,x2,y2,x3,y3]])
   end
 
-  def moveDelta(delay, duration, x, y, cb=nil)
+  def moveDelta(delay, duration, x, y, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     @processes.push([Processes::DeltaXY,delay,duration,0,cb,@x,@y,x,y])
   end
 
-  def setDelta(delay, x, y, cb=nil)
+  def setDelta(delay, x, y, cb = nil)
     moveDelta(delay,0,x,y,cb)
   end
 
-  def moveZ(delay, duration, z, cb=nil)
+  def moveZ(delay, duration, z, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     @processes.push([Processes::Z,delay,duration,0,cb,@z,z])
   end
 
-  def setZ(delay, z, cb=nil)
+  def setZ(delay, z, cb = nil)
     moveZ(delay,0,z,cb)
   end
 
-  def moveZoomXY(delay, duration, zoom_x, zoom_y, cb=nil)
+  def moveZoomXY(delay, duration, zoom_x, zoom_y, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     @processes.push([Processes::Zoom,delay,duration,0,cb,@zoom_x,@zoom_y,zoom_x,zoom_y])
   end
 
-  def setZoomXY(delay, zoom_x, zoom_y, cb=nil)
+  def setZoomXY(delay, zoom_x, zoom_y, cb = nil)
     moveZoomXY(delay,0,zoom_x,zoom_y,cb)
   end
 
-  def moveZoom(delay, duration, zoom, cb=nil)
+  def moveZoom(delay, duration, zoom, cb = nil)
     moveZoomXY(delay,duration,zoom,zoom,cb)
   end
 
-  def setZoom(delay, zoom, cb=nil)
+  def setZoom(delay, zoom, cb = nil)
     moveZoomXY(delay,0,zoom,zoom,cb)
   end
 
-  def moveAngle(delay, duration, angle, cb=nil)
+  def moveAngle(delay, duration, angle, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     @processes.push([Processes::Angle,delay,duration,0,cb,@angle,angle])
   end
 
-  def setAngle(delay, angle, cb=nil)
+  def setAngle(delay, angle, cb = nil)
     moveAngle(delay,0,angle,cb)
   end
 
-  def moveTone(delay, duration, tone, cb=nil)
+  def moveTone(delay, duration, tone, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     target = (tone) ? tone.clone : Tone.new(0,0,0,0)
     @processes.push([Processes::Tone,delay,duration,0,cb,@tone.clone,target])
   end
 
-  def setTone(delay, tone, cb=nil)
+  def setTone(delay, tone, cb = nil)
     moveTone(delay,0,tone,cb)
   end
 
-  def moveColor(delay, duration, color, cb=nil)
+  def moveColor(delay, duration, color, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     target = (color) ? color.clone : Color.new(0,0,0,0)
     @processes.push([Processes::Color,delay,duration,0,cb,@color.clone,target])
   end
 
-  def setColor(delay, color, cb=nil)
+  def setColor(delay, color, cb = nil)
     moveColor(delay,0,color,cb)
   end
 
   # Hue changes don't actually work.
-  def moveHue(delay, duration, hue, cb=nil)
+  def moveHue(delay, duration, hue, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     @processes.push([Processes::Hue,delay,duration,0,cb,@hue,hue])
   end
 
   # Hue changes don't actually work.
-  def setHue(delay, hue, cb=nil)
+  def setHue(delay, hue, cb = nil)
     moveHue(delay,0,hue,cb)
   end
 
-  def moveOpacity(delay, duration, opacity, cb=nil)
+  def moveOpacity(delay, duration, opacity, cb = nil)
     delay, duration = ensureDelayAndDuration(delay,duration)
     @processes.push([Processes::Opacity,delay,duration,0,cb,@opacity,opacity])
   end
 
-  def setOpacity(delay, opacity, cb=nil)
+  def setOpacity(delay, opacity, cb = nil)
     moveOpacity(delay,0,opacity,cb)
   end
 
-  def setVisible(delay, visible, cb=nil)
+  def setVisible(delay, visible, cb = nil)
     delay = ensureDelay(delay)
     @processes.push([Processes::Visible,delay,0,0,cb,visible])
   end
 
   # Only values of 0 (normal), 1 (additive) and 2 (subtractive) are allowed.
-  def setBlendType(delay, blend, cb=nil)
+  def setBlendType(delay, blend, cb = nil)
     delay = ensureDelayAndDuration(delay)
     @processes.push([Processes::BlendType,delay,0,0,cb,blend])
   end
 
-  def setSE(delay, seFile, volume=nil, pitch=nil, cb=nil)
+  def setSE(delay, seFile, volume = nil, pitch = nil, cb = nil)
     delay = ensureDelay(delay)
     @processes.push([Processes::SE,delay,0,0,cb,seFile,volume,pitch])
   end
 
-  def setName(delay, name, cb=nil)
+  def setName(delay, name, cb = nil)
     delay = ensureDelay(delay)
     @processes.push([Processes::Name,delay,0,0,cb,name])
   end
 
-  def setOrigin(delay, origin, cb=nil)
+  def setOrigin(delay, origin, cb = nil)
     delay = ensureDelay(delay)
     @processes.push([Processes::Origin,delay,0,0,cb,origin])
   end
 
-  def setSrc(delay, srcX, srcY, cb=nil)
+  def setSrc(delay, srcX, srcY, cb = nil)
     delay = ensureDelay(delay)
     @processes.push([Processes::Src,delay,0,0,cb,srcX,srcY])
   end
 
-  def setSrcSize(delay, srcWidth, srcHeight, cb=nil)
+  def setSrcSize(delay, srcWidth, srcHeight, cb = nil)
     delay = ensureDelay(delay)
     @processes.push([Processes::SrcSize,delay,0,0,cb,srcWidth,srcHeight])
   end
 
   # Used to cut Pokémon sprites off when they faint and sink into the ground.
-  def setCropBottom(delay, y, cb=nil)
+  def setCropBottom(delay, y, cb = nil)
     delay = ensureDelay(delay)
     @processes.push([Processes::CropBottom,delay,0,0,cb,y])
   end
@@ -462,7 +462,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-def setPictureSprite(sprite, picture, iconSprite=false)
+def setPictureSprite(sprite, picture, iconSprite = false)
   return if picture.frameUpdates.length==0
   for i in 0...picture.frameUpdates.length
     case picture.frameUpdates[i]

@@ -98,7 +98,7 @@ class Battle::Move::OHKO < Battle::Move::FixedDamageMove
     return target.totalhp
   end
 
-  def pbHitEffectivenessMessages(user,target,numTargets=1)
+  def pbHitEffectivenessMessages(user,target,numTargets = 1)
     super
     if target.fainted?
       @battle.pbDisplay(_INTL("It's a one-hit KO!"))
@@ -310,7 +310,7 @@ end
 # Does double damage and has perfect accuracy if the target is Minimized.
 #===============================================================================
 class Battle::Move::PowerHigherWithUserHeavierThanTarget < Battle::Move
-  def tramplesMinimize?(param=1)
+  def tramplesMinimize?(param = 1)
     return true if Settings::MECHANICS_GENERATION >= 7   # Perfect accuracy and double damage
     return super
   end
@@ -850,7 +850,7 @@ class Battle::Move::RemoveScreens < Battle::Move
     end
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     if user.pbOpposingSide.effects[PBEffects::LightScreen]>0 ||
        user.pbOpposingSide.effects[PBEffects::Reflect]>0 ||
        user.pbOpposingSide.effects[PBEffects::AuroraVeil]>0
@@ -1121,7 +1121,7 @@ end
 # Minimized. (Flying Press)
 #===============================================================================
 class Battle::Move::EffectivenessIncludesFlyingType < Battle::Move
-  def tramplesMinimize?(param=1)
+  def tramplesMinimize?(param = 1)
     return true if param==1 && Settings::MECHANICS_GENERATION >= 6   # Perfect accuracy
     return true if param==2   # Double damage
     return super
@@ -1195,8 +1195,8 @@ class Battle::Move::CategoryDependsOnHigherDamageIgnoreTargetAbility < Battle::M
     @calcCategory = 1
   end
 
-  def physicalMove?(thisType=nil); return (@calcCategory==0); end
-  def specialMove?(thisType=nil);  return (@calcCategory==1); end
+  def physicalMove?(thisType = nil); return (@calcCategory==0); end
+  def specialMove?(thisType = nil);  return (@calcCategory==1); end
 
   def pbOnStartUse(user,targets)
     # Calculate user's effective attacking value
@@ -1568,7 +1568,7 @@ class Battle::Move::TypeDependsOnUserDrive < Battle::Move
     return ret
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     t = pbBaseType(user)
     hitNum = 0
     hitNum = 1 if t == :ELECTRIC
@@ -1623,7 +1623,7 @@ class Battle::Move::TypeAndPowerDependOnWeather < Battle::Move
     return ret
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     t = pbBaseType(user)
     hitNum = 1 if t == :FIRE   # Type-specific anims
     hitNum = 2 if t == :WATER

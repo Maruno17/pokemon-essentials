@@ -52,7 +52,7 @@ end
 
 
 
-def pbTextBitmap(text, maxwidth=Graphics.width)
+def pbTextBitmap(text, maxwidth = Graphics.width)
   tmp = Bitmap.new(maxwidth,Graphics.height)
   pbSetSystemFont(tmp)
   drawFormattedTextEx(tmp,0,0,maxwidth,text,Color.new(248,248,248),Color.new(168,184,184))
@@ -67,7 +67,7 @@ end
 class EventScene
   attr_accessor :onCTrigger,:onBTrigger,:onUpdate
 
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @viewport       = viewport
     @onCTrigger     = Event.new
     @onBTrigger     = Event.new
@@ -140,7 +140,7 @@ class EventScene
     frames.times { update }
   end
 
-  def pictureWait(extraframes=0)
+  def pictureWait(extraframes = 0)
     loop do
       hasRunning = false
       for pic in @pictures

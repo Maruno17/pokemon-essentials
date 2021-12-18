@@ -286,7 +286,7 @@ class PokemonOption_Scene
     pbUpdateSpriteHash(@sprites)
   end
 
-  def pbStartScene(inloadscreen=false)
+  def pbStartScene(inloadscreen = false)
     @sprites = {}
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
@@ -449,7 +449,7 @@ class PokemonOptionScreen
     @scene = scene
   end
 
-  def pbStartScreen(inloadscreen=false)
+  def pbStartScreen(inloadscreen = false)
     @scene.pbStartScene(inloadscreen)
     @scene.pbOptions
     @scene.pbEndScene

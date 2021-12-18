@@ -76,7 +76,7 @@ module Compiler
     return line
   end
 
-  def csvQuote(str,always=false)
+  def csvQuote(str,always = false)
     return "" if nil_or_empty?(str)
     if always || str[/[,\"]/]   # || str[/^\s/] || str[/\s$/] || str[/^#/]
       str = str.gsub(/[\"]/,"\\\"")
@@ -278,7 +278,7 @@ module Compiler
     return ret
   end
 
-  def csvBoolean!(str,_line=-1)
+  def csvBoolean!(str,_line = -1)
     field = csvfield!(str)
     if field[/^1|[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Yy]$/]
       return true
@@ -288,7 +288,7 @@ module Compiler
     raise _INTL("Field {1} is not a Boolean value (true, false, 1, 0)\r\n{2}",field,FileLineData.linereport)
   end
 
-  def csvInt!(str,_line=-1)
+  def csvInt!(str,_line = -1)
     ret = csvfield!(str)
     if !ret[/^\-?\d+$/]
       raise _INTL("Field {1} is not an integer\r\n{2}",ret,FileLineData.linereport)
@@ -296,7 +296,7 @@ module Compiler
     return ret.to_i
   end
 
-  def csvPosInt!(str,_line=-1)
+  def csvPosInt!(str,_line = -1)
     ret = csvfield!(str)
     if !ret[/^\d+$/]
       raise _INTL("Field {1} is not a positive integer\r\n{2}",ret,FileLineData.linereport)
@@ -304,7 +304,7 @@ module Compiler
     return ret.to_i
   end
 
-  def csvFloat!(str,_line=-1)
+  def csvFloat!(str,_line = -1)
     ret = csvfield!(str)
     return Float(ret) rescue raise _INTL("Field {1} is not a number\r\n{2}",ret,FileLineData.linereport)
   end

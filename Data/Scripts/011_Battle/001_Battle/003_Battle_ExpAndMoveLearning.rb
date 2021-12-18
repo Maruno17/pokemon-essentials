@@ -89,7 +89,7 @@ class Battle
     end
   end
 
-  def pbGainExpOne(idxParty,defeatedBattler,numPartic,expShare,expAll,showMessages=true)
+  def pbGainExpOne(idxParty,defeatedBattler,numPartic,expShare,expAll,showMessages = true)
     pkmn = pbParty(0)[idxParty]   # The Pokémon gaining Exp from defeatedBattler
     growth_rate = pkmn.growth_rate
     # Don't bother calculating if gainer is already at max Exp

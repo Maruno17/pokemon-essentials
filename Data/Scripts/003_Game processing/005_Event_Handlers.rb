@@ -92,14 +92,14 @@ class HandlerHash
     return ret
   end
 
-  def addIf(conditionProc,handler=nil,&handlerBlock)
+  def addIf(conditionProc,handler = nil,&handlerBlock)
     if ![Proc,Hash].include?(handler.class) && !block_given?
       raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
     end
     @addIfs.push([conditionProc,handler || handlerBlock])
   end
 
-  def add(sym,handler=nil,&handlerBlock) # 'sym' can be an ID or symbol
+  def add(sym,handler = nil,&handlerBlock) # 'sym' can be an ID or symbol
     if ![Proc,Hash].include?(handler.class) && !block_given?
       raise ArgumentError, "#{self.class.name} for #{sym.inspect} has no valid handler (#{handler.inspect} was given)"
     end

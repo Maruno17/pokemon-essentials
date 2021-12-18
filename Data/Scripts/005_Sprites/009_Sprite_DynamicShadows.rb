@@ -7,7 +7,7 @@
 class Sprite_Shadow < RPG::Sprite
   attr_accessor :character
 
-  def initialize(viewport, character = nil,params=[])
+  def initialize(viewport, character = nil,params = [])
     super(viewport)
     @source       = params[0]
     @anglemin     = (params.size>1) ? params[1] : 0
@@ -184,7 +184,7 @@ class Spriteset_Map
   attr_accessor :shadows
 
   alias shadow_initialize initialize
-  def initialize(map=nil)
+  def initialize(map = nil)
     @shadows = []
     warn = false
     map = $game_map if !map
@@ -228,7 +228,7 @@ end
 #   p XPML_read("third", event_id) -> [3]
 #   p XPML_read("forth", event_id) -> nil
 #===================================================
-def XPML_read(map,markup,event,max_param_number=0)
+def XPML_read(map,markup,event,max_param_number = 0)
   parameter_list = nil
   return nil if !event || event.list == nil
   for i in 0...event.list.size

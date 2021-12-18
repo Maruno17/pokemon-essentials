@@ -279,7 +279,7 @@ class Battle::Move::StartNegateHeldItems < Battle::Move
     end
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     return if @battle.field.effects[PBEffects::MagicRoom]>0   # No animation
     super
   end

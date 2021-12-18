@@ -2,7 +2,7 @@
 # "Lottery" mini-game
 # By Maruno
 ################################################################################
-def pbSetLotteryNumber(variable=1)
+def pbSetLotteryNumber(variable = 1)
   t = pbGetTimeNow
   hash = t.day + (t.month << 5) + (t.year << 9)
   srand(hash)                      # seed RNG with fixed value depending on date
@@ -11,7 +11,7 @@ def pbSetLotteryNumber(variable=1)
   pbSet(variable,sprintf("%05d",lottery))
 end
 
-def pbLottery(winnum,nameVar=2,positionVar=3,matchedVar=4)
+def pbLottery(winnum,nameVar = 2,positionVar = 3,matchedVar = 4)
   winnum=winnum.to_i
   winpoke=nil
   winpos=0

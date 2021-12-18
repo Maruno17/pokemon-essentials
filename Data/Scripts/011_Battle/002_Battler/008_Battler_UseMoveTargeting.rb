@@ -170,7 +170,7 @@ class Battle::Battler
   #=============================================================================
   # Register target
   #=============================================================================
-  def pbAddTarget(targets,user,target,move,nearOnly=true,allowUser=false)
+  def pbAddTarget(targets,user,target,move,nearOnly = true,allowUser = false)
     return false if !target || (target.fainted? && !move.targetsPosition?)
     return false if !allowUser && target == user
     return false if nearOnly && !user.near?(target) && target != user
@@ -190,7 +190,7 @@ class Battle::Battler
     end
   end
 
-  def pbAddTargetRandomFoe(targets, user, move, nearOnly  =true)
+  def pbAddTargetRandomFoe(targets, user, move, nearOnly = true)
     choices = []
     user.allOpposing.each do |b|
       next if nearOnly && !user.near?(b)

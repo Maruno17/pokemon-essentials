@@ -174,7 +174,7 @@ def pbBottomLeft(window)
   window.y=Graphics.height-window.height
 end
 
-def pbBottomLeftLines(window,lines,width=nil)
+def pbBottomLeftLines(window,lines,width = nil)
   window.x=0
   window.width=width ? width : Graphics.width
   window.height=(window.borderY rescue 32)+lines*32
@@ -229,7 +229,7 @@ def pbPositionNearMsgWindow(cmdwindow,msgwindow,side)
 end
 
 # internal function
-def pbRepositionMessageWindow(msgwindow, linecount=2)
+def pbRepositionMessageWindow(msgwindow, linecount = 2)
   msgwindow.height=32*linecount+msgwindow.borderY
   msgwindow.y=(Graphics.height)-(msgwindow.height)
   if $game_system
@@ -246,7 +246,7 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
 end
 
 # internal function
-def pbUpdateMsgWindowPos(msgwindow,event,eventChanged=false)
+def pbUpdateMsgWindowPos(msgwindow,event,eventChanged = false)
   if event
     if eventChanged
       msgwindow.resizeToFit2(msgwindow.text,Graphics.width*2/3,msgwindow.height)
@@ -272,7 +272,7 @@ end
 #===============================================================================
 # Determine the colour of a background
 #===============================================================================
-def isDarkBackground(background,rect=nil)
+def isDarkBackground(background,rect = nil)
   return true if !background || background.disposed?
   rect = background.rect if !rect
   return true if rect.width<=0 || rect.height<=0
@@ -545,7 +545,7 @@ end
 # pbFadeOutIn(z) { block }
 # Fades out the screen before a block is run and fades it back in after the
 # block exits.  z indicates the z-coordinate of the viewport used for this effect
-def pbFadeOutIn(z=99999,nofadeout=false)
+def pbFadeOutIn(z = 99999,nofadeout = false)
   col=Color.new(0,0,0,0)
   viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z=z
@@ -576,7 +576,7 @@ def pbFadeOutIn(z=99999,nofadeout=false)
   end
 end
 
-def pbFadeOutInWithUpdate(z,sprites,nofadeout=false)
+def pbFadeOutInWithUpdate(z,sprites,nofadeout = false)
   col=Color.new(0,0,0,0)
   viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z=z
@@ -609,7 +609,7 @@ end
 
 # Similar to pbFadeOutIn, but pauses the music as it fades out.
 # Requires scripts "Audio" (for bgm_pause) and "SpriteWindow" (for pbFadeOutIn).
-def pbFadeOutInWithMusic(zViewport=99999)
+def pbFadeOutInWithMusic(zViewport = 99999)
   playingBGS = $game_system.getPlayingBGS
   playingBGM = $game_system.getPlayingBGM
   $game_system.bgm_pause(1.0)
@@ -642,7 +642,7 @@ def pbFadeOutAndHide(sprites)
   return visiblesprites
 end
 
-def pbFadeInAndShow(sprites,visiblesprites=nil)
+def pbFadeInAndShow(sprites,visiblesprites = nil)
   if visiblesprites
     for i in visiblesprites
       if i[1] && sprites[i[0]] && !pbDisposed?(sprites[i[0]])
@@ -713,7 +713,7 @@ end
 # _background_ is a filename within the Graphics/Pictures/ folder and can be
 #     an animated image.
 # _viewport_ is a viewport to place the background in.
-def addBackgroundPlane(sprites,planename,background,viewport=nil)
+def addBackgroundPlane(sprites,planename,background,viewport = nil)
   sprites[planename]=AnimatedPlane.new(viewport)
   bitmapName=pbResolveBitmap("Graphics/Pictures/#{background}")
   if bitmapName==nil
@@ -736,7 +736,7 @@ end
 #       an animated image.
 # _color_ is the color to use if the background can't be found.
 # _viewport_ is a viewport to place the background in.
-def addBackgroundOrColoredPlane(sprites,planename,background,color,viewport=nil)
+def addBackgroundOrColoredPlane(sprites,planename,background,color,viewport = nil)
   bitmapName=pbResolveBitmap("Graphics/Pictures/#{background}")
   if bitmapName==nil
     # Plane should exist in any case

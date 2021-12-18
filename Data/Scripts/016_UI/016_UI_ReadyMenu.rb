@@ -6,7 +6,7 @@ class ReadyMenuButton < SpriteWrapper
   attr_reader :selected
   attr_reader :side
 
-  def initialize(index,command,selected,side,viewport=nil)
+  def initialize(index,command,selected,side,viewport = nil)
     super(viewport)
     @index = index
     @command = command   # Item/move ID, name, mode (T move/F item), pkmnIndex

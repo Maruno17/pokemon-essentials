@@ -63,7 +63,7 @@ class Battle::Battler
 
   # Called when a Pokémon (self) enters battle, at the end of each move used,
   # and at the end of each round.
-  def pbContinualAbilityChecks(onSwitchIn=false)
+  def pbContinualAbilityChecks(onSwitchIn = false)
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
     # Trace
@@ -227,7 +227,7 @@ class Battle::Battler
     self.item = nil
   end
 
-  def pbConsumeItem(recoverable=true,symbiosis=true,belch=true)
+  def pbConsumeItem(recoverable = true,symbiosis = true,belch = true)
     PBDebug.log("[Item consumed] #{pbThis} consumed its held #{itemName}")
     if recoverable
       setRecycleItem(@item_id)

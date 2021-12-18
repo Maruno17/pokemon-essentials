@@ -73,13 +73,13 @@ module RecordedBattleModule
     return Marshal.dump([pbGetBattleType,@properties,@rounds,@randomnumbers,@switches])
   end
 
-  def pbSwitchInBetween(idxBattler,checkLaxOnly=false,canCancel=false)
+  def pbSwitchInBetween(idxBattler,checkLaxOnly = false,canCancel = false)
     ret = super
     @switches.push(ret)
     return ret
   end
 
-  def pbRegisterMove(idxBattler,idxMove,showMessages=true)
+  def pbRegisterMove(idxBattler,idxMove,showMessages = true)
     if super
       @rounds[@roundindex][idxBattler] = [Commands::Fight,idxMove]
       return true
@@ -92,13 +92,13 @@ module RecordedBattleModule
     @rounds[@roundindex][idxBattler][2] = idxTarget
   end
 
-  def pbRun(idxBattler,duringBattle=false)
+  def pbRun(idxBattler,duringBattle = false)
     ret = super
     @rounds[@roundindex][idxBattler] = [Commands::Run,@decision]
     return ret
   end
 
-  def pbAutoChooseMove(idxBattler,showMessages=true)
+  def pbAutoChooseMove(idxBattler,showMessages = true)
     ret = super
     @rounds[@roundindex][idxBattler] = [Commands::Fight,-1]
     return ret
@@ -112,7 +112,7 @@ module RecordedBattleModule
     return false
   end
 
-  def pbRegisterItem(idxBattler,item,idxTarget=nil,idxMove=nil)
+  def pbRegisterItem(idxBattler,item,idxTarget = nil,idxMove = nil)
     if super
       @rounds[@roundindex][idxBattler] = [Commands::Bag,item,idxTarget,idxMove]
       return true
@@ -183,7 +183,7 @@ module RecordedBattlePlaybackModule
     super
   end
 
-  def pbSwitchInBetween(_idxBattler,_checkLaxOnly=false,_canCancel=false)
+  def pbSwitchInBetween(_idxBattler,_checkLaxOnly = false,_canCancel = false)
     ret = @switches[@switchindex]
     @switchindex += 1
     return ret

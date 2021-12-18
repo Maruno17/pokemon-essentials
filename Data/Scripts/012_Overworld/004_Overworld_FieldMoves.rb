@@ -35,7 +35,7 @@ end
 
 
 
-def pbCanUseHiddenMove?(pkmn,move,showmsg=true)
+def pbCanUseHiddenMove?(pkmn,move,showmsg = true)
   return HiddenMoveHandlers.triggerCanUseMove(move,pkmn,showmsg)
 end
 
@@ -52,7 +52,7 @@ def pbHiddenMoveEvent
   Events.onAction.trigger(nil)
 end
 
-def pbCheckHiddenMoveBadge(badge=-1,showmsg=true)
+def pbCheckHiddenMoveBadge(badge = -1,showmsg = true)
   return true if badge<0   # No badge requirement
   return true if $DEBUG
   if (Settings::FIELD_MOVES_COUNT_BADGES) ? $player.badge_count >= badge : $player.badges[badge]
@@ -368,7 +368,7 @@ def pbSurfacing
 end
 
 # @deprecated This method is slated to be removed in v21.
-def pbTransferUnderwater(mapid,x,y,direction=$game_player.direction)
+def pbTransferUnderwater(mapid,x,y,direction = $game_player.direction)
   Deprecation.warn_method('pbTransferUnderwater', 'v21', '"Transfer Player" event command')
   pbFadeOutIn {
     $game_temp.player_new_map_id    = mapid
@@ -560,7 +560,7 @@ HiddenMoveHandlers::UseMove.add(:FLY,proc { |move, pkmn|
 #===============================================================================
 # Headbutt
 #===============================================================================
-def pbHeadbuttEffect(event=nil)
+def pbHeadbuttEffect(event = nil)
   event = $game_player.pbFacingEvent(true) if !event
   a = (event.x+(event.x/24).floor+1)*(event.y+(event.y/24).floor+1)
   a = (a*2/5)%10   # Even 2x as likely as odd, 0 is 1.5x as likely as odd
@@ -585,7 +585,7 @@ def pbHeadbuttEffect(event=nil)
   end
 end
 
-def pbHeadbutt(event=nil)
+def pbHeadbutt(event = nil)
   move = :HEADBUTT
   movefinder = $player.get_pokemon_with_move(move)
   if !$DEBUG && !movefinder
@@ -781,7 +781,7 @@ def pbEndSurf(_xOffset,_yOffset)
 end
 
 # @deprecated This method is slated to be removed in v21.
-def pbTransferSurfing(mapid,xcoord,ycoord,direction=$game_player.direction)
+def pbTransferSurfing(mapid,xcoord,ycoord,direction = $game_player.direction)
   Deprecation.warn_method('pbTransferSurfing', 'v21', '"Transfer Player" event command')
   pbFadeOutIn {
     $game_temp.player_new_map_id    = mapid

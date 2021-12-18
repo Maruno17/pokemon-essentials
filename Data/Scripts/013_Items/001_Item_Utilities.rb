@@ -91,7 +91,7 @@ module ItemHandlers
     return [UseOnPokemonMaximum.trigger(item, pkmn), 1].max
   end
 
-  def self.triggerCanUseInBattle(item,pkmn,battler,move,firstAction,battle,scene,showMessages=true)
+  def self.triggerCanUseInBattle(item,pkmn,battler,move,firstAction,battle,scene,showMessages = true)
     return true if !CanUseInBattle[item]   # Can use the item by default
     return CanUseInBattle.trigger(item,pkmn,battler,move,firstAction,battle,scene,showMessages)
   end
@@ -640,7 +640,7 @@ end
 # Use an item from the Bag and/or on a Pokémon
 #===============================================================================
 # @return [Integer] 0 = item wasn't used; 1 = item used; 2 = close Bag to use in field
-def pbUseItem(bag,item,bagscene=nil)
+def pbUseItem(bag,item,bagscene = nil)
   itm = GameData::Item.get(item)
   useType = itm.field_use
   if itm.is_machine?    # TM or TR or HM
@@ -794,7 +794,7 @@ end
 #===============================================================================
 # Give an item to a Pokémon to hold, and take a held item from a Pokémon
 #===============================================================================
-def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
+def pbGiveItemToPokemon(item,pkmn,scene,pkmnid = 0)
   newitemname = GameData::Item.get(item).name
   if pkmn.egg?
     scene.pbDisplay(_INTL("Eggs can't hold items."))

@@ -174,7 +174,7 @@ end
 # Minimized. (Body Slam (Gen 6+))
 #===============================================================================
 class Battle::Move::ParalyzeTargetTrampleMinimize < Battle::Move::ParalyzeTarget
-  def tramplesMinimize?(param=1)
+  def tramplesMinimize?(param = 1)
     return true if param==1 && Settings::MECHANICS_GENERATION >= 6   # Perfect accuracy
     return true if param==2   # Double damage
     return super
@@ -442,7 +442,7 @@ class Battle::Move::CureUserPartyStatus < Battle::Move
     return target.status == :NONE
   end
 
-  def pbAromatherapyHeal(pkmn,battler=nil)
+  def pbAromatherapyHeal(pkmn,battler = nil)
     oldStatus = (battler) ? battler.status : pkmn.status
     curedName = (battler) ? battler.pbThis : pkmn.name
     if battler
@@ -488,7 +488,7 @@ class Battle::Move::CureUserPartyStatus < Battle::Move
     end
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     super
     if @id == :AROMATHERAPY
       @battle.pbDisplay(_INTL("A soothing aroma wafted through the area!"))
@@ -552,7 +552,7 @@ end
 # the target is Minimized. (Dragon Rush (Gen 6+), Steamroller, Stomp)
 #===============================================================================
 class Battle::Move::FlinchTargetTrampleMinimize < Battle::Move::FlinchTarget
-  def tramplesMinimize?(param=1)
+  def tramplesMinimize?(param = 1)
     return true if param==1 && Settings::MECHANICS_GENERATION >= 6   # Perfect accuracy
     return true if param==2   # Double damage
     return super
@@ -1388,7 +1388,7 @@ class Battle::Move::TransformUserIntoTarget < Battle::Move
     user.pbTransform(target)
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     super
     @battle.scene.pbChangePokemon(user,targets[0].pokemon)
   end

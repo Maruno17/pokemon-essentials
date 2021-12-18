@@ -76,7 +76,7 @@ class Battle::Scene
   #=============================================================================
   # Updating and refreshing
   #=============================================================================
-  def pbUpdate(cw=nil)
+  def pbUpdate(cw = nil)
     pbGraphicsUpdate
     pbInputUpdate
     pbFrameUpdate(cw)
@@ -111,7 +111,7 @@ class Battle::Scene
     end
   end
 
-  def pbFrameUpdate(cw=nil)
+  def pbFrameUpdate(cw = nil)
     cw.update if cw
     @battle.battlers.each_with_index do |b,i|
       next if !b
@@ -185,7 +185,7 @@ class Battle::Scene
 
   # NOTE: A regular message is displayed for 1 second after it fully appears (or
   #       less if Back/Use is pressed). Disappears automatically after that time.
-  def pbDisplayMessage(msg,brief=false)
+  def pbDisplayMessage(msg,brief = false)
     pbWaitMessage
     pbShowWindow(MESSAGE_BOX)
     cw = @sprites["messageWindow"]
@@ -379,7 +379,7 @@ class Battle::Scene
   #=============================================================================
   #
   #=============================================================================
-  def pbSelectBattler(idxBattler,selectMode=1)
+  def pbSelectBattler(idxBattler,selectMode = 1)
     numWindows = @battle.sideSizes.max*2
     for i in 0...numWindows
       sel = (idxBattler.is_a?(Array)) ? !idxBattler[i].nil? : i==idxBattler

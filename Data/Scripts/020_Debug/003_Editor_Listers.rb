@@ -302,7 +302,7 @@ end
 #
 #===============================================================================
 class MapLister
-  def initialize(selmap,addGlobal=false)
+  def initialize(selmap,addGlobal = false)
     @sprite = SpriteWrapper.new
     @sprite.bitmap = nil
     @sprite.x      = Graphics.width * 3 / 4

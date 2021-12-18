@@ -39,7 +39,7 @@ def pbSceneStandby
   $scene.createSpritesets if $scene && $scene.is_a?(Scene_Map)
 end
 
-def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
+def pbBattleAnimation(bgm = nil,battletype = 0,foe = nil)
   $game_temp.in_battle = true
   viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z = 99999

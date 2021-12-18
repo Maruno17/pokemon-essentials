@@ -376,7 +376,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbCreateStatusWindow(viewport=nil)
+def pbCreateStatusWindow(viewport = nil)
   msgwindow=Window_AdvancedTextPokemon.new("")
   if !viewport
     msgwindow.z=99999
@@ -391,7 +391,7 @@ def pbCreateStatusWindow(viewport=nil)
   return msgwindow
 end
 
-def pbCreateMessageWindow(viewport=nil,skin=nil)
+def pbCreateMessageWindow(viewport = nil,skin = nil)
   msgwindow=Window_AdvancedTextPokemon.new("")
   if !viewport
     msgwindow.z=99999
@@ -418,7 +418,7 @@ end
 #===============================================================================
 # Main message-displaying function
 #===============================================================================
-def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
+def pbMessageDisplay(msgwindow,message,letterbyletter = true,commandProc = nil)
   return if !msgwindow
   oldletterbyletter=msgwindow.letterbyletter
   msgwindow.letterbyletter=(letterbyletter) ? true : false
@@ -708,7 +708,7 @@ end
 #===============================================================================
 # Message-displaying functions
 #===============================================================================
-def pbMessage(message,commands=nil,cmdIfCancel=0,skin=nil,defaultCmd=0,&block)
+def pbMessage(message,commands = nil,cmdIfCancel = 0,skin = nil,defaultCmd = 0,&block)
   ret = 0
   msgwindow = pbCreateMessageWindow(nil,skin)
   if commands
@@ -742,7 +742,7 @@ def pbMessageChooseNumber(message,params,&block)
   return ret
 end
 
-def pbShowCommands(msgwindow,commands=nil,cmdIfCancel=0,defaultCmd=0)
+def pbShowCommands(msgwindow,commands = nil,cmdIfCancel = 0,defaultCmd = 0)
   return 0 if !commands
   cmdwindow=Window_CommandPokemonEx.new(commands)
   cmdwindow.z=99999
@@ -778,7 +778,7 @@ def pbShowCommands(msgwindow,commands=nil,cmdIfCancel=0,defaultCmd=0)
   return ret
 end
 
-def pbShowCommandsWithHelp(msgwindow,commands,help,cmdIfCancel=0,defaultCmd=0)
+def pbShowCommandsWithHelp(msgwindow,commands,help,cmdIfCancel = 0,defaultCmd = 0)
   msgwin=msgwindow
   msgwin=pbCreateMessageWindow(nil) if !msgwindow
   oldlbl=msgwin.letterbyletter
@@ -828,7 +828,7 @@ def pbShowCommandsWithHelp(msgwindow,commands,help,cmdIfCancel=0,defaultCmd=0)
 end
 
 # frames is the number of 1/20 seconds to wait for
-def pbMessageWaitForInput(msgwindow,frames,showPause=false)
+def pbMessageWaitForInput(msgwindow,frames,showPause = false)
   return if !frames || frames<=0
   msgwindow.startPause if msgwindow && showPause
   frames = frames*Graphics.frame_rate/20
@@ -845,7 +845,7 @@ def pbMessageWaitForInput(msgwindow,frames,showPause=false)
   msgwindow.stopPause if msgwindow && showPause
 end
 
-def pbFreeText(msgwindow,currenttext,passwordbox,maxlength,width=240)
+def pbFreeText(msgwindow,currenttext,passwordbox,maxlength,width = 240)
   window=Window_TextEntry_Keyboard.new(currenttext,0,0,width,64)
   ret=""
   window.maxlength=maxlength
@@ -875,7 +875,7 @@ def pbFreeText(msgwindow,currenttext,passwordbox,maxlength,width=240)
   return ret
 end
 
-def pbMessageFreeText(message,currenttext,passwordbox,maxlength,width=240,&block)
+def pbMessageFreeText(message,currenttext,passwordbox,maxlength,width = 240,&block)
   msgwindow=pbCreateMessageWindow
   retval=pbMessageDisplay(msgwindow,message,true,
      proc { |msgwindow|

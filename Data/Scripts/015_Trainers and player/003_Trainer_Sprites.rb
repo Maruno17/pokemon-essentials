@@ -2,7 +2,7 @@
 # Walking charset, for use in text entry screens and load game screen
 #===============================================================================
 class TrainerWalkingCharSprite < SpriteWrapper
-  def initialize(charset,viewport=nil)
+  def initialize(charset,viewport = nil)
     super(viewport)
     @animbitmap = nil
     self.charset = charset

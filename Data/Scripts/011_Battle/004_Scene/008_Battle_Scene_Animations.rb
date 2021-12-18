@@ -47,7 +47,7 @@ class Battle::Scene::Animation::Intro < Battle::Scene::Animation
     blackBar.moveOpacity(appearTime*3/4,appearTime/4,0)
   end
 
-  def makeSlideSprite(spriteName,deltaMult,appearTime,origin=nil)
+  def makeSlideSprite(spriteName,deltaMult,appearTime,origin = nil)
     # If deltaMult is positive, the sprite starts off to the right and moves
     # left (for sprites on the player's side and the background).
     return if !@sprites[spriteName]
@@ -304,7 +304,7 @@ end
 # Doesn't show the ball thrown or the Pokémon.
 #===============================================================================
 class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
-  def initialize(sprites,viewport,fullAnim=false)
+  def initialize(sprites,viewport,fullAnim = false)
     @fullAnim = fullAnim   # True at start of battle, false when switching
     super(sprites,viewport)
   end
@@ -357,7 +357,7 @@ end
 # Doesn't show the ball thrown or the Pokémon.
 #===============================================================================
 class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
-  def initialize(sprites,viewport,fullAnim=false)
+  def initialize(sprites,viewport,fullAnim = false)
     @fullAnim = fullAnim   # True at start of battle, false when switching
     super(sprites,viewport)
   end
@@ -404,7 +404,7 @@ end
 class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
 
-  def initialize(sprites,viewport,idxTrainer,battler,startBattle,idxOrder=0)
+  def initialize(sprites,viewport,idxTrainer,battler,startBattle,idxOrder = 0)
     @idxTrainer     = idxTrainer
     @battler        = battler
     @showingTrainer = startBattle

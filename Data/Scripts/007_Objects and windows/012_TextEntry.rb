@@ -87,7 +87,7 @@ end
 #
 #===============================================================================
 class Window_TextEntry < SpriteWindow_Base
-  def initialize(text,x,y,width,height,heading=nil,usedarkercolor=false)
+  def initialize(text,x,y,width,height,heading = nil,usedarkercolor = false)
     super(x,y,width,height)
     colors=getDefaultTextColors(self.windowskin)
     @baseColor=colors[0]

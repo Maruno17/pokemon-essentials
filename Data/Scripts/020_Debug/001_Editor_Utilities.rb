@@ -10,7 +10,7 @@ def pbGetLegalMoves(species)
   return moves
 end
 
-def pbSafeCopyFile(x,y,z=nil)
+def pbSafeCopyFile(x,y,z = nil)
   if safeExists?(x)
     safetocopy = true
     filedata = nil
@@ -245,7 +245,7 @@ end
 #===============================================================================
 # General list methods
 #===============================================================================
-def pbCommands2(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
+def pbCommands2(cmdwindow,commands,cmdIfCancel,defaultindex = -1,noresize = false)
   cmdwindow.commands = commands
   cmdwindow.index    = defaultindex if defaultindex>=0
   cmdwindow.x        = 0
@@ -282,7 +282,7 @@ def pbCommands2(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
   return ret
 end
 
-def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
+def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex = -1,noresize = false)
   cmdwindow.commands = commands
   cmdwindow.index    = defaultindex if defaultindex>=0
   cmdwindow.x        = 0
@@ -378,7 +378,7 @@ def pbChooseList(commands, default = 0, cancelValue = -1, sortType = 1)
   return itemID
 end
 
-def pbCommandsSortable(cmdwindow,commands,cmdIfCancel,defaultindex=-1,sortable=false)
+def pbCommandsSortable(cmdwindow,commands,cmdIfCancel,defaultindex = -1,sortable = false)
   cmdwindow.commands = commands
   cmdwindow.index    = defaultindex if defaultindex >= 0
   cmdwindow.x        = 0

@@ -74,7 +74,7 @@ def isReversed(src0,src1,dst0,dst1)
   return (dst0<dst1)
 end
 
-def pbCreateCel(x,y,pattern,focus=4)
+def pbCreateCel(x,y,pattern,focus = 4)
   frame = []
   frame[AnimFrame::X]       = x
   frame[AnimFrame::Y]       = y
@@ -256,7 +256,7 @@ class PBAnimTiming
   attr_accessor :flashColor
   attr_accessor :flashDuration
 
-  def initialize(type=0)
+  def initialize(type = 0)
     @frame         = 0
     @timingType    = type
     @name          = ""
@@ -358,7 +358,7 @@ class PBAnimations < Array
   attr_reader   :array
   attr_accessor :selected
 
-  def initialize(size=1)
+  def initialize(size = 1)
     @array = []
     @selected = 0
     size = 1 if size<1   # Always create at least one animation
@@ -433,7 +433,7 @@ class PBAnimation < Array
     return @speed || 20
   end
 
-  def initialize(size=1)
+  def initialize(size = 1)
     @id       = -1
     @name     = ""
     @graphic  = ""
@@ -494,7 +494,7 @@ class PBAnimation < Array
     return @array[pos]
   end
 
-  def playTiming(frame,bgGraphic,bgColor,foGraphic,foColor,oldbg=[],oldfo=[],user=nil)
+  def playTiming(frame,bgGraphic,bgColor,foGraphic,foColor,oldbg = [],oldfo = [],user = nil)
     for i in @timing
       next if i.frame!=frame
       case i.timingType
@@ -617,7 +617,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbSpriteSetAnimFrame(sprite,frame,user=nil,target=nil,inEditor=false)
+def pbSpriteSetAnimFrame(sprite,frame,user = nil,target = nil,inEditor = false)
   return if !sprite
   if !frame
     sprite.visible  = false
@@ -702,7 +702,7 @@ class PBAnimationPlayerX
 
   MAX_SPRITES = 60
 
-  def initialize(animation,user,target,scene=nil,oppMove=false,inEditor=false)
+  def initialize(animation,user,target,scene = nil,oppMove = false,inEditor = false)
     @animation     = animation
     @user          = (oppMove) ? target : user   # Just used for playing user's cry
     @usersprite    = (user) ? scene.sprites["pokemon_#{user.index}"] : nil

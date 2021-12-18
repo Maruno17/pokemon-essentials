@@ -2,7 +2,7 @@
 # Pokémon icons
 #===============================================================================
 class PokemonBoxIcon < IconSprite
-  def initialize(pokemon,viewport=nil)
+  def initialize(pokemon,viewport = nil)
     super(0,0,viewport)
     @pokemon = pokemon
     @release = Interpolator.new
@@ -120,7 +120,7 @@ end
 class PokemonBoxArrow < SpriteWrapper
   attr_accessor :quickswap
 
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(viewport)
     @frame         = 0
     @holding       = false
@@ -292,7 +292,7 @@ class PokemonBoxSprite < SpriteWrapper
   attr_accessor :refreshBox
   attr_accessor :refreshSprites
 
-  def initialize(storage,boxnumber,viewport=nil)
+  def initialize(storage,boxnumber,viewport = nil)
     super(viewport)
     @storage = storage
     @boxnumber = boxnumber
@@ -444,7 +444,7 @@ end
 # Party pop-up panel
 #===============================================================================
 class PokemonBoxPartySprite < SpriteWrapper
-  def initialize(party,viewport=nil)
+  def initialize(party,viewport = nil)
     super(viewport)
     @party = party
     @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/overlay_party")
@@ -657,7 +657,7 @@ class PokemonStorageScene
     Input.update
   end
 
-  def pbShowCommands(message,commands,index=0)
+  def pbShowCommands(message,commands,index = 0)
     ret = -1
     msgwindow = Window_UnformattedTextPokemon.newWithSize("",180,0,Graphics.width-180,32)
     msgwindow.viewport       = @viewport
@@ -1392,7 +1392,7 @@ class PokemonStorageScene
     end
   end
 
-  def pbUpdateOverlay(selection,party=nil)
+  def pbUpdateOverlay(selection,party = nil)
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     buttonbase = Color.new(248,248,248)
@@ -1659,7 +1659,7 @@ class PokemonStorageScreen
     return pbShowCommands(str,[_INTL("Yes"),_INTL("No")])==0
   end
 
-  def pbShowCommands(msg,commands,index=0)
+  def pbShowCommands(msg,commands,index = 0)
     return @scene.pbShowCommands(msg,commands,index)
   end
 
@@ -1862,7 +1862,7 @@ class PokemonStorageScreen
     return
   end
 
-  def pbChooseMove(pkmn,helptext,index=0)
+  def pbChooseMove(pkmn,helptext,index = 0)
     movenames = []
     for i in pkmn.moves
       if i.total_pp<=0
@@ -1949,7 +1949,7 @@ class PokemonStorageScreen
     end
   end
 
-  def pbChoosePokemon(_party=nil)
+  def pbChoosePokemon(_party = nil)
     $game_temp.in_storage = true
     @heldpkmn = nil
     @scene.pbStartBox(self,1)

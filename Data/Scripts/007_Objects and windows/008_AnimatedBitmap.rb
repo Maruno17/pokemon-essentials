@@ -225,14 +225,14 @@ def pbGetTileBitmap(filename, tile_id, hue, width = 1, height = 1)
   }
 end
 
-def pbGetTileset(name,hue=0)
+def pbGetTileset(name,hue = 0)
   return AnimatedBitmap.new("Graphics/Tilesets/" + name, hue).deanimate
 end
 
-def pbGetAutotile(name,hue=0)
+def pbGetAutotile(name,hue = 0)
   return AnimatedBitmap.new("Graphics/Autotiles/" + name, hue).deanimate
 end
 
-def pbGetAnimation(name,hue=0)
+def pbGetAnimation(name,hue = 0)
   return AnimatedBitmap.new("Graphics/Animations/" + name, hue).deanimate
 end

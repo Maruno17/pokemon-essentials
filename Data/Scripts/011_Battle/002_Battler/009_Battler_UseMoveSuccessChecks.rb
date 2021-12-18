@@ -7,7 +7,7 @@ class Battle::Battler
   # earlier in the same round (after choosing the command but before using the
   # move) or an unusable move may be called by another move such as Metronome.
   #=============================================================================
-  def pbCanChooseMove?(move,commandPhase,showMessages=true,specialUsage=false)
+  def pbCanChooseMove?(move,commandPhase,showMessages = true,specialUsage = false)
     # Disable
     if @effects[PBEffects::DisableMove]==move.id && !specialUsage
       if showMessages

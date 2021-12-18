@@ -44,7 +44,7 @@ class Battle::Peer
   end
 
   # For switching out, including due to fainting, and for the end of battle
-  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle=false)
+  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle = false)
     return if !pkmn
     f = MultipleForms.call("getFormOnLeavingBattle",pkmn,battle,usedInBattle,endBattle)
     pkmn.form = f if f && pkmn.form!=f
@@ -58,7 +58,7 @@ end
 #===============================================================================
 class Battle::NullPeer
   def pbOnEnteringBattle(battle, battler, pkmn, wild = false); end
-  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle=false); end
+  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle = false); end
 
   def pbStorePokemon(player,pkmn)
     player.party[player.party.length] = pkmn if !player.party_full?

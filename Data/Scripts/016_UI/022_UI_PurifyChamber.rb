@@ -219,7 +219,7 @@ class PurifyChamber
     @sets[set].insertAt(index,value)
   end
 
-  def [](chamber,slot=nil)
+  def [](chamber,slot = nil)
     if slot==nil
       return @sets[chamber]
     end
@@ -272,7 +272,7 @@ class PurifyChamber
     insertAfter(set,setCount(set),pkmn)
   end
 
-  def debugAdd(set,shadow,type1,type2=nil)
+  def debugAdd(set,shadow,type1,type2 = nil)
     pkmn = PseudoPokemon.new(shadow, type1, type2 || type1)
     if pkmn.shadowPokemon?
       self.setShadow(set,pkmn)
@@ -637,7 +637,7 @@ end
 class Window_PurifyChamberSets < Window_DrawableCommand
   attr_reader :switching
 
-  def initialize(chamber,x,y,width,height,viewport=nil)
+  def initialize(chamber,x,y,width,height,viewport = nil)
     @chamber=chamber
     @switching=-1
     super(x,y,width,height,viewport)
@@ -680,7 +680,7 @@ end
 #
 #===============================================================================
 class DirectFlowDiagram
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @points=[]
     @angles=[]
     @viewport=viewport
@@ -754,7 +754,7 @@ end
 #
 #===============================================================================
 class FlowDiagram
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @points=[]
     @angles=[]
     @viewport=viewport
@@ -846,7 +846,7 @@ class PurifyChamberSetView < SpriteWrapper
   attr_reader :cursor
   attr_reader :heldpkmn
 
-  def initialize(chamber,set,viewport=nil)
+  def initialize(chamber,set,viewport = nil)
     super(viewport)
     @set=set
     @heldpkmn=nil

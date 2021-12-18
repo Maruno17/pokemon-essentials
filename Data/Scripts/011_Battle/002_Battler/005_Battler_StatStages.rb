@@ -6,7 +6,7 @@ class Battle::Battler
     return @stages[stat]>=6
   end
 
-  def pbCanRaiseStatStage?(stat,user=nil,move=nil,showFailMsg=false,ignoreContrary=false)
+  def pbCanRaiseStatStage?(stat,user = nil,move = nil,showFailMsg = false,ignoreContrary = false)
     return false if fainted?
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
@@ -21,7 +21,7 @@ class Battle::Battler
     return true
   end
 
-  def pbRaiseStatStageBasic(stat,increment,ignoreContrary=false)
+  def pbRaiseStatStageBasic(stat,increment,ignoreContrary = false)
     if !@battle.moldBreaker
       # Contrary
       if hasActiveAbility?(:CONTRARY) && !ignoreContrary
@@ -42,7 +42,7 @@ class Battle::Battler
     return increment
   end
 
-  def pbRaiseStatStage(stat,increment,user,showAnim=true,ignoreContrary=false)
+  def pbRaiseStatStage(stat,increment,user,showAnim = true,ignoreContrary = false)
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
       return pbLowerStatStage(stat,increment,user,showAnim,true)
@@ -65,7 +65,7 @@ class Battle::Battler
     return true
   end
 
-  def pbRaiseStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false)
+  def pbRaiseStatStageByCause(stat,increment,user,cause,showAnim = true,ignoreContrary = false)
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
       return pbLowerStatStageByCause(stat,increment,user,cause,showAnim,true)
@@ -96,7 +96,7 @@ class Battle::Battler
     return true
   end
 
-  def pbRaiseStatStageByAbility(stat,increment,user,splashAnim=true)
+  def pbRaiseStatStageByAbility(stat,increment,user,splashAnim = true)
     return false if fainted?
     ret = false
     @battle.pbShowAbilitySplash(user) if splashAnim
@@ -163,7 +163,7 @@ class Battle::Battler
     return true
   end
 
-  def pbLowerStatStageBasic(stat,increment,ignoreContrary=false)
+  def pbLowerStatStageBasic(stat,increment,ignoreContrary = false)
     if !@battle.moldBreaker
       # Contrary
       if hasActiveAbility?(:CONTRARY) && !ignoreContrary
@@ -275,7 +275,7 @@ class Battle::Battler
     return true
   end
 
-  def pbLowerStatStageByAbility(stat,increment,user,splashAnim=true,checkContact=false)
+  def pbLowerStatStageByAbility(stat,increment,user,splashAnim = true,checkContact = false)
     ret = false
     @battle.pbShowAbilitySplash(user) if splashAnim
     if pbCanLowerStatStage?(stat,user,nil,Battle::Scene::USE_ABILITY_SPLASH) &&

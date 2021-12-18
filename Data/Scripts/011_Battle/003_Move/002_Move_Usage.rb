@@ -61,7 +61,7 @@ class Battle::Move
   def pbDesignateTargetsForHit(targets, hitNum); return targets; end   # For Dragon Darts
   def pbRepeatHit?; return false; end   # For Dragon Darts
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     return if !showAnimation
     if user.effects[PBEffects::ParentalBond]==1
       @battle.pbCommonAnimation("ParentalBond",user,targets)
@@ -122,7 +122,7 @@ class Battle::Move
     return false
   end
 
-  def pbMoveFailedAromaVeil?(user,target,showMessage=true)
+  def pbMoveFailedAromaVeil?(user,target,showMessage = true)
     return false if @battle.moldBreaker
     if target.hasActiveAbility?(:AROMAVEIL)
       if showMessage
@@ -265,7 +265,7 @@ class Battle::Move
   #=============================================================================
   # Messages upon being hit
   #=============================================================================
-  def pbEffectivenessMessage(user,target,numTargets=1)
+  def pbEffectivenessMessage(user,target,numTargets = 1)
     return if target.damageState.disguise || target.damageState.iceFace
     if Effectiveness.super_effective?(target.damageState.typeMod)
       if numTargets>1
@@ -282,7 +282,7 @@ class Battle::Move
     end
   end
 
-  def pbHitEffectivenessMessages(user,target,numTargets=1)
+  def pbHitEffectivenessMessages(user,target,numTargets = 1)
     return if target.damageState.disguise || target.damageState.iceFace
     if target.damageState.substitute
       @battle.pbDisplay(_INTL("The substitute took damage for {1}!",target.pbThis(true)))

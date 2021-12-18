@@ -2,7 +2,7 @@
 # Miniature game map drawing
 #===============================================================================
 class MapSprite
-  def initialize(map,viewport=nil)
+  def initialize(map,viewport = nil)
     @sprite=Sprite.new(viewport)
     @sprite.bitmap=createMinimap(map)
     @sprite.x=(Graphics.width/2)-(@sprite.bitmap.width/2)
@@ -38,7 +38,7 @@ end
 #
 #===============================================================================
 class SelectionSprite < Sprite
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @sprite=Sprite.new(viewport)
     @sprite.bitmap=nil
     @sprite.z=2
@@ -87,7 +87,7 @@ end
 #
 #===============================================================================
 class RegionMapSprite
-  def initialize(map,viewport=nil)
+  def initialize(map,viewport = nil)
     @sprite=Sprite.new(viewport)
     @sprite.bitmap=createRegionMap(map)
     @sprite.x=(Graphics.width/2)-(@sprite.bitmap.width/2)

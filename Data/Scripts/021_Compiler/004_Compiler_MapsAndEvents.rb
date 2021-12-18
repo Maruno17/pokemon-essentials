@@ -114,7 +114,7 @@ module Compiler
     return route
   end
 
-  def push_move_route(list,character,route,indent=0)
+  def push_move_route(list,character,route,indent = 0)
     route = generate_move_route(route) if route.is_a?(Array)
     for i in 0...route.list.length
       list.push(RPG::EventCommand.new(
@@ -123,16 +123,16 @@ module Compiler
     end
   end
 
-  def push_move_route_and_wait(list,character,route,indent=0)
+  def push_move_route_and_wait(list,character,route,indent = 0)
     push_move_route(list,character,route,indent)
     push_event(list,210,[],indent)
   end
 
-  def push_wait(list,frames,indent=0)
+  def push_wait(list,frames,indent = 0)
     push_event(list,106,[frames],indent)
   end
 
-  def push_event(list,cmd,params=nil,indent=0)
+  def push_event(list,cmd,params = nil,indent = 0)
     list.push(RPG::EventCommand.new(cmd,indent,params ? params : []))
   end
 
@@ -140,14 +140,14 @@ module Compiler
     list.push(RPG::EventCommand.new(0,0,[]))
   end
 
-  def push_comment(list,cmt,indent=0)
+  def push_comment(list,cmt,indent = 0)
     textsplit2 = cmt.split(/\n/)
     for i in 0...textsplit2.length
       list.push(RPG::EventCommand.new((i==0) ? 108 : 408,indent,[textsplit2[i].gsub(/\s+$/,"")]))
     end
   end
 
-  def push_text(list,text,indent=0)
+  def push_text(list,text,indent = 0)
     return if !text
     textsplit = text.split(/\\m/)
     for t in textsplit
@@ -163,7 +163,7 @@ module Compiler
     end
   end
 
-  def push_script(list,script,indent=0)
+  def push_script(list,script,indent = 0)
     return if !script
     first = true
     textsplit2 = script.split(/\n/)
@@ -176,25 +176,25 @@ module Compiler
     end
   end
 
-  def push_exit(list,indent=0)
+  def push_exit(list,indent = 0)
     list.push(RPG::EventCommand.new(115,indent,[]))
   end
 
-  def push_else(list,indent=0)
+  def push_else(list,indent = 0)
     list.push(RPG::EventCommand.new(0,indent,[]))
     list.push(RPG::EventCommand.new(411,indent-1,[]))
   end
 
-  def push_branch(list,script,indent=0)
+  def push_branch(list,script,indent = 0)
     list.push(RPG::EventCommand.new(111,indent,[12,script]))
   end
 
-  def push_branch_end(list,indent=0)
+  def push_branch_end(list,indent = 0)
     list.push(RPG::EventCommand.new(0,indent,[]))
     list.push(RPG::EventCommand.new(412,indent-1,[]))
   end
 
-  def push_self_switch(list,swtch,switchOn,indent=0)
+  def push_self_switch(list,swtch,switchOn,indent = 0)
     list.push(RPG::EventCommand.new(123,indent,[swtch,switchOn ? 0 : 1]))
   end
 

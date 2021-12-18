@@ -41,8 +41,8 @@ class Battle::Move::Confusion < Battle::Move
     @snatched   = false
   end
 
-  def physicalMove?(thisType=nil);    return true;  end
-  def specialMove?(thisType=nil);     return false; end
+  def physicalMove?(thisType = nil);  return true;  end
+  def specialMove?(thisType = nil);   return false; end
   def pbCritialOverride(user,target); return -1;    end
 end
 
@@ -70,8 +70,8 @@ class Battle::Move::Struggle < Battle::Move
     @snatched   = false
   end
 
-  def physicalMove?(thisType=nil); return true;  end
-  def specialMove?(thisType=nil);  return false; end
+  def physicalMove?(thisType = nil); return true;  end
+  def specialMove?(thisType = nil);  return false; end
 
   def pbEffectAfterAllHits(user,target)
     return if target.damageState.unaffected
@@ -279,7 +279,7 @@ end
 class Battle::Move::FixedDamageMove < Battle::Move
   def pbFixedDamage(user,target); return 1; end
 
-  def pbCalcDamage(user,target,numTargets=1)
+  def pbCalcDamage(user,target,numTargets = 1)
     target.damageState.critical   = false
     target.damageState.calcDamage = pbFixedDamage(user,target)
     target.damageState.calcDamage = 1 if target.damageState.calcDamage<1
@@ -367,7 +367,7 @@ class Battle::Move::TwoTurnMove < Battle::Move
     end
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     hitNum = 1 if @chargingTurn && !@damagingTurn   # Charging anim
     super
   end
@@ -601,7 +601,7 @@ class Battle::Move::PledgeMove < Battle::Move
     @battle.pbCommonAnimation(animName) if animName
   end
 
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
     return if @pledgeSetup   # No animation for setting up
     id = @overrideAnim if @overrideAnim
     return super

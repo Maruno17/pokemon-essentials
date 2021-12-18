@@ -42,7 +42,7 @@ class Battle::FakeBattler
     return $player.owned?(pokemon.species)
   end
 
-  def pbThis(lowerCase=false)
+  def pbThis(lowerCase = false)
     return (lowerCase) ? _INTL("the wild {1}",name) : _INTL("The wild {1}",name)
   end
 
@@ -62,7 +62,7 @@ end
 class Battle::Scene::SafariDataBox < SpriteWrapper
   attr_accessor :selected
 
-  def initialize(battle,viewport=nil)
+  def initialize(battle,viewport = nil)
     super(viewport)
     @selected    = 0
     @battle      = battle
@@ -88,7 +88,7 @@ class Battle::Scene::SafariDataBox < SpriteWrapper
     pbDrawTextPositions(self.bitmap,textpos)
   end
 
-  def update(frameCounter=0)
+  def update(frameCounter = 0)
     super()
   end
 end
@@ -381,12 +381,12 @@ class SafariBattle
     return (opposes?(idxBattler)) ? @party2 : nil
   end
 
-  def pbAllFainted?(idxBattler=0); return false; end
+  def pbAllFainted?(idxBattler = 0); return false; end
 
   #=============================================================================
   # Battler-related
   #=============================================================================
-  def opposes?(idxBattler1,idxBattler2=0)
+  def opposes?(idxBattler1,idxBattler2 = 0)
     idxBattler1 = idxBattler1.index if idxBattler1.respond_to?("index")
     idxBattler2 = idxBattler2.index if idxBattler2.respond_to?("index")
     return (idxBattler1&1)!=(idxBattler2&1)

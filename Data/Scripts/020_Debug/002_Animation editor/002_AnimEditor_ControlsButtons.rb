@@ -1,5 +1,5 @@
 module ShadowText
-  def shadowtext(bitmap,x,y,w,h,t,disabled=false,align=0)
+  def shadowtext(bitmap,x,y,w,h,t,disabled = false,align = 0)
     width=bitmap.text_size(t).width
     if align==2
       x+=(w-width)

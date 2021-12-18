@@ -26,7 +26,7 @@ class Game_Character
   attr_accessor :walk_anime
   attr_writer   :bob_height
 
-  def initialize(map=nil)
+  def initialize(map = nil)
     @map                       = map
     @id                        = 0
     @original_x                = 0
@@ -629,7 +629,7 @@ class Game_Character
     end
   end
 
-  def move_random_range(xrange=-1,yrange=-1)
+  def move_random_range(xrange = -1,yrange = -1)
     dirs = []   # 0=down, 1=left, 2=right, 3=up
     if xrange<0
       dirs.push(1)
@@ -654,11 +654,11 @@ class Game_Character
     end
   end
 
-  def move_random_UD(range=-1)
+  def move_random_UD(range = -1)
     move_random_range(0,range)
   end
 
-  def move_random_LR(range=-1)
+  def move_random_LR(range = -1)
     move_random_range(range,0)
   end
 

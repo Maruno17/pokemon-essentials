@@ -46,7 +46,7 @@ end
 class DarknessSprite < SpriteWrapper
   attr_reader :radius
 
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(viewport)
     @darkness = BitmapWrapper.new(Graphics.width,Graphics.height)
     @radius = radiusMin
@@ -91,7 +91,7 @@ end
 # Light effects
 #===============================================================================
 class LightEffect
-  def initialize(event,viewport=nil,map=nil,filename=nil)
+  def initialize(event,viewport = nil,map = nil,filename = nil)
     @light = IconSprite.new(0,0,viewport)
     if filename!=nil && filename!="" && pbResolveBitmap("Graphics/Pictures/"+filename)
       @light.setBitmap("Graphics/Pictures/"+filename)
@@ -123,7 +123,7 @@ end
 
 
 class LightEffect_Lamp < LightEffect
-  def initialize(event,viewport=nil,map=nil)
+  def initialize(event,viewport = nil,map = nil)
     lamp = AnimatedBitmap.new("Graphics/Pictures/LE")
     @light = Sprite.new(viewport)
     @light.bitmap  = Bitmap.new(128,64)

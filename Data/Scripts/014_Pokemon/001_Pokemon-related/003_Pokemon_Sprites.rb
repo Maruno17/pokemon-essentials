@@ -2,7 +2,7 @@
 # Pokémon sprite (used out of battle)
 #===============================================================================
 class PokemonSprite < SpriteWrapper
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(viewport)
     @_iconbitmap = nil
   end
@@ -20,7 +20,7 @@ class PokemonSprite < SpriteWrapper
     self.bitmap = nil
   end
 
-  def setOffset(offset=PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::Center)
     @offset = offset
     changeOrigin
   end
@@ -46,7 +46,7 @@ class PokemonSprite < SpriteWrapper
     end
   end
 
-  def setPokemonBitmap(pokemon,back=false)
+  def setPokemonBitmap(pokemon,back = false)
     @_iconbitmap.dispose if @_iconbitmap
     @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back) : nil
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
@@ -54,7 +54,7 @@ class PokemonSprite < SpriteWrapper
     changeOrigin
   end
 
-  def setPokemonBitmapSpecies(pokemon,species,back=false)
+  def setPokemonBitmapSpecies(pokemon,species,back = false)
     @_iconbitmap.dispose if @_iconbitmap
     @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back, species) : nil
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
@@ -87,7 +87,7 @@ class PokemonIconSprite < SpriteWrapper
   attr_accessor :active
   attr_reader   :pokemon
 
-  def initialize(pokemon,viewport=nil)
+  def initialize(pokemon,viewport = nil)
     super(viewport)
     @selected     = false
     @active       = false
@@ -138,7 +138,7 @@ class PokemonIconSprite < SpriteWrapper
     changeOrigin
   end
 
-  def setOffset(offset=PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::Center)
     @offset = offset
     changeOrigin
   end
@@ -223,7 +223,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
   attr_reader :form
   attr_reader :shiny
 
-  def initialize(species,viewport=nil)
+  def initialize(species,viewport = nil)
     super(viewport)
     @species      = species
     @gender       = 0
@@ -260,7 +260,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
     refresh
   end
 
-  def pbSetParams(species,gender,form,shiny=false)
+  def pbSetParams(species,gender,form,shiny = false)
     @species = species
     @gender  = gender
     @form    = form
@@ -268,7 +268,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
     refresh
   end
 
-  def setOffset(offset=PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::Center)
     @offset = offset
     changeOrigin
   end

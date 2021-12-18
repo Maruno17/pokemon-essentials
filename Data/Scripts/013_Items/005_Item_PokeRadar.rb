@@ -55,7 +55,7 @@ def pbPokeRadarCancel
   $game_temp.poke_radar_data = nil
 end
 
-def pbPokeRadarHighlightGrass(showmessage=true)
+def pbPokeRadarHighlightGrass(showmessage = true)
   grasses = []   # x, y, ring (0-3 inner to outer), rarity
   # Choose 1 random tile from each ring around the player
   for i in 0...4

@@ -22,7 +22,7 @@ class Battle
     return __clauses__pbDecisionOnDraw
   end
 
-  def pbJudgeCheckpoint(user,move=nil)
+  def pbJudgeCheckpoint(user,move = nil)
     if pbAllFainted?(0) && pbAllFainted?(1)
       if @rules["drawclause"]   # NOTE: Also includes Life Orb (not implemented)
         if !(move && move.function=="HealUserByHalfOfDamageDone")
@@ -62,7 +62,7 @@ class Battle::Battler
     @__clauses__aliased = true
   end
 
-  def pbCanSleep?(user,showMessages,move=nil,ignoreStatus=false)
+  def pbCanSleep?(user,showMessages,move = nil,ignoreStatus = false)
     selfsleep = (user && user.index==@index)
     if ((@battle.rules["modifiedsleepclause"]) || (!selfsleep && @battle.rules["sleepclause"])) &&
        pbHasStatusPokemon?(:SLEEP)

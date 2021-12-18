@@ -67,7 +67,7 @@ class PokemonSaveScreen
     @scene=scene
   end
 
-  def pbDisplay(text,brief=false)
+  def pbDisplay(text,brief = false)
     @scene.pbDisplay(text,brief)
   end
 

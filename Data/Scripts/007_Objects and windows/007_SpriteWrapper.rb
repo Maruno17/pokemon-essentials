@@ -2,7 +2,7 @@
 # SpriteWrapper is a class which wraps (most of) Sprite's properties.
 #===============================================================================
 class SpriteWrapper
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @sprite = Sprite.new(viewport)
   end
 
@@ -94,7 +94,7 @@ end
 # This bitmap can't be changed to a different one.
 #===============================================================================
 class BitmapSprite < SpriteWrapper
-  def initialize(width,height,viewport=nil)
+  def initialize(width,height,viewport = nil)
     super(viewport)
     self.bitmap=Bitmap.new(width,height)
     @initialized=true
@@ -190,7 +190,7 @@ class AnimatedSprite < SpriteWrapper
     end
   end
 
-  def self.create(animname,framecount,frameskip,viewport=nil)
+  def self.create(animname,framecount,frameskip,viewport = nil)
     return self.new([animname,framecount,frameskip,viewport])
   end
 
@@ -275,7 +275,7 @@ class IconSprite < SpriteWrapper
   end
 
   # Sets the icon's filename.
-  def setBitmap(file,hue=0)
+  def setBitmap(file,hue = 0)
     oldrc=self.src_rect
     clearBitmaps()
     @name=file
@@ -326,7 +326,7 @@ end
 # SpriteWrapper that stores multiple bitmaps, and displays only one at once.
 #===============================================================================
 class ChangelingSprite < SpriteWrapper
-  def initialize(x=0,y=0,viewport=nil)
+  def initialize(x = 0,y = 0,viewport = nil)
     super(viewport)
     self.x = x
     self.y = y

@@ -118,7 +118,7 @@ class TileDrawingHelper
     bitmap.stretch_blt(Rect.new(x, y, cxTile, cyTile), @tileset, rect)
   end
 
-  def bltSmallTile(bitmap,x,y,cxTile,cyTile,id,frame=0)
+  def bltSmallTile(bitmap,x,y,cxTile,cyTile,id,frame = 0)
     if id >= 384
       bltSmallRegularTile(bitmap, x, y, cxTile, cyTile, id)
     elsif id > 0
@@ -134,7 +134,7 @@ class TileDrawingHelper
     bltSmallRegularTile(bitmap, x, y, 32, 32, id)
   end
 
-  def bltTile(bitmap,x,y,id,frame=0)
+  def bltTile(bitmap,x,y,id,frame = 0)
     if id >= 384
       bltRegularTile(bitmap, x, y, id)
     elsif id > 0

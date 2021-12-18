@@ -3,7 +3,7 @@
 # Exit is not called when game is reset (using F12)
 $AtExitProcs=[] if !$AtExitProcs
 
-def exit(code=0)
+def exit(code = 0)
   for p in $AtExitProcs
     p.call
   end

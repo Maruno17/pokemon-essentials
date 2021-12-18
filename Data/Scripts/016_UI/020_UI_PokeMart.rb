@@ -660,7 +660,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbPokemonMart(stock,speech=nil,cantsell=false)
+def pbPokemonMart(stock,speech = nil,cantsell = false)
   stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
   commands = []
   cmdBuy  = -1

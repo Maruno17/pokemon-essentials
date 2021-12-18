@@ -132,7 +132,7 @@ end
 #===============================================================================
 # Event utilities
 #===============================================================================
-def pbTimeEvent(variableNumber,secs=86400)
+def pbTimeEvent(variableNumber,secs = 86400)
   if variableNumber && variableNumber>=0
     if $game_variables
       secs = 0 if secs<0
@@ -143,7 +143,7 @@ def pbTimeEvent(variableNumber,secs=86400)
   end
 end
 
-def pbTimeEventDays(variableNumber,days=0)
+def pbTimeEventDays(variableNumber,days = 0)
   if variableNumber && variableNumber>=0
     if $game_variables
       days = 0 if days<0
@@ -173,7 +173,7 @@ def pbTimeEventValid(variableNumber)
   return retval
 end
 
-def pbExclaim(event,id=Settings::EXCLAMATION_ANIMATION_ID,tinting=false)
+def pbExclaim(event,id = Settings::EXCLAMATION_ANIMATION_ID,tinting = false)
   if event.is_a?(Array)
     sprite = nil
     done = []
@@ -264,7 +264,7 @@ def pbGetUserName
   return System.user_name
 end
 
-def getRandomNameEx(type,variable,upper,maxLength=100)
+def getRandomNameEx(type,variable,upper,maxLength = 100)
   return "" if maxLength<=0
   name = ""
   50.times {
@@ -339,7 +339,7 @@ def getRandomNameEx(type,variable,upper,maxLength=100)
   return name
 end
 
-def getRandomName(maxLength=100)
+def getRandomName(maxLength = 100)
   return getRandomNameEx(2,nil,nil,maxLength)
 end
 
@@ -424,7 +424,7 @@ def pbMoveTutorAnnotations(move, movelist = nil)
   return ret
 end
 
-def pbMoveTutorChoose(move,movelist=nil,bymachine=false,oneusemachine=false)
+def pbMoveTutorChoose(move,movelist = nil,bymachine = false,oneusemachine = false)
   ret = false
   move = GameData::Move.get(move).id
   if movelist!=nil && movelist.is_a?(Array)

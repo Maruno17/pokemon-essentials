@@ -306,7 +306,7 @@ class TilePuzzleScene
     return true
   end
 
-  def pbRotateTile(pos,anim=true)
+  def pbRotateTile(pos,anim = true)
     if @heldtile>=0
       if anim
         @sprites["cursor"].visible=false
@@ -407,7 +407,7 @@ class TilePuzzleScene
     return true
   end
 
-  def pbShiftLine(dir,cursor,anim=true)
+  def pbShiftLine(dir,cursor,anim = true)
     # Get tiles involved
     tiles=[]
     dist=0
@@ -584,7 +584,7 @@ end
 
 
 
-def pbTilePuzzle(game,board,width=0,height=0)
+def pbTilePuzzle(game,board,width = 0,height = 0)
   ret = false
   pbFadeOutIn {
     scene = TilePuzzleScene.new(game,board,width,height)

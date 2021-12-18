@@ -74,7 +74,7 @@ class Battle::Move
 
   # NOTE: This method is only ever called while using a move (and also by the
   #       AI), so using @calcType here is acceptable.
-  def physicalMove?(thisType=nil)
+  def physicalMove?(thisType = nil)
     return (@category==0) if Settings::MOVE_CATEGORY_PER_MOVE
     thisType ||= @calcType
     thisType ||= @type
@@ -84,7 +84,7 @@ class Battle::Move
 
   # NOTE: This method is only ever called while using a move (and also by the
   #       AI), so using @calcType here is acceptable.
-  def specialMove?(thisType=nil)
+  def specialMove?(thisType = nil)
     return (@category==1) if Settings::MOVE_CATEGORY_PER_MOVE
     thisType ||= @calcType
     thisType ||= @type
@@ -134,7 +134,7 @@ class Battle::Move
   def danceMove?;         return @flags.any? { |f| f[/^Dance$/i] };               end
 
   # Causes perfect accuracy (param=1) and double damage (param=2).
-  def tramplesMinimize?(_param=1); return false; end
+  def tramplesMinimize?(_param = 1); return false; end
   def nonLethal?(_user,_target); return false; end   # For False Swipe
 
   def ignoresSubstitute?(user)   # user is the Pokémon using this move

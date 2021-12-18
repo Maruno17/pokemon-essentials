@@ -83,7 +83,7 @@ class BugContestState
     return true
   end
 
-  def pbSetJudgingPoint(startMap,startX,startY,dir=8)
+  def pbSetJudgingPoint(startMap,startX,startY,dir = 8)
     @start=[startMap,startX,startY,dir]
   end
 
@@ -199,7 +199,7 @@ class BugContestState
     return 3
   end
 
-  def pbEnd(interrupted=false)
+  def pbEnd(interrupted = false)
     return if !@inProgress
     for poke in @otherparty
       $player.party.push(poke)

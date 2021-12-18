@@ -135,7 +135,7 @@ class PokemonBag_Scene
     pbUpdateSpriteHash(@sprites)
   end
 
-  def pbStartScene(bag,choosing=false,filterproc=nil,resetpocket=true)
+  def pbStartScene(bag,choosing = false,filterproc = nil,resetpocket = true)
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
     @bag        = bag
@@ -237,7 +237,7 @@ class PokemonBag_Scene
     @viewport.dispose
   end
 
-  def pbDisplay(msg,brief=false)
+  def pbDisplay(msg,brief = false)
     UIHelper.pbDisplay(@sprites["msgwindow"],msg,brief) { pbUpdate }
   end
 
@@ -245,11 +245,11 @@ class PokemonBag_Scene
     UIHelper.pbConfirm(@sprites["msgwindow"],msg) { pbUpdate }
   end
 
-  def pbChooseNumber(helptext,maximum,initnum=1)
+  def pbChooseNumber(helptext,maximum,initnum = 1)
     return UIHelper.pbChooseNumber(@sprites["helpwindow"],helptext,maximum,initnum) { pbUpdate }
   end
 
-  def pbShowCommands(helptext,commands,index=0)
+  def pbShowCommands(helptext,commands,index = 0)
     return UIHelper.pbShowCommands(@sprites["helpwindow"],helptext,commands,index) { pbUpdate }
   end
 
@@ -580,7 +580,7 @@ class PokemonBagScreen
   end
 
   # UI logic for the item screen for choosing an item.
-  def pbChooseItemScreen(proc=nil)
+  def pbChooseItemScreen(proc = nil)
     oldlastpocket = @bag.last_viewed_pocket
     oldchoices = @bag.last_pocket_selections.clone
     @scene.pbStartScene(@bag,true,proc)

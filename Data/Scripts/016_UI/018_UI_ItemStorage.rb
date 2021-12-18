@@ -117,7 +117,7 @@ class ItemStorage_Scene
     return UIHelper.pbChooseNumber(@sprites["helpwindow"],helptext,maximum) { update }
   end
 
-  def pbDisplay(msg,brief=false)
+  def pbDisplay(msg,brief = false)
     UIHelper.pbDisplay(@sprites["msgwindow"],msg,brief) { update }
   end
 
@@ -275,7 +275,7 @@ module UIHelper
     return ret
   end
 
-  def self.pbChooseNumber(helpwindow,helptext,maximum,initnum=1)
+  def self.pbChooseNumber(helpwindow,helptext,maximum,initnum = 1)
     oldvisible = helpwindow.visible
     helpwindow.visible        = true
     helpwindow.text           = helptext
@@ -331,7 +331,7 @@ module UIHelper
     return ret
   end
 
-  def self.pbShowCommands(helpwindow,helptext,commands,initcmd=0)
+  def self.pbShowCommands(helpwindow,helptext,commands,initcmd = 0)
     ret = -1
     oldvisible = helpwindow.visible
     helpwindow.visible        = helptext ? true : false

@@ -22,7 +22,7 @@ class Battle::Battler
     return @status != :NONE
   end
 
-  def pbCanInflictStatus?(newStatus,user,showMessages,move=nil,ignoreStatus=false)
+  def pbCanInflictStatus?(newStatus,user,showMessages,move = nil,ignoreStatus = false)
     return false if fainted?
     selfInflicted = (user && user.index==@index)
     # Already have that status problem
@@ -214,7 +214,7 @@ class Battle::Battler
   #=============================================================================
   # Generalised infliction of status problem
   #=============================================================================
-  def pbInflictStatus(newStatus,newStatusCount=0,msg=nil,user=nil)
+  def pbInflictStatus(newStatus,newStatusCount = 0,msg = nil,user = nil)
     # Inflict the new status
     self.status      = newStatus
     self.statusCount = newStatusCount
@@ -420,7 +420,7 @@ class Battle::Battler
     PBDebug.log("[Status continues] #{pbThis}'s sleep count is #{@statusCount}") if self.status == :SLEEP
   end
 
-  def pbCureStatus(showMessages=true)
+  def pbCureStatus(showMessages = true)
     oldStatus = status
     self.status = :NONE
     if showMessages
@@ -438,7 +438,7 @@ class Battle::Battler
   #=============================================================================
   # Confusion
   #=============================================================================
-  def pbCanConfuse?(user=nil,showMessages=true,move=nil,selfInflicted=false)
+  def pbCanConfuse?(user = nil,showMessages = true,move = nil,selfInflicted = false)
     return false if fainted?
     if @effects[PBEffects::Confusion]>0
       @battle.pbDisplay(_INTL("{1} is already confused.",pbThis)) if showMessages
@@ -480,7 +480,7 @@ class Battle::Battler
     return pbCanConfuse?(nil,showMessages,nil,true)
   end
 
-  def pbConfuse(msg=nil)
+  def pbConfuse(msg = nil)
     @effects[PBEffects::Confusion] = pbConfusionDuration
     @battle.pbCommonAnimation("Confusion",self)
     msg = _INTL("{1} became confused!",pbThis) if nil_or_empty?(msg)
@@ -491,7 +491,7 @@ class Battle::Battler
     pbAbilityStatusCureCheck
   end
 
-  def pbConfusionDuration(duration=-1)
+  def pbConfusionDuration(duration = -1)
     duration = 2+@battle.pbRandom(4) if duration<=0
     return duration
   end
@@ -503,7 +503,7 @@ class Battle::Battler
   #=============================================================================
   # Attraction
   #=============================================================================
-  def pbCanAttract?(user,showMessages=true)
+  def pbCanAttract?(user,showMessages = true)
     return false if fainted?
     return false if !user || user.fainted?
     if @effects[PBEffects::Attract]>=0
@@ -547,7 +547,7 @@ class Battle::Battler
     return true
   end
 
-  def pbAttract(user,msg=nil)
+  def pbAttract(user,msg = nil)
     @effects[PBEffects::Attract] = user.index
     @battle.pbCommonAnimation("Attract",self)
     msg = _INTL("{1} fell in love!",pbThis) if nil_or_empty?(msg)
@@ -568,7 +568,7 @@ class Battle::Battler
   #=============================================================================
   # Flinching
   #=============================================================================
-  def pbFlinch(_user=nil)
+  def pbFlinch(_user = nil)
     return if hasActiveAbility?(:INNERFOCUS) && !@battle.moldBreaker
     @effects[PBEffects::Flinch] = true
   end

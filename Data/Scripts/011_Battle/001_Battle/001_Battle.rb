@@ -310,7 +310,7 @@ class Battle
 
   # Returns the player's team in its display order. Used when showing the party
   # screen.
-  def pbPlayerDisplayParty(idxBattler=0)
+  def pbPlayerDisplayParty(idxBattler = 0)
     partyOrders = pbPartyOrder(idxBattler)
     idxStart, _idxEnd = pbTeamIndexRangeFromBattlerIndex(idxBattler)
     ret = []
@@ -318,14 +318,14 @@ class Battle
     return ret
   end
 
-  def pbAbleCount(idxBattler=0)
+  def pbAbleCount(idxBattler = 0)
     party = pbParty(idxBattler)
     count = 0
     party.each { |pkmn| count += 1 if pkmn && pkmn.able? }
     return count
   end
 
-  def pbAbleNonActiveCount(idxBattler=0)
+  def pbAbleNonActiveCount(idxBattler = 0)
     party = pbParty(idxBattler)
     inBattleIndices = allSameSideBattlers(idxBattler).map { |b| b.pokemonIndex }
     count = 0
@@ -337,7 +337,7 @@ class Battle
     return count
   end
 
-  def pbAllFainted?(idxBattler=0)
+  def pbAllFainted?(idxBattler = 0)
     return pbAbleCount(idxBattler)==0
   end
 
@@ -442,7 +442,7 @@ class Battle
   end
 
   # Unused
-  def eachSameSideBattler(idxBattler=0)
+  def eachSameSideBattler(idxBattler = 0)
     idxBattler = idxBattler.index if idxBattler.respond_to?("index")
     @battlers.each { |b| yield b if b && !b.fainted? && !b.opposes?(idxBattler) }
   end
@@ -453,7 +453,7 @@ class Battle
   end
 
   # Unused
-  def eachOtherSideBattler(idxBattler=0)
+  def eachOtherSideBattler(idxBattler = 0)
     idxBattler = idxBattler.index if idxBattler.respond_to?("index")
     @battlers.each { |b| yield b if b && !b.fainted? && b.opposes?(idxBattler) }
   end
@@ -463,11 +463,11 @@ class Battle
     return @battlers.select { |b| b && !b.fainted? && b.opposes?(idxBattler) }
   end
 
-  def pbSideBattlerCount(idxBattler=0)
+  def pbSideBattlerCount(idxBattler = 0)
     return allSameSideBattlers(idxBattler).length
   end
 
-  def pbOpposingBattlerCount(idxBattler=0)
+  def pbOpposingBattlerCount(idxBattler = 0)
     return allOtherSideBattlers(idxBattler).length
   end
 
@@ -481,7 +481,7 @@ class Battle
     return nil
   end
 
-  def pbCheckOpposingAbility(abil,idxBattler=0,nearOnly=false)
+  def pbCheckOpposingAbility(abil,idxBattler = 0,nearOnly = false)
     allOtherSideBattlers(idxBattler).each do |b|
       next if nearOnly && !b.near?(idxBattler)
       return b if b.hasActiveAbility?(abil)
@@ -536,7 +536,7 @@ class Battle
   #=============================================================================
   # Comparing the positions of two battlers
   #=============================================================================
-  def opposes?(idxBattler1,idxBattler2=0)
+  def opposes?(idxBattler1,idxBattler2 = 0)
     idxBattler1 = idxBattler1.index if idxBattler1.respond_to?("index")
     idxBattler2 = idxBattler2.index if idxBattler2.respond_to?("index")
     return (idxBattler1&1)!=(idxBattler2&1)
@@ -631,7 +631,7 @@ class Battle
   #=============================================================================
   # Returns the battler representing the Pokémon at index idxParty in its party,
   # on the same side as a battler with battler index of idxBattlerOther.
-  def pbFindBattler(idxParty,idxBattlerOther=0)
+  def pbFindBattler(idxParty,idxBattlerOther = 0)
     allSameSideBattlers(idxBattlerOther).each { |b| return b if b.pokemonIndex==idxParty }
     return nil
   end
@@ -696,7 +696,7 @@ class Battle
   end
 
   # Used for causing weather by a move or by an ability.
-  def pbStartWeather(user,newWeather,fixedDuration=false,showAnim=true)
+  def pbStartWeather(user,newWeather,fixedDuration = false,showAnim = true)
     return if @field.weather==newWeather
     @field.weather = newWeather
     duration = (fixedDuration) ? 5 : -1
@@ -774,7 +774,7 @@ class Battle
     @field.terrainDuration = -1
   end
 
-  def pbStartTerrain(user,newTerrain,fixedDuration=true)
+  def pbStartTerrain(user,newTerrain,fixedDuration = true)
     return if @field.terrain==newTerrain
     @field.terrain = newTerrain
     duration = (fixedDuration) ? 5 : -1
@@ -820,19 +820,19 @@ class Battle
     return @scene.pbDisplayConfirmMessage(msg)
   end
 
-  def pbShowCommands(msg,commands,canCancel=true)
+  def pbShowCommands(msg,commands,canCancel = true)
     @scene.pbShowCommands(msg,commands,canCancel)
   end
 
-  def pbAnimation(move,user,targets,hitNum=0)
+  def pbAnimation(move,user,targets,hitNum = 0)
     @scene.pbAnimation(move,user,targets,hitNum) if @showAnims
   end
 
-  def pbCommonAnimation(name,user=nil,targets=nil)
+  def pbCommonAnimation(name,user = nil,targets = nil)
     @scene.pbCommonAnimation(name,user,targets) if @showAnims
   end
 
-  def pbShowAbilitySplash(battler,delay=false,logTrigger=true)
+  def pbShowAbilitySplash(battler,delay = false,logTrigger = true)
     PBDebug.log("[Ability triggered] #{battler.pbThis}'s #{battler.abilityName}") if logTrigger
     return if !Scene::USE_ABILITY_SPLASH
     @scene.pbShowAbilitySplash(battler)

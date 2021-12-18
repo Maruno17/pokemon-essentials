@@ -4,7 +4,7 @@
 class ControlPointSprite < SpriteWrapper
   attr_accessor :dragging
 
-  def initialize(red,viewport=nil)
+  def initialize(red,viewport = nil)
     super(viewport)
     self.bitmap=Bitmap.new(6,6)
     self.bitmap.fill_rect(0,0,6,1,Color.new(0,0,0))
@@ -51,7 +51,7 @@ end
 
 
 class PointSprite < SpriteWrapper
-  def initialize(x,y,viewport=nil)
+  def initialize(x,y,viewport = nil)
     super(viewport)
     self.bitmap=Bitmap.new(2,2)
     self.bitmap.fill_rect(0,0,2,2,Color.new(0,0,0))
@@ -129,7 +129,7 @@ class PointPath
     @totaldist=0
   end
 
-  def smoothPointPath(frames,roundValues=false)
+  def smoothPointPath(frames,roundValues = false)
     if frames<0
       raise ArgumentError.new("frames out of range: #{frames}")
     end

@@ -79,7 +79,7 @@ class Game_System
     Graphics.frame_reset
   end
 
-  def bgm_pause(fadetime=0.0) # :nodoc:
+  def bgm_pause(fadetime = 0.0) # :nodoc:
     pos = Audio.bgm_pos rescue 0
     self.bgm_fade(fadetime) if fadetime>0.0
     @bgm_position = pos
@@ -130,7 +130,7 @@ class Game_System
     return (@playing_bgm) ? @playing_bgm.clone : nil
   end
 
-  def setDefaultBGM(bgm,volume=80,pitch=100)
+  def setDefaultBGM(bgm,volume = 80,pitch = 100)
     bgm = RPG::AudioFile.new(bgm,volume,pitch) if bgm.is_a?(String)
     if bgm!=nil && bgm.name!=""
       @defaultBGM = nil
@@ -178,7 +178,7 @@ class Game_System
     Graphics.frame_reset
   end
 
-  def bgs_pause(fadetime=0.0) # :nodoc:
+  def bgs_pause(fadetime = 0.0) # :nodoc:
     if fadetime>0.0
       self.bgs_fade(fadetime)
     else

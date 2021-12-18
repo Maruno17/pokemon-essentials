@@ -4,7 +4,7 @@
 class PokemonPartyConfirmCancelSprite < SpriteWrapper
   attr_reader :selected
 
-  def initialize(text,x,y,narrowbox=false,viewport=nil)
+  def initialize(text,x,y,narrowbox = false,viewport = nil)
     super(viewport)
     @refreshBitmap = true
     @bgsprite = ChangelingSprite.new(0,0,viewport)
@@ -79,7 +79,7 @@ end
 #
 #===============================================================================
 class PokemonPartyCancelSprite < PokemonPartyConfirmCancelSprite
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(_INTL("CANCEL"),398,328,false,viewport)
   end
 end
@@ -88,7 +88,7 @@ end
 #
 #===============================================================================
 class PokemonPartyConfirmSprite < PokemonPartyConfirmCancelSprite
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(_INTL("CONFIRM"),398,308,true,viewport)
   end
 end
@@ -97,7 +97,7 @@ end
 #
 #===============================================================================
 class PokemonPartyCancelSprite2 < PokemonPartyConfirmCancelSprite
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(_INTL("CANCEL"),398,346,true,viewport)
   end
 end
@@ -106,7 +106,7 @@ end
 #
 #===============================================================================
 class Window_CommandPokemonColor < Window_CommandPokemon
-  def initialize(commands,width=nil)
+  def initialize(commands,width = nil)
     @colorKey = []
     for i in 0...commands.length
       if commands[i].is_a?(Array)
@@ -137,7 +137,7 @@ end
 class PokemonPartyBlankPanel < SpriteWrapper
   attr_accessor :text
 
-  def initialize(_pokemon,index,viewport=nil)
+  def initialize(_pokemon,index,viewport = nil)
     super(viewport)
     self.x = (index % 2) * Graphics.width / 2
     self.y = 16 * (index % 2) + 96 * (index / 2)
@@ -171,7 +171,7 @@ class PokemonPartyPanel < SpriteWrapper
   attr_reader :switching
   attr_reader :text
 
-  def initialize(pokemon,index,viewport=nil)
+  def initialize(pokemon,index,viewport = nil)
     super(viewport)
     @pokemon = pokemon
     @active = (index==0)   # true = rounded panel, false = rectangular panel
@@ -557,7 +557,7 @@ class PokemonParty_Scene
     return ret
   end
 
-  def pbShowCommands(helptext,commands,index=0)
+  def pbShowCommands(helptext,commands,index = 0)
     ret = -1
     helpwindow = @sprites["helpwindow"]
     helpwindow.visible = true
@@ -665,7 +665,7 @@ class PokemonParty_Scene
     end
   end
 
-  def pbSummary(pkmnid,inbattle=false)
+  def pbSummary(pkmnid,inbattle = false)
     oldsprites = pbFadeOutAndHide(@sprites)
     scene = PokemonSummary_Scene.new
     screen = PokemonSummaryScreen.new(scene,inbattle)
@@ -704,7 +704,7 @@ class PokemonParty_Scene
     return ret
   end
 
-  def pbChoosePokemon(switching=false,initialsel=-1,canswitch=0)
+  def pbChoosePokemon(switching = false,initialsel = -1,canswitch = 0)
     for i in 0...Settings::MAX_PARTY_SIZE
       @sprites["pokemon#{i}"].preselected = (switching && i==@activecmd)
       @sprites["pokemon#{i}"].switching   = switching
@@ -873,11 +873,11 @@ class PokemonPartyScreen
     @party = party
   end
 
-  def pbStartScene(helptext,_numBattlersOut,annotations=nil)
+  def pbStartScene(helptext,_numBattlersOut,annotations = nil)
     @scene.pbStartScene(@party,helptext,annotations)
   end
 
-  def pbChoosePokemon(helptext=nil)
+  def pbChoosePokemon(helptext = nil)
     @scene.pbSetHelpText(helptext) if helptext
     return @scene.pbChoosePokemon
   end
@@ -942,7 +942,7 @@ class PokemonPartyScreen
     return @scene.pbDisplayConfirm(text)
   end
 
-  def pbShowCommands(helptext,commands,index=0)
+  def pbShowCommands(helptext,commands,index = 0)
     return @scene.pbShowCommands(helptext,commands,index)
   end
 
@@ -977,7 +977,7 @@ class PokemonPartyScreen
     end
   end
 
-  def pbChooseMove(pokemon,helptext,index=0)
+  def pbChooseMove(pokemon,helptext,index = 0)
     movenames = []
     for i in pokemon.moves
       next if !i || !i.id
@@ -1096,7 +1096,7 @@ class PokemonPartyScreen
     return ret
   end
 
-  def pbChooseAblePokemon(ableProc,allowIneligible=false)
+  def pbChooseAblePokemon(ableProc,allowIneligible = false)
     annot = []
     eligibility = []
     for pkmn in @party
@@ -1123,7 +1123,7 @@ class PokemonPartyScreen
     return ret
   end
 
-  def pbChooseTradablePokemon(ableProc,allowIneligible=false)
+  def pbChooseTradablePokemon(ableProc,allowIneligible = false)
     annot = []
     eligibility = []
     for pkmn in @party
@@ -1390,7 +1390,7 @@ end
 # Choose a Pokémon/egg from the party.
 # Stores result in variable _variableNumber_ and the chosen Pokémon's name in
 # variable _nameVarNumber_; result is -1 if no Pokémon was chosen
-def pbChoosePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=false)
+def pbChoosePokemon(variableNumber,nameVarNumber,ableProc = nil,allowIneligible = false)
   chosen = 0
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
@@ -1420,7 +1420,7 @@ def pbChooseAblePokemon(variableNumber,nameVarNumber)
 end
 
 # Same as pbChoosePokemon, but prevents choosing an egg or a Shadow Pokémon.
-def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=false)
+def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc = nil,allowIneligible = false)
   chosen = 0
   pbFadeOutIn {
     scene = PokemonParty_Scene.new

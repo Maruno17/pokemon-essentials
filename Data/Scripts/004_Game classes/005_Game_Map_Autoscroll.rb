@@ -77,7 +77,7 @@ class Interpreter
   #     y     : y coordinate to scroll to and center on
   #     speed : (optional) scroll speed (from 1-6, default being 4)
   #-----------------------------------------------------------------------------
-  def autoscroll(x,y,speed=SCROLL_SPEED_DEFAULT)
+  def autoscroll(x,y,speed = SCROLL_SPEED_DEFAULT)
     if $game_map.scrolling?
       return false
     elsif !$game_map.valid?(x,y)
@@ -138,7 +138,7 @@ class Interpreter
   # * Map Autoscroll (to Player)
   #     speed : (optional) scroll speed (from 1-6, default being 4)
   #-----------------------------------------------------------------------------
-  def autoscroll_player(speed=SCROLL_SPEED_DEFAULT)
+  def autoscroll_player(speed = SCROLL_SPEED_DEFAULT)
     autoscroll($game_player.x,$game_player.y,speed)
   end
 end

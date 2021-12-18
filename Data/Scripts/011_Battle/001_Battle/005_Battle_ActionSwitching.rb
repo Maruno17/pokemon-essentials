@@ -6,7 +6,7 @@ class Battle
   # battle.
   # NOTE: Messages are only shown while in the party screen when choosing a
   #       command for the next round.
-  def pbCanSwitchLax?(idxBattler,idxParty,partyScene=nil)
+  def pbCanSwitchLax?(idxBattler,idxParty,partyScene = nil)
     return true if idxParty<0
     party = pbParty(idxBattler)
     return false if idxParty>=party.length
@@ -40,7 +40,7 @@ class Battle
   # switch out (and that its replacement at party index idxParty can switch in).
   # NOTE: Messages are only shown while in the party screen when choosing a
   #       command for the next round.
-  def pbCanSwitch?(idxBattler,idxParty=-1,partyScene=nil)
+  def pbCanSwitch?(idxBattler,idxParty = -1,partyScene = nil)
     # Check whether party Pokémon can switch in
     return false if !pbCanSwitchLax?(idxBattler,idxParty,partyScene)
     # Make sure another battler isn't already choosing to switch to the party
@@ -113,7 +113,7 @@ class Battle
   #=============================================================================
   # Open party screen and potentially choose a Pokémon to switch with. Used in
   # all instances where the party screen is opened.
-  def pbPartyScreen(idxBattler,checkLaxOnly=false,canCancel=false,shouldRegister=false)
+  def pbPartyScreen(idxBattler,checkLaxOnly = false,canCancel = false,shouldRegister = false)
     ret = -1
     @scene.pbPartyScreen(idxBattler,canCancel) { |idxParty,partyScene|
       if checkLaxOnly
@@ -132,7 +132,7 @@ class Battle
 
   # For choosing a replacement Pokémon when prompted in the middle of other
   # things happening (U-turn, Baton Pass, in def pbEORSwitch).
-  def pbSwitchInBetween(idxBattler,checkLaxOnly=false,canCancel=false)
+  def pbSwitchInBetween(idxBattler,checkLaxOnly = false,canCancel = false)
     return pbPartyScreen(idxBattler,checkLaxOnly,canCancel) if pbOwnedByPlayer?(idxBattler)
     return @battleAI.pbDefaultChooseNewEnemy(idxBattler,pbParty(idxBattler))
   end
@@ -142,7 +142,7 @@ class Battle
   #=============================================================================
   # General switching method that checks if any Pokémon need to be sent out and,
   # if so, does. Called at the end of each round.
-  def pbEORSwitch(favorDraws=false)
+  def pbEORSwitch(favorDraws = false)
     return if @decision>0 && !favorDraws
     return if @decision==5 && favorDraws
     pbJudge
@@ -206,7 +206,7 @@ class Battle
     end
   end
 
-  def pbGetReplacementPokemonIndex(idxBattler,random=false)
+  def pbGetReplacementPokemonIndex(idxBattler,random = false)
     if random
       choices = []   # Find all Pokémon that can switch in
       eachInTeamFromBattlerIndex(idxBattler) do |_pkmn,i|
@@ -220,7 +220,7 @@ class Battle
   end
 
   # Actually performs the recalling and sending out in all situations.
-  def pbRecallAndReplace(idxBattler,idxParty,randomReplacement=false,batonPass=false)
+  def pbRecallAndReplace(idxBattler,idxParty,randomReplacement = false,batonPass = false)
     @scene.pbRecall(idxBattler) if !@battlers[idxBattler].fainted?
     @battlers[idxBattler].pbAbilitiesOnSwitchOut   # Inc. primordial weather check
     @scene.pbShowPartyLineup(idxBattler&1) if pbSideSize(idxBattler)==1
@@ -274,7 +274,7 @@ class Battle
 
   # Only called from def pbRecallAndReplace above and Battle Arena's def
   # pbSwitch.
-  def pbReplace(idxBattler,idxParty,batonPass=false)
+  def pbReplace(idxBattler,idxParty,batonPass = false)
     party = pbParty(idxBattler)
     idxPartyOld = @battlers[idxBattler].pokemonIndex
     # Initialise the new Pokémon
@@ -289,7 +289,7 @@ class Battle
 
   # Called from def pbReplace above and at the start of battle.
   # sendOuts is an array; each element is itself an array: [idxBattler,pkmn]
-  def pbSendOut(sendOuts,startBattle=false)
+  def pbSendOut(sendOuts,startBattle = false)
     sendOuts.each { |b| @peer.pbOnEnteringBattle(self, @battlers[b[0]], b[1]) }
     @scene.pbSendOutBattlers(sendOuts,startBattle)
     sendOuts.each do |b|

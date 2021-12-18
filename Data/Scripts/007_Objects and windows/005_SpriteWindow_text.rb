@@ -25,7 +25,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     refresh
   end
 
-  def initialize(text="")
+  def initialize(text = "")
     super(0,0,33,33)
     self.contents=Bitmap.new(1,1)
     pbSetSystemFont(self.contents)
@@ -37,7 +37,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     resizeToFit(text)
   end
 
-  def self.newWithSize(text,x,y,width,height,viewport=nil)
+  def self.newWithSize(text,x,y,width,height,viewport = nil)
     ret=self.new(text)
     ret.x=x
     ret.y=y
@@ -56,7 +56,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     return dims
   end
 
-  def setTextToFit(text,maxwidth=-1)
+  def setTextToFit(text,maxwidth = -1)
     resizeToFit(text,maxwidth)
     self.text=text
   end
@@ -118,7 +118,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   attr_accessor :letterbyletter
   attr_reader   :waitcount
 
-  def initialize(text="")
+  def initialize(text = "")
     @cursorMode       = MessageConfig::CURSOR_POSITION
     @endOfText        = nil
     @scrollstate      = 0
@@ -148,7 +148,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     @starting         = false
   end
 
-  def self.newWithSize(text,x,y,width,height,viewport=nil)
+  def self.newWithSize(text,x,y,width,height,viewport = nil)
     ret = self.new(text)
     ret.x        = x
     ret.y        = y
@@ -210,7 +210,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     self.text = self.text if !@starting
   end
 
-  def resizeToFit(text,maxwidth=-1)
+  def resizeToFit(text,maxwidth = -1)
     dims = resizeToFitInternal(text,maxwidth)
     oldstarting = @starting
     @starting = true
@@ -242,7 +242,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     return dims
   end
 
-  def resizeHeightToFit(text,width=-1)
+  def resizeHeightToFit(text,width = -1)
     dims = resizeToFitInternal(text,width)
     oldstarting = @starting
     @starting = true
@@ -252,7 +252,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     redrawText
   end
 
-  def setSkin(skin,redrawText=true)
+  def setSkin(skin,redrawText = true)
     super(skin)
     privRefresh(true)
     oldbaser = @baseColor.red
@@ -275,7 +275,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     end
   end
 
-  def setTextToFit(text,maxwidth=-1)
+  def setTextToFit(text,maxwidth = -1)
     resizeToFit(text,maxwidth)
     self.text = text
   end
@@ -913,7 +913,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
     return (self.height - self.borderY) / @row_height * @column_max
   end
 
-  def priv_update_cursor_rect(force=false)
+  def priv_update_cursor_rect(force = false)
     if @index < 0
       self.cursor_rect.empty
       self.refresh
@@ -1040,7 +1040,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
   attr_reader :baseColor
   attr_reader :shadowColor
 
-  def initialize(x,y,width,height,viewport=nil)
+  def initialize(x,y,width,height,viewport = nil)
     super(x,y,width,height)
     self.viewport = viewport if viewport
     if isDarkWindowskin(self.windowskin)
@@ -1076,7 +1076,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     return bitmap.text_size(text).width
   end
 
-  def getAutoDims(commands,dims,width=nil)
+  def getAutoDims(commands,dims,width = nil)
     rowMax = ((commands.length + self.columns - 1) / self.columns).to_i
     windowheight = (rowMax*self.rowHeight)
     windowheight += self.borderY
@@ -1146,7 +1146,7 @@ end
 class Window_CommandPokemon < Window_DrawableCommand
   attr_reader :commands
 
-  def initialize(commands,width=nil)
+  def initialize(commands,width = nil)
     @starting=true
     @commands=[]
     dims=[]
@@ -1163,7 +1163,7 @@ class Window_CommandPokemon < Window_DrawableCommand
     @starting=false
   end
 
-  def self.newWithSize(commands,x,y,width,height,viewport=nil)
+  def self.newWithSize(commands,x,y,width,height,viewport = nil)
     ret=self.new(commands,width)
     ret.x=x
     ret.y=y
@@ -1173,7 +1173,7 @@ class Window_CommandPokemon < Window_DrawableCommand
     return ret
   end
 
-  def self.newEmpty(x,y,width,height,viewport=nil)
+  def self.newEmpty(x,y,width,height,viewport = nil)
     ret=self.new([],width)
     ret.x=x
     ret.y=y
@@ -1211,7 +1211,7 @@ class Window_CommandPokemon < Window_DrawableCommand
     end
   end
 
-  def resizeToFit(commands,width=nil)
+  def resizeToFit(commands,width = nil)
     dims=[]
     getAutoDims(commands,dims,width)
     self.width=dims[0]
@@ -1258,7 +1258,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     return dims[1]-dims[0]
   end
 
-  def initialize(commands,width=nil)
+  def initialize(commands,width = nil)
     @starting=true
     @commands=[]
     dims=[]
@@ -1275,7 +1275,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     @starting=false
   end
 
-  def self.newWithSize(commands,x,y,width,height,viewport=nil)
+  def self.newWithSize(commands,x,y,width,height,viewport = nil)
     ret=self.new(commands,width)
     ret.x=x
     ret.y=y
@@ -1285,7 +1285,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     return ret
   end
 
-  def self.newEmpty(x,y,width,height,viewport=nil)
+  def self.newEmpty(x,y,width,height,viewport = nil)
     ret=self.new([],width)
     ret.x=x
     ret.y=y
@@ -1325,7 +1325,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     end
   end
 
-  def resizeToFit(commands,width=nil)
+  def resizeToFit(commands,width = nil)
     dims=[]
     getAutoDims(commands,dims,width)
     self.width=dims[0]

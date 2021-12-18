@@ -15,7 +15,7 @@ class Battle::Scene::MenuBase
   TEXT_BASE_COLOR   = Battle::Scene::MESSAGE_BASE_COLOR
   TEXT_SHADOW_COLOR = Battle::Scene::MESSAGE_SHADOW_COLOR
 
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     @x          = 0
     @y          = 0
     @z          = 0
