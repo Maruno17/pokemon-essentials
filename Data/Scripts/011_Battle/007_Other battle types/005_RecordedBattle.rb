@@ -31,16 +31,16 @@ module RecordedBattleModule
       ret = []
       for i in 0...trainer.length
         if trainer[i].is_a?(Player)
-          ret.push([trainer[i].trainer_type,trainer[i].name.clone,trainer[i].id,trainer[i].badges.clone])
+          ret.push([trainer[i].trainer_type, trainer[i].name.clone, trainer[i].id, trainer[i].badges.clone])
         else   # NPCTrainer
-          ret.push([trainer[i].trainer_type,trainer[i].name.clone,trainer[i].id])
+          ret.push([trainer[i].trainer_type, trainer[i].name.clone, trainer[i].id])
         end
       end
       return ret
     elsif trainer[i].is_a?(Player)
-      return [[trainer.trainer_type,trainer.name.clone,trainer.id,trainer.badges.clone]]
+      return [[trainer.trainer_type, trainer.name.clone, trainer.id, trainer.badges.clone]]
     else
-      return [[trainer.trainer_type,trainer.name.clone,trainer.id]]
+      return [[trainer.trainer_type, trainer.name.clone, trainer.id]]
     end
   end
 
@@ -70,51 +70,51 @@ module RecordedBattleModule
   end
 
   def pbDumpRecord
-    return Marshal.dump([pbGetBattleType,@properties,@rounds,@randomnumbers,@switches])
+    return Marshal.dump([pbGetBattleType, @properties, @rounds, @randomnumbers, @switches])
   end
 
-  def pbSwitchInBetween(idxBattler,checkLaxOnly = false,canCancel = false)
+  def pbSwitchInBetween(idxBattler, checkLaxOnly = false, canCancel = false)
     ret = super
     @switches.push(ret)
     return ret
   end
 
-  def pbRegisterMove(idxBattler,idxMove,showMessages = true)
+  def pbRegisterMove(idxBattler, idxMove, showMessages = true)
     if super
-      @rounds[@roundindex][idxBattler] = [Commands::Fight,idxMove]
+      @rounds[@roundindex][idxBattler] = [Commands::Fight, idxMove]
       return true
     end
     return false
   end
 
-  def pbRegisterTarget(idxBattler,idxTarget)
+  def pbRegisterTarget(idxBattler, idxTarget)
     super
     @rounds[@roundindex][idxBattler][2] = idxTarget
   end
 
-  def pbRun(idxBattler,duringBattle = false)
+  def pbRun(idxBattler, duringBattle = false)
     ret = super
-    @rounds[@roundindex][idxBattler] = [Commands::Run,@decision]
+    @rounds[@roundindex][idxBattler] = [Commands::Run, @decision]
     return ret
   end
 
-  def pbAutoChooseMove(idxBattler,showMessages = true)
+  def pbAutoChooseMove(idxBattler, showMessages = true)
     ret = super
-    @rounds[@roundindex][idxBattler] = [Commands::Fight,-1]
+    @rounds[@roundindex][idxBattler] = [Commands::Fight, -1]
     return ret
   end
 
-  def pbRegisterSwitch(idxBattler,idxParty)
+  def pbRegisterSwitch(idxBattler, idxParty)
     if super
-      @rounds[@roundindex][idxBattler] = [Commands::Pokemon,idxParty]
+      @rounds[@roundindex][idxBattler] = [Commands::Pokemon, idxParty]
       return true
     end
     return false
   end
 
-  def pbRegisterItem(idxBattler,item,idxTarget = nil,idxMove = nil)
+  def pbRegisterItem(idxBattler, item, idxTarget = nil, idxMove = nil)
     if super
-      @rounds[@roundindex][idxBattler] = [Commands::Bag,item,idxTarget,idxMove]
+      @rounds[@roundindex][idxBattler] = [Commands::Bag, item, idxTarget, idxMove]
       return true
     end
     return false
@@ -122,7 +122,7 @@ module RecordedBattleModule
 
   def pbCommandPhase
     @roundindex += 1
-    @rounds[@roundindex] = [[],[],[],[]]
+    @rounds[@roundindex] = [[], [], [], []]
     super
   end
 
@@ -146,7 +146,7 @@ module RecordedBattlePlaybackModule
     Run     = 3
   end
 
-  def initialize(scene,battle)
+  def initialize(scene, battle)
     @battletype  = battle[0]
     @properties  = battle[1]
     @rounds      = battle[2]
@@ -183,7 +183,7 @@ module RecordedBattlePlaybackModule
     super
   end
 
-  def pbSwitchInBetween(_idxBattler,_checkLaxOnly = false,_canCancel = false)
+  def pbSwitchInBetween(_idxBattler, _checkLaxOnly = false, _canCancel = false)
     ret = @switches[@switchindex]
     @switchindex += 1
     return ret
@@ -203,22 +203,22 @@ module RecordedBattlePlaybackModule
     return if !isPlayer
     @roundindex += 1
     for i in 0...4
-      next if @rounds[@roundindex][i].length==0
+      next if @rounds[@roundindex][i].length == 0
       pbClearChoice(i)
       case @rounds[@roundindex][i][0]
       when Commands::Fight
-        if @rounds[@roundindex][i][1]==-1
-          pbAutoChooseMove(i,false)
+        if @rounds[@roundindex][i][1] == -1
+          pbAutoChooseMove(i, false)
         else
-          pbRegisterMove(i,@rounds[@roundindex][i][1])
+          pbRegisterMove(i, @rounds[@roundindex][i][1])
         end
         if @rounds[@roundindex][i][2]
-          pbRegisterTarget(i,@rounds[@roundindex][i][2])
+          pbRegisterTarget(i, @rounds[@roundindex][i][2])
         end
       when Commands::Bag
-        pbRegisterItem(i,@rounds[@roundindex][i][1],@rounds[@roundindex][i][2],@rounds[@roundindex][i][3])
+        pbRegisterItem(i, @rounds[@roundindex][i][1], @rounds[@roundindex][i][2], @rounds[@roundindex][i][3])
       when Commands::Pokemon
-        pbRegisterSwitch(i,@rounds[@roundindex][i][1])
+        pbRegisterSwitch(i, @rounds[@roundindex][i][1])
       when Commands::Run
         @decision = @rounds[@roundindex][i][1]
       end

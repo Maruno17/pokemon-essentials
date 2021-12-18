@@ -199,16 +199,16 @@ class SpriteAnimation
         sprite.visible = false if sprite != nil
         next
       end
-      sprite.x          = sprite_x + cell_data[i, 1]
-      sprite.y          = sprite_y + cell_data[i, 2]
+      sprite.x = sprite_x + cell_data[i, 1]
+      sprite.y = sprite_y + cell_data[i, 2]
       next if quick_update
-      sprite.visible    = true
+      sprite.visible = true
       sprite.src_rect.set(pattern % 5 * 192, pattern / 5 * 192, 192, 192)
       case @_animation_height
-      when 0 then sprite.z  = 1
-      when 1 then sprite.z  = sprite.y+32+15
-      when 2 then sprite.z  = sprite.y+32+32+17
-      else        sprite.z  = 2000
+      when 0 then sprite.z = 1
+      when 1 then sprite.z = sprite.y + 32 + 15
+      when 2 then sprite.z = sprite.y + 32 + 32 + 17
+      else        sprite.z = 2000
       end
       sprite.ox         = 96
       sprite.oy         = 96
@@ -299,9 +299,9 @@ module RPG
     end
 
     def whiten
-      self.blend_type     = 0
+      self.blend_type = 0
       self.color.set(255, 255, 255, 128)
-      self.opacity        = 255
+      self.opacity = 255
       @_whiten_duration   = 16
       @_appear_duration   = 0
       @_escape_duration   = 0
@@ -345,10 +345,10 @@ module RPG
       bitmap.font.name = "Arial Black"
       bitmap.font.size = 32
       bitmap.font.color.set(0, 0, 0)
-      bitmap.draw_text(-1, 12-1, 160, 36, damage_string, 1)
-      bitmap.draw_text(+1, 12-1, 160, 36, damage_string, 1)
-      bitmap.draw_text(-1, 12+1, 160, 36, damage_string, 1)
-      bitmap.draw_text(+1, 12+1, 160, 36, damage_string, 1)
+      bitmap.draw_text(-1, 12 - 1, 160, 36, damage_string, 1)
+      bitmap.draw_text(+1, 12 - 1, 160, 36, damage_string, 1)
+      bitmap.draw_text(-1, 12 + 1, 160, 36, damage_string, 1)
+      bitmap.draw_text(+1, 12 + 1, 160, 36, damage_string, 1)
       if value.is_a?(Numeric) && value < 0
         bitmap.font.color.set(176, 255, 144)
       else
@@ -386,14 +386,14 @@ module RPG
 
     def animation(animation, hit, height = 3)
       anim = SpriteAnimation.new(self)
-      anim.animation(animation,hit,height)
-      pushAnimation(@animations,anim)
+      anim.animation(animation, hit, height)
+      pushAnimation(@animations, anim)
     end
 
     def loop_animation(animation)
       anim = SpriteAnimation.new(self)
       anim.loop_animation(animation)
-      pushAnimation(@loopAnimations,anim)
+      pushAnimation(@loopAnimations, anim)
     end
 
     def dispose_damage

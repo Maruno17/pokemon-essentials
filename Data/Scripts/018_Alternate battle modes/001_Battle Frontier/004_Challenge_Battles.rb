@@ -105,7 +105,7 @@ end
 #===============================================================================
 def pbRecordLastBattle
   $PokemonGlobal.lastbattle = $game_temp.last_battle_record
-  $game_temp.last_battle_record   = nil
+  $game_temp.last_battle_record = nil
 end
 
 def pbPlayLastBattle

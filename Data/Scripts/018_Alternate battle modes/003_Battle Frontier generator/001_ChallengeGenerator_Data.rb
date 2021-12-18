@@ -211,9 +211,9 @@ def pbGenerateChallenge(rule, tag)
         for j in 0...teams[i].length
           party.push(teams[i][j])
         end
-        teams[i] = RuledTeam.new(party,rule)
+        teams[i] = RuledTeam.new(party, rule)
       elsif teams[i].rating < toolowrating
-        teams[i] = RuledTeam.new(party,rule)
+        teams[i] = RuledTeam.new(party, rule)
       end
       i += 1
     end

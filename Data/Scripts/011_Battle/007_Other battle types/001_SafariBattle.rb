@@ -7,7 +7,7 @@ class Battle::FakeBattler
   attr_reader :pokemon
   attr_reader :owned
 
-  def initialize(battle,index)
+  def initialize(battle, index)
     @battle  = battle
     @pokemon = battle.party2[0]
     @index   = index
@@ -43,12 +43,12 @@ class Battle::FakeBattler
   end
 
   def pbThis(lowerCase = false)
-    return (lowerCase) ? _INTL("the wild {1}",name) : _INTL("The wild {1}",name)
+    return (lowerCase) ? _INTL("the wild {1}", name) : _INTL("The wild {1}", name)
   end
 
   def opposes?(i)
     i = i.index if i.is_a?(Battle::FakeBattler)
-    return (@index&1)!=(i&1)
+    return (@index & 1) != (i & 1)
   end
 
   def pbReset; end
@@ -62,14 +62,14 @@ end
 class Battle::Scene::SafariDataBox < SpriteWrapper
   attr_accessor :selected
 
-  def initialize(battle,viewport = nil)
+  def initialize(battle, viewport = nil)
     super(viewport)
     @selected    = 0
     @battle      = battle
     @databox     = AnimatedBitmap.new("Graphics/Pictures/Battle/databox_safari")
     self.x       = Graphics.width - 232
     self.y       = Graphics.height - 184
-    @contents    = BitmapWrapper.new(@databox.width,@databox.height)
+    @contents    = BitmapWrapper.new(@databox.width, @databox.height)
     self.bitmap  = @contents
     self.visible = false
     self.z       = 50
@@ -79,13 +79,13 @@ class Battle::Scene::SafariDataBox < SpriteWrapper
 
   def refresh
     self.bitmap.clear
-    self.bitmap.blt(0,0,@databox.bitmap,Rect.new(0,0,@databox.width,@databox.height))
-    base   = Color.new(72,72,72)
-    shadow = Color.new(184,184,184)
+    self.bitmap.blt(0, 0, @databox.bitmap, Rect.new(0, 0, @databox.width, @databox.height))
+    base   = Color.new(72, 72, 72)
+    shadow = Color.new(184, 184, 184)
     textpos = []
-    textpos.push([_INTL("Safari Balls"),30,2,false,base,shadow])
-    textpos.push([_INTL("Left: {1}",@battle.ballCount),30,32,false,base,shadow])
-    pbDrawTextPositions(self.bitmap,textpos)
+    textpos.push([_INTL("Safari Balls"), 30, 2, false, base, shadow])
+    textpos.push([_INTL("Left: {1}", @battle.ballCount), 30, 32, false, base, shadow])
+    pbDrawTextPositions(self.bitmap, textpos)
   end
 
   def update(frameCounter = 0)
@@ -101,59 +101,59 @@ end
 class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
 
-  def initialize(sprites,viewport,battler)
+  def initialize(sprites, viewport, battler)
     @battler = battler
     @trainer = battler.battle.pbGetOwnerFromBattlerIndex(battler.index)
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     # Calculate start and end coordinates for battler sprite movement
     batSprite = @sprites["pokemon_#{@battler.index}"]
     traSprite = @sprites["player_1"]
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index,batSprite.sideSize)
+    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
     ballStartX = traSprite.x
-    ballStartY = traSprite.y-traSprite.bitmap.height/2
+    ballStartY = traSprite.y - traSprite.bitmap.height / 2
     ballMidX   = 0   # Unused in arc calculation
     ballMidY   = 122
-    ballEndX   = ballPos[0]-40
-    ballEndY   = ballPos[1]-4
+    ballEndX   = ballPos[0] - 40
+    ballEndY   = ballPos[1] - 4
     # Set up trainer sprite
-    trainer = addSprite(traSprite,PictureOrigin::Bottom)
+    trainer = addSprite(traSprite, PictureOrigin::Bottom)
     # Set up bait sprite
-    ball = addNewSprite(ballStartX,ballStartY,
-       "Graphics/Battle animations/safari_bait",PictureOrigin::Center)
-    ball.setZ(0,batSprite.z+1)
+    ball = addNewSprite(ballStartX, ballStartY,
+       "Graphics/Battle animations/safari_bait", PictureOrigin::Center)
+    ball.setZ(0, batSprite.z + 1)
     # Trainer animation
-    if traSprite.bitmap.width>=traSprite.bitmap.height*2
-      ballStartX, ballStartY = trainerThrowingFrames(ball,trainer,traSprite)
+    if traSprite.bitmap.width >= traSprite.bitmap.height * 2
+      ballStartX, ballStartY = trainerThrowingFrames(ball, trainer, traSprite)
     end
     delay = ball.totalDuration   # 0 or 7
     # Bait arc animation
-    ball.setSE(delay,"Battle throw")
-    createBallTrajectory(ball,delay,12,
-       ballStartX,ballStartY,ballMidX,ballMidY,ballEndX,ballEndY)
-    ball.setZ(9,batSprite.z+1)
+    ball.setSE(delay, "Battle throw")
+    createBallTrajectory(ball, delay, 12,
+       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
+    ball.setZ(9, batSprite.z + 1)
     delay = ball.totalDuration
-    ball.moveOpacity(delay+8,2,0)
-    ball.setVisible(delay+10,false)
+    ball.moveOpacity(delay + 8, 2, 0)
+    ball.setVisible(delay + 10, false)
     # Set up battler sprite
-    battler = addSprite(batSprite,PictureOrigin::Bottom)
+    battler = addSprite(batSprite, PictureOrigin::Bottom)
     # Show Pokémon jumping before eating the bait
-    delay = ball.totalDuration+3
+    delay = ball.totalDuration + 3
     2.times do
-      battler.setSE(delay,"player jump")
-      battler.moveDelta(delay,3,0,-16)
-      battler.moveDelta(delay+4,3,0,16)
-      delay = battler.totalDuration+1
+      battler.setSE(delay, "player jump")
+      battler.moveDelta(delay, 3, 0, -16)
+      battler.moveDelta(delay + 4, 3, 0, 16)
+      delay = battler.totalDuration + 1
     end
     # Show Pokémon eating the bait
-    delay = battler.totalDuration+3
+    delay = battler.totalDuration + 3
     2.times do
-      battler.moveAngle(delay,7,5)
-      battler.moveDelta(delay,7,0,6)
-      battler.moveAngle(delay+7,7,0)
-      battler.moveDelta(delay+7,7,0,-6)
+      battler.moveAngle(delay, 7, 5)
+      battler.moveDelta(delay, 7, 0, 6)
+      battler.moveAngle(delay + 7, 7, 0)
+      battler.moveDelta(delay + 7, 7, 0, -6)
       delay = battler.totalDuration
     end
   end
@@ -167,10 +167,10 @@ end
 class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
 
-  def initialize(sprites,viewport,battler)
+  def initialize(sprites, viewport, battler)
     @battler = battler
     @trainer = battler.battle.pbGetOwnerFromBattlerIndex(battler.index)
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
@@ -178,46 +178,46 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
     batSprite = @sprites["pokemon_#{@battler.index}"]
     traSprite = @sprites["player_1"]
     ballStartX = traSprite.x
-    ballStartY = traSprite.y-traSprite.bitmap.height/2
+    ballStartY = traSprite.y - traSprite.bitmap.height / 2
     ballMidX   = 0   # Unused in arc calculation
     ballMidY   = 122
     ballEndX   = batSprite.x
-    ballEndY   = batSprite.y-batSprite.bitmap.height/2
+    ballEndY   = batSprite.y - batSprite.bitmap.height / 2
     # Set up trainer sprite
-    trainer = addSprite(traSprite,PictureOrigin::Bottom)
+    trainer = addSprite(traSprite, PictureOrigin::Bottom)
     # Set up bait sprite
-    ball = addNewSprite(ballStartX,ballStartY,
-       "Graphics/Battle animations/safari_rock",PictureOrigin::Center)
-    ball.setZ(0,batSprite.z+1)
+    ball = addNewSprite(ballStartX, ballStartY,
+       "Graphics/Battle animations/safari_rock", PictureOrigin::Center)
+    ball.setZ(0, batSprite.z + 1)
     # Trainer animation
-    if traSprite.bitmap.width>=traSprite.bitmap.height*2
-      ballStartX, ballStartY = trainerThrowingFrames(ball,trainer,traSprite)
+    if traSprite.bitmap.width >= traSprite.bitmap.height * 2
+      ballStartX, ballStartY = trainerThrowingFrames(ball, trainer, traSprite)
     end
     delay = ball.totalDuration   # 0 or 7
     # Bait arc animation
-    ball.setSE(delay,"Battle throw")
-    createBallTrajectory(ball,delay,12,
-       ballStartX,ballStartY,ballMidX,ballMidY,ballEndX,ballEndY)
-    ball.setZ(9,batSprite.z+1)
+    ball.setSE(delay, "Battle throw")
+    createBallTrajectory(ball, delay, 12,
+       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
+    ball.setZ(9, batSprite.z + 1)
     delay = ball.totalDuration
-    ball.setSE(delay,"Battle damage weak")
-    ball.moveOpacity(delay+2,2,0)
-    ball.setVisible(delay+4,false)
+    ball.setSE(delay, "Battle damage weak")
+    ball.moveOpacity(delay + 2, 2, 0)
+    ball.setVisible(delay + 4, false)
     # Set up anger sprite
-    anger = addNewSprite(ballEndX-42,ballEndY-36,
-       "Graphics/Battle animations/safari_anger",PictureOrigin::Center)
-    anger.setVisible(0,false)
-    anger.setZ(0,batSprite.z+1)
+    anger = addNewSprite(ballEndX - 42, ballEndY - 36,
+       "Graphics/Battle animations/safari_anger", PictureOrigin::Center)
+    anger.setVisible(0, false)
+    anger.setZ(0, batSprite.z + 1)
     # Show anger appearing
-    delay = ball.totalDuration+5
+    delay = ball.totalDuration + 5
     2.times do
-      anger.setSE(delay,"Player jump")
-      anger.setVisible(delay,true)
-      anger.moveZoom(delay,3,130)
-      anger.moveZoom(delay+3,3,100)
-      anger.setVisible(delay+6,false)
-      anger.setDelta(delay+6,96,-16)
-      delay = anger.totalDuration+3
+      anger.setSE(delay, "Player jump")
+      anger.setVisible(delay, true)
+      anger.moveZoom(delay, 3, 130)
+      anger.moveZoom(delay + 3, 3, 100)
+      anger.setVisible(delay + 6, false)
+      anger.setDelta(delay + 6, 96, -16)
+      delay = anger.totalDuration + 3
     end
   end
 end
@@ -230,8 +230,8 @@ end
 class Battle::Scene
   def pbSafariStart
     @briefMessage = false
-    @sprites["dataBox_0"] = SafariDataBox.new(@battle,@viewport)
-    dataBoxAnim = Animation::DataBoxAppear.new(@sprites,@viewport,0)
+    @sprites["dataBox_0"] = SafariDataBox.new(@battle, @viewport)
+    dataBoxAnim = Animation::DataBoxAppear.new(@sprites, @viewport, 0)
     loop do
       dataBoxAnim.update
       pbUpdate
@@ -242,18 +242,18 @@ class Battle::Scene
   end
 
   def pbSafariCommandMenu(index)
-    pbCommandMenuEx(index,[
-       _INTL("What will\n{1} throw?",@battle.pbPlayer.name),
+    pbCommandMenuEx(index, [
+       _INTL("What will\n{1} throw?", @battle.pbPlayer.name),
        _INTL("Ball"),
        _INTL("Bait"),
        _INTL("Rock"),
        _INTL("Run")
-    ],3)
+    ], 3)
   end
 
   def pbThrowBait
     @briefMessage = false
-    baitAnim = Animation::ThrowBait.new(@sprites,@viewport,@battle.battlers[1])
+    baitAnim = Animation::ThrowBait.new(@sprites, @viewport, @battle.battlers[1])
     loop do
       baitAnim.update
       pbUpdate
@@ -264,7 +264,7 @@ class Battle::Scene
 
   def pbThrowRock
     @briefMessage = false
-    rockAnim = Animation::ThrowRock.new(@sprites,@viewport,@battle.battlers[1])
+    rockAnim = Animation::ThrowRock.new(@sprites, @viewport, @battle.battlers[1])
     loop do
       rockAnim.update
       pbUpdate
@@ -311,7 +311,7 @@ class SafariBattle
   #=============================================================================
   # Initialize the battle class
   #=============================================================================
-  def initialize(scene,player,party2)
+  def initialize(scene, player, party2)
     @scene         = scene
     @peer          = Battle::Peer.new
     @backdrop      = ""
@@ -323,10 +323,10 @@ class SafariBattle
     @caughtPokemon = []
     @player        = [player]
     @party2        = party2
-    @sideSizes     = [1,1]
+    @sideSizes     = [1, 1]
     @battlers      = [
-       Battle::FakeBattler.new(self,0),
-       Battle::FakeBattler.new(self,1)
+       Battle::FakeBattler.new(self, 0),
+       Battle::FakeBattler.new(self, 1)
     ]
     @rules         = {}
     @ballCount     = 0
@@ -344,7 +344,7 @@ class SafariBattle
   def setBattleMode(mode); end
 
   def pbSideSize(index)
-    return @sideSizes[index%2]
+    return @sideSizes[index % 2]
   end
 
   #=============================================================================
@@ -386,28 +386,28 @@ class SafariBattle
   #=============================================================================
   # Battler-related
   #=============================================================================
-  def opposes?(idxBattler1,idxBattler2 = 0)
+  def opposes?(idxBattler1, idxBattler2 = 0)
     idxBattler1 = idxBattler1.index if idxBattler1.respond_to?("index")
     idxBattler2 = idxBattler2.index if idxBattler2.respond_to?("index")
-    return (idxBattler1&1)!=(idxBattler2&1)
+    return (idxBattler1 & 1) != (idxBattler2 & 1)
   end
 
-  def pbRemoveFromParty(idxBattler,idxParty); end
+  def pbRemoveFromParty(idxBattler, idxParty); end
   def pbGainExp; end
 
   #=============================================================================
   # Messages and animations
   #=============================================================================
-  def pbDisplay(msg,&block)
-    @scene.pbDisplayMessage(msg,&block)
+  def pbDisplay(msg, &block)
+    @scene.pbDisplayMessage(msg, &block)
   end
 
-  def pbDisplayPaused(msg,&block)
-    @scene.pbDisplayPausedMessage(msg,&block)
+  def pbDisplayPaused(msg, &block)
+    @scene.pbDisplayPausedMessage(msg, &block)
   end
 
   def pbDisplayBrief(msg)
-    @scene.pbDisplayMessage(msg,true)
+    @scene.pbDisplayMessage(msg, true)
   end
 
   def pbDisplayConfirm(msg)
@@ -438,16 +438,16 @@ class SafariBattle
       pkmn = @party2[0]
       pbSetSeen(pkmn)
       @scene.pbStartBattle(self)
-      pbDisplayPaused(_INTL("Wild {1} appeared!",pkmn.name))
+      pbDisplayPaused(_INTL("Wild {1} appeared!", pkmn.name))
       @scene.pbSafariStart
       weather_data = GameData::BattleWeather.try_get(@weather)
       @scene.pbCommonAnimation(weather_data.animation) if weather_data
       safariBall = GameData::Item.get(:SAFARIBALL).id
       catch_rate = pkmn.species_data.catch_rate
-      catchFactor  = (catch_rate*100)/1275
-      catchFactor  = [[catchFactor,3].max,20].min
-      escapeFactor = (pbEscapeRate(catch_rate)*100)/1275
-      escapeFactor = [[escapeFactor,2].max,20].min
+      catchFactor  = (catch_rate * 100) / 1275
+      catchFactor  = [[catchFactor, 3].max, 20].min
+      escapeFactor = (pbEscapeRate(catch_rate) * 100) / 1275
+      escapeFactor = [[escapeFactor, 2].max, 20].min
       loop do
         cmd = @scene.pbSafariCommandMenu(0)
         case cmd
@@ -458,46 +458,46 @@ class SafariBattle
           end
           @ballCount -= 1
           @scene.pbRefresh
-          rare = (catchFactor*1275)/100
+          rare = (catchFactor * 1275) / 100
           if safariBall
-            pbThrowPokeBall(1,safariBall,rare,true)
-            if @caughtPokemon.length>0
+            pbThrowPokeBall(1, safariBall, rare, true)
+            if @caughtPokemon.length > 0
               pbRecordAndStoreCaughtPokemon
               @decision = 4
             end
           end
         when 1   # Bait
-          pbDisplayBrief(_INTL("{1} threw some bait at the {2}!",self.pbPlayer.name,pkmn.name))
+          pbDisplayBrief(_INTL("{1} threw some bait at the {2}!", self.pbPlayer.name, pkmn.name))
           @scene.pbThrowBait
-          catchFactor  /= 2 if pbRandom(100)<90   # Harder to catch
+          catchFactor  /= 2 if pbRandom(100) < 90   # Harder to catch
           escapeFactor /= 2                       # Less likely to escape
         when 2   # Rock
-          pbDisplayBrief(_INTL("{1} threw a rock at the {2}!",self.pbPlayer.name,pkmn.name))
+          pbDisplayBrief(_INTL("{1} threw a rock at the {2}!", self.pbPlayer.name, pkmn.name))
           @scene.pbThrowRock
           catchFactor  *= 2                       # Easier to catch
-          escapeFactor *= 2 if pbRandom(100)<90   # More likely to escape
+          escapeFactor *= 2 if pbRandom(100) < 90   # More likely to escape
         when 3   # Run
           pbSEPlay("Battle flee")
           pbDisplayPaused(_INTL("You got away safely!"))
           @decision = 3
         end
-        catchFactor  = [[catchFactor,3].max,20].min
-        escapeFactor = [[escapeFactor,2].max,20].min
+        catchFactor  = [[catchFactor, 3].max, 20].min
+        escapeFactor = [[escapeFactor, 2].max, 20].min
         # End of round
-        if @decision==0
-          if @ballCount<=0
+        if @decision == 0
+          if @ballCount <= 0
             pbDisplay(_INTL("PA: You have no Safari Balls left! Game over!"))
             @decision = 2
-          elsif pbRandom(100)<5*escapeFactor
+          elsif pbRandom(100) < 5 * escapeFactor
             pbSEPlay("Battle flee")
-            pbDisplay(_INTL("{1} fled!",pkmn.name))
+            pbDisplay(_INTL("{1} fled!", pkmn.name))
             @decision = 3
-          elsif cmd==1   # Bait
-            pbDisplay(_INTL("{1} is eating!",pkmn.name))
-          elsif cmd==2   # Rock
-            pbDisplay(_INTL("{1} is angry!",pkmn.name))
+          elsif cmd == 1   # Bait
+            pbDisplay(_INTL("{1} is eating!", pkmn.name))
+          elsif cmd == 2   # Rock
+            pbDisplay(_INTL("{1} is angry!", pkmn.name))
           else
-            pbDisplay(_INTL("{1} is watching carefully!",pkmn.name))
+            pbDisplay(_INTL("{1} is watching carefully!", pkmn.name))
           end
           # Weather continues
           weather_data = GameData::BattleWeather.try_get(@weather)

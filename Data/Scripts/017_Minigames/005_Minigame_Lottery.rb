@@ -8,47 +8,47 @@ def pbSetLotteryNumber(variable = 1)
   srand(hash)                      # seed RNG with fixed value depending on date
   lottery = rand(65536)            # get a number
   srand                            # reseed RNG
-  pbSet(variable,sprintf("%05d",lottery))
+  pbSet(variable, sprintf("%05d", lottery))
 end
 
-def pbLottery(winnum,nameVar = 2,positionVar = 3,matchedVar = 4)
-  winnum=winnum.to_i
-  winpoke=nil
-  winpos=0
-  winmatched=0
+def pbLottery(winnum, nameVar = 2, positionVar = 3, matchedVar = 4)
+  winnum = winnum.to_i
+  winpoke = nil
+  winpos = 0
+  winmatched = 0
   for i in $player.party
-    thismatched=0
-    id=i.owner.public_id
+    thismatched = 0
+    id = i.owner.public_id
     for j in 0...5
-      if (id/(10**j))%10 == (winnum/(10**j))%10
-        thismatched+=1
+      if (id / (10**j)) % 10 == (winnum / (10**j)) % 10
+        thismatched += 1
       else
         break
       end
     end
-    if thismatched>winmatched
-      winpoke=i.name
-      winpos=1 # Party
-      winmatched=thismatched
+    if thismatched > winmatched
+      winpoke = i.name
+      winpos = 1 # Party
+      winmatched = thismatched
     end
   end
-  pbEachPokemon { |poke,_box|
-    thismatched=0
-    id=poke.owner.public_id
+  pbEachPokemon { |poke, _box|
+    thismatched = 0
+    id = poke.owner.public_id
     for j in 0...5
-      if (id/(10**j))%10 == (winnum/(10**j))%10
-        thismatched+=1
+      if (id / (10**j)) % 10 == (winnum / (10**j)) % 10
+        thismatched += 1
       else
         break
       end
     end
-    if thismatched>winmatched
-      winpoke=poke.name
-      winpos=2 # Storage
-      winmatched=thismatched
+    if thismatched > winmatched
+      winpoke = poke.name
+      winpos = 2 # Storage
+      winmatched = thismatched
     end
   }
-  $game_variables[nameVar]=winpoke
-  $game_variables[positionVar]=winpos
-  $game_variables[matchedVar]=winmatched
+  $game_variables[nameVar] = winpoke
+  $game_variables[positionVar] = winpos
+  $game_variables[matchedVar] = winmatched
 end

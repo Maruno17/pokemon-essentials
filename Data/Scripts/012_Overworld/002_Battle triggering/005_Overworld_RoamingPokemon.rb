@@ -19,7 +19,7 @@ end
 def pbResetAllRoamers
   return if !$PokemonGlobal.roamPokemon
   for i in 0...$PokemonGlobal.roamPokemon.length
-    next if $PokemonGlobal.roamPokemon[i]!=true || !$PokemonGlobal.roamPokemonCaught[i]
+    next if $PokemonGlobal.roamPokemon[i] != true || !$PokemonGlobal.roamPokemonCaught[i]
     $PokemonGlobal.roamPokemon[i] = nil
   end
 end
@@ -62,11 +62,11 @@ end
 def pbRoamPokemonOne(idxRoamer)
   # [species ID, level, Game Switch, encounter type, battle BGM, area maps hash]
   roamData = Settings::ROAMING_SPECIES[idxRoamer]
-  return if roamData[2]>0 && !$game_switches[roamData[2]]   # Game Switch is off
+  return if roamData[2] > 0 && !$game_switches[roamData[2]]   # Game Switch is off
   return if !GameData::Species.exists?(roamData[0])
   # Get hash of area patrolled by the roaming Pokémon
   mapIDs = pbRoamingAreas(idxRoamer).keys
-  return if !mapIDs || mapIDs.length==0   # No roaming area defined somehow
+  return if !mapIDs || mapIDs.length == 0   # No roaming area defined somehow
   # Get the roaming Pokémon's current map
   currentMap = $PokemonGlobal.roamPosition[idxRoamer]
   if !currentMap
@@ -82,23 +82,23 @@ def pbRoamPokemonOne(idxRoamer)
     newMapChoices.push(map)
   end
   # Rarely, add a random possible map into the mix
-  if rand(32)==0
+  if rand(32) == 0
     newMapChoices.push(mapIDs[rand(mapIDs.length)])
   end
   # Choose a random new map to roam to
-  if newMapChoices.length>0
+  if newMapChoices.length > 0
     $PokemonGlobal.roamPosition[idxRoamer] = newMapChoices[rand(newMapChoices.length)]
   end
 end
 
 # When the player moves to a new map (with a different name), make all roaming
 # Pokémon roam.
-Events.onMapChange += proc { |_sender,e|
+Events.onMapChange += proc { |_sender, e|
   oldMapID = e[0]
   # Get and compare map names
   mapInfos = pbLoadMapInfos
-  next if mapInfos && oldMapID>0 && mapInfos[oldMapID] &&
-          mapInfos[oldMapID].name && $game_map.name==mapInfos[oldMapID].name
+  next if mapInfos && oldMapID > 0 && mapInfos[oldMapID] &&
+          mapInfos[oldMapID].name && $game_map.name == mapInfos[oldMapID].name
   # Make roaming Pokémon roam
   pbRoamPokemon
   $PokemonGlobal.roamedAlready = false
@@ -185,11 +185,11 @@ EncounterModifier.register(proc { |encounter|
   next [roamer[1], roamer[2]]   # Species, level
 })
 
-Events.onWildBattleOverride += proc { |_sender,e|
+Events.onWildBattleOverride += proc { |_sender, e|
   species = e[0]
   level   = e[1]
   handled = e[2]
-  next if handled[0]!=nil
+  next if handled[0] != nil
   next if !$PokemonGlobal.roamEncounter || $game_temp.roamer_index_for_encounter.nil?
   handled[0] = pbRoamingPokemonBattle(species, level)
 }
@@ -200,7 +200,7 @@ def pbRoamingPokemonBattle(species, level)
   idxRoamer = $game_temp.roamer_index_for_encounter
   if !$PokemonGlobal.roamPokemon[idxRoamer] ||
      !$PokemonGlobal.roamPokemon[idxRoamer].is_a?(Pokemon)
-    $PokemonGlobal.roamPokemon[idxRoamer] = pbGenerateWildPokemon(species,level,true)
+    $PokemonGlobal.roamPokemon[idxRoamer] = pbGenerateWildPokemon(species, level, true)
   end
   # Set some battle rules
   setBattleRule("single")
@@ -208,16 +208,16 @@ def pbRoamingPokemonBattle(species, level)
   # Perform the battle
   decision = pbWildBattleCore($PokemonGlobal.roamPokemon[idxRoamer])
   # Update Roaming Pokémon data based on result of battle
-  if decision==1 || decision==4   # Defeated or caught
+  if decision == 1 || decision == 4   # Defeated or caught
     $PokemonGlobal.roamPokemon[idxRoamer]       = true
-    $PokemonGlobal.roamPokemonCaught[idxRoamer] = (decision==4)
+    $PokemonGlobal.roamPokemonCaught[idxRoamer] = (decision == 4)
   end
   $PokemonGlobal.roamEncounter = nil
   $PokemonGlobal.roamedAlready = true
   # Used by the Poké Radar to update/break the chain
-  Events.onWildBattleEnd.trigger(nil,species,level,decision)
+  Events.onWildBattleEnd.trigger(nil, species, level, decision)
   # Return false if the player lost or drew the battle, and true if any other result
-  return (decision!=2 && decision!=5)
+  return (decision != 2 && decision != 5)
 end
 
 EncounterModifier.registerEncounterEnd(proc {

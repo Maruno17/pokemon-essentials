@@ -15,7 +15,7 @@ end
 ################################################################################
 def pbCanUsePokeRadar?
   # Can't use Radar if not in tall grass
-  terrain = $game_map.terrain_tag($game_player.x,$game_player.y)
+  terrain = $game_map.terrain_tag($game_player.x, $game_player.y)
   if !terrain.land_wild_encounters || !terrain.shows_grass_rustle
     pbMessage(_INTL("Can't use that here."))
     return false
@@ -33,7 +33,7 @@ def pbCanUsePokeRadar?
   # Debug
   return true if $DEBUG && Input.press?(Input::CTRL)
   # Can't use Radar if it isn't fully charged
-  if $PokemonGlobal.pokeradarBattery && $PokemonGlobal.pokeradarBattery>0
+  if $PokemonGlobal.pokeradarBattery && $PokemonGlobal.pokeradarBattery > 0
     pbMessage(_INTL("The battery has run dry!\nFor it to recharge, you need to walk another {1} steps.",
        $PokemonGlobal.pokeradarBattery))
     return false
@@ -59,23 +59,23 @@ def pbPokeRadarHighlightGrass(showmessage = true)
   grasses = []   # x, y, ring (0-3 inner to outer), rarity
   # Choose 1 random tile from each ring around the player
   for i in 0...4
-    r = rand((i+1)*8)
+    r = rand((i + 1) * 8)
     # Get coordinates of randomly chosen tile
     x = $game_player.x
     y = $game_player.y
-    if r<=(i+1)*2
-      x = $game_player.x-i-1+r
-      y = $game_player.y-i-1
-    elsif r<=(i+1)*6-2
-      x = [$game_player.x+i+1,$game_player.x-i-1][r%2]
-      y = $game_player.y-i+((r-1-(i+1)*2)/2).floor
+    if r <= (i + 1) * 2
+      x = $game_player.x - i - 1 + r
+      y = $game_player.y - i - 1
+    elsif r <= (i + 1) * 6 - 2
+      x = [$game_player.x + i + 1, $game_player.x - i - 1][r % 2]
+      y = $game_player.y - i + ((r - 1 - (i + 1) * 2) / 2).floor
     else
-      x = $game_player.x-i+r-(i+1)*6
-      y = $game_player.y+i+1
+      x = $game_player.x - i + r - (i + 1) * 6
+      y = $game_player.y + i + 1
     end
     # Add tile to grasses array if it's a valid grass tile
-    if x>=0 && x<$game_map.width &&
-       y>=0 && y<$game_map.height
+    if x >= 0 && x < $game_map.width &&
+       y >= 0 && y < $game_map.height
       terrain = $game_map.terrain_tag(x, y)
       if terrain.land_wild_encounters && terrain.shows_grass_rustle
         # Choose a rarity for the grass (0=normal, 1=rare, 2=shiny)
@@ -85,11 +85,11 @@ def pbPokeRadarHighlightGrass(showmessage = true)
           v = (65536 / v.to_f).ceil
           s = 2 if rand(65536) < v
         end
-        grasses.push([x,y,i,s])
+        grasses.push([x, y, i, s])
       end
     end
   end
-  if grasses.length==0
+  if grasses.length == 0
     # No shaking grass found, break the chain
     pbMessage(_INTL("The grassy patch remained quiet...")) if showmessage
     pbPokeRadarCancel
@@ -98,15 +98,15 @@ def pbPokeRadarHighlightGrass(showmessage = true)
     for grass in grasses
       case grass[3]
       when 0   # Normal rustle
-        $scene.spriteset.addUserAnimation(Settings::RUSTLE_NORMAL_ANIMATION_ID,grass[0],grass[1],true,1)
+        $scene.spriteset.addUserAnimation(Settings::RUSTLE_NORMAL_ANIMATION_ID, grass[0], grass[1], true, 1)
       when 1   # Vigorous rustle
-        $scene.spriteset.addUserAnimation(Settings::RUSTLE_VIGOROUS_ANIMATION_ID,grass[0],grass[1],true,1)
+        $scene.spriteset.addUserAnimation(Settings::RUSTLE_VIGOROUS_ANIMATION_ID, grass[0], grass[1], true, 1)
       when 2   # Shiny rustle
-        $scene.spriteset.addUserAnimation(Settings::RUSTLE_SHINY_ANIMATION_ID,grass[0],grass[1],true,1)
+        $scene.spriteset.addUserAnimation(Settings::RUSTLE_SHINY_ANIMATION_ID, grass[0], grass[1], true, 1)
       end
     end
     $game_temp.poke_radar_data[3] = grasses if $game_temp.poke_radar_data
-    pbWait(Graphics.frame_rate/2)
+    pbWait(Graphics.frame_rate / 2)
   end
 end
 
@@ -192,23 +192,23 @@ EncounterModifier.register(proc { |encounter|
   next encounter
 })
 
-Events.onWildPokemonCreate += proc { |_sender,e|
+Events.onWildPokemonCreate += proc { |_sender, e|
   pokemon = e[0]
   next if !$game_temp.poke_radar_data
   grasses = $game_temp.poke_radar_data[3]
   next if !grasses
   for grass in grasses
-    next if $game_player.x!=grass[0] || $game_player.y!=grass[1]
-    pokemon.shiny = true if grass[3]==2
+    next if $game_player.x != grass[0] || $game_player.y != grass[1]
+    pokemon.shiny = true if grass[3] == 2
     break
   end
 }
 
-Events.onWildBattleEnd += proc { |_sender,e|
+Events.onWildBattleEnd += proc { |_sender, e|
   species  = e[0]
   level    = e[1]
   decision = e[2]
-  if $game_temp.poke_radar_data && (decision==1 || decision==4)   # Defeated/caught
+  if $game_temp.poke_radar_data && (decision == 1 || decision == 4)   # Defeated/caught
     $game_temp.poke_radar_data[0] = species
     $game_temp.poke_radar_data[1] = level
     $game_temp.poke_radar_data[2] += 1
@@ -221,28 +221,28 @@ Events.onWildBattleEnd += proc { |_sender,e|
   end
 }
 
-Events.onStepTaken += proc { |_sender,_e|
+Events.onStepTaken += proc { |_sender, _e|
   if $PokemonGlobal.pokeradarBattery && $PokemonGlobal.pokeradarBattery > 0 &&
      !$game_temp.poke_radar_data
     $PokemonGlobal.pokeradarBattery -= 1
   end
-  terrain = $game_map.terrain_tag($game_player.x,$game_player.y)
+  terrain = $game_map.terrain_tag($game_player.x, $game_player.y)
   if !terrain.land_wild_encounters || !terrain.shows_grass_rustle
     pbPokeRadarCancel
   end
 }
 
-Events.onMapChange += proc { |_sender,_e|
+Events.onMapChange += proc { |_sender, _e|
   pbPokeRadarCancel
 }
 
 ################################################################################
 # Item handlers
 ################################################################################
-ItemHandlers::UseInField.add(:POKERADAR,proc { |item|
+ItemHandlers::UseInField.add(:POKERADAR, proc { |item|
   next pbUsePokeRadar
 })
 
-ItemHandlers::UseFromBag.add(:POKERADAR,proc { |item|
+ItemHandlers::UseFromBag.add(:POKERADAR, proc { |item|
   next (pbCanUsePokeRadar?) ? 2 : 0
 })

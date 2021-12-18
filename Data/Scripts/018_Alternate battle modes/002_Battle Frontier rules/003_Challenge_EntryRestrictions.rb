@@ -326,7 +326,7 @@ class BannedItemRestriction
     @itemlist = itemlist.clone
   end
 
-  def isSpecies?(item,itemlist)
+  def isSpecies?(item, itemlist)
     return itemlist.include?(item)
   end
 

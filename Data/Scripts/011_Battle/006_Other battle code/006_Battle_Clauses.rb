@@ -10,7 +10,7 @@ class Battle
 
   def pbDecisionOnDraw
     if @rules["selfkoclause"]
-      if self.lastMoveUser<0
+      if self.lastMoveUser < 0
         # in extreme cases there may be no last move user
         return 5   # game is a draw
       elsif opposes?(self.lastMoveUser)
@@ -22,15 +22,15 @@ class Battle
     return __clauses__pbDecisionOnDraw
   end
 
-  def pbJudgeCheckpoint(user,move = nil)
+  def pbJudgeCheckpoint(user, move = nil)
     if pbAllFainted?(0) && pbAllFainted?(1)
       if @rules["drawclause"]   # NOTE: Also includes Life Orb (not implemented)
-        if !(move && move.function=="HealUserByHalfOfDamageDone")
+        if !(move && move.function == "HealUserByHalfOfDamageDone")
           # Not a draw if fainting occurred due to Liquid Ooze
           @decision = (user.opposes?) ? 1 : 2   # win / loss
         end
       elsif @rules["modifiedselfdestructclause"]
-        if move && move.function=="UserFaintsExplosive"   # Self-Destruct
+        if move && move.function == "UserFaintsExplosive"   # Self-Destruct
           @decision = (user.opposes?) ? 1 : 2   # win / loss
         end
       end
@@ -39,12 +39,12 @@ class Battle
 
   def pbEndOfRoundPhase
     __clauses__pbEndOfRoundPhase
-    if @rules["suddendeath"] && @decision==0
+    if @rules["suddendeath"] && @decision == 0
       p1able = pbAbleCount(0)
       p2able = pbAbleCount(1)
-      if p1able>p2able
+      if p1able > p2able
         @decision = 1   # loss
-      elsif p1able<p2able
+      elsif p1able < p2able
         @decision = 2   # win
       end
     end
@@ -62,16 +62,16 @@ class Battle::Battler
     @__clauses__aliased = true
   end
 
-  def pbCanSleep?(user,showMessages,move = nil,ignoreStatus = false)
-    selfsleep = (user && user.index==@index)
+  def pbCanSleep?(user, showMessages, move = nil, ignoreStatus = false)
+    selfsleep = (user && user.index == @index)
     if ((@battle.rules["modifiedsleepclause"]) || (!selfsleep && @battle.rules["sleepclause"])) &&
        pbHasStatusPokemon?(:SLEEP)
       if showMessages
-        @battle.pbDisplay(_INTL("But {1} couldn't sleep!",pbThis(true)))
+        @battle.pbDisplay(_INTL("But {1} couldn't sleep!", pbThis(true)))
       end
       return false
     end
-    return __clauses__pbCanSleep?(user,showMessages,move,ignoreStatus)
+    return __clauses__pbCanSleep?(user, showMessages, move, ignoreStatus)
   end
 
   def pbCanSleepYawn?
@@ -93,10 +93,10 @@ class Battle::Battler
     count = 0
     @battle.pbParty(@index).each do |pkmn|
       next if !pkmn || pkmn.egg?
-      next if pkmn.status!=status
+      next if pkmn.status != status
       count += 1
     end
-    return count>0
+    return count > 0
   end
 end
 
@@ -105,12 +105,12 @@ end
 class Battle::Move::RaiseUserEvasion1   # Double Team
   alias __clauses__pbMoveFailed? pbMoveFailed?
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !damagingMove? && @battle.rules["evasionclause"]
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    return __clauses__pbMoveFailed?(user,targets)
+    return __clauses__pbMoveFailed?(user, targets)
   end
 end
 
@@ -119,12 +119,12 @@ end
 class Battle::Move::RaiseUserEvasion2MinimizeUser   # Minimize
   alias __clauses__pbMoveFailed? pbMoveFailed?
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !damagingMove? && @battle.rules["evasionclause"]
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    return __clauses__pbMoveFailed?(user,targets)
+    return __clauses__pbMoveFailed?(user, targets)
   end
 end
 
@@ -220,12 +220,12 @@ class Battle::Move::UserFaintsExplosive   # Self-Destruct
     @__clauses__aliased = true
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if @battle.rules["selfkoclause"]
       # Check whether no unfainted Pokemon remain in either party
       count  = @battle.pbAbleNonActiveCount(user.idxOwnSide)
       count += @battle.pbAbleNonActiveCount(user.idxOpposingSide)
-      if count==0
+      if count == 0
         @battle.pbDisplay("But it failed!")
         return false
       end
@@ -234,13 +234,13 @@ class Battle::Move::UserFaintsExplosive   # Self-Destruct
       # Check whether no unfainted Pokemon remain in either party
       count  = @battle.pbAbleNonActiveCount(user.idxOwnSide)
       count += @battle.pbAbleNonActiveCount(user.idxOpposingSide)
-      if count==0
-        @battle.pbDisplay(_INTL("{1}'s team was disqualified!",user.pbThis))
+      if count == 0
+        @battle.pbDisplay(_INTL("{1}'s team was disqualified!", user.pbThis))
         @battle.decision = (user.opposes?) ? 1 : 2
         return false
       end
     end
-    return __clauses__pbMoveFailed?(user,targets)
+    return __clauses__pbMoveFailed?(user, targets)
   end
 end
 
@@ -251,7 +251,7 @@ class Battle::Move::StartPerishCountsForAllBattlers   # Perish Song
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["perishsongclause"] &&
-       @battle.pbAbleNonActiveCount(user.idxOwnSide)==0
+       @battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -266,7 +266,7 @@ class Battle::Move::AttackerFaintsIfUserFaints   # Destiny Bond
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["perishsongclause"] &&
-       @battle.pbAbleNonActiveCount(user.idxOwnSide)==0
+       @battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end

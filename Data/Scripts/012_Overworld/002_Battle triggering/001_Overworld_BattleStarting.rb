@@ -80,7 +80,7 @@ def setBattleRule(*args)
       $game_temp.add_battle_rule(arg)
     end
   end
-  raise _INTL("Argument {1} expected a variable after it but didn't have one.",r) if r
+  raise _INTL("Argument {1} expected a variable after it but didn't have one.", r) if r
 end
 
 def pbNewBattleScene
@@ -103,10 +103,10 @@ def pbPrepareBattle(battle)
   # Whether the player gains/loses money at the end of the battle (default: true)
   battle.moneyGain = battleRules["moneyGain"] if !battleRules["moneyGain"].nil?
   # Whether the player is able to switch when an opponent's Pokémon faints
-  battle.switchStyle = ($PokemonSystem.battlestyle==0)
+  battle.switchStyle = ($PokemonSystem.battlestyle == 0)
   battle.switchStyle = battleRules["switchStyle"] if !battleRules["switchStyle"].nil?
   # Whether battle animations are shown
-  battle.showAnims = ($PokemonSystem.battlescene==0)
+  battle.showAnims = ($PokemonSystem.battlescene == 0)
   battle.showAnims = battleRules["battleAnims"] if !battleRules["battleAnims"].nil?
   # Terrain
   battle.defaultTerrain = battleRules["defaultTerrain"] if !battleRules["defaultTerrain"].nil?
@@ -219,7 +219,7 @@ def pbWildBattleCore(*args)
   # Skip battle if the player has no able Pokémon, or if holding Ctrl in Debug mode
   if $player.able_pokemon_count == 0 || ($DEBUG && Input.press?(Input::CTRL))
     pbMessage(_INTL("SKIPPING BATTLE...")) if $player.pokemon_count > 0
-    pbSet(outcomeVar,1)   # Treat it as a win
+    pbSet(outcomeVar, 1)   # Treat it as a win
     $game_temp.clear_battle_rules
     $PokemonGlobal.nextBattleBGM       = nil
     $PokemonGlobal.nextBattleME        = nil
@@ -239,18 +239,18 @@ def pbWildBattleCore(*args)
       foeParty.push(arg)
     elsif arg.is_a?(Array)
       species = GameData::Species.get(arg[0]).id
-      pkmn = pbGenerateWildPokemon(species,arg[1])
+      pkmn = pbGenerateWildPokemon(species, arg[1])
       foeParty.push(pkmn)
     elsif sp
       species = GameData::Species.get(sp).id
-      pkmn = pbGenerateWildPokemon(species,arg)
+      pkmn = pbGenerateWildPokemon(species, arg)
       foeParty.push(pkmn)
       sp = nil
     else
       sp = arg
     end
   end
-  raise _INTL("Expected a level after being given {1}, but one wasn't found.",sp) if sp
+  raise _INTL("Expected a level after being given {1}, but one wasn't found.", sp) if sp
   # Calculate who the trainers and their party are
   playerTrainers    = [$player]
   playerParty       = $player.party
@@ -261,7 +261,7 @@ def pbWildBattleCore(*args)
     room_for_partner = true
   end
   if $PokemonGlobal.partner && !$game_temp.battle_rules["noPartner"] && room_for_partner
-    ally = NPCTrainer.new($PokemonGlobal.partner[1],$PokemonGlobal.partner[0])
+    ally = NPCTrainer.new($PokemonGlobal.partner[1], $PokemonGlobal.partner[0])
     ally.id    = $PokemonGlobal.partner[2]
     ally.party = $PokemonGlobal.partner[3]
     playerTrainers.push(ally)
@@ -274,18 +274,18 @@ def pbWildBattleCore(*args)
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = Battle.new(scene,playerParty,foeParty,playerTrainers,nil)
+  battle = Battle.new(scene, playerParty, foeParty, playerTrainers, nil)
   battle.party1starts = playerPartyStarts
   # Set various other properties in the battle class
   pbPrepareBattle(battle)
   $game_temp.clear_battle_rules
   # Perform the battle itself
   decision = 0
-  pbBattleAnimation(pbGetWildBattleBGM(foeParty),(foeParty.length==1) ? 0 : 2,foeParty) {
+  pbBattleAnimation(pbGetWildBattleBGM(foeParty), (foeParty.length == 1) ? 0 : 2, foeParty) {
     pbSceneStandby {
       decision = battle.pbStartBattle
     }
-    pbAfterBattle(decision,canLose)
+    pbAfterBattle(decision, canLose)
   }
   Input.update
   # Save the result of the battle in a Game Variable (1 by default)
@@ -301,7 +301,7 @@ def pbWildBattleCore(*args)
   when 2, 3, 5   # Lost, fled, draw
     $stats.wild_battles_lost += 1
   end
-  pbSet(outcomeVar,decision)
+  pbSet(outcomeVar, decision)
   return decision
 end
 
@@ -314,44 +314,44 @@ def pbWildBattle(species, level, outcomeVar = 1, canRun = true, canLose = false)
   # Potentially call a different pbWildBattle-type method instead (for roaming
   # Pokémon, Safari battles, Bug Contest battles)
   handled = [nil]
-  Events.onWildBattleOverride.trigger(nil,species,level,handled)
-  return handled[0] if handled[0]!=nil
+  Events.onWildBattleOverride.trigger(nil, species, level, handled)
+  return handled[0] if handled[0] != nil
   # Set some battle rules
-  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("cannotRun") if !canRun
   setBattleRule("canLose") if canLose
   # Perform the battle
   decision = pbWildBattleCore(species, level)
   # Used by the Poké Radar to update/break the chain
-  Events.onWildBattleEnd.trigger(nil,species,level,decision)
+  Events.onWildBattleEnd.trigger(nil, species, level, decision)
   # Return false if the player lost or drew the battle, and true if any other result
-  return (decision!=2 && decision!=5)
+  return (decision != 2 && decision != 5)
 end
 
 def pbDoubleWildBattle(species1, level1, species2, level2,
                        outcomeVar = 1, canRun = true, canLose = false)
   # Set some battle rules
-  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("cannotRun") if !canRun
   setBattleRule("canLose") if canLose
   setBattleRule("double")
   # Perform the battle
   decision = pbWildBattleCore(species1, level1, species2, level2)
   # Return false if the player lost or drew the battle, and true if any other result
-  return (decision!=2 && decision!=5)
+  return (decision != 2 && decision != 5)
 end
 
 def pbTripleWildBattle(species1, level1, species2, level2, species3, level3,
                        outcomeVar = 1, canRun = true, canLose = false)
   # Set some battle rules
-  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("cannotRun") if !canRun
   setBattleRule("canLose") if canLose
   setBattleRule("triple")
   # Perform the battle
   decision = pbWildBattleCore(species1, level1, species2, level2, species3, level3)
   # Return false if the player lost or drew the battle, and true if any other result
-  return (decision!=2 && decision!=5)
+  return (decision != 2 && decision != 5)
 end
 
 #===============================================================================
@@ -390,10 +390,10 @@ def pbTrainerBattleCore(*args)
       foeEndSpeeches.push(arg.lose_text)
       foeItems.push(arg.items)
     elsif arg.is_a?(Array)   # [trainer type, trainer name, ID, speech (optional)]
-      trainer = pbLoadTrainer(arg[0],arg[1],arg[2])
-      pbMissingTrainer(arg[0],arg[1],arg[2]) if !trainer
+      trainer = pbLoadTrainer(arg[0], arg[1], arg[2])
+      pbMissingTrainer(arg[0], arg[1], arg[2]) if !trainer
       return 0 if !trainer
-      Events.onTrainerPartyLoad.trigger(nil,trainer)
+      Events.onTrainerPartyLoad.trigger(nil, trainer)
       foeTrainers.push(trainer)
       foePartyStarts.push(foeParty.length)
       trainer.party.each { |pkmn| foeParty.push(pkmn) }
@@ -426,7 +426,7 @@ def pbTrainerBattleCore(*args)
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = Battle.new(scene,playerParty,foeParty,playerTrainers,foeTrainers)
+  battle = Battle.new(scene, playerParty, foeParty, playerTrainers, foeTrainers)
   battle.party1starts = playerPartyStarts
   battle.party2starts = foePartyStarts
   battle.items        = foeItems
@@ -438,11 +438,11 @@ def pbTrainerBattleCore(*args)
   Audio.me_stop
   # Perform the battle itself
   decision = 0
-  pbBattleAnimation(pbGetTrainerBattleBGM(foeTrainers),(battle.singleBattle?) ? 1 : 3,foeTrainers) {
+  pbBattleAnimation(pbGetTrainerBattleBGM(foeTrainers), (battle.singleBattle?) ? 1 : 3, foeTrainers) {
     pbSceneStandby {
       decision = battle.pbStartBattle
     }
-    pbAfterBattle(decision,canLose)
+    pbAfterBattle(decision, canLose)
   }
   Input.update
   # Save the result of the battle in a Game Variable (1 by default)
@@ -457,7 +457,7 @@ def pbTrainerBattleCore(*args)
   when 2, 3, 5   # Lost, fled, draw
     $stats.trainer_battles_lost += 1
   end
-  pbSet(outcomeVar,decision)
+  pbSet(outcomeVar, decision)
   return decision
 end
 
@@ -480,18 +480,18 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech = nil,
      ($player.able_pokemon_count > 0 && $PokemonGlobal.partner))
     thisEvent = pbMapInterpreter.get_self
     # Find all other triggered trainer events
-    triggeredEvents = $game_player.pbTriggeredTrainerEvents([2],false)
+    triggeredEvents = $game_player.pbTriggeredTrainerEvents([2], false)
     otherEvent = []
     for i in triggeredEvents
-      next if i.id==thisEvent.id
-      next if $game_self_switches[[$game_map.map_id,i.id,"A"]]
+      next if i.id == thisEvent.id
+      next if $game_self_switches[[$game_map.map_id, i.id, "A"]]
       otherEvent.push(i)
     end
     # Load the trainer's data, and call an event which might modify it
-    trainer = pbLoadTrainer(trainerID,trainerName,trainerPartyID)
-    pbMissingTrainer(trainerID,trainerName,trainerPartyID) if !trainer
+    trainer = pbLoadTrainer(trainerID, trainerName, trainerPartyID)
+    pbMissingTrainer(trainerID, trainerName, trainerPartyID) if !trainer
     return false if !trainer
-    Events.onTrainerPartyLoad.trigger(nil,trainer)
+    Events.onTrainerPartyLoad.trigger(nil, trainer)
     # If there is exactly 1 other triggered trainer event, and this trainer has
     # 6 or fewer Pokémon, record this trainer for a double battle caused by the
     # other triggered trainer event
@@ -502,40 +502,40 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech = nil,
     end
   end
   # Set some battle rules
-  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("canLose") if canLose
   setBattleRule("double") if doubleBattle || $game_temp.waiting_trainer
   # Perform the battle
   if $game_temp.waiting_trainer
     decision = pbTrainerBattleCore($game_temp.waiting_trainer[0],
-       [trainerID,trainerName,trainerPartyID,endSpeech]
+       [trainerID, trainerName, trainerPartyID, endSpeech]
     )
   else
-    decision = pbTrainerBattleCore([trainerID,trainerName,trainerPartyID,endSpeech])
+    decision = pbTrainerBattleCore([trainerID, trainerName, trainerPartyID, endSpeech])
   end
   # Finish off the recorded waiting trainer, because they have now been battled
-  if decision==1 && $game_temp.waiting_trainer   # Win
+  if decision == 1 && $game_temp.waiting_trainer   # Win
     pbMapInterpreter.pbSetSelfSwitch($game_temp.waiting_trainer[1], "A", true)
   end
   $game_temp.waiting_trainer = nil
   # Return true if the player won the battle, and false if any other result
-  return (decision==1)
+  return (decision == 1)
 end
 
 def pbDoubleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
                           trainerID2, trainerName2, trainerPartyID2 = 0, endSpeech2 = nil,
                           canLose = false, outcomeVar = 1)
   # Set some battle rules
-  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("canLose") if canLose
   setBattleRule("double")
   # Perform the battle
   decision = pbTrainerBattleCore(
-     [trainerID1,trainerName1,trainerPartyID1,endSpeech1],
-     [trainerID2,trainerName2,trainerPartyID2,endSpeech2]
+     [trainerID1, trainerName1, trainerPartyID1, endSpeech1],
+     [trainerID2, trainerName2, trainerPartyID2, endSpeech2]
   )
   # Return true if the player won the battle, and false if any other result
-  return (decision==1)
+  return (decision == 1)
 end
 
 def pbTripleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
@@ -543,23 +543,23 @@ def pbTripleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
                           trainerID3, trainerName3, trainerPartyID3 = 0, endSpeech3 = nil,
                           canLose = false, outcomeVar = 1)
   # Set some battle rules
-  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("canLose") if canLose
   setBattleRule("triple")
   # Perform the battle
   decision = pbTrainerBattleCore(
-     [trainerID1,trainerName1,trainerPartyID1,endSpeech1],
-     [trainerID2,trainerName2,trainerPartyID2,endSpeech2],
-     [trainerID3,trainerName3,trainerPartyID3,endSpeech3]
+     [trainerID1, trainerName1, trainerPartyID1, endSpeech1],
+     [trainerID2, trainerName2, trainerPartyID2, endSpeech2],
+     [trainerID3, trainerName3, trainerPartyID3, endSpeech3]
   )
   # Return true if the player won the battle, and false if any other result
-  return (decision==1)
+  return (decision == 1)
 end
 
 #===============================================================================
 # After battles
 #===============================================================================
-def pbAfterBattle(decision,canLose)
+def pbAfterBattle(decision, canLose)
   $player.party.each do |pkmn|
     pkmn.statusCount = 0 if pkmn.status == :POISON   # Bad poison becomes regular
     pkmn.makeUnmega
@@ -573,22 +573,22 @@ def pbAfterBattle(decision,canLose)
       pkmn.makeUnprimal
     end
   end
-  if decision==2 || decision==5   # if loss or draw
+  if decision == 2 || decision == 5   # if loss or draw
     if canLose
       $player.party.each { |pkmn| pkmn.heal }
-      (Graphics.frame_rate/4).times { Graphics.update }
+      (Graphics.frame_rate / 4).times { Graphics.update }
     end
   end
-  Events.onEndBattle.trigger(nil,decision,canLose)
+  Events.onEndBattle.trigger(nil, decision, canLose)
   $game_player.straighten
 end
 
-Events.onEndBattle += proc { |_sender,e|
+Events.onEndBattle += proc { |_sender, e|
   decision = e[0]
   canLose  = e[1]
   # Check for evolutions
   pbEvolutionCheck if Settings::CHECK_EVOLUTION_AFTER_ALL_BATTLES ||
-                      (decision!=2 && decision!=5)   # not a loss or a draw
+                      (decision != 2 && decision != 5)   # not a loss or a draw
   $game_temp.party_levels_before_battle = nil
   $game_temp.party_critical_hits_dealt = nil
   $game_temp.party_direct_damage_taken = nil
@@ -642,7 +642,7 @@ end
 def pbPickup(pkmn)
   return if pkmn.egg? || !pkmn.hasAbility?(:PICKUP)
   return if pkmn.hasItem?
-  return unless rand(100)<10   # 10% chance
+  return unless rand(100) < 10   # 10% chance
   # Common items to find (9 items from this list are added to the pool)
   pickupList = pbDynamicItemList(
      :POTION,
@@ -678,29 +678,29 @@ def pbPickup(pkmn)
      :LEFTOVERS,
      :DESTINYKNOT
   )
-  return if pickupList.length<18
-  return if pickupListRare.length<11
+  return if pickupList.length < 18
+  return if pickupListRare.length < 11
   # Generate a pool of items depending on the Pokémon's level
   items = []
-  pkmnLevel = [100,pkmn.level].min
-  itemStartIndex = (pkmnLevel-1)/10
-  itemStartIndex = 0 if itemStartIndex<0
+  pkmnLevel = [100, pkmn.level].min
+  itemStartIndex = (pkmnLevel - 1) / 10
+  itemStartIndex = 0 if itemStartIndex < 0
   for i in 0...9
-    items.push(pickupList[itemStartIndex+i])
+    items.push(pickupList[itemStartIndex + i])
   end
   for i in 0...2
-    items.push(pickupListRare[itemStartIndex+i])
+    items.push(pickupListRare[itemStartIndex + i])
   end
   # Probabilities of choosing each item in turn from the pool
-  chances = [30,10,10,10,10,10,10,4,4,1,1]   # Needs to be 11 numbers
+  chances = [30, 10, 10, 10, 10, 10, 10, 4, 4, 1, 1]   # Needs to be 11 numbers
   chanceSum = 0
   chances.each { |c| chanceSum += c }
   # Randomly choose an item from the pool to give to the Pokémon
   rnd = rand(chanceSum)
   cumul = 0
-  chances.each_with_index do |c,i|
+  chances.each_with_index do |c, i|
     cumul += c
-    next if rnd>=cumul
+    next if rnd >= cumul
     pkmn.item = items[i]
     break
   end

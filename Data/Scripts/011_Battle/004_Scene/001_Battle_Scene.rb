@@ -84,9 +84,9 @@ class Battle::Scene
 
   def pbGraphicsUpdate
     # Update lineup animations
-    if @animations.length>0
+    if @animations.length > 0
       shouldCompact = false
-      @animations.each_with_index do |a,i|
+      @animations.each_with_index do |a, i|
         a.update
         if a.animDone?
           a.dispose
@@ -100,7 +100,7 @@ class Battle::Scene
     @sprites["battle_bg"].update if @sprites["battle_bg"].respond_to?("update")
     Graphics.update
     @frameCounter += 1
-    @frameCounter = @frameCounter%(Graphics.frame_rate*12/20)
+    @frameCounter = @frameCounter % (Graphics.frame_rate * 12 / 20)
   end
 
   def pbInputUpdate
@@ -113,7 +113,7 @@ class Battle::Scene
 
   def pbFrameUpdate(cw = nil)
     cw.update if cw
-    @battle.battlers.each_with_index do |b,i|
+    @battle.battlers.each_with_index do |b, i|
       next if !b
       @sprites["dataBox_#{i}"].update(@frameCounter) if @sprites["dataBox_#{i}"]
       @sprites["pokemon_#{i}"].update(@frameCounter) if @sprites["pokemon_#{i}"]
@@ -122,7 +122,7 @@ class Battle::Scene
   end
 
   def pbRefresh
-    @battle.battlers.each_with_index do |b,i|
+    @battle.battlers.each_with_index do |b, i|
       next if !b
       @sprites["dataBox_#{i}"].refresh if @sprites["dataBox_#{i}"]
     end
@@ -147,7 +147,7 @@ class Battle::Scene
   #=============================================================================
   # Returns whether the party line-ups are currently coming on-screen
   def inPartyAnimation?
-    return @animations.length>0
+    return @animations.length > 0
   end
 
   #=============================================================================
@@ -157,11 +157,11 @@ class Battle::Scene
     # NOTE: If you are not using fancy graphics for the command/fight menus, you
     #       will need to make "messageBox" also visible if the windowtype if
     #       COMMAND_BOX/FIGHT_BOX respectively.
-    @sprites["messageBox"].visible    = (windowType==MESSAGE_BOX)
-    @sprites["messageWindow"].visible = (windowType==MESSAGE_BOX)
-    @sprites["commandWindow"].visible = (windowType==COMMAND_BOX)
-    @sprites["fightWindow"].visible   = (windowType==FIGHT_BOX)
-    @sprites["targetWindow"].visible  = (windowType==TARGET_BOX)
+    @sprites["messageBox"].visible    = (windowType == MESSAGE_BOX)
+    @sprites["messageWindow"].visible = (windowType == MESSAGE_BOX)
+    @sprites["commandWindow"].visible = (windowType == COMMAND_BOX)
+    @sprites["fightWindow"].visible   = (windowType == FIGHT_BOX)
+    @sprites["targetWindow"].visible  = (windowType == TARGET_BOX)
   end
 
   # This is for the end of brief messages, which have been lingering on-screen
@@ -185,7 +185,7 @@ class Battle::Scene
 
   # NOTE: A regular message is displayed for 1 second after it fully appears (or
   #       less if Back/Use is pressed). Disappears automatically after that time.
-  def pbDisplayMessage(msg,brief = false)
+  def pbDisplayMessage(msg, brief = false)
     pbWaitMessage
     pbShowWindow(MESSAGE_BOX)
     cw = @sprites["messageWindow"]
@@ -235,7 +235,7 @@ class Battle::Scene
     pbWaitMessage
     pbShowWindow(MESSAGE_BOX)
     cw = @sprites["messageWindow"]
-    cw.text = _INTL("{1}\1",msg)
+    cw.text = _INTL("{1}\1", msg)
     PBDebug.log(msg)
     yielded = false
     timer = 0.0
@@ -269,19 +269,19 @@ class Battle::Scene
   end
 
   def pbDisplayConfirmMessage(msg)
-    return pbShowCommands(msg,[_INTL("Yes"),_INTL("No")],1)==0
+    return pbShowCommands(msg, [_INTL("Yes"), _INTL("No")], 1) == 0
   end
 
-  def pbShowCommands(msg,commands,defaultValue)
+  def pbShowCommands(msg, commands, defaultValue)
     pbWaitMessage
     pbShowWindow(MESSAGE_BOX)
     dw = @sprites["messageWindow"]
     dw.text = msg
     cw = Window_CommandPokemon.new(commands)
     cw.height   = Graphics.height - dw.height if cw.height > Graphics.height - dw.height
-    cw.x        = Graphics.width-cw.width
-    cw.y        = Graphics.height-cw.height-dw.height
-    cw.z        = dw.z+1
+    cw.x        = Graphics.width - cw.width
+    cw.y        = Graphics.height - cw.height - dw.height
+    cw.z        = dw.z + 1
     cw.index    = 0
     cw.viewport = @viewport
     PBDebug.log(msg)
@@ -289,7 +289,7 @@ class Battle::Scene
       cw.visible = (!dw.busy?)
       pbUpdate(cw)
       dw.update
-      if Input.trigger?(Input::BACK) && defaultValue>=0
+      if Input.trigger?(Input::BACK) && defaultValue >= 0
         if dw.busy?
           pbPlayDecisionSE if dw.pausing?
           dw.resume
@@ -314,8 +314,8 @@ class Battle::Scene
   #=============================================================================
   # Sprites
   #=============================================================================
-  def pbAddSprite(id,x,y,filename,viewport)
-    sprite = @sprites[id] || IconSprite.new(x,y,viewport)
+  def pbAddSprite(id, x, y, filename, viewport)
+    sprite = @sprites[id] || IconSprite.new(x, y, viewport)
     if filename
       sprite.setBitmap(filename) rescue nil
     end
@@ -323,7 +323,7 @@ class Battle::Scene
     return sprite
   end
 
-  def pbAddPlane(id,filename,viewport)
+  def pbAddPlane(id, filename, viewport)
     sprite = AnimatedPlane.new(viewport)
     if filename
       sprite.setBitmap(filename)
@@ -337,12 +337,12 @@ class Battle::Scene
   end
 
   # Used by Ally Switch.
-  def pbSwapBattlerSprites(idxA,idxB)
+  def pbSwapBattlerSprites(idxA, idxB)
     @sprites["pokemon_#{idxA}"], @sprites["pokemon_#{idxB}"] = @sprites["pokemon_#{idxB}"], @sprites["pokemon_#{idxA}"]
     @sprites["shadow_#{idxA}"], @sprites["shadow_#{idxB}"] = @sprites["shadow_#{idxB}"], @sprites["shadow_#{idxA}"]
     @lastCmd[idxA], @lastCmd[idxB] = @lastCmd[idxB], @lastCmd[idxA]
     @lastMove[idxA], @lastMove[idxB] = @lastMove[idxB], @lastMove[idxA]
-    [idxA,idxB].each do |i|
+    [idxA, idxB].each do |i|
       @sprites["pokemon_#{i}"].index = i
       @sprites["pokemon_#{i}"].pbSetPosition
       @sprites["shadow_#{i}"].index = i
@@ -379,22 +379,22 @@ class Battle::Scene
   #=============================================================================
   #
   #=============================================================================
-  def pbSelectBattler(idxBattler,selectMode = 1)
-    numWindows = @battle.sideSizes.max*2
+  def pbSelectBattler(idxBattler, selectMode = 1)
+    numWindows = @battle.sideSizes.max * 2
     for i in 0...numWindows
-      sel = (idxBattler.is_a?(Array)) ? !idxBattler[i].nil? : i==idxBattler
+      sel = (idxBattler.is_a?(Array)) ? !idxBattler[i].nil? : i == idxBattler
       selVal = (sel) ? selectMode : 0
       @sprites["dataBox_#{i}"].selected = selVal if @sprites["dataBox_#{i}"]
       @sprites["pokemon_#{i}"].selected = selVal if @sprites["pokemon_#{i}"]
     end
   end
 
-  def pbChangePokemon(idxBattler,pkmn)
+  def pbChangePokemon(idxBattler, pkmn)
     idxBattler = idxBattler.index if idxBattler.respond_to?("index")
     pkmnSprite   = @sprites["pokemon_#{idxBattler}"]
     shadowSprite = @sprites["shadow_#{idxBattler}"]
     back = !@battle.opposes?(idxBattler)
-    pkmnSprite.setPokemonBitmap(pkmn,back)
+    pkmnSprite.setPokemonBitmap(pkmn, back)
     shadowSprite.setPokemonBitmap(pkmn)
     # Set visibility of battler's shadow
     shadowSprite.visible = pkmn.species_data.shows_shadow? if shadowSprite && !back

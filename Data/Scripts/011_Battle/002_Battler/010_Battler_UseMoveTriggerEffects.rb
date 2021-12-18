@@ -2,13 +2,13 @@ class Battle::Battler
   #=============================================================================
   # Effect per hit
   #=============================================================================
-  def pbEffectsOnMakingHit(move,user,target)
-    if target.damageState.calcDamage>0 && !target.damageState.substitute
+  def pbEffectsOnMakingHit(move, user, target)
+    if target.damageState.calcDamage > 0 && !target.damageState.substitute
       # Target's ability
       if target.abilityActive?(true)
         oldHP = user.hp
         Battle::AbilityEffects.triggerOnBeingHit(target.ability, user, target, move, @battle)
-        user.pbItemHPHealCheck if user.hp<oldHP
+        user.pbItemHPHealCheck if user.hp < oldHP
       end
       # Cramorant - Gulp Missile
       if target.isSpecies?(:CRAMORANT) && target.ability == :GULPMISSILE &&
@@ -39,28 +39,28 @@ class Battle::Battler
       if target.itemActive?(true)
         oldHP = user.hp
         Battle::ItemEffects.triggerOnBeingHit(target.item, user, target, move, @battle)
-        user.pbItemHPHealCheck if user.hp<oldHP
+        user.pbItemHPHealCheck if user.hp < oldHP
       end
     end
     if target.opposes?(user)
       # Rage
       if target.effects[PBEffects::Rage] && !target.fainted?
-        if target.pbCanRaiseStatStage?(:ATTACK,target)
-          @battle.pbDisplay(_INTL("{1}'s rage is building!",target.pbThis))
-          target.pbRaiseStatStage(:ATTACK,1,target)
+        if target.pbCanRaiseStatStage?(:ATTACK, target)
+          @battle.pbDisplay(_INTL("{1}'s rage is building!", target.pbThis))
+          target.pbRaiseStatStage(:ATTACK, 1, target)
         end
       end
       # Beak Blast
       if target.effects[PBEffects::BeakBlast]
         PBDebug.log("[Lingering effect] #{target.pbThis}'s Beak Blast")
         if move.pbContactMove?(user) && user.affectedByContactEffect?
-          target.pbBurn(user) if target.pbCanBurn?(user,false,self)
+          target.pbBurn(user) if target.pbCanBurn?(user, false, self)
         end
       end
       # Shell Trap (make the trapper move next if the trap was triggered)
       if target.effects[PBEffects::ShellTrap] &&
-         @battle.choices[target.index][0]==:UseMove && !target.movedThisRound?
-        if target.damageState.hpLost>0 && !target.damageState.substitute && move.physicalMove?
+         @battle.choices[target.index][0] == :UseMove && !target.movedThisRound?
+        if target.damageState.hpLost > 0 && !target.damageState.substitute && move.physicalMove?
           target.tookPhysicalHit              = true
           target.effects[PBEffects::MoveNext] = true
           target.effects[PBEffects::Quash]    = 0
@@ -70,11 +70,11 @@ class Battle::Battler
       if target.effects[PBEffects::Grudge] && target.fainted?
         move.pp = 0
         @battle.pbDisplay(_INTL("{1}'s {2} lost all of its PP due to the grudge!",
-           user.pbThis,move.name))
+           user.pbThis, move.name))
       end
       # Destiny Bond (recording that it should apply)
       if target.effects[PBEffects::DestinyBond] && target.fainted?
-        if user.effects[PBEffects::DestinyBondTarget]<0
+        if user.effects[PBEffects::DestinyBondTarget] < 0
           user.effects[PBEffects::DestinyBondTarget] = target.index
         end
       end
@@ -84,7 +84,7 @@ class Battle::Battler
   #=============================================================================
   # Effects after all hits (i.e. at end of move usage)
   #=============================================================================
-  def pbEffectsAfterMove(user,targets,move,numHits)
+  def pbEffectsAfterMove(user, targets, move, numHits)
     # Defrost
     if move.damagingMove?
       targets.each do |b|
@@ -101,10 +101,10 @@ class Battle::Battler
     # NOTE: Although Destiny Bond is similar to Grudge, they don't apply at
     #       the same time (although Destiny Bond does check whether it's going
     #       to trigger at the same time as Grudge).
-    if user.effects[PBEffects::DestinyBondTarget]>=0 && !user.fainted?
+    if user.effects[PBEffects::DestinyBondTarget] >= 0 && !user.fainted?
       dbName = @battle.battlers[user.effects[PBEffects::DestinyBondTarget]].pbThis
-      @battle.pbDisplay(_INTL("{1} took its attacker down with it!",dbName))
-      user.pbReduceHP(user.hp,false)
+      @battle.pbDisplay(_INTL("{1} took its attacker down with it!", dbName))
+      user.pbReduceHP(user.hp, false)
       user.pbItemHPHealCheck
       user.pbFaint
       @battle.pbJudgeCheckpoint(user)
@@ -117,15 +117,15 @@ class Battle::Battler
     if !user.fainted? && !user.effects[PBEffects::Transform] &&
        user.isSpecies?(:GRENINJA) && user.ability == :BATTLEBOND
       if !@battle.pbAllFainted?(user.idxOpposingSide) &&
-         !@battle.battleBond[user.index&1][user.pokemonIndex]
+         !@battle.battleBond[user.index & 1][user.pokemonIndex]
         numFainted = 0
         targets.each { |b| numFainted += 1 if b.damageState.fainted }
-        if numFainted>0 && user.form==1
-          @battle.battleBond[user.index&1][user.pokemonIndex] = true
-          @battle.pbDisplay(_INTL("{1} became fully charged due to its bond with its Trainer!",user.pbThis))
-          @battle.pbShowAbilitySplash(user,true)
+        if numFainted > 0 && user.form == 1
+          @battle.battleBond[user.index & 1][user.pokemonIndex] = true
+          @battle.pbDisplay(_INTL("{1} became fully charged due to its bond with its Trainer!", user.pbThis))
+          @battle.pbShowAbilitySplash(user, true)
           @battle.pbHideAbilitySplash(user)
-          user.pbChangeForm(2,_INTL("{1} became Ash-Greninja!",user.pbThis))
+          user.pbChangeForm(2, _INTL("{1} became Ash-Greninja!", user.pbThis))
         end
       end
     end
@@ -165,13 +165,13 @@ class Battle::Battler
     # U-turn/Volt Switch/Baton Pass/Parting Shot, Relic Song's form changing,
     # Fling/Natural Gift consuming item.
     if !switched_battlers.include?(user.index)
-      move.pbEndOfMoveUsageEffect(user,targets,numHits,switched_battlers)
+      move.pbEndOfMoveUsageEffect(user, targets, numHits, switched_battlers)
     end
     # User's ability/item that switches the user out (all negated by Sheer Force)
     if !(user.hasActiveAbility?(:SHEERFORCE) && move.addlEffect > 0)
       pbEffectsAfterMove3(user, targets, move, numHits, switched_battlers)
     end
-    if numHits>0
+    if numHits > 0
       @battle.allBattlers.each { |b| b.pbItemEndOfMoveCheck }
     end
   end
@@ -180,7 +180,7 @@ class Battle::Battler
   def pbEffectsAfterMove2(user, targets, move, numHits, switched_battlers)
     # Target's held item (Eject Button, Red Card, Eject Pack)
     @battle.pbPriority(true).each do |b|
-      if targets.any? { |targetB| targetB.index==b.index }
+      if targets.any? { |targetB| targetB.index == b.index }
         if !b.damageState.unaffected && b.damageState.calcDamage > 0 && b.itemActive?
           Battle::ItemEffects.triggerAfterMoveUseFromTarget(b.item, b, user, move, switched_battlers, @battle)
         end
@@ -198,7 +198,7 @@ class Battle::Battler
     end
     # Target's ability (Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out)
     @battle.pbPriority(true).each do |b|
-      if targets.any? { |targetB| targetB.index==b.index }
+      if targets.any? { |targetB| targetB.index == b.index }
         if !b.damageState.unaffected && !switched_battlers.include?(b.index) && b.abilityActive?
           Battle::AbilityEffects.triggerAfterMoveUseFromTarget(b.ability, b, user, move, switched_battlers, @battle)
         end

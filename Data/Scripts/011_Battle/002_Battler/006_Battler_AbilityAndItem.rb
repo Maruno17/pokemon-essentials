@@ -7,7 +7,7 @@ class Battle::Battler
       Battle::AbilityEffects.triggerOnSwitchOut(self.ability, self, false)
     end
     # Reset form
-    @battle.peer.pbOnLeavingBattle(@battle,@pokemon,@battle.usedInBattle[idxOwnSide][@index/2])
+    @battle.peer.pbOnLeavingBattle(@battle, @pokemon, @battle.usedInBattle[idxOwnSide][@index / 2])
     # Treat self as fainted
     @hp = 0
     @fainted = true
@@ -77,11 +77,11 @@ class Battle::Battler
         next !b.ungainableAbility? &&
              ![:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(b.ability_id)
       }
-      if choices.length>0
+      if choices.length > 0
         choice = choices[@battle.pbRandom(choices.length)]
         @battle.pbShowAbilitySplash(self)
         self.ability = choice.ability
-        @battle.pbDisplay(_INTL("{1} traced {2}'s {3}!",pbThis,choice.pbThis(true),choice.abilityName))
+        @battle.pbDisplay(_INTL("{1} traced {2}'s {3}!", pbThis, choice.pbThis(true), choice.abilityName))
         @battle.pbHideAbilitySplash(self)
         if !onSwitchIn && (unstoppableAbility? || abilityActive?)
           Battle::AbilityEffects.triggerOnSwitchIn(self.ability, self, @battle)
@@ -227,7 +227,7 @@ class Battle::Battler
     self.item = nil
   end
 
-  def pbConsumeItem(recoverable = true,symbiosis = true,belch = true)
+  def pbConsumeItem(recoverable = true, symbiosis = true, belch = true)
     PBDebug.log("[Item consumed] #{pbThis} consumed its held #{itemName}")
     if recoverable
       setRecycleItem(@item_id)
@@ -250,10 +250,10 @@ class Battle::Battler
       @battle.pbShowAbilitySplash(b)
       if Battle::Scene::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} shared its {2} with {3}!",
-           b.pbThis,b.itemName,pbThis(true)))
+           b.pbThis, b.itemName, pbThis(true)))
       else
         @battle.pbDisplay(_INTL("{1}'s {2} let it share its {3} with {4}!",
-           b.pbThis,b.abilityName,b.itemName,pbThis(true)))
+           b.pbThis, b.abilityName, b.itemName, pbThis(true)))
       end
       self.item = b.item
       b.item = nil

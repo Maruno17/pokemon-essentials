@@ -1034,7 +1034,7 @@ class Interpreter
     # Look for more script commands or a continuation of one, and add them to script
     loop do
       break if ![355, 655].include?(@list[@index + 1].code)
-      script += @list[@index+1].parameters[0] + "\n"
+      script += @list[@index + 1].parameters[0] + "\n"
       @index += 1
     end
     # Run the script

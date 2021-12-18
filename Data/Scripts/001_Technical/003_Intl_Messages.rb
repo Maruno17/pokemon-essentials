@@ -1,20 +1,20 @@
-def pbAddScriptTexts(items,script)
+def pbAddScriptTexts(items, script)
   script.scan(/(?:_I)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) { |s|
-    string=s[0]
-    string.gsub!(/\\\"/,"\"")
-    string.gsub!(/\\\\/,"\\")
+    string = s[0]
+    string.gsub!(/\\\"/, "\"")
+    string.gsub!(/\\\\/, "\\")
     items.push(string)
   }
 end
 
-def pbAddRgssScriptTexts(items,script)
+def pbAddRgssScriptTexts(items, script)
   script.scan(/(?:_INTL|_ISPRINTF)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) { |s|
-    string=s[0]
-    string.gsub!(/\\r/,"\r")
-    string.gsub!(/\\n/,"\n")
-    string.gsub!(/\\1/,"\1")
-    string.gsub!(/\\\"/,"\"")
-    string.gsub!(/\\\\/,"\\")
+    string = s[0]
+    string.gsub!(/\\r/, "\r")
+    string.gsub!(/\\n/, "\n")
+    string.gsub!(/\\1/, "\1")
+    string.gsub!(/\\\"/, "\"")
+    string.gsub!(/\\\\/, "\\")
     items.push(string)
   }
 end
@@ -23,14 +23,14 @@ def pbSetTextMessages
   Graphics.update
   begin
     t = Time.now.to_i
-    texts=[]
+    texts = []
     for script in $RGSS_SCRIPTS
       if Time.now.to_i - t >= 5
         t = Time.now.to_i
         Graphics.update
       end
-      scr=Zlib::Inflate.inflate(script[2])
-      pbAddRgssScriptTexts(texts,scr)
+      scr = Zlib::Inflate.inflate(script[2])
+      pbAddRgssScriptTexts(texts, scr)
     end
     if safeExists?("Data/PluginScripts.rxdata")
       plugin_scripts = load_data("Data/PluginScripts.rxdata")
@@ -41,62 +41,62 @@ def pbSetTextMessages
             Graphics.update
           end
           scr = Zlib::Inflate.inflate(script[1]).force_encoding(Encoding::UTF_8)
-          pbAddRgssScriptTexts(texts,scr)
+          pbAddRgssScriptTexts(texts, scr)
         end
       end
     end
     # Must add messages because this code is used by both game system and Editor
-    MessageTypes.addMessagesAsHash(MessageTypes::ScriptTexts,texts)
+    MessageTypes.addMessagesAsHash(MessageTypes::ScriptTexts, texts)
     commonevents = load_data("Data/CommonEvents.rxdata")
-    items=[]
-    choices=[]
+    items = []
+    choices = []
     for event in commonevents.compact
       if Time.now.to_i - t >= 5
         t = Time.now.to_i
         Graphics.update
       end
       begin
-        neednewline=false
-        lastitem=""
+        neednewline = false
+        lastitem = ""
         for j in 0...event.list.size
           list = event.list[j]
-          if neednewline && list.code!=401
-            if lastitem!=""
-              lastitem.gsub!(/([^\.\!\?])\s\s+/) { |m| $1+" " }
+          if neednewline && list.code != 401
+            if lastitem != ""
+              lastitem.gsub!(/([^\.\!\?])\s\s+/) { |m| $1 + " " }
               items.push(lastitem)
-              lastitem=""
+              lastitem = ""
             end
-            neednewline=false
+            neednewline = false
           end
           if list.code == 101
-            lastitem+="#{list.parameters[0]}"
-            neednewline=true
+            lastitem += "#{list.parameters[0]}"
+            neednewline = true
           elsif list.code == 102
             for k in 0...list.parameters[0].length
               choices.push(list.parameters[0][k])
             end
-            neednewline=false
+            neednewline = false
           elsif list.code == 401
-            lastitem+=" " if lastitem!=""
-            lastitem+="#{list.parameters[0]}"
-            neednewline=true
+            lastitem += " " if lastitem != ""
+            lastitem += "#{list.parameters[0]}"
+            neednewline = true
           elsif list.code == 355 || list.code == 655
-            pbAddScriptTexts(items,list.parameters[0])
-          elsif list.code == 111 && list.parameters[0]==12
-            pbAddScriptTexts(items,list.parameters[1])
+            pbAddScriptTexts(items, list.parameters[0])
+          elsif list.code == 111 && list.parameters[0] == 12
+            pbAddScriptTexts(items, list.parameters[1])
           elsif list.code == 209
-            route=list.parameters[1]
+            route = list.parameters[1]
             for k in 0...route.list.size
               if route.list[k].code == 45
-                pbAddScriptTexts(items,route.list[k].parameters[0])
+                pbAddScriptTexts(items, route.list[k].parameters[0])
               end
             end
           end
         end
         if neednewline
-          if lastitem!=""
+          if lastitem != ""
             items.push(lastitem)
-            lastitem=""
+            lastitem = ""
           end
         end
       end
@@ -105,21 +105,21 @@ def pbSetTextMessages
       t = Time.now.to_i
       Graphics.update
     end
-    items|=[]
-    choices|=[]
+    items |= []
+    choices |= []
     items.concat(choices)
-    MessageTypes.setMapMessagesAsHash(0,items)
+    MessageTypes.setMapMessagesAsHash(0, items)
     mapinfos = pbLoadMapInfos
     for id in mapinfos.keys
       if Time.now.to_i - t >= 5
         t = Time.now.to_i
         Graphics.update
       end
-      filename=sprintf("Data/Map%03d.rxdata",id)
+      filename = sprintf("Data/Map%03d.rxdata", id)
       next if !pbRgssExists?(filename)
       map = load_data(filename)
-      items=[]
-      choices=[]
+      items = []
+      choices = []
       for event in map.events.values
         if Time.now.to_i - t >= 5
           t = Time.now.to_i
@@ -127,47 +127,47 @@ def pbSetTextMessages
         end
         begin
           for i in 0...event.pages.size
-            neednewline=false
-            lastitem=""
+            neednewline = false
+            lastitem = ""
             for j in 0...event.pages[i].list.size
               list = event.pages[i].list[j]
-              if neednewline && list.code!=401
-                if lastitem!=""
-                  lastitem.gsub!(/([^\.\!\?])\s\s+/) { |m| $1+" " }
+              if neednewline && list.code != 401
+                if lastitem != ""
+                  lastitem.gsub!(/([^\.\!\?])\s\s+/) { |m| $1 + " " }
                   items.push(lastitem)
-                  lastitem=""
+                  lastitem = ""
                 end
-                neednewline=false
+                neednewline = false
               end
               if list.code == 101
-                lastitem+="#{list.parameters[0]}"
-                neednewline=true
+                lastitem += "#{list.parameters[0]}"
+                neednewline = true
               elsif list.code == 102
                 for k in 0...list.parameters[0].length
                   choices.push(list.parameters[0][k])
                 end
-                neednewline=false
+                neednewline = false
               elsif list.code == 401
-                lastitem+=" " if lastitem!=""
-                lastitem+="#{list.parameters[0]}"
-                neednewline=true
-              elsif list.code == 355 || list.code==655
-                pbAddScriptTexts(items,list.parameters[0])
-              elsif list.code == 111 && list.parameters[0]==12
-                pbAddScriptTexts(items,list.parameters[1])
-              elsif list.code==209
-                route=list.parameters[1]
+                lastitem += " " if lastitem != ""
+                lastitem += "#{list.parameters[0]}"
+                neednewline = true
+              elsif list.code == 355 || list.code == 655
+                pbAddScriptTexts(items, list.parameters[0])
+              elsif list.code == 111 && list.parameters[0] == 12
+                pbAddScriptTexts(items, list.parameters[1])
+              elsif list.code == 209
+                route = list.parameters[1]
                 for k in 0...route.list.size
-                  if route.list[k].code==45
-                    pbAddScriptTexts(items,route.list[k].parameters[0])
+                  if route.list[k].code == 45
+                    pbAddScriptTexts(items, route.list[k].parameters[0])
                   end
                 end
               end
             end
             if neednewline
-              if lastitem!=""
+              if lastitem != ""
                 items.push(lastitem)
-                lastitem=""
+                lastitem = ""
               end
             end
           end
@@ -177,10 +177,10 @@ def pbSetTextMessages
         t = Time.now.to_i
         Graphics.update
       end
-      items|=[]
-      choices|=[]
+      items |= []
+      choices |= []
       items.concat(choices)
-      MessageTypes.setMapMessagesAsHash(id,items)
+      MessageTypes.setMapMessagesAsHash(id, items)
       if Time.now.to_i - t >= 5
         t = Time.now.to_i
         Graphics.update
@@ -192,92 +192,92 @@ def pbSetTextMessages
 end
 
 def pbEachIntlSection(file)
-  lineno=1
-  re=/^\s*\[\s*([^\]]+)\s*\]\s*$/
-  havesection=false
-  sectionname=nil
-  lastsection=[]
+  lineno = 1
+  re = /^\s*\[\s*([^\]]+)\s*\]\s*$/
+  havesection = false
+  sectionname = nil
+  lastsection = []
   file.each_line { |line|
-    if lineno==1 && line[0].ord==0xEF && line[1].ord==0xBB && line[2].ord==0xBF
-      line=line[3,line.length-3]
+    if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
+      line = line[3, line.length - 3]
     end
     if !line[/^\#/] && !line[/^\s*$/]
       if line[re]
         if havesection
-          yield lastsection,sectionname
+          yield lastsection, sectionname
         end
         lastsection.clear
-        sectionname=$~[1]
-        havesection=true
+        sectionname = $~[1]
+        havesection = true
       else
-        if sectionname==nil
-          raise _INTL("Expected a section at the beginning of the file (line {1})",lineno)
+        if sectionname == nil
+          raise _INTL("Expected a section at the beginning of the file (line {1})", lineno)
         end
-        lastsection.push(line.gsub(/\s+$/,""))
+        lastsection.push(line.gsub(/\s+$/, ""))
       end
     end
-    lineno+=1
-    if lineno%500==0
+    lineno += 1
+    if lineno % 500 == 0
       Graphics.update
     end
   }
   if havesection
-    yield lastsection,sectionname
+    yield lastsection, sectionname
   end
 end
 
 def pbGetText(infile)
   begin
-    file=File.open(infile,"rb")
+    file = File.open(infile, "rb")
   rescue
-    raise _INTL("Can't find {1}",infile)
+    raise _INTL("Can't find {1}", infile)
   end
-  intldat=[]
+  intldat = []
   begin
-    pbEachIntlSection(file) { |section,name|
-      next if section.length==0
+    pbEachIntlSection(file) { |section, name|
+      next if section.length == 0
       if !name[/^([Mm][Aa][Pp])?(\d+)$/]
-        raise _INTL("Invalid section name {1}",name)
+        raise _INTL("Invalid section name {1}", name)
       end
-      ismap=$~[1] && $~[1]!=""
-      id=$~[2].to_i
-      itemlength=0
+      ismap = $~[1] && $~[1] != ""
+      id = $~[2].to_i
+      itemlength = 0
       if section[0][/^\d+$/]
-        intlhash=[]
-        itemlength=3
+        intlhash = []
+        itemlength = 3
         if ismap
-          raise _INTL("Section {1} can't be an ordered list (section was recognized as an ordered list because its first line is a number)",name)
+          raise _INTL("Section {1} can't be an ordered list (section was recognized as an ordered list because its first line is a number)", name)
         end
-        if section.length%3!=0
-          raise _INTL("Section {1}'s line count is not divisible by 3 (section was recognized as an ordered list because its first line is a number)",name)
+        if section.length % 3 != 0
+          raise _INTL("Section {1}'s line count is not divisible by 3 (section was recognized as an ordered list because its first line is a number)", name)
         end
       else
-        intlhash=OrderedHash.new
-        itemlength=2
-        if section.length%2!=0
-          raise _INTL("Section {1} has an odd number of entries (section was recognized as a hash because its first line is not a number)",name)
+        intlhash = OrderedHash.new
+        itemlength = 2
+        if section.length % 2 != 0
+          raise _INTL("Section {1} has an odd number of entries (section was recognized as a hash because its first line is not a number)", name)
         end
       end
-      i=0
+      i = 0
       loop do
         break unless i < section.length
-        if itemlength==3
+        if itemlength == 3
           if !section[i][/^\d+$/]
-            raise _INTL("Expected a number in section {1}, got {2} instead",name,section[i])
+            raise _INTL("Expected a number in section {1}, got {2} instead", name, section[i])
           end
-          key=section[i].to_i
-          i+=1
+          key = section[i].to_i
+          i += 1
         else
-          key=MessageTypes.denormalizeValue(section[i])
+          key = MessageTypes.denormalizeValue(section[i])
         end
-        intlhash[key]=MessageTypes.denormalizeValue(section[i+1])
-        i+=2
+        intlhash[key] = MessageTypes.denormalizeValue(section[i + 1])
+        i += 2
       end
       if ismap
-        intldat[0]=[] if !intldat[0]
-        intldat[0][id]=intlhash
+        intldat[0] = [] if !intldat[0]
+        intldat[0][id] = intlhash
       else
-        intldat[id]=intlhash
+        intldat[id] = intlhash
       end
     }
   ensure
@@ -287,10 +287,10 @@ def pbGetText(infile)
 end
 
 def pbCompileText
-  outfile=File.open("intl.dat","wb")
+  outfile = File.open("intl.dat", "wb")
   begin
-    intldat=pbGetText("intl.txt")
-    Marshal.dump(intldat,outfile)
+    intldat = pbGetText("intl.txt")
+    Marshal.dump(intldat, outfile)
   rescue
     raise
   ensure
@@ -302,7 +302,7 @@ end
 
 class OrderedHash < Hash
   def initialize
-    @keys=[]
+    @keys = []
     super
   end
 
@@ -311,54 +311,54 @@ class OrderedHash < Hash
   end
 
   def inspect
-    str="{"
+    str = "{"
     for i in 0...@keys.length
-      str+=", " if i>0
-      str+=@keys[i].inspect+"=>"+self[@keys[i]].inspect
+      str += ", " if i > 0
+      str += @keys[i].inspect + "=>" + self[@keys[i]].inspect
     end
-    str+="}"
+    str += "}"
     return str
   end
 
   alias :to_s :inspect
 
-  def []=(key,value)
-    oldvalue=self[key]
+  def []=(key, value)
+    oldvalue = self[key]
     if !oldvalue && value
       @keys.push(key)
     elsif !value
-      @keys|=[]
-      @keys-=[key]
+      @keys |= []
+      @keys -= [key]
     end
-    return super(key,value)
+    return super(key, value)
   end
 
   def self._load(string)
-    ret=self.new
-    keysvalues=Marshal.load(string)
-    keys=keysvalues[0]
-    values=keysvalues[1]
+    ret = self.new
+    keysvalues = Marshal.load(string)
+    keys = keysvalues[0]
+    values = keysvalues[1]
     for i in 0...keys.length
-      ret[keys[i]]=values[i]
+      ret[keys[i]] = values[i]
     end
     return ret
   end
 
   def _dump(_depth = 100)
-    values=[]
+    values = []
     for key in @keys
       values.push(self[key])
     end
-    return Marshal.dump([@keys,values])
+    return Marshal.dump([@keys, values])
   end
 end
 
 
 
 class Messages
-  def initialize(filename = nil,delayLoad = false)
-    @messages=nil
-    @filename=filename
+  def initialize(filename = nil, delayLoad = false)
+    @messages = nil
+    @filename = filename
     if @filename && !delayLoad
       loadMessageFile(@filename)
     end
@@ -367,7 +367,7 @@ class Messages
   def delayedLoad
     if @filename && !@messages
       loadMessageFile(@filename)
-      @filename=nil
+      @filename = nil
     end
   end
 
@@ -384,13 +384,13 @@ class Messages
 
   def self.normalizeValue(value)
     if value[/[\r\n\t\x01]|^[\[\]]/]
-      ret=value.clone
-      ret.gsub!(/\r/,"<<r>>")
-      ret.gsub!(/\n/,"<<n>>")
-      ret.gsub!(/\t/,"<<t>>")
-      ret.gsub!(/\[/,"<<[>>")
-      ret.gsub!(/\]/,"<<]>>")
-      ret.gsub!(/\x01/,"<<1>>")
+      ret = value.clone
+      ret.gsub!(/\r/, "<<r>>")
+      ret.gsub!(/\n/, "<<n>>")
+      ret.gsub!(/\t/, "<<t>>")
+      ret.gsub!(/\[/, "<<[>>")
+      ret.gsub!(/\]/, "<<]>>")
+      ret.gsub!(/\x01/, "<<1>>")
       return ret
     end
     return value
@@ -398,45 +398,45 @@ class Messages
 
   def self.denormalizeValue(value)
     if value[/<<[rnt1\[\]]>>/]
-      ret=value.clone
-      ret.gsub!(/<<1>>/,"\1")
-      ret.gsub!(/<<r>>/,"\r")
-      ret.gsub!(/<<n>>/,"\n")
-      ret.gsub!(/<<\[>>/,"[")
-      ret.gsub!(/<<\]>>/,"]")
-      ret.gsub!(/<<t>>/,"\t")
+      ret = value.clone
+      ret.gsub!(/<<1>>/, "\1")
+      ret.gsub!(/<<r>>/, "\r")
+      ret.gsub!(/<<n>>/, "\n")
+      ret.gsub!(/<<\[>>/, "[")
+      ret.gsub!(/<<\]>>/, "]")
+      ret.gsub!(/<<t>>/, "\t")
       return ret
     end
     return value
   end
 
-  def self.writeObject(f,msgs,secname,origMessages = nil)
+  def self.writeObject(f, msgs, secname, origMessages = nil)
     return if !msgs
     if msgs.is_a?(Array)
       f.write("[#{secname}]\r\n")
       for j in 0...msgs.length
         next if nil_or_empty?(msgs[j])
-        value=Messages.normalizeValue(msgs[j])
-        origValue=""
+        value = Messages.normalizeValue(msgs[j])
+        origValue = ""
         if origMessages
-          origValue=Messages.normalizeValue(origMessages.get(secname,j))
+          origValue = Messages.normalizeValue(origMessages.get(secname, j))
         else
-          origValue=Messages.normalizeValue(MessageTypes.get(secname,j))
+          origValue = Messages.normalizeValue(MessageTypes.get(secname, j))
         end
         f.write("#{j}\r\n")
-        f.write(origValue+"\r\n")
-        f.write(value+"\r\n")
+        f.write(origValue + "\r\n")
+        f.write(value + "\r\n")
       end
     elsif msgs.is_a?(OrderedHash)
       f.write("[#{secname}]\r\n")
-      keys=msgs.keys
+      keys = msgs.keys
       for key in keys
         next if nil_or_empty?(msgs[key])
-        value=Messages.normalizeValue(msgs[key])
-        valkey=Messages.normalizeValue(key)
+        value = Messages.normalizeValue(msgs[key])
+        valkey = Messages.normalizeValue(key)
         # key is already serialized
-        f.write(valkey+"\r\n")
-        f.write(value+"\r\n")
+        f.write(valkey + "\r\n")
+        f.write(value + "\r\n")
       end
     end
   end
@@ -447,8 +447,8 @@ class Messages
 
   def extract(outfile)
 #    return if !@messages
-    origMessages=Messages.new("Data/messages.dat")
-    File.open(outfile,"wb") { |f|
+    origMessages = Messages.new("Data/messages.dat")
+    File.open(outfile, "wb") { |f|
       f.write(0xef.chr)
       f.write(0xbb.chr)
       f.write(0xbf.chr)
@@ -456,103 +456,103 @@ class Messages
       f.write("# translate every second line of this file.\r\n")
       if origMessages.messages[0]
         for i in 0...origMessages.messages[0].length
-          msgs=origMessages.messages[0][i]
-          Messages.writeObject(f,msgs,"Map#{i}",origMessages)
+          msgs = origMessages.messages[0][i]
+          Messages.writeObject(f, msgs, "Map#{i}", origMessages)
         end
       end
       for i in 1...origMessages.messages.length
-        msgs=origMessages.messages[i]
-        Messages.writeObject(f,msgs,i,origMessages)
+        msgs = origMessages.messages[i]
+        Messages.writeObject(f, msgs, i, origMessages)
       end
     }
   end
 
-  def setMessages(type,array)
-    @messages=[] if !@messages
-    arr=[]
+  def setMessages(type, array)
+    @messages = [] if !@messages
+    arr = []
     for i in 0...array.length
-      arr[i]=(array[i]) ? array[i] : ""
+      arr[i] = (array[i]) ? array[i] : ""
     end
-    @messages[type]=arr
+    @messages[type] = arr
   end
 
-  def addMessages(type,array)
-    @messages=[] if !@messages
-    arr=(@messages[type]) ? @messages[type] : []
+  def addMessages(type, array)
+    @messages = [] if !@messages
+    arr = (@messages[type]) ? @messages[type] : []
     for i in 0...array.length
-      arr[i]=(array[i]) ? array[i] : (arr[i]) ? arr[i] : ""
+      arr[i] = (array[i]) ? array[i] : (arr[i]) ? arr[i] : ""
     end
-    @messages[type]=arr
+    @messages[type] = arr
   end
 
-  def self.createHash(_type,array)
-    arr=OrderedHash.new
+  def self.createHash(_type, array)
+    arr = OrderedHash.new
     for i in 0...array.length
       if array[i]
-        key=Messages.stringToKey(array[i])
-        arr[key]=array[i]
+        key = Messages.stringToKey(array[i])
+        arr[key] = array[i]
       end
     end
     return arr
   end
 
-  def self.addToHash(_type,array,hash)
-    hash=OrderedHash.new if !hash
+  def self.addToHash(_type, array, hash)
+    hash = OrderedHash.new if !hash
     for i in 0...array.length
       if array[i]
-        key=Messages.stringToKey(array[i])
-        hash[key]=array[i]
+        key = Messages.stringToKey(array[i])
+        hash[key] = array[i]
       end
     end
     return hash
   end
 
-  def setMapMessagesAsHash(type,array)
-    @messages=[] if !@messages
-    @messages[0]=[] if !@messages[0]
-    @messages[0][type]=Messages.createHash(type,array)
+  def setMapMessagesAsHash(type, array)
+    @messages = [] if !@messages
+    @messages[0] = [] if !@messages[0]
+    @messages[0][type] = Messages.createHash(type, array)
   end
 
-  def addMapMessagesAsHash(type,array)
-    @messages=[] if !@messages
-    @messages[0]=[] if !@messages[0]
-    @messages[0][type]=Messages.addToHash(type,array,@messages[0][type])
+  def addMapMessagesAsHash(type, array)
+    @messages = [] if !@messages
+    @messages[0] = [] if !@messages[0]
+    @messages[0][type] = Messages.addToHash(type, array, @messages[0][type])
   end
 
-  def setMessagesAsHash(type,array)
-    @messages=[] if !@messages
-    @messages[type]=Messages.createHash(type,array)
+  def setMessagesAsHash(type, array)
+    @messages = [] if !@messages
+    @messages[type] = Messages.createHash(type, array)
   end
 
-  def addMessagesAsHash(type,array)
-    @messages=[] if !@messages
-    @messages[type]=Messages.addToHash(type,array,@messages[type])
+  def addMessagesAsHash(type, array)
+    @messages = [] if !@messages
+    @messages[type] = Messages.addToHash(type, array, @messages[type])
   end
 
   def saveMessages(filename = nil)
-    filename="Data/messages.dat" if !filename
-    File.open(filename,"wb") { |f| Marshal.dump(@messages,f) }
+    filename = "Data/messages.dat" if !filename
+    File.open(filename, "wb") { |f| Marshal.dump(@messages, f) }
   end
 
   def loadMessageFile(filename)
     begin
-      pbRgssOpen(filename,"rb") { |f| @messages=Marshal.load(f) }
+      pbRgssOpen(filename, "rb") { |f| @messages = Marshal.load(f) }
       if !@messages.is_a?(Array)
-        @messages=nil
+        @messages = nil
         raise "Corrupted data"
       end
       return @messages
     rescue
-      @messages=nil
+      @messages = nil
       return nil
     end
   end
 
-  def set(type,id,value)
+  def set(type, id, value)
     delayedLoad
     return if !@messages
     return if !@messages[type]
-    @messages[type][id]=value
+    @messages[type][id] = value
   end
 
   def getCount(type)
@@ -562,7 +562,7 @@ class Messages
     return @messages[type].length
   end
 
-  def get(type,id)
+  def get(type, id)
     delayedLoad
     return "" if !@messages
     return "" if !@messages[type]
@@ -570,21 +570,21 @@ class Messages
     return @messages[type][id]
   end
 
-  def getFromHash(type,key)
+  def getFromHash(type, key)
     delayedLoad
     return key if !@messages || !@messages[type] || !key
-    id=Messages.stringToKey(key)
+    id = Messages.stringToKey(key)
     return key if !@messages[type][id]
     return @messages[type][id]
   end
 
-  def getFromMapHash(type,key)
+  def getFromMapHash(type, key)
     delayedLoad
     return key if !@messages
     return key if !@messages[0]
     return key if !@messages[0][type] && !@messages[0][0]
-    id=Messages.stringToKey(key)
-    if @messages[0][type] &&  @messages[0][type][id]
+    id = Messages.stringToKey(key)
+    if @messages[0][type] && @messages[0][type][id]
       return @messages[0][type][id]
     elsif @messages[0][0] && @messages[0][0][id]
       return @messages[0][0][id]
@@ -625,7 +625,7 @@ module MessageTypes
   RibbonDescriptions = 26
   StorageCreator     = 27
   @@messages         = Messages.new
-  @@messagesFallback = Messages.new("Data/messages.dat",true)
+  @@messagesFallback = Messages.new("Data/messages.dat", true)
 
   def self.stringToKey(str)
     return Messages.stringToKey(str)
@@ -639,7 +639,7 @@ module MessageTypes
     Messages.denormalizeValue(value)
   end
 
-  def self.writeObject(f,msgs,secname)
+  def self.writeObject(f, msgs, secname)
     Messages.denormalizeValue(str)
   end
 
@@ -647,32 +647,32 @@ module MessageTypes
     @@messages.extract(outfile)
   end
 
-  def self.setMessages(type,array)
-    @@messages.setMessages(type,array)
+  def self.setMessages(type, array)
+    @@messages.setMessages(type, array)
   end
 
-  def self.addMessages(type,array)
-    @@messages.addMessages(type,array)
+  def self.addMessages(type, array)
+    @@messages.addMessages(type, array)
   end
 
-  def self.createHash(type,array)
-    Messages.createHash(type,array)
+  def self.createHash(type, array)
+    Messages.createHash(type, array)
   end
 
-  def self.addMapMessagesAsHash(type,array)
-    @@messages.addMapMessagesAsHash(type,array)
+  def self.addMapMessagesAsHash(type, array)
+    @@messages.addMapMessagesAsHash(type, array)
   end
 
-  def self.setMapMessagesAsHash(type,array)
-    @@messages.setMapMessagesAsHash(type,array)
+  def self.setMapMessagesAsHash(type, array)
+    @@messages.setMapMessagesAsHash(type, array)
   end
 
-  def self.addMessagesAsHash(type,array)
-    @@messages.addMessagesAsHash(type,array)
+  def self.addMessagesAsHash(type, array)
+    @@messages.addMessagesAsHash(type, array)
   end
 
-  def self.setMessagesAsHash(type,array)
-    @@messages.setMessagesAsHash(type,array)
+  def self.setMessagesAsHash(type, array)
+    @@messages.setMessagesAsHash(type, array)
   end
 
   def self.saveMessages(filename = nil)
@@ -683,30 +683,30 @@ module MessageTypes
     @@messages.loadMessageFile(filename)
   end
 
-  def self.get(type,id)
-    ret=@@messages.get(type,id)
-    if ret==""
-      ret=@@messagesFallback.get(type,id)
+  def self.get(type, id)
+    ret = @@messages.get(type, id)
+    if ret == ""
+      ret = @@messagesFallback.get(type, id)
     end
     return ret
   end
 
   def self.getCount(type)
-    c1=@@messages.getCount(type)
-    c2=@@messagesFallback.getCount(type)
-    return c1>c2 ? c1 : c2
+    c1 = @@messages.getCount(type)
+    c2 = @@messagesFallback.getCount(type)
+    return c1 > c2 ? c1 : c2
   end
 
-  def self.getOriginal(type,id)
-    return @@messagesFallback.get(type,id)
+  def self.getOriginal(type, id)
+    return @@messagesFallback.get(type, id)
   end
 
-  def self.getFromHash(type,key)
-    @@messages.getFromHash(type,key)
+  def self.getFromHash(type, key)
+    @@messages.getFromHash(type, key)
   end
 
-  def self.getFromMapHash(type,key)
-    @@messages.getFromMapHash(type,key)
+  def self.getFromMapHash(type, key)
+    @@messages.getFromMapHash(type, key)
   end
 end
 
@@ -720,25 +720,25 @@ def pbGetMessageCount(type)
   return MessageTypes.getCount(type)
 end
 
-def pbGetMessage(type,id)
-  return MessageTypes.get(type,id)
+def pbGetMessage(type, id)
+  return MessageTypes.get(type, id)
 end
 
-def pbGetMessageFromHash(type,id)
-  return MessageTypes.getFromHash(type,id)
+def pbGetMessageFromHash(type, id)
+  return MessageTypes.getFromHash(type, id)
 end
 
 # Replaces first argument with a localized version and formats the other
 # parameters by replacing {1}, {2}, etc. with those placeholders.
 def _INTL(*arg)
   begin
-    string=MessageTypes.getFromHash(MessageTypes::ScriptTexts,arg[0])
+    string = MessageTypes.getFromHash(MessageTypes::ScriptTexts, arg[0])
   rescue
-    string=arg[0]
+    string = arg[0]
   end
-  string=string.clone
+  string = string.clone
   for i in 1...arg.length
-    string.gsub!(/\{#{i}\}/,"#{arg[i]}")
+    string.gsub!(/\{#{i}\}/, "#{arg[i]}")
   end
   return string
 end
@@ -748,38 +748,38 @@ end
 # This version acts more like sprintf, supports e.g. {1:d} or {2:s}
 def _ISPRINTF(*arg)
   begin
-    string=MessageTypes.getFromHash(MessageTypes::ScriptTexts,arg[0])
+    string = MessageTypes.getFromHash(MessageTypes::ScriptTexts, arg[0])
   rescue
-    string=arg[0]
+    string = arg[0]
   end
-  string=string.clone
+  string = string.clone
   for i in 1...arg.length
     string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m|
-      next sprintf("%"+$1,arg[i])
+      next sprintf("%" + $1, arg[i])
     }
   end
   return string
 end
 
 def _I(str)
-  return _MAPINTL($game_map.map_id,str)
+  return _MAPINTL($game_map.map_id, str)
 end
 
-def _MAPINTL(mapid,*arg)
-  string=MessageTypes.getFromMapHash(mapid,arg[0])
-  string=string.clone
+def _MAPINTL(mapid, *arg)
+  string = MessageTypes.getFromMapHash(mapid, arg[0])
+  string = string.clone
   for i in 1...arg.length
-    string.gsub!(/\{#{i}\}/,"#{arg[i]}")
+    string.gsub!(/\{#{i}\}/, "#{arg[i]}")
   end
   return string
 end
 
-def _MAPISPRINTF(mapid,*arg)
-  string=MessageTypes.getFromMapHash(mapid,arg[0])
-  string=string.clone
+def _MAPISPRINTF(mapid, *arg)
+  string = MessageTypes.getFromMapHash(mapid, arg[0])
+  string = string.clone
   for i in 1...arg.length
     string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m|
-      next sprintf("%"+$1,arg[i])
+      next sprintf("%" + $1, arg[i])
     }
   end
   return string

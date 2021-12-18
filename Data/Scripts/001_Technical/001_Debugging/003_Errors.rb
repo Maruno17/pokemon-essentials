@@ -13,7 +13,7 @@ class EventScriptError < Exception
   end
 end
 
-def pbGetExceptionMessage(e,_script = "")
+def pbGetExceptionMessage(e, _script = "")
   return e.event_message.dup if e.is_a?(EventScriptError)   # Message with map/event ID generated elsewhere
   emessage = e.message.dup
   emessage.force_encoding(Encoding::UTF_8)

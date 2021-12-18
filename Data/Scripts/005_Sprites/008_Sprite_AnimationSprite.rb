@@ -5,7 +5,7 @@ automatically when its animation is finished.
 Used for grass rustling and so forth.
 =end
 class AnimationSprite < RPG::Sprite
-  def initialize(animID,map,tileX,tileY,viewport = nil,tinting = false,height = 3)
+  def initialize(animID, map, tileX, tileY, viewport = nil, tinting = false, height = 3)
     super(viewport)
     @tileX = tileX
     @tileY = tileY
@@ -14,7 +14,7 @@ class AnimationSprite < RPG::Sprite
     @map = map
     setCoords
     pbDayNightTint(self) if tinting
-    self.animation($data_animations[animID],true,height)
+    self.animation($data_animations[animID], true, height)
   end
 
   def setCoords
@@ -46,20 +46,20 @@ class Spriteset_Map
   alias _animationSprite_dispose dispose
 
   def initialize(map = nil)
-    @usersprites=[]
+    @usersprites = []
     _animationSprite_initialize(map)
   end
 
-  def addUserAnimation(animID,x,y,tinting = false,height = 3)
-    sprite=AnimationSprite.new(animID,self.map,x,y,@@viewport1,tinting,height)
+  def addUserAnimation(animID, x, y, tinting = false, height = 3)
+    sprite = AnimationSprite.new(animID, self.map, x, y, @@viewport1, tinting, height)
     addUserSprite(sprite)
     return sprite
   end
 
   def addUserSprite(sprite)
     for i in 0...@usersprites.length
-      if @usersprites[i]==nil || @usersprites[i].disposed?
-        @usersprites[i]=sprite
+      if @usersprites[i] == nil || @usersprites[i].disposed?
+        @usersprites[i] = sprite
         return
       end
     end
@@ -75,7 +75,7 @@ class Spriteset_Map
   end
 
   def update
-    @@viewport3.tone.set(0,0,0,0)
+    @@viewport3.tone.set(0, 0, 0, 0)
     _animationSprite_update
     for i in 0...@usersprites.length
       @usersprites[i].update if !@usersprites[i].disposed?

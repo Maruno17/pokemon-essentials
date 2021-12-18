@@ -354,7 +354,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
           end
         end
       when 2   # Randomise pID
-        pkmn.personalID = rand(2 ** 16) | rand(2 ** 16) << 16
+        pkmn.personalID = rand(2**16) | rand(2**16) << 16
         pkmn.calc_stats
         screen.pbRefreshSingle(pkmnid)
       end

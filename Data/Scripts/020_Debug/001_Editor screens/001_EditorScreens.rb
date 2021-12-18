@@ -620,7 +620,7 @@ end
 # Trainer Pokémon editor
 #===============================================================================
 module TrainerPokemonProperty
-  def self.set(settingname,initsetting)
+  def self.set(settingname, initsetting)
     initsetting = { :species => nil, :level => 10 } if !initsetting
     oldsetting = [
       initsetting[:species],
@@ -1248,7 +1248,7 @@ def pbRegionalDexEditor(dex)
         end
       else   # Cancel
         case pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
+           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
         when 0   # Save all changes to Dex
           dex.slice!(-1) while !dex[-1]
           ret = dex
@@ -1400,7 +1400,7 @@ def pbEvoFamiliesToStrings
   for fam in 0...families.length
     string = ""
     for p in 0...families[fam].length
-      if p>=3
+      if p >= 3
         string += " + #{families[fam].length - 3} more"
         break
       end
@@ -1423,7 +1423,7 @@ def pbAnimationsOrganiser
     pbMessage(_INTL("No animations exist."))
     return
   end
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   cmdwin = pbListWindow([])
   cmdwin.viewport = viewport
@@ -1437,43 +1437,43 @@ def pbAnimationsOrganiser
   commands = []
   refreshlist = true
   oldsel = -1
-  cmd = [0,0]
+  cmd = [0, 0]
   loop do
     if refreshlist
       commands = []
       for i in 0...list.length
-        commands.push(sprintf("%d: %s",i,(list[i]) ? list[i].name : "???"))
+        commands.push(sprintf("%d: %s", i, (list[i]) ? list[i].name : "???"))
       end
     end
     refreshlist = false
     oldsel = -1
-    cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
-    if cmd[0]==1   # Swap animation up
-      if cmd[1]>=0 && cmd[1]<commands.length-1
-        list[cmd[1]+1],list[cmd[1]] = list[cmd[1]],list[cmd[1]+1]
+    cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
+    if cmd[0] == 1   # Swap animation up
+      if cmd[1] >= 0 && cmd[1] < commands.length - 1
+        list[cmd[1] + 1], list[cmd[1]] = list[cmd[1]], list[cmd[1] + 1]
         refreshlist = true
       end
-    elsif cmd[0]==2   # Swap animation down
-      if cmd[1]>0
-        list[cmd[1]-1],list[cmd[1]] = list[cmd[1]],list[cmd[1]-1]
+    elsif cmd[0] == 2   # Swap animation down
+      if cmd[1] > 0
+        list[cmd[1] - 1], list[cmd[1]] = list[cmd[1]], list[cmd[1] - 1]
         refreshlist = true
       end
-    elsif cmd[0]==3   # Delete spot
+    elsif cmd[0] == 3   # Delete spot
       list.delete_at(cmd[1])
-      cmd[1] = [cmd[1],list.length-1].min
+      cmd[1] = [cmd[1], list.length - 1].min
       refreshlist = true
-      pbWait(Graphics.frame_rate*2/10)
-    elsif cmd[0]==4   # Insert spot
-      list.insert(cmd[1],PBAnimation.new)
+      pbWait(Graphics.frame_rate * 2 / 10)
+    elsif cmd[0] == 4   # Insert spot
+      list.insert(cmd[1], PBAnimation.new)
       refreshlist = true
-      pbWait(Graphics.frame_rate*2/10)
-    elsif cmd[0]==0
+      pbWait(Graphics.frame_rate * 2 / 10)
+    elsif cmd[0] == 0
       cmd2 = pbMessage(_INTL("Save changes?"),
-          [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-      if cmd2==0 || cmd2==1
-        if cmd2==0
+          [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+      if cmd2 == 0 || cmd2 == 1
+        if cmd2 == 0
           # Save animations here
-          save_data(list,"Data/PkmnAnimations.rxdata")
+          save_data(list, "Data/PkmnAnimations.rxdata")
           $game_temp.battle_animations_data = nil
           pbMessage(_INTL("Data saved."))
         end

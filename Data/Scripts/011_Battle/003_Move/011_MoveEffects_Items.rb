@@ -3,7 +3,7 @@
 # Items stolen from wild Pokémon are kept after the battle.
 #===============================================================================
 class Battle::Move::UserTakesTargetItem < Battle::Move
-  def pbEffectAfterAllHits(user,target)
+  def pbEffectAfterAllHits(user, target)
     return if user.wild?   # Wild Pokémon can't thieve
     return if user.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
@@ -20,7 +20,7 @@ class Battle::Move::UserTakesTargetItem < Battle::Move
     else
       target.pbRemoveItem(false)
     end
-    @battle.pbDisplay(_INTL("{1} stole {2}'s {3}!",user.pbThis,target.pbThis(true),itemName))
+    @battle.pbDisplay(_INTL("{1} stole {2}'s {3}!", user.pbThis, target.pbThis(true), itemName))
     user.pbHeldItemTriggerCheck
   end
 end
@@ -35,7 +35,7 @@ class Battle::Move::TargetTakesUserItem < Battle::Move
     return super
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !user.item || user.unlosableItem?(user.item)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -51,7 +51,7 @@ class Battle::Move::TargetTakesUserItem < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     itemName = user.itemName
     target.item = user.item
     # Permanently steal the item from wild Pokémon
@@ -61,7 +61,7 @@ class Battle::Move::TargetTakesUserItem < Battle::Move
     else
       user.pbRemoveItem(false)
     end
-    @battle.pbDisplay(_INTL("{1} received {2} from {3}!",target.pbThis,itemName,user.pbThis(true)))
+    @battle.pbDisplay(_INTL("{1} received {2} from {3}!", target.pbThis, itemName, user.pbThis(true)))
     target.pbHeldItemTriggerCheck
   end
 end
@@ -71,7 +71,7 @@ end
 # (Switcheroo, Trick)
 #===============================================================================
 class Battle::Move::UserTargetSwapItems < Battle::Move
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if user.wild?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -107,7 +107,7 @@ class Battle::Move::UserTargetSwapItems < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     oldUserItem = user.item
     oldUserItemName = user.itemName
     oldTargetItem = target.item
@@ -122,9 +122,9 @@ class Battle::Move::UserTargetSwapItems < Battle::Move
     if target.wild? && !user.initialItem && oldTargetItem == target.initialItem
       user.setInitialItem(oldTargetItem)
     end
-    @battle.pbDisplay(_INTL("{1} switched items with its opponent!",user.pbThis))
-    @battle.pbDisplay(_INTL("{1} obtained {2}.",user.pbThis,oldTargetItemName)) if oldTargetItem
-    @battle.pbDisplay(_INTL("{1} obtained {2}.",target.pbThis,oldUserItemName)) if oldUserItem
+    @battle.pbDisplay(_INTL("{1} switched items with its opponent!", user.pbThis))
+    @battle.pbDisplay(_INTL("{1} obtained {2}.", user.pbThis, oldTargetItemName)) if oldTargetItem
+    @battle.pbDisplay(_INTL("{1} obtained {2}.", target.pbThis, oldUserItemName)) if oldUserItem
     user.pbHeldItemTriggerCheck
     target.pbHeldItemTriggerCheck
   end
@@ -136,7 +136,7 @@ end
 class Battle::Move::RestoreUserConsumedItem < Battle::Move
   def canSnatch?; return true; end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !user.recycleItem
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -153,9 +153,9 @@ class Battle::Move::RestoreUserConsumedItem < Battle::Move
     user.effects[PBEffects::PickupUse]  = 0
     itemName = GameData::Item.get(item).name
     if itemName.starts_with_vowel?
-      @battle.pbDisplay(_INTL("{1} found an {2}!",user.pbThis,itemName))
+      @battle.pbDisplay(_INTL("{1} found an {2}!", user.pbThis, itemName))
     else
-      @battle.pbDisplay(_INTL("{1} found a {2}!",user.pbThis,itemName))
+      @battle.pbDisplay(_INTL("{1} found a {2}!", user.pbThis, itemName))
     end
     user.pbHeldItemTriggerCheck
   end
@@ -166,17 +166,17 @@ end
 # If target has a losable item, damage is multiplied by 1.5.
 #===============================================================================
 class Battle::Move::RemoveTargetItem < Battle::Move
-  def pbBaseDamage(baseDmg,user,target)
+  def pbBaseDamage(baseDmg, user, target)
     if Settings::MECHANICS_GENERATION >= 6 &&
        target.item && !target.unlosableItem?(target.item)
        # NOTE: Damage is still boosted even if target has Sticky Hold or a
        #       substitute.
-      baseDmg = (baseDmg*1.5).round
+      baseDmg = (baseDmg * 1.5).round
     end
     return baseDmg
   end
 
-  def pbEffectAfterAllHits(user,target)
+  def pbEffectAfterAllHits(user, target)
     return if user.wild?   # Wild Pokémon can't knock off
     return if user.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
@@ -184,7 +184,7 @@ class Battle::Move::RemoveTargetItem < Battle::Move
     return if target.hasActiveAbility?(:STICKYHOLD) && !@battle.moldBreaker
     itemName = target.itemName
     target.pbRemoveItem(false)
-    @battle.pbDisplay(_INTL("{1} dropped its {2}!",target.pbThis,itemName))
+    @battle.pbDisplay(_INTL("{1} dropped its {2}!", target.pbThis, itemName))
   end
 end
 
@@ -192,12 +192,12 @@ end
 # Target's berry/Gem is destroyed. (Incinerate)
 #===============================================================================
 class Battle::Move::DestroyTargetBerryOrGem < Battle::Move
-  def pbEffectWhenDealingDamage(user,target)
+  def pbEffectWhenDealingDamage(user, target)
     return if target.damageState.substitute || target.damageState.berryWeakened
     return if !target.item || (!target.item.is_berry? &&
               !(Settings::MECHANICS_GENERATION >= 6 && target.item.is_gem?))
     target.pbRemoveItem
-    @battle.pbDisplay(_INTL("{1}'s {2} was incinerated!",target.pbThis,target.itemName))
+    @battle.pbDisplay(_INTL("{1}'s {2} was incinerated!", target.pbThis, target.itemName))
   end
 end
 
@@ -251,16 +251,16 @@ class Battle::Move::StartTargetCannotUseItem < Battle::Move
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.effects[PBEffects::Embargo]>0
+    if target.effects[PBEffects::Embargo] > 0
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     target.effects[PBEffects::Embargo] = 5
-    @battle.pbDisplay(_INTL("{1} can't use items anymore!",target.pbThis))
+    @battle.pbDisplay(_INTL("{1} can't use items anymore!", target.pbThis))
   end
 end
 
@@ -270,7 +270,7 @@ end
 #===============================================================================
 class Battle::Move::StartNegateHeldItems < Battle::Move
   def pbEffectGeneral(user)
-    if @battle.field.effects[PBEffects::MagicRoom]>0
+    if @battle.field.effects[PBEffects::MagicRoom] > 0
       @battle.field.effects[PBEffects::MagicRoom] = 0
       @battle.pbDisplay(_INTL("The area returned to normal!"))
     else
@@ -279,8 +279,8 @@ class Battle::Move::StartNegateHeldItems < Battle::Move
     end
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
-    return if @battle.field.effects[PBEffects::MagicRoom]>0   # No animation
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    return if @battle.field.effects[PBEffects::MagicRoom] > 0   # No animation
     super
   end
 end
@@ -374,7 +374,7 @@ end
 # User consumes target's berry and gains its effect. (Bug Bite, Pluck)
 #===============================================================================
 class Battle::Move::UserConsumeTargetBerry < Battle::Move
-  def pbEffectAfterAllHits(user,target)
+  def pbEffectAfterAllHits(user, target)
     return if user.fainted? || target.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
     return if !target.item || !target.item.is_berry?
@@ -382,8 +382,8 @@ class Battle::Move::UserConsumeTargetBerry < Battle::Move
     item = target.item
     itemName = target.itemName
     target.pbRemoveItem
-    @battle.pbDisplay(_INTL("{1} stole and ate its target's {2}!",user.pbThis,itemName))
-    user.pbHeldItemTriggerCheck(item,false)
+    @battle.pbDisplay(_INTL("{1} stole and ate its target's {2}!", user.pbThis, itemName))
+    user.pbHeldItemTriggerCheck(item, false)
   end
 end
 
@@ -391,114 +391,114 @@ end
 # User flings its item at the target. Power/effect depend on the item. (Fling)
 #===============================================================================
 class Battle::Move::ThrowUserItemAtTarget < Battle::Move
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     # 80 => all Mega Stones
     # 10 => all Berries
     @flingPowers = {
       130 => [:IRONBALL],
-      100 => [:HARDSTONE,:RAREBONE,
+      100 => [:HARDSTONE, :RAREBONE,
               # Fossils
-              :ARMORFOSSIL,:CLAWFOSSIL,:COVERFOSSIL,:DOMEFOSSIL,:HELIXFOSSIL,
-              :JAWFOSSIL,:OLDAMBER,:PLUMEFOSSIL,:ROOTFOSSIL,:SAILFOSSIL,
+              :ARMORFOSSIL, :CLAWFOSSIL, :COVERFOSSIL, :DOMEFOSSIL, :HELIXFOSSIL,
+              :JAWFOSSIL, :OLDAMBER, :PLUMEFOSSIL, :ROOTFOSSIL, :SAILFOSSIL,
               :SKULLFOSSIL],
-       90 => [:DEEPSEATOOTH,:GRIPCLAW,:THICKCLUB,
+       90 => [:DEEPSEATOOTH, :GRIPCLAW, :THICKCLUB,
               # Plates
-              :DRACOPLATE,:DREADPLATE,:EARTHPLATE,:FISTPLATE,:FLAMEPLATE,
-              :ICICLEPLATE,:INSECTPLATE,:IRONPLATE,:MEADOWPLATE,:MINDPLATE,
-              :PIXIEPLATE,:SKYPLATE,:SPLASHPLATE,:SPOOKYPLATE,:STONEPLATE,
-              :TOXICPLATE,:ZAPPLATE],
-       80 => [:ASSAULTVEST,:CHIPPEDPOT,:CRACKEDPOT,:DAWNSTONE,:DUSKSTONE,
-              :ELECTIRIZER,:HEAVYDUTYBOOTS,:MAGMARIZER,:ODDKEYSTONE,:OVALSTONE,
-              :PROTECTOR,:QUICKCLAW,:RAZORCLAW,:SACHET,:SAFETYGOGGLES,
-              :SHINYSTONE,:STICKYBARB,:WEAKNESSPOLICY,:WHIPPEDDREAM],
-       70 => [:DRAGONFANG,:POISONBARB,
+              :DRACOPLATE, :DREADPLATE, :EARTHPLATE, :FISTPLATE, :FLAMEPLATE,
+              :ICICLEPLATE, :INSECTPLATE, :IRONPLATE, :MEADOWPLATE, :MINDPLATE,
+              :PIXIEPLATE, :SKYPLATE, :SPLASHPLATE, :SPOOKYPLATE, :STONEPLATE,
+              :TOXICPLATE, :ZAPPLATE],
+       80 => [:ASSAULTVEST, :CHIPPEDPOT, :CRACKEDPOT, :DAWNSTONE, :DUSKSTONE,
+              :ELECTIRIZER, :HEAVYDUTYBOOTS, :MAGMARIZER, :ODDKEYSTONE, :OVALSTONE,
+              :PROTECTOR, :QUICKCLAW, :RAZORCLAW, :SACHET, :SAFETYGOGGLES,
+              :SHINYSTONE, :STICKYBARB, :WEAKNESSPOLICY, :WHIPPEDDREAM],
+       70 => [:DRAGONFANG, :POISONBARB,
               # EV-training items (Macho Brace is 60)
-              :POWERANKLET,:POWERBAND,:POWERBELT,:POWERBRACER,:POWERLENS,
+              :POWERANKLET, :POWERBAND, :POWERBELT, :POWERBRACER, :POWERLENS,
               :POWERWEIGHT,
               # Drives
-              :BURNDRIVE,:CHILLDRIVE,:DOUSEDRIVE,:SHOCKDRIVE],
-       60 => [:ADAMANTORB,:DAMPROCK,:GRISEOUSORB,:HEATROCK,:LEEK,:LUSTROUSORB,
-              :MACHOBRACE,:ROCKYHELMET,:STICK,:TERRAINEXTENDER],
-       50 => [:DUBIOUSDISC,:SHARPBEAK,
+              :BURNDRIVE, :CHILLDRIVE, :DOUSEDRIVE, :SHOCKDRIVE],
+       60 => [:ADAMANTORB, :DAMPROCK, :GRISEOUSORB, :HEATROCK, :LEEK, :LUSTROUSORB,
+              :MACHOBRACE, :ROCKYHELMET, :STICK, :TERRAINEXTENDER],
+       50 => [:DUBIOUSDISC, :SHARPBEAK,
               # Memories
-              :BUGMEMORY,:DARKMEMORY,:DRAGONMEMORY,:ELECTRICMEMORY,:FAIRYMEMORY,
-              :FIGHTINGMEMORY,:FIREMEMORY,:FLYINGMEMORY,:GHOSTMEMORY,
-              :GRASSMEMORY,:GROUNDMEMORY,:ICEMEMORY,:POISONMEMORY,
-              :PSYCHICMEMORY,:ROCKMEMORY,:STEELMEMORY,:WATERMEMORY],
-       40 => [:EVIOLITE,:ICYROCK,:LUCKYPUNCH],
-       30 => [:ABSORBBULB,:ADRENALINEORB,:AMULETCOIN,:BINDINGBAND,:BLACKBELT,
-              :BLACKGLASSES,:BLACKSLUDGE,:BOTTLECAP,:CELLBATTERY,:CHARCOAL,
-              :CLEANSETAG,:DEEPSEASCALE,:DRAGONSCALE,:EJECTBUTTON,:ESCAPEROPE,
-              :EXPSHARE,:FLAMEORB,:FLOATSTONE,:FLUFFYTAIL,:GOLDBOTTLECAP,
-              :HEARTSCALE,:HONEY,:KINGSROCK,:LIFEORB,:LIGHTBALL,:LIGHTCLAY,
-              :LUCKYEGG,:LUMINOUSMOSS,:MAGNET,:METALCOAT,:METRONOME,
-              :MIRACLESEED,:MYSTICWATER,:NEVERMELTICE,:PASSORB,:POKEDOLL,
-              :POKETOY,:PRISMSCALE,:PROTECTIVEPADS,:RAZORFANG,:SACREDASH,
-              :SCOPELENS,:SHELLBELL,:SHOALSALT,:SHOALSHELL,:SMOKEBALL,:SNOWBALL,
-              :SOULDEW,:SPELLTAG,:TOXICORB,:TWISTEDSPOON,:UPGRADE,
+              :BUGMEMORY, :DARKMEMORY, :DRAGONMEMORY, :ELECTRICMEMORY, :FAIRYMEMORY,
+              :FIGHTINGMEMORY, :FIREMEMORY, :FLYINGMEMORY, :GHOSTMEMORY,
+              :GRASSMEMORY, :GROUNDMEMORY, :ICEMEMORY, :POISONMEMORY,
+              :PSYCHICMEMORY, :ROCKMEMORY, :STEELMEMORY, :WATERMEMORY],
+       40 => [:EVIOLITE, :ICYROCK, :LUCKYPUNCH],
+       30 => [:ABSORBBULB, :ADRENALINEORB, :AMULETCOIN, :BINDINGBAND, :BLACKBELT,
+              :BLACKGLASSES, :BLACKSLUDGE, :BOTTLECAP, :CELLBATTERY, :CHARCOAL,
+              :CLEANSETAG, :DEEPSEASCALE, :DRAGONSCALE, :EJECTBUTTON, :ESCAPEROPE,
+              :EXPSHARE, :FLAMEORB, :FLOATSTONE, :FLUFFYTAIL, :GOLDBOTTLECAP,
+              :HEARTSCALE, :HONEY, :KINGSROCK, :LIFEORB, :LIGHTBALL, :LIGHTCLAY,
+              :LUCKYEGG, :LUMINOUSMOSS, :MAGNET, :METALCOAT, :METRONOME,
+              :MIRACLESEED, :MYSTICWATER, :NEVERMELTICE, :PASSORB, :POKEDOLL,
+              :POKETOY, :PRISMSCALE, :PROTECTIVEPADS, :RAZORFANG, :SACREDASH,
+              :SCOPELENS, :SHELLBELL, :SHOALSALT, :SHOALSHELL, :SMOKEBALL, :SNOWBALL,
+              :SOULDEW, :SPELLTAG, :TOXICORB, :TWISTEDSPOON, :UPGRADE,
               # Healing items
-              :ANTIDOTE,:AWAKENING,:BERRYJUICE,:BIGMALASADA,:BLUEFLUTE,
-              :BURNHEAL,:CASTELIACONE,:ELIXIR,:ENERGYPOWDER,:ENERGYROOT,:ETHER,
-              :FRESHWATER,:FULLHEAL,:FULLRESTORE,:HEALPOWDER,:HYPERPOTION,
-              :ICEHEAL,:LAVACOOKIE,:LEMONADE,:LUMIOSEGALETTE,:MAXELIXIR,
-              :MAXETHER,:MAXHONEY,:MAXPOTION,:MAXREVIVE,:MOOMOOMILK,:OLDGATEAU,
-              :PARALYZEHEAL,:PARLYZHEAL,:PEWTERCRUNCHIES,:POTION,:RAGECANDYBAR,
-              :REDFLUTE,:REVIVALHERB,:REVIVE,:SHALOURSABLE,:SODAPOP,
-              :SUPERPOTION,:SWEETHEART,:YELLOWFLUTE,
+              :ANTIDOTE, :AWAKENING, :BERRYJUICE, :BIGMALASADA, :BLUEFLUTE,
+              :BURNHEAL, :CASTELIACONE, :ELIXIR, :ENERGYPOWDER, :ENERGYROOT, :ETHER,
+              :FRESHWATER, :FULLHEAL, :FULLRESTORE, :HEALPOWDER, :HYPERPOTION,
+              :ICEHEAL, :LAVACOOKIE, :LEMONADE, :LUMIOSEGALETTE, :MAXELIXIR,
+              :MAXETHER, :MAXHONEY, :MAXPOTION, :MAXREVIVE, :MOOMOOMILK, :OLDGATEAU,
+              :PARALYZEHEAL, :PARLYZHEAL, :PEWTERCRUNCHIES, :POTION, :RAGECANDYBAR,
+              :REDFLUTE, :REVIVALHERB, :REVIVE, :SHALOURSABLE, :SODAPOP,
+              :SUPERPOTION, :SWEETHEART, :YELLOWFLUTE,
               # Battle items
-              :XACCURACY,:XACCURACY2,:XACCURACY3,:XACCURACY6,
-              :XATTACK,:XATTACK2,:XATTACK3,:XATTACK6,
-              :XDEFEND,:XDEFEND2,:XDEFEND3,:XDEFEND6,
-              :XDEFENSE,:XDEFENSE2,:XDEFENSE3,:XDEFENSE6,
-              :XSPATK,:XSPATK2,:XSPATK3,:XSPATK6,
-              :XSPECIAL,:XSPECIAL2,:XSPECIAL3,:XSPECIAL6,
-              :XSPDEF,:XSPDEF2,:XSPDEF3,:XSPDEF6,
-              :XSPEED,:XSPEED2,:XSPEED3,:XSPEED6,
-              :DIREHIT,:DIREHIT2,:DIREHIT3,
-              :ABILITYURGE,:GUARDSPEC,:ITEMDROP,:ITEMURGE,:RESETURGE,
+              :XACCURACY, :XACCURACY2, :XACCURACY3, :XACCURACY6,
+              :XATTACK, :XATTACK2, :XATTACK3, :XATTACK6,
+              :XDEFEND, :XDEFEND2, :XDEFEND3, :XDEFEND6,
+              :XDEFENSE, :XDEFENSE2, :XDEFENSE3, :XDEFENSE6,
+              :XSPATK, :XSPATK2, :XSPATK3, :XSPATK6,
+              :XSPECIAL, :XSPECIAL2, :XSPECIAL3, :XSPECIAL6,
+              :XSPDEF, :XSPDEF2, :XSPDEF3, :XSPDEF6,
+              :XSPEED, :XSPEED2, :XSPEED3, :XSPEED6,
+              :DIREHIT, :DIREHIT2, :DIREHIT3,
+              :ABILITYURGE, :GUARDSPEC, :ITEMDROP, :ITEMURGE, :RESETURGE,
               :MAXMUSHROOMS,
               # Vitamins
-              :CALCIUM,:CARBOS,:HPUP,:IRON,:PPUP,:PPMAX,:PROTEIN,:ZINC,
+              :CALCIUM, :CARBOS, :HPUP, :IRON, :PPUP, :PPMAX, :PROTEIN, :ZINC,
               :RARECANDY,
               # Most evolution stones (see also 80)
-              :EVERSTONE,:FIRESTONE,:ICESTONE,:LEAFSTONE,:MOONSTONE,:SUNSTONE,
-              :THUNDERSTONE,:WATERSTONE,:SWEETAPPLE,:TARTAPPLE, :GALARICACUFF,
+              :EVERSTONE, :FIRESTONE, :ICESTONE, :LEAFSTONE, :MOONSTONE, :SUNSTONE,
+              :THUNDERSTONE, :WATERSTONE, :SWEETAPPLE, :TARTAPPLE, :GALARICACUFF,
               :GALARICAWREATH,
               # Repels
-              :MAXREPEL,:REPEL,:SUPERREPEL,
+              :MAXREPEL, :REPEL, :SUPERREPEL,
               # Mulches
-              :AMAZEMULCH,:BOOSTMULCH,:DAMPMULCH,:GOOEYMULCH,:GROWTHMULCH,
-              :RICHMULCH,:STABLEMULCH,:SURPRISEMULCH,
+              :AMAZEMULCH, :BOOSTMULCH, :DAMPMULCH, :GOOEYMULCH, :GROWTHMULCH,
+              :RICHMULCH, :STABLEMULCH, :SURPRISEMULCH,
               # Shards
-              :BLUESHARD,:GREENSHARD,:REDSHARD,:YELLOWSHARD,
+              :BLUESHARD, :GREENSHARD, :REDSHARD, :YELLOWSHARD,
               # Valuables
-              :BALMMUSHROOM,:BIGMUSHROOM,:BIGNUGGET,:BIGPEARL,:COMETSHARD,
-              :NUGGET,:PEARL,:PEARLSTRING,:RELICBAND,:RELICCOPPER,:RELICCROWN,
-              :RELICGOLD,:RELICSILVER,:RELICSTATUE,:RELICVASE,:STARDUST,
-              :STARPIECE,:STRANGESOUVENIR,:TINYMUSHROOM,
+              :BALMMUSHROOM, :BIGMUSHROOM, :BIGNUGGET, :BIGPEARL, :COMETSHARD,
+              :NUGGET, :PEARL, :PEARLSTRING, :RELICBAND, :RELICCOPPER, :RELICCROWN,
+              :RELICGOLD, :RELICSILVER, :RELICSTATUE, :RELICVASE, :STARDUST,
+              :STARPIECE, :STRANGESOUVENIR, :TINYMUSHROOM,
               # Exp Candies
               :EXPCANDYXS, :EXPCANDYS, :EXPCANDYM, :EXPCANDYL, :EXPCANDYXL],
        20 => [ # Feathers
-              :CLEVERFEATHER,:GENIUSFEATHER,:HEALTHFEATHER,:MUSCLEFEATHER,
-              :PRETTYFEATHER,:RESISTFEATHER,:SWIFTFEATHER,
-              :CLEVERWING,:GENIUSWING,:HEALTHWING,:MUSCLEWING,:PRETTYWING,
-              :RESISTWING,:SWIFTWING],
-       10 => [:AIRBALLOON,:BIGROOT,:BRIGHTPOWDER,:CHOICEBAND,:CHOICESCARF,
-              :CHOICESPECS,:DESTINYKNOT,:DISCOUNTCOUPON,:EXPERTBELT,:FOCUSBAND,
-              :FOCUSSASH,:LAGGINGTAIL,:LEFTOVERS,:MENTALHERB,:METALPOWDER,
-              :MUSCLEBAND,:POWERHERB,:QUICKPOWDER,:REAPERCLOTH,:REDCARD,
-              :RINGTARGET,:SHEDSHELL,:SILKSCARF,:SILVERPOWDER,:SMOOTHROCK,
-              :SOFTSAND,:SOOTHEBELL,:WHITEHERB,:WIDELENS,:WISEGLASSES,:ZOOMLENS,
+              :CLEVERFEATHER, :GENIUSFEATHER, :HEALTHFEATHER, :MUSCLEFEATHER,
+              :PRETTYFEATHER, :RESISTFEATHER, :SWIFTFEATHER,
+              :CLEVERWING, :GENIUSWING, :HEALTHWING, :MUSCLEWING, :PRETTYWING,
+              :RESISTWING, :SWIFTWING],
+       10 => [:AIRBALLOON, :BIGROOT, :BRIGHTPOWDER, :CHOICEBAND, :CHOICESCARF,
+              :CHOICESPECS, :DESTINYKNOT, :DISCOUNTCOUPON, :EXPERTBELT, :FOCUSBAND,
+              :FOCUSSASH, :LAGGINGTAIL, :LEFTOVERS, :MENTALHERB, :METALPOWDER,
+              :MUSCLEBAND, :POWERHERB, :QUICKPOWDER, :REAPERCLOTH, :REDCARD,
+              :RINGTARGET, :SHEDSHELL, :SILKSCARF, :SILVERPOWDER, :SMOOTHROCK,
+              :SOFTSAND, :SOOTHEBELL, :WHITEHERB, :WIDELENS, :WISEGLASSES, :ZOOMLENS,
               # Terrain seeds
-              :ELECTRICSEED,:GRASSYSEED,:MISTYSEED,:PSYCHICSEED,
+              :ELECTRICSEED, :GRASSYSEED, :MISTYSEED, :PSYCHICSEED,
               # Nectar
-              :PINKNECTAR,:PURPLENECTAR,:REDNECTAR,:YELLOWNECTAR,
+              :PINKNECTAR, :PURPLENECTAR, :REDNECTAR, :YELLOWNECTAR,
               # Incenses
-              :FULLINCENSE,:LAXINCENSE,:LUCKINCENSE,:ODDINCENSE,:PUREINCENSE,
-              :ROCKINCENSE,:ROSEINCENSE,:SEAINCENSE,:WAVEINCENSE,
+              :FULLINCENSE, :LAXINCENSE, :LUCKINCENSE, :ODDINCENSE, :PUREINCENSE,
+              :ROCKINCENSE, :ROSEINCENSE, :SEAINCENSE, :WAVEINCENSE,
               # Scarves
-              :BLUESCARF,:GREENSCARF,:PINKSCARF,:REDSCARF,:YELLOWSCARF,
+              :BLUESCARF, :GREENSCARF, :PINKSCARF, :REDSCARF, :YELLOWSCARF,
               # Mints
               :LONELYMINT, :ADAMANTMINT, :NAUGHTYMINT, :BRAVEMINT, :BOLDMINT,
               :IMPISHMINT, :LAXMINT, :RELAXEDMINT, :MODESTMINT, :MILDMINT,
@@ -527,7 +527,7 @@ class Battle::Move::ThrowUserItemAtTarget < Battle::Move
     @willFail = true if !flingableItem
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if @willFail
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -539,13 +539,13 @@ class Battle::Move::ThrowUserItemAtTarget < Battle::Move
     super
     pbCheckFlingSuccess(user)
     if !@willFail
-      @battle.pbDisplay(_INTL("{1} flung its {2}!",user.pbThis,user.itemName))
+      @battle.pbDisplay(_INTL("{1} flung its {2}!", user.pbThis, user.itemName))
     end
   end
 
-  def pbNumHits(user,targets); return 1; end
+  def pbNumHits(user, targets); return 1; end
 
-  def pbBaseDamage(baseDmg,user,target)
+  def pbBaseDamage(baseDmg, user, target)
     return 0 if !user.item
     return 10 if user.item.is_berry?
     return 80 if user.item.is_mega_stone?
@@ -554,36 +554,36 @@ class Battle::Move::ThrowUserItemAtTarget < Battle::Move
       ret = 10 if ret < 10
       return ret
     end
-    @flingPowers.each do |power,items|
+    @flingPowers.each do |power, items|
       return power if items.include?(user.item_id)
     end
     return 10
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     return if target.damageState.substitute
     return if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
     case user.item_id
     when :POISONBARB
-      target.pbPoison(user) if target.pbCanPoison?(user,false,self)
+      target.pbPoison(user) if target.pbCanPoison?(user, false, self)
     when :TOXICORB
-      target.pbPoison(user,nil,true) if target.pbCanPoison?(user,false,self)
+      target.pbPoison(user, nil, true) if target.pbCanPoison?(user, false, self)
     when :FLAMEORB
-      target.pbBurn(user) if target.pbCanBurn?(user,false,self)
+      target.pbBurn(user) if target.pbCanBurn?(user, false, self)
     when :LIGHTBALL
-      target.pbParalyze(user) if target.pbCanParalyze?(user,false,self)
+      target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
     when :KINGSROCK, :RAZORFANG
       target.pbFlinch(user)
     else
-      target.pbHeldItemTriggerCheck(user.item,true)
+      target.pbHeldItemTriggerCheck(user.item, true)
     end
   end
 
-  def pbEndOfMoveUsageEffect(user,targets,numHits,switchedBattlers)
+  def pbEndOfMoveUsageEffect(user, targets, numHits, switchedBattlers)
     # NOTE: The item is consumed even if this move was Protected against or it
     #       missed. The item is not consumed if the target was switched out by
     #       an effect like a target's Red Card.
     # NOTE: There is no item consumption animation.
-    user.pbConsumeItem(true,true,false) if user.item
+    user.pbConsumeItem(true, true, false) if user.item
   end
 end

@@ -255,9 +255,8 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
     cmd = 0
     loop do
       persid = sprintf("0x%08X", pkmn.personalID)
-      cmd = pbMessage("\\ts[]" + _INTL("Personal ID is {1}.", persid), [
-           _INTL("Set EVs"),
-           _INTL("Set IVs")], -1, nil, cmd)
+      cmd = pbMessage("\\ts[]" + _INTL("Personal ID is {1}.", persid),
+                      [_INTL("Set EVs"), _INTL("Set IVs")], -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Set EVs
@@ -506,10 +505,8 @@ BattlerDebugMenuCommands.register("setmovepp", {
           cmd2 = 0
           loop do
             msg = _INTL("{1}: PP {2}/{3} (PP Up {4}/3)", move_name, move.pp, move.total_pp, move.ppup)
-            cmd2 = pbMessage("\\ts[]" + msg, [
-               _INTL("Set PP"),
-               _INTL("Full PP"),
-               _INTL("Set PP Up")], -1, nil, cmd2)
+            cmd2 = pbMessage("\\ts[]" + msg,
+                             [_INTL("Set PP"), _INTL("Full PP"), _INTL("Set PP Up")], -1, nil, cmd2)
             break if cmd2 < 0
             case cmd2
             when 0   # Change PP
@@ -680,10 +677,8 @@ BattlerDebugMenuCommands.register("setgender", {
     cmd = 0
     loop do
       msg = [_INTL("Gender is male."), _INTL("Gender is female.")][pkmn.male? ? 0 : 1]
-      cmd = pbMessage("\\ts[]" + msg, [
-         _INTL("Make male"),
-         _INTL("Make female"),
-         _INTL("Reset")], -1, nil, cmd)
+      cmd = pbMessage("\\ts[]" + msg,
+                      [_INTL("Make male"), _INTL("Make female"), _INTL("Reset")], -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Make male
@@ -747,11 +742,11 @@ BattlerDebugMenuCommands.register("setshininess", {
     loop do
       msg_idx = pkmn.shiny? ? (pkmn.super_shiny? ? 1 : 0) : 2
       msg = [_INTL("Is shiny."), _INTL("Is super shiny."), _INTL("Is normal (not shiny).")][msg_idx]
-      cmd = pbMessage("\\ts[]" + msg, [
-           _INTL("Make shiny"),
-           _INTL("Make super shiny"),
-           _INTL("Make normal"),
-           _INTL("Reset")], -1, nil, cmd)
+      cmd = pbMessage("\\ts[]" + msg,
+                      [_INTL("Make shiny"),
+                       _INTL("Make super shiny"),
+                       _INTL("Make normal"),
+                       _INTL("Reset")], -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Make shiny

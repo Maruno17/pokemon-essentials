@@ -11,43 +11,43 @@
 #===============================================================================
 class PokemonEggHatch_Scene
   def pbStartScene(pokemon)
-    @sprites={}
-    @pokemon=pokemon
-    @nicknamed=false
-    @viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
-    @viewport.z=99999
+    @sprites = {}
+    @pokemon = pokemon
+    @nicknamed = false
+    @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
+    @viewport.z = 99999
     # Create background image
-    addBackgroundOrColoredPlane(@sprites,"background","hatchbg",
-       Color.new(248,248,248),@viewport)
+    addBackgroundOrColoredPlane(@sprites, "background", "hatchbg",
+       Color.new(248, 248, 248), @viewport)
     # Create egg sprite/Pokémon sprite
-    @sprites["pokemon"]=PokemonSprite.new(@viewport)
+    @sprites["pokemon"] = PokemonSprite.new(@viewport)
     @sprites["pokemon"].setOffset(PictureOrigin::Bottom)
-    @sprites["pokemon"].x = Graphics.width/2
-    @sprites["pokemon"].y = 264+56   # 56 to offset the egg sprite
+    @sprites["pokemon"].x = Graphics.width / 2
+    @sprites["pokemon"].y = 264 + 56   # 56 to offset the egg sprite
     @sprites["pokemon"].setSpeciesBitmap(@pokemon.species, @pokemon.gender,
                                          @pokemon.form, @pokemon.shiny?,
                                          false, false, true)   # Egg sprite
     # Load egg cracks bitmap
     crackfilename = sprintf("Graphics/Pokemon/Eggs/%s_cracks", @pokemon.species)
     crackfilename = sprintf("Graphics/Pokemon/Eggs/000_cracks") if !pbResolveBitmap(crackfilename)
-    crackfilename=pbResolveBitmap(crackfilename)
-    @hatchSheet=AnimatedBitmap.new(crackfilename)
+    crackfilename = pbResolveBitmap(crackfilename)
+    @hatchSheet = AnimatedBitmap.new(crackfilename)
     # Create egg cracks sprite
-    @sprites["hatch"]=SpriteWrapper.new(@viewport)
+    @sprites["hatch"] = SpriteWrapper.new(@viewport)
     @sprites["hatch"].x = @sprites["pokemon"].x
     @sprites["hatch"].y = @sprites["pokemon"].y
     @sprites["hatch"].ox = @sprites["pokemon"].ox
     @sprites["hatch"].oy = @sprites["pokemon"].oy
     @sprites["hatch"].bitmap = @hatchSheet.bitmap
-    @sprites["hatch"].src_rect = Rect.new(0,0,@hatchSheet.width/5,@hatchSheet.height)
+    @sprites["hatch"].src_rect = Rect.new(0, 0, @hatchSheet.width / 5, @hatchSheet.height)
     @sprites["hatch"].visible = false
     # Create flash overlay
-    @sprites["overlay"]=BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
-    @sprites["overlay"].z=200
-    @sprites["overlay"].bitmap=Bitmap.new(Graphics.width,Graphics.height)
-    @sprites["overlay"].bitmap.fill_rect(0,0,Graphics.width,Graphics.height,
-        Color.new(255,255,255))
-    @sprites["overlay"].opacity=0
+    @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
+    @sprites["overlay"].z = 200
+    @sprites["overlay"].bitmap = Bitmap.new(Graphics.width, Graphics.height)
+    @sprites["overlay"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height,
+        Color.new(255, 255, 255))
+    @sprites["overlay"].opacity = 0
     # Start up scene
     pbFadeInAndShow(@sprites)
   end
@@ -55,46 +55,46 @@ class PokemonEggHatch_Scene
   def pbMain
     pbBGMPlay("Evolution")
     # Egg animation
-    updateScene(Graphics.frame_rate*15/10)
+    updateScene(Graphics.frame_rate * 15 / 10)
     pbPositionHatchMask(0)
     pbSEPlay("Battle ball shake")
     swingEgg(4)
-    updateScene(Graphics.frame_rate*2/10)
+    updateScene(Graphics.frame_rate * 2 / 10)
     pbPositionHatchMask(1)
     pbSEPlay("Battle ball shake")
     swingEgg(4)
-    updateScene(Graphics.frame_rate*4/10)
+    updateScene(Graphics.frame_rate * 4 / 10)
     pbPositionHatchMask(2)
     pbSEPlay("Battle ball shake")
-    swingEgg(8,2)
-    updateScene(Graphics.frame_rate*4/10)
+    swingEgg(8, 2)
+    updateScene(Graphics.frame_rate * 4 / 10)
     pbPositionHatchMask(3)
     pbSEPlay("Battle ball shake")
-    swingEgg(16,4)
-    updateScene(Graphics.frame_rate*2/10)
+    swingEgg(16, 4)
+    updateScene(Graphics.frame_rate * 2 / 10)
     pbPositionHatchMask(4)
     pbSEPlay("Battle recall")
     # Fade and change the sprite
-    fadeTime = Graphics.frame_rate*4/10
-    toneDiff = (255.0/fadeTime).ceil
+    fadeTime = Graphics.frame_rate * 4 / 10
+    toneDiff = (255.0 / fadeTime).ceil
     for i in 1..fadeTime
-      @sprites["pokemon"].tone=Tone.new(i*toneDiff,i*toneDiff,i*toneDiff)
-      @sprites["overlay"].opacity=i*toneDiff
+      @sprites["pokemon"].tone = Tone.new(i * toneDiff, i * toneDiff, i * toneDiff)
+      @sprites["overlay"].opacity = i * toneDiff
       updateScene
     end
-    updateScene(Graphics.frame_rate*3/4)
+    updateScene(Graphics.frame_rate * 3 / 4)
     @sprites["pokemon"].setPokemonBitmap(@pokemon) # Pokémon sprite
-    @sprites["pokemon"].x = Graphics.width/2
+    @sprites["pokemon"].x = Graphics.width / 2
     @sprites["pokemon"].y = 264
     @pokemon.species_data.apply_metrics_to_sprite(@sprites["pokemon"], 1)
-    @sprites["hatch"].visible=false
+    @sprites["hatch"].visible = false
     for i in 1..fadeTime
-      @sprites["pokemon"].tone=Tone.new(255-i*toneDiff,255-i*toneDiff,255-i*toneDiff)
-      @sprites["overlay"].opacity=255-i*toneDiff
+      @sprites["pokemon"].tone = Tone.new(255 - i * toneDiff, 255 - i * toneDiff, 255 - i * toneDiff)
+      @sprites["overlay"].opacity = 255 - i * toneDiff
       updateScene
     end
-    @sprites["pokemon"].tone=Tone.new(0,0,0)
-    @sprites["overlay"].opacity=0
+    @sprites["pokemon"].tone = Tone.new(0, 0, 0)
+    @sprites["overlay"].opacity = 0
     # Finish scene
     frames = (GameData::Species.cry_length(@pokemon) * Graphics.frame_rate).ceil
     @pokemon.play_cry
@@ -120,30 +120,30 @@ class PokemonEggHatch_Scene
   end
 
   def pbPositionHatchMask(index)
-    @sprites["hatch"].src_rect.x = index*@sprites["hatch"].src_rect.width
+    @sprites["hatch"].src_rect.x = index * @sprites["hatch"].src_rect.width
   end
 
-  def swingEgg(speed,swingTimes = 1)
+  def swingEgg(speed, swingTimes = 1)
     @sprites["hatch"].visible = true
-    speed = speed.to_f*20/Graphics.frame_rate
+    speed = speed.to_f * 20 / Graphics.frame_rate
     amplitude = 8
     targets = []
     swingTimes.times do
-      targets.push(@sprites["pokemon"].x+amplitude)
-      targets.push(@sprites["pokemon"].x-amplitude)
+      targets.push(@sprites["pokemon"].x + amplitude)
+      targets.push(@sprites["pokemon"].x - amplitude)
     end
     targets.push(@sprites["pokemon"].x)
-    targets.each_with_index do |target,i|
+    targets.each_with_index do |target, i|
       loop do
-        break if i%2==0 && @sprites["pokemon"].x>=target
-        break if i%2==1 && @sprites["pokemon"].x<=target
+        break if i % 2 == 0 && @sprites["pokemon"].x >= target
+        break if i % 2 == 1 && @sprites["pokemon"].x <= target
         @sprites["pokemon"].x += speed
         @sprites["hatch"].x    = @sprites["pokemon"].x
         updateScene
       end
       speed *= -1
     end
-    @sprites["pokemon"].x = targets[targets.length-1]
+    @sprites["pokemon"].x = targets[targets.length - 1]
     @sprites["hatch"].x   = @sprites["pokemon"].x
   end
 
@@ -165,7 +165,7 @@ end
 #===============================================================================
 class PokemonEggHatchScreen
   def initialize(scene)
-    @scene=scene
+    @scene = scene
   end
 
   def pbStartScreen(pokemon)
@@ -181,8 +181,8 @@ end
 def pbHatchAnimation(pokemon)
   pbMessage(_INTL("Huh?\1"))
   pbFadeOutInWithMusic {
-    scene=PokemonEggHatch_Scene.new
-    screen=PokemonEggHatchScreen.new(scene)
+    scene = PokemonEggHatch_Scene.new
+    screen = PokemonEggHatchScreen.new(scene)
     screen.pbStartScreen(pokemon)
   }
   return true
@@ -214,7 +214,7 @@ def pbHatch(pokemon)
   end
 end
 
-Events.onStepTaken += proc { |_sender,_e|
+Events.onStepTaken += proc { |_sender, _e|
   for egg in $player.party
     next if egg.steps_to_hatch <= 0
     egg.steps_to_hatch -= 1

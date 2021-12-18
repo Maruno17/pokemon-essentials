@@ -115,7 +115,7 @@ class BattleSwapScene
   end
 
   def pbSwapChosen(_pkmnindex)
-    commands=pbGetCommands(@newPokemon, [])
+    commands = pbGetCommands(@newPokemon, [])
     commands.push(_INTL("PKMN FOR SWAP"))
     commands.push(_INTL("CANCEL"))
     @sprites["help"].text = _INTL("Select Pokémon to accept.")

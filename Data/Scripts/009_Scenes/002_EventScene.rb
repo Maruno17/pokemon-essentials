@@ -24,9 +24,9 @@ class PictureSprite < SpriteWrapper
     super
     @pictureBitmap.update if @pictureBitmap
     # If picture file name is different from current one
-    if @customBitmap && @picture.name==""
+    if @customBitmap && @picture.name == ""
       self.bitmap = (@customBitmapIsBitmap) ? @customBitmap : @customBitmap.bitmap
-    elsif @picture_name != @picture.name ||  @picture.hue.to_i != @hue.to_i
+    elsif @picture_name != @picture.name || @picture.hue.to_i != @hue.to_i
       # Remember file name to instance variables
       @picture_name = @picture.name
       @hue = @picture.hue.to_i
@@ -46,16 +46,16 @@ class PictureSprite < SpriteWrapper
       self.visible = false
       return
     end
-    setPictureSprite(self,@picture)
+    setPictureSprite(self, @picture)
   end
 end
 
 
 
 def pbTextBitmap(text, maxwidth = Graphics.width)
-  tmp = Bitmap.new(maxwidth,Graphics.height)
+  tmp = Bitmap.new(maxwidth, Graphics.height)
   pbSetSystemFont(tmp)
-  drawFormattedTextEx(tmp,0,0,maxwidth,text,Color.new(248,248,248),Color.new(168,184,184))
+  drawFormattedTextEx(tmp, 0, 0, maxwidth, text, Color.new(248, 248, 248), Color.new(168, 184, 184))
   return tmp
 end
 
@@ -65,7 +65,7 @@ end
 # EventScene
 #===============================================================================
 class EventScene
-  attr_accessor :onCTrigger,:onBTrigger,:onUpdate
+  attr_accessor :onCTrigger, :onBTrigger, :onUpdate
 
   def initialize(viewport = nil)
     @viewport       = viewport
@@ -105,26 +105,26 @@ class EventScene
     # EventScene doesn't take ownership of the passed-in bitmap
     num = @pictures.length
     picture = PictureEx.new(num)
-    picture.setXY(0,x,y)
-    picture.setVisible(0,true)
+    picture.setXY(0, x, y)
+    picture.setVisible(0, true)
     @pictures[num] = picture
-    @picturesprites[num] = PictureSprite.new(@viewport,picture)
+    @picturesprites[num] = PictureSprite.new(@viewport, picture)
     @picturesprites[num].setCustomBitmap(bitmap)
     return picture
   end
 
   def addLabel(x, y, width, text)
-    addBitmap(x,y,pbTextBitmap(text,width))
+    addBitmap(x, y, pbTextBitmap(text, width))
   end
 
   def addImage(x, y, name)
     num = @pictures.length
     picture = PictureEx.new(num)
     picture.name = name
-    picture.setXY(0,x,y)
-    picture.setVisible(0,true)
+    picture.setXY(0, x, y)
+    picture.setVisible(0, true)
     @pictures[num] = picture
-    @picturesprites[num] = PictureSprite.new(@viewport,picture)
+    @picturesprites[num] = PictureSprite.new(@viewport, picture)
     return picture
   end
 
@@ -188,7 +188,7 @@ end
 #===============================================================================
 def pbEventScreen(cls)
   pbFadeOutIn {
-    viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+    viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     viewport.z = 99999
     PBDebug.logonerr {
       cls.new(viewport).main

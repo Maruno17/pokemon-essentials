@@ -38,7 +38,7 @@ class PokemonBox
     return @pokemon[i]
   end
 
-  def []=(i,value)
+  def []=(i, value)
     @pokemon[i] = value
   end
 
@@ -63,7 +63,7 @@ class PokemonStorage
   def initialize(maxBoxes = Settings::NUM_STORAGE_BOXES, maxPokemon = PokemonBox::BOX_SIZE)
     @boxes = []
     for i in 0...maxBoxes
-      @boxes[i] = PokemonBox.new(_INTL("Box {1}",i+1),maxPokemon)
+      @boxes[i] = PokemonBox.new(_INTL("Box {1}", i + 1), maxPokemon)
       @boxes[i].background = i % BASICWALLPAPERQTY
     end
     @currentBox = 0
@@ -77,17 +77,17 @@ class PokemonStorage
   def allWallpapers
     return [
        # Basic wallpapers
-       _INTL("Forest"),_INTL("City"),_INTL("Desert"),_INTL("Savanna"),
-       _INTL("Crag"),_INTL("Volcano"),_INTL("Snow"),_INTL("Cave"),
-       _INTL("Beach"),_INTL("Seafloor"),_INTL("River"),_INTL("Sky"),
-       _INTL("Poké Center"),_INTL("Machine"),_INTL("Checks"),_INTL("Simple"),
+       _INTL("Forest"), _INTL("City"), _INTL("Desert"), _INTL("Savanna"),
+       _INTL("Crag"), _INTL("Volcano"), _INTL("Snow"), _INTL("Cave"),
+       _INTL("Beach"), _INTL("Seafloor"), _INTL("River"), _INTL("Sky"),
+       _INTL("Poké Center"), _INTL("Machine"), _INTL("Checks"), _INTL("Simple"),
        # Special wallpapers
-       _INTL("Space"),_INTL("Backyard"),_INTL("Nostalgic 1"),_INTL("Torchic"),
-       _INTL("Trio 1"),_INTL("PikaPika 1"),_INTL("Legend 1"),_INTL("Team Galactic 1"),
-       _INTL("Distortion"),_INTL("Contest"),_INTL("Nostalgic 2"),_INTL("Croagunk"),
-       _INTL("Trio 2"),_INTL("PikaPika 2"),_INTL("Legend 2"),_INTL("Team Galactic 2"),
-       _INTL("Heart"),_INTL("Soul"),_INTL("Big Brother"),_INTL("Pokéathlon"),
-       _INTL("Trio 3"),_INTL("Spiky Pika"),_INTL("Kimono Girl"),_INTL("Revival")
+       _INTL("Space"), _INTL("Backyard"), _INTL("Nostalgic 1"), _INTL("Torchic"),
+       _INTL("Trio 1"), _INTL("PikaPika 1"), _INTL("Legend 1"), _INTL("Team Galactic 1"),
+       _INTL("Distortion"), _INTL("Contest"), _INTL("Nostalgic 2"), _INTL("Croagunk"),
+       _INTL("Trio 2"), _INTL("PikaPika 2"), _INTL("Legend 2"), _INTL("Team Galactic 2"),
+       _INTL("Heart"), _INTL("Soul"), _INTL("Big Brother"), _INTL("Pokéathlon"),
+       _INTL("Trio 3"), _INTL("Spiky Pika"), _INTL("Kimono Girl"), _INTL("Revival")
     ]
   end
 
@@ -98,13 +98,13 @@ class PokemonStorage
 
   def isAvailableWallpaper?(i)
     @unlockedWallpapers = [] if !@unlockedWallpapers
-    return true if i<BASICWALLPAPERQTY
+    return true if i < BASICWALLPAPERQTY
     return true if @unlockedWallpapers[i]
     return false
   end
 
   def availableWallpapers
-    ret = [[],[]]   # Names, IDs
+    ret = [[], []]   # Names, IDs
     papers = allWallpapers
     @unlockedWallpapers = [] if !@unlockedWallpapers
     for i in 0...papers.length
@@ -144,66 +144,66 @@ class PokemonStorage
   end
 
   def pbFirstFreePos(box)
-    if box==-1
+    if box == -1
       ret = self.party.length
       return (ret >= Settings::MAX_PARTY_SIZE) ? -1 : ret
     end
     for i in 0...maxPokemon(box)
-      return i if !self[box,i]
+      return i if !self[box, i]
     end
     return -1
   end
 
-  def [](x,y = nil)
-    if y==nil
-      return (x==-1) ? self.party : @boxes[x]
+  def [](x, y = nil)
+    if y == nil
+      return (x == -1) ? self.party : @boxes[x]
     else
       for i in @boxes
         raise "Box is a Pokémon, not a box" if i.is_a?(Pokemon)
       end
-      return (x==-1) ? self.party[y] : @boxes[x][y]
+      return (x == -1) ? self.party[y] : @boxes[x][y]
     end
   end
 
-  def []=(x,y,value)
-    if x==-1
+  def []=(x, y, value)
+    if x == -1
       self.party[y] = value
     else
       @boxes[x][y] = value
     end
   end
 
-  def pbCopy(boxDst,indexDst,boxSrc,indexSrc)
-    if indexDst<0 && boxDst<self.maxBoxes
+  def pbCopy(boxDst, indexDst, boxSrc, indexSrc)
+    if indexDst < 0 && boxDst < self.maxBoxes
       found = false
       for i in 0...maxPokemon(boxDst)
-        next if self[boxDst,i]
+        next if self[boxDst, i]
         found = true
         indexDst = i
         break
       end
       return false if !found
     end
-    if boxDst==-1   # Copying into party
+    if boxDst == -1   # Copying into party
       return false if party_full?
-      self.party[self.party.length] = self[boxSrc,indexSrc]
+      self.party[self.party.length] = self[boxSrc, indexSrc]
       self.party.compact!
     else   # Copying into box
-      pkmn = self[boxSrc,indexSrc]
+      pkmn = self[boxSrc, indexSrc]
       raise "Trying to copy nil to storage" if !pkmn
       if Settings::HEAL_STORED_POKEMON
         old_ready_evo = pkmn.ready_to_evolve
         pkmn.heal
         pkmn.ready_to_evolve = old_ready_evo
       end
-      self[boxDst,indexDst] = pkmn
+      self[boxDst, indexDst] = pkmn
     end
     return true
   end
 
-  def pbMove(boxDst,indexDst,boxSrc,indexSrc)
-    return false if !pbCopy(boxDst,indexDst,boxSrc,indexSrc)
-    pbDelete(boxSrc,indexSrc)
+  def pbMove(boxDst, indexDst, boxSrc, indexSrc)
+    return false if !pbCopy(boxDst, indexDst, boxSrc, indexSrc)
+    pbDelete(boxSrc, indexSrc)
     return true
   end
 
@@ -212,15 +212,15 @@ class PokemonStorage
     self.party[self.party.length] = pkmn
   end
 
-  def pbMoveCaughtToBox(pkmn,box)
+  def pbMoveCaughtToBox(pkmn, box)
     for i in 0...maxPokemon(box)
-      if self[box,i]==nil
+      if self[box, i] == nil
         if Settings::HEAL_STORED_POKEMON && box >= 0
           old_ready_evo = pkmn.ready_to_evolve
           pkmn.heal
           pkmn.ready_to_evolve = old_ready_evo
         end
-        self[box,i] = pkmn
+        self[box, i] = pkmn
         return true
       end
     end
@@ -234,15 +234,15 @@ class PokemonStorage
       pkmn.ready_to_evolve = old_ready_evo
     end
     for i in 0...maxPokemon(@currentBox)
-      if self[@currentBox,i]==nil
-        self[@currentBox,i] = pkmn
+      if self[@currentBox, i] == nil
+        self[@currentBox, i] = pkmn
         return @currentBox
       end
     end
     for j in 0...self.maxBoxes
       for i in 0...maxPokemon(j)
-        if self[j,i]==nil
-          self[j,i] = pkmn
+        if self[j, i] == nil
+          self[j, i] = pkmn
           @currentBox = j
           return @currentBox
         end
@@ -251,10 +251,10 @@ class PokemonStorage
     return -1
   end
 
-  def pbDelete(box,index)
-    if self[box,index]
-      self[box,index] = nil
-      self.party.compact! if box==-1
+  def pbDelete(box, index)
+    if self[box, index]
+      self[box, index] = nil
+      self.party.compact! if box == -1
     end
   end
 
@@ -281,11 +281,11 @@ class RegionalStorage
     if !$game_map
       raise _INTL("The player is not on a map, so the region could not be determined.")
     end
-    if @lastmap!=$game_map.map_id
+    if @lastmap != $game_map.map_id
       @rgnmap = pbGetCurrentRegion   # may access file IO, so caching result
       @lastmap = $game_map.map_id
     end
-    if @rgnmap<0
+    if @rgnmap < 0
       raise _INTL("The current map has no region set. Please set the MapPosition metadata setting for this map.")
     end
     if !@storages[@rgnmap]
@@ -338,39 +338,39 @@ class RegionalStorage
     getCurrentStorage.currentBox = value
   end
 
-  def [](x,y = nil)
-    getCurrentStorage[x,y]
+  def [](x, y = nil)
+    getCurrentStorage[x, y]
   end
 
-  def []=(x,y,value)
-    getCurrentStorage[x,y] = value
+  def []=(x, y, value)
+    getCurrentStorage[x, y] = value
   end
 
   def pbFirstFreePos(box)
     getCurrentStorage.pbFirstFreePos(box)
   end
 
-  def pbCopy(boxDst,indexDst,boxSrc,indexSrc)
-    getCurrentStorage.pbCopy(boxDst,indexDst,boxSrc,indexSrc)
+  def pbCopy(boxDst, indexDst, boxSrc, indexSrc)
+    getCurrentStorage.pbCopy(boxDst, indexDst, boxSrc, indexSrc)
   end
 
-  def pbMove(boxDst,indexDst,boxSrc,indexSrc)
-    getCurrentStorage.pbCopy(boxDst,indexDst,boxSrc,indexSrc)
+  def pbMove(boxDst, indexDst, boxSrc, indexSrc)
+    getCurrentStorage.pbCopy(boxDst, indexDst, boxSrc, indexSrc)
   end
 
   def pbMoveCaughtToParty(pkmn)
     getCurrentStorage.pbMoveCaughtToParty(pkmn)
   end
 
-  def pbMoveCaughtToBox(pkmn,box)
-    getCurrentStorage.pbMoveCaughtToBox(pkmn,box)
+  def pbMoveCaughtToBox(pkmn, box)
+    getCurrentStorage.pbMoveCaughtToBox(pkmn, box)
   end
 
   def pbStoreCaught(pkmn)
     getCurrentStorage.pbStoreCaught(pkmn)
   end
 
-  def pbDelete(box,index)
+  def pbDelete(box, index)
     getCurrentStorage.pbDelete(pkmn)
   end
 end
@@ -396,12 +396,12 @@ def pbEachPokemon
   for i in -1...$PokemonStorage.maxBoxes
     for j in 0...$PokemonStorage.maxPokemon(i)
       pkmn = $PokemonStorage[i][j]
-      yield(pkmn,i) if pkmn
+      yield(pkmn, i) if pkmn
     end
   end
 end
 
 # Yields every Pokémon in storage in turn.
 def pbEachNonEggPokemon
-  pbEachPokemon { |pkmn,box| yield(pkmn,box) if !pkmn.egg? }
+  pbEachPokemon { |pkmn, box| yield(pkmn, box) if !pkmn.egg? }
 end

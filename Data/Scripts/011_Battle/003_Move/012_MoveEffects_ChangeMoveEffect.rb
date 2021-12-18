@@ -6,11 +6,11 @@ class Battle::Move::RedirectAllMovesToUser < Battle::Move
   def pbEffectGeneral(user)
     user.effects[PBEffects::FollowMe] = 1
     user.allAllies.each do |b|
-      next if b.effects[PBEffects::FollowMe]<user.effects[PBEffects::FollowMe]
-      user.effects[PBEffects::FollowMe] = b.effects[PBEffects::FollowMe]+1
+      next if b.effects[PBEffects::FollowMe] < user.effects[PBEffects::FollowMe]
+      user.effects[PBEffects::FollowMe] = b.effects[PBEffects::FollowMe] + 1
     end
     user.effects[PBEffects::RagePowder] = true if powderMove?
-    @battle.pbDisplay(_INTL("{1} became the center of attention!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1} became the center of attention!", user.pbThis))
   end
 end
 
@@ -21,13 +21,13 @@ end
 class Battle::Move::RedirectAllMovesToTarget < Battle::Move
   def canMagicCoat?; return true; end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     target.effects[PBEffects::Spotlight] = 1
     target.allAllies.each do |b|
-      next if b.effects[PBEffects::Spotlight]<target.effects[PBEffects::Spotlight]
-      target.effects[PBEffects::Spotlight] = b.effects[PBEffects::Spotlight]+1
+      next if b.effects[PBEffects::Spotlight] < target.effects[PBEffects::Spotlight]
+      target.effects[PBEffects::Spotlight] = b.effects[PBEffects::Spotlight] + 1
     end
-    @battle.pbDisplay(_INTL("{1} became the center of attention!",target.pbThis))
+    @battle.pbDisplay(_INTL("{1} became the center of attention!", target.pbThis))
   end
 end
 
@@ -44,20 +44,20 @@ end
 #       but I think that's silly so I've omitted that effect.
 #===============================================================================
 class Battle::Move::RandomlyDamageOrHealTarget < Battle::Move
-  def pbOnStartUse(user,targets)
+  def pbOnStartUse(user, targets)
     @presentDmg = 0   # 0 = heal, >0 = damage
     r = @battle.pbRandom(100)
-    if r<40
+    if r < 40
       @presentDmg = 40
-    elsif r<70
+    elsif r < 70
       @presentDmg = 80
-    elsif r<80
+    elsif r < 80
       @presentDmg = 120
     end
   end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    return false if @presentDmg>0
+    return false if @presentDmg > 0
     if !target.canHeal?
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
@@ -66,22 +66,22 @@ class Battle::Move::RandomlyDamageOrHealTarget < Battle::Move
   end
 
   def pbDamagingMove?
-    return false if @presentDmg==0
+    return false if @presentDmg == 0
     return super
   end
 
-  def pbBaseDamage(baseDmg,user,target)
+  def pbBaseDamage(baseDmg, user, target)
     return @presentDmg
   end
 
-  def pbEffectAgainstTarget(user,target)
-    return if @presentDmg>0
-    target.pbRecoverHP(target.totalhp/4)
-    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
+  def pbEffectAgainstTarget(user, target)
+    return if @presentDmg > 0
+    target.pbRecoverHP(target.totalhp / 4)
+    @battle.pbDisplay(_INTL("{1}'s HP was restored.", target.pbThis))
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
-    hitNum = 1 if @presentDmg==0   # Healing anim
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    hitNum = 1 if @presentDmg == 0   # Healing anim
     super
   end
 end
@@ -92,18 +92,18 @@ end
 #===============================================================================
 class Battle::Move::HealAllyOrDamageFoe < Battle::Move
   def pbTarget(user)
-    return GameData::Target.get(:NearFoe) if user.effects[PBEffects::HealBlock]>0
+    return GameData::Target.get(:NearFoe) if user.effects[PBEffects::HealBlock] > 0
     return super
   end
 
-  def pbOnStartUse(user,targets)
+  def pbOnStartUse(user, targets)
     @healing = false
-    @healing = !user.opposes?(targets[0]) if targets.length>0
+    @healing = !user.opposes?(targets[0]) if targets.length > 0
   end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     return false if !@healing
-    if target.effects[PBEffects::Substitute]>0 && !ignoresSubstitute?(user)
+    if target.effects[PBEffects::Substitute] > 0 && !ignoresSubstitute?(user)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -119,13 +119,13 @@ class Battle::Move::HealAllyOrDamageFoe < Battle::Move
     return super
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     return if !@healing
-    target.pbRecoverHP(target.totalhp/2)
-    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
+    target.pbRecoverHP(target.totalhp / 2)
+    @battle.pbDisplay(_INTL("{1}'s HP was restored.", target.pbThis))
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     hitNum = 1 if @healing   # Healing anim
     super
   end
@@ -148,11 +148,11 @@ class Battle::Move::CurseTargetOrLowerUserSpd1RaiseUserAtkDef1 < Battle::Move
     return super
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     return false if user.pbHasType?(:GHOST)
-    if !user.pbCanLowerStatStage?(:SPEED,user,self) &&
-       !user.pbCanRaiseStatStage?(:ATTACK,user,self) &&
-       !user.pbCanRaiseStatStage?(:DEFENSE,user,self)
+    if !user.pbCanLowerStatStage?(:SPEED, user, self) &&
+       !user.pbCanRaiseStatStage?(:ATTACK, user, self) &&
+       !user.pbCanRaiseStatStage?(:DEFENSE, user, self)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -170,30 +170,30 @@ class Battle::Move::CurseTargetOrLowerUserSpd1RaiseUserAtkDef1 < Battle::Move
   def pbEffectGeneral(user)
     return if user.pbHasType?(:GHOST)
     # Non-Ghost effect
-    if user.pbCanLowerStatStage?(:SPEED,user,self)
-      user.pbLowerStatStage(:SPEED,1,user)
+    if user.pbCanLowerStatStage?(:SPEED, user, self)
+      user.pbLowerStatStage(:SPEED, 1, user)
     end
     showAnim = true
-    if user.pbCanRaiseStatStage?(:ATTACK,user,self)
-      if user.pbRaiseStatStage(:ATTACK,1,user,showAnim)
+    if user.pbCanRaiseStatStage?(:ATTACK, user, self)
+      if user.pbRaiseStatStage(:ATTACK, 1, user, showAnim)
         showAnim = false
       end
     end
-    if user.pbCanRaiseStatStage?(:DEFENSE,user,self)
-      user.pbRaiseStatStage(:DEFENSE,1,user,showAnim)
+    if user.pbCanRaiseStatStage?(:DEFENSE, user, self)
+      user.pbRaiseStatStage(:DEFENSE, 1, user, showAnim)
     end
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     return if !user.pbHasType?(:GHOST)
     # Ghost effect
-    @battle.pbDisplay(_INTL("{1} cut its own HP and laid a curse on {2}!",user.pbThis,target.pbThis(true)))
+    @battle.pbDisplay(_INTL("{1} cut its own HP and laid a curse on {2}!", user.pbThis, target.pbThis(true)))
     target.effects[PBEffects::Curse] = true
-    user.pbReduceHP(user.totalhp/2, false, false)
+    user.pbReduceHP(user.totalhp / 2, false, false)
     user.pbItemHPHealCheck
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     hitNum = 1 if !user.pbHasType?(:GHOST)   # Non-Ghost anim
     super
   end
@@ -203,9 +203,9 @@ end
 # Effect depends on the environment. (Secret Power)
 #===============================================================================
 class Battle::Move::EffectDependsOnEnvironment < Battle::Move
-  def flinchingMove?; return [6,10,12].include?(@secretPower); end
+  def flinchingMove?; return [6, 10, 12].include?(@secretPower); end
 
-  def pbOnStartUse(user,targets)
+  def pbOnStartUse(user, targets)
     # NOTE: This is Gen 7's list plus some of Gen 6 plus a bit of my own.
     @secretPower = 0   # Body Slam, paralysis
     case @battle.field.terrain
@@ -249,46 +249,46 @@ class Battle::Move::EffectDependsOnEnvironment < Battle::Move
   #       method is called per hit and this move's additional effect only occurs
   #       once per use, after all the hits have happened (two hits are possible
   #       via Parental Bond).
-  def pbEffectAfterAllHits(user,target)
+  def pbEffectAfterAllHits(user, target)
     return if target.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
-    chance = pbAdditionalEffectChance(user,target)
-    return if @battle.pbRandom(100)>=chance
+    chance = pbAdditionalEffectChance(user, target)
+    return if @battle.pbRandom(100) >= chance
     case @secretPower
     when 2
-      target.pbSleep if target.pbCanSleep?(user,false,self)
+      target.pbSleep if target.pbCanSleep?(user, false, self)
     when 10
-      target.pbBurn(user) if target.pbCanBurn?(user,false,self)
+      target.pbBurn(user) if target.pbCanBurn?(user, false, self)
     when 0, 1
-      target.pbParalyze(user) if target.pbCanParalyze?(user,false,self)
+      target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
     when 9
-      target.pbFreeze if target.pbCanFreeze?(user,false,self)
+      target.pbFreeze if target.pbCanFreeze?(user, false, self)
     when 5
-      if target.pbCanLowerStatStage?(:ATTACK,user,self)
-        target.pbLowerStatStage(:ATTACK,1,user)
+      if target.pbCanLowerStatStage?(:ATTACK, user, self)
+        target.pbLowerStatStage(:ATTACK, 1, user)
       end
     when 14
-      if target.pbCanLowerStatStage?(:DEFENSE,user,self)
-        target.pbLowerStatStage(:DEFENSE,1,user)
+      if target.pbCanLowerStatStage?(:DEFENSE, user, self)
+        target.pbLowerStatStage(:DEFENSE, 1, user)
       end
     when 3
-      if target.pbCanLowerStatStage?(:SPECIAL_ATTACK,user,self)
-        target.pbLowerStatStage(:SPECIAL_ATTACK,1,user)
+      if target.pbCanLowerStatStage?(:SPECIAL_ATTACK, user, self)
+        target.pbLowerStatStage(:SPECIAL_ATTACK, 1, user)
       end
     when 4, 6, 12
-      if target.pbCanLowerStatStage?(:SPEED,user,self)
-        target.pbLowerStatStage(:SPEED,1,user)
+      if target.pbCanLowerStatStage?(:SPEED, user, self)
+        target.pbLowerStatStage(:SPEED, 1, user)
       end
     when 8
-      if target.pbCanLowerStatStage?(:ACCURACY,user,self)
-        target.pbLowerStatStage(:ACCURACY,1,user)
+      if target.pbCanLowerStatStage?(:ACCURACY, user, self)
+        target.pbLowerStatStage(:ACCURACY, 1, user)
       end
     when 7, 11, 13
       target.pbFlinch(user)
     end
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     id = :BODYSLAM   # Environment-specific anim
     case @secretPower
     when 1  then id = :THUNDERSHOCK if GameData::Move.exists?(:THUNDERSHOCK)
@@ -347,9 +347,9 @@ class Battle::Move::TargetNextFireMoveDamagesTarget < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     target.effects[PBEffects::Powder] = true
-    @battle.pbDisplay(_INTL("{1} is covered in powder!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1} is covered in powder!", user.pbThis))
   end
 end
 
@@ -357,12 +357,12 @@ end
 # Power is doubled if Fusion Flare has already been used this round. (Fusion Bolt)
 #===============================================================================
 class Battle::Move::DoublePowerAfterFusionFlare < Battle::Move
-  def pbChangeUsageCounters(user,specialUsage)
+  def pbChangeUsageCounters(user, specialUsage)
     @doublePower = @battle.field.effects[PBEffects::FusionFlare]
     super
   end
 
-  def pbBaseDamageMultiplier(damageMult,user,target)
+  def pbBaseDamageMultiplier(damageMult, user, target)
     damageMult *= 2 if @doublePower
     return damageMult
   end
@@ -371,8 +371,8 @@ class Battle::Move::DoublePowerAfterFusionFlare < Battle::Move
     @battle.field.effects[PBEffects::FusionBolt] = true
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
-    hitNum = 1 if (targets.length>0 && targets[0].damageState.critical) ||
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    hitNum = 1 if (targets.length > 0 && targets[0].damageState.critical) ||
                   @doublePower   # Charged anim
     super
   end
@@ -382,12 +382,12 @@ end
 # Power is doubled if Fusion Bolt has already been used this round. (Fusion Flare)
 #===============================================================================
 class Battle::Move::DoublePowerAfterFusionBolt < Battle::Move
-  def pbChangeUsageCounters(user,specialUsage)
+  def pbChangeUsageCounters(user, specialUsage)
     @doublePower = @battle.field.effects[PBEffects::FusionBolt]
     super
   end
 
-  def pbBaseDamageMultiplier(damageMult,user,target)
+  def pbBaseDamageMultiplier(damageMult, user, target)
     damageMult *= 2 if @doublePower
     return damageMult
   end
@@ -396,8 +396,8 @@ class Battle::Move::DoublePowerAfterFusionBolt < Battle::Move
     @battle.field.effects[PBEffects::FusionFlare] = true
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
-    hitNum = 1 if (targets.length>0 && targets[0].damageState.critical) ||
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    hitNum = 1 if (targets.length > 0 && targets[0].damageState.critical) ||
                   @doublePower   # Charged anim
     super
   end
@@ -418,9 +418,9 @@ class Battle::Move::PowerUpAllyMove < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     target.effects[PBEffects::HelpingHand] = true
-    @battle.pbDisplay(_INTL("{1} is ready to help {2}!",user.pbThis,target.pbThis(true)))
+    @battle.pbDisplay(_INTL("{1} is ready to help {2}!", user.pbThis, target.pbThis(true)))
   end
 end
 
@@ -429,23 +429,23 @@ end
 # (Counter)
 #===============================================================================
 class Battle::Move::CounterPhysicalDamage < Battle::Move::FixedDamageMove
-  def pbAddTarget(targets,user)
+  def pbAddTarget(targets, user)
     t = user.effects[PBEffects::CounterTarget]
-    return if t<0 || !user.opposes?(t)
-    user.pbAddTarget(targets,user,@battle.battlers[t],self,false)
+    return if t < 0 || !user.opposes?(t)
+    user.pbAddTarget(targets, user, @battle.battlers[t], self, false)
   end
 
-  def pbMoveFailed?(user,targets)
-    if targets.length==0
+  def pbMoveFailed?(user, targets)
+    if targets.length == 0
       @battle.pbDisplay(_INTL("But there was no target..."))
       return true
     end
     return false
   end
 
-  def pbFixedDamage(user,target)
-    dmg = user.effects[PBEffects::Counter]*2
-    dmg = 1 if dmg==0
+  def pbFixedDamage(user, target)
+    dmg = user.effects[PBEffects::Counter] * 2
+    dmg = 1 if dmg == 0
     return dmg
   end
 end
@@ -455,23 +455,23 @@ end
 # (Mirror Coat)
 #===============================================================================
 class Battle::Move::CounterSpecialDamage < Battle::Move::FixedDamageMove
-  def pbAddTarget(targets,user)
+  def pbAddTarget(targets, user)
     t = user.effects[PBEffects::MirrorCoatTarget]
-    return if t<0 || !user.opposes?(t)
-    user.pbAddTarget(targets,user,@battle.battlers[t],self,false)
+    return if t < 0 || !user.opposes?(t)
+    user.pbAddTarget(targets, user, @battle.battlers[t], self, false)
   end
 
-  def pbMoveFailed?(user,targets)
-    if targets.length==0
+  def pbMoveFailed?(user, targets)
+    if targets.length == 0
       @battle.pbDisplay(_INTL("But there was no target..."))
       return true
     end
     return false
   end
 
-  def pbFixedDamage(user,target)
-    dmg = user.effects[PBEffects::MirrorCoat]*2
-    dmg = 1 if dmg==0
+  def pbFixedDamage(user, target)
+    dmg = user.effects[PBEffects::MirrorCoat] * 2
+    dmg = 1 if dmg == 0
     return dmg
   end
 end
@@ -481,24 +481,24 @@ end
 # the power. (Metal Burst)
 #===============================================================================
 class Battle::Move::CounterDamagePlusHalf < Battle::Move::FixedDamageMove
-  def pbAddTarget(targets,user)
-    return if user.lastFoeAttacker.length==0
+  def pbAddTarget(targets, user)
+    return if user.lastFoeAttacker.length == 0
     lastAttacker = user.lastFoeAttacker.last
-    return if lastAttacker<0 || !user.opposes?(lastAttacker)
-    user.pbAddTarget(targets,user,@battle.battlers[lastAttacker],self,false)
+    return if lastAttacker < 0 || !user.opposes?(lastAttacker)
+    user.pbAddTarget(targets, user, @battle.battlers[lastAttacker], self, false)
   end
 
-  def pbMoveFailed?(user,targets)
-    if targets.length==0
+  def pbMoveFailed?(user, targets)
+    if targets.length == 0
       @battle.pbDisplay(_INTL("But there was no target..."))
       return true
     end
     return false
   end
 
-  def pbFixedDamage(user,target)
-    dmg = (user.lastHPLostFromFoe*1.5).floor
-    dmg = 1 if dmg==0
+  def pbFixedDamage(user, target)
+    dmg = (user.lastHPLostFromFoe * 1.5).floor
+    dmg = 1 if dmg == 0
     return dmg
   end
 end
@@ -510,9 +510,9 @@ end
 class Battle::Move::UserAddStockpileRaiseDefSpDef1 < Battle::Move
   def canSnatch?; return true; end
 
-  def pbMoveFailed?(user,targets)
-    if user.effects[PBEffects::Stockpile]>=3
-      @battle.pbDisplay(_INTL("{1} can't stockpile any more!",user.pbThis))
+  def pbMoveFailed?(user, targets)
+    if user.effects[PBEffects::Stockpile] >= 3
+      @battle.pbDisplay(_INTL("{1} can't stockpile any more!", user.pbThis))
       return true
     end
     return false
@@ -521,16 +521,16 @@ class Battle::Move::UserAddStockpileRaiseDefSpDef1 < Battle::Move
   def pbEffectGeneral(user)
     user.effects[PBEffects::Stockpile] += 1
     @battle.pbDisplay(_INTL("{1} stockpiled {2}!",
-        user.pbThis,user.effects[PBEffects::Stockpile]))
+        user.pbThis, user.effects[PBEffects::Stockpile]))
     showAnim = true
-    if user.pbCanRaiseStatStage?(:DEFENSE,user,self)
-      if user.pbRaiseStatStage(:DEFENSE,1,user,showAnim)
+    if user.pbCanRaiseStatStage?(:DEFENSE, user, self)
+      if user.pbRaiseStatStage(:DEFENSE, 1, user, showAnim)
         user.effects[PBEffects::StockpileDef] += 1
         showAnim = false
       end
     end
-    if user.pbCanRaiseStatStage?(:SPECIAL_DEFENSE,user,self)
-      if user.pbRaiseStatStage(:SPECIAL_DEFENSE,1,user,showAnim)
+    if user.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user, self)
+      if user.pbRaiseStatStage(:SPECIAL_DEFENSE, 1, user, showAnim)
         user.effects[PBEffects::StockpileSpDef] += 1
       end
     end
@@ -542,33 +542,33 @@ end
 # 0. Decreases the user's Defense and Special Defense by X stages each. (Spit Up)
 #===============================================================================
 class Battle::Move::PowerDependsOnUserStockpile < Battle::Move
-  def pbMoveFailed?(user,targets)
-    if user.effects[PBEffects::Stockpile]==0
+  def pbMoveFailed?(user, targets)
+    if user.effects[PBEffects::Stockpile] == 0
       @battle.pbDisplay(_INTL("But it failed to spit up a thing!"))
       return true
     end
     return false
   end
 
-  def pbBaseDamage(baseDmg,user,target)
-    return 100*user.effects[PBEffects::Stockpile]
+  def pbBaseDamage(baseDmg, user, target)
+    return 100 * user.effects[PBEffects::Stockpile]
   end
 
-  def pbEffectAfterAllHits(user,target)
-    return if user.fainted? || user.effects[PBEffects::Stockpile]==0
+  def pbEffectAfterAllHits(user, target)
+    return if user.fainted? || user.effects[PBEffects::Stockpile] == 0
     return if target.damageState.unaffected
-    @battle.pbDisplay(_INTL("{1}'s stockpiled effect wore off!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1}'s stockpiled effect wore off!", user.pbThis))
     return if @battle.pbAllFainted?(target.idxOwnSide)
     showAnim = true
-    if user.effects[PBEffects::StockpileDef]>0 &&
-       user.pbCanLowerStatStage?(:DEFENSE,user,self)
-      if user.pbLowerStatStage(:DEFENSE,user.effects[PBEffects::StockpileDef],user,showAnim)
+    if user.effects[PBEffects::StockpileDef] > 0 &&
+       user.pbCanLowerStatStage?(:DEFENSE, user, self)
+      if user.pbLowerStatStage(:DEFENSE, user.effects[PBEffects::StockpileDef], user, showAnim)
         showAnim = false
       end
     end
-    if user.effects[PBEffects::StockpileSpDef]>0 &&
-       user.pbCanLowerStatStage?(:SPECIAL_DEFENSE,user,self)
-      user.pbLowerStatStage(:SPECIAL_DEFENSE,user.effects[PBEffects::StockpileSpDef],user,showAnim)
+    if user.effects[PBEffects::StockpileSpDef] > 0 &&
+       user.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user, self)
+      user.pbLowerStatStage(:SPECIAL_DEFENSE, user.effects[PBEffects::StockpileSpDef], user, showAnim)
     end
     user.effects[PBEffects::Stockpile]      = 0
     user.effects[PBEffects::StockpileDef]   = 0
@@ -584,14 +584,14 @@ class Battle::Move::HealUserDependingOnUserStockpile < Battle::Move
   def healingMove?; return true; end
   def canSnatch?;   return true; end
 
-  def pbMoveFailed?(user,targets)
-    if user.effects[PBEffects::Stockpile]==0
+  def pbMoveFailed?(user, targets)
+    if user.effects[PBEffects::Stockpile] == 0
       @battle.pbDisplay(_INTL("But it failed to swallow a thing!"))
       return true
     end
     if !user.canHeal? &&
-       user.effects[PBEffects::StockpileDef]==0 &&
-       user.effects[PBEffects::StockpileSpDef]==0
+       user.effects[PBEffects::StockpileDef] == 0 &&
+       user.effects[PBEffects::StockpileSpDef] == 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -600,25 +600,25 @@ class Battle::Move::HealUserDependingOnUserStockpile < Battle::Move
 
   def pbEffectGeneral(user)
     hpGain = 0
-    case [user.effects[PBEffects::Stockpile],1].max
-    when 1 then hpGain = user.totalhp/4
-    when 2 then hpGain = user.totalhp/2
+    case [user.effects[PBEffects::Stockpile], 1].max
+    when 1 then hpGain = user.totalhp / 4
+    when 2 then hpGain = user.totalhp / 2
     when 3 then hpGain = user.totalhp
     end
-    if user.pbRecoverHP(hpGain)>0
-      @battle.pbDisplay(_INTL("{1}'s HP was restored.",user.pbThis))
+    if user.pbRecoverHP(hpGain) > 0
+      @battle.pbDisplay(_INTL("{1}'s HP was restored.", user.pbThis))
     end
-    @battle.pbDisplay(_INTL("{1}'s stockpiled effect wore off!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1}'s stockpiled effect wore off!", user.pbThis))
     showAnim = true
-    if user.effects[PBEffects::StockpileDef]>0 &&
-       user.pbCanLowerStatStage?(:DEFENSE,user,self)
-      if user.pbLowerStatStage(:DEFENSE,user.effects[PBEffects::StockpileDef],user,showAnim)
+    if user.effects[PBEffects::StockpileDef] > 0 &&
+       user.pbCanLowerStatStage?(:DEFENSE, user, self)
+      if user.pbLowerStatStage(:DEFENSE, user.effects[PBEffects::StockpileDef], user, showAnim)
         showAnim = false
       end
     end
-    if user.effects[PBEffects::StockpileSpDef]>0 &&
-       user.pbCanLowerStatStage?(:SPECIAL_DEFENSE,user,self)
-      user.pbLowerStatStage(:SPECIAL_DEFENSE,user.effects[PBEffects::StockpileSpDef],user,showAnim)
+    if user.effects[PBEffects::StockpileSpDef] > 0 &&
+       user.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user, self)
+      user.pbLowerStatStage(:SPECIAL_DEFENSE, user.effects[PBEffects::StockpileSpDef], user, showAnim)
     end
     user.effects[PBEffects::Stockpile]      = 0
     user.effects[PBEffects::StockpileDef]   = 0
@@ -632,7 +632,7 @@ end
 # swamp on the opposing side.
 #===============================================================================
 class Battle::Move::GrassPledge < Battle::Move::PledgeMove
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     # [Function code to combo with, effect, override type, override animation]
     @combos = [["FirePledge",  :SeaOfFire, :FIRE, :FIREPLEDGE],
@@ -646,7 +646,7 @@ end
 # user's side or a sea of fire on the opposing side.
 #===============================================================================
 class Battle::Move::FirePledge < Battle::Move::PledgeMove
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     # [Function code to combo with, effect, override type, override animation]
     @combos = [["WaterPledge", :Rainbow,   :WATER, :WATERPLEDGE],
@@ -660,7 +660,7 @@ end
 # opposing side or a rainbow on the user's side.
 #===============================================================================
 class Battle::Move::WaterPledge < Battle::Move::PledgeMove
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     # [Function code to combo with, effect, override type, override animation]
     @combos = [["GrassPledge", :Swamp,   :GRASS, :GRASSPLEDGE],
@@ -674,7 +674,7 @@ end
 class Battle::Move::UseLastMoveUsed < Battle::Move
   def callsAnotherMove?; return true; end
 
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     @moveBlacklist = [
        # Struggle, Belch
@@ -738,12 +738,12 @@ class Battle::Move::UseLastMoveUsed < Battle::Move
     end
   end
 
-  def pbChangeUsageCounters(user,specialUsage)
+  def pbChangeUsageCounters(user, specialUsage)
     super
     @copied_move = @battle.lastMoveUsed
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !@copied_move ||
        @moveBlacklist.include?(GameData::Move.get(@copied_move).function_code)
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -773,11 +773,11 @@ class Battle::Move::UseLastMoveUsedByTarget < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    user.pbUseMoveSimple(target.lastRegularMoveUsed,target.index)
+  def pbEffectAgainstTarget(user, target)
+    user.pbUseMoveSimple(target.lastRegularMoveUsed, target.index)
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     # No animation
   end
 end
@@ -790,7 +790,7 @@ class Battle::Move::UseMoveTargetIsAboutToUse < Battle::Move
   def ignoresSubstitute?(user); return true; end
   def callsAnotherMove?; return true; end
 
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     @moveBlacklist = [
        "UserTakesTargetItem",   # Covet, Thief
@@ -818,7 +818,7 @@ class Battle::Move::UseMoveTargetIsAboutToUse < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     user.effects[PBEffects::MeFirst] = true
     user.pbUseMoveSimple(@battle.choices[target.index][2].id)
     user.effects[PBEffects::MeFirst] = false
@@ -834,7 +834,7 @@ end
 class Battle::Move::UseMoveDependingOnEnvironment < Battle::Move
   def callsAnotherMove?; return true; end
 
-  def pbOnStartUse(user,targets)
+  def pbOnStartUse(user, targets)
     # NOTE: It's possible in theory to not have the move Nature Power wants to
     #       turn into, but what self-respecting game wouldn't at least have Tri
     #       Attack in it?
@@ -882,7 +882,7 @@ class Battle::Move::UseMoveDependingOnEnvironment < Battle::Move
     end
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     @battle.pbDisplay(_INTL("{1} turned into {2}!", @name, GameData::Move.get(@npMove).name))
     user.pbUseMoveSimple(@npMove, target.index)
   end
@@ -894,7 +894,7 @@ end
 class Battle::Move::UseRandomMove < Battle::Move
   def callsAnotherMove?; return true; end
 
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     @moveBlacklist = [
        "FlinchTargetFailsIfUserNotAsleep",   # Snore
@@ -977,7 +977,7 @@ class Battle::Move::UseRandomMove < Battle::Move
     ]
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     @metronomeMove = nil
     move_keys = GameData::Move.keys
     # NOTE: You could be really unlucky and roll blacklisted moves 1000 times in
@@ -1009,7 +1009,7 @@ end
 class Battle::Move::UseRandomMoveFromUserParty < Battle::Move
   def callsAnotherMove?; return true; end
 
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     @moveBlacklist = [
        # Struggle, Belch
@@ -1092,11 +1092,11 @@ class Battle::Move::UseRandomMoveFromUserParty < Battle::Move
     end
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     @assistMoves = []
     # NOTE: This includes the Pokémon of ally trainers in multi battles.
-    @battle.pbParty(user.index).each_with_index do |pkmn,i|
-      next if !pkmn || i==user.pokemonIndex
+    @battle.pbParty(user.index).each_with_index do |pkmn, i|
+      next if !pkmn || i == user.pokemonIndex
       next if Settings::MECHANICS_GENERATION >= 6 && pkmn.egg?
       pkmn.moves.each do |move|
         next if @moveBlacklist.include?(move.function_code)
@@ -1104,7 +1104,7 @@ class Battle::Move::UseRandomMoveFromUserParty < Battle::Move
         @assistMoves.push(move.id)
       end
     end
-    if @assistMoves.length==0
+    if @assistMoves.length == 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1124,7 +1124,7 @@ class Battle::Move::UseRandomUserMoveIfAsleep < Battle::Move
   def usableWhenAsleep?; return true; end
   def callsAnotherMove?; return true; end
 
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     @moveBlacklist = [
        "MultiTurnAttackPreventSleeping",   # Uproar
@@ -1165,14 +1165,14 @@ class Battle::Move::UseRandomUserMoveIfAsleep < Battle::Move
     ]
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     @sleepTalkMoves = []
-    user.eachMoveWithIndex do |m,i|
+    user.eachMoveWithIndex do |m, i|
       next if @moveBlacklist.include?(m.function)
-      next if !@battle.pbCanChooseMove?(user.index,i,false,true)
+      next if !@battle.pbCanChooseMove?(user.index, i, false, true)
       @sleepTalkMoves.push(i)
     end
-    if !user.asleep? || @sleepTalkMoves.length==0
+    if !user.asleep? || @sleepTalkMoves.length == 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1181,7 +1181,7 @@ class Battle::Move::UseRandomUserMoveIfAsleep < Battle::Move
 
   def pbEffectGeneral(user)
     choice = @sleepTalkMoves[@battle.pbRandom(@sleepTalkMoves.length)]
-    user.pbUseMoveSimple(user.moves[choice].id,user.pbDirectOpposing.index)
+    user.pbUseMoveSimple(user.moves[choice].id, user.pbDirectOpposing.index)
   end
 end
 
@@ -1192,7 +1192,7 @@ end
 class Battle::Move::BounceBackProblemCausingStatusMoves < Battle::Move
   def pbEffectGeneral(user)
     user.effects[PBEffects::MagicCoat] = true
-    @battle.pbDisplay(_INTL("{1} shrouded itself with Magic Coat!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1} shrouded itself with Magic Coat!", user.pbThis))
   end
 end
 
@@ -1203,10 +1203,10 @@ class Battle::Move::StealAndUseBeneficialStatusMove < Battle::Move
   def pbEffectGeneral(user)
     user.effects[PBEffects::Snatch] = 1
     @battle.allBattlers.each do |b|
-      next if b.effects[PBEffects::Snatch]<user.effects[PBEffects::Snatch]
-      user.effects[PBEffects::Snatch] = b.effects[PBEffects::Snatch]+1
+      next if b.effects[PBEffects::Snatch] < user.effects[PBEffects::Snatch]
+      user.effects[PBEffects::Snatch] = b.effects[PBEffects::Snatch] + 1
     end
-    @battle.pbDisplay(_INTL("{1} waits for a target to make a move!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1} waits for a target to make a move!", user.pbThis))
   end
 end
 
@@ -1217,7 +1217,7 @@ end
 class Battle::Move::ReplaceMoveThisBattleWithTargetLastMoveUsed < Battle::Move
   def ignoresSubstitute?(user); return true; end
 
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     @moveBlacklist = [
        "UseRandomMove",   # Metronome
@@ -1230,7 +1230,7 @@ class Battle::Move::ReplaceMoveThisBattleWithTargetLastMoveUsed < Battle::Move
     ]
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if user.effects[PBEffects::Transform] || !user.pbHasMove?(@id)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -1250,12 +1250,12 @@ class Battle::Move::ReplaceMoveThisBattleWithTargetLastMoveUsed < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    user.eachMoveWithIndex do |m,i|
-      next if m.id!=@id
+  def pbEffectAgainstTarget(user, target)
+    user.eachMoveWithIndex do |m, i|
+      next if m.id != @id
       newMove = Pokemon::Move.new(target.lastRegularMoveUsed)
-      user.moves[i] = Battle::Move.from_pokemon_move(@battle,newMove)
-      @battle.pbDisplay(_INTL("{1} learned {2}!",user.pbThis,newMove.name))
+      user.moves[i] = Battle::Move.from_pokemon_move(@battle, newMove)
+      @battle.pbDisplay(_INTL("{1} learned {2}!", user.pbThis, newMove.name))
       user.pbCheckFormOnMovesetChange
       break
     end
@@ -1268,7 +1268,7 @@ end
 class Battle::Move::ReplaceMoveWithTargetLastMoveUsed < Battle::Move
   def ignoresSubstitute?(user); return true; end
 
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     @moveBlacklist = [
        "ReplaceMoveWithTargetLastMoveUsed",   # Sketch (this move)
@@ -1277,7 +1277,7 @@ class Battle::Move::ReplaceMoveWithTargetLastMoveUsed < Battle::Move
     ]
   end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if user.effects[PBEffects::Transform] || !user.pbHasMove?(@id)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -1297,13 +1297,13 @@ class Battle::Move::ReplaceMoveWithTargetLastMoveUsed < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    user.eachMoveWithIndex do |m,i|
-      next if m.id!=@id
+  def pbEffectAgainstTarget(user, target)
+    user.eachMoveWithIndex do |m, i|
+      next if m.id != @id
       newMove = Pokemon::Move.new(target.lastRegularMoveUsed)
       user.pokemon.moves[i] = newMove
-      user.moves[i] = Battle::Move.from_pokemon_move(@battle,newMove)
-      @battle.pbDisplay(_INTL("{1} learned {2}!",user.pbThis,newMove.name))
+      user.moves[i] = Battle::Move.from_pokemon_move(@battle, newMove)
+      @battle.pbDisplay(_INTL("{1} learned {2}!", user.pbThis, newMove.name))
       user.pbCheckFormOnMovesetChange
       break
     end

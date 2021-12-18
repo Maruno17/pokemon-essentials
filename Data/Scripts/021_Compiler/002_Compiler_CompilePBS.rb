@@ -16,24 +16,24 @@ module Compiler
     placenames = []
     placedescs = []
     sections   = []
-    pbCompilerEachCommentedLine(path) { |line,lineno|
+    pbCompilerEachCommentedLine(path) { |line, lineno|
       if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
         currentmap = $~[1].to_i
         sections[currentmap] = []
       else
-        if currentmap<0
-          raise _INTL("Expected a section at the beginning of the file\r\n{1}",FileLineData.linereport)
+        if currentmap < 0
+          raise _INTL("Expected a section at the beginning of the file\r\n{1}", FileLineData.linereport)
         end
         if !line[/^\s*(\w+)\s*=\s*(.*)$/]
-          raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\r\n{1}",FileLineData.linereport)
+          raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\r\n{1}", FileLineData.linereport)
         end
         settingname = $~[1]
         schema = nonglobaltypes[settingname]
         if schema
-          record = pbGetCsvRecord($~[2],lineno,schema)
-          if settingname=="Name"
+          record = pbGetCsvRecord($~[2], lineno, schema)
+          if settingname == "Name"
             rgnnames[currentmap] = record
-          elsif settingname=="Point"
+          elsif settingname == "Point"
             placenames.push(record[2])
             placedescs.push(record[3])
             sections[currentmap][schema[0]] = [] if !sections[currentmap][schema[0]]
@@ -44,10 +44,10 @@ module Compiler
         end
       end
     }
-    save_data(sections,"Data/town_map.dat")
-    MessageTypes.setMessages(MessageTypes::RegionNames,rgnnames)
-    MessageTypes.setMessagesAsHash(MessageTypes::PlaceNames,placenames)
-    MessageTypes.setMessagesAsHash(MessageTypes::PlaceDescriptions,placedescs)
+    save_data(sections, "Data/town_map.dat")
+    MessageTypes.setMessages(MessageTypes::RegionNames, rgnnames)
+    MessageTypes.setMessagesAsHash(MessageTypes::PlaceNames, placenames)
+    MessageTypes.setMessagesAsHash(MessageTypes::PlaceDescriptions, placedescs)
     process_pbs_file_message_end
   end
 
@@ -57,26 +57,26 @@ module Compiler
   def compile_connections(path = "PBS/map_connections.txt")
     compile_pbs_file_message_start(path)
     records   = []
-    pbCompilerEachPreppedLine(path) { |line,lineno|
+    pbCompilerEachPreppedLine(path) { |line, lineno|
       hashenum = {
-        "N" => "N","North" => "N",
-        "E" => "E","East"  => "E",
-        "S" => "S","South" => "S",
-        "W" => "W","West"  => "W"
+        "N" => "N", "North" => "N",
+        "E" => "E", "East"  => "E",
+        "S" => "S", "South" => "S",
+        "W" => "W", "West"  => "W"
       }
       record = []
       thisline = line.dup
-      record.push(csvInt!(thisline,lineno))
-      record.push(csvEnumFieldOrInt!(thisline,hashenum,"",sprintf("(line %d)",lineno)))
-      record.push(csvInt!(thisline,lineno))
-      record.push(csvInt!(thisline,lineno))
-      record.push(csvEnumFieldOrInt!(thisline,hashenum,"",sprintf("(line %d)",lineno)))
-      record.push(csvInt!(thisline,lineno))
-      if !pbRgssExists?(sprintf("Data/Map%03d.rxdata",record[0]))
-        print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}",record[0],FileLineData.linereport)
+      record.push(csvInt!(thisline, lineno))
+      record.push(csvEnumFieldOrInt!(thisline, hashenum, "", sprintf("(line %d)", lineno)))
+      record.push(csvInt!(thisline, lineno))
+      record.push(csvInt!(thisline, lineno))
+      record.push(csvEnumFieldOrInt!(thisline, hashenum, "", sprintf("(line %d)", lineno)))
+      record.push(csvInt!(thisline, lineno))
+      if !pbRgssExists?(sprintf("Data/Map%03d.rxdata", record[0]))
+        print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}", record[0], FileLineData.linereport)
       end
-      if !pbRgssExists?(sprintf("Data/Map%03d.rxdata",record[3]))
-        print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}",record[3],FileLineData.linereport)
+      if !pbRgssExists?(sprintf("Data/Map%03d.rxdata", record[3]))
+        print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}", record[3], FileLineData.linereport)
       end
       case record[1]
       when "N"
@@ -90,7 +90,7 @@ module Compiler
       end
       records.push(record)
     }
-    save_data(records,"Data/map_connections.dat")
+    save_data(records, "Data/map_connections.dat")
     process_pbs_file_message_end
   end
 
@@ -103,34 +103,34 @@ module Compiler
     database = PhoneDatabase.new
     sections = []
     File.open(path, "rb") { |f|
-      pbEachSection(f) { |section,name|
+      pbEachSection(f) { |section, name|
         case name
         when "<Generics>"
-          database.generics=section
+          database.generics = section
           sections.concat(section)
         when "<BattleRequests>"
-          database.battleRequests=section
+          database.battleRequests = section
           sections.concat(section)
         when "<GreetingsMorning>"
-          database.greetingsMorning=section
+          database.greetingsMorning = section
           sections.concat(section)
         when "<GreetingsEvening>"
-          database.greetingsEvening=section
+          database.greetingsEvening = section
           sections.concat(section)
         when "<Greetings>"
-          database.greetings=section
+          database.greetings = section
           sections.concat(section)
         when "<Bodies1>"
-          database.bodies1=section
+          database.bodies1 = section
           sections.concat(section)
         when "<Bodies2>"
-          database.bodies2=section
+          database.bodies2 = section
           sections.concat(section)
         end
       }
     }
-    MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages,sections)
-    save_data(database,"Data/phone.dat")
+    MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages, sections)
+    save_data(database, "Data/phone.dat")
     process_pbs_file_message_end
   end
 
@@ -1529,44 +1529,44 @@ module Compiler
       }
     end
     sections = []
-    MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech,[])
-    MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechWin,[])
-    MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechLose,[])
+    MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, [])
+    MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechWin, [])
+    MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechLose, [])
     File.open(path, "rb") { |f|
       FileLineData.file = path
       idx = 0
-      pbEachFileSection(f) { |section,name|
+      pbEachFileSection(f) { |section, name|
         echo "."
         idx += 1
         Graphics.update
-        next if name!="DefaultTrainerList" && name!="TrainerList"
+        next if name != "DefaultTrainerList" && name != "TrainerList"
         rsection = []
         for key in section.keys
-          FileLineData.setSection(name,key,section[key])
+          FileLineData.setSection(name, key, section[key])
           schema = btTrainersRequiredTypes[key]
-          next if key=="Challenges" && name=="DefaultTrainerList"
+          next if key == "Challenges" && name == "DefaultTrainerList"
           next if !schema
-          record = pbGetCsvRecord(section[key],0,schema)
+          record = pbGetCsvRecord(section[key], 0, schema)
           rsection[schema[0]] = record
         end
         if !rsection[0]
-          raise _INTL("No trainer data file given in section {1}.\r\n{2}",name,FileLineData.linereport)
+          raise _INTL("No trainer data file given in section {1}.\r\n{2}", name, FileLineData.linereport)
         end
         if !rsection[1]
-          raise _INTL("No trainer data file given in section {1}.\r\n{2}",name,FileLineData.linereport)
+          raise _INTL("No trainer data file given in section {1}.\r\n{2}", name, FileLineData.linereport)
         end
         rsection[3] = rsection[0]
         rsection[4] = rsection[1]
-        rsection[5] = (name=="DefaultTrainerList")
-        if safeExists?("PBS/"+rsection[0])
-          rsection[0] = compile_battle_tower_trainers("PBS/"+rsection[0])
+        rsection[5] = (name == "DefaultTrainerList")
+        if safeExists?("PBS/" + rsection[0])
+          rsection[0] = compile_battle_tower_trainers("PBS/" + rsection[0])
         else
           rsection[0] = []
         end
-        if safeExists?("PBS/"+rsection[1])
-          filename = "PBS/"+rsection[1]
+        if safeExists?("PBS/" + rsection[1])
+          filename = "PBS/" + rsection[1]
           rsection[1] = []
-          pbCompilerEachCommentedLine(filename) { |line,_lineno|
+          pbCompilerEachCommentedLine(filename) { |line, _lineno|
             rsection[1].push(PBPokemon.fromInspected(line))
           }
         else
@@ -1580,7 +1580,7 @@ module Compiler
         sections.push(rsection)
       }
     }
-    save_data(sections,"Data/trainer_lists.dat")
+    save_data(sections, "Data/trainer_lists.dat")
     process_pbs_file_message_end
   end
 
@@ -1599,15 +1599,15 @@ module Compiler
     endspeechwin  = []
     endspeechlose = []
     if safeExists?(filename)
-      File.open(filename,"rb") { |f|
+      File.open(filename, "rb") { |f|
         FileLineData.file = filename
-        pbEachFileSection(f) { |section,name|
+        pbEachFileSection(f) { |section, name|
           rsection = []
           for key in section.keys
-            FileLineData.setSection(name,key,section[key])
+            FileLineData.setSection(name, key, section[key])
             schema = requiredtypes[key]
             next if !schema
-            record = pbGetCsvRecord(section[key],0,schema)
+            record = pbGetCsvRecord(section[key], 0, schema)
             rsection[schema[0]] = record
           end
           trainernames.push(rsection[1])
@@ -1618,10 +1618,10 @@ module Compiler
         }
       }
     end
-    MessageTypes.addMessagesAsHash(MessageTypes::TrainerNames,trainernames)
-    MessageTypes.addMessagesAsHash(MessageTypes::BeginSpeech,beginspeech)
-    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechWin,endspeechwin)
-    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechLose,endspeechlose)
+    MessageTypes.addMessagesAsHash(MessageTypes::TrainerNames, trainernames)
+    MessageTypes.addMessagesAsHash(MessageTypes::BeginSpeech, beginspeech)
+    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechWin, endspeechwin)
+    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechLose, endspeechlose)
     return sections
   end
 
@@ -1815,8 +1815,8 @@ module Compiler
       end
     end
     if changed
-      save_data(move2anim,"Data/move2anim.dat")
-      save_data(pbanims,"Data/PkmnAnimations.rxdata")
+      save_data(move2anim, "Data/move2anim.dat")
+      save_data(pbanims, "Data/PkmnAnimations.rxdata")
     end
     process_pbs_file_message_end
   end

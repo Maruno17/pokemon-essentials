@@ -13,7 +13,7 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   party = []
   for i in 0...Settings::MAX_PARTY_SIZE
     if i == 0
-      pbMessage(_INTL("Please enter the first Pokémon.",i))
+      pbMessage(_INTL("Please enter the first Pokémon.", i))
     else
       break if !pbConfirmMessage(_INTL("Add another Pokémon?"))
     end

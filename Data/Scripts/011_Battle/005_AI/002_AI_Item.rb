@@ -12,7 +12,7 @@ class Battle::AI
       idxTarget = @battle.battlers[idxTarget].pokemonIndex   # Party Pokémon
     end
     # Register use of item
-    @battle.pbRegisterItem(idxBattler,item,idxTarget)
+    @battle.pbRegisterItem(idxBattler, item, idxTarget)
     PBDebug.log("[AI] #{user.pbThis} (#{user.index}) will use item #{GameData::Item.get(item).name}")
     return true
   end
@@ -22,7 +22,7 @@ class Battle::AI
   def pbEnemyItemToUse(idxBattler)
     return nil if !@battle.internalBattle
     items = @battle.pbGetOwnerItems(idxBattler)
-    return nil if !items || items.length==0
+    return nil if !items || items.length == 0
     # Determine target of item (always the Pokémon choosing the action)
     idxTarget = idxBattler   # Battler using the item
     battler = @battle.battlers[idxTarget]
@@ -40,7 +40,7 @@ class Battle::AI
        :LEMONADE     => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 70 : 80,
        :MOOMOOMILK   => 100,
        :ORANBERRY    => 10,
-       :SITRUSBERRY  => battler.totalhp/4,
+       :SITRUSBERRY  => battler.totalhp / 4,
        :ENERGYPOWDER => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 60 : 50,
        :ENERGYROOT   => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 120 : 200
     }
@@ -103,9 +103,9 @@ class Battle::AI
     usableXItems      = []
     items.each do |i|
       next if !i
-      next if !@battle.pbCanUseItemOnPokemon?(i,pkmn,battler,@battle.scene,false)
-      next if !ItemHandlers.triggerCanUseInBattle(i,pkmn,battler,nil,
-         false,self,@battle.scene,false)
+      next if !@battle.pbCanUseItemOnPokemon?(i, pkmn, battler, @battle.scene, false)
+      next if !ItemHandlers.triggerCanUseInBattle(i, pkmn, battler, nil,
+         false, self, @battle.scene, false)
       # Log HP healing items
       if losthp > 0
         power = hpItems[i]
@@ -140,28 +140,28 @@ class Battle::AI
       end
     end
     # Prioritise using a HP restoration item
-    if usableHPItems.length>0 && (battler.hp<=battler.totalhp/4 ||
-       (battler.hp<=battler.totalhp/2 && pbAIRandom(100)<30))
-      usableHPItems.sort! { |a,b| (a[1]==b[1]) ? a[2]<=>b[2] : a[1]<=>b[1] }
+    if usableHPItems.length > 0 && (battler.hp <= battler.totalhp / 4 ||
+       (battler.hp <= battler.totalhp / 2 && pbAIRandom(100) < 30))
+      usableHPItems.sort! { |a, b| (a[1] == b[1]) ? a[2] <=> b[2] : a[1] <=> b[1] }
       prevItem = nil
       usableHPItems.each do |i|
-        return i[0], idxTarget if i[2]>=losthp
+        return i[0], idxTarget if i[2] >= losthp
         prevItem = i
       end
       return prevItem[0], idxTarget
     end
     # Next prioritise using a status-curing item
-    if usableStatusItems.length>0 && pbAIRandom(100)<40
-      usableStatusItems.sort! { |a,b| a[1]<=>b[1] }
+    if usableStatusItems.length > 0 && pbAIRandom(100) < 40
+      usableStatusItems.sort! { |a, b| a[1] <=> b[1] }
       return usableStatusItems[0][0], idxTarget
     end
     # Next try using an X item
-    if usableXItems.length>0 && pbAIRandom(100)<30
-      usableXItems.sort! { |a,b| (a[1]==b[1]) ? a[2]<=>b[2] : a[1]<=>b[1] }
+    if usableXItems.length > 0 && pbAIRandom(100) < 30
+      usableXItems.sort! { |a, b| (a[1] == b[1]) ? a[2] <=> b[2] : a[1] <=> b[1] }
       prevItem = nil
       usableXItems.each do |i|
-        break if prevItem && i[1]>prevItem[1]
-        return i[0], idxTarget if i[1]+i[2]>=6
+        break if prevItem && i[1] > prevItem[1]
+        return i[0], idxTarget if i[1] + i[2] >= 6
         prevItem = i
       end
       return prevItem[0], idxTarget

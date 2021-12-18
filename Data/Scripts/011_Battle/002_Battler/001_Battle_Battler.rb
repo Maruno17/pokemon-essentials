@@ -82,14 +82,14 @@ class Battle::Battler
   end
 
   def defense
-    return @spdef if @battle.field.effects[PBEffects::WonderRoom]>0
+    return @spdef if @battle.field.effects[PBEffects::WonderRoom] > 0
     return @defense
   end
 
   attr_writer :defense
 
   def spdef
-    return @defense if @battle.field.effects[PBEffects::WonderRoom]>0
+    return @defense if @battle.field.effects[PBEffects::WonderRoom] > 0
     return @spdef
   end
 
@@ -102,7 +102,7 @@ class Battle::Battler
     @pokemon.hp = value.to_i if @pokemon
   end
 
-  def fainted?; return @hp<=0; end
+  def fainted?; return @hp <= 0; end
 
   attr_reader :status
 
@@ -211,12 +211,12 @@ class Battle::Battler
   def pbThis(lowerCase = false)
     if opposes?
       if @battle.trainerBattle?
-        return lowerCase ? _INTL("the opposing {1}",name) : _INTL("The opposing {1}",name)
+        return lowerCase ? _INTL("the opposing {1}", name) : _INTL("The opposing {1}", name)
       else
-        return lowerCase ? _INTL("the wild {1}",name) : _INTL("The wild {1}",name)
+        return lowerCase ? _INTL("the wild {1}", name) : _INTL("The wild {1}", name)
       end
     elsif !pbOwnedByPlayer?
-      return lowerCase ? _INTL("the ally {1}",name) : _INTL("The ally {1}",name)
+      return lowerCase ? _INTL("the ally {1}", name) : _INTL("The ally {1}", name)
     end
     return name
   end
@@ -240,10 +240,10 @@ class Battle::Battler
   #=============================================================================
   def pbSpeed
     return 1 if fainted?
-    stageMul = [2,2,2,2,2,2, 2, 3,4,5,6,7,8]
-    stageDiv = [8,7,6,5,4,3, 2, 2,2,2,2,2,2]
+    stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
+    stageDiv = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
     stage = @stages[:SPEED] + 6
-    speed = @speed*stageMul[stage]/stageDiv[stage]
+    speed = @speed * stageMul[stage] / stageDiv[stage]
     speedMult = 1.0
     # Ability effects that alter calculated Speed
     if abilityActive?
@@ -254,8 +254,8 @@ class Battle::Battler
       speedMult = Battle::ItemEffects.triggerSpeedCalc(self.item, self, speedMult)
     end
     # Other effects
-    speedMult *= 2 if pbOwnSide.effects[PBEffects::Tailwind]>0
-    speedMult /= 2 if pbOwnSide.effects[PBEffects::Swamp]>0
+    speedMult *= 2 if pbOwnSide.effects[PBEffects::Tailwind] > 0
+    speedMult /= 2 if pbOwnSide.effects[PBEffects::Swamp] > 0
     # Paralysis
     if status == :PARALYSIS && !hasActiveAbility?(:QUICKFEET)
       speedMult /= (Settings::MECHANICS_GENERATION >= 7) ? 2 : 4
@@ -266,20 +266,20 @@ class Battle::Battler
       speedMult *= 1.1
     end
     # Calculation
-    return [(speed*speedMult).round,1].max
+    return [(speed * speedMult).round, 1].max
   end
 
   def pbWeight
     ret = (@pokemon) ? @pokemon.weight : 500
     ret += @effects[PBEffects::WeightChange]
-    ret = 1 if ret<1
+    ret = 1 if ret < 1
     if abilityActive? && !@battle.moldBreaker
       ret = Battle::AbilityEffects.triggerWeightCalc(self.ability, self, ret)
     end
     if itemActive?
       ret = Battle::ItemEffects.triggerWeightCalc(self.item, self, ret)
     end
-    return [ret,1].max
+    return [ret, 1].max
   end
 
   #=============================================================================
@@ -415,10 +415,10 @@ class Battle::Battler
 
   def itemActive?(ignoreFainted = false)
     return false if fainted? && !ignoreFainted
-    return false if @effects[PBEffects::Embargo]>0
-    return false if @battle.field.effects[PBEffects::MagicRoom]>0
+    return false if @effects[PBEffects::Embargo] > 0
+    return false if @battle.field.effects[PBEffects::MagicRoom] > 0
     return false if @battle.corrosiveGas[@index % 2][@pokemonIndex]
-    return false if hasActiveAbility?(:KLUTZ,ignoreFainted)
+    return false if hasActiveAbility?(:KLUTZ, ignoreFainted)
     return true
   end
 
@@ -515,9 +515,9 @@ class Battle::Battler
       if showMsg
         @battle.pbShowAbilitySplash(self)
         if Battle::Scene::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis))
+          @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
         else
-          @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",pbThis,abilityName))
+          @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!", pbThis, abilityName))
         end
         @battle.pbHideAbilitySplash(self)
       end
@@ -531,7 +531,7 @@ class Battle::Battler
     return false if pbHasType?(:GROUND) || pbHasType?(:ROCK) || pbHasType?(:STEEL)
     return false if inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground",
                                      "TwoTurnAttackInvulnerableUnderwater")
-    return false if hasActiveAbility?([:OVERCOAT,:SANDFORCE,:SANDRUSH,:SANDVEIL])
+    return false if hasActiveAbility?([:OVERCOAT, :SANDFORCE, :SANDRUSH, :SANDVEIL])
     return false if hasActiveItem?(:SAFETYGOGGLES)
     return true
   end
@@ -541,7 +541,7 @@ class Battle::Battler
     return false if pbHasType?(:ICE)
     return false if inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground",
                                      "TwoTurnAttackInvulnerableUnderwater")
-    return false if hasActiveAbility?([:OVERCOAT,:ICEBODY,:SNOWCLOAK])
+    return false if hasActiveAbility?([:OVERCOAT, :ICEBODY, :SNOWCLOAK])
     return false if hasActiveItem?(:SAFETYGOGGLES)
     return true
   end
@@ -561,7 +561,7 @@ class Battle::Battler
   def affectedByPowder?(showMsg = false)
     return false if fainted?
     if pbHasType?(:GRASS) && Settings::MORE_TYPE_EFFECTS
-      @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis)) if showMsg
+      @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis)) if showMsg
       return false
     end
     if Settings::MECHANICS_GENERATION >= 6
@@ -569,9 +569,9 @@ class Battle::Battler
         if showMsg
           @battle.pbShowAbilitySplash(self)
           if Battle::Scene::USE_ABILITY_SPLASH
-            @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis))
+            @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
           else
-            @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",pbThis,abilityName))
+            @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!", pbThis, abilityName))
           end
           @battle.pbHideAbilitySplash(self)
         end
@@ -579,7 +579,7 @@ class Battle::Battler
       end
       if hasActiveItem?(:SAFETYGOGGLES)
         if showMsg
-          @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",pbThis,itemName))
+          @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!", pbThis, itemName))
         end
         return false
       end
@@ -588,15 +588,15 @@ class Battle::Battler
   end
 
   def canHeal?
-    return false if fainted? || @hp>=@totalhp
-    return false if @effects[PBEffects::HealBlock]>0
+    return false if fainted? || @hp >= @totalhp
+    return false if @effects[PBEffects::HealBlock] > 0
     return true
   end
 
   def affectedByContactEffect?(showMsg = false)
     return false if fainted?
     if hasActiveItem?(:PROTECTIVEPADS)
-      @battle.pbDisplay(_INTL("{1} protected itself with the {2}!",pbThis,itemName)) if showMsg
+      @battle.pbDisplay(_INTL("{1} protected itself with the {2}!", pbThis, itemName)) if showMsg
       return false
     end
     return true
@@ -615,23 +615,23 @@ class Battle::Battler
   end
 
   def movedThisRound?
-    return @lastRoundMoved && @lastRoundMoved==@battle.turnCount
+    return @lastRoundMoved && @lastRoundMoved == @battle.turnCount
   end
 
   def usingMultiTurnAttack?
     return true if @effects[PBEffects::TwoTurnAttack]
-    return true if @effects[PBEffects::HyperBeam]>0
-    return true if @effects[PBEffects::Rollout]>0
-    return true if @effects[PBEffects::Outrage]>0
-    return true if @effects[PBEffects::Uproar]>0
-    return true if @effects[PBEffects::Bide]>0
+    return true if @effects[PBEffects::HyperBeam] > 0
+    return true if @effects[PBEffects::Rollout] > 0
+    return true if @effects[PBEffects::Outrage] > 0
+    return true if @effects[PBEffects::Uproar] > 0
+    return true if @effects[PBEffects::Bide] > 0
     return false
   end
 
   def inTwoTurnAttack?(*arg)
     return false if !@effects[PBEffects::TwoTurnAttack]
     ttaFunction = GameData::Move.get(@effects[PBEffects::TwoTurnAttack]).function_code
-    arg.each { |a| return true if a==ttaFunction }
+    arg.each { |a| return true if a == ttaFunction }
     return false
   end
 
@@ -645,10 +645,10 @@ class Battle::Battler
   end
 
   def pbEncoredMoveIndex
-    return -1 if @effects[PBEffects::Encore]==0 || !@effects[PBEffects::EncoreMove]
+    return -1 if @effects[PBEffects::Encore] == 0 || !@effects[PBEffects::EncoreMove]
     ret = -1
-    eachMoveWithIndex do |m,i|
-      next if m.id!=@effects[PBEffects::EncoreMove]
+    eachMoveWithIndex do |m, i|
+      next if m.id != @effects[PBEffects::EncoreMove]
       ret = i
       break
     end
@@ -656,31 +656,31 @@ class Battle::Battler
   end
 
   def initialItem
-    return @battle.initialItems[@index&1][@pokemonIndex]
+    return @battle.initialItems[@index & 1][@pokemonIndex]
   end
 
   def setInitialItem(value)
     item_data = GameData::Item.try_get(value)
     new_item = (item_data) ? item_data.id : nil
-    @battle.initialItems[@index&1][@pokemonIndex] = new_item
+    @battle.initialItems[@index & 1][@pokemonIndex] = new_item
   end
 
   def recycleItem
-    return @battle.recycleItems[@index&1][@pokemonIndex]
+    return @battle.recycleItems[@index & 1][@pokemonIndex]
   end
 
   def setRecycleItem(value)
     item_data = GameData::Item.try_get(value)
     new_item = (item_data) ? item_data.id : nil
-    @battle.recycleItems[@index&1][@pokemonIndex] = new_item
+    @battle.recycleItems[@index & 1][@pokemonIndex] = new_item
   end
 
   def belched?
-    return @battle.belch[@index&1][@pokemonIndex]
+    return @battle.belch[@index & 1][@pokemonIndex]
   end
 
   def setBelched
-    @battle.belch[@index&1][@pokemonIndex] = true
+    @battle.belch[@index & 1][@pokemonIndex] = true
   end
 
   #=============================================================================
@@ -689,13 +689,13 @@ class Battle::Battler
   # Returns whether the given position belongs to the opposing Pokémon's side.
   def opposes?(i = 0)
     i = i.index if i.respond_to?("index")
-    return (@index&1)!=(i&1)
+    return (@index & 1) != (i & 1)
   end
 
   # Returns whether the given position/battler is near to self.
   def near?(i)
     i = i.index if i.respond_to?("index")
-    return @battle.nearBattlers?(@index,i)
+    return @battle.nearBattlers?(@index, i)
   end
 
   # Returns whether self is owned by the player.
@@ -710,13 +710,13 @@ class Battle::Battler
   # Returns 0 if self is on the player's side, or 1 if self is on the opposing
   # side.
   def idxOwnSide
-    return @index&1
+    return @index & 1
   end
 
   # Returns 1 if self is on the player's side, or 0 if self is on the opposing
   # side.
   def idxOpposingSide
-    return (@index&1)^1
+    return (@index & 1) ^ 1
   end
 
   # Returns the data structure for this battler's side.
@@ -733,7 +733,7 @@ class Battle::Battler
   # Unused
   def eachAlly
     @battle.battlers.each do |b|
-      yield b if b && !b.fainted? && !b.opposes?(@index) && b.index!=@index
+      yield b if b && !b.fainted? && !b.opposes?(@index) && b.index != @index
     end
   end
 
@@ -766,6 +766,6 @@ class Battle::Battler
     @battle.pbGetOpposingIndicesInOrder(@index).each do |i|
       return @battle.battlers[i] if @battle.battlers[i]
     end
-    return @battle.battlers[(@index^1)]
+    return @battle.battlers[(@index ^ 1)]
   end
 end

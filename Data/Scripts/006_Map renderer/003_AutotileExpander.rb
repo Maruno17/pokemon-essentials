@@ -1,6 +1,6 @@
 class TilemapRenderer
   module AutotileExpander
-    MAX_TEXTURE_SIZE  = (Bitmap.max_size / 1024) * 1024
+    MAX_TEXTURE_SIZE = (Bitmap.max_size / 1024) * 1024
 
     module_function
 

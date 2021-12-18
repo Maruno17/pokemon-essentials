@@ -2,33 +2,33 @@
 #
 #===============================================================================
 class Window_CharacterEntry < Window_DrawableCommand
-  XSIZE=13
-  YSIZE=4
+  XSIZE = 13
+  YSIZE = 4
 
-  def initialize(charset,viewport = nil)
-    @viewport=viewport
-    @charset=charset
-    @othercharset=""
-    super(0,96,480,192)
-    colors=getDefaultTextColors(self.windowskin)
-    self.baseColor=colors[0]
-    self.shadowColor=colors[1]
-    self.columns=XSIZE
+  def initialize(charset, viewport = nil)
+    @viewport = viewport
+    @charset = charset
+    @othercharset = ""
+    super(0, 96, 480, 192)
+    colors = getDefaultTextColors(self.windowskin)
+    self.baseColor = colors[0]
+    self.shadowColor = colors[1]
+    self.columns = XSIZE
     refresh
   end
 
   def setOtherCharset(value)
-    @othercharset=value.clone
+    @othercharset = value.clone
     refresh
   end
 
   def setCharset(value)
-    @charset=value.clone
+    @charset = value.clone
     refresh
   end
 
   def character
-    if self.index<0 || self.index>=@charset.length
+    if self.index < 0 || self.index >= @charset.length
       return ""
     else
       return @charset[self.index]
@@ -36,30 +36,30 @@ class Window_CharacterEntry < Window_DrawableCommand
   end
 
   def command
-    return -1 if self.index==@charset.length
-    return -2 if self.index==@charset.length+1
-    return -3 if self.index==@charset.length+2
+    return -1 if self.index == @charset.length
+    return -2 if self.index == @charset.length + 1
+    return -3 if self.index == @charset.length + 2
     return self.index
   end
 
   def itemCount
-    return @charset.length+3
+    return @charset.length + 3
   end
 
-  def drawItem(index,_count,rect)
-    rect=drawCursor(index,rect)
-    if index==@charset.length # -1
-      pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,"[ ]",
-         self.baseColor,self.shadowColor)
-    elsif index==@charset.length+1 # -2
-      pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,@othercharset,
-         self.baseColor,self.shadowColor)
-    elsif index==@charset.length+2 # -3
-      pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,_INTL("OK"),
-         self.baseColor,self.shadowColor)
+  def drawItem(index, _count, rect)
+    rect = drawCursor(index, rect)
+    if index == @charset.length # -1
+      pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height, "[ ]",
+         self.baseColor, self.shadowColor)
+    elsif index == @charset.length + 1 # -2
+      pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height, @othercharset,
+         self.baseColor, self.shadowColor)
+    elsif index == @charset.length + 2 # -3
+      pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height, _INTL("OK"),
+         self.baseColor, self.shadowColor)
     else
-      pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,@charset[index],
-         self.baseColor,self.shadowColor)
+      pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height, @charset[index],
+         self.baseColor, self.shadowColor)
     end
   end
 end
@@ -70,124 +70,124 @@ end
 # Text entry screen - free typing.
 #===============================================================================
 class PokemonEntryScene
-  @@Characters=[
-     [("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz").scan(/./),"[*]"],
-     [("0123456789   !@\#$%^&*()   ~`-_+={}[]   :;'\"<>,.?/   ").scan(/./),"[A]"],
+  @@Characters = [
+     [("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz").scan(/./), "[*]"],
+     [("0123456789   !@\#$%^&*()   ~`-_+={}[]   :;'\"<>,.?/   ").scan(/./), "[A]"],
   ]
-  USEKEYBOARD=true
+  USEKEYBOARD = true
 
-  def pbStartScene(helptext,minlength,maxlength,initialText,subject = 0,pokemon = nil)
-    @sprites={}
-    @viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
-    @viewport.z=99999
+  def pbStartScene(helptext, minlength, maxlength, initialText, subject = 0, pokemon = nil)
+    @sprites = {}
+    @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
+    @viewport.z = 99999
     if USEKEYBOARD
-      @sprites["entry"]=Window_TextEntry_Keyboard.new(initialText,
-         0,0,400-112,96,helptext,true)
+      @sprites["entry"] = Window_TextEntry_Keyboard.new(initialText,
+         0, 0, 400 - 112, 96, helptext, true)
       Input.text_input = true
     else
-      @sprites["entry"]=Window_TextEntry.new(initialText,0,0,400,96,helptext,true)
+      @sprites["entry"] = Window_TextEntry.new(initialText, 0, 0, 400, 96, helptext, true)
     end
-    @sprites["entry"].x=(Graphics.width/2)-(@sprites["entry"].width/2)+32
-    @sprites["entry"].viewport=@viewport
-    @sprites["entry"].visible=true
-    @minlength=minlength
-    @maxlength=maxlength
-    @symtype=0
-    @sprites["entry"].maxlength=maxlength
+    @sprites["entry"].x = (Graphics.width / 2) - (@sprites["entry"].width / 2) + 32
+    @sprites["entry"].viewport = @viewport
+    @sprites["entry"].visible = true
+    @minlength = minlength
+    @maxlength = maxlength
+    @symtype = 0
+    @sprites["entry"].maxlength = maxlength
     if !USEKEYBOARD
-      @sprites["entry2"]=Window_CharacterEntry.new(@@Characters[@symtype][0])
+      @sprites["entry2"] = Window_CharacterEntry.new(@@Characters[@symtype][0])
       @sprites["entry2"].setOtherCharset(@@Characters[@symtype][1])
-      @sprites["entry2"].viewport=@viewport
-      @sprites["entry2"].visible=true
-      @sprites["entry2"].x=(Graphics.width/2)-(@sprites["entry2"].width/2)
+      @sprites["entry2"].viewport = @viewport
+      @sprites["entry2"].visible = true
+      @sprites["entry2"].x = (Graphics.width / 2) - (@sprites["entry2"].width / 2)
     end
-    if minlength==0
-      @sprites["helpwindow"]=Window_UnformattedTextPokemon.newWithSize(
+    if minlength == 0
+      @sprites["helpwindow"] = Window_UnformattedTextPokemon.newWithSize(
          _INTL("Enter text using the keyboard. Press\nEnter to confirm, or Esc to cancel."),
-         32,Graphics.height-96,Graphics.width-64,96,@viewport
+         32, Graphics.height - 96, Graphics.width - 64, 96, @viewport
       )
     else
-      @sprites["helpwindow"]=Window_UnformattedTextPokemon.newWithSize(
+      @sprites["helpwindow"] = Window_UnformattedTextPokemon.newWithSize(
          _INTL("Enter text using the keyboard.\nPress Enter to confirm."),
-         32,Graphics.height-96,Graphics.width-64,96,@viewport
+         32, Graphics.height - 96, Graphics.width - 64, 96, @viewport
       )
     end
-    @sprites["helpwindow"].letterbyletter=false
-    @sprites["helpwindow"].viewport=@viewport
-    @sprites["helpwindow"].visible=USEKEYBOARD
-    @sprites["helpwindow"].baseColor=Color.new(16,24,32)
-    @sprites["helpwindow"].shadowColor=Color.new(168,184,184)
-    addBackgroundPlane(@sprites,"background","Naming/bg_2",@viewport)
+    @sprites["helpwindow"].letterbyletter = false
+    @sprites["helpwindow"].viewport = @viewport
+    @sprites["helpwindow"].visible = USEKEYBOARD
+    @sprites["helpwindow"].baseColor = Color.new(16, 24, 32)
+    @sprites["helpwindow"].shadowColor = Color.new(168, 184, 184)
+    addBackgroundPlane(@sprites, "background", "Naming/bg_2", @viewport)
     case subject
     when 1   # Player
       meta = GameData::PlayerMetadata.get($player.character_ID)
       if meta
-        @sprites["shadow"]=IconSprite.new(0,0,@viewport)
+        @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
         @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
-        @sprites["shadow"].x=33*2
-        @sprites["shadow"].y=32*2
+        @sprites["shadow"].x = 33 * 2
+        @sprites["shadow"].y = 32 * 2
         filename = pbGetPlayerCharset(meta.walk_charset, nil, true)
-        @sprites["subject"]=TrainerWalkingCharSprite.new(filename,@viewport)
-        charwidth=@sprites["subject"].bitmap.width
-        charheight=@sprites["subject"].bitmap.height
-        @sprites["subject"].x = 44*2 - charwidth/8
-        @sprites["subject"].y = 38*2 - charheight/4
+        @sprites["subject"] = TrainerWalkingCharSprite.new(filename, @viewport)
+        charwidth = @sprites["subject"].bitmap.width
+        charheight = @sprites["subject"].bitmap.height
+        @sprites["subject"].x = 44 * 2 - charwidth / 8
+        @sprites["subject"].y = 38 * 2 - charheight / 4
       end
     when 2   # Pokémon
       if pokemon
-        @sprites["shadow"]=IconSprite.new(0,0,@viewport)
+        @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
         @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
-        @sprites["shadow"].x=33*2
-        @sprites["shadow"].y=32*2
-        @sprites["subject"]=PokemonIconSprite.new(pokemon,@viewport)
+        @sprites["shadow"].x = 33 * 2
+        @sprites["shadow"].y = 32 * 2
+        @sprites["subject"] = PokemonIconSprite.new(pokemon, @viewport)
         @sprites["subject"].setOffset(PictureOrigin::Center)
-        @sprites["subject"].x=88
-        @sprites["subject"].y=54
-        @sprites["gender"]=BitmapSprite.new(32,32,@viewport)
-        @sprites["gender"].x=430
-        @sprites["gender"].y=54
+        @sprites["subject"].x = 88
+        @sprites["subject"].y = 54
+        @sprites["gender"] = BitmapSprite.new(32, 32, @viewport)
+        @sprites["gender"].x = 430
+        @sprites["gender"].y = 54
         @sprites["gender"].bitmap.clear
         pbSetSystemFont(@sprites["gender"].bitmap)
-        textpos=[]
+        textpos = []
         if pokemon.male?
-          textpos.push([_INTL("♂"),0,-6,false,Color.new(0,128,248),Color.new(168,184,184)])
+          textpos.push([_INTL("♂"), 0, -6, false, Color.new(0, 128, 248), Color.new(168, 184, 184)])
         elsif pokemon.female?
-          textpos.push([_INTL("♀"),0,-6,false,Color.new(248,24,24),Color.new(168,184,184)])
+          textpos.push([_INTL("♀"), 0, -6, false, Color.new(248, 24, 24), Color.new(168, 184, 184)])
         end
-        pbDrawTextPositions(@sprites["gender"].bitmap,textpos)
+        pbDrawTextPositions(@sprites["gender"].bitmap, textpos)
       end
     when 3   # NPC
-      @sprites["shadow"]=IconSprite.new(0,0,@viewport)
+      @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
       @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
-      @sprites["shadow"].x=33*2
-      @sprites["shadow"].y=32*2
-      @sprites["subject"]=TrainerWalkingCharSprite.new(pokemon.to_s,@viewport)
-      charwidth=@sprites["subject"].bitmap.width
-      charheight=@sprites["subject"].bitmap.height
-      @sprites["subject"].x = 44*2 - charwidth/8
-      @sprites["subject"].y = 38*2 - charheight/4
+      @sprites["shadow"].x = 33 * 2
+      @sprites["shadow"].y = 32 * 2
+      @sprites["subject"] = TrainerWalkingCharSprite.new(pokemon.to_s, @viewport)
+      charwidth = @sprites["subject"].bitmap.width
+      charheight = @sprites["subject"].bitmap.height
+      @sprites["subject"].x = 44 * 2 - charwidth / 8
+      @sprites["subject"].y = 38 * 2 - charheight / 4
     when 4   # Storage box
-      @sprites["subject"]=TrainerWalkingCharSprite.new(nil,@viewport)
-      @sprites["subject"].altcharset="Graphics/Pictures/Naming/icon_storage"
-      @sprites["subject"].animspeed=4
-      charwidth=@sprites["subject"].bitmap.width
-      charheight=@sprites["subject"].bitmap.height
-      @sprites["subject"].x = 44*2 - charwidth/8
-      @sprites["subject"].y = 26*2 - charheight/2
+      @sprites["subject"] = TrainerWalkingCharSprite.new(nil, @viewport)
+      @sprites["subject"].altcharset = "Graphics/Pictures/Naming/icon_storage"
+      @sprites["subject"].animspeed = 4
+      charwidth = @sprites["subject"].bitmap.width
+      charheight = @sprites["subject"].bitmap.height
+      @sprites["subject"].x = 44 * 2 - charwidth / 8
+      @sprites["subject"].y = 26 * 2 - charheight / 2
     end
     pbFadeInAndShow(@sprites)
   end
 
   def pbEntry1
-    ret=""
+    ret = ""
     loop do
       Graphics.update
       Input.update
-      if Input.triggerex?(:ESCAPE) && @minlength==0
-        ret=""
+      if Input.triggerex?(:ESCAPE) && @minlength == 0
+        ret = ""
         break
-      elsif Input.triggerex?(:RETURN) && @sprites["entry"].text.length>=@minlength
-        ret=@sprites["entry"].text
+      elsif Input.triggerex?(:RETURN) && @sprites["entry"].text.length >= @minlength
+        ret = @sprites["entry"].text
         break
       end
       @sprites["helpwindow"].update
@@ -199,7 +199,7 @@ class PokemonEntryScene
   end
 
   def pbEntry2
-    ret=""
+    ret = ""
     loop do
       Graphics.update
       Input.update
@@ -208,25 +208,25 @@ class PokemonEntryScene
       @sprites["entry2"].update
       @sprites["subject"].update if @sprites["subject"]
       if Input.trigger?(Input::USE)
-        index=@sprites["entry2"].command
-        if index==-3 # Confirm text
-          ret=@sprites["entry"].text
-          if ret.length<@minlength || ret.length>@maxlength
+        index = @sprites["entry2"].command
+        if index == -3 # Confirm text
+          ret = @sprites["entry"].text
+          if ret.length < @minlength || ret.length > @maxlength
             pbPlayBuzzerSE()
           else
             pbPlayDecisionSE()
             break
           end
-        elsif index==-1 # Insert a space
+        elsif index == -1 # Insert a space
           if @sprites["entry"].insert(" ")
             pbPlayDecisionSE()
           else
             pbPlayBuzzerSE()
           end
-        elsif index==-2 # Change character set
+        elsif index == -2 # Change character set
           pbPlayDecisionSE()
-          @symtype+=1
-          @symtype=0 if @symtype>=@@Characters.length
+          @symtype += 1
+          @symtype = 0 if @symtype >= @@Characters.length
           @sprites["entry2"].setCharset(@@Characters[@symtype][0])
           @sprites["entry2"].setOtherCharset(@@Characters[@symtype][1])
         else # Insert given character
@@ -373,7 +373,7 @@ class PokemonEntryScene2
 
 
 
-  def pbStartScene(helptext,minlength,maxlength,initialText,subject = 0,pokemon = nil)
+  def pbStartScene(helptext, minlength, maxlength, initialText, subject = 0, pokemon = nil)
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @helptext = helptext
@@ -476,7 +476,7 @@ class PokemonEntryScene2
     @sprites["bottomtab"].x = 22
     @sprites["bottomtab"].y = 162
     @sprites["bottomtab"].bitmap = @bitmaps[@@Characters.length]
-    @sprites["toptab"]=SpriteWrapper.new(@viewport)   # Next tab
+    @sprites["toptab"] = SpriteWrapper.new(@viewport)   # Next tab
     @sprites["toptab"].x = 22 - 504
     @sprites["toptab"].y = 162
     @sprites["toptab"].bitmap = @bitmaps[@@Characters.length + 1]
@@ -753,12 +753,12 @@ end
 #===============================================================================
 class PokemonEntry
   def initialize(scene)
-    @scene=scene
+    @scene = scene
   end
 
-  def pbStartScreen(helptext,minlength,maxlength,initialText,mode = -1,pokemon = nil)
-    @scene.pbStartScene(helptext,minlength,maxlength,initialText,mode,pokemon)
-    ret=@scene.pbEntry
+  def pbStartScreen(helptext, minlength, maxlength, initialText, mode = -1, pokemon = nil)
+    @scene.pbStartScene(helptext, minlength, maxlength, initialText, mode, pokemon)
+    ret = @scene.pbEntry
     @scene.pbEndScene
     return ret
   end
@@ -769,36 +769,36 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbEnterText(helptext,minlength,maxlength,initialText = "",mode = 0,pokemon = nil,nofadeout = false)
-  ret=""
-  if ($PokemonSystem.textinput==1 rescue false)   # Keyboard
-    pbFadeOutIn(99999,nofadeout) {
-      sscene=PokemonEntryScene.new
-      sscreen=PokemonEntry.new(sscene)
-      ret=sscreen.pbStartScreen(helptext,minlength,maxlength,initialText,mode,pokemon)
+def pbEnterText(helptext, minlength, maxlength, initialText = "", mode = 0, pokemon = nil, nofadeout = false)
+  ret = ""
+  if ($PokemonSystem.textinput == 1 rescue false)   # Keyboard
+    pbFadeOutIn(99999, nofadeout) {
+      sscene = PokemonEntryScene.new
+      sscreen = PokemonEntry.new(sscene)
+      ret = sscreen.pbStartScreen(helptext, minlength, maxlength, initialText, mode, pokemon)
     }
   else   # Cursor
-    pbFadeOutIn(99999,nofadeout) {
-      sscene=PokemonEntryScene2.new
-      sscreen=PokemonEntry.new(sscene)
-      ret=sscreen.pbStartScreen(helptext,minlength,maxlength,initialText,mode,pokemon)
+    pbFadeOutIn(99999, nofadeout) {
+      sscene = PokemonEntryScene2.new
+      sscreen = PokemonEntry.new(sscene)
+      ret = sscreen.pbStartScreen(helptext, minlength, maxlength, initialText, mode, pokemon)
     }
   end
   return ret
 end
 
-def pbEnterPlayerName(helptext,minlength,maxlength,initialText = "",nofadeout = false)
-  return pbEnterText(helptext,minlength,maxlength,initialText,1,nil,nofadeout)
+def pbEnterPlayerName(helptext, minlength, maxlength, initialText = "", nofadeout = false)
+  return pbEnterText(helptext, minlength, maxlength, initialText, 1, nil, nofadeout)
 end
 
-def pbEnterPokemonName(helptext,minlength,maxlength,initialText = "",pokemon = nil,nofadeout = false)
-  return pbEnterText(helptext,minlength,maxlength,initialText,2,pokemon,nofadeout)
+def pbEnterPokemonName(helptext, minlength, maxlength, initialText = "", pokemon = nil, nofadeout = false)
+  return pbEnterText(helptext, minlength, maxlength, initialText, 2, pokemon, nofadeout)
 end
 
-def pbEnterNPCName(helptext,minlength,maxlength,initialText = "",id = 0,nofadeout = false)
-  return pbEnterText(helptext,minlength,maxlength,initialText,3,id,nofadeout)
+def pbEnterNPCName(helptext, minlength, maxlength, initialText = "", id = 0, nofadeout = false)
+  return pbEnterText(helptext, minlength, maxlength, initialText, 3, id, nofadeout)
 end
 
-def pbEnterBoxName(helptext,minlength,maxlength,initialText = "",nofadeout = false)
-  return pbEnterText(helptext,minlength,maxlength,initialText,4,nil,nofadeout)
+def pbEnterBoxName(helptext, minlength, maxlength, initialText = "", nofadeout = false)
+  return pbEnterText(helptext, minlength, maxlength, initialText, 4, nil, nofadeout)
 end

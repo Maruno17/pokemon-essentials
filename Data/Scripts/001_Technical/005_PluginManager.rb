@@ -588,7 +588,7 @@ module PluginManager
         optional = false
         # clean the name to a simple string
         if dname.is_a?(Array)
-          optional = [:optional,:optional_exact].include?(dname[0])
+          optional = [:optional, :optional_exact].include?(dname[0])
           dname = dname[dname.length - 2]
         end
         # catch missing dependency
@@ -710,7 +710,7 @@ module PluginManager
         # get rid of tabs
         code.gsub!("\t", "  ")
         # construct filename
-        sname = scr[0].gsub("\\","/").split("/")[-1]
+        sname = scr[0].gsub("\\", "/").split("/")[-1]
         fname = "[#{name}] #{sname}"
         # try to run the code
         begin

@@ -67,14 +67,14 @@ class PokemonChallengeRules
     @levelAdjustment.unadjustLevels(party1, party2, adjusts) if @levelAdjustment && adjusts
   end
 
-  def adjustLevelsBilateral(party1,party2)
+  def adjustLevelsBilateral(party1, party2)
     if @levelAdjustment && @levelAdjustment.type == LevelAdjustment::BothTeams
       return @levelAdjustment.adjustLevels(party1, party2)
     end
     return nil
   end
 
-  def unadjustLevelsBilateral(party1,party2,adjusts)
+  def unadjustLevelsBilateral(party1, party2, adjusts)
     if @levelAdjustment && adjusts && @levelAdjustment.type == LevelAdjustment::BothTeams
       @levelAdjustment.unadjustLevels(party1, party2, adjusts)
     end
@@ -85,7 +85,7 @@ class PokemonChallengeRules
     return self
   end
 
-  def addLevelRule(minLevel,maxLevel,totalLevel)
+  def addLevelRule(minLevel, maxLevel, totalLevel)
     self.addPokemonRule(MinimumLevelRestriction.new(minLevel))
     self.addPokemonRule(MaximumLevelRestriction.new(maxLevel))
     self.addSubsetRule(TotalLevelRestriction.new(totalLevel))

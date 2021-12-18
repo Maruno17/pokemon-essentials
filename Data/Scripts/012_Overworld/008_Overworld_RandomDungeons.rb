@@ -254,7 +254,7 @@ module RandomDungeonGenerator
 
     def clearVisited(x, y)
       return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      @cells[y * cellWidth + x] &=~EdgeMasks::Visited
+      @cells[y * cellWidth + x] &= ~EdgeMasks::Visited
     end
 
     def clearAllCells
@@ -367,7 +367,7 @@ module RandomDungeonGenerator
           setEdgeNode(ox, oy, dir)
           return
         end
-        setEdgeNode(ox,oy,dir)
+        setEdgeNode(ox, oy, dir)
       end
     end
 
@@ -507,7 +507,7 @@ module RandomDungeonGenerator
                 (r2[0] >= r1[0] + r1[2]) ||
                 (r2[1] + r2[3] <= r1[1]) ||
                 (r2[1] >= r1[1] + r1[3])) &&
-               ((r1[0] <= r2[0] + r2[2])||
+               ((r1[0] <= r2[0] + r2[2]) ||
                 (r1[0] >= r2[0] + r2[2]) ||
                 (r1[1] + r1[3] <= r2[1]) ||
                 (r1[1] >= r2[1] + r2[3]))
@@ -543,7 +543,7 @@ module RandomDungeonGenerator
       return false
     end
 
-    def paint_room(rect,offsetX,offsetY)
+    def paint_room(rect, offsetX, offsetY)
       for y in (rect[1] + offsetY)...(rect[1] + offsetY + rect[3])
         for x in (rect[0] + offsetX)...(rect[0] + offsetX + rect[2])
           self[x, y] = DungeonTile::ROOM

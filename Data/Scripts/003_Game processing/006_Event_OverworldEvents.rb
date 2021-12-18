@@ -136,8 +136,8 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbOnSpritesetCreate(spriteset,viewport)
-  Events.onSpritesetCreate.trigger(nil,spriteset,viewport)
+def pbOnSpritesetCreate(spriteset, viewport)
+  Events.onSpritesetCreate.trigger(nil, spriteset, viewport)
 end
 
 #===============================================================================

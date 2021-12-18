@@ -43,8 +43,8 @@ class Game_Map
   end
 
   def setup(map_id)
-    @map_id               = map_id
-    @map = load_data(sprintf("Data/Map%03d.rxdata",map_id))
+    @map_id = map_id
+    @map = load_data(sprintf("Data/Map%03d.rxdata", map_id))
     tileset = $data_tilesets[@map.tileset_id]
     updateTileset
     @fog_ox               = 0
@@ -57,10 +57,10 @@ class Game_Map
     self.display_x        = 0
     self.display_y        = 0
     @need_refresh         = false
-    Events.onMapCreate.trigger(self,map_id,@map,tileset)
+    Events.onMapCreate.trigger(self, map_id, @map, tileset)
     @events               = {}
     for i in @map.events.keys
-      @events[i]          = Game_Event.new(@map_id, @map.events[i],self)
+      @events[i]          = Game_Event.new(@map_id, @map.events[i], self)
     end
     @common_events        = {}
     for i in 1...$data_common_events.size
@@ -110,10 +110,10 @@ class Game_Map
   #-----------------------------------------------------------------------------
   def autoplayAsCue
     if @map.autoplay_bgm
-      if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/"+ @map.bgm.name+ "_n")
-        pbCueBGM(@map.bgm.name+"_n",1.0,@map.bgm.volume,@map.bgm.pitch)
+      if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + @map.bgm.name + "_n")
+        pbCueBGM(@map.bgm.name + "_n", 1.0, @map.bgm.volume, @map.bgm.pitch)
       else
-        pbCueBGM(@map.bgm,1.0)
+        pbCueBGM(@map.bgm, 1.0)
       end
     end
     if @map.autoplay_bgs
@@ -126,8 +126,8 @@ class Game_Map
   #-----------------------------------------------------------------------------
   def autoplay
     if @map.autoplay_bgm
-      if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/"+ @map.bgm.name+ "_n")
-        pbBGMPlay(@map.bgm.name+"_n",@map.bgm.volume,@map.bgm.pitch)
+      if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + @map.bgm.name + "_n")
+        pbBGMPlay(@map.bgm.name + "_n", @map.bgm.volume, @map.bgm.pitch)
       else
         pbBGMPlay(@map.bgm)
       end
@@ -159,7 +159,7 @@ class Game_Map
       return false if passage & 0x0f == 0x0f
       return true if @priorities[event.tile_id] == 0
     end
-    return playerPassable?(x, y, d, self_event) if self_event==$game_player
+    return playerPassable?(x, y, d, self_event) if self_event == $game_player
     # All other events
     newx = x
     newy = y
@@ -270,7 +270,7 @@ class Game_Map
     return true
   end
 
-  def bush?(x,y)
+  def bush?(x, y)
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
       return false if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).bridge &&
@@ -280,7 +280,7 @@ class Game_Map
     return false
   end
 
-  def deepBush?(x,y)
+  def deepBush?(x, y)
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
@@ -290,7 +290,7 @@ class Game_Map
     return false
   end
 
-  def counter?(x,y)
+  def counter?(x, y)
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
       passage = @passages[tile_id]
@@ -299,7 +299,7 @@ class Game_Map
     return false
   end
 
-  def terrain_tag(x,y,countBridge = false)
+  def terrain_tag(x, y, countBridge = false)
     if valid?(x, y)
       for i in [2, 1, 0]
         tile_id = data[x, y, i]
@@ -313,7 +313,7 @@ class Game_Map
   end
 
   # Unused.
-  def check_event(x,y)
+  def check_event(x, y)
     for event in self.events.values
       return event.id if event.at_coordinate?(x, y)
     end
@@ -323,7 +323,7 @@ class Game_Map
     return if @display_x == value
     @display_x = value
     if metadata&.snap_edges
-      max_x = (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X
+      max_x = (self.width - Graphics.width * 1.0 / TILE_WIDTH) * REAL_RES_X
       @display_x = [0, [@display_x, max_x].min].max
     end
     $map_factory.setMapsInRange if $map_factory
@@ -333,7 +333,7 @@ class Game_Map
     return if @display_y == value
     @display_y = value
     if metadata&.snap_edges
-      max_y = (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y
+      max_y = (self.height - Graphics.height * 1.0 / TILE_HEIGHT) * REAL_RES_Y
       @display_y = [0, [@display_y, max_y].min].max
     end
     $map_factory.setMapsInRange if $map_factory
@@ -357,7 +357,7 @@ class Game_Map
 
   def start_scroll(direction, distance, speed)
     @scroll_direction = direction
-    if direction==2 || direction==8   # down or up
+    if direction == 2 || direction == 8   # down or up
       @scroll_rest = distance * REAL_RES_Y
     else
       @scroll_rest = distance * REAL_RES_X
@@ -369,7 +369,7 @@ class Game_Map
     return @scroll_rest > 0
   end
 
-  def start_fog_tone_change(tone,duration)
+  def start_fog_tone_change(tone, duration)
     @fog_tone_target = tone.clone
     @fog_tone_duration = duration
     if @fog_tone_duration == 0
@@ -377,10 +377,10 @@ class Game_Map
     end
   end
 
-  def start_fog_opacity_change(opacity,duration)
-    @fog_opacity_target = opacity*1.0
+  def start_fog_opacity_change(opacity, duration)
+    @fog_opacity_target = opacity * 1.0
     @fog_opacity_duration = duration
-    if @fog_opacity_duration==0
+    if @fog_opacity_duration == 0
       @fog_opacity = @fog_opacity_target
     end
   end
@@ -412,9 +412,9 @@ class Game_Map
       $map_factory.setCurrentMap
     end
     # If scrolling
-    if @scroll_rest>0
-      distance = (1<<@scroll_speed)*40.0/Graphics.frame_rate
-      distance = @scroll_rest if distance>@scroll_rest
+    if @scroll_rest > 0
+      distance = (1 << @scroll_speed) * 40.0 / Graphics.frame_rate
+      distance = @scroll_rest if distance > @scroll_rest
       case @scroll_direction
       when 2 then scroll_down(distance)
       when 4 then scroll_left(distance)
@@ -432,9 +432,9 @@ class Game_Map
       common_event.update
     end
     # Update fog
-    @fog_ox -= @fog_sx/8.0
-    @fog_oy -= @fog_sy/8.0
-    if @fog_tone_duration>=1
+    @fog_ox -= @fog_sx / 8.0
+    @fog_oy -= @fog_sy / 8.0
+    if @fog_tone_duration >= 1
       d = @fog_tone_duration
       target = @fog_tone_target
       @fog_tone.red   = (@fog_tone.red * (d - 1) + target.red) / d
@@ -454,8 +454,8 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbScrollMap(direction,distance,speed)
-  if speed==0
+def pbScrollMap(direction, distance, speed)
+  if speed == 0
     case direction
     when 2 then $game_map.scroll_down(distance * Game_Map::REAL_RES_Y)
     when 4 then $game_map.scroll_left(distance * Game_Map::REAL_RES_X)
@@ -471,7 +471,7 @@ def pbScrollMap(direction,distance,speed)
       Input.update
       break if !$game_map.scrolling?
       pbUpdateSceneMap
-      break if $game_map.display_x==oldx && $game_map.display_y==oldy
+      break if $game_map.display_x == oldx && $game_map.display_y == oldy
       oldx = $game_map.display_x
       oldy = $game_map.display_y
     end

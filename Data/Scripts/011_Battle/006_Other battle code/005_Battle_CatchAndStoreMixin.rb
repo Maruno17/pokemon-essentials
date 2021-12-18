@@ -31,7 +31,7 @@ module Battle::CatchAndStoreMixin
       if !pbPlayer.owned?(pkmn.species)
         pbPlayer.pokedex.set_owned(pkmn.species)
         if $player.has_pokedex
-          pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.",pkmn.name))
+          pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.", pkmn.name))
           pbPlayer.pokedex.register_last_seen(pkmn)
           @scene.pbShowPokedex(pkmn.species)
         end
@@ -47,7 +47,7 @@ module Battle::CatchAndStoreMixin
   #=============================================================================
   # Throw a Poké Ball
   #=============================================================================
-  def pbThrowPokeBall(idxBattler,ball,catch_rate = nil,showPlayer = false)
+  def pbThrowPokeBall(idxBattler, ball, catch_rate = nil, showPlayer = false)
     # Determine which Pokémon you're throwing the Poké Ball at
     battler = nil
     if opposes?(idxBattler)
@@ -60,32 +60,32 @@ module Battle::CatchAndStoreMixin
     itemName = GameData::Item.get(ball).name
     if battler.fainted?
       if itemName.starts_with_vowel?
-        pbDisplay(_INTL("{1} threw an {2}!",pbPlayer.name,itemName))
+        pbDisplay(_INTL("{1} threw an {2}!", pbPlayer.name, itemName))
       else
-        pbDisplay(_INTL("{1} threw a {2}!",pbPlayer.name,itemName))
+        pbDisplay(_INTL("{1} threw a {2}!", pbPlayer.name, itemName))
       end
       pbDisplay(_INTL("But there was no target..."))
       return
     end
     if itemName.starts_with_vowel?
-      pbDisplayBrief(_INTL("{1} threw an {2}!",pbPlayer.name,itemName))
+      pbDisplayBrief(_INTL("{1} threw an {2}!", pbPlayer.name, itemName))
     else
-      pbDisplayBrief(_INTL("{1} threw a {2}!",pbPlayer.name,itemName))
+      pbDisplayBrief(_INTL("{1} threw a {2}!", pbPlayer.name, itemName))
     end
     # Animation of opposing trainer blocking Poké Balls (unless it's a Snag Ball
     # at a Shadow Pokémon)
     if trainerBattle? && !(GameData::Item.get(ball).is_snag_ball? && battler.shadowPokemon?)
-      @scene.pbThrowAndDeflect(ball,1)
+      @scene.pbThrowAndDeflect(ball, 1)
       pbDisplay(_INTL("The Trainer blocked your Poké Ball! Don't be a thief!"))
       return
     end
     # Calculate the number of shakes (4=capture)
     pkmn = battler.pokemon
     @criticalCapture = false
-    numShakes = pbCaptureCalc(pkmn,battler,catch_rate,ball)
+    numShakes = pbCaptureCalc(pkmn, battler, catch_rate, ball)
     PBDebug.log("[Threw Poké Ball] #{itemName}, #{numShakes} shakes (4=capture)")
     # Animation of Ball throw, absorb, shake and capture/burst out
-    @scene.pbThrow(ball,numShakes,@criticalCapture,battler.index,showPlayer)
+    @scene.pbThrow(ball, numShakes, @criticalCapture, battler.index, showPlayer)
     # Outcome message
     case numShakes
     when 0
@@ -101,9 +101,9 @@ module Battle::CatchAndStoreMixin
       pbDisplay(_INTL("Gah! It was so close, too!"))
       Battle::PokeBallEffects.onFailCatch(ball, self, battler)
     when 4
-      pbDisplayBrief(_INTL("Gotcha! {1} was caught!",pkmn.name))
+      pbDisplayBrief(_INTL("Gotcha! {1} was caught!", pkmn.name))
       @scene.pbThrowSuccess   # Play capture success jingle
-      pbRemoveFromParty(battler.index,battler.pokemonIndex)
+      pbRemoveFromParty(battler.index, battler.pokemonIndex)
       # Gain Exp
       if Settings::GAIN_EXP_FOR_CAPTURE
         battler.captured = true
@@ -125,8 +125,8 @@ module Battle::CatchAndStoreMixin
       pkmn.update_shadow_moves if pkmn.shadowPokemon?
       pkmn.record_first_moves
       # Reset form
-      pkmn.forced_form = nil if MultipleForms.hasFunction?(pkmn.species,"getForm")
-      @peer.pbOnLeavingBattle(self,pkmn,true,true)
+      pkmn.forced_form = nil if MultipleForms.hasFunction?(pkmn.species, "getForm")
+      @peer.pbOnLeavingBattle(self, pkmn, true, true)
       # Make the Poké Ball and data box disappear
       @scene.pbHideCaptureBall(idxBattler)
       # Save the Pokémon for storage at the end of battle
@@ -141,7 +141,7 @@ module Battle::CatchAndStoreMixin
   #=============================================================================
   # Calculate how many shakes a thrown Poké Ball will make (4 = capture)
   #=============================================================================
-  def pbCaptureCalc(pkmn,battler,catch_rate,ball)
+  def pbCaptureCalc(pkmn, battler, catch_rate, ball)
     return 4 if $DEBUG && Input.press?(Input::CTRL)
     # Get a catch rate if one wasn't provided
     catch_rate = pkmn.species_data.catch_rate if !catch_rate
@@ -154,7 +154,7 @@ module Battle::CatchAndStoreMixin
     # First half of the shakes calculation
     a = battler.totalhp
     b = battler.hp
-    x = ((3*a-2*b)*catch_rate.to_f)/(3*a)
+    x = ((3 * a - 2 * b) * catch_rate.to_f) / (3 * a)
     # Calculation modifiers
     if battler.status == :SLEEP || battler.status == :FROZEN
       x *= 2.5
@@ -162,40 +162,40 @@ module Battle::CatchAndStoreMixin
       x *= 1.5
     end
     x = x.floor
-    x = 1 if x<1
+    x = 1 if x < 1
     # Definite capture, no need to perform randomness checks
-    return 4 if x>=255 || Battle::PokeBallEffects.isUnconditional?(ball, self, battler)
+    return 4 if x >= 255 || Battle::PokeBallEffects.isUnconditional?(ball, self, battler)
     # Second half of the shakes calculation
-    y = (65536 / ((255.0/x)**0.1875)).floor
+    y = (65536 / ((255.0 / x)**0.1875)).floor
     # Critical capture check
     if Settings::ENABLE_CRITICAL_CAPTURES
       dex_modifier = 0
       numOwned = $player.pokedex.owned_count
-      if numOwned>600
+      if numOwned > 600
         dex_modifier = 5
-      elsif numOwned>450
+      elsif numOwned > 450
         dex_modifier = 4
-      elsif numOwned>300
+      elsif numOwned > 300
         dex_modifier = 3
-      elsif numOwned>150
+      elsif numOwned > 150
         dex_modifier = 2
-      elsif numOwned>30
+      elsif numOwned > 30
         dex_modifier = 1
       end
       dex_modifier *= 2 if $bag.has?(:CATCHINGCHARM)
       c = x * dex_modifier / 12
       # Calculate the number of shakes
-      if c>0 && pbRandom(256)<c
+      if c > 0 && pbRandom(256) < c
         @criticalCapture = true
-        return 4 if pbRandom(65536)<y
+        return 4 if pbRandom(65536) < y
         return 0
       end
     end
     # Calculate the number of shakes
     numShakes = 0
     for i in 0...4
-      break if numShakes<i
-      numShakes += 1 if pbRandom(65536)<y
+      break if numShakes < i
+      numShakes += 1 if pbRandom(65536) < y
     end
     return numShakes
   end

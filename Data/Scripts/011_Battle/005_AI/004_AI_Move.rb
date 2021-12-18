@@ -14,12 +14,12 @@ class Battle::AI
     # NOTE: A move is only added to the choices array if it has a non-zero
     #       score.
     choices     = []
-    user.eachMoveWithIndex do |_m,i|
-      next if !@battle.pbCanChooseMove?(idxBattler,i,false)
+    user.eachMoveWithIndex do |_m, i|
+      next if !@battle.pbCanChooseMove?(idxBattler, i, false)
       if wildBattler
-        pbRegisterMoveWild(user,i,choices)
+        pbRegisterMoveWild(user, i, choices)
       else
-        pbRegisterMoveTrainer(user,i,choices,skill)
+        pbRegisterMoveTrainer(user, i, choices, skill)
       end
     end
     # Figure out useful information about the choices
@@ -27,54 +27,54 @@ class Battle::AI
     maxScore   = 0
     choices.each do |c|
       totalScore += c[1]
-      maxScore = c[1] if maxScore<c[1]
+      maxScore = c[1] if maxScore < c[1]
     end
     # Log the available choices
     if $INTERNAL
       logMsg = "[AI] Move choices for #{user.pbThis(true)} (#{user.index}): "
-      choices.each_with_index do |c,i|
+      choices.each_with_index do |c, i|
         logMsg += "#{user.moves[c[0]].name}=#{c[1]}"
-        logMsg += " (target #{c[2]})" if c[2]>=0
-        logMsg += ", " if i<choices.length-1
+        logMsg += " (target #{c[2]})" if c[2] >= 0
+        logMsg += ", " if i < choices.length - 1
       end
       PBDebug.log(logMsg)
     end
     # Find any preferred moves and just choose from them
-    if !wildBattler && skill>=PBTrainerAI.highSkill && maxScore>100
+    if !wildBattler && skill >= PBTrainerAI.highSkill && maxScore > 100
       stDev = pbStdDev(choices)
-      if stDev>=40 && pbAIRandom(100)<90
+      if stDev >= 40 && pbAIRandom(100) < 90
         preferredMoves = []
         choices.each do |c|
-          next if c[1]<200 && c[1]<maxScore*0.8
+          next if c[1] < 200 && c[1] < maxScore * 0.8
           preferredMoves.push(c)
-          preferredMoves.push(c) if c[1]==maxScore   # Doubly prefer the best move
+          preferredMoves.push(c) if c[1] == maxScore   # Doubly prefer the best move
         end
-        if preferredMoves.length>0
+        if preferredMoves.length > 0
           m = preferredMoves[pbAIRandom(preferredMoves.length)]
           PBDebug.log("[AI] #{user.pbThis} (#{user.index}) prefers #{user.moves[m[0]].name}")
-          @battle.pbRegisterMove(idxBattler,m[0],false)
-          @battle.pbRegisterTarget(idxBattler,m[2]) if m[2]>=0
+          @battle.pbRegisterMove(idxBattler, m[0], false)
+          @battle.pbRegisterTarget(idxBattler, m[2]) if m[2] >= 0
           return
         end
       end
     end
     # Decide whether all choices are bad, and if so, try switching instead
-    if !wildBattler && skill>=PBTrainerAI.highSkill
+    if !wildBattler && skill >= PBTrainerAI.highSkill
       badMoves = false
-      if (maxScore<=20 && user.turnCount>2) ||
-         (maxScore<=40 && user.turnCount>5)
-        badMoves = true if pbAIRandom(100)<80
+      if (maxScore <= 20 && user.turnCount > 2) ||
+         (maxScore <= 40 && user.turnCount > 5)
+        badMoves = true if pbAIRandom(100) < 80
       end
-      if !badMoves && totalScore<100 && user.turnCount>1
+      if !badMoves && totalScore < 100 && user.turnCount > 1
         badMoves = true
         choices.each do |c|
           next if !user.moves[c[0]].damagingMove?
           badMoves = false
           break
         end
-        badMoves = false if badMoves && pbAIRandom(100)<10
+        badMoves = false if badMoves && pbAIRandom(100) < 10
       end
-      if badMoves && pbEnemyShouldWithdrawEx?(idxBattler,true)
+      if badMoves && pbEnemyShouldWithdrawEx?(idxBattler, true)
         if $INTERNAL
           PBDebug.log("[AI] #{user.pbThis} (#{user.index}) will switch due to terrible moves")
         end
@@ -82,13 +82,13 @@ class Battle::AI
       end
     end
     # If there are no calculated choices, pick one at random
-    if choices.length==0
+    if choices.length == 0
       PBDebug.log("[AI] #{user.pbThis} (#{user.index}) doesn't want to use any moves; picking one at random")
-      user.eachMoveWithIndex do |_m,i|
-        next if !@battle.pbCanChooseMove?(idxBattler,i,false)
-        choices.push([i,100,-1])   # Move index, score, target
+      user.eachMoveWithIndex do |_m, i|
+        next if !@battle.pbCanChooseMove?(idxBattler, i, false)
+        choices.push([i, 100, -1])   # Move index, score, target
       end
-      if choices.length==0   # No moves are physically possible to use; use Struggle
+      if choices.length == 0   # No moves are physically possible to use; use Struggle
         @battle.pbAutoChooseMove(user.index)
       end
     end
@@ -96,9 +96,9 @@ class Battle::AI
     randNum = pbAIRandom(totalScore)
     choices.each do |c|
       randNum -= c[1]
-      next if randNum>=0
-      @battle.pbRegisterMove(idxBattler,c[0],false)
-      @battle.pbRegisterTarget(idxBattler,c[2]) if c[2]>=0
+      next if randNum >= 0
+      @battle.pbRegisterMove(idxBattler, c[0], false)
+      @battle.pbRegisterTarget(idxBattler, c[2]) if c[2] >= 0
       break
     end
     # Log the result
@@ -111,40 +111,40 @@ class Battle::AI
   # Get scores for the given move against each possible target
   #=============================================================================
   # Wild Pokémon choose their moves randomly.
-  def pbRegisterMoveWild(_user,idxMove,choices)
-    choices.push([idxMove,100,-1])   # Move index, score, target
+  def pbRegisterMoveWild(_user, idxMove, choices)
+    choices.push([idxMove, 100, -1])   # Move index, score, target
   end
 
   # Trainer Pokémon calculate how much they want to use each of their moves.
-  def pbRegisterMoveTrainer(user,idxMove,choices,skill)
+  def pbRegisterMoveTrainer(user, idxMove, choices, skill)
     move = user.moves[idxMove]
     target_data = move.pbTarget(user)
     if target_data.num_targets > 1
       # If move affects multiple battlers and you don't choose a particular one
       totalScore = 0
       @battle.allBattlers.each do |b|
-        next if !@battle.pbMoveCanTarget?(user.index,b.index,target_data)
-        score = pbGetMoveScore(move,user,b,skill)
+        next if !@battle.pbMoveCanTarget?(user.index, b.index, target_data)
+        score = pbGetMoveScore(move, user, b, skill)
         totalScore += ((user.opposes?(b)) ? score : -score)
       end
-      choices.push([idxMove,totalScore,-1]) if totalScore>0
+      choices.push([idxMove, totalScore, -1]) if totalScore > 0
     elsif target_data.num_targets == 0
       # If move has no targets, affects the user, a side or the whole field
-      score = pbGetMoveScore(move,user,user,skill)
-      choices.push([idxMove,score,-1]) if score>0
+      score = pbGetMoveScore(move, user, user, skill)
+      choices.push([idxMove, score, -1]) if score > 0
     else
       # If move affects one battler and you have to choose which one
       scoresAndTargets = []
       @battle.allBattlers.each do |b|
-        next if !@battle.pbMoveCanTarget?(user.index,b.index,target_data)
+        next if !@battle.pbMoveCanTarget?(user.index, b.index, target_data)
         next if target_data.targets_foe && !user.opposes?(b)
-        score = pbGetMoveScore(move,user,b,skill)
-        scoresAndTargets.push([score,b.index]) if score>0
+        score = pbGetMoveScore(move, user, b, skill)
+        scoresAndTargets.push([score, b.index]) if score > 0
       end
-      if scoresAndTargets.length>0
+      if scoresAndTargets.length > 0
         # Get the one best target for the move
-        scoresAndTargets.sort! { |a,b| b[0]<=>a[0] }
-        choices.push([idxMove,scoresAndTargets[0][0],scoresAndTargets[0][1]])
+        scoresAndTargets.sort! { |a, b| b[0] <=> a[0] }
+        choices.push([idxMove, scoresAndTargets[0][0], scoresAndTargets[0][1]])
       end
     end
   end
@@ -152,31 +152,31 @@ class Battle::AI
   #=============================================================================
   # Get a score for the given move being used against the given target
   #=============================================================================
-  def pbGetMoveScore(move,user,target,skill = 100)
-    skill = PBTrainerAI.minimumSkill if skill<PBTrainerAI.minimumSkill
+  def pbGetMoveScore(move, user, target, skill = 100)
+    skill = PBTrainerAI.minimumSkill if skill < PBTrainerAI.minimumSkill
     score = 100
-    score = pbGetMoveScoreFunctionCode(score,move,user,target,skill)
+    score = pbGetMoveScoreFunctionCode(score, move, user, target, skill)
     # A score of 0 here means it absolutely should not be used
-    return 0 if score<=0
-    if skill>=PBTrainerAI.mediumSkill
+    return 0 if score <= 0
+    if skill >= PBTrainerAI.mediumSkill
       # Prefer damaging moves if AI has no more Pokémon or AI is less clever
-      if @battle.pbAbleNonActiveCount(user.idxOwnSide)==0
-        if !(skill>=PBTrainerAI.highSkill && @battle.pbAbleNonActiveCount(target.idxOwnSide)>0)
+      if @battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
+        if !(skill >= PBTrainerAI.highSkill && @battle.pbAbleNonActiveCount(target.idxOwnSide) > 0)
           if move.statusMove?
             score /= 1.5
-          elsif target.hp<=target.totalhp/2
+          elsif target.hp <= target.totalhp / 2
             score *= 1.5
           end
         end
       end
       # Don't prefer attacking the target if they'd be semi-invulnerable
-      if skill>=PBTrainerAI.highSkill && move.accuracy>0 &&
-         (target.semiInvulnerable? || target.effects[PBEffects::SkyDrop]>=0)
+      if skill >= PBTrainerAI.highSkill && move.accuracy > 0 &&
+         (target.semiInvulnerable? || target.effects[PBEffects::SkyDrop] >= 0)
         miss = true
         miss = false if user.hasActiveAbility?(:NOGUARD) || target.hasActiveAbility?(:NOGUARD)
-        if miss && pbRoughStat(user,:SPEED,skill)>pbRoughStat(target,:SPEED,skill)
+        if miss && pbRoughStat(user, :SPEED, skill) > pbRoughStat(target, :SPEED, skill)
           # Knows what can get past semi-invulnerability
-          if target.effects[PBEffects::SkyDrop]>=0
+          if target.effects[PBEffects::SkyDrop] >= 0
             miss = false if move.hitsFlyingTargets?
           else
             if target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
@@ -193,13 +193,13 @@ class Battle::AI
         score -= 80 if miss
       end
       # Pick a good move for the Choice items
-      if user.hasActiveItem?([:CHOICEBAND,:CHOICESPECS,:CHOICESCARF]) ||
+      if user.hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
          user.hasActiveAbility?(:GORILLATACTICS)
-        if move.baseDamage>=60
+        if move.baseDamage >= 60
           score += 60
         elsif move.damagingMove?
           score += 30
-        elsif move.function=="UserTargetSwapItems"
+        elsif move.function == "UserTargetSwapItems"
           score += 70   # Trick
         else
           score -= 60
@@ -236,17 +236,17 @@ class Battle::AI
     end
     # Adjust score based on how much damage it can deal
     if move.damagingMove?
-      score = pbGetMoveScoreDamage(score,move,user,target,skill)
+      score = pbGetMoveScoreDamage(score, move, user, target, skill)
     else   # Status moves
       # Don't prefer attacks which don't deal damage
       score -= 10
       # Account for accuracy of move
-      accuracy = pbRoughAccuracy(move,user,target,skill)
-      score *= accuracy/100.0
-      score = 0 if score<=10 && skill>=PBTrainerAI.highSkill
+      accuracy = pbRoughAccuracy(move, user, target, skill)
+      score *= accuracy / 100.0
+      score = 0 if score <= 10 && skill >= PBTrainerAI.highSkill
     end
     score = score.to_i
-    score = 0 if score<0
+    score = 0 if score < 0
     return score
   end
 
@@ -254,25 +254,25 @@ class Battle::AI
   # Add to a move's score based on how much damage it will deal (as a percentage
   # of the target's current HP)
   #=============================================================================
-  def pbGetMoveScoreDamage(score,move,user,target,skill)
+  def pbGetMoveScoreDamage(score, move, user, target, skill)
     # Don't prefer moves that are ineffective because of abilities or effects
-    return 0 if score<=0 || pbCheckMoveImmunity(score,move,user,target,skill)
+    return 0 if score <= 0 || pbCheckMoveImmunity(score, move, user, target, skill)
     # Calculate how much damage the move will do (roughly)
-    baseDmg = pbMoveBaseDamage(move,user,target,skill)
-    realDamage = pbRoughDamage(move,user,target,skill,baseDmg)
+    baseDmg = pbMoveBaseDamage(move, user, target, skill)
+    realDamage = pbRoughDamage(move, user, target, skill, baseDmg)
     # Account for accuracy of move
-    accuracy = pbRoughAccuracy(move,user,target,skill)
-    realDamage *= accuracy/100.0
+    accuracy = pbRoughAccuracy(move, user, target, skill)
+    realDamage *= accuracy / 100.0
     # Two-turn attacks waste 2 turns to deal one lot of damage
-    if move.chargingTurnMove? || move.function=="AttackAndSkipNextTurn"   # Hyper Beam
-      realDamage *= 2/3   # Not halved because semi-invulnerable during use or hits first turn
+    if move.chargingTurnMove? || move.function == "AttackAndSkipNextTurn"   # Hyper Beam
+      realDamage *= 2 / 3   # Not halved because semi-invulnerable during use or hits first turn
     end
     # Prefer flinching external effects (note that move effects which cause
     # flinching are dealt with in the function code part of score calculation)
-    if skill>=PBTrainerAI.mediumSkill && !move.flinchingMove?
+    if skill >= PBTrainerAI.mediumSkill && !move.flinchingMove?
       if !target.hasActiveAbility?(:INNERFOCUS) &&
          !target.hasActiveAbility?(:SHIELDDUST) &&
-         target.effects[PBEffects::Substitute]==0
+         target.effects[PBEffects::Substitute] == 0
         canFlinch = false
         if user.hasActiveItem?([:KINGSROCK, :RAZORFANG])
           canFlinch = true
@@ -283,14 +283,14 @@ class Battle::AI
       end
     end
     # Convert damage to percentage of target's remaining HP
-    damagePercentage = realDamage*100.0/target.hp
+    damagePercentage = realDamage * 100.0 / target.hp
     # Don't prefer weak attacks
 #    damagePercentage /= 2 if damagePercentage<20
     # Prefer damaging attack if level difference is significantly high
-    damagePercentage *= 1.2 if user.level-10>target.level
+    damagePercentage *= 1.2 if user.level - 10 > target.level
     # Adjust score
-    damagePercentage = 120 if damagePercentage>120   # Treat all lethal moves the same
-    damagePercentage += 40 if damagePercentage>100   # Prefer moves likely to be lethal
+    damagePercentage = 120 if damagePercentage > 120   # Treat all lethal moves the same
+    damagePercentage += 40 if damagePercentage > 100   # Prefer moves likely to be lethal
     score += damagePercentage.to_i
     return score
   end

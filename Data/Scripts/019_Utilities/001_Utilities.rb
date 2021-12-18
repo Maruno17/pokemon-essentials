@@ -1,35 +1,35 @@
 #===============================================================================
 # General purpose utilities
 #===============================================================================
-def _pbNextComb(comb,length)
-  i = comb.length-1
+def _pbNextComb(comb, length)
+  i = comb.length - 1
   begin
     valid = true
     for j in i...comb.length
-      if j==i
+      if j == i
         comb[j] += 1
       else
-        comb[j] = comb[i]+(j-i)
+        comb[j] = comb[i] + (j - i)
       end
-      if comb[j]>=length
+      if comb[j] >= length
         valid = false
         break
       end
     end
     return true if valid
     i -= 1
-  end while i>=0
+  end while i >= 0
   return false
 end
 
 # Iterates through the array and yields each combination of _num_ elements in
 # the array.
-def pbEachCombination(array,num)
-  return if array.length<num || num<=0
-  if array.length==num
+def pbEachCombination(array, num)
+  return if array.length < num || num <= 0
+  if array.length == num
     yield array
     return
-  elsif num==1
+  elsif num == 1
     for x in array
       yield [x]
     end
@@ -45,7 +45,7 @@ def pbEachCombination(array,num)
       arr[i] = array[currentComb[i]]
     end
     yield arr
-  end while _pbNextComb(currentComb,array.length)
+  end while _pbNextComb(currentComb, array.length)
 end
 
 # Returns a language ID
@@ -64,12 +64,12 @@ end
 
 # Converts a Celsius temperature to Fahrenheit.
 def toFahrenheit(celsius)
-  return (celsius*9.0/5.0).round+32
+  return (celsius * 9.0 / 5.0).round + 32
 end
 
 # Converts a Fahrenheit temperature to Celsius.
 def toCelsius(fahrenheit)
-  return ((fahrenheit-32)*5.0/9.0).round
+  return ((fahrenheit - 32) * 5.0 / 9.0).round
 end
 
 
@@ -78,29 +78,29 @@ end
 # Constants utilities
 #===============================================================================
 # Unused
-def isConst?(val,mod,constant)
+def isConst?(val, mod, constant)
   begin
     return false if !mod.const_defined?(constant.to_sym)
   rescue
     return false
   end
-  return (val==mod.const_get(constant.to_sym))
+  return (val == mod.const_get(constant.to_sym))
 end
 
 # Unused
-def hasConst?(mod,constant)
+def hasConst?(mod, constant)
   return false if !mod || constant.nil?
   return mod.const_defined?(constant.to_sym) rescue false
 end
 
 # Unused
-def getConst(mod,constant)
+def getConst(mod, constant)
   return nil if !mod || constant.nil?
   return mod.const_get(constant.to_sym) rescue nil
 end
 
 # Unused
-def getID(mod,constant)
+def getID(mod, constant)
   return nil if !mod || constant.nil?
   if constant.is_a?(Symbol) || constant.is_a?(String)
     if (mod.const_defined?(constant.to_sym) rescue false)
@@ -111,18 +111,18 @@ def getID(mod,constant)
   return constant
 end
 
-def getConstantName(mod,value)
+def getConstantName(mod, value)
   mod = Object.const_get(mod) if mod.is_a?(Symbol)
   for c in mod.constants
-    return c.to_s if mod.const_get(c.to_sym)==value
+    return c.to_s if mod.const_get(c.to_sym) == value
   end
-  raise _INTL("Value {1} not defined by a constant in {2}",value,mod.name)
+  raise _INTL("Value {1} not defined by a constant in {2}", value, mod.name)
 end
 
-def getConstantNameOrValue(mod,value)
+def getConstantNameOrValue(mod, value)
   mod = Object.const_get(mod) if mod.is_a?(Symbol)
   for c in mod.constants
-    return c.to_s if mod.const_get(c.to_sym)==value
+    return c.to_s if mod.const_get(c.to_sym) == value
   end
   return value.inspect
 end
@@ -132,25 +132,25 @@ end
 #===============================================================================
 # Event utilities
 #===============================================================================
-def pbTimeEvent(variableNumber,secs = 86400)
-  if variableNumber && variableNumber>=0
+def pbTimeEvent(variableNumber, secs = 86400)
+  if variableNumber && variableNumber >= 0
     if $game_variables
-      secs = 0 if secs<0
+      secs = 0 if secs < 0
       timenow = pbGetTimeNow
-      $game_variables[variableNumber] = [timenow.to_f,secs]
+      $game_variables[variableNumber] = [timenow.to_f, secs]
       $game_map.refresh if $game_map
     end
   end
 end
 
-def pbTimeEventDays(variableNumber,days = 0)
-  if variableNumber && variableNumber>=0
+def pbTimeEventDays(variableNumber, days = 0)
+  if variableNumber && variableNumber >= 0
     if $game_variables
-      days = 0 if days<0
+      days = 0 if days < 0
       timenow = pbGetTimeNow
       time = timenow.to_f
-      expiry = (time%86400.0)+(days*86400.0)
-      $game_variables[variableNumber] = [time,expiry-time]
+      expiry = (time % 86400.0) + (days * 86400.0)
+      $game_variables[variableNumber] = [time, expiry - time]
       $game_map.refresh if $game_map
     end
   end
@@ -158,12 +158,12 @@ end
 
 def pbTimeEventValid(variableNumber)
   retval = false
-  if variableNumber && variableNumber>=0 && $game_variables
+  if variableNumber && variableNumber >= 0 && $game_variables
     value = $game_variables[variableNumber]
     if value.is_a?(Array)
       timenow = pbGetTimeNow
       retval = (timenow.to_f - value[0] > value[1]) # value[1] is age in seconds
-      retval = false if value[1]<=0 # zero age
+      retval = false if value[1] <= 0 # zero age
     end
     if !retval
       $game_variables[variableNumber] = 0
@@ -173,18 +173,18 @@ def pbTimeEventValid(variableNumber)
   return retval
 end
 
-def pbExclaim(event,id = Settings::EXCLAMATION_ANIMATION_ID,tinting = false)
+def pbExclaim(event, id = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
   if event.is_a?(Array)
     sprite = nil
     done = []
     for i in event
       if !done.include?(i.id)
-        sprite = $scene.spriteset.addUserAnimation(id,i.x,i.y,tinting,2)
+        sprite = $scene.spriteset.addUserAnimation(id, i.x, i.y, tinting, 2)
         done.push(i.id)
       end
     end
   else
-    sprite = $scene.spriteset.addUserAnimation(id,event.x,event.y,tinting,2)
+    sprite = $scene.spriteset.addUserAnimation(id, event.x, event.y, tinting, 2)
   end
   while !sprite.disposed?
     Graphics.update
@@ -194,10 +194,10 @@ def pbExclaim(event,id = Settings::EXCLAMATION_ANIMATION_ID,tinting = false)
 end
 
 def pbNoticePlayer(event)
-  if !pbFacingEachOther(event,$game_player)
+  if !pbFacingEachOther(event, $game_player)
     pbExclaim(event)
   end
-  pbTurnTowardEvent($game_player,event)
+  pbTurnTowardEvent($game_player, event)
   pbMoveTowardPlayer(event)
 end
 
@@ -243,14 +243,14 @@ end
 
 def pbSuggestTrainerName(gender)
   userName = pbGetUserName()
-  userName = userName.gsub(/\s+.*$/,"")
-  if userName.length>0 && userName.length<Settings::MAX_PLAYER_NAME_SIZE
-    userName[0,1] = userName[0,1].upcase
+  userName = userName.gsub(/\s+.*$/, "")
+  if userName.length > 0 && userName.length < Settings::MAX_PLAYER_NAME_SIZE
+    userName[0, 1] = userName[0, 1].upcase
     return userName
   end
-  userName = userName.gsub(/\d+$/,"")
-  if userName.length>0 && userName.length<Settings::MAX_PLAYER_NAME_SIZE
-    userName[0,1] = userName[0,1].upcase
+  userName = userName.gsub(/\d+$/, "")
+  if userName.length > 0 && userName.length < Settings::MAX_PLAYER_NAME_SIZE
+    userName[0, 1] = userName[0, 1].upcase
     return userName
   end
   userName = System.user_name.capitalize
@@ -264,8 +264,8 @@ def pbGetUserName
   return System.user_name
 end
 
-def getRandomNameEx(type,variable,upper,maxLength = 100)
-  return "" if maxLength<=0
+def getRandomNameEx(type, variable, upper, maxLength = 100)
+  return "" if maxLength <= 0
   name = ""
   50.times {
     name = ""
@@ -295,12 +295,12 @@ def getRandomNameEx(type,variable,upper,maxLength = 100)
         set1 = %w[b c d f g h j k l l m n n p r r s s t t v w y z]
         set2 = %w[bl br ch cl cr dr fr fl gl gr kh kl kr ph pl pr sc sk sl
                   sm sn sp st sw th tr tw vl zh]
-        name += (rand(3)>0) ? set1[rand(set1.length)] : set2[rand(set2.length)]
+        name += (rand(3) > 0) ? set1[rand(set1.length)] : set2[rand(set2.length)]
       when "E" # ending consonant
         set1 = %w[b c d f g h j k k l l m n n p r r s s t t v z]
         set2 = %w[bb bs ch cs ds fs ft gs gg ld ls nd ng nk rn kt ks
                   ms ns ph pt ps sk sh sp ss st rd rn rp rm rt rk ns th zh]
-        name += (rand(3)>0) ? set1[rand(set1.length)] : set2[rand(set2.length)]
+        name += (rand(3) > 0) ? set1[rand(set1.length)] : set2[rand(set2.length)]
       when "f" # consonant and vowel
         set = %w[iz us or]
         name += set[rand(set.length)]
@@ -325,9 +325,9 @@ def getRandomNameEx(type,variable,upper,maxLength = 100)
         name += set[rand(set.length)]
       end
     }
-    break if name.length<=maxLength
+    break if name.length <= maxLength
   }
-  name = name[0,maxLength]
+  name = name[0, maxLength]
   case upper
   when 0 then name = name.upcase
   when 1 then name[0, 1] = name[0, 1].upcase
@@ -340,7 +340,7 @@ def getRandomNameEx(type,variable,upper,maxLength = 100)
 end
 
 def getRandomName(maxLength = 100)
-  return getRandomNameEx(2,nil,nil,maxLength)
+  return getRandomNameEx(2, nil, nil, maxLength)
 end
 
 
@@ -396,8 +396,8 @@ end
 #===============================================================================
 # Other utilities
 #===============================================================================
-def pbTextEntry(helptext,minlength,maxlength,variableNumber)
-  $game_variables[variableNumber] = pbEnterText(helptext,minlength,maxlength)
+def pbTextEntry(helptext, minlength, maxlength, variableNumber)
+  $game_variables[variableNumber] = pbEnterText(helptext, minlength, maxlength)
   $game_map.need_refresh = true if $game_map
 end
 
@@ -424,34 +424,34 @@ def pbMoveTutorAnnotations(move, movelist = nil)
   return ret
 end
 
-def pbMoveTutorChoose(move,movelist = nil,bymachine = false,oneusemachine = false)
+def pbMoveTutorChoose(move, movelist = nil, bymachine = false, oneusemachine = false)
   ret = false
   move = GameData::Move.get(move).id
-  if movelist!=nil && movelist.is_a?(Array)
+  if movelist != nil && movelist.is_a?(Array)
     for i in 0...movelist.length
       movelist[i] = GameData::Move.get(movelist[i]).id
     end
   end
   pbFadeOutIn {
     movename = GameData::Move.get(move).name
-    annot = pbMoveTutorAnnotations(move,movelist)
+    annot = pbMoveTutorAnnotations(move, movelist)
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene,$player.party)
-    screen.pbStartScene(_INTL("Teach which Pokémon?"),false,annot)
+    screen = PokemonPartyScreen.new(scene, $player.party)
+    screen.pbStartScene(_INTL("Teach which Pokémon?"), false, annot)
     loop do
       chosen = screen.pbChoosePokemon
-      break if chosen<0
+      break if chosen < 0
       pokemon = $player.party[chosen]
       if pokemon.egg?
         pbMessage(_INTL("Eggs can't be taught any moves.")) { screen.pbUpdate }
       elsif pokemon.shadowPokemon?
         pbMessage(_INTL("Shadow Pokémon can't be taught any moves.")) { screen.pbUpdate }
-      elsif movelist && !movelist.any? { |j| j==pokemon.species }
-        pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
+      elsif movelist && !movelist.any? { |j| j == pokemon.species }
+        pbMessage(_INTL("{1} can't learn {2}.", pokemon.name, movename)) { screen.pbUpdate }
       elsif !pokemon.compatible_with_move?(move)
-        pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
+        pbMessage(_INTL("{1} can't learn {2}.", pokemon.name, movename)) { screen.pbUpdate }
       else
-        if pbLearnMove(pokemon,move,false,bymachine) { screen.pbUpdate }
+        if pbLearnMove(pokemon, move, false, bymachine) { screen.pbUpdate }
           $stats.moves_taught_by_item += 1 if bymachine
           $stats.moves_taught_by_tutor += 1 if !bymachine
           pokemon.add_first_move(move) if oneusemachine
@@ -468,7 +468,7 @@ end
 def pbConvertItemToItem(variable, array)
   item = GameData::Item.get(pbGet(variable))
   pbSet(variable, nil)
-  for i in 0...(array.length/2)
+  for i in 0...(array.length / 2)
     next if item != array[2 * i]
     pbSet(variable, array[2 * i + 1])
     return
@@ -492,8 +492,8 @@ def pbGet(id)
 end
 
 # Sets the value of a variable.
-def pbSet(id,value)
-  return if !id || id<0
+def pbSet(id, value)
+  return if !id || id < 0
   $game_variables[id] = value if $game_variables
   $game_map.need_refresh = true if $game_map
 end
@@ -501,12 +501,12 @@ end
 # Runs a common event and waits until the common event is finished.
 # Requires the script "Messages"
 def pbCommonEvent(id)
-  return false if id<0
+  return false if id < 0
   ce = $data_common_events[id]
   return false if !ce
   celist = ce.list
   interp = Interpreter.new
-  interp.setup(celist,0)
+  interp.setup(celist, 0)
   begin
     Graphics.update
     Input.update
@@ -579,11 +579,11 @@ def pbLoadRpgxpScene(scene)
 end
 
 def pbChooseLanguage
-  commands=[]
+  commands = []
   for lang in Settings::LANGUAGES
     commands.push(lang[0])
   end
-  return pbShowCommands(nil,commands)
+  return pbShowCommands(nil, commands)
 end
 
 def pbScreenCapture

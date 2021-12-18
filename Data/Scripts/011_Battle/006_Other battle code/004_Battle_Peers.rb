@@ -2,7 +2,7 @@
 #
 #===============================================================================
 class Battle::Peer
-  def pbStorePokemon(player,pkmn)
+  def pbStorePokemon(player, pkmn)
     if !player.party_full?
       player.party[player.party.length] = pkmn
       return -1
@@ -14,7 +14,7 @@ class Battle::Peer
     end
     oldCurBox = pbCurrentBox
     storedBox = $PokemonStorage.pbStoreCaught(pkmn)
-    if storedBox<0
+    if storedBox < 0
       # NOTE: Poké Balls can't be used if storage is full, so you shouldn't ever
       #       see this message.
       pbDisplayPaused(_INTL("Can't catch any more..."))
@@ -33,22 +33,22 @@ class Battle::Peer
   end
 
   def pbBoxName(box)
-    return (box<0) ? "" : $PokemonStorage[box].name
+    return (box < 0) ? "" : $PokemonStorage[box].name
   end
 
   def pbOnEnteringBattle(battle, battler, pkmn, wild = false)
-    f = MultipleForms.call("getFormOnEnteringBattle",pkmn,wild)
+    f = MultipleForms.call("getFormOnEnteringBattle", pkmn, wild)
     pkmn.form = f if f
     battler.form = pkmn.form if battler.form != pkmn.form
     MultipleForms.call("changePokemonOnEnteringBattle", battler, pkmn, battle)
   end
 
   # For switching out, including due to fainting, and for the end of battle
-  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle = false)
+  def pbOnLeavingBattle(battle, pkmn, usedInBattle, endBattle = false)
     return if !pkmn
-    f = MultipleForms.call("getFormOnLeavingBattle",pkmn,battle,usedInBattle,endBattle)
-    pkmn.form = f if f && pkmn.form!=f
-    pkmn.hp = pkmn.totalhp if pkmn.hp>pkmn.totalhp
+    f = MultipleForms.call("getFormOnLeavingBattle", pkmn, battle, usedInBattle, endBattle)
+    pkmn.form = f if f && pkmn.form != f
+    pkmn.hp = pkmn.totalhp if pkmn.hp > pkmn.totalhp
     MultipleForms.call("changePokemonOnLeavingBattle", pkmn, battle, usedInBattle, endBattle)
   end
 end
@@ -58,9 +58,9 @@ end
 #===============================================================================
 class Battle::NullPeer
   def pbOnEnteringBattle(battle, battler, pkmn, wild = false); end
-  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle = false); end
+  def pbOnLeavingBattle(battle, pkmn, usedInBattle, endBattle = false); end
 
-  def pbStorePokemon(player,pkmn)
+  def pbStorePokemon(player, pkmn)
     player.party[player.party.length] = pkmn if !player.party_full?
     return -1
   end

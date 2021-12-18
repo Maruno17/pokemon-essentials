@@ -2,22 +2,22 @@
 # Heals user to full HP. User falls asleep for 2 more rounds. (Rest)
 #===============================================================================
 class Battle::Move::HealUserFullyAndFallAsleep < Battle::Move::HealingMove
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if user.asleep?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    return true if !user.pbCanSleep?(user,true,self,true)
+    return true if !user.pbCanSleep?(user, true, self, true)
     return true if super
     return false
   end
 
   def pbHealAmount(user)
-    return user.totalhp-user.hp
+    return user.totalhp - user.hp
   end
 
   def pbEffectGeneral(user)
-    user.pbSleepSelf(_INTL("{1} slept and became healthy!",user.pbThis),3)
+    user.pbSleepSelf(_INTL("{1} slept and became healthy!", user.pbThis), 3)
     super
   end
 end
@@ -27,7 +27,7 @@ end
 #===============================================================================
 class Battle::Move::HealUserHalfOfTotalHP < Battle::Move::HealingMove
   def pbHealAmount(user)
-    return (user.totalhp/2.0).round
+    return (user.totalhp / 2.0).round
   end
 end
 
@@ -36,14 +36,14 @@ end
 # Synthesis)
 #===============================================================================
 class Battle::Move::HealUserDependingOnWeather < Battle::Move::HealingMove
-  def pbOnStartUse(user,targets)
+  def pbOnStartUse(user, targets)
     case user.effectiveWeather
     when :Sun, :HarshSun
-      @healAmount = (user.totalhp*2/3.0).round
+      @healAmount = (user.totalhp * 2 / 3.0).round
     when :None, :StrongWinds
-      @healAmount = (user.totalhp/2.0).round
+      @healAmount = (user.totalhp / 2.0).round
     else
-      @healAmount = (user.totalhp/4.0).round
+      @healAmount = (user.totalhp / 4.0).round
     end
   end
 
@@ -68,7 +68,7 @@ end
 #===============================================================================
 class Battle::Move::HealUserHalfOfTotalHPLoseFlyingTypeThisTurn < Battle::Move::HealingMove
   def pbHealAmount(user)
-    return (user.totalhp/2.0).round
+    return (user.totalhp / 2.0).round
   end
 
   def pbEffectGeneral(user)
@@ -94,10 +94,10 @@ class Battle::Move::CureTargetStatusHealUserHalfOfTotalHP < Battle::Move::Healin
   end
 
   def pbHealAmount(user)
-    return (user.totalhp/2.0).round
+    return (user.totalhp / 2.0).round
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     target.pbCureStatus
     super
   end
@@ -129,28 +129,28 @@ class Battle::Move::HealUserByTargetAttackLowerTargetAttack1 < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     # Calculate target's effective attack value
-    stageMul = [2,2,2,2,2,2, 2, 3,4,5,6,7,8]
-    stageDiv = [8,7,6,5,4,3, 2, 2,2,2,2,2,2]
+    stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
+    stageDiv = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
     atk      = target.attack
-    atkStage = target.stages[:ATTACK]+6
-    healAmt = (atk.to_f*stageMul[atkStage]/stageDiv[atkStage]).floor
+    atkStage = target.stages[:ATTACK] + 6
+    healAmt = (atk.to_f * stageMul[atkStage] / stageDiv[atkStage]).floor
     # Reduce target's Attack stat
-    if target.pbCanLowerStatStage?(:ATTACK,user,self)
-      target.pbLowerStatStage(:ATTACK,1,user)
+    if target.pbCanLowerStatStage?(:ATTACK, user, self)
+      target.pbLowerStatStage(:ATTACK, 1, user)
     end
     # Heal user
     if target.hasActiveAbility?(:LIQUIDOOZE)
       @battle.pbShowAbilitySplash(target)
       user.pbReduceHP(healAmt)
-      @battle.pbDisplay(_INTL("{1} sucked up the liquid ooze!",user.pbThis))
+      @battle.pbDisplay(_INTL("{1} sucked up the liquid ooze!", user.pbThis))
       @battle.pbHideAbilitySplash(target)
       user.pbItemHPHealCheck
     elsif user.canHeal?
-      healAmt = (healAmt*1.3).floor if user.hasActiveItem?(:BIGROOT)
+      healAmt = (healAmt * 1.3).floor if user.hasActiveItem?(:BIGROOT)
       user.pbRecoverHP(healAmt)
-      @battle.pbDisplay(_INTL("{1}'s HP was restored.",user.pbThis))
+      @battle.pbDisplay(_INTL("{1}'s HP was restored.", user.pbThis))
     end
   end
 end
@@ -161,10 +161,10 @@ end
 class Battle::Move::HealUserByHalfOfDamageDone < Battle::Move
   def healingMove?; return Settings::MECHANICS_GENERATION >= 6; end
 
-  def pbEffectAgainstTarget(user,target)
-    return if target.damageState.hpLost<=0
-    hpGain = (target.damageState.hpLost/2.0).round
-    user.pbRecoverHPFromDrain(hpGain,target)
+  def pbEffectAgainstTarget(user, target)
+    return if target.damageState.hpLost <= 0
+    hpGain = (target.damageState.hpLost / 2.0).round
+    user.pbRecoverHPFromDrain(hpGain, target)
   end
 end
 
@@ -183,10 +183,10 @@ class Battle::Move::HealUserByHalfOfDamageDoneIfTargetAsleep < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    return if target.damageState.hpLost<=0
-    hpGain = (target.damageState.hpLost/2.0).round
-    user.pbRecoverHPFromDrain(hpGain,target)
+  def pbEffectAgainstTarget(user, target)
+    return if target.damageState.hpLost <= 0
+    hpGain = (target.damageState.hpLost / 2.0).round
+    user.pbRecoverHPFromDrain(hpGain, target)
   end
 end
 
@@ -196,10 +196,10 @@ end
 class Battle::Move::HealUserByThreeQuartersOfDamageDone < Battle::Move
   def healingMove?; return Settings::MECHANICS_GENERATION >= 6; end
 
-  def pbEffectAgainstTarget(user,target)
-    return if target.damageState.hpLost<=0
-    hpGain = (target.damageState.hpLost*0.75).round
-    user.pbRecoverHPFromDrain(hpGain,target)
+  def pbEffectAgainstTarget(user, target)
+    return if target.damageState.hpLost <= 0
+    hpGain = (target.damageState.hpLost * 0.75).round
+    user.pbRecoverHPFromDrain(hpGain, target)
   end
 end
 
@@ -278,7 +278,7 @@ class Battle::Move::HealTargetHalfOfTotalHP < Battle::Move
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.hp==target.totalhp
+    if target.hp == target.totalhp
       @battle.pbDisplay(_INTL("{1}'s HP is full!", target.pbThis)) if show_message
       return true
     elsif !target.canHeal?
@@ -288,13 +288,13 @@ class Battle::Move::HealTargetHalfOfTotalHP < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    hpGain = (target.totalhp/2.0).round
+  def pbEffectAgainstTarget(user, target)
+    hpGain = (target.totalhp / 2.0).round
     if pulseMove? && user.hasActiveAbility?(:MEGALAUNCHER)
-      hpGain = (target.totalhp*3/4.0).round
+      hpGain = (target.totalhp * 3 / 4.0).round
     end
     target.pbRecoverHP(hpGain)
-    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
+    @battle.pbDisplay(_INTL("{1}'s HP was restored.", target.pbThis))
   end
 end
 
@@ -307,7 +307,7 @@ class Battle::Move::HealTargetDependingOnGrassyTerrain < Battle::Move
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.hp==target.totalhp
+    if target.hp == target.totalhp
       @battle.pbDisplay(_INTL("{1}'s HP is full!", target.pbThis)) if show_message
       return true
     elsif !target.canHeal?
@@ -317,11 +317,11 @@ class Battle::Move::HealTargetDependingOnGrassyTerrain < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    hpGain = (target.totalhp/2.0).round
-    hpGain = (target.totalhp*2/3.0).round if @battle.field.terrain == :Grassy
+  def pbEffectAgainstTarget(user, target)
+    hpGain = (target.totalhp / 2.0).round
+    hpGain = (target.totalhp * 2 / 3.0).round if @battle.field.terrain == :Grassy
     target.pbRecoverHP(hpGain)
-    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
+    @battle.pbDisplay(_INTL("{1}'s HP was restored.", target.pbThis))
   end
 end
 
@@ -333,8 +333,8 @@ class Battle::Move::HealUserPositionNextTurn < Battle::Move
   def healingMove?; return true; end
   def canSnatch?;   return true; end
 
-  def pbMoveFailed?(user,targets)
-    if @battle.positions[user.index].effects[PBEffects::Wish]>0
+  def pbMoveFailed?(user, targets)
+    if @battle.positions[user.index].effects[PBEffects::Wish] > 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -343,7 +343,7 @@ class Battle::Move::HealUserPositionNextTurn < Battle::Move
 
   def pbEffectGeneral(user)
     @battle.positions[user.index].effects[PBEffects::Wish]       = 2
-    @battle.positions[user.index].effects[PBEffects::WishAmount] = (user.totalhp/2.0).round
+    @battle.positions[user.index].effects[PBEffects::WishAmount] = (user.totalhp / 2.0).round
     @battle.positions[user.index].effects[PBEffects::WishMaker]  = user.pokemonIndex
   end
 end
@@ -355,7 +355,7 @@ end
 class Battle::Move::StartHealUserEachTurn < Battle::Move
   def canSnatch?; return true; end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if user.effects[PBEffects::AquaRing]
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -365,7 +365,7 @@ class Battle::Move::StartHealUserEachTurn < Battle::Move
 
   def pbEffectGeneral(user)
     user.effects[PBEffects::AquaRing] = true
-    @battle.pbDisplay(_INTL("{1} surrounded itself with a veil of water!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1} surrounded itself with a veil of water!", user.pbThis))
   end
 end
 
@@ -376,7 +376,7 @@ end
 class Battle::Move::StartHealUserEachTurnTrapUserInBattle < Battle::Move
   def canSnatch?; return true; end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if user.effects[PBEffects::Ingrain]
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -386,7 +386,7 @@ class Battle::Move::StartHealUserEachTurnTrapUserInBattle < Battle::Move
 
   def pbEffectGeneral(user)
     user.effects[PBEffects::Ingrain] = true
-    @battle.pbDisplay(_INTL("{1} planted its roots!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1} planted its roots!", user.pbThis))
   end
 end
 
@@ -402,9 +402,9 @@ class Battle::Move::StartDamageTargetEachTurnIfTargetAsleep < Battle::Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     target.effects[PBEffects::Nightmare] = true
-    @battle.pbDisplay(_INTL("{1} began having a nightmare!",target.pbThis))
+    @battle.pbDisplay(_INTL("{1} began having a nightmare!", target.pbThis))
   end
 end
 
@@ -416,7 +416,7 @@ class Battle::Move::StartLeechSeedTarget < Battle::Move
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.effects[PBEffects::LeechSeed]>=0
+    if target.effects[PBEffects::LeechSeed] >= 0
       @battle.pbDisplay(_INTL("{1} evaded the attack!", target.pbThis)) if show_message
       return true
     end
@@ -427,14 +427,14 @@ class Battle::Move::StartLeechSeedTarget < Battle::Move
     return false
   end
 
-  def pbMissMessage(user,target)
-    @battle.pbDisplay(_INTL("{1} evaded the attack!",target.pbThis))
+  def pbMissMessage(user, target)
+    @battle.pbDisplay(_INTL("{1} evaded the attack!", target.pbThis))
     return true
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     target.effects[PBEffects::LeechSeed] = user.index
-    @battle.pbDisplay(_INTL("{1} was seeded!",target.pbThis))
+    @battle.pbDisplay(_INTL("{1} was seeded!", target.pbThis))
   end
 end
 
@@ -459,16 +459,16 @@ end
 class Battle::Move::UserLosesHalfOfTotalHPExplosive < Battle::Move
   def worksWithNoTargets?; return true; end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !@battle.moldBreaker
       bearer = @battle.pbCheckGlobalAbility(:DAMP)
-      if bearer!=nil
+      if bearer != nil
         @battle.pbShowAbilitySplash(bearer)
         if Battle::Scene::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("{1} cannot use {2}!",user.pbThis,@name))
+          @battle.pbDisplay(_INTL("{1} cannot use {2}!", user.pbThis, @name))
         else
           @battle.pbDisplay(_INTL("{1} cannot use {2} because of {3}'s {4}!",
-             user.pbThis,@name,bearer.pbThis(true),bearer.abilityName))
+             user.pbThis, @name, bearer.pbThis(true), bearer.abilityName))
         end
         @battle.pbHideAbilitySplash(bearer)
         return true
@@ -479,7 +479,7 @@ class Battle::Move::UserLosesHalfOfTotalHPExplosive < Battle::Move
 
   def pbSelfKO(user)
     return if !user.takesIndirectDamage?
-    user.pbReduceHP((user.totalhp/2.0).round,false)
+    user.pbReduceHP((user.totalhp / 2.0).round, false)
     user.pbItemHPHealCheck
   end
 end
@@ -489,18 +489,18 @@ end
 #===============================================================================
 class Battle::Move::UserFaintsExplosive < Battle::Move
   def worksWithNoTargets?;     return true; end
-  def pbNumHits(user,targets); return 1;    end
+  def pbNumHits(user, targets); return 1;    end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !@battle.moldBreaker
       bearer = @battle.pbCheckGlobalAbility(:DAMP)
-      if bearer!=nil
+      if bearer != nil
         @battle.pbShowAbilitySplash(bearer)
         if Battle::Scene::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("{1} cannot use {2}!",user.pbThis,@name))
+          @battle.pbDisplay(_INTL("{1} cannot use {2}!", user.pbThis, @name))
         else
           @battle.pbDisplay(_INTL("{1} cannot use {2} because of {3}'s {4}!",
-             user.pbThis,@name,bearer.pbThis(true),bearer.abilityName))
+             user.pbThis, @name, bearer.pbThis(true), bearer.abilityName))
         end
         @battle.pbHideAbilitySplash(bearer)
         return true
@@ -511,7 +511,7 @@ class Battle::Move::UserFaintsExplosive < Battle::Move
 
   def pbSelfKO(user)
     return if user.fainted?
-    user.pbReduceHP(user.hp,false)
+    user.pbReduceHP(user.hp, false)
     user.pbItemHPHealCheck
   end
 end
@@ -532,19 +532,19 @@ end
 # User faints (if successful).
 #===============================================================================
 class Battle::Move::UserFaintsFixedDamageUserHP < Battle::Move::FixedDamageMove
-  def pbNumHits(user,targets); return 1; end
+  def pbNumHits(user, targets); return 1; end
 
-  def pbOnStartUse(user,targets)
+  def pbOnStartUse(user, targets)
     @finalGambitDamage = user.hp
   end
 
-  def pbFixedDamage(user,target)
+  def pbFixedDamage(user, target)
     return @finalGambitDamage
   end
 
   def pbSelfKO(user)
     return if user.fainted?
-    user.pbReduceHP(user.hp,false)
+    user.pbReduceHP(user.hp, false)
     user.pbItemHPHealCheck
   end
 end
@@ -556,9 +556,9 @@ end
 class Battle::Move::UserFaintsLowerTargetAtkSpAtk2 < Battle::Move::TargetMultiStatDownMove
   def canMagicCoat?; return false; end
 
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
-    @statDown = [:ATTACK,2,:SPECIAL_ATTACK,2]
+    @statDown = [:ATTACK, 2, :SPECIAL_ATTACK, 2]
   end
 
   # NOTE: The user faints even if the target's stats cannot be changed, so this
@@ -569,7 +569,7 @@ class Battle::Move::UserFaintsLowerTargetAtkSpAtk2 < Battle::Move::TargetMultiSt
 
   def pbSelfKO(user)
     return if user.fainted?
-    user.pbReduceHP(user.hp,false)
+    user.pbReduceHP(user.hp, false)
     user.pbItemHPHealCheck
   end
 end
@@ -582,7 +582,7 @@ class Battle::Move::UserFaintsHealAndCureReplacement < Battle::Move
   def healingMove?; return true; end
   def canSnatch?;   return true; end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !@battle.pbCanChooseNonActive?(user.index)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -592,7 +592,7 @@ class Battle::Move::UserFaintsHealAndCureReplacement < Battle::Move
 
   def pbSelfKO(user)
     return if user.fainted?
-    user.pbReduceHP(user.hp,false)
+    user.pbReduceHP(user.hp, false)
     user.pbItemHPHealCheck
     @battle.positions[user.index].effects[PBEffects::HealingWish] = true
   end
@@ -606,7 +606,7 @@ class Battle::Move::UserFaintsHealAndCureReplacementRestorePP < Battle::Move
   def healingMove?; return true; end
   def canSnatch?;   return true; end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !@battle.pbCanChooseNonActive?(user.index)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -616,7 +616,7 @@ class Battle::Move::UserFaintsHealAndCureReplacementRestorePP < Battle::Move
 
   def pbSelfKO(user)
     return if user.fainted?
-    user.pbReduceHP(user.hp,false)
+    user.pbReduceHP(user.hp, false)
     user.pbItemHPHealCheck
     @battle.positions[user.index].effects[PBEffects::LunarDance] = true
   end
@@ -626,10 +626,10 @@ end
 # All current battlers will perish after 3 more rounds. (Perish Song)
 #===============================================================================
 class Battle::Move::StartPerishCountsForAllBattlers < Battle::Move
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     failed = true
     targets.each do |b|
-      next if b.effects[PBEffects::PerishSong]>0   # Heard it before
+      next if b.effects[PBEffects::PerishSong] > 0   # Heard it before
       failed = false
       break
     end
@@ -641,15 +641,15 @@ class Battle::Move::StartPerishCountsForAllBattlers < Battle::Move
   end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    return target.effects[PBEffects::PerishSong]>0   # Heard it before
+    return target.effects[PBEffects::PerishSong] > 0   # Heard it before
   end
 
-  def pbEffectAgainstTarget(user,target)
+  def pbEffectAgainstTarget(user, target)
     target.effects[PBEffects::PerishSong]     = 4
     target.effects[PBEffects::PerishSongUser] = user.index
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     super
     @battle.pbDisplay(_INTL("All Pokémon that hear the song will faint in three turns!"))
   end
@@ -660,7 +660,7 @@ end
 # (Destiny Bond)
 #===============================================================================
 class Battle::Move::AttackerFaintsIfUserFaints < Battle::Move
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if Settings::MECHANICS_GENERATION >= 7 && user.effects[PBEffects::DestinyBondPrevious]
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -670,7 +670,7 @@ class Battle::Move::AttackerFaintsIfUserFaints < Battle::Move
 
   def pbEffectGeneral(user)
     user.effects[PBEffects::DestinyBond] = true
-    @battle.pbDisplay(_INTL("{1} is hoping to take its attacker down with it!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1} is hoping to take its attacker down with it!", user.pbThis))
   end
 end
 
@@ -681,6 +681,6 @@ end
 class Battle::Move::SetAttackerMovePPTo0IfUserFaints < Battle::Move
   def pbEffectGeneral(user)
     user.effects[PBEffects::Grudge] = true
-    @battle.pbDisplay(_INTL("{1} wants its target to bear a grudge!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1} wants its target to bear a grudge!", user.pbThis))
   end
 end

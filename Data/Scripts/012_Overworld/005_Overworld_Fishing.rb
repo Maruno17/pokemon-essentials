@@ -37,38 +37,38 @@ def pbFishingEnd
   $PokemonGlobal.fishing = false
 end
 
-def pbFishing(hasEncounter,rodType = 1)
+def pbFishing(hasEncounter, rodType = 1)
   $stats.fishing_count += 1
   speedup = ($player.first_pokemon && [:STICKYHOLD, :SUCTIONCUPS].include?($player.first_pokemon.ability_id))
-  biteChance = 20+(25*rodType)   # 45, 70, 95
+  biteChance = 20 + (25 * rodType)   # 45, 70, 95
   biteChance *= 1.5 if speedup   # 67.5, 100, 100
   hookChance = 100
   pbFishingBegin
   msgWindow = pbCreateMessageWindow
   ret = false
   loop do
-    time = 5+rand(6)
-    time = [time,5+rand(6)].min if speedup
+    time = 5 + rand(6)
+    time = [time, 5 + rand(6)].min if speedup
     message = ""
     time.times { message += ".   " }
-    if pbWaitMessage(msgWindow,time)
+    if pbWaitMessage(msgWindow, time)
       pbFishingEnd {
-        pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
+        pbMessageDisplay(msgWindow, _INTL("Not even a nibble..."))
       }
       break
     end
-    if hasEncounter && rand(100)<biteChance
-      $scene.spriteset.addUserAnimation(Settings::EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y,true,3)
-      frames = Graphics.frame_rate - rand(Graphics.frame_rate/2)   # 0.5-1 second
-      if !pbWaitForInput(msgWindow,message+_INTL("\r\nOh! A bite!"),frames)
+    if hasEncounter && rand(100) < biteChance
+      $scene.spriteset.addUserAnimation(Settings::EXCLAMATION_ANIMATION_ID, $game_player.x, $game_player.y, true, 3)
+      frames = Graphics.frame_rate - rand(Graphics.frame_rate / 2)   # 0.5-1 second
+      if !pbWaitForInput(msgWindow, message + _INTL("\r\nOh! A bite!"), frames)
         pbFishingEnd {
-          pbMessageDisplay(msgWindow,_INTL("The Pokémon got away..."))
+          pbMessageDisplay(msgWindow, _INTL("The Pokémon got away..."))
         }
         break
       end
       if Settings::FISHING_AUTO_HOOK || rand(100) < hookChance
         pbFishingEnd {
-          pbMessageDisplay(msgWindow,_INTL("Landed a Pokémon!")) if !Settings::FISHING_AUTO_HOOK
+          pbMessageDisplay(msgWindow, _INTL("Landed a Pokémon!")) if !Settings::FISHING_AUTO_HOOK
         }
         ret = true
         break
@@ -77,7 +77,7 @@ def pbFishing(hasEncounter,rodType = 1)
 #      hookChance += 15
     else
       pbFishingEnd {
-        pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
+        pbMessageDisplay(msgWindow, _INTL("Not even a nibble..."))
       }
       break
     end
@@ -87,12 +87,12 @@ def pbFishing(hasEncounter,rodType = 1)
 end
 
 # Show waiting dots before a Pokémon bites
-def pbWaitMessage(msgWindow,time)
+def pbWaitMessage(msgWindow, time)
   message = ""
-  periodTime = Graphics.frame_rate*4/10   # 0.4 seconds, 16 frames per dot
-  (time+1).times do |i|
-    message += ".   " if i>0
-    pbMessageDisplay(msgWindow,message,false)
+  periodTime = Graphics.frame_rate * 4 / 10   # 0.4 seconds, 16 frames per dot
+  (time + 1).times do |i|
+    message += ".   " if i > 0
+    pbMessageDisplay(msgWindow, message, false)
     periodTime.times do
       Graphics.update
       Input.update
@@ -106,8 +106,8 @@ def pbWaitMessage(msgWindow,time)
 end
 
 # A Pokémon is biting, reflex test to reel it in
-def pbWaitForInput(msgWindow,message,frames)
-  pbMessageDisplay(msgWindow,message,false)
+def pbWaitForInput(msgWindow, message, frames)
+  pbMessageDisplay(msgWindow, message, false)
   numFrame = 0
   twitchFrame = 0
   twitchFrameTime = Graphics.frame_rate * 2 / 10   # 0.2 seconds, 8 frames
@@ -116,8 +116,8 @@ def pbWaitForInput(msgWindow,message,frames)
     Input.update
     pbUpdateSceneMap
     # Twitch cycle: 1,0,1,0,0,0,0,0
-    twitchFrame = (twitchFrame+1)%(twitchFrameTime*8)
-    case twitchFrame%twitchFrameTime
+    twitchFrame = (twitchFrame + 1) % (twitchFrameTime * 8)
+    case twitchFrame % twitchFrameTime
     when 0, 2
       $game_player.pattern = 1
     else

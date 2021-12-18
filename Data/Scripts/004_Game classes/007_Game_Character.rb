@@ -96,7 +96,7 @@ class Game_Character
   end
 
   def move_speed=(val)
-    return if val==@move_speed
+    return if val == @move_speed
     @move_speed = val
     # @move_speed_real is the number of quarter-pixels to move each frame. There
     # are 128 quarter-pixels per tile. By default, it is calculated from
@@ -107,7 +107,7 @@ class Game_Character
     # 4 => 25.6   # 5 frames per tile - running speed (2x walking speed)
     # 5 => 32     # 4 frames per tile - cycling speed (1.25x running speed)
     # 6 => 64     # 2 frames per tile
-    self.move_speed_real = (val == 6) ? 64 : (val == 5) ? 32 : (2 ** (val + 1)) * 0.8
+    self.move_speed_real = (val == 6) ? 64 : (val == 5) ? 32 : (2**(val + 1)) * 0.8
   end
 
   def move_speed_real
@@ -120,7 +120,7 @@ class Game_Character
   end
 
   def jump_speed_real
-    self.jump_speed_real = (2 ** (3 + 1)) * 0.8 if !@jump_speed_real   # 3 is walking speed
+    self.jump_speed_real = (2**(3 + 1)) * 0.8 if !@jump_speed_real   # 3 is walking speed
     return @jump_speed_real
   end
 
@@ -129,7 +129,7 @@ class Game_Character
   end
 
   def move_frequency=(val)
-    return if val==@move_frequency
+    return if val == @move_frequency
     @move_frequency = val
     # @move_frequency_real is the number of frames to wait between each action
     # in a move route (not forced). Specifically, this is the number of frames
@@ -381,8 +381,8 @@ class Game_Character
 
   def triggerLeaveTile
     if @oldX && @oldY && @oldMap &&
-       (@oldX!=self.x || @oldY!=self.y || @oldMap!=self.map.map_id)
-      Events.onLeaveTile.trigger(self,self,@oldMap,@oldX,@oldY)
+       (@oldX != self.x || @oldY != self.y || @oldMap != self.map.map_id)
+      Events.onLeaveTile.trigger(self, self, @oldMap, @oldX, @oldY)
     end
     @oldX = self.x
     @oldY = self.y
@@ -629,23 +629,23 @@ class Game_Character
     end
   end
 
-  def move_random_range(xrange = -1,yrange = -1)
+  def move_random_range(xrange = -1, yrange = -1)
     dirs = []   # 0=down, 1=left, 2=right, 3=up
-    if xrange<0
+    if xrange < 0
       dirs.push(1)
       dirs.push(2)
-    elsif xrange>0
+    elsif xrange > 0
       dirs.push(1) if @x > @original_x - xrange
       dirs.push(2) if @x < @original_x + xrange
     end
-    if yrange<0
+    if yrange < 0
       dirs.push(0)
       dirs.push(3)
-    elsif yrange>0
+    elsif yrange > 0
       dirs.push(0) if @y < @original_y + yrange
       dirs.push(3) if @y > @original_y - yrange
     end
-    return if dirs.length==0
+    return if dirs.length == 0
     case dirs[rand(dirs.length)]
     when 0 then move_down(false)
     when 1 then move_left(false)
@@ -655,11 +655,11 @@ class Game_Character
   end
 
   def move_random_UD(range = -1)
-    move_random_range(0,range)
+    move_random_range(0, range)
   end
 
   def move_random_LR(range = -1)
-    move_random_range(range,0)
+    move_random_range(range, 0)
   end
 
   def move_toward_player
@@ -755,19 +755,19 @@ class Game_Character
 
   def jumpForward
     case self.direction
-    when 2 then jump(0,1)    # down
-    when 4 then jump(-1,0)   # left
-    when 6 then jump(1,0)    # right
-    when 8 then jump(0,-1)   # up
+    when 2 then jump(0, 1)    # down
+    when 4 then jump(-1, 0)   # left
+    when 6 then jump(1, 0)    # right
+    when 8 then jump(0, -1)   # up
     end
   end
 
   def jumpBackward
     case self.direction
-    when 2 then jump(0,-1)   # down
-    when 4 then jump(1,0)    # left
-    when 6 then jump(-1,0)   # right
-    when 8 then jump(0,1)    # up
+    when 2 then jump(0, -1)   # down
+    when 4 then jump(1, 0)    # left
+    when 6 then jump(-1, 0)   # right
+    when 8 then jump(0, 1)    # up
     end
   end
 

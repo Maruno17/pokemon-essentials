@@ -2,16 +2,16 @@
 # Hits twice.
 #===============================================================================
 class Battle::Move::HitTwoTimes < Battle::Move
-  def multiHitMove?;           return true; end
-  def pbNumHits(user,targets); return 2;    end
+  def multiHitMove?;            return true; end
+  def pbNumHits(user, targets); return 2;    end
 end
 
 #===============================================================================
 # Hits twice. May poison the target on each hit. (Twineedle)
 #===============================================================================
 class Battle::Move::HitTwoTimesPoisonTarget < Battle::Move::PoisonTarget
-  def multiHitMove?;           return true; end
-  def pbNumHits(user,targets); return 2;    end
+  def multiHitMove?;            return true; end
+  def pbNumHits(user, targets); return 2;    end
 end
 
 #===============================================================================
@@ -69,19 +69,19 @@ end
 # An accuracy check is performed for each hit.
 #===============================================================================
 class Battle::Move::HitThreeTimesPowersUpWithEachHit < Battle::Move
-  def multiHitMove?;           return true; end
-  def pbNumHits(user,targets); return 3;    end
+  def multiHitMove?;            return true; end
+  def pbNumHits(user, targets); return 3;    end
 
   def successCheckPerHit?
     return @accCheckPerHit
   end
 
-  def pbOnStartUse(user,targets)
+  def pbOnStartUse(user, targets)
     @calcBaseDmg = 0
     @accCheckPerHit = !user.hasActiveAbility?(:SKILLLINK)
   end
 
-  def pbBaseDamage(baseDmg,user,target)
+  def pbBaseDamage(baseDmg, user, target)
     @calcBaseDmg += baseDmg
     return @calcBaseDmg
   end
@@ -103,7 +103,7 @@ end
 class Battle::Move::HitTwoToFiveTimes < Battle::Move
   def multiHitMove?; return true; end
 
-  def pbNumHits(user,targets)
+  def pbNumHits(user, targets)
     hitChances = [
       2, 2, 2, 2, 2, 2, 2,
       3, 3, 3, 3, 3, 3, 3,
@@ -111,7 +111,7 @@ class Battle::Move::HitTwoToFiveTimes < Battle::Move
       5, 5, 5
     ]
     r = @battle.pbRandom(hitChances.length)
-    r = hitChances.length-1 if user.hasActiveAbility?(:SKILLLINK)
+    r = hitChances.length - 1 if user.hasActiveAbility?(:SKILLLINK)
     return hitChances[r]
   end
 end
@@ -121,12 +121,12 @@ end
 # (Water Shuriken)
 #===============================================================================
 class Battle::Move::HitTwoToFiveTimesOrThreeForAshGreninja < Battle::Move::HitTwoToFiveTimes
-  def pbNumHits(user,targets)
+  def pbNumHits(user, targets)
     return 3 if user.isSpecies?(:GRENINJA) && user.form == 2
     return super
   end
 
-  def pbBaseDamage(baseDmg,user,target)
+  def pbBaseDamage(baseDmg, user, target)
     return 20 if user.isSpecies?(:GRENINJA) && user.form == 2
     return super
   end
@@ -171,27 +171,27 @@ end
 class Battle::Move::HitOncePerUserTeamMember < Battle::Move
   def multiHitMove?; return true; end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     @beatUpList = []
-    @battle.eachInTeamFromBattlerIndex(user.index) do |pkmn,i|
+    @battle.eachInTeamFromBattlerIndex(user.index) do |pkmn, i|
       next if !pkmn.able? || pkmn.status != :NONE
       @beatUpList.push(i)
     end
-    if @beatUpList.length==0
+    if @beatUpList.length == 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     return false
   end
 
-  def pbNumHits(user,targets)
+  def pbNumHits(user, targets)
     return @beatUpList.length
   end
 
-  def pbBaseDamage(baseDmg,user,target)
+  def pbBaseDamage(baseDmg, user, target)
     i = @beatUpList.shift   # First element in array, and removes it from array
     atk = @battle.pbParty(user.index)[i].baseStats[:ATTACK]
-    return 5+(atk/10)
+    return 5 + (atk / 10)
   end
 end
 
@@ -209,8 +209,8 @@ end
 # Two turn attack. Skips first turn, attacks second turn. (Razor Wind)
 #===============================================================================
 class Battle::Move::TwoTurnAttack < Battle::Move::TwoTurnMove
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} whipped up a whirlwind!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} whipped up a whirlwind!", user.pbThis))
   end
 end
 
@@ -232,11 +232,11 @@ class Battle::Move::TwoTurnAttackOneTurnInSun < Battle::Move::TwoTurnMove
     return ret
   end
 
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} took in sunlight!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} took in sunlight!", user.pbThis))
   end
 
-  def pbBaseDamageMultiplier(damageMult,user,target)
+  def pbBaseDamageMultiplier(damageMult, user, target)
     damageMult /= 2 if ![:None, :Sun, :HarshSun].include?(user.effectiveWeather)
     return damageMult
   end
@@ -247,13 +247,13 @@ end
 # May paralyze the target.
 #===============================================================================
 class Battle::Move::TwoTurnAttackParalyzeTarget < Battle::Move::TwoTurnMove
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} became cloaked in a freezing light!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} became cloaked in a freezing light!", user.pbThis))
   end
 
-  def pbAdditionalEffect(user,target)
+  def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
-    target.pbParalyze(user) if target.pbCanParalyze?(user,false,self)
+    target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
   end
 end
 
@@ -262,13 +262,13 @@ end
 # May burn the target.
 #===============================================================================
 class Battle::Move::TwoTurnAttackBurnTarget < Battle::Move::TwoTurnMove
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} became cloaked in freezing air!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} became cloaked in freezing air!", user.pbThis))
   end
 
-  def pbAdditionalEffect(user,target)
+  def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
-    target.pbBurn(user) if target.pbCanBurn?(user,false,self)
+    target.pbBurn(user) if target.pbCanBurn?(user, false, self)
   end
 end
 
@@ -279,11 +279,11 @@ end
 class Battle::Move::TwoTurnAttackFlinchTarget < Battle::Move::TwoTurnMove
   def flinchingMove?; return true; end
 
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} became cloaked in a harsh light!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} became cloaked in a harsh light!", user.pbThis))
   end
 
-  def pbAdditionalEffect(user,target)
+  def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
     target.pbFlinch(user)
   end
@@ -294,27 +294,27 @@ end
 # Special Defense and Speed by 2 stages each in the second turn. (Geomancy)
 #===============================================================================
 class Battle::Move::TwoTurnAttackRaiseUserSpAtkSpDefSpd2 < Battle::Move::TwoTurnMove
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     return false if user.effects[PBEffects::TwoTurnAttack]   # Charging turn
-    if !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK,user,self) &&
-       !user.pbCanRaiseStatStage?(:SPECIAL_DEFENSE,user,self) &&
-       !user.pbCanRaiseStatStage?(:SPEED,user,self)
-      @battle.pbDisplay(_INTL("{1}'s stats won't go any higher!",user.pbThis))
+    if !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self) &&
+       !user.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user, self) &&
+       !user.pbCanRaiseStatStage?(:SPEED, user, self)
+      @battle.pbDisplay(_INTL("{1}'s stats won't go any higher!", user.pbThis))
       return true
     end
     return false
   end
 
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} is absorbing power!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} is absorbing power!", user.pbThis))
   end
 
   def pbEffectGeneral(user)
     return if !@damagingTurn
     showAnim = true
-    [:SPECIAL_ATTACK,:SPECIAL_DEFENSE,:SPEED].each do |s|
-      next if !user.pbCanRaiseStatStage?(s,user,self)
-      if user.pbRaiseStatStage(s,2,user,showAnim)
+    [:SPECIAL_ATTACK, :SPECIAL_DEFENSE, :SPEED].each do |s|
+      next if !user.pbCanRaiseStatStage?(s, user, self)
+      if user.pbRaiseStatStage(s, 2, user, showAnim)
         showAnim = false
       end
     end
@@ -326,13 +326,13 @@ end
 # (Skull Bash)
 #===============================================================================
 class Battle::Move::TwoTurnAttackChargeRaiseUserDefense1 < Battle::Move::TwoTurnMove
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} tucked in its head!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} tucked in its head!", user.pbThis))
   end
 
-  def pbChargingTurnEffect(user,target)
-    if user.pbCanRaiseStatStage?(:DEFENSE,user,self)
-      user.pbRaiseStatStage(:DEFENSE,1,user)
+  def pbChargingTurnEffect(user, target)
+    if user.pbCanRaiseStatStage?(:DEFENSE, user, self)
+      user.pbRaiseStatStage(:DEFENSE, 1, user)
     end
   end
 end
@@ -358,8 +358,8 @@ end
 # (Handled in Battler's pbSuccessCheckPerHit): Is semi-invulnerable during use.
 #===============================================================================
 class Battle::Move::TwoTurnAttackInvulnerableUnderground < Battle::Move::TwoTurnMove
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} burrowed its way under the ground!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} burrowed its way under the ground!", user.pbThis))
   end
 end
 
@@ -368,8 +368,8 @@ end
 # (Handled in Battler's pbSuccessCheckPerHit): Is semi-invulnerable during use.
 #===============================================================================
 class Battle::Move::TwoTurnAttackInvulnerableUnderwater < Battle::Move::TwoTurnMove
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} hid underwater!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} hid underwater!", user.pbThis))
   end
 end
 
@@ -380,8 +380,8 @@ end
 class Battle::Move::TwoTurnAttackInvulnerableInSky < Battle::Move::TwoTurnMove
   def unusableInGravity?; return true; end
 
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} flew up high!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} flew up high!", user.pbThis))
   end
 end
 
@@ -393,13 +393,13 @@ end
 class Battle::Move::TwoTurnAttackInvulnerableInSkyParalyzeTarget < Battle::Move::TwoTurnMove
   def unusableInGravity?; return true; end
 
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} sprang up!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} sprang up!", user.pbThis))
   end
 
-  def pbAdditionalEffect(user,target)
+  def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
-    target.pbParalyze(user) if target.pbCanParalyze?(user,false,self)
+    target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
   end
 end
 
@@ -426,44 +426,44 @@ class Battle::Move::TwoTurnAttackInvulnerableInSkyTargetCannotAct < Battle::Move
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    if target.effects[PBEffects::Substitute]>0 && !ignoresSubstitute?(user)
+    if target.effects[PBEffects::Substitute] > 0 && !ignoresSubstitute?(user)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    if Settings::MECHANICS_GENERATION >= 6 && target.pbWeight>=2000   # 200.0kg
+    if Settings::MECHANICS_GENERATION >= 6 && target.pbWeight >= 2000   # 200.0kg
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
     if target.semiInvulnerable? ||
-       (target.effects[PBEffects::SkyDrop]>=0 && @chargingTurn)
+       (target.effects[PBEffects::SkyDrop] >= 0 && @chargingTurn)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    if target.effects[PBEffects::SkyDrop]!=user.index && @damagingTurn
+    if target.effects[PBEffects::SkyDrop] != user.index && @damagingTurn
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
     return false
   end
 
-  def pbCalcTypeMod(movetype,user,target)
+  def pbCalcTypeMod(movetype, user, target)
     return Effectiveness::INEFFECTIVE if target.pbHasType?(:FLYING)
     return super
   end
 
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} took {2} into the sky!",user.pbThis,targets[0].pbThis(true)))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} took {2} into the sky!", user.pbThis, targets[0].pbThis(true)))
   end
 
-  def pbAttackingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} was freed from the Sky Drop!",targets[0].pbThis))
+  def pbAttackingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} was freed from the Sky Drop!", targets[0].pbThis))
   end
 
-  def pbChargingTurnEffect(user,target)
+  def pbChargingTurnEffect(user, target)
     target.effects[PBEffects::SkyDrop] = user.index
   end
 
-  def pbAttackingTurnEffect(user,target)
+  def pbAttackingTurnEffect(user, target)
     target.effects[PBEffects::SkyDrop] = -1
   end
 end
@@ -473,11 +473,11 @@ end
 # use. Ends target's protections upon hit. (Shadow Force, Phantom Force)
 #===============================================================================
 class Battle::Move::TwoTurnAttackInvulnerableRemoveProtections < Battle::Move::TwoTurnMove
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} vanished instantly!",user.pbThis))
+  def pbChargingTurnMessage(user, targets)
+    @battle.pbDisplay(_INTL("{1} vanished instantly!", user.pbThis))
   end
 
-  def pbAttackingTurnEffect(user,target)
+  def pbAttackingTurnEffect(user, target)
     target.effects[PBEffects::BanefulBunker]          = false
     target.effects[PBEffects::KingsShield]            = false
     target.effects[PBEffects::Obstruct]               = false
@@ -499,10 +499,10 @@ end
 #===============================================================================
 class Battle::Move::MultiTurnAttackPreventSleeping < Battle::Move
   def pbEffectGeneral(user)
-    return if user.effects[PBEffects::Uproar]>0
+    return if user.effects[PBEffects::Uproar] > 0
     user.effects[PBEffects::Uproar] = 3
     user.currentMove = @id
-    @battle.pbDisplay(_INTL("{1} caused an uproar!",user.pbThis))
+    @battle.pbDisplay(_INTL("{1} caused an uproar!", user.pbThis))
     @battle.pbPriority(true).each do |b|
       next if b.fainted? || b.status != :SLEEP
       next if b.hasActiveAbility?(:SOUNDPROOF)
@@ -516,15 +516,15 @@ end
 # (Outrage, Petal Dange, Thrash)
 #===============================================================================
 class Battle::Move::MultiTurnAttackConfuseUserAtEnd < Battle::Move
-  def pbEffectAfterAllHits(user,target)
-    if !target.damageState.unaffected && user.effects[PBEffects::Outrage]==0
-      user.effects[PBEffects::Outrage] = 2+@battle.pbRandom(2)
+  def pbEffectAfterAllHits(user, target)
+    if !target.damageState.unaffected && user.effects[PBEffects::Outrage] == 0
+      user.effects[PBEffects::Outrage] = 2 + @battle.pbRandom(2)
       user.currentMove = @id
     end
-    if user.effects[PBEffects::Outrage]>0
+    if user.effects[PBEffects::Outrage] > 0
       user.effects[PBEffects::Outrage] -= 1
-      if user.effects[PBEffects::Outrage]==0 && user.pbCanConfuseSelf?(false)
-        user.pbConfuse(_INTL("{1} became confused due to fatigue!",user.pbThis))
+      if user.effects[PBEffects::Outrage] == 0 && user.pbCanConfuseSelf?(false)
+        user.pbConfuse(_INTL("{1} became confused due to fatigue!", user.pbThis))
       end
     end
   end
@@ -535,7 +535,7 @@ end
 # Power is also doubled if user has curled up. (Ice Ball, Rollout)
 #===============================================================================
 class Battle::Move::MultiTurnAttackPowersUpEachTurn < Battle::Move
-  def pbBaseDamage(baseDmg,user,target)
+  def pbBaseDamage(baseDmg, user, target)
     shift = (5 - user.effects[PBEffects::Rollout])   # 0-4, where 0 is most powerful
     shift = 0 if user.effects[PBEffects::Rollout] == 0   # For first turn
     shift += 1 if user.effects[PBEffects::DefenseCurl]
@@ -543,7 +543,7 @@ class Battle::Move::MultiTurnAttackPowersUpEachTurn < Battle::Move
     return baseDmg
   end
 
-  def pbEffectAfterAllHits(user,target)
+  def pbEffectAfterAllHits(user, target)
     if !target.damageState.unaffected && user.effects[PBEffects::Rollout] == 0
       user.effects[PBEffects::Rollout] = 5
       user.currentMove = @id
@@ -558,23 +558,23 @@ end
 # (Bide)
 #===============================================================================
 class Battle::Move::MultiTurnAttackBideThenReturnDoubleDamage < Battle::Move::FixedDamageMove
-  def pbAddTarget(targets,user)
-    return if user.effects[PBEffects::Bide]!=1   # Not the attack turn
+  def pbAddTarget(targets, user)
+    return if user.effects[PBEffects::Bide] != 1   # Not the attack turn
     idxTarget = user.effects[PBEffects::BideTarget]
-    t = (idxTarget>=0) ? @battle.battlers[idxTarget] : nil
-    if !user.pbAddTarget(targets,user,t,self,false)
-      user.pbAddTargetRandomFoe(targets,user,self,false)
+    t = (idxTarget >= 0) ? @battle.battlers[idxTarget] : nil
+    if !user.pbAddTarget(targets, user, t, self, false)
+      user.pbAddTargetRandomFoe(targets, user, self, false)
     end
   end
 
-  def pbMoveFailed?(user,targets)
-    return false if user.effects[PBEffects::Bide]!=1   # Not the attack turn
-    if user.effects[PBEffects::BideDamage]==0
+  def pbMoveFailed?(user, targets)
+    return false if user.effects[PBEffects::Bide] != 1   # Not the attack turn
+    if user.effects[PBEffects::BideDamage] == 0
       @battle.pbDisplay(_INTL("But it failed!"))
       user.effects[PBEffects::Bide] = 0   # No need to reset other Bide variables
       return true
     end
-    if targets.length==0
+    if targets.length == 0
       @battle.pbDisplay(_INTL("But there was no target..."))
       user.effects[PBEffects::Bide] = 0   # No need to reset other Bide variables
       return true
@@ -582,15 +582,15 @@ class Battle::Move::MultiTurnAttackBideThenReturnDoubleDamage < Battle::Move::Fi
     return false
   end
 
-  def pbOnStartUse(user,targets)
-    @damagingTurn = (user.effects[PBEffects::Bide]==1)   # If attack turn
+  def pbOnStartUse(user, targets)
+    @damagingTurn = (user.effects[PBEffects::Bide] == 1)   # If attack turn
   end
 
   def pbDisplayUseMessage(user)
     if @damagingTurn   # Attack turn
-      @battle.pbDisplayBrief(_INTL("{1} unleashed energy!",user.pbThis))
-    elsif user.effects[PBEffects::Bide]>1   # Charging turns
-      @battle.pbDisplayBrief(_INTL("{1} is storing energy!",user.pbThis))
+      @battle.pbDisplayBrief(_INTL("{1} unleashed energy!", user.pbThis))
+    elsif user.effects[PBEffects::Bide] > 1   # Charging turns
+      @battle.pbDisplayBrief(_INTL("{1} is storing energy!", user.pbThis))
     else
       super   # Start using Bide
     end
@@ -601,12 +601,12 @@ class Battle::Move::MultiTurnAttackBideThenReturnDoubleDamage < Battle::Move::Fi
     return super
   end
 
-  def pbFixedDamage(user,target)
-    return user.effects[PBEffects::BideDamage]*2
+  def pbFixedDamage(user, target)
+    return user.effects[PBEffects::BideDamage] * 2
   end
 
   def pbEffectGeneral(user)
-    if user.effects[PBEffects::Bide]==0   # Starting using Bide
+    if user.effects[PBEffects::Bide] == 0   # Starting using Bide
       user.effects[PBEffects::Bide]       = 3
       user.effects[PBEffects::BideDamage] = 0
       user.effects[PBEffects::BideTarget] = -1
@@ -615,7 +615,7 @@ class Battle::Move::MultiTurnAttackBideThenReturnDoubleDamage < Battle::Move::Fi
     user.effects[PBEffects::Bide] -= 1
   end
 
-  def pbShowAnimation(id,user,targets,hitNum = 0,showAnimation = true)
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     hitNum = 1 if !@damagingTurn   # Charging anim
     super
   end

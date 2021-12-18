@@ -882,7 +882,7 @@ DebugMenuCommands.register("randomid", {
   "name"        => _INTL("Randomize Player ID"),
   "description" => _INTL("Generate a random new ID for the player."),
   "effect"      => proc {
-    $player.id = rand(2 ** 16) | rand(2 ** 16) << 16
+    $player.id = rand(2**16) | rand(2**16) << 16
     pbMessage(_INTL("The player's ID was changed to {1} (full ID: {2}).", $player.public_ID, $player.id))
   }
 })

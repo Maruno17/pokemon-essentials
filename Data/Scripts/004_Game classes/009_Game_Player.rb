@@ -17,9 +17,9 @@ class Game_Player < Game_Character
 
   def initialize(*arg)
     super(*arg)
-    @lastdir=0
-    @lastdirframe=0
-    @bump_se=0
+    @lastdir = 0
+    @lastdirframe = 0
+    @bump_se = 0
   end
 
   def map
@@ -103,9 +103,9 @@ class Game_Player < Game_Character
   end
 
   def bump_into_object
-    return if @bump_se && @bump_se>0
+    return if @bump_se && @bump_se > 0
     pbSEPlay("Player bump")
-    @bump_se = Graphics.frame_rate/4
+    @bump_se = Graphics.frame_rate / 4
   end
 
   def move_generic(dir, turn_enabled = true)
@@ -179,7 +179,7 @@ class Game_Player < Game_Character
     triggerLeaveTile
   end
 
-  def pbTriggeredTrainerEvents(triggers,checkIfRunning = true)
+  def pbTriggeredTrainerEvents(triggers, checkIfRunning = true)
     result = []
     # If event is running
     return result if checkIfRunning && $game_system.map_interpreter.running?
@@ -188,7 +188,7 @@ class Game_Player < Game_Character
       next if !event.name[/trainer\((\d+)\)/i]
       distance = $~[1].to_i
       # If event coordinates and triggers are consistent
-      if pbEventCanReachPlayer?(event,self,distance) && triggers.include?(event.trigger)
+      if pbEventCanReachPlayer?(event, self, distance) && triggers.include?(event.trigger)
         # If starting determinant is front event (other than jumping)
         result.push(event) if !event.jumping? && !event.over_trigger?
       end
@@ -196,7 +196,7 @@ class Game_Player < Game_Character
     return result
   end
 
-  def pbTriggeredCounterEvents(triggers,checkIfRunning = true)
+  def pbTriggeredCounterEvents(triggers, checkIfRunning = true)
     result = []
     # If event is running
     return result if checkIfRunning && $game_system.map_interpreter.running?
@@ -205,7 +205,7 @@ class Game_Player < Game_Character
       next if !event.name[/counter\((\d+)\)/i]
       distance = $~[1].to_i
       # If event coordinates and triggers are consistent
-      if pbEventFacesPlayer?(event,self,distance) && triggers.include?(event.trigger)
+      if pbEventFacesPlayer?(event, self, distance) && triggers.include?(event.trigger)
         # If starting determinant is front event (other than jumping)
         result.push(event) if !event.jumping? && !event.over_trigger?
       end
@@ -218,7 +218,7 @@ class Game_Player < Game_Character
   def pbCheckEventTriggerFromDistance(triggers)
     ret = pbTriggeredTrainerEvents(triggers)
     ret.concat(pbTriggeredCounterEvents(triggers))
-    return false if ret.length==0
+    return false if ret.length == 0
     for event in ret
       event.start
     end
@@ -401,10 +401,10 @@ class Game_Player < Game_Character
       next if !event.at_coordinate?(@x + x_offset, @y + y_offset)
       if event.name[/trainer\((\d+)\)/i]
         distance = $~[1].to_i
-        next if !pbEventCanReachPlayer?(event,self,distance)
+        next if !pbEventCanReachPlayer?(event, self, distance)
       elsif event.name[/counter\((\d+)\)/i]
         distance = $~[1].to_i
-        next if !pbEventFacesPlayer?(event,self,distance)
+        next if !pbEventFacesPlayer?(event, self, distance)
       end
       # If starting determinant is front event (other than jumping)
       next if event.jumping? || event.over_trigger?
@@ -429,12 +429,12 @@ class Game_Player < Game_Character
     end
     $game_temp.followers.update
     # Count down the time between allowed bump sounds
-    @bump_se -= 1 if @bump_se && @bump_se>0
+    @bump_se -= 1 if @bump_se && @bump_se > 0
     # Finish up dismounting from surfing
     if $game_temp.ending_surf && !moving?
       pbCancelVehicles
       $game_temp.surf_base_coords = nil
-      $game_temp.ending_surf  = false
+      $game_temp.ending_surf = false
     end
     update_event_triggering
   end
@@ -538,7 +538,7 @@ class Game_Player < Game_Character
       $game_temp.followers.turn_followers
       result = pbCheckEventTriggerFromDistance([2])
       # Event determinant is via touch of same position event
-      result |= check_event_trigger_here([1,2])
+      result |= check_event_trigger_here([1, 2])
       # No events triggered, try other event triggers upon finishing a step
       pbOnStepTaken(result)
     end
@@ -546,7 +546,7 @@ class Game_Player < Game_Character
     if Input.trigger?(Input::USE) && !$game_temp.in_mini_update
       # Same position and front event determinant
       check_event_trigger_here([0])
-      check_event_trigger_there([0,2])
+      check_event_trigger_there([0, 2])
     end
   end
 end
@@ -566,8 +566,8 @@ def pbGetPlayerCharset(charset, trainer = nil, force = false)
   end
   $game_player.charsetData = [trainer.character_ID, charset, outfit] if $game_player
   ret = charset
-  if pbResolveBitmap("Graphics/Characters/"+ret+"_"+outfit.to_s)
-    ret = ret+"_"+outfit.to_s
+  if pbResolveBitmap("Graphics/Characters/" + ret + "_" + outfit.to_s)
+    ret = ret + "_" + outfit.to_s
   end
   return ret
 end

@@ -27,7 +27,7 @@ class Battle
   #  1: Succeeded at fleeing, battle will end
   # duringBattle is true for replacing a fainted Pokémon during the End Of Round
   # phase, and false for choosing the Run command.
-  def pbRun(idxBattler,duringBattle = false)
+  def pbRun(idxBattler, duringBattle = false)
     battler = @battlers[idxBattler]
     if battler.opposes?
       return 0 if trainerBattle?
@@ -50,7 +50,7 @@ class Battle
         pbDisplayPaused(_INTL("No! There's no running from a Trainer battle!"))
       elsif pbDisplayConfirm(_INTL("Would you like to forfeit the match and quit now?"))
         pbSEPlay("Battle flee")
-        pbDisplay(_INTL("{1} forfeited the match!",self.pbPlayer.name))
+        pbDisplay(_INTL("{1} forfeited the match!", self.pbPlayer.name))
         @decision = 3
         return 1
       end
@@ -77,7 +77,7 @@ class Battle
       # Abilities that guarantee escape
       if battler.abilityActive?
         if Battle::AbilityEffects.triggerCertainEscapeFromBattle(battler.ability, battler)
-          pbShowAbilitySplash(battler,true)
+          pbShowAbilitySplash(battler, true)
           pbHideAbilitySplash(battler)
           pbSEPlay("Battle flee")
           pbDisplayPaused(_INTL("You got away safely!"))
@@ -89,7 +89,7 @@ class Battle
       if battler.itemActive?
         if Battle::ItemEffects.triggerCertainEscapeFromBattle(battler.item, battler)
           pbSEPlay("Battle flee")
-          pbDisplayPaused(_INTL("{1} fled using its {2}!", battler.pbThis,battler.itemName))
+          pbDisplayPaused(_INTL("{1} fled using its {2}!", battler.pbThis, battler.itemName))
           @decision = 3
           return 1
         end
@@ -103,14 +103,14 @@ class Battle
       allOtherSideBattlers(idxBattler).each do |b|
         next if !b.abilityActive?
         if Battle::AbilityEffects.triggerTrappingByTarget(b.ability, battler, b, self)
-          pbDisplayPaused(_INTL("{1} prevents escape with {2}!",b.pbThis,b.abilityName))
+          pbDisplayPaused(_INTL("{1} prevents escape with {2}!", b.pbThis, b.abilityName))
           return 0
         end
       end
       allOtherSideBattlers(idxBattler).each do |b|
         next if !b.itemActive?
         if Battle::ItemEffects.triggerTrappingByTarget(b.item, battler, b, self)
-          pbDisplayPaused(_INTL("{1} prevents escape with {2}!",b.pbThis,b.itemName))
+          pbDisplayPaused(_INTL("{1} prevents escape with {2}!", b.pbThis, b.itemName))
           return 0
         end
       end
@@ -123,16 +123,16 @@ class Battle
     speedEnemy = 1
     allOtherSideBattlers(idxBattler).each do |b|
       speed = b.speed
-      speedEnemy = speed if speedEnemy<speed
+      speedEnemy = speed if speedEnemy < speed
     end
     # Compare speeds and perform fleeing calculation
-    if speedPlayer>speedEnemy
+    if speedPlayer > speedEnemy
       rate = 256
     else
-      rate = (speedPlayer*128)/speedEnemy
-      rate += @runCommand*30
+      rate = (speedPlayer * 128) / speedEnemy
+      rate += @runCommand * 30
     end
-    if rate>=256 || @battleAI.pbAIRandom(256)<rate
+    if rate >= 256 || @battleAI.pbAIRandom(256) < rate
       pbSEPlay("Battle flee")
       pbDisplayPaused(_INTL("You got away safely!"))
       @decision = 3

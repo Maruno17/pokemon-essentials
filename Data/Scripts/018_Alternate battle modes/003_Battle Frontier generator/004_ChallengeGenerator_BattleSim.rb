@@ -49,7 +49,7 @@ class RuledTeam
     (@totalGames || 0) + self.games
   end
 
-  def addMatch(other,score)
+  def addMatch(other, score)
     @history.addMatch(other.ratingData, score)
   end
 
@@ -309,7 +309,7 @@ def pbDecideWinnerEffectiveness(move, otype1, otype2, ability, scores)
   data = GameData::Move.get(move)
   return 0 if data.base_damage == 0
   atype = data.type
-  typemod = Effectiveness::NORMAL_EFFECTIVE_ONE ** 2
+  typemod = Effectiveness::NORMAL_EFFECTIVE_ONE**2
   if ability != :LEVITATE || data.type != :GROUND
     mod1 = Effectiveness.calculate_one(atype, otype1)
     mod2 = (otype1 == otype2) ? Effectiveness::NORMAL_EFFECTIVE_ONE : Effectiveness.calculate_one(atype, otype2)

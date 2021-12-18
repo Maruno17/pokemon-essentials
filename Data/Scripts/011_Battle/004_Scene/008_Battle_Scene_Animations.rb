@@ -2,58 +2,58 @@
 # Shows the battle scene fading in while elements slide around into place
 #===============================================================================
 class Battle::Scene::Animation::Intro < Battle::Scene::Animation
-  def initialize(sprites,viewport,battle)
+  def initialize(sprites, viewport, battle)
     @battle = battle
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     appearTime = 20   # This is in 1/20 seconds
     # Background
     if @sprites["battle_bg2"]
-      makeSlideSprite("battle_bg",0.5,appearTime)
-      makeSlideSprite("battle_bg2",0.5,appearTime)
+      makeSlideSprite("battle_bg", 0.5, appearTime)
+      makeSlideSprite("battle_bg2", 0.5, appearTime)
     end
     # Bases
-    makeSlideSprite("base_0",1,appearTime,PictureOrigin::Bottom)
-    makeSlideSprite("base_1",-1,appearTime,PictureOrigin::Center)
+    makeSlideSprite("base_0", 1, appearTime, PictureOrigin::Bottom)
+    makeSlideSprite("base_1", -1, appearTime, PictureOrigin::Center)
     # Player sprite, partner trainer sprite
-    @battle.player.each_with_index do |_p,i|
-      makeSlideSprite("player_#{i+1}",1,appearTime,PictureOrigin::Bottom)
+    @battle.player.each_with_index do |_p, i|
+      makeSlideSprite("player_#{i + 1}", 1, appearTime, PictureOrigin::Bottom)
     end
     # Opposing trainer sprite(s) or wild Pokémon sprite(s)
     if @battle.trainerBattle?
-      @battle.opponent.each_with_index do |_p,i|
-        makeSlideSprite("trainer_#{i+1}",-1,appearTime,PictureOrigin::Bottom)
+      @battle.opponent.each_with_index do |_p, i|
+        makeSlideSprite("trainer_#{i + 1}", -1, appearTime, PictureOrigin::Bottom)
       end
     else   # Wild battle
-      @battle.pbParty(1).each_with_index do |_pkmn,i|
-        idxBattler = 2*i+1
-        makeSlideSprite("pokemon_#{idxBattler}",-1,appearTime,PictureOrigin::Bottom)
+      @battle.pbParty(1).each_with_index do |_pkmn, i|
+        idxBattler = 2 * i + 1
+        makeSlideSprite("pokemon_#{idxBattler}", -1, appearTime, PictureOrigin::Bottom)
       end
     end
     # Shadows
     for i in 0...@battle.battlers.length
-      makeSlideSprite("shadow_#{i}",((i%2)==0) ? 1 : -1,appearTime,PictureOrigin::Center)
+      makeSlideSprite("shadow_#{i}", ((i % 2) == 0) ? 1 : -1, appearTime, PictureOrigin::Center)
     end
     # Fading blackness over whole screen
-    blackScreen = addNewSprite(0,0,"Graphics/Battle animations/black_screen")
-    blackScreen.setZ(0,999)
-    blackScreen.moveOpacity(0,8,0)
+    blackScreen = addNewSprite(0, 0, "Graphics/Battle animations/black_screen")
+    blackScreen.setZ(0, 999)
+    blackScreen.moveOpacity(0, 8, 0)
     # Fading blackness over command bar
-    blackBar = addNewSprite(@sprites["cmdBar_bg"].x,@sprites["cmdBar_bg"].y,
+    blackBar = addNewSprite(@sprites["cmdBar_bg"].x, @sprites["cmdBar_bg"].y,
        "Graphics/Battle animations/black_bar")
-    blackBar.setZ(0,998)
-    blackBar.moveOpacity(appearTime*3/4,appearTime/4,0)
+    blackBar.setZ(0, 998)
+    blackBar.moveOpacity(appearTime * 3 / 4, appearTime / 4, 0)
   end
 
-  def makeSlideSprite(spriteName,deltaMult,appearTime,origin = nil)
+  def makeSlideSprite(spriteName, deltaMult, appearTime, origin = nil)
     # If deltaMult is positive, the sprite starts off to the right and moves
     # left (for sprites on the player's side and the background).
     return if !@sprites[spriteName]
-    s = addSprite(@sprites[spriteName],origin)
-    s.setDelta(0,(Graphics.width*deltaMult).floor,0)
-    s.moveDelta(0,appearTime,(-Graphics.width*deltaMult).floor,0)
+    s = addSprite(@sprites[spriteName], origin)
+    s.setDelta(0, (Graphics.width * deltaMult).floor, 0)
+    s.moveDelta(0, appearTime, (-Graphics.width * deltaMult).floor, 0)
   end
 end
 
@@ -64,18 +64,18 @@ end
 # animations
 #===============================================================================
 class Battle::Scene::Animation::Intro2 < Battle::Scene::Animation
-  def initialize(sprites,viewport,sideSize)
+  def initialize(sprites, viewport, sideSize)
     @sideSize = sideSize
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     for i in 0...@sideSize
-      idxBattler = 2*i+1
+      idxBattler = 2 * i + 1
       next if !@sprites["pokemon_#{idxBattler}"]
-      battler = addSprite(@sprites["pokemon_#{idxBattler}"],PictureOrigin::Bottom)
-      battler.moveTone(0,4,Tone.new(0,0,0,0))
-      battler.setCallback(10*i,[@sprites["pokemon_#{idxBattler}"],:pbPlayIntroAnimation])
+      battler = addSprite(@sprites["pokemon_#{idxBattler}"], PictureOrigin::Bottom)
+      battler.moveTone(0, 4, Tone.new(0, 0, 0, 0))
+      battler.setCallback(10 * i, [@sprites["pokemon_#{idxBattler}"], :pbPlayIntroAnimation])
     end
   end
 end
@@ -88,13 +88,13 @@ end
 class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
   BAR_DISPLAY_WIDTH = 248
 
-  def initialize(sprites,viewport,side,party,partyStarts,fullAnim)
+  def initialize(sprites, viewport, side, party, partyStarts, fullAnim)
     @side        = side
     @party       = party
     @partyStarts = partyStarts
     @fullAnim    = fullAnim   # True at start of battle, false when switching
     resetGraphics(sprites)
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def resetGraphics(sprites)
@@ -110,9 +110,9 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
       barY  = 114
       ballX = barX - 44 - 30   # 30 is width of ball icon
       ballY = barY - 30
-      barX  -= bar.bitmap.width
+      barX -= bar.bitmap.width
     end
-    ballXdiff = 32*(1-2*@side)
+    ballXdiff = 32 * (1 - 2 * @side)
     bar.x       = barX
     bar.y       = barY
     bar.opacity = 255
@@ -129,41 +129,41 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
 
   def getPartyIndexFromBallIndex(idxBall)
     # Player's lineup (just show balls for player's party)
-    if @side==0
-      return idxBall if @partyStarts.length<2
-      return idxBall if idxBall<@partyStarts[1]
+    if @side == 0
+      return idxBall if @partyStarts.length < 2
+      return idxBall if idxBall < @partyStarts[1]
       return -1
     end
     # Opposing lineup
     # NOTE: This doesn't work well for 4+ opposing trainers.
-    ballsPerTrainer = Battle::Scene::NUM_BALLS/@partyStarts.length   # 6/3/2
-    startsIndex = idxBall/ballsPerTrainer
-    teamIndex = idxBall%ballsPerTrainer
-    ret = @partyStarts[startsIndex]+teamIndex
-    if startsIndex<@partyStarts.length-1
+    ballsPerTrainer = Battle::Scene::NUM_BALLS / @partyStarts.length   # 6/3/2
+    startsIndex = idxBall / ballsPerTrainer
+    teamIndex = idxBall % ballsPerTrainer
+    ret = @partyStarts[startsIndex] + teamIndex
+    if startsIndex < @partyStarts.length - 1
       # There is a later trainer, don't spill over into its team
-      return -1 if ret>=@partyStarts[startsIndex+1]
+      return -1 if ret >= @partyStarts[startsIndex + 1]
     end
     return ret
   end
 
   def createProcesses
     bar = addSprite(@sprites["partyBar_#{@side}"])
-    bar.setVisible(0,true)
-    dir = (@side==0) ? 1 : -1
-    bar.setDelta(0,dir*Graphics.width/2,0)
-    bar.moveDelta(0,8,-dir*Graphics.width/2,0)
+    bar.setVisible(0, true)
+    dir = (@side == 0) ? 1 : -1
+    bar.setDelta(0, dir * Graphics.width / 2, 0)
+    bar.moveDelta(0, 8, -dir * Graphics.width / 2, 0)
     delay = bar.totalDuration
     for i in 0...Battle::Scene::NUM_BALLS
-      createBall(i,(@fullAnim) ? delay+i*2 : 0,dir)
+      createBall(i, (@fullAnim) ? delay + i * 2 : 0, dir)
     end
   end
 
-  def createBall(idxBall,delay,dir)
+  def createBall(idxBall, delay, dir)
     # Choose ball's graphic
     idxParty = getPartyIndexFromBallIndex(idxBall)
-    graphicFilename     = "Graphics/Pictures/Battle/icon_ball_empty"
-    if idxParty>=0 && idxParty<@party.length && @party[idxParty]
+    graphicFilename = "Graphics/Pictures/Battle/icon_ball_empty"
+    if idxParty >= 0 && idxParty < @party.length && @party[idxParty]
       if !@party[idxParty].able?
         graphicFilename = "Graphics/Pictures/Battle/icon_ball_faint"
       elsif @party[idxParty].status != :NONE
@@ -174,10 +174,10 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     end
     # Set up ball sprite
     ball = addSprite(@sprites["partyBall_#{@side}_#{idxBall}"])
-    ball.setVisible(delay,true)
-    ball.setName(delay,graphicFilename)
-    ball.setDelta(delay,dir*Graphics.width/2,0)
-    ball.moveDelta(delay,8,-dir*Graphics.width/2,0)
+    ball.setVisible(delay, true)
+    ball.setName(delay, graphicFilename)
+    ball.setDelta(delay, dir * Graphics.width / 2, 0)
+    ball.moveDelta(delay, 8, -dir * Graphics.width / 2, 0)
   end
 end
 
@@ -187,18 +187,18 @@ end
 # Makes a Pokémon's data box appear
 #===============================================================================
 class Battle::Scene::Animation::DataBoxAppear < Battle::Scene::Animation
-  def initialize(sprites,viewport,idxBox)
+  def initialize(sprites, viewport, idxBox)
     @idxBox = idxBox
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     return if !@sprites["dataBox_#{@idxBox}"]
     box = addSprite(@sprites["dataBox_#{@idxBox}"])
-    box.setVisible(0,true)
-    dir = ((@idxBox%2)==0) ? 1 : -1
-    box.setDelta(0,dir*Graphics.width/2,0)
-    box.moveDelta(0,8,-dir*Graphics.width/2,0)
+    box.setVisible(0, true)
+    dir = ((@idxBox % 2) == 0) ? 1 : -1
+    box.setDelta(0, dir * Graphics.width / 2, 0)
+    box.moveDelta(0, 8, -dir * Graphics.width / 2, 0)
   end
 end
 
@@ -208,17 +208,17 @@ end
 # Makes a Pokémon's data box disappear
 #===============================================================================
 class Battle::Scene::Animation::DataBoxDisappear < Battle::Scene::Animation
-  def initialize(sprites,viewport,idxBox)
+  def initialize(sprites, viewport, idxBox)
     @idxBox = idxBox
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     return if !@sprites["dataBox_#{@idxBox}"] || !@sprites["dataBox_#{@idxBox}"].visible
     box = addSprite(@sprites["dataBox_#{@idxBox}"])
-    dir = ((@idxBox%2)==0) ? 1 : -1
-    box.moveDelta(0,8,dir*Graphics.width/2,0)
-    box.setVisible(8,false)
+    dir = ((@idxBox % 2) == 0) ? 1 : -1
+    box.moveDelta(0, 8, dir * Graphics.width / 2, 0)
+    box.setVisible(8, false)
   end
 end
 
@@ -228,17 +228,17 @@ end
 # Makes a Pokémon's ability bar appear
 #===============================================================================
 class Battle::Scene::Animation::AbilitySplashAppear < Battle::Scene::Animation
-  def initialize(sprites,viewport,side)
+  def initialize(sprites, viewport, side)
     @side = side
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     return if !@sprites["abilityBar_#{@side}"]
     bar = addSprite(@sprites["abilityBar_#{@side}"])
-    bar.setVisible(0,true)
-    dir = (@side==0) ? 1 : -1
-    bar.moveDelta(0,8,dir*Graphics.width/2,0)
+    bar.setVisible(0, true)
+    dir = (@side == 0) ? 1 : -1
+    bar.moveDelta(0, 8, dir * Graphics.width / 2, 0)
   end
 end
 
@@ -248,17 +248,17 @@ end
 # Makes a Pokémon's ability bar disappear
 #===============================================================================
 class Battle::Scene::Animation::AbilitySplashDisappear < Battle::Scene::Animation
-  def initialize(sprites,viewport,side)
+  def initialize(sprites, viewport, side)
     @side = side
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     return if !@sprites["abilityBar_#{@side}"]
     bar = addSprite(@sprites["abilityBar_#{@side}"])
-    dir = (@side==0) ? -1 : 1
-    bar.moveDelta(0,8,dir*Graphics.width/2,0)
-    bar.setVisible(8,false)
+    dir = (@side == 0) ? -1 : 1
+    bar.moveDelta(0, 8, dir * Graphics.width / 2, 0)
+    bar.setVisible(8, false)
   end
 end
 
@@ -270,28 +270,28 @@ end
 # Used at the end of battle.
 #===============================================================================
 class Battle::Scene::Animation::TrainerAppear < Battle::Scene::Animation
-  def initialize(sprites,viewport,idxTrainer)
+  def initialize(sprites, viewport, idxTrainer)
     @idxTrainer = idxTrainer
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     delay = 0
     # Make old trainer sprite move off-screen first if necessary
-    if @idxTrainer>0 && @sprites["trainer_#{@idxTrainer}"].visible
-      oldTrainer = addSprite(@sprites["trainer_#{@idxTrainer}"],PictureOrigin::Bottom)
-      oldTrainer.moveDelta(delay,8,Graphics.width/4,0)
-      oldTrainer.setVisible(delay+8,false)
+    if @idxTrainer > 0 && @sprites["trainer_#{@idxTrainer}"].visible
+      oldTrainer = addSprite(@sprites["trainer_#{@idxTrainer}"], PictureOrigin::Bottom)
+      oldTrainer.moveDelta(delay, 8, Graphics.width / 4, 0)
+      oldTrainer.setVisible(delay + 8, false)
       delay = oldTrainer.totalDuration
     end
     # Make new trainer sprite move on-screen
-    if @sprites["trainer_#{@idxTrainer+1}"]
+    if @sprites["trainer_#{@idxTrainer + 1}"]
       trainerX, trainerY = Battle::Scene.pbTrainerPosition(1)
-      trainerX += 64+Graphics.width/4
-      newTrainer = addSprite(@sprites["trainer_#{@idxTrainer+1}"],PictureOrigin::Bottom)
-      newTrainer.setVisible(delay,true)
-      newTrainer.setXY(delay,trainerX,trainerY)
-      newTrainer.moveDelta(delay,8,-Graphics.width/4,0)
+      trainerX += 64 + Graphics.width / 4
+      newTrainer = addSprite(@sprites["trainer_#{@idxTrainer + 1}"], PictureOrigin::Bottom)
+      newTrainer.setVisible(delay, true)
+      newTrainer.setXY(delay, trainerX, trainerY)
+      newTrainer.moveDelta(delay, 8, -Graphics.width / 4, 0)
     end
   end
 end
@@ -304,9 +304,9 @@ end
 # Doesn't show the ball thrown or the Pokémon.
 #===============================================================================
 class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
-  def initialize(sprites,viewport,fullAnim = false)
+  def initialize(sprites, viewport, fullAnim = false)
     @fullAnim = fullAnim   # True at start of battle, false when switching
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
@@ -314,38 +314,38 @@ class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
     # Move trainer sprite(s) off-screen
     spriteNameBase = "player"
     i = 1
-    while @sprites[spriteNameBase+"_#{i}"]
-      pl = @sprites[spriteNameBase+"_#{i}"]
+    while @sprites[spriteNameBase + "_#{i}"]
+      pl = @sprites[spriteNameBase + "_#{i}"]
       i += 1
-      next if !pl.visible || pl.x<0
-      trainer = addSprite(pl,PictureOrigin::Bottom)
-      trainer.moveDelta(0,16,-Graphics.width/2,0)
+      next if !pl.visible || pl.x < 0
+      trainer = addSprite(pl, PictureOrigin::Bottom)
+      trainer.moveDelta(0, 16, -Graphics.width / 2, 0)
       # Animate trainer sprite(s) if they have multiple frames
-      if pl.bitmap && !pl.bitmap.disposed? && pl.bitmap.width>=pl.bitmap.height*2
+      if pl.bitmap && !pl.bitmap.disposed? && pl.bitmap.width >= pl.bitmap.height * 2
         size = pl.src_rect.width   # Width per frame
-        trainer.setSrc(0,size,0)
-        trainer.setSrc(5,size*2,0)
-        trainer.setSrc(7,size*3,0)
-        trainer.setSrc(9,size*4,0)
+        trainer.setSrc(0, size, 0)
+        trainer.setSrc(5, size * 2, 0)
+        trainer.setSrc(7, size * 3, 0)
+        trainer.setSrc(9, size * 4, 0)
       end
-      trainer.setVisible(16,false)
+      trainer.setVisible(16, false)
     end
     # Move and fade party bar/balls
     delay = 3
     if @sprites["partyBar_0"] && @sprites["partyBar_0"].visible
       partyBar = addSprite(@sprites["partyBar_0"])
-      partyBar.moveDelta(delay,16,-Graphics.width/4,0) if @fullAnim
-      partyBar.moveOpacity(delay,12,0)
-      partyBar.setVisible(delay+12,false)
-      partyBar.setOpacity(delay+12,255)
+      partyBar.moveDelta(delay, 16, -Graphics.width / 4, 0) if @fullAnim
+      partyBar.moveOpacity(delay, 12, 0)
+      partyBar.setVisible(delay + 12, false)
+      partyBar.setOpacity(delay + 12, 255)
     end
     for i in 0...Battle::Scene::NUM_BALLS
       next if !@sprites["partyBall_0_#{i}"] || !@sprites["partyBall_0_#{i}"].visible
       partyBall = addSprite(@sprites["partyBall_0_#{i}"])
-      partyBall.moveDelta(delay+2*i,16,-Graphics.width,0) if @fullAnim
-      partyBall.moveOpacity(delay,12,0)
-      partyBall.setVisible(delay+12,false)
-      partyBall.setOpacity(delay+12,255)
+      partyBall.moveDelta(delay + 2 * i, 16, -Graphics.width, 0) if @fullAnim
+      partyBall.moveOpacity(delay, 12, 0)
+      partyBall.setVisible(delay + 12, false)
+      partyBall.setOpacity(delay + 12, 255)
     end
   end
 end
@@ -357,9 +357,9 @@ end
 # Doesn't show the ball thrown or the Pokémon.
 #===============================================================================
 class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
-  def initialize(sprites,viewport,fullAnim = false)
+  def initialize(sprites, viewport, fullAnim = false)
     @fullAnim = fullAnim   # True at start of battle, false when switching
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
@@ -367,30 +367,30 @@ class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
     # Move trainer sprite(s) off-screen
     spriteNameBase = "trainer"
     i = 1
-    while @sprites[spriteNameBase+"_#{i}"]
-      trSprite = @sprites[spriteNameBase+"_#{i}"]
+    while @sprites[spriteNameBase + "_#{i}"]
+      trSprite = @sprites[spriteNameBase + "_#{i}"]
       i += 1
-      next if !trSprite.visible || trSprite.x>Graphics.width
-      trainer = addSprite(trSprite,PictureOrigin::Bottom)
-      trainer.moveDelta(0,16,Graphics.width/2,0)
-      trainer.setVisible(16,false)
+      next if !trSprite.visible || trSprite.x > Graphics.width
+      trainer = addSprite(trSprite, PictureOrigin::Bottom)
+      trainer.moveDelta(0, 16, Graphics.width / 2, 0)
+      trainer.setVisible(16, false)
     end
     # Move and fade party bar/balls
     delay = 3
     if @sprites["partyBar_1"] && @sprites["partyBar_1"].visible
       partyBar = addSprite(@sprites["partyBar_1"])
-      partyBar.moveDelta(delay,16,Graphics.width/4,0) if @fullAnim
-      partyBar.moveOpacity(delay,12,0)
-      partyBar.setVisible(delay+12,false)
-      partyBar.setOpacity(delay+12,255)
+      partyBar.moveDelta(delay, 16, Graphics.width / 4, 0) if @fullAnim
+      partyBar.moveOpacity(delay, 12, 0)
+      partyBar.setVisible(delay + 12, false)
+      partyBar.setOpacity(delay + 12, 255)
     end
     for i in 0...Battle::Scene::NUM_BALLS
       next if !@sprites["partyBall_1_#{i}"] || !@sprites["partyBall_1_#{i}"].visible
       partyBall = addSprite(@sprites["partyBall_1_#{i}"])
-      partyBall.moveDelta(delay+2*i,16,Graphics.width,0) if @fullAnim
-      partyBall.moveOpacity(delay,12,0)
-      partyBall.setVisible(delay+12,false)
-      partyBall.setOpacity(delay+12,255)
+      partyBall.moveDelta(delay + 2 * i, 16, Graphics.width, 0) if @fullAnim
+      partyBall.moveOpacity(delay, 12, 0)
+      partyBall.setVisible(delay + 12, false)
+      partyBall.setOpacity(delay + 12, 255)
     end
   end
 end
@@ -404,7 +404,7 @@ end
 class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
 
-  def initialize(sprites,viewport,idxTrainer,battler,startBattle,idxOrder = 0)
+  def initialize(sprites, viewport, idxTrainer, battler, startBattle, idxOrder = 0)
     @idxTrainer     = idxTrainer
     @battler        = battler
     @showingTrainer = startBattle
@@ -413,7 +413,7 @@ class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
     sprites["pokemon_#{battler.index}"].visible = false
     @shadowVisible = sprites["shadow_#{battler.index}"].visible
     sprites["shadow_#{battler.index}"].visible = false
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
@@ -426,7 +426,7 @@ class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
     col = getBattlerColorFromPokeBall(poke_ball)
     col.alpha = 255
     # Calculate start and end coordinates for battler sprite movement
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index,batSprite.sideSize)
+    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
     battlerStartX = ballPos[0]   # Is also where the Ball needs to end
     battlerStartY = ballPos[1]   # Is also where the Ball needs to end + 18
     battlerEndX = batSprite.x
@@ -435,40 +435,40 @@ class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
     ballStartX = -6
     ballStartY = 202
     ballMidX = 0   # Unused in trajectory calculation
-    ballMidY = battlerStartY-144
+    ballMidY = battlerStartY - 144
     # Set up Poké Ball sprite
-    ball = addBallSprite(ballStartX,ballStartY,poke_ball)
-    ball.setZ(0,25)
-    ball.setVisible(0,false)
+    ball = addBallSprite(ballStartX, ballStartY, poke_ball)
+    ball.setZ(0, 25)
+    ball.setVisible(0, false)
     # Poké Ball tracking the player's hand animation (if trainer is visible)
-    if @showingTrainer && traSprite && traSprite.x>0
-      ball.setZ(0,traSprite.z-1)
-      ballStartX, ballStartY = ballTracksHand(ball,traSprite)
+    if @showingTrainer && traSprite && traSprite.x > 0
+      ball.setZ(0, traSprite.z - 1)
+      ballStartX, ballStartY = ballTracksHand(ball, traSprite)
     end
     delay = ball.totalDuration   # 0 or 7
     # Poké Ball trajectory animation
-    createBallTrajectory(ball,delay,12,
-       ballStartX,ballStartY,ballMidX,ballMidY,battlerStartX,battlerStartY-18)
-    ball.setZ(9,batSprite.z-1)
-    delay = ball.totalDuration+4
-    delay += 10*@idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
-    ballOpenUp(ball,delay-2,poke_ball)
-    ballBurst(delay,battlerStartX,battlerStartY-18,poke_ball)
-    ball.moveOpacity(delay+2,2,0)
+    createBallTrajectory(ball, delay, 12,
+       ballStartX, ballStartY, ballMidX, ballMidY, battlerStartX, battlerStartY - 18)
+    ball.setZ(9, batSprite.z - 1)
+    delay = ball.totalDuration + 4
+    delay += 10 * @idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
+    ballOpenUp(ball, delay - 2, poke_ball)
+    ballBurst(delay, battlerStartX, battlerStartY - 18, poke_ball)
+    ball.moveOpacity(delay + 2, 2, 0)
     # Set up battler sprite
-    battler = addSprite(batSprite,PictureOrigin::Bottom)
-    battler.setXY(0,battlerStartX,battlerStartY)
-    battler.setZoom(0,0)
-    battler.setColor(0,col)
+    battler = addSprite(batSprite, PictureOrigin::Bottom)
+    battler.setXY(0, battlerStartX, battlerStartY)
+    battler.setZoom(0, 0)
+    battler.setColor(0, col)
     # Battler animation
-    battlerAppear(battler,delay,battlerEndX,battlerEndY,batSprite,col)
+    battlerAppear(battler, delay, battlerEndX, battlerEndY, batSprite, col)
     if @shadowVisible
       # Set up shadow sprite
-      shadow = addSprite(shaSprite,PictureOrigin::Center)
-      shadow.setOpacity(0,0)
+      shadow = addSprite(shaSprite, PictureOrigin::Center)
+      shadow.setOpacity(0, 0)
       # Shadow animation
-      shadow.setVisible(delay,@shadowVisible)
-      shadow.moveOpacity(delay+5,10,255)
+      shadow.setVisible(delay, @shadowVisible)
+      shadow.moveOpacity(delay + 5, 10, 255)
     end
   end
 end
@@ -483,7 +483,7 @@ end
 class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
 
-  def initialize(sprites,viewport,idxTrainer,battler,startBattle,idxOrder)
+  def initialize(sprites, viewport, idxTrainer, battler, startBattle, idxOrder)
     @idxTrainer     = idxTrainer
     @battler        = battler
     @showingTrainer = startBattle
@@ -491,7 +491,7 @@ class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animatio
     sprites["pokemon_#{battler.index}"].visible = false
     @shadowVisible = sprites["shadow_#{battler.index}"].visible
     sprites["shadow_#{battler.index}"].visible = false
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
@@ -503,44 +503,44 @@ class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animatio
     col = getBattlerColorFromPokeBall(poke_ball)
     col.alpha = 255
     # Calculate start and end coordinates for battler sprite movement
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index,batSprite.sideSize)
+    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
     battlerStartX = ballPos[0]
     battlerStartY = ballPos[1]
     battlerEndX = batSprite.x
     battlerEndY = batSprite.y
     # Set up Poké Ball sprite
-    ball = addBallSprite(0,0,poke_ball)
-    ball.setZ(0,batSprite.z-1)
+    ball = addBallSprite(0, 0, poke_ball)
+    ball.setZ(0, batSprite.z - 1)
     # Poké Ball animation
-    createBallTrajectory(ball,battlerStartX,battlerStartY)
-    delay = ball.totalDuration+6
+    createBallTrajectory(ball, battlerStartX, battlerStartY)
+    delay = ball.totalDuration + 6
     delay += 10 if @showingTrainer   # Give time for trainer to slide off screen
-    delay += 10*@idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
-    ballOpenUp(ball,delay-2,poke_ball)
-    ballBurst(delay,battlerStartX,battlerStartY-18,poke_ball)
-    ball.moveOpacity(delay+2,2,0)
+    delay += 10 * @idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
+    ballOpenUp(ball, delay - 2, poke_ball)
+    ballBurst(delay, battlerStartX, battlerStartY - 18, poke_ball)
+    ball.moveOpacity(delay + 2, 2, 0)
     # Set up battler sprite
-    battler = addSprite(batSprite,PictureOrigin::Bottom)
-    battler.setXY(0,battlerStartX,battlerStartY)
-    battler.setZoom(0,0)
-    battler.setColor(0,col)
+    battler = addSprite(batSprite, PictureOrigin::Bottom)
+    battler.setXY(0, battlerStartX, battlerStartY)
+    battler.setZoom(0, 0)
+    battler.setColor(0, col)
     # Battler animation
-    battlerAppear(battler,delay,battlerEndX,battlerEndY,batSprite,col)
+    battlerAppear(battler, delay, battlerEndX, battlerEndY, batSprite, col)
     if @shadowVisible
       # Set up shadow sprite
-      shadow = addSprite(shaSprite,PictureOrigin::Center)
-      shadow.setOpacity(0,0)
+      shadow = addSprite(shaSprite, PictureOrigin::Center)
+      shadow.setOpacity(0, 0)
       # Shadow animation
-      shadow.setVisible(delay,@shadowVisible)
-      shadow.moveOpacity(delay+5,10,255)
+      shadow.setVisible(delay, @shadowVisible)
+      shadow.moveOpacity(delay + 5, 10, 255)
     end
   end
 
-  def createBallTrajectory(ball,destX,destY)
+  def createBallTrajectory(ball, destX, destY)
     # NOTE: In HGSS, there isn't a Poké Ball arc under any circumstance (neither
     #       when throwing out the first Pokémon nor when switching/replacing a
     #       fainted Pokémon). This is probably worth changing.
-    ball.setXY(0,destX,destY-4)
+    ball.setXY(0, destX, destY - 4)
   end
 end
 
@@ -552,9 +552,9 @@ end
 class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
 
-  def initialize(sprites,viewport,idxBattler)
+  def initialize(sprites, viewport, idxBattler)
     @idxBattler = idxBattler
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
@@ -566,29 +566,29 @@ class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
     col = getBattlerColorFromPokeBall(poke_ball)
     col.alpha = 0
     # Calculate end coordinates for battler sprite movement
-    ballPos = Battle::Scene.pbBattlerPosition(@idxBattler,batSprite.sideSize)
+    ballPos = Battle::Scene.pbBattlerPosition(@idxBattler, batSprite.sideSize)
     battlerEndX = ballPos[0]
     battlerEndY = ballPos[1]
     # Set up battler sprite
-    battler = addSprite(batSprite,PictureOrigin::Bottom)
-    battler.setVisible(0,true)
-    battler.setColor(0,col)
+    battler = addSprite(batSprite, PictureOrigin::Bottom)
+    battler.setVisible(0, true)
+    battler.setColor(0, col)
     # Set up Poké Ball sprite
-    ball = addBallSprite(battlerEndX,battlerEndY,poke_ball)
-    ball.setZ(0,batSprite.z+1)
+    ball = addBallSprite(battlerEndX, battlerEndY, poke_ball)
+    ball.setZ(0, batSprite.z + 1)
     # Poké Ball animation
-    ballOpenUp(ball,0,poke_ball)
+    ballOpenUp(ball, 0, poke_ball)
     delay = ball.totalDuration
-    ballBurstRecall(delay,battlerEndX,battlerEndY,poke_ball)
-    ball.moveOpacity(10,2,0)
+    ballBurstRecall(delay, battlerEndX, battlerEndY, poke_ball)
+    ball.moveOpacity(10, 2, 0)
     # Battler animation
-    battlerAbsorb(battler,delay,battlerEndX,battlerEndY,col)
+    battlerAbsorb(battler, delay, battlerEndX, battlerEndY, col)
     if shaSprite.visible
       # Set up shadow sprite
-      shadow = addSprite(shaSprite,PictureOrigin::Center)
+      shadow = addSprite(shaSprite, PictureOrigin::Center)
       # Shadow animation
-      shadow.moveOpacity(0,10,0)
-      shadow.setVisible(delay,false)
+      shadow.moveOpacity(0, 10, 0)
+      shadow.setVisible(delay, false)
     end
   end
 end
@@ -599,18 +599,18 @@ end
 # Shows a Pokémon flashing after taking damage
 #===============================================================================
 class Battle::Scene::Animation::BattlerDamage < Battle::Scene::Animation
-  def initialize(sprites,viewport,idxBattler,effectiveness)
+  def initialize(sprites, viewport, idxBattler, effectiveness)
     @idxBattler    = idxBattler
     @effectiveness = effectiveness
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     batSprite = @sprites["pokemon_#{@idxBattler}"]
     shaSprite = @sprites["shadow_#{@idxBattler}"]
     # Set up battler/shadow sprite
-    battler = addSprite(batSprite,PictureOrigin::Bottom)
-    shadow  = addSprite(shaSprite,PictureOrigin::Center)
+    battler = addSprite(batSprite, PictureOrigin::Bottom)
+    shadow  = addSprite(shaSprite, PictureOrigin::Center)
     # Animation
     delay = 0
     case @effectiveness
@@ -619,15 +619,15 @@ class Battle::Scene::Animation::BattlerDamage < Battle::Scene::Animation
     when 2 then battler.setSE(delay, "Battle damage super")
     end
     4.times do   # 4 flashes, each lasting 0.2 (4/20) seconds
-      battler.setVisible(delay,false)
-      shadow.setVisible(delay,false)
-      battler.setVisible(delay+2,true) if batSprite.visible
-      shadow.setVisible(delay+2,true) if shaSprite.visible
+      battler.setVisible(delay, false)
+      shadow.setVisible(delay, false)
+      battler.setVisible(delay + 2, true) if batSprite.visible
+      shadow.setVisible(delay + 2, true) if shaSprite.visible
       delay += 4
     end
     # Restore original battler/shadow sprites visibilities
-    battler.setVisible(delay,batSprite.visible)
-    shadow.setVisible(delay,shaSprite.visible)
+    battler.setVisible(delay, batSprite.visible)
+    shadow.setVisible(delay, shaSprite.visible)
   end
 end
 
@@ -637,25 +637,25 @@ end
 # Shows a Pokémon fainting
 #===============================================================================
 class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
-  def initialize(sprites,viewport,idxBattler,battle)
+  def initialize(sprites, viewport, idxBattler, battle)
     @idxBattler = idxBattler
     @battle     = battle
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     batSprite = @sprites["pokemon_#{@idxBattler}"]
     shaSprite = @sprites["shadow_#{@idxBattler}"]
     # Set up battler/shadow sprite
-    battler = addSprite(batSprite,PictureOrigin::Bottom)
-    shadow  = addSprite(shaSprite,PictureOrigin::Center)
+    battler = addSprite(batSprite, PictureOrigin::Bottom)
+    shadow  = addSprite(shaSprite, PictureOrigin::Center)
     # Get approx duration depending on sprite's position/size. Min 20 frames.
-    battlerTop = batSprite.y-batSprite.height
+    battlerTop = batSprite.y - batSprite.height
     cropY = Battle::Scene.pbBattlerPosition(@idxBattler,
        @battle.pbSideSize(@idxBattler))[1]
     cropY += 8
-    duration = (cropY-battlerTop)/8
-    duration = 10 if duration<10   # Min 0.5 seconds
+    duration = (cropY - battlerTop) / 8
+    duration = 10 if duration < 10   # Min 0.5 seconds
     # Animation
     # Play cry
     delay = 10
@@ -672,13 +672,13 @@ class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
     end
     delay += 2
     # Sprite drops down
-    shadow.setVisible(delay,false)
-    battler.setSE(delay,"Pkmn faint")
-    battler.moveOpacity(delay,duration,0)
-    battler.moveDelta(delay,duration,0,cropY-battlerTop)
-    battler.setCropBottom(delay,cropY)
-    battler.setVisible(delay+duration,false)
-    battler.setOpacity(delay+duration,255)
+    shadow.setVisible(delay, false)
+    battler.setSE(delay, "Pkmn faint")
+    battler.moveOpacity(delay, duration, 0)
+    battler.moveDelta(delay, duration, 0, cropY - battlerTop)
+    battler.setCropBottom(delay, cropY)
+    battler.setVisible(delay + duration, false)
+    battler.setOpacity(delay + duration, 255)
   end
 end
 
@@ -690,8 +690,8 @@ end
 class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
 
-  def initialize(sprites,viewport,
-                 poke_ball,numShakes,critCapture,battler,showingTrainer)
+  def initialize(sprites, viewport,
+                 poke_ball, numShakes, critCapture, battler, showingTrainer)
     @poke_ball      = poke_ball
     @success        = numShakes >= 4
     @numShakes      = (critCapture && numShakes > 0) ? 1 : numShakes
@@ -700,7 +700,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     @showingTrainer = showingTrainer    # Only true if a Safari Zone battle
     @shadowVisible  = sprites["shadow_#{battler.index}"].visible
     @trainer        = battler.battle.pbPlayer
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
@@ -708,7 +708,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     batSprite = @sprites["pokemon_#{@battler.index}"]
     shaSprite = @sprites["shadow_#{@battler.index}"]
     traSprite = @sprites["player_1"]
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index,batSprite.sideSize)
+    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
     battlerStartX = batSprite.x
     battlerStartY = batSprite.y
     ballStartX = -6
@@ -717,117 +717,117 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     ballMidY   = 78
     ballEndX   = ballPos[0]
     ballEndY   = 112
-    ballGroundY = ballPos[1]-4
+    ballGroundY = ballPos[1] - 4
     # Set up Poké Ball sprite
-    ball = addBallSprite(ballStartX,ballStartY,@poke_ball)
-    ball.setZ(0,batSprite.z+1)
+    ball = addBallSprite(ballStartX, ballStartY, @poke_ball)
+    ball.setZ(0, batSprite.z + 1)
     @ballSpriteIndex = (@success) ? @tempSprites.length - 1 : -1
     # Set up trainer sprite (only visible in Safari Zone battles)
     if @showingTrainer && traSprite
-      if traSprite.bitmap.width>=traSprite.bitmap.height*2
-        trainer = addSprite(traSprite,PictureOrigin::Bottom)
+      if traSprite.bitmap.width >= traSprite.bitmap.height * 2
+        trainer = addSprite(traSprite, PictureOrigin::Bottom)
         # Trainer animation
-        ballStartX, ballStartY = trainerThrowingFrames(ball,trainer,traSprite)
+        ballStartX, ballStartY = trainerThrowingFrames(ball, trainer, traSprite)
       end
     end
     delay = ball.totalDuration   # 0 or 7
     # Poké Ball arc animation
-    ball.setSE(delay,"Battle throw")
-    createBallTrajectory(ball,delay,16,
-       ballStartX,ballStartY,ballMidX,ballMidY,ballEndX,ballEndY)
-    ball.setZ(9,batSprite.z+1)
-    ball.setSE(delay+16,"Battle ball hit")
+    ball.setSE(delay, "Battle throw")
+    createBallTrajectory(ball, delay, 16,
+       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
+    ball.setZ(9, batSprite.z + 1)
+    ball.setSE(delay + 16, "Battle ball hit")
     # Poké Ball opens up
-    delay = ball.totalDuration+6
-    ballOpenUp(ball,delay,@poke_ball,true,false)
+    delay = ball.totalDuration + 6
+    ballOpenUp(ball, delay, @poke_ball, true, false)
     # Set up battler sprite
-    battler = addSprite(batSprite,PictureOrigin::Bottom)
+    battler = addSprite(batSprite, PictureOrigin::Bottom)
     # Poké Ball absorbs battler
     delay = ball.totalDuration
-    ballBurstCapture(delay,ballEndX,ballEndY,@poke_ball)
-    delay = ball.totalDuration+4
+    ballBurstCapture(delay, ballEndX, ballEndY, @poke_ball)
+    delay = ball.totalDuration + 4
     # NOTE: The Pokémon does not change color while being absorbed into a Poké
     #       Ball during a capture attempt. This may be an oversight in HGSS.
-    battler.setSE(delay,"Battle jump to ball")
-    battler.moveXY(delay,5,ballEndX,ballEndY)
-    battler.moveZoom(delay,5,0)
-    battler.setVisible(delay+5,false)
+    battler.setSE(delay, "Battle jump to ball")
+    battler.moveXY(delay, 5, ballEndX, ballEndY)
+    battler.moveZoom(delay, 5, 0)
+    battler.setVisible(delay + 5, false)
     if @shadowVisible
       # Set up shadow sprite
-      shadow = addSprite(shaSprite,PictureOrigin::Center)
+      shadow = addSprite(shaSprite, PictureOrigin::Center)
       # Shadow animation
-      shadow.moveOpacity(delay,5,0)
-      shadow.moveZoom(delay,5,0)
-      shadow.setVisible(delay+5,false)
+      shadow.moveOpacity(delay, 5, 0)
+      shadow.moveZoom(delay, 5, 0)
+      shadow.setVisible(delay + 5, false)
     end
     # Poké Ball closes
     delay = battler.totalDuration
-    ballSetClosed(ball,delay,@poke_ball)
-    ball.moveTone(delay,3,Tone.new(96,64,-160,160))
-    ball.moveTone(delay+5,3,Tone.new(0,0,0,0))
+    ballSetClosed(ball, delay, @poke_ball)
+    ball.moveTone(delay, 3, Tone.new(96, 64, -160, 160))
+    ball.moveTone(delay + 5, 3, Tone.new(0, 0, 0, 0))
     # Poké Ball critical capture animation
-    delay = ball.totalDuration+3
+    delay = ball.totalDuration + 3
     if @critCapture
-      ball.setSE(delay,"Battle ball shake")
-      ball.moveXY(delay,1,ballEndX+4,ballEndY)
-      ball.moveXY(delay+1,2,ballEndX-4,ballEndY)
-      ball.moveXY(delay+3,2,ballEndX+4,ballEndY)
-      ball.setSE(delay+4,"Battle ball shake")
-      ball.moveXY(delay+5,2,ballEndX-4,ballEndY)
-      ball.moveXY(delay+7,1,ballEndX,ballEndY)
-      delay = ball.totalDuration+3
+      ball.setSE(delay, "Battle ball shake")
+      ball.moveXY(delay, 1, ballEndX + 4, ballEndY)
+      ball.moveXY(delay + 1, 2, ballEndX - 4, ballEndY)
+      ball.moveXY(delay + 3, 2, ballEndX + 4, ballEndY)
+      ball.setSE(delay + 4, "Battle ball shake")
+      ball.moveXY(delay + 5, 2, ballEndX - 4, ballEndY)
+      ball.moveXY(delay + 7, 1, ballEndX, ballEndY)
+      delay = ball.totalDuration + 3
     end
     # Poké Ball drops to the ground
     for i in 0...4
-      t = [4,4,3,2][i]   # Time taken to rise or fall for each bounce
-      d = [1,2,4,8][i]   # Fraction of the starting height each bounce rises to
-      delay -= t if i==0
-      if i>0
-        ball.setZoomXY(delay,100+5*(5-i),100-5*(5-i))   # Squish
-        ball.moveZoom(delay,2,100)                      # Unsquish
-        ball.moveXY(delay,t,ballEndX,ballGroundY-(ballGroundY-ballEndY)/d)
+      t = [4, 4, 3, 2][i]   # Time taken to rise or fall for each bounce
+      d = [1, 2, 4, 8][i]   # Fraction of the starting height each bounce rises to
+      delay -= t if i == 0
+      if i > 0
+        ball.setZoomXY(delay, 100 + 5 * (5 - i), 100 - 5 * (5 - i))   # Squish
+        ball.moveZoom(delay, 2, 100)                      # Unsquish
+        ball.moveXY(delay, t, ballEndX, ballGroundY - (ballGroundY - ballEndY) / d)
       end
-      ball.moveXY(delay+t,t,ballEndX,ballGroundY)
-      ball.setSE(delay+2*t,"Battle ball drop",100-i*7)
+      ball.moveXY(delay + t, t, ballEndX, ballGroundY)
+      ball.setSE(delay + 2 * t, "Battle ball drop", 100 - i * 7)
       delay = ball.totalDuration
     end
-    battler.setXY(ball.totalDuration,ballEndX,ballGroundY)
+    battler.setXY(ball.totalDuration, ballEndX, ballGroundY)
     # Poké Ball shakes
-    delay = ball.totalDuration+12
-    for i in 0...[@numShakes,3].min
-      ball.setSE(delay,"Battle ball shake")
-      ball.moveXY(delay,2,ballEndX-2*(4-i),ballGroundY)
-      ball.moveAngle(delay,2,5*(4-i))   # positive means counterclockwise
-      ball.moveXY(delay+2,4,ballEndX+2*(4-i),ballGroundY)
-      ball.moveAngle(delay+2,4,-5*(4-i))   # negative means clockwise
-      ball.moveXY(delay+6,2,ballEndX,ballGroundY)
-      ball.moveAngle(delay+6,2,0)
-      delay = ball.totalDuration+8
+    delay = ball.totalDuration + 12
+    for i in 0...[@numShakes, 3].min
+      ball.setSE(delay, "Battle ball shake")
+      ball.moveXY(delay, 2, ballEndX - 2 * (4 - i), ballGroundY)
+      ball.moveAngle(delay, 2, 5 * (4 - i))   # positive means counterclockwise
+      ball.moveXY(delay + 2, 4, ballEndX + 2 * (4 - i), ballGroundY)
+      ball.moveAngle(delay + 2, 4, -5 * (4 - i))   # negative means clockwise
+      ball.moveXY(delay + 6, 2, ballEndX, ballGroundY)
+      ball.moveAngle(delay + 6, 2, 0)
+      delay = ball.totalDuration + 8
     end
     if @success
       # Pokémon was caught
-      ballCaptureSuccess(ball,delay,ballEndX,ballGroundY)
+      ballCaptureSuccess(ball, delay, ballEndX, ballGroundY)
     else
       # Poké Ball opens
-      ball.setZ(delay,batSprite.z-1)
-      ballOpenUp(ball,delay,@poke_ball,false)
-      ballBurst(delay,ballEndX,ballGroundY,@poke_ball)
-      ball.moveOpacity(delay+2,2,0)
+      ball.setZ(delay, batSprite.z - 1)
+      ballOpenUp(ball, delay, @poke_ball, false)
+      ballBurst(delay, ballEndX, ballGroundY, @poke_ball)
+      ball.moveOpacity(delay + 2, 2, 0)
       # Battler emerges
       col = getBattlerColorFromPokeBall(@poke_ball)
       col.alpha = 255
-      battler.setColor(delay,col)
-      battlerAppear(battler,delay,battlerStartX,battlerStartY,batSprite,col)
+      battler.setColor(delay, col)
+      battlerAppear(battler, delay, battlerStartX, battlerStartY, batSprite, col)
       if @shadowVisible
-        shadow.setVisible(delay+5,true)
-        shadow.setZoom(delay+5,100)
-        shadow.moveOpacity(delay+5,10,255)
+        shadow.setVisible(delay + 5, true)
+        shadow.setZoom(delay + 5, 100)
+        shadow.moveOpacity(delay + 5, 10, 255)
       end
     end
   end
 
   def dispose
-    if @ballSpriteIndex>=0
+    if @ballSpriteIndex >= 0
       # Capture was successful, the Poké Ball sprite should stay around after
       # this animation has finished.
       @sprites["captureBall"] = @tempSprites[@ballSpriteIndex]
@@ -845,16 +845,16 @@ end
 class Battle::Scene::Animation::PokeballThrowDeflect < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
 
-  def initialize(sprites,viewport,poke_ball,battler)
+  def initialize(sprites, viewport, poke_ball, battler)
     @poke_ball = poke_ball
     @battler   = battler
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
     # Calculate start and end coordinates for battler sprite movement
     batSprite = @sprites["pokemon_#{@battler.index}"]
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index,batSprite.sideSize)
+    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
     ballStartX = -6
     ballStartY = 246
     ballMidX   = 190   # Unused in arc calculation
@@ -862,16 +862,16 @@ class Battle::Scene::Animation::PokeballThrowDeflect < Battle::Scene::Animation
     ballEndX   = ballPos[0]
     ballEndY   = 112
     # Set up Poké Ball sprite
-    ball = addBallSprite(ballStartX,ballStartY,@poke_ball)
-    ball.setZ(0,90)
+    ball = addBallSprite(ballStartX, ballStartY, @poke_ball)
+    ball.setZ(0, 90)
     # Poké Ball arc animation
-    ball.setSE(0,"Battle throw")
-    createBallTrajectory(ball,0,16,
-       ballStartX,ballStartY,ballMidX,ballMidY,ballEndX,ballEndY)
+    ball.setSE(0, "Battle throw")
+    createBallTrajectory(ball, 0, 16,
+       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     # Poké Ball knocked back
     delay = ball.totalDuration
-    ball.setSE(delay,"Battle ball drop")
-    ball.moveXY(delay,8,-32,Graphics.height-96+32)   # Back to player's corner
-    createBallTumbling(ball,delay,8)
+    ball.setSE(delay, "Battle ball drop")
+    ball.moveXY(delay, 8, -32, Graphics.height - 96 + 32)   # Back to player's corner
+    createBallTumbling(ball, delay, 8)
   end
 end

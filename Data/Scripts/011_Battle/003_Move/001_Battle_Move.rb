@@ -67,7 +67,7 @@ class Battle::Move
   def pbTarget(_user); return GameData::Target.get(@target); end
 
   def total_pp
-    return @total_pp if @total_pp && @total_pp>0   # Usually undefined
+    return @total_pp if @total_pp && @total_pp > 0   # Usually undefined
     return @realMove.total_pp if @realMove
     return 0
   end
@@ -75,7 +75,7 @@ class Battle::Move
   # NOTE: This method is only ever called while using a move (and also by the
   #       AI), so using @calcType here is acceptable.
   def physicalMove?(thisType = nil)
-    return (@category==0) if Settings::MOVE_CATEGORY_PER_MOVE
+    return (@category == 0) if Settings::MOVE_CATEGORY_PER_MOVE
     thisType ||= @calcType
     thisType ||= @type
     return true if !thisType
@@ -85,15 +85,15 @@ class Battle::Move
   # NOTE: This method is only ever called while using a move (and also by the
   #       AI), so using @calcType here is acceptable.
   def specialMove?(thisType = nil)
-    return (@category==1) if Settings::MOVE_CATEGORY_PER_MOVE
+    return (@category == 1) if Settings::MOVE_CATEGORY_PER_MOVE
     thisType ||= @calcType
     thisType ||= @type
     return false if !thisType
     return GameData::Type.get(thisType).special?
   end
 
-  def damagingMove?; return @category!=2; end
-  def statusMove?;   return @category==2; end
+  def damagingMove?; return @category != 2; end
+  def statusMove?;   return @category == 2; end
 
   def pbPriority(user); return @priority; end
 
@@ -135,7 +135,7 @@ class Battle::Move
 
   # Causes perfect accuracy (param=1) and double damage (param=2).
   def tramplesMinimize?(_param = 1); return false; end
-  def nonLethal?(_user,_target); return false; end   # For False Swipe
+  def nonLethal?(_user, _target); return false; end   # For False Swipe
 
   def ignoresSubstitute?(user)   # user is the Pokémon using this move
     if Settings::MECHANICS_GENERATION >= 6

@@ -11,11 +11,11 @@ class Window_PokemonItemStorage < Window_DrawableCommand
     refresh
   end
 
-  def initialize(bag,x,y,width,height)
+  def initialize(bag, x, y, width, height)
     @bag = bag
     @sortIndex = -1
     @adapter = PokemonMartAdapter.new
-    super(x,y,width,height)
+    super(x, y, width, height)
     self.windowskin = nil
   end
 
@@ -25,27 +25,27 @@ class Window_PokemonItemStorage < Window_DrawableCommand
   end
 
   def itemCount
-    return @bag.length+1
+    return @bag.length + 1
   end
 
-  def drawItem(index,_count,rect)
-    rect = drawCursor(index,rect)
+  def drawItem(index, _count, rect)
+    rect = drawCursor(index, rect)
     textpos = []
-    if index==@bag.length
-      textpos.push([_INTL("CANCEL"),rect.x,rect.y-6,false,self.baseColor,self.shadowColor])
+    if index == @bag.length
+      textpos.push([_INTL("CANCEL"), rect.x, rect.y - 6, false, self.baseColor, self.shadowColor])
     else
       item     = @bag[index][0]
       itemname = @adapter.getDisplayName(item)
-      baseColor = (index==@sortIndex) ? Color.new(248,24,24) : self.baseColor
-      textpos.push([itemname,rect.x,rect.y-6,false,self.baseColor,self.shadowColor])
+      baseColor = (index == @sortIndex) ? Color.new(248, 24, 24) : self.baseColor
+      textpos.push([itemname, rect.x, rect.y - 6, false, self.baseColor, self.shadowColor])
       if !GameData::Item.get(item).is_important?   # Not a Key item/HM/TM
-        qty     = _ISPRINTF("x{1: 2d}",@bag[index][1])
+        qty     = _ISPRINTF("x{1: 2d}", @bag[index][1])
         sizeQty = self.contents.text_size(qty).width
-        xQty = rect.x+rect.width-sizeQty-2
-        textpos.push([qty,xQty,rect.y-6,false,baseColor,self.shadowColor])
+        xQty = rect.x + rect.width - sizeQty - 2
+        textpos.push([qty, xQty, rect.y - 6, false, baseColor, self.shadowColor])
       end
     end
-    pbDrawTextPositions(self.contents,textpos)
+    pbDrawTextPositions(self.contents, textpos)
   end
 end
 
@@ -53,12 +53,12 @@ end
 #
 #===============================================================================
 class ItemStorage_Scene
-  ITEMLISTBASECOLOR   = Color.new(88,88,80)
-  ITEMLISTSHADOWCOLOR = Color.new(168,184,184)
-  ITEMTEXTBASECOLOR   = Color.new(248,248,248)
-  ITEMTEXTSHADOWCOLOR = Color.new(0,0,0)
-  TITLEBASECOLOR      = Color.new(248,248,248)
-  TITLESHADOWCOLOR    = Color.new(0,0,0)
+  ITEMLISTBASECOLOR   = Color.new(88, 88, 80)
+  ITEMLISTSHADOWCOLOR = Color.new(168, 184, 184)
+  ITEMTEXTBASECOLOR   = Color.new(248, 248, 248)
+  ITEMTEXTSHADOWCOLOR = Color.new(0, 0, 0)
+  TITLEBASECOLOR      = Color.new(248, 248, 248)
+  TITLESHADOWCOLOR    = Color.new(0, 0, 0)
   ITEMSVISIBLE        = 7
 
   def initialize(title)
@@ -70,27 +70,27 @@ class ItemStorage_Scene
   end
 
   def pbStartScene(bag)
-    @viewport   = Viewport.new(0,0,Graphics.width,Graphics.height)
+    @viewport   = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @bag = bag
     @sprites = {}
-    @sprites["background"] = IconSprite.new(0,0,@viewport)
+    @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap("Graphics/Pictures/pcItembg")
-    @sprites["icon"] = ItemIconSprite.new(50,334,nil,@viewport)
+    @sprites["icon"] = ItemIconSprite.new(50, 334, nil, @viewport)
     # Item list
-    @sprites["itemwindow"] = Window_PokemonItemStorage.new(@bag,98,14,334,32+ITEMSVISIBLE*32)
+    @sprites["itemwindow"] = Window_PokemonItemStorage.new(@bag, 98, 14, 334, 32 + ITEMSVISIBLE * 32)
     @sprites["itemwindow"].viewport    = @viewport
     @sprites["itemwindow"].index       = 0
     @sprites["itemwindow"].baseColor   = ITEMLISTBASECOLOR
     @sprites["itemwindow"].shadowColor = ITEMLISTSHADOWCOLOR
     @sprites["itemwindow"].refresh
     # Title
-    @sprites["pocketwindow"] = BitmapSprite.new(88,64,@viewport)
+    @sprites["pocketwindow"] = BitmapSprite.new(88, 64, @viewport)
     @sprites["pocketwindow"].x = 14
     @sprites["pocketwindow"].y = 16
     pbSetNarrowFont(@sprites["pocketwindow"].bitmap)
     # Item description
-    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("",84,270,Graphics.width-84,128,@viewport)
+    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("", 84, 270, Graphics.width - 84, 128, @viewport)
     @sprites["itemtextwindow"].baseColor   = ITEMTEXTBASECOLOR
     @sprites["itemtextwindow"].shadowColor = ITEMTEXTSHADOWCOLOR
     @sprites["itemtextwindow"].windowskin  = nil
@@ -101,7 +101,7 @@ class ItemStorage_Scene
     @sprites["msgwindow"] = Window_AdvancedTextPokemon.new("")
     @sprites["msgwindow"].visible  = false
     @sprites["msgwindow"].viewport = @viewport
-    pbBottomLeftLines(@sprites["helpwindow"],1)
+    pbBottomLeftLines(@sprites["helpwindow"], 1)
     pbDeactivateWindows(@sprites)
     pbRefresh
     pbFadeInAndShow(@sprites)
@@ -113,26 +113,26 @@ class ItemStorage_Scene
     @viewport.dispose
   end
 
-  def pbChooseNumber(helptext,maximum)
-    return UIHelper.pbChooseNumber(@sprites["helpwindow"],helptext,maximum) { update }
+  def pbChooseNumber(helptext, maximum)
+    return UIHelper.pbChooseNumber(@sprites["helpwindow"], helptext, maximum) { update }
   end
 
-  def pbDisplay(msg,brief = false)
-    UIHelper.pbDisplay(@sprites["msgwindow"],msg,brief) { update }
+  def pbDisplay(msg, brief = false)
+    UIHelper.pbDisplay(@sprites["msgwindow"], msg, brief) { update }
   end
 
   def pbConfirm(msg)
-    UIHelper.pbConfirm(@sprites["msgwindow"],msg) { update }
+    UIHelper.pbConfirm(@sprites["msgwindow"], msg) { update }
   end
 
-  def pbShowCommands(helptext,commands)
-    return UIHelper.pbShowCommands(@sprites["helpwindow"],helptext,commands) { update }
+  def pbShowCommands(helptext, commands)
+    return UIHelper.pbShowCommands(@sprites["helpwindow"], helptext, commands) { update }
   end
 
   def pbRefresh
     bm = @sprites["pocketwindow"].bitmap
     # Draw title at upper left corner ("Toss Item/Withdraw Item")
-    drawTextEx(bm,0,4,bm.width,2,@title,TITLEBASECOLOR,TITLESHADOWCOLOR)
+    drawTextEx(bm, 0, 4, bm.width, 2, @title, TITLEBASECOLOR, TITLESHADOWCOLOR)
     itemwindow = @sprites["itemwindow"]
     # Draw item icon
     @sprites["icon"].item = itemwindow.item
@@ -150,17 +150,17 @@ class ItemStorage_Scene
     @sprites["helpwindow"].visible = false
     itemwindow = @sprites["itemwindow"]
     itemwindow.refresh
-    pbActivateWindow(@sprites,"itemwindow") {
+    pbActivateWindow(@sprites, "itemwindow") {
       loop do
         Graphics.update
         Input.update
         olditem = itemwindow.item
         self.update
-        pbRefresh if itemwindow.item!=olditem
+        pbRefresh if itemwindow.item != olditem
         if Input.trigger?(Input::BACK)
           return nil
         elsif Input.trigger?(Input::USE)
-          if itemwindow.index<@bag.length
+          if itemwindow.index < @bag.length
             pbRefresh
             return @bag[itemwindow.index][0]
           else
@@ -197,13 +197,13 @@ end
 #===============================================================================
 module UIHelper
   # Letter by letter display of the message _msg_ by the window _helpwindow_.
-  def self.pbDisplay(helpwindow,msg,brief)
+  def self.pbDisplay(helpwindow, msg, brief)
     cw = helpwindow
     oldvisible = cw.visible
     cw.letterbyletter = true
-    cw.text           = msg+"\1"
+    cw.text           = msg + "\1"
     cw.visible        = true
-    pbBottomLeftLines(cw,2)
+    pbBottomLeftLines(cw, 2)
     loop do
       Graphics.update
       Input.update
@@ -217,13 +217,13 @@ module UIHelper
     cw.visible = oldvisible
   end
 
-  def self.pbDisplayStatic(msgwindow,message)
+  def self.pbDisplayStatic(msgwindow, message)
     oldvisible = msgwindow.visible
     msgwindow.visible        = true
     msgwindow.letterbyletter = false
     msgwindow.width          = Graphics.width
-    msgwindow.resizeHeightToFit(message,Graphics.width)
-    msgwindow.text           = message
+    msgwindow.resizeHeightToFit(message, Graphics.width)
+    msgwindow.text = message
     pbBottomRight(msgwindow)
     loop do
       Graphics.update
@@ -239,14 +239,14 @@ module UIHelper
 
   # Letter by letter display of the message _msg_ by the window _helpwindow_,
   # used to ask questions.  Returns true if the user chose yes, false if no.
-  def self.pbConfirm(helpwindow,msg)
+  def self.pbConfirm(helpwindow, msg)
     dw = helpwindow
     oldvisible = dw.visible
     dw.letterbyletter = true
     dw.text           = msg
     dw.visible        = true
-    pbBottomLeftLines(dw,2)
-    commands = [_INTL("Yes"),_INTL("No")]
+    pbBottomLeftLines(dw, 2)
+    commands = [_INTL("Yes"), _INTL("No")]
     cw = Window_CommandPokemon.new(commands)
     cw.index = 0
     cw.viewport = helpwindow.viewport
@@ -265,7 +265,7 @@ module UIHelper
           break
         elsif Input.trigger?(Input::USE)
           pbPlayDecisionSE
-          ret = (cw.index==0)
+          ret = (cw.index == 0)
           break
         end
       end
@@ -275,7 +275,7 @@ module UIHelper
     return ret
   end
 
-  def self.pbChooseNumber(helpwindow,helptext,maximum,initnum = 1)
+  def self.pbChooseNumber(helpwindow, helptext, maximum, initnum = 1)
     oldvisible = helpwindow.visible
     helpwindow.visible        = true
     helpwindow.text           = helptext
@@ -285,10 +285,10 @@ module UIHelper
     numwindow = Window_UnformattedTextPokemon.new("x000")
     numwindow.viewport       = helpwindow.viewport
     numwindow.letterbyletter = false
-    numwindow.text           = _ISPRINTF("x{1:03d}",curnumber)
-    numwindow.resizeToFit(numwindow.text,Graphics.width)
+    numwindow.text           = _ISPRINTF("x{1:03d}", curnumber)
+    numwindow.resizeToFit(numwindow.text, Graphics.width)
     pbBottomRight(numwindow)
-    helpwindow.resizeHeightToFit(helpwindow.text,Graphics.width-numwindow.width)
+    helpwindow.resizeHeightToFit(helpwindow.text, Graphics.width - numwindow.width)
     pbBottomLeft(helpwindow)
     loop do
       Graphics.update
@@ -306,23 +306,23 @@ module UIHelper
         break
       elsif Input.repeat?(Input::UP)
         curnumber += 1
-        curnumber = 1 if curnumber>maximum
-        numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
+        curnumber = 1 if curnumber > maximum
+        numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
         pbPlayCursorSE
       elsif Input.repeat?(Input::DOWN)
         curnumber -= 1
-        curnumber = maximum if curnumber<1
-        numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
+        curnumber = maximum if curnumber < 1
+        numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
         pbPlayCursorSE
       elsif Input.repeat?(Input::LEFT)
         curnumber -= 10
-        curnumber = 1 if curnumber<1
-        numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
+        curnumber = 1 if curnumber < 1
+        numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
         pbPlayCursorSE
       elsif Input.repeat?(Input::RIGHT)
         curnumber += 10
-        curnumber = maximum if curnumber>maximum
-        numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
+        curnumber = maximum if curnumber > maximum
+        numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
         pbPlayCursorSE
       end
     end
@@ -331,7 +331,7 @@ module UIHelper
     return ret
   end
 
-  def self.pbShowCommands(helpwindow,helptext,commands,initcmd = 0)
+  def self.pbShowCommands(helpwindow, helptext, commands, initcmd = 0)
     ret = -1
     oldvisible = helpwindow.visible
     helpwindow.visible        = helptext ? true : false
@@ -342,7 +342,7 @@ module UIHelper
     begin
       cmdwindow.viewport = helpwindow.viewport
       pbBottomRight(cmdwindow)
-      helpwindow.resizeHeightToFit(helpwindow.text,Graphics.width-cmdwindow.width)
+      helpwindow.resizeHeightToFit(helpwindow.text, Graphics.width - cmdwindow.width)
       pbBottomLeft(helpwindow)
       loop do
         Graphics.update

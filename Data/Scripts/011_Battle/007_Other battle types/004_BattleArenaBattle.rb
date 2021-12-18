@@ -17,9 +17,9 @@ class Battle::SuccessState
   end
 
   def updateSkill
-    if @useState==1
+    if @useState == 1
       @skill = -2 if !@protected
-    elsif @useState==2
+    elsif @useState == 2
       if Effectiveness.super_effective?(@typeMod)
         @skill = 2
       elsif Effectiveness.normal?(@typeMod)
@@ -43,33 +43,33 @@ class BattleArenaBattle < Battle
   def initialize(*arg)
     super
     @battlersChanged      = true
-    @mind                 = [0,0]
-    @skill                = [0,0]
-    @starthp              = [0,0]
+    @mind                 = [0, 0]
+    @skill                = [0, 0]
+    @starthp              = [0, 0]
     @count                = 0
-    @partyindexes         = [0,0]
+    @partyindexes         = [0, 0]
     @battleAI.battleArena = true
   end
 
-  def pbCanSwitchLax?(idxBattler,_idxParty,partyScene = nil)
+  def pbCanSwitchLax?(idxBattler, _idxParty, partyScene = nil)
     if partyScene
-      partyScene.pbDisplay(_INTL("{1} can't be switched out!",@battlers[idxBattler].pbThis))
+      partyScene.pbDisplay(_INTL("{1} can't be switched out!", @battlers[idxBattler].pbThis))
     end
     return false
   end
 
   def pbEORSwitch(favorDraws = false)
-    return if favorDraws && @decision==5
-    return if !favorDraws && @decision>0
+    return if favorDraws && @decision == 5
+    return if !favorDraws && @decision > 0
     pbJudge
-    return if @decision>0
+    return if @decision > 0
     for side in 0...2
       next if !@battlers[side].fainted?
-      next if @partyindexes[side]+1>=self.pbParty(side).length
+      next if @partyindexes[side] + 1 >= self.pbParty(side).length
       @partyindexes[side] += 1
       newpoke = @partyindexes[side]
-      pbMessagesOnReplace(side,newpoke)
-      pbReplace(side,newpoke)
+      pbMessagesOnReplace(side, newpoke)
+      pbReplace(side, newpoke)
       pbOnBattlerEnteringBattle(side)
     end
   end
@@ -97,14 +97,14 @@ class BattleArenaBattle < Battle
   end
 
   def pbMindScore(move)
-    if move.function=="ProtectUser" ||   # Detect/Protect
-       move.function=="UserEnduresFaintingThisTurn" ||   # Endure
-       move.function=="FlinchTargetFailsIfNotUserFirstTurn"   # Fake Out
+    if move.function == "ProtectUser" ||   # Detect/Protect
+       move.function == "UserEnduresFaintingThisTurn" ||   # Endure
+       move.function == "FlinchTargetFailsIfNotUserFirstTurn"   # Fake Out
       return -1
     end
-    if move.function=="CounterPhysicalDamage" ||   # Counter
-       move.function=="CounterSpecialDamage" ||   # Mirror Coat
-       move.function=="MultiTurnAttackBideThenReturnDoubleDamage"   # Bide
+    if move.function == "CounterPhysicalDamage" ||   # Counter
+       move.function == "CounterSpecialDamage" ||   # Mirror Coat
+       move.function == "MultiTurnAttackBideThenReturnDoubleDamage"   # Bide
       return 0
     end
     return 0 if move.statusMove?
@@ -113,16 +113,16 @@ class BattleArenaBattle < Battle
 
   def pbCommandPhase
     if @battlersChanged
-      @scene.pbBattleArenaBattlers(@battlers[0],@battlers[1])
+      @scene.pbBattleArenaBattlers(@battlers[0], @battlers[1])
       @battlersChanged = false
       @count = 0
     end
     super
-    return if @decision!=0
+    return if @decision != 0
     # Update mind rating (asserting that a move was chosen)
     # TODO: Actually done at Pokémon's turn
     for side in 0...2
-      if @choices[side][2] && @choices[side][0]==:UseMove
+      if @choices[side][2] && @choices[side][0] == :UseMove
         @mind[side] += pbMindScore(@choices[side][2])
       end
     end
@@ -230,7 +230,7 @@ class Battle::Scene
     pbGraphicsUpdate
   end
 
-  def updateJudgment(window,phase,battler1,battler2,ratings1,ratings2)
+  def updateJudgment(window, phase, battler1, battler2, ratings1, ratings2)
     total1 = 0
     total2 = 0
     for i in 0...phase
@@ -240,50 +240,50 @@ class Battle::Scene
     window.contents.clear
     pbSetSystemFont(window.contents)
     textpos = [
-       [battler1.name,64,-6,2,Color.new(248,0,0),Color.new(208,208,200)],
-       [_INTL("VS"),144,-6,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [battler2.name,224,-6,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [_INTL("Mind"),144,42,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [_INTL("Skill"),144,74,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [_INTL("Body"),144,106,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [sprintf("%d",total1),64,154,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [_INTL("Judgment"),144,154,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [sprintf("%d",total2),224,154,2,Color.new(72,72,72),Color.new(208,208,200)]
+       [battler1.name, 64, -6, 2, Color.new(248, 0, 0), Color.new(208, 208, 200)],
+       [_INTL("VS"), 144, -6, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+       [battler2.name, 224, -6, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+       [_INTL("Mind"), 144, 42, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+       [_INTL("Skill"), 144, 74, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+       [_INTL("Body"), 144, 106, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+       [sprintf("%d", total1), 64, 154, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+       [_INTL("Judgment"), 144, 154, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+       [sprintf("%d", total2), 224, 154, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)]
     ]
-    pbDrawTextPositions(window.contents,textpos)
+    pbDrawTextPositions(window.contents, textpos)
     images = []
     for i in 0...phase
-      y = [48,80,112][i]
-      x = (ratings1[i]==ratings2[i]) ? 64 : ((ratings1[i]>ratings2[i]) ? 0 : 32)
-      images.push(["Graphics/Pictures/judgment",64-16,y,x,0,32,32])
-      x = (ratings1[i]==ratings2[i]) ? 64 : ((ratings1[i]<ratings2[i]) ? 0 : 32)
-      images.push(["Graphics/Pictures/judgment",224-16,y,x,0,32,32])
+      y = [48, 80, 112][i]
+      x = (ratings1[i] == ratings2[i]) ? 64 : ((ratings1[i] > ratings2[i]) ? 0 : 32)
+      images.push(["Graphics/Pictures/judgment", 64 - 16, y, x, 0, 32, 32])
+      x = (ratings1[i] == ratings2[i]) ? 64 : ((ratings1[i] < ratings2[i]) ? 0 : 32)
+      images.push(["Graphics/Pictures/judgment", 224 - 16, y, x, 0, 32, 32])
     end
-    pbDrawImagePositions(window.contents,images)
-    window.contents.fill_rect(16,150,256,4,Color.new(80,80,80))
+    pbDrawImagePositions(window.contents, images)
+    window.contents.fill_rect(16, 150, 256, 4, Color.new(80, 80, 80))
   end
 
-  def pbBattleArenaBattlers(battler1,battler2)
+  def pbBattleArenaBattlers(battler1, battler2)
     pbMessage(_INTL("REFEREE: {1} VS {2}!\nCommence battling!\\wtnp[20]",
-       battler1.name,battler2.name)) { pbBattleArenaUpdate }
+       battler1.name, battler2.name)) { pbBattleArenaUpdate }
   end
 
-  def pbBattleArenaJudgment(battler1,battler2,ratings1,ratings2)
+  def pbBattleArenaJudgment(battler1, battler2, ratings1, ratings2)
     msgwindow  = nil
     dimmingvp  = nil
     infowindow = nil
     begin
       msgwindow = pbCreateMessageWindow
-      dimmingvp = Viewport.new(0,0,Graphics.width,Graphics.height-msgwindow.height)
+      dimmingvp = Viewport.new(0, 0, Graphics.width, Graphics.height - msgwindow.height)
       pbMessageDisplay(msgwindow,
          _INTL("REFEREE: That's it! We will now go to judging to determine the winner!\\wtnp[20]")) {
         pbBattleArenaUpdate
         dimmingvp.update
       }
       dimmingvp.z = 99999
-      infowindow = SpriteWindow_Base.new(80,0,320,224)
-      infowindow.contents = Bitmap.new(infowindow.width-infowindow.borderX,
-                                       infowindow.height-infowindow.borderY)
+      infowindow = SpriteWindow_Base.new(80, 0, 320, 224)
+      infowindow.contents = Bitmap.new(infowindow.width - infowindow.borderX,
+                                       infowindow.height - infowindow.borderY)
       infowindow.z        = 99999
       infowindow.visible  = false
       for i in 0..10
@@ -291,9 +291,9 @@ class Battle::Scene
         pbInputUpdate
         msgwindow.update
         dimmingvp.update
-        dimmingvp.color = Color.new(0,0,0,i*128/10)
+        dimmingvp.color = Color.new(0, 0, 0, i * 128 / 10)
       end
-      updateJudgment(infowindow,0,battler1,battler2,ratings1,ratings2)
+      updateJudgment(infowindow, 0, battler1, battler2, ratings1, ratings2)
       infowindow.visible = true
       for i in 0..10
         pbGraphicsUpdate
@@ -302,21 +302,21 @@ class Battle::Scene
         dimmingvp.update
         infowindow.update
       end
-      updateJudgment(infowindow,1,battler1,battler2,ratings1,ratings2)
+      updateJudgment(infowindow, 1, battler1, battler2, ratings1, ratings2)
       pbMessageDisplay(msgwindow,
          _INTL("REFEREE: Judging category 1, Mind!\nThe Pokémon showing the most guts!\\wtnp[40]")) {
         pbBattleArenaUpdate
         dimmingvp.update
         infowindow.update
       }
-      updateJudgment(infowindow,2,battler1,battler2,ratings1,ratings2)
+      updateJudgment(infowindow, 2, battler1, battler2, ratings1, ratings2)
       pbMessageDisplay(msgwindow,
          _INTL("REFEREE: Judging category 2, Skill!\nThe Pokémon using moves the best!\\wtnp[40]")) {
         pbBattleArenaUpdate
         dimmingvp.update
         infowindow.update
       }
-      updateJudgment(infowindow,3,battler1,battler2,ratings1,ratings2)
+      updateJudgment(infowindow, 3, battler1, battler2, ratings1, ratings2)
       pbMessageDisplay(msgwindow,
          _INTL("REFEREE: Judging category 3, Body!\nThe Pokémon with the most vitality!\\wtnp[40]")) {
         pbBattleArenaUpdate
@@ -329,17 +329,17 @@ class Battle::Scene
         total1 += ratings1[i]
         total2 += ratings2[i]
       end
-      if total1==total2
+      if total1 == total2
         pbMessageDisplay(msgwindow,
-           _INTL("REFEREE: Judgment: {1} to {2}!\nWe have a draw!\\wtnp[40]",total1,total2)) {
+           _INTL("REFEREE: Judgment: {1} to {2}!\nWe have a draw!\\wtnp[40]", total1, total2)) {
           pbBattleArenaUpdate
           dimmingvp.update
           infowindow.update
         }
-      elsif total1>total2
+      elsif total1 > total2
         pbMessageDisplay(msgwindow,
            _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}'s {4}!\\wtnp[40]",
-           total1,total2,@battle.pbGetOwnerName(battler1.index),battler1.name)) {
+           total1, total2, @battle.pbGetOwnerName(battler1.index), battler1.name)) {
           pbBattleArenaUpdate
           dimmingvp.update
           infowindow.update
@@ -347,7 +347,7 @@ class Battle::Scene
       else
         pbMessageDisplay(msgwindow,
            _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}!\\wtnp[40]",
-           total1,total2,battler2.name)) {
+           total1, total2, battler2.name)) {
           pbBattleArenaUpdate
           dimmingvp.update
           infowindow.update
@@ -360,7 +360,7 @@ class Battle::Scene
         pbInputUpdate
         msgwindow.update
         dimmingvp.update
-        dimmingvp.color = Color.new(0,0,0,(10-i)*128/10)
+        dimmingvp.color = Color.new(0, 0, 0, (10 - i) * 128 / 10)
       end
     ensure
       pbDisposeMessageWindow(msgwindow)

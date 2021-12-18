@@ -98,7 +98,7 @@ class BattleChallenge
     opponent = pbGenerateBattleTrainer(self.nextTrainer, self.rules)
     bttrainers = pbGetBTTrainers(@id)
     trainerdata = bttrainers[self.nextTrainer]
-    ret = pbOrganizedBattleEx(opponent,self.rules,
+    ret = pbOrganizedBattleEx(opponent, self.rules,
        pbGetMessageFromHash(MessageTypes::EndSpeechLose, trainerdata[4]),
        pbGetMessageFromHash(MessageTypes::EndSpeechWin, trainerdata[3]))
     return ret

@@ -281,7 +281,7 @@ class TilemapRenderer
     @tiles_horizontal_count.times do |i|
       @tiles[i] = []
       @tiles_vertical_count.times do |j|
-        @tiles[i][j]        = Array.new(3) { TileSprite.new(@viewport) }
+        @tiles[i][j] = Array.new(3) { TileSprite.new(@viewport) }
       end
     end
     @current_map_id         = 0

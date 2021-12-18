@@ -15,7 +15,7 @@ module PBDebug
   end
 
   def self.flush
-    if $DEBUG && $INTERNAL && @@log.length>0
+    if $DEBUG && $INTERNAL && @@log.length > 0
       File.open("Data/debuglog.txt", "a+b") { |f| f.write(@@log.to_s) }
     end
     @@log.clear

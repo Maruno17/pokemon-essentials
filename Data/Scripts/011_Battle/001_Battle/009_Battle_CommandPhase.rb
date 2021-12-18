@@ -25,8 +25,8 @@ class Battle
   #=============================================================================
   # Use main command menu (Fight/Pokémon/Bag/Run)
   #=============================================================================
-  def pbCommandMenu(idxBattler,firstAction)
-    return @scene.pbCommandMenu(idxBattler,firstAction)
+  def pbCommandMenu(idxBattler, firstAction)
+    return @scene.pbCommandMenu(idxBattler, firstAction)
   end
 
   #=============================================================================
@@ -42,11 +42,11 @@ class Battle
   def pbCanShowFightMenu?(idxBattler)
     battler = @battlers[idxBattler]
     # Encore
-    return false if battler.effects[PBEffects::Encore]>0
+    return false if battler.effects[PBEffects::Encore] > 0
     # No moves that can be chosen (will Struggle instead)
     usable = false
-    battler.eachMoveWithIndex do |_m,i|
-      next if !pbCanChooseMove?(idxBattler,i,false)
+    battler.eachMoveWithIndex do |_m, i|
+      next if !pbCanChooseMove?(idxBattler, i, false)
       usable = true
       break
     end
@@ -64,7 +64,7 @@ class Battle
     return true if pbAutoFightMenu(idxBattler)
     # Regular move selection
     ret = false
-    @scene.pbFightMenu(idxBattler,pbCanMegaEvolve?(idxBattler)) { |cmd|
+    @scene.pbFightMenu(idxBattler, pbCanMegaEvolve?(idxBattler)) { |cmd|
       case cmd
       when -1   # Cancel
       when -2   # Toggle Mega Evolution
@@ -75,11 +75,11 @@ class Battle
         pbRegisterShift(idxBattler)
         ret = true
       else      # Chose a move to use
-        next false if cmd<0 || !@battlers[idxBattler].moves[cmd] ||
+        next false if cmd < 0 || !@battlers[idxBattler].moves[cmd] ||
                       !@battlers[idxBattler].moves[cmd].id
-        next false if !pbRegisterMove(idxBattler,cmd)
+        next false if !pbRegisterMove(idxBattler, cmd)
         next false if !singleBattle? &&
-                      !pbChooseTarget(@battlers[idxBattler],@battlers[idxBattler].moves[cmd])
+                      !pbChooseTarget(@battlers[idxBattler], @battlers[idxBattler].moves[cmd])
         ret = true
       end
       next true
@@ -89,36 +89,36 @@ class Battle
 
   def pbAutoFightMenu(idxBattler); return false; end
 
-  def pbChooseTarget(battler,move)
+  def pbChooseTarget(battler, move)
     target_data = move.pbTarget(battler)
-    idxTarget = @scene.pbChooseTarget(battler.index,target_data)
-    return false if idxTarget<0
-    pbRegisterTarget(battler.index,idxTarget)
+    idxTarget = @scene.pbChooseTarget(battler.index, target_data)
+    return false if idxTarget < 0
+    pbRegisterTarget(battler.index, idxTarget)
     return true
   end
 
-  def pbItemMenu(idxBattler,firstAction)
+  def pbItemMenu(idxBattler, firstAction)
     if !@internalBattle
       pbDisplay(_INTL("Items can't be used here."))
       return false
     end
     ret = false
-    @scene.pbItemMenu(idxBattler,firstAction) { |item,useType,idxPkmn,idxMove,itemScene|
+    @scene.pbItemMenu(idxBattler, firstAction) { |item, useType, idxPkmn, idxMove, itemScene|
       next false if !item
       battler = pkmn = nil
       case useType
       when 1, 2   # Use on Pokémon/Pokémon's move
         next false if !ItemHandlers.hasBattleUseOnPokemon(item)
-        battler = pbFindBattler(idxPkmn,idxBattler)
+        battler = pbFindBattler(idxPkmn, idxBattler)
         pkmn    = pbParty(idxBattler)[idxPkmn]
-        next false if !pbCanUseItemOnPokemon?(item,pkmn,battler,itemScene)
+        next false if !pbCanUseItemOnPokemon?(item, pkmn, battler, itemScene)
       when 3   # Use on battler
         next false if !ItemHandlers.hasBattleUseOnBattler(item)
-        battler = pbFindBattler(idxPkmn,idxBattler)
+        battler = pbFindBattler(idxPkmn, idxBattler)
         pkmn    = battler.pokemon if battler
-        next false if !pbCanUseItemOnPokemon?(item,pkmn,battler,itemScene)
+        next false if !pbCanUseItemOnPokemon?(item, pkmn, battler, itemScene)
       when 4   # Poké Balls
-        next false if idxPkmn<0
+        next false if idxPkmn < 0
         battler = @battlers[idxPkmn]
         pkmn    = battler.pokemon if battler
       when 5   # No target (Poké Doll, Guard Spec., Launcher items)
@@ -129,8 +129,8 @@ class Battle
       end
       next false if !pkmn
       next false if !ItemHandlers.triggerCanUseInBattle(item,
-         pkmn,battler,idxMove,firstAction,self,itemScene)
-      next false if !pbRegisterItem(idxBattler,item,idxPkmn,idxMove)
+         pkmn, battler, idxMove, firstAction, self, itemScene)
+      next false if !pbRegisterItem(idxBattler, item, idxPkmn, idxMove)
       ret = true
       next true
     }
@@ -140,16 +140,16 @@ class Battle
   def pbPartyMenu(idxBattler)
     ret = -1
     if @debug
-      ret = @battleAI.pbDefaultChooseNewEnemy(idxBattler,pbParty(idxBattler))
+      ret = @battleAI.pbDefaultChooseNewEnemy(idxBattler, pbParty(idxBattler))
     else
-      ret = pbPartyScreen(idxBattler,false,true,true)
+      ret = pbPartyScreen(idxBattler, false, true, true)
     end
-    return ret>=0
+    return ret >= 0
   end
 
   def pbRunMenu(idxBattler)
     # Regardless of succeeding or failing to run, stop choosing actions
-    return pbRun(idxBattler)!=0
+    return pbRun(idxBattler) != 0
   end
 
   def pbCallMenu(idxBattler)
@@ -172,19 +172,19 @@ class Battle
   def pbCommandPhase
     @scene.pbBeginCommandPhase
     # Reset choices if commands can be shown
-    @battlers.each_with_index do |b,i|
+    @battlers.each_with_index do |b, i|
       next if !b
       pbClearChoice(i) if pbCanShowCommands?(i)
     end
     # Reset choices to perform Mega Evolution if it wasn't done somehow
     for side in 0...2
-      @megaEvolution[side].each_with_index do |megaEvo,i|
-        @megaEvolution[side][i] = -1 if megaEvo>=0
+      @megaEvolution[side].each_with_index do |megaEvo, i|
+        @megaEvolution[side][i] = -1 if megaEvo >= 0
       end
     end
     # Choose actions for the round (player first, then AI)
     pbCommandPhaseLoop(true)    # Player chooses their actions
-    return if @decision!=0   # Battle ended, stop choosing actions
+    return if @decision != 0   # Battle ended, stop choosing actions
     pbCommandPhaseLoop(false)   # AI chooses their actions
   end
 
@@ -194,11 +194,11 @@ class Battle
     actioned = []
     idxBattler = -1
     loop do
-      break if @decision!=0   # Battle ended, stop choosing actions
+      break if @decision != 0   # Battle ended, stop choosing actions
       idxBattler += 1
-      break if idxBattler>=@battlers.length
-      next if !@battlers[idxBattler] || pbOwnedByPlayer?(idxBattler)!=isPlayer
-      next if @choices[idxBattler][0]!=:None    # Action is forced, can't choose one
+      break if idxBattler >= @battlers.length
+      next if !@battlers[idxBattler] || pbOwnedByPlayer?(idxBattler) != isPlayer
+      next if @choices[idxBattler][0] != :None    # Action is forced, can't choose one
       next if !pbCanShowCommands?(idxBattler)   # Action is forced, can't choose one
       # AI controls this battler
       if @controlPlayer || !pbOwnedByPlayer?(idxBattler)
@@ -209,17 +209,17 @@ class Battle
       actioned.push(idxBattler)
       commandsEnd = false   # Whether to cancel choosing all other actions this round
       loop do
-        cmd = pbCommandMenu(idxBattler,actioned.length==1)
+        cmd = pbCommandMenu(idxBattler, actioned.length == 1)
         # If being Sky Dropped, can't do anything except use a move
-        if cmd>0 && @battlers[idxBattler].effects[PBEffects::SkyDrop]>=0
-          pbDisplay(_INTL("Sky Drop won't let {1} go!",@battlers[idxBattler].pbThis(true)))
+        if cmd > 0 && @battlers[idxBattler].effects[PBEffects::SkyDrop] >= 0
+          pbDisplay(_INTL("Sky Drop won't let {1} go!", @battlers[idxBattler].pbThis(true)))
           next
         end
         case cmd
         when 0    # Fight
           break if pbFightMenu(idxBattler)
         when 1    # Bag
-          if pbItemMenu(idxBattler,actioned.length==1)
+          if pbItemMenu(idxBattler, actioned.length == 1)
             commandsEnd = true if pbItemUsesAllActions?(@choices[idxBattler][1])
             break
           end
@@ -240,10 +240,10 @@ class Battle
           pbDebugMenu
           next
         when -1   # Go back to previous battler's action choice
-          next if actioned.length<=1
+          next if actioned.length <= 1
           actioned.pop   # Forget this battler was done
-          idxBattler = actioned.last-1
-          pbCancelChoice(idxBattler+1)   # Clear the previous battler's choice
+          idxBattler = actioned.last - 1
+          pbCancelChoice(idxBattler + 1)   # Clear the previous battler's choice
           actioned.pop   # Forget the previous battler was done
           break
         end

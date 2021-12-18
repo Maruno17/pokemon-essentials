@@ -14,7 +14,7 @@ def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
   if !ret
     # Check global metadata
     music = GameData::Metadata.get.wild_battle_BGM
-    ret = pbStringToAudioFile(music) if music && music!=""
+    ret = pbStringToAudioFile(music) if music && music != ""
   end
   ret = pbStringToAudioFile("Battle wild") if !ret
   return ret
@@ -33,10 +33,10 @@ def pbGetWildVictoryME
   if !ret
     # Check global metadata
     music = GameData::Metadata.get.wild_victory_ME
-    ret = pbStringToAudioFile(music) if music && music!=""
+    ret = pbStringToAudioFile(music) if music && music != ""
   end
   ret = pbStringToAudioFile("Battle victory") if !ret
-  ret.name = "../../Audio/ME/"+ret.name
+  ret.name = "../../Audio/ME/" + ret.name
   return ret
 end
 
@@ -53,10 +53,10 @@ def pbGetWildCaptureME
   if !ret
     # Check global metadata
     music = GameData::Metadata.get.wild_capture_ME
-    ret = pbStringToAudioFile(music) if music && music!=""
+    ret = pbStringToAudioFile(music) if music && music != ""
   end
   ret = pbStringToAudioFile("Battle capture success") if !ret
-  ret.name = "../../Audio/ME/"+ret.name
+  ret.name = "../../Audio/ME/" + ret.name
   return ret
 end
 
@@ -81,7 +81,7 @@ def pbGetTrainerBattleBGM(trainer)   # can be a Player, NPCTrainer or an array o
     trainer_type_data = GameData::TrainerType.get(t.trainer_type)
     music = trainer_type_data.battle_BGM if trainer_type_data.battle_BGM
   end
-  ret = pbStringToAudioFile(music) if music && music!=""
+  ret = pbStringToAudioFile(music) if music && music != ""
   if !ret
     # Check map metadata
     music = $game_map.metadata&.trainer_battle_BGM
@@ -90,7 +90,7 @@ def pbGetTrainerBattleBGM(trainer)   # can be a Player, NPCTrainer or an array o
   if !ret
     # Check global metadata
     music = GameData::Metadata.get.trainer_battle_BGM
-    if music && music!=""
+    if music && music != ""
       ret = pbStringToAudioFile(music)
     end
   end
@@ -112,7 +112,7 @@ def pbGetTrainerBattleBGMFromType(trainertype)
   if !ret
     # Check global metadata
     music = GameData::Metadata.get.trainer_battle_BGM
-    ret = pbStringToAudioFile(music) if music && music!=""
+    ret = pbStringToAudioFile(music) if music && music != ""
   end
   ret = pbStringToAudioFile("Battle trainer") if !ret
   return ret
@@ -129,7 +129,7 @@ def pbGetTrainerVictoryME(trainer)   # can be a Player, NPCTrainer or an array o
     music = trainer_type_data.victory_ME if trainer_type_data.victory_ME
   end
   ret = nil
-  if music && music!=""
+  if music && music != ""
     ret = pbStringToAudioFile(music)
   end
   if !ret
@@ -140,11 +140,11 @@ def pbGetTrainerVictoryME(trainer)   # can be a Player, NPCTrainer or an array o
   if !ret
     # Check global metadata
     music = GameData::Metadata.get.trainer_victory_ME
-    if music && music!=""
+    if music && music != ""
       ret = pbStringToAudioFile(music)
     end
   end
   ret = pbStringToAudioFile("Battle victory") if !ret
-  ret.name = "../../Audio/ME/"+ret.name
+  ret.name = "../../Audio/ME/" + ret.name
   return ret
 end

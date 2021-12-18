@@ -54,7 +54,7 @@ class Game_Event < Game_Character
   end
 
   def tsOn?(c)
-    return @tempSwitches && @tempSwitches[c]==true
+    return @tempSwitches && @tempSwitches[c] == true
   end
 
   def tsOff?(c)
@@ -62,17 +62,17 @@ class Game_Event < Game_Character
   end
 
   def setTempSwitchOn(c)
-    @tempSwitches[c]=true
+    @tempSwitches[c] = true
     refresh
   end
 
   def setTempSwitchOff(c)
-    @tempSwitches[c]=false
+    @tempSwitches[c] = false
     refresh
   end
 
   def isOff?(c)
-    return !$game_self_switches[[@map_id,@event.id,c]]
+    return !$game_self_switches[[@map_id, @event.id, c]]
   end
 
   def switchIsOn?(id)
@@ -87,31 +87,31 @@ class Game_Event < Game_Character
 
   def variable
     return nil if !$PokemonGlobal.eventvars
-    return $PokemonGlobal.eventvars[[@map_id,@event.id]]
+    return $PokemonGlobal.eventvars[[@map_id, @event.id]]
   end
 
   def setVariable(variable)
-    $PokemonGlobal.eventvars[[@map_id,@event.id]]=variable
+    $PokemonGlobal.eventvars[[@map_id, @event.id]] = variable
   end
 
   def varAsInt
     return 0 if !$PokemonGlobal.eventvars
-    return $PokemonGlobal.eventvars[[@map_id,@event.id]].to_i
+    return $PokemonGlobal.eventvars[[@map_id, @event.id]].to_i
   end
 
   def expired?(secs = 86400)
-    ontime=self.variable
-    time=pbGetTimeNow
-    return ontime && (time.to_i>ontime+secs)
+    ontime = self.variable
+    time = pbGetTimeNow
+    return ontime && (time.to_i > ontime + secs)
   end
 
   def expiredDays?(days = 1)
-    ontime=self.variable.to_i
+    ontime = self.variable.to_i
     return false if !ontime
-    now=pbGetTimeNow
-    elapsed=(now.to_i-ontime)/86400
-    elapsed+=1 if (now.to_i-ontime)%86400>(now.hour*3600+now.min*60+now.sec)
-    return elapsed>=days
+    now = pbGetTimeNow
+    elapsed = (now.to_i - ontime) / 86400
+    elapsed += 1 if (now.to_i - ontime) % 86400 > (now.hour * 3600 + now.min * 60 + now.sec)
+    return elapsed >= days
   end
 
   def cooledDown?(seconds)
@@ -143,7 +143,7 @@ class Game_Event < Game_Character
     return if $game_system.map_interpreter.running? || @starting
     if @event.name[/trainer\((\d+)\)/i]
       distance = $~[1].to_i
-      if @trigger==2 && pbEventCanReachPlayer?(self,$game_player,distance)
+      if @trigger == 2 && pbEventCanReachPlayer?(self, $game_player, distance)
         start if !jumping? && !over_trigger?
       end
     end
@@ -248,8 +248,8 @@ class Game_Event < Game_Character
     return true if @move_route_forcing
     return true if @event.name[/update/i]
     range = 2   # Number of tiles
-    return false if self.screen_x - @sprite_size[0]/2 > Graphics.width + range * Game_Map::TILE_WIDTH
-    return false if self.screen_x + @sprite_size[0]/2 < -range * Game_Map::TILE_WIDTH
+    return false if self.screen_x - @sprite_size[0] / 2 > Graphics.width + range * Game_Map::TILE_WIDTH
+    return false if self.screen_x + @sprite_size[0] / 2 < -range * Game_Map::TILE_WIDTH
     return false if self.screen_y_ground - @sprite_size[1] > Graphics.height + range * Game_Map::TILE_HEIGHT
     return false if self.screen_y_ground < -range * Game_Map::TILE_HEIGHT
     return true

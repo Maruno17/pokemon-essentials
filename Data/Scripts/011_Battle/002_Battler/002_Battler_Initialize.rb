@@ -2,7 +2,7 @@ class Battle::Battler
   #=============================================================================
   # Creating a battler
   #=============================================================================
-  def initialize(btl,idxBattler)
+  def initialize(btl, idxBattler)
     @battle      = btl
     @index       = idxBattler
     @captured    = false
@@ -33,7 +33,7 @@ class Battle::Battler
   end
 
   # Used by Future Sight only, when Future Sight's user is no longer in battle.
-  def pbInitDummyPokemon(pkmn,idxParty)
+  def pbInitDummyPokemon(pkmn, idxParty)
     raise _INTL("An egg can't be an active Pokémon.") if pkmn.egg?
     @name         = pkmn.name
     @species      = pkmn.species
@@ -57,13 +57,13 @@ class Battle::Battler
     @dummy        = true
   end
 
-  def pbInitialize(pkmn,idxParty,batonPass = false)
-    pbInitPokemon(pkmn,idxParty)
+  def pbInitialize(pkmn, idxParty, batonPass = false)
+    pbInitPokemon(pkmn, idxParty)
     pbInitEffects(batonPass)
     @damageState.reset
   end
 
-  def pbInitPokemon(pkmn,idxParty)
+  def pbInitPokemon(pkmn, idxParty)
     raise _INTL("An egg can't be an active Pokémon.") if pkmn.egg?
     @name         = pkmn.name
     @species      = pkmn.species
@@ -85,8 +85,8 @@ class Battle::Battler
     @pokemonIndex = idxParty
     @participants = []   # Participants earn Exp. if this battler is defeated
     @moves        = []
-    pkmn.moves.each_with_index do |m,i|
-      @moves[i] = Battle::Move.from_pokemon_move(@battle,m)
+    pkmn.moves.each_with_index do |m, i|
+      @moves[i] = Battle::Move.from_pokemon_move(@battle, m)
     end
   end
 
@@ -94,10 +94,10 @@ class Battle::Battler
     if batonPass
       # These effects are passed on if Baton Pass is used, but they need to be
       # reapplied
-      @effects[PBEffects::LaserFocus] = (@effects[PBEffects::LaserFocus]>0) ? 2 : 0
-      @effects[PBEffects::LockOn]     = (@effects[PBEffects::LockOn]>0) ? 2 : 0
+      @effects[PBEffects::LaserFocus] = (@effects[PBEffects::LaserFocus] > 0) ? 2 : 0
+      @effects[PBEffects::LockOn]     = (@effects[PBEffects::LockOn] > 0) ? 2 : 0
       if @effects[PBEffects::PowerTrick]
-        @attack,@defense = @defense,@attack
+        @attack, @defense = @defense, @attack
       end
       # These effects are passed on if Baton Pass is used, but they need to be
       # cancelled in certain circumstances anyway
@@ -131,7 +131,7 @@ class Battle::Battler
       @effects[PBEffects::Substitute]        = 0
       @effects[PBEffects::Telekinesis]       = 0
     end
-    @fainted               = (@hp==0)
+    @fainted               = (@hp == 0)
     @lastAttacker          = []
     @lastFoeAttacker       = []
     @lastHPLost            = 0
@@ -154,7 +154,7 @@ class Battle::Battler
     @turnCount             = 0
     @effects[PBEffects::Attract]             = -1
     @battle.allBattlers.each do |b|   # Other battlers no longer attracted to self
-      b.effects[PBEffects::Attract] = -1 if b.effects[PBEffects::Attract]==@index
+      b.effects[PBEffects::Attract] = -1 if b.effects[PBEffects::Attract] == @index
     end
     @effects[PBEffects::BanefulBunker]       = false
     @effects[PBEffects::BeakBlast]           = false
@@ -204,8 +204,8 @@ class Battle::Battler
     end
     @effects[PBEffects::KingsShield]         = false
     @battle.allBattlers.each do |b|   # Other battlers lose their lock-on against self
-      next if b.effects[PBEffects::LockOn]==0
-      next if b.effects[PBEffects::LockOnPos]!=@index
+      next if b.effects[PBEffects::LockOn] == 0
+      next if b.effects[PBEffects::LockOnPos] != @index
       b.effects[PBEffects::LockOn]    = 0
       b.effects[PBEffects::LockOnPos] = -1
     end
@@ -213,7 +213,7 @@ class Battle::Battler
     @effects[PBEffects::MagicCoat]           = false
     @effects[PBEffects::MeanLook]            = -1
     @battle.allBattlers.each do |b|   # Other battlers no longer blocked by self
-      b.effects[PBEffects::MeanLook] = -1 if b.effects[PBEffects::MeanLook]==@index
+      b.effects[PBEffects::MeanLook] = -1 if b.effects[PBEffects::MeanLook] == @index
     end
     @effects[PBEffects::MeFirst]             = false
     @effects[PBEffects::Metronome]           = 0
@@ -250,7 +250,7 @@ class Battle::Battler
     @effects[PBEffects::Roost]               = false
     @effects[PBEffects::SkyDrop]             = -1
     @battle.allBattlers.each do |b|   # Other battlers no longer Sky Dropped by self
-      b.effects[PBEffects::SkyDrop] = -1 if b.effects[PBEffects::SkyDrop]==@index
+      b.effects[PBEffects::SkyDrop] = -1 if b.effects[PBEffects::SkyDrop] == @index
     end
     @effects[PBEffects::SlowStart]           = 0
     @effects[PBEffects::SmackDown]           = false
@@ -271,7 +271,7 @@ class Battle::Battler
     @effects[PBEffects::TrappingMove]        = nil
     @effects[PBEffects::TrappingUser]        = -1
     @battle.allBattlers.each do |b|   # Other battlers no longer trapped by self
-      next if b.effects[PBEffects::TrappingUser]!=@index
+      next if b.effects[PBEffects::TrappingUser] != @index
       b.effects[PBEffects::Trapping]     = 0
       b.effects[PBEffects::TrappingUser] = -1
     end

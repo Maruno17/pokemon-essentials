@@ -60,7 +60,7 @@ class BattlePalaceBattle < Battle
 
   def initialize(*arg)
     super
-    @justswitched          = [false,false,false,false]
+    @justswitched          = [false, false, false, false]
     @battleAI.battlePalace = true
   end
 
@@ -76,26 +76,26 @@ class BattlePalaceBattle < Battle
   end
 
   # Different implementation of pbCanChooseMove, ignores Imprison/Torment/Taunt/Disable/Encore
-  def pbCanChooseMovePartial?(idxPokemon,idxMove)
+  def pbCanChooseMovePartial?(idxPokemon, idxMove)
     thispkmn = @battlers[idxPokemon]
     thismove = thispkmn.moves[idxMove]
     return false if !thismove
-    return false if thismove.pp<=0
+    return false if thismove.pp <= 0
     if thispkmn.effects[PBEffects::ChoiceBand] &&
-       thismove.id!=thispkmn.effects[PBEffects::ChoiceBand] &&
+       thismove.id != thispkmn.effects[PBEffects::ChoiceBand] &&
        thispkmn.hasActiveItem?(:CHOICEBAND)
       return false
     end
     # though incorrect, just for convenience (actually checks Torment later)
     if thispkmn.effects[PBEffects::Torment] && thispkmn.lastMoveUsed
-      return false if thismove.id==thispkmn.lastMoveUsed
+      return false if thismove.id == thispkmn.lastMoveUsed
     end
     return true
   end
 
-  def pbRegisterMove(idxBattler,idxMove,_showMessages = true)
+  def pbRegisterMove(idxBattler, idxMove, _showMessages = true)
     this_battler = @battlers[idxBattler]
-    if idxMove==-2
+    if idxMove == -2
       @choices[idxBattler][0] = :UseMove    # "Use move"
       @choices[idxBattler][1] = -2          # "Incapable of using its power..."
       @choices[idxBattler][2] = @struggle
@@ -117,30 +117,30 @@ class BattlePalaceBattle < Battle
     defpercent = 0
     if this_battler.effects[PBEffects::Pinch]
       atkpercent = @@BattlePalacePinchTable[nature][0]
-      defpercent = atkpercent+@@BattlePalacePinchTable[nature][1]
+      defpercent = atkpercent + @@BattlePalacePinchTable[nature][1]
     else
       atkpercent = @@BattlePalaceUsualTable[nature][0]
-      defpercent = atkpercent+@@BattlePalaceUsualTable[nature][1]
+      defpercent = atkpercent + @@BattlePalaceUsualTable[nature][1]
     end
-    if randnum<atkpercent
+    if randnum < atkpercent
       category = 0
-    elsif randnum<atkpercent+defpercent
+    elsif randnum < atkpercent + defpercent
       category = 1
     else
       category = 2
     end
     moves = []
     for i in 0...this_battler.moves.length
-      next if !pbCanChooseMovePartial?(idxBattler,i)
-      next if pbMoveCategory(this_battler.moves[i])!=category
+      next if !pbCanChooseMovePartial?(idxBattler, i)
+      next if pbMoveCategory(this_battler.moves[i]) != category
       moves[moves.length] = i
     end
-    if moves.length==0
+    if moves.length == 0
       # No moves of selected category
-      pbRegisterMove(idxBattler,-2)
+      pbRegisterMove(idxBattler, -2)
     else
       chosenmove = moves[@battleAI.pbAIRandom(moves.length)]
-      pbRegisterMove(idxBattler,chosenmove)
+      pbRegisterMove(idxBattler, chosenmove)
     end
     return true
   end
@@ -182,7 +182,7 @@ class Battle::AI
 
   def initialize(*arg)
     _battlePalace_initialize(*arg)
-    @justswitched = [false,false,false,false]
+    @justswitched = [false, false, false, false]
   end
 
   alias _battlePalace_pbEnemyShouldWithdraw? pbEnemyShouldWithdraw?
@@ -191,21 +191,21 @@ class Battle::AI
     return _battlePalace_pbEnemyShouldWithdraw?(idxBattler) if !@battlePalace
     thispkmn = @battle.battlers[idxBattler]
     shouldswitch = false
-    if thispkmn.effects[PBEffects::PerishSong]==1
+    if thispkmn.effects[PBEffects::PerishSong] == 1
       shouldswitch = true
     elsif !@battle.pbCanChooseAnyMove?(idxBattler) &&
-          thispkmn.turnCount && thispkmn.turnCount>5
+          thispkmn.turnCount && thispkmn.turnCount > 5
       shouldswitch = true
     else
-      hppercent = thispkmn.hp*100/thispkmn.totalhp
+      hppercent = thispkmn.hp * 100 / thispkmn.totalhp
       percents = []
       maxindex = -1
       maxpercent = 0
       factor = 0
-      @battle.pbParty(idxBattler).each_with_index do |pkmn,i|
-        if @battle.pbCanSwitch?(idxBattler,i)
-          percents[i] = 100*pkmn.hp/pkmn.totalhp
-          if percents[i]>maxpercent
+      @battle.pbParty(idxBattler).each_with_index do |pkmn, i|
+        if @battle.pbCanSwitch?(idxBattler, i)
+          percents[i] = 100 * pkmn.hp / pkmn.totalhp
+          if percents[i] > maxpercent
             maxindex = i
             maxpercent = percents[i]
           end
@@ -213,11 +213,11 @@ class Battle::AI
           percents[i] = 0
         end
       end
-      if hppercent<50
-        factor = (maxpercent<hppercent) ? 20 : 40
+      if hppercent < 50
+        factor = (maxpercent < hppercent) ? 20 : 40
       end
-      if hppercent<25
-        factor = (maxpercent<hppercent) ? 30 : 50
+      if hppercent < 25
+        factor = (maxpercent < hppercent) ? 30 : 50
       end
       case thispkmn.status
       when :SLEEP, :FROZEN
@@ -229,19 +229,19 @@ class Battle::AI
       end
       if @justswitched[idxBattler]
         factor -= 60
-        factor = 0 if factor<0
+        factor = 0 if factor < 0
       end
-      shouldswitch = (pbAIRandom(100)<factor)
-      if shouldswitch && maxindex>=0
-        @battle.pbRegisterSwitch(idxBattler,maxindex)
+      shouldswitch = (pbAIRandom(100) < factor)
+      if shouldswitch && maxindex >= 0
+        @battle.pbRegisterSwitch(idxBattler, maxindex)
         return true
       end
     end
     @justswitched[idxBattler] = shouldswitch
     if shouldswitch
-      @battle.pbParty(idxBattler).each_with_index do |_pkmn,i|
-        next if !@battle.pbCanSwitch?(idxBattler,i)
-        @battle.pbRegisterSwitch(idxBattler,i)
+      @battle.pbParty(idxBattler).each_with_index do |_pkmn, i|
+        next if !@battle.pbCanSwitch?(idxBattler, i)
+        @battle.pbRegisterSwitch(idxBattler, i)
         return true
       end
     end

@@ -2,11 +2,11 @@
 # Constant checks
 #===============================================================================
 # Pokérus check
-Events.onMapUpdate += proc { |_sender,_e|
+Events.onMapUpdate += proc { |_sender, _e|
   next if !$player
   last = $PokemonGlobal.pokerusTime
   now = pbGetTimeNow
-  if !last || last.year!=now.year || last.month!=now.month || last.day!=now.day
+  if !last || last.year != now.year || last.month != now.month || last.day != now.day
     for i in $player.pokemon_party
       i.lowerPokerusCount
     end
@@ -19,7 +19,7 @@ Events.onMapUpdate += proc { |_sender,_e|
 def pbPokerus?
   return false if $game_switches[Settings::SEEN_POKERUS_SWITCH]
   for i in $player.party
-    return true if i.pokerusStage==1
+    return true if i.pokerusStage == 1
   end
   return false
 end
@@ -46,12 +46,12 @@ def pbBatteryLow?
   return false
 end
 
-Events.onMapUpdate += proc { |_sender,_e|
+Events.onMapUpdate += proc { |_sender, _e|
   if !$game_temp.warned_low_battery && pbBatteryLow?
     if !$game_temp.in_menu && !$game_temp.in_battle &&
        !$game_player.move_route_forcing && !$game_temp.message_window_showing &&
        !pbMapInterpreterRunning?
-      if pbGetTimeNow.sec==0
+      if pbGetTimeNow.sec == 0
         pbMessage(_INTL("The game has detected that the battery is low. You should save soon to avoid losing your progress."))
         $game_temp.warned_low_battery = true
       end
@@ -77,19 +77,19 @@ Events.onMapUpdate += proc { |_sender,_e|
 Events.onStepTaken += proc {
   $PokemonGlobal.happinessSteps = 0 if !$PokemonGlobal.happinessSteps
   $PokemonGlobal.happinessSteps += 1
-  if $PokemonGlobal.happinessSteps>=128
+  if $PokemonGlobal.happinessSteps >= 128
     for pkmn in $player.able_party
-      pkmn.changeHappiness("walking") if rand(2)==0
+      pkmn.changeHappiness("walking") if rand(2) == 0
     end
     $PokemonGlobal.happinessSteps = 0
   end
 }
 
 # Poison party Pokémon
-Events.onStepTakenTransferPossible += proc { |_sender,e|
+Events.onStepTakenTransferPossible += proc { |_sender, e|
   handled = e[0]
   next if handled[0]
-  if $PokemonGlobal.stepcount%4==0 && Settings::POISON_IN_FIELD
+  if $PokemonGlobal.stepcount % 4 == 0 && Settings::POISON_IN_FIELD
     flashed = false
     for i in $player.able_party
       if i.status == :POISON && !i.hasAbility?(:IMMUNITY)
@@ -97,15 +97,15 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
           pbFlash(Color.new(255, 0, 0, 128), 8)
           flashed = true
         end
-        i.hp -= 1 if i.hp>1 || Settings::POISON_FAINT_IN_FIELD
-        if i.hp==1 && !Settings::POISON_FAINT_IN_FIELD
+        i.hp -= 1 if i.hp > 1 || Settings::POISON_FAINT_IN_FIELD
+        if i.hp == 1 && !Settings::POISON_FAINT_IN_FIELD
           i.status = :NONE
-          pbMessage(_INTL("{1} survived the poisoning.\\nThe poison faded away!\1",i.name))
+          pbMessage(_INTL("{1} survived the poisoning.\\nThe poison faded away!\1", i.name))
           next
-        elsif i.hp==0
+        elsif i.hp == 0
           i.changeHappiness("faint")
           i.status = :NONE
-          pbMessage(_INTL("{1} fainted...",i.name))
+          pbMessage(_INTL("{1} fainted...", i.name))
         end
         if $player.able_pokemon_count == 0
           handled[0] = true
@@ -127,12 +127,12 @@ def pbCheckAllFainted
 end
 
 # Gather soot from soot grass
-Events.onStepTakenFieldMovement += proc { |_sender,e|
+Events.onStepTakenFieldMovement += proc { |_sender, e|
   event = e[0]   # Get the event affected by field movement
-  thistile = $map_factory.getRealTilePos(event.map.map_id,event.x,event.y)
+  thistile = $map_factory.getRealTilePos(event.map.map_id, event.x, event.y)
   map = $map_factory.getMap(thistile[0])
   for i in [2, 1, 0]
-    tile_id = map.data[thistile[1],thistile[2],i]
+    tile_id = map.data[thistile[1], thistile[2], i]
     next if tile_id == nil
     next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
     if event == $game_player && $bag.has?(:SOOTSACK)
@@ -167,7 +167,7 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
 
 def pbOnStepTaken(eventTriggered)
   if $game_player.move_route_forcing || pbMapInterpreterRunning?
-    Events.onStepTakenFieldMovement.trigger(nil,$game_player)
+    Events.onStepTakenFieldMovement.trigger(nil, $game_player)
     return
   end
   $PokemonGlobal.stepcount = 0 if !$PokemonGlobal.stepcount
@@ -177,7 +177,7 @@ def pbOnStepTaken(eventTriggered)
   Events.onStepTaken.trigger(nil)
 #  Events.onStepTakenFieldMovement.trigger(nil,$game_player)
   handled = [nil]
-  Events.onStepTakenTransferPossible.trigger(nil,handled)
+  Events.onStepTakenTransferPossible.trigger(nil, handled)
   return if handled[0]
   pbBattleOnStepTaken(repel_active) if !eventTriggered && !$game_temp.in_menu
   $game_temp.encounter_triggered = false   # This info isn't needed here
@@ -311,9 +311,9 @@ Events.onMapSceneChange += proc { |_sender, e|
 # Event locations, terrain tags
 #===============================================================================
 # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
-def pbFacingTile(direction = nil,event = nil)
-  return $map_factory.getFacingTile(direction,event) if $map_factory
-  return pbFacingTileRegular(direction,event)
+def pbFacingTile(direction = nil, event = nil)
+  return $map_factory.getFacingTile(direction, event) if $map_factory
+  return pbFacingTileRegular(direction, event)
 end
 
 # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
@@ -395,11 +395,11 @@ end
 #===============================================================================
 # Audio playing
 #===============================================================================
-def pbCueBGM(bgm,seconds,volume = nil,pitch = nil)
+def pbCueBGM(bgm, seconds, volume = nil, pitch = nil)
   return if !bgm
-  bgm        = pbResolveAudioFile(bgm,volume,pitch)
+  bgm        = pbResolveAudioFile(bgm, volume, pitch)
   playingBGM = $game_system.playing_bgm
-  if !playingBGM || playingBGM.name!=bgm.name || playingBGM.pitch!=bgm.pitch
+  if !playingBGM || playingBGM.name != bgm.name || playingBGM.pitch != bgm.pitch
     pbBGMFade(seconds)
     if !$game_temp.cue_bgm_frame_delay
       $game_temp.cue_bgm_frame_delay = (seconds * Graphics.frame_rate) * 3 / 5
@@ -484,30 +484,30 @@ end
 
 
 
-def pbMoveRoute(event,commands,waitComplete = false)
+def pbMoveRoute(event, commands, waitComplete = false)
   route = RPG::MoveRoute.new
   route.repeat    = false
   route.skippable = true
   route.list.clear
   route.list.push(RPG::MoveCommand.new(PBMoveRoute::ThroughOn))
-  i=0
-  while i<commands.length
+  i = 0
+  while i < commands.length
     case commands[i]
     when PBMoveRoute::Wait, PBMoveRoute::SwitchOn, PBMoveRoute::SwitchOff,
        PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
        PBMoveRoute::Blending, PBMoveRoute::PlaySE, PBMoveRoute::Script
-      route.list.push(RPG::MoveCommand.new(commands[i],[commands[i+1]]))
+      route.list.push(RPG::MoveCommand.new(commands[i], [commands[i + 1]]))
       i += 1
     when PBMoveRoute::ScriptAsync
-      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Script,[commands[i+1]]))
-      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Wait,[0]))
+      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Script, [commands[i + 1]]))
+      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Wait, [0]))
       i += 1
     when PBMoveRoute::Jump
-      route.list.push(RPG::MoveCommand.new(commands[i],[commands[i+1],commands[i+2]]))
+      route.list.push(RPG::MoveCommand.new(commands[i], [commands[i + 1], commands[i + 2]]))
       i += 2
     when PBMoveRoute::Graphic
       route.list.push(RPG::MoveCommand.new(commands[i],
-         [commands[i+1],commands[i+2],commands[i+3],commands[i+4]]))
+         [commands[i + 1], commands[i + 2], commands[i + 3], commands[i + 4]]))
       i += 4
     else
       route.list.push(RPG::MoveCommand.new(commands[i]))
@@ -535,12 +535,12 @@ end
 #===============================================================================
 # Player/event movement in the field
 #===============================================================================
-def pbLedge(_xOffset,_yOffset)
+def pbLedge(_xOffset, _yOffset)
   if $game_player.pbFacingTerrainTag.ledge
-    if pbJumpToward(2,true)
-      $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID,$game_player.x,$game_player.y,true,1)
+    if pbJumpToward(2, true)
+      $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID, $game_player.x, $game_player.y, true, 1)
       $game_player.increase_steps
-      $game_player.check_event_trigger_here([1,2])
+      $game_player.check_event_trigger_here([1, 2])
     end
     return true
   end
@@ -574,7 +574,7 @@ def pbSlideOnIce
   $PokemonGlobal.sliding = false
 end
 
-def pbTurnTowardEvent(event,otherEvent)
+def pbTurnTowardEvent(event, otherEvent)
   sx = 0
   sy = 0
   if $map_factory
@@ -612,7 +612,7 @@ def pbMoveTowardPlayer(event)
   $PokemonMap.addMovedEvent(event.id) if $PokemonMap
 end
 
-def pbJumpToward(dist = 1,playSound = false,cancelSurf = false)
+def pbJumpToward(dist = 1, playSound = false, cancelSurf = false)
   x = $game_player.x
   y = $game_player.y
   case $game_player.direction
@@ -621,7 +621,7 @@ def pbJumpToward(dist = 1,playSound = false,cancelSurf = false)
   when 6 then $game_player.jump(dist, 0)    # right
   when 8 then $game_player.jump(0, -dist)   # up
   end
-  if $game_player.x!=x || $game_player.y!=y
+  if $game_player.x != x || $game_player.y != y
     pbSEPlay("Player jump") if playSound
     $PokemonEncounters.reset_step_count if cancelSurf
     $game_temp.ending_surf = true if cancelSurf
@@ -666,7 +666,7 @@ def pbSetEscapePoint
     yco += 1
     dir = 2
   end
-  $PokemonGlobal.escapePoint = [$game_map.map_id,xco,yco,dir]
+  $PokemonGlobal.escapePoint = [$game_map.map_id, xco, yco, dir]
 end
 
 def pbEraseEscapePoint
@@ -706,26 +706,26 @@ end
 #===============================================================================
 # Picking up an item found on the ground
 #===============================================================================
-def pbItemBall(item,quantity = 1)
+def pbItemBall(item, quantity = 1)
   item = GameData::Item.get(item)
-  return false if !item || quantity<1
-  itemname = (quantity>1) ? item.name_plural : item.name
+  return false if !item || quantity < 1
+  itemname = (quantity > 1) ? item.name_plural : item.name
   pocket = item.pocket
   move = item.move
   if $bag.add(item, quantity)   # If item can be picked up
     meName = (item.is_key_item?) ? "Key item get" : "Item get"
     if item == :LEFTOVERS
-      pbMessage(_INTL("\\me[{1}]You found some \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+      pbMessage(_INTL("\\me[{1}]You found some \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
     elsif item == :DNASPLICERS
-      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
     elsif item.is_machine?   # TM or HM
-      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,GameData::Move.get(move).name))
-    elsif quantity>1
-      pbMessage(_INTL("\\me[{1}]You found {2} \\c[1]{3}\\c[0]!\\wtnp[30]",meName,quantity,itemname))
+      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2} {3}\\c[0]!\\wtnp[30]", meName, itemname, GameData::Move.get(move).name))
+    elsif quantity > 1
+      pbMessage(_INTL("\\me[{1}]You found {2} \\c[1]{3}\\c[0]!\\wtnp[30]", meName, quantity, itemname))
     elsif itemname.starts_with_vowel?
-      pbMessage(_INTL("\\me[{1}]You found an \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+      pbMessage(_INTL("\\me[{1}]You found an \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
     else
-      pbMessage(_INTL("\\me[{1}]You found a \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+      pbMessage(_INTL("\\me[{1}]You found a \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
     end
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
        itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
@@ -733,15 +733,15 @@ def pbItemBall(item,quantity = 1)
   end
   # Can't add the item
   if item == :LEFTOVERS
-    pbMessage(_INTL("You found some \\c[1]{1}\\c[0]!\\wtnp[30]",itemname))
+    pbMessage(_INTL("You found some \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
   elsif item.is_machine?   # TM or HM
-    pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!\\wtnp[30]",itemname,GameData::Move.get(move).name))
-  elsif quantity>1
-    pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!\\wtnp[30]",quantity,itemname))
+    pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!\\wtnp[30]", itemname, GameData::Move.get(move).name))
+  elsif quantity > 1
+    pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!\\wtnp[30]", quantity, itemname))
   elsif itemname.starts_with_vowel?
-    pbMessage(_INTL("You found an \\c[1]{1}\\c[0]!\\wtnp[30]",itemname))
+    pbMessage(_INTL("You found an \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
   else
-    pbMessage(_INTL("You found a \\c[1]{1}\\c[0]!\\wtnp[30]",itemname))
+    pbMessage(_INTL("You found a \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
   end
   pbMessage(_INTL("But your Bag is full..."))
   return false
@@ -752,25 +752,25 @@ end
 #===============================================================================
 # Being given an item
 #===============================================================================
-def pbReceiveItem(item,quantity = 1)
+def pbReceiveItem(item, quantity = 1)
   item = GameData::Item.get(item)
-  return false if !item || quantity<1
-  itemname = (quantity>1) ? item.name_plural : item.name
+  return false if !item || quantity < 1
+  itemname = (quantity > 1) ? item.name_plural : item.name
   pocket = item.pocket
   move = item.move
   meName = (item.is_key_item?) ? "Key item get" : "Item get"
   if item == :LEFTOVERS
-    pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+    pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
   elsif item == :DNASPLICERS
-    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
   elsif item.is_machine?   # TM or HM
-    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,GameData::Move.get(move).name))
-  elsif quantity>1
-    pbMessage(_INTL("\\me[{1}]You obtained {2} \\c[1]{3}\\c[0]!\\wtnp[30]",meName,quantity,itemname))
+    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]", meName, itemname, GameData::Move.get(move).name))
+  elsif quantity > 1
+    pbMessage(_INTL("\\me[{1}]You obtained {2} \\c[1]{3}\\c[0]!\\wtnp[30]", meName, quantity, itemname))
   elsif itemname.starts_with_vowel?
-    pbMessage(_INTL("\\me[{1}]You obtained an \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+    pbMessage(_INTL("\\me[{1}]You obtained an \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
   else
-    pbMessage(_INTL("\\me[{1}]You obtained a \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+    pbMessage(_INTL("\\me[{1}]You obtained a \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
   end
   if $bag.add(item, quantity)   # If item can be added
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",

@@ -89,7 +89,7 @@ end
 #===============================================================================
 class Array
   def ^(other)   # xor of two arrays
-    return (self|other) - (self&other)
+    return (self | other) - (self & other)
   end
 
   def swap(val1, val2)

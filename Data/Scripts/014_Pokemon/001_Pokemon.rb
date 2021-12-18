@@ -1195,7 +1195,7 @@ class Pokemon
     @timeReceived     = pbGetTimeNow.to_i
     @timeEggHatched   = nil
     @fused            = nil
-    @personalID       = rand(2 ** 16) | rand(2 ** 16) << 16
+    @personalID       = rand(2**16) | rand(2**16) << 16
     @hp               = 1
     @totalhp          = 1
     calc_stats

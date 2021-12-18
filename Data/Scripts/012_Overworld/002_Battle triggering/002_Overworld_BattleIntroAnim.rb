@@ -39,9 +39,9 @@ def pbSceneStandby
   $scene.createSpritesets if $scene && $scene.is_a?(Scene_Map)
 end
 
-def pbBattleAnimation(bgm = nil,battletype = 0,foe = nil)
+def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
   $game_temp.in_battle = true
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   # Set up audio
   playingBGS = nil
@@ -53,7 +53,7 @@ def pbBattleAnimation(bgm = nil,battletype = 0,foe = nil)
     $game_system.bgs_pause
   end
   pbMEFade(0.25)
-  pbWait(Graphics.frame_rate/4)
+  pbWait(Graphics.frame_rate / 4)
   pbMEStop
   # Play battle music
   bgm = pbGetWildBattleBGM([]) if !bgm
@@ -83,34 +83,34 @@ def pbBattleAnimation(bgm = nil,battletype = 0,foe = nil)
     if PBDayNight.isDay?
       case battletype
       when 0, 2   # Wild, double wild
-        anim = ["SnakeSquares","DiagonalBubbleTL","DiagonalBubbleBR","RisingSplash"][location]
+        anim = ["SnakeSquares", "DiagonalBubbleTL", "DiagonalBubbleBR", "RisingSplash"][location]
       when 1      # Trainer
-        anim = ["TwoBallPass","ThreeBallDown","BallDown","WavyThreeBallUp"][location]
+        anim = ["TwoBallPass", "ThreeBallDown", "BallDown", "WavyThreeBallUp"][location]
       when 3      # Double trainer
         anim = "FourBallBurst"
       end
     else
       case battletype
       when 0, 2   # Wild, double wild
-        anim = ["SnakeSquares","DiagonalBubbleBR","DiagonalBubbleBR","RisingSplash"][location]
+        anim = ["SnakeSquares", "DiagonalBubbleBR", "DiagonalBubbleBR", "RisingSplash"][location]
       when 1      # Trainer
-        anim = ["SpinBallSplit","BallDown","BallDown","WavySpinBall"][location]
+        anim = ["SpinBallSplit", "BallDown", "BallDown", "WavySpinBall"][location]
       when 3      # Double trainer
         anim = "FourBallBurst"
       end
     end
     # Initial screen flashing
-    if location==2 || PBDayNight.isNight?
-      viewport.color = Color.new(0,0,0)         # Fade to black a few times
+    if location == 2 || PBDayNight.isNight?
+      viewport.color = Color.new(0, 0, 0)            # Fade to black a few times
     else
-      viewport.color = Color.new(255,255,255)   # Fade to white a few times
+      viewport.color = Color.new(255, 255, 255)      # Fade to white a few times
     end
-    halfFlashTime = Graphics.frame_rate*2/10   # 0.2 seconds, 8 frames
-    alphaDiff = (255.0/halfFlashTime).ceil
+    halfFlashTime = Graphics.frame_rate * 2 / 10   # 0.2 seconds, 8 frames
+    alphaDiff = (255.0 / halfFlashTime).ceil
     2.times do
       viewport.color.alpha = 0
-      for i in 0...halfFlashTime*2
-        if i<halfFlashTime
+      for i in 0...halfFlashTime * 2
+        if i < halfFlashTime
           viewport.color.alpha += alphaDiff
         else
           viewport.color.alpha -= alphaDiff
@@ -124,10 +124,10 @@ def pbBattleAnimation(bgm = nil,battletype = 0,foe = nil)
     $game_temp.background_bitmap = Graphics.snap_to_bitmap
     # Play main animation
     Graphics.freeze
-    viewport.color = Color.new(0,0,0,255)   # Ensure screen is black
+    viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
     Graphics.transition(25, "Graphics/Transitions/" + anim)
     # Slight pause after animation before starting up the battle scene
-    (Graphics.frame_rate/10).times do
+    (Graphics.frame_rate / 10).times do
       Graphics.update
       Input.update
       pbUpdateSceneMap
@@ -148,7 +148,7 @@ def pbBattleAnimation(bgm = nil,battletype = 0,foe = nil)
   $PokemonGlobal.nextBattleBack      = nil
   $PokemonEncounters.reset_step_count
   # Fade back to the overworld in 0.4 seconds
-  viewport.color = Color.new(0,0,0,255)
+  viewport.color = Color.new(0, 0, 0, 255)
   timer = 0.0
   loop do
     Graphics.update

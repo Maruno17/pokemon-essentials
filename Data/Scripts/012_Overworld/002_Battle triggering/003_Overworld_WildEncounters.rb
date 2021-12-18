@@ -387,12 +387,12 @@ end
 # Creates and returns a Pokémon based on the given species and level.
 # Applies wild Pokémon modifiers (wild held item, shiny chance modifiers,
 # Pokérus, gender/nature forcing because of player's lead Pokémon).
-def pbGenerateWildPokemon(species,level,isRoamer = false)
-  genwildpoke = Pokemon.new(species,level)
+def pbGenerateWildPokemon(species, level, isRoamer = false)
+  genwildpoke = Pokemon.new(species, level)
   # Give the wild Pokémon a held item
   items = genwildpoke.wildHoldItems
   first_pkmn = $player.first_pokemon
-  chances = [50,5,1]
+  chances = [50, 5, 1]
   if first_pkmn
     case first_pkmn.ability_id
     when :COMPOUNDEYES
@@ -402,11 +402,11 @@ def pbGenerateWildPokemon(species,level,isRoamer = false)
     end
   end
   itemrnd = rand(100)
-  if (items[0]==items[1] && items[1]==items[2]) || itemrnd<chances[0]
+  if (items[0] == items[1] && items[1] == items[2]) || itemrnd < chances[0]
     genwildpoke.item = items[0].sample
-  elsif itemrnd<(chances[0]+chances[1])
+  elsif itemrnd < (chances[0] + chances[1])
     genwildpoke.item = items[1].sample
-  elsif itemrnd<(chances[0]+chances[1]+chances[2])
+  elsif itemrnd < (chances[0] + chances[1] + chances[2])
     genwildpoke.item = items[2].sample
   end
   # Improve chances of shiny Pokémon with Shiny Charm and battling more of the
@@ -439,9 +439,9 @@ def pbGenerateWildPokemon(species,level,isRoamer = false)
   if first_pkmn
     if first_pkmn.hasAbility?(:CUTECHARM) && !genwildpoke.singleGendered?
       if first_pkmn.male?
-        (rand(3)<2) ? genwildpoke.makeFemale : genwildpoke.makeMale
+        (rand(3) < 2) ? genwildpoke.makeFemale : genwildpoke.makeMale
       elsif first_pkmn.female?
-        (rand(3)<2) ? genwildpoke.makeMale : genwildpoke.makeFemale
+        (rand(3) < 2) ? genwildpoke.makeMale : genwildpoke.makeFemale
       end
     elsif first_pkmn.hasAbility?(:SYNCHRONIZE)
       if !isRoamer && (Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS || (rand(100) < 50))
@@ -450,7 +450,7 @@ def pbGenerateWildPokemon(species,level,isRoamer = false)
     end
   end
   # Trigger events that may alter the generated Pokémon further
-  Events.onWildPokemonCreate.trigger(nil,genwildpoke)
+  Events.onWildPokemonCreate.trigger(nil, genwildpoke)
   return genwildpoke
 end
 

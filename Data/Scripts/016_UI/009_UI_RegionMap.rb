@@ -177,13 +177,13 @@ class PokemonRegionMap_Scene
 
   # TODO: Why is this PBS file writer here?
   def pbSaveMapData
-    File.open("PBS/town_map.txt","wb") { |f|
+    File.open("PBS/town_map.txt", "wb") { |f|
       Compiler.add_PBS_header_to_file(f)
       for i in 0...@map_data.length
         map = @map_data[i]
         next if !map
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("[%d]\r\n",i))
+        f.write(sprintf("[%d]\r\n", i))
         f.write(sprintf("Name = %s\r\nFilename = %s\r\n",
           Compiler.csvQuote(map[0]), Compiler.csvQuote(map[1])))
         for loc in map[2]
