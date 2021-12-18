@@ -110,7 +110,8 @@ def getPlayTime2(filename)
   File.open(filename, "rb") { |file|
     file.pos = 0
     fdw = fgetdw.call(file)
-    if fdw == 0x46464952   # "RIFF"
+    case fdw
+    when 0x46464952   # "RIFF"
       filesize = fgetdw.call(file)
       wave = fgetdw.call(file)
       return -1 if wave != 0x45564157   # "WAVE"
@@ -129,7 +130,7 @@ def getPlayTime2(filename)
       datasize = fgetdw.call(file)
       time = (datasize * 1.0) / bytessec
       return time
-    elsif fdw == 0x5367674F   # "OggS"
+    when 0x5367674F   # "OggS"
       file.pos = 0
       time = oggfiletime(file)
       return time
@@ -152,7 +153,7 @@ def getPlayTime2(filename)
       break if ateof || !rstr || rstr.length != 3
       if rstr[0] == 0xFB
         t = rstr[1] >> 4
-        next if t == 0 || t == 15
+        next if [0, 15].include?(t)
         freqs = [44100, 22050, 11025, 48000]
         bitrates = [32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320]
         bitrate = bitrates[t]

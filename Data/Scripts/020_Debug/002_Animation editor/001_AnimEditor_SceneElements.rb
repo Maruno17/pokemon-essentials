@@ -25,7 +25,7 @@ class Window_Menu < Window_CommandPokemon
   end
 
   def hittest
-    mousepos = Mouse::getMousePos
+    mousepos = Mouse.getMousePos
     return -1 if !mousepos
     toprow = self.top_row
     for i in toprow...toprow + @item_max
@@ -51,7 +51,7 @@ module Clipboard
 
   def self.data
     return nil if !@data
-    return Marshal::load(@data)
+    return Marshal.load(@data)
   end
 
   def self.typekey
@@ -131,7 +131,7 @@ def pbSpriteHitTest(sprite, x, y, usealpha = true, wholecanvas = false)
 end
 
 def pbTrackPopupMenu(commands)
-  mousepos = Mouse::getMousePos
+  mousepos = Mouse.getMousePos
   return -1 if !mousepos
   menuwindow = Window_Menu.new(commands, mousepos[0], mousepos[1])
   menuwindow.z = 99999
@@ -250,7 +250,7 @@ class AnimationWindow < SpriteWrapper
   end
 
   def update
-    mousepos = Mouse::getMousePos
+    mousepos = Mouse.getMousePos
     @changed = false
     return if !Input.repeat?(Input::MOUSELEFT)
     return if !mousepos
@@ -795,7 +795,7 @@ class AnimationCanvas < Sprite
 
   def updateInput
     cel = currentCel
-    mousepos = Mouse::getMousePos
+    mousepos = Mouse.getMousePos
     if mousepos && pbSpriteHitTest(self, mousepos[0], mousepos[1], false, true)
       if Input.trigger?(Input::MOUSELEFT)   # Left mouse button
         selectedcel = -1

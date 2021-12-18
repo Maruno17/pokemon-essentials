@@ -408,13 +408,13 @@ class PokemonOption_Scene
             @PokemonOptions[i].set(@sprites["option"][i])
           end
           if $PokemonSystem.textskin != oldTextSkin
-            @sprites["textbox"].setSkin(MessageConfig.pbGetSpeechFrame())
+            @sprites["textbox"].setSkin(MessageConfig.pbGetSpeechFrame)
             @sprites["textbox"].text = _INTL("Speech frame {1}.", 1 + $PokemonSystem.textskin)
             oldTextSkin = $PokemonSystem.textskin
           end
           if $PokemonSystem.frame != oldSystemSkin
-            @sprites["title"].setSkin(MessageConfig.pbGetSystemFrame())
-            @sprites["option"].setSkin(MessageConfig.pbGetSystemFrame())
+            @sprites["title"].setSkin(MessageConfig.pbGetSystemFrame)
+            @sprites["option"].setSkin(MessageConfig.pbGetSystemFrame)
             oldSystemSkin = $PokemonSystem.frame
           end
         end

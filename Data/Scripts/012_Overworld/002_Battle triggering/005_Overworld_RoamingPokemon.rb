@@ -208,7 +208,7 @@ def pbRoamingPokemonBattle(species, level)
   # Perform the battle
   decision = pbWildBattleCore($PokemonGlobal.roamPokemon[idxRoamer])
   # Update Roaming Pokémon data based on result of battle
-  if decision == 1 || decision == 4   # Defeated or caught
+  if [1, 4].include?(decision)   # Defeated or caught
     $PokemonGlobal.roamPokemon[idxRoamer]       = true
     $PokemonGlobal.roamPokemonCaught[idxRoamer] = (decision == 4)
   end

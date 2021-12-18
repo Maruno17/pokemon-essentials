@@ -515,7 +515,7 @@ MultipleForms.register(:SILVALLY, {
 
 MultipleForms.register(:MINIOR, {
   "getFormOnCreation" => proc { |pkmn|
-    next 7 + rand(7)   # Meteor forms are 0-6, Core forms are 7-13
+    next rand(7..13)   # Meteor forms are 0-6, Core forms are 7-13
   },
   "getFormOnEnteringBattle" => proc { |pkmn, wild|
     next pkmn.form - 7 if pkmn.form >= 7 && wild   # Wild Minior always appear in Meteor form

@@ -475,7 +475,7 @@ module Compiler
     ret = RPG::Event.new(event.x, event.y)
     ret.name = event.name
     ret.id   = event.id
-    firstpage = Marshal::load(Marshal.dump(event.pages[0]))   # Copy event's first page
+    firstpage = Marshal.load(Marshal.dump(event.pages[0]))   # Copy event's first page
     firstpage.trigger = 2   # On event touch
     firstpage.list    = []   # Clear page's commands
     # Rename the event if there's nothing above the trainer comments
@@ -590,14 +590,14 @@ module Compiler
     push_script(firstpage.list, "pbTrainerEnd", 0)
     push_end(firstpage.list)
     # Copy first page to last page and make changes to its properties
-    lastpage = Marshal::load(Marshal.dump(firstpage))
+    lastpage = Marshal.load(Marshal.dump(firstpage))
     lastpage.trigger   = 0   # On action
     lastpage.list      = []   # Clear page's commands
     lastpage.condition = firstpage.condition.clone
     lastpage.condition.self_switch_valid = true
     lastpage.condition.self_switch_ch    = "A"
     # Copy last page to rematch page
-    rematchpage = Marshal::load(Marshal.dump(lastpage))
+    rematchpage = Marshal.load(Marshal.dump(lastpage))
     rematchpage.list      = lastpage.list.clone   # Copy the last page's commands
     rematchpage.condition = lastpage.condition.clone
     rematchpage.condition.self_switch_valid = true
@@ -664,7 +664,7 @@ module Compiler
     end
     # Copy last page to endIfSwitch page
     for endswitch in endifswitch
-      endIfSwitchPage = Marshal::load(Marshal.dump(lastpage))
+      endIfSwitchPage = Marshal.load(Marshal.dump(lastpage))
       endIfSwitchPage.condition = lastpage.condition.clone
       if endIfSwitchPage.condition.switch1_valid   # Add another page condition
         endIfSwitchPage.condition.switch2_valid = true
@@ -682,7 +682,7 @@ module Compiler
     end
     # Copy last page to vanishIfSwitch page
     for vanishswitch in vanishifswitch
-      vanishIfSwitchPage = Marshal::load(Marshal.dump(lastpage))
+      vanishIfSwitchPage = Marshal.load(Marshal.dump(lastpage))
       vanishIfSwitchPage.graphic.character_name = ""   # No charset
       vanishIfSwitchPage.condition = lastpage.condition.clone
       if vanishIfSwitchPage.condition.switch1_valid   # Add another page condition
@@ -940,7 +940,8 @@ module Compiler
           end
           script.gsub!(/\s+/, "")
           # Using old method of recovering
-          if script == "foriin$player.partyi.healend"
+          case script
+          when "foriin$player.partyi.healend"
             for j in i..lastScript
               list.delete_at(i)
             end
@@ -948,7 +949,7 @@ module Compiler
                RPG::EventCommand.new(314, list[i].indent, [0])   # Recover All
             )
             changed = true
-          elsif script == "pbFadeOutIn(99999){foriin$player.partyi.healend}"
+          when "pbFadeOutIn(99999){foriin$player.partyi.healend}"
             oldIndent = list[i].indent
             for j in i..lastScript
               list.delete_at(i)
@@ -1275,22 +1276,23 @@ module Compiler
               # Checking money directly
               operator = $1
               amount   = $2.to_i
-              if operator == "<"
+              case operator
+              when "<"
                 params[0] = 7   # gold
                 params[2] = 1
                 params[1] = amount - 1
                 changed = true
-              elsif operator == "<="
+              when "<="
                 params[0] = 7   # gold
                 params[2] = 1
                 params[1] = amount
                 changed = true
-              elsif operator == ">"
+              when ">"
                 params[0] = 7   # gold
                 params[2] = 0
                 params[1] = amount + 1
                 changed = true
-              elsif operator == ">="
+              when ">="
                 params[0] = 7   # gold
                 params[2] = 0
                 params[1] = amount

@@ -45,13 +45,11 @@ module Compiler
   #=============================================================================
   def normalize_connection(conn)
     ret = conn.clone
-    if conn[1] < 0 && conn[4] < 0
-    elsif conn[1] < 0 || conn[4] < 0
+    if conn[1].negative? != conn[4].negative?   # Exactly one is negative
       ret[4] = -conn[1]
       ret[1] = -conn[4]
     end
-    if conn[2] < 0 && conn[5] < 0
-    elsif conn[2] < 0 || conn[5] < 0
+    if conn[2].negative? != conn[5].negative?   # Exactly one is negative
       ret[5] = -conn[2]
       ret[2] = -conn[5]
     end
@@ -743,9 +741,10 @@ module Compiler
           record = bttrainers[i][schema[0]]
           next if record == nil
           f.write(sprintf("%s = ", key))
-          if key == "Type"
+          case key
+          when "Type"
             f.write(record.to_s)
-          elsif key == "PokemonNos"
+          when "PokemonNos"
             f.write(record.join(","))   # pbWriteCsvRecord somehow won't work here
           else
             pbWriteCsvRecord(record, f, schema)

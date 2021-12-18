@@ -43,11 +43,12 @@ end
 
 loop do
   retval = mainFunction
-  if retval == 0   # failed
+  case retval
+  when 0   # failed
     loop do
       Graphics.update
     end
-  elsif retval == 1   # ended successfully
+  when 1   # ended successfully
     break
   end
 end

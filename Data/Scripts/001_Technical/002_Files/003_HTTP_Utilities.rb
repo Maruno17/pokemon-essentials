@@ -6,8 +6,8 @@
 def pbPostData(url, postdata, filename = nil, depth = 0)
   if url[/^http:\/\/([^\/]+)(.*)$/]
     host = $1
-    path = $2
-    path = "/" if path.length == 0
+#    path = $2
+#    path = "/" if path.length == 0
     userAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.14) Gecko/2009082707 Firefox/3.0.14"
     body = postdata.map { |key, value|
       keyString   = key.to_s

@@ -357,7 +357,7 @@ class Game_Map
 
   def start_scroll(direction, distance, speed)
     @scroll_direction = direction
-    if direction == 2 || direction == 8   # down or up
+    if [2, 8].include?(direction)   # down or up
       @scroll_rest = distance * REAL_RES_Y
     else
       @scroll_rest = distance * REAL_RES_X

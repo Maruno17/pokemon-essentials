@@ -162,8 +162,10 @@ class Battle
     allBattlers.each { |b| b.pbCheckFormOnWeatherChange }
     pbEndPrimordialWeather
     allBattlers.each { |b| b.pbAbilityOnTerrainChange }
-    allBattlers.each { |b| b.pbCheckFormOnMovesetChange }
-    allBattlers.each { |b| b.pbCheckFormOnStatusChange }
+    allBattlers.each do |b|
+      b.pbCheckFormOnMovesetChange
+      b.pbCheckFormOnStatusChange
+    end
   end
 
   #=============================================================================

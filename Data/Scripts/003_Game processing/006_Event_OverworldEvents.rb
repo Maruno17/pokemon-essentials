@@ -164,9 +164,9 @@ module EncounterModifier
     return encounter
   end
 
-  def self.triggerEncounterEnd()
+  def self.triggerEncounterEnd
     for prc in @@procsEnd
-      prc.call()
+      prc.call
     end
   end
 end

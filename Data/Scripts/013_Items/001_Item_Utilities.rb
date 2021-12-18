@@ -145,10 +145,10 @@ def pbChangeLevel(pkmn, new_level, scene)
   old_special_attack  = pkmn.spatk
   old_special_defense = pkmn.spdef
   old_speed           = pkmn.speed
-  if pkmn.level > new_level
-    pkmn.level = new_level
-    pkmn.calc_stats
-    scene.pbRefresh
+  pkmn.level = new_level
+  pkmn.calc_stats
+  scene.pbRefresh
+  if old_level > new_level
     if scene.is_a?(PokemonPartyScreen)
       scene.pbDisplay(_INTL("{1} dropped to Lv. {2}!", pkmn.name, pkmn.level))
     else
@@ -165,10 +165,7 @@ def pbChangeLevel(pkmn, new_level, scene)
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
        pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
   else
-    pkmn.level = new_level
     pkmn.changeHappiness("vitamin")
-    pkmn.calc_stats
-    scene.pbRefresh
     if scene.is_a?(PokemonPartyScreen)
       scene.pbDisplay(_INTL("{1} grew to Lv. {2}!", pkmn.name, pkmn.level))
     else
@@ -898,7 +895,7 @@ def pbChooseApricorn(var = 0)
   pbFadeOutIn {
     scene = PokemonBag_Scene.new
     screen = PokemonBagScreen.new(scene, $bag)
-    ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_apricorn? })
+    ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_apricorn? })
   }
   $game_variables[var] = ret || :NONE if var > 0
   return ret
@@ -909,7 +906,7 @@ def pbChooseFossil(var = 0)
   pbFadeOutIn {
     scene = PokemonBag_Scene.new
     screen = PokemonBagScreen.new(scene, $bag)
-    ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_fossil? })
+    ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_fossil? })
   }
   $game_variables[var] = ret || :NONE if var > 0
   return ret

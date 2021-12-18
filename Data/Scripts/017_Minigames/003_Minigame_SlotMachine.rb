@@ -193,7 +193,7 @@ class SlotMachineScene
         @sprites["light2"].src_rect.set(0, 26 * ((frame / timePerFrame) % 4), 96, 26)
         for i in 1..5
           if wonRow[i - 1]
-            @sprites["row#{i}"].visible = ((frame / timePerFrame) % 2) == 0
+            @sprites["row#{i}"].visible = (frame / timePerFrame).even?
           else
             @sprites["row#{i}"].visible = false
           end

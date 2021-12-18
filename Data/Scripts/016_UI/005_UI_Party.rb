@@ -679,7 +679,7 @@ class PokemonParty_Scene
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, bag)
-      ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).can_hold? })
+      ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).can_hold? })
       yield if block_given?
     }
     return ret
@@ -690,7 +690,7 @@ class PokemonParty_Scene
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, bag)
-      ret = screen.pbChooseItemScreen(Proc.new { |item|
+      ret = screen.pbChooseItemScreen(proc { |item|
         itm = GameData::Item.get(item)
         next false if !pbCanUseOnPokemon?(itm)
         if itm.is_machine?
@@ -1023,8 +1023,6 @@ class PokemonPartyScreen
     addedEntry = false
     for i in 0...@party.length
       statuses[i] = (ruleset.isPokemonValid?(@party[i])) ? 1 : 2
-    end
-    for i in 0...@party.length
       annot[i] = ordinals[statuses[i]]
     end
     @scene.pbStartScene(@party, _INTL("Choose Pokémon and confirm."), annot, true)

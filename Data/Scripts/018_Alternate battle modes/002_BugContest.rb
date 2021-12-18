@@ -4,7 +4,7 @@ class BugContestState
   attr_accessor :lastPokemon
   attr_reader   :timer
 
-  ContestantNames = [
+  CONTESTANT_NAMES = [
      _INTL("Bug Catcher Ed"),
      _INTL("Bug Catcher Benny"),
      _INTL("Bug Catcher Josh"),
@@ -14,7 +14,7 @@ class BugContestState
      _INTL("Picnicker Cindy"),
      _INTL("Youngster Samuel")
   ]
-  TimerSeconds = Settings::BUG_CONTEST_TIME
+  TIME_ALLOWED = Settings::BUG_CONTEST_TIME
 
   def initialize
     clear
@@ -29,8 +29,8 @@ class BugContestState
 
   def expired?
     return false if !undecided?
-    return false if TimerSeconds <= 0
-    curtime = @timer + TimerSeconds * Graphics.frame_rate
+    return false if TIME_ALLOWED <= 0
+    curtime = @timer + TIME_ALLOWED * Graphics.frame_rate
     curtime = [curtime - Graphics.frame_count, 0].max
     return (curtime <= 0)
   end
@@ -65,8 +65,8 @@ class BugContestState
     @chosenPokemon = chosenpoke
   end
 
-# Reception map is handled separately from contest map since the reception map
-# can be outdoors, with its own grassy patches.
+  # Reception map is handled separately from contest map since the reception map
+  # can be outdoors, with its own grassy patches.
   def pbSetReception(*arg)
     @reception = []
     for i in arg
@@ -96,16 +96,6 @@ class BugContestState
     if @lastPokemon
       judgearray.push([-1, @lastPokemon.species, pbBugContestScore(@lastPokemon)])
     end
-    @contestants = []
-    [5, ContestantNames.length].min.times do
-      loop do
-        value = rand(ContestantNames.length)
-        if !@contestants.any? { |i| i == value }
-          @contestants.push(value)
-          break
-        end
-      end
-    end
     enctype = :BugContest
     if !$PokemonEncounters.map_has_encounter_type?(@contestMap, enctype)
       enctype = :Land
@@ -134,7 +124,7 @@ class BugContestState
     if cont < 0
       $game_variables[1] = $player.name
     else
-      $game_variables[1] = ContestantNames[cont]
+      $game_variables[1] = CONTESTANT_NAMES[cont]
     end
     $game_variables[2] = GameData::Species.get(@places[place][1]).name
     $game_variables[3] = @places[place][2]
@@ -177,13 +167,12 @@ class BugContestState
       @otherparty.push($player.party[i]) if i != @chosenPokemon
     end
     @contestants = []
-    [5, ContestantNames.length].min.times do
+    [5, CONTESTANT_NAMES.length].min.times do
       loop do
-        value = rand(ContestantNames.length)
-        if !@contestants.any? { |i| i == value }
-          @contestants.push(value)
-          break
-        end
+        value = rand(CONTESTANT_NAMES.length)
+        next if @contestants.include?(value)
+        @contestants.push(value)
+        break
       end
     end
     $player.party = [chosenpkmn]
@@ -303,10 +292,10 @@ Events.onMapChange += proc { |_sender, _e|
 
 Events.onMapSceneChange += proc { |_sender, e|
   scene = e[0]
-  if pbInBugContest? && pbBugContestState.decision == 0 && BugContestState::TimerSeconds > 0
+  if pbInBugContest? && pbBugContestState.decision == 0 && BugContestState::TIME_ALLOWED > 0
     scene.spriteset.addUserSprite(TimerDisplay.new(
        pbBugContestState.timer,
-       BugContestState::TimerSeconds * Graphics.frame_rate))
+       BugContestState::TIME_ALLOWED * Graphics.frame_rate))
   end
 }
 
@@ -373,7 +362,7 @@ def pbBugContestBattle(species, level)
   pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) {
     decision = battle.pbStartBattle
     pbAfterBattle(decision, true)
-    if decision == 2 || decision == 5   # Lost or drew
+    if [2, 5].include?(decision)   # Lost or drew
       $game_system.bgm_unpause
       $game_system.bgs_unpause
       pbBugContestStartOver

@@ -668,7 +668,7 @@ module MapSizeProperty
     oldsetting = [0, ""] if !oldsetting
     properties = [
        [_INTL("Width"),         NonzeroLimitProperty.new(30), _INTL("The width of this map in Region Map squares.")],
-       [_INTL("Valid Squares"), StringProperty,               _INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")],
+       [_INTL("Valid Squares"), StringProperty,               _INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")]
     ]
     pbPropertyList(settingname, oldsetting, properties, false)
     return oldsetting
@@ -760,10 +760,11 @@ module RegionMapCoordsProperty
   def self.set(_settingname, oldsetting)
     regions = self.getMapNameList
     selregion = -1
-    if regions.length == 0
+    case regions.length
+    when 0
       pbMessage(_INTL("No region maps are defined."))
       return oldsetting
-    elsif regions.length == 1
+    when 1
       selregion = regions[0][0]
     else
       cmds = []
@@ -1335,17 +1336,18 @@ class EvolutionsProperty
       refreshlist = false
       oldsel = -1
       cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
-      if cmd[0] == 1   # Swap evolution up
+      case cmd[0]
+      when 1   # Swap evolution up
         if cmd[1] > 0 && cmd[1] < realcmds.length - 1
           realcmds[cmd[1] + 1][3], realcmds[cmd[1]][3] = realcmds[cmd[1]][3], realcmds[cmd[1] + 1][3]
           refreshlist = true
         end
-      elsif cmd[0] == 2   # Swap evolution down
+      when 2   # Swap evolution down
         if cmd[1] > 1
           realcmds[cmd[1] - 1][3], realcmds[cmd[1]][3] = realcmds[cmd[1]][3], realcmds[cmd[1] - 1][3]
           refreshlist = true
         end
-      elsif cmd[0] == 0
+      when 0
         if cmd[1] >= 0
           entry = realcmds[cmd[1]]
           if entry[3] == -1   # Add new evolution path
@@ -1450,7 +1452,7 @@ class EvolutionsProperty
         else
           cmd2 = pbMessage(_INTL("Save changes?"),
              [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
-          if cmd2 == 0 || cmd2 == 1
+          if [0, 1].include?(cmd2)
             if cmd2 == 0
               for i in 0...realcmds.length
                 realcmds[i].pop

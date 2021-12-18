@@ -102,11 +102,12 @@ def pbConvertAnimToNewFormat(textdata)
       for j in 0...PBAnimation::MAX_SPRITES
         next if !textdata[i][j]
         textdata[i][j][AnimFrame::PRIORITY] = 1 if textdata[i][j][AnimFrame::PRIORITY] == nil
-        if j == 0      # User battler
+        case j
+        when 0      # User battler
           textdata[i][j][AnimFrame::FOCUS] = 2
           textdata[i][j][AnimFrame::X] = Battle::Scene::FOCUSUSER_X
           textdata[i][j][AnimFrame::Y] = Battle::Scene::FOCUSUSER_Y
-        elsif j == 1   # Target battler
+        when 1   # Target battler
           textdata[i][j][AnimFrame::FOCUS] = 1
           textdata[i][j][AnimFrame::X] = Battle::Scene::FOCUSTARGET_X
           textdata[i][j][AnimFrame::Y] = Battle::Scene::FOCUSTARGET_Y

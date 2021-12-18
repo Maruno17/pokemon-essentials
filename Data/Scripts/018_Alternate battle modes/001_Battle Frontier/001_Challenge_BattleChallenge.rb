@@ -197,12 +197,8 @@ class BattleChallengeData
   end
 
   def setParty(value)
-    if @inProgress
-      $player.party = value
-      @party = value
-    else
-      @party = value
-    end
+    $player.party = value if @inProgress
+    @party = value
   end
 
   def pbStart(t, numRounds)

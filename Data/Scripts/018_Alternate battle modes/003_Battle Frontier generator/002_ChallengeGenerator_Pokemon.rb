@@ -159,7 +159,7 @@ def pbRandomPokemonFromRule(rules, trainer)
       r = rand(20)
       bst = baseStatTotal(species)
       next if level < minimumLevel(species)
-      if iteration % 2 == 0
+      if iteration.even?
         next if r < 16 && bst < 400
         next if r < 13 && bst < 500
       else
@@ -339,7 +339,7 @@ def pbRandomPokemonFromRule(rules, trainer)
         break
       end
     end
-    if item == :LIGHTCLAY && !moves.any? { |m| m == :LIGHTSCREEN || m == :REFLECT }
+    if item == :LIGHTCLAY && !moves.any? { |m| [:LIGHTSCREEN, :REFLECT].include?(m) }
       item = :LEFTOVERS
     end
     if item == :BLACKSLUDGE

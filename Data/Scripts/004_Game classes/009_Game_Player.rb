@@ -157,7 +157,7 @@ class Game_Player < Game_Character
     end
     @x = @x + x_plus
     @y = @y + y_plus
-    real_distance = Math::sqrt(x_plus * x_plus + y_plus * y_plus)
+    real_distance = Math.sqrt(x_plus * x_plus + y_plus * y_plus)
     distance = [1, real_distance].max
     @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
     @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max

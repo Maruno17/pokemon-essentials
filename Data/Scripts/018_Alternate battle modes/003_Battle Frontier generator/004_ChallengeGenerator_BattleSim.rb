@@ -60,7 +60,7 @@ class RuledTeam
   def updateRating
     @totalGames = 0 if !@totalGames
     oldgames = self.games
-    @history.updateAndClear()
+    @history.updateAndClear
     newgames = self.games
     @totalGames += (oldgames - newgames)
   end
@@ -420,10 +420,11 @@ def pbRuledBattle(team1, team2, rule)
       p.item = items2[i]
     end
   end
-  if decision == 1   # Team 1 wins
+  case decision
+  when 1   # Team 1 wins
     team1.addMatch(team2, 1)
     team2.addMatch(team1, 0)
-  elsif decision == 2   # Team 2 wins
+  when 2   # Team 2 wins
     team1.addMatch(team2, 0)
     team2.addMatch(team1, 1)
   else

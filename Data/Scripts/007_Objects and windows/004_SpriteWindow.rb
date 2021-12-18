@@ -144,8 +144,6 @@ class SpriteWindow < Window
     @viewport = value
     for i in @spritekeys
       @sprites[i].dispose if @sprites[i]
-    end
-    for i in @spritekeys
       if @sprites[i].is_a?(Sprite)
         @sprites[i] = Sprite.new(@viewport)
       else
@@ -306,11 +304,10 @@ class SpriteWindow < Window
         @cursoropacity += 8
         @cursorblink = 0 if @cursoropacity >= 255
       end
-      privRefreshCursor
     else
       @cursoropacity = 128
-      privRefreshCursor
     end
+    privRefreshCursor
     if @pause
       oldpauseframe = @pauseframe
       oldpauseopacity = @pauseopacity
@@ -591,7 +588,7 @@ class SpriteWindow < Window
            trimX + 32, trimY + 64,
            trimX + 48, trimY + 64,
            trimX + 32, trimY + 80,
-           trimX + 48, trimY + 80,
+           trimX + 48, trimY + 80
         ]
         pauseWidth = 16
         pauseHeight = 16
@@ -838,13 +835,13 @@ class SpriteWindow_Base < SpriteWindow
     self.width = width
     self.height = height
     self.z = 100
-    @curframe = MessageConfig.pbGetSystemFrame()
-    @curfont = MessageConfig.pbGetSystemFontName()
+    @curframe = MessageConfig.pbGetSystemFrame
+    @curfont = MessageConfig.pbGetSystemFontName
     @sysframe = AnimatedBitmap.new(@curframe)
     RPG::Cache.retain(@curframe) if @curframe && !@curframe.empty?
     @customskin = nil
     __setWindowskin(@sysframe.bitmap)
-    __resolveSystemFrame()
+    __resolveSystemFrame
     pbSetSystemFont(self.contents) if self.contents
   end
 
@@ -861,7 +858,7 @@ class SpriteWindow_Base < SpriteWindow
   def __resolveSystemFrame
     if self.skinformat == 1
       if !@resolvedFrame
-        @resolvedFrame = MessageConfig.pbGetSystemFrame()
+        @resolvedFrame = MessageConfig.pbGetSystemFrame
         @resolvedFrame.sub!(/\.[^\.\/\\]+$/, "")
       end
       self.loadSkinFile("#{@resolvedFrame}.txt") if @resolvedFrame != ""
@@ -886,7 +883,7 @@ class SpriteWindow_Base < SpriteWindow
     @customskin.dispose if @customskin
     @customskin = nil
     __setWindowskin(@sysframe.bitmap)
-    __resolveSystemFrame()
+    __resolveSystemFrame
   end
 
   def update
@@ -904,23 +901,23 @@ class SpriteWindow_Base < SpriteWindow
         end
       end
     end
-    if @curframe != MessageConfig.pbGetSystemFrame()
-      @curframe = MessageConfig.pbGetSystemFrame()
+    if @curframe != MessageConfig.pbGetSystemFrame
+      @curframe = MessageConfig.pbGetSystemFrame
       if @sysframe && !@customskin
         @sysframe.dispose if @sysframe
         @sysframe = AnimatedBitmap.new(@curframe)
         RPG::Cache.retain(@curframe) if @curframe && !@curframe.empty?
         @resolvedFrame = nil
         __setWindowskin(@sysframe.bitmap)
-        __resolveSystemFrame()
+        __resolveSystemFrame
       end
       begin
         refresh
       rescue NoMethodError
       end
     end
-    if @curfont != MessageConfig.pbGetSystemFontName()
-      @curfont = MessageConfig.pbGetSystemFontName()
+    if @curfont != MessageConfig.pbGetSystemFontName
+      @curfont = MessageConfig.pbGetSystemFontName
       if self.contents && !self.contents.disposed?
         pbSetSystemFont(self.contents)
       end

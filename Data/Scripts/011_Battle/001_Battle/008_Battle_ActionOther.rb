@@ -11,8 +11,8 @@ class Battle
     when 2
       idxOther = (idxBattler + 2) % 4
     when 3
-      return false if idxBattler == 2 || idxBattler == 3   # In middle spot already
-      idxOther = ((idxBattler % 2) == 0) ? 2 : 3
+      return false if [2, 3].include?(idxBattler)   # In middle spot already
+      idxOther = (idxBattler.even?) ? 2 : 3
     end
     return false if pbGetOwnerIndexFromBattlerIndex(idxBattler) != pbGetOwnerIndexFromBattlerIndex(idxOther)
     return true

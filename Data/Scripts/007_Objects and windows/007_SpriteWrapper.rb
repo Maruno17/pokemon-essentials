@@ -245,13 +245,14 @@ class IconSprite < SpriteWrapper
   attr_reader :name
 
   def initialize(*args)
-    if args.length == 0
+    case args.length
+    when 0
       super(nil)
       self.bitmap = nil
-    elsif args.length == 1
+    when 1
       super(args[0])
       self.bitmap = nil
-    elsif args.length == 2
+    when 2
       super(nil)
       self.x = args[0]
       self.y = args[1]
@@ -265,7 +266,7 @@ class IconSprite < SpriteWrapper
   end
 
   def dispose
-    clearBitmaps()
+    clearBitmaps
     super
   end
 
@@ -277,7 +278,7 @@ class IconSprite < SpriteWrapper
   # Sets the icon's filename.
   def setBitmap(file, hue = 0)
     oldrc = self.src_rect
-    clearBitmaps()
+    clearBitmaps
     @name = file
     return if file == nil
     if file != ""

@@ -1,9 +1,10 @@
 module ShadowText
   def shadowtext(bitmap, x, y, w, h, t, disabled = false, align = 0)
     width = bitmap.text_size(t).width
-    if align == 2
+    case align
+    when 2
       x += (w - width)
-    elsif align == 1
+    when 1
       x += (w / 2) - (width / 2)
     end
     pbDrawShadowText(bitmap, x, y, w, h, t,
@@ -120,7 +121,7 @@ class Button < UIControl
   end
 
   def update
-    mousepos = Mouse::getMousePos
+    mousepos = Mouse.getMousePos
     self.changed = false
     return if !mousepos
     rect = Rect.new(self.x + 1, self.y + 1, self.width - 2, self.height - 2)
@@ -385,7 +386,7 @@ class Slider < UIControl
   end
 
   def update
-    mousepos = Mouse::getMousePos
+    mousepos = Mouse.getMousePos
     self.changed = false
     if self.minvalue < self.maxvalue && self.curvalue < self.minvalue
       self.curvalue = self.minvalue
@@ -401,14 +402,12 @@ class Slider < UIControl
     if left.contains(mousepos[0], mousepos[1])
       if repeattime > 2500
         self.curvalue -= 10
-        self.curvalue = self.curvalue.floor
       elsif repeattime > 1250
         self.curvalue -= 5
-        self.curvalue = self.curvalue.floor
       else
         self.curvalue -= 1
-        self.curvalue = self.curvalue.floor
       end
+      self.curvalue = self.curvalue.floor
       self.changed = (self.curvalue != oldvalue)
       self.invalidate
     end
@@ -416,14 +415,12 @@ class Slider < UIControl
     if right.contains(mousepos[0], mousepos[1])
       if repeattime > 2500
         self.curvalue += 10
-        self.curvalue = self.curvalue.floor
       elsif repeattime > 1250
         self.curvalue += 5
-        self.curvalue = self.curvalue.floor
       else
         self.curvalue += 1
-        self.curvalue = self.curvalue.floor
       end
+      self.curvalue = self.curvalue.floor
       self.changed = (self.curvalue != oldvalue)
       self.invalidate
     end
@@ -634,7 +631,7 @@ class TextSlider < UIControl
   end
 
   def update
-    mousepos = Mouse::getMousePos
+    mousepos = Mouse.getMousePos
     self.changed = false
     if self.minvalue < self.maxvalue && self.curvalue < self.minvalue
       self.curvalue = self.minvalue
@@ -832,7 +829,7 @@ class ControlWindow < SpriteWindow_Base
   end
 
   def hittest?(i)
-    mousepos = Mouse::getMousePos
+    mousepos = Mouse.getMousePos
     return false if !mousepos
     return false if i < 0 || i >= @controls.length
     rc = Rect.new(

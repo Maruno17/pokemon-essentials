@@ -16,7 +16,7 @@ module GameData
       for i in 0...2**factors.length
         # Set try_ parameters for this combination
         factors.each_with_index do |factor, index|
-          value = ((i / (2**index)) % 2 == 0) ? factor[1] : factor[2]
+          value = ((i / (2**index)).even?) ? factor[1] : factor[2]
           case factor[0]
           when 0 then try_species   = value
           when 1 then try_form      = value

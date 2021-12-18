@@ -356,7 +356,8 @@ def pbTrainerTypeEditor
   ]
   pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
     if tr_type
-      if button == Input::ACTION
+      case button
+      when Input::ACTION
         if tr_type.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this trainer type?")
             GameData::TrainerType::DATA.delete(tr_type)
@@ -365,7 +366,7 @@ def pbTrainerTypeEditor
             pbMessage(_INTL("The Trainer type was deleted."))
           end
         end
-      elsif button == Input::USE
+      when Input::USE
         if tr_type.is_a?(Symbol)
           t_data = GameData::TrainerType.get(tr_type)
           data = [
@@ -496,7 +497,8 @@ def pbTrainerBattleEditor
   modified = false
   pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) { |button, trainer_id|
     if trainer_id
-      if button == Input::ACTION
+      case button
+      when Input::ACTION
         if trainer_id.is_a?(Array)
           if pbConfirmMessageSerious("Delete this trainer battle?")
             tr_data = GameData::Trainer::DATA[trainer_id]
@@ -505,7 +507,7 @@ def pbTrainerBattleEditor
             pbMessage(_INTL("The Trainer battle was deleted."))
           end
         end
-      elsif button == Input::USE
+      when Input::USE
         if trainer_id.is_a?(Array)   # Edit existing trainer
           tr_data = GameData::Trainer::DATA[trainer_id]
           old_type = tr_data.trainer_type
@@ -881,7 +883,8 @@ def pbItemEditor
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
     if item
-      if button == Input::ACTION
+      case button
+      when Input::ACTION
         if item.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this item?")
             GameData::Item::DATA.delete(item)
@@ -890,7 +893,7 @@ def pbItemEditor
             pbMessage(_INTL("The item was deleted."))
           end
         end
-      elsif button == Input::USE
+      when Input::USE
         if item.is_a?(Symbol)
           itm = GameData::Item.get(item)
           data = [
@@ -1039,7 +1042,8 @@ def pbPokemonEditor
   ]
   pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
     if species
-      if button == Input::ACTION
+      case button
+      when Input::ACTION
         if species.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this species?")
             GameData::Species::DATA.delete(species)
@@ -1048,7 +1052,7 @@ def pbPokemonEditor
             pbMessage(_INTL("The species was deleted."))
           end
         end
-      elsif button == Input::USE
+      when Input::USE
         if species.is_a?(Symbol)
           spec = GameData::Species.get(species)
           moves = []
@@ -1448,29 +1452,30 @@ def pbAnimationsOrganiser
     refreshlist = false
     oldsel = -1
     cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
-    if cmd[0] == 1   # Swap animation up
+    case cmd[0]
+    when 1   # Swap animation up
       if cmd[1] >= 0 && cmd[1] < commands.length - 1
         list[cmd[1] + 1], list[cmd[1]] = list[cmd[1]], list[cmd[1] + 1]
         refreshlist = true
       end
-    elsif cmd[0] == 2   # Swap animation down
+    when 2   # Swap animation down
       if cmd[1] > 0
         list[cmd[1] - 1], list[cmd[1]] = list[cmd[1]], list[cmd[1] - 1]
         refreshlist = true
       end
-    elsif cmd[0] == 3   # Delete spot
+    when 3   # Delete spot
       list.delete_at(cmd[1])
       cmd[1] = [cmd[1], list.length - 1].min
       refreshlist = true
       pbWait(Graphics.frame_rate * 2 / 10)
-    elsif cmd[0] == 4   # Insert spot
+    when 4   # Insert spot
       list.insert(cmd[1], PBAnimation.new)
       refreshlist = true
       pbWait(Graphics.frame_rate * 2 / 10)
-    elsif cmd[0] == 0
+    when 0
       cmd2 = pbMessage(_INTL("Save changes?"),
           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
-      if cmd2 == 0 || cmd2 == 1
+      if [0, 1].include?(cmd2)
         if cmd2 == 0
           # Save animations here
           save_data(list, "Data/PkmnAnimations.rxdata")

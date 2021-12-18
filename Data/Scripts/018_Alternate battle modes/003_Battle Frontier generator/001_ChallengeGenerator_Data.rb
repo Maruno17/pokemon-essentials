@@ -57,9 +57,10 @@ end
 
 def withRestr(_rule, minbs, maxbs, legendary)
   ret = PokemonChallengeRules.new.addPokemonRule(BaseStatRestriction.new(minbs, maxbs))
-  if legendary == 0
+  case legendary
+  when 0
     ret.addPokemonRule(NonlegendaryRestriction.new)
-  elsif legendary == 1
+  when 1
     ret.addPokemonRule(InverseRestriction.new(NonlegendaryRestriction.new))
   end
   return ret
@@ -298,14 +299,16 @@ def pbWriteCup(id, rules)
   else
     cmd = pbMessage(_INTL("Generate Pokémon teams for this challenge?"),
        [_INTL("YES"), _INTL("NO")], 2)
-    if cmd == 0
+    case cmd
+    when 0
       cmd = 2
-    elsif cmd == 1
+    when 1
       cmd = 0
     end
   end
   return if cmd == 0   # No
-  if cmd == 1   # Yes, use existing
+  case cmd
+  when 1   # Yes, use existing
     cmd = pbMessage(_INTL("Choose a challenge."), list, -1)
     if cmd >= 0
       pbMessage(_INTL("This challenge will use the Pokémon list from {1}.", list[cmd]))
@@ -321,7 +324,7 @@ def pbWriteCup(id, rules)
       Compiler.write_trainer_lists
     end
     return
-  elsif cmd == 2   # Yes, use new
+  when 2   # Yes, use new
     return if !pbConfirmMessage(_INTL("This may take a long time. Are you sure?"))
     mw = pbCreateMessageWindow
     t = Time.now

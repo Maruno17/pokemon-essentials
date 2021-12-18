@@ -95,17 +95,10 @@ class BattlePalaceBattle < Battle
 
   def pbRegisterMove(idxBattler, idxMove, _showMessages = true)
     this_battler = @battlers[idxBattler]
-    if idxMove == -2
-      @choices[idxBattler][0] = :UseMove    # "Use move"
-      @choices[idxBattler][1] = -2          # "Incapable of using its power..."
-      @choices[idxBattler][2] = @struggle
-      @choices[idxBattler][3] = -1
-    else
-      @choices[idxBattler][0] = :UseMove                      # "Use move"
-      @choices[idxBattler][1] = idxMove                       # Index of move to be used
-      @choices[idxBattler][2] = this_battler.moves[idxMove]   # Battle::Move object
-      @choices[idxBattler][3] = -1                            # No target chosen yet
-    end
+    @choices[idxBattler][0] = :UseMove
+    @choices[idxBattler][1] = idxMove   # Index of move to be used (-2="Incapable of using its power...")
+    @choices[idxBattler][2] = (idxMove == -2) ? @struggle : this_battler.moves[idxMove]   # Battle::Move object
+    @choices[idxBattler][3] = -1   # No target chosen yet
   end
 
   def pbAutoFightMenu(idxBattler)

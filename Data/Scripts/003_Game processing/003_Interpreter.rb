@@ -142,7 +142,7 @@ class Interpreter
       return result
     rescue Exception
       e = $!
-      raise if e.is_a?(SystemExit) || "#{e.class}" == "Reset"
+      raise if e.is_a?(SystemExit) || e.class.to_s == "Reset"
       event = get_self
       # Gather text for error message
       message = pbGetExceptionMessage(e)
@@ -295,7 +295,7 @@ class Interpreter
   #-----------------------------------------------------------------------------
   # Helper function that shows a picture in a script.
   def pbShowPicture(number, name, origin, x, y, zoomX = 100, zoomY = 100, opacity = 255, blendType = 0)
-    number = number + ($game_temp.in_battle ? 50 : 0)
+    number += ($game_temp.in_battle ? 50 : 0)
     $game_screen.pictures[number].show(name, origin, x, y, zoomX, zoomY, opacity, blendType)
   end
 

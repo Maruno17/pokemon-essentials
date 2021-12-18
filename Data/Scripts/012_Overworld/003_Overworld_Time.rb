@@ -8,7 +8,7 @@ end
 
 
 module PBDayNight
-  HourlyTones = [
+  HOURLY_TONES = [
     Tone.new(-70, -90,  15, 55),   # Night           # Midnight
     Tone.new(-70, -90,  15, 55),   # Night
     Tone.new(-70, -90,  15, 55),   # Night
@@ -93,15 +93,13 @@ module PBDayNight
     return (now.hour * 60) + now.min
   end
 
-  private
-
   def self.getToneInternal
     # Calculates the tone for the current frame, used for day/night effects
     realMinutes = pbGetDayNightMinutes
     hour   = realMinutes / 60
     minute = realMinutes % 60
-    tone         = PBDayNight::HourlyTones[hour]
-    nexthourtone = PBDayNight::HourlyTones[(hour + 1) % 24]
+    tone         = PBDayNight::HOURLY_TONES[hour]
+    nexthourtone = PBDayNight::HOURLY_TONES[(hour + 1) % 24]
     # Calculate current tint according to current and next hour's tint and
     # depending on current minute
     @cachedTone.red   = ((nexthourtone.red - tone.red) * minute * @oneOverSixty) + tone.red

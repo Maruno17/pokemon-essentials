@@ -490,9 +490,10 @@ class Battle::Move::CureUserPartyStatus < Battle::Move
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     super
-    if @id == :AROMATHERAPY
+    case @id
+    when :AROMATHERAPY
       @battle.pbDisplay(_INTL("A soothing aroma wafted through the area!"))
-    elsif @id == :HEALBELL
+    when :HEALBELL
       @battle.pbDisplay(_INTL("A bell chimed!"))
     end
   end

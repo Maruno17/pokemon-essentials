@@ -72,7 +72,6 @@ class Battle::Battler
       #       in and not at any later times, even if a traceable ability turns
       #       up later. Essentials ignores this, and allows Trace to trigger
       #       whenever it can even in the old battle mechanics.
-      choices = []
       choices = @battle.allOtherSideBattlers(@index).select { |b|
         next !b.ungainableAbility? &&
              ![:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(b.ability_id)

@@ -1582,7 +1582,7 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:PUNKROCK,
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:THICKFAT,
   proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] /= 2 if type == :FIRE || type == :ICE
+    mults[:base_damage_multiplier] /= 2 if [:FIRE, :ICE].include?(type)
   }
 )
 

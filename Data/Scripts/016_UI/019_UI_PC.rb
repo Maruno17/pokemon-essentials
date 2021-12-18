@@ -47,12 +47,13 @@ class StorageSystemPC
           _INTL("Return to the previous menu.")], -1, command
       )
       if command >= 0 && command < 3
-        if command == 1   # Withdraw
+        case command
+        when 1   # Withdraw
           if $PokemonStorage.party_full?
             pbMessage(_INTL("Your party is full!"))
             next
           end
-        elsif command == 2   # Deposit
+        when 2   # Deposit
           count = 0
           for p in $PokemonStorage.party
             count += 1 if p && !p.egg? && p.hp > 0

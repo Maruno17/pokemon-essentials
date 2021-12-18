@@ -158,15 +158,16 @@ def pbAnimList(animations, canvas, animwin)
          _INTL("Rename"),
          _INTL("Delete")
       ], -1)
-      if cmd2 == 0 # Load Animation
+      case cmd2
+      when 0 # Load Animation
         canvas.loadAnimation(animations[cmdwin.index])
         animwin.animbitmap = canvas.animbitmap
         animations.selected = cmdwin.index
         break
-      elsif cmd2 == 1 # Rename
+      when 1 # Rename
         pbAnimName(animations[cmdwin.index], cmdwin)
         cmdwin.refresh
-      elsif cmd2 == 2 # Delete
+      when 2 # Delete
         if pbConfirmMessage(_INTL("Are you sure you want to delete this animation?"))
           animations[cmdwin.index] = PBAnimation.new
           cmdwin.commands[cmdwin.index] = _INTL("{1} {2}", cmdwin.index, animations[cmdwin.index].name)
@@ -683,10 +684,8 @@ def pbEditBG(canvas, timing)
         timing.colorBlue = maxsizewindow.value(6)
         timing.colorAlpha = maxsizewindow.value(7)
         ret = true
-        break
-      else
-        break
       end
+      break
     end
     if maxsizewindow.changed?(9) # Cancel
       break
@@ -1064,7 +1063,7 @@ def animationEditorMain(animation)
       end
       next
     elsif Input.trigger?(Input::MOUSERIGHT)  # Right mouse button
-      mousepos = Mouse::getMousePos
+      mousepos = Mouse.getMousePos
       mousepos = [0, 0] if !mousepos
       commands = [
          _INTL("Properties..."),
@@ -1187,7 +1186,7 @@ end
 # Start
 ################################################################################
 def pbAnimationEditor
-  pbBGMStop()
+  pbBGMStop
   animation = pbLoadBattleAnimations
   if !animation || !animation[0]
     animation = PBAnimations.new

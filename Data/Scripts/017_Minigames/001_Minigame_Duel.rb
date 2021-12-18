@@ -174,7 +174,7 @@ class PokemonDuel
           PBMoveRoute::Forward
         ])
         pbMessage(_INTL("Your attack was evaded!"))
-      elsif (action == 0 || action == 1 || action == 2) && command == 3
+      elsif [0, 1, 2].include?(action) && command == 3
         pbMoveRoute($game_player, [
           PBMoveRoute::ChangeSpeed, 4,
           PBMoveRoute::ScriptAsync, "jumpForward"
@@ -282,7 +282,7 @@ class PokemonDuel
           PBMoveRoute::Backward
         ])
         pbMessage(_INTL("You evade the opponent's attack!"))
-      elsif action == 3 && (command == 0 || command == 1 || command == 2)
+      elsif action == 3 && [0, 1, 2].include?(command)
         pbMoveRoute(event, [
           PBMoveRoute::ChangeSpeed, 4,
           PBMoveRoute::ScriptAsync, "jumpForward"

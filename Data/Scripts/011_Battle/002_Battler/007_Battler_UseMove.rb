@@ -22,7 +22,7 @@ class Battle::Battler
         idxOther = (@index + 2) % 4
       when 3
         if @index != 2 && @index != 3   # If not in middle spot already
-          idxOther = ((@index % 2) == 0) ? 2 : 3
+          idxOther = (@index.even?) ? 2 : 3
         end
       end
       if idxOther >= 0

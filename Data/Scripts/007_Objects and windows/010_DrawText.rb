@@ -45,26 +45,27 @@ end
 def rgbToColor(param)
   return Font.default_color if !param
   baseint = param.to_i(16)
-  if param.length == 8 # 32-bit hex
+  case param.length
+  when 8 # 32-bit hex
     return Color.new(
        (baseint >> 24) & 0xFF,
        (baseint >> 16) & 0xFF,
        (baseint >> 8) & 0xFF,
        (baseint) & 0xFF
     )
-  elsif param.length == 6 # 24-bit hex
+  when 6 # 24-bit hex
     return Color.new(
        (baseint >> 16) & 0xFF,
        (baseint >> 8) & 0xFF,
        (baseint) & 0xFF
     )
-  elsif param.length == 4 # 16-bit hex
+  when 4 # 16-bit hex
     return Color.new(
        ((baseint) & 0x1F) << 3,
        ((baseint >> 5) & 0x1F) << 3,
        ((baseint >> 10) & 0x1F) << 3
     )
-  elsif param.length == 1 # Color number
+  when 1 # Color number
     i = param.to_i
     return Font.default_color if i >= 8
     return [
@@ -291,7 +292,7 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
 end
 
 def isWaitChar(x)
-  return (x == "\001" || x == "\002")
+  return (["\001", "\002"].include?(x))
 end
 
 def getLastParam(array, default)
@@ -418,14 +419,13 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   x = y = 0
   characters = []
   charactersInternal = []
-  realtext = nil
-  realtextStart = ""
-  if !explicitBreaksOnly && textchunks.join("").length == 0
-    # All commands occurred at the beginning of the text string
-    realtext = (newlineBreaks) ? text : text.gsub(/\n/, " ")
-    realtextStart = oldtext[0, oldtext.length - realtext.length]
-    realtextHalf = text.length / 2
-  end
+#  realtext = nil
+#  realtextStart = ""
+#  if !explicitBreaksOnly && textchunks.join("").length == 0
+#    # All commands occurred at the beginning of the text string
+#    realtext = (newlineBreaks) ? text : text.gsub(/\n/, " ")
+#    realtextStart = oldtext[0, oldtext.length - realtext.length]
+#  end
   textchunks.push(text)
   for chunk in textchunks
     chunk.gsub!(/&lt;/, "<")
@@ -483,14 +483,15 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
         control = controls[i][0]
         param = controls[i][1]
         endtag = controls[i][3]
-        if control == "c"
+        case control
+        when "c"
           if endtag
             colorstack.pop
           else
             color = rgbToColor(param)
             colorstack.push([color, nil])
           end
-        elsif control == "c2"
+        when "c2"
           if endtag
             colorstack.pop
           else
@@ -498,7 +499,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
             shadow = Rgb16ToColor(param[4, 4])
             colorstack.push([base, shadow])
           end
-        elsif control == "c3"
+        when "c3"
           if endtag
             colorstack.pop
           else
@@ -509,25 +510,25 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
             shadow = (param[1] && param[1] != "") ? rgbToColor(param[1]) : oldColors[1]
             colorstack.push([base, shadow])
           end
-        elsif control == "o"
+        when "o"
           if endtag
             opacitystack.pop
           else
             opacitystack.push(param.sub(/\s+$/, "").to_i)
           end
-        elsif control == "b"
+        when "b"
           boldcount += (endtag ? -1 : 1)
-        elsif control == "i"
+        when "i"
           italiccount += (endtag ? -1 : 1)
-        elsif control == "u"
+        when "u"
           underlinecount += (endtag ? -1 : 1)
-        elsif control == "s"
+        when "s"
           strikecount += (endtag ? -1 : 1)
-        elsif control == "outln"
+        when "outln"
           outlinecount += (endtag ? -1 : 1)
-        elsif control == "outln2"
+        when "outln2"
           outline2count += (endtag ? -1 : 1)
-        elsif control == "fs" # Font size
+        when "fs" # Font size
           if endtag
             fontsizestack.pop
           else
@@ -535,7 +536,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
           end
           fontsize = getLastParam(fontsizestack, defaultfontsize)
           bitmap.font.size = fontsize
-        elsif control == "fn" # Font name
+        when "fn" # Font name
           if endtag
             fontnamestack.pop
           else
@@ -544,38 +545,35 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
           end
           fontname = getLastParam(fontnamestack, defaultfontname)
           bitmap.font.name = fontname
-        elsif control == "ar" # Right align
-          if !endtag
+        when "ar" # Right align
+          if endtag
+            alignstack.pop
+          else
             alignstack.push(1)
-            nextline = 1 if x > 0 && nextline == 0
-          else
-            alignstack.pop
-            nextline = 1 if x > 0 && nextline == 0
           end
-        elsif control == "al" # Left align
-          if !endtag
+          nextline = 1 if x > 0 && nextline == 0
+        when "al" # Left align
+          if endtag
+            alignstack.pop
+          else
             alignstack.push(0)
-            nextline = 1 if x > 0 && nextline == 0
-          else
-            alignstack.pop
-            nextline = 1 if x > 0 && nextline == 0
           end
-        elsif control == "ac" # Center align
-          if !endtag
+          nextline = 1 if x > 0 && nextline == 0
+        when "ac" # Center align
+          if endtag
+            alignstack.pop
+          else
             alignstack.push(2)
-            nextline = 1 if x > 0 && nextline == 0
-          else
-            alignstack.pop
-            nextline = 1 if x > 0 && nextline == 0
           end
-        elsif control == "icon" # Icon
+          nextline = 1 if x > 0 && nextline == 0
+        when "icon" # Icon
           if !endtag
             param = param.sub(/\s+$/, "")
             graphic = "Graphics/Icons/#{param}"
             controls[i] = nil
             break
           end
-        elsif control == "img" # Icon
+        when "img" # Icon
           if !endtag
             param = param.sub(/\s+$/, "")
             param = param.split("|")
@@ -589,11 +587,11 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
             controls[i] = nil
             break
           end
-        elsif control == "br" # Line break
+        when "br" # Line break
           if !endtag
             nextline += 1
           end
-        elsif control == "r" # Right align this line
+        when "r" # Right align this line
           if !endtag
             x = 0
             rightalign = 1
@@ -679,7 +677,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
       havenl = true if !graphic && isWaitChar(textchars[position])
       extraspace = (!graphic && italiccount > 0) ? 2 + (width / 2) : 2
       characters.push([
-         graphic ? graphic : textchars[position],
+         graphic || textchars[position],
          x + xStart, texty, width + extraspace, lineheight,
          graphic ? true : false,
          (boldcount > 0), (italiccount > 0), colors[0], colors[1],
@@ -929,12 +927,11 @@ def getLineBrokenChunks(bitmap, value, width, dims, plain = false)
       y += 32
       next
     end
+    textcols = []
     if ccheck[/</] && !plain
-      textcols = []
       ccheck.scan(re) { textcols.push(rgbToColor($1)) }
       words = ccheck.split(reNoMatch) # must have no matches because split can include match
     else
-      textcols = []
       words = [ccheck]
     end
     for i in 0...words.length
@@ -1161,9 +1158,10 @@ def pbDrawTextPositions(bitmap, textpos)
     textsize = bitmap.text_size(i[0])
     x = i[1]
     y = i[2] + 6
-    if i[3] == true || i[3] == 1   # right align
+    case i[3]
+    when true, 1   # right align
       x -= textsize.width
-    elsif i[3] == 2 # centered
+    when 2 # centered
       x -= (textsize.width / 2)
     end
     if i[6] == true || i[6] == 1   # outline text

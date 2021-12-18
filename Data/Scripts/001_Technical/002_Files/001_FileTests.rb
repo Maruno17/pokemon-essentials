@@ -240,8 +240,6 @@ module RTP
     yield ".".gsub(/[\/\\]/, "/").gsub(/[\/\\]$/, "") + "/"
   end
 
-  private
-
   def self.getSaveFileName(fileName)
     File.join(getSaveFolder, fileName)
   end
@@ -260,15 +258,15 @@ end
 
 
 module FileTest
-  Image_ext = ['.png', '.gif']   # '.jpg', '.jpeg', '.bmp',
-  Audio_ext = ['.mid', '.midi', '.ogg', '.wav', '.wma']   # '.mp3'
+  IMAGE_EXTENSIONS = ['.png', '.gif']   # '.jpg', '.jpeg', '.bmp',
+  AUDIO_EXTENSIONS = ['.mid', '.midi', '.ogg', '.wav', '.wma']   # '.mp3'
 
   def self.audio_exist?(filename)
-    return RTP.exists?(filename, Audio_ext)
+    return RTP.exists?(filename, AUDIO_EXTENSIONS)
   end
 
   def self.image_exist?(filename)
-    return RTP.exists?(filename, Image_ext)
+    return RTP.exists?(filename, IMAGE_EXTENSIONS)
   end
 end
 
@@ -485,8 +483,6 @@ class StringInput
     @pos += 1 if @pos == @string.size
     str
   end
-
-  def read_all; read(); end
-
+  alias read_all read
   alias sysread read
 end

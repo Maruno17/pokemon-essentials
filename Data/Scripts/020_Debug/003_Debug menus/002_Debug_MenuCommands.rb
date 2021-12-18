@@ -134,11 +134,12 @@ DebugMenuCommands.register("togglewallpapers", {
         end
         paperscmd = pbShowCommands(nil, paperscmds, -1, paperscmd)
         break if paperscmd < 0
-        if paperscmd == 0   # Unlock all
+        case paperscmd
+        when 0   # Unlock all
           for i in PokemonStorage::BASICWALLPAPERQTY...w.length
             unlockarray[i] = true
           end
-        elsif paperscmd == 1   # Lock all
+        when 1   # Lock all
           for i in PokemonStorage::BASICWALLPAPERQTY...w.length
             unlockarray[i] = false
           end
@@ -715,9 +716,10 @@ DebugMenuCommands.register("setbadges", {
       end
       badgecmd = pbShowCommands(nil, badgecmds, -1, badgecmd)
       break if badgecmd < 0
-      if badgecmd == 0   # Give all
+      case badgecmd
+      when 0   # Give all
         24.times { |i| $player.badges[i] = true }
-      elsif badgecmd == 1   # Remove all
+      when 1   # Remove all
         24.times { |i| $player.badges[i] = false }
       else
         $player.badges[badgecmd - 2] = !$player.badges[badgecmd - 2]

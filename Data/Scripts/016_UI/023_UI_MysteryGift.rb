@@ -182,18 +182,19 @@ def pbManageMysteryGifts
                 _INTL("Delete"),
                 _INTL("Cancel")]
         cmd = pbMessage("\\ts[]" + commands[command], cmds, -1, nil, cmd)
-        if cmd == -1 || cmd == cmds.length - 1
+        case cmd
+        when -1, cmds.length - 1
           break
-        elsif cmd == 0   # Toggle on/offline
+        when 0   # Toggle on/offline
           if online.include?(gift[0])
             online.delete(gift[0])
           else
             online.push(gift[0])
           end
-        elsif cmd == 1   # Edit
+        when 1   # Edit
           newgift = pbEditMysteryGift(gift[1], gift[2], gift[0], gift[3])
           master[command] = newgift if newgift
-        elsif cmd == 2   # Receive
+        when 2   # Receive
           if !$player
             pbMessage(_INTL("There is no save file loaded. Cannot receive any gifts."))
             next
@@ -207,7 +208,7 @@ def pbManageMysteryGifts
           end
           $player.mystery_gifts.push(gift) if !replaced
           pbReceiveMysteryGift(gift[0])
-        elsif cmd == 3   # Delete
+        when 3   # Delete
           master.delete_at(command) if pbConfirmMessage(_INTL("Are you sure you want to delete this gift?"))
           break
         end
@@ -381,13 +382,8 @@ def pbReceiveMysteryGift(id)
     gift[2].timeReceived = time.getgm.to_i
     gift[2].obtain_method = 4   # Fateful encounter
     gift[2].record_first_moves
-    if $game_map
-      gift[2].obtain_map = $game_map.map_id
-      gift[2].obtain_level = gift[2].level
-    else
-      gift[2].obtain_map = 0
-      gift[2].obtain_level = gift[2].level
-    end
+    gift[2].obtain_level = gift[2].level
+    gift[2].obtain_map = $game_map&.map_id || 0
     if pbAddPokemonSilent(gift[2])
       pbMessage(_INTL("\\me[Pkmn get]{1} received {2}!", $player.name, gift[2].name))
       $player.mystery_gifts[index] = [id]

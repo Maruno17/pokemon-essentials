@@ -208,7 +208,7 @@ Events.onWildBattleEnd += proc { |_sender, e|
   species  = e[0]
   level    = e[1]
   decision = e[2]
-  if $game_temp.poke_radar_data && (decision == 1 || decision == 4)   # Defeated/caught
+  if $game_temp.poke_radar_data && [1, 4].include?(decision)   # Defeated/caught
     $game_temp.poke_radar_data[0] = species
     $game_temp.poke_radar_data[1] = level
     $game_temp.poke_radar_data[2] += 1

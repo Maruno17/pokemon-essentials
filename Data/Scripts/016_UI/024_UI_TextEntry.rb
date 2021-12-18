@@ -72,7 +72,7 @@ end
 class PokemonEntryScene
   @@Characters = [
      [("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz").scan(/./), "[*]"],
-     [("0123456789   !@\#$%^&*()   ~`-_+={}[]   :;'\"<>,.?/   ").scan(/./), "[A]"],
+     [("0123456789   !@\#$%^&*()   ~`-_+={}[]   :;'\"<>,.?/   ").scan(/./), "[A]"]
   ]
   USEKEYBOARD = true
 
@@ -212,28 +212,28 @@ class PokemonEntryScene
         if index == -3 # Confirm text
           ret = @sprites["entry"].text
           if ret.length < @minlength || ret.length > @maxlength
-            pbPlayBuzzerSE()
+            pbPlayBuzzerSE
           else
-            pbPlayDecisionSE()
+            pbPlayDecisionSE
             break
           end
         elsif index == -1 # Insert a space
           if @sprites["entry"].insert(" ")
-            pbPlayDecisionSE()
+            pbPlayDecisionSE
           else
-            pbPlayBuzzerSE()
+            pbPlayBuzzerSE
           end
         elsif index == -2 # Change character set
-          pbPlayDecisionSE()
+          pbPlayDecisionSE
           @symtype += 1
           @symtype = 0 if @symtype >= @@Characters.length
           @sprites["entry2"].setCharset(@@Characters[@symtype][0])
           @sprites["entry2"].setOtherCharset(@@Characters[@symtype][1])
         else # Insert given character
           if @sprites["entry"].insert(@sprites["entry2"].character)
-            pbPlayDecisionSE()
+            pbPlayDecisionSE
           else
-            pbPlayBuzzerSE()
+            pbPlayBuzzerSE
           end
         end
         next

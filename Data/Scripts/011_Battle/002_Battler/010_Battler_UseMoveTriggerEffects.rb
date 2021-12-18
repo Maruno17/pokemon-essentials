@@ -22,9 +22,10 @@ class Battle::Battler
           @battle.scene.pbDamageAnimation(user)
           user.pbReduceHP(user.totalhp / 4, false)
         end
-        if target.form == 1   # Gulping Form
+        case target.form
+        when 1   # Gulping Form
           user.pbLowerStatStageByAbility(:DEFENSE, 1, target, false)
-        elsif target.form == 2   # Gorging Form
+        when 2   # Gorging Form
           target.pbParalyze(user) if target.pbCanParalyze?(user, false)
         end
         @battle.pbHideAbilitySplash(target)

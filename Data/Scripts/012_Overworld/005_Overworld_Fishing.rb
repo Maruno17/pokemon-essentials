@@ -47,8 +47,8 @@ def pbFishing(hasEncounter, rodType = 1)
   msgWindow = pbCreateMessageWindow
   ret = false
   loop do
-    time = 5 + rand(6)
-    time = [time, 5 + rand(6)].min if speedup
+    time = rand(5..10)
+    time = [time, rand(5..10)].min if speedup
     message = ""
     time.times { message += ".   " }
     if pbWaitMessage(msgWindow, time)

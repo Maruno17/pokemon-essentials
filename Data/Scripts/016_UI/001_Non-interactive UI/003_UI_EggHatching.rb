@@ -99,7 +99,7 @@ class PokemonEggHatch_Scene
     frames = (GameData::Species.cry_length(@pokemon) * Graphics.frame_rate).ceil
     @pokemon.play_cry
     updateScene(frames + 4)
-    pbBGMStop()
+    pbBGMStop
     pbMEPlay("Evolution success")
     @pokemon.name = nil
     pbMessage(_INTL("\\se[]{1} hatched from the Egg!\\wt[80]", @pokemon.name)) { update }
@@ -135,8 +135,8 @@ class PokemonEggHatch_Scene
     targets.push(@sprites["pokemon"].x)
     targets.each_with_index do |target, i|
       loop do
-        break if i % 2 == 0 && @sprites["pokemon"].x >= target
-        break if i % 2 == 1 && @sprites["pokemon"].x <= target
+        break if i.even? && @sprites["pokemon"].x >= target
+        break if i.odd? && @sprites["pokemon"].x <= target
         @sprites["pokemon"].x += speed
         @sprites["hatch"].x    = @sprites["pokemon"].x
         updateScene

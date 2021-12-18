@@ -214,7 +214,7 @@ module RPG
       end
       if @weatherTypes[weather_type][0].category == :Rain
         last_index = weatherBitmaps.length - 1   # Last sprite is a splash
-        if (index % 2) == 0
+        if index.even?
           sprite.bitmap = weatherBitmaps[index % last_index]
         else
           sprite.bitmap = weatherBitmaps[last_index]
@@ -244,10 +244,10 @@ module RPG
         lifetimes[index] = 0
         return
       end
-      if @weatherTypes[weather_type][0].category == :Rain && (index % 2) != 0   # Splash
+      if @weatherTypes[weather_type][0].category == :Rain && index.odd?   # Splash
         sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width * 2)
         sprite.y = @oy - sprite.bitmap.height + rand(Graphics.height + sprite.bitmap.height * 2)
-        lifetimes[index] = (30 + rand(20)) * 0.01   # 0.3-0.5 seconds
+        lifetimes[index] = (rand(30...50)) * 0.01   # 0.3-0.5 seconds
       else
         x_speed = @weatherTypes[weather_type][0].particle_delta_x
         y_speed = @weatherTypes[weather_type][0].particle_delta_y
@@ -283,7 +283,7 @@ module RPG
       # Determine which weather type this sprite is representing
       weather_type = (is_new_sprite) ? @target_type : @type
       # Update visibility/position/opacity of sprite
-      if @weatherTypes[weather_type][0].category == :Rain && (index % 2) != 0   # Splash
+      if @weatherTypes[weather_type][0].category == :Rain && index.odd?   # Splash
         sprite.opacity = (lifetimes[index] < 0.2) ? 255 : 0   # 0.2 seconds
       else
         dist_x = @weatherTypes[weather_type][0].particle_delta_x * delta_t
@@ -486,11 +486,11 @@ module RPG
         if @time_until_flash > 0
           @time_until_flash -= Graphics.delta_s
           if @time_until_flash <= 0
-            @viewport.flash(Color.new(255, 255, 255, 230), (2 + rand(3)) * 20)
+            @viewport.flash(Color.new(255, 255, 255, 230), rand(2..4) * 20)
           end
         end
         if @time_until_flash <= 0
-          @time_until_flash = (1 + rand(12)) * 0.5   # 0.5-6 seconds
+          @time_until_flash = rand(1..12) * 0.5   # 0.5-6 seconds
         end
       end
       @viewport.update

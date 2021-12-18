@@ -71,7 +71,7 @@ class ReadyMenuButton < SpriteWrapper
     self.bitmap.blt(0, 0, @button.bitmap, rect)
     textx = (@command[2]) ? 164 : (GameData::Item.get(@command[0]).is_important?) ? 146 : 124
     textpos = [
-       [@command[1], textx, 16, 2, Color.new(248, 248, 248), Color.new(40, 40, 40), 1],
+       [@command[1], textx, 16, 2, Color.new(248, 248, 248), Color.new(40, 40, 40), 1]
     ]
     if !@command[2]
       if !GameData::Item.get(@command[0]).is_important?
@@ -206,11 +206,12 @@ class PokemonReadyMenu_Scene
     oldindex = @index[@index[2]]
     @index[@index[2]] = @sprites["cmdwindow"].index
     if @index[@index[2]] != oldindex
-      if @index[2] == 0
+      case @index[2]
+      when 0
         for i in 0...@commands[0].length
           @sprites["movebutton#{i}"].selected = @index[@index[2]]
         end
-      elsif @index[2] == 1
+      when 1
         for i in 0...@commands[1].length
           @sprites["itembutton#{i}"].selected = @index[@index[2]]
         end

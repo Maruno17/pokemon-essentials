@@ -78,8 +78,8 @@ class MiningGameCursor < BitmapSprite
   attr_accessor :hit
   attr_accessor :counter
 
-  ToolPositions = [[1, 0], [1, 1], [1, 1], [0, 0], [0, 0],
-                   [0, 2], [0, 2], [0, 0], [0, 0], [0, 2], [0, 2]]   # Graphic, position
+  TOOL_POSITIONS = [[1, 0], [1, 1], [1, 1], [0, 0], [0, 0],
+                    [0, 2], [0, 2], [0, 0], [0, 0], [0, 2], [0, 2]]   # Graphic, position
 
   def initialize(position = 0, mode = 0)   # mode: 0=pick, 1=hammer
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -106,22 +106,23 @@ class MiningGameCursor < BitmapSprite
 
   def update
     self.bitmap.clear
-    x = 32 * (@position % MiningGameScene::BOARDWIDTH)
-    y = 32 * (@position / MiningGameScene::BOARDWIDTH)
+    x = 32 * (@position % MiningGameScene::BOARD_WIDTH)
+    y = 32 * (@position / MiningGameScene::BOARD_WIDTH)
     if @counter > 0
       @counter -= 1
       toolx = x
       tooly = y
       i = 10 - (@counter / 2).floor
-      if ToolPositions[i][1] == 1
+      case TOOL_POSITIONS[i][1]
+      when 1
         toolx -= 8
         tooly += 8
-      elsif ToolPositions[i][1] == 2
+      when 2
         toolx += 6
       end
       self.bitmap.blt(toolx, tooly, @toolbitmap.bitmap,
-                      Rect.new(96 * ToolPositions[i][0], 96 * @mode, 96, 96))
-      if i < 5 && i % 2 == 0
+                      Rect.new(96 * TOOL_POSITIONS[i][0], 96 * @mode, 96, 96))
+      if i < 5 && i.even?
         if @hit == 2
           self.bitmap.blt(x - 64, y, @hitsbitmap.bitmap, Rect.new(160 * 2, 0, 160, 160))
         else
@@ -140,8 +141,8 @@ end
 
 
 class MiningGameScene
-  BOARDWIDTH  = 13
-  BOARDHEIGHT = 10
+  BOARD_WIDTH  = 13
+  BOARD_HEIGHT = 10
   ITEMS = [   # Item, probability, graphic x, graphic y, width, height, pattern
      [:DOMEFOSSIL, 20, 0, 3, 5, 4, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]],
      [:HELIXFOSSIL, 5, 5, 3, 4, 4, [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]],
@@ -238,9 +239,9 @@ class MiningGameScene
     @iron = []
     pbDistributeItems
     pbDistributeIron
-    for i in 0...BOARDHEIGHT
-      for j in 0...BOARDWIDTH
-        @sprites["tile#{j + i * BOARDWIDTH}"] = MiningGameTile.new(32 * j, 64 + 32 * i)
+    for i in 0...BOARD_HEIGHT
+      for j in 0...BOARD_WIDTH
+        @sprites["tile#{j + i * BOARD_WIDTH}"] = MiningGameTile.new(32 * j, 64 + 32 * i)
       end
     end
     @sprites["crack"] = MiningGameCounter.new(0, 4)
@@ -258,7 +259,7 @@ class MiningGameScene
     for i in ITEMS
       ptotal += i[1]
     end
-    numitems = 2 + rand(3)
+    numitems = rand(2..4)
     tries = 0
     while numitems > 0
       rnd = rand(ptotal)
@@ -268,8 +269,8 @@ class MiningGameScene
         if rnd < 0
           if pbNoDuplicateItems(ITEMS[i][0])
             while !added
-              provx = rand(BOARDWIDTH - ITEMS[i][4] + 1)
-              provy = rand(BOARDHEIGHT - ITEMS[i][5] + 1)
+              provx = rand(BOARD_WIDTH - ITEMS[i][4] + 1)
+              provy = rand(BOARD_HEIGHT - ITEMS[i][5] + 1)
               if pbCheckOverlaps(false, provx, provy, ITEMS[i][4], ITEMS[i][5], ITEMS[i][6])
                 @items.push([i, provx, provy])
                 numitems -= 1
@@ -298,12 +299,12 @@ class MiningGameScene
 
   def pbDistributeIron
     # Set iron to be buried (index in IRON, x coord, y coord)
-    numitems = 4 + rand(3)
+    numitems = rand(4..6)
     tries = 0
     while numitems > 0
       rnd = rand(IRON.length)
-      provx = rand(BOARDWIDTH - IRON[rnd][2] + 1)
-      provy = rand(BOARDHEIGHT - IRON[rnd][3] + 1)
+      provx = rand(BOARD_WIDTH - IRON[rnd][2] + 1)
+      provy = rand(BOARD_HEIGHT - IRON[rnd][3] + 1)
       if pbCheckOverlaps(true, provx, provy, IRON[rnd][2], IRON[rnd][3], IRON[rnd][4])
         @iron.push([rnd, provx, provy])
         numitems -= 1
@@ -398,12 +399,12 @@ class MiningGameScene
       hittype = 2
     else
       for i in 0..2
-        ytile = i - 1 + position / BOARDWIDTH
-        next if ytile < 0 || ytile >= BOARDHEIGHT
+        ytile = i - 1 + position / BOARD_WIDTH
+        next if ytile < 0 || ytile >= BOARD_HEIGHT
         for j in 0..2
-          xtile = j - 1 + position % BOARDWIDTH
-          next if xtile < 0 || xtile >= BOARDWIDTH
-          @sprites["tile#{xtile + ytile * BOARDWIDTH}"].layer -= pattern[j + i * 3]
+          xtile = j - 1 + position % BOARD_WIDTH
+          next if xtile < 0 || xtile >= BOARD_WIDTH
+          @sprites["tile#{xtile + ytile * BOARD_WIDTH}"].layer -= pattern[j + i * 3]
         end
       end
       if @sprites["cursor"].mode == 1   # Hammer
@@ -427,8 +428,8 @@ class MiningGameScene
   end
 
   def pbIsItemThere?(position)
-    posx = position % BOARDWIDTH
-    posy = position / BOARDWIDTH
+    posx = position % BOARD_WIDTH
+    posy = position / BOARD_WIDTH
     for i in @items
       index = i[0]
       width = ITEMS[index][4]
@@ -444,8 +445,8 @@ class MiningGameScene
   end
 
   def pbIsIronThere?(position)
-    posx = position % BOARDWIDTH
-    posy = position / BOARDWIDTH
+    posx = position % BOARD_WIDTH
+    posy = position / BOARD_WIDTH
     for i in @iron
       index = i[0]
       width = IRON[index][2]
@@ -471,7 +472,7 @@ class MiningGameScene
       pattern = ITEMS[index][6]
       for j in 0...height
         for k in 0...width
-          layer = @sprites["tile#{@items[i][1] + k + (@items[i][2] + j) * BOARDWIDTH}"].layer
+          layer = @sprites["tile#{@items[i][1] + k + (@items[i][2] + j) * BOARD_WIDTH}"].layer
           revealed = false if layer > 0 && pattern[k + j * width] > 0
           break if !revealed
         end
@@ -550,22 +551,22 @@ class MiningGameScene
       end
       # Input
       if Input.trigger?(Input::UP) || Input.repeat?(Input::UP)
-        if @sprites["cursor"].position >= BOARDWIDTH
+        if @sprites["cursor"].position >= BOARD_WIDTH
           pbSEPlay("Mining cursor")
-          @sprites["cursor"].position -= BOARDWIDTH
+          @sprites["cursor"].position -= BOARD_WIDTH
         end
       elsif Input.trigger?(Input::DOWN) || Input.repeat?(Input::DOWN)
-        if @sprites["cursor"].position < (BOARDWIDTH * (BOARDHEIGHT - 1))
+        if @sprites["cursor"].position < (BOARD_WIDTH * (BOARD_HEIGHT - 1))
           pbSEPlay("Mining cursor")
-          @sprites["cursor"].position += BOARDWIDTH
+          @sprites["cursor"].position += BOARD_WIDTH
         end
       elsif Input.trigger?(Input::LEFT) || Input.repeat?(Input::LEFT)
-        if @sprites["cursor"].position % BOARDWIDTH > 0
+        if @sprites["cursor"].position % BOARD_WIDTH > 0
           pbSEPlay("Mining cursor")
           @sprites["cursor"].position -= 1
         end
       elsif Input.trigger?(Input::RIGHT) || Input.repeat?(Input::RIGHT)
-        if @sprites["cursor"].position % BOARDWIDTH < (BOARDWIDTH - 1)
+        if @sprites["cursor"].position % BOARD_WIDTH < (BOARD_WIDTH - 1)
           pbSEPlay("Mining cursor")
           @sprites["cursor"].position += 1
         end

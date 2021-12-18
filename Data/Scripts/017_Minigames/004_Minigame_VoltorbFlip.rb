@@ -44,7 +44,7 @@ class VoltorbFlip
         voltorbs += 1
       # Sets the value randomly to a 2 or 3 if the total is less than the max
       elsif total < @levelRanges[@level - 1][1]
-        squareValues[i] = rand(2) + 2
+        squareValues[i] = rand(2..3)
         total *= squareValues[i]
       end
       if total > (@levelRanges[@level - 1][1])
@@ -387,11 +387,11 @@ class VoltorbFlip
         if @level < 8
           @level += 1
           pbMessage(_INTL("\\se[Voltorb Flip level up]Advanced to Game Lv. {1}!", @level.to_s))
-#          if @firstRound
+          if @firstRound
 #            pbMessage(_INTL("Congratulations!"))
 #            pbMessage(_INTL("You can receive even more Coins in the next game!"))
             @firstRound = false
-#          end
+          end
         end
         pbDisposeSpriteHash(@sprites)
         pbNewGame

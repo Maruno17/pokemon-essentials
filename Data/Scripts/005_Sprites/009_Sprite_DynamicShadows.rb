@@ -35,8 +35,8 @@ class Sprite_Shadow < RPG::Sprite
       @tile_id        = @character.tile_id
       @character_name = @character.character_name
       @character_hue  = @character.character_hue
+      @chbitmap.dispose if @chbitmap
       if @tile_id >= 384
-        @chbitmap.dispose if @chbitmap
         @chbitmap = pbGetTileBitmap(@character.map.tileset_name,
            @tile_id, @character.character_hue)
         self.src_rect.set(0, 0, 32, 32)
@@ -45,7 +45,6 @@ class Sprite_Shadow < RPG::Sprite
         self.ox = 16
         self.oy = 32
       else
-        @chbitmap.dispose if @chbitmap
         @chbitmap = AnimatedBitmap.new(
            'Graphics/Characters/' + @character.character_name, @character.character_hue)
         @cw = @chbitmap.width / 4
@@ -124,7 +123,7 @@ end
 # ? CLASS Sprite_Character edit
 #===================================================
 class Sprite_Character < RPG::Sprite
-  alias :shadow_initialize :initialize
+  alias shadow_initialize initialize
 
   def initialize(viewport, character = nil)
     @ombrelist = []

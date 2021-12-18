@@ -61,15 +61,17 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
 
   def shadowtext(x, y, w, h, t, align = 0, colors = 0)
     width = self.contents.text_size(t).width
-    if align == 1 # Right aligned
+    case align
+    when 1 # Right aligned
       x += (w - width)
-    elsif align == 2 # Centre aligned
+    when 2 # Centre aligned
       x += (w / 2) - (width / 2)
     end
     base = Color.new(12 * 8, 12 * 8, 12 * 8)
-    if colors == 1 # Red
+    case colors
+    when 1 # Red
       base = Color.new(168, 48, 56)
-    elsif colors == 2 # Green
+    when 2 # Green
       base = Color.new(0, 144, 0)
     end
     pbDrawShadowText(self.contents, x, y, [width, w].max, h, t, base, Color.new(26 * 8, 26 * 8, 25 * 8))
@@ -160,14 +162,15 @@ def pbDebugVariables(mode)
       break
     end
     current_id = right_window.index + 1
-    if mode == 0 # Switches
+    case mode
+    when 0 # Switches
       if Input.trigger?(Input::USE)
         pbPlayDecisionSE
         $game_switches[current_id] = !$game_switches[current_id]
         right_window.refresh
         $game_map.need_refresh = true
       end
-    elsif mode == 1 # Variables
+    when 1 # Variables
       if Input.repeat?(Input::LEFT)
         pbDebugSetVariable(current_id, -1)
         right_window.refresh
@@ -175,14 +178,17 @@ def pbDebugVariables(mode)
         pbDebugSetVariable(current_id, 1)
         right_window.refresh
       elsif Input.trigger?(Input::ACTION)
-        if $game_variables[current_id] == 0
+        case $game_variables[current_id]
+        when 0
           $game_variables[current_id] = ""
-        elsif $game_variables[current_id] == ""
+        when ""
           $game_variables[current_id] = 0
-        elsif $game_variables[current_id].is_a?(Numeric)
-          $game_variables[current_id] = 0
-        elsif $game_variables[current_id].is_a?(String)
-          $game_variables[current_id] = ""
+        else
+          if $game_variables[current_id].is_a?(Numeric)
+            $game_variables[current_id] = 0
+          elsif $game_variables[current_id].is_a?(String)
+            $game_variables[current_id] = ""
+          end
         end
         right_window.refresh
         $game_map.need_refresh = true
@@ -366,15 +372,17 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
 
   def shadowtext(t, x, y, w, h, align = 0, colors = 0)
     width = self.contents.text_size(t).width
-    if align == 1
+    case align
+    when 1
       x += (w - width)         # Right aligned
-    elsif align == 2
+    when 2
       x += (w / 2) - (width / 2)   # Centre aligned
     end
     base = Color.new(12 * 8, 12 * 8, 12 * 8)
-    if colors == 1
+    case colors
+    when 1
       base = Color.new(168, 48, 56)   # Red
-    elsif colors == 2
+    when 2
       base = Color.new(0, 144, 0)     # Green
     end
     pbDrawShadowText(self.contents, x, y, [width, w].max, h, t, base, Color.new(26 * 8, 26 * 8, 25 * 8))

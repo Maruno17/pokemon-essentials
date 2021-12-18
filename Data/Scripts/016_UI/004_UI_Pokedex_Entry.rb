@@ -383,7 +383,7 @@ class PokemonPokedexInfo_Scene
     end
     textpos = [
        [GameData::Species.get(@species).name, Graphics.width / 2, Graphics.height - 94, 2, base, shadow],
-       [formname, Graphics.width / 2, Graphics.height - 62, 2, base, shadow],
+       [formname, Graphics.width / 2, Graphics.height - 62, 2, base, shadow]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -464,12 +464,13 @@ class PokemonPokedexInfo_Scene
         pbPlayCloseMenuSE
         break
       elsif Input.trigger?(Input::USE)
-        if @page == 1   # Info
+        case @page
+        when 1   # Info
           @show_battled_count = !@show_battled_count
           dorefresh = true
-        elsif @page == 2   # Area
+        when 2   # Area
 #          dorefresh = true
-        elsif @page == 3   # Forms
+        when 3   # Forms
           if @available.length > 1
             pbPlayDecisionSE
             pbChooseForm

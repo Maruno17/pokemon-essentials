@@ -394,9 +394,9 @@ class PokemonMapFactory
       return
     end
     setMapsInRange
-    deleted = false
-    deleted = @maps.delete_if { |map| !MapFactoryHelper.mapInRange?(map) }
-    @mapIndex = getMapIndex($game_map.map_id) if deleted
+    old_num_maps = @maps.length
+    @maps.delete_if { |map| !MapFactoryHelper.mapInRange?(map) }
+    @mapIndex = getMapIndex($game_map.map_id) if @maps.length != old_num_maps
   end
 end
 
@@ -476,7 +476,7 @@ module MapFactoryHelper
   # Returns the X or Y coordinate of an edge on the map with id.
   # Considers the special strings "N","W","E","S"
   def self.getMapEdge(id, edge)
-    return 0 if edge == "N" || edge == "W"
+    return 0 if ["N", "W"].include?(edge)
     dims = getMapDims(id)   # Get dimensions
     return dims[0] if edge == "E"
     return dims[1] if edge == "S"

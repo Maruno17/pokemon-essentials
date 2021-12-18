@@ -121,8 +121,6 @@ def pbChooseFromGameDataList(game_data, default = nil)
     name = data.real_name
     name = yield(data) if block_given?
     next if !name
-    index = commands.length + 1
-    index = data.id_number if data.respond_to?("id_number")
     commands.push([commands.length + 1, name, data.id])
   end
   return pbChooseList(commands, default, nil, -1)
@@ -344,9 +342,10 @@ def pbChooseList(commands, default = 0, cancelValue = -1, sortType = 1)
   sorting = true
   loop do
     if sorting
-      if sortMode == 0
+      case sortMode
+      when 0
         commands.sort! { |a, b| a[0] <=> b[0] }
-      elsif sortMode == 1
+      when 1
         commands.sort! { |a, b| a[1] <=> b[1] }
       end
       if itemID.is_a?(Symbol)
@@ -365,10 +364,11 @@ def pbChooseList(commands, default = 0, cancelValue = -1, sortType = 1)
       sorting = false
     end
     cmd = pbCommandsSortable(cmdwin, realcommands, -1, itemIndex, (sortType < 0))
-    if cmd[0] == 0   # Chose an option or cancelled
+    case cmd[0]
+    when 0   # Chose an option or cancelled
       itemID = (cmd[1] < 0) ? cancelValue : (commands[cmd[1]][2] || commands[cmd[1]][0])
       break
-    elsif cmd[0] == 1   # Toggle sorting
+    when 1   # Toggle sorting
       itemID = commands[cmd[1]][2] || commands[cmd[1]][0]
       sortMode = (sortMode + 1) % 2
       sorting = true

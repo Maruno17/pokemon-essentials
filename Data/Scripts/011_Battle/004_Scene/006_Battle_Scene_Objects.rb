@@ -39,7 +39,7 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
   end
 
   def initializeDataBoxGraphic(sideSize)
-    onPlayerSide = ((@battler.index % 2) == 0)
+    onPlayerSide = @battler.index.even?
     # Get the data box graphic and set whether the HP numbers/Exp bar are shown
     if sideSize == 1   # One Pokémon on side, use the regular dara box BG
       bgFilename = ["Graphics/Pictures/Battle/databox_normal",
@@ -537,7 +537,7 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
   def pbSetPosition
     return if !@_iconBitmap
     pbSetOrigin
-    if (@index % 2) == 0
+    if @index.even?
       self.z = 50 + 5 * @index / 2
     else
       self.z = 50 - 5 * (@index + 1) / 2

@@ -10,7 +10,6 @@ class Battle::Battler
   attr_accessor :ability_id
   attr_accessor :item_id
   attr_accessor :moves
-  attr_accessor :gender
   attr_accessor :attack
   attr_accessor :spatk
   attr_accessor :speed
@@ -739,7 +738,7 @@ class Battle::Battler
 
   # Returns an array containing all unfainted ally Pokémon.
   def allAllies
-    return @battle.allSameSideBattlers(@index).select { |b| b.index != @index }
+    return @battle.allSameSideBattlers(@index).reject { |b| b.index == @index }
   end
 
   # Yields each unfainted opposing Pokémon.

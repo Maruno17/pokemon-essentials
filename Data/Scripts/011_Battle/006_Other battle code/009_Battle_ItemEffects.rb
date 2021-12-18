@@ -726,7 +726,7 @@ Battle::ItemEffects::AccuracyCalcFromTarget.copy(:BRIGHTPOWDER, :LAXINCENSE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:ADAMANTORB,
   proc { |item, user, target, move, mults, baseDmg, type|
-    if user.isSpecies?(:DIALGA) && (type == :DRAGON || type == :STEEL)
+    if user.isSpecies?(:DIALGA) && [:DRAGON, :STEEL].include?(type)
       mults[:base_damage_multiplier] *= 1.2
     end
   }
@@ -854,7 +854,7 @@ Battle::ItemEffects::DamageCalcFromUser.add(:GRASSGEM,
 
 Battle::ItemEffects::DamageCalcFromUser.add(:GRISEOUSORB,
   proc { |item, user, target, move, mults, baseDmg, type|
-    if user.isSpecies?(:GIRATINA) && (type == :DRAGON || type == :GHOST)
+    if user.isSpecies?(:GIRATINA) && [:DRAGON, :GHOST].include?(type)
       mults[:base_damage_multiplier] *= 1.2
     end
   }
@@ -898,7 +898,7 @@ Battle::ItemEffects::DamageCalcFromUser.add(:LIGHTBALL,
 
 Battle::ItemEffects::DamageCalcFromUser.add(:LUSTROUSORB,
   proc { |item, user, target, move, mults, baseDmg, type|
-    if user.isSpecies?(:PALKIA) && (type == :DRAGON || type == :WATER)
+    if user.isSpecies?(:PALKIA) && [:DRAGON, :WATER].include?(type)
       mults[:base_damage_multiplier] *= 1.2
     end
   }
@@ -1029,7 +1029,7 @@ Battle::ItemEffects::DamageCalcFromUser.add(:SOULDEW,
   proc { |item, user, target, move, mults, baseDmg, type|
     next if !user.isSpecies?(:LATIAS) && !user.isSpecies?(:LATIOS)
     if Settings::SOUL_DEW_POWERS_UP_TYPES
-      mults[:final_damage_multiplier] *= 1.2 if type == :PSYCHIC || type == :DRAGON
+      mults[:final_damage_multiplier] *= 1.2 if [:DRAGON, :PSYCHIC].include?(type)
     else
       if move.specialMove? && !user.battle.rules["souldewclause"]
         mults[:attack_multiplier] *= 1.5
@@ -1880,7 +1880,6 @@ Battle::ItemEffects::EndOfRoundEffect.add(:FLAMEORB,
 Battle::ItemEffects::EndOfRoundEffect.add(:STICKYBARB,
   proc { |item, battler, battle|
     next if !battler.takesIndirectDamage?
-    oldHP = battler.hp
     battle.scene.pbDamageAnimation(battler)
     battler.pbTakeEffectDamage(battler.totalhp / 8, false) { |hp_lost|
       battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))

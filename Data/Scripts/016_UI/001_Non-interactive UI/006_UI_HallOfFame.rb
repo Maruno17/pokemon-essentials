@@ -161,7 +161,7 @@ class HallOfFame_Scene
   def xpositionformula(battlernumber)
     ret = 0
     if !SINGLEROW
-      ret = (battlernumber / 3 % 2 == 0) ? (19 - battlernumber) % 3 : (19 + battlernumber) % 3
+      ret = (battlernumber / 3).even? ? (19 - battlernumber) % 3 : (19 + battlernumber) % 3
     else
       ret = battlernumber % 2 * 2
     end

@@ -104,9 +104,10 @@ class BattleSwapScene
   def pbUpdateChoices(choices)
     commands = pbGetCommands(@rentals, choices)
     @choices = choices
-    if choices.length == 0
+    case choices.length
+    when 0
       @sprites["help"].text = _INTL("Choose the first Pokémon.")
-    elsif choices.length == 1
+    when 1
       @sprites["help"].text = _INTL("Choose the second Pokémon.")
     else
       @sprites["help"].text = _INTL("Choose the third Pokémon.")
@@ -162,9 +163,10 @@ class BattleSwapScreen
       end
       commands.push(_INTL("OTHERS"))
       command = @scene.pbShowCommands(commands)
-      if command == 0
+      case command
+      when 0
         @scene.pbSummary(rentals, index)
-      elsif command == 1
+      when 1
         if chosen.include?(index)
           chosen.delete(index)
           @scene.pbUpdateChoices(chosen.clone)
@@ -194,9 +196,10 @@ class BattleSwapScreen
       if pkmn >= 0
         commands = [_INTL("SUMMARY"), _INTL("SWAP"), _INTL("RECHOOSE")]
         command = @scene.pbShowCommands(commands)
-        if command == 0
+        case command
+        when 0
           @scene.pbSummary(currentPokemon, pkmn)
-        elsif command == 1
+        when 1
           @scene.pbSwapChosen(pkmn)
           yourPkmn = pkmn
           loop do

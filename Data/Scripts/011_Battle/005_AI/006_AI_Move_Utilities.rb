@@ -273,12 +273,11 @@ class Battle::AI
           targetTypes = target.pbTypes(true)
           mult = Effectiveness.calculate(:FLYING,
              targetTypes[0], targetTypes[1], targetTypes[2])
-          baseDmg = (baseDmg.to_f * mult / Effectiveness::NORMAL_EFFECTIVE).round
         else
           mult = Effectiveness.calculate(:FLYING,
              target.types[0], target.types[1], target.effects[PBEffects::Type3])
-          baseDmg = (baseDmg.to_f * mult / Effectiveness::NORMAL_EFFECTIVE).round
         end
+        baseDmg = (baseDmg.to_f * mult / Effectiveness::NORMAL_EFFECTIVE).round
       end
       baseDmg *= 2 if skill >= PBTrainerAI.mediumSkill && target.effects[PBEffects::Minimize]
     when "DoublePowerIfUserLastMoveFailed"   # Stomping Tantrum
@@ -472,15 +471,17 @@ class Battle::AI
     if skill >= PBTrainerAI.mediumSkill
       case user.effectiveWeather
       when :Sun, :HarshSun
-        if type == :FIRE
+        case type
+        when :FIRE
           multipliers[:final_damage_multiplier] *= 1.5
-        elsif type == :WATER
+        when :WATER
           multipliers[:final_damage_multiplier] /= 2
         end
       when :Rain, :HeavyRain
-        if type == :FIRE
+        case type
+        when :FIRE
           multipliers[:final_damage_multiplier] /= 2
-        elsif type == :WATER
+        when :WATER
           multipliers[:final_damage_multiplier] *= 1.5
         end
       when :Sandstorm

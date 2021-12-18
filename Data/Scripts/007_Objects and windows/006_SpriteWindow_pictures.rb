@@ -13,7 +13,7 @@ class IconWindow < SpriteWindow_Base
   end
 
   def dispose
-    clearBitmaps()
+    clearBitmaps
     super
   end
 
@@ -38,7 +38,7 @@ class IconWindow < SpriteWindow_Base
 
   # Sets the icon's filename.
   def setBitmap(file, hue = 0)
-    clearBitmaps()
+    clearBitmaps
     @name = file
     return if file == nil
     if file != ""
@@ -67,7 +67,7 @@ class PictureWindow < SpriteWindow_Base
   end
 
   def dispose
-    clearBitmaps()
+    clearBitmaps
     super
   end
 
@@ -92,7 +92,7 @@ class PictureWindow < SpriteWindow_Base
   # Sets the icon's bitmap or filename. (hue parameter
   # is ignored unless pathOrBitmap is a filename)
   def setBitmap(pathOrBitmap, hue = 0)
-    clearBitmaps()
+    clearBitmaps
     if pathOrBitmap != nil && pathOrBitmap != ""
       if pathOrBitmap.is_a?(Bitmap)
         @_iconbitmap = pathOrBitmap

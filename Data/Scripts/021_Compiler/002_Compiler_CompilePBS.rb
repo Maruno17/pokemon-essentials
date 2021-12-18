@@ -31,9 +31,10 @@ module Compiler
         schema = nonglobaltypes[settingname]
         if schema
           record = pbGetCsvRecord($~[2], lineno, schema)
-          if settingname == "Name"
+          case settingname
+          when "Name"
             rgnnames[currentmap] = record
-          elsif settingname == "Point"
+          when "Point"
             placenames.push(record[2])
             placedescs.push(record[3])
             sections[currentmap][schema[0]] = [] if !sections[currentmap][schema[0]]

@@ -254,7 +254,7 @@ def pbGetText(infile)
       else
         intlhash = OrderedHash.new
         itemlength = 2
-        if section.length % 2 != 0
+        if section.length.odd?
           raise _INTL("Section {1} has an odd number of entries (section was recognized as a hash because its first line is not a number)", name)
         end
       end
@@ -320,7 +320,7 @@ class OrderedHash < Hash
     return str
   end
 
-  alias :to_s :inspect
+  alias to_s inspect
 
   def []=(key, value)
     oldvalue = self[key]

@@ -6,10 +6,10 @@ module RecordedBattleModule
   attr_reader :rounds
 
   module Commands
-    Fight   = 0
-    Bag     = 1
-    Pokemon = 2
-    Run     = 3
+    FIGHT   = 0
+    BAG     = 1
+    POKEMON = 2
+    RUN     = 3
   end
 
   def initialize(*arg)
@@ -81,7 +81,7 @@ module RecordedBattleModule
 
   def pbRegisterMove(idxBattler, idxMove, showMessages = true)
     if super
-      @rounds[@roundindex][idxBattler] = [Commands::Fight, idxMove]
+      @rounds[@roundindex][idxBattler] = [Commands::FIGHT, idxMove]
       return true
     end
     return false
@@ -94,19 +94,19 @@ module RecordedBattleModule
 
   def pbRun(idxBattler, duringBattle = false)
     ret = super
-    @rounds[@roundindex][idxBattler] = [Commands::Run, @decision]
+    @rounds[@roundindex][idxBattler] = [Commands::RUN, @decision]
     return ret
   end
 
   def pbAutoChooseMove(idxBattler, showMessages = true)
     ret = super
-    @rounds[@roundindex][idxBattler] = [Commands::Fight, -1]
+    @rounds[@roundindex][idxBattler] = [Commands::FIGHT, -1]
     return ret
   end
 
   def pbRegisterSwitch(idxBattler, idxParty)
     if super
-      @rounds[@roundindex][idxBattler] = [Commands::Pokemon, idxParty]
+      @rounds[@roundindex][idxBattler] = [Commands::POKEMON, idxParty]
       return true
     end
     return false
@@ -114,7 +114,7 @@ module RecordedBattleModule
 
   def pbRegisterItem(idxBattler, item, idxTarget = nil, idxMove = nil)
     if super
-      @rounds[@roundindex][idxBattler] = [Commands::Bag, item, idxTarget, idxMove]
+      @rounds[@roundindex][idxBattler] = [Commands::BAG, item, idxTarget, idxMove]
       return true
     end
     return false
@@ -140,10 +140,10 @@ end
 #===============================================================================
 module RecordedBattlePlaybackModule
   module Commands
-    Fight   = 0
-    Bag     = 1
-    Pokemon = 2
-    Run     = 3
+    FIGHT   = 0
+    BAG     = 1
+    POKEMON = 2
+    RUN     = 3
   end
 
   def initialize(scene, battle)
@@ -206,7 +206,7 @@ module RecordedBattlePlaybackModule
       next if @rounds[@roundindex][i].length == 0
       pbClearChoice(i)
       case @rounds[@roundindex][i][0]
-      when Commands::Fight
+      when Commands::FIGHT
         if @rounds[@roundindex][i][1] == -1
           pbAutoChooseMove(i, false)
         else
@@ -215,11 +215,11 @@ module RecordedBattlePlaybackModule
         if @rounds[@roundindex][i][2]
           pbRegisterTarget(i, @rounds[@roundindex][i][2])
         end
-      when Commands::Bag
+      when Commands::BAG
         pbRegisterItem(i, @rounds[@roundindex][i][1], @rounds[@roundindex][i][2], @rounds[@roundindex][i][3])
-      when Commands::Pokemon
+      when Commands::POKEMON
         pbRegisterSwitch(i, @rounds[@roundindex][i][1])
-      when Commands::Run
+      when Commands::RUN
         @decision = @rounds[@roundindex][i][1]
       end
     end

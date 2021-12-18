@@ -127,7 +127,7 @@ Events.onStepTaken += proc {
           pbFadeOutIn {
             scene = PokemonBag_Scene.new
             screen = PokemonBagScreen.new(scene, $bag)
-            ret = screen.pbChooseItemScreen(Proc.new { |item|
+            ret = screen.pbChooseItemScreen(proc { |item|
               [:REPEL, :SUPERREPEL, :MAXREPEL].include?(item)
             })
           }

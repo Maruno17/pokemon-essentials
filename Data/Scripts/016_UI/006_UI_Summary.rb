@@ -212,14 +212,14 @@ class PokemonSummary_Scene
   def pbDisplay(text)
     @sprites["messagebox"].text = text
     @sprites["messagebox"].visible = true
-    pbPlayDecisionSE()
+    pbPlayDecisionSE
     loop do
       Graphics.update
       Input.update
       pbUpdate
       if @sprites["messagebox"].busy?
         if Input.trigger?(Input::USE)
-          pbPlayDecisionSE() if @sprites["messagebox"].pausing?
+          pbPlayDecisionSE if @sprites["messagebox"].pausing?
           @sprites["messagebox"].resume
         end
       elsif Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
@@ -393,7 +393,7 @@ class PokemonSummary_Scene
        [@pokemon.speciesName, 435, 106, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)],
        [_INTL("Type"), 238, 138, 0, base, shadow],
        [_INTL("OT"), 238, 170, 0, base, shadow],
-       [_INTL("ID No."), 238, 202, 0, base, shadow],
+       [_INTL("ID No."), 238, 202, 0, base, shadow]
     ]
     # Write the Regional/National Dex number
     dexnum = 0
@@ -836,7 +836,7 @@ class PokemonSummary_Scene
     # Write various bits of text
     textpos = [
        [_INTL("No. of Ribbons:"), 234, 326, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-       [@pokemon.numRibbons.to_s, 450, 326, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+       [@pokemon.numRibbons.to_s, 450, 326, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -1097,11 +1097,12 @@ class PokemonSummary_Scene
       # Reposition the cursor
       @sprites["markingsel"].x = 284 + 58 * (index % 3)
       @sprites["markingsel"].y = 144 + 50 * (index / 3)
-      if index == 6   # OK
+      case index
+      when 6   # OK
         @sprites["markingsel"].x = 284
         @sprites["markingsel"].y = 244
         @sprites["markingsel"].src_rect.y = @sprites["markingsel"].bitmap.height / 2
-      elsif index == 7   # Cancel
+      when 7   # Cancel
         @sprites["markingsel"].x = 284
         @sprites["markingsel"].y = 294
         @sprites["markingsel"].src_rect.y = @sprites["markingsel"].bitmap.height / 2
@@ -1116,10 +1117,11 @@ class PokemonSummary_Scene
         break
       elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
-        if index == 6   # OK
+        case index
+        when 6   # OK
           ret = markings
           break
-        elsif index == 7   # Cancel
+        when 7   # Cancel
           break
         else
           markings[index] = ((markings[index] || 0) + 1) % mark_variants
@@ -1197,7 +1199,7 @@ class PokemonSummary_Scene
       pbFadeOutIn {
         scene = PokemonBag_Scene.new
         screen = PokemonBagScreen.new(scene, $bag)
-        item = screen.pbChooseItemScreen(Proc.new { |itm| GameData::Item.get(itm).can_hold? })
+        item = screen.pbChooseItemScreen(proc { |itm| GameData::Item.get(itm).can_hold? })
       }
       if item
         dorefresh = pbGiveItemToPokemon(item, @pokemon, self, @partyindex)

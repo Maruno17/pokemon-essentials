@@ -348,7 +348,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   def getLineY(line)
     textchars = getTextChars
     return 0 if textchars.length == 0
-    totallines = getTotalLines()
+    totallines = getTotalLines
     line = 0 if line < 0
     line = totallines - 1 if line >= totallines
     maximumY = 0
@@ -364,7 +364,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   def getColumnsInLine(line)
     textchars = getTextChars
     return 0 if textchars.length == 0
-    totallines = getTotalLines()
+    totallines = getTotalLines
     line = 0 if line < 0
     line = totallines - 1 if line >= totallines
     endpos = 0
@@ -379,7 +379,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   def getPosFromLineAndColumn(line, column)
     textchars = getTextChars
     return 0 if textchars.length == 0
-    totallines = getTotalLines()
+    totallines = getTotalLines
     line = 0 if line < 0
     line = totallines - 1 if line >= totallines
     endpos = 0
@@ -405,7 +405,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   end
 
   def getLastVisibleLine
-    getTextChars()
+    getTextChars
     textheight = [1, self.contents.text_size("X").height].max
     lastVisible = @firstline + ((self.height - self.borderY) / textheight) - 1
     return lastVisible
@@ -419,7 +419,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
       self.refresh
     end
     @firstline = @cursorLine if @cursorLine < @firstline
-    lastVisible = getLastVisibleLine()
+    lastVisible = getLastVisibleLine
     @firstline += (@cursorLine - lastVisible) if @cursorLine > lastVisible
   end
 
@@ -428,7 +428,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     # can affect line offset)
 #   echoln ["beforemoving",@cursorLine,@cursorColumn]
     totalColumns = getColumnsInLine(@cursorLine) # check current line
-    totalLines = getTotalLines()
+    totalLines = getTotalLines
     oldCursorLine = @cursorLine
     oldCursorColumn = @cursorColumn
     @cursorColumn += columnOffset
@@ -487,7 +487,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
       return
     elsif Input.press?(Input::CTRL) && Input.triggerex?(:END)
       # Move cursor to end
-      @cursorLine = getTotalLines() - 1
+      @cursorLine = getTotalLines - 1
       @cursorColumn = getColumnsInLine(@cursorLine)
       updateCursorPos(true)
       return
@@ -511,7 +511,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     getTextChars
     height = self.height - self.borderY
     cursorcolor = Color.new(0, 0, 0)
-    textchars = getTextChars()
+    textchars = getTextChars
     startY = getLineY(@firstline)
     for i in 0...textchars.length
       thisline = textchars[i][5]

@@ -396,15 +396,17 @@ class Battle::Move
     # Weather
     case user.effectiveWeather
     when :Sun, :HarshSun
-      if type == :FIRE
+      case type
+      when :FIRE
         multipliers[:final_damage_multiplier] *= 1.5
-      elsif type == :WATER
+      when :WATER
         multipliers[:final_damage_multiplier] /= 2
       end
     when :Rain, :HeavyRain
-      if type == :FIRE
+      case type
+      when :FIRE
         multipliers[:final_damage_multiplier] /= 2
-      elsif type == :WATER
+      when :WATER
         multipliers[:final_damage_multiplier] *= 1.5
       end
     when :Sandstorm

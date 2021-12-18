@@ -20,7 +20,7 @@ class MapSprite
 
   def getXY
     return nil if !Input.trigger?(Input::MOUSELEFT)
-    mouse = Mouse::getMousePos(true)
+    mouse = Mouse.getMousePos(true)
     return nil if !mouse
     if mouse[0] < @sprite.x || mouse[0] >= @sprite.x + @sprite.bitmap.width
       return nil
@@ -119,7 +119,7 @@ class RegionMapSprite
 
   def getXY
     return nil if !Input.trigger?(Input::MOUSELEFT)
-    mouse = Mouse::getMousePos(true)
+    mouse = Mouse.getMousePos(true)
     return nil if !mouse
     if mouse[0] < @sprite.x || mouse[0] >= @sprite.x + @sprite.bitmap.width
       return nil
@@ -280,7 +280,7 @@ class MapScreenScene
   end
 
   def serializeConnectionData
-    conndata = generateConnectionData()
+    conndata = generateConnectionData
     save_data(conndata, "Data/map_connections.dat")
     Compiler.write_connections
     @mapconns = conndata
@@ -477,7 +477,7 @@ class MapScreenScene
   end
 
   def update
-    mousepos = Mouse::getMousePos
+    mousepos = Mouse.getMousePos
     if mousepos
       hitmap = hittest(mousepos[0], mousepos[1])
       if Input.trigger?(Input::MOUSELEFT)

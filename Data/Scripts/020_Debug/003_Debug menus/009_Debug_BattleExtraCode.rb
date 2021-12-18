@@ -187,9 +187,10 @@ class SpriteWindow_DebugBattleFieldEffects < Window_DrawableCommand
 
   def shadowtext(x, y, w, h, t, align = 0, colors = 0)
     width = self.contents.text_size(t).width
-    if align == 1   # Right aligned
+    case align
+    when 1   # Right aligned
       x += w - width
-    elsif align == 2   # Centre aligned
+    when 2   # Centre aligned
       x += (w - width) / 2
     end
     base_color = BASE_TEXT_COLOR
@@ -213,7 +214,8 @@ class SpriteWindow_DebugBattleFieldEffects < Window_DrawableCommand
     rect = drawCursor(index, rect)
     # Get value's text to draw
     variable_text = variable.to_s
-    if variable_data[:default] == -1   # Battler
+    case variable_data[:default]
+    when -1   # Battler
       if variable >= 0
         battler_name = @battle.battlers[variable].name
         battler_name = "-" if nil_or_empty?(battler_name)
@@ -221,7 +223,7 @@ class SpriteWindow_DebugBattleFieldEffects < Window_DrawableCommand
       else
         variable_text = _INTL("[None]")
       end
-    elsif variable_data[:default] == nil   # Move, item
+    when nil   # Move, item
       variable_text = _INTL("[None]") if !variable
     end
     # Draw text

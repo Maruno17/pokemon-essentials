@@ -49,7 +49,7 @@ def pbEachCombination(array, num)
 end
 
 # Returns a language ID
-def pbGetLanguage()
+def pbGetLanguage
   case System.user_language[0..1]
   when "ja" then return 1   # Japanese
   when "en" then return 2   # English
@@ -242,7 +242,7 @@ def pbTrainerName(name = nil, outfit = 0)
 end
 
 def pbSuggestTrainerName(gender)
-  userName = pbGetUserName()
+  userName = pbGetUserName
   userName = userName.gsub(/\s+.*$/, "")
   if userName.length > 0 && userName.length < Settings::MAX_PLAYER_NAME_SIZE
     userName[0, 1] = userName[0, 1].upcase

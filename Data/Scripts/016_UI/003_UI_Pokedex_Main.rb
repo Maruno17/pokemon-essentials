@@ -676,7 +676,7 @@ class PokemonPokedex_Scene
       end
     end
     # Draw selected option(s) button graphic
-    if mode == 3 || mode == 4   # Height, weight
+    if [3, 4].include?(mode)   # Height, weight
       xpos1 = xstart + (sel[0] + 1) * xgap
       xpos1 = xstart if sel[0] < -1
       xpos2 = xstart + (sel[1] + 1) * xgap
@@ -696,11 +696,10 @@ class PokemonPokedex_Scene
       textpos.push([txt2, xpos2 + halfwidth, ypos2, 2, base, nil, 1])
     else
       for i in 0...sel.length
+        selrect = Rect.new(0, selbuttony, @selbitmap.bitmap.width, selbuttonheight)
         if sel[i] >= 0
-          selrect = Rect.new(0, selbuttony, @selbitmap.bitmap.width, selbuttonheight)
           overlay.blt(xstart + (sel[i] % cols) * xgap, ystart + (sel[i] / cols).floor * ygap, @selbitmap.bitmap, selrect)
         else
-          selrect = Rect.new(0, selbuttony, @selbitmap.bitmap.width, selbuttonheight)
           overlay.blt(xstart + (cols - 1) * xgap, ystart + (cmds.length / cols).floor * ygap, @selbitmap.bitmap, selrect)
         end
       end
@@ -903,7 +902,7 @@ class PokemonPokedex_Scene
     oldindex  = index
     minmax    = 1
     oldminmax = minmax
-    if mode == 3 || mode == 4
+    if [3, 4].include?(mode)
       index = oldindex = selindex[minmax]
     end
     @sprites["searchcursor"].mode   = mode
@@ -922,7 +921,7 @@ class PokemonPokedex_Scene
       end
       Graphics.update
       Input.update
-      if mode == 3 || mode == 4
+      if [3, 4].include?(mode)
         if Input.trigger?(Input::UP)
           if index < -1   # From OK/Cancel
             minmax = 0
@@ -936,10 +935,11 @@ class PokemonPokedex_Scene
             pbRefreshDexSearchParam(mode, cmds, selindex, index)
           end
         elsif Input.trigger?(Input::DOWN)
-          if minmax == 1
+          case minmax
+          when 1
             minmax = 0
             index = selindex[minmax]
-          elsif minmax == 0
+          when 0
             minmax = -1
             index = -2
           end
@@ -1131,7 +1131,7 @@ class PokemonPokedex_Scene
         end
         pbPlayCursorSE if index != oldindex
       elsif Input.trigger?(Input::DOWN)
-        if index == 4 || index == 6
+        if [4, 6].include?(index)
           index = 8
         elsif index < 7
           index += 1
@@ -1151,7 +1151,7 @@ class PokemonPokedex_Scene
           index = 5
         elsif index >= 2 && index <= 4
           index = 6
-        elsif index == 7 || index == 8
+        elsif [7, 8].include?(index)
           index += 1
         end
         pbPlayCursorSE if index != oldindex

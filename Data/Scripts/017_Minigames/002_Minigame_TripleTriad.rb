@@ -611,7 +611,7 @@ class TriadScreen
 
   def maxCards
     numcards = @width * @height
-    if numcards % 2 == 1
+    if numcards.odd?
       numcards = numcards / 2 + 1
     else
       numcards = numcards / 2
@@ -833,7 +833,7 @@ class TriadScreen
           end
         end
         # Sort by number of flips
-        scores.sort! { |a, b| (b[3] == a[3]) ? rand(3) - 1 : b[3] <=> a[3] }
+        scores.sort! { |a, b| (b[3] == a[3]) ? rand(-1..1) : b[3] <=> a[3] }
         scores = scores[0, opponentCards.length]   # Get the best results
         if scores.length == 0
           @scene.pbDisplay(_INTL("{1} can't move somehow...", @opponentName))

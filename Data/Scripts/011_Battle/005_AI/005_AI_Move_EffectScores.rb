@@ -1689,12 +1689,8 @@ class Battle::AI
     when "PowerHigherWithUserHeavierThanTarget"
     #---------------------------------------------------------------------------
     when "PowerUpAllyMove"
-      hasAlly = false
-      user.allAllies.each do |b|
-        hasAlly = true
-        score += 30
-        break
-      end
+      hasAlly = !user.allAllies.empty?
+      score += 30 if hasAlly
       score -= 90 if !hasAlly
     #---------------------------------------------------------------------------
     when "StartWeakenElectricMoves"
@@ -1825,8 +1821,6 @@ class Battle::AI
       end
     #---------------------------------------------------------------------------
     when "HitTwoTimes"
-    #---------------------------------------------------------------------------
-    when "HitTwoTimesPoisonTarget"
     #---------------------------------------------------------------------------
     when "HitThreeTimesPowersUpWithEachHit"
     #---------------------------------------------------------------------------

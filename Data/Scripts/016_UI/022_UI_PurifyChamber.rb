@@ -291,7 +291,7 @@ module PurifyChamberHelper
       return chamber.getShadow(set)
     elsif position > 0
       position -= 1
-      if position % 2 == 0
+      if position.even?
         return chamber[set, position / 2]
       else # In between two indices
         return nil
@@ -305,7 +305,7 @@ module PurifyChamberHelper
       return chamber.getShadow(chamber.currentSet)
     elsif position > 0
       position -= 1
-      if position % 2 == 0
+      if position.even?
         return chamber[chamber.currentSet, position / 2]
       else # In between two indices
         return nil
@@ -318,7 +318,7 @@ module PurifyChamberHelper
     if position > 0
       position -= 1
       oldpos = position / 2
-      if position % 2 == 0
+      if position.even?
         return position + 1
       else
         return ((oldpos + 1) * 2) + 1
@@ -332,7 +332,7 @@ module PurifyChamberHelper
       chamber.setShadow(chamber.currentSet, value)
     elsif position > 0
       position -= 1
-      if position % 2 == 0
+      if position.even?
         chamber.insertAt(chamber.currentSet, position / 2, value)
       else # In between two indices
         chamber.insertAfter(chamber.currentSet, position / 2, value)
@@ -612,11 +612,12 @@ class PurifyChamberScreen
            _INTL("What do you want to do?"),
            [_INTL("EDIT"), _INTL("SWITCH"), _INTL("CANCEL")]
         )
-        if cmd == 0   # edit
+        case cmd
+        when 0   # edit
           if !pbOpenSetDetail
             break
           end
-        elsif cmd == 1   # switch
+        when 1   # switch
           chamber.currentSet = set
           newSet = @scene.pbSwitch(set)
           chamber.switch(set, newSet)
@@ -900,19 +901,20 @@ class PurifyChamberSetView < SpriteWrapper
         pos /= 2
       end
       seg = pos * 8 / points
-      if seg == 7 || seg == 0
+      case seg
+      when 7, 0
         pos -= 1 if button == Input::LEFT
         pos += 1 if button == Input::RIGHT
         pos = nil if button == Input::DOWN
-      elsif seg == 1 || seg == 2
+      when 1, 2
         pos -= 1 if button == Input::UP
         pos += 1 if button == Input::DOWN
         pos = nil if button == Input::LEFT
-      elsif seg == 3 || seg == 4
+      when 3, 4
         pos -= 1 if button == Input::RIGHT
         pos += 1 if button == Input::LEFT
         pos = nil if button == Input::UP
-      elsif seg == 5 || seg == 6
+      when 5, 6
         pos -= 1 if button == Input::DOWN
         pos += 1 if button == Input::UP
         pos = nil if button == Input::RIGHT
@@ -986,7 +988,7 @@ class PurifyChamberSetView < SpriteWrapper
     setList = @chamber.setList(@set)
     refreshFlows
     for i in 0...PurifyChamber::SETSIZE * 2
-      pkmn = (i % 2 == 1 || i >= points) ? nil : setList[i / 2]
+      pkmn = (i.odd? || i >= points) ? nil : setList[i / 2]
       angle = 360 - (i * 360 / points)
       angle += 90 # start at 12 not 3 o'clock
       if pkmn && @chamber[@set].facing == i / 2

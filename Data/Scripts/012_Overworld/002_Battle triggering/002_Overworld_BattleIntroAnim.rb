@@ -180,7 +180,7 @@ end
 ##### VS. animation, by Luka S.J. #####
 ##### Tweaked by Maruno           #####
 SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
-  Proc.new { |battle_type, foe|   # Condition
+  proc { |battle_type, foe|   # Condition
     next false unless [1, 3].include?(battle_type) && foe.length == 1   # Only if a single trainer
     tr_type = foe[0].trainer_type
     next false if !tr_type
@@ -189,7 +189,7 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     next pbResolveBitmap("Graphics/Transitions/" + trainer_bar_graphic) &&
          pbResolveBitmap("Graphics/Transitions/" + trainer_graphic)
   },
-  Proc.new { |viewport, battle_type, foe|   # Animation
+  proc { |viewport, battle_type, foe|   # Animation
     # Determine filenames of graphics to be used
     tr_type = foe[0].trainer_type
     trainer_bar_graphic = sprintf("vsBar_%s", tr_type.to_s) rescue nil

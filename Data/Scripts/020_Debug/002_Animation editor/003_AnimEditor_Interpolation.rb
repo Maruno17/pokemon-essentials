@@ -24,7 +24,7 @@ class ControlPointSprite < SpriteWrapper
       @dragging = false
       return
     end
-    mouse = Mouse::getMousePos(true)
+    mouse = Mouse.getMousePos(true)
     return if !mouse
     self.x = [[mouse[0], 0].max, 512].min
     self.y = [[mouse[1], 0].max, 384].min
@@ -32,7 +32,7 @@ class ControlPointSprite < SpriteWrapper
 
   def hittest?
     return true if !self.visible
-    mouse = Mouse::getMousePos(true)
+    mouse = Mouse.getMousePos(true)
     return false if !mouse
     return mouse[0] >= self.x && mouse[0] < self.x + 6 &&
            mouse[1] >= self.y && mouse[1] < self.y + 6
@@ -294,7 +294,7 @@ def pbDefinePath(canvas)
         if Input.trigger?(Input::MOUSELEFT)
           for j in 0...4
             next if !curve[j].hittest?
-            if j == 1 || j == 2
+            if [1, 2].include?(j)
               next if !curve[0].visible || !curve[3].visible
             end
             curve[j].visible = true
@@ -307,7 +307,7 @@ def pbDefinePath(canvas)
         for j in 0...4
           curve[j].mouseover
         end
-        mousepos = Mouse::getMousePos(true)
+        mousepos = Mouse.getMousePos(true)
         newtext = (mousepos) ? sprintf("(%d,%d)", mousepos[0], mousepos[1]) : "(??,??)"
         if window.text != newtext
           window.text = newtext
@@ -376,11 +376,11 @@ def pbDefinePath(canvas)
         if Input.trigger?(Input::MOUSELEFT)
           break
         end
-        mousepos = Mouse::getMousePos(true)
+        mousepos = Mouse.getMousePos(true)
         window.text = (mousepos) ? sprintf("(%d,%d)", mousepos[0], mousepos[1]) : "(??,??)"
       end
       while !canceled
-        mousepos = Mouse::getMousePos(true)
+        mousepos = Mouse.getMousePos(true)
         if mousepos && !pointpath.isEndPoint?(mousepos[0], mousepos[1])
           pointpath.addPoint(mousepos[0], mousepos[1])
           points.push(PointSprite.new(mousepos[0], mousepos[1], canvas.viewport))

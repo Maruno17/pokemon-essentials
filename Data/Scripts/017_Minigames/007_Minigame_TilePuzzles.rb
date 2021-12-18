@@ -190,13 +190,14 @@ class TilePuzzleScene
       ret.push(i)
       @angles.push(0)
     end
-    if @game == 6
+    case @game
+    when 6
       @tiles = ret
       5.times do
         pbShiftLine([2, 4, 6, 8][rand(4)], rand(@boardwidth * @boardheight), false)
       end
       return @tiles
-    elsif @game == 7
+    when 7
       @tiles = ret
       5.times do
         pbRotateTile(rand(@boardwidth * @boardheight), false)
@@ -213,11 +214,11 @@ class TilePuzzleScene
                         ret[j] != @boardwidth * @boardheight - 1
           end
         end
-        if @boardwidth % 2 == 1
-          ret = pbShuffleTiles if num % 2 == 1
+        if @boardwidth.odd?
+          ret = pbShuffleTiles if num.odd?
         else
-          ret = pbShuffleTiles if !((num % 2 == 0 && (@boardheight - (blank / @boardwidth)) % 2 == 1) ||
-                                  (num % 2 == 1 && (@boardheight - (blank / @boardwidth)) % 2 == 0))
+          ret = pbShuffleTiles if !((num.even? && (@boardheight - (blank / @boardwidth)).odd?) ||
+                                  (num.odd? && (@boardheight - (blank / @boardwidth)).even?))
         end
       end
       if @game == 1 || @game == 2
@@ -241,16 +242,15 @@ class TilePuzzleScene
       for i in 0...@boardwidth * @boardheight
         return i if @tiles[i] == @boardwidth * @boardheight - 1
       end
-      return 0
-    else
-      return 0
     end
+    return 0
   end
 
   def pbMoveCursor(pos, dir)
-    if dir == 2
+    case dir
+    when 2
       pos += @boardwidth
-    elsif dir == 4
+    when 4
       if pos >= @boardwidth * @boardheight
         if pos % @boardwidth == (@boardwidth / 2).ceil
           pos = ((pos % (@boardwidth * @boardheight)) / @boardwidth) * @boardwidth + @boardwidth - 1
@@ -264,7 +264,7 @@ class TilePuzzleScene
           pos -= 1
         end
       end
-    elsif dir == 6
+    when 6
       if pos >= @boardwidth * @boardheight
         if pos % @boardwidth == (@boardwidth / 2).ceil - 1
           pos = ((pos % (@boardwidth * @boardheight)) / @boardwidth) * @boardwidth
@@ -278,7 +278,7 @@ class TilePuzzleScene
           pos += 1
         end
       end
-    elsif dir == 8
+    when 8
       pos -= @boardwidth
     end
     return pos
@@ -286,21 +286,22 @@ class TilePuzzleScene
 
   def pbCanMoveInDir?(pos, dir, swapping)
     return true if @game == 6 && swapping
-    if dir == 2
+    case dir
+    when 2
       return false if (pos / @boardwidth) % @boardheight >= @boardheight - 1
-    elsif dir == 4
+    when 4
       if @game == 1 || @game == 2
         return false if pos >= @boardwidth * @boardheight && pos % @boardwidth == 0
       else
         return false if pos % @boardwidth == 0
       end
-    elsif dir == 6
+    when 6
       if @game == 1 || @game == 2
         return false if pos >= @boardwidth * @boardheight && pos % @boardwidth >= @boardwidth - 1
       else
         return false if pos % @boardwidth >= @boardwidth - 1
       end
-    elsif dir == 8
+    when 8
       return false if (pos / @boardwidth) % @boardheight == 0
     end
     return true
@@ -376,8 +377,8 @@ class TilePuzzleScene
     movetile = pbMoveCursor(cursor, dir)
     @sprites["cursor"].visible = false
     @sprites["tile#{@tiles[cursor]}"].z = 1
-    if dir == 2 || dir == 8   # Swap vertically
-      swapTime = Graphics.frame_rate * 3 / 10
+    swapTime = Graphics.frame_rate * 3 / 10
+    if [2, 8].include?(dir)   # Swap vertically
       distancePerFrame = (@tileheight.to_f / swapTime).ceil
       dist = (dir / 4).floor - 1
       swapTime.times do
@@ -388,7 +389,6 @@ class TilePuzzleScene
         Input.update
       end
     else   # Swap horizontally
-      swapTime = Graphics.frame_rate * 3 / 10
       distancePerFrame = (@tilewidth.to_f / swapTime).ceil
       dist = dir - 5
       swapTime.times do
@@ -411,7 +411,7 @@ class TilePuzzleScene
     # Get tiles involved
     tiles = []
     dist = 0
-    if dir == 2 || dir == 8
+    if [2, 8].include?(dir)
       dist = (dir / 4).floor - 1
       while (dist > 0 && cursor < (@boardwidth - 1) * @boardheight) ||
             (dist < 0 && cursor >= @boardwidth)
@@ -441,7 +441,7 @@ class TilePuzzleScene
         Input.update
       end
       shiftTime = Graphics.frame_rate * 3 / 10
-      if dir == 2 || dir == 8
+      if [2, 8].include?(dir)
         distancePerFrame = (@tileheight.to_f / shiftTime).ceil
         shiftTime.times do
           for i in tiles

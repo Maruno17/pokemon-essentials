@@ -76,10 +76,10 @@ module RandomDungeonGenerator
     ROOM_MIN_HEIGHT = 4
     ROOM_MAX_HEIGHT = CELL_HEIGHT - 3   # Should be at most CELL_HEIGHT - 3
     CORRIDOR_WIDTH  = 3
-    None      = 0
-    TurnLeft  = 1
-    TurnRight = 2
-    Turn180   = 3
+    TURN_NONE  = 0
+    TURN_LEFT  = 1
+    TURN_RIGHT = 2
+    TURN_BACK  = 3
     @@corridor_layouts = nil
 
     module_function
@@ -96,16 +96,16 @@ module RandomDungeonGenerator
           for i in 0...CELL_WIDTH * CELL_HEIGHT
             tiles[combo][i] = DungeonTile::VOID
           end
-          if (combo & EdgeMasks::North) == 0
+          if (combo & EdgeMasks::NORTH) == 0
             paint_corridor(tiles[combo], x_offset, 0, CORRIDOR_WIDTH, y_offset + CORRIDOR_WIDTH)
           end
-          if (combo & EdgeMasks::South) == 0
+          if (combo & EdgeMasks::SOUTH) == 0
             paint_corridor(tiles[combo], x_offset, y_offset, CORRIDOR_WIDTH, CELL_HEIGHT - y_offset)
           end
-          if (combo & EdgeMasks::East) == 0
+          if (combo & EdgeMasks::EAST) == 0
             paint_corridor(tiles[combo], x_offset, y_offset, CELL_WIDTH - x_offset, CORRIDOR_WIDTH)
           end
-          if (combo & EdgeMasks::West) == 0
+          if (combo & EdgeMasks::WEST) == 0
             paint_corridor(tiles[combo], 0, y_offset, x_offset + CORRIDOR_WIDTH, CORRIDOR_WIDTH)
           end
         end
@@ -126,25 +126,25 @@ module RandomDungeonGenerator
     # Used to draw tiles from the given tile_layout and rotation (for corridors).
     def paint_tile_layout(dungeon, dstX, dstY, tile_layout, rotation)
       case rotation
-      when None
+      when TURN_NONE
         for y in 0...CELL_HEIGHT
           for x in 0...CELL_WIDTH
             dungeon[x + dstX, y + dstY] = tile_layout[y * CELL_WIDTH + x]
           end
         end
-      when TurnLeft
+      when TURN_LEFT
         for y in 0...CELL_HEIGHT
           for x in 0...CELL_WIDTH
             dungeon[y + dstX, CELL_WIDTH - 1 - x + dstY] = tile_layout[y * CELL_WIDTH + x]
           end
         end
-      when TurnRight
+      when TURN_RIGHT
         for y in 0...CELL_HEIGHT
           for x in 0...CELL_WIDTH
             dungeon[CELL_HEIGHT - 1 - y + dstX, x + dstY] = tile_layout[y * CELL_WIDTH + x]
           end
         end
-      when Turn180
+      when TURN_BACK
         for y in 0...CELL_HEIGHT
           for x in 0...CELL_WIDTH
             dungeon[CELL_WIDTH - 1 - x + dstX, CELL_HEIGHT - 1 - y + dstY] = tile_layout[y * CELL_WIDTH + x]
@@ -180,11 +180,11 @@ module RandomDungeonGenerator
   # Bitwise values used to keep track of the generation of node connections.
   #=============================================================================
   module EdgeMasks
-    North   = 1
-    West    = 2
-    East    = 4
-    South   = 8
-    Visited = 16
+    NORTH   = 1
+    WEST    = 2
+    EAST    = 4
+    SOUTH   = 8
+    VISITED = 16
   end
 
   #=============================================================================
@@ -225,7 +225,7 @@ module RandomDungeonGenerator
   class Maze
     attr_accessor :cellWidth, :cellHeight, :nodeWidth, :nodeHeight
 
-    DIRECTIONS = [EdgeMasks::North, EdgeMasks::South, EdgeMasks::East, EdgeMasks::West]
+    DIRECTIONS = [EdgeMasks::NORTH, EdgeMasks::SOUTH, EdgeMasks::EAST, EdgeMasks::WEST]
 
     def initialize(cw, ch)
       raise ArgumentError.new if cw == 0 || ch == 0
@@ -244,17 +244,17 @@ module RandomDungeonGenerator
 
     def getVisited(x, y)
       return false if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      return (@cells[y * cellWidth + x] & EdgeMasks::Visited) != 0
+      return (@cells[y * cellWidth + x] & EdgeMasks::VISITED) != 0
     end
 
     def setVisited(x, y)
       return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      @cells[y * cellWidth + x] |= EdgeMasks::Visited
+      @cells[y * cellWidth + x] |= EdgeMasks::VISITED
     end
 
     def clearVisited(x, y)
       return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      @cells[y * cellWidth + x] &= ~EdgeMasks::Visited
+      @cells[y * cellWidth + x] &= ~EdgeMasks::VISITED
     end
 
     def clearAllCells
@@ -275,17 +275,17 @@ module RandomDungeonGenerator
       nx = x
       ny = y
       case edge
-      when EdgeMasks::North
-        e = EdgeMasks::South
+      when EdgeMasks::NORTH
+        e = EdgeMasks::SOUTH
         ny = y - 1
-      when EdgeMasks::South
-        e = EdgeMasks::North
+      when EdgeMasks::SOUTH
+        e = EdgeMasks::NORTH
         ny = y + 1
-      when EdgeMasks::East
-        e = EdgeMasks::West
+      when EdgeMasks::EAST
+        e = EdgeMasks::WEST
         nx = x + 1
-      when EdgeMasks::West
-        e = EdgeMasks::East
+      when EdgeMasks::WEST
+        e = EdgeMasks::EAST
         nx = x - 1
       else
         return
@@ -307,17 +307,17 @@ module RandomDungeonGenerator
       nx = x
       ny = y
       case edge
-      when EdgeMasks::North
-        e = EdgeMasks::South
+      when EdgeMasks::NORTH
+        e = EdgeMasks::SOUTH
         ny -= 1
-      when EdgeMasks::South
-        e = EdgeMasks::North
+      when EdgeMasks::SOUTH
+        e = EdgeMasks::NORTH
         ny += 1
-      when EdgeMasks::East
-        e = EdgeMasks::West
+      when EdgeMasks::EAST
+        e = EdgeMasks::WEST
         nx += 1
-      when EdgeMasks::West
-        e = EdgeMasks::East
+      when EdgeMasks::WEST
+        e = EdgeMasks::EAST
         nx -= 1
       else
         raise ArgumentError.new
@@ -339,10 +339,10 @@ module RandomDungeonGenerator
 
     def getEdgePattern(x, y)
       pattern = 0
-      pattern |= EdgeMasks::North if getEdgeNode(x, y, EdgeMasks::North)
-      pattern |= EdgeMasks::South if getEdgeNode(x, y, EdgeMasks::South)
-      pattern |= EdgeMasks::East if getEdgeNode(x, y, EdgeMasks::East)
-      pattern |= EdgeMasks::West if getEdgeNode(x, y, EdgeMasks::West)
+      pattern |= EdgeMasks::NORTH if getEdgeNode(x, y, EdgeMasks::NORTH)
+      pattern |= EdgeMasks::SOUTH if getEdgeNode(x, y, EdgeMasks::SOUTH)
+      pattern |= EdgeMasks::EAST if getEdgeNode(x, y, EdgeMasks::EAST)
+      pattern |= EdgeMasks::WEST if getEdgeNode(x, y, EdgeMasks::WEST)
       return pattern
     end
 
@@ -354,13 +354,13 @@ module RandomDungeonGenerator
         ox = wx
         oy = wy
         case dir
-        when EdgeMasks::North
+        when EdgeMasks::NORTH
           wy -= 1
-        when EdgeMasks::West
+        when EdgeMasks::WEST
           wx -= 1
-        when EdgeMasks::East
+        when EdgeMasks::EAST
           wx += 1
-        when EdgeMasks::South
+        when EdgeMasks::SOUTH
           wy += 1
         end
         if isBlockedNode?(wx, wy)
@@ -384,10 +384,10 @@ module RandomDungeonGenerator
 
     def generateWallGrowthMaze(minWall = 0, maxWall = nil)
       maxWall = cellWidth if !maxWall
-      nlist = buildNodeList()
+      nlist = buildNodeList
       return if nlist.length == 0
       for c in 0...nlist.length
-        d = randomDir()
+        d = randomDir
         len = rand(maxWall + 1)
         x = nlist[c].x
         y = nlist[c].y
@@ -403,13 +403,13 @@ module RandomDungeonGenerator
         cx = x
         cy = y
         case d
-        when EdgeMasks::North
+        when EdgeMasks::NORTH
           cy -= 1
-        when EdgeMasks::South
+        when EdgeMasks::SOUTH
           cy += 1
-        when EdgeMasks::East
+        when EdgeMasks::EAST
           cx += 1
-        when EdgeMasks::West
+        when EdgeMasks::WEST
           cx -= 1
         end
         if cx >= 0 && cy >= 0 && cx < cellWidth && cy < cellHeight
@@ -568,7 +568,7 @@ module RandomDungeonGenerator
       end
       # Generate connections between cells
       maze = Maze.new(maxWidth / cellWidth, maxHeight / cellHeight)
-      maze.generateDepthFirstMaze()
+      maze.generateDepthFirstMaze
       # Draw each cell's contents in turn (room and corridors)
       corridor_patterns = DungeonMaze.generate_corridor_patterns
       roomcount = 0
@@ -577,7 +577,7 @@ module RandomDungeonGenerator
           pattern = maze.getEdgePattern(x, y)
           if DungeonMaze.paint_cell_contents(
              self, BUFFER_X + x * cellWidth, BUFFER_Y + y * cellHeight,
-             corridor_patterns[pattern], DungeonMaze::None)
+             corridor_patterns[pattern], DungeonMaze::TURN_NONE)
             roomcount += 1
           end
         end
@@ -622,8 +622,8 @@ module RandomDungeonGenerator
     ar1 = AntiRandom.new(dungeon.width)
     ar2 = AntiRandom.new(dungeon.height)
     ((tiles.length + 1) * 1000).times do
-      x = ar1.get()
-      y = ar2.get()
+      x = ar1.get
+      y = ar2.get
       if dungeon.isRoom?(x, y) &&
          !tiles.any? { |item| (item[0] - x).abs < 2 && (item[1] - y).abs < 2 }
         ret = [x, y]

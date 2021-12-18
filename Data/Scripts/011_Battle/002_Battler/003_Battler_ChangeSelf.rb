@@ -234,12 +234,12 @@ class Battle::Battler
     # Darmanitan - Zen Mode
     if isSpecies?(:DARMANITAN) && self.ability == :ZENMODE
       if @hp <= @totalhp / 2
-        if (@form % 2) == 0
+        if @form.even?
           @battle.pbShowAbilitySplash(self, true)
           @battle.pbHideAbilitySplash(self)
           pbChangeForm(@form + 1, _INTL("{1} triggered!", abilityName))
         end
-      elsif (@form % 2) != 0
+      elsif @form.odd?
         @battle.pbShowAbilitySplash(self, true)
         @battle.pbHideAbilitySplash(self)
         pbChangeForm(@form - 1, _INTL("{1} triggered!", abilityName))

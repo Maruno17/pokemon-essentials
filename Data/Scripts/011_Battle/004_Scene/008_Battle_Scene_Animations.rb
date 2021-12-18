@@ -34,7 +34,7 @@ class Battle::Scene::Animation::Intro < Battle::Scene::Animation
     end
     # Shadows
     for i in 0...@battle.battlers.length
-      makeSlideSprite("shadow_#{i}", ((i % 2) == 0) ? 1 : -1, appearTime, PictureOrigin::Center)
+      makeSlideSprite("shadow_#{i}", (i.even?) ? 1 : -1, appearTime, PictureOrigin::Center)
     end
     # Fading blackness over whole screen
     blackScreen = addNewSprite(0, 0, "Graphics/Battle animations/black_screen")
@@ -196,7 +196,7 @@ class Battle::Scene::Animation::DataBoxAppear < Battle::Scene::Animation
     return if !@sprites["dataBox_#{@idxBox}"]
     box = addSprite(@sprites["dataBox_#{@idxBox}"])
     box.setVisible(0, true)
-    dir = ((@idxBox % 2) == 0) ? 1 : -1
+    dir = (@idxBox.even?) ? 1 : -1
     box.setDelta(0, dir * Graphics.width / 2, 0)
     box.moveDelta(0, 8, -dir * Graphics.width / 2, 0)
   end
@@ -216,7 +216,7 @@ class Battle::Scene::Animation::DataBoxDisappear < Battle::Scene::Animation
   def createProcesses
     return if !@sprites["dataBox_#{@idxBox}"] || !@sprites["dataBox_#{@idxBox}"].visible
     box = addSprite(@sprites["dataBox_#{@idxBox}"])
-    dir = ((@idxBox % 2) == 0) ? 1 : -1
+    dir = (@idxBox.even?) ? 1 : -1
     box.moveDelta(0, 8, dir * Graphics.width / 2, 0)
     box.setVisible(8, false)
   end

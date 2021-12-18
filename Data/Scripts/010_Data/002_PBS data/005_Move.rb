@@ -570,9 +570,10 @@ module GameData
       when "09D" then new_code = "StartWeakenElectricMoves"
       when "09E" then new_code = "StartWeakenFireMoves"
       when "09F"
-        if data[:id] == :MULTIATTACK
+        case data[:id]
+        when :MULTIATTACK
           new_code = "TypeDependsOnUserMemory"
-        elsif data[:id] == :TECHNOBLAST
+        when :TECHNOBLAST
           new_code = "TypeDependsOnUserDrive"
         else
           new_code = "TypeDependsOnUserPlate"

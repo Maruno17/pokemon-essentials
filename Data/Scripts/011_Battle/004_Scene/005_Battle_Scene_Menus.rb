@@ -479,7 +479,7 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
       # NOTE: Battler indexes go from left to right from the perspective of
       #       that side's trainer, so inc is different for each side for the
       #       same value of i/2.
-      inc = ((i % 2) == 0) ? i / 2 : numButtons - 1 - i / 2
+      inc = (i.even?) ? i / 2 : numButtons - 1 - i / 2
       button = SpriteWrapper.new(viewport)
       button.bitmap = @buttonBitmap.bitmap
       button.src_rect.width  = (@smallButtons) ? CMD_BUTTON_WIDTH_SMALL : @buttonBitmap.width / 2
@@ -530,7 +530,7 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
       if @texts[i]
         sel ||= (@mode == 0 && i == @index)
         sel ||= (@mode == 1)
-        buttonType = ((i % 2) == 0) ? 1 : 2
+        buttonType = (i.even?) ? 1 : 2
       end
       buttonType = 2 * buttonType + ((@smallButtons) ? 1 : 0)
       button.src_rect.x = (sel) ? @buttonBitmap.width / 2 : 0

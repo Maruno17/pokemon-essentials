@@ -132,12 +132,11 @@ class Game_System
 
   def setDefaultBGM(bgm, volume = 80, pitch = 100)
     bgm = RPG::AudioFile.new(bgm, volume, pitch) if bgm.is_a?(String)
+    @defaultBGM = nil
     if bgm != nil && bgm.name != ""
-      @defaultBGM = nil
       self.bgm_play(bgm)
       @defaultBGM = bgm.clone
     else
-      @defaultBGM = nil
       self.bgm_play(@playing_bgm)
     end
   end

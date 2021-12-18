@@ -87,7 +87,7 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
   end
   # Save the record of the battle
   $game_temp.last_battle_record = nil
-  if decision == 1 || decision == 2 || decision == 5   # if win, loss or draw
+  if [1, 2, 5].include?(decision)   # if win, loss or draw
     $game_temp.last_battle_record = battle.pbDumpRecord
   end
   case decision

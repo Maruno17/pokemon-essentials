@@ -200,7 +200,7 @@ class Battle::Scene
     # Start Bag screen
     itemScene = PokemonBag_Scene.new
     itemScene.pbStartScene($bag, true,
-      Proc.new { |item|
+      proc { |item|
         useType = GameData::Item.get(item).battle_use
         next useType && useType > 0
       }, false)
@@ -368,7 +368,7 @@ class Battle::Scene
     when :Foe, :Other
       indices = @battle.pbGetOpposingIndicesInOrder(idxBattler)
       indices.each { |i| return i if !@battle.battlers[i].fainted? }
-      indices.each { |i| return i }
+      return indices.first if !indices.empty?
     end
     return idxBattler   # Target the user initially
   end
@@ -391,7 +391,7 @@ class Battle::Scene
       # Update selected command
       if mode == 0   # Choosing just one target, can change index
         if Input.trigger?(Input::LEFT) || Input.trigger?(Input::RIGHT)
-          inc = ((cw.index % 2) == 0) ? -2 : 2
+          inc = (cw.index.even?) ? -2 : 2
           inc *= -1 if Input.trigger?(Input::RIGHT)
           indexLength = @battle.sideSizes[cw.index % 2] * 2
           newIndex = cw.index
@@ -402,8 +402,8 @@ class Battle::Scene
             cw.index = newIndex
             break
           end
-        elsif (Input.trigger?(Input::UP) && (cw.index % 2) == 0) ||
-              (Input.trigger?(Input::DOWN) && (cw.index % 2) == 1)
+        elsif (Input.trigger?(Input::UP) && cw.index.even?) ||
+              (Input.trigger?(Input::DOWN) && cw.index.odd?)
           tryIndex = @battle.pbGetOpposingIndicesInOrder(cw.index)
           tryIndex.each do |idxBattlerTry|
             next if texts[idxBattlerTry].nil?

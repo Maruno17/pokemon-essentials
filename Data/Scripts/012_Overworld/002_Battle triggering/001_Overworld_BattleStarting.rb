@@ -573,7 +573,7 @@ def pbAfterBattle(decision, canLose)
       pkmn.makeUnprimal
     end
   end
-  if decision == 2 || decision == 5   # if loss or draw
+  if [2, 5].include?(decision)   # if loss or draw
     if canLose
       $player.party.each { |pkmn| pkmn.heal }
       (Graphics.frame_rate / 4).times { Graphics.update }

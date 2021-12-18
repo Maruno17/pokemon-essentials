@@ -617,12 +617,11 @@ class PokemonStorageScene
     if command != 2
       pbSetArrow(@sprites["arrow"], @selection)
       pbUpdateOverlay(@selection)
-      pbSetMosaic(@selection)
     else
       pbPartySetArrow(@sprites["arrow"], @selection)
       pbUpdateOverlay(@selection, @storage.party)
-      pbSetMosaic(@selection)
     end
+    pbSetMosaic(@selection)
     pbSEPlay("PC access")
     pbFadeInAndShow(@sprites)
   end
@@ -714,22 +713,24 @@ class PokemonStorageScene
   def pbChangeSelection(key, selection)
     case key
     when Input::UP
-      if selection == -1   # Box name
+      case selection
+      when -1   # Box name
         selection = -2
-      elsif selection == -2   # Party
+      when -2   # Party
         selection = PokemonBox::BOX_SIZE - 1 - PokemonBox::BOX_WIDTH * 2 / 3   # 25
-      elsif selection == -3   # Close Box
+      when -3   # Close Box
         selection = PokemonBox::BOX_SIZE - PokemonBox::BOX_WIDTH / 3   # 28
       else
         selection -= PokemonBox::BOX_WIDTH
         selection = -1 if selection < 0
       end
     when Input::DOWN
-      if selection == -1   # Box name
+      case selection
+      when -1   # Box name
         selection = PokemonBox::BOX_WIDTH / 3   # 2
-      elsif selection == -2   # Party
+      when -2   # Party
         selection = -1
-      elsif selection == -3   # Close Box
+      when -3   # Close Box
         selection = -1
       else
         selection += PokemonBox::BOX_WIDTH
@@ -830,16 +831,17 @@ class PokemonStorageScene
         pbPlayCursorSE
         selection = pbChangeSelection(key, selection)
         pbSetArrow(@sprites["arrow"], selection)
-        if selection == -4
+        case selection
+        when -4
           nextbox = (@storage.currentBox + @storage.maxBoxes - 1) % @storage.maxBoxes
           pbSwitchBoxToLeft(nextbox)
           @storage.currentBox = nextbox
-        elsif selection == -5
+        when -5
           nextbox = (@storage.currentBox + 1) % @storage.maxBoxes
           pbSwitchBoxToRight(nextbox)
           @storage.currentBox = nextbox
         end
-        selection = -1 if selection == -4 || selection == -5
+        selection = -1 if [-4, -5].include?(selection)
         pbUpdateOverlay(selection)
         pbSetMosaic(selection)
       end
@@ -932,9 +934,10 @@ class PokemonStorageScene
       if key >= 0
         pbPlayCursorSE
         newselection = pbPartyChangeSelection(key, selection)
-        if newselection == -1
+        case newselection
+        when -1
           return -1 if !depositing
-        elsif newselection == -2
+        when -2
           selection = lastsel
         else
           selection = newselection
@@ -1217,7 +1220,7 @@ class PokemonStorageScene
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, bag)
-      ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).can_hold? })
+      ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).can_hold? })
     }
     return ret
   end
@@ -1352,10 +1355,11 @@ class PokemonStorageScene
         break
       elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
-        if index == 6   # OK
+        case index
+        when 6   # OK
           pokemon.markings = markings
           break
-        elsif index == 7   # Cancel
+        when 7   # Cancel
           break
         else
           markings[index] = ((markings[index] || 0) + 1) % mark_variants
@@ -1399,7 +1403,7 @@ class PokemonStorageScene
     buttonshadow = Color.new(80, 80, 80)
     pbDrawTextPositions(overlay, [
        [_INTL("Party: {1}", (@storage.party.length rescue 0)), 270, 326, 2, buttonbase, buttonshadow, 1],
-       [_INTL("Exit"), 446, 326, 2, buttonbase, buttonshadow, 1],
+       [_INTL("Exit"), 446, 326, 2, buttonbase, buttonshadow, 1]
     ])
     pokemon = nil
     if @screen.pbHeldPokemon
@@ -1478,7 +1482,8 @@ class PokemonStorageScreen
   def pbStartScreen(command)
     $game_temp.in_storage = true
     @heldpkmn = nil
-    if command == 0   # Organise
+    case command
+    when 0   # Organise
       @scene.pbStartBox(self, command)
       loop do
         selected = @scene.pbSelectBox(@storage.party)
@@ -1559,7 +1564,7 @@ class PokemonStorageScreen
         end
       end
       @scene.pbCloseBox
-    elsif command == 1   # Withdraw
+    when 1   # Withdraw
       @scene.pbStartBox(self, command)
       loop do
         selected = @scene.pbSelectBox(@storage.party)
@@ -1599,7 +1604,7 @@ class PokemonStorageScreen
         end
       end
       @scene.pbCloseBox
-    elsif command == 2   # Deposit
+    when 2   # Deposit
       @scene.pbStartBox(self, command)
       loop do
         selected = @scene.pbSelectParty(@storage.party)
@@ -1631,7 +1636,7 @@ class PokemonStorageScreen
         end
       end
       @scene.pbCloseBox
-    elsif command == 3
+    when 3
       @scene.pbStartBox(self, command)
       @scene.pbCloseBox
     end
@@ -1921,7 +1926,7 @@ class PokemonStorageScreen
        _INTL("Jump"),
        _INTL("Wallpaper"),
        _INTL("Name"),
-       _INTL("Cancel"),
+       _INTL("Cancel")
     ]
     command = pbShowCommands(
        _INTL("What do you want to do?"), commands)

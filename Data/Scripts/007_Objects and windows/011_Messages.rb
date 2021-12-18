@@ -191,15 +191,15 @@ def pbChooseNumber(msgwindow, params)
     if Input.trigger?(Input::USE)
       ret = cmdwindow.number
       if ret > maximum
-        pbPlayBuzzerSE()
+        pbPlayBuzzerSE
       elsif ret < minimum
-        pbPlayBuzzerSE()
+        pbPlayBuzzerSE
       else
-        pbPlayDecisionSE()
+        pbPlayDecisionSE
         break
       end
     elsif Input.trigger?(Input::BACK)
-      pbPlayCancelSE()
+      pbPlayCancelSE
       ret = cancelNumber
       break
     end
@@ -324,7 +324,7 @@ def pbGetGoldString
 end
 
 def pbDisplayGoldWindow(msgwindow)
-  moneyString = pbGetGoldString()
+  moneyString = pbGetGoldString
   goldwindow = Window_AdvancedTextPokemon.new(_INTL("Money:\n<ar>{1}</ar>", moneyString))
   goldwindow.setSkin("Graphics/Windowskins/goldskin")
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
@@ -386,7 +386,7 @@ def pbCreateStatusWindow(viewport = nil)
   msgwindow.visible = false
   msgwindow.letterbyletter = false
   pbBottomLeftLines(msgwindow, 2)
-  skinfile = MessageConfig.pbGetSpeechFrame()
+  skinfile = MessageConfig.pbGetSpeechFrame
   msgwindow.setSkin(skinfile)
   return msgwindow
 end
@@ -403,7 +403,7 @@ def pbCreateMessageWindow(viewport = nil, skin = nil)
   msgwindow.back_opacity = MessageConfig::WINDOW_OPACITY
   pbBottomLeftLines(msgwindow, 2)
   $game_temp.message_window_showing = true if $game_temp
-  skin = MessageConfig.pbGetSpeechFrame() if !skin
+  skin = MessageConfig.pbGetSpeechFrame if !skin
   msgwindow.setSkin(skin)
   return msgwindow
 end
@@ -562,7 +562,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   if startSE != nil
     pbSEPlay(pbStringToAudioFile(startSE))
   elsif signWaitCount == 0 && letterbyletter
-    pbPlayDecisionSE()
+    pbPlayDecisionSE
   end
   ########## Position message window  ##############
   pbRepositionMessageWindow(msgwindow, linecount)

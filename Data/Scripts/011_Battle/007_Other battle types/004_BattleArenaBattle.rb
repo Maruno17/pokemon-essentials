@@ -17,9 +17,10 @@ class Battle::SuccessState
   end
 
   def updateSkill
-    if @useState == 1
+    case @useState
+    when 1
       @skill = -2 if !@protected
-    elsif @useState == 2
+    when 2
       if Effectiveness.super_effective?(@typeMod)
         @skill = 2
       elsif Effectiveness.normal?(@typeMod)

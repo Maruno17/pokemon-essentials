@@ -382,7 +382,7 @@ def pbBerryPlant
         pbFadeOutIn {
           scene = PokemonBag_Scene.new
           screen = PokemonBagScreen.new(scene, $bag)
-          mulch = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_mulch? })
+          mulch = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_mulch? })
         }
         return if !mulch
         mulch_data = GameData::Item.get(mulch)
@@ -409,7 +409,7 @@ def pbBerryPlant
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, $bag)
-      berry = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_berry? })
+      berry = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_berry? })
     }
     if berry
       $stats.berries_planted += 1

@@ -201,7 +201,6 @@ class Game_Character
       @bush_depth = 0
       return
     end
-    deep_bush = regular_bush = false
     xbehind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
     ybehind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
     this_map = (self.map.valid?(@x, @y)) ? [self.map, @x, @y] : $map_factory&.getNewMap(@x, @y)
@@ -738,7 +737,7 @@ class Game_Character
     end
     @x = @x + x_plus
     @y = @y + y_plus
-    real_distance = Math::sqrt(x_plus * x_plus + y_plus * y_plus)
+    real_distance = Math.sqrt(x_plus * x_plus + y_plus * y_plus)
     distance = [1, real_distance].max
     @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
     @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
