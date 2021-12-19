@@ -4,7 +4,7 @@ module Battle::CatchAndStoreMixin
   #=============================================================================
   def pbStorePokemon(pkmn)
     # Nickname the Pokémon (unless it's a Shadow Pokémon)
-    if !pkmn.shadowPokemon?
+    if !pkmn.shadowPokemon? && $PokemonSystem.givenicknames == 0
       if pbDisplayConfirm(_INTL("Would you like to give a nickname to {1}?", pkmn.name))
         nickname = @scene.pbNameEntry(_INTL("{1}'s nickname?", pkmn.speciesName), pkmn)
         pkmn.name = nickname
@@ -12,7 +12,7 @@ module Battle::CatchAndStoreMixin
     end
     # Store the Pokémon
     stored_box = @peer.pbStorePokemon(pbPlayer, pkmn)
-    if stored_box.negative?
+    if stored_box < 0
       pbDisplayPaused(_INTL("{1} has been added to your party.", pkmn.name))
       @initialItems[0][pbPlayer.party.length - 1] = pkmn.item_id if @initialItems
       return

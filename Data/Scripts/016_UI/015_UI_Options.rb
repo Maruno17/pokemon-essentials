@@ -5,6 +5,7 @@ class PokemonSystem
   attr_accessor :textspeed
   attr_accessor :battlescene
   attr_accessor :battlestyle
+  attr_accessor :givenicknames
   attr_accessor :frame
   attr_accessor :textskin
   attr_accessor :screensize
@@ -15,17 +16,18 @@ class PokemonSystem
   attr_accessor :textinput
 
   def initialize
-    @textspeed   = 1     # Text speed (0=slow, 1=normal, 2=fast)
-    @battlescene = 0     # Battle effects (animations) (0=on, 1=off)
-    @battlestyle = 0     # Battle style (0=switch, 1=set)
-    @frame       = 0     # Default window frame (see also Settings::MENU_WINDOWSKINS)
-    @textskin    = 0     # Speech frame
-    @screensize  = (Settings::SCREEN_SCALE * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
-    @language    = 0     # Language (see also Settings::LANGUAGES in script PokemonSystem)
-    @runstyle    = 0     # Default movement speed (0=walk, 1=run)
-    @bgmvolume   = 100   # Volume of background music and ME
-    @sevolume    = 100   # Volume of sound effects
-    @textinput   = 0     # Text input mode (0=cursor, 1=keyboard)
+    @textspeed     = 1     # Text speed (0=slow, 1=normal, 2=fast)
+    @battlescene   = 0     # Battle effects (animations) (0=on, 1=off)
+    @battlestyle   = 0     # Battle style (0=switch, 1=set)
+    @givenicknames = 0     # Give nicknames (0=give, 1=don't give)
+    @frame         = 0     # Default window frame (see also Settings::MENU_WINDOWSKINS)
+    @textskin      = 0     # Speech frame
+    @screensize    = (Settings::SCREEN_SCALE * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
+    @language      = 0     # Language (see also Settings::LANGUAGES in script PokemonSystem)
+    @runstyle      = 0     # Default movement speed (0=walk, 1=run)
+    @bgmvolume     = 100   # Volume of background music and ME
+    @sevolume      = 100   # Volume of sound effects
+    @textinput     = 0     # Text input mode (0=cursor, 1=keyboard)
   end
 end
 
@@ -348,6 +350,10 @@ class PokemonOption_Scene
       EnumOption.new(_INTL("Default Movement"), [_INTL("Walking"), _INTL("Running")],
         proc { $PokemonSystem.runstyle },
         proc { |value| $PokemonSystem.runstyle = value }
+      ),
+      EnumOption.new(_INTL("Give Nicknames"), [_INTL("Give"), _INTL("Don't give")],
+        proc { $PokemonSystem.givenicknames },
+        proc { |value| $PokemonSystem.givenicknames = value }
       ),
       NumberOption.new(_INTL("Speech Frame"), 1, Settings::SPEECH_WINDOWSKINS.length,
         proc { $PokemonSystem.textskin },

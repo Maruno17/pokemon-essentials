@@ -131,6 +131,14 @@ SaveData.register_conversion(:v20_berry_plant_data) do
   end
 end
 
+SaveData.register_conversion(:v20_add_default_nicknaming_option) do
+  essentials_version 20
+  display_title 'Updating Options to include nicknaming setting'
+  to_value :pokemon_system do |option|
+    option.givenicknames = 0 if option.givenicknames.nil?
+  end
+end
+
 SaveData.register_conversion(:v20_add_battled_counts) do
   essentials_version 20
   display_title 'Adding Pokédex battle counts'
