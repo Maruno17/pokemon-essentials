@@ -57,10 +57,10 @@ class Sprite_Reflection
       y += @height * 16
       width  = @rsprite.src_rect.width
       height = @rsprite.src_rect.height
-      @sprite.x        = x + width / 2
-      @sprite.y        = y + height + height / 2
+      @sprite.x        = x + (width / 2)
+      @sprite.y        = y + height + (height / 2)
       @sprite.ox       = width / 2
-      @sprite.oy       = height / 2 - 2   # Hard-coded 2 pixel shift up
+      @sprite.oy       = (height / 2) - 2   # Hard-coded 2 pixel shift up
       @sprite.oy       -= @rsprite.character.bob_height * 2
       @sprite.z        = -50   # Still water is -100, map is 0 and above
       @sprite.z        += 1 if @event == $game_player

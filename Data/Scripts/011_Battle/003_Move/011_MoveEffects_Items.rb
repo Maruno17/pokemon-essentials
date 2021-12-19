@@ -98,7 +98,7 @@ class Battle::Move::UserTargetSwapItems < Battle::Move
           @battle.pbDisplay(_INTL("But it failed to affect {1}!", target.pbThis(true)))
         else
           @battle.pbDisplay(_INTL("But it failed to affect {1} because of its {2}!",
-             target.pbThis(true), target.abilityName))
+                                  target.pbThis(true), target.abilityName))
         end
         @battle.pbHideAbilitySplash(target)
       end
@@ -223,7 +223,7 @@ class Battle::Move::CorrodeTargetItem < Battle::Move
           @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
         else
           @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",
-             target.pbThis(true), target.abilityName))
+                                  target.pbThis(true), target.abilityName))
         end
         @battle.pbHideAbilitySplash(target)
       end
@@ -239,7 +239,7 @@ class Battle::Move::CorrodeTargetItem < Battle::Move
   def pbEffectAgainstTarget(user, target)
     @battle.corrosiveGas[target.index % 2][target.pokemonIndex] = true
     @battle.pbDisplay(_INTL("{1} corroded {2}'s {3}!",
-       user.pbThis, target.pbThis(true), target.itemName))
+                            user.pbThis, target.pbThis(true), target.itemName))
   end
 end
 

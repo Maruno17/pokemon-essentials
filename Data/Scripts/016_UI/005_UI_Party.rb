@@ -127,7 +127,7 @@ class Window_CommandPokemonColor < Window_CommandPokemon
       shadow = Color.new(128, 192, 240)
     end
     pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height,
-       @commands[index], base, shadow)
+                     @commands[index], base, shadow)
   end
 end
 
@@ -140,7 +140,7 @@ class PokemonPartyBlankPanel < SpriteWrapper
   def initialize(_pokemon, index, viewport = nil)
     super(viewport)
     self.x = (index % 2) * Graphics.width / 2
-    self.y = 16 * (index % 2) + 96 * (index / 2)
+    self.y = (16 * (index % 2)) + (96 * (index / 2))
     @panelbgsprite = AnimatedBitmap.new("Graphics/Pictures/Party/panel_blank")
     self.bitmap = @panelbgsprite.bitmap
     @text = nil
@@ -177,7 +177,7 @@ class PokemonPartyPanel < SpriteWrapper
     @active = (index == 0)   # true = rounded panel, false = rectangular panel
     @refreshing = true
     self.x = (index % 2) * Graphics.width / 2
-    self.y = 16 * (index % 2) + 96 * (index / 2)
+    self.y = (16 * (index % 2)) + (96 * (index / 2))
     @panelbgsprite = ChangelingSprite.new(0, 0, viewport)
     @panelbgsprite.z = self.z
     if @active   # Rounded panel
@@ -374,7 +374,7 @@ class PokemonPartyPanel < SpriteWrapper
           textpos.push([sprintf("% 3d /% 3d", @pokemon.hp, @pokemon.totalhp), 224, 54, 1, basecolor, shadowcolor])
           # Draw HP bar
           if @pokemon.hp > 0
-            w = @pokemon.hp * 96 * 1.0 / @pokemon.totalhp
+            w = @pokemon.hp * 96 / @pokemon.totalhp.to_f
             w = 1 if w < 1
             w = ((w / 2).round) * 2
             hpzone = 0
@@ -406,27 +406,23 @@ class PokemonPartyPanel < SpriteWrapper
         # Draw shiny icon
         if @pokemon.shiny?
           pbDrawImagePositions(@overlaysprite.bitmap,
-             [["Graphics/Pictures/shiny", 80, 48, 0, 0, 16, 16]]
-          )
+                               [["Graphics/Pictures/shiny", 80, 48, 0, 0, 16, 16]])
         end
       end
       pbDrawTextPositions(@overlaysprite.bitmap, textpos)
       # Draw level text
       if !@pokemon.egg?
         pbDrawImagePositions(@overlaysprite.bitmap,
-           [["Graphics/Pictures/Party/overlay_lv", 20, 70, 0, 0, 22, 14]]
-        )
+                             [["Graphics/Pictures/Party/overlay_lv", 20, 70, 0, 0, 22, 14]])
         pbSetSmallFont(@overlaysprite.bitmap)
-        pbDrawTextPositions(@overlaysprite.bitmap, [
-           [@pokemon.level.to_s, 42, 57, 0, basecolor, shadowcolor]
-        ])
+        pbDrawTextPositions(@overlaysprite.bitmap,
+                            [[@pokemon.level.to_s, 42, 57, 0, basecolor, shadowcolor]])
       end
       # Draw annotation text
       if @text && @text.length > 0
         pbSetSystemFont(@overlaysprite.bitmap)
-        pbDrawTextPositions(@overlaysprite.bitmap, [
-           [@text, 96, 52, 0, basecolor, shadowcolor]
-        ])
+        pbDrawTextPositions(@overlaysprite.bitmap,
+                            [[@text, 96, 52, 0, basecolor, shadowcolor]])
       end
     end
     @refreshing = false
@@ -461,7 +457,8 @@ class PokemonParty_Scene
     @sprites["messagebox"].letterbyletter = true
     pbBottomLeftLines(@sprites["messagebox"], 2)
     @sprites["storagetext"] = Window_UnformattedTextPokemon.new(
-       @can_access_storage ? _INTL("[Special]: To Boxes") : "")
+      @can_access_storage ? _INTL("[Special]: To Boxes") : ""
+    )
     @sprites["storagetext"].x           = 32
     @sprites["storagetext"].y           = Graphics.height - @sprites["messagebox"].height - 16
     @sprites["storagetext"].z           = 10
@@ -515,10 +512,8 @@ class PokemonParty_Scene
           pbPlayDecisionSE if @sprites["messagebox"].pausing?
           @sprites["messagebox"].resume
         end
-      else
-        if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
-          break
-        end
+      elsif Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
+        break
       end
     end
     @sprites["messagebox"].visible = false
@@ -1103,11 +1098,15 @@ class PokemonPartyScreen
       annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
     end
     ret = -1
-    @scene.pbStartScene(@party,
-       (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."), annot)
+    @scene.pbStartScene(
+      @party,
+      (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),
+      annot
+    )
     loop do
       @scene.pbSetHelpText(
-         (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
+        (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel.")
+      )
       pkmnid = @scene.pbChoosePokemon
       break if pkmnid < 0
       if !eligibility[pkmnid] && !allowIneligible
@@ -1131,11 +1130,15 @@ class PokemonPartyScreen
       annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
     end
     ret = -1
-    @scene.pbStartScene(@party,
-       (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."), annot)
+    @scene.pbStartScene(
+      @party,
+      (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),
+      annot
+    )
     loop do
       @scene.pbSetHelpText(
-         (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
+        (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel.")
+      )
       pkmnid = @scene.pbChoosePokemon
       break if pkmnid < 0
       if !eligibility[pkmnid] && !allowIneligible
@@ -1158,8 +1161,8 @@ class PokemonPartyScreen
       end
     end
     @scene.pbStartScene(@party,
-       (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),
-       nil, false, can_access_storage)
+                        (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),
+                        nil, false, can_access_storage)
     loop do
       @scene.pbSetHelpText((@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
       pkmnid = @scene.pbChoosePokemon(false, -1, 1)
@@ -1250,7 +1253,7 @@ class PokemonPartyScreen
                 return [pkmn, pkmn.moves[i].id]
               end
               @scene.pbStartScene(@party,
-                 (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
+                                  (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
               break
             end
             return [pkmn, pkmn.moves[i].id]
@@ -1273,7 +1276,7 @@ class PokemonPartyScreen
         end
       elsif cmdMail >= 0 && command == cmdMail
         command = @scene.pbShowCommands(_INTL("Do what with the mail?"),
-           [_INTL("Read"), _INTL("Take"), _INTL("Cancel")])
+                                        [_INTL("Read"), _INTL("Take"), _INTL("Cancel")])
         case command
         when 0   # Read
           pbFadeOutIn {

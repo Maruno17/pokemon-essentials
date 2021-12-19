@@ -49,8 +49,8 @@ ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_pok
     if battle.pbOpposingBattlerCount > 1 && !(GameData::Item.get(item).is_snag_ball? && battle.trainerBattle?)
       if battle.pbOpposingBattlerCount == 2
         scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokémon!")) if showMessages
-      else
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are more than one Pokémon!")) if showMessages
+      elsif showMessages
+        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are more than one Pokémon!"))
       end
       next false
     end

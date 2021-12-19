@@ -78,7 +78,7 @@ class ItemStorage_Scene
     @sprites["background"].setBitmap("Graphics/Pictures/pcItembg")
     @sprites["icon"] = ItemIconSprite.new(50, 334, nil, @viewport)
     # Item list
-    @sprites["itemwindow"] = Window_PokemonItemStorage.new(@bag, 98, 14, 334, 32 + ITEMSVISIBLE * 32)
+    @sprites["itemwindow"] = Window_PokemonItemStorage.new(@bag, 98, 14, 334, 32 + (ITEMSVISIBLE * 32))
     @sprites["itemwindow"].viewport    = @viewport
     @sprites["itemwindow"].index       = 0
     @sprites["itemwindow"].baseColor   = ITEMLISTBASECOLOR

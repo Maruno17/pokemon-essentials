@@ -224,10 +224,9 @@ class FaceWindowVX < SpriteWindow_Base
     @faceIndex = faceinfo[1].to_i
     @facebitmaptmp = AnimatedBitmap.new(facefile)
     @facebitmap = BitmapWrapper.new(96, 96)
-    @facebitmap.blt(0, 0, @facebitmaptmp.bitmap, Rect.new(
-       (@faceIndex % 4) * 96,
-       (@faceIndex / 4) * 96, 96, 96
-    ))
+    @facebitmap.blt(0, 0, @facebitmaptmp.bitmap,
+                    Rect.new((@faceIndex % 4) * 96, (@faceIndex / 4) * 96, 96, 96)
+    )
     self.contents = @facebitmap
   end
 
@@ -235,10 +234,9 @@ class FaceWindowVX < SpriteWindow_Base
     super
     if @facebitmaptmp.totalFrames > 1
       @facebitmaptmp.update
-      @facebitmap.blt(0, 0, @facebitmaptmp.bitmap, Rect.new(
-         (@faceIndex % 4) * 96,
-         (@faceIndex / 4) * 96, 96, 96
-      ))
+      @facebitmap.blt(0, 0, @facebitmaptmp.bitmap,
+                      Rect.new((@faceIndex % 4) * 96, (@faceIndex / 4) * 96, 96, 96)
+      )
     end
   end
 
@@ -581,7 +579,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       if atTop
         msgwindow.y = -msgwindow.height * signWaitCount / signWaitTime
       else
-        msgwindow.y = Graphics.height - msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime
+        msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime)
       end
     end
     for i in 0...controls.length
@@ -627,7 +625,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
         msgwindow.y = Graphics.height - msgwindow.height
         msgback.y = msgwindow.y if msgback
         pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        msgwindow.y = Graphics.height - msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime
+        msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime)
       when "ts"     # Change text speed
         msgwindow.textspeed = (param == "") ? -999 : param.to_i
       when "."      # Wait 0.25 seconds
@@ -662,8 +660,8 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       if msgwindow.busy?
         pbPlayDecisionSE if msgwindow.pausing?
         msgwindow.resume
-      else
-        break if signWaitCount == 0
+      elsif signWaitCount == 0
+        break
       end
     end
     pbUpdateSceneMap
@@ -692,7 +690,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       if atTop
         msgwindow.y = -msgwindow.height * i / signWaitTime
       else
-        msgwindow.y = Graphics.height - msgwindow.height * (signWaitTime - i) / signWaitTime
+        msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - i) / signWaitTime)
       end
       Graphics.update
       Input.update
@@ -713,9 +711,9 @@ def pbMessage(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd =
   msgwindow = pbCreateMessageWindow(nil, skin)
   if commands
     ret = pbMessageDisplay(msgwindow, message, true,
-       proc { |msgwindow|
-         next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
-       }, &block)
+                           proc { |msgwindow|
+                             next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
+                           }, &block)
   else
     pbMessageDisplay(msgwindow, message, &block)
   end
@@ -735,9 +733,9 @@ end
 def pbMessageChooseNumber(message, params, &block)
   msgwindow = pbCreateMessageWindow(nil, params.messageSkin)
   ret = pbMessageDisplay(msgwindow, message, true,
-     proc { |msgwindow|
-       next pbChooseNumber(msgwindow, params, &block)
-     }, &block)
+                         proc { |msgwindow|
+                           next pbChooseNumber(msgwindow, params, &block)
+                         }, &block)
   pbDisposeMessageWindow(msgwindow)
   return ret
 end
@@ -878,9 +876,9 @@ end
 def pbMessageFreeText(message, currenttext, passwordbox, maxlength, width = 240, &block)
   msgwindow = pbCreateMessageWindow
   retval = pbMessageDisplay(msgwindow, message, true,
-     proc { |msgwindow|
-       next pbFreeText(msgwindow, currenttext, passwordbox, maxlength, width, &block)
-     }, &block)
+                            proc { |msgwindow|
+                              next pbFreeText(msgwindow, currenttext, passwordbox, maxlength, width, &block)
+                            }, &block)
   pbDisposeMessageWindow(msgwindow)
   return retval
 end

@@ -321,7 +321,8 @@ module Compiler
   end
 
   def checkEnumField(ret, enumer)
-    if enumer.is_a?(Module)
+    case enumer
+    when Module
       begin
         if nil_or_empty?(ret) || !enumer.const_defined?(ret)
           raise _INTL("Undefined value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
@@ -330,7 +331,7 @@ module Compiler
         raise _INTL("Incorrect value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
       end
       return enumer.const_get(ret.to_sym)
-    elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+    when Symbol, String
       if !Kernel.const_defined?(enumer.to_sym) && GameData.const_defined?(enumer.to_sym)
         enumer = GameData.const_get(enumer.to_sym)
         begin
@@ -351,13 +352,13 @@ module Compiler
         raise _INTL("Incorrect value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
       end
       return enumer.const_get(ret.to_sym)
-    elsif enumer.is_a?(Array)
+    when Array
       idx = findIndex(enumer) { |item| ret == item }
       if idx < 0
         raise _INTL("Undefined value {1} (expected one of: {2})\r\n{3}", ret, enumer.inspect, FileLineData.linereport)
       end
       return idx
-    elsif enumer.is_a?(Hash)
+    when Hash
       value = enumer[ret]
       if value == nil
         raise _INTL("Undefined value {1} (expected one of: {2})\r\n{3}", ret, enumer.keys.inspect, FileLineData.linereport)
@@ -368,10 +369,11 @@ module Compiler
   end
 
   def checkEnumFieldOrNil(ret, enumer)
-    if enumer.is_a?(Module)
+    case enumer
+    when Module
       return nil if nil_or_empty?(ret) || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
-    elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+    when Symbol, String
       if GameData.const_defined?(enumer.to_sym)
         enumer = GameData.const_get(enumer.to_sym)
         return nil if nil_or_empty?(ret) || !enumer.exists?(ret.to_sym)
@@ -380,11 +382,11 @@ module Compiler
       enumer = Object.const_get(enumer.to_sym)
       return nil if nil_or_empty?(ret) || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
-    elsif enumer.is_a?(Array)
+    when Array
       idx = findIndex(enumer) { |item| ret == item }
       return nil if idx < 0
       return idx
-    elsif enumer.is_a?(Hash)
+    when Hash
       return enumer[ret]
     end
     return nil
@@ -568,14 +570,15 @@ module Compiler
           case schema[1][i, 1]
           when "e", "E"   # Enumerable
             enumer = schema[2 + i]
-            if enumer.is_a?(Array)
+            case enumer
+            when Array
               file.write(enumer[value])
-            elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+            when Symbol, String
               mod = Object.const_get(enumer.to_sym)
               file.write(getConstantName(mod, value))
-            elsif enumer.is_a?(Module)
+            when Module
               file.write(getConstantName(enumer, value))
-            elsif enumer.is_a?(Hash)
+            when Hash
               for key in enumer.keys
                 if enumer[key] == value
                   file.write(key)
@@ -585,18 +588,19 @@ module Compiler
             end
           when "y", "Y"   # Enumerable or integer
             enumer = schema[2 + i]
-            if enumer.is_a?(Array)
+            case enumer
+            when Array
               if enumer[value] != nil
                 file.write(enumer[value])
               else
                 file.write(value)
               end
-            elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+            when Symbol, String
               mod = Object.const_get(enumer.to_sym)
               file.write(getConstantNameOrValue(mod, value))
-            elsif enumer.is_a?(Module)
+            when Module
               file.write(getConstantNameOrValue(enumer, value))
-            elsif enumer.is_a?(Hash)
+            when Hash
               hasenum = false
               for key in enumer.keys
                 if enumer[key] == value
@@ -756,48 +760,48 @@ module Compiler
     return if !$DEBUG
     begin
       dataFiles = [
-         "abilities.dat",
-         "berry_plants.dat",
-         "encounters.dat",
-         "items.dat",
-         "map_connections.dat",
-         "map_metadata.dat",
-         "metadata.dat",
-         "moves.dat",
-         "phone.dat",
-         "player_metadata.dat",
-         "regional_dexes.dat",
-         "ribbons.dat",
-         "shadow_pokemon.dat",
-         "species.dat",
-         "species_metrics.dat",
-         "town_map.dat",
-         "trainer_lists.dat",
-         "trainer_types.dat",
-         "trainers.dat",
-         "types.dat"
+        "abilities.dat",
+        "berry_plants.dat",
+        "encounters.dat",
+        "items.dat",
+        "map_connections.dat",
+        "map_metadata.dat",
+        "metadata.dat",
+        "moves.dat",
+        "phone.dat",
+        "player_metadata.dat",
+        "regional_dexes.dat",
+        "ribbons.dat",
+        "shadow_pokemon.dat",
+        "species.dat",
+        "species_metrics.dat",
+        "town_map.dat",
+        "trainer_lists.dat",
+        "trainer_types.dat",
+        "trainers.dat",
+        "types.dat"
       ]
       textFiles = [
-         "abilities.txt",
-         "battle_facility_lists.txt",
-         "berry_plants.txt",
-         "encounters.txt",
-         "items.txt",
-         "map_connections.txt",
-         "map_metadata.txt",
-         "metadata.txt",
-         "moves.txt",
-         "phone.txt",
-         "pokemon.txt",
-         "pokemon_forms.txt",
-         "pokemon_metrics.txt",
-         "regional_dexes.txt",
-         "ribbons.txt",
-         "shadow_pokemon.txt",
-         "town_map.txt",
-         "trainer_types.txt",
-         "trainers.txt",
-         "types.txt"
+        "abilities.txt",
+        "battle_facility_lists.txt",
+        "berry_plants.txt",
+        "encounters.txt",
+        "items.txt",
+        "map_connections.txt",
+        "map_metadata.txt",
+        "metadata.txt",
+        "moves.txt",
+        "phone.txt",
+        "pokemon.txt",
+        "pokemon_forms.txt",
+        "pokemon_metrics.txt",
+        "regional_dexes.txt",
+        "ribbons.txt",
+        "shadow_pokemon.txt",
+        "town_map.txt",
+        "trainer_types.txt",
+        "trainers.txt",
+        "types.txt"
       ]
       latestDataTime = 0
       latestTextTime = 0

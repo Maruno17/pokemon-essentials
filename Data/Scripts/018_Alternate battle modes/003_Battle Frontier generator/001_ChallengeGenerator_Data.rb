@@ -68,15 +68,15 @@ end
 
 def pbArrangeByTier(pokemonlist, rule)
   tiers = [
-     withRestr(rule,   0, 500, 0),
-     withRestr(rule, 380, 500, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 580, 680, 1),
-     withRestr(rule, 500, 680, 0),
-     withRestr(rule, 580, 680, 2)
+    withRestr(rule,   0, 500, 0),
+    withRestr(rule, 380, 500, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 580, 680, 1),
+    withRestr(rule, 500, 680, 0),
+    withRestr(rule, 580, 680, 2)
   ]
   tierPokemon = []
   tiers.length.times do
@@ -295,10 +295,10 @@ def pbWriteCup(id, rules)
   cmd = 0
   if trlists.length != 0
     cmd = pbMessage(_INTL("Generate Pokémon teams for this challenge?"),
-       [_INTL("NO"), _INTL("YES, USE EXISTING"), _INTL("YES, USE NEW")], 1)
+                    [_INTL("NO"), _INTL("YES, USE EXISTING"), _INTL("YES, USE NEW")], 1)
   else
     cmd = pbMessage(_INTL("Generate Pokémon teams for this challenge?"),
-       [_INTL("YES"), _INTL("NO")], 2)
+                    [_INTL("YES"), _INTL("NO")], 2)
     case cmd
     when 0
       cmd = 2

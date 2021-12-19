@@ -28,7 +28,7 @@ class Battle::Scene
     # shiny animation(s)
     # Set up data box animation
     for i in 0...@battle.sideSizes[1]
-      idxBattler = 2 * i + 1
+      idxBattler = (2 * i) + 1
       next if !@battle.battlers[idxBattler]
       dataBoxAnim = Animation::DataBoxAppear.new(@sprites, @viewport, idxBattler)
       @animations.push(dataBoxAnim)
@@ -43,7 +43,7 @@ class Battle::Scene
     # Show shiny animation for wild Pokémon
     if @battle.showAnims
       for i in 0...@battle.sideSizes[1]
-        idxBattler = 2 * i + 1
+        idxBattler = (2 * i) + 1
         next if !@battle.battlers[idxBattler] || !@battle.battlers[idxBattler].shiny?
         if Settings::SUPER_SHINY && @battle.battlers[idxBattler].super_shiny?
           pbCommonAnimation("SuperShiny", @battle.battlers[idxBattler])
@@ -58,12 +58,14 @@ class Battle::Scene
   # Animates a party lineup appearing for the given side
   #=============================================================================
   def pbShowPartyLineup(side, fullAnim = false)
-    @animations.push(Animation::LineupAppear.new(@sprites, @viewport,
-       side, @battle.pbParty(side), @battle.pbPartyStarts(side), fullAnim))
-    if !fullAnim
-      while inPartyAnimation?
-        pbUpdate
-      end
+    @animations.push(
+      Animation::LineupAppear.new(@sprites, @viewport, side,
+                                  @battle.pbParty(side), @battle.pbPartyStarts(side),
+                                  fullAnim)
+    )
+    return if fullAnim
+    while inPartyAnimation?
+      pbUpdate
     end
   end
 
@@ -112,13 +114,15 @@ class Battle::Scene
       pbChangePokemon(b[0], pkmn)
       pbRefresh
       if @battle.opposes?(b[0])
-        sendOutAnim = Animation::PokeballTrainerSendOut.new(@sprites, @viewport,
-           @battle.pbGetOwnerIndexFromBattlerIndex(b[0]) + 1,
-           @battle.battlers[b[0]], startBattle, i)
+        sendOutAnim = Animation::PokeballTrainerSendOut.new(
+          @sprites, @viewport, @battle.pbGetOwnerIndexFromBattlerIndex(b[0]) + 1,
+          @battle.battlers[b[0]], startBattle, i
+        )
       else
-        sendOutAnim = Animation::PokeballPlayerSendOut.new(@sprites, @viewport,
-           @battle.pbGetOwnerIndexFromBattlerIndex(b[0]) + 1,
-           @battle.battlers[b[0]], startBattle, i)
+        sendOutAnim = Animation::PokeballPlayerSendOut.new(
+          @sprites, @viewport, @battle.pbGetOwnerIndexFromBattlerIndex(b[0]) + 1,
+          @battle.battlers[b[0]], startBattle, i
+        )
       end
       dataBoxAnim = Animation::DataBoxAppear.new(@sprites, @viewport, b[0])
       sendOutAnims.push([sendOutAnim, dataBoxAnim, false])
@@ -295,12 +299,14 @@ class Battle::Scene
   #=============================================================================
   def pbLevelUp(pkmn, _battler, oldTotalHP, oldAttack, oldDefense, oldSpAtk, oldSpDef, oldSpeed)
     pbTopRightWindow(
-       _INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
-       pkmn.totalhp - oldTotalHP, pkmn.attack - oldAttack, pkmn.defense - oldDefense,
-       pkmn.spatk - oldSpAtk, pkmn.spdef - oldSpDef, pkmn.speed - oldSpeed))
+      _INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
+            pkmn.totalhp - oldTotalHP, pkmn.attack - oldAttack, pkmn.defense - oldDefense,
+            pkmn.spatk - oldSpAtk, pkmn.spdef - oldSpDef, pkmn.speed - oldSpeed)
+    )
     pbTopRightWindow(
-       _INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed))
+      _INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
+            pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed)
+    )
   end
 
   #=============================================================================
@@ -326,8 +332,9 @@ class Battle::Scene
   #=============================================================================
   def pbThrow(ball, shakes, critical, targetBattler, showPlayer = false)
     @briefMessage = false
-    captureAnim = Animation::PokeballThrowCapture.new(@sprites, @viewport,
-       ball, shakes, critical, @battle.battlers[targetBattler], showPlayer)
+    captureAnim = Animation::PokeballThrowCapture.new(
+      @sprites, @viewport, ball, shakes, critical, @battle.battlers[targetBattler], showPlayer
+    )
     loop do
       captureAnim.update
       pbUpdate
@@ -367,8 +374,9 @@ class Battle::Scene
 
   def pbThrowAndDeflect(ball, idxBattler)
     @briefMessage = false
-    throwAnim = Animation::PokeballThrowDeflect.new(@sprites, @viewport,
-       ball, @battle.battlers[idxBattler])
+    throwAnim = Animation::PokeballThrowDeflect.new(
+      @sprites, @viewport, ball, @battle.battlers[idxBattler]
+    )
     loop do
       throwAnim.update
       pbUpdate
@@ -533,8 +541,9 @@ class Battle::Scene
       targetHeight = userHeight
     end
     animPlayer.setLineTransform(
-       FOCUSUSER_X, FOCUSUSER_Y, FOCUSTARGET_X, FOCUSTARGET_Y,
-       oldUserX, oldUserY - userHeight / 2, oldTargetX, oldTargetY - targetHeight / 2)
+      FOCUSUSER_X, FOCUSUSER_Y, FOCUSTARGET_X, FOCUSTARGET_Y,
+      oldUserX, oldUserY - (userHeight / 2), oldTargetX, oldTargetY - (targetHeight / 2)
+    )
     # Play the animation
     animPlayer.start
     loop do

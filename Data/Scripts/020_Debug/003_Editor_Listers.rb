@@ -16,8 +16,9 @@ def pbListScreen(title, lister)
   list = pbListWindow([])
   list.viewport = viewport
   list.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(title,
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    title, Graphics.width / 2, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
   lister.setViewport(viewport)
   selectedmap = -1
@@ -63,8 +64,9 @@ def pbListScreenBlock(title, lister)
   list = pbListWindow([], Graphics.width / 2)
   list.viewport = viewport
   list.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(title,
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    title, Graphics.width / 2, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
   lister.setViewport(viewport)
   selectedmap = -1
@@ -121,7 +123,7 @@ class GraphicsLister
     @sprite = IconSprite.new(0, 0)
     @sprite.bitmap = nil
     @sprite.x      = Graphics.width * 3 / 4
-    @sprite.y      = (Graphics.height - 64) / 2 + 64
+    @sprite.y      = ((Graphics.height - 64) / 2) + 64
     @sprite.z      = 2
     @folder = folder
     @selection = selection
@@ -306,7 +308,7 @@ class MapLister
     @sprite = SpriteWrapper.new
     @sprite.bitmap = nil
     @sprite.x      = Graphics.width * 3 / 4
-    @sprite.y      = (Graphics.height - 64) / 2 + 64
+    @sprite.y      = ((Graphics.height - 64) / 2) + 64
     @sprite.z      = -2
     @commands = []
     @maps = pbMapTree
@@ -475,7 +477,7 @@ end
 #===============================================================================
 class TrainerTypeLister
   def initialize(selection = 0, includeNew = false)
-    @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height - 64) / 2 + 64)
+    @sprite = IconSprite.new(Graphics.width * 3 / 4, ((Graphics.height - 64) / 2) + 64)
     @sprite.z = 2
     @selection = selection
     @commands = []
@@ -552,8 +554,9 @@ class TrainerBattleLister
   def initialize(selection, includeNew)
     @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height / 2) + 32)
     @sprite.z = 2
-    @pkmnList = Window_UnformattedTextPokemon.newWithSize("",
-      Graphics.width / 2, Graphics.height - 64, Graphics.width / 2, 64)
+    @pkmnList = Window_UnformattedTextPokemon.newWithSize(
+      "", Graphics.width / 2, Graphics.height - 64, Graphics.width / 2, 64
+    )
     @pkmnList.z = 3
     @selection = selection
     @commands = []
@@ -604,12 +607,12 @@ class TrainerBattleLister
     for t in cmds
       if t[3] > 0
         @commands.push(_INTL("{1} {2} ({3}) x{4}",
-           GameData::TrainerType.get(t[1]).name, t[2], t[3],
-           GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
+                             GameData::TrainerType.get(t[1]).name, t[2], t[3],
+                             GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       else
         @commands.push(_INTL("{1} {2} x{3}",
-           GameData::TrainerType.get(t[1]).name, t[2],
-           GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
+                             GameData::TrainerType.get(t[1]).name, t[2],
+                             GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       end
       @ids.push([t[1], t[2], t[3]])
     end

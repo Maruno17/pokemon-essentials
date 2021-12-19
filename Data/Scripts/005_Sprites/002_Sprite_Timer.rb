@@ -38,8 +38,8 @@ class Sprite_Timer
         @timer.text = _ISPRINTF("<ac>{1:02d}:{2:02d}", min, sec)
       end
       @timer.update
-    else
-      @timer.visible = false if @timer
+    elsif @timer
+      @timer.visible = false
     end
   end
 end

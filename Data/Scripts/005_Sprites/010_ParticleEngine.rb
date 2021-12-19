@@ -9,23 +9,23 @@ class Particle_Engine
     @disposed  = false
     @firsttime = true
     @effects   = {
-       # PinkMan's Effects
-       "fire"         => Particle_Engine::Fire,
-       "smoke"        => Particle_Engine::Smoke,
-       "teleport"     => Particle_Engine::Teleport,
-       "spirit"       => Particle_Engine::Spirit,
-       "explosion"    => Particle_Engine::Explosion,
-       "aura"         => Particle_Engine::Aura,
-       # BlueScope's Effects
-       "soot"         => Particle_Engine::Soot,
-       "sootsmoke"    => Particle_Engine::SootSmoke,
-       "rocket"       => Particle_Engine::Rocket,
-       "fixteleport"  => Particle_Engine::FixedTeleport,
-       "smokescreen"  => Particle_Engine::Smokescreen,
-       "flare"        => Particle_Engine::Flare,
-       "splash"       => Particle_Engine::Splash,
-       # By Peter O.
-       "starteleport" => Particle_Engine::StarTeleport
+      # PinkMan's Effects
+      "fire"         => Particle_Engine::Fire,
+      "smoke"        => Particle_Engine::Smoke,
+      "teleport"     => Particle_Engine::Teleport,
+      "spirit"       => Particle_Engine::Spirit,
+      "explosion"    => Particle_Engine::Explosion,
+      "aura"         => Particle_Engine::Aura,
+      # BlueScope's Effects
+      "soot"         => Particle_Engine::Soot,
+      "sootsmoke"    => Particle_Engine::SootSmoke,
+      "rocket"       => Particle_Engine::Rocket,
+      "fixteleport"  => Particle_Engine::FixedTeleport,
+      "smokescreen"  => Particle_Engine::Smokescreen,
+      "flare"        => Particle_Engine::Flare,
+      "splash"       => Particle_Engine::Splash,
+      # By Peter O.
+      "starteleport" => Particle_Engine::StarTeleport
     }
   end
 
@@ -261,9 +261,9 @@ class ParticleEffect_Event < ParticleEffect
     @real_y = newRealY
     if @opacityvar > 0 && @viewport
       opac = 255.0 / @opacityvar
-      minX = opac * (-@xgravity * 1.0 / @slowdown).floor + @startingx
-      maxX = opac * (@xgravity * 1.0 / @slowdown).floor + @startingx
-      minY = opac * (-@ygravity * 1.0 / @slowdown).floor + @startingy
+      minX = (opac * (-@xgravity.to_f / @slowdown).floor) + @startingx
+      maxX = (opac * (@xgravity.to_f / @slowdown).floor) + @startingx
+      minY = (opac * (-@ygravity.to_f / @slowdown).floor) + @startingy
       maxY = @startingy
       minX -= @bmwidth
       minY -= @bmheight
@@ -309,14 +309,12 @@ class ParticleEffect_Event < ParticleEffect
           @particlex[i] = 0.0
           @particley[i] = 0.0
         end
-      else
-        if @opacity[i] <= 0
-          @opacity[i] = 250
-          @particles[i].y = @startingy + @yoffset
-          @particles[i].x = @startingx + @xoffset
-          @particlex[i] = 0.0
-          @particley[i] = 0.0
-        end
+      elsif @opacity[i] <= 0
+        @opacity[i] = 250
+        @particles[i].y = @startingy + @yoffset
+        @particles[i].x = @startingx + @xoffset
+        @particlex[i] = 0.0
+        @particley[i] = 0.0
       end
       calcParticlePos(i)
       if @randomhue == 1
@@ -333,11 +331,11 @@ class ParticleEffect_Event < ParticleEffect
   def calcParticlePos(i)
     @leftright = rand(2)
     if @leftright == 1
-      xo = -@xgravity * 1.0 / @slowdown
+      xo = -@xgravity.to_f / @slowdown
     else
-      xo = @xgravity * 1.0 / @slowdown
+      xo = @xgravity.to_f / @slowdown
     end
-    yo = -@ygravity * 1.0 / @slowdown
+    yo = -@ygravity.to_f / @slowdown
     @particlex[i] += xo
     @particley[i] += yo
     @particlex[i] -= @__offsetx

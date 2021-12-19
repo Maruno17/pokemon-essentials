@@ -47,23 +47,23 @@ def getCubicPoint2(src, t)
   x1  = src[6]
   y1  = src[7]
 
-  x1 = cx1 + (x1 - cx1) * t
-  x0 = x0 + (cx0 - x0) * t
-  cx0 = cx0 + (cx1 - cx0) * t
-  cx1 = cx0 + (x1 - cx0) * t
-  cx0 = x0 + (cx0 - x0) * t
-  cx = cx0 + (cx1 - cx0) * t
+  x1 = cx1 + ((x1 - cx1) * t)
+  x0 = x0 + ((cx0 - x0) * t)
+  cx0 = cx0 + ((cx1 - cx0) * t)
+  cx1 = cx0 + ((x1 - cx0) * t)
+  cx0 = x0 + ((cx0 - x0) * t)
+  cx = cx0 + ((cx1 - cx0) * t)
   # a = x1 - 3 * cx1 + 3 * cx0 - x0
   # b = 3 * (cx1 - 2 * cx0 + x0)
   # c = 3 * (cx0 - x0)
   # d = x0
   # cx = a*t*t*t + b*t*t + c*t + d
-  y1 = cy1 + (y1 - cy1) * t
-  y0 = y0 + (cy0 - y0) * t
-  cy0 = cy0 + (cy1 - cy0) * t
-  cy1 = cy0 + (y1 - cy0) * t
-  cy0 = y0 + (cy0 - y0) * t
-  cy = cy0 + (cy1 - cy0) * t
+  y1 = cy1 + ((y1 - cy1) * t)
+  y0 = y0 + ((cy0 - y0) * t)
+  cy0 = cy0 + ((cy1 - cy0) * t)
+  cy1 = cy0 + ((y1 - cy0) * t)
+  cy0 = y0 + ((cy0 - y0) * t)
+  cy = cy0 + ((cy1 - cy0) * t)
   # a = y1 - 3 * cy1 + 3 * cy0 - y0
   # b = 3 * (cy1 - 2 * cy0 + y0)
   # c = 3 * (cy0 - y0)
@@ -121,11 +121,12 @@ class PictureEx
   end
 
   def callback(cb)
-    if cb.is_a?(Proc)
+    case cb
+    when Proc
       cb.call(self)
-    elsif cb.is_a?(Array)
+    when Array
       cb[0].method(cb[1]).call(self)
-    elsif cb.is_a?(Method)
+    when Method
       cb.call(self)
     end
   end
@@ -390,31 +391,31 @@ class PictureEx
       dur = (process[2] == 0) ? 1 : process[2]   # Total duration of process
       case process[0]
       when Processes::XY, Processes::DeltaXY
-        @x = process[5] + fra * (process[7] - process[5]) / dur
-        @y = process[6] + fra * (process[8] - process[6]) / dur
+        @x = process[5] + (fra * (process[7] - process[5]) / dur)
+        @y = process[6] + (fra * (process[8] - process[6]) / dur)
       when Processes::Curve
         @x, @y = getCubicPoint2(process[5], fra.to_f / dur)
       when Processes::Z
-        @z = process[5] + fra * (process[6] - process[5]) / dur
+        @z = process[5] + (fra * (process[6] - process[5]) / dur)
       when Processes::Zoom
-        @zoom_x = process[5] + fra * (process[7] - process[5]) / dur
-        @zoom_y = process[6] + fra * (process[8] - process[6]) / dur
+        @zoom_x = process[5] + (fra * (process[7] - process[5]) / dur)
+        @zoom_y = process[6] + (fra * (process[8] - process[6]) / dur)
       when Processes::Angle
-        @angle = process[5] + fra * (process[6] - process[5]) / dur
+        @angle = process[5] + (fra * (process[6] - process[5]) / dur)
       when Processes::Tone
-        @tone.red   = process[5].red + fra * (process[6].red - process[5].red) / dur
-        @tone.green = process[5].green + fra * (process[6].green - process[5].green) / dur
-        @tone.blue  = process[5].blue + fra * (process[6].blue - process[5].blue) / dur
-        @tone.gray  = process[5].gray + fra * (process[6].gray - process[5].gray) / dur
+        @tone.red   = process[5].red + (fra * (process[6].red - process[5].red) / dur)
+        @tone.green = process[5].green + (fra * (process[6].green - process[5].green) / dur)
+        @tone.blue  = process[5].blue + (fra * (process[6].blue - process[5].blue) / dur)
+        @tone.gray  = process[5].gray + (fra * (process[6].gray - process[5].gray) / dur)
       when Processes::Color
-        @color.red   = process[5].red + fra * (process[6].red - process[5].red) / dur
-        @color.green = process[5].green + fra * (process[6].green - process[5].green) / dur
-        @color.blue  = process[5].blue + fra * (process[6].blue - process[5].blue) / dur
-        @color.alpha = process[5].alpha + fra * (process[6].alpha - process[5].alpha) / dur
+        @color.red   = process[5].red + (fra * (process[6].red - process[5].red) / dur)
+        @color.green = process[5].green + (fra * (process[6].green - process[5].green) / dur)
+        @color.blue  = process[5].blue + (fra * (process[6].blue - process[5].blue) / dur)
+        @color.alpha = process[5].alpha + (fra * (process[6].alpha - process[5].alpha) / dur)
       when Processes::Hue
         @hue = (process[6] - process[5]).to_f / dur
       when Processes::Opacity
-        @opacity = process[5] + fra * (process[6] - process[5]) / dur
+        @opacity = process[5] + (fra * (process[6] - process[5]) / dur)
       when Processes::Visible
         @visible = process[5]
       when Processes::BlendType

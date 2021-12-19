@@ -97,15 +97,15 @@ class Game_Screen
     end
     if @fadein_duration && @fadein_duration >= 1
       d = @fadein_duration
-      @brightness = (@brightness * (d - 1) + 255) / d
+      @brightness = ((@brightness * (d - 1)) + 255) / d
       @fadein_duration -= 1
     end
     if @tone_duration >= 1
       d = @tone_duration
-      @tone.red   = (@tone.red * (d - 1) + @tone_target.red) / d
-      @tone.green = (@tone.green * (d - 1) + @tone_target.green) / d
-      @tone.blue  = (@tone.blue * (d - 1) + @tone_target.blue) / d
-      @tone.gray  = (@tone.gray * (d - 1) + @tone_target.gray) / d
+      @tone.red   = ((@tone.red * (d - 1)) + @tone_target.red) / d
+      @tone.green = ((@tone.green * (d - 1)) + @tone_target.green) / d
+      @tone.blue  = ((@tone.blue * (d - 1)) + @tone_target.blue) / d
+      @tone.gray  = ((@tone.gray * (d - 1)) + @tone_target.gray) / d
       @tone_duration -= 1
     end
     if @flash_duration >= 1

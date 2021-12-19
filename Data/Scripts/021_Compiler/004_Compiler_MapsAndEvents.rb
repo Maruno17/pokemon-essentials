@@ -117,9 +117,10 @@ module Compiler
   def push_move_route(list, character, route, indent = 0)
     route = generate_move_route(route) if route.is_a?(Array)
     for i in 0...route.list.length
-      list.push(RPG::EventCommand.new(
-        (i == 0) ? 209 : 509, indent,
-        (i == 0) ? [character, route] : [route.list[i - 1]]))
+      list.push(
+        RPG::EventCommand.new((i == 0) ? 209 : 509, indent,
+                              (i == 0) ? [character, route] : [route.list[i - 1]])
+      )
     end
   end
 
@@ -306,7 +307,7 @@ module Compiler
     def getEventFromXY(mapID, x, y)
       return nil if x < 0 || y < 0
       mapPositions = @mapxy[mapID]
-      return mapPositions[y * @mapWidths[mapID] + x] if mapPositions
+      return mapPositions[(y * @mapWidths[mapID]) + x] if mapPositions
       map = getMap(mapID)
       return nil if !map
       @mapWidths[mapID]  = map.width
@@ -314,10 +315,10 @@ module Compiler
       mapPositions = []
       width = map.width
       for e in map.events.values
-        mapPositions[e.y * width + e.x] = e if e
+        mapPositions[(e.y * width) + e.x] = e if e
       end
       @mapxy[mapID] = mapPositions
-      return mapPositions[y * width + x]
+      return mapPositions[(y * width) + x]
     end
 
     def getEventFromID(mapID, id)
@@ -582,8 +583,8 @@ module Compiler
     push_branch(firstpage.list, battleString)
     if battles.length > 1   # Has rematches
       push_script(firstpage.list,
-         sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
-         regspeech, safetrcombo, battles.length), 1)
+                  sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
+                          regspeech, safetrcombo, battles.length), 1)
     end
     push_self_switch(firstpage.list, "A", true, 1)
     push_branch_end(firstpage.list, 1)
@@ -640,8 +641,8 @@ module Compiler
         push_text(lastpage.list, ebattle, 1)
       end
       push_script(lastpage.list,
-         sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
-         regspeech, safetrcombo, battles.length), 1)
+                  sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
+                          regspeech, safetrcombo, battles.length), 1)
       push_exit(lastpage.list, 1)   # Exit Event Processing
       push_branch_end(lastpage.list, 1)
     end
@@ -652,8 +653,8 @@ module Compiler
     push_text(lastpage.list, ebattle)
     if battles.length > 1
       push_script(lastpage.list,
-         sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
-         regspeech, safetrcombo, battles.length))
+                  sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
+                          regspeech, safetrcombo, battles.length))
     end
     push_end(lastpage.list)
     # Add pages to the new event
@@ -782,22 +783,27 @@ module Compiler
         if transferCommand.length == 1 && !list.any? { |cmd| cmd.code == 208 }   # Change Transparent Flag
           # Rewrite penultimate page
           list.clear
-          push_move_route_and_wait(list, 0, [   # Move Route for door opening
-             PBMoveRoute::PlaySE, RPG::AudioFile.new("Door enter"), PBMoveRoute::Wait, 2,
+          push_move_route_and_wait(   # Move Route for door opening
+            list, 0,
+            [PBMoveRoute::PlaySE, RPG::AudioFile.new("Door enter"), PBMoveRoute::Wait, 2,
              PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 2,
              PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2
-          ])
-          push_move_route_and_wait(list, -1, [   # Move Route for player entering door
-             PBMoveRoute::ThroughOn, PBMoveRoute::Up, PBMoveRoute::ThroughOff
-          ])
+             PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2]
+          )
+          push_move_route_and_wait(   # Move Route for player entering door
+            list, -1,
+            [PBMoveRoute::ThroughOn, PBMoveRoute::Up, PBMoveRoute::ThroughOff]
+          )
           push_event(list, 208, [0])   # Change Transparent Flag (invisible)
           push_script(list, "Followers.follow_into_door")
           push_event(list, 210, [], indent)   # Wait for Move's Completion
-          push_move_route_and_wait(list, 0, [PBMoveRoute::Wait, 2,   # Move Route for door closing
-                                             PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
-                                             PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 2,
-                                             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2])
+          push_move_route_and_wait(   # Move Route for door closing
+            list, 0,
+            [PBMoveRoute::Wait, 2,
+             PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
+             PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 2,
+             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2]
+          )
           push_event(list, 223, [Tone.new(-255, -255, -255), 6])   # Change Screen Color Tone
           push_wait(list, 8)   # Wait
           push_event(list, 208, [1])   # Change Transparent Flag (visible)
@@ -810,17 +816,21 @@ module Compiler
           push_branch(list, "get_self.onEvent?")   # Conditional Branch
           push_event(list, 208, [0], 1)   # Change Transparent Flag (invisible)
           push_script(list, "Followers.hide_followers", 1)
-          push_move_route_and_wait(list, 0, [   # Move Route for setting door to open
-             PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 6
-          ], 1)
+          push_move_route_and_wait(   # Move Route for setting door to open
+            list, 0,
+            [PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 6],
+            1
+          )
           push_event(list, 208, [1], 1)   # Change Transparent Flag (visible)
           push_move_route_and_wait(list, -1, [PBMoveRoute::Down], 1)   # Move Route for player exiting door
           push_script(list, "Followers.put_followers_on_player", 1)
-          push_move_route_and_wait(list, 0, [   # Move Route for door closing
-             PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2,
+          push_move_route_and_wait(   # Move Route for door closing
+            list, 0,
+            [PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2,
              PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2
-          ], 1)
+             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2],
+            1
+          )
           push_branch_end(list, 1)
           push_script(list, "setTempSwitchOn(\"A\")")
           push_end(list)
@@ -946,20 +956,20 @@ module Compiler
               list.delete_at(i)
             end
             list.insert(i,
-               RPG::EventCommand.new(314, list[i].indent, [0])   # Recover All
-            )
+                        RPG::EventCommand.new(314, list[i].indent, [0]))   # Recover All
             changed = true
           when "pbFadeOutIn(99999){foriin$player.partyi.healend}"
             oldIndent = list[i].indent
             for j in i..lastScript
               list.delete_at(i)
             end
-            list.insert(i,
-               RPG::EventCommand.new(223, oldIndent, [Tone.new(-255, -255, -255), 6]),   # Fade to black
-               RPG::EventCommand.new(106, oldIndent, [6]),                            # Wait
-               RPG::EventCommand.new(314, oldIndent, [0]),                            # Recover All
-               RPG::EventCommand.new(223, oldIndent, [Tone.new(0, 0, 0), 6]),            # Fade to normal
-               RPG::EventCommand.new(106, oldIndent, [6])                             # Wait
+            list.insert(
+              i,
+              RPG::EventCommand.new(223, oldIndent, [Tone.new(-255, -255, -255), 6]),   # Fade to black
+              RPG::EventCommand.new(106, oldIndent, [6]),                               # Wait
+              RPG::EventCommand.new(314, oldIndent, [0]),                               # Recover All
+              RPG::EventCommand.new(223, oldIndent, [Tone.new(0, 0, 0), 6]),            # Fade to normal
+              RPG::EventCommand.new(106, oldIndent, [6])                                # Wait
             )
             changed = true
           end
@@ -1175,12 +1185,13 @@ module Compiler
               fullTransfer = list[i]
               indent = list[i].indent
               (list.length - 1).times { list.delete_at(0) }
-              list.insert(0,
-                 RPG::EventCommand.new(250, indent, [RPG::AudioFile.new("Exit Door", 80, 100)]),   # Play SE
-                 RPG::EventCommand.new(223, indent, [Tone.new(-255, -255, -255), 6]),              # Fade to black
-                 RPG::EventCommand.new(106, indent, [8]),                                          # Wait
-                 fullTransfer,                                                                     # Transfer event
-                 RPG::EventCommand.new(223, indent, [Tone.new(0, 0, 0), 6])                        # Fade to normal
+              list.insert(
+                0,
+                RPG::EventCommand.new(250, indent, [RPG::AudioFile.new("Exit Door", 80, 100)]),   # Play SE
+                RPG::EventCommand.new(223, indent, [Tone.new(-255, -255, -255), 6]),              # Fade to black
+                RPG::EventCommand.new(106, indent, [8]),                                          # Wait
+                fullTransfer,                                                                     # Transfer event
+                RPG::EventCommand.new(223, indent, [Tone.new(0, 0, 0), 6])                        # Fade to normal
               )
               changed = true
             end
@@ -1324,14 +1335,16 @@ module Compiler
               end
               if isempty
                 if elseIndex >= 0
-                  list.insert(elseIndex + 1,
-                     RPG::EventCommand.new(115, list[i].indent + 1, [])   # Exit Event Processing
+                  list.insert(
+                    elseIndex + 1,
+                    RPG::EventCommand.new(115, list[i].indent + 1, [])   # Exit Event Processing
                   )
                 else
-                  list.insert(i + 1,
-                     RPG::EventCommand.new(0, list[i].indent + 1, []),    # Empty Event
-                     RPG::EventCommand.new(411, list[i].indent, []),    # Else
-                     RPG::EventCommand.new(115, list[i].indent + 1, [])   # Exit Event Processing
+                  list.insert(
+                    i + 1,
+                    RPG::EventCommand.new(0, list[i].indent + 1, []),    # Empty Event
+                    RPG::EventCommand.new(411, list[i].indent, []),      # Else
+                    RPG::EventCommand.new(115, list[i].indent + 1, [])   # Exit Event Processing
                   )
                 end
                 changed = true

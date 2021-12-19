@@ -820,7 +820,7 @@ class Battle::Move::SetUserTypesToTargetTypes < Battle::Move
   def pbEffectAgainstTarget(user, target)
     user.pbChangeTypes(target)
     @battle.pbDisplay(_INTL("{1}'s type changed to match {2}'s!",
-       user.pbThis, target.pbThis(true)))
+                            user.pbThis, target.pbThis(true)))
   end
 end
 
@@ -1067,7 +1067,7 @@ class Battle::Move::SetUserAbilityToTargetAbility < Battle::Move
     user.ability = target.ability
     @battle.pbReplaceAbilitySplash(user)
     @battle.pbDisplay(_INTL("{1} copied {2}'s {3}!",
-       user.pbThis, target.pbThis(true), target.abilityName))
+                            user.pbThis, target.pbThis(true), target.abilityName))
     @battle.pbHideAbilitySplash(user)
     user.pbOnLosingAbility(oldAbil)
     user.pbTriggerAbilityOnGainingIt
@@ -1169,7 +1169,7 @@ class Battle::Move::UserTargetSwapAbilities < Battle::Move
       @battle.pbDisplay(_INTL("{1} swapped Abilities with its target!", user.pbThis))
     else
       @battle.pbDisplay(_INTL("{1} swapped its {2} Ability with its target's {3} Ability!",
-         user.pbThis, target.abilityName, user.abilityName))
+                              user.pbThis, target.abilityName, user.abilityName))
     end
     if user.opposes?(target)
       @battle.pbHideAbilitySplash(user)
@@ -1359,7 +1359,7 @@ class Battle::Move::StartGravity < Battle::Move
         showMessage = true
       end
       @battle.pbDisplay(_INTL("{1} couldn't stay airborne because of gravity!",
-         b.pbThis)) if showMessage
+                              b.pbThis)) if showMessage
     end
   end
 end

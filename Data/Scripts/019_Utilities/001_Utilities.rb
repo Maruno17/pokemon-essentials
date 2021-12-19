@@ -450,14 +450,12 @@ def pbMoveTutorChoose(move, movelist = nil, bymachine = false, oneusemachine = f
         pbMessage(_INTL("{1} can't learn {2}.", pokemon.name, movename)) { screen.pbUpdate }
       elsif !pokemon.compatible_with_move?(move)
         pbMessage(_INTL("{1} can't learn {2}.", pokemon.name, movename)) { screen.pbUpdate }
-      else
-        if pbLearnMove(pokemon, move, false, bymachine) { screen.pbUpdate }
-          $stats.moves_taught_by_item += 1 if bymachine
-          $stats.moves_taught_by_tutor += 1 if !bymachine
-          pokemon.add_first_move(move) if oneusemachine
-          ret = true
-          break
-        end
+      elsif pbLearnMove(pokemon, move, false, bymachine) { screen.pbUpdate }
+        $stats.moves_taught_by_item += 1 if bymachine
+        $stats.moves_taught_by_tutor += 1 if !bymachine
+        pokemon.add_first_move(move) if oneusemachine
+        ret = true
+        break
       end
     end
     screen.pbEndScene
@@ -470,7 +468,7 @@ def pbConvertItemToItem(variable, array)
   pbSet(variable, nil)
   for i in 0...(array.length / 2)
     next if item != array[2 * i]
-    pbSet(variable, array[2 * i + 1])
+    pbSet(variable, array[(2 * i) + 1])
     return
   end
 end
@@ -480,7 +478,7 @@ def pbConvertItemToPokemon(variable, array)
   pbSet(variable, nil)
   for i in 0...(array.length / 2)
     next if item != array[2 * i]
-    pbSet(variable, GameData::Species.get(array[2 * i + 1]).id)
+    pbSet(variable, GameData::Species.get(array[(2 * i) + 1]).id)
     return
   end
 end

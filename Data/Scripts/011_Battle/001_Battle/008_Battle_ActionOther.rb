@@ -140,7 +140,7 @@ class Battle
       pbDisplay(_INTL("{1}'s fervent wish has reached {2}!", trainerName, battler.pbThis))
     else
       pbDisplay(_INTL("{1}'s {2} is reacting to {3}'s {4}!",
-         battler.pbThis, battler.itemName, trainerName, pbGetMegaRingName(idxBattler)))
+                      battler.pbThis, battler.itemName, trainerName, pbGetMegaRingName(idxBattler)))
     end
     pbCommonAnimation("MegaEvolution", battler)
     battler.pokemon.makeMega

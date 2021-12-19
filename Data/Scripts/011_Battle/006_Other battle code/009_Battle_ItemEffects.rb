@@ -922,7 +922,7 @@ Battle::ItemEffects::DamageCalcFromUser.copy(:METALCOAT, :IRONPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:METRONOME,
   proc { |item, user, target, move, mults, baseDmg, type|
-    met = 1 + 0.2 * [user.effects[PBEffects::Metronome], 5].min
+    met = 1 + (0.2 * [user.effects[PBEffects::Metronome], 5].min)
     mults[:final_damage_multiplier] *= met
   }
 )
@@ -1030,10 +1030,8 @@ Battle::ItemEffects::DamageCalcFromUser.add(:SOULDEW,
     next if !user.isSpecies?(:LATIAS) && !user.isSpecies?(:LATIOS)
     if Settings::SOUL_DEW_POWERS_UP_TYPES
       mults[:final_damage_multiplier] *= 1.2 if [:DRAGON, :PSYCHIC].include?(type)
-    else
-      if move.specialMove? && !user.battle.rules["souldewclause"]
-        mults[:attack_multiplier] *= 1.5
-      end
+    elsif move.specialMove? && !user.battle.rules["souldewclause"]
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )

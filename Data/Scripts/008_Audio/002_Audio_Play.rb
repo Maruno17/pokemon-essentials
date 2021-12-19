@@ -30,7 +30,7 @@ def pbResolveAudioFile(str, volume = nil, pitch = nil)
   if str.is_a?(RPG::AudioFile)
     if volume || pitch
       return RPG::AudioFile.new(str.name, volume || str.volume || 100,
-                                          pitch || str.pitch || 100)
+                                pitch || str.pitch || 100)
     else
       return str
     end

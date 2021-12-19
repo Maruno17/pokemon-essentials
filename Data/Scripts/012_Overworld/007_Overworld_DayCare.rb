@@ -244,7 +244,7 @@ class DayCare
       shiny_retries.times do
         break if egg.shiny?
         egg.shiny = nil   # Make it recalculate shininess
-        egg.personalID = rand(2**16) | rand(2**16) << 16
+        egg.personalID = rand(2**16) | (rand(2**16) << 16)
       end
     end
 

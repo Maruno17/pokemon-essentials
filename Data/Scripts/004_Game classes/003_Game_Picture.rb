@@ -131,19 +131,19 @@ class Game_Picture
   def update
     if @duration >= 1
       d = @duration
-      @x = (@x * (d - 1) + @target_x) / d
-      @y = (@y * (d - 1) + @target_y) / d
-      @zoom_x = (@zoom_x * (d - 1) + @target_zoom_x) / d
-      @zoom_y = (@zoom_y * (d - 1) + @target_zoom_y) / d
-      @opacity = (@opacity * (d - 1) + @target_opacity) / d
+      @x = ((@x * (d - 1)) + @target_x) / d
+      @y = ((@y * (d - 1)) + @target_y) / d
+      @zoom_x = ((@zoom_x * (d - 1)) + @target_zoom_x) / d
+      @zoom_y = ((@zoom_y * (d - 1)) + @target_zoom_y) / d
+      @opacity = ((@opacity * (d - 1)) + @target_opacity) / d
       @duration -= 1
     end
     if @tone_duration >= 1
       d = @tone_duration
-      @tone.red = (@tone.red * (d - 1) + @tone_target.red) / d
-      @tone.green = (@tone.green * (d - 1) + @tone_target.green) / d
-      @tone.blue = (@tone.blue * (d - 1) + @tone_target.blue) / d
-      @tone.gray = (@tone.gray * (d - 1) + @tone_target.gray) / d
+      @tone.red = ((@tone.red * (d - 1)) + @tone_target.red) / d
+      @tone.green = ((@tone.green * (d - 1)) + @tone_target.green) / d
+      @tone.blue = ((@tone.blue * (d - 1)) + @tone_target.blue) / d
+      @tone.gray = ((@tone.gray * (d - 1)) + @tone_target.gray) / d
       @tone_duration -= 1
     end
     if @rotate_speed != 0

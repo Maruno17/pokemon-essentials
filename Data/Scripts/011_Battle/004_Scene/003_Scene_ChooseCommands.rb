@@ -6,11 +6,11 @@ class Battle::Scene
   def pbCommandMenu(idxBattler, firstAction)
     shadowTrainer = (GameData::Type.exists?(:SHADOW) && @battle.trainerBattle?)
     cmds = [
-       _INTL("What will\n{1} do?", @battle.battlers[idxBattler].name),
-       _INTL("Fight"),
-       _INTL("Bag"),
-       _INTL("Pokémon"),
-       (shadowTrainer) ? _INTL("Call") : (firstAction) ? _INTL("Run") : _INTL("Cancel")
+      _INTL("What will\n{1} do?", @battle.battlers[idxBattler].name),
+      _INTL("Fight"),
+      _INTL("Bag"),
+      _INTL("Pokémon"),
+      (shadowTrainer) ? _INTL("Call") : (firstAction) ? _INTL("Run") : _INTL("Cancel")
     ]
     ret = pbCommandMenuEx(idxBattler, cmds, (shadowTrainer) ? 2 : (firstAction) ? 0 : 1)
     ret = 4 if ret == 3 && shadowTrainer   # Convert "Run" to "Call"
@@ -200,10 +200,10 @@ class Battle::Scene
     # Start Bag screen
     itemScene = PokemonBag_Scene.new
     itemScene.pbStartScene($bag, true,
-      proc { |item|
-        useType = GameData::Item.get(item).battle_use
-        next useType && useType > 0
-      }, false)
+                           proc { |item|
+                             useType = GameData::Item.get(item).battle_use
+                             next useType && useType > 0
+                           }, false)
     # Loop while in Bag screen
     wasTargeting = false
     loop do

@@ -102,7 +102,7 @@ module Battle::Scene::Animation::BallAnimationMixin
       ball.setVisible(7, true)
       ballStartX = traSprite.x
       ballStartX -= ball.totalDuration * (Graphics.width / (2 * 16)) if !safariThrow
-      ballStartY = traSprite.y - traSprite.bitmap.height / 2
+      ballStartY = traSprite.y - (traSprite.bitmap.height / 2)
       return ballStartX, ballStartY
     end
     # Back sprite is animated, make the Poké Ball track the trainer's hand
@@ -166,13 +166,13 @@ module Battle::Scene::Animation::BallAnimationMixin
     #       throw). Instead, that throw animation and initialDelay are designed
     #       to make sure the Ball's trajectory starts at the same position.
     ball.setVisible(delay, true)
-    a = 2 * startY - 4 * midY + 2 * endY
-    b = 4 * midY - 3 * startY - endY
+    a = (2 * startY) - (4 * midY) + (2 * endY)
+    b = (4 * midY) - (3 * startY) - endY
     c = startY
     for i in 1..duration
-      t = i.to_f / duration            # t ranges from 0 to 1
-      x = startX + (endX - startX) * t   # Linear in t
-      y = a * t**2 + b * t + c           # Quadratic in t
+      t = i.to_f / duration                # t ranges from 0 to 1
+      x = startX + ((endX - startX) * t)   # Linear in t
+      y = (a * (t**2)) + (b * t) + c       # Quadratic in t
       ball.moveXY(delay + i - 1, 1, x, y)
     end
     createBallTumbling(ball, delay, duration)

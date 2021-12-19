@@ -146,9 +146,10 @@ module MessageConfig
   def self.pbTryFonts(*args)
     for a in args
       next if !a
-      if a.is_a?(String)
+      case a
+      when String
         return a if Font.exist?(a)
-      elsif a.is_a?(Array)
+      when Array
         for aa in a
           ret = MessageConfig.pbTryFonts(aa)
           return ret if ret != ""
@@ -177,7 +178,7 @@ end
 def pbBottomLeftLines(window, lines, width = nil)
   window.x = 0
   window.width = width ? width : Graphics.width
-  window.height = (window.borderY rescue 32) + lines * 32
+  window.height = (window.borderY rescue 32) + (lines * 32)
   window.y = Graphics.height - window.height
 end
 
@@ -230,7 +231,7 @@ end
 
 # internal function
 def pbRepositionMessageWindow(msgwindow, linecount = 2)
-  msgwindow.height = 32 * linecount + msgwindow.borderY
+  msgwindow.height = (32 * linecount) + msgwindow.borderY
   msgwindow.y = (Graphics.height) - (msgwindow.height)
   if $game_system
     case $game_system.message_position
@@ -278,10 +279,10 @@ def isDarkBackground(background, rect = nil)
   return true if rect.width <= 0 || rect.height <= 0
   xSeg = (rect.width / 16)
   xLoop = (xSeg == 0) ? 1 : 16
-  xStart = (xSeg == 0) ? rect.x + (rect.width / 2) : rect.x + xSeg / 2
+  xStart = (xSeg == 0) ? rect.x + (rect.width / 2) : rect.x + (xSeg / 2)
   ySeg = (rect.height / 16)
   yLoop = (ySeg == 0) ? 1 : 16
-  yStart = (ySeg == 0) ? rect.y + (rect.height / 2) : rect.y + ySeg / 2
+  yStart = (ySeg == 0) ? rect.y + (rect.height / 2) : rect.y + (ySeg / 2)
   count = 0
   y = yStart
   r = g = b = 0
@@ -303,7 +304,7 @@ def isDarkBackground(background, rect = nil)
   r /= count
   g /= count
   b /= count
-  return (r * 0.299 + g * 0.587 + b * 0.114) < 160
+  return ((r * 0.299) + (g * 0.587) + (b * 0.114)) < 160
 end
 
 def isDarkWindowskin(windowskin)
@@ -316,7 +317,7 @@ def isDarkWindowskin(windowskin)
     return isDarkBackground(windowskin, Rect.new(32, 16, 16, 16))
   else
     clr = windowskin.get_pixel(windowskin.width / 2, windowskin.height / 2)
-    return (clr.red * 0.299 + clr.green * 0.587 + clr.blue * 0.114) < 160
+    return ((clr.red * 0.299) + (clr.green * 0.587) + (clr.blue * 0.114)) < 160
   end
 end
 
@@ -328,20 +329,20 @@ def getSkinColor(windowskin, color, isDarkSkin)
      windowskin.width != 128 || windowskin.height != 128
     # Base color, shadow color (these are reversed on dark windowskins)
     textcolors = [
-       "0070F8", "78B8E8",   # 1  Blue
-       "E82010", "F8A8B8",   # 2  Red
-       "60B048", "B0D090",   # 3  Green
-       "48D8D8", "A8E0E0",   # 4  Cyan
-       "D038B8", "E8A0E0",   # 5  Magenta
-       "E8D020", "F8E888",   # 6  Yellow
-       "A0A0A8", "D0D0D8",   # 7  Grey
-       "F0F0F8", "C8C8D0",   # 8  White
-       "9040E8", "B8A8E0",   # 9  Purple
-       "F89818", "F8C898",   # 10 Orange
-       colorToRgb32(MessageConfig::DARK_TEXT_MAIN_COLOR),
-       colorToRgb32(MessageConfig::DARK_TEXT_SHADOW_COLOR),   # 11 Dark default
-       colorToRgb32(MessageConfig::LIGHT_TEXT_MAIN_COLOR),
-       colorToRgb32(MessageConfig::LIGHT_TEXT_SHADOW_COLOR)   # 12 Light default
+      "0070F8", "78B8E8",   # 1  Blue
+      "E82010", "F8A8B8",   # 2  Red
+      "60B048", "B0D090",   # 3  Green
+      "48D8D8", "A8E0E0",   # 4  Cyan
+      "D038B8", "E8A0E0",   # 5  Magenta
+      "E8D020", "F8E888",   # 6  Yellow
+      "A0A0A8", "D0D0D8",   # 7  Grey
+      "F0F0F8", "C8C8D0",   # 8  White
+      "9040E8", "B8A8E0",   # 9  Purple
+      "F89818", "F8C898",   # 10 Orange
+      colorToRgb32(MessageConfig::DARK_TEXT_MAIN_COLOR),
+      colorToRgb32(MessageConfig::DARK_TEXT_SHADOW_COLOR),   # 11 Dark default
+      colorToRgb32(MessageConfig::LIGHT_TEXT_MAIN_COLOR),
+      colorToRgb32(MessageConfig::LIGHT_TEXT_SHADOW_COLOR)   # 12 Light default
     ]
     if color == 0 || color > textcolors.length / 2   # No special colour, use default
       if isDarkSkin   # Dark background, light text
@@ -352,14 +353,14 @@ def getSkinColor(windowskin, color, isDarkSkin)
     end
     # Special colour as listed above
     if isDarkSkin && color != 12   # Dark background, light text
-      return sprintf("<c3=%s,%s>", textcolors[2 * (color - 1) + 1], textcolors[2 * (color - 1)])
+      return sprintf("<c3=%s,%s>", textcolors[(2 * (color - 1)) + 1], textcolors[2 * (color - 1)])
     end
     # Light background, dark text
-    return sprintf("<c3=%s,%s>", textcolors[2 * (color - 1)], textcolors[2 * (color - 1) + 1])
+    return sprintf("<c3=%s,%s>", textcolors[2 * (color - 1)], textcolors[(2 * (color - 1)) + 1])
   else   # VX windowskin
     color = 0 if color >= 32
-    x = 64 + (color % 8) * 8
-    y = 96 + (color / 8) * 8
+    x = 64 + ((color % 8) * 8)
+    y = 96 + ((color / 8) * 8)
     pixel = windowskin.get_pixel(x, y)
     return shadowctagFromColor(pixel)
   end
@@ -441,10 +442,10 @@ def pbSrcOver(dstColor, srcColor)
   cg = dstColor.green * dstColor.alpha / 255
   cb = dstColor.blue * dstColor.alpha / 255
   ica = 255 - dstColor.alpha
-  a = 255 - (iea * ica) / 255
-  r = (iea * cr) / 255 + er
-  g = (iea * cg) / 255 + eg
-  b = (iea * cb) / 255 + eb
+  a = 255 - ((iea * ica) / 255)
+  r = ((iea * cr) / 255) + er
+  g = ((iea * cg) / 255) + eg
+  b = ((iea * cb) / 255) + eb
   r = (a == 0) ? 0 : r * 255 / a
   g = (a == 0) ? 0 : g * 255 / a
   b = (a == 0) ? 0 : b * 255 / a

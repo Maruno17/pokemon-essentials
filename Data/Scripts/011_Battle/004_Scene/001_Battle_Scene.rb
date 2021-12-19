@@ -64,11 +64,11 @@ class Battle::Scene
     # Shift depending on index (no shifting needed for sideSize of 1)
     case sideSize
     when 2
-      ret[0] += [-48, 48, 32, -32][2 * index + side]
-      ret[1] += [  0,  0,  0, -16][2 * index + side]
+      ret[0] += [-48, 48, 32, -32][(2 * index) + side]
+      ret[1] += [  0,  0,  0, -16][(2 * index) + side]
     when 3
-      ret[0] += [-80, 80,  0,  0, 80, -80][2 * index + side]
-      ret[1] += [  0,  0,  0, -8,  0, -16][2 * index + side]
+      ret[0] += [-80, 80,  0,  0, 80, -80][(2 * index) + side]
+      ret[1] += [  0,  0,  0, -8,  0, -16][(2 * index) + side]
     end
     return ret
   end

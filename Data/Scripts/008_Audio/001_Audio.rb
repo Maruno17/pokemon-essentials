@@ -128,7 +128,7 @@ def getPlayTime2(filename)
       data = fgetdw.call(file)
       return -1 if data != 0x61746164   # "data"
       datasize = fgetdw.call(file)
-      time = (datasize * 1.0) / bytessec
+      time = datasize.to_f / bytessec
       return time
     when 0x5367674F   # "OggS"
       file.pos = 0

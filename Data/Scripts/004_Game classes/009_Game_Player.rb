@@ -10,8 +10,8 @@ class Game_Player < Game_Character
   attr_accessor :charsetData
   attr_accessor :encounter_count
 
-  SCREEN_CENTER_X = (Settings::SCREEN_WIDTH / 2 - Game_Map::TILE_WIDTH / 2) * Game_Map::X_SUBPIXELS
-  SCREEN_CENTER_Y = (Settings::SCREEN_HEIGHT / 2 - Game_Map::TILE_HEIGHT / 2) * Game_Map::Y_SUBPIXELS
+  SCREEN_CENTER_X = ((Settings::SCREEN_WIDTH / 2) - (Game_Map::TILE_WIDTH / 2)) * Game_Map::X_SUBPIXELS
+  SCREEN_CENTER_Y = ((Settings::SCREEN_HEIGHT / 2) - (Game_Map::TILE_HEIGHT / 2)) * Game_Map::Y_SUBPIXELS
 
   @@bobFrameSpeed = 1.0 / 15
 
@@ -157,7 +157,7 @@ class Game_Player < Game_Character
     end
     @x = @x + x_plus
     @y = @y + y_plus
-    real_distance = Math.sqrt(x_plus * x_plus + y_plus * y_plus)
+    real_distance = Math.sqrt((x_plus * x_plus) + (y_plus * y_plus))
     distance = [1, real_distance].max
     @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
     @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
@@ -287,8 +287,8 @@ class Game_Player < Game_Character
   # * Set Map Display Position to Center of Screen
   #-----------------------------------------------------------------------------
   def center(x, y)
-    self.map.display_x = x * Game_Map::REAL_RES_X - SCREEN_CENTER_X
-    self.map.display_y = y * Game_Map::REAL_RES_Y - SCREEN_CENTER_Y
+    self.map.display_x = (x * Game_Map::REAL_RES_X) - SCREEN_CENTER_X
+    self.map.display_y = (y * Game_Map::REAL_RES_Y) - SCREEN_CENTER_Y
   end
 
   #-----------------------------------------------------------------------------

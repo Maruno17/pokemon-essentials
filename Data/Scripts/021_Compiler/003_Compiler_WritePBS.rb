@@ -28,8 +28,8 @@ module Compiler
         f.write(sprintf("[%d]\r\n", i))
         rname = pbGetMessage(MessageTypes::RegionNames, i)
         f.write(sprintf("Name = %s\r\nFilename = %s\r\n",
-          (rname && rname != "") ? rname : _INTL("Unnamed"),
-          csvQuote((map[1].is_a?(Array)) ? map[1][0] : map[1])))
+                        (rname && rname != "") ? rname : _INTL("Unnamed"),
+                        csvQuote((map[1].is_a?(Array)) ? map[1][0] : map[1])))
         for loc in map[2]
           f.write("Point = ")
           pbWriteCsvRecord(loc, f, [nil, "uussUUUU"])
@@ -84,12 +84,12 @@ module Compiler
           # Skip if map no longer exists
           next if !mapinfos[conn[0]] || !mapinfos[conn[3]]
           f.write(sprintf("# %s (%d) - %s (%d)\r\n",
-          (mapinfos[conn[0]]) ? mapinfos[conn[0]].name : "???", conn[0],
-          (mapinfos[conn[3]]) ? mapinfos[conn[3]].name : "???", conn[3]))
+                          (mapinfos[conn[0]]) ? mapinfos[conn[0]].name : "???", conn[0],
+                          (mapinfos[conn[3]]) ? mapinfos[conn[3]].name : "???", conn[3]))
         end
         if conn[1].is_a?(String) || conn[4].is_a?(String)
           f.write(sprintf("%d,%s,%d,%d,%s,%d", conn[0], conn[1], conn[2],
-            conn[3], conn[4], conn[5]))
+                          conn[3], conn[4], conn[5]))
         else
           ret = normalize_connection(conn)
           f.write(get_connection_text(ret[0], ret[1], ret[2], ret[3], ret[4], ret[5]))

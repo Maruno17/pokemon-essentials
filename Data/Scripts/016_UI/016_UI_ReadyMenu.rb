@@ -56,7 +56,7 @@ class ReadyMenuButton < SpriteWrapper
 
   def refresh
     sel = (@selected == @index && (@side == 0) == @command[2])
-    self.y = (Graphics.height - @button.height / 2) / 2 - (@selected - @index) * (@button.height / 2 + 4)
+    self.y = ((Graphics.height - (@button.height / 2)) / 2) - ((@selected - @index) * ((@button.height / 2) + 4))
     if @command[2]   # Pokémon
       self.x = (sel) ? 0 : -16
       @icon.x = self.x + 52
@@ -64,14 +64,14 @@ class ReadyMenuButton < SpriteWrapper
     else   # Item
       self.x = (sel) ? Graphics.width - @button.width : Graphics.width + 16 - @button.width
       @icon.x = self.x + 32
-      @icon.y = self.y + @button.height / 4
+      @icon.y = self.y + (@button.height / 4)
     end
     self.bitmap.clear
     rect = Rect.new(0, (sel) ? @button.height / 2 : 0, @button.width, @button.height / 2)
     self.bitmap.blt(0, 0, @button.bitmap, rect)
     textx = (@command[2]) ? 164 : (GameData::Item.get(@command[0]).is_important?) ? 146 : 124
     textpos = [
-       [@command[1], textx, 16, 2, Color.new(248, 248, 248), Color.new(40, 40, 40), 1]
+      [@command[1], textx, 16, 2, Color.new(248, 248, 248), Color.new(40, 40, 40), 1]
     ]
     if !@command[2]
       if !GameData::Item.get(@command[0]).is_important?

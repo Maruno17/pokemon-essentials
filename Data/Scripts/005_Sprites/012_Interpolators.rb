@@ -51,26 +51,26 @@ class Interpolator
 
   def update
     if @tweening
-      t = (@step * 1.0) / @frames
+      t = @step.to_f / @frames
       for i in 0...@tweensteps.length
         item = @tweensteps[i]
         next if !item
         case i
         when ZOOM_X
-          @sprite.zoom_x = item[0] + item[1] * t
+          @sprite.zoom_x = item[0] + (item[1] * t)
         when ZOOM_Y
-          @sprite.zoom_y = item[0] + item[1] * t
+          @sprite.zoom_y = item[0] + (item[1] * t)
         when X
-          @sprite.x = item[0] + item[1] * t
+          @sprite.x = item[0] + (item[1] * t)
         when Y
-          @sprite.y = item[0] + item[1] * t
+          @sprite.y = item[0] + (item[1] * t)
         when OPACITY
-          @sprite.opacity = item[0] + item[1] * t
+          @sprite.opacity = item[0] + (item[1] * t)
         when COLOR
-          @sprite.color = Color.new(item[0].red + item[1].red * t,
-                                    item[0].green + item[1].green * t,
-                                    item[0].blue + item[1].blue * t,
-                                    item[0].alpha + item[1].alpha * t)
+          @sprite.color = Color.new(item[0].red + (item[1].red * t),
+                                    item[0].green + (item[1].green * t),
+                                    item[0].blue + (item[1].blue * t),
+                                    item[0].alpha + (item[1].alpha * t))
         end
       end
       @step += 1
@@ -108,19 +108,19 @@ class RectInterpolator
 
   def update
     return if done?
-    t = (@curframe * 1.0 / @frames)
+    t = @curframe.to_f / @frames
     x1 = @oldrect.x
     x2 = @newrect.x
-    x = x1 + t * (x2 - x1)
+    x = x1 + (t * (x2 - x1))
     y1 = @oldrect.y
     y2 = @newrect.y
-    y = y1 + t * (y2 - y1)
+    y = y1 + (t * (y2 - y1))
     rx1 = @oldrect.x + @oldrect.width
     rx2 = @newrect.x + @newrect.width
-    rx = rx1 + t * (rx2 - rx1)
+    rx = rx1 + (t * (rx2 - rx1))
     ry1 = @oldrect.y + @oldrect.height
     ry2 = @newrect.y + @newrect.height
-    ry = ry1 + t * (ry2 - ry1)
+    ry = ry1 + (t * (ry2 - ry1))
     minx = x < rx ? x : rx
     maxx = x > rx ? x : rx
     miny = y < ry ? y : ry
@@ -157,13 +157,13 @@ class PointInterpolator
 
   def update
     return if done?
-    t = (@curframe * 1.0 / @frames)
+    t = @curframe.to_f / @frames
     rx1 = @oldx
     rx2 = @newx
-    @x = rx1 + t * (rx2 - rx1)
+    @x = rx1 + (t * (rx2 - rx1))
     ry1 = @oldy
     ry2 = @newy
-    @y = ry1 + t * (ry2 - ry1)
+    @y = ry1 + (t * (ry2 - ry1))
     @curframe += 1
   end
 end

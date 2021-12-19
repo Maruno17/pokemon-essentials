@@ -28,11 +28,12 @@ class PokemonPokedexInfo_Scene
     @sprites["areamap"].y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
     for hidden in Settings::REGION_MAP_EXTRAS
       if hidden[0] == @region && hidden[1] > 0 && $game_switches[hidden[1]]
-        pbDrawImagePositions(@sprites["areamap"].bitmap, [
-           ["Graphics/Pictures/#{hidden[4]}",
+        pbDrawImagePositions(
+          @sprites["areamap"].bitmap,
+          [["Graphics/Pictures/#{hidden[4]}",
             hidden[2] * PokemonRegionMap_Scene::SQUARE_WIDTH,
-            hidden[3] * PokemonRegionMap_Scene::SQUARE_HEIGHT]
-        ])
+            hidden[3] * PokemonRegionMap_Scene::SQUARE_HEIGHT]]
+        )
       end
     end
     @sprites["areahighlight"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
@@ -218,8 +219,8 @@ class PokemonPokedexInfo_Scene
       indexText = sprintf("%03d", indexNumber)
     end
     textpos = [
-       [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
-        246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+      [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
+       246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
     ]
     if @show_battled_count
       textpos.push([_INTL("Number Battled"), 314, 152, 0, base, shadow])
@@ -261,7 +262,7 @@ class PokemonPokedexInfo_Scene
       species_data.types.each_with_index do |type, i|
         type_number = GameData::Type.get(type).icon_position
         type_rect = Rect.new(0, type_number * 32, 96, 32)
-        overlay.blt(296 + 100 * i, 120, @typebitmap.bitmap, type_rect)
+        overlay.blt(296 + (100 * i), 120, @typebitmap.bitmap, type_rect)
       end
     else
       # Write the category
@@ -316,16 +317,16 @@ class PokemonPokedexInfo_Scene
       mapsize = map_metadata.town_map_size
       if mapsize && mapsize[0] && mapsize[0] > 0
         sqwidth  = mapsize[0]
-        sqheight = (mapsize[1].length * 1.0 / mapsize[0]).ceil
+        sqheight = (mapsize[1].length.to_f / mapsize[0]).ceil
         for i in 0...sqwidth
           for j in 0...sqheight
-            if mapsize[1][i + j * sqwidth, 1].to_i > 0
-              points[mappos[1] + i + (mappos[2] + j) * mapwidth] = true
+            if mapsize[1][i + (j * sqwidth), 1].to_i > 0
+              points[mappos[1] + i + ((mappos[2] + j) * mapwidth)] = true
             end
           end
         end
       else
-        points[mappos[1] + mappos[2] * mapwidth] = true
+        points[mappos[1] + (mappos[2] * mapwidth)] = true
       end
     end
     # Draw coloured squares on each square of the region map with a nest
@@ -357,10 +358,11 @@ class PokemonPokedexInfo_Scene
     # Set the text
     textpos = []
     if points.length == 0
-      pbDrawImagePositions(overlay, [
-         [sprintf("Graphics/Pictures/Pokedex/overlay_areanone"), 108, 188]
-      ])
-      textpos.push([_INTL("Area unknown"), Graphics.width / 2, Graphics.height / 2 - 6, 2, base, shadow])
+      pbDrawImagePositions(
+        overlay,
+        [[sprintf("Graphics/Pictures/Pokedex/overlay_areanone"), 108, 188]]
+      )
+      textpos.push([_INTL("Area unknown"), Graphics.width / 2, (Graphics.height / 2) - 6, 2, base, shadow])
     end
     textpos.push([pbGetMessage(MessageTypes::RegionNames, @region), 414, 38, 2, base, shadow])
     textpos.push([_INTL("{1}'s area", GameData::Species.get(@species).name),
@@ -382,8 +384,8 @@ class PokemonPokedexInfo_Scene
       end
     end
     textpos = [
-       [GameData::Species.get(@species).name, Graphics.width / 2, Graphics.height - 94, 2, base, shadow],
-       [formname, Graphics.width / 2, Graphics.height - 62, 2, base, shadow]
+      [GameData::Species.get(@species).name, Graphics.width / 2, Graphics.height - 94, 2, base, shadow],
+      [formname, Graphics.width / 2, Graphics.height - 62, 2, base, shadow]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)

@@ -18,9 +18,9 @@ class AnimationSprite < RPG::Sprite
   end
 
   def setCoords
-    self.x = ((@tileX * Game_Map::REAL_RES_X - @map.display_x) / Game_Map::X_SUBPIXELS).ceil
+    self.x = (((@tileX * Game_Map::REAL_RES_X) - @map.display_x) / Game_Map::X_SUBPIXELS).ceil
     self.x += Game_Map::TILE_WIDTH / 2
-    self.y = ((@tileY * Game_Map::REAL_RES_Y - @map.display_y) / Game_Map::Y_SUBPIXELS).ceil
+    self.y = (((@tileY * Game_Map::REAL_RES_Y) - @map.display_y) / Game_Map::Y_SUBPIXELS).ceil
     self.y += Game_Map::TILE_HEIGHT
   end
 

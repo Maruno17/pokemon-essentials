@@ -161,9 +161,9 @@ def pbChangeLevel(pkmn, new_level, scene)
     special_defense_diff = pkmn.spdef - old_special_defense
     speed_diff           = pkmn.speed - old_speed
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
+                           total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
+                           pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
   else
     pkmn.changeHappiness("vitamin")
     if scene.is_a?(PokemonPartyScreen)
@@ -178,9 +178,9 @@ def pbChangeLevel(pkmn, new_level, scene)
     special_defense_diff = pkmn.spdef - old_special_defense
     speed_diff           = pkmn.speed - old_speed
     pbTopRightWindow(_INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
-       total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
+                           total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
+                           pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
     # Learn new moves upon level up
     movelist = pkmn.getMoveList
     for i in movelist
@@ -259,9 +259,9 @@ def pbChangeExp(pkmn, new_exp, scene)
     special_defense_diff = pkmn.spdef - old_special_defense
     speed_diff           = pkmn.speed - old_speed
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
+                           total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
+                           pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
   else   # Gains Exp
     difference = new_exp - pkmn.exp
     if scene.is_a?(PokemonPartyScreen)
@@ -287,9 +287,9 @@ def pbChangeExp(pkmn, new_exp, scene)
     special_defense_diff = pkmn.spdef - old_special_defense
     speed_diff           = pkmn.speed - old_speed
     pbTopRightWindow(_INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
-       total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
+                           total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
+                           pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
     # Learn new moves upon level up
     movelist = pkmn.getMoveList
     for i in movelist
@@ -319,7 +319,7 @@ def pbGainExpFromExpCandy(pkmn, base_amt, qty, scene)
   if qty > 1
     (qty - 1).times { pkmn.changeHappiness("vitamin") }
   end
-  pbChangeExp(pkmn, pkmn.exp + base_amt * qty, scene)
+  pbChangeExp(pkmn, pkmn.exp + (base_amt * qty), scene)
   scene.pbHardRefresh
   return true
 end
@@ -351,10 +351,8 @@ def pbBattleHPItem(pkmn, battler, restoreHP, scene)
     if battler.pbRecoverHP(restoreHP) > 0
       scene.pbDisplay(_INTL("{1}'s HP was restored.", battler.pbThis))
     end
-  else
-    if pbItemRestoreHP(pkmn, restoreHP) > 0
-      scene.pbDisplay(_INTL("{1}'s HP was restored.", pkmn.name))
-    end
+  elsif pbItemRestoreHP(pkmn, restoreHP) > 0
+    scene.pbDisplay(_INTL("{1}'s HP was restored.", pkmn.name))
   end
   return true
 end
@@ -495,7 +493,7 @@ def pbNatureChangingMint(new_nature, item, pkmn, scene)
   pkmn.calc_stats
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1}'s stats may have changed due to the effects of the {2}!",
-     pkmn.name, GameData::Item.get(item).name))
+                        pkmn.name, GameData::Item.get(item).name))
   return true
 end
 
@@ -596,7 +594,7 @@ def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, &block)
     return true
   end
   pbMessage(_INTL("{1} wants to learn {2}, but it already knows {3} moves.\1",
-     pkmn_name, move_name, pkmn.numMoves.to_word), &block)
+                  pkmn_name, move_name, pkmn.numMoves.to_word), &block)
   if pbConfirmMessage(_INTL("Should {1} forget a move to learn {2}?", pkmn_name, move_name), &block)
     loop do
       move_index = pbForgetMove(pkmn, move)
@@ -688,7 +686,8 @@ def pbUseItem(bag, item, bagscene = nil)
         max_at_once = [max_at_once, $bag.quantity(item)].min
         if max_at_once > 1
           qty = screen.scene.pbChooseNumber(
-             _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), max_at_once)
+            _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), max_at_once
+          )
           screen.scene.pbSetHelpText("") if screen.is_a?(PokemonPartyScreen)
         end
         if qty >= 1
@@ -749,7 +748,8 @@ def pbUseItemOnPokemon(item, pkmn, scene)
   max_at_once = [max_at_once, $bag.quantity(item)].min
   if max_at_once > 1
     qty = scene.scene.pbChooseNumber(
-       _INTL("How many {1} do you want to use?", itm.name), max_at_once)
+      _INTL("How many {1} do you want to use?", itm.name), max_at_once
+    )
     scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   end
   return false if qty <= 0
@@ -812,35 +812,27 @@ def pbGiveItemToPokemon(item, pkmn, scene, pkmnid = 0)
     if scene.pbConfirm(_INTL("Would you like to switch the two items?"))
       $bag.remove(item)
       if !$bag.add(pkmn.item)
-        if !$bag.add(item)
-          raise _INTL("Could't re-store deleted item in Bag somehow")
-        end
+        raise _INTL("Couldn't re-store deleted item in Bag somehow") if !$bag.add(item)
         scene.pbDisplay(_INTL("The Bag is full. The Pokémon's item could not be removed."))
-      else
-        if GameData::Item.get(item).is_mail?
-          if pbWriteMail(item, pkmn, pkmnid, scene)
-            pkmn.item = item
-            scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.", olditemname, pkmn.name, newitemname))
-            return true
-          else
-            if !$bag.add(item)
-              raise _INTL("Couldn't re-store deleted item in Bag somehow")
-            end
-          end
-        else
+      elsif GameData::Item.get(item).is_mail?
+        if pbWriteMail(item, pkmn, pkmnid, scene)
           pkmn.item = item
           scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.", olditemname, pkmn.name, newitemname))
           return true
+        elsif !$bag.add(item)
+          raise _INTL("Couldn't re-store deleted item in Bag somehow")
         end
+      else
+        pkmn.item = item
+        scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.", olditemname, pkmn.name, newitemname))
+        return true
       end
     end
-  else
-    if !GameData::Item.get(item).is_mail? || pbWriteMail(item, pkmn, pkmnid, scene)
-      $bag.remove(item)
-      pkmn.item = item
-      scene.pbDisplay(_INTL("{1} is now holding the {2}.", pkmn.name, newitemname))
-      return true
-    end
+  elsif !GameData::Item.get(item).is_mail? || pbWriteMail(item, pkmn, pkmnid, scene)
+    $bag.remove(item)
+    pkmn.item = item
+    scene.pbDisplay(_INTL("{1} is now holding the {2}.", pkmn.name, newitemname))
+    return true
   end
   return false
 end

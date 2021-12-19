@@ -128,8 +128,8 @@ class Battle
         next false
       end
       next false if !pkmn
-      next false if !ItemHandlers.triggerCanUseInBattle(item,
-         pkmn, battler, idxMove, firstAction, self, itemScene)
+      next false if !ItemHandlers.triggerCanUseInBattle(item, pkmn, battler, idxMove,
+                                                        firstAction, self, itemScene)
       next false if !pbRegisterItem(idxBattler, item, idxPkmn, idxMove)
       ret = true
       next true

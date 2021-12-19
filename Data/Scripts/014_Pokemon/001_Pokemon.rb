@@ -1071,12 +1071,12 @@ class Pokemon
   # @return [Integer] the maximum HP of this Pokémon
   def calcHP(base, level, iv, ev)
     return 1 if base == 1   # For Shedinja
-    return ((base * 2 + iv + (ev / 4)) * level / 100).floor + level + 10
+    return (((base * 2) + iv + (ev / 4)) * level / 100).floor + level + 10
   end
 
   # @return [Integer] the specified stat of this Pokémon (not used for total HP)
   def calcStat(base, level, iv, ev, nat)
-    return ((((base * 2 + iv + (ev / 4)) * level / 100).floor + 5) * nat / 100).floor
+    return (((((base * 2) + iv + (ev / 4)) * level / 100).floor + 5) * nat / 100).floor
   end
 
   # Recalculates this Pokémon's stats.
@@ -1179,9 +1179,10 @@ class Pokemon
       @iv[s.id]       = rand(IV_STAT_LIMIT + 1)
       @ev[s.id]       = 0
     end
-    if owner.is_a?(Owner)
+    case owner
+    when Owner
       @owner = owner
-    elsif owner.is_a?(Player) || owner.is_a?(NPCTrainer)
+    when Player, NPCTrainer
       @owner = Owner.new_from_trainer(owner)
     else
       @owner = Owner.new(0, '', 2, 2)
@@ -1195,7 +1196,7 @@ class Pokemon
     @timeReceived     = pbGetTimeNow.to_i
     @timeEggHatched   = nil
     @fused            = nil
-    @personalID       = rand(2**16) | rand(2**16) << 16
+    @personalID       = rand(2**16) | (rand(2**16) << 16)
     @hp               = 1
     @totalhp          = 1
     calc_stats

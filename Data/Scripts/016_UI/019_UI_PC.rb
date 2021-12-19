@@ -44,8 +44,7 @@ class StorageSystemPC
          [_INTL("Organize the Pokémon in Boxes and in your party."),
           _INTL("Move Pokémon stored in Boxes to your party."),
           _INTL("Store Pokémon in your party in Boxes."),
-          _INTL("Return to the previous menu.")], -1, command
-      )
+          _INTL("Return to the previous menu.")], -1, command)
       if command >= 0 && command < 3
         case command
         when 1   # Withdraw
@@ -123,8 +122,7 @@ def pbPCItemStorage
        [_INTL("Take out items from the PC."),
         _INTL("Store items in the PC."),
         _INTL("Throw away items stored in the PC."),
-        _INTL("Go back to the previous menu.")], -1, command
-    )
+        _INTL("Go back to the previous menu.")], -1, command)
     case command
     when 0   # Withdraw Item
       if !$PokemonGlobal.pcItemStorage
@@ -178,13 +176,13 @@ def pbPCMailbox
       command = pbShowCommands(nil, commands, -1, command)
       if command >= 0 && command < $PokemonGlobal.mailbox.length
         mailIndex = command
-        commandMail = pbMessage(_INTL("What do you want to do with {1}'s Mail?",
-           $PokemonGlobal.mailbox[mailIndex].sender), [
-           _INTL("Read"),
+        commandMail = pbMessage(
+          _INTL("What do you want to do with {1}'s Mail?", $PokemonGlobal.mailbox[mailIndex].sender),
+          [_INTL("Read"),
            _INTL("Move to Bag"),
            _INTL("Give"),
-           _INTL("Cancel")
-           ], -1)
+           _INTL("Cancel")], -1
+        )
         case commandMail
         when 0   # Read
           pbFadeOutIn {
@@ -216,11 +214,10 @@ end
 def pbTrainerPCMenu
   command = 0
   loop do
-    command = pbMessage(_INTL("What do you want to do?"), [
-       _INTL("Item Storage"),
-       _INTL("Mailbox"),
-       _INTL("Turn Off")
-       ], -1, nil, command)
+    command = pbMessage(_INTL("What do you want to do?"),
+                        [_INTL("Item Storage"),
+                         _INTL("Mailbox"),
+                         _INTL("Turn Off")], -1, nil, command)
     case command
     when 0 then pbPCItemStorage
     when 1 then pbPCMailbox
@@ -241,7 +238,7 @@ def pbPokeCenterPC
   loop do
     commands = PokemonPCList.getCommandList
     command = pbMessage(_INTL("Which PC should be accessed?"), commands,
-       commands.length, nil, command)
+                        commands.length, nil, command)
     break if !PokemonPCList.callCommand(command)
   end
   pbSEPlay("PC close")

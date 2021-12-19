@@ -113,7 +113,7 @@ class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
     traSprite = @sprites["player_1"]
     ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
     ballStartX = traSprite.x
-    ballStartY = traSprite.y - traSprite.bitmap.height / 2
+    ballStartY = traSprite.y - (traSprite.bitmap.height / 2)
     ballMidX   = 0   # Unused in arc calculation
     ballMidY   = 122
     ballEndX   = ballPos[0] - 40
@@ -122,7 +122,7 @@ class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
     trainer = addSprite(traSprite, PictureOrigin::Bottom)
     # Set up bait sprite
     ball = addNewSprite(ballStartX, ballStartY,
-       "Graphics/Battle animations/safari_bait", PictureOrigin::Center)
+                        "Graphics/Battle animations/safari_bait", PictureOrigin::Center)
     ball.setZ(0, batSprite.z + 1)
     # Trainer animation
     if traSprite.bitmap.width >= traSprite.bitmap.height * 2
@@ -132,7 +132,7 @@ class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
     # Bait arc animation
     ball.setSE(delay, "Battle throw")
     createBallTrajectory(ball, delay, 12,
-       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
+                         ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     ball.setZ(9, batSprite.z + 1)
     delay = ball.totalDuration
     ball.moveOpacity(delay + 8, 2, 0)
@@ -178,16 +178,16 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
     batSprite = @sprites["pokemon_#{@battler.index}"]
     traSprite = @sprites["player_1"]
     ballStartX = traSprite.x
-    ballStartY = traSprite.y - traSprite.bitmap.height / 2
+    ballStartY = traSprite.y - (traSprite.bitmap.height / 2)
     ballMidX   = 0   # Unused in arc calculation
     ballMidY   = 122
     ballEndX   = batSprite.x
-    ballEndY   = batSprite.y - batSprite.bitmap.height / 2
+    ballEndY   = batSprite.y - (batSprite.bitmap.height / 2)
     # Set up trainer sprite
     trainer = addSprite(traSprite, PictureOrigin::Bottom)
     # Set up bait sprite
     ball = addNewSprite(ballStartX, ballStartY,
-       "Graphics/Battle animations/safari_rock", PictureOrigin::Center)
+                        "Graphics/Battle animations/safari_rock", PictureOrigin::Center)
     ball.setZ(0, batSprite.z + 1)
     # Trainer animation
     if traSprite.bitmap.width >= traSprite.bitmap.height * 2
@@ -197,7 +197,7 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
     # Bait arc animation
     ball.setSE(delay, "Battle throw")
     createBallTrajectory(ball, delay, 12,
-       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
+                         ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     ball.setZ(9, batSprite.z + 1)
     delay = ball.totalDuration
     ball.setSE(delay, "Battle damage weak")
@@ -205,7 +205,7 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
     ball.setVisible(delay + 4, false)
     # Set up anger sprite
     anger = addNewSprite(ballEndX - 42, ballEndY - 36,
-       "Graphics/Battle animations/safari_anger", PictureOrigin::Center)
+                         "Graphics/Battle animations/safari_anger", PictureOrigin::Center)
     anger.setVisible(0, false)
     anger.setZ(0, batSprite.z + 1)
     # Show anger appearing
@@ -242,13 +242,12 @@ class Battle::Scene
   end
 
   def pbSafariCommandMenu(index)
-    pbCommandMenuEx(index, [
-       _INTL("What will\n{1} throw?", @battle.pbPlayer.name),
-       _INTL("Ball"),
-       _INTL("Bait"),
-       _INTL("Rock"),
-       _INTL("Run")
-    ], 3)
+    pbCommandMenuEx(index,
+                    [_INTL("What will\n{1} throw?", @battle.pbPlayer.name),
+                     _INTL("Ball"),
+                     _INTL("Bait"),
+                     _INTL("Rock"),
+                     _INTL("Run")], 3)
   end
 
   def pbThrowBait
@@ -324,10 +323,8 @@ class SafariBattle
     @player        = [player]
     @party2        = party2
     @sideSizes     = [1, 1]
-    @battlers      = [
-       Battle::FakeBattler.new(self, 0),
-       Battle::FakeBattler.new(self, 1)
-    ]
+    @battlers      = [Battle::FakeBattler.new(self, 0),
+                      Battle::FakeBattler.new(self, 1)]
     @rules         = {}
     @ballCount     = 0
   end

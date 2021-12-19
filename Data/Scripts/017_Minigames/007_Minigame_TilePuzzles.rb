@@ -43,39 +43,41 @@ class TilePuzzleCursor < BitmapSprite
     self.bitmap.clear
     x = (Graphics.width - (@tilewidth * @boardwidth)) / 2
     if @position >= @boardwidth * @boardheight
-      x = (x - (@tilewidth * (@boardwidth / 2).ceil)) / 2 - 10
+      x = ((x - (@tilewidth * (@boardwidth / 2).ceil)) / 2) - 10
       if (@position % @boardwidth) >= (@boardwidth / 2).ceil
-        x = Graphics.width - x - @tilewidth * @boardwidth
+        x = Graphics.width - x - (@tilewidth * @boardwidth)
       end
     end
     x += @tilewidth * (@position % @boardwidth)
-    y = (Graphics.height - (@tileheight * @boardheight)) / 2 - 32
+    y = ((Graphics.height - (@tileheight * @boardheight)) / 2) - 32
     y += @tileheight * ((@position % (@boardwidth * @boardheight)) / @boardwidth)
     self.tone = Tone.new(0, (@holding ? 64 : 0), (@holding ? 64 : 0), 0)
     # Cursor
     if @game != 3
       expand = (@holding) ? 0 : 4
       for i in 0...4
-        self.bitmap.blt(x + (i % 2) * (@tilewidth - @cursorbitmap.width / 4) + expand * (((i % 2) * 2) - 1),
-           y + (i / 2) * (@tileheight - @cursorbitmap.height / 2) + expand * (((i / 2) * 2) - 1),
-           @cursorbitmap.bitmap, Rect.new(
-           (i % 2) * @cursorbitmap.width / 4, (i / 2) * @cursorbitmap.height / 2,
-           @cursorbitmap.width / 4, @cursorbitmap.height / 2))
+        self.bitmap.blt(
+          x + ((i % 2) * (@tilewidth - (@cursorbitmap.width / 4))) + (expand * (((i % 2) * 2) - 1)),
+          y + ((i / 2) * (@tileheight - (@cursorbitmap.height / 2))) + (expand * (((i / 2) * 2) - 1)),
+          @cursorbitmap.bitmap, Rect.new((i % 2) * @cursorbitmap.width / 4,
+                                         (i / 2) * @cursorbitmap.height / 2,
+                                         @cursorbitmap.width / 4, @cursorbitmap.height / 2)
+        )
       end
     end
     # Arrows
     if @selected || @game == 3
       expand = (@game == 3) ? 0 : 4
-      xin = [(@tilewidth - @cursorbitmap.width / 4) / 2, -expand,
-             @tilewidth - @cursorbitmap.width / 4 + expand, (@tilewidth - @cursorbitmap.width / 4) / 2]
-      yin = [@tileheight - @cursorbitmap.height / 2 + expand, (@tileheight - @cursorbitmap.height / 2) / 2,
-             (@tileheight - @cursorbitmap.height / 2) / 2, -expand]
+      xin = [(@tilewidth - (@cursorbitmap.width / 4)) / 2, -expand,
+             @tilewidth - (@cursorbitmap.width / 4) + expand, (@tilewidth - (@cursorbitmap.width / 4)) / 2]
+      yin = [@tileheight - (@cursorbitmap.height / 2) + expand, (@tileheight - (@cursorbitmap.height / 2)) / 2,
+             (@tileheight - (@cursorbitmap.height / 2)) / 2, -expand]
       for i in 0...4
         if @arrows[i]
-          self.bitmap.blt(x + xin[i], y + yin[i], @cursorbitmap.bitmap, Rect.new(
-             @cursorbitmap.width / 2 + (i % 2) * (@cursorbitmap.width / 4),
-             (i / 2) * (@cursorbitmap.height / 2),
-             @cursorbitmap.width / 4, @cursorbitmap.height / 2))
+          self.bitmap.blt(x + xin[i], y + yin[i], @cursorbitmap.bitmap,
+                          Rect.new((@cursorbitmap.width / 2) + ((i % 2) * (@cursorbitmap.width / 4)),
+                                   (i / 2) * (@cursorbitmap.height / 2),
+                                   @cursorbitmap.width / 4, @cursorbitmap.height / 2))
         end
       end
     end
@@ -94,7 +96,7 @@ class TilePuzzleScene
 
   def update
     xtop = (Graphics.width - (@tilewidth * @boardwidth)) / 2
-    ytop = (Graphics.height - (@tileheight * @boardheight)) / 2 + @tileheight / 2 - 32
+    ytop = ((Graphics.height - (@tileheight * @boardheight)) / 2) + (@tileheight / 2) - 32
     for i in 0...@boardwidth * @boardheight
       pos = -1
       for j in 0...@tiles.length
@@ -110,23 +112,23 @@ class TilePuzzleScene
       thisx = xtop
       if pos >= 0
         if pos >= @boardwidth * @boardheight
-          thisx = (xtop - (@tilewidth * (@boardwidth / 2).ceil)) / 2 - 10
+          thisx = ((xtop - (@tilewidth * (@boardwidth / 2).ceil)) / 2) - 10
           if (pos % @boardwidth) >= (@boardwidth / 2).ceil
-            thisx = Graphics.width - thisx - @tilewidth * @boardwidth
+            thisx = Graphics.width - thisx - (@tilewidth * @boardwidth)
           end
         end
-        @sprites["tile#{i}"].x = thisx + @tilewidth * (pos % @boardwidth) + @tilewidth / 2
-        @sprites["tile#{i}"].y = ytop + @tileheight * ((pos % (@boardwidth * @boardheight)) / @boardwidth)
+        @sprites["tile#{i}"].x = thisx + (@tilewidth * (pos % @boardwidth)) + (@tilewidth / 2)
+        @sprites["tile#{i}"].y = ytop + (@tileheight * ((pos % (@boardwidth * @boardheight)) / @boardwidth))
         next if @game == 3
         rotatebitmaps = [@tilebitmap, @tilebitmap1, @tilebitmap2, @tilebitmap3]
         @sprites["tile#{i}"].bitmap.clear
         if rotatebitmaps[@angles[i]]
           @sprites["tile#{i}"].bitmap.blt(0, 0, rotatebitmaps[@angles[i]].bitmap,
-             Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
+                                          Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
           @sprites["tile#{i}"].angle = 0
         else
           @sprites["tile#{i}"].bitmap.blt(0, 0, @tilebitmap.bitmap,
-             Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
+                                          Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
           @sprites["tile#{i}"].angle = @angles[i] * 90
         end
       end
@@ -171,15 +173,15 @@ class TilePuzzleScene
       @sprites["tile#{i}"] = BitmapSprite.new(@tilewidth, @tileheight, @viewport)
       @sprites["tile#{i}"].ox = @tilewidth / 2
       @sprites["tile#{i}"].oy = @tileheight / 2
-      break if @game == 3 && i >= @boardwidth * @boardheight - 1
+      break if @game == 3 && i >= (@boardwidth * @boardheight) - 1
       @sprites["tile#{i}"].bitmap.blt(0, 0, @tilebitmap.bitmap,
-         Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
+                                      Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
     end
     @heldtile = -1
     @angles = []
     @tiles = pbShuffleTiles
     @sprites["cursor"] = TilePuzzleCursor.new(@game, pbDefaultCursorPosition,
-       @tilewidth, @tileheight, @boardwidth, @boardheight)
+                                              @tilewidth, @tileheight, @boardwidth, @boardheight)
     update
     pbFadeInAndShow(@sprites)
   end
@@ -208,17 +210,16 @@ class TilePuzzleScene
         num = 0
         blank = -1
         for i in 0...ret.length - 1
-          blank = i if ret[i] == @boardwidth * @boardheight - 1
+          blank = i if ret[i] == (@boardwidth * @boardheight) - 1
           for j in i...ret.length
-            num += 1 if ret[j] < ret[i] && ret[i] != @boardwidth * @boardheight - 1 &&
-                        ret[j] != @boardwidth * @boardheight - 1
+            num += 1 if ret[j] < ret[i] && ret[i] != (@boardwidth * @boardheight) - 1 &&
+                        ret[j] != (@boardwidth * @boardheight) - 1
           end
         end
         if @boardwidth.odd?
           ret = pbShuffleTiles if num.odd?
-        else
-          ret = pbShuffleTiles if !((num.even? && (@boardheight - (blank / @boardwidth)).odd?) ||
-                                  (num.odd? && (@boardheight - (blank / @boardwidth)).even?))
+        elsif num.even? == (@boardheight - (blank / @boardwidth)).even?
+          ret = pbShuffleTiles
         end
       end
       if @game == 1 || @game == 2
@@ -240,7 +241,7 @@ class TilePuzzleScene
   def pbDefaultCursorPosition
     if @game == 3
       for i in 0...@boardwidth * @boardheight
-        return i if @tiles[i] == @boardwidth * @boardheight - 1
+        return i if @tiles[i] == (@boardwidth * @boardheight) - 1
       end
     end
     return 0
@@ -253,16 +254,14 @@ class TilePuzzleScene
     when 4
       if pos >= @boardwidth * @boardheight
         if pos % @boardwidth == (@boardwidth / 2).ceil
-          pos = ((pos % (@boardwidth * @boardheight)) / @boardwidth) * @boardwidth + @boardwidth - 1
+          pos = (((pos % (@boardwidth * @boardheight)) / @boardwidth) * @boardwidth) + @boardwidth - 1
         else
           pos -= 1
         end
+      elsif (pos % @boardwidth) == 0
+        pos = (((pos / @boardwidth) + @boardheight) * @boardwidth) + (@boardwidth / 2).ceil - 1
       else
-        if (pos % @boardwidth) == 0
-          pos = (((pos / @boardwidth) + @boardheight) * @boardwidth) + (@boardwidth / 2).ceil - 1
-        else
-          pos -= 1
-        end
+        pos -= 1
       end
     when 6
       if pos >= @boardwidth * @boardheight
@@ -271,12 +270,10 @@ class TilePuzzleScene
         else
           pos += 1
         end
+      elsif pos % @boardwidth >= @boardwidth - 1
+        pos = (((pos / @boardwidth) + @boardheight) * @boardwidth) + (@boardwidth / 2).ceil
       else
-        if pos % @boardwidth >= @boardwidth - 1
-          pos = (((pos / @boardwidth) + @boardheight) * @boardwidth) + (@boardwidth / 2).ceil
-        else
-          pos += 1
-        end
+        pos += 1
       end
     when 8
       pos -= @boardwidth
@@ -418,7 +415,7 @@ class TilePuzzleScene
         cursor += (@boardwidth * dist)
       end
       for i in 0...@boardheight
-        tiles.push(cursor - i * dist * @boardwidth)
+        tiles.push(cursor - (i * dist * @boardwidth))
       end
     else
       dist = dir - 5
@@ -427,7 +424,7 @@ class TilePuzzleScene
         cursor -= dist
       end
       for i in 0...@boardwidth
-        tiles.push(cursor + i * dist)
+        tiles.push(cursor + (i * dist))
       end
     end
     # Shift tiles
@@ -506,11 +503,11 @@ class TilePuzzleScene
       if pbCheckWin
         @sprites["cursor"].visible = false
         if @game == 3
-          extratile = @sprites["tile#{@boardwidth * @boardheight - 1}"]
+          extratile = @sprites["tile#{(@boardwidth * @boardheight) - 1}"]
           extratile.bitmap.clear
           extratile.bitmap.blt(0, 0, @tilebitmap.bitmap,
-             Rect.new(@tilewidth * (@boardwidth - 1), @tileheight * (@boardheight - 1),
-             @tilewidth, @tileheight))
+                               Rect.new(@tilewidth * (@boardwidth - 1), @tileheight * (@boardheight - 1),
+                                        @tilewidth, @tileheight))
           extratile.opacity = 0
           appearTime = Graphics.frame_rate * 8 / 10
           opacityDiff = (255.0 / appearTime).ceil

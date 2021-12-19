@@ -61,55 +61,55 @@ end
 
 def pbSpindaSpots(pkmn, bitmap)
   spot1 = [
-     [0, 0, 1, 1, 1, 1, 0, 0],
-     [0, 1, 1, 1, 1, 1, 1, 0],
-     [1, 1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1, 1],
-     [0, 1, 1, 1, 1, 1, 1, 0],
-     [0, 0, 1, 1, 1, 1, 0, 0]
+    [0, 0, 1, 1, 1, 1, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 1, 1, 1, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 1, 0, 0]
   ]
   spot2 = [
-     [0, 0, 1, 1, 1, 0, 0],
-     [0, 1, 1, 1, 1, 1, 0],
-     [1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1],
-     [0, 1, 1, 1, 1, 1, 0],
-     [0, 0, 1, 1, 1, 0, 0]
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 1, 1, 1, 1, 1, 0],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [0, 1, 1, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 0, 0]
   ]
   spot3 = [
-     [0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
-     [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-     [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-     [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0]
   ]
   spot4 = [
-     [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
-     [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-     [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]
+    [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]
   ]
   id = pkmn.personalID
   h = (id >> 28) & 15
@@ -215,11 +215,11 @@ MultipleForms.register(:CHERRIM, {
 MultipleForms.register(:ROTOM, {
   "onSetForm" => proc { |pkmn, form, oldForm|
     form_moves = [
-       :OVERHEAT,    # Heat (microwave oven)
-       :HYDROPUMP,   # Wash (washing machine)
-       :BLIZZARD,    # Frost (refrigerator)
-       :AIRSLASH,    # Fan (electric fan)
-       :LEAFSTORM    # Mow (lawn mower)
+      :OVERHEAT,    # Heat (microwave oven)
+      :HYDROPUMP,   # Wash (washing machine)
+      :BLIZZARD,    # Frost (refrigerator)
+      :AIRSLASH,    # Fan (electric fan)
+      :LEAFSTORM    # Mow (lawn mower)
     ]
     # Find a known move that should be forgotten
     old_move_index = -1
@@ -277,23 +277,23 @@ MultipleForms.register(:ARCEUS, {
   "getForm" => proc { |pkmn|
     next nil if !pkmn.hasAbility?(:MULTITYPE)
     typeArray = {
-       1  => [:FISTPLATE,   :FIGHTINIUMZ],
-       2  => [:SKYPLATE,    :FLYINIUMZ],
-       3  => [:TOXICPLATE,  :POISONIUMZ],
-       4  => [:EARTHPLATE,  :GROUNDIUMZ],
-       5  => [:STONEPLATE,  :ROCKIUMZ],
-       6  => [:INSECTPLATE, :BUGINIUMZ],
-       7  => [:SPOOKYPLATE, :GHOSTIUMZ],
-       8  => [:IRONPLATE,   :STEELIUMZ],
-       10 => [:FLAMEPLATE,  :FIRIUMZ],
-       11 => [:SPLASHPLATE, :WATERIUMZ],
-       12 => [:MEADOWPLATE, :GRASSIUMZ],
-       13 => [:ZAPPLATE,    :ELECTRIUMZ],
-       14 => [:MINDPLATE,   :PSYCHIUMZ],
-       15 => [:ICICLEPLATE, :ICIUMZ],
-       16 => [:DRACOPLATE,  :DRAGONIUMZ],
-       17 => [:DREADPLATE,  :DARKINIUMZ],
-       18 => [:PIXIEPLATE,  :FAIRIUMZ]
+      1  => [:FISTPLATE,   :FIGHTINIUMZ],
+      2  => [:SKYPLATE,    :FLYINIUMZ],
+      3  => [:TOXICPLATE,  :POISONIUMZ],
+      4  => [:EARTHPLATE,  :GROUNDIUMZ],
+      5  => [:STONEPLATE,  :ROCKIUMZ],
+      6  => [:INSECTPLATE, :BUGINIUMZ],
+      7  => [:SPOOKYPLATE, :GHOSTIUMZ],
+      8  => [:IRONPLATE,   :STEELIUMZ],
+      10 => [:FLAMEPLATE,  :FIRIUMZ],
+      11 => [:SPLASHPLATE, :WATERIUMZ],
+      12 => [:MEADOWPLATE, :GRASSIUMZ],
+      13 => [:ZAPPLATE,    :ELECTRIUMZ],
+      14 => [:MINDPLATE,   :PSYCHIUMZ],
+      15 => [:ICICLEPLATE, :ICIUMZ],
+      16 => [:DRACOPLATE,  :DRAGONIUMZ],
+      17 => [:DREADPLATE,  :DARKINIUMZ],
+      18 => [:PIXIEPLATE,  :FAIRIUMZ]
     }
     ret = 0
     typeArray.each do |f, items|
@@ -394,7 +394,7 @@ MultipleForms.copy(:SCATTERBUG, :SPEWPA, :VIVILLON)
 MultipleForms.register(:FURFROU, {
   "getForm" => proc { |pkmn|
     if !pkmn.time_form_set ||
-       pbGetTimeNow.to_i > pkmn.time_form_set.to_i + 60 * 60 * 24 * 5   # 5 days
+       pbGetTimeNow.to_i > pkmn.time_form_set.to_i + (60 * 60 * 24 * 5)   # 5 days
       next 0
     end
   },
@@ -447,7 +447,7 @@ MultipleForms.register(:ZYGARDE, {
 MultipleForms.register(:HOOPA, {
   "getForm" => proc { |pkmn|
     if !pkmn.time_form_set ||
-       pbGetTimeNow.to_i > pkmn.time_form_set.to_i + 60 * 60 * 24 * 3   # 3 days
+       pbGetTimeNow.to_i > pkmn.time_form_set.to_i + (60 * 60 * 24 * 3)   # 3 days
       next 0
     end
   },
@@ -482,23 +482,23 @@ MultipleForms.register(:SILVALLY, {
   "getForm" => proc { |pkmn|
     next nil if !pkmn.hasAbility?(:RKSSYSTEM)
     typeArray = {
-       1  => [:FIGHTINGMEMORY],
-       2  => [:FLYINGMEMORY],
-       3  => [:POISONMEMORY],
-       4  => [:GROUNDMEMORY],
-       5  => [:ROCKMEMORY],
-       6  => [:BUGMEMORY],
-       7  => [:GHOSTMEMORY],
-       8  => [:STEELMEMORY],
-       10 => [:FIREMEMORY],
-       11 => [:WATERMEMORY],
-       12 => [:GRASSMEMORY],
-       13 => [:ELECTRICMEMORY],
-       14 => [:PSYCHICMEMORY],
-       15 => [:ICEMEMORY],
-       16 => [:DRAGONMEMORY],
-       17 => [:DARKMEMORY],
-       18 => [:FAIRYMEMORY]
+      1  => [:FIGHTINGMEMORY],
+      2  => [:FLYINGMEMORY],
+      3  => [:POISONMEMORY],
+      4  => [:GROUNDMEMORY],
+      5  => [:ROCKMEMORY],
+      6  => [:BUGMEMORY],
+      7  => [:GHOSTMEMORY],
+      8  => [:STEELMEMORY],
+      10 => [:FIREMEMORY],
+      11 => [:WATERMEMORY],
+      12 => [:GRASSMEMORY],
+      13 => [:ELECTRICMEMORY],
+      14 => [:PSYCHICMEMORY],
+      15 => [:ICEMEMORY],
+      16 => [:DRAGONMEMORY],
+      17 => [:DARKMEMORY],
+      18 => [:FAIRYMEMORY]
     }
     ret = 0
     typeArray.each do |f, items|
@@ -596,7 +596,7 @@ MultipleForms.register(:MILCERY, {
     sweets = [:STRAWBERRYSWEET, :BERRYSWEET, :LOVESWEET, :STARSWEET,
               :CLOVERSWEET, :FLOWERSWEET, :RIBBONSWEET]
     if sweets.include?(pkmn.item_id)
-      next sweets.index(pkmn.item_id) + (pkmn.personalID % num_flavors) * sweets.length
+      next sweets.index(pkmn.item_id) + ((pkmn.personalID % num_flavors) * sweets.length)
     end
     next 0
   }

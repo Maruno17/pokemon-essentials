@@ -471,9 +471,20 @@ class Battle::Battler
         @battle.pbHideAbilitySplash(b) if b.damageState.magicBounce
         newChoice = choice.clone
         newChoice[3] = user.index
-        newTargets = pbFindTargets(newChoice, move, b)
+        newTargets = pbFindTargets(newChoice ,move, b)
         newTargets = pbChangeTargets(move, b, newTargets)
-        success = pbProcessMoveHit(move, b, newTargets, 0, false)
+        success = false
+        if !move.pbMoveFailed?(b, newTargets)
+          newTargets.each_with_index do |newTarget, idx|
+            if pbSuccessCheckAgainstTarget(move, b, newTarget, newTargets)
+              success = true
+              next
+            end
+            newTargets[idx] = nil
+          end
+          newTargets.compact!
+        end
+        pbProcessMoveHit(move, b, newTargets, 0, false) if success
         b.lastMoveFailed = true if !success
         targets.each { |otherB| otherB.pbFaint if otherB && otherB.fainted? }
         user.pbFaint if user.fainted?
@@ -486,7 +497,10 @@ class Battle::Battler
           @battle.pbShowAbilitySplash(mc) if magicBouncer >= 0
           @battle.pbDisplay(_INTL("{1} bounced the {2} back!", mc.pbThis, move.name))
           @battle.pbHideAbilitySplash(mc) if magicBouncer >= 0
-          success = pbProcessMoveHit(move, mc, [], 0, false)
+          success = false
+          if !move.pbMoveFailed?(mc, [])
+            success = pbProcessMoveHit(move, mc, [], 0, false)
+          end
           mc.lastMoveFailed = true if !success
           targets.each { |b| b.pbFaint if b && b.fainted? }
           user.pbFaint if user.fainted?
@@ -557,7 +571,7 @@ class Battle::Battler
         @battle.pbHideAbilitySplash(nextUser)
         if !Battle::Scene::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} kept the dance going with {2}!",
-             nextUser.pbThis, nextUser.abilityName))
+                                  nextUser.pbThis, nextUser.abilityName))
         end
         nextUser.effects[PBEffects::Dancer] = true
         if nextUser.pbCanChooseMove?(move, false)
@@ -641,7 +655,7 @@ class Battle::Battler
       #       actual removal of the item happens in def pbEffectsAfterMove.
       @battle.pbCommonAnimation("UseItem", user)
       @battle.pbDisplay(_INTL("The {1} strengthened {2}'s power!",
-         GameData::Item.get(user.effects[PBEffects::GemConsumed]).name, move.name))
+                              GameData::Item.get(user.effects[PBEffects::GemConsumed]).name, move.name))
     end
     # Messages about missed target(s) (relevant for multi-target moves only)
     if !move.pbRepeatHit?

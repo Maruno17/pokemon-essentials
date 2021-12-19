@@ -31,7 +31,7 @@ def pbCaveEntranceEx(exiting)
     for i in 0...totalBands
       currentGray = grays[i]
       sprite.bitmap.fill_rect(Rect.new(x, y, rectwidth, rectheight),
-         Color.new(currentGray, currentGray, currentGray))
+                              Color.new(currentGray, currentGray, currentGray))
       x += bandwidth
       y += bandheight
       rectwidth  -= bandwidth * 2

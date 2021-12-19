@@ -136,11 +136,11 @@ class AnimatedSprite < SpriteWrapper
     end
     if @animbitmap.width % framewidth != 0
       raise _INTL("Bitmap's width ({1}) is not a multiple of frame width ({2}) [Bitmap={3}]",
-         @animbitmap.width, framewidth, animname)
+                  @animbitmap.width, framewidth, animname)
     end
     if @animbitmap.height % frameheight != 0
       raise _INTL("Bitmap's height ({1}) is not a multiple of frame height ({2}) [Bitmap={3}]",
-         @animbitmap.height, frameheight, animname)
+                  @animbitmap.height, frameheight, animname)
     end
     @framecount = framecount
     @framewidth = framewidth
@@ -167,7 +167,7 @@ class AnimatedSprite < SpriteWrapper
     end
     if @animbitmap.width % framecount != 0
       raise _INTL("Bitmap's width ({1}) is not a multiple of frame count ({2}) [Bitmap={3}]",
-         @animbitmap.width, framewidth, animname)
+                  @animbitmap.width, framewidth, animname)
     end
     @framecount = framecount
     @framewidth = @animbitmap.width / @framecount

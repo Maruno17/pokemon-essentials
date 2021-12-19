@@ -119,13 +119,10 @@ class Battle::Battler
         else
           pbRaiseStatStageByCause(stat, increment, self, abilityName)
         end
+      elsif Battle::Scene::USE_ABILITY_SPLASH
+        @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
       else
-        if Battle::Scene::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
-        else
-          @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
-             pbThis, abilityName, move.name))
-        end
+        @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!", pbThis, abilityName, move.name))
       end
       @battle.pbHideAbilitySplash(self)
     end
@@ -149,13 +146,10 @@ class Battle::Battler
         else
           @battle.pbDisplay(_INTL("{1}'s {2} restored its HP.", pbThis, abilityName))
         end
+      elsif Battle::Scene::USE_ABILITY_SPLASH
+        @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
       else
-        if Battle::Scene::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
-        else
-          @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
-             pbThis, abilityName, move.name))
-        end
+        @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!", pbThis, abilityName, move.name))
       end
       @battle.pbHideAbilitySplash(self)
     end
@@ -249,10 +243,10 @@ class Battle::Battler
       @battle.pbShowAbilitySplash(b)
       if Battle::Scene::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} shared its {2} with {3}!",
-           b.pbThis, b.itemName, pbThis(true)))
+                                b.pbThis, b.itemName, pbThis(true)))
       else
         @battle.pbDisplay(_INTL("{1}'s {2} let it share its {3} with {4}!",
-           b.pbThis, b.abilityName, b.itemName, pbThis(true)))
+                                b.pbThis, b.abilityName, b.itemName, pbThis(true)))
       end
       self.item = b.item
       b.item = nil

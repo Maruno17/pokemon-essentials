@@ -76,18 +76,18 @@ class PokemonStorage
 
   def allWallpapers
     return [
-       # Basic wallpapers
-       _INTL("Forest"), _INTL("City"), _INTL("Desert"), _INTL("Savanna"),
-       _INTL("Crag"), _INTL("Volcano"), _INTL("Snow"), _INTL("Cave"),
-       _INTL("Beach"), _INTL("Seafloor"), _INTL("River"), _INTL("Sky"),
-       _INTL("Poké Center"), _INTL("Machine"), _INTL("Checks"), _INTL("Simple"),
-       # Special wallpapers
-       _INTL("Space"), _INTL("Backyard"), _INTL("Nostalgic 1"), _INTL("Torchic"),
-       _INTL("Trio 1"), _INTL("PikaPika 1"), _INTL("Legend 1"), _INTL("Team Galactic 1"),
-       _INTL("Distortion"), _INTL("Contest"), _INTL("Nostalgic 2"), _INTL("Croagunk"),
-       _INTL("Trio 2"), _INTL("PikaPika 2"), _INTL("Legend 2"), _INTL("Team Galactic 2"),
-       _INTL("Heart"), _INTL("Soul"), _INTL("Big Brother"), _INTL("Pokéathlon"),
-       _INTL("Trio 3"), _INTL("Spiky Pika"), _INTL("Kimono Girl"), _INTL("Revival")
+      # Basic wallpapers
+      _INTL("Forest"), _INTL("City"), _INTL("Desert"), _INTL("Savanna"),
+      _INTL("Crag"), _INTL("Volcano"), _INTL("Snow"), _INTL("Cave"),
+      _INTL("Beach"), _INTL("Seafloor"), _INTL("River"), _INTL("Sky"),
+      _INTL("Poké Center"), _INTL("Machine"), _INTL("Checks"), _INTL("Simple"),
+      # Special wallpapers
+      _INTL("Space"), _INTL("Backyard"), _INTL("Nostalgic 1"), _INTL("Torchic"),
+      _INTL("Trio 1"), _INTL("PikaPika 1"), _INTL("Legend 1"), _INTL("Team Galactic 1"),
+      _INTL("Distortion"), _INTL("Contest"), _INTL("Nostalgic 2"), _INTL("Croagunk"),
+      _INTL("Trio 2"), _INTL("PikaPika 2"), _INTL("Legend 2"), _INTL("Team Galactic 2"),
+      _INTL("Heart"), _INTL("Soul"), _INTL("Big Brother"), _INTL("Pokéathlon"),
+      _INTL("Trio 3"), _INTL("Spiky Pika"), _INTL("Kimono Girl"), _INTL("Revival")
     ]
   end
 

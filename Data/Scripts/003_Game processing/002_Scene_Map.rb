@@ -57,8 +57,8 @@ class Scene_Map
     if playingBGM && map.autoplay_bgm
       if (PBDayNight.isNight? rescue false)
         pbBGMFade(0.8) if playingBGM.name != map.bgm.name && playingBGM.name != map.bgm.name + "_n"
-      else
-        pbBGMFade(0.8) if playingBGM.name != map.bgm.name
+      elsif playingBGM.name != map.bgm.name
+        pbBGMFade(0.8)
       end
     end
     if playingBGS && map.autoplay_bgs

@@ -148,7 +148,7 @@ class PBPokemon
       ev_array.push(s.id) if pkmn.ev[s.id] > 60
     end
     return self.new(pkmn.species, pkmn.item_id, pkmn.nature,
-       mov1, mov2, mov3, mov4, ev_array)
+                    mov1, mov2, mov3, mov4, ev_array)
   end
 
   def initialize(species, item, nature, move1, move2, move3, move4, ev)
@@ -203,7 +203,7 @@ class PBPokemon
   def createPokemon(level, iv, trainer)
     pkmn = Pokemon.new(@species, level, trainer, false)
     pkmn.item = @item
-    pkmn.personalID = rand(2**16) | rand(2**16) << 16
+    pkmn.personalID = rand(2**16) | (rand(2**16) << 16)
     pkmn.nature = nature
     pkmn.happiness = 0
     pkmn.moves.push(Pokemon::Move.new(self.convertMove(@move1)))

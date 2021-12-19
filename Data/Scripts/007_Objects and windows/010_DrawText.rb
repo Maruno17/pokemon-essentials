@@ -31,7 +31,7 @@ def colorToRgb32(color)
     return sprintf("%02X%02X%02X", color.red.to_i, color.green.to_i, color.blue.to_i)
   else
     return sprintf("%02X%02X%02X%02X",
-       color.red.to_i, color.green.to_i, color.blue.to_i, color.alpha.to_i)
+                   color.red.to_i, color.green.to_i, color.blue.to_i, color.alpha.to_i)
   end
 end
 
@@ -48,35 +48,35 @@ def rgbToColor(param)
   case param.length
   when 8 # 32-bit hex
     return Color.new(
-       (baseint >> 24) & 0xFF,
-       (baseint >> 16) & 0xFF,
-       (baseint >> 8) & 0xFF,
-       (baseint) & 0xFF
+      (baseint >> 24) & 0xFF,
+      (baseint >> 16) & 0xFF,
+      (baseint >> 8) & 0xFF,
+      (baseint) & 0xFF
     )
   when 6 # 24-bit hex
     return Color.new(
-       (baseint >> 16) & 0xFF,
-       (baseint >> 8) & 0xFF,
-       (baseint) & 0xFF
+      (baseint >> 16) & 0xFF,
+      (baseint >> 8) & 0xFF,
+      (baseint) & 0xFF
     )
   when 4 # 16-bit hex
     return Color.new(
-       ((baseint) & 0x1F) << 3,
-       ((baseint >> 5) & 0x1F) << 3,
-       ((baseint >> 10) & 0x1F) << 3
+      ((baseint) & 0x1F) << 3,
+      ((baseint >> 5) & 0x1F) << 3,
+      ((baseint >> 10) & 0x1F) << 3
     )
   when 1 # Color number
     i = param.to_i
     return Font.default_color if i >= 8
     return [
-       Color.new(255, 255, 255, 255),
-       Color.new(128, 128, 255, 255),
-       Color.new(255, 128, 128, 255),
-       Color.new(128, 255, 128, 255),
-       Color.new(128, 255, 255, 255),
-       Color.new(255, 128, 255, 255),
-       Color.new(255, 255, 128, 255),
-       Color.new(192, 192, 192, 255)
+      Color.new(255, 255, 255, 255),
+      Color.new(128, 128, 255, 255),
+      Color.new(255, 128, 128, 255),
+      Color.new(128, 255, 128, 255),
+      Color.new(128, 255, 255, 255),
+      Color.new(255, 128, 255, 255),
+      Color.new(255, 255, 128, 255),
+      Color.new(192, 192, 192, 255)
     ][i]
   else
     return Font.default_color
@@ -86,9 +86,9 @@ end
 def Rgb16ToColor(param)
   baseint = param.to_i(16)
   return Color.new(
-     ((baseint) & 0x1F) << 3,
-     ((baseint >> 5) & 0x1F) << 3,
-     ((baseint >> 10) & 0x1F) << 3
+    ((baseint) & 0x1F) << 3,
+    ((baseint >> 5) & 0x1F) << 3,
+    ((baseint >> 10) & 0x1F) << 3
   )
 end
 
@@ -98,9 +98,9 @@ def getContrastColor(color)
   g = color.green
   b = color.blue
   yuv = [
-     r * 0.299 + g * 0.587 + b * 0.114,
-     r * -0.1687 + g * -0.3313 + b *  0.500 + 0.5,
-     r * 0.500 + g * -0.4187 + b * -0.0813 + 0.5
+    (r * 0.299) + (g * 0.587) + (b * 0.114),
+    (r * -0.1687) + (g * -0.3313) + (b *  0.500) + 0.5,
+    (r * 0.500) + (g * -0.4187) + (b * -0.0813) + 0.5
   ]
   if yuv[0] < 127.5
     yuv[0] += (255 - yuv[0]) / 2
@@ -108,10 +108,10 @@ def getContrastColor(color)
     yuv[0] = yuv[0] / 2
   end
   return Color.new(
-     yuv[0] + 1.4075 * (yuv[2] - 0.5),
-     yuv[0] - 0.3455 * (yuv[1] - 0.5) - 0.7169 * (yuv[2] - 0.5),
-     yuv[0] + 1.7790 * (yuv[1] - 0.5),
-     color.alpha
+    yuv[0] + (1.4075 * (yuv[2] - 0.5)),
+    yuv[0] - (0.3455 * (yuv[1] - 0.5)) - (0.7169 * (yuv[2] - 0.5)),
+    yuv[0] + (1.7790 * (yuv[1] - 0.5)),
+    color.alpha
   )
 end
 
@@ -163,10 +163,9 @@ def getFormattedTextForDims(bitmap, xDst, yDst, widthDst, heightDst, text, lineh
   if newlineBreaks
     text2.gsub!(/<(\/?)(br)(\s*\=\s*([^>]*))?>/i, "\n")
   end
-  return getFormattedText(
-     bitmap, xDst, yDst, widthDst, heightDst,
-     text2, lineheight, newlineBreaks,
-     explicitBreaksOnly, true)
+  return getFormattedText(bitmap, xDst, yDst, widthDst, heightDst,
+                          text2, lineheight, newlineBreaks,
+                          explicitBreaksOnly, true)
 end
 
 def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight,
@@ -199,7 +198,7 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
     if textchars[position] == "\n"
       if newlineBreaks   # treat newline as break
         havenl = true
-        characters.push(["\n", x, y * lineheight + yDst, 0, lineheight, false, false,
+        characters.push(["\n", x, (y * lineheight) + yDst, 0, lineheight, false, false,
                          false, colorclone, nil, false, false, "", 8, position, nil, 0])
         y += 1
         x = 0
@@ -225,18 +224,16 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
     # Push character
     if heightDst < 0 || yStart < yDst + heightDst
       havenl = true if isWaitChar(textchars[position])
-      characters.push([
-         textchars[position],
-         x + xStart, texty, width + 2, lineheight,
-         false, bold, italic, colorclone, nil, false, false,
-         defaultfontname, bitmap.font.size, position, nil, 0
-      ])
+      characters.push([textchars[position],
+                       x + xStart, texty, width + 2, lineheight,
+                       false, bold, italic, colorclone, nil, false, false,
+                       defaultfontname, bitmap.font.size, position, nil, 0])
     end
     x += width
     if !explicitBreaksOnly && x + 2 > widthDst && lastword[1] != 0 &&
        (!hadnonspace || !hadspace)
       havenl = true
-      characters.insert(lastword[0], ["\n", x, y * lineheight + yDst, 0, lineheight,
+      characters.insert(lastword[0], ["\n", x, (y * lineheight) + yDst, 0, lineheight,
                                       false, false, false, colorclone, nil, false, false, "", 8, position])
       lastword[0] += 1
       y += 1
@@ -412,7 +409,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   end
   if controls.length == 0
     ret = getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight,
-       newlineBreaks, explicitBreaksOnly)
+                               newlineBreaks, explicitBreaksOnly)
     dummybitmap.dispose if dummybitmap
     return ret
   end
@@ -627,7 +624,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     end
     nextline.times do
       havenl = true
-      characters.push(["\n", x, y * lineheight + yDst, 0, lineheight, false, false, false,
+      characters.push(["\n", x, (y * lineheight) + yDst, 0, lineheight, false, false, false,
                        defaultcolors[0], defaultcolors[1], false, false, "", 8, position, nil, 0])
       charactersInternal.push([alignment, y, 0])
       y += 1
@@ -641,7 +638,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
       if newlineBreaks
         if nextline == 0
           havenl = true
-          characters.push(["\n", x, y * lineheight + yDst, 0, lineheight, false, false, false,
+          characters.push(["\n", x, (y * lineheight) + yDst, 0, lineheight, false, false, false,
                            defaultcolors[0], defaultcolors[1], false, false, "", 8, position, nil, 0])
           charactersInternal.push([alignment, y, 0])
           y += 1
@@ -676,22 +673,20 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     if heightDst < 0 || texty < yDst + heightDst
       havenl = true if !graphic && isWaitChar(textchars[position])
       extraspace = (!graphic && italiccount > 0) ? 2 + (width / 2) : 2
-      characters.push([
-         graphic || textchars[position],
-         x + xStart, texty, width + extraspace, lineheight,
-         graphic ? true : false,
-         (boldcount > 0), (italiccount > 0), colors[0], colors[1],
-         (underlinecount > 0), (strikecount > 0), fontname, fontsize,
-         position, graphicRect,
-         ((outlinecount > 0) ? 1 : 0) + ((outline2count > 0) ? 2 : 0)
-      ])
+      characters.push([graphic || textchars[position],
+                       x + xStart, texty, width + extraspace, lineheight,
+                       graphic ? true : false,
+                       (boldcount > 0), (italiccount > 0), colors[0], colors[1],
+                       (underlinecount > 0), (strikecount > 0), fontname, fontsize,
+                       position, graphicRect,
+                       ((outlinecount > 0) ? 1 : 0) + ((outline2count > 0) ? 2 : 0)])
       charactersInternal.push([alignment, y, xStart, textchars[position], extraspace])
     end
     x += width
     if !explicitBreaksOnly && x + 2 > widthDst && lastword[1] != 0 &&
        (!hadnonspace || !hadspace)
       havenl = true
-      characters.insert(lastword[0], ["\n", x, y * lineheight + yDst, 0, lineheight,
+      characters.insert(lastword[0], ["\n", x, (y * lineheight) + yDst, 0, lineheight,
                                       false, false, false,
                                       defaultcolors[0], defaultcolors[1],
                                       false, false, "", 8, position, nil])
@@ -1046,12 +1041,12 @@ def drawSingleFormattedChar(bitmap, ch)
       end
       bitmap.font.color = ch[8] if bitmap.font.color != ch[8]
       bitmap.draw_text(ch[1] + offset, ch[2] + offset, ch[3], ch[4], ch[0])
-    else
-      bitmap.font.color = ch[8] if bitmap.font.color != ch[8]
+    elsif bitmap.font.color != ch[8]
+      bitmap.font.color = ch[8]
     end
     if ch[10] # underline
       bitmap.fill_rect(ch[1], ch[2] + ch[4] - 4 - [(ch[4] - bitmap.font.size) / 2, 0].max - 2,
-         ch[3] - 2, 2, ch[8])
+                       ch[3] - 2, 2, ch[8])
     end
     if ch[11] # strikeout
       bitmap.fill_rect(ch[1], ch[2] + (ch[4] / 2) - 4, ch[3] - 2, 2, ch[8])
@@ -1088,7 +1083,7 @@ end
 def drawTextEx(bitmap, x, y, width, numlines, text, baseColor, shadowColor)
   normtext = getLineBrokenChunks(bitmap, text, width, nil, true)
   renderLineBrokenChunksWithShadow(bitmap, x, y, normtext, numlines * 32,
-     baseColor, shadowColor)
+                                   baseColor, shadowColor)
 end
 
 def drawFormattedTextEx(bitmap, x, y, width, text, baseColor = nil, shadowColor = nil, lineheight = 32)

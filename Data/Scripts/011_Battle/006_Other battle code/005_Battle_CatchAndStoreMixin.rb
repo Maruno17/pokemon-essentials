@@ -154,7 +154,7 @@ module Battle::CatchAndStoreMixin
     # First half of the shakes calculation
     a = battler.totalhp
     b = battler.hp
-    x = ((3 * a - 2 * b) * catch_rate.to_f) / (3 * a)
+    x = (((3 * a) - (2 * b)) * catch_rate.to_f) / (3 * a)
     # Calculation modifiers
     if battler.status == :SLEEP || battler.status == :FROZEN
       x *= 2.5

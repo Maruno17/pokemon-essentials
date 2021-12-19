@@ -222,8 +222,8 @@ class AnimationWindow < SpriteWrapper
     @contents.clear
     @contents.fill_rect(0, 0, @contents.width, @contents.height, Color.new(180, 180, 180))
     @contents.blt(0, 0, @arrows.bitmap, Rect.new(0, 0, arrowwidth, 96))
-    @contents.blt(arrowwidth + NUMFRAMES * 96, 0, @arrows.bitmap,
-       Rect.new(arrowwidth, 0, arrowwidth, 96))
+    @contents.blt(arrowwidth + (NUMFRAMES * 96), 0, @arrows.bitmap,
+                  Rect.new(arrowwidth, 0, arrowwidth, 96))
     havebitmap = (self.animbitmap && !self.animbitmap.disposed?)
     if havebitmap
       rect = Rect.new(0, 0, 0, 0)
@@ -238,9 +238,9 @@ class AnimationWindow < SpriteWrapper
       end
     end
     for i in 0...NUMFRAMES
-      drawrect(@contents, arrowwidth + i * 96, 0, 96, 96, Color.new(100, 100, 100))
+      drawrect(@contents, arrowwidth + (i * 96), 0, 96, 96, Color.new(100, 100, 100))
       if @start + i == @selected && havebitmap
-        drawborder(@contents, arrowwidth + i * 96, 0, 96, 96, Color.new(255, 0, 0))
+        drawborder(@contents, arrowwidth + (i * 96), 0, 96, 96, Color.new(255, 0, 0))
       end
     end
   end
@@ -258,7 +258,7 @@ class AnimationWindow < SpriteWrapper
     arrowwidth = @arrows.bitmap.width / 2
     maxindex = (self.animbitmap.height / 192) * 5
     left = Rect.new(0, 0, arrowwidth, 96)
-    right = Rect.new(arrowwidth + NUMFRAMES * 96, 0, arrowwidth, 96)
+    right = Rect.new(arrowwidth + (NUMFRAMES * 96), 0, arrowwidth, 96)
     left.x += self.x
     left.y += self.y
     right.x += self.x
@@ -266,7 +266,7 @@ class AnimationWindow < SpriteWrapper
     swatchrects = []
     repeattime = Input.time?(Input::MOUSELEFT) / 1000
     for i in 0...NUMFRAMES
-      swatchrects.push(Rect.new(arrowwidth + i * 96 + self.x, self.y, 96, 96))
+      swatchrects.push(Rect.new(arrowwidth + (i * 96) + self.x, self.y, 96, 96))
     end
     for i in 0...NUMFRAMES
       if swatchrects[i].contains(mousepos[0], mousepos[1])
@@ -410,7 +410,7 @@ class SpriteFrame < InvalidatableSprite
     @contents.fill_rect(63, 0, 1, 64, color)
     # Determine frame number graphic to use from @iconbitmap
     yoffset = (@previous) ? (NUM_ROWS + 1) * 16 : 0   # 1 is for padlock icon
-    bmrect = Rect.new((@id % 10) * 16, yoffset + (@id / 10) * 16, 16, 16)
+    bmrect = Rect.new((@id % 10) * 16, yoffset + ((@id / 10) * 16), 16, 16)
     @contents.blt(0, 0, @iconbitmap.bitmap, bmrect)
     # Draw padlock if frame is locked
     if @locked && !@previous
@@ -484,7 +484,7 @@ class AnimationCanvas < Sprite
     else
       begin
         @animbitmap = AnimatedBitmap.new("Graphics/Animations/" + @animation.graphic,
-           @animation.hue).deanimate
+                                         @animation.hue).deanimate
       rescue
         @animbitmap = nil
       end
@@ -527,13 +527,13 @@ class AnimationCanvas < Sprite
       @sprites["pokemon_1"].bitmap = @target
       @sprites["pokemon_1"].z = 16
       pbSpriteSetAnimFrame(@sprites["pokemon_0"],
-         pbCreateCel(Battle::Scene::FOCUSUSER_X,
-                     Battle::Scene::FOCUSUSER_Y, -1, 2),
-         @sprites["pokemon_0"], @sprites["pokemon_1"])
+                           pbCreateCel(Battle::Scene::FOCUSUSER_X,
+                                       Battle::Scene::FOCUSUSER_Y, -1, 2),
+                           @sprites["pokemon_0"], @sprites["pokemon_1"])
       pbSpriteSetAnimFrame(@sprites["pokemon_1"],
-         pbCreateCel(Battle::Scene::FOCUSTARGET_X,
-                     Battle::Scene::FOCUSTARGET_Y, -2, 1),
-         @sprites["pokemon_0"], @sprites["pokemon_1"])
+                           pbCreateCel(Battle::Scene::FOCUSTARGET_X,
+                                       Battle::Scene::FOCUSTARGET_Y, -2, 1),
+                           @sprites["pokemon_0"], @sprites["pokemon_1"])
       usersprite = @sprites["pokemon_#{oppmove ? 1 : 0}"]
       targetsprite = @sprites["pokemon_#{oppmove ? 0 : 1}"]
       olduserx = usersprite ? usersprite.x : 0
@@ -541,12 +541,15 @@ class AnimationCanvas < Sprite
       oldtargetx = targetsprite ? targetsprite.x : 0
       oldtargety = targetsprite ? targetsprite.y : 0
       @player = PBAnimationPlayerX.new(@animation,
-         @battle.battlers[oppmove ? 1 : 0], @battle.battlers[oppmove ? 0 : 1], self, oppmove, true)
+                                       @battle.battlers[oppmove ? 1 : 0],
+                                       @battle.battlers[oppmove ? 0 : 1],
+                                       self, oppmove, true)
       @player.setLineTransform(
-         Battle::Scene::FOCUSUSER_X, Battle::Scene::FOCUSUSER_Y,
-         Battle::Scene::FOCUSTARGET_X, Battle::Scene::FOCUSTARGET_Y,
-         olduserx, oldusery,
-         oldtargetx, oldtargety)
+        Battle::Scene::FOCUSUSER_X, Battle::Scene::FOCUSUSER_Y,
+        Battle::Scene::FOCUSTARGET_X, Battle::Scene::FOCUSTARGET_Y,
+        olduserx, oldusery,
+        oldtargetx, oldtargety
+      )
       @player.start
       @playing = true
       @sprites["pokemon_0"].x += BORDERSIZE
@@ -983,8 +986,8 @@ class BitmapDisplayWindow < SpriteWindow_Base
     return if !bmap
     ww = bmap.width
     wh = bmap.height
-    sx = self.contents.width * 1.0 / ww
-    sy = self.contents.height * 1.0 / wh
+    sx = self.contents.width / ww.to_f
+    sy = self.contents.height / wh.to_f
     if sx > sy
       ww = sy * ww
       wh = self.contents.height
@@ -992,10 +995,9 @@ class BitmapDisplayWindow < SpriteWindow_Base
       wh = sx * wh
       ww = self.contents.width
     end
-    dest = Rect.new(
-       (self.contents.width - ww) / 2,
-       (self.contents.height - wh) / 2,
-       ww, wh)
+    dest = Rect.new((self.contents.width - ww) / 2,
+                    (self.contents.height - wh) / 2,
+                    ww, wh)
     src = Rect.new(0, 0, bmap.width, bmap.height)
     self.contents.stretch_blt(dest, bmap, src)
     bmap.dispose
@@ -1009,7 +1011,8 @@ class AnimationNameWindow
     @canvas = canvas
     @oldname = nil
     @window = Window_UnformattedTextPokemon.newWithSize(
-       _INTL("Name: {1}", @canvas.animation.name), x, y, width, height, viewport)
+      _INTL("Name: {1}", @canvas.animation.name), x, y, width, height, viewport
+    )
   end
 
   def viewport=(value); @window.viewport = value; end

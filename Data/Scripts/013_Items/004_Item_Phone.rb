@@ -48,7 +48,7 @@ def pbPhoneRegisterBattle(message, event, trainertype, trainername, maxbattles)
   message = _INTL("Let me register you.") if !message
   return if !pbConfirmMessage(message)
   displayname = _INTL("{1} {2}", GameData::TrainerType.get(trainertype).name,
-     pbGetMessageFromHash(MessageTypes::TrainerNames, trainername))
+                      pbGetMessageFromHash(MessageTypes::TrainerNames, trainername))
   if contact                          # Previously registered, just make visible
     contact[0] = true
   else                                                         # Add new contact
@@ -150,7 +150,7 @@ Events.onMapUpdate += proc { |_sender, _e|
       next if !num[0] || num.length != 8   # if not visible or not a trainer
       # Reset time to next can-battle if necessary
       if num[4] == 0
-        num[3] = 20 * 60 + rand(20 * 60)   # 20-40 minutes
+        num[3] = rand(20...40) * 60   # 20-40 minutes
         num[4] = 1
       end
       # Count down time to next can-battle

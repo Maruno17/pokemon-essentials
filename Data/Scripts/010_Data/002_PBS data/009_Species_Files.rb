@@ -28,7 +28,7 @@ module GameData
         # Look for a graphic matching this combination's parameters
         try_species_text = try_species
         ret = pbResolveBitmap(sprintf("%s%s%s%s%s%s", path, try_subfolder,
-           try_species_text, try_form, try_gender, try_shadow))
+                                      try_species_text, try_form, try_gender, try_shadow))
         return ret if ret
       end
       return nil

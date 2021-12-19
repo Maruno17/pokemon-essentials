@@ -117,7 +117,7 @@ class PointPath
       len = @points.length
       dx = @points[len - 2][0] - @points[len - 1][0]
       dy = @points[len - 2][1] - @points[len - 1][1]
-      dist = Math.sqrt(dx * dx + dy * dy)
+      dist = Math.sqrt((dx * dx) + (dy * dy))
       @distances.push(dist)
       @totaldist += dist
     end
@@ -171,8 +171,8 @@ class PointPath
           distT = 1.0 - ((curdist - distForT) / dist)
           dx = @points[i + 1][0] - @points[i][0]
           dy = @points[i + 1][1] - @points[i][1]
-          ret = [@points[i][0] + dx * distT,
-                 @points[i][1] + dy * distT]
+          ret = [@points[i][0] + (dx * distT),
+                 @points[i][1] + (dy * distT)]
           break
         end
       end
@@ -188,9 +188,9 @@ def catmullRom(p1, p2, p3, p4, t)
   # p1=prevPoint, p2=startPoint, p3=endPoint, p4=nextPoint, t is from 0 through 1
   t2 = t * t
   t3 = t2 * t
-  return 0.5 * (2 * p2 + t * (p3 - p1) +
-         t2 * (2 * p1 - 5 * p2 + 4 * p3 - p4) +
-         t3 * (p4 - 3 * p3 + 3 * p2 - p1))
+  return 0.5 * ((2 * p2) + (t * (p3 - p1)) +
+         (t2 * ((2 * p1) - (5 * p2) + (4 * p3) - p4)) +
+         (t3 * (p4 - (3 * p3) + (3 * p2) - p1)))
 end
 
 def getCatmullRomPoint(src, t)
@@ -275,16 +275,17 @@ def pbDefinePath(canvas)
         points.push(point)
       end
       curve = [
-         ControlPointSprite.new(true, canvas.viewport),
-         ControlPointSprite.new(false, canvas.viewport),
-         ControlPointSprite.new(false, canvas.viewport),
-         ControlPointSprite.new(true, canvas.viewport)
+        ControlPointSprite.new(true, canvas.viewport),
+        ControlPointSprite.new(false, canvas.viewport),
+        ControlPointSprite.new(false, canvas.viewport),
+        ControlPointSprite.new(true, canvas.viewport)
       ]
       showline = false
       sliderwin2.visible = false
       # This window displays the mouse's current position
-      window = Window_UnformattedTextPokemon.newWithSize("",
-         0, 320 - 64, 128, 64, canvas.viewport)
+      window = Window_UnformattedTextPokemon.newWithSize(
+        "", 0, 320 - 64, 128, 64, canvas.viewport
+      )
       loop do
         Graphics.update
         Input.update
@@ -320,10 +321,10 @@ def pbDefinePath(canvas)
           if !showline
             curve[1].visible = true
             curve[2].visible = true
-            curve[1].x = curve[0].x + 0.3333 * (curve[3].x - curve[0].x)
-            curve[1].y = curve[0].y + 0.3333 * (curve[3].y - curve[0].y)
-            curve[2].x = curve[0].x + 0.6666 * (curve[3].x - curve[0].x)
-            curve[2].y = curve[0].y + 0.6666 * (curve[3].y - curve[0].y)
+            curve[1].x = curve[0].x + (0.3333 * (curve[3].x - curve[0].x))
+            curve[1].y = curve[0].y + (0.3333 * (curve[3].y - curve[0].y))
+            curve[2].x = curve[0].x + (0.6666 * (curve[3].x - curve[0].x))
+            curve[2].y = curve[0].y + (0.6666 * (curve[3].y - curve[0].y))
           end
           showline = true
         end
@@ -363,8 +364,9 @@ def pbDefinePath(canvas)
         point.dispose
       end
       points.clear
-      window = Window_UnformattedTextPokemon.newWithSize("",
-         0, 320 - 64, 128, 64, canvas.viewport)
+      window = Window_UnformattedTextPokemon.newWithSize(
+        "", 0, 320 - 64, 128, 64, canvas.viewport
+      )
       sliderwin2.visible = false
       loop do
         Graphics.update

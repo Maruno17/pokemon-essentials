@@ -141,12 +141,12 @@ class Battle
     @priorityTrickRoom = false
     @choices           = []
     @megaEvolution     = [
-       [-1] * (@player ? @player.length : 1),
-       [-1] * (@opponent ? @opponent.length : 1)
+      [-1] * (@player ? @player.length : 1),
+      [-1] * (@opponent ? @opponent.length : 1)
     ]
     @initialItems      = [
-       Array.new(@party1.length) { |i| (@party1[i]) ? @party1[i].item_id : nil },
-       Array.new(@party2.length) { |i| (@party2[i]) ? @party2[i].item_id : nil }
+      Array.new(@party1.length) { |i| (@party1[i]) ? @party1[i].item_id : nil },
+      Array.new(@party2.length) { |i| (@party2[i]) ? @party2[i].item_id : nil }
     ]
     @recycleItems      = [Array.new(@party1.length, nil),   Array.new(@party2.length, nil)]
     @belch             = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
@@ -202,7 +202,7 @@ class Battle
   end
 
   def maxBattlerIndex
-    return (pbSideSize(0) > pbSideSize(1)) ? (pbSideSize(0) - 1) * 2 : pbSideSize(1) * 2 - 1
+    return (pbSideSize(0) > pbSideSize(1)) ? (pbSideSize(0) - 1) * 2 : (pbSideSize(1) * 2) - 1
   end
 
   #=============================================================================
@@ -282,7 +282,7 @@ class Battle
   def pbNumPositions(side, idxTrainer)
     ret = 0
     for i in 0...pbSideSize(side)
-      t = pbGetOwnerIndexFromBattlerIndex(i * 2 + side)
+      t = pbGetOwnerIndexFromBattlerIndex((i * 2) + side)
       next if t != idxTrainer
       ret += 1
     end
@@ -701,8 +701,8 @@ class Battle
     @field.weather = newWeather
     duration = (fixedDuration) ? 5 : -1
     if duration > 0 && user && user.itemActive?
-      duration = Battle::ItemEffects.triggerWeatherExtender(user.item,
-         @field.weather, duration, user, self)
+      duration = Battle::ItemEffects.triggerWeatherExtender(user.item, @field.weather,
+                                                            duration, user, self)
     end
     @field.weatherDuration = duration
     weather_data = GameData::BattleWeather.try_get(@field.weather)
@@ -779,8 +779,8 @@ class Battle
     @field.terrain = newTerrain
     duration = (fixedDuration) ? 5 : -1
     if duration > 0 && user && user.itemActive?
-      duration = Battle::ItemEffects.triggerTerrainExtender(user.item,
-         newTerrain, duration, user, self)
+      duration = Battle::ItemEffects.triggerTerrainExtender(user.item, newTerrain,
+                                                            duration, user, self)
     end
     @field.terrainDuration = duration
     terrain_data = GameData::BattleTerrain.try_get(@field.terrain)

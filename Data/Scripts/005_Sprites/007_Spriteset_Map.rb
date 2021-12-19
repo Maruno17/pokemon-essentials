@@ -9,7 +9,7 @@ class ClippableSprite < Sprite_Character
   def update
     super
     @_src_rect = self.src_rect
-    tmright = @tilemap.map_data.xsize * Game_Map::TILE_WIDTH - @tilemap.ox
+    tmright = (@tilemap.map_data.xsize * Game_Map::TILE_WIDTH) - @tilemap.ox
     echoln "x=#{self.x},ox=#{self.ox},tmright=#{tmright},tmox=#{@tilemap.ox}"
     if @tilemap.ox - self.ox < -self.x
       # clipped on left
@@ -64,16 +64,14 @@ class Spriteset_Map
   end
 
   def dispose
-    if $scne.is_a?(Scene_Map)
+    if $scene.is_a?(Scene_Map)
       $scene.map_renderer.remove_tileset(@map.tileset_name)
       @map.autotile_names.each { |filename| $scene.map_renderer.remove_autotile(filename) }
       $scene.map_renderer.remove_extra_autotiles(@map.tileset_id)
     end
     @panorama.dispose
     @fog.dispose
-    for sprite in @character_sprites
-      sprite.dispose
-    end
+    @character_sprites.each { |sprite| sprite.dispose }
     @weather.dispose
     @panorama = nil
     @fog = nil
