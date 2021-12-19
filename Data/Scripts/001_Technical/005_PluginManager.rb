@@ -212,11 +212,12 @@ module PluginManager
         dependencies = value
         dependencies = [dependencies] if !dependencies.is_a?(Array) || !dependencies[0].is_a?(Array)
         for dep in value
-          if dep.is_a?(String)   # "plugin name"
+          case dep
+          when String   # "plugin name"
             if !self.installed?(dep)
               self.error("Plugin '#{name}' requires plugin '#{dep}' to be installed above it.")
             end
-          elsif dep.is_a?(Array)
+          when Array
             case dep.size
             when 1   # ["plugin name"]
               if dep[0].is_a?(String)
@@ -428,8 +429,8 @@ module PluginManager
         return 1 if !c2
         return 1 if c1.to_i(16) > c2.to_i(16)
         return -1 if c1.to_i(16) < c2.to_i(16)
-      else
-        return -1 if c2
+      elsif c2
+        return -1
       end
     end
     return 0

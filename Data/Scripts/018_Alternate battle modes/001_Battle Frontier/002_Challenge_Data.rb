@@ -203,7 +203,7 @@ class PBPokemon
   def createPokemon(level, iv, trainer)
     pkmn = Pokemon.new(@species, level, trainer, false)
     pkmn.item = @item
-    pkmn.personalID = rand(2**16) | rand(2**16) << 16
+    pkmn.personalID = rand(2**16) | (rand(2**16) << 16)
     pkmn.nature = nature
     pkmn.happiness = 0
     pkmn.moves.push(Pokemon::Move.new(self.convertMove(@move1)))

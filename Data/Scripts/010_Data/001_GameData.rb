@@ -207,13 +207,14 @@ module GameData
     # @return [Boolean] whether other represents the same thing as this thing
     def ==(other)
       return false if other.nil?
-      if other.is_a?(Symbol)
+      case other
+      when Symbol
         return @id == other
-      elsif other.is_a?(self.class)
+      when self.class
         return @id == other.id
-      elsif other.is_a?(String)
+      when String
         return @id == other.to_sym
-      elsif other.is_a?(Integer)
+      when Integer
         return @id_number == other
       end
       return false

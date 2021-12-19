@@ -28,7 +28,7 @@ class Battle::Scene::Animation::Intro < Battle::Scene::Animation
       end
     else   # Wild battle
       @battle.pbParty(1).each_with_index do |_pkmn, i|
-        idxBattler = 2 * i + 1
+        idxBattler = (2 * i) + 1
         makeSlideSprite("pokemon_#{idxBattler}", -1, appearTime, PictureOrigin::Bottom)
       end
     end
@@ -71,7 +71,7 @@ class Battle::Scene::Animation::Intro2 < Battle::Scene::Animation
 
   def createProcesses
     for i in 0...@sideSize
-      idxBattler = 2 * i + 1
+      idxBattler = (2 * i) + 1
       next if !@sprites["pokemon_#{idxBattler}"]
       battler = addSprite(@sprites["pokemon_#{idxBattler}"], PictureOrigin::Bottom)
       battler.moveTone(0, 4, Tone.new(0, 0, 0, 0))
@@ -112,7 +112,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
       ballY = barY - 30
       barX -= bar.bitmap.width
     end
-    ballXdiff = 32 * (1 - 2 * @side)
+    ballXdiff = 32 * (1 - (2 * @side))
     bar.x       = barX
     bar.y       = barY
     bar.opacity = 255
@@ -155,7 +155,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     bar.moveDelta(0, 8, -dir * Graphics.width / 2, 0)
     delay = bar.totalDuration
     for i in 0...Battle::Scene::NUM_BALLS
-      createBall(i, (@fullAnim) ? delay + i * 2 : 0, dir)
+      createBall(i, (@fullAnim) ? delay + (i * 2) : 0, dir)
     end
   end
 
@@ -287,7 +287,7 @@ class Battle::Scene::Animation::TrainerAppear < Battle::Scene::Animation
     # Make new trainer sprite move on-screen
     if @sprites["trainer_#{@idxTrainer + 1}"]
       trainerX, trainerY = Battle::Scene.pbTrainerPosition(1)
-      trainerX += 64 + Graphics.width / 4
+      trainerX += 64 + (Graphics.width / 4)
       newTrainer = addSprite(@sprites["trainer_#{@idxTrainer + 1}"], PictureOrigin::Bottom)
       newTrainer.setVisible(delay, true)
       newTrainer.setXY(delay, trainerX, trainerY)
@@ -342,7 +342,7 @@ class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
     for i in 0...Battle::Scene::NUM_BALLS
       next if !@sprites["partyBall_0_#{i}"] || !@sprites["partyBall_0_#{i}"].visible
       partyBall = addSprite(@sprites["partyBall_0_#{i}"])
-      partyBall.moveDelta(delay + 2 * i, 16, -Graphics.width, 0) if @fullAnim
+      partyBall.moveDelta(delay + (2 * i), 16, -Graphics.width, 0) if @fullAnim
       partyBall.moveOpacity(delay, 12, 0)
       partyBall.setVisible(delay + 12, false)
       partyBall.setOpacity(delay + 12, 255)
@@ -387,7 +387,7 @@ class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
     for i in 0...Battle::Scene::NUM_BALLS
       next if !@sprites["partyBall_1_#{i}"] || !@sprites["partyBall_1_#{i}"].visible
       partyBall = addSprite(@sprites["partyBall_1_#{i}"])
-      partyBall.moveDelta(delay + 2 * i, 16, Graphics.width, 0) if @fullAnim
+      partyBall.moveDelta(delay + (2 * i), 16, Graphics.width, 0) if @fullAnim
       partyBall.moveOpacity(delay, 12, 0)
       partyBall.setVisible(delay + 12, false)
       partyBall.setOpacity(delay + 12, 255)
@@ -782,12 +782,12 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
       d = [1, 2, 4, 8][i]   # Fraction of the starting height each bounce rises to
       delay -= t if i == 0
       if i > 0
-        ball.setZoomXY(delay, 100 + 5 * (5 - i), 100 - 5 * (5 - i))   # Squish
+        ball.setZoomXY(delay, 100 + (5 * (5 - i)), 100 - (5 * (5 - i)))   # Squish
         ball.moveZoom(delay, 2, 100)                      # Unsquish
-        ball.moveXY(delay, t, ballEndX, ballGroundY - (ballGroundY - ballEndY) / d)
+        ball.moveXY(delay, t, ballEndX, ballGroundY - ((ballGroundY - ballEndY) / d))
       end
       ball.moveXY(delay + t, t, ballEndX, ballGroundY)
-      ball.setSE(delay + 2 * t, "Battle ball drop", 100 - i * 7)
+      ball.setSE(delay + (2 * t), "Battle ball drop", 100 - (i * 7))
       delay = ball.totalDuration
     end
     battler.setXY(ball.totalDuration, ballEndX, ballGroundY)
@@ -795,9 +795,9 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     delay = ball.totalDuration + 12
     for i in 0...[@numShakes, 3].min
       ball.setSE(delay, "Battle ball shake")
-      ball.moveXY(delay, 2, ballEndX - 2 * (4 - i), ballGroundY)
+      ball.moveXY(delay, 2, ballEndX - (2 * (4 - i)), ballGroundY)
       ball.moveAngle(delay, 2, 5 * (4 - i))   # positive means counterclockwise
-      ball.moveXY(delay + 2, 4, ballEndX + 2 * (4 - i), ballGroundY)
+      ball.moveXY(delay + 2, 4, ballEndX + (2 * (4 - i)), ballGroundY)
       ball.moveAngle(delay + 2, 4, -5 * (4 - i))   # negative means clockwise
       ball.moveXY(delay + 6, 2, ballEndX, ballGroundY)
       ball.moveAngle(delay + 6, 2, 0)

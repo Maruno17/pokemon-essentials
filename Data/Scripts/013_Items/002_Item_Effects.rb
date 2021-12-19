@@ -943,11 +943,13 @@ ItemHandlers::UseOnPokemonMaximum.add(:POMEGBERRY, proc { |item, pkmn|
 })
 
 ItemHandlers::UseOnPokemon.add(:POMEGBERRY, proc { |item, qty, pkmn, scene|
-  next pbRaiseHappinessAndLowerEV(pkmn, scene, :HP, qty, [
-     _INTL("{1} adores you! Its base HP fell!", pkmn.name),
-     _INTL("{1} became more friendly. Its base HP can't go lower.", pkmn.name),
-     _INTL("{1} became more friendly. However, its base HP fell!", pkmn.name)
-  ])
+  next pbRaiseHappinessAndLowerEV(
+    pkmn, scene, :HP, qty, [
+      _INTL("{1} adores you! Its base HP fell!", pkmn.name),
+      _INTL("{1} became more friendly. Its base HP can't go lower.", pkmn.name),
+      _INTL("{1} became more friendly. However, its base HP fell!", pkmn.name)
+    ]
+  )
 })
 
 ItemHandlers::UseOnPokemonMaximum.add(:KELPSYBERRY, proc { |item, pkmn|
@@ -955,11 +957,13 @@ ItemHandlers::UseOnPokemonMaximum.add(:KELPSYBERRY, proc { |item, pkmn|
 })
 
 ItemHandlers::UseOnPokemon.add(:KELPSYBERRY, proc { |item, qty, pkmn, scene|
-  next pbRaiseHappinessAndLowerEV(pkmn, scene, :ATTACK, qty, [
-     _INTL("{1} adores you! Its base Attack fell!", pkmn.name),
-     _INTL("{1} became more friendly. Its base Attack can't go lower.", pkmn.name),
-     _INTL("{1} became more friendly. However, its base Attack fell!", pkmn.name)
-  ])
+  next pbRaiseHappinessAndLowerEV(
+    pkmn, scene, :ATTACK, qty, [
+      _INTL("{1} adores you! Its base Attack fell!", pkmn.name),
+      _INTL("{1} became more friendly. Its base Attack can't go lower.", pkmn.name),
+      _INTL("{1} became more friendly. However, its base Attack fell!", pkmn.name)
+    ]
+  )
 })
 
 ItemHandlers::UseOnPokemonMaximum.add(:QUALOTBERRY, proc { |item, pkmn|
@@ -967,11 +971,13 @@ ItemHandlers::UseOnPokemonMaximum.add(:QUALOTBERRY, proc { |item, pkmn|
 })
 
 ItemHandlers::UseOnPokemon.add(:QUALOTBERRY, proc { |item, qty, pkmn, scene|
-  next pbRaiseHappinessAndLowerEV(pkmn, scene, :DEFENSE, qty, [
-     _INTL("{1} adores you! Its base Defense fell!", pkmn.name),
-     _INTL("{1} became more friendly. Its base Defense can't go lower.", pkmn.name),
-     _INTL("{1} became more friendly. However, its base Defense fell!", pkmn.name)
-  ])
+  next pbRaiseHappinessAndLowerEV(
+    pkmn, scene, :DEFENSE, qty, [
+      _INTL("{1} adores you! Its base Defense fell!", pkmn.name),
+      _INTL("{1} became more friendly. Its base Defense can't go lower.", pkmn.name),
+      _INTL("{1} became more friendly. However, its base Defense fell!", pkmn.name)
+    ]
+  )
 })
 
 ItemHandlers::UseOnPokemonMaximum.add(:HONDEWBERRY, proc { |item, pkmn|
@@ -979,11 +985,13 @@ ItemHandlers::UseOnPokemonMaximum.add(:HONDEWBERRY, proc { |item, pkmn|
 })
 
 ItemHandlers::UseOnPokemon.add(:HONDEWBERRY, proc { |item, qty, pkmn, scene|
-  next pbRaiseHappinessAndLowerEV(pkmn, scene, :SPECIAL_ATTACK, qty, [
-     _INTL("{1} adores you! Its base Special Attack fell!", pkmn.name),
-     _INTL("{1} became more friendly. Its base Special Attack can't go lower.", pkmn.name),
-     _INTL("{1} became more friendly. However, its base Special Attack fell!", pkmn.name)
-  ])
+  next pbRaiseHappinessAndLowerEV(
+    pkmn, scene, :SPECIAL_ATTACK, qty, [
+      _INTL("{1} adores you! Its base Special Attack fell!", pkmn.name),
+      _INTL("{1} became more friendly. Its base Special Attack can't go lower.", pkmn.name),
+      _INTL("{1} became more friendly. However, its base Special Attack fell!", pkmn.name)
+    ]
+  )
 })
 
 ItemHandlers::UseOnPokemonMaximum.add(:GREPABERRY, proc { |item, pkmn|
@@ -991,11 +999,13 @@ ItemHandlers::UseOnPokemonMaximum.add(:GREPABERRY, proc { |item, pkmn|
 })
 
 ItemHandlers::UseOnPokemon.add(:GREPABERRY, proc { |item, qty, pkmn, scene|
-  next pbRaiseHappinessAndLowerEV(pkmn, scene, :SPECIAL_DEFENSE, qty, [
-     _INTL("{1} adores you! Its base Special Defense fell!", pkmn.name),
-     _INTL("{1} became more friendly. Its base Special Defense can't go lower.", pkmn.name),
-     _INTL("{1} became more friendly. However, its base Special Defense fell!", pkmn.name)
-  ])
+  next pbRaiseHappinessAndLowerEV(
+    pkmn, scene, :SPECIAL_DEFENSE, qty, [
+      _INTL("{1} adores you! Its base Special Defense fell!", pkmn.name),
+      _INTL("{1} became more friendly. Its base Special Defense can't go lower.", pkmn.name),
+      _INTL("{1} became more friendly. However, its base Special Defense fell!", pkmn.name)
+    ]
+  )
 })
 
 ItemHandlers::UseOnPokemonMaximum.add(:TAMATOBERRY, proc { |item, pkmn|
@@ -1003,11 +1013,13 @@ ItemHandlers::UseOnPokemonMaximum.add(:TAMATOBERRY, proc { |item, pkmn|
 })
 
 ItemHandlers::UseOnPokemon.add(:TAMATOBERRY, proc { |item, qty, pkmn, scene|
-  next pbRaiseHappinessAndLowerEV(pkmn, scene, :SPEED, qty, [
-     _INTL("{1} adores you! Its base Speed fell!", pkmn.name),
-     _INTL("{1} became more friendly. Its base Speed can't go lower.", pkmn.name),
-     _INTL("{1} became more friendly. However, its base Speed fell!", pkmn.name)
-  ])
+  next pbRaiseHappinessAndLowerEV(
+    pkmn, scene, :SPEED, qty, [
+      _INTL("{1} adores you! Its base Speed fell!", pkmn.name),
+      _INTL("{1} became more friendly. Its base Speed can't go lower.", pkmn.name),
+      _INTL("{1} became more friendly. However, its base Speed fell!", pkmn.name)
+    ]
+  )
 })
 
 ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE, proc { |item, qty, pkmn, scene|

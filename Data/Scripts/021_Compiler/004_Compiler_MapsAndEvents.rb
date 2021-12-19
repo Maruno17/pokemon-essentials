@@ -117,10 +117,10 @@ module Compiler
   def push_move_route(list, character, route, indent = 0)
     route = generate_move_route(route) if route.is_a?(Array)
     for i in 0...route.list.length
-      list.push(RPG::EventCommand.new(
-        (i == 0) ? 209 : 509, indent,
-        (i == 0) ? [character, route] : [route.list[i - 1]]
-      ))
+      list.push(
+        RPG::EventCommand.new((i == 0) ? 209 : 509, indent,
+                              (i == 0) ? [character, route] : [route.list[i - 1]])
+      )
     end
   end
 
@@ -307,7 +307,7 @@ module Compiler
     def getEventFromXY(mapID, x, y)
       return nil if x < 0 || y < 0
       mapPositions = @mapxy[mapID]
-      return mapPositions[y * @mapWidths[mapID] + x] if mapPositions
+      return mapPositions[(y * @mapWidths[mapID]) + x] if mapPositions
       map = getMap(mapID)
       return nil if !map
       @mapWidths[mapID]  = map.width
@@ -315,10 +315,10 @@ module Compiler
       mapPositions = []
       width = map.width
       for e in map.events.values
-        mapPositions[e.y * width + e.x] = e if e
+        mapPositions[(e.y * width) + e.x] = e if e
       end
       @mapxy[mapID] = mapPositions
-      return mapPositions[y * width + x]
+      return mapPositions[(y * width) + x]
     end
 
     def getEventFromID(mapID, id)
@@ -783,22 +783,27 @@ module Compiler
         if transferCommand.length == 1 && !list.any? { |cmd| cmd.code == 208 }   # Change Transparent Flag
           # Rewrite penultimate page
           list.clear
-          push_move_route_and_wait(list, 0, [   # Move Route for door opening
-             PBMoveRoute::PlaySE, RPG::AudioFile.new("Door enter"), PBMoveRoute::Wait, 2,
+          push_move_route_and_wait(   # Move Route for door opening
+            list, 0,
+            [PBMoveRoute::PlaySE, RPG::AudioFile.new("Door enter"), PBMoveRoute::Wait, 2,
              PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 2,
              PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2
-          ])
-          push_move_route_and_wait(list, -1, [   # Move Route for player entering door
-             PBMoveRoute::ThroughOn, PBMoveRoute::Up, PBMoveRoute::ThroughOff
-          ])
+             PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2]
+          )
+          push_move_route_and_wait(   # Move Route for player entering door
+            list, -1,
+            [PBMoveRoute::ThroughOn, PBMoveRoute::Up, PBMoveRoute::ThroughOff]
+          )
           push_event(list, 208, [0])   # Change Transparent Flag (invisible)
           push_script(list, "Followers.follow_into_door")
           push_event(list, 210, [], indent)   # Wait for Move's Completion
-          push_move_route_and_wait(list, 0, [PBMoveRoute::Wait, 2,   # Move Route for door closing
-                                             PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
-                                             PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 2,
-                                             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2])
+          push_move_route_and_wait(   # Move Route for door closing
+            list, 0,
+            [PBMoveRoute::Wait, 2,
+             PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
+             PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 2,
+             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2]
+          )
           push_event(list, 223, [Tone.new(-255, -255, -255), 6])   # Change Screen Color Tone
           push_wait(list, 8)   # Wait
           push_event(list, 208, [1])   # Change Transparent Flag (visible)
@@ -811,17 +816,21 @@ module Compiler
           push_branch(list, "get_self.onEvent?")   # Conditional Branch
           push_event(list, 208, [0], 1)   # Change Transparent Flag (invisible)
           push_script(list, "Followers.hide_followers", 1)
-          push_move_route_and_wait(list, 0, [   # Move Route for setting door to open
-             PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 6
-          ], 1)
+          push_move_route_and_wait(   # Move Route for setting door to open
+            list, 0,
+            [PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 6],
+            1
+          )
           push_event(list, 208, [1], 1)   # Change Transparent Flag (visible)
           push_move_route_and_wait(list, -1, [PBMoveRoute::Down], 1)   # Move Route for player exiting door
           push_script(list, "Followers.put_followers_on_player", 1)
-          push_move_route_and_wait(list, 0, [   # Move Route for door closing
-             PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2,
+          push_move_route_and_wait(   # Move Route for door closing
+            list, 0,
+            [PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2,
              PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2
-          ], 1)
+             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2],
+            1
+          )
           push_branch_end(list, 1)
           push_script(list, "setTempSwitchOn(\"A\")")
           push_end(list)

@@ -7,7 +7,7 @@ class SpriteAnimation
   end
 
   %w[
-     x y ox oy viewport flash src_rect opacity tone
+    x y ox oy viewport flash src_rect opacity tone
   ].each_with_index do |s, _i|
     eval <<-__END__
 
@@ -187,7 +187,7 @@ class SpriteAnimation
         sprite_y = self.viewport.rect.height - 160
       end
     else
-      sprite_x = self.x - self.ox + self.src_rect.width / 2
+      sprite_x = self.x - self.ox + (self.src_rect.width / 2)
       sprite_y = self.y - self.oy
       sprite_y += self.src_rect.height / 2 if position == 1
       sprite_y += self.src_rect.height if position == 2
@@ -370,7 +370,7 @@ module RPG
       @_damage_sprite.ox     = 80
       @_damage_sprite.oy     = 20
       @_damage_sprite.x      = self.x
-      @_damage_sprite.y      = self.y - self.oy / 2
+      @_damage_sprite.y      = self.y - (self.oy / 2)
       @_damage_sprite.z      = 3000
       @_damage_duration      = 40
     end
@@ -450,7 +450,7 @@ module RPG
       super
       if @_whiten_duration > 0
         @_whiten_duration -= 1
-        self.color.alpha = 128 - (16 - @_whiten_duration) * 10
+        self.color.alpha = 128 - ((16 - @_whiten_duration) * 10)
       end
       if @_appear_duration > 0
         @_appear_duration -= 1
@@ -458,11 +458,11 @@ module RPG
       end
       if @_escape_duration > 0
         @_escape_duration -= 1
-        self.opacity = 256 - (32 - @_escape_duration) * 10
+        self.opacity = 256 - ((32 - @_escape_duration) * 10)
       end
       if @_collapse_duration > 0
         @_collapse_duration -= 1
-        self.opacity = 256 - (48 - @_collapse_duration) * 6
+        self.opacity = 256 - ((48 - @_collapse_duration) * 6)
       end
       if @_damage_duration > 0
         @_damage_duration -= 1
@@ -476,7 +476,7 @@ module RPG
         when 28..33
           @_damage_sprite.y += 4
         end
-        @_damage_sprite.opacity = 256 - (12 - @_damage_duration) * 32
+        @_damage_sprite.opacity = 256 - ((12 - @_damage_duration) * 32)
         if @_damage_duration == 0
           dispose_damage
         end

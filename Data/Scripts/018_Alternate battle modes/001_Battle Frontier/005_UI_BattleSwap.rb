@@ -229,12 +229,10 @@ class BattleSwapScreen
             end
           end
         end
-      else
+      elsif @scene.pbConfirm(_INTL("Quit swapping?"))
         # Canceled
-        if @scene.pbConfirm(_INTL("Quit swapping?"))
-          @scene.pbEndScene
-          return false
-        end
+        @scene.pbEndScene
+        return false
       end
     end
   end

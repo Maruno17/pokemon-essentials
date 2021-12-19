@@ -75,7 +75,7 @@ class VoltorbFlip
     for i in 0...25
       x = i if i % 5 == 0
       r = rand(squareValues.length)
-      @squares[i] = [(i - x).abs * 64 + 128, (i / 5).abs * 64, squareValues[r], false]
+      @squares[i] = [((i - x).abs * 64) + 128, (i / 5).abs * 64, squareValues[r], false]
       squareValues.delete_at(r)
     end
     pbCreateSprites
@@ -258,14 +258,14 @@ class VoltorbFlip
     elsif Input.trigger?(Input::USE)
       if @cursor[0][3] == 64   # If in mark mode
         for i in 0...@squares.length
-          if @index[0] * 64 + 128 == @squares[i][0] && @index[1] * 64 == @squares[i][1] && @squares[i][3] == false
+          if (@index[0] * 64) + 128 == @squares[i][0] && @index[1] * 64 == @squares[i][1] && @squares[i][3] == false
             pbSEPlay("Voltorb Flip mark")
           end
         end
         for i in 0...@marks.length + 1
           if @marks[i] == nil
-            @marks[i] = [@directory + "tiles", @index[0] * 64 + 128, @index[1] * 64, 256, 0, 64, 64]
-          elsif @marks[i][1] == @index[0] * 64 + 128 && @marks[i][2] == @index[1] * 64
+            @marks[i] = [@directory + "tiles", (@index[0] * 64) + 128, @index[1] * 64, 256, 0, 64, 64]
+          elsif @marks[i][1] == (@index[0] * 64) + 128 && @marks[i][2] == @index[1] * 64
             @marks.delete_at(i)
             @marks.compact!
             @sprites["mark"].bitmap.clear
@@ -278,8 +278,8 @@ class VoltorbFlip
         # Display the tile for the selected spot
         icons = []
         for i in 0...@squares.length
-          if @index[0] * 64 + 128 == @squares[i][0] && @index[1] * 64 == @squares[i][1] && @squares[i][3] == false
-            pbAnimateTile(@index[0] * 64 + 128, @index[1] * 64, @squares[i][2])
+          if (@index[0] * 64) + 128 == @squares[i][0] && @index[1] * 64 == @squares[i][1] && @squares[i][3] == false
+            pbAnimateTile((@index[0] * 64) + 128, @index[1] * 64, @squares[i][2])
             @squares[i][3] = true
             # If Voltorb (0), display all tiles on the board
             if @squares[i][2] == 0
@@ -288,7 +288,7 @@ class VoltorbFlip
               # Part1
               animation = []
               for j in 0...3
-                animation[0] = icons[0] = [@directory + "tiles", @index[0] * 64 + 128, @index[1] * 64, 704 + (64 * j), 0, 64, 64]
+                animation[0] = icons[0] = [@directory + "tiles", (@index[0] * 64) + 128, @index[1] * 64, 704 + (64 * j), 0, 64, 64]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
                 pbWait(Graphics.frame_rate / 20)
                 @sprites["animation"].bitmap.clear
@@ -296,7 +296,7 @@ class VoltorbFlip
               # Part2
               animation = []
               for j in 0...6
-                animation[0] = [@directory + "explosion", @index[0] * 64 - 32 + 128, @index[1] * 64 - 32, j * 128, 0, 128, 128]
+                animation[0] = [@directory + "explosion", (@index[0] * 64) - 32 + 128, (@index[1] * 64) - 32, j * 128, 0, 128, 128]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
                 pbWait(Graphics.frame_rate / 10)
                 @sprites["animation"].bitmap.clear
@@ -336,7 +336,7 @@ class VoltorbFlip
               # Play tile animation
               animation = []
               for j in 0...4
-                animation[0] = [@directory + "flipAnimation", @index[0] * 64 - 14 + 128, @index[1] * 64 - 16, j * 92, 0, 92, 96]
+                animation[0] = [@directory + "flipAnimation", (@index[0] * 64) - 14 + 128, (@index[1] * 64) - 16, j * 92, 0, 92, 96]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
                 pbWait(Graphics.frame_rate / 20)
                 @sprites["animation"].bitmap.clear
@@ -441,9 +441,9 @@ class VoltorbFlip
     numText += num.to_s
     numImages = numText.split(//)[0...2]
     for j in 0...2
-      @numbers[j] = [@directory + "numbersSmall", 472 + j * 16, i * 64 + 8, numImages[j].to_i * 16, 0, 16, 16]
+      @numbers[j] = [@directory + "numbersSmall", 472 + (j * 16), (i * 64) + 8, numImages[j].to_i * 16, 0, 16, 16]
     end
-    @voltorbNumbers[i] = [@directory + "numbersSmall", 488, i * 64 + 34, voltorbs * 16, 0, 16, 16]
+    @voltorbNumbers[i] = [@directory + "numbersSmall", 488, (i * 64) + 34, voltorbs * 16, 0, 16, 16]
     # Display the numbers
     pbDrawImagePositions(@sprites["numbers"].bitmap, @numbers)
     pbDrawImagePositions(@sprites["numbers"].bitmap, @voltorbNumbers)
@@ -459,7 +459,7 @@ class VoltorbFlip
     numText += num.to_s
     numImages = numText.split(//)[0...2]
     for j in 0...2
-      @numbers[j] = [@directory + "numbersSmall", (i * 64) + 152 + j * 16, 328, numImages[j].to_i * 16, 0, 16, 16]
+      @numbers[j] = [@directory + "numbersSmall", (i * 64) + 152 + (j * 16), 328, numImages[j].to_i * 16, 0, 16, 16]
     end
     @voltorbNumbers[i] = [@directory + "numbersSmall", (i * 64) + 168, 354, voltorbs * 16, 0, 16, 16]
     # Display the numbers
@@ -476,7 +476,7 @@ class VoltorbFlip
     coinText += source.to_s
     coinImages = coinText.split(//)[0...5]
     for i in 0...5
-      @coins[i] = [@directory + "numbersScore", 6 + i * 24, y, coinImages[i].to_i * 24, 0, 24, 38]
+      @coins[i] = [@directory + "numbersScore", 6 + (i * 24), y, coinImages[i].to_i * 24, 0, 24, 38]
     end
   end
 

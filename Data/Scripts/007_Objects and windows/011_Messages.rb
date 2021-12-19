@@ -224,10 +224,9 @@ class FaceWindowVX < SpriteWindow_Base
     @faceIndex = faceinfo[1].to_i
     @facebitmaptmp = AnimatedBitmap.new(facefile)
     @facebitmap = BitmapWrapper.new(96, 96)
-    @facebitmap.blt(0, 0, @facebitmaptmp.bitmap, Rect.new(
-       (@faceIndex % 4) * 96,
-       (@faceIndex / 4) * 96, 96, 96
-    ))
+    @facebitmap.blt(0, 0, @facebitmaptmp.bitmap,
+                    Rect.new((@faceIndex % 4) * 96, (@faceIndex / 4) * 96, 96, 96)
+    )
     self.contents = @facebitmap
   end
 
@@ -235,10 +234,9 @@ class FaceWindowVX < SpriteWindow_Base
     super
     if @facebitmaptmp.totalFrames > 1
       @facebitmaptmp.update
-      @facebitmap.blt(0, 0, @facebitmaptmp.bitmap, Rect.new(
-         (@faceIndex % 4) * 96,
-         (@faceIndex / 4) * 96, 96, 96
-      ))
+      @facebitmap.blt(0, 0, @facebitmaptmp.bitmap,
+                      Rect.new((@faceIndex % 4) * 96, (@faceIndex / 4) * 96, 96, 96)
+      )
     end
   end
 
@@ -581,7 +579,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       if atTop
         msgwindow.y = -msgwindow.height * signWaitCount / signWaitTime
       else
-        msgwindow.y = Graphics.height - msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime
+        msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime)
       end
     end
     for i in 0...controls.length
@@ -627,7 +625,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
         msgwindow.y = Graphics.height - msgwindow.height
         msgback.y = msgwindow.y if msgback
         pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        msgwindow.y = Graphics.height - msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime
+        msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime)
       when "ts"     # Change text speed
         msgwindow.textspeed = (param == "") ? -999 : param.to_i
       when "."      # Wait 0.25 seconds
@@ -662,8 +660,8 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       if msgwindow.busy?
         pbPlayDecisionSE if msgwindow.pausing?
         msgwindow.resume
-      else
-        break if signWaitCount == 0
+      elsif signWaitCount == 0
+        break
       end
     end
     pbUpdateSceneMap
@@ -692,7 +690,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       if atTop
         msgwindow.y = -msgwindow.height * i / signWaitTime
       else
-        msgwindow.y = Graphics.height - msgwindow.height * (signWaitTime - i) / signWaitTime
+        msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - i) / signWaitTime)
       end
       Graphics.update
       Input.update

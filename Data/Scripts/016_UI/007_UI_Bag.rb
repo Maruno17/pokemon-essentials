@@ -47,9 +47,9 @@ class Window_PokemonBag < Window_DrawableCommand
        item > self.top_item + self.page_item_max
       return Rect.new(0, 0, 0, 0)
     else
-      cursor_width = (self.width - self.borderX - (@column_max - 1) * @column_spacing) / @column_max
+      cursor_width = (self.width - self.borderX - ((@column_max - 1) * @column_spacing)) / @column_max
       x = item % @column_max * (cursor_width + @column_spacing)
-      y = item / @column_max * @row_height - @virtualOy
+      y = (item / @column_max * @row_height) - @virtualOy
       return Rect.new(x, y, cursor_width, @row_height)
     end
   end
@@ -76,17 +76,17 @@ class Window_PokemonBag < Window_DrawableCommand
         shadowColor = Color.new(248, 144, 144)
       end
       textpos.push(
-         [@adapter.getDisplayName(item), rect.x, rect.y - 2, false, baseColor, shadowColor]
+        [@adapter.getDisplayName(item), rect.x, rect.y - 2, false, baseColor, shadowColor]
       )
       if GameData::Item.get(item).is_important?
         if @bag.registered?(item)
-          pbDrawImagePositions(self.contents, [
-             ["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 0, -1, 24]
-          ])
+          pbDrawImagePositions(
+            self.contents,
+            [["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 0, -1, 24]])
         elsif pbCanRegisterItem?(item)
-          pbDrawImagePositions(self.contents, [
-             ["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 24, -1, 24]
-          ])
+          pbDrawImagePositions(
+            self.contents,
+            [["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 24, -1, 24]])
         end
       else
         qty = (@filterlist) ? thispocket[@filterlist[@pocket][index]][1] : thispocket[index][1]
@@ -190,7 +190,7 @@ class PokemonBag_Scene
     @sprites["rightarrow"].y       = 76
     @sprites["rightarrow"].visible = (!@choosing || numfilledpockets > 1)
     @sprites["rightarrow"].play
-    @sprites["itemlist"] = Window_PokemonBag.new(@bag, @filterlist, lastpocket, 168, -8, 314, 40 + 32 + ITEMSVISIBLE * 32)
+    @sprites["itemlist"] = Window_PokemonBag.new(@bag, @filterlist, lastpocket, 168, -8, 314, 40 + 32 + (ITEMSVISIBLE * 32))
     @sprites["itemlist"].viewport    = @viewport
     @sprites["itemlist"].pocket      = lastpocket
     @sprites["itemlist"].index       = @bag.last_viewed_index(lastpocket)
@@ -270,13 +270,13 @@ class PokemonBag_Scene
       for i in 1...@bag.pockets.length
         if @filterlist[i].length == 0
           @sprites["pocketicon"].bitmap.blt(
-            6 + (i - 1) * 22, 6, @pocketbitmap.bitmap, Rect.new((i - 1) * 20, 28, 20, 20)
+            6 + ((i - 1) * 22), 6, @pocketbitmap.bitmap, Rect.new((i - 1) * 20, 28, 20, 20)
           )
         end
       end
     end
     @sprites["pocketicon"].bitmap.blt(
-      2 + (@sprites["itemlist"].pocket - 1) * 22, 2, @pocketbitmap.bitmap,
+      2 + ((@sprites["itemlist"].pocket - 1) * 22), 2, @pocketbitmap.bitmap,
       Rect.new((@sprites["itemlist"].pocket - 1) * 28, 0, 28, 28)
     )
     # Refresh the item window
@@ -290,9 +290,9 @@ class PokemonBag_Scene
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     # Draw the pocket name
-    pbDrawTextPositions(overlay, [
-       [PokemonBag.pocket_names[@bag.last_viewed_pocket - 1], 94, 176, 2, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]
-    ])
+    pbDrawTextPositions(
+      overlay,
+      [[PokemonBag.pocket_names[@bag.last_viewed_pocket - 1], 94, 176, 2, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]])
     # Draw slider arrows
     showslider = false
     if itemlist.top_row > 0
@@ -314,8 +314,8 @@ class PokemonBag_Scene
       overlay.blt(470, y, @sliderbitmap.bitmap, Rect.new(36, 0, 36, 4))
       i = 0
       while i * 16 < boxheight - 4 - 18
-        height = [boxheight - 4 - 18 - i * 16, 16].min
-        overlay.blt(470, y + 4 + i * 16, @sliderbitmap.bitmap, Rect.new(36, 4, 36, height))
+        height = [boxheight - 4 - 18 - (i * 16), 16].min
+        overlay.blt(470, y + 4 + (i * 16), @sliderbitmap.bitmap, Rect.new(36, 4, 36, height))
         i += 1
       end
       overlay.blt(470, y + boxheight - 18, @sliderbitmap.bitmap, Rect.new(36, 20, 36, 18))
@@ -377,8 +377,7 @@ class PokemonBag_Scene
             pbPlayCancelSE
             pbRefresh
           end
-        else
-          # Change pockets
+        else   # Change pockets
           if Input.trigger?(Input::LEFT)
             newpocket = itemwindow.pocket
             loop do
@@ -386,8 +385,8 @@ class PokemonBag_Scene
               break if !@choosing || newpocket == itemwindow.pocket
               if @filterlist
                 break if @filterlist[newpocket].length > 0
-              else
-                break if @bag.pockets[newpocket].length > 0
+              elsif @bag.pockets[newpocket].length > 0
+                break
               end
             end
             if itemwindow.pocket != newpocket
@@ -404,8 +403,8 @@ class PokemonBag_Scene
               break if !@choosing || newpocket == itemwindow.pocket
               if @filterlist
                 break if @filterlist[newpocket].length > 0
-              else
-                break if @bag.pockets[newpocket].length > 0
+              elsif @bag.pockets[newpocket].length > 0
+                break
               end
             end
             if itemwindow.pocket != newpocket
@@ -539,11 +538,10 @@ class PokemonBagScreen
       elsif cmdDebug >= 0 && command == cmdDebug   # Debug
         command = 0
         loop do
-          command = @scene.pbShowCommands(_INTL("Do what with {1}?", itemname), [
-            _INTL("Change quantity"),
-            _INTL("Make Mystery Gift"),
-            _INTL("Cancel")
-            ], command)
+          command = @scene.pbShowCommands(_INTL("Do what with {1}?", itemname),
+                                          [_INTL("Change quantity"),
+                                           _INTL("Make Mystery Gift"),
+                                           _INTL("Cancel")], command)
           case command
           ### Cancel ###
           when -1, 2

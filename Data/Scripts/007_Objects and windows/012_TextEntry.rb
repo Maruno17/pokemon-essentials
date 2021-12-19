@@ -453,10 +453,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     totalColumns = getColumnsInLine(@cursorLine)
     @cursorColumn = totalColumns if @cursorColumn > totalColumns
     @cursorColumn = 0 if @cursorColumn < 0 # totalColumns can be 0
-    updateCursorPos(
-       oldCursorLine != @cursorLine ||
-       oldCursorColumn != @cursorColumn
-    )
+    updateCursorPos(oldCursorLine != @cursorLine || oldCursorColumn != @cursorColumn)
 #   echoln ["aftermoving",@cursorLine,@cursorColumn]
   end
 

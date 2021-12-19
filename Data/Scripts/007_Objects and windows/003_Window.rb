@@ -78,12 +78,12 @@ class Window
   def initialize(viewport = nil)
     @sprites = {}
     @spritekeys = [
-       "back",
-       "corner0", "side0", "scroll0",
-       "corner1", "side1", "scroll1",
-       "corner2", "side2", "scroll2",
-       "corner3", "side3", "scroll3",
-       "cursor", "contents", "pause"
+      "back",
+      "corner0", "side0", "scroll0",
+      "corner1", "side1", "scroll1",
+      "corner2", "side2", "scroll2",
+      "corner3", "side3", "scroll3",
+      "cursor", "contents", "pause"
     ]
     @sidebitmaps = [nil, nil, nil, nil]
     @cursorbitmap = nil
@@ -444,10 +444,10 @@ class Window
     cursorX = trimX
     cursorY = trimY + 64
     sideRects = [
-       Rect.new(trimX + 16, trimY + 0, 32, 16),
-       Rect.new(trimX, trimY + 16, 16, 32),
-       Rect.new(trimX + 48, trimY + 16, 16, 32),
-       Rect.new(trimX + 16, trimY + 48, 32, 16)
+      Rect.new(trimX + 16, trimY + 0, 32, 16),
+      Rect.new(trimX, trimY + 16, 16, 32),
+      Rect.new(trimX + 48, trimY + 16, 16, 32),
+      Rect.new(trimX + 16, trimY + 48, 32, 16)
     ]
     if @width > 32 && @height > 32
       @sprites["contents"].src_rect.set(@ox, @oy, @width - 32, @height - 32)
@@ -455,15 +455,15 @@ class Window
       @sprites["contents"].src_rect.set(0, 0, 0, 0)
     end
     pauseRects = [
-       trimX + 32, trimY + 64,
-       trimX + 48, trimY + 64,
-       trimX + 32, trimY + 80,
-       trimX + 48, trimY + 80
+      trimX + 32, trimY + 64,
+      trimX + 48, trimY + 64,
+      trimX + 32, trimY + 80,
+      trimX + 48, trimY + 80
     ]
     pauseWidth = 16
     pauseHeight = 16
     @sprites["pause"].src_rect.set(pauseRects[@pauseframe * 2],
-                                   pauseRects[@pauseframe * 2 + 1],
+                                   pauseRects[(@pauseframe * 2) + 1],
                                    pauseWidth,
                                    pauseHeight)
     @sprites["pause"].x = @x + (@width / 2) - (pauseWidth / 2)
@@ -486,13 +486,13 @@ class Window
     @sprites["side2"].y = @y + 16
     @sprites["side3"].x = @x + 16
     @sprites["side3"].y = @y + @height - 16
-    @sprites["scroll0"].x = @x + @width / 2 - 8
+    @sprites["scroll0"].x = @x + (@width / 2) - 8
     @sprites["scroll0"].y = @y + 8
     @sprites["scroll1"].x = @x + 8
-    @sprites["scroll1"].y = @y + @height / 2 - 8
+    @sprites["scroll1"].y = @y + (@height / 2) - 8
     @sprites["scroll2"].x = @x + @width - 16
-    @sprites["scroll2"].y = @y + @height / 2 - 8
-    @sprites["scroll3"].x = @x + @width / 2 - 8
+    @sprites["scroll2"].y = @y + (@height / 2) - 8
+    @sprites["scroll3"].x = @x + (@width / 2) - 8
     @sprites["scroll3"].y = @y + @height - 16
     @sprites["back"].x = @x + 2
     @sprites["back"].y = @y + 2
@@ -503,18 +503,18 @@ class Window
       height = @cursor_rect.height
       if width > 0 && height > 0
         cursorrects = [
-           # sides
-           Rect.new(cursorX + 2, cursorY + 0, 28, 2),
-           Rect.new(cursorX + 0, cursorY + 2, 2, 28),
-           Rect.new(cursorX + 30, cursorY + 2, 2, 28),
-           Rect.new(cursorX + 2, cursorY + 30, 28, 2),
-           # corners
-           Rect.new(cursorX + 0, cursorY + 0, 2, 2),
-           Rect.new(cursorX + 30, cursorY + 0, 2, 2),
-           Rect.new(cursorX + 0, cursorY + 30, 2, 2),
-           Rect.new(cursorX + 30, cursorY + 30, 2, 2),
-           # back
-           Rect.new(cursorX + 2, cursorY + 2, 28, 28)
+          # sides
+          Rect.new(cursorX + 2, cursorY + 0, 28, 2),
+          Rect.new(cursorX + 0, cursorY + 2, 2, 28),
+          Rect.new(cursorX + 30, cursorY + 2, 2, 28),
+          Rect.new(cursorX + 2, cursorY + 30, 28, 2),
+          # corners
+          Rect.new(cursorX + 0, cursorY + 0, 2, 2),
+          Rect.new(cursorX + 30, cursorY + 0, 2, 2),
+          Rect.new(cursorX + 0, cursorY + 30, 2, 2),
+          Rect.new(cursorX + 30, cursorY + 30, 2, 2),
+          # back
+          Rect.new(cursorX + 2, cursorY + 2, 28, 28)
         ]
         margin = 2
         fullmargin = 4
@@ -575,7 +575,7 @@ class Window
       opn = @openness / 255.0
       for k in @spritekeys
         sprite = @sprites[k]
-        ratio = (@height <= 0) ? 0 : (sprite.y - @y) * 1.0 / @height
+        ratio = (@height <= 0) ? 0 : (sprite.y - @y) / @height.to_f
         sprite.zoom_y = opn
         sprite.oy = 0
         sprite.y = (@y + (@height / 2.0) + (@height * ratio * opn) - (@height / 2 * opn)).floor

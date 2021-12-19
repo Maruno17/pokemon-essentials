@@ -28,7 +28,7 @@ class Battle::Scene
     # shiny animation(s)
     # Set up data box animation
     for i in 0...@battle.sideSizes[1]
-      idxBattler = 2 * i + 1
+      idxBattler = (2 * i) + 1
       next if !@battle.battlers[idxBattler]
       dataBoxAnim = Animation::DataBoxAppear.new(@sprites, @viewport, idxBattler)
       @animations.push(dataBoxAnim)
@@ -43,7 +43,7 @@ class Battle::Scene
     # Show shiny animation for wild Pokémon
     if @battle.showAnims
       for i in 0...@battle.sideSizes[1]
-        idxBattler = 2 * i + 1
+        idxBattler = (2 * i) + 1
         next if !@battle.battlers[idxBattler] || !@battle.battlers[idxBattler].shiny?
         if Settings::SUPER_SHINY && @battle.battlers[idxBattler].super_shiny?
           pbCommonAnimation("SuperShiny", @battle.battlers[idxBattler])
@@ -58,13 +58,14 @@ class Battle::Scene
   # Animates a party lineup appearing for the given side
   #=============================================================================
   def pbShowPartyLineup(side, fullAnim = false)
-    @animations.push(Animation::LineupAppear.new(
-      @sprites, @viewport, side, @battle.pbParty(side), @battle.pbPartyStarts(side), fullAnim
-    ))
-    if !fullAnim
-      while inPartyAnimation?
-        pbUpdate
-      end
+    @animations.push(
+      Animation::LineupAppear.new(@sprites, @viewport, side,
+                                  @battle.pbParty(side), @battle.pbPartyStarts(side),
+                                  fullAnim)
+    )
+    return if fullAnim
+    while inPartyAnimation?
+      pbUpdate
     end
   end
 
@@ -298,13 +299,13 @@ class Battle::Scene
   #=============================================================================
   def pbLevelUp(pkmn, _battler, oldTotalHP, oldAttack, oldDefense, oldSpAtk, oldSpDef, oldSpeed)
     pbTopRightWindow(
-       _INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
-             pkmn.totalhp - oldTotalHP, pkmn.attack - oldAttack, pkmn.defense - oldDefense,
-             pkmn.spatk - oldSpAtk, pkmn.spdef - oldSpDef, pkmn.speed - oldSpeed)
+      _INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
+            pkmn.totalhp - oldTotalHP, pkmn.attack - oldAttack, pkmn.defense - oldDefense,
+            pkmn.spatk - oldSpAtk, pkmn.spdef - oldSpDef, pkmn.speed - oldSpeed)
     )
     pbTopRightWindow(
-       _INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-             pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed)
+      _INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
+            pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed)
     )
   end
 
@@ -541,7 +542,7 @@ class Battle::Scene
     end
     animPlayer.setLineTransform(
       FOCUSUSER_X, FOCUSUSER_Y, FOCUSTARGET_X, FOCUSTARGET_Y,
-      oldUserX, oldUserY - userHeight / 2, oldTargetX, oldTargetY - targetHeight / 2
+      oldUserX, oldUserY - (userHeight / 2), oldTargetX, oldTargetY - (targetHeight / 2)
     )
     # Play the animation
     animPlayer.start

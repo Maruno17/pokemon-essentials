@@ -45,8 +45,8 @@ end
 def repositionY(x1, y1, x2, y2, tx, ty)
   dx = x2 - x1
   dy = y2 - y1
-  x = x1 + tx * dx.to_f
-  y = y1 + ty * dy.to_f
+  x = x1 + (tx * dx.to_f)
+  y = y1 + (ty * dy.to_f)
   return [x, y]
 end
 
@@ -134,10 +134,10 @@ def pbConvertRPGAnimation(animation)
       end
       if animation.position == 3   # Screen
         point = transformPoint(
-           -160, 80, 160, -80,
-           Battle::Scene::FOCUSUSER_X, Battle::Scene::FOCUSUSER_Y,
-           Battle::Scene::FOCUSTARGET_X, Battle::Scene::FOCUSTARGET_Y,
-           data[j, 1], data[j, 2]
+          -160, 80, 160, -80,
+          Battle::Scene::FOCUSUSER_X, Battle::Scene::FOCUSUSER_Y,
+          Battle::Scene::FOCUSTARGET_X, Battle::Scene::FOCUSTARGET_Y,
+          data[j, 1], data[j, 2]
         )
         cel = pbCreateCel(point[0], point[1], data[j, 0])
       else
@@ -219,11 +219,9 @@ class RPG::Animation
       timing = RPG::Animation::Timing.new
       othertiming = otherAnim.timings[i]
       timing.frame          = frame + othertiming.frame
-      timing.se             = RPG::AudioFile.new(
-         othertiming.se.name.clone,
-         othertiming.se.volume,
-         othertiming.se.pitch
-      )
+      timing.se             = RPG::AudioFile.new(othertiming.se.name.clone,
+                                                 othertiming.se.volume,
+                                                 othertiming.se.pitch)
       timing.flash_scope    = othertiming.flash_scope
       timing.flash_color    = othertiming.flash_color.clone
       timing.flash_duration = othertiming.flash_duration
@@ -571,20 +569,20 @@ class PBAnimation < Array
         next if frame < i.frame || frame > i.frame + i.duration
         fraction = (frame - i.frame).to_f / i.duration
         if bgGraphic.bitmap != nil
-          bgGraphic.ox      = oldbg[0] - (i.bgX - oldbg[0]) * fraction if i.bgX != nil
-          bgGraphic.oy      = oldbg[1] - (i.bgY - oldbg[1]) * fraction if i.bgY != nil
-          bgGraphic.opacity = oldbg[2] + (i.opacity - oldbg[2]) * fraction if i.opacity != nil
-          cr = (i.colorRed != nil) ? oldbg[3].red + (i.colorRed - oldbg[3].red) * fraction : oldbg[3].red
-          cg = (i.colorGreen != nil) ? oldbg[3].green + (i.colorGreen - oldbg[3].green) * fraction : oldbg[3].green
-          cb = (i.colorBlue != nil) ? oldbg[3].blue + (i.colorBlue - oldbg[3].blue) * fraction : oldbg[3].blue
-          ca = (i.colorAlpha != nil) ? oldbg[3].alpha + (i.colorAlpha - oldbg[3].alpha) * fraction : oldbg[3].alpha
+          bgGraphic.ox      = oldbg[0] - ((i.bgX - oldbg[0]) * fraction) if i.bgX != nil
+          bgGraphic.oy      = oldbg[1] - ((i.bgY - oldbg[1]) * fraction) if i.bgY != nil
+          bgGraphic.opacity = oldbg[2] + ((i.opacity - oldbg[2]) * fraction) if i.opacity != nil
+          cr = (i.colorRed != nil) ? oldbg[3].red + ((i.colorRed - oldbg[3].red) * fraction) : oldbg[3].red
+          cg = (i.colorGreen != nil) ? oldbg[3].green + ((i.colorGreen - oldbg[3].green) * fraction) : oldbg[3].green
+          cb = (i.colorBlue != nil) ? oldbg[3].blue + ((i.colorBlue - oldbg[3].blue) * fraction) : oldbg[3].blue
+          ca = (i.colorAlpha != nil) ? oldbg[3].alpha + ((i.colorAlpha - oldbg[3].alpha) * fraction) : oldbg[3].alpha
           bgGraphic.color   = Color.new(cr, cg, cb, ca)
         else
-          bgColor.opacity   = oldbg[2] + (i.opacity - oldbg[2]) * fraction if i.opacity != nil
-          cr = (i.colorRed != nil) ? oldbg[3].red + (i.colorRed - oldbg[3].red) * fraction : oldbg[3].red
-          cg = (i.colorGreen != nil) ? oldbg[3].green + (i.colorGreen - oldbg[3].green) * fraction : oldbg[3].green
-          cb = (i.colorBlue != nil) ? oldbg[3].blue + (i.colorBlue - oldbg[3].blue) * fraction : oldbg[3].blue
-          ca = (i.colorAlpha != nil) ? oldbg[3].alpha + (i.colorAlpha - oldbg[3].alpha) * fraction : oldbg[3].alpha
+          bgColor.opacity   = oldbg[2] + ((i.opacity - oldbg[2]) * fraction) if i.opacity != nil
+          cr = (i.colorRed != nil) ? oldbg[3].red + ((i.colorRed - oldbg[3].red) * fraction) : oldbg[3].red
+          cg = (i.colorGreen != nil) ? oldbg[3].green + ((i.colorGreen - oldbg[3].green) * fraction) : oldbg[3].green
+          cb = (i.colorBlue != nil) ? oldbg[3].blue + ((i.colorBlue - oldbg[3].blue) * fraction) : oldbg[3].blue
+          ca = (i.colorAlpha != nil) ? oldbg[3].alpha + ((i.colorAlpha - oldbg[3].alpha) * fraction) : oldbg[3].alpha
           bgColor.color     = Color.new(cr, cg, cb, ca)
         end
       when 4
@@ -592,20 +590,20 @@ class PBAnimation < Array
         next if frame < i.frame || frame > i.frame + i.duration
         fraction = (frame - i.frame).to_f / i.duration
         if foGraphic.bitmap != nil
-          foGraphic.ox      = oldfo[0] - (i.bgX - oldfo[0]) * fraction if i.bgX != nil
-          foGraphic.oy      = oldfo[1] - (i.bgY - oldfo[1]) * fraction if i.bgY != nil
-          foGraphic.opacity = oldfo[2] + (i.opacity - oldfo[2]) * fraction if i.opacity != nil
-          cr = (i.colorRed != nil) ? oldfo[3].red + (i.colorRed - oldfo[3].red) * fraction : oldfo[3].red
-          cg = (i.colorGreen != nil) ? oldfo[3].green + (i.colorGreen - oldfo[3].green) * fraction : oldfo[3].green
-          cb = (i.colorBlue != nil) ? oldfo[3].blue + (i.colorBlue - oldfo[3].blue) * fraction : oldfo[3].blue
-          ca = (i.colorAlpha != nil) ? oldfo[3].alpha + (i.colorAlpha - oldfo[3].alpha) * fraction : oldfo[3].alpha
+          foGraphic.ox      = oldfo[0] - ((i.bgX - oldfo[0]) * fraction) if i.bgX != nil
+          foGraphic.oy      = oldfo[1] - ((i.bgY - oldfo[1]) * fraction) if i.bgY != nil
+          foGraphic.opacity = oldfo[2] + ((i.opacity - oldfo[2]) * fraction) if i.opacity != nil
+          cr = (i.colorRed != nil) ? oldfo[3].red + ((i.colorRed - oldfo[3].red) * fraction) : oldfo[3].red
+          cg = (i.colorGreen != nil) ? oldfo[3].green + ((i.colorGreen - oldfo[3].green) * fraction) : oldfo[3].green
+          cb = (i.colorBlue != nil) ? oldfo[3].blue + ((i.colorBlue - oldfo[3].blue) * fraction) : oldfo[3].blue
+          ca = (i.colorAlpha != nil) ? oldfo[3].alpha + ((i.colorAlpha - oldfo[3].alpha) * fraction) : oldfo[3].alpha
           foGraphic.color   = Color.new(cr, cg, cb, ca)
         else
-          foColor.opacity   = oldfo[2] + (i.opacity - oldfo[2]) * fraction if i.opacity != nil
-          cr = (i.colorRed != nil) ? oldfo[3].red + (i.colorRed - oldfo[3].red) * fraction : oldfo[3].red
-          cg = (i.colorGreen != nil) ? oldfo[3].green + (i.colorGreen - oldfo[3].green) * fraction : oldfo[3].green
-          cb = (i.colorBlue != nil) ? oldfo[3].blue + (i.colorBlue - oldfo[3].blue) * fraction : oldfo[3].blue
-          ca = (i.colorAlpha != nil) ? oldfo[3].alpha + (i.colorAlpha - oldfo[3].alpha) * fraction : oldfo[3].alpha
+          foColor.opacity   = oldfo[2] + ((i.opacity - oldfo[2]) * fraction) if i.opacity != nil
+          cr = (i.colorRed != nil) ? oldfo[3].red + ((i.colorRed - oldfo[3].red) * fraction) : oldfo[3].red
+          cg = (i.colorGreen != nil) ? oldfo[3].green + ((i.colorGreen - oldfo[3].green) * fraction) : oldfo[3].green
+          cb = (i.colorBlue != nil) ? oldfo[3].blue + ((i.colorBlue - oldfo[3].blue) * fraction) : oldfo[3].blue
+          ca = (i.colorAlpha != nil) ? oldfo[3].alpha + ((i.colorAlpha - oldfo[3].alpha) * fraction) : oldfo[3].alpha
           foColor.color = Color.new(cr, cg, cb, ca)
         end
       end
@@ -648,16 +646,16 @@ def pbSpriteSetAnimFrame(sprite, frame, user = nil, target = nil, inEditor = fal
   sprite.zoom_x = frame[AnimFrame::ZOOMX] / 100.0
   sprite.zoom_y = frame[AnimFrame::ZOOMY] / 100.0
   sprite.color.set(
-     frame[AnimFrame::COLORRED],
-     frame[AnimFrame::COLORGREEN],
-     frame[AnimFrame::COLORBLUE],
-     frame[AnimFrame::COLORALPHA]
+    frame[AnimFrame::COLORRED],
+    frame[AnimFrame::COLORGREEN],
+    frame[AnimFrame::COLORBLUE],
+    frame[AnimFrame::COLORALPHA]
   )
   sprite.tone.set(
-     frame[AnimFrame::TONERED],
-     frame[AnimFrame::TONEGREEN],
-     frame[AnimFrame::TONEBLUE],
-     frame[AnimFrame::TONEGRAY]
+    frame[AnimFrame::TONERED],
+    frame[AnimFrame::TONEGREEN],
+    frame[AnimFrame::TONEBLUE],
+    frame[AnimFrame::TONEGRAY]
   )
   sprite.ox = sprite.src_rect.width / 2
   sprite.oy = sprite.src_rect.height / 2

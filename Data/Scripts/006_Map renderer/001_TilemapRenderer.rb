@@ -372,7 +372,7 @@ class TilemapRenderer
       if tile_id < true_tileset_start_id
         filename = ""
         if tile_id < TILESET_START_ID   # Real autotiles
-          filename = map.autotile_names[tile_id / TILES_PER_AUTOTILE - 1]
+          filename = map.autotile_names[(tile_id / TILES_PER_AUTOTILE) - 1]
         elsif tile_id < single_autotile_start_id   # Large extra autotiles
           filename = extra_autotile_arrays[0][(tile_id - TILESET_START_ID) / TILES_PER_AUTOTILE]
         else   # Single extra autotiles
@@ -406,8 +406,8 @@ class TilemapRenderer
 
   # x and y are the positions of tile within @tiles, not a map x/y
   def refresh_tile_coordinates(tile, x, y)
-    tile.x = x * DISPLAY_TILE_WIDTH - @pixel_offset_x
-    tile.y = y * DISPLAY_TILE_HEIGHT - @pixel_offset_y
+    tile.x = (x * DISPLAY_TILE_WIDTH) - @pixel_offset_x
+    tile.y = (y * DISPLAY_TILE_HEIGHT) - @pixel_offset_y
   end
 
   def refresh_tile_z(tile, map, y, layer, tile_id)
@@ -417,7 +417,7 @@ class TilemapRenderer
       tile.z = 0
     else
       priority = tile.priority
-      tile.z = (priority == 0) ? 0 : y * DISPLAY_TILE_HEIGHT + priority * 32 + 32
+      tile.z = (priority == 0) ? 0 : (y * DISPLAY_TILE_HEIGHT) + (priority * 32) + 32
     end
   end
 

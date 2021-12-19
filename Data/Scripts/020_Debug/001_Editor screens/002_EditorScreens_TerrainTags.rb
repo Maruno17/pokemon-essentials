@@ -53,7 +53,7 @@ class PokemonTilesetScene
     @x = 0
     @y = 0
     @top_y = 0
-    @height = (@tileset.terrain_tags.xsize - TILESET_START_ID) / TILES_PER_ROW + 1
+    @height = ((@tileset.terrain_tags.xsize - TILESET_START_ID) / TILES_PER_ROW) + 1
     draw_tiles
     draw_overlay
   end
@@ -71,7 +71,7 @@ class PokemonTilesetScene
     @sprites["tileset"].bitmap.clear
     for yy in 0...@visible_height
       autotile_row = (@top_y == 0 && yy == 0)   # Autotiles
-      id_y_offset = (autotile_row) ? 0 : TILESET_START_ID + (@top_y + yy - 1) * TILES_PER_ROW
+      id_y_offset = (autotile_row) ? 0 : TILESET_START_ID + ((@top_y + yy - 1) * TILES_PER_ROW)
       for xx in 0...TILES_PER_ROW
         id_x_offset = (autotile_row) ? xx * TILES_PER_AUTOTILE : xx
         @tilehelper.bltTile(@sprites["tileset"].bitmap, xx * TILE_SIZE, yy * TILE_SIZE,
@@ -88,7 +88,7 @@ class PokemonTilesetScene
       for xx in 0...TILES_PER_ROW
         tile_id = tile_ID_from_coordinates(xx, @top_y + yy)
         terr = @tileset.terrain_tags[tile_id]
-        textpos.push(["#{terr}", xx * TILE_SIZE + TILE_SIZE / 2, yy * TILE_SIZE - 6, 2, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        textpos.push(["#{terr}", (xx * TILE_SIZE) + (TILE_SIZE / 2), (yy * TILE_SIZE) - 6, 2, TEXT_COLOR, TEXT_SHADOW_COLOR])
       end
     end
     pbDrawTextPositions(@sprites["overlay"].bitmap, textpos)
@@ -105,16 +105,16 @@ class PokemonTilesetScene
 
   def draw_tile_details
     overlay = @sprites["overlay"].bitmap
-    tile_x = Graphics.width * 3 / 4 - TILE_SIZE
-    tile_y = Graphics.height / 2 - TILE_SIZE
+    tile_x = (Graphics.width * 3 / 4) - TILE_SIZE
+    tile_y = (Graphics.height / 2) - TILE_SIZE
     tile_id = tile_ID_from_coordinates(@x, @y) || 0
     # Draw tile (at 200% size)
     @tilehelper.bltSmallTile(overlay, tile_x, tile_y, TILE_SIZE * 2, TILE_SIZE * 2, tile_id)
     # Draw box around tile image
-    overlay.fill_rect(tile_x - 1,             tile_y - 1,             TILE_SIZE * 2 + 2, 1, Color.new(255, 255, 255))
-    overlay.fill_rect(tile_x - 1,             tile_y - 1,             1, TILE_SIZE * 2 + 2, Color.new(255, 255, 255))
-    overlay.fill_rect(tile_x - 1,             tile_y + TILE_SIZE * 2, TILE_SIZE * 2 + 2, 1, Color.new(255, 255, 255))
-    overlay.fill_rect(tile_x + TILE_SIZE * 2, tile_y - 1,             1, TILE_SIZE * 2 + 2, Color.new(255, 255, 255))
+    overlay.fill_rect(tile_x - 1,               tile_y - 1,               (TILE_SIZE * 2) + 2, 1, Color.new(255, 255, 255))
+    overlay.fill_rect(tile_x - 1,               tile_y - 1,               1, (TILE_SIZE * 2) + 2, Color.new(255, 255, 255))
+    overlay.fill_rect(tile_x - 1,               tile_y + (TILE_SIZE * 2), (TILE_SIZE * 2) + 2, 1, Color.new(255, 255, 255))
+    overlay.fill_rect(tile_x + (TILE_SIZE * 2), tile_y - 1,               1, (TILE_SIZE * 2) + 2, Color.new(255, 255, 255))
     # Write terrain tag info about selected tile
     terrain_tag = @tileset.terrain_tags[tile_id] || 0
     if GameData::TerrainTag.exists?(terrain_tag)
@@ -123,8 +123,8 @@ class PokemonTilesetScene
       terrain_tag_name = terrain_tag.to_s
     end
     textpos = [
-      [_INTL("Terrain Tag:"), tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 10, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)],
-      [terrain_tag_name, tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 42, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)]
+      [_INTL("Terrain Tag:"), tile_x + TILE_SIZE, tile_y + (TILE_SIZE * 2) + 10, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)],
+      [terrain_tag_name, tile_x + TILE_SIZE, tile_y + (TILE_SIZE * 2) + 42, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -132,7 +132,7 @@ class PokemonTilesetScene
 
   def tile_ID_from_coordinates(x, y)
     return x * TILES_PER_AUTOTILE if y == 0   # Autotile
-    return TILESET_START_ID + (y - 1) * TILES_PER_ROW + x
+    return TILESET_START_ID + ((y - 1) * TILES_PER_ROW) + x
   end
 
   def set_terrain_tag_for_tile_ID(i, value)
@@ -183,10 +183,10 @@ class PokemonTilesetScene
         update_cursor_position(0, @visible_height)
       elsif Input.trigger?(Input::ACTION)
         commands = [
-           _INTL("Go to bottom"),
-           _INTL("Go to top"),
-           _INTL("Change tileset"),
-           _INTL("Cancel")
+          _INTL("Go to bottom"),
+          _INTL("Go to top"),
+          _INTL("Change tileset"),
+          _INTL("Cancel")
         ]
         case pbShowCommands(nil, commands, -1)
         when 0

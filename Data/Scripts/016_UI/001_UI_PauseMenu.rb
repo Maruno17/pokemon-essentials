@@ -143,8 +143,8 @@ class PokemonPauseMenu
         @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount))
       end
       commands[cmdQuit = commands.length]     = _INTL("Quit Contest")
-    else
-      commands[cmdSave = commands.length]     = _INTL("Save") if $game_system && !$game_system.save_disabled
+    elsif $game_system && !$game_system.save_disabled
+      commands[cmdSave = commands.length]     = _INTL("Save")
     end
     commands[cmdOption = commands.length]     = _INTL("Options")
     commands[cmdDebug = commands.length]      = _INTL("Debug") if $DEBUG
@@ -160,23 +160,21 @@ class PokemonPauseMenu
             screen.pbStartScreen
             @scene.pbRefresh
           }
+        elsif $player.pokedex.accessible_dexes.length == 1
+          $PokemonGlobal.pokedexDex = $player.pokedex.accessible_dexes[0]
+          pbFadeOutIn {
+            scene = PokemonPokedex_Scene.new
+            screen = PokemonPokedexScreen.new(scene)
+            screen.pbStartScreen
+            @scene.pbRefresh
+          }
         else
-          if $player.pokedex.accessible_dexes.length == 1
-            $PokemonGlobal.pokedexDex = $player.pokedex.accessible_dexes[0]
-            pbFadeOutIn {
-              scene = PokemonPokedex_Scene.new
-              screen = PokemonPokedexScreen.new(scene)
-              screen.pbStartScreen
-              @scene.pbRefresh
-            }
-          else
-            pbFadeOutIn {
-              scene = PokemonPokedexMenu_Scene.new
-              screen = PokemonPokedexMenuScreen.new(scene)
-              screen.pbStartScreen
-              @scene.pbRefresh
-            }
-          end
+          pbFadeOutIn {
+            scene = PokemonPokedexMenu_Scene.new
+            screen = PokemonPokedexMenuScreen.new(scene)
+            screen.pbStartScreen
+            @scene.pbRefresh
+          }
         end
       elsif cmdPokemon >= 0 && command == cmdPokemon
         pbPlayDecisionSE
@@ -243,14 +241,12 @@ class PokemonPauseMenu
           else
             pbShowMenu
           end
+        elsif pbConfirmMessage(_INTL("Would you like to end the Contest now?"))
+          @scene.pbEndScene
+          pbBugContestState.pbStartJudging
+          return
         else
-          if pbConfirmMessage(_INTL("Would you like to end the Contest now?"))
-            @scene.pbEndScene
-            pbBugContestState.pbStartJudging
-            return
-          else
-            pbShowMenu
-          end
+          pbShowMenu
         end
       elsif cmdSave >= 0 && command == cmdSave
         @scene.pbHideMenu

@@ -155,7 +155,7 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
     Input.update
     pbUpdateSceneMap
     timer += Graphics.delta_s
-    viewport.color.alpha = 255 * (1 - timer / 0.4)
+    viewport.color.alpha = 255 * (1 - (timer / 0.4))
     break if viewport.color.alpha <= 0
   end
   viewport.dispose
@@ -267,9 +267,9 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
       flash.opacity -= 52 * 20 / Graphics.frame_rate if flash.opacity > 0
       bar1.ox -= 32 * 20 / Graphics.frame_rate
       bar2.ox += 32 * 20 / Graphics.frame_rate
-      if i >= animTime / 2 && i < slideInTime + animTime / 2
-        player.x = xoffset * (i + 1 - slideInTime - animTime / 2) / slideInTime
-        trainer.x = xoffset * (slideInTime - i - 1 + animTime / 2) / slideInTime
+      if i >= animTime / 2 && i < slideInTime + (animTime / 2)
+        player.x = xoffset * (i + 1 - slideInTime - (animTime / 2)) / slideInTime
+        trainer.x = xoffset * (slideInTime - i - 1 + (animTime / 2)) / slideInTime
       end
       pbWait(1)
     end
@@ -283,10 +283,10 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     trainer.tone = Tone.new(0, 0, 0)
     trainername = foe[0].name
     textpos = [
-       [$player.name, Graphics.width / 4, (Graphics.height / 1.5) + 4, 2,
-        Color.new(248, 248, 248), Color.new(72, 72, 72)],
-       [trainername, (Graphics.width / 4) + (Graphics.width / 2), (Graphics.height / 1.5) + 4, 2,
-        Color.new(248, 248, 248), Color.new(72, 72, 72)]
+      [$player.name, Graphics.width / 4, (Graphics.height / 1.5) + 4, 2,
+       Color.new(248, 248, 248), Color.new(72, 72, 72)],
+      [trainername, (Graphics.width / 4) + (Graphics.width / 2), (Graphics.height / 1.5) + 4, 2,
+       Color.new(248, 248, 248), Color.new(72, 72, 72)]
     ]
     pbDrawTextPositions(overlay.bitmap, textpos)
     # Fade out flash, shudder Vs logo and expand it, and then fade to black

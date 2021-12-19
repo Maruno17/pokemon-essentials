@@ -55,11 +55,11 @@ class MoveRelearner_Scene
     @pokemon.types.each_with_index do |type, i|
       type_number = GameData::Type.get(type).icon_position
       type_rect = Rect.new(0, type_number * 28, 64, 28)
-      type_x = (@pokemon.types.length == 1) ? 400 : 366 + 70 * i
+      type_x = (@pokemon.types.length == 1) ? 400 : 366 + (70 * i)
       overlay.blt(type_x, 70, @typebitmap.bitmap, type_rect)
     end
     textpos = [
-       [_INTL("Teach which move?"), 16, 2, 0, Color.new(88, 88, 80), Color.new(168, 184, 184)]
+      [_INTL("Teach which move?"), 16, 2, 0, Color.new(88, 88, 80), Color.new(168, 184, 184)]
     ]
     imagepos = []
     yPos = 76
@@ -82,7 +82,7 @@ class MoveRelearner_Scene
       yPos += 64
     end
     imagepos.push(["Graphics/Pictures/reminderSel",
-                   0, 78 + (@sprites["commands"].index - @sprites["commands"].top_item) * 64,
+                   0, 78 + ((@sprites["commands"].index - @sprites["commands"].top_item) * 64),
                    0, 0, 258, 72])
     selMoveData = GameData::Move.get(@moves[@sprites["commands"].index])
     basedamage = selMoveData.display_damage(@pokemon)
@@ -119,7 +119,7 @@ class MoveRelearner_Scene
         pbUpdate
         if @sprites["commands"].index != oldcmd
           @sprites["background"].x = 0
-          @sprites["background"].y = 78 + (@sprites["commands"].index - @sprites["commands"].top_item) * 64
+          @sprites["background"].y = 78 + ((@sprites["commands"].index - @sprites["commands"].top_item) * 64)
           pbDrawMoveList
         end
         if Input.trigger?(Input::BACK)

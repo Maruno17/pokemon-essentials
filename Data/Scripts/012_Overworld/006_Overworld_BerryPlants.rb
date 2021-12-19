@@ -84,15 +84,12 @@ class BerryPlantData
     data = GameData::BerryPlant.get(@berry_id)
     if @new_mechanics
       return [data.maximum_yield * (5 - @yield_penalty) / 5, data.minimum_yield].max
-    else
-      if @watering_count > 0
-        ret = (data.maximum_yield - data.minimum_yield) * (@watering_count - 1)
-        ret += rand(1 + data.maximum_yield - data.minimum_yield)
-        return (ret / 4) + data.minimum_yield
-      else
-        return data.minimum_yield
-      end
+    elsif @watering_count > 0
+      ret = (data.maximum_yield - data.minimum_yield) * (@watering_count - 1)
+      ret += rand(1 + data.maximum_yield - data.minimum_yield)
+      return (ret / 4) + data.minimum_yield
     end
+    return data.minimum_yield
   end
 
   # Old mechanics only update a plant when its map is loaded. New mechanics
@@ -138,7 +135,7 @@ class BerryPlantData
     # Update how long plant has been alive for
     old_growth_stage = @growth_stage
     @time_alive = new_time_alive
-    @growth_stage = 1 + @time_alive / time_per_stage
+    @growth_stage = 1 + (@time_alive / time_per_stage)
     @growth_stage += 1 if replanted?   # Replants start at stage 2
     @time_last_updated = time_now.to_i
     # Record watering (old mechanics), and apply drying out per hour (new mechanics)

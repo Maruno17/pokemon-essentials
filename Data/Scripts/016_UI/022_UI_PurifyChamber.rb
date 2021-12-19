@@ -53,7 +53,7 @@ class PurifyChamberSet
   attr_reader :facing   # Index in list of Pokémon the Shadow Pokémon is facing
 
   def partialSum(x)
-    return (x * x + x) / 2   # pattern: 1, 3, 6, 10, 15, 21, 28, ...
+    return ((x * x) + x) / 2   # pattern: 1, 3, 6, 10, 15, 21, 28, ...
   end
 
   def length
@@ -163,7 +163,7 @@ class PurifyChamber
 
   def self.maximumTempo   # Calculates the maximum possible tempo
     x = SETSIZE + 1
-    return ((x * x + x) / 2) - 1
+    return (((x * x) + x) / 2) - 1
   end
 
   def initialize
@@ -411,7 +411,8 @@ class PurifyChamberScreen
     if @chamber.setCount(set) == 0 && @chamber.isPurifiableIgnoreRegular?(set)
       pkmn = @chamber.getShadow(set)
       @scene.pbDisplay(
-         _INTL("This {1} is ready to open its heart. However, there must be at least one regular Pokémon in the set to perform a purification ceremony.", pkmn.name)
+        _INTL("This {1} is ready to open its heart. However, there must be at least one regular Pokémon in the set to perform a purification ceremony.",
+              pkmn.name)
       )
     end
   end
@@ -447,8 +448,8 @@ class PurifyChamberScreen
           end
           commands.push(_INTL("CANCEL"))
           choice = @scene.pbShowCommands(
-             _INTL("What shall I do with this {1}?",
-                   heldpkmn ? heldpkmn.name : curpkmn.name), commands
+            _INTL("What shall I do with this {1}?", heldpkmn ? heldpkmn.name : curpkmn.name),
+            commands
           )
           if choice == 0
             if heldpkmn
@@ -610,10 +611,8 @@ class PurifyChamberScreen
         end
       else
         chamber.currentSet = set
-        cmd = @scene.pbShowCommands(
-           _INTL("What do you want to do?"),
-           [_INTL("EDIT"), _INTL("SWITCH"), _INTL("CANCEL")]
-        )
+        cmd = @scene.pbShowCommands(_INTL("What do you want to do?"),
+                                    [_INTL("EDIT"), _INTL("SWITCH"), _INTL("CANCEL")])
         case cmd
         when 0   # edit
           if !pbOpenSetDetail
@@ -748,7 +747,7 @@ class DirectFlowDiagram
   end
 
   def setAngle(angle1)
-    @angle = angle1 - (angle1 / 360).floor * 360
+    @angle = angle1 - ((angle1 / 360).floor * 360)
   end
 end
 
@@ -831,8 +830,8 @@ class FlowDiagram
   end
 
   def setRange(angle1, angle2)
-    @startAngle = angle1 - (angle1 / 360).floor * 360
-    @endAngle = angle2 - (angle2 / 360).floor * 360
+    @startAngle = angle1 - ((angle1 / 360).floor * 360)
+    @endAngle = angle2 - ((angle2 / 360).floor * 360)
     if @startAngle == @endAngle && angle1 != angle2
       @startAngle = 0
       @endAngle = 359.99
@@ -866,7 +865,7 @@ class PurifyChamberSetView < SpriteWrapper
     for i in 0...PurifyChamber::SETSIZE * 2
       @__sprites[i + 1] = PokemonIconSprite.new(nil, viewport)
     end
-    @__sprites[1 + PurifyChamber::SETSIZE * 2] = PokemonIconSprite.new(nil, viewport)
+    @__sprites[1 + (PurifyChamber::SETSIZE * 2)] = PokemonIconSprite.new(nil, viewport)
     @chamber = chamber
     refresh
   end
@@ -893,9 +892,9 @@ class PurifyChamberSetView < SpriteWrapper
     oldcursor = @cursor
     if @cursor == 0 && points > 0
       @cursor = 1 if button == Input::UP
-      @cursor = points * 1 / 4 + 1 if button == Input::RIGHT
-      @cursor = points * 2 / 4 + 1 if button == Input::DOWN
-      @cursor = points * 3 / 4 + 1 if button == Input::LEFT
+      @cursor = (points * 1 / 4) + 1 if button == Input::RIGHT
+      @cursor = (points * 2 / 4) + 1 if button == Input::DOWN
+      @cursor = (points * 3 / 4) + 1 if button == Input::LEFT
     elsif @cursor > 0
       pos = @cursor - 1
       if @chamber.setCount(@set) == PurifyChamber::SETSIZE
@@ -959,7 +958,7 @@ class PurifyChamberSetView < SpriteWrapper
                             GameData::Type.get(pkmn.types[1]).name),
                       2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       end
-      textpos.push([_INTL("FLOW"), 2 + @info.bitmap.width / 2, 18, 0,
+      textpos.push([_INTL("FLOW"), 2 + (@info.bitmap.width / 2), 18, 0,
                     Color.new(248, 248, 248), Color.new(128, 128, 128)])
       # draw heart gauge
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 3 / 4, 8, @info.bitmap.width * 1 / 4, 8),
@@ -1004,11 +1003,11 @@ class PurifyChamberSetView < SpriteWrapper
       @__sprites[i + 1].pokemon = pkmn
       checkCursor(i + 1)
     end
-    @__sprites[1 + PurifyChamber::SETSIZE * 2].pokemon = @heldpkmn
-    @__sprites[1 + PurifyChamber::SETSIZE * 2].visible = @view.visible
-    @__sprites[1 + PurifyChamber::SETSIZE * 2].x = @view.x + 32
-    @__sprites[1 + PurifyChamber::SETSIZE * 2].y = @view.y - 6 + 40
-    @__sprites[1 + PurifyChamber::SETSIZE * 2].z = 3
+    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].pokemon = @heldpkmn
+    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].visible = @view.visible
+    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].x = @view.x + 32
+    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].y = @view.y - 6 + 40
+    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].z = 3
   end
 
   def getCurrent
@@ -1115,7 +1114,7 @@ class PurifyChamberScene
     addBackgroundOrColoredPlane(@sprites, "bg", "purifychamberbg",
                                 Color.new(0, 0, 0), @viewport)
     @sprites["setwindow"] = Window_PurifyChamberSets.new(
-       @chamber, 0, 0, 112, Graphics.height, @viewport
+      @chamber, 0, 0, 112, Graphics.height, @viewport
     )
     @sprites["setview"] = PurifyChamberSetView.new(@chamber, set, @viewport)
     @sprites["msgwindow"] = Window_AdvancedTextPokemon.new("")

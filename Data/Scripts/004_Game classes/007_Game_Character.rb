@@ -142,7 +142,7 @@ class Game_Character
     # 4 => 64    # 1.6 seconds
     # 5 => 30    # 0.75 seconds
     # 6 => 0     # 0 seconds, i.e. continuous movement
-    self.move_frequency_real = (40 - val * 2) * (6 - val)
+    self.move_frequency_real = (40 - (val * 2)) * (6 - val)
   end
 
   def move_frequency_real
@@ -318,7 +318,7 @@ class Game_Character
       else
         jump_fraction = ((@jump_distance_left / @jump_distance) - 0.5).abs   # 0.5 to 0 to 0.5
       end
-      ret += @jump_peak * (4 * jump_fraction**2 - 1)
+      ret += @jump_peak * ((4 * (jump_fraction**2)) - 1)
     end
     return ret
   end
@@ -328,7 +328,7 @@ class Game_Character
     z = screen_y_ground
     if @tile_id > 0
       begin
-        return z + self.map.priorities[@tile_id] * 32
+        return z + (self.map.priorities[@tile_id] * 32)
       rescue
         raise "Event's graphic is an out-of-range tile (event #{@id}, map #{self.map.map_id})"
       end
@@ -405,8 +405,8 @@ class Game_Character
   end
 
   def move_type_toward_player
-    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
-    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
+    sx = @x + (@width / 2.0) - ($game_player.x + ($game_player.width / 2.0))
+    sy = @y - (@height / 2.0) - ($game_player.y - ($game_player.height / 2.0))
     if sx.abs + sy.abs >= 20
       move_random
       return
@@ -662,8 +662,8 @@ class Game_Character
   end
 
   def move_toward_player
-    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
-    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
+    sx = @x + (@width / 2.0) - ($game_player.x + ($game_player.width / 2.0))
+    sy = @y - (@height / 2.0) - ($game_player.y - ($game_player.height / 2.0))
     return if sx == 0 && sy == 0
     abs_sx = sx.abs
     abs_sy = sy.abs
@@ -684,8 +684,8 @@ class Game_Character
   end
 
   def move_away_from_player
-    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
-    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
+    sx = @x + (@width / 2.0) - ($game_player.x + ($game_player.width / 2.0))
+    sy = @y - (@height / 2.0) - ($game_player.y - ($game_player.height / 2.0))
     return if sx == 0 && sy == 0
     abs_sx = sx.abs
     abs_sy = sy.abs
@@ -737,7 +737,7 @@ class Game_Character
     end
     @x = @x + x_plus
     @y = @y + y_plus
-    real_distance = Math.sqrt(x_plus * x_plus + y_plus * y_plus)
+    real_distance = Math.sqrt((x_plus * x_plus) + (y_plus * y_plus))
     distance = [1, real_distance].max
     @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
     @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
@@ -824,8 +824,8 @@ class Game_Character
   end
 
   def turn_toward_player
-    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
-    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
+    sx = @x + (@width / 2.0) - ($game_player.x + ($game_player.width / 2.0))
+    sy = @y - (@height / 2.0) - ($game_player.y - ($game_player.height / 2.0))
     return if sx == 0 && sy == 0
     if sx.abs > sy.abs
       (sx > 0) ? turn_left : turn_right
@@ -835,8 +835,8 @@ class Game_Character
   end
 
   def turn_away_from_player
-    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
-    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
+    sx = @x + (@width / 2.0) - ($game_player.x + ($game_player.width / 2.0))
+    sy = @y - (@height / 2.0) - ($game_player.y - ($game_player.height / 2.0))
     return if sx == 0 && sy == 0
     if sx.abs > sy.abs
       (sx > 0) ? turn_right : turn_left

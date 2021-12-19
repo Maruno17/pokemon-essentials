@@ -125,7 +125,7 @@ class Battle
     # Scale the gained Exp based on the gainer's level (or not)
     if Settings::SCALED_EXP_FORMULA
       exp /= 5
-      levelAdjust = (2 * level + 10.0) / (pkmn.level + level + 10.0)
+      levelAdjust = ((2 * level) + 10.0) / (pkmn.level + level + 10.0)
       levelAdjust = levelAdjust**5
       levelAdjust = Math.sqrt(levelAdjust)
       exp *= levelAdjust

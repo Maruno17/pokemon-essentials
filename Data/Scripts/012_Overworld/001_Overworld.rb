@@ -286,8 +286,8 @@ Events.onMapSceneChange += proc { |_sender, e|
     if $PokemonGlobal.mapTrail[1]
       for i in 0...Settings::NO_SIGNPOSTS.length / 2
         nosignpost = true if Settings::NO_SIGNPOSTS[2 * i] == $PokemonGlobal.mapTrail[1] &&
-                             Settings::NO_SIGNPOSTS[2 * i + 1] == $game_map.map_id
-        nosignpost = true if Settings::NO_SIGNPOSTS[2 * i + 1] == $PokemonGlobal.mapTrail[1] &&
+                             Settings::NO_SIGNPOSTS[(2 * i) + 1] == $game_map.map_id
+        nosignpost = true if Settings::NO_SIGNPOSTS[(2 * i) + 1] == $PokemonGlobal.mapTrail[1] &&
                              Settings::NO_SIGNPOSTS[2 * i] == $game_map.map_id
         break if nosignpost
       end
@@ -378,7 +378,7 @@ def pbEventCanReachPlayer?(event, player, distance)
   end
   if real_distance > 0
     real_distance.times do |i|
-      return false if !event.can_move_from_coordinate?(event.x + i * delta_x, event.y + i * delta_y, event.direction)
+      return false if !event.can_move_from_coordinate?(event.x + (i * delta_x), event.y + (i * delta_y), event.direction)
     end
   end
   return true

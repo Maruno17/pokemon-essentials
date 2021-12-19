@@ -123,7 +123,7 @@ class GraphicsLister
     @sprite = IconSprite.new(0, 0)
     @sprite.bitmap = nil
     @sprite.x      = Graphics.width * 3 / 4
-    @sprite.y      = (Graphics.height - 64) / 2 + 64
+    @sprite.y      = ((Graphics.height - 64) / 2) + 64
     @sprite.z      = 2
     @folder = folder
     @selection = selection
@@ -308,7 +308,7 @@ class MapLister
     @sprite = SpriteWrapper.new
     @sprite.bitmap = nil
     @sprite.x      = Graphics.width * 3 / 4
-    @sprite.y      = (Graphics.height - 64) / 2 + 64
+    @sprite.y      = ((Graphics.height - 64) / 2) + 64
     @sprite.z      = -2
     @commands = []
     @maps = pbMapTree
@@ -477,7 +477,7 @@ end
 #===============================================================================
 class TrainerTypeLister
   def initialize(selection = 0, includeNew = false)
-    @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height - 64) / 2 + 64)
+    @sprite = IconSprite.new(Graphics.width * 3 / 4, ((Graphics.height - 64) / 2) + 64)
     @sprite.z = 2
     @selection = selection
     @commands = []

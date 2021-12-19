@@ -154,11 +154,10 @@ def pbAnimList(animations, canvas, animwin)
       next
     end
     if Input.trigger?(Input::USE) && animations.length > 0
-      cmd2 = pbShowCommands(helpwindow, [
-         _INTL("Load Animation"),
-         _INTL("Rename"),
-         _INTL("Delete")
-      ], -1)
+      cmd2 = pbShowCommands(helpwindow,
+                            [_INTL("Load Animation"),
+                             _INTL("Rename"),
+                             _INTL("Delete")], -1)
       case cmd2
       when 0 # Load Animation
         canvas.loadAnimation(animations[cmdwin.index])
@@ -223,12 +222,8 @@ def pbSetTone(cel, previewsprite)
   okbutton = sliderwin2.addButton(_INTL("OK"))
   cancelbutton = sliderwin2.addButton(_INTL("Cancel"))
   loop do
-    previewsprite.tone.set(
-       sliderwin2.value(0),
-       sliderwin2.value(1),
-       sliderwin2.value(2),
-       sliderwin2.value(3)
-    )
+    previewsprite.tone.set(sliderwin2.value(0), sliderwin2.value(1),
+                           sliderwin2.value(2), sliderwin2.value(3))
     Graphics.update
     Input.update
     sliderwin2.update
@@ -257,12 +252,8 @@ def pbSetFlash(cel, previewsprite)
   okbutton = sliderwin2.addButton(_INTL("OK"))
   cancelbutton = sliderwin2.addButton(_INTL("Cancel"))
   loop do
-    previewsprite.tone.set(
-       sliderwin2.value(0),
-       sliderwin2.value(1),
-       sliderwin2.value(2),
-       sliderwin2.value(3)
-    )
+    previewsprite.tone.set(sliderwin2.value(0), sliderwin2.value(1),
+                           sliderwin2.value(2), sliderwin2.value(3))
     Graphics.update
     Input.update
     sliderwin2.update
@@ -1030,11 +1021,11 @@ def animationEditorMain(animation)
       next
     elsif Input.trigger?(Input::MOUSERIGHT) && sliderwin.hittest?(0)   # Right mouse button
       commands = [
-         _INTL("Copy Frame"),
-         _INTL("Paste Frame"),
-         _INTL("Clear Frame"),
-         _INTL("Insert Frame"),
-         _INTL("Delete Frame")
+        _INTL("Copy Frame"),
+        _INTL("Paste Frame"),
+        _INTL("Clear Frame"),
+        _INTL("Insert Frame"),
+        _INTL("Delete Frame")
       ]
       hit = pbTrackPopupMenu(commands)
       case hit
@@ -1067,13 +1058,13 @@ def animationEditorMain(animation)
       mousepos = Mouse.getMousePos
       mousepos = [0, 0] if !mousepos
       commands = [
-         _INTL("Properties..."),
-         _INTL("Cut"),
-         _INTL("Copy"),
-         _INTL("Paste"),
-         _INTL("Delete"),
-         _INTL("Renumber..."),
-         _INTL("Extrapolate Path...")
+        _INTL("Properties..."),
+        _INTL("Cut"),
+        _INTL("Copy"),
+        _INTL("Paste"),
+        _INTL("Delete"),
+        _INTL("Renumber..."),
+        _INTL("Extrapolate Path...")
       ]
       hit = pbTrackPopupMenu(commands)
       case hit

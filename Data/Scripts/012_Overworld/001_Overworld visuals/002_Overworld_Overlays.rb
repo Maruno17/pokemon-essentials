@@ -153,12 +153,12 @@ class LightEffect_Basic < LightEffect
     super
     if (Object.const_defined?(:ScreenPosHelper) rescue false)
       @light.x      = ScreenPosHelper.pbScreenX(@event)
-      @light.y      = ScreenPosHelper.pbScreenY(@event) - Game_Map::TILE_HEIGHT / 2
+      @light.y      = ScreenPosHelper.pbScreenY(@event) - (Game_Map::TILE_HEIGHT / 2)
       @light.zoom_x = ScreenPosHelper.pbScreenZoomX(@event)
       @light.zoom_y = @light.zoom_x
     else
       @light.x = @event.screen_x
-      @light.y = @event.screen_y - Game_Map::TILE_HEIGHT / 2
+      @light.y = @event.screen_y - (Game_Map::TILE_HEIGHT / 2)
     end
     @light.tone = $game_screen.tone
   end
@@ -188,12 +188,12 @@ class LightEffect_DayNight < LightEffect
     if @light.opacity > 0
       if (Object.const_defined?(:ScreenPosHelper) rescue false)
         @light.x      = ScreenPosHelper.pbScreenX(@event)
-        @light.y      = ScreenPosHelper.pbScreenY(@event) - Game_Map::TILE_HEIGHT / 2
+        @light.y      = ScreenPosHelper.pbScreenY(@event) - (Game_Map::TILE_HEIGHT / 2)
         @light.zoom_x = ScreenPosHelper.pbScreenZoomX(@event)
         @light.zoom_y = ScreenPosHelper.pbScreenZoomY(@event)
       else
         @light.x = @event.screen_x
-        @light.y = @event.screen_y - Game_Map::TILE_HEIGHT / 2
+        @light.y = @event.screen_y - (Game_Map::TILE_HEIGHT / 2)
       end
       @light.tone.set($game_screen.tone.red,
                       $game_screen.tone.green,

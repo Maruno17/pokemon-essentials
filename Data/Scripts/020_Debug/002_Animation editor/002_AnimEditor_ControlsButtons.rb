@@ -829,12 +829,8 @@ class ControlWindow < SpriteWindow_Base
     mousepos = Mouse.getMousePos
     return false if !mousepos
     return false if i < 0 || i >= @controls.length
-    rc = Rect.new(
-       @controls[i].parentX,
-       @controls[i].parentY,
-       @controls[i].width,
-       @controls[i].height
-    )
+    rc = Rect.new(@controls[i].parentX, @controls[i].parentY,
+                  @controls[i].width, @controls[i].height)
     return rc.contains(mousepos[0], mousepos[1])
   end
 

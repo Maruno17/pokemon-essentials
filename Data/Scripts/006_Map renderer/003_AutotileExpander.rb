@@ -36,11 +36,11 @@ class TilemapRenderer
                                       SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
             when 2   # Top right corner
               new_bitmap.blt(dest_x, dest_y, bitmap,
-                             Rect.new(SOURCE_TILE_WIDTH + frame * SOURCE_TILE_WIDTH * 3, SOURCE_TILE_HEIGHT * 4,
+                             Rect.new(SOURCE_TILE_WIDTH + (frame * SOURCE_TILE_WIDTH * 3), SOURCE_TILE_HEIGHT * 4,
                                       SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
             when 4   # Bottom right corner
               new_bitmap.blt(dest_x, dest_y, bitmap,
-                             Rect.new(SOURCE_TILE_WIDTH + frame * SOURCE_TILE_WIDTH * 3, SOURCE_TILE_HEIGHT * 5,
+                             Rect.new(SOURCE_TILE_WIDTH + (frame * SOURCE_TILE_WIDTH * 3), SOURCE_TILE_HEIGHT * 5,
                                       SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
             when 8   # Bottom left corner
               new_bitmap.blt(dest_x, dest_y, bitmap,

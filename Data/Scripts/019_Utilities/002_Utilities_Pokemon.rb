@@ -207,7 +207,7 @@ def pbSize(pkmn)
   spiv = pkmn.iv[:SPEED] & 15
   m = pkmn.personalID & 0xFF
   n = (pkmn.personalID >> 8) & 0xFF
-  s = (((ativ ^ dfiv) * hpiv) ^ m) * 256 + (((saiv ^ sdiv) * spiv) ^ n)
+  s = ((((ativ ^ dfiv) * hpiv) ^ m) * 256) + (((saiv ^ sdiv) * spiv) ^ n)
   xyz = []
   if s < 10       then xyz = [ 290,   1,     0]
   elsif s < 110   then xyz = [ 300,   1,    10]
@@ -225,7 +225,7 @@ def pbSize(pkmn)
   elsif s < 65410 then xyz = [1500,   2, 65210]
   else                 xyz = [1700,   1, 65510]
   end
-  return (((s - xyz[2]) / xyz[1] + xyz[0]).floor * baseheight / 10).floor
+  return ((((s - xyz[2]) / xyz[1]) + xyz[0]).floor * baseheight / 10).floor
 end
 
 #===============================================================================

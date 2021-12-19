@@ -562,7 +562,7 @@ class Battle::AI
     baseDmg = [(baseDmg * multipliers[:base_damage_multiplier]).round, 1].max
     atk     = [(atk     * multipliers[:attack_multiplier]).round, 1].max
     defense = [(defense * multipliers[:defense_multiplier]).round, 1].max
-    damage  = (((2.0 * user.level / 5 + 2).floor * baseDmg * atk / defense).floor / 50).floor + 2
+    damage  = ((((2.0 * user.level / 5) + 2).floor * baseDmg * atk / defense).floor / 50).floor + 2
     damage  = [(damage * multipliers[:final_damage_multiplier]).round, 1].max
     # "AI-specific calculations below"
     # Increased critical hit rates

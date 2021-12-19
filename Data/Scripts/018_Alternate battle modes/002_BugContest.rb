@@ -5,14 +5,14 @@ class BugContestState
   attr_reader   :timer
 
   CONTESTANT_NAMES = [
-     _INTL("Bug Catcher Ed"),
-     _INTL("Bug Catcher Benny"),
-     _INTL("Bug Catcher Josh"),
-     _INTL("Camper Barry"),
-     _INTL("Cool Trainer Nick"),
-     _INTL("Lass Abby"),
-     _INTL("Picnicker Cindy"),
-     _INTL("Youngster Samuel")
+    _INTL("Bug Catcher Ed"),
+    _INTL("Bug Catcher Benny"),
+    _INTL("Bug Catcher Josh"),
+    _INTL("Camper Barry"),
+    _INTL("Cool Trainer Nick"),
+    _INTL("Lass Abby"),
+    _INTL("Picnicker Cindy"),
+    _INTL("Youngster Samuel")
   ]
   TIME_ALLOWED = Settings::BUG_CONTEST_TIME
 
@@ -30,7 +30,7 @@ class BugContestState
   def expired?
     return false if !undecided?
     return false if TIME_ALLOWED <= 0
-    curtime = @timer + TIME_ALLOWED * Graphics.frame_rate
+    curtime = @timer + (TIME_ALLOWED * Graphics.frame_rate)
     curtime = [curtime - Graphics.frame_count, 0].max
     return (curtime <= 0)
   end

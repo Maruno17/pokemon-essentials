@@ -53,9 +53,9 @@ class Battle::Battler
     # Stat up animation and message
     @battle.pbCommonAnimation("StatUp", self) if showAnim
     arrStatTexts = [
-       _INTL("{1}'s {2} rose!", pbThis, GameData::Stat.get(stat).name),
-       _INTL("{1}'s {2} rose sharply!", pbThis, GameData::Stat.get(stat).name),
-       _INTL("{1}'s {2} rose drastically!", pbThis, GameData::Stat.get(stat).name)
+      _INTL("{1}'s {2} rose!", pbThis, GameData::Stat.get(stat).name),
+      _INTL("{1}'s {2} rose sharply!", pbThis, GameData::Stat.get(stat).name),
+      _INTL("{1}'s {2} rose drastically!", pbThis, GameData::Stat.get(stat).name)
     ]
     @battle.pbDisplay(arrStatTexts[[increment - 1, 2].min])
     # Trigger abilities upon stat gain
@@ -77,15 +77,15 @@ class Battle::Battler
     @battle.pbCommonAnimation("StatUp", self) if showAnim
     if user.index == @index
       arrStatTexts = [
-         _INTL("{1}'s {2} raised its {3}!", pbThis, cause, GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} sharply raised its {3}!", pbThis, cause, GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} drastically raised its {3}!", pbThis, cause, GameData::Stat.get(stat).name)
+        _INTL("{1}'s {2} raised its {3}!", pbThis, cause, GameData::Stat.get(stat).name),
+        _INTL("{1}'s {2} sharply raised its {3}!", pbThis, cause, GameData::Stat.get(stat).name),
+        _INTL("{1}'s {2} drastically raised its {3}!", pbThis, cause, GameData::Stat.get(stat).name)
       ]
     else
       arrStatTexts = [
-         _INTL("{1}'s {2} raised {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} sharply raised {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} drastically raised {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name)
+        _INTL("{1}'s {2} raised {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name),
+        _INTL("{1}'s {2} sharply raised {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name),
+        _INTL("{1}'s {2} drastically raised {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name)
       ]
     end
     @battle.pbDisplay(arrStatTexts[[increment - 1, 2].min])
@@ -218,9 +218,9 @@ class Battle::Battler
     # Stat down animation and message
     @battle.pbCommonAnimation("StatDown", self) if showAnim
     arrStatTexts = [
-       _INTL("{1}'s {2} fell!", pbThis, GameData::Stat.get(stat).name),
-       _INTL("{1}'s {2} harshly fell!", pbThis, GameData::Stat.get(stat).name),
-       _INTL("{1}'s {2} severely fell!", pbThis, GameData::Stat.get(stat).name)
+      _INTL("{1}'s {2} fell!", pbThis, GameData::Stat.get(stat).name),
+      _INTL("{1}'s {2} harshly fell!", pbThis, GameData::Stat.get(stat).name),
+      _INTL("{1}'s {2} severely fell!", pbThis, GameData::Stat.get(stat).name)
     ]
     @battle.pbDisplay(arrStatTexts[[increment - 1, 2].min])
     # Trigger abilities upon stat loss
@@ -259,15 +259,15 @@ class Battle::Battler
     @battle.pbCommonAnimation("StatDown", self) if showAnim
     if user.index == @index
       arrStatTexts = [
-         _INTL("{1}'s {2} lowered its {3}!", pbThis, cause, GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} harshly lowered its {3}!", pbThis, cause, GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} severely lowered its {3}!", pbThis, cause, GameData::Stat.get(stat).name)
+        _INTL("{1}'s {2} lowered its {3}!", pbThis, cause, GameData::Stat.get(stat).name),
+        _INTL("{1}'s {2} harshly lowered its {3}!", pbThis, cause, GameData::Stat.get(stat).name),
+        _INTL("{1}'s {2} severely lowered its {3}!", pbThis, cause, GameData::Stat.get(stat).name)
       ]
     else
       arrStatTexts = [
-         _INTL("{1}'s {2} lowered {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} harshly lowered {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name),
-         _INTL("{1}'s {2} severely lowered {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name)
+        _INTL("{1}'s {2} lowered {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name),
+        _INTL("{1}'s {2} harshly lowered {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name),
+        _INTL("{1}'s {2} severely lowered {3}'s {4}!", user.pbThis, cause, pbThis(true), GameData::Stat.get(stat).name)
       ]
     end
     @battle.pbDisplay(arrStatTexts[[increment - 1, 2].min])

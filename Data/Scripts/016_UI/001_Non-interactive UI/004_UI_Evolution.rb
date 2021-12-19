@@ -34,13 +34,13 @@ class SpriteMetafile
   def initialize(viewport = nil)
     @metafile = []
     @values = [
-       viewport,
-       Tone.new(0, 0, 0, 0), Rect.new(0, 0, 0, 0),
-       true,
-       0, 0, 0, 0, 0, 100, 100,
-       0, false, 0, 255, 0,
-       Color.new(0, 0, 0, 0), Color.new(0, 0, 0, 0),
-       0
+      viewport,
+      Tone.new(0, 0, 0, 0), Rect.new(0, 0, 0, 0),
+      true,
+      0, 0, 0, 0, 0, 100, 100,
+      0, false, 0, 255, 0,
+      Color.new(0, 0, 0, 0), Color.new(0, 0, 0, 0),
+      0
     ]
   end
 

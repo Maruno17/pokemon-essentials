@@ -358,7 +358,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
           end
         end
       when 2   # Randomise pID
-        pkmn.personalID = rand(2**16) | rand(2**16) << 16
+        pkmn.personalID = rand(2**16) | (rand(2**16) << 16)
         pkmn.calc_stats
         screen.pbRefreshSingle(pkmnid)
       end
@@ -1034,7 +1034,7 @@ PokemonDebugMenuCommands.register("ownership", {
         val = pbMessageChooseNumber(
           _INTL("Set the new ID (max. 65535)."), params
         ) { screen.pbUpdate }
-        pkmn.owner.id = val | val << 16
+        pkmn.owner.id = val | (val << 16)
       end
     end
     next false
@@ -1173,11 +1173,12 @@ PokemonDebugMenuCommands.register("duplicate", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if screen.pbConfirm(_INTL("Are you sure you want to copy this Pokémon?"))
       clonedpkmn = pkmn.clone
-      if screen.is_a?(PokemonPartyScreen)
+      case screen
+      when PokemonPartyScreen
         pbStorePokemon(clonedpkmn)
         screen.pbHardRefresh
         screen.pbDisplay(_INTL("The Pokémon was duplicated."))
-      elsif screen.is_a?(PokemonStorageScreen)
+      when PokemonStorageScreen
         if screen.storage.pbMoveCaughtToParty(clonedpkmn)
           if pkmnid[0] != -1
             screen.pbDisplay(_INTL("The duplicated Pokémon was moved to your party."))
@@ -1205,10 +1206,11 @@ PokemonDebugMenuCommands.register("delete", {
   "name"        => _INTL("Delete"),
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if screen.pbConfirm(_INTL("Are you sure you want to delete this Pokémon?"))
-      if screen.is_a?(PokemonPartyScreen)
+      case screen
+      when PokemonPartyScreen
         screen.party.delete_at(pkmnid)
         screen.pbHardRefresh
-      elsif screen.is_a?(PokemonStorageScreen)
+      when PokemonStorageScreen
         screen.scene.pbRelease(pkmnid, heldpoke)
         (heldpoke) ? screen.heldpkmn = nil : screen.storage.pbDelete(pkmnid[0], pkmnid[1])
         screen.scene.pbRefresh

@@ -19,11 +19,11 @@ class PokemonBoxIcon < IconSprite
     self.oy = self.src_rect.height / 2   # 32
     self.x += self.src_rect.width / 2   # 32
     self.y += self.src_rect.height / 2   # 32
-    @release.tween(self, [
-       [Interpolator::ZOOM_X, 0],
-       [Interpolator::ZOOM_Y, 0],
-       [Interpolator::OPACITY, 0]
-    ], 100)
+    @release.tween(self,
+                   [[Interpolator::ZOOM_X, 0],
+                    [Interpolator::ZOOM_Y, 0],
+                    [Interpolator::OPACITY, 0]],
+                   100)
     @startRelease = true
   end
 
@@ -95,7 +95,7 @@ class MosaicPokemonSprite < PokemonSprite
       @mosaicbitmap2.clear
       @mosaicbitmap.stretch_blt(Rect.new(0, 0, newWidth, newHeight), @oldbitmap, @oldbitmap.rect)
       @mosaicbitmap2.stretch_blt(
-        Rect.new(-@mosaic / 2 + 1, -@mosaic / 2 + 1, @mosaicbitmap2.width, @mosaicbitmap2.height),
+        Rect.new((-@mosaic / 2) + 1, (-@mosaic / 2) + 1, @mosaicbitmap2.width, @mosaicbitmap2.height),
         @mosaicbitmap, Rect.new(0, 0, newWidth, newHeight)
       )
       self.bitmap = @mosaicbitmap2
@@ -244,12 +244,12 @@ class PokemonBoxArrow < SpriteWrapper
     if @grabbingState > 0
       if @grabbingState <= 4 * Graphics.frame_rate / 20
         @handsprite.changeBitmap((@quickswap) ? "grabq" : "grab")
-        self.y = @spriteY + 4.0 * @grabbingState * 20 / Graphics.frame_rate
+        self.y = @spriteY + (4.0 * @grabbingState * 20 / Graphics.frame_rate)
         @grabbingState += 1
       elsif @grabbingState <= 8 * Graphics.frame_rate / 20
         @holding = true
         @handsprite.changeBitmap((@quickswap) ? "fistq" : "fist")
-        self.y = @spriteY + 4 * (8 * Graphics.frame_rate / 20 - @grabbingState) * 20 / Graphics.frame_rate
+        self.y = @spriteY + (4 * ((8 * Graphics.frame_rate / 20) - @grabbingState) * 20 / Graphics.frame_rate)
         @grabbingState += 1
       else
         @grabbingState = 0
@@ -257,13 +257,13 @@ class PokemonBoxArrow < SpriteWrapper
     elsif @placingState > 0
       if @placingState <= 4 * Graphics.frame_rate / 20
         @handsprite.changeBitmap((@quickswap) ? "fistq" : "fist")
-        self.y = @spriteY + 4.0 * @placingState * 20 / Graphics.frame_rate
+        self.y = @spriteY + (4.0 * @placingState * 20 / Graphics.frame_rate)
         @placingState += 1
       elsif @placingState <= 8 * Graphics.frame_rate / 20
         @holding = false
         @heldpkmn = nil
         @handsprite.changeBitmap((@quickswap) ? "grabq" : "grab")
-        self.y = @spriteY + 4 * (8 * Graphics.frame_rate / 20 - @placingState) * 20 / Graphics.frame_rate
+        self.y = @spriteY + (4 * ((8 * Graphics.frame_rate / 20) - @placingState) * 20 / Graphics.frame_rate)
         @placingState += 1
       else
         @placingState = 0
@@ -417,7 +417,7 @@ class PokemonBoxSprite < SpriteWrapper
     for j in 0...PokemonBox::BOX_HEIGHT
       xval = self.x + 10
       for k in 0...PokemonBox::BOX_WIDTH
-        sprite = @pokemonsprites[j * PokemonBox::BOX_WIDTH + k]
+        sprite = @pokemonsprites[(j * PokemonBox::BOX_WIDTH) + k]
         if sprite && !sprite.disposed?
           sprite.viewport = self.viewport
           sprite.x = xval
@@ -529,14 +529,15 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def refresh
     @contents.blt(0, 0, @boxbitmap.bitmap, Rect.new(0, 0, 172, 352))
-    pbDrawTextPositions(self.bitmap, [
-       [_INTL("Back"), 86, 240, 2, Color.new(248, 248, 248), Color.new(80, 80, 80), 1]
-    ])
+    pbDrawTextPositions(
+      self.bitmap,
+      [[_INTL("Back"), 86, 240, 2, Color.new(248, 248, 248), Color.new(80, 80, 80), 1]]
+    )
     xvalues = []   # [18, 90, 18, 90, 18, 90]
     yvalues = []   # [2, 18, 66, 82, 130, 146]
     for i in 0...Settings::MAX_PARTY_SIZE
-      xvalues.push(18 + 72 * (i % 2))
-      yvalues.push(2 + 16 * (i % 2) + 64 * (i / 2))
+      xvalues.push(18 + (72 * (i % 2)))
+      yvalues.push(2 + (16 * (i % 2)) + (64 * (i / 2)))
     end
     @pokemonsprites.delete_if { |sprite| sprite && sprite.disposed? }
     @pokemonsprites.each { |sprite| sprite.refresh if sprite }
@@ -705,8 +706,8 @@ class PokemonStorageScene
       arrow.x = 207 * 2
       arrow.y = 139 * 2
     else
-      arrow.x = (97 + 24 * (selection % PokemonBox::BOX_WIDTH)) * 2
-      arrow.y = (8 + 24 * (selection / PokemonBox::BOX_WIDTH)) * 2
+      arrow.x = (97 + (24 * (selection % PokemonBox::BOX_WIDTH))) * 2
+      arrow.y = (8 + (24 * (selection / PokemonBox::BOX_WIDTH))) * 2
     end
   end
 
@@ -717,9 +718,9 @@ class PokemonStorageScene
       when -1   # Box name
         selection = -2
       when -2   # Party
-        selection = PokemonBox::BOX_SIZE - 1 - PokemonBox::BOX_WIDTH * 2 / 3   # 25
+        selection = PokemonBox::BOX_SIZE - 1 - (PokemonBox::BOX_WIDTH * 2 / 3)   # 25
       when -3   # Close Box
-        selection = PokemonBox::BOX_SIZE - PokemonBox::BOX_WIDTH / 3   # 28
+        selection = PokemonBox::BOX_SIZE - (PokemonBox::BOX_WIDTH / 3)   # 28
       else
         selection -= PokemonBox::BOX_WIDTH
         selection = -1 if selection < 0
@@ -735,7 +736,7 @@ class PokemonStorageScene
       else
         selection += PokemonBox::BOX_WIDTH
         if selection >= PokemonBox::BOX_SIZE
-          if selection < PokemonBox::BOX_SIZE + PokemonBox::BOX_WIDTH / 2
+          if selection < PokemonBox::BOX_SIZE + (PokemonBox::BOX_WIDTH / 2)
             selection = -2   # Party
           else
             selection = -3   # Close Box
@@ -775,8 +776,8 @@ class PokemonStorageScene
     xvalues = []   # [200, 272, 200, 272, 200, 272, 236]
     yvalues = []   # [2, 18, 66, 82, 130, 146, 220]
     for i in 0...Settings::MAX_PARTY_SIZE
-      xvalues.push(200 + 72 * (i % 2))
-      yvalues.push(2 + 16 * (i % 2) + 64 * (i / 2))
+      xvalues.push(200 + (72 * (i % 2)))
+      yvalues.push(2 + (16 * (i % 2)) + (64 * (i / 2)))
     end
     xvalues.push(236)
     yvalues.push(220)
@@ -1325,12 +1326,12 @@ class PokemonStorageScene
         (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
           markrect.x = i * MARK_WIDTH
           markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
-          @sprites["markingoverlay"].bitmap.blt(336 + 58 * (i % 3), 106 + 50 * (i / 3),
+          @sprites["markingoverlay"].bitmap.blt(336 + (58 * (i % 3)), 106 + (50 * (i / 3)),
                                                 @markingbitmap.bitmap, markrect)
         end
         textpos = [
-           [_INTL("OK"), 402, 208, 2, base, shadow, 1],
-           [_INTL("Cancel"), 402, 272, 2, base, shadow, 1]
+          [_INTL("OK"), 402, 208, 2, base, shadow, 1],
+          [_INTL("Cancel"), 402, 272, 2, base, shadow, 1]
         ]
         pbDrawTextPositions(@sprites["markingoverlay"].bitmap, textpos)
         pbMarkingSetArrow(@sprites["arrow"], index)
@@ -1392,7 +1393,7 @@ class PokemonStorageScene
     (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
       markrect.x = i * MARK_WIDTH
       markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
-      bitmap.blt(x + i * MARK_WIDTH, y, @markingbitmap.bitmap, markrect)
+      bitmap.blt(x + (i * MARK_WIDTH), y, @markingbitmap.bitmap, markrect)
     end
   end
 
@@ -1401,10 +1402,11 @@ class PokemonStorageScene
     overlay.clear
     buttonbase = Color.new(248, 248, 248)
     buttonshadow = Color.new(80, 80, 80)
-    pbDrawTextPositions(overlay, [
-       [_INTL("Party: {1}", (@storage.party.length rescue 0)), 270, 326, 2, buttonbase, buttonshadow, 1],
-       [_INTL("Exit"), 446, 326, 2, buttonbase, buttonshadow, 1]
-    ])
+    pbDrawTextPositions(
+      overlay,
+      [[_INTL("Party: {1}", (@storage.party.length rescue 0)), 270, 326, 2, buttonbase, buttonshadow, 1],
+       [_INTL("Exit"), 446, 326, 2, buttonbase, buttonshadow, 1]]
+    )
     pokemon = nil
     if @screen.pbHeldPokemon
       pokemon = @screen.pbHeldPokemon
@@ -1422,7 +1424,7 @@ class PokemonStorageScene
     nonshadow = Color.new(224, 224, 224)
     pokename = pokemon.name
     textstrings = [
-       [pokename, 10, 2, false, base, shadow]
+      [pokename, 10, 2, false, base, shadow]
     ]
     if !pokemon.egg?
       imagepos = []
@@ -1450,7 +1452,7 @@ class PokemonStorageScene
       pokemon.types.each_with_index do |type, i|
         type_number = GameData::Type.get(type).icon_position
         type_rect = Rect.new(0, type_number * 28, 64, 28)
-        type_x = (pokemon.types.length == 1) ? 52 : 18 + 70 * i
+        type_x = (pokemon.types.length == 1) ? 52 : 18 + (70 * i)
         overlay.blt(type_x, 272, typebitmap.bitmap, type_rect)
       end
       drawMarkings(overlay, 70, 240, 128, 20, pokemon.markings)
@@ -1588,13 +1590,12 @@ class PokemonStorageScreen
           end
           pokemon = @storage[selected[0], selected[1]]
           next if !pokemon
-          command = pbShowCommands(_INTL("{1} is selected.", pokemon.name), [
-             _INTL("Withdraw"),
-             _INTL("Summary"),
-             _INTL("Mark"),
-             _INTL("Release"),
-             _INTL("Cancel")
-          ])
+          command = pbShowCommands(_INTL("{1} is selected.", pokemon.name),
+                                   [_INTL("Withdraw"),
+                                    _INTL("Summary"),
+                                    _INTL("Mark"),
+                                    _INTL("Release"),
+                                    _INTL("Cancel")])
           case command
           when 0 then pbWithdraw(selected, nil)
           when 1 then pbSummary(selected, nil)
@@ -1620,13 +1621,12 @@ class PokemonStorageScreen
         else
           pokemon = @storage[-1, selected]
           next if !pokemon
-          command = pbShowCommands(_INTL("{1} is selected.", pokemon.name), [
-             _INTL("Store"),
-             _INTL("Summary"),
-             _INTL("Mark"),
-             _INTL("Release"),
-             _INTL("Cancel")
-          ])
+          command = pbShowCommands(_INTL("{1} is selected.", pokemon.name),
+                                   [_INTL("Store"),
+                                    _INTL("Summary"),
+                                    _INTL("Mark"),
+                                    _INTL("Release"),
+                                    _INTL("Cancel")])
           case command
           when 0 then pbStore([-1, selected], nil)
           when 1 then pbSummary([-1, selected], nil)
@@ -1976,11 +1976,11 @@ class PokemonStorageScreen
         pokemon = @storage[selected[0], selected[1]]
         next if !pokemon
         commands = [
-           _INTL("Select"),
-           _INTL("Summary"),
-           _INTL("Withdraw"),
-           _INTL("Item"),
-           _INTL("Mark")
+          _INTL("Select"),
+          _INTL("Summary"),
+          _INTL("Withdraw"),
+          _INTL("Item"),
+          _INTL("Mark")
         ]
         commands.push(_INTL("Cancel"))
         commands[2] = _INTL("Store") if selected[0] == -1

@@ -319,7 +319,7 @@ def pbGainExpFromExpCandy(pkmn, base_amt, qty, scene)
   if qty > 1
     (qty - 1).times { pkmn.changeHappiness("vitamin") }
   end
-  pbChangeExp(pkmn, pkmn.exp + base_amt * qty, scene)
+  pbChangeExp(pkmn, pkmn.exp + (base_amt * qty), scene)
   scene.pbHardRefresh
   return true
 end
@@ -351,10 +351,8 @@ def pbBattleHPItem(pkmn, battler, restoreHP, scene)
     if battler.pbRecoverHP(restoreHP) > 0
       scene.pbDisplay(_INTL("{1}'s HP was restored.", battler.pbThis))
     end
-  else
-    if pbItemRestoreHP(pkmn, restoreHP) > 0
-      scene.pbDisplay(_INTL("{1}'s HP was restored.", pkmn.name))
-    end
+  elsif pbItemRestoreHP(pkmn, restoreHP) > 0
+    scene.pbDisplay(_INTL("{1}'s HP was restored.", pkmn.name))
   end
   return true
 end
@@ -814,35 +812,27 @@ def pbGiveItemToPokemon(item, pkmn, scene, pkmnid = 0)
     if scene.pbConfirm(_INTL("Would you like to switch the two items?"))
       $bag.remove(item)
       if !$bag.add(pkmn.item)
-        if !$bag.add(item)
-          raise _INTL("Could't re-store deleted item in Bag somehow")
-        end
+        raise _INTL("Couldn't re-store deleted item in Bag somehow") if !$bag.add(item)
         scene.pbDisplay(_INTL("The Bag is full. The Pokémon's item could not be removed."))
-      else
-        if GameData::Item.get(item).is_mail?
-          if pbWriteMail(item, pkmn, pkmnid, scene)
-            pkmn.item = item
-            scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.", olditemname, pkmn.name, newitemname))
-            return true
-          else
-            if !$bag.add(item)
-              raise _INTL("Couldn't re-store deleted item in Bag somehow")
-            end
-          end
-        else
+      elsif GameData::Item.get(item).is_mail?
+        if pbWriteMail(item, pkmn, pkmnid, scene)
           pkmn.item = item
           scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.", olditemname, pkmn.name, newitemname))
           return true
+        elsif !$bag.add(item)
+          raise _INTL("Couldn't re-store deleted item in Bag somehow")
         end
+      else
+        pkmn.item = item
+        scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.", olditemname, pkmn.name, newitemname))
+        return true
       end
     end
-  else
-    if !GameData::Item.get(item).is_mail? || pbWriteMail(item, pkmn, pkmnid, scene)
-      $bag.remove(item)
-      pkmn.item = item
-      scene.pbDisplay(_INTL("{1} is now holding the {2}.", pkmn.name, newitemname))
-      return true
-    end
+  elsif !GameData::Item.get(item).is_mail? || pbWriteMail(item, pkmn, pkmnid, scene)
+    $bag.remove(item)
+    pkmn.item = item
+    scene.pbDisplay(_INTL("{1} is now holding the {2}.", pkmn.name, newitemname))
+    return true
   end
   return false
 end

@@ -124,44 +124,44 @@ module Battle::DebugVariables
   }
 
   SIDE_EFFECTS = {
-     PBEffects::AuroraVeil         => { name: "Aurora Veil duration",                   default: 0 },
-     PBEffects::CraftyShield       => { name: "Crafty Shield applies this round",       default: false },
-     PBEffects::EchoedVoiceCounter => { name: "Echoed Voice rounds used (max. 5)",      default: 0, max: 5 },
-     PBEffects::EchoedVoiceUsed    => { name: "Echoed Voice used this round",           default: false },
-     PBEffects::LastRoundFainted   => { name: "Round when side's battler last fainted", default: -2 },   # Treated as -1, isn't a battler index
-     PBEffects::LightScreen        => { name: "Light Screen duration",                  default: 0 },
-     PBEffects::LuckyChant         => { name: "Lucky Chant duration",                   default: 0 },
-     PBEffects::MatBlock           => { name: "Mat Block applies this round",           default: false },
-     PBEffects::Mist               => { name: "Mist duration",                          default: 0 },
-     PBEffects::QuickGuard         => { name: "Quick Guard applies this round",         default: false },
-     PBEffects::Rainbow            => { name: "Rainbow duration",                       default: 0 },
-     PBEffects::Reflect            => { name: "Reflect duration",                       default: 0 },
-     PBEffects::Round              => { name: "Round was used this round",              default: false },
-     PBEffects::Safeguard          => { name: "Safeguard duration",                     default: 0 },
-     PBEffects::SeaOfFire          => { name: "Sea Of Fire duration",                   default: 0 },
-     PBEffects::Spikes             => { name: "Spikes layers (0-3)",                    default: 0, max: 3 },
-     PBEffects::StealthRock        => { name: "Stealth Rock exists",                    default: false },
-     PBEffects::StickyWeb          => { name: "Sticky Web exists",                      default: false },
-     PBEffects::Swamp              => { name: "Swamp duration",                         default: 0 },
-     PBEffects::Tailwind           => { name: "Tailwind duration",                      default: 0 },
-     PBEffects::ToxicSpikes        => { name: "Toxic Spikes layers (0-2)",              default: 0, max: 2 },
-     PBEffects::WideGuard          => { name: "Wide Guard applies this round",          default: false }
+    PBEffects::AuroraVeil         => { name: "Aurora Veil duration",                   default: 0 },
+    PBEffects::CraftyShield       => { name: "Crafty Shield applies this round",       default: false },
+    PBEffects::EchoedVoiceCounter => { name: "Echoed Voice rounds used (max. 5)",      default: 0, max: 5 },
+    PBEffects::EchoedVoiceUsed    => { name: "Echoed Voice used this round",           default: false },
+    PBEffects::LastRoundFainted   => { name: "Round when side's battler last fainted", default: -2 },   # Treated as -1, isn't a battler index
+    PBEffects::LightScreen        => { name: "Light Screen duration",                  default: 0 },
+    PBEffects::LuckyChant         => { name: "Lucky Chant duration",                   default: 0 },
+    PBEffects::MatBlock           => { name: "Mat Block applies this round",           default: false },
+    PBEffects::Mist               => { name: "Mist duration",                          default: 0 },
+    PBEffects::QuickGuard         => { name: "Quick Guard applies this round",         default: false },
+    PBEffects::Rainbow            => { name: "Rainbow duration",                       default: 0 },
+    PBEffects::Reflect            => { name: "Reflect duration",                       default: 0 },
+    PBEffects::Round              => { name: "Round was used this round",              default: false },
+    PBEffects::Safeguard          => { name: "Safeguard duration",                     default: 0 },
+    PBEffects::SeaOfFire          => { name: "Sea Of Fire duration",                   default: 0 },
+    PBEffects::Spikes             => { name: "Spikes layers (0-3)",                    default: 0, max: 3 },
+    PBEffects::StealthRock        => { name: "Stealth Rock exists",                    default: false },
+    PBEffects::StickyWeb          => { name: "Sticky Web exists",                      default: false },
+    PBEffects::Swamp              => { name: "Swamp duration",                         default: 0 },
+    PBEffects::Tailwind           => { name: "Tailwind duration",                      default: 0 },
+    PBEffects::ToxicSpikes        => { name: "Toxic Spikes layers (0-2)",              default: 0, max: 2 },
+    PBEffects::WideGuard          => { name: "Wide Guard applies this round",          default: false }
   }
 
   FIELD_EFFECTS = {
-     PBEffects::AmuletCoin      => { name: "Amulet Coin doubling prize money", default: false },
-     PBEffects::FairyLock       => { name: "Fairy Lock trapping duration",     default: 0 },
-     PBEffects::FusionBolt      => { name: "Fusion Bolt was used",             default: false },
-     PBEffects::FusionFlare     => { name: "Fusion Flare was used",            default: false },
-     PBEffects::Gravity         => { name: "Gravity duration",                 default: 0 },
-     PBEffects::HappyHour       => { name: "Happy Hour doubling prize money",  default: false },
-     PBEffects::IonDeluge       => { name: "Ion Deluge making moves Electric", default: false },
-     PBEffects::MagicRoom       => { name: "Magic Room duration",              default: 0 },
-     PBEffects::MudSportField   => { name: "Mud Sport duration (Gen 6+)",      default: 0 },
-     PBEffects::PayDay          => { name: "Pay Day additional prize money",   default: 0, max: Settings::MAX_MONEY },
-     PBEffects::TrickRoom       => { name: "Trick Room duration",              default: 0 },
-     PBEffects::WaterSportField => { name: "Water Sport duration (Gen 6+)",    default: 0 },
-     PBEffects::WonderRoom      => { name: "Wonder Room duration",             default: 0 }
+    PBEffects::AmuletCoin      => { name: "Amulet Coin doubling prize money", default: false },
+    PBEffects::FairyLock       => { name: "Fairy Lock trapping duration",     default: 0 },
+    PBEffects::FusionBolt      => { name: "Fusion Bolt was used",             default: false },
+    PBEffects::FusionFlare     => { name: "Fusion Flare was used",            default: false },
+    PBEffects::Gravity         => { name: "Gravity duration",                 default: 0 },
+    PBEffects::HappyHour       => { name: "Happy Hour doubling prize money",  default: false },
+    PBEffects::IonDeluge       => { name: "Ion Deluge making moves Electric", default: false },
+    PBEffects::MagicRoom       => { name: "Magic Room duration",              default: 0 },
+    PBEffects::MudSportField   => { name: "Mud Sport duration (Gen 6+)",      default: 0 },
+    PBEffects::PayDay          => { name: "Pay Day additional prize money",   default: 0, max: Settings::MAX_MONEY },
+    PBEffects::TrickRoom       => { name: "Trick Room duration",              default: 0 },
+    PBEffects::WaterSportField => { name: "Water Sport duration (Gen 6+)",    default: 0 },
+    PBEffects::WonderRoom      => { name: "Wonder Room duration",             default: 0 }
   }
 end
 

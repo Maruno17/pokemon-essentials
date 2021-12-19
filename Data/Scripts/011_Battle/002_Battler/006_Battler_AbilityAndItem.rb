@@ -119,13 +119,10 @@ class Battle::Battler
         else
           pbRaiseStatStageByCause(stat, increment, self, abilityName)
         end
+      elsif Battle::Scene::USE_ABILITY_SPLASH
+        @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
       else
-        if Battle::Scene::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
-        else
-          @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
-                                  pbThis, abilityName, move.name))
-        end
+        @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!", pbThis, abilityName, move.name))
       end
       @battle.pbHideAbilitySplash(self)
     end
@@ -149,13 +146,10 @@ class Battle::Battler
         else
           @battle.pbDisplay(_INTL("{1}'s {2} restored its HP.", pbThis, abilityName))
         end
+      elsif Battle::Scene::USE_ABILITY_SPLASH
+        @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
       else
-        if Battle::Scene::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
-        else
-          @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
-                                  pbThis, abilityName, move.name))
-        end
+        @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!", pbThis, abilityName, move.name))
       end
       @battle.pbHideAbilitySplash(self)
     end

@@ -58,7 +58,7 @@ class PokemonLoadPanel < SpriteWrapper
       if @isContinue
         self.bitmap.blt(0, 0, @bgbitmap.bitmap, Rect.new(0, (@selected) ? 111 * 2 : 0, @bgbitmap.width, 111 * 2))
       else
-        self.bitmap.blt(0, 0, @bgbitmap.bitmap, Rect.new(0, 111 * 2 * 2 + ((@selected) ? 23 * 2 : 0), @bgbitmap.width, 23 * 2))
+        self.bitmap.blt(0, 0, @bgbitmap.bitmap, Rect.new(0, (111 * 2 * 2) + ((@selected) ? 23 * 2 : 0), @bgbitmap.width, 23 * 2))
       end
       textpos = []
       if @isContinue
@@ -140,7 +140,7 @@ class PokemonLoad_Scene
       @sprites["panel#{oldi}"].pbRefresh
       @sprites["panel#{newi}"].selected = true
       @sprites["panel#{newi}"].pbRefresh
-      while @sprites["panel#{newi}"].y > Graphics.height - 40 * 2
+      while @sprites["panel#{newi}"].y > Graphics.height - (40 * 2)
         for i in 0...@commands.length
           @sprites["panel#{i}"].y -= 24 * 2
         end
@@ -171,15 +171,15 @@ class PokemonLoad_Scene
       @sprites["player"] = TrainerWalkingCharSprite.new(filename, @viewport)
       charwidth  = @sprites["player"].bitmap.width
       charheight = @sprites["player"].bitmap.height
-      @sprites["player"].x        = 56 * 2 - charwidth / 8
-      @sprites["player"].y        = 56 * 2 - charheight / 8
+      @sprites["player"].x        = (56 * 2) - (charwidth / 8)
+      @sprites["player"].y        = (56 * 2) - (charheight / 8)
       @sprites["player"].src_rect = Rect.new(0, 0, charwidth / 4, charheight / 4)
     end
     for i in 0...trainer.party.length
       @sprites["party#{i}"] = PokemonIconSprite.new(trainer.party[i], @viewport)
       @sprites["party#{i}"].setOffset(PictureOrigin::Center)
-      @sprites["party#{i}"].x = (167 + 33 * (i % 2)) * 2
-      @sprites["party#{i}"].y = (56 + 25 * (i / 2)) * 2
+      @sprites["party#{i}"].x = (167 + (33 * (i % 2))) * 2
+      @sprites["party#{i}"].y = (56 + (25 * (i / 2))) * 2
       @sprites["party#{i}"].z = 99999
     end
   end

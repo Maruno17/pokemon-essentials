@@ -110,7 +110,7 @@ class Game_Event < Game_Character
     return false if !ontime
     now = pbGetTimeNow
     elapsed = (now.to_i - ontime) / 86400
-    elapsed += 1 if (now.to_i - ontime) % 86400 > (now.hour * 3600 + now.min * 60 + now.sec)
+    elapsed += 1 if (now.to_i - ontime) % 86400 > ((now.hour * 3600) + (now.min * 60) + now.sec)
     return elapsed >= days
   end
 
@@ -249,9 +249,9 @@ class Game_Event < Game_Character
     return true if @move_route_forcing
     return true if @event.name[/update/i]
     range = 2   # Number of tiles
-    return false if self.screen_x - @sprite_size[0] / 2 > Graphics.width + range * Game_Map::TILE_WIDTH
-    return false if self.screen_x + @sprite_size[0] / 2 < -range * Game_Map::TILE_WIDTH
-    return false if self.screen_y_ground - @sprite_size[1] > Graphics.height + range * Game_Map::TILE_HEIGHT
+    return false if self.screen_x - (@sprite_size[0] / 2) > Graphics.width + (range * Game_Map::TILE_WIDTH)
+    return false if self.screen_x + (@sprite_size[0] / 2) < -range * Game_Map::TILE_WIDTH
+    return false if self.screen_y_ground - @sprite_size[1] > Graphics.height + (range * Game_Map::TILE_HEIGHT)
     return false if self.screen_y_ground < -range * Game_Map::TILE_HEIGHT
     return true
   end

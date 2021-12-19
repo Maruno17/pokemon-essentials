@@ -63,8 +63,8 @@ class Sprite_SurfBase
       sy = ((@event.direction - 2) / 2) * ch
       @sprite.src_rect.set(sx, sy, cw, ch)
       if $game_temp.surf_base_coords
-        @sprite.x = ($game_temp.surf_base_coords[0] * Game_Map::REAL_RES_X - @event.map.display_x + 3) / 4 + (Game_Map::TILE_WIDTH / 2)
-        @sprite.y = ($game_temp.surf_base_coords[1] * Game_Map::REAL_RES_Y - @event.map.display_y + 3) / 4 + (Game_Map::TILE_HEIGHT / 2) + 16
+        @sprite.x = ((($game_temp.surf_base_coords[0] * Game_Map::REAL_RES_X) - @event.map.display_x + 3) / 4) + (Game_Map::TILE_WIDTH / 2)
+        @sprite.y = ((($game_temp.surf_base_coords[1] * Game_Map::REAL_RES_Y) - @event.map.display_y + 3) / 4) + (Game_Map::TILE_HEIGHT / 2) + 16
       else
         @sprite.x = @rsprite.x
         @sprite.y = @rsprite.y

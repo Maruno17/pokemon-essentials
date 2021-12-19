@@ -71,8 +71,8 @@ end
 #===============================================================================
 class PokemonEntryScene
   @@Characters = [
-     [("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz").scan(/./), "[*]"],
-     [("0123456789   !@\#$%^&*()   ~`-_+={}[]   :;'\"<>,.?/   ").scan(/./), "[A]"]
+    [("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz").scan(/./), "[*]"],
+    [("0123456789   !@\#$%^&*()   ~`-_+={}[]   :;'\"<>,.?/   ").scan(/./), "[A]"]
   ]
   USEKEYBOARD = true
 
@@ -104,13 +104,13 @@ class PokemonEntryScene
     end
     if minlength == 0
       @sprites["helpwindow"] = Window_UnformattedTextPokemon.newWithSize(
-         _INTL("Enter text using the keyboard. Press\nEnter to confirm, or Esc to cancel."),
-         32, Graphics.height - 96, Graphics.width - 64, 96, @viewport
+        _INTL("Enter text using the keyboard. Press\nEnter to confirm, or Esc to cancel."),
+        32, Graphics.height - 96, Graphics.width - 64, 96, @viewport
       )
     else
       @sprites["helpwindow"] = Window_UnformattedTextPokemon.newWithSize(
-         _INTL("Enter text using the keyboard.\nPress Enter to confirm."),
-         32, Graphics.height - 96, Graphics.width - 64, 96, @viewport
+        _INTL("Enter text using the keyboard.\nPress Enter to confirm."),
+        32, Graphics.height - 96, Graphics.width - 64, 96, @viewport
       )
     end
     @sprites["helpwindow"].letterbyletter = false
@@ -131,8 +131,8 @@ class PokemonEntryScene
         @sprites["subject"] = TrainerWalkingCharSprite.new(filename, @viewport)
         charwidth = @sprites["subject"].bitmap.width
         charheight = @sprites["subject"].bitmap.height
-        @sprites["subject"].x = 44 * 2 - charwidth / 8
-        @sprites["subject"].y = 38 * 2 - charheight / 4
+        @sprites["subject"].x = (44 * 2) - (charwidth / 8)
+        @sprites["subject"].y = (38 * 2) - (charheight / 4)
       end
     when 2   # Pokémon
       if pokemon
@@ -165,16 +165,16 @@ class PokemonEntryScene
       @sprites["subject"] = TrainerWalkingCharSprite.new(pokemon.to_s, @viewport)
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
-      @sprites["subject"].x = 44 * 2 - charwidth / 8
-      @sprites["subject"].y = 38 * 2 - charheight / 4
+      @sprites["subject"].x = (44 * 2) - (charwidth / 8)
+      @sprites["subject"].y = (38 * 2) - (charheight / 4)
     when 4   # Storage box
       @sprites["subject"] = TrainerWalkingCharSprite.new(nil, @viewport)
       @sprites["subject"].altcharset = "Graphics/Pictures/Naming/icon_storage"
       @sprites["subject"].animspeed = 4
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
-      @sprites["subject"].x = 44 * 2 - charwidth / 8
-      @sprites["subject"].y = 26 * 2 - charheight / 2
+      @sprites["subject"].x = (44 * 2) - (charwidth / 8)
+      @sprites["subject"].y = (26 * 2) - (charheight / 2)
     end
     pbFadeInAndShow(@sprites)
   end
@@ -321,8 +321,8 @@ class PokemonEntryScene2
         @cursortype = 2
       else
         if value >= 0
-          @sprite.x = 52 + 32 * (value % PokemonEntryScene2::ROWS)
-          @sprite.y = 180 + 38 * (value / PokemonEntryScene2::ROWS)
+          @sprite.x = 52 + (32 * (value % PokemonEntryScene2::ROWS))
+          @sprite.y = 180 + (38 * (value / PokemonEntryScene2::ROWS))
           @cursortype = 0
         end
       end
@@ -388,8 +388,8 @@ class PokemonEntryScene2
       textPos = []
       for y in 0...COLUMNS
         for x in 0...ROWS
-          pos = y * ROWS + x
-          textPos.push([@@Characters[i][0][pos], 44 + x * 32, 12 + y * 38, 2,
+          pos = (y * ROWS) + x
+          textPos.push([@@Characters[i][0][pos], 44 + (x * 32), 12 + (y * 38), 2,
                         Color.new(16, 24, 32), Color.new(160, 160, 160)])
         end
       end
@@ -416,8 +416,8 @@ class PokemonEntryScene2
         @sprites["subject"] = TrainerWalkingCharSprite.new(filename, @viewport)
         charwidth = @sprites["subject"].bitmap.width
         charheight = @sprites["subject"].bitmap.height
-        @sprites["subject"].x = 88 - charwidth / 8
-        @sprites["subject"].y = 76 - charheight / 4
+        @sprites["subject"].x = 88 - (charwidth / 8)
+        @sprites["subject"].y = 76 - (charheight / 4)
       end
     when 2   # Pokémon
       if pokemon
@@ -450,16 +450,16 @@ class PokemonEntryScene2
       @sprites["subject"] = TrainerWalkingCharSprite.new(pokemon.to_s, @viewport)
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
-      @sprites["subject"].x = 88 - charwidth / 8
-      @sprites["subject"].y = 76 - charheight / 4
+      @sprites["subject"].x = 88 - (charwidth / 8)
+      @sprites["subject"].y = 76 - (charheight / 4)
     when 4   # Storage box
       @sprites["subject"] = TrainerWalkingCharSprite.new(nil, @viewport)
       @sprites["subject"].altcharset = "Graphics/Pictures/Naming/icon_storage"
       @sprites["subject"].animspeed = 4
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
-      @sprites["subject"].x = 88 - charwidth / 8
-      @sprites["subject"].y = 52 - charheight / 2
+      @sprites["subject"].x = 88 - (charwidth / 8)
+      @sprites["subject"].y = 52 - (charheight / 2)
     end
     @sprites["bgoverlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbDoUpdateOverlay
@@ -469,7 +469,7 @@ class PokemonEntryScene2
     @maxlength = maxlength
     @maxlength.times { |i|
       @sprites["blank#{i}"] = SpriteWrapper.new(@viewport)
-      @sprites["blank#{i}"].x = 160 + 24 * i
+      @sprites["blank#{i}"].x = 160 + (24 * i)
       @sprites["blank#{i}"].bitmap = @bitmaps[@bitmaps.length - 1]
       @blanks[i] = 0
     }
@@ -502,7 +502,7 @@ class PokemonEntryScene2
   def pbDoUpdateOverlay2
     overlay = @sprites["overlay"].bitmap
     overlay.clear
-    modeIcon = [[_INTL("Graphics/Pictures/Naming/icon_mode"), 44 + @mode * 62, 120, @mode * 60, 0, 60, 44]]
+    modeIcon = [[_INTL("Graphics/Pictures/Naming/icon_mode"), 44 + (@mode * 62), 120, @mode * 60, 0, 60, 44]]
     pbDrawImagePositions(overlay, modeIcon)
   end
 
@@ -513,7 +513,7 @@ class PokemonEntryScene2
     bgoverlay.clear
     pbSetSystemFont(bgoverlay)
     textPositions = [
-       [@helptext, 160, 6, false, Color.new(16, 24, 32), Color.new(168, 184, 184)]
+      [@helptext, 160, 6, false, Color.new(16, 24, 32), Color.new(168, 184, 184)]
     ]
     chars = @helper.textChars
     x = 166
@@ -587,7 +587,7 @@ class PokemonEntryScene2
     return false if m >= ROWS - 1
     chset = @@Characters[@mode][0]
     COLUMNS.times do |i|
-      return false if chset[i * ROWS + m] != " "
+      return false if chset[(i * ROWS) + m] != " "
     end
     return true
   end
@@ -627,11 +627,11 @@ class PokemonEntryScene2
       if @cursorpos < 0         # Controls
         case @cursorpos
         when MODE1 then @cursorpos = ROWS * (COLUMNS - 1)
-        when MODE2 then @cursorpos = ROWS * (COLUMNS - 1) + 2
-        when MODE3 then @cursorpos = ROWS * (COLUMNS - 1) + 4
-        when MODE4 then @cursorpos = ROWS * (COLUMNS - 1) + 6
-        when BACK  then @cursorpos = ROWS * (COLUMNS - 1) + 9
-        when OK    then @cursorpos = ROWS * (COLUMNS - 1) + 11
+        when MODE2 then @cursorpos = (ROWS * (COLUMNS - 1)) + 2
+        when MODE3 then @cursorpos = (ROWS * (COLUMNS - 1)) + 4
+        when MODE4 then @cursorpos = (ROWS * (COLUMNS - 1)) + 6
+        when BACK  then @cursorpos = (ROWS * (COLUMNS - 1)) + 9
+        when OK    then @cursorpos = (ROWS * (COLUMNS - 1)) + 11
         end
       elsif @cursorpos < ROWS   # Top row of letters
         case @cursorpos
@@ -644,7 +644,7 @@ class PokemonEntryScene2
         end
       else
         cursordiv = wrapmod(cursordiv - 1, COLUMNS)
-        @cursorpos = cursordiv * ROWS + cursormod
+        @cursorpos = (cursordiv * ROWS) + cursormod
       end
     elsif Input.repeat?(Input::DOWN)
       if @cursorpos < 0                      # Controls
@@ -667,7 +667,7 @@ class PokemonEntryScene2
         end
       else
         cursordiv = wrapmod(cursordiv + 1, COLUMNS)
-        @cursorpos = cursordiv * ROWS + cursormod
+        @cursorpos = (cursordiv * ROWS) + cursormod
       end
     end
     if @cursorpos != oldcursor   # Cursor position changed
@@ -717,7 +717,7 @@ class PokemonEntryScene2
         else
           cursormod = @cursorpos % ROWS
           cursordiv = @cursorpos / ROWS
-          charpos = cursordiv * ROWS + cursormod
+          charpos = (cursordiv * ROWS) + cursormod
           chset = @@Characters[@mode][0]
           if @helper.length >= @maxlength
             @helper.delete

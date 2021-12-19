@@ -140,7 +140,7 @@ class PokemonPartyBlankPanel < SpriteWrapper
   def initialize(_pokemon, index, viewport = nil)
     super(viewport)
     self.x = (index % 2) * Graphics.width / 2
-    self.y = 16 * (index % 2) + 96 * (index / 2)
+    self.y = (16 * (index % 2)) + (96 * (index / 2))
     @panelbgsprite = AnimatedBitmap.new("Graphics/Pictures/Party/panel_blank")
     self.bitmap = @panelbgsprite.bitmap
     @text = nil
@@ -177,7 +177,7 @@ class PokemonPartyPanel < SpriteWrapper
     @active = (index == 0)   # true = rounded panel, false = rectangular panel
     @refreshing = true
     self.x = (index % 2) * Graphics.width / 2
-    self.y = 16 * (index % 2) + 96 * (index / 2)
+    self.y = (16 * (index % 2)) + (96 * (index / 2))
     @panelbgsprite = ChangelingSprite.new(0, 0, viewport)
     @panelbgsprite.z = self.z
     if @active   # Rounded panel
@@ -374,7 +374,7 @@ class PokemonPartyPanel < SpriteWrapper
           textpos.push([sprintf("% 3d /% 3d", @pokemon.hp, @pokemon.totalhp), 224, 54, 1, basecolor, shadowcolor])
           # Draw HP bar
           if @pokemon.hp > 0
-            w = @pokemon.hp * 96 * 1.0 / @pokemon.totalhp
+            w = @pokemon.hp * 96 / @pokemon.totalhp.to_f
             w = 1 if w < 1
             w = ((w / 2).round) * 2
             hpzone = 0
@@ -415,16 +415,14 @@ class PokemonPartyPanel < SpriteWrapper
         pbDrawImagePositions(@overlaysprite.bitmap,
                              [["Graphics/Pictures/Party/overlay_lv", 20, 70, 0, 0, 22, 14]])
         pbSetSmallFont(@overlaysprite.bitmap)
-        pbDrawTextPositions(@overlaysprite.bitmap, [
-           [@pokemon.level.to_s, 42, 57, 0, basecolor, shadowcolor]
-        ])
+        pbDrawTextPositions(@overlaysprite.bitmap,
+                            [[@pokemon.level.to_s, 42, 57, 0, basecolor, shadowcolor]])
       end
       # Draw annotation text
       if @text && @text.length > 0
         pbSetSystemFont(@overlaysprite.bitmap)
-        pbDrawTextPositions(@overlaysprite.bitmap, [
-           [@text, 96, 52, 0, basecolor, shadowcolor]
-        ])
+        pbDrawTextPositions(@overlaysprite.bitmap,
+                            [[@text, 96, 52, 0, basecolor, shadowcolor]])
       end
     end
     @refreshing = false
@@ -514,10 +512,8 @@ class PokemonParty_Scene
           pbPlayDecisionSE if @sprites["messagebox"].pausing?
           @sprites["messagebox"].resume
         end
-      else
-        if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
-          break
-        end
+      elsif Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
+        break
       end
     end
     @sprites["messagebox"].visible = false

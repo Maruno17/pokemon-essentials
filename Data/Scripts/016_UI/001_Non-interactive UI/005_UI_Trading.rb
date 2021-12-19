@@ -93,8 +93,8 @@ class PokemonTrade_Scene
     pictureBall.moveXY(delay, 6, Graphics.width / 2, -32)
     # Play animation
     pbRunPictures(
-       [picturePoke, pictureBall],
-       [@sprites["rsprite1"], spriteBall]
+      [picturePoke, pictureBall],
+      [@sprites["rsprite1"], spriteBall]
     )
     spriteBall.dispose
   end
@@ -124,12 +124,12 @@ class PokemonTrade_Scene
       d = [1, 2, 4, 8][i]   # Fraction of the starting height each bounce rises to
       delay -= t if i == 0
       if i > 0
-        pictureBall.setZoomXY(delay, 100 + 5 * (5 - i), 100 - 5 * (5 - i))   # Squish
+        pictureBall.setZoomXY(delay, 100 + (5 * (5 - i)), 100 - (5 * (5 - i)))   # Squish
         pictureBall.moveZoom(delay, 2, 100)                      # Unsquish
-        pictureBall.moveXY(delay, t, Graphics.width / 2, y - 100 / d)
+        pictureBall.moveXY(delay, t, Graphics.width / 2, y - (100 / d))
       end
       pictureBall.moveXY(delay + t, t, Graphics.width / 2, y)
-      pictureBall.setSE(delay + 2 * t, "Battle ball drop")
+      pictureBall.setSE(delay + (2 * t), "Battle ball drop")
       delay = pictureBall.totalDuration
     end
     picturePoke.setXY(delay, Graphics.width / 2, y)
@@ -150,8 +150,8 @@ class PokemonTrade_Scene
     picturePoke.setSE(delay, cry) if cry
     # Play animation
     pbRunPictures(
-       [picturePoke, pictureBall],
-       [@sprites["rsprite2"], spriteBall]
+      [picturePoke, pictureBall],
+      [@sprites["rsprite2"], spriteBall]
     )
     spriteBall.dispose
   end

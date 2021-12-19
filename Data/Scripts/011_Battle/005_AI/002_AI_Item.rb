@@ -29,24 +29,24 @@ class Battle::AI
     pkmn = battler.pokemon
     # Item categories
     hpItems = {
-       :POTION       => 20,
-       :SUPERPOTION  => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 60 : 50,
-       :HYPERPOTION  => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 120 : 200,
-       :MAXPOTION    => 999,
-       :BERRYJUICE   => 20,
-       :SWEETHEART   => 20,
-       :FRESHWATER   => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 30 : 50,
-       :SODAPOP      => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 50 : 60,
-       :LEMONADE     => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 70 : 80,
-       :MOOMOOMILK   => 100,
-       :ORANBERRY    => 10,
-       :SITRUSBERRY  => battler.totalhp / 4,
-       :ENERGYPOWDER => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 60 : 50,
-       :ENERGYROOT   => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 120 : 200
+      :POTION       => 20,
+      :SUPERPOTION  => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 60 : 50,
+      :HYPERPOTION  => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 120 : 200,
+      :MAXPOTION    => 999,
+      :BERRYJUICE   => 20,
+      :SWEETHEART   => 20,
+      :FRESHWATER   => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 30 : 50,
+      :SODAPOP      => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 50 : 60,
+      :LEMONADE     => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 70 : 80,
+      :MOOMOOMILK   => 100,
+      :ORANBERRY    => 10,
+      :SITRUSBERRY  => battler.totalhp / 4,
+      :ENERGYPOWDER => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 60 : 50,
+      :ENERGYROOT   => (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 120 : 200
     }
     hpItems[:RAGECANDYBAR] = 20 if !Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
     fullRestoreItems = [
-       :FULLRESTORE
+      :FULLRESTORE
     ]
     oneStatusItems = [   # Preferred over items that heal all status problems
       :AWAKENING, :CHESTOBERRY, :BLUEFLUTE,
@@ -56,43 +56,43 @@ class Battle::AI
       :ICEHEAL, :ASPEARBERRY
     ]
     allStatusItems = [
-       :FULLHEAL, :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE, :LUMIOSEGALETTE,
-       :SHALOURSABLE, :BIGMALASADA, :PEWTERCRUNCHIES, :LUMBERRY, :HEALPOWDER
+      :FULLHEAL, :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE, :LUMIOSEGALETTE,
+      :SHALOURSABLE, :BIGMALASADA, :PEWTERCRUNCHIES, :LUMBERRY, :HEALPOWDER
     ]
     allStatusItems.push(:RAGECANDYBAR) if Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
     xItems = {
-       :XATTACK    => [:ATTACK, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
-       :XATTACK2   => [:ATTACK, 2],
-       :XATTACK3   => [:ATTACK, 3],
-       :XATTACK6   => [:ATTACK, 6],
-       :XDEFENSE   => [:DEFENSE, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
-       :XDEFENSE2  => [:DEFENSE, 2],
-       :XDEFENSE3  => [:DEFENSE, 3],
-       :XDEFENSE6  => [:DEFENSE, 6],
-       :XDEFEND    => [:DEFENSE, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
-       :XDEFEND2   => [:DEFENSE, 2],
-       :XDEFEND3   => [:DEFENSE, 3],
-       :XDEFEND6   => [:DEFENSE, 6],
-       :XSPATK     => [:SPECIAL_ATTACK, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
-       :XSPATK2    => [:SPECIAL_ATTACK, 2],
-       :XSPATK3    => [:SPECIAL_ATTACK, 3],
-       :XSPATK6    => [:SPECIAL_ATTACK, 6],
-       :XSPECIAL   => [:SPECIAL_ATTACK, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
-       :XSPECIAL2  => [:SPECIAL_ATTACK, 2],
-       :XSPECIAL3  => [:SPECIAL_ATTACK, 3],
-       :XSPECIAL6  => [:SPECIAL_ATTACK, 6],
-       :XSPDEF     => [:SPECIAL_DEFENSE, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
-       :XSPDEF2    => [:SPECIAL_DEFENSE, 2],
-       :XSPDEF3    => [:SPECIAL_DEFENSE, 3],
-       :XSPDEF6    => [:SPECIAL_DEFENSE, 6],
-       :XSPEED     => [:SPEED, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
-       :XSPEED2    => [:SPEED, 2],
-       :XSPEED3    => [:SPEED, 3],
-       :XSPEED6    => [:SPEED, 6],
-       :XACCURACY  => [:ACCURACY, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
-       :XACCURACY2 => [:ACCURACY, 2],
-       :XACCURACY3 => [:ACCURACY, 3],
-       :XACCURACY6 => [:ACCURACY, 6]
+      :XATTACK    => [:ATTACK, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
+      :XATTACK2   => [:ATTACK, 2],
+      :XATTACK3   => [:ATTACK, 3],
+      :XATTACK6   => [:ATTACK, 6],
+      :XDEFENSE   => [:DEFENSE, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
+      :XDEFENSE2  => [:DEFENSE, 2],
+      :XDEFENSE3  => [:DEFENSE, 3],
+      :XDEFENSE6  => [:DEFENSE, 6],
+      :XDEFEND    => [:DEFENSE, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
+      :XDEFEND2   => [:DEFENSE, 2],
+      :XDEFEND3   => [:DEFENSE, 3],
+      :XDEFEND6   => [:DEFENSE, 6],
+      :XSPATK     => [:SPECIAL_ATTACK, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
+      :XSPATK2    => [:SPECIAL_ATTACK, 2],
+      :XSPATK3    => [:SPECIAL_ATTACK, 3],
+      :XSPATK6    => [:SPECIAL_ATTACK, 6],
+      :XSPECIAL   => [:SPECIAL_ATTACK, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
+      :XSPECIAL2  => [:SPECIAL_ATTACK, 2],
+      :XSPECIAL3  => [:SPECIAL_ATTACK, 3],
+      :XSPECIAL6  => [:SPECIAL_ATTACK, 6],
+      :XSPDEF     => [:SPECIAL_DEFENSE, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
+      :XSPDEF2    => [:SPECIAL_DEFENSE, 2],
+      :XSPDEF3    => [:SPECIAL_DEFENSE, 3],
+      :XSPDEF6    => [:SPECIAL_DEFENSE, 6],
+      :XSPEED     => [:SPEED, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
+      :XSPEED2    => [:SPEED, 2],
+      :XSPEED3    => [:SPEED, 3],
+      :XSPEED6    => [:SPEED, 6],
+      :XACCURACY  => [:ACCURACY, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
+      :XACCURACY2 => [:ACCURACY, 2],
+      :XACCURACY3 => [:ACCURACY, 3],
+      :XACCURACY6 => [:ACCURACY, 6]
     }
     losthp = battler.totalhp - battler.hp
     preferFullRestore = (battler.hp <= battler.totalhp * 2 / 3 &&

@@ -66,18 +66,16 @@ module GameData
 
     def apply_metrics_to_sprite(sprite, index, shadow = false)
       if shadow
-        if (index & 1) == 1   # Foe Pokémon
+        if (index & 1) == 1    # Foe Pokémon
           sprite.x += @shadow_x * 2
         end
-      else
-        if (index & 1) == 0   # Player's Pokémon
-          sprite.x += @back_sprite[0] * 2
-          sprite.y += @back_sprite[1] * 2
-        else                  # Foe Pokémon
-          sprite.x += @front_sprite[0] * 2
-          sprite.y += @front_sprite[1] * 2
-          sprite.y -= @front_sprite_altitude * 2
-        end
+      elsif (index & 1) == 0   # Player's Pokémon
+        sprite.x += @back_sprite[0] * 2
+        sprite.y += @back_sprite[1] * 2
+      else                     # Foe Pokémon
+        sprite.x += @front_sprite[0] * 2
+        sprite.y += @front_sprite[1] * 2
+        sprite.y -= @front_sprite_altitude * 2
       end
     end
 

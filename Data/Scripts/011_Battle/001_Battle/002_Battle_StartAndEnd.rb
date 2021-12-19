@@ -49,7 +49,7 @@ class Battle
         requireds = []
         # Find out how many Pokémon each trainer on side needs to have
         for i in 0...@sideSizes[side]
-          idxTrainer = pbGetOwnerIndexFromBattlerIndex(i * 2 + side)
+          idxTrainer = pbGetOwnerIndexFromBattlerIndex((i * 2) + side)
           requireds[idxTrainer] = 0 if requireds[idxTrainer].nil?
           requireds[idxTrainer] += 1
         end
@@ -119,10 +119,10 @@ class Battle
       # Set up wild Pokémon
       if side == 1 && wildBattle?
         pbParty(1).each_with_index do |pkmn, idxPkmn|
-          pbCreateBattler(2 * idxPkmn + side, pkmn, idxPkmn)
+          pbCreateBattler((2 * idxPkmn) + side, pkmn, idxPkmn)
           # Changes the Pokémon's form upon entering battle (if it should)
-          @peer.pbOnEnteringBattle(self, @battlers[2 * idxPkmn + side], pkmn, true)
-          pbSetSeen(@battlers[2 * idxPkmn + side])
+          @peer.pbOnEnteringBattle(self, @battlers[(2 * idxPkmn) + side], pkmn, true)
+          pbSetSeen(@battlers[(2 * idxPkmn) + side])
           @usedInBattle[side][idxPkmn] = true
         end
         next
@@ -132,7 +132,7 @@ class Battle
       requireds = []
       # Find out how many Pokémon each trainer on side needs to have
       for i in 0...@sideSizes[side]
-        idxTrainer = pbGetOwnerIndexFromBattlerIndex(i * 2 + side)
+        idxTrainer = pbGetOwnerIndexFromBattlerIndex((i * 2) + side)
         requireds[idxTrainer] = 0 if requireds[idxTrainer].nil?
         requireds[idxTrainer] += 1
       end
@@ -143,7 +143,7 @@ class Battle
         ret[side][idxTrainer] = []
         eachInTeam(side, idxTrainer) do |pkmn, idxPkmn|
           next if !pkmn.able?
-          idxBattler = 2 * battlerNumber + side
+          idxBattler = (2 * battlerNumber) + side
           pbCreateBattler(idxBattler, pkmn, idxPkmn)
           ret[side][idxTrainer].push(idxBattler)
           battlerNumber += 1

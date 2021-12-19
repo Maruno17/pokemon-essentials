@@ -411,12 +411,10 @@ BattlerDebugMenuCommands.register("settypes", {
             end
             battler.types.compact!
           end
+        elsif cmd < max_main_types
+          battler.types[cmd] = new_type
         else
-          if cmd < max_main_types
-            battler.types[cmd] = new_type
-          else
-            battler.effects[PBEffects::Type3] = new_type
-          end
+          battler.effects[PBEffects::Type3] = new_type
         end
       end
     end

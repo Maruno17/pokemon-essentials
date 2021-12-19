@@ -379,13 +379,13 @@ class Battle::Move::RandomPowerDoublePowerIfTargetUnderground < Battle::Move
   def pbOnStartUse(user, targets)
     baseDmg = [10, 30, 50, 70, 90, 110, 150]
     magnitudes = [
-       4,
-       5, 5,
-       6, 6, 6, 6,
-       7, 7, 7, 7, 7, 7,
-       8, 8, 8, 8,
-       9, 9,
-       10
+      4,
+      5, 5,
+      6, 6, 6, 6,
+      7, 7, 7, 7, 7, 7,
+      8, 8, 8, 8,
+      9, 9,
+      10
     ]
     magni = magnitudes[@battle.pbRandom(magnitudes.length)]
     @magnitudeDmg = baseDmg[magni - 4]
@@ -710,11 +710,9 @@ class Battle::Move::StartWeakenElectricMoves < Battle::Move
         @battle.pbDisplay(_INTL("But it failed!"))
         return true
       end
-    else
-      if @battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
-        @battle.pbDisplay(_INTL("But it failed!"))
-        return true
-      end
+    elsif @battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
     end
     return false
   end
@@ -739,11 +737,9 @@ class Battle::Move::StartWeakenFireMoves < Battle::Move
         @battle.pbDisplay(_INTL("But it failed!"))
         return true
       end
-    else
-      if @battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
-        @battle.pbDisplay(_INTL("But it failed!"))
-        return true
-      end
+    elsif @battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
     end
     return false
   end
@@ -1359,7 +1355,7 @@ def pbHiddenPower(pkmn)
     power |= (iv[:SPEED] & 2) << 2
     power |= (iv[:SPECIAL_ATTACK] & 2) << 3
     power |= (iv[:SPECIAL_DEFENSE] & 2) << 4
-    power = powerMin + (powerMax - powerMin) * power / 63
+    power = powerMin + ((powerMax - powerMin) * power / 63)
   end
   return [type, power]
 end
@@ -1372,41 +1368,41 @@ class Battle::Move::TypeAndPowerDependOnUserBerry < Battle::Move
   def initialize(battle, move)
     super
     @typeArray = {
-       :NORMAL   => [:CHILANBERRY],
-       :FIRE     => [:CHERIBERRY,  :BLUKBERRY,   :WATMELBERRY, :OCCABERRY],
-       :WATER    => [:CHESTOBERRY, :NANABBERRY,  :DURINBERRY,  :PASSHOBERRY],
-       :ELECTRIC => [:PECHABERRY,  :WEPEARBERRY, :BELUEBERRY,  :WACANBERRY],
-       :GRASS    => [:RAWSTBERRY,  :PINAPBERRY,  :RINDOBERRY,  :LIECHIBERRY],
-       :ICE      => [:ASPEARBERRY, :POMEGBERRY,  :YACHEBERRY,  :GANLONBERRY],
-       :FIGHTING => [:LEPPABERRY,  :KELPSYBERRY, :CHOPLEBERRY, :SALACBERRY],
-       :POISON   => [:ORANBERRY,   :QUALOTBERRY, :KEBIABERRY,  :PETAYABERRY],
-       :GROUND   => [:PERSIMBERRY, :HONDEWBERRY, :SHUCABERRY,  :APICOTBERRY],
-       :FLYING   => [:LUMBERRY,    :GREPABERRY,  :COBABERRY,   :LANSATBERRY],
-       :PSYCHIC  => [:SITRUSBERRY, :TAMATOBERRY, :PAYAPABERRY, :STARFBERRY],
-       :BUG      => [:FIGYBERRY,   :CORNNBERRY,  :TANGABERRY,  :ENIGMABERRY],
-       :ROCK     => [:WIKIBERRY,   :MAGOSTBERRY, :CHARTIBERRY, :MICLEBERRY],
-       :GHOST    => [:MAGOBERRY,   :RABUTABERRY, :KASIBBERRY,  :CUSTAPBERRY],
-       :DRAGON   => [:AGUAVBERRY,  :NOMELBERRY,  :HABANBERRY,  :JABOCABERRY],
-       :DARK     => [:IAPAPABERRY, :SPELONBERRY, :COLBURBERRY, :ROWAPBERRY, :MARANGABERRY],
-       :STEEL    => [:RAZZBERRY,   :PAMTREBERRY, :BABIRIBERRY],
-       :FAIRY    => [:ROSELIBERRY, :KEEBERRY]
+      :NORMAL   => [:CHILANBERRY],
+      :FIRE     => [:CHERIBERRY,  :BLUKBERRY,   :WATMELBERRY, :OCCABERRY],
+      :WATER    => [:CHESTOBERRY, :NANABBERRY,  :DURINBERRY,  :PASSHOBERRY],
+      :ELECTRIC => [:PECHABERRY,  :WEPEARBERRY, :BELUEBERRY,  :WACANBERRY],
+      :GRASS    => [:RAWSTBERRY,  :PINAPBERRY,  :RINDOBERRY,  :LIECHIBERRY],
+      :ICE      => [:ASPEARBERRY, :POMEGBERRY,  :YACHEBERRY,  :GANLONBERRY],
+      :FIGHTING => [:LEPPABERRY,  :KELPSYBERRY, :CHOPLEBERRY, :SALACBERRY],
+      :POISON   => [:ORANBERRY,   :QUALOTBERRY, :KEBIABERRY,  :PETAYABERRY],
+      :GROUND   => [:PERSIMBERRY, :HONDEWBERRY, :SHUCABERRY,  :APICOTBERRY],
+      :FLYING   => [:LUMBERRY,    :GREPABERRY,  :COBABERRY,   :LANSATBERRY],
+      :PSYCHIC  => [:SITRUSBERRY, :TAMATOBERRY, :PAYAPABERRY, :STARFBERRY],
+      :BUG      => [:FIGYBERRY,   :CORNNBERRY,  :TANGABERRY,  :ENIGMABERRY],
+      :ROCK     => [:WIKIBERRY,   :MAGOSTBERRY, :CHARTIBERRY, :MICLEBERRY],
+      :GHOST    => [:MAGOBERRY,   :RABUTABERRY, :KASIBBERRY,  :CUSTAPBERRY],
+      :DRAGON   => [:AGUAVBERRY,  :NOMELBERRY,  :HABANBERRY,  :JABOCABERRY],
+      :DARK     => [:IAPAPABERRY, :SPELONBERRY, :COLBURBERRY, :ROWAPBERRY, :MARANGABERRY],
+      :STEEL    => [:RAZZBERRY,   :PAMTREBERRY, :BABIRIBERRY],
+      :FAIRY    => [:ROSELIBERRY, :KEEBERRY]
     }
     @damageArray = {
-       60 => [:CHERIBERRY,  :CHESTOBERRY, :PECHABERRY,  :RAWSTBERRY,  :ASPEARBERRY,
-              :LEPPABERRY,  :ORANBERRY,   :PERSIMBERRY, :LUMBERRY,    :SITRUSBERRY,
-              :FIGYBERRY,   :WIKIBERRY,   :MAGOBERRY,   :AGUAVBERRY,  :IAPAPABERRY,
-              :RAZZBERRY,   :OCCABERRY,   :PASSHOBERRY, :WACANBERRY,  :RINDOBERRY,
-              :YACHEBERRY,  :CHOPLEBERRY, :KEBIABERRY,  :SHUCABERRY,  :COBABERRY,
-              :PAYAPABERRY, :TANGABERRY,  :CHARTIBERRY, :KASIBBERRY,  :HABANBERRY,
-              :COLBURBERRY, :BABIRIBERRY, :CHILANBERRY, :ROSELIBERRY],
-       70 => [:BLUKBERRY,   :NANABBERRY,  :WEPEARBERRY, :PINAPBERRY,  :POMEGBERRY,
-              :KELPSYBERRY, :QUALOTBERRY, :HONDEWBERRY, :GREPABERRY,  :TAMATOBERRY,
-              :CORNNBERRY,  :MAGOSTBERRY, :RABUTABERRY, :NOMELBERRY,  :SPELONBERRY,
-              :PAMTREBERRY],
-       80 => [:WATMELBERRY, :DURINBERRY,  :BELUEBERRY,  :LIECHIBERRY, :GANLONBERRY,
-              :SALACBERRY,  :PETAYABERRY, :APICOTBERRY, :LANSATBERRY, :STARFBERRY,
-              :ENIGMABERRY, :MICLEBERRY,  :CUSTAPBERRY, :JABOCABERRY, :ROWAPBERRY,
-              :KEEBERRY,    :MARANGABERRY]
+      60 => [:CHERIBERRY,  :CHESTOBERRY, :PECHABERRY,  :RAWSTBERRY,  :ASPEARBERRY,
+             :LEPPABERRY,  :ORANBERRY,   :PERSIMBERRY, :LUMBERRY,    :SITRUSBERRY,
+             :FIGYBERRY,   :WIKIBERRY,   :MAGOBERRY,   :AGUAVBERRY,  :IAPAPABERRY,
+             :RAZZBERRY,   :OCCABERRY,   :PASSHOBERRY, :WACANBERRY,  :RINDOBERRY,
+             :YACHEBERRY,  :CHOPLEBERRY, :KEBIABERRY,  :SHUCABERRY,  :COBABERRY,
+             :PAYAPABERRY, :TANGABERRY,  :CHARTIBERRY, :KASIBBERRY,  :HABANBERRY,
+             :COLBURBERRY, :BABIRIBERRY, :CHILANBERRY, :ROSELIBERRY],
+      70 => [:BLUKBERRY,   :NANABBERRY,  :WEPEARBERRY, :PINAPBERRY,  :POMEGBERRY,
+             :KELPSYBERRY, :QUALOTBERRY, :HONDEWBERRY, :GREPABERRY,  :TAMATOBERRY,
+             :CORNNBERRY,  :MAGOSTBERRY, :RABUTABERRY, :NOMELBERRY,  :SPELONBERRY,
+             :PAMTREBERRY],
+      80 => [:WATMELBERRY, :DURINBERRY,  :BELUEBERRY,  :LIECHIBERRY, :GANLONBERRY,
+             :SALACBERRY,  :PETAYABERRY, :APICOTBERRY, :LANSATBERRY, :STARFBERRY,
+             :ENIGMABERRY, :MICLEBERRY,  :CUSTAPBERRY, :JABOCABERRY, :ROWAPBERRY,
+             :KEEBERRY,    :MARANGABERRY]
     }
   end
 
@@ -1469,23 +1465,23 @@ class Battle::Move::TypeDependsOnUserPlate < Battle::Move
   def initialize(battle, move)
     super
     @itemTypes = {
-       :FISTPLATE   => :FIGHTING,
-       :SKYPLATE    => :FLYING,
-       :TOXICPLATE  => :POISON,
-       :EARTHPLATE  => :GROUND,
-       :STONEPLATE  => :ROCK,
-       :INSECTPLATE => :BUG,
-       :SPOOKYPLATE => :GHOST,
-       :IRONPLATE   => :STEEL,
-       :FLAMEPLATE  => :FIRE,
-       :SPLASHPLATE => :WATER,
-       :MEADOWPLATE => :GRASS,
-       :ZAPPLATE    => :ELECTRIC,
-       :MINDPLATE   => :PSYCHIC,
-       :ICICLEPLATE => :ICE,
-       :DRACOPLATE  => :DRAGON,
-       :DREADPLATE  => :DARK,
-       :PIXIEPLATE  => :FAIRY
+      :FISTPLATE   => :FIGHTING,
+      :SKYPLATE    => :FLYING,
+      :TOXICPLATE  => :POISON,
+      :EARTHPLATE  => :GROUND,
+      :STONEPLATE  => :ROCK,
+      :INSECTPLATE => :BUG,
+      :SPOOKYPLATE => :GHOST,
+      :IRONPLATE   => :STEEL,
+      :FLAMEPLATE  => :FIRE,
+      :SPLASHPLATE => :WATER,
+      :MEADOWPLATE => :GRASS,
+      :ZAPPLATE    => :ELECTRIC,
+      :MINDPLATE   => :PSYCHIC,
+      :ICICLEPLATE => :ICE,
+      :DRACOPLATE  => :DRAGON,
+      :DREADPLATE  => :DARK,
+      :PIXIEPLATE  => :FAIRY
     }
   end
 
@@ -1509,23 +1505,23 @@ class Battle::Move::TypeDependsOnUserMemory < Battle::Move
   def initialize(battle, move)
     super
     @itemTypes = {
-       :FIGHTINGMEMORY => :FIGHTING,
-       :FLYINGMEMORY   => :FLYING,
-       :POISONMEMORY   => :POISON,
-       :GROUNDMEMORY   => :GROUND,
-       :ROCKMEMORY     => :ROCK,
-       :BUGMEMORY      => :BUG,
-       :GHOSTMEMORY    => :GHOST,
-       :STEELMEMORY    => :STEEL,
-       :FIREMEMORY     => :FIRE,
-       :WATERMEMORY    => :WATER,
-       :GRASSMEMORY    => :GRASS,
-       :ELECTRICMEMORY => :ELECTRIC,
-       :PSYCHICMEMORY  => :PSYCHIC,
-       :ICEMEMORY      => :ICE,
-       :DRAGONMEMORY   => :DRAGON,
-       :DARKMEMORY     => :DARK,
-       :FAIRYMEMORY    => :FAIRY
+      :FIGHTINGMEMORY => :FIGHTING,
+      :FLYINGMEMORY   => :FLYING,
+      :POISONMEMORY   => :POISON,
+      :GROUNDMEMORY   => :GROUND,
+      :ROCKMEMORY     => :ROCK,
+      :BUGMEMORY      => :BUG,
+      :GHOSTMEMORY    => :GHOST,
+      :STEELMEMORY    => :STEEL,
+      :FIREMEMORY     => :FIRE,
+      :WATERMEMORY    => :WATER,
+      :GRASSMEMORY    => :GRASS,
+      :ELECTRICMEMORY => :ELECTRIC,
+      :PSYCHICMEMORY  => :PSYCHIC,
+      :ICEMEMORY      => :ICE,
+      :DRAGONMEMORY   => :DRAGON,
+      :DARKMEMORY     => :DARK,
+      :FAIRYMEMORY    => :FAIRY
     }
   end
 
@@ -1549,10 +1545,10 @@ class Battle::Move::TypeDependsOnUserDrive < Battle::Move
   def initialize(battle, move)
     super
     @itemTypes = {
-       :SHOCKDRIVE => :ELECTRIC,
-       :BURNDRIVE  => :FIRE,
-       :CHILLDRIVE => :ICE,
-       :DOUSEDRIVE => :WATER
+      :SHOCKDRIVE => :ELECTRIC,
+      :BURNDRIVE  => :FIRE,
+      :CHILLDRIVE => :ICE,
+      :DOUSEDRIVE => :WATER
     }
   end
 

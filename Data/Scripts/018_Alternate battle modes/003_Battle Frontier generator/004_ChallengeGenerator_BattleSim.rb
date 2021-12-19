@@ -146,7 +146,7 @@ class PlayerRatingElo
 
   def winChancePercent
     return @estimatedRating if @estimatedRating
-    x = (1 + 10.0**((@rating - 1600.0) / 400.0))
+    x = (1 + (10.0**((@rating - 1600.0) / 400.0)))
     @estimatedRating = (x == 0 ? 1.0 : 1.0 / x)
     return @estimatedRating
   end
@@ -156,7 +156,7 @@ class PlayerRatingElo
     stake = 0
     matches.length.times do
       score = (match.score == -1) ? 0.5 : match.score
-      e = (1 + 10.0**((@rating - match.opponentRating) / 400.0))
+      e = (1 + (10.0**((@rating - match.opponentRating) / 400.0)))
       stake += match.kValue * (score - e)
     end
     @rating += stake
@@ -184,7 +184,7 @@ class PlayerRating
       # https://www.smogon.com/forums/threads/make-sense-of-your-shoddy-battle-rating.55764/
       otherRating = 1500.0
       otherDeviation = 350.0
-      s = Math.sqrt(100000.0 + @deviation * @deviation + otherDeviation * otherDeviation)
+      s = Math.sqrt(100000.0 + (@deviation * @deviation) + (otherDeviation * otherDeviation))
       g = 10.0**((otherRating - @rating) * 0.79 / s)
       @estimatedRating = (1.0 / (1.0 + g)) * 100.0   # Percent chance that I win against opponent
     else
@@ -192,7 +192,7 @@ class PlayerRating
       rds = @deviation * @deviation
       sqr = Math.sqrt(15.905694331435 * (rds + 221781.21786254))
       inner = (1500.0 - @rating) * Math::PI / sqr
-      @estimatedRating = (10000.0 / (1.0 + (10.0**inner)) + 0.5) / 100.0
+      @estimatedRating = ((10000.0 / (1.0 + (10.0**inner))) + 0.5) / 100.0
     end
     return @estimatedRating
   end
@@ -202,7 +202,7 @@ class PlayerRating
     deviation = deviation2
     rating = rating2
     if matches.length == 0
-      setDeviation2(Math.sqrt(deviation * deviation + volatility * volatility))
+      setDeviation2(Math.sqrt((deviation * deviation) + (volatility * volatility)))
       return
     end
     g = []
@@ -228,10 +228,10 @@ class PlayerRating
     end
     volatility = getUpdatedVolatility(volatility, deviation, variance, sum, system)
     # Update deviation
-    t = deviation * deviation + volatility * volatility
-    deviation = 1.0 / Math.sqrt(1.0 / t + 1.0 / variance)
+    t = (deviation * deviation) + (volatility * volatility)
+    deviation = 1.0 / Math.sqrt((1.0 / t) + (1.0 / variance))
     # Update rating
-    rating = rating + deviation * deviation * sum
+    rating = rating + (deviation * deviation * sum)
     setRating2(rating)
     setDeviation2(deviation)
     setVolatility2(volatility)
@@ -254,7 +254,7 @@ class PlayerRating
   def getGFactor(deviation)
     # deviation is not yet in glicko2
     deviation /= 173.7178
-    return 1.0 / Math.sqrt(1.0 + (3.0 * deviation * deviation) / (Math::PI * Math::PI))
+    return 1.0 / Math.sqrt(1.0 + ((3.0 * deviation * deviation) / (Math::PI * Math::PI)))
   end
 
   def getEFactor(rating, opponentRating, g)
@@ -291,8 +291,8 @@ class PlayerRating
       d = squDevplusVar + e
       squD = d * d
       i = improvement / d
-      h1 = -(x0 - a) / squSystem - 0.5 * e * i * i
-      h2 = -1.0 / squSystem - 0.5 * e * squDevplusVar / squD
+      h1 = (-(x0 - a) / squSystem) - (0.5 * e * i * i)
+      h2 = (-1.0 / squSystem) - (0.5 * e * squDevplusVar / squD)
       h2 += 0.5 * squVariance * e * (squDevplusVar - e) / (squD * d)
       x1 = x0
       x0 -= h1 / h2

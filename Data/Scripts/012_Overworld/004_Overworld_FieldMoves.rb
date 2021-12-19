@@ -89,9 +89,9 @@ def pbHiddenMoveAnimation(pokemon)
   end
   strobebitmap.dispose
   interp = RectInterpolator.new(
-     Rect.new(0, Graphics.height / 2, Graphics.width, 0),
-     Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
-     Graphics.frame_rate / 4
+    Rect.new(0, Graphics.height / 2, Graphics.width, 0),
+    Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
+    Graphics.frame_rate / 4
   )
   ptinterp = nil
   phase = 1
@@ -109,9 +109,9 @@ def pbHiddenMoveAnimation(pokemon)
       if interp.done?
         phase = 2
         ptinterp = PointInterpolator.new(
-           Graphics.width + (sprite.bitmap.width / 2), bg.bitmap.height / 2,
-           Graphics.width / 2, bg.bitmap.height / 2,
-           Graphics.frame_rate * 4 / 10
+          Graphics.width + (sprite.bitmap.width / 2), bg.bitmap.height / 2,
+          Graphics.width / 2, bg.bitmap.height / 2,
+          Graphics.frame_rate * 4 / 10
         )
       end
     when 2   # Slide Pokémon sprite in from right to centre
@@ -129,9 +129,9 @@ def pbHiddenMoveAnimation(pokemon)
       if frames > Graphics.frame_rate * 3 / 4
         phase = 4
         ptinterp = PointInterpolator.new(
-           Graphics.width / 2, bg.bitmap.height / 2,
-           -(sprite.bitmap.width / 2), bg.bitmap.height / 2,
-           Graphics.frame_rate * 4 / 10
+          Graphics.width / 2, bg.bitmap.height / 2,
+          -(sprite.bitmap.width / 2), bg.bitmap.height / 2,
+          Graphics.frame_rate * 4 / 10
         )
         frames = 0
       end
@@ -143,9 +143,9 @@ def pbHiddenMoveAnimation(pokemon)
         phase = 5
         sprite.visible = false
         interp = RectInterpolator.new(
-           Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
-           Rect.new(0, Graphics.height / 2, Graphics.width, 0),
-           Graphics.frame_rate / 4
+          Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
+          Rect.new(0, Graphics.height / 2, Graphics.width, 0),
+          Graphics.frame_rate / 4
         )
       end
     when 5   # Shrink viewport height from full to zero
@@ -159,15 +159,15 @@ def pbHiddenMoveAnimation(pokemon)
       strobe.ox = strobe.viewport.rect.x
       strobe.oy = strobe.viewport.rect.y
       if !strobe.visible   # Initial placement of strobes
-        randomY = 16 * (1 + rand(bg.bitmap.height / 16 - 2))
-        strobe.y = randomY + (Graphics.height - bg.bitmap.height) / 2
+        randomY = 16 * (1 + rand((bg.bitmap.height / 16) - 2))
+        strobe.y = randomY + ((Graphics.height - bg.bitmap.height) / 2)
         strobe.x = rand(Graphics.width)
         strobe.visible = true
       elsif strobe.x < Graphics.width   # Move strobe right
         strobe.x += strobeSpeed
       else   # Strobe is off the screen, reposition it to the left of the screen
-        randomY = 16 * (1 + rand(bg.bitmap.height / 16 - 2))
-        strobe.y = randomY + (Graphics.height - bg.bitmap.height) / 2
+        randomY = 16 * (1 + rand((bg.bitmap.height / 16) - 2))
+        strobe.y = randomY + ((Graphics.height - bg.bitmap.height) / 2)
         strobe.x = -strobe.bitmap.width - rand(Graphics.width / 4)
       end
     end
@@ -236,15 +236,13 @@ def pbSmashEvent(event)
   elsif event.name[/smashrock/i]
     pbSEPlay("Rock Smash", 80)
   end
-  pbMoveRoute(event, [
-     PBMoveRoute::Wait, 2,
-     PBMoveRoute::TurnLeft,
-     PBMoveRoute::Wait, 2,
-     PBMoveRoute::TurnRight,
-     PBMoveRoute::Wait, 2,
-     PBMoveRoute::TurnUp,
-     PBMoveRoute::Wait, 2
-  ])
+  pbMoveRoute(event, [PBMoveRoute::Wait, 2,
+                      PBMoveRoute::TurnLeft,
+                      PBMoveRoute::Wait, 2,
+                      PBMoveRoute::TurnRight,
+                      PBMoveRoute::Wait, 2,
+                      PBMoveRoute::TurnUp,
+                      PBMoveRoute::Wait, 2])
   pbWait(Graphics.frame_rate * 4 / 10)
   event.erase
   $PokemonMap.addErasedEvent(event.id) if $PokemonMap
@@ -397,8 +395,8 @@ Events.onAction += proc { |_sender, _e|
        $map_factory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
       pbSurfacing
     end
-  else
-    pbDive if $game_player.terrain_tag.can_dive
+  elsif $game_player.terrain_tag.can_dive
+    pbDive
   end
 }
 

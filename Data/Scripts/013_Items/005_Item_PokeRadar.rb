@@ -66,11 +66,11 @@ def pbPokeRadarHighlightGrass(showmessage = true)
     if r <= (i + 1) * 2
       x = $game_player.x - i - 1 + r
       y = $game_player.y - i - 1
-    elsif r <= (i + 1) * 6 - 2
+    elsif r <= ((i + 1) * 6) - 2
       x = [$game_player.x + i + 1, $game_player.x - i - 1][r % 2]
-      y = $game_player.y - i + ((r - 1 - (i + 1) * 2) / 2).floor
+      y = $game_player.y - i + ((r - 1 - ((i + 1) * 2)) / 2).floor
     else
-      x = $game_player.x - i + r - (i + 1) * 6
+      x = $game_player.x - i + r - ((i + 1) * 6)
       y = $game_player.y + i + 1
     end
     # Add tile to grasses array if it's a valid grass tile
@@ -81,7 +81,7 @@ def pbPokeRadarHighlightGrass(showmessage = true)
         # Choose a rarity for the grass (0=normal, 1=rare, 2=shiny)
         s = (rand(100) < 25) ? 1 : 0
         if $game_temp.poke_radar_data && $game_temp.poke_radar_data[2] > 0
-          v = [(65536 / Settings::SHINY_POKEMON_CHANCE) - [$game_temp.poke_radar_data[2], 40].min * 200, 200].max
+          v = [(65536 / Settings::SHINY_POKEMON_CHANCE) - ([$game_temp.poke_radar_data[2], 40].min * 200), 200].max
           v = (65536 / v.to_f).ceil
           s = 2 if rand(65536) < v
         end
@@ -164,7 +164,7 @@ EncounterModifier.register(proc { |encounter|
     $game_temp.poke_radar_data[3].each { |g| rarity = g[3] if g[2] == ring }
     if $game_temp.poke_radar_data[2] > 0   # Chain count, i.e. is chaining
       if rarity == 2 ||
-         rand(100) < 58 + ring * 10 + ([$game_temp.poke_radar_data[2], 40].min / 4) + ($game_temp.poke_radar_data[4] ? 10 : 0)
+         rand(100) < 58 + (ring * 10) + ([$game_temp.poke_radar_data[2], 40].min / 4) + ($game_temp.poke_radar_data[4] ? 10 : 0)
         # Continue the chain
         encounter = [$game_temp.poke_radar_data[0], $game_temp.poke_radar_data[1]]
         $game_temp.force_single_battle = true
@@ -186,8 +186,8 @@ EncounterModifier.register(proc { |encounter|
       encounter = pbPokeRadarGetEncounter(rarity)
       $game_temp.force_single_battle = true
     end
-  else   # Encounter triggered by stepping in non-rustling grass
-    pbPokeRadarCancel if encounter
+  elsif encounter   # Encounter triggered by stepping in non-rustling grass
+    pbPokeRadarCancel
   end
   next encounter
 })

@@ -89,8 +89,8 @@ class PokemonEggHatch_Scene
     @pokemon.species_data.apply_metrics_to_sprite(@sprites["pokemon"], 1)
     @sprites["hatch"].visible = false
     for i in 1..fadeTime
-      @sprites["pokemon"].tone = Tone.new(255 - i * toneDiff, 255 - i * toneDiff, 255 - i * toneDiff)
-      @sprites["overlay"].opacity = 255 - i * toneDiff
+      @sprites["pokemon"].tone = Tone.new(255 - (i * toneDiff), 255 - (i * toneDiff), 255 - (i * toneDiff))
+      @sprites["overlay"].opacity = 255 - (i * toneDiff)
       updateScene
     end
     @sprites["pokemon"].tone = Tone.new(0, 0, 0)

@@ -94,12 +94,13 @@ class PictureWindow < SpriteWindow_Base
   def setBitmap(pathOrBitmap, hue = 0)
     clearBitmaps
     if pathOrBitmap != nil && pathOrBitmap != ""
-      if pathOrBitmap.is_a?(Bitmap)
+      case pathOrBitmap
+      when Bitmap
         @_iconbitmap = pathOrBitmap
         self.contents = @_iconbitmap
         self.width = @_iconbitmap.width + self.borderX
         self.height = @_iconbitmap.height + self.borderY
-      elsif pathOrBitmap.is_a?(AnimatedBitmap)
+      when AnimatedBitmap
         @_iconbitmap = pathOrBitmap
         self.contents = @_iconbitmap.bitmap
         self.width = @_iconbitmap.bitmap.width + self.borderX

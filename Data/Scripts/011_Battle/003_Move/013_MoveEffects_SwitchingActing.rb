@@ -545,44 +545,44 @@ class Battle::Move::TargetUsesItsLastUsedMoveAgain < Battle::Move
   def initialize(battle, move)
     super
     @moveBlacklist = [
-       "MultiTurnAttackBideThenReturnDoubleDamage",   # Bide
-       "ProtectUserFromDamagingMovesKingsShield",   # King's Shield
-       "TargetUsesItsLastUsedMoveAgain",   # Instruct (this move)
-       # Struggle
-       "Struggle",   # Struggle
-       # Moves that affect the moveset
-       "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
-       "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
-       "TransformUserIntoTarget",   # Transform
-       # Moves that call other moves
-       "UseLastMoveUsedByTarget",   # Mirror Move
-       "UseLastMoveUsed",   # Copycat
-       "UseMoveTargetIsAboutToUse",   # Me First
-       "UseMoveDependingOnEnvironment",   # Nature Power
-       "UseRandomUserMoveIfAsleep",   # Sleep Talk
-       "UseRandomMoveFromUserParty",   # Assist
-       "UseRandomMove",   # Metronome
-       # Moves that require a recharge turn
-       "AttackAndSkipNextTurn",   # Hyper Beam
-       # Two-turn attacks
-       "TwoTurnAttack",   # Razor Wind
-       "TwoTurnAttackOneTurnInSun",   # Solar Beam, Solar Blade
-       "TwoTurnAttackParalyzeTarget",   # Freeze Shock
-       "TwoTurnAttackBurnTarget",   # Ice Burn
-       "TwoTurnAttackFlinchTarget",   # Sky Attack
-       "TwoTurnAttackChargeRaiseUserDefense1",   # Skull Bash
-       "TwoTurnAttackInvulnerableInSky",   # Fly
-       "TwoTurnAttackInvulnerableUnderground",   # Dig
-       "TwoTurnAttackInvulnerableUnderwater",   # Dive
-       "TwoTurnAttackInvulnerableInSkyParalyzeTarget",   # Bounce
-       "TwoTurnAttackInvulnerableRemoveProtections",   # Shadow Force, Phantom Force
-       "TwoTurnAttackInvulnerableInSkyTargetCannotAct",   # Sky Drop
-       "AllBattlersLoseHalfHPUserSkipsNextTurn",   # Shadow Half
-       "TwoTurnAttackRaiseUserSpAtkSpDefSpd2",   # Geomancy
-       # Moves that start focussing at the start of the round
-       "FailsIfUserDamagedThisTurn",   # Focus Punch
-       "UsedAfterUserTakesPhysicalDamage",   # Shell Trap
-       "BurnAttackerBeforeUserActs"   # Beak Blast
+      "MultiTurnAttackBideThenReturnDoubleDamage",   # Bide
+      "ProtectUserFromDamagingMovesKingsShield",   # King's Shield
+      "TargetUsesItsLastUsedMoveAgain",   # Instruct (this move)
+      # Struggle
+      "Struggle",   # Struggle
+      # Moves that affect the moveset
+      "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
+      "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
+      "TransformUserIntoTarget",   # Transform
+      # Moves that call other moves
+      "UseLastMoveUsedByTarget",   # Mirror Move
+      "UseLastMoveUsed",   # Copycat
+      "UseMoveTargetIsAboutToUse",   # Me First
+      "UseMoveDependingOnEnvironment",   # Nature Power
+      "UseRandomUserMoveIfAsleep",   # Sleep Talk
+      "UseRandomMoveFromUserParty",   # Assist
+      "UseRandomMove",   # Metronome
+      # Moves that require a recharge turn
+      "AttackAndSkipNextTurn",   # Hyper Beam
+      # Two-turn attacks
+      "TwoTurnAttack",   # Razor Wind
+      "TwoTurnAttackOneTurnInSun",   # Solar Beam, Solar Blade
+      "TwoTurnAttackParalyzeTarget",   # Freeze Shock
+      "TwoTurnAttackBurnTarget",   # Ice Burn
+      "TwoTurnAttackFlinchTarget",   # Sky Attack
+      "TwoTurnAttackChargeRaiseUserDefense1",   # Skull Bash
+      "TwoTurnAttackInvulnerableInSky",   # Fly
+      "TwoTurnAttackInvulnerableUnderground",   # Dig
+      "TwoTurnAttackInvulnerableUnderwater",   # Dive
+      "TwoTurnAttackInvulnerableInSkyParalyzeTarget",   # Bounce
+      "TwoTurnAttackInvulnerableRemoveProtections",   # Shadow Force, Phantom Force
+      "TwoTurnAttackInvulnerableInSkyTargetCannotAct",   # Sky Drop
+      "AllBattlersLoseHalfHPUserSkipsNextTurn",   # Shadow Half
+      "TwoTurnAttackRaiseUserSpAtkSpDefSpd2",   # Geomancy
+      # Moves that start focussing at the start of the round
+      "FailsIfUserDamagedThisTurn",   # Focus Punch
+      "UsedAfterUserTakesPhysicalDamage",   # Shell Trap
+      "BurnAttackerBeforeUserActs"   # Beak Blast
     ]
   end
 
@@ -771,26 +771,26 @@ class Battle::Move::DisableTargetUsingDifferentMove < Battle::Move
   def initialize(battle, move)
     super
     @moveBlacklist = [
-       "DisableTargetUsingDifferentMove",   # Encore
-       # Struggle
-       "Struggle",   # Struggle
-       # Moves that affect the moveset
-       "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
-       "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
-       "TransformUserIntoTarget",   # Transform
-       # Moves that call other moves (see also below)
-       "UseLastMoveUsedByTarget"   # Mirror Move
+      "DisableTargetUsingDifferentMove",   # Encore
+      # Struggle
+      "Struggle",   # Struggle
+      # Moves that affect the moveset
+      "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
+      "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
+      "TransformUserIntoTarget",   # Transform
+      # Moves that call other moves (see also below)
+      "UseLastMoveUsedByTarget"   # Mirror Move
     ]
     if Settings::MECHANICS_GENERATION >= 7
       @moveBlacklist += [
-         # Moves that call other moves
-#         "UseLastMoveUsedByTarget",   # Mirror Move                 # See above
-         "UseLastMoveUsed",   # Copycat
-         "UseMoveTargetIsAboutToUse",   # Me First
-         "UseMoveDependingOnEnvironment",   # Nature Power
-         "UseRandomUserMoveIfAsleep",   # Sleep Talk
-         "UseRandomMoveFromUserParty",   # Assist
-         "UseRandomMove"   # Metronome
+        # Moves that call other moves
+#        "UseLastMoveUsedByTarget",   # Mirror Move                 # See above
+        "UseLastMoveUsed",   # Copycat
+        "UseMoveTargetIsAboutToUse",   # Me First
+        "UseMoveDependingOnEnvironment",   # Nature Power
+        "UseRandomUserMoveIfAsleep",   # Sleep Talk
+        "UseRandomMoveFromUserParty",   # Assist
+        "UseRandomMove"   # Metronome
       ]
     end
   end

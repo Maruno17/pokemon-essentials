@@ -176,18 +176,15 @@ class Battle::AI
         miss = false if user.hasActiveAbility?(:NOGUARD) || target.hasActiveAbility?(:NOGUARD)
         if miss && pbRoughStat(user, :SPEED, skill) > pbRoughStat(target, :SPEED, skill)
           # Knows what can get past semi-invulnerability
-          if target.effects[PBEffects::SkyDrop] >= 0
+          if target.effects[PBEffects::SkyDrop] >= 0 ||
+             target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+                                     "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
+                                     "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
             miss = false if move.hitsFlyingTargets?
-          else
-            if target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
-                                       "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
-                                       "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
-              miss = false if move.hitsFlyingTargets?
-            elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")
-              miss = false if move.hitsDiggingTargets?
-            elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderwater")
-              miss = false if move.hitsDivingTargets?
-            end
+          elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")
+            miss = false if move.hitsDiggingTargets?
+          elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderwater")
+            miss = false if move.hitsDivingTargets?
           end
         end
         score -= 80 if miss

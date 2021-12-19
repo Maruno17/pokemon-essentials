@@ -144,82 +144,82 @@ class MiningGameScene
   BOARD_WIDTH  = 13
   BOARD_HEIGHT = 10
   ITEMS = [   # Item, probability, graphic x, graphic y, width, height, pattern
-     [:DOMEFOSSIL, 20, 0, 3, 5, 4, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]],
-     [:HELIXFOSSIL, 5, 5, 3, 4, 4, [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]],
-     [:HELIXFOSSIL, 5, 9, 3, 4, 4, [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]],
-     [:HELIXFOSSIL, 5, 13, 3, 4, 4, [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]],
-     [:HELIXFOSSIL, 5, 17, 3, 4, 4, [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]],
-     [:OLDAMBER, 10, 21, 3, 4, 4, [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]],
-     [:OLDAMBER, 10, 25, 3, 4, 4, [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]],
-     [:ROOTFOSSIL, 5, 0, 7, 5, 5, [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0]],
-     [:ROOTFOSSIL, 5, 5, 7, 5, 5, [0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]],
-     [:ROOTFOSSIL, 5, 10, 7, 5, 5, [0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1]],
-     [:ROOTFOSSIL, 5, 15, 7, 5, 5, [0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0]],
-     [:SKULLFOSSIL, 20, 20, 7, 4, 4, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0]],
-     [:ARMORFOSSIL, 20, 24, 7, 5, 4, [0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]],
-     [:CLAWFOSSIL, 5, 0, 12, 4, 5, [0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]],
-     [:CLAWFOSSIL, 5, 4, 12, 5, 4, [1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1]],
-     [:CLAWFOSSIL, 5, 9, 12, 4, 5, [0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0]],
-     [:CLAWFOSSIL, 5, 13, 12, 5, 4, [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1]],
-     [:FIRESTONE, 20, 20, 11, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:WATERSTONE, 20, 23, 11, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 0]],
-     [:THUNDERSTONE, 20, 26, 11, 3, 3, [0, 1, 1, 1, 1, 1, 1, 1, 0]],
-     [:LEAFSTONE, 10, 18, 14, 3, 4, [0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0]],
-     [:LEAFSTONE, 10, 21, 14, 4, 3, [0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0]],
-     [:MOONSTONE, 10, 25, 14, 4, 2, [0, 1, 1, 1, 1, 1, 1, 0]],
-     [:MOONSTONE, 10, 27, 16, 2, 4, [1, 0, 1, 1, 1, 1, 0, 1]],
-     [:SUNSTONE, 20, 21, 17, 3, 3, [0, 1, 0, 1, 1, 1, 1, 1, 1]],
-     [:OVALSTONE, 150, 24, 17, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:EVERSTONE, 150, 21, 20, 4, 2, [1, 1, 1, 1, 1, 1, 1, 1]],
-     [:STARPIECE, 100, 0, 17, 3, 3, [0, 1, 0, 1, 1, 1, 0, 1, 0]],
-     [:REVIVE, 100, 0, 20, 3, 3, [0, 1, 0, 1, 1, 1, 0, 1, 0]],
-     [:MAXREVIVE, 50, 0, 23, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:RAREBONE, 50, 3, 17, 6, 3, [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1]],
-     [:RAREBONE, 50, 3, 20, 3, 6, [1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1]],
-     [:LIGHTCLAY, 100, 6, 20, 4, 4, [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1]],
-     [:HARDSTONE, 200, 6, 24, 2, 2, [1, 1, 1, 1]],
-     [:HEARTSCALE, 200, 8, 24, 2, 2, [1, 0, 1, 1]],
-     [:IRONBALL, 100, 9, 17, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:ODDKEYSTONE, 100, 10, 20, 4, 4, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:HEATROCK, 50, 12, 17, 4, 3, [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:DAMPROCK, 50, 14, 20, 3, 3, [1, 1, 1, 1, 1, 1, 1, 0, 1]],
-     [:SMOOTHROCK, 50, 17, 18, 4, 4, [0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0]],
-     [:ICYROCK, 50, 17, 22, 4, 4, [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1]],
-     [:REDSHARD, 100, 21, 22, 3, 3, [1, 1, 1, 1, 1, 0, 1, 1, 1]],
-     [:GREENSHARD, 100, 25, 20, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]],
-     [:YELLOWSHARD, 100, 25, 23, 4, 3, [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1]],
-     [:BLUESHARD, 100, 26, 26, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 0]],
-     [:INSECTPLATE, 10, 0, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:DREADPLATE, 10, 4, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:DRACOPLATE, 10, 8, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:ZAPPLATE, 10, 12, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:FISTPLATE, 10, 16, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:FLAMEPLATE, 10, 20, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:MEADOWPLATE, 10, 0, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:EARTHPLATE, 10, 4, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:ICICLEPLATE, 10, 8, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:TOXICPLATE, 10, 12, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:MINDPLATE, 10, 16, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:STONEPLATE, 10, 20, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:SKYPLATE, 10, 0, 32, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:SPOOKYPLATE, 10, 4, 32, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:IRONPLATE, 10, 8, 32, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [:SPLASHPLATE, 10, 12, 32, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+    [:DOMEFOSSIL, 20, 0, 3, 5, 4, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]],
+    [:HELIXFOSSIL, 5, 5, 3, 4, 4, [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]],
+    [:HELIXFOSSIL, 5, 9, 3, 4, 4, [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]],
+    [:HELIXFOSSIL, 5, 13, 3, 4, 4, [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]],
+    [:HELIXFOSSIL, 5, 17, 3, 4, 4, [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]],
+    [:OLDAMBER, 10, 21, 3, 4, 4, [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]],
+    [:OLDAMBER, 10, 25, 3, 4, 4, [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]],
+    [:ROOTFOSSIL, 5, 0, 7, 5, 5, [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0]],
+    [:ROOTFOSSIL, 5, 5, 7, 5, 5, [0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]],
+    [:ROOTFOSSIL, 5, 10, 7, 5, 5, [0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1]],
+    [:ROOTFOSSIL, 5, 15, 7, 5, 5, [0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0]],
+    [:SKULLFOSSIL, 20, 20, 7, 4, 4, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0]],
+    [:ARMORFOSSIL, 20, 24, 7, 5, 4, [0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0]],
+    [:CLAWFOSSIL, 5, 0, 12, 4, 5, [0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0]],
+    [:CLAWFOSSIL, 5, 4, 12, 5, 4, [1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1]],
+    [:CLAWFOSSIL, 5, 9, 12, 4, 5, [0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0]],
+    [:CLAWFOSSIL, 5, 13, 12, 5, 4, [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1]],
+    [:FIRESTONE, 20, 20, 11, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:WATERSTONE, 20, 23, 11, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 0]],
+    [:THUNDERSTONE, 20, 26, 11, 3, 3, [0, 1, 1, 1, 1, 1, 1, 1, 0]],
+    [:LEAFSTONE, 10, 18, 14, 3, 4, [0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0]],
+    [:LEAFSTONE, 10, 21, 14, 4, 3, [0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0]],
+    [:MOONSTONE, 10, 25, 14, 4, 2, [0, 1, 1, 1, 1, 1, 1, 0]],
+    [:MOONSTONE, 10, 27, 16, 2, 4, [1, 0, 1, 1, 1, 1, 0, 1]],
+    [:SUNSTONE, 20, 21, 17, 3, 3, [0, 1, 0, 1, 1, 1, 1, 1, 1]],
+    [:OVALSTONE, 150, 24, 17, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:EVERSTONE, 150, 21, 20, 4, 2, [1, 1, 1, 1, 1, 1, 1, 1]],
+    [:STARPIECE, 100, 0, 17, 3, 3, [0, 1, 0, 1, 1, 1, 0, 1, 0]],
+    [:REVIVE, 100, 0, 20, 3, 3, [0, 1, 0, 1, 1, 1, 0, 1, 0]],
+    [:MAXREVIVE, 50, 0, 23, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:RAREBONE, 50, 3, 17, 6, 3, [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1]],
+    [:RAREBONE, 50, 3, 20, 3, 6, [1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1]],
+    [:LIGHTCLAY, 100, 6, 20, 4, 4, [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1]],
+    [:HARDSTONE, 200, 6, 24, 2, 2, [1, 1, 1, 1]],
+    [:HEARTSCALE, 200, 8, 24, 2, 2, [1, 0, 1, 1]],
+    [:IRONBALL, 100, 9, 17, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:ODDKEYSTONE, 100, 10, 20, 4, 4, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:HEATROCK, 50, 12, 17, 4, 3, [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:DAMPROCK, 50, 14, 20, 3, 3, [1, 1, 1, 1, 1, 1, 1, 0, 1]],
+    [:SMOOTHROCK, 50, 17, 18, 4, 4, [0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0]],
+    [:ICYROCK, 50, 17, 22, 4, 4, [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1]],
+    [:REDSHARD, 100, 21, 22, 3, 3, [1, 1, 1, 1, 1, 0, 1, 1, 1]],
+    [:GREENSHARD, 100, 25, 20, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]],
+    [:YELLOWSHARD, 100, 25, 23, 4, 3, [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1]],
+    [:BLUESHARD, 100, 26, 26, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 0]],
+    [:INSECTPLATE, 10, 0, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:DREADPLATE, 10, 4, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:DRACOPLATE, 10, 8, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:ZAPPLATE, 10, 12, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:FISTPLATE, 10, 16, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:FLAMEPLATE, 10, 20, 26, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:MEADOWPLATE, 10, 0, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:EARTHPLATE, 10, 4, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:ICICLEPLATE, 10, 8, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:TOXICPLATE, 10, 12, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:MINDPLATE, 10, 16, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:STONEPLATE, 10, 20, 29, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:SKYPLATE, 10, 0, 32, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:SPOOKYPLATE, 10, 4, 32, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:IRONPLATE, 10, 8, 32, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [:SPLASHPLATE, 10, 12, 32, 4, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
   ]
   IRON = [   # Graphic x, graphic y, width, height, pattern
-     [0, 0, 1, 4, [1, 1, 1, 1]],
-     [1, 0, 2, 4, [1, 1, 1, 1, 1, 1, 1, 1]],
-     [3, 0, 4, 2, [1, 1, 1, 1, 1, 1, 1, 1]],
-     [3, 2, 4, 1, [1, 1, 1, 1]],
-     [7, 0, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
-     [0, 5, 3, 2, [1, 1, 0, 0, 1, 1]],
-     [0, 7, 3, 2, [0, 1, 0, 1, 1, 1]],
-     [3, 5, 3, 2, [0, 1, 1, 1, 1, 0]],
-     [3, 7, 3, 2, [1, 1, 1, 0, 1, 0]],
-     [6, 3, 2, 3, [1, 0, 1, 1, 0, 1]],
-     [8, 3, 2, 3, [0, 1, 1, 1, 1, 0]],
-     [6, 6, 2, 3, [1, 0, 1, 1, 1, 0]],
-     [8, 6, 2, 3, [0, 1, 1, 1, 0, 1]]
+    [0, 0, 1, 4, [1, 1, 1, 1]],
+    [1, 0, 2, 4, [1, 1, 1, 1, 1, 1, 1, 1]],
+    [3, 0, 4, 2, [1, 1, 1, 1, 1, 1, 1, 1]],
+    [3, 2, 4, 1, [1, 1, 1, 1]],
+    [7, 0, 3, 3, [1, 1, 1, 1, 1, 1, 1, 1, 1]],
+    [0, 5, 3, 2, [1, 1, 0, 0, 1, 1]],
+    [0, 7, 3, 2, [0, 1, 0, 1, 1, 1]],
+    [3, 5, 3, 2, [0, 1, 1, 1, 1, 0]],
+    [3, 7, 3, 2, [1, 1, 1, 0, 1, 0]],
+    [6, 3, 2, 3, [1, 0, 1, 1, 0, 1]],
+    [8, 3, 2, 3, [0, 1, 1, 1, 1, 0]],
+    [6, 6, 2, 3, [1, 0, 1, 1, 1, 0]],
+    [8, 6, 2, 3, [0, 1, 1, 1, 0, 1]]
   ]
 
   def update
@@ -241,7 +241,7 @@ class MiningGameScene
     pbDistributeIron
     for i in 0...BOARD_HEIGHT
       for j in 0...BOARD_WIDTH
-        @sprites["tile#{j + i * BOARD_WIDTH}"] = MiningGameTile.new(32 * j, 64 + 32 * i)
+        @sprites["tile#{j + (i * BOARD_WIDTH)}"] = MiningGameTile.new(32 * j, 64 + (32 * i))
       end
     end
     @sprites["crack"] = MiningGameCounter.new(0, 4)
@@ -293,7 +293,7 @@ class MiningGameScene
       oy = ITEMS[i[0]][3]
       rectx = ITEMS[i[0]][4]
       recty = ITEMS[i[0]][5]
-      layer.blt(32 * i[1], 64 + 32 * i[2], @itembitmap.bitmap, Rect.new(32 * ox, 32 * oy, 32 * rectx, 32 * recty))
+      layer.blt(32 * i[1], 64 + (32 * i[2]), @itembitmap.bitmap, Rect.new(32 * ox, 32 * oy, 32 * rectx, 32 * recty))
     end
   end
 
@@ -319,7 +319,7 @@ class MiningGameScene
       oy = IRON[i[0]][1]
       rectx = IRON[i[0]][2]
       recty = IRON[i[0]][3]
-      layer.blt(32 * i[1], 64 + 32 * i[2], @ironbitmap.bitmap, Rect.new(32 * ox, 32 * oy, 32 * rectx, 32 * recty))
+      layer.blt(32 * i[1], 64 + (32 * i[2]), @ironbitmap.bitmap, Rect.new(32 * ox, 32 * oy, 32 * rectx, 32 * recty))
     end
   end
 
@@ -354,7 +354,7 @@ class MiningGameScene
         yco = prey + (j / prewidth).floor
         next if provx + provwidth <= xco || provx > xco ||
                 provy + provheight <= yco || provy > yco
-        return false if provpattern[xco - provx + (yco - provy) * provwidth] == 1
+        return false if provpattern[xco - provx + ((yco - provy) * provwidth)] == 1
       end
     end
     if checkiron   # Check other irons as well
@@ -372,7 +372,7 @@ class MiningGameScene
           yco = prey + (j / prewidth).floor
           next if provx + provwidth <= xco || provx > xco ||
                   provy + provheight <= yco || provy > yco
-          return false if provpattern[xco - provx + (yco - provy) * provwidth] == 1
+          return false if provpattern[xco - provx + ((yco - provy) * provwidth)] == 1
         end
       end
     end
@@ -399,12 +399,12 @@ class MiningGameScene
       hittype = 2
     else
       for i in 0..2
-        ytile = i - 1 + position / BOARD_WIDTH
+        ytile = i - 1 + (position / BOARD_WIDTH)
         next if ytile < 0 || ytile >= BOARD_HEIGHT
         for j in 0..2
-          xtile = j - 1 + position % BOARD_WIDTH
+          xtile = j - 1 + (position % BOARD_WIDTH)
           next if xtile < 0 || xtile >= BOARD_WIDTH
-          @sprites["tile#{xtile + ytile * BOARD_WIDTH}"].layer -= pattern[j + i * 3]
+          @sprites["tile#{xtile + (ytile * BOARD_WIDTH)}"].layer -= pattern[j + (i * 3)]
         end
       end
       if @sprites["cursor"].mode == 1   # Hammer
@@ -439,7 +439,7 @@ class MiningGameScene
       next if posy < i[2] || posy >= (i[2] + height)
       dx = posx - i[1]
       dy = posy - i[2]
-      return true if pattern[dx + dy * width] > 0
+      return true if pattern[dx + (dy * width)] > 0
     end
     return false
   end
@@ -456,7 +456,7 @@ class MiningGameScene
       next if posy < i[2] || posy >= (i[2] + height)
       dx = posx - i[1]
       dy = posy - i[2]
-      return true if pattern[dx + dy * width] > 0
+      return true if pattern[dx + (dy * width)] > 0
     end
     return false
   end
@@ -472,8 +472,8 @@ class MiningGameScene
       pattern = ITEMS[index][6]
       for j in 0...height
         for k in 0...width
-          layer = @sprites["tile#{@items[i][1] + k + (@items[i][2] + j) * BOARD_WIDTH}"].layer
-          revealed = false if layer > 0 && pattern[k + j * width] > 0
+          layer = @sprites["tile#{@items[i][1] + k + ((@items[i][2] + j) * BOARD_WIDTH)}"].layer
+          revealed = false if layer > 0 && pattern[k + (j * width)] > 0
           break if !revealed
         end
         break if !revealed
@@ -491,12 +491,12 @@ class MiningGameScene
     for i in 1..halfFlashTime * 2
       for index in revealed
         burieditem = @items[index]
-        revealeditems.bitmap.blt(32 * burieditem[1], 64 + 32 * burieditem[2],
+        revealeditems.bitmap.blt(32 * burieditem[1], 64 + (32 * burieditem[2]),
                                  @itembitmap.bitmap,
                                  Rect.new(32 * ITEMS[burieditem[0]][2], 32 * ITEMS[burieditem[0]][3],
                                           32 * ITEMS[burieditem[0]][4], 32 * ITEMS[burieditem[0]][5]))
         if i > halfFlashTime
-          revealeditems.color = Color.new(255, 255, 255, (halfFlashTime * 2 - i) * alphaDiff)
+          revealeditems.color = Color.new(255, 255, 255, ((halfFlashTime * 2) - i) * alphaDiff)
         else
           revealeditems.color = Color.new(255, 255, 255, i * alphaDiff)
         end
@@ -575,7 +575,7 @@ class MiningGameScene
         newmode = (@sprites["cursor"].mode + 1) % 2
         @sprites["cursor"].mode = newmode
         @sprites["tool"].src_rect.set(newmode * 68, 0, 68, 100)
-        @sprites["tool"].y = 254 - 144 * newmode
+        @sprites["tool"].y = 254 - (144 * newmode)
       elsif Input.trigger?(Input::USE)   # Hit
         pbHit
       elsif Input.trigger?(Input::BACK)   # Quit

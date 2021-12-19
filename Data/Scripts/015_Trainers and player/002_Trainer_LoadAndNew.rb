@@ -14,8 +14,8 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   for i in 0...Settings::MAX_PARTY_SIZE
     if i == 0
       pbMessage(_INTL("Please enter the first Pokémon.", i))
-    else
-      break if !pbConfirmMessage(_INTL("Add another Pokémon?"))
+    elsif !pbConfirmMessage(_INTL("Add another Pokémon?"))
+      break
     end
     loop do
       species = pbChooseSpeciesList
@@ -42,10 +42,12 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
       :pokemon      => []
     }
     party.each do |pkmn|
-      trainer_hash[:pokemon].push({
-        :species => pkmn[0],
-        :level   => pkmn[1]
-      })
+      trainer_hash[:pokemon].push(
+        {
+          :species => pkmn[0],
+          :level   => pkmn[1]
+        }
+      )
     end
     # Add trainer's data to records
     trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]

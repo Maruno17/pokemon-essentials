@@ -147,7 +147,7 @@ class Game_Map
 
   def passable?(x, y, d, self_event = nil)
     return false if !valid?(x, y)
-    bit = (1 << (d / 2 - 1)) & 0x0f
+    bit = (1 << ((d / 2) - 1)) & 0x0f
     for event in events.values
       next if event.tile_id <= 0
       next if event == self_event
@@ -224,7 +224,7 @@ class Game_Map
   end
 
   def playerPassable?(x, y, d, self_event = nil)
-    bit = (1 << (d / 2 - 1)) & 0x0f
+    bit = (1 << ((d / 2) - 1)) & 0x0f
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
@@ -323,7 +323,7 @@ class Game_Map
     return if @display_x == value
     @display_x = value
     if metadata&.snap_edges
-      max_x = (self.width - Graphics.width * 1.0 / TILE_WIDTH) * REAL_RES_X
+      max_x = (self.width - (Graphics.width.to_f / TILE_WIDTH)) * REAL_RES_X
       @display_x = [0, [@display_x, max_x].min].max
     end
     $map_factory.setMapsInRange if $map_factory
@@ -333,7 +333,7 @@ class Game_Map
     return if @display_y == value
     @display_y = value
     if metadata&.snap_edges
-      max_y = (self.height - Graphics.height * 1.0 / TILE_HEIGHT) * REAL_RES_Y
+      max_y = (self.height - (Graphics.height.to_f / TILE_HEIGHT)) * REAL_RES_Y
       @display_y = [0, [@display_y, max_y].min].max
     end
     $map_factory.setMapsInRange if $map_factory
@@ -378,7 +378,7 @@ class Game_Map
   end
 
   def start_fog_opacity_change(opacity, duration)
-    @fog_opacity_target = opacity * 1.0
+    @fog_opacity_target = opacity.to_f
     @fog_opacity_duration = duration
     if @fog_opacity_duration == 0
       @fog_opacity = @fog_opacity_target
@@ -437,15 +437,15 @@ class Game_Map
     if @fog_tone_duration >= 1
       d = @fog_tone_duration
       target = @fog_tone_target
-      @fog_tone.red   = (@fog_tone.red * (d - 1) + target.red) / d
-      @fog_tone.green = (@fog_tone.green * (d - 1) + target.green) / d
-      @fog_tone.blue  = (@fog_tone.blue * (d - 1) + target.blue) / d
-      @fog_tone.gray  = (@fog_tone.gray * (d - 1) + target.gray) / d
+      @fog_tone.red   = ((@fog_tone.red * (d - 1)) + target.red) / d
+      @fog_tone.green = ((@fog_tone.green * (d - 1)) + target.green) / d
+      @fog_tone.blue  = ((@fog_tone.blue * (d - 1)) + target.blue) / d
+      @fog_tone.gray  = ((@fog_tone.gray * (d - 1)) + target.gray) / d
       @fog_tone_duration -= 1
     end
     if @fog_opacity_duration >= 1
       d = @fog_opacity_duration
-      @fog_opacity = (@fog_opacity * (d - 1) + @fog_opacity_target) / d
+      @fog_opacity = ((@fog_opacity * (d - 1)) + @fog_opacity_target) / d
       @fog_opacity_duration -= 1
     end
   end

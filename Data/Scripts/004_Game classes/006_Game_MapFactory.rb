@@ -122,8 +122,8 @@ class PokemonMapFactory
       for conn in conns[id]
         if conn[0] == id
           mapA = getMap(conn[0])
-          newdispx = (conn[4] - conn[1]) * Game_Map::REAL_RES_X + mapA.display_x
-          newdispy = (conn[5] - conn[2]) * Game_Map::REAL_RES_Y + mapA.display_y
+          newdispx = ((conn[4] - conn[1]) * Game_Map::REAL_RES_X) + mapA.display_x
+          newdispy = ((conn[5] - conn[2]) * Game_Map::REAL_RES_Y) + mapA.display_y
           if hasMap?(conn[3]) || MapFactoryHelper.mapInRangeById?(conn[3], newdispx, newdispy)
             mapB = getMap(conn[3])
             mapB.display_x = newdispx if mapB.display_x != newdispx
@@ -131,8 +131,8 @@ class PokemonMapFactory
           end
         else
           mapA = getMap(conn[3])
-          newdispx = (conn[1] - conn[4]) * Game_Map::REAL_RES_X + mapA.display_x
-          newdispy = (conn[2] - conn[5]) * Game_Map::REAL_RES_Y + mapA.display_y
+          newdispx = ((conn[1] - conn[4]) * Game_Map::REAL_RES_X) + mapA.display_x
+          newdispy = ((conn[2] - conn[5]) * Game_Map::REAL_RES_Y) + mapA.display_y
           if hasMap?(conn[0]) || MapFactoryHelper.mapInRangeById?(conn[0], newdispx, newdispy)
             mapB = getMap(conn[0])
             mapB.display_x = newdispx if mapB.display_x != newdispx
@@ -204,8 +204,8 @@ class PokemonMapFactory
       if !($DEBUG && Input.press?(Input::CTRL))
         return false if !map.passableStrict?(x, y, 0, thisEvent)
       end
-    else
-      return false if !map.passableStrict?(x, y, 0, thisEvent)
+    elsif !map.passableStrict?(x, y, 0, thisEvent)
+      return false
     end
     for event in map.events.values
       next if event == thisEvent || !event.at_coordinate?(x, y)
@@ -488,8 +488,8 @@ module MapFactoryHelper
     dispy = map.display_y
     return false if dispx >= (map.width + range) * Game_Map::REAL_RES_X
     return false if dispy >= (map.height + range) * Game_Map::REAL_RES_Y
-    return false if dispx <= -(Graphics.width + range * Game_Map::TILE_WIDTH) * Game_Map::X_SUBPIXELS
-    return false if dispy <= -(Graphics.height + range * Game_Map::TILE_HEIGHT) * Game_Map::Y_SUBPIXELS
+    return false if dispx <= -(Graphics.width + (range * Game_Map::TILE_WIDTH)) * Game_Map::X_SUBPIXELS
+    return false if dispy <= -(Graphics.height + (range * Game_Map::TILE_HEIGHT)) * Game_Map::Y_SUBPIXELS
     return true
   end
 
@@ -498,8 +498,8 @@ module MapFactoryHelper
     dims = MapFactoryHelper.getMapDims(id)
     return false if dispx >= (dims[0] + range) * Game_Map::REAL_RES_X
     return false if dispy >= (dims[1] + range) * Game_Map::REAL_RES_Y
-    return false if dispx <= -(Graphics.width + range * Game_Map::TILE_WIDTH) * Game_Map::X_SUBPIXELS
-    return false if dispy <= -(Graphics.height + range * Game_Map::TILE_HEIGHT) * Game_Map::Y_SUBPIXELS
+    return false if dispx <= -(Graphics.width + (range * Game_Map::TILE_WIDTH)) * Game_Map::X_SUBPIXELS
+    return false if dispy <= -(Graphics.height + (range * Game_Map::TILE_HEIGHT)) * Game_Map::Y_SUBPIXELS
     return true
   end
 end

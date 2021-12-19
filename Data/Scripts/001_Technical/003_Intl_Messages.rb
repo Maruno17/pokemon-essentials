@@ -412,7 +412,8 @@ class Messages
 
   def self.writeObject(f, msgs, secname, origMessages = nil)
     return if !msgs
-    if msgs.is_a?(Array)
+    case msgs
+    when Array
       f.write("[#{secname}]\r\n")
       for j in 0...msgs.length
         next if nil_or_empty?(msgs[j])
@@ -427,7 +428,7 @@ class Messages
         f.write(origValue + "\r\n")
         f.write(value + "\r\n")
       end
-    elsif msgs.is_a?(OrderedHash)
+    when OrderedHash
       f.write("[#{secname}]\r\n")
       keys = msgs.keys
       for key in keys

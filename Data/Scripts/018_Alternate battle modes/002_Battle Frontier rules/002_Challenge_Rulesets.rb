@@ -52,9 +52,10 @@ class PokemonRuleSet
     maxLevel = GameData::GrowthRate.max_level
     num = self.suggestedNumber
     for rule in @pokemonRules
-      if rule.is_a?(MinimumLevelRestriction)
+      case rule
+      when MinimumLevelRestriction
         minLevel = rule.level
-      elsif rule.is_a?(MaximumLevelRestriction)
+      when MaximumLevelRestriction
         maxLevel = rule.level
       end
     end
@@ -203,8 +204,8 @@ class PokemonRuleSet
       next if isPokemonValid?(pkmn)
       if pkmn
         error.push(_INTL("{1} is not allowed.", pkmn.name)) if error
-      else
-        error.push(_INTL("This team is not allowed.")) if error
+      elsif error
+        error.push(_INTL("This team is not allowed."))
       end
       return false
     end

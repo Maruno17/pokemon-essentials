@@ -110,9 +110,9 @@ class RegionMapSprite
     bitmap = AnimatedBitmap.new("Graphics/Pictures/#{@map[1]}").deanimate
     retbitmap = BitmapWrapper.new(bitmap.width / 2, bitmap.height / 2)
     retbitmap.stretch_blt(
-       Rect.new(0, 0, bitmap.width / 2, bitmap.height / 2),
-       bitmap,
-       Rect.new(0, 0, bitmap.width, bitmap.height)
+      Rect.new(0, 0, bitmap.width / 2, bitmap.height / 2),
+      bitmap,
+      Rect.new(0, 0, bitmap.width, bitmap.height)
     )
     bitmap.dispose
     return retbitmap
@@ -172,8 +172,8 @@ class MapScreenScene
       if conn[0] == id
         b = sprites.any? { |i| i == conn[3] }
         if !b
-          x = (conn[1] - conn[4]) * 4 + dispx
-          y = (conn[2] - conn[5]) * 4 + dispy
+          x = ((conn[1] - conn[4]) * 4) + dispx
+          y = ((conn[2] - conn[5]) * 4) + dispy
           setMapSpritePos(conn[3], x, y)
           sprites.push(conn[3])
           putNeighbors(conn[3], sprites)
@@ -181,8 +181,8 @@ class MapScreenScene
       elsif conn[3] == id
         b = sprites.any? { |i| i == conn[0] }
         if !b
-          x = (conn[4] - conn[1]) * 4 + dispx
-          y = (conn[5] - conn[2]) * 4 + dispy
+          x = ((conn[4] - conn[1]) * 4) + dispx
+          y = ((conn[5] - conn[2]) * 4) + dispy
           setMapSpritePos(conn[0], x, y)
           sprites.push(conn[3])
           putNeighbors(conn[0], sprites)
@@ -375,16 +375,9 @@ class MapScreenScene
 
   def getMapRect(mapid)
     sprite = getMapSprite(mapid)
-    if sprite
-      return [
-         sprite.x,
-         sprite.y,
-         sprite.x + sprite.bitmap.width,
-         sprite.y + sprite.bitmap.height
-      ]
-    else
-      return nil
-    end
+    return nil if !sprite
+    return [sprite.x, sprite.y,
+            sprite.x + sprite.bitmap.width, sprite.y + sprite.bitmap.height]
   end
 
   def onDoubleClick(map_id)
@@ -455,12 +448,10 @@ class MapScreenScene
         end
         @sprites["title"].text = _INTL("D: Help")
       end
+    elsif mapid >= 0
+      @sprites["title"].text = _ISPRINTF("D: Help [{1:03d}: {2:s}]", mapid, @mapinfos[mapid].name)
     else
-      if mapid >= 0
-        @sprites["title"].text = _ISPRINTF("D: Help [{1:03d}: {2:s}]", mapid, @mapinfos[mapid].name)
-      else
-        @sprites["title"].text = _INTL("D: Help")
-      end
+      @sprites["title"].text = _INTL("D: Help")
     end
   end
 

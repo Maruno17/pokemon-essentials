@@ -127,7 +127,8 @@ def pbDebugSetVariable(id, diff)
 end
 
 def pbDebugVariableScreen(id)
-  if $game_variables[id].is_a?(Numeric)
+  case $game_variables[id]
+  when Numeric
     value = $game_variables[id]
     params = ChooseNumberParams.new
     params.setDefaultValue(value)
@@ -137,7 +138,7 @@ def pbDebugVariableScreen(id)
     $game_variables[id] = [value, 99999999].min
     $game_variables[id] = [$game_variables[id], -99999999].max
     $game_map.need_refresh = true
-  elsif $game_variables[id].is_a?(String)
+  when String
     value = pbMessageFreeText(_INTL("Set variable {1}.", id),
                               $game_variables[id], false, 250, Graphics.width)
     $game_variables[id] = value
@@ -184,9 +185,10 @@ def pbDebugVariables(mode)
         when ""
           $game_variables[current_id] = 0
         else
-          if $game_variables[current_id].is_a?(Numeric)
+          case $game_variables[current_id]
+          when Numeric
             $game_variables[current_id] = 0
-          elsif $game_variables[current_id].is_a?(String)
+          when String
             $game_variables[current_id] = ""
           end
         end
@@ -739,7 +741,7 @@ def pbCheckTileValidity(tile_id, map, tilesets, passages)
   return false if !tile_id
   if tile_id > 0 && tile_id < 384
     # Check for defined autotile
-    autotile_id = tile_id / 48 - 1
+    autotile_id = (tile_id / 48) - 1
     autotile_name = tilesets[map.tileset_id].autotile_names[autotile_id]
     return true if autotile_name && autotile_name != ""
   else

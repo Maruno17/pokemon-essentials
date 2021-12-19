@@ -169,7 +169,7 @@ class PokedexSearchSelectionSprite < SpriteWrapper
         self.y = 52
       when 1, 2, 3, 4   # Name, type, height, weight
         self.x = 114
-        self.y = 110 + (@index - 1) * 52
+        self.y = 110 + ((@index - 1) * 52)
       when 5         # Color
         self.x = 382
         self.y = 110
@@ -177,7 +177,7 @@ class PokedexSearchSelectionSprite < SpriteWrapper
         self.x = 420
         self.y = 214
       when 7, 8, 9     # Reset, start, cancel
-        self.x = 4 + (@index - 7) * 176
+        self.x = 4 + ((@index - 7) * 176)
         self.y = 334
       end
     else   # Parameter screen
@@ -207,11 +207,11 @@ class PokedexSearchSelectionSprite < SpriteWrapper
       case @index
       when -1   # Blank option
         if @mode == 3 || @mode == 4   # Height/weight range
-          self.x = @xstart + (@cmds + 1) * @xgap * (@minmax % 2)
-          self.y = @ystart + @ygap * ((@minmax + 1) % 2)
+          self.x = @xstart + ((@cmds + 1) * @xgap * (@minmax % 2))
+          self.y = @ystart + (@ygap * ((@minmax + 1) % 2))
         else
-          self.x = @xstart + (@cols - 1) * @xgap
-          self.y = @ystart + (@cmds / @cols).floor * @ygap
+          self.x = @xstart + ((@cols - 1) * @xgap)
+          self.y = @ystart + ((@cmds / @cols).floor * @ygap)
         end
       when -2   # OK
         self.x = 4
@@ -223,19 +223,19 @@ class PokedexSearchSelectionSprite < SpriteWrapper
         case @mode
         when 0, 1, 2, 5, 6   # Order, name, type, color, shape
           if @index >= @cmds
-            self.x = @xstart + (@cols - 1) * @xgap
-            self.y = @ystart + (@cmds / @cols).floor * @ygap
+            self.x = @xstart + ((@cols - 1) * @xgap)
+            self.y = @ystart + ((@cmds / @cols).floor * @ygap)
           else
-            self.x = @xstart + (@index % @cols) * @xgap
-            self.y = @ystart + (@index / @cols).floor * @ygap
+            self.x = @xstart + ((@index % @cols) * @xgap)
+            self.y = @ystart + ((@index / @cols).floor * @ygap)
           end
         when 3, 4         # Height, weight
           if @index >= @cmds
-            self.x = @xstart + (@cmds + 1) * @xgap * ((@minmax + 1) % 2)
+            self.x = @xstart + ((@cmds + 1) * @xgap * ((@minmax + 1) % 2))
           else
-            self.x = @xstart + (@index + 1) * @xgap
+            self.x = @xstart + ((@index + 1) * @xgap)
           end
-          self.y = @ystart + @ygap * ((@minmax + 1) % 2)
+          self.y = @ystart + (@ygap * ((@minmax + 1) % 2))
         end
       end
     end
@@ -424,7 +424,7 @@ class PokemonPokedex_Scene
       end
     end
     textpos = [
-       [dexname, Graphics.width / 2, -2, 2, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+      [dexname, Graphics.width / 2, -2, 2, Color.new(248, 248, 248), Color.new(0, 0, 0)]
     ]
     textpos.push([GameData::Species.get(iconspecies).name, 112, 46, 2, base, shadow]) if iconspecies
     if @searchResults
@@ -462,8 +462,8 @@ class PokemonPokedex_Scene
       overlay.blt(468, y, @sliderbitmap.bitmap, Rect.new(40, 0, 40, 8))
       i = 0
       while i * 16 < boxheight - 8 - 16
-        height = [boxheight - 8 - 16 - i * 16, 16].min
-        overlay.blt(468, y + 8 + i * 16, @sliderbitmap.bitmap, Rect.new(40, 8, 40, height))
+        height = [boxheight - 8 - 16 - (i * 16), 16].min
+        overlay.blt(468, y + 8 + (i * 16), @sliderbitmap.bitmap, Rect.new(40, 8, 40, height))
         i += 1
       end
       overlay.blt(468, y + boxheight - 16, @sliderbitmap.bitmap, Rect.new(40, 24, 40, 16))
@@ -477,17 +477,17 @@ class PokemonPokedex_Scene
     shadow = Color.new(72, 72, 72)
     # Write various bits of text
     textpos = [
-       [_INTL("Search Mode"), Graphics.width / 2, -2, 2, base, shadow],
-       [_INTL("Order"), 136, 52, 2, base, shadow],
-       [_INTL("Name"), 58, 110, 2, base, shadow],
-       [_INTL("Type"), 58, 162, 2, base, shadow],
-       [_INTL("Height"), 58, 214, 2, base, shadow],
-       [_INTL("Weight"), 58, 266, 2, base, shadow],
-       [_INTL("Color"), 326, 110, 2, base, shadow],
-       [_INTL("Shape"), 454, 162, 2, base, shadow],
-       [_INTL("Reset"), 80, 338, 2, base, shadow, 1],
-       [_INTL("Start"), Graphics.width / 2, 338, 2, base, shadow, 1],
-       [_INTL("Cancel"), Graphics.width - 80, 338, 2, base, shadow, 1]
+      [_INTL("Search Mode"), Graphics.width / 2, -2, 2, base, shadow],
+      [_INTL("Order"), 136, 52, 2, base, shadow],
+      [_INTL("Name"), 58, 110, 2, base, shadow],
+      [_INTL("Type"), 58, 162, 2, base, shadow],
+      [_INTL("Height"), 58, 214, 2, base, shadow],
+      [_INTL("Weight"), 58, 266, 2, base, shadow],
+      [_INTL("Color"), 326, 110, 2, base, shadow],
+      [_INTL("Shape"), 454, 162, 2, base, shadow],
+      [_INTL("Reset"), 80, 338, 2, base, shadow, 1],
+      [_INTL("Start"), Graphics.width / 2, 338, 2, base, shadow, 1],
+      [_INTL("Cancel"), Graphics.width - 80, 338, 2, base, shadow, 1]
     ]
     # Write order, name and color parameters
     textpos.push([@orderCommands[params[0]], 344, 58, 2, base, shadow, 1])
@@ -549,9 +549,9 @@ class PokemonPokedex_Scene
     shadow = Color.new(72, 72, 72)
     # Write various bits of text
     textpos = [
-       [_INTL("Search Mode"), Graphics.width / 2, -2, 2, base, shadow],
-       [_INTL("OK"), 80, 338, 2, base, shadow, 1],
-       [_INTL("Cancel"), Graphics.width - 80, 338, 2, base, shadow, 1]
+      [_INTL("Search Mode"), Graphics.width / 2, -2, 2, base, shadow],
+      [_INTL("OK"), 80, 338, 2, base, shadow, 1],
+      [_INTL("Cancel"), Graphics.width - 80, 338, 2, base, shadow, 1]
     ]
     title = [_INTL("Order"), _INTL("Name"), _INTL("Type"), _INTL("Height"),
              _INTL("Weight"), _INTL("Color"), _INTL("Shape")][mode]
@@ -615,11 +615,11 @@ class PokemonPokedex_Scene
     when 2   # Type icons
       for i in 0...2
         if !sel[i] || sel[i] < 0
-          textpos.push(["----", 298 + 128 * i, 58, 2, base, shadow, 1])
+          textpos.push(["----", 298 + (128 * i), 58, 2, base, shadow, 1])
         else
           type_number = @typeCommands[sel[i]].icon_position
           typerect = Rect.new(0, type_number * 32, 96, 32)
-          overlay.blt(250 + 128 * i, 58, @typebitmap.bitmap, typerect)
+          overlay.blt(250 + (128 * i), 58, @typebitmap.bitmap, typerect)
         end
       end
     when 3   # Height range
@@ -677,10 +677,10 @@ class PokemonPokedex_Scene
     end
     # Draw selected option(s) button graphic
     if [3, 4].include?(mode)   # Height, weight
-      xpos1 = xstart + (sel[0] + 1) * xgap
+      xpos1 = xstart + ((sel[0] + 1) * xgap)
       xpos1 = xstart if sel[0] < -1
-      xpos2 = xstart + (sel[1] + 1) * xgap
-      xpos2 = xstart + cols * xgap if sel[1] < 0
+      xpos2 = xstart + ((sel[1] + 1) * xgap)
+      xpos2 = xstart + (cols * xgap) if sel[1] < 0
       xpos2 = xstart if sel[1] >= cols - 1
       ypos1 = ystart + 172
       ypos2 = ystart + 28
@@ -698,9 +698,9 @@ class PokemonPokedex_Scene
       for i in 0...sel.length
         selrect = Rect.new(0, selbuttony, @selbitmap.bitmap.width, selbuttonheight)
         if sel[i] >= 0
-          overlay.blt(xstart + (sel[i] % cols) * xgap, ystart + (sel[i] / cols).floor * ygap, @selbitmap.bitmap, selrect)
+          overlay.blt(xstart + ((sel[i] % cols) * xgap), ystart + ((sel[i] / cols).floor * ygap), @selbitmap.bitmap, selrect)
         else
-          overlay.blt(xstart + (cols - 1) * xgap, ystart + (cmds.length / cols).floor * ygap, @selbitmap.bitmap, selrect)
+          overlay.blt(xstart + ((cols - 1) * xgap), ystart + ((cmds.length / cols).floor * ygap), @selbitmap.bitmap, selrect)
         end
       end
     end
@@ -708,35 +708,35 @@ class PokemonPokedex_Scene
     case mode
     when 0, 1   # Order, name
       for i in 0...cmds.length
-        x = xstart + halfwidth + (i % cols) * xgap
-        y = ystart + 6 + (i / cols).floor * ygap
+        x = xstart + halfwidth + ((i % cols) * xgap)
+        y = ystart + 6 + ((i / cols).floor * ygap)
         textpos.push([cmds[i], x, y, 2, base, shadow, 1])
       end
       if mode != 0
         textpos.push([(mode == 1) ? "-" : "----",
-                      xstart + halfwidth + (cols - 1) * xgap, ystart + 6 + (cmds.length / cols).floor * ygap, 2, base, shadow, 1])
+                      xstart + halfwidth + ((cols - 1) * xgap), ystart + 6 + ((cmds.length / cols).floor * ygap), 2, base, shadow, 1])
       end
     when 2   # Type
       typerect = Rect.new(0, 0, 96, 32)
       for i in 0...cmds.length
         typerect.y = @typeCommands[i].icon_position * 32
-        overlay.blt(xstart + 14 + (i % cols) * xgap, ystart + 6 + (i / cols).floor * ygap, @typebitmap.bitmap, typerect)
+        overlay.blt(xstart + 14 + ((i % cols) * xgap), ystart + 6 + ((i / cols).floor * ygap), @typebitmap.bitmap, typerect)
       end
       textpos.push(["----",
-                    xstart + halfwidth + (cols - 1) * xgap, ystart + 6 + (cmds.length / cols).floor * ygap, 2, base, shadow, 1])
+                    xstart + halfwidth + ((cols - 1) * xgap), ystart + 6 + ((cmds.length / cols).floor * ygap), 2, base, shadow, 1])
     when 5   # Color
       for i in 0...cmds.length
-        x = xstart + halfwidth + (i % cols) * xgap
-        y = ystart + 6 + (i / cols).floor * ygap
+        x = xstart + halfwidth + ((i % cols) * xgap)
+        y = ystart + 6 + ((i / cols).floor * ygap)
         textpos.push([cmds[i].name, x, y, 2, base, shadow, 1])
       end
       textpos.push(["----",
-                    xstart + halfwidth + (cols - 1) * xgap, ystart + 6 + (cmds.length / cols).floor * ygap, 2, base, shadow, 1])
+                    xstart + halfwidth + ((cols - 1) * xgap), ystart + 6 + ((cmds.length / cols).floor * ygap), 2, base, shadow, 1])
     when 6   # Shape
       shaperect = Rect.new(0, 0, 60, 60)
       for i in 0...cmds.length
         shaperect.y = @shapeCommands[i].icon_position * 60
-        overlay.blt(xstart + 4 + (i % cols) * xgap, ystart + 4 + (i / cols).floor * ygap, @shapebitmap.bitmap, shaperect)
+        overlay.blt(xstart + 4 + ((i % cols) * xgap), ystart + 4 + ((i / cols).floor * ygap), @shapebitmap.bitmap, shaperect)
       end
     end
     # Draw all text
@@ -986,7 +986,7 @@ class PokemonPokedex_Scene
       else
         if Input.trigger?(Input::UP)
           if index == -1   # From blank
-            index = cmds.length - 1 - (cmds.length - 1) % cols - 1
+            index = cmds.length - 1 - ((cmds.length - 1) % cols) - 1
           elsif index == -2   # From OK
             index = ((cmds.length - 1) / cols).floor * cols
           elsif index == -3 && mode == 0   # From Cancel

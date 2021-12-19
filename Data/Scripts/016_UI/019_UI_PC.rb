@@ -176,13 +176,13 @@ def pbPCMailbox
       command = pbShowCommands(nil, commands, -1, command)
       if command >= 0 && command < $PokemonGlobal.mailbox.length
         mailIndex = command
-        commandMail = pbMessage(_INTL("What do you want to do with {1}'s Mail?",
-                                      $PokemonGlobal.mailbox[mailIndex].sender), [
-           _INTL("Read"),
+        commandMail = pbMessage(
+          _INTL("What do you want to do with {1}'s Mail?", $PokemonGlobal.mailbox[mailIndex].sender),
+          [_INTL("Read"),
            _INTL("Move to Bag"),
            _INTL("Give"),
-           _INTL("Cancel")
-           ], -1)
+           _INTL("Cancel")], -1
+        )
         case commandMail
         when 0   # Read
           pbFadeOutIn {
@@ -214,11 +214,10 @@ end
 def pbTrainerPCMenu
   command = 0
   loop do
-    command = pbMessage(_INTL("What do you want to do?"), [
-       _INTL("Item Storage"),
-       _INTL("Mailbox"),
-       _INTL("Turn Off")
-       ], -1, nil, command)
+    command = pbMessage(_INTL("What do you want to do?"),
+                        [_INTL("Item Storage"),
+                         _INTL("Mailbox"),
+                         _INTL("Turn Off")], -1, nil, command)
     case command
     when 0 then pbPCItemStorage
     when 1 then pbPCMailbox

@@ -87,12 +87,12 @@ class Interpreter
       print 'Map Autoscroll: invalid speed (1-6 only)'
       return command_skip
     end
-    center_x = (Graphics.width / 2 - Game_Map::TILE_WIDTH / 2) * 4   # X coordinate in the center of the screen
-    center_y = (Graphics.height / 2 - Game_Map::TILE_HEIGHT / 2) * 4   # Y coordinate in the center of the screen
-    max_x = ($game_map.width - Graphics.width * 1.0 / Game_Map::TILE_WIDTH) * 4 * Game_Map::TILE_WIDTH
-    max_y = ($game_map.height - Graphics.height * 1.0 / Game_Map::TILE_HEIGHT) * 4 * Game_Map::TILE_HEIGHT
-    count_x = ($game_map.display_x - [0, [x * Game_Map::REAL_RES_X - center_x, max_x].min].max) / Game_Map::REAL_RES_X
-    count_y = ($game_map.display_y - [0, [y * Game_Map::REAL_RES_Y - center_y, max_y].min].max) / Game_Map::REAL_RES_Y
+    center_x = ((Graphics.width / 2) - (Game_Map::TILE_WIDTH / 2)) * 4   # X coordinate in the center of the screen
+    center_y = ((Graphics.height / 2) - (Game_Map::TILE_HEIGHT / 2)) * 4   # Y coordinate in the center of the screen
+    max_x = ($game_map.width - (Graphics.width.to_f / Game_Map::TILE_WIDTH)) * 4 * Game_Map::TILE_WIDTH
+    max_y = ($game_map.height - (Graphics.height.to_f / Game_Map::TILE_HEIGHT)) * 4 * Game_Map::TILE_HEIGHT
+    count_x = ($game_map.display_x - [0, [(x * Game_Map::REAL_RES_X) - center_x, max_x].min].max) / Game_Map::REAL_RES_X
+    count_y = ($game_map.display_y - [0, [(y * Game_Map::REAL_RES_Y) - center_y, max_y].min].max) / Game_Map::REAL_RES_Y
     if !@diag
       @diag = true
       dir = nil
@@ -148,20 +148,20 @@ end
 class Game_Map
   def scroll_downright(distance)
     @display_x = [@display_x + distance,
-                  (self.width - Graphics.width * 1.0 / TILE_WIDTH) * REAL_RES_X].min
+                  (self.width - (Graphics.width.to_f / TILE_WIDTH)) * REAL_RES_X].min
     @display_y = [@display_y + distance,
-                  (self.height - Graphics.height * 1.0 / TILE_HEIGHT) * REAL_RES_Y].min
+                  (self.height - (Graphics.height.to_f / TILE_HEIGHT)) * REAL_RES_Y].min
   end
 
   def scroll_downleft(distance)
     @display_x = [@display_x - distance, 0].max
     @display_y = [@display_y + distance,
-                  (self.height - Graphics.height * 1.0 / TILE_HEIGHT) * REAL_RES_Y].min
+                  (self.height - (Graphics.height.to_f / TILE_HEIGHT)) * REAL_RES_Y].min
   end
 
   def scroll_upright(distance)
     @display_x = [@display_x + distance,
-                  (self.width - Graphics.width * 1.0 / TILE_WIDTH) * REAL_RES_X].min
+                  (self.width - (Graphics.width.to_f / TILE_WIDTH)) * REAL_RES_X].min
     @display_y = [@display_y - distance, 0].max
   end
 

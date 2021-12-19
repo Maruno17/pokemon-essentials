@@ -667,8 +667,8 @@ module MapSizeProperty
   def self.set(settingname, oldsetting)
     oldsetting = [0, ""] if !oldsetting
     properties = [
-       [_INTL("Width"),         NonzeroLimitProperty.new(30), _INTL("The width of this map in Region Map squares.")],
-       [_INTL("Valid Squares"), StringProperty,               _INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")]
+      [_INTL("Width"),         NonzeroLimitProperty.new(30), _INTL("The width of this map in Region Map squares.")],
+      [_INTL("Valid Squares"), StringProperty,               _INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")]
     ]
     pbPropertyList(settingname, oldsetting, properties, false)
     return oldsetting
@@ -792,9 +792,7 @@ module RegionMapCoordsProperty
     ret = []
     for i in 0...mapdata.length
       next if !mapdata[i]
-      ret.push(
-         [i, pbGetMessage(MessageTypes::RegionNames, i)]
-      )
+      ret.push([i, pbGetMessage(MessageTypes::RegionNames, i)])
     end
     return ret
   end

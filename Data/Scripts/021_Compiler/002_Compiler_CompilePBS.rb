@@ -1585,12 +1585,12 @@ module Compiler
   def compile_battle_tower_trainers(filename)
     sections = []
     requiredtypes = {
-       "Type"          => [0, "e", :TrainerType],
-       "Name"          => [1, "s"],
-       "BeginSpeech"   => [2, "s"],
-       "EndSpeechWin"  => [3, "s"],
-       "EndSpeechLose" => [4, "s"],
-       "PokemonNos"    => [5, "*u"]
+      "Type"          => [0, "e", :TrainerType],
+      "Name"          => [1, "s"],
+      "BeginSpeech"   => [2, "s"],
+      "EndSpeechWin"  => [3, "s"],
+      "EndSpeechLose" => [4, "s"],
+      "PokemonNos"    => [5, "*u"]
     }
     trainernames  = []
     beginspeech   = []

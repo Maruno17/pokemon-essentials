@@ -114,7 +114,7 @@ class PokemonEncounters
     return true if pbPokeRadarOnShakingGrass
     # Get base encounter chance and minimum steps grace period
     encounter_chance = @step_chances[enc_type].to_f
-    min_steps_needed = (8 - encounter_chance / 10).clamp(0, 8).to_f
+    min_steps_needed = (8 - (encounter_chance / 10)).clamp(0, 8).to_f
     # Apply modifiers to the encounter chance and the minimum steps amount
     if triggered_by_step
       encounter_chance += @chance_accumulator / 200
@@ -168,7 +168,7 @@ class PokemonEncounters
     # after a previous wild encounter
     if triggered_by_step && @step_count < min_steps_needed
       @step_count += 1
-      return false if rand(100) >= encounter_chance * 5 / (@step_chances[enc_type] + @chance_accumulator / 200)
+      return false if rand(100) >= encounter_chance * 5 / (@step_chances[enc_type] + (@chance_accumulator / 200))
     end
     # Decide whether the wild encounter should actually happen
     return true if rand(100) < encounter_chance
@@ -429,7 +429,7 @@ def pbGenerateWildPokemon(species, level, isRoamer = false)
     shiny_retries.times do
       break if genwildpoke.shiny?
       genwildpoke.shiny = nil   # Make it recalculate shininess
-      genwildpoke.personalID = rand(2**16) | rand(2**16) << 16
+      genwildpoke.personalID = rand(2**16) | (rand(2**16) << 16)
     end
   end
   # Give Pokérus

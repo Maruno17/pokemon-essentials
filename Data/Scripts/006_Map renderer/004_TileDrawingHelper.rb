@@ -89,7 +89,7 @@ class TileDrawingHelper
 
   def bltSmallAutotile(bitmap, x, y, cxTile, cyTile, id, frame)
     return if id >= 384 || frame < 0 || !@autotiles
-    autotile = @autotiles[id / 48 - 1]
+    autotile = @autotiles[(id / 48) - 1]
     return if !autotile || autotile.disposed?
     cxTile = [cxTile / 2, 1].max
     cyTile = [cyTile / 2, 1].max
@@ -104,8 +104,8 @@ class TileDrawingHelper
       src = Rect.new(0, 0, 0, 0)
       for i in 0...4
         tile_position = tiles[i] - 1
-        src.set(tile_position % 6 * 16 + anim, tile_position / 6 * 16, 16, 16)
-        bitmap.stretch_blt(Rect.new(i % 2 * cxTile + x, i / 2 * cyTile + y, cxTile, cyTile),
+        src.set((tile_position % 6 * 16) + anim, tile_position / 6 * 16, 16, 16)
+        bitmap.stretch_blt(Rect.new((i % 2 * cxTile) + x, (i / 2 * cyTile) + y, cxTile, cyTile),
                            autotile, src)
       end
     end
@@ -180,9 +180,9 @@ def bltMinimapAutotile(dstBitmap, x, y, srcBitmap, id)
   src = Rect.new(0, 0, 0, 0)
   for i in 0...4
     tile_position = tiles[i] - 1
-    src.set(tile_position % 6 * cxTile + anim,
+    src.set((tile_position % 6 * cxTile) + anim,
             tile_position / 6 * cyTile, cxTile, cyTile)
-    dstBitmap.blt(i % 2 * cxTile + x, i / 2 * cyTile + y, srcBitmap, src)
+    dstBitmap.blt((i % 2 * cxTile) + x, (i / 2 * cyTile) + y, srcBitmap, src)
   end
 end
 

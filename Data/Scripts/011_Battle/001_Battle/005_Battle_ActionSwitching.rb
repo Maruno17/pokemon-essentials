@@ -116,8 +116,8 @@ class Battle
     @scene.pbPartyScreen(idxBattler, canCancel) { |idxParty, partyScene|
       if checkLaxOnly
         next false if !pbCanSwitchLax?(idxBattler, idxParty, partyScene)
-      else
-        next false if !pbCanSwitch?(idxBattler, idxParty, partyScene)
+      elsif !pbCanSwitch?(idxBattler, idxParty, partyScene)
+        next false
       end
       if shouldRegister
         next false if idxParty < 0 || !pbRegisterSwitch(idxBattler, idxParty)

@@ -164,7 +164,7 @@ class Game_Follower < Game_Event
     return false if !this_map || !this_map.valid?(x, y)
     return true if @through
     passed_tile_checks = false
-    bit = (1 << (direction / 2 - 1)) & 0x0f
+    bit = (1 << ((direction / 2) - 1)) & 0x0f
     # Check all events for ones using tiles as graphics, and see if they're passable
     for event in this_map.events.values
       next if event.tile_id < 0 || event.through || !event.at_coordinate?(x, y)

@@ -64,8 +64,8 @@ class PokemonPhoneScene
     @sprites["icon"].setBitmap(filename)
     charwidth  = @sprites["icon"].bitmap.width
     charheight = @sprites["icon"].bitmap.height
-    @sprites["icon"].x = 86 - charwidth / 8
-    @sprites["icon"].y = 134 - charheight / 8
+    @sprites["icon"].x = 86 - (charwidth / 8)
+    @sprites["icon"].y = 134 - (charheight / 8)
     @sprites["icon"].src_rect = Rect.new(0, 0, charwidth / 4, charheight / 4)
     for trainer in @trainers
       if trainer.length == 4
@@ -78,7 +78,7 @@ class PokemonPhoneScene
     end
     @sprites["list"].commands = commands
     for i in 0...@sprites["list"].page_item_max
-      @sprites["rematch[#{i}]"] = IconSprite.new(468, 62 + i * 32, @viewport)
+      @sprites["rematch[#{i}]"] = IconSprite.new(468, 62 + (i * 32), @viewport)
       j = i + @sprites["list"].top_item
       next if j >= commands.length
       trainer = @trainers[j]
@@ -115,8 +115,8 @@ class PokemonPhoneScene
           @sprites["icon"].setBitmap(filename)
           charwidth  = @sprites["icon"].bitmap.width
           charheight = @sprites["icon"].bitmap.height
-          @sprites["icon"].x        = 86 - charwidth / 8
-          @sprites["icon"].y        = 134 - charheight / 8
+          @sprites["icon"].x        = 86 - (charwidth / 8)
+          @sprites["icon"].y        = 134 - (charheight / 8)
           @sprites["icon"].src_rect = Rect.new(0, 0, charwidth / 4, charheight / 4)
           mapname = (trainer[2]) ? pbGetMapNameFromId(trainer[2]) : ""
           @sprites["bottom"].text = "<ac>" + mapname

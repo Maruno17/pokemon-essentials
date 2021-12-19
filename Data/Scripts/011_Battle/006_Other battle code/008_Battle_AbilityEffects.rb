@@ -925,13 +925,11 @@ Battle::AbilityEffects::MoveImmunity.add(:FLASHFIRE,
           battle.pbDisplay(_INTL("The power of {1}'s Fire-type moves rose because of its {2}!",
              target.pbThis(true), target.abilityName))
         end
+      elsif Battle::Scene::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
       else
-        if Battle::Scene::USE_ABILITY_SPLASH
-          battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
-        else
-          battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
-             target.pbThis, target.abilityName, move.name))
-        end
+        battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
+                               target.pbThis, target.abilityName, move.name))
       end
       battle.pbHideAbilitySplash(target)
     end
@@ -2604,8 +2602,8 @@ Battle::AbilityEffects::OnSwitchIn.add(:ANTICIPATION,
           next if Effectiveness.ineffective?(eff)
           next if !Effectiveness.super_effective?(eff) &&
                   !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
-        else
-          next if !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
+        elsif !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
+          next
         end
         found = true
         break
@@ -2857,8 +2855,8 @@ Battle::AbilityEffects::OnSwitchIn.add(:INTIMIDATE,
       check_item = true
       if b.hasActiveAbility?(:CONTRARY)
         check_item = false if b.statStageAtMax?(:ATTACK)
-      else
-        check_item = false if b.statStageAtMin?(:ATTACK)
+      elsif b.statStageAtMin?(:ATTACK)
+        check_item = false
       end
       check_ability = b.pbLowerAttackStatStageIntimidate(battler)
       b.pbAbilitiesOnIntimidated if check_ability

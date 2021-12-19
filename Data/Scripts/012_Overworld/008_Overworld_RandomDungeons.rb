@@ -118,7 +118,7 @@ module RandomDungeonGenerator
     def paint_corridor(tile, x, y, width, height)
       for j in 0...height
         for i in 0...width
-          tile[(y + j) * CELL_WIDTH + (x + i)] = DungeonTile::CORRIDOR
+          tile[((y + j) * CELL_WIDTH) + (x + i)] = DungeonTile::CORRIDOR
         end
       end
     end
@@ -129,25 +129,25 @@ module RandomDungeonGenerator
       when TURN_NONE
         for y in 0...CELL_HEIGHT
           for x in 0...CELL_WIDTH
-            dungeon[x + dstX, y + dstY] = tile_layout[y * CELL_WIDTH + x]
+            dungeon[x + dstX, y + dstY] = tile_layout[(y * CELL_WIDTH) + x]
           end
         end
       when TURN_LEFT
         for y in 0...CELL_HEIGHT
           for x in 0...CELL_WIDTH
-            dungeon[y + dstX, CELL_WIDTH - 1 - x + dstY] = tile_layout[y * CELL_WIDTH + x]
+            dungeon[y + dstX, CELL_WIDTH - 1 - x + dstY] = tile_layout[(y * CELL_WIDTH) + x]
           end
         end
       when TURN_RIGHT
         for y in 0...CELL_HEIGHT
           for x in 0...CELL_WIDTH
-            dungeon[CELL_HEIGHT - 1 - y + dstX, x + dstY] = tile_layout[y * CELL_WIDTH + x]
+            dungeon[CELL_HEIGHT - 1 - y + dstX, x + dstY] = tile_layout[(y * CELL_WIDTH) + x]
           end
         end
       when TURN_BACK
         for y in 0...CELL_HEIGHT
           for x in 0...CELL_WIDTH
-            dungeon[CELL_WIDTH - 1 - x + dstX, CELL_HEIGHT - 1 - y + dstY] = tile_layout[y * CELL_WIDTH + x]
+            dungeon[CELL_WIDTH - 1 - x + dstX, CELL_HEIGHT - 1 - y + dstY] = tile_layout[(y * CELL_WIDTH) + x]
           end
         end
       end
@@ -164,8 +164,8 @@ module RandomDungeonGenerator
       width = rand(ROOM_MIN_WIDTH..ROOM_MAX_WIDTH)
       height = rand(ROOM_MIN_HEIGHT..ROOM_MAX_HEIGHT)
       return false if width <= 0 || height <= 0
-      centerX = CELL_WIDTH / 2 + rand(5) - 2
-      centerY = CELL_HEIGHT / 2 + rand(5) - 2
+      centerX = (CELL_WIDTH / 2) + rand(5) - 2
+      centerY = (CELL_HEIGHT / 2) + rand(5) - 2
       x = centerX - (width / 2)
       y = centerY - (height / 2)
       rect = [x, y, width, height]
@@ -244,17 +244,17 @@ module RandomDungeonGenerator
 
     def getVisited(x, y)
       return false if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      return (@cells[y * cellWidth + x] & EdgeMasks::VISITED) != 0
+      return (@cells[(y * cellWidth) + x] & EdgeMasks::VISITED) != 0
     end
 
     def setVisited(x, y)
       return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      @cells[y * cellWidth + x] |= EdgeMasks::VISITED
+      @cells[(y * cellWidth) + x] |= EdgeMasks::VISITED
     end
 
     def clearVisited(x, y)
       return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      @cells[y * cellWidth + x] &= ~EdgeMasks::VISITED
+      @cells[(y * cellWidth) + x] &= ~EdgeMasks::VISITED
     end
 
     def clearAllCells
@@ -265,12 +265,12 @@ module RandomDungeonGenerator
 
     def getEdgeNode(x, y, edge)
       return false if x < 0 || y < 0 || x >= nodeWidth || y >= nodeHeight
-      return @nodes[y * nodeWidth + x].getEdge(edge)
+      return @nodes[(y * nodeWidth) + x].getEdge(edge)
     end
 
     def setEdgeNode(x, y, edge)
       return if x < 0 || x >= nodeWidth || y < 0 || y >= nodeHeight
-      @nodes[y * nodeWidth + x].setEdge(edge)
+      @nodes[(y * nodeWidth) + x].setEdge(edge)
       e = 0
       nx = x
       ny = y
@@ -291,7 +291,7 @@ module RandomDungeonGenerator
         return
       end
       return if nx < 0 || ny < 0 || nx >= nodeWidth || ny >= nodeHeight
-      @nodes[ny * nodeWidth + nx].setEdge(e)
+      @nodes[(ny * nodeWidth) + nx].setEdge(e)
     end
 
     def setAllEdges
@@ -302,7 +302,7 @@ module RandomDungeonGenerator
 
     def clearEdgeNode(x, y, edge)
       return if x < 0 || x >= nodeWidth || y < 0 || y >= nodeHeight
-      @nodes[y * nodeWidth + x].clearEdge(edge)
+      @nodes[(y * nodeWidth) + x].clearEdge(edge)
       e = 0
       nx = x
       ny = y
@@ -323,7 +323,7 @@ module RandomDungeonGenerator
         raise ArgumentError.new
       end
       return if nx < 0 || ny < 0 || nx >= nodeWidth || ny >= nodeHeight
-      @nodes[ny * nodeWidth + nx].clearEdge(e)
+      @nodes[(ny * nodeWidth) + nx].clearEdge(e)
     end
 
     def clearAllEdges
@@ -334,7 +334,7 @@ module RandomDungeonGenerator
 
     def isBlockedNode?(x, y)
       return false if x < 0 || y < 0 || x >= nodeWidth || y >= nodeHeight
-      return @nodes[y * nodeWidth + x].isBlocked?
+      return @nodes[(y * nodeWidth) + x].isBlocked?
     end
 
     def getEdgePattern(x, y)
@@ -483,22 +483,22 @@ module RandomDungeonGenerator
     end
 
     def [](x, y)
-      return @array[y * @width + x]
+      return @array[(y * @width) + x]
     end
 
     def []=(x, y, value)
-      @array[y * @width + x] = value
+      @array[(y * @width) + x] = value
     end
 
     def value(x, y)
       return DungeonTile::VOID if x < 0 || y < 0 || x >= @width || y >= @height
-      return @array[y * @width + x]
+      return @array[(y * @width) + x]
     end
 
     # Unused
     def get(x, y)
       return false if x < 0 || y < 0 || x >= @width || y >= @height
-      return @array[y * @width + x] != DungeonTile::VOID
+      return @array[(y * @width) + x] != DungeonTile::VOID
     end
 
     # Unused
@@ -553,8 +553,8 @@ module RandomDungeonGenerator
 
     def generate
       self.clear
-      maxWidth = @width - BUFFER_X * 2
-      maxHeight = @height - BUFFER_Y * 2
+      maxWidth = @width - (BUFFER_X * 2)
+      maxHeight = @height - (BUFFER_Y * 2)
       cellWidth = DungeonMaze::CELL_WIDTH
       cellHeight = DungeonMaze::CELL_HEIGHT
       return if maxWidth < 0 || maxHeight < 0
@@ -576,7 +576,7 @@ module RandomDungeonGenerator
         for x in 0...maxWidth / cellWidth
           pattern = maze.getEdgePattern(x, y)
           next if !DungeonMaze.paint_cell_contents(
-            self, BUFFER_X + x * cellWidth, BUFFER_Y + y * cellHeight,
+            self, BUFFER_X + (x * cellWidth), BUFFER_Y + (y * cellHeight),
             corridor_patterns[pattern], DungeonMaze::TURN_NONE
           )
           roomcount += 1
@@ -605,7 +605,7 @@ module RandomDungeonGenerator
         for j in 0...map.height
           nb = TileDrawingHelper.tableNeighbors(tbl, i, j)
           tile = TileDrawingHelper::NEIGHBORS_TO_AUTOTILE_INDEX[nb]
-          map.data[i, j, 0] = tile + 48 * (tbl[i, j])
+          map.data[i, j, 0] = tile + (48 * (tbl[i, j]))
           map.data[i, j, 1] = 0
           map.data[i, j, 2] = 0
         end
@@ -638,8 +638,8 @@ module RandomDungeonGenerator
   # @param x_cells [Integer] the number of cells wide the dungeon will be
   # @param y_cells [Intenger] the number of cells tall the dungeon will be
   def self.generate_test_dungeon(x_cells = 4, y_cells = 4)
-    dungeon = Dungeon.new(Dungeon::BUFFER_X * 2 + DungeonMaze::CELL_WIDTH * x_cells,
-                          Dungeon::BUFFER_Y * 2 + DungeonMaze::CELL_HEIGHT * y_cells)
+    dungeon = Dungeon.new((Dungeon::BUFFER_X * 2) + (DungeonMaze::CELL_WIDTH * x_cells),
+                          (Dungeon::BUFFER_Y * 2) + (DungeonMaze::CELL_HEIGHT * y_cells))
     dungeon.generate
     echoln dungeon.write
   end

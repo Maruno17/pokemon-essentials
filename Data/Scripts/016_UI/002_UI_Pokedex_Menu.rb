@@ -23,10 +23,11 @@ class Window_DexesList < Window_CommandPokemon
                        sprintf("%d", @commands2[index][1]), self.baseColor, self.shadowColor, 1)
       allseen = (@commands2[index][0] >= @commands2[index][2])
       allown  = (@commands2[index][1] >= @commands2[index][2])
-      pbDrawImagePositions(self.contents, [
-        ["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 236, rect.y + 2, (allseen) ? 24 : 0, 0, 24, 24],
-        ["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 332, rect.y + 2, (allown) ? 24 : 0, 24, 24, 24]
-      ])
+      pbDrawImagePositions(
+        self.contents,
+        [["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 236, rect.y + 2, (allseen) ? 24 : 0, 0, 24, 24],
+         ["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 332, rect.y + 2, (allown) ? 24 : 0, 24, 24, 24]]
+      )
     end
   end
 end
@@ -47,7 +48,7 @@ class PokemonPokedexMenu_Scene
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_menu"))
     @sprites["headings"] = Window_AdvancedTextPokemon.newWithSize(
-       _INTL("<c3=F8F8F8,C02028>SEEN<r>OBTAINED</c3>"), 286, 136, 208, 64, @viewport
+      _INTL("<c3=F8F8F8,C02028>SEEN<r>OBTAINED</c3>"), 286, 136, 208, 64, @viewport
     )
     @sprites["headings"].windowskin = nil
     @sprites["commands"] = Window_DexesList.new(commands, commands2, Graphics.width - 84)

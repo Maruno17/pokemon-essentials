@@ -621,7 +621,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     @sign = false
     @negative = false
     super(0, 0, 32, 32)
-    self.width = digits_max * 24 + 8 + self.borderX
+    self.width = (digits_max * 24) + 8 + self.borderX
     self.height = 32 + self.borderY
     colors = getDefaultTextColors(self.windowskin)
     @baseColor = colors[0]
@@ -644,16 +644,16 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     value = 0 if !value.is_a?(Numeric)
     if @sign
       @negative = (value < 0)
-      @number = [value.abs, 10**@digits_max - 1].min
+      @number = [value.abs, (10**@digits_max) - 1].min
     else
-      @number = [[value, 0].max, 10**@digits_max - 1].min
+      @number = [[value, 0].max, (10**@digits_max) - 1].min
     end
     refresh
   end
 
   def sign=(value)
     @sign = value
-    self.width = @digits_max * 24 + 8 + self.borderX + (@sign ? 24 : 0)
+    self.width = (@digits_max * 24) + 8 + self.borderX + (@sign ? 24 : 0)
     @index = (@digits_max - 1) + (@sign ? 1 : 0)
     refresh
   end
@@ -717,9 +717,9 @@ class Window_InputNumberPokemon < SpriteWindow_Base
 
   def textHelper(x, y, text, i)
     textwidth = self.contents.text_size(text).width
-    pbDrawShadowText(self.contents, x + (12 - textwidth / 2), y, textwidth + 4, 32, text, @baseColor, @shadowColor)
+    pbDrawShadowText(self.contents, x + (12 - (textwidth / 2)), y, textwidth + 4, 32, text, @baseColor, @shadowColor)
     if @index == i && @active && @frame / 15 == 0
-      self.contents.fill_rect(x + (12 - textwidth / 2), y + 30, textwidth, 2, @baseColor)
+      self.contents.fill_rect(x + (12 - (textwidth / 2)), y + 30, textwidth, 2, @baseColor)
     end
   end
 end
@@ -825,9 +825,9 @@ class SpriteWindow_Selectable < SpriteWindow_Base
        item > self.top_item + self.page_item_max
       return Rect.new(0, 0, 0, 0)
     else
-      cursor_width = (self.width - self.borderX - (@column_max - 1) * @column_spacing) / @column_max
+      cursor_width = (self.width - self.borderX - ((@column_max - 1) * @column_spacing)) / @column_max
       x = item % @column_max * (cursor_width + @column_spacing)
-      y = item / @column_max * @row_height - @virtualOy
+      y = (item / @column_max * @row_height) - @virtualOy
       return Rect.new(x, y, cursor_width, @row_height)
     end
   end
@@ -946,7 +946,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
     # End of code
     cursor_width = (self.width - self.borderX) / @column_max
     x = self.index % @column_max * (cursor_width + @column_spacing)
-    y = self.index / @column_max * @row_height - @virtualOy
+    y = (self.index / @column_max * @row_height) - @virtualOy
     self.cursor_rect.set(x, y, cursor_width, @row_height)
     self.refresh if dorefresh || force
   end
@@ -992,8 +992,8 @@ module UpDownArrowMixin
   def adjustForZoom(sprite)
     sprite.zoom_x = self.zoom_x
     sprite.zoom_y = self.zoom_y
-    sprite.x = sprite.x * self.zoom_x + self.offset_x / self.zoom_x
-    sprite.y = sprite.y * self.zoom_y + self.offset_y / self.zoom_y
+    sprite.x = (sprite.x * self.zoom_x) + (self.offset_x / self.zoom_x)
+    sprite.y = (sprite.y * self.zoom_y) + (self.offset_y / self.zoom_y)
   end
 
   def update
@@ -1093,7 +1093,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     end
     # Store suggested width and height of window
     dims[0] = [self.borderX + 1,
-               (width * self.columns) + self.borderX + (self.columns - 1) * self.columnSpacing].max
+               (width * self.columns) + self.borderX + ((self.columns - 1) * self.columnSpacing)].max
     dims[1] = [self.borderY + 1, windowheight].max
     dims[1] = [dims[1], Graphics.height].min
   end

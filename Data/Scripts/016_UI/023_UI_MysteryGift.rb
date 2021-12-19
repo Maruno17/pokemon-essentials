@@ -23,7 +23,8 @@ def pbEditMysteryGift(type, item, id = 0, giftname = "")
       commands.push(_INTL("[Custom]"))
       loop do
         command = pbMessage(
-           _INTL("Choose a phrase to be where the gift Pokémon was obtained from."), commands, -1
+          _INTL("Choose a phrase to be where the gift Pokémon was obtained from."),
+          commands, -1
         )
         if command < 0
           return nil if pbConfirmMessage(_INTL("Stop editing this gift?"))
@@ -73,13 +74,11 @@ def pbEditMysteryGift(type, item, id = 0, giftname = "")
         newid = pbMessageChooseNumber(_INTL("Choose a unique ID for this gift."), params)
         if newid == 0
           return nil if pbConfirmMessage(_INTL("Stop editing this gift?"))
+        elsif idlist.include?(newid)
+          pbMessage(_INTL("That ID is already used by a Mystery Gift."))
         else
-          if idlist.include?(newid)
-            pbMessage(_INTL("That ID is already used by a Mystery Gift."))
-          else
-            id = newid
-            break
-          end
+          id = newid
+          break
         end
       end
     end
@@ -377,7 +376,7 @@ def pbReceiveMysteryGift(id)
   end
   gift = $player.mystery_gifts[index]
   if gift[1] == 0   # Pokémon
-    gift[2].personalID = rand(2**16) | rand(2**16) << 16
+    gift[2].personalID = rand(2**16) | (rand(2**16) << 16)
     gift[2].calc_stats
     time = pbGetTimeNow
     gift[2].timeReceived = time.getgm.to_i

@@ -14,7 +14,7 @@ class PokemonJukebox_Scene
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap("Graphics/Pictures/jukeboxbg")
     @sprites["header"] = Window_UnformattedTextPokemon.newWithSize(
-       _INTL("Jukebox"), 2, -18, 128, 64, @viewport
+      _INTL("Jukebox"), 2, -18, 128, 64, @viewport
     )
     @sprites["header"].baseColor   = Color.new(248, 248, 248)
     @sprites["header"].shadowColor = Color.new(0, 0, 0)

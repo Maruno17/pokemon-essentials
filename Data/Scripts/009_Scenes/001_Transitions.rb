@@ -178,7 +178,7 @@ module Transitions
       sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
+          idx_sprite = (j * NUM_SPRITES_X) + i
           @sprites[idx_sprite] = new_sprite(i * sprite_width, j * sprite_height, @overworld_bitmap)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
         end
@@ -189,7 +189,7 @@ module Transitions
       @start_y = []
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
+          idx_sprite = (j * NUM_SPRITES_X) + i
           @start_y[idx_sprite] = @sprites[idx_sprite].y
           @timings[idx_sprite] = 0.5 + rand
         end
@@ -199,7 +199,7 @@ module Transitions
     def update_anim
       proportion = @timer / @duration
       @sprites.each_with_index do |sprite, i|
-        sprite.y = @start_y[i] + Graphics.height * @timings[i] * proportion * proportion
+        sprite.y = @start_y[i] + (Graphics.height * @timings[i] * proportion * proportion)
         sprite.opacity = 255 * (1 - proportion)
       end
     end
@@ -219,7 +219,7 @@ module Transitions
       sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
+          idx_sprite = (j * NUM_SPRITES_X) + i
           @sprites[idx_sprite] = new_sprite((i + 0.5) * sprite_width, (j + 0.5) * sprite_height,
                                             @overworld_bitmap, sprite_width / 2, sprite_height / 2)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
@@ -230,10 +230,10 @@ module Transitions
     def update_anim
       proportion = @timer / @duration
       @sprites.each_with_index do |sprite, i|
-        sprite.zoom_x = 1.0 * (1 - proportion)
+        sprite.zoom_x = (1 - proportion).to_f
         sprite.zoom_y = sprite.zoom_x
         if @parameters[0]   # Rotation
-          direction = (1 - 2 * ((i / NUM_SPRITES_X + i % NUM_SPRITES_X) % 2))
+          direction = (1 - (2 * (((i / NUM_SPRITES_X) + (i % NUM_SPRITES_X)) % 2)))
           sprite.angle = direction * 360 * 2 * proportion
         end
       end
@@ -258,7 +258,7 @@ module Transitions
       sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
+          idx_sprite = (j * NUM_SPRITES_X) + i
           @sprites[idx_sprite] = new_sprite((i + 0.5) * sprite_width, (j + 0.5) * sprite_height,
                                             @overworld_bitmap, sprite_width / 2, sprite_height / 2)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
@@ -272,17 +272,17 @@ module Transitions
       vague = (@parameters[0] || 9.6) * SPEED
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
+          idx_sprite = (j * NUM_SPRITES_X) + i
           spr = @sprites[idx_sprite]
           @start_positions[idx_sprite] = [spr.x, spr.y]
-          dx = spr.x - Graphics.width / 2
-          dy = spr.y - Graphics.height / 2
+          dx = spr.x - (Graphics.width / 2)
+          dy = spr.y - (Graphics.height / 2)
           move_x = move_y = 0
           if dx == 0 && dy == 0
             move_x = (dx == 0) ? rand_sign * vague : dx * SPEED * 1.5
             move_y = (dy == 0) ? rand_sign * vague : dy * SPEED * 1.5
           else
-            radius = Math.sqrt(dx**2 + dy**2)
+            radius = Math.sqrt((dx**2) + (dy**2))
             move_x = dx * vague / radius
             move_y = dy * vague / radius
           end
@@ -296,8 +296,8 @@ module Transitions
     def update_anim
       proportion = @timer / @duration
       @sprites.each_with_index do |sprite, i|
-        sprite.x = @start_positions[i][0] + @move_vectors[i][0] * proportion
-        sprite.y = @start_positions[i][1] + @move_vectors[i][1] * proportion
+        sprite.x = @start_positions[i][0] + (@move_vectors[i][0] * proportion)
+        sprite.y = @start_positions[i][1] + (@move_vectors[i][1] * proportion)
         sprite.opacity = 384 * (1 - proportion)
       end
     end
@@ -331,7 +331,7 @@ module Transitions
       end
       for j in 0...num_stripes_y
         for i in 0...num_stripes_x
-          idx_sprite = j * num_stripes_x + i
+          idx_sprite = (j * num_stripes_x) + i
           @sprites[idx_sprite] = new_sprite(i * sprite_width, j * sprite_height, @overworld_bitmap)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
         end
@@ -367,7 +367,7 @@ module Transitions
 
     def update_anim
       proportion = @timer / @duration
-      @overworld_sprite.zoom_x = 1.0 + 7.0 * proportion
+      @overworld_sprite.zoom_x = 1 + (7 * proportion)
       @overworld_sprite.zoom_y = @overworld_sprite.zoom_x
       @overworld_sprite.opacity = 255 * (1 - proportion)
     end
@@ -410,7 +410,7 @@ module Transitions
 
     def update_anim
       proportion = @timer / @duration
-      inv_proportion = 1 / (1 + proportion * (MAX_PIXELLATION_FACTOR - 1))
+      inv_proportion = 1 / (1 + (proportion * (MAX_PIXELLATION_FACTOR - 1)))
       new_size_rect = Rect.new(0, 0, @overworld_bitmap.width * inv_proportion,
                                @overworld_bitmap.height * inv_proportion)
       # Take all of buffer_original, shrink it and put it into buffer_temp
@@ -420,7 +420,7 @@ module Transitions
       @overworld_bitmap.stretch_blt(Rect.new(0, 0, @overworld_bitmap.width, @overworld_bitmap.height),
                                     @buffer_temp, new_size_rect)
       if @timer >= @start_black_fade
-        @overworld_sprite.opacity = 255 * (1 - (@timer - @start_black_fade) / (@duration - @start_black_fade))
+        @overworld_sprite.opacity = 255 * (1 - ((@timer - @start_black_fade) / (@duration - @start_black_fade)))
       end
     end
   end
@@ -466,7 +466,7 @@ module Transitions
     def initialize_sprites
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
+          idx_sprite = (j * NUM_SPRITES_X) + i
           if idx_sprite >= TOTAL_SPRITES / 2
             sprite_x = ((j.odd?) ? i : (NUM_SPRITES_X - i - 1)) * @black_bitmap.width
           else
@@ -485,7 +485,7 @@ module Transitions
       time_between_zooms = (@duration - TIME_TO_ZOOM) * 2 / (TOTAL_SPRITES - 1)
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
+          idx_sprite = (j * NUM_SPRITES_X) + i
           idx_from_start = (idx_sprite >= TOTAL_SPRITES / 2) ? TOTAL_SPRITES - 1 - idx_sprite : idx_sprite
           @timings[idx_sprite] = time_between_zooms * idx_from_start
         end
@@ -534,9 +534,9 @@ module Transitions
     def initialize_sprites
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
-          @sprites[idx_sprite] = new_sprite((i * @bitmap.width + @bitmap.width / 2) * @zoom_x_target,
-                                            (j * @bitmap.height + @bitmap.height / 2) * @zoom_y_target,
+          idx_sprite = (j * NUM_SPRITES_X) + i
+          @sprites[idx_sprite] = new_sprite(((i * @bitmap.width) + (@bitmap.width / 2)) * @zoom_x_target,
+                                            ((j * @bitmap.height) + (@bitmap.height / 2)) * @zoom_y_target,
                                             @bitmap, @bitmap.width / 2, @bitmap.height / 2)
           @sprites[idx_sprite].visible = false
         end
@@ -546,16 +546,16 @@ module Transitions
     def set_up_timings
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_from_start = j * NUM_SPRITES_X + i   # Top left -> bottom right
+          idx_from_start = (j * NUM_SPRITES_X) + i   # Top left -> bottom right
           case @parameters[0]   # Origin
           when 1   # Top right -> bottom left
-            idx_from_start = j * NUM_SPRITES_X + NUM_SPRITES_X - i - 1
+            idx_from_start = (j * NUM_SPRITES_X) + NUM_SPRITES_X - i - 1
           when 2   # Bottom left -> top right
-            idx_from_start = TOTAL_SPRITES - 1 - (j * NUM_SPRITES_X + NUM_SPRITES_X - i - 1)
+            idx_from_start = TOTAL_SPRITES - 1 - ((j * NUM_SPRITES_X) + NUM_SPRITES_X - i - 1)
           when 3   # Bottom right -> top left
             idx_from_start = TOTAL_SPRITES - 1 - idx_from_start
           end
-          dist = i + j.to_f * (NUM_SPRITES_X - 1) / (NUM_SPRITES_Y - 1)
+          dist = i + (j.to_f * (NUM_SPRITES_X - 1) / (NUM_SPRITES_Y - 1))
           @timings[idx_from_start] = (dist / ((NUM_SPRITES_X - 1) * 2)) * (@duration - TIME_TO_ZOOM)
         end
       end
@@ -641,16 +641,16 @@ module Transitions
       # Make overworld wave strips oscillate
       amplitude = MAX_WAVE_AMPLITUDE * [@timer / 0.1, 1].min   # Build up to max in 0.1 seconds
       @sprites.each_with_index do |sprite, i|
-        sprite.x = amplitude * Math.sin(@timer * WAVE_SPEED + i * WAVE_SPACING)
+        sprite.x = amplitude * Math.sin((@timer * WAVE_SPEED) + (i * WAVE_SPACING))
       end
       # Move bubbles sprite up and oscillate side to side
       @bubbles_sprite.x = (Graphics.width - @bubble_bitmap.width) / 2
       @bubbles_sprite.x += MAX_BUBBLE_AMPLITUDE * Math.sin(@timer * BUBBLES_WAVE_SPEED)
-      @bubbles_sprite.y = Graphics.height * (1 - @timer * 1.2)
+      @bubbles_sprite.y = Graphics.height * (1 - (@timer * 1.2))
       # Move splash sprite up
       if @timer >= @splash_rising_start
         proportion = (@timer - @splash_rising_start) / (@duration - @splash_rising_start)
-        @splash_sprite.y = Graphics.height * (1 - proportion * 2)
+        @splash_sprite.y = Graphics.height * (1 - (proportion * 2))
       end
       # Move black sprite up
       if @timer >= @black_rising_start
@@ -680,15 +680,15 @@ module Transitions
       # Balls that roll across the screen
       @ball_sprites = []
       for i in 0...2
-        x = (1 - i) * Graphics.width + (1 - i * 2) * @ball_bitmap.width / 2
-        y = (Graphics.height + (i * 2 - 1) * @ball_bitmap.width) / 2
+        x = ((1 - i) * Graphics.width) + ((1 - (i * 2)) * @ball_bitmap.width / 2)
+        y = (Graphics.height + (((i * 2) - 1) * @ball_bitmap.width)) / 2
         @ball_sprites[i] = new_sprite(x, y, @ball_bitmap,
                                       @ball_bitmap.width / 2, @ball_bitmap.height / 2)
         @ball_sprites[i].z = 2
       end
       # Black foreground sprites
       for i in 0...2
-        @sprites[i] = new_sprite((1 - i * 2) * Graphics.width, i * Graphics.height / 2, @black_bitmap)
+        @sprites[i] = new_sprite((1 - (i * 2)) * Graphics.width, i * Graphics.height / 2, @black_bitmap)
         @sprites[i].z = 1
       end
       @sprites[2] = new_sprite(0, Graphics.height / 2, @black_bitmap, 0, @black_bitmap.height / 2)
@@ -718,8 +718,8 @@ module Transitions
         proportion = @timer / @ball_roll_end
         total_distance = Graphics.width + @ball_bitmap.width
         @ball_sprites.each_with_index do |sprite, i|
-          sprite.x = @ball_start_x[i] + (2 * i - 1) * (total_distance * proportion)
-          sprite.angle = (2 * i - 1) * 360 * proportion * 2
+          sprite.x = @ball_start_x[i] + (((2 * i) - 1) * (total_distance * proportion))
+          sprite.angle = ((2 * i) - 1) * 360 * proportion * 2
         end
       else
         proportion = (@timer - @ball_roll_end) / (@duration - @ball_roll_end)
@@ -728,11 +728,11 @@ module Transitions
           @ball_sprites.each { |s| s.visible = false }
         end
         # Zoom in overworld sprite
-        @overworld_sprite.zoom_x = 1.0 + proportion * proportion   # Ends at 2x zoom
+        @overworld_sprite.zoom_x = 1.0 + (proportion * proportion)   # Ends at 2x zoom
         @overworld_sprite.zoom_y = @overworld_sprite.zoom_x
         # Slide first two black bars across
-        @sprites[0].x = Graphics.width * (1 - proportion * proportion)
-        @sprites[1].x = Graphics.width * (proportion * proportion - 1)
+        @sprites[0].x = Graphics.width * (1 - (proportion * proportion))
+        @sprites[1].x = Graphics.width * ((proportion * proportion) - 1)
         # Expand third black bar
         @sprites[2].zoom_y = 2.0 * proportion * proportion   # Ends at 2x zoom
       end
@@ -820,10 +820,10 @@ module Transitions
         # Split overworld/ball apart, move blackness in following them
         proportion = (@timer - @slide_start) / (@duration - @slide_start)
         @overworld_sprites.each_with_index do |sprite, i|
-          sprite.x = (0.5 + (i * 2 - 1) * proportion * proportion) * Graphics.width
-          sprite.zoom_x = 1.0 + proportion * proportion   # Ends at 2x zoom
+          sprite.x = (0.5 + (((i * 2) - 1) * proportion * proportion)) * Graphics.width
+          sprite.zoom_x = 1.0 + (proportion * proportion)   # Ends at 2x zoom
           sprite.zoom_y = sprite.zoom_x
-          @black_sprites[i].x = sprite.x + (1 - i * 2) * Graphics.width / 2
+          @black_sprites[i].x = sprite.x + ((1 - (i * 2)) * Graphics.width / 2)
           @ball_sprites[i].x = sprite.x
         end
       end
@@ -859,7 +859,7 @@ module Transitions
       # Black squares
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
+          idx_sprite = (j * NUM_SPRITES_X) + i
           @sprites[idx_sprite] = new_sprite(i * @black_bitmap.width * @zoom_x_target,
                                             j * @black_bitmap.height * @zoom_y_target, @black_bitmap)
           @sprites[idx_sprite].visible = false
@@ -868,7 +868,7 @@ module Transitions
       # Falling balls
       @ball_sprites = []
       for i in 0...3
-        @ball_sprites[i] = new_sprite(Graphics.width / 2 + (i - 1) * 160,
+        @ball_sprites[i] = new_sprite((Graphics.width / 2) + ((i - 1) * 160),
                                       -@ball_bitmap.height - BALL_START_Y_OFFSETS[i],
                                       @ball_bitmap, @ball_bitmap.width / 2, @ball_bitmap.height / 2)
         @ball_sprites[i].z = 2
@@ -882,8 +882,8 @@ module Transitions
       for j in 0...NUM_SPRITES_Y
         row_offset = NUM_SPRITES_Y - j - 1
         for i in 0...NUM_SPRITES_X
-          idx_sprite = j * NUM_SPRITES_X + i
-          @timings[idx_sprite] = period * (row_offset * NUM_SPRITES_X + appear_order[i]) / TOTAL_SPRITES
+          idx_sprite = (j * NUM_SPRITES_X) + i
+          @timings[idx_sprite] = period * ((row_offset * NUM_SPRITES_X) + appear_order[i]) / TOTAL_SPRITES
           @timings[idx_sprite] += @black_appear_start
         end
       end
@@ -906,7 +906,7 @@ module Transitions
         proportion = @timer / @black_appear_start
         @ball_sprites.each_with_index do |sprite, i|
           sprite.y = -@ball_bitmap.height - BALL_START_Y_OFFSETS[i]
-          sprite.y += (Graphics.height + BALL_START_Y_OFFSETS.max + @ball_bitmap.height * 2) * proportion
+          sprite.y += (Graphics.height + BALL_START_Y_OFFSETS.max + (@ball_bitmap.height * 2)) * proportion
           sprite.angle = 1.5 * 360 * proportion * ([1, -1][(i == 2) ? 0 : 1])
         end
       else
@@ -921,7 +921,7 @@ module Transitions
         end
         # Zoom in overworld sprite
         proportion = (@timer - @black_appear_start) / (@duration - @black_appear_start)
-        @overworld_sprite.zoom_x = 1.0 + proportion * proportion   # Ends at 2x zoom
+        @overworld_sprite.zoom_x = 1.0 + (proportion * proportion)   # Ends at 2x zoom
         @overworld_sprite.zoom_y = @overworld_sprite.zoom_x
       end
     end
@@ -977,7 +977,7 @@ module Transitions
       if @timer <= @ball_appear_end
         # Make ball drop down and zoom in
         proportion = @timer / @ball_appear_end
-        @ball_sprite.y = -@ball_bitmap.height / 2 + (Graphics.height + @ball_bitmap.height * 3) * proportion * proportion
+        @ball_sprite.y = (-@ball_bitmap.height / 2) + ((Graphics.height + (@ball_bitmap.height * 3)) * proportion * proportion)
         @ball_sprite.angle = -1.5 * 360 * proportion
         @ball_sprite.zoom_x = 3 * proportion * proportion
         @ball_sprite.zoom_y = @ball_sprite.zoom_x
@@ -986,10 +986,10 @@ module Transitions
         # Black curve and blackness descends
         proportion = (@timer - @ball_appear_end) / (@duration - @ball_appear_end)
         @sprites.each do |sprite|
-          sprite.y = -@curve_bitmap.height + (Graphics.height + @curve_bitmap.height) * proportion
+          sprite.y = -@curve_bitmap.height + ((Graphics.height + @curve_bitmap.height) * proportion)
         end
         # Zoom in overworld sprite
-        @overworld_sprite.zoom_x = 1.0 + proportion * proportion   # Ends at 2x zoom
+        @overworld_sprite.zoom_x = 1.0 + (proportion * proportion)   # Ends at 2x zoom
         @overworld_sprite.zoom_y = @overworld_sprite.zoom_x
       end
     end
@@ -1024,7 +1024,7 @@ module Transitions
       # Ball sprites
       @ball_sprites = []
       for i in 0...3
-        @ball_sprites[i] = new_sprite((2 * i + 1) * Graphics.width / 6,
+        @ball_sprites[i] = new_sprite(((2 * i) + 1) * Graphics.width / 6,
                                       BALL_OFFSETS[i] * Graphics.height,
                                       @ball_bitmap, @ball_bitmap.width / 2, @ball_bitmap.height / 2)
         @ball_sprites[i].z = 4
@@ -1062,13 +1062,13 @@ module Transitions
       # Make overworld wave strips oscillate
       amplitude = MAX_WAVE_AMPLITUDE * [@timer / 0.1, 1].min   # Build up to max in 0.1 seconds
       @sprites.each_with_index do |sprite, i|
-        sprite.x = (1 - (i % 2) * 2) * amplitude * Math.sin(@timer * WAVE_SPEED + i * WAVE_SPACING)
+        sprite.x = (1 - ((i % 2) * 2)) * amplitude * Math.sin((@timer * WAVE_SPEED) + (i * WAVE_SPACING))
       end
       # Move balls and trailing blackness up
       if @timer >= @ball_rising_start
         proportion = (@timer - @ball_rising_start) / (@duration - @ball_rising_start)
         @ball_sprites.each_with_index do |sprite, i|
-          sprite.y = BALL_OFFSETS[i] * Graphics.height - Graphics.height * 3.5 * proportion
+          sprite.y = (BALL_OFFSETS[i] * Graphics.height) - (Graphics.height * 3.5 * proportion)
           sprite.angle = [-1, -1, 1][i] * 360 * 2 * proportion
           @black_trail_sprites[i].y = sprite.y
           @black_trail_sprites[i].y = 0 if @black_trail_sprites[i].y < 0
@@ -1133,7 +1133,7 @@ module Transitions
       # Make overworld wave strips oscillate
       amplitude = MAX_WAVE_AMPLITUDE * [@timer / 0.1, 1].min   # Build up to max in 0.1 seconds
       @sprites.each_with_index do |sprite, i|
-        sprite.x = (1 - (i % 2) * 2) * amplitude * Math.sin(@timer * WAVE_SPEED + i * WAVE_SPACING)
+        sprite.x = (1 - ((i % 2) * 2)) * amplitude * Math.sin((@timer * WAVE_SPEED) + (i * WAVE_SPACING))
       end
       if @timer <= @ball_appear_end
         # Fade in ball while spinning
@@ -1208,11 +1208,11 @@ module Transitions
       if @timer <= @ball_appear_end
         # Balls fly out from centre of screen
         proportion = @timer / @ball_appear_end
-        ball_travel_x = (Graphics.width + @ball_bitmap.width * 2) / 2
-        ball_travel_y = (Graphics.height + @ball_bitmap.height * 2) / 2
+        ball_travel_x = (Graphics.width + (@ball_bitmap.width * 2)) / 2
+        ball_travel_y = (Graphics.height + (@ball_bitmap.height * 2)) / 2
         @ball_sprites.each_with_index do |sprite, i|
-          sprite.x = Graphics.width / 2 + [0, 1, 0, -1][i] * ball_travel_x * proportion if i.odd?
-          sprite.y = Graphics.height / 2 + [1, 0, -1, 0][i] * ball_travel_y * proportion if i.even?
+          sprite.x = (Graphics.width / 2) + ([0, 1, 0, -1][i] * ball_travel_x * proportion) if i.odd?
+          sprite.y = (Graphics.height / 2) + ([1, 0, -1, 0][i] * ball_travel_y * proportion) if i.even?
         end
       else
         # Black wedges expand to fill screen

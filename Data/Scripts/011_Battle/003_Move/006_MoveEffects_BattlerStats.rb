@@ -440,14 +440,14 @@ class Battle::Move::LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2 < Battle::Move
     showAnim = true
     for i in 0...@statDown.length / 2
       next if !user.pbCanLowerStatStage?(@statDown[i * 2], user, self)
-      if user.pbLowerStatStage(@statDown[i * 2], @statDown[i * 2 + 1], user, showAnim)
+      if user.pbLowerStatStage(@statDown[i * 2], @statDown[(i * 2) + 1], user, showAnim)
         showAnim = false
       end
     end
     showAnim = true
     for i in 0...@statUp.length / 2
       next if !user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
-      if user.pbRaiseStatStage(@statUp[i * 2], @statUp[i * 2 + 1], user, showAnim)
+      if user.pbRaiseStatStage(@statUp[i * 2], @statUp[(i * 2) + 1], user, showAnim)
         showAnim = false
       end
     end
@@ -1385,7 +1385,7 @@ class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
     showMirrorArmorSplash = true
     for i in 0...@statDown.length / 2
       next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
-      if target.pbLowerStatStage(@statDown[i * 2], @statDown[i * 2 + 1], user,
+      if target.pbLowerStatStage(@statDown[i * 2], @statDown[(i * 2) + 1], user,
                                  showAnim, false, (showMirrorArmorSplash) ? 1 : 3)
         showAnim = false
       end

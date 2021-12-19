@@ -298,12 +298,10 @@ class Battle::Move
         else
           @battle.pbDisplay(_INTL("{1} landed a critical hit, wishing to be praised!", user.pbThis))
         end
+      elsif numTargets > 1
+        @battle.pbDisplay(_INTL("A critical hit on {1}!", target.pbThis(true)))
       else
-        if numTargets > 1
-          @battle.pbDisplay(_INTL("A critical hit on {1}!", target.pbThis(true)))
-        else
-          @battle.pbDisplay(_INTL("A critical hit!"))
-        end
+        @battle.pbDisplay(_INTL("A critical hit!"))
       end
     end
     # Effectiveness message, for moves with 1 hit

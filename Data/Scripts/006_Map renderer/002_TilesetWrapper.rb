@@ -23,7 +23,7 @@ class TilemapRenderer
     TILESET_WIDTH        = SOURCE_TILE_WIDTH * TILESET_TILES_PER_ROW
     # Looks useless, but covers weird numbers given to mkxp.json or a funky driver
     MAX_TEX_SIZE         = (Bitmap.max_size / 1024) * 1024
-    MAX_TEX_SIZE_BOOSTED = MAX_TEX_SIZE**2 / TILESET_WIDTH
+    MAX_TEX_SIZE_BOOSTED = (MAX_TEX_SIZE**2) / TILESET_WIDTH
 
     module_function
 
@@ -49,7 +49,7 @@ class TilemapRenderer
     def getWrappedRect(src_rect)
       ret = Rect.new(0, 0, 0, 0)
       col = (src_rect.y / MAX_TEX_SIZE.to_f).floor
-      ret.x = col * TILESET_WIDTH + src_rect.x.clamp(0, TILESET_WIDTH)
+      ret.x = (col * TILESET_WIDTH) + src_rect.x.clamp(0, TILESET_WIDTH)
       ret.y = src_rect.y % MAX_TEX_SIZE
       ret.width = src_rect.width.clamp(0, TILESET_WIDTH - src_rect.x)
       ret.height = src_rect.height.clamp(0, MAX_TEX_SIZE)
@@ -70,8 +70,8 @@ class TilemapRenderer
         # FIXME: won't work on heights longer than two columns, but nobody should need
         # more than 32k pixels high at once anyway
         side = {
-           :a => MAX_TEX_SIZE - srcrect_mod.y,
-           :b => srcrect_mod.height - MAX_TEX_SIZE + srcrect_mod.y
+          :a => MAX_TEX_SIZE - srcrect_mod.y,
+          :b => srcrect_mod.height - MAX_TEX_SIZE + srcrect_mod.y
         }
         dest.blt(destX, destY, src, Rect.new(srcrect_mod.x, srcrect_mod.y, srcrect_mod.width, side[:a]))
         dest.blt(destX, destY + side[:a], src, Rect.new(srcrect_mod.x + TILESET_WIDTH, 0, srcrect_mod.width, side[:b]))

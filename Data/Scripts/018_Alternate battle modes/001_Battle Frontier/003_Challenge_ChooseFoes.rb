@@ -7,21 +7,21 @@ def pbBattleChallengeTrainer(win_count, bttrainers)
   # This table's start points and lengths are based on a bttrainers size of 300.
   # They are scaled based on the actual size of bttrainers later.
   table = [   # Each value is [minimum win count, range start point, range length]
-     [ 0,   0, 100],   # 0-100
-     [ 6,  80,  40],   # 80-120
-     [ 7,  80,  40],   # 80-120
-     [13, 120,  20],   # 120-140
-     [14, 100,  40],   # 100-140
-     [20, 140,  20],   # 140-160
-     [21, 120,  40],   # 120-160
-     [27, 160,  20],   # 160-180
-     [28, 140,  40],   # 140-180
-     [34, 180,  20],   # 180-200
-     [35, 160,  40],   # 160-200
-     [41, 200,  20],   # 200-220
-     [42, 180,  40],   # 180-220
-     [48, 220,  40],   # 220-260
-     [49, 200, 100]    # 200-300 - This line is used for all higher win_counts
+    [ 0,   0, 100],   # 0-100
+    [ 6,  80,  40],   # 80-120
+    [ 7,  80,  40],   # 80-120
+    [13, 120,  20],   # 120-140
+    [14, 100,  40],   # 100-140
+    [20, 140,  20],   # 140-160
+    [21, 120,  40],   # 120-160
+    [27, 160,  20],   # 160-180
+    [28, 140,  40],   # 140-180
+    [34, 180,  20],   # 180-200
+    [35, 160,  40],   # 160-200
+    [41, 200,  20],   # 200-220
+    [42, 180,  40],   # 180-220
+    [48, 220,  40],   # 220-260
+    [49, 200, 100]    # 200-300 - This line is used for all higher win_counts
   ]
   slot = nil
   table.each { |val| slot = val if val[0] <= win_count && (!slot || slot[0] < val[0]) }
@@ -99,25 +99,25 @@ def pbBattleFactoryPokemon(rules, win_count, swap_count, rentals)
   # Group 1 is 0 - 173. Group 2 is 174 - 371. Group 3 is 372 - 881.
   if level == GameData::GrowthRate.max_level   # Open Level (Level 100)
     table = [
-       [372, 491],   # Group 3 (first quarter)
-       [492, 610],   # Group 3 (second quarter)
-       [611, 729],   # Group 3 (third quarter)
-       [730, 849],   # Group 3 (fourth quarter)
-       [372, 881],   # All of Group 3
-       [372, 881],   # All of Group 3
-       [372, 881],   # All of Group 3
-       [372, 881]    # This line is used for all higher sets (all of Group 3)
+      [372, 491],   # Group 3 (first quarter)
+      [492, 610],   # Group 3 (second quarter)
+      [611, 729],   # Group 3 (third quarter)
+      [730, 849],   # Group 3 (fourth quarter)
+      [372, 881],   # All of Group 3
+      [372, 881],   # All of Group 3
+      [372, 881],   # All of Group 3
+      [372, 881]    # This line is used for all higher sets (all of Group 3)
     ]
   else
     table = [
-       [  0, 173],   # Group 1
-       [174, 272],   # Group 2 (first half)
-       [273, 371],   # Group 2 (second half)
-       [372, 491],   # Group 3 (first quarter)
-       [492, 610],   # Group 3 (second quarter)
-       [611, 729],   # Group 3 (third quarter)
-       [730, 849],   # Group 3 (fourth quarter)
-       [372, 881]    # This line is used for all higher sets (all of Group 3)
+      [  0, 173],   # Group 1
+      [174, 272],   # Group 2 (first half)
+      [273, 371],   # Group 2 (second half)
+      [372, 491],   # Group 3 (first quarter)
+      [492, 610],   # Group 3 (second quarter)
+      [611, 729],   # Group 3 (third quarter)
+      [730, 849],   # Group 3 (fourth quarter)
+      [372, 881]    # This line is used for all higher sets (all of Group 3)
     ]
   end
   pokemonNumbers[0] = table[set][0] * btpokemon.length / 881

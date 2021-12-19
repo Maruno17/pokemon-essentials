@@ -83,7 +83,7 @@ class Battle::Scene
     # Wild battle, so set up the Pokémon sprite(s) accordingly
     if @battle.wildBattle?
       @battle.pbParty(1).each_with_index do |pkmn, i|
-        index = i * 2 + 1
+        index = (i * 2) + 1
         pbChangePokemon(index, pkmn)
         pkmnSprite = @sprites["pokemon_#{index}"]
         pkmnSprite.tone    = Tone.new(-80, -80, -80)

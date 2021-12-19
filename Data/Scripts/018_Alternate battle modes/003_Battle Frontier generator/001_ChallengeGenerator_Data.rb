@@ -68,15 +68,15 @@ end
 
 def pbArrangeByTier(pokemonlist, rule)
   tiers = [
-     withRestr(rule,   0, 500, 0),
-     withRestr(rule, 380, 500, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 580, 680, 1),
-     withRestr(rule, 500, 680, 0),
-     withRestr(rule, 580, 680, 2)
+    withRestr(rule,   0, 500, 0),
+    withRestr(rule, 380, 500, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 580, 680, 1),
+    withRestr(rule, 500, 680, 0),
+    withRestr(rule, 580, 680, 2)
   ]
   tierPokemon = []
   tiers.length.times do

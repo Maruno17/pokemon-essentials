@@ -73,7 +73,7 @@ class SlotMachineReel < BitmapSprite
     for i in 0...4
       num = @index - i
       num += @reel.length if num < 0
-      self.bitmap.blt(0, @toppos + i * 48, @images.bitmap, Rect.new(@reel[num] * 64, 0, 64, 48))
+      self.bitmap.blt(0, @toppos + (i * 48), @images.bitmap, Rect.new(@reel[num] * 64, 0, 64, 48))
     end
     self.bitmap.blt(0, 0, @shading.bitmap, Rect.new(0, 0, 64, 144))
   end
@@ -246,7 +246,7 @@ class SlotMachineScene
     @sprites["reel2"] = SlotMachineReel.new(144, 112, difficulty)
     @sprites["reel3"] = SlotMachineReel.new(224, 112, difficulty)
     for i in 1..3
-      @sprites["button#{i}"] = IconSprite.new(68 + 80 * (i - 1), 260, @viewport)
+      @sprites["button#{i}"] = IconSprite.new(68 + (80 * (i - 1)), 260, @viewport)
       @sprites["button#{i}"].setBitmap(sprintf("Graphics/Pictures/Slot Machine/button"))
       @sprites["button#{i}"].visible = false
     end
@@ -254,7 +254,7 @@ class SlotMachineScene
       y = [170, 122, 218, 82, 82][i - 1]
       @sprites["row#{i}"] = IconSprite.new(2, y, @viewport)
       @sprites["row#{i}"].setBitmap(sprintf("Graphics/Pictures/Slot Machine/line%1d%s",
-                                            1 + i / 2, (i >= 4) ? ((i == 4) ? "a" : "b") : ""))
+                                            1 + (i / 2), (i >= 4) ? ((i == 4) ? "a" : "b") : ""))
       @sprites["row#{i}"].visible = false
     end
     @sprites["light1"] = IconSprite.new(16, 32, @viewport)

@@ -138,19 +138,19 @@ end
 def moonphase(time = nil) # in UTC
   time = pbGetTimeNow if !time
   transitions = [
-     1.8456618033125,
-     5.5369854099375,
-     9.2283090165625,
-     12.9196326231875,
-     16.6109562298125,
-     20.3022798364375,
-     23.9936034430625,
-     27.6849270496875
+    1.8456618033125,
+    5.5369854099375,
+    9.2283090165625,
+    12.9196326231875,
+    16.6109562298125,
+    20.3022798364375,
+    23.9936034430625,
+    27.6849270496875
   ]
   yy = time.year - ((12 - time.mon) / 10.0).floor
-  j = (365.25 * (4712 + yy)).floor + (((time.mon + 9) % 12) * 30.6 + 0.5).floor + time.day + 59
+  j = (365.25 * (4712 + yy)).floor + ((((time.mon + 9) % 12) * 30.6) + 0.5).floor + time.day + 59
   j -= (((yy / 100.0) + 49).floor * 0.75).floor - 38 if j > 2299160
-  j += (((time.hour * 60) + time.min * 60) + time.sec) / 86400.0
+  j += (((time.hour * 60) + (time.min * 60)) + time.sec) / 86400.0
   v = (j - 2451550.1) / 29.530588853
   v = ((v - v.floor) + (v < 0 ? 1 : 0))
   ag = v * 29.53
@@ -164,22 +164,22 @@ end
 # 0 is Aries, 11 is Pisces. Month is 1 if January, and so on.
 def zodiac(month, day)
   time = [
-     3, 21, 4, 19,   # Aries
-     4, 20, 5, 20,   # Taurus
-     5, 21, 6, 20,   # Gemini
-     6, 21, 7, 20,   # Cancer
-     7, 23, 8, 22,   # Leo
-     8, 23, 9, 22,   # Virgo
-     9, 23, 10, 22,  # Libra
-     10, 23, 11, 21, # Scorpio
-     11, 22, 12, 21, # Sagittarius
-     12, 22, 1, 19,  # Capricorn
-     1, 20, 2, 18,   # Aquarius
-     2, 19, 3, 20    # Pisces
+    3, 21, 4, 19,   # Aries
+    4, 20, 5, 20,   # Taurus
+    5, 21, 6, 20,   # Gemini
+    6, 21, 7, 20,   # Cancer
+    7, 23, 8, 22,   # Leo
+    8, 23, 9, 22,   # Virgo
+    9, 23, 10, 22,  # Libra
+    10, 23, 11, 21, # Scorpio
+    11, 22, 12, 21, # Sagittarius
+    12, 22, 1, 19,  # Capricorn
+    1, 20, 2, 18,   # Aquarius
+    2, 19, 3, 20    # Pisces
   ]
   for i in 0...12
-    return i if month == time[i * 4] && day >= time[i * 4 + 1]
-    return i if month == time[i * 4 + 2] && day <= time[i * 4 + 3]
+    return i if month == time[i * 4] && day >= time[(i * 4) + 1]
+    return i if month == time[(i * 4) + 2] && day <= time[(i * 4) + 3]
   end
   return 0
 end
@@ -212,13 +212,13 @@ def pbIsWeekday(wdayVariable, *arg)
   end
   if wdayVariable > 0
     $game_variables[wdayVariable] = [
-       _INTL("Sunday"),
-       _INTL("Monday"),
-       _INTL("Tuesday"),
-       _INTL("Wednesday"),
-       _INTL("Thursday"),
-       _INTL("Friday"),
-       _INTL("Saturday")
+      _INTL("Sunday"),
+      _INTL("Monday"),
+      _INTL("Tuesday"),
+      _INTL("Wednesday"),
+      _INTL("Thursday"),
+      _INTL("Friday"),
+      _INTL("Saturday")
     ][wday]
     $game_map.need_refresh = true if $game_map
   end
@@ -258,8 +258,7 @@ def pbGetMonthName(month)
 end
 
 def pbGetAbbrevMonthName(month)
-  return ["",
-          _INTL("Jan."),
+  return [_INTL("Jan."),
           _INTL("Feb."),
           _INTL("Mar."),
           _INTL("Apr."),
@@ -270,7 +269,7 @@ def pbGetAbbrevMonthName(month)
           _INTL("Sep."),
           _INTL("Oct."),
           _INTL("Nov."),
-          _INTL("Dec.")][month]
+          _INTL("Dec.")][month - 1]
 end
 
 #===============================================================================
@@ -287,12 +286,10 @@ def pbIsSeason(seasonVariable, *arg)
     ret = true if wd == thisseason
   end
   if seasonVariable > 0
-    $game_variables[seasonVariable] = [
-       _INTL("Spring"),
-       _INTL("Summer"),
-       _INTL("Autumn"),
-       _INTL("Winter")
-    ][thisseason]
+    $game_variables[seasonVariable] = [_INTL("Spring"),
+                                       _INTL("Summer"),
+                                       _INTL("Autumn"),
+                                       _INTL("Winter")][thisseason]
     $game_map.need_refresh = true if $game_map
   end
   return ret

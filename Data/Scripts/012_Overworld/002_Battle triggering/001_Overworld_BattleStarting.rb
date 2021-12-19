@@ -182,8 +182,8 @@ def pbGetEnvironment
   tile_environment = terrainTag.battle_environment
   if ret == :Forest && [:Grass, :TallGrass].include?(tile_environment)
     ret = :ForestGrass
-  else
-    ret = tile_environment if tile_environment
+  elsif tile_environment
+    ret = tile_environment
   end
   return ret
 end
@@ -383,13 +383,14 @@ def pbTrainerBattleCore(*args)
   foeParty       = []
   foePartyStarts = []
   for arg in args
-    if arg.is_a?(NPCTrainer)
+    case arg
+    when NPCTrainer
       foeTrainers.push(arg)
       foePartyStarts.push(foeParty.length)
       arg.party.each { |pkmn| foeParty.push(pkmn) }
       foeEndSpeeches.push(arg.lose_text)
       foeItems.push(arg.items)
-    elsif arg.is_a?(Array)   # [trainer type, trainer name, ID, speech (optional)]
+    when Array   # [trainer type, trainer name, ID, speech (optional)]
       trainer = pbLoadTrainer(arg[0], arg[1], arg[2])
       pbMissingTrainer(arg[0], arg[1], arg[2]) if !trainer
       return 0 if !trainer
@@ -530,8 +531,8 @@ def pbDoubleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
   setBattleRule("double")
   # Perform the battle
   decision = pbTrainerBattleCore(
-     [trainerID1, trainerName1, trainerPartyID1, endSpeech1],
-     [trainerID2, trainerName2, trainerPartyID2, endSpeech2]
+    [trainerID1, trainerName1, trainerPartyID1, endSpeech1],
+    [trainerID2, trainerName2, trainerPartyID2, endSpeech2]
   )
   # Return true if the player won the battle, and false if any other result
   return (decision == 1)
@@ -547,9 +548,9 @@ def pbTripleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
   setBattleRule("triple")
   # Perform the battle
   decision = pbTrainerBattleCore(
-     [trainerID1, trainerName1, trainerPartyID1, endSpeech1],
-     [trainerID2, trainerName2, trainerPartyID2, endSpeech2],
-     [trainerID3, trainerName3, trainerPartyID3, endSpeech3]
+    [trainerID1, trainerName1, trainerPartyID1, endSpeech1],
+    [trainerID2, trainerName2, trainerPartyID2, endSpeech2],
+    [trainerID3, trainerName3, trainerPartyID3, endSpeech3]
   )
   # Return true if the player won the battle, and false if any other result
   return (decision == 1)
@@ -644,38 +645,38 @@ def pbPickup(pkmn)
   return unless rand(100) < 10   # 10% chance
   # Common items to find (9 items from this list are added to the pool)
   pickupList = pbDynamicItemList(
-     :POTION,
-     :ANTIDOTE,
-     :SUPERPOTION,
-     :GREATBALL,
-     :REPEL,
-     :ESCAPEROPE,
-     :FULLHEAL,
-     :HYPERPOTION,
-     :ULTRABALL,
-     :REVIVE,
-     :RARECANDY,
-     :SUNSTONE,
-     :MOONSTONE,
-     :HEARTSCALE,
-     :FULLRESTORE,
-     :MAXREVIVE,
-     :PPUP,
-     :MAXELIXIR
+    :POTION,
+    :ANTIDOTE,
+    :SUPERPOTION,
+    :GREATBALL,
+    :REPEL,
+    :ESCAPEROPE,
+    :FULLHEAL,
+    :HYPERPOTION,
+    :ULTRABALL,
+    :REVIVE,
+    :RARECANDY,
+    :SUNSTONE,
+    :MOONSTONE,
+    :HEARTSCALE,
+    :FULLRESTORE,
+    :MAXREVIVE,
+    :PPUP,
+    :MAXELIXIR
   )
   # Rare items to find (2 items from this list are added to the pool)
   pickupListRare = pbDynamicItemList(
-     :HYPERPOTION,
-     :NUGGET,
-     :KINGSROCK,
-     :FULLRESTORE,
-     :ETHER,
-     :IRONBALL,
-     :DESTINYKNOT,
-     :ELIXIR,
-     :DESTINYKNOT,
-     :LEFTOVERS,
-     :DESTINYKNOT
+    :HYPERPOTION,
+    :NUGGET,
+    :KINGSROCK,
+    :FULLRESTORE,
+    :ETHER,
+    :IRONBALL,
+    :DESTINYKNOT,
+    :ELIXIR,
+    :DESTINYKNOT,
+    :LEFTOVERS,
+    :DESTINYKNOT
   )
   return if pickupList.length < 18
   return if pickupListRare.length < 11
@@ -709,7 +710,7 @@ end
 def pbHoneyGather(pkmn)
   return if !GameData::Item.exists?(:HONEY)
   return if pkmn.egg? || !pkmn.hasAbility?(:HONEYGATHER) || pkmn.hasItem?
-  chance = 5 + ((pkmn.level - 1) / 10) * 5
+  chance = 5 + (((pkmn.level - 1) / 10) * 5)
   return unless rand(100) < chance
   pkmn.item = :HONEY
 end
