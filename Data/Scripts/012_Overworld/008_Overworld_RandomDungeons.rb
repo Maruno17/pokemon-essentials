@@ -575,11 +575,11 @@ module RandomDungeonGenerator
       for y in 0...maxHeight / cellHeight
         for x in 0...maxWidth / cellWidth
           pattern = maze.getEdgePattern(x, y)
-          if DungeonMaze.paint_cell_contents(
-             self, BUFFER_X + x * cellWidth, BUFFER_Y + y * cellHeight,
-             corridor_patterns[pattern], DungeonMaze::TURN_NONE)
-            roomcount += 1
-          end
+          next if !DungeonMaze.paint_cell_contents(
+            self, BUFFER_X + x * cellWidth, BUFFER_Y + y * cellHeight,
+            corridor_patterns[pattern], DungeonMaze::TURN_NONE
+          )
+          roomcount += 1
         end
       end
       # If no rooms were generated, make the whole map a room

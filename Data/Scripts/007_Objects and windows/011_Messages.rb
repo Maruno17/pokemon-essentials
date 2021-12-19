@@ -713,9 +713,9 @@ def pbMessage(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd =
   msgwindow = pbCreateMessageWindow(nil, skin)
   if commands
     ret = pbMessageDisplay(msgwindow, message, true,
-       proc { |msgwindow|
-         next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
-       }, &block)
+                           proc { |msgwindow|
+                             next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
+                           }, &block)
   else
     pbMessageDisplay(msgwindow, message, &block)
   end
@@ -735,9 +735,9 @@ end
 def pbMessageChooseNumber(message, params, &block)
   msgwindow = pbCreateMessageWindow(nil, params.messageSkin)
   ret = pbMessageDisplay(msgwindow, message, true,
-     proc { |msgwindow|
-       next pbChooseNumber(msgwindow, params, &block)
-     }, &block)
+                         proc { |msgwindow|
+                           next pbChooseNumber(msgwindow, params, &block)
+                         }, &block)
   pbDisposeMessageWindow(msgwindow)
   return ret
 end
@@ -878,9 +878,9 @@ end
 def pbMessageFreeText(message, currenttext, passwordbox, maxlength, width = 240, &block)
   msgwindow = pbCreateMessageWindow
   retval = pbMessageDisplay(msgwindow, message, true,
-     proc { |msgwindow|
-       next pbFreeText(msgwindow, currenttext, passwordbox, maxlength, width, &block)
-     }, &block)
+                            proc { |msgwindow|
+                              next pbFreeText(msgwindow, currenttext, passwordbox, maxlength, width, &block)
+                            }, &block)
   pbDisposeMessageWindow(msgwindow)
   return retval
 end

@@ -18,9 +18,9 @@ class Window_DexesList < Window_CommandPokemon
     super(index, count, rect)
     if index >= 0 && index < @commands2.length
       pbDrawShadowText(self.contents, rect.x + 254, rect.y, 64, rect.height,
-         sprintf("%d", @commands2[index][0]), self.baseColor, self.shadowColor, 1)
+                       sprintf("%d", @commands2[index][0]), self.baseColor, self.shadowColor, 1)
       pbDrawShadowText(self.contents, rect.x + 350, rect.y, 64, rect.height,
-         sprintf("%d", @commands2[index][1]), self.baseColor, self.shadowColor, 1)
+                       sprintf("%d", @commands2[index][1]), self.baseColor, self.shadowColor, 1)
       allseen = (@commands2[index][0] >= @commands2[index][2])
       allown  = (@commands2[index][1] >= @commands2[index][2])
       pbDrawImagePositions(self.contents, [
@@ -47,7 +47,8 @@ class PokemonPokedexMenu_Scene
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_menu"))
     @sprites["headings"] = Window_AdvancedTextPokemon.newWithSize(
-       _INTL("<c3=F8F8F8,C02028>SEEN<r>OBTAINED</c3>"), 286, 136, 208, 64, @viewport)
+       _INTL("<c3=F8F8F8,C02028>SEEN<r>OBTAINED</c3>"), 286, 136, 208, 64, @viewport
+    )
     @sprites["headings"].windowskin = nil
     @sprites["commands"] = Window_DexesList.new(commands, commands2, Graphics.width - 84)
     @sprites["commands"].x      = 40

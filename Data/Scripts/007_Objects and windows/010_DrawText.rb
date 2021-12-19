@@ -31,7 +31,7 @@ def colorToRgb32(color)
     return sprintf("%02X%02X%02X", color.red.to_i, color.green.to_i, color.blue.to_i)
   else
     return sprintf("%02X%02X%02X%02X",
-       color.red.to_i, color.green.to_i, color.blue.to_i, color.alpha.to_i)
+                   color.red.to_i, color.green.to_i, color.blue.to_i, color.alpha.to_i)
   end
 end
 
@@ -163,10 +163,9 @@ def getFormattedTextForDims(bitmap, xDst, yDst, widthDst, heightDst, text, lineh
   if newlineBreaks
     text2.gsub!(/<(\/?)(br)(\s*\=\s*([^>]*))?>/i, "\n")
   end
-  return getFormattedText(
-     bitmap, xDst, yDst, widthDst, heightDst,
-     text2, lineheight, newlineBreaks,
-     explicitBreaksOnly, true)
+  return getFormattedText(bitmap, xDst, yDst, widthDst, heightDst,
+                          text2, lineheight, newlineBreaks,
+                          explicitBreaksOnly, true)
 end
 
 def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight,
@@ -412,7 +411,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   end
   if controls.length == 0
     ret = getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight,
-       newlineBreaks, explicitBreaksOnly)
+                               newlineBreaks, explicitBreaksOnly)
     dummybitmap.dispose if dummybitmap
     return ret
   end
@@ -1051,7 +1050,7 @@ def drawSingleFormattedChar(bitmap, ch)
     end
     if ch[10] # underline
       bitmap.fill_rect(ch[1], ch[2] + ch[4] - 4 - [(ch[4] - bitmap.font.size) / 2, 0].max - 2,
-         ch[3] - 2, 2, ch[8])
+                       ch[3] - 2, 2, ch[8])
     end
     if ch[11] # strikeout
       bitmap.fill_rect(ch[1], ch[2] + (ch[4] / 2) - 4, ch[3] - 2, 2, ch[8])
@@ -1088,7 +1087,7 @@ end
 def drawTextEx(bitmap, x, y, width, numlines, text, baseColor, shadowColor)
   normtext = getLineBrokenChunks(bitmap, text, width, nil, true)
   renderLineBrokenChunksWithShadow(bitmap, x, y, normtext, numlines * 32,
-     baseColor, shadowColor)
+                                   baseColor, shadowColor)
 end
 
 def drawFormattedTextEx(bitmap, x, y, width, text, baseColor = nil, shadowColor = nil, lineheight = 32)

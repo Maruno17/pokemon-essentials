@@ -18,7 +18,7 @@ class PokemonEggHatch_Scene
     @viewport.z = 99999
     # Create background image
     addBackgroundOrColoredPlane(@sprites, "background", "hatchbg",
-       Color.new(248, 248, 248), @viewport)
+                                Color.new(248, 248, 248), @viewport)
     # Create egg sprite/Pokémon sprite
     @sprites["pokemon"] = PokemonSprite.new(@viewport)
     @sprites["pokemon"].setOffset(PictureOrigin::Bottom)
@@ -46,7 +46,7 @@ class PokemonEggHatch_Scene
     @sprites["overlay"].z = 200
     @sprites["overlay"].bitmap = Bitmap.new(Graphics.width, Graphics.height)
     @sprites["overlay"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height,
-        Color.new(255, 255, 255))
+                                         Color.new(255, 255, 255))
     @sprites["overlay"].opacity = 0
     # Start up scene
     pbFadeInAndShow(@sprites)
@@ -103,10 +103,10 @@ class PokemonEggHatch_Scene
     pbMEPlay("Evolution success")
     @pokemon.name = nil
     pbMessage(_INTL("\\se[]{1} hatched from the Egg!\\wt[80]", @pokemon.name)) { update }
-    if pbConfirmMessage(
-        _INTL("Would you like to nickname the newly hatched {1}?", @pokemon.name)) { update }
+    if pbConfirmMessage(_INTL("Would you like to nickname the newly hatched {1}?",
+                              @pokemon.name)) { update }
       nickname = pbEnterPokemonName(_INTL("{1}'s nickname?", @pokemon.name),
-                                  0, Pokemon::MAX_NAME_SIZE, "", @pokemon, true)
+                                    0, Pokemon::MAX_NAME_SIZE, "", @pokemon, true)
       @pokemon.name = nickname
       @nicknamed = true
     end

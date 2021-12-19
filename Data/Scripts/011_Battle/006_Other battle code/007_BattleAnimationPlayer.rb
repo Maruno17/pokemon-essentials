@@ -222,7 +222,8 @@ class RPG::Animation
       timing.se             = RPG::AudioFile.new(
          othertiming.se.name.clone,
          othertiming.se.volume,
-         othertiming.se.pitch)
+         othertiming.se.pitch
+      )
       timing.flash_scope    = othertiming.flash_scope
       timing.flash_color    = othertiming.flash_color.clone
       timing.flash_duration = othertiming.flash_duration
@@ -290,57 +291,57 @@ class PBAnimTiming
     when 1
       text = sprintf("[%d] Set BG: \"%s\"", @frame + 1, name)
       text += sprintf(" (color=%s,%s,%s,%s)",
-         (@colorRed != nil)   ? @colorRed.to_i   : "-",
-         (@colorGreen != nil) ? @colorGreen.to_i : "-",
-         (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
-         (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
+                      (@colorRed != nil)   ? @colorRed.to_i   : "-",
+                      (@colorGreen != nil) ? @colorGreen.to_i : "-",
+                      (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
+                      (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
       text += sprintf(" (opacity=%s)", @opacity.to_i)
       text += sprintf(" (coords=%s,%s)",
-         (@bgX != nil) ? @bgX : "-",
-         (@bgY != nil) ? @bgY : "-")
+                      (@bgX != nil) ? @bgX : "-",
+                      (@bgY != nil) ? @bgY : "-")
       return text
     when 2
       text = sprintf("[%d] Change BG: @%d", @frame + 1, duration)
       if @colorRed != nil || @colorGreen != nil || @colorBlue != nil || @colorAlpha != nil
         text += sprintf(" (color=%s,%s,%s,%s)",
-           (@colorRed != nil)   ? @colorRed.to_i   : "-",
-           (@colorGreen != nil) ? @colorGreen.to_i : "-",
-           (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
-           (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
+                        (@colorRed != nil)   ? @colorRed.to_i   : "-",
+                        (@colorGreen != nil) ? @colorGreen.to_i : "-",
+                        (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
+                        (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
       end
       text += sprintf(" (opacity=%s)", @opacity.to_i) if @opacity != nil
       if @bgX != nil || @bgY != nil
         text += sprintf(" (coords=%s,%s)",
-           (@bgX != nil) ? @bgX : "-",
-           (@bgY != nil) ? @bgY : "-")
+                        (@bgX != nil) ? @bgX : "-",
+                        (@bgY != nil) ? @bgY : "-")
       end
       return text
     when 3
       text = sprintf("[%d] Set FG: \"%s\"", @frame + 1, name)
       text += sprintf(" (color=%s,%s,%s,%s)",
-         (@colorRed != nil)   ? @colorRed.to_i   : "-",
-         (@colorGreen != nil) ? @colorGreen.to_i : "-",
-         (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
-         (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
+                      (@colorRed != nil)   ? @colorRed.to_i   : "-",
+                      (@colorGreen != nil) ? @colorGreen.to_i : "-",
+                      (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
+                      (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
       text += sprintf(" (opacity=%s)", @opacity.to_i)
       text += sprintf(" (coords=%s,%s)",
-         (@bgX != nil) ? @bgX : "-",
-         (@bgY != nil) ? @bgY : "-")
+                      (@bgX != nil) ? @bgX : "-",
+                      (@bgY != nil) ? @bgY : "-")
       return text
     when 4
       text = sprintf("[%d] Change FG: @%d", @frame + 1, duration)
       if @colorRed != nil || @colorGreen != nil || @colorBlue != nil || @colorAlpha != nil
         text += sprintf(" (color=%s,%s,%s,%s)",
-           (@colorRed != nil)   ? @colorRed.to_i   : "-",
-           (@colorGreen != nil) ? @colorGreen.to_i : "-",
-           (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
-           (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
+                        (@colorRed != nil)   ? @colorRed.to_i   : "-",
+                        (@colorGreen != nil) ? @colorGreen.to_i : "-",
+                        (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
+                        (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
       end
       text += sprintf(" (opacity=%s)", @opacity.to_i) if @opacity != nil
       if @bgX != nil || @bgY != nil
         text += sprintf(" (coords=%s,%s)",
-           (@bgX != nil) ? @bgX : "-",
-           (@bgY != nil) ? @bgY : "-")
+                        (@bgX != nil) ? @bgX : "-",
+                        (@bgY != nil) ? @bgY : "-")
       end
       return text
     end
@@ -638,11 +639,11 @@ def pbSpriteSetAnimFrame(sprite, frame, user = nil, target = nil, inEditor = fal
   if pattern >= 0
     animwidth = 192
     sprite.src_rect.set((pattern % 5) * animwidth, (pattern / 5) * animwidth,
-       animwidth, animwidth)
+                        animwidth, animwidth)
   else
     sprite.src_rect.set(0, 0,
-       (sprite.bitmap) ? sprite.bitmap.width : 128,
-       (sprite.bitmap) ? sprite.bitmap.height : 128)
+                        (sprite.bitmap) ? sprite.bitmap.width : 128,
+                        (sprite.bitmap) ? sprite.bitmap.height : 128)
   end
   sprite.zoom_x = frame[AnimFrame::ZOOMX] / 100.0
   sprite.zoom_y = frame[AnimFrame::ZOOMY] / 100.0
@@ -807,7 +808,7 @@ class PBAnimationPlayerX
     # Load the animation's spritesheet and assign it to all the sprites.
     if !@animbitmap || @animbitmap.disposed?
       @animbitmap = AnimatedBitmap.new("Graphics/Animations/" + @animation.graphic,
-         @animation.hue).deanimate
+                                       @animation.hue).deanimate
       for i in 0...MAX_SPRITES
         @animsprites[i].bitmap = @animbitmap if @animsprites[i]
       end
@@ -851,10 +852,9 @@ class PBAnimationPlayerX
           sprite.y = cel[AnimFrame::Y] + @userOrig[1] - Battle::Scene::FOCUSUSER_Y
         when 3   # Focused on user and target
           next if !@srcLine || !@dstLine
-          point = transformPoint(
-             @srcLine[0], @srcLine[1], @srcLine[2], @srcLine[3],
-             @dstLine[0], @dstLine[1], @dstLine[2], @dstLine[3],
-             sprite.x, sprite.y)
+          point = transformPoint(@srcLine[0], @srcLine[1], @srcLine[2], @srcLine[3],
+                                 @dstLine[0], @dstLine[1], @dstLine[2], @dstLine[3],
+                                 sprite.x, sprite.y)
           sprite.x = point[0]
           sprite.y = point[1]
           if isReversed(@srcLine[0], @srcLine[2], @dstLine[0], @dstLine[2]) &&

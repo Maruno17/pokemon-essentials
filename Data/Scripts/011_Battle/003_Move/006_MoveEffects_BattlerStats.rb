@@ -1386,7 +1386,7 @@ class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
     for i in 0...@statDown.length / 2
       next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
       if target.pbLowerStatStage(@statDown[i * 2], @statDown[i * 2 + 1], user,
-         showAnim, false, (showMirrorArmorSplash) ? 1 : 3)
+                                 showAnim, false, (showMirrorArmorSplash) ? 1 : 3)
         showAnim = false
       end
       showMirrorArmorSplash = false

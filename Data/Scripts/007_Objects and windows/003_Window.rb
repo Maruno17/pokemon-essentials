@@ -522,24 +522,19 @@ class Window
         @cursorbitmap.clear
         @sprites["cursor"].bitmap = @cursorbitmap
         @sprites["cursor"].src_rect.set(0, 0, width, height)
-        rect = Rect.new(margin, margin,
-           width - fullmargin, height - fullmargin)
+        rect = Rect.new(margin, margin, width - fullmargin, height - fullmargin)
         @cursorbitmap.stretch_blt(rect, @_windowskin, cursorrects[8])
         @cursorbitmap.blt(0, 0, @_windowskin, cursorrects[4])   # top left
         @cursorbitmap.blt(width - margin, 0, @_windowskin, cursorrects[5])   # top right
         @cursorbitmap.blt(0, height - margin, @_windowskin, cursorrects[6])   # bottom right
         @cursorbitmap.blt(width - margin, height - margin, @_windowskin, cursorrects[7])   # bottom left
-        rect = Rect.new(margin, 0,
-           width - fullmargin, margin)
+        rect = Rect.new(margin, 0, width - fullmargin, margin)
         @cursorbitmap.stretch_blt(rect, @_windowskin, cursorrects[0])
-        rect = Rect.new(0, margin,
-           margin, height - fullmargin)
+        rect = Rect.new(0, margin, margin, height - fullmargin)
         @cursorbitmap.stretch_blt(rect, @_windowskin, cursorrects[1])
-        rect = Rect.new(width - margin, margin,
-           margin, height - fullmargin)
+        rect = Rect.new(width - margin, margin, margin, height - fullmargin)
         @cursorbitmap.stretch_blt(rect, @_windowskin, cursorrects[2])
-        rect = Rect.new(margin, height - margin,
-           width - fullmargin, margin)
+        rect = Rect.new(margin, height - margin, width - fullmargin, margin)
         @cursorbitmap.stretch_blt(rect, @_windowskin, cursorrects[3])
       else
         @sprites["cursor"].visible = false
@@ -553,8 +548,7 @@ class Window
         @sprites["side#{i}"].src_rect.set(0, 0, dwidth, dheight)
         @sidebitmaps[i].clear
         if sideRects[i].width > 0 && sideRects[i].height > 0
-          @sidebitmaps[i].stretch_blt(@sprites["side#{i}"].src_rect,
-             @_windowskin, sideRects[i])
+          @sidebitmaps[i].stretch_blt(@sprites["side#{i}"].src_rect, @_windowskin, sideRects[i])
         end
       end
       backwidth = @width - 4

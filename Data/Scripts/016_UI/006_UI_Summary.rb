@@ -1084,7 +1084,7 @@ class PokemonSummary_Scene
           markrect.x = i * MARK_WIDTH
           markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
           @sprites["markingoverlay"].bitmap.blt(300 + 58 * (i % 3), 154 + 50 * (i / 3),
-             @markingbitmap.bitmap, markrect)
+                                                @markingbitmap.bitmap, markrect)
         end
         textpos = [
            [_INTL("Mark {1}", pokemon.name), 366, 90, 2, base, shadow],

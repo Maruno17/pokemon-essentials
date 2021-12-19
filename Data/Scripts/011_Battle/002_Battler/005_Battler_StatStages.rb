@@ -15,7 +15,7 @@ class Battle::Battler
     # Check the stat stage
     if statStageAtMax?(stat)
       @battle.pbDisplay(_INTL("{1}'s {2} won't go any higher!",
-         pbThis, GameData::Stat.get(stat).name)) if showFailMsg
+                              pbThis, GameData::Stat.get(stat).name)) if showFailMsg
       return false
     end
     return true
@@ -142,22 +142,25 @@ class Battle::Battler
       end
       if abilityActive?
         return false if !@battle.moldBreaker && Battle::AbilityEffects.triggerStatLossImmunity(
-           self.ability, self, stat, @battle, showFailMsg)
+          self.ability, self, stat, @battle, showFailMsg
+        )
         return false if Battle::AbilityEffects.triggerStatLossImmunityNonIgnorable(
-           self.ability, self, stat, @battle, showFailMsg)
+          self.ability, self, stat, @battle, showFailMsg
+        )
       end
       if !@battle.moldBreaker
         allAllies.each do |b|
           next if !b.abilityActive?
           return false if Battle::AbilityEffects.triggerStatLossImmunityFromAlly(
-             b.ability, b, self, stat, @battle, showFailMsg)
+            b.ability, b, self, stat, @battle, showFailMsg
+          )
         end
       end
     end
     # Check the stat stage
     if statStageAtMin?(stat)
       @battle.pbDisplay(_INTL("{1}'s {2} won't go any lower!",
-         pbThis, GameData::Stat.get(stat).name)) if showFailMsg
+                              pbThis, GameData::Stat.get(stat).name)) if showFailMsg
       return false
     end
     return true
@@ -298,7 +301,7 @@ class Battle::Battler
         @battle.pbDisplay(_INTL("{1} is protected by its substitute!", pbThis))
       else
         @battle.pbDisplay(_INTL("{1}'s substitute protected it from {2}'s {3}!",
-           pbThis, user.pbThis(true), user.abilityName))
+                                pbThis, user.pbThis(true), user.abilityName))
       end
       return false
     end
@@ -308,7 +311,7 @@ class Battle::Battler
         @battle.pbDisplay(_INTL("{1}'s {2} cannot be lowered!", pbThis, GameData::Stat.get(:ATTACK).name))
       else
         @battle.pbDisplay(_INTL("{1}'s {2} prevents {3} loss!", pbThis, abilityName,
-           GameData::Stat.get(:ATTACK).name))
+                                GameData::Stat.get(:ATTACK).name))
       end
       @battle.pbHideAbilitySplash(self)
       return false
@@ -322,14 +325,14 @@ class Battle::Battler
     if !hasActiveAbility?(:CONTRARY)
       if pbOwnSide.effects[PBEffects::Mist] > 0
         @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by Mist!",
-           pbThis, user.pbThis(true), user.abilityName))
+                                pbThis, user.pbThis(true), user.abilityName))
         return false
       end
       if abilityActive?
         if Battle::AbilityEffects.triggerStatLossImmunity(self.ability, self, :ATTACK, @battle, false) ||
            Battle::AbilityEffects.triggerStatLossImmunityNonIgnorable(self.ability, self, :ATTACK, @battle, false)
           @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
-             pbThis, abilityName, user.pbThis(true), user.abilityName))
+                                  pbThis, abilityName, user.pbThis(true), user.abilityName))
           return false
         end
       end
@@ -337,7 +340,7 @@ class Battle::Battler
         next if !b.abilityActive?
         if Battle::AbilityEffects.triggerStatLossImmunityFromAlly(b.ability, b, self, :ATTACK, @battle, false)
           @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by {4}'s {5}!",
-             pbThis, user.pbThis(true), user.abilityName, b.pbThis(true), b.abilityName))
+                                  pbThis, user.pbThis(true), user.abilityName, b.pbThis(true), b.abilityName))
           return false
         end
       end

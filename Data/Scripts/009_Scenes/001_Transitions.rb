@@ -415,10 +415,10 @@ module Transitions
                                @overworld_bitmap.height * inv_proportion)
       # Take all of buffer_original, shrink it and put it into buffer_temp
       @buffer_temp.stretch_blt(new_size_rect,
-         @buffer_original, Rect.new(0, 0, @overworld_bitmap.width, @overworld_bitmap.height))
+                               @buffer_original, Rect.new(0, 0, @overworld_bitmap.width, @overworld_bitmap.height))
       # Take shrunken area from buffer_temp and stretch it into buffer
       @overworld_bitmap.stretch_blt(Rect.new(0, 0, @overworld_bitmap.width, @overworld_bitmap.height),
-         @buffer_temp, new_size_rect)
+                                    @buffer_temp, new_size_rect)
       if @timer >= @start_black_fade
         @overworld_sprite.opacity = 255 * (1 - (@timer - @start_black_fade) / (@duration - @start_black_fade))
       end

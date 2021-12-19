@@ -95,9 +95,9 @@ class MosaicPokemonSprite < PokemonSprite
       @mosaicbitmap2.clear
       @mosaicbitmap.stretch_blt(Rect.new(0, 0, newWidth, newHeight), @oldbitmap, @oldbitmap.rect)
       @mosaicbitmap2.stretch_blt(
-         Rect.new(-@mosaic / 2 + 1, -@mosaic / 2 + 1,
-         @mosaicbitmap2.width, @mosaicbitmap2.height),
-         @mosaicbitmap, Rect.new(0, 0, newWidth, newHeight))
+        Rect.new(-@mosaic / 2 + 1, -@mosaic / 2 + 1, @mosaicbitmap2.width, @mosaicbitmap2.height),
+        @mosaicbitmap, Rect.new(0, 0, newWidth, newHeight)
+      )
       self.bitmap = @mosaicbitmap2
     end
     @inrefresh = false
@@ -410,7 +410,7 @@ class PokemonBoxSprite < SpriteWrapper
       widthval = @contents.text_size(boxname).width
       xval = 162 - (widthval / 2)
       pbDrawShadowText(@contents, xval, 8, widthval, 32,
-         boxname, Color.new(248, 248, 248), Color.new(40, 48, 48))
+                       boxname, Color.new(248, 248, 248), Color.new(40, 48, 48))
       @refreshBox = false
     end
     yval = self.y + 30
@@ -1326,7 +1326,7 @@ class PokemonStorageScene
           markrect.x = i * MARK_WIDTH
           markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
           @sprites["markingoverlay"].bitmap.blt(336 + 58 * (i % 3), 106 + 50 * (i / 3),
-             @markingbitmap.bitmap, markrect)
+                                                @markingbitmap.bitmap, markrect)
         end
         textpos = [
            [_INTL("OK"), 402, 208, 2, base, shadow, 1],
@@ -1923,13 +1923,12 @@ class PokemonStorageScreen
 
   def pbBoxCommands
     commands = [
-       _INTL("Jump"),
-       _INTL("Wallpaper"),
-       _INTL("Name"),
-       _INTL("Cancel")
+      _INTL("Jump"),
+      _INTL("Wallpaper"),
+      _INTL("Name"),
+      _INTL("Cancel")
     ]
-    command = pbShowCommands(
-       _INTL("What do you want to do?"), commands)
+    command = pbShowCommands(_INTL("What do you want to do?"), commands)
     case command
     when 0
       destbox = @scene.pbChooseBox(_INTL("Jump to which Box?"))

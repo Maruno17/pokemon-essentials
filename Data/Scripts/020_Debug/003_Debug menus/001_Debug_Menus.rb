@@ -270,7 +270,7 @@ module Battle::DebugMixin
         help_text += _INTL("Form: {1}", battler.form)
         help_text += "\r\n"
         help_text += _INTL("Level {1}, {2}", battler.level,
-           (battler.pokemon.male?) ? "♂" : (battler.pokemon.female?) ? "♀" : "genderless")
+                           (battler.pokemon.male?) ? "♂" : (battler.pokemon.female?) ? "♀" : "genderless")
         help_text += ", " + _INTL("Shiny") if battler.pokemon.shiny?
         help_text += "\r\n"
         help_text += _INTL("HP: {1}/{2} ({3}%)", battler.hp, battler.totalhp, (100.0 * battler.hp / battler.totalhp).to_i)

@@ -23,7 +23,8 @@ def pbEditMysteryGift(type, item, id = 0, giftname = "")
       commands.push(_INTL("[Custom]"))
       loop do
         command = pbMessage(
-           _INTL("Choose a phrase to be where the gift Pokémon was obtained from."), commands, -1)
+           _INTL("Choose a phrase to be where the gift Pokémon was obtained from."), commands, -1
+        )
         if command < 0
           return nil if pbConfirmMessage(_INTL("Stop editing this gift?"))
         elsif command < commands.length - 1
@@ -45,7 +46,7 @@ def pbEditMysteryGift(type, item, id = 0, giftname = "")
       params.setCancelValue(0)
       loop do
         newtype = pbMessageChooseNumber(_INTL("Choose a quantity of {1}.",
-           GameData::Item.get(item).name), params)
+                                              GameData::Item.get(item).name), params)
         if newtype == 0
           return nil if pbConfirmMessage(_INTL("Stop editing this gift?"))
         else
@@ -400,7 +401,7 @@ def pbReceiveMysteryGift(id)
         pbMessage(_INTL("\\me[Item get]You obtained some \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
       elsif itm.is_machine?   # TM or HM
         pbMessage(_INTL("\\me[Item get]You obtained \\c[1]{1} {2}\\c[0]!\\wtnp[30]", itemname,
-           GameData::Move.get(itm.move).name))
+                        GameData::Move.get(itm.move).name))
       elsif qty > 1
         pbMessage(_INTL("\\me[Item get]You obtained {1} \\c[1]{2}\\c[0]!\\wtnp[30]", qty, itemname))
       elsif itemname.starts_with_vowel?

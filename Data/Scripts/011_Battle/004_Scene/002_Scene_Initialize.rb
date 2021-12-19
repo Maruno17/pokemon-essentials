@@ -28,11 +28,12 @@ class Battle::Scene
     pbCreateBackdropSprites
     # Create message box graphic
     messageBox = pbAddSprite("messageBox", 0, Graphics.height - 96,
-       "Graphics/Pictures/Battle/overlay_message", @viewport)
+                             "Graphics/Pictures/Battle/overlay_message", @viewport)
     messageBox.z = 195
     # Create message window (displays the message)
-    msgWindow = Window_AdvancedTextPokemon.newWithSize("",
-       16, Graphics.height - 96 + 2, Graphics.width - 32, 96, @viewport)
+    msgWindow = Window_AdvancedTextPokemon.newWithSize(
+      "", 16, Graphics.height - 96 + 2, Graphics.width - 32, 96, @viewport
+    )
     msgWindow.z              = 200
     msgWindow.opacity        = 0
     msgWindow.baseColor      = MESSAGE_BASE_COLOR
@@ -49,7 +50,7 @@ class Battle::Scene
     # The party lineup graphics (bar and balls) for both sides
     for side in 0...2
       partyBar = pbAddSprite("partyBar_#{side}", 0, 0,
-         "Graphics/Pictures/Battle/overlay_lineup", @viewport)
+                             "Graphics/Pictures/Battle/overlay_lineup", @viewport)
       partyBar.z       = 120
       partyBar.mirror  = true if side == 0   # Player's lineup bar only
       partyBar.visible = false
@@ -139,7 +140,7 @@ class Battle::Scene
     for side in 0...2
       baseX, baseY = Battle::Scene.pbBattlerPosition(side)
       base = pbAddSprite("base_#{side}", baseX, baseY,
-         (side == 0) ? playerBase : enemyBase, @viewport)
+                         (side == 0) ? playerBase : enemyBase, @viewport)
       base.z = 1
       if base.bitmap
         base.ox = base.bitmap.width / 2

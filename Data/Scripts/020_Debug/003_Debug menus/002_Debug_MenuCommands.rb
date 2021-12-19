@@ -211,7 +211,7 @@ DebugMenuCommands.register("testwildbattle", {
       params.setInitialValue(5)
       params.setCancelValue(0)
       level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
-         GameData::Species.get(species).name), params)
+                                          GameData::Species.get(species).name), params)
       if level > 0
         $game_temp.encounter_type = nil
         pbWildBattle(species, level)
@@ -257,7 +257,8 @@ DebugMenuCommands.register("testwildbattleadvanced", {
         params.setInitialValue(size0)
         params.setCancelValue(0)
         newSize = pbMessageChooseNumber(
-           _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params)
+          _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params
+        )
         size0 = newSize if newSize > 0
       elsif pkmnCmd == pkmnCmds.length - 3   # Add Pokémon
         species = pbChooseSpeciesList
@@ -267,7 +268,7 @@ DebugMenuCommands.register("testwildbattleadvanced", {
           params.setInitialValue(5)
           params.setCancelValue(0)
           level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
-             GameData::Species.get(species).name), params)
+                                              GameData::Species.get(species).name), params)
           pkmn.push(Pokemon.new(species, level)) if level > 0
         end
       else                                   # Edit a Pokémon
@@ -324,8 +325,9 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
           next
         elsif size1 > trainers.length && trainers[0][1].party_count == 1
           pbMessage(
-             _INTL("Opposing side size cannot be {1}, as that requires the first trainer to have 2 or more Pokémon, which they don't.",
-             size1))
+            _INTL("Opposing side size cannot be {1}, as that requires the first trainer to have 2 or more Pokémon, which they don't.",
+                  size1)
+          )
           next
         end
         setBattleRule(sprintf("%dv%d", size0, size1))
@@ -347,7 +349,8 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         params.setInitialValue(size1)
         params.setCancelValue(0)
         newSize = pbMessageChooseNumber(
-           _INTL("Choose the number of battlers on the opponent's side (max. {1}).", maxVal), params)
+          _INTL("Choose the number of battlers on the opponent's side (max. {1}).", maxVal), params
+        )
         size1 = newSize if newSize > 0
       elsif trainerCmd == trainerCmds.length - 3   # Set player side size
         if !pbCanDoubleBattle?
@@ -360,7 +363,8 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         params.setInitialValue(size0)
         params.setCancelValue(0)
         newSize = pbMessageChooseNumber(
-           _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params)
+          _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params
+        )
         size0 = newSize if newSize > 0
       elsif trainerCmd == trainerCmds.length - 4   # Add trainer
         trainerdata = pbListScreen(_INTL("CHOOSE A TRAINER"), TrainerBattleLister.new(0, false))
@@ -371,7 +375,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
       else                                         # Edit a trainer
         if pbConfirmMessage(_INTL("Change this trainer?"))
           trainerdata = pbListScreen(_INTL("CHOOSE A TRAINER"),
-             TrainerBattleLister.new(trainers[trainerCmd][0], false))
+                                     TrainerBattleLister.new(trainers[trainerCmd][0], false))
           if trainerdata
             tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
             trainers[trainerCmd] = [0, tr]
@@ -480,7 +484,7 @@ DebugMenuCommands.register("additem", {
         params.setInitialValue(1)
         params.setCancelValue(0)
         qty = pbMessageChooseNumber(_INTL("Add how many {1}?",
-           GameData::Item.get(item).name_plural), params)
+                                          GameData::Item.get(item).name_plural), params)
         if qty > 0
           $bag.add(item, qty)
           pbMessage(_INTL("Gave {1}x {2}.", qty, GameData::Item.get(item).name))
@@ -660,7 +664,7 @@ DebugMenuCommands.register("fillboxes", {
     pbMessage(_INTL("Storage boxes were filled with one Pokémon of each species."))
     if !completed
       pbMessage(_INTL("Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.",
-         Settings::NUM_STORAGE_BOXES, box_qty))
+                      Settings::NUM_STORAGE_BOXES, box_qty))
     end
   }
 })

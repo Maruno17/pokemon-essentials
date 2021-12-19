@@ -270,15 +270,14 @@ class PokemonMapFactory
   # the array (3,-4), because (5-2=3) and (1-5=-4).
   def getThisAndOtherEventRelativePos(thisEvent, otherEvent)
     return [0, 0] if !thisEvent || !otherEvent
-    return getRelativePos(
-       thisEvent.map.map_id, thisEvent.x, thisEvent.y,
-       otherEvent.map.map_id, otherEvent.x, otherEvent.y)
+    return getRelativePos(thisEvent.map.map_id, thisEvent.x, thisEvent.y,
+                          otherEvent.map.map_id, otherEvent.x, otherEvent.y)
   end
 
   def getThisAndOtherPosRelativePos(thisEvent, otherMapID, otherX, otherY)
     return [0, 0] if !thisEvent
-    return getRelativePos(
-       thisEvent.map.map_id, thisEvent.x, thisEvent.y, otherMapID, otherX, otherY)
+    return getRelativePos(thisEvent.map.map_id, thisEvent.x, thisEvent.y,
+                          otherMapID, otherX, otherY)
   end
 
   # Unused

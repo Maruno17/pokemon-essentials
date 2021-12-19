@@ -91,7 +91,8 @@ def pbHiddenMoveAnimation(pokemon)
   interp = RectInterpolator.new(
      Rect.new(0, Graphics.height / 2, Graphics.width, 0),
      Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
-     Graphics.frame_rate / 4)
+     Graphics.frame_rate / 4
+  )
   ptinterp = nil
   phase = 1
   frames = 0
@@ -110,7 +111,8 @@ def pbHiddenMoveAnimation(pokemon)
         ptinterp = PointInterpolator.new(
            Graphics.width + (sprite.bitmap.width / 2), bg.bitmap.height / 2,
            Graphics.width / 2, bg.bitmap.height / 2,
-           Graphics.frame_rate * 4 / 10)
+           Graphics.frame_rate * 4 / 10
+        )
       end
     when 2   # Slide Pokémon sprite in from right to centre
       ptinterp.update
@@ -129,7 +131,8 @@ def pbHiddenMoveAnimation(pokemon)
         ptinterp = PointInterpolator.new(
            Graphics.width / 2, bg.bitmap.height / 2,
            -(sprite.bitmap.width / 2), bg.bitmap.height / 2,
-           Graphics.frame_rate * 4 / 10)
+           Graphics.frame_rate * 4 / 10
+        )
         frames = 0
       end
     when 4   # Slide Pokémon sprite off from centre to left
@@ -142,7 +145,8 @@ def pbHiddenMoveAnimation(pokemon)
         interp = RectInterpolator.new(
            Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
            Rect.new(0, Graphics.height / 2, Graphics.width, 0),
-           Graphics.frame_rate / 4)
+           Graphics.frame_rate / 4
+        )
       end
     when 5   # Shrink viewport height from full to zero
       interp.update

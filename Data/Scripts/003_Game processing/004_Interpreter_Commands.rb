@@ -816,7 +816,7 @@ class Interpreter
       y = $game_variables[@parameters[5]]
     end
     $game_screen.pictures[number].show(@parameters[1], @parameters[2],
-       x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
+                                       x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
     return true
   end
   #-----------------------------------------------------------------------------
@@ -832,7 +832,7 @@ class Interpreter
       y = $game_variables[@parameters[5]]
     end
     $game_screen.pictures[number].move(@parameters[1] * Graphics.frame_rate / 20,
-       @parameters[2], x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
+                                       @parameters[2], x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
     return true
   end
   #-----------------------------------------------------------------------------
@@ -849,7 +849,7 @@ class Interpreter
   def command_234
     number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
     $game_screen.pictures[number].start_tone_change(@parameters[1],
-       @parameters[2] * Graphics.frame_rate / 20)
+                                                    @parameters[2] * Graphics.frame_rate / 20)
     return true
   end
   #-----------------------------------------------------------------------------
@@ -953,7 +953,8 @@ class Interpreter
         sscreen = PokemonEntry.new(sscene)
         $game_actors[@parameters[0]].name = sscreen.pbStartScreen(
            _INTL("Enter {1}'s name.", $game_actors[@parameters[0]].name),
-           1, @parameters[1], $game_actors[@parameters[0]].name)
+           1, @parameters[1], $game_actors[@parameters[0]].name
+        )
       }
     end
     return true

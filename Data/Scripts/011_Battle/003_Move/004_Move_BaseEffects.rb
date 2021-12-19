@@ -256,7 +256,7 @@ class Battle::Move::TargetMultiStatDownMove < Battle::Move
     for i in 0...@statDown.length / 2
       next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
       if target.pbLowerStatStage(@statDown[i * 2], @statDown[i * 2 + 1], user,
-         showAnim, false, (showMirrorArmorSplash) ? 1 : 3)
+                                 showAnim, false, (showMirrorArmorSplash) ? 1 : 3)
         showAnim = false
       end
       showMirrorArmorSplash = false
@@ -567,7 +567,7 @@ class Battle::Move::PledgeMove < Battle::Move
     user.effects[PBEffects::FirstPledge] = nil
     return if !@pledgeSetup
     @battle.pbDisplay(_INTL("{1} is waiting for {2}'s move...",
-       user.pbThis, @pledgeOtherUser.pbThis(true)))
+                            user.pbThis, @pledgeOtherUser.pbThis(true)))
     @pledgeOtherUser.effects[PBEffects::FirstPledge] = @function
     @pledgeOtherUser.effects[PBEffects::MoveNext]    = true
     user.lastMoveFailed = true   # Treated as a failure for Stomping Tantrum

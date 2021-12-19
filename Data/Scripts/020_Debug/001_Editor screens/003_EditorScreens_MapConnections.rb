@@ -60,15 +60,16 @@ class SelectionSprite < Sprite
     if @othersprite && !@othersprite.disposed? &&
        @othersprite.bitmap && !@othersprite.bitmap.disposed?
       @sprite.bitmap = pbDoEnsureBitmap(
-         @sprite.bitmap, @othersprite.bitmap.width, @othersprite.bitmap.height)
+        @sprite.bitmap, @othersprite.bitmap.width, @othersprite.bitmap.height
+      )
       red = Color.new(255, 0, 0)
       @sprite.bitmap.clear
       @sprite.bitmap.fill_rect(0, 0, @othersprite.bitmap.width, 2, red)
       @sprite.bitmap.fill_rect(0, @othersprite.bitmap.height - 2,
-         @othersprite.bitmap.width, 2, red)
+                               @othersprite.bitmap.width, 2, red)
       @sprite.bitmap.fill_rect(0, 0, 2, @othersprite.bitmap.height, red)
       @sprite.bitmap.fill_rect(@othersprite.bitmap.width - 2, 0, 2,
-         @othersprite.bitmap.height, red)
+                               @othersprite.bitmap.height, red)
     end
   end
 
@@ -324,8 +325,9 @@ class MapScreenScene
     @selmapid = -1
     @sprites["background"] = ColoredPlane.new(Color.new(160, 208, 240), @viewport)
     @sprites["selsprite"] = SelectionSprite.new(@viewport)
-    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(_INTL("D: Help"),
-       0, Graphics.height - 64, Graphics.width, 64, @viewport)
+    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
+      _INTL("D: Help"), 0, Graphics.height - 64, Graphics.width, 64, @viewport
+    )
     @sprites["title"].z = 2
     @mapinfos = pbLoadMapInfos
     conns = MapFactoryHelper.getMapConnections
@@ -358,8 +360,9 @@ class MapScreenScene
     helptext += _INTL("Double-click: Edit map's metadata\r\n")
     helptext += _INTL("Drag map to move it\r\n")
     helptext += _INTL("Arrow keys/drag canvas: Move around canvas")
-    title = Window_UnformattedTextPokemon.newWithSize(helptext,
-       0, 0, Graphics.width * 8 / 10, Graphics.height, @viewport)
+    title = Window_UnformattedTextPokemon.newWithSize(
+      helptext, 0, 0, Graphics.width * 8 / 10, Graphics.height, @viewport
+    )
     title.z = 2
     loop do
       Graphics.update

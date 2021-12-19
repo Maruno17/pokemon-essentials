@@ -162,7 +162,8 @@ BattleDebugMenuCommands.register("weather", {
       when 0   # Change type
         weather_cmd = weather_types.index(battle.field.weather) || 0
         new_weather = pbMessage(
-           "\\ts[]" + _INTL("Choose the new weather type."), weather_cmds, -1, nil, weather_cmd)
+          "\\ts[]" + _INTL("Choose the new weather type."), weather_cmds, -1, nil, weather_cmd
+        )
         if new_weather >= 0
           battle.field.weather = weather_types[new_weather]
           battle.field.weatherDuration = 5 if battle.field.weatherDuration == 0
@@ -177,7 +178,8 @@ BattleDebugMenuCommands.register("weather", {
         params.setInitialValue([battle.field.weatherDuration, 0].max)
         params.setCancelValue([battle.field.weatherDuration, 0].max)
         new_duration = pbMessageChooseNumber(
-           "\\ts[]" + _INTL("Choose the new weather duration (0=infinite)."), params)
+          "\\ts[]" + _INTL("Choose the new weather duration (0=infinite)."), params
+        )
         if new_duration != [battle.field.weatherDuration, 0].max
           battle.field.weatherDuration = (new_duration == 0) ? -1 : new_duration
         end
@@ -223,7 +225,8 @@ BattleDebugMenuCommands.register("terrain", {
       when 0   # Change type
         terrain_cmd = terrain_types.index(battle.field.terrain) || 0
         new_terrain = pbMessage(
-           "\\ts[]" + _INTL("Choose the new terrain type."), terrain_cmds, -1, nil, terrain_cmd)
+          "\\ts[]" + _INTL("Choose the new terrain type."), terrain_cmds, -1, nil, terrain_cmd
+        )
         if new_terrain >= 0
           battle.field.terrain = terrain_types[new_terrain]
           battle.field.terrainDuration = 5 if battle.field.terrainDuration == 0
@@ -238,7 +241,8 @@ BattleDebugMenuCommands.register("terrain", {
         params.setInitialValue([battle.field.terrainDuration, 0].max)
         params.setCancelValue([battle.field.terrainDuration, 0].max)
         new_duration = pbMessageChooseNumber(
-           "\\ts[]" + _INTL("Choose the new terrain duration (0=infinite)."), params)
+          "\\ts[]" + _INTL("Choose the new terrain duration (0=infinite)."), params
+        )
         if new_duration != [battle.field.terrainDuration, 0].max
           battle.field.terrainDuration = (new_duration == 0) ? -1 : new_duration
         end
@@ -275,13 +279,14 @@ BattleDebugMenuCommands.register("environment", {
       when 0   # Change environment
         environment_cmd = environment_types.index(battle.environment) || 0
         new_environment = pbMessage(
-           "\\ts[]" + _INTL("Choose the new environment."), environment_cmds, -1, nil, environment_cmd)
+          "\\ts[]" + _INTL("Choose the new environment."), environment_cmds, -1, nil, environment_cmd
+        )
         if new_environment >= 0
           battle.environment = environment_types[new_environment]
         end
       when 1   # Change time of day
         new_time = pbMessage("\\ts[]" + _INTL("Choose the new time."),
-           [_INTL("Day"), _INTL("Evening"), _INTL("Night")], -1, nil, battle.time)
+                             [_INTL("Day"), _INTL("Evening"), _INTL("Night")], -1, nil, battle.time)
         battle.time = new_time if new_time >= 0 && new_time != battle.time
       end
     end
@@ -358,7 +363,7 @@ BattleDebugMenuCommands.register("mega_evolution", {
         end
       end
       cmd = pbMessage("\\ts[]" + _INTL("Choose trainer to toggle whether they can Mega Evolve."),
-         commands, -1, nil, cmd)
+                      commands, -1, nil, cmd)
       break if cmd < 0
       real_cmd = cmds[cmd]
       if battle.megaEvolution[real_cmd[0]][real_cmd[1]] == -1
@@ -384,6 +389,6 @@ BattleDebugMenuCommands.register("speed_order", {
       commands.push(sprintf("[%d] %s (speed: %d)", b.index, b.pbThis, value[1]))
     end
     pbMessage("\\ts[]" + _INTL("Battlers are listed from fastest to slowest. Speeds include modifiers."),
-       commands, -1)
+              commands, -1)
   }
 })

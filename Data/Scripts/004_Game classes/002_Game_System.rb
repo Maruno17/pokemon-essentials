@@ -65,7 +65,7 @@ class Game_System
     if bgm != nil && bgm.name != ""
       if FileTest.audio_exist?("Audio/BGM/" + bgm.name)
         bgm_play_internal2("Audio/BGM/" + bgm.name,
-           bgm.volume, bgm.pitch, @bgm_position) if !@defaultBGM
+                           bgm.volume, bgm.pitch, @bgm_position) if !@defaultBGM
       end
     else
       @bgm_position = position if !@bgm_paused
@@ -74,7 +74,7 @@ class Game_System
     end
     if @defaultBGM
       bgm_play_internal2("Audio/BGM/" + @defaultBGM.name,
-         @defaultBGM.volume, @defaultBGM.pitch, @bgm_position)
+                         @defaultBGM.volume, @defaultBGM.pitch, @bgm_position)
     end
     Graphics.frame_reset
   end

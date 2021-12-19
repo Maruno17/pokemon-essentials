@@ -106,7 +106,7 @@ class TileDrawingHelper
         tile_position = tiles[i] - 1
         src.set(tile_position % 6 * 16 + anim, tile_position / 6 * 16, 16, 16)
         bitmap.stretch_blt(Rect.new(i % 2 * cxTile + x, i / 2 * cyTile + y, cxTile, cyTile),
-           autotile, src)
+                           autotile, src)
       end
     end
   end
@@ -180,9 +180,8 @@ def bltMinimapAutotile(dstBitmap, x, y, srcBitmap, id)
   src = Rect.new(0, 0, 0, 0)
   for i in 0...4
     tile_position = tiles[i] - 1
-    src.set(
-      tile_position % 6 * cxTile + anim,
-      tile_position / 6 * cyTile, cxTile, cyTile)
+    src.set(tile_position % 6 * cxTile + anim,
+            tile_position / 6 * cyTile, cxTile, cyTile)
     dstBitmap.blt(i % 2 * cxTile + x, i / 2 * cyTile + y, srcBitmap, src)
   end
 end

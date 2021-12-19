@@ -205,7 +205,7 @@ class Window_PokemonOption < Window_DrawableCommand
     optionname = (index == @options.length) ? _INTL("Cancel") : @options[index].name
     optionwidth = rect.width * 9 / 20
     pbDrawShadowText(self.contents, rect.x, rect.y, optionwidth, rect.height, optionname,
-       @nameBaseColor, @nameShadowColor)
+                     @nameBaseColor, @nameShadowColor)
     return if index == @options.length
     if @options[index].is_a?(EnumOption)
       if @options[index].values.length > 1
@@ -219,42 +219,42 @@ class Window_PokemonOption < Window_DrawableCommand
         ivalue = 0
         for value in @options[index].values
           pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
-             (ivalue == self[index]) ? @selBaseColor : self.baseColor,
-             (ivalue == self[index]) ? @selShadowColor : self.shadowColor
-          )
+                           (ivalue == self[index]) ? @selBaseColor : self.baseColor,
+                           (ivalue == self[index]) ? @selShadowColor : self.shadowColor)
           xpos += self.contents.text_size(value).width
           xpos += spacing
           ivalue += 1
         end
       else
         pbDrawShadowText(self.contents, rect.x + optionwidth, rect.y, optionwidth, rect.height,
-           optionname, self.baseColor, self.shadowColor)
+                         optionname, self.baseColor, self.shadowColor)
       end
     elsif @options[index].is_a?(NumberOption)
       value = _INTL("Type {1}/{2}", @options[index].optstart + self[index],
-         @options[index].optend - @options[index].optstart + 1)
+                    @options[index].optend - @options[index].optstart + 1)
       xpos = optionwidth + rect.x
       pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
-         @selBaseColor, @selShadowColor)
+                       @selBaseColor, @selShadowColor)
     elsif @options[index].is_a?(SliderOption)
       value = sprintf(" %d", @options[index].optend)
       sliderlength = optionwidth - self.contents.text_size(value).width
       xpos = optionwidth + rect.x
       self.contents.fill_rect(xpos, rect.y - 2 + rect.height / 2,
-         optionwidth - self.contents.text_size(value).width, 4, self.baseColor)
+                              optionwidth - self.contents.text_size(value).width, 4, self.baseColor)
       self.contents.fill_rect(
-         xpos + (sliderlength - 8) * (@options[index].optstart + self[index]) / @options[index].optend,
-         rect.y - 8 + rect.height / 2,
-         8, 16, @selBaseColor)
+        xpos + (sliderlength - 8) * (@options[index].optstart + self[index]) / @options[index].optend,
+        rect.y - 8 + rect.height / 2,
+        8, 16, @selBaseColor
+      )
       value = sprintf("%d", @options[index].optstart + self[index])
       xpos += optionwidth - self.contents.text_size(value).width
       pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
-         @selBaseColor, @selShadowColor)
+                       @selBaseColor, @selShadowColor)
     else
       value = @options[index].values[self[index]]
       xpos = optionwidth + rect.x
       pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
-         @selBaseColor, @selShadowColor)
+                       @selBaseColor, @selShadowColor)
     end
   end
 
@@ -291,7 +291,8 @@ class PokemonOption_Scene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-       _INTL("Options"), 0, 0, Graphics.width, 64, @viewport)
+      _INTL("Options"), 0, 0, Graphics.width, 64, @viewport
+    )
     @sprites["textbox"] = pbCreateMessageWindow
     @sprites["textbox"].text           = _INTL("Speech frame {1}.", 1 + $PokemonSystem.textskin)
     @sprites["textbox"].letterbyletter = false
@@ -376,9 +377,10 @@ class PokemonOption_Scene
        )
     ]
     @PokemonOptions = pbAddOnOptions(@PokemonOptions)
-    @sprites["option"] = Window_PokemonOption.new(@PokemonOptions, 0,
-       @sprites["title"].height, Graphics.width,
-       Graphics.height - @sprites["title"].height - @sprites["textbox"].height)
+    @sprites["option"] = Window_PokemonOption.new(
+      @PokemonOptions, 0, @sprites["title"].height, Graphics.width,
+      Graphics.height - @sprites["title"].height - @sprites["textbox"].height
+    )
     @sprites["option"].viewport = @viewport
     @sprites["option"].visible  = true
     # Get the values of each option

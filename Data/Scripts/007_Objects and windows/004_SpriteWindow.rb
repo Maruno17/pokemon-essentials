@@ -618,8 +618,7 @@ class SpriteWindow < Window
         @sprites["corner1"].src_rect.set(cx, 0, endX, startY)
         @sprites["corner2"].src_rect.set(0, cy, startX, endY)
         @sprites["corner3"].src_rect.set(cx, cy, endX, endY)
-        backRect = Rect.new(@skinrect.x, @skinrect.y,
-           @skinrect.width, @skinrect.height)
+        backRect = Rect.new(@skinrect.x, @skinrect.y, @skinrect.width, @skinrect.height)
         blindsRect = nil
         sideRects = [
            Rect.new(startX, 0, @skinrect.width, startY),  # side0 (top)
@@ -753,10 +752,10 @@ class SpriteWindow < Window
           if (@compat & CompatBits::StretchSides) > 0 && @skinformat == 0
             # Compatibility mode: Stretch sides
             @sidebitmaps[i].stretch_blt(@sprites["side#{i}"].src_rect,
-               @_windowskin, sideRects[i])
+                                        @_windowskin, sideRects[i])
           else
             tileBitmap(@sidebitmaps[i], @sprites["side#{i}"].src_rect,
-               @_windowskin, sideRects[i])
+                       @_windowskin, sideRects[i])
           end
         end
       end

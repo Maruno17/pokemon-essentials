@@ -105,7 +105,7 @@ class MoveRelearner_Scene
     end
     pbDrawImagePositions(overlay, imagepos)
     drawTextEx(overlay, 272, 214, 230, 5, selMoveData.description,
-       Color.new(64, 64, 64), Color.new(176, 176, 176))
+               Color.new(64, 64, 64), Color.new(176, 176, 176))
   end
 
   # Processes the scene

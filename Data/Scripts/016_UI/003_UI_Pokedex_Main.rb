@@ -49,7 +49,7 @@ class Window_Pokedex < Window_DrawableCommand
       text = sprintf("%03d  ----------", indexNumber)
     end
     pbDrawShadowText(self.contents, rect.x + 36, rect.y + 6, rect.width, rect.height,
-       text, self.baseColor, self.shadowColor)
+                     text, self.baseColor, self.shadowColor)
   end
 
   def refresh

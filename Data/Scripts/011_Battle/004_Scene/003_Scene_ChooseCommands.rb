@@ -200,10 +200,10 @@ class Battle::Scene
     # Start Bag screen
     itemScene = PokemonBag_Scene.new
     itemScene.pbStartScene($bag, true,
-      proc { |item|
-        useType = GameData::Item.get(item).battle_use
-        next useType && useType > 0
-      }, false)
+                           proc { |item|
+                             useType = GameData::Item.get(item).battle_use
+                             next useType && useType > 0
+                           }, false)
     # Loop while in Bag screen
     wasTargeting = false
     loop do

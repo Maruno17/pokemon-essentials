@@ -35,7 +35,7 @@ def pbCanUsePokeRadar?
   # Can't use Radar if it isn't fully charged
   if $PokemonGlobal.pokeradarBattery && $PokemonGlobal.pokeradarBattery > 0
     pbMessage(_INTL("The battery has run dry!\nFor it to recharge, you need to walk another {1} steps.",
-       $PokemonGlobal.pokeradarBattery))
+                    $PokemonGlobal.pokeradarBattery))
     return false
   end
   return true

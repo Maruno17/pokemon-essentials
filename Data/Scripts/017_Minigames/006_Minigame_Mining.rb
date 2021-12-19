@@ -492,9 +492,9 @@ class MiningGameScene
       for index in revealed
         burieditem = @items[index]
         revealeditems.bitmap.blt(32 * burieditem[1], 64 + 32 * burieditem[2],
-           @itembitmap.bitmap,
-           Rect.new(32 * ITEMS[burieditem[0]][2], 32 * ITEMS[burieditem[0]][3],
-           32 * ITEMS[burieditem[0]][4], 32 * ITEMS[burieditem[0]][5]))
+                                 @itembitmap.bitmap,
+                                 Rect.new(32 * ITEMS[burieditem[0]][2], 32 * ITEMS[burieditem[0]][3],
+                                          32 * ITEMS[burieditem[0]][4], 32 * ITEMS[burieditem[0]][5]))
         if i > halfFlashTime
           revealeditems.color = Color.new(255, 255, 255, (halfFlashTime * 2 - i) * alphaDiff)
         else
@@ -531,7 +531,7 @@ class MiningGameScene
         collapseFraction = (Graphics.height.to_f / collapseTime).ceil
         for i in 1..collapseTime
           @sprites["collapse"].bitmap.fill_rect(0, collapseFraction * (i - 1),
-             Graphics.width, collapseFraction * i, Color.new(0, 0, 0))
+                                                Graphics.width, collapseFraction * i, Color.new(0, 0, 0))
           Graphics.update
         end
         pbMessage(_INTL("The wall collapsed!"))
@@ -590,10 +590,10 @@ class MiningGameScene
       for i in @itemswon
         if $bag.add(i)
           pbMessage(_INTL("One {1} was obtained.\\se[Mining item get]\\wtnp[30]",
-             GameData::Item.get(i).name))
+                          GameData::Item.get(i).name))
         else
           pbMessage(_INTL("One {1} was found, but you have no room for it.",
-             GameData::Item.get(i).name))
+                          GameData::Item.get(i).name))
         end
       end
     end

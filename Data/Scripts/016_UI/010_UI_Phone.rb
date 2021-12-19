@@ -43,13 +43,15 @@ class PokemonPhoneScene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites["list"] = Window_PhoneList.newEmpty(152, 32, Graphics.width - 142, Graphics.height - 80, @viewport)
-    @sprites["header"] = Window_UnformattedTextPokemon.newWithSize(_INTL("Phone"),
-       2, -18, 128, 64, @viewport)
+    @sprites["header"] = Window_UnformattedTextPokemon.newWithSize(
+      _INTL("Phone"), 2, -18, 128, 64, @viewport
+    )
     @sprites["header"].baseColor   = Color.new(248, 248, 248)
     @sprites["header"].shadowColor = Color.new(0, 0, 0)
     mapname = (@trainers[0][2]) ? pbGetMapNameFromId(@trainers[0][2]) : ""
-    @sprites["bottom"] = Window_AdvancedTextPokemon.newWithSize("",
-       162, Graphics.height - 64, Graphics.width - 158, 64, @viewport)
+    @sprites["bottom"] = Window_AdvancedTextPokemon.newWithSize(
+      "", 162, Graphics.height - 64, Graphics.width - 158, 64, @viewport
+    )
     @sprites["bottom"].text = "<ac>" + mapname
     @sprites["info"] = Window_AdvancedTextPokemon.newWithSize("", -8, 224, 180, 160, @viewport)
     addBackgroundPlane(@sprites, "bg", "phonebg", @viewport)
@@ -68,8 +70,7 @@ class PokemonPhoneScene
     for trainer in @trainers
       if trainer.length == 4
         displayname = _INTL("{1} {2}", GameData::TrainerType.get(trainer[0]).name,
-           pbGetMessageFromHash(MessageTypes::TrainerNames, trainer[1])
-        )
+                            pbGetMessageFromHash(MessageTypes::TrainerNames, trainer[1]))
         commands.push(displayname) # trainer's display name
       else
         commands.push(trainer[1]) # NPC's display name

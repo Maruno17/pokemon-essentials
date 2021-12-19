@@ -106,8 +106,10 @@ class PokemonLoad_Scene
     addBackgroundOrColoredPlane(@sprites, "background", "loadbg", Color.new(248, 248, 248), @viewport)
     y = 16 * 2
     for i in 0...commands.length
-      @sprites["panel#{i}"] = PokemonLoadPanel.new(i, commands[i],
-         (show_continue) ? (i == 0) : false, trainer, frame_count, stats, map_id, @viewport)
+      @sprites["panel#{i}"] = PokemonLoadPanel.new(
+        i, commands[i], (show_continue) ? (i == 0) : false, trainer,
+        frame_count, stats, map_id, @viewport
+      )
       @sprites["panel#{i}"].x = 24 * 2
       @sprites["panel#{i}"].y = y
       @sprites["panel#{i}"].pbRefresh

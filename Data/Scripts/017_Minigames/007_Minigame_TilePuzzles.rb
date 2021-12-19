@@ -56,11 +56,13 @@ class TilePuzzleCursor < BitmapSprite
     if @game != 3
       expand = (@holding) ? 0 : 4
       for i in 0...4
-        self.bitmap.blt(x + (i % 2) * (@tilewidth - @cursorbitmap.width / 4) + expand * (((i % 2) * 2) - 1),
-           y + (i / 2) * (@tileheight - @cursorbitmap.height / 2) + expand * (((i / 2) * 2) - 1),
-           @cursorbitmap.bitmap, Rect.new(
-           (i % 2) * @cursorbitmap.width / 4, (i / 2) * @cursorbitmap.height / 2,
-           @cursorbitmap.width / 4, @cursorbitmap.height / 2))
+        self.bitmap.blt(
+          x + (i % 2) * (@tilewidth - @cursorbitmap.width / 4) + expand * (((i % 2) * 2) - 1),
+          y + (i / 2) * (@tileheight - @cursorbitmap.height / 2) + expand * (((i / 2) * 2) - 1),
+          @cursorbitmap.bitmap, Rect.new((i % 2) * @cursorbitmap.width / 4,
+                                         (i / 2) * @cursorbitmap.height / 2,
+                                         @cursorbitmap.width / 4, @cursorbitmap.height / 2)
+        )
       end
     end
     # Arrows
@@ -72,10 +74,10 @@ class TilePuzzleCursor < BitmapSprite
              (@tileheight - @cursorbitmap.height / 2) / 2, -expand]
       for i in 0...4
         if @arrows[i]
-          self.bitmap.blt(x + xin[i], y + yin[i], @cursorbitmap.bitmap, Rect.new(
-             @cursorbitmap.width / 2 + (i % 2) * (@cursorbitmap.width / 4),
-             (i / 2) * (@cursorbitmap.height / 2),
-             @cursorbitmap.width / 4, @cursorbitmap.height / 2))
+          self.bitmap.blt(x + xin[i], y + yin[i], @cursorbitmap.bitmap,
+                          Rect.new(@cursorbitmap.width / 2 + (i % 2) * (@cursorbitmap.width / 4),
+                                   (i / 2) * (@cursorbitmap.height / 2),
+                                   @cursorbitmap.width / 4, @cursorbitmap.height / 2))
         end
       end
     end
@@ -122,11 +124,11 @@ class TilePuzzleScene
         @sprites["tile#{i}"].bitmap.clear
         if rotatebitmaps[@angles[i]]
           @sprites["tile#{i}"].bitmap.blt(0, 0, rotatebitmaps[@angles[i]].bitmap,
-             Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
+                                          Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
           @sprites["tile#{i}"].angle = 0
         else
           @sprites["tile#{i}"].bitmap.blt(0, 0, @tilebitmap.bitmap,
-             Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
+                                          Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
           @sprites["tile#{i}"].angle = @angles[i] * 90
         end
       end
@@ -173,13 +175,13 @@ class TilePuzzleScene
       @sprites["tile#{i}"].oy = @tileheight / 2
       break if @game == 3 && i >= @boardwidth * @boardheight - 1
       @sprites["tile#{i}"].bitmap.blt(0, 0, @tilebitmap.bitmap,
-         Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
+                                      Rect.new(@tilewidth * (i % @boardwidth), @tileheight * (i / @boardwidth), @tilewidth, @tileheight))
     end
     @heldtile = -1
     @angles = []
     @tiles = pbShuffleTiles
     @sprites["cursor"] = TilePuzzleCursor.new(@game, pbDefaultCursorPosition,
-       @tilewidth, @tileheight, @boardwidth, @boardheight)
+                                              @tilewidth, @tileheight, @boardwidth, @boardheight)
     update
     pbFadeInAndShow(@sprites)
   end
@@ -509,8 +511,8 @@ class TilePuzzleScene
           extratile = @sprites["tile#{@boardwidth * @boardheight - 1}"]
           extratile.bitmap.clear
           extratile.bitmap.blt(0, 0, @tilebitmap.bitmap,
-             Rect.new(@tilewidth * (@boardwidth - 1), @tileheight * (@boardheight - 1),
-             @tilewidth, @tileheight))
+                               Rect.new(@tilewidth * (@boardwidth - 1), @tileheight * (@boardheight - 1),
+                                        @tilewidth, @tileheight))
           extratile.opacity = 0
           appearTime = Graphics.frame_rate * 8 / 10
           opacityDiff = (255.0 / appearTime).ceil

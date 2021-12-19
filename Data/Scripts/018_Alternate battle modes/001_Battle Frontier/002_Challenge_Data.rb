@@ -148,7 +148,7 @@ class PBPokemon
       ev_array.push(s.id) if pkmn.ev[s.id] > 60
     end
     return self.new(pkmn.species, pkmn.item_id, pkmn.nature,
-       mov1, mov2, mov3, mov4, ev_array)
+                    mov1, mov2, mov3, mov4, ev_array)
   end
 
   def initialize(species, item, nature, move1, move2, move3, move4, ev)

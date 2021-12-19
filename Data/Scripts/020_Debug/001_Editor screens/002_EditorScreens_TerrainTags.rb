@@ -17,8 +17,9 @@ class PokemonTilesetScene
     @viewport.z = 99999
     @sprites = {}
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-       _INTL("Tileset Editor\r\nA/S: SCROLL\r\nZ: MENU"),
-       TILESET_WIDTH, 0, Graphics.width - TILESET_WIDTH, 128, @viewport)
+      _INTL("Tileset Editor\r\nA/S: SCROLL\r\nZ: MENU"),
+      TILESET_WIDTH, 0, Graphics.width - TILESET_WIDTH, 128, @viewport
+    )
     @sprites["tileset"] = BitmapSprite.new(TILESET_WIDTH, Graphics.height, @viewport)
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
@@ -74,7 +75,7 @@ class PokemonTilesetScene
       for xx in 0...TILES_PER_ROW
         id_x_offset = (autotile_row) ? xx * TILES_PER_AUTOTILE : xx
         @tilehelper.bltTile(@sprites["tileset"].bitmap, xx * TILE_SIZE, yy * TILE_SIZE,
-           id_y_offset + id_x_offset)
+                            id_y_offset + id_x_offset)
       end
     end
   end

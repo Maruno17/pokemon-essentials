@@ -105,7 +105,7 @@ class Battle::AI
       next if !i
       next if !@battle.pbCanUseItemOnPokemon?(i, pkmn, battler, @battle.scene, false)
       next if !ItemHandlers.triggerCanUseInBattle(i, pkmn, battler, nil,
-         false, self, @battle.scene, false)
+                                                  false, self, @battle.scene, false)
       # Log HP healing items
       if losthp > 0
         power = hpItems[i]

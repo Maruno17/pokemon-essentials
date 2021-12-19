@@ -496,7 +496,7 @@ class PokemonEvolutionScene
     @msgviewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @msgviewport.z = 99999
     addBackgroundOrColoredPlane(@sprites, "background", "evolutionbg",
-       Color.new(248, 248, 248), @bgviewport)
+                                Color.new(248, 248, 248), @bgviewport)
     rsprite1 = PokemonSprite.new(@viewport)
     rsprite1.setOffset(PictureOrigin::Center)
     rsprite1.setPokemonBitmap(@pokemon, false)
@@ -534,7 +534,7 @@ class PokemonEvolutionScene
     pbBGMStop
     @pokemon.play_cry
     pbMessageDisplay(@sprites["msgwindow"],
-       _INTL("\\se[]What? {1} is evolving!\\^", @pokemon.name)) { pbUpdate }
+                     _INTL("\\se[]What? {1} is evolving!\\^", @pokemon.name)) { pbUpdate }
     pbMessageWaitForInput(@sprites["msgwindow"], 50, true) { pbUpdate }
     pbPlayDecisionSE
     oldstate  = pbSaveSpriteState(@sprites["rsprite1"])
@@ -560,7 +560,7 @@ class PokemonEvolutionScene
     if canceled
       $stats.evolutions_cancelled += 1
       pbMessageDisplay(@sprites["msgwindow"],
-         _INTL("Huh? {1} stopped evolving!", @pokemon.name)) { pbUpdate }
+                       _INTL("Huh? {1} stopped evolving!", @pokemon.name)) { pbUpdate }
     else
       pbEvolutionSuccess
     end
@@ -580,8 +580,8 @@ class PokemonEvolutionScene
     pbMEPlay("Evolution success")
     newspeciesname = GameData::Species.get(@newspecies).name
     pbMessageDisplay(@sprites["msgwindow"],
-       _INTL("\\se[]Congratulations! Your {1} evolved into {2}!\\wt[80]",
-       @pokemon.name, newspeciesname)) { pbUpdate }
+                     _INTL("\\se[]Congratulations! Your {1} evolved into {2}!\\wt[80]",
+                           @pokemon.name, newspeciesname)) { pbUpdate }
     @sprites["msgwindow"].text = ""
     # Check for consumed item and check if Pokémon should be duplicated
     pbEvolutionMethodAfterEvolution

@@ -283,13 +283,13 @@ class HallOfFame_Scene
     lefttext += _INTL("IDNo.<r>{1}<br>", pubid)
     lefttext += _ISPRINTF("Time<r>{1:02d}:{2:02d}<br>", hour, min)
     lefttext += _INTL("Pokédex<r>{1}/{2}<br>",
-        $player.pokedex.owned_count, $player.pokedex.seen_count)
+                      $player.pokedex.owned_count, $player.pokedex.seen_count)
     @sprites["messagebox"] = Window_AdvancedTextPokemon.new(lefttext)
     @sprites["messagebox"].viewport = @viewport
     @sprites["messagebox"].width = 192 if @sprites["messagebox"].width < 192
     @sprites["msgwindow"] = pbCreateMessageWindow(@viewport)
     pbMessageDisplay(@sprites["msgwindow"],
-        _INTL("League champion!\nCongratulations!\\^"))
+                     _INTL("League champion!\nCongratulations!\\^"))
   end
 
   def writePokemonData(pokemon, hallNumber = -1)

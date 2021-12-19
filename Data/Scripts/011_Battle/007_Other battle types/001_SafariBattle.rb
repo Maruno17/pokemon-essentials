@@ -122,7 +122,7 @@ class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
     trainer = addSprite(traSprite, PictureOrigin::Bottom)
     # Set up bait sprite
     ball = addNewSprite(ballStartX, ballStartY,
-       "Graphics/Battle animations/safari_bait", PictureOrigin::Center)
+                        "Graphics/Battle animations/safari_bait", PictureOrigin::Center)
     ball.setZ(0, batSprite.z + 1)
     # Trainer animation
     if traSprite.bitmap.width >= traSprite.bitmap.height * 2
@@ -132,7 +132,7 @@ class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
     # Bait arc animation
     ball.setSE(delay, "Battle throw")
     createBallTrajectory(ball, delay, 12,
-       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
+                         ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     ball.setZ(9, batSprite.z + 1)
     delay = ball.totalDuration
     ball.moveOpacity(delay + 8, 2, 0)
@@ -187,7 +187,7 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
     trainer = addSprite(traSprite, PictureOrigin::Bottom)
     # Set up bait sprite
     ball = addNewSprite(ballStartX, ballStartY,
-       "Graphics/Battle animations/safari_rock", PictureOrigin::Center)
+                        "Graphics/Battle animations/safari_rock", PictureOrigin::Center)
     ball.setZ(0, batSprite.z + 1)
     # Trainer animation
     if traSprite.bitmap.width >= traSprite.bitmap.height * 2
@@ -197,7 +197,7 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
     # Bait arc animation
     ball.setSE(delay, "Battle throw")
     createBallTrajectory(ball, delay, 12,
-       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
+                         ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     ball.setZ(9, batSprite.z + 1)
     delay = ball.totalDuration
     ball.setSE(delay, "Battle damage weak")
@@ -205,7 +205,7 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
     ball.setVisible(delay + 4, false)
     # Set up anger sprite
     anger = addNewSprite(ballEndX - 42, ballEndY - 36,
-       "Graphics/Battle animations/safari_anger", PictureOrigin::Center)
+                         "Graphics/Battle animations/safari_anger", PictureOrigin::Center)
     anger.setVisible(0, false)
     anger.setZ(0, batSprite.z + 1)
     # Show anger appearing

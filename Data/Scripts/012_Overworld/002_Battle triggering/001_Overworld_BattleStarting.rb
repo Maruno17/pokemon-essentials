@@ -508,8 +508,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech = nil,
   # Perform the battle
   if $game_temp.waiting_trainer
     decision = pbTrainerBattleCore($game_temp.waiting_trainer[0],
-       [trainerID, trainerName, trainerPartyID, endSpeech]
-    )
+                                   [trainerID, trainerName, trainerPartyID, endSpeech])
   else
     decision = pbTrainerBattleCore([trainerID, trainerName, trainerPartyID, endSpeech])
   end

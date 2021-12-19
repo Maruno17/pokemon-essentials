@@ -173,7 +173,7 @@ class Window_TextEntry < SpriteWindow_Base
 
   def refresh
     self.contents = pbDoEnsureBitmap(self.contents, self.width - self.borderX,
-       self.height - self.borderY)
+                                     self.height - self.borderY)
     bitmap = self.contents
     bitmap.clear
     x = 0
@@ -333,7 +333,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   def getTextChars
     if !@textchars
       @textchars = getLineBrokenText(self.contents, @helper.text,
-         self.contents.width, nil)
+                                     self.contents.width, nil)
     end
     return @textchars
   end
@@ -503,7 +503,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
 
   def refresh
     newContents = pbDoEnsureBitmap(self.contents, self.width - self.borderX,
-       self.height - self.borderY)
+                                   self.height - self.borderY)
     @textchars = nil if self.contents != newContents
     self.contents = newContents
     bitmap = self.contents

@@ -48,7 +48,7 @@ def pbPhoneRegisterBattle(message, event, trainertype, trainername, maxbattles)
   message = _INTL("Let me register you.") if !message
   return if !pbConfirmMessage(message)
   displayname = _INTL("{1} {2}", GameData::TrainerType.get(trainertype).name,
-     pbGetMessageFromHash(MessageTypes::TrainerNames, trainername))
+                      pbGetMessageFromHash(MessageTypes::TrainerNames, trainername))
   if contact                          # Previously registered, just make visible
     contact[0] = true
   else                                                         # Add new contact

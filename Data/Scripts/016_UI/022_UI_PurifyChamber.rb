@@ -411,7 +411,8 @@ class PurifyChamberScreen
     if @chamber.setCount(set) == 0 && @chamber.isPurifiableIgnoreRegular?(set)
       pkmn = @chamber.getShadow(set)
       @scene.pbDisplay(
-         _INTL("This {1} is ready to open its heart. However, there must be at least one regular Pokémon in the set to perform a purification ceremony.", pkmn.name))
+         _INTL("This {1} is ready to open its heart. However, there must be at least one regular Pokémon in the set to perform a purification ceremony.", pkmn.name)
+      )
     end
   end
 
@@ -447,7 +448,8 @@ class PurifyChamberScreen
           commands.push(_INTL("CANCEL"))
           choice = @scene.pbShowCommands(
              _INTL("What shall I do with this {1}?",
-             heldpkmn ? heldpkmn.name : curpkmn.name), commands)
+                   heldpkmn ? heldpkmn.name : curpkmn.name), commands
+          )
           if choice == 0
             if heldpkmn
               if pbPlace(heldpkmn, cmd[1]) # calls place or shift as appropriate
@@ -664,7 +666,7 @@ class Window_PurifyChamberSets < Window_DrawableCommand
     end
     if @chamber.setCount(index) > 0
       pbDrawGauge(self.contents, Rect.new(rect.x + 16, rect.y + 6, 48, 8),
-         Color.new(0, 0, 256), @chamber[index].tempo, PurifyChamber.maximumTempo)
+                  Color.new(0, 0, 256), @chamber[index].tempo, PurifyChamber.maximumTempo)
     end
     if @chamber.getShadow(index)
       pbDrawGauge(self.contents, Rect.new(rect.x + 16, rect.y + 18, 48, 8),
@@ -949,12 +951,12 @@ class PurifyChamberSetView < SpriteWrapper
     if pkmn
       if pkmn.types.length == 1
         textpos.push([_INTL("{1}  Lv.{2}  {3}", pkmn.name, pkmn.level,
-           GameData::Type.get(pkmn.types[0]).name),
+                            GameData::Type.get(pkmn.types[0]).name),
                       2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       else
         textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}", pkmn.name, pkmn.level,
-           GameData::Type.get(pkmn.types[0]).name,
-           GameData::Type.get(pkmn.types[1]).name),
+                            GameData::Type.get(pkmn.types[0]).name,
+                            GameData::Type.get(pkmn.types[1]).name),
                       2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       end
       textpos.push([_INTL("FLOW"), 2 + @info.bitmap.width / 2, 18, 0,
@@ -964,15 +966,15 @@ class PurifyChamberSetView < SpriteWrapper
                   Color.new(192, 0, 256), pkmn.heart_gauge, pkmn.max_gauge_size)
       # draw flow gauge
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 3 / 4, 24 + 8, @info.bitmap.width * 1 / 4, 8),
-         Color.new(0, 0, 248), @chamber.chamberFlow(@set), 6)
+                  Color.new(0, 0, 248), @chamber.chamberFlow(@set), 6)
     end
     if @chamber.setCount(@set) > 0
       textpos.push([_INTL("TEMPO"), 2, 18, 0,
                     Color.new(248, 248, 248), Color.new(128, 128, 128)])
       # draw tempo gauge
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 1 / 4, 24 + 8, @info.bitmap.width * 1 / 4, 8),
-         Color.new(0, 0, 248), @chamber[@set].tempo,
-         PurifyChamber.maximumTempo)
+                  Color.new(0, 0, 248), @chamber[@set].tempo,
+                  PurifyChamber.maximumTempo)
     end
     pbDrawTextPositions(@info.bitmap, textpos)
     @info.x = Graphics.width - @info.bitmap.width
@@ -1111,9 +1113,10 @@ class PurifyChamberScene
     @viewportmsg = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewportmsg.z = 99999
     addBackgroundOrColoredPlane(@sprites, "bg", "purifychamberbg",
-       Color.new(0, 0, 0), @viewport)
+                                Color.new(0, 0, 0), @viewport)
     @sprites["setwindow"] = Window_PurifyChamberSets.new(
-       @chamber, 0, 0, 112, Graphics.height, @viewport)
+       @chamber, 0, 0, 112, Graphics.height, @viewport
+    )
     @sprites["setview"] = PurifyChamberSetView.new(@chamber, set, @viewport)
     @sprites["msgwindow"] = Window_AdvancedTextPokemon.new("")
     @sprites["msgwindow"].viewport = @viewportmsg

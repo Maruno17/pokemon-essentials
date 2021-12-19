@@ -557,7 +557,7 @@ class Battle::Battler
         @battle.pbHideAbilitySplash(nextUser)
         if !Battle::Scene::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} kept the dance going with {2}!",
-             nextUser.pbThis, nextUser.abilityName))
+                                  nextUser.pbThis, nextUser.abilityName))
         end
         nextUser.effects[PBEffects::Dancer] = true
         if nextUser.pbCanChooseMove?(move, false)
@@ -641,7 +641,7 @@ class Battle::Battler
       #       actual removal of the item happens in def pbEffectsAfterMove.
       @battle.pbCommonAnimation("UseItem", user)
       @battle.pbDisplay(_INTL("The {1} strengthened {2}'s power!",
-         GameData::Item.get(user.effects[PBEffects::GemConsumed]).name, move.name))
+                              GameData::Item.get(user.effects[PBEffects::GemConsumed]).name, move.name))
     end
     # Messages about missed target(s) (relevant for multi-target moves only)
     if !move.pbRepeatHit?

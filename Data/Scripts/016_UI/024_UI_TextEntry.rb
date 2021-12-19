@@ -50,16 +50,16 @@ class Window_CharacterEntry < Window_DrawableCommand
     rect = drawCursor(index, rect)
     if index == @charset.length # -1
       pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height, "[ ]",
-         self.baseColor, self.shadowColor)
+                       self.baseColor, self.shadowColor)
     elsif index == @charset.length + 1 # -2
       pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height, @othercharset,
-         self.baseColor, self.shadowColor)
+                       self.baseColor, self.shadowColor)
     elsif index == @charset.length + 2 # -3
       pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height, _INTL("OK"),
-         self.baseColor, self.shadowColor)
+                       self.baseColor, self.shadowColor)
     else
       pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height, @charset[index],
-         self.baseColor, self.shadowColor)
+                       self.baseColor, self.shadowColor)
     end
   end
 end
@@ -81,8 +81,9 @@ class PokemonEntryScene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     if USEKEYBOARD
-      @sprites["entry"] = Window_TextEntry_Keyboard.new(initialText,
-         0, 0, 400 - 112, 96, helptext, true)
+      @sprites["entry"] = Window_TextEntry_Keyboard.new(
+        initialText, 0, 0, 400 - 112, 96, helptext, true
+      )
       Input.text_input = true
     else
       @sprites["entry"] = Window_TextEntry.new(initialText, 0, 0, 400, 96, helptext, true)

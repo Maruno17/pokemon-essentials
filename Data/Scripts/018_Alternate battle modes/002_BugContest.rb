@@ -293,9 +293,10 @@ Events.onMapChange += proc { |_sender, _e|
 Events.onMapSceneChange += proc { |_sender, e|
   scene = e[0]
   if pbInBugContest? && pbBugContestState.decision == 0 && BugContestState::TIME_ALLOWED > 0
-    scene.spriteset.addUserSprite(TimerDisplay.new(
-       pbBugContestState.timer,
-       BugContestState::TIME_ALLOWED * Graphics.frame_rate))
+    scene.spriteset.addUserSprite(
+      TimerDisplay.new(pbBugContestState.timer,
+                       BugContestState::TIME_ALLOWED * Graphics.frame_rate)
+    )
   end
 }
 

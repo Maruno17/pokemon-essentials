@@ -128,8 +128,9 @@ def pbAnimList(animations, canvas, animwin)
   cmdwin.index = animations.selected
   cmdwin.viewport = canvas.viewport
   helpwindow = Window_UnformattedTextPokemon.newWithSize(
-     _INTL("Enter: Load/rename an animation\nEsc: Cancel"),
-     320, 0, 320, 128, canvas.viewport)
+    _INTL("Enter: Load/rename an animation\nEsc: Cancel"),
+    320, 0, 320, 128, canvas.viewport
+  )
   maxsizewindow = ControlWindow.new(0, 416, 320, 32 * 3)
   maxsizewindow.addSlider(_INTL("Total Animations:"), 1, 2000, animations.length)
   maxsizewindow.addButton(_INTL("Resize Animation List"))

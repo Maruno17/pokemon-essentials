@@ -118,8 +118,9 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
     self.x = 0
     self.y = Graphics.height - 96
     # Create message box (shows "What will X do?")
-    @msgBox = Window_UnformattedTextPokemon.newWithSize("",
-       self.x + 16, self.y + 2, 220, Graphics.height - self.y, viewport)
+    @msgBox = Window_UnformattedTextPokemon.newWithSize(
+      "", self.x + 16, self.y + 2, 220, Graphics.height - self.y, viewport
+    )
     @msgBox.baseColor   = TEXT_BASE_COLOR
     @msgBox.shadowColor = TEXT_SHADOW_COLOR
     @msgBox.windowskin  = nil
@@ -146,8 +147,9 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
       end
     else
       # Create command window (shows Fight/Bag/Pokémon/Run)
-      @cmdWindow = Window_CommandPokemon.newWithSize([],
-         self.x + Graphics.width - 240, self.y, 240, Graphics.height - self.y, viewport)
+      @cmdWindow = Window_CommandPokemon.newWithSize(
+        [], self.x + Graphics.width - 240, self.y, 240, Graphics.height - self.y, viewport
+      )
       @cmdWindow.columns       = 2
       @cmdWindow.columnSpacing = 4
       @cmdWindow.ignore_input  = true
@@ -287,15 +289,17 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
       addSprite("shiftButton", @shiftButton)
     else
       # Create message box (shows type and PP of selected move)
-      @msgBox = Window_AdvancedTextPokemon.newWithSize("",
-         self.x + 320, self.y, Graphics.width - 320, Graphics.height - self.y, viewport)
+      @msgBox = Window_AdvancedTextPokemon.newWithSize(
+        "", self.x + 320, self.y, Graphics.width - 320, Graphics.height - self.y, viewport
+      )
       @msgBox.baseColor   = TEXT_BASE_COLOR
       @msgBox.shadowColor = TEXT_SHADOW_COLOR
       pbSetNarrowFont(@msgBox.contents)
       addSprite("msgBox", @msgBox)
       # Create command window (shows moves)
-      @cmdWindow = Window_CommandPokemon.newWithSize([],
-         self.x, self.y, 320, Graphics.height - self.y, viewport)
+      @cmdWindow = Window_CommandPokemon.newWithSize(
+        [], self.x, self.y, 320, Graphics.height - self.y, viewport
+      )
       @cmdWindow.columns       = 2
       @cmdWindow.columnSpacing = 4
       @cmdWindow.ignore_input  = true
@@ -392,7 +396,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
         @msgBox.text = _INTL("PP: ---<br>TYPE/{1}", moveType)
       else
         @msgBox.text = _ISPRINTF("PP: {1: 2d}/{2: 2d}<br>TYPE/{3:s}",
-           move.pp, move.total_pp, moveType)
+                                 move.pp, move.total_pp, moveType)
       end
       return
     end

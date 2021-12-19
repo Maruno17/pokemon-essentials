@@ -10,7 +10,7 @@ class Battle
     # Embargo
     if battler && battler.effects[PBEffects::Embargo] > 0
       scene.pbDisplay(_INTL("Embargo's effect prevents the item's use on {1}!",
-         battler.pbThis(true))) if showMessages
+                            battler.pbThis(true))) if showMessages
       return false
     end
     return true

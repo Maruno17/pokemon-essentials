@@ -8,8 +8,8 @@ module ShadowText
       x += (w / 2) - (width / 2)
     end
     pbDrawShadowText(bitmap, x, y, w, h, t,
-       disabled ? Color.new(26 * 8, 26 * 8, 25 * 8) : Color.new(12 * 8, 12 * 8, 12 * 8),
-       Color.new(26 * 8, 26 * 8, 25 * 8))
+                     disabled ? Color.new(26 * 8, 26 * 8, 25 * 8) : Color.new(12 * 8, 12 * 8, 12 * 8),
+                     Color.new(26 * 8, 26 * 8, 25 * 8))
   end
 end
 
@@ -47,10 +47,7 @@ class UIControl
   end
 
   def toAbsoluteRect(rc)
-    return Rect.new(
-       rc.x + self.parentX,
-       rc.y + self.parentY,
-       rc.width, rc.height)
+    return Rect.new(rc.x + self.parentX, rc.y + self.parentY, rc.width, rc.height)
   end
 
   def parentX
@@ -442,7 +439,7 @@ class Slider < UIControl
     shadowtext(bitmap, x, y, size, height, self.label)
     x += size
     shadowtext(bitmap, x, y, leftarrows.width, height, _INTL(" << "),
-       self.disabled || self.curvalue == self.minvalue)
+               self.disabled || self.curvalue == self.minvalue)
     @leftarrow = Rect.new(x, y, leftarrows.width, height)
     x += leftarrows.width
     if !self.disabled
@@ -451,7 +448,7 @@ class Slider < UIControl
     end
     x += numbers
     shadowtext(bitmap, x, y, rightarrows.width, height, _INTL(" >> "),
-       self.disabled || self.curvalue == self.maxvalue)
+               self.disabled || self.curvalue == self.maxvalue)
     @rightarrow = Rect.new(x, y, rightarrows.width, height)
   end
 end
@@ -690,7 +687,7 @@ class TextSlider < UIControl
     shadowtext(bitmap, x, y, size, height, self.label)
     x += size
     shadowtext(bitmap, x, y, leftarrows.width, height, _INTL(" << "),
-       self.disabled || self.curvalue == self.minvalue)
+               self.disabled || self.curvalue == self.minvalue)
     @leftarrow = Rect.new(x, y, leftarrows.width, height)
     x += leftarrows.width
     if !self.disabled
@@ -699,7 +696,7 @@ class TextSlider < UIControl
     end
     x += @maxoptionwidth
     shadowtext(bitmap, x, y, rightarrows.width, height, _INTL(" >> "),
-       self.disabled || self.curvalue == self.maxvalue)
+               self.disabled || self.curvalue == self.maxvalue)
     @rightarrow = Rect.new(x, y, rightarrows.width, height)
   end
 end

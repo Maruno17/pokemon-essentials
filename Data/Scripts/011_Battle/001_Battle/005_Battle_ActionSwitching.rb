@@ -19,18 +19,16 @@ class Battle
       if partyScene
         owner = pbGetOwnerFromPartyIndex(idxBattler, idxParty)
         partyScene.pbDisplay(_INTL("You can't switch {1}'s Pokémon with one of yours!",
-          owner.name))
+                                   owner.name))
       end
       return false
     end
     if party[idxParty].fainted?
-      partyScene.pbDisplay(_INTL("{1} has no energy left to battle!",
-         party[idxParty].name)) if partyScene
+      partyScene.pbDisplay(_INTL("{1} has no energy left to battle!", party[idxParty].name)) if partyScene
       return false
     end
     if pbFindBattler(idxParty, idxBattler)
-      partyScene.pbDisplay(_INTL("{1} is already in battle!",
-         party[idxParty].name)) if partyScene
+      partyScene.pbDisplay(_INTL("{1} is already in battle!", party[idxParty].name)) if partyScene
       return false
     end
     return true
@@ -48,7 +46,7 @@ class Battle
     allSameSideBattlers(idxBattler).each do |b|
       next if choices[b.index][0] != :SwitchOut || choices[b.index][1] != idxParty
       partyScene.pbDisplay(_INTL("{1} has already been selected.",
-         pbParty(idxBattler)[idxParty].name)) if partyScene
+                                 pbParty(idxBattler)[idxParty].name)) if partyScene
       return false
     end
     # Check whether battler can switch out
@@ -77,7 +75,7 @@ class Battle
       next if !b.abilityActive?
       if Battle::AbilityEffects.triggerTrappingByTarget(b.ability, battler, b, self)
         partyScene.pbDisplay(_INTL("{1}'s {2} prevents switching!",
-           b.pbThis, b.abilityName)) if partyScene
+                                   b.pbThis, b.abilityName)) if partyScene
         return false
       end
     end
@@ -85,7 +83,7 @@ class Battle
       next if !b.itemActive?
       if Battle::ItemEffects.triggerTrappingByTarget(b.item, battler, b, self)
         partyScene.pbDisplay(_INTL("{1}'s {2} prevents switching!",
-           b.pbThis, b.itemName)) if partyScene
+                                   b.pbThis, b.itemName)) if partyScene
         return false
       end
     end
@@ -172,7 +170,7 @@ class Battle
               idxPartyForName = new_index if new_index >= 0 && new_index != idxPartyNew
             end
             if pbDisplayConfirm(_INTL("{1} is about to send in {2}. Will you switch your Pokémon?",
-               opponent.full_name, enemyParty[idxPartyForName].name))
+                                      opponent.full_name, enemyParty[idxPartyForName].name))
               idxPlayerPartyNew = pbSwitchInBetween(0, false, true)
               if idxPlayerPartyNew >= 0
                 pbMessageOnRecall(@battlers[0])

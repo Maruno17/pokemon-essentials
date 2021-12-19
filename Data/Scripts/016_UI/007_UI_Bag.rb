@@ -197,8 +197,9 @@ class PokemonBag_Scene
     @sprites["itemlist"].baseColor   = ITEMLISTBASECOLOR
     @sprites["itemlist"].shadowColor = ITEMLISTSHADOWCOLOR
     @sprites["itemicon"] = ItemIconSprite.new(48, Graphics.height - 48, nil, @viewport)
-    @sprites["itemtext"] = Window_UnformattedTextPokemon.newWithSize("",
-       72, 270, Graphics.width - 72 - 24, 128, @viewport)
+    @sprites["itemtext"] = Window_UnformattedTextPokemon.newWithSize(
+      "", 72, 270, Graphics.width - 72 - 24, 128, @viewport
+    )
     @sprites["itemtext"].baseColor   = ITEMTEXTBASECOLOR
     @sprites["itemtext"].shadowColor = ITEMTEXTSHADOWCOLOR
     @sprites["itemtext"].visible     = true
@@ -268,13 +269,16 @@ class PokemonBag_Scene
     if @choosing && @filterlist
       for i in 1...@bag.pockets.length
         if @filterlist[i].length == 0
-          @sprites["pocketicon"].bitmap.blt(6 + (i - 1) * 22, 6,
-             @pocketbitmap.bitmap, Rect.new((i - 1) * 20, 28, 20, 20))
+          @sprites["pocketicon"].bitmap.blt(
+            6 + (i - 1) * 22, 6, @pocketbitmap.bitmap, Rect.new((i - 1) * 20, 28, 20, 20)
+          )
         end
       end
     end
-    @sprites["pocketicon"].bitmap.blt(2 + (@sprites["itemlist"].pocket - 1) * 22, 2,
-       @pocketbitmap.bitmap, Rect.new((@sprites["itemlist"].pocket - 1) * 28, 0, 28, 28))
+    @sprites["pocketicon"].bitmap.blt(
+      2 + (@sprites["itemlist"].pocket - 1) * 22, 2, @pocketbitmap.bitmap,
+      Rect.new((@sprites["itemlist"].pocket - 1) * 28, 0, 28, 28)
+    )
     # Refresh the item window
     @sprites["itemlist"].refresh
     # Refresh more things
@@ -552,7 +556,8 @@ class PokemonBagScreen
             params.setRange(0, Settings::BAG_MAX_PER_SLOT)
             params.setDefaultValue(qty)
             newqty = pbMessageChooseNumber(
-               _INTL("Choose new quantity of {1} (max. #{Settings::BAG_MAX_PER_SLOT}).", itemplural), params) { @scene.pbUpdate }
+              _INTL("Choose new quantity of {1} (max. #{Settings::BAG_MAX_PER_SLOT}).", itemplural), params
+            ) { @scene.pbUpdate }
             if newqty > qty
               @bag.add(item, newqty - qty)
             elsif newqty < qty

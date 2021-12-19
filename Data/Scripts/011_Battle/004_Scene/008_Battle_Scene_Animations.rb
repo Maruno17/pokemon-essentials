@@ -42,7 +42,7 @@ class Battle::Scene::Animation::Intro < Battle::Scene::Animation
     blackScreen.moveOpacity(0, 8, 0)
     # Fading blackness over command bar
     blackBar = addNewSprite(@sprites["cmdBar_bg"].x, @sprites["cmdBar_bg"].y,
-       "Graphics/Battle animations/black_bar")
+                            "Graphics/Battle animations/black_bar")
     blackBar.setZ(0, 998)
     blackBar.moveOpacity(appearTime * 3 / 4, appearTime / 4, 0)
   end
@@ -448,7 +448,7 @@ class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
     delay = ball.totalDuration   # 0 or 7
     # Poké Ball trajectory animation
     createBallTrajectory(ball, delay, 12,
-       ballStartX, ballStartY, ballMidX, ballMidY, battlerStartX, battlerStartY - 18)
+                         ballStartX, ballStartY, ballMidX, ballMidY, battlerStartX, battlerStartY - 18)
     ball.setZ(9, batSprite.z - 1)
     delay = ball.totalDuration + 4
     delay += 10 * @idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
@@ -651,8 +651,7 @@ class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
     shadow  = addSprite(shaSprite, PictureOrigin::Center)
     # Get approx duration depending on sprite's position/size. Min 20 frames.
     battlerTop = batSprite.y - batSprite.height
-    cropY = Battle::Scene.pbBattlerPosition(@idxBattler,
-       @battle.pbSideSize(@idxBattler))[1]
+    cropY = Battle::Scene.pbBattlerPosition(@idxBattler, @battle.pbSideSize(@idxBattler))[1]
     cropY += 8
     duration = (cropY - battlerTop) / 8
     duration = 10 if duration < 10   # Min 0.5 seconds
@@ -734,7 +733,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     # Poké Ball arc animation
     ball.setSE(delay, "Battle throw")
     createBallTrajectory(ball, delay, 16,
-       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
+                         ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     ball.setZ(9, batSprite.z + 1)
     ball.setSE(delay + 16, "Battle ball hit")
     # Poké Ball opens up
@@ -867,7 +866,7 @@ class Battle::Scene::Animation::PokeballThrowDeflect < Battle::Scene::Animation
     # Poké Ball arc animation
     ball.setSE(0, "Battle throw")
     createBallTrajectory(ball, 0, 16,
-       ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
+                         ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     # Poké Ball knocked back
     delay = ball.totalDuration
     ball.setSE(delay, "Battle ball drop")

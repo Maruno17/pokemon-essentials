@@ -63,9 +63,8 @@ class BugContestBattle < Battle
       lastPokemon = pbBugContestState.lastPokemon
       pbDisplayPaused(_INTL("You already caught a {1}.", lastPokemon.name))
       helptext = _INTL("STOCK POKéMON:\n {1} Lv.{2} MaxHP: {3}\nTHIS POKéMON:\n {4} Lv.{5} MaxHP: {6}",
-         lastPokemon.name, lastPokemon.level, lastPokemon.totalhp,
-         pkmn.name, pkmn.level, pkmn.totalhp
-      )
+                       lastPokemon.name, lastPokemon.level, lastPokemon.totalhp,
+                       pkmn.name, pkmn.level, pkmn.totalhp)
       @scene.pbShowHelp(helptext)
       if pbDisplayConfirm(_INTL("Switch Pokémon?"))
         pbBugContestState.lastPokemon = pkmn

@@ -521,7 +521,7 @@ class Battle::Move::UserAddStockpileRaiseDefSpDef1 < Battle::Move
   def pbEffectGeneral(user)
     user.effects[PBEffects::Stockpile] += 1
     @battle.pbDisplay(_INTL("{1} stockpiled {2}!",
-        user.pbThis, user.effects[PBEffects::Stockpile]))
+                            user.pbThis, user.effects[PBEffects::Stockpile]))
     showAnim = true
     if user.pbCanRaiseStatStage?(:DEFENSE, user, self)
       if user.pbRaiseStatStage(:DEFENSE, 1, user, showAnim)

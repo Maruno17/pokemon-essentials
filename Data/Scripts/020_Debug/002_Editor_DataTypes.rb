@@ -156,7 +156,7 @@ end
 module StringProperty
   def self.set(settingname, oldsetting)
     return pbMessageFreeText(_INTL("Set the value for {1}.", settingname),
-       (oldsetting) ? oldsetting : "", false, 250, Graphics.width)
+                             (oldsetting) ? oldsetting : "", false, 250, Graphics.width)
   end
 
   def self.format(value)
@@ -177,7 +177,7 @@ class LimitStringProperty
 
   def set(settingname, oldsetting)
     return pbMessageFreeText(_INTL("Set the value for {1}.", settingname),
-       (oldsetting) ? oldsetting : "", false, @limit)
+                             (oldsetting) ? oldsetting : "", false, @limit)
   end
 end
 
@@ -265,7 +265,7 @@ class StringListProperty
         entry = real_cmds[cmd]
         if entry[1] == -1   # Add new value
           new_value = pbMessageFreeText(_INTL("Enter the new value."),
-             "", false, 250, Graphics.width)
+                                        "", false, 250, Graphics.width)
           if !nil_or_empty?(new_value)
             if real_cmds.any? { |e| e[0] == new_value }
               oldsel = new_value   # Already have value; just move cursor to it
@@ -276,10 +276,10 @@ class StringListProperty
           end
         else   # Edit value
           case pbMessage(_INTL("\\ts[]Do what with this value?"),
-             [_INTL("Edit"), _INTL("Delete"), _INTL("Cancel")], 3)
+                         [_INTL("Edit"), _INTL("Delete"), _INTL("Cancel")], 3)
           when 0   # Edit
             new_value = pbMessageFreeText(_INTL("Enter the new value."),
-               entry[0], false, 250, Graphics.width)
+                                          entry[0], false, 250, Graphics.width)
             if !nil_or_empty?(new_value)
               if real_cmds.any? { |e| e[0] == new_value }   # Already have value; delete this one
                 real_cmds.delete_at(cmd)
@@ -684,8 +684,9 @@ end
 def chooseMapPoint(map, rgnmap = false)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
-  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Click a point on the map."),
-     0, Graphics.height - 64, Graphics.width, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Click a point on the map."), 0, Graphics.height - 64, Graphics.width, 64, viewport
+  )
   title.z = 2
   if rgnmap
     sprite = RegionMapSprite.new(map, viewport)
@@ -739,7 +740,7 @@ module MapCoordsFacingProperty
       mappoint = chooseMapPoint(chosenmap)
       if mappoint
         facing = pbMessage(_INTL("Choose the direction to face in."),
-           [_INTL("Down"), _INTL("Left"), _INTL("Right"), _INTL("Up")], -1)
+                           [_INTL("Down"), _INTL("Left"), _INTL("Right"), _INTL("Up")], -1)
         return (facing >= 0) ? [chosenmap, mappoint[0], mappoint[1], [2, 4, 6, 8][facing]] : oldsetting
       else
         return oldsetting
@@ -848,7 +849,7 @@ end
 module ItemNameProperty
   def self.set(settingname, oldsetting)
     return pbMessageFreeText(_INTL("Set the value for {1}.", settingname),
-       (oldsetting) ? oldsetting : "", false, 30)
+                             (oldsetting) ? oldsetting : "", false, 30)
   end
 
   def self.defaultValue
@@ -1039,7 +1040,7 @@ class GameDataPoolProperty
             end
           else   # Edit existing value
             case pbMessage(_INTL("\\ts[]Do what with this value?"),
-               [_INTL("Change value"), _INTL("Delete"), _INTL("Cancel")], 3)
+                           [_INTL("Change value"), _INTL("Delete"), _INTL("Cancel")], 3)
             when 0   # Change value
               new_value = pbChooseFromGameDataList(@game_data, entry[0])
               if new_value && new_value != entry[0]
@@ -1065,7 +1066,7 @@ class GameDataPoolProperty
           end
         else   # Cancel/quit
           case pbMessage(_INTL("Apply changes?"),
-             [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+                         [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           when 0
             values.shift   # Remove the "add value" option
             for i in 0...values.length
@@ -1173,7 +1174,7 @@ module LevelUpMovesProperty
             end
           else   # Edit existing move
             case pbMessage(_INTL("\\ts[]Do what with this move?"),
-               [_INTL("Change level"), _INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 4)
+                           [_INTL("Change level"), _INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 4)
             when 0   # Change level
               params = ChooseNumberParams.new
               params.setRange(0, GameData::GrowthRate.max_level)
@@ -1219,7 +1220,7 @@ module LevelUpMovesProperty
           end
         else   # Cancel/quit
           case pbMessage(_INTL("Save changes?"),
-             [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+                         [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           when 0
             realcmds.shift
             for i in 0...realcmds.length
@@ -1320,14 +1321,14 @@ class EvolutionsProperty
             param_type = evo_method_data.parameter
             if param_type.nil?
               commands.push(_INTL("{1}: {2}",
-                 GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name))
+                                  GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name))
             else
               if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
                 level = getConstantName(param_type, level)
               end
               level = "???" if !level || (level.is_a?(String) && level.empty?)
               commands.push(_INTL("{1}: {2}, {3}",
-                 GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name, level.to_s))
+                                  GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name, level.to_s))
             end
           end
           cmd[1] = i if oldsel >= 0 && realcmds[i][3] == oldsel
@@ -1379,8 +1380,8 @@ class EvolutionsProperty
             end
           else   # Edit evolution
             case pbMessage(_INTL("\\ts[]Do what with this evolution?"),
-               [_INTL("Change species"), _INTL("Change method"),
-                _INTL("Change parameter"), _INTL("Delete"), _INTL("Cancel")], 5)
+                           [_INTL("Change species"), _INTL("Change method"),
+                            _INTL("Change parameter"), _INTL("Delete"), _INTL("Cancel")], 5)
             when 0   # Change species
               newspecies = pbChooseSpeciesList(entry[0])
               if newspecies
@@ -1451,7 +1452,7 @@ class EvolutionsProperty
           end
         else
           cmd2 = pbMessage(_INTL("Save changes?"),
-             [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+                           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           if [0, 1].include?(cmd2)
             if cmd2 == 0
               for i in 0...realcmds.length
@@ -1531,10 +1532,10 @@ module EncounterSlotProperty
     if species_data.form > 0
       if value[2] == value[3]
         return sprintf("%d, %s_%d (Lv.%d)", value[0],
-           species_data.real_name, species_data.form, value[2])
+                       species_data.real_name, species_data.form, value[2])
       end
       return sprintf("%d, %s_%d (Lv.%d-%d)", value[0],
-         species_data.real_name, species_data.form, value[2], value[3])
+                     species_data.real_name, species_data.form, value[2], value[3])
     end
     if value[2] == value[3]
       return sprintf("%d, %s (Lv.%d)", value[0], species_data.real_name, value[2])
@@ -1554,11 +1555,13 @@ def pbPropertyList(title, data, properties, saveprompt = false)
   list = pbListWindow([], Graphics.width / 2)
   list.viewport = viewport
   list.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(title,
-     list.width, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    title, list.width, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
-  desc = Window_UnformattedTextPokemon.newWithSize("",
-     list.width, title.height, Graphics.width / 2, Graphics.height - title.height, viewport)
+  desc = Window_UnformattedTextPokemon.newWithSize(
+    "", list.width, title.height, Graphics.width / 2, Graphics.height - title.height, viewport
+  )
   desc.z = 2
   selectedmap = -1
   retval = nil
@@ -1614,7 +1617,7 @@ def pbPropertyList(title, data, properties, saveprompt = false)
     end
     if selectedmap == -1 && saveprompt
       cmd = pbMessage(_INTL("Save changes?"),
-         [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+                      [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
       if cmd == 2
         selectedmap = list.index
       else

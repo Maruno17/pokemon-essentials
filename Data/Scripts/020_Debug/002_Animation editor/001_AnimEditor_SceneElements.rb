@@ -223,7 +223,7 @@ class AnimationWindow < SpriteWrapper
     @contents.fill_rect(0, 0, @contents.width, @contents.height, Color.new(180, 180, 180))
     @contents.blt(0, 0, @arrows.bitmap, Rect.new(0, 0, arrowwidth, 96))
     @contents.blt(arrowwidth + NUMFRAMES * 96, 0, @arrows.bitmap,
-       Rect.new(arrowwidth, 0, arrowwidth, 96))
+                  Rect.new(arrowwidth, 0, arrowwidth, 96))
     havebitmap = (self.animbitmap && !self.animbitmap.disposed?)
     if havebitmap
       rect = Rect.new(0, 0, 0, 0)
@@ -484,7 +484,7 @@ class AnimationCanvas < Sprite
     else
       begin
         @animbitmap = AnimatedBitmap.new("Graphics/Animations/" + @animation.graphic,
-           @animation.hue).deanimate
+                                         @animation.hue).deanimate
       rescue
         @animbitmap = nil
       end
@@ -527,13 +527,13 @@ class AnimationCanvas < Sprite
       @sprites["pokemon_1"].bitmap = @target
       @sprites["pokemon_1"].z = 16
       pbSpriteSetAnimFrame(@sprites["pokemon_0"],
-         pbCreateCel(Battle::Scene::FOCUSUSER_X,
-                     Battle::Scene::FOCUSUSER_Y, -1, 2),
-         @sprites["pokemon_0"], @sprites["pokemon_1"])
+                           pbCreateCel(Battle::Scene::FOCUSUSER_X,
+                                       Battle::Scene::FOCUSUSER_Y, -1, 2),
+                           @sprites["pokemon_0"], @sprites["pokemon_1"])
       pbSpriteSetAnimFrame(@sprites["pokemon_1"],
-         pbCreateCel(Battle::Scene::FOCUSTARGET_X,
-                     Battle::Scene::FOCUSTARGET_Y, -2, 1),
-         @sprites["pokemon_0"], @sprites["pokemon_1"])
+                           pbCreateCel(Battle::Scene::FOCUSTARGET_X,
+                                       Battle::Scene::FOCUSTARGET_Y, -2, 1),
+                           @sprites["pokemon_0"], @sprites["pokemon_1"])
       usersprite = @sprites["pokemon_#{oppmove ? 1 : 0}"]
       targetsprite = @sprites["pokemon_#{oppmove ? 0 : 1}"]
       olduserx = usersprite ? usersprite.x : 0
@@ -541,12 +541,15 @@ class AnimationCanvas < Sprite
       oldtargetx = targetsprite ? targetsprite.x : 0
       oldtargety = targetsprite ? targetsprite.y : 0
       @player = PBAnimationPlayerX.new(@animation,
-         @battle.battlers[oppmove ? 1 : 0], @battle.battlers[oppmove ? 0 : 1], self, oppmove, true)
+                                       @battle.battlers[oppmove ? 1 : 0],
+                                       @battle.battlers[oppmove ? 0 : 1],
+                                       self, oppmove, true)
       @player.setLineTransform(
-         Battle::Scene::FOCUSUSER_X, Battle::Scene::FOCUSUSER_Y,
-         Battle::Scene::FOCUSTARGET_X, Battle::Scene::FOCUSTARGET_Y,
-         olduserx, oldusery,
-         oldtargetx, oldtargety)
+        Battle::Scene::FOCUSUSER_X, Battle::Scene::FOCUSUSER_Y,
+        Battle::Scene::FOCUSTARGET_X, Battle::Scene::FOCUSTARGET_Y,
+        olduserx, oldusery,
+        oldtargetx, oldtargety
+      )
       @player.start
       @playing = true
       @sprites["pokemon_0"].x += BORDERSIZE
@@ -992,10 +995,9 @@ class BitmapDisplayWindow < SpriteWindow_Base
       wh = sx * wh
       ww = self.contents.width
     end
-    dest = Rect.new(
-       (self.contents.width - ww) / 2,
-       (self.contents.height - wh) / 2,
-       ww, wh)
+    dest = Rect.new((self.contents.width - ww) / 2,
+                    (self.contents.height - wh) / 2,
+                    ww, wh)
     src = Rect.new(0, 0, bmap.width, bmap.height)
     self.contents.stretch_blt(dest, bmap, src)
     bmap.dispose
@@ -1009,7 +1011,8 @@ class AnimationNameWindow
     @canvas = canvas
     @oldname = nil
     @window = Window_UnformattedTextPokemon.newWithSize(
-       _INTL("Name: {1}", @canvas.animation.name), x, y, width, height, viewport)
+      _INTL("Name: {1}", @canvas.animation.name), x, y, width, height, viewport
+    )
   end
 
   def viewport=(value); @window.viewport = value; end

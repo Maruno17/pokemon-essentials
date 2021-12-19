@@ -87,8 +87,7 @@ class Battle::Battler
     # executing them)
     if hasActiveItem?(:ASSAULTVEST) && move.statusMove? && move.id != :MEFIRST && commandPhase
       if showMessages
-        msg = _INTL("The effects of the {1} prevent status moves from being used!",
-           itemName)
+        msg = _INTL("The effects of the {1} prevent status moves from being used!", itemName)
         (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
       end
       return false
@@ -277,7 +276,7 @@ class Battle::Battler
     if @effects[PBEffects::Attract] >= 0
       @battle.pbCommonAnimation("Attract", self)
       @battle.pbDisplay(_INTL("{1} is in love with {2}!", pbThis,
-         @battle.battlers[@effects[PBEffects::Attract]].pbThis(true)))
+                              @battle.battlers[@effects[PBEffects::Attract]].pbThis(true)))
       if @battle.pbRandom(100) < 50
         @battle.pbDisplay(_INTL("{1} is immobilized by love!", pbThis))
         @lastMoveFailed = true

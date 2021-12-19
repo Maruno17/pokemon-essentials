@@ -124,7 +124,7 @@ class Battle::Battler
           @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
         else
           @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
-             pbThis, abilityName, move.name))
+                                  pbThis, abilityName, move.name))
         end
       end
       @battle.pbHideAbilitySplash(self)
@@ -154,7 +154,7 @@ class Battle::Battler
           @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
         else
           @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
-             pbThis, abilityName, move.name))
+                                  pbThis, abilityName, move.name))
         end
       end
       @battle.pbHideAbilitySplash(self)
@@ -249,10 +249,10 @@ class Battle::Battler
       @battle.pbShowAbilitySplash(b)
       if Battle::Scene::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} shared its {2} with {3}!",
-           b.pbThis, b.itemName, pbThis(true)))
+                                b.pbThis, b.itemName, pbThis(true)))
       else
         @battle.pbDisplay(_INTL("{1}'s {2} let it share its {3} with {4}!",
-           b.pbThis, b.abilityName, b.itemName, pbThis(true)))
+                                b.pbThis, b.abilityName, b.itemName, pbThis(true)))
       end
       self.item = b.item
       b.item = nil

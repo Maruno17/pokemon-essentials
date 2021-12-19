@@ -87,8 +87,7 @@ class PokemonSaveScreen
         pbMessage(_INTL('WARNING!'))
         pbMessage(_INTL('There is a different game file that is already saved.'))
         pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokémon, will be entirely lost."))
-        if !pbConfirmMessageSerious(
-            _INTL('Are you sure you want to save now and overwrite the other save file?'))
+        if !pbConfirmMessageSerious(_INTL('Are you sure you want to save now and overwrite the other save file?'))
           pbSEPlay('GUI save choice')
           @scene.pbEndScreen
           return false

@@ -86,8 +86,8 @@ class Battle::Move
     return false if @battle.moldBreaker
     ret = false
     if target.abilityActive?
-      ret = Battle::AbilityEffects.triggerMoveImmunity(target.ability,
-         user, target, self, @calcType, @battle, show_message)
+      ret = Battle::AbilityEffects.triggerMoveImmunity(target.ability, user, target,
+                                                       self, @calcType, @battle, show_message)
     end
     return ret
   end
@@ -131,7 +131,7 @@ class Battle::Move
           @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
         else
           @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",
-            target.pbThis, target.abilityName))
+                                  target.pbThis, target.abilityName))
         end
         @battle.pbHideAbilitySplash(target)
       end
@@ -145,7 +145,7 @@ class Battle::Move
           @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
         else
           @battle.pbDisplay(_INTL("{1} is unaffected because of {2}'s {3}!",
-            target.pbThis, b.pbThis(true), b.abilityName))
+                                  target.pbThis, b.pbThis(true), b.abilityName))
         end
         @battle.pbHideAbilitySplash(target)
       end
@@ -294,7 +294,7 @@ class Battle::Move
       if target.damageState.affection_critical
         if numTargets > 1
           @battle.pbDisplay(_INTL("{1} landed a critical hit on {2}, wishing to be praised!",
-             user.pbThis, target.pbThis(true)))
+                                  user.pbThis, target.pbThis(true)))
         else
           @battle.pbDisplay(_INTL("{1} landed a critical hit, wishing to be praised!", user.pbThis))
         end

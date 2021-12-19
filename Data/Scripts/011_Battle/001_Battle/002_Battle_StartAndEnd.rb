@@ -56,14 +56,14 @@ class Battle
         # Compare the have values with the need values
         if requireds.length > sideCounts.length
           raise _INTL("Error: def pbGetOwnerIndexFromBattlerIndex gives invalid owner index ({1} for battle type {2}v{3}, trainers {4}v{5})",
-             requireds.length - 1, @sideSizes[0], @sideSizes[1], side1counts.length, side2counts.length)
+                      requireds.length - 1, @sideSizes[0], @sideSizes[1], side1counts.length, side2counts.length)
         end
         sideCounts.each_with_index do |_count, i|
           if !requireds[i] || requireds[i] == 0
             raise _INTL("Player-side trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
-               i + 1, @sideSizes[0], @sideSizes[1]) if side == 0
+                        i + 1, @sideSizes[0], @sideSizes[1]) if side == 0
             raise _INTL("Opposing trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
-               i + 1, @sideSizes[0], @sideSizes[1]) if side == 1
+                        i + 1, @sideSizes[0], @sideSizes[1]) if side == 1
           end
           next if requireds[i] <= sideCounts[i]   # Trainer has enough Pokémon to fill their positions
           if requireds[i] == 1
@@ -166,10 +166,10 @@ class Battle
         pbDisplayPaused(_INTL("Oh! A wild {1} appeared!", foeParty[0].name))
       when 2
         pbDisplayPaused(_INTL("Oh! A wild {1} and {2} appeared!", foeParty[0].name,
-           foeParty[1].name))
+                              foeParty[1].name))
       when 3
         pbDisplayPaused(_INTL("Oh! A wild {1}, {2} and {3} appeared!", foeParty[0].name,
-           foeParty[1].name, foeParty[2].name))
+                              foeParty[1].name, foeParty[2].name))
       end
     else   # Trainer battle
       case @opponent.length
@@ -177,10 +177,10 @@ class Battle
         pbDisplayPaused(_INTL("You are challenged by {1}!", @opponent[0].full_name))
       when 2
         pbDisplayPaused(_INTL("You are challenged by {1} and {2}!", @opponent[0].full_name,
-           @opponent[1].full_name))
+                              @opponent[1].full_name))
       when 3
         pbDisplayPaused(_INTL("You are challenged by {1}, {2} and {3}!",
-           @opponent[0].full_name, @opponent[1].full_name, @opponent[2].full_name))
+                              @opponent[0].full_name, @opponent[1].full_name, @opponent[2].full_name))
       end
     end
     # Send out Pokémon (opposing trainers first)
@@ -199,10 +199,10 @@ class Battle
           msg += _INTL("{1} sent out {2}!", t.full_name, @battlers[sent[0]].name)
         when 2
           msg += _INTL("{1} sent out {2} and {3}!", t.full_name,
-             @battlers[sent[0]].name, @battlers[sent[1]].name)
+                       @battlers[sent[0]].name, @battlers[sent[1]].name)
         when 3
           msg += _INTL("{1} sent out {2}, {3} and {4}!", t.full_name,
-             @battlers[sent[0]].name, @battlers[sent[1]].name, @battlers[sent[2]].name)
+                       @battlers[sent[0]].name, @battlers[sent[1]].name, @battlers[sent[2]].name)
         end
         toSendOut.concat(sent)
       end
@@ -217,7 +217,7 @@ class Battle
           msg += _INTL("Go! {1} and {2}!", @battlers[sent[0]].name, @battlers[sent[1]].name)
         when 3
           msg += _INTL("Go! {1}, {2} and {3}!", @battlers[sent[0]].name,
-             @battlers[sent[1]].name, @battlers[sent[2]].name)
+                       @battlers[sent[1]].name, @battlers[sent[2]].name)
         end
         toSendOut.concat(sent)
       end
@@ -403,10 +403,10 @@ class Battle
           pbDisplayPaused(_INTL("You defeated {1}!", @opponent[0].full_name))
         when 2
           pbDisplayPaused(_INTL("You defeated {1} and {2}!", @opponent[0].full_name,
-             @opponent[1].full_name))
+                                @opponent[1].full_name))
         when 3
           pbDisplayPaused(_INTL("You defeated {1}, {2} and {3}!", @opponent[0].full_name,
-             @opponent[1].full_name, @opponent[2].full_name))
+                                @opponent[1].full_name, @opponent[2].full_name))
         end
         @opponent.each_with_index do |_t, i|
           @scene.pbShowOpponent(i)
@@ -431,10 +431,10 @@ class Battle
             pbDisplayPaused(_INTL("You lost against {1}!", @opponent[0].full_name))
           when 2
             pbDisplayPaused(_INTL("You lost against {1} and {2}!",
-               @opponent[0].full_name, @opponent[1].full_name))
+                                  @opponent[0].full_name, @opponent[1].full_name))
           when 3
             pbDisplayPaused(_INTL("You lost against {1}, {2} and {3}!",
-               @opponent[0].full_name, @opponent[1].full_name, @opponent[2].full_name))
+                                  @opponent[0].full_name, @opponent[1].full_name, @opponent[2].full_name))
           end
         end
         # Lose money from losing a battle

@@ -379,7 +379,7 @@ class TilemapRenderer
           filename = extra_autotile_arrays[1][tile_id - single_autotile_start_id]
         end
         tile.set_bitmap(filename, tile_id, true, @autotiles.animated?(filename),
-           priority, @autotiles[filename])
+                        priority, @autotiles[filename])
       else
         filename = map.tileset_name
         tile.set_bitmap(filename, tile_id, false, false, priority, @tilesets[filename])

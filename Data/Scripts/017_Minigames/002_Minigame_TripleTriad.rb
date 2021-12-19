@@ -169,8 +169,9 @@ class TriadScene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     addBackgroundPlane(@sprites, "background", "triad_bg", @viewport)
-    @sprites["helpwindow"] = Window_AdvancedTextPokemon.newWithSize("",
-       0, Graphics.height - 64, Graphics.width, 64, @viewport)
+    @sprites["helpwindow"] = Window_AdvancedTextPokemon.newWithSize(
+      "", 0, Graphics.height - 64, Graphics.width, 64, @viewport
+    )
     for i in 0...@battle.width * @battle.height
       @sprites["sprite#{i}"] = SpriteWrapper.new(@viewport)
       @sprites["sprite#{i}"].x = Graphics.width / 2 - 118 + (i % 3) * 78
@@ -637,7 +638,7 @@ class TriadScreen
 
   def pbAdd(items, item)
     return ItemStorageHelper.add(items, $PokemonGlobal.triads.maxSize,
-       TriadStorage::MAX_PER_SLOT, item, 1)
+                                 TriadStorage::MAX_PER_SLOT, item, 1)
   end
 
   def pbSubtract(items, item)
@@ -719,7 +720,7 @@ class TriadScreen
     for i in 0...$PokemonGlobal.triads.length
       item = $PokemonGlobal.triads[i]
       ItemStorageHelper.add(@triadCards, $PokemonGlobal.triads.maxSize,
-         TriadStorage::MAX_PER_SLOT, item[0], item[1])
+                            TriadStorage::MAX_PER_SLOT, item[0], item[1])
       count += item[1]   # Add item count to total count
     end
     @board = []
@@ -1076,7 +1077,8 @@ def pbBuyTriads
   cmdwindow = Window_CommandPokemonEx.newWithSize(realcommands, 0, 0, Graphics.width / 2, Graphics.height)
   cmdwindow.z = 99999
   goldwindow = Window_UnformattedTextPokemon.newWithSize(
-     _INTL("Money:\r\n{1}", pbGetGoldString), 0, 0, 32, 32)
+    _INTL("Money:\r\n{1}", pbGetGoldString), 0, 0, 32, 32
+  )
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
   goldwindow.x = Graphics.width - goldwindow.width
   goldwindow.y = 0
@@ -1118,7 +1120,8 @@ def pbBuyTriads
       params.setInitialValue(1)
       params.setCancelValue(0)
       quantity = pbMessageChooseNumber(
-         _INTL("The {1} card? Certainly. How many would you like?", itemname), params)
+        _INTL("The {1} card? Certainly. How many would you like?", itemname), params
+      )
       next if quantity <= 0
       price *= quantity
       next if !pbConfirmMessage(_INTL("{1}, and you want {2}. That will be ${3}. OK?", itemname, quantity, price.to_s_formatted))
@@ -1162,7 +1165,8 @@ def pbSellTriads
   cmdwindow = Window_CommandPokemonEx.newWithSize(commands, 0, 0, Graphics.width / 2, Graphics.height)
   cmdwindow.z = 99999
   goldwindow = Window_UnformattedTextPokemon.newWithSize(
-     _INTL("Money:\r\n{1}", pbGetGoldString), 0, 0, 32, 32)
+    _INTL("Money:\r\n{1}", pbGetGoldString), 0, 0, 32, 32
+  )
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
   goldwindow.x = Graphics.width - goldwindow.width
   goldwindow.y = 0
@@ -1216,7 +1220,8 @@ def pbSellTriads
           params.setInitialValue(1)
           params.setCancelValue(0)
           quantity = pbMessageChooseNumber(
-             _INTL("The {1} card? How many would you like to sell?", itemname), params)
+            _INTL("The {1} card? How many would you like to sell?", itemname), params
+          )
         end
         if quantity > 0
           price /= 4

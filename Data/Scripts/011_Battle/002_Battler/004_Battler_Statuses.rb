@@ -62,7 +62,7 @@ class Battle::Battler
       when :Electric
         if newStatus == :SLEEP
           @battle.pbDisplay(_INTL("{1} surrounds itself with electrified terrain!",
-             pbThis(true))) if showMessages
+                                  pbThis(true))) if showMessages
           return false
         end
       when :Misty
@@ -133,19 +133,19 @@ class Battle::Battler
           case newStatus
           when :SLEEP
             msg = _INTL("{1} stays awake because of {2}'s {3}!",
-               pbThis, immAlly.pbThis(true), immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           when :POISON
             msg = _INTL("{1} cannot be poisoned because of {2}'s {3}!",
-               pbThis, immAlly.pbThis(true), immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           when :BURN
             msg = _INTL("{1} cannot be burned because of {2}'s {3}!",
-               pbThis, immAlly.pbThis(true), immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           when :PARALYSIS
             msg = _INTL("{1} cannot be paralyzed because of {2}'s {3}!",
-               pbThis, immAlly.pbThis(true), immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           when :FROZEN
             msg = _INTL("{1} cannot be frozen solid because of {2}'s {3}!",
-               pbThis, immAlly.pbThis(true), immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           end
         else
           case newStatus

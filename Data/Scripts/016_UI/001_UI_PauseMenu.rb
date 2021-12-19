@@ -130,15 +130,15 @@ class PokemonPauseMenu
         @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
       else
         @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
-           pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
+                                pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
       end
       commands[cmdQuit = commands.length]     = _INTL("Quit")
     elsif pbInBugContest?
       if pbBugContestState.lastPokemon
         @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
-           pbBugContestState.lastPokemon.speciesName,
-           pbBugContestState.lastPokemon.level,
-           pbBugContestState.ballcount))
+                                pbBugContestState.lastPokemon.speciesName,
+                                pbBugContestState.lastPokemon.level,
+                                pbBugContestState.ballcount))
       else
         @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount))
       end

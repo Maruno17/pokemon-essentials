@@ -8,8 +8,9 @@ def pbEncountersEditor
   commands = []
   maps = []
   list = pbListWindow([])
-  help_window = Window_UnformattedTextPokemon.newWithSize(_INTL("Edit wild encounters"),
-     Graphics.width / 2, 0, Graphics.width / 2, 96)
+  help_window = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Edit wild encounters"), Graphics.width / 2, 0, Graphics.width / 2, 96
+  )
   help_window.z = 99999
   ret = 0
   need_refresh = true
@@ -128,8 +129,9 @@ def pbEncounterMapVersionEditor(enc_data)
   commands = []
   enc_types = []
   list = pbListWindow([])
-  help_window = Window_UnformattedTextPokemon.newWithSize(_INTL("Edit map's encounters"),
-     Graphics.width / 2, 0, Graphics.width / 2, 96)
+  help_window = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Edit map's encounters"), Graphics.width / 2, 0, Graphics.width / 2, 96
+  )
   help_window.z = 99999
   ret = 0
   need_refresh = true
@@ -219,7 +221,7 @@ def pbEncounterMapVersionEditor(enc_data)
         end
         if new_type_commands.length > 0
           chosen_type_cmd = pbMessage(_INTL("Choose an encounter type to copy to."),
-             new_type_commands, -1)
+                                      new_type_commands, -1)
           if chosen_type_cmd >= 0
             new_type = new_types[chosen_type_cmd]
             enc_data.step_chances[new_type] = enc_data.step_chances[this_type]
@@ -253,8 +255,9 @@ end
 def pbEncounterTypeEditor(enc_data, enc_type)
   commands = []
   list = pbListWindow([])
-  help_window = Window_UnformattedTextPokemon.newWithSize(_INTL("Edit encounter slots"),
-     Graphics.width / 2, 0, Graphics.width / 2, 96)
+  help_window = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Edit encounter slots"), Graphics.width / 2, 0, Graphics.width / 2, 96
+  )
   help_window.z = 99999
   enc_type_name = ""
   ret = 0
@@ -409,7 +412,7 @@ end
 def pbTrainerTypeEditorNew(default_name)
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the trainer type's name."),
-     (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
+                           (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
   if nil_or_empty?(name)
     return nil if !default_name
     name = default_name
@@ -942,7 +945,7 @@ end
 def pbItemEditorNew(default_name)
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the item's name."),
-     (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
+                           (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
   if nil_or_empty?(name)
     return if !default_name
     name = default_name
@@ -1171,8 +1174,9 @@ def pbRegionalDexEditor(dex)
   viewport.z = 99999
   cmd_window = pbListWindow([])
   info = Window_AdvancedTextPokemon.newWithSize(
-     _INTL("Z+Up/Down: Rearrange entries\nZ+Right: Insert new entry\nZ+Left: Delete entry\nD: Clear entry"),
-     Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
+    _INTL("Z+Up/Down: Rearrange entries\nZ+Right: Insert new entry\nZ+Left: Delete entry\nD: Clear entry"),
+    Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport
+  )
   info.z = 2
   dex.compact!
   ret = dex.clone
@@ -1226,7 +1230,9 @@ def pbRegionalDexEditor(dex)
     when 0
       if cmd[1] >= 0   # Edit entry
         case pbMessage(_INTL("\\ts[]Do what with this entry?"),
-           [_INTL("Change species"), _INTL("Clear"), _INTL("Insert entry"), _INTL("Delete entry"), _INTL("Cancel")], 5)
+                       [_INTL("Change species"), _INTL("Clear"),
+                        _INTL("Insert entry"), _INTL("Delete entry"),
+                        _INTL("Cancel")], 5)
         when 0   # Change species
           species = pbChooseSpeciesList(dex[cmd[1]])
           if species
@@ -1252,7 +1258,7 @@ def pbRegionalDexEditor(dex)
         end
       else   # Cancel
         case pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+                       [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
         when 0   # Save all changes to Dex
           dex.slice!(-1) while !dex[-1]
           ret = dex
@@ -1276,11 +1282,14 @@ def pbRegionalDexEditorMain
   cmd_window = pbListWindow([])
   cmd_window.viewport = viewport
   cmd_window.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Regional Dexes Editor"),
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Regional Dexes Editor"), Graphics.width / 2, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
-  info = Window_AdvancedTextPokemon.newWithSize(_INTL("Z+Up/Down: Rearrange Dexes"),
-     Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
+  info = Window_AdvancedTextPokemon.newWithSize(
+    _INTL("Z+Up/Down: Rearrange Dexes"), Graphics.width / 2, 64,
+    Graphics.width / 2, Graphics.height - 64, viewport
+  )
   info.z = 2
   dex_lists = []
   pbLoadRegionalDexes.each_with_index { |d, index| dex_lists[index] = d.clone }
@@ -1314,7 +1323,8 @@ def pbRegionalDexEditorMain
     when 0   # Clicked on a command/Dex
       if cmd[1] == 0   # Add new Dex
         case pbMessage(_INTL("Fill in this new Dex?"),
-           [_INTL("Leave blank"), _INTL("National Dex"), _INTL("Nat. Dex grouped families"), _INTL("Cancel")], 4)
+                       [_INTL("Leave blank"), _INTL("National Dex"),
+                        _INTL("Nat. Dex grouped families"), _INTL("Cancel")], 4)
         when 0   # Leave blank
           dex_lists.push([])
           refresh_list = true
@@ -1337,7 +1347,7 @@ def pbRegionalDexEditorMain
         end
       elsif cmd[1] > 0   # Edit a Dex
         case pbMessage(_INTL("\\ts[]Do what with this Dex?"),
-            [_INTL("Edit"), _INTL("Copy"), _INTL("Delete"), _INTL("Cancel")], 4)
+                       [_INTL("Edit"), _INTL("Copy"), _INTL("Delete"), _INTL("Cancel")], 4)
         when 0   # Edit
           dex_lists[cmd[1] - 1] = pbRegionalDexEditor(dex_lists[cmd[1] - 1])
           refresh_list = true
@@ -1352,7 +1362,7 @@ def pbRegionalDexEditorMain
         end
       else   # Cancel
         case pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+                       [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
         when 0   # Save all changes to Dexes
           save_data(dex_lists, "Data/regional_dexes.dat")
           $game_temp.regional_dexes_data = nil
@@ -1432,11 +1442,14 @@ def pbAnimationsOrganiser
   cmdwin = pbListWindow([])
   cmdwin.viewport = viewport
   cmdwin.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Animations Organiser"),
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Animations Organiser"), Graphics.width / 2, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
-  info = Window_AdvancedTextPokemon.newWithSize(_INTL("Z+Up/Down: Swap\nZ+Left: Delete\nZ+Right: Insert"),
-     Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
+  info = Window_AdvancedTextPokemon.newWithSize(
+    _INTL("Z+Up/Down: Swap\nZ+Left: Delete\nZ+Right: Insert"),
+    Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport
+  )
   info.z = 2
   commands = []
   refreshlist = true
@@ -1474,7 +1487,7 @@ def pbAnimationsOrganiser
       pbWait(Graphics.frame_rate * 2 / 10)
     when 0
       cmd2 = pbMessage(_INTL("Save changes?"),
-          [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+                       [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
       if [0, 1].include?(cmd2)
         if cmd2 == 0
           # Save animations here

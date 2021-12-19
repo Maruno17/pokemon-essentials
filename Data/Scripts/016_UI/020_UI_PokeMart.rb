@@ -203,13 +203,15 @@ class PokemonMart_Scene
     @sprites["background"].setBitmap("Graphics/Pictures/martScreen")
     @sprites["icon"] = ItemIconSprite.new(36, Graphics.height - 50, nil, @viewport)
     winAdapter = buying ? BuyAdapter.new(adapter) : SellAdapter.new(adapter)
-    @sprites["itemwindow"] = Window_PokemonMart.new(stock, winAdapter,
-       Graphics.width - 316 - 16, 12, 330 + 16, Graphics.height - 126)
+    @sprites["itemwindow"] = Window_PokemonMart.new(
+      stock, winAdapter, Graphics.width - 316 - 16, 12, 330 + 16, Graphics.height - 126
+    )
     @sprites["itemwindow"].viewport = @viewport
     @sprites["itemwindow"].index = 0
     @sprites["itemwindow"].refresh
-    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("",
-       64, Graphics.height - 96 - 16, Graphics.width - 64, 128, @viewport)
+    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize(
+      "", 64, Graphics.height - 96 - 16, Graphics.width - 64, 128, @viewport
+    )
     pbPrepareWindow(@sprites["itemtextwindow"])
     @sprites["itemtextwindow"].baseColor = Color.new(248, 248, 248)
     @sprites["itemtextwindow"].shadowColor = Color.new(0, 0, 0)
@@ -554,7 +556,7 @@ class PokemonMartScreen
       end
       if GameData::Item.get(item).is_important?
         if !pbConfirm(_INTL("Certainly. You want {1}. That will be ${2}. OK?",
-           itemname, price.to_s_formatted))
+                            itemname, price.to_s_formatted))
           next
         end
         quantity = 1
@@ -562,11 +564,12 @@ class PokemonMartScreen
         maxafford = (price <= 0) ? Settings::BAG_MAX_PER_SLOT : @adapter.getMoney / price
         maxafford = Settings::BAG_MAX_PER_SLOT if maxafford > Settings::BAG_MAX_PER_SLOT
         quantity = @scene.pbChooseNumber(
-           _INTL("{1}? Certainly. How many would you like?", itemname), item, maxafford)
+          _INTL("{1}? Certainly. How many would you like?", itemname), item, maxafford
+        )
         next if quantity == 0
         price *= quantity
         if !pbConfirm(_INTL("{1}, and you want {2}. That will be ${3}. OK?",
-           itemname, quantity, price.to_s_formatted))
+                            itemname, quantity, price.to_s_formatted))
           next
         end
       end
@@ -633,7 +636,8 @@ class PokemonMartScreen
       @scene.pbShowMoney
       if qty > 1
         qty = @scene.pbChooseNumber(
-           _INTL("{1}? How many would you like to sell?", itemname), item, qty)
+          _INTL("{1}? How many would you like to sell?", itemname), item, qty
+        )
       end
       if qty == 0
         @scene.pbHideMoney
@@ -669,9 +673,8 @@ def pbPokemonMart(stock, speech = nil, cantsell = false)
   commands[cmdBuy = commands.length]  = _INTL("Buy")
   commands[cmdSell = commands.length] = _INTL("Sell") if !cantsell
   commands[cmdQuit = commands.length] = _INTL("Quit")
-  cmd = pbMessage(
-     speech ? speech : _INTL("Welcome! How may I serve you?"),
-     commands, cmdQuit + 1)
+  cmd = pbMessage(speech ? speech : _INTL("Welcome! How may I serve you?"),
+                  commands, cmdQuit + 1)
   loop do
     if cmdBuy >= 0 && cmd == cmdBuy
       scene = PokemonMart_Scene.new
@@ -686,7 +689,7 @@ def pbPokemonMart(stock, speech = nil, cantsell = false)
       break
     end
     cmd = pbMessage(_INTL("Is there anything else I can help you with?"),
-       commands, cmdQuit + 1)
+                    commands, cmdQuit + 1)
   end
   $game_temp.clear_mart_prices
 end

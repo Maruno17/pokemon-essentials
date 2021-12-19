@@ -80,7 +80,7 @@ class Battle::Move::OHKO < Battle::Move::FixedDamageMove
           @battle.pbDisplay(_INTL("But it failed to affect {1}!", target.pbThis(true)))
         else
           @battle.pbDisplay(_INTL("But it failed to affect {1} because of its {2}!",
-             target.pbThis(true), target.abilityName))
+                                  target.pbThis(true), target.abilityName))
         end
         @battle.pbHideAbilitySplash(target)
       end
@@ -149,12 +149,12 @@ class Battle::Move::DamageTargetAlly < Battle::Move
     end
     if hitAlly.length == 2
       @battle.pbDisplay(_INTL("The bursting flame hit {1} and {2}!",
-         @battle.battlers[hitAlly[0][0]].pbThis(true),
-         @battle.battlers[hitAlly[1][0]].pbThis(true)))
+                              @battle.battlers[hitAlly[0][0]].pbThis(true),
+                              @battle.battlers[hitAlly[1][0]].pbThis(true)))
     elsif hitAlly.length > 0
       hitAlly.each do |b|
         @battle.pbDisplay(_INTL("The bursting flame hit {1}!",
-           @battle.battlers[b[0]].pbThis(true)))
+                                @battle.battlers[b[0]].pbThis(true)))
       end
     end
     hitAlly.each { |b| @battle.battlers[b[0]].pbItemHPHealCheck }
@@ -824,7 +824,7 @@ class Battle::Move::StartWeakenDamageAgainstUserSideIfHail < Battle::Move
     user.pbOwnSide.effects[PBEffects::AuroraVeil] = 5
     user.pbOwnSide.effects[PBEffects::AuroraVeil] = 8 if user.hasActiveItem?(:LIGHTCLAY)
     @battle.pbDisplay(_INTL("{1} made {2} stronger against physical and special moves!",
-       @name, user.pbTeam(true)))
+                            @name, user.pbTeam(true)))
   end
 end
 

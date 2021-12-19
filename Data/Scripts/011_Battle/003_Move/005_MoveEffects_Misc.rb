@@ -386,7 +386,7 @@ class Battle::Move::AddSpikesToFoeSide < Battle::Move
   def pbEffectGeneral(user)
     user.pbOpposingSide.effects[PBEffects::Spikes] += 1
     @battle.pbDisplay(_INTL("Spikes were scattered all around {1}'s feet!",
-       user.pbOpposingTeam(true)))
+                            user.pbOpposingTeam(true)))
   end
 end
 
@@ -408,7 +408,7 @@ class Battle::Move::AddToxicSpikesToFoeSide < Battle::Move
   def pbEffectGeneral(user)
     user.pbOpposingSide.effects[PBEffects::ToxicSpikes] += 1
     @battle.pbDisplay(_INTL("Poison spikes were scattered all around {1}'s feet!",
-       user.pbOpposingTeam(true)))
+                            user.pbOpposingTeam(true)))
   end
 end
 
@@ -429,7 +429,7 @@ class Battle::Move::AddStealthRocksToFoeSide < Battle::Move
   def pbEffectGeneral(user)
     user.pbOpposingSide.effects[PBEffects::StealthRock] = true
     @battle.pbDisplay(_INTL("Pointed stones float in the air around {1}!",
-       user.pbOpposingTeam(true)))
+                            user.pbOpposingTeam(true)))
   end
 end
 
@@ -450,7 +450,7 @@ class Battle::Move::AddStickyWebToFoeSide < Battle::Move
   def pbEffectGeneral(user)
     user.pbOpposingSide.effects[PBEffects::StickyWeb] = true
     @battle.pbDisplay(_INTL("A sticky web has been laid out beneath {1}'s feet!",
-       user.pbOpposingTeam(true)))
+                            user.pbOpposingTeam(true)))
   end
 end
 
@@ -672,7 +672,7 @@ class Battle::Move::UserSwapsPositionsWithAlly < Battle::Move
     idxB = @idxAlly
     if @battle.pbSwapBattlers(idxA, idxB)
       @battle.pbDisplay(_INTL("{1} and {2} switched places!",
-         @battle.battlers[idxB].pbThis, @battle.battlers[idxA].pbThis(true)))
+                              @battle.battlers[idxB].pbThis, @battle.battlers[idxA].pbThis(true)))
       [idxA, idxB].each { |idx| @battle.pbEffectsOnBattlerEnteringPosition(@battle.battlers[idx]) }
     end
   end

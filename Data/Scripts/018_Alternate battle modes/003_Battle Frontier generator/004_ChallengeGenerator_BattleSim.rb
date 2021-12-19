@@ -342,8 +342,9 @@ def pbDecideWinnerScore(party0, party1, rating)
     for move in party0[i].moves
       next if !move
       for j in 0...party1.length
-        score += pbDecideWinnerEffectiveness(move.id,
-           types1[j], types2[j], abilities[j], [-16, -8, 0, 4, 12, 20])
+        score += pbDecideWinnerEffectiveness(
+          move.id, types1[j], types2[j], abilities[j], [-16, -8, 0, 4, 12, 20]
+        )
       end
     end
     basestatsum = baseStatTotal(party0[i].species)

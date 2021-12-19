@@ -254,7 +254,7 @@ class SlotMachineScene
       y = [170, 122, 218, 82, 82][i - 1]
       @sprites["row#{i}"] = IconSprite.new(2, y, @viewport)
       @sprites["row#{i}"].setBitmap(sprintf("Graphics/Pictures/Slot Machine/line%1d%s",
-         1 + i / 2, (i >= 4) ? ((i == 4) ? "a" : "b") : ""))
+                                            1 + i / 2, (i >= 4) ? ((i == 4) ? "a" : "b") : ""))
       @sprites["row#{i}"].visible = false
     end
     @sprites["light1"] = IconSprite.new(16, 32, @viewport)

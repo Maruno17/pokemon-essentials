@@ -231,7 +231,7 @@ class Battle
       next if !moveUser   # User is fainted
       move = pos.effects[PBEffects::FutureSightMove]
       pbDisplay(_INTL("{1} took the {2} attack!", @battlers[idxPos].pbThis,
-         GameData::Move.get(move).name))
+                      GameData::Move.get(move).name))
       # NOTE: Future Sight failing against the target here doesn't count towards
       #       Stomping Tantrum.
       userLastMoveFailed = moveUser.lastMoveFailed
@@ -332,7 +332,7 @@ class Battle
       pbCommonAnimation("LeechSeed", recipient, b)
       b.pbTakeEffectDamage(b.totalhp / 8) { |hp_lost|
         recipient.pbRecoverHPFromDrain(hp_lost, b,
-           _INTL("{1}'s health is sapped by Leech Seed!", b.pbThis))
+                                       _INTL("{1}'s health is sapped by Leech Seed!", b.pbThis))
         recipient.pbAbilitiesOnDamageTaken
       }
       recipient.pbFaint if recipient.fainted?
@@ -519,53 +519,53 @@ class Battle
     for side in 0...2
       # Reflect
       pbEORCountDownSideEffect(side, PBEffects::Reflect,
-         _INTL("{1}'s Reflect wore off!", @battlers[side].pbTeam))
+                               _INTL("{1}'s Reflect wore off!", @battlers[side].pbTeam))
       # Light Screen
       pbEORCountDownSideEffect(side, PBEffects::LightScreen,
-         _INTL("{1}'s Light Screen wore off!", @battlers[side].pbTeam))
+                               _INTL("{1}'s Light Screen wore off!", @battlers[side].pbTeam))
       # Safeguard
       pbEORCountDownSideEffect(side, PBEffects::Safeguard,
-         _INTL("{1} is no longer protected by Safeguard!", @battlers[side].pbTeam))
+                               _INTL("{1} is no longer protected by Safeguard!", @battlers[side].pbTeam))
       # Mist
       pbEORCountDownSideEffect(side, PBEffects::Mist,
-         _INTL("{1} is no longer protected by mist!", @battlers[side].pbTeam))
+                               _INTL("{1} is no longer protected by mist!", @battlers[side].pbTeam))
       # Tailwind
       pbEORCountDownSideEffect(side, PBEffects::Tailwind,
-         _INTL("{1}'s Tailwind petered out!", @battlers[side].pbTeam))
+                               _INTL("{1}'s Tailwind petered out!", @battlers[side].pbTeam))
       # Lucky Chant
       pbEORCountDownSideEffect(side, PBEffects::LuckyChant,
-         _INTL("{1}'s Lucky Chant wore off!", @battlers[side].pbTeam))
+                               _INTL("{1}'s Lucky Chant wore off!", @battlers[side].pbTeam))
       # Pledge Rainbow
       pbEORCountDownSideEffect(side, PBEffects::Rainbow,
-         _INTL("The rainbow on {1}'s side disappeared!", @battlers[side].pbTeam(true)))
+                               _INTL("The rainbow on {1}'s side disappeared!", @battlers[side].pbTeam(true)))
       # Pledge Sea of Fire
       pbEORCountDownSideEffect(side, PBEffects::SeaOfFire,
-         _INTL("The sea of fire around {1} disappeared!", @battlers[side].pbTeam(true)))
+                               _INTL("The sea of fire around {1} disappeared!", @battlers[side].pbTeam(true)))
       # Pledge Swamp
       pbEORCountDownSideEffect(side, PBEffects::Swamp,
-         _INTL("The swamp around {1} disappeared!", @battlers[side].pbTeam(true)))
+                               _INTL("The swamp around {1} disappeared!", @battlers[side].pbTeam(true)))
       # Aurora Veil
       pbEORCountDownSideEffect(side, PBEffects::AuroraVeil,
-         _INTL("{1}'s Aurora Veil wore off!", @battlers[side].pbTeam(true)))
+                               _INTL("{1}'s Aurora Veil wore off!", @battlers[side].pbTeam(true)))
     end
     # Trick Room
     pbEORCountDownFieldEffect(PBEffects::TrickRoom,
-       _INTL("The twisted dimensions returned to normal!"))
+                              _INTL("The twisted dimensions returned to normal!"))
     # Gravity
     pbEORCountDownFieldEffect(PBEffects::Gravity,
-       _INTL("Gravity returned to normal!"))
+                              _INTL("Gravity returned to normal!"))
     # Water Sport
     pbEORCountDownFieldEffect(PBEffects::WaterSportField,
-       _INTL("The effects of Water Sport have faded."))
+                              _INTL("The effects of Water Sport have faded."))
     # Mud Sport
     pbEORCountDownFieldEffect(PBEffects::MudSportField,
-       _INTL("The effects of Mud Sport have faded."))
+                              _INTL("The effects of Mud Sport have faded."))
     # Wonder Room
     pbEORCountDownFieldEffect(PBEffects::WonderRoom,
-       _INTL("Wonder Room wore off, and Defense and Sp. Def stats returned to normal!"))
+                              _INTL("Wonder Room wore off, and Defense and Sp. Def stats returned to normal!"))
     # Magic Room
     pbEORCountDownFieldEffect(PBEffects::MagicRoom,
-       _INTL("Magic Room wore off, and held items' effects returned to normal!"))
+                              _INTL("Magic Room wore off, and held items' effects returned to normal!"))
     # End of terrains
     pbEORTerrain
     priority.each do |b|

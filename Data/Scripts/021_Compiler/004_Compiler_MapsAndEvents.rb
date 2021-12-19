@@ -119,7 +119,8 @@ module Compiler
     for i in 0...route.list.length
       list.push(RPG::EventCommand.new(
         (i == 0) ? 209 : 509, indent,
-        (i == 0) ? [character, route] : [route.list[i - 1]]))
+        (i == 0) ? [character, route] : [route.list[i - 1]]
+      ))
     end
   end
 
@@ -582,8 +583,8 @@ module Compiler
     push_branch(firstpage.list, battleString)
     if battles.length > 1   # Has rematches
       push_script(firstpage.list,
-         sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
-         regspeech, safetrcombo, battles.length), 1)
+                  sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
+                          regspeech, safetrcombo, battles.length), 1)
     end
     push_self_switch(firstpage.list, "A", true, 1)
     push_branch_end(firstpage.list, 1)
@@ -640,8 +641,8 @@ module Compiler
         push_text(lastpage.list, ebattle, 1)
       end
       push_script(lastpage.list,
-         sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
-         regspeech, safetrcombo, battles.length), 1)
+                  sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
+                          regspeech, safetrcombo, battles.length), 1)
       push_exit(lastpage.list, 1)   # Exit Event Processing
       push_branch_end(lastpage.list, 1)
     end
@@ -652,8 +653,8 @@ module Compiler
     push_text(lastpage.list, ebattle)
     if battles.length > 1
       push_script(lastpage.list,
-         sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
-         regspeech, safetrcombo, battles.length))
+                  sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
+                          regspeech, safetrcombo, battles.length))
     end
     push_end(lastpage.list)
     # Add pages to the new event
@@ -946,20 +947,20 @@ module Compiler
               list.delete_at(i)
             end
             list.insert(i,
-               RPG::EventCommand.new(314, list[i].indent, [0])   # Recover All
-            )
+                        RPG::EventCommand.new(314, list[i].indent, [0]))   # Recover All
             changed = true
           when "pbFadeOutIn(99999){foriin$player.partyi.healend}"
             oldIndent = list[i].indent
             for j in i..lastScript
               list.delete_at(i)
             end
-            list.insert(i,
-               RPG::EventCommand.new(223, oldIndent, [Tone.new(-255, -255, -255), 6]),   # Fade to black
-               RPG::EventCommand.new(106, oldIndent, [6]),                            # Wait
-               RPG::EventCommand.new(314, oldIndent, [0]),                            # Recover All
-               RPG::EventCommand.new(223, oldIndent, [Tone.new(0, 0, 0), 6]),            # Fade to normal
-               RPG::EventCommand.new(106, oldIndent, [6])                             # Wait
+            list.insert(
+              i,
+              RPG::EventCommand.new(223, oldIndent, [Tone.new(-255, -255, -255), 6]),   # Fade to black
+              RPG::EventCommand.new(106, oldIndent, [6]),                               # Wait
+              RPG::EventCommand.new(314, oldIndent, [0]),                               # Recover All
+              RPG::EventCommand.new(223, oldIndent, [Tone.new(0, 0, 0), 6]),            # Fade to normal
+              RPG::EventCommand.new(106, oldIndent, [6])                                # Wait
             )
             changed = true
           end
@@ -1175,12 +1176,13 @@ module Compiler
               fullTransfer = list[i]
               indent = list[i].indent
               (list.length - 1).times { list.delete_at(0) }
-              list.insert(0,
-                 RPG::EventCommand.new(250, indent, [RPG::AudioFile.new("Exit Door", 80, 100)]),   # Play SE
-                 RPG::EventCommand.new(223, indent, [Tone.new(-255, -255, -255), 6]),              # Fade to black
-                 RPG::EventCommand.new(106, indent, [8]),                                          # Wait
-                 fullTransfer,                                                                     # Transfer event
-                 RPG::EventCommand.new(223, indent, [Tone.new(0, 0, 0), 6])                        # Fade to normal
+              list.insert(
+                0,
+                RPG::EventCommand.new(250, indent, [RPG::AudioFile.new("Exit Door", 80, 100)]),   # Play SE
+                RPG::EventCommand.new(223, indent, [Tone.new(-255, -255, -255), 6]),              # Fade to black
+                RPG::EventCommand.new(106, indent, [8]),                                          # Wait
+                fullTransfer,                                                                     # Transfer event
+                RPG::EventCommand.new(223, indent, [Tone.new(0, 0, 0), 6])                        # Fade to normal
               )
               changed = true
             end
@@ -1324,14 +1326,16 @@ module Compiler
               end
               if isempty
                 if elseIndex >= 0
-                  list.insert(elseIndex + 1,
-                     RPG::EventCommand.new(115, list[i].indent + 1, [])   # Exit Event Processing
+                  list.insert(
+                    elseIndex + 1,
+                    RPG::EventCommand.new(115, list[i].indent + 1, [])   # Exit Event Processing
                   )
                 else
-                  list.insert(i + 1,
-                     RPG::EventCommand.new(0, list[i].indent + 1, []),    # Empty Event
-                     RPG::EventCommand.new(411, list[i].indent, []),    # Else
-                     RPG::EventCommand.new(115, list[i].indent + 1, [])   # Exit Event Processing
+                  list.insert(
+                    i + 1,
+                    RPG::EventCommand.new(0, list[i].indent + 1, []),    # Empty Event
+                    RPG::EventCommand.new(411, list[i].indent, []),      # Else
+                    RPG::EventCommand.new(115, list[i].indent + 1, [])   # Exit Event Processing
                   )
                 end
                 changed = true

@@ -182,7 +182,7 @@ class BattleArenaBattle < Battle
     # Make judgment
     if points[0] == points[1]
       pbDisplay(_INTL("{1} tied the opponent\n{2} in a referee's decision!",
-         @battlers[0].name, @battlers[1].name))
+                      @battlers[0].name, @battlers[1].name))
       # NOTE: Pokémon doesn't really lose HP, but the effect is mostly the
       #       same.
       @battlers[0].hp = 0
@@ -191,12 +191,12 @@ class BattleArenaBattle < Battle
       @battlers[1].pbFaint(false)
     elsif points[0] > points[1]
       pbDisplay(_INTL("{1} defeated the opponent\n{2} in a referee's decision!",
-         @battlers[0].name, @battlers[1].name))
+                      @battlers[0].name, @battlers[1].name))
       @battlers[1].hp = 0
       @battlers[1].pbFaint(false)
     else
       pbDisplay(_INTL("{1} lost to the opponent\n{2} in a referee's decision!",
-         @battlers[0].name, @battlers[1].name))
+                      @battlers[0].name, @battlers[1].name))
       @battlers[0].hp = 0
       @battlers[0].pbFaint(false)
     end
@@ -266,7 +266,7 @@ class Battle::Scene
 
   def pbBattleArenaBattlers(battler1, battler2)
     pbMessage(_INTL("REFEREE: {1} VS {2}!\nCommence battling!\\wtnp[20]",
-       battler1.name, battler2.name)) { pbBattleArenaUpdate }
+                    battler1.name, battler2.name)) { pbBattleArenaUpdate }
   end
 
   def pbBattleArenaJudgment(battler1, battler2, ratings1, ratings2)
@@ -277,7 +277,7 @@ class Battle::Scene
       msgwindow = pbCreateMessageWindow
       dimmingvp = Viewport.new(0, 0, Graphics.width, Graphics.height - msgwindow.height)
       pbMessageDisplay(msgwindow,
-         _INTL("REFEREE: That's it! We will now go to judging to determine the winner!\\wtnp[20]")) {
+                       _INTL("REFEREE: That's it! We will now go to judging to determine the winner!\\wtnp[20]")) {
         pbBattleArenaUpdate
         dimmingvp.update
       }
@@ -305,21 +305,21 @@ class Battle::Scene
       end
       updateJudgment(infowindow, 1, battler1, battler2, ratings1, ratings2)
       pbMessageDisplay(msgwindow,
-         _INTL("REFEREE: Judging category 1, Mind!\nThe Pokémon showing the most guts!\\wtnp[40]")) {
+                       _INTL("REFEREE: Judging category 1, Mind!\nThe Pokémon showing the most guts!\\wtnp[40]")) {
         pbBattleArenaUpdate
         dimmingvp.update
         infowindow.update
       }
       updateJudgment(infowindow, 2, battler1, battler2, ratings1, ratings2)
       pbMessageDisplay(msgwindow,
-         _INTL("REFEREE: Judging category 2, Skill!\nThe Pokémon using moves the best!\\wtnp[40]")) {
+                       _INTL("REFEREE: Judging category 2, Skill!\nThe Pokémon using moves the best!\\wtnp[40]")) {
         pbBattleArenaUpdate
         dimmingvp.update
         infowindow.update
       }
       updateJudgment(infowindow, 3, battler1, battler2, ratings1, ratings2)
       pbMessageDisplay(msgwindow,
-         _INTL("REFEREE: Judging category 3, Body!\nThe Pokémon with the most vitality!\\wtnp[40]")) {
+                       _INTL("REFEREE: Judging category 3, Body!\nThe Pokémon with the most vitality!\\wtnp[40]")) {
         pbBattleArenaUpdate
         dimmingvp.update
         infowindow.update
@@ -332,23 +332,23 @@ class Battle::Scene
       end
       if total1 == total2
         pbMessageDisplay(msgwindow,
-           _INTL("REFEREE: Judgment: {1} to {2}!\nWe have a draw!\\wtnp[40]", total1, total2)) {
+                         _INTL("REFEREE: Judgment: {1} to {2}!\nWe have a draw!\\wtnp[40]", total1, total2)) {
           pbBattleArenaUpdate
           dimmingvp.update
           infowindow.update
         }
       elsif total1 > total2
         pbMessageDisplay(msgwindow,
-           _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}'s {4}!\\wtnp[40]",
-           total1, total2, @battle.pbGetOwnerName(battler1.index), battler1.name)) {
+                         _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}'s {4}!\\wtnp[40]",
+                               total1, total2, @battle.pbGetOwnerName(battler1.index), battler1.name)) {
           pbBattleArenaUpdate
           dimmingvp.update
           infowindow.update
         }
       else
         pbMessageDisplay(msgwindow,
-           _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}!\\wtnp[40]",
-           total1, total2, battler2.name)) {
+                         _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}!\\wtnp[40]",
+                               total1, total2, battler2.name)) {
           pbBattleArenaUpdate
           dimmingvp.update
           infowindow.update

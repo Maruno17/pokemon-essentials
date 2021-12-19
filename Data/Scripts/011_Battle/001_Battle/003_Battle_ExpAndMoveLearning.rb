@@ -174,7 +174,7 @@ class Battle
     if newLevel < curLevel
       debugInfo = "Levels: #{curLevel}->#{newLevel} | Exp: #{pkmn.exp}->#{expFinal} | gain: #{expGained}"
       raise _INTL("{1}'s new level is less than its\r\ncurrent level, which shouldn't happen.\r\n[Debug: {2}]",
-         pkmn.name, debugInfo)
+                  pkmn.name, debugInfo)
     end
     # Give Exp
     if pkmn.shadowPokemon?
@@ -219,7 +219,7 @@ class Battle
       @scene.pbRefreshOne(battler.index) if battler
       pbDisplayPaused(_INTL("{1} grew to Lv. {2}!", pkmn.name, curLevel))
       @scene.pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
-                                    oldSpAtk, oldSpDef, oldSpeed)
+                       oldSpAtk, oldSpDef, oldSpeed)
       # Learn all moves learned at this level
       moveList = pkmn.getMoveList
       moveList.each { |m| pbLearnMove(idxParty, m[1]) if m[0] == curLevel }
@@ -249,7 +249,7 @@ class Battle
     end
     # Pokémon already knows the maximum number of moves; try to forget one to learn the new move
     pbDisplayPaused(_INTL("{1} wants to learn {2}, but it already knows {3} moves.",
-       pkmnName, moveName, pkmn.numMoves.to_word))
+                          pkmnName, moveName, pkmn.numMoves.to_word))
     if pbDisplayConfirm(_INTL("Should {1} forget a move to learn {2}?", pkmnName, moveName))
       loop do
         forgetMove = @scene.pbForgetMove(pkmn, newMove)

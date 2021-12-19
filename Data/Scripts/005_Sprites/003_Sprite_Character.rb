@@ -117,7 +117,8 @@ class Sprite_Character < RPG::Sprite
         self.oy = @ch
       else
         @charbitmap = AnimatedBitmap.new(
-           'Graphics/Characters/' + @character_name, @character_hue)
+           'Graphics/Characters/' + @character_name, @character_hue
+        )
         RPG::Cache.retain('Graphics/Characters/', @character_name, @character_hue) if @character == $game_player
         @charbitmapAnimated = true
         @bushbitmap.dispose if @bushbitmap

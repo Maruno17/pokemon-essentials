@@ -52,7 +52,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     dims = [0, 0]
     cwidth = maxwidth < 0 ? Graphics.width : maxwidth
     getLineBrokenChunks(self.contents, text,
-       cwidth - self.borderX - SpriteWindow_Base::TEXTPADDING, dims, true)
+                        cwidth - self.borderX - SpriteWindow_Base::TEXTPADDING, dims, true)
     return dims
   end
 
@@ -99,10 +99,10 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
 
   def refresh
     self.contents = pbDoEnsureBitmap(self.contents, self.width - self.borderX,
-       self.height - self.borderY)
+                                     self.height - self.borderY)
     self.contents.clear
     drawTextEx(self.contents, 0, 4, self.contents.width, 0,
-       @text.gsub(/\r/, ""), @baseColor, @shadowColor)
+               @text.gsub(/\r/, ""), @baseColor, @shadowColor)
   end
 end
 
@@ -234,7 +234,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     dims = [0, 0]
     cwidth = (maxwidth < 0) ? Graphics.width : maxwidth
     chars = getFormattedTextForDims(self.contents, 0, 0,
-       cwidth - self.borderX - 2 - 6, -1, text, @lineHeight, true)
+                                    cwidth - self.borderX - 2 - 6, -1, text, @lineHeight, true)
     for ch in chars
       dims[0] = [dims[0], ch[1] + ch[3]].max
       dims[1] = [dims[1], ch[2] + ch[4]].max
@@ -309,8 +309,8 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       if @letterbyletter
         @fmtchars = []
         fmt = getFormattedText(self.contents, 0, 0,
-           self.width - self.borderX - SpriteWindow_Base::TEXTPADDING, -1,
-           shadowctag(@baseColor, @shadowColor) + value, 32, true)
+                               self.width - self.borderX - SpriteWindow_Base::TEXTPADDING, -1,
+                               shadowctag(@baseColor, @shadowColor) + value, 32, true)
         @oldfont = self.contents.font.clone
         for ch in fmt
           chx = ch[1] + ch[3]
@@ -337,8 +337,8 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         fmt.clear
       else
         @fmtchars = getFormattedText(self.contents, 0, 0,
-           self.width - self.borderX - SpriteWindow_Base::TEXTPADDING, -1,
-           shadowctag(@baseColor, @shadowColor) + value, 32, true)
+                                     self.width - self.borderX - SpriteWindow_Base::TEXTPADDING, -1,
+                                     shadowctag(@baseColor, @shadowColor) + value, 32, true)
         @oldfont = self.contents.font.clone
         for ch in @fmtchars
           chx = ch[1] + ch[3]
@@ -660,7 +660,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
 
   def refresh
     self.contents = pbDoEnsureBitmap(self.contents,
-       self.width - self.borderX, self.height - self.borderY)
+                                     self.width - self.borderX, self.height - self.borderY)
     pbSetSystemFont(self.contents)
     self.contents.clear
     s = sprintf("%0*d", @digits_max, @number.abs)
@@ -1226,7 +1226,7 @@ class Window_CommandPokemon < Window_DrawableCommand
     pbSetSystemFont(self.contents) if @starting
     rect = drawCursor(index, rect)
     pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height,
-       @commands[index], self.baseColor, self.shadowColor)
+                     @commands[index], self.baseColor, self.shadowColor)
   end
 end
 
@@ -1248,8 +1248,8 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
   def textWidth(bitmap, text)
     dims = [nil, 0]
     chars = getFormattedText(bitmap, 0, 0,
-       Graphics.width - self.borderX - SpriteWindow_Base::TEXTPADDING - 16,
-       -1, text, self.rowHeight, true, true)
+                             Graphics.width - self.borderX - SpriteWindow_Base::TEXTPADDING - 16,
+                             -1, text, self.rowHeight, true, true)
     for ch in chars
       dims[0] = dims[0] ? [dims[0], ch[1]].min : ch[1]
       dims[1] = [dims[1], ch[1] + ch[3]].max
@@ -1342,11 +1342,10 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     if toUnformattedText(@commands[index]).gsub(/\n/, "") == @commands[index]
       # Use faster alternative for unformatted text without line breaks
       pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height,
-         @commands[index], self.baseColor, self.shadowColor)
+                       @commands[index], self.baseColor, self.shadowColor)
     else
-      chars = getFormattedText(
-         self.contents, rect.x, rect.y + 4, rect.width, rect.height,
-         @commands[index], rect.height, true, true)
+      chars = getFormattedText(self.contents, rect.x, rect.y + 4, rect.width, rect.height,
+                               @commands[index], rect.height, true, true)
       drawFormattedChars(self.contents, chars)
     end
   end

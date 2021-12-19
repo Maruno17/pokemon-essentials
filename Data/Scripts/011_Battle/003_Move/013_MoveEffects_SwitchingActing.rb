@@ -37,7 +37,7 @@ class Battle::Move::SwitchOutUserStatusMove < Battle::Move
   def pbEndOfMoveUsageEffect(user, targets, numHits, switchedBattlers)
     return if user.wild?
     @battle.pbDisplay(_INTL("{1} went back to {2}!", user.pbThis,
-       @battle.pbGetOwnerName(user.index)))
+                            @battle.pbGetOwnerName(user.index)))
     @battle.pbPursuit(user.index)
     return if user.fainted?
     newPkmn = @battle.pbGetReplacementPokemonIndex(user.index)   # Owner chooses
@@ -71,7 +71,7 @@ class Battle::Move::SwitchOutUserDamagingMove < Battle::Move
     return if targetSwitched
     return if !@battle.pbCanChooseNonActive?(user.index)
     @battle.pbDisplay(_INTL("{1} went back to {2}!", user.pbThis,
-       @battle.pbGetOwnerName(user.index)))
+                            @battle.pbGetOwnerName(user.index)))
     @battle.pbPursuit(user.index)
     return if user.fainted?
     newPkmn = @battle.pbGetReplacementPokemonIndex(user.index)   # Owner chooses
@@ -103,7 +103,7 @@ class Battle::Move::LowerTargetAtkSpAtk1SwitchOutUser < Battle::Move::TargetMult
     return if switcher.fainted? || numHits == 0
     return if !@battle.pbCanChooseNonActive?(switcher.index)
     @battle.pbDisplay(_INTL("{1} went back to {2}!", switcher.pbThis,
-       @battle.pbGetOwnerName(switcher.index)))
+                            @battle.pbGetOwnerName(switcher.index)))
     @battle.pbPursuit(switcher.index)
     return if switcher.fainted?
     newPkmn = @battle.pbGetReplacementPokemonIndex(switcher.index)   # Owner chooses
@@ -673,7 +673,7 @@ class Battle::Move::LowerPPOfTargetLastMoveBy3 < Battle::Move
     reduction = [3, last_move.pp].min
     target.pbSetPP(last_move, last_move.pp - reduction)
     @battle.pbDisplay(_INTL("It reduced the PP of {1}'s {2} by {3}!",
-       target.pbThis(true), last_move.name, reduction))
+                            target.pbThis(true), last_move.name, reduction))
   end
 end
 
@@ -698,7 +698,7 @@ class Battle::Move::LowerPPOfTargetLastMoveBy4 < Battle::Move
     reduction = [4, last_move.pp].min
     target.pbSetPP(last_move, last_move.pp - reduction)
     @battle.pbDisplay(_INTL("It reduced the PP of {1}'s {2} by {3}!",
-       target.pbThis(true), last_move.name, reduction))
+                            target.pbThis(true), last_move.name, reduction))
   end
 end
 
@@ -733,7 +733,7 @@ class Battle::Move::DisableTargetLastMoveUsed < Battle::Move
     target.effects[PBEffects::Disable]     = 5
     target.effects[PBEffects::DisableMove] = target.lastRegularMoveUsed
     @battle.pbDisplay(_INTL("{1}'s {2} was disabled!", target.pbThis,
-       GameData::Move.get(target.lastRegularMoveUsed).name))
+                            GameData::Move.get(target.lastRegularMoveUsed).name))
     target.pbItemStatusCureCheck
   end
 end
@@ -853,7 +853,7 @@ class Battle::Move::DisableTargetStatusMoves < Battle::Move
           @battle.pbDisplay(_INTL("But it failed!"))
         else
           @battle.pbDisplay(_INTL("But it failed because of {1}'s {2}!",
-             target.pbThis(true), target.abilityName))
+                                  target.pbThis(true), target.abilityName))
         end
         @battle.pbHideAbilitySplash(target)
       end
@@ -897,8 +897,10 @@ end
 class Battle::Move::DisableTargetSoundMoves < Battle::Move
   def pbAdditionalEffect(user, target)
     return if target.fainted? || target.damageState.substitute
-    @battle.pbDisplay(_INTL("The effects of {1} prevent {2} from using certain moves!",
-       @name, target.pbThis(true))) if target.effects[PBEffects::ThroatChop] == 0
+    if target.effects[PBEffects::ThroatChop] == 0
+      @battle.pbDisplay(_INTL("The effects of {1} prevent {2} from using certain moves!",
+                              @name, target.pbThis(true)))
+    end
     target.effects[PBEffects::ThroatChop] = 3
   end
 end
