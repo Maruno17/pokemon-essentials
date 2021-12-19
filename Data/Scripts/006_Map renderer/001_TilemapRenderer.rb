@@ -221,7 +221,7 @@ class TilemapRenderer
       super
       @timer += Graphics.delta_s
       # Update the current frame for each autotile
-      @bitmaps.keys.each do |filename|
+      @bitmaps.each_key do |filename|
         next if !@bitmaps[filename] || @bitmaps[filename].disposed?
         old_frame = @current_frames[filename]
         set_current_frame(filename)
@@ -281,7 +281,7 @@ class TilemapRenderer
     @tiles_horizontal_count.times do |i|
       @tiles[i] = []
       @tiles_vertical_count.times do |j|
-        @tiles[i][j]        = Array.new(3) { TileSprite.new(@viewport) }
+        @tiles[i][j] = Array.new(3) { TileSprite.new(@viewport) }
       end
     end
     @current_map_id         = 0

@@ -100,7 +100,7 @@ class TotalLevelAdjustment < LevelAdjustment
     super(LevelAdjustment::EnemyTeam)
     @minLevel = minLevel.clamp(1, GameData::GrowthRate.max_level)
     @maxLevel = maxLevel.clamp(1, GameData::GrowthRate.max_level)
-    @totalLevel=totalLevel
+    @totalLevel = totalLevel
   end
 
   def getAdjustment(thisTeam, _otherTeam)
@@ -134,12 +134,12 @@ class CombinedLevelAdjustment < LevelAdjustment
     @their = their
   end
 
-  def getMyAdjustment(myTeam,theirTeam)
+  def getMyAdjustment(myTeam, theirTeam)
     return @my.getAdjustment(myTeam, theirTeam) if @my
     return LevelAdjustment.getNullAdjustment(myTeam, theirTeam)
   end
 
-  def getTheirAdjustment(theirTeam,myTeam)
+  def getTheirAdjustment(theirTeam, myTeam)
     return @their.getAdjustment(theirTeam, myTeam) if @their
     return LevelAdjustment.getNullAdjustment(theirTeam, myTeam)
   end

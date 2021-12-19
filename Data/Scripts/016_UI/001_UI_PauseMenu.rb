@@ -3,15 +3,15 @@
 #===============================================================================
 class PokemonPauseMenu_Scene
   def pbStartScene
-    @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+    @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites = {}
     @sprites["cmdwindow"] = Window_CommandPokemon.new([])
     @sprites["cmdwindow"].visible = false
     @sprites["cmdwindow"].viewport = @viewport
-    @sprites["infowindow"] = Window_UnformattedTextPokemon.newWithSize("",0,0,32,32,@viewport)
+    @sprites["infowindow"] = Window_UnformattedTextPokemon.newWithSize("", 0, 0, 32, 32, @viewport)
     @sprites["infowindow"].visible = false
-    @sprites["helpwindow"] = Window_UnformattedTextPokemon.newWithSize("",0,0,32,32,@viewport)
+    @sprites["helpwindow"] = Window_UnformattedTextPokemon.newWithSize("", 0, 0, 32, 32, @viewport)
     @sprites["helpwindow"].visible = false
     @infostate = false
     @helpstate = false
@@ -19,14 +19,14 @@ class PokemonPauseMenu_Scene
   end
 
   def pbShowInfo(text)
-    @sprites["infowindow"].resizeToFit(text,Graphics.height)
+    @sprites["infowindow"].resizeToFit(text, Graphics.height)
     @sprites["infowindow"].text    = text
     @sprites["infowindow"].visible = true
     @infostate = true
   end
 
   def pbShowHelp(text)
-    @sprites["helpwindow"].resizeToFit(text,Graphics.height)
+    @sprites["helpwindow"].resizeToFit(text, Graphics.height)
     @sprites["helpwindow"].text    = text
     @sprites["helpwindow"].visible = true
     pbBottomLeft(@sprites["helpwindow"])
@@ -51,7 +51,7 @@ class PokemonPauseMenu_Scene
     cmdwindow.commands = commands
     cmdwindow.index    = $game_temp.menu_last_choice
     cmdwindow.resizeToFit(commands)
-    cmdwindow.x        = Graphics.width-cmdwindow.width
+    cmdwindow.x        = Graphics.width - cmdwindow.width
     cmdwindow.y        = 0
     cmdwindow.visible  = true
     loop do
@@ -127,7 +127,7 @@ class PokemonPauseMenu
     commands[cmdTrainer = commands.length]    = $player.name
     if pbInSafari?
       if Settings::SAFARI_STEPS <= 0
-        @scene.pbShowInfo(_INTL("Balls: {1}",pbSafariState.ballcount))
+        @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
       else
         @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
            pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
@@ -140,7 +140,7 @@ class PokemonPauseMenu
            pbBugContestState.lastPokemon.level,
            pbBugContestState.ballcount))
       else
-        @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}",pbBugContestState.ballcount))
+        @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount))
       end
       commands[cmdQuit = commands.length]     = _INTL("Quit Contest")
     else
@@ -151,7 +151,7 @@ class PokemonPauseMenu
     commands[cmdEndGame = commands.length]    = _INTL("Quit Game")
     loop do
       command = @scene.pbShowCommands(commands)
-      if cmdPokedex>=0 && command==cmdPokedex
+      if cmdPokedex >= 0 && command == cmdPokedex
         pbPlayDecisionSE
         if Settings::USE_CURRENT_REGION_DEX
           pbFadeOutIn {
@@ -178,7 +178,7 @@ class PokemonPauseMenu
             }
           end
         end
-      elsif cmdPokemon>=0 && command==cmdPokemon
+      elsif cmdPokemon >= 0 && command == cmdPokemon
         pbPlayDecisionSE
         hiddenmove = nil
         pbFadeOutIn {
@@ -189,10 +189,10 @@ class PokemonPauseMenu
         }
         if hiddenmove
           $game_temp.in_menu = false
-          pbUseHiddenMove(hiddenmove[0],hiddenmove[1])
+          pbUseHiddenMove(hiddenmove[0], hiddenmove[1])
           return
         end
-      elsif cmdBag>=0 && command==cmdBag
+      elsif cmdBag >= 0 && command == cmdBag
         pbPlayDecisionSE
         item = nil
         pbFadeOutIn {
@@ -206,7 +206,7 @@ class PokemonPauseMenu
           pbUseKeyItemInField(item)
           return
         end
-      elsif cmdPokegear>=0 && command==cmdPokegear
+      elsif cmdPokegear >= 0 && command == cmdPokegear
         pbPlayDecisionSE
         pbFadeOutIn {
           scene = PokemonPokegear_Scene.new
@@ -215,7 +215,7 @@ class PokemonPauseMenu
           ($game_temp.fly_destination) ? @scene.pbEndScene : @scene.pbRefresh
         }
         return if pbFlyToNewLocation
-      elsif cmdTownMap>=0 && command==cmdTownMap
+      elsif cmdTownMap >= 0 && command == cmdTownMap
         pbFadeOutIn {
           scene = PokemonRegionMap_Scene.new(-1, false)
           screen = PokemonRegionMapScreen.new(scene)
@@ -224,7 +224,7 @@ class PokemonPauseMenu
           ($game_temp.fly_destination) ? @scene.pbEndScene : @scene.pbRefresh
         }
         return if pbFlyToNewLocation
-      elsif cmdTrainer>=0 && command==cmdTrainer
+      elsif cmdTrainer >= 0 && command == cmdTrainer
         pbPlayDecisionSE
         pbFadeOutIn {
           scene = PokemonTrainerCard_Scene.new
@@ -232,7 +232,7 @@ class PokemonPauseMenu
           screen.pbStartScreen
           @scene.pbRefresh
         }
-      elsif cmdQuit>=0 && command==cmdQuit
+      elsif cmdQuit >= 0 && command == cmdQuit
         @scene.pbHideMenu
         if pbInSafari?
           if pbConfirmMessage(_INTL("Would you like to leave the Safari Game right now?"))
@@ -252,7 +252,7 @@ class PokemonPauseMenu
             pbShowMenu
           end
         end
-      elsif cmdSave>=0 && command==cmdSave
+      elsif cmdSave >= 0 && command == cmdSave
         @scene.pbHideMenu
         scene = PokemonSave_Scene.new
         screen = PokemonSaveScreen.new(scene)
@@ -263,7 +263,7 @@ class PokemonPauseMenu
         else
           pbShowMenu
         end
-      elsif cmdOption>=0 && command==cmdOption
+      elsif cmdOption >= 0 && command == cmdOption
         pbPlayDecisionSE
         pbFadeOutIn {
           scene = PokemonOption_Scene.new
@@ -272,13 +272,13 @@ class PokemonPauseMenu
           pbUpdateSceneMap
           @scene.pbRefresh
         }
-      elsif cmdDebug>=0 && command==cmdDebug
+      elsif cmdDebug >= 0 && command == cmdDebug
         pbPlayDecisionSE
         pbFadeOutIn {
           pbDebugMenu
           @scene.pbRefresh
         }
-      elsif cmdEndGame>=0 && command==cmdEndGame
+      elsif cmdEndGame >= 0 && command == cmdEndGame
         @scene.pbHideMenu
         if pbConfirmMessage(_INTL("Are you sure you want to quit the game?"))
           scene = PokemonSave_Scene.new

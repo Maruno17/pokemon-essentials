@@ -49,7 +49,7 @@ class RuledTeam
     (@totalGames || 0) + self.games
   end
 
-  def addMatch(other,score)
+  def addMatch(other, score)
     @history.addMatch(other.ratingData, score)
   end
 
@@ -60,7 +60,7 @@ class RuledTeam
   def updateRating
     @totalGames = 0 if !@totalGames
     oldgames = self.games
-    @history.updateAndClear()
+    @history.updateAndClear
     newgames = self.games
     @totalGames += (oldgames - newgames)
   end
@@ -134,6 +134,7 @@ end
 #===============================================================================
 class PlayerRatingElo
   attr_reader :rating
+
   K_VALUE = 16
 
   def initialize
@@ -308,7 +309,7 @@ def pbDecideWinnerEffectiveness(move, otype1, otype2, ability, scores)
   data = GameData::Move.get(move)
   return 0 if data.base_damage == 0
   atype = data.type
-  typemod = Effectiveness::NORMAL_EFFECTIVE_ONE ** 2
+  typemod = Effectiveness::NORMAL_EFFECTIVE_ONE**2
   if ability != :LEVITATE || data.type != :GROUND
     mod1 = Effectiveness.calculate_one(atype, otype1)
     mod2 = (otype1 == otype2) ? Effectiveness::NORMAL_EFFECTIVE_ONE : Effectiveness.calculate_one(atype, otype2)
@@ -419,10 +420,11 @@ def pbRuledBattle(team1, team2, rule)
       p.item = items2[i]
     end
   end
-  if decision == 1   # Team 1 wins
+  case decision
+  when 1   # Team 1 wins
     team1.addMatch(team2, 1)
     team2.addMatch(team1, 0)
-  elsif decision == 2   # Team 2 wins
+  when 2   # Team 2 wins
     team1.addMatch(team2, 0)
     team2.addMatch(team1, 1)
   else

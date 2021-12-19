@@ -202,7 +202,7 @@ class BerryPlantMoistureSprite
     return if !@sprite || !@event
     new_moisture = -1
     berry_plant = @event.variable
-    if berry_plant&.is_a?(BerryPlantData) && berry_plant.planted?
+    if berry_plant.is_a?(BerryPlantData) && berry_plant.planted?
       new_moisture = berry_plant.moisture_stage
     end
     if new_moisture != @moisture_stage
@@ -309,7 +309,7 @@ Events.onSpritesetCreate += proc { |_sender, e|
 #===============================================================================
 def pbBerryPlant
   interp = pbMapInterpreter
-  this_event = interp.get_character(0)
+  this_event = interp.get_self
   berry_plant = interp.getVariable
   if !berry_plant
     berry_plant = BerryPlantData.new
@@ -375,14 +375,14 @@ def pbBerryPlant
     if berry_plant.mulch_id
       pbMessage(_INTL("{1} has been laid down.\1", GameData::Item.get(berry_plant.mulch_id).name))
     else
-      case pbMessage(_INTL("It's soft, earthy soil."), [
-         _INTL("Fertilize"), _INTL("Plant Berry"), _INTL("Exit")], -1)
+      case pbMessage(_INTL("It's soft, earthy soil."),
+           [_INTL("Fertilize"), _INTL("Plant Berry"), _INTL("Exit")], -1)
       when 0   # Fertilize
         mulch = nil
         pbFadeOutIn {
           scene = PokemonBag_Scene.new
           screen = PokemonBagScreen.new(scene, $bag)
-          mulch = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_mulch? })
+          mulch = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_mulch? })
         }
         return if !mulch
         mulch_data = GameData::Item.get(mulch)
@@ -409,7 +409,7 @@ def pbBerryPlant
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, $bag)
-      berry = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_berry? })
+      berry = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_berry? })
     }
     if berry
       $stats.berries_planted += 1
@@ -460,7 +460,7 @@ def pbPickBerry(berry, qty = 1)
   else
     pbMessage(_INTL("The soil returned to its soft and loamy state."))
   end
-  this_event = pbMapInterpreter.get_character(0)
+  this_event = pbMapInterpreter.get_self
   pbSetSelfSwitch(this_event.id, "A", true)
   return true
 end

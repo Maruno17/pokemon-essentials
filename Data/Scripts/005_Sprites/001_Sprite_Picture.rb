@@ -19,8 +19,8 @@ class Sprite_Picture
       # If file name is not empty
       if @picture_name != ""
         # Get picture graphic
-        @sprite=IconSprite.new(0,0,@viewport) if !@sprite
-        @sprite.setBitmap("Graphics/Pictures/"+@picture_name)
+        @sprite = IconSprite.new(0, 0, @viewport) if !@sprite
+        @sprite.setBitmap("Graphics/Pictures/" + @picture_name)
       end
     end
     # If file name is empty
@@ -28,7 +28,7 @@ class Sprite_Picture
       # Set sprite to invisible
       if @sprite
         @sprite.dispose if @sprite
-        @sprite=nil
+        @sprite = nil
       end
       return
     end

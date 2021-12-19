@@ -1,5 +1,6 @@
 class Spriteset_Global
   attr_reader :playersprite
+
   @@viewport2 = Viewport.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
   @@viewport2.z = 200
 

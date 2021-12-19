@@ -279,7 +279,8 @@ module PluginManager
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}', if installed, to be version #{dep_version}"
                   msg << " or higher" if !exact
                   msg << ", but the installed version was #{self.version(dep_name)}."
-                  if dep_link = self.link(dep_name)
+                  dep_link = self.link(dep_name)
+                  if dep_link
                     msg << "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
                   self.error(msg)
@@ -289,16 +290,16 @@ module PluginManager
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' to be version #{dep_version}"
                   msg << " or later" if !exact
                   msg << ", but the installed version was #{self.version(dep_name)}."
-                  if dep_link = self.link(dep_name)
+                  dep_link = self.link(dep_name)
+                  if dep_link
                     msg << "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
-                  self.error(msg)
                 else   # Don't have plugin
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' version #{dep_version} "
-                  msg << "or later" if !exact
+                  msg << "or later " if !exact
                   msg << "to be installed above it."
-                  self.error(msg)
                 end
+                self.error(msg)
               end
             end
           end
@@ -588,7 +589,7 @@ module PluginManager
         optional = false
         # clean the name to a simple string
         if dname.is_a?(Array)
-          optional = [:optional,:optional_exact].include?(dname[0])
+          optional = [:optional, :optional_exact].include?(dname[0])
           dname = dname[dname.length - 2]
         end
         # catch missing dependency
@@ -710,7 +711,7 @@ module PluginManager
         # get rid of tabs
         code.gsub!("\t", "  ")
         # construct filename
-        sname = scr[0].gsub("\\","/").split("/")[-1]
+        sname = scr[0].gsub("\\", "/").split("/")[-1]
         fname = "[#{name}] #{sname}"
         # try to run the code
         begin

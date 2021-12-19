@@ -161,7 +161,7 @@ class Game_Follower < Game_Event
 
   def location_passable?(x, y, direction)
     this_map = self.map
-    return false if !this_map || !this_map.valid?(x,y)
+    return false if !this_map || !this_map.valid?(x, y)
     return true if @through
     passed_tile_checks = false
     bit = (1 << (direction / 2 - 1)) & 0x0f

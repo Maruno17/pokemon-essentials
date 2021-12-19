@@ -555,7 +555,7 @@ end
 # With each step taken, add Exp to Pokémon in the Day Care and try to generate
 # an egg.
 #===============================================================================
-Events.onStepTaken += proc { |_sender,_e|
+Events.onStepTaken += proc { |_sender, _e|
   $PokemonGlobal.day_care.update_on_step_taken
 }
 

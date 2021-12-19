@@ -25,14 +25,14 @@ module Compiler
         map = mapdata[i]
         next if !map
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("[%d]\r\n",i))
-        rname = pbGetMessage(MessageTypes::RegionNames,i)
+        f.write(sprintf("[%d]\r\n", i))
+        rname = pbGetMessage(MessageTypes::RegionNames, i)
         f.write(sprintf("Name = %s\r\nFilename = %s\r\n",
-          (rname && rname!="") ? rname : _INTL("Unnamed"),
+          (rname && rname != "") ? rname : _INTL("Unnamed"),
           csvQuote((map[1].is_a?(Array)) ? map[1][0] : map[1])))
         for loc in map[2]
           f.write("Point = ")
-          pbWriteCsvRecord(loc,f,[nil,"uussUUUU"])
+          pbWriteCsvRecord(loc, f, [nil, "uussUUUU"])
           f.write("\r\n")
         end
       end
@@ -45,13 +45,11 @@ module Compiler
   #=============================================================================
   def normalize_connection(conn)
     ret = conn.clone
-    if conn[1] < 0 && conn[4] < 0
-    elsif conn[1] < 0 || conn[4] < 0
+    if conn[1].negative? != conn[4].negative?   # Exactly one is negative
       ret[4] = -conn[1]
       ret[1] = -conn[4]
     end
-    if conn[2] < 0 && conn[5] < 0
-    elsif conn[2] < 0 || conn[5] < 0
+    if conn[2].negative? != conn[5].negative?   # Exactly one is negative
       ret[5] = -conn[2]
       ret[2] = -conn[5]
     end
@@ -152,9 +150,9 @@ module Compiler
         f.write("IsSpecialType = true\r\n") if type.special?
         f.write("IsPseudoType = true\r\n") if type.pseudo_type
         f.write(sprintf("Flags = %s\r\n", type.flags.join(","))) if type.flags.length > 0
-        f.write("Weaknesses = #{type.weaknesses.join(",")}\r\n") if type.weaknesses.length > 0
-        f.write("Resistances = #{type.resistances.join(",")}\r\n") if type.resistances.length > 0
-        f.write("Immunities = #{type.immunities.join(",")}\r\n") if type.immunities.length > 0
+        f.write("Weaknesses = #{type.weaknesses.join(',')}\r\n") if type.weaknesses.length > 0
+        f.write("Resistances = #{type.resistances.join(',')}\r\n") if type.resistances.length > 0
+        f.write("Immunities = #{type.immunities.join(',')}\r\n") if type.immunities.length > 0
       end
     }
     process_pbs_file_message_end
@@ -204,7 +202,7 @@ module Compiler
         f.write("Target = #{move.target}\r\n")
         f.write("Priority = #{move.priority}\r\n") if move.priority != 0
         f.write("FunctionCode = #{move.function_code}\r\n")
-        f.write("Flags = #{move.flags.join(",")}\r\n") if move.flags.length > 0
+        f.write("Flags = #{move.flags.join(',')}\r\n") if move.flags.length > 0
         f.write("EffectChance = #{move.effect_chance}\r\n") if move.effect_chance > 0
         f.write("Description = #{move.real_description}\r\n")
       end
@@ -708,12 +706,12 @@ module Compiler
       for tr in trainerlists
         echo "."
         f.write("\#-------------------------------\r\n")
-        f.write(((tr[5]) ? "[DefaultTrainerList]" : "[TrainerList]")+"\r\n")
-        f.write("Trainers = "+tr[3]+"\r\n")
-        f.write("Pokemon = "+tr[4]+"\r\n")
-        f.write("Challenges = "+tr[2].join(",")+"\r\n") if !tr[5]
-        write_battle_tower_trainers(tr[0],"PBS/"+tr[3])
-        write_battle_tower_pokemon(tr[1],"PBS/"+tr[4])
+        f.write(((tr[5]) ? "[DefaultTrainerList]" : "[TrainerList]") + "\r\n")
+        f.write("Trainers = " + tr[3] + "\r\n")
+        f.write("Pokemon = " + tr[4] + "\r\n")
+        f.write("Challenges = " + tr[2].join(",") + "\r\n") if !tr[5]
+        write_battle_tower_trainers(tr[0], "PBS/" + tr[3])
+        write_battle_tower_pokemon(tr[1], "PBS/" + tr[4])
       end
     }
     process_pbs_file_message_end
@@ -732,23 +730,24 @@ module Compiler
       "EndSpeechLose" => [4, "s"],
       "PokemonNos"    => [5, "*u"]
     }
-    File.open(filename,"wb") { |f|
+    File.open(filename, "wb") { |f|
       add_PBS_header_to_file(f)
       for i in 0...bttrainers.length
         next if !bttrainers[i]
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("[%03d]\r\n",i))
+        f.write(sprintf("[%03d]\r\n", i))
         for key in btTrainersRequiredTypes.keys
           schema = btTrainersRequiredTypes[key]
           record = bttrainers[i][schema[0]]
-          next if record==nil
-          f.write(sprintf("%s = ",key))
-          if key=="Type"
+          next if record == nil
+          f.write(sprintf("%s = ", key))
+          case key
+          when "Type"
             f.write(record.to_s)
-          elsif key=="PokemonNos"
+          when "PokemonNos"
             f.write(record.join(","))   # pbWriteCsvRecord somehow won't work here
           else
-            pbWriteCsvRecord(record,f,schema)
+            pbWriteCsvRecord(record, f, schema)
           end
           f.write(sprintf("\r\n"))
         end
@@ -760,7 +759,7 @@ module Compiler
   #=============================================================================
   # Save Battle Tower Pokémon data to PBS file
   #=============================================================================
-  def write_battle_tower_pokemon(btpokemon,filename)
+  def write_battle_tower_pokemon(btpokemon, filename)
     return if !btpokemon || !filename
     species = {}
     moves   = {}
@@ -774,7 +773,7 @@ module Compiler
       :SPECIAL_DEFENSE => "SD",
       :SPEED           => "SPD"
     }
-    File.open(filename,"wb") { |f|
+    File.open(filename, "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       for i in 0...btpokemon.length

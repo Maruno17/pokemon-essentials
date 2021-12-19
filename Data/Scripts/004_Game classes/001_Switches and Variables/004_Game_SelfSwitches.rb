@@ -16,7 +16,7 @@ class Game_SelfSwitches
   #     key : key
   #-----------------------------------------------------------------------------
   def [](key)
-    return (@data[key]==true) ? true : false
+    return (@data[key] == true) ? true : false
   end
   #-----------------------------------------------------------------------------
   # * Set Self Switch

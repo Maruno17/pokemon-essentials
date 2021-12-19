@@ -3,11 +3,11 @@
 # HTTP utility functions
 #
 #############################
-def pbPostData(url, postdata, filename=nil, depth=0)
+def pbPostData(url, postdata, filename = nil, depth = 0)
   if url[/^http:\/\/([^\/]+)(.*)$/]
     host = $1
-    path = $2
-    path = "/" if path.length==0
+#    path = $2
+#    path = "/" if path.length == 0
     userAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.14) Gecko/2009082707 Firefox/3.0.14"
     body = postdata.map { |key, value|
       keyString   = key.to_s
@@ -31,7 +31,7 @@ def pbPostData(url, postdata, filename=nil, depth=0)
     return ret if !ret.is_a?(Hash)
     return "" if ret[:status] != 200
     return ret[:body] if !filename
-    File.open(filename, "wb"){|f|f.write(ret[:body])}
+    File.open(filename, "wb") { |f| f.write(ret[:body]) }
     return ""
   end
   return ""
@@ -63,7 +63,7 @@ end
 
 def pbDownloadToFile(url, file)
   begin
-    pbDownloadData(url,file)
+    pbDownloadData(url, file)
   rescue
   end
 end
@@ -79,7 +79,7 @@ end
 
 def pbPostToFile(url, postdata, file)
   begin
-    pbPostData(url, postdata,file)
+    pbPostData(url, postdata, file)
   rescue
   end
 end

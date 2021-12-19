@@ -41,7 +41,7 @@ module Graphics
     @@transition = nil if @@transition && @@transition.disposed?
   end
 
-  def self.judge_special_transition(duration,filename)
+  def self.judge_special_transition(duration, filename)
     return false if @_interrupt_transition
     ret = true
     if @@transition && !@@transition.disposed?
@@ -282,7 +282,7 @@ module Transitions
             move_x = (dx == 0) ? rand_sign * vague : dx * SPEED * 1.5
             move_y = (dy == 0) ? rand_sign * vague : dy * SPEED * 1.5
           else
-            radius = Math.sqrt(dx ** 2 + dy ** 2)
+            radius = Math.sqrt(dx**2 + dy**2)
             move_x = dx * vague / radius
             move_y = dy * vague / radius
           end
@@ -544,11 +544,10 @@ module Transitions
     end
 
     def set_up_timings
-      time_between_zooms = (@duration - TIME_TO_ZOOM) * 2 / (TOTAL_SPRITES - 1)
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
           idx_from_start = j * NUM_SPRITES_X + i   # Top left -> bottom right
-          case @parameters[0] || 0   # Origin
+          case @parameters[0]   # Origin
           when 1   # Top right -> bottom left
             idx_from_start = j * NUM_SPRITES_X + NUM_SPRITES_X - i - 1
           when 2   # Bottom left -> top right
@@ -1182,7 +1181,7 @@ module Transitions
       for i in 0...4
         b = [@black_1_bitmap, @black_2_bitmap, @black_3_bitmap, @black_4_bitmap][i]
         @sprites[i] = new_sprite((i == 1) ? 0 : Graphics.width / 2, (i == 2) ? 0 : Graphics.height / 2, b,
-                                 (i % 2 == 0) ? b.width / 2 : 0, (i % 2 == 0) ? 0 : b.height / 2)
+                                 (i.even?) ? b.width / 2 : 0, (i.even?) ? 0 : b.height / 2)
         @sprites[i].zoom_x = 0.0 if i.even?
         @sprites[i].zoom_y = 0.0 if i.odd?
         @sprites[i].visible = false

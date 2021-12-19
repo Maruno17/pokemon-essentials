@@ -13,7 +13,7 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   party = []
   for i in 0...Settings::MAX_PARTY_SIZE
     if i == 0
-      pbMessage(_INTL("Please enter the first Pokémon.",i))
+      pbMessage(_INTL("Please enter the first Pokémon.", i))
     else
       break if !pbConfirmMessage(_INTL("Add another Pokémon?"))
     end
@@ -110,7 +110,7 @@ def pbMissingTrainer(tr_type, tr_name, tr_version)
   if !$DEBUG
     raise _INTL("Can't find trainer ({1}, {2}, ID {3})", tr_type.to_s, tr_name, tr_version)
   end
-	message = ""
+  message = ""
   if tr_version != 0
     message = _INTL("Add new trainer ({1}, {2}, ID {3})?", tr_type.to_s, tr_name, tr_version)
   else

@@ -1,9 +1,9 @@
 #####################################
 # Needed because RGSS doesn't call at_exit procs on exit
 # Exit is not called when game is reset (using F12)
-$AtExitProcs=[] if !$AtExitProcs
+$AtExitProcs = [] if !$AtExitProcs
 
-def exit(code=0)
+def exit(code = 0)
   for p in $AtExitProcs
     p.call
   end
@@ -79,7 +79,7 @@ def oggfiletime(file)
   end
   ret = 0.0
   for i in 0...pcmlengths.length
-    ret += pcmlengths[i].to_f / rates[i].to_f
+    ret += pcmlengths[i].to_f / rates[i]
   end
   return ret * 256.0
 end
@@ -110,7 +110,8 @@ def getPlayTime2(filename)
   File.open(filename, "rb") { |file|
     file.pos = 0
     fdw = fgetdw.call(file)
-    if fdw == 0x46464952   # "RIFF"
+    case fdw
+    when 0x46464952   # "RIFF"
       filesize = fgetdw.call(file)
       wave = fgetdw.call(file)
       return -1 if wave != 0x45564157   # "WAVE"
@@ -127,16 +128,16 @@ def getPlayTime2(filename)
       data = fgetdw.call(file)
       return -1 if data != 0x61746164   # "data"
       datasize = fgetdw.call(file)
-      time = (datasize*1.0)/bytessec
+      time = (datasize * 1.0) / bytessec
       return time
-    elsif fdw == 0x5367674F   # "OggS"
+    when 0x5367674F   # "OggS"
       file.pos = 0
       time = oggfiletime(file)
       return time
     end
     file.pos = 0
     # Find the length of an MP3 file
-    while true
+    loop do
       rstr = ""
       ateof = false
       while !file.eof?
@@ -152,7 +153,7 @@ def getPlayTime2(filename)
       break if ateof || !rstr || rstr.length != 3
       if rstr[0] == 0xFB
         t = rstr[1] >> 4
-        next if t == 0 || t == 15
+        next if [0, 15].include?(t)
         freqs = [44100, 22050, 11025, 48000]
         bitrates = [32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320]
         bitrate = bitrates[t]

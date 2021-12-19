@@ -64,7 +64,6 @@ module FilenameUpdater
       end
       next if !changed
       mapData.saveMap(id)
-      any_changed = true
       ret.push(_INTL("Map {1}: '{2}' was modified and saved.", id, mapData.mapinfos[id].name))
     end
     Console.echo_done(true)
@@ -74,7 +73,6 @@ module FilenameUpdater
   def rename_files
     Console.echo_h1 "Updating file names and locations"
     change_record = []
-    changed = false
     # Add underscore to berry plant charsets
     if rename_berry_plant_charsets
       Console.echo_warn _INTL("Berry plant charset files were renamed.")

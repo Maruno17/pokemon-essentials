@@ -154,10 +154,9 @@ BattleDebugMenuCommands.register("weather", {
           msg += _INTL("Duration : Infinite")
         end
       end
-      cmd = pbMessage("\\ts[]" + msg, [
-         _INTL("Change type"),
-         _INTL("Change duration"),
-         _INTL("Clear weather")], -1, nil, cmd)
+      cmd = pbMessage("\\ts[]" + msg, [_INTL("Change type"),
+                                       _INTL("Change duration"),
+                                       _INTL("Clear weather")], -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Change type
@@ -216,10 +215,9 @@ BattleDebugMenuCommands.register("terrain", {
           msg += _INTL("Duration : Infinite")
         end
       end
-      cmd = pbMessage("\\ts[]" + msg, [
-         _INTL("Change type"),
-         _INTL("Change duration"),
-         _INTL("Clear terrain")], -1, nil, cmd)
+      cmd = pbMessage("\\ts[]" + msg, [_INTL("Change type"),
+                                       _INTL("Change duration"),
+                                       _INTL("Clear terrain")], -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Change type
@@ -270,9 +268,8 @@ BattleDebugMenuCommands.register("environment", {
       msg = _INTL("Environment: {1}", environment_data.name || _INTL("Unknown"))
       msg += "\r\n"
       msg += _INTL("Time of day: {1}", [_INTL("Day"), _INTL("Evening"), _INTL("Night")][battle.time])
-      cmd = pbMessage("\\ts[]" + msg, [
-         _INTL("Change environment"),
-         _INTL("Change time of day")], -1, nil, cmd)
+      cmd = pbMessage("\\ts[]" + msg, [_INTL("Change environment"),
+                                       _INTL("Change time of day")], -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Change environment
@@ -379,7 +376,6 @@ BattleDebugMenuCommands.register("speed_order", {
   "description" => _INTL("Show all battlers in order from fastest to slowest."),
   "always_show" => true,
   "effect"      => proc { |battle|
-    battlers = []
     battlers = battle.allBattlers.map { |b| [b, b.pbSpeed] }
     battlers.sort! { |a, b| b[1] <=> a[1] }
     commands = []

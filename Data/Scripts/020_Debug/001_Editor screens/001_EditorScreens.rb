@@ -356,7 +356,8 @@ def pbTrainerTypeEditor
   ]
   pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
     if tr_type
-      if button == Input::ACTION
+      case button
+      when Input::ACTION
         if tr_type.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this trainer type?")
             GameData::TrainerType::DATA.delete(tr_type)
@@ -365,7 +366,7 @@ def pbTrainerTypeEditor
             pbMessage(_INTL("The Trainer type was deleted."))
           end
         end
-      elsif button == Input::USE
+      when Input::USE
         if tr_type.is_a?(Symbol)
           t_data = GameData::TrainerType.get(tr_type)
           data = [
@@ -435,8 +436,8 @@ def pbTrainerTypeEditorNew(default_name)
     return nil
   end
   # Choose a gender
-  gender = pbMessage(_INTL("Is the Trainer male, female or unknown?"), [
-     _INTL("Male"), _INTL("Female"), _INTL("Unknown")], 0)
+  gender = pbMessage(_INTL("Is the Trainer male, female or unknown?"),
+                     [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], 0)
   # Choose a base money value
   params = ChooseNumberParams.new
   params.setRange(0, 255)
@@ -496,7 +497,8 @@ def pbTrainerBattleEditor
   modified = false
   pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) { |button, trainer_id|
     if trainer_id
-      if button == Input::ACTION
+      case button
+      when Input::ACTION
         if trainer_id.is_a?(Array)
           if pbConfirmMessageSerious("Delete this trainer battle?")
             tr_data = GameData::Trainer::DATA[trainer_id]
@@ -505,7 +507,7 @@ def pbTrainerBattleEditor
             pbMessage(_INTL("The Trainer battle was deleted."))
           end
         end
-      elsif button == Input::USE
+      when Input::USE
         if trainer_id.is_a?(Array)   # Edit existing trainer
           tr_data = GameData::Trainer::DATA[trainer_id]
           old_type = tr_data.trainer_type
@@ -564,7 +566,8 @@ def pbTrainerBattleEditor
           ret = pbMessage(_INTL("First, define the new trainer's type."), [
              _INTL("Use existing type"),
              _INTL("Create new type"),
-             _INTL("Cancel")], 3)
+             _INTL("Cancel")
+          ], 3)
           case ret
           when 0
             tr_type = pbListScreen(_INTL("TRAINER TYPE"), TrainerTypeLister.new(0, false))
@@ -619,8 +622,8 @@ end
 # Trainer Pokémon editor
 #===============================================================================
 module TrainerPokemonProperty
-  def self.set(settingname,initsetting)
-    initsetting = {:species => nil, :level => 10} if !initsetting
+  def self.set(settingname, initsetting)
+    initsetting = { :species => nil, :level => 10 } if !initsetting
     oldsetting = [
       initsetting[:species],
       initsetting[:level],
@@ -657,7 +660,7 @@ module TrainerPokemonProperty
     ]
     Pokemon::MAX_MOVES.times do |i|
       pkmn_properties.push([_INTL("Move {1}", i + 1),
-         MovePropertyForSpecies.new(oldsetting), _INTL("A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.")])
+                            MovePropertyForSpecies.new(oldsetting), _INTL("A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.")])
     end
     pkmn_properties.concat([
        [_INTL("Ability"),       AbilityProperty,                         _INTL("Ability of the Pokémon. Overrides the ability index.")],
@@ -687,7 +690,7 @@ module TrainerPokemonProperty
       :iv              => oldsetting[12 + Pokemon::MAX_MOVES],
       :ev              => oldsetting[13 + Pokemon::MAX_MOVES],
       :happiness       => oldsetting[14 + Pokemon::MAX_MOVES],
-      :poke_ball       => oldsetting[15 + Pokemon::MAX_MOVES],
+      :poke_ball       => oldsetting[15 + Pokemon::MAX_MOVES]
     }
     moves = []
     Pokemon::MAX_MOVES.times do |i|
@@ -766,7 +769,7 @@ def pbEditPlayerMetadata(player_id = 1)
       player_id = i
       break
     end
-    metadata = GameData::PlayerMetadata.new({:id => player_id})
+    metadata = GameData::PlayerMetadata.new({ :id => player_id })
   elsif !GameData::PlayerMetadata.exists?(player_id)
     pbMessage(_INTL("Metadata for player character {1} was not found.", player_id))
     return
@@ -788,7 +791,7 @@ def pbEditPlayerMetadata(player_id = 1)
       :surf_charset      => data[4],
       :dive_charset      => data[5],
       :fish_charset      => data[6],
-      :surf_fish_charset => data[7],
+      :surf_fish_charset => data[7]
     }
     # Add player metadata's data to records
     GameData::PlayerMetadata.register(metadata_hash)
@@ -815,7 +818,7 @@ def pbEditMapMetadata(map_id)
   data = []
   map_name = mapinfos[map_id].name
   metadata = GameData::MapMetadata.try_get(map_id)
-  metadata = GameData::MapMetadata.new({:id => map_id}) if !metadata
+  metadata = GameData::MapMetadata.new({ :id => map_id }) if !metadata
   properties = GameData::MapMetadata.editor_properties
   properties.each do |property|
     data.push(metadata.property_from_string(property[0]))
@@ -880,7 +883,8 @@ def pbItemEditor
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
     if item
-      if button == Input::ACTION
+      case button
+      when Input::ACTION
         if item.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this item?")
             GameData::Item::DATA.delete(item)
@@ -889,7 +893,7 @@ def pbItemEditor
             pbMessage(_INTL("The item was deleted."))
           end
         end
-      elsif button == Input::USE
+      when Input::USE
         if item.is_a?(Symbol)
           itm = GameData::Item.get(item)
           data = [
@@ -1038,7 +1042,8 @@ def pbPokemonEditor
   ]
   pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
     if species
-      if button == Input::ACTION
+      case button
+      when Input::ACTION
         if species.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this species?")
             GameData::Species::DATA.delete(species)
@@ -1047,7 +1052,7 @@ def pbPokemonEditor
             pbMessage(_INTL("The species was deleted."))
           end
         end
-      elsif button == Input::USE
+      when Input::USE
         if species.is_a?(Symbol)
           spec = GameData::Species.get(species)
           moves = []
@@ -1198,7 +1203,7 @@ def pbRegionalDexEditor(dex)
         dex[cmd[1] + 1], dex[cmd[1]] = dex[cmd[1]], dex[cmd[1] + 1]
         refresh_list = true
       end
-     when 2   # Swap entry down
+    when 2   # Swap entry down
       if cmd[1] > 0
         dex[cmd[1] - 1], dex[cmd[1]] = dex[cmd[1]], dex[cmd[1] - 1]
         refresh_list = true
@@ -1247,7 +1252,7 @@ def pbRegionalDexEditor(dex)
         end
       else   # Cancel
         case pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
+           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
         when 0   # Save all changes to Dex
           dex.slice!(-1) while !dex[-1]
           ret = dex
@@ -1399,7 +1404,7 @@ def pbEvoFamiliesToStrings
   for fam in 0...families.length
     string = ""
     for p in 0...families[fam].length
-      if p>=3
+      if p >= 3
         string += " + #{families[fam].length - 3} more"
         break
       end
@@ -1422,7 +1427,7 @@ def pbAnimationsOrganiser
     pbMessage(_INTL("No animations exist."))
     return
   end
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   cmdwin = pbListWindow([])
   cmdwin.viewport = viewport
@@ -1436,43 +1441,44 @@ def pbAnimationsOrganiser
   commands = []
   refreshlist = true
   oldsel = -1
-  cmd = [0,0]
+  cmd = [0, 0]
   loop do
     if refreshlist
       commands = []
       for i in 0...list.length
-        commands.push(sprintf("%d: %s",i,(list[i]) ? list[i].name : "???"))
+        commands.push(sprintf("%d: %s", i, (list[i]) ? list[i].name : "???"))
       end
     end
     refreshlist = false
     oldsel = -1
-    cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
-    if cmd[0]==1   # Swap animation up
-      if cmd[1]>=0 && cmd[1]<commands.length-1
-        list[cmd[1]+1],list[cmd[1]] = list[cmd[1]],list[cmd[1]+1]
+    cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
+    case cmd[0]
+    when 1   # Swap animation up
+      if cmd[1] >= 0 && cmd[1] < commands.length - 1
+        list[cmd[1] + 1], list[cmd[1]] = list[cmd[1]], list[cmd[1] + 1]
         refreshlist = true
       end
-    elsif cmd[0]==2   # Swap animation down
-      if cmd[1]>0
-        list[cmd[1]-1],list[cmd[1]] = list[cmd[1]],list[cmd[1]-1]
+    when 2   # Swap animation down
+      if cmd[1] > 0
+        list[cmd[1] - 1], list[cmd[1]] = list[cmd[1]], list[cmd[1] - 1]
         refreshlist = true
       end
-    elsif cmd[0]==3   # Delete spot
+    when 3   # Delete spot
       list.delete_at(cmd[1])
-      cmd[1] = [cmd[1],list.length-1].min
+      cmd[1] = [cmd[1], list.length - 1].min
       refreshlist = true
-      pbWait(Graphics.frame_rate*2/10)
-    elsif cmd[0]==4   # Insert spot
-      list.insert(cmd[1],PBAnimation.new)
+      pbWait(Graphics.frame_rate * 2 / 10)
+    when 4   # Insert spot
+      list.insert(cmd[1], PBAnimation.new)
       refreshlist = true
-      pbWait(Graphics.frame_rate*2/10)
-    elsif cmd[0]==0
+      pbWait(Graphics.frame_rate * 2 / 10)
+    when 0
       cmd2 = pbMessage(_INTL("Save changes?"),
-          [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-      if cmd2==0 || cmd2==1
-        if cmd2==0
+          [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+      if [0, 1].include?(cmd2)
+        if cmd2 == 0
           # Save animations here
-          save_data(list,"Data/PkmnAnimations.rxdata")
+          save_data(list, "Data/PkmnAnimations.rxdata")
           $game_temp.battle_animations_data = nil
           pbMessage(_INTL("Data saved."))
         end

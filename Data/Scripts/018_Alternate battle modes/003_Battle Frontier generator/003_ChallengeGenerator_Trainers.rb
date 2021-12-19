@@ -36,7 +36,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
       randomName = getRandomNameEx(gender, nil, 0, 12)
       # Add the trainer to bttrainers
       tr = [trainerid, randomName, _INTL("Here I come!"), _INTL("Yes, I won!"),
-         _INTL("Man, I lost!"), []]
+            _INTL("Man, I lost!"), []]
       bttrainers.push(tr)
     end
     # Sort all the randomly chosen trainers by their base money (smallest first)
@@ -160,7 +160,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
         # until a valid team can be formed from what's in numbers
         if numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon)
           while numbers.length < pokemonlist.length &&
-             (numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon))
+                (numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon))
             index = rand(pokemonlist.length)
             if !numbers.include?(index)
               numbers.push(index)
@@ -202,7 +202,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   yield(nil) if block_given?
   if trIndex < 0
     info = [newbttrainers, pbpokemonlist, [trfile],
-          trfile + "tr.txt", trfile + "pm.txt", !hasDefault]
+            trfile + "tr.txt", trfile + "pm.txt", !hasDefault]
     trlists.push(info)
   end
   yield(nil) if block_given?

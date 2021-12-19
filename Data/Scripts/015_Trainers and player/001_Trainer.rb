@@ -34,7 +34,7 @@ class Trainer
   # Random ID other than this Trainer's ID
   def make_foreign_ID
     loop do
-      ret = rand(2 ** 16) | rand(2 ** 16) << 16
+      ret = rand(2**16) | rand(2**16) << 16
       return ret if ret != @id
     end
     return 0
@@ -168,7 +168,7 @@ class Trainer
   def initialize(name, trainer_type)
     @trainer_type = GameData::TrainerType.get(trainer_type).id
     @name         = name
-    @id           = rand(2 ** 16) | rand(2 ** 16) << 16
+    @id           = rand(2**16) | rand(2**16) << 16
     @language     = pbGetLanguage
     @party        = []
   end

@@ -60,7 +60,6 @@ def pbGetLegalMoves2(species, maxlevel)
   species_data.tutor_moves.each { |m| addMove(moves, m, 0) if $tmMoves.include?(m) }
   babyspecies = babySpecies(species)
   GameData::Species.get(babyspecies).egg_moves.each { |m| addMove(moves, m, 2) }
-  #
   movedatas = []
   for move in moves
     movedatas.push([move, GameData::Move.get(move)])
@@ -82,7 +81,7 @@ def pbGetLegalMoves2(species, maxlevel)
       # If we have two status moves that have the same function code, delete the
       # one with lower accuracy (Supersonic vs. Confuse Ray, etc.)
       elsif md.function_code == move2[1].function_code && md.base_damage == 0 &&
-         move2[1].base_damage == 0 && md.accuracy > move2[1].accuracy
+            move2[1].base_damage == 0 && md.accuracy > move2[1].accuracy
         deleteAll.call(moves, move2[0])
       # Delete poison-causing moves if we have a move that causes toxic
       elsif md.function_code == "BadPoisonTarget" && move2[1].function_code == "PoisonTarget"
@@ -92,10 +91,10 @@ def pbGetLegalMoves2(species, maxlevel)
       # does more damage than the other move OR does the same damage but is more
       # accurate, delete the other move (Surf, Flamethrower, Thunderbolt, etc.)
       elsif md.function_code == move2[1].function_code && md.base_damage != 0 &&
-         md.type == move2[1].type &&
-         (md.total_pp == 15 || md.total_pp == 10 || md.total_pp == move2[1].total_pp) &&
-         (md.base_damage > move2[1].base_damage ||
-         (md.base_damage == move2[1].base_damage && md.accuracy > move2[1].accuracy))
+            md.type == move2[1].type &&
+            (md.total_pp == 15 || md.total_pp == 10 || md.total_pp == move2[1].total_pp) &&
+            (md.base_damage > move2[1].base_damage ||
+            (md.base_damage == move2[1].base_damage && md.accuracy > move2[1].accuracy))
         deleteAll.call(moves, move2[0])
       end
     end
@@ -160,7 +159,7 @@ def pbRandomPokemonFromRule(rules, trainer)
       r = rand(20)
       bst = baseStatTotal(species)
       next if level < minimumLevel(species)
-      if iteration % 2 == 0
+      if iteration.even?
         next if r < 16 && bst < 400
         next if r < 13 && bst < 500
       else
@@ -340,7 +339,7 @@ def pbRandomPokemonFromRule(rules, trainer)
         break
       end
     end
-    if item == :LIGHTCLAY && !moves.any? { |m| m == :LIGHTSCREEN || m == :REFLECT }
+    if item == :LIGHTCLAY && !moves.any? { |m| [:LIGHTSCREEN, :REFLECT].include?(m) }
       item = :LEFTOVERS
     end
     if item == :BLACKSLUDGE

@@ -142,7 +142,7 @@ class Interpreter
       return result
     rescue Exception
       e = $!
-      raise if e.is_a?(SystemExit) || "#{e.class}" == "Reset"
+      raise if e.is_a?(SystemExit) || e.class.to_s == "Reset"
       event = get_self
       # Gather text for error message
       message = pbGetExceptionMessage(e)
@@ -212,13 +212,13 @@ class Interpreter
   # * Freezes all events on the map (for use at the beginning of common events)
   #-----------------------------------------------------------------------------
   def pbGlobalLock
-    $game_map.events.values.each { |event| event.minilock }
+    $game_map.events.each_value { |event| event.minilock }
   end
   #-----------------------------------------------------------------------------
   # * Unfreezes all events on the map (for use at the end of common events)
   #-----------------------------------------------------------------------------
   def pbGlobalUnlock
-    $game_map.events.values.each { |event| event.unlock }
+    $game_map.events.each_value { |event| event.unlock }
   end
   #-----------------------------------------------------------------------------
   # * Gets the next index in the interpreter, ignoring certain commands between messages
@@ -295,7 +295,7 @@ class Interpreter
   #-----------------------------------------------------------------------------
   # Helper function that shows a picture in a script.
   def pbShowPicture(number, name, origin, x, y, zoomX = 100, zoomY = 100, opacity = 255, blendType = 0)
-    number = number + ($game_temp.in_battle ? 50 : 0)
+    number += ($game_temp.in_battle ? 50 : 0)
     $game_screen.pictures[number].show(name, origin, x, y, zoomX, zoomY, opacity, blendType)
   end
 
