@@ -521,10 +521,10 @@ class Interpreter
         next if value == 1
         $game_variables[i] *= value
       when 4   # divide
-        next if value == 1 || value == 0
+        next if [0, 1].include?(value)
         $game_variables[i] /= value
       when 5   # remainder
-        next if value == 1 || value == 0
+        next if [0, 1].include?(value)
         $game_variables[i] %= value
       end
       $game_variables[i] = 99999999 if $game_variables[i] > 99999999
@@ -631,13 +631,12 @@ class Interpreter
       $game_temp.player_new_map_id    = @parameters[1]
       $game_temp.player_new_x         = @parameters[2]
       $game_temp.player_new_y         = @parameters[3]
-      $game_temp.player_new_direction = @parameters[4]
     else   # Appoint with variables
       $game_temp.player_new_map_id    = $game_variables[@parameters[1]]
       $game_temp.player_new_x         = $game_variables[@parameters[2]]
       $game_temp.player_new_y         = $game_variables[@parameters[3]]
-      $game_temp.player_new_direction = @parameters[4]
     end
+    $game_temp.player_new_direction = @parameters[4]
     @index += 1
     # If transition happens with a fade, do the fade
     if @parameters[5] == 0
@@ -655,9 +654,10 @@ class Interpreter
     character = get_character(@parameters[0])
     return true if character.nil?
     # Move the character
-    if @parameters[1] == 0   # Direct appointment
+    case @parameters[1]
+    when 0   # Direct appointment
       character.moveto(@parameters[2], @parameters[3])
-    elsif @parameters[1] == 1   # Appoint with variables
+    when 1   # Appoint with variables
       character.moveto($game_variables[@parameters[2]], $game_variables[@parameters[3]])
     else   # Exchange with another event
       character2 = get_character(@parameters[2])
@@ -816,7 +816,7 @@ class Interpreter
       y = $game_variables[@parameters[5]]
     end
     $game_screen.pictures[number].show(@parameters[1], @parameters[2],
-       x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
+                                       x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
     return true
   end
   #-----------------------------------------------------------------------------
@@ -832,7 +832,7 @@ class Interpreter
       y = $game_variables[@parameters[5]]
     end
     $game_screen.pictures[number].move(@parameters[1] * Graphics.frame_rate / 20,
-       @parameters[2], x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
+                                       @parameters[2], x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
     return true
   end
   #-----------------------------------------------------------------------------
@@ -849,7 +849,7 @@ class Interpreter
   def command_234
     number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
     $game_screen.pictures[number].start_tone_change(@parameters[1],
-       @parameters[2] * Graphics.frame_rate / 20)
+                                                    @parameters[2] * Graphics.frame_rate / 20)
     return true
   end
   #-----------------------------------------------------------------------------
@@ -952,8 +952,9 @@ class Interpreter
         sscene = PokemonEntryScene.new
         sscreen = PokemonEntry.new(sscene)
         $game_actors[@parameters[0]].name = sscreen.pbStartScreen(
-           _INTL("Enter {1}'s name.", $game_actors[@parameters[0]].name),
-           1, @parameters[1], $game_actors[@parameters[0]].name)
+          _INTL("Enter {1}'s name.", $game_actors[@parameters[0]].name),
+          1, @parameters[1], $game_actors[@parameters[0]].name
+        )
       }
     end
     return true
@@ -1034,7 +1035,7 @@ class Interpreter
     # Look for more script commands or a continuation of one, and add them to script
     loop do
       break if ![355, 655].include?(@list[@index + 1].code)
-      script += @list[@index+1].parameters[0] + "\n"
+      script += @list[@index + 1].parameters[0] + "\n"
       @index += 1
     end
     # Run the script

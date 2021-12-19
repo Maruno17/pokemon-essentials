@@ -72,7 +72,8 @@ BattlerDebugMenuCommands.register("sethp", {
     params.setRange(1, battler.totalhp)
     params.setDefaultValue(battler.hp)
     new_hp = pbMessageChooseNumber(
-       "\\ts[]" + _INTL("Set {1}'s HP (1-{2}).", battler.pbThis(true), battler.totalhp), params)
+      "\\ts[]" + _INTL("Set {1}'s HP (1-{2}).", battler.pbThis(true), battler.totalhp), params
+    )
     battler.hp = new_hp if new_hp != battler.hp
   }
 })
@@ -126,7 +127,8 @@ BattlerDebugMenuCommands.register("setstatus", {
             params.setDefaultValue(0)
             params.setCancelValue(-1)
             count = pbMessageChooseNumber(
-               "\\ts[]" + _INTL("Set {1}'s toxic count (0-15).", battler.pbThis(true)), params)
+              "\\ts[]" + _INTL("Set {1}'s toxic count (0-15).", battler.pbThis(true)), params
+            )
             next if count < 0
             battler.statusCount = 1
             battler.effects[PBEffects::Toxic] = count
@@ -192,7 +194,8 @@ BattlerDebugMenuCommands.register("setstatstages", {
         params.setNegativesAllowed(true)
         params.setDefaultValue(battler.stages[stat_ids[cmd]])
         value = pbMessageChooseNumber(
-           "\\ts[]" + _INTL("Set the stage for {1}.", GameData::Stat.get(stat_ids[cmd]).name), params)
+          "\\ts[]" + _INTL("Set the stage for {1}.", GameData::Stat.get(stat_ids[cmd]).name), params
+        )
         battler.stages[stat_ids[cmd]] = value
       else   # Reset all stats
         GameData::Stat.each_battle { |stat| battler.stages[stat.id] = 0 }
@@ -214,7 +217,8 @@ BattlerDebugMenuCommands.register("setlevel", {
     params.setRange(1, GameData::GrowthRate.max_level)
     params.setDefaultValue(pkmn.level)
     level = pbMessageChooseNumber(
-       "\\ts[]" + _INTL("Set the Pokémon's level (max. {1}).", params.maxNumber), params)
+      "\\ts[]" + _INTL("Set the Pokémon's level (max. {1}).", params.maxNumber), params
+    )
     if level != pkmn.level
       pkmn.level = level
       pkmn.calc_stats
@@ -242,7 +246,8 @@ BattlerDebugMenuCommands.register("setexp", {
     params.setRange(min_exp, max_exp - 1)
     params.setDefaultValue(pkmn.exp)
     new_exp = pbMessageChooseNumber(
-       "\\ts[]" + _INTL("Set the Pokémon's Exp (range {1}-{2}).", min_exp, max_exp - 1), params)
+      "\\ts[]" + _INTL("Set the Pokémon's Exp (range {1}-{2}).", min_exp, max_exp - 1), params
+    )
     pkmn.exp = new_exp if new_exp != pkmn.exp
   }
 })
@@ -255,9 +260,8 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
     cmd = 0
     loop do
       persid = sprintf("0x%08X", pkmn.personalID)
-      cmd = pbMessage("\\ts[]" + _INTL("Personal ID is {1}.", persid), [
-           _INTL("Set EVs"),
-           _INTL("Set IVs")], -1, nil, cmd)
+      cmd = pbMessage("\\ts[]" + _INTL("Personal ID is {1}.", persid),
+                      [_INTL("Set EVs"), _INTL("Set IVs")], -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Set EVs
@@ -274,7 +278,7 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
           ev_commands.push(_INTL("Randomise all"))
           ev_commands.push(_INTL("Max randomise all"))
           cmd2 = pbMessage("\\ts[]" + _INTL("Change which EV?\nTotal: {1}/{2} ({3}%)",
-                           total_evs, Pokemon::EV_LIMIT, 100 * total_evs / Pokemon::EV_LIMIT),
+                                            total_evs, Pokemon::EV_LIMIT, 100 * total_evs / Pokemon::EV_LIMIT),
                            ev_commands, -1, nil, cmd2)
           break if cmd2 < 0
           if cmd2 < ev_id.length
@@ -288,7 +292,7 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
             params.setDefaultValue(thisValue)
             params.setCancelValue(thisValue)
             f = pbMessageChooseNumber("\\ts[]" + _INTL("Set the EV for {1} (max. {2}).",
-               GameData::Stat.get(ev_id[cmd2]).name, upperLimit), params)
+                                                       GameData::Stat.get(ev_id[cmd2]).name, upperLimit), params)
             if f != pkmn.ev[ev_id[cmd2]]
               pkmn.ev[ev_id[cmd2]] = f
               pkmn.calc_stats
@@ -327,8 +331,8 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
             totaliv += pkmn.iv[s.id]
           end
           msg = _INTL("Change which IV?\nHidden Power:\n{1}, power {2}\nTotal: {3}/{4} ({5}%)",
-             GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
-             iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
+                      GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
+                      iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
           ivcommands.push(_INTL("Randomise all"))
           cmd2 = pbMessage("\\ts[]" + msg, ivcommands, -1, nil, cmd2)
           break if cmd2 < 0
@@ -338,7 +342,7 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
             params.setDefaultValue(pkmn.iv[iv_id[cmd2]])
             params.setCancelValue(pkmn.iv[iv_id[cmd2]])
             f = pbMessageChooseNumber("\\ts[]" + _INTL("Set the IV for {1} (max. 31).",
-               GameData::Stat.get(iv_id[cmd2]).name), params)
+                                                       GameData::Stat.get(iv_id[cmd2]).name), params)
             if f != pkmn.iv[iv_id[cmd2]]
               pkmn.iv[iv_id[cmd2]] = f
               pkmn.calc_stats
@@ -407,12 +411,10 @@ BattlerDebugMenuCommands.register("settypes", {
             end
             battler.types.compact!
           end
+        elsif cmd < max_main_types
+          battler.types[cmd] = new_type
         else
-          if cmd < max_main_types
-            battler.types[cmd] = new_type
-          else
-            battler.effects[PBEffects::Type3] = new_type
-          end
+          battler.effects[PBEffects::Type3] = new_type
         end
       end
     end
@@ -435,7 +437,7 @@ BattlerDebugMenuCommands.register("teachmove", {
   "effect"      => proc { |battler, pkmn, battle|
     if pkmn.numMoves >= Pokemon::MAX_MOVES
       pbMessage("\\ts[]" + _INTL("{1} already knows {2} moves. It needs to forget one first.",
-         pkmn.name, pkmn.numMoves))
+                                 pkmn.name, pkmn.numMoves))
       next
     end
     new_move = pbChooseMoveList
@@ -506,10 +508,8 @@ BattlerDebugMenuCommands.register("setmovepp", {
           cmd2 = 0
           loop do
             msg = _INTL("{1}: PP {2}/{3} (PP Up {4}/3)", move_name, move.pp, move.total_pp, move.ppup)
-            cmd2 = pbMessage("\\ts[]" + msg, [
-               _INTL("Set PP"),
-               _INTL("Full PP"),
-               _INTL("Set PP Up")], -1, nil, cmd2)
+            cmd2 = pbMessage("\\ts[]" + msg,
+                             [_INTL("Set PP"), _INTL("Full PP"), _INTL("Set PP Up")], -1, nil, cmd2)
             break if cmd2 < 0
             case cmd2
             when 0   # Change PP
@@ -517,7 +517,8 @@ BattlerDebugMenuCommands.register("setmovepp", {
               params.setRange(0, move.total_pp)
               params.setDefaultValue(move.pp)
               h = pbMessageChooseNumber(
-                 "\\ts[]" + _INTL("Set PP of {1} (max. {2}).", move_name, move.total_pp), params)
+                "\\ts[]" + _INTL("Set PP of {1} (max. {2}).", move_name, move.total_pp), params
+              )
               move.pp = h
               if battler && battler.moves[move_indices[cmd]].id == move.id
                 battler.moves[move_indices[cmd]].pp = move.pp
@@ -532,7 +533,8 @@ BattlerDebugMenuCommands.register("setmovepp", {
               params.setRange(0, 3)
               params.setDefaultValue(move.ppup)
               h = pbMessageChooseNumber(
-                 "\\ts[]" + _INTL("Set PP Up of {1} (max. 3).", move_name), params)
+                "\\ts[]" + _INTL("Set PP Up of {1} (max. 3).", move_name), params
+              )
               move.ppup = h
               move.pp = move.total_pp if move.pp > move.total_pp
               if battler && battler.moves[move_indices[cmd]].id == move.id
@@ -602,7 +604,7 @@ BattlerDebugMenuCommands.register("setability", {
     ]
     loop do
       msg = _INTL("Battler's ability is {1}. Pokémon's ability is {2}.",
-         battler.abilityName, pkmn.ability.name)
+                  battler.abilityName, pkmn.ability.name)
       cmd = pbMessage("\\ts[]" + msg, commands, -1, nil, cmd)
       break if cmd < 0
       case cmd
@@ -680,10 +682,8 @@ BattlerDebugMenuCommands.register("setgender", {
     cmd = 0
     loop do
       msg = [_INTL("Gender is male."), _INTL("Gender is female.")][pkmn.male? ? 0 : 1]
-      cmd = pbMessage("\\ts[]" + msg, [
-         _INTL("Make male"),
-         _INTL("Make female"),
-         _INTL("Reset")], -1, nil, cmd)
+      cmd = pbMessage("\\ts[]" + msg,
+                      [_INTL("Make male"), _INTL("Make female"), _INTL("Reset")], -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Make male
@@ -747,11 +747,11 @@ BattlerDebugMenuCommands.register("setshininess", {
     loop do
       msg_idx = pkmn.shiny? ? (pkmn.super_shiny? ? 1 : 0) : 2
       msg = [_INTL("Is shiny."), _INTL("Is super shiny."), _INTL("Is normal (not shiny).")][msg_idx]
-      cmd = pbMessage("\\ts[]" + msg, [
-           _INTL("Make shiny"),
-           _INTL("Make super shiny"),
-           _INTL("Make normal"),
-           _INTL("Reset")], -1, nil, cmd)
+      cmd = pbMessage("\\ts[]" + msg,
+                      [_INTL("Make shiny"),
+                       _INTL("Make super shiny"),
+                       _INTL("Make normal"),
+                       _INTL("Reset")], -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Make shiny

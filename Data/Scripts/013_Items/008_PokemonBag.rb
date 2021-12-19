@@ -78,7 +78,8 @@ class PokemonBag
     max_size = max_pocket_size(pocket)
     max_size = @pockets[pocket].length + 1 if max_size < 0   # Infinite size
     return ItemStorageHelper.can_add?(
-       @pockets[pocket], max_size, Settings::BAG_MAX_PER_SLOT, item_data.id, qty)
+      @pockets[pocket], max_size, Settings::BAG_MAX_PER_SLOT, item_data.id, qty
+    )
   end
 
   def add(item, qty = 1)
@@ -88,7 +89,7 @@ class PokemonBag
     max_size = max_pocket_size(pocket)
     max_size = @pockets[pocket].length + 1 if max_size < 0   # Infinite size
     ret = ItemStorageHelper.add(@pockets[pocket],
-       max_size, Settings::BAG_MAX_PER_SLOT, item_data.id, qty)
+                                max_size, Settings::BAG_MAX_PER_SLOT, item_data.id, qty)
     if ret && Settings::BAG_POCKET_AUTO_SORT[pocket - 1]
       @pockets[pocket].sort! { |a, b| GameData::Item.keys.index(a[0]) <=> GameData::Item.keys.index(b[0]) }
     end

@@ -244,7 +244,7 @@ class DayCare
       shiny_retries.times do
         break if egg.shiny?
         egg.shiny = nil   # Make it recalculate shininess
-        egg.personalID = rand(2**16) | rand(2**16) << 16
+        egg.personalID = rand(2**16) | (rand(2**16) << 16)
       end
     end
 
@@ -555,7 +555,7 @@ end
 # With each step taken, add Exp to Pokémon in the Day Care and try to generate
 # an egg.
 #===============================================================================
-Events.onStepTaken += proc { |_sender,_e|
+Events.onStepTaken += proc { |_sender, _e|
   $PokemonGlobal.day_care.update_on_step_taken
 }
 

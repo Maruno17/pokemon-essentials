@@ -67,7 +67,7 @@ module FileInputMixin
     self.pos = 0
     offset = fgetdw >> 3
     return 0 if index >= offset
-    self.pos = index * 8 + 4
+    self.pos = (index * 8) + 4
     return fgetdw
   end
 

@@ -39,9 +39,9 @@ def pbSceneStandby
   $scene.createSpritesets if $scene && $scene.is_a?(Scene_Map)
 end
 
-def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
+def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
   $game_temp.in_battle = true
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   # Set up audio
   playingBGS = nil
@@ -53,7 +53,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     $game_system.bgs_pause
   end
   pbMEFade(0.25)
-  pbWait(Graphics.frame_rate/4)
+  pbWait(Graphics.frame_rate / 4)
   pbMEStop
   # Play battle music
   bgm = pbGetWildBattleBGM([]) if !bgm
@@ -72,7 +72,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     if $PokemonGlobal.surfing || $PokemonGlobal.diving
       location = 3
     elsif $game_temp.encounter_type &&
-       GameData::EncounterType.get($game_temp.encounter_type).type == :fishing
+          GameData::EncounterType.get($game_temp.encounter_type).type == :fishing
       location = 3
     elsif $PokemonEncounters.has_cave_encounters?
       location = 2
@@ -83,34 +83,34 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     if PBDayNight.isDay?
       case battletype
       when 0, 2   # Wild, double wild
-        anim = ["SnakeSquares","DiagonalBubbleTL","DiagonalBubbleBR","RisingSplash"][location]
+        anim = ["SnakeSquares", "DiagonalBubbleTL", "DiagonalBubbleBR", "RisingSplash"][location]
       when 1      # Trainer
-        anim = ["TwoBallPass","ThreeBallDown","BallDown","WavyThreeBallUp"][location]
+        anim = ["TwoBallPass", "ThreeBallDown", "BallDown", "WavyThreeBallUp"][location]
       when 3      # Double trainer
         anim = "FourBallBurst"
       end
     else
       case battletype
       when 0, 2   # Wild, double wild
-        anim = ["SnakeSquares","DiagonalBubbleBR","DiagonalBubbleBR","RisingSplash"][location]
+        anim = ["SnakeSquares", "DiagonalBubbleBR", "DiagonalBubbleBR", "RisingSplash"][location]
       when 1      # Trainer
-        anim = ["SpinBallSplit","BallDown","BallDown","WavySpinBall"][location]
+        anim = ["SpinBallSplit", "BallDown", "BallDown", "WavySpinBall"][location]
       when 3      # Double trainer
         anim = "FourBallBurst"
       end
     end
     # Initial screen flashing
-    if location==2 || PBDayNight.isNight?
-      viewport.color = Color.new(0,0,0)         # Fade to black a few times
+    if location == 2 || PBDayNight.isNight?
+      viewport.color = Color.new(0, 0, 0)            # Fade to black a few times
     else
-      viewport.color = Color.new(255,255,255)   # Fade to white a few times
+      viewport.color = Color.new(255, 255, 255)      # Fade to white a few times
     end
-    halfFlashTime = Graphics.frame_rate*2/10   # 0.2 seconds, 8 frames
-    alphaDiff = (255.0/halfFlashTime).ceil
+    halfFlashTime = Graphics.frame_rate * 2 / 10   # 0.2 seconds, 8 frames
+    alphaDiff = (255.0 / halfFlashTime).ceil
     2.times do
       viewport.color.alpha = 0
-      for i in 0...halfFlashTime*2
-        if i<halfFlashTime
+      for i in 0...halfFlashTime * 2
+        if i < halfFlashTime
           viewport.color.alpha += alphaDiff
         else
           viewport.color.alpha -= alphaDiff
@@ -124,10 +124,10 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     $game_temp.background_bitmap = Graphics.snap_to_bitmap
     # Play main animation
     Graphics.freeze
-    viewport.color = Color.new(0,0,0,255)   # Ensure screen is black
+    viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
     Graphics.transition(25, "Graphics/Transitions/" + anim)
     # Slight pause after animation before starting up the battle scene
-    (Graphics.frame_rate/10).times do
+    (Graphics.frame_rate / 10).times do
       Graphics.update
       Input.update
       pbUpdateSceneMap
@@ -148,14 +148,14 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
   $PokemonGlobal.nextBattleBack      = nil
   $PokemonEncounters.reset_step_count
   # Fade back to the overworld in 0.4 seconds
-  viewport.color = Color.new(0,0,0,255)
+  viewport.color = Color.new(0, 0, 0, 255)
   timer = 0.0
   loop do
     Graphics.update
     Input.update
     pbUpdateSceneMap
     timer += Graphics.delta_s
-    viewport.color.alpha = 255 * (1 - timer / 0.4)
+    viewport.color.alpha = 255 * (1 - (timer / 0.4))
     break if viewport.color.alpha <= 0
   end
   viewport.dispose
@@ -180,7 +180,7 @@ end
 ##### VS. animation, by Luka S.J. #####
 ##### Tweaked by Maruno           #####
 SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
-  Proc.new { |battle_type, foe|   # Condition
+  proc { |battle_type, foe|   # Condition
     next false unless [1, 3].include?(battle_type) && foe.length == 1   # Only if a single trainer
     tr_type = foe[0].trainer_type
     next false if !tr_type
@@ -189,7 +189,7 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     next pbResolveBitmap("Graphics/Transitions/" + trainer_bar_graphic) &&
          pbResolveBitmap("Graphics/Transitions/" + trainer_graphic)
   },
-  Proc.new { |viewport, battle_type, foe|   # Animation
+  proc { |viewport, battle_type, foe|   # Animation
     # Determine filenames of graphics to be used
     tr_type = foe[0].trainer_type
     trainer_bar_graphic = sprintf("vsBar_%s", tr_type.to_s) rescue nil
@@ -267,9 +267,9 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
       flash.opacity -= 52 * 20 / Graphics.frame_rate if flash.opacity > 0
       bar1.ox -= 32 * 20 / Graphics.frame_rate
       bar2.ox += 32 * 20 / Graphics.frame_rate
-      if i >= animTime / 2 && i < slideInTime + animTime / 2
-        player.x = xoffset * (i + 1 - slideInTime - animTime / 2) / slideInTime
-        trainer.x = xoffset * (slideInTime - i - 1 + animTime / 2) / slideInTime
+      if i >= animTime / 2 && i < slideInTime + (animTime / 2)
+        player.x = xoffset * (i + 1 - slideInTime - (animTime / 2)) / slideInTime
+        trainer.x = xoffset * (slideInTime - i - 1 + (animTime / 2)) / slideInTime
       end
       pbWait(1)
     end
@@ -283,10 +283,10 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     trainer.tone = Tone.new(0, 0, 0)
     trainername = foe[0].name
     textpos = [
-       [$player.name, Graphics.width / 4, (Graphics.height / 1.5) + 4, 2,
-          Color.new(248, 248, 248), Color.new(72, 72, 72)],
-       [trainername, (Graphics.width / 4) + (Graphics.width / 2), (Graphics.height / 1.5) + 4, 2,
-          Color.new(248, 248, 248), Color.new(72, 72, 72)]
+      [$player.name, Graphics.width / 4, (Graphics.height / 1.5) + 4, 2,
+       Color.new(248, 248, 248), Color.new(72, 72, 72)],
+      [trainername, (Graphics.width / 4) + (Graphics.width / 2), (Graphics.height / 1.5) + 4, 2,
+       Color.new(248, 248, 248), Color.new(72, 72, 72)]
     ]
     pbDrawTextPositions(overlay.bitmap, textpos)
     # Fade out flash, shudder Vs logo and expand it, and then fade to black

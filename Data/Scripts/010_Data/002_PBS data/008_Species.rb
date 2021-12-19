@@ -116,7 +116,7 @@ module GameData
         "BaseEXP"           => [0, "v"],
         "EffortPoints"      => [0, "uuuuuu"],
         "HiddenAbility"     => [0, "*e", :Ability],
-        "StepsToHatch"      => [0, "v"],
+        "StepsToHatch"      => [0, "v"]
       }
       if compiling_forms
         ret["PokedexForm"]  = [0, "u"]
@@ -311,8 +311,8 @@ module GameData
       evos.each do |evo|
         if check_method.is_a?(Array)
           next if !check_method.include?(evo[2])
-        else
-          next if evo[2] != check_method
+        elsif evo[2] != check_method
+          next
         end
         return true if check_param.nil? || evo[3] == check_param
       end

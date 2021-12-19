@@ -306,13 +306,13 @@ class SpritePositioner
 
   def pbMenu
     refresh
-    cw = Window_CommandPokemon.new([
-       _INTL("Set Ally Position"),
+    cw = Window_CommandPokemon.new(
+      [_INTL("Set Ally Position"),
        _INTL("Set Enemy Position"),
        _INTL("Set Shadow Size"),
        _INTL("Set Shadow Position"),
-       _INTL("Auto-Position Sprites")
-    ])
+       _INTL("Auto-Position Sprites")]
+    )
     cw.x        = Graphics.width - cw.width
     cw.y        = Graphics.height - cw.height
     cw.viewport = @viewport
@@ -340,7 +340,7 @@ class SpritePositioner
       pbFadeInAndShow(@sprites) { update }
       @starting = false
     end
-    cw = Window_CommandPokemonEx.newEmpty(0, 0, 260, 32 + 24 * 6, @viewport)
+    cw = Window_CommandPokemonEx.newEmpty(0, 0, 260, 32 + (24 * 6), @viewport)
     cw.rowHeight = 24
     pbSetSmallFont(cw.contents)
     cw.x = Graphics.width - cw.width

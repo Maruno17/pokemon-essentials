@@ -105,12 +105,20 @@ module Console
 
   # status output
   def echo_status(status)
-    echoln (status) ? markup_style('OK', text: :green) : markup_style('FAIL', text: :red)
+    if status
+      echoln markup_style('OK', text: :green)
+    else
+      echoln markup_style('FAIL', text: :red)
+    end
   end
 
   # completion output
   def echo_done(status)
-    echoln (status) ? markup_style('done', text: :green) : markup_style('error', text: :red)
+    if status
+      echoln markup_style('done', text: :green)
+    else
+      echoln markup_style('error', text: :red)
+    end
   end
 
   #-----------------------------------------------------------------------------

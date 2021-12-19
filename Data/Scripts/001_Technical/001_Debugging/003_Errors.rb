@@ -13,13 +13,14 @@ class EventScriptError < Exception
   end
 end
 
-def pbGetExceptionMessage(e,_script="")
+def pbGetExceptionMessage(e, _script = "")
   return e.event_message.dup if e.is_a?(EventScriptError)   # Message with map/event ID generated elsewhere
   emessage = e.message.dup
   emessage.force_encoding(Encoding::UTF_8)
-  if e.is_a?(Hangup)
+  case e
+  when Hangup
     emessage = "The script is taking too long. The game will restart."
-  elsif e.is_a?(Errno::ENOENT)
+  when Errno::ENOENT
     filename = emessage.sub("No such file or directory - ", "")
     emessage = "File #{filename} not found."
   end

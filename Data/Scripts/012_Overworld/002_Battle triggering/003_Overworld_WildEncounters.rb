@@ -114,7 +114,7 @@ class PokemonEncounters
     return true if pbPokeRadarOnShakingGrass
     # Get base encounter chance and minimum steps grace period
     encounter_chance = @step_chances[enc_type].to_f
-    min_steps_needed = (8 - encounter_chance / 10).clamp(0, 8).to_f
+    min_steps_needed = (8 - (encounter_chance / 10)).clamp(0, 8).to_f
     # Apply modifiers to the encounter chance and the minimum steps amount
     if triggered_by_step
       encounter_chance += @chance_accumulator / 200
@@ -168,7 +168,7 @@ class PokemonEncounters
     # after a previous wild encounter
     if triggered_by_step && @step_count < min_steps_needed
       @step_count += 1
-      return false if rand(100) >= encounter_chance * 5 / (@step_chances[enc_type] + @chance_accumulator / 200)
+      return false if rand(100) >= encounter_chance * 5 / (@step_chances[enc_type] + (@chance_accumulator / 200))
     end
     # Decide whether the wild encounter should actually happen
     return true if rand(100) < encounter_chance
@@ -387,12 +387,12 @@ end
 # Creates and returns a Pokémon based on the given species and level.
 # Applies wild Pokémon modifiers (wild held item, shiny chance modifiers,
 # Pokérus, gender/nature forcing because of player's lead Pokémon).
-def pbGenerateWildPokemon(species,level,isRoamer=false)
-  genwildpoke = Pokemon.new(species,level)
+def pbGenerateWildPokemon(species, level, isRoamer = false)
+  genwildpoke = Pokemon.new(species, level)
   # Give the wild Pokémon a held item
   items = genwildpoke.wildHoldItems
   first_pkmn = $player.first_pokemon
-  chances = [50,5,1]
+  chances = [50, 5, 1]
   if first_pkmn
     case first_pkmn.ability_id
     when :COMPOUNDEYES
@@ -402,11 +402,11 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
     end
   end
   itemrnd = rand(100)
-  if (items[0]==items[1] && items[1]==items[2]) || itemrnd<chances[0]
+  if (items[0] == items[1] && items[1] == items[2]) || itemrnd < chances[0]
     genwildpoke.item = items[0].sample
-  elsif itemrnd<(chances[0]+chances[1])
+  elsif itemrnd < (chances[0] + chances[1])
     genwildpoke.item = items[1].sample
-  elsif itemrnd<(chances[0]+chances[1]+chances[2])
+  elsif itemrnd < (chances[0] + chances[1] + chances[2])
     genwildpoke.item = items[2].sample
   end
   # Improve chances of shiny Pokémon with Shiny Charm and battling more of the
@@ -429,7 +429,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
     shiny_retries.times do
       break if genwildpoke.shiny?
       genwildpoke.shiny = nil   # Make it recalculate shininess
-      genwildpoke.personalID = rand(2**16) | rand(2**16) << 16
+      genwildpoke.personalID = rand(2**16) | (rand(2**16) << 16)
     end
   end
   # Give Pokérus
@@ -439,9 +439,9 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   if first_pkmn
     if first_pkmn.hasAbility?(:CUTECHARM) && !genwildpoke.singleGendered?
       if first_pkmn.male?
-        (rand(3)<2) ? genwildpoke.makeFemale : genwildpoke.makeMale
+        (rand(3) < 2) ? genwildpoke.makeFemale : genwildpoke.makeMale
       elsif first_pkmn.female?
-        (rand(3)<2) ? genwildpoke.makeMale : genwildpoke.makeFemale
+        (rand(3) < 2) ? genwildpoke.makeMale : genwildpoke.makeFemale
       end
     elsif first_pkmn.hasAbility?(:SYNCHRONIZE)
       if !isRoamer && (Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS || (rand(100) < 50))
@@ -450,7 +450,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
     end
   end
   # Trigger events that may alter the generated Pokémon further
-  Events.onWildPokemonCreate.trigger(nil,genwildpoke)
+  Events.onWildPokemonCreate.trigger(nil, genwildpoke)
   return genwildpoke
 end
 
@@ -469,7 +469,7 @@ def pbEncounter(enc_type)
   else
     pbWildBattle(encounter1[0], encounter1[1])
   end
-	$game_temp.encounter_type = nil
+  $game_temp.encounter_type = nil
   $game_temp.force_single_battle = false
   EncounterModifier.triggerEncounterEnd
   return true

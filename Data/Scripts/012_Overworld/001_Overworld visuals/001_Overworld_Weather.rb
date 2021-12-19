@@ -7,6 +7,7 @@ module RPG
     attr_reader :max
     attr_reader :ox
     attr_reader :oy
+
     MAX_SPRITES              = 60
     FADE_OLD_TILES_START     = 0
     FADE_OLD_TILES_END       = 1
@@ -213,7 +214,7 @@ module RPG
       end
       if @weatherTypes[weather_type][0].category == :Rain
         last_index = weatherBitmaps.length - 1   # Last sprite is a splash
-        if (index % 2) == 0
+        if index.even?
           sprite.bitmap = weatherBitmaps[index % last_index]
         else
           sprite.bitmap = weatherBitmaps[last_index]
@@ -243,10 +244,10 @@ module RPG
         lifetimes[index] = 0
         return
       end
-      if @weatherTypes[weather_type][0].category == :Rain && (index % 2) != 0   # Splash
-        sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width * 2)
-        sprite.y = @oy - sprite.bitmap.height + rand(Graphics.height + sprite.bitmap.height * 2)
-        lifetimes[index] = (30 + rand(20)) * 0.01   # 0.3-0.5 seconds
+      if @weatherTypes[weather_type][0].category == :Rain && index.odd?   # Splash
+        sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + (sprite.bitmap.width * 2))
+        sprite.y = @oy - sprite.bitmap.height + rand(Graphics.height + (sprite.bitmap.height * 2))
+        lifetimes[index] = (rand(30...50)) * 0.01   # 0.3-0.5 seconds
       else
         x_speed = @weatherTypes[weather_type][0].particle_delta_x
         y_speed = @weatherTypes[weather_type][0].particle_delta_y
@@ -254,14 +255,14 @@ module RPG
         if gradient.abs >= 1
           # Position sprite to the right of the screen
           sprite.x = @ox + Graphics.width + rand(Graphics.width)
-          sprite.y = @oy + Graphics.height - rand(Graphics.height + sprite.bitmap.height - Graphics.width / gradient)
-          distance_to_cover = sprite.x - @ox - Graphics.width / 2 + sprite.bitmap.width + rand(Graphics.width * 8 / 5)
+          sprite.y = @oy + Graphics.height - rand(Graphics.height + sprite.bitmap.height - (Graphics.width / gradient))
+          distance_to_cover = sprite.x - @ox - (Graphics.width / 2) + sprite.bitmap.width + rand(Graphics.width * 8 / 5)
           lifetimes[index] = (distance_to_cover.to_f / x_speed).abs
         else
           # Position sprite to the top of the screen
-          sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width - gradient * Graphics.height)
+          sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width - (gradient * Graphics.height))
           sprite.y = @oy - sprite.bitmap.height - rand(Graphics.height)
-          distance_to_cover = @oy - sprite.y + Graphics.height / 2 + rand(Graphics.height * 8 / 5)
+          distance_to_cover = @oy - sprite.y + (Graphics.height / 2) + rand(Graphics.height * 8 / 5)
           lifetimes[index] = (distance_to_cover.to_f / y_speed).abs
         end
       end
@@ -282,7 +283,7 @@ module RPG
       # Determine which weather type this sprite is representing
       weather_type = (is_new_sprite) ? @target_type : @type
       # Update visibility/position/opacity of sprite
-      if @weatherTypes[weather_type][0].category == :Rain && (index % 2) != 0   # Splash
+      if @weatherTypes[weather_type][0].category == :Rain && index.odd?   # Splash
         sprite.opacity = (lifetimes[index] < 0.2) ? 255 : 0   # 0.2 seconds
       else
         dist_x = @weatherTypes[weather_type][0].particle_delta_x * delta_t
@@ -332,8 +333,8 @@ module RPG
 
     def update_tile_position(sprite, index)
       return if !sprite || !sprite.bitmap || !sprite.visible
-      sprite.x = @tile_x.round + (index % @tiles_wide) * sprite.bitmap.width
-      sprite.y = @tile_y.round + (index / @tiles_wide) * sprite.bitmap.height
+      sprite.x = @tile_x.round + ((index % @tiles_wide) * sprite.bitmap.width)
+      sprite.y = @tile_y.round + ((index / @tiles_wide) * sprite.bitmap.height)
       sprite.x += @tiles_wide * sprite.bitmap.width if sprite.x - @ox < -sprite.bitmap.width
       sprite.y -= @tiles_tall * sprite.bitmap.height if sprite.y - @oy > Graphics.height
       sprite.visible = true
@@ -371,10 +372,10 @@ module RPG
              @fade_time < [FADE_NEW_TONE_END - @time_shift, 0].max
             weather_max = @target_max
             fract = (@fade_time - [FADE_NEW_TONE_START - @time_shift, 0].max) / (FADE_NEW_TONE_END - FADE_NEW_TONE_START)
-            tone_red = @target_tone.red + (1 - fract) * (@old_tone.red - @target_tone.red)
-            tone_green = @target_tone.green + (1 - fract) * (@old_tone.green - @target_tone.green)
-            tone_blue = @target_tone.blue + (1 - fract) * (@old_tone.blue - @target_tone.blue)
-            tone_gray = @target_tone.gray + (1 - fract) * (@old_tone.gray - @target_tone.gray)
+            tone_red = @target_tone.red + ((1 - fract) * (@old_tone.red - @target_tone.red))
+            tone_green = @target_tone.green + ((1 - fract) * (@old_tone.green - @target_tone.green))
+            tone_blue = @target_tone.blue + ((1 - fract) * (@old_tone.blue - @target_tone.blue))
+            tone_gray = @target_tone.gray + ((1 - fract) * (@old_tone.gray - @target_tone.gray))
           else
             tone_red = @viewport.tone.red
             tone_green = @viewport.tone.green
@@ -485,11 +486,11 @@ module RPG
         if @time_until_flash > 0
           @time_until_flash -= Graphics.delta_s
           if @time_until_flash <= 0
-            @viewport.flash(Color.new(255, 255, 255, 230), (2 + rand(3)) * 20)
+            @viewport.flash(Color.new(255, 255, 255, 230), rand(2..4) * 20)
           end
         end
         if @time_until_flash <= 0
-          @time_until_flash = (1 + rand(12)) * 0.5   # 0.5-6 seconds
+          @time_until_flash = rand(1..12) * 0.5   # 0.5-6 seconds
         end
       end
       @viewport.update

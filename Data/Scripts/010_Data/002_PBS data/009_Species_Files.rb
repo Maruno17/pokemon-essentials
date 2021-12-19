@@ -13,10 +13,10 @@ module GameData
       factors.push([1, try_form, ""]) if form > 0
       factors.push([0, try_species, "000"])
       # Go through each combination of parameters in turn to find an existing sprite
-      for i in 0...2 ** factors.length
+      for i in 0...2**factors.length
         # Set try_ parameters for this combination
         factors.each_with_index do |factor, index|
-          value = ((i / (2 ** index)) % 2 == 0) ? factor[1] : factor[2]
+          value = ((i / (2**index)).even?) ? factor[1] : factor[2]
           case factor[0]
           when 0 then try_species   = value
           when 1 then try_form      = value
@@ -28,7 +28,7 @@ module GameData
         # Look for a graphic matching this combination's parameters
         try_species_text = try_species
         ret = pbResolveBitmap(sprintf("%s%s%s%s%s%s", path, try_subfolder,
-           try_species_text, try_form, try_gender, try_shadow))
+                                      try_species_text, try_form, try_gender, try_shadow))
         return ret if ret
       end
       return nil

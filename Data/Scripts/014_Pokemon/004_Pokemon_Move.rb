@@ -43,7 +43,7 @@ class Pokemon
     # @return [Integer] total PP
     def total_pp
       max_pp = GameData::Move.get(@id).total_pp
-      return max_pp + max_pp * @ppup / 5
+      return max_pp + (max_pp * @ppup / 5)
     end
     alias totalpp total_pp
 

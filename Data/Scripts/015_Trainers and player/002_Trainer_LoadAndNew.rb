@@ -13,9 +13,9 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   party = []
   for i in 0...Settings::MAX_PARTY_SIZE
     if i == 0
-      pbMessage(_INTL("Please enter the first Pokémon.",i))
-    else
-      break if !pbConfirmMessage(_INTL("Add another Pokémon?"))
+      pbMessage(_INTL("Please enter the first Pokémon.", i))
+    elsif !pbConfirmMessage(_INTL("Add another Pokémon?"))
+      break
     end
     loop do
       species = pbChooseSpeciesList
@@ -24,7 +24,7 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
         params.setRange(1, GameData::GrowthRate.max_level)
         params.setDefaultValue(10)
         level = pbMessageChooseNumber(_INTL("Set the level for {1} (max. #{params.maxNumber}).",
-           GameData::Species.get(species).name), params)
+                                            GameData::Species.get(species).name), params)
         party.push([species, level])
         break
       else
@@ -42,10 +42,12 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
       :pokemon      => []
     }
     party.each do |pkmn|
-      trainer_hash[:pokemon].push({
-        :species => pkmn[0],
-        :level   => pkmn[1]
-      })
+      trainer_hash[:pokemon].push(
+        {
+          :species => pkmn[0],
+          :level   => pkmn[1]
+        }
+      )
     end
     # Add trainer's data to records
     trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
@@ -87,7 +89,7 @@ def pbTrainerCheck(tr_type, tr_name, max_battles, tr_version = 0)
   return true if GameData::Trainer.exists?(tr_type, tr_name, tr_version)
   # Add new trainer
   if pbConfirmMessage(_INTL("Add new trainer variant {1} (of {2}) for {3} {4}?",
-     tr_version, max_battles, tr_type.to_s, tr_name))
+                            tr_version, max_battles, tr_type.to_s, tr_name))
     pbNewTrainer(tr_type, tr_name, tr_version)
   end
   return true
@@ -110,7 +112,7 @@ def pbMissingTrainer(tr_type, tr_name, tr_version)
   if !$DEBUG
     raise _INTL("Can't find trainer ({1}, {2}, ID {3})", tr_type.to_s, tr_name, tr_version)
   end
-	message = ""
+  message = ""
   if tr_version != 0
     message = _INTL("Add new trainer ({1}, {2}, ID {3})?", tr_type.to_s, tr_name, tr_version)
   else

@@ -36,7 +36,7 @@ class SafariState
   end
 
   def pbStart(ballcount)
-    @start      = [$game_map.map_id,$game_player.x,$game_player.y,$game_player.direction]
+    @start      = [$game_map.map_id, $game_player.x, $game_player.y, $game_player.direction]
     @ballcount  = ballcount
     @inProgress = true
     @steps      = Settings::SAFARI_STEPS
@@ -55,7 +55,7 @@ end
 
 
 
-Events.onMapChange += proc { |_sender,*args|
+Events.onMapChange += proc { |_sender, *args|
   pbSafariState.pbEnd if !pbInSafari?
 }
 
@@ -75,12 +75,12 @@ def pbSafariState
   return $PokemonGlobal.safariState
 end
 
-Events.onStepTakenTransferPossible += proc { |_sender,e|
+Events.onStepTakenTransferPossible += proc { |_sender, e|
   handled = e[0]
   next if handled[0]
-  if pbInSafari? && pbSafariState.decision==0 && Settings::SAFARI_STEPS > 0
+  if pbInSafari? && pbSafariState.decision == 0 && Settings::SAFARI_STEPS > 0
     pbSafariState.steps -= 1
-    if pbSafariState.steps<=0
+    if pbSafariState.steps <= 0
       pbMessage(_INTL("PA:  Ding-dong!\1"))
       pbMessage(_INTL("PA:  Your safari game is over!"))
       pbSafariState.decision = 1
@@ -90,30 +90,30 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
   end
 }
 
-Events.onWildBattleOverride += proc { |_sender,e|
+Events.onWildBattleOverride += proc { |_sender, e|
   species = e[0]
   level   = e[1]
   handled = e[2]
-  next if handled[0]!=nil
+  next if handled[0] != nil
   next if !pbInSafari?
-  handled[0] = pbSafariBattle(species,level)
+  handled[0] = pbSafariBattle(species, level)
 }
 
-def pbSafariBattle(species,level)
+def pbSafariBattle(species, level)
   # Generate a wild Pokémon based on the species and level
-  pkmn = pbGenerateWildPokemon(species,level)
+  pkmn = pbGenerateWildPokemon(species, level)
   foeParty = [pkmn]
   # Calculate who the trainer is
   playerTrainer = $player
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = SafariBattle.new(scene,playerTrainer,foeParty)
+  battle = SafariBattle.new(scene, playerTrainer, foeParty)
   battle.ballCount = pbSafariState.ballcount
   pbPrepareBattle(battle)
   # Perform the battle itself
   decision = 0
-  pbBattleAnimation(pbGetWildBattleBGM(foeParty),0,foeParty) {
+  pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) {
     pbSceneStandby {
       decision = battle.pbStartBattle
     }
@@ -121,8 +121,8 @@ def pbSafariBattle(species,level)
   Input.update
   # Update Safari game data based on result of battle
   pbSafariState.ballcount = battle.ballCount
-  if pbSafariState.ballcount<=0
-    if decision!=2   # Last Safari Ball was used to catch the wild Pokémon
+  if pbSafariState.ballcount <= 0
+    if decision != 2   # Last Safari Ball was used to catch the wild Pokémon
       pbMessage(_INTL("Announcer: You're out of Safari Balls! Game over!"))
     end
     pbSafariState.decision = 1
@@ -138,9 +138,9 @@ def pbSafariBattle(species,level)
     pbSafariState.captures += 1
     $stats.most_captures_per_safari_game = [$stats.most_captures_per_safari_game, pbSafariState.captures].max
   end
-  pbSet(1,decision)
+  pbSet(1, decision)
   # Used by the Poké Radar to update/break the chain
-  Events.onWildBattleEnd.trigger(nil,species,level,decision)
+  Events.onWildBattleEnd.trigger(nil, species, level, decision)
   # Return the outcome of the battle
   return decision
 end

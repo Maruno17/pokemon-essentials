@@ -136,8 +136,8 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbOnSpritesetCreate(spriteset,viewport)
-  Events.onSpritesetCreate.trigger(nil,spriteset,viewport)
+def pbOnSpritesetCreate(spriteset, viewport)
+  Events.onSpritesetCreate.trigger(nil, spriteset, viewport)
 end
 
 #===============================================================================
@@ -164,9 +164,9 @@ module EncounterModifier
     return encounter
   end
 
-  def self.triggerEncounterEnd()
+  def self.triggerEncounterEnd
     for prc in @@procsEnd
-      prc.call()
+      prc.call
     end
   end
 end

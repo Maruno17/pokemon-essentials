@@ -7,15 +7,15 @@ class SpriteAnimation
   end
 
   %w[
-     x y ox oy viewport flash src_rect opacity tone
+    x y ox oy viewport flash src_rect opacity tone
   ].each_with_index do |s, _i|
-  eval <<-__END__
+    eval <<-__END__
 
   def #{s}(*arg)
     @sprite.#{s}(*arg)
   end
 
-  __END__
+    __END__
   end
 
   def self.clear
@@ -187,7 +187,7 @@ class SpriteAnimation
         sprite_y = self.viewport.rect.height - 160
       end
     else
-      sprite_x = self.x - self.ox + self.src_rect.width / 2
+      sprite_x = self.x - self.ox + (self.src_rect.width / 2)
       sprite_y = self.y - self.oy
       sprite_y += self.src_rect.height / 2 if position == 1
       sprite_y += self.src_rect.height if position == 2
@@ -199,16 +199,16 @@ class SpriteAnimation
         sprite.visible = false if sprite != nil
         next
       end
-      sprite.x          = sprite_x + cell_data[i, 1]
-      sprite.y          = sprite_y + cell_data[i, 2]
+      sprite.x = sprite_x + cell_data[i, 1]
+      sprite.y = sprite_y + cell_data[i, 2]
       next if quick_update
-      sprite.visible    = true
+      sprite.visible = true
       sprite.src_rect.set(pattern % 5 * 192, pattern / 5 * 192, 192, 192)
       case @_animation_height
-      when 0 then sprite.z  = 1
-      when 1 then sprite.z  = sprite.y+32+15
-      when 2 then sprite.z  = sprite.y+32+32+17
-      else        sprite.z  = 2000
+      when 0 then sprite.z = 1
+      when 1 then sprite.z = sprite.y + 32 + 15
+      when 2 then sprite.z = sprite.y + 32 + 32 + 17
+      else        sprite.z = 2000
       end
       sprite.ox         = 96
       sprite.oy         = 96
@@ -299,9 +299,9 @@ module RPG
     end
 
     def whiten
-      self.blend_type     = 0
+      self.blend_type = 0
       self.color.set(255, 255, 255, 128)
-      self.opacity        = 255
+      self.opacity = 255
       @_whiten_duration   = 16
       @_appear_duration   = 0
       @_escape_duration   = 0
@@ -345,10 +345,10 @@ module RPG
       bitmap.font.name = "Arial Black"
       bitmap.font.size = 32
       bitmap.font.color.set(0, 0, 0)
-      bitmap.draw_text(-1, 12-1, 160, 36, damage_string, 1)
-      bitmap.draw_text(+1, 12-1, 160, 36, damage_string, 1)
-      bitmap.draw_text(-1, 12+1, 160, 36, damage_string, 1)
-      bitmap.draw_text(+1, 12+1, 160, 36, damage_string, 1)
+      bitmap.draw_text(-1, 12 - 1, 160, 36, damage_string, 1)
+      bitmap.draw_text(+1, 12 - 1, 160, 36, damage_string, 1)
+      bitmap.draw_text(-1, 12 + 1, 160, 36, damage_string, 1)
+      bitmap.draw_text(+1, 12 + 1, 160, 36, damage_string, 1)
       if value.is_a?(Numeric) && value < 0
         bitmap.font.color.set(176, 255, 144)
       else
@@ -370,7 +370,7 @@ module RPG
       @_damage_sprite.ox     = 80
       @_damage_sprite.oy     = 20
       @_damage_sprite.x      = self.x
-      @_damage_sprite.y      = self.y - self.oy / 2
+      @_damage_sprite.y      = self.y - (self.oy / 2)
       @_damage_sprite.z      = 3000
       @_damage_duration      = 40
     end
@@ -386,14 +386,14 @@ module RPG
 
     def animation(animation, hit, height = 3)
       anim = SpriteAnimation.new(self)
-      anim.animation(animation,hit,height)
-      pushAnimation(@animations,anim)
+      anim.animation(animation, hit, height)
+      pushAnimation(@animations, anim)
     end
 
     def loop_animation(animation)
       anim = SpriteAnimation.new(self)
       anim.loop_animation(animation)
-      pushAnimation(@loopAnimations,anim)
+      pushAnimation(@loopAnimations, anim)
     end
 
     def dispose_damage
@@ -450,7 +450,7 @@ module RPG
       super
       if @_whiten_duration > 0
         @_whiten_duration -= 1
-        self.color.alpha = 128 - (16 - @_whiten_duration) * 10
+        self.color.alpha = 128 - ((16 - @_whiten_duration) * 10)
       end
       if @_appear_duration > 0
         @_appear_duration -= 1
@@ -458,11 +458,11 @@ module RPG
       end
       if @_escape_duration > 0
         @_escape_duration -= 1
-        self.opacity = 256 - (32 - @_escape_duration) * 10
+        self.opacity = 256 - ((32 - @_escape_duration) * 10)
       end
       if @_collapse_duration > 0
         @_collapse_duration -= 1
-        self.opacity = 256 - (48 - @_collapse_duration) * 6
+        self.opacity = 256 - ((48 - @_collapse_duration) * 6)
       end
       if @_damage_duration > 0
         @_damage_duration -= 1
@@ -476,7 +476,7 @@ module RPG
         when 28..33
           @_damage_sprite.y += 4
         end
-        @_damage_sprite.opacity = 256 - (12 - @_damage_duration) * 32
+        @_damage_sprite.opacity = 256 - ((12 - @_damage_duration) * 32)
         if @_damage_duration == 0
           dispose_damage
         end

@@ -20,8 +20,8 @@ class BattleChallenge
     @numRounds = numrounds
     @rules = rules
     register(id, id[/double/], 3,
-       id[/^factory/] ? BattleFactoryID : BattleTowerID,
-       id[/open$/] ? 1 : 0)
+             id[/^factory/] ? BattleFactoryID : BattleTowerID,
+             id[/open$/] ? 1 : 0)
     pbWriteCup(id, rules)
   end
 
@@ -98,9 +98,9 @@ class BattleChallenge
     opponent = pbGenerateBattleTrainer(self.nextTrainer, self.rules)
     bttrainers = pbGetBTTrainers(@id)
     trainerdata = bttrainers[self.nextTrainer]
-    ret = pbOrganizedBattleEx(opponent,self.rules,
-       pbGetMessageFromHash(MessageTypes::EndSpeechLose, trainerdata[4]),
-       pbGetMessageFromHash(MessageTypes::EndSpeechWin, trainerdata[3]))
+    ret = pbOrganizedBattleEx(opponent, self.rules,
+                              pbGetMessageFromHash(MessageTypes::EndSpeechLose, trainerdata[4]),
+                              pbGetMessageFromHash(MessageTypes::EndSpeechWin, trainerdata[3]))
     return ret
   end
 
@@ -197,12 +197,8 @@ class BattleChallengeData
   end
 
   def setParty(value)
-    if @inProgress
-      $player.party = value
-      @party = value
-    else
-      @party = value
-    end
+    $player.party = value if @inProgress
+    @party = value
   end
 
   def pbStart(t, numRounds)
@@ -376,10 +372,11 @@ class BattleFactoryData
     bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
     trainerdata = bttrainers[@trainerid]
     @opponent = NPCTrainer.new(
-       pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
-       trainerdata[0])
+      pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
+      trainerdata[0]
+    )
     opponentPkmn = pbBattleFactoryPokemon(pbBattleChallenge.rules, @bcdata.wins, @bcdata.swaps, @rentals)
-    @opponent.party = opponentPkmn.shuffle[0, 3]
+    @opponent.party = opponentPkmn.sample(3)
   end
 
   def pbChooseRentals
@@ -398,11 +395,12 @@ class BattleFactoryData
     bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
     trainerdata = bttrainers[trainerid]
     @opponent = NPCTrainer.new(
-       pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
-       trainerdata[0])
+      pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
+      trainerdata[0]
+    )
     opponentPkmn = pbBattleFactoryPokemon(pbBattleChallenge.rules, @bcdata.wins, @bcdata.swaps,
-       [].concat(@rentals).concat(@oldopponent))
-    @opponent.party = opponentPkmn.shuffle[0, 3]
+                                          [].concat(@rentals).concat(@oldopponent))
+    @opponent.party = opponentPkmn.sample(3)
   end
 
   def pbChooseSwaps
@@ -421,7 +419,7 @@ class BattleFactoryData
     bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
     trainerdata = bttrainers[@trainerid]
     return pbOrganizedBattleEx(@opponent, challenge.rules,
-       pbGetMessageFromHash(MessageTypes::EndSpeechLose, trainerdata[4]),
-       pbGetMessageFromHash(MessageTypes::EndSpeechWin, trainerdata[3]))
+                               pbGetMessageFromHash(MessageTypes::EndSpeechLose, trainerdata[4]),
+                               pbGetMessageFromHash(MessageTypes::EndSpeechWin, trainerdata[3]))
   end
 end

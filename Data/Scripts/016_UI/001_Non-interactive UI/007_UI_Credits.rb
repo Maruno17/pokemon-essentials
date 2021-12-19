@@ -118,14 +118,14 @@ _END_
       pcred = PluginManager.credits(plugin)
       plugin_credits << "\"#{plugin}\" v.#{PluginManager.version(plugin)} by:\n"
       if pcred.size >= 5
-        plugin_credits << pcred[0] + "\n"
+        plugin_credits << (pcred[0] + "\n")
         i = 1
         until i >= pcred.size
-          plugin_credits << pcred[i] + "<s>" + (pcred[i + 1] || "") + "\n"
+          plugin_credits << (pcred[i] + "<s>" + (pcred[i + 1] || "") + "\n")
           i += 2
         end
       else
-        pcred.each { |name| plugin_credits << name + "\n" }
+        pcred.each { |name| plugin_credits << (name + "\n") }
       end
       plugin_credits << "\n"
     end
@@ -148,7 +148,7 @@ _END_
       credit_bitmap = Bitmap.new(Graphics.width, @bitmap_height + 16)
       pbSetSystemFont(credit_bitmap)
       for j in 0...lines_per_bitmap
-        line = credit_lines[i * lines_per_bitmap + j]
+        line = credit_lines[(i * lines_per_bitmap) + j]
         next if !line
         line = line.split("<s>")
         xpos = 0
@@ -156,29 +156,29 @@ _END_
         linewidth = Graphics.width
         for k in 0...line.length
           if line.length > 1
-            xpos = (k == 0) ? 0 : 20 + Graphics.width / 2
+            xpos = (k == 0) ? 0 : 20 + (Graphics.width / 2)
             align = (k == 0) ? 2 : 0   # Right align : left align
-            linewidth = Graphics.width / 2 - 20
+            linewidth = (Graphics.width / 2) - 20
           end
           credit_bitmap.font.color = TEXT_SHADOW_COLOR
-          credit_bitmap.draw_text(xpos,     j * 32 + 12, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos, (j * 32) + 12, linewidth, 32, line[k], align)
           credit_bitmap.font.color = TEXT_OUTLINE_COLOR
-          credit_bitmap.draw_text(xpos + 2, j * 32 + 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos,     j * 32 + 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, j * 32 + 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos + 2, j * 32 + 4, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, j * 32 + 4, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos + 2, j * 32 + 6, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos,     j * 32 + 6, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, j * 32 + 6, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos + 2, (j * 32) + 2, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos,     (j * 32) + 2, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos - 2, (j * 32) + 2, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos + 2, (j * 32) + 4, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos - 2, (j * 32) + 4, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos + 2, (j * 32) + 6, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos,     (j * 32) + 6, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos - 2, (j * 32) + 6, linewidth, 32, line[k], align)
           credit_bitmap.font.color = TEXT_BASE_COLOR
-          credit_bitmap.draw_text(xpos,     j * 32 + 4, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos, (j * 32) + 4, linewidth, 32, line[k], align)
         end
       end
       credit_sprite = Sprite.new(text_viewport)
       credit_sprite.bitmap = credit_bitmap
       credit_sprite.z      = 9998
-      credit_sprite.oy     = @realOY - @bitmap_height * i
+      credit_sprite.oy     = @realOY - (@bitmap_height * i)
       @credit_sprites[i] = credit_sprite
     end
     #-------------------------------
@@ -245,6 +245,6 @@ _END_
     return if cancel?
     return if last?
     @realOY += SCROLL_SPEED * delta
-    @credit_sprites.each_with_index { |s, i| s.oy = @realOY - @bitmap_height * i }
+    @credit_sprites.each_with_index { |s, i| s.oy = @realOY - (@bitmap_height * i) }
   end
 end

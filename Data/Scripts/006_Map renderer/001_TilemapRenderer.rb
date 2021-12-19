@@ -221,7 +221,7 @@ class TilemapRenderer
       super
       @timer += Graphics.delta_s
       # Update the current frame for each autotile
-      @bitmaps.keys.each do |filename|
+      @bitmaps.each_key do |filename|
         next if !@bitmaps[filename] || @bitmaps[filename].disposed?
         old_frame = @current_frames[filename]
         set_current_frame(filename)
@@ -281,7 +281,7 @@ class TilemapRenderer
     @tiles_horizontal_count.times do |i|
       @tiles[i] = []
       @tiles_vertical_count.times do |j|
-        @tiles[i][j]        = Array.new(3) { TileSprite.new(@viewport) }
+        @tiles[i][j] = Array.new(3) { TileSprite.new(@viewport) }
       end
     end
     @current_map_id         = 0
@@ -372,14 +372,14 @@ class TilemapRenderer
       if tile_id < true_tileset_start_id
         filename = ""
         if tile_id < TILESET_START_ID   # Real autotiles
-          filename = map.autotile_names[tile_id / TILES_PER_AUTOTILE - 1]
+          filename = map.autotile_names[(tile_id / TILES_PER_AUTOTILE) - 1]
         elsif tile_id < single_autotile_start_id   # Large extra autotiles
           filename = extra_autotile_arrays[0][(tile_id - TILESET_START_ID) / TILES_PER_AUTOTILE]
         else   # Single extra autotiles
           filename = extra_autotile_arrays[1][tile_id - single_autotile_start_id]
         end
         tile.set_bitmap(filename, tile_id, true, @autotiles.animated?(filename),
-           priority, @autotiles[filename])
+                        priority, @autotiles[filename])
       else
         filename = map.tileset_name
         tile.set_bitmap(filename, tile_id, false, false, priority, @tilesets[filename])
@@ -406,8 +406,8 @@ class TilemapRenderer
 
   # x and y are the positions of tile within @tiles, not a map x/y
   def refresh_tile_coordinates(tile, x, y)
-    tile.x = x * DISPLAY_TILE_WIDTH - @pixel_offset_x
-    tile.y = y * DISPLAY_TILE_HEIGHT - @pixel_offset_y
+    tile.x = (x * DISPLAY_TILE_WIDTH) - @pixel_offset_x
+    tile.y = (y * DISPLAY_TILE_HEIGHT) - @pixel_offset_y
   end
 
   def refresh_tile_z(tile, map, y, layer, tile_id)
@@ -417,7 +417,7 @@ class TilemapRenderer
       tile.z = 0
     else
       priority = tile.priority
-      tile.z = (priority == 0) ? 0 : y * DISPLAY_TILE_HEIGHT + priority * 32 + 32
+      tile.z = (priority == 0) ? 0 : (y * DISPLAY_TILE_HEIGHT) + (priority * 32) + 32
     end
   end
 

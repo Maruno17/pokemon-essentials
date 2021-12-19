@@ -58,7 +58,8 @@ PokemonDebugMenuCommands.register("sethp", {
       params.setRange(0, pkmn.totalhp)
       params.setDefaultValue(pkmn.hp)
       newhp = pbMessageChooseNumber(
-         _INTL("Set {1}'s HP (max. {2}).", pkmn.name, pkmn.totalhp), params) { screen.pbUpdate }
+        _INTL("Set {1}'s HP (max. {2}).", pkmn.name, pkmn.totalhp), params
+      ) { screen.pbUpdate }
       if newhp != pkmn.hp
         pkmn.hp = newhp
         screen.pbRefreshSingle(pkmnid)
@@ -90,7 +91,7 @@ PokemonDebugMenuCommands.register("setstatus", {
         msg = _INTL("Current status: {1}", GameData::Status.get(pkmn.status).name)
         if pkmn.status == :SLEEP
           msg = _INTL("Current status: {1} (turns: {2})",
-             GameData::Status.get(pkmn.status).name, pkmn.statusCount)
+                      GameData::Status.get(pkmn.status).name, pkmn.statusCount)
         end
         cmd = screen.pbShowCommands(msg, commands, cmd)
         break if cmd < 0
@@ -106,7 +107,8 @@ PokemonDebugMenuCommands.register("setstatus", {
             params.setRange(0, 9)
             params.setDefaultValue(3)
             count = pbMessageChooseNumber(
-               _INTL("Set the Pokémon's sleep count."), params) { screen.pbUpdate }
+              _INTL("Set the Pokémon's sleep count."), params
+            ) { screen.pbUpdate }
             cancel = true if count <= 0
           end
           if !cancel
@@ -163,10 +165,10 @@ PokemonDebugMenuCommands.register("setpokerus", {
       msg = [_INTL("{1} doesn't have Pokérus.", pkmn.name),
              _INTL("Has strain {1}, infectious for {2} more days.", pokerus / 16, pokerus % 16),
              _INTL("Has strain {1}, not infectious.", pokerus / 16)][pkmn.pokerusStage]
-      cmd = screen.pbShowCommands(msg, [
-         _INTL("Give random strain"),
-         _INTL("Make not infectious"),
-         _INTL("Clear Pokérus")], cmd)
+      cmd = screen.pbShowCommands(msg,
+                                  [_INTL("Give random strain"),
+                                   _INTL("Make not infectious"),
+                                   _INTL("Clear Pokérus")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Give random strain
@@ -209,7 +211,8 @@ PokemonDebugMenuCommands.register("setlevel", {
       params.setRange(1, GameData::GrowthRate.max_level)
       params.setDefaultValue(pkmn.level)
       level = pbMessageChooseNumber(
-         _INTL("Set the Pokémon's level (max. {1}).", params.maxNumber), params) { screen.pbUpdate }
+        _INTL("Set the Pokémon's level (max. {1}).", params.maxNumber), params
+      ) { screen.pbUpdate }
       if level != pkmn.level
         pkmn.level = level
         pkmn.calc_stats
@@ -237,7 +240,8 @@ PokemonDebugMenuCommands.register("setexp", {
         params.setRange(minxp, maxxp - 1)
         params.setDefaultValue(pkmn.exp)
         newexp = pbMessageChooseNumber(
-           _INTL("Set the Pokémon's Exp (range {1}-{2}).", minxp, maxxp - 1), params) { screen.pbUpdate }
+          _INTL("Set the Pokémon's Exp (range {1}-{2}).", minxp, maxxp - 1), params
+        ) { screen.pbUpdate }
         if newexp != pkmn.exp
           pkmn.exp = newexp
           pkmn.calc_stats
@@ -257,10 +261,10 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
     cmd = 0
     loop do
       persid = sprintf("0x%08X", pkmn.personalID)
-      cmd = screen.pbShowCommands(_INTL("Personal ID is {1}.", persid), [
-           _INTL("Set EVs"),
-           _INTL("Set IVs"),
-           _INTL("Randomise pID")], cmd)
+      cmd = screen.pbShowCommands(_INTL("Personal ID is {1}.", persid),
+                                  [_INTL("Set EVs"),
+                                   _INTL("Set IVs"),
+                                   _INTL("Randomise pID")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Set EVs
@@ -277,8 +281,8 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
           evcommands.push(_INTL("Randomise all"))
           evcommands.push(_INTL("Max randomise all"))
           cmd2 = screen.pbShowCommands(_INTL("Change which EV?\nTotal: {1}/{2} ({3}%)",
-                                      totalev, Pokemon::EV_LIMIT,
-                                      100 * totalev / Pokemon::EV_LIMIT), evcommands, cmd2)
+                                             totalev, Pokemon::EV_LIMIT,
+                                             100 * totalev / Pokemon::EV_LIMIT), evcommands, cmd2)
           break if cmd2 < 0
           if cmd2 < ev_id.length
             params = ChooseNumberParams.new
@@ -291,7 +295,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
             params.setDefaultValue(thisValue)
             params.setCancelValue(thisValue)
             f = pbMessageChooseNumber(_INTL("Set the EV for {1} (max. {2}).",
-               GameData::Stat.get(ev_id[cmd2]).name, upperLimit), params) { screen.pbUpdate }
+                                            GameData::Stat.get(ev_id[cmd2]).name, upperLimit), params) { screen.pbUpdate }
             if f != pkmn.ev[ev_id[cmd2]]
               pkmn.ev[ev_id[cmd2]] = f
               pkmn.calc_stats
@@ -330,8 +334,8 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
             totaliv += pkmn.iv[s.id]
           end
           msg = _INTL("Change which IV?\nHidden Power:\n{1}, power {2}\nTotal: {3}/{4} ({5}%)",
-             GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
-             iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
+                      GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
+                      iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
           ivcommands.push(_INTL("Randomise all"))
           cmd2 = screen.pbShowCommands(msg, ivcommands, cmd2)
           break if cmd2 < 0
@@ -341,7 +345,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
             params.setDefaultValue(pkmn.iv[iv_id[cmd2]])
             params.setCancelValue(pkmn.iv[iv_id[cmd2]])
             f = pbMessageChooseNumber(_INTL("Set the IV for {1} (max. 31).",
-               GameData::Stat.get(iv_id[cmd2]).name), params) { screen.pbUpdate }
+                                            GameData::Stat.get(iv_id[cmd2]).name), params) { screen.pbUpdate }
             if f != pkmn.iv[iv_id[cmd2]]
               pkmn.iv[iv_id[cmd2]] = f
               pkmn.calc_stats
@@ -354,7 +358,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
           end
         end
       when 2   # Randomise pID
-        pkmn.personalID = rand(2 ** 16) | rand(2 ** 16) << 16
+        pkmn.personalID = rand(2**16) | (rand(2**16) << 16)
         pkmn.calc_stats
         screen.pbRefreshSingle(pkmnid)
       end
@@ -372,7 +376,8 @@ PokemonDebugMenuCommands.register("sethappiness", {
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.happiness)
     h = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's happiness (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's happiness (max. 255)."), params
+    ) { screen.pbUpdate }
     if h != pkmn.happiness
       pkmn.happiness = h
       screen.pbRefreshSingle(pkmnid)
@@ -396,7 +401,8 @@ PokemonDebugMenuCommands.register("setbeauty", {
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.beauty)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Beauty (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Beauty (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.beauty
       pkmn.beauty = newval
       screen.pbRefreshSingle(pkmnid)
@@ -414,7 +420,8 @@ PokemonDebugMenuCommands.register("setcool", {
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.cool)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Cool (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Cool (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.cool
       pkmn.cool = newval
       screen.pbRefreshSingle(pkmnid)
@@ -432,7 +439,8 @@ PokemonDebugMenuCommands.register("setcute", {
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.cute)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Cute (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Cute (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.cute
       pkmn.cute = newval
       screen.pbRefreshSingle(pkmnid)
@@ -450,7 +458,8 @@ PokemonDebugMenuCommands.register("setsmart", {
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.smart)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Smart (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Smart (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.smart
       pkmn.smart = newval
       screen.pbRefreshSingle(pkmnid)
@@ -468,7 +477,8 @@ PokemonDebugMenuCommands.register("settough", {
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.tough)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Tough (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Tough (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.tough
       pkmn.tough = newval
       screen.pbRefreshSingle(pkmnid)
@@ -486,7 +496,8 @@ PokemonDebugMenuCommands.register("setsheen", {
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.sheen)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Sheen (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Sheen (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.sheen
       pkmn.sheen = newval
       screen.pbRefreshSingle(pkmnid)
@@ -574,10 +585,10 @@ PokemonDebugMenuCommands.register("setmovepp", {
           cmd2 = 0
           loop do
             msg = _INTL("{1}: PP {2}/{3} (PP Up {4}/3)", movename, move.pp, move.total_pp, move.ppup)
-            cmd2 = screen.pbShowCommands(msg, [
-               _INTL("Set PP"),
-               _INTL("Full PP"),
-               _INTL("Set PP Up")], cmd2)
+            cmd2 = screen.pbShowCommands(msg,
+                                         [_INTL("Set PP"),
+                                          _INTL("Full PP"),
+                                          _INTL("Set PP Up")], cmd2)
             break if cmd2 < 0
             case cmd2
             when 0   # Change PP
@@ -585,7 +596,8 @@ PokemonDebugMenuCommands.register("setmovepp", {
               params.setRange(0, move.total_pp)
               params.setDefaultValue(move.pp)
               h = pbMessageChooseNumber(
-                 _INTL("Set PP of {1} (max. {2}).", movename, move.total_pp), params) { screen.pbUpdate }
+                _INTL("Set PP of {1} (max. {2}).", movename, move.total_pp), params
+              ) { screen.pbUpdate }
               move.pp = h
             when 1   # Full PP
               move.pp = move.total_pp
@@ -594,7 +606,8 @@ PokemonDebugMenuCommands.register("setmovepp", {
               params.setRange(0, 3)
               params.setDefaultValue(move.ppup)
               h = pbMessageChooseNumber(
-                 _INTL("Set PP Up of {1} (max. 3).", movename), params) { screen.pbUpdate }
+                _INTL("Set PP Up of {1} (max. 3).", movename), params
+              ) { screen.pbUpdate }
               move.ppup = h
               move.pp = move.total_pp if move.pp > move.total_pp
             end
@@ -764,10 +777,10 @@ PokemonDebugMenuCommands.register("setgender", {
       cmd = 0
       loop do
         msg = [_INTL("Gender is male."), _INTL("Gender is female.")][pkmn.male? ? 0 : 1]
-        cmd = screen.pbShowCommands(msg, [
-           _INTL("Make male"),
-           _INTL("Make female"),
-           _INTL("Reset")], cmd)
+        cmd = screen.pbShowCommands(msg,
+                                    [_INTL("Make male"),
+                                     _INTL("Make female"),
+                                     _INTL("Reset")], cmd)
         break if cmd < 0
         case cmd
         when 0   # Make male
@@ -800,10 +813,10 @@ PokemonDebugMenuCommands.register("speciesform", {
     loop do
       msg = [_INTL("Species {1}, form {2}.", pkmn.speciesName, pkmn.form),
              _INTL("Species {1}, form {2} (forced).", pkmn.speciesName, pkmn.form)][(pkmn.forced_form.nil?) ? 0 : 1]
-      cmd = screen.pbShowCommands(msg, [
-         _INTL("Set species"),
-         _INTL("Set form"),
-         _INTL("Remove form override")], cmd)
+      cmd = screen.pbShowCommands(msg,
+                                  [_INTL("Set species"),
+                                   _INTL("Set form"),
+                                   _INTL("Remove form override")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Set species
@@ -869,11 +882,8 @@ PokemonDebugMenuCommands.register("setshininess", {
     loop do
       msg_idx = pkmn.shiny? ? (pkmn.super_shiny? ? 1 : 0) : 2
       msg = [_INTL("Is shiny."), _INTL("Is super shiny."), _INTL("Is normal (not shiny).")][msg_idx]
-      cmd = screen.pbShowCommands(msg, [
-           _INTL("Make shiny"),
-           _INTL("Make super shiny"),
-           _INTL("Make normal"),
-           _INTL("Reset")], cmd)
+      cmd = screen.pbShowCommands(msg, [_INTL("Make shiny"), _INTL("Make super shiny"),
+                                        _INTL("Make normal"), _INTL("Reset")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make shiny
@@ -934,7 +944,7 @@ PokemonDebugMenuCommands.register("setribbons", {
       ids = []
       GameData::Ribbon.each do |ribbon_data|
         commands.push(_INTL("{1} {2}",
-           (pkmn.hasRibbon?(ribbon_data.id)) ? "[Y]" : "[  ]", ribbon_data.name))
+                            (pkmn.hasRibbon?(ribbon_data.id)) ? "[Y]" : "[  ]", ribbon_data.name))
         ids.push(ribbon_data.id)
       end
       commands.push(_INTL("Give all"))
@@ -969,9 +979,7 @@ PokemonDebugMenuCommands.register("setnickname", {
       speciesname = pkmn.speciesName
       msg = [_INTL("{1} has the nickname {2}.", speciesname, pkmn.name),
              _INTL("{1} has no nickname.", speciesname)][pkmn.nicknamed? ? 0 : 1]
-      cmd = screen.pbShowCommands(msg, [
-           _INTL("Rename"),
-           _INTL("Erase name")], cmd)
+      cmd = screen.pbShowCommands(msg, [_INTL("Rename"), _INTL("Erase name")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Rename
@@ -997,15 +1005,16 @@ PokemonDebugMenuCommands.register("ownership", {
     cmd = 0
     loop do
       gender = [_INTL("Male"), _INTL("Female"), _INTL("Unknown")][pkmn.owner.gender]
-      msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id),
-             _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id)
-            ][pkmn.foreign?($player) ? 1 : 0]
-      cmd = screen.pbShowCommands(msg, [
-           _INTL("Make player's"),
-           _INTL("Set OT's name"),
-           _INTL("Set OT's gender"),
-           _INTL("Random foreign ID"),
-           _INTL("Set foreign ID")], cmd)
+      msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})",
+                   pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id),
+             _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})",
+                   pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id)][pkmn.foreign?($player) ? 1 : 0]
+      cmd = screen.pbShowCommands(msg,
+                                  [_INTL("Make player's"),
+                                   _INTL("Set OT's name"),
+                                   _INTL("Set OT's gender"),
+                                   _INTL("Random foreign ID"),
+                                   _INTL("Set foreign ID")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make player's
@@ -1014,7 +1023,7 @@ PokemonDebugMenuCommands.register("ownership", {
         pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, Settings::MAX_PLAYER_NAME_SIZE)
       when 2   # Set OT's gender
         cmd2 = screen.pbShowCommands(_INTL("Set OT's gender."),
-           [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
+                                     [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
         pkmn.owner.gender = cmd2 if cmd2 >= 0
       when 3   # Random foreign ID
         pkmn.owner.id = $player.make_foreign_ID
@@ -1023,8 +1032,9 @@ PokemonDebugMenuCommands.register("ownership", {
         params.setRange(0, 65535)
         params.setDefaultValue(pkmn.owner.public_id)
         val = pbMessageChooseNumber(
-           _INTL("Set the new ID (max. 65535)."), params) { screen.pbUpdate }
-        pkmn.owner.id = val | val << 16
+          _INTL("Set the new ID (max. 65535)."), params
+        ) { screen.pbUpdate }
+        pkmn.owner.id = val | (val << 16)
       end
     end
     next false
@@ -1073,10 +1083,10 @@ PokemonDebugMenuCommands.register("setegg", {
     loop do
       msg = [_INTL("Not an egg"),
              _INTL("Egg (hatches in {1} steps).", pkmn.steps_to_hatch)][pkmn.egg? ? 1 : 0]
-      cmd = screen.pbShowCommands(msg, [
-           _INTL("Make egg"),
-           _INTL("Make Pokémon"),
-           _INTL("Set steps left to 1")], cmd)
+      cmd = screen.pbShowCommands(msg,
+                                  [_INTL("Make egg"),
+                                   _INTL("Make Pokémon"),
+                                   _INTL("Set steps left to 1")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make egg
@@ -1114,11 +1124,8 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
     cmd = 0
     loop do
       msg = [_INTL("Not a Shadow Pokémon."),
-             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heart_gauge, pkmn.heartStage)
-            ][pkmn.shadowPokemon? ? 1 : 0]
-      cmd = screen.pbShowCommands(msg, [
-         _INTL("Make Shadow"),
-         _INTL("Set heart gauge")], cmd)
+             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heart_gauge, pkmn.heartStage)][pkmn.shadowPokemon? ? 1 : 0]
+      cmd = screen.pbShowCommands(msg, [_INTL("Make Shadow"), _INTL("Set heart gauge")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make Shadow
@@ -1135,8 +1142,9 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
           params.setRange(0, pkmn.max_gauge_size)
           params.setDefaultValue(pkmn.heart_gauge)
           val = pbMessageChooseNumber(
-             _INTL("Set the heart gauge (max. {1}).", pkmn.max_gauge_size),
-             params) { screen.pbUpdate }
+            _INTL("Set the heart gauge (max. {1}).", pkmn.max_gauge_size),
+            params
+          ) { screen.pbUpdate }
           if val != oldheart
             pkmn.adjustHeart(val - oldheart)
             pkmn.check_ready_to_purify
@@ -1165,11 +1173,12 @@ PokemonDebugMenuCommands.register("duplicate", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if screen.pbConfirm(_INTL("Are you sure you want to copy this Pokémon?"))
       clonedpkmn = pkmn.clone
-      if screen.is_a?(PokemonPartyScreen)
+      case screen
+      when PokemonPartyScreen
         pbStorePokemon(clonedpkmn)
         screen.pbHardRefresh
         screen.pbDisplay(_INTL("The Pokémon was duplicated."))
-      elsif screen.is_a?(PokemonStorageScreen)
+      when PokemonStorageScreen
         if screen.storage.pbMoveCaughtToParty(clonedpkmn)
           if pkmnid[0] != -1
             screen.pbDisplay(_INTL("The duplicated Pokémon was moved to your party."))
@@ -1197,10 +1206,11 @@ PokemonDebugMenuCommands.register("delete", {
   "name"        => _INTL("Delete"),
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if screen.pbConfirm(_INTL("Are you sure you want to delete this Pokémon?"))
-      if screen.is_a?(PokemonPartyScreen)
+      case screen
+      when PokemonPartyScreen
         screen.party.delete_at(pkmnid)
         screen.pbHardRefresh
-      elsif screen.is_a?(PokemonStorageScreen)
+      when PokemonStorageScreen
         screen.scene.pbRelease(pkmnid, heldpoke)
         (heldpoke) ? screen.heldpkmn = nil : screen.storage.pbDelete(pkmnid[0], pkmnid[1])
         screen.scene.pbRefresh

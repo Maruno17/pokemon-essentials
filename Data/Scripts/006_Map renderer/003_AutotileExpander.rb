@@ -1,6 +1,6 @@
 class TilemapRenderer
   module AutotileExpander
-    MAX_TEXTURE_SIZE  = (Bitmap.max_size / 1024) * 1024
+    MAX_TEXTURE_SIZE = (Bitmap.max_size / 1024) * 1024
 
     module_function
 
@@ -32,20 +32,20 @@ class TilemapRenderer
             case id
             when 1   # Top left corner
               new_bitmap.blt(dest_x, dest_y, bitmap,
-                 Rect.new(frame * SOURCE_TILE_WIDTH * 3, SOURCE_TILE_HEIGHT * 4,
-                 SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
+                             Rect.new(frame * SOURCE_TILE_WIDTH * 3, SOURCE_TILE_HEIGHT * 4,
+                                      SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
             when 2   # Top right corner
               new_bitmap.blt(dest_x, dest_y, bitmap,
-                 Rect.new(SOURCE_TILE_WIDTH + frame * SOURCE_TILE_WIDTH * 3, SOURCE_TILE_HEIGHT * 4,
-                 SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
+                             Rect.new(SOURCE_TILE_WIDTH + (frame * SOURCE_TILE_WIDTH * 3), SOURCE_TILE_HEIGHT * 4,
+                                      SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
             when 4   # Bottom right corner
               new_bitmap.blt(dest_x, dest_y, bitmap,
-                 Rect.new(SOURCE_TILE_WIDTH + frame * SOURCE_TILE_WIDTH * 3, SOURCE_TILE_HEIGHT * 5,
-                 SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
+                             Rect.new(SOURCE_TILE_WIDTH + (frame * SOURCE_TILE_WIDTH * 3), SOURCE_TILE_HEIGHT * 5,
+                                      SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
             when 8   # Bottom left corner
               new_bitmap.blt(dest_x, dest_y, bitmap,
-                 Rect.new(frame * SOURCE_TILE_WIDTH * 3, SOURCE_TILE_HEIGHT * 5,
-                 SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
+                             Rect.new(frame * SOURCE_TILE_WIDTH * 3, SOURCE_TILE_HEIGHT * 5,
+                                      SOURCE_TILE_WIDTH, SOURCE_TILE_HEIGHT))
             end
             next
           end

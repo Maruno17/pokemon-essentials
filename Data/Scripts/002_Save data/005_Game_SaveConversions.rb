@@ -96,9 +96,10 @@ SaveData.register_conversion(:v20_berry_plant_data) do
     if global.eventvars
       global.eventvars.each_pair do |key, value|
         next if !value || !value.is_a?(Array)
-        if value.length == 6   # Old berry plant data
+        case value.length
+        when 6   # Old berry plant data
           data = BerryPlantData.new
-          if value[1]&.is_a?(Symbol)
+          if value[1].is_a?(Symbol)
             plant_data = GameData::DerryPlant.get(value[1])
             data.new_mechanics      = false
             data.berry_id           = value[1]
@@ -110,12 +111,12 @@ SaveData.register_conversion(:v20_berry_plant_data) do
             data.watering_count     = value[4]
           end
           global.eventvars[key] = data
-        elsif value.length == 7 || value.length == 8   # New berry plant data
+        when 7, 8   # New berry plant data
           data = BerryPlantData.new
-          if value[1]&.is_a?(Symbol)
+          if value[1].is_a?(Symbol)
             data.new_mechanics     = true
             data.berry_id          = value[1]
-            data.mulch_id          = value[7] if value[7]&.is_a?(Symbol)
+            data.mulch_id          = value[7] if value[7].is_a?(Symbol)
             data.time_alive        = value[2]
             data.time_last_updated = value[3]
             data.growth_stage      = value[0]
@@ -294,12 +295,16 @@ SaveData.register_conversion(:v20_convert_pokemon_markings_global) do
       end
     end
     global.purifyChamber.sets.each do |set|
-      set.shadow = PokeBattle_Pokemon.convert(set.shadow) if set.shadow
       set.list.each do |pkmn|
         next if !pkmn.markings.is_a?(Integer)
         markings = []
         6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
         pkmn.markings = markings
+      end
+      if set.shadow && set.shadow.markings.is_a?(Integer)
+        markings = []
+        6.times { |i| markings[i] = ((set.shadow.markings & (1 << i)) == 0) ? 0 : 1 }
+        set.shadow.markings = markings
       end
     end
     if global.hallOfFame

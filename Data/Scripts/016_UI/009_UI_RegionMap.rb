@@ -58,7 +58,7 @@ class PokemonRegionMap_Scene
   SQUARE_WIDTH  = 16
   SQUARE_HEIGHT = 16
 
-  def initialize(region =- 1, wallmap = true)
+  def initialize(region = - 1, wallmap = true)
     @region  = region
     @wallmap = wallmap
   end
@@ -116,9 +116,9 @@ class PokemonRegionMap_Scene
         @sprites["map2"].x = @sprites["map"].x
         @sprites["map2"].y = @sprites["map"].y
       end
-      pbDrawImagePositions(@sprites["map2"].bitmap, [
-        ["Graphics/Pictures/#{graphic[4]}", graphic[2] * SQUARE_WIDTH, graphic[3] * SQUARE_HEIGHT]
-      ])
+      pbDrawImagePositions(
+        @sprites["map2"].bitmap,
+        [["Graphics/Pictures/#{graphic[4]}", graphic[2] * SQUARE_WIDTH, graphic[3] * SQUARE_HEIGHT]])
     end
     @sprites["mapbottom"] = MapBottomSprite.new(@viewport)
     @sprites["mapbottom"].mapname     = pbGetMessage(MessageTypes::RegionNames, mapindex)
@@ -163,11 +163,11 @@ class PokemonRegionMap_Scene
   end
 
   def point_x_to_screen_x(x)
-    return -SQUARE_WIDTH / 2 + (x * SQUARE_WIDTH) + (Graphics.width - @sprites["map"].bitmap.width) / 2
+    return (-SQUARE_WIDTH / 2) + (x * SQUARE_WIDTH) + ((Graphics.width - @sprites["map"].bitmap.width) / 2)
   end
 
   def point_y_to_screen_y(y)
-    return -SQUARE_HEIGHT / 2 + (y * SQUARE_HEIGHT) + (Graphics.height - @sprites["map"].bitmap.height) / 2
+    return (-SQUARE_HEIGHT / 2) + (y * SQUARE_HEIGHT) + ((Graphics.height - @sprites["map"].bitmap.height) / 2)
   end
 
   def location_shown?(point)
@@ -177,15 +177,15 @@ class PokemonRegionMap_Scene
 
   # TODO: Why is this PBS file writer here?
   def pbSaveMapData
-    File.open("PBS/town_map.txt","wb") { |f|
+    File.open("PBS/town_map.txt", "wb") { |f|
       Compiler.add_PBS_header_to_file(f)
       for i in 0...@map_data.length
         map = @map_data[i]
         next if !map
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("[%d]\r\n",i))
+        f.write(sprintf("[%d]\r\n", i))
         f.write(sprintf("Name = %s\r\nFilename = %s\r\n",
-          Compiler.csvQuote(map[0]), Compiler.csvQuote(map[1])))
+                        Compiler.csvQuote(map[0]), Compiler.csvQuote(map[1])))
         for loc in map[2]
           f.write("Point = ")
           Compiler.pbWriteCsvRecord(loc, f, [nil, "uussUUUU"])
@@ -248,9 +248,9 @@ class PokemonRegionMap_Scene
     return if @fly_map || !Settings::CAN_FLY_FROM_TOWN_MAP || !pbCanFly?
     @sprites["help"].bitmap.clear
     text = (@mode == 0) ? _INTL("ACTION: Fly") : _INTL("ACTION: Cancel Fly")
-    pbDrawTextPositions(@sprites["help"].bitmap, [
-      [text, Graphics.width - 16, -8, 1, Color.new(248, 248, 248), Color.new(0, 0, 0)]
-    ])
+    pbDrawTextPositions(
+      @sprites["help"].bitmap,
+      [[text, Graphics.width - 16, -8, 1, Color.new(248, 248, 248), Color.new(0, 0, 0)]])
     @sprites.each do |key, sprite|
       next if !key.include?("point")
       sprite.visible = (@mode == 1)

@@ -212,11 +212,12 @@ module PluginManager
         dependencies = value
         dependencies = [dependencies] if !dependencies.is_a?(Array) || !dependencies[0].is_a?(Array)
         for dep in value
-          if dep.is_a?(String)   # "plugin name"
+          case dep
+          when String   # "plugin name"
             if !self.installed?(dep)
               self.error("Plugin '#{name}' requires plugin '#{dep}' to be installed above it.")
             end
-          elsif dep.is_a?(Array)
+          when Array
             case dep.size
             when 1   # ["plugin name"]
               if dep[0].is_a?(String)
@@ -279,7 +280,8 @@ module PluginManager
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}', if installed, to be version #{dep_version}"
                   msg << " or higher" if !exact
                   msg << ", but the installed version was #{self.version(dep_name)}."
-                  if dep_link = self.link(dep_name)
+                  dep_link = self.link(dep_name)
+                  if dep_link
                     msg << "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
                   self.error(msg)
@@ -289,16 +291,16 @@ module PluginManager
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' to be version #{dep_version}"
                   msg << " or later" if !exact
                   msg << ", but the installed version was #{self.version(dep_name)}."
-                  if dep_link = self.link(dep_name)
+                  dep_link = self.link(dep_name)
+                  if dep_link
                     msg << "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
-                  self.error(msg)
                 else   # Don't have plugin
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' version #{dep_version} "
-                  msg << "or later" if !exact
+                  msg << "or later " if !exact
                   msg << "to be installed above it."
-                  self.error(msg)
                 end
+                self.error(msg)
               end
             end
           end
@@ -427,8 +429,8 @@ module PluginManager
         return 1 if !c2
         return 1 if c1.to_i(16) > c2.to_i(16)
         return -1 if c1.to_i(16) < c2.to_i(16)
-      else
-        return -1 if c2
+      elsif c2
+        return -1
       end
     end
     return 0
@@ -588,7 +590,7 @@ module PluginManager
         optional = false
         # clean the name to a simple string
         if dname.is_a?(Array)
-          optional = [:optional,:optional_exact].include?(dname[0])
+          optional = [:optional, :optional_exact].include?(dname[0])
           dname = dname[dname.length - 2]
         end
         # catch missing dependency
@@ -710,7 +712,7 @@ module PluginManager
         # get rid of tabs
         code.gsub!("\t", "  ")
         # construct filename
-        sname = scr[0].gsub("\\","/").split("/")[-1]
+        sname = scr[0].gsub("\\", "/").split("/")[-1]
         fname = "[#{name}] #{sname}"
         # try to run the code
         begin

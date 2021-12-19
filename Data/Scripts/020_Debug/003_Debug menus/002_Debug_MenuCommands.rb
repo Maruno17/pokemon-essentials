@@ -134,11 +134,12 @@ DebugMenuCommands.register("togglewallpapers", {
         end
         paperscmd = pbShowCommands(nil, paperscmds, -1, paperscmd)
         break if paperscmd < 0
-        if paperscmd == 0   # Unlock all
+        case paperscmd
+        when 0   # Unlock all
           for i in PokemonStorage::BASICWALLPAPERQTY...w.length
             unlockarray[i] = true
           end
-        elsif paperscmd == 1   # Lock all
+        when 1   # Lock all
           for i in PokemonStorage::BASICWALLPAPERQTY...w.length
             unlockarray[i] = false
           end
@@ -210,7 +211,7 @@ DebugMenuCommands.register("testwildbattle", {
       params.setInitialValue(5)
       params.setCancelValue(0)
       level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
-         GameData::Species.get(species).name), params)
+                                          GameData::Species.get(species).name), params)
       if level > 0
         $game_temp.encounter_type = nil
         pbWildBattle(species, level)
@@ -256,7 +257,8 @@ DebugMenuCommands.register("testwildbattleadvanced", {
         params.setInitialValue(size0)
         params.setCancelValue(0)
         newSize = pbMessageChooseNumber(
-           _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params)
+          _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params
+        )
         size0 = newSize if newSize > 0
       elsif pkmnCmd == pkmnCmds.length - 3   # Add Pokémon
         species = pbChooseSpeciesList
@@ -266,7 +268,7 @@ DebugMenuCommands.register("testwildbattleadvanced", {
           params.setInitialValue(5)
           params.setCancelValue(0)
           level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
-             GameData::Species.get(species).name), params)
+                                              GameData::Species.get(species).name), params)
           pkmn.push(Pokemon.new(species, level)) if level > 0
         end
       else                                   # Edit a Pokémon
@@ -323,8 +325,9 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
           next
         elsif size1 > trainers.length && trainers[0][1].party_count == 1
           pbMessage(
-             _INTL("Opposing side size cannot be {1}, as that requires the first trainer to have 2 or more Pokémon, which they don't.",
-             size1))
+            _INTL("Opposing side size cannot be {1}, as that requires the first trainer to have 2 or more Pokémon, which they don't.",
+                  size1)
+          )
           next
         end
         setBattleRule(sprintf("%dv%d", size0, size1))
@@ -346,7 +349,8 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         params.setInitialValue(size1)
         params.setCancelValue(0)
         newSize = pbMessageChooseNumber(
-           _INTL("Choose the number of battlers on the opponent's side (max. {1}).", maxVal), params)
+          _INTL("Choose the number of battlers on the opponent's side (max. {1}).", maxVal), params
+        )
         size1 = newSize if newSize > 0
       elsif trainerCmd == trainerCmds.length - 3   # Set player side size
         if !pbCanDoubleBattle?
@@ -359,7 +363,8 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         params.setInitialValue(size0)
         params.setCancelValue(0)
         newSize = pbMessageChooseNumber(
-           _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params)
+          _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params
+        )
         size0 = newSize if newSize > 0
       elsif trainerCmd == trainerCmds.length - 4   # Add trainer
         trainerdata = pbListScreen(_INTL("CHOOSE A TRAINER"), TrainerBattleLister.new(0, false))
@@ -370,7 +375,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
       else                                         # Edit a trainer
         if pbConfirmMessage(_INTL("Change this trainer?"))
           trainerdata = pbListScreen(_INTL("CHOOSE A TRAINER"),
-             TrainerBattleLister.new(trainers[trainerCmd][0], false))
+                                     TrainerBattleLister.new(trainers[trainerCmd][0], false))
           if trainerdata
             tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
             trainers[trainerCmd] = [0, tr]
@@ -479,7 +484,7 @@ DebugMenuCommands.register("additem", {
         params.setInitialValue(1)
         params.setCancelValue(0)
         qty = pbMessageChooseNumber(_INTL("Add how many {1}?",
-           GameData::Item.get(item).name_plural), params)
+                                          GameData::Item.get(item).name_plural), params)
         if qty > 0
           $bag.add(item, qty)
           pbMessage(_INTL("Gave {1}x {2}.", qty, GameData::Item.get(item).name))
@@ -659,7 +664,7 @@ DebugMenuCommands.register("fillboxes", {
     pbMessage(_INTL("Storage boxes were filled with one Pokémon of each species."))
     if !completed
       pbMessage(_INTL("Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.",
-         Settings::NUM_STORAGE_BOXES, box_qty))
+                      Settings::NUM_STORAGE_BOXES, box_qty))
     end
   }
 })
@@ -715,9 +720,10 @@ DebugMenuCommands.register("setbadges", {
       end
       badgecmd = pbShowCommands(nil, badgecmds, -1, badgecmd)
       break if badgecmd < 0
-      if badgecmd == 0   # Give all
+      case badgecmd
+      when 0   # Give all
         24.times { |i| $player.badges[i] = true }
-      elsif badgecmd == 1   # Remove all
+      when 1   # Remove all
         24.times { |i| $player.badges[i] = false }
       else
         $player.badges[badgecmd - 2] = !$player.badges[badgecmd - 2]
@@ -807,12 +813,10 @@ DebugMenuCommands.register("dexlists", {
       dexindex = dexescmd - 1
       if dexindex < 0   # Toggle Pokédex ownership
         $player.has_pokedex = !$player.has_pokedex
-      else   # Toggle Regional Dex accessibility
-        if $player.pokedex.unlocked?(dexindex)
-          $player.pokedex.lock(dexindex)
-        else
-          $player.pokedex.unlock(dexindex)
-        end
+      elsif $player.pokedex.unlocked?(dexindex)   # Toggle Regional Dex accessibility
+        $player.pokedex.lock(dexindex)
+      else
+        $player.pokedex.unlock(dexindex)
       end
     end
   }
@@ -882,7 +886,7 @@ DebugMenuCommands.register("randomid", {
   "name"        => _INTL("Randomize Player ID"),
   "description" => _INTL("Generate a random new ID for the player."),
   "effect"      => proc {
-    $player.id = rand(2 ** 16) | rand(2 ** 16) << 16
+    $player.id = rand(2**16) | (rand(2**16) << 16)
     pbMessage(_INTL("The player's ID was changed to {1} (full ID: {2}).", $player.public_ID, $player.id))
   }
 })
