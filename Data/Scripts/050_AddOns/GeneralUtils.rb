@@ -100,6 +100,10 @@ def getDexNumberForSpecies(species)
   return dexNum
 end
 
+def getPokemon(dexNum)
+  return GameData::Species.get(dexNum)
+end
+
 #shortcut for using in game events because of script characters limit
 def dexNum(species)
   return getDexNumberForSpecies(species)
@@ -279,3 +283,18 @@ def Kernel.setRocketPassword(variableNum)
   password = _INTL("{1}'s {2}",word1,word2)
   pbSet(variableNum,password)
 end
+
+
+def getGenericPokemonCryText(pokemonSpecies)
+  case pokemonSpecies
+  when 25
+    return "Pika!"
+  when 16,17,18,21,22,144,145,146,227,417,418,372 #birds
+    return "Squawk!"
+  when 163,164
+    return "Hoot!"  #owl
+  else
+    return "Guaugh!"
+  end
+end
+

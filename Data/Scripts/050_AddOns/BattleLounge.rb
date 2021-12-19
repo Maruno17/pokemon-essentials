@@ -4,49 +4,82 @@ end
 
 def get_egg_group_from_id(id)
   case id
-  when 0 ;return nil
-  when 1;return :Monster
-  when 2;return :Water1
-  when 3;return :Bug
-  when 4;return :Flying
-  when 5;return :Field
-  when 6;return :Fairy
-  when 7;return :Grass
-  when 8;return :Humanlike
-  when 9;return :Water3
-  when 10;return :Mineral
-  when 11;return :Amorphous
-  when 12;return :Water2
-  when 13;return :Ditto
-  when 14;return :Dragon
-  when 15;return :Undiscovered
+  when 0;
+    return nil
+  when 1;
+    return :Monster
+  when 2;
+    return :Water1
+  when 3;
+    return :Bug
+  when 4;
+    return :Flying
+  when 5;
+    return :Field
+  when 6;
+    return :Fairy
+  when 7;
+    return :Grass
+  when 8;
+    return :Humanlike
+  when 9;
+    return :Water3
+  when 10;
+    return :Mineral
+  when 11;
+    return :Amorphous
+  when 12;
+    return :Water2
+  when 13;
+    return :Ditto
+  when 14;
+    return :Dragon
+  when 15;
+    return :Undiscovered
   end
 end
 
 def get_egg_group_name(id)
   case id
-  when 0 ;return nil
-  when 1;return "Monster Pokémon"
-  when 2;return :"Aquatic Pokémon"
-  when 3;return :"Bug Pokémon"
-  when 4;return :"Bird Pokémon"
-  when 5;return :"Land Pokémon"
-  when 6;return :"Cute Pokémon"
-  when 7;return :"Plant Pokémon"
-  when 8;return :"Human-like Pokémon"
-  when 9;return :"Aquatic Pokémon"
-  when 10;return :"Mineral Pokémon"
-  when 11;return :"Blob Pokémon"
-  when 12;return :"Fish Pokémon"
-  when 13;return :"Ditto"
-  when 14;return :"Dragon Pokémon"
-  when 15;return :"Legendary Pokémon"
+  when 0;
+    return nil
+  when 1;
+    return "Monster Pokémon"
+  when 2;
+    return :"Aquatic Pokémon"
+  when 3;
+    return :"Bug Pokémon"
+  when 4;
+    return :"Bird Pokémon"
+  when 5;
+    return :"Land Pokémon"
+  when 6;
+    return :"Cute Pokémon"
+  when 7;
+    return :"Plant Pokémon"
+  when 8;
+    return :"Human-like Pokémon"
+  when 9;
+    return :"Aquatic Pokémon"
+  when 10;
+    return :"Mineral Pokémon"
+  when 11;
+    return :"Blob Pokémon"
+  when 12;
+    return :"Fish Pokémon"
+  when 13;
+    return :"Ditto"
+  when 14;
+    return :"Dragon Pokémon"
+  when 15;
+    return :"Legendary Pokémon"
   end
 end
 
-def get_random_trainer_name(trainer_class) #0: male, 1: female
-gender = GameData::TrainerType.get(trainer_class).gender
-  if(gender == 0)
+def get_random_trainer_name(trainer_class)
+  #0: male, 1: female
+  gender = GameData::TrainerType.get(trainer_class).gender
+  if (gender == 0)
     return RandTrainerNames_male[rand(RandTrainerNames_male.length)]
   else
     return RandTrainerNames_female[rand(RandTrainerNames_female.length)]
@@ -54,56 +87,66 @@ gender = GameData::TrainerType.get(trainer_class).gender
 end
 
 def get_random_battle_lounge_egg_group
-  _DISABLED_EGG_GROUPS = [0,13,15]
-  group=0
+  _DISABLED_EGG_GROUPS = [0, 13, 15]
+  group = 0
   while _DISABLED_EGG_GROUPS.include?(group)
-    group = rand(0,15)
+    group = rand(0, 15)
   end
   return group
 end
 
-GENERIC_PRIZES_MULTI = [:HEARTSCALE,:LEMONADE]
-GENERIC_PRIZES_SINGLE = [:RARECANDY,:RARECANDY,:PPUP,:EJECTBUTTON,:FOCUSBAND,:FOCUSSASH,:RESETURGE,:ABILITYURGE,:ITEMURGE,:ITEMDROP,:HPUP]
-MONSTER_PRIZES = [:RAREBONE,:LAGGINGTAIL,:RAZORFANG,:RAZORCLAW,:GRIPCLAW]
-WATER_PRIZES = [:MYSTICWATER,:BIGPEARL]
-BUG_PRIZES = [:SILVERPOWDER,:SHEDSHELL]
-FLYING_PRIZES = [:AIRBALLOON,:FLOATSTONE]
-FIELD_PRIZES = [:MOOMOOMILK,:IRONBALL,:RAREBONE]
-FAIRY_PRIZES = [:STARPIECE,:DESTINYKNOT,:MAXELIXIR]
-HUMAN_PRIZES = [:BLACKBELT,:RINGTARGET,:EXPERTBELT]
-GRASS_PRIZES = [:REVIVALHERB,:POWERHERB,:HEALPOWDER,:ABSORBBULB,:BIGMUSHROOM]
-MINERAL_PRIZES = [:CELLBATTERY,:SHINYSTONE,:BIGNUGGET,:RELICCOPPER,:RELICGOLD,:RELICSILVER]
-AMORPHOUS_PRIZES = [:SPELLTAG,:WIDELENS,:ZOOMLENS,:SCOPELENS]
-DRAGON_PRIZES = [:DRAGONSCALE,:DRAGONFANG,:RARECANDY]
-UNDISCOVERED_PRIZES = [:MASTERBALL,:SACREDASH]
+GENERIC_PRIZES_MULTI = [:HEARTSCALE, :LEMONADE]
+GENERIC_PRIZES_SINGLE = [:RARECANDY, :RARECANDY, :PPUP, :EJECTBUTTON, :FOCUSBAND, :FOCUSSASH, :RESETURGE, :ABILITYURGE, :ITEMURGE, :ITEMDROP, :HPUP]
+MONSTER_PRIZES = [:RAREBONE, :LAGGINGTAIL, :RAZORFANG, :RAZORCLAW, :GRIPCLAW]
+WATER_PRIZES = [:MYSTICWATER, :BIGPEARL]
+BUG_PRIZES = [:SILVERPOWDER, :SHEDSHELL]
+FLYING_PRIZES = [:AIRBALLOON, :FLOATSTONE]
+FIELD_PRIZES = [:MOOMOOMILK, :IRONBALL, :RAREBONE]
+FAIRY_PRIZES = [:STARPIECE, :DESTINYKNOT, :MAXELIXIR]
+HUMAN_PRIZES = [:BLACKBELT, :RINGTARGET, :EXPERTBELT]
+GRASS_PRIZES = [:REVIVALHERB, :POWERHERB, :HEALPOWDER, :ABSORBBULB, :BIGMUSHROOM]
+MINERAL_PRIZES = [:CELLBATTERY, :SHINYSTONE, :BIGNUGGET, :RELICCOPPER, :RELICGOLD, :RELICSILVER]
+AMORPHOUS_PRIZES = [:SPELLTAG, :WIDELENS, :ZOOMLENS, :SCOPELENS]
+DRAGON_PRIZES = [:DRAGONSCALE, :DRAGONFANG, :RARECANDY]
+UNDISCOVERED_PRIZES = [:MASTERBALL, :SACREDASH]
 #todo: prizes related to the group (ex: dragon fang for dragon types, TMs, etc. )
 # todo: if heartscale, give a random amount from 10-20
 def get_random_battle_lounge_prize(group_type)
   generic_prizes = [GENERIC_PRIZES_MULTI, GENERIC_PRIZES_SINGLE]
-  is_generic_prize = rand(3)==1
+  is_generic_prize = rand(3) == 1
   if is_generic_prize
     type = generic_prizes.sample
     return type.sample
   else
     case get_egg_group_from_id(group_type)
-    when :Monster ; return MONSTER_PRIZES.sample
-    when :Water1,:Water2,:Water3 ; return WATER_PRIZES.sample
-    when :Bug ; return BUG_PRIZES.sample
-    when :Flying ; return FLYING_PRIZES.sample
-    when :Field ; return FIELD_PRIZES.sample
-    when :Fairy ; return FAIRY_PRIZES.sample
-    when :Grass ; return GRASS_PRIZES.sample
-    when :Mineral ; return MINERAL_PRIZES.sample
-    when :Humanlike ; return HUMAN_PRIZES.sample
-    when :Amorphous ; return AMORPHOUS_PRIZES.sample
-    when :Dragon ; return DRAGON_PRIZES.sample
-    when :Undiscovered ; return UNDISCOVERED_PRIZES.sample
+    when :Monster;
+      return MONSTER_PRIZES.sample
+    when :Water1, :Water2, :Water3;
+      return WATER_PRIZES.sample
+    when :Bug;
+      return BUG_PRIZES.sample
+    when :Flying;
+      return FLYING_PRIZES.sample
+    when :Field;
+      return FIELD_PRIZES.sample
+    when :Fairy;
+      return FAIRY_PRIZES.sample
+    when :Grass;
+      return GRASS_PRIZES.sample
+    when :Mineral;
+      return MINERAL_PRIZES.sample
+    when :Humanlike;
+      return HUMAN_PRIZES.sample
+    when :Amorphous;
+      return AMORPHOUS_PRIZES.sample
+    when :Dragon;
+      return DRAGON_PRIZES.sample
+    when :Undiscovered;
+      return UNDISCOVERED_PRIZES.sample
     end
   end
 
 end
-
-
 
 def generateSameEggGroupFusionsTeam(eggGroup_id)
   eggGroup = get_egg_group_from_id(eggGroup_id)
@@ -111,11 +154,11 @@ def generateSameEggGroupFusionsTeam(eggGroup_id)
   generatedTeam = []
   while !teamComplete
     foundFusionPartner = false
-    species1 = rand(Settings::NB_POKEMON)+1
+    species1 = rand(Settings::NB_POKEMON) + 1
     if getPokemonEggGroups(species1).include?(eggGroup)
       foundFusionPartner = false
       while !foundFusionPartner
-        species2 = rand(Settings::NB_POKEMON)+1
+        species2 = rand(Settings::NB_POKEMON) + 1
         if getPokemonEggGroups(species2).include?(eggGroup)
           generatedTeam << getFusionSpecies(species1, species2)
           foundFusionPartner = true
@@ -125,4 +168,53 @@ def generateSameEggGroupFusionsTeam(eggGroup_id)
     teamComplete = generatedTeam.length == 3
   end
   return generatedTeam
+end
+
+def listLegendaryPokemonIds()
+  return [144, 145, 146, 150, 151, 245, 243, 244, 245, 249, 250, 251, 315, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 378, 379, 380, 381]
+end
+
+def generateRandomFusionFromPokemon(dexNum, onlyCustomSprites = false, allowLegendaries=true)
+  speciesList = onlyCustomSprites ? getCustomSpeciesListForPokemon(dexNum,allowLegendaries) : getAllPokemonWithBase(dexNum)
+  return speciesList.sample
+end
+
+def getRandomBasePokemon(includeLegendaries = false)
+  legendaries =listLegendaryPokemonIds()
+  poke = rand(NB_POKEMON + 1)
+  return poke if includeLegendaries
+  while legendaries.include?(poke)
+    poke = rand(NB_POKEMON + 1)
+  end
+  return poke
+end
+
+def getAllPokemonWithBase(dexNum)
+  #todo Unimplemented
+  return [25]
+end
+
+def getCustomSpeciesListForPokemon(dexNum,allowLegendaries=true)
+  excluded = allowLegendaries ? [] : listLegendaryPokemonIds()
+  filesList = Dir["./Graphics/CustomBattlers/*"]
+  speciesList = []
+  maxDexNumber = (NB_POKEMON * NB_POKEMON) + NB_POKEMON
+  maxVal = filesList.length - 1
+  for i in 0..maxVal
+    path = filesList[i]
+    file = File.basename(path, ".*")
+    splitPoke = file.split(".")
+    head = splitPoke[0].to_i
+    body = splitPoke[1].to_i
+    if (head == dexNum || body == dexNum) && !(excluded.include?(head) || excluded.include?(body))
+      fused = (body * NB_POKEMON) + head
+      if fused <= maxDexNumber && fused > 0
+        speciesList << fused
+      end
+    end
+  end
+  if speciesList.length == 0
+    speciesList << dexNum
+  end
+  return speciesList
 end

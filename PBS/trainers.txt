@@ -4638,4 +4638,7 @@ Pokemon = B130H149,79 #DRAGONDOS (w/extremespeed)
 [COOLTRAINER_F,lounge_member]
 Pokemon = DIALGA,25 
 Pokemon = PALKIA,25 
-Pokemon = GIRATINA,25 
+Pokemon = GIRATINA,25
+
+[COOLTRAINER_F,lounge_member_single]
+Pokemon = DIALGA,25 
