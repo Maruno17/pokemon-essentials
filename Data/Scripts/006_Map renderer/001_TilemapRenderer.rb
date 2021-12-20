@@ -572,9 +572,9 @@ class TilemapRenderer
       end_y = [end_y, map.height - map_display_y_tile - 1].min
       next if start_x > end_x || start_y > end_y || end_x < 0 || end_y < 0
       # Update all tile sprites representing this map
-      for i in start_x..end_x
+      (start_x..end_x).each do |i|
         tile_x = i + map_display_x_tile
-        for j in start_y..end_y
+        (start_y..end_y).each do |j|
           tile_y = j + map_display_y_tile
           @tiles[i][j].each_with_index do |tile, layer|
             tile_id = map.data[tile_x, tile_y, layer]

@@ -135,14 +135,14 @@ class Sprite_Character < RPG::Sprite
     if character.is_a?(Game_Event) && shadows.length > 0
       params = XPML_read(map, "Shadow", @character, 4)
       if params != nil
-        for i in 0...shadows.size
-          @ombrelist.push(Sprite_Shadow.new(viewport, @character, shadows[i]))
+        shadows.each do |shadow|
+          @ombrelist.push(Sprite_Shadow.new(viewport, @character, shadows))
         end
       end
     end
     if character.is_a?(Game_Player) && shadows.length > 0
-      for i in 0...shadows.size
-        @ombrelist.push(Sprite_Shadow.new(viewport, $game_player, shadows[i]))
+      shadows.each do |shadow|
+        @ombrelist.push(Sprite_Shadow.new(viewport, $game_player, shadow))
       end
     end
     update
@@ -157,11 +157,7 @@ class Sprite_Character < RPG::Sprite
 
   def update
     shadow_update
-    if @ombrelist.length > 0
-      for i in 0...@ombrelist.size
-        @ombrelist[i].update
-      end
-    end
+    @ombrelist.each { |ombre| ombre.update }
   end
 end
 
@@ -187,7 +183,7 @@ class Spriteset_Map
     @shadows = []
     warn = false
     map = $game_map if !map
-    for k in map.events.keys.sort
+    map.events.keys.sort.each do |k|
       ev = map.events[k]
       warn = true if (ev.list != nil && ev.list.length > 0 &&
          ev.list[0].code == 108 &&
@@ -199,7 +195,7 @@ class Spriteset_Map
       p "Warning : At least one event on this map uses the obsolete way to add shadows"
     end
     shadow_initialize(map)
-    for sprite in @character_sprites
+    @character_sprites.each do |sprite|
       sprite.setShadows(map, @shadows)
     end
     $scene.spritesetGlobal.playersprite.setShadows(map, @shadows)
@@ -230,11 +226,11 @@ end
 def XPML_read(map, markup, event, max_param_number = 0)
   parameter_list = nil
   return nil if !event || event.list == nil
-  for i in 0...event.list.size
+  event.list.size.times do |i|
     if event.list[i].code == 108 &&
        event.list[i].parameters[0].downcase == "begin " + markup.downcase
       parameter_list = [] if parameter_list == nil
-      for j in (i + 1)...event.list.size
+      ((i + 1)...event.list.size).each do |j|
         if event.list[j].code == 108
           parts = event.list[j].parameters[0].split
           if parts.size != 1 && parts[0].downcase != "begin"

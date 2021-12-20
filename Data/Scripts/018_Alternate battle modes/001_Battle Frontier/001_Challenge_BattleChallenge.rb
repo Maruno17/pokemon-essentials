@@ -216,7 +216,7 @@ class BattleChallengeData
     while @trainers.length < @numRounds
       newtrainer = pbBattleChallengeTrainer(@wins + @trainers.length, btTrainers)
       found = false
-      for tr in @trainers
+      @trainers.each do |tr|
         found = true if tr == newtrainer
       end
       @trainers.push(newtrainer) if !found

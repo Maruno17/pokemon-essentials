@@ -9,7 +9,7 @@ class RuledTeam
     @team = []
     retnum = []
     loop do
-      for i in 0...count
+      count.times do |i|
         retnum[i] = rand(party.length)
         @team[i] = party[retnum[i]]
         party.delete_at(retnum[i])
@@ -71,7 +71,7 @@ class RuledTeam
 
   def load(party)
     ret = []
-    for i in 0...team.length
+    team.length.times do |i|
       ret.push(party[team[i]])
     end
     return ret
@@ -208,7 +208,7 @@ class PlayerRating
     g = []
     e = []
     score = []
-    for i in 0...matches.length
+    matches.length.times do |i|
       match = matches[i]
       g[i] = getGFactor(match.opponentDeviation)
       e[i] = getEFactor(rating, match.opponentRating, g[i])
@@ -216,13 +216,13 @@ class PlayerRating
     end
     # Estimated variance
     variance = 0.0
-    for i in 0...matches.length
+    matches.length.times do |i|
       variance += g[i] * g[i] * e[i] * (1 - e[i])
     end
     variance = 1.0 / variance
     # Improvement sum
     sum = 0.0
-    for i in 0...matches.length
+    matches.length.times do |i|
       v = score[i]
       sum += g[i] * (v.to_f - e[i]) if v != -1
     end
@@ -333,15 +333,15 @@ def pbDecideWinnerScore(party0, party1, rating)
   types1 = []
   types2 = []
   abilities = []
-  for j in 0...party1.length
+  party1.length.times do |j|
     types1.push(party1[j].types[0])
     types2.push(party1[j].types[1] || party1[j].types[0])
     abilities.push(party1[j].ability_id)
   end
-  for i in 0...party0.length
-    for move in party0[i].moves
+  party0.length.times do |i|
+    party0[i].moves.each do |move|
       next if !move
-      for j in 0...party1.length
+      party1.length.times do |j|
         score += pbDecideWinnerEffectiveness(
           move.id, types1[j], types2[j], abilities[j], [-16, -8, 0, 4, 12, 20]
         )

@@ -48,13 +48,13 @@ class Battle::Scene
     @sprites["targetWindow"] = TargetMenu.new(@viewport, 200, @battle.sideSizes)
     pbShowWindow(MESSAGE_BOX)
     # The party lineup graphics (bar and balls) for both sides
-    for side in 0...2
+    2.times do |side|
       partyBar = pbAddSprite("partyBar_#{side}", 0, 0,
                              "Graphics/Pictures/Battle/overlay_lineup", @viewport)
       partyBar.z       = 120
       partyBar.mirror  = true if side == 0   # Player's lineup bar only
       partyBar.visible = false
-      for i in 0...NUM_BALLS
+      NUM_BALLS.times do |i|
         ball = pbAddSprite("partyBall_#{side}_#{i}", 0, 0, nil, @viewport)
         ball.z       = 121
         ball.visible = false
@@ -137,7 +137,7 @@ class Battle::Scene
     bg = pbAddSprite("battle_bg2", -Graphics.width, 0, battleBG, @viewport)
     bg.z      = 0
     bg.mirror = true
-    for side in 0...2
+    2.times do |side|
       baseX, baseY = Battle::Scene.pbBattlerPosition(side)
       base = pbAddSprite("base_#{side}", baseX, baseY,
                          (side == 0) ? playerBase : enemyBase, @viewport)

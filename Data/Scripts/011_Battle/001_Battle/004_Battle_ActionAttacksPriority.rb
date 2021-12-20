@@ -144,7 +144,7 @@ class Battle
         randomOrder[i], randomOrder[r] = randomOrder[r], randomOrder[i]
       end
       @priority.clear
-      for i in 0..maxBattlerIndex
+      (0..maxBattlerIndex).each do |i|
         b = @battlers[i]
         next if !b
         # [battler, speed, sub-priority, priority, tie-breaker order]

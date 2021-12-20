@@ -67,7 +67,7 @@ def pbRandomPhoneTrainer
   this_map_metadata = $game_map.metadata
   return nil if !this_map_metadata || !this_map_metadata.town_map_position
   currentRegion = this_map_metadata.town_map_position[0]
-  for num in $PokemonGlobal.phoneNumbers
+  $PokemonGlobal.phoneNumbers.each do |num|
     next if !num[0] || num.length != 8   # if not visible or not a trainer
     next if $game_map.map_id == num[6]   # Can't call if on same map
     caller_map_metadata = GameData::MapMetadata.try_get(num[6])
@@ -82,7 +82,7 @@ end
 
 def pbFindPhoneTrainer(tr_type, tr_name)        # Ignores whether visible or not
   return nil if !$PokemonGlobal.phoneNumbers
-  for num in $PokemonGlobal.phoneNumbers
+  $PokemonGlobal.phoneNumbers.each do |num|
     return num if num[1] == tr_type && num[2] == tr_name   # If a match
   end
   return nil
@@ -146,7 +146,7 @@ Events.onMapUpdate += proc { |_sender, _e|
   $PokemonGlobal.phoneTime -= 1
   # Count down time to next can-battle for each trainer contact
   if $PokemonGlobal.phoneTime % Graphics.frame_rate == 0   # Every second
-    for num in $PokemonGlobal.phoneNumbers
+    $PokemonGlobal.phoneNumbers.each do |num|
       next if !num[0] || num.length != 8   # if not visible or not a trainer
       # Reset time to next can-battle if necessary
       if num[4] == 0
@@ -291,7 +291,7 @@ def pbPhoneCall(call, phonenum)
   trainerspecies = pbTrainerSpecies(phonenum)
   trainermap     = pbTrainerMapName(phonenum)
   messages = call.split("\\m")
-  for i in 0...messages.length
+  messages.length.times do |i|
     messages[i].gsub!(/\\TN/, phonenum[2])
     messages[i].gsub!(/\\TP/, trainerspecies)
     messages[i].gsub!(/\\TE/, encspecies)

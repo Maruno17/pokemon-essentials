@@ -45,14 +45,14 @@ module Compiler
     # Get IDs of all maps in the Data folder
     Dir.chdir("Data") {
       mapData = sprintf("Map*.rxdata")
-      for map in Dir.glob(mapData)
+      Dir.glob(mapData).each do |map|
         mapfiles[$1.to_i(10)] = true if map[/map(\d+)\.rxdata/i]
       end
     }
     mapinfos = pbLoadMapInfos
     maxOrder = 0
     # Exclude maps found in mapinfos
-    for id in mapinfos.keys
+    mapinfos.keys.each do |id|
       next if !mapinfos[id]
       mapfiles.delete(id) if mapfiles[id]
       maxOrder = [maxOrder, mapinfos[id].order].max
@@ -61,7 +61,7 @@ module Compiler
     maxOrder += 1
     imported = false
     count = 0
-    for id in mapfiles.keys
+    mapfiles.keys.each do |id|
       next if id == 999   # Ignore 999 (random dungeon map)
       mapinfo = RPG::MapInfo.new
       mapinfo.order = maxOrder
@@ -116,7 +116,7 @@ module Compiler
 
   def push_move_route(list, character, route, indent = 0)
     route = generate_move_route(route) if route.is_a?(Array)
-    for i in 0...route.list.length
+    route.list.length.times do |i|
       list.push(
         RPG::EventCommand.new((i == 0) ? 209 : 509, indent,
                               (i == 0) ? [character, route] : [route.list[i - 1]])
@@ -143,7 +143,7 @@ module Compiler
 
   def push_comment(list, cmt, indent = 0)
     textsplit2 = cmt.split(/\n/)
-    for i in 0...textsplit2.length
+    textsplit2.length.times do |i|
       list.push(RPG::EventCommand.new((i == 0) ? 108 : 408, indent, [textsplit2[i].gsub(/\s+$/, "")]))
     end
   end
@@ -151,10 +151,10 @@ module Compiler
   def push_text(list, text, indent = 0)
     return if !text
     textsplit = text.split(/\\m/)
-    for t in textsplit
+    textsplit.each do |t|
       first = true
       textsplit2 = t.split(/\n/)
-      for i in 0...textsplit2.length
+      textsplit2.length.times do |i|
         textchunk = textsplit2[i].gsub(/\s+$/, "")
         if textchunk && textchunk != ""
           list.push(RPG::EventCommand.new((first) ? 101 : 401, indent, [textchunk]))
@@ -168,7 +168,7 @@ module Compiler
     return if !script
     first = true
     textsplit2 = script.split(/\n/)
-    for i in 0...textsplit2.length
+    textsplit2.length.times do |i|
       textchunk = textsplit2[i].gsub(/\s+$/, "")
       if textchunk && textchunk != ""
         list.push(RPG::EventCommand.new((first) ? 355 : 655, indent, [textchunk]))
@@ -200,7 +200,7 @@ module Compiler
   end
 
   def apply_pages(page, pages)
-    for p in pages
+    pages.each do |p|
       p.graphic       = page.graphic
       p.walk_anime    = page.walk_anime
       p.step_anime    = page.step_anime
@@ -314,7 +314,7 @@ module Compiler
       @mapHeights[mapID] = map.height
       mapPositions = []
       width = map.width
-      for e in map.events.values
+      map.events.values.each do |e|
         mapPositions[(e.y * width) + e.x] = e if e
       end
       @mapxy[mapID] = mapPositions
@@ -351,7 +351,7 @@ module Compiler
       return false if x < 0 || x >= map.width || y < 0 || y >= map.height
       passages   = getTilesetPassages(map, mapID)
       priorities = getTilesetPriorities(map, mapID)
-      for i in [2, 1, 0]
+      [2, 1, 0].each do |i|
         tile_id = map.data[x, y, i]
         return false if tile_id == nil
         passage = passages[tile_id]
@@ -369,7 +369,7 @@ module Compiler
       map = getMap(mapID)
       return false if !map
       passages = getTilesetPassages(map, mapID)
-      for i in [2, 1, 0]
+      [2, 1, 0].each do |i|
         tile_id = map.data[x, y, i]
         return false if tile_id == nil
         passage = passages[tile_id]
@@ -386,7 +386,7 @@ module Compiler
       map = getMap(mapID)
       return if !map
       passages = getTilesetPassages(map, mapID)
-      for i in [2, 1, 0]
+      [2, 1, 0].each do |i|
         tile_id = map.data[x, y, i]
         next if tile_id == 0
         passages[tile_id] |= 0x80
@@ -396,7 +396,7 @@ module Compiler
 
     def registerSwitch(switch)
       return @registeredSwitches[switch] if @registeredSwitches[switch]
-      for id in 1..5000
+      (1..5000).each do |id|
         name = @system.switches[id]
         next if name && name != "" && name != switch
         @system.switches[id] = switch
@@ -459,10 +459,10 @@ module Compiler
     commands = []
     isFirstCommand = false
     # Find all the trainer comments in the event
-    for i in 0...list.length
+    list.length.times do |i|
       next if list[i].code != 108   # Comment (first line)
       command = list[i].parameters[0]
-      for j in (i + 1)...list.length
+      ((i + 1)...list.length).each do |j|
         break if list[j].code != 408   # Comment (continuation line)
         command += "\r\n" + list[j].parameters[0]
       end
@@ -502,7 +502,7 @@ module Compiler
     endifswitch    = []
     vanishifswitch = []
     regspeech      = nil
-    for command in commands
+    commands.each do |command|
       if command[/^Battle\:\s*([\s\S]+)$/i]
         battles.push($~[1])
         push_comment(firstpage.list, command) if rewriteComments
@@ -604,7 +604,7 @@ module Compiler
     rematchpage.condition.self_switch_valid = true
     rematchpage.condition.self_switch_ch    = "B"
     # Write rematch and last pages
-    for i in 1...battles.length
+    (1...battles.length).each do |i|
       # Run trainer check now, except in editor
       trainerChecker.pbTrainerBattleCheck(trtype, trname, battleid + i)
       if i == battles.length - 1
@@ -664,7 +664,7 @@ module Compiler
       ret.pages = [firstpage, rematchpage, lastpage]
     end
     # Copy last page to endIfSwitch page
-    for endswitch in endifswitch
+    endifswitch.each do |endswitch|
       endIfSwitchPage = Marshal.load(Marshal.dump(lastpage))
       endIfSwitchPage.condition = lastpage.condition.clone
       if endIfSwitchPage.condition.switch1_valid   # Add another page condition
@@ -682,7 +682,7 @@ module Compiler
       ret.pages.push(endIfSwitchPage)
     end
     # Copy last page to vanishIfSwitch page
-    for vanishswitch in vanishifswitch
+    vanishifswitch.each do |vanishswitch|
       vanishIfSwitchPage = Marshal.load(Marshal.dump(lastpage))
       vanishIfSwitchPage.graphic.character_name = ""   # No charset
       vanishIfSwitchPage.condition = lastpage.condition.clone
@@ -952,7 +952,7 @@ module Compiler
           # Using old method of recovering
           case script
           when "foriin$player.partyi.healend"
-            for j in i..lastScript
+            (i..lastScript).each do |j|
               list.delete_at(i)
             end
             list.insert(i,
@@ -960,7 +960,7 @@ module Compiler
             changed = true
           when "pbFadeOutIn(99999){foriin$player.partyi.healend}"
             oldIndent = list[i].indent
-            for j in i..lastScript
+            (i..lastScript).each do |j|
               list.delete_at(i)
             end
             list.insert(
@@ -1431,7 +1431,7 @@ module Compiler
   def check_counters(map, mapID, mapData)
     toDelete = []
     changed = false
-    for key in map.events.keys
+    map.events.keys.each do |key|
       event = map.events[key]
       next if !plain_event_or_mart?(event)
       # Found an event that is empty or looks like a simple Mart or a Poké
@@ -1442,7 +1442,7 @@ module Compiler
       neighbors.push(mapData.getEventFromXY(mapID, event.x - 1, event.y))
       neighbors.push(mapData.getEventFromXY(mapID, event.x + 1, event.y))
       neighbors.compact!
-      for otherEvent in neighbors
+      neighbors.each do |otherEvent|
         next if plain_event?(otherEvent)   # Blank/cosmetic-only event
         next if !likely_counter?(event, otherEvent, mapID, mapData)
         # Found an adjacent event that looks like it's supposed to be a counter.
@@ -1471,14 +1471,14 @@ module Compiler
     change_record = []
     Console.echo_li _INTL("Processing {1} maps...", mapData.mapinfos.keys.length)
     idx = 0
-    for id in mapData.mapinfos.keys.sort
+    mapData.mapinfos.keys.sort.each do |id|
       echo "." if idx % 20 == 0
       idx += 1
       Graphics.update if idx % 250 == 0
       changed = false
       map = mapData.getMap(id)
       next if !map || !mapData.mapinfos[id]
-      for key in map.events.keys
+      map.events.keys.each do |key|
         if Time.now.to_i - t >= 5
           Graphics.update
           t = Time.now.to_i
@@ -1518,7 +1518,7 @@ module Compiler
     Graphics.update
     commonEvents = load_data("Data/CommonEvents.rxdata")
     Console.echo_li _INTL("Processing common events...")
-    for key in 0...commonEvents.length
+    commonEvents.length.times do |key|
       newevent = fix_event_use(commonEvents[key], 0, mapData)
       if newevent
         commonEvents[key] = newevent

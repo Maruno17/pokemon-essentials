@@ -100,7 +100,7 @@ class SpriteAnimation
         sprite.bitmap.dispose
       end
     end
-    for sprite in @_animation_sprites
+    @_animation_sprites.each do |sprite|
       sprite.dispose
     end
     @_animation_sprites = nil
@@ -116,7 +116,7 @@ class SpriteAnimation
         sprite.bitmap.dispose
       end
     end
-    for sprite in @_loop_animation_sprites
+    @_loop_animation_sprites.each do |sprite|
       sprite.dispose
     end
     @_loop_animation_sprites = nil
@@ -160,7 +160,7 @@ class SpriteAnimation
     position    = @_animation.position
     animation_set_sprites(@_animation_sprites, cell_data, position, quick_update)
     return if quick_update
-    for timing in @_animation.timings
+    @_animation.timings.each do |timing|
       next if timing.frame != frame_index
       animation_process_timing(timing, @_animation_hit)
     end
@@ -172,7 +172,7 @@ class SpriteAnimation
     position    = @_loop_animation.position
     animation_set_sprites(@_loop_animation_sprites, cell_data, position, quick_update)
     return if quick_update
-    for timing in @_loop_animation.timings
+    @_loop_animation.timings.each do |timing|
       next if timing.frame != frame_index
       animation_process_timing(timing, true)
     end
@@ -192,7 +192,7 @@ class SpriteAnimation
       sprite_y += self.src_rect.height / 2 if position == 1
       sprite_y += self.src_rect.height if position == 2
     end
-    for i in 0..15
+    16.times do |i|
       sprite = sprites[i]
       pattern = cell_data[i, 0]
       if sprite == nil || pattern == nil || pattern == -1
@@ -247,12 +247,12 @@ class SpriteAnimation
     sx = x - self.x
     return if sx == 0
     if @_animation_sprites != nil
-      for i in 0..15
+      16.times do |i|
         @_animation_sprites[i].x += sx
       end
     end
     if @_loop_animation_sprites != nil
-      for i in 0..15
+      16.times do |i|
         @_loop_animation_sprites[i].x += sx
       end
     end
@@ -262,12 +262,12 @@ class SpriteAnimation
     sy = y - self.y
     return if sy == 0
     if @_animation_sprites != nil
-      for i in 0..15
+      16.times do |i|
         @_animation_sprites[i].y += sy
       end
     end
     if @_loop_animation_sprites != nil
-      for i in 0..15
+      16.times do |i|
         @_loop_animation_sprites[i].y += sy
       end
     end
@@ -376,7 +376,7 @@ module RPG
     end
 
     def pushAnimation(array, anim)
-      for i in 0...array.length
+      array.length.times do |i|
         next if array[i] && array[i].active?
         array[i] = anim
         return
@@ -405,14 +405,14 @@ module RPG
     end
 
     def dispose_animation
-      for a in @animations
+      @animations.each do |a|
         a.dispose_animation if a
       end
       @animations.clear
     end
 
     def dispose_loop_animation
-      for a in @loopAnimations
+      @loopAnimations.each do |a|
         a.dispose_loop_animation if a
       end
       @loopAnimations.clear
@@ -440,7 +440,7 @@ module RPG
       return true if @_escape_duration > 0
       return true if @_collapse_duration > 0
       return true if @_damage_duration > 0
-      for a in @animations
+      @animations.each do |a|
         return true if a.effect?
       end
       return false
@@ -481,10 +481,10 @@ module RPG
           dispose_damage
         end
       end
-      for a in @animations
+      @animations.each do |a|
         a.update
       end
-      for a in @loopAnimations
+      @loopAnimations.each do |a|
         a.update
       end
       if @_blink
@@ -500,32 +500,32 @@ module RPG
     end
 
     def update_animation
-      for a in @animations
+      @animations.each do |a|
         a.update_animation if a && a.active?
       end
     end
 
     def update_loop_animation
-      for a in @loopAnimations
+      @loopAnimations.each do |a|
         a.update_loop_animation if a && a.active?
       end
     end
 
     def x=(x)
-      for a in @animations
+      @animations.each do |a|
         a.x = x if a
       end
-      for a in @loopAnimations
+      @loopAnimations.each do |a|
         a.x = x if a
       end
       super
     end
 
     def y=(y)
-      for a in @animations
+      @animations.each do |a|
         a.y = y if a
       end
-      for a in @loopAnimations
+      @loopAnimations.each do |a|
         a.y = y if a
       end
       super

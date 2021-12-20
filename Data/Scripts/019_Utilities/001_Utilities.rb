@@ -3,9 +3,9 @@
 #===============================================================================
 def _pbNextComb(comb, length)
   i = comb.length - 1
-  begin
+  loop do
     valid = true
-    for j in i...comb.length
+    (i...comb.length).each do |j|
       if j == i
         comb[j] += 1
       else
@@ -18,7 +18,8 @@ def _pbNextComb(comb, length)
     end
     return true if valid
     i -= 1
-  end while i >= 0
+    break unless i >= 0
+  end
   return false
 end
 
@@ -30,22 +31,19 @@ def pbEachCombination(array, num)
     yield array
     return
   elsif num == 1
-    for x in array
+    array.each do |x|
       yield [x]
     end
     return
   end
   currentComb = []
   arr = []
-  for i in 0...num
-    currentComb[i] = i
-  end
-  begin
-    for i in 0...num
-      arr[i] = array[currentComb[i]]
-    end
+  num.times { |i| currentComb[i] = i }
+  loop do
+    num.times { |i| arr[i] = array[currentComb[i]] }
     yield arr
-  end while _pbNextComb(currentComb, array.length)
+    break unless _pbNextComb(currentComb, array.length)
+  end
 end
 
 # Returns a language ID
@@ -113,7 +111,7 @@ end
 
 def getConstantName(mod, value)
   mod = Object.const_get(mod) if mod.is_a?(Symbol)
-  for c in mod.constants
+  mod.constants.each do |c|
     return c.to_s if mod.const_get(c.to_sym) == value
   end
   raise _INTL("Value {1} not defined by a constant in {2}", value, mod.name)
@@ -121,7 +119,7 @@ end
 
 def getConstantNameOrValue(mod, value)
   mod = Object.const_get(mod) if mod.is_a?(Symbol)
-  for c in mod.constants
+  mod.constants.each do |c|
     return c.to_s if mod.const_get(c.to_sym) == value
   end
   return value.inspect
@@ -177,7 +175,7 @@ def pbExclaim(event, id = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
   if event.is_a?(Array)
     sprite = nil
     done = []
-    for i in event
+    event.each do |i|
       if !done.include?(i.id)
         sprite = $scene.spriteset.addUserAnimation(id, i.x, i.y, tinting, 2)
         done.push(i.id)
@@ -428,7 +426,7 @@ def pbMoveTutorChoose(move, movelist = nil, bymachine = false, oneusemachine = f
   ret = false
   move = GameData::Move.get(move).id
   if movelist != nil && movelist.is_a?(Array)
-    for i in 0...movelist.length
+    movelist.length.times do |i|
       movelist[i] = GameData::Move.get(movelist[i]).id
     end
   end
@@ -466,7 +464,7 @@ end
 def pbConvertItemToItem(variable, array)
   item = GameData::Item.get(pbGet(variable))
   pbSet(variable, nil)
-  for i in 0...(array.length / 2)
+  (array.length / 2).times do |i|
     next if item != array[2 * i]
     pbSet(variable, array[(2 * i) + 1])
     return
@@ -476,7 +474,7 @@ end
 def pbConvertItemToPokemon(variable, array)
   item = GameData::Item.get(pbGet(variable))
   pbSet(variable, nil)
-  for i in 0...(array.length / 2)
+  (array.length / 2).times do |i|
     next if item != array[2 * i]
     pbSet(variable, GameData::Species.get(array[(2 * i) + 1]).id)
     return
@@ -505,12 +503,13 @@ def pbCommonEvent(id)
   celist = ce.list
   interp = Interpreter.new
   interp.setup(celist, 0)
-  begin
+  loop do
     Graphics.update
     Input.update
     interp.update
     pbUpdateSceneMap
-  end while interp.running?
+    break unless interp.running?
+  end
   return true
 end
 
@@ -550,7 +549,7 @@ def pbHideVisibleObjects
 end
 
 def pbShowObjects(visibleObjects)
-  for o in visibleObjects
+  visibleObjects.each do |o|
     next if pbDisposed?(o)
     o.visible = true
   end
@@ -578,7 +577,7 @@ end
 
 def pbChooseLanguage
   commands = []
-  for lang in Settings::LANGUAGES
+  Settings::LANGUAGES.each do |lang|
     commands.push(lang[0])
   end
   return pbShowCommands(nil, commands)

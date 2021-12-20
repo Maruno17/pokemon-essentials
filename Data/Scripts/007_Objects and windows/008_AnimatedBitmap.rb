@@ -57,7 +57,7 @@ class PngAnimatedBitmap
       end
       @frameDelay = delay
       subWidth = panorama.width / numFrames
-      for i in 0...numFrames
+      numFrames.times do |i|
         subBitmap = BitmapWrapper.new(subWidth, panorama.height)
         subBitmap.blt(0, 0, panorama, Rect.new(subWidth * i, 0, subWidth, panorama.height))
         @frames.push(subBitmap)
@@ -76,7 +76,7 @@ class PngAnimatedBitmap
   def height; self.bitmap.height; end
 
   def deanimate
-    for i in 1...@frames.length
+    (1...@frames.length).each do |i|
       @frames[i].dispose
     end
     @frames = [@frames[0]]
@@ -134,9 +134,7 @@ class PngAnimatedBitmap
   def copy
     x = self.clone
     x.frames = x.frames.clone
-    for i in 0...x.frames.length
-      x.frames[i] = x.frames[i].copy
-    end
+    x.frames.each_with_index { |frame, i| x.frames[i] = frame.copy }
     return x
   end
 end

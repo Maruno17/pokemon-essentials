@@ -59,11 +59,11 @@ class Game_Map
     @need_refresh         = false
     Events.onMapCreate.trigger(self, map_id, @map, tileset)
     @events               = {}
-    for i in @map.events.keys
+    @map.events.keys.each do |i|
       @events[i]          = Game_Event.new(@map_id, @map.events[i], self)
     end
     @common_events        = {}
-    for i in 1...$data_common_events.size
+    (1...$data_common_events.size).each do |i|
       @common_events[i]   = Game_CommonEvent.new(i)
     end
     @scroll_direction     = 2
@@ -148,7 +148,7 @@ class Game_Map
   def passable?(x, y, d, self_event = nil)
     return false if !valid?(x, y)
     bit = (1 << ((d / 2) - 1)) & 0x0f
-    for event in events.values
+    events.values.each do |event|
       next if event.tile_id <= 0
       next if event == self_event
       next if !event.at_coordinate?(x, y)
@@ -186,12 +186,12 @@ class Game_Map
       newy -= 1
     end
     return false if !valid?(newx, newy)
-    for i in [2, 1, 0]
+    [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       # If already on water, only allow movement to another water tile
       if self_event != nil && terrain.can_surf_freely
-        for j in [2, 1, 0]
+        [2, 1, 0].each do |j|
           facing_tile_id = data[newx, newy, j]
           return false if facing_tile_id == nil
           facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
@@ -205,7 +205,7 @@ class Game_Map
         return false
       elsif self_event != nil && self_event.x == x && self_event.y == y
         # Can't walk onto ledges
-        for j in [2, 1, 0]
+        [2, 1, 0].each do |j|
           facing_tile_id = data[newx, newy, j]
           return false if facing_tile_id == nil
           facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
@@ -225,7 +225,7 @@ class Game_Map
 
   def playerPassable?(x, y, d, self_event = nil)
     bit = (1 << ((d / 2) - 1)) & 0x0f
-    for i in [2, 1, 0]
+    [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       passage = @passages[tile_id]
@@ -254,14 +254,14 @@ class Game_Map
   # event there, and the tile is fully passable in all directions)
   def passableStrict?(x, y, d, self_event = nil)
     return false if !valid?(x, y)
-    for event in events.values
+    events.values.each do |event|
       next if event == self_event || event.tile_id < 0 || event.through
       next if !event.at_coordinate?(x, y)
       next if GameData::TerrainTag.try_get(@terrain_tags[event.tile_id]).ignore_passability
       return false if @passages[event.tile_id] & 0x0f != 0
       return true if @priorities[event.tile_id] == 0
     end
-    for i in [2, 1, 0]
+    [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
       next if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).ignore_passability
       return false if @passages[tile_id] & 0x0f != 0
@@ -271,7 +271,7 @@ class Game_Map
   end
 
   def bush?(x, y)
-    for i in [2, 1, 0]
+    [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
       return false if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).bridge &&
                       $PokemonGlobal.bridge > 0
@@ -281,7 +281,7 @@ class Game_Map
   end
 
   def deepBush?(x, y)
-    for i in [2, 1, 0]
+    [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       return false if terrain.bridge && $PokemonGlobal.bridge > 0
@@ -291,7 +291,7 @@ class Game_Map
   end
 
   def counter?(x, y)
-    for i in [2, 1, 0]
+    [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
       passage = @passages[tile_id]
       return true if passage & 0x80 == 0x80
@@ -301,7 +301,7 @@ class Game_Map
 
   def terrain_tag(x, y, countBridge = false)
     if valid?(x, y)
-      for i in [2, 1, 0]
+      [2, 1, 0].each do |i|
         tile_id = data[x, y, i]
         terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
         next if terrain.id == :None || terrain.ignore_passability
@@ -314,7 +314,7 @@ class Game_Map
 
   # Unused.
   def check_event(x, y)
-    for event in self.events.values
+    self.events.values.each do |event|
       return event.id if event.at_coordinate?(x, y)
     end
   end
@@ -394,10 +394,10 @@ class Game_Map
   end
 
   def refresh
-    for event in @events.values
+    @events.values.each do |event|
       event.refresh
     end
-    for common_event in @common_events.values
+    @common_events.values.each do |common_event|
       common_event.refresh
     end
     @need_refresh = false
@@ -406,7 +406,7 @@ class Game_Map
   def update
     # refresh maps if necessary
     if $map_factory
-      for i in $map_factory.maps
+      $map_factory.maps.each do |i|
         i.refresh if i.need_refresh
       end
       $map_factory.setCurrentMap
@@ -424,11 +424,11 @@ class Game_Map
       @scroll_rest -= distance
     end
     # Only update events that are on-screen
-    for event in @events.values
+    @events.values.each do |event|
       event.update
     end
     # Update common events
-    for common_event in @common_events.values
+    @common_events.values.each do |common_event|
       common_event.update
     end
     # Update fog

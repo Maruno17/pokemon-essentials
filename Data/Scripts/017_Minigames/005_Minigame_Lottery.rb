@@ -16,10 +16,10 @@ def pbLottery(winnum, nameVar = 2, positionVar = 3, matchedVar = 4)
   winpoke = nil
   winpos = 0
   winmatched = 0
-  for i in $player.party
+  $player.party.each do |i|
     thismatched = 0
     id = i.owner.public_id
-    for j in 0...5
+    5.times do |j|
       if (id / (10**j)) % 10 == (winnum / (10**j)) % 10
         thismatched += 1
       else
@@ -35,7 +35,7 @@ def pbLottery(winnum, nameVar = 2, positionVar = 3, matchedVar = 4)
   pbEachPokemon { |poke, _box|
     thismatched = 0
     id = poke.owner.public_id
-    for j in 0...5
+    5.times do |j|
       if (id / (10**j)) % 10 == (winnum / (10**j)) % 10
         thismatched += 1
       else

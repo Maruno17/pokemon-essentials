@@ -54,7 +54,7 @@ class StorageSystemPC
           end
         when 2   # Deposit
           count = 0
-          for p in $PokemonStorage.party
+          $PokemonStorage.party.each do |p|
             count += 1 if p && !p.egg? && p.hp > 0
           end
           if count <= 1
@@ -86,7 +86,7 @@ module PokemonPCList
 
   def self.getCommandList
     commands = []
-    for pc in @@pclist
+    @@pclist.each do |pc|
       commands.push(pc.name) if pc.shouldShow?
     end
     commands.push(_INTL("Log Off"))
@@ -96,7 +96,7 @@ module PokemonPCList
   def self.callCommand(cmd)
     return false if cmd < 0 || cmd >= @@pclist.length
     i = 0
-    for pc in @@pclist
+    @@pclist.each do |pc|
       next if !pc.shouldShow?
       if i == cmd
         pc.access
@@ -169,7 +169,7 @@ def pbPCMailbox
     loop do
       command = 0
       commands = []
-      for mail in $PokemonGlobal.mailbox
+      $PokemonGlobal.mailbox.each do |mail|
         commands.push(mail.sender)
       end
       commands.push(_INTL("Cancel"))

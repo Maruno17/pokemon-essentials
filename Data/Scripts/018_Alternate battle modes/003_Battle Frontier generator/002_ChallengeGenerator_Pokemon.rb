@@ -61,7 +61,7 @@ def pbGetLegalMoves2(species, maxlevel)
   babyspecies = babySpecies(species)
   GameData::Species.get(babyspecies).egg_moves.each { |m| addMove(moves, m, 2) }
   movedatas = []
-  for move in moves
+  moves.each do |move|
     movedatas.push([move, GameData::Move.get(move)])
   end
   # Delete less powerful moves
@@ -70,9 +70,9 @@ def pbGetLegalMoves2(species, maxlevel)
       a.delete(item)
     end
   }
-  for move in moves
+  moves.each do |move|
     md = GameData::Move.get(move)
-    for move2 in movedatas
+    movedatas.each do |move2|
       # If we have a move that always hits, remove all other moves with no
       # effect of the same type and <= base power
       if md.accuracy == 0 && move2[1].function_code == "None" &&
@@ -130,7 +130,7 @@ end
 def hasMorePowerfulMove(moves, thismove)
   thisdata = GameData::Move.get(thismove)
   return false if thisdata.base_damage == 0
-  for move in moves
+  moves.each do |move|
     next if !move
     moveData = GameData::Move.get(move)
     if moveData.type == thisdata.type && moveData.base_damage > thisdata.base_damage
@@ -262,9 +262,7 @@ def pbRandomPokemonFromRule(rules, trainer)
     sketch = false
     if moves[0] == :SKETCH
       sketch = true
-      for m in 0...Pokemon::MAX_MOVES
-        moves[m] = pbRandomMove
-      end
+      Pokemon::MAX_MOVES.times { |m| moves[m] = pbRandomMove }
     end
     next if moves.length == 0
     if (moves | []).length < Pokemon::MAX_MOVES
@@ -303,7 +301,7 @@ def pbRandomPokemonFromRule(rules, trainer)
         hasPhysical = false
         hasSpecial = false
         hasNormal = false
-        for move in newmoves
+        newmoves.each do |move|
           d = GameData::Move.get(move)
           if d.base_damage >= 1
             totalbasedamage += d.base_damage

@@ -108,7 +108,7 @@ end
 class Window_CommandPokemonColor < Window_CommandPokemon
   def initialize(commands, width = nil)
     @colorKey = []
-    for i in 0...commands.length
+    commands.length.times do |i|
       if commands[i].is_a?(Array)
         @colorKey[i] = commands[i][1]
         commands[i] = commands[i][0]
@@ -472,7 +472,7 @@ class PokemonParty_Scene
     pbBottomLeftLines(@sprites["helpwindow"], 1)
     pbSetHelpText(starthelptext)
     # Add party Pokémon sprites
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       if @party[i]
         @sprites["pokemon#{i}"] = PokemonPartyPanel.new(@party[i], i, @viewport)
       else
@@ -599,7 +599,7 @@ class PokemonParty_Scene
   end
 
   def pbAnnotate(annot)
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       @sprites["pokemon#{i}"].text = (annot) ? annot[i] : nil
     end
   end
@@ -607,7 +607,7 @@ class PokemonParty_Scene
   def pbSelect(item)
     @activecmd = item
     numsprites = Settings::MAX_PARTY_SIZE + ((@multiselect) ? 2 : 1)
-    for i in 0...numsprites
+    numsprites.times do |i|
       @sprites["pokemon#{i}"].selected = (i == @activecmd)
     end
   end
@@ -646,7 +646,7 @@ class PokemonParty_Scene
       Input.update
       self.update
     end
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       @sprites["pokemon#{i}"].preselected = false
       @sprites["pokemon#{i}"].switching   = false
     end
@@ -654,7 +654,7 @@ class PokemonParty_Scene
   end
 
   def pbClearSwitching
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       @sprites["pokemon#{i}"].preselected = false
       @sprites["pokemon#{i}"].switching   = false
     end
@@ -700,7 +700,7 @@ class PokemonParty_Scene
   end
 
   def pbChoosePokemon(switching = false, initialsel = -1, canswitch = 0)
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       @sprites["pokemon#{i}"].preselected = (switching && i == @activecmd)
       @sprites["pokemon#{i}"].switching   = switching
     end
@@ -722,7 +722,7 @@ class PokemonParty_Scene
       if @activecmd != oldsel   # Changing selection
         pbPlayCursorSE
         numsprites = Settings::MAX_PARTY_SIZE + ((@multiselect) ? 2 : 1)
-        for i in 0...numsprites
+        numsprites.times do |i|
           @sprites["pokemon#{i}"].selected = (i == @activecmd)
         end
       end
@@ -759,17 +759,19 @@ class PokemonParty_Scene
     numsprites = Settings::MAX_PARTY_SIZE + ((@multiselect) ? 2 : 1)
     case key
     when Input::LEFT
-      begin
+      loop do
         currentsel -= 1
-      end while currentsel > 0 && currentsel < @party.length && !@party[currentsel]
+        break unless currentsel > 0 && currentsel < @party.length && !@party[currentsel]
+      end
       if currentsel >= @party.length && currentsel < Settings::MAX_PARTY_SIZE
         currentsel = @party.length - 1
       end
       currentsel = numsprites - 1 if currentsel < 0
     when Input::RIGHT
-      begin
+      loop do
         currentsel += 1
-      end while currentsel < @party.length && !@party[currentsel]
+        break unless currentsel < @party.length && !@party[currentsel]
+      end
       if currentsel == @party.length
         currentsel = Settings::MAX_PARTY_SIZE
       elsif currentsel == numsprites
@@ -782,9 +784,10 @@ class PokemonParty_Scene
           currentsel -= 1
         end
       else
-        begin
+        loop do
           currentsel -= 2
-        end while currentsel > 0 && !@party[currentsel]
+          break unless currentsel > 0 && !@party[currentsel]
+        end
       end
       if currentsel >= @party.length && currentsel < Settings::MAX_PARTY_SIZE
         currentsel = @party.length - 1
@@ -809,14 +812,14 @@ class PokemonParty_Scene
   def pbHardRefresh
     oldtext = []
     lastselected = -1
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       oldtext.push(@sprites["pokemon#{i}"].text)
       lastselected = i if @sprites["pokemon#{i}"].selected
       @sprites["pokemon#{i}"].dispose
     end
     lastselected = @party.length - 1 if lastselected >= @party.length
     lastselected = 0 if lastselected < 0
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       if @party[i]
         @sprites["pokemon#{i}"] = PokemonPartyPanel.new(@party[i], i, @viewport)
       else
@@ -828,7 +831,7 @@ class PokemonParty_Scene
   end
 
   def pbRefresh
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       sprite = @sprites["pokemon#{i}"]
       if sprite
         if sprite.is_a?(PokemonPartyPanel)
@@ -943,8 +946,8 @@ class PokemonPartyScreen
 
   # Checks for identical species
   def pbCheckSpecies(array)   # Unused
-    for i in 0...array.length
-      for j in i + 1...array.length
+    array.length.times do |i|
+      (i + 1...array.length).each do |j|
         return false if array[i].species == array[j].species
       end
     end
@@ -953,9 +956,9 @@ class PokemonPartyScreen
 
   # Checks for identical held items
   def pbCheckItems(array)   # Unused
-    for i in 0...array.length
+    array.length.times do |i|
       next if !array[i].hasItem?
-      for j in i + 1...array.length
+      (i + 1...array.length).each do |j|
         return false if array[i].item == array[j].item
       end
     end
@@ -974,7 +977,7 @@ class PokemonPartyScreen
 
   def pbChooseMove(pokemon, helptext, index = 0)
     movenames = []
-    for i in pokemon.moves
+    pokemon.moves.each do |i|
       next if !i || !i.id
       if i.total_pp <= 0
         movenames.push(_INTL("{1} (PP: ---)", i.name))
@@ -988,7 +991,7 @@ class PokemonPartyScreen
   def pbRefreshAnnotations(ableProc)   # For after using an evolution stone
     return if !@scene.pbHasAnnotations?
     annot = []
-    for pkmn in @party
+    @party.each do |pkmn|
       elig = ableProc.call(pkmn)
       annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
     end
@@ -1006,7 +1009,7 @@ class PokemonPartyScreen
     positions = [_INTL("FIRST"), _INTL("SECOND"), _INTL("THIRD"), _INTL("FOURTH"),
                  _INTL("FIFTH"), _INTL("SIXTH"), _INTL("SEVENTH"), _INTL("EIGHTH"),
                  _INTL("NINTH"), _INTL("TENTH"), _INTL("ELEVENTH"), _INTL("TWELFTH")]
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       if i < positions.length
         ordinals.push(positions[i])
       else
@@ -1016,25 +1019,25 @@ class PokemonPartyScreen
     return nil if !ruleset.hasValidTeam?(@party)
     ret = nil
     addedEntry = false
-    for i in 0...@party.length
+    @party.length.times do |i|
       statuses[i] = (ruleset.isPokemonValid?(@party[i])) ? 1 : 2
       annot[i] = ordinals[statuses[i]]
     end
     @scene.pbStartScene(@party, _INTL("Choose Pokémon and confirm."), annot, true)
     loop do
       realorder = []
-      for i in 0...@party.length
-        for j in 0...@party.length
+      @party.length.times do |i|
+        @party.length.times do |j|
           if statuses[j] == i + 3
             realorder.push(j)
             break
           end
         end
       end
-      for i in 0...realorder.length
+      realorder.length.times do |i|
         statuses[realorder[i]] = i + 3
       end
-      for i in 0...@party.length
+      @party.length.times do |i|
         annot[i] = ordinals[statuses[i]]
       end
       @scene.pbAnnotate(annot)
@@ -1046,7 +1049,7 @@ class PokemonPartyScreen
       addedEntry = false
       if pkmnid == Settings::MAX_PARTY_SIZE   # Confirm was chosen
         ret = []
-        for i in realorder
+        realorder.each do |i|
           ret.push(@party[i])
         end
         error = []
@@ -1092,7 +1095,7 @@ class PokemonPartyScreen
   def pbChooseAblePokemon(ableProc, allowIneligible = false)
     annot = []
     eligibility = []
-    for pkmn in @party
+    @party.each do |pkmn|
       elig = ableProc.call(pkmn)
       eligibility.push(elig)
       annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
@@ -1123,7 +1126,7 @@ class PokemonPartyScreen
   def pbChooseTradablePokemon(ableProc, allowIneligible = false)
     annot = []
     eligibility = []
-    for pkmn in @party
+    @party.each do |pkmn|
       elig = ableProc.call(pkmn)
       elig = false if pkmn.egg? || pkmn.shadowPokemon? || pkmn.cannot_trade
       eligibility.push(elig)

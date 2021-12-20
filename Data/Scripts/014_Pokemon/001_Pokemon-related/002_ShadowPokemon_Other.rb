@@ -372,7 +372,7 @@ end
 #===============================================================================
 class Battle::Move::RemoveAllScreens < Battle::Move
   def pbEffectGeneral(user)
-    for i in @battle.sides
+    @battle.sides.each do |i|
       i.effects[PBEffects::AuroraVeil]  = 0
       i.effects[PBEffects::Reflect]     = 0
       i.effects[PBEffects::LightScreen] = 0

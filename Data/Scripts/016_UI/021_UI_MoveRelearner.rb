@@ -63,7 +63,7 @@ class MoveRelearner_Scene
     ]
     imagepos = []
     yPos = 76
-    for i in 0...VISIBLEMOVES
+    VISIBLEMOVES.times do |i|
       moveobject = @moves[@sprites["commands"].top_item + i]
       if moveobject
         moveData = GameData::Move.get(moveobject)
@@ -157,7 +157,7 @@ class MoveRelearnerScreen
     end
     tmoves = []
     if pkmn.first_moves
-      for i in pkmn.first_moves
+      pkmn.first_moves.each do |i|
         tmoves.push(i) if !pkmn.hasMove?(i) && !moves.include?(i)
       end
     end

@@ -74,8 +74,8 @@ class DarknessSprite < SpriteWrapper
     cy = Graphics.height / 2
     cradius = @radius
     numfades = 5
-    for i in 1..numfades
-      for j in cx - cradius..cx + cradius
+    (1..numfades).each do |i|
+      (cx - cradius..cx + cradius).each do |j|
         diff2 = (cradius * cradius) - ((j - cx) * (j - cx))
         diff = Math.sqrt(diff2)
         @darkness.fill_rect(j, cy - diff, 1, diff * 2, Color.new(0, 0, 0, 255.0 * (numfades - i) / numfades))
@@ -209,7 +209,7 @@ Events.onSpritesetCreate += proc { |_sender, e|
   spriteset = e[0]      # Spriteset being created
   viewport  = e[1]      # Viewport used for tilemap and characters
   map = spriteset.map   # Map associated with the spriteset (not necessarily the current map)
-  for i in map.events.keys
+  map.events.keys.each do |i|
     if map.events[i].name[/^outdoorlight\((\w+)\)$/i]
       filename = $~[1].to_s
       spriteset.addUserSprite(LightEffect_DayNight.new(map.events[i], viewport, map, filename))

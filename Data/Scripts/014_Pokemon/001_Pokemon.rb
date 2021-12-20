@@ -631,7 +631,7 @@ class Pokemon
     @moves.clear
     first_move_index = knowable_moves.length - MAX_MOVES
     first_move_index = 0 if first_move_index < 0
-    for i in first_move_index...knowable_moves.length
+    (first_move_index...knowable_moves.length).each do |i|
       @moves.push(Pokemon::Move.new(knowable_moves[i]))
     end
   end
@@ -744,7 +744,7 @@ class Pokemon
     args.each_with_index do |ribbon, i|
       this_ribbon_data = GameData::Ribbon.try_get(ribbon)
       next if !this_ribbon_data
-      for j in 0...@ribbons.length
+      @ribbons.length.times do |j|
         next if @ribbons[j] != this_ribbon_data.id
         next_ribbon_data = GameData::Ribbon.try_get(args[i + 1])
         next if !next_ribbon_data

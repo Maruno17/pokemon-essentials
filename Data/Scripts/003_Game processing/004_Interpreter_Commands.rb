@@ -190,7 +190,7 @@ class Interpreter
     @message_waiting = true   # Lets parallel process events work while a message is displayed
     if commands
       cmd_texts = []
-      for cmd in commands[0]
+      commands[0].each do |cmd|
         cmd_texts.push(_MAPINTL($game_map.map_id, cmd))
       end
       command = pbMessage(message + message_end, cmd_texts, commands[1])
@@ -272,7 +272,7 @@ class Interpreter
       Input.update
       pbUpdateSceneMap
       # Check for input and break if there is one
-      for i in 1..18
+      (1..18).each do |i|
         ret = i if Input.trigger?(i)
       end
       break if ret != 0
@@ -460,7 +460,7 @@ class Interpreter
   #-----------------------------------------------------------------------------
   def command_121
     should_refresh = false
-    for i in @parameters[0]..@parameters[1]
+    (@parameters[0]..@parameters[1]).each do |i|
       next if $game_switches[i] == (@parameters[2] == 0)
       $game_switches[i] = (@parameters[2] == 0)
       should_refresh = true
@@ -506,7 +506,7 @@ class Interpreter
       end
     end
     # Apply value and operation to all specified game variables
-    for i in @parameters[0]..@parameters[1]
+    (@parameters[0]..@parameters[1]).each do |i|
       case @parameters[2]
       when 0   # set
         next if $game_variables[i] == value
@@ -573,7 +573,7 @@ class Interpreter
   # * Change Windowskin
   #-----------------------------------------------------------------------------
   def command_131
-    for i in 0...Settings::SPEECH_WINDOWSKINS.length
+    Settings::SPEECH_WINDOWSKINS.length.times do |i|
       next if Settings::SPEECH_WINDOWSKINS[i] != @parameters[0]
       $PokemonSystem.textskin = i
       MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[i])

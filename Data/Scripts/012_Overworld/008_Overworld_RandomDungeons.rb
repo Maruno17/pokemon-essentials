@@ -91,9 +91,9 @@ module RandomDungeonGenerator
         tiles = []
         x_offset = (CELL_WIDTH - CORRIDOR_WIDTH) / 2
         y_offset = (CELL_HEIGHT - CORRIDOR_WIDTH) / 2
-        for combo in 0...16
+        16.times do |combo|
           tiles[combo] = []
-          for i in 0...CELL_WIDTH * CELL_HEIGHT
+          (CELL_WIDTH * CELL_HEIGHT).times do |i|
             tiles[combo][i] = DungeonTile::VOID
           end
           if (combo & EdgeMasks::NORTH) == 0
@@ -116,8 +116,8 @@ module RandomDungeonGenerator
 
     # Makes all tiles in a particular area corridor tiles.
     def paint_corridor(tile, x, y, width, height)
-      for j in 0...height
-        for i in 0...width
+      timesheight.times do |j|
+        timeswidth.times do |i|
           tile[((y + j) * CELL_WIDTH) + (x + i)] = DungeonTile::CORRIDOR
         end
       end
@@ -127,26 +127,26 @@ module RandomDungeonGenerator
     def paint_tile_layout(dungeon, dstX, dstY, tile_layout, rotation)
       case rotation
       when TURN_NONE
-        for y in 0...CELL_HEIGHT
-          for x in 0...CELL_WIDTH
+        CELL_HEIGHT.times do |y|
+          CELL_WIDTH.times do |x|
             dungeon[x + dstX, y + dstY] = tile_layout[(y * CELL_WIDTH) + x]
           end
         end
       when TURN_LEFT
-        for y in 0...CELL_HEIGHT
-          for x in 0...CELL_WIDTH
+        CELL_HEIGHT.times do |y|
+          CELL_WIDTH.times do |x|
             dungeon[y + dstX, CELL_WIDTH - 1 - x + dstY] = tile_layout[(y * CELL_WIDTH) + x]
           end
         end
       when TURN_RIGHT
-        for y in 0...CELL_HEIGHT
-          for x in 0...CELL_WIDTH
+        CELL_HEIGHT.times do |y|
+          CELL_WIDTH.times do |x|
             dungeon[CELL_HEIGHT - 1 - y + dstX, x + dstY] = tile_layout[(y * CELL_WIDTH) + x]
           end
         end
       when TURN_BACK
-        for y in 0...CELL_HEIGHT
-          for x in 0...CELL_WIDTH
+        CELL_HEIGHT.times do |y|
+          CELL_WIDTH.times do |x|
             dungeon[CELL_WIDTH - 1 - x + dstX, CELL_HEIGHT - 1 - y + dstY] = tile_layout[(y * CELL_WIDTH) + x]
           end
         end
@@ -258,7 +258,7 @@ module RandomDungeonGenerator
     end
 
     def clearAllCells
-      for c in 0...cellWidth * cellHeight
+      (cellWidth * cellHeight).times do |c|
         @cells[c] = 0
       end
     end
@@ -295,7 +295,7 @@ module RandomDungeonGenerator
     end
 
     def setAllEdges
-      for c in 0...nodeWidth * nodeHeight
+      (nodeWidth * nodeHeight).times do |c|
         @nodes[c].set
       end
     end
@@ -327,7 +327,7 @@ module RandomDungeonGenerator
     end
 
     def clearAllEdges
-      for c in 0...nodeWidth * nodeHeight
+      (nodeWidth * nodeHeight).times do |c|
         @nodes[c].clear
       end
     end
@@ -373,8 +373,8 @@ module RandomDungeonGenerator
 
     def buildNodeList
       list = []
-      for x in 0...nodeWidth
-        for y in 0...nodeHeight
+      nodeWidth.times do |x|
+        nodeHeight.times do |y|
           list.push(NodeListElement.new(x, y))
         end
       end
@@ -386,7 +386,7 @@ module RandomDungeonGenerator
       maxWall = cellWidth if !maxWall
       nlist = buildNodeList
       return if nlist.length == 0
-      for c in 0...nlist.length
+      nlist.length.times do |c|
         d = randomDir
         len = rand(maxWall + 1)
         x = nlist[c].x
@@ -398,7 +398,7 @@ module RandomDungeonGenerator
     def recurseDepthFirst(x, y, depth)
       setVisited(x, y)
       dirs = DIRECTIONS.shuffle
-      for c in 0...4
+      4.times do |c|
         d = dirs[c]
         cx = x
         cy = y
@@ -464,7 +464,7 @@ module RandomDungeonGenerator
     end
 
     def clear
-      for i in 0...width * height
+      (width * height).times do |i|
         @array[i] = DungeonTile::VOID
       end
     end
@@ -472,8 +472,8 @@ module RandomDungeonGenerator
     def write
       ret = ""
       i = 0
-      for y in 0...@height
-        for x in 0...@width
+      @height.times do |y|
+        @width.times do |x|
           ret += DungeonTile.to_text(value(x, y))
           i += 1
         end
@@ -544,8 +544,8 @@ module RandomDungeonGenerator
     end
 
     def paint_room(rect, offsetX, offsetY)
-      for y in (rect[1] + offsetY)...(rect[1] + offsetY + rect[3])
-        for x in (rect[0] + offsetX)...(rect[0] + offsetX + rect[2])
+      ((rect[1] + offsetY)...(rect[1] + offsetY + rect[3])).each do |y|
+        ((rect[0] + offsetX)...(rect[0] + offsetX + rect[2])).each do |x|
           self[x, y] = DungeonTile::ROOM
         end
       end
@@ -559,8 +559,8 @@ module RandomDungeonGenerator
       cellHeight = DungeonMaze::CELL_HEIGHT
       return if maxWidth < 0 || maxHeight < 0
       if maxWidth < cellWidth || maxHeight < cellHeight   # Map is too small
-        for x in 0...maxWidth
-          for y in 0...maxHeight
+        maxWidth.times do |x|
+          maxHeight.times do |y|
             self[x + BUFFER_X, y + BUFFER_Y] = DungeonTile::ROOM
           end
         end
@@ -572,8 +572,8 @@ module RandomDungeonGenerator
       # Draw each cell's contents in turn (room and corridors)
       corridor_patterns = DungeonMaze.generate_corridor_patterns
       roomcount = 0
-      for y in 0...maxHeight / cellHeight
-        for x in 0...maxWidth / cellWidth
+      (maxHeight / cellHeight).times do |y|
+        (maxWidth / cellWidth).times do |x|
           pattern = maze.getEdgePattern(x, y)
           next if !DungeonMaze.paint_cell_contents(
             self, BUFFER_X + (x * cellWidth), BUFFER_Y + (y * cellHeight),
@@ -584,15 +584,15 @@ module RandomDungeonGenerator
       end
       # If no rooms were generated, make the whole map a room
       if roomcount == 0
-        for x in 0...maxWidth
-          for y in 0...maxHeight
+        maxWidth.times do |x|
+          maxHeight.times do |y|
             self[x + BUFFER_X, y + BUFFER_Y] = DungeonTile::ROOM
           end
         end
       end
       # Generate walls
-      for y in 0...@height
-        for x in 0...@width
+      @height.times do |y|
+        @width.times do |x|
           self[x, y] = DungeonTile::WALL if isWall?(x, y)   # Make appropriate tiles wall tiles
         end
       end
@@ -601,8 +601,8 @@ module RandomDungeonGenerator
     # Convert dungeon layout into proper map tiles
     def generateMapInPlace(map)
       tbl = DungeonTable.new(self)
-      for i in 0...map.width
-        for j in 0...map.height
+      map.width.times do |i|
+        map.height.times do |j|
           nb = TileDrawingHelper.tableNeighbors(tbl, i, j)
           tile = TileDrawingHelper::NEIGHBORS_TO_AUTOTILE_INDEX[nb]
           map.data[i, j, 0] = tile + (48 * (tbl[i, j]))
@@ -655,7 +655,7 @@ Events.onMapCreate += proc { |_sender, e|
   dungeon.generateMapInPlace(map)
   roomtiles = []
   # Reposition events
-  for event in map.events.values
+  map.events.values.each do |event|
     tile = RandomDungeonGenerator.pbRandomRoomTile(dungeon, roomtiles)
     if tile
       event.x = tile[0]

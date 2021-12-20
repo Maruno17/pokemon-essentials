@@ -98,7 +98,7 @@ class PointPath
 
   def inspect
     p = []
-    for point in @points
+    @points.each do |point|
       p.push([point[0].to_i, point[1].to_i])
     end
     return p.inspect
@@ -164,7 +164,7 @@ class PointPath
     curdist = 0
     distForT = @totaldist * t
     i = 0
-    for dist in @distances
+    @distances.each do |dist|
       curdist += dist
       if dist > 0.0
         if curdist >= distForT
@@ -249,7 +249,7 @@ def pbDefinePath(canvas)
       if path
         path = path.smoothPointPath(sliderwin2.value(0), false)
         i = 0
-        for point in path
+        path.each do |point|
           if i < points.length
             points[i].x = point[0]
             points[i].y = point[1]
@@ -258,14 +258,14 @@ def pbDefinePath(canvas)
           end
           i += 1
         end
-        for j in i...points.length
+        (i...points.length).each do |j|
           points[j].dispose
           points[j] = nil
         end
         points.compact!
       end
     elsif sliderwin2.changed?(defcurvebutton)
-      for point in points
+      points.each do |point|
         point.dispose
       end
       points.clear
@@ -293,19 +293,19 @@ def pbDefinePath(canvas)
           break
         end
         if Input.trigger?(Input::MOUSELEFT)
-          for j in 0...4
+          4.times do |j|
             next if !curve[j].hittest?
             if [1, 2].include?(j)
               next if !curve[0].visible || !curve[3].visible
             end
             curve[j].visible = true
-            for k in 0...4
+            4.times do |k|
               curve[k].dragging = (k == j)
             end
             break
           end
         end
-        for j in 0...4
+        4.times do |j|
           curve[j].mouseover
         end
         mousepos = Mouse.getMousePos(true)
@@ -315,7 +315,7 @@ def pbDefinePath(canvas)
         end
         if curve[0].visible && curve[3].visible &&
            !curve[0].dragging && !curve[3].dragging
-          for point in points
+          points.each do |point|
             point.visible = true
           end
           if !showline
@@ -331,7 +331,7 @@ def pbDefinePath(canvas)
         if showline
           step = 1.0 / (points.length - 1)
           t = 0.0
-          for i in 0...points.length
+          points.length.times do |i|
             point = getCurvePoint(curve, t)
             points[i].x = point[0]
             points[i].y = point[1]
@@ -341,18 +341,18 @@ def pbDefinePath(canvas)
       end
       window.dispose
       # dispose temporary path
-      for point in points
+      points.each do |point|
         point.dispose
       end
       points.clear
       if showline
         path = curveToPointPath(curve, sliderwin2.value(0))
 #       File.open("pointpath.txt","wb") { |f| f.write(path.inspect) }
-        for point in path
+        path.each do |point|
           points.push(PointSprite.new(point[0], point[1], canvas.viewport))
         end
       end
-      for point in curve
+      curve.each do |point|
         point.dispose
       end
       sliderwin2.visible = true
@@ -360,7 +360,7 @@ def pbDefinePath(canvas)
     elsif sliderwin2.changed?(defpathbutton)
       canceled = false
       pointpath = PointPath.new
-      for point in points
+      points.each do |point|
         point.dispose
       end
       points.clear
@@ -396,14 +396,14 @@ def pbDefinePath(canvas)
       end
       window.dispose
       # dispose temporary path
-      for point in points
+      points.each do |point|
         point.dispose
       end
       points.clear
       # generate smooth path from temporary path
       path = pointpath.smoothPointPath(sliderwin2.value(0), true)
       # redraw path from smooth path
-      for point in path
+      path.each do |point|
         points.push(PointSprite.new(point[0], point[1], canvas.viewport))
       end
 #     File.open("pointpath.txt","wb") { |f| f.write(path.inspect) }
@@ -417,7 +417,7 @@ def pbDefinePath(canvas)
       end
       thiscel = canvas.currentCel
       celnumber = canvas.currentcel
-      for i in canvas.currentframe...neededsize
+      (canvas.currentframe...neededsize).each do |i|
         cel = canvas.animation[i][celnumber]
         if !canvas.animation[i][celnumber]
           cel = pbCreateCel(0, 0, thiscel[AnimFrame::PATTERN], canvas.animation.position)
@@ -432,7 +432,7 @@ def pbDefinePath(canvas)
     end
   end
   # dispose all points
-  for point in points
+  points.each do |point|
     point.dispose
   end
   points.clear

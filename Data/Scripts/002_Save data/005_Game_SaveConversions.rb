@@ -334,20 +334,20 @@ SaveData.register_conversion(:v20_convert_pokemon_markings_variables) do
   display_title 'Updating format of Pokémon markings (3/4)'
   to_all do |save_data|
     variables = save_data[:variables]
-    for i in 0..5000
+    (0..5000).each do |i|
       value = variables[i]
       next if value.nil?
       if value.is_a?(Array)
         value.each do |value2|
           if value2.is_a?(Pokemon) && value2.markings.is_a?(Integer)
             markings = []
-            6.times { |i| markings[i] = ((value2.markings & (1 << i)) == 0) ? 0 : 1 }
+            6.times { |j| markings[j] = ((value2.markings & (1 << j)) == 0) ? 0 : 1 }
             value2.markings = markings
           end
         end
       elsif value.is_a?(Pokemon) && value.markings.is_a?(Integer)
         markings = []
-        6.times { |i| markings[i] = ((value.markings & (1 << i)) == 0) ? 0 : 1 }
+        6.times { |j| markings[j] = ((value.markings & (1 << j)) == 0) ? 0 : 1 }
         value.markings = markings
       end
     end
@@ -359,12 +359,12 @@ SaveData.register_conversion(:v20_convert_pokemon_markings_storage) do
   display_title 'Updating format of Pokémon markings (4/4)'
   to_value :storage_system do |storage|
     storage.instance_eval do
-      for box in 0...self.maxBoxes
-        for i in 0...self.maxPokemon(box)
+      self.maxBoxes.times do |box|
+        self.maxPokemon(box).times do |i|
           pkmn = self[box, i]
           next if !pkmn || !pkmn.markings.is_a?(Integer)
           markings = []
-          6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
+          6.times { |j| markings[j] = ((pkmn.markings & (1 << j)) == 0) ? 0 : 1 }
           pkmn.markings = markings
         end
       end

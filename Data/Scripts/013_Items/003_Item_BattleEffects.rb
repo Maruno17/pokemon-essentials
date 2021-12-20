@@ -163,7 +163,7 @@ ItemHandlers::CanUseInBattle.add(:ELIXIR, proc { |item, pokemon, battler, move, 
     next false
   end
   canRestore = false
-  for m in pokemon.moves
+  pokemon.moves.each do |m|
     next if m.id == 0
     next if m.total_pp <= 0 || m.pp == m.total_pp
     canRestore = true
@@ -502,14 +502,14 @@ ItemHandlers::BattleUseOnPokemon.add(:MAXETHER, proc { |item, pokemon, battler, 
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:ELIXIR, proc { |item, pokemon, battler, choices, scene|
-  for i in 0...pokemon.moves.length
+  pokemon.moves.length.times do |i|
     pbBattleRestorePP(pokemon, battler, i, 10)
   end
   scene.pbDisplay(_INTL("PP was restored."))
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:MAXELIXIR, proc { |item, pokemon, battler, choices, scene|
-  for i in 0...pokemon.moves.length
+  pokemon.moves.length.times do |i|
     pbBattleRestorePP(pokemon, battler, i, pokemon.moves[i].total_pp)
   end
   scene.pbDisplay(_INTL("PP was restored."))

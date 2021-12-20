@@ -66,7 +66,7 @@ end
 
 def setBattleRule(*args)
   r = nil
-  for arg in args
+  args.each do |arg|
     if r
       $game_temp.add_battle_rule(r, arg)
       r = nil
@@ -234,7 +234,7 @@ def pbWildBattleCore(*args)
   # Generate wild Pokémon based on the species and level
   foeParty = []
   sp = nil
-  for arg in args
+  args.each do |arg|
     if arg.is_a?(Pokemon)
       foeParty.push(arg)
     elsif arg.is_a?(Array)
@@ -382,7 +382,7 @@ def pbTrainerBattleCore(*args)
   foeEndSpeeches = []
   foeParty       = []
   foePartyStarts = []
-  for arg in args
+  args.each do |arg|
     case arg
     when NPCTrainer
       foeTrainers.push(arg)
@@ -483,7 +483,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech = nil,
     # Find all other triggered trainer events
     triggeredEvents = $game_player.pbTriggeredTrainerEvents([2], false)
     otherEvent = []
-    for i in triggeredEvents
+    triggeredEvents.each do |i|
       next if i.id == thisEvent.id
       next if $game_self_switches[[$game_map.map_id, i.id, "A"]]
       otherEvent.push(i)
@@ -632,9 +632,7 @@ end
 
 def pbDynamicItemList(*args)
   ret = []
-  for i in 0...args.length
-    ret.push(args[i]) if GameData::Item.exists?(args[i])
-  end
+  args.each { |arg| ret.push(arg) if GameData::Item.exists?(arg) }
   return ret
 end
 
@@ -685,10 +683,10 @@ def pbPickup(pkmn)
   pkmnLevel = [100, pkmn.level].min
   itemStartIndex = (pkmnLevel - 1) / 10
   itemStartIndex = 0 if itemStartIndex < 0
-  for i in 0...9
+  9.times do |i|
     items.push(pickupList[itemStartIndex + i])
   end
-  for i in 0...2
+  2.times do |i|
     items.push(pickupListRare[itemStartIndex + i])
   end
   # Probabilities of choosing each item in turn from the pool

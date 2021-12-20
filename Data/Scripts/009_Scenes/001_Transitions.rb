@@ -176,8 +176,8 @@ module Transitions
       # Overworld sprites
       sprite_width = @overworld_bitmap.width / NUM_SPRITES_X
       sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           @sprites[idx_sprite] = new_sprite(i * sprite_width, j * sprite_height, @overworld_bitmap)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
@@ -187,8 +187,8 @@ module Transitions
 
     def set_up_timings
       @start_y = []
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           @start_y[idx_sprite] = @sprites[idx_sprite].y
           @timings[idx_sprite] = 0.5 + rand
@@ -217,8 +217,8 @@ module Transitions
       # Overworld sprites
       sprite_width = @overworld_bitmap.width / NUM_SPRITES_X
       sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           @sprites[idx_sprite] = new_sprite((i + 0.5) * sprite_width, (j + 0.5) * sprite_height,
                                             @overworld_bitmap, sprite_width / 2, sprite_height / 2)
@@ -256,8 +256,8 @@ module Transitions
       # Overworld sprites
       sprite_width = @overworld_bitmap.width / NUM_SPRITES_X
       sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           @sprites[idx_sprite] = new_sprite((i + 0.5) * sprite_width, (j + 0.5) * sprite_height,
                                             @overworld_bitmap, sprite_width / 2, sprite_height / 2)
@@ -270,8 +270,8 @@ module Transitions
       @start_positions = []
       @move_vectors = []
       vague = (@parameters[0] || 9.6) * SPEED
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           spr = @sprites[idx_sprite]
           @start_positions[idx_sprite] = [spr.x, spr.y]
@@ -329,8 +329,8 @@ module Transitions
         num_stripes_x = 1
         num_stripes_y = @overworld_bitmap.height / STRIPE_WIDTH
       end
-      for j in 0...num_stripes_y
-        for i in 0...num_stripes_x
+      num_stripes_y.times do |j|
+        num_stripes_x.times do |i|
           idx_sprite = (j * num_stripes_x) + i
           @sprites[idx_sprite] = new_sprite(i * sprite_width, j * sprite_height, @overworld_bitmap)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
@@ -339,7 +339,7 @@ module Transitions
     end
 
     def set_up_timings
-      for i in 0...@sprites.length
+      @sprites.length.times do |i|
         @timings[i] = @duration * i / @sprites.length
       end
       @timings.shuffle!
@@ -464,8 +464,8 @@ module Transitions
     end
 
     def initialize_sprites
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           if idx_sprite >= TOTAL_SPRITES / 2
             sprite_x = ((j.odd?) ? i : (NUM_SPRITES_X - i - 1)) * @black_bitmap.width
@@ -483,8 +483,8 @@ module Transitions
 
     def set_up_timings
       time_between_zooms = (@duration - TIME_TO_ZOOM) * 2 / (TOTAL_SPRITES - 1)
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           idx_from_start = (idx_sprite >= TOTAL_SPRITES / 2) ? TOTAL_SPRITES - 1 - idx_sprite : idx_sprite
           @timings[idx_sprite] = time_between_zooms * idx_from_start
@@ -532,8 +532,8 @@ module Transitions
     end
 
     def initialize_sprites
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           @sprites[idx_sprite] = new_sprite(((i * @bitmap.width) + (@bitmap.width / 2)) * @zoom_x_target,
                                             ((j * @bitmap.height) + (@bitmap.height / 2)) * @zoom_y_target,
@@ -544,8 +544,8 @@ module Transitions
     end
 
     def set_up_timings
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_from_start = (j * NUM_SPRITES_X) + i   # Top left -> bottom right
           case @parameters[0]   # Origin
           when 1   # Top right -> bottom left
@@ -603,7 +603,7 @@ module Transitions
       @overworld_sprite.visible = false
       # Overworld strips (they go all wavy)
       rect = Rect.new(0, 0, Graphics.width, 2)
-      for i in 0...Graphics.height / 2
+      (Graphics.height / 2).times do |i|
         @sprites[i] = new_sprite(0, i * 2, @overworld_bitmap)
         @sprites[i].z = 2
         rect.y = i * 2
@@ -679,7 +679,7 @@ module Transitions
       @overworld_sprite.oy = @overworld_bitmap.height / 2
       # Balls that roll across the screen
       @ball_sprites = []
-      for i in 0...2
+      2.times do |i|
         x = ((1 - i) * Graphics.width) + ((1 - (i * 2)) * @ball_bitmap.width / 2)
         y = (Graphics.height + (((i * 2) - 1) * @ball_bitmap.width)) / 2
         @ball_sprites[i] = new_sprite(x, y, @ball_bitmap,
@@ -687,7 +687,7 @@ module Transitions
         @ball_sprites[i].z = 2
       end
       # Black foreground sprites
-      for i in 0...2
+      2.times do |i|
         @sprites[i] = new_sprite((1 - (i * 2)) * Graphics.width, i * Graphics.height / 2, @black_bitmap)
         @sprites[i].z = 1
       end
@@ -756,7 +756,7 @@ module Transitions
       @overworld_sprites = []
       @black_sprites = []
       @ball_sprites = []
-      for i in 0...2
+      2.times do |i|
         # Overworld sprites (they split apart)
         @overworld_sprites[i] = new_sprite(Graphics.width / 2, Graphics.height / 2, @overworld_bitmap,
                                            Graphics.width / 2, (1 - i) * Graphics.height / 2)
@@ -857,8 +857,8 @@ module Transitions
       @overworld_sprite.ox = @overworld_bitmap.width / 2
       @overworld_sprite.oy = @overworld_bitmap.height / 2
       # Black squares
-      for j in 0...NUM_SPRITES_Y
-        for i in 0...NUM_SPRITES_X
+      NUM_SPRITES_Y.times do |j|
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           @sprites[idx_sprite] = new_sprite(i * @black_bitmap.width * @zoom_x_target,
                                             j * @black_bitmap.height * @zoom_y_target, @black_bitmap)
@@ -867,7 +867,7 @@ module Transitions
       end
       # Falling balls
       @ball_sprites = []
-      for i in 0...3
+      3.times do |i|
         @ball_sprites[i] = new_sprite((Graphics.width / 2) + ((i - 1) * 160),
                                       -@ball_bitmap.height - BALL_START_Y_OFFSETS[i],
                                       @ball_bitmap, @ball_bitmap.width / 2, @ball_bitmap.height / 2)
@@ -879,9 +879,9 @@ module Transitions
       @black_appear_start = @duration * 0.2
       appear_order = [0, 4, 1, 6, 7, 2, 5, 3]
       period = @duration - @black_appear_start
-      for j in 0...NUM_SPRITES_Y
+      NUM_SPRITES_Y.times do |j|
         row_offset = NUM_SPRITES_Y - j - 1
-        for i in 0...NUM_SPRITES_X
+        NUM_SPRITES_X.times do |i|
           idx_sprite = (j * NUM_SPRITES_X) + i
           @timings[idx_sprite] = period * ((row_offset * NUM_SPRITES_X) + appear_order[i]) / TOTAL_SPRITES
           @timings[idx_sprite] += @black_appear_start
@@ -1015,7 +1015,7 @@ module Transitions
       @overworld_sprite.visible = false
       # Overworld strips (they go all wavy)
       rect = Rect.new(0, 0, Graphics.width, 4)
-      for i in 0...Graphics.height / 4
+      (Graphics.height / 4).times do |i|
         @sprites[i] = new_sprite(0, i * 4, @overworld_bitmap)
         @sprites[i].z = 2
         rect.y = i * 4
@@ -1023,7 +1023,7 @@ module Transitions
       end
       # Ball sprites
       @ball_sprites = []
-      for i in 0...3
+      3.times do |i|
         @ball_sprites[i] = new_sprite(((2 * i) + 1) * Graphics.width / 6,
                                       BALL_OFFSETS[i] * Graphics.height,
                                       @ball_bitmap, @ball_bitmap.width / 2, @ball_bitmap.height / 2)
@@ -1031,7 +1031,7 @@ module Transitions
       end
       # Black columns that follow the ball sprites
       @black_trail_sprites = []
-      for i in 0...3
+      3.times do |i|
         @black_trail_sprites[i] = new_sprite((i - 1) * Graphics.width * 2 / 3,
                                              BALL_OFFSETS[i] * Graphics.height, @black_bitmap)
         @black_trail_sprites[i].z = 3
@@ -1096,7 +1096,7 @@ module Transitions
       @overworld_sprite.visible = false
       # Overworld strips (they go all wavy)
       rect = Rect.new(0, 0, Graphics.width, 4)
-      for i in 0...Graphics.height / 4
+      (Graphics.height / 4).times do |i|
         @sprites[i] = new_sprite(0, i * 4, @overworld_bitmap)
         @sprites[i].z = 2
         rect.y = i * 4
@@ -1172,13 +1172,13 @@ module Transitions
     def initialize_sprites
       # Ball sprites
       @ball_sprites = []
-      for i in 0...4
+      4.times do |i|
         @ball_sprites[i] = new_sprite(Graphics.width / 2, Graphics.height / 2, @ball_bitmap,
                                       @ball_bitmap.width / 2, @ball_bitmap.height / 2)
         @ball_sprites[i].z = [2, 1, 3, 0][i]
       end
       # Black wedges
-      for i in 0...4
+      4.times do |i|
         b = [@black_1_bitmap, @black_2_bitmap, @black_3_bitmap, @black_4_bitmap][i]
         @sprites[i] = new_sprite((i == 1) ? 0 : Graphics.width / 2, (i == 2) ? 0 : Graphics.height / 2, b,
                                  (i.even?) ? b.width / 2 : 0, (i.even?) ? 0 : b.height / 2)

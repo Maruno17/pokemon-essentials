@@ -19,7 +19,7 @@ class PokemonBag
     @last_viewed_pocket     = 1
     @pockets                = []
     @last_pocket_selections = []
-    for i in 0..PokemonBag.pocket_count
+    (0..PokemonBag.pocket_count).each do |i|
       @pockets[i] = []
       @last_pocket_selections[i] = 0
     end

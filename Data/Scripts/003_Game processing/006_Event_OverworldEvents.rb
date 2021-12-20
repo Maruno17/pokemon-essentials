@@ -158,14 +158,14 @@ module EncounterModifier
   end
 
   def self.trigger(encounter)
-    for prc in @@procs
+    @@procs.each do |prc|
       encounter = prc.call(encounter)
     end
     return encounter
   end
 
   def self.triggerEncounterEnd
-    for prc in @@procsEnd
+    @@procsEnd.each do |prc|
       prc.call
     end
   end

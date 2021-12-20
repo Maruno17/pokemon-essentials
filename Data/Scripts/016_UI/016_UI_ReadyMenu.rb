@@ -104,10 +104,10 @@ class PokemonReadyMenu_Scene
     @commands = commands
     @movecommands = []
     @itemcommands = []
-    for i in 0...@commands[0].length
+    @commands[0].length.times do |i|
       @movecommands.push(@commands[0][i][1])
     end
-    for i in 0...@commands[1].length
+    @commands[1].length.times do |i|
       @itemcommands.push(@commands[1][i][1])
     end
     @index = $bag.ready_menu_selection
@@ -129,10 +129,10 @@ class PokemonReadyMenu_Scene
     @sprites["cmdwindow"].height = 6 * 32
     @sprites["cmdwindow"].visible = false
     @sprites["cmdwindow"].viewport = @viewport
-    for i in 0...@commands[0].length
+    @commands[0].length.times do |i|
       @sprites["movebutton#{i}"] = ReadyMenuButton.new(i, @commands[0][i], @index[0], @index[2], @viewport)
     end
-    for i in 0...@commands[1].length
+    @commands[1].length.times do |i|
       @sprites["itembutton#{i}"] = ReadyMenuButton.new(i, @commands[1][i], @index[1], @index[2], @viewport)
     end
     pbSEPlay("GUI menu open")
@@ -140,20 +140,20 @@ class PokemonReadyMenu_Scene
 
   def pbShowMenu
     @sprites["cmdwindow"].visible = false
-    for i in 0...@commands[0].length
+    @commands[0].length.times do |i|
       @sprites["movebutton#{i}"].visible = true
     end
-    for i in 0...@commands[1].length
+    @commands[1].length.times do |i|
       @sprites["itembutton#{i}"].visible = true
     end
   end
 
   def pbHideMenu
     @sprites["cmdwindow"].visible = false
-    for i in 0...@commands[0].length
+    @commands[0].length.times do |i|
       @sprites["movebutton#{i}"].visible = false
     end
-    for i in 0...@commands[1].length
+    @commands[1].length.times do |i|
       @sprites["itembutton#{i}"].visible = false
     end
   end
@@ -190,10 +190,10 @@ class PokemonReadyMenu_Scene
   end
 
   def pbChangeSide
-    for i in 0...@commands[0].length
+    @commands[0].length.times do |i|
       @sprites["movebutton#{i}"].side = @index[2]
     end
-    for i in 0...@commands[1].length
+    @commands[1].length.times do |i|
       @sprites["itembutton#{i}"].side = @index[2]
     end
     @sprites["cmdwindow"].commands = (@index[2] == 0) ? @movecommands : @itemcommands
@@ -208,11 +208,11 @@ class PokemonReadyMenu_Scene
     if @index[@index[2]] != oldindex
       case @index[2]
       when 0
-        for i in 0...@commands[0].length
+        @commands[0].length.times do |i|
           @sprites["movebutton#{i}"].selected = @index[@index[2]]
         end
       when 1
-        for i in 0...@commands[1].length
+        @commands[1].length.times do |i|
           @sprites["itembutton#{i}"].selected = @index[@index[2]]
         end
       end
@@ -243,11 +243,11 @@ class PokemonReadyMenu
 
   def pbStartReadyMenu(moves, items)
     commands = [[], []]   # Moves, items
-    for i in moves
+    moves.each do |i|
       commands[0].push([i[0], GameData::Move.get(i[0]).name, true, i[1]])
     end
     commands[0].sort! { |a, b| a[1] <=> b[1] }
-    for i in items
+    items.each do |i|
       commands[1].push([i, GameData::Item.get(i).name, false])
     end
     commands[1].sort! { |a, b| a[1] <=> b[1] }
@@ -313,7 +313,7 @@ def pbUseKeyItem
     end
   end
   real_items = []
-  for i in $bag.registered_items
+  $bag.registered_items.each do |i|
     itm = GameData::Item.get(i).id
     real_items.push(itm) if $bag.has?(itm)
   end

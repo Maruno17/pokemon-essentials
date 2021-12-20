@@ -8,22 +8,18 @@ class PokemonTrade_Scene
 
   def pbRunPictures(pictures, sprites)
     loop do
-      for i in 0...pictures.length
-        pictures[i].update
-      end
-      for i in 0...sprites.length
-        if sprites[i].is_a?(IconSprite)
-          setPictureIconSprite(sprites[i], pictures[i])
+      pictures.each { |pic| pic.update }
+      sprites.each_with_index do |sprite, i|
+        if sprite.is_a?(IconSprite)
+          setPictureIconSprite(sprite, pictures[i])
         else
-          setPictureSprite(sprites[i], pictures[i])
+          setPictureSprite(sprite, pictures[i])
         end
       end
       Graphics.update
       Input.update
       running = false
-      for i in 0...pictures.length
-        running = true if pictures[i].running?
-      end
+      pictures.each { |pic| running = true if pic.running? }
       break if !running
     end
   end
@@ -119,7 +115,7 @@ class PokemonTrade_Scene
     # Dropping ball
     y = Graphics.height - 96 - 16 - 16   # end point of Poké Ball
     delay = picturePoke.totalDuration + 2
-    for i in 0...4
+    4.times do |i|
       t = [4, 4, 3, 2][i]   # Time taken to rise or fall for each bounce
       d = [1, 2, 4, 8][i]   # Fraction of the starting height each bounce rises to
       delay -= t if i == 0

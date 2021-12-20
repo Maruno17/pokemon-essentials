@@ -106,7 +106,7 @@ class PokemonDuel
       else
         num = rand(total)
         cumtotal = 0
-        for i in 0...4
+        4.times do |i|
           cumtotal += scores[i]
           if num < cumtotal
             action = i
@@ -385,7 +385,7 @@ def pbDuel(trainer_id, trainer_name, event, speeches)
     pbGetMessageFromHash(MessageTypes::TrainerNames, trainer_name), trainer_id
   )
   speech_texts = []
-  for i in 0...12
+  12.times do |i|
     speech_texts.push(_I(speeches[i]))
   end
   duel.pbDuel(opponent, event, speech_texts)

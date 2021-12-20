@@ -142,7 +142,7 @@ class PictureEx
 
   def totalDuration
     ret = 0
-    for process in @processes
+    @processes.each do |process|
       dur = process[1] + process[2]
       ret = dur if dur > ret
     end
@@ -186,7 +186,7 @@ class PictureEx
   end
 
   def adjustPosition(xOffset, yOffset)
-    for process in @processes
+    @processes.each do |process|
       next if process[0] != Processes::XY
       process[5] += xOffset
       process[6] += yOffset
@@ -345,8 +345,7 @@ class PictureEx
   def update
     procEnded = false
     @frameUpdates.clear
-    for i in 0...@processes.length
-      process = @processes[i]
+    @processes.each_with_index do |process, i|
       # Decrease delay of processes that are scheduled to start later
       if process[1] >= 0
         # Set initial values if the process will start this frame
@@ -465,8 +464,8 @@ end
 #===============================================================================
 def setPictureSprite(sprite, picture, iconSprite = false)
   return if picture.frameUpdates.length == 0
-  for i in 0...picture.frameUpdates.length
-    case picture.frameUpdates[i]
+  picture.frameUpdates.each do |type|
+    case type
     when Processes::XY, Processes::DeltaXY
       sprite.x = picture.x.round
       sprite.y = picture.y.round

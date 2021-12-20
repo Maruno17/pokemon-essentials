@@ -123,7 +123,7 @@ class BattlePalaceBattle < Battle
       category = 2
     end
     moves = []
-    for i in 0...this_battler.moves.length
+    this_battler.moves.length.times do |i|
       next if !pbCanChooseMovePartial?(idxBattler, i)
       next if pbMoveCategory(this_battler.moves[i]) != category
       moves[moves.length] = i

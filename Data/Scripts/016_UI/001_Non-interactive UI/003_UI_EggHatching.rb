@@ -77,7 +77,7 @@ class PokemonEggHatch_Scene
     # Fade and change the sprite
     fadeTime = Graphics.frame_rate * 4 / 10
     toneDiff = (255.0 / fadeTime).ceil
-    for i in 1..fadeTime
+    (1..fadeTime).each do |i|
       @sprites["pokemon"].tone = Tone.new(i * toneDiff, i * toneDiff, i * toneDiff)
       @sprites["overlay"].opacity = i * toneDiff
       updateScene
@@ -88,7 +88,7 @@ class PokemonEggHatch_Scene
     @sprites["pokemon"].y = 264
     @pokemon.species_data.apply_metrics_to_sprite(@sprites["pokemon"], 1)
     @sprites["hatch"].visible = false
-    for i in 1..fadeTime
+    (1..fadeTime).each do |i|
       @sprites["pokemon"].tone = Tone.new(255 - (i * toneDiff), 255 - (i * toneDiff), 255 - (i * toneDiff))
       @sprites["overlay"].opacity = 255 - (i * toneDiff)
       updateScene
@@ -220,10 +220,10 @@ def pbHatch(pokemon)
 end
 
 Events.onStepTaken += proc { |_sender, _e|
-  for egg in $player.party
+  $player.party.each do |egg|
     next if egg.steps_to_hatch <= 0
     egg.steps_to_hatch -= 1
-    for i in $player.pokemon_party
+    $player.pokemon_party.each do |i|
       next if ![:FLAMEBODY, :MAGMAARMOR, :STEAMENGINE].include?(i.ability_id)
       egg.steps_to_hatch -= 1
       break

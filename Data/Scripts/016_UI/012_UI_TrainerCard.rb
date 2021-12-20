@@ -66,7 +66,7 @@ class PokemonTrainerCard_Scene
     x = 72
     region = pbGetCurrentRegion(0) # Get the current region
     imagePositions = []
-    for i in 0...8
+    8.times do |i|
       if $player.badges[i + (region * 8)]
         imagePositions.push(["Graphics/Pictures/Trainer Card/icon_badges", x, 310, i * 32, region * 32, 32, 32])
       end

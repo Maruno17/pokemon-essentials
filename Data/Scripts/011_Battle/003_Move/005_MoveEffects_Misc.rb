@@ -482,7 +482,7 @@ class Battle::Move::SwapSideEffects < Battle::Move
 
   def pbMoveFailed?(user, targets)
     has_effect = false
-    for side in 0...2
+    2.times do |side|
       effects = @battle.sides[side].effects
       @number_effects.each do |e|
         next if effects[e] == 0

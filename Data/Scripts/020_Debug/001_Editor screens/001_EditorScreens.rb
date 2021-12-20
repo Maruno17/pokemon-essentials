@@ -427,7 +427,7 @@ def pbTrainerTypeEditorNew(default_name)
     id = "T_" + id
   end
   if GameData::TrainerType.exists?(id)
-    for i in 1..100
+    (1..100).each do |i|
       trial_id = sprintf("%s_%d", id, i)
       next if GameData::TrainerType.exists?(trial_id)
       id = trial_id
@@ -522,10 +522,10 @@ def pbTrainerBattleEditor
             tr_data.version,
             tr_data.real_lose_text
           ]
-          for i in 0...Settings::MAX_PARTY_SIZE
+          Settings::MAX_PARTY_SIZE.times do |i|
             data.push(tr_data.pokemon[i])
           end
-          for i in 0...TrainerBattleProperty::NUM_ITEMS
+          TrainerBattleProperty::NUM_ITEMS.times do |i|
             data.push(tr_data.items[i])
           end
           loop do
@@ -533,10 +533,10 @@ def pbTrainerBattleEditor
             break if !data
             party = []
             items = []
-            for i in 0...Settings::MAX_PARTY_SIZE
+            Settings::MAX_PARTY_SIZE.times do |i|
               party.push(data[4 + i]) if data[4 + i] && data[4 + i][:species]
             end
-            for i in 0...TrainerBattleProperty::NUM_ITEMS
+            TrainerBattleProperty::NUM_ITEMS.times do |i|
               items.push(data[4 + Settings::MAX_PARTY_SIZE + i]) if data[4 + Settings::MAX_PARTY_SIZE + i]
             end
             if !data[0]
@@ -959,7 +959,7 @@ def pbItemEditorNew(default_name)
     id = "ITEM_" + id
   end
   if GameData::Item.exists?(id)
-    for i in 1..100
+    (1..100).each do |i|
       trial_id = sprintf("%s_%d", id, i)
       next if GameData::Item.exists?(trial_id)
       id = trial_id
@@ -1387,7 +1387,7 @@ def pbAppendEvoToFamilyArray(species, array, seenarray)
   evos = GameData::Species.get(species).get_evolutions
   if evos.length > 0
     subarray = []
-    for i in evos
+    evos.each do |i|
       pbAppendEvoToFamilyArray(i[0], subarray, seenarray)
     end
     array.push(subarray) if subarray.length > 0
@@ -1410,9 +1410,9 @@ end
 def pbEvoFamiliesToStrings
   ret = []
   families = pbGetEvoFamilies
-  for fam in 0...families.length
+  families.length.times do |fam|
     string = ""
-    for p in 0...families[fam].length
+    families[fam].length.times do |p|
       if p >= 3
         string += " + #{families[fam].length - 3} more"
         break
@@ -1457,7 +1457,7 @@ def pbAnimationsOrganiser
   loop do
     if refreshlist
       commands = []
-      for i in 0...list.length
+      list.length.times do |i|
         commands.push(sprintf("%d: %s", i, (list[i]) ? list[i].name : "???"))
       end
     end

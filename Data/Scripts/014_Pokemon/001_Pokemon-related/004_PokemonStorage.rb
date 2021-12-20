@@ -8,12 +8,10 @@ class PokemonBox
   BOX_SIZE   = BOX_WIDTH * BOX_HEIGHT
 
   def initialize(name, maxPokemon = BOX_SIZE)
-    @pokemon = []
     @name = name
     @background = 0
-    for i in 0...maxPokemon
-      @pokemon[i] = nil
-    end
+    @pokemon = []
+    maxPokemon.times { |i| @pokemon[i] = nil }
   end
 
   def length
@@ -62,14 +60,14 @@ class PokemonStorage
 
   def initialize(maxBoxes = Settings::NUM_STORAGE_BOXES, maxPokemon = PokemonBox::BOX_SIZE)
     @boxes = []
-    for i in 0...maxBoxes
+    maxBoxes.times do |i|
       @boxes[i] = PokemonBox.new(_INTL("Box {1}", i + 1), maxPokemon)
       @boxes[i].background = i % BASICWALLPAPERQTY
     end
     @currentBox = 0
     @boxmode = -1
     @unlockedWallpapers = []
-    for i in 0...allWallpapers.length
+    allWallpapers.length.times do |i|
       @unlockedWallpapers[i] = false
     end
   end
@@ -107,7 +105,7 @@ class PokemonStorage
     ret = [[], []]   # Names, IDs
     papers = allWallpapers
     @unlockedWallpapers = [] if !@unlockedWallpapers
-    for i in 0...papers.length
+    papers.length.times do |i|
       next if !isAvailableWallpaper?(i)
       ret[0].push(papers[i])
       ret[1].push(i)
@@ -137,7 +135,7 @@ class PokemonStorage
   end
 
   def full?
-    for i in 0...self.maxBoxes
+    self.maxBoxes.times do |i|
       return false if !@boxes[i].full?
     end
     return true
@@ -148,7 +146,7 @@ class PokemonStorage
       ret = self.party.length
       return (ret >= Settings::MAX_PARTY_SIZE) ? -1 : ret
     end
-    for i in 0...maxPokemon(box)
+    maxPokemon(box).times do |i|
       return i if !self[box, i]
     end
     return -1
@@ -158,7 +156,7 @@ class PokemonStorage
     if y == nil
       return (x == -1) ? self.party : @boxes[x]
     else
-      for i in @boxes
+      @boxes.each do |i|
         raise "Box is a Pokémon, not a box" if i.is_a?(Pokemon)
       end
       return (x == -1) ? self.party[y] : @boxes[x][y]
@@ -176,7 +174,7 @@ class PokemonStorage
   def pbCopy(boxDst, indexDst, boxSrc, indexSrc)
     if indexDst < 0 && boxDst < self.maxBoxes
       found = false
-      for i in 0...maxPokemon(boxDst)
+      maxPokemon(boxDst).times do |i|
         next if self[boxDst, i]
         found = true
         indexDst = i
@@ -213,7 +211,7 @@ class PokemonStorage
   end
 
   def pbMoveCaughtToBox(pkmn, box)
-    for i in 0...maxPokemon(box)
+    maxPokemon(box).times do |i|
       if self[box, i] == nil
         if Settings::HEAL_STORED_POKEMON && box >= 0
           old_ready_evo = pkmn.ready_to_evolve
@@ -233,14 +231,14 @@ class PokemonStorage
       pkmn.heal
       pkmn.ready_to_evolve = old_ready_evo
     end
-    for i in 0...maxPokemon(@currentBox)
+    maxPokemon(@currentBox).times do |i|
       if self[@currentBox, i] == nil
         self[@currentBox, i] = pkmn
         return @currentBox
       end
     end
-    for j in 0...self.maxBoxes
-      for i in 0...maxPokemon(j)
+    self.maxBoxes.times do |j|
+      maxPokemon(j).times do |i|
         if self[j, i] == nil
           self[j, i] = pkmn
           @currentBox = j
@@ -259,9 +257,7 @@ class PokemonStorage
   end
 
   def clear
-    for i in 0...self.maxBoxes
-      @boxes[i].clear
-    end
+    self.maxBoxes.times { |i| @boxes[i].clear }
   end
 end
 
@@ -393,8 +389,8 @@ end
 #===============================================================================
 # Yields every Pokémon/egg in storage in turn.
 def pbEachPokemon
-  for i in -1...$PokemonStorage.maxBoxes
-    for j in 0...$PokemonStorage.maxPokemon(i)
+  (-1...$PokemonStorage.maxBoxes).each do |i|
+    $PokemonStorage.maxPokemon(i).times do |j|
       pkmn = $PokemonStorage[i][j]
       yield(pkmn, i) if pkmn
     end

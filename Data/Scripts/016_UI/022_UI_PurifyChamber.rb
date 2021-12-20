@@ -83,7 +83,7 @@ class PurifyChamberSet
   def flow
     ret = 0
     return 0 if !@shadow
-    for i in 0...@list.length
+    @list.length.times do |i|
       ret += (PurifyChamberSet.isSuperEffective(@list[i], @list[(i + 1) % @list.length])) ? 1 : 0
     end
     if @list[@facing]
@@ -106,7 +106,7 @@ class PurifyChamberSet
   # clockwise direction. Tempo also depends on the number of Pokemon in the set
   def tempo
     ret = 0
-    for i in 0...@list.length
+    @list.length.times do |i|
       ret += (PurifyChamberSet.isSuperEffective(@list[i], @list[(i + 1) % @list.length])) ? 1 : 0
     end
     return partialSum(@list.length) + ret
@@ -235,7 +235,7 @@ class PurifyChamber
     # Define an exception for Lugia
     if shadow.isSpecies?(:LUGIA)
       maxtempo = PurifyChamber.maximumTempo
-      for i in 0...NUMSETS
+      NUMSETS.times do |i|
         return false if @sets[i].tempo != maxtempo
       end
     end
@@ -247,7 +247,7 @@ class PurifyChamber
   end
 
   def update # called each step
-    for set in 0...NUMSETS
+    NUMSETS.times do |set|
       # If a shadow Pokemon and a regular Pokemon are on the same set
       if @sets[set].shadow
         if @sets[set].shadow.heart_gauge > 0
@@ -560,7 +560,7 @@ class PurifyChamberScreen
 
   def pbCheckPurify
     purifiables = []
-    for set in 0...PurifyChamber::NUMSETS
+    PurifyChamber::NUMSETS.times do |set|
       if @chamber.isPurifiable?(set) # if ready for purification
         purifiables.push(set)
       end
@@ -570,12 +570,12 @@ class PurifyChamberScreen
 
   def pbDoPurify
     purifiables = []
-    for set in 0...PurifyChamber::NUMSETS
+    PurifyChamber::NUMSETS.times do |set|
       if @chamber.isPurifiable?(set) # if ready for purification
         purifiables.push(set)
       end
     end
-    for i in 0...purifiables.length
+    purifiables.length.times do |i|
       set = purifiables[i]
       @chamber.currentSet = set
       @scene.pbOpenSet(set)
@@ -698,13 +698,13 @@ class DirectFlowDiagram
   end
 
   def visible=(value)
-    for point in @points
+    @points.each do |point|
       point.visible = value
     end
   end
 
   def dispose
-    for point in @points
+    @points.each do |point|
       point.dispose
     end
   end
@@ -719,7 +719,7 @@ class DirectFlowDiagram
   end
 
   def update
-    for point in @points
+    @points.each do |point|
       point.update
       point.visible = false
     end
@@ -741,7 +741,7 @@ class DirectFlowDiagram
   end
 
   def color=(value)
-    for point in @points
+    @points.each do |point|
       point.color = value
     end
   end
@@ -772,13 +772,13 @@ class FlowDiagram
   end
 
   def visible=(value)
-    for point in @points
+    @points.each do |point|
       point.visible = value
     end
   end
 
   def dispose
-    for point in @points
+    @points.each do |point|
       point.dispose
     end
   end
@@ -802,7 +802,7 @@ class FlowDiagram
   end
 
   def update
-    for point in @points
+    @points.each do |point|
       point.update
       point.visible = false
     end
@@ -824,7 +824,7 @@ class FlowDiagram
   end
 
   def color=(value)
-    for point in @points
+    @points.each do |point|
       point.color = value
     end
   end
@@ -862,7 +862,7 @@ class PurifyChamberSetView < SpriteWrapper
     @directflow.setFlowStrength(1)
     @__sprites = []
     @__sprites[0] = PokemonIconSprite.new(nil, viewport)
-    for i in 0...PurifyChamber::SETSIZE * 2
+    PurifyChamber::SETSIZE * 2.times do |i|
       @__sprites[i + 1] = PokemonIconSprite.new(nil, viewport)
     end
     @__sprites[1 + (PurifyChamber::SETSIZE * 2)] = PokemonIconSprite.new(nil, viewport)
@@ -871,11 +871,11 @@ class PurifyChamberSetView < SpriteWrapper
   end
 
   def refreshFlows
-    for flow in @flows
+    @flows.each do |flow|
       flow.setFlowStrength(0)
     end
     setcount = @chamber.setCount(@set)
-    for i in 0...setcount
+    setcount.times do |i|
       if !@flows[i]
         @flows[i] = FlowDiagram.new(self.viewport)
       end
@@ -988,7 +988,7 @@ class PurifyChamberSetView < SpriteWrapper
     points = [@chamber.setCount(@set) * 2, 1].max
     setList = @chamber.setList(@set)
     refreshFlows
-    for i in 0...PurifyChamber::SETSIZE * 2
+    (PurifyChamber::SETSIZE * 2).times do |i|
       pkmn = (i.odd? || i >= points) ? nil : setList[i / 2]
       angle = 360 - (i * 360 / points)
       angle += 90 # start at 12 not 3 o'clock
@@ -1031,10 +1031,10 @@ class PurifyChamberSetView < SpriteWrapper
 
   def visible=(value)
     super
-    for sprite in @__sprites
+    @__sprites.each do |sprite|
       sprite.visible = value
     end
-    for flow in @flows
+    @flows.each do |flow|
       flow.visible = value
     end
     @directflow.visible = value
@@ -1044,10 +1044,10 @@ class PurifyChamberSetView < SpriteWrapper
 
   def color=(value)
     super
-    for sprite in @__sprites
+    @__sprites.each do |sprite|
       sprite.color = pbSrcOver(sprite.color, value.clone)
     end
-    for flow in @flows
+    @flows.each do |flow|
       flow.color = value.clone
     end
     @directflow.color = value.clone
@@ -1057,10 +1057,10 @@ class PurifyChamberSetView < SpriteWrapper
 
   def update
     super
-    for sprite in @__sprites
+    @__sprites.each do |sprite|
       sprite.update if sprite
     end
-    for flow in @flows
+    @flows.each do |flow|
       flow.update
     end
     @directflow.update
@@ -1069,10 +1069,10 @@ class PurifyChamberSetView < SpriteWrapper
   end
 
   def dispose
-    for sprite in @__sprites
+    @__sprites.each do |sprite|
       sprite.dispose if sprite
     end
-    for flow in @flows
+    @flows.each do |flow|
       flow.dispose
     end
     @directflow.dispose
@@ -1261,7 +1261,7 @@ class PurifyChamberScene
     indexes = []
     startindex = 0
     set = @sprites["setview"].set
-    for i in 0...@chamber.setCount(set) * 2
+    (@chamber.setCount(set) * 2).times do |i|
       p = PurifyChamberHelper.pbGetPokemon2(@chamber, set, i)
       if p
         startindex = party.length if i == pos

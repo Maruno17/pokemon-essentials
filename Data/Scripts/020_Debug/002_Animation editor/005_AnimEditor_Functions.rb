@@ -15,9 +15,7 @@ class MiniBattle
 
   def initialize
     @battlers = []
-    for i in 0...4
-      @battlers[i] = MiniBattler.new(i)
-    end
+    4.times { |i| @battlers[i] = MiniBattler.new(i) }
   end
 end
 
@@ -118,7 +116,7 @@ end
 
 def pbAnimList(animations, canvas, animwin)
   commands = []
-  for i in 0...animations.length
+  animations.length.times do |i|
     animations[i] = PBAnimation.new if !animations[i]
     commands[commands.length] = _INTL("{1} {2}", i, animations[i].name)
   end
@@ -146,7 +144,7 @@ def pbAnimList(animations, canvas, animwin)
       newsize = maxsizewindow.value(0)
       animations.resize(newsize)
       commands.clear
-      for i in 0...animations.length
+      animations.length.times do |i|
         commands[commands.length] = _INTL("{1} {2}", i, animations[i].name)
       end
       cmdwin.commands = commands
@@ -382,7 +380,7 @@ def pbTimingList(canvas)
   cmdEditBG = -1
   cmdNewFO = -1
   cmdEditFO = -1
-  for i in canvas.animation.timing
+  canvas.animation.timing.each do |i|
     commands.push(sprintf("%s", i))
   end
   commands[cmdNewSound = commands.length] = _INTL("Add: Play Sound...")
@@ -752,7 +750,7 @@ def pbClearFrames(canvas)
     if sliderwin2.changed?(okbutton)
       startframe = sliderwin2.value(0) - 1
       endframe = sliderwin2.value(1) - 1
-      for i in startframe..endframe
+      (startframe..endframe).each do |i|
         canvas.clearFrame(i)
       end
       break
@@ -789,7 +787,7 @@ def pbTweening(canvas)
       frames = endframe - startframe
       startcel = sliderwin2.value(s1set2)
       endcel = sliderwin2.value(s1set3)
-      for j in startcel..endcel
+      (startcel..endcel).each do |j|
         cel1 = canvas.animation[startframe][j]
         cel2 = canvas.animation[endframe][j]
         next if !cel1 || !cel2
@@ -809,7 +807,7 @@ def pbTweening(canvas)
         startAngle = cel1[AnimFrame::ANGLE]
         startOpacity = cel1[AnimFrame::OPACITY]
         startBlend = cel1[AnimFrame::BLENDTYPE]
-        for k in 0..frames
+        (0..frames).each do |k|
           cel = canvas.animation[startframe + k][j]
           curcel = cel
           if !cel
@@ -879,8 +877,8 @@ def pbCellBatch(canvas)
       endframe = sliderwin1.value(s1set1) - 1
       startcel = sliderwin1.value(s1set2)
       endcel = sliderwin1.value(s1set3)
-      for i in startframe..endframe
-        for j in startcel..endcel
+      (startframe..endframe).each do |i|
+        (startcel..endcel).each do |j|
           next if !canvas.animation[i][j]
           cel = canvas.animation[i][j]
           cel[AnimFrame::PATTERN] = sliderwin2.value(set0) if sliderwin2.value(set0)
@@ -926,7 +924,7 @@ def pbEntireSlide(canvas)
       endvalue = sliderwin2.value(1) - 1
       xoffset = sliderwin2.value(2)
       yoffset = sliderwin2.value(3)
-      for i in startvalue..endvalue
+      (startvalue..endvalue).each do |i|
         canvas.offsetFrame(i, xoffset, yoffset)
       end
       break
@@ -1129,7 +1127,7 @@ def animationEditorMain(animation)
     if sidewin.changed?(1)
       positions = [_INTL("User"), _INTL("Target"), _INTL("User and target"), _INTL("Screen")]
       indexes = [2, 1, 3, 4] # Keeping backwards compatibility
-      for i in 0...positions.length
+      positions.length.times do |i|
         selected = "[  ]"
         if animation[animation.selected].position == indexes[i]
           selected = "[x]"

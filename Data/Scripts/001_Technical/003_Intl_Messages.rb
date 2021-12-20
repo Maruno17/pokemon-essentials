@@ -24,7 +24,7 @@ def pbSetTextMessages
   begin
     t = Time.now.to_i
     texts = []
-    for script in $RGSS_SCRIPTS
+    $RGSS_SCRIPTS.each do |script|
       if Time.now.to_i - t >= 5
         t = Time.now.to_i
         Graphics.update
@@ -34,8 +34,8 @@ def pbSetTextMessages
     end
     if safeExists?("Data/PluginScripts.rxdata")
       plugin_scripts = load_data("Data/PluginScripts.rxdata")
-      for plugin in plugin_scripts
-        for script in plugin[2]
+      plugin_scripts.each do |plugin|
+        plugin[2].each do |script|
           if Time.now.to_i - t >= 5
             t = Time.now.to_i
             Graphics.update
@@ -50,7 +50,7 @@ def pbSetTextMessages
     commonevents = load_data("Data/CommonEvents.rxdata")
     items = []
     choices = []
-    for event in commonevents.compact
+    commonevents.compact.each do |event|
       if Time.now.to_i - t >= 5
         t = Time.now.to_i
         Graphics.update
@@ -58,7 +58,7 @@ def pbSetTextMessages
       begin
         neednewline = false
         lastitem = ""
-        for j in 0...event.list.size
+        event.list.size.times do |j|
           list = event.list[j]
           if neednewline && list.code != 401
             if lastitem != ""
@@ -72,7 +72,7 @@ def pbSetTextMessages
             lastitem += "#{list.parameters[0]}"
             neednewline = true
           elsif list.code == 102
-            for k in 0...list.parameters[0].length
+            list.parameters[0].length.times do |k|
               choices.push(list.parameters[0][k])
             end
             neednewline = false
@@ -86,7 +86,7 @@ def pbSetTextMessages
             pbAddScriptTexts(items, list.parameters[1])
           elsif list.code == 209
             route = list.parameters[1]
-            for k in 0...route.list.size
+            route.list.size.times do |k|
               if route.list[k].code == 45
                 pbAddScriptTexts(items, route.list[k].parameters[0])
               end
@@ -110,7 +110,7 @@ def pbSetTextMessages
     items.concat(choices)
     MessageTypes.setMapMessagesAsHash(0, items)
     mapinfos = pbLoadMapInfos
-    for id in mapinfos.keys
+    mapinfos.keys.each do |id|
       if Time.now.to_i - t >= 5
         t = Time.now.to_i
         Graphics.update
@@ -120,16 +120,16 @@ def pbSetTextMessages
       map = load_data(filename)
       items = []
       choices = []
-      for event in map.events.values
+      map.events.values.each do |event|
         if Time.now.to_i - t >= 5
           t = Time.now.to_i
           Graphics.update
         end
         begin
-          for i in 0...event.pages.size
+          event.pages.size.times do |i|
             neednewline = false
             lastitem = ""
-            for j in 0...event.pages[i].list.size
+            event.pages[i].list.size.times do |j|
               list = event.pages[i].list[j]
               if neednewline && list.code != 401
                 if lastitem != ""
@@ -143,7 +143,7 @@ def pbSetTextMessages
                 lastitem += "#{list.parameters[0]}"
                 neednewline = true
               elsif list.code == 102
-                for k in 0...list.parameters[0].length
+                list.parameters[0].length.times do |k|
                   choices.push(list.parameters[0][k])
                 end
                 neednewline = false
@@ -157,7 +157,7 @@ def pbSetTextMessages
                 pbAddScriptTexts(items, list.parameters[1])
               elsif list.code == 209
                 route = list.parameters[1]
-                for k in 0...route.list.size
+                route.list.size.times do |k|
                   if route.list[k].code == 45
                     pbAddScriptTexts(items, route.list[k].parameters[0])
                   end
@@ -312,7 +312,7 @@ class OrderedHash < Hash
 
   def inspect
     str = "{"
-    for i in 0...@keys.length
+    @keys.length.times do |i|
       str += ", " if i > 0
       str += @keys[i].inspect + "=>" + self[@keys[i]].inspect
     end
@@ -330,7 +330,7 @@ class OrderedHash < Hash
       @keys |= []
       @keys -= [key]
     end
-    return super(key, value)
+    super(key, value)
   end
 
   def self._load(string)
@@ -338,7 +338,7 @@ class OrderedHash < Hash
     keysvalues = Marshal.load(string)
     keys = keysvalues[0]
     values = keysvalues[1]
-    for i in 0...keys.length
+    keys.length.times do |i|
       ret[keys[i]] = values[i]
     end
     return ret
@@ -346,7 +346,7 @@ class OrderedHash < Hash
 
   def _dump(_depth = 100)
     values = []
-    for key in @keys
+    @keys.each do |key|
       values.push(self[key])
     end
     return Marshal.dump([@keys, values])
@@ -415,7 +415,7 @@ class Messages
     case msgs
     when Array
       f.write("[#{secname}]\r\n")
-      for j in 0...msgs.length
+      msgs.length.times do |j|
         next if nil_or_empty?(msgs[j])
         value = Messages.normalizeValue(msgs[j])
         origValue = ""
@@ -431,7 +431,7 @@ class Messages
     when OrderedHash
       f.write("[#{secname}]\r\n")
       keys = msgs.keys
-      for key in keys
+      keys.each do |key|
         next if nil_or_empty?(msgs[key])
         value = Messages.normalizeValue(msgs[key])
         valkey = Messages.normalizeValue(key)
@@ -456,12 +456,12 @@ class Messages
       f.write("# To localize this text for a particular language, please\r\n")
       f.write("# translate every second line of this file.\r\n")
       if origMessages.messages[0]
-        for i in 0...origMessages.messages[0].length
+        origMessages.messages[0].length.times do |i|
           msgs = origMessages.messages[0][i]
           Messages.writeObject(f, msgs, "Map#{i}", origMessages)
         end
       end
-      for i in 1...origMessages.messages.length
+      (1...origMessages.messages.length).each do |i|
         msgs = origMessages.messages[i]
         Messages.writeObject(f, msgs, i, origMessages)
       end
@@ -471,7 +471,7 @@ class Messages
   def setMessages(type, array)
     @messages = [] if !@messages
     arr = []
-    for i in 0...array.length
+    array.length.times do |i|
       arr[i] = (array[i]) ? array[i] : ""
     end
     @messages[type] = arr
@@ -480,7 +480,7 @@ class Messages
   def addMessages(type, array)
     @messages = [] if !@messages
     arr = (@messages[type]) ? @messages[type] : []
-    for i in 0...array.length
+    array.length.times do |i|
       arr[i] = (array[i]) ? array[i] : (arr[i]) ? arr[i] : ""
     end
     @messages[type] = arr
@@ -488,7 +488,7 @@ class Messages
 
   def self.createHash(_type, array)
     arr = OrderedHash.new
-    for i in 0...array.length
+    array.length.times do |i|
       if array[i]
         key = Messages.stringToKey(array[i])
         arr[key] = array[i]
@@ -499,7 +499,7 @@ class Messages
 
   def self.addToHash(_type, array, hash)
     hash = OrderedHash.new if !hash
-    for i in 0...array.length
+    array.length.times do |i|
       if array[i]
         key = Messages.stringToKey(array[i])
         hash[key] = array[i]
@@ -738,7 +738,7 @@ def _INTL(*arg)
     string = arg[0]
   end
   string = string.clone
-  for i in 1...arg.length
+  (1...arg.length).each do |i|
     string.gsub!(/\{#{i}\}/, "#{arg[i]}")
   end
   return string
@@ -754,7 +754,7 @@ def _ISPRINTF(*arg)
     string = arg[0]
   end
   string = string.clone
-  for i in 1...arg.length
+  (1...arg.length).each do |i|
     string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m|
       next sprintf("%" + $1, arg[i])
     }
@@ -769,7 +769,7 @@ end
 def _MAPINTL(mapid, *arg)
   string = MessageTypes.getFromMapHash(mapid, arg[0])
   string = string.clone
-  for i in 1...arg.length
+  (1...arg.length).each do |i|
     string.gsub!(/\{#{i}\}/, "#{arg[i]}")
   end
   return string
@@ -778,7 +778,7 @@ end
 def _MAPISPRINTF(mapid, *arg)
   string = MessageTypes.getFromMapHash(mapid, arg[0])
   string = string.clone
-  for i in 1...arg.length
+  (1...arg.length).each do |i|
     string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m|
       next sprintf("%" + $1, arg[i])
     }

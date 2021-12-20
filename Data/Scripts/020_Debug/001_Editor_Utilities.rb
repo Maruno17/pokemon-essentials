@@ -41,7 +41,7 @@ def pbSafeCopyFile(x, y, z = nil)
 end
 
 def pbAllocateAnimation(animations, name)
-  for i in 1...animations.length
+  (1...animations.length).each do |i|
     anim = animations[i]
     return i if !anim
 #    if name && name!="" && anim.name==name
@@ -62,7 +62,7 @@ def pbMapTree
   mapinfos = pbLoadMapInfos
   maplevels = []
   retarray = []
-  for i in mapinfos.keys
+  mapinfos.keys.each do |i|
     info = mapinfos[i]
     level = -1
     while info
@@ -97,7 +97,7 @@ def pbMapTree
       next
     end
     retarray.push([maplevel[0], mapinfos[maplevel[0]].name, maplevel[1]])
-    for i in index + 1...maplevels.length
+    (index + 1...maplevels.length).each do |i|
       if maplevels[i][2] == maplevel[0]
         stack.push(i)
         stack.push(maplevel[0])
@@ -191,8 +191,8 @@ def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   commands.sort! { |a, b| a[1] <=> b[1] }
   moveDefault = 0
   if defaultMoveID
-    commands.each_with_index do |_item, i|
-      moveDefault = i if moveDefault == 0 && i[2] == defaultMoveID
+    commands.each_with_index do |item, i|
+      moveDefault = i if moveDefault == 0 && item[2] == defaultMoveID
     end
   end
   # Get all moves
@@ -203,8 +203,8 @@ def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   end
   commands2.sort! { |a, b| a[1] <=> b[1] }
   if defaultMoveID
-    commands2.each_with_index do |_item, i|
-      moveDefault = i if moveDefault == 0 && i[2] == defaultMoveID
+    commands2.each_with_index do |item, i|
+      moveDefault = i if moveDefault == 0 && item[2] == defaultMoveID
     end
   end
   # Choose from all moves
@@ -225,12 +225,14 @@ def pbChooseBallList(defaultMoveID = nil)
   end
   commands.sort! { |a, b| a[1] <=> b[1] }
   if defaultMoveID
-    for i in 0...commands.length
-      moveDefault = i if commands[i][0] == defaultMoveID
+    commands.each_with_index do |cmd, i|
+      next if cmd[0] != defaultMoveID
+      moveDefault = i
+      break
     end
   end
   realcommands = []
-  for i in commands
+  commands.each do |i|
     realcommands.push(i[1])
   end
   ret = pbCommands2(cmdwin, realcommands, -1, moveDefault, true)
@@ -354,7 +356,7 @@ def pbChooseList(commands, default = 0, cancelValue = -1, sortType = 1)
         commands.each_with_index { |command, i| itemIndex = i if command[0] == itemID }
       end
       realcommands = []
-      for command in commands
+      commands.each do |command|
         if sortType <= 0
           realcommands.push(sprintf("%03d: %s", command[0], command[1]))
         else

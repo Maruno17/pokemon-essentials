@@ -56,29 +56,24 @@ class Spriteset_Map
     return sprite
   end
 
-  def addUserSprite(sprite)
-    for i in 0...@usersprites.length
-      if @usersprites[i] == nil || @usersprites[i].disposed?
-        @usersprites[i] = sprite
-        return
-      end
+  def addUserSprite(new_sprite)
+    @usersprites.each_with_index do |sprite, i|
+      next if sprite && !sprite.disposed?
+      @usersprites[i] = new_sprite
+      return
     end
-    @usersprites.push(sprite)
+    @usersprites.push(new_sprite)
   end
 
   def dispose
     _animationSprite_dispose
-    for i in 0...@usersprites.length
-      @usersprites[i].dispose
-    end
+    @usersprites.each { |sprite| sprite.dispose }
     @usersprites.clear
   end
 
   def update
     @@viewport3.tone.set(0, 0, 0, 0)
     _animationSprite_update
-    for i in 0...@usersprites.length
-      @usersprites[i].update if !@usersprites[i].disposed?
-    end
+    @usersprites.each { |sprite| sprite.update if !sprite.disposed? }
   end
 end

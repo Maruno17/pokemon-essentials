@@ -57,7 +57,7 @@ end
 #===============================================================================
 class PokemonPokegear_Scene
   def pbUpdate
-    for i in 0...@commands.length
+    @commands.length.times do |i|
       @sprites["button#{i}"].selected = (i == @index)
     end
     pbUpdateSpriteHash(@sprites)
@@ -75,7 +75,7 @@ class PokemonPokegear_Scene
     else
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
     end
-    for i in 0...@commands.length
+    @commands.length.times do |i|
       y = 196 - (@commands.length * 24) + (i * 48)
       @sprites["button#{i}"] = PokegearButton.new(@commands[i], 118, y, @viewport)
     end

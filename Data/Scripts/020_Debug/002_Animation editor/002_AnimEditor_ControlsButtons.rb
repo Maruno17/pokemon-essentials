@@ -233,7 +233,7 @@ class TextField < UIControl
     chars = self.text.scan(/./m)
     chars.insert(@cursor, ch)
     @text = ""
-    for ch in chars
+    chars.each do |ch|
       @text += ch
     end
     @cursor += 1
@@ -246,7 +246,7 @@ class TextField < UIControl
     chars = self.text.scan(/./m)
     chars.delete_at(@cursor - 1)
     @text = ""
-    for ch in chars
+    chars.each do |ch|
       @text += ch
     end
     @cursor -= 1
@@ -320,7 +320,7 @@ class TextField < UIControl
       break if fromcursor > width - 4
       startpos -= 1
     end
-    for i in startpos...scanlength
+    (startpos...scanlength).each do |i|
       c = textscan[i]
       textwidth = bitmap.text_size(c).width
       next if c == "\n"
@@ -669,7 +669,7 @@ class TextSlider < UIControl
   def refresh
     bitmap = self.bitmap
     if @maxoptionwidth == nil
-      for i in 0...@options.length
+      @options.length.times do |i|
         w = self.bitmap.text_size(" " + @options[i] + " ").width
         @maxoptionwidth = w if !@maxoptionwidth || @maxoptionwidth < w
       end
@@ -808,21 +808,15 @@ class ControlWindow < SpriteWindow_Base
   end
 
   def refresh
-    for i in 0...@controls.length
-      @controls[i].refresh
-    end
+    @controls.each { |ctrl| ctrl.refresh }
   end
 
   def repaint
-    for i in 0...@controls.length
-      @controls[i].repaint
-    end
+    @controls.each { |ctrl| ctrl.repaint }
   end
 
   def invalidate
-    for i in 0...@controls.length
-      @controls[i].invalidate
-    end
+    @controls.each { |ctrl| ctrl.invalidate }
   end
 
   def hittest?(i)
@@ -882,9 +876,7 @@ class ControlWindow < SpriteWindow_Base
 
   def update
     super
-    for i in 0...@controls.length
-      @controls[i].update
-    end
+    @controls.each { |ctrl| ctrl.update }
     repaint
   end
 

@@ -36,7 +36,7 @@ class Game_Screen
     @shake_direction  = 1
     @shake            = 0
     @pictures         = [nil]
-    for i in 1..100
+    (1..100).each do |i|
       @pictures.push(Game_Picture.new(i))
     end
     @weather_type     = 0
@@ -125,11 +125,11 @@ class Game_Screen
       @shake_duration -= 1 if @shake_duration >= 1
     end
     if $game_temp.in_battle
-      for i in 51..100
+      (51..100).each do |i|
         @pictures[i].update
       end
     else
-      for i in 1..50
+      (1..50).each do |i|
         @pictures[i].update
       end
     end
@@ -141,7 +141,7 @@ end
 #===============================================================================
 def pbToneChangeAll(tone, duration)
   $game_screen.start_tone_change(tone, duration * Graphics.frame_rate / 20)
-  for picture in $game_screen.pictures
+  $game_screen.pictures.each do |picture|
     picture.start_tone_change(tone, duration * Graphics.frame_rate / 20) if picture
   end
 end

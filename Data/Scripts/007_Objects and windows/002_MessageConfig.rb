@@ -144,13 +144,13 @@ module MessageConfig
   end
 
   def self.pbTryFonts(*args)
-    for a in args
+    args.each do |a|
       next if !a
       case a
       when String
         return a if Font.exist?(a)
       when Array
-        for aa in a
+        a.each do |aa|
           ret = MessageConfig.pbTryFonts(aa)
           return ret if ret != ""
         end
@@ -455,14 +455,14 @@ end
 def pbSetSpritesToColor(sprites, color)
   return if !sprites || !color
   colors = {}
-  for i in sprites
+  sprites.each do |i|
     next if !i[1] || pbDisposed?(i[1])
     colors[i[0]] = i[1].color.clone
     i[1].color = pbSrcOver(i[1].color, color)
   end
   Graphics.update
   Input.update
-  for i in colors
+  colors.each do |i|
     next if !sprites[i[0]]
     sprites[i[0]].color = i[1]
   end
@@ -480,7 +480,7 @@ def using(window)
 end
 
 def pbUpdateSpriteHash(windows)
-  for i in windows
+  windows.each do |i|
     window = i[1]
     if window
       if window.is_a?(Sprite) || window.is_a?(Window)
@@ -503,7 +503,7 @@ end
 # Disposes all objects in the specified hash.
 def pbDisposeSpriteHash(sprites)
   return if !sprites
-  for i in sprites.keys
+  sprites.keys.each do |i|
     pbDisposeSprite(sprites, i)
   end
   sprites.clear
@@ -552,7 +552,7 @@ def pbFadeOutIn(z = 99999, nofadeout = false)
   viewport.z = z
   numFrames = (Graphics.frame_rate * 0.4).floor
   alphaDiff = (255.0 / numFrames).ceil
-  for j in 0..numFrames
+  (0..numFrames).each do |j|
     col.set(0, 0, 0, j * alphaDiff)
     viewport.color = col
     Graphics.update
@@ -566,7 +566,7 @@ def pbFadeOutIn(z = 99999, nofadeout = false)
   ensure
     pbPopFade
     if !nofadeout
-      for j in 0..numFrames
+      (0..numFrames).each do |j|
         col.set(0, 0, 0, (numFrames - j) * alphaDiff)
         viewport.color = col
         Graphics.update
@@ -583,7 +583,7 @@ def pbFadeOutInWithUpdate(z, sprites, nofadeout = false)
   viewport.z = z
   numFrames = (Graphics.frame_rate * 0.4).floor
   alphaDiff = (255.0 / numFrames).ceil
-  for j in 0..numFrames
+  (0..numFrames).each do |j|
     col.set(0, 0, 0, j * alphaDiff)
     viewport.color = col
     pbUpdateSpriteHash(sprites)
@@ -596,7 +596,7 @@ def pbFadeOutInWithUpdate(z, sprites, nofadeout = false)
   ensure
     pbPopFade
     if !nofadeout
-      for j in 0..numFrames
+      (0..numFrames).each do |j|
         col.set(0, 0, 0, (numFrames - j) * alphaDiff)
         viewport.color = col
         pbUpdateSpriteHash(sprites)
@@ -629,12 +629,12 @@ def pbFadeOutAndHide(sprites)
   numFrames = (Graphics.frame_rate * 0.4).floor
   alphaDiff = (255.0 / numFrames).ceil
   pbDeactivateWindows(sprites) {
-    for j in 0..numFrames
+    (0..numFrames).each do |j|
       pbSetSpritesToColor(sprites, Color.new(0, 0, 0, j * alphaDiff))
       (block_given?) ? yield : pbUpdateSpriteHash(sprites)
     end
   }
-  for i in sprites
+  sprites.each do |i|
     next if !i[1]
     next if pbDisposed?(i[1])
     visiblesprites[i[0]] = true if i[1].visible
@@ -645,7 +645,7 @@ end
 
 def pbFadeInAndShow(sprites, visiblesprites = nil)
   if visiblesprites
-    for i in visiblesprites
+    visiblesprites.each do |i|
       if i[1] && sprites[i[0]] && !pbDisposed?(sprites[i[0]])
         sprites[i[0]].visible = true
       end
@@ -654,7 +654,7 @@ def pbFadeInAndShow(sprites, visiblesprites = nil)
   numFrames = (Graphics.frame_rate * 0.4).floor
   alphaDiff = (255.0 / numFrames).ceil
   pbDeactivateWindows(sprites) {
-    for j in 0..numFrames
+    (0..numFrames).each do |j|
       pbSetSpritesToColor(sprites, Color.new(0, 0, 0, ((numFrames - j) * alphaDiff)))
       (block_given?) ? yield : pbUpdateSpriteHash(sprites)
     end
@@ -665,7 +665,7 @@ end
 # _activeStatuses_ is the result of a previous call to pbActivateWindows
 def pbRestoreActivations(sprites, activeStatuses)
   return if !sprites || !activeStatuses
-  for k in activeStatuses.keys
+  activeStatuses.keys.each do |k|
     if sprites[k] && sprites[k].is_a?(Window) && !pbDisposed?(sprites[k])
       sprites[k].active = activeStatuses[k] ? true : false
     end
@@ -688,7 +688,7 @@ end
 def pbActivateWindow(sprites, key)
   return if !sprites
   activeStatuses = {}
-  for i in sprites
+  sprites.each do |i|
     if i[1] && i[1].is_a?(Window) && !pbDisposed?(i[1])
       activeStatuses[i[0]] = i[1].active
       i[1].active = (i[0] == key)
@@ -723,7 +723,7 @@ def addBackgroundPlane(sprites, planename, background, viewport = nil)
     sprites[planename].visible = false
   else
     sprites[planename].setBitmap(bitmapName)
-    for spr in sprites.values
+    sprites.values.each do |spr|
       if spr.is_a?(Window)
         spr.windowskin = nil
       end
@@ -745,7 +745,7 @@ def addBackgroundOrColoredPlane(sprites, planename, background, color, viewport 
   else
     sprites[planename] = AnimatedPlane.new(viewport)
     sprites[planename].setBitmap(bitmapName)
-    for spr in sprites.values
+    sprites.values.each do |spr|
       if spr.is_a?(Window)
         spr.windowskin = nil
       end
@@ -772,7 +772,7 @@ end
 if !defined?(_INTL)
   def _INTL(*args)
     string = args[0].clone
-    for i in 1...args.length
+    (1...args.length).each do |i|
       string.gsub!(/\{#{i}\}/, "#{args[i]}")
     end
     return string
@@ -782,7 +782,7 @@ end
 if !defined?(_ISPRINTF)
   def _ISPRINTF(*args)
     string = args[0].clone
-    for i in 1...args.length
+    (1...args.length).each do |i|
       string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m|
         next sprintf("%" + $1, args[i])
       }
@@ -794,7 +794,7 @@ end
 if !defined?(_MAPINTL)
   def _MAPINTL(*args)
     string = args[1].clone
-    for i in 2...args.length
+    (2...args.length).each do |i|
       string.gsub!(/\{#{i}\}/, "#{args[i + 1]}")
     end
     return string

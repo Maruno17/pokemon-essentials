@@ -60,7 +60,7 @@ def pbGenerateBattleTrainer(idxTrainer, rules)
   # The number of possible Pokémon is <= the required number; make them
   # all Pokémon and use them
   if pokemonnumbers.length <= rules.ruleset.suggestedNumber
-    for n in pokemonnumbers
+    pokemonnumbers.each do |n|
       rndpoke = btpokemon[n]
       pkmn = rndpoke.createPokemon(level, indvalues, opponent)
       opponent.party.push(pkmn)

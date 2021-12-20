@@ -120,7 +120,7 @@ module RPG
       return if @max == value
       @max = value.clamp(0, MAX_SPRITES)
       ensureSprites
-      for i in 0...MAX_SPRITES
+      MAX_SPRITES.times do |i|
         @sprites[i].visible = (i < @max) if @sprites[i]
       end
     end
@@ -149,7 +149,7 @@ module RPG
       weather_data = GameData::Weather.get(new_type)
       bitmap_names = weather_data.graphics
       @weatherTypes[new_type] = [weather_data, [], []]
-      for i in 0...2   # 0=particles, 1=tiles
+      2.times do |i|   # 0=particles, 1=tiles
         next if !bitmap_names[i]
         bitmap_names[i].each do |name|
           bitmap = RPG::Cache.load_bitmap("Graphics/Weather/", name)
@@ -160,7 +160,7 @@ module RPG
 
     def ensureSprites
       if @sprites.length < MAX_SPRITES && @weatherTypes[@type] && @weatherTypes[@type][1].length > 0
-        for i in 0...MAX_SPRITES
+        MAX_SPRITES.times do |i|
           if !@sprites[i]
             sprite = Sprite.new(@origViewport)
             sprite.z       = 1000
@@ -175,7 +175,7 @@ module RPG
       end
       if @fading && @new_sprites.length < MAX_SPRITES && @weatherTypes[@target_type] &&
          @weatherTypes[@target_type][1].length > 0
-        for i in 0...MAX_SPRITES
+        MAX_SPRITES.times do |i|
           if !@new_sprites[i]
             sprite = Sprite.new(@origViewport)
             sprite.z       = 1000
@@ -192,7 +192,7 @@ module RPG
 
     def ensureTiles
       return if @tiles.length >= @tiles_wide * @tiles_tall
-      for i in 0...(@tiles_wide * @tiles_tall)
+      (@tiles_wide * @tiles_tall).times do |i|
         if !@tiles[i]
           sprite = Sprite.new(@origViewport)
           sprite.z       = 1000
@@ -497,7 +497,7 @@ module RPG
       # Update weather particles (raindrops, snowflakes, etc.)
       if @weatherTypes[@type] && @weatherTypes[@type][1].length > 0
         ensureSprites
-        for i in 0...MAX_SPRITES
+        MAX_SPRITES.times do |i|
           update_sprite_position(@sprites[i], i, false)
         end
       elsif @sprites.length > 0
@@ -507,7 +507,7 @@ module RPG
       # Update new weather particles (while fading in only)
       if @fading && @weatherTypes[@target_type] && @weatherTypes[@target_type][1].length > 0
         ensureSprites
-        for i in 0...MAX_SPRITES
+        MAX_SPRITES.times do |i|
           update_sprite_position(@new_sprites[i], i, true)
         end
       elsif @new_sprites.length > 0

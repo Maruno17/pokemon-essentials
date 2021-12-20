@@ -63,7 +63,7 @@ def pbEditMysteryGift(type, item, id = 0, giftname = "")
         master = IO.read("MysteryGiftMaster.txt")
         master = pbMysteryGiftDecrypt(master)
       end
-      for i in master
+      master.each do |i|
         idlist.push(i[0])
       end
       params = ChooseNumberParams.new
@@ -161,7 +161,7 @@ def pbManageMysteryGifts
     elsif command == commands.length - 2   # Export selected to file
       begin
         newfile = []
-        for gift in master
+        master.each do |gift|
           newfile.push(gift) if online.include?(gift[0])
         end
         string = pbMysteryGiftEncrypt(newfile)
@@ -200,7 +200,7 @@ def pbManageMysteryGifts
             next
           end
           replaced = false
-          for i in 0...$player.mystery_gifts.length
+          $player.mystery_gifts.length.times do |i|
             if $player.mystery_gifts[i][0] == gift[0]
               $player.mystery_gifts[i] = gift
               replaced = true
@@ -219,7 +219,7 @@ end
 
 def pbRefreshMGCommands(master, online)
   commands = []
-  for gift in master
+  master.each do |gift|
     itemname = "BLANK"
     if gift[1] == 0
       itemname = gift[2].speciesName
@@ -252,9 +252,9 @@ def pbDownloadMysteryGift(trainer)
   else
     online = pbMysteryGiftDecrypt(string)
     pending = []
-    for gift in online
+    online.each do |gift|
       notgot = true
-      for j in trainer.mystery_gifts
+      trainer.mystery_gifts.each do |j|
         notgot = false if j[0] == gift[0]
       end
       pending.push(gift) if notgot
@@ -264,7 +264,7 @@ def pbDownloadMysteryGift(trainer)
     else
       loop do
         commands = []
-        for gift in pending
+        pending.each do |gift|
           commands.push(gift[3])
         end
         commands.push(_INTL("Cancel"))
@@ -356,7 +356,7 @@ end
 # Collecting a Mystery Gift from the deliveryman.
 #===============================================================================
 def pbNextMysteryGiftID
-  for i in $player.mystery_gifts
+  $player.mystery_gifts.each do |i|
     return i[0] if i.length > 1
   end
   return 0
@@ -364,7 +364,7 @@ end
 
 def pbReceiveMysteryGift(id)
   index = -1
-  for i in 0...$player.mystery_gifts.length
+  $player.mystery_gifts.length.times do |i|
     if $player.mystery_gifts[i][0] == id && $player.mystery_gifts[i].length > 1
       index = i
       break

@@ -89,7 +89,7 @@ class Window
     @cursorbitmap = nil
     @bgbitmap = nil
     @viewport = viewport
-    for i in @spritekeys
+    @spritekeys.each do |i|
       @sprites[i] = Sprite.new(@viewport)
     end
     @disposed = false
@@ -126,12 +126,12 @@ class Window
 
   def dispose
     if !self.disposed?
-      for i in @sprites
+      @sprites.each do |i|
         i[1].dispose if i[1]
         @sprites[i[0]] = nil
       end
-      for i in 0...@sidebitmaps.length
-        @sidebitmaps[i].dispose if @sidebitmaps[i]
+      @sidebitmaps.each_with_index do |bitmap, i|
+        bitmap.dispose if bitmap
         @sidebitmaps[i] = nil
       end
       @blankcontents.dispose
@@ -164,7 +164,7 @@ class Window
 
   def viewport=(value)
     @viewport = value
-    for i in @spritekeys
+    @spritekeys.each do |i|
       @sprites[i].dispose
       if @sprites[i].is_a?(Sprite)
         @sprites[i] = Sprite.new(@viewport)
@@ -286,7 +286,7 @@ class Window
 
   def flash(color, duration)
     return if disposed?
-    for i in @sprites
+    @sprites.each do |i|
       i[1].flash(color, duration)
     end
   end
@@ -313,7 +313,7 @@ class Window
       mustchange = true
     end
     privRefresh if mustchange
-    for i in @sprites
+    @sprites.each do |i|
       i[1].update
     end
   end
@@ -350,14 +350,14 @@ class Window
     backopac = self.back_opacity * self.opacity / 255
     contopac = self.contents_opacity
     cursoropac = @cursoropacity * contopac / 255
-    for i in 0...4
+    4.times do |i|
       @sprites["corner#{i}"].bitmap = @_windowskin
       @sprites["scroll#{i}"].bitmap = @_windowskin
     end
     @sprites["pause"].bitmap = @_windowskin
     @sprites["contents"].bitmap = @contents
     if @_windowskin && !@_windowskin.disposed?
-      for i in 0...4
+      4.times do |i|
         @sprites["corner#{i}"].opacity = @opacity
         @sprites["corner#{i}"].tone = @tone
         @sprites["corner#{i}"].color = @color
@@ -374,7 +374,7 @@ class Window
         @sprites["scroll#{i}"].color = @color
         @sprites["scroll#{i}"].visible = @visible
       end
-      for i in ["back", "cursor", "pause", "contents"]
+      ["back", "cursor", "pause", "contents"].each do |i|
         @sprites[i].color = @color
         @sprites[i].tone = @tone
         @sprites[i].blend_type = @blend_type
@@ -396,7 +396,7 @@ class Window
       @sprites["scroll3"].visible = @visible && hascontents &&
                                     (@contents.height - @oy) > @height - 32
     else
-      for i in 0...4
+      4.times do |i|
         @sprites["corner#{i}"].visible = false
         @sprites["side#{i}"].visible = false
         @sprites["scroll#{i}"].visible = false
@@ -410,7 +410,7 @@ class Window
       @sprites["pause"].visible = false
       @sprites["cursor"].visible = false
     end
-    for i in @sprites
+    @sprites.each do |i|
       i[1].z = @z
     end
     if @rpgvx
@@ -540,7 +540,7 @@ class Window
         @sprites["cursor"].visible = false
         @sprites["cursor"].src_rect.set(0, 0, 0, 0)
       end
-      for i in 0...4
+      4.times do |i|
         dwidth  = [0, 3].include?(i) ? @width - 32 : 16
         dheight = [0, 3].include?(i) ? 16 : @height - 32
         @sidebitmaps[i] = ensureBitmap(@sidebitmaps[i], dwidth, dheight)
@@ -573,7 +573,7 @@ class Window
     end
     if @openness != 255
       opn = @openness / 255.0
-      for k in @spritekeys
+      @spritekeys.each do |k|
         sprite = @sprites[k]
         ratio = (@height <= 0) ? 0 : (sprite.y - @y) / @height.to_f
         sprite.zoom_y = opn
@@ -581,14 +581,14 @@ class Window
         sprite.y = (@y + (@height / 2.0) + (@height * ratio * opn) - (@height / 2 * opn)).floor
       end
     else
-      for k in @spritekeys
+      @spritekeys.each do |k|
         sprite = @sprites[k]
         sprite.zoom_y = 1.0
       end
     end
     i = 0
     # Ensure Z order
-    for k in @spritekeys
+    @spritekeys.each do |k|
       sprite = @sprites[k]
       y = sprite.y
       sprite.y = i

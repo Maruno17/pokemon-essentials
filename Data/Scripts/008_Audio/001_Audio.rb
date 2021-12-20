@@ -4,7 +4,7 @@
 $AtExitProcs = [] if !$AtExitProcs
 
 def exit(code = 0)
-  for p in $AtExitProcs
+  $AtExitProcs.each do |p|
     p.call
   end
   raise SystemExit.new(code)
@@ -51,7 +51,7 @@ def oggfiletime(file)
   i = -1
   pcmlengths = []
   rates = []
-  for page in pages
+  pages.each do |page|
     header = page[0]
     serial = header[10, 4].unpack("V")
     frame = header[2, 8].unpack("C*")
@@ -78,9 +78,7 @@ def oggfiletime(file)
     pcmlengths[i] = frameno
   end
   ret = 0.0
-  for i in 0...pcmlengths.length
-    ret += pcmlengths[i].to_f / rates[i]
-  end
+  pcmlengths.each_with_index { |length, i| ret += length.to_f / rates[i] }
   return ret * 256.0
 end
 

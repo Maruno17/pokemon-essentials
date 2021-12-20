@@ -87,9 +87,9 @@ end
 ################################################################################
 def pbConvertAnimToNewFormat(textdata)
   needconverting = false
-  for i in 0...textdata.length
+  textdata.length.times do |i|
     next if !textdata[i]
-    for j in 0...PBAnimation::MAX_SPRITES
+    PBAnimation::MAX_SPRITES.times do |j|
       next if !textdata[i][j]
       needconverting = true if textdata[i][j][AnimFrame::FOCUS] == nil
       break if needconverting
@@ -97,9 +97,9 @@ def pbConvertAnimToNewFormat(textdata)
     break if needconverting
   end
   if needconverting
-    for i in 0...textdata.length
+    textdata.length.times do |i|
       next if !textdata[i]
-      for j in 0...PBAnimation::MAX_SPRITES
+      PBAnimation::MAX_SPRITES.times do |j|
         next if !textdata[i][j]
         textdata[i][j][AnimFrame::PRIORITY] = 1 if textdata[i][j][AnimFrame::PRIORITY] == nil
         case j
@@ -132,7 +132,7 @@ def pbConvertAnimsToNewFormat
     pbMessage(_INTL("No animations exist."))
     return
   end
-  for k in 0...animations.length
+  animations.length.times do |k|
     next if !animations[k]
     ret = pbConvertAnimToNewFormat(animations[k])
     count += 1 if ret

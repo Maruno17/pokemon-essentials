@@ -60,7 +60,7 @@ class Interpreter
       return
     end
     # Check all map events for one that wants to start, and set it up
-    for event in $game_map.events.values
+    $game_map.events.values.each do |event|
       next if !event.starting
       if event.trigger < 3   # Isn't autorun or parallel processing
         event.lock
@@ -70,7 +70,7 @@ class Interpreter
       return
     end
     # Check all common events for one that is autorun, and set it up
-    for common_event in $data_common_events.compact
+    $data_common_events.compact.each do |common_event|
       next if common_event.trigger != 1 || !$game_switches[common_event.switch_id]
       setup(common_event.list, 0)
       return
@@ -107,7 +107,7 @@ class Interpreter
       # Do nothing if any event or the player is in the middle of a move route
       if @move_route_waiting
         return if $game_player.move_route_forcing
-        for event in $game_map.events.values
+        $game_map.events.values.each do |event|
           return if event.move_route_forcing
         end
         $game_temp.followers.each_follower do |event, follower|
@@ -386,7 +386,7 @@ class Interpreter
     time = time.to_i
     pbSetSelfSwitch(@event_id, "A", true)
     $PokemonGlobal.eventvars[[@map_id, @event_id]] = time
-    for otherevt in arg
+    arg.each do |otherevt|
       pbSetSelfSwitch(otherevt, "A", true)
       $PokemonGlobal.eventvars[[@map_id, otherevt]] = time
     end

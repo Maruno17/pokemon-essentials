@@ -28,12 +28,12 @@ def pbEventCommentInput(*args)
   trigger = args[2]     # Trigger
   return nil if list == nil
   return nil unless list.is_a?(Array)
-  for item in list
+  list.each do |item|
     next unless item.code == 108 || item.code == 408
     if item.parameters[0] == trigger
       start = list.index(item) + 1
       finish = start + elements
-      for id in start...finish
+      (start...finish).each do |id|
         next if !list[id]
         parameters.push(list[id].parameters[0])
       end
@@ -225,8 +225,7 @@ class FaceWindowVX < SpriteWindow_Base
     @facebitmaptmp = AnimatedBitmap.new(facefile)
     @facebitmap = BitmapWrapper.new(96, 96)
     @facebitmap.blt(0, 0, @facebitmaptmp.bitmap,
-                    Rect.new((@faceIndex % 4) * 96, (@faceIndex / 4) * 96, 96, 96)
-    )
+                    Rect.new((@faceIndex % 4) * 96, (@faceIndex / 4) * 96, 96, 96))
     self.contents = @facebitmap
   end
 
@@ -235,8 +234,7 @@ class FaceWindowVX < SpriteWindow_Base
     if @facebitmaptmp.totalFrames > 1
       @facebitmaptmp.update
       @facebitmap.blt(0, 0, @facebitmaptmp.bitmap,
-                      Rect.new((@faceIndex % 4) * 96, (@faceIndex / 4) * 96, 96, 96)
-      )
+                      Rect.new((@faceIndex % 4) * 96, (@faceIndex / 4) * 96, 96, 96))
     end
   end
 
@@ -504,11 +502,11 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     text = $~.post_match
   end
   textchunks.push(text)
-  for chunk in textchunks
+  textchunks.each do |chunk|
     chunk.gsub!(/\005/, "\\")
   end
   textlen = 0
-  for i in 0...controls.length
+  controls.length.times do |i|
     control = controls[i][0]
     case control
     when "wt", "wtnp", ".", "|"
@@ -524,7 +522,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   signWaitTime = Graphics.frame_rate / 2
   haveSpecialClose = false
   specialCloseSE = ""
-  for i in 0...controls.length
+  controls.length.times do |i|
     control = controls[i][0]
     param = controls[i][1]
     case control
@@ -582,7 +580,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
         msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime)
       end
     end
-    for i in 0...controls.length
+    controls.length.times do |i|
       next if !controls[i]
       next if controls[i][2] > msgwindow.position || msgwindow.waitcount != 0
       control = controls[i][0]
@@ -686,7 +684,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   if haveSpecialClose
     pbSEPlay(pbStringToAudioFile(specialCloseSE))
     atTop = (msgwindow.y == 0)
-    for i in 0..signWaitTime
+    (0..signWaitTime).each do |i|
       if atTop
         msgwindow.y = -msgwindow.height * i / signWaitTime
       else

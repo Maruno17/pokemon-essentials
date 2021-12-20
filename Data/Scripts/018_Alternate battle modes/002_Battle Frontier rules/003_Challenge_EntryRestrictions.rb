@@ -125,8 +125,8 @@ end
 #===============================================================================
 class NicknameClause
   def isValid?(team)
-    for i in 0...team.length - 1
-      for j in i + 1...team.length
+    (team.length - 1).times do |i|
+      (i + 1...team.length).each do |j|
         return false if team[i].name == team[j].name
         return false if !NicknameChecker.check(team[i].name, team[i].species)
       end

@@ -144,17 +144,17 @@ _END_
     @total_height = credit_lines.size * 32
     lines_per_bitmap = @bitmap_height / 32
     num_bitmaps = (credit_lines.size.to_f / lines_per_bitmap).ceil
-    for i in 0...num_bitmaps
+    num_bitmaps.times do |i|
       credit_bitmap = Bitmap.new(Graphics.width, @bitmap_height + 16)
       pbSetSystemFont(credit_bitmap)
-      for j in 0...lines_per_bitmap
+      lines_per_bitmap.times do |j|
         line = credit_lines[(i * lines_per_bitmap) + j]
         next if !line
         line = line.split("<s>")
         xpos = 0
         align = 1   # Centre align
         linewidth = Graphics.width
-        for k in 0...line.length
+        line.length.times do |k|
           if line.length > 1
             xpos = (k == 0) ? 0 : 20 + (Graphics.width / 2)
             align = (k == 0) ? 2 : 0   # Right align : left align

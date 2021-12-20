@@ -9,7 +9,7 @@ class Dir
     files = []
     filters = [filters] if !filters.is_a?(Array)
     self.chdir(dir) do
-      for filter in filters
+      filters.each do |filter|
         self.glob(filter) { |f| files.push(full ? (dir + "/" + f) : f) }
       end
     end
@@ -22,7 +22,7 @@ class Dir
     # sets variables for starting
     files = []
     subfolders = []
-    for file in self.get(dir, filters, full)
+    self.get(dir, filters, full).each do |file|
       # engages in recursion to read the entire file tree
       if self.safe?(file)   # Is a directory
         subfolders += self.all(file, filters, full)
@@ -157,7 +157,7 @@ def canonicalize(c)
   pos = -1
   ret = []
   retstr = ""
-  for x in csplit
+  csplit.each do |x|
     if x == ".."
       if pos >= 0
         ret.delete_at(pos)
@@ -168,7 +168,7 @@ def canonicalize(c)
       pos += 1
     end
   end
-  for i in 0...ret.length
+  ret.length.times do |i|
     retstr += "/" if i > 0
     retstr += ret[i]
   end
@@ -184,7 +184,7 @@ module RTP
     return false if nil_or_empty?(filename)
     eachPathFor(filename) { |path|
       return true if safeExists?(path)
-      for ext in extensions
+      extensions.each do |ext|
         return true if safeExists?(path + ext)
       end
     }
@@ -203,7 +203,7 @@ module RTP
     return filename if nil_or_empty?(filename)
     eachPathFor(filename) { |path|
       return path if safeExists?(path)
-      for ext in extensions
+      extensions.each do |ext|
         file = path + ext
         return file if safeExists?(file)
       end
@@ -449,7 +449,8 @@ class StringInput
 
   def gets
     raise IOError, 'closed stream' if @closed
-    if idx = @string.index(?\n, @pos)
+    idx = @string.index("\n", @pos)
+    if idx
       idx += 1  # "\n".size
       line = @string[@pos...idx]
       @pos = idx

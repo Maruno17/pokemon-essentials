@@ -9,7 +9,7 @@ class Scene_Map
 
   def spriteset(map_id = -1)
     return @spritesets[map_id] if map_id > 0 && @spritesets[map_id]
-    for i in @spritesets.values
+    @spritesets.values.each do |i|
       return i if i.map == $game_map
     end
     return @spritesets.values[0]
@@ -19,7 +19,7 @@ class Scene_Map
     @map_renderer = TilemapRenderer.new(Spriteset_Map.viewport)
     @spritesetGlobal = Spriteset_Global.new
     @spritesets = {}
-    for map in $map_factory.maps
+    $map_factory.maps.each do |map|
       @spritesets[map.map_id] = Spriteset_Map.new(map)
     end
     $map_factory.setSceneStarted(self)
@@ -36,7 +36,7 @@ class Scene_Map
 
   def disposeSpritesets
     return if !@spritesets
-    for i in @spritesets.keys
+    @spritesets.keys.each do |i|
       next if !@spritesets[i]
       @spritesets[i].dispose
       @spritesets[i] = nil
@@ -132,7 +132,7 @@ class Scene_Map
   end
 
   def updateMaps
-    for map in $map_factory.maps
+    $map_factory.maps.each do |map|
       map.update
     end
     $map_factory.updateMaps(self)
@@ -140,11 +140,11 @@ class Scene_Map
 
   def updateSpritesets
     @spritesets = {} if !@spritesets
-    for map in $map_factory.maps
+    $map_factory.maps.each do |map|
       @spritesets[map.map_id] = Spriteset_Map.new(map) if !@spritesets[map.map_id]
     end
     keys = @spritesets.keys.clone
-    for i in keys
+    keys.each do |i|
       if !$map_factory.hasMap?(i)
         @spritesets[i].dispose if @spritesets[i]
         @spritesets[i] = nil

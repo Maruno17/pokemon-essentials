@@ -29,11 +29,11 @@ module RecordedBattleModule
     return nil if !trainer
     if trainer.is_a?(Array)
       ret = []
-      for i in 0...trainer.length
-        if trainer[i].is_a?(Player)
-          ret.push([trainer[i].trainer_type, trainer[i].name.clone, trainer[i].id, trainer[i].badges.clone])
+      trainer.each do |tr|
+        if tr.is_a?(Player)
+          ret.push([tr.trainer_type, tr.name.clone, tr.id, tr.badges.clone])
         else   # NPCTrainer
-          ret.push([trainer[i].trainer_type, trainer[i].name.clone, trainer[i].id])
+          ret.push([tr.trainer_type, tr.name.clone, tr.id])
         end
       end
       return ret
@@ -202,7 +202,7 @@ module RecordedBattlePlaybackModule
   def pbCommandPhaseLoop(isPlayer)
     return if !isPlayer
     @roundindex += 1
-    for i in 0...4
+    4.times do |i|
       next if @rounds[@roundindex][i].length == 0
       pbClearChoice(i)
       case @rounds[@roundindex][i][0]

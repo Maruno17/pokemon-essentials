@@ -154,7 +154,7 @@ def moonphase(time = nil) # in UTC
   v = (j - 2451550.1) / 29.530588853
   v = ((v - v.floor) + (v < 0 ? 1 : 0))
   ag = v * 29.53
-  for i in 0...transitions.length
+  transitions.length.times do |i|
     return i if ag <= transitions[i]
   end
   return 0
@@ -177,7 +177,7 @@ def zodiac(month, day)
     1, 20, 2, 18,   # Aquarius
     2, 19, 3, 20    # Pisces
   ]
-  for i in 0...12
+  (time.length / 4).times do |i|
     return i if month == time[i * 4] && day >= time[(i * 4) + 1]
     return i if month == time[(i * 4) + 2] && day <= time[(i * 4) + 3]
   end
@@ -207,7 +207,7 @@ def pbIsWeekday(wdayVariable, *arg)
   timenow = pbGetTimeNow
   wday = timenow.wday
   ret = false
-  for wd in arg
+  arg.each do |wd|
     ret = true if wd == wday
   end
   if wdayVariable > 0
@@ -232,7 +232,7 @@ def pbIsMonth(monVariable, *arg)
   timenow = pbGetTimeNow
   thismon = timenow.mon
   ret = false
-  for wd in arg
+  arg.each do |wd|
     ret = true if wd == thismon
   end
   if monVariable > 0
@@ -282,7 +282,7 @@ end
 def pbIsSeason(seasonVariable, *arg)
   thisseason = pbGetSeason
   ret = false
-  for wd in arg
+  arg.each do |wd|
     ret = true if wd == thisseason
   end
   if seasonVariable > 0

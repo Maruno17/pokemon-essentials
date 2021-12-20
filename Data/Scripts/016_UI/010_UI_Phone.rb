@@ -25,7 +25,7 @@ class PokemonPhoneScene
     commands = []
     @trainers = []
     if $PokemonGlobal.phoneNumbers
-      for num in $PokemonGlobal.phoneNumbers
+      $PokemonGlobal.phoneNumbers.each do |num|
         if num[0]   # if visible
           if num.length == 8   # if trainer
             @trainers.push([num[1], num[2], num[6], (num[4] >= 2)])
@@ -67,7 +67,7 @@ class PokemonPhoneScene
     @sprites["icon"].x = 86 - (charwidth / 8)
     @sprites["icon"].y = 134 - (charheight / 8)
     @sprites["icon"].src_rect = Rect.new(0, 0, charwidth / 4, charheight / 4)
-    for trainer in @trainers
+    @trainers.each do |trainer|
       if trainer.length == 4
         displayname = _INTL("{1} {2}", GameData::TrainerType.get(trainer[0]).name,
                             pbGetMessageFromHash(MessageTypes::TrainerNames, trainer[1]))
@@ -77,7 +77,7 @@ class PokemonPhoneScene
       end
     end
     @sprites["list"].commands = commands
-    for i in 0...@sprites["list"].page_item_max
+    @sprites["list"].page_item_max.times do |i|
       @sprites["rematch[#{i}]"] = IconSprite.new(468, 62 + (i * 32), @viewport)
       j = i + @sprites["list"].top_item
       next if j >= commands.length
@@ -89,7 +89,7 @@ class PokemonPhoneScene
       end
     end
     rematchcount = 0
-    for trainer in @trainers
+    @trainers.each do |trainer|
       if trainer.length == 4
         rematchcount += 1 if trainer[3]
       end
@@ -120,7 +120,7 @@ class PokemonPhoneScene
           @sprites["icon"].src_rect = Rect.new(0, 0, charwidth / 4, charheight / 4)
           mapname = (trainer[2]) ? pbGetMapNameFromId(trainer[2]) : ""
           @sprites["bottom"].text = "<ac>" + mapname
-          for i in 0...@sprites["list"].page_item_max
+          @sprites["list"].page_item_max.times do |i|
             @sprites["rematch[#{i}]"].clearBitmaps
             j = i + @sprites["list"].top_item
             next if j >= commands.length

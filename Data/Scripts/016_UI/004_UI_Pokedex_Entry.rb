@@ -26,7 +26,7 @@ class PokemonPokedexInfo_Scene
     @sprites["areamap"].setBitmap("Graphics/Pictures/#{@mapdata[@region][1]}")
     @sprites["areamap"].x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
     @sprites["areamap"].y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
-    for hidden in Settings::REGION_MAP_EXTRAS
+    Settings::REGION_MAP_EXTRAS.each do |hidden|
       if hidden[0] == @region && hidden[1] > 0 && $game_switches[hidden[1]]
         pbDrawImagePositions(
           @sprites["areamap"].bitmap,
@@ -82,7 +82,7 @@ class PokemonPokedexInfo_Scene
         dexnumshift = true if dexnum > 0 && Settings::DEXES_WITH_OFFSETS.include?(-1)
       end
     else
-      for i in 0...$player.pokedex.dexes_count - 1   # Regional Dexes
+      ($player.pokedex.dexes_count - 1).times do |i|   # Regional Dexes
         next if !$player.pokedex.unlocked?(i)
         num = pbGetRegionalNumber(i, species)
         next if num <= 0
@@ -158,7 +158,7 @@ class PokemonPokedexInfo_Scene
         real_gender = 2 if sp.gender_ratio == :Genderless
         ret.push([sp.form_name, real_gender, sp.form])
       else   # Both male and female
-        for real_gender in 0...2
+        2.times do |real_gender|
           next if !$player.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
           ret.push([sp.form_name, real_gender, sp.form])
           break if sp.form_name && !sp.form_name.empty?   # Only show 1 entry for each non-0 form
@@ -309,7 +309,7 @@ class PokemonPokedexInfo_Scene
       mappos = (map_metadata) ? map_metadata.town_map_position : nil
       next if !mappos || mappos[0] != @region
       showpoint = true
-      for loc in @mapdata[@region][2]
+      @mapdata[@region][2].each do |loc|
         showpoint = false if loc[0] == mappos[1] && loc[1] == mappos[2] &&
                              loc[7] && !$game_switches[loc[7]]
       end
@@ -318,8 +318,8 @@ class PokemonPokedexInfo_Scene
       if mapsize && mapsize[0] && mapsize[0] > 0
         sqwidth  = mapsize[0]
         sqheight = (mapsize[1].length.to_f / mapsize[0]).ceil
-        for i in 0...sqwidth
-          for j in 0...sqheight
+        sqwidth.times do |i|
+          sqheight.times do |j|
             if mapsize[1][i + (j * sqwidth), 1].to_i > 0
               points[mappos[1] + i + ((mappos[2] + j) * mapwidth)] = true
             end
@@ -334,7 +334,7 @@ class PokemonPokedexInfo_Scene
     pointcolorhl = Color.new(192, 248, 248)
     sqwidth = PokemonRegionMap_Scene::SQUARE_WIDTH
     sqheight = PokemonRegionMap_Scene::SQUARE_HEIGHT
-    for j in 0...points.length
+    points.length.times do |j|
       if points[j]
         x = (j % mapwidth) * sqwidth
         x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
@@ -377,7 +377,7 @@ class PokemonPokedexInfo_Scene
     shadow = Color.new(168, 184, 184)
     # Write species and form name
     formname = ""
-    for i in @available
+    @available.each do |i|
       if i[1] == @gender && i[2] == @form
         formname = i[0]
         break
@@ -415,7 +415,7 @@ class PokemonPokedexInfo_Scene
 
   def pbChooseForm
     index = 0
-    for i in 0...@available.length
+    @available.length.times do |i|
       if @available[i][1] == @gender && @available[i][2] == @form
         index = i
         break

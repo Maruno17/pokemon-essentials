@@ -166,7 +166,7 @@ class Game_Follower < Game_Event
     passed_tile_checks = false
     bit = (1 << ((direction / 2) - 1)) & 0x0f
     # Check all events for ones using tiles as graphics, and see if they're passable
-    for event in this_map.events.values
+    this_map.events.values.each do |event|
       next if event.tile_id < 0 || event.through || !event.at_coordinate?(x, y)
       tile_data = GameData::TerrainTag.try_get(this_map.terrain_tags[event.tile_id])
       next if tile_data.ignore_passability
@@ -180,7 +180,7 @@ class Game_Follower < Game_Event
     end
     # Check if tiles at (x, y) allow passage for followe
     if !passed_tile_checks
-      for i in [2, 1, 0]
+      [2, 1, 0].each do |i|
         tile_id = this_map.data[x, y, i] || 0
         next if tile_id == 0
         tile_data = GameData::TerrainTag.try_get(this_map.terrain_tags[tile_id])
@@ -194,7 +194,7 @@ class Game_Follower < Game_Event
       end
     end
     # Check all events on the map to see if any are in the way
-    for event in this_map.events.values
+    this_map.events.values.each do |event|
       next if !event.at_coordinate?(x, y)
       return false if !event.through && event.character_name != ""
     end

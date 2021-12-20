@@ -82,11 +82,13 @@ class Window_PokemonBag < Window_DrawableCommand
         if @bag.registered?(item)
           pbDrawImagePositions(
             self.contents,
-            [["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 0, -1, 24]])
+            [["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 0, -1, 24]]
+          )
         elsif pbCanRegisterItem?(item)
           pbDrawImagePositions(
             self.contents,
-            [["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 24, -1, 24]])
+            [["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 24, -1, 24]]
+          )
         end
       else
         qty = (@filterlist) ? thispocket[@filterlist[@pocket][index]][1] : thispocket[index][1]
@@ -105,7 +107,7 @@ class Window_PokemonBag < Window_DrawableCommand
     dheight = self.height - self.borderY
     self.contents = pbDoEnsureBitmap(self.contents, dwidth, dheight)
     self.contents.clear
-    for i in 0...@item_max
+    @item_max.times do |i|
       next if i < self.top_item - 1 || i > self.top_item + self.page_item_max
       drawItem(i, @item_max, itemRect(i))
     end
@@ -147,18 +149,18 @@ class PokemonBag_Scene
     if @choosing
       numfilledpockets = 0
       if @filterlist != nil
-        for i in 1...@bag.pockets.length
+        (1...@bag.pockets.length).each do |i|
           numfilledpockets += 1 if @filterlist[i].length > 0
         end
       else
-        for i in 1...@bag.pockets.length
+        (1...@bag.pockets.length).each do |i|
           numfilledpockets += 1 if @bag.pockets[i].length > 0
         end
       end
       lastpocket = (resetpocket) ? 1 : @bag.last_viewed_pocket
       if (@filterlist && @filterlist[lastpocket].length == 0) ||
          (!@filterlist && @bag.pockets[lastpocket].length == 0)
-        for i in 1...@bag.pockets.length
+        (1...@bag.pockets.length).each do |i|
           if @filterlist && @filterlist[i].length > 0
             lastpocket = i
             break
@@ -267,7 +269,7 @@ class PokemonBag_Scene
     # Draw the pocket icons
     @sprites["pocketicon"].bitmap.clear
     if @choosing && @filterlist
-      for i in 1...@bag.pockets.length
+      (1...@bag.pockets.length).each do |i|
         if @filterlist[i].length == 0
           @sprites["pocketicon"].bitmap.blt(
             6 + ((i - 1) * 22), 6, @pocketbitmap.bitmap, Rect.new((i - 1) * 20, 28, 20, 20)
@@ -292,7 +294,8 @@ class PokemonBag_Scene
     # Draw the pocket name
     pbDrawTextPositions(
       overlay,
-      [[PokemonBag.pocket_names[@bag.last_viewed_pocket - 1], 94, 176, 2, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]])
+      [[PokemonBag.pocket_names[@bag.last_viewed_pocket - 1], 94, 176, 2, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]]
+    )
     # Draw slider arrows
     showslider = false
     if itemlist.top_row > 0
@@ -332,9 +335,9 @@ class PokemonBag_Scene
     return if !@choosing
     return if @filterproc == nil
     @filterlist = []
-    for i in 1...@bag.pockets.length
+    (1...@bag.pockets.length).each do |i|
       @filterlist[i] = []
-      for j in 0...@bag.pockets[i].length
+      @bag.pockets[i].length.times do |j|
         @filterlist[i].push(j) if @filterproc.call(@bag.pockets[i][j][0])
       end
     end

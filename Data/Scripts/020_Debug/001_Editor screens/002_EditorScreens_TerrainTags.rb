@@ -60,7 +60,7 @@ class PokemonTilesetScene
 
   def choose_tileset
     commands = []
-    for i in 1...@tilesets_data.length
+    (1...@tilesets_data.length).each do |i|
       commands.push(sprintf("%03d %s", i, @tilesets_data[i].name))
     end
     ret = pbShowCommands(nil, commands, -1)
@@ -69,10 +69,10 @@ class PokemonTilesetScene
 
   def draw_tiles
     @sprites["tileset"].bitmap.clear
-    for yy in 0...@visible_height
+    @visible_height.times do |yy|
       autotile_row = (@top_y == 0 && yy == 0)   # Autotiles
       id_y_offset = (autotile_row) ? 0 : TILESET_START_ID + ((@top_y + yy - 1) * TILES_PER_ROW)
-      for xx in 0...TILES_PER_ROW
+      TILES_PER_ROW.times do |xx|
         id_x_offset = (autotile_row) ? xx * TILES_PER_AUTOTILE : xx
         @tilehelper.bltTile(@sprites["tileset"].bitmap, xx * TILE_SIZE, yy * TILE_SIZE,
                             id_y_offset + id_x_offset)
@@ -84,8 +84,8 @@ class PokemonTilesetScene
     @sprites["overlay"].bitmap.clear
     # Draw all text over tiles (terrain tag numbers)
     textpos = []
-    for yy in 0...@visible_height
-      for xx in 0...TILES_PER_ROW
+    @visible_height.times do |yy|
+      TILES_PER_ROW.times do |xx|
         tile_id = tile_ID_from_coordinates(xx, @top_y + yy)
         terr = @tileset.terrain_tags[tile_id]
         textpos.push(["#{terr}", (xx * TILE_SIZE) + (TILE_SIZE / 2), (yy * TILE_SIZE) - 6, 2, TEXT_COLOR, TEXT_SHADOW_COLOR])
@@ -137,9 +137,7 @@ class PokemonTilesetScene
 
   def set_terrain_tag_for_tile_ID(i, value)
     if i < TILESET_START_ID
-      for j in 0...TILES_PER_AUTOTILE
-        @tileset.terrain_tags[i + j] = value
-      end
+      TILES_PER_AUTOTILE.times { |j| @tileset.terrain_tags[i + j] = value }
     else
       @tileset.terrain_tags[i] = value
     end

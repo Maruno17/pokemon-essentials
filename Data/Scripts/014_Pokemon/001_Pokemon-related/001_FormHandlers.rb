@@ -37,9 +37,9 @@ end
 def drawSpot(bitmap, spotpattern, x, y, red, green, blue)
   height = spotpattern.length
   width  = spotpattern[0].length
-  for yy in 0...height
+  height.times do |yy|
     spot = spotpattern[yy]
-    for xx in 0...width
+    width.times do |xx|
       if spot[xx] == 1
         xOrg = (x + xx) << 1
         yOrg = (y + yy) << 1
@@ -297,7 +297,7 @@ MultipleForms.register(:ARCEUS, {
     }
     ret = 0
     typeArray.each do |f, items|
-      for item in items
+      items.each do |item|
         next if !pkmn.hasItem?(item)
         ret = f
         break
@@ -502,7 +502,7 @@ MultipleForms.register(:SILVALLY, {
     }
     ret = 0
     typeArray.each do |f, items|
-      for item in items
+      items.each do |item|
         next if !pkmn.hasItem?(item)
         ret = f
         break
@@ -539,8 +539,8 @@ MultipleForms.register(:NECROZMA, {
   "onSetForm" => proc { |pkmn, form, oldForm|
     next if form > 2 || oldForm > 2   # Ultra form changes don't affect moveset
     form_moves = [
-       :SUNSTEELSTRIKE,   # Dusk Mane (with Solgaleo) (form 1)
-       :MOONGEISTBEAM     # Dawn Wings (with Lunala) (form 2)
+      :SUNSTEELSTRIKE,   # Dusk Mane (with Solgaleo) (form 1)
+      :MOONGEISTBEAM     # Dawn Wings (with Lunala) (form 2)
     ]
     if form == 0
       # Turned back into the base form; forget form-specific moves

@@ -565,7 +565,7 @@ PokemonDebugMenuCommands.register("setmovepp", {
     cmd = 0
     loop do
       commands = []
-      for i in pkmn.moves
+      pkmn.moves.each do |i|
         break if !i.id
         if i.total_pp <= 0
           commands.push(_INTL("{1} (PP: ---)", i.name))
@@ -698,7 +698,7 @@ PokemonDebugMenuCommands.register("setability", {
         abils = pkmn.getAbilityList
         ability_commands = []
         abil_cmd = 0
-        for i in abils
+        abils.each do |i|
           ability_commands.push(((i[1] < 2) ? "" : "(H) ") + GameData::Ability.get(i[0]).name)
           abil_cmd = ability_commands.length - 1 if pkmn.ability_id == i[0]
         end
@@ -917,8 +917,8 @@ PokemonDebugMenuCommands.register("setpokeball", {
     end
     balls.sort! { |a, b| a[1] <=> b[1] }
     cmd = 0
-    for i in 0...balls.length
-      next if balls[i][0] != pkmn.poke_ball
+    balls.each_with_index do |ball, i|
+      next if ball[0] != pkmn.poke_ball
       cmd = i
       break
     end

@@ -179,7 +179,7 @@ class Window_PokemonOption < Window_DrawableCommand
     @selShadowColor  = Color.new(31 * 8, 17 * 8, 16 * 8)
     @optvalues = []
     @mustUpdateOptions = false
-    for i in 0...@options.length
+    @options.length.times do |i|
       @optvalues[i] = 0
     end
     super(x, y, width, height)
@@ -213,14 +213,14 @@ class Window_PokemonOption < Window_DrawableCommand
     when EnumOption
       if @options[index].values.length > 1
         totalwidth = 0
-        for value in @options[index].values
+        @options[index].values.each do |value|
           totalwidth += self.contents.text_size(value).width
         end
         spacing = (optionwidth - totalwidth) / (@options[index].values.length - 1)
         spacing = 0 if spacing < 0
         xpos = optionwidth + rect.x
         ivalue = 0
-        for value in @options[index].values
+        @options[index].values.each do |value|
           pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
                            (ivalue == self[index]) ? @selBaseColor : self.baseColor,
                            (ivalue == self[index]) ? @selShadowColor : self.shadowColor)
@@ -391,7 +391,7 @@ class PokemonOption_Scene
     @sprites["option"].viewport = @viewport
     @sprites["option"].visible  = true
     # Get the values of each option
-    for i in 0...@PokemonOptions.length
+    @PokemonOptions.length.times do |i|
       @sprites["option"].setValueNoRefresh(i, (@PokemonOptions[i].get || 0))
     end
     @sprites["option"].refresh
@@ -413,7 +413,7 @@ class PokemonOption_Scene
         pbUpdate
         if @sprites["option"].mustUpdateOptions
           # Set the values of each option
-          for i in 0...@PokemonOptions.length
+          @PokemonOptions.length.times do |i|
             @PokemonOptions[i].set(@sprites["option"][i])
           end
           if $PokemonSystem.textskin != oldTextSkin
@@ -440,7 +440,7 @@ class PokemonOption_Scene
     pbPlayCloseMenuSE
     pbFadeOutAndHide(@sprites) { pbUpdate }
     # Set the values of each option
-    for i in 0...@PokemonOptions.length
+    @PokemonOptions.length.times do |i|
       @PokemonOptions[i].set(@sprites["option"][i])
     end
     pbDisposeMessageWindow(@sprites["textbox"])

@@ -385,7 +385,7 @@ BattlerDebugMenuCommands.register("settypes", {
     loop do
       commands = []
       types = []
-      (0...max_main_types).each do |i|
+      max_main_types.times do |i|
         type = battler.types[i]
         type_name = (type) ? GameData::Type.get(type).name : "-"
         commands.push(_INTL("Type {1}: {2}", i + 1, type_name))

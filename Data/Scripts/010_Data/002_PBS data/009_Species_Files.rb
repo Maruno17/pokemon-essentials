@@ -13,7 +13,7 @@ module GameData
       factors.push([1, try_form, ""]) if form > 0
       factors.push([0, try_species, "000"])
       # Go through each combination of parameters in turn to find an existing sprite
-      for i in 0...2**factors.length
+      (2**factors.length).times do |i|
         # Set try_ parameters for this combination
         factors.each_with_index do |factor, index|
           value = ((i / (2**index)).even?) ? factor[1] : factor[2]

@@ -105,7 +105,7 @@ class PokemonLoad_Scene
     @viewport.z = 99998
     addBackgroundOrColoredPlane(@sprites, "background", "loadbg", Color.new(248, 248, 248), @viewport)
     y = 16 * 2
-    for i in 0...commands.length
+    commands.length.times do |i|
       @sprites["panel#{i}"] = PokemonLoadPanel.new(
         i, commands[i], (show_continue) ? (i == 0) : false, trainer,
         frame_count, stats, map_id, @viewport
@@ -141,20 +141,20 @@ class PokemonLoad_Scene
       @sprites["panel#{newi}"].selected = true
       @sprites["panel#{newi}"].pbRefresh
       while @sprites["panel#{newi}"].y > Graphics.height - (40 * 2)
-        for i in 0...@commands.length
+        @commands.length.times do |i|
           @sprites["panel#{i}"].y -= 24 * 2
         end
-        for i in 0...6
+        6.times do |i|
           break if !@sprites["party#{i}"]
           @sprites["party#{i}"].y -= 24 * 2
         end
         @sprites["player"].y -= 24 * 2 if @sprites["player"]
       end
       while @sprites["panel#{newi}"].y < 16 * 2
-        for i in 0...@commands.length
+        @commands.length.times do |i|
           @sprites["panel#{i}"].y += 24 * 2
         end
-        for i in 0...6
+        6.times do |i|
           break if !@sprites["party#{i}"]
           @sprites["party#{i}"].y += 24 * 2
         end
@@ -175,8 +175,8 @@ class PokemonLoad_Scene
       @sprites["player"].y        = (56 * 2) - (charheight / 8)
       @sprites["player"].src_rect = Rect.new(0, 0, charwidth / 4, charheight / 4)
     end
-    for i in 0...trainer.party.length
-      @sprites["party#{i}"] = PokemonIconSprite.new(trainer.party[i], @viewport)
+    trainer.party.each_with_index do |pkmn, i|
+      @sprites["party#{i}"] = PokemonIconSprite.new(pkmn, @viewport)
       @sprites["party#{i}"].setOffset(PictureOrigin::Center)
       @sprites["party#{i}"].x = (167 + (33 * (i % 2))) * 2
       @sprites["party#{i}"].y = (56 + (25 * (i / 2))) * 2

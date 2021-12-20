@@ -235,7 +235,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     cwidth = (maxwidth < 0) ? Graphics.width : maxwidth
     chars = getFormattedTextForDims(self.contents, 0, 0,
                                     cwidth - self.borderX - 2 - 6, -1, text, @lineHeight, true)
-    for ch in chars
+    chars.each do |ch|
       dims[0] = [dims[0], ch[1] + ch[3]].max
       dims[1] = [dims[1], ch[2] + ch[4]].max
     end
@@ -312,7 +312,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
                                self.width - self.borderX - SpriteWindow_Base::TEXTPADDING, -1,
                                shadowctag(@baseColor, @shadowColor) + value, 32, true)
         @oldfont = self.contents.font.clone
-        for ch in fmt
+        fmt.each do |ch|
           chx = ch[1] + ch[3]
           chy = ch[2] + ch[4]
           width  = chx if width < chx
@@ -340,7 +340,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
                                      self.width - self.borderX - SpriteWindow_Base::TEXTPADDING, -1,
                                      shadowctag(@baseColor, @shadowColor) + value, 32, true)
         @oldfont = self.contents.font.clone
-        for ch in @fmtchars
+        @fmtchars.each do |ch|
           chx = ch[1] + ch[3]
           chy = ch[2] + ch[4]
           width  = chx if width < chx
@@ -390,7 +390,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
 
   def maxPosition
     pos = 0
-    for ch in @fmtchars
+    @fmtchars.each do |ch|
       # index after the last character's index
       pos = ch[14] + 1 if pos < ch[14] + 1
     end
@@ -481,7 +481,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     end
     maxX = self.width - self.borderX
     maxY = self.height - self.borderY
-    for i in @drawncurchar + 1..numchars
+    (@drawncurchar + 1..numchars).each do |i|
       next if i >= @fmtchars.length
       if !self.letterbyletter
         next if @fmtchars[i][1] >= maxX
@@ -667,7 +667,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     if @sign
       textHelper(0, 0, @negative ? "-" : "+", 0)
     end
-    for i in 0...@digits_max
+    @digits_max.times do |i|
       index = i + (@sign ? 1 : 0)
       textHelper(index * 24, 0, s[i, 1], index)
     end
@@ -1084,7 +1084,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
       width = 0
       tmpbitmap = BitmapWrapper.new(1, 1)
       pbSetSystemFont(tmpbitmap)
-      for i in commands
+      commands.each do |i|
         width = [width, tmpbitmap.text_size(i).width].max
       end
       # one 16 to allow cursor
@@ -1125,7 +1125,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     dheight = self.height - self.borderY
     self.contents = pbDoEnsureBitmap(self.contents, dwidth, dheight)
     self.contents.clear
-    for i in 0...@item_max
+    @item_max.times do |i|
       next if i < self.top_item || i > self.top_item + self.page_item_max
       drawItem(i, @item_max, itemRect(i))
     end
@@ -1250,7 +1250,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     chars = getFormattedText(bitmap, 0, 0,
                              Graphics.width - self.borderX - SpriteWindow_Base::TEXTPADDING - 16,
                              -1, text, self.rowHeight, true, true)
-    for ch in chars
+    chars.each do |ch|
       dims[0] = dims[0] ? [dims[0], ch[1]].min : ch[1]
       dims[1] = [dims[1], ch[1] + ch[3]].max
     end

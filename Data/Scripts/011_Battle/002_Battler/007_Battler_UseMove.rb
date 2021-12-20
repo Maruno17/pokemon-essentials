@@ -414,7 +414,7 @@ class Battle::Battler
       numHits = move.pbNumHits(user, targets)
       # Process each hit in turn
       realNumHits = 0
-      for i in 0...numHits
+      numHits.times do |i|
         break if magicCoater >= 0 || magicBouncer >= 0
         success = pbProcessMoveHit(move, user, targets, i, skipAccuracyCheck)
         if !success

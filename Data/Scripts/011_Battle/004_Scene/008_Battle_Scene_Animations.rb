@@ -33,7 +33,7 @@ class Battle::Scene::Animation::Intro < Battle::Scene::Animation
       end
     end
     # Shadows
-    for i in 0...@battle.battlers.length
+    @battle.battlers.length.times do |i|
       makeSlideSprite("shadow_#{i}", (i.even?) ? 1 : -1, appearTime, PictureOrigin::Center)
     end
     # Fading blackness over whole screen
@@ -70,7 +70,7 @@ class Battle::Scene::Animation::Intro2 < Battle::Scene::Animation
   end
 
   def createProcesses
-    for i in 0...@sideSize
+    @sideSize.times do |i|
       idxBattler = (2 * i) + 1
       next if !@sprites["pokemon_#{idxBattler}"]
       battler = addSprite(@sprites["pokemon_#{idxBattler}"], PictureOrigin::Bottom)
@@ -117,7 +117,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     bar.y       = barY
     bar.opacity = 255
     bar.visible = false
-    for i in 0...Battle::Scene::NUM_BALLS
+    Battle::Scene::NUM_BALLS.times do |i|
       ball = sprites["partyBall_#{@side}_#{i}"]
       ball.x       = ballX
       ball.y       = ballY
@@ -154,7 +154,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     bar.setDelta(0, dir * Graphics.width / 2, 0)
     bar.moveDelta(0, 8, -dir * Graphics.width / 2, 0)
     delay = bar.totalDuration
-    for i in 0...Battle::Scene::NUM_BALLS
+    Battle::Scene::NUM_BALLS.times do |i|
       createBall(i, (@fullAnim) ? delay + (i * 2) : 0, dir)
     end
   end
@@ -339,7 +339,7 @@ class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
       partyBar.setVisible(delay + 12, false)
       partyBar.setOpacity(delay + 12, 255)
     end
-    for i in 0...Battle::Scene::NUM_BALLS
+    Battle::Scene::NUM_BALLS.times do |i|
       next if !@sprites["partyBall_0_#{i}"] || !@sprites["partyBall_0_#{i}"].visible
       partyBall = addSprite(@sprites["partyBall_0_#{i}"])
       partyBall.moveDelta(delay + (2 * i), 16, -Graphics.width, 0) if @fullAnim
@@ -384,7 +384,7 @@ class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
       partyBar.setVisible(delay + 12, false)
       partyBar.setOpacity(delay + 12, 255)
     end
-    for i in 0...Battle::Scene::NUM_BALLS
+    Battle::Scene::NUM_BALLS.times do |i|
       next if !@sprites["partyBall_1_#{i}"] || !@sprites["partyBall_1_#{i}"].visible
       partyBall = addSprite(@sprites["partyBall_1_#{i}"])
       partyBall.moveDelta(delay + (2 * i), 16, Graphics.width, 0) if @fullAnim
@@ -777,7 +777,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
       delay = ball.totalDuration + 3
     end
     # Poké Ball drops to the ground
-    for i in 0...4
+    4.times do |i|
       t = [4, 4, 3, 2][i]   # Time taken to rise or fall for each bounce
       d = [1, 2, 4, 8][i]   # Fraction of the starting height each bounce rises to
       delay -= t if i == 0
@@ -793,7 +793,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     battler.setXY(ball.totalDuration, ballEndX, ballGroundY)
     # Poké Ball shakes
     delay = ball.totalDuration + 12
-    for i in 0...[@numShakes, 3].min
+    [@numShakes, 3].min.times do |i|
       ball.setSE(delay, "Battle ball shake")
       ball.moveXY(delay, 2, ballEndX - (2 * (4 - i)), ballGroundY)
       ball.moveAngle(delay, 2, 5 * (4 - i))   # positive means counterclockwise

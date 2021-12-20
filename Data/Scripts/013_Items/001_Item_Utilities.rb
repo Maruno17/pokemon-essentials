@@ -183,7 +183,7 @@ def pbChangeLevel(pkmn, new_level, scene)
                            pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
     # Learn new moves upon level up
     movelist = pkmn.getMoveList
-    for i in movelist
+    movelist.each do |i|
       next if i[0] <= old_level || i[0] > pkmn.level
       pbLearnMove(pkmn, i[1], true) { scene.pbUpdate }
     end
@@ -292,7 +292,7 @@ def pbChangeExp(pkmn, new_exp, scene)
                            pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
     # Learn new moves upon level up
     movelist = pkmn.getMoveList
-    for i in movelist
+    movelist.each do |i|
       next if i[0] <= old_level || i[0] > pkmn.level
       pbLearnMove(pkmn, i[1], true) { scene.pbUpdate }
     end
@@ -551,7 +551,7 @@ def pbClosestHiddenItem
   result = []
   playerX = $game_player.x
   playerY = $game_player.y
-  for event in $game_map.events.values
+  $game_map.events.values.each do |event|
     next if !event.name[/hiddenitem/i]
     next if (playerX - event.x).abs >= 8
     next if (playerY - event.y).abs >= 6
@@ -561,7 +561,7 @@ def pbClosestHiddenItem
   return nil if result.length == 0
   ret = nil
   retmin = 0
-  for event in result
+  result.each do |event|
     dist = (playerX - event.x).abs + (playerY - event.y).abs
     next if ret && retmin <= dist
     ret = event
@@ -663,7 +663,7 @@ def pbUseItem(bag, item, bagscene = nil)
     annot = nil
     if itm.is_evolution_stone?
       annot = []
-      for pkmn in $player.party
+      $player.party.each do |pkmn|
         elig = pkmn.check_evolution_on_use_item(item)
         annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
       end
@@ -909,7 +909,7 @@ end
 def pbChooseItemFromList(message, variable, *args)
   commands = []
   itemid   = []
-  for item in args
+  args.each do |item|
     next if !GameData::Item.exists?(item)
     itm = GameData::Item.get(item)
     next if !$bag.has?(itm)

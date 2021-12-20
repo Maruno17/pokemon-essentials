@@ -58,7 +58,7 @@ end
 def pbPokeRadarHighlightGrass(showmessage = true)
   grasses = []   # x, y, ring (0-3 inner to outer), rarity
   # Choose 1 random tile from each ring around the player
-  for i in 0...4
+  4.times do |i|
     r = rand((i + 1) * 8)
     # Get coordinates of randomly chosen tile
     x = $game_player.x
@@ -95,7 +95,7 @@ def pbPokeRadarHighlightGrass(showmessage = true)
     pbPokeRadarCancel
   else
     # Show grass rustling animations
-    for grass in grasses
+    grasses.each do |grass|
       case grass[3]
       when 0   # Normal rustle
         $scene.spriteset.addUserAnimation(Settings::RUSTLE_NORMAL_ANIMATION_ID, grass[0], grass[1], true, 1)
@@ -114,7 +114,7 @@ def pbPokeRadarGetShakingGrass
   return -1 if !$game_temp.poke_radar_data
   grasses = $game_temp.poke_radar_data[3]
   return -1 if grasses.length == 0
-  for i in grasses
+  grasses.each do |i|
     return i[2] if $game_player.x == i[0] && $game_player.y == i[1]
   end
   return -1
@@ -197,7 +197,7 @@ Events.onWildPokemonCreate += proc { |_sender, e|
   next if !$game_temp.poke_radar_data
   grasses = $game_temp.poke_radar_data[3]
   next if !grasses
-  for grass in grasses
+  grasses.each do |grass|
     next if $game_player.x != grass[0] || $game_player.y != grass[1]
     pokemon.shiny = true if grass[3] == 2
     break

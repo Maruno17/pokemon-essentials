@@ -179,7 +179,7 @@ class Battle
       pbClearChoice(i) if pbCanShowCommands?(i)
     end
     # Reset choices to perform Mega Evolution if it wasn't done somehow
-    for side in 0...2
+    2.times do |side|
       @megaEvolution[side].each_with_index do |megaEvo, i|
         @megaEvolution[side][i] = -1 if megaEvo >= 0
       end

@@ -402,7 +402,7 @@ class PokemonSummary_Scene
       dexnum = @nationalDexList.index(@pokemon.species_data.species) || 0
       dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
     else
-      for i in 0...$player.pokedex.dexes_count - 1
+      ($player.pokedex.dexes_count - 1).times do |i|
         next if !$player.pokedex.unlocked?(i)
         num = pbGetRegionalNumber(i, @pokemon.species)
         next if num <= 0
@@ -578,7 +578,7 @@ class PokemonSummary_Scene
       best_iv = 0
       stats_order = [:HP, :ATTACK, :DEFENSE, :SPEED, :SPECIAL_ATTACK, :SPECIAL_DEFENSE]
       start_point = @pokemon.personalID % stats_order.length   # Tiebreaker
-      for i in 0...stats_order.length
+      stats_order.length.times do |i|
         stat = stats_order[(i + start_point) % stats_order.length]
         if !best_stat || @pokemon.iv[stat] > @pokemon.iv[best_stat]
           best_stat = stat
@@ -694,7 +694,7 @@ class PokemonSummary_Scene
     imagepos = []
     # Write move names, types and PP amounts for each known move
     yPos = 92
-    for i in 0...Pokemon::MAX_MOVES
+    Pokemon::MAX_MOVES.times do |i|
       move = @pokemon.moves[i]
       if move
         type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
@@ -756,7 +756,7 @@ class PokemonSummary_Scene
     yPos = 92
     yPos -= 76 if move_to_learn
     limit = (move_to_learn) ? Pokemon::MAX_MOVES + 1 : Pokemon::MAX_MOVES
-    for i in 0...limit
+    limit.times do |i|
       move = @pokemon.moves[i]
       if i == Pokemon::MAX_MOVES
         move = move_to_learn
@@ -842,7 +842,7 @@ class PokemonSummary_Scene
     # Show all ribbons
     imagepos = []
     coord = 0
-    for i in @ribbonOffset * 4...(@ribbonOffset * 4) + 12
+    (@ribbonOffset * 4...(@ribbonOffset * 4) + 12).each do |i|
       break if !@pokemon.ribbons[i]
       ribbon_data = GameData::Ribbon.get(@pokemon.ribbons[i])
       ribn = ribbon_data.icon_position

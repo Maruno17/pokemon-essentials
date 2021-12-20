@@ -109,7 +109,7 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
     alphaDiff = (255.0 / halfFlashTime).ceil
     2.times do
       viewport.color.alpha = 0
-      for i in 0...halfFlashTime * 2
+      (halfFlashTime * 2).times do |i|
         if i < halfFlashTime
           viewport.color.alpha += alphaDiff
         else
@@ -238,7 +238,7 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     flash.opacity = 0
     # Animate bars sliding in from either side
     slideInTime = (Graphics.frame_rate * 0.25).floor
-    for i in 0...slideInTime
+    slideInTime.times do |i|
       bar1.x = xoffset * (i + 1 - slideInTime) / slideInTime
       bar2.x = xoffset * (slideInTime - i - 1) / slideInTime
       pbWait(1)
@@ -263,7 +263,7 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     trainer.tone   = Tone.new(-255, -255, -255)
     # Dim the flash and make the trainer sprites appear, while animating bars
     animTime = (Graphics.frame_rate * 1.2).floor
-    for i in 0...animTime
+    animTime.times do |i|
       flash.opacity -= 52 * 20 / Graphics.frame_rate if flash.opacity > 0
       bar1.ox -= 32 * 20 / Graphics.frame_rate
       bar2.ox += 32 * 20 / Graphics.frame_rate
@@ -294,7 +294,7 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     shudderTime = (Graphics.frame_rate * 1.75).floor
     zoomTime = (Graphics.frame_rate * 2.5).floor
     shudderDelta = [4 * 20 / Graphics.frame_rate, 1].max
-    for i in 0...animTime
+    animTime.times do |i|
       if i < shudderTime   # Fade out the white flash
         flash.opacity -= 52 * 20 / Graphics.frame_rate if flash.opacity > 0
       elsif i == shudderTime   # Make the flash black

@@ -20,7 +20,7 @@ def pbWarpToMap
       y = rand(map.height)
       next if !map.passableStrict?(x, y, 0, $game_player)
       blocked = false
-      for event in map.events.values
+      map.events.values.each do |event|
         if event.at_coordinate?(x, y) && !event.through
           blocked = true if event.character_name != ""
         end
@@ -509,7 +509,7 @@ def pbDebugRoamers
           pbPlayBuzzerSE
         else
           pbPlayDecisionSE
-          for i in 0...Settings::ROAMING_SPECIES.length
+          Settings::ROAMING_SPECIES.length.times do |i|
             $PokemonGlobal.roamPosition[i] = nil
           end
           $PokemonGlobal.roamedAlready = false
@@ -564,7 +564,7 @@ def pbExportAllAnimations
     animations = pbLoadBattleAnimations
     if animations
       msgwindow = pbCreateMessageWindow
-      for anim in animations
+      animations.each do |anim|
         next if !anim || anim.length == 0 || anim.name == ""
         pbMessageDisplay(msgwindow, anim.name, false)
         Graphics.update
@@ -577,7 +577,7 @@ def pbExportAllAnimations
           graphicname = RTP.getImagePath("Graphics/Animations/" + anim.graphic)
           pbSafeCopyFile(graphicname, "Animations/#{safename}/" + File.basename(graphicname))
         end
-        for timing in anim.timing
+        anim.timing.each do |timing|
           if !timing.timingType || timing.timingType == 0
             if timing.name && timing.name != ""
               audioName = RTP.getAudioPath("Audio/SE/Anim/" + timing.name)
@@ -618,7 +618,7 @@ def pbImportAllAnimations
     msgwindow = pbCreateMessageWindow
     animations = pbLoadBattleAnimations
     animations = PBAnimations.new if !animations
-    for folder in animationFolders
+    animationFolders.each do |folder|
       pbMessageDisplay(msgwindow, folder, false)
       Graphics.update
       audios = []
@@ -628,7 +628,7 @@ def pbImportAllAnimations
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == ext })
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == upext })
       }
-      for audio in audios
+      audios.each do |audio|
         pbSafeCopyFile(audio, RTP.getAudioPath("Audio/SE/Anim/" + File.basename(audio)), "Audio/SE/Anim/" + File.basename(audio))
       end
       images = []
@@ -637,7 +637,7 @@ def pbImportAllAnimations
         images.concat(files.find_all { |f| f[f.length - 3, 3] == ext })
         images.concat(files.find_all { |f| f[f.length - 3, 3] == upext })
       }
-      for image in images
+      images.each do |image|
         pbSafeCopyFile(image, RTP.getImagePath("Graphics/Animations/" + File.basename(image)), "Graphics/Animations/" + File.basename(image))
       end
       Dir.glob(folder + "/*.anm") { |f|
@@ -655,7 +655,7 @@ def pbImportAllAnimations
               missingFiles.push(textdata.graphic)
             end
           end
-          for timing in textdata.timing
+          textdata.timing.each do |timing|
             if timing.name && timing.name != ""
               if !safeExists?(folder + "/" + timing.name) &&
                  !FileTest.audio_exist?("Audio/SE/Anim/" + timing.name)
@@ -687,7 +687,7 @@ def pbDebugFixInvalidTiles
   Graphics.update
   total_maps = mapData.mapinfos.keys.length
   Console.echo_h1 _INTL("Checking {1} maps for invalid tiles", total_maps)
-  for id in mapData.mapinfos.keys.sort
+  mapData.mapinfos.keys.sort.each do |id|
     if Time.now.to_i - t >= 5
       Graphics.update
       t = Time.now.to_i
@@ -697,9 +697,9 @@ def pbDebugFixInvalidTiles
     next if !map || !mapData.mapinfos[id]
     passages = mapData.getTilesetPassages(map, id)
     # Check all tiles in map for non-existent tiles
-    for x in 0...map.data.xsize
-      for y in 0...map.data.ysize
-        for i in 0...map.data.zsize
+    map.data.xsize.times do |x|
+      map.data.ysize.times do |y|
+        map.data.zsize.times do |i|
           tile_id = map.data[x, y, i]
           next if pbCheckTileValidity(tile_id, map, tilesets, passages)
           map.data[x, y, i] = 0
@@ -708,9 +708,9 @@ def pbDebugFixInvalidTiles
       end
     end
     # Check all events in map for page graphics using a non-existent tile
-    for key in map.events.keys
+    map.events.keys.each do |key|
       event = map.events[key]
-      for page in event.pages
+      event.pages.each do |page|
         next if page.graphic.tile_id <= 0
         next if pbCheckTileValidity(page.graphic.tile_id, map, tilesets, passages)
         page.graphic.tile_id = 0
@@ -864,7 +864,7 @@ class PokemonDebugPartyScreen
 
   def pbChooseMove(pkmn, text, index = 0)
     moveNames = []
-    for i in pkmn.moves
+    pkmn.moves.each do |i|
       if i.total_pp <= 0
         moveNames.push(_INTL("{1} (PP: ---)", i.name))
       else

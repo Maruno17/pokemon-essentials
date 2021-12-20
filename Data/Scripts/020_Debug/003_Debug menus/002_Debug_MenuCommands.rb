@@ -129,18 +129,18 @@ DebugMenuCommands.register("togglewallpapers", {
         paperscmds = []
         paperscmds.push(_INTL("Unlock all"))
         paperscmds.push(_INTL("Lock all"))
-        for i in PokemonStorage::BASICWALLPAPERQTY...w.length
+        (PokemonStorage::BASICWALLPAPERQTY...w.length).each do |i|
           paperscmds.push(_INTL("{1} {2}", unlockarray[i] ? "[Y]" : "[  ]", w[i]))
         end
         paperscmd = pbShowCommands(nil, paperscmds, -1, paperscmd)
         break if paperscmd < 0
         case paperscmd
         when 0   # Unlock all
-          for i in PokemonStorage::BASICWALLPAPERQTY...w.length
+          (PokemonStorage::BASICWALLPAPERQTY...w.length).each do |i|
             unlockarray[i] = true
           end
         when 1   # Lock all
-          for i in PokemonStorage::BASICWALLPAPERQTY...w.length
+          (PokemonStorage::BASICWALLPAPERQTY...w.length).each do |i|
             unlockarray[i] = false
           end
         else
@@ -406,7 +406,7 @@ DebugMenuCommands.register("resettrainers", {
   "description" => _INTL("Turn off Self Switches A and B for all events with \"Trainer\" in their name."),
   "effect"      => proc {
     if $game_map
-      for event in $game_map.events.values
+      $game_map.events.values.each do |event|
         if event.name[/trainer/i]
           $game_self_switches[[$game_map.map_id, event.id, "A"]] = false
           $game_self_switches[[$game_map.map_id, event.id, "B"]] = false
@@ -428,7 +428,7 @@ DebugMenuCommands.register("readyrematches", {
     if !$PokemonGlobal.phoneNumbers || $PokemonGlobal.phoneNumbers.length == 0
       pbMessage(_INTL("There are no trainers in the Phone."))
     else
-      for i in $PokemonGlobal.phoneNumbers
+      $PokemonGlobal.phoneNumbers.each do |i|
         next if i.length != 8   # Isn't a trainer with an event
         i[4] = 2
         pbSetReadyToBattle(i)
@@ -566,7 +566,7 @@ DebugMenuCommands.register("demoparty", {
   "effect"      => proc {
     party = []
     species = [:PIKACHU, :PIDGEOTTO, :KADABRA, :GYARADOS, :DIGLETT, :CHANSEY]
-    for id in species
+    species.each do |id|
       party.push(id) if GameData::Species.exists?(id)
     end
     $player.party.clear
@@ -674,8 +674,8 @@ DebugMenuCommands.register("clearboxes", {
   "name"        => _INTL("Clear Storage Boxes"),
   "description" => _INTL("Remove all Pokémon in storage."),
   "effect"      => proc {
-    for i in 0...$PokemonStorage.maxBoxes
-      for j in 0...$PokemonStorage.maxPokemon(i)
+    $PokemonStorage.maxBoxes.times do |i|
+      $PokemonStorage.maxPokemon(i).times do |j|
         $PokemonStorage[i, j] = nil
       end
     end
@@ -715,7 +715,7 @@ DebugMenuCommands.register("setbadges", {
       badgecmds = []
       badgecmds.push(_INTL("Give all"))
       badgecmds.push(_INTL("Remove all"))
-      for i in 0...24
+      24.times do |i|
         badgecmds.push(_INTL("{1} Badge {2}", $player.badges[i] ? "[Y]" : "[  ]", i + 1))
       end
       badgecmd = pbShowCommands(nil, badgecmds, -1, badgecmd)
@@ -803,7 +803,7 @@ DebugMenuCommands.register("dexlists", {
       dexescmds = []
       dexescmds.push(_INTL("Have Pokédex: {1}", $player.has_pokedex ? "[YES]" : "[NO]"))
       dex_names = Settings.pokedex_names
-      for i in 0...dex_names.length
+      dex_names.length.times do |i|
         name = (dex_names[i].is_a?(Array)) ? dex_names[i][0] : dex_names[i]
         unlocked = $player.pokedex.unlocked?(i)
         dexescmds.push(_INTL("{1} {2}", unlocked ? "[Y]" : "[  ]", name))

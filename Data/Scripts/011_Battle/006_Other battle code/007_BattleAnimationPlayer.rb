@@ -123,10 +123,10 @@ def pbConvertRPGAnimation(animation)
   pbAnim.position = animation.position
   yOffset = -64 if animation.position == 0
   yOffset = 64 if animation.position == 2
-  for i in 0...animation.frames.length
+  animation.frames.length.times do |i|
     frame = pbAnim.addFrame
     animFrame = animation.frames[i]
-    for j in 0...animFrame.cell_max
+    animFrame.cell_max.times do |j|
       data = animFrame.cell_data
       if data[j, 0] == -1
         frame.push(nil)
@@ -152,8 +152,7 @@ def pbConvertRPGAnimation(animation)
       frame.push(cel)
     end
   end
-  for i in 0...animation.timings.length
-    timing = animation.timings[i]
+  animation.timings.each do |timing|
     newTiming = PBAnimTiming.new
     newTiming.frame         = timing.frame
     newTiming.name          = timing.se.name
@@ -193,18 +192,18 @@ class RPG::Animation
   def addAnimation(otherAnim, frame, x, y)   # frame is zero-based
     if frame + otherAnim.frames.length >= self.frames.length
       totalframes = frame + otherAnim.frames.length + 1
-      for i in self.frames.length...totalframes
+      (totalframes - self.frames.length).times do
         self.frames.push(RPG::Animation::Frame.new)
       end
     end
     self.frame_max = self.frames.length
-    for i in 0...otherAnim.frame_max
+    otherAnim.frame_max.times do |i|
       thisframe = self.frames[frame + i]
       otherframe = otherAnim.frames[i]
       cellStart = thisframe.cell_max
       thisframe.cell_max += otherframe.cell_max
       thisframe.cell_data.resize(thisframe.cell_max, 8)
-      for j in 0...otherframe.cell_max
+      otherframe.cell_max.times do |j|
         thisframe.cell_data[cellStart + j, 0] = otherframe.cell_data[j, 0]
         thisframe.cell_data[cellStart + j, 1] = otherframe.cell_data[j, 1] + x
         thisframe.cell_data[cellStart + j, 2] = otherframe.cell_data[j, 2] + y
@@ -215,9 +214,8 @@ class RPG::Animation
         thisframe.cell_data[cellStart + j, 7] = otherframe.cell_data[j, 7]
       end
     end
-    for i in 0...otherAnim.timings.length
+    otherAnim.timings.each do |othertiming|
       timing = RPG::Animation::Timing.new
-      othertiming = otherAnim.timings[i]
       timing.frame          = frame + othertiming.frame
       timing.se             = RPG::AudioFile.new(othertiming.se.name.clone,
                                                  othertiming.se.volume,
@@ -398,13 +396,9 @@ class PBAnimations < Array
     idxStart = @array.length
     idxEnd   = len
     if idxStart > idxEnd
-      for i in idxEnd...idxStart
-        @array.pop
-      end
+      (idxStart - idxEnd).times { @array.pop }
     else
-      for i in idxStart...idxEnd
-        @array.push(PBAnimation.new)
-      end
+      (idxEnd - idxStart).times { @array.push(PBAnimation.new) }
     end
     self.selected = len if self.selected >= len
   end
@@ -494,7 +488,7 @@ class PBAnimation < Array
   end
 
   def playTiming(frame, bgGraphic, bgColor, foGraphic, foColor, oldbg = [], oldfo = [], user = nil)
-    for i in @timing
+    @timing.each do |i|
       next if i.frame != frame
       case i.timingType
       when 0   # Play SE
@@ -562,7 +556,7 @@ class PBAnimation < Array
         end
       end
     end
-    for i in @timing
+    @timing.each do |i|
       case i.timingType
       when 2
         next if !i.duration || i.duration <= 0
@@ -729,7 +723,7 @@ class PBAnimationPlayerX
     @animsprites = []
     @animsprites[0] = @usersprite
     @animsprites[1] = @targetsprite
-    for i in 2...MAX_SPRITES
+    (2...MAX_SPRITES).each do |i|
       @animsprites[i] = Sprite.new(@viewport)
       @animsprites[i].bitmap  = nil
       @animsprites[i].visible = false
@@ -768,7 +762,7 @@ class PBAnimationPlayerX
 
   def dispose
     @animbitmap.dispose if @animbitmap
-    for i in 2...MAX_SPRITES
+    (2...MAX_SPRITES).each do |i|
       @animsprites[i].dispose if @animsprites[i]
     end
     @bgGraphic.dispose
@@ -807,7 +801,7 @@ class PBAnimationPlayerX
     if !@animbitmap || @animbitmap.disposed?
       @animbitmap = AnimatedBitmap.new("Graphics/Animations/" + @animation.graphic,
                                        @animation.hue).deanimate
-      for i in 0...MAX_SPRITES
+      MAX_SPRITES.times do |i|
         @animsprites[i].bitmap = @animbitmap if @animsprites[i]
       end
     end
@@ -821,11 +815,11 @@ class PBAnimationPlayerX
     if @framesPerTick == 1 || (@frame % @framesPerTick) == 0
       thisframe = @animation[animFrame]
       # Make all cel sprites invisible
-      for i in 0...MAX_SPRITES
+      MAX_SPRITES.times do |i|
         @animsprites[i].visible = false if @animsprites[i]
       end
       # Set each cel sprite acoordingly
-      for i in 0...thisframe.length
+      thisframe.length.times do |i|
         cel = thisframe[i]
         next if !cel
         sprite = @animsprites[i]

@@ -38,21 +38,21 @@ class Battle::Scene::MenuBase
 
   def z=(value)
     @z = value
-    for i in @sprites
+    @sprites.each do |i|
       i[1].z = value if !i[1].disposed?
     end
   end
 
   def visible=(value)
     @visible = value
-    for i in @sprites
+    @sprites.each do |i|
       i[1].visible = (value && @visibility[i[0]]) if !i[1].disposed?
     end
   end
 
   def color=(value)
     @color = value
-    for i in @sprites
+    @sprites.each do |i|
       i[1].color = value if !i[1].disposed?
     end
   end
@@ -174,7 +174,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
     @msgBox.text = value[0]
     return if USE_GRAPHICS
     commands = []
-    for i in 1..4
+    (1..4).each do |i|
       commands.push(value[i]) if value[i] && value[i] != nil
     end
     @cmdWindow.commands = commands
@@ -182,8 +182,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
 
   def refreshButtons
     return if !USE_GRAPHICS
-    for i in 0...@buttons.length
-      button = @buttons[i]
+    @buttons.each_with_index do |button, i|
       button.src_rect.x = (i == @index) ? @buttonBitmap.width / 2 : 0
       button.src_rect.y = MODES[@mode][i] * BUTTON_HEIGHT
       button.z          = self.z + ((i == @index) ? 3 : 2)
@@ -343,7 +342,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
     if !USE_GRAPHICS
       # Fill in command window
       commands = []
-      for i in 0...[4, moves.length].max
+      [4, moves.length].max.times do |i|
         commands.push((moves[i]) ? moves[i].name : "-")
       end
       @cmdWindow.commands = commands

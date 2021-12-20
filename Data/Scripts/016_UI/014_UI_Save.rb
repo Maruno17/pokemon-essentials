@@ -6,8 +6,10 @@ def pbEmergencySave
   if SaveData.exists?
     File.open(SaveData::FILE_PATH, 'rb') do |r|
       File.open(SaveData::FILE_PATH + '.bak', 'wb') do |w|
-        while s = r.read(4096)
-          w.write s
+        loop do
+          s = r.read(4096)
+          break if !s
+          w.write(s)
         end
       end
     end

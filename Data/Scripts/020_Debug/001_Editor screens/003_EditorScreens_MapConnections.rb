@@ -168,7 +168,7 @@ class MapScreenScene
     mapsprite = getMapSprite(id)
     dispx = mapsprite.x
     dispy = mapsprite.y
-    for conn in conns
+    conns.each do |conn|
       if conn[0] == id
         b = sprites.any? { |i| i == conn[3] }
         if !b
@@ -192,7 +192,7 @@ class MapScreenScene
   end
 
   def hasConnections?(conns, id)
-    for conn in conns
+    conns.each do |conn|
       return true if conn[0] == id || conn[3] == id
     end
     return false
@@ -228,7 +228,7 @@ class MapScreenScene
     thissprite = getMapSprite(map)
     thisdims = MapFactoryHelper.getMapDims(map)
     ret = []
-    for i in keys
+    keys.each do |i|
       next if i == map
       othersprite = getMapSprite(i)
       otherdims = MapFactoryHelper.getMapDims(i)
@@ -250,19 +250,19 @@ class MapScreenScene
   def generateConnectionData
     ret = []
     # Create a clone of current map connection
-    for conn in @mapconns
+    @mapconns.each do |conn|
       ret.push(conn.clone)
     end
     keys = @mapsprites.keys
     return ret if keys.length < 2
     # Remove all connections containing any sprites on the canvas from the array
-    for i in keys
+    keys.each do |i|
       removeOldConnections(ret, i)
     end
     # Rebuild connections
-    for i in keys
+    keys.each do |i|
       refs = getDirectConnections(keys, i)
-      for refmap in refs
+      refs.each do |refmap|
         othersprite = getMapSprite(i)
         refsprite = getMapSprite(refmap)
         c1 = (refsprite.x - othersprite.x) / 4
@@ -302,7 +302,7 @@ class MapScreenScene
 
   def saveMapSpritePos
     @mapspritepos.clear
-    for i in @mapsprites.keys
+    @mapsprites.keys.each do |i|
       s = @mapsprites[i]
       @mapspritepos[i] = [s.x, s.y] if s && !s.disposed?
     end
@@ -332,7 +332,7 @@ class MapScreenScene
     @mapinfos = pbLoadMapInfos
     conns = MapFactoryHelper.getMapConnections
     @mapconns = []
-    for map_conns in conns
+    conns.each do |map_conns|
       next if !map_conns
       map_conns.each do |c|
         @mapconns.push(c.clone) if !@mapconns.any? { |x| x[0] == c[0] && x[3] == c[3] }
@@ -347,7 +347,7 @@ class MapScreenScene
   end
 
   def setTopSprite(id)
-    for i in @mapsprites.keys
+    @mapsprites.keys.each do |i|
       @mapsprites[i].z = (i == id) ? 1 : 0
     end
   end
@@ -441,7 +441,7 @@ class MapScreenScene
       else
         xpos = x - @dragOffsetX
         ypos = y - @dragOffsetY
-        for i in @mapspritepos.keys
+        @mapspritepos.keys.each do |i|
           sprite = getMapSprite(i)
           sprite.x = (@mapspritepos[i][0] + xpos) & ~3
           sprite.y = (@mapspritepos[i][1] + ypos) & ~3
@@ -456,7 +456,7 @@ class MapScreenScene
   end
 
   def hittest(x, y)
-    for i in @mapsprites.keys
+    @mapsprites.keys.each do |i|
       sx = @mapsprites[i].x
       sy = @mapsprites[i].y
       sr = sx + @mapsprites[i].bitmap.width
@@ -495,22 +495,22 @@ class MapScreenScene
       end
     end
     if Input.press?(Input::UP)
-      for i in @mapsprites
+      @mapsprites.each do |i|
         i[1].y += 4 if i
       end
     end
     if Input.press?(Input::DOWN)
-      for i in @mapsprites
+      @mapsprites.each do |i|
         i[1].y -= 4 if i
       end
     end
     if Input.press?(Input::LEFT)
-      for i in @mapsprites
+      @mapsprites.each do |i|
         i[1].x += 4 if i
       end
     end
     if Input.press?(Input::RIGHT)
-      for i in @mapsprites
+      @mapsprites.each do |i|
         i[1].x -= 4 if i
       end
     end

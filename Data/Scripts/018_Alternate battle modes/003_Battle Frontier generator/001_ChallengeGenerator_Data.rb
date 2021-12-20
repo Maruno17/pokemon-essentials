@@ -85,10 +85,10 @@ def pbArrangeByTier(pokemonlist, rule)
   # Sort each Pokémon into tiers. Which tier a Pokémon is put in deoends on the
   # Pokémon's position within pokemonlist (later = higher tier). pokemonlist is
   # already roughly arranged by rank from weakest to strongest.
-  for i in 0...pokemonlist.length
+  pokemonlist.length.times do |i|
     next if !rule.ruleset.isPokemonValid?(pokemonlist[i])
     validtiers = []
-    for j in 0...tiers.length
+    tiers.length.times do |j|
       validtiers.push(j) if tiers[j].ruleset.isPokemonValid?(pokemonlist[i])
     end
     if validtiers.length > 0
@@ -98,7 +98,7 @@ def pbArrangeByTier(pokemonlist, rule)
   end
   # Now for each tier, sort the Pokemon in that tier by their BST (lowest first).
   ret = []
-  for i in 0...tiers.length
+  tiers.length.times do |i|
     tierPokemon[i].sort! { |a, b|
       bstA = baseStatTotal(a.species)
       bstB = baseStatTotal(b.species)
@@ -116,7 +116,7 @@ def pbReplenishBattlePokemon(party, rule)
   while party.length < 20
     pkmn = pbRandomPokemonFromRule(rule, nil)
     found = false
-    for pk in party
+    party.each do |pk|
       next if !isBattlePokemonDuplicate(pkmn, pk)
       found = true
       break
@@ -129,7 +129,7 @@ def isBattlePokemonDuplicate(pk, pk2)
   return false if pk.species != pk2.species
   moves1 = []
   moves2 = []
-  for i in 0...Pokemon::MAX_MOVES
+  Pokemon::MAX_MOVES.times do |i|
     moves1.push((pk.moves[i]) ? pk.moves[i].id : nil)
     moves2.push((pk2.moves[i]) ? pk2.moves[i].id : nil)
   end
@@ -144,11 +144,11 @@ end
 
 def pbRemoveDuplicates(party)
   ret = []
-  for pk in party
+  party.each do |pk|
     found = false
     count = 0
     firstIndex = -1
-    for i in 0...ret.length
+    ret.length.times do |i|
       pk2 = ret[i]
       if isBattlePokemonDuplicate(pk, pk2)
         found = true
@@ -181,7 +181,7 @@ def pbGenerateChallenge(rule, tag)
     btpokemon = pbGetBTPokemon(tag)
     if btpokemon && btpokemon.length != 0
       suggestedLevel = rule.ruleset.suggestedLevel
-      for pk in btpokemon
+      btpokemon.each do |pk|
         pkmn = pk.createPokemon(suggestedLevel, 31, nil)
         party.push(pkmn) if rule.ruleset.isPokemonValid?(pkmn)
       end
@@ -209,7 +209,7 @@ def pbGenerateChallenge(rule, tag)
         teams.delete_at(i)
       elsif teams[i].totalGames >= 250
         # retire
-        for j in 0...teams[i].length
+        teams[i].length.times do |j|
           party.push(teams[i][j])
         end
         teams[i] = RuledTeam.new(party, rule)
@@ -244,12 +244,12 @@ def pbGenerateChallenge(rule, tag)
       }
       i += 1
       gameCount = 0
-      for team in teams
+      teams.each do |team|
         gameCount += team.games
       end
       yield(nil)
       if gameCount / teams.length >= 12
-        for team in teams
+        teams.each do |team|
           team.updateRating
         end
         break
@@ -261,9 +261,9 @@ def pbGenerateChallenge(rule, tag)
   party = []
   yield(nil)
   teams.sort! { |a, b| a.rating <=> b.rating }
-  for team in teams
+  teams.each do |team|
     next if team.rating <= cutoffrating
-    for i in 0...team.length
+    team.length.times do |i|
       party.push(team[i])
     end
   end
@@ -284,7 +284,7 @@ def pbWriteCup(id, rules)
   return if !$DEBUG
   trlists = (load_data("Data/trainer_lists.dat") rescue [])
   list = []
-  for i in 0...trlists.length
+  trlists.length.times do |i|
     tr = trlists[i]
     if tr[5]
       list.push("*" + (tr[3].sub(/\.txt$/, "")))
@@ -312,7 +312,7 @@ def pbWriteCup(id, rules)
     cmd = pbMessage(_INTL("Choose a challenge."), list, -1)
     if cmd >= 0
       pbMessage(_INTL("This challenge will use the Pokémon list from {1}.", list[cmd]))
-      for i in 0...trlists.length
+      trlists.length.times do |i|
         tr = trlists[i]
         while !tr[5] && tr[2].include?(id)
           tr[2].delete(id)

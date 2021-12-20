@@ -96,7 +96,7 @@ class HallOfFame_Scene
     exponent = 8 if exponent > 8
     max = 2**exponent
     speed = (2**8) / max
-    for j in 0..max
+    (0..max).each do |j|
       if extraWaitExponent > -1
         (2**extraWaitExponent).times do
           Graphics.update
@@ -117,7 +117,7 @@ class HallOfFame_Scene
 
   # Change the pokémon sprites opacity except the index one
   def setPokemonSpritesOpacity(index, opacity = 255)
-    for n in 0...@hallEntry.size
+    @hallEntry.size.times do |n|
       @sprites["pokemon#{n}"].opacity = (n == index) ? 255 : opacity if @sprites["pokemon#{n}"]
     end
   end
@@ -201,7 +201,7 @@ class HallOfFame_Scene
 
   def createBattlers(hide = true)
     # Movement in animation
-    for i in 0...6
+    6.times do |i|
       # Clear all 6 pokémon sprites and dispose the ones that exists every time
       # that this method is call
       restartSpritePosition(@sprites, "pokemon#{i}")

@@ -27,7 +27,7 @@ class Battle::Scene
     # data box(es), return the wild Pokémon's sprite(s) to normal colour, show
     # shiny animation(s)
     # Set up data box animation
-    for i in 0...@battle.sideSizes[1]
+    @battle.sideSizes[1].times do |i|
       idxBattler = (2 * i) + 1
       next if !@battle.battlers[idxBattler]
       dataBoxAnim = Animation::DataBoxAppear.new(@sprites, @viewport, idxBattler)
@@ -42,7 +42,7 @@ class Battle::Scene
     end
     # Show shiny animation for wild Pokémon
     if @battle.showAnims
-      for i in 0...@battle.sideSizes[1]
+      @battle.sideSizes[1].times do |i|
         idxBattler = (2 * i) + 1
         next if !@battle.battlers[idxBattler] || !@battle.battlers[idxBattler].shiny?
         if Settings::SUPER_SHINY && @battle.battlers[idxBattler].super_shiny?
@@ -400,7 +400,7 @@ class Battle::Scene
     # Yield to other code, i.e. playing an animation
     yield
     # Restore shadow visibility
-    for i in 0...@battle.battlers.length
+    @battle.battlers.length.times do |i|
       shadow = @sprites["shadow_#{i}"]
       shadow.visible = shadows[i] if shadow
     end

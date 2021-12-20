@@ -31,7 +31,7 @@ class Particle_Engine
 
   def dispose
     return if disposed?
-    for particle in @effect
+    @effect.each do |particle|
       next if particle.nil?
       particle.dispose
     end
@@ -80,13 +80,12 @@ class Particle_Engine
   def update
     if @firsttime
       @firsttime = false
-      for event in @map.events.values
+      @map.events.values.each do |event|
         remove_effect(event)
         add_effect(event)
       end
     end
-    for i in 0...@effect.length
-      particle = @effect[i]
+    @effect.each_with_index do |particle, i|
       next if particle.nil?
       if particle.event.pe_refresh
         event = particle.event
@@ -217,7 +216,7 @@ class ParticleEffect_Event < ParticleEffect
     @zoffset   = zOffset
     @bmwidth   = 32
     @bmheight  = 32
-    for i in 0...@maxparticless
+    @maxparticless.times do |i|
       @particlex[i] = -@xoffset
       @particley[i] = -@yoffset
       @particles[i] = ParticleSprite.new(@viewport)
@@ -275,7 +274,7 @@ class ParticleEffect_Event < ParticleEffect
       end
     end
     particleZ = selfZ + @zoffset
-    for i in 0...@maxparticless
+    @maxparticless.times do |i|
       @particles[i].z = particleZ
       if @particles[i].y <= @ytop
         @particles[i].y = @startingy + @yoffset
@@ -347,10 +346,10 @@ class ParticleEffect_Event < ParticleEffect
   end
 
   def dispose
-    for particle in @particles
+    @particles.each do |particle|
       particle.dispose
     end
-    for bitmap in @bitmaps.values
+    @bitmaps.values.each do |bitmap|
       bitmap.dispose
     end
     @particles.clear
@@ -388,7 +387,7 @@ class Particle_Engine::Teleport < ParticleEffect_Event
     setParameters([1, 1, 1, 10, rand(360), 1, -64,
                    Graphics.height, -64, Graphics.width, 0, 3, -8, -15, 20, 0])
     initParticles("wideportal", 250)
-    for i in 0...@maxparticless
+    @maxparticless.times do |i|
       @particles[i].ox = 16
       @particles[i].oy = 16
     end
@@ -447,7 +446,7 @@ class Particle_Engine::SootSmoke < ParticleEffect_Event
     setParameters([0, 0, 0, 30, 0, 0.5, -64,
                    Graphics.height, -64, Graphics.width, 0.5, 0.10, -5, -15, 5, 80])
     initParticles("smoke", 100, 0)
-    for i in 0...@maxparticless
+    @maxparticless.times do |i|
       @particles[i].blend_type = rand(6) < 3 ? 1 : 2
     end
   end
@@ -472,7 +471,7 @@ class Particle_Engine::FixedTeleport < ParticleEffect_Event
     setParameters([1, 0, 1, 10, rand(360), 1,
                    -Graphics.height, Graphics.height, 0, Graphics.width, 0, 3, -8, -15, 20, 0])
     initParticles("wideportal", 250)
-    for i in 0...@maxparticless
+    @maxparticless.times do |i|
       @particles[i].ox = 16
       @particles[i].oy = 16
     end
@@ -488,7 +487,7 @@ class Particle_Engine::StarTeleport < ParticleEffect_Event
     setParameters([0, 0, 1, 10, 0, 1,
                    -Graphics.height, Graphics.height, 0, Graphics.width, 0, 3, -8, -15, 10, 0])
     initParticles("star", 250)
-    for i in 0...@maxparticless
+    @maxparticless.times do |i|
       @particles[i].ox = 48
       @particles[i].oy = 48
     end
@@ -503,7 +502,7 @@ class Particle_Engine::Smokescreen < ParticleEffect_Event
     setParameters([0, 0, 0, 250, 0, 0.2, -64,
                    Graphics.height, -64, Graphics.width, 0.8, 0.8, -5, -15, 5, 80])
     initParticles(nil, 100)
-    for i in 0...@maxparticless
+    @maxparticless.times do |i|
       rnd = rand(3)
       @opacity[i] = (rnd == 0) ? 1 : 100
       filename = (rnd == 0) ? "explosionsmoke" : "smoke"
@@ -555,7 +554,7 @@ class Particle_Engine::Splash < ParticleEffect_Event
 
   def update
     super
-    for i in 0...@maxparticless
+    @maxparticless.times do |i|
       @particles[i].opacity = 50
       @particles[i].update
     end

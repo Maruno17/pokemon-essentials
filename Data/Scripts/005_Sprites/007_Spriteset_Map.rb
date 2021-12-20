@@ -54,7 +54,7 @@ class Spriteset_Map
     @fog = AnimatedPlane.new(@@viewport1)
     @fog.z = 3000
     @character_sprites = []
-    for i in @map.events.keys.sort
+    @map.events.keys.sort.each do |i|
       sprite = Sprite_Character.new(@@viewport1, @map.events[i])
       @character_sprites.push(sprite)
     end
@@ -119,7 +119,7 @@ class Spriteset_Map
     @fog.tone       = @map.fog_tone
     @panorama.update
     @fog.update
-    for sprite in @character_sprites
+    @character_sprites.each do |sprite|
       sprite.update
     end
     if self.map != $game_map

@@ -118,7 +118,8 @@ class PokemonRegionMap_Scene
       end
       pbDrawImagePositions(
         @sprites["map2"].bitmap,
-        [["Graphics/Pictures/#{graphic[4]}", graphic[2] * SQUARE_WIDTH, graphic[3] * SQUARE_HEIGHT]])
+        [["Graphics/Pictures/#{graphic[4]}", graphic[2] * SQUARE_WIDTH, graphic[3] * SQUARE_HEIGHT]]
+      )
     end
     @sprites["mapbottom"] = MapBottomSprite.new(@viewport)
     @sprites["mapbottom"].mapname     = pbGetMessage(MessageTypes::RegionNames, mapindex)
@@ -179,14 +180,14 @@ class PokemonRegionMap_Scene
   def pbSaveMapData
     File.open("PBS/town_map.txt", "wb") { |f|
       Compiler.add_PBS_header_to_file(f)
-      for i in 0...@map_data.length
+      @map_data.length.times do |i|
         map = @map_data[i]
         next if !map
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%d]\r\n", i))
         f.write(sprintf("Name = %s\r\nFilename = %s\r\n",
                         Compiler.csvQuote(map[0]), Compiler.csvQuote(map[1])))
-        for loc in map[2]
+        map[2].each do |loc|
           f.write("Point = ")
           Compiler.pbWriteCsvRecord(loc, f, [nil, "uussUUUU"])
           f.write("\r\n")
@@ -197,7 +198,7 @@ class PokemonRegionMap_Scene
 
   def pbGetMapLocation(x, y)
     return "" if !@map[2]
-    for point in @map[2]
+    @map[2].each do |point|
       next if point[0] != x || point[1] != y
       return "" if point[7] && (@wallmap || point[7] <= 0 || !$game_switches[point[7]])
       name = pbGetMessageFromHash(MessageTypes::PlaceNames, point[2])
@@ -225,7 +226,7 @@ class PokemonRegionMap_Scene
 
   def pbGetMapDetails(x, y)   # From Wichu, with my help
     return "" if !@map[2]
-    for point in @map[2]
+    @map[2].each do |point|
       next if point[0] != x || point[1] != y
       return "" if point[7] && (@wallmap || point[7] <= 0 || !$game_switches[point[7]])
       mapdesc = pbGetMessageFromHash(MessageTypes::PlaceDescriptions, point[3])
@@ -236,7 +237,7 @@ class PokemonRegionMap_Scene
 
   def pbGetHealingSpot(x, y)
     return nil if !@map[2]
-    for point in @map[2]
+    @map[2].each do |point|
       next if point[0] != x || point[1] != y
       return nil if point[7] && (@wallmap || point[7] <= 0 || !$game_switches[point[7]])
       return (point[4] && point[5] && point[6]) ? [point[4], point[5], point[6]] : nil
@@ -250,7 +251,8 @@ class PokemonRegionMap_Scene
     text = (@mode == 0) ? _INTL("ACTION: Fly") : _INTL("ACTION: Cancel Fly")
     pbDrawTextPositions(
       @sprites["help"].bitmap,
-      [[text, Graphics.width - 16, -8, 1, Color.new(248, 248, 248), Color.new(0, 0, 0)]])
+      [[text, Graphics.width - 16, -8, 1, Color.new(248, 248, 248), Color.new(0, 0, 0)]]
+    )
     @sprites.each do |key, sprite|
       next if !key.include?("point")
       sprite.visible = (@mode == 1)

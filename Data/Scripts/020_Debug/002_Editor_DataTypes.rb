@@ -190,7 +190,7 @@ class EnumProperty
 
   def set(settingname, oldsetting)
     commands = []
-    for value in @values
+    @values.each do |value|
       commands.push(value)
     end
     cmd = pbMessage(_INTL("Choose a value for {1}.", settingname), commands, -1)
@@ -217,7 +217,7 @@ class EnumProperty2
 
   def set(settingname, oldsetting)
     commands = []
-    for i in 0..@module.maxValue
+    (0..@module.maxValue).each do |i|
       commands.push(getConstantName(@module, i))
     end
     cmd = pbMessage(_INTL("Choose a value for {1}.", settingname), commands, -1, nil, oldsetting)
@@ -299,7 +299,7 @@ class StringListProperty
       else   # Cancel/quit
         case pbMessage(_INTL("Keep changes?"), [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
         when 0
-          for i in 0...real_cmds.length
+          real_cmds.length.times do |i|
             real_cmds[i] = (real_cmds[i][1] == -1) ? nil : real_cmds[i][0]
           end
           real_cmds.compact!
@@ -769,7 +769,7 @@ module RegionMapCoordsProperty
       selregion = regions[0][0]
     else
       cmds = []
-      for region in regions
+      regions.each do |region|
         cmds.push(region[1])
       end
       selcmd = pbMessage(_INTL("Choose a region map."), cmds, -1)
@@ -790,7 +790,7 @@ module RegionMapCoordsProperty
   def self.getMapNameList
     mapdata = pbLoadTownMapData
     ret = []
-    for i in 0...mapdata.length
+    mapdata.length.times do |i|
       next if !mapdata[i]
       ret.push([i, pbGetMessage(MessageTypes::RegionNames, i)])
     end
@@ -1067,7 +1067,7 @@ class GameDataPoolProperty
                          [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           when 0
             values.shift   # Remove the "add value" option
-            for i in 0...values.length
+            values.length.times do |i|
               values[i] = values[i][0]
             end
             values.compact!
@@ -1107,7 +1107,7 @@ module LevelUpMovesProperty
     # Get all moves in move pool
     realcmds = []
     realcmds.push([-1, nil, -1, "-"])   # Level, move ID, index in this list, name
-    for i in 0...oldsetting.length
+    oldsetting.length.times do |i|
       realcmds.push([oldsetting[i][0], oldsetting[i][1], i, GameData::Move.get(oldsetting[i][1]).real_name])
     end
     # Edit move pool
@@ -1221,7 +1221,7 @@ module LevelUpMovesProperty
                          [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           when 0
             realcmds.shift
-            for i in 0...realcmds.length
+            realcmds.length.times do |i|
               realcmds[i].pop   # Remove name
               realcmds[i].pop   # Remove index in this list
             end
@@ -1244,7 +1244,7 @@ module LevelUpMovesProperty
 
   def self.format(value)
     ret = ""
-    for i in 0...value.length
+    value.length.times do |i|
       ret << "," if i > 0
       ret << sprintf("%s,%s", value[i][0], GameData::Move.get(value[i][1]).real_name)
     end
@@ -1300,7 +1300,7 @@ class EvolutionsProperty
     commands = []
     realcmds = []
     realcmds.push([-1, 0, 0, -1])
-    for i in 0...oldsetting.length
+    oldsetting.length.times do |i|
       realcmds.push([oldsetting[i][0], oldsetting[i][1], oldsetting[i][2], i])
     end
     refreshlist = true
@@ -1310,7 +1310,7 @@ class EvolutionsProperty
       if refreshlist
         realcmds.sort! { |a, b| a[3] <=> b[3] }
         commands = []
-        for i in 0...realcmds.length
+        realcmds.length.times do |i|
           if realcmds[i][3] < 0
             commands.push(_INTL("[ADD EVOLUTION]"))
           else
@@ -1359,7 +1359,7 @@ class EvolutionsProperty
                 newparam = edit_parameter(newmethod)
                 if newparam || GameData::Evolution.get(newmethod).parameter.nil?
                   existing_evo = -1
-                  for i in 0...realcmds.length
+                  realcmds.length.times do |i|
                     existing_evo = realcmds[i][3] if realcmds[i][0] == newspecies &&
                                                      realcmds[i][1] == newmethod &&
                                                      realcmds[i][2] == newparam
@@ -1384,7 +1384,7 @@ class EvolutionsProperty
               newspecies = pbChooseSpeciesList(entry[0])
               if newspecies
                 existing_evo = -1
-                for i in 0...realcmds.length
+                realcmds.length.times do |i|
                   existing_evo = realcmds[i][3] if realcmds[i][0] == newspecies &&
                                                    realcmds[i][1] == entry[1] &&
                                                    realcmds[i][2] == entry[2]
@@ -1405,7 +1405,7 @@ class EvolutionsProperty
               if newmethodindex >= 0
                 newmethod = @evo_ids[newmethodindex]
                 existing_evo = -1
-                for i in 0...realcmds.length
+                realcmds.length.times do |i|
                   existing_evo = realcmds[i][3] if realcmds[i][0] == entry[0] &&
                                                    realcmds[i][1] == newmethod &&
                                                    realcmds[i][2] == entry[2]
@@ -1427,7 +1427,7 @@ class EvolutionsProperty
                 newparam = edit_parameter(entry[1], entry[2])
                 if newparam
                   existing_evo = -1
-                  for i in 0...realcmds.length
+                  realcmds.length.times do |i|
                     existing_evo = realcmds[i][3] if realcmds[i][0] == entry[0] &&
                                                      realcmds[i][1] == entry[1] &&
                                                      realcmds[i][2] == newparam
@@ -1453,7 +1453,7 @@ class EvolutionsProperty
                            [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           if [0, 1].include?(cmd2)
             if cmd2 == 0
-              for i in 0...realcmds.length
+              realcmds.length.times do |i|
                 realcmds[i].pop
                 realcmds[i] = nil if realcmds[i][0] == -1
               end
@@ -1475,7 +1475,7 @@ class EvolutionsProperty
 
   def format(value)
     ret = ""
-    for i in 0...value.length
+    value.length.times do |i|
       ret << "," if i > 0
       param = value[i][2]
       evo_method_data = GameData::Evolution.get(value[i][1])
@@ -1564,13 +1564,13 @@ def pbPropertyList(title, data, properties, saveprompt = false)
   selectedmap = -1
   retval = nil
   commands = []
-  for i in 0...properties.length
+  properties.length.times do |i|
     propobj = properties[i][1]
     commands.push(sprintf("%s=%s", properties[i][0], propobj.format(data[i])))
   end
   list.commands = commands
   list.index    = 0
-  begin
+  loop do
     loop do
       Graphics.update
       Input.update
@@ -1591,7 +1591,7 @@ def pbPropertyList(title, data, properties, saveprompt = false)
           end
         end
         commands.clear
-        for i in 0...properties.length
+        properties.length.times do |i|
           propobj = properties[i][1]
           commands.push(sprintf("%s=%s", properties[i][0], propobj.format(data[i])))
         end
@@ -1605,7 +1605,7 @@ def pbPropertyList(title, data, properties, saveprompt = false)
         newsetting = propobj.set(properties[selectedmap][0], oldsetting)
         data[selectedmap] = newsetting
         commands.clear
-        for i in 0...properties.length
+        properties.length.times do |i|
           propobj = properties[i][1]
           commands.push(sprintf("%s=%s", properties[i][0], propobj.format(data[i])))
         end
@@ -1622,7 +1622,8 @@ def pbPropertyList(title, data, properties, saveprompt = false)
         retval = (cmd == 0)
       end
     end
-  end while selectedmap != -1
+    break unless selectedmap != -1
+  end
   title.dispose
   list.dispose
   desc.dispose

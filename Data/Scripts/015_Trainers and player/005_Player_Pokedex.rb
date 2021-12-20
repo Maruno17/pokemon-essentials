@@ -119,7 +119,7 @@ class Player < Trainer
       ret = 0
       @seen_forms[species_id] ||= [[[], []], [[], []]]
       array = @seen_forms[species_id]
-      for i in 0...[array[0].length, array[1].length].max
+      [array[0].length, array[1].length].max.times do |i|
         ret += 1 if array[0][0][i] || array[0][1][i] ||   # male or genderless shiny/non-shiny
                     array[1][0][i] || array[1][1][i]      # female shiny/non-shiny
       end
@@ -325,7 +325,7 @@ class Player < Trainer
           @accessible_dexes.push(-1)
         end
       else   # Regional Dexes + National Dex
-        for i in 0...dexes_count
+        dexes_count.times do |i|
           dex_list_to_check = (i == dexes_count - 1) ? -1 : i
           if self.unlocked?(i) && self.seen_any?(dex_list_to_check)
             @accessible_dexes.push(dex_list_to_check)

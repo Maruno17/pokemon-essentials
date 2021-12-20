@@ -25,7 +25,7 @@ class Interpolator
       @frames = frames
       @step = 0
       @sprite = sprite
-      for item in items
+      items.each do |item|
         case item[0]
         when ZOOM_X
           @tweensteps[item[0]] = [sprite.zoom_x, item[1] - sprite.zoom_x]
@@ -52,7 +52,7 @@ class Interpolator
   def update
     if @tweening
       t = @step.to_f / @frames
-      for i in 0...@tweensteps.length
+      @tweensteps.length.times do |i|
         item = @tweensteps[i]
         next if !item
         case i

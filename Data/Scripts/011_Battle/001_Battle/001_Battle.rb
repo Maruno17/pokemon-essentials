@@ -281,7 +281,7 @@ class Battle
   # on the given side of battle.
   def pbNumPositions(side, idxTrainer)
     ret = 0
-    for i in 0...pbSideSize(side)
+    pbSideSize(side).times do |i|
       t = pbGetOwnerIndexFromBattlerIndex((i * 2) + side)
       next if t != idxTrainer
       ret += 1
@@ -618,7 +618,7 @@ class Battle
                      PBEffects::SkyDrop,
                      PBEffects::TrappingUser]
     allBattlers.each do |b|
-      for i in effectsToSwap
+      effectsToSwap.each do |i|
         next if b.effects[i] != idxA && b.effects[i] != idxB
         b.effects[i] = (b.effects[i] == idxA) ? idxB : idxA
       end

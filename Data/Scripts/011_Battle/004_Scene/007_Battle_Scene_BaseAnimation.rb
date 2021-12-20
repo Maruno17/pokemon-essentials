@@ -169,7 +169,7 @@ module Battle::Scene::Animation::BallAnimationMixin
     a = (2 * startY) - (4 * midY) + (2 * endY)
     b = (4 * midY) - (3 * startY) - endY
     c = startY
-    for i in 1..duration
+    (1..duration).each do |i|
       t = i.to_f / duration                # t ranges from 0 to 1
       x = startX + ((endX - startX) * t)   # Linear in t
       y = (a * (t**2)) + (b * t) + c       # Quadratic in t
@@ -188,7 +188,7 @@ module Battle::Scene::Animation::BallAnimationMixin
     end
     if numFrames > 1
       curFrame = 0
-      for i in 1..duration
+      (1..duration).each do |i|
         thisFrame = numFrames * numTumbles * i / duration
         if thisFrame > curFrame
           curFrame = thisFrame

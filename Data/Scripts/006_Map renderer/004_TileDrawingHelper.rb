@@ -60,7 +60,7 @@ class TileDrawingHelper
   def self.fromTileset(tileset)
     bmtileset = pbGetTileset(tileset.tileset_name)
     bmautotiles = []
-    for i in 0...7
+    7.times do |i|
       bmautotiles.push(pbGetAutotile(tileset.autotile_names[i]))
     end
     return self.new(bmtileset, bmautotiles)
@@ -81,8 +81,8 @@ class TileDrawingHelper
   def dispose
     @tileset.dispose if @tileset
     @tileset = nil
-    for i in 0...@autotiles.length
-      @autotiles[i].dispose
+    @autotiles.each_with_index do |autotile, i|
+      autotile.dispose
       @autotiles[i] = nil
     end
   end
@@ -102,7 +102,7 @@ class TileDrawingHelper
       id %= 48
       tiles = AUTOTILE_PATTERNS[id >> 3][id & 7]
       src = Rect.new(0, 0, 0, 0)
-      for i in 0...4
+      4.times do |i|
         tile_position = tiles[i] - 1
         src.set((tile_position % 6 * 16) + anim, tile_position / 6 * 16, 16, 16)
         bitmap.stretch_blt(Rect.new((i % 2 * cxTile) + x, (i / 2 * cyTile) + y, cxTile, cyTile),
@@ -155,9 +155,9 @@ def createMinimap(mapid)
   tileset = tilesets[map.tileset_id]
   return bitmap if !tileset
   helper = TileDrawingHelper.fromTileset(tileset)
-  for y in 0...map.height
-    for x in 0...map.width
-      for z in 0..2
+  map.height.times do |y|
+    map.width.times do |x|
+      3.times do |z|
         id = map.data[x, y, z]
         id = 0 if !id
         helper.bltSmallTile(bitmap, x * 4, y * 4, 4, 4, id)
@@ -178,7 +178,7 @@ def bltMinimapAutotile(dstBitmap, x, y, srcBitmap, id)
   cyTile = 3
   tiles = TileDrawingHelper::AUTOTILE_PATTERNS[id >> 3][id & 7]
   src = Rect.new(0, 0, 0, 0)
-  for i in 0...4
+  4.times do |i|
     tile_position = tiles[i] - 1
     src.set((tile_position % 6 * cxTile) + anim,
             tile_position / 6 * cyTile, cxTile, cyTile)
@@ -200,10 +200,10 @@ def getPassabilityMinimap(mapid)
   ret = Bitmap.new(map.width * 6, map.height * 6)
   passtable = Table.new(map.width, map.height)
   passages = tileset.passages
-  for i in 0...map.width
-    for j in 0...map.height
+  map.width.times do |i|
+    map.height.times do |j|
       pass = true
-      for z in [2, 1, 0]
+      [2, 1, 0].each do |z|
         if !passable?(passages, map.data[i, j, z])
           pass = false
           break
@@ -213,8 +213,8 @@ def getPassabilityMinimap(mapid)
     end
   end
   neighbors = TileDrawingHelper::NEIGHBORS_TO_AUTOTILE_INDEX
-  for i in 0...map.width
-    for j in 0...map.height
+  map.width.times do |i|
+    map.height.times do |j|
       if passtable[i, j] == 0
         nb = TileDrawingHelper.tableNeighbors(passtable, i, j)
         tile = neighbors[nb]

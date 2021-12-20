@@ -23,7 +23,7 @@ class SlotMachineReel < BitmapSprite
     @viewport.z = 99999
     super(64, 144, @viewport)
     @reel = []
-    for i in 0...ICONSPOOL[difficulty].length
+    ICONSPOOL[difficulty].length.times do |i|
       @reel.push(ICONSPOOL[difficulty][i])
     end
     @reel.shuffle!
@@ -49,7 +49,7 @@ class SlotMachineReel < BitmapSprite
 
   def showing
     array = []
-    for i in 0...3
+    3.times do |i|
       num = @index - i
       num += @reel.length if num < 0
       array.push(@reel[num])
@@ -70,7 +70,7 @@ class SlotMachineReel < BitmapSprite
         @slipping -= 1 if @slipping > 0
       end
     end
-    for i in 0...4
+    4.times do |i|
       num = @index - i
       num += @reel.length if num < 0
       self.bitmap.blt(0, @toppos + (i * 48), @images.bitmap, Rect.new(@reel[num] * 64, 0, 64, 48))
@@ -100,7 +100,7 @@ class SlotMachineScore < BitmapSprite
 
   def refresh
     self.bitmap.clear
-    for i in 0...5
+    5.times do |i|
       digit = (@score / (10**i)) % 10 # Least significant digit first
       self.bitmap.blt(14 * (4 - i), 0, @numbers.bitmap, Rect.new(digit * 14, 0, 14, 22))
     end
@@ -133,7 +133,7 @@ class SlotMachineScene
                     [reel1[2], reel2[2], reel3[2]], # Bottom row
                     [reel1[0], reel2[1], reel3[2]], # Diagonal top left -> bottom right
                     [reel1[2], reel2[1], reel3[0]]] # Diagonal bottom left -> top right
-    for i in 0...combinations.length
+    combinations.length.times do |i|
       break if i >= 1 && @wager <= 1 # One coin = centre row only
       break if i >= 3 && @wager <= 2 # Two coins = three rows only
       wonRow[i] = true
@@ -191,7 +191,7 @@ class SlotMachineScene
         @sprites["light1"].src_rect.set(0, 26 * ((frame / timePerFrame) % 4), 96, 26)
         @sprites["light2"].visible = true
         @sprites["light2"].src_rect.set(0, 26 * ((frame / timePerFrame) % 4), 96, 26)
-        for i in 1..5
+        (1..5).each do |i|
           if wonRow[i - 1]
             @sprites["row#{i}"].visible = (frame / timePerFrame).even?
           else
@@ -245,12 +245,12 @@ class SlotMachineScene
     @sprites["reel1"] = SlotMachineReel.new(64, 112, difficulty)
     @sprites["reel2"] = SlotMachineReel.new(144, 112, difficulty)
     @sprites["reel3"] = SlotMachineReel.new(224, 112, difficulty)
-    for i in 1..3
+    (1..3).each do |i|
       @sprites["button#{i}"] = IconSprite.new(68 + (80 * (i - 1)), 260, @viewport)
       @sprites["button#{i}"].setBitmap(sprintf("Graphics/Pictures/Slot Machine/button"))
       @sprites["button#{i}"].visible = false
     end
-    for i in 1..5
+    (1..5).each do |i|
       y = [170, 122, 218, 82, 82][i - 1]
       @sprites["row#{i}"] = IconSprite.new(2, y, @viewport)
       @sprites["row#{i}"].setBitmap(sprintf("Graphics/Pictures/Slot Machine/line%1d%s",
@@ -317,7 +317,7 @@ class SlotMachineScene
         @sprites["button1"].visible = false
         @sprites["button2"].visible = false
         @sprites["button3"].visible = false
-        for i in 1..5
+        (1..5).each do |i|
           @sprites["row#{i}"].visible = false
         end
         @gameEnd = false
@@ -345,7 +345,7 @@ class SlotMachineScene
               (Input.trigger?(Input::USE) && @wager > 0) || @replay
           if @replay
             @wager = 3
-            for i in 1..5
+            (1..5).each do |i|
               @sprites["row#{i}"].visible = true
              end
           end

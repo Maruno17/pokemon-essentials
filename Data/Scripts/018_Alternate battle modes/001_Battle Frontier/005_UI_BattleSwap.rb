@@ -76,7 +76,7 @@ class BattleSwapScene
 
   def pbGetCommands(list, choices)
     commands = []
-    for i in 0...list.length
+    list.length.times do |i|
       pkmn = list[i]
       category = pkmn.species_data.category
       cmd = _INTL("{1} - {2} Pokémon", pkmn.speciesName, category)

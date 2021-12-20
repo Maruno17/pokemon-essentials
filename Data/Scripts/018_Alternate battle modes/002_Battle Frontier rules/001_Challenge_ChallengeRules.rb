@@ -17,7 +17,7 @@ class PokemonChallengeRules
     ret = PokemonChallengeRules.new(@ruleset.copy)
     ret.setBattleType(@battletype)
     ret.setLevelAdjustment(@levelAdjustment)
-    for rule in @battlerules
+    @battlerules.each do |rule|
       ret.addBattleRule(rule)
     end
     return ret
@@ -110,7 +110,7 @@ class PokemonChallengeRules
 
   def createBattle(scene, trainer1, trainer2)
     battle = @battletype.pbCreateBattle(scene, trainer1, trainer2)
-    for p in @battlerules
+    @battlerules.each do |p|
       p.setRule(battle)
     end
     return battle

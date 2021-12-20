@@ -18,7 +18,7 @@ module Compiler
     File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
-      for i in 0...mapdata.length
+      mapdata.length.times do |i|
         echo "." if idx % 50 == 0
         idx += 1
         Graphics.update if idx % 250 == 0
@@ -30,7 +30,7 @@ module Compiler
         f.write(sprintf("Name = %s\r\nFilename = %s\r\n",
                         (rname && rname != "") ? rname : _INTL("Unnamed"),
                         csvQuote((map[1].is_a?(Array)) ? map[1][0] : map[1])))
-        for loc in map[2]
+        map[2].each do |loc|
           f.write("Point = ")
           pbWriteCsvRecord(loc, f, [nil, "uussUUUU"])
           f.write("\r\n")
@@ -79,7 +79,7 @@ module Compiler
     File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
-      for conn in conndata
+      conndata.each do |conn|
         if mapinfos
           # Skip if map no longer exists
           next if !mapinfos[conn[0]] || !mapinfos[conn[3]]
@@ -703,7 +703,7 @@ module Compiler
     write_pbs_file_message_start(path)
     File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
-      for tr in trainerlists
+      trainerlists.each do |tr|
         echo "."
         f.write("\#-------------------------------\r\n")
         f.write(((tr[5]) ? "[DefaultTrainerList]" : "[TrainerList]") + "\r\n")
@@ -732,11 +732,11 @@ module Compiler
     }
     File.open(filename, "wb") { |f|
       add_PBS_header_to_file(f)
-      for i in 0...bttrainers.length
+      bttrainers.length.times do |i|
         next if !bttrainers[i]
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%03d]\r\n", i))
-        for key in btTrainersRequiredTypes.keys
+        btTrainersRequiredTypes.keys.each do |key|
           schema = btTrainersRequiredTypes[key]
           record = bttrainers[i][schema[0]]
           next if record == nil
@@ -776,7 +776,7 @@ module Compiler
     File.open(filename, "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
-      for i in 0...btpokemon.length
+      btpokemon.length.times do |i|
         Graphics.update if i % 500 == 0
         pkmn = btpokemon[i]
         c1 = (species[pkmn.species]) ? species[pkmn.species] : (species[pkmn.species] = GameData::Species.get(pkmn.species).species.to_s)
@@ -820,7 +820,7 @@ module Compiler
       metadata = GameData::Metadata.get
       schema = GameData::Metadata::SCHEMA
       keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
-      for key in keys
+      keys.each do |key|
         record = metadata.property_from_string(key)
         next if record.nil? || (record.is_a?(Array) && record.empty?)
         f.write(sprintf("%s = ", key))
@@ -833,7 +833,7 @@ module Compiler
       GameData::PlayerMetadata.each do |player_data|
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%d]\r\n", player_data.id))
-        for key in keys
+        keys.each do |key|
           record = player_data.property_from_string(key)
           next if record.nil? || (record.is_a?(Array) && record.empty?)
           f.write(sprintf("%s = ", key))
@@ -868,7 +868,7 @@ module Compiler
         else
           f.write(sprintf("[%03d]\r\n", map_data.id))
         end
-        for key in keys
+        keys.each do |key|
           record = map_data.property_from_string(key)
           next if record.nil? || (record.is_a?(Array) && record.empty?)
           f.write(sprintf("%s = ", key))

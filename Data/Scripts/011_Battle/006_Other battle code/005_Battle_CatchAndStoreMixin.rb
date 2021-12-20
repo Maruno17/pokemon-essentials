@@ -193,7 +193,7 @@ module Battle::CatchAndStoreMixin
     end
     # Calculate the number of shakes
     numShakes = 0
-    for i in 0...4
+    4.times do |i|
       break if numShakes < i
       numShakes += 1 if pbRandom(65536) < y
     end

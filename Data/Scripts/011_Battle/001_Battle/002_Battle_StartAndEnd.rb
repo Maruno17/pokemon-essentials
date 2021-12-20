@@ -43,12 +43,12 @@ class Battle
     # side if necessary
     loop do
       needsChanging = false
-      for side in 0...2   # Each side in turn
+      2.times do |side|   # Each side in turn
         next if side == 1 && wildBattle?   # Wild side's size already checked above
         sideCounts = (side == 0) ? side1counts : side2counts
         requireds = []
         # Find out how many Pokémon each trainer on side needs to have
-        for i in 0...@sideSizes[side]
+        @sideSizes[side].times do |i|
           idxTrainer = pbGetOwnerIndexFromBattlerIndex((i * 2) + side)
           requireds[idxTrainer] = 0 if requireds[idxTrainer].nil?
           requireds[idxTrainer] += 1
@@ -90,7 +90,7 @@ class Battle
       if newSize == 0
         raise _INTL("Couldn't lower either side's size any further, battle isn't possible")
       end
-      for side in 0...2
+      2.times do |side|
         next if side == 1 && wildBattle?   # Wild Pokémon's side size is fixed
         next if @sideSizes[side] == 1 || newSize > @sideSizes[side]
         @sideSizes[side] = newSize
@@ -115,7 +115,7 @@ class Battle
 
   def pbSetUpSides
     ret = [[], []]
-    for side in 0...2
+    2.times do |side|
       # Set up wild Pokémon
       if side == 1 && wildBattle?
         pbParty(1).each_with_index do |pkmn, idxPkmn|
@@ -131,7 +131,7 @@ class Battle
       trainer = (side == 0) ? @player : @opponent
       requireds = []
       # Find out how many Pokémon each trainer on side needs to have
-      for i in 0...@sideSizes[side]
+      @sideSizes[side].times do |i|
         idxTrainer = pbGetOwnerIndexFromBattlerIndex((i * 2) + side)
         requireds[idxTrainer] = 0 if requireds[idxTrainer].nil?
         requireds[idxTrainer] += 1
@@ -184,7 +184,7 @@ class Battle
       end
     end
     # Send out Pokémon (opposing trainers first)
-    for side in [1, 0]
+    [1, 0].each do |side|
       next if side == 1 && wildBattle?
       msg = ""
       toSendOut = []
@@ -496,7 +496,7 @@ class Battle
   def pbDecisionOnTime
     counts   = [0, 0]
     hpTotals = [0, 0]
-    for side in 0...2
+    2.times do |side|
       pbParty(side).each do |pkmn|
         next if !pkmn || !pkmn.able?
         counts[side]   += 1
@@ -514,7 +514,7 @@ class Battle
   def pbDecisionOnTime2
     counts   = [0, 0]
     hpTotals = [0, 0]
-    for side in 0...2
+    2.times do |side|
       pbParty(side).each do |pkmn|
         next if !pkmn || !pkmn.able?
         counts[side]   += 1

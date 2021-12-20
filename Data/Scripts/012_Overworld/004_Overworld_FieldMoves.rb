@@ -155,7 +155,7 @@ def pbHiddenMoveAnimation(pokemon)
       phase = 6 if interp.done?
     end
     # Constantly stream the strobes across the screen
-    for strobe in strobes
+    strobes.each do |strobe|
       strobe.ox = strobe.viewport.rect.x
       strobe.oy = strobe.viewport.rect.y
       if !strobe.visible   # Initial placement of strobes
@@ -175,7 +175,7 @@ def pbHiddenMoveAnimation(pokemon)
     break if phase == 6
   end
   sprite.dispose
-  for strobe in strobes
+  strobes.each do |strobe|
     strobe.dispose
   end
   strobes.clear

@@ -148,7 +148,7 @@ class Battle
     #       is not generalised to larger side sizes.
     if !singleBattle?
       swaps = []   # Each element is an array of two battler indices to swap
-      for side in 0...2
+      2.times do |side|
         next if pbSideSize(side) == 1   # Only battlers on sides of size 2+ need to move
         # Check if any battler on this side is near any battler on the other side
         anyNear = false
@@ -256,7 +256,7 @@ class Battle
       pbDisplay(_INTL("{1}'s wish came true!", wishMaker))
     end
     # Sea of Fire damage (Fire Pledge + Grass Pledge combination)
-    for side in 0...2
+    2.times do |side|
       next if sides[side].effects[PBEffects::SeaOfFire] == 0
       @battle.pbCommonAnimation("SeaOfFire") if side == 0
       @battle.pbCommonAnimation("SeaOfFireOpp") if side == 1
@@ -516,7 +516,7 @@ class Battle
       pbGainExp
       return
     end
-    for side in 0...2
+    2.times do |side|
       # Reflect
       pbEORCountDownSideEffect(side, PBEffects::Reflect,
                                _INTL("{1}'s Reflect wore off!", @battlers[side].pbTeam))
@@ -664,7 +664,7 @@ class Battle
       b.lastFoeAttacker.clear
     end
     # Reset/count down side-specific effects (no messages)
-    for side in 0...2
+    2.times do |side|
       @sides[side].effects[PBEffects::CraftyShield]         = false
       if !@sides[side].effects[PBEffects::EchoedVoiceUsed]
         @sides[side].effects[PBEffects::EchoedVoiceCounter] = 0

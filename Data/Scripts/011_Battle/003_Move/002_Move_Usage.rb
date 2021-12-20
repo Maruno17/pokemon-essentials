@@ -241,7 +241,7 @@ class Battle::Move
   def pbAnimateHitAndHPLost(user, targets)
     # Animate allies first, then foes
     animArray = []
-    for side in 0...2   # side here means "allies first, then foes"
+    2.times do |side|   # side here means "allies first, then foes"
       targets.each do |b|
         next if b.damageState.unaffected || b.damageState.hpLost == 0
         next if (side == 0 && b.opposes?(user)) || (side == 1 && !b.opposes?(user))

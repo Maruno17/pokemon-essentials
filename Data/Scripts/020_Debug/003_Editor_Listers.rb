@@ -314,7 +314,7 @@ class MapLister
     @maps = pbMapTree
     @addGlobalOffset = (addGlobal) ? 1 : 0
     @index = 0
-    for i in 0...@maps.length
+    @maps.length.times do |i|
       @index = i + @addGlobalOffset if @maps[i][0] == selmap
     end
   end
@@ -337,7 +337,7 @@ class MapLister
     if @addGlobalOffset == 1
       @commands.push(_INTL("[GLOBAL]"))
     end
-    for i in 0...@maps.length
+    @maps.length.times do |i|
       @commands.push(sprintf("%s%03d %s", ("  " * @maps[i][2]), @maps[i][0], @maps[i][1]))
     end
     return @commands
@@ -393,7 +393,7 @@ class SpeciesLister
       @commands.push(_INTL("[NEW SPECIES]"))
       @ids.push(true)
     end
-    for i in cmds
+    cmds.each do |i|
       @commands.push(sprintf("%03d: %s", i[0], i[2]))
       @ids.push(i[1])
     end
@@ -452,7 +452,7 @@ class ItemLister
       @commands.push(_INTL("[NEW ITEM]"))
       @ids.push(true)
     end
-    for i in cmds
+    cmds.each do |i|
       @commands.push(sprintf("%03d: %s", i[0], i[2]))
       @ids.push(i[1])
     end
@@ -513,7 +513,7 @@ class TrainerTypeLister
       @commands.push(_INTL("[NEW TRAINER TYPE]"))
       @ids.push(true)
     end
-    for t in cmds
+    cmds.each do |t|
       @commands.push(sprintf("%03d: %s", t[0], t[2]))
       @ids.push(t[1])
     end
@@ -604,7 +604,7 @@ class TrainerBattleLister
       @commands.push(_INTL("[NEW TRAINER BATTLE]"))
       @ids.push(true)
     end
-    for t in cmds
+    cmds.each do |t|
       if t[3] > 0
         @commands.push(_INTL("{1} {2} ({3}) x{4}",
                              GameData::TrainerType.get(t[1]).name, t[2], t[3],

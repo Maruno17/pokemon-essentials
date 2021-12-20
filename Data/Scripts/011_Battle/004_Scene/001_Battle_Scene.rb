@@ -381,7 +381,7 @@ class Battle::Scene
   #=============================================================================
   def pbSelectBattler(idxBattler, selectMode = 1)
     numWindows = @battle.sideSizes.max * 2
-    for i in 0...numWindows
+    numWindows.times do |i|
       sel = (idxBattler.is_a?(Array)) ? !idxBattler[i].nil? : i == idxBattler
       selVal = (sel) ? selectMode : 0
       @sprites["dataBox_#{i}"].selected = selVal if @sprites["dataBox_#{i}"]

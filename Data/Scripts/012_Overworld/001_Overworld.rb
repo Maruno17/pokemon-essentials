@@ -7,7 +7,7 @@ Events.onMapUpdate += proc { |_sender, _e|
   last = $PokemonGlobal.pokerusTime
   now = pbGetTimeNow
   if !last || last.year != now.year || last.month != now.month || last.day != now.day
-    for i in $player.pokemon_party
+    $player.pokemon_party.each do |i|
       i.lowerPokerusCount
     end
     $PokemonGlobal.pokerusTime = now
@@ -18,7 +18,7 @@ Events.onMapUpdate += proc { |_sender, _e|
 # healed Pokémon has it.
 def pbPokerus?
   return false if $game_switches[Settings::SEEN_POKERUS_SWITCH]
-  for i in $player.party
+  $player.party.each do |i|
     return true if i.pokerusStage == 1
   end
   return false
@@ -78,7 +78,7 @@ Events.onStepTaken += proc {
   $PokemonGlobal.happinessSteps = 0 if !$PokemonGlobal.happinessSteps
   $PokemonGlobal.happinessSteps += 1
   if $PokemonGlobal.happinessSteps >= 128
-    for pkmn in $player.able_party
+    $player.able_party.each do |pkmn|
       pkmn.changeHappiness("walking") if rand(2) == 0
     end
     $PokemonGlobal.happinessSteps = 0
@@ -91,7 +91,7 @@ Events.onStepTakenTransferPossible += proc { |_sender, e|
   next if handled[0]
   if $PokemonGlobal.stepcount % 4 == 0 && Settings::POISON_IN_FIELD
     flashed = false
-    for i in $player.able_party
+    $player.able_party.each do |i|
       if i.status == :POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
           pbFlash(Color.new(255, 0, 0, 128), 8)
@@ -131,7 +131,7 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
   event = e[0]   # Get the event affected by field movement
   thistile = $map_factory.getRealTilePos(event.map.map_id, event.x, event.y)
   map = $map_factory.getMap(thistile[0])
-  for i in [2, 1, 0]
+  [2, 1, 0].each do |i|
     tile_id = map.data[thistile[1], thistile[2], i]
     next if tile_id == nil
     next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
@@ -284,7 +284,7 @@ Events.onMapSceneChange += proc { |_sender, e|
   if mapChanged && map_metadata && map_metadata.announce_location
     nosignpost = false
     if $PokemonGlobal.mapTrail[1]
-      for i in 0...Settings::NO_SIGNPOSTS.length / 2
+      (Settings::NO_SIGNPOSTS.length / 2).times do |i|
         nosignpost = true if Settings::NO_SIGNPOSTS[2 * i] == $PokemonGlobal.mapTrail[1] &&
                              Settings::NO_SIGNPOSTS[(2 * i) + 1] == $game_map.map_id
         nosignpost = true if Settings::NO_SIGNPOSTS[(2 * i) + 1] == $PokemonGlobal.mapTrail[1] &&
@@ -691,7 +691,7 @@ def pbRegisterPartner(tr_type, tr_name, tr_id = 0)
   pbCancelVehicles
   trainer = pbLoadTrainer(tr_type, tr_name, tr_id)
   Events.onTrainerPartyLoad.trigger(nil, trainer)
-  for i in trainer.party
+  trainer.party.each do |i|
     i.owner = Pokemon::Owner.new_from_trainer(trainer)
     i.calc_stats
   end

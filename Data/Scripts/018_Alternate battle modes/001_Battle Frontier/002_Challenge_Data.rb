@@ -130,7 +130,7 @@ class PBPokemon
     end
     moves = pieces[4].split(/\s*,\s*/)
     moveid = []
-    for i in 0...Pokemon::MAX_MOVES
+    Pokemon::MAX_MOVES.times do |i|
       move_data = GameData::Move.try_get(moves[i])
       moveid.push(move_data.id) if move_data
     end

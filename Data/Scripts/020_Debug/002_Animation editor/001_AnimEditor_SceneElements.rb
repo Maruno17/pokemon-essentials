@@ -5,7 +5,7 @@ class Window_Menu < Window_CommandPokemon
   def initialize(commands, x, y)
     tempbitmap = Bitmap.new(32, 32)
     w = 0
-    for i in commands
+    commands.each do |i|
       width = tempbitmap.text_size(i).width
       w = width if w < width
     end
@@ -28,7 +28,7 @@ class Window_Menu < Window_CommandPokemon
     mousepos = Mouse.getMousePos
     return -1 if !mousepos
     toprow = self.top_row
-    for i in toprow...toprow + @item_max
+    (toprow...toprow + @item_max).each do |i|
       rc = Rect.new(0, 32 * (i - toprow), self.contents.width, 32)
       rc.x += self.x + self.leftEdge
       rc.y += self.y + self.topEdge
@@ -229,7 +229,7 @@ class AnimationWindow < SpriteWrapper
       rect = Rect.new(0, 0, 0, 0)
       rectdst = Rect.new(0, 0, 0, 0)
       x = arrowwidth
-      for i in 0...NUMFRAMES
+      NUMFRAMES.times do |i|
         j = i + @start
         rect.set((j % 5) * 192, (j / 5) * 192, 192, 192)
         rectdst.set(x, 0, 96, 96)
@@ -237,7 +237,7 @@ class AnimationWindow < SpriteWrapper
         x += 96
       end
     end
-    for i in 0...NUMFRAMES
+    NUMFRAMES.times do |i|
       drawrect(@contents, arrowwidth + (i * 96), 0, 96, 96, Color.new(100, 100, 100))
       if @start + i == @selected && havebitmap
         drawborder(@contents, arrowwidth + (i * 96), 0, 96, 96, Color.new(255, 0, 0))
@@ -265,10 +265,10 @@ class AnimationWindow < SpriteWrapper
     right.y += self.y
     swatchrects = []
     repeattime = Input.time?(Input::MOUSELEFT) / 1000
-    for i in 0...NUMFRAMES
+    NUMFRAMES.times do |i|
       swatchrects.push(Rect.new(arrowwidth + (i * 96) + self.x, self.y, 96, 96))
     end
-    for i in 0...NUMFRAMES
+    NUMFRAMES.times do |i|
       if swatchrects[i].contains(mousepos[0], mousepos[1])
         @selected = @start + i
         @changed = true
@@ -458,12 +458,12 @@ class AnimationCanvas < Sprite
     @target = AnimatedBitmap.new("Graphics/Pictures/testfront").deanimate
     @testscreen = AnimatedBitmap.new("Graphics/Pictures/testscreen")
     self.bitmap = @testscreen.bitmap
-    for i in 0...PBAnimation::MAX_SPRITES
+    PBAnimation::MAX_SPRITES.times do |i|
       @lastframesprites[i] = SpriteFrame.new(i, @celsprites[i], viewport, true)
       @lastframesprites[i].selected = false
       @lastframesprites[i].visible = false
     end
-    for i in 0...PBAnimation::MAX_SPRITES
+    PBAnimation::MAX_SPRITES.times do |i|
       @celsprites[i] = Sprite.new(viewport)
       @celsprites[i].visible = false
       @celsprites[i].src_rect = Rect.new(0, 0, 0, 0)
@@ -499,7 +499,7 @@ class AnimationCanvas < Sprite
   def animbitmap=(value)
     @animbitmap.dispose if @animbitmap
     @animbitmap = value
-    for i in 2...PBAnimation::MAX_SPRITES
+    (2...PBAnimation::MAX_SPRITES).each do |i|
       @celsprites[i].bitmap = @animbitmap if @celsprites[i]
     end
     self.invalidate
@@ -512,7 +512,7 @@ class AnimationCanvas < Sprite
     @selectedbitmap.dispose if @selectedbitmap
     @celbitmap.dispose if @celbitmap
     self.bitmap.dispose if self.bitmap
-    for i in 0...PBAnimation::MAX_SPRITES
+    PBAnimation::MAX_SPRITES.times do |i|
       @celsprites[i].dispose if @celsprites[i]
     end
     super
@@ -557,7 +557,7 @@ class AnimationCanvas < Sprite
       @sprites["pokemon_1"].x += BORDERSIZE
       @sprites["pokemon_1"].y += BORDERSIZE
       oldstate = []
-      for i in 0...PBAnimation::MAX_SPRITES
+      PBAnimation::MAX_SPRITES.times do |i|
         oldstate.push([@celsprites[i].visible, @framesprites[i].visible, @lastframesprites[i].visible])
         @celsprites[i].visible = false
         @framesprites[i].visible = false
@@ -568,7 +568,7 @@ class AnimationCanvas < Sprite
         self.update
         break if !@playing
       end
-      for i in 0...PBAnimation::MAX_SPRITES
+      PBAnimation::MAX_SPRITES.times do |i|
         @celsprites[i].visible = oldstate[i][0]
         @framesprites[i].visible = oldstate[i][1]
         @lastframesprites[i].visible = oldstate[i][2]
@@ -581,7 +581,7 @@ class AnimationCanvas < Sprite
   end
 
   def invalidate
-    for i in 0...PBAnimation::MAX_SPRITES
+    PBAnimation::MAX_SPRITES.times do |i|
       invalidateCel(i)
     end
   end
@@ -635,7 +635,7 @@ class AnimationCanvas < Sprite
 
   def offsetFrame(frame, ox, oy)
     if frame >= 0 && frame < @animation.length
-      for i in 0...PBAnimation::MAX_SPRITES
+      PBAnimation::MAX_SPRITES.times do |i|
         if !self.locked?(i) && @animation[frame][i]
           @animation[frame][i][AnimFrame::X] += ox
           @animation[frame][i][AnimFrame::Y] += oy
@@ -648,7 +648,7 @@ class AnimationCanvas < Sprite
   # Clears all items in the frame except locked items
   def clearFrame(frame)
     if frame >= 0 && frame < @animation.length
-      for i in 0...PBAnimation::MAX_SPRITES
+      PBAnimation::MAX_SPRITES.times do |i|
         if self.deletable?(i)
           @animation[frame][i] = nil
         else
@@ -667,7 +667,7 @@ class AnimationCanvas < Sprite
 
   def copyFrame(src, dst)
     return if dst >= @animation.length
-    for i in 0...PBAnimation::MAX_SPRITES
+    PBAnimation::MAX_SPRITES.times do |i|
       clonedframe = @animation[src][i]
       clonedframe = clonedframe.clone if clonedframe && clonedframe != true
       @animation[dst][i] = clonedframe
@@ -704,7 +704,7 @@ class AnimationCanvas < Sprite
   def pasteCel(x, y)
     return if @currentframe >= @animation.length
     return if Clipboard.typekey != "PBAnimCel"
-    for i in 0...PBAnimation::MAX_SPRITES
+    PBAnimation::MAX_SPRITES.times do |i|
       next if @animation[@currentframe][i]
       @animation[@currentframe][i] = Clipboard.data
       cel = @animation[@currentframe][i]
@@ -754,7 +754,7 @@ class AnimationCanvas < Sprite
     if cel[AnimFrame::PATTERN] < 0
       count = 0
       pattern = cel[AnimFrame::PATTERN]
-      for i in 0...PBAnimation::MAX_SPRITES
+      PBAnimation::MAX_SPRITES.times do |i|
         othercel = @animation[self.currentframe][i]
         count += 1 if othercel && othercel[AnimFrame::PATTERN] == pattern
       end
@@ -786,7 +786,7 @@ class AnimationCanvas < Sprite
 
   def addSprite(x, y)
     return false if @currentframe >= @animation.length
-    for i in 0...PBAnimation::MAX_SPRITES
+    PBAnimation::MAX_SPRITES.times do |i|
       next if @animation[@currentframe][i]
       @animation[@currentframe][i] = pbCreateCel(x, y, @pattern, @animation.position)
       @dirty[i] = true
@@ -803,7 +803,7 @@ class AnimationCanvas < Sprite
       if Input.trigger?(Input::MOUSELEFT)   # Left mouse button
         selectedcel = -1
         usealpha = (Input.press?(Input::ALT)) ? true : false
-        for j in 0...PBAnimation::MAX_SPRITES
+        PBAnimation::MAX_SPRITES.times do |j|
           if pbSpriteHitTest(@celsprites[j], mousepos[0], mousepos[1], usealpha, false)
             selectedcel = j
           end
@@ -924,7 +924,7 @@ class AnimationCanvas < Sprite
 #    @testscreen.update
 #    self.bitmap=@testscreen.bitmap
     if @currentframe < @animation.length
-      for i in 0...PBAnimation::MAX_SPRITES
+      PBAnimation::MAX_SPRITES.times do |i|
         if @dirty[i]
           if @celsprites[i]
             setBitmap(i, @currentframe)
@@ -938,7 +938,7 @@ class AnimationCanvas < Sprite
         end
       end
     else
-      for i in 0...PBAnimation::MAX_SPRITES
+      PBAnimation::MAX_SPRITES.times do |i|
         pbSpriteSetAnimFrame(@celsprites[i], nil, @celsprites[0], @celsprites[1], true)
         @celsprites[i].x += BORDERSIZE
         @celsprites[i].y += BORDERSIZE

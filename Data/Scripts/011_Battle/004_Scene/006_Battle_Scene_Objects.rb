@@ -133,14 +133,14 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
 
   def opacity=(value)
     super
-    for i in @sprites
+    @sprites.each do |i|
       i[1].opacity = value if !i[1].disposed?
     end
   end
 
   def visible=(value)
     super
-    for i in @sprites
+    @sprites.each do |i|
       i[1].visible = value if !i[1].disposed?
     end
     @expBar.visible = (value && @showExp)
@@ -148,7 +148,7 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
 
   def color=(value)
     super
-    for i in @sprites
+    @sprites.each do |i|
       i[1].color = value if !i[1].disposed?
     end
   end
@@ -335,7 +335,7 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
         @expFlash = Graphics.frame_rate / 5
         pbSEPlay("Pkmn exp full")
         self.flash(Color.new(64, 200, 248, 192), @expFlash)
-        for i in @sprites
+        @sprites.each do |i|
           i[1].flash(Color.new(64, 200, 248, 192), @expFlash) if !i[1].disposed?
         end
       else

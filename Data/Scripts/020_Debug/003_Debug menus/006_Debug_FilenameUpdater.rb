@@ -7,8 +7,8 @@ module FilenameUpdater
   def readDirectoryFiles(directory, formats)
     files = []
     Dir.chdir(directory) {
-      for i in 0...formats.length
-        Dir.glob(formats[i]) { |f| files.push(f) }
+      formats.each do |format|
+        Dir.glob(format) { |f| files.push(f) }
       end
     }
     return files
@@ -40,14 +40,14 @@ module FilenameUpdater
     Graphics.update
     Console.echo_li _INTL("Checking {1} maps for used berry tree charsets...", mapData.mapinfos.keys.length)
     idx = 0
-    for id in mapData.mapinfos.keys.sort
+    mapData.mapinfos.keys.sort.each do |id|
       echo "." if idx % 20 == 0
       idx += 1
       Graphics.update if idx % 250 == 0
       map = mapData.getMap(id)
       next if !map || !mapData.mapinfos[id]
       changed = false
-      for key in map.events.keys
+      map.events.keys.each do |key|
         if Time.now.to_i - t >= 5
           Graphics.update
           t = Time.now.to_i

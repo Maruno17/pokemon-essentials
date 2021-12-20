@@ -11,7 +11,7 @@ end
 
 def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   party = []
-  for i in 0...Settings::MAX_PARTY_SIZE
+  Settings::MAX_PARTY_SIZE.times do |i|
     if i == 0
       pbMessage(_INTL("Please enter the first Pokémon.", i))
     elsif !pbConfirmMessage(_INTL("Add another Pokémon?"))
@@ -99,7 +99,7 @@ def pbGetFreeTrainerParty(tr_type, tr_name)
   tr_type_data = GameData::TrainerType.try_get(tr_type)
   raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
   tr_type = tr_type_data.id
-  for i in 0...256
+  256.times do |i|
     return i if !GameData::Trainer.try_get(tr_type, tr_name, i)
   end
   return -1

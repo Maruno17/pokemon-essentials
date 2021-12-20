@@ -55,7 +55,7 @@ class TilePuzzleCursor < BitmapSprite
     # Cursor
     if @game != 3
       expand = (@holding) ? 0 : 4
-      for i in 0...4
+      4.times do |i|
         self.bitmap.blt(
           x + ((i % 2) * (@tilewidth - (@cursorbitmap.width / 4))) + (expand * (((i % 2) * 2) - 1)),
           y + ((i / 2) * (@tileheight - (@cursorbitmap.height / 2))) + (expand * (((i / 2) * 2) - 1)),
@@ -72,7 +72,7 @@ class TilePuzzleCursor < BitmapSprite
              @tilewidth - (@cursorbitmap.width / 4) + expand, (@tilewidth - (@cursorbitmap.width / 4)) / 2]
       yin = [@tileheight - (@cursorbitmap.height / 2) + expand, (@tileheight - (@cursorbitmap.height / 2)) / 2,
              (@tileheight - (@cursorbitmap.height / 2)) / 2, -expand]
-      for i in 0...4
+      4.times do |i|
         if @arrows[i]
           self.bitmap.blt(x + xin[i], y + yin[i], @cursorbitmap.bitmap,
                           Rect.new((@cursorbitmap.width / 2) + ((i % 2) * (@cursorbitmap.width / 4)),
@@ -97,9 +97,9 @@ class TilePuzzleScene
   def update
     xtop = (Graphics.width - (@tilewidth * @boardwidth)) / 2
     ytop = ((Graphics.height - (@tileheight * @boardheight)) / 2) + (@tileheight / 2) - 32
-    for i in 0...@boardwidth * @boardheight
+    (@boardwidth * @boardheight).times do |i|
       pos = -1
-      for j in 0...@tiles.length
+      @tiles.length.times do |j|
         pos = j if @tiles[j] == i
       end
       @sprites["tile#{i}"].z = 0
@@ -139,7 +139,7 @@ class TilePuzzleScene
 
   def updateCursor
     arrows = []
-    for i in 0...4
+    4.times do |i|
       arrows.push(pbCanMoveInDir?(@sprites["cursor"].position, (i + 1) * 2, @game == 6))
     end
     @sprites["cursor"].arrows = arrows
@@ -169,7 +169,7 @@ class TilePuzzleScene
     end
     @tilewidth = @tilebitmap.width / @boardwidth
     @tileheight = @tilebitmap.height / @boardheight
-    for i in 0...@boardwidth * @boardheight
+    (@boardwidth * @boardheight).times do |i|
       @sprites["tile#{i}"] = BitmapSprite.new(@tilewidth, @tileheight, @viewport)
       @sprites["tile#{i}"].ox = @tilewidth / 2
       @sprites["tile#{i}"].oy = @tileheight / 2
@@ -188,7 +188,7 @@ class TilePuzzleScene
 
   def pbShuffleTiles
     ret = []
-    for i in 0...@boardwidth * @boardheight
+    (@boardwidth * @boardheight).times do |i|
       ret.push(i)
       @angles.push(0)
     end
@@ -209,9 +209,9 @@ class TilePuzzleScene
       if @game == 3  # Make sure only solvable Mystic Squares are allowed.
         num = 0
         blank = -1
-        for i in 0...ret.length - 1
+        (ret.length - 1).times do |i|
           blank = i if ret[i] == (@boardwidth * @boardheight) - 1
-          for j in i...ret.length
+          (i...ret.length).each do |j|
             num += 1 if ret[j] < ret[i] && ret[i] != (@boardwidth * @boardheight) - 1 &&
                         ret[j] != (@boardwidth * @boardheight) - 1
           end
@@ -224,13 +224,13 @@ class TilePuzzleScene
       end
       if @game == 1 || @game == 2
         ret2 = []
-        for i in 0...@boardwidth * @boardheight
+        (@boardwidth * @boardheight).times do |i|
           ret2.push(-1)
         end
         ret = ret2 + ret
       end
       if @game == 2 || @game == 5
-        for i in 0...@angles.length
+        @angles.length.times do |i|
           @angles[i] = rand(4)
         end
       end
@@ -240,7 +240,7 @@ class TilePuzzleScene
 
   def pbDefaultCursorPosition
     if @game == 3
-      for i in 0...@boardwidth * @boardheight
+      (@boardwidth * @boardheight).times do |i|
         return i if @tiles[i] == (@boardwidth * @boardheight) - 1
       end
     end
@@ -330,27 +330,27 @@ class TilePuzzleScene
       if anim
         @sprites["cursor"].visible = false
         oldAngles = []
-        for i in group
+        group.each do |i|
           @sprites["tile#{@tiles[i]}"].z = 1
           oldAngles[i] = @sprites["tile#{@tiles[i]}"].angle
         end
         rotateTime = Graphics.frame_rate / 4
         angleDiff = 90.0 / rotateTime
         rotateTime.times do
-          for i in group
+          group.each do |i|
             @sprites["tile#{@tiles[i]}"].angle -= angleDiff
           end
           pbUpdateSpriteHash(@sprites)
           Graphics.update
           Input.update
         end
-        for i in group
+        group.each do |i|
           @sprites["tile#{@tiles[i]}"].z = 0
           @sprites["tile#{@tiles[i]}"].angle = oldAngles[i] - 90
         end
         @sprites["cursor"].visible = true if !pbCheckWin
       end
-      for i in group
+      group.each do |i|
         tile = @tiles[i]
         @angles[tile] -= 1
         @angles[tile] += 4 if @angles[tile] < 0
@@ -361,7 +361,7 @@ class TilePuzzleScene
   def pbGetNearTiles(pos)
     ret = [pos]
     if @game == 7
-      for i in [2, 4, 6, 8]
+      [2, 4, 6, 8].each do |i|
         ret.push(pbMoveCursor(pos, i)) if pbCanMoveInDir?(pos, i, true)
       end
     end
@@ -414,7 +414,7 @@ class TilePuzzleScene
             (dist < 0 && cursor >= @boardwidth)
         cursor += (@boardwidth * dist)
       end
-      for i in 0...@boardheight
+      @boardheight.times do |i|
         tiles.push(cursor - (i * dist * @boardwidth))
       end
     else
@@ -423,7 +423,7 @@ class TilePuzzleScene
             (dist < 0 && cursor % @boardwidth < @boardwidth - 1)
         cursor -= dist
       end
-      for i in 0...@boardwidth
+      @boardwidth.times do |i|
         tiles.push(cursor + (i * dist))
       end
     end
@@ -441,7 +441,7 @@ class TilePuzzleScene
       if [2, 8].include?(dir)
         distancePerFrame = (@tileheight.to_f / shiftTime).ceil
         shiftTime.times do
-          for i in tiles
+          tiles.each do |i|
             @sprites["tile#{@tiles[i]}"].y -= dist * distancePerFrame
           end
           pbUpdateSpriteHash(@sprites)
@@ -451,7 +451,7 @@ class TilePuzzleScene
       else
         distancePerFrame = (@tilewidth.to_f / shiftTime).ceil
         shiftTime.times do
-          for i in tiles
+          tiles.each do |i|
             @sprites["tile#{@tiles[i]}"].x += dist * distancePerFrame
           end
           pbUpdateSpriteHash(@sprites)
@@ -461,10 +461,10 @@ class TilePuzzleScene
       end
     end
     temp = []
-    for i in tiles
+    tiles.each do |i|
       temp.push(@tiles[i])
     end
-    for i in 0...temp.length
+    temp.length.times do |i|
       @tiles[tiles[(i + 1) % (temp.length)]] = temp[i]
     end
     if anim
@@ -487,7 +487,7 @@ class TilePuzzleScene
   end
 
   def pbCheckWin
-    for i in 0...@boardwidth * @boardheight
+    (@boardwidth * @boardheight).times do |i|
       return false if @tiles[i] != i
       return false if @angles[i] != 0
     end

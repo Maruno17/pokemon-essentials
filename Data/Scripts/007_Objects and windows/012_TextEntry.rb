@@ -41,7 +41,7 @@ class CharacterEntryHelper
     return false if @maxlength >= 0 && chars.length >= @maxlength
     chars.insert(@cursor, ch)
     @text = ""
-    for ch in chars
+    chars.each do |ch|
       @text += ch if ch
     end
     @cursor += 1
@@ -59,7 +59,7 @@ class CharacterEntryHelper
     return false if chars.length <= 0 || @cursor <= 0
     chars.delete_at(@cursor - 1)
     @text = ""
-    for ch in chars
+    chars.each do |ch|
       @text += ch if ch
     end
     @cursor -= 1
@@ -75,7 +75,7 @@ class CharacterEntryHelper
       chars = chars[0, @maxlength]
     end
     @text = ""
-    for ch in chars
+    chars.each do |ch|
       @text += ch if ch
     end
   end
@@ -198,7 +198,7 @@ class Window_TextEntry < SpriteWindow_Base
       break if fromcursor > width - 4
       startpos -= 1
     end
-    for i in startpos...scanlength
+    (startpos...scanlength).each do |i|
       c = (@helper.passwordChar != "") ? @helper.passwordChar : textscan[i]
       textwidth = bitmap.text_size(c).width
       next if c == "\n"
@@ -352,9 +352,9 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     line = 0 if line < 0
     line = totallines - 1 if line >= totallines
     maximumY = 0
-    for i in 0...textchars.length
-      thisline = textchars[i][5]
-      y = textchars[i][2]
+    textchars.each do |text|
+      thisline = text[5]
+      y = text[2]
       return y if thisline == line
       maximumY = y if maximumY < y
     end
@@ -368,9 +368,9 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     line = 0 if line < 0
     line = totallines - 1 if line >= totallines
     endpos = 0
-    for i in 0...textchars.length
-      thisline = textchars[i][5]
-      thislength = textchars[i][8]
+    textchars.each do |text|
+      thisline = text[5]
+      thislength = text[8]
       endpos += thislength if thisline == line
     end
     return endpos
@@ -383,11 +383,11 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     line = 0 if line < 0
     line = totallines - 1 if line >= totallines
     endpos = 0
-    for i in 0...textchars.length
-      thisline = textchars[i][5]
-      thispos = textchars[i][6]
-      thiscolumn = textchars[i][7]
-      thislength = textchars[i][8]
+    textchars.each do |text|
+      thisline = text[5]
+      thispos = text[6]
+      thiscolumn = text[7]
+      thislength = text[8]
       if thisline == line
         endpos = thispos + thislength
 #        echoln [endpos,thispos+(column-thiscolumn),textchars[i]]
@@ -510,40 +510,40 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     cursorcolor = Color.new(0, 0, 0)
     textchars = getTextChars
     startY = getLineY(@firstline)
-    for i in 0...textchars.length
-      thisline = textchars[i][5]
-      thiscolumn = textchars[i][7]
-      thislength = textchars[i][8]
-      textY = textchars[i][2] - startY
+    textchars.each do |text|
+      thisline = text[5]
+      thiscolumn = text[7]
+      thislength = text[8]
+      textY = text[2] - startY
       # Don't draw lines before the first or zero-length segments
       next if thisline < @firstline || thislength == 0
       # Don't draw lines beyond the window's height
       break if textY >= height
-      c = textchars[i][0]
+      c = text[0]
       # Don't draw spaces
       next if c == " "
-      textwidth = textchars[i][3] + 4   # add 4 to prevent draw_text from stretching text
-      textheight = textchars[i][4]
+      textwidth = text[3] + 4   # add 4 to prevent draw_text from stretching text
+      textheight = text[4]
       # Draw text
-      pbDrawShadowText(bitmap, textchars[i][1], textY, textwidth, textheight, c, @baseColor, @shadowColor)
+      pbDrawShadowText(bitmap, text[1], textY, textwidth, textheight, c, @baseColor, @shadowColor)
     end
     # Draw cursor
     if ((@frame / 10) & 1) == 0
       textheight = bitmap.text_size("X").height
       cursorY = (textheight * @cursorLine) - startY
       cursorX = 0
-      for i in 0...textchars.length
-        thisline = textchars[i][5]
-        thiscolumn = textchars[i][7]
-        thislength = textchars[i][8]
+      textchars.each do |text|
+        thisline = text[5]
+        thiscolumn = text[7]
+        thislength = text[8]
         if thisline == @cursorLine && @cursorColumn >= thiscolumn &&
            @cursorColumn <= thiscolumn + thislength
-          cursorY = textchars[i][2] - startY
-          cursorX = textchars[i][1]
-          textheight = textchars[i][4]
+          cursorY = text[2] - startY
+          cursorX = text[1]
+          textheight = text[4]
           posToCursor = @cursorColumn - thiscolumn
           if posToCursor >= 0
-            partialString = textchars[i][0].scan(/./m)[0, posToCursor].join("")
+            partialString = text[0].scan(/./m)[0, posToCursor].join("")
             cursorX += bitmap.text_size(partialString).width
           end
           break

@@ -404,9 +404,9 @@ module Compiler
       start = 1
     end
     subarrays = repeat && schema[1].length > 2
-    begin
+    loop do
       subrecord = []
-      for i in start...schema[1].length
+      (start...schema[1].length).each do |i|
         chr = schema[1][i, 1]
         case chr
         when "i"   # Integer
@@ -540,7 +540,8 @@ module Compiler
         end
       end
       break if repeat && nil_or_empty?(rec)
-    end while repeat
+      break unless repeat
+    end
     return (schema[1].length == 1) ? record[0] : record
   end
 
@@ -551,8 +552,8 @@ module Compiler
     rec = (record.is_a?(Array)) ? record.flatten : [record]
     start = (schema[1][0, 1] == "*") ? 1 : 0
     index = -1
-    begin
-      for i in start...schema[1].length
+    loop do
+      (start...schema[1].length).each do |i|
         index += 1
         file.write(",") if index > 0
         value = rec[index]
@@ -579,7 +580,7 @@ module Compiler
             when Module
               file.write(getConstantName(enumer, value))
             when Hash
-              for key in enumer.keys
+              enumer.keys.each do |key|
                 if enumer[key] == value
                   file.write(key)
                   break
@@ -602,7 +603,7 @@ module Compiler
               file.write(getConstantNameOrValue(enumer, value))
             when Hash
               hasenum = false
-              for key in enumer.keys
+              enumer.keys.each do |key|
                 if enumer[key] == value
                   file.write(key)
                   hasenum = true
@@ -619,7 +620,8 @@ module Compiler
         end
       end
       break if start > 0 && index >= rec.length - 1
-    end while start > 0
+      break if start <= 0
+    end
     return record
   end
 
@@ -845,7 +847,7 @@ module Compiler
       mustCompile = true if Input.press?(Input::CTRL)
       # Delete old data files in preparation for recompiling
       if mustCompile
-        for i in 0...dataFiles.length
+        dataFiles.length.times do |i|
           begin
             File.delete("Data/#{dataFiles[i]}") if safeExists?("Data/#{dataFiles[i]}")
           rescue SystemCallError
@@ -858,7 +860,7 @@ module Compiler
       e = $!
       raise e if "#{e.class}" == "Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)
       pbPrintException(e)
-      for i in 0...dataFiles.length
+      dataFiles.length.times do |i|
         begin
           File.delete("Data/#{dataFiles[i]}")
         rescue SystemCallError

@@ -417,13 +417,13 @@ class Battle::Move::LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2 < Battle::Move
 
   def pbMoveFailed?(user, targets)
     failed = true
-    for i in 0...@statUp.length / 2
+    (@statUp.length / 2).times do |i|
       if user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
         failed = false
         break
       end
     end
-    for i in 0...@statDown.length / 2
+    (@statDown.length / 2).times do |i|
       if user.pbCanLowerStatStage?(@statDown[i * 2], user, self)
         failed = false
         break
@@ -438,14 +438,14 @@ class Battle::Move::LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2 < Battle::Move
 
   def pbEffectGeneral(user)
     showAnim = true
-    for i in 0...@statDown.length / 2
+    (@statDown.length / 2).times do |i|
       next if !user.pbCanLowerStatStage?(@statDown[i * 2], user, self)
       if user.pbLowerStatStage(@statDown[i * 2], @statDown[(i * 2) + 1], user, showAnim)
         showAnim = false
       end
     end
     showAnim = true
-    for i in 0...@statUp.length / 2
+    (@statUp.length / 2).times do |i|
       next if !user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
       if user.pbRaiseStatStage(@statUp[i * 2], @statUp[(i * 2) + 1], user, showAnim)
         showAnim = false
@@ -1359,7 +1359,7 @@ class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
   def pbCheckForMirrorArmor(user, target)
     if target.hasActiveAbility?(:MIRRORARMOR) && user.index != target.index
       failed = true
-      for i in 0...@statDown.length / 2
+      (@statDown.length / 2).times do |i|
         next if target.statStageAtMin?(@statDown[i * 2])
         next if !user.pbCanLowerStatStage?(@statDown[i * 2], target, self, false, false, true)
         failed = false
@@ -1383,7 +1383,7 @@ class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
     return if !pbCheckForMirrorArmor(user, target)
     showAnim = true
     showMirrorArmorSplash = true
-    for i in 0...@statDown.length / 2
+    (@statDown.length / 2).times do |i|
       next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
       if target.pbLowerStatStage(@statDown[i * 2], @statDown[(i * 2) + 1], user,
                                  showAnim, false, (showMirrorArmorSplash) ? 1 : 3)

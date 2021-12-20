@@ -381,13 +381,13 @@ class PokemonEntryScene2
     @helper = CharacterEntryHelper.new(initialText)
     # Create bitmaps
     @bitmaps = []
-    for i in 0...@@Characters.length
+    @@Characters.length.times do |i|
       @bitmaps[i] = AnimatedBitmap.new(sprintf("Graphics/Pictures/Naming/overlay_tab_#{i + 1}"))
       b = @bitmaps[i].bitmap.clone
       pbSetSystemFont(b)
       textPos = []
-      for y in 0...COLUMNS
-        for x in 0...ROWS
+      COLUMNS.times do |y|
+        ROWS.times do |x|
           pos = (y * ROWS) + x
           textPos.push([@@Characters[i][0][pos], 44 + (x * 32), 12 + (y * 38), 2,
                         Color.new(16, 24, 32), Color.new(160, 160, 160)])
@@ -517,7 +517,7 @@ class PokemonEntryScene2
     ]
     chars = @helper.textChars
     x = 166
-    for ch in chars
+    chars.each do |ch|
       textPositions.push([ch, x, 42, false, Color.new(16, 24, 32), Color.new(168, 184, 184)])
       x += 24
     end
@@ -566,7 +566,7 @@ class PokemonEntryScene2
   end
 
   def pbUpdate
-    for i in 0...@@Characters.length
+    @@Characters.length.times do |i|
       @bitmaps[i].update
     end
     if @init || Graphics.frame_count % 5 == 0
@@ -608,20 +608,22 @@ class PokemonEntryScene2
         @cursorpos -= 1
         @cursorpos = OK if @cursorpos < MODE1
       else
-        begin
+        loop do
           cursormod = wrapmod(cursormod - 1, ROWS)
           @cursorpos = cursororigin + cursormod
-        end while pbColumnEmpty?(cursormod)
+          break unless pbColumnEmpty?(cursormod)
+        end
       end
     elsif Input.repeat?(Input::RIGHT)
       if @cursorpos < 0   # Controls
         @cursorpos += 1
         @cursorpos = MODE1 if @cursorpos > OK
       else
-        begin
+        loop do
           cursormod = wrapmod(cursormod + 1, ROWS)
           @cursorpos = cursororigin + cursormod
-        end while pbColumnEmpty?(cursormod)
+          break unless pbColumnEmpty?(cursormod)
+        end
       end
     elsif Input.repeat?(Input::UP)
       if @cursorpos < 0         # Controls
@@ -738,7 +740,7 @@ class PokemonEntryScene2
 
   def pbEndScene
     pbFadeOutAndHide(@sprites) { pbUpdate }
-    for bitmap in @bitmaps
+    @bitmaps.each do |bitmap|
       bitmap.dispose if bitmap
     end
     @bitmaps.clear

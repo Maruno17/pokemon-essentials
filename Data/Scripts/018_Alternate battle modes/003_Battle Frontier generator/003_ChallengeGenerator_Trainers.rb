@@ -17,7 +17,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   # No battle trainers found; fill bttrainers with 200 randomly chosen ones from
   # all that exist (with a base money < 100)
   if bttrainers.length == 0
-    for i in 0...200
+    200.times do |i|
       yield(nil) if block_given? && i % 50 == 0
       trainerid = nil
       if GameData::TrainerType.exists?(:YOUNGSTER) && rand(30) == 0
@@ -53,7 +53,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   rulesetTeam = rules.ruleset.copy.clearPokemonRules
   pkmntypes = []
   validities = []
-  for pkmn in pokemonlist
+  pokemonlist.each do |pkmn|
     pkmn.level = suggestedLevel if pkmn.level != suggestedLevel
     pkmntypes.push(getTypes(pkmn.species))
     validities.push(rules.ruleset.isPokemonValid?(pkmn))
@@ -62,7 +62,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   # pokemonlist for that trainer, and copy the trainer and their set of Pokémon
   # to newbttrainers
   newbttrainers = []
-  for btt in 0...bttrainers.length
+  bttrainers.length.times do |btt|
     yield(nil) if block_given? && btt % 50 == 0
     trainerdata = bttrainers[btt]
     pokemonnumbers = trainerdata[5] || []
@@ -71,7 +71,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
     species = []
     types = {}
     GameData::Type.each { |t| types[t.id] = 0 }
-    for pn in pokemonnumbers
+    pokemonnumbers.each do |pn|
       pkmn = btpokemon[pn]
       species.push(pkmn.species)
       t = getTypes(pkmn.species)
@@ -104,7 +104,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
       # pokemonlist, or if the trainer is positioned earlier in bttrainers (i.e.
       # later trainers get better Pokémon).
       numbersPokemon = []
-      for index in 0...pokemonlist.length
+      pokemonlist.length.times do |index|
         next if !validities[index]
         pkmn = pokemonlist[index]
         absDiff = ((index * 8 / pokemonlist.length) - (btt * 8 / bttrainers.length)).abs
@@ -137,7 +137,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
       # formed from what's in numbers
       if numbers.length < Settings::MAX_PARTY_SIZE ||
          !rulesetTeam.hasValidTeam?(numbersPokemon)
-        for index in 0...pokemonlist.length
+        pokemonlist.length.times do |index|
           pkmn = pokemonlist[index]
           next if !validities[index]
           if species.include?(pkmn.species)
@@ -180,18 +180,18 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   # Add the trainer and Pokémon data from above to trainer_lists.dat, and then
   # create all PBS files from it
   pbpokemonlist = []
-  for pkmn in pokemonlist
+  pokemonlist.each do |pkmn|
     pbpokemonlist.push(PBPokemon.fromPokemon(pkmn))
   end
   trlists = (load_data("Data/trainer_lists.dat") rescue [])
   hasDefault = false
   trIndex = -1
-  for i in 0...trlists.length
+  trlists.length.times do |i|
     next if !trlists[i][5]
     hasDefault = true
     break
   end
-  for i in 0...trlists.length
+  trlists.length.times do |i|
     if trlists[i][2].include?(trfile)
       trIndex = i
       trlists[i][0] = newbttrainers

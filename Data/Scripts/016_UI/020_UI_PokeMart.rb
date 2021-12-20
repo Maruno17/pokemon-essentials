@@ -257,7 +257,7 @@ class PokemonMart_Scene
     @viewport2.z = 99999
     numFrames = Graphics.frame_rate * 4 / 10
     alphaDiff = (255.0 / numFrames).ceil
-    for j in 0..numFrames
+    (0..numFrames).each do |j|
       col = Color.new(0, 0, 0, j * alphaDiff)
       @viewport2.color = col
       Graphics.update
@@ -301,7 +301,7 @@ class PokemonMart_Scene
     if @viewport2
       numFrames = Graphics.frame_rate * 4 / 10
       alphaDiff = (255.0 / numFrames).ceil
-      for j in 0..numFrames
+      (0..numFrames).each do |j|
         col = Color.new(0, 0, 0, (numFrames - j) * alphaDiff)
         @viewport2.color = col
         Graphics.update

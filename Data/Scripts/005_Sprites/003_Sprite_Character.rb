@@ -28,7 +28,7 @@ class BushBitmap
     ret = Bitmap.new(bitmap.width, bitmap.height)
     charheight = ret.height / 4
     cy = charheight - depth - 2
-    for i in 0...4
+    4.times do |i|
       y = i * charheight
       if cy >= 0
         ret.blt(0, y, bitmap, Rect.new(0, y, ret.width, cy))

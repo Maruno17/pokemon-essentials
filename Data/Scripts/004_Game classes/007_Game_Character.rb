@@ -88,8 +88,8 @@ class Game_Character
   end
 
   def each_occupied_tile
-    for i in @x...(@x + @width)
-      for j in (@y - @height + 1)..@y
+    (@x...(@x + @width)).each do |i|
+      ((@y - @height + 1)..@y).each do |j|
         yield i, j
       end
     end
@@ -240,7 +240,7 @@ class Game_Character
       return false unless self.map.passable?(x, y, d, self)
       return false unless self.map.passable?(new_x, new_y, 10 - d, self)
     end
-    for event in self.map.events.values
+    self.map.events.values.each do |event|
       next if self == event || !event.at_coordinate?(new_x, new_y) || event.through
       return false if self != $game_player || event.character_name != ""
     end
@@ -254,24 +254,24 @@ class Game_Character
     case dir
     when 2, 8   # Down, up
       y_diff = (dir == 8) ? @height - 1 : 0
-      for i in start_x...(start_x + @width)
+      (start_x...(start_x + @width)).each do |i|
         return false if !passable?(i, start_y - y_diff, dir, strict)
       end
       return true
     when 4, 6   # Left, right
       x_diff = (dir == 6) ? @width - 1 : 0
-      for i in (start_y - @height + 1)..start_y
+      ((start_y - @height + 1)..start_y).each do |i|
         return false if !passable?(start_x + x_diff, i, dir, strict)
       end
       return true
     when 1, 3   # Down diagonals
       # Treated as moving down first and then horizontally, because that
       # describes which tiles the character's feet touch
-      for i in start_x...(start_x + @width)
+      (start_x...(start_x + @width)).each do |i|
         return false if !passable?(i, start_y, 2, strict)
       end
       x_diff = (dir == 3) ? @width - 1 : 0
-      for i in (start_y - @height + 1)..start_y
+      ((start_y - @height + 1)..start_y).each do |i|
         return false if !passable?(start_x + x_diff, i + 1, dir + 3, strict)
       end
       return true
@@ -279,11 +279,11 @@ class Game_Character
       # Treated as moving horizontally first and then up, because that describes
       # which tiles the character's feet touch
       x_diff = (dir == 9) ? @width - 1 : 0
-      for i in (start_y - @height + 1)..start_y
+      ((start_y - @height + 1)..start_y).each do |i|
         return false if !passable?(start_x + x_diff, i, dir - 3, strict)
       end
       x_offset = (dir == 9) ? 1 : -1
-      for i in start_x...(start_x + @width)
+      (start_x...(start_x + @width)).each do |i|
         return false if !passable?(i + x_offset, start_y - @height + 1, 8, strict)
       end
       return true

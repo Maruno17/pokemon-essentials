@@ -8,7 +8,7 @@ class Spriteset_Global
     @follower_sprites = FollowerSprites.new(Spriteset_Map.viewport)
     @playersprite = Sprite_Character.new(Spriteset_Map.viewport, $game_player)
     @picture_sprites = []
-    for i in 1..100
+    (1..100).each do |i|
       @picture_sprites.push(Sprite_Picture.new(@@viewport2, $game_screen.pictures[i]))
     end
     @timer_sprite = Sprite_Timer.new

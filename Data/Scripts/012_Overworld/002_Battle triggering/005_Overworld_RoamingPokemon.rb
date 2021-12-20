@@ -18,7 +18,7 @@ end
 # Resets all roaming Pokemon that were defeated without having been caught.
 def pbResetAllRoamers
   return if !$PokemonGlobal.roamPokemon
-  for i in 0...$PokemonGlobal.roamPokemon.length
+  $PokemonGlobal.roamPokemon.length.times do |i|
     next if $PokemonGlobal.roamPokemon[i] != true || !$PokemonGlobal.roamPokemonCaught[i]
     $PokemonGlobal.roamPokemon[i] = nil
   end
@@ -45,14 +45,14 @@ def pbRoamPokemon
   # Start all roamers off in random maps
   if !$PokemonGlobal.roamPosition
     $PokemonGlobal.roamPosition = {}
-    for i in 0...Settings::ROAMING_SPECIES.length
+    Settings::ROAMING_SPECIES.length.times do |i|
       next if !GameData::Species.exists?(Settings::ROAMING_SPECIES[i][0])
       keys = pbRoamingAreas(i).keys
       $PokemonGlobal.roamPosition[i] = keys[rand(keys.length)]
     end
   end
   # Roam each Pokémon in turn
-  for i in 0...Settings::ROAMING_SPECIES.length
+  Settings::ROAMING_SPECIES.length.times do |i|
     pbRoamPokemonOne(i)
   end
 end
@@ -77,7 +77,7 @@ def pbRoamPokemonOne(idxRoamer)
   newMapChoices = []
   nextMaps = pbRoamingAreas(idxRoamer)[currentMap]
   return if !nextMaps
-  for map in nextMaps
+  nextMaps.each do |map|
     # Only add map as a choice if the player hasn't been there recently
     newMapChoices.push(map)
   end

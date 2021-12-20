@@ -80,10 +80,10 @@ class EventScene
 
   def dispose
     return if disposed?
-    for sprite in @picturesprites
+    @picturesprites.each do |sprite|
       sprite.dispose
     end
-    for sprite in @usersprites
+    @usersprites.each do |sprite|
       sprite.dispose
     end
     @onCTrigger.clear
@@ -143,7 +143,7 @@ class EventScene
   def pictureWait(extraframes = 0)
     loop do
       hasRunning = false
-      for pic in @pictures
+      @pictures.each do |pic|
         hasRunning = true if pic.running?
       end
       break if !hasRunning
@@ -156,13 +156,13 @@ class EventScene
     return if disposed?
     Graphics.update
     Input.update
-    for picture in @pictures
+    @pictures.each do |picture|
       picture.update
     end
-    for sprite in @picturesprites
+    @picturesprites.each do |sprite|
       sprite.update
     end
-    for sprite in @usersprites
+    @usersprites.each do |sprite|
       next if !sprite || sprite.disposed? || !sprite.is_a?(Sprite)
       sprite.update
     end

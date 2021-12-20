@@ -38,21 +38,21 @@ class PokemonMapFactory
   end
 
   def hasMap?(id)
-    for map in @maps
+    @maps.each do |map|
       return true if map.map_id == id
     end
     return false
   end
 
   def getMapIndex(id)
-    for i in 0...@maps.length
+    @maps.length.times do |i|
       return i if @maps[i].map_id == id
     end
     return -1
   end
 
   def getMap(id, add = true)
-    for map in @maps
+    @maps.each do |map|
       return map if map.map_id == id
     end
     map = Game_Map.new
@@ -69,7 +69,7 @@ class PokemonMapFactory
     id = $game_map.map_id
     conns = MapFactoryHelper.getMapConnections
     if conns[id]
-      for conn in conns[id]
+      conns[id].each do |conn|
         mapidB = nil
         newx = 0
         newy = 0
@@ -119,7 +119,7 @@ class PokemonMapFactory
     id = $game_map.map_id
     conns = MapFactoryHelper.getMapConnections
     if conns[id]
-      for conn in conns[id]
+      conns[id].each do |conn|
         if conn[0] == id
           mapA = getMap(conn[0])
           newdispx = ((conn[4] - conn[1]) * Game_Map::REAL_RES_X) + mapA.display_x
@@ -180,7 +180,7 @@ class PokemonMapFactory
       return false unless map.passable?(x, y, 0, thisEvent)
     end
     # Check passability of event(s) in that spot
-    for event in map.events.values
+    map.events.values.each do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)
       return false if !event.through && event.character_name != ""
     end
@@ -207,7 +207,7 @@ class PokemonMapFactory
     elsif !map.passableStrict?(x, y, 0, thisEvent)
       return false
     end
-    for event in map.events.values
+    map.events.values.each do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)
       return false if !event.through && event.character_name != ""
     end
@@ -236,7 +236,7 @@ class PokemonMapFactory
     return true if mapID1 == mapID2
     conns = MapFactoryHelper.getMapConnections
     if conns[mapID1]
-      for conn in conns[mapID1]
+      conns[mapID1].each do |conn|
         return true if conn[0] == mapID2 || conn[3] == mapID2
       end
     end
@@ -250,7 +250,7 @@ class PokemonMapFactory
     end
     conns = MapFactoryHelper.getMapConnections
     if conns[thisMapID]
-      for conn in conns[thisMapID]
+      conns[thisMapID].each do |conn|
         if conn[0] == otherMapID
           posX = conn[4] - conn[1] + otherX - thisX
           posY = conn[5] - conn[2] + otherY - thisY
@@ -332,7 +332,7 @@ class PokemonMapFactory
     return [id, x, y] if getMapNoAdd(id).valid?(x, y)
     conns = MapFactoryHelper.getMapConnections
     if conns[id]
-      for conn in conns[id]
+      conns[id].each do |conn|
         if conn[0] == id
           newX = x + conn[4] - conn[1]
           newY = y + conn[5] - conn[2]
@@ -510,7 +510,7 @@ end
 # Unused
 def updateTilesets
   maps = $map_factory.maps
-  for map in maps
+  maps.each do |map|
     map.updateTileset if map
   end
 end

@@ -58,7 +58,7 @@ class Window_Pokedex < Window_DrawableCommand
     dheight = self.height - self.borderY
     self.contents = pbDoEnsureBitmap(self.contents, dwidth, dheight)
     self.contents.clear
-    for i in 0...@item_max
+    @item_max.times do |i|
       next if i < self.top_item || i > self.top_item + self.page_item_max
       drawItem(i, @item_max, itemRect(i))
     end
@@ -613,7 +613,7 @@ class PokemonPokedex_Scene
     # Draw selected option(s) text in top bar
     case mode
     when 2   # Type icons
-      for i in 0...2
+      2.times do |i|
         if !sel[i] || sel[i] < 0
           textpos.push(["----", 298 + (128 * i), 58, 2, base, shadow, 1])
         else
@@ -695,7 +695,7 @@ class PokemonPokedex_Scene
       textpos.push([txt1, xpos1 + halfwidth, ypos1, 2, base, nil, 1])
       textpos.push([txt2, xpos2 + halfwidth, ypos2, 2, base, nil, 1])
     else
-      for i in 0...sel.length
+      sel.length.times do |i|
         selrect = Rect.new(0, selbuttony, @selbitmap.bitmap.width, selbuttonheight)
         if sel[i] >= 0
           overlay.blt(xstart + ((sel[i] % cols) * xgap), ystart + ((sel[i] / cols).floor * ygap), @selbitmap.bitmap, selrect)
@@ -707,7 +707,7 @@ class PokemonPokedex_Scene
     # Draw options
     case mode
     when 0, 1   # Order, name
-      for i in 0...cmds.length
+      cmds.length.times do |i|
         x = xstart + halfwidth + ((i % cols) * xgap)
         y = ystart + 6 + ((i / cols).floor * ygap)
         textpos.push([cmds[i], x, y, 2, base, shadow, 1])
@@ -718,14 +718,14 @@ class PokemonPokedex_Scene
       end
     when 2   # Type
       typerect = Rect.new(0, 0, 96, 32)
-      for i in 0...cmds.length
+      cmds.length.times do |i|
         typerect.y = @typeCommands[i].icon_position * 32
         overlay.blt(xstart + 14 + ((i % cols) * xgap), ystart + 6 + ((i / cols).floor * ygap), @typebitmap.bitmap, typerect)
       end
       textpos.push(["----",
                     xstart + halfwidth + ((cols - 1) * xgap), ystart + 6 + ((cmds.length / cols).floor * ygap), 2, base, shadow, 1])
     when 5   # Color
-      for i in 0...cmds.length
+      cmds.length.times do |i|
         x = xstart + halfwidth + ((i % cols) * xgap)
         y = ystart + 6 + ((i / cols).floor * ygap)
         textpos.push([cmds[i].name, x, y, 2, base, shadow, 1])
@@ -734,7 +734,7 @@ class PokemonPokedex_Scene
                     xstart + halfwidth + ((cols - 1) * xgap), ystart + 6 + ((cmds.length / cols).floor * ygap), 2, base, shadow, 1])
     when 6   # Shape
       shaperect = Rect.new(0, 0, 60, 60)
-      for i in 0...cmds.length
+      cmds.length.times do |i|
         shaperect.y = @shapeCommands[i].icon_position * 60
         overlay.blt(xstart + 4 + ((i % cols) * xgap), ystart + 4 + ((i / cols).floor * ygap), @shapebitmap.bitmap, shaperect)
       end
@@ -838,7 +838,7 @@ class PokemonPokedex_Scene
     $PokemonGlobal.pokedexMode = MODENUMERICAL
     @searchParams = [$PokemonGlobal.pokedexMode, -1, -1, -1, -1, -1, -1, -1, -1, -1]
     pbRefreshDexList($PokemonGlobal.pokedexIndex[pbGetSavePositionIndex])
-    for i in 0...@dexlist.length
+    @dexlist.length.times do |i|
       next if @dexlist[i][0] != oldspecies
       @sprites["pokedex"].index = i
       pbRefresh
@@ -1202,7 +1202,7 @@ class PokemonPokedex_Scene
           params[9] = newparam[0] if newparam != nil
           pbRefreshDexSearch(params, index)
         when 7   # Clear filters
-          for i in 0...10
+          10.times do |i|
             params[i] = (i == 0) ? MODENUMERICAL : -1
           end
           pbRefreshDexSearch(params, index)

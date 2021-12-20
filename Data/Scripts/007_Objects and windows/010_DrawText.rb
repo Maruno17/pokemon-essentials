@@ -238,7 +238,7 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
       lastword[0] += 1
       y += 1
       x = 0
-      for i in lastword[0]...characters.length
+      (lastword[0]...characters.length).each do |i|
         characters[i][2] += lineheight
         charwidth = characters[i][3] - 2
         characters[i][1] = x
@@ -251,12 +251,12 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
   # Eliminate spaces before newlines and pause character
   if havenl
     firstspace = -1
-    for i in 0...characters.length
+    characters.length.times do |i|
       if characters[i][5] != false # If not a character
         firstspace = -1
       elsif (characters[i][0] == "\n" || isWaitChar(characters[i][0])) &&
             firstspace >= 0
-        for j in firstspace...i
+        (firstspace...i).each do |j|
           characters[j] = nil
         end
         firstspace = -1
@@ -267,21 +267,17 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
       end
     end
     if firstspace > 0
-      for j in firstspace...characters.length
+      (firstspace...characters.length).each do |j|
         characters[j] = nil
       end
     end
     characters.compact!
   end
-  for i in 0...characters.length
-    characters[i][1] = xDst + characters[i][1]
-  end
+  characters.each { |char| char[1] = xDst + char[1] }
   # Remove all characters with Y greater or equal to _yDst_+_heightDst_
   if heightDst >= 0
-    for i in 0...characters.length
-      if characters[i][2] >= yDst + heightDst
-        characters[i] = nil
-      end
+    characters.each_with_index do |char, i|
+      characters[i] = nil if char[2] >= yDst + heightDst
     end
     characters.compact!
   end
@@ -397,7 +393,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   end
   textchunks = []
   controls = []
-  oldtext = text
+#  oldtext = text
   while text[FORMATREGEXP]
     textchunks.push($~.pre_match)
     if $~[3]
@@ -424,7 +420,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
 #    realtextStart = oldtext[0, oldtext.length - realtext.length]
 #  end
   textchunks.push(text)
-  for chunk in textchunks
+  textchunks.each do |chunk|
     chunk.gsub!(/&lt;/, "<")
     chunk.gsub!(/&gt;/, ">")
     chunk.gsub!(/&apos;/, "'")
@@ -432,9 +428,9 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     chunk.gsub!(/&amp;/, "&")
   end
   textlen = 0
-  for i in 0...controls.length
+  controls.each_with_index do |control, i|
     textlen += textchunks[i].scan(/./m).length
-    controls[i][2] = textlen
+    control[2] = textlen
   end
   text = textchunks.join("")
   textchars = text.scan(/./m)
@@ -475,7 +471,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     graphicWidth = nil
     graphicHeight = nil
     graphicRect = nil
-    for i in 0...controls.length
+    controls.length.times do |i|
       if controls[i] && controls[i][2] == position
         control = controls[i][0]
         param = controls[i][1]
@@ -694,7 +690,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
       lastword[0] += 1
       y += 1
       x = 0
-      for i in lastword[0]...characters.length
+      (lastword[0]...characters.length).each do |i|
         characters[i][2] += lineheight
         charactersInternal[i][1] += 1
         extraspace = (charactersInternal[i][4]) ? charactersInternal[i][4] : 0
@@ -754,12 +750,12 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   if havenl
     # Eliminate spaces before newlines and pause character
     firstspace = -1
-    for i in 0...characters.length
+    characters.length.times do |i|
       if characters[i][5] != false # If not a character
         firstspace = -1
       elsif (characters[i][0] == "\n" || isWaitChar(characters[i][0])) &&
             firstspace >= 0
-        for j in firstspace...i
+        (firstspace...i).each do |j|
           characters[j] = nil
           charactersInternal[j] = nil
         end
@@ -773,7 +769,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
       end
     end
     if firstspace > 0
-      for j in firstspace...characters.length
+      (firstspace...characters.length).each do |j|
         characters[j] = nil
         charactersInternal[j] = nil
       end
@@ -788,7 +784,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   lastalign = 0
   lasty = 0
   runstart = 0
-  for i in 0...characters.length
+  characters.length.times do |i|
     c = characters[i]
     if i > 0 && (charactersInternal[i][0] != lastalign ||
        charactersInternal[i][1] != lasty)
@@ -806,7 +802,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   if collapseAlignments
     # Calculate the total width of each line
     totalLineWidths = []
-    for block in widthblocks
+    widthblocks.each do |block|
       y = block[4]
       if !totalLineWidths[y]
         totalLineWidths[y] = 0
@@ -821,9 +817,9 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     widthDst = [widthDst, (totalLineWidths.compact.max || 0)].min
   end
   # Now, based on the text runs found, recalculate Xs
-  for block in widthblocks
+  widthblocks.each do |block|
     next if block[0] >= block[1]
-    for i in block[0]...block[1]
+    (block[0]...block[1]).each do |i|
       case block[2]
       when 1 then characters[i][1] = xDst + (widthDst - block[3] - 4) + characters[i][1]
       when 2 then characters[i][1] = xDst + ((widthDst / 2) - (block[3] / 2)) + characters[i][1]
@@ -874,7 +870,7 @@ def getLineBrokenText(bitmap, value, width, dims)
       next
     end
     words = [ccheck]
-    for i in 0...words.length
+    words.length.times do |i|
       word = words[i]
       if word && word != ""
         textSize = bitmap.text_size(word)
@@ -929,7 +925,7 @@ def getLineBrokenChunks(bitmap, value, width, dims, plain = false)
     else
       words = [ccheck]
     end
-    for i in 0...words.length
+    words.length.times do |i|
       word = words[i]
       if word && word != ""
         textSize = bitmap.text_size(word)
@@ -955,25 +951,25 @@ def getLineBrokenChunks(bitmap, value, width, dims, plain = false)
 end
 
 def renderLineBrokenChunks(bitmap, xDst, yDst, normtext, maxheight = 0)
-  for i in 0...normtext.length
-    width = normtext[i][3]
-    textx = normtext[i][1] + xDst
-    texty = normtext[i][2] + yDst
-    if maxheight == 0 || normtext[i][2] < maxheight
-      bitmap.font.color = normtext[i][5]
-      bitmap.draw_text(textx, texty, width + 2, normtext[i][4], normtext[i][0])
+  normtext.each do |text|
+    width = text[3]
+    textx = text[1] + xDst
+    texty = text[2] + yDst
+    if maxheight == 0 || text[2] < maxheight
+      bitmap.font.color = text[5]
+      bitmap.draw_text(textx, texty, width + 2, text[4], text[0])
     end
   end
 end
 
 def renderLineBrokenChunksWithShadow(bitmap, xDst, yDst, normtext, maxheight, baseColor, shadowColor)
-  for i in 0...normtext.length
-    width = normtext[i][3]
-    textx = normtext[i][1] + xDst
-    texty = normtext[i][2] + yDst
-    if maxheight == 0 || normtext[i][2] < maxheight
-      height = normtext[i][4]
-      text = normtext[i][0]
+  normtext.each do |text|
+    width = text[3]
+    textx = text[1] + xDst
+    texty = text[2] + yDst
+    if maxheight == 0 || text[2] < maxheight
+      height = text[4]
+      text = text[0]
       bitmap.font.color = shadowColor
       bitmap.draw_text(textx + 2, texty, width + 2, height, text)
       bitmap.draw_text(textx, texty + 2, width + 2, height, text)
@@ -987,7 +983,7 @@ end
 def drawBitmapBuffer(chars)
   width = 1
   height = 1
-  for ch in chars
+  chars.each do |ch|
     chx = ch[1] + ch[3]
     chy = ch[2] + ch[4]
     width = chx if width < chx
@@ -1057,7 +1053,7 @@ end
 def drawFormattedChars(bitmap, chars)
   return if chars.length == 0 || !bitmap || bitmap.disposed?
   oldfont = bitmap.font.clone
-  for ch in chars
+  chars.each do |ch|
     drawSingleFormattedChar(bitmap, ch)
   end
   bitmap.font = oldfont
@@ -1066,10 +1062,10 @@ end
 # Unused
 def drawTextTable(bitmap, x, y, totalWidth, rowHeight, columnWidthPercents, table)
   yPos = y
-  for i in 0...table.length
+  table.length.times do |i|
     row = table[i]
     xPos = x
-    for j in 0...row.length
+    row.length.times do |j|
       cell = row[j]
       cellwidth = columnWidthPercents[j] * totalWidth / 100
       chars = getFormattedText(bitmap, xPos, yPos, cellwidth, -1, cell, rowHeight)
@@ -1149,7 +1145,7 @@ end
 #  5 - Shadow color
 #  6 - If true or 1, the text has an outline. Otherwise, the text has a shadow.
 def pbDrawTextPositions(bitmap, textpos)
-  for i in textpos
+  textpos.each do |i|
     textsize = bitmap.text_size(i[0])
     x = i[1]
     y = i[2] + 6
@@ -1178,7 +1174,7 @@ def pbCopyBitmap(dstbm, srcbm, x, y, opacity = 255)
 end
 
 def pbDrawImagePositions(bitmap, textpos)
-  for i in textpos
+  textpos.each do |i|
     srcbitmap = AnimatedBitmap.new(pbBitmapName(i[0]))
     x = i[1]
     y = i[2]

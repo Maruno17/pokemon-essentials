@@ -253,12 +253,12 @@ class SpriteMetafilePlayer
 
   def update
     if @playing
-      for j in @index...@metafile.length
+      (@index...@metafile.length).each do |j|
         @index = j + 1
         break if @metafile[j][0] < 0
         code = @metafile[j][0]
         value = @metafile[j][1]
-        for sprite in @sprites
+        @sprites.each do |sprite|
           case code
           when SpriteMetafile::X          then sprite.x = value
           when SpriteMetafile::Y          then sprite.y = value
@@ -379,7 +379,7 @@ class PokemonEvolutionScene
     currenttempo = 25
     maxtempo = 7 * Graphics.frame_rate
     while totaltempo < maxtempo
-      for j in 0...currenttempo
+      currenttempo.times do |j|
         if alpha < 255
           sprite.color.red   = 255
           sprite.color.green = 255
@@ -395,7 +395,7 @@ class PokemonEvolutionScene
       end
       totaltempo += currenttempo
       if totaltempo + currenttempo < maxtempo
-        for j in 0...currenttempo
+        currenttempo.times do |j|
           sprite.zoom  = [1.1 * (j + 1) / currenttempo, 1.0].min
           sprite2.zoom = [1.1 * (currenttempo - j - 1) / currenttempo, 1.0].min
           sprite.update
@@ -542,7 +542,7 @@ class PokemonEvolutionScene
     pbMEPlay("Evolution start")
     pbBGMPlay("Evolution")
     canceled = false
-    begin
+    loop do
       pbUpdateNarrowScreen
       metaplayer1.update
       metaplayer2.update
@@ -555,7 +555,8 @@ class PokemonEvolutionScene
         canceled = true
         break
       end
-    end while metaplayer1.playing? && metaplayer2.playing?
+      break unless metaplayer1.playing? && metaplayer2.playing?
+    end
     pbFlashInOut(canceled, oldstate, oldstate2)
     if canceled
       $stats.evolutions_cancelled += 1
@@ -595,7 +596,7 @@ class PokemonEvolutionScene
     $player.pokedex.set_owned(@newspecies)
     # Learn moves upon evolution for evolved species
     movelist = @pokemon.getMoveList
-    for i in movelist
+    movelist.each do |i|
       next if i[0] != 0 && i[0] != @pokemon.level   # 0 is "learn upon evolution"
       pbLearnMove(@pokemon, i[1], true) { pbUpdate }
     end

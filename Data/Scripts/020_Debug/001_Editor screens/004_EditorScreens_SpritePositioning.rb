@@ -3,8 +3,8 @@
 #===============================================================================
 def findBottom(bitmap)
   return 0 if !bitmap
-  for i in 1..bitmap.height
-    for j in 0..bitmap.width - 1
+  (1..bitmap.height).each do |i|
+    bitmap.width.times do |j|
       return bitmap.height - i if bitmap.get_pixel(j, bitmap.height - i).alpha > 0
     end
   end
@@ -117,7 +117,7 @@ class SpritePositioner
       return
     end
     metrics_data = GameData::SpeciesMetrics.get_species_form(@species, @form)
-    for i in 0...2
+    2.times do |i|
       pos = Battle::Scene.pbBattlerPosition(i, 1)
       @sprites["pokemon_#{i}"].x = pos[0]
       @sprites["pokemon_#{i}"].y = pos[1]

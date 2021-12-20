@@ -299,7 +299,7 @@ class PokemonBoxSprite < SpriteWrapper
     @refreshBox = true
     @refreshSprites = true
     @pokemonsprites = []
-    for i in 0...PokemonBox::BOX_SIZE
+    PokemonBox::BOX_SIZE.times do |i|
       @pokemonsprites[i] = nil
       pokemon = @storage[boxnumber, i]
       @pokemonsprites[i] = PokemonBoxIcon.new(pokemon, viewport)
@@ -313,7 +313,7 @@ class PokemonBoxSprite < SpriteWrapper
 
   def dispose
     if !disposed?
-      for i in 0...PokemonBox::BOX_SIZE
+      PokemonBox::BOX_SIZE.times do |i|
         @pokemonsprites[i].dispose if @pokemonsprites[i]
         @pokemonsprites[i] = nil
       end
@@ -336,7 +336,7 @@ class PokemonBoxSprite < SpriteWrapper
   def color=(value)
     super
     if @refreshSprites
-      for i in 0...PokemonBox::BOX_SIZE
+      PokemonBox::BOX_SIZE.times do |i|
         if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
           @pokemonsprites[i].color = value
         end
@@ -347,7 +347,7 @@ class PokemonBoxSprite < SpriteWrapper
 
   def visible=(value)
     super
-    for i in 0...PokemonBox::BOX_SIZE
+    PokemonBox::BOX_SIZE.times do |i|
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].visible = value
       end
@@ -414,9 +414,9 @@ class PokemonBoxSprite < SpriteWrapper
       @refreshBox = false
     end
     yval = self.y + 30
-    for j in 0...PokemonBox::BOX_HEIGHT
+    PokemonBox::BOX_HEIGHT.times do |j|
       xval = self.x + 10
-      for k in 0...PokemonBox::BOX_WIDTH
+      PokemonBox::BOX_WIDTH.times do |k|
         sprite = @pokemonsprites[(j * PokemonBox::BOX_WIDTH) + k]
         if sprite && !sprite.disposed?
           sprite.viewport = self.viewport
@@ -432,7 +432,7 @@ class PokemonBoxSprite < SpriteWrapper
 
   def update
     super
-    for i in 0...PokemonBox::BOX_SIZE
+    PokemonBox::BOX_SIZE.times do |i|
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].update
       end
@@ -449,7 +449,7 @@ class PokemonBoxPartySprite < SpriteWrapper
     @party = party
     @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/overlay_party")
     @pokemonsprites = []
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       @pokemonsprites[i] = nil
       pokemon = @party[i]
       if pokemon
@@ -465,7 +465,7 @@ class PokemonBoxPartySprite < SpriteWrapper
   end
 
   def dispose
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       @pokemonsprites[i].dispose if @pokemonsprites[i]
     end
     @boxbitmap.dispose
@@ -485,7 +485,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def color=(value)
     super
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].color = pbSrcOver(@pokemonsprites[i].color, value)
       end
@@ -494,7 +494,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def visible=(value)
     super
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].visible = value
       end
@@ -535,13 +535,13 @@ class PokemonBoxPartySprite < SpriteWrapper
     )
     xvalues = []   # [18, 90, 18, 90, 18, 90]
     yvalues = []   # [2, 18, 66, 82, 130, 146]
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       xvalues.push(18 + (72 * (i % 2)))
       yvalues.push(2 + (16 * (i % 2)) + (64 * (i / 2)))
     end
     @pokemonsprites.delete_if { |sprite| sprite && sprite.disposed? }
     @pokemonsprites.each { |sprite| sprite.refresh if sprite }
-    for j in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |j|
       sprite = @pokemonsprites[j]
       if sprite && !sprite.disposed?
         sprite.viewport = self.viewport
@@ -554,7 +554,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def update
     super
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       @pokemonsprites[i].update if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
     end
   end
@@ -775,7 +775,7 @@ class PokemonStorageScene
     return if selection < 0
     xvalues = []   # [200, 272, 200, 272, 200, 272, 236]
     yvalues = []   # [2, 18, 66, 82, 130, 146, 220]
-    for i in 0...Settings::MAX_PARTY_SIZE
+    Settings::MAX_PARTY_SIZE.times do |i|
       xvalues.push(200 + (72 * (i % 2)))
       yvalues.push(2 + (16 * (i % 2)) + (64 * (i / 2)))
     end
@@ -1196,7 +1196,7 @@ class PokemonStorageScene
 
   def pbChooseBox(msg)
     commands = []
-    for i in 0...@storage.maxBoxes
+    @storage.maxBoxes.times do |i|
       box = @storage[i]
       if box
         commands.push(_INTL("{1} ({2}/{3})", box.name, box.nitems, box.length))
@@ -1527,7 +1527,6 @@ class PokemonStorageScreen
             cmdMark     = -1
             cmdRelease  = -1
             cmdDebug    = -1
-            cmdCancel   = -1
             if heldpoke
               helptext = _INTL("{1} is selected.", heldpoke.name)
               commands[cmdMove = commands.length] = (pokemon) ? _INTL("Shift") : _INTL("Place")
@@ -1541,7 +1540,7 @@ class PokemonStorageScreen
             commands[cmdMark = commands.length]     = _INTL("Mark")
             commands[cmdRelease = commands.length]  = _INTL("Release")
             commands[cmdDebug = commands.length]    = _INTL("Debug") if $DEBUG
-            commands[cmdCancel = commands.length]   = _INTL("Cancel")
+            commands[commands.length]               = _INTL("Cancel")
             command = pbShowCommands(helptext, commands)
             if cmdMove >= 0 && command == cmdMove   # Move/Shift/Place
               if @heldpkmn
@@ -1674,7 +1673,7 @@ class PokemonStorageScreen
 
   def pbAbleCount
     count = 0
-    for p in @storage.party
+    @storage.party.each do |p|
       count += 1 if pbAble?(p)
     end
     return count
@@ -1869,7 +1868,7 @@ class PokemonStorageScreen
 
   def pbChooseMove(pkmn, helptext, index = 0)
     movenames = []
-    for i in pkmn.moves
+    pkmn.moves.each do |i|
       if i.total_pp <= 0
         movenames.push(_INTL("{1} (PP: ---)", i.name))
       else
@@ -1938,7 +1937,7 @@ class PokemonStorageScreen
     when 1
       papers = @storage.availableWallpapers
       index = 0
-      for i in 0...papers[1].length
+      papers[1].length.times do |i|
         if papers[1][i] == @storage[@storage.currentBox].background
           index = i
           break

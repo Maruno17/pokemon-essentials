@@ -193,7 +193,7 @@ ItemHandlers::UseInField.add(:SACREDASH, proc { |item|
     next false
   end
   canrevive = false
-  for i in $player.pokemon_party
+  $player.pokemon_party.each do |i|
     next if !i.fainted?
     canrevive = true
     break
@@ -604,7 +604,7 @@ ItemHandlers::UseOnPokemon.add(:MAXETHER, proc { |item, qty, pkmn, scene|
 
 ItemHandlers::UseOnPokemon.add(:ELIXIR, proc { |item, qty, pkmn, scene|
   pprestored = 0
-  for i in 0...pkmn.moves.length
+  pkmn.moves.length.times do |i|
     pprestored += pbRestorePP(pkmn, i, 10)
   end
   if pprestored == 0
@@ -617,7 +617,7 @@ ItemHandlers::UseOnPokemon.add(:ELIXIR, proc { |item, qty, pkmn, scene|
 
 ItemHandlers::UseOnPokemon.add(:MAXELIXIR, proc { |item, qty, pkmn, scene|
   pprestored = 0
-  for i in 0...pkmn.moves.length
+  pkmn.moves.length.times do |i|
     pprestored += pbRestorePP(pkmn, i, pkmn.moves[i].total_pp - pkmn.moves[i].pp)
   end
   if pprestored == 0
@@ -1027,7 +1027,7 @@ ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE, proc { |item, qty, pkmn, scene|
     abils = pkmn.getAbilityList
     abil1 = nil
     abil2 = nil
-    for i in abils
+    abils.each do |i|
       abil1 = i[0] if i[1] == 0
       abil2 = i[0] if i[1] == 1
     end

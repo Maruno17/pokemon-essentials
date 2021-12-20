@@ -185,7 +185,7 @@ module PluginManager
       idx_b = order.index(b) || order.size
       next idx_a <=> idx_b
     end
-    for key in keys
+    keys.each do |key|
       value = options[key]
       case key
       when :name   # Plugin name
@@ -211,7 +211,7 @@ module PluginManager
       when :dependencies   # Plugin dependencies
         dependencies = value
         dependencies = [dependencies] if !dependencies.is_a?(Array) || !dependencies[0].is_a?(Array)
-        for dep in value
+        value.each do |dep|
           case dep
           when String   # "plugin name"
             if !self.installed?(dep)
@@ -238,7 +238,8 @@ module PluginManager
                 if self.installed?(dep_name)   # Have plugin but lower version
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' version #{dep_version} or higher, " +
                         "but the installed version is #{self.version(dep_name)}."
-                  if dep_link = self.link(dep_name)
+                  dep_link = self.link(dep_name)
+                  if dep_link
                     msg += "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
                   self.error(msg)
@@ -308,7 +309,7 @@ module PluginManager
       when :incompatibilities   # Plugin incompatibilities
         incompats = value
         incompats = [incompats] if !incompats.is_a?(Array)
-        for incompat in incompats
+        incompats.each do |incompat|
           if self.installed?(incompat)
             self.error("Plugin '#{name}' is incompatible with '#{incompat}'. " +
                        "They cannot both be used at the same time.")
@@ -317,7 +318,7 @@ module PluginManager
       when :credits # Plugin credits
         value = [value] if value.is_a?(String)
         if value.is_a?(Array)
-          for entry in value
+          value.each do |entry|
             if !entry.is_a?(String)
               self.error("Plugin '#{name}'s credits array contains a non-string value.")
             else
@@ -331,7 +332,7 @@ module PluginManager
         self.error("Invalid plugin registry key '#{key}'.")
       end
     end
-    for plugin in @@Plugins.values
+    @@Plugins.values.each do |plugin|
       if plugin[:incompatibilities] && plugin[:incompatibilities].include?(name)
         self.error("Plugin '#{plugin[:name]}' is incompatible with '#{name}'. " +
                    "They cannot both be used at the same time.")
@@ -422,7 +423,7 @@ module PluginManager
     while d2[-1] == "."                 # Turn "123." into "123"
       d2 = d2[0..-2]
     end
-    for i in 0...[d1.size, d2.size].max   # Compare each digit in turn
+    [d1.size, d2.size].max.times do |i|   # Compare each digit in turn
       c1 = d1[i]
       c2 = d2[i]
       if c1
@@ -445,7 +446,7 @@ module PluginManager
     message += "Error in Plugin [#{name}]:\r\n"
     message += "#{$!.class} occurred.\r\n"
     # go through message content
-    for line in $!.message.split("\r\n")
+    $!.message.split("\r\n").each do |line|
       next if nil_or_empty?(line)
       n = line[/\d+/]
       err = line.split(":")[-1].strip
@@ -538,7 +539,7 @@ module PluginManager
     # be loaded (files listed in the meta file are loaded first)
     meta[:scripts] = [] if !meta[:scripts]
     # get all script files from plugin Dir
-    for fl in Dir.all(dir)
+    Dir.all(dir).each do |fl|
       next if !fl.include?(".rb")
       meta[:scripts].push(fl.gsub("#{dir}/", ""))
     end
@@ -566,7 +567,7 @@ module PluginManager
     return nil if !meta[name] || !meta[name][:dependencies]
     og = [name] if !og
     # go through all dependencies
-    for dname in meta[name][:dependencies]
+    meta[name][:dependencies].each do |dname|
       # clean the name to a simple string
       dname = dname[0] if dname.is_a?(Array) && dname.length == 2
       dname = dname[1] if dname.is_a?(Array) && dname.length == 3
@@ -583,10 +584,10 @@ module PluginManager
   #-----------------------------------------------------------------------------
   def self.sortLoadOrder(order, plugins)
     # go through the load order
-    for o in order
+    order.each do |o|
       next if !plugins[o] || !plugins[o][:dependencies]
       # go through all dependencies
-      for dname in plugins[o][:dependencies]
+      plugins[o][:dependencies].each do |dname|
         optional = false
         # clean the name to a simple string
         if dname.is_a?(Array)
@@ -615,7 +616,7 @@ module PluginManager
     order = []
     # Find all plugin folders that have a meta.txt and add them to the list of
     # plugins.
-    for dir in self.listAll
+    self.listAll.each do |dir|
       # skip if there is no meta file
       next if !safeExists?(dir + "/meta.txt")
       ndx = order.length
@@ -646,11 +647,11 @@ module PluginManager
     return true if Input.press?(Input::CTRL)
     # analyze whether or not to push recompile
     mtime = File.mtime("Data/PluginScripts.rxdata")
-    for o in order
+    order.each do |o|
       # go through all the registered plugin scripts
       scr = plugins[o][:scripts]
       dir = plugins[o][:dir]
-      for sc in scr
+      scr.each do |sc|
         return true if File.mtime("#{dir}/#{sc}") > mtime
       end
       return true if File.mtime("#{dir}/meta.txt") > mtime
@@ -664,14 +665,14 @@ module PluginManager
     Console.echo_li "Compiling plugin scripts..."
     scripts = []
     # go through the entire order one by one
-    for o in order
+    order.each do |o|
       # save name, metadata and scripts array
       meta = plugins[o].clone
       meta.delete(:scripts)
       meta.delete(:dir)
       dat = [o, meta, []]
       # iterate through each file to deflate
-      for file in plugins[o][:scripts]
+      plugins[o][:scripts].each do |file|
         File.open("#{plugins[o][:dir]}/#{file}", 'rb') do |f|
           dat[2].push([file, Zlib::Deflate.deflate(f.read)])
         end
@@ -697,7 +698,7 @@ module PluginManager
     # load plugins
     scripts = load_data("Data/PluginScripts.rxdata")
     echoed_plugins = []
-    for plugin in scripts
+    scripts.each do |plugin|
       # get the required data
       name, meta, script = plugin
       if !meta[:essentials] || !meta[:essentials].include?(Essentials::VERSION)
@@ -706,7 +707,7 @@ module PluginManager
       # register plugin
       self.register(meta)
       # go through each script and interpret
-      for scr in script
+      script.each do |scr|
         # turn code into plaintext
         code = Zlib::Inflate.inflate(scr[1]).force_encoding(Encoding::UTF_8)
         # get rid of tabs

@@ -239,8 +239,8 @@ class MiningGameScene
     @iron = []
     pbDistributeItems
     pbDistributeIron
-    for i in 0...BOARD_HEIGHT
-      for j in 0...BOARD_WIDTH
+    BOARD_HEIGHT.times do |i|
+      BOARD_WIDTH.times do |j|
         @sprites["tile#{j + (i * BOARD_WIDTH)}"] = MiningGameTile.new(32 * j, 64 + (32 * i))
       end
     end
@@ -256,7 +256,7 @@ class MiningGameScene
   def pbDistributeItems
     # Set items to be buried (index in ITEMS, x coord, y coord)
     ptotal = 0
-    for i in ITEMS
+    ITEMS.each do |i|
       ptotal += i[1]
     end
     numitems = rand(2..4)
@@ -264,7 +264,7 @@ class MiningGameScene
     while numitems > 0
       rnd = rand(ptotal)
       added = false
-      for i in 0...ITEMS.length
+      ITEMS.length.times do |i|
         rnd -= ITEMS[i][1]
         if rnd < 0
           if pbNoDuplicateItems(ITEMS[i][0])
@@ -288,7 +288,7 @@ class MiningGameScene
     end
     # Draw items on item layer
     layer = @sprites["itemlayer"].bitmap
-    for i in @items
+    @items.each do |i|
       ox = ITEMS[i[0]][2]
       oy = ITEMS[i[0]][3]
       rectx = ITEMS[i[0]][4]
@@ -314,7 +314,7 @@ class MiningGameScene
     end
     # Draw items on item layer
     layer = @sprites["itemlayer"].bitmap
-    for i in @iron
+    @iron.each do |i|
       ox = IRON[i[0]][0]
       oy = IRON[i[0]][1]
       rectx = IRON[i[0]][2]
@@ -330,7 +330,7 @@ class MiningGameScene
     plates = [:INSECTPLATE, :DREADPLATE, :DRACOPLATE, :ZAPPLATE, :FISTPLATE,
               :FLAMEPLATE, :MEADOWPLATE, :EARTHPLATE, :ICICLEPLATE, :TOXICPLATE,
               :MINDPLATE, :STONEPLATE, :SKYPLATE, :SPOOKYPLATE, :IRONPLATE, :SPLASHPLATE]
-    for i in @items
+    @items.each do |i|
       preitem = ITEMS[i[0]][0]
       return false if preitem == newitem   # No duplicate items
       return false if fossils.include?(preitem) && fossils.include?(newitem)
@@ -340,7 +340,7 @@ class MiningGameScene
   end
 
   def pbCheckOverlaps(checkiron, provx, provy, provwidth, provheight, provpattern)
-    for i in @items
+    @items.each do |i|
       prex = i[1]
       prey = i[2]
       prewidth = ITEMS[i[0]][4]
@@ -348,7 +348,7 @@ class MiningGameScene
       prepattern = ITEMS[i[0]][6]
       next if provx + provwidth <= prex || provx >= prex + prewidth ||
               provy + provheight <= prey || provy >= prey + preheight
-      for j in 0...prepattern.length
+      prepattern.length.times do |j|
         next if prepattern[j] == 0
         xco = prex + (j % prewidth)
         yco = prey + (j / prewidth).floor
@@ -358,7 +358,7 @@ class MiningGameScene
       end
     end
     if checkiron   # Check other irons as well
-      for i in @iron
+      @iron.each do |i|
         prex = i[1]
         prey = i[2]
         prewidth = IRON[i[0]][2]
@@ -366,7 +366,7 @@ class MiningGameScene
         prepattern = IRON[i[0]][4]
         next if provx + provwidth <= prex || provx >= prex + prewidth ||
                 provy + provheight <= prey || provy >= prey + preheight
-        for j in 0...prepattern.length
+        prepattern.length.times do |j|
           next if prepattern[j] == 0
           xco = prex + (j % prewidth)
           yco = prey + (j / prewidth).floor
@@ -398,10 +398,10 @@ class MiningGameScene
       pbSEPlay("Mining iron")
       hittype = 2
     else
-      for i in 0..2
+      3.times do |i|
         ytile = i - 1 + (position / BOARD_WIDTH)
         next if ytile < 0 || ytile >= BOARD_HEIGHT
-        for j in 0..2
+        3.times do |j|
           xtile = j - 1 + (position % BOARD_WIDTH)
           next if xtile < 0 || xtile >= BOARD_WIDTH
           @sprites["tile#{xtile + (ytile * BOARD_WIDTH)}"].layer -= pattern[j + (i * 3)]
@@ -430,7 +430,7 @@ class MiningGameScene
   def pbIsItemThere?(position)
     posx = position % BOARD_WIDTH
     posy = position / BOARD_WIDTH
-    for i in @items
+    @items.each do |i|
       index = i[0]
       width = ITEMS[index][4]
       height = ITEMS[index][5]
@@ -447,7 +447,7 @@ class MiningGameScene
   def pbIsIronThere?(position)
     posx = position % BOARD_WIDTH
     posy = position / BOARD_WIDTH
-    for i in @iron
+    @iron.each do |i|
       index = i[0]
       width = IRON[index][2]
       height = IRON[index][3]
@@ -463,15 +463,15 @@ class MiningGameScene
 
   def pbCheckRevealed
     ret = []
-    for i in 0...@items.length
+    @items.length.times do |i|
       next if @items[i][3]
       revealed = true
       index = @items[i][0]
       width = ITEMS[index][4]
       height = ITEMS[index][5]
       pattern = ITEMS[index][6]
-      for j in 0...height
-        for k in 0...width
+      height.times do |j|
+        width.times do |k|
           layer = @sprites["tile#{@items[i][1] + k + ((@items[i][2] + j) * BOARD_WIDTH)}"].layer
           revealed = false if layer > 0 && pattern[k + (j * width)] > 0
           break if !revealed
@@ -488,8 +488,8 @@ class MiningGameScene
     revealeditems = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     halfFlashTime = Graphics.frame_rate / 8
     alphaDiff = (255.0 / halfFlashTime).ceil
-    for i in 1..halfFlashTime * 2
-      for index in revealed
+    (1..halfFlashTime * 2).each do |i|
+      revealed.each do |index|
         burieditem = @items[index]
         revealeditems.bitmap.blt(32 * burieditem[1], 64 + (32 * burieditem[2]),
                                  @itembitmap.bitmap,
@@ -505,7 +505,7 @@ class MiningGameScene
       Graphics.update
     end
     revealeditems.dispose
-    for index in revealed
+    revealed.each do |index|
       @items[index][3] = true
       item = ITEMS[@items[index][0]][0]
       @itemswon.push(item)
@@ -529,7 +529,7 @@ class MiningGameScene
         @sprites["collapse"] = BitmapSprite.new(Graphics.width, Graphics.height, collapseviewport)
         collapseTime = Graphics.frame_rate * 8 / 10
         collapseFraction = (Graphics.height.to_f / collapseTime).ceil
-        for i in 1..collapseTime
+        (1..collapseTime).each do |i|
           @sprites["collapse"].bitmap.fill_rect(0, collapseFraction * (i - 1),
                                                 Graphics.width, collapseFraction * i, Color.new(0, 0, 0))
           Graphics.update
@@ -538,7 +538,7 @@ class MiningGameScene
         break
       end
       foundall = true
-      for i in @items
+      @items.each do |i|
         foundall = false if !i[3]
         break if !foundall
       end
@@ -587,7 +587,7 @@ class MiningGameScene
 
   def pbGiveItems
     if @itemswon.length > 0
-      for i in @itemswon
+      @itemswon.each do |i|
         if $bag.add(i)
           pbMessage(_INTL("One {1} was obtained.\\se[Mining item get]\\wtnp[30]",
                           GameData::Item.get(i).name))

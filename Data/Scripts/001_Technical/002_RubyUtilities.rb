@@ -37,7 +37,7 @@ class String
     width -= bitmap.text_size("...").width
     string_width = 0
     text = []
-    for char in string.scan(/./)
+    string.scan(/./).each do |char|
       wdh = bitmap.text_size(char).width
       next if (wdh + string_width) > width
       string_width += wdh
@@ -45,7 +45,7 @@ class String
     end
     text.push("...") if text.length < string.length
     new_string = ""
-    for char in text
+    text.each do |char|
       new_string += char
     end
     return new_string
@@ -97,7 +97,7 @@ class Hash
     h = self.clone
     # failsafe
     return h if !hash.is_a?(Hash)
-    for key in hash.keys
+    hash.keys.each do |key|
       if self[key].is_a?(Hash)
         h.deep_merge!(hash[key])
       else
@@ -109,7 +109,7 @@ class Hash
 
   def deep_merge!(hash)
     return if !hash.is_a?(Hash)
-    for key in hash.keys
+    hash.keys.each do |key|
       if self[key].is_a?(Hash)
         self[key].deep_merge!(hash[key])
       else
@@ -139,7 +139,9 @@ class File
     data = ""
     t = Time.now
     File.open(source, 'rb') do |f|
-      while r = f.read(4096)
+      loop do
+        r = f.read(4096)
+        break if !r
         if Time.now - t > 1
           Graphics.update
           t = Time.now

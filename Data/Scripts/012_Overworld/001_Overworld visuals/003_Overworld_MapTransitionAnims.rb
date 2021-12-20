@@ -18,7 +18,7 @@ def pbCaveEntranceEx(exiting)
     x = 0
     y = 0
     # Calculate color of each band
-    for k in 0...totalBands
+    totalBands.times do |k|
       next if k >= totalBands * j / totalFrames
       inc = increment
       inc *= -1 if exiting
@@ -28,7 +28,7 @@ def pbCaveEntranceEx(exiting)
     # Draw gray rectangles
     rectwidth  = Graphics.width
     rectheight = Graphics.height
-    for i in 0...totalBands
+    totalBands.times do |i|
       currentGray = grays[i]
       sprite.bitmap.fill_rect(Rect.new(x, y, rectwidth, rectheight),
                               Color.new(currentGray, currentGray, currentGray))
@@ -47,7 +47,7 @@ def pbCaveEntranceEx(exiting)
     pbToneChangeAll(Tone.new(-255, -255, -255), 0)
   end
   # Animate fade to white (if exiting) or black (if entering)
-  for j in 0...totalFrames
+  totalFrames.times do |j|
     if exiting
       sprite.color = Color.new(255, 255, 255, j * increment)
     else

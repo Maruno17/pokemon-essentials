@@ -113,7 +113,7 @@ class Battle::Move::MultiStatUpMove < Battle::Move
   def pbMoveFailed?(user, targets)
     return false if damagingMove?
     failed = true
-    for i in 0...@statUp.length / 2
+    (@statUp.length / 2).times do |i|
       next if !user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
       failed = false
       break
@@ -128,7 +128,7 @@ class Battle::Move::MultiStatUpMove < Battle::Move
   def pbEffectGeneral(user)
     return if damagingMove?
     showAnim = true
-    for i in 0...@statUp.length / 2
+    (@statUp.length / 2).times do |i|
       next if !user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
       if user.pbRaiseStatStage(@statUp[i * 2], @statUp[(i * 2) + 1], user, showAnim)
         showAnim = false
@@ -138,7 +138,7 @@ class Battle::Move::MultiStatUpMove < Battle::Move
 
   def pbAdditionalEffect(user, target)
     showAnim = true
-    for i in 0...@statUp.length / 2
+    (@statUp.length / 2).times do |i|
       next if !user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
       if user.pbRaiseStatStage(@statUp[i * 2], @statUp[(i * 2) + 1], user, showAnim)
         showAnim = false
@@ -154,7 +154,7 @@ class Battle::Move::StatDownMove < Battle::Move
   def pbEffectWhenDealingDamage(user, target)
     return if @battle.pbAllFainted?(target.idxOwnSide)
     showAnim = true
-    for i in 0...@statDown.length / 2
+    (@statDown.length / 2).times do |i|
       next if !user.pbCanLowerStatStage?(@statDown[i * 2], user, self)
       if user.pbLowerStatStage(@statDown[i * 2], @statDown[(i * 2) + 1], user, showAnim)
         showAnim = false
@@ -195,7 +195,7 @@ class Battle::Move::TargetMultiStatDownMove < Battle::Move
   def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
     failed = true
-    for i in 0...@statDown.length / 2
+    (@statDown.length / 2).times do |i|
       next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
       failed = false
       break
@@ -205,14 +205,14 @@ class Battle::Move::TargetMultiStatDownMove < Battle::Move
       #       is shown here, I know.
       canLower = false
       if target.hasActiveAbility?(:CONTRARY) && !@battle.moldBreaker
-        for i in 0...@statDown.length / 2
+        (@statDown.length / 2).times do |i|
           next if target.statStageAtMax?(@statDown[i * 2])
           canLower = true
           break
         end
         @battle.pbDisplay(_INTL("{1}'s stats won't go any higher!", user.pbThis)) if !canLower && show_message
       else
-        for i in 0...@statDown.length / 2
+        (@statDown.length / 2).times do |i|
           next if target.statStageAtMin?(@statDown[i * 2])
           canLower = true
           break
@@ -230,7 +230,7 @@ class Battle::Move::TargetMultiStatDownMove < Battle::Move
   def pbCheckForMirrorArmor(user, target)
     if target.hasActiveAbility?(:MIRRORARMOR) && user.index != target.index
       failed = true
-      for i in 0...@statDown.length / 2
+      (@statDown.length / 2).times do |i|
         next if target.statStageAtMin?(@statDown[i * 2])
         next if !user.pbCanLowerStatStage?(@statDown[i * 2], target, self, false, false, true)
         failed = false
@@ -253,7 +253,7 @@ class Battle::Move::TargetMultiStatDownMove < Battle::Move
     return if !pbCheckForMirrorArmor(user, target)
     showAnim = true
     showMirrorArmorSplash = true
-    for i in 0...@statDown.length / 2
+    (@statDown.length / 2).times do |i|
       next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
       if target.pbLowerStatStage(@statDown[i * 2], @statDown[(i * 2) + 1], user,
                                  showAnim, false, (showMirrorArmorSplash) ? 1 : 3)

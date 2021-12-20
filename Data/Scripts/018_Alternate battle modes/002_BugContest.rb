@@ -69,7 +69,7 @@ class BugContestState
   # can be outdoors, with its own grassy patches.
   def pbSetReception(*arg)
     @reception = []
-    for i in arg
+    arg.each do |i|
       @reception.push(i)
     end
   end
@@ -77,7 +77,7 @@ class BugContestState
   def pbOffLimits?(map)
 #    p [map,@contestMap,@reception]
     return false if map == @contestMap
-    for i in @reception
+    @reception.each do |i|
       return false if map == i
     end
     return true
@@ -100,7 +100,7 @@ class BugContestState
     if !$PokemonEncounters.map_has_encounter_type?(@contestMap, enctype)
       enctype = :Land
     end
-    for cont in @contestants
+    @contestants.each do |cont|
       enc = $PokemonEncounters.choose_wild_pokemon_for_map(@contestMap, enctype)
       if !enc
         raise _INTL("No encounters for map {1}, so can't judge contest", @contestMap)
@@ -163,7 +163,7 @@ class BugContestState
     @timer = Graphics.frame_count
     @places = []
     chosenpkmn = $player.party[@chosenPokemon]
-    for i in 0...$player.party.length
+    $player.party.length.times do |i|
       @otherparty.push($player.party[i]) if i != @chosenPokemon
     end
     @contestants = []
@@ -182,7 +182,7 @@ class BugContestState
   end
 
   def place
-    for i in 0...3
+    3.times do |i|
       return i if @places[i][0] < 0
     end
     return 3
@@ -190,7 +190,7 @@ class BugContestState
 
   def pbEnd(interrupted = false)
     return if !@inProgress
-    for poke in @otherparty
+    @otherparty.each do |poke|
       $player.party.push(poke)
     end
     if !interrupted

@@ -64,7 +64,7 @@ module GameData
       return ArgumentError.new("Exp amount #{level} is invalid.") if !exp || exp < 0
       max = GrowthRate.max_level
       return max if exp >= maximum_exp
-      for level in 1..max
+      (1..max).each do |level|
         return level - 1 if exp < minimum_exp_for_level(level)
       end
       return max
