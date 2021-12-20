@@ -101,6 +101,7 @@ module Compiler
       if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
         line = line[3, line.length - 3]
       end
+      line.force_encoding(Encoding::UTF_8)
       if !line[/^\#/] && !line[/^\s*$/]
         line = prepline(line)
         if line[/^\s*\[\s*(.*)\s*\]\s*$/]   # Of the format: [something]
@@ -159,6 +160,7 @@ module Compiler
       if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
         line = line[3, line.length - 3]
       end
+      line.force_encoding(Encoding::UTF_8)
       if !line[/^\#/] && !line[/^\s*$/]
         if line[/^\s*\[\s*(.+?)\s*\]\s*$/]
           yield lastsection, sectionname  if havesection
@@ -185,6 +187,7 @@ module Compiler
       if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
         line = line[3, line.length - 3]
       end
+      line.force_encoding(Encoding::UTF_8)
       yield line, lineno if !line[/^\#/] && !line[/^\s*$/]
       lineno += 1
     }
@@ -199,6 +202,7 @@ module Compiler
         if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
           line = line[3, line.length - 3]
         end
+        line.force_encoding(Encoding::UTF_8)
         if !line[/^\#/] && !line[/^\s*$/]
           FileLineData.setLine(line, lineno)
           yield line, lineno
@@ -215,6 +219,7 @@ module Compiler
       if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
         line = line[3, line.length - 3]
       end
+      line.force_encoding(Encoding::UTF_8)
       line = prepline(line)
       yield line, lineno if !line[/^\#/] && !line[/^\s*$/]
       lineno += 1
@@ -230,6 +235,7 @@ module Compiler
         if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
           line = line[3, line.length - 3]
         end
+        line.force_encoding(Encoding::UTF_8)
         line = prepline(line)
         if !line[/^\#/] && !line[/^\s*$/]
           FileLineData.setLine(line, lineno)
