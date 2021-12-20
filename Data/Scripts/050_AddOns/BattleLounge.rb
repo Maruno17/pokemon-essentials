@@ -160,7 +160,7 @@ def generateSameEggGroupFusionsTeam(eggGroup_id)
       while !foundFusionPartner
         species2 = rand(Settings::NB_POKEMON) + 1
         if getPokemonEggGroups(species2).include?(eggGroup)
-          generatedTeam << getFusionSpecies(species1, species2)
+          generatedTeam << getFusionSpecies(species1, specieres2)
           foundFusionPartner = true
         end
       end

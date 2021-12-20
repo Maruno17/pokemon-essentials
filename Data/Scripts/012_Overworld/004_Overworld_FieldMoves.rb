@@ -722,6 +722,12 @@ def pbSurf
       return false
     end
   end
+  if $PokemonSystem.quicksurf == 1
+    surfbgm = GameData::Metadata.get.surf_BGM
+    pbCueBGM(surfbgm, 0.5) if surfbgm
+    pbStartSurfing
+    return true
+  end
   if pbConfirmMessage(_INTL("The water is a deep blue...\nWould you like to surf on it?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))

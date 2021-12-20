@@ -13,6 +13,7 @@ class PokemonSystem
   attr_accessor :bgmvolume
   attr_accessor :sevolume
   attr_accessor :textinput
+  attr_accessor :quicksurf
 
   def initialize
     @textspeed = 1 # Text speed (0=slow, 1=normal, 2=fast)
@@ -26,6 +27,7 @@ class PokemonSystem
     @bgmvolume = 100 # Volume of background music and ME
     @sevolume = 100 # Volume of sound effects
     @textinput = 1 # Text input mode (0=cursor, 1=keyboard)
+    @quicksurf = 0
   end
 end
 
@@ -392,6 +394,14 @@ class PokemonOption_Scene
                        }
         )
 
+    end
+
+    if $game_switches && $game_switches[GOT_BADGE_5] #badge for Surf
+      @PokemonOptions <<
+        EnumOption.new(_INTL("Quick Surf"), [_INTL("Off"), _INTL("On")],
+                       proc { $PokemonSystem.quicksurf },
+                       proc { |value| $PokemonSystem.quicksurf = value }
+        )
     end
 
     @PokemonOptions = pbAddOnOptions(@PokemonOptions)

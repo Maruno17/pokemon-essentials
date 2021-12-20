@@ -80,8 +80,13 @@ def useLantern()
     return false
   end
   Kernel.pbMessage(_INTL("The Lantern illuminated the cave!"))
-  $PokemonGlobal.flashUsed = true
   darkness.radius += 176
+  while darkness.radius<176
+    Graphics.update
+    Input.update
+    pbUpdateSceneMapd
+    darkness.radius+=4
+  end
   return true
 end
 
@@ -104,12 +109,18 @@ ItemHandlers::UseInField.add(:TELEPORTER, proc { |item|
 def useTeleporter()
   if HiddenMoveHandlers.triggerCanUseMove(:TELEPORT, 0,true)
     Kernel.pbMessage(_INTL("Teleport to where?", $Trainer.name))
-    scene = PokemonRegionMapScene.new(-1, false)
-    screen = PokemonRegionMap.new(scene)
-    ret = screen.pbStartFlyScreen
+    ret = pbBetterRegionMap(-1, true, true)
+    pbShowMenu unless ret
+    ###############################################
     if ret
       $PokemonTemp.flydata = ret
     end
+    # scene = PokemonRegionMapScene.new(-1, false)
+    # screen = PokemonRegionMap.new(scene)
+    # ret = screen.pbStartFlyScreen
+    # if ret
+    #   $PokemonTemp.flydata = ret
+    # end
   end
 
   if !$PokemonTemp.flydata
@@ -194,18 +205,18 @@ ItemHandlers::UseFromBag.add(:LANTERN, proc { |item|
   darkness = $PokemonTemp.darknessSprite
   if !darkness || darkness.disposed?
     Kernel.pbMessage(_INTL("The cave is already illuminated."))
-    return false
+    next false
   end
   Kernel.pbMessage(_INTL("The Lantern illuminated the cave!"))
   $PokemonGlobal.flashUsed = true
   darkness.radius += 176
-  #while darkness.radius<176
-  #  Graphics.update
-  #  Input.update
-  #  pbUpdateSceneMap
-  #  darkness.radius+=4
-  #end
-  return true
+  while darkness.radius<176
+   Graphics.update
+   Input.update
+   pbUpdateSceneMap
+   darkness.radius+=4
+  end
+  next true
 })
 
 ItemHandlers::UseFromBag.add(:AZUREFLUTE, proc { |item|

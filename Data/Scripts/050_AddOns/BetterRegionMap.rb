@@ -562,57 +562,55 @@ def calculatePointsAndCenter(mapwidth)
 end
 
 class PokemonReadyMenu
-  def pbStartReadyMenu(moves, items)
-    commands = [[], []] # Moves, items
+  def pbStartReadyMenu(moves,items)
+    commands = [[],[]]   # Moves, items
     for i in moves
-      commands[0].push([i[0], PBMoves.getName(i[0]), true, i[1]])
+      commands[0].push([i[0], GameData::Move.get(i[0]).name, true, i[1]])
     end
-    commands[0].sort! { |a, b| a[1] <=> b[1] }
+    commands[0].sort! { |a,b| a[1]<=>b[1] }
     for i in items
-      commands[1].push([i, PBItems.getName(i), false])
+      commands[1].push([i, GameData::Item.get(i).name, false])
     end
-    commands[1].sort! { |a, b| a[1] <=> b[1] }
-
+    commands[1].sort! { |a,b| a[1]<=>b[1] }
     @scene.pbStartScene(commands)
     loop do
       command = @scene.pbShowCommands
-      if command == -1
-        break
-      else
-        if command[0] == 0 # Use a move
-          move = commands[0][command[1]][0]
-          user = $Trainer.party[commands[0][command[1]][3]]
-          if isConst?(move, PBMoves, :FLY)
-            ###############################################
-            pbHideMenu
-            ret = pbBetterRegionMap(-1, true, true)
-            pbShowMenu unless ret
-            ###############################################
-            if ret
-              $PokemonTemp.flydata = ret
-              $game_temp.in_menu = false
-              Kernel.pbUseHiddenMove(user, move)
-              break
-            end
-          else
-            pbHideMenu
-            if Kernel.pbConfirmUseHiddenMove(user, move)
-              $game_temp.in_menu = false
-              Kernel.pbUseHiddenMove(user, move)
-              break
-            else
-              pbShowMenu
-            end
+      break if command==-1
+      if command[0]==0   # Use a move
+        move = commands[0][command[1]][0]
+        user = $Trainer.party[commands[0][command[1]][3]]
+        if move == :FLY || move == :TELEPORT
+          ###############################################
+          pbHideMenu
+          ret = pbBetterRegionMap(-1, true, true)
+          pbShowMenu unless ret
+          ###############################################
+          if ret
+            $PokemonTemp.flydata = ret
+            $game_temp.in_menu = false
+            Kernel.pbUseHiddenMove(user, move)
+            break
           end
-        else # Use an item
-        item = commands[1][command[1]][0]
-        pbHideMenu
-        if ItemHandlers.triggerConfirmUseInField(item)
-          break if Kernel.pbUseKeyItemInField(item)
+        else
+          pbHideMenu
+          if pbConfirmUseHiddenMove(user,move)
+            $game_temp.in_menu = false
+            pbUseHiddenMove(user,move)
+            break
+          else
+            pbShowMenu
+          end
         end
-        end
-        pbShowMenu
+      else   # Use an item
+      item = commands[1][command[1]][0]
+      pbHideMenu
+      if ItemHandlers.triggerConfirmUseInField(item)
+        $game_temp.in_menu = false
+        break if pbUseKeyItemInField(item)
+        $game_temp.in_menu = true
       end
+      end
+      pbShowMenu
     end
     @scene.pbEndScene
   end
