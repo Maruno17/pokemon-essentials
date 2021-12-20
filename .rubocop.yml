@@ -1,3 +1,5 @@
+TargetRubyVersion: "3.0"
+
 AllCops:
   NewCops: enable
 
@@ -17,6 +19,51 @@ Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
 #===============================================================================
+# Lint
+#===============================================================================
+
+# Some methods and blocks will have unused arguments. That's fine.
+Lint/UnusedBlockArgument:
+  Enabled: false
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+#===============================================================================
+# Metrics
+#===============================================================================
+
+# Yes, Essentials has classes/modules/methods that are too big and complex.
+# That's just how it is.
+Metrics:
+  Enabled: false
+
+#===============================================================================
+# Naming
+#===============================================================================
+
+# This cop forbids class/module names with underscores in them. Having
+# underscores isn't the end of the world.
+Naming/ClassAndModuleCamelCase:
+  Enabled: false
+
+# Script files are given names that look reasonable in the list of script
+# sections in RMXP, and are all numbered. They won't be camel_case.
+Naming/FileName:
+  Enabled: false
+
+#===============================================================================
+# Security
+#===============================================================================
+
+# Script event conditions and script switches are eval'd, amongst other things.
+Security/Eval:
+  Enabled: false
+
+# Plenty of things are loaded via Marshal.
+Security/MarshalLoad:
+  Enabled: false
+
+#===============================================================================
 # Style
 #===============================================================================
 
@@ -29,6 +76,10 @@ Style/Documentation:
 Style/FormatString:
   EnforcedStyle: sprintf
 
+# RMXP and Essentials use lots of global variables.
+Style/GlobalVars:
+  Enabled: false
+
 # Mixing the styles within a hash just looks silly.
 Style/HashSyntax:
   EnforcedStyle: no_mixed_keys
@@ -37,8 +88,17 @@ Style/HashSyntax:
 Style/PreferredHashMethods:
   Enabled: false
 
+# Explicit returns help to show whether a method returns a value.
+Style/RedundantReturn:
+  Enabled: false
+
 # Enforcing the names of variables? To single letter ones? Just no.
 Style/SingleLineBlockParams:
+  Enabled: false
+
+# Single line methods use up less space, and they're easier to list next to each
+# other and see that they behave similarly.
+Style/SingleLineMethods:
   Enabled: false
 
 # Single quotes being faster is hardly measurable and only affects parse time.
