@@ -1,0 +1,55 @@
+AllCops:
+  NewCops: enable
+
+#===============================================================================
+# Layout
+#===============================================================================
+
+# In a hash with multiple values (one per line), prefer the => to be lined up
+# and text to otherwise be left-aligned.
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+# This means hashes and arrays are written the same way, rather than hashes
+# needing to be written like { foo => bar } while arrays are like [foo, bar].
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+#===============================================================================
+# Style
+#===============================================================================
+
+# Check with yard instead.
+Style/Documentation:
+  Enabled: false
+
+# It's a choice between format and sprintf. We already make use of sprintf and
+# the translatable _ISPRINTF, so...
+Style/FormatString:
+  EnforcedStyle: sprintf
+
+# Mixing the styles within a hash just looks silly.
+Style/HashSyntax:
+  EnforcedStyle: no_mixed_keys
+
+# has_key? and has_value? are far more readable than key? and value?
+Style/PreferredHashMethods:
+  Enabled: false
+
+# Enforcing the names of variables? To single letter ones? Just no.
+Style/SingleLineBlockParams:
+  Enabled: false
+
+# Single quotes being faster is hardly measurable and only affects parse time.
+# Enforcing double quotes reduces the times where you need to change them
+# when introducing an interpolation or an apostrophe. Use single quotes only if
+# their semantics are needed.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# This cop requires arrays of symbols to be written like %i[BULBASAUR IVYSAUR].
+# We don't need that nonsense. [:BULBASAUR, :IVYSAUR] is clearer and introduces
+# no additional syntax to confuse people.
+Style/SymbolArray:
+  EnforcedStyle: brackets
