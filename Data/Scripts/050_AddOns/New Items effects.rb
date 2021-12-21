@@ -81,11 +81,11 @@ def useLantern()
   end
   Kernel.pbMessage(_INTL("The Lantern illuminated the cave!"))
   darkness.radius += 176
-  while darkness.radius<176
+  while darkness.radius < 176
     Graphics.update
     Input.update
     pbUpdateSceneMapd
-    darkness.radius+=4
+    darkness.radius += 4
   end
   return true
 end
@@ -107,7 +107,7 @@ ItemHandlers::UseInField.add(:TELEPORTER, proc { |item|
 })
 
 def useTeleporter()
-  if HiddenMoveHandlers.triggerCanUseMove(:TELEPORT, 0,true)
+  if HiddenMoveHandlers.triggerCanUseMove(:TELEPORT, 0, true)
     Kernel.pbMessage(_INTL("Teleport to where?", $Trainer.name))
     ret = pbBetterRegionMap(-1, true, true)
     pbShowMenu unless ret
@@ -210,11 +210,11 @@ ItemHandlers::UseFromBag.add(:LANTERN, proc { |item|
   Kernel.pbMessage(_INTL("The Lantern illuminated the cave!"))
   $PokemonGlobal.flashUsed = true
   darkness.radius += 176
-  while darkness.radius<176
-   Graphics.update
-   Input.update
-   pbUpdateSceneMap
-   darkness.radius+=4
+  while darkness.radius < 176
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    darkness.radius += 4
   end
   next true
 })
@@ -389,8 +389,8 @@ ItemHandlers::UseOnPokemon.add(:MISTSTONE, proc { |item, pokemon, scene|
   end
 })
 
-ItemHandlers::UseFromBag.add(:DEBUGGER,proc{|item|
-  Kernel.pbMessage(_INTL("[{1}]The debugger should ONLY be used if you are stuck somewhere because of a glitch.",Settings::GAME_VERSION_NUMBER))
+ItemHandlers::UseFromBag.add(:DEBUGGER, proc { |item|
+  Kernel.pbMessage(_INTL("[{1}]The debugger should ONLY be used if you are stuck somewhere because of a glitch.", Settings::GAME_VERSION_NUMBER))
   if Kernel.pbConfirmMessageSerious(_INTL("Innapropriate use of this item can lead to unwanted effects and make the game unplayable. Do you want to continue?"))
     $game_player.cancelMoveRoute()
     Kernel.pbStartOver(false)
@@ -398,7 +398,7 @@ ItemHandlers::UseFromBag.add(:DEBUGGER,proc{|item|
   end
 })
 
-ItemHandlers::UseFromBag.add(:MAGICBOOTS,proc{|item|
+ItemHandlers::UseFromBag.add(:MAGICBOOTS, proc { |item|
   if $DEBUG
     if Kernel.pbConfirmMessageSerious(_INTL("Take off the Magic Boots?"))
       $DEBUG = false
@@ -412,7 +412,6 @@ ItemHandlers::UseFromBag.add(:MAGICBOOTS,proc{|item|
   end
   next 1
 })
-
 
 def pbForceEvo(pokemon)
   newspecies = getEvolvedSpecies(pokemon)
@@ -470,7 +469,6 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, pokemon, scene|
   next true if pbDNASplicing(pokemon, scene)
   next false
 })
-
 
 ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
   if !pokemon.isFusion?
@@ -533,7 +531,6 @@ ItemHandlers::UseOnPokemon.add(:INFINITEREVERSERS, proc { |item, pokemon, scene|
 
   next false
 })
-
 
 #
 # def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
@@ -1191,21 +1188,22 @@ ItemHandlers::UseOnPokemon.add(:MISTSTONE, proc { |item, pokemon, scene|
 })
 
 def pbForceEvo(pokemon)
-  newspecies = getEvolvedSpecies(pokemon)
-  return false if newspecies == -1
-  if newspecies > 0
-    evo = PokemonEvolutionScene.new
-    evo.pbStartScreen(pokemon, newspecies)
-    evo.pbEvolution
-    evo.pbEndScreen
-  end
+  evolutions = getEvolvedSpecies(pokemon)
+  return false if evolutions.empty?
+  #if multiple evolutions, pick a random one
+  #(format of returned value is [[speciesNum, level]])
+  newspecies = evolutions[rand(evolutions.length - 1)][0]
+  return false if newspecies == nil
+  evo = PokemonEvolutionScene.new
+  evo.pbStartScreen(pokemon, newspecies)
+  evo.pbEvolution
+  evo.pbEndScreen
   return true
 end
 
+# format of returned value is [[speciesNum, evolutionMethod],[speciesNum, evolutionMethod],etc.]
 def getEvolvedSpecies(pokemon)
-  return pbCheckEvolutionEx(pokemon) { |pokemon, evonib, level, poke|
-    next pbMiniCheckEvolution(pokemon, evonib, level, poke, true)
-  }
+  return GameData::Species.get(pokemon.species).get_evolutions(true)
 end
 
 #(copie de fixEvolutionOverflow dans FusionScene)
@@ -1251,9 +1249,6 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, pokemon, scene|
   next true if pbDNASplicing(pokemon, scene)
   next false
 })
-
-
-
 
 def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
   playingBGM = $game_system.getPlayingBGM
@@ -1367,7 +1362,6 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
         scene.pbDisplay(_INTL(" ... "))
         scene.pbDisplay(_INTL(" ... "))
 
-
         if pokemon.exp_when_fused_head == nil || pokemon.exp_when_fused_body == nil
           new_level = calculateUnfuseLevelOldMethod(pokemon, supersplicers)
           body_level = new_level
@@ -1383,7 +1377,6 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
           poke1.exp = exp_body
           poke2.exp = exp_head
         end
-
 
         if $Trainer.party.length >= 6
           if (keepInParty == 0)

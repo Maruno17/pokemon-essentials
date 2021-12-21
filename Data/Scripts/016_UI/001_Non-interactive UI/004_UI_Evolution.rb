@@ -458,16 +458,20 @@ class PokemonEvolutionScene
     if canceled
       pbRestoreSpriteState(@sprites["rsprite1"],oldstate)
       pbRestoreSpriteState(@sprites["rsprite2"],oldstate2)
-      @sprites["rsprite1"].zoom_x      = 1.0
-      @sprites["rsprite1"].zoom_y      = 1.0
+      @sprites["rsprite1"].zoom_x      = Settings::FRONTSPRITE_SCALE
+      @sprites["rsprite1"].zoom_y      = Settings::FRONTSPRITE_SCALE
+      @sprites["rsprite2"].zoom_x      = Settings::FRONTSPRITE_SCALE
+      @sprites["rsprite2"].zoom_y      = Settings::FRONTSPRITE_SCALE
       @sprites["rsprite1"].color.alpha = 0
       @sprites["rsprite1"].visible     = true
       @sprites["rsprite2"].visible     = false
     else
       @sprites["rsprite1"].visible     = false
       @sprites["rsprite2"].visible     = true
-      @sprites["rsprite2"].zoom_x      = 1.0
-      @sprites["rsprite2"].zoom_y      = 1.0
+      @sprites["rsprite1"].zoom_x      = Settings::FRONTSPRITE_SCALE
+      @sprites["rsprite1"].zoom_y      = Settings::FRONTSPRITE_SCALE
+      @sprites["rsprite2"].zoom_x      = Settings::FRONTSPRITE_SCALE
+      @sprites["rsprite2"].zoom_y      = Settings::FRONTSPRITE_SCALE
       @sprites["rsprite2"].color.alpha = 0
     end
     (Graphics.frame_rate/4).times do
@@ -513,6 +517,10 @@ class PokemonEvolutionScene
     @sprites["rsprite1"] = rsprite1
     @sprites["rsprite2"] = rsprite2
     pbGenerateMetafiles(rsprite1.ox,rsprite1.oy,rsprite2.ox,rsprite2.oy)
+    @sprites["rsprite1"].zoom_x = Settings::FRONTSPRITE_SCALE
+    @sprites["rsprite1"].zoom_y = Settings::FRONTSPRITE_SCALE
+    @sprites["rsprite2"].zoom_x = Settings::FRONTSPRITE_SCALE
+    @sprites["rsprite2"].zoom_y = Settings::FRONTSPRITE_SCALE
     @sprites["msgwindow"] = pbCreateMessageWindow(@msgviewport)
     pbFadeInAndShow(@sprites) { pbUpdate }
   end

@@ -25,7 +25,7 @@ end
 #
 def incrNbRematches(trainerId)
   $PokemonGlobal.rematchedTrainers.each do |key, trainer|
-    if(trainer.id == trainerId)
+    if (trainer.id == trainerId)
       trainer.incrementNbTimes()
     end
   end
@@ -71,11 +71,6 @@ def addNewTrainerRematch(trainerId)
 
 end
 
-
-
-
-
-
 def getNumberRematchOld(trainerId)
   if $PokemonGlobal.rematchedTrainers == nil
     $PokemonGlobal.rematchedTrainers = Hash.new
@@ -83,7 +78,7 @@ def getNumberRematchOld(trainerId)
   end
 
   $PokemonGlobal.rematchedTrainers.each do |key, trainer|
-    if(trainer.id == trainerId)
+    if (trainer.id == trainerId)
       return (trainer.nbTimesRematched)
     end
   end
@@ -91,12 +86,10 @@ def getNumberRematchOld(trainerId)
   return 0
 end
 
-
-
-def getRematchLevel(originalLevel,nbRematch)
-  levelCap = getLevelCap(originalLevel,$Trainer.numbadges)
+def getRematchLevel(originalLevel, nbRematch)
+  levelCap = getLevelCap(originalLevel, $Trainer.numbadges)
   expRate = getLevelRate(originalLevel)
-  levelIncr =0
+  levelIncr = 0
   for i in 0..nbRematch
     if i % expRate == 0
       levelIncr += 1
@@ -108,32 +101,31 @@ def getRematchLevel(originalLevel,nbRematch)
 end
 
 def getLevelRate(originalLevel)
-  return 2 + (originalLevel/20).ceil
+  return 2 + (originalLevel / 20).ceil
 end
 
-def getLevelCap(originalLevel,nbBadges)
+def getLevelCap(originalLevel, nbBadges)
   return 100 if $game_switches[599] #no cap in battle arena
-  cap = originalLevel + nbBadges +2
+  cap = originalLevel + nbBadges + 2
   return cap < 100 ? cap : 100
 end
 
-
 def decreaseRematchNumber(trainerId)
   $PokemonGlobal.rematchedTrainers.each do |key, trainer|
-    if(trainer.id == trainerId)
+    if (trainer.id == trainerId)
       trainer.removeNbTimes()
       return
     end
   end
 end
 
-
-def evolveRematchPokemon(nbRematch,species)
-  if(nbRematch >= 10 && $Trainer.numbadges >= 3)
-    evospecies=getEvolution(species)
+def evolveRematchPokemon(nbRematch, speciesSymbol)
+  species = getDexNumberForSpecies(speciesSymbol)
+  if (nbRematch >= 10 && $Trainer.numbadges >= 3)
+    evospecies = getEvolution(species)
     return species if evospecies == -1
-    if(nbRematch >= 20 && $Trainer.numbadges >= 8)
-      secondEvoSpecies=getEvolution(evospecies)
+    if (nbRematch >= 20 && $Trainer.numbadges >= 8)
+      secondEvoSpecies = getEvolution(evospecies)
       return secondEvoSpecies == -1 ? evospecies : secondEvoSpecies
     end
     return evospecies
@@ -143,28 +135,40 @@ end
 
 def getEvolution(species)
   if species >= Settings::NB_POKEMON
-    pokemon = PokeBattle_Pokemon.new(species,1)
     body = getBasePokemonID(species)
-    head = getBasePokemonID(species,false)
-    ret_evoB = pbGetEvolvedFormData(body)
-    ret_evoH = pbGetEvolvedFormData(head)
-    evoBody = ret_evoB.any? ? ret_evoB[0][2] : -1
-    evoHead = ret_evoH.any? ? ret_evoH[0][2] : -1
-    return -1 if isNegativeOrNull(evoBody) && isNegativeOrNull(evoHead)
-    return body*Settings::NB_POKEMON+evoHead if isNegativeOrNull(evoBody)   #only head evolves
-    return evoBody*Settings::NB_POKEMON + head if isNegativeOrNull(evoHead)  #only body evolves
-    return evoBody*Settings::NB_POKEMON+evoHead                   #both evolve
+    head = getBasePokemonID(species, false)
+
+    bodyPossibleEvolutions = GameData::Species.get(body).get_evolutions(true)
+    headPossibleEvolutions = GameData::Species.get(head).get_evolutions(true)
+
+    bodyCanEvolve = !bodyPossibleEvolutions.empty?
+    headCanEvolve = !headPossibleEvolutions.empty?
+
+    evoBodySpecies = bodyCanEvolve ? bodyPossibleEvolutions[rand(bodyPossibleEvolutions.length - 1)][0] : nil
+    evoHeadSpecies = headCanEvolve ? headPossibleEvolutions[rand(headPossibleEvolutions.length - 1)][0] : nil
+    if evoBodySpecies != nil
+      evoBody= getDexNumberForSpecies(evoBodySpecies)
+    end
+    if evoHeadSpecies != nil
+      evoHead= getDexNumberForSpecies(evoHeadSpecies)
+    end
+
+    return -1 if evoBody == nil && evoHead == nil
+    return body * Settings::NB_POKEMON + evoHead if evoBody == nil #only head evolves
+    return evoBody * Settings::NB_POKEMON + head if evoHead == nil #only body evolves
+    return evoBody * Settings::NB_POKEMON + evoHead #both evolve
   else
     evo = pbGetEvolvedFormData(species)
-    return evo.any? ? getDexNumberForSpecies(evo[0][0]) : -1
+    newSpecies = evo[rand(evo.length - 1)][0]
+    return evo.any? ? getDexNumberForSpecies(newSpecies) : -1
   end
 end
 
-
-def getFusionSpecies(body,head)
+def getFusionSpecies(body, head)
   id = body * Settings::NB_POKEMON + head
-  return  GameData::Species.get(id).species
+  return GameData::Species.get(id).species
 end
+
 #
 def evolveHead(species)
   species_id = getDexNumberForSpecies(species)
@@ -172,10 +176,10 @@ def evolveHead(species)
     evo = getEvolution(species_id)
     return evo == -1 ? species_id : evo
   end
-  head = getBasePokemonID(species_id,false)
+  head = getBasePokemonID(species_id, false)
   body = getBasePokemonID(species_id)
   headEvo = getEvolution(head)
-  return headEvo == -1 ? species_id : getFusionSpecies(body,headEvo)
+  return headEvo == -1 ? species_id : getFusionSpecies(body, headEvo)
 end
 
 def evolveBody(species)
@@ -184,49 +188,48 @@ def evolveBody(species)
     evo = getEvolution(species_id)
     return evo == -1 ? species_id : evo
   end
-  head = getBasePokemonID(species_id,false)
+  head = getBasePokemonID(species_id, false)
   body = getBasePokemonID(species_id)
   bodyEvo = getEvolution(body)
-  return bodyEvo == -1 ? species_id : getFusionSpecies(bodyEvo,head)
+  return bodyEvo == -1 ? species_id : getFusionSpecies(bodyEvo, head)
 end
-
 
 def getCorrectEvolvedSpecies(pokemon)
   if pokemon.species >= Settings::NB_POKEMON
     body = getBasePokemonID(pokemon.species)
-    head = getBasePokemonID(pokemon.species,false)
-    ret1=-1;ret2=-1
+    head = getBasePokemonID(pokemon.species, false)
+    ret1 = -1; ret2 = -1
     for form in pbGetEvolvedFormData(body)
-      retB=yield pokemon,form[0],form[1],form[2]
-      break if retB>0
+      retB = yield pokemon, form[0], form[1], form[2]
+      break if retB > 0
     end
     for form in pbGetEvolvedFormData(head)
-      retH=yield pokemon,form[0],form[1],form[2]
-      break if retH>0
+      retH = yield pokemon, form[0], form[1], form[2]
+      break if retH > 0
     end
     return ret if ret == retB && ret == retH
-    return  fixEvolutionOverflow(retB,retH,pokemon.species)
+    return fixEvolutionOverflow(retB, retH, pokemon.species)
   else
     for form in pbGetEvolvedFormData(pokemon.species)
-      newspecies=form[2]
+      newspecies = form[2]
     end
     return newspecies;
   end
 
 end
 
-
-def printDebugRematchInfo(nbRematch,expRate,newLevel,levelCap,originalLevel)
+def printDebugRematchInfo(nbRematch, expRate, newLevel, levelCap, originalLevel)
   info = ""
-  info << "total rematched trainers: "+   $PokemonGlobal.rematchedTrainers.length.to_s +  "\n"
+  info << "total rematched trainers: " + $PokemonGlobal.rematchedTrainers.length.to_s + "\n"
 
-  info << "nb times: "+  nbRematch.to_s +  "\n"
-  info << "lvl up every " +  expRate.to_s +  " times" +  "\n"
-  info << "original level: " << originalLevel.to_s +  "\n"
-  info << "new level: " +  newLevel.to_s  +  "\n"
-  info <<  "level cap: "+  levelCap.to_s
+  info << "nb times: " + nbRematch.to_s + "\n"
+  info << "lvl up every " + expRate.to_s + " times" + "\n"
+  info << "original level: " << originalLevel.to_s + "\n"
+  info << "new level: " + newLevel.to_s + "\n"
+  info << "level cap: " + levelCap.to_s
   print info
 end
+
 #
 #
 #

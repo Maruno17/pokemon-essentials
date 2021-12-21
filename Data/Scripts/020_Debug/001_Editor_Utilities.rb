@@ -119,8 +119,11 @@ def pbChooseSpeciesList(default = nil)
   # commands = []
   # GameData::Species.each { |s| commands.push([s.id_number, s.real_name, s.id]) if s.form == 0 }
   # return pbChooseList(commands, default, nil, -1)
+  #
+  defaultNumber = default == nil ? 1 : getDexNumberForSpecies(default)
   params = ChooseNumberParams.new
   params.setRange(1,PBSpecies.maxValue)
+  params.setInitialValue(defaultNumber)
   dexNum = pbMessageChooseNumber("dex number?",params)
   return GameData::Species.get(dexNum)
 end
