@@ -325,7 +325,7 @@ class Game_Temp
 end
 
 #===============================================================================
-# Permanently stores data of dependent events (i.e. in save files).
+# Permanently stores data of follower events (i.e. in save files).
 #===============================================================================
 class PokemonGlobalMetadata
   attr_accessor :dependentEvents   # Deprecated

@@ -240,7 +240,7 @@ Bicycle = true
 MapPosition = 0,16,10
 BattleBack = cave1
 Environment = Cave
-Flags = Magnetic
+Flags = Magnetic,DistortionWorld
 #-------------------------------
 [050]   # Rock Cave B1F
 Name = Route 7
@@ -249,7 +249,7 @@ MapPosition = 0,16,10
 DarkMap = true
 BattleBack = cave3
 Environment = Cave
-Flags = Magnetic
+Flags = Magnetic,DistortionWorld
 #-------------------------------
 [051]   # Dungeon
 Name = Route 7
@@ -258,7 +258,7 @@ MapPosition = 0,16,10
 Dungeon = true
 BattleBack = cave2
 Environment = Cave
-Flags = Magnetic
+Flags = Magnetic,DistortionWorld
 #-------------------------------
 [052]   # Battle Frontier
 Name = Battle Frontier
@@ -375,6 +375,7 @@ ShowArea = true
 Weather = Storm,50
 MapPosition = 0,18,17
 BattleBack = field
+Flags = DistortionWorld
 #-------------------------------
 [073]   # Faraday Island
 Name = Faraday Island
@@ -382,6 +383,7 @@ Outdoor = true
 ShowArea = true
 MapPosition = 0,22,16
 BattleBack = field
+Flags = DistortionWorld
 #-------------------------------
 [074]   # Route 6 Cycling Road gate
 Name = Route 6

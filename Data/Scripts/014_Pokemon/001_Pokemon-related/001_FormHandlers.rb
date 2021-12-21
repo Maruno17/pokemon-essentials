@@ -259,8 +259,9 @@ MultipleForms.register(:ROTOM, {
 
 MultipleForms.register(:GIRATINA, {
   "getForm" => proc { |pkmn|
-    maps = [49, 50, 51, 72, 73]   # Map IDs for Origin Forme
-    if pkmn.hasItem?(:GRISEOUSORB) || ($game_map && maps.include?($game_map.map_id))
+    next 1 if pkmn.hasItem?(:GRISEOUSORB)
+    if $game_map &&
+       GameData::MapMetadata.get($game_map.map_id)&.has_flag?("DistortionWorld")
       next 1
     end
     next 0
