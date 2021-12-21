@@ -11,7 +11,7 @@ Actual stats? @attack, @defense, etc.
 #===============================================================================
 #
 #===============================================================================
-module BattlerDebugMenuCommands
+module BattlePokemonDebugMenuCommands
   @@commands = HandlerHashBasic.new
 
   def self.register(option, hash)
@@ -50,39 +50,40 @@ end
 #===============================================================================
 # HP/Status options
 #===============================================================================
-BattlerDebugMenuCommands.register("hpstatusmenu", {
-  "parent"      => "main",
-  "name"        => _INTL("HP/Status..."),
-  "always_show" => true
+BattlePokemonDebugMenuCommands.register("hp_status_menu", {
+  "parent" => "main",
+  "name"   => _INTL("HP/Status..."),
+  "usage"  => :both
 })
 
-BattlerDebugMenuCommands.register("sethp", {
-  "parent"      => "hpstatusmenu",
-  "name"        => _INTL("Set HP"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_hp", {
+  "parent" => "hp_status_menu",
+  "name"   => _INTL("Set HP"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
       pbMessage("\\ts[]" + _INTL("{1} is an egg.", pkmn.name))
       next
-    elsif battler.totalhp == 1
+    elsif pkmn.totalhp == 1
       pbMessage("\\ts[]" + _INTL("Can't change HP, {1}'s maximum HP is 1.", pkmn.name))
       next
     end
     params = ChooseNumberParams.new
-    params.setRange(1, battler.totalhp)
-    params.setDefaultValue(battler.hp)
+    params.setRange(1, pkmn.totalhp)
+    params.setDefaultValue(pkmn.hp)
     new_hp = pbMessageChooseNumber(
-      "\\ts[]" + _INTL("Set {1}'s HP (1-{2}).", battler.pbThis(true), battler.totalhp), params
+      "\\ts[]" + _INTL("Set {1}'s HP (1-{2}).", (battler) ? battler.pbThis(true) : pkmn.name, pkmn.totalhp), params
     )
-    battler.hp = new_hp if new_hp != battler.hp
+    next if new_hp == pkmn.hp
+    (battler || pkmn).hp = new_hp
   }
 })
 
-BattlerDebugMenuCommands.register("setstatus", {
-  "parent"      => "hpstatusmenu",
-  "name"        => _INTL("Set status"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_status", {
+  "parent" => "hp_status_menu",
+  "name"   => _INTL("Set status"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
       pbMessage("\\ts[]" + _INTL("{1} is an egg.", pkmn.name))
       next
@@ -99,77 +100,95 @@ BattlerDebugMenuCommands.register("setstatus", {
       ids.push(s.id)
     end
     loop do
-      msg = _INTL("Current status: {1}", GameData::Status.get(battler.status).name)
-      if battler.status == :SLEEP
-        msg += " " + _INTL("(turns: {1})", battler.statusCount)
-      elsif battler.status == :POISON && battler.statusCount > 0
-        msg += " " + _INTL("(toxic, count: {1})", battler.statusCount)
+      msg = _INTL("Current status: {1}", GameData::Status.get(pkmn.status).name)
+      if pkmn.status == :SLEEP
+        msg += " " + _INTL("(turns: {1})", pkmn.statusCount)
+      elsif pkmn.status == :POISON && pkmn.statusCount > 0
+        if battler
+          msg += " " + _INTL("(toxic, count: {1})", battler.statusCount)
+        else
+          msg += " " + _INTL("(toxic)")
+        end
       end
       cmd = pbMessage("\\ts[]" + msg, commands, -1, nil, cmd)
       break if cmd < 0
       case cmd
       when 0   # Cure
-        battler.status = :NONE
+        if battler
+          battler.status = :NONE
+        else
+          pkmn.heal_status
+        end
       else   # Give status problem
+        pkmn_name = (battler) ? battler.pbThis(true) : pkmn.name
         case ids[cmd]
         when :SLEEP
           params = ChooseNumberParams.new
           params.setRange(0, 99)
-          params.setDefaultValue((battler.status == :SLEEP) ? battler.statusCount : 3)
+          params.setDefaultValue((pkmn.status == :SLEEP) ? pkmn.statusCount : 3)
           params.setCancelValue(-1)
-          count = pbMessageChooseNumber("\\ts[]" + _INTL("Set {1}'s sleep count (0-99).", battler.pbThis(true)), params)
+          count = pbMessageChooseNumber("\\ts[]" + _INTL("Set {1}'s sleep count (0-99).", pkmn_name), params)
           next if count < 0
-          battler.statusCount = count
+          (battler || pkmn).statusCount = count
         when :POISON
-          if pbConfirmMessage("\\ts[]" + _INTL("Make {1} badly poisoned (toxic)?", battler.pbThis(true)))
-            params = ChooseNumberParams.new
-            params.setRange(0, 15)
-            params.setDefaultValue(0)
-            params.setCancelValue(-1)
-            count = pbMessageChooseNumber(
-              "\\ts[]" + _INTL("Set {1}'s toxic count (0-15).", battler.pbThis(true)), params
-            )
-            next if count < 0
-            battler.statusCount = 1
-            battler.effects[PBEffects::Toxic] = count
+          if pbConfirmMessage("\\ts[]" + _INTL("Make {1} badly poisoned (toxic)?", pkmn_name))
+            if battler
+              params = ChooseNumberParams.new
+              params.setRange(0, 15)
+              params.setDefaultValue(0)
+              params.setCancelValue(-1)
+              count = pbMessageChooseNumber(
+                "\\ts[]" + _INTL("Set {1}'s toxic count (0-15).", pkmn_name), params
+              )
+              next if count < 0
+              battler.statusCount = 1
+              battler.effects[PBEffects::Toxic] = count
+            else
+              pkmn.statusCount = 1
+            end
           else
-            battler.statusCount = 0
+            (battler || pkmn).statusCount = 0
           end
         end
-        battler.status = ids[cmd]
+        (battler || pkmn).status = ids[cmd]
       end
     end
   }
 })
 
-BattlerDebugMenuCommands.register("fullheal", {
-  "parent"      => "hpstatusmenu",
-  "name"        => _INTL("Heal HP and status"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("full_heal", {
+  "parent" => "hp_status_menu",
+  "name"   => _INTL("Heal HP and status"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
       pbMessage("\\ts[]" + _INTL("{1} is an egg.", pkmn.name))
       next
     end
-    battler.hp = battler.totalhp
-    battler.status = :NONE
+    if battler
+      battler.hp = battler.totalhp
+      battler.status = :NONE
+    else
+      pkmn.heal_HP
+      pkmn.heal_status
+    end
   }
 })
 
 #===============================================================================
 # Level/stats options
 #===============================================================================
-BattlerDebugMenuCommands.register("levelstats", {
-  "parent"      => "main",
-  "name"        => _INTL("Stats/level..."),
-  "always_show" => true
+BattlePokemonDebugMenuCommands.register("level_stats", {
+  "parent" => "main",
+  "name"   => _INTL("Stats/level..."),
+  "usage"  => :both
 })
 
-BattlerDebugMenuCommands.register("setstatstages", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("Set stat stages"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_stat_stages", {
+  "parent" => "level_stats",
+  "name"   => _INTL("Set stat stages"),
+  "usage"  => :battler,
+  "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
       pbMessage("\\ts[]" + _INTL("{1} is an egg.", pkmn.name))
       next
@@ -204,11 +223,11 @@ BattlerDebugMenuCommands.register("setstatstages", {
   }
 })
 
-BattlerDebugMenuCommands.register("setlevel", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("Set level"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_level", {
+  "parent" => "level_stats",
+  "name"   => _INTL("Set level"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
       pbMessage("\\ts[]" + _INTL("{1} is an egg.", pkmn.name))
       next
@@ -222,16 +241,16 @@ BattlerDebugMenuCommands.register("setlevel", {
     if level != pkmn.level
       pkmn.level = level
       pkmn.calc_stats
-      battler.pbUpdate
+      battler.pbUpdate if battler
     end
   }
 })
 
-BattlerDebugMenuCommands.register("setexp", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("Set Exp"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_exp", {
+  "parent" => "level_stats",
+  "name"   => _INTL("Set Exp"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
       pbMessage("\\ts[]" + _INTL("{1} is an egg.", pkmn.name))
       next
@@ -252,11 +271,11 @@ BattlerDebugMenuCommands.register("setexp", {
   }
 })
 
-BattlerDebugMenuCommands.register("hiddenvalues", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("EV/IV..."),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("hidden_values", {
+  "parent" => "level_stats",
+  "name"   => _INTL("EV/IV..."),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     cmd = 0
     loop do
       persid = sprintf("0x%08X", pkmn.personalID)
@@ -296,7 +315,7 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
             if f != pkmn.ev[ev_id[cmd2]]
               pkmn.ev[ev_id[cmd2]] = f
               pkmn.calc_stats
-              battler.pbUpdate
+              battler.pbUpdate if battler
             end
           else   # (Max) Randomise all
             evTotalTarget = Pokemon::EV_LIMIT
@@ -315,7 +334,7 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
               evTotalTarget -= addVal
             end
             pkmn.calc_stats
-            battler.pbUpdate
+            battler.pbUpdate if battler
           end
         end
       when 1   # Set IVs
@@ -346,12 +365,12 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
             if f != pkmn.iv[iv_id[cmd2]]
               pkmn.iv[iv_id[cmd2]] = f
               pkmn.calc_stats
-              battler.pbUpdate
+              battler.pbUpdate if battler
             end
           else   # Randomise all
             GameData::Stat.each_main { |s| pkmn.iv[s.id] = rand(Pokemon::IV_STAT_LIMIT + 1) }
             pkmn.calc_stats
-            battler.pbUpdate
+            battler.pbUpdate if battler
           end
         end
       end
@@ -359,11 +378,11 @@ BattlerDebugMenuCommands.register("hiddenvalues", {
   }
 })
 
-BattlerDebugMenuCommands.register("sethappiness", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("Set happiness"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_happiness", {
+  "parent" => "level_stats",
+  "name"   => _INTL("Set happiness"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     params = ChooseNumberParams.new
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.happiness)
@@ -375,11 +394,11 @@ BattlerDebugMenuCommands.register("sethappiness", {
 #===============================================================================
 # Types
 #===============================================================================
-BattlerDebugMenuCommands.register("settypes", {
-  "parent"      => "main",
-  "name"        => _INTL("Set types"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_types", {
+  "parent" => "main",
+  "name"   => _INTL("Set types"),
+  "usage"  => :battler,
+  "effect" => proc { |pkmn, battler, battle|
     max_main_types = 2   # The most types a Pokémon can have normally
     cmd = 0
     loop do
@@ -424,17 +443,17 @@ BattlerDebugMenuCommands.register("settypes", {
 #===============================================================================
 # Moves options
 #===============================================================================
-BattlerDebugMenuCommands.register("moves", {
-  "parent"      => "main",
-  "name"        => _INTL("Moves..."),
-  "always_show" => true
+BattlePokemonDebugMenuCommands.register("moves", {
+  "parent" => "main",
+  "name"   => _INTL("Moves..."),
+  "usage"  => :both
 })
 
-BattlerDebugMenuCommands.register("teachmove", {
-  "parent"      => "moves",
-  "name"        => _INTL("Teach move"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("teach_move", {
+  "parent" => "moves",
+  "name"   => _INTL("Teach move"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     if pkmn.numMoves >= Pokemon::MAX_MOVES
       pbMessage("\\ts[]" + _INTL("{1} already knows {2} moves. It needs to forget one first.",
                                  pkmn.name, pkmn.numMoves))
@@ -448,16 +467,16 @@ BattlerDebugMenuCommands.register("teachmove", {
       next
     end
     pkmn.learn_move(new_move)
-    battler.moves.push(Move.from_pokemon_move(self, pkmn.moves.last)) if battler
+    battler.moves.push(Battle::Move.from_pokemon_move(self, pkmn.moves.last)) if battler
     pbMessage("\\ts[]" + _INTL("{1} learned {2}!", pkmn.name, move_name))
   }
 })
 
-BattlerDebugMenuCommands.register("forgetmove", {
-  "parent"      => "moves",
-  "name"        => _INTL("Forget move"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("forget_move", {
+  "parent" => "moves",
+  "name"   => _INTL("Forget move"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     move_names = []
     move_indices = []
     pkmn.moves.each_with_index do |move, index|
@@ -478,11 +497,11 @@ BattlerDebugMenuCommands.register("forgetmove", {
   }
 })
 
-BattlerDebugMenuCommands.register("setmovepp", {
-  "parent"      => "moves",
-  "name"        => _INTL("Set move PP"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_move_pp", {
+  "parent" => "moves",
+  "name"   => _INTL("Set move PP"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     cmd = 0
     loop do
       move_names = []
@@ -546,7 +565,7 @@ BattlerDebugMenuCommands.register("setmovepp", {
       elsif cmd == commands.length - 1   # Restore all PP
         pkmn.heal_PP
         if battler
-          battler.moves.each { |move| move.pp = move.total_pp }
+          battler.moves.each { |m| m.pp = m.total_pp }
         end
       end
     end
@@ -556,11 +575,11 @@ BattlerDebugMenuCommands.register("setmovepp", {
 #===============================================================================
 # Other options
 #===============================================================================
-BattlerDebugMenuCommands.register("setitem", {
-  "parent"      => "main",
-  "name"        => _INTL("Set item"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_item", {
+  "parent" => "main",
+  "name"   => _INTL("Set item"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     cmd = 0
     commands = [
       _INTL("Change item"),
@@ -574,14 +593,14 @@ BattlerDebugMenuCommands.register("setitem", {
       when 0   # Change item
         item = pbChooseItemList(pkmn.item_id)
         if item && item != pkmn.item_id
-          battler.item = item
+          (battler || pkmn).item = item
           if GameData::Item.get(item).is_mail?
             pkmn.mail = Mail.new(item, _INTL("Text"), $player.name)
           end
         end
       when 1   # Remove item
         if pkmn.hasItem?
-          battler.item = nil
+          (battler || pkmn).item = nil
           pkmn.mail = nil
         end
       else
@@ -591,48 +610,52 @@ BattlerDebugMenuCommands.register("setitem", {
   }
 })
 
-BattlerDebugMenuCommands.register("setability", {
-  "parent"      => "main",
-  "name"        => _INTL("Set ability"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_ability", {
+  "parent" => "main",
+  "name"   => _INTL("Set ability"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     cmd = 0
-    commands = [
-      _INTL("Set ability for battler"),
-      _INTL("Set ability for Pokémon"),
-      _INTL("Reset")
-    ]
+    commands = []
+    commands.push(_INTL("Set ability for Pokémon"))
+    commands.push(_INTL("Set ability for battler")) if battler
+    commands.push(_INTL("Reset"))
     loop do
       msg = _INTL("Battler's ability is {1}. Pokémon's ability is {2}.",
                   battler.abilityName, pkmn.ability.name)
       cmd = pbMessage("\\ts[]" + msg, commands, -1, nil, cmd)
       break if cmd < 0
+      cmd = 2 if cmd >= 1 && !battler   # Correct command for Pokémon (no battler)
       case cmd
-      when 0   # Set ability for battler
-        new_ability = pbChooseAbilityList(pkmn.ability_id)
-        if new_ability && new_ability != battler.ability_id
-          battler.ability = new_ability
-        end
-      when 1   # Set ability for Pokémon
+      when 0   # Set ability for Pokémon
         new_ability = pbChooseAbilityList(pkmn.ability_id)
         if new_ability && new_ability != pkmn.ability_id
           pkmn.ability = new_ability
-          battler.ability = pkmn.ability
+          battler.ability = pkmn.ability if battler
+        end
+      when 1   # Set ability for battler
+        if battler
+          new_ability = pbChooseAbilityList(battler.ability_id)
+          if new_ability && new_ability != battler.ability_id
+            battler.ability = new_ability
+          end
+        else
+          pbMessage(_INTL("This Pokémon isn't in battle."))
         end
       when 2   # Reset
         pkmn.ability_index = nil
         pkmn.ability = nil
-        battler.ability = pkmn.ability
+        battler.ability = pkmn.ability if battler
       end
     end
   }
 })
 
-BattlerDebugMenuCommands.register("setnature", {
-  "parent"      => "main",
-  "name"        => _INTL("Set nature"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_nature", {
+  "parent" => "main",
+  "name"   => _INTL("Set nature"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     commands = []
     ids = []
     GameData::Nature.each do |nature|
@@ -665,16 +688,16 @@ BattlerDebugMenuCommands.register("setnature", {
       elsif cmd == commands.length - 1   # Reset
         pkmn.nature = nil
       end
-      battler.pbUpdate
+      battler.pbUpdate if battler
     end
   }
 })
 
-BattlerDebugMenuCommands.register("setgender", {
-  "parent"      => "main",
-  "name"        => _INTL("Set gender"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_gender", {
+  "parent" => "main",
+  "name"   => _INTL("Set gender"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     if pkmn.singleGendered?
       pbMessage("\\ts[]" + _INTL("{1} is single-gendered or genderless.", pkmn.speciesName))
       next
@@ -699,11 +722,11 @@ BattlerDebugMenuCommands.register("setgender", {
   }
 })
 
-BattlerDebugMenuCommands.register("speciesform", {
-  "parent"      => "main",
-  "name"        => _INTL("Set form"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("form", {
+  "parent" => "main",
+  "name"   => _INTL("Set form"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     cmd = 0
     formcmds = [[], []]
     GameData::Species.each do |sp|
@@ -730,19 +753,17 @@ BattlerDebugMenuCommands.register("speciesform", {
           pkmn.forced_form = f
         end
         pkmn.form_simple = f
+        battler.form = pkmn.form if battler
       end
     end
   }
 })
 
-#===============================================================================
-# Shininess
-#===============================================================================
-BattlerDebugMenuCommands.register("setshininess", {
-  "parent"      => "main",
-  "name"        => _INTL("Set shininess"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_shininess", {
+  "parent" => "main",
+  "name"   => _INTL("Set shininess"),
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
     cmd = 0
     loop do
       msg_idx = pkmn.shiny? ? (pkmn.super_shiny? ? 1 : 0) : 2
@@ -770,14 +791,11 @@ BattlerDebugMenuCommands.register("setshininess", {
   }
 })
 
-#===============================================================================
-# Set effects
-#===============================================================================
-BattlerDebugMenuCommands.register("set_effects", {
-  "parent"      => "main",
-  "name"        => _INTL("Set effects"),
-  "always_show" => true,
-  "effect"      => proc { |battler, pkmn, battle|
+BattlePokemonDebugMenuCommands.register("set_effects", {
+  "parent" => "main",
+  "name"   => _INTL("Set effects"),
+  "usage"  => :battler,
+  "effect" => proc { |pkmn, battler, battle|
     editor = Battle::DebugSetEffects.new(battle, :battler, battler.index)
     editor.update
     editor.dispose

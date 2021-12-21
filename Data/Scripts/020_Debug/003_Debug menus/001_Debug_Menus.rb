@@ -238,10 +238,98 @@ module Battle::DebugMixin
     viewport.dispose
   end
 
-  def pbBattleBattlerDebug(battler, show_all = true)
+  def pbBattleDebugBattlerInfo(battler)
+    ret = ""
+    return ret if battler.nil?
+    # Battler index, name
+    ret += sprintf("[%d] %s", battler.index, battler.pbThis)
+    ret += "\r\n"
+    # Species
+    ret += _INTL("Species: {1}", GameData::Species.get(battler.species).name)
+    ret += "\r\n"
+    # Form number
+    ret += _INTL("Form: {1}", battler.form)
+    ret += "\r\n"
+    # Level, gender, shininess
+    ret += _INTL("Level {1}, {2}", battler.level,
+                 (battler.pokemon.male?) ? "♂" : (battler.pokemon.female?) ? "♀" : _INTL("genderless"))
+    ret += ", " + _INTL("shiny") if battler.pokemon.shiny?
+    ret += "\r\n"
+    # HP
+    ret += _INTL("HP: {1}/{2} ({3}%)", battler.hp, battler.totalhp, (100.0 * battler.hp / battler.totalhp).to_i)
+    ret += "\r\n"
+    # Status
+    ret += _INTL("Status: {1}", GameData::Status.get(battler.status).name)
+    case battler.status
+    when :SLEEP
+      ret += " " + _INTL("({1} rounds left)", battler.statusCount)
+    when :POISON
+      if battler.statusCount > 0
+        ret += " " + _INTL("(toxic, {1}/16)", battler.effects[PBEffects::Toxic])
+      end
+    end
+    ret += "\r\n"
+    # Stat stages
+    stages = []
+    GameData::Stat.each_battle do |stat|
+      next if battler.stages[stat.id] == 0
+      stage_text = ""
+      stage_text += "+" if battler.stages[stat.id] > 0
+      stage_text += battler.stages[stat.id].to_s
+      stage_text += " " + stat.name_brief
+      stages.push(stage_text)
+    end
+    ret += _INTL("Stat stages: {1}", (stages.empty?) ? "-" : stages.join(", "))
+    ret += "\r\n"
+    # Ability
+    ret += _INTL("Ability: {1}", (battler.ability) ? battler.abilityName : "-")
+    ret += "\r\n"
+    # Held item
+    ret += _INTL("Item: {1}", (battler.item) ? battler.itemName : "-")
+    return ret
+  end
+
+  def pbBattleDebugPokemonInfo(pkmn)
+    ret = ""
+    return ret if pkmn.nil?
+    sp_data = pkmn.species_data
+    # Name, species
+    ret += sprintf("%s (%s)", pkmn.name, sp_data.name)
+    ret += "\r\n"
+    # Form number
+    ret += _INTL("Form: {1}", sp_data.form)
+    ret += "\r\n"
+    # Level, gender, shininess
+    ret += _INTL("Level {1}, {2}", pkmn.level,
+                 (pkmn.male?) ? "♂" : (pkmn.female?) ? "♀" : _INTL("genderless"))
+    ret += ", " + _INTL("shiny") if pkmn.shiny?
+    ret += "\r\n"
+    # HP
+    ret += _INTL("HP: {1}/{2} ({3}%)", pkmn.hp, pkmn.totalhp, (100.0 * pkmn.hp / pkmn.totalhp).to_i)
+    ret += "\r\n"
+    # Status
+    ret += _INTL("Status: {1}", GameData::Status.get(pkmn.status).name)
+    case pkmn.status
+    when :SLEEP
+      ret += " " + _INTL("({1} rounds left)", pkmn.statusCount)
+    when :POISON
+      ret += " " + _INTL("(toxic)") if pkmn.statusCount > 0
+    end
+    ret += "\r\n"
+    # Ability
+    ret += _INTL("Ability: {1}", pkmn.ability&.name || "-")
+    ret += "\r\n"
+    # Held item
+    ret += _INTL("Item: {1}", pkmn.item&.name || "-")
+    return ret
+  end
+
+  def pbBattlePokemonDebug(pkmn, battler = nil)
     commands = CommandMenuList.new
-    BattlerDebugMenuCommands.each do |option, hash|
-      commands.add(option, hash) if show_all || hash["always_show"]
+    BattlePokemonDebugMenuCommands.each do |option, hash|
+      next if battler && hash["usage"] == :pokemon
+      next if !battler && hash["usage"] == :battler
+      commands.add(option, hash)
     end
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     viewport.z = 99999
@@ -262,44 +350,11 @@ module Battle::DebugMixin
     cmd = 0
     loop do
       if need_refresh
-        help_text = ""
-        help_text += sprintf("[%d] %s", battler.index, battler.pbThis)
-        help_text += "\r\n"
-        help_text += _INTL("Species: {1}", GameData::Species.get(battler.species).name)
-        help_text += "\r\n"
-        help_text += _INTL("Form: {1}", battler.form)
-        help_text += "\r\n"
-        help_text += _INTL("Level {1}, {2}", battler.level,
-                           (battler.pokemon.male?) ? "♂" : (battler.pokemon.female?) ? "♀" : "genderless")
-        help_text += ", " + _INTL("Shiny") if battler.pokemon.shiny?
-        help_text += "\r\n"
-        help_text += _INTL("HP: {1}/{2} ({3}%)", battler.hp, battler.totalhp, (100.0 * battler.hp / battler.totalhp).to_i)
-        help_text += "\r\n"
-        help_text += _INTL("Status: {1}", GameData::Status.get(battler.status).name)
-        case battler.status
-        when :SLEEP
-          help_text += " " + _INTL("({1} rounds left)", battler.statusCount)
-        when :POISON
-          if battler.statusCount > 0
-            help_text += " " + _INTL("(toxic, {1}/16)", battler.effects[PBEffects::Toxic])
-          end
+        if battler
+          sprites["infowindow"].text = pbBattleDebugBattlerInfo(battler)
+        else
+          sprites["infowindow"].text = pbBattleDebugPokemonInfo(pkmn)
         end
-        help_text += "\r\n"
-        stages = []
-        GameData::Stat.each_battle do |stat|
-          next if battler.stages[stat.id] == 0
-          stage_text = ""
-          stage_text += "+" if battler.stages[stat.id] > 0
-          stage_text += battler.stages[stat.id].to_s
-          stage_text += " " + stat.name_brief
-          stages.push(stage_text)
-        end
-        help_text += _INTL("Stat stages: {1}", (stages.empty?) ? "-" : stages.join(", "))
-        help_text += "\r\n"
-        help_text += _INTL("Ability: {1}", (battler.ability) ? battler.abilityName : "-")
-        help_text += "\r\n"
-        help_text += _INTL("Item: {1}", (battler.item) ? battler.itemName : "-")
-        sprites["infowindow"].text = help_text
         need_refresh = false
       end
       # Choose a command
@@ -318,7 +373,7 @@ module Battle::DebugMixin
           commands.currentList = real_cmd
           cmd = 0
         else
-          BattlerDebugMenuCommands.call("effect", real_cmd, battler, battler.pokemon, battler.battle)
+          BattlePokemonDebugMenuCommands.call("effect", real_cmd, pkmn, battler, self)
           need_refresh = true
         end
       end

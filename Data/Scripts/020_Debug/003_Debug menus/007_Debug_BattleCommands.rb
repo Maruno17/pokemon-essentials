@@ -4,7 +4,6 @@
 Positions (Battle::ActivePosition)
   PBEffects::HealingWish
   PBEffects::LunarDance
-backdrop, backdropBase
 turnCount
 items (of foe trainers)
 initialItems       - Array of two arrays, each with one value per party index
@@ -92,7 +91,7 @@ BattleDebugMenuCommands.register("list_player_battlers", {
     loop do
       cmd = pbMessage("\\ts[]" + _INTL("Choose a Pokémon."), cmds, -1, nil, cmd)
       break if cmd < 0
-      battle.pbBattleBattlerDebug(battlers[cmd])
+      battle.pbBattlePokemonDebug(battlers[cmd].pokemon, battlers[cmd])
     end
   }
 })
@@ -113,7 +112,7 @@ BattleDebugMenuCommands.register("list_foe_battlers", {
     loop do
       cmd = pbMessage("\\ts[]" + _INTL("Choose a Pokémon."), cmds, -1, nil, cmd)
       break if cmd < 0
-      battle.pbBattleBattlerDebug(battlers[cmd])
+      battle.pbBattlePokemonDebug(battlers[cmd].pokemon, battlers[cmd])
     end
   }
 })
@@ -288,6 +287,31 @@ BattleDebugMenuCommands.register("environment", {
         new_time = pbMessage("\\ts[]" + _INTL("Choose the new time."),
                              [_INTL("Day"), _INTL("Evening"), _INTL("Night")], -1, nil, battle.time)
         battle.time = new_time if new_time >= 0 && new_time != battle.time
+      end
+    end
+  }
+})
+
+BattleDebugMenuCommands.register("backdrop", {
+  "parent"      => "field",
+  "name"        => _INTL("Backdrop Names"),
+  "description" => _INTL("Set the names of the backdrop and base graphics."),
+  "always_show" => true,
+  "effect"      => proc { |battle|
+    loop do
+      cmd = pbMessage("\\ts[]" + _INTL("Set which backdrop name?"),
+                      [_INTL("Backdrop"),
+                       _INTL("Base modifier")], -1)
+      break if cmd < 0
+      case cmd
+      when 0   # Backdrop
+        text = pbMessageFreeText("\\ts[]" + _INTL("Set the backdrop's name."),
+                                 battle.backdrop, false, 100, Graphics.width)
+        battle.backdrop = (nil_or_empty?(text)) ? "Indoor1" : text
+      when 1   # Base modifier
+        text = pbMessageFreeText("\\ts[]" + _INTL("Set the base modifier text."),
+                                 battle.backdropBase, false, 100, Graphics.width)
+        battle.backdropBase = (nil_or_empty?(text)) ? nil : text
       end
     end
   }

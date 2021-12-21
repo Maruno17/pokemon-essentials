@@ -40,14 +40,14 @@ end
 #===============================================================================
 # Field options
 #===============================================================================
-DebugMenuCommands.register("fieldmenu", {
+DebugMenuCommands.register("field_menu", {
   "parent"      => "main",
   "name"        => _INTL("Field options..."),
   "description" => _INTL("Warp to maps, edit switches/variables, use the PC, edit Day Care, etc.")
 })
 
 DebugMenuCommands.register("warp", {
-  "parent"      => "fieldmenu",
+  "parent"      => "field_menu",
   "name"        => _INTL("Warp to Map"),
   "description" => _INTL("Instantly warp to another map of your choice."),
   "effect"      => proc { |sprites, viewport|
@@ -77,8 +77,8 @@ DebugMenuCommands.register("warp", {
   }
 })
 
-DebugMenuCommands.register("refreshmap", {
-  "parent"      => "fieldmenu",
+DebugMenuCommands.register("refresh_map", {
+  "parent"      => "field_menu",
   "name"        => _INTL("Refresh Map"),
   "description" => _INTL("Make all events on this map, and common events, refresh themselves."),
   "effect"      => proc {
@@ -88,7 +88,7 @@ DebugMenuCommands.register("refreshmap", {
 })
 
 DebugMenuCommands.register("switches", {
-  "parent"      => "fieldmenu",
+  "parent"      => "field_menu",
   "name"        => _INTL("Switches"),
   "description" => _INTL("Edit all Game Switches (except Script Switches)."),
   "effect"      => proc {
@@ -97,7 +97,7 @@ DebugMenuCommands.register("switches", {
 })
 
 DebugMenuCommands.register("variables", {
-  "parent"      => "fieldmenu",
+  "parent"      => "field_menu",
   "name"        => _INTL("Variables"),
   "description" => _INTL("Edit all Game Variables. Can set them to numbers or text."),
   "effect"      => proc {
@@ -105,8 +105,8 @@ DebugMenuCommands.register("variables", {
   }
 })
 
-DebugMenuCommands.register("usepc", {
-  "parent"      => "fieldmenu",
+DebugMenuCommands.register("use_pc", {
+  "parent"      => "field_menu",
   "name"        => _INTL("Use PC"),
   "description" => _INTL("Use a PC to access Pokémon storage and player's PC."),
   "effect"      => proc {
@@ -114,8 +114,8 @@ DebugMenuCommands.register("usepc", {
   }
 })
 
-DebugMenuCommands.register("togglewallpapers", {
-  "parent"      => "fieldmenu",
+DebugMenuCommands.register("toggle_wallpapers", {
+  "parent"      => "field_menu",
   "name"        => _INTL("Toggle Storage Wallpapers"),
   "description" => _INTL("Unlock and lock special wallpapers used in Pokémon storage."),
   "effect"      => proc {
@@ -152,8 +152,8 @@ DebugMenuCommands.register("togglewallpapers", {
   }
 })
 
-DebugMenuCommands.register("daycare", {
-  "parent"      => "fieldmenu",
+DebugMenuCommands.register("day_care", {
+  "parent"      => "field_menu",
   "name"        => _INTL("Day Care"),
   "description" => _INTL("View Pokémon in the Day Care and edit them."),
   "effect"      => proc {
@@ -161,8 +161,8 @@ DebugMenuCommands.register("daycare", {
   }
 })
 
-DebugMenuCommands.register("skipcredits", {
-  "parent"      => "fieldmenu",
+DebugMenuCommands.register("skip_credits", {
+  "parent"      => "field_menu",
   "name"        => _INTL("Skip Credits"),
   "description" => _INTL("Toggle whether credits can be ended early by pressing the Use input."),
   "effect"      => proc {
@@ -172,8 +172,8 @@ DebugMenuCommands.register("skipcredits", {
   }
 })
 
-DebugMenuCommands.register("relicstone", {
-  "parent"      => "fieldmenu",
+DebugMenuCommands.register("relic_stone", {
+  "parent"      => "field_menu",
   "name"        => _INTL("Use Relic Stone"),
   "description" => _INTL("Shadow Pokémon. Choose a Pokémon to show to the Relic Stone for purification."),
   "effect"      => proc {
@@ -181,8 +181,8 @@ DebugMenuCommands.register("relicstone", {
   }
 })
 
-DebugMenuCommands.register("purifychamber", {
-  "parent"      => "fieldmenu",
+DebugMenuCommands.register("purify_chamber", {
+  "parent"      => "field_menu",
   "name"        => _INTL("Use Purify Chamber"),
   "description" => _INTL("Shadow Pokémon. Open the Purify Chamber for purification."),
   "effect"      => proc {
@@ -193,14 +193,14 @@ DebugMenuCommands.register("purifychamber", {
 #===============================================================================
 # Battle options
 #===============================================================================
-DebugMenuCommands.register("battlemenu", {
+DebugMenuCommands.register("battle_menu", {
   "parent"      => "main",
   "name"        => _INTL("Battle options..."),
   "description" => _INTL("Start battles, reset this map's trainers, ready rematches, edit roamers, etc.")
 })
 
-DebugMenuCommands.register("testwildbattle", {
-  "parent"      => "battlemenu",
+DebugMenuCommands.register("test_wild_battle", {
+  "parent"      => "battle_menu",
   "name"        => _INTL("Test Wild Battle"),
   "description" => _INTL("Start a single battle against a wild Pokémon. You choose the species/level."),
   "effect"      => proc {
@@ -221,8 +221,8 @@ DebugMenuCommands.register("testwildbattle", {
   }
 })
 
-DebugMenuCommands.register("testwildbattleadvanced", {
-  "parent"      => "battlemenu",
+DebugMenuCommands.register("test_wild_battle_advanced", {
+  "parent"      => "battle_menu",
   "name"        => _INTL("Test Wild Battle Advanced"),
   "description" => _INTL("Start a battle against 1 or more wild Pokémon. Battle size is your choice."),
   "effect"      => proc {
@@ -285,8 +285,8 @@ DebugMenuCommands.register("testwildbattleadvanced", {
   }
 })
 
-DebugMenuCommands.register("testtrainerbattle", {
-  "parent"      => "battlemenu",
+DebugMenuCommands.register("test_trainer_battle", {
+  "parent"      => "battle_menu",
   "name"        => _INTL("Test Trainer Battle"),
   "description" => _INTL("Start a single battle against a trainer of your choice."),
   "effect"      => proc {
@@ -298,8 +298,8 @@ DebugMenuCommands.register("testtrainerbattle", {
   }
 })
 
-DebugMenuCommands.register("testtrainerbattleadvanced", {
-  "parent"      => "battlemenu",
+DebugMenuCommands.register("test_trainer_battle_advanced", {
+  "parent"      => "battle_menu",
   "name"        => _INTL("Test Trainer Battle Advanced"),
   "description" => _INTL("Start a battle against 1 or more trainers with a battle size of your choice."),
   "effect"      => proc {
@@ -389,8 +389,8 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
   }
 })
 
-DebugMenuCommands.register("togglelogging", {
-  "parent"      => "battlemenu",
+DebugMenuCommands.register("toggle_logging", {
+  "parent"      => "battle_menu",
   "name"        => _INTL("Toggle Battle Logging"),
   "description" => _INTL("Record debug logs for battles in Data/debuglog.txt."),
   "effect"      => proc {
@@ -400,8 +400,8 @@ DebugMenuCommands.register("togglelogging", {
   }
 })
 
-DebugMenuCommands.register("resettrainers", {
-  "parent"      => "battlemenu",
+DebugMenuCommands.register("reset_trainers", {
+  "parent"      => "battle_menu",
   "name"        => _INTL("Reset Map's Trainers"),
   "description" => _INTL("Turn off Self Switches A and B for all events with \"Trainer\" in their name."),
   "effect"      => proc {
@@ -420,8 +420,8 @@ DebugMenuCommands.register("resettrainers", {
   }
 })
 
-DebugMenuCommands.register("readyrematches", {
-  "parent"      => "battlemenu",
+DebugMenuCommands.register("ready_rematches", {
+  "parent"      => "battle_menu",
   "name"        => _INTL("Ready All Phone Rematches"),
   "description" => _INTL("Make all trainers in the phone ready for rematches."),
   "effect"      => proc {
@@ -439,7 +439,7 @@ DebugMenuCommands.register("readyrematches", {
 })
 
 DebugMenuCommands.register("roamers", {
-  "parent"      => "battlemenu",
+  "parent"      => "battle_menu",
   "name"        => _INTL("Roaming Pokémon"),
   "description" => _INTL("Toggle and edit all roaming Pokémon."),
   "effect"      => proc {
@@ -447,8 +447,8 @@ DebugMenuCommands.register("roamers", {
   }
 })
 
-DebugMenuCommands.register("encounterversion", {
-  "parent"      => "battlemenu",
+DebugMenuCommands.register("encounter_version", {
+  "parent"      => "battle_menu",
   "name"        => _INTL("Set Encounters Version"),
   "description" => _INTL("Choose which version of wild encounters should be used."),
   "effect"      => proc {
@@ -466,14 +466,14 @@ DebugMenuCommands.register("encounterversion", {
 #===============================================================================
 # Item options
 #===============================================================================
-DebugMenuCommands.register("itemsmenu", {
+DebugMenuCommands.register("items_menu", {
   "parent"      => "main",
   "name"        => _INTL("Item options..."),
   "description" => _INTL("Give and take items.")
 })
 
-DebugMenuCommands.register("additem", {
-  "parent"      => "itemsmenu",
+DebugMenuCommands.register("add_item", {
+  "parent"      => "items_menu",
   "name"        => _INTL("Add Item"),
   "description" => _INTL("Choose an item and a quantity of it to add to the Bag."),
   "effect"      => proc {
@@ -494,8 +494,8 @@ DebugMenuCommands.register("additem", {
   }
 })
 
-DebugMenuCommands.register("fillbag", {
-  "parent"      => "itemsmenu",
+DebugMenuCommands.register("fill_bag", {
+  "parent"      => "items_menu",
   "name"        => _INTL("Fill Bag"),
   "description" => _INTL("Empties the Bag and then fills it with a certain number of every item."),
   "effect"      => proc {
@@ -523,8 +523,8 @@ DebugMenuCommands.register("fillbag", {
   }
 })
 
-DebugMenuCommands.register("emptybag", {
-  "parent"      => "itemsmenu",
+DebugMenuCommands.register("empty_bag", {
+  "parent"      => "items_menu",
   "name"        => _INTL("Empty Bag"),
   "description" => _INTL("Remove all items from the Bag."),
   "effect"      => proc {
@@ -536,14 +536,14 @@ DebugMenuCommands.register("emptybag", {
 #===============================================================================
 # Pokémon options
 #===============================================================================
-DebugMenuCommands.register("pokemonmenu", {
+DebugMenuCommands.register("pokemon_menu", {
   "parent"      => "main",
   "name"        => _INTL("Pokémon options..."),
   "description" => _INTL("Give Pokémon, heal party, fill/empty PC storage, etc.")
 })
 
-DebugMenuCommands.register("addpokemon", {
-  "parent"      => "pokemonmenu",
+DebugMenuCommands.register("add_pokemon", {
+  "parent"      => "pokemon_menu",
   "name"        => _INTL("Add Pokémon"),
   "description" => _INTL("Give yourself a Pokémon of a chosen species/level. Goes to PC if party is full."),
   "effect"      => proc {
@@ -559,8 +559,8 @@ DebugMenuCommands.register("addpokemon", {
   }
 })
 
-DebugMenuCommands.register("demoparty", {
-  "parent"      => "pokemonmenu",
+DebugMenuCommands.register("give_demo_party", {
+  "parent"      => "pokemon_menu",
   "name"        => _INTL("Give Demo Party"),
   "description" => _INTL("Give yourself 6 preset Pokémon. They overwrite the current party."),
   "effect"      => proc {
@@ -602,8 +602,8 @@ DebugMenuCommands.register("demoparty", {
   }
 })
 
-DebugMenuCommands.register("healparty", {
-  "parent"      => "pokemonmenu",
+DebugMenuCommands.register("heal_party", {
+  "parent"      => "pokemon_menu",
   "name"        => _INTL("Heal Party"),
   "description" => _INTL("Fully heal the HP/status/PP of all Pokémon in the party."),
   "effect"      => proc {
@@ -612,8 +612,8 @@ DebugMenuCommands.register("healparty", {
   }
 })
 
-DebugMenuCommands.register("quickhatch", {
-  "parent"      => "pokemonmenu",
+DebugMenuCommands.register("quick_hatch_party_eggs", {
+  "parent"      => "pokemon_menu",
   "name"        => _INTL("Quick Hatch"),
   "description" => _INTL("Make all eggs in the party require just one more step to hatch."),
   "effect"      => proc {
@@ -622,8 +622,8 @@ DebugMenuCommands.register("quickhatch", {
   }
 })
 
-DebugMenuCommands.register("fillboxes", {
-  "parent"      => "pokemonmenu",
+DebugMenuCommands.register("fill_boxes", {
+  "parent"      => "pokemon_menu",
   "name"        => _INTL("Fill Storage Boxes"),
   "description" => _INTL("Add one Pokémon of each species (at Level 50) to storage."),
   "effect"      => proc {
@@ -669,8 +669,8 @@ DebugMenuCommands.register("fillboxes", {
   }
 })
 
-DebugMenuCommands.register("clearboxes", {
-  "parent"      => "pokemonmenu",
+DebugMenuCommands.register("clear_boxes", {
+  "parent"      => "pokemon_menu",
   "name"        => _INTL("Clear Storage Boxes"),
   "description" => _INTL("Remove all Pokémon in storage."),
   "effect"      => proc {
@@ -683,8 +683,8 @@ DebugMenuCommands.register("clearboxes", {
   }
 })
 
-DebugMenuCommands.register("openstorage", {
-  "parent"      => "pokemonmenu",
+DebugMenuCommands.register("open_storage", {
+  "parent"      => "pokemon_menu",
   "name"        => _INTL("Access Pokémon Storage"),
   "description" => _INTL("Opens the Pokémon storage boxes in Organize Boxes mode."),
   "effect"      => proc {
@@ -699,14 +699,14 @@ DebugMenuCommands.register("openstorage", {
 #===============================================================================
 # Player options
 #===============================================================================
-DebugMenuCommands.register("playermenu", {
+DebugMenuCommands.register("player_menu", {
   "parent"      => "main",
   "name"        => _INTL("Player options..."),
   "description" => _INTL("Set money, badges, Pokédexes, player's appearance and name, etc.")
 })
 
-DebugMenuCommands.register("setbadges", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("set_badges", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Set Badges"),
   "description" => _INTL("Toggle possession of each Gym Badge."),
   "effect"      => proc {
@@ -732,8 +732,8 @@ DebugMenuCommands.register("setbadges", {
   }
 })
 
-DebugMenuCommands.register("setmoney", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("set_money", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Set Money"),
   "description" => _INTL("Edit how much money you have."),
   "effect"      => proc {
@@ -745,8 +745,8 @@ DebugMenuCommands.register("setmoney", {
   }
 })
 
-DebugMenuCommands.register("setcoins", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("set_coins", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Set Coins"),
   "description" => _INTL("Edit how many Game Corner Coins you have."),
   "effect"      => proc {
@@ -758,8 +758,8 @@ DebugMenuCommands.register("setcoins", {
   }
 })
 
-DebugMenuCommands.register("setbp", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("set_bp", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Set Battle Points"),
   "description" => _INTL("Edit how many Battle Points you have."),
   "effect"      => proc {
@@ -771,8 +771,8 @@ DebugMenuCommands.register("setbp", {
   }
 })
 
-DebugMenuCommands.register("toggleshoes", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("toggle_running_shoes", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Toggle Running Shoes"),
   "description" => _INTL("Toggle possession of running shoes."),
   "effect"      => proc {
@@ -782,8 +782,8 @@ DebugMenuCommands.register("toggleshoes", {
   }
 })
 
-DebugMenuCommands.register("togglepokegear", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("toggle_pokegear", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Toggle Pokégear"),
   "description" => _INTL("Toggle possession of the Pokégear."),
   "effect"      => proc {
@@ -793,8 +793,8 @@ DebugMenuCommands.register("togglepokegear", {
   }
 })
 
-DebugMenuCommands.register("dexlists", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("toggle_pokedex", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Toggle Pokédex and Dexes"),
   "description" => _INTL("Toggle possession of the Pokédex, and edit Regional Dex accessibility."),
   "effect"      => proc {
@@ -822,8 +822,8 @@ DebugMenuCommands.register("dexlists", {
   }
 })
 
-DebugMenuCommands.register("setplayer", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("set_player_character", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Set Player Character"),
   "description" => _INTL("Edit the player's character, as defined in \"metadata.txt\"."),
   "effect"      => proc {
@@ -847,8 +847,8 @@ DebugMenuCommands.register("setplayer", {
   }
 })
 
-DebugMenuCommands.register("changeoutfit", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("change_outfit", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Set Player Outfit"),
   "description" => _INTL("Edit the player's outfit number."),
   "effect"      => proc {
@@ -861,8 +861,8 @@ DebugMenuCommands.register("changeoutfit", {
   }
 })
 
-DebugMenuCommands.register("renameplayer", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("rename_player", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Set Player Name"),
   "description" => _INTL("Rename the player."),
   "effect"      => proc {
@@ -881,8 +881,8 @@ DebugMenuCommands.register("renameplayer", {
   }
 })
 
-DebugMenuCommands.register("randomid", {
-  "parent"      => "playermenu",
+DebugMenuCommands.register("random_id", {
+  "parent"      => "player_menu",
   "name"        => _INTL("Randomize Player ID"),
   "description" => _INTL("Generate a random new ID for the player."),
   "effect"      => proc {
@@ -894,15 +894,15 @@ DebugMenuCommands.register("randomid", {
 #===============================================================================
 # Information editors
 #===============================================================================
-DebugMenuCommands.register("editorsmenu", {
+DebugMenuCommands.register("editors_menu", {
   "parent"      => "main",
   "name"        => _INTL("Information editors..."),
   "description" => _INTL("Edit information in the PBS files, terrain tags, battle animations, etc."),
   "always_show" => true
 })
 
-DebugMenuCommands.register("setmetadata", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_metadata", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Metadata"),
   "description" => _INTL("Edit global metadata and player character metadata."),
   "always_show" => true,
@@ -911,8 +911,8 @@ DebugMenuCommands.register("setmetadata", {
   }
 })
 
-DebugMenuCommands.register("setmapmetadata", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_map_metadata", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Map Metadata"),
   "description" => _INTL("Edit map metadata."),
   "always_show" => true,
@@ -921,8 +921,8 @@ DebugMenuCommands.register("setmapmetadata", {
   }
 })
 
-DebugMenuCommands.register("mapconnections", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_map_connections", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Map Connections"),
   "description" => _INTL("Connect maps using a visual interface. Can also edit map encounters/metadata."),
   "always_show" => true,
@@ -931,8 +931,8 @@ DebugMenuCommands.register("mapconnections", {
   }
 })
 
-DebugMenuCommands.register("terraintags", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_terrain_tags", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Terrain Tags"),
   "description" => _INTL("Edit the terrain tags of tiles in tilesets. Required for tags 8+."),
   "always_show" => true,
@@ -941,8 +941,8 @@ DebugMenuCommands.register("terraintags", {
   }
 })
 
-DebugMenuCommands.register("setencounters", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_encounters", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Wild Encounters"),
   "description" => _INTL("Edit the wild Pokémon that can be found on maps, and how they are encountered."),
   "always_show" => true,
@@ -951,8 +951,8 @@ DebugMenuCommands.register("setencounters", {
   }
 })
 
-DebugMenuCommands.register("trainertypes", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_trainer_types", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Trainer Types"),
   "description" => _INTL("Edit the properties of trainer types."),
   "always_show" => true,
@@ -961,8 +961,8 @@ DebugMenuCommands.register("trainertypes", {
   }
 })
 
-DebugMenuCommands.register("edittrainers", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_trainers", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Individual Trainers"),
   "description" => _INTL("Edit individual trainers, their Pokémon and items."),
   "always_show" => true,
@@ -971,8 +971,8 @@ DebugMenuCommands.register("edittrainers", {
   }
 })
 
-DebugMenuCommands.register("edititems", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_items", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Items"),
   "description" => _INTL("Edit item data."),
   "always_show" => true,
@@ -981,8 +981,8 @@ DebugMenuCommands.register("edititems", {
   }
 })
 
-DebugMenuCommands.register("editpokemon", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_species", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Pokémon"),
   "description" => _INTL("Edit Pokémon species data."),
   "always_show" => true,
@@ -991,8 +991,8 @@ DebugMenuCommands.register("editpokemon", {
   }
 })
 
-DebugMenuCommands.register("editdexes", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("set_pokedex_lists", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Regional Dexes"),
   "description" => _INTL("Create, rearrange and delete Regional Pokédex lists."),
   "always_show" => true,
@@ -1001,8 +1001,8 @@ DebugMenuCommands.register("editdexes", {
   }
 })
 
-DebugMenuCommands.register("positionsprites", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("position_sprites", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Edit Pokémon Sprite Positions"),
   "description" => _INTL("Reposition Pokémon sprites in battle."),
   "always_show" => true,
@@ -1015,8 +1015,8 @@ DebugMenuCommands.register("positionsprites", {
   }
 })
 
-DebugMenuCommands.register("autopositionsprites", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("auto_position_sprites", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Auto-Position All Sprites"),
   "description" => _INTL("Automatically reposition all Pokémon sprites in battle. Don't use lightly."),
   "always_show" => true,
@@ -1031,8 +1031,8 @@ DebugMenuCommands.register("autopositionsprites", {
   }
 })
 
-DebugMenuCommands.register("animeditor", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("animation_editor", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Battle Animation Editor"),
   "description" => _INTL("Edit the battle animations."),
   "always_show" => true,
@@ -1041,8 +1041,8 @@ DebugMenuCommands.register("animeditor", {
   }
 })
 
-DebugMenuCommands.register("animorganiser", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("animation_organiser", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Battle Animation Organiser"),
   "description" => _INTL("Rearrange/add/delete battle animations."),
   "always_show" => true,
@@ -1051,8 +1051,8 @@ DebugMenuCommands.register("animorganiser", {
   }
 })
 
-DebugMenuCommands.register("importanims", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("import_animations", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Import All Battle Animations"),
   "description" => _INTL("Import all battle animations from the \"Animations\" folder."),
   "always_show" => true,
@@ -1061,8 +1061,8 @@ DebugMenuCommands.register("importanims", {
   }
 })
 
-DebugMenuCommands.register("exportanims", {
-  "parent"      => "editorsmenu",
+DebugMenuCommands.register("export_animations", {
+  "parent"      => "editors_menu",
   "name"        => _INTL("Export All Battle Animations"),
   "description" => _INTL("Export all battle animations individually to the \"Animations\" folder."),
   "always_show" => true,
@@ -1074,15 +1074,15 @@ DebugMenuCommands.register("exportanims", {
 #===============================================================================
 # Other options
 #===============================================================================
-DebugMenuCommands.register("othermenu", {
+DebugMenuCommands.register("other_menu", {
   "parent"      => "main",
   "name"        => _INTL("Other options..."),
   "description" => _INTL("Mystery Gifts, translations, compile data, etc."),
   "always_show" => true
 })
 
-DebugMenuCommands.register("mysterygift", {
-  "parent"      => "othermenu",
+DebugMenuCommands.register("mystery_gift", {
+  "parent"      => "other_menu",
   "name"        => _INTL("Manage Mystery Gifts"),
   "description" => _INTL("Edit and enable/disable Mystery Gifts."),
   "always_show" => true,
@@ -1091,8 +1091,8 @@ DebugMenuCommands.register("mysterygift", {
   }
 })
 
-DebugMenuCommands.register("extracttext", {
-  "parent"      => "othermenu",
+DebugMenuCommands.register("extract_text", {
+  "parent"      => "other_menu",
   "name"        => _INTL("Extract Text"),
   "description" => _INTL("Extract all text in the game to a single file for translating."),
   "always_show" => true,
@@ -1101,8 +1101,8 @@ DebugMenuCommands.register("extracttext", {
   }
 })
 
-DebugMenuCommands.register("compiletext", {
-  "parent"      => "othermenu",
+DebugMenuCommands.register("compile_text", {
+  "parent"      => "other_menu",
   "name"        => _INTL("Compile Text"),
   "description" => _INTL("Import text and converts it into a language file."),
   "always_show" => true,
@@ -1111,8 +1111,8 @@ DebugMenuCommands.register("compiletext", {
   }
 })
 
-DebugMenuCommands.register("compiledata", {
-  "parent"      => "othermenu",
+DebugMenuCommands.register("compile_data", {
+  "parent"      => "other_menu",
   "name"        => _INTL("Compile Data"),
   "description" => _INTL("Fully compile all data."),
   "always_show" => true,
@@ -1124,8 +1124,8 @@ DebugMenuCommands.register("compiledata", {
   }
 })
 
-DebugMenuCommands.register("createpbs", {
-  "parent"      => "othermenu",
+DebugMenuCommands.register("create_pbs_files", {
+  "parent"      => "other_menu",
   "name"        => _INTL("Create PBS File(s)"),
   "description" => _INTL("Choose one or all PBS files and create it."),
   "always_show" => true,
@@ -1185,8 +1185,8 @@ DebugMenuCommands.register("createpbs", {
   }
 })
 
-DebugMenuCommands.register("invalidtiles", {
-  "parent"      => "othermenu",
+DebugMenuCommands.register("fix_invalid_tiles", {
+  "parent"      => "other_menu",
   "name"        => _INTL("Fix Invalid Tiles"),
   "description" => _INTL("Scans all maps and erases non-existent tiles."),
   "always_show" => true,
@@ -1195,8 +1195,8 @@ DebugMenuCommands.register("invalidtiles", {
   }
 })
 
-DebugMenuCommands.register("renamefiles", {
-  "parent"      => "othermenu",
+DebugMenuCommands.register("rename_files", {
+  "parent"      => "other_menu",
   "name"        => _INTL("Rename Outdated Files"),
   "description" => _INTL("Check for files with outdated names and rename/move them. Can alter map data."),
   "always_show" => true,
@@ -1208,8 +1208,8 @@ DebugMenuCommands.register("renamefiles", {
   }
 })
 
-DebugMenuCommands.register("reloadsystemcache", {
-  "parent"      => "othermenu",
+DebugMenuCommands.register("reload_system_cache", {
+  "parent"      => "other_menu",
   "name"        => _INTL("Reload System Cache"),
   "description" => _INTL("Refreshes the system's file cache. Use if you change a file while playing."),
   "always_show" => true,
