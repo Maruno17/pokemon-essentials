@@ -726,8 +726,8 @@ module PluginManager
         end
       end
     end
-    echoln ""
     if scripts.length > 0
+      echoln ""
       Console.echo_h2("Successfully loaded #{scripts.length} plugin(s)", text: :green)
     else
       Console.echo_h2("No plugins found", text: :green)

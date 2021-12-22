@@ -522,6 +522,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   signWaitTime = Graphics.frame_rate / 2
   haveSpecialClose = false
   specialCloseSE = ""
+  startSE = nil
   controls.length.times do |i|
     control = controls[i][0]
     param = controls[i][1]
