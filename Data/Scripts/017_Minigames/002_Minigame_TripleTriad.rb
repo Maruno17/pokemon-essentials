@@ -970,6 +970,11 @@ end
 #===============================================================================
 # Start duel
 #===============================================================================
+def pbCanTriadDuel?
+  card_count = $PokemonGlobal.triads.total_cards
+  return card_count >= PokemonGlobalMetadata::MINIMUM_TRIAD_CARDS
+end
+
 def pbTriadDuel(name, minLevel, maxLevel, rules = nil, oppdeck = nil, prize = nil)
   ret = 0
   pbFadeOutInWithMusic {
@@ -987,6 +992,8 @@ end
 #===============================================================================
 class PokemonGlobalMetadata
   attr_writer :triads
+
+  MINIMUM_TRIAD_CARDS = 5
 
   def triads
     @triads = TriadStorage.new if !@triads
@@ -1050,6 +1057,12 @@ class TriadStorage
 
   def remove(item, qty = 1)
     return ItemStorageHelper.remove(@items, item, qty)
+  end
+
+  def total_cards
+    ret = 0
+    @items.each { |itm| ret += itm[1] }
+    return ret
   end
 end
 
@@ -1151,14 +1164,16 @@ def pbBuyTriads
 end
 
 def pbSellTriads
+  total_cards = 0
   commands = []
   $PokemonGlobal.triads.length.times do |i|
     item = $PokemonGlobal.triads[i]
     speciesname = GameData::Species.get(item[0]).name
     commands.push(_INTL("{1} x{2}", speciesname, item[1]))
+    total_cards += item[1]
   end
   commands.push(_INTL("CANCEL"))
-  if commands.length == 1
+  if total_cards == 0
     pbMessage(_INTL("You have no cards."))
     return
   end
@@ -1257,14 +1272,16 @@ def pbSellTriads
 end
 
 def pbTriadList
+  total_cards = 0
   commands = []
   $PokemonGlobal.triads.length.times do |i|
     item = $PokemonGlobal.triads[i]
     speciesname = GameData::Species.get(item[0]).name
     commands.push(_INTL("{1} x{2}", speciesname, item[1]))
+    total_cards += item[1]
   end
   commands.push(_INTL("CANCEL"))
-  if commands.length == 1
+  if total_cards == 0
     pbMessage(_INTL("You have no cards."))
     return
   end
