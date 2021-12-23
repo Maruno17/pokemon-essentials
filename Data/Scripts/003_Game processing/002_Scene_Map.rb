@@ -196,6 +196,7 @@ class Scene_Map
         unless $game_system.menu_disabled || $game_player.moving?
           $game_temp.menu_calling = true
           $game_temp.menu_beep = true
+          $scene.spriteset.addUserSprite(LocationWindow.new($game_map.name+ "\n"+ pbGetTimeNow.strftime("%I:%M %p")))
         end
       elsif Input.trigger?(Input::SPECIAL)
         unless $game_player.moving?

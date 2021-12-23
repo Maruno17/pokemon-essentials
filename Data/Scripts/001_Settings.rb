@@ -6,7 +6,7 @@
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '5.0.0'
-  GAME_VERSION_NUMBER = "5.0.10 - beta"
+  GAME_VERSION_NUMBER = "5.0.11 - beta"
 
   #
   FUSION_ICON_SPRITE_OFFSET = 10

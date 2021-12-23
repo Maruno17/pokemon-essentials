@@ -1,3 +1,29 @@
+5.1
+Many, many bugfixes
+
+## Re-added features ##
+In-game clock
+Speed-up button
+
+#Removals
+Removed Trainer House
+Removed the Convert Pokemon option from the update menu
+Oak no longer gives a Johto starter after beating the league
+
+##New Stuff
+Added Quick Surf option
+Added Kin Island Club
+Added support for multiple savefiles
+Replaced Delibird's hidden ability with Snow Warning
+Added overworld sprites for a few important trainers
+Added animations for using Rock Smash and Cut in the overworld
+Traded Pokémon now become owned by player when fused (so they can be unfused)
+Made Oak's Lab look more like the HGSS version
+Added egg move tutor in Battle Factory
+Battle Factory now gives Factory Points instead of Rare Candies
+Updated critical hits to gen 6 mechanics
+Added gen 6 status move immunity from certain types
+
 5.0
 ##########################
 The 5.0 update brings Infinite Fusion to a new engine, which makes the game run better and allows
