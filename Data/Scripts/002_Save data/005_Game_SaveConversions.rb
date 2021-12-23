@@ -1,6 +1,13 @@
-# Contains conversions defined in Essentials by default.
+#===============================================================================
+# Conversions required to support backwards compatibility with old save files
+# (within reason).
+#===============================================================================
 
-SaveData.register_conversion(:v19_2_fix_berry_plants) do
+# Planted berries accidentally weren't converted in v19 to change their
+# numerical IDs to symbolic IDs (for the berry planted and for mulch laid down).
+# Since item numerical IDs no longer exist, this conversion needs to have a list
+# of them in order to convert planted berry data properly.
+SaveData.register_conversion(:v19_2_fix_planted_berry_numerical_ids) do
   essentials_version 19.2
   display_title 'Fixing berry plant IDs data'
   to_value :global_metadata do |global|
@@ -89,7 +96,9 @@ SaveData.register_conversion(:v19_2_fix_berry_plants) do
   end
 end
 
-SaveData.register_conversion(:v20_berry_plant_data) do
+#===============================================================================
+
+SaveData.register_conversion(:v20_refactor_planted_berries_data) do
   essentials_version 20
   display_title 'Updating berry plant data format'
   to_value :global_metadata do |global|
@@ -100,7 +109,7 @@ SaveData.register_conversion(:v20_berry_plant_data) do
         when 6   # Old berry plant data
           data = BerryPlantData.new
           if value[1].is_a?(Symbol)
-            plant_data = GameData::DerryPlant.get(value[1])
+            plant_data = GameData::BerryPlant.get(value[1])
             data.new_mechanics      = false
             data.berry_id           = value[1]
             data.time_alive         = value[0] * plant_data.hours_per_stage * 3600
@@ -131,26 +140,9 @@ SaveData.register_conversion(:v20_berry_plant_data) do
   end
 end
 
-SaveData.register_conversion(:v20_add_default_nicknaming_option) do
-  essentials_version 20
-  display_title 'Updating Options to include nicknaming setting'
-  to_value :pokemon_system do |option|
-    option.givenicknames = 0 if option.givenicknames.nil?
-  end
-end
+#===============================================================================
 
-SaveData.register_conversion(:v20_add_battled_counts) do
-  essentials_version 20
-  display_title 'Adding Pokédex battle counts'
-  to_value :player do |player|
-    player.pokedex.instance_eval do
-      @caught_counts   = {} if @caught_counts.nil?
-      @defeated_counts = {} if @defeated_counts.nil?
-    end
-  end
-end
-
-SaveData.register_conversion(:v20_follower_data) do
+SaveData.register_conversion(:v20_refactor_follower_data) do
   essentials_version 20
   display_title 'Updating follower data format'
   to_value :global_metadata do |global|
@@ -171,38 +163,7 @@ SaveData.register_conversion(:v20_follower_data) do
   end
 end
 
-SaveData.register_conversion(:v20_increment_player_character_id) do
-  essentials_version 19.1
-  display_title 'Incrementing player character ID'
-  to_value :player do |player|
-    player.character_ID += 1
-  end
-end
-
-SaveData.register_conversion(:v20_rename_bag_variables) do
-  essentials_version 20
-  display_title 'Renaming Bag variables'
-  to_value :bag do |bag|
-    bag.instance_eval do
-      if !@lastpocket.nil?
-        @last_viewed_pocket = @lastpocket
-        @lastPocket = nil
-      end
-      if !@choices.nil?
-        @last_pocket_selections = @choices.clone
-        @choices = nil
-      end
-      if !@registeredItems.nil?
-        @registered_items = @registeredItems || []
-        @registeredItems = nil
-      end
-      if !@registeredIndex.nil?
-        @ready_menu_selection = @registeredIndex || [0, 0, 1]
-        @registeredIndex = nil
-      end
-    end
-  end
-end
+#===============================================================================
 
 SaveData.register_conversion(:v20_refactor_day_care_variables) do
   essentials_version 20
@@ -240,6 +201,86 @@ SaveData.register_conversion(:v20_refactor_day_care_variables) do
   end
 end
 
+#===============================================================================
+
+SaveData.register_conversion(:v20_rename_bag_variables) do
+  essentials_version 20
+  display_title 'Renaming Bag variables'
+  to_value :bag do |bag|
+    bag.instance_eval do
+      if !@lastpocket.nil?
+        @last_viewed_pocket = @lastpocket
+        @lastPocket = nil
+      end
+      if !@choices.nil?
+        @last_pocket_selections = @choices.clone
+        @choices = nil
+      end
+      if !@registeredItems.nil?
+        @registered_items = @registeredItems || []
+        @registeredItems = nil
+      end
+      if !@registeredIndex.nil?
+        @ready_menu_selection = @registeredIndex || [0, 0, 1]
+        @registeredIndex = nil
+      end
+    end
+  end
+end
+
+#===============================================================================
+
+SaveData.register_conversion(:v20_increment_player_character_id) do
+  essentials_version 19.1
+  display_title 'Incrementing player character ID'
+  to_value :player do |player|
+    player.character_ID += 1
+  end
+end
+
+#===============================================================================
+
+SaveData.register_conversion(:v20_add_pokedex_records) do
+  essentials_version 20
+  display_title 'Adding more Pokédex records'
+  to_value :player do |player|
+    player.pokedex.instance_eval do
+      @caught_counts = {} if @caught_counts.nil?
+      @defeated_counts = {} if @defeated_counts.nil?
+      @seen_eggs = {} if @seen_eggs.nil?
+      @seen_forms.each_value do |sp|
+        next if !sp || sp[0][0].is_a?(Array)   # Already converted to include shininess
+        sp[0] = [sp[0], []]
+        sp[1] = [sp[1], []]
+      end
+    end
+  end
+end
+
+#===============================================================================
+
+SaveData.register_conversion(:v20_add_default_nicknaming_option) do
+  essentials_version 20
+  display_title 'Updating Options to include nicknaming setting'
+  to_value :pokemon_system do |option|
+    option.givenicknames = 0 if option.givenicknames.nil?
+  end
+end
+
+#===============================================================================
+
+SaveData.register_conversion(:v20_fix_default_weather_type) do
+  essentials_version 20
+  display_title 'Fixing weather type 0 in effect'
+  to_value :game_screen do |game_screen|
+    game_screen.instance_eval do
+      @weather_type = :None if @weather_type == 0
+    end
+  end
+end
+
+#===============================================================================
+
 SaveData.register_conversion(:v20_add_stats) do
   essentials_version 20
   display_title 'Adding stats to save data'
@@ -253,121 +294,56 @@ SaveData.register_conversion(:v20_add_stats) do
   end
 end
 
-SaveData.register_conversion(:v20_adding_pokedex_records) do
-  essentials_version 20
-  display_title 'Adding more Pokédex records'
-  to_value :player do |player|
-    player.pokedex.instance_eval do
-      @seen_eggs = {} if @seen_eggs.nil?
-      @seen_forms.each_value do |sp|
-        next if !sp || sp[0][0].is_a?(Array)   # Already converted to include shininess
-        sp[0] = [sp[0], []]
-        sp[1] = [sp[1], []]
-      end
-    end
-  end
-end
+#===============================================================================
 
-SaveData.register_conversion(:v20_convert_pokemon_markings_party) do
+SaveData.register_conversion(:v20_convert_pokemon_markings) do
   essentials_version 20
-  display_title 'Updating format of Pokémon markings (1/4)'
-  to_value :player do |player|
-    player.party.each do |pkmn|
-      next if !pkmn.markings.is_a?(Integer)
+  display_title 'Updating format of Pokémon markings'
+  to_all do |save_data|
+    # Create a lambda function that updates a Pokémon's markings
+    update_markings = lambda do |pkmn|
+      return if !pkmn || !pkmn.markings.is_a?(Integer)
       markings = []
       6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
       pkmn.markings = markings
     end
-  end
-end
-
-SaveData.register_conversion(:v20_convert_pokemon_markings_global) do
-  essentials_version 20
-  display_title 'Updating format of Pokémon markings (2/4)'
-  to_value :global_metadata do |global|
-    if global.partner
-      global.partner[3].each do |pkmn|
-        next if !pkmn.markings.is_a?(Integer)
-        markings = []
-        6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
-        pkmn.markings = markings
-      end
+    # Party Pokémon
+    save_data[:player].party.each { |pkmn| update_markings.call(pkmn) }
+    # Pokémon storage
+    save_data[:storage_system].boxes.each do |box|
+      box.pokemon.each { |pkmn| update_markings.call(pkmn) if pkmn }
     end
-    # Pokémon in the Day Care have their markings converted above
-    if global.roamPokemon
-      global.roamPokemon.each do |pkmn|
-        next if !pkmn.markings.is_a?(Integer)
-        markings = []
-        6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
-        pkmn.markings = markings
-      end
+    # NOTE: Pokémon in the Day Care have their markings converted above.
+    # Partner trainer
+    if save_data[:global_metadata].partner
+      save_data[:global_metadata].partner[3].each { |pkmn| update_markings.call(pkmn) }
     end
-    global.purifyChamber.sets.each do |set|
-      set.list.each do |pkmn|
-        next if !pkmn.markings.is_a?(Integer)
-        markings = []
-        6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
-        pkmn.markings = markings
-      end
-      if set.shadow && set.shadow.markings.is_a?(Integer)
-        markings = []
-        6.times { |i| markings[i] = ((set.shadow.markings & (1 << i)) == 0) ? 0 : 1 }
-        set.shadow.markings = markings
-      end
+    # Roaming Pokémon
+    if save_data[:global_metadata].roamPokemon
+      save_data[:global_metadata].roamPokemon.each { |pkmn| update_markings.call(pkmn) }
     end
-    if global.hallOfFame
-      global.hallOfFame.each do |team|
+    # Purify Chamber
+    save_data[:global_metadata].purifyChamber.sets.each do |set|
+      set.list.each { |pkmn| update_markings.call(pkmn) }
+      update_markings.call(set.shadow) if set.shadow
+    end
+    # Hall of Fame records
+    if save_data[:global_metadata].hallOfFame
+      save_data[:global_metadata].hallOfFame.each do |team|
         next if !team
-        team.each do |pkmn|
-          next if !pkmn.markings.is_a?(Integer)
-          markings = []
-          6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
-          pkmn.markings = markings
-        end
+        team.each { |pkmn| update_markings.call(pkmn) }
       end
     end
-  end
-end
-
-SaveData.register_conversion(:v20_convert_pokemon_markings_variables) do
-  essentials_version 20
-  display_title 'Updating format of Pokémon markings (3/4)'
-  to_all do |save_data|
+    # Pokémon stored in Game Variables for some reason
     variables = save_data[:variables]
     (0..5000).each do |i|
       value = variables[i]
       next if value.nil?
       if value.is_a?(Array)
-        value.each do |value2|
-          if value2.is_a?(Pokemon) && value2.markings.is_a?(Integer)
-            markings = []
-            6.times { |j| markings[j] = ((value2.markings & (1 << j)) == 0) ? 0 : 1 }
-            value2.markings = markings
-          end
-        end
-      elsif value.is_a?(Pokemon) && value.markings.is_a?(Integer)
-        markings = []
-        6.times { |j| markings[j] = ((value.markings & (1 << j)) == 0) ? 0 : 1 }
-        value.markings = markings
+        value.each { |value2| update_markings.call(value2) if value2.is_a?(Pokemon) }
+      elsif value.is_a?(Pokemon)
+        update_markings.call(value)
       end
     end
   end
-end
-
-SaveData.register_conversion(:v20_convert_pokemon_markings_storage) do
-  essentials_version 20
-  display_title 'Updating format of Pokémon markings (4/4)'
-  to_value :storage_system do |storage|
-    storage.instance_eval do
-      self.maxBoxes.times do |box|
-        self.maxPokemon(box).times do |i|
-          pkmn = self[box, i]
-          next if !pkmn || !pkmn.markings.is_a?(Integer)
-          markings = []
-          6.times { |j| markings[j] = ((pkmn.markings & (1 << j)) == 0) ? 0 : 1 }
-          pkmn.markings = markings
-        end
-      end
-    end   # storage.instance_eval
-  end   # to_value
 end
