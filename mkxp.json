@@ -97,7 +97,7 @@
     // This option may be force-disabled at build time.
     // (0 = disabled)
     //
-    "fixedFramerate": 0,
+    "fixedFramerate": 60,
 
 
     // Skip (don't draw) frames when behind.

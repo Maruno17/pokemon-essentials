@@ -198,8 +198,9 @@ class Game_Map
         end
         return false
       # Can't walk onto ice
-      elsif terrain.ice
-        return false
+      # removed for mahogany gym. idk if this will cause problems, hopefully not
+      # elsif terrain.ice
+      #   return false
       elsif self_event != nil && self_event.x == x && self_event.y == y
         # Can't walk onto ledges
         for j in [2, 1, 0]

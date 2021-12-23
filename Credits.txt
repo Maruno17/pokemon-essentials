@@ -111,6 +111,9 @@ with their respective authors' consent
 		Lorelei VS sprite by Nalty 		http://nalty.deviantart.com/art/Lorelei-VS-Sprite-177184960
 		Kiwi (Kurt battle sprite)
 		UnworthyPie (Bruno battle sprite, Lance backsprite)
+		
+	Triple Fusion sprites
+		Sinnoh legendaries: 	Blackboot
 ### Tileset graphics ### 
 	Jorginho (OutsideEmerald)
 	ThatsSoWitty (Cave) http://thatssowitty.deviantart.com/art/The-Public-Pokemon-Tileset-281342410
@@ -173,6 +176,7 @@ Wootius				Turbo Speed		https://www.pokecommunity.com/showthread.php?t=306037
 Marin				Better maps script	https://www.pokecommunity.com/showthread.php?t=411299
 barafanatic			Safari Zone improvements
 M3rein				Easy Questing System 
+bo4p5687			Multisave
 
 
 #### Data sources ###			  
