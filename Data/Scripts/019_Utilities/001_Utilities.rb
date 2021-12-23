@@ -130,45 +130,41 @@ end
 #===============================================================================
 # Event utilities
 #===============================================================================
-def pbTimeEvent(variableNumber, secs = 86400)
-  if variableNumber && variableNumber >= 0
-    if $game_variables
-      secs = 0 if secs < 0
-      timenow = pbGetTimeNow
-      $game_variables[variableNumber] = [timenow.to_f, secs]
-      $game_map.refresh if $game_map
-    end
-  end
+def pbTimeEvent(variableNumber, secs = 86_400)
+  return if !$game_variables
+  return if !variableNumber || variableNumber < 0
+  secs = 0 if secs < 0
+  timenow = pbGetTimeNow
+  $game_variables[variableNumber] = [timenow.to_f, secs]
+  $game_map&.refresh
 end
 
 def pbTimeEventDays(variableNumber, days = 0)
-  if variableNumber && variableNumber >= 0
-    if $game_variables
-      days = 0 if days < 0
-      timenow = pbGetTimeNow
-      time = timenow.to_f
-      expiry = (time % 86400.0) + (days * 86400.0)
-      $game_variables[variableNumber] = [time, expiry - time]
-      $game_map.refresh if $game_map
-    end
-  end
+  return if !$game_variables
+  return if !variableNumber || variableNumber < 0
+  days = 0 if days < 0
+  timenow = pbGetTimeNow
+  time = timenow.to_f
+  expiry = (time % 86_400.0) + (days * 86_400.0)
+  $game_variables[variableNumber] = [time, expiry - time]
+  $game_map&.refresh
 end
 
 def pbTimeEventValid(variableNumber)
-  retval = false
-  if variableNumber && variableNumber >= 0 && $game_variables
-    value = $game_variables[variableNumber]
-    if value.is_a?(Array)
-      timenow = pbGetTimeNow
-      retval = (timenow.to_f - value[0] > value[1]) # value[1] is age in seconds
-      retval = false if value[1] <= 0 # zero age
-    end
-    if !retval
-      $game_variables[variableNumber] = 0
-      $game_map.refresh if $game_map
-    end
+  return false if !$game_variables
+  return false if !variableNumber || variableNumber < 0
+  ret = false
+  value = $game_variables[variableNumber]
+  if value.is_a?(Array)
+    timenow = pbGetTimeNow
+    ret = (timenow.to_f - value[0] > value[1]) # value[1] is age in seconds
+    ret = false if value[1] <= 0 # zero age
   end
-  return retval
+  if !ret
+    $game_variables[variableNumber] = 0
+    $game_map&.refresh
+  end
+  return ret
 end
 
 def pbExclaim(event, id = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
@@ -184,7 +180,7 @@ def pbExclaim(event, id = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
   else
     sprite = $scene.spriteset.addUserAnimation(id, event.x, event.y, tinting, 2)
   end
-  while !sprite.disposed?
+  until sprite.disposed?
     Graphics.update
     Input.update
     pbUpdateSceneMap
@@ -408,7 +404,7 @@ def pbMoveTutorAnnotations(move, movelist = nil)
       ret[i] = _INTL("LEARNED")
     else
       species = pkmn.species
-      if movelist && movelist.any? { |j| j == species }
+      if movelist&.any? { |j| j == species }
         # Checked data from movelist given in parameter
         ret[i] = _INTL("ABLE")
       elsif pkmn.compatible_with_move?(move)

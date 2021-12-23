@@ -61,8 +61,8 @@ class Scene_Map
         pbBGMFade(0.8)
       end
     end
-    if playingBGS && map.autoplay_bgs
-      pbBGMFade(0.8) if playingBGS.name != map.bgs.name
+    if playingBGS && map.autoplay_bgs && playingBGS.name != map.bgs.name
+      pbBGMFade(0.8)
     end
     Graphics.frame_reset
   end
@@ -145,12 +145,12 @@ class Scene_Map
     end
     keys = @spritesets.keys.clone
     keys.each do |i|
-      if !$map_factory.hasMap?(i)
-        @spritesets[i].dispose if @spritesets[i]
+      if $map_factory.hasMap?(i)
+        @spritesets[i].update
+      else
+        @spritesets[i]&.dispose
         @spritesets[i] = nil
         @spritesets.delete(i)
-      else
-        @spritesets[i].update
       end
     end
     @spritesetGlobal.update

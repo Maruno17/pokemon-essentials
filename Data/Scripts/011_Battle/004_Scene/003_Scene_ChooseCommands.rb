@@ -70,7 +70,7 @@ class Battle::Scene
     cw = @sprites["fightWindow"]
     cw.battler = battler
     moveIndex = 0
-    if battler.moves[@lastMove[idxBattler]] && battler.moves[@lastMove[idxBattler]].id
+    if battler.moves[@lastMove[idxBattler]]&.id
       moveIndex = @lastMove[idxBattler]
     end
     cw.shiftMode = (@battle.pbCanShift?(idxBattler)) ? 1 : 0
@@ -98,14 +98,14 @@ class Battle::Scene
       if Input.trigger?(Input::LEFT)
         cw.index -= 1 if (cw.index & 1) == 1
       elsif Input.trigger?(Input::RIGHT)
-        if battler.moves[cw.index + 1] && battler.moves[cw.index + 1].id
-          cw.index += 1 if (cw.index & 1) == 0
+        if battler.moves[cw.index + 1]&.id && (cw.index & 1) == 0
+          cw.index += 1
         end
       elsif Input.trigger?(Input::UP)
         cw.index -= 2 if (cw.index & 2) == 2
       elsif Input.trigger?(Input::DOWN)
-        if battler.moves[cw.index + 2] && battler.moves[cw.index + 2].id
-          cw.index += 2 if (cw.index & 2) == 0
+        if battler.moves[cw.index + 2]&.id && (cw.index & 2) == 0
+          cw.index += 2
         end
       end
       pbPlayCursorSE if cw.index != oldIndex

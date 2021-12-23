@@ -53,7 +53,7 @@ module GameData
     end
 
     def call_after_evolution(*args)
-      @after_evolution_proc.call(*args) if @after_evolution_proc
+      @after_evolution_proc&.call(*args)
     end
   end
 end
@@ -500,8 +500,7 @@ GameData::Evolution.register({
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
     map_metadata = $game_map.metadata
-    next map_metadata && map_metadata.town_map_position &&
-         map_metadata.town_map_position[0] == parameter
+    next map_metadata&.town_map_position && map_metadata.town_map_position[0] == parameter
   }
 })
 

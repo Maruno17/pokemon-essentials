@@ -281,11 +281,11 @@ class Battle::Battler
 
   def pbCanSleepYawn?
     return false if self.status != :NONE
-    if affectedByTerrain?
-      return false if [:Electric, :Misty].include?(@battle.field.terrain)
+    if affectedByTerrain? && [:Electric, :Misty].include?(@battle.field.terrain)
+      return false
     end
-    if !hasActiveAbility?(:SOUNDPROOF)
-      return false if @battle.allBattlers.any? { |b| b.effects[PBEffects::Uproar] > 0 }
+    if !hasActiveAbility?(:SOUNDPROOF) && @battle.allBattlers.any? { |b| b.effects[PBEffects::Uproar] > 0 }
+      return false
     end
     if Battle::AbilityEffects.triggerStatusImmunityNonIgnorable(self.ability, self, :SLEEP)
       return false
@@ -454,19 +454,17 @@ class Battle::Battler
       @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!", pbThis(true))) if showMessages
       return false
     end
-    if selfInflicted || !@battle.moldBreaker
-      if hasActiveAbility?(:OWNTEMPO)
-        if showMessages
-          @battle.pbShowAbilitySplash(self)
-          if Battle::Scene::USE_ABILITY_SPLASH
-            @battle.pbDisplay(_INTL("{1} doesn't become confused!", pbThis))
-          else
-            @battle.pbDisplay(_INTL("{1}'s {2} prevents confusion!", pbThis, abilityName))
-          end
-          @battle.pbHideAbilitySplash(self)
+    if (selfInflicted || !@battle.moldBreaker) && hasActiveAbility?(:OWNTEMPO)
+      if showMessages
+        @battle.pbShowAbilitySplash(self)
+        if Battle::Scene::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("{1} doesn't become confused!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("{1}'s {2} prevents confusion!", pbThis, abilityName))
         end
-        return false
+        @battle.pbHideAbilitySplash(self)
       end
+      return false
     end
     if pbOwnSide.effects[PBEffects::Safeguard] > 0 && !selfInflicted &&
        !(user && user.hasActiveAbility?(:INFILTRATOR))

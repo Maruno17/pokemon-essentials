@@ -19,7 +19,7 @@ class Sprite_Shadow < RPG::Sprite
   end
 
   def dispose
-    @chbitmap.dispose if @chbitmap
+    @chbitmap&.dispose
     super
   end
 
@@ -35,7 +35,7 @@ class Sprite_Shadow < RPG::Sprite
       @tile_id        = @character.tile_id
       @character_name = @character.character_name
       @character_hue  = @character.character_hue
-      @chbitmap.dispose if @chbitmap
+      @chbitmap&.dispose
       if @tile_id >= 384
         @chbitmap = pbGetTileBitmap(@character.map.tileset_name,
                                     @tile_id, @character.character_hue)
@@ -89,7 +89,7 @@ class Sprite_Shadow < RPG::Sprite
     @deltay = ScreenPosHelper.pbScreenY(@source) - self.y
     self.color = Color.new(0, 0, 0)
     @distance = ((@deltax**2) + (@deltay**2))
-    self.opacity = @self_opacity * 13000 / ((@distance * 370 / @distancemax) + 6000)
+    self.opacity = @self_opacity * 13_000 / ((@distance * 370 / @distancemax) + 6000)
     self.angle = 57.3 * Math.atan2(@deltax, @deltay)
     @angle_trigo = self.angle + 90
     @angle_trigo += 360 if @angle_trigo < 0
@@ -149,7 +149,7 @@ class Sprite_Character < RPG::Sprite
   end
 
   def clearShadows
-    @ombrelist.each { |s| s.dispose if s }
+    @ombrelist.each { |s| s&.dispose }
     @ombrelist.clear
   end
 
@@ -185,9 +185,8 @@ class Spriteset_Map
     map = $game_map if !map
     map.events.keys.sort.each do |k|
       ev = map.events[k]
-      warn = true if (ev.list != nil && ev.list.length > 0 &&
-         ev.list[0].code == 108 &&
-         (ev.list[0].parameters == ["s"] || ev.list[0].parameters == ["o"]))
+      warn = true if ev.list != nil && ev.list.length > 0 && ev.list[0].code == 108 &&
+                     (ev.list[0].parameters == ["s"] || ev.list[0].parameters == ["o"])
       params = XPML_read(map, "Shadow Source", ev, 4)
       @shadows.push([ev] + params) if params != nil
     end
@@ -225,11 +224,11 @@ end
 #===================================================
 def XPML_read(map, markup, event, max_param_number = 0)
   parameter_list = nil
-  return nil if !event || event.list == nil
+  return nil if !event || event.list.nil?
   event.list.size.times do |i|
     if event.list[i].code == 108 &&
        event.list[i].parameters[0].downcase == "begin " + markup.downcase
-      parameter_list = [] if parameter_list == nil
+      parameter_list = [] if parameter_list.nil?
       ((i + 1)...event.list.size).each do |j|
         if event.list[j].code == 108
           parts = event.list[j].parameters[0].split

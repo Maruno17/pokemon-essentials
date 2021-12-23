@@ -21,7 +21,7 @@ class Sprite_SurfBase
 
   def dispose
     return if @disposed
-    @sprite.dispose if @sprite
+    @sprite&.dispose
     @sprite   = nil
     @surfbitmap.dispose
     @divebitmap.dispose

@@ -829,7 +829,7 @@ end
 
 module MapProperty
   def self.set(settingname, oldsetting)
-    chosenmap = pbListScreen(settingname, MapLister.new(oldsetting ? oldsetting : 0))
+    chosenmap = pbListScreen(settingname, MapLister.new(oldsetting || 0))
     return (chosenmap > 0) ? chosenmap : oldsetting
   end
 
@@ -1285,7 +1285,7 @@ class EvolutionsProperty
       ret = nil if ret.empty?
     else
       params = ChooseNumberParams.new
-      params.setRange(0, 65535)
+      params.setRange(0, 65_535)
       params.setDefaultValue(value) if value
       params.setCancelValue(-1)
       ret = pbMessageChooseNumber(_INTL("Choose a parameter."), params)

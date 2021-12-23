@@ -12,7 +12,7 @@ class Battle
     return false if idxParty >= party.length
     return false if !party[idxParty]
     if party[idxParty].egg?
-      partyScene.pbDisplay(_INTL("An Egg can't battle!")) if partyScene
+      partyScene&.pbDisplay(_INTL("An Egg can't battle!"))
       return false
     end
     if !pbIsOwner?(idxBattler, idxParty)
@@ -24,11 +24,11 @@ class Battle
       return false
     end
     if party[idxParty].fainted?
-      partyScene.pbDisplay(_INTL("{1} has no energy left to battle!", party[idxParty].name)) if partyScene
+      partyScene&.pbDisplay(_INTL("{1} has no energy left to battle!", party[idxParty].name))
       return false
     end
     if pbFindBattler(idxParty, idxBattler)
-      partyScene.pbDisplay(_INTL("{1} is already in battle!", party[idxParty].name)) if partyScene
+      partyScene&.pbDisplay(_INTL("{1} is already in battle!", party[idxParty].name))
       return false
     end
     return true
@@ -45,45 +45,43 @@ class Battle
     # Pokémon
     allSameSideBattlers(idxBattler).each do |b|
       next if choices[b.index][0] != :SwitchOut || choices[b.index][1] != idxParty
-      partyScene.pbDisplay(_INTL("{1} has already been selected.",
-                                 pbParty(idxBattler)[idxParty].name)) if partyScene
+      partyScene&.pbDisplay(_INTL("{1} has already been selected.",
+                                  pbParty(idxBattler)[idxParty].name))
       return false
     end
     # Check whether battler can switch out
     battler = @battlers[idxBattler]
     return true if battler.fainted?
     # Ability/item effects that allow switching no matter what
-    if battler.abilityActive?
-      if Battle::AbilityEffects.triggerCertainSwitching(battler.ability, battler, self)
-        return true
-      end
+    if battler.abilityActive? &&
+       Battle::AbilityEffects.triggerCertainSwitching(battler.ability, battler, self)
+      return true
     end
-    if battler.itemActive?
-      if Battle::ItemEffects.triggerCertainSwitching(battler.item, battler, self)
-        return true
-      end
+    if battler.itemActive? &&
+       Battle::ItemEffects.triggerCertainSwitching(battler.item, battler, self)
+      return true
     end
     # Other certain switching effects
     return true if Settings::MORE_TYPE_EFFECTS && battler.pbHasType?(:GHOST)
     # Other certain trapping effects
     if battler.trappedInBattle?
-      partyScene.pbDisplay(_INTL("{1} can't be switched out!", battler.pbThis)) if partyScene
+      partyScene&.pbDisplay(_INTL("{1} can't be switched out!", battler.pbThis))
       return false
     end
     # Trapping abilities/items
     allOtherSideBattlers(idxBattler).each do |b|
       next if !b.abilityActive?
       if Battle::AbilityEffects.triggerTrappingByTarget(b.ability, battler, b, self)
-        partyScene.pbDisplay(_INTL("{1}'s {2} prevents switching!",
-                                   b.pbThis, b.abilityName)) if partyScene
+        partyScene&.pbDisplay(_INTL("{1}'s {2} prevents switching!",
+                                    b.pbThis, b.abilityName))
         return false
       end
     end
     allOtherSideBattlers(idxBattler).each do |b|
       next if !b.itemActive?
       if Battle::ItemEffects.triggerTrappingByTarget(b.item, battler, b, self)
-        partyScene.pbDisplay(_INTL("{1}'s {2} prevents switching!",
-                                   b.pbThis, b.itemName)) if partyScene
+        partyScene&.pbDisplay(_INTL("{1}'s {2} prevents switching!",
+                                    b.pbThis, b.itemName))
         return false
       end
     end
@@ -119,8 +117,8 @@ class Battle
       elsif !pbCanSwitch?(idxBattler, idxParty, partyScene)
         next false
       end
-      if shouldRegister
-        next false if idxParty < 0 || !pbRegisterSwitch(idxBattler, idxParty)
+      if shouldRegister && (idxParty < 0 || !pbRegisterSwitch(idxBattler, idxParty))
+        next false
       end
       ret = idxParty
       next true
@@ -187,10 +185,10 @@ class Battle
           switched.push(idxBattler)
         else   # Player's Pokémon has fainted in a wild battle
           switch = false
-          if !pbDisplayConfirm(_INTL("Use next Pokémon?"))
-            switch = (pbRun(idxBattler, true) <= 0)
-          else
+          if pbDisplayConfirm(_INTL("Use next Pokémon?"))
             switch = true
+          else
+            switch = (pbRun(idxBattler, true) <= 0)
           end
           if switch
             idxPlayerPartyNew = pbGetReplacementPokemonIndex(idxBattler)   # Owner chooses

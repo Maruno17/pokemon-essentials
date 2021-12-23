@@ -174,7 +174,7 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
   characters = []
   textchunks = []
   textchunks.push(text)
-  text = textchunks.join("")
+  text = textchunks.join
   textchars = text.scan(/./m)
   lastword = [0, 0] # position of last word
   hadspace = false
@@ -406,7 +406,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   if controls.length == 0
     ret = getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight,
                                newlineBreaks, explicitBreaksOnly)
-    dummybitmap.dispose if dummybitmap
+    dummybitmap&.dispose
     return ret
   end
   x = y = 0
@@ -414,7 +414,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   charactersInternal = []
 #  realtext = nil
 #  realtextStart = ""
-#  if !explicitBreaksOnly && textchunks.join("").length == 0
+#  if !explicitBreaksOnly && textchunks.join.length == 0
 #    # All commands occurred at the beginning of the text string
 #    realtext = (newlineBreaks) ? text : text.gsub(/\n/, " ")
 #    realtextStart = oldtext[0, oldtext.length - realtext.length]
@@ -432,7 +432,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     textlen += textchunks[i].scan(/./m).length
     control[2] = textlen
   end
-  text = textchunks.join("")
+  text = textchunks.join
   textchars = text.scan(/./m)
   colorstack = []
   boldcount = 0
@@ -830,7 +830,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   # Remove all characters with Y greater or equal to _yDst_+_heightDst_
   characters.delete_if { |ch| ch[2] >= yDst + heightDst } if heightDst >= 0
   bitmap.font = oldfont
-  dummybitmap.dispose if dummybitmap
+  dummybitmap&.dispose
   return characters
 end
 
@@ -854,7 +854,7 @@ def getLineBrokenText(bitmap, value, width, dims)
   return ret if !bitmap || bitmap.disposed? || width <= 0
   textmsg = value.clone
   ret.push(["", 0, 0, 0, bitmap.text_size("X").height, 0, 0, 0, 0])
-  while ((c = textmsg.slice!(/\n|(\S*([ \r\t\f]?))/)) != nil)
+  while (c = textmsg.slice!(/\n|(\S*([ \r\t\f]?))/)) != nil
     break if c == ""
     length = c.scan(/./m).length
     ccheck = c
@@ -1083,8 +1083,8 @@ def drawTextEx(bitmap, x, y, width, numlines, text, baseColor, shadowColor)
 end
 
 def drawFormattedTextEx(bitmap, x, y, width, text, baseColor = nil, shadowColor = nil, lineheight = 32)
-  base = !baseColor ? Color.new(12 * 8, 12 * 8, 12 * 8) : baseColor.clone
-  shadow = !shadowColor ? Color.new(26 * 8, 26 * 8, 25 * 8) : shadowColor.clone
+  base = baseColor ? baseColor.clone : Color.new(12 * 8, 12 * 8, 12 * 8)
+  shadow = shadowColor ? shadowColor.clone : Color.new(26 * 8, 26 * 8, 25 * 8)
   text = "<c2=" + colorToRgb16(base) + colorToRgb16(shadow) + ">" + text
   chars = getFormattedText(bitmap, x, y, width, -1, text, lineheight)
   drawFormattedChars(bitmap, chars)

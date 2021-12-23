@@ -859,9 +859,7 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetAttack1"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:ATTACK, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:ATTACK, user)
           score += target.stages[:ATTACK] * 20
           if skill >= PBTrainerAI.mediumSkill
             hasPhysicalAttack = false
@@ -876,6 +874,8 @@ class Battle::AI
               score -= 90
             end
           end
+        else
+          score -= 90
         end
       else
         score += 20 if target.stages[:ATTACK] > 0
@@ -892,10 +892,10 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetDefense1"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:DEFENSE, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:DEFENSE, user)
           score += target.stages[:DEFENSE] * 20
+        else
+          score -= 90
         end
       elsif target.stages[:DEFENSE] > 0
         score += 20
@@ -903,15 +903,15 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetSpeed1", "LowerTargetSpeed1WeakerInGrassyTerrain"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:SPEED, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:SPEED, user)
           score += target.stages[:SPEED] * 10
           if skill >= PBTrainerAI.highSkill
             aspeed = pbRoughStat(user, :SPEED, skill)
             ospeed = pbRoughStat(target, :SPEED, skill)
             score += 30 if aspeed < ospeed && aspeed * 2 > ospeed
           end
+        else
+          score -= 90
         end
       elsif user.stages[:SPEED] > 0
         score += 20
@@ -919,9 +919,7 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetSpAtk1"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:SPECIAL_ATTACK, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:SPECIAL_ATTACK, user)
           score += user.stages[:SPECIAL_ATTACK] * 20
           if skill >= PBTrainerAI.mediumSkill
             hasSpecicalAttack = false
@@ -936,6 +934,8 @@ class Battle::AI
               score -= 90
             end
           end
+        else
+          score -= 90
         end
       else
         score += 20 if user.stages[:SPECIAL_ATTACK] > 0
@@ -952,10 +952,10 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetSpDef1"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user)
           score += target.stages[:SPECIAL_DEFENSE] * 20
+        else
+          score -= 90
         end
       elsif target.stages[:SPECIAL_DEFENSE] > 0
         score += 20
@@ -963,10 +963,10 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetAccuracy1", "LowerTargetAccuracy2", "LowerTargetAccuracy3"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:ACCURACY, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:ACCURACY, user)
           score += target.stages[:ACCURACY] * 10
+        else
+          score -= 90
         end
       elsif target.stages[:ACCURACY] > 0
         score += 20
@@ -974,10 +974,10 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetEvasion1", "LowerTargetEvasion2", "LowerTargetEvasion3"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:EVASION, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:EVASION, user)
           score += target.stages[:EVASION] * 10
+        else
+          score -= 90
         end
       elsif target.stages[:EVASION] > 0
         score += 20
@@ -985,10 +985,10 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetEvasion1RemoveSideEffects"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:EVASION, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:EVASION, user)
           score += target.stages[:EVASION] * 10
+        else
+          score -= 90
         end
       elsif target.stages[:EVASION] > 0
         score += 20
@@ -1009,9 +1009,7 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetAttack2", "LowerTargetAttack3"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:ATTACK, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:ATTACK, user)
           score += 40 if user.turnCount == 0
           score += target.stages[:ATTACK] * 20
           if skill >= PBTrainerAI.mediumSkill
@@ -1027,6 +1025,8 @@ class Battle::AI
               score -= 90
             end
           end
+        else
+          score -= 90
         end
       else
         score += 10 if user.turnCount == 0
@@ -1044,11 +1044,11 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetDefense2", "LowerTargetDefense3"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:DEFENSE, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:DEFENSE, user)
           score += 40 if user.turnCount == 0
           score += target.stages[:DEFENSE] * 20
+        else
+          score -= 90
         end
       else
         score += 10 if user.turnCount == 0
@@ -1057,9 +1057,7 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetSpeed2", "LowerTargetSpeed3"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:SPEED, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:SPEED, user)
           score += 20 if user.turnCount == 0
           score += target.stages[:SPEED] * 20
           if skill >= PBTrainerAI.highSkill
@@ -1067,6 +1065,8 @@ class Battle::AI
             ospeed = pbRoughStat(target, :SPEED, skill)
             score += 30 if aspeed < ospeed && aspeed * 2 > ospeed
           end
+        else
+          score -= 90
         end
       else
         score += 10 if user.turnCount == 0
@@ -1078,9 +1078,7 @@ class Battle::AI
          target.hasActiveAbility?(:OBLIVIOUS)
         score -= 90
       elsif move.statusMove?
-        if !target.pbCanLowerStatStage?(:SPECIAL_ATTACK, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:SPECIAL_ATTACK, user)
           score += 40 if user.turnCount == 0
           score += target.stages[:SPECIAL_ATTACK] * 20
           if skill >= PBTrainerAI.mediumSkill
@@ -1096,6 +1094,8 @@ class Battle::AI
               score -= 90
             end
           end
+        else
+          score -= 90
         end
       else
         score += 10 if user.turnCount == 0
@@ -1113,11 +1113,11 @@ class Battle::AI
     #---------------------------------------------------------------------------
     when "LowerTargetSpDef2", "LowerTargetSpDef3"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user)
-          score -= 90
-        else
+        if target.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user)
           score += 40 if user.turnCount == 0
           score += target.stages[:SPECIAL_DEFENSE] * 20
+        else
+          score -= 90
         end
       else
         score += 10 if user.turnCount == 0
@@ -1323,9 +1323,7 @@ class Battle::AI
       end
     #---------------------------------------------------------------------------
     when "SetUserTypesToUserMoveType"
-      if !user.canChangeType?
-        score -= 90
-      else
+      if user.canChangeType?
         has_possible_type = false
         user.eachMoveWithIndex do |m, i|
           break if Settings::MECHANICS_GENERATION >= 6 && i > 0
@@ -1335,6 +1333,8 @@ class Battle::AI
           break
         end
         score -= 90 if !has_possible_type
+      else
+        score -= 90
       end
     #---------------------------------------------------------------------------
     when "SetUserTypesToResistLastAttack"
@@ -1350,9 +1350,7 @@ class Battle::AI
           aType = m.pbCalcType(user)
           break
         end
-        if !aType
-          score -= 90
-        else
+        if aType
           has_possible_type = false
           GameData::Type.each do |t|
             next if t.pseudo_type || user.pbHasType?(t.id) ||
@@ -1361,6 +1359,8 @@ class Battle::AI
             break
           end
           score -= 90 if !has_possible_type
+        else
+          score -= 90
         end
       end
     #---------------------------------------------------------------------------
@@ -1793,9 +1793,7 @@ class Battle::AI
       if target.effects[PBEffects::Encore] > 0
         score -= 90
       elsif aspeed > ospeed
-        if !target.lastRegularMoveUsed
-          score -= 90
-        else
+        if target.lastRegularMoveUsed
           moveData = GameData::Move.get(target.lastRegularMoveUsed)
           if moveData.category == 2 &&   # Status move
              [:User, :BothSides].include?(moveData.target)
@@ -1805,6 +1803,8 @@ class Battle::AI
                 Effectiveness.ineffective?(pbCalcTypeMod(moveData.type, target, user))
             score += 60
           end
+        else
+          score -= 90
         end
       end
     #---------------------------------------------------------------------------
@@ -2056,9 +2056,7 @@ class Battle::AI
       end
     #---------------------------------------------------------------------------
     when "SwitchOutUserPassOnEffects"
-      if !@battle.pbCanChooseNonActive?(user.index)
-        score -= 100
-      else
+      if @battle.pbCanChooseNonActive?(user.index)
         score -= 40 if user.effects[PBEffects::Confusion] > 0
         total = 0
         GameData::Stat.each_battle { |s| total += user.stages[s.id] }
@@ -2075,6 +2073,8 @@ class Battle::AI
           end
           score += 75 if !hasDamagingMove
         end
+      else
+        score -= 100
       end
     #---------------------------------------------------------------------------
     when "TrapTargetInBattle"
@@ -2505,9 +2505,7 @@ class Battle::AI
       end
     #---------------------------------------------------------------------------
     when "LowerTargetAttack1BypassSubstitute"
-      if !target.pbCanLowerStatStage?(:ATTACK, user)
-        score -= 90
-      else
+      if target.pbCanLowerStatStage?(:ATTACK, user)
         score += target.stages[:ATTACK] * 20
         if skill >= PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
@@ -2522,6 +2520,8 @@ class Battle::AI
             score -= 90
           end
         end
+      else
+        score -= 90
       end
     #---------------------------------------------------------------------------
     when "LowerTargetAtkSpAtk1"
@@ -2537,11 +2537,11 @@ class Battle::AI
       end
     #---------------------------------------------------------------------------
     when "LowerTargetSpAtk2", "LowerTargetSpAtk3"
-      if !target.pbCanLowerStatStage?(:SPECIAL_ATTACK, user)
-        score -= 90
-      else
+      if target.pbCanLowerStatStage?(:SPECIAL_ATTACK, user)
         score += 40 if user.turnCount == 0
         score += target.stages[:SPECIAL_ATTACK] * 20
+      else
+        score -= 90
       end
     #---------------------------------------------------------------------------
     when "RaiseGroundedGrassBattlersAtkSpAtk1"
@@ -3005,7 +3005,7 @@ class Battle::AI
           end
           GameData::Stat.each_main_battle { |s| score += 10 if user.stages[s.id] <= 0 }
           if skill >= PBTrainerAI.mediumSkill
-            hasDamagingAttack = user.moves.any? { |m| next m && m.damagingMove? }
+            hasDamagingAttack = user.moves.any? { |m| next m&.damagingMove? }
             score += 20 if hasDamagingAttack
           end
         end
@@ -3031,7 +3031,7 @@ class Battle::AI
           end
           GameData::Stat.each_main_battle { |s| score += 10 if user.stages[s.id] <= 0 }
           if skill >= PBTrainerAI.mediumSkill
-            hasDamagingAttack = user.moves.any? { |m| next m && m.damagingMove? }
+            hasDamagingAttack = user.moves.any? { |m| next m&.damagingMove? }
             score += 20 if hasDamagingAttack
           end
         end
@@ -3064,11 +3064,11 @@ class Battle::AI
       end
     #---------------------------------------------------------------------------
     when "LowerTargetDefense1DoublePowerInGravity"
-      if !target.pbCanLowerStatStage?(:DEFENSE, user)
-        score -= 90
-      else
+      if target.pbCanLowerStatStage?(:DEFENSE, user)
         score += 20
         score += target.stages[:DEFENSE] * 20
+      else
+        score -= 90
       end
       score += 30 if @battle.field.effects[PBEffects::Gravity] > 0
     #---------------------------------------------------------------------------

@@ -82,17 +82,13 @@ class PokemonPhoneScene
       j = i + @sprites["list"].top_item
       next if j >= commands.length
       trainer = @trainers[j]
-      if trainer.length == 4
-        if trainer[3]
-          @sprites["rematch[#{i}]"].setBitmap("Graphics/Pictures/phoneRematch")
-        end
+      if trainer.length == 4 && trainer[3]
+        @sprites["rematch[#{i}]"].setBitmap("Graphics/Pictures/phoneRematch")
       end
     end
     rematchcount = 0
     @trainers.each do |trainer|
-      if trainer.length == 4
-        rematchcount += 1 if trainer[3]
-      end
+      rematchcount += 1 if trainer.length == 4 && trainer[3]
     end
     infotext = _INTL("Registered<br>")
     infotext += _INTL(" <r>{1}<br>", @sprites["list"].commands.length)
@@ -125,10 +121,8 @@ class PokemonPhoneScene
             j = i + @sprites["list"].top_item
             next if j >= commands.length
             trainer = @trainers[j]
-            if trainer.length == 4
-              if trainer[3]
-                @sprites["rematch[#{i}]"].setBitmap("Graphics/Pictures/phoneRematch")
-              end
+            if trainer.length == 4 && trainer[3]
+              @sprites["rematch[#{i}]"].setBitmap("Graphics/Pictures/phoneRematch")
             end
           end
         end
@@ -137,9 +131,7 @@ class PokemonPhoneScene
           break
         elsif Input.trigger?(Input::USE)
           index = @sprites["list"].index
-          if index >= 0
-            pbCallTrainer(@trainers[index][0], @trainers[index][1])
-          end
+          pbCallTrainer(@trainers[index][0], @trainers[index][1]) if index >= 0
         end
       end
     }

@@ -72,7 +72,7 @@ class PurifyChamberSet
   end
 
   def shadow=(value)
-    if value == nil || value.shadowPokemon?
+    if value.nil? || value.shadowPokemon?
       @shadow = value
     end
   end
@@ -123,7 +123,7 @@ class PurifyChamberSet
   def insertAfter(index, value)
     return if self.length >= PurifyChamber::SETSIZE
     return if index < 0 || index >= PurifyChamber::SETSIZE
-    unless value && value.shadowPokemon?
+    unless value&.shadowPokemon?
       @list.insert(index + 1, value)
       @list.compact!
       @facing += 1 if @facing > index && value != nil
@@ -133,7 +133,7 @@ class PurifyChamberSet
 
   def insertAt(index, value)
     return if index < 0 || index >= PurifyChamber::SETSIZE
-    unless value && value.shadowPokemon?
+    unless value&.shadowPokemon?
       @list[index] = value
       @list.compact!
       @facing = [[@facing, @list.length - 1].min, 0].max
@@ -220,7 +220,7 @@ class PurifyChamber
   end
 
   def [](chamber, slot = nil)
-    if slot == nil
+    if slot.nil?
       return @sets[chamber]
     end
     return nil if chamber < 0 || chamber >= NUMSETS
@@ -249,13 +249,11 @@ class PurifyChamber
   def update # called each step
     NUMSETS.times do |set|
       # If a shadow Pokemon and a regular Pokemon are on the same set
-      if @sets[set].shadow
-        if @sets[set].shadow.heart_gauge > 0
-          flow = self.chamberFlow(set)
-          @sets[set].shadow.adjustHeart(-flow)
-          if isPurifiable?(set)
-            pbMessage(_INTL("Your {1} in the Purify Chamber is ready for purification!", @sets[set].shadow.name))
-          end
+      if @sets[set].shadow && @sets[set].shadow.heart_gauge > 0
+        flow = self.chamberFlow(set)
+        @sets[set].shadow.adjustHeart(-flow)
+        if isPurifiable?(set)
+          pbMessage(_INTL("Your {1} in the Purify Chamber is ready for purification!", @sets[set].shadow.name))
         end
       end
     end
@@ -363,7 +361,7 @@ class PurifyChamberScreen
       @scene.pbDisplay(_INTL("Can't place an egg there."))
       return false
     end
-    if (position == 0)
+    if position == 0
       if pkmn.shadowPokemon?
         # Remove from storage and place in set
         oldpkmn = PurifyChamberHelper.pbGetPokemon(@chamber, position)
@@ -378,7 +376,7 @@ class PurifyChamberScreen
         @scene.pbDisplay(_INTL("Only a Shadow Pokémon can go there."))
         return false
       end
-    elsif (position >= 1)
+    elsif position >= 1
       if pkmn.shadowPokemon?
         @scene.pbDisplay(_INTL("Can't place a Shadow Pokémon there."))
         return false
@@ -454,12 +452,12 @@ class PurifyChamberScreen
           if choice == 0
             if heldpkmn
               if pbPlace(heldpkmn, cmd[1]) # calls place or shift as appropriate
-                if !curpkmn
+                if curpkmn
+                  heldpkmn = curpkmn # Pokemon was shifted
+                else
                   pbOnPlace(heldpkmn)
                   @scene.pbPositionHint(PurifyChamberHelper.adjustOnInsert(cmd[1]))
                   heldpkmn = nil # Pokemon was placed
-                else
-                  heldpkmn = curpkmn # Pokemon was shifted
                 end
               end
             else
@@ -498,14 +496,14 @@ class PurifyChamberScreen
             if pos
               newpkmn = $PokemonStorage[pos[0], pos[1]]
               if newpkmn
-                if (newpkmn.shadowPokemon?) != (curpkmn.shadowPokemon?)
-                  @scene.pbDisplay(_INTL("That Pokémon can't be placed there."))
-                else
+                if (newpkmn.shadowPokemon?) == (curpkmn.shadowPokemon?)
                   @scene.pbReplace(cmd, pos)
                   PurifyChamberHelper.pbSetPokemon(@chamber, cmd[1], newpkmn)
                   $PokemonStorage[pos[0], pos[1]] = curpkmn
                   @scene.pbRefresh
                   pbOnPlace(curpkmn)
+                else
+                  @scene.pbDisplay(_INTL("That Pokémon can't be placed there."))
                 end
               end
             end
@@ -920,12 +918,12 @@ class PurifyChamberSetView < SpriteWrapper
         pos += 1 if button == Input::UP
         pos = nil if button == Input::RIGHT
       end
-      if pos != nil
+      if pos.nil?
+        @cursor = 0
+      else
         pos -= (pos / points).floor * points # modulus
         pos *= 2 if @chamber.setCount(@set) == PurifyChamber::SETSIZE
         @cursor = pos + 1
-      else
-        @cursor = 0
       end
     end
     if @cursor != oldcursor
@@ -1058,7 +1056,7 @@ class PurifyChamberSetView < SpriteWrapper
   def update
     super
     @__sprites.each do |sprite|
-      sprite.update if sprite
+      sprite&.update
     end
     @flows.each do |flow|
       flow.update
@@ -1070,7 +1068,7 @@ class PurifyChamberSetView < SpriteWrapper
 
   def dispose
     @__sprites.each do |sprite|
-      sprite.dispose if sprite
+      sprite&.dispose
     end
     @flows.each do |flow|
       flow.dispose

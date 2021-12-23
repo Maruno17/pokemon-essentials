@@ -10,7 +10,7 @@ class Battle::Scene::Animation
   end
 
   def dispose
-    @tempSprites.each { |s| s.dispose if s }
+    @tempSprites.each { |s| s&.dispose }
   end
 
   def createProcesses; end
@@ -47,7 +47,7 @@ class Battle::Scene::Animation
 
   def update
     return if @animDone
-    @tempSprites.each { |s| s.update if s }
+    @tempSprites.each { |s| s&.update }
     finished = true
     @pictureEx.each_with_index do |p, i|
       next if !p.running?

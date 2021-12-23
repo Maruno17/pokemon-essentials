@@ -6,7 +6,7 @@ def pbSetLotteryNumber(variable = 1)
   t = pbGetTimeNow
   hash = t.day + (t.month << 5) + (t.year << 9)
   srand(hash)                      # seed RNG with fixed value depending on date
-  lottery = rand(65536)            # get a number
+  lottery = rand(65_536)           # get a number
   srand                            # reseed RNG
   pbSet(variable, sprintf("%05d", lottery))
 end

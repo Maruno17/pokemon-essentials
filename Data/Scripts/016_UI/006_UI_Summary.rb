@@ -205,7 +205,7 @@ class PokemonSummary_Scene
     pbFadeOutAndHide(@sprites) { pbUpdate }
     pbDisposeSpriteHash(@sprites)
     @typebitmap.dispose
-    @markingbitmap.dispose if @markingbitmap
+    @markingbitmap&.dispose
     @viewport.dispose
   end
 
@@ -519,7 +519,7 @@ class PokemonSummary_Scene
     # Write Egg Watch blurb
     memo += _INTL("<c3=404040,B0B0B0>\"The Egg Watch\"\n")
     eggstate = _INTL("It looks like this Egg will take a long time to hatch.")
-    eggstate = _INTL("What will hatch from this? It doesn't seem close to hatching.") if @pokemon.steps_to_hatch < 10200
+    eggstate = _INTL("What will hatch from this? It doesn't seem close to hatching.") if @pokemon.steps_to_hatch < 10_200
     eggstate = _INTL("It appears to move occasionally. It may be close to hatching.") if @pokemon.steps_to_hatch < 2550
     eggstate = _INTL("Sounds can be heard coming from inside! It will hatch soon!") if @pokemon.steps_to_hatch < 1275
     memo += sprintf("<c3=404040,B0B0B0>%s\n", eggstate)
@@ -939,18 +939,18 @@ class PokemonSummary_Scene
           @sprites["movepresel"].visible = false
           switching = false
         elsif !@pokemon.shadowPokemon?
-          if !switching
-            @sprites["movepresel"].index   = selmove
-            @sprites["movepresel"].visible = true
-            oldselmove = selmove
-            switching = true
-          else
+          if switching
             tmpmove                    = @pokemon.moves[oldselmove]
             @pokemon.moves[oldselmove] = @pokemon.moves[selmove]
             @pokemon.moves[selmove]    = tmpmove
             @sprites["movepresel"].visible = false
             switching = false
             drawSelectedMove(nil, @pokemon.moves[selmove])
+          else
+            @sprites["movepresel"].index   = selmove
+            @sprites["movepresel"].visible = true
+            oldselmove = selmove
+            switching = true
           end
         end
       elsif Input.trigger?(Input::UP)
@@ -1003,15 +1003,7 @@ class PokemonSummary_Scene
         @sprites["ribbonpresel"].visible = false
         switching = false
       elsif Input.trigger?(Input::USE)
-        if !switching
-          if @pokemon.ribbons[selribbon]
-            pbPlayDecisionSE
-            @sprites["ribbonpresel"].index = selribbon - (@ribbonOffset * 4)
-            oldselribbon = selribbon
-            @sprites["ribbonpresel"].visible = true
-            switching = true
-          end
-        else
+        if switching
           pbPlayDecisionSE
           tmpribbon                      = @pokemon.ribbons[oldselribbon]
           @pokemon.ribbons[oldselribbon] = @pokemon.ribbons[selribbon]
@@ -1026,6 +1018,14 @@ class PokemonSummary_Scene
           @sprites["ribbonpresel"].visible = false
           switching = false
           drawSelectedRibbon(@pokemon.ribbons[selribbon])
+        else
+          if @pokemon.ribbons[selribbon]
+            pbPlayDecisionSE
+            @sprites["ribbonpresel"].index = selribbon - (@ribbonOffset * 4)
+            oldselribbon = selribbon
+            @sprites["ribbonpresel"].visible = true
+            switching = true
+          end
         end
       elsif Input.trigger?(Input::UP)
         selribbon -= 4

@@ -73,23 +73,21 @@ class ReadyMenuButton < SpriteWrapper
     textpos = [
       [@command[1], textx, 16, 2, Color.new(248, 248, 248), Color.new(40, 40, 40), 1]
     ]
-    if !@command[2]
-      if !GameData::Item.get(@command[0]).is_important?
-        qty = $bag.quantity(@command[0])
-        if qty > 99
-          textpos.push([_INTL(">99"), 230, 16, 1,
-                        Color.new(248, 248, 248), Color.new(40, 40, 40), 1])
-        else
-          textpos.push([_INTL("x{1}", qty), 230, 16, 1,
-                        Color.new(248, 248, 248), Color.new(40, 40, 40), 1])
-        end
+    if !@command[2] && !GameData::Item.get(@command[0]).is_important?
+      qty = $bag.quantity(@command[0])
+      if qty > 99
+        textpos.push([_INTL(">99"), 230, 16, 1,
+                      Color.new(248, 248, 248), Color.new(40, 40, 40), 1])
+      else
+        textpos.push([_INTL("x{1}", qty), 230, 16, 1,
+                      Color.new(248, 248, 248), Color.new(40, 40, 40), 1])
       end
     end
     pbDrawTextPositions(self.bitmap, textpos)
   end
 
   def update
-    @icon.update if @icon
+    @icon&.update
     super
   end
 end

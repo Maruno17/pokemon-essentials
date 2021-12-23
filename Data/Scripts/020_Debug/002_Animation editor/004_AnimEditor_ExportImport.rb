@@ -91,7 +91,7 @@ def pbConvertAnimToNewFormat(textdata)
     next if !textdata[i]
     PBAnimation::MAX_SPRITES.times do |j|
       next if !textdata[i][j]
-      needconverting = true if textdata[i][j][AnimFrame::FOCUS] == nil
+      needconverting = true if textdata[i][j][AnimFrame::FOCUS].nil?
       break if needconverting
     end
     break if needconverting
@@ -101,7 +101,7 @@ def pbConvertAnimToNewFormat(textdata)
       next if !textdata[i]
       PBAnimation::MAX_SPRITES.times do |j|
         next if !textdata[i][j]
-        textdata[i][j][AnimFrame::PRIORITY] = 1 if textdata[i][j][AnimFrame::PRIORITY] == nil
+        textdata[i][j][AnimFrame::PRIORITY] = 1 if textdata[i][j][AnimFrame::PRIORITY].nil?
         case j
         when 0      # User battler
           textdata[i][j][AnimFrame::FOCUS] = 2

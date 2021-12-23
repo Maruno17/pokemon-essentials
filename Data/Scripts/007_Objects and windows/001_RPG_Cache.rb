@@ -27,7 +27,7 @@ module RPG
     def self.fromCache(i)
       return nil if !@cache.include?(i)
       obj = @cache[i]
-      return nil if obj && obj.disposed?
+      return nil if obj&.disposed?
       return obj
     end
 

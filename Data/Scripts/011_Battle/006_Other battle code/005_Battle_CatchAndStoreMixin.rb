@@ -4,8 +4,9 @@ module Battle::CatchAndStoreMixin
   #=============================================================================
   def pbStorePokemon(pkmn)
     # Nickname the Pokémon (unless it's a Shadow Pokémon)
-    if !pkmn.shadowPokemon? && $PokemonSystem.givenicknames == 0
-      if pbDisplayConfirm(_INTL("Would you like to give a nickname to {1}?", pkmn.name))
+    if !pkmn.shadowPokemon?
+      if $PokemonSystem.givenicknames == 0 &&
+         pbDisplayConfirm(_INTL("Would you like to give a nickname to {1}?", pkmn.name))
         nickname = @scene.pbNameEntry(_INTL("{1}'s nickname?", pkmn.speciesName), pkmn)
         pkmn.name = nickname
       end
@@ -166,7 +167,7 @@ module Battle::CatchAndStoreMixin
     # Definite capture, no need to perform randomness checks
     return 4 if x >= 255 || Battle::PokeBallEffects.isUnconditional?(ball, self, battler)
     # Second half of the shakes calculation
-    y = (65536 / ((255.0 / x)**0.1875)).floor
+    y = (65_536 / ((255.0 / x)**0.1875)).floor
     # Critical capture check
     if Settings::ENABLE_CRITICAL_CAPTURES
       dex_modifier = 0
@@ -187,7 +188,7 @@ module Battle::CatchAndStoreMixin
       # Calculate the number of shakes
       if c > 0 && pbRandom(256) < c
         @criticalCapture = true
-        return 4 if pbRandom(65536) < y
+        return 4 if pbRandom(65_536) < y
         return 0
       end
     end
@@ -195,7 +196,7 @@ module Battle::CatchAndStoreMixin
     numShakes = 0
     4.times do |i|
       break if numShakes < i
-      numShakes += 1 if pbRandom(65536) < y
+      numShakes += 1 if pbRandom(65_536) < y
     end
     return numShakes
   end

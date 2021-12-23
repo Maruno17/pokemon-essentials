@@ -40,7 +40,7 @@ module PropertyMixin
   end
 
   def set(value)
-    @setProc.call(value) if @setProc
+    @setProc&.call(value)
   end
 end
 

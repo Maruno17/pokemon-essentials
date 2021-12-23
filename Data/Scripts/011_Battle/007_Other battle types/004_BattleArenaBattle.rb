@@ -53,9 +53,7 @@ class BattleArenaBattle < Battle
   end
 
   def pbCanSwitchLax?(idxBattler, _idxParty, partyScene = nil)
-    if partyScene
-      partyScene.pbDisplay(_INTL("{1} can't be switched out!", @battlers[idxBattler].pbThis))
-    end
+    partyScene&.pbDisplay(_INTL("{1} can't be switched out!", @battlers[idxBattler].pbThis))
     return false
   end
 
@@ -366,8 +364,8 @@ class Battle::Scene
     ensure
       pbDisposeMessageWindow(msgwindow)
       dimmingvp.dispose
-      infowindow.contents.dispose if infowindow && infowindow.contents
-      infowindow.dispose if infowindow
+      infowindow&.contents&.dispose
+      infowindow&.dispose
     end
   end
 end

@@ -32,7 +32,7 @@ module BattlePokemonDebugMenuCommands
 
   def self.hasFunction?(option, function)
     option_hash = @@commands[option]
-    return option_hash && option_hash.keys.include?(function)
+    return option_hash&.has_key?(function)
   end
 
   def self.getFunction(option, function)
@@ -241,7 +241,7 @@ BattlePokemonDebugMenuCommands.register("set_level", {
     if level != pkmn.level
       pkmn.level = level
       pkmn.calc_stats
-      battler.pbUpdate if battler
+      battler&.pbUpdate
     end
   }
 })
@@ -315,7 +315,7 @@ BattlePokemonDebugMenuCommands.register("hidden_values", {
             if f != pkmn.ev[ev_id[cmd2]]
               pkmn.ev[ev_id[cmd2]] = f
               pkmn.calc_stats
-              battler.pbUpdate if battler
+              battler&.pbUpdate
             end
           else   # (Max) Randomise all
             evTotalTarget = Pokemon::EV_LIMIT
@@ -334,7 +334,7 @@ BattlePokemonDebugMenuCommands.register("hidden_values", {
               evTotalTarget -= addVal
             end
             pkmn.calc_stats
-            battler.pbUpdate if battler
+            battler&.pbUpdate
           end
         end
       when 1   # Set IVs
@@ -365,12 +365,12 @@ BattlePokemonDebugMenuCommands.register("hidden_values", {
             if f != pkmn.iv[iv_id[cmd2]]
               pkmn.iv[iv_id[cmd2]] = f
               pkmn.calc_stats
-              battler.pbUpdate if battler
+              battler&.pbUpdate
             end
           else   # Randomise all
             GameData::Stat.each_main { |s| pkmn.iv[s.id] = rand(Pokemon::IV_STAT_LIMIT + 1) }
             pkmn.calc_stats
-            battler.pbUpdate if battler
+            battler&.pbUpdate
           end
         end
       end
@@ -467,7 +467,7 @@ BattlePokemonDebugMenuCommands.register("teach_move", {
       next
     end
     pkmn.learn_move(new_move)
-    battler.moves.push(Battle::Move.from_pokemon_move(self, pkmn.moves.last)) if battler
+    battler&.moves&.push(Battle::Move.from_pokemon_move(self, pkmn.moves.last))
     pbMessage("\\ts[]" + _INTL("{1} learned {2}!", pkmn.name, move_name))
   }
 })
@@ -492,7 +492,7 @@ BattlePokemonDebugMenuCommands.register("forget_move", {
     next if cmd < 0
     old_move_name = pkmn.moves[move_indices[cmd]].name
     pkmn.forget_move_at_index(move_indices[cmd])
-    battler.moves.delete_at(move_indices[cmd]) if battler
+    battler&.moves&.delete_at(move_indices[cmd])
     pbMessage("\\ts[]" + _INTL("{1} forgot {2}.", pkmn.name, old_move_name))
   }
 })
@@ -688,7 +688,7 @@ BattlePokemonDebugMenuCommands.register("set_nature", {
       elsif cmd == commands.length - 1   # Reset
         pkmn.nature = nil
       end
-      battler.pbUpdate if battler
+      battler&.pbUpdate
     end
   }
 })

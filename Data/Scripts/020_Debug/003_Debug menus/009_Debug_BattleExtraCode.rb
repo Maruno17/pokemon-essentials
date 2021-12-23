@@ -119,7 +119,7 @@ module Battle::DebugVariables
     PBEffects::Unburden       => { name: "Self lost its item (for Unburden)",               default: false },
     PBEffects::Uproar         => { name: "Uproar number of rounds remaining",               default: 0 },
     PBEffects::WaterSport     => { name: "Used Water Sport (Gen 5 and older)",              default: false },
-    PBEffects::WeightChange   => { name: "Weight change +0.1*x kg",                         default: 0, min: -99999, max: 99999 },
+    PBEffects::WeightChange   => { name: "Weight change +0.1*x kg",                         default: 0, min: -99_999, max: 99_999 },
     PBEffects::Yawn           => { name: "Yawn rounds remaining until falling asleep",      default: 0 }
   }
 
@@ -421,7 +421,7 @@ class Battle::DebugSetEffects
         @window.refresh if update_input_for_integer(effect, variable_data[:default], variable_data)
       elsif variable_data[:default] == -1
         @window.refresh if update_input_for_battler_index(effect, variable_data)
-      elsif variable_data[:default] == nil
+      elsif variable_data[:default].nil?
         case variable_data[:type]
         when :move
           @window.refresh if update_input_for_move(effect, variable_data)

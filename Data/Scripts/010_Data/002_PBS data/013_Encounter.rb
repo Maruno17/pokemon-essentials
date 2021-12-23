@@ -51,8 +51,8 @@ module GameData
     def self.each_of_version(version = 0)
       self.each do |data|
         yield data if data.version == version
-        if version > 0
-          yield data if data.version == 0 && !self::DATA.has_key?([data.map, version])
+        if version > 0 && data.version == 0 && !self::DATA.has_key?([data.map, version])
+          yield data
         end
       end
     end

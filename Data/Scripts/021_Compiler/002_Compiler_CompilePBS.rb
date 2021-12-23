@@ -785,7 +785,7 @@ module Compiler
           raise _INTL("Species ID '{1}' is not defined in {2}.\r\n{3}", species_symbol, path, FileLineData.linereport)
         elsif form == 0
           raise _INTL("A form cannot be defined with a form number of 0.\r\n{1}", FileLineData.linereport)
-        elsif used_forms[species_symbol] && used_forms[species_symbol].include?(form)
+        elsif used_forms[species_symbol]&.include?(form)
           raise _INTL("Form {1} for species ID {2} is defined twice.\r\n{3}", form, species_symbol, FileLineData.linereport)
         end
         used_forms[species_symbol] = [] if !used_forms[species_symbol]

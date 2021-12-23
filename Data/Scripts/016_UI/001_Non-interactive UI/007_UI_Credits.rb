@@ -205,7 +205,7 @@ _END_
     Graphics.transition(8, "fadetoblack")
     $game_temp.background_bitmap.dispose
     @background_sprite.dispose
-    @credit_sprites.each { |s| s.dispose if s }
+    @credit_sprites.each { |s| s&.dispose }
     text_viewport.dispose
     viewport.dispose
     $PokemonGlobal.creditsPlayed = true

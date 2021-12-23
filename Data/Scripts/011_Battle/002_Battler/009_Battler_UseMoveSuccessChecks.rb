@@ -265,12 +265,10 @@ class Battle::Battler
       end
     end
     # Paralysis
-    if @status == :PARALYSIS
-      if @battle.pbRandom(100) < 25
-        pbContinueStatus
-        @lastMoveFailed = true
-        return false
-      end
+    if @status == :PARALYSIS && @battle.pbRandom(100) < 25
+      pbContinueStatus
+      @lastMoveFailed = true
+      return false
     end
     # Infatuation
     if @effects[PBEffects::Attract] >= 0
@@ -358,10 +356,9 @@ class Battle::Battler
           end
           target.damageState.protected = true
           @battle.successStates[user.index].protected = true
-          if move.pbContactMove?(user) && user.affectedByContactEffect?
-            if user.pbCanLowerStatStage?(:ATTACK, target)
-              user.pbLowerStatStage(:ATTACK, (Settings::MECHANICS_GENERATION >= 8) ? 1 : 2, target)
-            end
+          if move.pbContactMove?(user) && user.affectedByContactEffect? &&
+             user.pbCanLowerStatStage?(:ATTACK, target)
+            user.pbLowerStatStage(:ATTACK, (Settings::MECHANICS_GENERATION >= 8) ? 1 : 2, target)
           end
           return false
         end
@@ -389,8 +386,9 @@ class Battle::Battler
           end
           target.damageState.protected = true
           @battle.successStates[user.index].protected = true
-          if move.pbContactMove?(user) && user.affectedByContactEffect?
-            user.pbPoison(target) if user.pbCanPoison?(target, false)
+          if move.pbContactMove?(user) && user.affectedByContactEffect? &&
+             user.pbCanPoison?(target, false)
+            user.pbPoison(target)
           end
           return false
         end
@@ -402,10 +400,9 @@ class Battle::Battler
           end
           target.damageState.protected = true
           @battle.successStates[user.index].protected = true
-          if move.pbContactMove?(user) && user.affectedByContactEffect?
-            if user.pbCanLowerStatStage?(:DEFENSE, target)
-              user.pbLowerStatStage(:DEFENSE, 2, target)
-            end
+          if move.pbContactMove?(user) && user.affectedByContactEffect? &&
+             user.pbCanLowerStatStage?(:DEFENSE, target)
+            user.pbLowerStatStage(:DEFENSE, 2, target)
           end
           return false
         end
@@ -550,8 +547,8 @@ class Battle::Battler
         end
       end
       if target.effects[PBEffects::SkyDrop] >= 0 &&
-         target.effects[PBEffects::SkyDrop] != user.index
-        miss = true if !move.hitsFlyingTargets?
+         target.effects[PBEffects::SkyDrop] != user.index && !move.hitsFlyingTargets?
+        miss = true
       end
     end
     target.damageState.invulnerable = true if miss
@@ -572,9 +569,7 @@ class Battle::Battler
   def pbMissMessage(move, user, target)
     if target.damageState.affection_missed
       @battle.pbDisplay(_INTL("{1} avoided the move in time with your shout!", target.pbThis))
-    elsif move.pbTarget(user).num_targets > 1
-      @battle.pbDisplay(_INTL("{1} avoided the attack!", target.pbThis))
-    elsif target.effects[PBEffects::TwoTurnAttack]
+    elsif move.pbTarget(user).num_targets > 1 || target.effects[PBEffects::TwoTurnAttack]
       @battle.pbDisplay(_INTL("{1} avoided the attack!", target.pbThis))
     elsif !move.pbMissMessage(user, target)
       @battle.pbDisplay(_INTL("{1}'s attack missed!", user.pbThis))

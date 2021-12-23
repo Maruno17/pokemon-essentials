@@ -112,24 +112,24 @@ class Battle::Scene
   end
 
   def pbFrameUpdate(cw = nil)
-    cw.update if cw
+    cw&.update
     @battle.battlers.each_with_index do |b, i|
       next if !b
-      @sprites["dataBox_#{i}"].update(@frameCounter) if @sprites["dataBox_#{i}"]
-      @sprites["pokemon_#{i}"].update(@frameCounter) if @sprites["pokemon_#{i}"]
-      @sprites["shadow_#{i}"].update(@frameCounter) if @sprites["shadow_#{i}"]
+      @sprites["dataBox_#{i}"]&.update(@frameCounter)
+      @sprites["pokemon_#{i}"]&.update(@frameCounter)
+      @sprites["shadow_#{i}"]&.update(@frameCounter)
     end
   end
 
   def pbRefresh
     @battle.battlers.each_with_index do |b, i|
       next if !b
-      @sprites["dataBox_#{i}"].refresh if @sprites["dataBox_#{i}"]
+      @sprites["dataBox_#{i}"]&.refresh
     end
   end
 
   def pbRefreshOne(idxBattler)
-    @sprites["dataBox_#{idxBattler}"].refresh if @sprites["dataBox_#{idxBattler}"]
+    @sprites["dataBox_#{idxBattler}"]&.refresh
   end
 
   def pbRefreshEverything

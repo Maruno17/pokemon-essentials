@@ -137,8 +137,8 @@ class Battle::Scene
         a[2] = true if a[1].animDone?
       end
       pbUpdate
-      if !inPartyAnimation?
-        break if !sendOutAnims.any? { |a| !a[2] }
+      if !inPartyAnimation? && !sendOutAnims.any? { |a| !a[2] }
+        break
       end
     end
     fadeAnim.dispose
@@ -165,7 +165,7 @@ class Battle::Scene
     # Recall animation
     recallAnim = Animation::BattlerRecall.new(@sprites, @viewport, idxBattler)
     loop do
-      recallAnim.update if recallAnim
+      recallAnim&.update
       pbUpdate
       break if recallAnim.animDone?
     end
@@ -495,7 +495,7 @@ class Battle::Scene
     animID = pbFindMoveAnimation(moveID, user.index, hitNum)
     return if !animID
     anim = animID[0]
-    target = (targets && targets.is_a?(Array)) ? targets[0] : targets
+    target = (targets.is_a?(Array)) ? targets[0] : targets
     animations = pbLoadBattleAnimations
     return if !animations
     pbSaveShadows {
@@ -510,7 +510,7 @@ class Battle::Scene
   # Plays a common animation.
   def pbCommonAnimation(animName, user = nil, target = nil)
     return if nil_or_empty?(animName)
-    target = target[0] if target && target.is_a?(Array)
+    target = target[0] if target.is_a?(Array)
     animations = pbLoadBattleAnimations
     return if !animations
     animations.each do |a|
@@ -534,7 +534,7 @@ class Battle::Scene
     animPlayer = PBAnimationPlayerX.new(animation, user, target, self, oppMove)
     # Apply a transformation to the animation based on where the user and target
     # actually are. Get the centres of each sprite.
-    userHeight = (userSprite && userSprite.bitmap && !userSprite.bitmap.disposed?) ? userSprite.bitmap.height : 128
+    userHeight = (userSprite&.bitmap && !userSprite.bitmap.disposed?) ? userSprite.bitmap.height : 128
     if targetSprite
       targetHeight = (targetSprite.bitmap && !targetSprite.bitmap.disposed?) ? targetSprite.bitmap.height : 128
     else

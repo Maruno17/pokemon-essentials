@@ -140,7 +140,7 @@ class Battle::Move
   def ignoresSubstitute?(user)   # user is the Pokémon using this move
     if Settings::MECHANICS_GENERATION >= 6
       return true if soundMove?
-      return true if user && user.hasActiveAbility?(:INFILTRATOR)
+      return true if user&.hasActiveAbility?(:INFILTRATOR)
     end
     return false
   end

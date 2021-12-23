@@ -73,7 +73,7 @@ def pbTrainerTypeCheck(trainer_type)
   if pbConfirmMessage(_INTL("Add new trainer type {1}?", trainer_type.to_s))
     pbTrainerTypeEditorNew(trainer_type.to_s)
   end
-  pbMapInterpreter.command_end if pbMapInterpreter
+  pbMapInterpreter&.command_end
   return false
 end
 
@@ -113,10 +113,10 @@ def pbMissingTrainer(tr_type, tr_name, tr_version)
     raise _INTL("Can't find trainer ({1}, {2}, ID {3})", tr_type.to_s, tr_name, tr_version)
   end
   message = ""
-  if tr_version != 0
-    message = _INTL("Add new trainer ({1}, {2}, ID {3})?", tr_type.to_s, tr_name, tr_version)
-  else
+  if tr_version == 0
     message = _INTL("Add new trainer ({1}, {2})?", tr_type.to_s, tr_name)
+  else
+    message = _INTL("Add new trainer ({1}, {2}, ID {3})?", tr_type.to_s, tr_name, tr_version)
   end
   cmd = pbMessage(message, [_INTL("Yes"), _INTL("No")], 2)
   pbNewTrainer(tr_type, tr_name, tr_version) if cmd == 0

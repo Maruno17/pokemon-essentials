@@ -17,7 +17,7 @@ class ColoredPlane < Plane
   end
 
   def dispose
-    self.bitmap.dispose if self.bitmap
+    self.bitmap&.dispose
     super
   end
 
@@ -59,7 +59,7 @@ class AnimatedPlane < Plane
   private
 
   def clear_bitmap
-    @bitmap.dispose if @bitmap
+    @bitmap&.dispose
     @bitmap = nil
     self.bitmap = nil if !self.disposed?
   end

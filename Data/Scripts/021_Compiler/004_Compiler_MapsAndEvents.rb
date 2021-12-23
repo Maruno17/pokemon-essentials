@@ -134,7 +134,7 @@ module Compiler
   end
 
   def push_event(list, cmd, params = nil, indent = 0)
-    list.push(RPG::EventCommand.new(cmd, indent, params ? params : []))
+    list.push(RPG::EventCommand.new(cmd, indent, params || []))
   end
 
   def push_end(list)
@@ -353,7 +353,7 @@ module Compiler
       priorities = getTilesetPriorities(map, mapID)
       [2, 1, 0].each do |i|
         tile_id = map.data[x, y, i]
-        return false if tile_id == nil
+        return false if tile_id.nil?
         passage = passages[tile_id]
         if !passage
           raise "The tile used on map #{mapID} at coordinates (#{x}, #{y}) on layer #{i + 1} doesn't exist in the tileset. " +
@@ -371,7 +371,7 @@ module Compiler
       passages = getTilesetPassages(map, mapID)
       [2, 1, 0].each do |i|
         tile_id = map.data[x, y, i]
-        return false if tile_id == nil
+        return false if tile_id.nil?
         passage = passages[tile_id]
         if !passage
           raise "The tile used on map #{mapID} at coordinates (#{x}, #{y}) on layer #{i + 1} doesn't exist in the tileset. " +

@@ -465,11 +465,11 @@ class Battle
       end
       infected.each do |idxParty|
         strain = $player.party[idxParty].pokerusStrain
-        if idxParty > 0 && $player.party[idxParty - 1].pokerusStage == 0
-          $player.party[idxParty - 1].givePokerus(strain) if rand(3) == 0   # 33%
+        if idxParty > 0 && $player.party[idxParty - 1].pokerusStage == 0 && rand(3) == 0   # 33%
+          $player.party[idxParty - 1].givePokerus(strain)
         end
-        if idxParty < $player.party.length - 1 && $player.party[idxParty + 1].pokerusStage == 0
-          $player.party[idxParty + 1].givePokerus(strain) if rand(3) == 0   # 33%
+        if idxParty < $player.party.length - 1 && $player.party[idxParty + 1].pokerusStage == 0 && rand(3) == 0   # 33%
+          $player.party[idxParty + 1].givePokerus(strain)
         end
       end
     end

@@ -245,7 +245,7 @@ def pbSmashEvent(event)
                       PBMoveRoute::Wait, 2])
   pbWait(Graphics.frame_rate * 4 / 10)
   event.erase
-  $PokemonMap.addErasedEvent(event.id) if $PokemonMap
+  $PokemonMap&.addErasedEvent(event.id)
 end
 
 

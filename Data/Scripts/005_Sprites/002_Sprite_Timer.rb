@@ -7,7 +7,7 @@ class Sprite_Timer
   end
 
   def dispose
-    @timer.dispose if @timer
+    @timer&.dispose
     @timer = nil
     @disposed = true
   end

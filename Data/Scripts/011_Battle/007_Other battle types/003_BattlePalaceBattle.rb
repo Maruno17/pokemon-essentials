@@ -87,8 +87,9 @@ class BattlePalaceBattle < Battle
       return false
     end
     # though incorrect, just for convenience (actually checks Torment later)
-    if thispkmn.effects[PBEffects::Torment] && thispkmn.lastMoveUsed
-      return false if thismove.id == thispkmn.lastMoveUsed
+    if thispkmn.effects[PBEffects::Torment] &&
+       thispkmn.lastMoveUsed && thismove.id == thispkmn.lastMoveUsed
+      return false
     end
     return true
   end

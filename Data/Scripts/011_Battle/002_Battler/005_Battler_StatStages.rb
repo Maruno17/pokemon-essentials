@@ -118,7 +118,8 @@ class Battle::Battler
     return @stages[stat] <= -6
   end
 
-  def pbCanLowerStatStage?(stat, user = nil, move = nil, showFailMsg = false, ignoreContrary = false, ignoreMirrorArmor = false)
+  def pbCanLowerStatStage?(stat, user = nil, move = nil, showFailMsg = false,
+                           ignoreContrary = false, ignoreMirrorArmor = false)
     return false if fainted?
     if !@battle.moldBreaker
       # Contrary
@@ -126,12 +127,14 @@ class Battle::Battler
         return pbCanRaiseStatStage?(stat, user, move, showFailMsg, true)
       end
       # Mirror Armor
-      if hasActiveAbility?(:MIRRORARMOR) && !ignoreMirrorArmor && user && user.index != @index
-        return true if !statStageAtMin?(stat)
+      if hasActiveAbility?(:MIRRORARMOR) && !ignoreMirrorArmor &&
+         user && user.index != @index && !statStageAtMin?(stat)
+        return true
       end
     end
     if !user || user.index != @index   # Not self-inflicted
-      if @effects[PBEffects::Substitute] > 0 && (ignoreMirrorArmor || !(move && move.ignoresSubstitute?(user)))
+      if @effects[PBEffects::Substitute] > 0 &&
+         (ignoreMirrorArmor || !(move && move.ignoresSubstitute?(user)))
         @battle.pbDisplay(_INTL("{1} is protected by its substitute!", pbThis)) if showFailMsg
         return false
       end
@@ -328,13 +331,12 @@ class Battle::Battler
                                 pbThis, user.pbThis(true), user.abilityName))
         return false
       end
-      if abilityActive?
-        if Battle::AbilityEffects.triggerStatLossImmunity(self.ability, self, :ATTACK, @battle, false) ||
-           Battle::AbilityEffects.triggerStatLossImmunityNonIgnorable(self.ability, self, :ATTACK, @battle, false)
-          @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
-                                  pbThis, abilityName, user.pbThis(true), user.abilityName))
-          return false
-        end
+      if abilityActive? &&
+         (Battle::AbilityEffects.triggerStatLossImmunity(self.ability, self, :ATTACK, @battle, false) ||
+          Battle::AbilityEffects.triggerStatLossImmunityNonIgnorable(self.ability, self, :ATTACK, @battle, false))
+        @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
+                                pbThis, abilityName, user.pbThis(true), user.abilityName))
+        return false
       end
       allAllies.each do |b|
         next if !b.abilityActive?

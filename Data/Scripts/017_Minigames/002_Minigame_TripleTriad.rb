@@ -67,7 +67,7 @@ class TriadCard
     ret *= (@north + @east + @south + @west)
     ret /= 10   # Ranges from 2 to 24,000
     # Quantize prices to the next highest "unit"
-    if ret > 10000
+    if ret > 10_000
       ret = (1 + (ret / 1000)) * 1000
     elsif ret > 5000
       ret = (1 + (ret / 500)) * 500
@@ -280,7 +280,7 @@ class TriadScene
       pbUpdate
       command.update
       if command.index != index
-        preview.bitmap.dispose if preview.bitmap
+        preview.bitmap&.dispose
         if command.index < cardStorage.length
           item = cardStorage[command.index]
           preview.bitmap = TriadCard.new(item[0]).createBitmap(1)
@@ -308,7 +308,7 @@ class TriadScene
         else
           pbPlayDecisionSE
           sprite = @sprites["player#{chosenCards.length}"]
-          sprite.bitmap.dispose if sprite.bitmap
+          sprite.bitmap&.dispose
           @cardBitmaps[chosenCards.length] = TriadCard.new(item[0]).createBitmap(1)
           sprite.bitmap = @cardBitmaps[chosenCards.length]
           chosenCards.push(item[0])
@@ -340,7 +340,7 @@ class TriadScene
       end
     end
     command.dispose
-    preview.bitmap.dispose if preview.bitmap
+    preview.bitmap&.dispose
     preview.dispose
     return chosenCards
   end
@@ -525,7 +525,7 @@ class TriadScene
       sprite = @sprites["opponent#{@opponentCardIndexes[i]}"]
       if i == cardIndex
         @opponentCardBitmaps[@opponentCardIndexes[i]] = triadCard.createBitmap(2)
-        sprite.bitmap.dispose if sprite.bitmap
+        sprite.bitmap&.dispose
         sprite.bitmap = @opponentCardBitmaps[@opponentCardIndexes[i]]
         sprite.x = (Graphics.width / 2) - 118 + (position[0] * 78)
         sprite.y = 36 + (position[1] * 94)
@@ -555,7 +555,7 @@ class TriadScene
       y = i / @battle.width
       if @boardSprites[i]
         owner = @battle.getOwner(x, y)
-        @boardSprites[i].bitmap.dispose if @boardSprites[i].bitmap
+        @boardSprites[i].bitmap&.dispose
         @boardSprites[i].bitmap = @boardCards[i].createBitmap(owner)
       end
     end
@@ -653,7 +653,7 @@ class TriadScreen
     panels[2] = (@wrapAround ? 0 : @width - 1) if panels[2] > @width - 1     # right
     panels[5] = (@wrapAround ? @height - 1 : 0) if panels[5] < 0           # top
     panels[7] = (@wrapAround ? 0 : @height - 1) if panels[7] > @height - 1   # bottom
-    attacker = attackerParam != nil ? attackerParam : @board[(y * @width) + x]
+    attacker = attackerParam.nil? ? @board[(y * @width) + x] : attackerParam
     flips = []
     return nil if attackerParam != nil && @board[(y * @width) + x].owner != 0
     return nil if !attacker.card || attacker.owner == 0
@@ -678,7 +678,7 @@ class TriadScreen
         end
         if attack > defense || (attack == defense && @sameWins)
           flips.push([defenderX, defenderY])
-          if attackerParam == nil
+          if attackerParam.nil?
             defender.owner = attacker.owner
             if @sameWins
               # Combo with the "sameWins" rule
@@ -704,7 +704,7 @@ class TriadScreen
     raise _INTL("Minimum level must be 0 through 9.") if minLevel < 0 || minLevel > 9
     raise _INTL("Maximum level must be 0 through 9.") if maxLevel < 0 || maxLevel > 9
     raise _INTL("Maximum level shouldn't be less than the minimum level.") if maxLevel < minLevel
-    if rules && rules.is_a?(Array) && rules.length > 0
+    if rules.is_a?(Array) && rules.length > 0
       rules.each do |rule|
         @sameWins           = true if rule == "samewins"
         @openHand           = true if rule == "openhand"
@@ -762,7 +762,7 @@ class TriadScreen
       cards = @scene.pbChooseTriadCard(@triadCards)
     end
     # Set the opponent's cards.
-    if oppdeck && oppdeck.is_a?(Array) && oppdeck.length == self.maxCards   # Preset
+    if oppdeck.is_a?(Array) && oppdeck.length == self.maxCards   # Preset
       opponentCards = []
       oppdeck.each do |i|
         species_data = GameData::Species.try_get(i)
@@ -812,7 +812,7 @@ class TriadScreen
       cardIndex = 0
       if playerTurn
         # Player's turn
-        while !position
+        until position
           cardIndex = @scene.pbPlayerChooseCard(cards.length)
           triadCard = TriadCard.new(cards[cardIndex])
           position = @scene.pbPlayerPlaceCard(cardIndex)
@@ -1099,7 +1099,7 @@ def pbBuyTriads
     cmdwindow.update
     goldwindow.update
     if commands[cmdwindow.index][3] != olditem
-      preview.bitmap.dispose if preview.bitmap
+      preview.bitmap&.dispose
       preview.bitmap = TriadCard.new(commands[cmdwindow.index][3]).createBitmap(1)
       olditem = commands[cmdwindow.index][3]
     end
@@ -1143,7 +1143,7 @@ def pbBuyTriads
   end
   cmdwindow.dispose
   goldwindow.dispose
-  preview.bitmap.dispose if preview.bitmap
+  preview.bitmap&.dispose
   preview.dispose
   Graphics.frame_reset
   # Scroll right before showing screen
@@ -1182,7 +1182,7 @@ def pbSellTriads
   olditem = $PokemonGlobal.triads.get_item(cmdwindow.index)
   done = false
   Graphics.frame_reset
-  while !done
+  until done
     loop do
       Graphics.update
       Input.update
@@ -1191,7 +1191,7 @@ def pbSellTriads
       goldwindow.update
       item = $PokemonGlobal.triads.get_item(cmdwindow.index)
       if olditem != item
-        preview.bitmap.dispose if preview.bitmap
+        preview.bitmap&.dispose
         if item
           preview.bitmap = TriadCard.new(item).createBitmap(1)
         end
@@ -1249,7 +1249,7 @@ def pbSellTriads
   end
   cmdwindow.dispose
   goldwindow.dispose
-  preview.bitmap.dispose if preview.bitmap
+  preview.bitmap&.dispose
   preview.dispose
   Graphics.frame_reset
   # Scroll right before showing screen
@@ -1276,27 +1276,22 @@ def pbTriadList
   sprite.z = 99999
   done = false
   lastIndex = -1
-  while !done
+  until done
     loop do
       Graphics.update
       Input.update
       cmdwindow.update
       if lastIndex != cmdwindow.index
-        sprite.bitmap.dispose if sprite.bitmap
+        sprite.bitmap&.dispose
         if cmdwindow.index < $PokemonGlobal.triads.length
           sprite.bitmap = TriadCard.new($PokemonGlobal.triads.get_item(cmdwindow.index)).createBitmap(1)
         end
         lastIndex = cmdwindow.index
       end
-      if Input.trigger?(Input::BACK)
+      if Input.trigger?(Input::BACK) ||
+         (Input.trigger?(Input::USE) && cmdwindow.index >= $PokemonGlobal.triads.length)
         done = true
         break
-      end
-      if Input.trigger?(Input::USE)
-        if cmdwindow.index >= $PokemonGlobal.triads.length
-          done = true
-          break
-        end
       end
     end
   end

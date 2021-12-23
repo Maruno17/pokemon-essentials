@@ -61,11 +61,10 @@ class Game_System
 
   def bgm_play_internal(bgm, position) # :nodoc:
     @bgm_position = position if !@bgm_paused
-    @playing_bgm = (bgm == nil) ? nil : bgm.clone
+    @playing_bgm = bgm&.clone
     if bgm != nil && bgm.name != ""
-      if FileTest.audio_exist?("Audio/BGM/" + bgm.name)
-        bgm_play_internal2("Audio/BGM/" + bgm.name,
-                           bgm.volume, bgm.pitch, @bgm_position) if !@defaultBGM
+      if !@defaultBGM && FileTest.audio_exist?("Audio/BGM/" + bgm.name)
+        bgm_play_internal2("Audio/BGM/" + bgm.name, bgm.volume, bgm.pitch, @bgm_position)
       end
     else
       @bgm_position = position if !@bgm_paused
@@ -161,7 +160,7 @@ class Game_System
 ################################################################################
 
   def bgs_play(bgs)
-    @playing_bgs = (bgs == nil) ? nil : bgs.clone
+    @playing_bgs = (bgs.nil?) ? nil : bgs.clone
     if bgs != nil && bgs.name != ""
       if FileTest.audio_exist?("Audio/BGS/" + bgs.name)
         vol = bgs.volume
@@ -258,7 +257,7 @@ class Game_System
 ################################################################################
 
   def windowskin_name
-    if @windowskin_name == nil
+    if @windowskin_name.nil?
       return $data_system.windowskin_name
     else
       return @windowskin_name

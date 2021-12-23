@@ -6,12 +6,11 @@ def pbBoxesFull?
 end
 
 def pbNickname(pkmn)
+  return if $PokemonSystem.givenicknames != 0
   species_name = pkmn.speciesName
-  if $PokemonSystem.givenicknames == 0
-    if pbConfirmMessage(_INTL("Would you like to give a nickname to {1}?", species_name))
-      pkmn.name = pbEnterPokemonName(_INTL("{1}'s nickname?", species_name),
-                                     0, Pokemon::MAX_NAME_SIZE, "", pkmn)
-    end
+  if pbConfirmMessage(_INTL("Would you like to give a nickname to {1}?", species_name))
+    pkmn.name = pbEnterPokemonName(_INTL("{1}'s nickname?", species_name),
+                                   0, Pokemon::MAX_NAME_SIZE, "", pkmn)
   end
 end
 
@@ -210,22 +209,22 @@ def pbSize(pkmn)
   m = pkmn.personalID & 0xFF
   n = (pkmn.personalID >> 8) & 0xFF
   s = ((((ativ ^ dfiv) * hpiv) ^ m) * 256) + (((saiv ^ sdiv) * spiv) ^ n)
-  xyz = [1700, 1, 65510]
+  xyz = [1700, 1, 65_510]
   case s
-  when 0...10        then xyz = [ 290,   1,     0]
-  when 10...110      then xyz = [ 300,   1,    10]
-  when 110...310     then xyz = [ 400,   2,   110]
-  when 310...710     then xyz = [ 500,   4,   310]
-  when 710...2710    then xyz = [ 600,  20,   710]
-  when 2710...7710   then xyz = [ 700,  50,  2710]
-  when 7710...17710  then xyz = [ 800, 100,  7710]
-  when 17710...32710 then xyz = [ 900, 150, 17710]
-  when 32710...47710 then xyz = [1000, 150, 32710]
-  when 47710...57710 then xyz = [1100, 100, 47710]
-  when 57710...62710 then xyz = [1200,  50, 57710]
-  when 62710...64710 then xyz = [1300,  20, 62710]
-  when 64710...65210 then xyz = [1400,   5, 64710]
-  when 65210...65410 then xyz = [1500,   2, 65210]
+  when 0...10          then xyz = [ 290,   1,      0]
+  when 10...110        then xyz = [ 300,   1,     10]
+  when 110...310       then xyz = [ 400,   2,    110]
+  when 310...710       then xyz = [ 500,   4,    310]
+  when 710...2710      then xyz = [ 600,  20,    710]
+  when 2710...7710     then xyz = [ 700,  50,   2710]
+  when 7710...17_710   then xyz = [ 800, 100,   7710]
+  when 17_710...32_710 then xyz = [ 900, 150, 17_710]
+  when 32_710...47_710 then xyz = [1000, 150, 32_710]
+  when 47_710...57_710 then xyz = [1100, 100, 47_710]
+  when 57_710...62_710 then xyz = [1200,  50, 57_710]
+  when 62_710...64_710 then xyz = [1300,  20, 62_710]
+  when 64_710...65_210 then xyz = [1400,   5, 64_710]
+  when 65_210...65_410 then xyz = [1500,   2, 65_210]
   end
   return ((((s - xyz[2]) / xyz[1]) + xyz[0]).floor * baseheight / 10).floor
 end

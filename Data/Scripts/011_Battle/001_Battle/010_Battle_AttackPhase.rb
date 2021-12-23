@@ -161,10 +161,10 @@ class Battle
       next if advance
       # Check for all done
       priority.each do |b|
-        if !b.fainted? && !b.movedThisRound?
-          advance = true if @choices[b.index][0] == :UseMove || @choices[b.index][0] == :Shift
-        end
-        break if advance
+        next if b.fainted?
+        next if b.movedThisRound? || ![:UseMove, :Shift].include?(@choices[b.index][0])
+        advance = true
+        break
       end
       next if advance
       # All Pokémon have moved; end the loop

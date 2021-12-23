@@ -412,11 +412,9 @@ module RandomDungeonGenerator
         when EdgeMasks::WEST
           cx -= 1
         end
-        if cx >= 0 && cy >= 0 && cx < cellWidth && cy < cellHeight
-          if !getVisited(cx, cy)
-            clearEdgeNode(x, y, d)
-            recurseDepthFirst(cx, cy, depth + 1)
-          end
+        if cx >= 0 && cy >= 0 && cx < cellWidth && cy < cellHeight && !getVisited(cx, cy)
+          clearEdgeNode(x, y, d)
+          recurseDepthFirst(cx, cy, depth + 1)
         end
       end
     end

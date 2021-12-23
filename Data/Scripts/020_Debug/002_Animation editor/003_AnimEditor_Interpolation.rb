@@ -166,15 +166,13 @@ class PointPath
     i = 0
     @distances.each do |dist|
       curdist += dist
-      if dist > 0.0
-        if curdist >= distForT
-          distT = 1.0 - ((curdist - distForT) / dist)
-          dx = @points[i + 1][0] - @points[i][0]
-          dy = @points[i + 1][1] - @points[i][1]
-          ret = [@points[i][0] + (dx * distT),
-                 @points[i][1] + (dy * distT)]
-          break
-        end
+      if dist > 0.0 && curdist >= distForT
+        distT = 1.0 - ((curdist - distForT) / dist)
+        dx = @points[i + 1][0] - @points[i][0]
+        dy = @points[i + 1][1] - @points[i][1]
+        ret = [@points[i][0] + (dx * distT),
+               @points[i][1] + (dy * distT)]
+        break
       end
       i += 1
     end
@@ -295,8 +293,8 @@ def pbDefinePath(canvas)
         if Input.trigger?(Input::MOUSELEFT)
           4.times do |j|
             next if !curve[j].hittest?
-            if [1, 2].include?(j)
-              next if !curve[0].visible || !curve[3].visible
+            if [1, 2].include?(j) && (!curve[0].visible || !curve[3].visible)
+              next
             end
             curve[j].visible = true
             4.times do |k|
@@ -381,7 +379,7 @@ def pbDefinePath(canvas)
         mousepos = Mouse.getMousePos(true)
         window.text = (mousepos) ? sprintf("(%d,%d)", mousepos[0], mousepos[1]) : "(??,??)"
       end
-      while !canceled
+      until canceled
         mousepos = Mouse.getMousePos(true)
         if mousepos && !pointpath.isEndPoint?(mousepos[0], mousepos[1])
           pointpath.addPoint(mousepos[0], mousepos[1])

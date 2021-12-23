@@ -52,7 +52,7 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
       bgFilename = ["Graphics/Pictures/Battle/databox_thin",
                     "Graphics/Pictures/Battle/databox_thin_foe"][@battler.index % 2]
     end
-    @databoxBitmap.dispose if @databoxBitmap
+    @databoxBitmap&.dispose
     @databoxBitmap = AnimatedBitmap.new(bgFilename)
     # Determine the co-ordinates of the data box and the left edge padding width
     if onPlayerSide
@@ -500,7 +500,7 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
   end
 
   def dispose
-    @_iconBitmap.dispose if @_iconBitmap
+    @_iconBitmap&.dispose
     @_iconBitmap = nil
     self.bitmap = nil if !self.disposed?
     super
@@ -552,7 +552,7 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
 
   def setPokemonBitmap(pkmn, back = false)
     @pkmn = pkmn
-    @_iconBitmap.dispose if @_iconBitmap
+    @_iconBitmap&.dispose
     @_iconBitmap = GameData::Species.sprite_bitmap_from_pokemon(@pkmn, back)
     self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
     pbSetPosition
@@ -563,7 +563,7 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
   # recommendation is to create a PictureEx animation and push it into
   # the @battleAnimations array.
   def pbPlayIntroAnimation(pictureEx = nil)
-    @pkmn.play_cry if @pkmn
+    @pkmn&.play_cry
   end
 
   QUARTER_ANIM_PERIOD = Graphics.frame_rate * 3 / 20
@@ -617,7 +617,7 @@ class Battle::Scene::BattlerShadowSprite < RPG::Sprite
   end
 
   def dispose
-    @_iconBitmap.dispose if @_iconBitmap
+    @_iconBitmap&.dispose
     @_iconBitmap = nil
     self.bitmap = nil if !self.disposed?
     super
@@ -647,7 +647,7 @@ class Battle::Scene::BattlerShadowSprite < RPG::Sprite
 
   def setPokemonBitmap(pkmn)
     @pkmn = pkmn
-    @_iconBitmap.dispose if @_iconBitmap
+    @_iconBitmap&.dispose
     @_iconBitmap = GameData::Species.shadow_bitmap_from_pokemon(@pkmn)
     self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
     pbSetPosition

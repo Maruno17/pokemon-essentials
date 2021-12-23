@@ -161,7 +161,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
 
   def dispose
     super
-    @buttonBitmap.dispose if @buttonBitmap
+    @buttonBitmap&.dispose
   end
 
   def z=(value)
@@ -191,7 +191,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
 
   def refresh
     @msgBox.refresh
-    @cmdWindow.refresh if @cmdWindow
+    @cmdWindow&.refresh
     refreshButtons
   end
 end
@@ -310,10 +310,10 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
 
   def dispose
     super
-    @buttonBitmap.dispose if @buttonBitmap
-    @typeBitmap.dispose if @typeBitmap
-    @megaEvoBitmap.dispose if @megaEvoBitmap
-    @shiftBitmap.dispose if @shiftBitmap
+    @buttonBitmap&.dispose
+    @typeBitmap&.dispose
+    @megaEvoBitmap&.dispose
+    @shiftBitmap&.dispose
   end
 
   def z=(value)
@@ -510,7 +510,7 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
 
   def dispose
     super
-    @buttonBitmap.dispose if @buttonBitmap
+    @buttonBitmap&.dispose
   end
 
   def z=(value)

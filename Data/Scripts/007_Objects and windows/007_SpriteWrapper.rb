@@ -280,19 +280,19 @@ class IconSprite < SpriteWrapper
     oldrc = self.src_rect
     clearBitmaps
     @name = file
-    return if file == nil
-    if file != ""
+    return if file.nil?
+    if file == ""
+      @_iconbitmap = nil
+    else
       @_iconbitmap = AnimatedBitmap.new(file, hue)
       # for compatibility
       self.bitmap = @_iconbitmap ? @_iconbitmap.bitmap : nil
       self.src_rect = oldrc
-    else
-      @_iconbitmap = nil
     end
   end
 
   def clearBitmaps
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = nil
     self.bitmap = nil if !self.disposed?
   end
@@ -336,7 +336,7 @@ class ChangelingSprite < SpriteWrapper
   end
 
   def addBitmap(key, path)
-    @bitmaps[key].dispose if @bitmaps[key]
+    @bitmaps[key]&.dispose
     @bitmaps[key] = AnimatedBitmap.new(path)
   end
 

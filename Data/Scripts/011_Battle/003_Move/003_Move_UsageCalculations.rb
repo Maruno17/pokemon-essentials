@@ -31,28 +31,29 @@ class Battle::Move
   #=============================================================================
   def pbCalcTypeModSingle(moveType, defType, user, target)
     ret = Effectiveness.calculate_one(moveType, defType)
-    # Ring Target
-    if target.hasActiveItem?(:RINGTARGET)
-      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if Effectiveness.ineffective_type?(moveType, defType)
-    end
-    # Foresight
-    if user.hasActiveAbility?(:SCRAPPY) || target.effects[PBEffects::Foresight]
-      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :GHOST &&
-                                                   Effectiveness.ineffective_type?(moveType, defType)
-    end
-    # Miracle Eye
-    if target.effects[PBEffects::MiracleEye]
-      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :DARK &&
-                                                   Effectiveness.ineffective_type?(moveType, defType)
-    end
-    # Delta Stream's weather
-    if target.effectiveWeather == :StrongWinds
-      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
-                                                   Effectiveness.super_effective_type?(moveType, defType)
+    if Effectiveness.ineffective_type?(moveType, defType)
+      # Ring Target
+      if target.hasActiveItem?(:RINGTARGET)
+        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+      end
+      # Foresight
+      if (user.hasActiveAbility?(:SCRAPPY) || target.effects[PBEffects::Foresight]) &&
+         defType == :GHOST
+        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+      end
+      # Miracle Eye
+      if target.effects[PBEffects::MiracleEye] && defType == :DARK
+        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+      end
+    elsif Effectiveness.super_effective_type?(moveType, defType)
+      # Delta Stream's weather
+      if target.effectiveWeather == :StrongWinds && defType == :FLYING
+        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+      end
     end
     # Grounded Flying-type Pokémon become susceptible to Ground moves
-    if !target.airborne?
-      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING && moveType == :GROUND
+    if !target.airborne? && defType == :FLYING && moveType == :GROUND
+      ret = Effectiveness::NORMAL_EFFECTIVE_ONE
     end
     return ret
   end
@@ -493,9 +494,9 @@ class Battle::Move
   def pbAdditionalEffectChance(user, target, effectChance = 0)
     return 0 if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
     ret = (effectChance > 0) ? effectChance : @addlEffect
-    if Settings::MECHANICS_GENERATION >= 6 || @function != "EffectDependsOnEnvironment"
-      ret *= 2 if user.hasActiveAbility?(:SERENEGRACE) ||
-                  user.pbOwnSide.effects[PBEffects::Rainbow] > 0
+    if (Settings::MECHANICS_GENERATION >= 6 || @function != "EffectDependsOnEnvironment") &&
+       (user.hasActiveAbility?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
+      ret *= 2
     end
     ret = 100 if $DEBUG && Input.press?(Input::CTRL)
     return ret
@@ -507,9 +508,8 @@ class Battle::Move
     return 0 if flinchingMove?
     return 0 if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
     ret = 0
-    if user.hasActiveAbility?(:STENCH, true)
-      ret = 10
-    elsif user.hasActiveItem?([:KINGSROCK, :RAZORFANG], true)
+    if user.hasActiveAbility?(:STENCH, true) ||
+       user.hasActiveItem?([:KINGSROCK, :RAZORFANG], true)
       ret = 10
     end
     ret *= 2 if user.hasActiveAbility?(:SERENEGRACE) ||

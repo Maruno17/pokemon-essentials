@@ -208,10 +208,8 @@ module UIHelper
       Graphics.update
       Input.update
       (block_given?) ? yield : cw.update
-      if !cw.busy?
-        if brief || (Input.trigger?(Input::USE) && cw.resume)
-          break
-        end
+      if !cw.busy? && (brief || (Input.trigger?(Input::USE) && cw.resume))
+        break
       end
     end
     cw.visible = oldvisible
@@ -336,7 +334,7 @@ module UIHelper
     oldvisible = helpwindow.visible
     helpwindow.visible        = helptext ? true : false
     helpwindow.letterbyletter = false
-    helpwindow.text           = helptext ? helptext : ""
+    helpwindow.text           = helptext || ""
     cmdwindow = Window_CommandPokemon.new(commands)
     cmdwindow.index = initcmd
     begin
@@ -361,7 +359,7 @@ module UIHelper
         end
       end
     ensure
-      cmdwindow.dispose if cmdwindow
+      cmdwindow&.dispose
     end
     helpwindow.visible = oldvisible
     return ret

@@ -12,7 +12,7 @@ class TrainerWalkingCharSprite < SpriteWrapper
   end
 
   def charset=(value)
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     @animbitmap = nil
     bitmapFileName = sprintf("Graphics/Characters/%s", value)
     @charset = pbResolveBitmap(bitmapFileName)
@@ -26,7 +26,7 @@ class TrainerWalkingCharSprite < SpriteWrapper
   end
 
   def altcharset=(value)   # Used for box icon in the naming screen
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     @animbitmap = nil
     @charset = pbResolveBitmap(value)
     if @charset
@@ -43,7 +43,7 @@ class TrainerWalkingCharSprite < SpriteWrapper
   end
 
   def dispose
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     super
   end
 

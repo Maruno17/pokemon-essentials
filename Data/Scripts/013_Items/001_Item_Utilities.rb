@@ -212,7 +212,7 @@ def pbTopRightWindow(text, scene = nil)
     Graphics.update
     Input.update
     window.update
-    scene.pbUpdate if scene
+    scene&.pbUpdate
     break if Input.trigger?(Input::USE)
   end
   window.dispose
@@ -702,7 +702,7 @@ def pbUseItem(bag, item, bagscene = nil)
         end
       end
       screen.pbEndScene
-      bagscene.pbRefresh if bagscene
+      bagscene&.pbRefresh
     }
     return (ret) ? 1 : 0
   elsif useType == 2   # Item is usable from Bag
@@ -845,12 +845,12 @@ def pbTakeItemFromPokemon(pkmn, scene)
     scene.pbDisplay(_INTL("The Bag is full. The Pokémon's item could not be removed."))
   elsif pkmn.mail
     if scene.pbConfirm(_INTL("Save the removed mail in your PC?"))
-      if !pbMoveToMailbox(pkmn)
-        scene.pbDisplay(_INTL("Your PC's Mailbox is full."))
-      else
+      if pbMoveToMailbox(pkmn)
         scene.pbDisplay(_INTL("The mail was saved in your PC."))
         pkmn.item = nil
         ret = true
+      else
+        scene.pbDisplay(_INTL("Your PC's Mailbox is full."))
       end
     elsif scene.pbConfirm(_INTL("If the mail is removed, its message will be lost. OK?"))
       $bag.add(pkmn.item)

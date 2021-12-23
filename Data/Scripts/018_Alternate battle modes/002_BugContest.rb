@@ -24,7 +24,7 @@ class BugContestState
   def pbContestHeld?
     return false if !@lastContest
     timenow = pbGetTimeNow
-    return timenow.to_i - @lastContest < 86400
+    return timenow.to_i - @lastContest < 86_400
   end
 
   def expired?
@@ -193,13 +193,13 @@ class BugContestState
     @otherparty.each do |poke|
       $player.party.push(poke)
     end
-    if !interrupted
+    if interrupted
+      @ended = false
+    else
       if @lastPokemon
         pbNicknameAndStore(@lastPokemon)
       end
       @ended = true
-    else
-      @ended = false
     end
     $stats.bug_contest_wins += 1 if place == 0
     @lastPokemon = nil
@@ -302,22 +302,18 @@ Events.onMapSceneChange += proc { |_sender, e|
 
 Events.onMapUpdate += proc { |_sender, _e|
   if !$game_player.move_route_forcing && !pbMapInterpreterRunning? &&
-     !$game_temp.message_window_showing
-    if pbBugContestState.expired?
-      pbMessage(_INTL("ANNOUNCER:  BEEEEEP!"))
-      pbMessage(_INTL("Time's up!"))
-      pbBugContestState.pbStartJudging
-    end
+     !$game_temp.message_window_showing && pbBugContestState.expired?
+    pbMessage(_INTL("ANNOUNCER:  BEEEEEP!"))
+    pbMessage(_INTL("Time's up!"))
+    pbBugContestState.pbStartJudging
   end
 }
 
 Events.onMapChanging += proc { |_sender, e|
   newmapID = e[0]
-  if pbInBugContest?
-    if pbBugContestState.pbOffLimits?(newmapID)
-      # Clear bug contest if player flies/warps/teleports out of the contest
-      pbBugContestState.pbEnd(true)
-    end
+  if pbInBugContest? && pbBugContestState.pbOffLimits?(newmapID)
+    # Clear bug contest if player flies/warps/teleports out of the contest
+    pbBugContestState.pbEnd(true)
   end
 }
 

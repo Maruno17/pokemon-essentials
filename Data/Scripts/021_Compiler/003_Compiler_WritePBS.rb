@@ -542,7 +542,7 @@ module Compiler
         current_family = nil
         list.each do |species|
           next if !species
-          if current_family && current_family.include?(species)
+          if current_family&.include?(species)
             f.write(",") if comma
           else
             current_family = GameData::Species.get(species).get_family_species
@@ -739,7 +739,7 @@ module Compiler
         btTrainersRequiredTypes.keys.each do |key|
           schema = btTrainersRequiredTypes[key]
           record = bttrainers[i][schema[0]]
-          next if record == nil
+          next if record.nil?
           f.write(sprintf("%s = ", key))
           case key
           when "Type"

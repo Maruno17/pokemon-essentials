@@ -149,9 +149,9 @@ def moonphase(time = nil) # in UTC
   ]
   yy = time.year - ((12 - time.mon) / 10.0).floor
   j = (365.25 * (4712 + yy)).floor + ((((time.mon + 9) % 12) * 30.6) + 0.5).floor + time.day + 59
-  j -= (((yy / 100.0) + 49).floor * 0.75).floor - 38 if j > 2299160
-  j += (((time.hour * 60) + (time.min * 60)) + time.sec) / 86400.0
-  v = (j - 2451550.1) / 29.530588853
+  j -= (((yy / 100.0) + 49).floor * 0.75).floor - 38 if j > 2_299_160
+  j += (((time.hour * 60) + (time.min * 60)) + time.sec) / 86_400.0
+  v = (j - 2_451_550.1) / 29.530588853
   v = ((v - v.floor) + (v < 0 ? 1 : 0))
   ag = v * 29.53
   transitions.length.times do |i|

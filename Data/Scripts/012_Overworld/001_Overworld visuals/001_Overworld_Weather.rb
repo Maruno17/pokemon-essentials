@@ -50,14 +50,14 @@ module RPG
     end
 
     def dispose
-      @sprites.each { |sprite| sprite.dispose if sprite }
-      @new_sprites.each { |sprite| sprite.dispose if sprite }
-      @tiles.each { |sprite| sprite.dispose if sprite }
+      @sprites.each { |sprite| sprite&.dispose }
+      @new_sprites.each { |sprite| sprite&.dispose }
+      @tiles.each { |sprite| sprite&.dispose }
       @viewport.dispose
       @weatherTypes.each_value do |weather|
         next if !weather
-        weather[1].each { |bitmap| bitmap.dispose if bitmap }
-        weather[2].each { |bitmap| bitmap.dispose if bitmap }
+        weather[1].each { |bitmap| bitmap&.dispose }
+        weather[2].each { |bitmap| bitmap&.dispose }
       end
     end
 
@@ -83,7 +83,7 @@ module RPG
           @time_shift += 1   # No previous tiles to fade out first
         end
         @fading = true
-        @new_sprites.each { |sprite| sprite.dispose if sprite }
+        @new_sprites.each { |sprite| sprite&.dispose }
         @new_sprites.clear
         ensureSprites
         @new_sprites.each_with_index { |sprite, i| set_sprite_bitmap(sprite, i, @target_type) }
@@ -456,25 +456,24 @@ module RPG
         @new_sprites.each_with_index { |sprite, i| sprite.visible = (i < @new_max) if sprite }
       end
       # End fading
-      if @fade_time >= ((@target_type == :None) ? FADE_OLD_PARTICLES_END : FADE_NEW_TILES_END) - @time_shift
-        if !@sprites.any? { |sprite| sprite.visible }
-          @type                 = @target_type
-          @max                  = @target_max
-          @target_type          = nil
-          @target_max           = nil
-          @old_max              = nil
-          @new_max              = nil
-          @old_tone             = nil
-          @target_tone          = nil
-          @fade_time            = 0.0
-          @time_shift           = 0
-          @sprites.each { |sprite| sprite.dispose if sprite }
-          @sprites              = @new_sprites
-          @new_sprites          = []
-          @sprite_lifetimes     = @new_sprite_lifetimes
-          @new_sprite_lifetimes = []
-          @fading               = false
-        end
+      if @fade_time >= ((@target_type == :None) ? FADE_OLD_PARTICLES_END : FADE_NEW_TILES_END) - @time_shift &&
+         !@sprites.any? { |sprite| sprite.visible }
+        @type                 = @target_type
+        @max                  = @target_max
+        @target_type          = nil
+        @target_max           = nil
+        @old_max              = nil
+        @new_max              = nil
+        @old_tone             = nil
+        @target_tone          = nil
+        @fade_time            = 0.0
+        @time_shift           = 0
+        @sprites.each { |sprite| sprite&.dispose }
+        @sprites              = @new_sprites
+        @new_sprites          = []
+        @sprite_lifetimes     = @new_sprite_lifetimes
+        @new_sprite_lifetimes = []
+        @fading               = false
       end
     end
 
@@ -501,7 +500,7 @@ module RPG
           update_sprite_position(@sprites[i], i, false)
         end
       elsif @sprites.length > 0
-        @sprites.each { |sprite| sprite.dispose if sprite }
+        @sprites.each { |sprite| sprite&.dispose }
         @sprites.clear
       end
       # Update new weather particles (while fading in only)
@@ -511,7 +510,7 @@ module RPG
           update_sprite_position(@new_sprites[i], i, true)
         end
       elsif @new_sprites.length > 0
-        @new_sprites.each { |sprite| sprite.dispose if sprite }
+        @new_sprites.each { |sprite| sprite&.dispose }
         @new_sprites.clear
       end
       # Update weather tiles (sandstorm/blizzard tiled overlay)
@@ -520,7 +519,7 @@ module RPG
         recalculate_tile_positions
         @tiles.each_with_index { |sprite, i| update_tile_position(sprite, i) }
       elsif @tiles.length > 0
-        @tiles.each { |sprite| sprite.dispose if sprite }
+        @tiles.each { |sprite| sprite&.dispose }
         @tiles.clear
       end
     end

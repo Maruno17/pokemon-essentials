@@ -160,7 +160,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
 
   def dispose
     return if disposed?
-    @pausesprite.dispose if @pausesprite
+    @pausesprite&.dispose
     @pausesprite = nil
     super
   end
@@ -490,10 +490,8 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       drawSingleFormattedChar(self.contents, @fmtchars[i])
       @lastDrawnChar = i
     end
-    if !self.letterbyletter
-      # all characters were drawn, reset old font
-      self.contents.font = @oldfont if @oldfont
-    end
+    # all characters were drawn, reset old font
+    self.contents.font = @oldfont if !self.letterbyletter && @oldfont
     if numchars > 0 && numchars != @numtextchars
       fch = @fmtchars[numchars - 1]
       if fch
@@ -579,7 +577,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
 
   def update
     super
-    @pausesprite.update if @pausesprite && @pausesprite.visible
+    @pausesprite.update if @pausesprite&.visible
     if @waitcount > 0
       @waitcount -= 1
       return
@@ -601,7 +599,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       break if @textchars[@curchar] == "\n" ||   # newline
                @textchars[@curchar] == "\1" ||   # pause
                @textchars[@curchar] == "\2" ||   # letter-by-letter break
-               @textchars[@curchar] == nil
+               @textchars[@curchar].nil?
     end
   end
 end

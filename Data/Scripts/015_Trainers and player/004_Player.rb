@@ -38,13 +38,13 @@ class Player < Trainer
   def character_ID=(value)
     return if @character_ID == value
     @character_ID = value
-    $game_player.refresh_charset if $game_player
+    $game_player&.refresh_charset
   end
 
   def outfit=(value)
     return if @outfit == value
     @outfit = value
-    $game_player.refresh_charset if $game_player
+    $game_player&.refresh_charset
   end
 
   def trainer_type

@@ -152,7 +152,7 @@ class BerryPlantData
         end
       end
     else
-      old_growth_stage = (done_replant) ? 0 : old_growth_stage
+      old_growth_stage = 0 if done_replant
       new_growth_stage = [@growth_stage, stages_growing + 1].min
       @watered_this_stage = false if new_growth_stage > old_growth_stage
       water if $game_screen && GameData::Weather.get($game_screen.weather_type).category == :Rain
@@ -268,8 +268,8 @@ class BerryPlantSprite
       if berry_plant.new_mechanics && @old_stage != berry_plant.growth_stage &&
          @old_stage > 0 && berry_plant.growth_stage <= GameData::BerryPlant::NUMBER_OF_GROWTH_STAGES + 1
         spriteset = $scene.spriteset(@map.map_id)
-        spriteset.addUserAnimation(Settings::PLANT_SPARKLE_ANIMATION_ID,
-                                   @event.x, @event.y, false, 1) if spriteset
+        spriteset&.addUserAnimation(Settings::PLANT_SPARKLE_ANIMATION_ID,
+                                    @event.x, @event.y, false, 1)
       end
     end
     @old_stage = berry_plant.growth_stage

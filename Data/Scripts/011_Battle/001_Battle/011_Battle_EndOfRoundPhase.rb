@@ -223,7 +223,7 @@ class Battle
       if !moveUser   # User isn't in battle, get it from the party
         party = pbParty(pos.effects[PBEffects::FutureSightUserIndex])
         pkmn = party[pos.effects[PBEffects::FutureSightUserPartyIndex]]
-        if pkmn && pkmn.able?
+        if pkmn&.able?
           moveUser = Battler.new(self, pos.effects[PBEffects::FutureSightUserIndex])
           moveUser.pbInitDummyPokemon(pkmn, pos.effects[PBEffects::FutureSightUserPartyIndex])
         end
@@ -504,12 +504,11 @@ class Battle
       b.pbItemHPHealCheck
       b.pbFaint if b.fainted?
     end
-    if perishSongUsers.length > 0
-      # If all remaining Pokemon fainted by a Perish Song triggered by a single side
-      if (perishSongUsers.find_all { |idxBattler| opposes?(idxBattler) }.length == perishSongUsers.length) ||
-         (perishSongUsers.find_all { |idxBattler| !opposes?(idxBattler) }.length == perishSongUsers.length)
-        pbJudgeCheckpoint(@battlers[perishSongUsers[0]])
-      end
+    # Judge if all remaining Pokemon fainted by a Perish Song triggered by a single side
+    if perishSongUsers.length > 0 &&
+       ((perishSongUsers.find_all { |idxBattler| opposes?(idxBattler) }.length == perishSongUsers.length) ||
+       (perishSongUsers.find_all { |idxBattler| !opposes?(idxBattler) }.length == perishSongUsers.length))
+      pbJudgeCheckpoint(@battlers[perishSongUsers[0]])
     end
     # Check for end of battle
     if @decision > 0

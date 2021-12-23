@@ -180,7 +180,7 @@ class SlotMachineScene
         Graphics.update
         Input.update
         update
-        @sprites["window2"].bitmap.clear if @sprites["window2"].bitmap
+        @sprites["window2"].bitmap&.clear
         @sprites["window1"].setBitmap(sprintf("Graphics/Pictures/Slot Machine/win"))
         @sprites["window1"].src_rect.set(152 * ((frame / timePerFrame) % 4), 0, 152, 208)
         if bonus > 0
@@ -228,7 +228,7 @@ class SlotMachineScene
         Graphics.update
         Input.update
         update
-        @sprites["window2"].bitmap.clear if @sprites["window2"].bitmap
+        @sprites["window2"].bitmap&.clear
         @sprites["window1"].setBitmap(sprintf("Graphics/Pictures/Slot Machine/lose"))
         @sprites["window1"].src_rect.set(152 * ((frame / timePerFrame) % 2), 0, 152, 208)
         frame += 1
@@ -283,8 +283,8 @@ class SlotMachineScene
       Graphics.update
       Input.update
       update
-      @sprites["window1"].bitmap.clear if @sprites["window1"].bitmap
-      @sprites["window2"].bitmap.clear if @sprites["window2"].bitmap
+      @sprites["window1"].bitmap&.clear
+      @sprites["window2"].bitmap&.clear
       if @sprites["credit"].score == Settings::MAX_COINS
         pbMessage(_INTL("You've got {1} Coins.", Settings::MAX_COINS.to_s_formatted))
         break

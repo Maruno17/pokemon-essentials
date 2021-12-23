@@ -334,11 +334,11 @@ MultipleForms.register(:KYUREM, {
     case form
     when 0   # Normal
       pkmn.moves.each do |move|
-        if [:ICEBURN, :FREEZESHOCK].include?(move.id)
-          move.id = :GLACIATE if GameData::Move.exists?(:GLACIATE)
+        if [:ICEBURN, :FREEZESHOCK].include?(move.id) && GameData::Move.exists?(:GLACIATE)
+          move.id = :GLACIATE
         end
-        if [:FUSIONFLARE, :FUSIONBOLT].include?(move.id)
-          move.id = :SCARYFACE if GameData::Move.exists?(:SCARYFACE)
+        if [:FUSIONFLARE, :FUSIONBOLT].include?(move.id) && GameData::Move.exists?(:SCARYFACE)
+          move.id = :SCARYFACE
         end
       end
     when 1   # White

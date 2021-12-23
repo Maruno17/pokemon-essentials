@@ -22,7 +22,7 @@ module PokemonDebugMenuCommands
 
   def self.hasFunction?(option, function)
     option_hash = @@commands[option]
-    return option_hash && option_hash.keys.include?(function)
+    return option_hash&.has_key?(function)
   end
 
   def self.getFunction(option, function)
@@ -1029,7 +1029,7 @@ PokemonDebugMenuCommands.register("ownership", {
         pkmn.owner.id = $player.make_foreign_ID
       when 4   # Set foreign ID
         params = ChooseNumberParams.new
-        params.setRange(0, 65535)
+        params.setRange(0, 65_535)
         params.setDefaultValue(pkmn.owner.public_id)
         val = pbMessageChooseNumber(
           _INTL("Set the new ID (max. 65535)."), params
@@ -1129,11 +1129,11 @@ PokemonDebugMenuCommands.register("shadow_pkmn", {
       break if cmd < 0
       case cmd
       when 0   # Make Shadow
-        if !pkmn.shadowPokemon?
+        if pkmn.shadowPokemon?
+          screen.pbDisplay(_INTL("{1} is already a Shadow Pokémon.", pkmn.name))
+        else
           pkmn.makeShadow
           screen.pbRefreshSingle(pkmnid)
-        else
-          screen.pbDisplay(_INTL("{1} is already a Shadow Pokémon.", pkmn.name))
         end
       when 1   # Set heart gauge
         if pkmn.shadowPokemon?

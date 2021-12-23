@@ -144,10 +144,10 @@ class Button < UIControl
     color = Color.new(120, 120, 120)
     bitmap.fill_rect(x + 1, y + 1, width - 2, height - 2, color)
     ret = Rect.new(x + 1, y + 1, width - 2, height - 2)
-    if !@captured
-      bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
-    else
+    if @captured
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(120, 120, 120, 80))
+    else
+      bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
     end
     size = bitmap.text_size(self.label).width
     shadowtext(bitmap, x + 4, y, size, height, self.label, @disabled)
@@ -196,10 +196,10 @@ class Checkbox < Button
     bitmap.fill_rect(x + 2, y + 2, self.width - 4, self.height - 4, Color.new(0, 0, 0, 0))
     bitmap.fill_rect(x + 1, y + 1, width - 2, height - 2, color)
     ret = Rect.new(x + 1, y + 1, width - 2, height - 2)
-    if !@captured
-      bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
-    else
+    if @captured
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(120, 120, 120, 80))
+    else
+      bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
     end
     if self.checked
       shadowtext(bitmap, x, y, 32, 32, "X", @disabled, 1)
@@ -259,7 +259,7 @@ class TextField < UIControl
     @frame += 1
     @frame %= 20
     self.changed = false
-    self.invalidate if ((@frame % 10) == 0)
+    self.invalidate if (@frame % 10) == 0
     # Moving cursor
     if Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
       if @cursor > 0
@@ -302,10 +302,10 @@ class TextField < UIControl
     width -= size
     bitmap.fill_rect(x + 1, y + 1, width - 2, height - 2, color)
     ret = Rect.new(x + 1, y + 1, width - 2, height - 2)
-    if !@captured
-      bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
-    else
+    if @captured
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(120, 120, 120, 80))
+    else
+      bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
     end
     x += 4
     textscan = self.text.scan(/./m)
@@ -314,7 +314,7 @@ class TextField < UIControl
     @cursor = 0 if @cursor < 0
     startpos = @cursor
     fromcursor = 0
-    while (startpos > 0)
+    while startpos > 0
       c = textscan[startpos - 1]
       fromcursor += bitmap.text_size(c).width
       break if fromcursor > width - 4
@@ -668,7 +668,7 @@ class TextSlider < UIControl
 
   def refresh
     bitmap = self.bitmap
-    if @maxoptionwidth == nil
+    if @maxoptionwidth.nil?
       @options.length.times do |i|
         w = self.bitmap.text_size(" " + @options[i] + " ").width
         @maxoptionwidth = w if !@maxoptionwidth || @maxoptionwidth < w

@@ -69,7 +69,7 @@ def pbSetTextMessages
             neednewline = false
           end
           if list.code == 101
-            lastitem += "#{list.parameters[0]}"
+            lastitem += list.parameters[0].to_s
             neednewline = true
           elsif list.code == 102
             list.parameters[0].length.times do |k|
@@ -78,7 +78,7 @@ def pbSetTextMessages
             neednewline = false
           elsif list.code == 401
             lastitem += " " if lastitem != ""
-            lastitem += "#{list.parameters[0]}"
+            lastitem += list.parameters[0].to_s
             neednewline = true
           elsif list.code == 355 || list.code == 655
             pbAddScriptTexts(items, list.parameters[0])
@@ -93,11 +93,9 @@ def pbSetTextMessages
             end
           end
         end
-        if neednewline
-          if lastitem != ""
-            items.push(lastitem)
-            lastitem = ""
-          end
+        if neednewline && lastitem != ""
+          items.push(lastitem)
+          lastitem = ""
         end
       end
     end
@@ -140,7 +138,7 @@ def pbSetTextMessages
                 neednewline = false
               end
               if list.code == 101
-                lastitem += "#{list.parameters[0]}"
+                lastitem += list.parameters[0].to_s
                 neednewline = true
               elsif list.code == 102
                 list.parameters[0].length.times do |k|
@@ -149,7 +147,7 @@ def pbSetTextMessages
                 neednewline = false
               elsif list.code == 401
                 lastitem += " " if lastitem != ""
-                lastitem += "#{list.parameters[0]}"
+                lastitem += list.parameters[0].to_s
                 neednewline = true
               elsif list.code == 355 || list.code == 655
                 pbAddScriptTexts(items, list.parameters[0])
@@ -164,11 +162,9 @@ def pbSetTextMessages
                 end
               end
             end
-            if neednewline
-              if lastitem != ""
-                items.push(lastitem)
-                lastitem = ""
-              end
+            if neednewline && lastitem != ""
+              items.push(lastitem)
+              lastitem = ""
             end
           end
         end
@@ -210,7 +206,7 @@ def pbEachIntlSection(file)
         sectionname = $~[1]
         havesection = true
       else
-        if sectionname == nil
+        if sectionname.nil?
           raise _INTL("Expected a section at the beginning of the file (line {1})", lineno)
         end
         lastsection.push(line.gsub(/\s+$/, ""))
@@ -739,7 +735,7 @@ def _INTL(*arg)
   end
   string = string.clone
   (1...arg.length).each do |i|
-    string.gsub!(/\{#{i}\}/, "#{arg[i]}")
+    string.gsub!(/\{#{i}\}/, arg[i].to_s)
   end
   return string
 end
@@ -770,7 +766,7 @@ def _MAPINTL(mapid, *arg)
   string = MessageTypes.getFromMapHash(mapid, arg[0])
   string = string.clone
   (1...arg.length).each do |i|
-    string.gsub!(/\{#{i}\}/, "#{arg[i]}")
+    string.gsub!(/\{#{i}\}/, arg[i].to_s)
   end
   return string
 end

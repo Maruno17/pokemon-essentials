@@ -184,15 +184,15 @@ class PlayerRating
       # https://www.smogon.com/forums/threads/make-sense-of-your-shoddy-battle-rating.55764/
       otherRating = 1500.0
       otherDeviation = 350.0
-      s = Math.sqrt(100000.0 + (@deviation * @deviation) + (otherDeviation * otherDeviation))
+      s = Math.sqrt(100_000.0 + (@deviation * @deviation) + (otherDeviation * otherDeviation))
       g = 10.0**((otherRating - @rating) * 0.79 / s)
       @estimatedRating = (1.0 / (1.0 + g)) * 100.0   # Percent chance that I win against opponent
     else
       # GLIXARE method
       rds = @deviation * @deviation
-      sqr = Math.sqrt(15.905694331435 * (rds + 221781.21786254))
+      sqr = Math.sqrt(15.905694331435 * (rds + 221_781.21786254))
       inner = (1500.0 - @rating) * Math::PI / sqr
-      @estimatedRating = ((10000.0 / (1.0 + (10.0**inner))) + 0.5) / 100.0
+      @estimatedRating = ((10_000.0 / (1.0 + (10.0**inner))) + 0.5) / 100.0
     end
     return @estimatedRating
   end
@@ -296,7 +296,7 @@ class PlayerRating
       h2 += 0.5 * squVariance * e * (squDevplusVar - e) / (squD * d)
       x1 = x0
       x0 -= h1 / h2
-      break if ((x1 - x0).abs < 0.000001)
+      break if (x1 - x0).abs < 0.000001
     }
     return Math.exp(x0 / 2.0)
   end
@@ -373,13 +373,7 @@ end
 #===============================================================================
 def pbRuledBattle(team1, team2, rule)
   decision = 0
-  if rand(100) != 0
-    party1 = []
-    party2 = []
-    team1.length.times { |i| party1.push(team1[i]) }
-    team2.length.times { |i| party2.push(team2[i]) }
-    decision = pbDecideWinner(party1, party2, team1.rating, team2.rating)
-  else
+  if rand(100) == 0
     level = rule.ruleset.suggestedLevel
     t_type = GameData::TrainerType.keys.first
     trainer1 = NPCTrainer.new("PLAYER1", t_type)
@@ -420,6 +414,12 @@ def pbRuledBattle(team1, team2, rule)
       p.heal
       p.item = items2[i]
     end
+  else
+    party1 = []
+    party2 = []
+    team1.length.times { |i| party1.push(team1[i]) }
+    team2.length.times { |i| party2.push(team2[i]) }
+    decision = pbDecideWinner(party1, party2, team1.rating, team2.rating)
   end
   case decision
   when 1   # Team 1 wins

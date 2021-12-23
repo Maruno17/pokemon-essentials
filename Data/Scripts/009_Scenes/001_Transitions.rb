@@ -38,7 +38,7 @@ module Graphics
   def self.update
     update_KGC_SpecialTransition
     @@transition.update if @@transition && !@@transition.disposed?
-    @@transition = nil if @@transition && @@transition.disposed?
+    @@transition = nil if @@transition&.disposed?
   end
 
   def self.judge_special_transition(duration, filename)
@@ -137,11 +137,11 @@ module Transitions
     def dispose
       return if disposed?
       dispose_all
-      @sprites.each { |s| s.dispose if s }
+      @sprites.each { |s| s&.dispose }
       @sprites.clear
       @overworld_sprite.dispose
-      @overworld_bitmap.dispose if @overworld_bitmap
-      @viewport.dispose if @viewport
+      @overworld_bitmap&.dispose
+      @viewport&.dispose
       @disposed = true
     end
 
@@ -404,8 +404,8 @@ module Transitions
     end
 
     def dispose_all
-      @buffer_original.dispose if @buffer_original
-      @buffer_temp.dispose if @buffer_temp
+      @buffer_original&.dispose
+      @buffer_temp&.dispose
     end
 
     def update_anim
@@ -628,13 +628,13 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @bubbles_sprite.dispose if @bubbles_sprite
-      @splash_sprite.dispose if @splash_sprite
-      @black_sprite.dispose if @black_sprite
+      @bubbles_sprite&.dispose
+      @splash_sprite&.dispose
+      @black_sprite&.dispose
       # Dispose bitmaps
-      @bubble_bitmap.dispose if @bubble_bitmap
-      @splash_bitmap.dispose if @splash_bitmap
-      @black_bitmap.dispose if @black_bitmap
+      @bubble_bitmap&.dispose
+      @splash_bitmap&.dispose
+      @black_bitmap&.dispose
     end
 
     def update_anim
@@ -704,12 +704,12 @@ module Transitions
     def dispose_all
       # Dispose sprites
       if @ball_sprites
-        @ball_sprites.each { |s| s.dispose if s }
+        @ball_sprites.each { |s| s&.dispose }
         @ball_sprites.clear
       end
       # Dispose bitmaps
-      @black_bitmap.dispose if @black_bitmap
-      @ball_bitmap.dispose if @ball_bitmap
+      @black_bitmap&.dispose
+      @ball_bitmap&.dispose
     end
 
     def update_anim
@@ -782,20 +782,20 @@ module Transitions
     def dispose_all
       # Dispose sprites
       if @overworld_sprites
-        @overworld_sprites.each { |s| s.dispose if s }
+        @overworld_sprites.each { |s| s&.dispose }
         @overworld_sprites.clear
       end
       if @black_sprites
-        @black_sprites.each { |s| s.dispose if s }
+        @black_sprites.each { |s| s&.dispose }
         @black_sprites.clear
       end
       if @ball_sprites
-        @ball_sprites.each { |s| s.dispose if s }
+        @ball_sprites.each { |s| s&.dispose }
         @ball_sprites.clear
       end
       # Dispose bitmaps
-      @black_bitmap.dispose if @black_bitmap
-      @ball_bitmap.dispose if @ball_bitmap
+      @black_bitmap&.dispose
+      @ball_bitmap&.dispose
     end
 
     def update_anim
@@ -892,12 +892,12 @@ module Transitions
     def dispose_all
       # Dispose sprites
       if @ball_sprites
-        @ball_sprites.each { |s| s.dispose if s }
+        @ball_sprites.each { |s| s&.dispose }
         @ball_sprites.clear
       end
       # Dispose bitmaps
-      @black_bitmap.dispose if @black_bitmap
-      @ball_bitmap.dispose if @ball_bitmap
+      @black_bitmap&.dispose
+      @ball_bitmap&.dispose
     end
 
     def update_anim
@@ -966,11 +966,11 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @ball_sprite.dispose if @ball_sprite
+      @ball_sprite&.dispose
       # Dispose bitmaps
-      @black_bitmap.dispose if @black_bitmap
-      @curve_bitmap.dispose if @curve_bitmap
-      @ball_bitmap.dispose if @ball_bitmap
+      @black_bitmap&.dispose
+      @curve_bitmap&.dispose
+      @ball_bitmap&.dispose
     end
 
     def update_anim
@@ -1046,16 +1046,16 @@ module Transitions
     def dispose_all
       # Dispose sprites
       if @ball_sprites
-        @ball_sprites.each { |s| s.dispose if s }
+        @ball_sprites.each { |s| s&.dispose }
         @ball_sprites.clear
       end
       if @black_trail_sprites
-        @black_trail_sprites.each { |s| s.dispose if s }
+        @black_trail_sprites.each { |s| s&.dispose }
         @black_trail_sprites.clear
       end
       # Dispose bitmaps
-      @black_bitmap.dispose if @black_bitmap
-      @ball_bitmap.dispose if @ball_bitmap
+      @black_bitmap&.dispose
+      @ball_bitmap&.dispose
     end
 
     def update_anim
@@ -1122,11 +1122,11 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @ball_sprite.dispose if @ball_sprite
-      @black_sprite.dispose if @black_sprite
+      @ball_sprite&.dispose
+      @black_sprite&.dispose
       # Dispose bitmaps
-      @black_bitmap.dispose if @black_bitmap
-      @ball_bitmap.dispose if @ball_bitmap
+      @black_bitmap&.dispose
+      @ball_bitmap&.dispose
     end
 
     def update_anim
@@ -1194,14 +1194,14 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @ball_sprites.each { |s| s.dispose if s }
+      @ball_sprites.each { |s| s&.dispose }
       @ball_sprites.clear
       # Dispose bitmaps
-      @black_1_bitmap.dispose if @black_1_bitmap
-      @black_2_bitmap.dispose if @black_2_bitmap
-      @black_3_bitmap.dispose if @black_3_bitmap
-      @black_4_bitmap.dispose if @black_4_bitmap
-      @ball_bitmap.dispose if @ball_bitmap
+      @black_1_bitmap&.dispose
+      @black_2_bitmap&.dispose
+      @black_3_bitmap&.dispose
+      @black_4_bitmap&.dispose
+      @ball_bitmap&.dispose
     end
 
     def update_anim

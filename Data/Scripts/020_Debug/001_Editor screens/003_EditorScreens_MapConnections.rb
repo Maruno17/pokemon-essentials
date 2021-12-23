@@ -50,7 +50,7 @@ class SelectionSprite < Sprite
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @othersprite = nil
     @sprite.dispose
   end
@@ -234,8 +234,8 @@ class MapScreenScene
       otherdims = MapFactoryHelper.getMapDims(i)
       x1 = (thissprite.x - othersprite.x) / 4
       y1 = (thissprite.y - othersprite.y) / 4
-      if (x1 == otherdims[0] || x1 == -thisdims[0] ||
-          y1 == otherdims[1] || y1 == -thisdims[1])
+      if x1 == otherdims[0] || x1 == -thisdims[0] ||
+         y1 == otherdims[1] || y1 == -thisdims[1]
         ret.push(i)
       end
     end

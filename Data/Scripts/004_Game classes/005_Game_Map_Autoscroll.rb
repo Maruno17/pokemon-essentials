@@ -93,7 +93,22 @@ class Interpreter
     max_y = ($game_map.height - (Graphics.height.to_f / Game_Map::TILE_HEIGHT)) * 4 * Game_Map::TILE_HEIGHT
     count_x = ($game_map.display_x - [0, [(x * Game_Map::REAL_RES_X) - center_x, max_x].min].max) / Game_Map::REAL_RES_X
     count_y = ($game_map.display_y - [0, [(y * Game_Map::REAL_RES_Y) - center_y, max_y].min].max) / Game_Map::REAL_RES_Y
-    if !@diag
+    if @diag
+      @diag = false
+      dir = nil
+      if count_x != 0 && count_y != 0
+        return false
+      elsif count_x > 0
+        dir = 4
+      elsif count_x < 0
+        dir = 6
+      elsif count_y > 0
+        dir = 8
+      elsif count_y < 0
+        dir = 2
+      end
+      count = count_x == 0 ? count_y.abs : count_x.abs
+    else
       @diag = true
       dir = nil
       if count_x > 0
@@ -110,21 +125,6 @@ class Interpreter
         end
       end
       count = [count_x.abs, count_y.abs].min
-    else
-      @diag = false
-      dir = nil
-      if count_x != 0 && count_y != 0
-        return false
-      elsif count_x > 0
-        dir = 4
-      elsif count_x < 0
-        dir = 6
-      elsif count_y > 0
-        dir = 8
-      elsif count_y < 0
-        dir = 2
-      end
-      count = count_x != 0 ? count_x.abs : count_y.abs
     end
     $game_map.start_scroll(dir, count, speed) if dir != nil
     if @diag

@@ -56,19 +56,15 @@ class VoltorbFlip
     # Randomize the values a little
     25.times do |i|
       temp = squareValues[i]
-      if squareValues[i] > 1
-        if rand(10) > 8
-          total /= squareValues[i]
-          squareValues[i] -= 1
-          total *= squareValues[i]
-        end
+      if squareValues[i] > 1 && rand(10) == 0
+        total /= squareValues[i]
+        squareValues[i] -= 1
+        total *= squareValues[i]
       end
-      if total < @levelRanges[@level - 1][0]
-        if squareValues[i] > 0
-          total /= squareValues[i]
-          squareValues[i] = temp
-          total *= squareValues[i]
-        end
+      if total < @levelRanges[@level - 1][0] && squareValues[i] > 0
+        total /= squareValues[i]
+        squareValues[i] = temp
+        total *= squareValues[i]
       end
     end
     # Populate @squares array
@@ -263,7 +259,7 @@ class VoltorbFlip
           end
         end
         (@marks.length + 1).times do |i|
-          if @marks[i] == nil
+          if @marks[i].nil?
             @marks[i] = [@directory + "tiles", (@index[0] * 64) + 128, @index[1] * 64, 256, 0, 64, 64]
           elsif @marks[i][1] == (@index[0] * 64) + 128 && @marks[i][2] == @index[1] * 64
             @marks.delete_at(i)

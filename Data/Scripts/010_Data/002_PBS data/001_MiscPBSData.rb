@@ -42,10 +42,8 @@ end
 #===============================================================================
 def pbLoadPhoneData
   $game_temp = Game_Temp.new if !$game_temp
-  if !$game_temp.phone_messages_data
-    if pbRgssExists?("Data/phone.dat")
-      $game_temp.phone_messages_data = load_data("Data/phone.dat")
-    end
+  if !$game_temp.phone_messages_data && pbRgssExists?("Data/phone.dat")
+    $game_temp.phone_messages_data = load_data("Data/phone.dat")
   end
   return $game_temp.phone_messages_data
 end
@@ -66,10 +64,8 @@ end
 #===============================================================================
 def pbLoadBattleAnimations
   $game_temp = Game_Temp.new if !$game_temp
-  if !$game_temp.battle_animations_data
-    if pbRgssExists?("Data/PkmnAnimations.rxdata")
-      $game_temp.battle_animations_data = load_data("Data/PkmnAnimations.rxdata")
-    end
+  if !$game_temp.battle_animations_data && pbRgssExists?("Data/PkmnAnimations.rxdata")
+    $game_temp.battle_animations_data = load_data("Data/PkmnAnimations.rxdata")
   end
   return $game_temp.battle_animations_data
 end

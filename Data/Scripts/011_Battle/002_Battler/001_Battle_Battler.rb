@@ -136,17 +136,17 @@ class Battle::Battler
   #=============================================================================
   def hasMega?
     return false if @effects[PBEffects::Transform]
-    return @pokemon && @pokemon.hasMegaForm?
+    return @pokemon&.hasMegaForm?
   end
 
-  def mega?; return @pokemon && @pokemon.mega?; end
+  def mega?; return @pokemon&.mega?; end
 
   def hasPrimal?
     return false if @effects[PBEffects::Transform]
-    return @pokemon && @pokemon.hasPrimalForm?
+    return @pokemon&.hasPrimalForm?
   end
 
-  def primal?; return @pokemon && @pokemon.primal?; end
+  def primal?; return @pokemon&.primal?; end
 
   def shadowPokemon?; return false; end
 
@@ -184,11 +184,11 @@ class Battle::Battler
 
   def shiny?
     return @effects[PBEffects::Illusion].shiny? if @effects[PBEffects::Illusion]
-    return @pokemon && @pokemon.shiny?
+    return @pokemon&.shiny?
   end
 
   def super_shiny?
-    return @pokemon && @pokemon.super_shiny?
+    return @pokemon&.super_shiny?
   end
 
   def owned?
@@ -295,7 +295,7 @@ class Battle::Battler
   end
 
   def isSpecies?(species)
-    return @pokemon && @pokemon.isSpecies?(species)
+    return @pokemon&.isSpecies?(species)
   end
 
   # Returns the active types of this Pokémon. The array should not include the
@@ -311,8 +311,8 @@ class Battle::Battler
       ret.push(:NORMAL) if ret.length == 0
     end
     # Add the third type specially.
-    if withType3 && @effects[PBEffects::Type3]
-      ret.push(@effects[PBEffects::Type3]) if !ret.include?(@effects[PBEffects::Type3])
+    if withType3 && @effects[PBEffects::Type3] && !ret.include?(@effects[PBEffects::Type3])
+      ret.push(@effects[PBEffects::Type3])
     end
     return ret
   end

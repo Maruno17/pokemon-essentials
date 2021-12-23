@@ -153,7 +153,7 @@ end
 #===============================================================================
 class AblePokemonRestriction
   def isValid?(pkmn)
-    return pkmn && pkmn.able?
+    return pkmn&.able?
   end
 end
 

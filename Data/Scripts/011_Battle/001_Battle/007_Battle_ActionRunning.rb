@@ -75,24 +75,22 @@ class Battle
         return 1
       end
       # Abilities that guarantee escape
-      if battler.abilityActive?
-        if Battle::AbilityEffects.triggerCertainEscapeFromBattle(battler.ability, battler)
-          pbShowAbilitySplash(battler, true)
-          pbHideAbilitySplash(battler)
-          pbSEPlay("Battle flee")
-          pbDisplayPaused(_INTL("You got away safely!"))
-          @decision = 3
-          return 1
-        end
+      if battler.abilityActive? &&
+         Battle::AbilityEffects.triggerCertainEscapeFromBattle(battler.ability, battler)
+        pbShowAbilitySplash(battler, true)
+        pbHideAbilitySplash(battler)
+        pbSEPlay("Battle flee")
+        pbDisplayPaused(_INTL("You got away safely!"))
+        @decision = 3
+        return 1
       end
       # Held items that guarantee escape
-      if battler.itemActive?
-        if Battle::ItemEffects.triggerCertainEscapeFromBattle(battler.item, battler)
-          pbSEPlay("Battle flee")
-          pbDisplayPaused(_INTL("{1} fled using its {2}!", battler.pbThis, battler.itemName))
-          @decision = 3
-          return 1
-        end
+      if battler.itemActive? &&
+         Battle::ItemEffects.triggerCertainEscapeFromBattle(battler.item, battler)
+        pbSEPlay("Battle flee")
+        pbDisplayPaused(_INTL("{1} fled using its {2}!", battler.pbThis, battler.itemName))
+        @decision = 3
+        return 1
       end
       # Other certain trapping effects
       if battler.trappedInBattle?

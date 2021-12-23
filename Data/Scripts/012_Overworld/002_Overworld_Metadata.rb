@@ -156,7 +156,7 @@ class PokemonMapMetadata
     @erasedEvents.each do |i|
       if i[0][0] == $game_map.map_id && i[1]
         event = $game_map.events[i[0][1]]
-        event.erase if event
+        event&.erase
       end
     end
     @movedEvents.each do |i|

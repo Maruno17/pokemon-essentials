@@ -16,13 +16,13 @@ def pbSafeCopyFile(x, y, z = nil)
     filedata = nil
     if safeExists?(y)
       different = false
-      if FileTest.size(x) != FileTest.size(y)
-        different = true
-      else
+      if FileTest.size(x) == FileTest.size(y)
         filedata2 = ""
         File.open(x, "rb") { |f| filedata  = f.read }
         File.open(y, "rb") { |f| filedata2 = f.read }
         different = true if filedata != filedata2
+      else
+        different = true
       end
       if different
         safetocopy = pbConfirmMessage(_INTL("A different file named '{1}' already exists. Overwrite it?", y))

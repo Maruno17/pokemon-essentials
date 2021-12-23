@@ -39,10 +39,10 @@ module FileLineData
 
   def self.linereport
     if @section
-      if @key != nil
-        return _INTL("File {1}, section {2}, key {3}\r\n{4}\r\n\r\n", @file, @section, @key, @value)
-      else
+      if @key.nil?
         return _INTL("File {1}, section {2}\r\n{3}\r\n\r\n", @file, @section, @value)
+      else
+        return _INTL("File {1}, section {2}, key {3}\r\n{4}\r\n\r\n", @file, @section, @key, @value)
       end
     else
       return _INTL("File {1}, line {2}\r\n{3}\r\n\r\n", @file, @lineno, @linedata)
@@ -79,7 +79,7 @@ module Compiler
   def csvQuote(str, always = false)
     return "" if nil_or_empty?(str)
     if always || str[/[,\"]/]   # || str[/^\s/] || str[/\s$/] || str[/^#/]
-      str = str.gsub(/[\"]/, "\\\"")
+      str = str.gsub(/\"/, "\\\"")
       str = "\"#{str}\""
     end
     return str
@@ -110,7 +110,7 @@ module Compiler
           havesection = true
           lastsection = {}
         else
-          if sectionname == nil
+          if sectionname.nil?
             FileLineData.setLine(line, lineno)
             raise _INTL("Expected a section at the beginning of the file. This error may also occur if the file was not saved in UTF-8.\r\n{1}", FileLineData.linereport)
           end
@@ -168,7 +168,7 @@ module Compiler
           lastsection = []
           havesection = true
         else
-          if sectionname == nil
+          if sectionname.nil?
             raise _INTL("Expected a section at the beginning of the file (line {1}). Sections begin with '[name of section]'", lineno)
           end
           lastsection.push(line.gsub(/^\s+/, "").gsub(/\s+$/, ""))
@@ -366,7 +366,7 @@ module Compiler
       return idx
     when Hash
       value = enumer[ret]
-      if value == nil
+      if value.nil?
         raise _INTL("Undefined value {1} (expected one of: {2})\r\n{3}", ret, enumer.keys.inspect, FileLineData.linereport)
       end
       return value
@@ -597,10 +597,10 @@ module Compiler
             enumer = schema[2 + i]
             case enumer
             when Array
-              if enumer[value] != nil
-                file.write(enumer[value])
-              else
+              if enumer[value].nil?
                 file.write(value)
+              else
+                file.write(enumer[value])
               end
             when Symbol, String
               mod = Object.const_get(enumer.to_sym)
@@ -864,7 +864,7 @@ module Compiler
       compile_all(mustCompile)
     rescue Exception
       e = $!
-      raise e if "#{e.class}" == "Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)
+      raise e if e.class.to_s == "Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)
       pbPrintException(e)
       dataFiles.length.times do |i|
         begin

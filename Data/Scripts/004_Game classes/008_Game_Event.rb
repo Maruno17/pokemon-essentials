@@ -99,7 +99,7 @@ class Game_Event < Game_Character
     return $PokemonGlobal.eventvars[[@map_id, @event.id]].to_i
   end
 
-  def expired?(secs = 86400)
+  def expired?(secs = 86_400)
     ontime = self.variable
     time = pbGetTimeNow
     return ontime && (time.to_i > ontime + secs)
@@ -109,8 +109,8 @@ class Game_Event < Game_Character
     ontime = self.variable.to_i
     return false if !ontime
     now = pbGetTimeNow
-    elapsed = (now.to_i - ontime) / 86400
-    elapsed += 1 if (now.to_i - ontime) % 86400 > ((now.hour * 3600) + (now.min * 60) + now.sec)
+    elapsed = (now.to_i - ontime) / 86_400
+    elapsed += 1 if (now.to_i - ontime) % 86_400 > ((now.hour * 3600) + (now.min * 60) + now.sec)
     return elapsed >= days
   end
 
@@ -141,12 +141,12 @@ class Game_Event < Game_Character
 
   def pbCheckEventTriggerAfterTurning
     return if $game_system.map_interpreter.running? || @starting
-    if @event.name[/trainer\((\d+)\)/i]
-      distance = $~[1].to_i
-      if @trigger == 2 && pbEventCanReachPlayer?(self, $game_player, distance)
-        start if !jumping? && !over_trigger?
-      end
-    end
+    return if @trigger != 2   # Event touch
+    return if !@event.name[/trainer\((\d+)\)/i]
+    distance = $~[1].to_i
+    return if !pbEventCanReachPlayer?(self, $game_player, distance)
+    return if jumping? || over_trigger?
+    start
   end
 
   def check_event_trigger_touch(dir)
@@ -170,8 +170,8 @@ class Game_Event < Game_Character
   def check_event_trigger_auto
     case @trigger
     when 2   # Event touch
-      if at_coordinate?($game_player.x, $game_player.y)
-        start if !jumping? && over_trigger?
+      if at_coordinate?($game_player.x, $game_player.y) && !jumping? && over_trigger?
+        start
       end
     when 3   # Autorun
       start
@@ -197,7 +197,7 @@ class Game_Event < Game_Character
     return if new_page == @page
     @page = new_page
     clear_starting
-    if @page == nil
+    if @page.nil?
       @tile_id        = 0
       @character_name = ""
       @character_hue  = 0

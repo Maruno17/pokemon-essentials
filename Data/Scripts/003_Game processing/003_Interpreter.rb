@@ -304,7 +304,7 @@ class Interpreter
   def pbEraseThisEvent
     if $game_map.events[@event_id]
       $game_map.events[@event_id].erase
-      $PokemonMap.addErasedEvent(@event_id) if $PokemonMap
+      $PokemonMap&.addErasedEvent(@event_id)
     end
     @index += 1
     return true
@@ -407,7 +407,7 @@ class Interpreter
     when 6 then event.move_right
     when 8 then event.move_up
     end
-    $PokemonMap.addMovedEvent(@event_id) if $PokemonMap
+    $PokemonMap&.addMovedEvent(@event_id)
     if old_x != event.x || old_y != event.y
       $game_player.lock
       loop do
@@ -443,7 +443,7 @@ class Interpreter
   def pbTrainerEnd
     pbGlobalUnlock
     event = get_self
-    event.erase_route if event
+    event&.erase_route
   end
 
   def setPrice(item, buy_price = -1, sell_price = -1)

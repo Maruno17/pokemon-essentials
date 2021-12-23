@@ -79,7 +79,7 @@ ItemHandlers::CanUseInBattle.add(:AWAKENING, proc { |item, pokemon, battler, mov
 ItemHandlers::CanUseInBattle.copy(:AWAKENING, :CHESTOBERRY)
 
 ItemHandlers::CanUseInBattle.add(:BLUEFLUTE, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
-  if battler && battler.hasActiveAbility?(:SOUNDPROOF)
+  if battler&.hasActiveAbility?(:SOUNDPROOF)
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
   end
@@ -365,7 +365,7 @@ ItemHandlers::BattleUseOnPokemon.add(:SITRUSBERRY, proc { |item, pokemon, battle
 
 ItemHandlers::BattleUseOnPokemon.add(:AWAKENING, proc { |item, pokemon, battler, choices, scene|
   pokemon.heal_status
-  battler.pbCureStatus(false) if battler
+  battler&.pbCureStatus(false)
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} woke up.", name))
@@ -375,7 +375,7 @@ ItemHandlers::BattleUseOnPokemon.copy(:AWAKENING, :CHESTOBERRY, :BLUEFLUTE)
 
 ItemHandlers::BattleUseOnPokemon.add(:ANTIDOTE, proc { |item, pokemon, battler, choices, scene|
   pokemon.heal_status
-  battler.pbCureStatus(false) if battler
+  battler&.pbCureStatus(false)
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} was cured of its poisoning.", name))
@@ -385,7 +385,7 @@ ItemHandlers::BattleUseOnPokemon.copy(:ANTIDOTE, :PECHABERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:BURNHEAL, proc { |item, pokemon, battler, choices, scene|
   pokemon.heal_status
-  battler.pbCureStatus(false) if battler
+  battler&.pbCureStatus(false)
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1}'s burn was healed.", name))
@@ -395,7 +395,7 @@ ItemHandlers::BattleUseOnPokemon.copy(:BURNHEAL, :RAWSTBERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:PARALYZEHEAL, proc { |item, pokemon, battler, choices, scene|
   pokemon.heal_status
-  battler.pbCureStatus(false) if battler
+  battler&.pbCureStatus(false)
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} was cured of paralysis.", name))
@@ -405,7 +405,7 @@ ItemHandlers::BattleUseOnPokemon.copy(:PARALYZEHEAL, :PARLYZHEAL, :CHERIBERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:ICEHEAL, proc { |item, pokemon, battler, choices, scene|
   pokemon.heal_status
-  battler.pbCureStatus(false) if battler
+  battler&.pbCureStatus(false)
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} was thawed out.", name))
@@ -415,8 +415,8 @@ ItemHandlers::BattleUseOnPokemon.copy(:ICEHEAL, :ASPEARBERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:FULLHEAL, proc { |item, pokemon, battler, choices, scene|
   pokemon.heal_status
-  battler.pbCureStatus(false) if battler
-  battler.pbCureConfusion if battler
+  battler&.pbCureStatus(false)
+  battler&.pbCureConfusion
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} became healthy.", name))
@@ -429,8 +429,8 @@ ItemHandlers::BattleUseOnPokemon.copy(:FULLHEAL, :RAGECANDYBAR) if Settings::RAG
 
 ItemHandlers::BattleUseOnPokemon.add(:FULLRESTORE, proc { |item, pokemon, battler, choices, scene|
   pokemon.heal_status
-  battler.pbCureStatus(false) if battler
-  battler.pbCureConfusion if battler
+  battler&.pbCureStatus(false)
+  battler&.pbCureConfusion
   name = (battler) ? battler.pbThis : pokemon.name
   if pokemon.hp < pokemon.totalhp
     pbBattleHPItem(pokemon, battler, pokemon.totalhp, scene)
@@ -471,8 +471,8 @@ ItemHandlers::BattleUseOnPokemon.add(:ENERGYROOT, proc { |item, pokemon, battler
 
 ItemHandlers::BattleUseOnPokemon.add(:HEALPOWDER, proc { |item, pokemon, battler, choices, scene|
   pokemon.heal_status
-  battler.pbCureStatus(false) if battler
-  battler.pbCureConfusion if battler
+  battler&.pbCureStatus(false)
+  battler&.pbCureConfusion
   pokemon.changeHappiness("powder")
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh

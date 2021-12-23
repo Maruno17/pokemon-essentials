@@ -134,13 +134,13 @@ class Trainer
   # Returns true if there is a Pokémon of the given species in the trainer's
   # party. You may also specify a particular form it should be.
   def has_species?(species, form = -1)
-    return pokemon_party.any? { |p| p && p.isSpecies?(species) && (form < 0 || p.form == form) }
+    return pokemon_party.any? { |p| p&.isSpecies?(species) && (form < 0 || p.form == form) }
   end
 
   # Returns whether there is a fatefully met Pokémon of the given species in the
   # trainer's party.
   def has_fateful_species?(species)
-    return pokemon_party.any? { |p| p && p.isSpecies?(species) && p.obtain_method == 4 }
+    return pokemon_party.any? { |p| p&.isSpecies?(species) && p.obtain_method == 4 }
   end
 
   # Returns whether there is a Pokémon with the given type in the trainer's
@@ -148,7 +148,7 @@ class Trainer
   def has_pokemon_of_type?(type)
     return false if !GameData::Type.exists?(type)
     type = GameData::Type.get(type).id
-    return pokemon_party.any? { |p| p && p.hasType?(type) }
+    return pokemon_party.any? { |p| p&.hasType?(type) }
   end
 
   # Checks whether any Pokémon in the party knows the given move, and returns

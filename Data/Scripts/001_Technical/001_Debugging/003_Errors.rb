@@ -37,7 +37,7 @@ def pbPrintException(e)
     message += "Exception: #{e.class}\r\n"
     message += "Message: "
   end
-  message += "#{emessage}"
+  message += emessage
   # show last 10/25 lines of backtrace
   if !e.is_a?(EventScriptError)
     message += "\r\n\r\nBacktrace:\r\n"

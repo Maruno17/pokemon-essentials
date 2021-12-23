@@ -277,14 +277,13 @@ class Battle::Battler
       end
     end
     # Zygarde - Power Construct
-    if isSpecies?(:ZYGARDE) && self.ability == :POWERCONSTRUCT && endOfRound
-      if @hp <= @totalhp / 2 && @form < 2   # Turn into Complete Forme
-        newForm = @form + 2
-        @battle.pbDisplay(_INTL("You sense the presence of many!"))
-        @battle.pbShowAbilitySplash(self, true)
-        @battle.pbHideAbilitySplash(self)
-        pbChangeForm(newForm, _INTL("{1} transformed into its Complete Forme!", pbThis))
-      end
+    if isSpecies?(:ZYGARDE) && self.ability == :POWERCONSTRUCT && endOfRound &&
+       @hp <= @totalhp / 2 && @form < 2   # Turn into Complete Forme
+      newForm = @form + 2
+      @battle.pbDisplay(_INTL("You sense the presence of many!"))
+      @battle.pbShowAbilitySplash(self, true)
+      @battle.pbHideAbilitySplash(self)
+      pbChangeForm(newForm, _INTL("{1} transformed into its Complete Forme!", pbThis))
     end
     # Morpeko - Hunger Switch
     if isSpecies?(:MORPEKO) && hasActiveAbility?(:HUNGERSWITCH) && endOfRound

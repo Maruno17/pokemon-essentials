@@ -22,7 +22,7 @@ class ItemIconSprite < SpriteWrapper
   end
 
   def dispose
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     super
   end
 
@@ -70,7 +70,7 @@ class ItemIconSprite < SpriteWrapper
   def item=(value)
     return if @item == value && !@forceitemchange
     @item = value
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     @animbitmap = nil
     if @item || !@blankzero
       @animbitmap = AnimatedBitmap.new(GameData::Item.icon_filename(@item))
@@ -126,7 +126,7 @@ class HeldItemIconSprite < SpriteWrapper
   end
 
   def dispose
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     super
   end
 
@@ -138,7 +138,7 @@ class HeldItemIconSprite < SpriteWrapper
   def item=(value)
     return if @item == value
     @item = value
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     @animbitmap = nil
     if @item
       @animbitmap = AnimatedBitmap.new(GameData::Item.held_icon_filename(@item))

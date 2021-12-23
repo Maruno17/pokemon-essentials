@@ -48,8 +48,8 @@ class Battle::AI
        skill >= PBTrainerAI.highSkill
       toxicHP = battler.totalhp / 16
       nextToxicHP = toxicHP * (battler.effects[PBEffects::Toxic] + 1)
-      if battler.hp <= nextToxicHP && battler.hp > toxicHP * 2
-        shouldSwitch = true if pbAIRandom(100) < 80
+      if battler.hp <= nextToxicHP && battler.hp > toxicHP * 2 && pbAIRandom(100) < 80
+        shouldSwitch = true
       end
     end
     # Pokémon is Encored into an unfavourable move
@@ -62,8 +62,8 @@ class Battle::AI
           scoreSum += pbGetMoveScore(battler.moves[idxEncoredMove], battler, b, skill)
           scoreCount += 1
         end
-        if scoreCount > 0 && scoreSum / scoreCount <= 20
-          shouldSwitch = true if pbAIRandom(100) < 80
+        if scoreCount > 0 && scoreSum / scoreCount <= 20 && pbAIRandom(100) < 80
+          shouldSwitch = true
         end
       end
     end
@@ -72,9 +72,9 @@ class Battle::AI
     if @battle.pbSideSize(battler.index + 1) == 1 &&
        !battler.pbDirectOpposing.fainted? && skill >= PBTrainerAI.highSkill
       opp = battler.pbDirectOpposing
-      if opp.effects[PBEffects::HyperBeam] > 0 ||
-         (opp.hasActiveAbility?(:TRUANT) && opp.effects[PBEffects::Truant])
-        shouldSwitch = false if pbAIRandom(100) < 80
+      if (opp.effects[PBEffects::HyperBeam] > 0 ||
+         (opp.hasActiveAbility?(:TRUANT) && opp.effects[PBEffects::Truant])) && pbAIRandom(100) < 80
+        shouldSwitch = false
       end
     end
     # Sudden Death rule - I'm not sure what this means
@@ -103,9 +103,8 @@ class Battle::AI
           # Don't switch to this if too little HP
           if spikes > 0
             spikesDmg = [8, 6, 4][spikes - 1]
-            if pkmn.hp <= pkmn.totalhp / spikesDmg
-              next if !pkmn.hasType?(:FLYING) && !pkmn.hasActiveAbility?(:LEVITATE)
-            end
+            next if pkmn.hp <= pkmn.totalhp / spikesDmg &&
+                    !pkmn.hasType?(:FLYING) && !pkmn.hasActiveAbility?(:LEVITATE)
           end
         end
         # moveType is the type of the target's last used move
@@ -136,7 +135,7 @@ class Battle::AI
         end
         if @battle.pbRegisterSwitch(idxBattler, list[0])
           PBDebug.log("[AI] #{battler.pbThis} (#{idxBattler}) will switch with " +
-                      "#{@battle.pbParty(idxBattler)[list[0]].name}")
+                      @battle.pbParty(idxBattler)[list[0]].name)
           return true
         end
       end

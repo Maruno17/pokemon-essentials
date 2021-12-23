@@ -47,23 +47,18 @@ def pbBatteryLow?
 end
 
 Events.onMapUpdate += proc { |_sender, _e|
-  if !$game_temp.warned_low_battery && pbBatteryLow?
-    if !$game_temp.in_menu && !$game_temp.in_battle &&
-       !$game_player.move_route_forcing && !$game_temp.message_window_showing &&
-       !pbMapInterpreterRunning?
-      if pbGetTimeNow.sec == 0
-        pbMessage(_INTL("The game has detected that the battery is low. You should save soon to avoid losing your progress."))
-        $game_temp.warned_low_battery = true
-      end
-    end
+  if !$game_temp.warned_low_battery && pbBatteryLow? &&
+     !$game_temp.in_menu && !$game_temp.in_battle && !$game_player.move_route_forcing &&
+     !$game_temp.message_window_showing && !pbMapInterpreterRunning? &&
+     pbGetTimeNow.sec == 0
+    pbMessage(_INTL("The game has detected that the battery is low. You should save soon to avoid losing your progress."))
+    $game_temp.warned_low_battery = true
   end
   if $game_temp.cue_bgm_frame_delay
     $game_temp.cue_bgm_frame_delay -= 1
     if $game_temp.cue_bgm_frame_delay <= 0
       $game_temp.cue_bgm_frame_delay = nil
-      if $game_system.getPlayingBGM == nil
-        pbBGMPlay($game_temp.cue_bgm)
-      end
+      pbBGMPlay($game_temp.cue_bgm) if $game_system.getPlayingBGM.nil?
     end
   end
 }
@@ -133,7 +128,7 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
   map = $map_factory.getMap(thistile[0])
   [2, 1, 0].each do |i|
     tile_id = map.data[thistile[1], thistile[2], i]
-    next if tile_id == nil
+    next if tile_id.nil?
     next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
     if event == $game_player && $bag.has?(:SOOTSACK)
       old_soot = $player.soot
@@ -229,7 +224,7 @@ Events.onMapChanging += proc { |_sender, e|
   map_infos = pbLoadMapInfos
   if $game_map.name == map_infos[new_map_ID].name
     new_map_metadata = GameData::MapMetadata.try_get(new_map_ID)
-    next if new_map_metadata && new_map_metadata.weather
+    next if new_map_metadata&.weather
   end
   $game_screen.weather(:None, 0, 0)
 }
@@ -238,18 +233,18 @@ Events.onMapChanging += proc { |_sender, e|
 Events.onMapChange += proc { |_sender, e|
   old_map_ID = e[0]   # previous map ID, is 0 if no map ID
   new_map_metadata = $game_map.metadata
-  if new_map_metadata && new_map_metadata.teleport_destination
+  if new_map_metadata&.teleport_destination
     $PokemonGlobal.healingSpot = new_map_metadata.teleport_destination
   end
-  $PokemonMap.clear if $PokemonMap
-  $PokemonEncounters.setup($game_map.map_id) if $PokemonEncounters
+  $PokemonMap&.clear
+  $PokemonEncounters&.setup($game_map.map_id)
   $PokemonGlobal.visitedMaps[$game_map.map_id] = true
   next if old_map_ID == 0 || old_map_ID == $game_map.map_id
   next if !new_map_metadata || !new_map_metadata.weather
   map_infos = pbLoadMapInfos
   if $game_map.name == map_infos[old_map_ID].name
     old_map_metadata = GameData::MapMetadata.try_get(old_map_ID)
-    next if old_map_metadata && old_map_metadata.weather
+    next if old_map_metadata&.weather
   end
   new_weather = new_map_metadata.weather
   $game_screen.weather(new_weather[0], 9, 0) if rand(100) < new_weather[1]
@@ -262,14 +257,14 @@ Events.onMapSceneChange += proc { |_sender, e|
   # Update map trail
   if $game_map
     $PokemonGlobal.mapTrail = [] if !$PokemonGlobal.mapTrail
-    if $PokemonGlobal.mapTrail[0] != $game_map.map_id
-      $PokemonGlobal.mapTrail.pop if $PokemonGlobal.mapTrail.length >= 4
+    if $PokemonGlobal.mapTrail[0] != $game_map.map_id && $PokemonGlobal.mapTrail.length >= 4
+      $PokemonGlobal.mapTrail.pop
     end
     $PokemonGlobal.mapTrail = [$game_map.map_id] + $PokemonGlobal.mapTrail
   end
   # Display darkness circle on dark maps
   map_metadata = $game_map.metadata
-  if map_metadata && map_metadata.dark_map
+  if map_metadata&.dark_map
     $game_temp.darkness_sprite = DarknessSprite.new
     scene.spriteset.addUserSprite($game_temp.darkness_sprite)
     if $PokemonGlobal.flashUsed
@@ -277,7 +272,7 @@ Events.onMapSceneChange += proc { |_sender, e|
     end
   else
     $PokemonGlobal.flashUsed = false
-    $game_temp.darkness_sprite.dispose if $game_temp.darkness_sprite
+    $game_temp.darkness_sprite&.dispose
     $game_temp.darkness_sprite = nil
   end
   # Show location signpost
@@ -298,7 +293,7 @@ Events.onMapSceneChange += proc { |_sender, e|
     scene.spriteset.addUserSprite(LocationWindow.new($game_map.name)) if !nosignpost
   end
   # Force cycling/walking
-  if map_metadata && map_metadata.always_bicycle
+  if map_metadata&.always_bicycle
     pbMountBike
   elsif !pbCanUseBike?($game_map.map_id)
     pbDismountBike
@@ -517,9 +512,7 @@ def pbMoveRoute(event, commands, waitComplete = false)
   end
   route.list.push(RPG::MoveCommand.new(PBMoveRoute::ThroughOff))
   route.list.push(RPG::MoveCommand.new(0))
-  if event
-    event.force_move_route(route)
-  end
+  event&.force_move_route(route)
   return route
 end
 
@@ -610,7 +603,7 @@ def pbMoveTowardPlayer(event)
       pbUpdateSceneMap
     end
   end
-  $PokemonMap.addMovedEvent(event.id) if $PokemonMap
+  $PokemonMap&.addMovedEvent(event.id)
 end
 
 def pbJumpToward(dist = 1, playSound = false, cancelSurf = false)

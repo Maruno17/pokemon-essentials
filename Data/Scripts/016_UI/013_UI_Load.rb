@@ -54,7 +54,7 @@ class PokemonLoadPanel < SpriteWrapper
     end
     if @refreshBitmap
       @refreshBitmap = false
-      self.bitmap.clear if self.bitmap
+      self.bitmap&.clear
       if @isContinue
         self.bitmap.blt(0, 0, @bgbitmap.bitmap, Rect.new(0, (@selected) ? 111 * 2 : 0, @bgbitmap.width, 111 * 2))
       else

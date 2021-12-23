@@ -58,9 +58,9 @@ class MosaicPokemonSprite < PokemonSprite
 
   def dispose
     super
-    @mosaicbitmap.dispose if @mosaicbitmap
+    @mosaicbitmap&.dispose
     @mosaicbitmap = nil
-    @mosaicbitmap2.dispose if @mosaicbitmap2
+    @mosaicbitmap2&.dispose
     @mosaicbitmap2 = nil
   end
 
@@ -80,15 +80,15 @@ class MosaicPokemonSprite < PokemonSprite
     @inrefresh = true
     @oldbitmap = bitmap
     if @mosaic <= 0 || !@oldbitmap
-      @mosaicbitmap.dispose if @mosaicbitmap
+      @mosaicbitmap&.dispose
       @mosaicbitmap = nil
-      @mosaicbitmap2.dispose if @mosaicbitmap2
+      @mosaicbitmap2&.dispose
       @mosaicbitmap2 = nil
       self.bitmap = @oldbitmap
     else
       newWidth  = [(@oldbitmap.width / @mosaic), 1].max
       newHeight = [(@oldbitmap.height / @mosaic), 1].max
-      @mosaicbitmap2.dispose if @mosaicbitmap2
+      @mosaicbitmap2&.dispose
       @mosaicbitmap = pbDoEnsureBitmap(@mosaicbitmap, newWidth, newHeight)
       @mosaicbitmap.clear
       @mosaicbitmap2 = pbDoEnsureBitmap(@mosaicbitmap2, @oldbitmap.width, @oldbitmap.height)
@@ -145,12 +145,12 @@ class PokemonBoxArrow < SpriteWrapper
 
   def dispose
     @handsprite.dispose
-    @heldpkmn.dispose if @heldpkmn
+    @heldpkmn&.dispose
     super
   end
 
   def heldPokemon
-    @heldpkmn = nil if @heldpkmn && @heldpkmn.disposed?
+    @heldpkmn = nil if @heldpkmn&.disposed?
     @holding = false if !@heldpkmn
     return @heldpkmn
   end
@@ -231,14 +231,14 @@ class PokemonBoxArrow < SpriteWrapper
   end
 
   def release
-    @heldpkmn.release if @heldpkmn
+    @heldpkmn&.release
   end
 
   def update
     @updating = true
     super
     heldpkmn = heldPokemon
-    heldpkmn.update if heldpkmn
+    heldpkmn&.update
     @handsprite.update
     @holding = false if !heldpkmn
     if @grabbingState > 0
@@ -314,7 +314,7 @@ class PokemonBoxSprite < SpriteWrapper
   def dispose
     if !disposed?
       PokemonBox::BOX_SIZE.times do |i|
-        @pokemonsprites[i].dispose if @pokemonsprites[i]
+        @pokemonsprites[i]&.dispose
         @pokemonsprites[i] = nil
       end
       @boxbitmap.dispose
@@ -371,7 +371,7 @@ class PokemonBoxSprite < SpriteWrapper
         @bg = @boxnumber % PokemonStorage::BASICWALLPAPERQTY
         @storage[@boxnumber].background = @bg
       end
-      @boxbitmap.dispose if @boxbitmap
+      @boxbitmap&.dispose
       @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/box_#{@bg}")
     end
   end
@@ -466,7 +466,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def dispose
     Settings::MAX_PARTY_SIZE.times do |i|
-      @pokemonsprites[i].dispose if @pokemonsprites[i]
+      @pokemonsprites[i]&.dispose
     end
     @boxbitmap.dispose
     @contents.dispose
@@ -539,8 +539,8 @@ class PokemonBoxPartySprite < SpriteWrapper
       xvalues.push(18 + (72 * (i % 2)))
       yvalues.push(2 + (16 * (i % 2)) + (64 * (i / 2)))
     end
-    @pokemonsprites.delete_if { |sprite| sprite && sprite.disposed? }
-    @pokemonsprites.each { |sprite| sprite.refresh if sprite }
+    @pokemonsprites.delete_if { |sprite| sprite&.disposed? }
+    @pokemonsprites.each { |sprite| sprite&.refresh }
     Settings::MAX_PARTY_SIZE.times do |j|
       sprite = @pokemonsprites[j]
       if sprite && !sprite.disposed?
@@ -615,12 +615,12 @@ class PokemonStorageScene
     pbSetSystemFont(@sprites["markingoverlay"].bitmap)
     @sprites["arrow"] = PokemonBoxArrow.new(@arrowviewport)
     @sprites["arrow"].z += 1
-    if command != 2
-      pbSetArrow(@sprites["arrow"], @selection)
-      pbUpdateOverlay(@selection)
-    else
+    if command == 2
       pbPartySetArrow(@sprites["arrow"], @selection)
       pbUpdateOverlay(@selection, @storage.party)
+    else
+      pbSetArrow(@sprites["arrow"], @selection)
+      pbUpdateOverlay(@selection)
     end
     pbSetMosaic(@selection)
     pbSEPlay("PC access")
@@ -630,7 +630,7 @@ class PokemonStorageScene
   def pbCloseBox
     pbFadeOutAndHide(@sprites)
     pbDisposeSpriteHash(@sprites)
-    @markingbitmap.dispose if @markingbitmap
+    @markingbitmap&.dispose
     @boxviewport.dispose
     @boxsidesviewport.dispose
     @arrowviewport.dispose
@@ -1043,24 +1043,21 @@ class PokemonStorageScene
   end
 
   def pbJumpToBox(newbox)
-    if @storage.currentBox != newbox
-      if newbox > @storage.currentBox
-        pbSwitchBoxToRight(newbox)
-      else
-        pbSwitchBoxToLeft(newbox)
-      end
-      @storage.currentBox = newbox
+    return if @storage.currentBox == newbox
+    if newbox > @storage.currentBox
+      pbSwitchBoxToRight(newbox)
+    else
+      pbSwitchBoxToLeft(newbox)
     end
+    @storage.currentBox = newbox
   end
 
   def pbSetMosaic(selection)
-    if !@screen.pbHeldPokemon
-      if @boxForMosaic != @storage.currentBox || @selectionForMosaic != selection
-        @sprites["pokemon"].mosaic = Graphics.frame_rate / 4
-        @boxForMosaic = @storage.currentBox
-        @selectionForMosaic = selection
-      end
-    end
+    return if @screen.pbHeldPokemon
+    return if @boxForMosaic == @storage.currentBox && @selectionForMosaic == selection
+    @sprites["pokemon"].mosaic = Graphics.frame_rate / 4
+    @boxForMosaic = @storage.currentBox
+    @selectionForMosaic = selection
   end
 
   def pbSetQuickSwap(value)
@@ -1489,7 +1486,7 @@ class PokemonStorageScreen
       @scene.pbStartBox(self, command)
       loop do
         selected = @scene.pbSelectBox(@storage.party)
-        if selected == nil
+        if selected.nil?
           if pbHeldPokemon
             pbDisplay(_INTL("You're holding a Pokémon!"))
             next
@@ -1569,7 +1566,7 @@ class PokemonStorageScreen
       @scene.pbStartBox(self, command)
       loop do
         selected = @scene.pbSelectBox(@storage.party)
-        if selected == nil
+        if selected.nil?
           next if pbConfirm(_INTL("Continue Box operations?"))
           break
         else
@@ -1713,11 +1710,11 @@ class PokemonStorageScreen
     if pbAbleCount <= 1 && pbAble?(@storage[box, index]) && !heldpoke
       pbPlayBuzzerSE
       pbDisplay(_INTL("That's your last Pokémon!"))
-    elsif heldpoke && heldpoke.mail
+    elsif heldpoke&.mail
       pbDisplay(_INTL("Please remove the Mail."))
     elsif !heldpoke && @storage[box, index].mail
       pbDisplay(_INTL("Please remove the Mail."))
-    elsif heldpoke && heldpoke.cannot_store
+    elsif heldpoke&.cannot_store
       pbDisplay(_INTL("{1} refuses to go into storage!", heldpoke.name))
     elsif !heldpoke && @storage[box, index].cannot_store
       pbDisplay(_INTL("{1} refuses to go into storage!", @storage[box, index].name))
@@ -1900,12 +1897,12 @@ class PokemonStorageScreen
     if pokemon.item
       itemname = pokemon.item.name
       if pbConfirm(_INTL("Take this {1}?", itemname))
-        if !$bag.add(pokemon.item)
-          pbDisplay(_INTL("Can't store the {1}.", itemname))
-        else
+        if $bag.add(pokemon.item)
           pbDisplay(_INTL("Took the {1}.", itemname))
           pokemon.item = nil
           @scene.pbHardRefresh
+        else
+          pbDisplay(_INTL("Can't store the {1}.", itemname))
         end
       end
     else
@@ -1966,7 +1963,7 @@ class PokemonStorageScreen
         end
         next
       end
-      if selected == nil
+      if selected.nil?
         next if pbConfirm(_INTL("Continue Box operations?"))
         break
       elsif selected[0] == -4   # Box name

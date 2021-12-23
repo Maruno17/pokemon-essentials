@@ -171,7 +171,7 @@ class TilemapRenderer
         bitmap = @bitmaps[filename]
         @frame_counts[filename] = [bitmap.width / SOURCE_TILE_WIDTH, 1].max
         if bitmap.height > SOURCE_TILE_HEIGHT && @bitmap_wraps[filename]
-          @frame_counts[filename] /= 2 if @bitmap_wraps[filename]
+          @frame_counts[filename] /= 2
         end
       end
       return @frame_counts[filename]

@@ -10,7 +10,7 @@ class PictureSprite < SpriteWrapper
   end
 
   def dispose
-    @pictureBitmap.dispose if @pictureBitmap
+    @pictureBitmap&.dispose
     super
   end
 
@@ -22,7 +22,7 @@ class PictureSprite < SpriteWrapper
 
   def update
     super
-    @pictureBitmap.update if @pictureBitmap
+    @pictureBitmap&.update
     # If picture file name is different from current one
     if @customBitmap && @picture.name == ""
       self.bitmap = (@customBitmapIsBitmap) ? @customBitmap : @customBitmap.bitmap
@@ -32,13 +32,13 @@ class PictureSprite < SpriteWrapper
       @hue = @picture.hue.to_i
       # If file name is not empty
       if @picture_name == ""
-        @pictureBitmap.dispose if @pictureBitmap
+        @pictureBitmap&.dispose
         @pictureBitmap = nil
         self.visible = false
         return
       end
       # Get picture graphic
-      @pictureBitmap.dispose if @pictureBitmap
+      @pictureBitmap&.dispose
       @pictureBitmap = AnimatedBitmap.new(@picture_name, @hue)
       self.bitmap = (@pictureBitmap) ? @pictureBitmap.bitmap : nil
     elsif @picture_name == ""
@@ -175,7 +175,7 @@ class EventScene
   end
 
   def main
-    while !disposed?
+    until disposed?
       update
     end
   end

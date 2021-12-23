@@ -122,10 +122,10 @@ class Spriteset_Map
     @character_sprites.each do |sprite|
       sprite.update
     end
-    if self.map != $game_map
-      @weather.fade_in(:None, 0, 20)
-    else
+    if self.map == $game_map
       @weather.fade_in($game_screen.weather_type, $game_screen.weather_max, $game_screen.weather_duration)
+    else
+      @weather.fade_in(:None, 0, 20)
     end
     @weather.ox   = tmox
     @weather.oy   = tmoy

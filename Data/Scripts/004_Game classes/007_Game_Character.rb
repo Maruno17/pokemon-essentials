@@ -244,8 +244,9 @@ class Game_Character
       next if self == event || !event.at_coordinate?(new_x, new_y) || event.through
       return false if self != $game_player || event.character_name != ""
     end
-    if $game_player.x == new_x && $game_player.y == new_y
-      return false if !$game_player.through && @character_name != ""
+    if $game_player.x == new_x && $game_player.y == new_y &&
+       !$game_player.through && @character_name != ""
+      return false
     end
     return true
   end
@@ -356,7 +357,7 @@ class Game_Character
   end
 
   def force_move_route(move_route)
-    if @original_move_route == nil
+    if @original_move_route.nil?
       @original_move_route       = @move_route
       @original_move_route_index = @move_route_index
     end

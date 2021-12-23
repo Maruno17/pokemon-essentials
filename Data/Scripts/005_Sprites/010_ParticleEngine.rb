@@ -57,17 +57,17 @@ class Particle_Engine
   def realloc_effect(event, particle)
     type = pbEventCommentInput(event, 1, "Particle Engine Type")
     if type.nil?
-      particle.dispose if particle
+      particle&.dispose
       return nil
     end
     type = type[0].downcase
     cls = @effects[type]
     if cls.nil?
-      particle.dispose if particle
+      particle&.dispose
       return nil
     end
     if !particle || !particle.is_a?(cls)
-      particle.dispose if particle
+      particle&.dispose
       particle = cls.new(event, @viewport)
     end
     return particle
@@ -93,7 +93,7 @@ class Particle_Engine
         particle = realloc_effect(event, particle)
         @effect[i] = particle
       end
-      particle.update if particle
+      particle&.update
     end
   end
 end
@@ -135,7 +135,7 @@ class ParticleSprite
   end
 
   def dispose
-    @sprite.dispose if @sprite
+    @sprite&.dispose
   end
 
   def bitmap=(value)
@@ -517,9 +517,9 @@ class Particle_Engine::Smokescreen < ParticleEffect_Event
     end
     multiple = 1.7
     xgrav = @xgravity * multiple / @slowdown
-    xgrav = -xgrav if (rand(2) == 1)
+    xgrav = -xgrav if rand(2) == 1
     ygrav = @ygravity * multiple / @slowdown
-    ygrav = -ygrav if (rand(2) == 1)
+    ygrav = -ygrav if rand(2) == 1
     @particlex[i] += xgrav
     @particley[i] += ygrav
     @particlex[i] -= @__offsetx

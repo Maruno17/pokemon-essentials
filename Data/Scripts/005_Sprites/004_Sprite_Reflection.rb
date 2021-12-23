@@ -8,11 +8,9 @@ class Sprite_Reflection
     @event    = event
     @height   = 0
     @fixedheight = false
-    if @event && @event != $game_player
-      if @event.name[/reflection\((\d+)\)/i]
-        @height = $~[1].to_i || 0
-        @fixedheight = true
-      end
+    if @event != $game_player && @event&.name[/reflection\((\d+)\)/i]
+      @height = $~[1].to_i || 0
+      @fixedheight = true
     end
     @viewport = viewport
     @disposed = false
@@ -21,7 +19,7 @@ class Sprite_Reflection
 
   def dispose
     if !@disposed
-      @sprite.dispose if @sprite
+      @sprite&.dispose
       @sprite   = nil
       @disposed = true
     end

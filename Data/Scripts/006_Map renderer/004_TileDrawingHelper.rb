@@ -79,7 +79,7 @@ class TileDrawingHelper
   end
 
   def dispose
-    @tileset.dispose if @tileset
+    @tileset&.dispose
     @tileset = nil
     @autotiles.each_with_index do |autotile, i|
       autotile.dispose
@@ -187,7 +187,7 @@ def bltMinimapAutotile(dstBitmap, x, y, srcBitmap, id)
 end
 
 def passable?(passages, tile_id)
-  return false if tile_id == nil
+  return false if tile_id.nil?
   passage = passages[tile_id]
   return (passage && passage < 15)
 end

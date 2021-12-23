@@ -21,11 +21,11 @@ def pbAutoPositionAll
     metrics = GameData::SpeciesMetrics.get_species_form(sp.species, sp.form)
     bitmap1 = GameData::Species.sprite_bitmap(sp.species, sp.form, nil, nil, nil, true)
     bitmap2 = GameData::Species.sprite_bitmap(sp.species, sp.form)
-    if bitmap1 && bitmap1.bitmap   # Player's y
+    if bitmap1&.bitmap   # Player's y
       metrics.back_sprite[0] = 0
       metrics.back_sprite[1] = (bitmap1.height - (findBottom(bitmap1.bitmap) + 1)) / 2
     end
-    if bitmap2 && bitmap2.bitmap   # Foe's y
+    if bitmap2&.bitmap   # Foe's y
       metrics.front_sprite[0] = 0
       metrics.front_sprite[1] = (bitmap2.height - (findBottom(bitmap2.bitmap) + 1)) / 2
       metrics.front_sprite[1] += 4   # Just because
@@ -33,8 +33,8 @@ def pbAutoPositionAll
     metrics.front_sprite_altitude = 0   # Shouldn't be used
     metrics.shadow_x              = 0
     metrics.shadow_size           = 2
-    bitmap1.dispose if bitmap1
-    bitmap2.dispose if bitmap2
+    bitmap1&.dispose
+    bitmap2&.dispose
   end
   GameData::SpeciesMetrics.save
   Compiler.write_pokemon_metrics

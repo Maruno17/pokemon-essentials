@@ -32,11 +32,11 @@ end
 # Battle intro animation
 #===============================================================================
 def pbSceneStandby
-  $scene.disposeSpritesets if $scene && $scene.is_a?(Scene_Map)
+  $scene.disposeSpritesets if $scene.is_a?(Scene_Map)
   RPG::Cache.clear
   Graphics.frame_reset
   yield
-  $scene.createSpritesets if $scene && $scene.is_a?(Scene_Map)
+  $scene.createSpritesets if $scene.is_a?(Scene_Map)
 end
 
 def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
@@ -46,7 +46,7 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
   # Set up audio
   playingBGS = nil
   playingBGM = nil
-  if $game_system && $game_system.is_a?(Game_System)
+  if $game_system.is_a?(Game_System)
     playingBGS = $game_system.getPlayingBGS
     playingBGM = $game_system.getPlayingBGM
     $game_system.bgm_pause
@@ -120,7 +120,7 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
       end
     end
     # Take screenshot of game, for use in some animations
-    $game_temp.background_bitmap.dispose if $game_temp.background_bitmap
+    $game_temp.background_bitmap&.dispose
     $game_temp.background_bitmap = Graphics.snap_to_bitmap
     # Play main animation
     Graphics.freeze
@@ -138,7 +138,7 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
   yield if block_given?
   # After the battle
   pbPopFade
-  if $game_system && $game_system.is_a?(Game_System)
+  if $game_system.is_a?(Game_System)
     $game_system.bgm_resume(playingBGM)
     $game_system.bgs_resume(playingBGS)
   end

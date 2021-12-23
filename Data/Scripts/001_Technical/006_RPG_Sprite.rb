@@ -6,13 +6,11 @@ class SpriteAnimation
     @sprite = sprite
   end
 
-  %w[
-    x y ox oy viewport flash src_rect opacity tone
-  ].each_with_index do |s, _i|
+  ["x", "y", "ox", "oy", "viewport", "flash", "src_rect", "opacity", "tone"].each do |def_name|
     eval <<-__END__
 
-  def #{s}(*arg)
-    @sprite.#{s}(*arg)
+  def #{def_name}(*arg)
+    @sprite.#{def_name}(*arg)
   end
 
     __END__
@@ -30,7 +28,7 @@ class SpriteAnimation
   def animation(animation, hit, height = 3)
     dispose_animation
     @_animation = animation
-    return if @_animation == nil
+    return if @_animation.nil?
     @_animation_hit      = hit
     @_animation_height   = height
     @_animation_duration = @_animation.frame_max
@@ -66,7 +64,7 @@ class SpriteAnimation
     return if animation == @_loop_animation
     dispose_loop_animation
     @_loop_animation = animation
-    return if @_loop_animation == nil
+    return if @_loop_animation.nil?
     @_loop_animation_index = 0
     fr = 20
     if @_animation.name[/\[\s*(\d+?)\s*\]\s*$/]
@@ -92,7 +90,7 @@ class SpriteAnimation
   end
 
   def dispose_animation
-    return if @_animation_sprites == nil
+    return if @_animation_sprites.nil?
     sprite = @_animation_sprites[0]
     if sprite != nil
       @@_reference_count[sprite.bitmap] -= 1
@@ -108,7 +106,7 @@ class SpriteAnimation
   end
 
   def dispose_loop_animation
-    return if @_loop_animation_sprites == nil
+    return if @_loop_animation_sprites.nil?
     sprite = @_loop_animation_sprites[0]
     if sprite != nil
       @@_reference_count[sprite.bitmap] -= 1
@@ -195,7 +193,7 @@ class SpriteAnimation
     16.times do |i|
       sprite = sprites[i]
       pattern = cell_data[i, 0]
-      if sprite == nil || pattern == nil || pattern == -1
+      if sprite.nil? || pattern.nil? || pattern == -1
         sprite.visible = false if sprite != nil
         next
       end
@@ -377,7 +375,7 @@ module RPG
 
     def pushAnimation(array, anim)
       array.length.times do |i|
-        next if array[i] && array[i].active?
+        next if array[i]&.active?
         array[i] = anim
         return
       end
@@ -397,7 +395,7 @@ module RPG
     end
 
     def dispose_damage
-      return if @_damage_sprite == nil
+      return if @_damage_sprite.nil?
       @_damage_sprite.bitmap.dispose
       @_damage_sprite.dispose
       @_damage_sprite   = nil
@@ -406,14 +404,14 @@ module RPG
 
     def dispose_animation
       @animations.each do |a|
-        a.dispose_animation if a
+        a&.dispose_animation
       end
       @animations.clear
     end
 
     def dispose_loop_animation
       @loopAnimations.each do |a|
-        a.dispose_loop_animation if a
+        a&.dispose_loop_animation
       end
       @loopAnimations.clear
     end
@@ -501,13 +499,13 @@ module RPG
 
     def update_animation
       @animations.each do |a|
-        a.update_animation if a && a.active?
+        a.update_animation if a&.active?
       end
     end
 
     def update_loop_animation
       @loopAnimations.each do |a|
-        a.update_loop_animation if a && a.active?
+        a.update_loop_animation if a&.active?
       end
     end
 

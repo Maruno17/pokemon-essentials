@@ -284,18 +284,20 @@ def pbRandomPokemonFromRule(rules, trainer)
           newmoves.push(m) if m && !newmoves.include?(m)
         end
         if (newmoves.include?(spitup) || newmoves.include?(swallow)) &&
-           !newmoves.include?(stockpile)
-          next unless sketch
+           !newmoves.include?(stockpile) && !sketch
+          next
         end
         if (!newmoves.include?(spitup) && !newmoves.include?(swallow)) &&
-           newmoves.include?(stockpile)
-          next unless sketch
+           newmoves.include?(stockpile) && !sketch
+          next
         end
-        if newmoves.include?(sleeptalk) && !newmoves.include?(rest)
-          next unless (sketch || !moves.include?(rest)) && rand(100) < 20
+        if newmoves.include?(sleeptalk) && !newmoves.include?(rest) &&
+           !((sketch || !moves.include?(rest)) && rand(100) < 20)
+          next
         end
-        if newmoves.include?(snore) && !newmoves.include?(rest)
-          next unless (sketch || !moves.include?(rest)) && rand(100) < 20
+        if newmoves.include?(snore) && !newmoves.include?(rest) &&
+           !((sketch || !moves.include?(rest)) && rand(100) < 20)
+          next
         end
         totalbasedamage = 0
         hasPhysical = false
@@ -310,13 +312,13 @@ def pbRandomPokemonFromRule(rules, trainer)
             hasSpecial = true if d.category == 1
           end
         end
-        if !hasPhysical && ev.include?(:ATTACK)
+        if !hasPhysical && ev.include?(:ATTACK) && rand(100) < 80
           # No physical attack, but emphasizes Attack
-          next if rand(100) < 80
+          next
         end
-        if !hasSpecial && ev.include?(:SPECIAL_ATTACK)
+        if !hasSpecial && ev.include?(:SPECIAL_ATTACK) && rand(100) < 80
           # No special attack, but emphasizes Special Attack
-          next if rand(100) < 80
+          next
         end
         r = rand(10)
         next if r > 6 && totalbasedamage > 180

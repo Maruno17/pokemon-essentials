@@ -319,10 +319,10 @@ module PluginManager
         value = [value] if value.is_a?(String)
         if value.is_a?(Array)
           value.each do |entry|
-            if !entry.is_a?(String)
-              self.error("Plugin '#{name}'s credits array contains a non-string value.")
-            else
+            if entry.is_a?(String)
               credits << entry
+            else
+              self.error("Plugin '#{name}'s credits array contains a non-string value.")
             end
           end
         else
@@ -333,7 +333,7 @@ module PluginManager
       end
     end
     @@Plugins.values.each do |plugin|
-      if plugin[:incompatibilities] && plugin[:incompatibilities].include?(name)
+      if plugin[:incompatibilities]&.include?(name)
         self.error("Plugin '#{plugin[:name]}' is incompatible with '#{name}'. " +
                    "They cannot both be used at the same time.")
       end
@@ -475,7 +475,7 @@ module PluginManager
     print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl when closing this message to copy it to the clipboard.")
     # Give a ~500ms coyote time to start holding Control
     t = System.delta
-    until (System.delta - t) >= 500000
+    until (System.delta - t) >= 500_000
       Input.update
       if Input.press?(Input::CTRL)
         Input.clipboard = message

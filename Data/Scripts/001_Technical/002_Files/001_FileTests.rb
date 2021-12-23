@@ -378,7 +378,7 @@ class StringInput
           f = super
           yield f
         ensure
-          f.close if f
+          f&.close
         end
       else
         super

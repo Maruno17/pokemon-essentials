@@ -85,14 +85,14 @@ def pbSpriteHitTest(sprite, x, y, usealpha = true, wholecanvas = false)
   return false if sprite.bitmap.disposed?
   width = sprite.src_rect.width
   height = sprite.src_rect.height
-  if !wholecanvas
+  if wholecanvas
+    xwidth = 0
+    xheight = 0
+  else
     xwidth = width - 64
     xheight = height - 64
     width = 64 if width > 64 && !usealpha
     height = 64 if height > 64 && !usealpha
-  else
-    xwidth = 0
-    xheight = 0
   end
   width = sprite.bitmap.width if width > sprite.bitmap.width
   height = sprite.bitmap.height if height > sprite.bitmap.height
@@ -125,7 +125,7 @@ def pbSpriteHitTest(sprite, x, y, usealpha = true, wholecanvas = false)
       bitmapX = sprite.src_rect.x + 192 - xmirror
     end
     color = sprite.bitmap.get_pixel(bitmapX, bitmapY)
-    return false if (color.alpha == 0)
+    return false if color.alpha == 0
   end
   return true
 end
@@ -478,7 +478,7 @@ class AnimationCanvas < Sprite
 
   def loadAnimation(anim)
     @animation = anim
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     if @animation.graphic == ""
       @animbitmap = nil
     else
@@ -497,7 +497,7 @@ class AnimationCanvas < Sprite
   end
 
   def animbitmap=(value)
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     @animbitmap = value
     (2...PBAnimation::MAX_SPRITES).each do |i|
       @celsprites[i].bitmap = @animbitmap if @celsprites[i]
@@ -508,12 +508,12 @@ class AnimationCanvas < Sprite
   def dispose
     @user.dispose
     @target.dispose
-    @animbitmap.dispose if @animbitmap
-    @selectedbitmap.dispose if @selectedbitmap
-    @celbitmap.dispose if @celbitmap
-    self.bitmap.dispose if self.bitmap
+    @animbitmap&.dispose
+    @selectedbitmap&.dispose
+    @celbitmap&.dispose
+    self.bitmap&.dispose
     PBAnimation::MAX_SPRITES.times do |i|
-      @celsprites[i].dispose if @celsprites[i]
+      @celsprites[i]&.dispose
     end
     super
   end
@@ -616,7 +616,9 @@ class AnimationCanvas < Sprite
   def setPreviousFrame(i)
     if @currentframe > 0
       cel = @animation[@currentframe - 1][i]
-      if cel != nil
+      if cel.nil?
+        @lastframesprites[i].visible = false
+      else
         @lastframesprites[i].ox = 32
         @lastframesprites[i].oy = 32
         @lastframesprites[i].selected = false
@@ -625,8 +627,6 @@ class AnimationCanvas < Sprite
         @lastframesprites[i].y = cel[AnimFrame::Y] + 64
         @lastframesprites[i].visible = true
         @lastframesprites[i].repaint
-      else
-        @lastframesprites[i].visible = false
       end
     else
       @lastframesprites[i].visible = false
@@ -799,31 +799,30 @@ class AnimationCanvas < Sprite
   def updateInput
     cel = currentCel
     mousepos = Mouse.getMousePos
-    if mousepos && pbSpriteHitTest(self, mousepos[0], mousepos[1], false, true)
-      if Input.trigger?(Input::MOUSELEFT)   # Left mouse button
-        selectedcel = -1
-        usealpha = (Input.press?(Input::ALT)) ? true : false
-        PBAnimation::MAX_SPRITES.times do |j|
-          if pbSpriteHitTest(@celsprites[j], mousepos[0], mousepos[1], usealpha, false)
-            selectedcel = j
-          end
+    if Input.trigger?(Input::MOUSELEFT) && mousepos &&
+       pbSpriteHitTest(self, mousepos[0], mousepos[1], false, true)
+      selectedcel = -1
+      usealpha = (Input.press?(Input::ALT)) ? true : false
+      PBAnimation::MAX_SPRITES.times do |j|
+        if pbSpriteHitTest(@celsprites[j], mousepos[0], mousepos[1], usealpha, false)
+          selectedcel = j
         end
-        if selectedcel < 0
-          if @animbitmap && addSprite(mousepos[0] - BORDERSIZE, mousepos[1] - BORDERSIZE)
-            @selecting = true if !self.locked?(@currentcel)
-            @selectOffsetX = 0
-            @selectOffsetY = 0
-            cel = currentCel
-            invalidate
-          end
-        else
-          @currentcel = selectedcel
+      end
+      if selectedcel < 0
+        if @animbitmap && addSprite(mousepos[0] - BORDERSIZE, mousepos[1] - BORDERSIZE)
           @selecting = true if !self.locked?(@currentcel)
+          @selectOffsetX = 0
+          @selectOffsetY = 0
           cel = currentCel
-          @selectOffsetX = cel[AnimFrame::X] - mousepos[0] + BORDERSIZE
-          @selectOffsetY = cel[AnimFrame::Y] - mousepos[1] + BORDERSIZE
           invalidate
         end
+      else
+        @currentcel = selectedcel
+        @selecting = true if !self.locked?(@currentcel)
+        cel = currentCel
+        @selectOffsetX = cel[AnimFrame::X] - mousepos[0] + BORDERSIZE
+        @selectOffsetY = cel[AnimFrame::Y] - mousepos[1] + BORDERSIZE
+        invalidate
       end
     end
     currentFrame = getCurrentFrame

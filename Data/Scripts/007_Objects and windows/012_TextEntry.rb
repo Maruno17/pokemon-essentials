@@ -23,7 +23,7 @@ class CharacterEntryHelper
   end
 
   def passwordChar=(value)
-    @passwordChar = value ? value : ""
+    @passwordChar = value || ""
   end
 
   def length
@@ -192,7 +192,7 @@ class Window_TextEntry < SpriteWindow_Base
     @helper.cursor = 0 if @helper.cursor < 0
     startpos = @helper.cursor
     fromcursor = 0
-    while (startpos > 0)
+    while startpos > 0
       c = (@helper.passwordChar != "") ? @helper.passwordChar : textscan[startpos - 1]
       fromcursor += bitmap.text_size(c).width
       break if fromcursor > width - 4
@@ -226,7 +226,7 @@ class Window_TextEntry_Keyboard < Window_TextEntry
   def update
     @frame += 1
     @frame %= 20
-    self.refresh if ((@frame % 10) == 0)
+    self.refresh if (@frame % 10) == 0
     return if !self.active
     # Moving cursor
     if Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
@@ -460,7 +460,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   def update
     @frame += 1
     @frame %= 20
-    self.refresh if ((@frame % 10) == 0)
+    self.refresh if (@frame % 10) == 0
     return if !self.active
     # Moving cursor
     if Input.triggerex?(:UP) || Input.repeatex?(:UP)
@@ -543,7 +543,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
           textheight = text[4]
           posToCursor = @cursorColumn - thiscolumn
           if posToCursor >= 0
-            partialString = text[0].scan(/./m)[0, posToCursor].join("")
+            partialString = text[0].scan(/./m)[0, posToCursor].join
             cursorX += bitmap.text_size(partialString).width
           end
           break

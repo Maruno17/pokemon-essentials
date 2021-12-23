@@ -42,7 +42,7 @@ def pbEditMysteryGift(type, item, id = 0, giftname = "")
       end
     elsif type > 0   # Item
       params = ChooseNumberParams.new
-      params.setRange(1, 99999)
+      params.setRange(1, 99_999)
       params.setDefaultValue(type)
       params.setCancelValue(0)
       loop do
@@ -67,7 +67,7 @@ def pbEditMysteryGift(type, item, id = 0, giftname = "")
         idlist.push(i[0])
       end
       params = ChooseNumberParams.new
-      params.setRange(0, 99999)
+      params.setRange(0, 99_999)
       params.setDefaultValue(id)
       params.setCancelValue(0)
       loop do
@@ -99,9 +99,7 @@ end
 
 def pbCreateMysteryGift(type, item)
   gift = pbEditMysteryGift(type, item)
-  if !gift
-    pbMessage(_INTL("Didn't create a gift."))
-  else
+  if gift
     begin
       if safeExists?("MysteryGiftMaster.txt")
         master = IO.read("MysteryGiftMaster.txt")
@@ -116,6 +114,8 @@ def pbCreateMysteryGift(type, item)
     rescue
       pbMessage(_INTL("Couldn't save the gift to MysteryGiftMaster.txt."))
     end
+  else
+    pbMessage(_INTL("Didn't create a gift."))
   end
 end
 

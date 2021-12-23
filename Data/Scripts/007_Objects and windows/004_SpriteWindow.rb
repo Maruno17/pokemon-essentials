@@ -113,16 +113,16 @@ class SpriteWindow < Window
   def dispose
     if !self.disposed?
       @sprites.each do |i|
-        i[1].dispose if i[1]
+        i[1]&.dispose
         @sprites[i[0]] = nil
       end
       @sidebitmaps.each_with_index do |bitmap, i|
-        bitmap.dispose if bitmap
+        bitmap&.dispose
         @sidebitmaps[i] = nil
       end
       @blankcontents.dispose
-      @cursorbitmap.dispose if @cursorbitmap
-      @backbitmap.dispose if @backbitmap
+      @cursorbitmap&.dispose
+      @backbitmap&.dispose
       @sprites.clear
       @sidebitmaps.clear
       @_windowskin = nil
@@ -143,7 +143,7 @@ class SpriteWindow < Window
   def viewport=(value)
     @viewport = value
     @spritekeys.each do |i|
-      @sprites[i].dispose if @sprites[i]
+      @sprites[i]&.dispose
       if @sprites[i].is_a?(Sprite)
         @sprites[i] = Sprite.new(@viewport)
       else
@@ -189,10 +189,10 @@ class SpriteWindow < Window
   end
 
   def cursor_rect=(value)
-    if !value
-      @cursor_rect.empty
-    else
+    if value
       @cursor_rect.set(value.x, value.y, value.width, value.height)
+    else
+      @cursor_rect.empty
     end
   end
 
@@ -358,7 +358,7 @@ class SpriteWindow < Window
         @trim = [16, 16, 16, 16]
       end
     else
-      if value && value.is_a?(Bitmap) && !value.disposed? && value.width == 128
+      if value.is_a?(Bitmap) && !value.disposed? && value.width == 128
         @rpgvx = true
       else
         @rpgvx = false
@@ -442,7 +442,7 @@ class SpriteWindow < Window
 
   def ensureBitmap(bitmap, dwidth, dheight)
     if !bitmap || bitmap.disposed? || bitmap.width < dwidth || bitmap.height < dheight
-      bitmap.dispose if bitmap
+      bitmap&.dispose
       bitmap = Bitmap.new([1, dwidth].max, [1, dheight].max)
     end
     return bitmap
@@ -631,15 +631,13 @@ class SpriteWindow < Window
     end
     @sprites["contents"].x = @x + trimStartX
     @sprites["contents"].y = @y + trimStartY
-    if (@compat & CompatBits::ShowScrollArrows) > 0 && @skinformat == 0
-      # Compatibility mode: Make scroll arrows visible
-      if @skinformat == 0 && @_windowskin && !@_windowskin.disposed? &&
-         @contents && !@contents.disposed?
-        @sprites["scroll0"].visible = @visible && hascontents && @oy > 0
-        @sprites["scroll1"].visible = @visible && hascontents && @ox > 0
-        @sprites["scroll2"].visible = @visible && (@contents.width - @ox) > @width - trimWidth
-        @sprites["scroll3"].visible = @visible && (@contents.height - @oy) > @height - trimHeight
-      end
+    if (@compat & CompatBits::ShowScrollArrows) > 0 && @skinformat == 0 &&
+       @_windowskin && !@_windowskin.disposed? &&
+       @contents && !@contents.disposed?
+      @sprites["scroll0"].visible = @visible && hascontents && @oy > 0
+      @sprites["scroll1"].visible = @visible && hascontents && @ox > 0
+      @sprites["scroll2"].visible = @visible && (@contents.width - @ox) > @width - trimWidth
+      @sprites["scroll3"].visible = @visible && (@contents.height - @oy) > @height - trimHeight
     end
     if @_windowskin && !@_windowskin.disposed?
       borderX = startX + endX
@@ -781,7 +779,13 @@ class SpriteWindow < Window
         @sprites["back"].src_rect.set(0, 0, 0, 0)
       end
     end
-    if @openness != 255
+    if @openness == 255
+      @spritekeys.each do |k|
+        sprite = @sprites[k]
+        sprite.zoom_x = 1.0
+        sprite.zoom_y = 1.0
+      end
+    else
       opn = @openness / 255.0
       @spritekeys.each do |k|
         sprite = @sprites[k]
@@ -790,12 +794,6 @@ class SpriteWindow < Window
         sprite.zoom_x = 1.0
         sprite.oy = 0
         sprite.y = (@y + (@height / 2.0) + (@height * ratio * opn) - (@height / 2 * opn)).floor
-      end
-    else
-      @spritekeys.each do |k|
-        sprite = @sprites[k]
-        sprite.zoom_x = 1.0
-        sprite.zoom_y = 1.0
       end
     end
     i = 0
@@ -861,7 +859,7 @@ class SpriteWindow_Base < SpriteWindow
   end
 
   def setSkin(skin)   # Filename of windowskin to apply. Supports XP, VX, and animated skins.
-    @customskin.dispose if @customskin
+    @customskin&.dispose
     @customskin = nil
     resolvedName = pbResolveBitmap(skin)
     return if nil_or_empty?(resolvedName)
@@ -875,7 +873,7 @@ class SpriteWindow_Base < SpriteWindow
   end
 
   def setSystemFrame
-    @customskin.dispose if @customskin
+    @customskin&.dispose
     @customskin = nil
     __setWindowskin(@sysframe.bitmap)
     __resolveSystemFrame
@@ -899,7 +897,7 @@ class SpriteWindow_Base < SpriteWindow
     if @curframe != MessageConfig.pbGetSystemFrame
       @curframe = MessageConfig.pbGetSystemFrame
       if @sysframe && !@customskin
-        @sysframe.dispose if @sysframe
+        @sysframe&.dispose
         @sysframe = AnimatedBitmap.new(@curframe)
         RPG::Cache.retain(@curframe) if @curframe && !@curframe.empty?
         @resolvedFrame = nil
@@ -924,9 +922,9 @@ class SpriteWindow_Base < SpriteWindow
   end
 
   def dispose
-    self.contents.dispose if self.contents
+    self.contents&.dispose
     @sysframe.dispose
-    @customskin.dispose if @customskin
+    @customskin&.dispose
     super
   end
 end

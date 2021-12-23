@@ -26,7 +26,7 @@ class IconWindow < SpriteWindow_Base
   end
 
   def clearBitmaps
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = nil
     self.contents = nil if !self.disposed?
   end
@@ -40,13 +40,13 @@ class IconWindow < SpriteWindow_Base
   def setBitmap(file, hue = 0)
     clearBitmaps
     @name = file
-    return if file == nil
-    if file != ""
+    return if file.nil?
+    if file == ""
+      @_iconbitmap = nil
+    else
       @_iconbitmap = AnimatedBitmap.new(file, hue)
       # for compatibility
       self.contents = @_iconbitmap ? @_iconbitmap.bitmap : nil
-    else
-      @_iconbitmap = nil
     end
   end
 end
@@ -84,7 +84,7 @@ class PictureWindow < SpriteWindow_Base
   end
 
   def clearBitmaps
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = nil
     self.contents = nil if !self.disposed?
   end

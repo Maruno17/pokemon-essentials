@@ -8,7 +8,7 @@ class BushBitmap
   end
 
   def dispose
-    @bitmaps.each { |b| b.dispose if b }
+    @bitmaps.each { |b| b&.dispose }
   end
 
   def bitmap
@@ -80,13 +80,13 @@ class Sprite_Character < RPG::Sprite
   end
 
   def dispose
-    @bushbitmap.dispose if @bushbitmap
+    @bushbitmap&.dispose
     @bushbitmap = nil
-    @charbitmap.dispose if @charbitmap
+    @charbitmap&.dispose
     @charbitmap = nil
-    @reflection.dispose if @reflection
+    @reflection&.dispose
     @reflection = nil
-    @surfbase.dispose if @surfbase
+    @surfbase&.dispose
     @surfbase = nil
     super
   end
@@ -102,12 +102,12 @@ class Sprite_Character < RPG::Sprite
       @character_name = @character.character_name
       @character_hue  = @character.character_hue
       @oldbushdepth   = @character.bush_depth
-      @charbitmap.dispose if @charbitmap
+      @charbitmap&.dispose
       if @tile_id >= 384
         @charbitmap = pbGetTileBitmap(@character.map.tileset_name, @tile_id,
                                       @character_hue, @character.width, @character.height)
         @charbitmapAnimated = false
-        @bushbitmap.dispose if @bushbitmap
+        @bushbitmap&.dispose
         @bushbitmap = nil
         @spriteoffset = false
         @cw = Game_Map::TILE_WIDTH * @character.width
@@ -121,7 +121,7 @@ class Sprite_Character < RPG::Sprite
         )
         RPG::Cache.retain('Graphics/Characters/', @character_name, @character_hue) if @character == $game_player
         @charbitmapAnimated = true
-        @bushbitmap.dispose if @bushbitmap
+        @bushbitmap&.dispose
         @bushbitmap = nil
         @spriteoffset = @character_name[/offset/i]
         @cw = @charbitmap.width / 4
@@ -163,7 +163,7 @@ class Sprite_Character < RPG::Sprite
       animation(animation, true)
       @character.animation_id = 0
     end
-    @reflection.update if @reflection
-    @surfbase.update if @surfbase
+    @reflection&.update
+    @surfbase&.update
   end
 end

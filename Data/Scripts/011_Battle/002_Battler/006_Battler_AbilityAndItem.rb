@@ -378,7 +378,7 @@ class Battle::Battler
 
   def pbItemsOnUnnerveEnding
     @battle.pbPriority(true).each do |b|
-      b.pbHeldItemTriggerCheck if b.item && b.item.is_berry?
+      b.pbHeldItemTriggerCheck if b.item&.is_berry?
     end
   end
 

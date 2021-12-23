@@ -281,25 +281,21 @@ class PokemonEncounters
       favored_type = nil
       case first_pkmn.ability_id
       when :FLASHFIRE
-        if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
-          favored_type = :FIRE if GameData::Type.exists?(:FIRE) && rand(100) < 50
-        end
+        favored_type = :FIRE if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS &&
+                                GameData::Type.exists?(:FIRE) && rand(100) < 50
       when :HARVEST
-        if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
-          favored_type = :GRASS if GameData::Type.exists?(:GRASS) && rand(100) < 50
-        end
+        favored_type = :GRASS if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS &&
+                                 GameData::Type.exists?(:GRASS) && rand(100) < 50
       when :LIGHTNINGROD
-        if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
-          favored_type = :ELECTRIC if GameData::Type.exists?(:ELECTRIC) && rand(100) < 50
-        end
+        favored_type = :ELECTRIC if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS &&
+                                    GameData::Type.exists?(:ELECTRIC) && rand(100) < 50
       when :MAGNETPULL
         favored_type = :STEEL if GameData::Type.exists?(:STEEL) && rand(100) < 50
       when :STATIC
         favored_type = :ELECTRIC if GameData::Type.exists?(:ELECTRIC) && rand(100) < 50
       when :STORMDRAIN
-        if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
-          favored_type = :WATER if GameData::Type.exists?(:WATER) && rand(100) < 50
-        end
+        favored_type = :WATER if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS &&
+                                 GameData::Type.exists?(:WATER) && rand(100) < 50
       end
       if favored_type
         new_enc_list = []
@@ -433,7 +429,7 @@ def pbGenerateWildPokemon(species, level, isRoamer = false)
     end
   end
   # Give Pokérus
-  genwildpoke.givePokerus if rand(65536) < Settings::POKERUS_CHANCE
+  genwildpoke.givePokerus if rand(65_536) < Settings::POKERUS_CHANCE
   # Change wild Pokémon's gender/nature depending on the lead party Pokémon's
   # ability
   if first_pkmn

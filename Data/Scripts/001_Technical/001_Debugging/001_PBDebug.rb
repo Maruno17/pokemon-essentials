@@ -7,7 +7,7 @@ module PBDebug
     rescue
       PBDebug.log("")
       PBDebug.log("**Exception: #{$!.message}")
-      PBDebug.log("#{$!.backtrace.inspect}")
+      PBDebug.log($!.backtrace.inspect.to_s)
       PBDebug.log("")
       pbPrintException($!)   # if $INTERNAL
       PBDebug.flush

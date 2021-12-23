@@ -132,7 +132,7 @@ class GraphicsLister
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
   end
 
@@ -320,7 +320,7 @@ class MapLister
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
   end
 
@@ -344,14 +344,12 @@ class MapLister
   end
 
   def value(index)
-    if @addGlobalOffset == 1
-      return 0 if index == 0
-    end
+    return 0 if @addGlobalOffset == 1 && index == 0
     return (index < 0) ? -1 : @maps[index - @addGlobalOffset][0]
   end
 
   def refresh(index)
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     return if index < 0
     return if index == 0 && @addGlobalOffset == 1
     @sprite.bitmap = createMinimap(@maps[index - @addGlobalOffset][0])
@@ -426,7 +424,7 @@ class ItemLister
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
   end
 
@@ -487,7 +485,7 @@ class TrainerTypeLister
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
   end
 
@@ -529,7 +527,7 @@ class TrainerTypeLister
   end
 
   def refresh(index)
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     return if index < 0
     begin
       if @ids[index].is_a?(Symbol)
@@ -566,7 +564,7 @@ class TrainerBattleLister
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
     @pkmnList.dispose
   end
@@ -629,7 +627,7 @@ class TrainerBattleLister
 
   def refresh(index)
     # Refresh trainer sprite
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     return if index < 0
     begin
       if @ids[index].is_a?(Array)

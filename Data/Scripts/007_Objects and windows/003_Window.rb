@@ -127,16 +127,16 @@ class Window
   def dispose
     if !self.disposed?
       @sprites.each do |i|
-        i[1].dispose if i[1]
+        i[1]&.dispose
         @sprites[i[0]] = nil
       end
       @sidebitmaps.each_with_index do |bitmap, i|
-        bitmap.dispose if bitmap
+        bitmap&.dispose
         @sidebitmaps[i] = nil
       end
       @blankcontents.dispose
-      @cursorbitmap.dispose if @cursorbitmap
-      @backbitmap.dispose if @backbitmap
+      @cursorbitmap&.dispose
+      @backbitmap&.dispose
       @sprites.clear
       @sidebitmaps.clear
       @_windowskin = nil
@@ -191,7 +191,7 @@ class Window
 
   def windowskin=(value)
     @_windowskin = value
-    if value && value.is_a?(Bitmap) && !value.disposed? && value.width == 128
+    if value.is_a?(Bitmap) && !value.disposed? && value.width == 128
       @rpgvx = true
     else
       @rpgvx = false
@@ -210,10 +210,10 @@ class Window
   end
 
   def cursor_rect=(value)
-    if !value
-      @cursor_rect.empty
-    else
+    if value
       @cursor_rect.set(value.x, value.y, value.width, value.height)
+    else
+      @cursor_rect.empty
     end
   end
 
@@ -322,7 +322,7 @@ class Window
 
   def ensureBitmap(bitmap, dwidth, dheight)
     if !bitmap || bitmap.disposed? || bitmap.width < dwidth || bitmap.height < dheight
-      bitmap.dispose if bitmap
+      bitmap&.dispose
       bitmap = Bitmap.new([1, dwidth].max, [1, dheight].max)
     end
     return bitmap
@@ -571,7 +571,12 @@ class Window
         @sprites["back"].src_rect.set(0, 0, 0, 0)
       end
     end
-    if @openness != 255
+    if @openness == 255
+      @spritekeys.each do |k|
+        sprite = @sprites[k]
+        sprite.zoom_y = 1.0
+      end
+    else
       opn = @openness / 255.0
       @spritekeys.each do |k|
         sprite = @sprites[k]
@@ -579,11 +584,6 @@ class Window
         sprite.zoom_y = opn
         sprite.oy = 0
         sprite.y = (@y + (@height / 2.0) + (@height * ratio * opn) - (@height / 2 * opn)).floor
-      end
-    else
-      @spritekeys.each do |k|
-        sprite = @sprites[k]
-        sprite.zoom_y = 1.0
       end
     end
     i = 0

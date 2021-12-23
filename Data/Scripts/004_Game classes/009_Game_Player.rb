@@ -185,13 +185,12 @@ class Game_Player < Game_Character
     return result if checkIfRunning && $game_system.map_interpreter.running?
     # All event loops
     $game_map.events.values.each do |event|
+      next if !triggers.include?(event.trigger)
       next if !event.name[/trainer\((\d+)\)/i]
       distance = $~[1].to_i
-      # If event coordinates and triggers are consistent
-      if pbEventCanReachPlayer?(event, self, distance) && triggers.include?(event.trigger)
-        # If starting determinant is front event (other than jumping)
-        result.push(event) if !event.jumping? && !event.over_trigger?
-      end
+      next if !pbEventCanReachPlayer?(event, self, distance)
+      next if event.jumping? || event.over_trigger?
+      result.push(event)
     end
     return result
   end
@@ -202,13 +201,12 @@ class Game_Player < Game_Character
     return result if checkIfRunning && $game_system.map_interpreter.running?
     # All event loops
     $game_map.events.values.each do |event|
+      next if !triggers.include?(event.trigger)
       next if !event.name[/counter\((\d+)\)/i]
       distance = $~[1].to_i
-      # If event coordinates and triggers are consistent
-      if pbEventFacesPlayer?(event, self, distance) && triggers.include?(event.trigger)
-        # If starting determinant is front event (other than jumping)
-        result.push(event) if !event.jumping? && !event.over_trigger?
-      end
+      next if !pbEventFacesPlayer?(event, self, distance)
+      next if event.jumping? || event.over_trigger?
+      result.push(event)
     end
     return result
   end
@@ -355,32 +353,29 @@ class Game_Player < Game_Character
     return false if !$game_map.valid?(new_x, new_y)
     # All event loops
     $game_map.events.values.each do |event|
+      next if !triggers.include?(event.trigger)
       # If event coordinates and triggers are consistent
       next if !event.at_coordinate?(new_x, new_y)
-      next if !triggers.include?(event.trigger)
       # If starting determinant is front event (other than jumping)
       next if event.jumping? || event.over_trigger?
       event.start
       result = true
     end
     # If fitting event is not found
-    if result == false
-      # If front tile is a counter
-      if $game_map.counter?(new_x, new_y)
-        # Calculate coordinates of 1 tile further away
-        new_x += (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
-        new_y += (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
-        return false if !$game_map.valid?(new_x, new_y)
-        # All event loops
-        $game_map.events.values.each do |event|
-          # If event coordinates and triggers are consistent
-          next if !event.at_coordinate?(new_x, new_y)
-          next if !triggers.include?(event.trigger)
-          # If starting determinant is front event (other than jumping)
-          next if event.jumping? || event.over_trigger?
-          event.start
-          result = true
-        end
+    if result == false && $game_map.counter?(new_x, new_y)
+      # Calculate coordinates of 1 tile further away
+      new_x += (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
+      new_y += (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
+      return false if !$game_map.valid?(new_x, new_y)
+      # All event loops
+      $game_map.events.values.each do |event|
+        next if !triggers.include?(event.trigger)
+        # If event coordinates and triggers are consistent
+        next if !event.at_coordinate?(new_x, new_y)
+        # If starting determinant is front event (other than jumping)
+        next if event.jumping? || event.over_trigger?
+        event.start
+        result = true
       end
     end
     return result
@@ -559,11 +554,10 @@ end
 def pbGetPlayerCharset(charset, trainer = nil, force = false)
   trainer = $player if !trainer
   outfit = (trainer) ? trainer.outfit : 0
-  if $game_player && $game_player.charsetData && !force
-    return nil if $game_player.charsetData[0] == trainer.character_ID &&
-                  $game_player.charsetData[1] == charset &&
-                  $game_player.charsetData[2] == outfit
-  end
+  return nil if !force && $game_player&.charsetData &&
+                $game_player.charsetData[0] == trainer.character_ID &&
+                $game_player.charsetData[1] == charset &&
+                $game_player.charsetData[2] == outfit
   $game_player.charsetData = [trainer.character_ID, charset, outfit] if $game_player
   ret = charset
   if pbResolveBitmap("Graphics/Characters/" + ret + "_" + outfit.to_s)

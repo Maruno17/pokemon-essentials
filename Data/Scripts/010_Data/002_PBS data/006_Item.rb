@@ -188,7 +188,7 @@ module GameData
         :KYOGRE   => [:BLUEORB],
         :GROUDON  => [:REDORB]
       }
-      return combos[species] && combos[species].include?(@id)
+      return combos[species]&.include?(@id)
     end
   end
 end

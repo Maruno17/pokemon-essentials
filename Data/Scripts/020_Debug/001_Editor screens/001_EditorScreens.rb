@@ -361,13 +361,11 @@ def pbTrainerTypeEditor
     if tr_type
       case button
       when Input::ACTION
-        if tr_type.is_a?(Symbol)
-          if pbConfirmMessageSerious("Delete this trainer type?")
-            GameData::TrainerType::DATA.delete(tr_type)
-            GameData::TrainerType.save
-            pbConvertTrainerData
-            pbMessage(_INTL("The Trainer type was deleted."))
-          end
+        if tr_type.is_a?(Symbol) && pbConfirmMessageSerious("Delete this trainer type?")
+          GameData::TrainerType::DATA.delete(tr_type)
+          GameData::TrainerType.save
+          pbConvertTrainerData
+          pbMessage(_INTL("The Trainer type was deleted."))
         end
       when Input::USE
         if tr_type.is_a?(Symbol)
@@ -502,13 +500,11 @@ def pbTrainerBattleEditor
     if trainer_id
       case button
       when Input::ACTION
-        if trainer_id.is_a?(Array)
-          if pbConfirmMessageSerious("Delete this trainer battle?")
-            tr_data = GameData::Trainer::DATA[trainer_id]
-            GameData::Trainer::DATA.delete(trainer_id)
-            modified = true
-            pbMessage(_INTL("The Trainer battle was deleted."))
-          end
+        if trainer_id.is_a?(Array) && pbConfirmMessageSerious("Delete this trainer battle?")
+          tr_data = GameData::Trainer::DATA[trainer_id]
+          GameData::Trainer::DATA.delete(trainer_id)
+          modified = true
+          pbMessage(_INTL("The Trainer battle was deleted."))
         end
       when Input::USE
         if trainer_id.is_a?(Array)   # Edit existing trainer
@@ -874,8 +870,8 @@ def pbItemEditor
     [_INTL("Name"),        ItemNameProperty,                   _INTL("Name of this item as displayed by the game.")],
     [_INTL("NamePlural"),  ItemNameProperty,                   _INTL("Plural name of this item as displayed by the game.")],
     [_INTL("Pocket"),      PocketProperty,                     _INTL("Pocket in the Bag where this item is stored.")],
-    [_INTL("Price"),       LimitProperty.new(999999),          _INTL("Purchase price of this item.")],
-    [_INTL("SellPrice"),   LimitProperty.new(999999),          _INTL("Sell price of this item. If blank, is half the purchase price.")],
+    [_INTL("Price"),       LimitProperty.new(999_999),         _INTL("Purchase price of this item.")],
+    [_INTL("SellPrice"),   LimitProperty.new(999_999),         _INTL("Sell price of this item. If blank, is half the purchase price.")],
     [_INTL("Description"), StringProperty,                     _INTL("Description of this item")],
     [_INTL("FieldUse"),    EnumProperty.new(field_use_array),  _INTL("How this item can be used outside of battle.")],
     [_INTL("BattleUse"),   EnumProperty.new(battle_use_array), _INTL("How this item can be used within a battle.")],
@@ -887,13 +883,11 @@ def pbItemEditor
     if item
       case button
       when Input::ACTION
-        if item.is_a?(Symbol)
-          if pbConfirmMessageSerious("Delete this item?")
-            GameData::Item::DATA.delete(item)
-            GameData::Item.save
-            Compiler.write_items
-            pbMessage(_INTL("The item was deleted."))
-          end
+        if item.is_a?(Symbol) && pbConfirmMessageSerious("Delete this item?")
+          GameData::Item::DATA.delete(item)
+          GameData::Item.save
+          Compiler.write_items
+          pbMessage(_INTL("The item was deleted."))
         end
       when Input::USE
         if item.is_a?(Symbol)
@@ -974,7 +968,7 @@ def pbItemEditorNew(default_name)
   pocket = PocketProperty.set("", 0)
   return if pocket == 0
   # Choose a price
-  price = LimitProperty.new(999999).set(_INTL("Purchase price"), -1)
+  price = LimitProperty.new(999_999).set(_INTL("Purchase price"), -1)
   return if price == -1
   # Choose a description
   description = StringProperty.set(_INTL("Description"), "")
@@ -1030,7 +1024,7 @@ def pbPokemonEditor
     [_INTL("WildItemRare"),      GameDataPoolProperty.new(:Item),    _INTL("Item(s) rarely held by wild Pokémon of this species.")],
     [_INTL("EggGroup 1"),        GameDataProperty.new(:EggGroup),    _INTL("Compatibility group (egg group) for breeding purposes.")],
     [_INTL("EggGroup 2"),        GameDataProperty.new(:EggGroup),    _INTL("Compatibility group (egg group) for breeding purposes.")],
-    [_INTL("HatchSteps"),        LimitProperty.new(99999),           _INTL("Number of steps until an egg of this species hatches.")],
+    [_INTL("HatchSteps"),        LimitProperty.new(99_999),          _INTL("Number of steps until an egg of this species hatches.")],
     [_INTL("Incense"),           ItemProperty,                       _INTL("Item needed to be held by a parent to produce an egg of this species.")],
     [_INTL("Offspring"),         GameDataPoolProperty.new(:Species), _INTL("All possible species that an egg can be when breeding for an egg of this species (if blank, the egg can only be this species).")],
     [_INTL("Evolutions"),        EvolutionsProperty.new,             _INTL("Evolution paths of this species.")],
@@ -1039,20 +1033,18 @@ def pbPokemonEditor
     [_INTL("Color"),             GameDataProperty.new(:BodyColor),   _INTL("Pokémon's body color.")],
     [_INTL("Shape"),             GameDataProperty.new(:BodyShape),   _INTL("Body shape of this species.")],
     [_INTL("Habitat"),           GameDataProperty.new(:Habitat),     _INTL("The habitat of this species.")],
-    [_INTL("Generation"),        LimitProperty.new(99999),           _INTL("The number of the generation the Pokémon debuted in.")],
+    [_INTL("Generation"),        LimitProperty.new(99_999),          _INTL("The number of the generation the Pokémon debuted in.")],
     [_INTL("Flags"),             StringListProperty,                 _INTL("Words/phrases that distinguish this species from others.")]
   ]
   pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
     if species
       case button
       when Input::ACTION
-        if species.is_a?(Symbol)
-          if pbConfirmMessageSerious("Delete this species?")
-            GameData::Species::DATA.delete(species)
-            GameData::Species.save
-            Compiler.write_pokemon
-            pbMessage(_INTL("The species was deleted."))
-          end
+        if species.is_a?(Symbol) && pbConfirmMessageSerious("Delete this species?")
+          GameData::Species::DATA.delete(species)
+          GameData::Species.save
+          Compiler.write_pokemon
+          pbMessage(_INTL("The species was deleted."))
         end
       when Input::USE
         if species.is_a?(Symbol)
@@ -1259,7 +1251,7 @@ def pbRegionalDexEditor(dex)
         case pbMessage(_INTL("Save changes?"),
                        [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
         when 0   # Save all changes to Dex
-          dex.slice!(-1) while !dex[-1]
+          dex.slice!(-1) until dex[-1]
           ret = dex
           break
         when 1   # Just quit

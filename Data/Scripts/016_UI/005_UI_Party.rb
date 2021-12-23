@@ -347,12 +347,10 @@ class PokemonPartyPanel < SpriteWrapper
       @pkmnsprite.color    = self.color
       @pkmnsprite.selected = self.selected
     end
-    if @helditemsprite && !@helditemsprite.disposed?
-      if @helditemsprite.visible
-        @helditemsprite.x     = self.x + 62
-        @helditemsprite.y     = self.y + 48
-        @helditemsprite.color = self.color
-      end
+    if @helditemsprite&.visible && !@helditemsprite.disposed?
+      @helditemsprite.x     = self.x + 62
+      @helditemsprite.y     = self.y + 48
+      @helditemsprite.color = self.color
     end
     if @overlaysprite && !@overlaysprite.disposed?
       @overlaysprite.x     = self.x
@@ -361,7 +359,7 @@ class PokemonPartyPanel < SpriteWrapper
     end
     if @refreshBitmap
       @refreshBitmap = false
-      @overlaysprite.bitmap.clear if @overlaysprite.bitmap
+      @overlaysprite.bitmap&.clear
       basecolor   = Color.new(248, 248, 248)
       shadowcolor = Color.new(40, 40, 40)
       pbSetSystemFont(@overlaysprite.bitmap)
@@ -1157,11 +1155,10 @@ class PokemonPartyScreen
 
   def pbPokemonScreen
     can_access_storage = false
-    if $player.has_box_link || $bag.has?(:POKEMONBOXLINK)
-      if !$game_switches[Settings::DISABLE_BOX_LINK_SWITCH] &&
-         !$game_map.metadata&.has_flag?("DisableBoxLink")
-        can_access_storage = true
-      end
+    if ($player.has_box_link || $bag.has?(:POKEMONBOXLINK)) &&
+       !$game_switches[Settings::DISABLE_BOX_LINK_SWITCH] &&
+       !$game_map.metadata&.has_flag?("DisableBoxLink")
+      can_access_storage = true
     end
     @scene.pbStartScene(@party,
                         (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),
@@ -1317,10 +1314,8 @@ class PokemonPartyScreen
           item = @scene.pbChooseItem($bag) {
             @scene.pbSetHelpText((@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
           }
-          if item
-            if pbGiveItemToPokemon(item, pkmn, self, pkmnid)
-              pbRefreshSingle(pkmnid)
-            end
+          if item && pbGiveItemToPokemon(item, pkmn, self, pkmnid)
+            pbRefreshSingle(pkmnid)
           end
         elsif cmdTakeItem >= 0 && command == cmdTakeItem   # Take
           if pbTakeItemFromPokemon(pkmn, self)

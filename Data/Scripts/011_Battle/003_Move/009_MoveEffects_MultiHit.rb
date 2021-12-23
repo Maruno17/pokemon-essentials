@@ -221,13 +221,12 @@ end
 class Battle::Move::TwoTurnAttackOneTurnInSun < Battle::Move::TwoTurnMove
   def pbIsChargingTurn?(user)
     ret = super
-    if !user.effects[PBEffects::TwoTurnAttack]
-      if [:Sun, :HarshSun].include?(user.effectiveWeather)
-        @powerHerb = false
-        @chargingTurn = true
-        @damagingTurn = true
-        return false
-      end
+    if !user.effects[PBEffects::TwoTurnAttack] &&
+       [:Sun, :HarshSun].include?(user.effectiveWeather)
+      @powerHerb = false
+      @chargingTurn = true
+      @damagingTurn = true
+      return false
     end
     return ret
   end

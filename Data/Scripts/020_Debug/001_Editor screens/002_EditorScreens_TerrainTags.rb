@@ -48,7 +48,7 @@ class PokemonTilesetScene
 
   def load_tileset(id)
     @tileset = @tilesets_data[id]
-    @tilehelper.dispose if @tilehelper
+    @tilehelper&.dispose
     @tilehelper = TileDrawingHelper.fromTileset(@tileset)
     @x = 0
     @y = 0
@@ -88,7 +88,7 @@ class PokemonTilesetScene
       TILES_PER_ROW.times do |xx|
         tile_id = tile_ID_from_coordinates(xx, @top_y + yy)
         terr = @tileset.terrain_tags[tile_id]
-        textpos.push(["#{terr}", (xx * TILE_SIZE) + (TILE_SIZE / 2), (yy * TILE_SIZE) - 6, 2, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        textpos.push([terr.to_s, (xx * TILE_SIZE) + (TILE_SIZE / 2), (yy * TILE_SIZE) - 6, 2, TEXT_COLOR, TEXT_SHADOW_COLOR])
       end
     end
     pbDrawTextPositions(@sprites["overlay"].bitmap, textpos)
@@ -188,9 +188,9 @@ class PokemonTilesetScene
         ]
         case pbShowCommands(nil, commands, -1)
         when 0
-          update_cursor_position(0, 99999)
+          update_cursor_position(0, 99_999)
         when 1
-          update_cursor_position(0, -99999)
+          update_cursor_position(0, -99_999)
         when 2
           choose_tileset
         end

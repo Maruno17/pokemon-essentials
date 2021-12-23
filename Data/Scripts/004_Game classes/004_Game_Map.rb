@@ -193,7 +193,7 @@ class Game_Map
       if self_event != nil && terrain.can_surf_freely
         [2, 1, 0].each do |j|
           facing_tile_id = data[newx, newy, j]
-          return false if facing_tile_id == nil
+          return false if facing_tile_id.nil?
           facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
           if facing_terrain.id != :None && !facing_terrain.ignore_passability
             return facing_terrain.can_surf_freely
@@ -207,7 +207,7 @@ class Game_Map
         # Can't walk onto ledges
         [2, 1, 0].each do |j|
           facing_tile_id = data[newx, newy, j]
-          return false if facing_tile_id == nil
+          return false if facing_tile_id.nil?
           facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
           return false if facing_terrain.ledge
           break if facing_terrain.id != :None && !facing_terrain.ignore_passability
@@ -326,7 +326,7 @@ class Game_Map
       max_x = (self.width - (Graphics.width.to_f / TILE_WIDTH)) * REAL_RES_X
       @display_x = [0, [@display_x, max_x].min].max
     end
-    $map_factory.setMapsInRange if $map_factory
+    $map_factory&.setMapsInRange
   end
 
   def display_y=(value)
@@ -336,7 +336,7 @@ class Game_Map
       max_y = (self.height - (Graphics.height.to_f / TILE_HEIGHT)) * REAL_RES_Y
       @display_y = [0, [@display_y, max_y].min].max
     end
-    $map_factory.setMapsInRange if $map_factory
+    $map_factory&.setMapsInRange
   end
 
   def scroll_up(distance)

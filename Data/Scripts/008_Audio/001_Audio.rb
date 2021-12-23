@@ -138,7 +138,7 @@ def getPlayTime2(filename)
     loop do
       rstr = ""
       ateof = false
-      while !file.eof?
+      until file.eof?
         if (file.read(1)[0] rescue 0) == 0xFF
           begin
             rstr = file.read(3)
@@ -152,14 +152,14 @@ def getPlayTime2(filename)
       if rstr[0] == 0xFB
         t = rstr[1] >> 4
         next if [0, 15].include?(t)
-        freqs = [44100, 22050, 11025, 48000]
+        freqs = [44_100, 22_050, 11_025, 48_000]
         bitrates = [32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320]
         bitrate = bitrates[t]
         t = (rstr[1] >> 2) & 3
         freq = freqs[t]
         t = (rstr[1] >> 1) & 1
         filesize = FileTest.size(filename)
-        frameLength = ((144000 * bitrate) / freq) + t
+        frameLength = ((144_000 * bitrate) / freq) + t
         numFrames = filesize / (frameLength + 4)
         time = (numFrames * 1152.0 / freq)
         break

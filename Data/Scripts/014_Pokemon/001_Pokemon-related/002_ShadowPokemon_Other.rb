@@ -50,12 +50,11 @@ def pbPurify(pkmn, scene)
       pkmn.exp = newexp
     end
   end
-  if $PokemonSystem.givenicknames == 0
-    if scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?", pkmn.speciesName))
-      newname = pbEnterPokemonName(_INTL("{1}'s nickname?", pkmn.speciesName),
-                                   0, Pokemon::MAX_NAME_SIZE, "", pkmn)
-      pkmn.name = newname
-    end
+  if $PokemonSystem.givenicknames == 0 &&
+     scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?", pkmn.speciesName))
+    newname = pbEnterPokemonName(_INTL("{1}'s nickname?", pkmn.speciesName),
+                                 0, Pokemon::MAX_NAME_SIZE, "", pkmn)
+    pkmn.name = newname
   end
 end
 
@@ -201,13 +200,13 @@ class Battle::Battler
 
   def shadowPokemon?
     p = self.pokemon
-    return p && p.shadowPokemon?
+    return p&.shadowPokemon?
   end
 
   def inHyperMode?
     return false if fainted?
     p = self.pokemon
-    return p && p.hyper_mode
+    return p&.hyper_mode
   end
 
   def pbHyperMode

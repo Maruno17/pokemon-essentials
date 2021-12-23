@@ -48,7 +48,7 @@ module GameData
 
     def self.charset_filename_brief(tr_type)
       ret = self.charset_filename(tr_type)
-      ret.slice!("Graphics/Characters/") if ret
+      ret&.slice!("Graphics/Characters/")
       return ret
     end
 

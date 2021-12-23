@@ -177,7 +177,7 @@ end
 
 def pbBottomLeftLines(window, lines, width = nil)
   window.x = 0
-  window.width = width ? width : Graphics.width
+  window.width = width || Graphics.width
   window.height = (window.borderY rescue 32) + (lines * 32)
   window.y = Graphics.height - window.height
 end
@@ -393,10 +393,10 @@ end
 def pbDoEnsureBitmap(bitmap, dwidth, dheight)
   if !bitmap || bitmap.disposed? || bitmap.width < dwidth || bitmap.height < dheight
     oldfont = (bitmap && !bitmap.disposed?) ? bitmap.font : nil
-    bitmap.dispose if bitmap
+    bitmap&.dispose
     bitmap = Bitmap.new([1, dwidth].max, [1, dheight].max)
     (oldfont) ? bitmap.font = oldfont : pbSetSystemFont(bitmap)
-    bitmap.font.shadow = false if bitmap.font && bitmap.font.respond_to?("shadow")
+    bitmap.font.shadow = false if bitmap.font&.respond_to?("shadow")
   end
   return bitmap
 end
@@ -666,7 +666,7 @@ end
 def pbRestoreActivations(sprites, activeStatuses)
   return if !sprites || !activeStatuses
   activeStatuses.keys.each do |k|
-    if sprites[k] && sprites[k].is_a?(Window) && !pbDisposed?(sprites[k])
+    if sprites[k].is_a?(Window) && !pbDisposed?(sprites[k])
       sprites[k].active = activeStatuses[k] ? true : false
     end
   end
@@ -689,7 +689,7 @@ def pbActivateWindow(sprites, key)
   return if !sprites
   activeStatuses = {}
   sprites.each do |i|
-    if i[1] && i[1].is_a?(Window) && !pbDisposed?(i[1])
+    if i[1].is_a?(Window) && !pbDisposed?(i[1])
       activeStatuses[i[0]] = i[1].active
       i[1].active = (i[0] == key)
     end
@@ -717,7 +717,7 @@ end
 def addBackgroundPlane(sprites, planename, background, viewport = nil)
   sprites[planename] = AnimatedPlane.new(viewport)
   bitmapName = pbResolveBitmap("Graphics/Pictures/#{background}")
-  if bitmapName == nil
+  if bitmapName.nil?
     # Plane should exist in any case
     sprites[planename].bitmap = nil
     sprites[planename].visible = false
@@ -739,7 +739,7 @@ end
 # _viewport_ is a viewport to place the background in.
 def addBackgroundOrColoredPlane(sprites, planename, background, color, viewport = nil)
   bitmapName = pbResolveBitmap("Graphics/Pictures/#{background}")
-  if bitmapName == nil
+  if bitmapName.nil?
     # Plane should exist in any case
     sprites[planename] = ColoredPlane.new(color, viewport)
   else
@@ -773,7 +773,7 @@ if !defined?(_INTL)
   def _INTL(*args)
     string = args[0].clone
     (1...args.length).each do |i|
-      string.gsub!(/\{#{i}\}/, "#{args[i]}")
+      string.gsub!(/\{#{i}\}/, args[i].to_s)
     end
     return string
   end
@@ -795,7 +795,7 @@ if !defined?(_MAPINTL)
   def _MAPINTL(*args)
     string = args[1].clone
     (2...args.length).each do |i|
-      string.gsub!(/\{#{i}\}/, "#{args[i + 1]}")
+      string.gsub!(/\{#{i}\}/, args[i + 1].to_s)
     end
     return string
   end

@@ -175,12 +175,11 @@ class Battle::Battler
     elsif @effects[PBEffects::Encore] > 0 && choice[1] >= 0 &&
           @battle.pbCanShowCommands?(@index)
       idxEncoredMove = pbEncoredMoveIndex
-      if idxEncoredMove >= 0 && @battle.pbCanChooseMove?(@index, idxEncoredMove, false)
-        if choice[1] != idxEncoredMove   # Change move if battler was Encored mid-round
-          choice[1] = idxEncoredMove
-          choice[2] = @moves[idxEncoredMove]
-          choice[3] = -1   # No target chosen
-        end
+      if idxEncoredMove >= 0 && choice[1] != idxEncoredMove &&
+         @battle.pbCanChooseMove?(@index, idxEncoredMove, false)   # Change move if battler was Encored mid-round
+        choice[1] = idxEncoredMove
+        choice[2] = @moves[idxEncoredMove]
+        choice[3] = -1   # No target chosen
       end
     end
     # Labels the move being used as "move"
@@ -203,19 +202,17 @@ class Battle::Battler
     move = choice[2]   # In case disobedience changed the move to be used
     return if !move   # if move was not chosen somehow
     # Subtract PP
-    if !specialUsage
-      if !pbReducePP(move)
-        @battle.pbDisplay(_INTL("{1} used {2}!", pbThis, move.name))
-        @battle.pbDisplay(_INTL("But there was no PP left for the move!"))
-        @lastMoveUsed          = nil
-        @lastMoveUsedType      = nil
-        @lastRegularMoveUsed   = nil
-        @lastRegularMoveTarget = -1
-        @lastMoveFailed        = true
-        pbCancelMoves
-        pbEndTurn(choice)
-        return
-      end
+    if !specialUsage && !pbReducePP(move)
+      @battle.pbDisplay(_INTL("{1} used {2}!", pbThis, move.name))
+      @battle.pbDisplay(_INTL("But there was no PP left for the move!"))
+      @lastMoveUsed          = nil
+      @lastMoveUsedType      = nil
+      @lastRegularMoveUsed   = nil
+      @lastRegularMoveTarget = -1
+      @lastMoveFailed        = true
+      pbCancelMoves
+      pbEndTurn(choice)
+      return
     end
     # Stance Change
     if isSpecies?(:AEGISLASH) && self.ability == :STANCECHANGE
@@ -356,21 +353,21 @@ class Battle::Battler
       end
     end
     # Protean
-    if user.hasActiveAbility?([:LIBERO, :PROTEAN]) && !move.callsAnotherMove? && !move.snatched
-      if user.pbHasOtherType?(move.calcType) && !GameData::Type.get(move.calcType).pseudo_type
-        @battle.pbShowAbilitySplash(user)
-        user.pbChangeTypes(move.calcType)
-        typeName = GameData::Type.get(move.calcType).name
-        @battle.pbDisplay(_INTL("{1}'s type changed to {2}!", user.pbThis, typeName))
-        @battle.pbHideAbilitySplash(user)
-        # NOTE: The GF games say that if Curse is used by a non-Ghost-type
-        #       Pokémon which becomes Ghost-type because of Protean, it should
-        #       target and curse itself. I think this is silly, so I'm making it
-        #       choose a random opponent to curse instead.
-        if move.function == "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" && targets.length == 0
-          choice[3] = -1
-          targets = pbFindTargets(choice, move, user)
-        end
+    if user.hasActiveAbility?([:LIBERO, :PROTEAN]) &&
+       !move.callsAnotherMove? && !move.snatched &&
+       user.pbHasOtherType?(move.calcType) && !GameData::Type.get(move.calcType).pseudo_type
+      @battle.pbShowAbilitySplash(user)
+      user.pbChangeTypes(move.calcType)
+      typeName = GameData::Type.get(move.calcType).name
+      @battle.pbDisplay(_INTL("{1}'s type changed to {2}!", user.pbThis, typeName))
+      @battle.pbHideAbilitySplash(user)
+      # NOTE: The GF games say that if Curse is used by a non-Ghost-type
+      #       Pokémon which becomes Ghost-type because of Protean, it should
+      #       target and curse itself. I think this is silly, so I'm making it
+      #       choose a random opponent to curse instead.
+      if move.function == "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" && targets.length == 0
+        choice[3] = -1
+        targets = pbFindTargets(choice, move, user)
       end
     end
     #---------------------------------------------------------------------------
@@ -486,7 +483,7 @@ class Battle::Battler
         end
         pbProcessMoveHit(move, b, newTargets, 0, false) if success
         b.lastMoveFailed = true if !success
-        targets.each { |otherB| otherB.pbFaint if otherB && otherB.fainted? }
+        targets.each { |otherB| otherB.pbFaint if otherB&.fainted? }
         user.pbFaint if user.fainted?
       end
       # Magic Coat's bouncing back (move has no targets)
@@ -502,14 +499,14 @@ class Battle::Battler
             success = pbProcessMoveHit(move, mc, [], 0, false)
           end
           mc.lastMoveFailed = true if !success
-          targets.each { |b| b.pbFaint if b && b.fainted? }
+          targets.each { |b| b.pbFaint if b&.fainted? }
           user.pbFaint if user.fainted?
         end
       end
       # Move-specific effects after all hits
       targets.each { |b| move.pbEffectAfterAllHits(user, b) }
       # Faint if 0 HP
-      targets.each { |b| b.pbFaint if b && b.fainted? }
+      targets.each { |b| b.pbFaint if b&.fainted? }
       user.pbFaint if user.fainted?
       # External/general effects after all hits. Eject Button, Shell Bell, etc.
       pbEffectsAfterMove(user, targets, move, realNumHits)
@@ -707,7 +704,7 @@ class Battle::Battler
       @battle.pbPriority(true).each { |b| b.pbItemHPHealCheck }
       # Animate battlers fainting (checks all battlers rather than just targets
       # because Flame Burst's splash damage affects non-targets)
-      @battle.pbPriority(true).each { |b| b.pbFaint if b && b.fainted? }
+      @battle.pbPriority(true).each { |b| b.pbFaint if b&.fainted? }
     end
     @battle.pbJudgeCheckpoint(user, move)
     # Main effect (recoil/drain, etc.)
@@ -716,7 +713,7 @@ class Battle::Battler
       move.pbEffectAgainstTarget(user, b)
     end
     move.pbEffectGeneral(user)
-    targets.each { |b| b.pbFaint if b && b.fainted? }
+    targets.each { |b| b.pbFaint if b&.fainted? }
     user.pbFaint if user.fainted?
     # Additional effect
     if !user.hasActiveAbility?(:SHEERFORCE)
@@ -761,13 +758,12 @@ class Battle::Battler
       end
     end
     # Fainting
-    targets.each { |b| b.pbFaint if b && b.fainted? }
+    targets.each { |b| b.pbFaint if b&.fainted? }
     user.pbFaint if user.fainted?
     # Dragon Darts' second half of attack
-    if move.pbRepeatHit? && hitNum == 0
-      if targets.any? { |b| !b.fainted? && !b.damageState.unaffected }
-        pbProcessMoveHit(move, user, all_targets, 1, skipAccuracyCheck)
-      end
+    if move.pbRepeatHit? && hitNum == 0 &&
+       targets.any? { |b| !b.fainted? && !b.damageState.unaffected }
+      pbProcessMoveHit(move, user, all_targets, 1, skipAccuracyCheck)
     end
     return true
   end

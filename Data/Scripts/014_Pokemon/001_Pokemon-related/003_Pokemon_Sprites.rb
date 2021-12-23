@@ -8,14 +8,14 @@ class PokemonSprite < SpriteWrapper
   end
 
   def dispose
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = nil
     self.bitmap = nil if !self.disposed?
     super
   end
 
   def clearBitmap
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = nil
     self.bitmap = nil
   end
@@ -47,7 +47,7 @@ class PokemonSprite < SpriteWrapper
   end
 
   def setPokemonBitmap(pokemon, back = false)
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back) : nil
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     self.color = Color.new(0, 0, 0, 0)
@@ -55,14 +55,14 @@ class PokemonSprite < SpriteWrapper
   end
 
   def setPokemonBitmapSpecies(pokemon, species, back = false)
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back, species) : nil
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     changeOrigin
   end
 
   def setSpeciesBitmap(species, gender = 0, form = 0, shiny = false, shadow = false, back = false, egg = false)
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     changeOrigin
@@ -102,7 +102,7 @@ class PokemonIconSprite < SpriteWrapper
   end
 
   def dispose
-    @animBitmap.dispose if @animBitmap
+    @animBitmap&.dispose
     super
   end
 
@@ -121,7 +121,7 @@ class PokemonIconSprite < SpriteWrapper
 
   def pokemon=(value)
     @pokemon = value
-    @animBitmap.dispose if @animBitmap
+    @animBitmap&.dispose
     @animBitmap = nil
     if !@pokemon
       self.bitmap = nil
@@ -236,7 +236,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
   end
 
   def dispose
-    @animBitmap.dispose if @animBitmap
+    @animBitmap&.dispose
     super
   end
 
@@ -307,7 +307,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
   end
 
   def refresh
-    @animBitmap.dispose if @animBitmap
+    @animBitmap&.dispose
     @animBitmap = nil
     bitmapFileName = GameData::Species.icon_filename(@species, @form, @gender, @shiny)
     return if !bitmapFileName

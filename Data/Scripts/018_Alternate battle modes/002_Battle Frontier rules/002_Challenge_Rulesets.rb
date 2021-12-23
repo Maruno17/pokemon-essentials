@@ -197,13 +197,13 @@ class PokemonRuleSet
       error.push(_INTL("{1} Pokémon are needed.", self.minLength)) if error && self.minLength > 1
       return false
     elsif team.length > self.maxLength
-      error.push(_INTL("No more than {1} Pokémon may enter.", self.maxLength)) if error
+      error&.push(_INTL("No more than {1} Pokémon may enter.", self.maxLength))
       return false
     end
     team.each do |pkmn|
       next if isPokemonValid?(pkmn)
       if pkmn
-        error.push(_INTL("{1} is not allowed.", pkmn.name)) if error
+        error&.push(_INTL("{1} is not allowed.", pkmn.name))
       elsif error
         error.push(_INTL("This team is not allowed."))
       end
@@ -211,12 +211,12 @@ class PokemonRuleSet
     end
     @teamRules.each do |rule|
       next if rule.isValid?(team)
-      error.push(rule.errorMessage) if error
+      error&.push(rule.errorMessage)
       return false
     end
     @subsetRules.each do |rule|
       next if rule.isValid?(team)
-      error.push(rule.errorMessage) if error
+      error&.push(rule.errorMessage)
       return false
     end
     return true

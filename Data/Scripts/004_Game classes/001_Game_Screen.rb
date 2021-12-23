@@ -142,7 +142,7 @@ end
 def pbToneChangeAll(tone, duration)
   $game_screen.start_tone_change(tone, duration * Graphics.frame_rate / 20)
   $game_screen.pictures.each do |picture|
-    picture.start_tone_change(tone, duration * Graphics.frame_rate / 20) if picture
+    picture&.start_tone_change(tone, duration * Graphics.frame_rate / 20)
   end
 end
 

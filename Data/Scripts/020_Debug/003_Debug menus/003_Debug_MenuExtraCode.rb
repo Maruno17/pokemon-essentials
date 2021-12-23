@@ -21,8 +21,8 @@ def pbWarpToMap
       next if !map.passableStrict?(x, y, 0, $game_player)
       blocked = false
       map.events.values.each do |event|
-        if event.at_coordinate?(x, y) && !event.through
-          blocked = true if event.character_name != ""
+        if event.at_coordinate?(x, y) && !event.through && event.character_name != ""
+          blocked = true
         end
       end
       next if blocked
@@ -101,7 +101,7 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
       status = $game_variables[index + 1].to_s
       status = "\"__\"" if nil_or_empty?(status)
     end
-    name = '' if name == nil
+    name = '' if name.nil?
     id_text = sprintf("%04d:", index + 1)
     rect = drawCursor(index, rect)
     totalWidth = rect.width
@@ -117,11 +117,11 @@ end
 
 
 def pbDebugSetVariable(id, diff)
-  $game_variables[id] = 0 if $game_variables[id] == nil
+  $game_variables[id] = 0 if $game_variables[id].nil?
   if $game_variables[id].is_a?(Numeric)
     pbPlayCursorSE
-    $game_variables[id] = [$game_variables[id] + diff, 99999999].min
-    $game_variables[id] = [$game_variables[id], -99999999].max
+    $game_variables[id] = [$game_variables[id] + diff, 99_999_999].min
+    $game_variables[id] = [$game_variables[id], -99_999_999].max
     $game_map.need_refresh = true
   end
 end
@@ -135,8 +135,8 @@ def pbDebugVariableScreen(id)
     params.setMaxDigits(8)
     params.setNegativesAllowed(true)
     value = pbMessageChooseNumber(_INTL("Set variable {1}.", id), params)
-    $game_variables[id] = [value, 99999999].min
-    $game_variables[id] = [$game_variables[id], -99999999].max
+    $game_variables[id] = [value, 99_999_999].min
+    $game_variables[id] = [$game_variables[id], -99_999_999].max
     $game_map.need_refresh = true
   when String
     value = pbMessageFreeText(_INTL("Set variable {1}.", id),
@@ -623,7 +623,7 @@ def pbImportAllAnimations
       Graphics.update
       audios = []
       files = Dir.glob(folder + "/*.*")
-      %w[wav ogg mid wma].each { |ext|   # mp3
+      ["wav", "ogg", "mid", "wma"].each { |ext|   # mp3
         upext = ext.upcase
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == ext })
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == upext })
@@ -632,7 +632,7 @@ def pbImportAllAnimations
         pbSafeCopyFile(audio, RTP.getAudioPath("Audio/SE/Anim/" + File.basename(audio)), "Audio/SE/Anim/" + File.basename(audio))
       end
       images = []
-      %w[png gif].each { |ext|   # jpg jpeg bmp
+      ["png", "gif"].each { |ext|   # jpg jpeg bmp
         upext = ext.upcase
         images.concat(files.find_all { |f| f[f.length - 3, 3] == ext })
         images.concat(files.find_all { |f| f[f.length - 3, 3] == upext })
@@ -642,26 +642,24 @@ def pbImportAllAnimations
       end
       Dir.glob(folder + "/*.anm") { |f|
         textdata = loadBase64Anim(IO.read(f)) rescue nil
-        if textdata && textdata.is_a?(PBAnimation)
+        if textdata.is_a?(PBAnimation)
           index = pbAllocateAnimation(animations, textdata.name)
           missingFiles = []
           textdata.name = File.basename(folder) if textdata.name == ""
           textdata.id = -1   # This is not an RPG Maker XP animation
           pbConvertAnimToNewFormat(textdata)
-          if textdata.graphic && textdata.graphic != ""
-            if !safeExists?(folder + "/" + textdata.graphic) &&
-               !FileTest.image_exist?("Graphics/Animations/" + textdata.graphic)
-              textdata.graphic = ""
-              missingFiles.push(textdata.graphic)
-            end
+          if textdata.graphic && textdata.graphic != "" &&
+             !safeExists?(folder + "/" + textdata.graphic) &&
+             !FileTest.image_exist?("Graphics/Animations/" + textdata.graphic)
+            textdata.graphic = ""
+            missingFiles.push(textdata.graphic)
           end
           textdata.timing.each do |timing|
-            if timing.name && timing.name != ""
-              if !safeExists?(folder + "/" + timing.name) &&
-                 !FileTest.audio_exist?("Audio/SE/Anim/" + timing.name)
-                timing.name = ""
-                missingFiles.push(timing.name)
-              end
+            if timing.name && timing.name != "" &&
+               !safeExists?(folder + "/" + timing.name) &&
+               !FileTest.audio_exist?("Audio/SE/Anim/" + timing.name)
+              timing.name = ""
+              missingFiles.push(timing.name)
             end
           end
           animations[index] = textdata

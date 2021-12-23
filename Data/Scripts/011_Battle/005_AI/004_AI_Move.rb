@@ -61,9 +61,9 @@ class Battle::AI
     # Decide whether all choices are bad, and if so, try switching instead
     if !wildBattler && skill >= PBTrainerAI.highSkill
       badMoves = false
-      if (maxScore <= 20 && user.turnCount > 2) ||
-         (maxScore <= 40 && user.turnCount > 5)
-        badMoves = true if pbAIRandom(100) < 80
+      if ((maxScore <= 20 && user.turnCount > 2) ||
+         (maxScore <= 40 && user.turnCount > 5)) && pbAIRandom(100) < 80
+        badMoves = true
       end
       if !badMoves && totalScore < 100 && user.turnCount > 1
         badMoves = true
@@ -160,13 +160,12 @@ class Battle::AI
     return 0 if score <= 0
     if skill >= PBTrainerAI.mediumSkill
       # Prefer damaging moves if AI has no more Pokémon or AI is less clever
-      if @battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
-        if !(skill >= PBTrainerAI.highSkill && @battle.pbAbleNonActiveCount(target.idxOwnSide) > 0)
-          if move.statusMove?
-            score /= 1.5
-          elsif target.hp <= target.totalhp / 2
-            score *= 1.5
-          end
+      if @battle.pbAbleNonActiveCount(user.idxOwnSide) == 0 &&
+         !(skill >= PBTrainerAI.highSkill && @battle.pbAbleNonActiveCount(target.idxOwnSide) > 0)
+        if move.statusMove?
+          score /= 1.5
+        elsif target.hp <= target.totalhp / 2
+          score *= 1.5
         end
       end
       # Don't prefer attacking the target if they'd be semi-invulnerable
@@ -266,18 +265,16 @@ class Battle::AI
     end
     # Prefer flinching external effects (note that move effects which cause
     # flinching are dealt with in the function code part of score calculation)
-    if skill >= PBTrainerAI.mediumSkill && !move.flinchingMove?
-      if !target.hasActiveAbility?(:INNERFOCUS) &&
-         !target.hasActiveAbility?(:SHIELDDUST) &&
-         target.effects[PBEffects::Substitute] == 0
-        canFlinch = false
-        if user.hasActiveItem?([:KINGSROCK, :RAZORFANG])
-          canFlinch = true
-        elsif user.hasActiveAbility?(:STENCH)
-          canFlinch = true
-        end
-        realDamage *= 1.3 if canFlinch
+    if skill >= PBTrainerAI.mediumSkill && !move.flinchingMove? &&
+       !target.hasActiveAbility?(:INNERFOCUS) &&
+       !target.hasActiveAbility?(:SHIELDDUST) &&
+       target.effects[PBEffects::Substitute] == 0
+      canFlinch = false
+      if user.hasActiveItem?([:KINGSROCK, :RAZORFANG]) ||
+         user.hasActiveAbility?(:STENCH)
+        canFlinch = true
       end
+      realDamage *= 1.3 if canFlinch
     end
     # Convert damage to percentage of target's remaining HP
     damagePercentage = realDamage * 100.0 / target.hp

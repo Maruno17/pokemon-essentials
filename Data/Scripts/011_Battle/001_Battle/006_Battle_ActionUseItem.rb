@@ -56,14 +56,14 @@ class Battle
     return if !item
     return if !GameData::Item.get(item).consumed_after_use?
     if pbOwnedByPlayer?(idxBattler)
-      if $bag && $bag.can_add?(item)
+      if $bag&.can_add?(item)
         $bag.add(item)
       else
         raise _INTL("Couldn't return unused item to Bag somehow.")
       end
     else
       items = pbGetOwnerItems(idxBattler)
-      items.push(item) if items
+      items&.push(item)
     end
   end
 

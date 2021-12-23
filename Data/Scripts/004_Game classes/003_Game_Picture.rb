@@ -66,7 +66,7 @@ class Game_Picture
     @zoom_x = zoom_x.to_f
     @zoom_y = zoom_y.to_f
     @opacity = opacity.to_f
-    @blend_type = blend_type ? blend_type : 0
+    @blend_type = blend_type || 0
     @duration = 0
     @target_x = @x
     @target_y = @y
@@ -98,7 +98,7 @@ class Game_Picture
     @target_zoom_x  = zoom_x.to_f
     @target_zoom_y  = zoom_y.to_f
     @target_opacity = opacity.to_f
-    @blend_type     = blend_type ? blend_type : 0
+    @blend_type     = blend_type || 0
   end
   #-----------------------------------------------------------------------------
   # * Change Rotation Speed

@@ -148,13 +148,13 @@ class PokemonBag_Scene
     numfilledpockets = @bag.pockets.length - 1
     if @choosing
       numfilledpockets = 0
-      if @filterlist != nil
+      if @filterlist.nil?
         (1...@bag.pockets.length).each do |i|
-          numfilledpockets += 1 if @filterlist[i].length > 0
+          numfilledpockets += 1 if @bag.pockets[i].length > 0
         end
       else
         (1...@bag.pockets.length).each do |i|
-          numfilledpockets += 1 if @bag.pockets[i].length > 0
+          numfilledpockets += 1 if @filterlist[i].length > 0
         end
       end
       lastpocket = (resetpocket) ? 1 : @bag.last_viewed_pocket
@@ -333,7 +333,7 @@ class PokemonBag_Scene
   def pbRefreshFilter
     @filterlist = nil
     return if !@choosing
-    return if @filterproc == nil
+    return if @filterproc.nil?
     @filterlist = []
     (1...@bag.pockets.length).each do |i|
       @filterlist[i] = []
@@ -428,14 +428,12 @@ class PokemonBag_Scene
 #              pbRefresh
 #            end
           elsif Input.trigger?(Input::ACTION)   # Start switching the selected item
-            if !@choosing
-              if thispocket.length > 1 && itemwindow.index < thispocket.length &&
-                 !Settings::BAG_POCKET_AUTO_SORT[itemwindow.pocket - 1]
-                itemwindow.sorting = true
-                swapinitialpos = itemwindow.index
-                pbPlayDecisionSE
-                pbRefresh
-              end
+            if !@choosing && thispocket.length > 1 && itemwindow.index < thispocket.length &&
+               !Settings::BAG_POCKET_AUTO_SORT[itemwindow.pocket - 1]
+              itemwindow.sorting = true
+              swapinitialpos = itemwindow.index
+              pbPlayDecisionSE
+              pbRefresh
             end
           elsif Input.trigger?(Input::BACK)   # Cancel the item screen
             pbPlayCloseMenuSE
@@ -647,9 +645,7 @@ class PokemonBagScreen
         qty = @scene.pbChooseNumber(_INTL("How many do you want to deposit?"), qty)
       end
       if qty > 0
-        if !storage.can_add?(item, qty)
-          pbDisplay(_INTL("There's no room to store items."))
-        else
+        if storage.can_add?(item, qty)
           if !@bag.remove(item, qty)
             raise "Can't delete items from Bag"
           end
@@ -660,6 +656,8 @@ class PokemonBagScreen
           dispqty  = (itm.is_important?) ? 1 : qty
           itemname = (dispqty > 1) ? itm.name_plural : itm.name
           pbDisplay(_INTL("Deposited {1} {2}.", dispqty, itemname))
+        else
+          pbDisplay(_INTL("There's no room to store items."))
         end
       end
     end

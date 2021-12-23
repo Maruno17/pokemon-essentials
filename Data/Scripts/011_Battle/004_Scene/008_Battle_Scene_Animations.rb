@@ -140,9 +140,9 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     startsIndex = idxBall / ballsPerTrainer
     teamIndex = idxBall % ballsPerTrainer
     ret = @partyStarts[startsIndex] + teamIndex
-    if startsIndex < @partyStarts.length - 1
+    if startsIndex < @partyStarts.length - 1 && ret >= @partyStarts[startsIndex + 1]
       # There is a later trainer, don't spill over into its team
-      return -1 if ret >= @partyStarts[startsIndex + 1]
+      return -1
     end
     return ret
   end
@@ -332,7 +332,7 @@ class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
     end
     # Move and fade party bar/balls
     delay = 3
-    if @sprites["partyBar_0"] && @sprites["partyBar_0"].visible
+    if @sprites["partyBar_0"]&.visible
       partyBar = addSprite(@sprites["partyBar_0"])
       partyBar.moveDelta(delay, 16, -Graphics.width / 4, 0) if @fullAnim
       partyBar.moveOpacity(delay, 12, 0)
@@ -377,7 +377,7 @@ class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
     end
     # Move and fade party bar/balls
     delay = 3
-    if @sprites["partyBar_1"] && @sprites["partyBar_1"].visible
+    if @sprites["partyBar_1"]&.visible
       partyBar = addSprite(@sprites["partyBar_1"])
       partyBar.moveDelta(delay, 16, Graphics.width / 4, 0) if @fullAnim
       partyBar.moveOpacity(delay, 12, 0)
@@ -722,12 +722,10 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     ball.setZ(0, batSprite.z + 1)
     @ballSpriteIndex = (@success) ? @tempSprites.length - 1 : -1
     # Set up trainer sprite (only visible in Safari Zone battles)
-    if @showingTrainer && traSprite
-      if traSprite.bitmap.width >= traSprite.bitmap.height * 2
-        trainer = addSprite(traSprite, PictureOrigin::Bottom)
-        # Trainer animation
-        ballStartX, ballStartY = trainerThrowingFrames(ball, trainer, traSprite)
-      end
+    if @showingTrainer && traSprite && traSprite.bitmap.width >= traSprite.bitmap.height * 2
+      trainer = addSprite(traSprite, PictureOrigin::Bottom)
+      # Trainer animation
+      ballStartX, ballStartY = trainerThrowingFrames(ball, trainer, traSprite)
     end
     delay = ball.totalDuration   # 0 or 7
     # Poké Ball arc animation

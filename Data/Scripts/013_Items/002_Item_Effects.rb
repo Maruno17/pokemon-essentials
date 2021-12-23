@@ -281,9 +281,7 @@ ItemHandlers::UseInField.add(:SUPERROD, proc { |item|
 ItemHandlers::UseInField.add(:ITEMFINDER, proc { |item|
   $stats.itemfinder_count += 1
   event = pbClosestHiddenItem
-  if !event
-    pbMessage(_INTL("... \\wt[10]... \\wt[10]... \\wt[10]...\\wt[10]Nope! There's no response."))
-  else
+  if event
     offsetX = event.x - $game_player.x
     offsetY = event.y - $game_player.y
     if offsetX == 0 && offsetY == 0   # Standing on the item, spin around
@@ -310,6 +308,8 @@ ItemHandlers::UseInField.add(:ITEMFINDER, proc { |item|
       pbMessage(_INTL("Huh? The {1}'s responding!\1", GameData::Item.get(item).name))
       pbMessage(_INTL("There's an item buried around here!"))
     end
+  else
+    pbMessage(_INTL("... \\wt[10]... \\wt[10]... \\wt[10]...\\wt[10]Nope! There's no response."))
   end
   next true
 })

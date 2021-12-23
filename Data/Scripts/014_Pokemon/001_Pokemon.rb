@@ -157,7 +157,7 @@ class Pokemon
     @ability = nil
     MultipleForms.call("onSetForm", self, value, oldForm)
     calc_stats
-    $player.pokedex.register(self) if $player
+    $player&.pokedex&.register(self)
   end
 
   # The same as def form=, but yields to a given block in the middle so that a
@@ -170,7 +170,7 @@ class Pokemon
     yield if block_given?
     MultipleForms.call("onSetForm", self, value, oldForm)
     calc_stats
-    $player.pokedex.register(self) if $player
+    $player&.pokedex&.register(self)
   end
 
   def form_simple=(value)

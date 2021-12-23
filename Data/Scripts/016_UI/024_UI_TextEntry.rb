@@ -193,7 +193,7 @@ class PokemonEntryScene
       end
       @sprites["helpwindow"].update
       @sprites["entry"].update
-      @sprites["subject"].update if @sprites["subject"]
+      @sprites["subject"]&.update
     end
     Input.update
     return ret
@@ -207,7 +207,7 @@ class PokemonEntryScene
       @sprites["helpwindow"].update
       @sprites["entry"].update
       @sprites["entry2"].update
-      @sprites["subject"].update if @sprites["subject"]
+      @sprites["subject"]&.update
       if Input.trigger?(Input::USE)
         index = @sprites["entry2"].command
         if index == -3 # Confirm text
@@ -741,7 +741,7 @@ class PokemonEntryScene2
   def pbEndScene
     pbFadeOutAndHide(@sprites) { pbUpdate }
     @bitmaps.each do |bitmap|
-      bitmap.dispose if bitmap
+      bitmap&.dispose
     end
     @bitmaps.clear
     pbDisposeSpriteHash(@sprites)

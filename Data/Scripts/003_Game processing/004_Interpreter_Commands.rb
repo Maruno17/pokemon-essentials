@@ -414,8 +414,8 @@ class Interpreter
   #-----------------------------------------------------------------------------
   def command_116
     if @event_id > 0
-      $game_map.events[@event_id].erase if $game_map.events[@event_id]
-      $PokemonMap.addErasedEvent(@event_id) if $PokemonMap
+      $game_map.events[@event_id]&.erase
+      $PokemonMap&.addErasedEvent(@event_id)
     end
     @index += 1
     return false
@@ -512,10 +512,10 @@ class Interpreter
         next if $game_variables[i] == value
         $game_variables[i] = value
       when 1   # add
-        next if $game_variables[i] >= 99999999
+        next if $game_variables[i] >= 99_999_999
         $game_variables[i] += value
       when 2   # subtract
-        next if $game_variables[i] <= -99999999
+        next if $game_variables[i] <= -99_999_999
         $game_variables[i] -= value
       when 3   # multiply
         next if value == 1
@@ -527,8 +527,8 @@ class Interpreter
         next if [0, 1].include?(value)
         $game_variables[i] %= value
       end
-      $game_variables[i] = 99999999 if $game_variables[i] > 99999999
-      $game_variables[i] = -99999999 if $game_variables[i] < -99999999
+      $game_variables[i] = 99_999_999 if $game_variables[i] > 99_999_999
+      $game_variables[i] = -99_999_999 if $game_variables[i] < -99_999_999
       $game_map.need_refresh = true
     end
     return true

@@ -268,7 +268,7 @@ class MiningGameScene
         rnd -= ITEMS[i][1]
         if rnd < 0
           if pbNoDuplicateItems(ITEMS[i][0])
-            while !added
+            until added
               provx = rand(BOARD_WIDTH - ITEMS[i][4] + 1)
               provy = rand(BOARD_HEIGHT - ITEMS[i][5] + 1)
               if pbCheckOverlaps(false, provx, provy, ITEMS[i][4], ITEMS[i][5], ITEMS[i][6])

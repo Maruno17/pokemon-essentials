@@ -293,10 +293,7 @@ def pbWriteCup(id, rules)
     end
   end
   cmd = 0
-  if trlists.length != 0
-    cmd = pbMessage(_INTL("Generate Pokémon teams for this challenge?"),
-                    [_INTL("NO"), _INTL("YES, USE EXISTING"), _INTL("YES, USE NEW")], 1)
-  else
+  if trlists.length == 0
     cmd = pbMessage(_INTL("Generate Pokémon teams for this challenge?"),
                     [_INTL("YES"), _INTL("NO")], 2)
     case cmd
@@ -305,6 +302,9 @@ def pbWriteCup(id, rules)
     when 1
       cmd = 0
     end
+  else
+    cmd = pbMessage(_INTL("Generate Pokémon teams for this challenge?"),
+                    [_INTL("NO"), _INTL("YES, USE EXISTING"), _INTL("YES, USE NEW")], 1)
   end
   return if cmd == 0   # No
   case cmd

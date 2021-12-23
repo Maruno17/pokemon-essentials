@@ -7,11 +7,11 @@ class Sprite_Picture
   end
 
   def dispose
-    @sprite.dispose if @sprite
+    @sprite&.dispose
   end
 
   def update
-    @sprite.update if @sprite
+    @sprite&.update
     # If picture file name is different from current one
     if @picture_name != @picture.name
       # Remember file name to instance variables
@@ -27,7 +27,7 @@ class Sprite_Picture
     if @picture_name == ""
       # Set sprite to invisible
       if @sprite
-        @sprite.dispose if @sprite
+        @sprite&.dispose
         @sprite = nil
       end
       return

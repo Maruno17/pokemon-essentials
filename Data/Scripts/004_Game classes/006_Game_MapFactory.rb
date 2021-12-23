@@ -185,10 +185,10 @@ class PokemonMapFactory
       return false if !event.through && event.character_name != ""
     end
     # Check passability of player
-    if !thisEvent.is_a?(Game_Player)
-      if $game_map.map_id == mapID && $game_player.x == x && $game_player.y == y
-        return false if !$game_player.through && $game_player.character_name != ""
-      end
+    if !thisEvent.is_a?(Game_Player) &&
+       $game_map.map_id == mapID && $game_player.x == x && $game_player.y == y &&
+       !$game_player.through && $game_player.character_name != ""
+      return false
     end
     return true
   end
@@ -201,8 +201,8 @@ class PokemonMapFactory
     return false if !map.valid?(x, y)
     return true if thisEvent.through
     if thisEvent == $game_player
-      if !($DEBUG && Input.press?(Input::CTRL))
-        return false if !map.passableStrict?(x, y, 0, thisEvent)
+      if !($DEBUG && Input.press?(Input::CTRL)) && !map.passableStrict?(x, y, 0, thisEvent)
+        return false
       end
     elsif !map.passableStrict?(x, y, 0, thisEvent)
       return false
@@ -289,12 +289,12 @@ class PokemonMapFactory
 
   # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
   def getFacingTile(direction = nil, event = nil, steps = 1)
-    event = $game_player if event == nil
+    event = $game_player if event.nil?
     return [0, 0, 0] if !event
     x = event.x
     y = event.y
     id = event.map.map_id
-    direction = event.direction if direction == nil
+    direction = event.direction if direction.nil?
     return getFacingTileFromPos(id, x, y, direction, steps)
   end
 
@@ -511,6 +511,6 @@ end
 def updateTilesets
   maps = $map_factory.maps
   maps.each do |map|
-    map.updateTileset if map
+    map&.updateTileset
   end
 end

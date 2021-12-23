@@ -137,7 +137,7 @@ class StringInput
   end
 
   def each_byte
-    while !eof?
+    until eof?
       yield getc
     end
   end

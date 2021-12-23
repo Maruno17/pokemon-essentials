@@ -138,21 +138,21 @@ class HallOfFame_Scene
   # Don't use odd numbers!
   def xpointformula(battlernumber)
     ret = 0
-    if !SINGLEROW
-      ret = 32 + (160 * xpositionformula(battlernumber))
-    else
+    if SINGLEROW
       ret = ((60 * (battlernumber / 2)) + 48) * (xpositionformula(battlernumber) - 1)
       ret += (Graphics.width / 2) - 56
+    else
+      ret = 32 + (160 * xpositionformula(battlernumber))
     end
     return ret
   end
 
   def ypointformula(battlernumber)
     ret = 0
-    if !SINGLEROW
-      ret = 32 + (128 * ypositionformula(battlernumber) / 2)
-    else
+    if SINGLEROW
       ret = 96 - (8 * (battlernumber / 2))
+    else
+      ret = 32 + (128 * ypositionformula(battlernumber) / 2)
     end
     return ret
   end
@@ -160,20 +160,20 @@ class HallOfFame_Scene
   # Returns 0, 1 or 2 as the x/y column value
   def xpositionformula(battlernumber)
     ret = 0
-    if !SINGLEROW
-      ret = (battlernumber / 3).even? ? (19 - battlernumber) % 3 : (19 + battlernumber) % 3
-    else
+    if SINGLEROW
       ret = battlernumber % 2 * 2
+    else
+      ret = (battlernumber / 3).even? ? (19 - battlernumber) % 3 : (19 + battlernumber) % 3
     end
     return ret
   end
 
   def ypositionformula(battlernumber)
     ret = 0
-    if !SINGLEROW
-      ret = (battlernumber / 3) % 2 * 2
-    else
+    if SINGLEROW
       ret = 1
+    else
+      ret = (battlernumber / 3) % 2 * 2
     end
     return ret
   end
@@ -244,12 +244,12 @@ class HallOfFame_Scene
   def createTrainerBattler
     @sprites["trainer"] = IconSprite.new(@viewport)
     @sprites["trainer"].setBitmap(GameData::TrainerType.front_sprite_filename($player.trainer_type))
-    if !SINGLEROW
-      @sprites["trainer"].x = Graphics.width - 96
-      @sprites["trainer"].y = 160
-    else
+    if SINGLEROW
       @sprites["trainer"].x = Graphics.width / 2
       @sprites["trainer"].y = 178
+    else
+      @sprites["trainer"].x = Graphics.width - 96
+      @sprites["trainer"].y = 160
     end
     @sprites["trainer"].z = 9
     @sprites["trainer"].ox = @sprites["trainer"].bitmap.width / 2
@@ -318,7 +318,7 @@ class HallOfFame_Scene
       [_INTL("IDNo.{1}", pokemon.egg? ? "?????" : idno),
        Graphics.width - 192, Graphics.height - 54, 2, BASECOLOR, SHADOWCOLOR]
     ]
-    if (hallNumber > -1)
+    if hallNumber > -1
       textPositions.push([_INTL("Hall of Fame No."), (Graphics.width / 2) - 104, -6, 0, BASECOLOR, SHADOWCOLOR])
       textPositions.push([hallNumber.to_s, (Graphics.width / 2) + 104, -6, 1, BASECOLOR, SHADOWCOLOR])
     end

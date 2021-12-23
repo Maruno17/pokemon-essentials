@@ -38,7 +38,7 @@ module Game
   # Called when starting a new game. Initializes global variables
   # and transfers the player into the map scene.
   def self.start_new
-    if $game_map && $game_map.events
+    if $game_map&.events
       $game_map.events.each_value { |event| event.clear_starting }
     end
     $game_temp.common_event_id = 0 if $game_temp

@@ -119,11 +119,10 @@ class DayCare
         end
       end
       # Learn Volt Tackle if a parent has a Light Ball and is in the Pichu family
-      if egg.species == :PICHU && GameData::Move.exists?(:VOLTTACKLE)
-        if (father[2] && father[0].hasItem?(:LIGHTBALL)) ||
-           (mother[2] && mother[0].hasItem?(:LIGHTBALL))
-          moves.push(:VOLTTACKLE)
-        end
+      if egg.species == :PICHU && GameData::Move.exists?(:VOLTTACKLE) &&
+         ((father[2] && father[0].hasItem?(:LIGHTBALL)) ||
+          (mother[2] && mother[0].hasItem?(:LIGHTBALL)))
+        moves.push(:VOLTTACKLE)
       end
       return moves
     end
@@ -249,7 +248,7 @@ class DayCare
     end
 
     def set_pokerus(egg)
-      egg.givePokerus if rand(65536) < Settings::POKERUS_CHANCE
+      egg.givePokerus if rand(65_536) < Settings::POKERUS_CHANCE
     end
   end
 
@@ -370,11 +369,11 @@ class DayCare
       pkmn2.moves.each { |m| known_moves2.push(m.id) if egg_moves1.include?(m.id) && !pkmn1.hasMove?(m.id) }
     end
     if !known_moves1.empty?
-      if !known_moves2.empty?
+      if known_moves2.empty?
+        pkmn2.learn_move(known_moves1[0])
+      else
         learner = [[pkmn1, known_moves2[0]], [pkmn2, known_moves1[0]]].sample
         learner[0].learn_move(learner[1])
-      else
-        pkmn2.learn_move(known_moves1[0])
       end
     elsif !known_moves2.empty?
       pkmn1.learn_move(known_moves2[0])

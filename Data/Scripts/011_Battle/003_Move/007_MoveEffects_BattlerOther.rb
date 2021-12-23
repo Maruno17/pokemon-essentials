@@ -209,8 +209,8 @@ class Battle::Move::ParalyzeFlinchTarget < Battle::Move
     return if target.damageState.substitute
     chance = pbAdditionalEffectChance(user, target, 10)
     return if chance == 0
-    if @battle.pbRandom(100) < chance
-      target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
+    if target.pbCanParalyze?(user, false, self) && @battle.pbRandom(100) < chance
+      target.pbParalyze(user)
     end
     target.pbFlinch(user) if @battle.pbRandom(100) < chance
   end
@@ -258,8 +258,8 @@ class Battle::Move::BurnFlinchTarget < Battle::Move
     return if target.damageState.substitute
     chance = pbAdditionalEffectChance(user, target, 10)
     return if chance == 0
-    if @battle.pbRandom(100) < chance
-      target.pbBurn(user) if target.pbCanBurn?(user, false, self)
+    if target.pbCanBurn?(user, false, self) && @battle.pbRandom(100) < chance
+      target.pbBurn(user)
     end
     target.pbFlinch(user) if @battle.pbRandom(100) < chance
   end
@@ -317,8 +317,8 @@ class Battle::Move::FreezeFlinchTarget < Battle::Move
     return if target.damageState.substitute
     chance = pbAdditionalEffectChance(user, target, 10)
     return if chance == 0
-    if @battle.pbRandom(100) < chance
-      target.pbFreeze if target.pbCanFreeze?(user, false, self)
+    if target.pbCanFreeze?(user, false, self) && @battle.pbRandom(100) < chance
+      target.pbFreeze
     end
     target.pbFlinch(user) if @battle.pbRandom(100) < chance
   end
@@ -429,7 +429,7 @@ class Battle::Move::CureUserPartyStatus < Battle::Move
   def pbMoveFailed?(user, targets)
     has_effect = @battle.allSameSideBattlers(user).any? { |b| b.status != :NONE }
     if !has_effect
-      has_effect = @battle.pbParty(user.index).any? { |pkmn| pkmn && pkmn.able? && pkmn.status != :NONE }
+      has_effect = @battle.pbParty(user.index).any? { |pkmn| pkmn&.able? && pkmn.status != :NONE }
     end
     if !has_effect
       @battle.pbDisplay(_INTL("But it failed!"))

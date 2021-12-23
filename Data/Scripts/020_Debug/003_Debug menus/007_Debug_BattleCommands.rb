@@ -44,7 +44,7 @@ module BattleDebugMenuCommands
 
   def self.hasFunction?(option, function)
     option_hash = @@commands[option]
-    return option_hash && option_hash.keys.include?(function)
+    return option_hash&.has_key?(function)
   end
 
   def self.getFunction(option, function)

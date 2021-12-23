@@ -11,13 +11,13 @@ class Battle
     expAll = $player.has_exp_all || $bag.has?(:EXPALL)
     p1 = pbParty(0)
     @battlers.each do |b|
-      next unless b && b.opposes?   # Can only gain Exp from fainted foes
+      next unless b&.opposes?   # Can only gain Exp from fainted foes
       next if b.participants.length == 0
       next unless b.fainted? || b.captured
       # Count the number of participants
       numPartic = 0
       b.participants.each do |partic|
-        next unless p1[partic] && p1[partic].able? && pbIsOwner?(0, partic)
+        next unless p1[partic]&.able? && pbIsOwner?(0, partic)
         numPartic += 1
       end
       # Find which Pokémon have an Exp Share
@@ -199,7 +199,7 @@ class Battle
       if curLevel > newLevel
         # Gained all the Exp now, end the animation
         pkmn.calc_stats
-        battler.pbUpdate(false) if battler
+        battler&.pbUpdate(false)
         @scene.pbRefreshOne(battler.index) if battler
         break
       end
@@ -211,11 +211,11 @@ class Battle
       oldSpAtk   = pkmn.spatk
       oldSpDef   = pkmn.spdef
       oldSpeed   = pkmn.speed
-      if battler && battler.pokemon
+      if battler&.pokemon
         battler.pokemon.changeHappiness("levelup")
       end
       pkmn.calc_stats
-      battler.pbUpdate(false) if battler
+      battler&.pbUpdate(false)
       @scene.pbRefreshOne(battler.index) if battler
       pbDisplayPaused(_INTL("{1} grew to Lv. {2}!", pkmn.name, curLevel))
       @scene.pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
@@ -260,7 +260,7 @@ class Battle
           pbDisplayPaused(_INTL("1, 2, and... ... ... Ta-da!")) { pbSEPlay("Battle ball drop") }
           pbDisplayPaused(_INTL("{1} forgot how to use {2}. And...", pkmnName, oldMoveName))
           pbDisplay(_INTL("{1} learned {2}!", pkmnName, moveName)) { pbSEPlay("Pkmn move learnt") }
-          battler.pbCheckFormOnMovesetChange if battler
+          battler&.pbCheckFormOnMovesetChange
           break
         elsif pbDisplayConfirm(_INTL("Give up on learning {1}?", moveName))
           pbDisplay(_INTL("{1} did not learn {2}.", pkmnName, moveName))

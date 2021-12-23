@@ -707,7 +707,7 @@ def pbCopyFrames(canvas)
       dstvalue = sliderwin2.value(2) - 1
       length = (endvalue - startvalue) + 1
       if length > 0 # Ensure correct overlap handling
-        if (startvalue < dstvalue)
+        if startvalue < dstvalue
           startvalue += length
           dstvalue += length
           while length != 0
@@ -1187,5 +1187,5 @@ def pbAnimationEditor
   animationEditorMain(animation)
   Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
   pbSetResizeFactor($PokemonSystem.screensize)
-  $game_map.autoplay if $game_map
+  $game_map&.autoplay
 end

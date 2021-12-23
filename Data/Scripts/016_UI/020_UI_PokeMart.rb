@@ -175,7 +175,7 @@ end
 class PokemonMart_Scene
   def update
     pbUpdateSpriteHash(@sprites)
-    @subscene.pbUpdate if @subscene
+    @subscene&.pbUpdate
   end
 
   def pbRefresh
@@ -296,7 +296,7 @@ class PokemonMart_Scene
   end
 
   def pbEndSellScene
-    @subscene.pbEndScene if @subscene
+    @subscene&.pbEndScene
     pbDisposeSpriteHash(@sprites)
     if @viewport2
       numFrames = Graphics.frame_rate * 4 / 10
@@ -582,14 +582,7 @@ class PokemonMartScreen
         break if !@adapter.addItem(item)
         added += 1
       end
-      if added != quantity
-        added.times do
-          if !@adapter.removeItem(item)
-            raise _INTL("Failed to delete stored items")
-          end
-        end
-        pbDisplayPaused(_INTL("You have no more room in the Bag."))
-      else
+      if added == quantity
         $stats.money_spent_at_marts += price
         $stats.mart_items_bought += quantity
         @adapter.setMoney(@adapter.getMoney - price)
@@ -615,6 +608,13 @@ class PokemonMartScreen
             end
           end
         end
+      else
+        added.times do
+          if !@adapter.removeItem(item)
+            raise _INTL("Failed to delete stored items")
+          end
+        end
+        pbDisplayPaused(_INTL("You have no more room in the Bag."))
       end
     end
     @scene.pbEndBuyScene
@@ -652,7 +652,8 @@ class PokemonMartScreen
         qty.times do
           @adapter.removeItem(item)
         end
-        pbDisplayPaused(_INTL("Turned over the {1} and received ${2}.", itemname, price.to_s_formatted)) { pbSEPlay("Mart buy item") }
+        pbDisplayPaused(_INTL("Turned over the {1} and received ${2}.",
+                              itemname, price.to_s_formatted)) { pbSEPlay("Mart buy item") }
         @scene.pbRefresh
       end
       @scene.pbHideMoney
@@ -673,8 +674,7 @@ def pbPokemonMart(stock, speech = nil, cantsell = false)
   commands[cmdBuy = commands.length]  = _INTL("Buy")
   commands[cmdSell = commands.length] = _INTL("Sell") if !cantsell
   commands[cmdQuit = commands.length] = _INTL("Quit")
-  cmd = pbMessage(speech ? speech : _INTL("Welcome! How may I serve you?"),
-                  commands, cmdQuit + 1)
+  cmd = pbMessage(speech || _INTL("Welcome! How may I serve you?"), commands, cmdQuit + 1)
   loop do
     if cmdBuy >= 0 && cmd == cmdBuy
       scene = PokemonMart_Scene.new
@@ -688,8 +688,7 @@ def pbPokemonMart(stock, speech = nil, cantsell = false)
       pbMessage(_INTL("Please come again!"))
       break
     end
-    cmd = pbMessage(_INTL("Is there anything else I can help you with?"),
-                    commands, cmdQuit + 1)
+    cmd = pbMessage(_INTL("Is there anything else I can help you with?"), commands, cmdQuit + 1)
   end
   $game_temp.clear_mart_prices
 end

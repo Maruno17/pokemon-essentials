@@ -321,7 +321,7 @@ class Battle
   def pbAbleCount(idxBattler = 0)
     party = pbParty(idxBattler)
     count = 0
-    party.each { |pkmn| count += 1 if pkmn && pkmn.able? }
+    party.each { |pkmn| count += 1 if pkmn&.able? }
     return count
   end
 

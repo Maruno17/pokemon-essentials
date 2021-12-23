@@ -175,9 +175,7 @@ class Battle::Move::CurseTargetOrLowerUserSpd1RaiseUserAtkDef1 < Battle::Move
     end
     showAnim = true
     if user.pbCanRaiseStatStage?(:ATTACK, user, self)
-      if user.pbRaiseStatStage(:ATTACK, 1, user, showAnim)
-        showAnim = false
-      end
+      showAnim = false if user.pbRaiseStatStage(:ATTACK, 1, user, showAnim)
     end
     if user.pbCanRaiseStatStage?(:DEFENSE, user, self)
       user.pbRaiseStatStage(:DEFENSE, 1, user, showAnim)
@@ -562,9 +560,7 @@ class Battle::Move::PowerDependsOnUserStockpile < Battle::Move
     showAnim = true
     if user.effects[PBEffects::StockpileDef] > 0 &&
        user.pbCanLowerStatStage?(:DEFENSE, user, self)
-      if user.pbLowerStatStage(:DEFENSE, user.effects[PBEffects::StockpileDef], user, showAnim)
-        showAnim = false
-      end
+      showAnim = false if user.pbLowerStatStage(:DEFENSE, user.effects[PBEffects::StockpileDef], user, showAnim)
     end
     if user.effects[PBEffects::StockpileSpDef] > 0 &&
        user.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user, self)
@@ -611,11 +607,9 @@ class Battle::Move::HealUserDependingOnUserStockpile < Battle::Move
     @battle.pbDisplay(_INTL("{1}'s stockpiled effect wore off!", user.pbThis))
     showAnim = true
     if user.effects[PBEffects::StockpileDef] > 0 &&
-       user.pbCanLowerStatStage?(:DEFENSE, user, self)
-      if user.pbLowerStatStage(:DEFENSE, user.effects[PBEffects::StockpileDef], user, showAnim)
+       user.pbCanLowerStatStage?(:DEFENSE, user, self) && user.pbLowerStatStage(:DEFENSE, user.effects[PBEffects::StockpileDef], user, showAnim)
         showAnim = false
       end
-    end
     if user.effects[PBEffects::StockpileSpDef] > 0 &&
        user.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user, self)
       user.pbLowerStatStage(:SPECIAL_DEFENSE, user.effects[PBEffects::StockpileSpDef], user, showAnim)
