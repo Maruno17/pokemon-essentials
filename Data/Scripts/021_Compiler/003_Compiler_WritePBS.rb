@@ -661,7 +661,6 @@ module Compiler
           f.write(sprintf("[%s,%s]\r\n", trainer.trainer_type, trainer.real_name))
         end
         f.write(sprintf("Items = %s\r\n", trainer.items.join(","))) if trainer.items.length > 0
-        f.write(sprintf("Mega Item = %s\r\n", trainer.mega_item)) if !nil_or_empty?(trainer.mega_item) && trainer.mega_item != _INTL("Mega Ring")
         if trainer.real_lose_text && !trainer.real_lose_text.empty?
           f.write(sprintf("LoseText = %s\r\n", trainer.real_lose_text))
         end

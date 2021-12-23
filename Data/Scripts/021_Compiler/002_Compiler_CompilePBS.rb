@@ -1387,7 +1387,6 @@ module Compiler
     max_level = GameData::GrowthRate.max_level
     trainer_names      = []
     trainer_lose_texts = []
-    trainer_mega_items = []
     trainer_hash       = nil
     current_pkmn       = nil
     # Read each line of trainers.txt at a time and compile it as a trainer property
@@ -1469,7 +1468,6 @@ module Compiler
         when "Items", "LoseText", "MegaItem"
           trainer_hash[line_schema[0]] = property_value
           trainer_lose_texts.push(property_value) if property_name == "LoseText"
-          trainer_mega_items.push(property_value) if property_name == "MegaItem"
         when "Pokemon"
           current_pkmn = {
             :species => property_value[0],
@@ -1506,7 +1504,6 @@ module Compiler
     GameData::Trainer.save
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames, trainer_names)
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText, trainer_lose_texts)
-    MessageTypes.setMessagesAsHash(MessageTypes::TrainerMegaItems, trainer_mega_items)
     process_pbs_file_message_end
   end
 
