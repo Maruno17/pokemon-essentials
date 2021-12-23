@@ -649,39 +649,39 @@ module Compiler
         types = [types] if !types.is_a?(Array)
         types = types.uniq.compact
         species_hash = {
-          :id                    => contents["InternalName"].to_sym,
-          :name                  => contents["Name"],
-          :form_name             => contents["FormName"],
-          :category              => contents["Category"] || contents["Kind"],
-          :pokedex_entry         => contents["Pokedex"],
-          :types                 => types,
-          :base_stats            => contents["BaseStats"],
-          :evs                   => contents["EVs"] || contents["EffortPoints"],
-          :base_exp              => contents["BaseExp"] || contents["BaseEXP"],
-          :growth_rate           => contents["GrowthRate"],
-          :gender_ratio          => contents["GenderRatio"] || contents["GenderRate"],
-          :catch_rate            => contents["CatchRate"] || contents["Rareness"],
-          :happiness             => contents["Happiness"],
-          :moves                 => contents["Moves"],
-          :tutor_moves           => contents["TutorMoves"],
-          :egg_moves             => contents["EggMoves"],
-          :abilities             => contents["Abilities"],
-          :hidden_abilities      => contents["HiddenAbilities"] || contents["HiddenAbility"],
-          :wild_item_common      => contents["WildItemCommon"],
-          :wild_item_uncommon    => contents["WildItemUncommon"],
-          :wild_item_rare        => contents["WildItemRare"],
-          :egg_groups            => contents["EggGroups"] || contents["Compatibility"],
-          :hatch_steps           => contents["HatchSteps"] || contents["StepsToHatch"],
-          :incense               => contents["Incense"],
-          :offspring             => contents["Offspring"],
-          :evolutions            => contents["Evolutions"],
-          :height                => contents["Height"],
-          :weight                => contents["Weight"],
-          :color                 => contents["Color"],
-          :shape                 => contents["Shape"],
-          :habitat               => contents["Habitat"],
-          :generation            => contents["Generation"],
-          :flags                 => contents["Flags"]
+          :id                 => contents["InternalName"].to_sym,
+          :name               => contents["Name"],
+          :form_name          => contents["FormName"],
+          :category           => contents["Category"] || contents["Kind"],
+          :pokedex_entry      => contents["Pokedex"],
+          :types              => types,
+          :base_stats         => contents["BaseStats"],
+          :evs                => contents["EVs"] || contents["EffortPoints"],
+          :base_exp           => contents["BaseExp"] || contents["BaseEXP"],
+          :growth_rate        => contents["GrowthRate"],
+          :gender_ratio       => contents["GenderRatio"] || contents["GenderRate"],
+          :catch_rate         => contents["CatchRate"] || contents["Rareness"],
+          :happiness          => contents["Happiness"],
+          :moves              => contents["Moves"],
+          :tutor_moves        => contents["TutorMoves"],
+          :egg_moves          => contents["EggMoves"],
+          :abilities          => contents["Abilities"],
+          :hidden_abilities   => contents["HiddenAbilities"] || contents["HiddenAbility"],
+          :wild_item_common   => contents["WildItemCommon"],
+          :wild_item_uncommon => contents["WildItemUncommon"],
+          :wild_item_rare     => contents["WildItemRare"],
+          :egg_groups         => contents["EggGroups"] || contents["Compatibility"],
+          :hatch_steps        => contents["HatchSteps"] || contents["StepsToHatch"],
+          :incense            => contents["Incense"],
+          :offspring          => contents["Offspring"],
+          :evolutions         => contents["Evolutions"],
+          :height             => contents["Height"],
+          :weight             => contents["Weight"],
+          :color              => contents["Color"],
+          :shape              => contents["Shape"],
+          :habitat            => contents["Habitat"],
+          :generation         => contents["Generation"],
+          :flags              => contents["Flags"]
         }
         # Add species' data to records
         GameData::Species.register(species_hash)
@@ -850,46 +850,46 @@ module Compiler
           base_data.evolutions.each { |e| evolutions.push(e.clone) }
         end
         species_hash = {
-          :id                    => form_symbol,
-          :species               => species_symbol,
-          :form                  => form,
-          :name                  => base_data.real_name,
-          :form_name             => contents["FormName"],
-          :category              => contents["Category"] || contents["Kind"] || base_data.real_category,
-          :pokedex_entry         => contents["Pokedex"] || base_data.real_pokedex_entry,
-          :pokedex_form          => contents["PokedexForm"],
-          :types                 => types,
-          :base_stats            => contents["BaseStats"] || base_data.base_stats,
-          :evs                   => contents["EVs"] || contents["EffortPoints"] || base_data.evs,
-          :base_exp              => contents["BaseExp"] || contents["BaseEXP"] || base_data.base_exp,
-          :growth_rate           => base_data.growth_rate,
-          :gender_ratio          => base_data.gender_ratio,
-          :catch_rate            => contents["CatchRate"] || contents["Rareness"] || base_data.catch_rate,
-          :happiness             => contents["Happiness"] || base_data.happiness,
-          :moves                 => moves,
-          :tutor_moves           => contents["TutorMoves"] || base_data.tutor_moves.clone,
-          :egg_moves             => contents["EggMoves"] || base_data.egg_moves.clone,
-          :abilities             => contents["Abilities"] || base_data.abilities.clone,
-          :hidden_abilities      => contents["HiddenAbilities"] || contents["HiddenAbility"] || base_data.hidden_abilities.clone,
-          :wild_item_common      => contents["WildItemCommon"] || base_data.wild_item_common.clone,
-          :wild_item_uncommon    => contents["WildItemUncommon"] || base_data.wild_item_uncommon.clone,
-          :wild_item_rare        => contents["WildItemRare"] || base_data.wild_item_rare.clone,
-          :egg_groups            => contents["EggGroups"] || contents["Compatibility"] || base_data.egg_groups.clone,
-          :hatch_steps           => contents["HatchSteps"] || contents["StepsToHatch"] || base_data.hatch_steps,
-          :incense               => base_data.incense,
-          :offspring             => contents["Offspring"] || base_data.offspring.clone,
-          :evolutions            => evolutions,
-          :height                => contents["Height"] || base_data.height,
-          :weight                => contents["Weight"] || base_data.weight,
-          :color                 => contents["Color"] || base_data.color,
-          :shape                 => contents["Shape"] || base_data.shape,
-          :habitat               => contents["Habitat"] || base_data.habitat,
-          :generation            => contents["Generation"] || base_data.generation,
-          :flags                 => contents["Flags"] || base_data.flags.clone,
-          :mega_stone            => contents["MegaStone"],
-          :mega_move             => contents["MegaMove"],
-          :unmega_form           => contents["UnmegaForm"],
-          :mega_message          => contents["MegaMessage"]
+          :id                 => form_symbol,
+          :species            => species_symbol,
+          :form               => form,
+          :name               => base_data.real_name,
+          :form_name          => contents["FormName"],
+          :category           => contents["Category"] || contents["Kind"] || base_data.real_category,
+          :pokedex_entry      => contents["Pokedex"] || base_data.real_pokedex_entry,
+          :pokedex_form       => contents["PokedexForm"],
+          :types              => types,
+          :base_stats         => contents["BaseStats"] || base_data.base_stats,
+          :evs                => contents["EVs"] || contents["EffortPoints"] || base_data.evs,
+          :base_exp           => contents["BaseExp"] || contents["BaseEXP"] || base_data.base_exp,
+          :growth_rate        => base_data.growth_rate,
+          :gender_ratio       => base_data.gender_ratio,
+          :catch_rate         => contents["CatchRate"] || contents["Rareness"] || base_data.catch_rate,
+          :happiness          => contents["Happiness"] || base_data.happiness,
+          :moves              => moves,
+          :tutor_moves        => contents["TutorMoves"] || base_data.tutor_moves.clone,
+          :egg_moves          => contents["EggMoves"] || base_data.egg_moves.clone,
+          :abilities          => contents["Abilities"] || base_data.abilities.clone,
+          :hidden_abilities   => contents["HiddenAbilities"] || contents["HiddenAbility"] || base_data.hidden_abilities.clone,
+          :wild_item_common   => contents["WildItemCommon"] || base_data.wild_item_common.clone,
+          :wild_item_uncommon => contents["WildItemUncommon"] || base_data.wild_item_uncommon.clone,
+          :wild_item_rare     => contents["WildItemRare"] || base_data.wild_item_rare.clone,
+          :egg_groups         => contents["EggGroups"] || contents["Compatibility"] || base_data.egg_groups.clone,
+          :hatch_steps        => contents["HatchSteps"] || contents["StepsToHatch"] || base_data.hatch_steps,
+          :incense            => base_data.incense,
+          :offspring          => contents["Offspring"] || base_data.offspring.clone,
+          :evolutions         => evolutions,
+          :height             => contents["Height"] || base_data.height,
+          :weight             => contents["Weight"] || base_data.weight,
+          :color              => contents["Color"] || base_data.color,
+          :shape              => contents["Shape"] || base_data.shape,
+          :habitat            => contents["Habitat"] || base_data.habitat,
+          :generation         => contents["Generation"] || base_data.generation,
+          :flags              => contents["Flags"] || base_data.flags.clone,
+          :mega_stone         => contents["MegaStone"],
+          :mega_move          => contents["MegaMove"],
+          :unmega_form        => contents["UnmegaForm"],
+          :mega_message       => contents["MegaMessage"]
         }
         # If form has any wild items, ensure none are inherited from base species
         if (contents["WildItemCommon"] && !contents["WildItemCommon"].empty?) ||
@@ -941,9 +941,15 @@ module Compiler
       end
     end
     GameData::Species.each do |species|   # Distribute prevolutions
-      next if species.form == 0   # Looking at alternate forms only
       next if species.evolutions.any? { |evo| evo[3] }   # Already has prevo listed
-      species.evolutions.push(all_evos[species.species].clone) if all_evos[species.species]
+      next if !all_evos[species.species]
+      # Record what species evolves from
+      species.evolutions.push(all_evos[species.species].clone)
+      # Record that the prevolution can evolve into species
+      prevo = GameData::Species.get(all_evos[species.species][0])
+      if prevo.evolutions.none? { |evo| !evo[3] && evo[0] == species.species }
+        prevo.evolutions.push([species.species, :None, nil])
+      end
     end
     # Save all data
     GameData::Species.save

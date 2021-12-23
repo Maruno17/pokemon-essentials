@@ -244,7 +244,7 @@ module GameData
     end
 
     def get_family_evolutions(exclude_invalid = true)
-      evos = self.get_evolutions(exclude_invalid)
+      evos = get_evolutions(exclude_invalid)
       evos = evos.sort { |a, b| GameData::Species.keys.index(a[0]) <=> GameData::Species.keys.index(b[0]) }
       ret = []
       evos.each do |evo|
@@ -280,7 +280,7 @@ module GameData
 
     # Returns an array of all the species in this species' evolution family.
     def get_family_species
-      sp = self.get_baby_species
+      sp = get_baby_species
       evos = GameData::Species.get(sp).get_family_evolutions(false)
       return [sp] if evos.length == 0
       return [sp].concat(evos.map { |e| e[1] }).uniq
@@ -292,7 +292,7 @@ module GameData
       if @offspring.length > 0
         return (other_family & @offspring).length > 0
       end
-      return other_family.include?(@id)
+      return other_family.include?(@species)
     end
 
     # If this species doesn't have egg moves, looks at prevolutions one at a
@@ -305,7 +305,7 @@ module GameData
     end
 
     def family_evolutions_have_method?(check_method, check_param = nil)
-      sp = self.get_baby_species
+      sp = get_baby_species
       evos = GameData::Species.get(sp).get_family_evolutions
       return false if evos.length == 0
       evos.each do |evo|
@@ -322,7 +322,7 @@ module GameData
     # Used by the Moon Ball when checking if a Pokémon's evolution family
     # includes an evolution that uses the Moon Stone.
     def family_item_evolutions_use_item?(check_item = nil)
-      sp = self.get_baby_species
+      sp = get_baby_species
       evos = GameData::Species.get(sp).get_family_evolutions
       return false if !evos || evos.length == 0
       evos.each do |evo|

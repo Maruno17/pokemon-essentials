@@ -66,6 +66,9 @@ class DayCare
       egg.obtain_text    = _INTL("Day-Care Couple")
       egg.happiness      = 120
       egg.form           = 0 if species == :SINISTEA
+      # Set regional form
+      new_form = MultipleForms.call("getFormOnEggCreation", egg)
+      egg.form = new_form if new_form
       return egg
     end
 
