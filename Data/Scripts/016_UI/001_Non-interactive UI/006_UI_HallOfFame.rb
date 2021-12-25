@@ -467,29 +467,6 @@ end
 #===============================================================================
 #
 #===============================================================================
-class HallOfFamePC
-  def shouldShow?
-    return $PokemonGlobal.hallOfFameLastNumber > 0
-  end
-
-  def name
-    return _INTL("Hall of Fame")
-  end
-
-  def access
-    pbMessage(_INTL("\\se[PC access]Accessed the Hall of Fame."))
-    pbHallOfFamePC
-  end
-end
-
-#===============================================================================
-#
-#===============================================================================
-PokemonPCList.registerPC(HallOfFamePC.new)
-
-#===============================================================================
-#
-#===============================================================================
 class PokemonGlobalMetadata
   attr_writer :hallOfFame
   # Number necessary if hallOfFame array reach in its size limit

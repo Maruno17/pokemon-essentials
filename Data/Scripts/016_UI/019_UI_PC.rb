@@ -1,118 +1,10 @@
 #===============================================================================
-#
+# Various PC menus
 #===============================================================================
-class TrainerPC
-  def shouldShow?
-    return true
-  end
-
-  def name
-    return _INTL("{1}'s PC", $player.name)
-  end
-
-  def access
-    pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.", $player.name))
-    pbTrainerPCMenu
-  end
-end
-
-#===============================================================================
-#
-#===============================================================================
-class StorageSystemPC
-  def shouldShow?
-    return true
-  end
-
-  def name
-    if $player.seen_storage_creator
-      return _INTL("{1}'s PC", pbGetStorageCreator)
-    else
-      return _INTL("Someone's PC")
-    end
-  end
-
-  def access
-    pbMessage(_INTL("\\se[PC access]The Pokémon Storage System was opened."))
-    command = 0
-    loop do
-      command = pbShowCommandsWithHelp(nil,
-         [_INTL("Organize Boxes"),
-          _INTL("Withdraw Pokémon"),
-          _INTL("Deposit Pokémon"),
-          _INTL("See ya!")],
-         [_INTL("Organize the Pokémon in Boxes and in your party."),
-          _INTL("Move Pokémon stored in Boxes to your party."),
-          _INTL("Store Pokémon in your party in Boxes."),
-          _INTL("Return to the previous menu.")], -1, command)
-      if command >= 0 && command < 3
-        case command
-        when 1   # Withdraw
-          if $PokemonStorage.party_full?
-            pbMessage(_INTL("Your party is full!"))
-            next
-          end
-        when 2   # Deposit
-          count = 0
-          $PokemonStorage.party.each do |p|
-            count += 1 if p && !p.egg? && p.hp > 0
-          end
-          if count <= 1
-            pbMessage(_INTL("Can't deposit the last Pokémon!"))
-            next
-          end
-        end
-        pbFadeOutIn {
-          scene = PokemonStorageScene.new
-          screen = PokemonStorageScreen.new(scene, $PokemonStorage)
-          screen.pbStartScreen(command)
-        }
-      else
-        break
-      end
-    end
-  end
-end
-
-#===============================================================================
-#
-#===============================================================================
-module PokemonPCList
-  @@pclist = []
-
-  def self.registerPC(pc)
-    @@pclist.push(pc)
-  end
-
-  def self.getCommandList
-    commands = []
-    @@pclist.each do |pc|
-      commands.push(pc.name) if pc.shouldShow?
-    end
-    commands.push(_INTL("Log Off"))
-    return commands
-  end
-
-  def self.callCommand(cmd)
-    return false if cmd < 0 || cmd >= @@pclist.length
-    i = 0
-    @@pclist.each do |pc|
-      next if !pc.shouldShow?
-      if i == cmd
-        pc.access
-        return true
-      end
-      i += 1
-    end
-    return false
-  end
-end
-
-#===============================================================================
-# PC menus
-#===============================================================================
+# Item Storage -----------------------------------------------------------------
 def pbPCItemStorage
   command = 0
+  $PokemonGlobal.pcItemStorage = PCItemStorage.new if !$PokemonGlobal.pcItemStorage
   loop do
     command = pbShowCommandsWithHelp(nil,
        [_INTL("Withdraw Item"),
@@ -125,9 +17,6 @@ def pbPCItemStorage
         _INTL("Go back to the previous menu.")], -1, command)
     case command
     when 0   # Withdraw Item
-      if !$PokemonGlobal.pcItemStorage
-        $PokemonGlobal.pcItemStorage = PCItemStorage.new
-      end
       if $PokemonGlobal.pcItemStorage.empty?
         pbMessage(_INTL("There are no items."))
       else
@@ -144,9 +33,6 @@ def pbPCItemStorage
         screen.pbDepositItemScreen
       }
     when 2   # Toss Item
-      if !$PokemonGlobal.pcItemStorage
-        $PokemonGlobal.pcItemStorage = PCItemStorage.new
-      end
       if $PokemonGlobal.pcItemStorage.empty?
         pbMessage(_INTL("There are no items."))
       else
@@ -162,6 +48,7 @@ def pbPCItemStorage
   end
 end
 
+# Mailbox ----------------------------------------------------------------------
 def pbPCMailbox
   if !$PokemonGlobal.mailbox || $PokemonGlobal.mailbox.length == 0
     pbMessage(_INTL("There's no Mail here."))
@@ -211,6 +98,7 @@ def pbPCMailbox
   end
 end
 
+# Trainer PC Menu --------------------------------------------------------------
 def pbTrainerPCMenu
   command = 0
   loop do
@@ -226,30 +114,158 @@ def pbTrainerPCMenu
   end
 end
 
+# Pokecenter PC  script command ------------------------------------------------
+def pbPokeCenterPC
+  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $player.name))
+  command  = 0
+  commands    = []
+  display_cmd = []
+  PokemonPCCommands.each_available do |option, hash|
+    commands.push(option)
+    name = PokemonPCCommands.get_string_option("name", option)
+    display_cmd.push(name)
+  end
+  display_cmd.push(_INTL("Cancel"))
+  loop do
+    command = pbMessage(_INTL("Which PC should be accessed?"), display_cmd, commands.length, nil, command)
+    break if command >= commands.length
+    cmd      = commands[command]
+    endscene = PokemonPCCommands.call("effect", cmd)
+    break if endscene
+  end
+  pbSEPlay("PC close")
+end
+
+# Trainer PC script command ----------------------------------------------------
 def pbTrainerPC
   pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $player.name))
   pbTrainerPCMenu
   pbSEPlay("PC close")
 end
 
-def pbPokeCenterPC
-  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $player.name))
-  command = 0
-  loop do
-    commands = PokemonPCList.getCommandList
-    command = pbMessage(_INTL("Which PC should be accessed?"), commands,
-                        commands.length, nil, command)
-    break if !PokemonPCList.callCommand(command)
-  end
-  pbSEPlay("PC close")
-end
-
+# Get name of Storage System creator -------------------------------------------
 def pbGetStorageCreator
   return GameData::Metadata.get.storage_creator
 end
 
+
 #===============================================================================
-#
+# Module to register and handle commands in the PC
 #===============================================================================
-PokemonPCList.registerPC(StorageSystemPC.new)
-PokemonPCList.registerPC(TrainerPC.new)
+module PokemonPCCommands
+  @@commands = HandlerHashBasic.new
+
+  def self.register(option, hash)
+    @@commands.add(option, hash)
+  end
+
+  def self.each_available
+    @@commands.sort_by("priority")
+    @@commands.each { |key, hash|
+      condition = hash["condition"]
+      yield key, hash if !condition.respond_to?(:call) || condition.call
+    }
+  end
+
+  def self.get_string_option(function, option, *args)
+    option_hash = @@commands[option]
+    return option if !option_hash || !option_hash[function]
+    if option_hash[function].is_a?(Proc)
+      return option_hash[function].call(*args)
+    elsif option_hash[function].is_a?(String)
+      return option_hash[function]
+    end
+    return option
+  end
+
+  def self.call(function, option, *args)
+    option_hash = @@commands[option]
+    return nil if !option_hash || !option_hash[function]
+    return (option_hash[function].call(*args) == true)
+  end
+end
+
+#===============================================================================
+# Individual commands for the PC
+#===============================================================================
+# Pokemon Storage --------------------------------------------------------------
+PokemonPCCommands.register("pokemonstorage", {
+  "name"        => proc {
+    next $player.seen_storage_creator ? _INTL("{1}'s PC", pbGetStorageCreator) : _INTL("Someone's PC")
+  },
+  "condition"   => proc { next true },
+  "priority"    => 40,
+  "effect"      => proc {
+    pbMessage(_INTL("\\se[PC access]The Pokémon Storage System was opened."))
+    command = 0
+    loop do
+      command = pbShowCommandsWithHelp(nil,
+         [_INTL("Organize Boxes"),
+          _INTL("Withdraw Pokémon"),
+          _INTL("Deposit Pokémon"),
+          _INTL("See ya!")],
+         [_INTL("Organize the Pokémon in Boxes and in your party."),
+          _INTL("Move Pokémon stored in Boxes to your party."),
+          _INTL("Store Pokémon in your party in Boxes."),
+          _INTL("Return to the previous menu.")], -1, command)
+      if command >= 0 && command < 3
+        case command
+        when 1   # Withdraw
+          if $PokemonStorage.party_full?
+            pbMessage(_INTL("Your party is full!"))
+            next
+          end
+        when 2   # Deposit
+          count = 0
+          $PokemonStorage.party.each do |p|
+            count += 1 if p && !p.egg? && p.hp > 0
+          end
+          if count <= 1
+            pbMessage(_INTL("Can't deposit the last Pokémon!"))
+            next
+          end
+        end
+        pbFadeOutIn {
+          scene = PokemonStorageScene.new
+          screen = PokemonStorageScreen.new(scene, $PokemonStorage)
+          screen.pbStartScreen(command)
+        }
+      else
+        break
+      end
+    end
+  }
+})
+
+# Trainer PC -------------------------------------------------------------------
+PokemonPCCommands.register("trainerpc", {
+  "name"        => proc { next _INTL("{1}'s PC", $player.name) },
+  "condition"   => proc { next true },
+  "priority"    => 30,
+  "effect"      => proc {
+    pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.", $player.name))
+    pbTrainerPCMenu
+  }
+})
+
+# Hall Of Fame PC Menu ---------------------------------------------------------
+PokemonPCCommands.register("halloffame", {
+  "name"        => _INTL("Hall of Fame"),
+  "condition"   => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
+  "priority"    => 20,
+  "effect"      => proc {
+    pbMessage(_INTL("\\se[PC access]Accessed the Hall of Fame."))
+    pbHallOfFamePC
+  }
+})
+
+# Shadow Pokemon Purify Chamber ------------------------------------------------
+PokemonPCCommands.register("purifychamber", {
+  "name"        => _INTL("Purify Chamber"),
+  "condition"   => proc { next $player.seen_purify_chamber },
+  "priority"    => 10,
+  "effect"      => proc {
+    pbMessage(_INTL("\\se[PC access]Accessed the Purify Chamber."))
+    pbPurifyChamber
+  }
+})

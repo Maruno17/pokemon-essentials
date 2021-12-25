@@ -1310,26 +1310,3 @@ def pbPurifyChamber
     screen.pbStartPurify
   }
 end
-
-#===============================================================================
-#
-#===============================================================================
-class PurifyChamberPC
-  def shouldShow?
-    return $player.seen_purify_chamber
-  end
-
-  def name
-    return _INTL("Purify Chamber")
-  end
-
-  def access
-    pbMessage(_INTL("\\se[PC access]Accessed the Purify Chamber."))
-    pbPurifyChamber
-  end
-end
-
-#===============================================================================
-#
-#===============================================================================
-PokemonPCList.registerPC(PurifyChamberPC.new)
