@@ -1,52 +1,23 @@
 #===============================================================================
 #
 #===============================================================================
-module PokemonDebugMenuCommands
-  @@commands = HandlerHashBasic.new
-
-  def self.register(option, hash)
-    @@commands.add(option, hash)
-  end
-
-  def self.registerIf(condition, hash)
-    @@commands.addIf(condition, hash)
-  end
-
-  def self.copy(option, *new_options)
-    @@commands.copy(option, *new_options)
-  end
-
-  def self.each
-    @@commands.each { |key, hash| yield key, hash }
-  end
-
-  def self.hasFunction?(option, function)
-    option_hash = @@commands[option]
-    return option_hash&.has_key?(function)
-  end
-
-  def self.getFunction(option, function)
-    option_hash = @@commands[option]
-    return (option_hash && option_hash[function]) ? option_hash[function] : nil
-  end
-
-  def self.call(function, option, *args)
-    option_hash = @@commands[option]
-    return nil if !option_hash || !option_hash[function]
-    return (option_hash[function].call(*args) == true)
+module MenuHandlers
+  class PokemonDebug
+    extend HandlerMethods
+    @commands = HandlerHashBasic.new
   end
 end
 
 #===============================================================================
 # HP/Status options
 #===============================================================================
-PokemonDebugMenuCommands.register("hp_status_menu", {
+MenuHandlers::PokemonDebug.register("hp_status_menu", {
   "parent"      => "main",
   "name"        => _INTL("HP/Status..."),
   "always_show" => true
 })
 
-PokemonDebugMenuCommands.register("set_hp", {
+MenuHandlers::PokemonDebug.register("set_hp", {
   "parent"      => "hp_status_menu",
   "name"        => _INTL("Set HP"),
   "always_show" => true,
@@ -69,7 +40,7 @@ PokemonDebugMenuCommands.register("set_hp", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_status", {
+MenuHandlers::PokemonDebug.register("set_status", {
   "parent"      => "hp_status_menu",
   "name"        => _INTL("Set status"),
   "always_show" => true,
@@ -123,7 +94,7 @@ PokemonDebugMenuCommands.register("set_status", {
   }
 })
 
-PokemonDebugMenuCommands.register("full_heal", {
+MenuHandlers::PokemonDebug.register("full_heal", {
   "parent"      => "hp_status_menu",
   "name"        => _INTL("Fully heal"),
   "always_show" => true,
@@ -139,7 +110,7 @@ PokemonDebugMenuCommands.register("full_heal", {
   }
 })
 
-PokemonDebugMenuCommands.register("make_fainted", {
+MenuHandlers::PokemonDebug.register("make_fainted", {
   "parent"      => "hp_status_menu",
   "name"        => _INTL("Make fainted"),
   "always_show" => true,
@@ -154,7 +125,7 @@ PokemonDebugMenuCommands.register("make_fainted", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_pokerus", {
+MenuHandlers::PokemonDebug.register("set_pokerus", {
   "parent"      => "hp_status_menu",
   "name"        => _INTL("Set Pokérus"),
   "always_show" => true,
@@ -193,13 +164,13 @@ PokemonDebugMenuCommands.register("set_pokerus", {
 #===============================================================================
 # Level/stats options
 #===============================================================================
-PokemonDebugMenuCommands.register("level_stats", {
+MenuHandlers::PokemonDebug.register("level_stats", {
   "parent"      => "main",
   "name"        => _INTL("Level/stats..."),
   "always_show" => true
 })
 
-PokemonDebugMenuCommands.register("set_level", {
+MenuHandlers::PokemonDebug.register("set_level", {
   "parent"      => "level_stats",
   "name"        => _INTL("Set level"),
   "always_show" => true,
@@ -223,7 +194,7 @@ PokemonDebugMenuCommands.register("set_level", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_exp", {
+MenuHandlers::PokemonDebug.register("set_exp", {
   "parent"      => "level_stats",
   "name"        => _INTL("Set Exp"),
   "always_show" => true,
@@ -253,7 +224,7 @@ PokemonDebugMenuCommands.register("set_exp", {
   }
 })
 
-PokemonDebugMenuCommands.register("hidden_values", {
+MenuHandlers::PokemonDebug.register("hidden_values", {
   "parent"      => "level_stats",
   "name"        => _INTL("EV/IV/pID..."),
   "always_show" => true,
@@ -367,7 +338,7 @@ PokemonDebugMenuCommands.register("hidden_values", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_happiness", {
+MenuHandlers::PokemonDebug.register("set_happiness", {
   "parent"      => "level_stats",
   "name"        => _INTL("Set happiness"),
   "always_show" => true,
@@ -386,13 +357,13 @@ PokemonDebugMenuCommands.register("set_happiness", {
   }
 })
 
-PokemonDebugMenuCommands.register("contest_stats", {
+MenuHandlers::PokemonDebug.register("contest_stats", {
   "parent"      => "level_stats",
   "name"        => _INTL("Contest stats..."),
   "always_show" => true
 })
 
-PokemonDebugMenuCommands.register("set_beauty", {
+MenuHandlers::PokemonDebug.register("set_beauty", {
   "parent"      => "contest_stats",
   "name"        => _INTL("Set Beauty"),
   "always_show" => true,
@@ -411,7 +382,7 @@ PokemonDebugMenuCommands.register("set_beauty", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_cool", {
+MenuHandlers::PokemonDebug.register("set_cool", {
   "parent"      => "contest_stats",
   "name"        => _INTL("Set Cool"),
   "always_show" => true,
@@ -430,7 +401,7 @@ PokemonDebugMenuCommands.register("set_cool", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_cute", {
+MenuHandlers::PokemonDebug.register("set_cute", {
   "parent"      => "contest_stats",
   "name"        => _INTL("Set Cute"),
   "always_show" => true,
@@ -449,7 +420,7 @@ PokemonDebugMenuCommands.register("set_cute", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_smart", {
+MenuHandlers::PokemonDebug.register("set_smart", {
   "parent"      => "contest_stats",
   "name"        => _INTL("Set Smart"),
   "always_show" => true,
@@ -468,7 +439,7 @@ PokemonDebugMenuCommands.register("set_smart", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_tough", {
+MenuHandlers::PokemonDebug.register("set_tough", {
   "parent"      => "contest_stats",
   "name"        => _INTL("Set Tough"),
   "always_show" => true,
@@ -487,7 +458,7 @@ PokemonDebugMenuCommands.register("set_tough", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_sheen", {
+MenuHandlers::PokemonDebug.register("set_sheen", {
   "parent"      => "contest_stats",
   "name"        => _INTL("Set Sheen"),
   "always_show" => true,
@@ -509,13 +480,13 @@ PokemonDebugMenuCommands.register("set_sheen", {
 #===============================================================================
 # Moves options
 #===============================================================================
-PokemonDebugMenuCommands.register("moves", {
+MenuHandlers::PokemonDebug.register("moves", {
   "parent"      => "main",
   "name"        => _INTL("Moves..."),
   "always_show" => true
 })
 
-PokemonDebugMenuCommands.register("teach_move", {
+MenuHandlers::PokemonDebug.register("teach_move", {
   "parent"      => "moves",
   "name"        => _INTL("Teach move"),
   "always_show" => true,
@@ -529,7 +500,7 @@ PokemonDebugMenuCommands.register("teach_move", {
   }
 })
 
-PokemonDebugMenuCommands.register("forget_move", {
+MenuHandlers::PokemonDebug.register("forget_move", {
   "parent"      => "moves",
   "name"        => _INTL("Forget move"),
   "always_show" => true,
@@ -545,7 +516,7 @@ PokemonDebugMenuCommands.register("forget_move", {
   }
 })
 
-PokemonDebugMenuCommands.register("reset_moves", {
+MenuHandlers::PokemonDebug.register("reset_moves", {
   "parent"      => "moves",
   "name"        => _INTL("Reset moves"),
   "always_show" => true,
@@ -557,7 +528,7 @@ PokemonDebugMenuCommands.register("reset_moves", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_move_pp", {
+MenuHandlers::PokemonDebug.register("set_move_pp", {
   "parent"      => "moves",
   "name"        => _INTL("Set move PP"),
   "always_show" => true,
@@ -621,7 +592,7 @@ PokemonDebugMenuCommands.register("set_move_pp", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_initial_moves", {
+MenuHandlers::PokemonDebug.register("set_initial_moves", {
   "parent"      => "moves",
   "name"        => _INTL("Reset initial moves"),
   "always_show" => true,
@@ -636,7 +607,7 @@ PokemonDebugMenuCommands.register("set_initial_moves", {
 #===============================================================================
 # Other options
 #===============================================================================
-PokemonDebugMenuCommands.register("set_item", {
+MenuHandlers::PokemonDebug.register("set_item", {
   "parent"      => "main",
   "name"        => _INTL("Set item"),
   "always_show" => true,
@@ -674,7 +645,7 @@ PokemonDebugMenuCommands.register("set_item", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_ability", {
+MenuHandlers::PokemonDebug.register("set_ability", {
   "parent"      => "main",
   "name"        => _INTL("Set ability"),
   "always_show" => true,
@@ -723,7 +694,7 @@ PokemonDebugMenuCommands.register("set_ability", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_nature", {
+MenuHandlers::PokemonDebug.register("set_nature", {
   "parent"      => "main",
   "name"        => _INTL("Set nature"),
   "always_show" => true,
@@ -766,7 +737,7 @@ PokemonDebugMenuCommands.register("set_nature", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_gender", {
+MenuHandlers::PokemonDebug.register("set_gender", {
   "parent"      => "main",
   "name"        => _INTL("Set gender"),
   "always_show" => true,
@@ -804,7 +775,7 @@ PokemonDebugMenuCommands.register("set_gender", {
   }
 })
 
-PokemonDebugMenuCommands.register("species_and_form", {
+MenuHandlers::PokemonDebug.register("species_and_form", {
   "parent"      => "main",
   "name"        => _INTL("Species/form..."),
   "always_show" => true,
@@ -867,13 +838,13 @@ PokemonDebugMenuCommands.register("species_and_form", {
 #===============================================================================
 # Cosmetic options
 #===============================================================================
-PokemonDebugMenuCommands.register("cosmetic", {
+MenuHandlers::PokemonDebug.register("cosmetic", {
   "parent"      => "main",
   "name"        => _INTL("Cosmetic info..."),
   "always_show" => true
 })
 
-PokemonDebugMenuCommands.register("set_shininess", {
+MenuHandlers::PokemonDebug.register("set_shininess", {
   "parent"      => "cosmetic",
   "name"        => _INTL("Set shininess"),
   "always_show" => true,
@@ -905,7 +876,7 @@ PokemonDebugMenuCommands.register("set_shininess", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_pokeball", {
+MenuHandlers::PokemonDebug.register("set_pokeball", {
   "parent"      => "cosmetic",
   "name"        => _INTL("Set Poké Ball"),
   "always_show" => true,
@@ -933,7 +904,7 @@ PokemonDebugMenuCommands.register("set_pokeball", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_ribbons", {
+MenuHandlers::PokemonDebug.register("set_ribbons", {
   "parent"      => "cosmetic",
   "name"        => _INTL("Set ribbons"),
   "always_show" => true,
@@ -969,7 +940,7 @@ PokemonDebugMenuCommands.register("set_ribbons", {
   }
 })
 
-PokemonDebugMenuCommands.register("set_nickname", {
+MenuHandlers::PokemonDebug.register("set_nickname", {
   "parent"      => "cosmetic",
   "name"        => _INTL("Set nickname"),
   "always_show" => true,
@@ -997,7 +968,7 @@ PokemonDebugMenuCommands.register("set_nickname", {
   }
 })
 
-PokemonDebugMenuCommands.register("ownership", {
+MenuHandlers::PokemonDebug.register("ownership", {
   "parent"      => "cosmetic",
   "name"        => _INTL("Ownership..."),
   "always_show" => true,
@@ -1044,7 +1015,7 @@ PokemonDebugMenuCommands.register("ownership", {
 #===============================================================================
 # Can store/release/trade
 #===============================================================================
-PokemonDebugMenuCommands.register("set_discardable", {
+MenuHandlers::PokemonDebug.register("set_discardable", {
   "parent"      => "main",
   "name"        => _INTL("Set discardable"),
   "always_show" => true,
@@ -1074,7 +1045,7 @@ PokemonDebugMenuCommands.register("set_discardable", {
 #===============================================================================
 # Other options
 #===============================================================================
-PokemonDebugMenuCommands.register("set_egg", {
+MenuHandlers::PokemonDebug.register("set_egg", {
   "parent"      => "main",
   "name"        => _INTL("Set egg"),
   "always_show" => true,
@@ -1116,7 +1087,7 @@ PokemonDebugMenuCommands.register("set_egg", {
   }
 })
 
-PokemonDebugMenuCommands.register("shadow_pkmn", {
+MenuHandlers::PokemonDebug.register("shadow_pkmn", {
   "parent"      => "main",
   "name"        => _INTL("Shadow Pkmn..."),
   "always_show" => true,
@@ -1158,7 +1129,7 @@ PokemonDebugMenuCommands.register("shadow_pkmn", {
   }
 })
 
-PokemonDebugMenuCommands.register("mystery_gift", {
+MenuHandlers::PokemonDebug.register("mystery_gift", {
   "parent"      => "main",
   "name"        => _INTL("Mystery Gift"),
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
@@ -1167,7 +1138,7 @@ PokemonDebugMenuCommands.register("mystery_gift", {
   }
 })
 
-PokemonDebugMenuCommands.register("duplicate", {
+MenuHandlers::PokemonDebug.register("duplicate", {
   "parent"      => "main",
   "name"        => _INTL("Duplicate"),
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
@@ -1201,7 +1172,7 @@ PokemonDebugMenuCommands.register("duplicate", {
   }
 })
 
-PokemonDebugMenuCommands.register("delete", {
+MenuHandlers::PokemonDebug.register("delete", {
   "parent"      => "main",
   "name"        => _INTL("Delete"),
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|

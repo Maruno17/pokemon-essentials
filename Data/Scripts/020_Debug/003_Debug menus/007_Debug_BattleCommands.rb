@@ -23,53 +23,24 @@ Choose each battler's next action.
 #===============================================================================
 #
 #===============================================================================
-module BattleDebugMenuCommands
-  @@commands = HandlerHashBasic.new
-
-  def self.register(option, hash)
-    @@commands.add(option, hash)
-  end
-
-  def self.registerIf(condition, hash)
-    @@commands.addIf(condition, hash)
-  end
-
-  def self.copy(option, *new_options)
-    @@commands.copy(option, *new_options)
-  end
-
-  def self.each
-    @@commands.each { |key, hash| yield key, hash }
-  end
-
-  def self.hasFunction?(option, function)
-    option_hash = @@commands[option]
-    return option_hash&.has_key?(function)
-  end
-
-  def self.getFunction(option, function)
-    option_hash = @@commands[option]
-    return (option_hash && option_hash[function]) ? option_hash[function] : nil
-  end
-
-  def self.call(function, option, *args)
-    option_hash = @@commands[option]
-    return nil if !option_hash || !option_hash[function]
-    return (option_hash[function].call(*args) == true)
+module MenuHandlers
+  class BattleDebug
+    extend HandlerMethods
+    @commands = HandlerHashBasic.new
   end
 end
 
 #===============================================================================
 # Battler Options
 #===============================================================================
-BattleDebugMenuCommands.register("battlers", {
+MenuHandlers::BattleDebug.register("battlers", {
   "parent"      => "main",
   "name"        => _INTL("Battlers..."),
   "description" => _INTL("Look at Pokémon in battle and change their properties."),
   "always_show" => true
 })
 
-BattleDebugMenuCommands.register("list_player_battlers", {
+MenuHandlers::BattleDebug.register("list_player_battlers", {
   "parent"      => "battlers",
   "name"        => _INTL("Player-Side Battlers"),
   "description" => _INTL("Edit Pokémon on the player's side of battle."),
@@ -96,7 +67,7 @@ BattleDebugMenuCommands.register("list_player_battlers", {
   }
 })
 
-BattleDebugMenuCommands.register("list_foe_battlers", {
+MenuHandlers::BattleDebug.register("list_foe_battlers", {
   "parent"      => "battlers",
   "name"        => _INTL("Foe-Side Battlers"),
   "description" => _INTL("Edit Pokémon on the opposing side of battle."),
@@ -120,14 +91,14 @@ BattleDebugMenuCommands.register("list_foe_battlers", {
 #===============================================================================
 # Field Options
 #===============================================================================
-BattleDebugMenuCommands.register("field", {
+MenuHandlers::BattleDebug.register("field", {
   "parent"      => "main",
   "name"        => _INTL("Field Effects..."),
   "description" => _INTL("Effects that apply to the whole battlefield."),
   "always_show" => true
 })
 
-BattleDebugMenuCommands.register("weather", {
+MenuHandlers::BattleDebug.register("weather", {
   "parent"      => "field",
   "name"        => _INTL("Weather"),
   "description" => _INTL("Set weather and duration."),
@@ -190,7 +161,7 @@ BattleDebugMenuCommands.register("weather", {
   }
 })
 
-BattleDebugMenuCommands.register("terrain", {
+MenuHandlers::BattleDebug.register("terrain", {
   "parent"      => "field",
   "name"        => _INTL("Terrain"),
   "description" => _INTL("Set terrain and duration."),
@@ -253,7 +224,7 @@ BattleDebugMenuCommands.register("terrain", {
   }
 })
 
-BattleDebugMenuCommands.register("environment", {
+MenuHandlers::BattleDebug.register("environment", {
   "parent"      => "field",
   "name"        => _INTL("Environment/Time"),
   "description" => _INTL("Set the battle's environment and time of day."),
@@ -292,7 +263,7 @@ BattleDebugMenuCommands.register("environment", {
   }
 })
 
-BattleDebugMenuCommands.register("backdrop", {
+MenuHandlers::BattleDebug.register("backdrop", {
   "parent"      => "field",
   "name"        => _INTL("Backdrop Names"),
   "description" => _INTL("Set the names of the backdrop and base graphics."),
@@ -317,7 +288,7 @@ BattleDebugMenuCommands.register("backdrop", {
   }
 })
 
-BattleDebugMenuCommands.register("set_field_effects", {
+MenuHandlers::BattleDebug.register("set_field_effects", {
   "parent"      => "field",
   "name"        => _INTL("Other Field Effects..."),
   "description" => _INTL("View/set other effects that apply to the whole battlefield."),
@@ -329,7 +300,7 @@ BattleDebugMenuCommands.register("set_field_effects", {
   }
 })
 
-BattleDebugMenuCommands.register("player_side", {
+MenuHandlers::BattleDebug.register("player_side", {
   "parent"      => "field",
   "name"        => _INTL("Player's Side Effects..."),
   "description" => _INTL("Effects that apply to the side the player is on."),
@@ -341,7 +312,7 @@ BattleDebugMenuCommands.register("player_side", {
   }
 })
 
-BattleDebugMenuCommands.register("opposing_side", {
+MenuHandlers::BattleDebug.register("opposing_side", {
   "parent"      => "field",
   "name"        => _INTL("Foe's Side Effects..."),
   "description" => _INTL("Effects that apply to the opposing side."),
@@ -356,14 +327,14 @@ BattleDebugMenuCommands.register("opposing_side", {
 #===============================================================================
 # Trainer Options
 #===============================================================================
-BattleDebugMenuCommands.register("trainers", {
+MenuHandlers::BattleDebug.register("trainers", {
   "parent"      => "main",
   "name"        => _INTL("Trainer Options..."),
   "description" => _INTL("Variables that apply to trainers."),
   "always_show" => true
 })
 
-BattleDebugMenuCommands.register("mega_evolution", {
+MenuHandlers::BattleDebug.register("mega_evolution", {
   "parent"      => "trainers",
   "name"        => _INTL("Mega Evolution"),
   "description" => _INTL("Whether each trainer is allowed to Mega Evolve."),
@@ -399,7 +370,7 @@ BattleDebugMenuCommands.register("mega_evolution", {
   }
 })
 
-BattleDebugMenuCommands.register("speed_order", {
+MenuHandlers::BattleDebug.register("speed_order", {
   "parent"      => "main",
   "name"        => _INTL("Battler Speed Order"),
   "description" => _INTL("Show all battlers in order from fastest to slowest."),

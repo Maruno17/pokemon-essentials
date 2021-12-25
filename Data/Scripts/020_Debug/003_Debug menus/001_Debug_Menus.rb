@@ -68,7 +68,7 @@ end
 #===============================================================================
 def pbDebugMenu(show_all = true)
   commands = CommandMenuList.new
-  DebugMenuCommands.each do |option, hash|
+  MenuHandlers::DebugMenu.each do |option, hash|
     commands.add(option, hash) if show_all || hash["always_show"]
   end
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -124,9 +124,9 @@ def pbDebugMenu(show_all = true)
       cmdwindow.index = 0
       refresh = true
     elsif cmd == "warp"
-      return if DebugMenuCommands.call("effect", cmd, sprites, viewport)
+      return if MenuHandlers::DebugMenu.call("effect", cmd, sprites, viewport)
     else
-      DebugMenuCommands.call("effect", cmd)
+      MenuHandlers::DebugMenu.call("effect", cmd)
     end
   end
   pbPlayCloseMenuSE
@@ -143,7 +143,7 @@ module PokemonDebugMixin
   def pbPokemonDebug(pkmn, pkmnid, heldpoke = nil, settingUpBattle = false)
     command = 0
     commands = CommandMenuList.new
-    PokemonDebugMenuCommands.each do |option, hash|
+    MenuHandlers::PokemonDebug.each do |option, hash|
       commands.add(option, hash) if !settingUpBattle || hash["always_show"]
     end
     loop do
@@ -161,7 +161,7 @@ module PokemonDebugMixin
         if commands.hasSubMenu?(cmd)
           commands.currentList = cmd
           command = 0
-        elsif PokemonDebugMenuCommands.call("effect", cmd, pkmn, pkmnid, heldpoke, settingUpBattle, self)
+        elsif MenuHandlers::PokemonDebug.call("effect", cmd, pkmn, pkmnid, heldpoke, settingUpBattle, self)
           break
         end
       end
@@ -175,7 +175,7 @@ end
 module Battle::DebugMixin
   def pbBattleDebug(battle, show_all = true)
     commands = CommandMenuList.new
-    BattleDebugMenuCommands.each do |option, hash|
+    MenuHandlers::BattleDebug.each do |option, hash|
       commands.add(option, hash) if show_all || hash["always_show"]
     end
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -229,7 +229,7 @@ module Battle::DebugMixin
         cmdwindow.index = 0
         refresh = true
       else
-        BattleDebugMenuCommands.call("effect", cmd, battle)
+        MenuHandlers::BattleDebug.call("effect", cmd, battle)
       end
     end
     pbPlayCloseMenuSE
@@ -326,7 +326,7 @@ module Battle::DebugMixin
 
   def pbBattlePokemonDebug(pkmn, battler = nil)
     commands = CommandMenuList.new
-    BattlePokemonDebugMenuCommands.each do |option, hash|
+    MenuHandlers::BattlerDebug.each do |option, hash|
       next if battler && hash["usage"] == :pokemon
       next if !battler && hash["usage"] == :battler
       commands.add(option, hash)
@@ -373,7 +373,7 @@ module Battle::DebugMixin
           commands.currentList = real_cmd
           cmd = 0
         else
-          BattlePokemonDebugMenuCommands.call("effect", real_cmd, pkmn, battler, self)
+          MenuHandlers::BattlerDebug.call("effect", real_cmd, pkmn, battler, self)
           need_refresh = true
         end
       end

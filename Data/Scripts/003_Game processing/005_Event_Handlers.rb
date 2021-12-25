@@ -277,8 +277,19 @@ end
 module MenuHandlers
   module HandlerMethods
     def register(option, hash)
-      return false if !@commands[option].nil?
-      @commands[option] = hash
+      @commands.add(option, hash)
+    end
+
+    def register_if(condition, hash)
+      @@commands.addIf(condition, hash)
+    end
+
+    def copy(option, *new_options)
+      @commands.copy(option, *new_options)
+    end
+
+    def each
+      @commands.each { |key, hash| yield key, hash }
     end
 
     def each_available
@@ -288,6 +299,16 @@ module MenuHandlers
         condition = hash["condition"]
         yield key, hash if !condition.respond_to?(:call) || condition.call
       }
+    end
+
+    def has_function?(option, function)
+      option_hash = @@commands[option]
+      return option_hash&.has_key?(function)
+    end
+
+    def get_function(option, function)
+      option_hash = @@commands[option]
+      return (option_hash && option_hash[function]) ? option_hash[function] : nil
     end
 
     def get_string_option(function, option, *args)
