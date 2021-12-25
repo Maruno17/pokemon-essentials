@@ -104,11 +104,11 @@ class PokemonPauseMenu
     endscene    = false
     commands    = []
     display_cmd = []
-    PauseMenuCommands.each_available do |option, hash|
+    MenuHandlers::PauseMenu.each_available do |option, hash|
       commands.push(option)
-      name = PauseMenuCommands.get_string_option("name", option)
+      name = MenuHandlers::PauseMenu.get_string_option("name", option)
       display_cmd.push(name)
-      info = PauseMenuCommands.get_string_option("info", option)
+      info = MenuHandlers::PauseMenu.get_string_option("info", option)
       @scene.pbShowInfo(info) if !nil_or_empty?(info) && option != info
     end
     loop do
@@ -118,7 +118,7 @@ class PokemonPauseMenu
         break
       end
       cmd = commands[command]
-      endscene = PauseMenuCommands.call("effect", cmd, @scene)
+      endscene = MenuHandlers::PauseMenu.call("effect", cmd, @scene)
       break if endscene
     end
     @scene.pbEndScene if !endscene
@@ -128,36 +128,12 @@ end
 #===============================================================================
 # Module to register and handle commands in the Pause Menu
 #===============================================================================
-module PauseMenuCommands
-  @@commands = HandlerHashBasic.new
+module MenuHandlers
+  class PauseMenu
+    extend HandlerMethods
 
-  def self.register(option, hash)
-    @@commands.add(option, hash)
-  end
+    @commands = HandlerHashBasic.new
 
-  def self.each_available
-    @@commands.sort_by("priority")
-    @@commands.each { |key, hash|
-      condition = hash["condition"]
-      yield key, hash if !condition.respond_to?(:call) || condition.call
-    }
-  end
-
-  def self.get_string_option(function, option, *args)
-    option_hash = @@commands[option]
-    return option if !option_hash || !option_hash[function]
-    if option_hash[function].is_a?(Proc)
-      return option_hash[function].call(*args)
-    elsif option_hash[function].is_a?(String)
-      return option_hash[function]
-    end
-    return option
-  end
-
-  def self.call(function, option, *args)
-    option_hash = @@commands[option]
-    return nil if !option_hash || !option_hash[function]
-    return option_hash[function].call(*args) == true
   end
 end
 
@@ -165,7 +141,7 @@ end
 # Individual commands for the Pause Menu
 #===============================================================================
 # Pokedex ----------------------------------------------------------------------
-PauseMenuCommands.register("pokedex", {
+MenuHandlers::PauseMenu.register("pokedex", {
   "name"        => _INTL("Pokedex"),
   "condition"   => proc {
     next $player.has_pokedex && $player.pokedex.accessible_dexes.length > 0
@@ -203,7 +179,7 @@ PauseMenuCommands.register("pokedex", {
 })
 
 # Pokemon Party ----------------------------------------------------------------
-PauseMenuCommands.register("party", {
+MenuHandlers::PauseMenu.register("party", {
   "name"        => _INTL("Pokémon"),
   "condition"   => proc { next $player.party_count > 0 },
   "priority"    => 90,
@@ -224,7 +200,7 @@ PauseMenuCommands.register("party", {
 })
 
 # Bag --------------------------------------------------------------------------
-PauseMenuCommands.register("bag", {
+MenuHandlers::PauseMenu.register("bag", {
   "name"        => _INTL("Bag"),
   "condition"   => proc { next !pbInBugContest? },
   "priority"    => 80,
@@ -245,7 +221,7 @@ PauseMenuCommands.register("bag", {
 })
 
 # Pokegear ---------------------------------------------------------------------
-PauseMenuCommands.register("pokegear", {
+MenuHandlers::PauseMenu.register("pokegear", {
   "name"        => _INTL("Pokégear"),
   "condition"   => proc { next $player.has_pokegear },
   "priority"    => 70,
@@ -262,7 +238,7 @@ PauseMenuCommands.register("pokegear", {
 })
 
 # Town Map ---------------------------------------------------------------------
-PauseMenuCommands.register("townmap", {
+MenuHandlers::PauseMenu.register("townmap", {
   "name"        => _INTL("Town Map"),
   "condition"   => proc { next $bag.has?(:TOWNMAP) && !$player.has_pokegear },
   "priority"    => 70,
@@ -280,7 +256,7 @@ PauseMenuCommands.register("townmap", {
 })
 
 # Trainer Card -----------------------------------------------------------------
-PauseMenuCommands.register("trainercard", {
+MenuHandlers::PauseMenu.register("trainercard", {
   "name"        => proc { next $player.name },
   "condition"   => proc { next true },
   "priority"    => 60,
@@ -297,7 +273,7 @@ PauseMenuCommands.register("trainercard", {
 })
 
 # Quit Safari Game -------------------------------------------------------------
-PauseMenuCommands.register("quitsafari", {
+MenuHandlers::PauseMenu.register("quitsafari", {
   "name"        => _INTL("Exit Safari"),
   "condition"   => proc { next pbInSafari? && !pbInBugContest? },
   "info"        => proc {
@@ -323,7 +299,7 @@ PauseMenuCommands.register("quitsafari", {
 })
 
 # Quit Bug Contest -------------------------------------------------------------
-PauseMenuCommands.register("quitbugcontest", {
+MenuHandlers::PauseMenu.register("quitbugcontest", {
   "name"        => _INTL("Quit Contest"),
   "condition"   => proc { next pbInBugContest? && !pbInSafari? },
   "info"        => proc {
@@ -350,7 +326,7 @@ PauseMenuCommands.register("quitbugcontest", {
 })
 
 # Save Game --------------------------------------------------------------------
-PauseMenuCommands.register("savegame", {
+MenuHandlers::PauseMenu.register("savegame", {
   "name"        => _INTL("Save"),
   "condition"   => proc {
     next $game_system && !$game_system.save_disabled && !pbInBugContest? && !pbInSafari?
@@ -371,7 +347,7 @@ PauseMenuCommands.register("savegame", {
 })
 
 # Options ----------------------------------------------------------------------
-PauseMenuCommands.register("options", {
+MenuHandlers::PauseMenu.register("options", {
   "name"        => _INTL("Options"),
   "condition"   => proc { next true },
   "priority"    => 30,
@@ -389,7 +365,7 @@ PauseMenuCommands.register("options", {
 })
 
 # Debug Menu -------------------------------------------------------------------
-PauseMenuCommands.register("debug", {
+MenuHandlers::PauseMenu.register("debug", {
   "name"        => _INTL("Debug"),
   "condition"   => proc { next $DEBUG },
   "priority"    => 20,
@@ -404,7 +380,7 @@ PauseMenuCommands.register("debug", {
 })
 
 # Quit Game --------------------------------------------------------------------
-PauseMenuCommands.register("quitgame", {
+MenuHandlers::PauseMenu.register("quitgame", {
   "name"        => _INTL("Quit Game"),
   "condition"   => proc { next true },
   "priority"    => 10,

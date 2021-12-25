@@ -120,9 +120,9 @@ def pbPokeCenterPC
   command  = 0
   commands    = []
   display_cmd = []
-  PokemonPCCommands.each_available do |option, hash|
+  MenuHandlers::PokemonPC.each_available do |option, hash|
     commands.push(option)
-    name = PokemonPCCommands.get_string_option("name", option)
+    name = MenuHandlers::PokemonPC.get_string_option("name", option)
     display_cmd.push(name)
   end
   display_cmd.push(_INTL("Cancel"))
@@ -130,7 +130,7 @@ def pbPokeCenterPC
     command = pbMessage(_INTL("Which PC should be accessed?"), display_cmd, commands.length, nil, command)
     break if command >= commands.length
     cmd      = commands[command]
-    endscene = PokemonPCCommands.call("effect", cmd)
+    endscene = MenuHandlers::PokemonPC.call("effect", cmd)
     break if endscene
   end
   pbSEPlay("PC close")
@@ -152,44 +152,21 @@ end
 #===============================================================================
 # Module to register and handle commands in the PC
 #===============================================================================
-module PokemonPCCommands
-  @@commands = HandlerHashBasic.new
+module MenuHandlers
+  class PokemonPC
+    extend HandlerMethods
 
-  def self.register(option, hash)
-    @@commands.add(option, hash)
-  end
+    @commands = HandlerHashBasic.new
 
-  def self.each_available
-    @@commands.sort_by("priority")
-    @@commands.each { |key, hash|
-      condition = hash["condition"]
-      yield key, hash if !condition.respond_to?(:call) || condition.call
-    }
-  end
-
-  def self.get_string_option(function, option, *args)
-    option_hash = @@commands[option]
-    return option if !option_hash || !option_hash[function]
-    if option_hash[function].is_a?(Proc)
-      return option_hash[function].call(*args)
-    elsif option_hash[function].is_a?(String)
-      return option_hash[function]
-    end
-    return option
-  end
-
-  def self.call(function, option, *args)
-    option_hash = @@commands[option]
-    return nil if !option_hash || !option_hash[function]
-    return (option_hash[function].call(*args) == true)
   end
 end
+
 
 #===============================================================================
 # Individual commands for the PC
 #===============================================================================
 # Pokemon Storage --------------------------------------------------------------
-PokemonPCCommands.register("pokemonstorage", {
+MenuHandlers::PokemonPC.register("pokemonstorage", {
   "name"        => proc {
     next $player.seen_storage_creator ? _INTL("{1}'s PC", pbGetStorageCreator) : _INTL("Someone's PC")
   },
@@ -238,7 +215,7 @@ PokemonPCCommands.register("pokemonstorage", {
 })
 
 # Trainer PC -------------------------------------------------------------------
-PokemonPCCommands.register("trainerpc", {
+MenuHandlers::PokemonPC.register("trainerpc", {
   "name"        => proc { next _INTL("{1}'s PC", $player.name) },
   "condition"   => proc { next true },
   "priority"    => 30,
@@ -249,7 +226,7 @@ PokemonPCCommands.register("trainerpc", {
 })
 
 # Hall Of Fame PC Menu ---------------------------------------------------------
-PokemonPCCommands.register("halloffame", {
+MenuHandlers::PokemonPC.register("halloffame", {
   "name"        => _INTL("Hall of Fame"),
   "condition"   => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
   "priority"    => 20,
@@ -260,7 +237,7 @@ PokemonPCCommands.register("halloffame", {
 })
 
 # Shadow Pokemon Purify Chamber ------------------------------------------------
-PokemonPCCommands.register("purifychamber", {
+MenuHandlers::PokemonPC.register("purifychamber", {
   "name"        => _INTL("Purify Chamber"),
   "condition"   => proc { next $player.seen_purify_chamber },
   "priority"    => 10,

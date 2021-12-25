@@ -142,10 +142,10 @@ class PokemonPokegearScreen
     commands    = []
     display_cmd = []
     endscene    = false
-    PokegearCommands.each_available do |option, hash|
+    MenuHandlers::Pokegear.each_available do |option, hash|
       commands.push(option)
       icon = nil_or_empty?(hash["icon"]) ? "" : hash["icon"]
-      name = PokegearCommands.get_string_option("name", option)
+      name = MenuHandlers::Pokegear.get_string_option("name", option)
       display_cmd.push([icon, name])
     end
     @scene.pbStartScene(display_cmd)
@@ -153,7 +153,7 @@ class PokemonPokegearScreen
       command = @scene.pbScene
       break if command < 0
       cmd = commands[command]
-      endscene  = PokegearCommands.call("effect", cmd)
+      endscene  = MenuHandlers::Pokegear.call("effect", cmd)
       break if endscene
     end
     ($game_temp.fly_destination) ? @scene.dispose : @scene.pbEndScene
@@ -164,44 +164,21 @@ end
 #===============================================================================
 # Module to register and handle commands in the Pokegear
 #===============================================================================
-module PokegearCommands
-  @@commands = HandlerHashBasic.new
+module MenuHandlers
+  class Pokegear
+    extend HandlerMethods
 
-  def self.register(option, hash)
-    @@commands.add(option, hash)
-  end
+    @commands = HandlerHashBasic.new
 
-  def self.each_available
-    @@commands.sort_by("priority")
-    @@commands.each { |key, hash|
-      condition = hash["condition"]
-      yield key, hash if !condition.respond_to?(:call) || condition.call
-    }
-  end
-
-  def self.get_string_option(function, option, *args)
-    option_hash = @@commands[option]
-    return option if !option_hash || !option_hash[function]
-    if option_hash[function].is_a?(Proc)
-      return option_hash[function].call(*args)
-    elsif option_hash[function].is_a?(String)
-      return option_hash[function]
-    end
-    return option
-  end
-
-  def self.call(function, option, *args)
-    option_hash = @@commands[option]
-    return nil if !option_hash || !option_hash[function]
-    return (option_hash[function].call(*args) == true)
   end
 end
+
 
 #===============================================================================
 # Individual commands for the Pokegear
 #===============================================================================
 # Town Map ---------------------------------------------------------------------
-PokegearCommands.register("map", {
+MenuHandlers::Pokegear.register("map", {
   "name"        => _INTL("Map"),
   "icon"        => "icon_map",
   "condition"   => proc { next true },
@@ -221,7 +198,7 @@ PokegearCommands.register("map", {
 })
 
 # Phone ------------------------------------------------------------------------
-PokegearCommands.register("phone", {
+MenuHandlers::Pokegear.register("phone", {
   "name"        => _INTL("Phone"),
   "icon"        => "icon_phone",
   "priority"    => 20,
@@ -235,7 +212,7 @@ PokegearCommands.register("phone", {
 })
 
 # Jukebox ----------------------------------------------------------------------
-PokegearCommands.register("jukebox", {
+MenuHandlers::Pokegear.register("jukebox", {
   "name"        => _INTL("Jukebox"),
   "icon"        => "icon_jukebox",
   "condition"   => proc { next true },

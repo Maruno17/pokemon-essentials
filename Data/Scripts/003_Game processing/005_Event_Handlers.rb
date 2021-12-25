@@ -199,6 +199,9 @@ end
 # hashes with keys, no matter what the keys are.
 #===============================================================================
 class HandlerHashBasic
+
+  attr_reader :ordered_keys
+
   def initialize
     @ordered_keys = []
     @hash         = {}
@@ -251,10 +254,6 @@ class HandlerHashBasic
     handler = self[entry]
     return (handler) ? handler.call(*args) : nil
   end
-
-  def sort_by(option)
-    @ordered_keys.sort_by! { |key| -@hash[key][option] rescue 0 }
-  end
 end
 
 #===============================================================================
@@ -270,4 +269,42 @@ class ItemHandlerHash < HandlerHash2
 end
 
 class MoveHandlerHash < HandlerHash2
+end
+
+#===============================================================================
+# Menu Option Handler Modules
+#===============================================================================
+module MenuHandlers
+  module HandlerMethods
+    def register(option, hash)
+      return false if !@commands[option].nil?
+      @commands[option] = hash
+    end
+
+    def each_available
+      keys = @commands.ordered_keys.sort_by { |key| -@commands[key]["priority"] rescue 0 }
+      keys.each { |key|
+        hash = @commands[key]
+        condition = hash["condition"]
+        yield key, hash if !condition.respond_to?(:call) || condition.call
+      }
+    end
+
+    def get_string_option(function, option, *args)
+      option_hash = @commands[option]
+      return option if !option_hash || !option_hash[function]
+      if option_hash[function].is_a?(Proc)
+        return option_hash[function].call(*args)
+      elsif option_hash[function].is_a?(String)
+        return option_hash[function]
+      end
+      return option
+    end
+
+    def call(function, option, *args)
+      option_hash = @commands[option]
+      return nil if !option_hash || !option_hash[function]
+      return option_hash[function].call(*args) == true
+    end
+  end
 end
