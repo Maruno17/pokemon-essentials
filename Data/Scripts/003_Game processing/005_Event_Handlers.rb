@@ -251,6 +251,10 @@ class HandlerHashBasic
     handler = self[entry]
     return (handler) ? handler.call(*args) : nil
   end
+
+  def sort_by(option)
+    @ordered_keys.sort_by! { |key| -@hash[key][option] rescue 0 }
+  end
 end
 
 #===============================================================================

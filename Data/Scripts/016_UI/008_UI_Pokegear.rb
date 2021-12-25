@@ -42,18 +42,21 @@ class PokegearButton < SpriteWrapper
 
   def refresh
     self.bitmap.clear
-    rect = Rect.new(0, 0, @button.width, @button.height/2)
-    rect.y = @button.height/2 if @selected
+    rect = Rect.new(0, 0, @button.width, @button.height / 2)
+    rect.y = @button.height / 2 if @selected
     self.bitmap.blt(0, 0, @button.bitmap, rect)
     height = self.bitmap.text_size(@name).height
     textpos = [
-       [@name, rect.width/2, (rect.height/2 - height), 2, BASE_COLOR, SHADOW_COLOR],
+      [@name, rect.width / 2, (rect.height / 2) - height, 2, BASE_COLOR, SHADOW_COLOR]
     ]
     pbDrawTextPositions(self.bitmap, textpos)
     bmp = RPG::Cache.load_bitmap("Graphics/Pictures/Pokegear/", @image) rescue Bitmap.new(32, 32)
-    x   =  rect.width/15
-    y   =  (rect.height - bmp.height)/2
+    x =  rect.width / 15
+    y =  (rect.height - bmp.height) / 2
     self.bitmap.blt(x, y, bmp, Rect.new(0, 0, bmp.width, bmp.height))
+    imagepos = [
+      ["Graphics/Pictures/Pokegear/icon_" + @image, 18, 10]
+    ]
     bmp.dispose
   end
 end
@@ -63,7 +66,7 @@ end
 #===============================================================================
 class PokemonPokegear_Scene
   def pbUpdate
-    for i in 0...@commands.length
+    @commands.length.times do |i|
       @sprites["button#{i}"].selected = (i == @index)
     end
     pbUpdateSpriteHash(@sprites)
@@ -82,9 +85,9 @@ class PokemonPokegear_Scene
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
     end
     @commands.each_with_index do |command, i|
-      @sprites["button#{i}"] = PokegearButton.new(command, Graphics.width/2, 0, @viewport)
-      height = @sprites["button#{i}"].bitmap.height/2
-      y = Graphics.height/2 - (@commands.length * height/2) + (height * i)
+      @sprites["button#{i}"] = PokegearButton.new(command, Graphics.width / 2, 0, @viewport)
+      height = @sprites["button#{i}"].bitmap.height / 2
+      y = (Graphics.height / 2) - (@commands.length * height / 2) + (height * i)
       @sprites["button#{i}"].y = y
     end
     pbFadeInAndShow(@sprites) { pbUpdate }
@@ -139,7 +142,7 @@ class PokemonPokegearScreen
     commands    = []
     display_cmd = []
     endscene    = false
-    PokegearCommands.each_availible do |option, name, icon|
+    PokegearCommands.each_available do |option, name, icon|
       commands.push(option)
       display_cmd.push([icon, name])
     end
@@ -167,6 +170,7 @@ module PokegearCommands
   end
 
   def self.each_availible
+    @@commands.sort_by("priority")
     @@commands.each { |key, hash|
       name      = hash["name"]
       condition = hash["condition"]
@@ -190,6 +194,7 @@ PokegearCommands.register("map", {
   "name"        => _INTL("Map"),
   "icon"        => "icon_map",
   "condition"   => proc { next true },
+  "priority"    => 30,
   "effect"      => proc {
     pbFadeOutIn {
       scene = PokemonRegionMap_Scene.new(-1, false)
@@ -200,7 +205,7 @@ PokegearCommands.register("map", {
         next 99999   # Ugly hack to make Pokégear scene not reappear if flying
       end
     }
-    next true if $game_temp.fly_destination
+    next ($game_temp.fly_destination) ? true : false
   }
 })
 
@@ -208,11 +213,13 @@ PokegearCommands.register("map", {
 PokegearCommands.register("phone", {
   "name"        => _INTL("Phone"),
   "icon"        => "icon_phone",
+  "priority"    => 20,
   "condition"   => proc {
-    next $PokemonGlobal&.phoneNumbers && $PokemonGlobal&.phoneNumbers.length > 0
+    next $PokemonGlobal.phoneNumbers && $PokemonGlobal.phoneNumbers.length > 0
   },
   "effect"      => proc {
     pbFadeOutIn { PokemonPhoneScene.new.start }
+    next false
   }
 })
 
@@ -221,11 +228,13 @@ PokegearCommands.register("jukebox", {
   "name"        => _INTL("Jukebox"),
   "icon"        => "icon_jukebox",
   "condition"   => proc { next true },
+  "priority"    => 10,
   "effect"      => proc {
     pbFadeOutIn {
       scene = PokemonJukebox_Scene.new
       screen = PokemonJukeboxScreen.new(scene)
       screen.pbStartScreen
     }
+    next false
   }
 })

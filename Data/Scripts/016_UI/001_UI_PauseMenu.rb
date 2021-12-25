@@ -3,15 +3,15 @@
 #===============================================================================
 class PokemonPauseMenu_Scene
   def pbStartScene
-    @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+    @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites = {}
     @sprites["cmdwindow"] = Window_CommandPokemon.new([])
     @sprites["cmdwindow"].visible = false
     @sprites["cmdwindow"].viewport = @viewport
-    @sprites["infowindow"] = Window_UnformattedTextPokemon.newWithSize("",0,0,32,32,@viewport)
+    @sprites["infowindow"] = Window_UnformattedTextPokemon.newWithSize("", 0, 0, 32, 32, @viewport)
     @sprites["infowindow"].visible = false
-    @sprites["helpwindow"] = Window_UnformattedTextPokemon.newWithSize("",0,0,32,32,@viewport)
+    @sprites["helpwindow"] = Window_UnformattedTextPokemon.newWithSize("", 0, 0, 32, 32, @viewport)
     @sprites["helpwindow"].visible = false
     @infostate = false
     @helpstate = false
@@ -19,14 +19,14 @@ class PokemonPauseMenu_Scene
   end
 
   def pbShowInfo(text)
-    @sprites["infowindow"].resizeToFit(text,Graphics.height)
+    @sprites["infowindow"].resizeToFit(text, Graphics.height)
     @sprites["infowindow"].text    = text
     @sprites["infowindow"].visible = true
     @infostate = true
   end
 
   def pbShowHelp(text)
-    @sprites["helpwindow"].resizeToFit(text,Graphics.height)
+    @sprites["helpwindow"].resizeToFit(text, Graphics.height)
     @sprites["helpwindow"].text    = text
     @sprites["helpwindow"].visible = true
     pbBottomLeft(@sprites["helpwindow"])
@@ -51,7 +51,7 @@ class PokemonPauseMenu_Scene
     cmdwindow.commands = commands
     cmdwindow.index    = $game_temp.menu_last_choice
     cmdwindow.resizeToFit(commands)
-    cmdwindow.x        = Graphics.width-cmdwindow.width
+    cmdwindow.x        = Graphics.width - cmdwindow.width
     cmdwindow.y        = 0
     cmdwindow.visible  = true
     loop do
@@ -104,7 +104,7 @@ class PokemonPauseMenu
     endscene    = false
     commands    = []
     display_cmd = []
-    PauseMenuCommands.each_availible do |option, name, info|
+    PauseMenuCommands.each_available do |option, name, info|
       commands.push(option)
       name = name.gsub("\\PN", $player.name)
       display_cmd.push(name)
@@ -116,7 +116,7 @@ class PokemonPauseMenu
         pbPlayCloseMenuSE
         break
       end
-      cmd      = commands[command]
+      cmd = commands[command]
       endscene = PauseMenuCommands.call("effect", cmd, @scene)
       break if endscene
     end
@@ -135,10 +135,11 @@ module PauseMenuCommands
   end
 
   def self.each_availible
+    @@commands.sort_by("priority")
     @@commands.each { |key, hash|
       name      = hash["name"]
       condition = hash["condition"]
-      info      = (hash["info"] ? hash["info"].call : nil)
+      info      = hash["info"]&.call
       yield key, name, info if condition&.call
     }
   end
@@ -146,7 +147,7 @@ module PauseMenuCommands
   def self.call(function, option, *args)
     option_hash = @@commands[option]
     return nil if !option_hash || !option_hash[function]
-    return (option_hash[function].call(*args) == true)
+    return option_hash[function].call(*args) == true
   end
 end
 
@@ -159,6 +160,7 @@ PauseMenuCommands.register("pokedex", {
   "condition"   => proc {
     next $player.has_pokedex && $player.pokedex.accessible_dexes.length > 0
   },
+  "priority"    => 100,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     if Settings::USE_CURRENT_REGION_DEX
@@ -186,6 +188,7 @@ PauseMenuCommands.register("pokedex", {
         }
       end
     end
+    next false
   }
 })
 
@@ -193,6 +196,7 @@ PauseMenuCommands.register("pokedex", {
 PauseMenuCommands.register("party", {
   "name"        => _INTL("Pokémon"),
   "condition"   => proc { next $player.party_count > 0 },
+  "priority"    => 90,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     hiddenmove = nil
@@ -202,11 +206,10 @@ PauseMenuCommands.register("party", {
       hiddenmove = sscreen.pbPokemonScreen
       (hiddenmove) ? menu.pbEndScene : menu.pbRefresh
     }
-    if hiddenmove
-      $game_temp.in_menu = false
-      pbUseHiddenMove(hiddenmove[0],hiddenmove[1])
-      next true
-    end
+    next false if !hiddenmove
+    $game_temp.in_menu = false
+    pbUseHiddenMove(hiddenmove[0], hiddenmove[1])
+    next true
   }
 })
 
@@ -214,6 +217,7 @@ PauseMenuCommands.register("party", {
 PauseMenuCommands.register("bag", {
   "name"        => _INTL("Bag"),
   "condition"   => proc { next !pbInBugContest? },
+  "priority"    => 80,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     item = nil
@@ -223,11 +227,10 @@ PauseMenuCommands.register("bag", {
       item = screen.pbStartScreen
       (item) ? menu.pbEndScene : menu.pbRefresh
     }
-    if item
-      $game_temp.in_menu = false
-      pbUseKeyItemInField(item)
-      next true
-    end
+    next false if !item
+    $game_temp.in_menu = false
+    pbUseKeyItemInField(item)
+    next true
   }
 })
 
@@ -235,6 +238,7 @@ PauseMenuCommands.register("bag", {
 PauseMenuCommands.register("pokegear", {
   "name"        => _INTL("Pokégear"),
   "condition"   => proc { next $player.has_pokegear },
+  "priority"    => 70,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
@@ -243,7 +247,7 @@ PauseMenuCommands.register("pokegear", {
       screen.pbStartScreen
       ($game_temp.fly_destination) ? menu.pbEndScene : menu.pbRefresh
     }
-    next true if pbFlyToNewLocation
+    next pbFlyToNewLocation
   }
 })
 
@@ -251,6 +255,7 @@ PauseMenuCommands.register("pokegear", {
 PauseMenuCommands.register("townmap", {
   "name"        => _INTL("Town Map"),
   "condition"   => proc { next $bag.has?(:TOWNMAP) && !$player.has_pokegear },
+  "priority"    => 70,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
@@ -260,7 +265,7 @@ PauseMenuCommands.register("townmap", {
       $game_temp.fly_destination = ret if ret
       ($game_temp.fly_destination) ? menu.pbEndScene : menu.pbRefresh
     }
-    next true if pbFlyToNewLocation
+    next pbFlyToNewLocation
   }
 })
 
@@ -268,6 +273,7 @@ PauseMenuCommands.register("townmap", {
 PauseMenuCommands.register("trainercard", {
   "name"        => _INTL("\\PN"),
   "condition"   => proc { next true },
+  "priority"    => 60,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
@@ -276,6 +282,7 @@ PauseMenuCommands.register("trainercard", {
       screen.pbStartScreen
       menu.pbRefresh
     }
+    next false
   }
 })
 
@@ -286,11 +293,11 @@ PauseMenuCommands.register("quitsafari", {
   "info"        => proc {
     if Settings::SAFARI_STEPS <= 0
       next _INTL("Balls: {1}", pbSafariState.ballcount)
-    else
-      next _INTL("Steps: {1}/{2}\nBalls: {3}",
-         pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount)
     end
+    next _INTL("Steps: {1}/{2}\nBalls: {3}",
+               pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount)
   },
+  "priority"    => 50,
   "effect"      => proc { |menu|
     menu.pbHideMenu
     if pbConfirmMessage(_INTL("Would you like to leave the Safari Game right now?"))
@@ -298,10 +305,10 @@ PauseMenuCommands.register("quitsafari", {
       pbSafariState.decision = 1
       pbSafariState.pbGoToStart
       next true
-    else
-      menu.pbRefresh
-      menu.pbShowMenu
     end
+    menu.pbRefresh
+    menu.pbShowMenu
+    next false
   }
 })
 
@@ -312,23 +319,23 @@ PauseMenuCommands.register("quitbugcontest", {
   "info"        => proc {
     if pbBugContestState.lastPokemon
       next _INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
-         pbBugContestState.lastPokemon.speciesName,
-         pbBugContestState.lastPokemon.level,
-         pbBugContestState.ballcount)
-    else
-      next _INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount)
+                 pbBugContestState.lastPokemon.speciesName,
+                 pbBugContestState.lastPokemon.level,
+                 pbBugContestState.ballcount)
     end
+    next _INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount)
   },
+  "priority"    => 50,
   "effect"      => proc { |menu|
     menu.pbHideMenu
     if pbConfirmMessage(_INTL("Would you like to end the Contest now?"))
       menu.pbEndScene
       pbBugContestState.pbStartJudging
       next true
-    else
-      menu.pbRefresh
-      menu.pbShowMenu
     end
+    menu.pbRefresh
+    menu.pbShowMenu
+    next false
   }
 })
 
@@ -338,6 +345,7 @@ PauseMenuCommands.register("savegame", {
   "condition"   => proc {
     next $game_system && !$game_system.save_disabled && !pbInBugContest? && !pbInSafari?
   },
+  "priority"    => 40,
   "effect"      => proc { |menu|
     menu.pbHideMenu
     scene = PokemonSave_Scene.new
@@ -345,10 +353,10 @@ PauseMenuCommands.register("savegame", {
     if screen.pbSaveScreen
       menu.pbEndScene
       next true
-    else
-      menu.pbRefresh
-      menu.pbShowMenu
     end
+    menu.pbRefresh
+    menu.pbShowMenu
+    next false
   }
 })
 
@@ -356,6 +364,7 @@ PauseMenuCommands.register("savegame", {
 PauseMenuCommands.register("options", {
   "name"        => _INTL("Options"),
   "condition"   => proc { next true },
+  "priority"    => 30,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
@@ -365,6 +374,7 @@ PauseMenuCommands.register("options", {
       pbUpdateSceneMap
       menu.pbRefresh
     }
+    next false
   }
 })
 
@@ -372,12 +382,14 @@ PauseMenuCommands.register("options", {
 PauseMenuCommands.register("debug", {
   "name"        => _INTL("Debug"),
   "condition"   => proc { next $DEBUG },
+  "priority"    => 20,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
       pbDebugMenu
       menu.pbRefresh
     }
+    next false
   }
 })
 
@@ -385,6 +397,7 @@ PauseMenuCommands.register("debug", {
 PauseMenuCommands.register("quitgame", {
   "name"        => _INTL("Quit Game"),
   "condition"   => proc { next true },
+  "priority"    => 10,
   "effect"      => proc { |menu|
     menu.pbHideMenu
     if pbConfirmMessage(_INTL("Are you sure you want to quit the game?"))
@@ -394,9 +407,9 @@ PauseMenuCommands.register("quitgame", {
       menu.pbEndScene
       $scene = nil
       next true
-    else
-      menu.pbRefresh
-      menu.pbShowMenu
     end
+    menu.pbRefresh
+    menu.pbShowMenu
+    next false
   }
 })
