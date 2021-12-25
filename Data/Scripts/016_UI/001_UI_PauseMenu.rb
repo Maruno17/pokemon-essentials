@@ -104,11 +104,12 @@ class PokemonPauseMenu
     endscene    = false
     commands    = []
     display_cmd = []
-    PauseMenuCommands.each_available do |option, name, info|
+    PauseMenuCommands.each_available do |option, hash|
       commands.push(option)
-      name = name.gsub("\\PN", $player.name)
+      name = PauseMenuCommands.get_string_option("name", option)
       display_cmd.push(name)
-      @scene.pbShowInfo(info) if !nil_or_empty?(info)
+      info = PauseMenuCommands.get_string_option("info", option)
+      @scene.pbShowInfo(info) if !nil_or_empty?(info) && option != info
     end
     loop do
       command = @scene.pbShowCommands(display_cmd)
@@ -134,14 +135,23 @@ module PauseMenuCommands
     @@commands.add(option, hash)
   end
 
-  def self.each_availible
+  def self.each_available
     @@commands.sort_by("priority")
     @@commands.each { |key, hash|
-      name      = hash["name"]
       condition = hash["condition"]
-      info      = hash["info"]&.call
-      yield key, name, info if condition&.call
+      yield key, hash if !condition.respond_to?(:call) || condition.call
     }
+  end
+
+  def self.get_string_option(function, option, *args)
+    option_hash = @@commands[option]
+    return option if !option_hash || !option_hash[function]
+    if option_hash[function].is_a?(Proc)
+      return option_hash[function].call(*args)
+    elsif option_hash[function].is_a?(String)
+      return option_hash[function]
+    end
+    return option
   end
 
   def self.call(function, option, *args)
@@ -271,7 +281,7 @@ PauseMenuCommands.register("townmap", {
 
 # Trainer Card -----------------------------------------------------------------
 PauseMenuCommands.register("trainercard", {
-  "name"        => _INTL("\\PN"),
+  "name"        => proc { next $player.name },
   "condition"   => proc { next true },
   "priority"    => 60,
   "effect"      => proc { |menu|

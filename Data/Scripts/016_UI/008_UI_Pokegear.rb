@@ -142,8 +142,10 @@ class PokemonPokegearScreen
     commands    = []
     display_cmd = []
     endscene    = false
-    PokegearCommands.each_available do |option, name, icon|
+    PokegearCommands.each_available do |option, hash|
       commands.push(option)
+      icon = nil_or_empty?(hash["icon"]) ? "" : hash["icon"]
+      name = PokegearCommands.get_string_option("name", option)
       display_cmd.push([icon, name])
     end
     @scene.pbStartScene(display_cmd)
@@ -169,14 +171,23 @@ module PokegearCommands
     @@commands.add(option, hash)
   end
 
-  def self.each_availible
+  def self.each_available
     @@commands.sort_by("priority")
     @@commands.each { |key, hash|
-      name      = hash["name"]
       condition = hash["condition"]
-      icon      = hash["icon"]
-      yield key, name, icon if condition&.call
+      yield key, hash if !condition.respond_to?(:call) || condition.call
     }
+  end
+
+  def self.get_string_option(function, option, *args)
+    option_hash = @@commands[option]
+    return option if !option_hash || !option_hash[function]
+    if option_hash[function].is_a?(Proc)
+      return option_hash[function].call(*args)
+    elsif option_hash[function].is_a?(String)
+      return option_hash[function]
+    end
+    return option
   end
 
   def self.call(function, option, *args)
