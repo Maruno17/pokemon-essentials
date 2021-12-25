@@ -167,7 +167,7 @@ MenuHandlers::PauseMenu.register("pokedex", {
         }
       else
         pbFadeOutIn {
-          scene = PokemonPokedexmenu.new
+          scene = PokemonPokedexMenu_Scene.new
           screen = PokemonPokedexMenuScreen.new(scene)
           screen.pbStartScreen
           menu.pbRefresh
