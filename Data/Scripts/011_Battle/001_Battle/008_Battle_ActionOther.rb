@@ -78,7 +78,7 @@ class Battle
         @mega_rings.each { |item| return GameData::Item.get(item).name if $bag.has?(item) }
       else
         trainer_items = pbGetOwnerItems(idxBattler)
-        @mega_rings.each { |item| return GameData::Item.get(item).name if trainer_items.include?(item) }
+        @mega_rings.each { |item| return GameData::Item.get(item).name if trainer_items&.include?(item) }
       end
     end
     return _INTL("Mega Ring")
