@@ -13,24 +13,24 @@ module GameData
     DATA_FILENAME = "trainers.dat"
 
     SCHEMA = {
-      "Items"        => [:items,         "*e", :Item],
-      "LoseText"     => [:lose_text,     "s"],
-      "Pokemon"      => [:pokemon,       "ev", :Species],   # Species, level
-      "Form"         => [:form,          "u"],
-      "Name"         => [:name,          "s"],
-      "Moves"        => [:moves,         "*e", :Move],
-      "Ability"      => [:ability,       "s"],
+      "Items" => [:items, "*e", :Item],
+      "LoseText" => [:lose_text, "s"],
+      "Pokemon" => [:pokemon, "ev", :Species], # Species, level
+      "Form" => [:form, "u"],
+      "Name" => [:name, "s"],
+      "Moves" => [:moves, "*e", :Move],
+      "Ability" => [:ability, "s"],
       "AbilityIndex" => [:ability_index, "u"],
-      "Item"         => [:item,          "e", :Item],
-      "Gender"       => [:gender,        "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
-                                                "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
-      "Nature"       => [:nature,        "e", :Nature],
-      "IV"           => [:iv,            "uUUUUU"],
-      "EV"           => [:ev,            "uUUUUU"],
-      "Happiness"    => [:happiness,     "u"],
-      "Shiny"        => [:shininess,     "b"],
-      "Shadow"       => [:shadowness,    "b"],
-      "Ball"         => [:poke_ball,     "s"],
+      "Item" => [:item, "e", :Item],
+      "Gender" => [:gender, "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
+                                   "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
+      "Nature" => [:nature, "e", :Nature],
+      "IV" => [:iv, "uUUUUU"],
+      "EV" => [:ev, "uUUUUU"],
+      "Happiness" => [:happiness, "u"],
+      "Shiny" => [:shininess, "b"],
+      "Shadow" => [:shadowness, "b"],
+      "Ball" => [:poke_ball, "s"],
     }
 
     extend ClassMethods
@@ -71,14 +71,14 @@ module GameData
     end
 
     def initialize(hash)
-      @id             = hash[:id]
-      @id_number      = hash[:id_number]
-      @trainer_type   = hash[:trainer_type]
-      @real_name      = hash[:name]         || "Unnamed"
-      @version        = hash[:version]      || 0
-      @items          = hash[:items]        || []
-      @real_lose_text = hash[:lose_text]    || "..."
-      @pokemon        = hash[:pokemon]      || []
+      @id = hash[:id]
+      @id_number = hash[:id_number]
+      @trainer_type = hash[:trainer_type]
+      @real_name = hash[:name] || "Unnamed"
+      @version = hash[:version] || 0
+      @items = hash[:items] || []
+      @real_lose_text = hash[:lose_text] || "..."
+      @pokemon = hash[:pokemon] || []
       @pokemon.each do |pkmn|
         GameData::Stat.each_main do |s|
           pkmn[:iv][s.id] ||= 0 if pkmn[:iv]
@@ -126,12 +126,12 @@ module GameData
       end
       # Create trainer object
       trainer = NPCTrainer.new(tr_name, @trainer_type)
-      trainer.id        = $Trainer.make_foreign_ID
-      trainer.items     = @items.clone
+      trainer.id = $Trainer.make_foreign_ID
+      trainer.items = @items.clone
       trainer.lose_text = self.lose_text
 
       isRematch = $game_switches[200]
-      rematchId = getRematchId(trainer.name,trainer.trainer_type)
+      rematchId = getRematchId(trainer.name, trainer.trainer_type)
 
       # Create each Pokémon owned by the trainer
       @pokemon.each do |pkmn_data|
@@ -143,11 +143,18 @@ module GameData
         if $game_switches[REVERSED_MODE]
           species = reverseFusionSpecies(species)
         end
-        level =pkmn_data[:level]
+        level = pkmn_data[:level]
+        if $game_switches[GAME_DIFFICULTY_HARD]
+          level *= Settings::HARD_MODE_LEVEL_MODIFIER.ceil
+          if level > Settings::MAXIMUM_LEVEL
+            level = Settings::MAXIMUM_LEVEL
+          end
+        end
+
         if $game_switches[Settings::OVERRIDE_BATTLE_LEVEL_SWITCH]
           override_level = $game_variables[Settings::OVERRIDE_BATTLE_LEVEL_VALUE_VAR]
           if override_level.is_a?(Integer)
-            level =override_level
+            level = override_level
           end
         end
         ####
@@ -155,8 +162,8 @@ module GameData
         #trainer rematch infinite fusion edit
         if isRematch
           nbRematch = getNumberRematch(rematchId)
-          level = getRematchLevel(level,nbRematch)
-          species = evolveRematchPokemon(nbRematch,species)
+          level = getRematchLevel(level, nbRematch)
+          species = evolveRematchPokemon(nbRematch, species)
         end
         #
         pkmn = Pokemon.new(species, level, trainer, false)

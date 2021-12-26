@@ -396,13 +396,13 @@ class PokemonOption_Scene
 
     end
 
-    if $game_switches && $game_switches[GOT_BADGE_5] #badge for Surf
-      @PokemonOptions <<
-        EnumOption.new(_INTL("Quick Surf"), [_INTL("Off"), _INTL("On")],
-                       proc { $PokemonSystem.quicksurf },
-                       proc { |value| $PokemonSystem.quicksurf = value }
-        )
-    end
+    # if $game_switches && $game_switches[GOT_BADGE_5] #badge for Surf
+    @PokemonOptions <<
+      EnumOption.new(_INTL("Quick Surf"), [_INTL("Off"), _INTL("On")],
+                     proc { $PokemonSystem.quicksurf },
+                     proc { |value| $PokemonSystem.quicksurf = value }
+      )
+    # end
 
     @PokemonOptions = pbAddOnOptions(@PokemonOptions)
     @sprites["option"] = Window_PokemonOption.new(@PokemonOptions, 0,
