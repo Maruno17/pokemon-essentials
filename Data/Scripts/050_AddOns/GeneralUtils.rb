@@ -356,5 +356,15 @@ def getArceusPlateType(heldItem)
   end
 end
 
+def reverseFusionSpecies(species)
+  dexId = getDexNumberForSpecies(species)
+  return species if dexId <= NB_POKEMON
+  return species if dexId > (NB_POKEMON * NB_POKEMON) + NB_POKEMON
+  body = getBasePokemonID(dexId, true)
+  head = getBasePokemonID(dexId, false)
+  newspecies = (head) * NB_POKEMON + body
+  return getPokemon(newspecies)
+end
+
 
 

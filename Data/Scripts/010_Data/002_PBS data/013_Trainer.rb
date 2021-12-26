@@ -140,6 +140,9 @@ module GameData
         if placeholder_species.include?(species)
           species = replace_species_with_placeholder(species)
         end
+        if $game_switches[REVERSED_MODE]
+          species = reverseFusionSpecies(species)
+        end
         level =pkmn_data[:level]
         if $game_switches[Settings::OVERRIDE_BATTLE_LEVEL_SWITCH]
           override_level = $game_variables[Settings::OVERRIDE_BATTLE_LEVEL_VALUE_VAR]
