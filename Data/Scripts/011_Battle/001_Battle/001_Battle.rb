@@ -170,7 +170,7 @@ class Battle
       @struggle = Move::Struggle.new(self, nil)
     end
     @mega_rings = []
-    GameData::Item.each { |itm| @mega_rings.push(itm.id) if itm.has_flag?("MegaRing") }
+    GameData::Item.each { |item| @mega_rings.push(item.id) if item.has_flag?("MegaRing") }
   end
 
   #=============================================================================
@@ -263,8 +263,14 @@ class Battle
   end
 
   def pbGetOwnerItems(idxBattler)
-    return [] if !@items || !opposes?(idxBattler)
-    return @items[pbGetOwnerIndexFromBattlerIndex(idxBattler)]
+    if opposes?(idxBattler)
+      return [] if !@items
+      return @items[pbGetOwnerIndexFromBattlerIndex(idxBattler)]
+    else
+      return [] if !@ally_items
+      return @ally_items[pbGetOwnerIndexFromBattlerIndex(idxBattler)]
+    end
+    return []
   end
 
   # Returns whether the battler in position idxBattler is owned by the same
