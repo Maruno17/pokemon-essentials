@@ -298,3 +298,25 @@ def getGenericPokemonCryText(pokemonSpecies)
   end
 end
 
+def obtainPokemonSpritePath(id,includeCustoms=true)
+  head=getBasePokemonID(param.to_i,false)
+  body=getBasePokemonID(param.to_i,true)
+  return obtainPokemonSpritePath(body,head,includeCustoms)
+end
+
+def obtainPokemonSpritePath(bodyId, headId,include_customs=true)
+  hasCustom=false
+  picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", headId, bodyId)
+
+  if include_customs
+    pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", headId, bodyId)
+    if (pbResolveBitmap(pathCustom))
+      picturePath = pathCustom
+      hasCustom = true
+    end
+  end
+  return picturePath
+end
+
+
+

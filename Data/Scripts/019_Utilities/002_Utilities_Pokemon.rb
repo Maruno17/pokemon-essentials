@@ -115,7 +115,7 @@ def pbAddToPartySilent(pkmn, level = nil, see_form = true)
 end
 
 def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner_gender = 0, see_form = true)
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   # Set original trainer to a foreign one
   pkmn.owner = Pokemon::Owner.new_foreign(owner_name || "", owner_gender)

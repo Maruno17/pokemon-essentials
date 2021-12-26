@@ -134,33 +134,37 @@ def evolveRematchPokemon(nbRematch, speciesSymbol)
 end
 
 def getEvolution(species)
-  if species >= Settings::NB_POKEMON
-    body = getBasePokemonID(species)
-    head = getBasePokemonID(species, false)
+  begin
+    if species >= Settings::NB_POKEMON
+      body = getBasePokemonID(species)
+      head = getBasePokemonID(species, false)
 
-    bodyPossibleEvolutions = GameData::Species.get(body).get_evolutions(true)
-    headPossibleEvolutions = GameData::Species.get(head).get_evolutions(true)
+      bodyPossibleEvolutions = GameData::Species.get(body).get_evolutions(true)
+      headPossibleEvolutions = GameData::Species.get(head).get_evolutions(true)
 
-    bodyCanEvolve = !bodyPossibleEvolutions.empty?
-    headCanEvolve = !headPossibleEvolutions.empty?
+      bodyCanEvolve = !bodyPossibleEvolutions.empty?
+      headCanEvolve = !headPossibleEvolutions.empty?
 
-    evoBodySpecies = bodyCanEvolve ? bodyPossibleEvolutions[rand(bodyPossibleEvolutions.length - 1)][0] : nil
-    evoHeadSpecies = headCanEvolve ? headPossibleEvolutions[rand(headPossibleEvolutions.length - 1)][0] : nil
-    if evoBodySpecies != nil
-      evoBody= getDexNumberForSpecies(evoBodySpecies)
+      evoBodySpecies = bodyCanEvolve ? bodyPossibleEvolutions[rand(bodyPossibleEvolutions.length - 1)][0] : nil
+      evoHeadSpecies = headCanEvolve ? headPossibleEvolutions[rand(headPossibleEvolutions.length - 1)][0] : nil
+      if evoBodySpecies != nil
+        evoBody = getDexNumberForSpecies(evoBodySpecies)
+      end
+      if evoHeadSpecies != nil
+        evoHead = getDexNumberForSpecies(evoHeadSpecies)
+      end
+
+      return -1 if evoBody == nil && evoHead == nil
+      return body * Settings::NB_POKEMON + evoHead if evoBody == nil #only head evolves
+      return evoBody * Settings::NB_POKEMON + head if evoHead == nil #only body evolves
+      return evoBody * Settings::NB_POKEMON + evoHead #both evolve
+    else
+      evo = pbGetEvolvedFormData(species)
+      newSpecies = evo[rand(evo.length - 1)][0]
+      return evo.any? ? getDexNumberForSpecies(newSpecies) : -1
     end
-    if evoHeadSpecies != nil
-      evoHead= getDexNumberForSpecies(evoHeadSpecies)
-    end
-
-    return -1 if evoBody == nil && evoHead == nil
-    return body * Settings::NB_POKEMON + evoHead if evoBody == nil #only head evolves
-    return evoBody * Settings::NB_POKEMON + head if evoHead == nil #only body evolves
-    return evoBody * Settings::NB_POKEMON + evoHead #both evolve
-  else
-    evo = pbGetEvolvedFormData(species)
-    newSpecies = evo[rand(evo.length - 1)][0]
-    return evo.any? ? getDexNumberForSpecies(newSpecies) : -1
+  rescue
+    return -1
   end
 end
 

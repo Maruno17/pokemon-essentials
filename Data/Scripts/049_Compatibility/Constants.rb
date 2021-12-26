@@ -24,7 +24,7 @@ GOT_BADGE_16 = 50
 DEFAULT_BATTLE_TYPE = 242
 BATTLE_FACTORY_TOKENS = 243
 NB_GYM_REMATCHES = 162
-
+CUSTOM_SPRITES_ENABLED= 196
 #Settings
 # This is for settings that are used in scripts since it's a chore to change them everywhere to include the module name
 NUM_BADGES = Settings::NB_BADGES
