@@ -104,11 +104,11 @@ class PokemonPauseMenu
     endscene    = false
     commands    = []
     display_cmd = []
-    MenuHandlers::PauseMenu.each_available do |option, hash|
+    MenuHandlers.each_available(:pause_menu) do |option, hash|
       commands.push(option)
-      name = MenuHandlers::PauseMenu.get_string_option("name", option)
+      name = MenuHandlers.get_string_option(:pause_menu, "name", option)
       display_cmd.push(name)
-      info = MenuHandlers::PauseMenu.get_string_option("info", option)
+      info = MenuHandlers.get_string_option(:info, "name", option)
       @scene.pbShowInfo(info) if !nil_or_empty?(info) && option != info
     end
     loop do
@@ -118,7 +118,7 @@ class PokemonPauseMenu
         break
       end
       cmd = commands[command]
-      endscene = MenuHandlers::PauseMenu.call("effect", cmd, @scene)
+      endscene = MenuHandlers.call(:pause_menu, "effect", cmd, @scene)
       break if endscene
     end
     @scene.pbEndScene if !endscene
@@ -126,22 +126,10 @@ class PokemonPauseMenu
 end
 
 #===============================================================================
-# Module to register and handle commands in the Pause Menu
-#===============================================================================
-module MenuHandlers
-  class PauseMenu
-    extend HandlerMethods
-
-    @commands = HandlerHashBasic.new
-
-  end
-end
-
-#===============================================================================
 # Individual commands for the Pause Menu
 #===============================================================================
 # Pokedex ----------------------------------------------------------------------
-MenuHandlers::PauseMenu.register("pokedex", {
+MenuHandlers.register(:pause_menu, "pokedex", {
   "name"        => _INTL("Pokedex"),
   "condition"   => proc {
     next $player.has_pokedex && $player.pokedex.accessible_dexes.length > 0
@@ -179,7 +167,7 @@ MenuHandlers::PauseMenu.register("pokedex", {
 })
 
 # Pokemon Party ----------------------------------------------------------------
-MenuHandlers::PauseMenu.register("party", {
+MenuHandlers.register(:pause_menu, "party", {
   "name"        => _INTL("Pokémon"),
   "condition"   => proc { next $player.party_count > 0 },
   "priority"    => 90,
@@ -200,7 +188,7 @@ MenuHandlers::PauseMenu.register("party", {
 })
 
 # Bag --------------------------------------------------------------------------
-MenuHandlers::PauseMenu.register("bag", {
+MenuHandlers.register(:pause_menu, "bag", {
   "name"        => _INTL("Bag"),
   "condition"   => proc { next !pbInBugContest? },
   "priority"    => 80,
@@ -221,7 +209,7 @@ MenuHandlers::PauseMenu.register("bag", {
 })
 
 # Pokegear ---------------------------------------------------------------------
-MenuHandlers::PauseMenu.register("pokegear", {
+MenuHandlers.register(:pause_menu, "pokegear", {
   "name"        => _INTL("Pokégear"),
   "condition"   => proc { next $player.has_pokegear },
   "priority"    => 70,
@@ -238,7 +226,7 @@ MenuHandlers::PauseMenu.register("pokegear", {
 })
 
 # Town Map ---------------------------------------------------------------------
-MenuHandlers::PauseMenu.register("townmap", {
+MenuHandlers.register(:pause_menu, "townmap", {
   "name"        => _INTL("Town Map"),
   "condition"   => proc { next $bag.has?(:TOWNMAP) && !$player.has_pokegear },
   "priority"    => 70,
@@ -256,7 +244,7 @@ MenuHandlers::PauseMenu.register("townmap", {
 })
 
 # Trainer Card -----------------------------------------------------------------
-MenuHandlers::PauseMenu.register("trainercard", {
+MenuHandlers.register(:pause_menu, "trainercard", {
   "name"        => proc { next $player.name },
   "condition"   => proc { next true },
   "priority"    => 60,
@@ -273,7 +261,7 @@ MenuHandlers::PauseMenu.register("trainercard", {
 })
 
 # Quit Safari Game -------------------------------------------------------------
-MenuHandlers::PauseMenu.register("quitsafari", {
+MenuHandlers.register(:pause_menu, "quitsafari", {
   "name"        => _INTL("Exit Safari"),
   "condition"   => proc { next pbInSafari? && !pbInBugContest? },
   "info"        => proc {
@@ -299,7 +287,7 @@ MenuHandlers::PauseMenu.register("quitsafari", {
 })
 
 # Quit Bug Contest -------------------------------------------------------------
-MenuHandlers::PauseMenu.register("quitbugcontest", {
+MenuHandlers.register(:pause_menu, "quitbugcontest", {
   "name"        => _INTL("Quit Contest"),
   "condition"   => proc { next pbInBugContest? && !pbInSafari? },
   "info"        => proc {
@@ -326,7 +314,7 @@ MenuHandlers::PauseMenu.register("quitbugcontest", {
 })
 
 # Save Game --------------------------------------------------------------------
-MenuHandlers::PauseMenu.register("savegame", {
+MenuHandlers.register(:pause_menu, "savegame", {
   "name"        => _INTL("Save"),
   "condition"   => proc {
     next $game_system && !$game_system.save_disabled && !pbInBugContest? && !pbInSafari?
@@ -347,7 +335,7 @@ MenuHandlers::PauseMenu.register("savegame", {
 })
 
 # Options ----------------------------------------------------------------------
-MenuHandlers::PauseMenu.register("options", {
+MenuHandlers.register(:pause_menu, "options", {
   "name"        => _INTL("Options"),
   "condition"   => proc { next true },
   "priority"    => 30,
@@ -365,7 +353,7 @@ MenuHandlers::PauseMenu.register("options", {
 })
 
 # Debug Menu -------------------------------------------------------------------
-MenuHandlers::PauseMenu.register("debug", {
+MenuHandlers.register(:pause_menu, "debug", {
   "name"        => _INTL("Debug"),
   "condition"   => proc { next $DEBUG },
   "priority"    => 20,
@@ -380,7 +368,7 @@ MenuHandlers::PauseMenu.register("debug", {
 })
 
 # Quit Game --------------------------------------------------------------------
-MenuHandlers::PauseMenu.register("quitgame", {
+MenuHandlers.register(:pause_menu, "quitgame", {
   "name"        => _INTL("Quit Game"),
   "condition"   => proc { next true },
   "priority"    => 10,

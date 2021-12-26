@@ -142,10 +142,10 @@ class PokemonPokegearScreen
     commands    = []
     display_cmd = []
     endscene    = false
-    MenuHandlers::Pokegear.each_available do |option, hash|
+    MenuHandlers.each_available(:pokegear) do |option, hash|
       commands.push(option)
       icon = nil_or_empty?(hash["icon"]) ? "" : hash["icon"]
-      name = MenuHandlers::Pokegear.get_string_option("name", option)
+      name = MenuHandlers.get_string_option(:pokegear, "name", option)
       display_cmd.push([icon, name])
     end
     @scene.pbStartScene(display_cmd)
@@ -153,32 +153,18 @@ class PokemonPokegearScreen
       command = @scene.pbScene
       break if command < 0
       cmd = commands[command]
-      endscene  = MenuHandlers::Pokegear.call("effect", cmd)
+      endscene  = MenuHandlers.call(:pokegear, "effect", cmd)
       break if endscene
     end
     ($game_temp.fly_destination) ? @scene.dispose : @scene.pbEndScene
   end
 end
 
-
-#===============================================================================
-# Module to register and handle commands in the Pokegear
-#===============================================================================
-module MenuHandlers
-  class Pokegear
-    extend HandlerMethods
-
-    @commands = HandlerHashBasic.new
-
-  end
-end
-
-
 #===============================================================================
 # Individual commands for the Pokegear
 #===============================================================================
 # Town Map ---------------------------------------------------------------------
-MenuHandlers::Pokegear.register("map", {
+MenuHandlers.register(:pokegear, "map", {
   "name"        => _INTL("Map"),
   "icon"        => "icon_map",
   "condition"   => proc { next true },
@@ -198,7 +184,7 @@ MenuHandlers::Pokegear.register("map", {
 })
 
 # Phone ------------------------------------------------------------------------
-MenuHandlers::Pokegear.register("phone", {
+MenuHandlers.register(:pokegear, "phone", {
   "name"        => _INTL("Phone"),
   "icon"        => "icon_phone",
   "priority"    => 20,
@@ -212,7 +198,7 @@ MenuHandlers::Pokegear.register("phone", {
 })
 
 # Jukebox ----------------------------------------------------------------------
-MenuHandlers::Pokegear.register("jukebox", {
+MenuHandlers.register(:pokegear, "jukebox", {
   "name"        => _INTL("Jukebox"),
   "icon"        => "icon_jukebox",
   "condition"   => proc { next true },

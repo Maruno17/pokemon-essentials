@@ -21,26 +21,16 @@ Choose each battler's next action.
 =end
 
 #===============================================================================
-#
-#===============================================================================
-module MenuHandlers
-  class BattleDebug
-    extend HandlerMethods
-    @commands = HandlerHashBasic.new
-  end
-end
-
-#===============================================================================
 # Battler Options
 #===============================================================================
-MenuHandlers::BattleDebug.register("battlers", {
+MenuHandlers.register(:battle_debug, "battlers", {
   "parent"      => "main",
   "name"        => _INTL("Battlers..."),
   "description" => _INTL("Look at Pokémon in battle and change their properties."),
   "always_show" => true
 })
 
-MenuHandlers::BattleDebug.register("list_player_battlers", {
+MenuHandlers.register(:battle_debug, "list_player_battlers", {
   "parent"      => "battlers",
   "name"        => _INTL("Player-Side Battlers"),
   "description" => _INTL("Edit Pokémon on the player's side of battle."),
@@ -67,7 +57,7 @@ MenuHandlers::BattleDebug.register("list_player_battlers", {
   }
 })
 
-MenuHandlers::BattleDebug.register("list_foe_battlers", {
+MenuHandlers.register(:battle_debug, "list_foe_battlers", {
   "parent"      => "battlers",
   "name"        => _INTL("Foe-Side Battlers"),
   "description" => _INTL("Edit Pokémon on the opposing side of battle."),
@@ -91,14 +81,14 @@ MenuHandlers::BattleDebug.register("list_foe_battlers", {
 #===============================================================================
 # Field Options
 #===============================================================================
-MenuHandlers::BattleDebug.register("field", {
+MenuHandlers.register(:battle_debug, "field", {
   "parent"      => "main",
   "name"        => _INTL("Field Effects..."),
   "description" => _INTL("Effects that apply to the whole battlefield."),
   "always_show" => true
 })
 
-MenuHandlers::BattleDebug.register("weather", {
+MenuHandlers.register(:battle_debug, "weather", {
   "parent"      => "field",
   "name"        => _INTL("Weather"),
   "description" => _INTL("Set weather and duration."),
@@ -161,7 +151,7 @@ MenuHandlers::BattleDebug.register("weather", {
   }
 })
 
-MenuHandlers::BattleDebug.register("terrain", {
+MenuHandlers.register(:battle_debug, "terrain", {
   "parent"      => "field",
   "name"        => _INTL("Terrain"),
   "description" => _INTL("Set terrain and duration."),
@@ -224,7 +214,7 @@ MenuHandlers::BattleDebug.register("terrain", {
   }
 })
 
-MenuHandlers::BattleDebug.register("environment", {
+MenuHandlers.register(:battle_debug, "environment", {
   "parent"      => "field",
   "name"        => _INTL("Environment/Time"),
   "description" => _INTL("Set the battle's environment and time of day."),
@@ -263,7 +253,7 @@ MenuHandlers::BattleDebug.register("environment", {
   }
 })
 
-MenuHandlers::BattleDebug.register("backdrop", {
+MenuHandlers.register(:battle_debug, "backdrop", {
   "parent"      => "field",
   "name"        => _INTL("Backdrop Names"),
   "description" => _INTL("Set the names of the backdrop and base graphics."),
@@ -288,7 +278,7 @@ MenuHandlers::BattleDebug.register("backdrop", {
   }
 })
 
-MenuHandlers::BattleDebug.register("set_field_effects", {
+MenuHandlers.register(:battle_debug, "set_field_effects", {
   "parent"      => "field",
   "name"        => _INTL("Other Field Effects..."),
   "description" => _INTL("View/set other effects that apply to the whole battlefield."),
@@ -300,7 +290,7 @@ MenuHandlers::BattleDebug.register("set_field_effects", {
   }
 })
 
-MenuHandlers::BattleDebug.register("player_side", {
+MenuHandlers.register(:battle_debug, "player_side", {
   "parent"      => "field",
   "name"        => _INTL("Player's Side Effects..."),
   "description" => _INTL("Effects that apply to the side the player is on."),
@@ -312,7 +302,7 @@ MenuHandlers::BattleDebug.register("player_side", {
   }
 })
 
-MenuHandlers::BattleDebug.register("opposing_side", {
+MenuHandlers.register(:battle_debug, "opposing_side", {
   "parent"      => "field",
   "name"        => _INTL("Foe's Side Effects..."),
   "description" => _INTL("Effects that apply to the opposing side."),
@@ -327,14 +317,14 @@ MenuHandlers::BattleDebug.register("opposing_side", {
 #===============================================================================
 # Trainer Options
 #===============================================================================
-MenuHandlers::BattleDebug.register("trainers", {
+MenuHandlers.register(:battle_debug, "trainers", {
   "parent"      => "main",
   "name"        => _INTL("Trainer Options..."),
   "description" => _INTL("Variables that apply to trainers."),
   "always_show" => true
 })
 
-MenuHandlers::BattleDebug.register("mega_evolution", {
+MenuHandlers.register(:battle_debug, "mega_evolution", {
   "parent"      => "trainers",
   "name"        => _INTL("Mega Evolution"),
   "description" => _INTL("Whether each trainer is allowed to Mega Evolve."),
@@ -370,7 +360,7 @@ MenuHandlers::BattleDebug.register("mega_evolution", {
   }
 })
 
-MenuHandlers::BattleDebug.register("speed_order", {
+MenuHandlers.register(:battle_debug, "speed_order", {
   "parent"      => "main",
   "name"        => _INTL("Battler Speed Order"),
   "description" => _INTL("Show all battlers in order from fastest to slowest."),

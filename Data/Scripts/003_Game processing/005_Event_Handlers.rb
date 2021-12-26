@@ -275,57 +275,66 @@ end
 # Menu Option Handler Modules
 #===============================================================================
 module MenuHandlers
-  module HandlerMethods
-    def register(option, hash)
-      @commands.add(option, hash)
-    end
+  @@handlers = {}
 
-    def register_if(condition, hash)
-      @@commands.addIf(condition, hash)
-    end
+  def self.register(key, option, hash)
+    @@handlers[key] = HandlerHashBasic.new if !@@handlers.has_key?(key)
+    @@handlers[key].add(option, hash)
+  end
 
-    def copy(option, *new_options)
-      @commands.copy(option, *new_options)
-    end
+  def self.register_if(key, condition, hash)
+    @@handlers[key] = HandlerHashBasic.new if !@@handlers.has_key?(key)
+    @@handlers[key].addIf(condition, hash)
+  end
 
-    def each
-      @commands.each { |key, hash| yield key, hash }
-    end
+  def self.copy(key, option, *new_options)
+    return if !@@handlers.has_key?(key)
+    @@handlers[key].copy(option, *new_options)
+  end
 
-    def each_available
-      keys = @commands.ordered_keys.sort_by { |key| -@commands[key]["priority"] rescue 0 }
-      keys.each { |key|
-        hash = @commands[key]
-        condition = hash["condition"]
-        yield key, hash if !condition.respond_to?(:call) || condition.call
-      }
-    end
+  def self.each(key)
+    return if !@@handlers.has_key?(key)
+    @@handlers[key].each { |option, hash| yield option, hash }
+  end
 
-    def has_function?(option, function)
-      option_hash = @@commands[option]
-      return option_hash&.has_key?(function)
-    end
+  def self.each_available(key)
+    return if !@@handlers.has_key?(key)
+    option_hash = @@handlers[key]
+    keys = option_hash.ordered_keys.sort_by { |option| -option_hash[option]["priority"] rescue 0 }
+    keys.each { |option|
+      hash = option_hash[option]
+      condition = hash["condition"]
+      yield option, hash if !condition.respond_to?(:call) || condition.call
+    }
+  end
 
-    def get_function(option, function)
-      option_hash = @@commands[option]
-      return (option_hash && option_hash[function]) ? option_hash[function] : nil
-    end
+  def self.has_function?(key, option, function)
+    return false if !@@handlers.has_key?(key)
+    option_hash = @@handlers[key][option]
+    return option_hash&.has_key?(function)
+  end
 
-    def get_string_option(function, option, *args)
-      option_hash = @commands[option]
-      return option if !option_hash || !option_hash[function]
-      if option_hash[function].is_a?(Proc)
-        return option_hash[function].call(*args)
-      elsif option_hash[function].is_a?(String)
-        return option_hash[function]
-      end
-      return option
-    end
+  def self.get_function(key, option, function)
+    return false if !@@handlers.has_key?(key)
+    option_hash = @@handlers[key][option]
+    return (option_hash && option_hash[function]) ? option_hash[function] : nil
+  end
 
-    def call(function, option, *args)
-      option_hash = @commands[option]
-      return nil if !option_hash || !option_hash[function]
-      return option_hash[function].call(*args) == true
+  def self.get_string_option(key, function, option, *args)
+    return false if !@@handlers.has_key?(key)
+    option_hash = @@handlers[key][option]
+    return option if !option_hash || !option_hash[function]
+    if option_hash[function].is_a?(Proc)
+      return option_hash[function].call(*args)
+    elsif option_hash[function].is_a?(String)
+      return option_hash[function]
     end
+    return option
+  end
+
+  def self.call(key, function, option, *args)
+    option_hash = @@handlers[key][option]
+    return nil if !option_hash || !option_hash[function]
+    return option_hash[function].call(*args) == true
   end
 end

@@ -9,25 +9,15 @@ Actual stats? @attack, @defense, etc.
 =end
 
 #===============================================================================
-#
-#===============================================================================
-module MenuHandlers
-  class BattlerDebug
-    extend HandlerMethods
-    @commands = HandlerHashBasic.new
-  end
-end
-
-#===============================================================================
 # HP/Status options
 #===============================================================================
-MenuHandlers::BattlerDebug.register("hp_status_menu", {
+MenuHandlers.register(:battler_debug, "hp_status_menu", {
   "parent" => "main",
   "name"   => _INTL("HP/Status..."),
   "usage"  => :both
 })
 
-MenuHandlers::BattlerDebug.register("set_hp", {
+MenuHandlers.register(:battler_debug, "set_hp", {
   "parent" => "hp_status_menu",
   "name"   => _INTL("Set HP"),
   "usage"  => :both,
@@ -50,7 +40,7 @@ MenuHandlers::BattlerDebug.register("set_hp", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_status", {
+MenuHandlers.register(:battler_debug, "set_status", {
   "parent" => "hp_status_menu",
   "name"   => _INTL("Set status"),
   "usage"  => :both,
@@ -127,7 +117,7 @@ MenuHandlers::BattlerDebug.register("set_status", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("full_heal", {
+MenuHandlers.register(:battler_debug, "full_heal", {
   "parent" => "hp_status_menu",
   "name"   => _INTL("Heal HP and status"),
   "usage"  => :both,
@@ -149,13 +139,13 @@ MenuHandlers::BattlerDebug.register("full_heal", {
 #===============================================================================
 # Level/stats options
 #===============================================================================
-MenuHandlers::BattlerDebug.register("level_stats", {
+MenuHandlers.register(:battler_debug, "level_stats", {
   "parent" => "main",
   "name"   => _INTL("Stats/level..."),
   "usage"  => :both
 })
 
-MenuHandlers::BattlerDebug.register("set_stat_stages", {
+MenuHandlers.register(:battler_debug, "set_stat_stages", {
   "parent" => "level_stats",
   "name"   => _INTL("Set stat stages"),
   "usage"  => :battler,
@@ -194,7 +184,7 @@ MenuHandlers::BattlerDebug.register("set_stat_stages", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_level", {
+MenuHandlers.register(:battler_debug, "set_level", {
   "parent" => "level_stats",
   "name"   => _INTL("Set level"),
   "usage"  => :both,
@@ -217,7 +207,7 @@ MenuHandlers::BattlerDebug.register("set_level", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_exp", {
+MenuHandlers.register(:battler_debug, "set_exp", {
   "parent" => "level_stats",
   "name"   => _INTL("Set Exp"),
   "usage"  => :both,
@@ -242,7 +232,7 @@ MenuHandlers::BattlerDebug.register("set_exp", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("hidden_values", {
+MenuHandlers.register(:battler_debug, "hidden_values", {
   "parent" => "level_stats",
   "name"   => _INTL("EV/IV..."),
   "usage"  => :both,
@@ -349,7 +339,7 @@ MenuHandlers::BattlerDebug.register("hidden_values", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_happiness", {
+MenuHandlers.register(:battler_debug, "set_happiness", {
   "parent" => "level_stats",
   "name"   => _INTL("Set happiness"),
   "usage"  => :both,
@@ -365,7 +355,7 @@ MenuHandlers::BattlerDebug.register("set_happiness", {
 #===============================================================================
 # Types
 #===============================================================================
-MenuHandlers::BattlerDebug.register("set_types", {
+MenuHandlers.register(:battler_debug, "set_types", {
   "parent" => "main",
   "name"   => _INTL("Set types"),
   "usage"  => :battler,
@@ -414,13 +404,13 @@ MenuHandlers::BattlerDebug.register("set_types", {
 #===============================================================================
 # Moves options
 #===============================================================================
-MenuHandlers::BattlerDebug.register("moves", {
+MenuHandlers.register(:battler_debug, "moves", {
   "parent" => "main",
   "name"   => _INTL("Moves..."),
   "usage"  => :both
 })
 
-MenuHandlers::BattlerDebug.register("teach_move", {
+MenuHandlers.register(:battler_debug, "teach_move", {
   "parent" => "moves",
   "name"   => _INTL("Teach move"),
   "usage"  => :both,
@@ -443,7 +433,7 @@ MenuHandlers::BattlerDebug.register("teach_move", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("forget_move", {
+MenuHandlers.register(:battler_debug, "forget_move", {
   "parent" => "moves",
   "name"   => _INTL("Forget move"),
   "usage"  => :both,
@@ -468,7 +458,7 @@ MenuHandlers::BattlerDebug.register("forget_move", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_move_pp", {
+MenuHandlers.register(:battler_debug, "set_move_pp", {
   "parent" => "moves",
   "name"   => _INTL("Set move PP"),
   "usage"  => :both,
@@ -546,7 +536,7 @@ MenuHandlers::BattlerDebug.register("set_move_pp", {
 #===============================================================================
 # Other options
 #===============================================================================
-MenuHandlers::BattlerDebug.register("set_item", {
+MenuHandlers.register(:battler_debug, "set_item", {
   "parent" => "main",
   "name"   => _INTL("Set item"),
   "usage"  => :both,
@@ -581,7 +571,7 @@ MenuHandlers::BattlerDebug.register("set_item", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_ability", {
+MenuHandlers.register(:battler_debug, "set_ability", {
   "parent" => "main",
   "name"   => _INTL("Set ability"),
   "usage"  => :both,
@@ -622,7 +612,7 @@ MenuHandlers::BattlerDebug.register("set_ability", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_nature", {
+MenuHandlers.register(:battler_debug, "set_nature", {
   "parent" => "main",
   "name"   => _INTL("Set nature"),
   "usage"  => :both,
@@ -664,7 +654,7 @@ MenuHandlers::BattlerDebug.register("set_nature", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_gender", {
+MenuHandlers.register(:battler_debug, "set_gender", {
   "parent" => "main",
   "name"   => _INTL("Set gender"),
   "usage"  => :both,
@@ -693,7 +683,7 @@ MenuHandlers::BattlerDebug.register("set_gender", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("form", {
+MenuHandlers.register(:battler_debug, "form", {
   "parent" => "main",
   "name"   => _INTL("Set form"),
   "usage"  => :both,
@@ -730,7 +720,7 @@ MenuHandlers::BattlerDebug.register("form", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_shininess", {
+MenuHandlers.register(:battler_debug, "set_shininess", {
   "parent" => "main",
   "name"   => _INTL("Set shininess"),
   "usage"  => :both,
@@ -762,7 +752,7 @@ MenuHandlers::BattlerDebug.register("set_shininess", {
   }
 })
 
-MenuHandlers::BattlerDebug.register("set_effects", {
+MenuHandlers.register(:battler_debug, "set_effects", {
   "parent" => "main",
   "name"   => _INTL("Set effects"),
   "usage"  => :battler,

@@ -120,9 +120,9 @@ def pbPokeCenterPC
   command  = 0
   commands    = []
   display_cmd = []
-  MenuHandlers::PokemonPC.each_available do |option, hash|
+  MenuHandlers.each_available(:pokemon_pc) do |option, hash|
     commands.push(option)
-    name = MenuHandlers::PokemonPC.get_string_option("name", option)
+    name = MenuHandlers.get_string_option(:pokemon_pc, "name", option)
     display_cmd.push(name)
   end
   display_cmd.push(_INTL("Cancel"))
@@ -130,7 +130,7 @@ def pbPokeCenterPC
     command = pbMessage(_INTL("Which PC should be accessed?"), display_cmd, commands.length, nil, command)
     break if command >= commands.length
     cmd      = commands[command]
-    endscene = MenuHandlers::PokemonPC.call("effect", cmd)
+    endscene = MenuHandlers.call(:pokemon_pc, "effect", cmd)
     break if endscene
   end
   pbSEPlay("PC close")
@@ -150,23 +150,10 @@ end
 
 
 #===============================================================================
-# Module to register and handle commands in the PC
-#===============================================================================
-module MenuHandlers
-  class PokemonPC
-    extend HandlerMethods
-
-    @commands = HandlerHashBasic.new
-
-  end
-end
-
-
-#===============================================================================
 # Individual commands for the PC
 #===============================================================================
 # Pokemon Storage --------------------------------------------------------------
-MenuHandlers::PokemonPC.register("pokemonstorage", {
+ MenuHandlers.register(:pokemon_pc, "pokemonstorage", {
   "name"        => proc {
     next $player.seen_storage_creator ? _INTL("{1}'s PC", pbGetStorageCreator) : _INTL("Someone's PC")
   },
@@ -215,7 +202,7 @@ MenuHandlers::PokemonPC.register("pokemonstorage", {
 })
 
 # Trainer PC -------------------------------------------------------------------
-MenuHandlers::PokemonPC.register("trainerpc", {
+ MenuHandlers.register(:pokemon_pc, "trainerpc", {
   "name"        => proc { next _INTL("{1}'s PC", $player.name) },
   "condition"   => proc { next true },
   "priority"    => 30,
@@ -226,7 +213,7 @@ MenuHandlers::PokemonPC.register("trainerpc", {
 })
 
 # Hall Of Fame PC Menu ---------------------------------------------------------
-MenuHandlers::PokemonPC.register("halloffame", {
+ MenuHandlers.register(:pokemon_pc, "halloffame", {
   "name"        => _INTL("Hall of Fame"),
   "condition"   => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
   "priority"    => 20,
@@ -237,7 +224,7 @@ MenuHandlers::PokemonPC.register("halloffame", {
 })
 
 # Shadow Pokemon Purify Chamber ------------------------------------------------
-MenuHandlers::PokemonPC.register("purifychamber", {
+ MenuHandlers.register(:pokemon_pc, "purifychamber", {
   "name"        => _INTL("Purify Chamber"),
   "condition"   => proc { next $player.seen_purify_chamber },
   "priority"    => 10,
