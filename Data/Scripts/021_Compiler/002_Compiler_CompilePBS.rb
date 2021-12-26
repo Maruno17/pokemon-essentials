@@ -1465,7 +1465,7 @@ module Compiler
         end
         # Record XXX=YYY setting
         case property_name
-        when "Items", "LoseText", "MegaItem"
+        when "Items", "LoseText"
           trainer_hash[line_schema[0]] = property_value
           trainer_lose_texts.push(property_value) if property_name == "LoseText"
         when "Pokemon"
