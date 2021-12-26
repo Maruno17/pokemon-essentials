@@ -689,13 +689,13 @@ def pbUseItem(bag, item, bagscene = nil)
       bagscene&.pbRefresh
     }
     return (ret) ? 1 : 0
-  elsif useType == 2 || itm.is_machine?   # Item is usable from Bag
+  elsif useType == 2 || itm.is_machine?   # Item is usable from Bag or teaches a move
     intret = ItemHandlers.triggerUseFromBag(item)
     if intret >= 0
       bag.remove(item) if intret == 1 && itm.consumed_after_use?
       return intret
     end
-    pbMessage(_INTL("Can't use that here.")) if intret == 0
+    pbMessage(_INTL("Can't use that here."))
     return 0
   end
   pbMessage(_INTL("Can't use that here."))
