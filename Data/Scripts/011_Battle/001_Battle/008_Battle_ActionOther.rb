@@ -62,30 +62,26 @@ class Battle
   # Choosing to Mega Evolve a battler
   #=============================================================================
   def pbHasMegaRing?(idxBattler)
-    return false if @mega_rings.empty?
-    # return true if !pbOwnedByPlayer?(idxBattler)   # Assume AI trainer have a ring
     if pbOwnedByPlayer?(idxBattler)
       @mega_rings.each { |item| return true if $bag.has?(item) }
-    elsif !opposes?(idxBattler)
-      @mega_rings.each { |item| return true if @ally_items.include?(item) }
     else
-      idxTrainer = pbGetOwnerIndexFromBattlerIndex(idxBattler)
-      @mega_rings.each { |item| return true if @items[idxTrainer].include?(item) }
+      trainer_items = pbGetOwnerItems(idxBattler)
+      return false if !trainer_items
+      @mega_rings.each { |item| return true if trainer_items.include?(item) }
     end
     return false
   end
 
   def pbGetMegaRingName(idxBattler)
-    return "" if @mega_rings.empty?
-    if pbOwnedByPlayer?(idxBattler)
-      @mega_rings.each { |item| return GameData::Item.get(item).name if $bag.has?(item) }
-    elsif !opposes?(idxBattler)
-      @mega_rings.each { |item| return GameData::Item.get(item).name if @ally_items.include?(item) }
-    else
-      idxTrainer = pbGetOwnerIndexFromBattlerIndex(idxBattler)
-      @mega_rings.each { |item| return GameData::Item.get(item).name if @items[idxTrainer].include?(item) }
+    if !@mega_rings.empty?
+      if pbOwnedByPlayer?(idxBattler)
+        @mega_rings.each { |item| return GameData::Item.get(item).name if $bag.has?(item) }
+      else
+        trainer_items = pbGetOwnerItems(idxBattler)
+        @mega_rings.each { |item| return GameData::Item.get(item).name if trainer_items.include?(item) }
+      end
     end
-    return ""
+    return _INTL("Mega Ring")
   end
 
   def pbCanMegaEvolve?(idxBattler)
