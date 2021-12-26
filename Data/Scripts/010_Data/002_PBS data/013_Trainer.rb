@@ -145,7 +145,7 @@ module GameData
         end
         level = pkmn_data[:level]
         if $game_switches[GAME_DIFFICULTY_HARD]
-          level *= Settings::HARD_MODE_LEVEL_MODIFIER.ceil
+          level = (level*Settings::HARD_MODE_LEVEL_MODIFIER).ceil
           if level > Settings::MAXIMUM_LEVEL
             level = Settings::MAXIMUM_LEVEL
           end

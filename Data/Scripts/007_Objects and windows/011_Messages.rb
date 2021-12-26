@@ -862,6 +862,9 @@ end
 
 def pbShowCommands(msgwindow, commands = nil, cmdIfCancel = 0, defaultCmd = 0)
   return 0 if !commands
+  if defaultCmd == 0 && $game_variables[COMMAND_WINDOW_INDEX] != 0
+    defaultCmd = $game_variables[COMMAND_WINDOW_INDEX]
+  end
   cmdwindow = Window_CommandPokemonEx.new(commands)
   cmdwindow.z = 99999
   cmdwindow.visible = true
