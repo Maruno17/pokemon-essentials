@@ -1377,14 +1377,15 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
           poke1.exp = exp_body
           poke2.exp = exp_head
         end
-
+        body_level=poke1.level
+        head_level=poke2.level
         if $Trainer.party.length >= 6
           if (keepInParty == 0)
             $PokemonStorage.pbStoreCaught(poke2)
             scene.pbDisplay(_INTL("{1} was sent to the PC.", poke2.name))
           else
-            poke2 = PokeBattle_Pokemon.new(bodyPoke, lev, $Trainer)
-            poke1 = PokeBattle_Pokemon.new(headPoke, lev, $Trainer)
+            poke2 = Pokemon.new(bodyPoke, body_level)
+            poke1 = Pokemon.new(headPoke, head_level)
 
             $PokemonStorage.pbStoreCaught(poke2)
             scene.pbDisplay(_INTL("{1} was sent to the PC.", poke2.name))
