@@ -382,7 +382,6 @@ def pbTrainerBattleCore(*args)
   foeEndSpeeches = []
   foeParty       = []
   foePartyStarts = []
-  allyItems      = []
   args.each do |arg|
     case arg
     when NPCTrainer
@@ -407,6 +406,7 @@ def pbTrainerBattleCore(*args)
   end
   # Calculate who the player trainer(s) and their party are
   playerTrainers    = [$player]
+  allyItems         = []
   playerParty       = $player.party
   playerPartyStarts = [0]
   room_for_partner = (foeParty.length > 1)
@@ -418,7 +418,7 @@ def pbTrainerBattleCore(*args)
     ally = NPCTrainer.new($PokemonGlobal.partner[1], $PokemonGlobal.partner[0])
     ally.id    = $PokemonGlobal.partner[2]
     ally.party = $PokemonGlobal.partner[3]
-    allyItems  = ally.items.clone
+    allyItems[1] = ally.items.clone
     playerTrainers.push(ally)
     playerParty = []
     $player.party.each { |pkmn| playerParty.push(pkmn) }
