@@ -312,11 +312,17 @@ class Pokemon
 
   # @return [Symbol] this Pokémon's first type
   def type1
+    if @ability == :MULTITYPE && species_data.type1 == :NORMAL
+      return getHeldPlateType()
+    end
     return species_data.type1
   end
 
   # @return [Symbol] this Pokémon's second type, or the first type if none is defined
   def type2
+    if @ability == :MULTITYPE && species_data.type2 == :NORMAL
+      return getHeldPlateType()
+    end
     sp_data = species_data
     return sp_data.type2 || sp_data.type1
   end
@@ -334,6 +340,10 @@ class Pokemon
   def hasType?(type)
     type = GameData::Type.get(type).id
     return self.types.include?(type)
+  end
+
+  def getHeldPlateType()
+    return getArceusPlateType(@item)
   end
 
   #=============================================================================

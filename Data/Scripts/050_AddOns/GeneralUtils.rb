@@ -69,24 +69,23 @@ def CanLearnMove(pokemon, move)
 end
 
 def pbPokemonIconFile(pokemon)
-  bitmapFileName=pbCheckPokemonIconFiles(pokemon.species, pokemon.isEgg?)
+  bitmapFileName = pbCheckPokemonIconFiles(pokemon.species, pokemon.isEgg?)
   return bitmapFileName
 end
 
-def pbCheckPokemonIconFiles(speciesNum,egg=false, dna=false)
+def pbCheckPokemonIconFiles(speciesNum, egg = false, dna = false)
   if egg
-    bitmapFileName=sprintf("Graphics/Icons/iconEgg")
+    bitmapFileName = sprintf("Graphics/Icons/iconEgg")
     return pbResolveBitmap(bitmapFileName)
   else
-    bitmapFileName=sprintf("Graphics/Icons/icon%03d",speciesNum)
-    ret=pbResolveBitmap(bitmapFileName)
+    bitmapFileName = sprintf("Graphics/Icons/icon%03d", speciesNum)
+    ret = pbResolveBitmap(bitmapFileName)
     return ret if ret
   end
-  ret=pbResolveBitmap("Graphics/Icons/iconDNA.png")
+  ret = pbResolveBitmap("Graphics/Icons/iconDNA.png")
   return ret if ret
   return pbResolveBitmap("Graphics/Icons/iconDNA.png")
 end
-
 
 def getDexNumberForSpecies(species)
   return species if species.is_a?(Integer)
@@ -109,29 +108,29 @@ def dexNum(species)
   return getDexNumberForSpecies(species)
 end
 
-def getRandomCustomFusion(returnRandomPokemonIfNoneFound=true,customPokeList=[],maxPoke=-1,recursionLimit=3)
-  if customPokeList.length==0
+def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3)
+  if customPokeList.length == 0
     customPokeList = getCustomSpeciesList()
   end
   randPoke = []
   if customPokeList.length >= 5000
-    chosen=false
-    i=0 #loop pas plus que 3 fois pour pas lag
+    chosen = false
+    i = 0 #loop pas plus que 3 fois pour pas lag
     while chosen == false
-      fusedPoke =  customPokeList[rand(customPokeList.length)]
-      poke1 = getBasePokemonID(fusedPoke,false)
-      poke2 = getBasePokemonID(fusedPoke,true)
+      fusedPoke = customPokeList[rand(customPokeList.length)]
+      poke1 = getBasePokemonID(fusedPoke, false)
+      poke2 = getBasePokemonID(fusedPoke, true)
 
       if ((poke1 <= maxPoke && poke2 <= maxPoke) || i >= recursionLimit) || maxPoke == -1
-        randPoke << getBasePokemonID(fusedPoke,false)
-        randPoke << getBasePokemonID(fusedPoke,true)
+        randPoke << getBasePokemonID(fusedPoke, false)
+        randPoke << getBasePokemonID(fusedPoke, true)
         chosen = true
       end
     end
   else
     if returnRandomPokemonIfNoneFound
-      randPoke << rand(maxPoke)+1
-      randPoke << rand(maxPoke)+1
+      randPoke << rand(maxPoke) + 1
+      randPoke << rand(maxPoke) + 1
     end
   end
 
@@ -180,7 +179,7 @@ def getAllNonLegendaryPokemon()
 end
 
 def getPokemonEggGroups(species)
-  return  GameData::Species.get(species).egg_groups
+  return GameData::Species.get(species).egg_groups
 end
 
 def generateEggGroupTeam(eggGroup)
@@ -203,8 +202,6 @@ end
 def obtainBadgeMessage(badgeName)
   Kernel.pbMessage(_INTL("\\me[Badge get]{1} obtained the {2}!", $Trainer.name, badgeName))
 end
-
-
 
 def getAllNonLegendaryPokemon()
   list = []
@@ -276,36 +273,35 @@ end
 
 def Kernel.setRocketPassword(variableNum)
   abilityIndex = rand(233)
-  speciesIndex =rand(PBSpecies.maxValue-1)
+  speciesIndex = rand(PBSpecies.maxValue - 1)
 
   word1 = PBSpecies.getName(speciesIndex)
   word2 = GameData::Ability.get(abilityIndex).name
-  password = _INTL("{1}'s {2}",word1,word2)
-  pbSet(variableNum,password)
+  password = _INTL("{1}'s {2}", word1, word2)
+  pbSet(variableNum, password)
 end
-
 
 def getGenericPokemonCryText(pokemonSpecies)
   case pokemonSpecies
   when 25
     return "Pika!"
-  when 16,17,18,21,22,144,145,146,227,417,418,372 #birds
+  when 16, 17, 18, 21, 22, 144, 145, 146, 227, 417, 418, 372 #birds
     return "Squawk!"
-  when 163,164
-    return "Hoot!"  #owl
+  when 163, 164
+    return "Hoot!" #owl
   else
     return "Guaugh!"
   end
 end
 
-def obtainPokemonSpritePath(id,includeCustoms=true)
-  head=getBasePokemonID(param.to_i,false)
-  body=getBasePokemonID(param.to_i,true)
-  return obtainPokemonSpritePath(body,head,includeCustoms)
+def obtainPokemonSpritePath(id, includeCustoms = true)
+  head = getBasePokemonID(param.to_i, false)
+  body = getBasePokemonID(param.to_i, true)
+  return obtainPokemonSpritePath(body, head, includeCustoms)
 end
 
-def obtainPokemonSpritePath(bodyId, headId,include_customs=true)
-  hasCustom=false
+def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
+  hasCustom = false
   picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", headId, bodyId)
 
   if include_customs
@@ -316,6 +312,48 @@ def obtainPokemonSpritePath(bodyId, headId,include_customs=true)
     end
   end
   return picturePath
+end
+
+def getArceusPlateType(heldItem)
+  return :NORMAL if heldItem == nil
+  case heldItem
+  when :FISTPLATE
+    return :FIGHTING
+  when :SKYPLATE
+    return :FLYING
+  when :TOXICPLATE
+    return :POISON
+  when :EARTHPLATE
+    return :GROUND
+  when :STONEPLATE
+    return :ROCK
+  when :INSECTPLATE
+    return :BUG
+  when :SPOOKYPLATE
+    return :GHOST
+  when :IRONPLATE
+    return :STEEL
+  when :FLAMEPLATE
+    return :FIRE
+  when :SPLASHPLATE
+    return :WATER
+  when :MEADOWPLATE
+    return :GRASS
+  when :ZAPPLATE
+    return :ELECTRIC
+  when :MINDPLATE
+    return :PSYCHIC
+  when :ICICLEPLATE
+    return :ICE
+  when :DRACOPLATE
+    return :DRAGON
+  when :DREADPLATE
+    return :DARK
+  when :PIXIEPLATE
+    return :FAIRY
+  else
+    return :NORMAL
+  end
 end
 
 
