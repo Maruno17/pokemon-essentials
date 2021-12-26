@@ -9,9 +9,9 @@ ItemHandlers::UseText.copy(:BICYCLE, :MACHBIKE, :ACROBIKE)
 
 #===============================================================================
 # UseFromBag handlers
-# Return values: 0  = not used
-#                1  = used
-#                2  = close the Bag to use
+# Return values: 0 = not used
+#                1 = used
+#                2 = close the Bag to use
 # If there is no UseFromBag handler for an item being used from the Bag (not on
 # a Pokémon), calls the UseInField handler for it instead.
 #===============================================================================
@@ -65,19 +65,18 @@ ItemHandlers::UseFromBag.add(:TOWNMAP, proc { |item|
 })
 
 ItemHandlers::UseFromBag.addIf(proc { |item| GameData::Item.get(item).is_machine? },
-  proc { |itm|
+  proc { |item|
     if $player.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
       next 0
     end
-    item = GameData::Item.get(itm)
-    machine = item.move
-    next 0 if !machine
-    movename = GameData::Move.get(machine).name
-    pbMessage(_INTL("\\se[PC access]You booted up {1}.\1", item.name))
-    next 0 if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?", movename))
-    ret = (item.consumable ? 1 : 0)
-    next ret if pbMoveTutorChoose(machine, nil, true, item.is_TR?)
+    item_data = GameData::Item.get(item)
+    move = item_data.move
+    next 0 if !move
+    pbMessage(_INTL("\\se[PC access]You booted up {1}.\1", item_data.name))
+    next 0 if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",
+                                      GameData::Move.get(move).name))
+    next 1 if pbMoveTutorChoose(move, nil, true, item_data.is_TR?)
     next 0
   }
 )
