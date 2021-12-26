@@ -1310,3 +1310,16 @@ def pbPurifyChamber
     screen.pbStartPurify
   }
 end
+
+#===============================================================================
+# Shadow Pokemon Purify Chamber Option in Pokecenter PC 
+#===============================================================================
+ MenuHandlers.register(:pokemon_pc, :purify_chamber, {
+  "name"        => _INTL("Purify Chamber"),
+  "condition"   => proc { next $player.seen_purify_chamber },
+  "priority"    => 10,
+  "effect"      => proc {
+    pbMessage(_INTL("\\se[PC access]Accessed the Purify Chamber."))
+    pbPurifyChamber
+  }
+})

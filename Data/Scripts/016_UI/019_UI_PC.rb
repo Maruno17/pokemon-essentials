@@ -153,7 +153,7 @@ end
 # Individual commands for the PC
 #===============================================================================
 # Pokemon Storage --------------------------------------------------------------
- MenuHandlers.register(:pokemon_pc, "pokemonstorage", {
+ MenuHandlers.register(:pokemon_pc, :pokemon_storage, {
   "name"        => proc {
     next $player.seen_storage_creator ? _INTL("{1}'s PC", pbGetStorageCreator) : _INTL("Someone's PC")
   },
@@ -202,7 +202,7 @@ end
 })
 
 # Trainer PC -------------------------------------------------------------------
- MenuHandlers.register(:pokemon_pc, "trainerpc", {
+ MenuHandlers.register(:pokemon_pc, :trainer_pc, {
   "name"        => proc { next _INTL("{1}'s PC", $player.name) },
   "condition"   => proc { next true },
   "priority"    => 30,
@@ -210,26 +210,4 @@ end
     pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.", $player.name))
     pbTrainerPCMenu
   }
-})
-
-# Hall Of Fame PC Menu ---------------------------------------------------------
- MenuHandlers.register(:pokemon_pc, "halloffame", {
-  "name"        => _INTL("Hall of Fame"),
-  "condition"   => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
-  "priority"    => 20,
-  "effect"      => proc {
-    pbMessage(_INTL("\\se[PC access]Accessed the Hall of Fame."))
-    pbHallOfFamePC
-  }
-})
-
-# Shadow Pokemon Purify Chamber ------------------------------------------------
- MenuHandlers.register(:pokemon_pc, "purifychamber", {
-  "name"        => _INTL("Purify Chamber"),
-  "condition"   => proc { next $player.seen_purify_chamber },
-  "priority"    => 10,
-  "effect"      => proc {
-    pbMessage(_INTL("\\se[PC access]Accessed the Purify Chamber."))
-    pbPurifyChamber
-  }
-})
+})-

@@ -129,7 +129,7 @@ end
 # Individual commands for the Pause Menu
 #===============================================================================
 # Pokedex ----------------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "pokedex", {
+MenuHandlers.register(:pause_menu, :pokedex, {
   "name"        => _INTL("Pokedex"),
   "condition"   => proc {
     next $player.has_pokedex && $player.pokedex.accessible_dexes.length > 0
@@ -167,7 +167,7 @@ MenuHandlers.register(:pause_menu, "pokedex", {
 })
 
 # Pokemon Party ----------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "party", {
+MenuHandlers.register(:pause_menu, :party, {
   "name"        => _INTL("Pokémon"),
   "condition"   => proc { next $player.party_count > 0 },
   "priority"    => 90,
@@ -188,7 +188,7 @@ MenuHandlers.register(:pause_menu, "party", {
 })
 
 # Bag --------------------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "bag", {
+MenuHandlers.register(:pause_menu, :bag, {
   "name"        => _INTL("Bag"),
   "condition"   => proc { next !pbInBugContest? },
   "priority"    => 80,
@@ -209,7 +209,7 @@ MenuHandlers.register(:pause_menu, "bag", {
 })
 
 # Pokegear ---------------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "pokegear", {
+MenuHandlers.register(:pause_menu, :pokegear, {
   "name"        => _INTL("Pokégear"),
   "condition"   => proc { next $player.has_pokegear },
   "priority"    => 70,
@@ -226,7 +226,7 @@ MenuHandlers.register(:pause_menu, "pokegear", {
 })
 
 # Town Map ---------------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "townmap", {
+MenuHandlers.register(:pause_menu, :town_map, {
   "name"        => _INTL("Town Map"),
   "condition"   => proc { next $bag.has?(:TOWNMAP) && !$player.has_pokegear },
   "priority"    => 70,
@@ -244,7 +244,7 @@ MenuHandlers.register(:pause_menu, "townmap", {
 })
 
 # Trainer Card -----------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "trainercard", {
+MenuHandlers.register(:pause_menu, :trainer_card, {
   "name"        => proc { next $player.name },
   "condition"   => proc { next true },
   "priority"    => 60,
@@ -261,7 +261,7 @@ MenuHandlers.register(:pause_menu, "trainercard", {
 })
 
 # Quit Safari Game -------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "quitsafari", {
+MenuHandlers.register(:pause_menu, :quit_safari, {
   "name"        => _INTL("Exit Safari"),
   "condition"   => proc { next pbInSafari? && !pbInBugContest? },
   "info"        => proc {
@@ -287,7 +287,7 @@ MenuHandlers.register(:pause_menu, "quitsafari", {
 })
 
 # Quit Bug Contest -------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "quitbugcontest", {
+MenuHandlers.register(:pause_menu, :quit_bug_contest, {
   "name"        => _INTL("Quit Contest"),
   "condition"   => proc { next pbInBugContest? && !pbInSafari? },
   "info"        => proc {
@@ -314,7 +314,7 @@ MenuHandlers.register(:pause_menu, "quitbugcontest", {
 })
 
 # Save Game --------------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "savegame", {
+MenuHandlers.register(:pause_menu, :save_game, {
   "name"        => _INTL("Save"),
   "condition"   => proc {
     next $game_system && !$game_system.save_disabled && !pbInBugContest? && !pbInSafari?
@@ -335,7 +335,7 @@ MenuHandlers.register(:pause_menu, "savegame", {
 })
 
 # Options ----------------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "options", {
+MenuHandlers.register(:pause_menu, :options, {
   "name"        => _INTL("Options"),
   "condition"   => proc { next true },
   "priority"    => 30,
@@ -353,7 +353,7 @@ MenuHandlers.register(:pause_menu, "options", {
 })
 
 # Debug Menu -------------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "debug", {
+MenuHandlers.register(:pause_menu, :debug_menu, {
   "name"        => _INTL("Debug"),
   "condition"   => proc { next $DEBUG },
   "priority"    => 20,
@@ -368,7 +368,7 @@ MenuHandlers.register(:pause_menu, "debug", {
 })
 
 # Quit Game --------------------------------------------------------------------
-MenuHandlers.register(:pause_menu, "quitgame", {
+MenuHandlers.register(:pause_menu, :quit_game, {
   "name"        => _INTL("Quit Game"),
   "condition"   => proc { next true },
   "priority"    => 10,

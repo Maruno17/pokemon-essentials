@@ -496,3 +496,16 @@ def pbHallOfFamePC
   screen = HallOfFameScreen.new(scene)
   screen.pbStartScreenPC
 end
+
+#===============================================================================
+# Hall Of Fame Option in Pokecenter PC
+#===============================================================================
+MenuHandlers.register(:pokemon_pc, :hall_of_fame, {
+ "name"        => _INTL("Hall of Fame"),
+ "condition"   => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
+ "priority"    => 20,
+ "effect"      => proc {
+   pbMessage(_INTL("\\se[PC access]Accessed the Hall of Fame."))
+   pbHallOfFamePC
+ }
+})

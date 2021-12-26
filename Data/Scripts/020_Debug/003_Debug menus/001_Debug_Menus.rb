@@ -6,7 +6,7 @@ class CommandMenuList
 
   def initialize
     @commands    = []
-    @currentList = "main"
+    @currentList = :main
   end
 
   def add(option, hash)

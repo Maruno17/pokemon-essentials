@@ -164,7 +164,7 @@ end
 # Individual commands for the Pokegear
 #===============================================================================
 # Town Map ---------------------------------------------------------------------
-MenuHandlers.register(:pokegear, "map", {
+MenuHandlers.register(:pokegear, :town_map, {
   "name"        => _INTL("Map"),
   "icon"        => "icon_map",
   "condition"   => proc { next true },
@@ -184,7 +184,7 @@ MenuHandlers.register(:pokegear, "map", {
 })
 
 # Phone ------------------------------------------------------------------------
-MenuHandlers.register(:pokegear, "phone", {
+MenuHandlers.register(:pokegear, :phone, {
   "name"        => _INTL("Phone"),
   "icon"        => "icon_phone",
   "priority"    => 20,
@@ -198,7 +198,7 @@ MenuHandlers.register(:pokegear, "phone", {
 })
 
 # Jukebox ----------------------------------------------------------------------
-MenuHandlers.register(:pokegear, "jukebox", {
+MenuHandlers.register(:pokegear, :jukebox, {
   "name"        => _INTL("Jukebox"),
   "icon"        => "icon_jukebox",
   "condition"   => proc { next true },
