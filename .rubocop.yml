@@ -93,6 +93,11 @@ Style/Documentation:
 Style/FormatString:
   EnforcedStyle: sprintf
 
+# String literals are not frozen by default, which makes this comment a
+# pointless bit of boilerplate that we neither need nor want.
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
 # RMXP and Essentials use lots of global variables.
 Style/GlobalVars:
   Enabled: false

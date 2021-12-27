@@ -281,7 +281,7 @@ class PokemonPokedex_Scene
     @sprites["searchbg"].visible = false
     @sprites["pokedex"] = Window_Pokedex.new(206, 30, 276, 364, @viewport)
     @sprites["icon"] = PokemonSprite.new(@viewport)
-    @sprites["icon"].setOffset(PictureOrigin::Center)
+    @sprites["icon"].setOffset(PictureOrigin::CENTER)
     @sprites["icon"].x = 112
     @sprites["icon"].y = 196
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)

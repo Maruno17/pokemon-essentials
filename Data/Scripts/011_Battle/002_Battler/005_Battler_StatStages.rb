@@ -14,8 +14,10 @@ class Battle::Battler
     end
     # Check the stat stage
     if statStageAtMax?(stat)
-      @battle.pbDisplay(_INTL("{1}'s {2} won't go any higher!",
-                              pbThis, GameData::Stat.get(stat).name)) if showFailMsg
+      if showFailMsg
+        @battle.pbDisplay(_INTL("{1}'s {2} won't go any higher!",
+                                pbThis, GameData::Stat.get(stat).name))
+      end
       return false
     end
     return true
@@ -162,8 +164,10 @@ class Battle::Battler
     end
     # Check the stat stage
     if statStageAtMin?(stat)
-      @battle.pbDisplay(_INTL("{1}'s {2} won't go any lower!",
-                              pbThis, GameData::Stat.get(stat).name)) if showFailMsg
+      if showFailMsg
+        @battle.pbDisplay(_INTL("{1}'s {2} won't go any lower!",
+                                pbThis, GameData::Stat.get(stat).name))
+      end
       return false
     end
     return true

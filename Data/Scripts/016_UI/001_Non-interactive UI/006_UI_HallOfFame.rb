@@ -210,7 +210,7 @@ class HallOfFame_Scene
       ypoint = ypointformula(i)
       pok = @hallEntry[i]
       @sprites["pokemon#{i}"] = PokemonSprite.new(@viewport)
-      @sprites["pokemon#{i}"].setOffset(PictureOrigin::TopLeft)
+      @sprites["pokemon#{i}"].setOffset(PictureOrigin::TOP_LEFT)
       @sprites["pokemon#{i}"].setPokemonBitmap(pok)
       # This method doesn't put the exact coordinates
       @sprites["pokemon#{i}"].x = xpoint

@@ -61,8 +61,9 @@ class Battle::Battler
       case @battle.field.terrain
       when :Electric
         if newStatus == :SLEEP
-          @battle.pbDisplay(_INTL("{1} surrounds itself with electrified terrain!",
-                                  pbThis(true))) if showMessages
+          if showMessages
+            @battle.pbDisplay(_INTL("{1} surrounds itself with electrified terrain!", pbThis(true)))
+          end
           return false
         end
       when :Misty

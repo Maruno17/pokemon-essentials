@@ -22,7 +22,7 @@ class Interpreter
 
   def inspect
     str = super.chop
-    str << format(' @event_id: %d>', @event_id)
+    str << sprintf(' @event_id: %d>', @event_id)
     return str
   end
 

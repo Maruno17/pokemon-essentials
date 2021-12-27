@@ -277,7 +277,7 @@ def pbDownloadMysteryGift(trainer)
           sprites["msgwindow"].visible = false
           if gift[1] == 0
             sprite = PokemonSprite.new(viewport)
-            sprite.setOffset(PictureOrigin::Center)
+            sprite.setOffset(PictureOrigin::CENTER)
             sprite.setPokemonBitmap(gift[2])
             sprite.x = Graphics.width / 2
             sprite.y = -sprite.bitmap.height / 2

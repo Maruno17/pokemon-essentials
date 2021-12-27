@@ -1358,8 +1358,9 @@ class Battle::Move::StartGravity < Battle::Move
         b.effects[PBEffects::SkyDrop]     = -1
         showMessage = true
       end
-      @battle.pbDisplay(_INTL("{1} couldn't stay airborne because of gravity!",
-                              b.pbThis)) if showMessage
+      if showMessage
+        @battle.pbDisplay(_INTL("{1} couldn't stay airborne because of gravity!", b.pbThis))
+      end
     end
   end
 end

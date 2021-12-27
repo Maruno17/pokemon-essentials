@@ -8,7 +8,7 @@ class Sprite_Reflection
     @event    = event
     @height   = 0
     @fixedheight = false
-    if @event != $game_player && @event&.name[/reflection\((\d+)\)/i]
+    if @event && @event != $game_player && @event.name[/reflection\((\d+)\)/i]
       @height = $~[1].to_i || 0
       @fixedheight = true
     end

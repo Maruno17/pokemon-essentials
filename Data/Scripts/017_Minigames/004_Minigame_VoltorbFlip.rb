@@ -435,7 +435,7 @@ class VoltorbFlip
       numText += "0"
     end
     numText += num.to_s
-    numImages = numText.split(//)[0...2]
+    numImages = numText.chars[0...2]
     2.times do |j|
       @numbers[j] = [@directory + "numbersSmall", 472 + (j * 16), (i * 64) + 8, numImages[j].to_i * 16, 0, 16, 16]
     end
@@ -453,7 +453,7 @@ class VoltorbFlip
       numText += "0"
     end
     numText += num.to_s
-    numImages = numText.split(//)[0...2]
+    numImages = numText.chars[0...2]
     2.times do |j|
       @numbers[j] = [@directory + "numbersSmall", (i * 64) + 152 + (j * 16), 328, numImages[j].to_i * 16, 0, 16, 16]
     end
@@ -470,7 +470,7 @@ class VoltorbFlip
       coinText += "0"
     end
     coinText += source.to_s
-    coinImages = coinText.split(//)[0...5]
+    coinImages = coinText.chars[0...5]
     5.times do |i|
       @coins[i] = [@directory + "numbersScore", 6 + (i * 24), y, coinImages[i].to_i * 24, 0, 24, 38]
     end

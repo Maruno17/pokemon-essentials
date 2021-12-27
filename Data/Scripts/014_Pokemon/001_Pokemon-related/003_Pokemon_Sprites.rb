@@ -20,28 +20,28 @@ class PokemonSprite < SpriteWrapper
     self.bitmap = nil
   end
 
-  def setOffset(offset = PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::CENTER)
     @offset = offset
     changeOrigin
   end
 
   def changeOrigin
     return if !self.bitmap
-    @offset = PictureOrigin::Center if !@offset
+    @offset = PictureOrigin::CENTER if !@offset
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
+    when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
       self.ox = 0
-    when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
+    when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
       self.ox = self.bitmap.width / 2
-    when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
+    when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
       self.ox = self.bitmap.width
     end
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
+    when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
       self.oy = 0
-    when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
+    when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
       self.oy = self.bitmap.height / 2
-    when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
+    when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
       self.oy = self.bitmap.height
     end
   end
@@ -138,30 +138,30 @@ class PokemonIconSprite < SpriteWrapper
     changeOrigin
   end
 
-  def setOffset(offset = PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::CENTER)
     @offset = offset
     changeOrigin
   end
 
   def changeOrigin
     return if !self.bitmap
-    @offset = PictureOrigin::TopLeft if !@offset
+    @offset = PictureOrigin::TOP_LEFT if !@offset
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
+    when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
       self.ox = 0
-    when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
+    when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
       self.ox = self.src_rect.width / 2
-    when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
+    when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
       self.ox = self.src_rect.width
     end
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
+    when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
       self.oy = 0
-    when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
+    when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
       # NOTE: This assumes the top quarter of the icon is blank, so oy is placed
       #       in the middle of the lower three quarters of the image.
       self.oy = self.src_rect.height * 5 / 8
-    when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
+    when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
       self.oy = self.src_rect.height
     end
   end
@@ -268,30 +268,30 @@ class PokemonSpeciesIconSprite < SpriteWrapper
     refresh
   end
 
-  def setOffset(offset = PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::CENTER)
     @offset = offset
     changeOrigin
   end
 
   def changeOrigin
     return if !self.bitmap
-    @offset = PictureOrigin::TopLeft if !@offset
+    @offset = PictureOrigin::TOP_LEFT if !@offset
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
+    when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
       self.ox = 0
-    when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
+    when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
       self.ox = self.src_rect.width / 2
-    when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
+    when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
       self.ox = self.src_rect.width
     end
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
+    when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
       self.oy = 0
-    when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
+    when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
       # NOTE: This assumes the top quarter of the icon is blank, so oy is placed
       #       in the middle of the lower three quarters of the image.
       self.oy = self.src_rect.height * 5 / 8
-    when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
+    when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
       self.oy = self.src_rect.height
     end
   end

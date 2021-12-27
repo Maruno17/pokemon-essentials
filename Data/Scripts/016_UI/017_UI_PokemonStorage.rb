@@ -598,7 +598,7 @@ class PokemonStorageScene
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @boxsidesviewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
     @sprites["pokemon"] = AutoMosaicPokemonSprite.new(@boxsidesviewport)
-    @sprites["pokemon"].setOffset(PictureOrigin::Center)
+    @sprites["pokemon"].setOffset(PictureOrigin::CENTER)
     @sprites["pokemon"].x = 90
     @sprites["pokemon"].y = 134
     @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport)

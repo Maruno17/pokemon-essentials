@@ -512,7 +512,6 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     startY = getLineY(@firstline)
     textchars.each do |text|
       thisline = text[5]
-      thiscolumn = text[7]
       thislength = text[8]
       textY = text[2] - startY
       # Don't draw lines before the first or zero-length segments

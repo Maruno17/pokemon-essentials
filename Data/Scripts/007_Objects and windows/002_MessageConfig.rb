@@ -396,7 +396,7 @@ def pbDoEnsureBitmap(bitmap, dwidth, dheight)
     bitmap&.dispose
     bitmap = Bitmap.new([1, dwidth].max, [1, dheight].max)
     (oldfont) ? bitmap.font = oldfont : pbSetSystemFont(bitmap)
-    bitmap.font.shadow = false if bitmap.font&.respond_to?("shadow")
+    bitmap.font.shadow = false if bitmap.font.respond_to?("shadow")
   end
   return bitmap
 end

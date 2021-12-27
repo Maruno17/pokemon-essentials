@@ -14,7 +14,7 @@ class PokemonPokedexInfo_Scene
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["infosprite"] = PokemonSprite.new(@viewport)
-    @sprites["infosprite"].setOffset(PictureOrigin::Center)
+    @sprites["infosprite"].setOffset(PictureOrigin::CENTER)
     @sprites["infosprite"].x = 104
     @sprites["infosprite"].y = 136
     @mapdata = pbLoadTownMapData
@@ -40,14 +40,14 @@ class PokemonPokedexInfo_Scene
     @sprites["areaoverlay"] = IconSprite.new(0, 0, @viewport)
     @sprites["areaoverlay"].setBitmap("Graphics/Pictures/Pokedex/overlay_area")
     @sprites["formfront"] = PokemonSprite.new(@viewport)
-    @sprites["formfront"].setOffset(PictureOrigin::Center)
+    @sprites["formfront"].setOffset(PictureOrigin::CENTER)
     @sprites["formfront"].x = 130
     @sprites["formfront"].y = 158
     @sprites["formback"] = PokemonSprite.new(@viewport)
-    @sprites["formback"].setOffset(PictureOrigin::Bottom)
+    @sprites["formback"].setOffset(PictureOrigin::BOTTOM)
     @sprites["formback"].x = 382   # y is set below as it depends on metrics
     @sprites["formicon"] = PokemonSpeciesIconSprite.new(nil, @viewport)
-    @sprites["formicon"].setOffset(PictureOrigin::Center)
+    @sprites["formicon"].setOffset(PictureOrigin::CENTER)
     @sprites["formicon"].x = 82
     @sprites["formicon"].y = 328
     @sprites["uparrow"] = AnimatedSprite.new("Graphics/Pictures/uparrow", 8, 28, 40, 2, @viewport)
@@ -99,7 +99,7 @@ class PokemonPokedexInfo_Scene
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["infosprite"] = PokemonSprite.new(@viewport)
-    @sprites["infosprite"].setOffset(PictureOrigin::Center)
+    @sprites["infosprite"].setOffset(PictureOrigin::CENTER)
     @sprites["infosprite"].x = 104
     @sprites["infosprite"].y = 136
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)

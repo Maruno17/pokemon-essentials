@@ -74,7 +74,7 @@ def pbHiddenMoveAnimation(pokemon)
   bg = Sprite.new(viewport)
   bg.bitmap = RPG::Cache.picture("hiddenMovebg")
   sprite = PokemonSprite.new(viewport)
-  sprite.setOffset(PictureOrigin::Center)
+  sprite.setOffset(PictureOrigin::CENTER)
   sprite.setPokemonBitmap(pokemon)
   sprite.z = 1
   sprite.visible = false

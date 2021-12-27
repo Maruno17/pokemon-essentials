@@ -21,7 +21,7 @@ class PokemonEggHatch_Scene
                                 Color.new(248, 248, 248), @viewport)
     # Create egg sprite/Pokémon sprite
     @sprites["pokemon"] = PokemonSprite.new(@viewport)
-    @sprites["pokemon"].setOffset(PictureOrigin::Bottom)
+    @sprites["pokemon"].setOffset(PictureOrigin::BOTTOM)
     @sprites["pokemon"].x = Graphics.width / 2
     @sprites["pokemon"].y = 264 + 56   # 56 to offset the egg sprite
     @sprites["pokemon"].setSpeciesBitmap(@pokemon.species, @pokemon.gender,

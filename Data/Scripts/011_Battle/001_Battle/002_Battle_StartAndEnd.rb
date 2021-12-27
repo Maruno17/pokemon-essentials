@@ -60,10 +60,13 @@ class Battle
         end
         sideCounts.each_with_index do |_count, i|
           if !requireds[i] || requireds[i] == 0
-            raise _INTL("Player-side trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
-                        i + 1, @sideSizes[0], @sideSizes[1]) if side == 0
-            raise _INTL("Opposing trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
-                        i + 1, @sideSizes[0], @sideSizes[1]) if side == 1
+            if side == 0
+              raise _INTL("Player-side trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
+                          i + 1, @sideSizes[0], @sideSizes[1])
+            elsif side == 1
+              raise _INTL("Opposing trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
+                          i + 1, @sideSizes[0], @sideSizes[1])
+            end
           end
           next if requireds[i] <= sideCounts[i]   # Trainer has enough Pokémon to fill their positions
           if requireds[i] == 1

@@ -27,7 +27,7 @@ class MoveRelearner_Scene
     @sprites = {}
     addBackgroundPlane(@sprites, "bg", "reminderbg", @viewport)
     @sprites["pokeicon"] = PokemonIconSprite.new(@pokemon, @viewport)
-    @sprites["pokeicon"].setOffset(PictureOrigin::Center)
+    @sprites["pokeicon"].setOffset(PictureOrigin::CENTER)
     @sprites["pokeicon"].x = 320
     @sprites["pokeicon"].y = 84
     @sprites["background"] = IconSprite.new(0, 0, @viewport)

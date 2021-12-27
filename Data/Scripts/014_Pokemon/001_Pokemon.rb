@@ -106,7 +106,7 @@ class Pokemon
 
   def inspect
     str = super.chop
-    str << format(' %s Lv.%s>', @species, @level.to_s || '???')
+    str << sprintf(' %s Lv.%s>', @species, @level.to_s || '???')
     return str
   end
 

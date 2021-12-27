@@ -391,20 +391,22 @@ class Battle::AI
         )
       end
     end
-    if skill >= PBTrainerAI.bestSkill && target.itemActive? && (target.item && !target.item.is_berry?)
-        Battle::ItemEffects.triggerDamageCalcFromTarget(
-          target.item, user, target, move, multipliers, baseDmg, type
-        )
-      end
+    if skill >= PBTrainerAI.bestSkill &&
+       target.itemActive? && target.item && !target.item.is_berry?
+      Battle::ItemEffects.triggerDamageCalcFromTarget(
+        target.item, user, target, move, multipliers, baseDmg, type
+      )
+    end
     # Global abilities
-    if skill >= PBTrainerAI.mediumSkill && ((@battle.pbCheckGlobalAbility(:DARKAURA) && type == :DARK) ||
-         (@battle.pbCheckGlobalAbility(:FAIRYAURA) && type == :FAIRY))
-        if @battle.pbCheckGlobalAbility(:AURABREAK)
-          multipliers[:base_damage_multiplier] *= 2 / 3.0
-        else
-          multipliers[:base_damage_multiplier] *= 4 / 3.0
-        end
+    if skill >= PBTrainerAI.mediumSkill &&
+       ((@battle.pbCheckGlobalAbility(:DARKAURA) && type == :DARK) ||
+        (@battle.pbCheckGlobalAbility(:FAIRYAURA) && type == :FAIRY))
+      if @battle.pbCheckGlobalAbility(:AURABREAK)
+        multipliers[:base_damage_multiplier] *= 2 / 3.0
+      else
+        multipliers[:base_damage_multiplier] *= 4 / 3.0
       end
+    end
     # Parental Bond
     if skill >= PBTrainerAI.mediumSkill && user.hasActiveAbility?(:PARENTALBOND)
       multipliers[:base_damage_multiplier] *= 1.25
@@ -413,9 +415,10 @@ class Battle::AI
     # TODO
     # Helping Hand - n/a
     # Charge
-    if skill >= PBTrainerAI.mediumSkill && (user.effects[PBEffects::Charge] > 0 && type == :ELECTRIC)
-        multipliers[:base_damage_multiplier] *= 2
-      end
+    if skill >= PBTrainerAI.mediumSkill &&
+       user.effects[PBEffects::Charge] > 0 && type == :ELECTRIC
+      multipliers[:base_damage_multiplier] *= 2
+    end
     # Mud Sport and Water Sport
     if skill >= PBTrainerAI.mediumSkill
       if type == :ELECTRIC
@@ -450,16 +453,16 @@ class Battle::AI
     end
     # Badge multipliers
     if skill >= PBTrainerAI.highSkill && @battle.internalBattle && target.pbOwnedByPlayer?
-          if move.physicalMove?(type) && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE
-            multipliers[:defense_multiplier] *= 1.1
-          elsif move.specialMove?(type) && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPDEF
-            multipliers[:defense_multiplier] *= 1.1
-          end
-        end
+      if move.physicalMove?(type) && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE
+        multipliers[:defense_multiplier] *= 1.1
+      elsif move.specialMove?(type) && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPDEF
+        multipliers[:defense_multiplier] *= 1.1
+      end
+    end
     # Multi-targeting attacks
     if skill >= PBTrainerAI.highSkill && pbTargetsMultiple?(move, user)
-        multipliers[:final_damage_multiplier] *= 0.75
-      end
+      multipliers[:final_damage_multiplier] *= 0.75
+    end
     # Weather
     if skill >= PBTrainerAI.mediumSkill
       case user.effectiveWeather
@@ -487,50 +490,51 @@ class Battle::AI
     # Critical hits - n/a
     # Random variance - n/a
     # STAB
-    if skill >= PBTrainerAI.mediumSkill && (type && user.pbHasType?(type))
-        if user.hasActiveAbility?(:ADAPTABILITY)
-          multipliers[:final_damage_multiplier] *= 2
-        else
-          multipliers[:final_damage_multiplier] *= 1.5
-        end
+    if skill >= PBTrainerAI.mediumSkill && type && user.pbHasType?(type)
+      if user.hasActiveAbility?(:ADAPTABILITY)
+        multipliers[:final_damage_multiplier] *= 2
+      else
+        multipliers[:final_damage_multiplier] *= 1.5
       end
+    end
     # Type effectiveness
     if skill >= PBTrainerAI.mediumSkill
       typemod = pbCalcTypeMod(type, user, target)
       multipliers[:final_damage_multiplier] *= typemod.to_f / Effectiveness::NORMAL_EFFECTIVE
     end
     # Burn
-    if skill >= PBTrainerAI.highSkill && (user.status == :BURN && move.physicalMove?(type) &&
-         !user.hasActiveAbility?(:GUTS) &&
-         !(Settings::MECHANICS_GENERATION >= 6 && move.function == "DoublePowerIfUserPoisonedBurnedParalyzed"))   # Facade
-        multipliers[:final_damage_multiplier] /= 2
-      end
+    if skill >= PBTrainerAI.highSkill && move.physicalMove?(type) &&
+       user.status == :BURN && !user.hasActiveAbility?(:GUTS) &&
+       !(Settings::MECHANICS_GENERATION >= 6 &&
+         move.function == "DoublePowerIfUserPoisonedBurnedParalyzed")   # Facade
+      multipliers[:final_damage_multiplier] /= 2
+    end
     # Aurora Veil, Reflect, Light Screen
-    if skill >= PBTrainerAI.highSkill && (!move.ignoresReflect? && !user.hasActiveAbility?(:INFILTRATOR))
-        if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
-          if @battle.pbSideBattlerCount(target) > 1
-            multipliers[:final_damage_multiplier] *= 2 / 3.0
-          else
-            multipliers[:final_damage_multiplier] /= 2
-          end
-        elsif target.pbOwnSide.effects[PBEffects::Reflect] > 0 && move.physicalMove?(type)
-          if @battle.pbSideBattlerCount(target) > 1
-            multipliers[:final_damage_multiplier] *= 2 / 3.0
-          else
-            multipliers[:final_damage_multiplier] /= 2
-          end
-        elsif target.pbOwnSide.effects[PBEffects::LightScreen] > 0 && move.specialMove?(type)
-          if @battle.pbSideBattlerCount(target) > 1
-            multipliers[:final_damage_multiplier] *= 2 / 3.0
-          else
-            multipliers[:final_damage_multiplier] /= 2
-          end
+    if skill >= PBTrainerAI.highSkill && !move.ignoresReflect? && !user.hasActiveAbility?(:INFILTRATOR)
+      if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+        if @battle.pbSideBattlerCount(target) > 1
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
+        else
+          multipliers[:final_damage_multiplier] /= 2
+        end
+      elsif target.pbOwnSide.effects[PBEffects::Reflect] > 0 && move.physicalMove?(type)
+        if @battle.pbSideBattlerCount(target) > 1
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
+        else
+          multipliers[:final_damage_multiplier] /= 2
+        end
+      elsif target.pbOwnSide.effects[PBEffects::LightScreen] > 0 && move.specialMove?(type)
+        if @battle.pbSideBattlerCount(target) > 1
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
+        else
+          multipliers[:final_damage_multiplier] /= 2
         end
       end
+    end
     # Minimize
     if skill >= PBTrainerAI.highSkill && (target.effects[PBEffects::Minimize] && move.tramplesMinimize?(2))
-        multipliers[:final_damage_multiplier] *= 2
-      end
+      multipliers[:final_damage_multiplier] *= 2
+    end
     # Move-specific base damage modifiers
     # TODO
     # Move-specific final damage modifiers
@@ -549,16 +553,16 @@ class Battle::AI
       if c >= 0 && user.abilityActive?
         c = Battle::AbilityEffects.triggerCriticalCalcFromUser(user.ability, user, target, c)
       end
-      if skill >= PBTrainerAI.bestSkill && (c >= 0 && !moldBreaker && target.abilityActive?)
-          c = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target.ability, user, target, c)
-        end
+      if skill >= PBTrainerAI.bestSkill && c >= 0 && !moldBreaker && target.abilityActive?
+        c = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target.ability, user, target, c)
+      end
       # Item effects that alter critical hit rate
       if c >= 0 && user.itemActive?
         c = Battle::ItemEffects.triggerCriticalCalcFromUser(user.item, user, target, c)
       end
-      if skill >= PBTrainerAI.bestSkill && (c >= 0 && target.itemActive?)
-          c = Battle::ItemEffects.triggerCriticalCalcFromTarget(target.item, user, target, c)
-        end
+      if skill >= PBTrainerAI.bestSkill && c >= 0 && target.itemActive?
+        c = Battle::ItemEffects.triggerCriticalCalcFromTarget(target.item, user, target, c)
+      end
       # Other efffects
       c = -1 if target.pbOwnSide.effects[PBEffects::LuckyChant] > 0
       if c >= 0
@@ -632,22 +636,22 @@ class Battle::AI
         )
       end
     end
-    if skill >= PBTrainerAI.bestSkill && (target.abilityActive? && !moldBreaker)
-        Battle::AbilityEffects.triggerAccuracyCalcFromTarget(
-          target.ability, modifiers, user, target, move, type
-        )
-      end
+    if skill >= PBTrainerAI.bestSkill && target.abilityActive? && !moldBreaker
+      Battle::AbilityEffects.triggerAccuracyCalcFromTarget(
+        target.ability, modifiers, user, target, move, type
+      )
+    end
     # Item effects that alter accuracy calculation
     if skill >= PBTrainerAI.mediumSkill && user.itemActive?
-        Battle::ItemEffects.triggerAccuracyCalcFromUser(
-          user.item, modifiers, user, target, move, type
-        )
-      end
+      Battle::ItemEffects.triggerAccuracyCalcFromUser(
+        user.item, modifiers, user, target, move, type
+      )
+    end
     if skill >= PBTrainerAI.bestSkill && target.itemActive?
-        Battle::ItemEffects.triggerAccuracyCalcFromTarget(
-          target.item, modifiers, user, target, move, type
-        )
-      end
+      Battle::ItemEffects.triggerAccuracyCalcFromTarget(
+        target.item, modifiers, user, target, move, type
+      )
+    end
     # Other effects, inc. ones that set accuracy_multiplier or evasion_stage to specific values
     if skill >= PBTrainerAI.mediumSkill
       if @battle.field.effects[PBEffects::Gravity] > 0
@@ -666,8 +670,8 @@ class Battle::AI
                                        user.effects[PBEffects::LockOnPos] == target.index
     end
     if skill >= PBTrainerAI.highSkill
-      if move.function == "BadPoisonTarget" && (Settings::MORE_TYPE_EFFECTS && move.statusMove? &&
-                                         user.pbHasType?(:POISON))   # Toxic
+      if move.function == "BadPoisonTarget" &&   # Toxic
+         Settings::MORE_TYPE_EFFECTS && move.statusMove? && user.pbHasType?(:POISON)
         modifiers[:base_accuracy] = 0
       end
       if ["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(move.function)

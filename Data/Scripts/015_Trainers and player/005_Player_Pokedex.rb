@@ -7,7 +7,7 @@ class Player < Trainer
 
     def inspect
       str = super.chop
-      str << format(' seen: %d, owned: %d>', self.seen_count, self.owned_count)
+      str << sprintf(' seen: %d, owned: %d>', self.seen_count, self.owned_count)
       return str
     end
 

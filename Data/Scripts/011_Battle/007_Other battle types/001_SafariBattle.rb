@@ -119,10 +119,10 @@ class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
     ballEndX   = ballPos[0] - 40
     ballEndY   = ballPos[1] - 4
     # Set up trainer sprite
-    trainer = addSprite(traSprite, PictureOrigin::Bottom)
+    trainer = addSprite(traSprite, PictureOrigin::BOTTOM)
     # Set up bait sprite
     ball = addNewSprite(ballStartX, ballStartY,
-                        "Graphics/Battle animations/safari_bait", PictureOrigin::Center)
+                        "Graphics/Battle animations/safari_bait", PictureOrigin::CENTER)
     ball.setZ(0, batSprite.z + 1)
     # Trainer animation
     if traSprite.bitmap.width >= traSprite.bitmap.height * 2
@@ -138,7 +138,7 @@ class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
     ball.moveOpacity(delay + 8, 2, 0)
     ball.setVisible(delay + 10, false)
     # Set up battler sprite
-    battler = addSprite(batSprite, PictureOrigin::Bottom)
+    battler = addSprite(batSprite, PictureOrigin::BOTTOM)
     # Show Pokémon jumping before eating the bait
     delay = ball.totalDuration + 3
     2.times do
@@ -184,10 +184,10 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
     ballEndX   = batSprite.x
     ballEndY   = batSprite.y - (batSprite.bitmap.height / 2)
     # Set up trainer sprite
-    trainer = addSprite(traSprite, PictureOrigin::Bottom)
+    trainer = addSprite(traSprite, PictureOrigin::BOTTOM)
     # Set up bait sprite
     ball = addNewSprite(ballStartX, ballStartY,
-                        "Graphics/Battle animations/safari_rock", PictureOrigin::Center)
+                        "Graphics/Battle animations/safari_rock", PictureOrigin::CENTER)
     ball.setZ(0, batSprite.z + 1)
     # Trainer animation
     if traSprite.bitmap.width >= traSprite.bitmap.height * 2
@@ -205,7 +205,7 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
     ball.setVisible(delay + 4, false)
     # Set up anger sprite
     anger = addNewSprite(ballEndX - 42, ballEndY - 36,
-                         "Graphics/Battle animations/safari_anger", PictureOrigin::Center)
+                         "Graphics/Battle animations/safari_anger", PictureOrigin::CENTER)
     anger.setVisible(0, false)
     anger.setZ(0, batSprite.z + 1)
     # Show anger appearing

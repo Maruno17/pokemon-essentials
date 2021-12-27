@@ -860,7 +860,7 @@ class PurifyChamberSetView < SpriteWrapper
     @directflow.setFlowStrength(1)
     @__sprites = []
     @__sprites[0] = PokemonIconSprite.new(nil, viewport)
-    PurifyChamber::SETSIZE * 2.times do |i|
+    (PurifyChamber::SETSIZE * 2).times do |i|
       @__sprites[i + 1] = PokemonIconSprite.new(nil, viewport)
     end
     @__sprites[1 + (PurifyChamber::SETSIZE * 2)] = PokemonIconSprite.new(nil, viewport)

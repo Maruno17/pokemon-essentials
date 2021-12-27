@@ -22,7 +22,7 @@ class ReadyMenuButton < SpriteWrapper
     pbSetSystemFont(self.bitmap)
     if @command[2]
       @icon = PokemonIconSprite.new($player.party[@command[3]], viewport)
-      @icon.setOffset(PictureOrigin::Center)
+      @icon.setOffset(PictureOrigin::CENTER)
     else
       @icon = ItemIconSprite.new(0, 0, @command[0], viewport)
     end

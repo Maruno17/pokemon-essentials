@@ -802,7 +802,7 @@ class AnimationCanvas < Sprite
     if Input.trigger?(Input::MOUSELEFT) && mousepos &&
        pbSpriteHitTest(self, mousepos[0], mousepos[1], false, true)
       selectedcel = -1
-      usealpha = (Input.press?(Input::ALT)) ? true : false
+      usealpha = Input.press?(Input::ALT)
       PBAnimation::MAX_SPRITES.times do |j|
         if pbSpriteHitTest(@celsprites[j], mousepos[0], mousepos[1], usealpha, false)
           selectedcel = j

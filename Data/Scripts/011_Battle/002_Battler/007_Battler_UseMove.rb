@@ -468,7 +468,7 @@ class Battle::Battler
         @battle.pbHideAbilitySplash(b) if b.damageState.magicBounce
         newChoice = choice.clone
         newChoice[3] = user.index
-        newTargets = pbFindTargets(newChoice ,move, b)
+        newTargets = pbFindTargets(newChoice, move, b)
         newTargets = pbChangeTargets(move, b, newTargets)
         success = false
         if !move.pbMoveFailed?(b, newTargets)

@@ -42,27 +42,27 @@ class ItemIconSprite < SpriteWrapper
     @forceitemchange = false
   end
 
-  def setOffset(offset = PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::CENTER)
     @offset = offset
     changeOrigin
   end
 
   def changeOrigin
-    @offset = PictureOrigin::Center if !@offset
+    @offset = PictureOrigin::CENTER if !@offset
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
+    when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
       self.oy = 0
-    when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
+    when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
       self.oy = self.height / 2
-    when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
+    when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
       self.oy = self.height
     end
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
+    when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
       self.ox = 0
-    when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
+    when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
       self.ox = self.width / 2
-    when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
+    when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
       self.ox = self.width
     end
   end

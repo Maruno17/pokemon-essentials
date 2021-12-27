@@ -11,7 +11,7 @@ class Trainer
   def inspect
     str = super.chop
     party_str = @party.map { |p| p.species_data.species }.inspect
-    str << format(' %s @party=%s>', self.full_name, party_str)
+    str << sprintf(' %s @party=%s>', self.full_name, party_str)
     return str
   end
 

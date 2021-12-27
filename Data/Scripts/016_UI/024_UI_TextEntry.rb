@@ -141,7 +141,7 @@ class PokemonEntryScene
         @sprites["shadow"].x = 33 * 2
         @sprites["shadow"].y = 32 * 2
         @sprites["subject"] = PokemonIconSprite.new(pokemon, @viewport)
-        @sprites["subject"].setOffset(PictureOrigin::Center)
+        @sprites["subject"].setOffset(PictureOrigin::CENTER)
         @sprites["subject"].x = 88
         @sprites["subject"].y = 54
         @sprites["gender"] = BitmapSprite.new(32, 32, @viewport)
@@ -426,7 +426,7 @@ class PokemonEntryScene2
         @sprites["shadow"].x = 66
         @sprites["shadow"].y = 64
         @sprites["subject"] = PokemonIconSprite.new(pokemon, @viewport)
-        @sprites["subject"].setOffset(PictureOrigin::Center)
+        @sprites["subject"].setOffset(PictureOrigin::CENTER)
         @sprites["subject"].x = 88
         @sprites["subject"].y = 54
         @sprites["gender"] = BitmapSprite.new(32, 32, @viewport)

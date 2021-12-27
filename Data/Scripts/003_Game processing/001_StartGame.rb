@@ -10,7 +10,7 @@ module Game
     $data_system        = load_data('Data/System.rxdata')
     pbLoadBattleAnimations
     GameData.load_all
-    map_file = format('Data/Map%03d.rxdata', $data_system.start_map_id)
+    map_file = sprintf('Data/Map%03d.rxdata', $data_system.start_map_id)
     if $data_system.start_map_id == 0 || !pbRgssExists?(map_file)
       raise _INTL('No starting position was set in the map editor.')
     end

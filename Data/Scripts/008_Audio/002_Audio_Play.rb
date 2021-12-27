@@ -58,7 +58,7 @@ def pbBGMPlay(param, volume = nil, pitch = nil)
       return
     elsif (RPG.const_defined?(:BGM) rescue false)
       b = RPG::BGM.new(param.name, param.volume, param.pitch)
-      if b&.respond_to?("play")
+      if b.respond_to?("play")
         b.play
         return
       end
@@ -108,7 +108,7 @@ def pbMEPlay(param, volume = nil, pitch = nil)
       return
     elsif (RPG.const_defined?(:ME) rescue false)
       b = RPG::ME.new(param.name, param.volume, param.pitch)
-      if b&.respond_to?("play")
+      if b.respond_to?("play")
         b.play
         return
       end
@@ -125,7 +125,7 @@ def pbMEStop(timeInSeconds = 0.0)
   if $game_system && timeInSeconds > 0.0 && $game_system.respond_to?("me_fade")
     $game_system.me_fade(timeInSeconds)
     return
-  elsif $game_system&.respond_to?("me_stop")
+  elsif $game_system.respond_to?("me_stop")
     $game_system.me_stop(nil)
     return
   elsif (RPG.const_defined?(:ME) rescue false)
@@ -158,7 +158,7 @@ def pbBGSPlay(param, volume = nil, pitch = nil)
       return
     elsif (RPG.const_defined?(:BGS) rescue false)
       b = RPG::BGS.new(param.name, param.volume, param.pitch)
-      if b&.respond_to?("play")
+      if b.respond_to?("play")
         b.play
         return
       end
@@ -209,7 +209,7 @@ def pbSEPlay(param, volume = nil, pitch = nil)
     end
     if (RPG.const_defined?(:SE) rescue false)
       b = RPG::SE.new(param.name, param.volume, param.pitch)
-      if b&.respond_to?("play")
+      if b.respond_to?("play")
         b.play
         return
       end

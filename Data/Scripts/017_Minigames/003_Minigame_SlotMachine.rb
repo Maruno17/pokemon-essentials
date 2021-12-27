@@ -347,7 +347,7 @@ class SlotMachineScene
             @wager = 3
             (1..5).each do |i|
               @sprites["row#{i}"].visible = true
-             end
+            end
           end
           @sprites["reel1"].startSpinning
           @sprites["reel2"].startSpinning

@@ -9,9 +9,9 @@ class SpriteAnimation
   ["x", "y", "ox", "oy", "viewport", "flash", "src_rect", "opacity", "tone"].each do |def_name|
     eval <<-__END__
 
-  def #{def_name}(*arg)
-    @sprite.#{def_name}(*arg)
-  end
+  def #{def_name}(*arg)         # def x(*arg)
+    @sprite.#{def_name}(*arg)   #   @sprite.x(*arg)
+  end                           # end
 
     __END__
   end

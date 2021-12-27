@@ -36,14 +36,14 @@ class PokemonTrade_Scene
                                 Color.new(248, 248, 248), @viewport)
     @sprites["rsprite1"] = PokemonSprite.new(@viewport)
     @sprites["rsprite1"].setPokemonBitmap(@pokemon, false)
-    @sprites["rsprite1"].setOffset(PictureOrigin::Bottom)
+    @sprites["rsprite1"].setOffset(PictureOrigin::BOTTOM)
     @sprites["rsprite1"].x = Graphics.width / 2
     @sprites["rsprite1"].y = 264
     @sprites["rsprite1"].z = 10
     @pokemon.species_data.apply_metrics_to_sprite(@sprites["rsprite1"], 1)
     @sprites["rsprite2"] = PokemonSprite.new(@viewport)
     @sprites["rsprite2"].setPokemonBitmap(@pokemon2, false)
-    @sprites["rsprite2"].setOffset(PictureOrigin::Bottom)
+    @sprites["rsprite2"].setOffset(PictureOrigin::BOTTOM)
     @sprites["rsprite2"].x = Graphics.width / 2
     @sprites["rsprite2"].y = 264
     @sprites["rsprite2"].z = 10
@@ -63,11 +63,11 @@ class PokemonTrade_Scene
     pictureBall.setXY(0, Graphics.width / 2, 48)
     pictureBall.setName(0, ballimage)
     pictureBall.setSrcSize(0, 32, 64)
-    pictureBall.setOrigin(0, PictureOrigin::Center)
+    pictureBall.setOrigin(0, PictureOrigin::CENTER)
     pictureBall.setVisible(0, true)
     # Starting position of sprite
     picturePoke.setXY(0, @sprites["rsprite1"].x, @sprites["rsprite1"].y)
-    picturePoke.setOrigin(0, PictureOrigin::Bottom)
+    picturePoke.setOrigin(0, PictureOrigin::BOTTOM)
     picturePoke.setVisible(0, true)
     # Change Pokémon color
     picturePoke.moveColor(2, 5, Color.new(31 * 8, 22 * 8, 30 * 8, 255))
@@ -105,10 +105,10 @@ class PokemonTrade_Scene
     pictureBall.setXY(0, Graphics.width / 2, -32)
     pictureBall.setName(0, ballimage)
     pictureBall.setSrcSize(0, 32, 64)
-    pictureBall.setOrigin(0, PictureOrigin::Center)
+    pictureBall.setOrigin(0, PictureOrigin::CENTER)
     pictureBall.setVisible(0, true)
     # Starting position of sprite
-    picturePoke.setOrigin(0, PictureOrigin::Bottom)
+    picturePoke.setOrigin(0, PictureOrigin::BOTTOM)
     picturePoke.setZoom(0, 0)
     picturePoke.setColor(0, Color.new(31 * 8, 22 * 8, 30 * 8, 255))
     picturePoke.setVisible(0, false)

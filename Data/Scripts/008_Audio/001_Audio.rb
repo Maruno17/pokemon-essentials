@@ -115,14 +115,14 @@ def getPlayTime2(filename)
       return -1 if wave != 0x45564157   # "WAVE"
       fmt = fgetdw.call(file)
       return -1 if fmt != 0x20746d66   # "fmt "
-      fmtsize = fgetdw.call(file)
-      format = fgetw.call(file)
-      channels = fgetw.call(file)
-      rate = fgetdw.call(file)
+      fgetdw.call(file)   # fmtsize
+      fgetw.call(file)   # format
+      fgetw.call(file)   # channels
+      fgetdw.call(file)   # rate
       bytessec = fgetdw.call(file)
       return -1 if bytessec == 0
-      bytessample = fgetw.call(file)
-      bitssample = fgetw.call(file)
+      fgetw.call(file)   # bytessample
+      fgetw.call(file)   # bitssample
       data = fgetdw.call(file)
       return -1 if data != 0x61746164   # "data"
       datasize = fgetdw.call(file)

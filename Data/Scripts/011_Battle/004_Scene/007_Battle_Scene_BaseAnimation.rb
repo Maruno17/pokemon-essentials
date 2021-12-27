@@ -17,7 +17,7 @@ class Battle::Scene::Animation
   def empty?; return @pictureEx.length == 0; end
   def animDone?; return @animDone; end
 
-  def addSprite(s, origin = PictureOrigin::TopLeft)
+  def addSprite(s, origin = PictureOrigin::TOP_LEFT)
     num = @pictureEx.length
     picture = PictureEx.new(s.z)
     picture.x       = s.x
@@ -31,7 +31,7 @@ class Battle::Scene::Animation
     return picture
   end
 
-  def addNewSprite(x, y, name, origin = PictureOrigin::TopLeft)
+  def addNewSprite(x, y, name, origin = PictureOrigin::TOP_LEFT)
     num = @pictureEx.length
     picture = PictureEx.new(num)
     picture.setXY(0, x, y)
@@ -87,7 +87,7 @@ module Battle::Scene::Animation::BallAnimationMixin
 
   def addBallSprite(ballX, ballY, poke_ball)
     file_path = sprintf("Graphics/Battle animations/ball_%s", poke_ball)
-    ball = addNewSprite(ballX, ballY, file_path, PictureOrigin::Center)
+    ball = addNewSprite(ballX, ballY, file_path, PictureOrigin::CENTER)
     @ballSprite = @pictureSprites.last
     if @ballSprite.bitmap.width >= @ballSprite.bitmap.height
       @ballSprite.src_rect.width = @ballSprite.bitmap.height / 2

@@ -122,12 +122,12 @@ class PokemonSummary_Scene
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["pokemon"] = PokemonSprite.new(@viewport)
-    @sprites["pokemon"].setOffset(PictureOrigin::Center)
+    @sprites["pokemon"].setOffset(PictureOrigin::CENTER)
     @sprites["pokemon"].x = 104
     @sprites["pokemon"].y = 206
     @sprites["pokemon"].setPokemonBitmap(@pokemon)
     @sprites["pokeicon"] = PokemonIconSprite.new(@pokemon, @viewport)
-    @sprites["pokeicon"].setOffset(PictureOrigin::Center)
+    @sprites["pokeicon"].setOffset(PictureOrigin::CENTER)
     @sprites["pokeicon"].x       = 46
     @sprites["pokeicon"].y       = 92
     @sprites["pokeicon"].visible = false
@@ -189,7 +189,7 @@ class PokemonSummary_Scene
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
     @sprites["pokeicon"] = PokemonIconSprite.new(@pokemon, @viewport)
-    @sprites["pokeicon"].setOffset(PictureOrigin::Center)
+    @sprites["pokeicon"].setOffset(PictureOrigin::CENTER)
     @sprites["pokeicon"].x       = 46
     @sprites["pokeicon"].y       = 92
     @sprites["movesel"] = MoveSelectionSprite.new(@viewport, !move_to_learn.nil?)

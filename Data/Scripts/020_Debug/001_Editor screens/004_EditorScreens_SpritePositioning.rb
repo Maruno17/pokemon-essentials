@@ -72,10 +72,10 @@ class SpritePositioner
     @sprites["shadow_1"] = IconSprite.new(0, 0, @viewport)
     @sprites["shadow_1"].z = 3
     @sprites["pokemon_0"] = PokemonSprite.new(@viewport)
-    @sprites["pokemon_0"].setOffset(PictureOrigin::Bottom)
+    @sprites["pokemon_0"].setOffset(PictureOrigin::BOTTOM)
     @sprites["pokemon_0"].z = 4
     @sprites["pokemon_1"] = PokemonSprite.new(@viewport)
-    @sprites["pokemon_1"].setOffset(PictureOrigin::Bottom)
+    @sprites["pokemon_1"].setOffset(PictureOrigin::BOTTOM)
     @sprites["pokemon_1"].z = 4
     @sprites["info"] = Window_UnformattedTextPokemon.new("")
     @sprites["info"].viewport = @viewport

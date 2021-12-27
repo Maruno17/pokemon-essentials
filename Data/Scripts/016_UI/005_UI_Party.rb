@@ -207,7 +207,7 @@ class PokemonPartyPanel < SpriteWrapper
     @ballsprite.addBitmap("desel", "Graphics/Pictures/Party/icon_ball")
     @ballsprite.addBitmap("sel", "Graphics/Pictures/Party/icon_ball_sel")
     @pkmnsprite = PokemonIconSprite.new(pokemon, viewport)
-    @pkmnsprite.setOffset(PictureOrigin::Center)
+    @pkmnsprite.setOffset(PictureOrigin::CENTER)
     @pkmnsprite.active = @active
     @pkmnsprite.z      = self.z + 2
     @helditemsprite = HeldItemIconSprite.new(0, 0, @pokemon, viewport)
