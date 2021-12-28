@@ -1,20 +1,26 @@
-################################################################################
+#===============================================================================
 # "Voltorb Flip" mini-game
 # By KitsuneKouta
 #-------------------------------------------------------------------------------
 # Run with:      pbVoltorbFlip
-################################################################################
+#===============================================================================
 class VoltorbFlip
+  # Ranges of total coins available in each level.
+  LEVEL_RANGES = [[20, 50],
+                  [50, 100],
+                  [100, 200],
+                  [200, 350],
+                  [350, 600],
+                  [600, 1000],
+                  [1000, 2000],
+                  [2000, 3500]]
+
   def update
     pbUpdateSpriteHash(@sprites)
   end
 
   def pbStart
-    # Set initial level
     @level = 1
-    # Maximum and minimum total point values for each level
-    @levelRanges = [[20, 50], [50, 100], [100, 200], [200, 350],
-                    [350, 600], [600, 1000], [1000, 2000], [2000, 3500]]
     @firstRound = true
     pbNewGame
   end
@@ -43,11 +49,11 @@ class VoltorbFlip
         squareValues[i] = 0
         voltorbs += 1
       # Sets the value randomly to a 2 or 3 if the total is less than the max
-      elsif total < @levelRanges[@level - 1][1]
+      elsif total < LEVEL_RANGES[@level - 1][1]
         squareValues[i] = rand(2..3)
         total *= squareValues[i]
       end
-      if total > (@levelRanges[@level - 1][1])
+      if total > LEVEL_RANGES[@level - 1][1]
         # Lowers value of square to 1 if over max
         total /= squareValues[i]
         squareValues[i] = 1
@@ -61,7 +67,7 @@ class VoltorbFlip
         squareValues[i] -= 1
         total *= squareValues[i]
       end
-      if total < @levelRanges[@level - 1][0] && squareValues[i] > 0
+      if total < LEVEL_RANGES[@level - 1][0] && squareValues[i] > 0
         total /= squareValues[i]
         squareValues[i] = temp
         total *= squareValues[i]
@@ -69,9 +75,8 @@ class VoltorbFlip
     end
     # Populate @squares array
     25.times do |i|
-      x = i if i % 5 == 0
       r = rand(squareValues.length)
-      @squares[i] = [((i - x).abs * 64) + 128, (i / 5).abs * 64, squareValues[r], false]
+      @squares[i] = [((i % 5) * 64) + 128, (i / 5).abs * 64, squareValues[r], false]
       squareValues.delete_at(r)
     end
     pbCreateSprites
@@ -83,9 +88,9 @@ class VoltorbFlip
     pbDrawShadowText(@sprites["text"].bitmap, 8, 16, 118, 26,
                      _INTL("Your coins"), Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
     pbDrawShadowText(@sprites["text"].bitmap, 8, 82, 118, 26,
-                     _INTL("Earned coins"), Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
+                     _INTL("Prize coins"), Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
     # Draw current level
-    pbDrawShadowText(@sprites["level"].bitmap, 8, 150, 118, 28,
+    pbDrawShadowText(@sprites["level"].bitmap, 8, 148, 118, 28,
                      _INTL("Level {1}", @level.to_s), Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
     # Displays total and current coins
     pbUpdateCoins
@@ -119,18 +124,15 @@ class VoltorbFlip
       @numbers = []
       # Draw numbers for each row (precautionary)
       @squares.length.times do |i|
-        if i % 5 == 0
-          num = 0
-          voltorbs = 0
-          j = i + 5
-          (i...j).each do |k|
-            num += @squares[k][2]
-            if @squares[k][2] == 0
-              voltorbs += 1
-            end
-          end
+        next if (i % 5) != 0
+        num = 0
+        voltorbs = 0
+        j = i + 5
+        (i...j).each do |k|
+          num += @squares[k][2]
+          voltorbs += 1 if @squares[k][2] == 0
         end
-        pbUpdateRowNumbers(num, voltorbs, (i / 5).abs)
+        pbUpdateRowNumbers(num, voltorbs, i / 5)
       end
       # Reset arrays to empty
       @voltorbNumbers = []
@@ -141,9 +143,7 @@ class VoltorbFlip
         voltorbs = 0
         5.times do |j|
           num += @squares[i + (j * 5)][2]
-          if @squares[i + (j * 5)][2] == 0
-            voltorbs += 1
-          end
+          voltorbs += 1 if @squares[i + (j * 5)][2] == 0
         end
         pbUpdateColumnNumbers(num, voltorbs, i)
       end
@@ -157,10 +157,8 @@ class VoltorbFlip
     @sprites["bg"].bitmap = RPG::Cache.load_bitmap(@directory, "boardbg")
     @sprites["text"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["text"].bitmap)
-    @sprites["text"].bitmap.font.size = 26
     @sprites["level"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["level"].bitmap)
-    @sprites["level"].bitmap.font.size = 28
     @sprites["curtain"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["curtain"].z = 99999
     @sprites["curtain"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
@@ -284,7 +282,8 @@ class VoltorbFlip
               # Part1
               animation = []
               3.times do |j|
-                animation[0] = icons[0] = [@directory + "tiles", (@index[0] * 64) + 128, @index[1] * 64, 704 + (64 * j), 0, 64, 64]
+                animation[0] = icons[0] = [@directory + "tiles", (@index[0] * 64) + 128, @index[1] * 64,
+                                           704 + (64 * j), 0, 64, 64]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
                 pbWait(Graphics.frame_rate / 20)
                 @sprites["animation"].bitmap.clear
@@ -292,7 +291,8 @@ class VoltorbFlip
               # Part2
               animation = []
               6.times do |j|
-                animation[0] = [@directory + "explosion", (@index[0] * 64) - 32 + 128, (@index[1] * 64) - 32, j * 128, 0, 128, 128]
+                animation[0] = [@directory + "explosion", (@index[0] * 64) - 32 + 128, (@index[1] * 64) - 32,
+                                j * 128, 0, 128, 128]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
                 pbWait(Graphics.frame_rate / 10)
                 @sprites["animation"].bitmap.clear
@@ -316,14 +316,15 @@ class VoltorbFlip
               end
               # Update level text
               @sprites["level"].bitmap.clear
-              pbDrawShadowText(@sprites["level"].bitmap, 8, 150, 118, 28, "Level " + @level.to_s, Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
+              pbDrawShadowText(@sprites["level"].bitmap, 8, 150, 118, 28, "Level " + @level.to_s,
+                               Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
               @points = 0
               pbUpdateCoins
               # Revert numbers to 0s
               @sprites["numbers"].bitmap.clear
-              5.times do |i|
-                pbUpdateRowNumbers(0, 0, i)
-                pbUpdateColumnNumbers(0, 0, i)
+              5.times do |j|
+                pbUpdateRowNumbers(0, 0, j)
+                pbUpdateColumnNumbers(0, 0, j)
               end
               pbDisposeSpriteHash(@sprites)
               @firstRound = false
@@ -332,7 +333,8 @@ class VoltorbFlip
               # Play tile animation
               animation = []
               4.times do |j|
-                animation[0] = [@directory + "flipAnimation", (@index[0] * 64) - 14 + 128, (@index[1] * 64) - 16, j * 92, 0, 92, 96]
+                animation[0] = [@directory + "flipAnimation", (@index[0] * 64) - 14 + 128, (@index[1] * 64) - 16,
+                                j * 92, 0, 92, 96]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
                 pbWait(Graphics.frame_rate / 20)
                 @sprites["animation"].bitmap.clear
@@ -365,7 +367,8 @@ class VoltorbFlip
         pbMessage(_INTL("\\se[Voltorb Flip gain coins]{1} received {2} Coins!", $player.name, @points.to_s_formatted))
         # Update level text
         @sprites["level"].bitmap.clear
-        pbDrawShadowText(@sprites["level"].bitmap, 8, 150, 118, 28, _INTL("Level {1}", @level.to_s), Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
+        pbDrawShadowText(@sprites["level"].bitmap, 8, 150, 118, 28, _INTL("Level {1}", @level.to_s),
+                         Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
         old_coins = $player.coins
         $player.coins += @points
         $stats.coins_won += $player.coins - old_coins if $player.coins > old_coins
@@ -410,7 +413,8 @@ class VoltorbFlip
           pbShowAndDispose
           @quit = true
         end
-      elsif pbConfirmMessage(_INTL("If you quit now, you will recieve {1} Coin(s). Will you quit?", @points.to_s_formatted))
+      elsif pbConfirmMessage(_INTL("If you quit now, you will recieve {1} Coin(s). Will you quit?",
+                                   @points.to_s_formatted))
         pbMessage(_INTL("{1} received {2} Coin(s)!", $player.name, @points.to_s_formatted))
         old_coins = $player.coins
         $player.coins += @points
@@ -428,62 +432,42 @@ class VoltorbFlip
   end
 
   def pbUpdateRowNumbers(num, voltorbs, i)
-    # Create and split a string for the number, with padded 0s
-    zeroes = 2 - num.to_s.length
-    numText = ""
-    zeroes.times do
-      numText += "0"
+    numText = sprintf("%02d", num)
+    numText.chars.each_with_index do |digit, j|
+      @numbers[j] = [@directory + "numbersSmall", 472 + (j * 16), 8 + (i * 64), digit.to_i * 16, 0, 16, 16]
     end
-    numText += num.to_s
-    numImages = numText.chars[0...2]
-    2.times do |j|
-      @numbers[j] = [@directory + "numbersSmall", 472 + (j * 16), (i * 64) + 8, numImages[j].to_i * 16, 0, 16, 16]
-    end
-    @voltorbNumbers[i] = [@directory + "numbersSmall", 488, (i * 64) + 34, voltorbs * 16, 0, 16, 16]
+    @voltorbNumbers[i] = [@directory + "numbersSmall", 488, 34 + (i * 64), voltorbs * 16, 0, 16, 16]
     # Display the numbers
     pbDrawImagePositions(@sprites["numbers"].bitmap, @numbers)
     pbDrawImagePositions(@sprites["numbers"].bitmap, @voltorbNumbers)
   end
 
   def pbUpdateColumnNumbers(num, voltorbs, i)
-    # Create and split a string for the number, with padded 0s
-    zeroes = 2 - num.to_s.length
-    numText = ""
-    zeroes.times do
-      numText += "0"
+    numText = sprintf("%02d", num)
+    numText.chars.each_with_index do |digit, j|
+      @numbers[j] = [@directory + "numbersSmall", 152 + (i * 64) + (j * 16), 328, digit.to_i * 16, 0, 16, 16]
     end
-    numText += num.to_s
-    numImages = numText.chars[0...2]
-    2.times do |j|
-      @numbers[j] = [@directory + "numbersSmall", (i * 64) + 152 + (j * 16), 328, numImages[j].to_i * 16, 0, 16, 16]
-    end
-    @voltorbNumbers[i] = [@directory + "numbersSmall", (i * 64) + 168, 354, voltorbs * 16, 0, 16, 16]
+    @voltorbNumbers[i] = [@directory + "numbersSmall", 168 + (i * 64), 354, voltorbs * 16, 0, 16, 16]
     # Display the numbers
     pbDrawImagePositions(@sprites["numbers"].bitmap, @numbers)
     pbDrawImagePositions(@sprites["numbers"].bitmap, @voltorbNumbers)
   end
 
   def pbCreateCoins(source, y)
-    zeroes = 5 - source.to_s.length
-    coinText = ""
-    zeroes.times do
-      coinText += "0"
-    end
-    coinText += source.to_s
-    coinImages = coinText.chars[0...5]
-    5.times do |i|
-      @coins[i] = [@directory + "numbersScore", 6 + (i * 24), y, coinImages[i].to_i * 24, 0, 24, 38]
+    coinText = sprintf("%05d", source)
+    coinText.chars.each_with_index do |digit, i|
+      @coins[i] = [@directory + "numbersScore", 6 + (i * 24), y, digit.to_i * 24, 0, 24, 38]
     end
   end
 
   def pbUpdateCoins
     # Update coins display
     @sprites["totalCoins"].bitmap.clear
-    pbCreateCoins($player.coins, 44)
+    pbCreateCoins($player.coins, 46)
     pbDrawImagePositions(@sprites["totalCoins"].bitmap, @coins)
     # Update points display
     @sprites["currentCoins"].bitmap.clear
-    pbCreateCoins(@points, 110)
+    pbCreateCoins(@points, 112)
     pbDrawImagePositions(@sprites["currentCoins"].bitmap, @coins)
   end
 
@@ -527,7 +511,8 @@ class VoltorbFlip
       icons = []
       pbSEPlay("Voltorb Flip tile")
       5.times do |j|
-        icons[j] = [@directory + "tiles", @squares[i + (j * 5)][0], @squares[i + (j * 5)][1], 448 + (@squares[i + (j * 5)][2] * 64), 0, 64, 64]
+        icons[j] = [@directory + "tiles", @squares[i + (j * 5)][0], @squares[i + (j * 5)][1],
+                    448 + (@squares[i + (j * 5)][2] * 64), 0, 64, 64]
       end
       pbDrawImagePositions(@sprites[i].bitmap, icons)
       pbWait(Graphics.frame_rate / 20)
