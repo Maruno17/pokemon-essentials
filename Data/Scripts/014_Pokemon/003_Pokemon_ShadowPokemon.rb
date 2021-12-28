@@ -10,7 +10,7 @@ class Pokemon
   attr_accessor :shadow_moves
   attr_accessor :heart_gauge_step_counter
 
-  alias __shadow_expeq exp=
+  alias __shadow_expeq exp= unless method_defined?(:__shadow_expeq)
   def exp=(value)
     if shadowPokemon?
       @saved_exp += value - @exp
@@ -19,7 +19,7 @@ class Pokemon
     end
   end
 
-  alias __shadow_hpeq hp=
+  alias __shadow_hpeq hp= unless method_defined?(:__shadow_hpeq)
   def hp=(value)
     __shadow_hpeq(value)
     @hyper_mode = false if @hp <= 0
@@ -107,7 +107,7 @@ class Pokemon
     return (self.heart_gauge == 0 || @hp == 0) ? false : @hyper_mode
   end
 
-  alias __shadow__changeHappiness changeHappiness
+  alias __shadow__changeHappiness changeHappiness unless method_defined?(:__shadow__changeHappiness)
   def changeHappiness(method)
     return if shadowPokemon? && heartStage >= 4
     __shadow__changeHappiness(method)
@@ -212,7 +212,7 @@ class Pokemon
     end
   end
 
-  alias __shadow_clone clone
+  alias __shadow_clone clone unless method_defined?(:__shadow_clone)
   def clone
     ret = __shadow_clone
     if @saved_ev

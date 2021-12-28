@@ -2,7 +2,7 @@
 # class Object
 #===============================================================================
 class Object
-  alias full_inspect inspect
+  alias full_inspect inspect unless method_defined?(:full_inspect)
 
   def inspect
     return "#<#{self.class}>"

@@ -103,7 +103,9 @@ end
 
 
 class Battle::Move::RaiseUserEvasion1   # Double Team
-  alias __clauses__pbMoveFailed? pbMoveFailed?
+  unless method_defined?(:__clauses__pbMoveFailed?)
+    alias __clauses__pbMoveFailed? pbMoveFailed?
+  end
 
   def pbMoveFailed?(user, targets)
     if !damagingMove? && @battle.rules["evasionclause"]
@@ -117,7 +119,9 @@ end
 
 
 class Battle::Move::RaiseUserEvasion2MinimizeUser   # Minimize
-  alias __clauses__pbMoveFailed? pbMoveFailed?
+  unless method_defined?(:__clauses__pbMoveFailed?)
+    alias __clauses__pbMoveFailed? pbMoveFailed?
+  end
 
   def pbMoveFailed?(user, targets)
     if !damagingMove? && @battle.rules["evasionclause"]
@@ -131,7 +135,9 @@ end
 
 
 class Battle::Move::UserTargetSwapAbilities   # Skill Swap
-  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  unless method_defined?(:__clauses__pbFailsAgainstTarget?)
+    alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["skillswapclause"]
@@ -145,7 +151,9 @@ end
 
 
 class Battle::Move::FixedDamage20   # Sonic Boom
-  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  unless method_defined?(:__clauses__pbFailsAgainstTarget?)
+    alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["sonicboomclause"]
@@ -159,7 +167,9 @@ end
 
 
 class Battle::Move::FixedDamage40   # Dragon Rage
-  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  unless method_defined?(:__clauses__pbFailsAgainstTarget?)
+    alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["sonicboomclause"]
@@ -173,7 +183,9 @@ end
 
 
 class Battle::Move::OHKO
-  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  unless method_defined?(:__clauses__pbFailsAgainstTarget?)
+    alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["ohkoclause"]
@@ -187,7 +199,9 @@ end
 
 
 class Battle::Move::OHKOIce
-  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  unless method_defined?(:__clauses__pbFailsAgainstTarget?)
+    alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["ohkoclause"]
@@ -201,7 +215,9 @@ end
 
 
 class Battle::Move::OHKOHitsUndergroundTarget
-  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  unless method_defined?(:__clauses__pbFailsAgainstTarget?)
+    alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["ohkoclause"]
@@ -215,9 +231,8 @@ end
 
 
 class Battle::Move::UserFaintsExplosive   # Self-Destruct
-  unless @__clauses__aliased
+  unless method_defined?(:__clauses__pbMoveFailed?)
     alias __clauses__pbMoveFailed? pbMoveFailed?
-    @__clauses__aliased = true
   end
 
   def pbMoveFailed?(user, targets)
@@ -247,7 +262,9 @@ end
 
 
 class Battle::Move::StartPerishCountsForAllBattlers   # Perish Song
-  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  unless method_defined?(:__clauses__pbFailsAgainstTarget?)
+    alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["perishsongclause"] &&
@@ -262,7 +279,9 @@ end
 
 
 class Battle::Move::AttackerFaintsIfUserFaints   # Destiny Bond
-  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  unless method_defined?(:__clauses__pbFailsAgainstTarget?)
+    alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+  end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["perishsongclause"] &&

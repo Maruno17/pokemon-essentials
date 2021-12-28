@@ -236,7 +236,7 @@ class Battle::Battler
     return if fainted?
     return if self.item
     @battle.pbPriority(true).each do |b|
-      next if b.opposes?
+      next if b.opposes?(self)
       next if !b.hasActiveAbility?(:SYMBIOSIS)
       next if !b.item || b.unlosableItem?(b.item)
       next if unlosableItem?(b.item)

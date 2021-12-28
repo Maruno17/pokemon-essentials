@@ -169,7 +169,9 @@ end
 # Shadow Pokémon in battle.
 #===============================================================================
 class Battle
-  alias __shadow__pbCanUseItemOnPokemon? pbCanUseItemOnPokemon?
+  unless method_defined?(:__shadow__pbCanUseItemOnPokemon?)
+    alias __shadow__pbCanUseItemOnPokemon? pbCanUseItemOnPokemon?
+  end
 
   def pbCanUseItemOnPokemon?(item, pkmn, battler, scene, showMessages = true)
     ret = __shadow__pbCanUseItemOnPokemon?(item, pkmn, battler, scene, showMessages)
@@ -184,7 +186,7 @@ end
 
 
 class Battle::Battler
-  alias __shadow__pbInitPokemon pbInitPokemon
+  alias __shadow__pbInitPokemon pbInitPokemon unless method_defined?(:__shadow__pbInitPokemon)
 
   def pbInitPokemon(*arg)
     if self.pokemonIndex > 0 && inHyperMode?

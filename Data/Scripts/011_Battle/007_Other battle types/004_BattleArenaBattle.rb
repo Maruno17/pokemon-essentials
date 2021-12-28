@@ -211,7 +211,9 @@ end
 class Battle::AI
   attr_accessor :battleArena
 
-  alias _battleArena_pbEnemyShouldWithdraw? pbEnemyShouldWithdraw?
+  unless method_defined?(:_battleArena_pbEnemyShouldWithdraw?)
+    alias _battleArena_pbEnemyShouldWithdraw? pbEnemyShouldWithdraw?
+  end
 
   def pbEnemyShouldWithdraw?(idxBattler)
     return _battleArena_pbEnemyShouldWithdraw?(idxBattler) if !@battleArena

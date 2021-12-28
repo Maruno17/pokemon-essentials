@@ -566,7 +566,8 @@ end
 class Game_Event < Game_Character
   attr_accessor :pe_refresh
 
-  alias nf_particles_game_map_initialize initialize
+  alias nf_particles_game_map_initialize initialize unless method_defined?(:nf_particles_game_map_initialize)
+
   def initialize(map_id, event, map = nil)
     @pe_refresh = false
     begin
@@ -576,7 +577,8 @@ class Game_Event < Game_Character
     end
   end
 
-  alias nf_particles_game_map_refresh refresh
+  alias nf_particles_game_map_refresh refresh unless method_defined?(:nf_particles_game_map_refresh)
+
   def refresh
     nf_particles_game_map_refresh
     @pe_refresh = true

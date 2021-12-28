@@ -2,7 +2,7 @@
 # Bug Catching Contest battle scene (the visuals of the battle)
 #===============================================================================
 class Battle::Scene
-  alias _bugContest_pbInitSprites pbInitSprites
+  alias _bugContest_pbInitSprites pbInitSprites unless method_defined?(:_bugContest_pbInitSprites)
 
   def pbInitSprites
     _bugContest_pbInitSprites

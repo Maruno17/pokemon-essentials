@@ -41,9 +41,9 @@ end
 
 
 class Spriteset_Map
-  alias _animationSprite_initialize initialize
-  alias _animationSprite_update update
-  alias _animationSprite_dispose dispose
+  alias _animationSprite_initialize initialize unless method_defined?(:_animationSprite_initialize)
+  alias _animationSprite_update update unless method_defined?(:_animationSprite_update)
+  alias _animationSprite_dispose dispose unless method_defined?(:_animationSprite_dispose)
 
   def initialize(map = nil)
     @usersprites = []
