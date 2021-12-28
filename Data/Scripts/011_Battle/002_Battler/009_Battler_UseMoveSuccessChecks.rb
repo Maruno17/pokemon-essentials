@@ -109,22 +109,22 @@ class Battle::Battler
     return true if !@battle.pbOwnedByPlayer?(@index)
     disobedient = false
     # Pokémon may be disobedient; calculate if it is
+    badge_level = 10 * (@battle.pbPlayer.badge_count + 1)
+    badge_level = GameData::GrowthRate.max_level if @battle.pbPlayer.badge_count >= 8
     if Settings::ANY_HIGH_LEVEL_POKEMON_CAN_DISOBEY ||
        (Settings::FOREIGN_HIGH_LEVEL_POKEMON_CAN_DISOBEY && @pokemon.foreign?(@battle.pbPlayer))
-      badgeLevel = 10 * (@battle.pbPlayer.badge_count + 1)
-      badgeLevel = GameData::GrowthRate.max_level if @battle.pbPlayer.badge_count >= 8
-      if @level > badgeLevel
-        a = ((@level + badgeLevel) * @battle.pbRandom(256) / 256).floor
-        disobedient |= (a >= badgeLevel)
+      if @level > badge_level
+        a = ((@level + badge_level) * @battle.pbRandom(256) / 256).floor
+        disobedient |= (a >= badge_level)
       end
     end
     disobedient |= !pbHyperModeObedience(choice[2])
     return true if !disobedient
     # Pokémon is disobedient; make it do something else
-    return pbDisobey(choice, badgeLevel)
+    return pbDisobey(choice, badge_level)
   end
 
-  def pbDisobey(choice, badgeLevel)
+  def pbDisobey(choice, badge_level)
     move = choice[2]
     PBDebug.log("[Disobedience] #{pbThis} disobeyed")
     @effects[PBEffects::Rage] = false
@@ -133,9 +133,9 @@ class Battle::Battler
       @battle.pbDisplay(_INTL("{1} ignored orders and kept sleeping!", pbThis))
       return false
     end
-    b = ((@level + badgeLevel) * @battle.pbRandom(256) / 256).floor
+    b = ((@level + badge_level) * @battle.pbRandom(256) / 256).floor
     # Use another move
-    if b < badgeLevel
+    if b < badge_level
       @battle.pbDisplay(_INTL("{1} ignored orders!", pbThis))
       return false if !@battle.pbCanShowFightMenu?(@index)
       otherMoves = []
@@ -150,7 +150,7 @@ class Battle::Battler
       choice[3] = -1
       return true
     end
-    c = @level - badgeLevel
+    c = @level - badge_level
     r = @battle.pbRandom(256)
     # Fall asleep
     if r < c && pbCanSleep?(self, false)
