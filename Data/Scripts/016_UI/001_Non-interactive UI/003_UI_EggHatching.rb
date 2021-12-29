@@ -221,8 +221,8 @@ Events.onStepTaken += proc { |_sender, _e|
   $player.party.each do |egg|
     next if egg.steps_to_hatch <= 0
     egg.steps_to_hatch -= 1
-    $player.pokemon_party.each do |i|
-      next if ![:FLAMEBODY, :MAGMAARMOR, :STEAMENGINE].include?(i.ability_id)
+    $player.pokemon_party.each do |pkmn|
+      next if !pkmn.ability&.has_flag?("FasterEggHatching")
       egg.steps_to_hatch -= 1
       break
     end

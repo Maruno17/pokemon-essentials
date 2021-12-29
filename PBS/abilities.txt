@@ -158,6 +158,7 @@ Description = The Pokémon is protected from flinching.
 #-------------------------------
 [MAGMAARMOR]
 Name = Magma Armor
+Flags = FasterEggHatching
 Description = Prevents the Pokémon from becoming frozen.
 #-------------------------------
 [WATERVEIL]
@@ -194,6 +195,7 @@ Description = The Pokémon awakens quickly from sleep.
 #-------------------------------
 [FLAMEBODY]
 Name = Flame Body
+Flags = FasterEggHatching
 Description = Contact with the Pokémon may burn the attacker.
 #-------------------------------
 [RUNAWAY]
@@ -970,6 +972,7 @@ Description = This Pokémon's moves cannot be redirected.
 #-------------------------------
 [STEAMENGINE]
 Name = Steam Engine
+Flags = FasterEggHatching
 Description = Boosts Speed drastically if hit by a Fire or Water move.
 #-------------------------------
 [PUNKROCK]
