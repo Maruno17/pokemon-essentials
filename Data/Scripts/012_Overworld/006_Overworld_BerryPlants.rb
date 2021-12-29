@@ -290,9 +290,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-Events.onSpritesetCreate.add(:berry_sprites, proc { |_sender, e|
-  spriteset = e[0]
-  viewport  = e[1]
+EventHandlers.add(:on_spriteset_creation, :berry_sprites, proc { |spriteset, viewport|
   map = spriteset.map
   map.events.each do |event|
     next if !event[1].name[/berryplant/i]

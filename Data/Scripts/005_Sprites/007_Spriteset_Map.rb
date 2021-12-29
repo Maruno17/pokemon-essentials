@@ -59,7 +59,7 @@ class Spriteset_Map
       @character_sprites.push(sprite)
     end
     @weather = RPG::Weather.new(@@viewport1)
-    pbOnSpritesetCreate(self, @@viewport1)
+    EventHandlers.trigger(:on_spriteset_creation, self, @@viewport1)
     update
   end
 

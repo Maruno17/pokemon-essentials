@@ -446,7 +446,7 @@ def pbGenerateWildPokemon(species, level, isRoamer = false)
     end
   end
   # Trigger events that may alter the generated Pokémon further
-  Events.onWildPokemonCreate.trigger(nil, genwildpoke)
+  EventHandlers.trigger(:on_wild_pokemon_creation, genwildpoke)
   return genwildpoke
 end
 

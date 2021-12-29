@@ -145,16 +145,16 @@ class PokemonMapFactory
   end
 
   def setMapChanging(newID, newMap)
-    Events.onMapChanging.trigger(self, newID, newMap)
+    EventHandlers.trigger(:on_map_changing, newID, newMap)
   end
 
-  def setMapChanged(prevMap)
-    Events.onMapChange.trigger(self, prevMap)
+  def setMapChanged(prevMapID)
+    EventHandlers.trigger(:on_full_map_change, prevMapID)
     @mapChanged = true
   end
 
   def setSceneStarted(scene)
-    Events.onMapSceneChange.trigger(self, scene, @mapChanged)
+    EventHandlers.trigger(:on_map_scene_change, scene, @mapChanged)
     @mapChanged = false
   end
 

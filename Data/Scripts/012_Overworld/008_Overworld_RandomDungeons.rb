@@ -643,10 +643,8 @@ module RandomDungeonGenerator
   end
 end
 
-Events.onMapCreate.add(:random_dungeon, proc { |_sender, e|
-  mapID = e[0]
-  map   = e[1]
-  next if !GameData::MapMetadata.try_get(mapID)&.random_dungeon
+EventHandlers.add(:on_map_creation, :random_dungeon, proc { |map, map_id, _map_data, _tileset_data|
+  next if !GameData::MapMetadata.try_get(map_id)&.random_dungeon
   # this map is a randomly generated dungeon
   dungeon = RandomDungeonGenerator::Dungeon.new(map.width, map.height)
   dungeon.generate
