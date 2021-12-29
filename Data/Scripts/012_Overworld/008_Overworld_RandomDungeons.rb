@@ -116,8 +116,8 @@ module RandomDungeonGenerator
 
     # Makes all tiles in a particular area corridor tiles.
     def paint_corridor(tile, x, y, width, height)
-      timesheight.times do |j|
-        timeswidth.times do |i|
+      height.times do |j|
+        width.times do |i|
           tile[((y + j) * CELL_WIDTH) + (x + i)] = DungeonTile::CORRIDOR
         end
       end
