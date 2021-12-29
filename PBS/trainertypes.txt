@@ -115,3 +115,4 @@
 112,LEADER_Jasmine,Gym Leader,100,gymleader,,,Female,,
 113,POLICE,Officer,32,,,,Male,,
 114,SKIER_F,Skier,16,,,,Female,32,
+115,CHAMPION_Sinnoh,Champion,16,,,,Female,100,

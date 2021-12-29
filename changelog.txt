@@ -4,11 +4,14 @@ Many, many bugfixes
 ## Re-added features ##
 In-game clock
 Speed-up button
+Reverse mode
+Easy and Hard difficulties
 
 #Removals
 Removed Trainer House
 Removed the Convert Pokemon option from the update menu
 Oak no longer gives a Johto starter after beating the league
+Removed Pokedex key item
 
 ##New Stuff
 Added Quick Surf option
@@ -23,6 +26,11 @@ Added egg move tutor in Battle Factory
 Battle Factory now gives Factory Points instead of Rare Candies
 Updated critical hits to gen 6 mechanics
 Added gen 6 status move immunity from certain types
+Implemented Multitype ability for fusions
+
+
+
+
 
 5.0
 ##########################

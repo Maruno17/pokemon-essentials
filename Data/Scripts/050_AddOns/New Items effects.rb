@@ -666,7 +666,31 @@ def calculateUnfuseLevelOldMethod(pokemon, supersplicers)
   return lev.floor
 end
 
+def drawPokemonType(pokemon_id, x_pos = 192, y_pos = 264)
+  width = 66
+
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
+  viewport.z = 1000001
+
+  overlay = BitmapSprite.new(Graphics.width, Graphics.height, viewport).bitmap
+
+  pokemon = GameData::Species.get(pokemon_id)
+  typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+  type1_number = GameData::Type.get(pokemon.type1).id_number
+  type2_number = GameData::Type.get(pokemon.type2).id_number
+  type1rect = Rect.new(0, type1_number * 28, 64, 28)
+  type2rect = Rect.new(0, type2_number * 28, 64, 28)
+  if pokemon.type1 == pokemon.type2
+    overlay.blt(x_pos + (width / 2), y_pos, typebitmap.bitmap, type1rect)
+  else
+    overlay.blt(x_pos, y_pos, typebitmap.bitmap, type1rect)
+    overlay.blt(x_pos + width, y_pos, typebitmap.bitmap, type2rect)
+  end
+  return viewport
+end
+
 def pbFuse(pokemon, poke2, supersplicers = false)
+
   newid = (pokemon.species) * NB_POKEMON + poke2.species
   playingBGM = $game_system.getPlayingBGM
 
@@ -1291,7 +1315,9 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
 
           previewwindow = PictureWindow.new(picturePath)
 
-          if hasCustom
+          typeWindow = drawPokemonType(newid)
+
+          if hasCustom§
             previewwindow.picture.pbSetColor(220, 255, 220, 200)
           else
             previewwindow.picture.pbSetColor(255, 255, 255, 200)
@@ -1302,6 +1328,7 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
 
           if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
             previewwindow.dispose
+            typeWindow.dispose
             fus = PokemonFusionScene.new
             if (fus.pbStartScreen(pokemon, poke2, newid))
               returnItemsToBag(pokemon, poke2)
@@ -1316,6 +1343,7 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
             end
           else
             previewwindow.dispose
+            typeWindow.dispose
             return false
           end
 
@@ -1377,8 +1405,8 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
           poke1.exp = exp_body
           poke2.exp = exp_head
         end
-        body_level=poke1.level
-        head_level=poke2.level
+        body_level = poke1.level
+        head_level = poke2.level
         if $Trainer.party.length >= 6
           if (keepInParty == 0)
             $PokemonStorage.pbStoreCaught(poke2)

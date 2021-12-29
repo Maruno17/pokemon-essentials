@@ -4642,3 +4642,25 @@ Pokemon = GIRATINA,25
 
 [COOLTRAINER_F,lounge_member_single]
 Pokemon = DIALGA,25 
+########################MT SILVER##########################
+[RIVAL1,Blue,24]
+Pokemon = B248H59,69 #Arcaitar
+	Moves = THRASH,FIREFANG,CRUNCH,ROAR
+	AbilityIndex = 0
+	Item = SMOOTHROCK
+Pokemon = B142H329,69 #Aegidactyl,
+	Moves = STEELWING,DRAGONDANCE,TAILWIND,KINGSSHIELD
+	AbilityIndex = 1
+	Item = METALCOAT
+Pokemon = B65H255,69 #Mismakazam,
+	Moves = CALMMIND,MYSTICALFIRE,TRICKROOM,PSYCHIC
+	AbilityIndex = 0
+	Item = WISEGLASSES
+Pokemon = B18H169,68 #Crogeot
+	Moves = WHIRLWIND,CROSSPOISON,UTURN,AIRSLASH
+	AbilityIndex = 10	Item = WISEGLASSES
+	Item=RAZORFANG
+Pokemon = MEW,72 #Starter
+	Item = LEFTOVERS
+#######################
+#[CHAMPION_Sinnoh,Cynthia]
