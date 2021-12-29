@@ -185,9 +185,9 @@ class PokemonMart_Scene
       itemwindow = @sprites["itemwindow"]
       @sprites["icon"].item = itemwindow.item
       @sprites["itemtextwindow"].text =
-         (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
+        (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
       @sprites["qtywindow"].visible = !itemwindow.item.nil?
-      @sprites["qtywindow"].text    = _INTL("In Bag:<r>x{1}", $bag.quantity(itemwindow.item))
+      @sprites["qtywindow"].text    = _INTL("In Bag:<r>x{1}", @adapter.getQuantity(itemwindow.item))
       @sprites["qtywindow"].y       = Graphics.height - 108 - @sprites["qtywindow"].height
       itemwindow.refresh
     end
@@ -243,7 +243,7 @@ class PokemonMart_Scene
     @sprites["qtywindow"].height = 64
     @sprites["qtywindow"].baseColor = Color.new(88, 88, 80)
     @sprites["qtywindow"].shadowColor = Color.new(168, 184, 184)
-    @sprites["qtywindow"].text = _INTL("In Bag:<r>x{1}", $bag.quantity(@sprites["itemwindow"].item))
+    @sprites["qtywindow"].text = _INTL("In Bag:<r>x{1}", @adapter.getQuantity(@sprites["itemwindow"].item))
     @sprites["qtywindow"].y    = Graphics.height - 108 - @sprites["qtywindow"].height
     pbDeactivateWindows(@sprites)
     @buying = buying
