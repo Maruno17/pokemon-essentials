@@ -158,7 +158,7 @@ end
     next $player.seen_storage_creator ? _INTL("{1}'s PC", pbGetStorageCreator) : _INTL("Someone's PC")
   },
   "condition"   => proc { next true },
-  "priority"    => 40,
+  "order"       => 10,
   "effect"      => proc {
     pbMessage(_INTL("\\se[PC access]The Pokémon Storage System was opened."))
     command = 0
@@ -205,9 +205,9 @@ end
  MenuHandlers.register(:pokemon_pc, :trainer_pc, {
   "name"        => proc { next _INTL("{1}'s PC", $player.name) },
   "condition"   => proc { next true },
-  "priority"    => 30,
+  "order"       => 20,
   "effect"      => proc {
     pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.", $player.name))
     pbTrainerPCMenu
   }
-})-
+})

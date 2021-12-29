@@ -503,7 +503,7 @@ end
 MenuHandlers.register(:pokemon_pc, :hall_of_fame, {
  "name"        => _INTL("Hall of Fame"),
  "condition"   => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
- "priority"    => 20,
+ "order"       => 30,
  "effect"      => proc {
    pbMessage(_INTL("\\se[PC access]Accessed the Hall of Fame."))
    pbHallOfFamePC

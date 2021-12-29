@@ -300,7 +300,7 @@ module MenuHandlers
   def self.each_available(key)
     return if !@@handlers.has_key?(key)
     option_hash = @@handlers[key]
-    keys = option_hash.ordered_keys.sort_by { |option| -option_hash[option]["priority"] rescue 0 }
+    keys = option_hash.ordered_keys.sort_by { |option| option_hash[option]["order"] rescue 0 }
     keys.each { |option|
       hash = option_hash[option]
       condition = hash["condition"]

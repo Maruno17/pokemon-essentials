@@ -168,7 +168,7 @@ MenuHandlers.register(:pokegear, :town_map, {
   "name"        => _INTL("Map"),
   "icon"        => "icon_map",
   "condition"   => proc { next true },
-  "priority"    => 30,
+  "order"       => 10,
   "effect"      => proc {
     pbFadeOutIn {
       scene = PokemonRegionMap_Scene.new(-1, false)
@@ -187,7 +187,7 @@ MenuHandlers.register(:pokegear, :town_map, {
 MenuHandlers.register(:pokegear, :phone, {
   "name"        => _INTL("Phone"),
   "icon"        => "icon_phone",
-  "priority"    => 20,
+  "order"       => 20,
   "condition"   => proc {
     next $PokemonGlobal.phoneNumbers && $PokemonGlobal.phoneNumbers.length > 0
   },
@@ -202,7 +202,7 @@ MenuHandlers.register(:pokegear, :jukebox, {
   "name"        => _INTL("Jukebox"),
   "icon"        => "icon_jukebox",
   "condition"   => proc { next true },
-  "priority"    => 10,
+  "order"       => 30,
   "effect"      => proc {
     pbFadeOutIn {
       scene = PokemonJukebox_Scene.new

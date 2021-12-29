@@ -134,7 +134,7 @@ MenuHandlers.register(:pause_menu, :pokedex, {
   "condition"   => proc {
     next $player.has_pokedex && $player.pokedex.accessible_dexes.length > 0
   },
-  "priority"    => 100,
+  "order"       => 10,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     if Settings::USE_CURRENT_REGION_DEX
@@ -170,7 +170,7 @@ MenuHandlers.register(:pause_menu, :pokedex, {
 MenuHandlers.register(:pause_menu, :party, {
   "name"        => _INTL("Pokémon"),
   "condition"   => proc { next $player.party_count > 0 },
-  "priority"    => 90,
+  "order"       => 20,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     hiddenmove = nil
@@ -191,7 +191,7 @@ MenuHandlers.register(:pause_menu, :party, {
 MenuHandlers.register(:pause_menu, :bag, {
   "name"        => _INTL("Bag"),
   "condition"   => proc { next !pbInBugContest? },
-  "priority"    => 80,
+  "order"       => 30,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     item = nil
@@ -212,7 +212,7 @@ MenuHandlers.register(:pause_menu, :bag, {
 MenuHandlers.register(:pause_menu, :pokegear, {
   "name"        => _INTL("Pokégear"),
   "condition"   => proc { next $player.has_pokegear },
-  "priority"    => 70,
+  "order"       => 40,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
@@ -229,7 +229,7 @@ MenuHandlers.register(:pause_menu, :pokegear, {
 MenuHandlers.register(:pause_menu, :town_map, {
   "name"        => _INTL("Town Map"),
   "condition"   => proc { next $bag.has?(:TOWNMAP) && !$player.has_pokegear },
-  "priority"    => 70,
+  "order"       => 40,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
@@ -247,7 +247,7 @@ MenuHandlers.register(:pause_menu, :town_map, {
 MenuHandlers.register(:pause_menu, :trainer_card, {
   "name"        => proc { next $player.name },
   "condition"   => proc { next true },
-  "priority"    => 60,
+  "order"       => 50,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
@@ -271,7 +271,7 @@ MenuHandlers.register(:pause_menu, :quit_safari, {
     next _INTL("Steps: {1}/{2}\nBalls: {3}",
                pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount)
   },
-  "priority"    => 50,
+  "order"       => 60,
   "effect"      => proc { |menu|
     menu.pbHideMenu
     if pbConfirmMessage(_INTL("Would you like to leave the Safari Game right now?"))
@@ -299,7 +299,7 @@ MenuHandlers.register(:pause_menu, :quit_bug_contest, {
     end
     next _INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount)
   },
-  "priority"    => 50,
+  "order"       => 60,
   "effect"      => proc { |menu|
     menu.pbHideMenu
     if pbConfirmMessage(_INTL("Would you like to end the Contest now?"))
@@ -319,7 +319,7 @@ MenuHandlers.register(:pause_menu, :save_game, {
   "condition"   => proc {
     next $game_system && !$game_system.save_disabled && !pbInBugContest? && !pbInSafari?
   },
-  "priority"    => 40,
+  "order"       => 70,
   "effect"      => proc { |menu|
     menu.pbHideMenu
     scene = PokemonSave_Scene.new
@@ -338,7 +338,7 @@ MenuHandlers.register(:pause_menu, :save_game, {
 MenuHandlers.register(:pause_menu, :options, {
   "name"        => _INTL("Options"),
   "condition"   => proc { next true },
-  "priority"    => 30,
+  "order"       => 80,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
@@ -356,7 +356,7 @@ MenuHandlers.register(:pause_menu, :options, {
 MenuHandlers.register(:pause_menu, :debug_menu, {
   "name"        => _INTL("Debug"),
   "condition"   => proc { next $DEBUG },
-  "priority"    => 20,
+  "order"       => 90,
   "effect"      => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn {
@@ -371,7 +371,7 @@ MenuHandlers.register(:pause_menu, :debug_menu, {
 MenuHandlers.register(:pause_menu, :quit_game, {
   "name"        => _INTL("Quit Game"),
   "condition"   => proc { next true },
-  "priority"    => 10,
+  "order"       => 100,
   "effect"      => proc { |menu|
     menu.pbHideMenu
     if pbConfirmMessage(_INTL("Are you sure you want to quit the game?"))
