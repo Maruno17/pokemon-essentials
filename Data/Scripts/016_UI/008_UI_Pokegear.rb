@@ -2,13 +2,12 @@
 #
 #===============================================================================
 class PokegearButton < SpriteWrapper
-
-  BASE_COLOR   = Color.new(248, 248, 248)
-  SHADOW_COLOR = Color.new(40, 40, 40)
-
   attr_reader :index
   attr_reader :name
   attr_reader :selected
+
+  BASE_COLOR   = Color.new(248, 248, 248)
+  SHADOW_COLOR = Color.new(40, 40, 40)
 
   def initialize(command, x, y, viewport = nil)
     super(viewport)
@@ -22,7 +21,7 @@ class PokegearButton < SpriteWrapper
     end
     @contents = BitmapWrapper.new(@button.width, @button.height)
     self.bitmap = @contents
-    self.x = x - @button.width/2
+    self.x = x - (@button.width / 2)
     self.y = y
     pbSetSystemFont(self.bitmap)
     refresh
@@ -51,12 +50,9 @@ class PokegearButton < SpriteWrapper
     ]
     pbDrawTextPositions(self.bitmap, textpos)
     bmp = RPG::Cache.load_bitmap("Graphics/Pictures/Pokegear/", @image) rescue Bitmap.new(32, 32)
-    x =  rect.width / 15
-    y =  (rect.height - bmp.height) / 2
+    x = rect.width / 15
+    y = (rect.height - bmp.height) / 2
     self.bitmap.blt(x, y, bmp, Rect.new(0, 0, bmp.width, bmp.height))
-    imagepos = [
-      ["Graphics/Pictures/Pokegear/icon_" + @image, 18, 10]
-    ]
     bmp.dispose
   end
 end
@@ -144,7 +140,7 @@ class PokemonPokegearScreen
     endscene    = false
     MenuHandlers.each_available(:pokegear) do |option, hash|
       commands.push(option)
-      icon = nil_or_empty?(hash["icon"]) ? "" : hash["icon"]
+      icon = hash["icon"] || ""
       name = MenuHandlers.get_string_option(:pokegear, "name", option)
       display_cmd.push([icon, name])
     end
