@@ -149,9 +149,6 @@ module Settings
   # whether the machine's move retains the replaced move's PP (true), or whether
   # the machine's move has full PP (false).
   TAUGHT_MACHINES_KEEP_OLD_PP           = (MECHANICS_GENERATION == 5)
-  # If a move has been taught by an HM, allow the Pokémon to forget or replace
-  # this move (true) or not (false).
-  ALLOW_FORGETTING_HM_MOVES             = false
   # Whether the Black/White Flutes will raise/lower the levels of wild Pokémon
   # respectively (true), or will lower/raise the wild encounter rate
   # respectively (false).
