@@ -1476,8 +1476,7 @@ Battle::ItemEffects::OnBeingHitPositiveBerry.add(:ENIGMABERRY,
     if forced
       battle.pbDisplay(_INTL("{1}'s HP was restored.", battler.pbThis))
     else
-      battle.pbDisplay(_INTL("{1} restored its health using its {2}!", battler.pbThis,
-         itemName))
+      battle.pbDisplay(_INTL("{1} restored its health using its {2}!", battler.pbThis, itemName))
     end
     next true
   }

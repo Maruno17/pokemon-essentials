@@ -754,7 +754,7 @@ class Battle
   def pbStartWeatherAbility(new_weather, battler, ignore_primal = false)
     return if !ignore_primal && [:HarshSun, :HeavyRain, :StrongWinds].include?(@field.weather)
     return if @field.weather == new_weather
-    battle.pbShowAbilitySplash(battler)
+    pbShowAbilitySplash(battler)
     if !Scene::USE_ABILITY_SPLASH
       pbDisplay(_INTL("{1}'s {2} activated!", battler.pbThis, battler.abilityName))
     end

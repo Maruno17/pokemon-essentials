@@ -323,7 +323,7 @@ class Battle::Battler
       user.lastMoveFailed = true
       if ![:Rain, :HeavyRain].include?(user.effectiveWeather) && user.takesIndirectDamage?
         user.pbTakeEffectDamage((user.totalhp / 4.0).round, false) { |hp_lost|
-          battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
+          @battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
         }
         @battle.pbGainExp   # In case user is KO'd by this
       end
