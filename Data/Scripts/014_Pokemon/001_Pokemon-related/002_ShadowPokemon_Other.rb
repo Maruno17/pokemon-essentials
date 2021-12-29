@@ -396,22 +396,22 @@ end
 
 # Record current heart gauges of Pokémon in party, to see if they drop to zero
 # during battle and need to say they're ready to be purified afterwards
-Events.onStartBattle += proc { |_sender|
+EventHandlers.add(:before_battle, :shadow_heart_gauge, proc {
   $game_temp.party_heart_gauges_before_battle = []
   $player.party.each_with_index do |pkmn, i|
     $game_temp.party_heart_gauges_before_battle[i] = pkmn.heart_gauge
   end
-}
+})
 
-Events.onEndBattle += proc { |_sender, _e|
+EventHandlers.add(:after_battle, :shadow_purification, proc {
   $game_temp.party_heart_gauges_before_battle.each_with_index do |value, i|
     pkmn = $player.party[i]
     next if !pkmn || !value || value == 0
     pkmn.check_ready_to_purify if pkmn.heart_gauge == 0
   end
-}
+})
 
-Events.onStepTaken += proc {
+EventHandlers.add(:on_player_movement, :shadow_heart_gauge, proc { |_handled|
   $player.able_party.each do |pkmn|
     next if pkmn.heart_gauge == 0
     pkmn.heart_gauge_step_counter = 0 if !pkmn.heart_gauge_step_counter
@@ -431,4 +431,4 @@ Events.onStepTaken += proc {
   if ($PokemonGlobal.purifyChamber rescue nil)
     $PokemonGlobal.purifyChamber.update
   end
-}
+})

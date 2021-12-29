@@ -131,7 +131,7 @@ end
 #===============================================================================
 # Phone-related counters
 #===============================================================================
-Events.onMapUpdate += proc { |_sender, _e|
+EventHandlers.add(:on_map_scene_update, :phone_time, proc {
   next if !$player || !$player.has_pokegear
   # Reset time to next phone call if necessary
   if !$PokemonGlobal.phoneTime || $PokemonGlobal.phoneTime <= 0
@@ -171,7 +171,7 @@ Events.onMapUpdate += proc { |_sender, _e|
       pbPhoneCall(call, phonenum)
     end
   end
-}
+})
 
 #===============================================================================
 # Player calls a contact

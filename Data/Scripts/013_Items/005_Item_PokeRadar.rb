@@ -192,22 +192,18 @@ EventHandlers.add(:on_encounter_generation, :pokeradar_battle, proc { |encounter
   next encounter
 })
 
-Events.onWildPokemonCreate += proc { |_sender, e|
-  pokemon = e[0]
+EventHandlers.add(:on_wild_pokemon_creation, :poke_radar_shininess, proc { |pkmn|
   next if !$game_temp.poke_radar_data
   grasses = $game_temp.poke_radar_data[3]
   next if !grasses
   grasses.each do |grass|
     next if $game_player.x != grass[0] || $game_player.y != grass[1]
-    pokemon.shiny = true if grass[3] == 2
+    pkmn.shiny = true if grass[3] == 2
     break
   end
-}
+})
 
-Events.onWildBattleEnd += proc { |_sender, e|
-  species  = e[0]
-  level    = e[1]
-  decision = e[2]
+EventHandlers.add(:after_battle, :pokeradar_cancel, proc { |species, level, decision|
   if $game_temp.poke_radar_data && [1, 4].include?(decision)   # Defeated/caught
     $game_temp.poke_radar_data[0] = species
     $game_temp.poke_radar_data[1] = level
@@ -219,9 +215,9 @@ Events.onWildBattleEnd += proc { |_sender, e|
   else
     pbPokeRadarCancel
   end
-}
+})
 
-Events.onStepTaken += proc { |_sender, _e|
+EventHandlers.add(:on_player_movement, :poke_radar_battery, proc { |_handled|
   if $PokemonGlobal.pokeradarBattery && $PokemonGlobal.pokeradarBattery > 0 &&
      !$game_temp.poke_radar_data
     $PokemonGlobal.pokeradarBattery -= 1
@@ -230,11 +226,11 @@ Events.onStepTaken += proc { |_sender, _e|
   if !terrain.land_wild_encounters || !terrain.shows_grass_rustle
     pbPokeRadarCancel
   end
-}
+})
 
-Events.onMapChange += proc { |_sender, _e|
+EventHandlers.add(:on_full_map_change, :pokeradar_cancel, proc {
   pbPokeRadarCancel
-}
+})
 
 ################################################################################
 # Item handlers

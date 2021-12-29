@@ -2,7 +2,7 @@
 # Constant checks
 #===============================================================================
 # Pokérus check
-Events.onMapUpdate += proc { |_sender, _e|
+EventHandlers.add(:on_map_scene_update, :pokerus_time, proc {
   next if !$player
   last = $PokemonGlobal.pokerusTime
   now = pbGetTimeNow
@@ -12,7 +12,7 @@ Events.onMapUpdate += proc { |_sender, _e|
     end
     $PokemonGlobal.pokerusTime = now
   end
-}
+})
 
 # Returns whether the Poké Center should explain Pokérus to the player, if a
 # healed Pokémon has it.
@@ -46,7 +46,7 @@ def pbBatteryLow?
   return false
 end
 
-Events.onMapUpdate += proc { |_sender, _e|
+EventHandlers.add(:on_map_scene_update, :low_battery, proc {
   if !$game_temp.warned_low_battery && pbBatteryLow? &&
      !$game_temp.in_menu && !$game_temp.in_battle && !$game_player.move_route_forcing &&
      !$game_temp.message_window_showing && !pbMapInterpreterRunning? &&
@@ -61,7 +61,7 @@ Events.onMapUpdate += proc { |_sender, _e|
       pbBGMPlay($game_temp.cue_bgm) if $game_system.getPlayingBGM.nil?
     end
   end
-}
+})
 
 
 
@@ -69,7 +69,7 @@ Events.onMapUpdate += proc { |_sender, _e|
 # Checks per step
 #===============================================================================
 # Party Pokémon gain happiness from walking
-Events.onStepTaken += proc {
+EventHandlers.add(:on_player_movement, :happiness, proc { |_handled|
   $PokemonGlobal.happinessSteps = 0 if !$PokemonGlobal.happinessSteps
   $PokemonGlobal.happinessSteps += 1
   if $PokemonGlobal.happinessSteps >= 128
@@ -78,11 +78,10 @@ Events.onStepTaken += proc {
     end
     $PokemonGlobal.happinessSteps = 0
   end
-}
+})
 
 # Poison party Pokémon
-Events.onStepTakenTransferPossible += proc { |_sender, e|
-  handled = e[0]
+EventHandlers.add(:on_player_movement, :poison_in_field, proc { |handled|
   next if handled[0]
   if $PokemonGlobal.stepcount % 4 == 0 && Settings::POISON_IN_FIELD
     flashed = false
@@ -109,7 +108,7 @@ Events.onStepTakenTransferPossible += proc { |_sender, e|
       end
     end
   end
-}
+})
 
 def pbCheckAllFainted
   if $player.able_pokemon_count == 0
@@ -122,8 +121,7 @@ def pbCheckAllFainted
 end
 
 # Gather soot from soot grass
-Events.onStepTakenFieldMovement += proc { |_sender, e|
-  event = e[0]   # Get the event affected by field movement
+EventHandlers.add(:on_event_movement, :soot_grass, proc { |event|
   thistile = $map_factory.getRealTilePos(event.map.map_id, event.x, event.y)
   map = $map_factory.getMap(thistile[0])
   [2, 1, 0].each do |i|
@@ -138,51 +136,48 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
     map.erase_tile(thistile[1], thistile[2], i)
     break
   end
-}
+})
 
 # Show grass rustle animation, and auto-move the player over waterfalls and ice
-Events.onStepTakenFieldMovement += proc { |_sender, e|
-  event = e[0]   # Get the event affected by field movement
-  if $scene.is_a?(Scene_Map)
-    event.each_occupied_tile do |x, y|
-      if $map_factory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
-        $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)
-      end
-    end
-    if event == $game_player
-      currentTag = $game_player.pbTerrainTag
-      if currentTag.waterfall_crest
-        pbDescendWaterfall
-      elsif currentTag.ice && !$PokemonGlobal.sliding
-        pbSlideOnIce
-      end
+EventHandlers.add(:on_event_movement, :rustling_grass, proc { |event|
+  next if !$scene.is_a?(Scene_Map)
+  event.each_occupied_tile do |x, y|
+    if $map_factory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
+      $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)
     end
   end
-}
+})
+
+EventHandlers.add(:on_player_movement, :waterfall_and_ice, proc { |_handled|
+  currentTag = $game_player.pbTerrainTag
+  if currentTag.waterfall_crest
+    pbDescendWaterfall
+  elsif currentTag.ice && !$PokemonGlobal.sliding
+    pbSlideOnIce
+  end
+})
 
 def pbOnStepTaken(eventTriggered)
   if $game_player.move_route_forcing || pbMapInterpreterRunning?
-    Events.onStepTakenFieldMovement.trigger(nil, $game_player)
+    EventHandlers.trigger(:on_event_movement, $game_player)
     return
   end
   $PokemonGlobal.stepcount = 0 if !$PokemonGlobal.stepcount
   $PokemonGlobal.stepcount += 1
   $PokemonGlobal.stepcount &= 0x7FFFFFFF
   repel_active = ($PokemonGlobal.repel > 0)
-  Events.onStepTaken.trigger(nil)
-#  Events.onStepTakenFieldMovement.trigger(nil,$game_player)
   handled = [nil]
-  Events.onStepTakenTransferPossible.trigger(nil, handled)
+  EventHandlers.trigger(:on_player_movement, handled)
   return if handled[0]
   pbBattleOnStepTaken(repel_active) if !eventTriggered && !$game_temp.in_menu
   $game_temp.encounter_triggered = false   # This info isn't needed here
 end
 
 # Start wild encounters while turning on the spot
-Events.onChangeDirection += proc {
+EventHandlers.add(:on_player_turning, :wild_battle, proc {
   repel_active = ($PokemonGlobal.repel > 0)
   pbBattleOnStepTaken(repel_active) if !$game_temp.in_menu
-}
+})
 
 def pbBattleOnStepTaken(repel_active)
   return if $player.able_pokemon_count == 0
@@ -192,11 +187,11 @@ def pbBattleOnStepTaken(repel_active)
   return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)
   $game_temp.encounter_type = encounter_type
   encounter = $PokemonEncounters.choose_wild_pokemon(encounter_type)
-  encounter = EventHandlers.trigger(:on_encounter_generation, encounter)
+  EventHandlers.trigger(:on_encounter_generation, encounter)
   if $PokemonEncounters.allow_encounter?(encounter, repel_active)
     if $PokemonEncounters.have_double_wild_battle?
       encounter2 = $PokemonEncounters.choose_wild_pokemon(encounter_type)
-      encounter2 = EventHandlers.trigger(:on_encounter_generation, encounter2)
+      EventHandlers.trigger(:on_encounter_generation, encounter2)
       pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])
     else
       pbWildBattle(encounter[0], encounter[1])
@@ -216,22 +211,20 @@ end
 # Clears the weather of the old map, if the old map has defined weather and the
 # new map either has the same name as the old map or doesn't have defined
 # weather.
-Events.onMapChanging += proc { |_sender, e|
-  new_map_ID = e[0]
-  next if new_map_ID == 0
+EventHandlers.add(:on_map_changing, :clear_weather, proc { |new_map_id, _new_map|
+  next if new_map_id == 0
   old_map_metadata = $game_map.metadata
   next if !old_map_metadata || !old_map_metadata.weather
   map_infos = pbLoadMapInfos
-  if $game_map.name == map_infos[new_map_ID].name
-    new_map_metadata = GameData::MapMetadata.try_get(new_map_ID)
+  if $game_map.name == map_infos[new_map_id].name
+    new_map_metadata = GameData::MapMetadata.try_get(new_map_id)
     next if new_map_metadata&.weather
   end
   $game_screen.weather(:None, 0, 0)
-}
+})
 
 # Set up various data related to the new map
-Events.onMapChange += proc { |_sender, e|
-  old_map_ID = e[0]   # previous map ID, is 0 if no map ID
+EventHandlers.add(:on_full_map_change, :setup_new_data, proc { |old_map_id|
   new_map_metadata = $game_map.metadata
   if new_map_metadata&.teleport_destination
     $PokemonGlobal.healingSpot = new_map_metadata.teleport_destination
@@ -239,29 +232,28 @@ Events.onMapChange += proc { |_sender, e|
   $PokemonMap&.clear
   $PokemonEncounters&.setup($game_map.map_id)
   $PokemonGlobal.visitedMaps[$game_map.map_id] = true
-  next if old_map_ID == 0 || old_map_ID == $game_map.map_id
+  next if old_map_id == 0 || old_map_id == $game_map.map_id
   next if !new_map_metadata || !new_map_metadata.weather
   map_infos = pbLoadMapInfos
-  if $game_map.name == map_infos[old_map_ID].name
-    old_map_metadata = GameData::MapMetadata.try_get(old_map_ID)
+  if $game_map.name == map_infos[old_map_id].name
+    old_map_metadata = GameData::MapMetadata.try_get(old_map_id)
     next if old_map_metadata&.weather
   end
   new_weather = new_map_metadata.weather
   $game_screen.weather(new_weather[0], 9, 0) if rand(100) < new_weather[1]
-}
+})
 
-Events.onMapSceneChange += proc { |_sender, e|
-  scene      = e[0]
-  mapChanged = e[1]
-  next if !scene || !scene.spriteset
-  # Update map trail
-  if $game_map
-    $PokemonGlobal.mapTrail = [] if !$PokemonGlobal.mapTrail
-    if $PokemonGlobal.mapTrail[0] != $game_map.map_id && $PokemonGlobal.mapTrail.length >= 4
-      $PokemonGlobal.mapTrail.pop
-    end
-    $PokemonGlobal.mapTrail = [$game_map.map_id] + $PokemonGlobal.mapTrail
+EventHandlers.add(:on_map_scene_change, :map_trail, proc { |scene, _map_changed|
+  next if !$game_map
+  $PokemonGlobal.mapTrail = [] if !$PokemonGlobal.mapTrail
+  if $PokemonGlobal.mapTrail[0] != $game_map.map_id && $PokemonGlobal.mapTrail.length >= 4
+    $PokemonGlobal.mapTrail.pop
   end
+  $PokemonGlobal.mapTrail = [$game_map.map_id] + $PokemonGlobal.mapTrail
+})
+
+EventHandlers.add(:on_map_scene_change, :darkness_sprite, proc { |scene, _map_changed|
+  next if !scene || !scene.spriteset
   # Display darkness circle on dark maps
   map_metadata = $game_map.metadata
   if map_metadata&.dark_map
@@ -275,30 +267,38 @@ Events.onMapSceneChange += proc { |_sender, e|
     $game_temp.darkness_sprite&.dispose
     $game_temp.darkness_sprite = nil
   end
+})
+
+EventHandlers.add(:on_map_scene_change, :location_window, proc { |scene, map_changed|
+  next if !scene || !scene.spriteset
+  map_metadata = $game_map.metadata
   # Show location signpost
-  if mapChanged && map_metadata && map_metadata.announce_location
-    nosignpost = false
-    if $PokemonGlobal.mapTrail[1]
-      (Settings::NO_SIGNPOSTS.length / 2).times do |i|
-        nosignpost = true if Settings::NO_SIGNPOSTS[2 * i] == $PokemonGlobal.mapTrail[1] &&
-                             Settings::NO_SIGNPOSTS[(2 * i) + 1] == $game_map.map_id
-        nosignpost = true if Settings::NO_SIGNPOSTS[(2 * i) + 1] == $PokemonGlobal.mapTrail[1] &&
-                             Settings::NO_SIGNPOSTS[2 * i] == $game_map.map_id
-        break if nosignpost
-      end
-      mapinfos = pbLoadMapInfos
-      oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]].name
-      nosignpost = true if $game_map.name == oldmapname
+  next if !map_changed || !map_metadata&.announce_location
+  nosignpost = false
+  if $PokemonGlobal.mapTrail[1]
+    (Settings::NO_SIGNPOSTS.length / 2).times do |i|
+      nosignpost = true if Settings::NO_SIGNPOSTS[2 * i] == $PokemonGlobal.mapTrail[1] &&
+                           Settings::NO_SIGNPOSTS[(2 * i) + 1] == $game_map.map_id
+      nosignpost = true if Settings::NO_SIGNPOSTS[(2 * i) + 1] == $PokemonGlobal.mapTrail[1] &&
+                           Settings::NO_SIGNPOSTS[2 * i] == $game_map.map_id
+      break if nosignpost
     end
-    scene.spriteset.addUserSprite(LocationWindow.new($game_map.name)) if !nosignpost
+    mapinfos = pbLoadMapInfos
+    oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]].name
+    nosignpost = true if $game_map.name == oldmapname
   end
+  scene.spriteset.addUserSprite(LocationWindow.new($game_map.name)) if !nosignpost
+})
+
+EventHandlers.add(:on_map_scene_change, :force_cycling, proc { |scene, _map_changed|
+  map_metadata = $game_map.metadata
   # Force cycling/walking
   if map_metadata&.always_bicycle
     pbMountBike
   elsif !pbCanUseBike?($game_map.map_id)
     pbDismountBike
   end
-}
+})
 
 
 
@@ -683,7 +683,7 @@ def pbRegisterPartner(tr_type, tr_name, tr_id = 0)
   tr_type = GameData::TrainerType.get(tr_type).id
   pbCancelVehicles
   trainer = pbLoadTrainer(tr_type, tr_name, tr_id)
-  Events.onTrainerPartyLoad.trigger(nil, trainer)
+  EventHandlers.trigger(:on_trainer_party_load, trainer)
   trainer.party.each do |i|
     i.owner = Pokemon::Owner.new_from_trainer(trainer)
     i.calc_stats

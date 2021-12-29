@@ -188,7 +188,7 @@ def pbGetEnvironment
   return ret
 end
 
-Events.onStartBattle += proc { |_sender|
+EventHandlers.add(:before_battle, :evolution_checks, proc {
   # Record current levels of Pokémon in party, to see if they gain a level
   # during battle and may need to evolve afterwards
   $game_temp.party_levels_before_battle = []
@@ -199,7 +199,7 @@ Events.onStartBattle += proc { |_sender|
     $game_temp.party_critical_hits_dealt[i] = 0
     $game_temp.party_direct_damage_taken[i] = 0
   end
-}
+})
 
 def pbCanDoubleBattle?
   return $PokemonGlobal.partner || $player.able_pokemon_count >= 2
@@ -230,7 +230,7 @@ def pbWildBattleCore(*args)
   end
   # Record information about party Pokémon to be used at the end of battle (e.g.
   # comparing levels for an evolution check)
-  Events.onStartBattle.trigger(nil)
+  EventHandlers.trigger(:before_battle)
   # Generate wild Pokémon based on the species and level
   foeParty = []
   sp = nil
@@ -313,9 +313,9 @@ def pbWildBattle(species, level, outcomeVar = 1, canRun = true, canLose = false)
   species = GameData::Species.get(species).id
   # Potentially call a different pbWildBattle-type method instead (for roaming
   # Pokémon, Safari battles, Bug Contest battles)
-  handled = [nil]
-  Events.onWildBattleOverride.trigger(nil, species, level, handled)
-  return handled[0] if handled[0] != nil
+  battle = [nil]
+  EventHandlers.trigger(:override_wild_battle, species, level, battle)
+  return battle[0] if !battle[0].nil?
   # Set some battle rules
   setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("cannotRun") if !canRun
@@ -323,7 +323,7 @@ def pbWildBattle(species, level, outcomeVar = 1, canRun = true, canLose = false)
   # Perform the battle
   decision = pbWildBattleCore(species, level)
   # Used by the Poké Radar to update/break the chain
-  Events.onWildBattleEnd.trigger(nil, species, level, decision)
+  EventHandlers.trigger(:after_battle, species, level, decision)
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision != 2 && decision != 5)
 end
@@ -375,7 +375,7 @@ def pbTrainerBattleCore(*args)
   end
   # Record information about party Pokémon to be used at the end of battle (e.g.
   # comparing levels for an evolution check)
-  Events.onStartBattle.trigger(nil)
+  EventHandlers.trigger(:before_battle)
   # Generate trainers and their parties based on the arguments given
   foeTrainers    = []
   foeItems       = []
@@ -394,7 +394,7 @@ def pbTrainerBattleCore(*args)
       trainer = pbLoadTrainer(arg[0], arg[1], arg[2])
       pbMissingTrainer(arg[0], arg[1], arg[2]) if !trainer
       return 0 if !trainer
-      Events.onTrainerPartyLoad.trigger(nil, trainer)
+      EventHandlers.trigger(:on_trainer_party_load, trainer)
       foeTrainers.push(trainer)
       foePartyStarts.push(foeParty.length)
       trainer.party.each { |pkmn| foeParty.push(pkmn) }
@@ -492,7 +492,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech = nil,
     trainer = pbLoadTrainer(trainerID, trainerName, trainerPartyID)
     pbMissingTrainer(trainerID, trainerName, trainerPartyID) if !trainer
     return false if !trainer
-    Events.onTrainerPartyLoad.trigger(nil, trainer)
+    EventHandlers.trigger(:on_trainer_party_load, trainer)
     # If there is exactly 1 other triggered trainer event, and this trainer has
     # 6 or fewer Pokémon, record this trainer for a double battle caused by the
     # other triggered trainer event
@@ -577,13 +577,11 @@ def pbAfterBattle(decision, canLose)
     $player.party.each { |pkmn| pkmn.heal }
     (Graphics.frame_rate / 4).times { Graphics.update }
   end
-  Events.onEndBattle.trigger(nil, decision, canLose)
+  EventHandlers.trigger(:after_battle, decision, canLose)
   $game_player.straighten
 end
 
-Events.onEndBattle += proc { |_sender, e|
-  decision = e[0]
-  canLose  = e[1]
+EventHandlers.add(:after_battle, :evolution_checks, proc { |decision, can_lose|
   # Check for evolutions
   pbEvolutionCheck if Settings::CHECK_EVOLUTION_AFTER_ALL_BATTLES ||
                       (decision != 2 && decision != 5)   # not a loss or a draw
@@ -598,13 +596,13 @@ Events.onEndBattle += proc { |_sender, e|
       pbHoneyGather(pkmn)
     end
   when 2, 5   # Lose, draw
-    if !canLose
+    if !can_lose
       $game_system.bgm_unpause
       $game_system.bgs_unpause
       pbStartOver
     end
   end
-}
+})
 
 def pbEvolutionCheck
   $player.party.each_with_index do |pkmn, i|

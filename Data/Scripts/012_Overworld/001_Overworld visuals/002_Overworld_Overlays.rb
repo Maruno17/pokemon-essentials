@@ -205,9 +205,7 @@ end
 
 
 
-Events.onSpritesetCreate += proc { |_sender, e|
-  spriteset = e[0]      # Spriteset being created
-  viewport  = e[1]      # Viewport used for tilemap and characters
+EventHandlers.add(:on_spriteset_creation, :particle_engine, proc { |spriteset, viewport|
   map = spriteset.map   # Map associated with the spriteset (not necessarily the current map)
   map.events.keys.each do |i|
     if map.events[i].name[/^outdoorlight\((\w+)\)$/i]
@@ -223,4 +221,4 @@ Events.onSpritesetCreate += proc { |_sender, e|
     end
   end
   spriteset.addUserSprite(Particle_Engine.new(viewport, map))
-}
+})

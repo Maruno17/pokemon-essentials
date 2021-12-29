@@ -455,11 +455,11 @@ end
 def pbEncounter(enc_type)
   $game_temp.encounter_type = enc_type
   encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type)
-  encounter1 = EventHandlers.trigger(:on_encounter_generation, encounter1)
+  EventHandlers.trigger(:on_encounter_generation, encounter1)
   return false if !encounter1
   if $PokemonEncounters.have_double_wild_battle?
     encounter2 = $PokemonEncounters.choose_wild_pokemon(enc_type)
-    encounter2 = EventHandlers.trigger(:on_encounter_generation, encounter2)
+    EventHandlers.trigger(:on_encounter_generation, encounter2)
     return false if !encounter2
     pbDoubleWildBattle(encounter1[0], encounter1[1], encounter2[0], encounter2[1])
   else

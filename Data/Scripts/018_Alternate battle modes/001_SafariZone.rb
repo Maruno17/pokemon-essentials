@@ -55,9 +55,9 @@ end
 
 
 
-Events.onMapChange += proc { |_sender, *args|
+EventHandlers.add(:on_full_map_change, :safari_end, proc {
   pbSafariState.pbEnd if !pbInSafari?
-}
+})
 
 def pbInSafari?
   if pbSafariState.inProgress?
@@ -75,8 +75,7 @@ def pbSafariState
   return $PokemonGlobal.safariState
 end
 
-Events.onStepTakenTransferPossible += proc { |_sender, e|
-  handled = e[0]
+EventHandlers.add(:on_player_movement, :safari_steps, proc { |handled|
   next if handled[0]
   if pbInSafari? && pbSafariState.decision == 0 && Settings::SAFARI_STEPS > 0
     pbSafariState.steps -= 1
@@ -88,18 +87,18 @@ Events.onStepTakenTransferPossible += proc { |_sender, e|
       handled[0] = true
     end
   end
-}
+})
 
-Events.onWildBattleOverride += proc { |_sender, e|
-  species = e[0]
-  level   = e[1]
-  handled = e[2]
-  next if handled[0] != nil
+EventHandlers.add(:override_wild_battle, :safari_battle, proc { |species, level, battle|
+  next if !battle[0].nil?
   next if !pbInSafari?
-  handled[0] = pbSafariBattle(species, level)
-}
+  battle[0] = pbSafariBattle(species, level)
+})
 
 def pbSafariBattle(species, level)
+  # Record information about party Pokémon to be used at the end of battle (e.g.
+  # comparing levels for an evolution check)
+  EventHandlers.trigger(:before_battle)
   # Generate a wild Pokémon based on the species and level
   pkmn = pbGenerateWildPokemon(species, level)
   foeParty = [pkmn]
@@ -140,7 +139,7 @@ def pbSafariBattle(species, level)
   end
   pbSet(1, decision)
   # Used by the Poké Radar to update/break the chain
-  Events.onWildBattleEnd.trigger(nil, species, level, decision)
+  EventHandlers.trigger(:after_battle, species, level, decision)
   # Return the outcome of the battle
   return decision
 end

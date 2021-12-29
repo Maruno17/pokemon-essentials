@@ -93,16 +93,15 @@ end
 
 # When the player moves to a new map (with a different name), make all roaming
 # Pokémon roam.
-Events.onMapChange += proc { |_sender, e|
-  oldMapID = e[0]
+EventHandlers.add(:on_full_map_change, :roaming_pokemon, proc { |old_map_id|
   # Get and compare map names
   mapInfos = pbLoadMapInfos
-  next if mapInfos && oldMapID > 0 && mapInfos[oldMapID] &&
-          mapInfos[oldMapID].name && $game_map.name == mapInfos[oldMapID].name
+  next if mapInfos && old_map_id > 0 && mapInfos[old_map_id] &&
+          mapInfos[old_map_id].name && $game_map.name == mapInfos[old_map_id].name
   # Make roaming Pokémon roam
   pbRoamPokemon
   $PokemonGlobal.roamedAlready = false
-}
+})
 
 
 
@@ -137,7 +136,7 @@ end
 
 EventHandlers.add(:on_encounter_generation, :roaming_battle, proc { |encounter|
   $game_temp.roamer_index_for_encounter = nil
-  next nil if !encounter
+  next encpounter if !encounter
   # Give the regular encounter if encountering a roaming Pokémon isn't possible
   next encounter if $PokemonGlobal.roamedAlready
   next encounter if $PokemonGlobal.partner
@@ -185,14 +184,11 @@ EventHandlers.add(:on_encounter_generation, :roaming_battle, proc { |encounter|
   next [roamer[1], roamer[2]]   # Species, level
 })
 
-Events.onWildBattleOverride += proc { |_sender, e|
-  species = e[0]
-  level   = e[1]
-  handled = e[2]
-  next if handled[0] != nil
+EventHandlers.add(:override_wild_battle, :roaming_battle, proc { |species, level, battle|
+  next if !battle[0].nil?
   next if !$PokemonGlobal.roamEncounter || $game_temp.roamer_index_for_encounter.nil?
-  handled[0] = pbRoamingPokemonBattle(species, level)
-}
+  battle[0] = pbRoamingPokemonBattle(species, level)
+})
 
 def pbRoamingPokemonBattle(species, level)
   # Get the roaming Pokémon to encounter; generate it based on the species and
@@ -215,7 +211,7 @@ def pbRoamingPokemonBattle(species, level)
   $PokemonGlobal.roamEncounter = nil
   $PokemonGlobal.roamedAlready = true
   # Used by the Poké Radar to update/break the chain
-  Events.onWildBattleEnd.trigger(nil, species, level, decision)
+  EventHandlers.trigger(:after_battle, species, level, decision)
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision != 2 && decision != 5)
 end

@@ -3,26 +3,19 @@
 #===============================================================================
 class Event
   def initialize
-    @callbacks = []
-  end
-
-  # Sets an event handler for this event and removes all other event handlers.
-  def set(method)
-    @callbacks.clear
-    @callbacks.push(method)
+    @callbacks = {}
   end
 
   # Removes an event handler procedure from the event.
-  def -(other)
-    @callbacks.delete(other)
-    return self
+  def remove(key, proc)
+    return false if !@callbacks.has_key?(key)
+    @callbacks.delete(key)
   end
 
   # Adds an event handler procedure from the event.
-  def +(other)
-    return self if @callbacks.include?(other)
-    @callbacks.push(other)
-    return self
+  def add(key, proc)
+    return false if @callbacks.has_key?(key)
+    @callbacks[key] = proc
   end
 
   # Clears the event of event handlers.
@@ -30,32 +23,10 @@ class Event
     @callbacks.clear
   end
 
-  # Triggers the event and calls all its event handlers.  Normally called only
-  # by the code where the event occurred.
-  # The first argument is the sender of the event, the second argument contains
-  # the event's parameters. If three or more arguments are given, this method
-  # supports the following callbacks:
-  # proc { |sender,params| } where params is an array of the other parameters, and
-  # proc { |sender,arg0,arg1,...| }
-  def trigger(*arg)
-    arglist = arg[1, arg.length]
-    @callbacks.each do |callback|
-      if callback.arity > 2 && arg.length == callback.arity
-        # Retrofitted for callbacks that take three or more arguments
-        callback.call(*arg)
-      else
-        callback.call(arg[0], arglist)
-      end
-    end
-  end
-
   # Triggers the event and calls all its event handlers. Normally called only
-  # by the code where the event occurred. The first argument is the sender of
-  # the event, the other arguments are the event's parameters.
-  def trigger2(*arg)
-    @callbacks.each do |callback|
-      callback.call(*arg)
-    end
+  # by the code where the event occurred.
+  def trigger(*args)
+    @callbacks.each { |_, callback| callback.call(*args) }
   end
 end
 

@@ -217,12 +217,12 @@ def pbHatch(pokemon)
   end
 end
 
-Events.onStepTaken += proc { |_sender, _e|
+EventHandlers.add(:on_player_movement, :egg_hatching, proc { |_handled|
   $player.party.each do |egg|
     next if egg.steps_to_hatch <= 0
     egg.steps_to_hatch -= 1
     $player.pokemon_party.each do |i|
-      next if ![:FLAMEBODY, :MAGMAARMOR, :STEAMENGINE].include?(i.ability_id)
+      next if i.ability.has_flag?("FasterEggHatch")
       egg.steps_to_hatch -= 1
       break
     end
@@ -231,4 +231,4 @@ Events.onStepTaken += proc { |_sender, _e|
       pbHatch(egg)
     end
   end
-}
+})

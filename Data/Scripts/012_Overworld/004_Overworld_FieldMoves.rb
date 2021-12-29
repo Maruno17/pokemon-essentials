@@ -49,7 +49,7 @@ end
 
 # Unused
 def pbHiddenMoveEvent
-  Events.onAction.trigger(nil)
+  EventHandlers.trigger(:on_player_interaction)
 end
 
 def pbCheckHiddenMoveBadge(badge = -1, showmsg = true)
@@ -383,7 +383,7 @@ def pbTransferUnderwater(mapid, x, y, direction = $game_player.direction)
   }
 end
 
-Events.onAction += proc { |_sender, _e|
+EventHandlers.add(:on_player_interaction, :diving, proc {
   if $PokemonGlobal.diving
     surface_map_id = nil
     GameData::MapMetadata.each do |map_data|
@@ -398,7 +398,7 @@ Events.onAction += proc { |_sender, _e|
   elsif $game_player.terrain_tag.can_dive
     pbDive
   end
-}
+})
 
 HiddenMoveHandlers::CanUseMove.add(:DIVE, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, showmsg)
@@ -703,10 +703,10 @@ def pbStrength
   return false
 end
 
-Events.onAction += proc { |_sender, _e|
+EventHandlers.add(:on_player_interaction, :strength, proc {
   facingEvent = $game_player.pbFacingEvent
   pbStrength if facingEvent && facingEvent.name[/strengthboulder/i]
-}
+})
 
 HiddenMoveHandlers::CanUseMove.add(:STRENGTH, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_STRENGTH, showmsg)
@@ -796,13 +796,13 @@ def pbTransferSurfing(mapid, xcoord, ycoord, direction = $game_player.direction)
   }
 end
 
-Events.onAction += proc { |_sender, _e|
+EventHandlers.add(:on_player_interaction, :surfing, proc {
   next if $PokemonGlobal.surfing
   next if $game_map.metadata&.always_bicycle
   next if !$game_player.pbFacingTerrainTag.can_surf_freely
   next if !$game_map.passable?($game_player.x, $game_player.y, $game_player.direction, $game_player)
   pbSurf
-}
+})
 
 HiddenMoveHandlers::CanUseMove.add(:SURF, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, showmsg)
@@ -1001,14 +1001,14 @@ def pbWaterfall
   return false
 end
 
-Events.onAction += proc { |_sender, _e|
+EventHandlers.add(:on_player_interaction, :waterfall, proc {
   terrain = $game_player.pbFacingTerrainTag
   if terrain.waterfall
     pbWaterfall
   elsif terrain.waterfall_crest
     pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
   end
-}
+})
 
 HiddenMoveHandlers::CanUseMove.add(:WATERFALL, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL, showmsg)

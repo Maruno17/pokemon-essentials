@@ -117,28 +117,25 @@ ItemHandlers::UseInField.add(:MAXREPEL, proc { |item|
   next pbRepel(item, 250)
 })
 
-Events.onStepTaken += proc {
-  if $PokemonGlobal.repel > 0 && !$game_player.terrain_tag.ice   # Shouldn't count down if on ice
-    $PokemonGlobal.repel -= 1
-    if $PokemonGlobal.repel <= 0
-      if $bag.has?(:REPEL) || $bag.has?(:SUPERREPEL) || $bag.has?(:MAXREPEL)
-        if pbConfirmMessage(_INTL("The repellent's effect wore off! Would you like to use another one?"))
-          ret = nil
-          pbFadeOutIn {
-            scene = PokemonBag_Scene.new
-            screen = PokemonBagScreen.new(scene, $bag)
-            ret = screen.pbChooseItemScreen(proc { |item|
-              [:REPEL, :SUPERREPEL, :MAXREPEL].include?(item)
-            })
-          }
-          pbUseItem($bag, ret) if ret
-        end
-      else
-        pbMessage(_INTL("The repellent's effect wore off!"))
-      end
-    end
+EventHandlers.add(:on_player_movement, :repel, proc { |_handled|
+  next if $PokemonGlobal.repel <= 0 || $game_player.terrain_tag.ice   # Shouldn't count down if on ice
+  $PokemonGlobal.repel -= 1
+  next if $PokemonGlobal.repel > 0
+  repel_items = []
+  GameData::Item.each { |item| repel_items.push(item.id) if item.has_flag?("Repel") }
+  if !repel_items.any? { $bag.has?(item) }
+    pbMessage(_INTL("The repellent's effect wore off!"))
+    next
   end
-}
+  next if !pbConfirmMessage(_INTL("The repellent's effect wore off! Would you like to use another one?"))
+  ret = nil
+  pbFadeOutIn {
+    scene = PokemonBag_Scene.new
+    screen = PokemonBagScreen.new(scene, $bag)
+    ret = screen.pbChooseItemScreen(proc { |item| repel_items.include?(item) })
+  }
+  pbUseItem($bag, ret) if ret
+})
 
 ItemHandlers::UseInField.add(:BLACKFLUTE, proc { |item|
   pbUseItemMessage(item)
