@@ -110,9 +110,8 @@ Pokemon = SQUIRTLE,18
 #-------------------------------
 [CHAMPION,Blue]
 LoseText = A good battle indeed!
-Items = MEGARING
 Pokemon = VENUSAUR,63
-    Item = VENUSAURITE
+    Item = SITRUSBERRY
 Pokemon = CHARIZARD,63
     Item = SITRUSBERRY
 Pokemon = BLASTOISE,63
