@@ -1,4 +1,4 @@
-# See the documentation on the wiki to learn how to edit this file.
+﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
 [REPEL]
 Name = Repel
@@ -6,6 +6,7 @@ NamePlural = Repels
 Pocket = 1
 Price = 400
 FieldUse = Direct
+Flags = Repel
 Description = An item that prevents weak wild Pokémon from appearing for 100 steps after its use.
 #-------------------------------
 [SUPERREPEL]
@@ -14,6 +15,7 @@ NamePlural = Super Repels
 Pocket = 1
 Price = 700
 FieldUse = Direct
+Flags = Repel
 Description = An item that prevents weak wild Pokémon from appearing for 200 steps after its use.
 #-------------------------------
 [MAXREPEL]
@@ -22,6 +24,7 @@ NamePlural = Max Repels
 Pocket = 1
 Price = 900
 FieldUse = Direct
+Flags = Repel
 Description = An item that prevents weak wild Pokémon from appearing for 250 steps after its use.
 #-------------------------------
 [BLACKFLUTE]
