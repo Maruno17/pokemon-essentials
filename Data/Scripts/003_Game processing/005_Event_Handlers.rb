@@ -60,6 +60,40 @@ class Event
 end
 
 #===============================================================================
+# This module stores events that can happen during the game. A procedure can
+# subscribe to an event by adding itself to the event. It will then be called
+# whenever the event occurs.
+#===============================================================================
+module EventHandlers
+  @@events = {}
+
+  # Add a new Event to a handler. Also add a proc to the corresponding Event if
+  # a proc has been provided
+  def self.add(key, event = nil, proc = nil)
+    @@events[key] = Event.new if !@@events.has_key?(key)
+    @@events[key].add(event, proc) if proc && event
+  end
+
+  # Remove callback from an Event if it has been defined.
+  def self.remove(key, event)
+    return false if !@@events.has_key?(key)
+    @@events[key].remove(event)
+  end
+
+  # Clear all callbacks from an Event if it has been defined.
+  def self.clear(key)
+    return false if !@@events.has_key?(key)
+    @@events[key].clear
+  end
+
+  # Trigger all callbacks from an Event if it has been defined.
+  def self.trigger(key, *args)
+    return false if !@@events.has_key?(key)
+    @@events[key].trigger(*args)
+  end
+end
+
+#===============================================================================
 #
 #===============================================================================
 class HandlerHash

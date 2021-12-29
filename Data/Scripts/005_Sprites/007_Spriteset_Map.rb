@@ -136,3 +136,8 @@ class Spriteset_Map
     @@viewport3.update
   end
 end
+
+# Unused
+def pbOnSpritesetCreate(spriteset, viewport)
+  EventHandlers.trigger(:on_spriteset_creation, spriteset, viewport)
+end

@@ -135,7 +135,7 @@ def pbRoamingMethodAllowed(roamer_method)
   return false
 end
 
-EncounterModifier.register(proc { |encounter|
+EventHandlers.add(:on_encounter_generation, :roaming_battle, proc { |encounter|
   $game_temp.roamer_index_for_encounter = nil
   next nil if !encounter
   # Give the regular encounter if encountering a roaming Pokémon isn't possible
@@ -220,6 +220,6 @@ def pbRoamingPokemonBattle(species, level)
   return (decision != 2 && decision != 5)
 end
 
-EncounterModifier.registerEncounterEnd(proc {
+EventHandlers.add(:after_encounter_generation, :roaming_battle, proc {
   $game_temp.roamer_index_for_encounter = nil
 })

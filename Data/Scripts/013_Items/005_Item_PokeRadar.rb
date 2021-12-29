@@ -151,7 +151,7 @@ end
 ################################################################################
 # Event handlers
 ################################################################################
-EncounterModifier.register(proc { |encounter|
+EventHandlers.add(:on_encounter_generation, :pokeradar_battle, proc { |encounter|
   if GameData::EncounterType.get($game_temp.encounter_type).type != :land ||
      $PokemonGlobal.bicycle || $PokemonGlobal.partner
     pbPokeRadarCancel
