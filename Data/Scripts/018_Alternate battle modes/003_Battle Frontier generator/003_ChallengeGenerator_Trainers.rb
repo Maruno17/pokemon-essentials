@@ -202,7 +202,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   yield(nil) if block_given?
   if trIndex < 0
     info = [newbttrainers, pbpokemonlist, [trfile],
-            trfile + "tr.txt", trfile + "pm.txt", !hasDefault]
+            trfile + "_trainers.txt", trfile + "_pkmn.txt", !hasDefault]
     trlists.push(info)
   end
   yield(nil) if block_given?

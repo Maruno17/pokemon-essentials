@@ -1527,7 +1527,7 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:FLOWERGIFT,
 Battle::AbilityEffects::DamageCalcFromTarget.add(:FLUFFY,
   proc { |ability, user, target, move, mults, baseDmg, type|
     mults[:final_damage_multiplier] *= 2 if move.calcType == :FIRE
-    mults[:final_damage_multiplier] /= 2 if move.pbContactMove?
+    mults[:final_damage_multiplier] /= 2 if move.pbContactMove?(user)
   }
 )
 
@@ -1711,11 +1711,11 @@ Battle::AbilityEffects::OnBeingHit.add(:ANGERPOINT,
 Battle::AbilityEffects::OnBeingHit.add(:COTTONDOWN,
   proc { |ability, user, target, move, battle|
     next if battle.allBattlers.none? { |b| b.pbCanLowerStatStage?(:DEFENSE, target) }
-    battle.pbShowAbilitySplash(battler)
+    battle.pbShowAbilitySplash(target)
     battle.allBattlers.each do |b|
       b.pbLowerStatStageByAbility(:SPEED, 1, target, false)
     end
-    battle.pbHideAbilitySplash(battler)
+    battle.pbHideAbilitySplash(target)
   }
 )
 
@@ -1972,7 +1972,7 @@ Battle::AbilityEffects::OnBeingHit.add(:RATTLED,
 
 Battle::AbilityEffects::OnBeingHit.add(:SANDSPIT,
   proc { |ability, user, target, move, battle|
-    battle.pbStartWeatherAbility(:Sandstorm, battler)
+    battle.pbStartWeatherAbility(:Sandstorm, target)
   }
 )
 
@@ -2907,7 +2907,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:NEUTRALIZINGGAS,
       # Truant - let b move on its first turn after Neutralizing Gas disappears
       b.effects[PBEffects::Truant] = false
       # Gorilla Tactics - end choice lock
-      if !hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
+      if !b.hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
         b.effects[PBEffects::ChoiceBand] = nil
       end
       # Illusion - end illusions
@@ -2977,12 +2977,12 @@ Battle::AbilityEffects::OnSwitchIn.add(:SANDSTREAM,
 
 Battle::AbilityEffects::OnSwitchIn.add(:SCREENCLEANER,
   proc { |ability, battler, battle, switch_in|
-    next if target.pbOwnSide.effects[PBEffects::AuroraVeil] == 0 &&
-            target.pbOwnSide.effects[PBEffects::LightScreen] == 0 &&
-            target.pbOwnSide.effects[PBEffects::Reflect] == 0 &&
-            target.pbOpposingSide.effects[PBEffects::AuroraVeil] == 0 &&
-            target.pbOpposingSide.effects[PBEffects::LightScreen] == 0 &&
-            target.pbOpposingSide.effects[PBEffects::Reflect] == 0
+    next if battler.pbOwnSide.effects[PBEffects::AuroraVeil] == 0 &&
+            battler.pbOwnSide.effects[PBEffects::LightScreen] == 0 &&
+            battler.pbOwnSide.effects[PBEffects::Reflect] == 0 &&
+            battler.pbOpposingSide.effects[PBEffects::AuroraVeil] == 0 &&
+            battler.pbOpposingSide.effects[PBEffects::LightScreen] == 0 &&
+            battler.pbOpposingSide.effects[PBEffects::Reflect] == 0
     battle.pbShowAbilitySplash(battler)
     if battler.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
       battler.pbOpposingSide.effects[PBEffects::AuroraVeil] = 0

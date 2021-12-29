@@ -380,7 +380,7 @@ def pbRuledBattle(team1, team2, rule)
     trainer2 = NPCTrainer.new("PLAYER2", t_type)
     items1 = []
     items2 = []
-    team1.each_with_index do |p, i|
+    team1.team.each_with_index do |p, i|
       next if !p
       if p.level != level
         p.level = level
@@ -389,7 +389,7 @@ def pbRuledBattle(team1, team2, rule)
       items1[i] = p.item_id
       trainer1.party.push(p)
     end
-    team2.each_with_index do |p, i|
+    team2.team.each_with_index do |p, i|
       next if !p
       if p.level != level
         p.level = level
@@ -404,12 +404,12 @@ def pbRuledBattle(team1, team2, rule)
     battle.controlPlayer = true
     battle.internalBattle = false
     decision = battle.pbStartBattle
-    team1.each_with_index do |p, i|
+    team1.team.each_with_index do |p, i|
       next if !p
       p.heal
       p.item = items1[i]
     end
-    team2.each_with_index do |p, i|
+    team2.team.each_with_index do |p, i|
       next if !p
       p.heal
       p.item = items2[i]
