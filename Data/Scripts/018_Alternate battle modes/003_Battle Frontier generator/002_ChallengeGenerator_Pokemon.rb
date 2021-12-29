@@ -40,7 +40,7 @@ end
 def pbRandomMove
   keys = GameData::Move.keys
   loop do
-    move_id = keys[keys.sample]
+    move_id = keys.sample
     move = GameData::Move.get(move_id)
     next if move.id == :SKETCH || move.id == :STRUGGLE
     return move.id
@@ -153,7 +153,7 @@ def pbRandomPokemonFromRule(rules, trainer)
     keys = GameData::Species.keys
     loop do
       loop do
-        species = keys[keys.sample]
+        species = keys.sample
         break if GameData::Species.get(species).form == 0
       end
       r = rand(20)
@@ -175,7 +175,7 @@ def pbRandomPokemonFromRule(rules, trainer)
     nature = nil
     keys = GameData::Nature.keys
     loop do
-      nature = keys[keys.sample]
+      nature = keys.sample
       nature_data = GameData::Nature.get(nature)
       if [:LAX, :GENTLE].include?(nature_data.id) || nature_data.stat_changes.length == 0
         next if rand(20) < 19
