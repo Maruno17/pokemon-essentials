@@ -62,21 +62,25 @@ class Battle
   # Choosing to Mega Evolve a battler
   #=============================================================================
   def pbHasMegaRing?(idxBattler)
-    return true if !pbOwnedByPlayer?(idxBattler)   # Assume AI trainer have a ring
-    Settings::MEGA_RINGS.each { |item| return true if $bag.has?(item) }
+    if pbOwnedByPlayer?(idxBattler)
+      @mega_rings.each { |item| return true if $bag.has?(item) }
+    else
+      trainer_items = pbGetOwnerItems(idxBattler)
+      return false if !trainer_items
+      @mega_rings.each { |item| return true if trainer_items.include?(item) }
+    end
     return false
   end
 
   def pbGetMegaRingName(idxBattler)
-    if pbOwnedByPlayer?(idxBattler)
-      Settings::MEGA_RINGS.each do |item|
-        return GameData::Item.get(item).name if $bag.has?(item)
+    if !@mega_rings.empty?
+      if pbOwnedByPlayer?(idxBattler)
+        @mega_rings.each { |item| return GameData::Item.get(item).name if $bag.has?(item) }
+      else
+        trainer_items = pbGetOwnerItems(idxBattler)
+        @mega_rings.each { |item| return GameData::Item.get(item).name if trainer_items&.include?(item) }
       end
     end
-    # NOTE: Add your own Mega objects for particular NPC trainers here.
-#    if pbGetOwnerFromBattlerIndex(idxBattler).trainer_type == :BUGCATCHER
-#      return _INTL("Mega Net")
-#    end
     return _INTL("Mega Ring")
   end
 

@@ -421,10 +421,8 @@ end
 def pbMoveTutorChoose(move, movelist = nil, bymachine = false, oneusemachine = false)
   ret = false
   move = GameData::Move.get(move).id
-  if movelist != nil && movelist.is_a?(Array)
-    movelist.length.times do |i|
-      movelist[i] = GameData::Move.get(movelist[i]).id
-    end
+  if movelist.is_a?(Array)
+    movelist.map! { |m| GameData::Move.get(m).id }
   end
   pbFadeOutIn {
     movename = GameData::Move.get(move).name

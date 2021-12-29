@@ -186,6 +186,9 @@ class PokemonMart_Scene
       @sprites["icon"].item = itemwindow.item
       @sprites["itemtextwindow"].text =
         (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
+      @sprites["qtywindow"].visible = !itemwindow.item.nil?
+      @sprites["qtywindow"].text    = _INTL("In Bag:<r>x{1}", @adapter.getQuantity(itemwindow.item))
+      @sprites["qtywindow"].y       = Graphics.height - 108 - @sprites["qtywindow"].height
       itemwindow.refresh
     end
     @sprites["moneywindow"].text = _INTL("Money:\r\n<r>{1}", @adapter.getMoneyString)
@@ -232,6 +235,16 @@ class PokemonMart_Scene
     @sprites["moneywindow"].height = 96
     @sprites["moneywindow"].baseColor = Color.new(88, 88, 80)
     @sprites["moneywindow"].shadowColor = Color.new(168, 184, 184)
+    @sprites["qtywindow"] = Window_AdvancedTextPokemon.new("")
+    pbPrepareWindow(@sprites["qtywindow"])
+    @sprites["qtywindow"].setSkin("Graphics/Windowskins/goldskin")
+    @sprites["qtywindow"].viewport = @viewport
+    @sprites["qtywindow"].width = 190
+    @sprites["qtywindow"].height = 64
+    @sprites["qtywindow"].baseColor = Color.new(88, 88, 80)
+    @sprites["qtywindow"].shadowColor = Color.new(168, 184, 184)
+    @sprites["qtywindow"].text = _INTL("In Bag:<r>x{1}", @adapter.getQuantity(@sprites["itemwindow"].item))
+    @sprites["qtywindow"].y    = Graphics.height - 108 - @sprites["qtywindow"].height
     pbDeactivateWindows(@sprites)
     @buying = buying
     pbRefresh
@@ -326,6 +339,16 @@ class PokemonMart_Scene
   def pbHideMoney
     pbRefresh
     @sprites["moneywindow"].visible = false
+  end
+
+  def pbShowQuantity
+    pbRefresh
+    @sprites["qtywindow"].visible = true
+  end
+
+  def pbHideQuantity
+    pbRefresh
+    @sprites["qtywindow"].visible = false
   end
 
   def pbDisplay(msg, brief = false)
@@ -490,11 +513,7 @@ class PokemonMart_Scene
         Input.update
         olditem = itemwindow.item
         self.update
-        if itemwindow.item != olditem
-          @sprites["icon"].item = itemwindow.item
-          @sprites["itemtextwindow"].text =
-            (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
-        end
+        pbRefresh if itemwindow.item != olditem
         if Input.trigger?(Input::BACK)
           pbPlayCloseMenuSE
           return nil

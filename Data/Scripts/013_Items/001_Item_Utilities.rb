@@ -638,23 +638,7 @@ end
 def pbUseItem(bag, item, bagscene = nil)
   itm = GameData::Item.get(item)
   useType = itm.field_use
-  if itm.is_machine?    # TM or TR or HM
-    if $player.pokemon_count == 0
-      pbMessage(_INTL("There is no Pokémon."))
-      return 0
-    end
-    machine = itm.move
-    return 0 if !machine
-    movename = GameData::Move.get(machine).name
-    pbMessage(_INTL("\\se[PC access]You booted up {1}.\1", itm.name))
-    if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?", movename))
-      return 0
-    elsif pbMoveTutorChoose(machine, nil, true, itm.is_TR?)
-      bag.remove(item) if itm.consumed_after_use?
-      return 1
-    end
-    return 0
-  elsif useType == 1   # Item is usable on a Pokémon
+  if useType == 1   # Item is usable on a Pokémon
     if $player.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
@@ -705,7 +689,7 @@ def pbUseItem(bag, item, bagscene = nil)
       bagscene&.pbRefresh
     }
     return (ret) ? 1 : 0
-  elsif useType == 2   # Item is usable from Bag
+  elsif useType == 2 || itm.is_machine?   # Item is usable from Bag or teaches a move
     intret = ItemHandlers.triggerUseFromBag(item)
     if intret >= 0
       bag.remove(item) if intret == 1 && itm.consumed_after_use?

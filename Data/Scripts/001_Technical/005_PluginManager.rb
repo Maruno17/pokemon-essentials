@@ -356,7 +356,7 @@ module PluginManager
     Graphics.update
     t = Thread.new do
       Console.echo_error "Plugin Error:\r\n#{msg}"
-      p "Plugin Error: #{msg}"
+      print("Plugin Error:\r\n#{msg}")
       Thread.exit
     end
     while t.status

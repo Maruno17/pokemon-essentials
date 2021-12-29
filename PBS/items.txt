@@ -1,4 +1,4 @@
-﻿# See the documentation on the wiki to learn how to edit this file.
+# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
 [REPEL]
 Name = Repel
@@ -5623,7 +5623,7 @@ Name = Mega Ring
 NamePlural = Mega Rings
 Pocket = 8
 Price = 0
-Flags = KeyItem
+Flags = KeyItem, MegaRing
 Description = This ring contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.
 #-------------------------------
 [POKEMONBOXLINK]
