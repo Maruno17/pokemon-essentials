@@ -9,7 +9,7 @@ $tmMoves         = nil   # Array of all moves teachable by a HM/TM/TR
 def pbBaseStatTotal(species)
   baseStats = GameData::Species.get(species).base_stats
   ret = 0
-  baseStats.each { |s| ret += s }
+  baseStats.each_value { |s| ret += s }
   return ret
 end
 
