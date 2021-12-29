@@ -32,7 +32,7 @@ class Battle::Move::Confusion < Battle::Move
     @category   = 0
     @accuracy   = 100
     @pp         = -1
-    @target     = 0
+    @target     = :User
     @priority   = 0
     @flags      = []
     @addlEffect = 0
@@ -61,7 +61,7 @@ class Battle::Move::Struggle < Battle::Move
     @category   = 0
     @accuracy   = 0
     @pp         = -1
-    @target     = 0
+    @target     = :NearOther
     @priority   = 0
     @flags      = ["Contact", "CanProtect"]
     @addlEffect = 0

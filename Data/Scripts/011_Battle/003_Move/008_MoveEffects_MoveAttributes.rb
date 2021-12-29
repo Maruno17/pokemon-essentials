@@ -1315,13 +1315,13 @@ end
 #===============================================================================
 class Battle::Move::TypeDependsOnUserIVs < Battle::Move
   def pbBaseType(user)
-    hp = pbHiddenPower(user)
+    hp = pbHiddenPower(user.pokemon)
     return hp[0]
   end
 
   def pbBaseDamage(baseDmg, user, target)
     return super if Settings::MECHANICS_GENERATION >= 6
-    hp = pbHiddenPower(user)
+    hp = pbHiddenPower(user.pokemon)
     return hp[1]
   end
 end

@@ -176,7 +176,7 @@ def pbGenerateChallenge(rule, tag)
   rule = rule.copy.setNumber(2)
   yield(nil)
   party = load_data(tag + ".rxdata") rescue []
-  teams = load_data(tag + "teams.rxdata") rescue []
+  teams = load_data(tag + "_teams.rxdata") rescue []
   if teams.length < 10
     btpokemon = pbGetBTPokemon(tag)
     if btpokemon && btpokemon.length != 0
@@ -218,7 +218,7 @@ def pbGenerateChallenge(rule, tag)
       end
       i += 1
     end
-    save_data(teams, tag + "teams.rxdata")
+    save_data(teams, tag + "_teams.rxdata")
     yield(nil)
     while teams.length < maxteams
       yield(nil) if teams.length % 10 == 0
@@ -256,7 +256,7 @@ def pbGenerateChallenge(rule, tag)
       end
     end
     teams.sort! { |a, b| b.rating <=> a.rating }
-    save_data(teams, tag + "teams.rxdata")
+    save_data(teams, tag + "_teams.rxdata")
   end
   party = []
   yield(nil)

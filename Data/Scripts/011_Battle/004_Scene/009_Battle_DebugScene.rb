@@ -22,19 +22,28 @@ class Battle::DebugSceneNoLogging
   # Called whenever a new round begins.
   def pbBeginCommandPhase; end
   def pbBeginAttackPhase; end
+  def pbBeginEndOfRoundPhase; end
   def pbShowOpponent(idxTrainer); end
   def pbDamageAnimation(battler, effectiveness = 0); end
   def pbCommonAnimation(animName, user = nil, target = nil); end
   def pbAnimation(moveID, user, targets, hitNum = 0); end
+  def pbHitAndHPLossAnimation(targets); end
+  def pbShowPartyLineup(side, fullAnim = false); end
+  def pbShowAbilitySplash(battler, delay = false, logTrigger = true); end
+  def pbReplaceAbilitySplash(battler); end
+  def pbHideAbilitySplash(battler); end
   def pbEndBattle(result); end
   def pbWildBattleSuccess; end
   def pbTrainerBattleSuccess; end
   def pbBattleArenaJudgment(b1, b2, r1, r2); end
   def pbBattleArenaBattlers(b1, b2); end
 
+  def pbUpdate(cw = nil); end
   def pbRefresh; end
+  def pbRefreshOne(idxBattler); end
 
   def pbDisplayMessage(msg, brief = false); end
+  alias pbDisplay pbDisplayMessage
   def pbDisplayPausedMessage(msg); end
   def pbDisplayConfirmMessage(msg); return true; end
   def pbShowCommands(msg, commands, defaultValue); return 0; end
@@ -45,6 +54,7 @@ class Battle::DebugSceneNoLogging
   def pbResetMoveIndex(idxBattler); end
 
   def pbHPChanged(battler, oldHP, showAnim = false); end
+  def pbChangePokemon(idxBattler, pkmn); end
   def pbFaintBattler(battler); end
   def pbEXPBar(battler, startExp, endExp, tempExp1, tempExp2); end
   def pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,

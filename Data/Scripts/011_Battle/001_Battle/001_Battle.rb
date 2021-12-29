@@ -346,7 +346,7 @@ class Battle
     count = 0
     eachInTeamFromBattlerIndex(idxBattler) do |pkmn, i|
       next if !pkmn || !pkmn.able?
-      next if inBattleIndices.include?(idxParty)
+      next if inBattleIndices.include?(i)
       count += 1
     end
     return count
