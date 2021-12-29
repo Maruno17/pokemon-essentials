@@ -108,7 +108,7 @@ class PokemonPauseMenu
       commands.push(option)
       name = MenuHandlers.get_string_option(:pause_menu, "name", option)
       display_cmd.push(name)
-      info = MenuHandlers.get_string_option(:info, "name", option)
+      info = MenuHandlers.get_string_option(:info, "info", option)
       @scene.pbShowInfo(info) if !nil_or_empty?(info) && option != info
     end
     loop do

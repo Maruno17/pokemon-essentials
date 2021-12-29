@@ -354,14 +354,14 @@ module MenuHandlers
     return (option_hash && option_hash[function]) ? option_hash[function] : nil
   end
 
-  def self.get_string_option(key, function, option, *args)
+  def self.get_string_option(key, function, option)
     return false if !@@handlers.has_key?(key)
     option_hash = @@handlers[key][option]
     return option if !option_hash || !option_hash[function]
     if option_hash[function].is_a?(Proc)
-      return option_hash[function].call(*args)
+      return option_hash[function].call
     elsif option_hash[function].is_a?(String)
-      return option_hash[function]
+      return _INTL(option_hash[function])
     end
     return option
   end
