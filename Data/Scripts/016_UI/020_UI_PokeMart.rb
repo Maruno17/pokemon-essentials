@@ -187,8 +187,8 @@ class PokemonMart_Scene
       @sprites["itemtextwindow"].text =
         (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
       @sprites["qtywindow"].visible = !itemwindow.item.nil?
-      @sprites["qtywindow"].text    = _INTL("In Bag:<r>x{1}", @adapter.getQuantity(itemwindow.item))
-      @sprites["qtywindow"].y       = Graphics.height - 108 - @sprites["qtywindow"].height
+      @sprites["qtywindow"].text    = _INTL("In Bag:<r>{1}", @adapter.getQuantity(itemwindow.item))
+      @sprites["qtywindow"].y       = Graphics.height - 102 - @sprites["qtywindow"].height
       itemwindow.refresh
     end
     @sprites["moneywindow"].text = _INTL("Money:\r\n<r>{1}", @adapter.getMoneyString)
@@ -243,8 +243,8 @@ class PokemonMart_Scene
     @sprites["qtywindow"].height = 64
     @sprites["qtywindow"].baseColor = Color.new(88, 88, 80)
     @sprites["qtywindow"].shadowColor = Color.new(168, 184, 184)
-    @sprites["qtywindow"].text = _INTL("In Bag:<r>x{1}", @adapter.getQuantity(@sprites["itemwindow"].item))
-    @sprites["qtywindow"].y    = Graphics.height - 108 - @sprites["qtywindow"].height
+    @sprites["qtywindow"].text = _INTL("In Bag:<r>{1}", @adapter.getQuantity(@sprites["itemwindow"].item))
+    @sprites["qtywindow"].y    = Graphics.height - 102 - @sprites["qtywindow"].height
     pbDeactivateWindows(@sprites)
     @buying = buying
     pbRefresh
@@ -439,66 +439,52 @@ class PokemonMart_Scene
     itemprice = @adapter.getPrice(item, !@buying)
     itemprice /= 2 if !@buying
     pbDisplay(helptext, true)
-    using(numwindow = Window_AdvancedTextPokemon.new("")) {   # Showing number of items
-      qty = @adapter.getQuantity(item)
-      using(inbagwindow = Window_AdvancedTextPokemon.new("")) {   # Showing quantity in bag
-        pbPrepareWindow(numwindow)
-        pbPrepareWindow(inbagwindow)
-        numwindow.viewport = @viewport
-        numwindow.width = 224
-        numwindow.height = 64
-        numwindow.baseColor = Color.new(88, 88, 80)
-        numwindow.shadowColor = Color.new(168, 184, 184)
-        inbagwindow.visible = @buying
-        inbagwindow.viewport = @viewport
-        inbagwindow.width = 190
-        inbagwindow.height = 64
-        inbagwindow.baseColor = Color.new(88, 88, 80)
-        inbagwindow.shadowColor = Color.new(168, 184, 184)
-        inbagwindow.text = _INTL("In Bag:<r>{1}  ", qty)
-        numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-        pbBottomRight(numwindow)
-        numwindow.y -= helpwindow.height
-        pbBottomLeft(inbagwindow)
-        inbagwindow.y -= helpwindow.height
-        loop do
-          Graphics.update
-          Input.update
-          numwindow.update
-          inbagwindow.update
-          self.update
-          if Input.repeat?(Input::LEFT)
-            pbPlayCursorSE
-            curnumber -= 10
-            curnumber = 1 if curnumber < 1
-            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-          elsif Input.repeat?(Input::RIGHT)
-            pbPlayCursorSE
-            curnumber += 10
-            curnumber = maximum if curnumber > maximum
-            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-          elsif Input.repeat?(Input::UP)
-            pbPlayCursorSE
-            curnumber += 1
-            curnumber = 1 if curnumber > maximum
-            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-          elsif Input.repeat?(Input::DOWN)
-            pbPlayCursorSE
-            curnumber -= 1
-            curnumber = maximum if curnumber < 1
-            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-          elsif Input.trigger?(Input::USE)
-            pbPlayDecisionSE
-            ret = curnumber
-            break
-          elsif Input.trigger?(Input::BACK)
-            pbPlayCancelSE
-            ret = 0
-            break
-          end
+    using(numwindow = Window_AdvancedTextPokemon.new("")) do   # Showing number of items
+      pbPrepareWindow(numwindow)
+      numwindow.viewport = @viewport
+      numwindow.width = 224
+      numwindow.height = 64
+      numwindow.baseColor = Color.new(88, 88, 80)
+      numwindow.shadowColor = Color.new(168, 184, 184)
+      numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+      pbBottomRight(numwindow)
+      numwindow.y -= helpwindow.height
+      loop do
+        Graphics.update
+        Input.update
+        numwindow.update
+        update
+        if Input.repeat?(Input::LEFT)
+          pbPlayCursorSE
+          curnumber -= 10
+          curnumber = 1 if curnumber < 1
+          numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+        elsif Input.repeat?(Input::RIGHT)
+          pbPlayCursorSE
+          curnumber += 10
+          curnumber = maximum if curnumber > maximum
+          numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+        elsif Input.repeat?(Input::UP)
+          pbPlayCursorSE
+          curnumber += 1
+          curnumber = 1 if curnumber > maximum
+          numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+        elsif Input.repeat?(Input::DOWN)
+          pbPlayCursorSE
+          curnumber -= 1
+          curnumber = maximum if curnumber < 1
+          numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+        elsif Input.trigger?(Input::USE)
+          pbPlayDecisionSE
+          ret = curnumber
+          break
+        elsif Input.trigger?(Input::BACK)
+          pbPlayCancelSE
+          ret = 0
+          break
         end
-      }
-    }
+      end
+    end
     helpwindow.visible = false
     return ret
   end

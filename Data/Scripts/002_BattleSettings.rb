@@ -65,9 +65,6 @@ module Settings
 
   #=============================================================================
 
-  # An array of items which act as Mega Rings for the player (NPCs don't need a
-  # Mega Ring item, just a Mega Stone held by their Pokémon).
-  MEGA_RINGS        = [:MEGARING, :MEGABRACELET, :MEGACUFF, :MEGACHARM]
   # The Game Switch which, while ON, prevents all Pokémon in battle from Mega
   # Evolving even if they otherwise could.
   NO_MEGA_EVOLUTION = 34
