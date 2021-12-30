@@ -595,15 +595,16 @@ class PokemonMartScreen
         )
         next if quantity == 0
         price *= quantity
-        if quantity > 1 &&
-           !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
-                            quantity, itemnameplural, price.to_s_formatted))
-          next
-        end
-        if quantity > 0 &&
-           !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
-                            quantity, itemname, price.to_s_formatted))
-          next
+        if quantity > 1
+          if !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
+                              quantity, itemnameplural, price.to_s_formatted))
+            next
+          end
+        elsif quantity > 0
+          if !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
+                              quantity, itemname, price.to_s_formatted))
+            next
+          end
         end
       end
       if @adapter.getMoney < price
