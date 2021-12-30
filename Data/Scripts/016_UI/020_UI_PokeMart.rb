@@ -687,8 +687,13 @@ class PokemonMartScreen
         qty.times do
           @adapter.removeItem(item)
         end
-        pbDisplayPaused(_INTL("You turned over the {1} and got ${2}.",
-                              itemname, price.to_s_formatted)) { pbSEPlay("Mart buy item") }
+        if qty > 1
+          pbDisplayPaused(_INTL("You turned over the {1} and got ${2}.",
+                                itemnameplural, price.to_s_formatted)) { pbSEPlay("Mart buy item") }
+        elsif qty > 0
+          pbDisplayPaused(_INTL("You turned over the {1} and got ${2}.",
+                                itemname, price.to_s_formatted)) { pbSEPlay("Mart buy item") }
+        end
         @scene.pbRefresh
       end
       @scene.pbHideMoney
