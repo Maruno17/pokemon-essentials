@@ -599,7 +599,8 @@ class PokemonMartScreen
            !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
                             quantity, itemnameplural, price.to_s_formatted))
           next
-        elsif quantity > 0 &&
+        end
+        if quantity > 0 &&
            !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
                             quantity, itemname, price.to_s_formatted))
           next
