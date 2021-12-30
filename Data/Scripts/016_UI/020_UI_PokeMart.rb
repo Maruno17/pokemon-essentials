@@ -599,8 +599,7 @@ class PokemonMartScreen
            !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
                             quantity, itemnameplural, price.to_s_formatted))
           next
-        end
-        if quantity > 0 &&
+        elsif quantity > 0 &&
            !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
                             quantity, itemname, price.to_s_formatted))
           next
@@ -631,8 +630,7 @@ class PokemonMartScreen
             $stats.premier_balls_earned += premier_balls_added
             if premier_balls_added > 1
               pbDisplayPaused(_INTL("And have {1} {2} on the house!", premier_balls_added, GameData::Item.get(:PREMIERBALL).name_plural))
-            end
-            if premier_balls_added > 0
+            elsif premier_balls_added > 0
               pbDisplayPaused(_INTL("And have {1} {2} on the house!", premier_balls_added, GameData::Item.get(:PREMIERBALL).name))
             end
           elsif !Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item) == :POKEBALL
