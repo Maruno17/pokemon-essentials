@@ -633,7 +633,7 @@ class PokemonMartScreen
             if premier_balls_added > 1
               pbDisplayPaused(_INTL("And have {1} {2} on the house!", premier_balls_added, GameData::Item.get(:PREMIERBALL).name_plural))
             elsif premier_balls_added > 0
-              pbDisplayPaused(_INTL("And have {1} {2} on the house!", premier_balls_added, GameData::Item.get(:PREMIERBALL).name))
+              pbDisplayPaused(_INTL("And have 1 {1} on the house!", GameData::Item.get(:PREMIERBALL).name))
             end
           elsif !Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item) == :POKEBALL
             if @adapter.addItem(GameData::Item.get(:PREMIERBALL))
