@@ -156,7 +156,7 @@ class Scene_Map
     @spritesetGlobal.update
     pbDayNightTint(@map_renderer)
     @map_renderer.update
-    Events.onMapUpdate.trigger(self)
+    EventHandlers.trigger(:on_frame_update)
   end
 
   def update
@@ -214,7 +214,7 @@ class Scene_Map
       elsif $game_temp.interact_calling
         $game_temp.interact_calling = false
         $game_player.straighten
-        Events.onAction.trigger(self)
+        EventHandlers.trigger(:on_player_interact)
       end
     end
   end

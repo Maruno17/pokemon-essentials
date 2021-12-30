@@ -60,7 +60,38 @@ class Event
 end
 
 #===============================================================================
-#
+# Same as class Event, but each registered proc has a name (a symbol) so it can
+# be referenced individually.
+#===============================================================================
+class NamedEvent
+  def initialize
+    @callbacks = {}
+  end
+
+  # Adds an event handler procedure from the event.
+  def add(key, proc)
+    @callbacks[key] = proc if !@callbacks.has_key?(key)
+  end
+
+  # Removes an event handler procedure from the event.
+  def remove(key)
+    @callbacks.delete(key)
+  end
+
+  # Clears the event of event handlers.
+  def clear
+    @callbacks.clear
+  end
+
+  # Triggers the event and calls all its event handlers. Normally called only
+  # by the code where the event occurred.
+  def trigger(*args)
+    @callbacks.each_value { |callback| callback.call(*args) }
+  end
+end
+
+#===============================================================================
+# Unused.
 #===============================================================================
 class HandlerHash
   def initialize(mod)
@@ -144,7 +175,8 @@ end
 
 #===============================================================================
 # A stripped-down version of class HandlerHash which only deals with symbols and
-# doesn't care about whether those symbols actually relate to a defined thing.
+# doesn't care about whether those symbols are defined as constants in a class
+# or module.
 #===============================================================================
 class HandlerHash2
   def initialize

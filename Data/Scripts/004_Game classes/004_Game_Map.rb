@@ -57,7 +57,7 @@ class Game_Map
     self.display_x        = 0
     self.display_y        = 0
     @need_refresh         = false
-    Events.onMapCreate.trigger(self, map_id, @map, tileset)
+    EventHandlers.trigger(:on_game_map_setup, map_id, @map, tileset)
     @events               = {}
     @map.events.keys.each do |i|
       @events[i]          = Game_Event.new(@map_id, @map.events[i], self)

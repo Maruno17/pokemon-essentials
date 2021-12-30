@@ -55,9 +55,11 @@ end
 
 
 
-Events.onMapChange += proc { |_sender, *args|
-  pbSafariState.pbEnd if !pbInSafari?
-}
+EventHandlers.add(:on_enter_map, :end_safari_game,
+  proc { |_old_map_id|
+    pbSafariState.pbEnd if !pbInSafari?
+  }
+)
 
 def pbInSafari?
   if pbSafariState.inProgress?
@@ -75,29 +77,32 @@ def pbSafariState
   return $PokemonGlobal.safariState
 end
 
-Events.onStepTakenTransferPossible += proc { |_sender, e|
-  handled = e[0]
-  next if handled[0]
-  if pbInSafari? && pbSafariState.decision == 0 && Settings::SAFARI_STEPS > 0
+EventHandlers.add(:on_player_step_taken_can_transfer, :safari_game_counter,
+  proc { |handled|
+    # handled is an array: [nil]. If [true], a message has already been shown
+    # because of this step, so don't do anything that might show another one
+    next if handled[0]
+    next if Settings::SAFARI_STEPS == 0 || !pbInSafari? || pbSafariState.decision != 0
     pbSafariState.steps -= 1
-    if pbSafariState.steps <= 0
-      pbMessage(_INTL("PA:  Ding-dong!\1"))
-      pbMessage(_INTL("PA:  Your safari game is over!"))
-      pbSafariState.decision = 1
-      pbSafariState.pbGoToStart
-      handled[0] = true
-    end
-  end
-}
+    next if pbSafariState.steps > 0
+    pbMessage(_INTL("PA: Ding-dong!\1"))
+    pbMessage(_INTL("PA: Your safari game is over!"))
+    pbSafariState.decision = 1
+    pbSafariState.pbGoToStart
+    handled[0] = true
+  }
+)
 
-Events.onWildBattleOverride += proc { |_sender, e|
-  species = e[0]
-  level   = e[1]
-  handled = e[2]
-  next if handled[0] != nil
-  next if !pbInSafari?
-  handled[0] = pbSafariBattle(species, level)
-}
+EventHandlers.add(:on_calling_wild_battle, :safari_battle,
+  proc { |species, level, handled|
+    # handled is an array: [nil]. If [true] or [false], the battle has already
+    # been overridden (the boolean is its outcome), so don't do anything that
+    # would override it again
+    next if !handled[0].nil?
+    next if !pbInSafari?
+    handled[0] = pbSafariBattle(species, level)
+  }
+)
 
 def pbSafariBattle(species, level)
   # Generate a wild Pokémon based on the species and level
@@ -140,7 +145,7 @@ def pbSafariBattle(species, level)
   end
   pbSet(1, decision)
   # Used by the Poké Radar to update/break the chain
-  Events.onWildBattleEnd.trigger(nil, species, level, decision)
+  EventHandlers.trigger(:on_wild_battle_end, species, level, decision)
   # Return the outcome of the battle
   return decision
 end

@@ -141,7 +141,7 @@ class Game_Player < Game_Character
     old_direction = @direction
     super(dir)
     if @direction != old_direction && !@move_route_forcing && !pbMapInterpreterRunning?
-      Events.onChangeDirection.trigger(self, self)
+      EventHandlers.trigger(:on_player_change_direction)
       $game_temp.encounter_triggered = false if !keep_enc_indicator
     end
   end

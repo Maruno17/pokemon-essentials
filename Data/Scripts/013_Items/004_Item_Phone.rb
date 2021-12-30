@@ -131,47 +131,48 @@ end
 #===============================================================================
 # Phone-related counters
 #===============================================================================
-Events.onMapUpdate += proc { |_sender, _e|
-  next if !$player || !$player.has_pokegear
-  # Reset time to next phone call if necessary
-  if !$PokemonGlobal.phoneTime || $PokemonGlobal.phoneTime <= 0
-    $PokemonGlobal.phoneTime = 20 * 60 * Graphics.frame_rate
-    $PokemonGlobal.phoneTime += rand(20 * 60 * Graphics.frame_rate)
-  end
-  # Don't count down various phone times if other things are happening
-  $PokemonGlobal.phoneNumbers = [] if !$PokemonGlobal.phoneNumbers
-  next if $game_temp.in_menu || $game_temp.in_battle || $game_temp.message_window_showing
-  next if $game_player.move_route_forcing || pbMapInterpreterRunning?
-  # Count down time to next phone call
-  $PokemonGlobal.phoneTime -= 1
-  # Count down time to next can-battle for each trainer contact
-  if $PokemonGlobal.phoneTime % Graphics.frame_rate == 0   # Every second
-    $PokemonGlobal.phoneNumbers.each do |num|
-      next if !num[0] || num.length != 8   # if not visible or not a trainer
-      # Reset time to next can-battle if necessary
-      if num[4] == 0
-        num[3] = rand(20...40) * 60   # 20-40 minutes
-        num[4] = 1
-      end
-      # Count down time to next can-battle
-      num[3] -= 1
-      # Ready to battle
-      if num[3] <= 0 && num[4] == 1
-        num[4] = 2   # set ready-to-battle flag
-        pbSetReadyToBattle(num)
+EventHandlers.add(:on_frame_update, :phone_call_counter,
+  proc {
+    next if !$player&.has_pokegear
+    # Reset time to next phone call if necessary
+    if !$PokemonGlobal.phoneTime || $PokemonGlobal.phoneTime <= 0
+      $PokemonGlobal.phoneTime = rand(20...40) * 60 * Graphics.frame_rate
+    end
+    # Don't count down various phone times if other things are happening
+    $PokemonGlobal.phoneNumbers = [] if !$PokemonGlobal.phoneNumbers
+    next if $game_temp.in_menu || $game_temp.in_battle || $game_temp.message_window_showing
+    next if $game_player.move_route_forcing || pbMapInterpreterRunning?
+    # Count down time to next phone call
+    $PokemonGlobal.phoneTime -= 1
+    # Count down time to next can-battle for each trainer contact
+    if $PokemonGlobal.phoneTime % Graphics.frame_rate == 0   # Every second
+      $PokemonGlobal.phoneNumbers.each do |num|
+        next if !num[0] || num.length != 8   # if not visible or not a trainer
+        # Reset time to next can-battle if necessary
+        if num[4] == 0
+          num[3] = rand(20...40) * 60   # 20-40 minutes
+          num[4] = 1
+        end
+        # Count down time to next can-battle
+        num[3] -= 1
+        # Ready to battle
+        if num[3] <= 0 && num[4] == 1
+          num[4] = 2   # set ready-to-battle flag
+          pbSetReadyToBattle(num)
+        end
       end
     end
-  end
-  # Time for a random phone call; generate one
-  if $PokemonGlobal.phoneTime <= 0
-    # find all trainer phone numbers
-    phonenum = pbRandomPhoneTrainer
-    if phonenum
-      call = pbPhoneGenerateCall(phonenum)
-      pbPhoneCall(call, phonenum)
+    # Time for a random phone call; generate one
+    if $PokemonGlobal.phoneTime <= 0
+      # find all trainer phone numbers
+      phonenum = pbRandomPhoneTrainer
+      if phonenum
+        call = pbPhoneGenerateCall(phonenum)
+        pbPhoneCall(call, phonenum)
+      end
     end
-  end
-}
+  }
+)
 
 #===============================================================================
 # Player calls a contact

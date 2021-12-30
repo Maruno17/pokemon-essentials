@@ -382,7 +382,7 @@ class Game_Character
   def triggerLeaveTile
     if @oldX && @oldY && @oldMap &&
        (@oldX != self.x || @oldY != self.y || @oldMap != self.map.map_id)
-      Events.onLeaveTile.trigger(self, self, @oldMap, @oldX, @oldY)
+      EventHandlers.trigger(:on_leave_tile, self, @oldMap, @oldX, @oldY)
     end
     @oldX = self.x
     @oldY = self.y
@@ -918,7 +918,7 @@ class Game_Character
     end
     # End of a step, so perform events that happen at this time
     if !jumping? && !moving?
-      Events.onStepTakenFieldMovement.trigger(self, self)
+      EventHandlers.trigger(:on_step_taken, self)
       calculate_bush_depth
       @stopped_this_frame = true
     elsif !@moved_last_frame || @stopped_last_frame   # Started a new step

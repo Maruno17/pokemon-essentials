@@ -286,36 +286,40 @@ def pbBugContestDecided?
   return pbBugContestState.decided?
 end
 
-Events.onMapChange += proc { |_sender, _e|
-  pbBugContestState.pbClearIfEnded
-}
+EventHandlers.add(:on_enter_map, :end_bug_contest,
+  proc { |_old_map_id|
+    pbBugContestState.pbClearIfEnded
+  }
+)
 
-Events.onMapSceneChange += proc { |_sender, e|
-  scene = e[0]
-  if pbInBugContest? && pbBugContestState.decision == 0 && BugContestState::TIME_ALLOWED > 0
+EventHandlers.add(:on_map_or_spriteset_change, :show_bug_contest_timer,
+  proc { |scene, _map_changed|
+    next if !pbInBugContest? || pbBugContestState.decision != 0 || BugContestState::TIME_ALLOWED == 0
     scene.spriteset.addUserSprite(
       TimerDisplay.new(pbBugContestState.timer,
                        BugContestState::TIME_ALLOWED * Graphics.frame_rate)
     )
-  end
-}
+  }
+)
 
-Events.onMapUpdate += proc { |_sender, _e|
-  if !$game_player.move_route_forcing && !pbMapInterpreterRunning? &&
-     !$game_temp.message_window_showing && pbBugContestState.expired?
-    pbMessage(_INTL("ANNOUNCER:  BEEEEEP!"))
+EventHandlers.add(:on_frame_update, :bug_contest_counter,
+  proc {
+    next if !pbBugContestState.expired?
+    next if $game_player.move_route_forcing || pbMapInterpreterRunning? ||
+            $game_temp.message_window_showing
+    pbMessage(_INTL("ANNOUNCER: BEEEEEP!"))
     pbMessage(_INTL("Time's up!"))
     pbBugContestState.pbStartJudging
-  end
-}
+  }
+)
 
-Events.onMapChanging += proc { |_sender, e|
-  newmapID = e[0]
-  if pbInBugContest? && pbBugContestState.pbOffLimits?(newmapID)
+EventHandlers.add(:on_leave_map, :end_bug_contest,
+  proc { |new_map_id, new_map|
+    next if !pbInBugContest? || !pbBugContestState.pbOffLimits?(new_map_id)
     # Clear bug contest if player flies/warps/teleports out of the contest
     pbBugContestState.pbEnd(true)
-  end
-}
+  }
+)
 
 def pbBugContestStartOver
   $player.party.each do |pkmn|
@@ -326,19 +330,21 @@ def pbBugContestStartOver
   pbBugContestState.pbStartJudging
 end
 
-Events.onWildBattleOverride += proc { |_sender, e|
-  species = e[0]
-  level   = e[1]
-  handled = e[2]
-  next if handled[0] != nil
-  next if !pbInBugContest?
-  handled[0] = pbBugContestBattle(species, level)
-}
+EventHandlers.add(:on_calling_wild_battle, :bug_contest_battle,
+  proc { |species, level, handled|
+    # handled is an array: [nil]. If [true] or [false], the battle has already
+    # been overridden (the boolean is its outcome), so don't do anything that
+    # would override it again
+    next if !handled[0].nil?
+    next if !pbInBugContest?
+    handled[0] = pbBugContestBattle(species, level)
+  }
+)
 
 def pbBugContestBattle(species, level)
   # Record information about party Pokémon to be used at the end of battle (e.g.
   # comparing levels for an evolution check)
-  Events.onStartBattle.trigger(nil)
+  EventHandlers.trigger(:on_start_battle)
   # Generate a wild Pokémon based on the species and level
   pkmn = pbGenerateWildPokemon(species, level)
   foeParty = [pkmn]
@@ -387,7 +393,7 @@ def pbBugContestBattle(species, level)
   end
   pbSet(1, decision)
   # Used by the Poké Radar to update/break the chain
-  Events.onWildBattleEnd.trigger(nil, species, level, decision)
+  EventHandlers.trigger(:on_wild_battle_end, species, level, decision)
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision != 2 && decision != 5)
 end

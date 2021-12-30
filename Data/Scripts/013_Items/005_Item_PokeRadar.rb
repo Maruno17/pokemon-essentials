@@ -151,90 +151,102 @@ end
 ################################################################################
 # Event handlers
 ################################################################################
-EncounterModifier.register(proc { |encounter|
-  if GameData::EncounterType.get($game_temp.encounter_type).type != :land ||
-     $PokemonGlobal.bicycle || $PokemonGlobal.partner
-    pbPokeRadarCancel
-    next encounter
-  end
-  ring = pbPokeRadarGetShakingGrass
-  if ring >= 0   # Encounter triggered by stepping into rustling grass
-    # Get rarity of shaking grass
-    rarity = 0   # 0 = rustle, 1 = vigorous rustle, 2 = shiny rustle
-    $game_temp.poke_radar_data[3].each { |g| rarity = g[3] if g[2] == ring }
-    if $game_temp.poke_radar_data[2] > 0   # Chain count, i.e. is chaining
-      if rarity == 2 ||
-         rand(100) < 58 + (ring * 10) + ([$game_temp.poke_radar_data[2], 40].min / 4) + ($game_temp.poke_radar_data[4] ? 10 : 0)
-        # Continue the chain
-        encounter = [$game_temp.poke_radar_data[0], $game_temp.poke_radar_data[1]]
-        $game_temp.force_single_battle = true
-      else
-        # Break the chain, force an encounter with a different species
-        100.times do
-          break if encounter && encounter[0] != $game_temp.poke_radar_data[0]
-          encounter = $PokemonEncounters.choose_wild_pokemon($PokemonEncounters.encounter_type)
-        end
-        if encounter[0] == $game_temp.poke_radar_data[0] && encounter[1] == $game_temp.poke_radar_data[1]
-          # Chain couldn't be broken somehow; continue it after all
+EventHandlers.add(:on_wild_species_chosen, :poke_radar_chain,
+  proc { |encounter|
+    if GameData::EncounterType.get($game_temp.encounter_type).type != :land ||
+       $PokemonGlobal.bicycle || $PokemonGlobal.partner
+      pbPokeRadarCancel
+      next
+    end
+    ring = pbPokeRadarGetShakingGrass
+    if ring >= 0   # Encounter triggered by stepping into rustling grass
+      # Get rarity of shaking grass
+      rarity = 0   # 0 = rustle, 1 = vigorous rustle, 2 = shiny rustle
+      $game_temp.poke_radar_data[3].each { |g| rarity = g[3] if g[2] == ring }
+      if $game_temp.poke_radar_data[2] > 0   # Chain count, i.e. is chaining
+        chain_chance = 58 + (ring * 10)
+        chain_chance += [$game_temp.poke_radar_data[2], 40].min / 4   # Chain length
+        chain_chance += 10 if $game_temp.poke_radar_data[4]   # Previous in chain was caught
+        if rarity == 2 || rand(100) < chain_chance
+          # Continue the chain
+          encounter[0] = $game_temp.poke_radar_data[0]   # Species
+          encounter[1] = $game_temp.poke_radar_data[1]   # Level
           $game_temp.force_single_battle = true
         else
-          pbPokeRadarCancel
+          # Break the chain, force an encounter with a different species
+          100.times do
+            break if encounter && encounter[0] != $game_temp.poke_radar_data[0]
+            new_encounter = $PokemonEncounters.choose_wild_pokemon($PokemonEncounters.encounter_type)
+            encounter[0] = new_encounter[0]
+            encounter[1] = new_encounter[1]
+          end
+          if encounter[0] == $game_temp.poke_radar_data[0] && encounter[1] == $game_temp.poke_radar_data[1]
+            # Chain couldn't be broken somehow; continue it after all
+            $game_temp.force_single_battle = true
+          else
+            pbPokeRadarCancel
+          end
         end
+      else   # Not chaining; will start one
+        # Force random wild encounter, vigorous shaking means rarer species
+        new_encounter = pbPokeRadarGetEncounter(rarity)
+        encounter[0] = new_encounter[0]
+        encounter[1] = new_encounter[1]
+        $game_temp.force_single_battle = true
       end
-    else   # Not chaining; will start one
-      # Force random wild encounter, vigorous shaking means rarer species
-      encounter = pbPokeRadarGetEncounter(rarity)
-      $game_temp.force_single_battle = true
+    elsif encounter   # Encounter triggered by stepping in non-rustling grass
+      pbPokeRadarCancel
     end
-  elsif encounter   # Encounter triggered by stepping in non-rustling grass
+  }
+)
+
+EventHandlers.add(:on_wild_pokemon_created, :poke_radar_shiny,
+  proc { |pkmn|
+    next if !$game_temp.poke_radar_data
+    grasses = $game_temp.poke_radar_data[3]
+    next if !grasses
+    grasses.each do |grass|
+      next if $game_player.x != grass[0] || $game_player.y != grass[1]
+      pkmn.shiny = true if grass[3] == 2
+      break
+    end
+  }
+)
+
+EventHandlers.add(:on_wild_battle_end, :poke_radar_continue_chain,
+  proc { |species, level, decision|
+    if $game_temp.poke_radar_data && [1, 4].include?(decision)   # Defeated/caught
+      $game_temp.poke_radar_data[0] = species
+      $game_temp.poke_radar_data[1] = level
+      $game_temp.poke_radar_data[2] += 1
+      $stats.poke_radar_longest_chain = [$game_temp.poke_radar_data[2], $stats.poke_radar_longest_chain].max
+      # Catching makes the next Radar encounter more likely to continue the chain
+      $game_temp.poke_radar_data[4] = (decision == 4)
+      pbPokeRadarHighlightGrass(false)
+    else
+      pbPokeRadarCancel
+    end
+  }
+)
+
+EventHandlers.add(:on_player_step_taken, :poke_radar,
+  proc {
+    if $PokemonGlobal.pokeradarBattery && $PokemonGlobal.pokeradarBattery > 0 &&
+       !$game_temp.poke_radar_data
+      $PokemonGlobal.pokeradarBattery -= 1
+    end
+    terrain = $game_map.terrain_tag($game_player.x, $game_player.y)
+    if !terrain.land_wild_encounters || !terrain.shows_grass_rustle
+      pbPokeRadarCancel
+    end
+  }
+)
+
+EventHandlers.add(:on_enter_map, :cancel_poke_radar,
+  proc { |_old_map_id|
     pbPokeRadarCancel
-  end
-  next encounter
-})
-
-Events.onWildPokemonCreate += proc { |_sender, e|
-  pokemon = e[0]
-  next if !$game_temp.poke_radar_data
-  grasses = $game_temp.poke_radar_data[3]
-  next if !grasses
-  grasses.each do |grass|
-    next if $game_player.x != grass[0] || $game_player.y != grass[1]
-    pokemon.shiny = true if grass[3] == 2
-    break
-  end
-}
-
-Events.onWildBattleEnd += proc { |_sender, e|
-  species  = e[0]
-  level    = e[1]
-  decision = e[2]
-  if $game_temp.poke_radar_data && [1, 4].include?(decision)   # Defeated/caught
-    $game_temp.poke_radar_data[0] = species
-    $game_temp.poke_radar_data[1] = level
-    $game_temp.poke_radar_data[2] += 1
-    $stats.poke_radar_longest_chain = [$game_temp.poke_radar_data[2], $stats.poke_radar_longest_chain].max
-    # Catching makes the next Radar encounter more likely to continue the chain
-    $game_temp.poke_radar_data[4] = (decision == 4)
-    pbPokeRadarHighlightGrass(false)
-  else
-    pbPokeRadarCancel
-  end
-}
-
-Events.onStepTaken += proc { |_sender, _e|
-  if $PokemonGlobal.pokeradarBattery && $PokemonGlobal.pokeradarBattery > 0 &&
-     !$game_temp.poke_radar_data
-    $PokemonGlobal.pokeradarBattery -= 1
-  end
-  terrain = $game_map.terrain_tag($game_player.x, $game_player.y)
-  if !terrain.land_wild_encounters || !terrain.shows_grass_rustle
-    pbPokeRadarCancel
-  end
-}
-
-Events.onMapChange += proc { |_sender, _e|
-  pbPokeRadarCancel
-}
+  }
+)
 
 ################################################################################
 # Item handlers

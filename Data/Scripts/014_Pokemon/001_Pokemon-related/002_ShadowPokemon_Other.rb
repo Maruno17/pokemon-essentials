@@ -396,39 +396,43 @@ end
 
 # Record current heart gauges of Pokémon in party, to see if they drop to zero
 # during battle and need to say they're ready to be purified afterwards
-Events.onStartBattle += proc { |_sender|
-  $game_temp.party_heart_gauges_before_battle = []
-  $player.party.each_with_index do |pkmn, i|
-    $game_temp.party_heart_gauges_before_battle[i] = pkmn.heart_gauge
-  end
-}
-
-Events.onEndBattle += proc { |_sender, _e|
-  $game_temp.party_heart_gauges_before_battle.each_with_index do |value, i|
-    pkmn = $player.party[i]
-    next if !pkmn || !value || value == 0
-    pkmn.check_ready_to_purify if pkmn.heart_gauge == 0
-  end
-}
-
-Events.onStepTaken += proc {
-  $player.able_party.each do |pkmn|
-    next if pkmn.heart_gauge == 0
-    pkmn.heart_gauge_step_counter = 0 if !pkmn.heart_gauge_step_counter
-    pkmn.heart_gauge_step_counter += 1
-    if pkmn.heart_gauge_step_counter >= 256
-      old_stage = pkmn.heartStage
-      pkmn.change_heart_gauge("walking")
-      new_stage = pkmn.heartStage
-      if new_stage == 0
-        pkmn.check_ready_to_purify
-      elsif new_stage != old_stage
-        pkmn.update_shadow_moves
-      end
-      pkmn.heart_gauge_step_counter = 0
+EventHandlers.add(:on_start_battle, :record_party_heart_gauges,
+  proc {
+    $game_temp.party_heart_gauges_before_battle = []
+    $player.party.each_with_index do |pkmn, i|
+      $game_temp.party_heart_gauges_before_battle[i] = pkmn.heart_gauge
     end
-  end
-  if ($PokemonGlobal.purifyChamber rescue nil)
-    $PokemonGlobal.purifyChamber.update
-  end
-}
+  }
+)
+
+EventHandlers.add(:on_end_battle, :check_ready_to_purify,
+  proc { |_decision, _canLose|
+    $game_temp.party_heart_gauges_before_battle.each_with_index do |value, i|
+      pkmn = $player.party[i]
+      next if !pkmn || !value || value == 0
+      pkmn.check_ready_to_purify if pkmn.heart_gauge == 0
+    end
+  }
+)
+
+EventHandlers.add(:on_player_step_taken, :lower_heart_gauges,
+  proc {
+    $player.able_party.each do |pkmn|
+      next if pkmn.heart_gauge == 0
+      pkmn.heart_gauge_step_counter = 0 if !pkmn.heart_gauge_step_counter
+      pkmn.heart_gauge_step_counter += 1
+      if pkmn.heart_gauge_step_counter >= 256
+        old_stage = pkmn.heartStage
+        pkmn.change_heart_gauge("walking")
+        new_stage = pkmn.heartStage
+        if new_stage == 0
+          pkmn.check_ready_to_purify
+        elsif new_stage != old_stage
+          pkmn.update_shadow_moves
+        end
+        pkmn.heart_gauge_step_counter = 0
+      end
+    end
+    $PokemonGlobal.purifyChamber&.update
+  }
+)

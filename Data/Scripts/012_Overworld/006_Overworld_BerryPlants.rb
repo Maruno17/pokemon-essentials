@@ -290,16 +290,16 @@ end
 #===============================================================================
 #
 #===============================================================================
-Events.onSpritesetCreate += proc { |_sender, e|
-  spriteset = e[0]
-  viewport  = e[1]
-  map = spriteset.map
-  map.events.each do |event|
-    next if !event[1].name[/berryplant/i]
-    spriteset.addUserSprite(BerryPlantMoistureSprite.new(event[1], map, viewport))
-    spriteset.addUserSprite(BerryPlantSprite.new(event[1], map, viewport))
-  end
-}
+EventHandlers.add(:on_new_spriteset_map, :add_berry_plant_graphics,
+  proc { |spriteset, viewport|
+    map = spriteset.map
+    map.events.each do |event|
+      next if !event[1].name[/berryplant/i]
+      spriteset.addUserSprite(BerryPlantMoistureSprite.new(event[1], map, viewport))
+      spriteset.addUserSprite(BerryPlantSprite.new(event[1], map, viewport))
+    end
+  }
+)
 
 #===============================================================================
 #

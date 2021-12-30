@@ -9,7 +9,7 @@ class Game_Temp
   attr_accessor :menu_calling             # menu calling flag
   attr_accessor :ready_menu_calling       # ready menu calling flag
   attr_accessor :debug_calling            # debug calling flag
-  attr_accessor :interact_calling         # trigger Events.onAction flag
+  attr_accessor :interact_calling         # EventHandlers.trigger(:on_player_interact) flag
   attr_accessor :battle_abort             # battle flag: interrupt (unused)
   attr_accessor :title_screen_calling     # return to title screen flag
   attr_accessor :common_event_id          # common event ID to start
