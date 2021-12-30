@@ -22,6 +22,10 @@ class PokemonMartAdapter
     return GameData::Item.get(item).name
   end
 
+  def getNamePlural(item)
+    return GameData::Item.get(item).name_plural
+  end
+
   def getDisplayName(item)
     item_name = getName(item)
     if GameData::Item.get(item).is_machine?
@@ -29,6 +33,15 @@ class PokemonMartAdapter
       item_name = _INTL("{1} {2}", item_name, GameData::Move.get(machine).name)
     end
     return item_name
+  end
+
+  def getDisplayNamePlural(item)
+    item_name_plural = getNamePlural(item)
+    if GameData::Item.get(item).is_machine?
+      machine = GameData::Item.get(item).move
+      item_name_plural = _INTL("{1} {2}", item_name_plural, GameData::Move.get(machine).name)
+    end
+    return item_name_plural
   end
 
   def getDescription(item)
@@ -94,6 +107,10 @@ class BuyAdapter
     @adapter.getDisplayName(item)
   end
 
+  def getDisplayNamePlural(item)
+    @adapter.getDisplayNamePlural(item)
+  end
+
   def getDisplayPrice(item)
     @adapter.getDisplayPrice(item, false)
   end
@@ -113,6 +130,10 @@ class SellAdapter
 
   def getDisplayName(item)
     @adapter.getDisplayName(item)
+  end
+
+  def getDisplayNamePlural(item)
+    @adapter.getDisplayNamePlural(item)
   end
 
   def getDisplayPrice(item)
@@ -552,8 +573,9 @@ class PokemonMartScreen
     loop do
       item = @scene.pbChooseBuyItem
       break if !item
-      quantity = 0
-      itemname = @adapter.getDisplayName(item)
+      quantity       = 0
+      itemname       = @adapter.getDisplayName(item)
+      itemnameplural = @adapter.getDisplayNamePlural(item)
       price = @adapter.getPrice(item)
       if @adapter.getMoney < price
         pbDisplayPaused(_INTL("You don't have enough money."))
@@ -569,8 +591,8 @@ class PokemonMartScreen
         maxafford = (price <= 0) ? Settings::BAG_MAX_PER_SLOT : @adapter.getMoney / price
         maxafford = Settings::BAG_MAX_PER_SLOT if maxafford > Settings::BAG_MAX_PER_SLOT
         quantity = @scene.pbChooseNumber(
-          _INTL("So how many {1}?", itemname), item, maxafford
-        ) # TODO: Plural Item Name
+          _INTL("So how many {1}?", itemnameplural), item, maxafford
+        )
         next if quantity == 0
         price *= quantity
         if !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
@@ -628,9 +650,10 @@ class PokemonMartScreen
     loop do
       item = @scene.pbChooseSellItem
       break if !item
-      itemname = @adapter.getDisplayName(item)
+      itemname       = @adapter.getDisplayName(item)
+      itemnameplural = @adapter.getDisplayNamePlural(item)
       if !@adapter.canSell?(item)
-        pbDisplayPaused(_INTL("Oh, no. I can't buy {1}.", itemname)) # TODO: Plural Item Name
+        pbDisplayPaused(_INTL("Oh, no. I can't buy {1}.", itemnameplural))
         next
       end
       price = @adapter.getPrice(item, true)
@@ -639,8 +662,8 @@ class PokemonMartScreen
       @scene.pbShowMoney
       if qty > 1
         qty = @scene.pbChooseNumber(
-          _INTL("How many {1} would you like to sell?", itemname), item, qty
-        ) # TODO: Plural Item Name
+          _INTL("How many {1} would you like to sell?", itemnameplural), item, qty
+        )
       end
       if qty == 0
         @scene.pbHideMoney
