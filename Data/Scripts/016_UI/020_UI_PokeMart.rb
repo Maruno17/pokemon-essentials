@@ -638,7 +638,7 @@ class PokemonMartScreen
           elsif !Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item) == :POKEBALL
             if @adapter.addItem(GameData::Item.get(:PREMIERBALL))
               $stats.premier_balls_earned += 1
-              pbDisplayPaused(_INTL("And have a {1} on the house!"), GameData::Item.get(:PREMIERBALL).name)
+              pbDisplayPaused(_INTL("And have 1 {1} on the house!", GameData::Item.get(:PREMIERBALL).name))
             end
           end
         end
