@@ -193,13 +193,6 @@ class HandlerHash2
     return nil
   end
 
-  def addIf(conditionProc, handler = nil, &handlerBlock)
-    if ![Proc, Hash].include?(handler.class) && !block_given?
-      raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
-    end
-    @add_ifs.push([conditionProc, handler || handlerBlock])
-  end
-
   def add(sym, handler = nil, &handlerBlock)
     if ![Proc, Hash].include?(handler.class) && !block_given?
       raise ArgumentError, "#{self.class.name} for #{sym.inspect} has no valid handler (#{handler.inspect} was given)"
@@ -207,12 +200,21 @@ class HandlerHash2
     @hash[sym] = handler || handlerBlock if sym
   end
 
+  def addIf(conditionProc, handler = nil, &handlerBlock)
+    if ![Proc, Hash].include?(handler.class) && !block_given?
+      raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
+    end
+    @add_ifs.push([conditionProc, handler || handlerBlock])
+  end
+
   def copy(src, *dests)
     handler = self[src]
     return if !handler
-    dests.each do |dest|
-      self.add(dest, handler)
-    end
+    dests.each { |dest| add(dest, handler) }
+  end
+
+  def remove(key)
+    @hash.delete(key)
   end
 
   def clear
@@ -222,7 +224,7 @@ class HandlerHash2
   def trigger(sym, *args)
     sym = sym.id if !sym.is_a?(Symbol) && sym.respond_to?("id")
     handler = self[sym]
-    return (handler) ? handler.call(sym, *args) : nil
+    return handler&.call(sym, *args)
   end
 end
 
@@ -232,9 +234,8 @@ end
 #===============================================================================
 class HandlerHashBasic
   def initialize
-    @ordered_keys = []
-    @hash         = {}
-    @addIfs       = []
+    @hash   = {}
+    @addIfs = []
   end
 
   def [](entry)
@@ -248,16 +249,11 @@ class HandlerHashBasic
     return ret
   end
 
-  def each
-    @ordered_keys.each { |key| yield key, @hash[key] }
-  end
-
   def add(entry, handler = nil, &handlerBlock)
     if ![Proc, Hash].include?(handler.class) && !block_given?
       raise ArgumentError, "#{self.class.name} for #{entry.inspect} has no valid handler (#{handler.inspect} was given)"
     end
     return if !entry || entry.empty?
-    @ordered_keys.push(entry) if !@ordered_keys.include?(entry)
     @hash[entry] = handler || handlerBlock
   end
 
@@ -271,17 +267,28 @@ class HandlerHashBasic
   def copy(src, *dests)
     handler = self[src]
     return if !handler
-    dests.each { |dest| self.add(dest, handler) }
+    dests.each { |dest| add(dest, handler) }
+  end
+
+  def remove(key)
+    @hash.delete(key)
   end
 
   def clear
     @hash.clear
-    @ordered_keys.clear
+  end
+
+  def each
+    @hash.each_pair { |key, value| yield key, value }
+  end
+
+  def keys
+    return @hash.keys.clone
   end
 
   def trigger(entry, *args)
     handler = self[entry]
-    return (handler) ? handler.call(*args) : nil
+    return handler&.call(*args)
   end
 end
 

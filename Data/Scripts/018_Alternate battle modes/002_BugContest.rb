@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class BugContestState
   attr_accessor :ballcount
   attr_accessor :decision
@@ -214,8 +217,9 @@ class BugContestState
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TimerDisplay # :nodoc:
   def initialize(start, maxtime)
     @timer = Window_AdvancedTextPokemon.newWithSize("", Graphics.width - 120, 0, 120, 64)
@@ -247,8 +251,9 @@ class TimerDisplay # :nodoc:
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 # Returns a score for this Pokemon in the Bug Catching Contest.
 # Not exactly the HGSS calculation, but it should be decent enough.
 def pbBugContestScore(pkmn)
@@ -286,12 +291,18 @@ def pbBugContestDecided?
   return pbBugContestState.decided?
 end
 
-EventHandlers.add(:on_enter_map, :end_bug_contest,
-  proc { |_old_map_id|
-    pbBugContestState.pbClearIfEnded
-  }
-)
+def pbBugContestStartOver
+  $player.party.each do |pkmn|
+    pkmn.heal
+    pkmn.makeUnmega
+    pkmn.makeUnprimal
+  end
+  pbBugContestState.pbStartJudging
+end
 
+#===============================================================================
+#
+#===============================================================================
 EventHandlers.add(:on_map_or_spriteset_change, :show_bug_contest_timer,
   proc { |scene, _map_changed|
     next if !pbInBugContest? || pbBugContestState.decision != 0 || BugContestState::TIME_ALLOWED == 0
@@ -313,6 +324,12 @@ EventHandlers.add(:on_frame_update, :bug_contest_counter,
   }
 )
 
+EventHandlers.add(:on_enter_map, :end_bug_contest,
+  proc { |_old_map_id|
+    pbBugContestState.pbClearIfEnded
+  }
+)
+
 EventHandlers.add(:on_leave_map, :end_bug_contest,
   proc { |new_map_id, new_map|
     next if !pbInBugContest? || !pbBugContestState.pbOffLimits?(new_map_id)
@@ -321,15 +338,9 @@ EventHandlers.add(:on_leave_map, :end_bug_contest,
   }
 )
 
-def pbBugContestStartOver
-  $player.party.each do |pkmn|
-    pkmn.heal
-    pkmn.makeUnmega
-    pkmn.makeUnprimal
-  end
-  pbBugContestState.pbStartJudging
-end
-
+#===============================================================================
+#
+#===============================================================================
 EventHandlers.add(:on_calling_wild_battle, :bug_contest_battle,
   proc { |species, level, handled|
     # handled is an array: [nil]. If [true] or [false], the battle has already
@@ -397,3 +408,40 @@ def pbBugContestBattle(species, level)
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision != 2 && decision != 5)
 end
+
+#===============================================================================
+#
+#===============================================================================
+class PokemonPauseMenu
+  alias __bug_contest_pbShowInfo pbShowInfo unless method_defined?(:__bug_contest_pbShowInfo)
+
+  def pbShowInfo
+    __bug_contest_pbShowInfo
+    return if !pbInBugContest?
+    if pbBugContestState.lastPokemon
+      @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
+                              pbBugContestState.lastPokemon.speciesName,
+                              pbBugContestState.lastPokemon.level,
+                              pbBugContestState.ballcount))
+    else
+      @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount))
+    end
+  end
+end
+
+MenuHandlers.add(:pause_menu, :quit_bug_contest, {
+  "name"      => _INTL("Quit Contest"),
+  "order"     => 60,
+  "condition" => proc { next pbInBugContest? },
+  "effect"    => proc { |menu|
+    menu.pbHideMenu
+    if pbConfirmMessage(_INTL("Would you like to end the Contest now?"))
+      menu.pbEndScene
+      pbBugContestState.pbStartJudging
+      next true
+    end
+    menu.pbRefresh
+    menu.pbShowMenu
+    next false
+  }
+})

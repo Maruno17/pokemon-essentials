@@ -63,3 +63,59 @@ module EventHandlers
     return @@events[event]&.trigger(*args)
   end
 end
+
+#===============================================================================
+# This module stores the contents of various menus. Each command in a menu is a
+# hash of data (containing its name, relative order, code to run when chosen,
+# etc.).
+# Menus that use this module are:
+#-------------------------------------------------------------------------------
+# Pause menu
+# Pokégear main menu
+# PC main menu
+# Various debug menus (main, Pokémon, battle, battle Pokémon)
+#===============================================================================
+module MenuHandlers
+  @@handlers = {}
+
+  def self.add(menu, option, hash)
+    @@handlers[menu] = HandlerHashBasic.new if !@@handlers.has_key?(menu)
+    @@handlers[menu].add(option, hash)
+  end
+
+  def self.remove(menu, option)
+    @@handlers[menu]&.remove(option)
+  end
+
+  def self.clear(menu)
+    @@handlers[menu]&.clear
+  end
+
+  def self.each(menu)
+    return if !@@handlers.has_key?(menu)
+    @@handlers[menu].each { |option, hash| yield option, hash }
+  end
+
+  def self.each_available(menu)
+    return if !@@handlers.has_key?(menu)
+    options = @@handlers[menu]
+    keys = options.keys
+    sorted_keys = keys.sort_by { |option| options[option]["order"] || keys.index(option) }
+    sorted_keys.each do |option|
+      hash = options[option]
+      next if hash["condition"] && !hash["condition"].call
+      if hash["name"].is_a?(Proc)
+        name = hash["name"].call
+      else
+        name = _INTL(hash["name"])
+      end
+      yield option, hash, name
+    end
+  end
+
+  def self.call(menu, option, function, *args)
+    option_hash = @@handlers[menu][option]
+    return nil if !option_hash || !option_hash[function]
+    return option_hash[function].call(*args)
+  end
+end

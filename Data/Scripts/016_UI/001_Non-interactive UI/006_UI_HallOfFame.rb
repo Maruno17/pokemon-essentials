@@ -467,25 +467,16 @@ end
 #===============================================================================
 #
 #===============================================================================
-class HallOfFamePC
-  def shouldShow?
-    return $PokemonGlobal.hallOfFameLastNumber > 0
-  end
-
-  def name
-    return _INTL("Hall of Fame")
-  end
-
-  def access
+MenuHandlers.add(:pc_menu, :hall_of_fame, {
+  "name"      => _INTL("Hall of Fame"),
+  "order"     => 40,
+  "condition" => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
+  "effect"    => proc { |menu|
     pbMessage(_INTL("\\se[PC access]Accessed the Hall of Fame."))
     pbHallOfFamePC
-  end
-end
-
-#===============================================================================
-#
-#===============================================================================
-PokemonPCList.registerPC(HallOfFamePC.new)
+    next false
+  }
+})
 
 #===============================================================================
 #

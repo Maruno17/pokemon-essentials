@@ -1,85 +1,46 @@
 #===============================================================================
-#
-#===============================================================================
-module DebugMenuCommands
-  @@commands = HandlerHashBasic.new
-
-  def self.register(option, hash)
-    @@commands.add(option, hash)
-  end
-
-  def self.registerIf(condition, hash)
-    @@commands.addIf(condition, hash)
-  end
-
-  def self.copy(option, *new_options)
-    @@commands.copy(option, *new_options)
-  end
-
-  def self.each
-    @@commands.each { |key, hash| yield key, hash }
-  end
-
-  def self.hasFunction?(option, function)
-    option_hash = @@commands[option]
-    return option_hash&.has_key?(function)
-  end
-
-  def self.getFunction(option, function)
-    option_hash = @@commands[option]
-    return (option_hash && option_hash[function]) ? option_hash[function] : nil
-  end
-
-  def self.call(function, option, *args)
-    option_hash = @@commands[option]
-    return nil if !option_hash || !option_hash[function]
-    return (option_hash[function].call(*args) == true)
-  end
-end
-
-#===============================================================================
 # Field options
 #===============================================================================
-DebugMenuCommands.register("field_menu", {
-  "parent"      => "main",
-  "name"        => _INTL("Field options..."),
-  "description" => _INTL("Warp to maps, edit switches/variables, use the PC, edit Day Care, etc.")
+MenuHandlers.add(:debug_menu, :field_menu, {
+  "name"        => _INTL("Field Options..."),
+  "parent"      => :main,
+  "description" => _INTL("Warp to maps, edit switches/variables, use the PC, edit Day Care, etc."),
+  "always_show" => false
 })
 
-DebugMenuCommands.register("warp", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :warp, {
   "name"        => _INTL("Warp to Map"),
+  "parent"      => :field_menu,
   "description" => _INTL("Instantly warp to another map of your choice."),
   "effect"      => proc { |sprites, viewport|
     map = pbWarpToMap
-    if map
-      pbFadeOutAndHide(sprites)
-      pbDisposeMessageWindow(sprites["textbox"])
-      pbDisposeSpriteHash(sprites)
-      viewport.dispose
-      if $scene.is_a?(Scene_Map)
-        $game_temp.player_new_map_id    = map[0]
-        $game_temp.player_new_x         = map[1]
-        $game_temp.player_new_y         = map[2]
-        $game_temp.player_new_direction = 2
-        $scene.transfer_player
-      else
-        pbCancelVehicles
-        $map_factory.setup(map[0])
-        $game_player.moveto(map[1], map[2])
-        $game_player.turn_down
-        $game_map.update
-        $game_map.autoplay
-      end
-      $game_map.refresh
-      next true   # Closes the debug menu to allow the warp
+    next false if !map
+    pbFadeOutAndHide(sprites)
+    pbDisposeMessageWindow(sprites["textbox"])
+    pbDisposeSpriteHash(sprites)
+    viewport.dispose
+    if $scene.is_a?(Scene_Map)
+      $game_temp.player_new_map_id    = map[0]
+      $game_temp.player_new_x         = map[1]
+      $game_temp.player_new_y         = map[2]
+      $game_temp.player_new_direction = 2
+      $scene.transfer_player
+    else
+      pbCancelVehicles
+      $map_factory.setup(map[0])
+      $game_player.moveto(map[1], map[2])
+      $game_player.turn_down
+      $game_map.update
+      $game_map.autoplay
     end
+    $game_map.refresh
+    next true   # Closes the debug menu to allow the warp
   }
 })
 
-DebugMenuCommands.register("refresh_map", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :refresh_map, {
   "name"        => _INTL("Refresh Map"),
+  "parent"      => :field_menu,
   "description" => _INTL("Make all events on this map, and common events, refresh themselves."),
   "effect"      => proc {
     $game_map.need_refresh = true
@@ -87,36 +48,36 @@ DebugMenuCommands.register("refresh_map", {
   }
 })
 
-DebugMenuCommands.register("switches", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :switches, {
   "name"        => _INTL("Switches"),
+  "parent"      => :field_menu,
   "description" => _INTL("Edit all Game Switches (except Script Switches)."),
   "effect"      => proc {
     pbDebugVariables(0)
   }
 })
 
-DebugMenuCommands.register("variables", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :variables, {
   "name"        => _INTL("Variables"),
+  "parent"      => :field_menu,
   "description" => _INTL("Edit all Game Variables. Can set them to numbers or text."),
   "effect"      => proc {
     pbDebugVariables(1)
   }
 })
 
-DebugMenuCommands.register("use_pc", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :use_pc, {
   "name"        => _INTL("Use PC"),
+  "parent"      => :field_menu,
   "description" => _INTL("Use a PC to access Pokémon storage and player's PC."),
   "effect"      => proc {
     pbPokeCenterPC
   }
 })
 
-DebugMenuCommands.register("toggle_wallpapers", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :storage_wallpapers, {
   "name"        => _INTL("Toggle Storage Wallpapers"),
+  "parent"      => :field_menu,
   "description" => _INTL("Unlock and lock special wallpapers used in Pokémon storage."),
   "effect"      => proc {
     w = $PokemonStorage.allWallpapers
@@ -152,18 +113,18 @@ DebugMenuCommands.register("toggle_wallpapers", {
   }
 })
 
-DebugMenuCommands.register("day_care", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :day_care, {
   "name"        => _INTL("Day Care"),
+  "parent"      => :field_menu,
   "description" => _INTL("View Pokémon in the Day Care and edit them."),
   "effect"      => proc {
     pbDebugDayCare
   }
 })
 
-DebugMenuCommands.register("skip_credits", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :skip_credits, {
   "name"        => _INTL("Skip Credits"),
+  "parent"      => :field_menu,
   "description" => _INTL("Toggle whether credits can be ended early by pressing the Use input."),
   "effect"      => proc {
     $PokemonGlobal.creditsPlayed = !$PokemonGlobal.creditsPlayed
@@ -172,18 +133,18 @@ DebugMenuCommands.register("skip_credits", {
   }
 })
 
-DebugMenuCommands.register("relic_stone", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :relic_stone, {
   "name"        => _INTL("Use Relic Stone"),
+  "parent"      => :field_menu,
   "description" => _INTL("Shadow Pokémon. Choose a Pokémon to show to the Relic Stone for purification."),
   "effect"      => proc {
     pbRelicStone
   }
 })
 
-DebugMenuCommands.register("purify_chamber", {
-  "parent"      => "field_menu",
+MenuHandlers.add(:debug_menu, :purify_chamber, {
   "name"        => _INTL("Use Purify Chamber"),
+  "parent"      => :field_menu,
   "description" => _INTL("Shadow Pokémon. Open the Purify Chamber for purification."),
   "effect"      => proc {
     pbPurifyChamber
@@ -193,15 +154,16 @@ DebugMenuCommands.register("purify_chamber", {
 #===============================================================================
 # Battle options
 #===============================================================================
-DebugMenuCommands.register("battle_menu", {
-  "parent"      => "main",
-  "name"        => _INTL("Battle options..."),
-  "description" => _INTL("Start battles, reset this map's trainers, ready rematches, edit roamers, etc.")
+MenuHandlers.add(:debug_menu, :battle_menu, {
+  "name"        => _INTL("Battle Options..."),
+  "parent"      => :main,
+  "description" => _INTL("Start battles, reset this map's trainers, ready rematches, edit roamers, etc."),
+  "always_show" => false
 })
 
-DebugMenuCommands.register("test_wild_battle", {
-  "parent"      => "battle_menu",
+MenuHandlers.add(:debug_menu, :test_wild_battle, {
   "name"        => _INTL("Test Wild Battle"),
+  "parent"      => :battle_menu,
   "description" => _INTL("Start a single battle against a wild Pokémon. You choose the species/level."),
   "effect"      => proc {
     species = pbChooseSpeciesList
@@ -221,9 +183,9 @@ DebugMenuCommands.register("test_wild_battle", {
   }
 })
 
-DebugMenuCommands.register("test_wild_battle_advanced", {
-  "parent"      => "battle_menu",
+MenuHandlers.add(:debug_menu, :test_wild_battle_advanced, {
   "name"        => _INTL("Test Wild Battle Advanced"),
+  "parent"      => :battle_menu,
   "description" => _INTL("Start a battle against 1 or more wild Pokémon. Battle size is your choice."),
   "effect"      => proc {
     pkmn = []
@@ -285,9 +247,9 @@ DebugMenuCommands.register("test_wild_battle_advanced", {
   }
 })
 
-DebugMenuCommands.register("test_trainer_battle", {
-  "parent"      => "battle_menu",
+MenuHandlers.add(:debug_menu, :test_trainer_battle, {
   "name"        => _INTL("Test Trainer Battle"),
+  "parent"      => :battle_menu,
   "description" => _INTL("Start a single battle against a trainer of your choice."),
   "effect"      => proc {
     trainerdata = pbListScreen(_INTL("SINGLE TRAINER"), TrainerBattleLister.new(0, false))
@@ -298,9 +260,9 @@ DebugMenuCommands.register("test_trainer_battle", {
   }
 })
 
-DebugMenuCommands.register("test_trainer_battle_advanced", {
-  "parent"      => "battle_menu",
+MenuHandlers.add(:debug_menu, :test_trainer_battle_advanced, {
   "name"        => _INTL("Test Trainer Battle Advanced"),
+  "parent"      => :battle_menu,
   "description" => _INTL("Start a battle against 1 or more trainers with a battle size of your choice."),
   "effect"      => proc {
     trainers = []
@@ -389,9 +351,9 @@ DebugMenuCommands.register("test_trainer_battle_advanced", {
   }
 })
 
-DebugMenuCommands.register("toggle_logging", {
-  "parent"      => "battle_menu",
+MenuHandlers.add(:debug_menu, :toggle_logging, {
   "name"        => _INTL("Toggle Battle Logging"),
+  "parent"      => :battle_menu,
   "description" => _INTL("Record debug logs for battles in Data/debuglog.txt."),
   "effect"      => proc {
     $INTERNAL = !$INTERNAL
@@ -400,9 +362,9 @@ DebugMenuCommands.register("toggle_logging", {
   }
 })
 
-DebugMenuCommands.register("reset_trainers", {
-  "parent"      => "battle_menu",
+MenuHandlers.add(:debug_menu, :reset_trainers, {
   "name"        => _INTL("Reset Map's Trainers"),
+  "parent"      => :battle_menu,
   "description" => _INTL("Turn off Self Switches A and B for all events with \"Trainer\" in their name."),
   "effect"      => proc {
     if $game_map
@@ -420,9 +382,9 @@ DebugMenuCommands.register("reset_trainers", {
   }
 })
 
-DebugMenuCommands.register("ready_rematches", {
-  "parent"      => "battle_menu",
+MenuHandlers.add(:debug_menu, :ready_rematches, {
   "name"        => _INTL("Ready All Phone Rematches"),
+  "parent"      => :battle_menu,
   "description" => _INTL("Make all trainers in the phone ready for rematches."),
   "effect"      => proc {
     if !$PokemonGlobal.phoneNumbers || $PokemonGlobal.phoneNumbers.length == 0
@@ -438,18 +400,18 @@ DebugMenuCommands.register("ready_rematches", {
   }
 })
 
-DebugMenuCommands.register("roamers", {
-  "parent"      => "battle_menu",
+MenuHandlers.add(:debug_menu, :roamers, {
   "name"        => _INTL("Roaming Pokémon"),
+  "parent"      => :battle_menu,
   "description" => _INTL("Toggle and edit all roaming Pokémon."),
   "effect"      => proc {
     pbDebugRoamers
   }
 })
 
-DebugMenuCommands.register("encounter_version", {
-  "parent"      => "battle_menu",
+MenuHandlers.add(:debug_menu, :encounter_version, {
   "name"        => _INTL("Set Encounters Version"),
+  "parent"      => :battle_menu,
   "description" => _INTL("Choose which version of wild encounters should be used."),
   "effect"      => proc {
     params = ChooseNumberParams.new
@@ -466,15 +428,16 @@ DebugMenuCommands.register("encounter_version", {
 #===============================================================================
 # Item options
 #===============================================================================
-DebugMenuCommands.register("items_menu", {
-  "parent"      => "main",
-  "name"        => _INTL("Item options..."),
-  "description" => _INTL("Give and take items.")
+MenuHandlers.add(:debug_menu, :items_menu, {
+  "name"        => _INTL("Item Options..."),
+  "parent"      => :main,
+  "description" => _INTL("Give and take items."),
+  "always_show" => false
 })
 
-DebugMenuCommands.register("add_item", {
-  "parent"      => "items_menu",
+MenuHandlers.add(:debug_menu, :add_item, {
   "name"        => _INTL("Add Item"),
+  "parent"      => :items_menu,
   "description" => _INTL("Choose an item and a quantity of it to add to the Bag."),
   "effect"      => proc {
     pbListScreenBlock(_INTL("ADD ITEM"), ItemLister.new) { |button, item|
@@ -494,9 +457,9 @@ DebugMenuCommands.register("add_item", {
   }
 })
 
-DebugMenuCommands.register("fill_bag", {
-  "parent"      => "items_menu",
+MenuHandlers.add(:debug_menu, :fill_bag, {
   "name"        => _INTL("Fill Bag"),
+  "parent"      => :items_menu,
   "description" => _INTL("Empties the Bag and then fills it with a certain number of every item."),
   "effect"      => proc {
     params = ChooseNumberParams.new
@@ -523,9 +486,9 @@ DebugMenuCommands.register("fill_bag", {
   }
 })
 
-DebugMenuCommands.register("empty_bag", {
-  "parent"      => "items_menu",
+MenuHandlers.add(:debug_menu, :empty_bag, {
   "name"        => _INTL("Empty Bag"),
+  "parent"      => :items_menu,
   "description" => _INTL("Remove all items from the Bag."),
   "effect"      => proc {
     $bag.clear
@@ -536,15 +499,16 @@ DebugMenuCommands.register("empty_bag", {
 #===============================================================================
 # Pokémon options
 #===============================================================================
-DebugMenuCommands.register("pokemon_menu", {
-  "parent"      => "main",
-  "name"        => _INTL("Pokémon options..."),
-  "description" => _INTL("Give Pokémon, heal party, fill/empty PC storage, etc.")
+MenuHandlers.add(:debug_menu, :pokemon_menu, {
+  "name"        => _INTL("Pokémon Options..."),
+  "parent"      => :main,
+  "description" => _INTL("Give Pokémon, heal party, fill/empty PC storage, etc."),
+  "always_show" => false
 })
 
-DebugMenuCommands.register("add_pokemon", {
-  "parent"      => "pokemon_menu",
+MenuHandlers.add(:debug_menu, :add_pokemon, {
   "name"        => _INTL("Add Pokémon"),
+  "parent"      => :pokemon_menu,
   "description" => _INTL("Give yourself a Pokémon of a chosen species/level. Goes to PC if party is full."),
   "effect"      => proc {
     species = pbChooseSpeciesList
@@ -559,9 +523,9 @@ DebugMenuCommands.register("add_pokemon", {
   }
 })
 
-DebugMenuCommands.register("give_demo_party", {
-  "parent"      => "pokemon_menu",
+MenuHandlers.add(:debug_menu, :give_demo_party, {
   "name"        => _INTL("Give Demo Party"),
+  "parent"      => :pokemon_menu,
   "description" => _INTL("Give yourself 6 preset Pokémon. They overwrite the current party."),
   "effect"      => proc {
     party = []
@@ -602,9 +566,9 @@ DebugMenuCommands.register("give_demo_party", {
   }
 })
 
-DebugMenuCommands.register("heal_party", {
-  "parent"      => "pokemon_menu",
+MenuHandlers.add(:debug_menu, :heal_party, {
   "name"        => _INTL("Heal Party"),
+  "parent"      => :pokemon_menu,
   "description" => _INTL("Fully heal the HP/status/PP of all Pokémon in the party."),
   "effect"      => proc {
     $player.party.each { |pkmn| pkmn.heal }
@@ -612,9 +576,9 @@ DebugMenuCommands.register("heal_party", {
   }
 })
 
-DebugMenuCommands.register("quick_hatch_party_eggs", {
-  "parent"      => "pokemon_menu",
+MenuHandlers.add(:debug_menu, :quick_hatch_party_eggs, {
   "name"        => _INTL("Quick Hatch"),
+  "parent"      => :pokemon_menu,
   "description" => _INTL("Make all eggs in the party require just one more step to hatch."),
   "effect"      => proc {
     $player.party.each { |pkmn| pkmn.steps_to_hatch = 1 if pkmn.egg? }
@@ -622,9 +586,9 @@ DebugMenuCommands.register("quick_hatch_party_eggs", {
   }
 })
 
-DebugMenuCommands.register("fill_boxes", {
-  "parent"      => "pokemon_menu",
+MenuHandlers.add(:debug_menu, :fill_boxes, {
   "name"        => _INTL("Fill Storage Boxes"),
+  "parent"      => :pokemon_menu,
   "description" => _INTL("Add one Pokémon of each species (at Level 50) to storage."),
   "effect"      => proc {
     added = 0
@@ -669,9 +633,9 @@ DebugMenuCommands.register("fill_boxes", {
   }
 })
 
-DebugMenuCommands.register("clear_boxes", {
-  "parent"      => "pokemon_menu",
+MenuHandlers.add(:debug_menu, :clear_boxes, {
   "name"        => _INTL("Clear Storage Boxes"),
+  "parent"      => :pokemon_menu,
   "description" => _INTL("Remove all Pokémon in storage."),
   "effect"      => proc {
     $PokemonStorage.maxBoxes.times do |i|
@@ -683,9 +647,9 @@ DebugMenuCommands.register("clear_boxes", {
   }
 })
 
-DebugMenuCommands.register("open_storage", {
-  "parent"      => "pokemon_menu",
+MenuHandlers.add(:debug_menu, :open_storage, {
   "name"        => _INTL("Access Pokémon Storage"),
+  "parent"      => :pokemon_menu,
   "description" => _INTL("Opens the Pokémon storage boxes in Organize Boxes mode."),
   "effect"      => proc {
     pbFadeOutIn {
@@ -699,15 +663,16 @@ DebugMenuCommands.register("open_storage", {
 #===============================================================================
 # Player options
 #===============================================================================
-DebugMenuCommands.register("player_menu", {
-  "parent"      => "main",
-  "name"        => _INTL("Player options..."),
-  "description" => _INTL("Set money, badges, Pokédexes, player's appearance and name, etc.")
+MenuHandlers.add(:debug_menu, :player_menu, {
+  "name"        => _INTL("Player Options..."),
+  "parent"      => :main,
+  "description" => _INTL("Set money, badges, Pokédexes, player's appearance and name, etc."),
+  "always_show" => false
 })
 
-DebugMenuCommands.register("set_badges", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :set_badges, {
   "name"        => _INTL("Set Badges"),
+  "parent"      => :player_menu,
   "description" => _INTL("Toggle possession of each Gym Badge."),
   "effect"      => proc {
     badgecmd = 0
@@ -732,9 +697,9 @@ DebugMenuCommands.register("set_badges", {
   }
 })
 
-DebugMenuCommands.register("set_money", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :set_money, {
   "name"        => _INTL("Set Money"),
+  "parent"      => :player_menu,
   "description" => _INTL("Edit how much money you have."),
   "effect"      => proc {
     params = ChooseNumberParams.new
@@ -745,9 +710,9 @@ DebugMenuCommands.register("set_money", {
   }
 })
 
-DebugMenuCommands.register("set_coins", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :set_coins, {
   "name"        => _INTL("Set Coins"),
+  "parent"      => :player_menu,
   "description" => _INTL("Edit how many Game Corner Coins you have."),
   "effect"      => proc {
     params = ChooseNumberParams.new
@@ -758,9 +723,9 @@ DebugMenuCommands.register("set_coins", {
   }
 })
 
-DebugMenuCommands.register("set_bp", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :set_bp, {
   "name"        => _INTL("Set Battle Points"),
+  "parent"      => :player_menu,
   "description" => _INTL("Edit how many Battle Points you have."),
   "effect"      => proc {
     params = ChooseNumberParams.new
@@ -771,9 +736,9 @@ DebugMenuCommands.register("set_bp", {
   }
 })
 
-DebugMenuCommands.register("toggle_running_shoes", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :toggle_running_shoes, {
   "name"        => _INTL("Toggle Running Shoes"),
+  "parent"      => :player_menu,
   "description" => _INTL("Toggle possession of running shoes."),
   "effect"      => proc {
     $player.has_running_shoes = !$player.has_running_shoes
@@ -782,9 +747,9 @@ DebugMenuCommands.register("toggle_running_shoes", {
   }
 })
 
-DebugMenuCommands.register("toggle_pokegear", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :toggle_pokegear, {
   "name"        => _INTL("Toggle Pokégear"),
+  "parent"      => :player_menu,
   "description" => _INTL("Toggle possession of the Pokégear."),
   "effect"      => proc {
     $player.has_pokegear = !$player.has_pokegear
@@ -793,9 +758,9 @@ DebugMenuCommands.register("toggle_pokegear", {
   }
 })
 
-DebugMenuCommands.register("toggle_pokedex", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :toggle_pokedex, {
   "name"        => _INTL("Toggle Pokédex and Dexes"),
+  "parent"      => :player_menu,
   "description" => _INTL("Toggle possession of the Pokédex, and edit Regional Dex accessibility."),
   "effect"      => proc {
     dexescmd = 0
@@ -822,9 +787,9 @@ DebugMenuCommands.register("toggle_pokedex", {
   }
 })
 
-DebugMenuCommands.register("set_player_character", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :set_player_character, {
   "name"        => _INTL("Set Player Character"),
+  "parent"      => :player_menu,
   "description" => _INTL("Edit the player's character, as defined in \"metadata.txt\"."),
   "effect"      => proc {
     index = 0
@@ -847,9 +812,9 @@ DebugMenuCommands.register("set_player_character", {
   }
 })
 
-DebugMenuCommands.register("change_outfit", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :change_outfit, {
   "name"        => _INTL("Set Player Outfit"),
+  "parent"      => :player_menu,
   "description" => _INTL("Edit the player's outfit number."),
   "effect"      => proc {
     oldoutfit = $player.outfit
@@ -861,9 +826,9 @@ DebugMenuCommands.register("change_outfit", {
   }
 })
 
-DebugMenuCommands.register("rename_player", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :rename_player, {
   "name"        => _INTL("Set Player Name"),
+  "parent"      => :player_menu,
   "description" => _INTL("Rename the player."),
   "effect"      => proc {
     trname = pbEnterPlayerName("Your name?", 0, Settings::MAX_PLAYER_NAME_SIZE, $player.name)
@@ -881,9 +846,9 @@ DebugMenuCommands.register("rename_player", {
   }
 })
 
-DebugMenuCommands.register("random_id", {
-  "parent"      => "player_menu",
+MenuHandlers.add(:debug_menu, :random_id, {
   "name"        => _INTL("Randomize Player ID"),
+  "parent"      => :player_menu,
   "description" => _INTL("Generate a random new ID for the player."),
   "effect"      => proc {
     $player.id = rand(2**16) | (rand(2**16) << 16)
@@ -894,118 +859,106 @@ DebugMenuCommands.register("random_id", {
 #===============================================================================
 # Information editors
 #===============================================================================
-DebugMenuCommands.register("editors_menu", {
-  "parent"      => "main",
-  "name"        => _INTL("Information editors..."),
-  "description" => _INTL("Edit information in the PBS files, terrain tags, battle animations, etc."),
-  "always_show" => true
+MenuHandlers.add(:debug_menu, :editors_menu, {
+  "name"        => _INTL("Information Editors..."),
+  "parent"      => :main,
+  "description" => _INTL("Edit information in the PBS files, terrain tags, battle animations, etc.")
 })
 
-DebugMenuCommands.register("set_metadata", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :set_metadata, {
   "name"        => _INTL("Edit Metadata"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Edit global metadata and player character metadata."),
-  "always_show" => true,
   "effect"      => proc {
     pbMetadataScreen
   }
 })
 
-DebugMenuCommands.register("set_map_metadata", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :set_map_metadata, {
   "name"        => _INTL("Edit Map Metadata"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Edit map metadata."),
-  "always_show" => true,
   "effect"      => proc {
     pbMapMetadataScreen(pbDefaultMap)
   }
 })
 
-DebugMenuCommands.register("set_map_connections", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :set_map_connections, {
   "name"        => _INTL("Edit Map Connections"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Connect maps using a visual interface. Can also edit map encounters/metadata."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbConnectionsEditor }
   }
 })
 
-DebugMenuCommands.register("set_terrain_tags", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :set_terrain_tags, {
   "name"        => _INTL("Edit Terrain Tags"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Edit the terrain tags of tiles in tilesets. Required for tags 8+."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbTilesetScreen }
   }
 })
 
-DebugMenuCommands.register("set_encounters", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :set_encounters, {
   "name"        => _INTL("Edit Wild Encounters"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Edit the wild Pokémon that can be found on maps, and how they are encountered."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbEncountersEditor }
   }
 })
 
-DebugMenuCommands.register("set_trainer_types", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :set_trainer_types, {
   "name"        => _INTL("Edit Trainer Types"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Edit the properties of trainer types."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbTrainerTypeEditor }
   }
 })
 
-DebugMenuCommands.register("set_trainers", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :set_trainers, {
   "name"        => _INTL("Edit Individual Trainers"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Edit individual trainers, their Pokémon and items."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbTrainerBattleEditor }
   }
 })
 
-DebugMenuCommands.register("set_items", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :set_items, {
   "name"        => _INTL("Edit Items"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Edit item data."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbItemEditor }
   }
 })
 
-DebugMenuCommands.register("set_species", {
-  "parent"      => "editors_menu",
-  "name"        => _INTL("Edit Pokémon"),
+MenuHandlers.add(:debug_menu, :set_species, {
+  "name"        => _INTL("Edit Pokémon Species"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Edit Pokémon species data."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbPokemonEditor }
   }
 })
 
-DebugMenuCommands.register("set_pokedex_lists", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :set_pokedex_lists, {
   "name"        => _INTL("Edit Regional Dexes"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Create, rearrange and delete Regional Pokédex lists."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbRegionalDexEditorMain }
   }
 })
 
-DebugMenuCommands.register("position_sprites", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :position_sprites, {
   "name"        => _INTL("Edit Pokémon Sprite Positions"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Reposition Pokémon sprites in battle."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn {
       sp = SpritePositioner.new
@@ -1015,11 +968,10 @@ DebugMenuCommands.register("position_sprites", {
   }
 })
 
-DebugMenuCommands.register("auto_position_sprites", {
-  "parent"      => "editors_menu",
-  "name"        => _INTL("Auto-Position All Sprites"),
+MenuHandlers.add(:debug_menu, :auto_position_sprites, {
+  "name"        => _INTL("Auto-Position All Pokémon Sprites"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Automatically reposition all Pokémon sprites in battle. Don't use lightly."),
-  "always_show" => true,
   "effect"      => proc {
     if pbConfirmMessage(_INTL("Are you sure you want to reposition all sprites?"))
       msgwindow = pbCreateMessageWindow
@@ -1031,41 +983,37 @@ DebugMenuCommands.register("auto_position_sprites", {
   }
 })
 
-DebugMenuCommands.register("animation_editor", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :animation_editor, {
   "name"        => _INTL("Battle Animation Editor"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Edit the battle animations."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbAnimationEditor }
   }
 })
 
-DebugMenuCommands.register("animation_organiser", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :animation_organiser, {
   "name"        => _INTL("Battle Animation Organiser"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Rearrange/add/delete battle animations."),
-  "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbAnimationsOrganiser }
   }
 })
 
-DebugMenuCommands.register("import_animations", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :import_animations, {
   "name"        => _INTL("Import All Battle Animations"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Import all battle animations from the \"Animations\" folder."),
-  "always_show" => true,
   "effect"      => proc {
     pbImportAllAnimations
   }
 })
 
-DebugMenuCommands.register("export_animations", {
-  "parent"      => "editors_menu",
+MenuHandlers.add(:debug_menu, :export_animations, {
   "name"        => _INTL("Export All Battle Animations"),
+  "parent"      => :editors_menu,
   "description" => _INTL("Export all battle animations individually to the \"Animations\" folder."),
-  "always_show" => true,
   "effect"      => proc {
     pbExportAllAnimations
   }
@@ -1074,48 +1022,43 @@ DebugMenuCommands.register("export_animations", {
 #===============================================================================
 # Other options
 #===============================================================================
-DebugMenuCommands.register("other_menu", {
-  "parent"      => "main",
-  "name"        => _INTL("Other options..."),
-  "description" => _INTL("Mystery Gifts, translations, compile data, etc."),
-  "always_show" => true
+MenuHandlers.add(:debug_menu, :other_menu, {
+  "name"        => _INTL("Other Options..."),
+  "parent"      => :main,
+  "description" => _INTL("Mystery Gifts, translations, compile data, etc.")
 })
 
-DebugMenuCommands.register("mystery_gift", {
-  "parent"      => "other_menu",
+MenuHandlers.add(:debug_menu, :mystery_gift, {
   "name"        => _INTL("Manage Mystery Gifts"),
+  "parent"      => :other_menu,
   "description" => _INTL("Edit and enable/disable Mystery Gifts."),
-  "always_show" => true,
   "effect"      => proc {
     pbManageMysteryGifts
   }
 })
 
-DebugMenuCommands.register("extract_text", {
-  "parent"      => "other_menu",
+MenuHandlers.add(:debug_menu, :extract_text, {
   "name"        => _INTL("Extract Text"),
+  "parent"      => :other_menu,
   "description" => _INTL("Extract all text in the game to a single file for translating."),
-  "always_show" => true,
   "effect"      => proc {
     pbExtractText
   }
 })
 
-DebugMenuCommands.register("compile_text", {
-  "parent"      => "other_menu",
+MenuHandlers.add(:debug_menu, :compile_text, {
   "name"        => _INTL("Compile Text"),
+  "parent"      => :other_menu,
   "description" => _INTL("Import text and converts it into a language file."),
-  "always_show" => true,
   "effect"      => proc {
     pbCompileTextUI
   }
 })
 
-DebugMenuCommands.register("compile_data", {
-  "parent"      => "other_menu",
+MenuHandlers.add(:debug_menu, :compile_data, {
   "name"        => _INTL("Compile Data"),
+  "parent"      => :other_menu,
   "description" => _INTL("Fully compile all data."),
-  "always_show" => true,
   "effect"      => proc {
     msgwindow = pbCreateMessageWindow
     Compiler.compile_all(true)
@@ -1124,11 +1067,10 @@ DebugMenuCommands.register("compile_data", {
   }
 })
 
-DebugMenuCommands.register("create_pbs_files", {
-  "parent"      => "other_menu",
+MenuHandlers.add(:debug_menu, :create_pbs_files, {
   "name"        => _INTL("Create PBS File(s)"),
+  "parent"      => :other_menu,
   "description" => _INTL("Choose one or all PBS files and create it."),
-  "always_show" => true,
   "effect"      => proc {
     cmd = 0
     cmds = [
@@ -1185,21 +1127,19 @@ DebugMenuCommands.register("create_pbs_files", {
   }
 })
 
-DebugMenuCommands.register("fix_invalid_tiles", {
-  "parent"      => "other_menu",
+MenuHandlers.add(:debug_menu, :fix_invalid_tiles, {
   "name"        => _INTL("Fix Invalid Tiles"),
+  "parent"      => :other_menu,
   "description" => _INTL("Scans all maps and erases non-existent tiles."),
-  "always_show" => true,
   "effect"      => proc {
     pbDebugFixInvalidTiles
   }
 })
 
-DebugMenuCommands.register("rename_files", {
-  "parent"      => "other_menu",
+MenuHandlers.add(:debug_menu, :rename_files, {
   "name"        => _INTL("Rename Outdated Files"),
+  "parent"      => :other_menu,
   "description" => _INTL("Check for files with outdated names and rename/move them. Can alter map data."),
-  "always_show" => true,
   "effect"      => proc {
     if pbConfirmMessage(_INTL("Are you sure you want to automatically rename outdated files?"))
       FilenameUpdater.rename_files
@@ -1208,11 +1148,10 @@ DebugMenuCommands.register("rename_files", {
   }
 })
 
-DebugMenuCommands.register("reload_system_cache", {
-  "parent"      => "other_menu",
+MenuHandlers.add(:debug_menu, :reload_system_cache, {
   "name"        => _INTL("Reload System Cache"),
+  "parent"      => :other_menu,
   "description" => _INTL("Refreshes the system's file cache. Use if you change a file while playing."),
-  "always_show" => true,
   "effect"      => proc {
     System.reload_cache
     pbMessage(_INTL("Done."))

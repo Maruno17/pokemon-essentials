@@ -128,43 +128,71 @@ class PokemonPokegearScreen
   end
 
   def pbStartScreen
+    # Get all commands
+    command_list = []
     commands = []
-    cmdMap     = -1
-    cmdPhone   = -1
-    cmdJukebox = -1
-    commands[cmdMap = commands.length] = ["map", _INTL("Map")]
-    if $PokemonGlobal.phoneNumbers && $PokemonGlobal.phoneNumbers.length > 0
-      commands[cmdPhone = commands.length] = ["phone", _INTL("Phone")]
+    MenuHandlers.each_available(:pokegear_menu) do |option, hash, name|
+      command_list.push([hash["icon_name"] || "", name])
+      commands.push(hash)
     end
-    commands[cmdJukebox = commands.length] = ["jukebox", _INTL("Jukebox")]
-    @scene.pbStartScene(commands)
+    @scene.pbStartScene(command_list)
+    # Main loop
+    end_scene = false
     loop do
-      cmd = @scene.pbScene
-      if cmd < 0
+      choice = @scene.pbScene
+      if choice < 0
+        end_scene = true
         break
-      elsif cmdMap >= 0 && cmd == cmdMap
-        pbFadeOutIn {
-          scene = PokemonRegionMap_Scene.new(-1, false)
-          screen = PokemonRegionMapScreen.new(scene)
-          ret = screen.pbStartScreen
-          if ret
-            $game_temp.fly_destination = ret
-            next 99999   # Ugly hack to make Pokégear scene not reappear if flying
-          end
-        }
-        break if $game_temp.fly_destination
-      elsif cmdPhone >= 0 && cmd == cmdPhone
-        pbFadeOutIn {
-          PokemonPhoneScene.new.start
-        }
-      elsif cmdJukebox >= 0 && cmd == cmdJukebox
-        pbFadeOutIn {
-          scene = PokemonJukebox_Scene.new
-          screen = PokemonJukeboxScreen.new(scene)
-          screen.pbStartScreen
-        }
       end
+      break if commands[choice]["effect"].call(@scene)
     end
-    ($game_temp.fly_destination) ? @scene.dispose : @scene.pbEndScene
+    @scene.pbEndScene if end_scene
   end
 end
+
+#===============================================================================
+#
+#===============================================================================
+MenuHandlers.add(:pokegear_menu, :map, {
+  "name"      => _INTL("Map"),
+  "icon_name" => "map",
+  "order"     => 10,
+  "effect"    => proc { |menu|
+    pbFadeOutIn {
+      scene = PokemonRegionMap_Scene.new(-1, false)
+      screen = PokemonRegionMapScreen.new(scene)
+      ret = screen.pbStartScreen
+      if ret
+        $game_temp.fly_destination = ret
+        menu.dispose
+        next 99999
+      end
+    }
+    next $game_temp.fly_destination
+  }
+})
+
+MenuHandlers.add(:pokegear_menu, :phone, {
+  "name"      => _INTL("Phone"),
+  "icon_name" => "phone",
+  "order"     => 20,
+  "condition" => proc { next $PokemonGlobal.phoneNumbers && $PokemonGlobal.phoneNumbers.length > 0 },
+  "effect"    => proc { |menu|
+    pbFadeOutIn { PokemonPhoneScene.new.start }
+    next false
+  }
+})
+
+MenuHandlers.add(:pokegear_menu, :jukebox, {
+  "name"      => _INTL("Jukebox"),
+  "icon_name" => "jukebox",
+  "order"     => 30,
+  "effect"    => proc { |menu|
+    pbFadeOutIn {
+      scene = PokemonJukebox_Scene.new
+      screen = PokemonJukeboxScreen.new(scene)
+      screen.pbStartScreen
+    }
+    next false
+  }
+})

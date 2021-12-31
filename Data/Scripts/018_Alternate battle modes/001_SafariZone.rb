@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class SafariState
   attr_accessor :ballcount
   attr_accessor :captures
@@ -53,14 +56,9 @@ class SafariState
   end
 end
 
-
-
-EventHandlers.add(:on_enter_map, :end_safari_game,
-  proc { |_old_map_id|
-    pbSafariState.pbEnd if !pbInSafari?
-  }
-)
-
+#===============================================================================
+#
+#===============================================================================
 def pbInSafari?
   if pbSafariState.inProgress?
     # Reception map is handled separately from safari map since the reception
@@ -77,10 +75,19 @@ def pbSafariState
   return $PokemonGlobal.safariState
 end
 
+#===============================================================================
+#
+#===============================================================================
+EventHandlers.add(:on_enter_map, :end_safari_game,
+  proc { |_old_map_id|
+    pbSafariState.pbEnd if !pbInSafari?
+  }
+)
+
 EventHandlers.add(:on_player_step_taken_can_transfer, :safari_game_counter,
   proc { |handled|
-    # handled is an array: [nil]. If [true], a message has already been shown
-    # because of this step, so don't do anything that might show another one
+    # handled is an array: [nil]. If [true], a transfer has happened because of
+    # this event, so don't do anything that might cause another one
     next if handled[0]
     next if Settings::SAFARI_STEPS == 0 || !pbInSafari? || pbSafariState.decision != 0
     pbSafariState.steps -= 1
@@ -93,6 +100,9 @@ EventHandlers.add(:on_player_step_taken_can_transfer, :safari_game_counter,
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 EventHandlers.add(:on_calling_wild_battle, :safari_battle,
   proc { |species, level, handled|
     # handled is an array: [nil]. If [true] or [false], the battle has already
@@ -149,3 +159,39 @@ def pbSafariBattle(species, level)
   # Return the outcome of the battle
   return decision
 end
+
+#===============================================================================
+#
+#===============================================================================
+class PokemonPauseMenu
+  alias __safari_pbShowInfo pbShowInfo unless method_defined?(:__safari_pbShowInfo)
+
+  def pbShowInfo
+    __safari_pbShowInfo
+    return if !pbInSafari?
+    if Settings::SAFARI_STEPS <= 0
+      @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
+    else
+      @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
+                              pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
+    end
+  end
+end
+
+MenuHandlers.add(:pause_menu, :quit_safari_game, {
+  "name"      => _INTL("Quit"),
+  "order"     => 60,
+  "condition" => proc { next pbInSafari? },
+  "effect"    => proc { |menu|
+    menu.pbHideMenu
+    if pbConfirmMessage(_INTL("Would you like to leave the Safari Game right now?"))
+      menu.pbEndScene
+      pbSafariState.decision = 1
+      pbSafariState.pbGoToStart
+      next true
+    end
+    menu.pbRefresh
+    menu.pbShowMenu
+    next false
+  }
+})

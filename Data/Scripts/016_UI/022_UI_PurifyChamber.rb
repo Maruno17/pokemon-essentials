@@ -1314,22 +1314,13 @@ end
 #===============================================================================
 #
 #===============================================================================
-class PurifyChamberPC
-  def shouldShow?
-    return $player.seen_purify_chamber
-  end
-
-  def name
-    return _INTL("Purify Chamber")
-  end
-
-  def access
+MenuHandlers.add(:pc_menu, :purify_chamber, {
+  "name"      => _INTL("Purify Chamber"),
+  "order"     => 30,
+  "condition" => proc { next $player.seen_purify_chamber },
+  "effect"    => proc { |menu|
     pbMessage(_INTL("\\se[PC access]Accessed the Purify Chamber."))
     pbPurifyChamber
-  end
-end
-
-#===============================================================================
-#
-#===============================================================================
-PokemonPCList.registerPC(PurifyChamberPC.new)
+    next false
+  }
+})

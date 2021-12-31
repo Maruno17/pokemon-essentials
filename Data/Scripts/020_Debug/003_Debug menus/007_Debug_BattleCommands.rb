@@ -21,59 +21,18 @@ Choose each battler's next action.
 =end
 
 #===============================================================================
-#
-#===============================================================================
-module BattleDebugMenuCommands
-  @@commands = HandlerHashBasic.new
-
-  def self.register(option, hash)
-    @@commands.add(option, hash)
-  end
-
-  def self.registerIf(condition, hash)
-    @@commands.addIf(condition, hash)
-  end
-
-  def self.copy(option, *new_options)
-    @@commands.copy(option, *new_options)
-  end
-
-  def self.each
-    @@commands.each { |key, hash| yield key, hash }
-  end
-
-  def self.hasFunction?(option, function)
-    option_hash = @@commands[option]
-    return option_hash&.has_key?(function)
-  end
-
-  def self.getFunction(option, function)
-    option_hash = @@commands[option]
-    return (option_hash && option_hash[function]) ? option_hash[function] : nil
-  end
-
-  def self.call(function, option, *args)
-    option_hash = @@commands[option]
-    return nil if !option_hash || !option_hash[function]
-    return (option_hash[function].call(*args) == true)
-  end
-end
-
-#===============================================================================
 # Battler Options
 #===============================================================================
-BattleDebugMenuCommands.register("battlers", {
-  "parent"      => "main",
+MenuHandlers.add(:battle_debug_menu, :battlers, {
   "name"        => _INTL("Battlers..."),
-  "description" => _INTL("Look at Pokémon in battle and change their properties."),
-  "always_show" => true
+  "parent"      => :main,
+  "description" => _INTL("Look at Pokémon in battle and change their properties.")
 })
 
-BattleDebugMenuCommands.register("list_player_battlers", {
-  "parent"      => "battlers",
+MenuHandlers.add(:battle_debug_menu, :list_player_battlers, {
   "name"        => _INTL("Player-Side Battlers"),
+  "parent"      => :battlers,
   "description" => _INTL("Edit Pokémon on the player's side of battle."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     battlers = []
     cmds = []
@@ -96,11 +55,10 @@ BattleDebugMenuCommands.register("list_player_battlers", {
   }
 })
 
-BattleDebugMenuCommands.register("list_foe_battlers", {
-  "parent"      => "battlers",
+MenuHandlers.add(:battle_debug_menu, :list_foe_battlers, {
   "name"        => _INTL("Foe-Side Battlers"),
+  "parent"      => :battlers,
   "description" => _INTL("Edit Pokémon on the opposing side of battle."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     battlers = []
     cmds = []
@@ -120,18 +78,16 @@ BattleDebugMenuCommands.register("list_foe_battlers", {
 #===============================================================================
 # Field Options
 #===============================================================================
-BattleDebugMenuCommands.register("field", {
-  "parent"      => "main",
+MenuHandlers.add(:battle_debug_menu, :field, {
   "name"        => _INTL("Field Effects..."),
+  "parent"      => :main,
   "description" => _INTL("Effects that apply to the whole battlefield."),
-  "always_show" => true
 })
 
-BattleDebugMenuCommands.register("weather", {
-  "parent"      => "field",
+MenuHandlers.add(:battle_debug_menu, :weather, {
   "name"        => _INTL("Weather"),
+  "parent"      => :field,
   "description" => _INTL("Set weather and duration."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     weather_types = []
     weather_cmds = []
@@ -190,11 +146,10 @@ BattleDebugMenuCommands.register("weather", {
   }
 })
 
-BattleDebugMenuCommands.register("terrain", {
-  "parent"      => "field",
+MenuHandlers.add(:battle_debug_menu, :terrain, {
   "name"        => _INTL("Terrain"),
+  "parent"      => :field,
   "description" => _INTL("Set terrain and duration."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     terrain_types = []
     terrain_cmds = []
@@ -253,11 +208,10 @@ BattleDebugMenuCommands.register("terrain", {
   }
 })
 
-BattleDebugMenuCommands.register("environment", {
-  "parent"      => "field",
+MenuHandlers.add(:battle_debug_menu, :environment_time, {
   "name"        => _INTL("Environment/Time"),
+  "parent"      => :field,
   "description" => _INTL("Set the battle's environment and time of day."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     environment_types = []
     environment_cmds = []
@@ -292,11 +246,10 @@ BattleDebugMenuCommands.register("environment", {
   }
 })
 
-BattleDebugMenuCommands.register("backdrop", {
-  "parent"      => "field",
+MenuHandlers.add(:battle_debug_menu, :backdrop, {
   "name"        => _INTL("Backdrop Names"),
+  "parent"      => :field,
   "description" => _INTL("Set the names of the backdrop and base graphics."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     loop do
       cmd = pbMessage("\\ts[]" + _INTL("Set which backdrop name?"),
@@ -317,11 +270,10 @@ BattleDebugMenuCommands.register("backdrop", {
   }
 })
 
-BattleDebugMenuCommands.register("set_field_effects", {
-  "parent"      => "field",
+MenuHandlers.add(:battle_debug_menu, :set_field_effects, {
   "name"        => _INTL("Other Field Effects..."),
+  "parent"      => :field,
   "description" => _INTL("View/set other effects that apply to the whole battlefield."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     editor = Battle::DebugSetEffects.new(battle, :field)
     editor.update
@@ -329,11 +281,10 @@ BattleDebugMenuCommands.register("set_field_effects", {
   }
 })
 
-BattleDebugMenuCommands.register("player_side", {
-  "parent"      => "field",
+MenuHandlers.add(:battle_debug_menu, :player_side, {
   "name"        => _INTL("Player's Side Effects..."),
+  "parent"      => :field,
   "description" => _INTL("Effects that apply to the side the player is on."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     editor = Battle::DebugSetEffects.new(battle, :side, 0)
     editor.update
@@ -341,11 +292,10 @@ BattleDebugMenuCommands.register("player_side", {
   }
 })
 
-BattleDebugMenuCommands.register("opposing_side", {
-  "parent"      => "field",
+MenuHandlers.add(:battle_debug_menu, :opposing_side, {
   "name"        => _INTL("Foe's Side Effects..."),
+  "parent"      => :field,
   "description" => _INTL("Effects that apply to the opposing side."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     editor = Battle::DebugSetEffects.new(battle, :side, 1)
     editor.update
@@ -356,18 +306,16 @@ BattleDebugMenuCommands.register("opposing_side", {
 #===============================================================================
 # Trainer Options
 #===============================================================================
-BattleDebugMenuCommands.register("trainers", {
-  "parent"      => "main",
+MenuHandlers.add(:battle_debug_menu, :trainers, {
   "name"        => _INTL("Trainer Options..."),
-  "description" => _INTL("Variables that apply to trainers."),
-  "always_show" => true
+  "parent"      => :main,
+  "description" => _INTL("Variables that apply to trainers.")
 })
 
-BattleDebugMenuCommands.register("mega_evolution", {
-  "parent"      => "trainers",
+MenuHandlers.add(:battle_debug_menu, :mega_evolution, {
   "name"        => _INTL("Mega Evolution"),
+  "parent"      => :trainers,
   "description" => _INTL("Whether each trainer is allowed to Mega Evolve."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     cmd = 0
     loop do
@@ -399,11 +347,10 @@ BattleDebugMenuCommands.register("mega_evolution", {
   }
 })
 
-BattleDebugMenuCommands.register("speed_order", {
-  "parent"      => "main",
+MenuHandlers.add(:battle_debug_menu, :speed_order, {
   "name"        => _INTL("Battler Speed Order"),
+  "parent"      => :main,
   "description" => _INTL("Show all battlers in order from fastest to slowest."),
-  "always_show" => true,
   "effect"      => proc { |battle|
     battlers = battle.allBattlers.map { |b| [b, b.pbSpeed] }
     battlers.sort! { |a, b| b[1] <=> a[1] }

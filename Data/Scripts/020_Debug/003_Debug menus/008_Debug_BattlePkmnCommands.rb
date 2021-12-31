@@ -9,56 +9,17 @@ Actual stats? @attack, @defense, etc.
 =end
 
 #===============================================================================
-#
-#===============================================================================
-module BattlePokemonDebugMenuCommands
-  @@commands = HandlerHashBasic.new
-
-  def self.register(option, hash)
-    @@commands.add(option, hash)
-  end
-
-  def self.registerIf(condition, hash)
-    @@commands.addIf(condition, hash)
-  end
-
-  def self.copy(option, *new_options)
-    @@commands.copy(option, *new_options)
-  end
-
-  def self.each
-    @@commands.each { |key, hash| yield key, hash }
-  end
-
-  def self.hasFunction?(option, function)
-    option_hash = @@commands[option]
-    return option_hash&.has_key?(function)
-  end
-
-  def self.getFunction(option, function)
-    option_hash = @@commands[option]
-    return (option_hash && option_hash[function]) ? option_hash[function] : nil
-  end
-
-  def self.call(function, option, *args)
-    option_hash = @@commands[option]
-    return nil if !option_hash || !option_hash[function]
-    return (option_hash[function].call(*args) == true)
-  end
-end
-
-#===============================================================================
 # HP/Status options
 #===============================================================================
-BattlePokemonDebugMenuCommands.register("hp_status_menu", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :hp_status_menu, {
   "name"   => _INTL("HP/Status..."),
+  "parent" => :main,
   "usage"  => :both
 })
 
-BattlePokemonDebugMenuCommands.register("set_hp", {
-  "parent" => "hp_status_menu",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_hp, {
   "name"   => _INTL("Set HP"),
+  "parent" => :hp_status_menu,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
@@ -79,9 +40,9 @@ BattlePokemonDebugMenuCommands.register("set_hp", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_status", {
-  "parent" => "hp_status_menu",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_status, {
   "name"   => _INTL("Set status"),
+  "parent" => :hp_status_menu,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
@@ -156,9 +117,9 @@ BattlePokemonDebugMenuCommands.register("set_status", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("full_heal", {
-  "parent" => "hp_status_menu",
+MenuHandlers.add(:battle_pokemon_debug_menu, :full_heal, {
   "name"   => _INTL("Heal HP and status"),
+  "parent" => :hp_status_menu,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
@@ -178,15 +139,15 @@ BattlePokemonDebugMenuCommands.register("full_heal", {
 #===============================================================================
 # Level/stats options
 #===============================================================================
-BattlePokemonDebugMenuCommands.register("level_stats", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :level_stats, {
   "name"   => _INTL("Stats/level..."),
+  "parent" => :main,
   "usage"  => :both
 })
 
-BattlePokemonDebugMenuCommands.register("set_stat_stages", {
-  "parent" => "level_stats",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_stat_stages, {
   "name"   => _INTL("Set stat stages"),
+  "parent" => :level_stats,
   "usage"  => :battler,
   "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
@@ -223,9 +184,9 @@ BattlePokemonDebugMenuCommands.register("set_stat_stages", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_level", {
-  "parent" => "level_stats",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_level, {
   "name"   => _INTL("Set level"),
+  "parent" => :level_stats,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
@@ -246,9 +207,9 @@ BattlePokemonDebugMenuCommands.register("set_level", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_exp", {
-  "parent" => "level_stats",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_exp, {
   "name"   => _INTL("Set Exp"),
+  "parent" => :level_stats,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     if pkmn.egg?
@@ -271,9 +232,9 @@ BattlePokemonDebugMenuCommands.register("set_exp", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("hidden_values", {
-  "parent" => "level_stats",
+MenuHandlers.add(:battle_pokemon_debug_menu, :hidden_values, {
   "name"   => _INTL("EV/IV..."),
+  "parent" => :level_stats,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     cmd = 0
@@ -378,9 +339,9 @@ BattlePokemonDebugMenuCommands.register("hidden_values", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_happiness", {
-  "parent" => "level_stats",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_happiness, {
   "name"   => _INTL("Set happiness"),
+  "parent" => :level_stats,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     params = ChooseNumberParams.new
@@ -394,9 +355,9 @@ BattlePokemonDebugMenuCommands.register("set_happiness", {
 #===============================================================================
 # Types
 #===============================================================================
-BattlePokemonDebugMenuCommands.register("set_types", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_types, {
   "name"   => _INTL("Set types"),
+  "parent" => :main,
   "usage"  => :battler,
   "effect" => proc { |pkmn, battler, battle|
     max_main_types = 2   # The most types a Pokémon can have normally
@@ -443,15 +404,15 @@ BattlePokemonDebugMenuCommands.register("set_types", {
 #===============================================================================
 # Moves options
 #===============================================================================
-BattlePokemonDebugMenuCommands.register("moves", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :moves, {
   "name"   => _INTL("Moves..."),
+  "parent" => :main,
   "usage"  => :both
 })
 
-BattlePokemonDebugMenuCommands.register("teach_move", {
-  "parent" => "moves",
+MenuHandlers.add(:battle_pokemon_debug_menu, :teach_move, {
   "name"   => _INTL("Teach move"),
+  "parent" => :moves,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     if pkmn.numMoves >= Pokemon::MAX_MOVES
@@ -472,9 +433,9 @@ BattlePokemonDebugMenuCommands.register("teach_move", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("forget_move", {
-  "parent" => "moves",
+MenuHandlers.add(:battle_pokemon_debug_menu, :forget_move, {
   "name"   => _INTL("Forget move"),
+  "parent" => :moves,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     move_names = []
@@ -497,9 +458,9 @@ BattlePokemonDebugMenuCommands.register("forget_move", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_move_pp", {
-  "parent" => "moves",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_move_pp, {
   "name"   => _INTL("Set move PP"),
+  "parent" => :moves,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     cmd = 0
@@ -575,9 +536,9 @@ BattlePokemonDebugMenuCommands.register("set_move_pp", {
 #===============================================================================
 # Other options
 #===============================================================================
-BattlePokemonDebugMenuCommands.register("set_item", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_item, {
   "name"   => _INTL("Set item"),
+  "parent" => :main,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     cmd = 0
@@ -610,9 +571,9 @@ BattlePokemonDebugMenuCommands.register("set_item", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_ability", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_ability, {
   "name"   => _INTL("Set ability"),
+  "parent" => :main,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     cmd = 0
@@ -651,9 +612,9 @@ BattlePokemonDebugMenuCommands.register("set_ability", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_nature", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_nature, {
   "name"   => _INTL("Set nature"),
+  "parent" => :main,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     commands = []
@@ -693,9 +654,9 @@ BattlePokemonDebugMenuCommands.register("set_nature", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_gender", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_gender, {
   "name"   => _INTL("Set gender"),
+  "parent" => :main,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     if pkmn.singleGendered?
@@ -722,9 +683,9 @@ BattlePokemonDebugMenuCommands.register("set_gender", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("form", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_form, {
   "name"   => _INTL("Set form"),
+  "parent" => :main,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     cmd = 0
@@ -759,9 +720,9 @@ BattlePokemonDebugMenuCommands.register("form", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_shininess", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_shininess, {
   "name"   => _INTL("Set shininess"),
+  "parent" => :main,
   "usage"  => :both,
   "effect" => proc { |pkmn, battler, battle|
     cmd = 0
@@ -791,9 +752,9 @@ BattlePokemonDebugMenuCommands.register("set_shininess", {
   }
 })
 
-BattlePokemonDebugMenuCommands.register("set_effects", {
-  "parent" => "main",
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_effects, {
   "name"   => _INTL("Set effects"),
+  "parent" => :main,
   "usage"  => :battler,
   "effect" => proc { |pkmn, battler, battle|
     editor = Battle::DebugSetEffects.new(battle, :battler, battler.index)

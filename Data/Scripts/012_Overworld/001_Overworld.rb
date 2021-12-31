@@ -87,8 +87,8 @@ EventHandlers.add(:on_player_step_taken, :gain_happiness,
 # Poison party Pokémon
 EventHandlers.add(:on_player_step_taken_can_transfer, :poison_party,
   proc { |handled|
-    # handled is an array: [nil]. If [true], a message has already been shown
-    # because of this step, so don't do anything that might show another one
+    # handled is an array: [nil]. If [true], a transfer has happened because of
+    # this event, so don't do anything that might cause another one
     next if handled[0]
     next if !Settings::POISON_IN_FIELD || $PokemonGlobal.stepcount % 4 != 0
     flashed = false

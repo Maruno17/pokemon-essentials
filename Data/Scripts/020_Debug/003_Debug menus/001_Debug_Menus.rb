@@ -6,11 +6,11 @@ class CommandMenuList
 
   def initialize
     @commands    = []
-    @currentList = "main"
+    @currentList = :main
   end
 
-  def add(option, hash)
-    @commands.push([option, hash["parent"], hash["name"], hash["description"]])
+  def add(option, hash, name = nil, description = nil)
+    @commands.push([option, hash["parent"], name || hash["name"], description || hash["description"]])
   end
 
   def list
@@ -67,10 +67,18 @@ end
 #
 #===============================================================================
 def pbDebugMenu(show_all = true)
+  # Get all commands
   commands = CommandMenuList.new
-  DebugMenuCommands.each do |option, hash|
-    commands.add(option, hash) if show_all || hash["always_show"]
+  MenuHandlers.each_available(:debug_menu) do |option, hash, name|
+    next if !show_all && !hash["always_show"].nil? && !hash["always_show"]
+    if hash["description"].is_a?(Proc)
+      description = hash["description"].call
+    elsif !hash["description"].nil?
+      description = _INTL(hash["description"])
+    end
+    commands.add(option, hash, name, description)
   end
+  # Setup windows
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   sprites = {}
@@ -86,6 +94,7 @@ def pbDebugMenu(show_all = true)
   cmdwindow.visible  = true
   sprites["textbox"].text = commands.getDesc(cmdwindow.index)
   pbFadeInAndShow(sprites)
+  # Main loop
   ret = -1
   refresh = true
   loop do
@@ -123,10 +132,10 @@ def pbDebugMenu(show_all = true)
       cmdwindow.commands = commands.list
       cmdwindow.index = 0
       refresh = true
-    elsif cmd == "warp"
-      return if DebugMenuCommands.call("effect", cmd, sprites, viewport)
+    elsif cmd == :warp
+      return if MenuHandlers.call(:debug_menu, cmd, "effect", sprites, viewport)
     else
-      DebugMenuCommands.call("effect", cmd)
+      MenuHandlers.call(:debug_menu, cmd, "effect")
     end
   end
   pbPlayCloseMenuSE
@@ -141,27 +150,27 @@ end
 #===============================================================================
 module PokemonDebugMixin
   def pbPokemonDebug(pkmn, pkmnid, heldpoke = nil, settingUpBattle = false)
-    command = 0
+    # Get all commands
     commands = CommandMenuList.new
-    PokemonDebugMenuCommands.each do |option, hash|
-      commands.add(option, hash) if !settingUpBattle || hash["always_show"]
+    MenuHandlers.each_available(:pokemon_debug_menu) do |option, hash, name|
+      next if settingUpBattle && !hash["always_show"].nil? && !hash["always_show"]
+      commands.add(option, hash, name)
     end
+    # Main loop
+    command = 0
     loop do
       command = pbShowCommands(_INTL("Do what with {1}?", pkmn.name), commands.list, command)
       if command < 0
         parent = commands.getParent
-        if parent
-          commands.currentList = parent[0]
-          command = parent[1]
-        else
-          break
-        end
+        break if !parent
+        commands.currentList = parent[0]
+        command = parent[1]
       else
         cmd = commands.getCommand(command)
         if commands.hasSubMenu?(cmd)
           commands.currentList = cmd
           command = 0
-        elsif PokemonDebugMenuCommands.call("effect", cmd, pkmn, pkmnid, heldpoke, settingUpBattle, self)
+        elsif MenuHandlers.call(:pokemon_debug_menu, cmd, "effect", pkmn, pkmnid, heldpoke, settingUpBattle, self)
           break
         end
       end
@@ -174,10 +183,18 @@ end
 #===============================================================================
 module Battle::DebugMixin
   def pbBattleDebug(battle, show_all = true)
+    # Get all commands
     commands = CommandMenuList.new
-    BattleDebugMenuCommands.each do |option, hash|
-      commands.add(option, hash) if show_all || hash["always_show"]
+    MenuHandlers.each_available(:battle_debug_menu) do |option, hash, name|
+      next if !show_all && !hash["always_show"].nil? && !hash["always_show"]
+      if hash["description"].is_a?(Proc)
+        description = hash["description"].call
+      elsif !hash["description"].nil?
+        description = _INTL(hash["description"])
+      end
+      commands.add(option, hash, name, description)
     end
+    # Setup windows
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     viewport.z = 99999
     sprites = {}
@@ -191,6 +208,7 @@ module Battle::DebugMixin
     cmdwindow.viewport = viewport
     cmdwindow.visible  = true
     sprites["textbox"].text = commands.getDesc(cmdwindow.index)
+    # Main loop
     ret = -1
     refresh = true
     loop do
@@ -229,7 +247,7 @@ module Battle::DebugMixin
         cmdwindow.index = 0
         refresh = true
       else
-        BattleDebugMenuCommands.call("effect", cmd, battle)
+        MenuHandlers.call(:battle_debug_menu, cmd, "effect", battle)
       end
     end
     pbPlayCloseMenuSE
@@ -325,12 +343,14 @@ module Battle::DebugMixin
   end
 
   def pbBattlePokemonDebug(pkmn, battler = nil)
+    # Get all commands
     commands = CommandMenuList.new
-    BattlePokemonDebugMenuCommands.each do |option, hash|
+    MenuHandlers.each_available(:battle_pokemon_debug_menu) do |option, hash, name|
       next if battler && hash["usage"] == :pokemon
       next if !battler && hash["usage"] == :battler
-      commands.add(option, hash)
+      commands.add(option, hash, name)
     end
+    # Setup windows
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     viewport.z = 99999
     sprites = {}
@@ -346,6 +366,7 @@ module Battle::DebugMixin
     sprites["dummywindow"].y = Graphics.height
     sprites["dummywindow"].width = Graphics.width
     sprites["dummywindow"].height = 0
+    # Main loop
     need_refresh = true
     cmd = 0
     loop do
@@ -373,7 +394,7 @@ module Battle::DebugMixin
           commands.currentList = real_cmd
           cmd = 0
         else
-          BattlePokemonDebugMenuCommands.call("effect", real_cmd, pkmn, battler, self)
+          MenuHandlers.call(:battle_pokemon_debug_menu, real_cmd, "effect", pkmn, battler, self)
           need_refresh = true
         end
       end

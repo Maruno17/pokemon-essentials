@@ -92,6 +92,8 @@ class PokemonPauseMenu
     @scene.pbShowMenu
   end
 
+  def pbShowInfo; end
+
   def pbStartPokemonMenu
     if !$player
       if $DEBUG
@@ -101,198 +103,218 @@ class PokemonPauseMenu
       return
     end
     @scene.pbStartScene
-    endscene = true
+    # Show extra info window if relevant
+    pbShowInfo
+    # Get all commands
+    command_list = []
     commands = []
-    cmdPokedex  = -1
-    cmdPokemon  = -1
-    cmdBag      = -1
-    cmdTrainer  = -1
-    cmdSave     = -1
-    cmdOption   = -1
-    cmdPokegear = -1
-    cmdTownMap  = -1
-    cmdDebug    = -1
-    cmdQuit     = -1
-    cmdEndGame  = -1
-    if $player.has_pokedex && $player.pokedex.accessible_dexes.length > 0
-      commands[cmdPokedex = commands.length]  = _INTL("Pokédex")
+    MenuHandlers.each_available(:pause_menu) do |option, hash, name|
+      command_list.push(name)
+      commands.push(hash)
     end
-    commands[cmdPokemon = commands.length]    = _INTL("Pokémon") if $player.party_count > 0
-    commands[cmdBag = commands.length]        = _INTL("Bag") if !pbInBugContest?
-    if $player.has_pokegear
-      commands[cmdPokegear = commands.length] = _INTL("Pokégear")
-    elsif $bag.has?(:TOWNMAP)
-      commands[cmdTownMap = commands.length]  = _INTL("Town Map")
-    end
-    commands[cmdTrainer = commands.length]    = $player.name
-    if pbInSafari?
-      if Settings::SAFARI_STEPS <= 0
-        @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
-      else
-        @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
-                                pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
-      end
-      commands[cmdQuit = commands.length]     = _INTL("Quit")
-    elsif pbInBugContest?
-      if pbBugContestState.lastPokemon
-        @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
-                                pbBugContestState.lastPokemon.speciesName,
-                                pbBugContestState.lastPokemon.level,
-                                pbBugContestState.ballcount))
-      else
-        @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount))
-      end
-      commands[cmdQuit = commands.length]     = _INTL("Quit Contest")
-    elsif $game_system && !$game_system.save_disabled
-      commands[cmdSave = commands.length]     = _INTL("Save")
-    end
-    commands[cmdOption = commands.length]     = _INTL("Options")
-    commands[cmdDebug = commands.length]      = _INTL("Debug") if $DEBUG
-    commands[cmdEndGame = commands.length]    = _INTL("Quit Game")
+    # Main loop
+    end_scene = false
     loop do
-      command = @scene.pbShowCommands(commands)
-      if cmdPokedex >= 0 && command == cmdPokedex
-        pbPlayDecisionSE
-        if Settings::USE_CURRENT_REGION_DEX
-          pbFadeOutIn {
-            scene = PokemonPokedex_Scene.new
-            screen = PokemonPokedexScreen.new(scene)
-            screen.pbStartScreen
-            @scene.pbRefresh
-          }
-        elsif $player.pokedex.accessible_dexes.length == 1
-          $PokemonGlobal.pokedexDex = $player.pokedex.accessible_dexes[0]
-          pbFadeOutIn {
-            scene = PokemonPokedex_Scene.new
-            screen = PokemonPokedexScreen.new(scene)
-            screen.pbStartScreen
-            @scene.pbRefresh
-          }
-        else
-          pbFadeOutIn {
-            scene = PokemonPokedexMenu_Scene.new
-            screen = PokemonPokedexMenuScreen.new(scene)
-            screen.pbStartScreen
-            @scene.pbRefresh
-          }
-        end
-      elsif cmdPokemon >= 0 && command == cmdPokemon
-        pbPlayDecisionSE
-        hiddenmove = nil
-        pbFadeOutIn {
-          sscene = PokemonParty_Scene.new
-          sscreen = PokemonPartyScreen.new(sscene, $player.party)
-          hiddenmove = sscreen.pbPokemonScreen
-          (hiddenmove) ? @scene.pbEndScene : @scene.pbRefresh
-        }
-        if hiddenmove
-          $game_temp.in_menu = false
-          pbUseHiddenMove(hiddenmove[0], hiddenmove[1])
-          return
-        end
-      elsif cmdBag >= 0 && command == cmdBag
-        pbPlayDecisionSE
-        item = nil
-        pbFadeOutIn {
-          scene = PokemonBag_Scene.new
-          screen = PokemonBagScreen.new(scene, $bag)
-          item = screen.pbStartScreen
-          (item) ? @scene.pbEndScene : @scene.pbRefresh
-        }
-        if item
-          $game_temp.in_menu = false
-          pbUseKeyItemInField(item)
-          return
-        end
-      elsif cmdPokegear >= 0 && command == cmdPokegear
-        pbPlayDecisionSE
-        pbFadeOutIn {
-          scene = PokemonPokegear_Scene.new
-          screen = PokemonPokegearScreen.new(scene)
-          screen.pbStartScreen
-          ($game_temp.fly_destination) ? @scene.pbEndScene : @scene.pbRefresh
-        }
-        return if pbFlyToNewLocation
-      elsif cmdTownMap >= 0 && command == cmdTownMap
-        pbFadeOutIn {
-          scene = PokemonRegionMap_Scene.new(-1, false)
-          screen = PokemonRegionMapScreen.new(scene)
-          ret = screen.pbStartScreen
-          $game_temp.fly_destination = ret if ret
-          ($game_temp.fly_destination) ? @scene.pbEndScene : @scene.pbRefresh
-        }
-        return if pbFlyToNewLocation
-      elsif cmdTrainer >= 0 && command == cmdTrainer
-        pbPlayDecisionSE
-        pbFadeOutIn {
-          scene = PokemonTrainerCard_Scene.new
-          screen = PokemonTrainerCardScreen.new(scene)
-          screen.pbStartScreen
-          @scene.pbRefresh
-        }
-      elsif cmdQuit >= 0 && command == cmdQuit
-        @scene.pbHideMenu
-        if pbInSafari?
-          if pbConfirmMessage(_INTL("Would you like to leave the Safari Game right now?"))
-            @scene.pbEndScene
-            pbSafariState.decision = 1
-            pbSafariState.pbGoToStart
-            return
-          else
-            pbShowMenu
-          end
-        elsif pbConfirmMessage(_INTL("Would you like to end the Contest now?"))
-          @scene.pbEndScene
-          pbBugContestState.pbStartJudging
-          return
-        else
-          pbShowMenu
-        end
-      elsif cmdSave >= 0 && command == cmdSave
-        @scene.pbHideMenu
-        scene = PokemonSave_Scene.new
-        screen = PokemonSaveScreen.new(scene)
-        if screen.pbSaveScreen
-          @scene.pbEndScene
-          endscene = false
-          break
-        else
-          pbShowMenu
-        end
-      elsif cmdOption >= 0 && command == cmdOption
-        pbPlayDecisionSE
-        pbFadeOutIn {
-          scene = PokemonOption_Scene.new
-          screen = PokemonOptionScreen.new(scene)
-          screen.pbStartScreen
-          pbUpdateSceneMap
-          @scene.pbRefresh
-        }
-      elsif cmdDebug >= 0 && command == cmdDebug
-        pbPlayDecisionSE
-        pbFadeOutIn {
-          pbDebugMenu
-          @scene.pbRefresh
-        }
-      elsif cmdEndGame >= 0 && command == cmdEndGame
-        @scene.pbHideMenu
-        if pbConfirmMessage(_INTL("Are you sure you want to quit the game?"))
-          scene = PokemonSave_Scene.new
-          screen = PokemonSaveScreen.new(scene)
-          if screen.pbSaveScreen
-            @scene.pbEndScene
-          end
-          @scene.pbEndScene
-          $scene = nil
-          return
-        else
-          pbShowMenu
-        end
-      else
+      choice = @scene.pbShowCommands(command_list)
+      if choice < 0
         pbPlayCloseMenuSE
+        end_scene = true
         break
       end
+      break if commands[choice]["effect"].call(@scene)
     end
-    @scene.pbEndScene if endscene
+    @scene.pbEndScene if end_scene
   end
 end
+
+#===============================================================================
+# Pause menu commands.
+#===============================================================================
+MenuHandlers.add(:pause_menu, :pokedex, {
+  "name"      => _INTL("Pokédex"),
+  "order"     => 10,
+  "condition" => proc { next $player.has_pokedex && $player.pokedex.accessible_dexes.length > 0 },
+  "effect"    => proc { |menu|
+    pbPlayDecisionSE
+    if Settings::USE_CURRENT_REGION_DEX
+      pbFadeOutIn {
+        scene = PokemonPokedex_Scene.new
+        screen = PokemonPokedexScreen.new(scene)
+        screen.pbStartScreen
+        menu.pbRefresh
+      }
+    elsif $player.pokedex.accessible_dexes.length == 1
+      $PokemonGlobal.pokedexDex = $player.pokedex.accessible_dexes[0]
+      pbFadeOutIn {
+        scene = PokemonPokedex_Scene.new
+        screen = PokemonPokedexScreen.new(scene)
+        screen.pbStartScreen
+        menu.pbRefresh
+      }
+    else
+      pbFadeOutIn {
+        scene = PokemonPokedexMenu_Scene.new
+        screen = PokemonPokedexMenuScreen.new(scene)
+        screen.pbStartScreen
+        menu.pbRefresh
+      }
+    end
+    next false
+  }
+})
+
+MenuHandlers.add(:pause_menu, :party, {
+  "name"      => _INTL("Pokémon"),
+  "order"     => 20,
+  "condition" => proc { next $player.party_count > 0 },
+  "effect"    => proc { |menu|
+    pbPlayDecisionSE
+    hidden_move = nil
+    pbFadeOutIn {
+      sscene = PokemonParty_Scene.new
+      sscreen = PokemonPartyScreen.new(sscene, $player.party)
+      hidden_move = sscreen.pbPokemonScreen
+      (hidden_move) ? menu.pbEndScene : menu.pbRefresh
+    }
+    next false if !hidden_move
+    $game_temp.in_menu = false
+    pbUseHiddenMove(hidden_move[0], hidden_move[1])
+    next true
+  }
+})
+
+MenuHandlers.add(:pause_menu, :bag, {
+  "name"      => _INTL("Bag"),
+  "order"     => 30,
+  "condition" => proc { next !pbInBugContest? },
+  "effect"    => proc { |menu|
+    pbPlayDecisionSE
+    item = nil
+    pbFadeOutIn {
+      scene = PokemonBag_Scene.new
+      screen = PokemonBagScreen.new(scene, $bag)
+      item = screen.pbStartScreen
+      (item) ? menu.pbEndScene : menu.pbRefresh
+    }
+    next false if !item
+    $game_temp.in_menu = false
+    pbUseKeyItemInField(item)
+    next true
+  }
+})
+
+MenuHandlers.add(:pause_menu, :pokegear, {
+  "name"      => _INTL("Pokégear"),
+  "order"     => 40,
+  "condition" => proc { next $player.has_pokegear },
+  "effect"    => proc { |menu|
+    pbPlayDecisionSE
+    pbFadeOutIn {
+      scene = PokemonPokegear_Scene.new
+      screen = PokemonPokegearScreen.new(scene)
+      screen.pbStartScreen
+      ($game_temp.fly_destination) ? menu.pbEndScene : menu.pbRefresh
+    }
+    next pbFlyToNewLocation
+  }
+})
+
+MenuHandlers.add(:pause_menu, :town_map, {
+  "name"      => _INTL("Town Map"),
+  "order"     => 40,
+  "condition" => proc { next !$player.has_pokegear && $bag.has?(:TOWNMAP) },
+  "effect"    => proc { |menu|
+    pbPlayDecisionSE
+    pbFadeOutIn {
+      scene = PokemonRegionMap_Scene.new(-1, false)
+      screen = PokemonRegionMapScreen.new(scene)
+      ret = screen.pbStartScreen
+      $game_temp.fly_destination = ret if ret
+      ($game_temp.fly_destination) ? menu.pbEndScene : menu.pbRefresh
+    }
+    next pbFlyToNewLocation
+  }
+})
+
+MenuHandlers.add(:pause_menu, :trainer_card, {
+  "name"      => proc { next $player.name },
+  "order"     => 50,
+  "effect"    => proc { |menu|
+    pbPlayDecisionSE
+    pbFadeOutIn {
+      scene = PokemonTrainerCard_Scene.new
+      screen = PokemonTrainerCardScreen.new(scene)
+      screen.pbStartScreen
+      menu.pbRefresh
+    }
+    next false
+  }
+})
+
+MenuHandlers.add(:pause_menu, :save, {
+  "name"      => _INTL("Save"),
+  "order"     => 60,
+  "condition" => proc { next $game_system && !$game_system.save_disabled &&
+                             !pbInSafari? && !pbInBugContest? },
+  "effect"    => proc { |menu|
+    menu.pbHideMenu
+    scene = PokemonSave_Scene.new
+    screen = PokemonSaveScreen.new(scene)
+    if screen.pbSaveScreen
+      menu.pbEndScene
+      next true
+    end
+    menu.pbRefresh
+    menu.pbShowMenu
+    next false
+  }
+})
+
+MenuHandlers.add(:pause_menu, :options, {
+  "name"      => _INTL("Options"),
+  "order"     => 70,
+  "effect"    => proc { |menu|
+    pbPlayDecisionSE
+    pbFadeOutIn {
+      scene = PokemonOption_Scene.new
+      screen = PokemonOptionScreen.new(scene)
+      screen.pbStartScreen
+      pbUpdateSceneMap
+      menu.pbRefresh
+    }
+    next false
+  }
+})
+
+MenuHandlers.add(:pause_menu, :debug, {
+  "name"      => _INTL("Debug"),
+  "order"     => 80,
+  "condition" => proc { next $DEBUG },
+  "effect"    => proc { |menu|
+    pbPlayDecisionSE
+    pbFadeOutIn {
+      pbDebugMenu
+      menu.pbRefresh
+    }
+    next false
+  }
+})
+
+MenuHandlers.add(:pause_menu, :quit_game, {
+  "name"      => _INTL("Quit Game"),
+  "order"     => 90,
+  "effect"    => proc { |menu|
+    menu.pbHideMenu
+    if pbConfirmMessage(_INTL("Are you sure you want to quit the game?"))
+      scene = PokemonSave_Scene.new
+      screen = PokemonSaveScreen.new(scene)
+      screen.pbSaveScreen
+      menu.pbEndScene
+      $scene = nil
+      next true
+    end
+    menu.pbRefresh
+    menu.pbShowMenu
+    next false
+  }
+})
