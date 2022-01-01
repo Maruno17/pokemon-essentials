@@ -263,6 +263,9 @@ end
 # Options main screen
 #===============================================================================
 class PokemonOption_Scene
+  attr_reader :sprites
+  attr_reader :load_screen
+
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
   end
@@ -309,8 +312,6 @@ class PokemonOption_Scene
   end
 
   def pbOptions
-    oldSystemSkin = $PokemonSystem.frame      # Menu
-    oldTextSkin   = $PokemonSystem.textskin   # Speech
     old_index     = -1
     pbActivateWindow(@sprites, "option") {
       loop do
@@ -319,17 +320,9 @@ class PokemonOption_Scene
         pbUpdate
         if @sprites["option"].mustUpdateOptions
           # Set the values of each option
+          @sprites["textbox"].letterbyletter = false
           @options.keys.each_with_index do |key, i|
-            @options[key].set(@sprites["option"][i], @load_screen)
-          end
-          if $PokemonSystem.textskin != oldTextSkin
-            @sprites["textbox"].setSkin(MessageConfig.pbGetSpeechFrame)
-            oldTextSkin = $PokemonSystem.textskin
-          end
-          if $PokemonSystem.frame != oldSystemSkin
-            @sprites["title"].setSkin(MessageConfig.pbGetSystemFrame)
-            @sprites["option"].setSkin(MessageConfig.pbGetSystemFrame)
-            oldSystemSkin = $PokemonSystem.frame
+            @options[key].set(@sprites["option"][i], self)
           end
         end
         if @sprites["option"].index != old_index
@@ -352,7 +345,7 @@ class PokemonOption_Scene
     pbFadeOutAndHide(@sprites) { pbUpdate }
     # Set the values of each option
     @options.keys.each_with_index do |key, i|
-      @options[key].set(@sprites["option"][i], @load_screen)
+      @options[key].set(@sprites["option"][i], self)
     end
     pbDisposeMessageWindow(@sprites["textbox"])
     pbDisposeSpriteHash(@sprites)
@@ -386,14 +379,13 @@ MenuHandlers.add(:options, :bgm_volume, {
   "description" => _INTL("Adjust the volume of the background music."),
   "parameters"  => [0, 100, 5], # [minimum_value, maximum_value, interval]
   "get_proc"    => proc { $PokemonSystem.bgmvolume },
-  "set_proc"    => proc { |value, load_screen|
-    if $PokemonSystem.bgmvolume != value
-      $PokemonSystem.bgmvolume = value
-      if $game_system.playing_bgm != nil && !load_screen
-        playingBGM = $game_system.getPlayingBGM
-        $game_system.bgm_pause
-        $game_system.bgm_resume(playingBGM)
-      end
+  "set_proc"    => proc { |value, scene|
+    next if $PokemonSystem.bgmvolume == value
+    $PokemonSystem.bgmvolume = value
+    if !$game_system.playing_bgm.nil? && !scene.load_screen
+      playingBGM = $game_system.getPlayingBGM
+      $game_system.bgm_pause
+      $game_system.bgm_resume(playingBGM)
     end
   }
 })
@@ -405,17 +397,16 @@ MenuHandlers.add(:options, :se_volume, {
   "description" => _INTL("Adjust the volume of sound effects."),
   "parameters"  => [0, 100, 5], # [minimum_value, maximum_value, interval]
   "get_proc"    => proc { $PokemonSystem.sevolume },
-  "set_proc"    => proc { |value, _load_screen|
-    if $PokemonSystem.sevolume != value
-      $PokemonSystem.sevolume = value
-      if $game_system.playing_bgs != nil
-        $game_system.playing_bgs.volume = value
-        playingBGS = $game_system.getPlayingBGS
-        $game_system.bgs_pause
-        $game_system.bgs_resume(playingBGS)
-      end
-      pbPlayCursorSE
+  "set_proc"    => proc { |value, _scene|
+    next if $PokemonSystem.sevolume == value
+    $PokemonSystem.sevolume = value
+    if !$game_system.playing_bgs.nil?
+      $game_system.playing_bgs.volume = value
+      playingBGS = $game_system.getPlayingBGS
+      $game_system.bgs_pause
+      $game_system.bgs_resume(playingBGS)
     end
+    pbPlayCursorSE
   }
 })
 
@@ -426,9 +417,17 @@ MenuHandlers.add(:options, :text_speed, {
   "description" => _INTL("Choose the speed at which messages are displayed."),
   "parameters"  => [_INTL("Slow"), _INTL("Normal"), _INTL("Fast")], # all possible choices
   "get_proc"    => proc { $PokemonSystem.textspeed },
-  "set_proc"    => proc { |value, _load_screen|
+  "set_proc"    => proc { |value, scene|
+    old_text  = scene.sprites["textbox"].text
+    old_speed = $PokemonSystem.textspeed
     $PokemonSystem.textspeed = value
+    next if $PokemonSystem.textspeed == old_speed
+    # Display the message with the selected text speed to gauge it better.
     MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
+    pbSetSystemFont(scene.sprites["textbox"].contents)
+    scene.sprites["textbox"].textspeed      = MessageConfig.pbGetTextSpeed
+    scene.sprites["textbox"].letterbyletter = true
+    scene.sprites["textbox"].text           = old_text
   }
 })
 
@@ -439,7 +438,7 @@ MenuHandlers.add(:options, :battle_animations, {
   "description" => _INTL("Choose whether you wish to see move animations in battle or not."),
   "parameters"  => [_INTL("On"), _INTL("Off")], # all possible choices
   "get_proc"    => proc { $PokemonSystem.battlescene },
-  "set_proc"    => proc { |value, _load_screen| $PokemonSystem.battlescene = value }
+  "set_proc"    => proc { |value, _scene| $PokemonSystem.battlescene = value }
 })
 
 MenuHandlers.add(:options, :battle_style, {
@@ -449,7 +448,7 @@ MenuHandlers.add(:options, :battle_style, {
   "description" => _INTL("Choose if you want to switch Pokémon after an opponent faints or not."),
   "parameters"  => [_INTL("Switch"), _INTL("Set")], # all possible choices
   "get_proc"    => proc { $PokemonSystem.battlestyle },
-  "set_proc"    => proc { |value, _load_screen| $PokemonSystem.battlestyle = value }
+  "set_proc"    => proc { |value, _scene| $PokemonSystem.battlestyle = value }
 })
 
 MenuHandlers.add(:options, :movement_style, {
@@ -460,7 +459,7 @@ MenuHandlers.add(:options, :movement_style, {
   "description" => _INTL("Choose whether you want to always run when moving or not."),
   "parameters"  => [_INTL("Walking"), _INTL("Running")], # all possible choices
   "get_proc"    => proc { $PokemonSystem.runstyle },
-  "set_proc"    => proc { |value, _load_screen| $PokemonSystem.runstyle = value }
+  "set_proc"    => proc { |value, _sceme| $PokemonSystem.runstyle = value }
 })
 
 MenuHandlers.add(:options, :give_nicknames, {
@@ -470,7 +469,7 @@ MenuHandlers.add(:options, :give_nicknames, {
   "description" => _INTL("Choose whether you wish to give a nickname to a Pokémon when you obtain it."),
   "parameters"  => [_INTL("Give"), _INTL("Don't give")], # all possible choices
   "get_proc"    => proc { $PokemonSystem.givenicknames },
-  "set_proc"    => proc { |value, _load_screen| $PokemonSystem.givenicknames = value }
+  "set_proc"    => proc { |value, _scene| $PokemonSystem.givenicknames = value }
 })
 
 MenuHandlers.add(:options, :speech_frame, {
@@ -480,9 +479,11 @@ MenuHandlers.add(:options, :speech_frame, {
   "description" => _INTL("Choose the type of frame you want to use for dialogue boxes."),
   "parameters"  => [1, Settings::SPEECH_WINDOWSKINS.length], # [minimum_value, maximum_value]
   "get_proc"    => proc { $PokemonSystem.textskin },
-  "set_proc"    => proc { |value, _load_screen|
+  "set_proc"    => proc { |value, scene|
     $PokemonSystem.textskin = value
     MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[value])
+    # Change the windowskin of the options text box to selected one
+    scene.sprites["textbox"].setSkin(MessageConfig.pbGetSpeechFrame)
   }
 })
 
@@ -493,9 +494,12 @@ MenuHandlers.add(:options, :menu_frame, {
   "description" => _INTL("Choose the type of frame you want to use for choice boxes."),
   "parameters"  => [1, Settings::MENU_WINDOWSKINS.length], # [minimum_value, maximum_value]
   "get_proc"    => proc { $PokemonSystem.frame },
-  "set_proc"    => proc { |value, _load_screen|
+  "set_proc"    => proc { |value, scene|
     $PokemonSystem.frame = value
     MessageConfig.pbSetSystemFrame("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[value])
+    # Change the windowskin of the options text box to selected one
+    scene.sprites["title"].setSkin(MessageConfig.pbGetSystemFrame)
+    scene.sprites["option"].setSkin(MessageConfig.pbGetSystemFrame)
   }
 })
 
@@ -506,7 +510,7 @@ MenuHandlers.add(:options, :text_input_style, {
   "description" => _INTL("Choose if you want to input text using the keyboard or an on-screen cursor."),
   "parameters"  => [_INTL("Cursor"), _INTL("Keyboard")], # all possible choices
   "get_proc"    => proc { $PokemonSystem.textinput },
-  "set_proc"    => proc { |value, _load_screen| $PokemonSystem.textinput = value }
+  "set_proc"    => proc { |value, _scene| $PokemonSystem.textinput = value }
 })
 
 MenuHandlers.add(:options, :screen_size, {
@@ -516,10 +520,9 @@ MenuHandlers.add(:options, :screen_size, {
   "description" => _INTL("Adjust the size of the game window."),
   "parameters"  => [_INTL("S"), _INTL("M"), _INTL("L"), _INTL("XL"), _INTL("Full")], # all possible choices
   "get_proc"    => proc { [$PokemonSystem.screensize, 4].min },
-  "set_proc"    => proc { |value, _load_screen|
-    if $PokemonSystem.screensize != value
-      $PokemonSystem.screensize = value
-      pbSetResizeFactor($PokemonSystem.screensize)
-    end
+  "set_proc"    => proc { |value, _scene|
+    next if $PokemonSystem.screensize == value
+    $PokemonSystem.screensize = value
+    pbSetResizeFactor($PokemonSystem.screensize)
   }
 })
