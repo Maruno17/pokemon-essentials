@@ -280,24 +280,24 @@ class PokemonOption_Scene
     # These are the different options in the game. To add an option, define a
     # setter and a getter for that option. To delete an option, comment it out
     # or delete it. The game's options may be placed in any order.
-    @PokemonOptions = {}
+    @options = {}
     MenuHandlers.each_available(:options) do |option, hash, name|
       @options[option] = hash["type"].new(
         hash["name"], hash["parameters"], hash["get_proc"], hash["set_proc"],
         hash["description"]
       )
     end
-    @sprites["textbox"].text = @PokemonOptions.values.first&.description || _INTL("Close the Options Menu")
+    @sprites["textbox"].text = @options.values.first&.description || _INTL("Close the Options Menu.")
     @sprites["textbox"].letterbyletter = false
     @sprites["option"] = Window_PokemonOption.new(
-      @PokemonOptions, 0, @sprites["title"].height, Graphics.width,
+      @options, 0, @sprites["title"].height, Graphics.width,
       Graphics.height - @sprites["title"].height - @sprites["textbox"].height
     )
     @sprites["option"].viewport = @viewport
     @sprites["option"].visible  = true
     # Get the values of each option
-    @PokemonOptions.keys.each_with_index do |key, i|
-      @sprites["option"].setValueNoRefresh(i, (@PokemonOptions[key].get || 0))
+    @options.keys.each_with_index do |key, i|
+      @sprites["option"].setValueNoRefresh(i, (@options[key].get || 0))
     end
     @sprites["option"].refresh
     pbDeactivateWindows(@sprites)
@@ -319,8 +319,8 @@ class PokemonOption_Scene
         pbUpdate
         if @sprites["option"].mustUpdateOptions
           # Set the values of each option
-          @PokemonOptions.keys.each_with_index do |key, i|
-            @PokemonOptions[key].set(@sprites["option"][i], @load_screen)
+          @options.keys.each_with_index do |key, i|
+            @options[key].set(@sprites["option"][i], @load_screen)
           end
           if $PokemonSystem.textskin != oldTextSkin
             @sprites["textbox"].setSkin(MessageConfig.pbGetSpeechFrame)
@@ -340,7 +340,7 @@ class PokemonOption_Scene
         if Input.trigger?(Input::BACK)
           break
         elsif Input.trigger?(Input::USE)
-          break if @sprites["option"].index == @PokemonOptions.length
+          break if @sprites["option"].index == @options.length
         end
         old_index = @sprites["option"].index
       end
@@ -351,8 +351,8 @@ class PokemonOption_Scene
     pbPlayCloseMenuSE
     pbFadeOutAndHide(@sprites) { pbUpdate }
     # Set the values of each option
-    @PokemonOptions.keys.each_with_index do |key, i|
-      @PokemonOptions[key].set(@sprites["option"][i], @load_screen)
+    @options.keys.each_with_index do |key, i|
+      @options[key].set(@sprites["option"][i], @load_screen)
     end
     pbDisposeMessageWindow(@sprites["textbox"])
     pbDisposeSpriteHash(@sprites)
