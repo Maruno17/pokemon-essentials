@@ -61,9 +61,9 @@ module GameData
       return nil if !species || !form
       validate species => [Symbol, self, String, Integer]
       validate form => Integer
-#      if other.is_a?(Integer)
-#        p "Please switch to symbols, thanks."
-#      end
+      #      if other.is_a?(Integer)
+      #        p "Please switch to symbols, thanks."
+      #      end
       species = species.species if species.is_a?(self)
       species = DATA[species].species if species.is_a?(Integer)
       species = species.to_sym if species.is_a?(String)
@@ -74,110 +74,110 @@ module GameData
 
     def self.schema(compiling_forms = false)
       ret = {
-        "FormName"          => [0, "q"],
-        "Kind"              => [0, "s"],
-        "Pokedex"           => [0, "q"],
-        "Type1"             => [0, "e", :Type],
-        "Type2"             => [0, "e", :Type],
-        "BaseStats"         => [0, "vvvvvv"],
-        "EffortPoints"      => [0, "uuuuuu"],
-        "BaseEXP"           => [0, "v"],
-        "Rareness"          => [0, "u"],
-        "Happiness"         => [0, "u"],
-        "Moves"             => [0, "*ue", nil, :Move],
-        "TutorMoves"        => [0, "*e", :Move],
-        "EggMoves"          => [0, "*e", :Move],
-        "Abilities"         => [0, "*e", :Ability],
-        "HiddenAbility"     => [0, "*e", :Ability],
-        "WildItemCommon"    => [0, "e", :Item],
-        "WildItemUncommon"  => [0, "e", :Item],
-        "WildItemRare"      => [0, "e", :Item],
-        "Compatibility"     => [0, "*e", :EggGroup],
-        "StepsToHatch"      => [0, "v"],
-        "Height"            => [0, "f"],
-        "Weight"            => [0, "f"],
-        "Color"             => [0, "e", :BodyColor],
-        "Shape"             => [0, "y", :BodyShape],
-        "Habitat"           => [0, "e", :Habitat],
-        "Generation"        => [0, "i"],
-        "BattlerPlayerX"    => [0, "i"],
-        "BattlerPlayerY"    => [0, "i"],
-        "BattlerEnemyX"     => [0, "i"],
-        "BattlerEnemyY"     => [0, "i"],
-        "BattlerAltitude"   => [0, "i"],
-        "BattlerShadowX"    => [0, "i"],
+        "FormName" => [0, "q"],
+        "Kind" => [0, "s"],
+        "Pokedex" => [0, "q"],
+        "Type1" => [0, "e", :Type],
+        "Type2" => [0, "e", :Type],
+        "BaseStats" => [0, "vvvvvv"],
+        "EffortPoints" => [0, "uuuuuu"],
+        "BaseEXP" => [0, "v"],
+        "Rareness" => [0, "u"],
+        "Happiness" => [0, "u"],
+        "Moves" => [0, "*ue", nil, :Move],
+        "TutorMoves" => [0, "*e", :Move],
+        "EggMoves" => [0, "*e", :Move],
+        "Abilities" => [0, "*e", :Ability],
+        "HiddenAbility" => [0, "*e", :Ability],
+        "WildItemCommon" => [0, "e", :Item],
+        "WildItemUncommon" => [0, "e", :Item],
+        "WildItemRare" => [0, "e", :Item],
+        "Compatibility" => [0, "*e", :EggGroup],
+        "StepsToHatch" => [0, "v"],
+        "Height" => [0, "f"],
+        "Weight" => [0, "f"],
+        "Color" => [0, "e", :BodyColor],
+        "Shape" => [0, "y", :BodyShape],
+        "Habitat" => [0, "e", :Habitat],
+        "Generation" => [0, "i"],
+        "BattlerPlayerX" => [0, "i"],
+        "BattlerPlayerY" => [0, "i"],
+        "BattlerEnemyX" => [0, "i"],
+        "BattlerEnemyY" => [0, "i"],
+        "BattlerAltitude" => [0, "i"],
+        "BattlerShadowX" => [0, "i"],
         "BattlerShadowSize" => [0, "u"]
       }
       if compiling_forms
-        ret["PokedexForm"]  = [0, "u"]
-        ret["Evolutions"]   = [0, "*ees", :Species, :Evolution, nil]
-        ret["MegaStone"]    = [0, "e", :Item]
-        ret["MegaMove"]     = [0, "e", :Move]
-        ret["UnmegaForm"]   = [0, "u"]
-        ret["MegaMessage"]  = [0, "u"]
+        ret["PokedexForm"] = [0, "u"]
+        ret["Evolutions"] = [0, "*ees", :Species, :Evolution, nil]
+        ret["MegaStone"] = [0, "e", :Item]
+        ret["MegaMove"] = [0, "e", :Move]
+        ret["UnmegaForm"] = [0, "u"]
+        ret["MegaMessage"] = [0, "u"]
       else
         ret["InternalName"] = [0, "n"]
-        ret["Name"]         = [0, "s"]
-        ret["GrowthRate"]   = [0, "e", :GrowthRate]
-        ret["GenderRate"]   = [0, "e", :GenderRatio]
-        ret["Incense"]      = [0, "e", :Item]
-        ret["Evolutions"]   = [0, "*ses", nil, :Evolution, nil]
+        ret["Name"] = [0, "s"]
+        ret["GrowthRate"] = [0, "e", :GrowthRate]
+        ret["GenderRate"] = [0, "e", :GenderRatio]
+        ret["Incense"] = [0, "e", :Item]
+        ret["Evolutions"] = [0, "*ses", nil, :Evolution, nil]
       end
       return ret
     end
 
     def initialize(hash)
-      @id                    = hash[:id]
-      @id_number             = hash[:id_number]             || -1
-      @species               = hash[:species]               || @id
-      @form                  = hash[:form]                  || 0
-      @real_name             = hash[:name]                  || "Unnamed"
-      @real_form_name        = hash[:form_name]
-      @real_category         = hash[:category]              || "???"
-      @real_pokedex_entry    = hash[:pokedex_entry]         || "???"
-      @pokedex_form          = hash[:pokedex_form]          || @form
-      @type1                 = hash[:type1]                 || :NORMAL
-      @type2                 = hash[:type2]                 || @type1
-      @base_stats            = hash[:base_stats]            || {}
-      @evs                   = hash[:evs]                   || {}
+      @id = hash[:id]
+      @id_number = hash[:id_number] || -1
+      @species = hash[:species] || @id
+      @form = hash[:form] || 0
+      @real_name = hash[:name] || "Unnamed"
+      @real_form_name = hash[:form_name]
+      @real_category = hash[:category] || "???"
+      @real_pokedex_entry = hash[:pokedex_entry] || "???"
+      @pokedex_form = hash[:pokedex_form] || @form
+      @type1 = hash[:type1] || :NORMAL
+      @type2 = hash[:type2] || @type1
+      @base_stats = hash[:base_stats] || {}
+      @evs = hash[:evs] || {}
       GameData::Stat.each_main do |s|
         @base_stats[s.id] = 1 if !@base_stats[s.id] || @base_stats[s.id] <= 0
-        @evs[s.id]        = 0 if !@evs[s.id] || @evs[s.id] < 0
+        @evs[s.id] = 0 if !@evs[s.id] || @evs[s.id] < 0
       end
-      @base_exp              = hash[:base_exp]              || 100
-      @growth_rate           = hash[:growth_rate]           || :Medium
-      @gender_ratio          = hash[:gender_ratio]          || :Female50Percent
-      @catch_rate            = hash[:catch_rate]            || 255
-      @happiness             = hash[:happiness]             || 70
-      @moves                 = hash[:moves]                 || []
-      @tutor_moves           = hash[:tutor_moves]           || []
-      @egg_moves             = hash[:egg_moves]             || []
-      @abilities             = hash[:abilities]             || []
-      @hidden_abilities      = hash[:hidden_abilities]      || []
-      @wild_item_common      = hash[:wild_item_common]
-      @wild_item_uncommon    = hash[:wild_item_uncommon]
-      @wild_item_rare        = hash[:wild_item_rare]
-      @egg_groups            = hash[:egg_groups]            || [:Undiscovered]
-      @hatch_steps           = hash[:hatch_steps]           || 1
-      @incense               = hash[:incense]
-      @evolutions            = hash[:evolutions]            || []
-      @height                = hash[:height]                || 1
-      @weight                = hash[:weight]                || 1
-      @color                 = hash[:color]                 || :Red
-      @shape                 = hash[:shape]                 || :Head
-      @habitat               = hash[:habitat]               || :None
-      @generation            = hash[:generation]            || 0
-      @mega_stone            = hash[:mega_stone]
-      @mega_move             = hash[:mega_move]
-      @unmega_form           = hash[:unmega_form]           || 0
-      @mega_message          = hash[:mega_message]          || 0
-      @back_sprite_x         = hash[:back_sprite_x]         || 0
-      @back_sprite_y         = hash[:back_sprite_y]         || 0
-      @front_sprite_x        = hash[:front_sprite_x]        || 0
-      @front_sprite_y        = hash[:front_sprite_y]        || 0
+      @base_exp = hash[:base_exp] || 100
+      @growth_rate = hash[:growth_rate] || :Medium
+      @gender_ratio = hash[:gender_ratio] || :Female50Percent
+      @catch_rate = hash[:catch_rate] || 255
+      @happiness = hash[:happiness] || 70
+      @moves = hash[:moves] || []
+      @tutor_moves = hash[:tutor_moves] || []
+      @egg_moves = hash[:egg_moves] || []
+      @abilities = hash[:abilities] || []
+      @hidden_abilities = hash[:hidden_abilities] || []
+      @wild_item_common = hash[:wild_item_common]
+      @wild_item_uncommon = hash[:wild_item_uncommon]
+      @wild_item_rare = hash[:wild_item_rare]
+      @egg_groups = hash[:egg_groups] || [:Undiscovered]
+      @hatch_steps = hash[:hatch_steps] || 1
+      @incense = hash[:incense]
+      @evolutions = hash[:evolutions] || []
+      @height = hash[:height] || 1
+      @weight = hash[:weight] || 1
+      @color = hash[:color] || :Red
+      @shape = hash[:shape] || :Head
+      @habitat = hash[:habitat] || :None
+      @generation = hash[:generation] || 0
+      @mega_stone = hash[:mega_stone]
+      @mega_move = hash[:mega_move]
+      @unmega_form = hash[:unmega_form] || 0
+      @mega_message = hash[:mega_message] || 0
+      @back_sprite_x = hash[:back_sprite_x] || 0
+      @back_sprite_y = hash[:back_sprite_y] || 0
+      @front_sprite_x = hash[:front_sprite_x] || 0
+      @front_sprite_y = hash[:front_sprite_y] || 0
       @front_sprite_altitude = hash[:front_sprite_altitude] || 0
-      @shadow_x              = hash[:shadow_x]              || 0
-      @shadow_size           = hash[:shadow_size]           || 2
+      @shadow_x = hash[:shadow_x] || 0
+      @shadow_size = hash[:shadow_size] || 2
     end
 
     # @return [String] the translated name of this species
@@ -200,16 +200,21 @@ module GameData
       return pbGetMessage(MessageTypes::Entries, @id_number)
     end
 
+    def is_fusion
+      return @id_number > Settings::NB_POKEMON
+    end
+
     def apply_metrics_to_sprite(sprite, index, shadow = false)
       if shadow
-        if (index & 1) == 1   # Foe Pokémon
+        if (index & 1) == 1 # Foe Pokémon
           sprite.x += @shadow_x * 2
         end
       else
-        if (index & 1) == 0   # Player's Pokémon
+        if (index & 1) == 0 # Player's Pokémon
           sprite.x += @back_sprite_x * 2
-          sprite.y += (@back_sprite_y * 2)  + Settings::BACKSPRITE_POSITION_OFFSET
-        else                  # Foe Pokémon
+          sprite.y += (@back_sprite_y * 2) + Settings::BACKSPRITE_POSITION_OFFSET
+        else
+          # Foe Pokémon
           sprite.x += @front_sprite_x * 2
           sprite.y += (@front_sprite_y * 2) + Settings::FRONTSPRITE_POSITION_OFFSET
           sprite.y -= @front_sprite_altitude * 2
@@ -219,15 +224,15 @@ module GameData
 
     def shows_shadow?
       return true
-#      return @front_sprite_altitude > 0
+      #      return @front_sprite_altitude > 0
     end
 
     def get_evolutions(exclude_invalid = false)
       ret = []
       @evolutions.each do |evo|
-        next if evo[3]   # Is the prevolution
+        next if evo[3] # Is the prevolution
         next if evo[1] == :None && exclude_invalid
-        ret.push([evo[0], evo[1], evo[2]])   # [Species, method, parameter]
+        ret.push([evo[0], evo[1], evo[2]]) # [Species, method, parameter]
       end
       return ret
     end
@@ -237,7 +242,7 @@ module GameData
       evos = evos.sort { |a, b| GameData::Species.get(a[0]).id_number <=> GameData::Species.get(b[0]).id_number }
       ret = []
       evos.each do |evo|
-        ret.push([@species].concat(evo))   # [Prevo species, evo species, method, parameter]
+        ret.push([@species].concat(evo)) # [Prevo species, evo species, method, parameter]
         evo_array = GameData::Species.get(evo[0]).get_family_evolutions(exclude_invalid)
         ret.concat(evo_array) if evo_array && evo_array.length > 0
       end
@@ -246,7 +251,7 @@ module GameData
 
     def get_previous_species
       return @species if @evolutions.length == 0
-      @evolutions.each { |evo| return evo[0] if evo[3] }   # Is the prevolution
+      @evolutions.each { |evo| return evo[0] if evo[3] } # Is the prevolution
       return @species
     end
 
@@ -254,12 +259,12 @@ module GameData
       ret = @species
       return ret if @evolutions.length == 0
       @evolutions.each do |evo|
-        next if !evo[3]   # Not the prevolution
+        next if !evo[3] # Not the prevolution
         if check_items
           incense = GameData::Species.get(evo[0]).incense
           ret = evo[0] if !incense || item1 == incense || item2 == incense
         else
-          ret = evo[0]   # Species of prevolution
+          ret = evo[0] # Species of prevolution
         end
         break
       end
@@ -305,7 +310,7 @@ module GameData
     def minimum_level
       return 1 if @evolutions.length == 0
       @evolutions.each do |evo|
-        next if !evo[3]   # Not the prevolution
+        next if !evo[3] # Not the prevolution
         evo_method_data = GameData::Evolution.get(evo[1])
         next if evo_method_data.level_up_proc.nil?
         min_level = evo_method_data.minimum_level
@@ -362,13 +367,15 @@ def pbGetEvolvedFormData(species, exclude_invalid = false)
 end
 
 # @deprecated Use {GameData#Species#get_family_evolutions} instead. This alias is slated to be removed in v20.
-def pbGetEvolutionFamilyData(species)   # Unused
+def pbGetEvolutionFamilyData(species)
+  # Unused
   Deprecation.warn_method('pbGetEvolutionFamilyData', 'v20', 'GameData::Species.get(species).get_family_evolutions')
   return GameData::Species.get(species).get_family_evolutions
 end
 
 # @deprecated Use {GameData#Species#get_previous_species} instead. This alias is slated to be removed in v20.
-def pbGetPreviousForm(species)   # Unused
+def pbGetPreviousForm(species)
+  # Unused
   Deprecation.warn_method('pbGetPreviousForm', 'v20', 'GameData::Species.get(species).get_previous_species')
   return GameData::Species.get(species).get_previous_species
 end
@@ -380,7 +387,8 @@ def pbGetBabySpecies(species, check_items = false, item1 = nil, item2 = nil)
 end
 
 # @deprecated Use {GameData#Species#family_evolutions_have_method?} instead. This alias is slated to be removed in v20.
-def pbCheckEvolutionFamilyForMethod(species, method, param = nil)   # Unused
+def pbCheckEvolutionFamilyForMethod(species, method, param = nil)
+  # Unused
   Deprecation.warn_method('pbCheckEvolutionFamilyForMethod', 'v20', 'GameData::Species.get(species).family_evolutions_have_method?(method)')
   return GameData::Species.get(species).family_evolutions_have_method?(method, param)
 end

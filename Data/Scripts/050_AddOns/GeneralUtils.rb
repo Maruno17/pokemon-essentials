@@ -93,6 +93,8 @@ def getDexNumberForSpecies(species)
     dexNum = GameData::Species.get(species).id_number
   elsif species.is_a?(Pokemon)
     dexNum = GameData::Species.get(species.species).id_number
+  elsif species.is_a?(GameData::Species)
+    return species.id_number
   else
     dexNum = species
   end
@@ -142,7 +144,10 @@ def getBodyID(species)
   return (dexNum / NB_POKEMON).round
 end
 
-def getHeadID(species, bodyId)
+def getHeadID(species, bodyId = nil)
+  if bodyId == nil
+    bodyId = getBodyID(species)
+  end
   head_dexNum = getDexNumberForSpecies(species)
   body_dexNum = getDexNumberForSpecies(bodyId)
   calculated_number = (head_dexNum - (body_dexNum * NB_POKEMON)).round

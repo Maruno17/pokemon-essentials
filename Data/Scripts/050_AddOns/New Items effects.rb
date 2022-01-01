@@ -1317,7 +1317,7 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
 
           typeWindow = drawPokemonType(newid)
 
-          if hasCustom§
+          if hasCustom
             previewwindow.picture.pbSetColor(220, 255, 220, 200)
           else
             previewwindow.picture.pbSetColor(255, 255, 255, 200)
@@ -1407,6 +1407,11 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
         end
         body_level = poke1.level
         head_level = poke2.level
+
+        pokemon.exp_gained_since_fused=0
+        pokemon.exp_when_fused_head=nil
+        pokemon.exp_when_fused_body=nil
+
         if $Trainer.party.length >= 6
           if (keepInParty == 0)
             $PokemonStorage.pbStoreCaught(poke2)

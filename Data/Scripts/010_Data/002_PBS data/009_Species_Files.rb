@@ -3,9 +3,9 @@ module GameData
     def self.check_graphic_file(path, species, form = 0, gender = 0, shiny = false, shadow = false, subfolder = "")
       try_subfolder = sprintf("%s/", subfolder)
       try_species = species
-      try_form    = (form > 0) ? sprintf("_%d", form) : ""
-      try_gender  = (gender == 1) ? "_female" : ""
-      try_shadow  = (shadow) ? "_shadow" : ""
+      try_form = (form > 0) ? sprintf("_%d", form) : ""
+      try_gender = (gender == 1) ? "_female" : ""
+      try_shadow = (shadow) ? "_shadow" : ""
       factors = []
       factors.push([4, sprintf("%s shiny/", subfolder), try_subfolder]) if shiny
       factors.push([3, try_shadow, ""]) if shadow
@@ -18,17 +18,22 @@ module GameData
         factors.each_with_index do |factor, index|
           value = ((i / (2 ** index)) % 2 == 0) ? factor[1] : factor[2]
           case factor[0]
-          when 0 then try_species   = value
-          when 1 then try_form      = value
-          when 2 then try_gender    = value
-          when 3 then try_shadow    = value
-          when 4 then try_subfolder = value   # Shininess
+          when 0 then
+            try_species = value
+          when 1 then
+            try_form = value
+          when 2 then
+            try_gender = value
+          when 3 then
+            try_shadow = value
+          when 4 then
+            try_subfolder = value # Shininess
           end
         end
         # Look for a graphic matching this combination's parameters
         try_species_text = try_species
         ret = pbResolveBitmap(sprintf("%s%s%s%s%s%s", path, try_subfolder,
-           try_species_text, try_form, try_gender, try_shadow))
+                                      try_species_text, try_form, try_gender, try_shadow))
         return ret if ret
       end
       return nil
@@ -87,7 +92,7 @@ module GameData
 
     def self.sprite_bitmap_from_pokemon(pkmn, back = false, species = nil)
       species = pkmn.species if !species
-      species = GameData::Species.get(species).species   # Just to be sure it's a symbol
+      species = GameData::Species.get(species).species # Just to be sure it's a symbol
       return self.egg_sprite_bitmap(species, pkmn.form) if pkmn.egg?
       if back
         ret = self.back_sprite_bitmap(species, pkmn.form, pkmn.gender, pkmn.shiny?, pkmn.shadowPokemon?)
@@ -177,6 +182,10 @@ module GameData
     def self.check_cry_file(species, form)
       species_data = self.get_species_form(species, form)
       return nil if species_data.nil?
+      if species_data.is_fusion
+        species_data = GameData::Species.get(getHeadID(species_data))
+      end
+
       if form > 0
         ret = sprintf("Cries/%s_%d", species_data.species, form)
         return ret if pbResolveAudioSE(ret)
@@ -228,8 +237,8 @@ module GameData
         filename = pbResolveAudioSE(GameData::Species.cry_filename(species, form))
         ret = getPlayTime(filename) if filename
       end
-      ret /= pitch   # Sound played at a lower pitch lasts longer
-      return (ret * Graphics.frame_rate).ceil + 4   # 4 provides a buffer between sounds
+      ret /= pitch # Sound played at a lower pitch lasts longer
+      return (ret * Graphics.frame_rate).ceil + 4 # 4 provides a buffer between sounds
     end
   end
 end
@@ -238,7 +247,7 @@ end
 # Deprecated methods
 #===============================================================================
 # @deprecated This alias is slated to be removed in v20.
-def pbLoadSpeciesBitmap(species, gender = 0, form = 0, shiny = false, shadow = false, back = false , egg = false)
+def pbLoadSpeciesBitmap(species, gender = 0, form = 0, shiny = false, shadow = false, back = false, egg = false)
   Deprecation.warn_method('pbLoadSpeciesBitmap', 'v20', 'GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)')
   return GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)
 end
