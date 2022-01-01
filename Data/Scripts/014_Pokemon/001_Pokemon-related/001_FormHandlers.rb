@@ -341,7 +341,7 @@ MultipleForms.register(:KYUREM,{
   "onSetForm" => proc { |pkmn, form, oldForm|
     case form
     when 0   # Normal
-	    pkmn.moves.each_with_index do |move,i|
+      pkmn.moves.each_with_index do |move,i|
         if [:SCARYFACE].include?(move.id)
           pkmn.pbDeleteMoveAtIndex(i)
         end
