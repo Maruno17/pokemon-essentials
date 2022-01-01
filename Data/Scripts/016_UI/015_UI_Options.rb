@@ -148,10 +148,10 @@ class Window_PokemonOption < Window_DrawableCommand
 
   def initialize(options, x, y, width, height)
     @options           = options
-    @nameBaseColor     = Color.new(24 * 8, 15 * 8, 0)
-    @nameShadowColor   = Color.new(31 * 8, 22 * 8, 10 * 8)
-    @selBaseColor      = Color.new(31 * 8, 6 * 8, 3 * 8)
-    @selShadowColor    = Color.new(31 * 8, 17 * 8, 16 * 8)
+    @nameBaseColor     = Color.new(0, 112, 248)
+    @nameShadowColor   = Color.new(144, 200, 248)
+    @selBaseColor      = Color.new(232, 32, 16)
+    @selShadowColor    = Color.new(248, 168, 184)
     @optvalues         = []
     @mustUpdateOptions = false
     @options.length.times { |i| @optvalues[i] = 0 }
@@ -181,11 +181,13 @@ class Window_PokemonOption < Window_DrawableCommand
 
   def drawItem(index, _count, rect)
     rect = drawCursor(index, rect)
-        key = @options.keys[index]
-    optionname = (index == @options.length) ? _INTL("Cancel") : @options[key].name
-    optionwidth = rect.width * 9 / 20
+    key = @options.keys[index]
+    optionname   = (index == @options.length) ? _INTL("Cancel") : @options[key].name
+    optionwidth  = rect.width * 9 / 20
+    base_color   = index == self.index ? @nameBaseColor : self.baseColor
+    shadow_color = index == self.index ? @nameShadowColor : self.shadowColor
     pbDrawShadowText(self.contents, rect.x, rect.y, optionwidth, rect.height, optionname,
-                     @nameBaseColor, @nameShadowColor)
+                     base_color, shadow_color)
     return if index == @options.length
     case @options[key]
     when EnumOption
@@ -215,7 +217,7 @@ class Window_PokemonOption < Window_DrawableCommand
                     @options[key].optend - @options[key].optstart + 1)
       xpos = optionwidth + rect.x
       pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
-                       @selBaseColor, @selShadowColor)
+                       @selBaseColor, @selShadowColor, 1)
     when SliderOption
       value = sprintf(" %d", @options[key].optend)
       sliderlength = optionwidth - self.contents.text_size(value).width
@@ -275,14 +277,15 @@ class PokemonOption_Scene
     @load_screen = inloadscreen
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
-    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-      _INTL("Options"), 0, 0, Graphics.width, 64, @viewport
+    addBackgroundOrColoredPlane(@sprites, "bg", "optionsbg", Color.new(198, 206, 214), @viewport)
+    @sprites["title"] = BitmapSprite.new(Graphics.width, 64, @viewport)
+    pbSetSystemFont(@sprites["title"].bitmap)
+    pbDrawShadowText(@sprites["title"].bitmap, 32, 16,
+       @sprites["title"].bitmap.width, @sprites["title"].bitmap.height,
+        _INTL("Options"), Color.new(80, 80, 80), Color.new(160, 160, 160)
     )
     @sprites["textbox"] = pbCreateMessageWindow
     pbSetSystemFont(@sprites["textbox"].contents)
-    # These are the different options in the game. To add an option, define a
-    # setter and a getter for that option. To delete an option, comment it out
-    # or delete it. The game's options may be placed in any order.
     @options = {}
     MenuHandlers.each_available(:options) do |option, hash, name|
       @options[option] = hash["type"].new(
@@ -293,8 +296,8 @@ class PokemonOption_Scene
     @sprites["textbox"].text = @options.values.first&.description || _INTL("Close the Options Menu.")
     @sprites["textbox"].letterbyletter = false
     @sprites["option"] = Window_PokemonOption.new(
-      @options, 0, @sprites["title"].height, Graphics.width,
-      Graphics.height - @sprites["title"].height - @sprites["textbox"].height
+      @options, 0, @sprites["title"].bitmap.height, Graphics.width,
+      Graphics.height - @sprites["title"].bitmap.height - @sprites["textbox"].height
     )
     @sprites["option"].viewport = @viewport
     @sprites["option"].visible  = true
@@ -498,7 +501,6 @@ MenuHandlers.add(:options, :menu_frame, {
     $PokemonSystem.frame = value
     MessageConfig.pbSetSystemFrame("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[value])
     # Change the windowskin of the options text box to selected one
-    scene.sprites["title"].setSkin(MessageConfig.pbGetSystemFrame)
     scene.sprites["option"].setSkin(MessageConfig.pbGetSystemFrame)
   }
 })
