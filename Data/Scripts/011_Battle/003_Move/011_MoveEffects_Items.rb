@@ -196,8 +196,9 @@ class Battle::Move::DestroyTargetBerryOrGem < Battle::Move
     return if target.damageState.substitute || target.damageState.berryWeakened
     return if !target.item || (!target.item.is_berry? &&
               !(Settings::MECHANICS_GENERATION >= 6 && target.item.is_gem?))
+    item_name = target.itemName
     target.pbRemoveItem
-    @battle.pbDisplay(_INTL("{1}'s {2} was incinerated!", target.pbThis, target.itemName))
+    @battle.pbDisplay(_INTL("{1}'s {2} was incinerated!", target.pbThis, item_name))
   end
 end
 
