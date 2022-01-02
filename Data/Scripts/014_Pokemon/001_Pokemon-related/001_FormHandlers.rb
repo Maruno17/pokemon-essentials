@@ -236,13 +236,14 @@ MultipleForms.register(:ROTOM, {
       new_move_id = nil if !GameData::Move.exists?(new_move_id)
       raise _INTL("Rotom is trying to forget its last move, but there isn't another move to replace it with.") if new_move_id.nil?
     end
+    new_move_id = nil if pkmn.hasMove?(new_move_id)
     # Forget a known move (if relevant) and learn a new move (if relevant)
     if old_move_index >= 0
       old_move_name = pkmn.moves[old_move_index].name
       if new_move_id.nil?
         # Just forget the old move
         pkmn.forget_move_at_index(old_move_index)
-        pbMessage(_INTL("{1} forgot {2}...\1", pkmn.name, old_move_name))
+        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, old_move_name))
       else
         # Replace the old move with the new move (keeps the same index)
         pkmn.moves[old_move_index].id = new_move_id
@@ -333,23 +334,46 @@ MultipleForms.register(:KYUREM, {
   "onSetForm" => proc { |pkmn, form, oldForm|
     case form
     when 0   # Normal
-      pkmn.moves.each do |move|
-        if [:ICEBURN, :FREEZESHOCK].include?(move.id) && GameData::Move.exists?(:GLACIATE)
-          move.id = :GLACIATE
+      pkmn.moves.each_with_index do |move, i|
+        case move.id
+        when :ICEBURN, :FREEZESHOCK
+          next if !GameData::Move.exists?(:GLACIATE)
+          if pkmn.hasMove?(:GLACIATE)
+            pkmn.moves[i] = nil
+          else
+            move.id = :GLACIATE
+          end
+        when :FUSIONFLARE, :FUSIONBOLT
+          next if !GameData::Move.exists?(:SCARYFACE)
+          if pkmn.hasMove?(:SCARYFACE)
+            pkmn.moves[i] = nil
+          else
+            move.id = :SCARYFACE
+          end
         end
-        if [:FUSIONFLARE, :FUSIONBOLT].include?(move.id) && GameData::Move.exists?(:SCARYFACE)
-          move.id = :SCARYFACE
-        end
+        pkmn.moves.compact!
       end
     when 1   # White
       pkmn.moves.each do |move|
-        move.id = :ICEBURN if move.id == :GLACIATE && GameData::Move.exists?(:ICEBURN)
-        move.id = :FUSIONFLARE if move.id == :SCARYFACE && GameData::Move.exists?(:FUSIONFLARE)
+        case move.id
+        when :GLACIATE
+          next if !GameData::Move.exists?(:ICEBURN) || pkmn.hasMove?(:ICEBURN)
+          move.id = :ICEBURN
+        when :SCARYFACE
+          next if !GameData::Move.exists?(:FUSIONFLARE) || pkmn.hasMove?(:FUSIONFLARE)
+          move.id = :FUSIONFLARE
+        end
       end
     when 2   # Black
       pkmn.moves.each do |move|
-        move.id = :FREEZESHOCK if move.id == :GLACIATE && GameData::Move.exists?(:FREEZESHOCK)
-        move.id = :FUSIONBOLT if move.id == :SCARYFACE && GameData::Move.exists?(:FUSIONBOLT)
+        case move.id
+        when :GLACIATE
+          next if !GameData::Move.exists?(:FREEZESHOCK) || pkmn.hasMove?(:FREEZESHOCK)
+          move.id = :FREEZESHOCK
+        when :SCARYFACE
+          next if !GameData::Move.exists?(:FUSIONBOLT) || pkmn.hasMove?(:FUSIONBOLT)
+          move.id = :FUSIONBOLT
+        end
       end
     end
   }
@@ -543,21 +567,15 @@ MultipleForms.register(:NECROZMA, {
       :SUNSTEELSTRIKE,   # Dusk Mane (with Solgaleo) (form 1)
       :MOONGEISTBEAM     # Dawn Wings (with Lunala) (form 2)
     ]
-    if form == 0
+    if form == 0   # Normal
       # Turned back into the base form; forget form-specific moves
-      move_index = -1
-      pkmn.moves.each_with_index do |move, i|
-        next if !form_moves.any? { |m| m == move.id }
-        move_index = i
-        break
+      form_moves.each do |move|
+        next if !pkmn.hasMove?(move)
+        pkmn.forget_move(move)
+        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, GameData::Move.get(move).name))
       end
-      if move_index >= 0
-        move_name = pkmn.moves[move_index].name
-        pkmn.forget_move_at_index(move_index)
-        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, move_name))
-        pbLearnMove(pkmn, :CONFUSION) if pkmn.numMoves == 0
-      end
-    else
+      pbLearnMove(pkmn, :CONFUSION) if pkmn.numMoves == 0
+    else   # Dusk Mane, Dawn Wings
       # Turned into an alternate form; try learning that form's unique move
       new_move_id = form_moves[form - 1]
       pbLearnMove(pkmn, new_move_id, true)
@@ -687,21 +705,20 @@ MultipleForms.register(:URSHIFU, {
 
 MultipleForms.register(:CALYREX, {
   "onSetForm" => proc { |pkmn, form, oldForm|
-    case form
-    when 0   # Normal
-      if pkmn.hasMove?(:GLACIALLANCE)
-        pkmn.forget_move(:GLACIALLANCE)
-        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, GameData::Move.get(:GLACIALLANCE).name))
-      end
-      if pkmn.hasMove?(:ASTRALBARRAGE)
-        pkmn.forget_move(:ASTRALBARRAGE)
-        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, GameData::Move.get(:ASTRALBARRAGE).name))
+    form_moves = [
+      :GLACIALLANCE,   # Ice Rider (with Glastrier) (form 1)
+      :ASTRALBARRAGE   # Shadow Rider (with Spectrier) (form 2)
+    ]
+    if form == 0   # Normal
+      form_moves.each do |move|
+        next if !pkmn.hasMove?(move)
+        pkmn.forget_move(move)
+        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, GameData::Move.get(move).name))
       end
       pbLearnMove(pkmn, :CONFUSION) if pkmn.numMoves == 0
-    when 1   # Ice Rider
-      pbLearnMove(pkmn, :GLACIALLANCE, true)
-    when 2   # Shadow Rider
-      pbLearnMove(pkmn, :ASTRALBARRAGE, true)
+    else   # Ice Rider, Shadow Rider
+      new_move = form_moves[form - 1]
+      pbLearnMove(pkmn, new_move, true)
     end
   }
 })
