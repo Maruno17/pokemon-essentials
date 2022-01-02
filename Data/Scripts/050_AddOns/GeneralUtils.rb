@@ -371,5 +371,3 @@ def reverseFusionSpecies(species)
   return getPokemon(newspecies)
 end
 
-
-

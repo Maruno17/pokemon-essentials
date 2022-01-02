@@ -109,6 +109,9 @@ class PokemonEncounters
     # Check if enc_type has a defined step chance/encounter table
     return false if !@step_chances[enc_type] || @step_chances[enc_type] == 0
     return false if !has_encounter_type?(enc_type)
+    #Always check encounter if pokeradar is active
+    return true if $PokemonTemp.pokeradar != nil
+
     # Get base encounter chance and minimum steps grace period
     encounter_chance = @step_chances[enc_type].to_f
     min_steps_needed = (8 - encounter_chance / 10).clamp(0, 8).to_f

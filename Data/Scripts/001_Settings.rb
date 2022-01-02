@@ -6,7 +6,12 @@
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '5.0.0'
-  GAME_VERSION_NUMBER = "5.0.11 - beta"
+  GAME_VERSION_NUMBER = "5.0.13 - beta"
+
+  POKERADAR_LIGHT_ANIMATION_RED_ID = 17
+  POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
+  POKERADAR_HIDDEN_ABILITY_POKE_CHANCE = 32
+  POKERADAR_BATTERY_STEPS = 0
 
   #
   FUSION_ICON_SPRITE_OFFSET = 10
@@ -310,10 +315,48 @@ module Settings
   #   * Minimum possible level.
   #   * Maximum possible level (optional).
   POKE_RADAR_ENCOUNTERS = [
-    [5, 20, :STARLY, 12, 15],
-    [21, 10, :STANTLER, 14],
-    [28, 20, :BUTTERFREE, 15, 18],
-    [28, 20, :BEEDRILL, 15, 18]
+    [78, 30,  :FLETCHLING,2,5],         #Rt. 1
+    [86, 30,  :FLETCHLING,2,5],         #Rt. 2
+    [90, 30,  :FLETCHLING,2,5],      #Rt. 2
+    [491, 30, :SHROOMISH,2,5],          #Viridian Forest
+    [490, 30, :BUDEW,4,9],              #Rt. 3
+    [106, 30, :NINCADA,8,10],           #Rt. 4
+    [12, 30,  :TOGEPI,10,10],           #Rt. 5
+    [16, 30,  :SLAKOTH,12,15],          #Rt. 6
+    [413, 30, :DRIFLOON,17,20],         #Rt. 7
+    [409, 30, :SHINX,17,18],            #Rt. 8
+    [495, 30, :ARON,12,15],             #Rt. 9
+    [351, 30, :ARON,12,15],             #Rt. 9
+    [154, 30, :KLINK,14,17],            #Rt. 10
+    [155, 30, :NINCADA,12,15],          #Rt. 11
+    [159, 30, :COTTONEE,22,25],         #Rt. 12
+    [437, 30, :COTTONEE,22,25],         #Rt. 13
+    [437, 30, :JOLTIK,22,25],           #Rt. 13
+    [440, 30, :JOLTIK,22,25],           #Rt. 14
+    [444, 30, :SOLOSIS,22,25],          #Rt. 15
+    [438, 30, :NATU,22,25],             #Rt. 16
+    [146, 30, :KLEFKI,22,25],           #Rt. 17
+    [517, 30, :FERROSEED,22,25],        #Rt. 18
+    [445, 30, :BAGON,20,20],            #Safari zone 1
+    [484, 30, :AXEW,20,20],             #Safari zone 2
+    [485, 30, :DEINO,20,20],            #Safari zone 3
+    [486, 30, :LARVITAR,20,20],         #Safari zone 4
+    [487, 30, :BELDUM,20,20],           #Safari zone 5
+    [59, 30,  :DUNSPARSE,25,30],        #Rt. 21
+    [171, 30, :BIDOOF,2,5],             #Rt. 22
+    [143, 30, :RIOLU,25,25],            #Rt. 23
+    [8, 30,   :BUNEARY,12,13],          #Rt. 24
+    [145, 5, :ABSOL,30,35],             #Rt. 26
+    [147, 5, :ABSOL,30,35],             #Rt. 27
+    [311, 30, :BIDOOF,5,5],             #Rt. 29
+    [265, 30, :KIRLIA,25,30],           #Rt. 34
+    [300, 30, :ROSELIA,30,30],          #National Park
+    [300, 30, :BRELOOM,30,30],          #Ilex Forest
+    [670, 30, :WEAVILE,50,50],          #Ice mountains
+    [528, 30, :PYUKUMUKU,20,20],        #Treasure Beach
+    [690, 30, :OCTILLERY,32,45],        #Deep Ocean
+    [561, 30, :MAGMAR,32,45],           #Mt. Ember
+    [654, 30, :WHIMSICOTT,32,45],       #Brine Road
   ]
 
   #=============================================================================
