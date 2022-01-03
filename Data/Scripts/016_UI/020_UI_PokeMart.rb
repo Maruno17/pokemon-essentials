@@ -22,6 +22,10 @@ class PokemonMartAdapter
     return GameData::Item.get(item).name
   end
 
+  def getNamePlural(item)
+    return GameData::Item.get(item).name_plural
+  end
+
   def getDisplayName(item)
     item_name = getName(item)
     if GameData::Item.get(item).is_machine?
@@ -29,6 +33,15 @@ class PokemonMartAdapter
       item_name = _INTL("{1} {2}", item_name, GameData::Move.get(machine).name)
     end
     return item_name
+  end
+
+  def getDisplayNamePlural(item)
+    item_name_plural = getNamePlural(item)
+    if GameData::Item.get(item).is_machine?
+      machine = GameData::Item.get(item).move
+      item_name_plural = _INTL("{1} {2}", item_name_plural, GameData::Move.get(machine).name)
+    end
+    return item_name_plural
   end
 
   def getDescription(item)
@@ -94,6 +107,10 @@ class BuyAdapter
     @adapter.getDisplayName(item)
   end
 
+  def getDisplayNamePlural(item)
+    @adapter.getDisplayNamePlural(item)
+  end
+
   def getDisplayPrice(item)
     @adapter.getDisplayPrice(item, false)
   end
@@ -113,6 +130,10 @@ class SellAdapter
 
   def getDisplayName(item)
     @adapter.getDisplayName(item)
+  end
+
+  def getDisplayNamePlural(item)
+    @adapter.getDisplayNamePlural(item)
   end
 
   def getDisplayPrice(item)
@@ -552,30 +573,32 @@ class PokemonMartScreen
     loop do
       item = @scene.pbChooseBuyItem
       break if !item
-      quantity = 0
-      itemname = @adapter.getDisplayName(item)
+      quantity       = 0
+      itemname       = @adapter.getDisplayName(item)
+      itemnameplural = @adapter.getDisplayNamePlural(item)
       price = @adapter.getPrice(item)
       if @adapter.getMoney < price
         pbDisplayPaused(_INTL("You don't have enough money."))
         next
       end
       if GameData::Item.get(item).is_important?
-        if !pbConfirm(_INTL("Certainly. You want {1}. That will be ${2}. OK?",
+        next if !pbConfirm(_INTL("So you want {1}?\nIt'll be ${2}. All right?",
                             itemname, price.to_s_formatted))
-          next
-        end
         quantity = 1
       else
         maxafford = (price <= 0) ? Settings::BAG_MAX_PER_SLOT : @adapter.getMoney / price
         maxafford = Settings::BAG_MAX_PER_SLOT if maxafford > Settings::BAG_MAX_PER_SLOT
         quantity = @scene.pbChooseNumber(
-          _INTL("{1}? Certainly. How many would you like?", itemname), item, maxafford
+          _INTL("So how many {1}?", itemnameplural), item, maxafford
         )
         next if quantity == 0
         price *= quantity
-        if !pbConfirm(_INTL("{1}, and you want {2}. That will be ${3}. OK?",
-                            itemname, quantity, price.to_s_formatted))
-          next
+        if quantity > 1
+          next if !pbConfirm(_INTL("So you want {1} {2}?\nThey'll be ${3}. All right?",
+                                   quantity, itemnameplural, price.to_s_formatted))
+        elsif quantity > 0
+          next if !pbConfirm(_INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
+                                   quantity, itemname, price.to_s_formatted))
         end
       end
       if @adapter.getMoney < price
@@ -593,23 +616,22 @@ class PokemonMartScreen
         @adapter.setMoney(@adapter.getMoney - price)
         @stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
-        if quantity >= 10 && $bag && GameData::Item.exists?(:PREMIERBALL)
+        if quantity >= 10 && GameData::Item.exists?(:PREMIERBALL)
           if Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item).is_poke_ball?
             premier_balls_added = 0
             (quantity / 10).times do
               break if !@adapter.addItem(:PREMIERBALL)
               premier_balls_added += 1
             end
+            ball_name = GameData::Item.get(:PREMIERBALL).name
+            ball_name = GameData::Item.get(:PREMIERBALL).name_plural if premier_balls_added > 1
             $stats.premier_balls_earned += premier_balls_added
-            if premier_balls_added > 1
-              pbDisplayPaused(_INTL("I'll throw in some {1}, too.", GameData::Item.get(:PREMIERBALL).name_plural))
-            elsif premier_balls_added > 0
-              pbDisplayPaused(_INTL("I'll throw in a {1}, too.", GameData::Item.get(:PREMIERBALL).name))
-            end
+            pbDisplayPaused(_INTL("And have {1} {2} on the house!", premier_balls_added, ball_name))
           elsif !Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item) == :POKEBALL
-            if @adapter.addItem(GameData::Item.get(:PREMIERBALL))
+            if @adapter.addItem(:PREMIERBALL)
+              ball_name = GameData::Item.get(:PREMIERBALL).name
               $stats.premier_balls_earned += 1
-              pbDisplayPaused(_INTL("I'll throw in a Premier Ball, too."))
+              pbDisplayPaused(_INTL("And have 1 {1} on the house!", ball_name))
             end
           end
         end
@@ -619,7 +641,7 @@ class PokemonMartScreen
             raise _INTL("Failed to delete stored items")
           end
         end
-        pbDisplayPaused(_INTL("You have no more room in the Bag."))
+        pbDisplayPaused(_INTL("You have no room in your Bag."))
       end
     end
     @scene.pbEndBuyScene
@@ -630,9 +652,10 @@ class PokemonMartScreen
     loop do
       item = @scene.pbChooseSellItem
       break if !item
-      itemname = @adapter.getDisplayName(item)
+      itemname       = @adapter.getDisplayName(item)
+      itemnameplural = @adapter.getDisplayNamePlural(item)
       if !@adapter.canSell?(item)
-        pbDisplayPaused(_INTL("{1}? Oh, no. I can't buy that.", itemname))
+        pbDisplayPaused(_INTL("Oh, no. I can't buy {1}.", itemnameplural))
         next
       end
       price = @adapter.getPrice(item, true)
@@ -641,7 +664,7 @@ class PokemonMartScreen
       @scene.pbShowMoney
       if qty > 1
         qty = @scene.pbChooseNumber(
-          _INTL("{1}? How many would you like to sell?", itemname), item, qty
+          _INTL("How many {1} would you like to sell?", itemnameplural), item, qty
         )
       end
       if qty == 0
@@ -650,15 +673,14 @@ class PokemonMartScreen
       end
       price /= 2
       price *= qty
-      if pbConfirm(_INTL("I can pay ${1}. Would that be OK?", price.to_s_formatted))
+      if pbConfirm(_INTL("I can pay ${1}.\nWould that be OK?", price.to_s_formatted))
         old_money = @adapter.getMoney
         @adapter.setMoney(@adapter.getMoney + price)
         $stats.money_earned_at_marts += @adapter.getMoney - old_money
-        qty.times do
-          @adapter.removeItem(item)
-        end
-        pbDisplayPaused(_INTL("Turned over the {1} and received ${2}.",
-                              itemname, price.to_s_formatted)) { pbSEPlay("Mart buy item") }
+        qty.times { @adapter.removeItem(item) }
+        sold_item_name = (qty > 1) ? itemnameplural : itemname
+        pbDisplayPaused(_INTL("You turned over the {1} and got ${2}.",
+                              sold_item_name, price.to_s_formatted)) { pbSEPlay("Mart buy item") }
         @scene.pbRefresh
       end
       @scene.pbHideMoney
@@ -676,10 +698,10 @@ def pbPokemonMart(stock, speech = nil, cantsell = false)
   cmdBuy  = -1
   cmdSell = -1
   cmdQuit = -1
-  commands[cmdBuy = commands.length]  = _INTL("Buy")
-  commands[cmdSell = commands.length] = _INTL("Sell") if !cantsell
-  commands[cmdQuit = commands.length] = _INTL("Quit")
-  cmd = pbMessage(speech || _INTL("Welcome! How may I serve you?"), commands, cmdQuit + 1)
+  commands[cmdBuy = commands.length]  = _INTL("I'm here to buy")
+  commands[cmdSell = commands.length] = _INTL("I'm here to sell") if !cantsell
+  commands[cmdQuit = commands.length] = _INTL("No, thanks")
+  cmd = pbMessage(speech || _INTL("Welcome! How may I help you?"), commands, cmdQuit + 1)
   loop do
     if cmdBuy >= 0 && cmd == cmdBuy
       scene = PokemonMart_Scene.new
@@ -690,10 +712,10 @@ def pbPokemonMart(stock, speech = nil, cantsell = false)
       screen = PokemonMartScreen.new(scene, stock)
       screen.pbSellScreen
     else
-      pbMessage(_INTL("Please come again!"))
+      pbMessage(_INTL("Do come again!"))
       break
     end
-    cmd = pbMessage(_INTL("Is there anything else I can help you with?"), commands, cmdQuit + 1)
+    cmd = pbMessage(_INTL("Is there anything else I can do for you?"), commands, cmdQuit + 1)
   end
   $game_temp.clear_mart_prices
 end
