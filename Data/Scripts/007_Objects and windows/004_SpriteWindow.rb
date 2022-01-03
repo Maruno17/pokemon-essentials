@@ -485,12 +485,12 @@ class SpriteWindow < Window
     @sprites["contents"].bitmap = @contents
     if haveskin
       4.times do |i|
-        @sprites["corner#{i}"].opacity = @opacity
+        @sprites["corner#{i}"].opacity = backopac
         @sprites["corner#{i}"].tone = @tone
         @sprites["corner#{i}"].color = @color
         @sprites["corner#{i}"].visible = @visible
         @sprites["corner#{i}"].blend_type = @blend_type
-        @sprites["side#{i}"].opacity = @opacity
+        @sprites["side#{i}"].opacity = backopac
         @sprites["side#{i}"].tone = @tone
         @sprites["side#{i}"].color = @color
         @sprites["side#{i}"].blend_type = @blend_type
