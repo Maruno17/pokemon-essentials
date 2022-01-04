@@ -27,8 +27,8 @@ def pbStorePokemon(pkmn)
       commands = [_INTL("Add to your party"),
                   _INTL("Send to a Box"),
                   _INTL("See {1}'s summary", pkmn.name)]
-      command = pbMessage(_INTL("Where do you want to send {1} to?", pkmn.name), commands, -1)
-      if command == 0
+      case command = pbMessage(_INTL("Where do you want to send {1} to?", pkmn.name), commands, -1)
+      when 0
         pbMessage(_INTL("Please select a Pokémon to swap from your party."))
         @scene.pbChoosePokemon(1, 3)
         chosen = pbGet(1)
@@ -41,7 +41,7 @@ def pbStorePokemon(pkmn)
         pbMessage(_INTL("{1} will be added to your party, and {2} will be sent to Box \"{3}\"!",
                         pkmn_added.name, pkmn.name, box_name))
         return
-      elsif command == 2
+      when 2
         pbFadeOutIn {
           scene  = PokemonSummary_Scene.new
           screen = PokemonSummaryScreen.new(scene, false)

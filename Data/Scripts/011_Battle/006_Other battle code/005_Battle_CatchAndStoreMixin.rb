@@ -17,8 +17,8 @@ module Battle::CatchAndStoreMixin
         commands = [_INTL("Add to your party"),
                     _INTL("Send to a Box"),
                     _INTL("See {1}'s summary", pkmn.name)]
-        command = pbMessage(_INTL("Where do you want to send {1} to?", pkmn.name), commands, -1)
-        if command == 0
+        case command = pbMessage(_INTL("Where do you want to send {1} to?", pkmn.name), commands, -1)
+        when 0
           pbDisplayPaused(_INTL("Please select a Pokémon to swap from your party."))
           @scene.pbChoosePokemon(1, 3)
           chosen = pbGet(1)
@@ -32,7 +32,7 @@ module Battle::CatchAndStoreMixin
                                 pkmn_added.name, pkmn.name, box_name))
           @initialItems[0][chosen] = pkmn_added.item_id if @initialItems
           return
-        elsif command == 2
+        when 2
           pbFadeOutIn {
             scene  = PokemonSummary_Scene.new
             screen = PokemonSummaryScreen.new(scene, false)
