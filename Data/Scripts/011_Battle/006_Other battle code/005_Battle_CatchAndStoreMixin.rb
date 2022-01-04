@@ -11,6 +11,37 @@ module Battle::CatchAndStoreMixin
         pkmn.name = nickname
       end
     end
+    # Choose what will happen to the Pokémon
+    if pbPlayer.party_full? && $PokemonSystem.sendtoboxes == 0
+      loop do
+        commands = [_INTL("Add to your party"),
+                    _INTL("Send to a Box"),
+                    _INTL("See {1}'s summary", pkmn.name)]
+        command = pbMessage(_INTL("Where do you want to send {1} to?", pkmn.name), commands, -1)
+        if command == 0
+          pbDisplayPaused(_INTL("Please select a Pokémon to swap from your party."))
+          @scene.pbChoosePokemon(1, 3)
+          chosen = pbGet(1)
+          next unless chosen.positive?
+          pkmn_added             = pkmn
+          pkmn                   = pbPlayer.party[chosen].clone
+          pbPlayer.party[chosen] = pkmn_added
+          stored_box = @peer.pbStorePokemon(pbPlayer, pkmn)
+          box_name   = @peer.pbBoxName(stored_box)
+          pbDisplayPaused(_INTL("{1} will be added to your party, and {2} will be sent to Box \"{2}\"!",
+                                pkmn_added.name, pkmn.name, box_name))
+          @initialItems[0][chosen] = pkmn_added.item_id if @initialItems
+          return
+        elsif command == 2
+          pbFadeOutIn {
+            scene  = PokemonSummary_Scene.new
+            screen = PokemonSummaryScreen.new(scene, false)
+            screen.pbStartScreen([pkmn], 0)
+          }
+        end
+        break unless command > 1
+      end
+    end
     # Store the Pokémon
     stored_box = @peer.pbStorePokemon(pbPlayer, pkmn)
     if stored_box < 0
