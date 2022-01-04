@@ -26,9 +26,9 @@ module Battle::CatchAndStoreMixin
           pkmn_added             = pkmn
           pkmn                   = pbPlayer.party[chosen].clone
           pbPlayer.party[chosen] = pkmn_added
-          stored_box = @peer.pbStorePokemon(pbPlayer, pkmn)
-          box_name   = @peer.pbBoxName(stored_box)
-          pbDisplayPaused(_INTL("{1} will be added to your party, and {2} will be sent to Box \"{2}\"!",
+          stored_box             = @peer.pbStorePokemon(pbPlayer, pkmn)
+          box_name               = @peer.pbBoxName(stored_box)
+          pbDisplayPaused(_INTL("{1} will be added to your party, and {2} will be sent to Box \"{3}\"!",
                                 pkmn_added.name, pkmn.name, box_name))
           @initialItems[0][chosen] = pkmn_added.item_id if @initialItems
           return

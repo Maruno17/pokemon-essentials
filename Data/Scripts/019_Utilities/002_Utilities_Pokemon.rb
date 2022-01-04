@@ -36,11 +36,10 @@ def pbStorePokemon(pkmn)
         pkmn_added             = pkmn
         pkmn                   = $player.party[chosen].clone
         $player.party[chosen]  = pkmn_added
-        stored_box = $PokemonStorage.pbStoreCaught(pkmn)
-        box_name   = $PokemonStorage[stored_box].name
-        pbMessage(_INTL("{1} will be added to your party, and {2} will be sent to Box \"{2}\"!",
+        stored_box             = $PokemonStorage.pbStoreCaught(pkmn)
+        box_name               = $PokemonStorage[stored_box].name
+        pbMessage(_INTL("{1} will be added to your party, and {2} will be sent to Box \"{3}\"!",
                         pkmn_added.name, pkmn.name, box_name))
-        @initialItems[0][chosen] = pkmn_added.item_id if @initialItems
         return
       elsif command == 2
         pbFadeOutIn {
