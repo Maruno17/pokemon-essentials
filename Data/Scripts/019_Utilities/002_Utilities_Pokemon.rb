@@ -34,7 +34,7 @@ def pbStorePokemon(pkmn)
         chosen = pbGet(1)
         next unless chosen.positive?
         pkmn_added             = pkmn
-        pkmn                   = $player.party[chosen].clone
+        pkmn                   = $player.party[chosen]
         $player.party[chosen]  = pkmn_added
         stored_box             = $PokemonStorage.pbStoreCaught(pkmn)
         box_name               = $PokemonStorage[stored_box].name

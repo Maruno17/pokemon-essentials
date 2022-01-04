@@ -24,7 +24,7 @@ module Battle::CatchAndStoreMixin
           chosen = pbGet(1)
           next unless chosen.positive?
           pkmn_added             = pkmn
-          pkmn                   = pbPlayer.party[chosen].clone
+          pkmn                   = pbPlayer.party[chosen]
           pbPlayer.party[chosen] = pkmn_added
           stored_box             = @peer.pbStorePokemon(pbPlayer, pkmn)
           box_name               = @peer.pbBoxName(stored_box)
