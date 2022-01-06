@@ -323,9 +323,6 @@ class Battle::Battler
       @battle.pbHideAbilitySplash(self)
       return false
     end
-    if Battle::Scene::USE_ABILITY_SPLASH
-      return pbLowerStatStageByAbility(:ATTACK, 1, user, false)
-    end
     # NOTE: These checks exist to ensure appropriate messages are shown if
     #       Intimidate is blocked somehow (i.e. the messages should mention the
     #       Intimidate ability by name).
@@ -338,20 +335,25 @@ class Battle::Battler
       if abilityActive? &&
          (Battle::AbilityEffects.triggerStatLossImmunity(self.ability, self, :ATTACK, @battle, false) ||
           Battle::AbilityEffects.triggerStatLossImmunityNonIgnorable(self.ability, self, :ATTACK, @battle, false))
+        @battle.pbShowAbilitySplash(self)
         @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
                                 pbThis, abilityName, user.pbThis(true), user.abilityName))
+        @battle.pbHideAbilitySplash(self)
         return false
       end
       allAllies.each do |b|
         next if !b.abilityActive?
         if Battle::AbilityEffects.triggerStatLossImmunityFromAlly(b.ability, b, self, :ATTACK, @battle, false)
+          @battle.pbShowAbilitySplash(self)
           @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by {4}'s {5}!",
                                   pbThis, user.pbThis(true), user.abilityName, b.pbThis(true), b.abilityName))
+          @battle.pbHideAbilitySplash(self)
           return false
         end
       end
     end
     return false if !pbCanLowerStatStage?(:ATTACK, user)
+    return pbLowerStatStageByAbility(:ATTACK, 1, user, false) if Battle::Scene::USE_ABILITY_SPLASH
     return pbLowerStatStageByCause(:ATTACK, 1, user, user.abilityName)
   end
 
