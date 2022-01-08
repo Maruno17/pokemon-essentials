@@ -109,7 +109,16 @@ def pbPrepareBattle(battle)
   battle.showAnims = ($PokemonSystem.battlescene == 0)
   battle.showAnims = battleRules["battleAnims"] if !battleRules["battleAnims"].nil?
   # Terrain
-  battle.defaultTerrain = battleRules["defaultTerrain"] if !battleRules["defaultTerrain"].nil?
+  if battleRules["defaultTerrain"].nil? && Settings::MECHANICS_GENERATION >= 8
+    case $game_screen.weather_type
+    when :Storm
+      battle.defaultTerrain = :Electric
+    when :Fog
+      battle.defaultTerrain = :Misty
+    end
+  else
+    battle.defaultTerrain = battleRules["defaultTerrain"]
+  end
   # Weather
   if battleRules["defaultWeather"].nil?
     case GameData::Weather.get($game_screen.weather_type).category
