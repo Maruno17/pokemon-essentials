@@ -211,7 +211,7 @@ class Interpreter
   def command_102
     choices = setup_choices(@list[@index].parameters)
     tl_choices = []
-    choices[0].each { |cmd| tl_choices.push(_MAPINTL($game_map.map_id, cmd) }
+    choices[0].each { |cmd| tl_choices.push(_MAPINTL($game_map.map_id, cmd)) }
     @message_waiting = true
     command = pbShowCommands(nil, tl_choices, choices[1])
     @message_waiting = false
