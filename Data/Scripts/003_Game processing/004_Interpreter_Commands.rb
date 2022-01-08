@@ -190,9 +190,7 @@ class Interpreter
     @message_waiting = true   # Lets parallel process events work while a message is displayed
     if choices
       cmd_texts = []
-      choices[0].each do |cmd|
-        cmd_texts.push(_MAPINTL($game_map.map_id, cmd))
-      end
+      choices[0].each { |cmd| cmd_texts.push(_MAPINTL($game_map.map_id, cmd)) }
       command = pbMessage(message + message_end, cmd_texts, choices[1])
       @branch[@list[@index].indent] = command
     elsif number_input_variable
@@ -212,8 +210,10 @@ class Interpreter
   #-----------------------------------------------------------------------------
   def command_102
     choices = setup_choices(@list[@index].parameters)
+    tl_choices = []
+    choices[0].each { |cmd| tl_choices.push(_MAPINTL($game_map.map_id, cmd) }
     @message_waiting = true
-    command = pbShowCommands(nil, choices[0], choices[1])
+    command = pbShowCommands(nil, tl_choices, choices[1])
     @message_waiting = false
     @branch[@list[@index].indent] = command
     Input.update   # Must call Input.update again to avoid extra triggers
