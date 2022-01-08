@@ -159,7 +159,7 @@ class Interpreter
     return false if $game_temp.message_window_showing
     message     = @list[@index].parameters[0]
     message_end = ""
-    commands                = nil
+    choices                 = nil
     number_input_variable   = nil
     number_input_max_digits = nil
     # Check the next command(s) for things to add on to this text
@@ -175,8 +175,8 @@ class Interpreter
       when 101   # Show Text
         message_end = "\1"
       when 102   # Show Choices
-        commands = @list[next_index].parameters
         @index = next_index
+        choices = setup_choices(@list[@index].parameters)
       when 103   # Input Number
         number_input_variable   = @list[next_index].parameters[0]
         number_input_max_digits = @list[next_index].parameters[1]
@@ -186,14 +186,14 @@ class Interpreter
     end
     # Translate the text
     message = _MAPINTL($game_map.map_id, message)
-    # Display the text, with commands/number choosing if appropriate
+    # Display the text, with choices/number choosing if appropriate
     @message_waiting = true   # Lets parallel process events work while a message is displayed
-    if commands
+    if choices
       cmd_texts = []
-      commands[0].each do |cmd|
+      choices[0].each do |cmd|
         cmd_texts.push(_MAPINTL($game_map.map_id, cmd))
       end
-      command = pbMessage(message + message_end, cmd_texts, commands[1])
+      command = pbMessage(message + message_end, cmd_texts, choices[1])
       @branch[@list[@index].indent] = command
     elsif number_input_variable
       params = ChooseNumberParams.new
@@ -211,17 +211,69 @@ class Interpreter
   # * Show Choices
   #-----------------------------------------------------------------------------
   def command_102
+    choices = setup_choices(@list[@index].parameters)
     @message_waiting = true
-    command = pbShowCommands(nil, @list[@index].parameters[0], @list[@index].parameters[1])
+    command = pbShowCommands(nil, choices[0], choices[1])
     @message_waiting = false
     @branch[@list[@index].indent] = command
     Input.update   # Must call Input.update again to avoid extra triggers
     return true
   end
+
+  def setup_choices(params)
+    # Get initial options
+    choices = params[0]
+    cancel_index = params[1]
+    # Clone @list so the original isn't modified
+    @list = Marshal.load(Marshal.dump(@list))
+    # Get more choices
+    @choice_branch_index = 4
+    ret = add_more_choices(choices, cancel_index, @index + 1, @list[@index].indent)
+    return ret
+  end
+
+  def add_more_choices(choices, cancel_index, choice_index, indent)
+    # Find index of next command after the current Show Choices command
+    loop do
+      break if @list[choice_index].indent == indent && ![402, 403, 404].include?(@list[choice_index].code)
+      choice_index += 1
+    end
+    next_cmd = @list[choice_index]
+    # If the next command isn't another Show Choices, we're done
+    return [choices, cancel_index] if next_cmd.code != 102
+    # Add more choices
+    old_length = choices.length
+    choices += next_cmd.parameters[0]
+    # Update cancel option
+    if next_cmd.parameters[1] == 5   # Branch
+      cancel_index = choices.length + 1
+      @choice_branch_index = cancel_index - 1
+    elsif next_cmd.parameters[1] > 0   # A choice
+      cancel_index = old_length + next_cmd.parameters[1]
+      @choice_branch_index = -1
+    end
+    # Update first Show Choices command to include all options and result of cancelling
+    @list[@index].parameters[0] = choices
+    @list[@index].parameters[1] = cancel_index
+    # Find the "When" lines for this Show Choices command and update their index parameter
+    temp_index = choice_index + 1
+    loop do
+      break if @list[temp_index].indent == indent && ![402, 403, 404].include?(@list[temp_index].code)
+      if @list[temp_index].code == 402 && @list[temp_index].indent == indent
+        @list[temp_index].parameters[0] += old_length
+      end
+      temp_index += 1
+    end
+    # Delete the "Show Choices" line
+    @list.delete(next_cmd)
+    # Find more choices to add
+    return add_more_choices(choices, cancel_index, choice_index + 1, indent)
+  end
   #-----------------------------------------------------------------------------
   # * When [**]
   #-----------------------------------------------------------------------------
   def command_402
+    # @parameters[0] is 0/1/2/3 for Choice 1/2/3/4 respectively
     if @branch[@list[@index].indent] == @parameters[0]
       @branch.delete(@list[@index].indent)
       return true
@@ -232,7 +284,8 @@ class Interpreter
   # * When Cancel
   #-----------------------------------------------------------------------------
   def command_403
-    if @branch[@list[@index].indent] == 4
+    # @parameters[0] is 4 for "Branch"
+    if @branch[@list[@index].indent] == @choice_branch_index
       @branch.delete(@list[@index].indent)
       return true
     end
