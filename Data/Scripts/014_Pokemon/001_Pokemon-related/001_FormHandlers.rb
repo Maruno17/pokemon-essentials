@@ -136,6 +136,69 @@ end
 #===============================================================================
 # Regular form differences
 #===============================================================================
+MultipleForms.register(:PIKACHU,{
+  "onSetForm" => proc { |pkmn, form, old_form|
+    # All Cosplay Pikachu forms are 100% female
+    if (2..7).include?(form)
+      pkmn.makeFemale
+    # All Cap Pikachu forms are 100% male
+    elsif (8..15).include?(form)
+      pkmn.makeMale
+    end
+    form_moves = [
+      nil,               # Form 1 (Alolan form) has no special move
+      nil,               # Form 2 (Cosplay form) has no special move
+      :ICICLECRASH,      # Belle Pikachu
+      :FLYINGPRESS,      # Libre Pikachu
+      :ELECTRICTERRAIN,  # PhD Pikachu
+      :DRAININGKISS,     # Pop Star Pikachu
+      :METEORMASH        # Rockstar Pikachu
+    ]
+    # Find a known move that should be forgotten
+    old_move_index = -1
+    pkmn.moves.each_with_index do |move, i|
+      next if !form_moves.include?(move.id)
+      old_move_index = i
+      break
+    end
+    # Determine which new move to learn (if any)
+    new_move_id = (form > 0) ? form_moves[form - 1] : nil
+    new_move_id = nil if !GameData::Move.exists?(new_move_id)
+    if new_move_id.nil? && old_move_index >= 0 && pkmn.numMoves == 1
+      new_move_id = :THUNDERSHOCK
+      new_move_id = nil if !GameData::Move.exists?(new_move_id)
+      raise _INTL("Pikachu is trying to forget its last move, but there isn't another move to replace it with.") if new_move_id.nil?
+    end
+    new_move_id = nil if pkmn.hasMove?(new_move_id)
+    # Forget a known move (if relevant) and learn a new move (if relevant)
+    if old_move_index >= 0
+      old_move_name = pkmn.moves[old_move_index].name
+      if new_move_id.nil?
+        # Just forget the old move
+        pkmn.forget_move_at_index(old_move_index)
+        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, old_move_name))
+      else
+        # Replace the old move with the new move (keeps the same index)
+        pkmn.moves[old_move_index].id = new_move_id
+        new_move_name = pkmn.moves[old_move_index].name
+        pbMessage(_INTL("{1} forgot {2}...\1", pkmn.name, old_move_name))
+        pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]\1", pkmn.name, new_move_name))
+      end
+    elsif !new_move_id.nil?
+      # Just learn the new move
+      pbLearnMove(pkmn, new_move_id, true)
+    end
+  },
+  "getForm" => proc { |pkmn|
+    next if pkmn.form_simple >= 2
+    next if !$game_map
+    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    next 1 if map_metadata && map_metadata.town_map_position &&
+              map_metadata.town_map_position[0] == 1   # Tiall region
+    next 0
+  }
+})
+
 
 MultipleForms.register(:UNOWN, {
   "getFormOnCreation" => proc { |pkmn|
@@ -772,7 +835,7 @@ MultipleForms.copy(:RATTATA, :SANDSHREW, :VULPIX, :DIGLETT, :MEOWTH, :GEODUDE,
 #===============================================================================
 
 # Alolan forms
-MultipleForms.register(:PIKACHU, {
+MultipleForms.register(:EXEGGCUTE, {
   "getForm" => proc { |pkmn|
     next if pkmn.form_simple >= 2
     if $game_map
@@ -783,7 +846,7 @@ MultipleForms.register(:PIKACHU, {
   }
 })
 
-MultipleForms.copy(:PIKACHU, :EXEGGCUTE, :CUBONE)
+MultipleForms.copy(:EXEGGCUTE, :CUBONE)
 
 # Galarian forms
 MultipleForms.register(:KOFFING, {
