@@ -12,9 +12,14 @@ end
 class Bitmap
   alias mkxp_draw_text draw_text unless method_defined?(:mkxp_draw_text)
 
-  def draw_text(x, y, width, height, text, align = 0)
-    height = text_size(text).height
-    mkxp_draw_text(x, y, width, height, text, align)
+  def draw_text(x, y, width, height = nil, text = "", align = 0)
+    if x.is_a?(Rect)
+      # rect, string & alignment
+      mkxp_draw_text(x, y, width)
+    else
+      height = text_size(text).height
+      mkxp_draw_text(x, y, width, height, text, align)
+    end
   end
 end
 
