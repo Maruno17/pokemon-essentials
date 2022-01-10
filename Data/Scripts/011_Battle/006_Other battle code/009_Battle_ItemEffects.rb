@@ -1141,7 +1141,8 @@ Battle::ItemEffects::DamageCalcFromTarget.add(:EVIOLITE,
     #       means it also cares about the Pokémon's form. Some forms cannot
     #       evolve even if the species generally can, and such forms are not
     #       affected by Eviolite.
-    if target.pokemon.species_data.get_evolutions(true).length > 0
+    sp_data = target.pokemon.species_data
+    if sp_data.get_evolutions(true).length > 0 && !sp_data.has_flag?("UnaffectedByEviolite")
       mults[:defense_multiplier] *= 1.5
     end
   }
