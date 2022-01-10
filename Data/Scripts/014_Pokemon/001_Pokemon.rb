@@ -78,6 +78,10 @@ class Pokemon
   # Used by Galarian Yamask to remember that it took sufficient damage from a
   # battle and can evolve.
   attr_accessor :ready_to_evolve
+  # Used by Meltan to store the number of Meltan Candies which have been feed
+  # to the Pokemon. This value is checked when evolving a Meltan into Melmetal.
+  # @return [Integer] amount of candies fed to Meltan
+  attr_accessor :candies_fed
   # Whether this Pokémon can be deposited in storage/Day Care
   attr_accessor :cannot_store
   # Whether this Pokémon can be released
@@ -954,6 +958,11 @@ class Pokemon
     @happiness = (@happiness + gain).clamp(0, 255)
   end
 
+  def candies_fed
+    @candies_fed = 0 if !@candies_fed
+    return @candies_fed
+  end
+
   #=============================================================================
   # Evolution checks
   #=============================================================================
@@ -1199,6 +1208,7 @@ class Pokemon
     @personalID       = rand(2**16) | (rand(2**16) << 16)
     @hp               = 1
     @totalhp          = 1
+    @candies_fed      = 0
     calc_stats
     if @form == 0 && recheck_form
       f = MultipleForms.call("getFormOnCreation", self)

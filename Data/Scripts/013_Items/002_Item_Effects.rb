@@ -386,6 +386,45 @@ ItemHandlers::UseOnPokemon.addIf(proc { |item| GameData::Item.get(item).is_evolu
   }
 )
 
+ItemHandlers::UseOnPokemonMaximum.add(:MELTANCANDY, proc { |item, pkmn|
+  next 0 if !pkmn.isSpecies?(:MELTAN) || pkmn.shadowPokemon? || pkmn.fainted?
+  max_qty = 1
+  pkmn.species_data.get_evolutions(true).each do |_, method, parameter|
+    next if method != :ItemCandy
+    max_qty = parameter
+    break
+  end
+  next max_qty - pkmn.candies_fed
+})
+
+ItemHandlers::UseOnPokemon.add(:MELTANCANDY, proc { |item, qty, pkmn, scene|
+  if !pkmn.isSpecies?(:MELTAN) || pkmn.shadowPokemon?
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
+  elsif pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  end
+  pkmn.candies_fed += qty
+  if qty == 1
+    item_name = GameData::Item.get(item).name
+    scene.pbDisplay(_INTL("You fed {1} {3} to {2}.", qty, pkmn.name, item_name))
+  else
+    item_name = GameData::Item.get(item).name_plural
+    scene.pbDisplay(_INTL("You fed {1} {3} to {2}.", qty, pkmn.name, item_name))
+  end
+  new_species = pkmn.check_evolution_on_use_item(item)
+  pbFadeOutInWithMusic {
+    evo = PokemonEvolutionScene.new
+    evo.pbStartScreen(pkmn, new_species)
+    evo.pbEvolution
+    evo.pbEndScreen
+    scene.pbRefresh
+  } if new_species
+  scene.pbHardRefresh
+  next true
+})
+
 ItemHandlers::UseOnPokemon.add(:POTION, proc { |item, qty, pkmn, scene|
   next pbHPItem(pkmn, 20, scene)
 })
