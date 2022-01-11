@@ -70,7 +70,6 @@ class Battle::Battler
   #=============================================================================
   def pbBeginTurn(_choice)
     # Cancel some lingering effects which only apply until the user next moves
-    @effects[PBEffects::BeakBlast]           = false
     @effects[PBEffects::DestinyBondPrevious] = @effects[PBEffects::DestinyBond]
     @effects[PBEffects::DestinyBond]         = false
     @effects[PBEffects::Grudge]              = false

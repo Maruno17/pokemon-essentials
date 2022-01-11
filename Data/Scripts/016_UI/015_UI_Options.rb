@@ -352,7 +352,7 @@ class PokemonOption_Scene
     end
     pbDisposeMessageWindow(@sprites["textbox"])
     pbDisposeSpriteHash(@sprites)
-    pbRefreshSceneMap
+    pbUpdateSceneMap
     @viewport.dispose
   end
 

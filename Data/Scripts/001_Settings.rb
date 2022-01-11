@@ -177,6 +177,11 @@ module Settings
   # Whether more abilities affect whether wild Pokémon appear, which Pokémon
   # they are, etc.
   MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS = (MECHANICS_GENERATION >= 8)
+  # Whether weather effects set the default terrains in battle (true) or
+  # not (false). Eg.:
+  #   * Storm weather sets Electric Terrain
+  #   * Fog weather sets Misty Terrain
+  OVERWORLD_WEATHERS_SET_TERRAINS       = (MECHANICS_GENERATION >= 8)
 
   #=============================================================================
 

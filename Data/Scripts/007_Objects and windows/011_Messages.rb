@@ -10,6 +10,7 @@ def pbMapInterpreterRunning?
   return interp&.running?
 end
 
+# Unused
 def pbRefreshSceneMap
   $scene.miniupdate if $scene.is_a?(Scene_Map)
 end
