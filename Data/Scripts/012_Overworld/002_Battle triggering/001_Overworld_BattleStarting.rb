@@ -109,7 +109,7 @@ def pbPrepareBattle(battle)
   battle.showAnims = ($PokemonSystem.battlescene == 0)
   battle.showAnims = battleRules["battleAnims"] if !battleRules["battleAnims"].nil?
   # Terrain
-  if battleRules["defaultTerrain"].nil? && Settings::OVERWORLD_WEATHERS_SET_TERRAINS
+  if battleRules["defaultTerrain"].nil? && Settings::OVERWORLD_WEATHER_SETS_BATTLE_TERRAIN
     case $game_screen.weather_type
     when :Storm
       battle.defaultTerrain = :Electric

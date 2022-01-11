@@ -72,6 +72,7 @@ end
 #-------------------------------------------------------------------------------
 # Pause menu
 # Pokégear main menu
+# Options screen
 # PC main menu
 # Various debug menus (main, Pokémon, battle, battle Pokémon)
 #===============================================================================
