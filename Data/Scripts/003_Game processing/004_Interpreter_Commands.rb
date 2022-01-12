@@ -189,10 +189,8 @@ class Interpreter
     # Display the text, with choices/number choosing if appropriate
     @message_waiting = true   # Lets parallel process events work while a message is displayed
     if choices
-      cmd_texts = []
-      choices[0].each { |cmd| cmd_texts.push(_MAPINTL($game_map.map_id, cmd)) }
-      command = pbMessage(message + message_end, cmd_texts, choices[1])
-      @branch[@list[@index].indent] = command
+      command = pbMessage(message + message_end, choices[0], choices[1])
+      @branch[@list[@index].indent] = choices[2][command] || command
     elsif number_input_variable
       params = ChooseNumberParams.new
       params.setMaxDigits(number_input_max_digits)
@@ -210,25 +208,38 @@ class Interpreter
   #-----------------------------------------------------------------------------
   def command_102
     choices = setup_choices(@list[@index].parameters)
-    tl_choices = []
-    choices[0].each { |cmd| tl_choices.push(_MAPINTL($game_map.map_id, cmd)) }
     @message_waiting = true
-    command = pbShowCommands(nil, tl_choices, choices[1])
+    command = pbShowCommands(nil, choices[0], choices[1])
     @message_waiting = false
-    @branch[@list[@index].indent] = command
+    @branch[@list[@index].indent] = choices[2][command] || command
     Input.update   # Must call Input.update again to avoid extra triggers
     return true
   end
 
   def setup_choices(params)
     # Get initial options
-    choices = params[0]
+    choices = params[0].clone
     cancel_index = params[1]
     # Clone @list so the original isn't modified
     @list = Marshal.load(Marshal.dump(@list))
     # Get more choices
     @choice_branch_index = 4
     ret = add_more_choices(choices, cancel_index, @index + 1, @list[@index].indent)
+    # Rename choices
+    ret[0].each_with_index { |choice, i| ret[0][i] = @renamed_choices[i] if @renamed_choices[i] }
+    @renamed_choices.clear
+    # Remove hidden choices
+    ret[2] = Array.new(ret[0].length) { |i| i }
+    @hidden_choices.each_with_index do |condition, i|
+      next if !condition
+      ret[0][i] = nil
+      ret[2][i] = nil
+    end
+    ret[0].compact!
+    ret[2].compact!
+    @hidden_choices.clear
+    # Translate choices
+    ret[0].map! { |ch| _MAPINTL($game_map.map_id, ch) }
     return ret
   end
 
@@ -268,6 +279,15 @@ class Interpreter
     @list.delete(next_cmd)
     # Find more choices to add
     return add_more_choices(choices, cancel_index, choice_index + 1, indent)
+  end
+
+  def hide_choice(number, condition = true)
+    @hidden_choices[number - 1] = condition
+  end
+
+  def rename_choice(number, new_name, condition = true)
+    return if !condition || nil_or_empty?(new_name)
+    @renamed_choices[number - 1] = new_name
   end
   #-----------------------------------------------------------------------------
   # * When [**]
