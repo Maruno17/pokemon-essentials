@@ -314,7 +314,7 @@ class PokemonRegionMap_Scene
            ($DEBUG && Input.press?(Input::CTRL)))
           return healspot if @fly_map
           name = pbGetMapNameFromId(healspot[0])
-          return healspot if pbConfirmMessage(_INTL("Would you like to fly to {1}?", name)) { pbUpdate }
+          return healspot if pbConfirmMessage(_INTL("Would you like to use Fly to go to {1}?", name)) { pbUpdate }
         end
       elsif Input.trigger?(Input::USE) && @editor   # Intentionally after other USE input check
         pbChangeMapLocation(@map_x, @map_y)
