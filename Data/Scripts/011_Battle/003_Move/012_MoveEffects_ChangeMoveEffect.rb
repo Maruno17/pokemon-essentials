@@ -674,62 +674,62 @@ class Battle::Move::UseLastMoveUsed < Battle::Move
     super
     @moveBlacklist = [
       # Struggle, Belch
-      "Struggle",
-      "FailsIfUserNotConsumedBerry",   # Belch       # Not listed on Bulbapedia
+      "Struggle",                                          # Struggle
+      "FailsIfUserNotConsumedBerry",                       # Belch              # Not listed on Bulbapedia
       # Moves that affect the moveset
-      "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
-      "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
-      "TransformUserIntoTarget",   # Transform
+      "ReplaceMoveThisBattleWithTargetLastMoveUsed",       # Mimic
+      "ReplaceMoveWithTargetLastMoveUsed",                 # Sketch
+      "TransformUserIntoTarget",                           # Transform
       # Counter moves
-      "CounterPhysicalDamage",   # Counter
-      "CounterSpecialDamage",   # Mirror Coat
-      "CounterDamagePlusHalf",   # Metal Burst       # Not listed on Bulbapedia
+      "CounterPhysicalDamage",                             # Counter
+      "CounterSpecialDamage",                              # Mirror Coat
+      "CounterDamagePlusHalf",                             # Metal Burst        # Not listed on Bulbapedia
       # Helping Hand, Feint (always blacklisted together, don't know why)
-      "PowerUpAllyMove",   # Helping Hand
-      "RemoveProtections",   # Feint
+      "PowerUpAllyMove",                                   # Helping Hand
+      "RemoveProtections",                                 # Feint
       # Protection moves
-      "ProtectUser",   # Detect, Protect
-      "ProtectUserSideFromPriorityMoves",   # Quick Guard             # Not listed on Bulbapedia
-      "ProtectUserSideFromMultiTargetDamagingMoves",   # Wide Guard   # Not listed on Bulbapedia
+      "ProtectUser",                                       # Detect, Protect
+      "ProtectUserSideFromPriorityMoves",                  # Quick Guard        # Not listed on Bulbapedia
+      "ProtectUserSideFromMultiTargetDamagingMoves",       # Wide Guard         # Not listed on Bulbapedia
       "UserEnduresFaintingThisTurn",   # Endure
       "ProtectUserSideFromDamagingMovesIfUserFirstTurn",   # Mat Block
-      "ProtectUserSideFromStatusMoves",   # Crafty Shield             # Not listed on Bulbapedia
-      "ProtectUserFromDamagingMovesKingsShield",   # King's Shield
-      "ProtectUserFromTargetingMovesSpikyShield",   # Spiky Shield
-      "ProtectUserBanefulBunker",   # Baneful Bunker
+      "ProtectUserSideFromStatusMoves",                    # Crafty Shield      # Not listed on Bulbapedia
+      "ProtectUserFromDamagingMovesKingsShield",           # King's Shield
+      "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
+      "ProtectUserBanefulBunker",                          # Baneful Bunker
       # Moves that call other moves
-      "UseLastMoveUsedByTarget",   # Mirror Move
-      "UseLastMoveUsed",   # Copycat (this move)
-      "UseMoveTargetIsAboutToUse",   # Me First
-      "UseMoveDependingOnEnvironment",   # Nature Power   # Not listed on Bulbapedia
-      "UseRandomUserMoveIfAsleep",   # Sleep Talk
-      "UseRandomMoveFromUserParty",   # Assist
-      "UseRandomMove",   # Metronome
+      "UseLastMoveUsedByTarget",                           # Mirror Move
+      "UseLastMoveUsed",                                   # Copycat (this move)
+      "UseMoveTargetIsAboutToUse",                         # Me First
+      "UseMoveDependingOnEnvironment",                     # Nature Power       # Not listed on Bulbapedia
+      "UseRandomUserMoveIfAsleep",                         # Sleep Talk
+      "UseRandomMoveFromUserParty",                        # Assist
+      "UseRandomMove",                                     # Metronome
       # Move-redirecting and stealing moves
-      "BounceBackProblemCausingStatusMoves",   # Magic Coat   # Not listed on Bulbapedia
-      "StealAndUseBeneficialStatusMove",   # Snatch
-      "RedirectAllMovesToUser",   # Follow Me, Rage Powder
-      "RedirectAllMovesToTarget",   # Spotlight
+      "BounceBackProblemCausingStatusMoves",               # Magic Coat         # Not listed on Bulbapedia
+      "StealAndUseBeneficialStatusMove",                   # Snatch
+      "RedirectAllMovesToUser",                            # Follow Me, Rage Powder
+      "RedirectAllMovesToTarget",                          # Spotlight
       # Set up effects that trigger upon KO
-      "ReduceAttackerMovePPTo0IfUserFaints",   # Grudge   # Not listed on Bulbapedia
-      "AttackerFaintsIfUserFaints",   # Destiny Bond
+      "ReduceAttackerMovePPTo0IfUserFaints",               # Grudge             # Not listed on Bulbapedia
+      "AttackerFaintsIfUserFaints",                        # Destiny Bond
       # Held item-moving moves
-      "UserTakesTargetItem",   # Covet, Thief
-      "UserTargetSwapItems",   # Switcheroo, Trick
-      "TargetTakesUserItem",   # Bestow
+      "UserTakesTargetItem",                               # Covet, Thief
+      "UserTargetSwapItems",                               # Switcheroo, Trick
+      "TargetTakesUserItem",                               # Bestow
       # Moves that start focussing at the start of the round
-      "FailsIfUserDamagedThisTurn",   # Focus Punch
-      "UsedAfterUserTakesPhysicalDamage",   # Shell Trap
-      "BurnAttackerBeforeUserActs",   # Beak Blast
+      "FailsIfUserDamagedThisTurn",                        # Focus Punch
+      "UsedAfterUserTakesPhysicalDamage",                  # Shell Trap
+      "BurnAttackerBeforeUserActs",                        # Beak Blast
       # Event moves that do nothing
-      "DoesNothingFailsIfNoAlly",   # Hold Hands
-      "DoesNothingCongratulations"   # Celebrate
+      "DoesNothingFailsIfNoAlly",                          # Hold Hands
+      "DoesNothingCongratulations"                         # Celebrate
     ]
     if Settings::MECHANICS_GENERATION >= 6
       @moveBlacklist += [
         # Target-switching moves
-        "SwitchOutTargetStatusMove",   # Roar, Whirlwind
-        "SwitchOutTargetDamagingMove"    # Circle Throw, Dragon Tail
+        "SwitchOutTargetStatusMove",                       # Roar, Whirlwind
+        "SwitchOutTargetDamagingMove"                      # Circle Throw, Dragon Tail
       ]
     end
   end
@@ -789,18 +789,18 @@ class Battle::Move::UseMoveTargetIsAboutToUse < Battle::Move
   def initialize(battle, move)
     super
     @moveBlacklist = [
-      "UserTakesTargetItem",   # Covet, Thief
+      "UserTakesTargetItem",                # Covet, Thief
       # Struggle, Belch
-      "Struggle",   # Struggle
-      "FailsIfUserNotConsumedBerry",   # Belch
+      "Struggle",                           # Struggle
+      "FailsIfUserNotConsumedBerry",        # Belch
       # Counter moves
-      "CounterPhysicalDamage",   # Counter
-      "CounterSpecialDamage",   # Mirror Coat
-      "CounterDamagePlusHalf",   # Metal Burst
+      "CounterPhysicalDamage",              # Counter
+      "CounterSpecialDamage",               # Mirror Coat
+      "CounterDamagePlusHalf",              # Metal Burst
       # Moves that start focussing at the start of the round
-      "FailsIfUserDamagedThisTurn",   # Focus Punch
+      "FailsIfUserDamagedThisTurn",         # Focus Punch
       "UsedAfterUserTakesPhysicalDamage",   # Shell Trap
-      "BurnAttackerBeforeUserActs"   # Beak Blast
+      "BurnAttackerBeforeUserActs"          # Beak Blast
     ]
   end
 
@@ -893,83 +893,61 @@ class Battle::Move::UseRandomMove < Battle::Move
   def initialize(battle, move)
     super
     @moveBlacklist = [
-      "FlinchTargetFailsIfUserNotAsleep",   # Snore
-      "TargetActsNext",   # After You
-      "TargetActsLast",   # Quash
-      "TargetUsesItsLastUsedMoveAgain",   # Instruct
+      "FlinchTargetFailsIfUserNotAsleep",                  # Snore
+      "TargetActsNext",                                    # After You
+      "TargetActsLast",                                    # Quash
+      "TargetUsesItsLastUsedMoveAgain",                    # Instruct
       # Struggle, Belch
-      "Struggle",   # Struggle
-      "FailsIfUserNotConsumedBerry",   # Belch
+      "Struggle",                                          # Struggle
+      "FailsIfUserNotConsumedBerry",                       # Belch
       # Moves that affect the moveset
-      "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
-      "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
-      "TransformUserIntoTarget",   # Transform
+      "ReplaceMoveThisBattleWithTargetLastMoveUsed",       # Mimic
+      "ReplaceMoveWithTargetLastMoveUsed",                 # Sketch
+      "TransformUserIntoTarget",                           # Transform
       # Counter moves
-      "CounterPhysicalDamage",   # Counter
-      "CounterSpecialDamage",   # Mirror Coat
-      "CounterDamagePlusHalf",   # Metal Burst        # Not listed on Bulbapedia
+      "CounterPhysicalDamage",                             # Counter
+      "CounterSpecialDamage",                              # Mirror Coat
+      "CounterDamagePlusHalf",                             # Metal Burst        # Not listed on Bulbapedia
       # Helping Hand, Feint (always blacklisted together, don't know why)
-      "PowerUpAllyMove",   # Helping Hand
-      "RemoveProtections",   # Feint
+      "PowerUpAllyMove",                                   # Helping Hand
+      "RemoveProtections",                                 # Feint
       # Protection moves
-      "ProtectUser",   # Detect, Protect
-      "ProtectUserSideFromPriorityMoves",   # Quick Guard
-      "ProtectUserSideFromMultiTargetDamagingMoves",   # Wide Guard
-      "UserEnduresFaintingThisTurn",   # Endure
+      "ProtectUser",                                       # Detect, Protect
+      "ProtectUserSideFromPriorityMoves",                  # Quick Guard
+      "ProtectUserSideFromMultiTargetDamagingMoves",       # Wide Guard
+      "UserEnduresFaintingThisTurn",                       # Endure
       "ProtectUserSideFromDamagingMovesIfUserFirstTurn",   # Mat Block
-      "ProtectUserSideFromStatusMoves",   # Crafty Shield
-      "ProtectUserFromDamagingMovesKingsShield",   # King's Shield
-      "ProtectUserFromTargetingMovesSpikyShield",   # Spiky Shield
-      "ProtectUserBanefulBunker",   # Baneful Bunker
+      "ProtectUserSideFromStatusMoves",                    # Crafty Shield
+      "ProtectUserFromDamagingMovesKingsShield",           # King's Shield
+      "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
+      "ProtectUserBanefulBunker",                          # Baneful Bunker
       # Moves that call other moves
-      "UseLastMoveUsedByTarget",   # Mirror Move
-      "UseLastMoveUsed",   # Copycat
-      "UseMoveTargetIsAboutToUse",   # Me First
-      "UseMoveDependingOnEnvironment",   # Nature Power
-      "UseRandomUserMoveIfAsleep",   # Sleep Talk
-      "UseRandomMoveFromUserParty",   # Assist
-      "UseRandomMove",   # Metronome
+      "UseLastMoveUsedByTarget",                           # Mirror Move
+      "UseLastMoveUsed",                                   # Copycat
+      "UseMoveTargetIsAboutToUse",                         # Me First
+      "UseMoveDependingOnEnvironment",                     # Nature Power
+      "UseRandomUserMoveIfAsleep",                         # Sleep Talk
+      "UseRandomMoveFromUserParty",                        # Assist
+      "UseRandomMove",                                     # Metronome
       # Move-redirecting and stealing moves
-      "BounceBackProblemCausingStatusMoves",   # Magic Coat   # Not listed on Bulbapedia
-      "StealAndUseBeneficialStatusMove",   # Snatch
-      "RedirectAllMovesToUser",   # Follow Me, Rage Powder
-      "RedirectAllMovesToTarget",   # Spotlight
+      "BounceBackProblemCausingStatusMoves",               # Magic Coat         # Not listed on Bulbapedia
+      "StealAndUseBeneficialStatusMove",                   # Snatch
+      "RedirectAllMovesToUser",                            # Follow Me, Rage Powder
+      "RedirectAllMovesToTarget",                          # Spotlight
       # Set up effects that trigger upon KO
-      "ReduceAttackerMovePPTo0IfUserFaints",   # Grudge   # Not listed on Bulbapedia
-      "AttackerFaintsIfUserFaints",   # Destiny Bond
+      "ReduceAttackerMovePPTo0IfUserFaints",               # Grudge             # Not listed on Bulbapedia
+      "AttackerFaintsIfUserFaints",                        # Destiny Bond
       # Held item-moving moves
-      "UserTakesTargetItem",   # Covet, Thief
-      "UserTargetSwapItems",   # Switcheroo, Trick
-      "TargetTakesUserItem",   # Bestow
+      "UserTakesTargetItem",                               # Covet, Thief
+      "UserTargetSwapItems",                               # Switcheroo, Trick
+      "TargetTakesUserItem",                               # Bestow
       # Moves that start focussing at the start of the round
-      "FailsIfUserDamagedThisTurn",   # Focus Punch
-      "UsedAfterUserTakesPhysicalDamage",   # Shell Trap
-      "BurnAttackerBeforeUserActs",   # Beak Blast
+      "FailsIfUserDamagedThisTurn",                        # Focus Punch
+      "UsedAfterUserTakesPhysicalDamage",                  # Shell Trap
+      "BurnAttackerBeforeUserActs",                        # Beak Blast
       # Event moves that do nothing
-      "DoesNothingFailsIfNoAlly",   # Hold Hands
-      "DoesNothingCongratulations"   # Celebrate
-    ]
-    @moveBlacklistSignatures = [
-      :SNARL,
-      # Signature moves
-      :DIAMONDSTORM,     # Diancie (Gen 6)
-      :FLEURCANNON,      # Magearna (Gen 7)
-      :FREEZESHOCK,      # Black Kyurem (Gen 5)
-      :HYPERSPACEFURY,   # Hoopa Unbound (Gen 6)
-      :HYPERSPACEHOLE,   # Hoopa Confined (Gen 6)
-      :ICEBURN,          # White Kyurem (Gen 5)
-      :LIGHTOFRUIN,      # Eternal Flower Floette (Gen 6)
-      :MINDBLOWN,        # Blacephalon (Gen 7)
-      :PHOTONGEYSER,     # Necrozma (Gen 7)
-      :PLASMAFISTS,      # Zeraora (Gen 7)
-      :RELICSONG,        # Meloetta (Gen 5)
-      :SECRETSWORD,      # Keldeo (Gen 5)
-      :SPECTRALTHIEF,    # Marshadow (Gen 7)
-      :STEAMERUPTION,    # Volcanion (Gen 6)
-      :TECHNOBLAST,      # Genesect (Gen 5)
-      :THOUSANDARROWS,   # Zygarde (Gen 6)
-      :THOUSANDWAVES,    # Zygarde (Gen 6)
-      :VCREATE           # Victini (Gen 5)
+      "DoesNothingFailsIfNoAlly",                          # Hold Hands
+      "DoesNothingCongratulations"                         # Celebrate
     ]
   end
 
@@ -982,7 +960,7 @@ class Battle::Move::UseRandomMove < Battle::Move
       move_id = move_keys[@battle.pbRandom(move_keys.length)]
       move_data = GameData::Move.get(move_id)
       next if @moveBlacklist.include?(move_data.function_code)
-      next if @moveBlacklistSignatures.include?(move_data.id)
+      next if move_data.has_flag?("CannnotMetronome")
       next if move_data.type == :SHADOW
       @metronomeMove = move_data.id
       break
@@ -1009,81 +987,81 @@ class Battle::Move::UseRandomMoveFromUserParty < Battle::Move
     super
     @moveBlacklist = [
       # Struggle, Belch
-      "Struggle",   # Struggle
-      "FailsIfUserNotConsumedBerry",   # Belch
+      "Struggle",                                          # Struggle
+      "FailsIfUserNotConsumedBerry",                       # Belch
       # Moves that affect the moveset
-      "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
-      "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
-      "TransformUserIntoTarget",   # Transform
+      "ReplaceMoveThisBattleWithTargetLastMoveUsed",       # Mimic
+      "ReplaceMoveWithTargetLastMoveUsed",                 # Sketch
+      "TransformUserIntoTarget",                           # Transform
       # Counter moves
-      "CounterPhysicalDamage",   # Counter
-      "CounterSpecialDamage",   # Mirror Coat
-      "CounterDamagePlusHalf",   # Metal Burst       # Not listed on Bulbapedia
+      "CounterPhysicalDamage",                             # Counter
+      "CounterSpecialDamage",                              # Mirror Coat
+      "CounterDamagePlusHalf",                             # Metal Burst        # Not listed on Bulbapedia
       # Helping Hand, Feint (always blacklisted together, don't know why)
-      "PowerUpAllyMove",   # Helping Hand
-      "RemoveProtections",   # Feint
+      "PowerUpAllyMove",                                   # Helping Hand
+      "RemoveProtections",                                 # Feint
       # Protection moves
-      "ProtectUser",   # Detect, Protect
-      "ProtectUserSideFromPriorityMoves",   # Quick Guard             # Not listed on Bulbapedia
-      "ProtectUserSideFromMultiTargetDamagingMoves",   # Wide Guard   # Not listed on Bulbapedia
-      "UserEnduresFaintingThisTurn",   # Endure
+      "ProtectUser",                                       # Detect, Protect
+      "ProtectUserSideFromPriorityMoves",                  # Quick Guard        # Not listed on Bulbapedia
+      "ProtectUserSideFromMultiTargetDamagingMoves",       # Wide Guard         # Not listed on Bulbapedia
+      "UserEnduresFaintingThisTurn",                       # Endure
       "ProtectUserSideFromDamagingMovesIfUserFirstTurn",   # Mat Block
-      "ProtectUserSideFromStatusMoves",   # Crafty Shield             # Not listed on Bulbapedia
-      "ProtectUserFromDamagingMovesKingsShield",   # King's Shield
-      "ProtectUserFromTargetingMovesSpikyShield",   # Spiky Shield
-      "ProtectUserBanefulBunker",   # Baneful Bunker
+      "ProtectUserSideFromStatusMoves",                    # Crafty Shield      # Not listed on Bulbapedia
+      "ProtectUserFromDamagingMovesKingsShield",           # King's Shield
+      "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
+      "ProtectUserBanefulBunker",                          # Baneful Bunker
       # Moves that call other moves
-      "UseLastMoveUsedByTarget",   # Mirror Move
-      "UseLastMoveUsed",   # Copycat
-      "UseMoveTargetIsAboutToUse",   # Me First
-#      "UseMoveDependingOnEnvironment",   # Nature Power            # See below
-      "UseRandomUserMoveIfAsleep",   # Sleep Talk
-      "UseRandomMoveFromUserParty",   # Assist
-      "UseRandomMove",   # Metronome
+      "UseLastMoveUsedByTarget",                           # Mirror Move
+      "UseLastMoveUsed",                                   # Copycat
+      "UseMoveTargetIsAboutToUse",                         # Me First
+#      "UseMoveDependingOnEnvironment",                    # Nature Power       # See below
+      "UseRandomUserMoveIfAsleep",                         # Sleep Talk
+      "UseRandomMoveFromUserParty",                        # Assist
+      "UseRandomMove",                                     # Metronome
       # Move-redirecting and stealing moves
-      "BounceBackProblemCausingStatusMoves",   # Magic Coat   # Not listed on Bulbapedia
-      "StealAndUseBeneficialStatusMove",   # Snatch
-      "RedirectAllMovesToUser",   # Follow Me, Rage Powder
-      "RedirectAllMovesToTarget",   # Spotlight
+      "BounceBackProblemCausingStatusMoves",               # Magic Coat         # Not listed on Bulbapedia
+      "StealAndUseBeneficialStatusMove",                   # Snatch
+      "RedirectAllMovesToUser",                            # Follow Me, Rage Powder
+      "RedirectAllMovesToTarget",                          # Spotlight
       # Set up effects that trigger upon KO
-      "ReduceAttackerMovePPTo0IfUserFaints",   # Grudge   # Not listed on Bulbapedia
-      "AttackerFaintsIfUserFaints",   # Destiny Bond
+      "ReduceAttackerMovePPTo0IfUserFaints",               # Grudge             # Not listed on Bulbapedia
+      "AttackerFaintsIfUserFaints",                        # Destiny Bond
       # Target-switching moves
-#      "SwitchOutTargetStatusMove",   # Roar, Whirlwind             # See below
-      "SwitchOutTargetDamagingMove",   # Circle Throw, Dragon Tail
+#      "SwitchOutTargetStatusMove",                        # Roar, Whirlwind    # See below
+      "SwitchOutTargetDamagingMove",                       # Circle Throw, Dragon Tail
       # Held item-moving moves
-      "UserTakesTargetItem",   # Covet, Thief
-      "UserTargetSwapItems",   # Switcheroo, Trick
-      "TargetTakesUserItem",   # Bestow
+      "UserTakesTargetItem",                               # Covet, Thief
+      "UserTargetSwapItems",                               # Switcheroo, Trick
+      "TargetTakesUserItem",                               # Bestow
       # Moves that start focussing at the start of the round
-      "FailsIfUserDamagedThisTurn",   # Focus Punch
-      "UsedAfterUserTakesPhysicalDamage",   # Shell Trap
-      "BurnAttackerBeforeUserActs",   # Beak Blast
+      "FailsIfUserDamagedThisTurn",                        # Focus Punch
+      "UsedAfterUserTakesPhysicalDamage",                  # Shell Trap
+      "BurnAttackerBeforeUserActs",                        # Beak Blast
       # Event moves that do nothing
-      "DoesNothingFailsIfNoAlly",   # Hold Hands
-      "DoesNothingCongratulations"   # Celebrate
+      "DoesNothingFailsIfNoAlly",                          # Hold Hands
+      "DoesNothingCongratulations"                         # Celebrate
     ]
     if Settings::MECHANICS_GENERATION >= 6
       @moveBlacklist += [
         # Moves that call other moves
-        "UseMoveDependingOnEnvironment",   # Nature Power
+        "UseMoveDependingOnEnvironment",                   # Nature Power
         # Two-turn attacks
-        "TwoTurnAttack",   # Razor Wind                            # Not listed on Bulbapedia
-        "TwoTurnAttackOneTurnInSun",   # Solar Beam, Solar Blade   # Not listed on Bulbapedia
-        "TwoTurnAttackParalyzeTarget",   # Freeze Shock            # Not listed on Bulbapedia
-        "TwoTurnAttackBurnTarget",   # Ice Burn                    # Not listed on Bulbapedia
-        "TwoTurnAttackFlinchTarget",   # Sky Attack                # Not listed on Bulbapedia
-        "TwoTurnAttackChargeRaiseUserDefense1",   # Skull Bash     # Not listed on Bulbapedia
-        "TwoTurnAttackInvulnerableInSky",   # Fly
-        "TwoTurnAttackInvulnerableUnderground",   # Dig
-        "TwoTurnAttackInvulnerableUnderwater",   # Dive
-        "TwoTurnAttackInvulnerableInSkyParalyzeTarget",   # Bounce
-        "TwoTurnAttackInvulnerableRemoveProtections",   # Shadow Force/Phantom Force
+        "TwoTurnAttack",                                   # Razor Wind                # Not listed on Bulbapedia
+        "TwoTurnAttackOneTurnInSun",                       # Solar Beam, Solar Blade   # Not listed on Bulbapedia
+        "TwoTurnAttackParalyzeTarget",                     # Freeze Shock              # Not listed on Bulbapedia
+        "TwoTurnAttackBurnTarget",                         # Ice Burn                  # Not listed on Bulbapedia
+        "TwoTurnAttackFlinchTarget",                       # Sky Attack                # Not listed on Bulbapedia
+        "TwoTurnAttackChargeRaiseUserDefense1",            # Skull Bash                # Not listed on Bulbapedia
+        "TwoTurnAttackInvulnerableInSky",                  # Fly
+        "TwoTurnAttackInvulnerableUnderground",            # Dig
+        "TwoTurnAttackInvulnerableUnderwater",             # Dive
+        "TwoTurnAttackInvulnerableInSkyParalyzeTarget",    # Bounce
+        "TwoTurnAttackInvulnerableRemoveProtections",      # Shadow Force/Phantom Force
         "TwoTurnAttackInvulnerableInSkyTargetCannotAct",   # Sky Drop
-        "AllBattlersLoseHalfHPUserSkipsNextTurn",   # Shadow Half
-        "TwoTurnAttackRaiseUserSpAtkSpDefSpd2",   # Geomancy       # Not listed on Bulbapedia
+        "AllBattlersLoseHalfHPUserSkipsNextTurn",          # Shadow Half
+        "TwoTurnAttackRaiseUserSpAtkSpDefSpd2",            # Geomancy                  # Not listed on Bulbapedia
         # Target-switching moves
-        "SwitchOutTargetStatusMove"   # Roar, Whirlwind
+        "SwitchOutTargetStatusMove"                        # Roar, Whirlwind
       ]
     end
   end
@@ -1123,41 +1101,41 @@ class Battle::Move::UseRandomUserMoveIfAsleep < Battle::Move
   def initialize(battle, move)
     super
     @moveBlacklist = [
-      "MultiTurnAttackPreventSleeping",   # Uproar
-      "MultiTurnAttackBideThenReturnDoubleDamage",   # Bide
+      "MultiTurnAttackPreventSleeping",                  # Uproar
+      "MultiTurnAttackBideThenReturnDoubleDamage",       # Bide
       # Struggle, Belch
-      "Struggle",   # Struggle                       # Not listed on Bulbapedia
-      "FailsIfUserNotConsumedBerry",   # Belch
+      "Struggle",                                        # Struggle             # Not listed on Bulbapedia
+      "FailsIfUserNotConsumedBerry",                     # Belch
       # Moves that affect the moveset (except Transform)
-      "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
-      "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
+      "ReplaceMoveThisBattleWithTargetLastMoveUsed",     # Mimic
+      "ReplaceMoveWithTargetLastMoveUsed",               # Sketch
       # Moves that call other moves
-      "UseLastMoveUsedByTarget",   # Mirror Move
-      "UseLastMoveUsed",   # Copycat
-      "UseMoveTargetIsAboutToUse",   # Me First
-      "UseMoveDependingOnEnvironment",   # Nature Power   # Not listed on Bulbapedia
-      "UseRandomUserMoveIfAsleep",   # Sleep Talk
-      "UseRandomMoveFromUserParty",   # Assist
-      "UseRandomMove",   # Metronome
+      "UseLastMoveUsedByTarget",                         # Mirror Move
+      "UseLastMoveUsed",                                 # Copycat
+      "UseMoveTargetIsAboutToUse",                       # Me First
+      "UseMoveDependingOnEnvironment",                   # Nature Power         # Not listed on Bulbapedia
+      "UseRandomUserMoveIfAsleep",                       # Sleep Talk
+      "UseRandomMoveFromUserParty",                      # Assist
+      "UseRandomMove",                                   # Metronome
       # Two-turn attacks
-      "TwoTurnAttack",   # Razor Wind
-      "TwoTurnAttackOneTurnInSun",   # Solar Beam, Solar Blade
-      "TwoTurnAttackParalyzeTarget",   # Freeze Shock
-      "TwoTurnAttackBurnTarget",   # Ice Burn
-      "TwoTurnAttackFlinchTarget",   # Sky Attack
-      "TwoTurnAttackChargeRaiseUserDefense1",   # Skull Bash
-      "TwoTurnAttackInvulnerableInSky",   # Fly
-      "TwoTurnAttackInvulnerableUnderground",   # Dig
-      "TwoTurnAttackInvulnerableUnderwater",   # Dive
-      "TwoTurnAttackInvulnerableInSkyParalyzeTarget",   # Bounce
-      "TwoTurnAttackInvulnerableRemoveProtections",   # Shadow Force/Phantom Force
+      "TwoTurnAttack",                                   # Razor Wind
+      "TwoTurnAttackOneTurnInSun",                       # Solar Beam, Solar Blade
+      "TwoTurnAttackParalyzeTarget",                     # Freeze Shock
+      "TwoTurnAttackBurnTarget",                         # Ice Burn
+      "TwoTurnAttackFlinchTarget",                       # Sky Attack
+      "TwoTurnAttackChargeRaiseUserDefense1",            # Skull Bash
+      "TwoTurnAttackInvulnerableInSky",                  # Fly
+      "TwoTurnAttackInvulnerableUnderground",            # Dig
+      "TwoTurnAttackInvulnerableUnderwater",             # Dive
+      "TwoTurnAttackInvulnerableInSkyParalyzeTarget",    # Bounce
+      "TwoTurnAttackInvulnerableRemoveProtections",      # Shadow Force/Phantom Force
       "TwoTurnAttackInvulnerableInSkyTargetCannotAct",   # Sky Drop
-      "AllBattlersLoseHalfHPUserSkipsNextTurn",   # Shadow Half
-      "TwoTurnAttackRaiseUserSpAtkSpDefSpd2",   # Geomancy
+      "AllBattlersLoseHalfHPUserSkipsNextTurn",          # Shadow Half
+      "TwoTurnAttackRaiseUserSpAtkSpDefSpd2",            # Geomancy
       # Moves that start focussing at the start of the round
-      "FailsIfUserDamagedThisTurn",   # Focus Punch
-      "UsedAfterUserTakesPhysicalDamage",   # Shell Trap
-      "BurnAttackerBeforeUserActs"   # Beak Blast
+      "FailsIfUserDamagedThisTurn",                      # Focus Punch
+      "UsedAfterUserTakesPhysicalDamage",                # Shell Trap
+      "BurnAttackerBeforeUserActs"                       # Beak Blast
     ]
   end
 
@@ -1216,13 +1194,13 @@ class Battle::Move::ReplaceMoveThisBattleWithTargetLastMoveUsed < Battle::Move
   def initialize(battle, move)
     super
     @moveBlacklist = [
-      "UseRandomMove",   # Metronome
+      "UseRandomMove",                                 # Metronome
       # Struggle
-      "Struggle",   # Struggle
+      "Struggle",                                      # Struggle
       # Moves that affect the moveset
       "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
-      "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
-      "TransformUserIntoTarget"   # Transform
+      "ReplaceMoveWithTargetLastMoveUsed",             # Sketch
+      "TransformUserIntoTarget"                        # Transform
     ]
   end
 
@@ -1269,7 +1247,7 @@ class Battle::Move::ReplaceMoveWithTargetLastMoveUsed < Battle::Move
     @moveBlacklist = [
       "ReplaceMoveWithTargetLastMoveUsed",   # Sketch (this move)
       # Struggle
-      "Struggle"   # Struggle
+      "Struggle"                             # Struggle
     ]
   end
 
