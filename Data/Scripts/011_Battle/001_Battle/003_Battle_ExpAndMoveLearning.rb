@@ -44,7 +44,7 @@ class Battle
           eachInTeam(0, 0) do |pkmn, i|
             next if !pkmn.able?
             next if b.participants.include?(i) || expShare.include?(i)
-            pbDisplayPaused(_INTL("Your party Pokémon in waiting also got Exp. Points!")) if showMessage
+            pbDisplayPaused(_INTL("Your Pokémon gained Exp. Points!")) if showMessage
             showMessage = false
             pbGainEVsOne(i, b)
             pbGainExpOne(i, b, numPartic, expShare, expAll, false)
@@ -162,7 +162,7 @@ class Battle
     expGained = expFinal - pkmn.exp
     return if expGained <= 0
     # "Exp gained" message
-    if showMessages
+    if showMessages && !expAll
       if isOutsider
         pbDisplayPaused(_INTL("{1} got a boosted {2} Exp. Points!", pkmn.name, expGained))
       else

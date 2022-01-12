@@ -167,7 +167,7 @@ class Battle
               new_index = pbLastInTeam(idxBattler)
               idxPartyForName = new_index if new_index >= 0 && new_index != idxPartyNew
             end
-            if pbDisplayConfirm(_INTL("{1} is about to send in {2}. Will you switch your Pokémon?",
+            if pbDisplayConfirm(_INTL("{1} is about to send out {2}. Will you switch your Pokémon?",
                                       opponent.full_name, enemyParty[idxPartyForName].name))
               idxPlayerPartyNew = pbSwitchInBetween(0, false, true)
               if idxPlayerPartyNew >= 0
