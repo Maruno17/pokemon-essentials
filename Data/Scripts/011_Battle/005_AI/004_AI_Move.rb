@@ -119,7 +119,14 @@ class Battle::AI
   def pbRegisterMoveTrainer(user, idxMove, choices, skill)
     move = user.moves[idxMove]
     target_data = move.pbTarget(user)
-    if target_data.num_targets > 1
+    if [:UserAndAllies, :AllAllies, :AllBattlers].include?(target_data.id) ||
+       target_data.num_targets == 0
+      # If move has no targets, affects the user, a side or the whole field, or
+      # specially affects multiple Pokémon and the AI calculates an overall
+      # score at once instead of per target
+      score = pbGetMoveScore(move, user, user, skill)
+      choices.push([idxMove, score, -1]) if score > 0
+    elsif target_data.num_targets > 1
       # If move affects multiple battlers and you don't choose a particular one
       totalScore = 0
       @battle.allBattlers.each do |b|
@@ -128,10 +135,6 @@ class Battle::AI
         totalScore += ((user.opposes?(b)) ? score : -score)
       end
       choices.push([idxMove, totalScore, -1]) if totalScore > 0
-    elsif target_data.num_targets == 0
-      # If move has no targets, affects the user, a side or the whole field
-      score = pbGetMoveScore(move, user, user, skill)
-      choices.push([idxMove, score, -1]) if score > 0
     else
       # If move affects one battler and you have to choose which one
       scoresAndTargets = []
