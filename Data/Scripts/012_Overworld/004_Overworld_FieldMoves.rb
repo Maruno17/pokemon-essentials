@@ -725,7 +725,7 @@ HiddenMoveHandlers::UseMove.add(:STRENGTH, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!\1", pokemon.name, GameData::Move.get(move).name))
   end
-  pbMessage(_INTL("Strength made it possible to move boulders around!")
+  pbMessage(_INTL("Strength made it possible to move boulders around!"))
   $PokemonMap.strengthUsed = true
   next true
 })
