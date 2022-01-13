@@ -1040,21 +1040,19 @@ HiddenMoveHandlers::UseMove.add(:WATERFALL, proc { |move, pokemon|
 #===============================================================================
 # Defog
 #===============================================================================
-if Settings::FIELD_MOVES_DEFOG
-  HiddenMoveHandlers::CanUseMove.add(:DEFOG, proc { |_move, _pkmn, showmsg|
-    unless $game_screen.weather_type == :Fog
-      pbMessage(_INTL("You can't use that here.")) if showmsg
-      next false
-    end
-    next true
-  })
+HiddenMoveHandlers::CanUseMove.add(:DEFOG, proc { |move, pkmn, showmsg|
+  unless $game_screen.weather_type == :Fog
+    pbMessage(_INTL("You can't use that here.")) if showmsg
+    next false
+  end
+  next true
+}) if Settings::FIELD_MOVES_DEFOG
 
-  HiddenMoveHandlers::UseMove.add(:DEFOG, proc { |move, pokemon|
-    next false unless $game_screen.weather_type == :Fog
+HiddenMoveHandlers::UseMove.add(:DEFOG, proc { |move, pokemon|
+  next false unless $game_screen.weather_type == :Fog
 
-    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
-    pbHiddenMoveAnimation(pokemon)
-    $game_screen.weather(:None, 0, 0)
-    next true
-  })
-end
+  pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  pbHiddenMoveAnimation(pokemon)
+  $game_screen.weather(:None, 0, 0)
+  next true
+}) if Settings::FIELD_MOVES_DEFOG
