@@ -643,7 +643,7 @@ def pbRockSmash
     pbMessage(_INTL("It's a rugged rock, but a Pokémon may be able to smash it."))
     return false
   end
-  pbMessage(_INTL("This rock seems breakable with a hidden move."))
+  pbMessage(_INTL("This rock seems breakable with a hidden move.\1"))
   if pbConfirmMessage(_INTL("Would you like to use Rock Smash?"))
     $stats.rock_smash_count += 1
     speciesname = (movefinder) ? movefinder.name : $player.name
