@@ -141,8 +141,6 @@ module Settings
   # moves in the field (true), or whether you need one specific badge to use
   # them (false). The amounts/specific badges are defined below.
   FIELD_MOVES_COUNT_BADGES = true
-  # Whether Defog clears away fog from the area outside the battle.
-  FIELD_MOVES_DEFOG        = true
   # Depending on FIELD_MOVES_COUNT_BADGES, either the number of badges required
   # to use each hidden move in the field, or the specific badge number required
   # to use each move. Remember that badge 0 is the first badge, badge 1 is the

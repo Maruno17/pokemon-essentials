@@ -1046,7 +1046,7 @@ HiddenMoveHandlers::CanUseMove.add(:DEFOG, proc { |move, pkmn, showmsg|
     next false
   end
   next true
-}) if Settings::FIELD_MOVES_DEFOG
+})
 
 HiddenMoveHandlers::UseMove.add(:DEFOG, proc { |move, pokemon|
   next false unless $game_screen.weather_type == :Fog
@@ -1055,4 +1055,4 @@ HiddenMoveHandlers::UseMove.add(:DEFOG, proc { |move, pokemon|
   pbHiddenMoveAnimation(pokemon)
   $game_screen.weather(:None, 0, 0)
   next true
-}) if Settings::FIELD_MOVES_DEFOG
+})
