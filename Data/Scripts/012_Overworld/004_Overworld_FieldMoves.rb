@@ -693,7 +693,7 @@ def pbStrength
     pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside."))
     return false
   end
-  pbMessage(_INTL("It's a big boulder, but you may be able to push it aside with a hidden move."))
+  pbMessage(_INTL("It's a big boulder, but you may be able to push it aside with a hidden move.\1"))
   if pbConfirmMessage(_INTL("Would you like to use Strength?"))
     speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
@@ -723,7 +723,7 @@ HiddenMoveHandlers::CanUseMove.add(:STRENGTH, proc { |move, pkmn, showmsg|
 
 HiddenMoveHandlers::UseMove.add(:STRENGTH, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
-    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+    pbMessage(_INTL("{1} used {2}!\1", pokemon.name, GameData::Move.get(move).name))
   end
   pbMessage(_INTL("Strength made it possible to move boulders around!")
   $PokemonMap.strengthUsed = true
