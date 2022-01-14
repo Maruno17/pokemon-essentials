@@ -162,7 +162,7 @@ class Battle
     expGained = expFinal - pkmn.exp
     return if expGained <= 0
     # "Exp gained" message
-    if showMessages && !expAll
+    if showMessages
       if isOutsider
         pbDisplayPaused(_INTL("{1} got a boosted {2} Exp. Points!", pkmn.name, expGained))
       else
