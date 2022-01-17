@@ -163,6 +163,18 @@ module Battle::DebugVariables
     PBEffects::WaterSportField => { name: "Water Sport duration (Gen 6+)",    default: 0 },
     PBEffects::WonderRoom      => { name: "Wonder Room duration",             default: 0 }
   }
+
+  POSITION_EFFECTS = {
+#    PBEffects::FutureSightCounter - too complex to be worth bothering with
+#    PBEffects::FutureSightMove - too complex to be worth bothering with
+#    PBEffects::FutureSightUserIndex - too complex to be worth bothering with
+#    PBEffects::FutureSightUserPartyIndex - too complex to be worth bothering with
+    PBEffects::HealingWish => { name: "Whether Healing Wish is waiting to apply", default: false },
+    PBEffects::LunarDance  => { name: "Whether Lunar Dance is waiting to apply",  default: false }
+#    PBEffects::Wish - too complex to be worth bothering with
+#    PBEffects::WishAmount - too complex to be worth bothering with
+#    PBEffects::WishMaker - too complex to be worth bothering with
+  }
 end
 
 #===============================================================================
@@ -250,6 +262,9 @@ class Battle::DebugSetEffects
     when :side
       @variables_data = Battle::DebugVariables::SIDE_EFFECTS
       @variables = @battle.sides[@side].effects
+    when :position
+      @variables_data = Battle::DebugVariables::POSITION_EFFECTS
+      @variables = @battle.positions[@side].effects
     when :battler
       @variables_data = Battle::DebugVariables::BATTLER_EFFECTS
       @variables = @battle.battlers[@side].effects
