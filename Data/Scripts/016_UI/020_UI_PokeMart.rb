@@ -496,7 +496,6 @@ class PokemonMart_Scene
           curnumber = maximum if curnumber < 1
           numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
         elsif Input.trigger?(Input::USE)
-          pbPlayDecisionSE
           ret = curnumber
           break
         elsif Input.trigger?(Input::BACK)
