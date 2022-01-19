@@ -89,7 +89,7 @@ def pbFindPhoneTrainer(tr_type, tr_name)        # Ignores whether visible or not
 end
 
 def pbHasPhoneTrainer?(tr_type, tr_name)
-  return pbFindPhoneTrainer(tr_type, tr_name) != nil
+  return !pbFindPhoneTrainer(tr_type, tr_name).nil?
 end
 
 def pbPhoneBattleCount(tr_type, tr_name)

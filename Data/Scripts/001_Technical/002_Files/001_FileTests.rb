@@ -279,7 +279,7 @@ end
 # and matching mount points added through System.mount
 def pbRgssExists?(filename)
   if safeExists?("./Game.rgssad")
-    return pbGetFileChar(filename) != nil
+    return !pbGetFileChar(filename).nil?
   else
     filename = canonicalize(filename)
     return safeExists?(filename)
@@ -336,7 +336,7 @@ end
 
 def pbTryString(x)
   ret = pbGetFileChar(x)
-  return (ret != nil && ret != "") ? x : nil
+  return (!nil_or_empty?(ret) ? x : nil)
 end
 
 # Gets the contents of a file. Doesn't check RTP, but does check

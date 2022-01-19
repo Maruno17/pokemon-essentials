@@ -126,7 +126,7 @@ class PurifyChamberSet
     unless value&.shadowPokemon?
       @list.insert(index + 1, value)
       @list.compact!
-      @facing += 1 if @facing > index && value != nil
+      @facing += 1 if @facing > index && !value.nil?
       @facing = [[@facing, @list.length - 1].min, 0].max
     end
   end

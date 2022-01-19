@@ -170,9 +170,7 @@ class PokemonMapMetadata
         when 8 then $game_map.events[i[0][1]].turn_up
         end
       end
-      if i[1][3] != nil
-        $game_map.events[i[0][1]].through = i[1][3]
-      end
+      $game_map.events[i[0][1]].through = i[1][3] if !i[1][3].nil?
     end
   end
 end

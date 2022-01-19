@@ -287,57 +287,57 @@ class PBAnimTiming
     when 1
       text = sprintf("[%d] Set BG: \"%s\"", @frame + 1, name)
       text += sprintf(" (color=%s,%s,%s,%s)",
-                      (@colorRed != nil)   ? @colorRed.to_i   : "-",
-                      (@colorGreen != nil) ? @colorGreen.to_i : "-",
-                      (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
-                      (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
+                      (!@colorRed.nil?)   ? @colorRed.to_i   : "-",
+                      (!@colorGreen.nil?) ? @colorGreen.to_i : "-",
+                      (!@colorBlue.nil?)  ? @colorBlue.to_i  : "-",
+                      (!@colorAlpha.nil?) ? @colorAlpha.to_i : "-")
       text += sprintf(" (opacity=%s)", @opacity.to_i)
       text += sprintf(" (coords=%s,%s)",
-                      (@bgX != nil) ? @bgX : "-",
-                      (@bgY != nil) ? @bgY : "-")
+                      (!@bgX.nil?) ? @bgX : "-",
+                      (!@bgY.nil?) ? @bgY : "-")
       return text
     when 2
       text = sprintf("[%d] Change BG: @%d", @frame + 1, duration)
-      if @colorRed != nil || @colorGreen != nil || @colorBlue != nil || @colorAlpha != nil
+      if !@colorRed.nil? || !@colorGreen.nil? || !@colorBlue.nil? || !@colorAlpha.nil?
         text += sprintf(" (color=%s,%s,%s,%s)",
-                        (@colorRed != nil)   ? @colorRed.to_i   : "-",
-                        (@colorGreen != nil) ? @colorGreen.to_i : "-",
-                        (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
-                        (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
+                        (!@colorRed.nil?)   ? @colorRed.to_i   : "-",
+                        (!@colorGreen.nil?) ? @colorGreen.to_i : "-",
+                        (!@colorBlue.nil?)  ? @colorBlue.to_i  : "-",
+                        (!@colorAlpha.nil?) ? @colorAlpha.to_i : "-")
       end
-      text += sprintf(" (opacity=%s)", @opacity.to_i) if @opacity != nil
-      if @bgX != nil || @bgY != nil
+      text += sprintf(" (opacity=%s)", @opacity.to_i) if !@opacity.nil?
+      if !@bgX.nil? || !@bgY.nil?
         text += sprintf(" (coords=%s,%s)",
-                        (@bgX != nil) ? @bgX : "-",
-                        (@bgY != nil) ? @bgY : "-")
+                        (!@bgX.nil?) ? @bgX : "-",
+                        (!@bgY.nil?) ? @bgY : "-")
       end
       return text
     when 3
       text = sprintf("[%d] Set FG: \"%s\"", @frame + 1, name)
       text += sprintf(" (color=%s,%s,%s,%s)",
-                      (@colorRed != nil)   ? @colorRed.to_i   : "-",
-                      (@colorGreen != nil) ? @colorGreen.to_i : "-",
-                      (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
-                      (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
+                      (!@colorRed.nil?)   ? @colorRed.to_i   : "-",
+                      (!@colorGreen.nil?) ? @colorGreen.to_i : "-",
+                      (!@colorBlue.nil?)  ? @colorBlue.to_i  : "-",
+                      (!@colorAlpha.nil?) ? @colorAlpha.to_i : "-")
       text += sprintf(" (opacity=%s)", @opacity.to_i)
       text += sprintf(" (coords=%s,%s)",
-                      (@bgX != nil) ? @bgX : "-",
-                      (@bgY != nil) ? @bgY : "-")
+                      (!@bgX.nil?) ? @bgX : "-",
+                      (!@bgY.nil?) ? @bgY : "-")
       return text
     when 4
       text = sprintf("[%d] Change FG: @%d", @frame + 1, duration)
-      if @colorRed != nil || @colorGreen != nil || @colorBlue != nil || @colorAlpha != nil
+      if !@colorRed.nil? || !@colorGreen.nil? || !@colorBlue.nil? || !@colorAlpha.nil?
         text += sprintf(" (color=%s,%s,%s,%s)",
-                        (@colorRed != nil)   ? @colorRed.to_i   : "-",
-                        (@colorGreen != nil) ? @colorGreen.to_i : "-",
-                        (@colorBlue != nil)  ? @colorBlue.to_i  : "-",
-                        (@colorAlpha != nil) ? @colorAlpha.to_i : "-")
+                        (!@colorRed.nil?)   ? @colorRed.to_i   : "-",
+                        (!@colorGreen.nil?) ? @colorGreen.to_i : "-",
+                        (!@colorBlue.nil?)  ? @colorBlue.to_i  : "-",
+                        (!@colorAlpha.nil?) ? @colorAlpha.to_i : "-")
       end
-      text += sprintf(" (opacity=%s)", @opacity.to_i) if @opacity != nil
-      if @bgX != nil || @bgY != nil
+      text += sprintf(" (opacity=%s)", @opacity.to_i) if !@opacity.nil?
+      if !@bgX.nil? || !@bgY.nil?
         text += sprintf(" (coords=%s,%s)",
-                        (@bgX != nil) ? @bgX : "-",
-                        (@bgY != nil) ? @bgY : "-")
+                        (!@bgX.nil?) ? @bgX : "-",
+                        (!@bgY.nil?) ? @bgY : "-")
       end
       return text
     end
@@ -563,20 +563,20 @@ class PBAnimation < Array
         next if frame < i.frame || frame > i.frame + i.duration
         fraction = (frame - i.frame).to_f / i.duration
         if bgGraphic.bitmap.nil?
-          bgColor.opacity = oldbg[2] + ((i.opacity - oldbg[2]) * fraction) if i.opacity != nil
-          cr = (i.colorRed != nil) ? oldbg[3].red + ((i.colorRed - oldbg[3].red) * fraction) : oldbg[3].red
-          cg = (i.colorGreen != nil) ? oldbg[3].green + ((i.colorGreen - oldbg[3].green) * fraction) : oldbg[3].green
-          cb = (i.colorBlue != nil) ? oldbg[3].blue + ((i.colorBlue - oldbg[3].blue) * fraction) : oldbg[3].blue
-          ca = (i.colorAlpha != nil) ? oldbg[3].alpha + ((i.colorAlpha - oldbg[3].alpha) * fraction) : oldbg[3].alpha
+          bgColor.opacity = oldbg[2] + ((i.opacity - oldbg[2]) * fraction) if !i.opacity.nil?
+          cr = (!i.colorRed.nil?)   ? oldbg[3].red   + ((i.colorRed   - oldbg[3].red)   * fraction) : oldbg[3].red
+          cg = (!i.colorGreen.nil?) ? oldbg[3].green + ((i.colorGreen - oldbg[3].green) * fraction) : oldbg[3].green
+          cb = (!i.colorBlue.nil?)  ? oldbg[3].blue  + ((i.colorBlue  - oldbg[3].blue)  * fraction) : oldbg[3].blue
+          ca = (!i.colorAlpha.nil?) ? oldbg[3].alpha + ((i.colorAlpha - oldbg[3].alpha) * fraction) : oldbg[3].alpha
           bgColor.color = Color.new(cr, cg, cb, ca)
         else
-          bgGraphic.ox      = oldbg[0] - ((i.bgX - oldbg[0]) * fraction) if i.bgX != nil
-          bgGraphic.oy      = oldbg[1] - ((i.bgY - oldbg[1]) * fraction) if i.bgY != nil
-          bgGraphic.opacity = oldbg[2] + ((i.opacity - oldbg[2]) * fraction) if i.opacity != nil
-          cr = (i.colorRed != nil) ? oldbg[3].red + ((i.colorRed - oldbg[3].red) * fraction) : oldbg[3].red
-          cg = (i.colorGreen != nil) ? oldbg[3].green + ((i.colorGreen - oldbg[3].green) * fraction) : oldbg[3].green
-          cb = (i.colorBlue != nil) ? oldbg[3].blue + ((i.colorBlue - oldbg[3].blue) * fraction) : oldbg[3].blue
-          ca = (i.colorAlpha != nil) ? oldbg[3].alpha + ((i.colorAlpha - oldbg[3].alpha) * fraction) : oldbg[3].alpha
+          bgGraphic.ox      = oldbg[0] - ((i.bgX     - oldbg[0]) * fraction) if !i.bgX.nil?
+          bgGraphic.oy      = oldbg[1] - ((i.bgY     - oldbg[1]) * fraction) if !i.bgY.nil?
+          bgGraphic.opacity = oldbg[2] + ((i.opacity - oldbg[2]) * fraction) if !i.opacity.nil?
+          cr = (!i.colorRed.nil?)   ? oldbg[3].red   + ((i.colorRed   - oldbg[3].red)   * fraction) : oldbg[3].red
+          cg = (!i.colorGreen.nil?) ? oldbg[3].green + ((i.colorGreen - oldbg[3].green) * fraction) : oldbg[3].green
+          cb = (!i.colorBlue.nil?)  ? oldbg[3].blue  + ((i.colorBlue  - oldbg[3].blue)  * fraction) : oldbg[3].blue
+          ca = (!i.colorAlpha.nil?) ? oldbg[3].alpha + ((i.colorAlpha - oldbg[3].alpha) * fraction) : oldbg[3].alpha
           bgGraphic.color = Color.new(cr, cg, cb, ca)
         end
       when 4
@@ -584,20 +584,20 @@ class PBAnimation < Array
         next if frame < i.frame || frame > i.frame + i.duration
         fraction = (frame - i.frame).to_f / i.duration
         if foGraphic.bitmap.nil?
-          foColor.opacity = oldfo[2] + ((i.opacity - oldfo[2]) * fraction) if i.opacity != nil
-          cr = (i.colorRed != nil) ? oldfo[3].red + ((i.colorRed - oldfo[3].red) * fraction) : oldfo[3].red
-          cg = (i.colorGreen != nil) ? oldfo[3].green + ((i.colorGreen - oldfo[3].green) * fraction) : oldfo[3].green
-          cb = (i.colorBlue != nil) ? oldfo[3].blue + ((i.colorBlue - oldfo[3].blue) * fraction) : oldfo[3].blue
-          ca = (i.colorAlpha != nil) ? oldfo[3].alpha + ((i.colorAlpha - oldfo[3].alpha) * fraction) : oldfo[3].alpha
+          foColor.opacity = oldfo[2] + ((i.opacity - oldfo[2]) * fraction) if !i.opacity.nil?
+          cr = (!i.colorRed.nil?)   ? oldfo[3].red   + ((i.colorRed   - oldfo[3].red)   * fraction) : oldfo[3].red
+          cg = (!i.colorGreen.nil?) ? oldfo[3].green + ((i.colorGreen - oldfo[3].green) * fraction) : oldfo[3].green
+          cb = (!i.colorBlue.nil?)  ? oldfo[3].blue  + ((i.colorBlue  - oldfo[3].blue)  * fraction) : oldfo[3].blue
+          ca = (!i.colorAlpha.nil?) ? oldfo[3].alpha + ((i.colorAlpha - oldfo[3].alpha) * fraction) : oldfo[3].alpha
           foColor.color = Color.new(cr, cg, cb, ca)
         else
-          foGraphic.ox      = oldfo[0] - ((i.bgX - oldfo[0]) * fraction) if i.bgX != nil
-          foGraphic.oy      = oldfo[1] - ((i.bgY - oldfo[1]) * fraction) if i.bgY != nil
-          foGraphic.opacity = oldfo[2] + ((i.opacity - oldfo[2]) * fraction) if i.opacity != nil
-          cr = (i.colorRed != nil) ? oldfo[3].red + ((i.colorRed - oldfo[3].red) * fraction) : oldfo[3].red
-          cg = (i.colorGreen != nil) ? oldfo[3].green + ((i.colorGreen - oldfo[3].green) * fraction) : oldfo[3].green
-          cb = (i.colorBlue != nil) ? oldfo[3].blue + ((i.colorBlue - oldfo[3].blue) * fraction) : oldfo[3].blue
-          ca = (i.colorAlpha != nil) ? oldfo[3].alpha + ((i.colorAlpha - oldfo[3].alpha) * fraction) : oldfo[3].alpha
+          foGraphic.ox      = oldfo[0] - ((i.bgX     - oldfo[0]) * fraction) if !i.bgX.nil?
+          foGraphic.oy      = oldfo[1] - ((i.bgY     - oldfo[1]) * fraction) if !i.bgY.nil?
+          foGraphic.opacity = oldfo[2] + ((i.opacity - oldfo[2]) * fraction) if !i.opacity.nil?
+          cr = (!i.colorRed.nil?)   ? oldfo[3].red   + ((i.colorRed   - oldfo[3].red)   * fraction) : oldfo[3].red
+          cg = (!i.colorGreen.nil?) ? oldfo[3].green + ((i.colorGreen - oldfo[3].green) * fraction) : oldfo[3].green
+          cb = (!i.colorBlue.nil?)  ? oldfo[3].blue  + ((i.colorBlue  - oldfo[3].blue)  * fraction) : oldfo[3].blue
+          ca = (!i.colorAlpha.nil?) ? oldfo[3].alpha + ((i.colorAlpha - oldfo[3].alpha) * fraction) : oldfo[3].alpha
           foGraphic.color = Color.new(cr, cg, cb, ca)
         end
       end

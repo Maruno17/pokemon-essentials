@@ -147,7 +147,7 @@ module BooleanProperty2
   end
 
   def self.format(value)
-    return (value) ? _INTL("True") : (value != nil) ? _INTL("False") : "-"
+    return (value) ? _INTL("True") : (!value.nil?) ? _INTL("False") : "-"
   end
 end
 

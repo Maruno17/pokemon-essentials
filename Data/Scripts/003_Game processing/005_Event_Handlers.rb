@@ -142,11 +142,7 @@ class HandlerHash
 
   def copy(src, *dests)
     handler = self[src]
-    if handler
-      dests.each do |dest|
-        self.add(dest, handler)
-      end
-    end
+    dests.each { |dest| self.add(dest, handler) } if handler
   end
 
   def [](sym)   # 'sym' can be an ID or symbol
@@ -155,11 +151,7 @@ class HandlerHash
     ret = @hash[id] if id && @hash[id]   # Real ID from the item
     symbol = toSymbol(sym)
     ret = @hash[symbol] if symbol && @hash[symbol]   # Symbol or string
-    unless ret
-      @addIfs.each do |addif|
-        return addif[1] if addif[0].call(id)
-      end
-    end
+    @addIfs.each { |addif| return addif[1] if addif[0].call(id) } if !ret
     return ret
   end
 
@@ -187,9 +179,7 @@ class HandlerHash2
   def [](sym)
     sym = sym.id if !sym.is_a?(Symbol) && sym.respond_to?("id")
     return @hash[sym] if sym && @hash[sym]
-    @add_ifs.each do |add_if|
-      return add_if[1] if add_if[0].call(sym)
-    end
+    @add_ifs.each { |add_if| return add_if[1] if add_if[0].call(sym) }
     return nil
   end
 
@@ -241,11 +231,7 @@ class HandlerHashBasic
   def [](entry)
     ret = nil
     ret = @hash[entry] if entry && @hash[entry]
-    unless ret
-      @addIfs.each do |addif|
-        return addif[1] if addif[0].call(entry)
-      end
-    end
+    @addIfs.each { |addif| return addif[1] if addif[0].call(entry) } if !ret
     return ret
   end
 

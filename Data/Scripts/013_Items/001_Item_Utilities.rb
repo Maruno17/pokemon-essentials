@@ -13,37 +13,24 @@ module ItemHandlers
   BattleUseOnBattler  = ItemHandlerHash.new
   BattleUseOnPokemon  = ItemHandlerHash.new
 
-  def self.hasUseText(item)
-    return UseText[item] != nil
-  end
+  def self.hasUseText(item); return !UseText[item].nil?; end
 
   def self.hasOutHandler(item)                       # Shows "Use" option in Bag
-    return UseFromBag[item] != nil || UseInField[item] != nil || UseOnPokemon[item] != nil
+    return !UseFromBag[item].nil? || !UseInField[item].nil? || !UseOnPokemon[item].nil?
   end
 
-  def self.hasUseInFieldHandler(item)           # Shows "Register" option in Bag
-    return UseInField[item] != nil
-  end
+  # Shows "Register" option in Bag
+  def self.hasUseInFieldHandler(item); return !UseInField[item].nil?; end
 
-  def self.hasUseOnPokemon(item)
-    return UseOnPokemon[item] != nil
-  end
+  def self.hasUseOnPokemon(item); return !UseOnPokemon[item].nil?; end
 
-  def self.hasUseOnPokemonMaximum(item)
-    return UseOnPokemonMaximum[item] != nil
-  end
+  def self.hasUseOnPokemonMaximum(item) return !UseOnPokemonMaximum[item].nil?; end
 
-  def self.hasUseInBattle(item)
-    return UseInBattle[item] != nil
-  end
+  def self.hasUseInBattle(item); return !UseInBattle[item].nil?; end
 
-  def self.hasBattleUseOnBattler(item)
-    return BattleUseOnBattler[item] != nil
-  end
+  def self.hasBattleUseOnBattler(item); return !BattleUseOnBattler[item].nil?; end
 
-  def self.hasBattleUseOnPokemon(item)
-    return BattleUseOnPokemon[item] != nil
-  end
+  def self.hasBattleUseOnPokemon(item); return !BattleUseOnPokemon[item].nil?; end
 
   # Returns text to display instead of "Use"
   def self.getUseText(item)

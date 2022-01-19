@@ -515,7 +515,7 @@ class Battle::Scene
     return if !animations
     animations.each do |a|
       next if !a || a.name != "Common:" + animName
-      pbAnimationCore(a, user, (target != nil) ? target : user)
+      pbAnimationCore(a, user, (!target.nil? ? target : user))
       return
     end
   end

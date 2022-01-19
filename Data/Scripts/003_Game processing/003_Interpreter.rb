@@ -79,9 +79,7 @@ class Interpreter
     end
   end
 
-  def running?
-    return @list != nil
-  end
+  def running?; return !@list.nil?; end
   #-----------------------------------------------------------------------------
   # * Frame Update
   #-----------------------------------------------------------------------------

@@ -557,7 +557,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       end
     end
   end
-  if startSE != nil
+  if !startSE.nil?
     pbSEPlay(pbStringToAudioFile(startSE))
   elsif signWaitCount == 0 && letterbyletter
     pbPlayDecisionSE

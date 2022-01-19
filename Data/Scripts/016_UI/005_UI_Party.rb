@@ -592,9 +592,7 @@ class PokemonParty_Scene
     helpwindow.visible = true
   end
 
-  def pbHasAnnotations?
-    return @sprites["pokemon0"].text != nil
-  end
+  def pbHasAnnotations?; return !@sprites["pokemon0"].text.nil?; end
 
   def pbAnnotate(annot)
     Settings::MAX_PARTY_SIZE.times do |i|

@@ -134,11 +134,7 @@ class Sprite_Character < RPG::Sprite
   def setShadows(map, shadows)
     if character.is_a?(Game_Event) && shadows.length > 0
       params = XPML_read(map, "Shadow", @character, 4)
-      if params != nil
-        shadows.each do |shadow|
-          @ombrelist.push(Sprite_Shadow.new(viewport, @character, shadows))
-        end
-      end
+      shadows.each { |shadow| @ombrelist.push(Sprite_Shadow.new(viewport, @character, shadows)) } unless params.nil?
     end
     if character.is_a?(Game_Player) && shadows.length > 0
       shadows.each do |shadow|
@@ -186,10 +182,10 @@ class Spriteset_Map
     map = $game_map if !map
     map.events.keys.sort.each do |k|
       ev = map.events[k]
-      warn = true if ev.list != nil && ev.list.length > 0 && ev.list[0].code == 108 &&
+      warn = true if !ev.list.nil? && ev.list.length > 0 && ev.list[0].code == 108 &&
                      (ev.list[0].parameters == ["s"] || ev.list[0].parameters == ["o"])
       params = XPML_read(map, "Shadow Source", ev, 4)
-      @shadows.push([ev] + params) if params != nil
+      @shadows.push([ev] + params) unless params.nil?
     end
     if warn == true
       p "Warning : At least one event on this map uses the obsolete way to add shadows"

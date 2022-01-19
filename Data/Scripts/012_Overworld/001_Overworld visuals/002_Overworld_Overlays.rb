@@ -93,7 +93,7 @@ end
 class LightEffect
   def initialize(event, viewport = nil, map = nil, filename = nil)
     @light = IconSprite.new(0, 0, viewport)
-    if filename != nil && filename != "" && pbResolveBitmap("Graphics/Pictures/" + filename)
+    if !nil_or_empty?(filename) && pbResolveBitmap("Graphics/Pictures/" + filename)
       @light.setBitmap("Graphics/Pictures/" + filename)
     else
       @light.setBitmap("Graphics/Pictures/LE")
