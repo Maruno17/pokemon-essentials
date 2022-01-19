@@ -156,7 +156,7 @@ module Compiler
       textsplit2 = t.split(/\n/)
       textsplit2.length.times do |i|
         textchunk = textsplit2[i].gsub(/\s+$/, "")
-        if textchunk && textchunk != ""
+        if !nil_or_empty?(textchunk)
           list.push(RPG::EventCommand.new((first) ? 101 : 401, indent, [textchunk]))
           first = false
         end
@@ -170,7 +170,7 @@ module Compiler
     textsplit2 = script.split(/\n/)
     textsplit2.length.times do |i|
       textchunk = textsplit2[i].gsub(/\s+$/, "")
-      if textchunk && textchunk != ""
+      if !nil_or_empty?(textchunk)
         list.push(RPG::EventCommand.new((first) ? 355 : 655, indent, [textchunk]))
         first = false
       end
@@ -398,7 +398,7 @@ module Compiler
       return @registeredSwitches[switch] if @registeredSwitches[switch]
       (1..5000).each do |id|
         name = @system.switches[id]
-        next if name && name != "" && name != switch
+        next if !nil_or_empty?(name) && name != switch
         @system.switches[id] = switch
         @registeredSwitches[switch] = id
         return id

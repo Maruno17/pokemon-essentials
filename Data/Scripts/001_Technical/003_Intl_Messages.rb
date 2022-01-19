@@ -682,9 +682,7 @@ module MessageTypes
 
   def self.get(type, id)
     ret = @@messages.get(type, id)
-    if ret == ""
-      ret = @@messagesFallback.get(type, id)
-    end
+    ret = @@messagesFallback.get(type, id) if nil_or_empty?(ret)
     return ret
   end
 

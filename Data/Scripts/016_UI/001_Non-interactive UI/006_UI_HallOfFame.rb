@@ -64,7 +64,7 @@ class HallOfFame_Scene
 
   def pbStartSceneEntry
     pbStartScene
-    @useMusic = (ENTRYMUSIC && ENTRYMUSIC != "")
+    @useMusic = !nil_or_empty?(ENTRYMUSIC)
     pbBGMPlay(ENTRYMUSIC) if @useMusic
     saveHallEntry
     @xmovement = []

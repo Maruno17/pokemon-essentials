@@ -492,7 +492,7 @@ class PBAnimation < Array
       next if i.frame != frame
       case i.timingType
       when 0   # Play SE
-        if i.name && i.name != ""
+        if !nil_or_empty?(i&.name)
           pbSEPlay("Anim/" + i.name, i.volume, i.pitch)
         elsif user&.pokemon
           name = GameData::Species.cry_filename_from_pokemon(user.pokemon)
@@ -503,7 +503,7 @@ class PBAnimation < Array
 #          sprite.flash(nil, i.flashDuration * 2) if i.flashScope == 3
 #        end
       when 1   # Set background graphic (immediate)
-        if i.name && i.name != ""
+        if !nil_or_empty?(i&.name)
           bgGraphic.setBitmap("Graphics/Animations/" + i.name)
           bgGraphic.ox      = -i.bgX || 0
           bgGraphic.oy      = -i.bgY || 0
@@ -529,7 +529,7 @@ class PBAnimation < Array
           oldbg[3] = bgGraphic.color.clone || Color.new(0, 0, 0, 0)
         end
       when 3   # Set foreground graphic (immediate)
-        if i.name && i.name != ""
+        if !nil_or_empty?(i&.name)
           foGraphic.setBitmap("Graphics/Animations/" + i.name)
           foGraphic.ox      = -i.bgX || 0
           foGraphic.oy      = -i.bgY || 0

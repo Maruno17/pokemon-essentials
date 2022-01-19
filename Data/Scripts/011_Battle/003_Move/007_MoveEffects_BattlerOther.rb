@@ -377,7 +377,7 @@ class Battle::Move::GiveUserStatusToTarget < Battle::Move
       target.pbFreeze
       msg = _INTL("{1} was thawed out.", user.pbThis)
     end
-    if msg != ""
+    if !nil_or_empty?(msg)
       user.pbCureStatus(false)
       @battle.pbDisplay(msg)
     end

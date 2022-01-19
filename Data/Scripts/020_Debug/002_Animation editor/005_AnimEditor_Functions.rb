@@ -504,8 +504,8 @@ def pbTimingList(canvas)
 end
 
 def pbSelectSE(canvas, audio)
-  filename = (audio.name != "") ? audio.name : ""
-  displayname = (filename != "") ? filename : _INTL("<user's cry>")
+  filename = (!nil_or_empty?(audio.name) ? audio.name : "")
+  displayname = (!nil_or_empty?(filename) ? filename : _INTL("<user's cry>"))
   animfiles = []
   ret = false
   pbRgssChdir(File.join("Audio", "SE", "Anim")) {
@@ -558,7 +558,7 @@ def pbSelectSE(canvas, audio)
     end
     if Input.trigger?(Input::USE) && animfiles.length > 0
       filename = (cmdwin.index == 0) ? "" : cmdwin.commands[cmdwin.index]
-      displayname = (filename != "") ? filename : _INTL("<user's cry>")
+      displayname = (!nil_or_empty?(filename) ? filename : _INTL("<user's cry>"))
       maxsizewindow.controls[0].text = _INTL("File: \"{1}\"", displayname)
     elsif Input.trigger?(Input::BACK)
       break

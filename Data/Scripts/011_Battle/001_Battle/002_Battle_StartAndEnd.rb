@@ -413,7 +413,7 @@ class Battle
         end
         @opponent.each_with_index do |_t, i|
           @scene.pbShowOpponent(i)
-          msg = (@endSpeeches[i] && @endSpeeches[i] != "") ? @endSpeeches[i] : "..."
+          msg = (!nil_or_empty?(@endSpeeches[i])) ? @endSpeeches[i] : "..."
           pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
         end
       end
@@ -447,7 +447,7 @@ class Battle
         if @opponent
           @opponent.each_with_index do |_t, i|
             @scene.pbShowOpponent(i)
-            msg = (@endSpeechesWin[i] && @endSpeechesWin[i] != "") ? @endSpeechesWin[i] : "..."
+            msg = (!nil_or_empty?(@endSpeechesWin[i])) ? @endSpeechesWin[i] : "..."
             pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
           end
         end

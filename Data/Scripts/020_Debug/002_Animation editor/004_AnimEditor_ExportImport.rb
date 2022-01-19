@@ -67,7 +67,7 @@ def pbImportAnim(animations, canvas, animwin)
       end
       graphic = animations[animations.selected].graphic
       graphic = "Graphics/Animations/#{graphic}"
-      if graphic && graphic != "" && !FileTest.image_exist?(graphic)
+      if !nil_or_empty?(graphic) && !FileTest.image_exist?(graphic)
         pbMessage(_INTL("The animation file {1} was not found. The animation will load anyway.", graphic))
       end
       canvas.loadAnimation(animations[animations.selected])

@@ -499,8 +499,8 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
             param = param.split(",")
             # get pure colors unaffected by opacity
             oldColors = getLastParam(colorstack, defaultcolors)
-            base = (param[0] && param[0] != "") ? rgbToColor(param[0]) : oldColors[0]
-            shadow = (param[1] && param[1] != "") ? rgbToColor(param[1]) : oldColors[1]
+            base = (!nil_or_empty?(param[0])) ? rgbToColor(param[0]) : oldColors[0]
+            shadow = (!nil_or_empty?(param[1])) ? rgbToColor(param[1]) : oldColors[1]
             colorstack.push([base, shadow])
           end
         when "o"
@@ -854,8 +854,7 @@ def getLineBrokenText(bitmap, value, width, dims)
   return ret if !bitmap || bitmap.disposed? || width <= 0
   textmsg = value.clone
   ret.push(["", 0, 0, 0, bitmap.text_size("X").height, 0, 0, 0, 0])
-  while (c = textmsg.slice!(/\n|(\S*([ \r\t\f]?))/)) != nil
-    break if c == ""
+  while !nil_or_empty?(c = textmsg.slice!(/\n|(\S*([ \r\t\f]?))/))
     length = c.scan(/./m).length
     ccheck = c
     if ccheck == "\n"
@@ -872,7 +871,7 @@ def getLineBrokenText(bitmap, value, width, dims)
     words = [ccheck]
     words.length.times do |i|
       word = words[i]
-      if word && word != ""
+      if !nil_or_empty?(word)
         textSize = bitmap.text_size(word)
         textwidth = textSize.width
         if x > 0 && x + textwidth >= width - 2
@@ -910,8 +909,7 @@ def getLineBrokenChunks(bitmap, value, width, dims, plain = false)
   return ret if !bitmap || bitmap.disposed? || width <= 0
   textmsg = value.clone
   color = Font.default_color
-  while (c = textmsg.slice!(/\n|[^ \r\t\f\n\-]*\-+|(\S*([ \r\t\f]?))/)) != nil
-    break if c == ""
+  while !nil_or_empty?(c = textmsg.slice!(/\n|[^ \r\t\f\n\-]*\-+|(\S*([ \r\t\f]?))/))
     ccheck = c
     if ccheck == "\n"
       x = 0
@@ -927,7 +925,7 @@ def getLineBrokenChunks(bitmap, value, width, dims, plain = false)
     end
     words.length.times do |i|
       word = words[i]
-      if word && word != ""
+      if !nil_or_empty?(word)
         textSize = bitmap.text_size(word)
         textwidth = textSize.width
         if x > 0 && x + textwidth > width

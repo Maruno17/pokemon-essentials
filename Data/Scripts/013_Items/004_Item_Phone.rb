@@ -214,10 +214,10 @@ def pbPhoneGenerateCall(phonenum)
   time = pbGetTimeNow
   if PBDayNight.isMorning?(time)
     modcall = pbRandomPhoneItem(phoneData.greetingsMorning)
-    call = modcall if modcall && modcall != ""
+    call = modcall if !nil_or_empty?(modcall)
   elsif PBDayNight.isEvening?(time)
     modcall = pbRandomPhoneItem(phoneData.greetingsEvening)
-    call = modcall if modcall && modcall != ""
+    call = modcall if !nil_or_empty?(modcall)
   end
   call += "\\m"
   if phonenum[4] == 2 || (rand(2) == 0 && phonenum[4] == 3)

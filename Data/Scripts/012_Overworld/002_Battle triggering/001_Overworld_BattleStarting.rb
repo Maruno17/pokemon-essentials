@@ -149,7 +149,7 @@ def pbPrepareBattle(battle)
     backdrop = "water"   # This applies wherever you are, including in caves
   elsif $game_map.metadata
     back = $game_map.metadata.battle_background
-    backdrop = back if back && back != ""
+    backdrop = back if !nil_or_empty?(back)
   end
   backdrop = "indoor1" if !backdrop
   battle.backdrop = backdrop

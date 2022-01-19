@@ -160,7 +160,7 @@ class Battle::Battler
     @effects[PBEffects::WeightChange] = 0 if Settings::MECHANICS_GENERATION >= 6
     @battle.scene.pbChangePokemon(self, @pokemon)
     @battle.scene.pbRefreshOne(@index)
-    @battle.pbDisplay(msg) if msg && msg != ""
+    @battle.pbDisplay(msg) if !nil_or_empty?(msg)
     PBDebug.log("[Form changed] #{pbThis} changed from form #{oldForm} to form #{newForm}")
     @battle.pbSetSeen(self)
   end

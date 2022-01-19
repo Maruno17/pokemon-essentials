@@ -52,7 +52,7 @@ end
 def pbBGMPlay(param, volume = nil, pitch = nil)
   return if !param
   param = pbResolveAudioFile(param, volume, pitch)
-  if param.name && param.name != ""
+  if !nil_or_empty?(param&.name)
     if $game_system
       $game_system.bgm_play(param)
       return
@@ -102,7 +102,7 @@ end
 def pbMEPlay(param, volume = nil, pitch = nil)
   return if !param
   param = pbResolveAudioFile(param, volume, pitch)
-  if param.name && param.name != ""
+  if !nil_or_empty?(param&.name)
     if $game_system
       $game_system.me_play(param)
       return
@@ -152,7 +152,7 @@ end
 def pbBGSPlay(param, volume = nil, pitch = nil)
   return if !param
   param = pbResolveAudioFile(param, volume, pitch)
-  if param.name && param.name != ""
+  if !nil_or_empty?(param&.name)
     if $game_system
       $game_system.bgs_play(param)
       return
@@ -202,7 +202,7 @@ end
 def pbSEPlay(param, volume = nil, pitch = nil)
   return if !param
   param = pbResolveAudioFile(param, volume, pitch)
-  if param.name && param.name != ""
+  if !nil_or_empty?(param&.name)
     if $game_system
       $game_system.se_play(param)
       return

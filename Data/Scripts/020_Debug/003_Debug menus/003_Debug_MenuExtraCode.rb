@@ -573,18 +573,18 @@ def pbExportAllAnimations
         File.open("Animations/#{safename}/#{safename}.anm", "wb") { |f|
           f.write(dumpBase64Anim(anim))
         }
-        if anim.graphic && anim.graphic != ""
+        if !nil_or_empty?(anim.graphic)
           graphicname = RTP.getImagePath("Graphics/Animations/" + anim.graphic)
           pbSafeCopyFile(graphicname, "Animations/#{safename}/" + File.basename(graphicname))
         end
         anim.timing.each do |timing|
           if !timing.timingType || timing.timingType == 0
-            if timing.name && timing.name != ""
+            if !nil_or_empty?(timing.name)
               audioName = RTP.getAudioPath("Audio/SE/Anim/" + timing.name)
               pbSafeCopyFile(audioName, "Animations/#{safename}/" + File.basename(audioName))
             end
           elsif timing.timingType == 1 || timing.timingType == 3
-            if timing.name && timing.name != ""
+            if !nil_or_empty?(timing.name)
               graphicname = RTP.getImagePath("Graphics/Animations/" + timing.name)
               pbSafeCopyFile(graphicname, "Animations/#{safename}/" + File.basename(graphicname))
             end
@@ -648,14 +648,14 @@ def pbImportAllAnimations
           textdata.name = File.basename(folder) if textdata.name == ""
           textdata.id = -1   # This is not an RPG Maker XP animation
           pbConvertAnimToNewFormat(textdata)
-          if textdata.graphic && textdata.graphic != "" &&
+          if !nil_or_empty?(textdata.graphic) &&
              !safeExists?(folder + "/" + textdata.graphic) &&
              !FileTest.image_exist?("Graphics/Animations/" + textdata.graphic)
             textdata.graphic = ""
             missingFiles.push(textdata.graphic)
           end
           textdata.timing.each do |timing|
-            if timing.name && timing.name != "" &&
+            if !nil_or_empty?(timing.name) &&
                !safeExists?(folder + "/" + timing.name) &&
                !FileTest.audio_exist?("Audio/SE/Anim/" + timing.name)
               timing.name = ""
@@ -741,7 +741,7 @@ def pbCheckTileValidity(tile_id, map, tilesets, passages)
     # Check for defined autotile
     autotile_id = (tile_id / 48) - 1
     autotile_name = tilesets[map.tileset_id].autotile_names[autotile_id]
-    return true if autotile_name && autotile_name != ""
+    return true if !nil_or_empty?(autotile_name)
   else
     # Check for tileset data
     return true if passages[tile_id]
