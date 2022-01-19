@@ -566,7 +566,7 @@ end
 class Game_Event < Game_Character
   attr_accessor :pe_refresh
 
-  alias nf_particles_game_map_initialize initialize unless method_defined?(:nf_particles_game_map_initialize)
+  alias nf_particles_game_map_initialize initialize unless private_method_defined?(:nf_particles_game_map_initialize)
 
   def initialize(map_id, event, map = nil)
     @pe_refresh = false
