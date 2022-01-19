@@ -707,7 +707,13 @@ MultipleForms.register(:CALYREX, {
   "onSetForm" => proc { |pkmn, form, oldForm|
     form_moves = [
       :GLACIALLANCE,   # Ice Rider (with Glastrier) (form 1)
-      :ASTRALBARRAGE   # Shadow Rider (with Spectrier) (form 2)
+      :ASTRALBARRAGE,   # Shadow Rider (with Spectrier) (form 2)
+      # Moves that Calyrex should forget in form 0, because they are exclusive
+      # to Ice Rider and Shadow Rider forms
+      :TACKLE, :TAILWHIP, :DOUBLEKICK, :AVALANCHE, :HEX, :STOMP, :TORMENT,
+      :CONFUSERAY, :MIST, :HAZE, :ICICLECRASH, :SHADOWBALL, :TAKEDOWN,
+      :IRONDEFENSE, :AGILITY, :THRASH, :TAUNT, :DISABLE, :DOUBLEEDGE,
+      :SWORDSDANCE, :NASTYPLOT,
     ]
     if form == 0   # Normal
       form_moves.each do |move|
