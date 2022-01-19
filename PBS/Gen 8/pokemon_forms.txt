@@ -100,6 +100,104 @@ Generation = 7
 Flags = InheritFormWithEverStone
 WildItemUncommon = PECHABERRY
 #-------------------------------
+[PIKACHU,2]
+FormName = Cosplay Pikachu
+Compatibility = Undiscovered
+Pokedex = When it comes across something new, it blasts it with electricity. If you find a charred berry, it's evidence that a Pikachu mistook the power of its charge.
+Generation = 6
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,3]
+FormName = Cosplay Pikachu - Belle
+Compatibility = Undiscovered
+Pokedex = When it comes across something new, it blasts it with electricity. If you find a charred berry, it's evidence that a Pikachu mistook the power of its charge.
+Generation = 6
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,4]
+FormName = Cosplay Pikachu - Libre
+Compatibility = Undiscovered
+Pokedex = When it comes across something new, it blasts it with electricity. If you find a charred berry, it's evidence that a Pikachu mistook the power of its charge.
+Generation = 6
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,5]
+FormName = Cosplay Pikachu - Ph.D.
+Compatibility = Undiscovered
+Pokedex = When it comes across something new, it blasts it with electricity. If you find a charred berry, it's evidence that a Pikachu mistook the power of its charge.
+Generation = 6
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,6]
+FormName = Cosplay Pikachu - Pop Star
+Compatibility = Undiscovered
+Pokedex = When it comes across something new, it blasts it with electricity. If you find a charred berry, it's evidence that a Pikachu mistook the power of its charge.
+Generation = 6
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,7]
+FormName = Cosplay Pikachu - Rock Star
+Compatibility = Undiscovered
+Pokedex = When it comes across something new, it blasts it with electricity. If you find a charred berry, it's evidence that a Pikachu mistook the power of its charge.
+Generation = 6
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,8]
+FormName = Original Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through many different regions.
+Generation = 1
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,9]
+FormName = Hoenn Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Hoenn region.
+Generation = 3
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,10]
+FormName = Sinnoh Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Sinnoh region.
+Generation = 4
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,11]
+FormName = Unova Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Unova region.
+Generation = 5
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,12]
+FormName = Kalos Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Kalos region.
+Generation = 6
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,13]
+FormName = Alola Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Alola region.
+Generation = 7
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,14]
+FormName = Partner Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of when they first met.
+Generation = 7
+Evolutions = RAICHU,None,
+#-------------------------------
+[PIKACHU,15]
+FormName = World Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu is wearing its Trainer's cap. The cap is a precious symbol that travels across different regions with Pikachu.
+Generation = 8
+Evolutions = RAICHU,None,
+#-------------------------------
 [RAICHU,1]
 FormName = Alolan
 Types = ELECTRIC,PSYCHIC
