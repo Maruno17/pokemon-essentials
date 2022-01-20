@@ -172,7 +172,7 @@ end
 class Battle::AI
   attr_accessor :battlePalace
 
-  alias _battlePalace_initialize initialize unless method_defined?(:_battlePalace_initialize)
+  alias _battlePalace_initialize initialize unless private_method_defined?(:_battlePalace_initialize)
 
   def initialize(*arg)
     _battlePalace_initialize(*arg)

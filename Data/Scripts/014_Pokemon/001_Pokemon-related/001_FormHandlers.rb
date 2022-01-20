@@ -710,11 +710,23 @@ MultipleForms.register(:CALYREX, {
       :ASTRALBARRAGE   # Shadow Rider (with Spectrier) (form 2)
     ]
     if form == 0   # Normal
+      # Forget special form moves
       form_moves.each do |move|
         next if !pkmn.hasMove?(move)
         pkmn.forget_move(move)
         pbMessage(_INTL("{1} forgot {2}...", pkmn.name, GameData::Move.get(move).name))
       end
+      # Forget all other moves not accessible to the base form
+      sp_data = pkmn.species_data
+      pkmn.moves.each_with_index do |move, i|
+        next if sp_data.moves.any? { |learn_move| learn_move[1] == move.id }
+        next if sp_data.tutor_moves.include?(move.id)
+        next if sp_data.egg_moves.include?(move.id)
+        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, move.name))
+        pkmn.moves[i] = nil
+      end
+      pkmn.moves.compact!
+      # Ensure pkmn has at least one move in the end
       pbLearnMove(pkmn, :CONFUSION) if pkmn.numMoves == 0
     else   # Ice Rider, Shadow Rider
       new_move = form_moves[form - 1]
