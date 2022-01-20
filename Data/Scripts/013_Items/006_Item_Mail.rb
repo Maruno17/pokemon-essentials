@@ -99,7 +99,7 @@ def pbWriteMail(item, pkmn, pkmnid, scene)
   loop do
     message = pbMessageFreeText(_INTL("Please enter a message (max. 250 characters)."),
                                 "", false, 250, Graphics.width) { scene.pbUpdate }
-    if message != ""
+    if !message.empty?
       # Store mail if a message was written
       poke1 = poke2 = nil
       if $player.party[pkmnid + 2]

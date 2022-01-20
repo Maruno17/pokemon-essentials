@@ -854,7 +854,7 @@ class SpriteWindow_Base < SpriteWindow
         @resolvedFrame = MessageConfig.pbGetSystemFrame
         @resolvedFrame.sub!(/\.[^\.\/\\]+$/, "")
       end
-      self.loadSkinFile("#{@resolvedFrame}.txt") if @resolvedFrame != ""
+      self.loadSkinFile("#{@resolvedFrame}.txt") if !@resolvedFrame.empty?
     end
   end
 

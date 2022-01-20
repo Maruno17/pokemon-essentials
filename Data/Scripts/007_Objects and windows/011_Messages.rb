@@ -458,7 +458,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   text.gsub!(/\\r/i,   "<c3=E00808,D0D0C8>")
   text.gsub!(/\\[Ww]\[([^\]]*)\]/) {
     w = $1.to_s
-    if w == ""
+    if w.empty?
       msgwindow.windowskin = nil
     else
       msgwindow.setSkin("Graphics/Windowskins/#{w}", false)
@@ -627,7 +627,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
         pbPositionNearMsgWindow(facewindow, msgwindow, :left)
         msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime)
       when "ts"     # Change text speed
-        msgwindow.textspeed = (param == "") ? -999 : param.to_i
+        msgwindow.textspeed = (param.empty?) ? -999 : param.to_i
       when "."      # Wait 0.25 seconds
         msgwindow.waitcount += Graphics.frame_rate / 4
       when "|"      # Wait 1 second

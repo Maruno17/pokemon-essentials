@@ -551,7 +551,7 @@ module Compiler
     trainerChecker.pbTrainerBattleCheck(trtype, trname, battleid)
     # Set the event's charset to one depending on the trainer type if the event
     # doesn't have a charset
-    if firstpage.graphic.character_name == "" && GameData::TrainerType.exists?(trtype)
+    if firstpage.graphic.character_name.empty? && GameData::TrainerType.exists?(trtype)
       trainerid = GameData::TrainerType.get(trtype).id
       filename = GameData::TrainerType.charset_filename_brief(trainerid)
       if FileTest.image_exist?("Graphics/Characters/" + filename)
@@ -762,7 +762,7 @@ module Compiler
     lastPage = event.pages[event.pages.length - 1]
     if event.pages.length >= 2 &&
        lastPage.condition.switch1_valid &&
-       lastPage.graphic.character_name != "" &&
+       !lastPage.graphic.character_name.empty? &&
        lastPage.list.length > 5 &&
        lastPage.list[0].code == 111
       # This bit of code is just in case Switch 22 has been renamed/repurposed,
@@ -858,7 +858,7 @@ module Compiler
   def likely_passage?(thisEvent, mapID, mapData)
     return false if !thisEvent || thisEvent.pages.length == 0
     return false if thisEvent.pages.length != 1
-    if thisEvent.pages[0].graphic.character_name == "" &&
+    if thisEvent.pages[0].graphic.character_name.empty? &&
        thisEvent.pages[0].list.length <= 12 &&
        thisEvent.pages[0].list.any? { |cmd| cmd.code == 201 } &&   # Transfer Player
 #       mapData.isPassable?(mapID,thisEvent.x,thisEvent.y+1) &&
@@ -1390,12 +1390,12 @@ module Compiler
     return true if event.pages[0].list.length <= 1
     # pbPokemonMart events
     return true if event.pages[0].list.length <= 12 &&
-                   event.pages[0].graphic.character_name != "" &&   # Has charset
+                   !event.pages[0].graphic.character_name.empty? &&   # Has charset
                    event.pages[0].list[0].code == 355 &&   # First line is Script
                    event.pages[0].list[0].parameters[0][/^pbPokemonMart/]
     # pbSetPokemonCenter events
     return true if event.pages[0].list.length > 8 &&
-                   event.pages[0].graphic.character_name != "" &&   # Has charset
+                   !event.pages[0].graphic.character_name.empty? &&   # Has charset
                    event.pages[0].list[0].code == 355 &&   # First line is Script
                    event.pages[0].list[0].parameters[0][/^pbSetPokemonCenter/]
     return false
@@ -1412,8 +1412,8 @@ module Compiler
     # and a spot where the player can be
     yonderX = otherEvent.x + (otherEvent.x - thisEvent.x)
     yonderY = otherEvent.y + (otherEvent.y - thisEvent.y)
-    return thisEvent.pages[0].graphic.character_name != "" &&    # Has charset
-           otherEvent.pages[0].graphic.character_name == "" &&   # Has no charset
+    return !thisEvent.pages[0].graphic.character_name.empty? &&    # Has charset
+           otherEvent.pages[0].graphic.character_name.empty? &&   # Has no charset
            otherEvent.pages[0].trigger == 0 &&                   # Action trigger
            mapData.isPassable?(mapID, thisEvent.x, thisEvent.y) &&
            !mapData.isPassable?(mapID, otherEvent.x, otherEvent.y) &&

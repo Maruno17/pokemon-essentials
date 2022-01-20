@@ -479,7 +479,7 @@ class AnimationCanvas < Sprite
   def loadAnimation(anim)
     @animation = anim
     @animbitmap&.dispose
-    if @animation.graphic == ""
+    if @animation.graphic.empty?
       @animbitmap = nil
     else
       begin

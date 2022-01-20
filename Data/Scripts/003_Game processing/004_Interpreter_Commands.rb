@@ -168,7 +168,7 @@ class Interpreter
       case @list[next_index].code
       when 401   # Continuation of 101 Show Text
         text = @list[next_index].parameters[0]
-        message += " " if text != "" && message[message.length - 1, 1] != " "
+        message += " " if !text.empty? && message[message.length - 1, 1] != " "
         message += text
         @index = next_index
         next

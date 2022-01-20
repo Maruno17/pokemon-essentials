@@ -21,7 +21,7 @@ def pbWarpToMap
       next if !map.passableStrict?(x, y, 0, $game_player)
       blocked = false
       map.events.values.each do |event|
-        if event.at_coordinate?(x, y) && !event.through && event.character_name != ""
+        if event.at_coordinate?(x, y) && !event.through && !event.character_name.empty?
           blocked = true
         end
       end
@@ -565,7 +565,7 @@ def pbExportAllAnimations
     if animations
       msgwindow = pbCreateMessageWindow
       animations.each do |anim|
-        next if !anim || anim.length == 0 || anim.name == ""
+        next if !anim || anim.length == 0 || anim.name.empty?
         pbMessageDisplay(msgwindow, anim.name, false)
         Graphics.update
         safename = anim.name.gsub(/\W/, "_")
@@ -645,7 +645,7 @@ def pbImportAllAnimations
         if textdata.is_a?(PBAnimation)
           index = pbAllocateAnimation(animations, textdata.name)
           missingFiles = []
-          textdata.name = File.basename(folder) if textdata.name == ""
+          textdata.name = File.basename(folder) if textdata.name.empty?
           textdata.id = -1   # This is not an RPG Maker XP animation
           pbConvertAnimToNewFormat(textdata)
           if !nil_or_empty?(textdata.graphic) &&

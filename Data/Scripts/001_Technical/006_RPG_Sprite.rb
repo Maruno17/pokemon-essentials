@@ -220,7 +220,7 @@ class SpriteAnimation
     if timing.condition == 0 ||
        (timing.condition == 1 && hit == true) ||
        (timing.condition == 2 && hit == false)
-      if timing.se.name != ""
+      if !timing.se.name.empty?
         se = timing.se
         pbSEPlay(se)
       end

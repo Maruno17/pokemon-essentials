@@ -26,7 +26,7 @@ module Graphics
     begin
       transition_KGC_SpecialTransition(duration, filename, vague)
     rescue Exception
-      transition_KGC_SpecialTransition(duration, "", vague) if filename != ""
+      transition_KGC_SpecialTransition(duration, "", vague) if !filename.empty?
     end
     if STOP_WHILE_TRANSITION && !@_interrupt_transition
       while @@transition && !@@transition.disposed?

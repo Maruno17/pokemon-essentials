@@ -33,7 +33,7 @@ module ScreenPosHelper
       height = 0
       if ch.tile_id > 0
         height = 32
-      elsif ch.character_name != ""
+      elsif !ch.character_name.empty?
         height = bmHeight(ch.character_name) / 4
       end
     end

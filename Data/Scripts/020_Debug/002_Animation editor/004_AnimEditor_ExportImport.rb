@@ -23,7 +23,7 @@ end
 
 def pbExportAnim(animations)
   filename = pbMessageFreeText(_INTL("Enter a filename."), "", false, 32)
-  if filename != ""
+  if !filename.empty?
     begin
       filename += ".anm"
       File.open(filename, "wb") { |f|

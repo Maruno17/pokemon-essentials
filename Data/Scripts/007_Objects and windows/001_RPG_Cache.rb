@@ -36,7 +36,7 @@ module RPG
       cached = true
       ret = fromCache(path)
       if !ret
-        if filename == ""
+        if filename.empty?
           ret = BitmapWrapper.new(32, 32)
         else
           ret = BitmapWrapper.new(path)

@@ -130,17 +130,17 @@ module MessageConfig
 
   def self.pbSetSystemFontName(value)
     @@systemFont = MessageConfig.pbTryFonts(value)
-    @@systemFont = MessageConfig.pbDefaultSystemFontName if @@systemFont == ""
+    @@systemFont = MessageConfig.pbDefaultSystemFontName if @@systemFont.empty?
   end
 
   def self.pbSetSmallFontName(value)
     @@smallFont = MessageConfig.pbTryFonts(value)
-    @@smallFont = MessageConfig.pbDefaultSmallFontName if @@smallFont == ""
+    @@smallFont = MessageConfig.pbDefaultSmallFontName if @@smallFont.empty?
   end
 
   def self.pbSetNarrowFontName(value)
     @@narrowFont = MessageConfig.pbTryFonts(value)
-    @@narrowFont = MessageConfig.pbDefaultNarrowFontName if @@narrowFont == ""
+    @@narrowFont = MessageConfig.pbDefaultNarrowFontName if @@narrowFont.empty?
   end
 
   def self.pbTryFonts(*args)
@@ -152,7 +152,7 @@ module MessageConfig
       when Array
         a.each do |aa|
           ret = MessageConfig.pbTryFonts(aa)
-          return ret if ret != ""
+          return ret if !ret.empty?
         end
       end
     end

@@ -16,9 +16,7 @@ class CharacterEntryHelper
 
   def textChars
     chars = text.scan(/./m)
-    if @passwordChar != ""
-      chars.length.times { |i| chars[i] = @passwordChar }
-    end
+    chars.length.times { |i| chars[i] = @passwordChar } if !@passwordChar.empty?
     return chars
   end
 
@@ -193,13 +191,13 @@ class Window_TextEntry < SpriteWindow_Base
     startpos = @helper.cursor
     fromcursor = 0
     while startpos > 0
-      c = (@helper.passwordChar != "") ? @helper.passwordChar : textscan[startpos - 1]
+      c = (!@helper.passwordChar.empty?) ? @helper.passwordChar : textscan[startpos - 1]
       fromcursor += bitmap.text_size(c).width
       break if fromcursor > width - 4
       startpos -= 1
     end
     (startpos...scanlength).each do |i|
-      c = (@helper.passwordChar != "") ? @helper.passwordChar : textscan[i]
+      c = (!@helper.passwordChar.empty?) ? @helper.passwordChar : textscan[i]
       textwidth = bitmap.text_size(c).width
       next if c == "\n"
       # Draw text

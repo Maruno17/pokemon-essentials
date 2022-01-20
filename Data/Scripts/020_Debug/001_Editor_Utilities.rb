@@ -48,7 +48,7 @@ def pbAllocateAnimation(animations, name)
 #      # use animation with same name
 #      return i
 #    end
-    if anim.length == 1 && anim[0].length == 2 && anim.name == ""
+    if anim.length == 1 && anim[0].length == 2 && anim.name.empty?
       # assume empty
       return i
     end

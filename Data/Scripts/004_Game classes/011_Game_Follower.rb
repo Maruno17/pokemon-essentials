@@ -196,7 +196,7 @@ class Game_Follower < Game_Event
     # Check all events on the map to see if any are in the way
     this_map.events.values.each do |event|
       next if !event.at_coordinate?(x, y)
-      return false if !event.through && event.character_name != ""
+      return false if !event.through && !event.character_name.empty?
     end
     return true
   end

@@ -179,7 +179,7 @@ class Scene_Map
     end
     if $game_temp.transition_processing
       $game_temp.transition_processing = false
-      if $game_temp.transition_name == ""
+      if $game_temp.transition_name.empty?
         Graphics.transition
       else
         Graphics.transition(40, "Graphics/Transitions/" + $game_temp.transition_name)

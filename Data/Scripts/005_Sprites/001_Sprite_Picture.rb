@@ -17,14 +17,14 @@ class Sprite_Picture
       # Remember file name to instance variables
       @picture_name = @picture.name
       # If file name is not empty
-      if @picture_name != ""
+      if !@picture_name.empty?
         # Get picture graphic
         @sprite = IconSprite.new(0, 0, @viewport) if !@sprite
         @sprite.setBitmap("Graphics/Pictures/" + @picture_name)
       end
     end
     # If file name is empty
-    if @picture_name == ""
+    if @picture_name.empty?
       # Set sprite to invisible
       if @sprite
         @sprite&.dispose

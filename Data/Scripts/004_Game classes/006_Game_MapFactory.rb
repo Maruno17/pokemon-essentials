@@ -182,12 +182,12 @@ class PokemonMapFactory
     # Check passability of event(s) in that spot
     map.events.values.each do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)
-      return false if !event.through && event.character_name != ""
+      return false if !event.through && !event.character_name.empty?
     end
     # Check passability of player
     if !thisEvent.is_a?(Game_Player) &&
        $game_map.map_id == mapID && $game_player.x == x && $game_player.y == y &&
-       !$game_player.through && $game_player.character_name != ""
+       !$game_player.through && !$game_player.character_name.empty?
       return false
     end
     return true
@@ -209,7 +209,7 @@ class PokemonMapFactory
     end
     map.events.values.each do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)
-      return false if !event.through && event.character_name != ""
+      return false if !event.through && !event.character_name.empty?
     end
     return true
   end

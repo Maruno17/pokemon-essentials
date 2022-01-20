@@ -24,14 +24,14 @@ class PictureSprite < SpriteWrapper
     super
     @pictureBitmap&.update
     # If picture file name is different from current one
-    if @customBitmap && @picture.name == ""
+    if @customBitmap && @picture.name.empty?
       self.bitmap = (@customBitmapIsBitmap) ? @customBitmap : @customBitmap.bitmap
     elsif @picture_name != @picture.name || @picture.hue.to_i != @hue.to_i
       # Remember file name to instance variables
       @picture_name = @picture.name
       @hue = @picture.hue.to_i
       # If file name is not empty
-      if @picture_name == ""
+      if @picture_name.empty?
         @pictureBitmap&.dispose
         @pictureBitmap = nil
         self.visible = false
@@ -41,7 +41,7 @@ class PictureSprite < SpriteWrapper
       @pictureBitmap&.dispose
       @pictureBitmap = AnimatedBitmap.new(@picture_name, @hue)
       self.bitmap = (@pictureBitmap) ? @pictureBitmap.bitmap : nil
-    elsif @picture_name == ""
+    elsif @picture_name.empty?
       # Set sprite to invisible
       self.visible = false
       return

@@ -169,7 +169,7 @@ class PBPokemon
     c3 = (@nature) ? GameData::Nature.get(@nature).id : ""
     evlist = ""
     @ev.each do |stat|
-      evlist += "," if evlist != ""
+      evlist += "," if !evlist.empty?
       evlist += stat.real_name_brief
     end
     c4 = (@move1) ? GameData::Move.get(@move1).id : ""

@@ -281,7 +281,7 @@ class IconSprite < SpriteWrapper
     clearBitmaps
     @name = file
     return if file.nil?
-    if file == ""
+    if file.empty?
       @_iconbitmap = nil
     else
       @_iconbitmap = AnimatedBitmap.new(file, hue)

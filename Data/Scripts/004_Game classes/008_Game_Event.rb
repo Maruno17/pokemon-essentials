@@ -131,7 +131,7 @@ class Game_Event < Game_Character
   end
 
   def over_trigger?
-    return false if @character_name != "" && !@through
+    return false if !@character_name.empty? && !@through
     return false if @event.name[/hiddenitem/i]
     each_occupied_tile do |i, j|
       return true if self.map.passable?(i, j, 0, $game_player)

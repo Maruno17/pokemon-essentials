@@ -61,7 +61,7 @@ def pbSetTextMessages
         event.list.size.times do |j|
           list = event.list[j]
           if neednewline && list.code != 401
-            if lastitem != ""
+            if !lastitem.empty?
               lastitem.gsub!(/([^\.\!\?])\s\s+/) { |m| $1 + " " }
               items.push(lastitem)
               lastitem = ""
@@ -77,7 +77,7 @@ def pbSetTextMessages
             end
             neednewline = false
           elsif list.code == 401
-            lastitem += " " if lastitem != ""
+            lastitem += " " if !lastitem.empty?
             lastitem += list.parameters[0].to_s
             neednewline = true
           elsif list.code == 355 || list.code == 655
@@ -93,7 +93,7 @@ def pbSetTextMessages
             end
           end
         end
-        if neednewline && lastitem != ""
+        if neednewline && !lastitem.empty?
           items.push(lastitem)
           lastitem = ""
         end
@@ -130,7 +130,7 @@ def pbSetTextMessages
             event.pages[i].list.size.times do |j|
               list = event.pages[i].list[j]
               if neednewline && list.code != 401
-                if lastitem != ""
+                if !lastitem.empty?
                   lastitem.gsub!(/([^\.\!\?])\s\s+/) { |m| $1 + " " }
                   items.push(lastitem)
                   lastitem = ""
@@ -146,7 +146,7 @@ def pbSetTextMessages
                 end
                 neednewline = false
               elsif list.code == 401
-                lastitem += " " if lastitem != ""
+                lastitem += " " if !lastitem.empty?
                 lastitem += list.parameters[0].to_s
                 neednewline = true
               elsif list.code == 355 || list.code == 655
@@ -162,7 +162,7 @@ def pbSetTextMessages
                 end
               end
             end
-            if neednewline && lastitem != ""
+            if neednewline && !lastitem.empty?
               items.push(lastitem)
               lastitem = ""
             end
@@ -235,7 +235,7 @@ def pbGetText(infile)
       if !name[/^([Mm][Aa][Pp])?(\d+)$/]
         raise _INTL("Invalid section name {1}", name)
       end
-      ismap = $~[1] && $~[1] != ""
+      ismap = $~[1] && !$~[1].empty?
       id = $~[2].to_i
       itemlength = 0
       if section[0][/^\d+$/]

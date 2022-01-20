@@ -189,6 +189,10 @@ class << Kernel
   end
 end
 
+class NilClass
+  def empty?; return true; end
+end
+
 def nil_or_empty?(string)
   return string.nil? || !string.is_a?(String) || string.size == 0
 end

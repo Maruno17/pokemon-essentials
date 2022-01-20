@@ -242,10 +242,10 @@ class Game_Character
     end
     self.map.events.values.each do |event|
       next if self == event || !event.at_coordinate?(new_x, new_y) || event.through
-      return false if self != $game_player || event.character_name != ""
+      return false if self != $game_player || !event.character_name.empty?
     end
     if $game_player.x == new_x && $game_player.y == new_y &&
-       !$game_player.through && @character_name != ""
+       !$game_player.through && !@character_name.empty?
       return false
     end
     return true
