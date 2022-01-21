@@ -452,7 +452,6 @@ module PluginManager
       err = line.split(":")[-1].strip
       lms = line.split(":")[0].strip
       err.gsub!(n, "") if n
-      err = err.capitalize if err.is_a?(String) && !err.empty?
       linum = n ? "Line #{n}: " : ""
       message += "#{linum}#{err}: #{lms}\r\n"
     end
