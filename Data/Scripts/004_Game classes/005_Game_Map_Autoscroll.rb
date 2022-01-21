@@ -126,7 +126,7 @@ class Interpreter
       end
       count = [count_x.abs, count_y.abs].min
     end
-    $game_map.start_scroll(dir, count, speed) if !dir.nil?
+    $game_map.start_scroll(dir, count, speed) if dir
     if @diag
       return false
     else

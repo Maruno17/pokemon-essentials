@@ -52,19 +52,18 @@ end
 def pbBGMPlay(param, volume = nil, pitch = nil)
   return if !param
   param = pbResolveAudioFile(param, volume, pitch)
-  if !nil_or_empty?(param&.name)
-    if $game_system
-      $game_system.bgm_play(param)
+  return if nil_or_empty?(param&.name)
+  if $game_system
+    $game_system.bgm_play(param)
+    return
+  elsif (RPG.const_defined?(:BGM) rescue false)
+    b = RPG::BGM.new(param.name, param.volume, param.pitch)
+    if b.respond_to?("play")
+      b.play
       return
-    elsif (RPG.const_defined?(:BGM) rescue false)
-      b = RPG::BGM.new(param.name, param.volume, param.pitch)
-      if b.respond_to?("play")
-        b.play
-        return
-      end
     end
-    Audio.bgm_play(canonicalize("Audio/BGM/" + param.name), param.volume, param.pitch)
   end
+  Audio.bgm_play(canonicalize("Audio/BGM/" + param.name), param.volume, param.pitch)
 end
 
 # Fades out or stops BGM playback. 'x' is the time in seconds to fade out.
@@ -102,19 +101,18 @@ end
 def pbMEPlay(param, volume = nil, pitch = nil)
   return if !param
   param = pbResolveAudioFile(param, volume, pitch)
-  if !nil_or_empty?(param&.name)
-    if $game_system
-      $game_system.me_play(param)
+  return if nil_or_empty?(param&.name)
+  if $game_system
+    $game_system.me_play(param)
+    return
+  elsif (RPG.const_defined?(:ME) rescue false)
+    b = RPG::ME.new(param.name, param.volume, param.pitch)
+    if b.respond_to?("play")
+      b.play
       return
-    elsif (RPG.const_defined?(:ME) rescue false)
-      b = RPG::ME.new(param.name, param.volume, param.pitch)
-      if b.respond_to?("play")
-        b.play
-        return
-      end
     end
-    Audio.me_play(canonicalize("Audio/ME/" + param.name), param.volume, param.pitch)
   end
+  Audio.me_play(canonicalize("Audio/ME/" + param.name), param.volume, param.pitch)
 end
 
 # Fades out or stops ME playback. 'x' is the time in seconds to fade out.
@@ -152,19 +150,18 @@ end
 def pbBGSPlay(param, volume = nil, pitch = nil)
   return if !param
   param = pbResolveAudioFile(param, volume, pitch)
-  if !nil_or_empty?(param&.name)
-    if $game_system
-      $game_system.bgs_play(param)
+  return if nil_or_empty?(param&.name)
+  if $game_system
+    $game_system.bgs_play(param)
+    return
+  elsif (RPG.const_defined?(:BGS) rescue false)
+    b = RPG::BGS.new(param.name, param.volume, param.pitch)
+    if b.respond_to?("play")
+      b.play
       return
-    elsif (RPG.const_defined?(:BGS) rescue false)
-      b = RPG::BGS.new(param.name, param.volume, param.pitch)
-      if b.respond_to?("play")
-        b.play
-        return
-      end
     end
-    Audio.bgs_play(canonicalize("Audio/BGS/" + param.name), param.volume, param.pitch)
   end
+  Audio.bgs_play(canonicalize("Audio/BGS/" + param.name), param.volume, param.pitch)
 end
 
 # Fades out or stops BGS playback. 'x' is the time in seconds to fade out.
@@ -202,20 +199,19 @@ end
 def pbSEPlay(param, volume = nil, pitch = nil)
   return if !param
   param = pbResolveAudioFile(param, volume, pitch)
-  if !nil_or_empty?(param&.name)
-    if $game_system
-      $game_system.se_play(param)
+  return if nil_or_empty?(param&.name)
+  if $game_system
+    $game_system.se_play(param)
+    return
+  end
+  if (RPG.const_defined?(:SE) rescue false)
+    b = RPG::SE.new(param.name, param.volume, param.pitch)
+    if b.respond_to?("play")
+      b.play
       return
     end
-    if (RPG.const_defined?(:SE) rescue false)
-      b = RPG::SE.new(param.name, param.volume, param.pitch)
-      if b.respond_to?("play")
-        b.play
-        return
-      end
-    end
-    Audio.se_play(canonicalize("Audio/SE/" + param.name), param.volume, param.pitch)
   end
+  Audio.se_play(canonicalize("Audio/SE/" + param.name), param.volume, param.pitch)
 end
 
 # Stops SE playback.

@@ -143,7 +143,7 @@ class Pokemon
     return @forced_form if !@forced_form.nil?
     return @form if $game_temp.in_battle || $game_temp.in_storage
     calc_form = MultipleForms.call("getForm", self)
-    self.form = calc_form if !calc_form.nil? && calc_form != @form
+    self.form = calc_form unless calc_form.nil? || calc_form == @form
     return @form
   end
 
@@ -587,9 +587,7 @@ class Pokemon
   # removes the held mail.
   # @param mail [Mail, nil] mail to be held by this Pokémon
   def mail=(mail)
-    if !mail.nil? && !mail.is_a?(Mail)
-      raise ArgumentError, _INTL('Invalid value {1} given', mail.inspect)
-    end
+    validate mail => [NilClass, Mail]
     @mail = mail
   end
 

@@ -571,7 +571,7 @@ module PluginManager
       dname = dname[0] if dname.is_a?(Array) && dname.length == 2
       dname = dname[1] if dname.is_a?(Array) && dname.length == 3
       # catch looping dependency issue
-      self.error("Plugin '#{og[0]}' has looping dependencies which cannot be resolved automatically.") if !og.nil? && og.include?(dname)
+      self.error("Plugin '#{og[0]}' has looping dependencies which cannot be resolved automatically.") if og&.include?(dname)
       new_og = og.clone
       new_og.push(dname)
       self.validateDependencies(dname, meta, new_og)

@@ -510,10 +510,10 @@ class PokemonSummary_Scene
     # Write map name egg was received on
     mapname = pbGetMapNameFromId(@pokemon.obtain_map)
     mapname = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
-    if !nil_or_empty?(mapname)
-      memo += _INTL("<c3=404040,B0B0B0>A mysterious Pokémon Egg received from <c3=F83820,E09890>{1}<c3=404040,B0B0B0>.\n", mapname)
-    else
+    if nil_or_empty?(mapname)
       memo += _INTL("<c3=404040,B0B0B0>A mysterious Pokémon Egg.\n", mapname)
+    else
+      memo += _INTL("<c3=404040,B0B0B0>A mysterious Pokémon Egg received from <c3=F83820,E09890>{1}<c3=404040,B0B0B0>.\n", mapname)
     end
     memo += "\n" # Empty line
     # Write Egg Watch blurb

@@ -336,12 +336,10 @@ module Compiler
             evo_type_data = GameData::Evolution.get(evo[1])
             param_type = evo_type_data.parameter
             f.write(sprintf("%s,%s,", evo[0], evo_type_data.id.to_s))
-            if !param_type.nil?
-              if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
-                f.write(getConstantName(param_type, evo[2]))
-              else
-                f.write(evo[2].to_s)
-              end
+            if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
+              f.write(getConstantName(param_type, evo[2]))
+            elsif !param_type.nil?
+              f.write(evo[2].to_s)
             end
           end
           f.write("\r\n")
@@ -438,12 +436,10 @@ module Compiler
             evo_type_data = GameData::Evolution.get(evo[1])
             param_type = evo_type_data.parameter
             f.write(sprintf("%s,%s,", evo[0], evo_type_data.id.to_s))
-            if !param_type.nil?
-              if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
-                f.write(getConstantName(param_type, evo[2]))
-              else
-                f.write(evo[2].to_s)
-              end
+            if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
+              f.write(getConstantName(param_type, evo[2]))
+            elsif !param_type.nil?
+              f.write(evo[2].to_s)
             end
           end
           f.write("\r\n")

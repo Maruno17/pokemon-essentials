@@ -115,8 +115,8 @@ class Battle
     @turnCount         = 0
     @decision          = 0
     @caughtPokemon     = []
-    player   = [player] if !player.nil? && !player.is_a?(Array)
-    opponent = [opponent] if !opponent.nil? && !opponent.is_a?(Array)
+    player   = [player]   unless player.nil?   || player.is_a?(Array)
+    opponent = [opponent] unless opponent.nil? || opponent.is_a?(Array)
     @player            = player     # Array of Player/NPCTrainer objects, or nil
     @opponent          = opponent   # Array of NPCTrainer objects, or nil
     @items             = nil

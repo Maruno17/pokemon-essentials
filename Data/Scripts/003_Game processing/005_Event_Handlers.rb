@@ -151,7 +151,7 @@ class HandlerHash
     ret = @hash[id] if id && @hash[id]   # Real ID from the item
     symbol = toSymbol(sym)
     ret = @hash[symbol] if symbol && @hash[symbol]   # Symbol or string
-    @addIfs.each { |addif| return addif[1] if addif[0].call(id) } if !ret
+    @addIfs.each { |addif| return addif[1] if addif[0].call(id) } unless ret
     return ret
   end
 
@@ -231,7 +231,7 @@ class HandlerHashBasic
   def [](entry)
     ret = nil
     ret = @hash[entry] if entry && @hash[entry]
-    @addIfs.each { |addif| return addif[1] if addif[0].call(entry) } if !ret
+    @addIfs.each { |addif| return addif[1] if addif[0].call(entry) } unless ret
     return ret
   end
 

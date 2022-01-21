@@ -336,7 +336,7 @@ end
 
 def pbTryString(x)
   ret = pbGetFileChar(x)
-  return (!nil_or_empty?(ret) ? x : nil)
+  return (nil_or_empty?(ret) ? nil : x)
 end
 
 # Gets the contents of a file. Doesn't check RTP, but does check

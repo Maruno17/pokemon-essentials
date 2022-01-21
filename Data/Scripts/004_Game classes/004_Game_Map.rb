@@ -190,7 +190,7 @@ class Game_Map
       tile_id = data[x, y, i]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       # If already on water, only allow movement to another water tile
-      if !self_event.nil? && terrain.can_surf_freely
+      if self_event && terrain.can_surf_freely
         [2, 1, 0].each do |j|
           facing_tile_id = data[newx, newy, j]
           return false if facing_tile_id.nil?
@@ -203,7 +203,7 @@ class Game_Map
       # Can't walk onto ice
       elsif terrain.ice
         return false
-      elsif !self_event.nil? && self_event.x == x && self_event.y == y
+      elsif self_event && self_event.x == x && self_event.y == y
         # Can't walk onto ledges
         [2, 1, 0].each do |j|
           facing_tile_id = data[newx, newy, j]

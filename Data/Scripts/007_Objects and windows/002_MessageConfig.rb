@@ -41,9 +41,7 @@ module MessageConfig
 
   def self.pbDefaultWindowskin
     skin = ($data_system) ? $data_system.windowskin_name : nil
-    if !nil_or_empty?(skin)
-      skin = pbResolveBitmap("Graphics/Windowskins/" + skin) || ""
-    end
+    skin = pbResolveBitmap("Graphics/Windowskins/" + skin) || "" unless nil_or_empty?(skin)
     skin = pbResolveBitmap("Graphics/System/Window") if nil_or_empty?(skin)
     skin = pbResolveBitmap("Graphics/Windowskins/001-Blue01") if nil_or_empty?(skin)
     return skin || ""

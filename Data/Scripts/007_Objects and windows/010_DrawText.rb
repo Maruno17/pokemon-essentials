@@ -499,8 +499,8 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
             param = param.split(",")
             # get pure colors unaffected by opacity
             oldColors = getLastParam(colorstack, defaultcolors)
-            base = (!nil_or_empty?(param[0])) ? rgbToColor(param[0]) : oldColors[0]
-            shadow = (!nil_or_empty?(param[1])) ? rgbToColor(param[1]) : oldColors[1]
+            base   = (nil_or_empty?(param[0]) ? oldColors[0] : rgbToColor(param[0]))
+            shadow = (nil_or_empty?(param[1]) ? oldColors[1] : rgbToColor(param[1]))
             colorstack.push([base, shadow])
           end
         when "o"
@@ -939,9 +939,7 @@ def getLineBrokenChunks(bitmap, value, width, dims, plain = false)
         x += textwidth
         dims[0] = x if dims && dims[0] < x
       end
-      if textcols[i]
-        color = textcols[i]
-      end
+      color = textcols[i] if textcols[i]
     end
   end
   dims[1] = y + 32 if dims

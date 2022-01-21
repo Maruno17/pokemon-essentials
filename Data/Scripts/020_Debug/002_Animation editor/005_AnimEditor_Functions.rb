@@ -504,8 +504,8 @@ def pbTimingList(canvas)
 end
 
 def pbSelectSE(canvas, audio)
-  filename = (!nil_or_empty?(audio.name) ? audio.name : "")
-  displayname = (!nil_or_empty?(filename) ? filename : _INTL("<user's cry>"))
+  filename    = (nil_or_empty?(audio.name) ? "" : audio.name)
+  displayname = (nil_or_empty?(filename)   ? _INTL("<user's cry>") : filename)
   animfiles = []
   ret = false
   pbRgssChdir(File.join("Audio", "SE", "Anim")) {

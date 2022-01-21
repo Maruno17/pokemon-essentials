@@ -16,7 +16,7 @@ module ItemHandlers
   def self.hasUseText(item); return !UseText[item].nil?; end
 
   def self.hasOutHandler(item)                       # Shows "Use" option in Bag
-    return !UseFromBag[item].nil? || !UseInField[item].nil? || !UseOnPokemon[item].nil?
+    return (UseFromBag[item].nil? && UseInField[item].nil? && UseOnPokemon[item].nil?)
   end
 
   # Shows "Register" option in Bag

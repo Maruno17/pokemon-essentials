@@ -106,9 +106,7 @@ class Battle
   # Set up all battlers
   #=============================================================================
   def pbCreateBattler(idxBattler, pkmn, idxParty)
-    if !@battlers[idxBattler].nil?
-      raise _INTL("Battler index {1} already exists", idxBattler)
-    end
+    raise _INTL("Battler index {1} already exists", idxBattler) if !@battlers[idxBattler].nil?
     @battlers[idxBattler] = Battler.new(self, idxBattler)
     @positions[idxBattler] = ActivePosition.new
     pbClearChoice(idxBattler)
@@ -413,7 +411,7 @@ class Battle
         end
         @opponent.each_with_index do |_t, i|
           @scene.pbShowOpponent(i)
-          msg = (!nil_or_empty?(@endSpeeches[i])) ? @endSpeeches[i] : "..."
+          msg = (nil_or_empty?(@endSpeeches[i]) ? "..." : @endSpeeches[i])
           pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
         end
       end
@@ -447,7 +445,7 @@ class Battle
         if @opponent
           @opponent.each_with_index do |_t, i|
             @scene.pbShowOpponent(i)
-            msg = (!nil_or_empty?(@endSpeechesWin[i])) ? @endSpeechesWin[i] : "..."
+            msg = (nil_or_empty?(@endSpeechesWin[i]) ? "..." : @endSpeechesWin[i])
             pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
           end
         end

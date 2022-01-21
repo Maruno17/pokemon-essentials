@@ -2,9 +2,7 @@
 # Load various wild battle music
 #===============================================================================
 def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
-  if $PokemonGlobal.nextBattleBGM
-    return $PokemonGlobal.nextBattleBGM.clone
-  end
+  return $PokemonGlobal.nextBattleBGM.clone if $PokemonGlobal.nextBattleBGM
   ret = nil
   if !ret
     # Check map metadata
@@ -21,9 +19,7 @@ def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
 end
 
 def pbGetWildVictoryME
-  if $PokemonGlobal.nextBattleME
-    return $PokemonGlobal.nextBattleME.clone
-  end
+  return $PokemonGlobal.nextBattleME.clone if $PokemonGlobal.nextBattleME
   ret = nil
   if !ret
     # Check map metadata
@@ -41,9 +37,7 @@ def pbGetWildVictoryME
 end
 
 def pbGetWildCaptureME
-  if $PokemonGlobal.nextBattleCaptureME
-    return $PokemonGlobal.nextBattleCaptureME.clone
-  end
+  return $PokemonGlobal.nextBattleCaptureME.clone if $PokemonGlobal.nextBattleCaptureME
   ret = nil
   if !ret
     # Check map metadata
@@ -71,9 +65,7 @@ def pbPlayTrainerIntroME(trainer_type)
 end
 
 def pbGetTrainerBattleBGM(trainer)   # can be a Player, NPCTrainer or an array of them
-  if $PokemonGlobal.nextBattleBGM
-    return $PokemonGlobal.nextBattleBGM.clone
-  end
+  return $PokemonGlobal.nextBattleBGM.clone if $PokemonGlobal.nextBattleBGM
   ret = nil
   music = nil
   trainerarray = (trainer.is_a?(Array)) ? trainer : [trainer]
@@ -90,18 +82,14 @@ def pbGetTrainerBattleBGM(trainer)   # can be a Player, NPCTrainer or an array o
   if !ret
     # Check global metadata
     music = GameData::Metadata.get.trainer_battle_BGM
-    if !nil_or_empty?(music)
-      ret = pbStringToAudioFile(music)
-    end
+    ret = pbStringToAudioFile(music) if !nil_or_empty?(music)
   end
   ret = pbStringToAudioFile("Battle trainer") if !ret
   return ret
 end
 
 def pbGetTrainerBattleBGMFromType(trainertype)
-  if $PokemonGlobal.nextBattleBGM
-    return $PokemonGlobal.nextBattleBGM.clone
-  end
+  return $PokemonGlobal.nextBattleBGM.clone if $PokemonGlobal.nextBattleBGM
   trainer_type_data = GameData::TrainerType.get(trainertype)
   ret = trainer_type_data.battle_BGM if trainer_type_data.battle_BGM
   if !ret
@@ -119,9 +107,7 @@ def pbGetTrainerBattleBGMFromType(trainertype)
 end
 
 def pbGetTrainerVictoryME(trainer)   # can be a Player, NPCTrainer or an array of them
-  if $PokemonGlobal.nextBattleME
-    return $PokemonGlobal.nextBattleME.clone
-  end
+  return $PokemonGlobal.nextBattleME.clone if $PokemonGlobal.nextBattleME
   music = nil
   trainerarray = (trainer.is_a?(Array)) ? trainer : [trainer]
   trainerarray.each do |t|
@@ -129,9 +115,7 @@ def pbGetTrainerVictoryME(trainer)   # can be a Player, NPCTrainer or an array o
     music = trainer_type_data.victory_ME if trainer_type_data.victory_ME
   end
   ret = nil
-  if !nil_or_empty?(music)
-    ret = pbStringToAudioFile(music)
-  end
+  ret = pbStringToAudioFile(music) if !nil_or_empty?(music)
   if !ret
     # Check map metadata
     music = $game_map.metadata&.trainer_victory_ME
@@ -140,9 +124,7 @@ def pbGetTrainerVictoryME(trainer)   # can be a Player, NPCTrainer or an array o
   if !ret
     # Check global metadata
     music = GameData::Metadata.get.trainer_victory_ME
-    if !nil_or_empty?(music)
-      ret = pbStringToAudioFile(music)
-    end
+    ret = pbStringToAudioFile(music) if !nil_or_empty?(music)
   end
   ret = pbStringToAudioFile("Battle victory") if !ret
   ret.name = "../../Audio/ME/" + ret.name

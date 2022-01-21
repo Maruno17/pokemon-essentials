@@ -10,7 +10,7 @@ module HiddenMoveHandlers
   def self.addConfirmUseMove(item, proc); ConfirmUseMove.add(item, proc); end
   def self.addUseMove(item, proc);        UseMove.add(item, proc);        end
 
-  def self.hasHandler(item); return !CanUseMove[item].nil? && !UseMove[item].nil?; end
+  def self.hasHandler(item); return !(CanUseMove[item].nil? || UseMove[item].nil?); end
 
   # Returns whether move can be used
   def self.triggerCanUseMove(item, pokemon, showmsg)

@@ -830,7 +830,7 @@ class TriadScreen
             y = i / @width
             square.type = @board[i].type
             flips = flipBoard(x, y, square)
-            scores.push([cardIndex, x, y, flips.length]) if !flips.nil?
+            scores.push([cardIndex, x, y, flips.length]) unless flips.nil?
           end
         end
         # Sort by number of flips

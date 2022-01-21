@@ -62,10 +62,9 @@ class Game_System
   def bgm_play_internal(bgm, position) # :nodoc:
     @bgm_position = position if !@bgm_paused
     @playing_bgm = bgm&.clone
-    if !nil_or_empty?(bgm&.name)
-      if !@defaultBGM && FileTest.audio_exist?("Audio/BGM/" + bgm.name)
-        bgm_play_internal2("Audio/BGM/" + bgm.name, bgm.volume, bgm.pitch, @bgm_position)
-      end
+    if !nil_or_empty?(bgm&.name) && !@defaultBGM &&
+       FileTest.audio_exist?("Audio/BGM/" + bgm.name)
+      bgm_play_internal2("Audio/BGM/" + bgm.name, bgm.volume, bgm.pitch, @bgm_position)
     else
       @bgm_position = position if !@bgm_paused
       @playing_bgm = nil
@@ -132,11 +131,11 @@ class Game_System
   def setDefaultBGM(bgm, volume = 80, pitch = 100)
     bgm = RPG::AudioFile.new(bgm, volume, pitch) if bgm.is_a?(String)
     @defaultBGM = nil
-    if !nil_or_empty?(bgm&.name)
+    if nil_or_empty?(bgm&.name)
+      self.bgm_play(@playing_bgm)
+    else
       self.bgm_play(bgm)
       @defaultBGM = bgm.clone
-    else
-      self.bgm_play(@playing_bgm)
     end
   end
 
@@ -144,13 +143,11 @@ class Game_System
 
   def me_play(me)
     me = RPG::AudioFile.new(me) if me.is_a?(String)
-    if !nil_or_empty?(me&.name)
-      if FileTest.audio_exist?("Audio/ME/" + me.name)
-        vol = me.volume
-        vol *= $PokemonSystem.bgmvolume / 100.0
-        vol = vol.to_i
-        Audio.me_play("Audio/ME/" + me.name, vol, me.pitch)
-      end
+    if !nil_or_empty?(me&.name) && FileTest.audio_exist?("Audio/ME/" + me.name)
+      vol = me.volume
+      vol *= $PokemonSystem.bgmvolume / 100.0
+      vol = vol.to_i
+      Audio.me_play("Audio/ME/" + me.name, vol, me.pitch)
     else
       Audio.me_stop
     end
@@ -161,13 +158,11 @@ class Game_System
 
   def bgs_play(bgs)
     @playing_bgs = (bgs.nil?) ? nil : bgs.clone
-    if !nil_or_empty?(bgs&.name)
-      if FileTest.audio_exist?("Audio/BGS/" + bgs.name)
-        vol = bgs.volume
-        vol *= $PokemonSystem.sevolume / 100.0
-        vol = vol.to_i
-        Audio.bgs_play("Audio/BGS/" + bgs.name, vol, bgs.pitch)
-      end
+    if !nil_or_empty?(bgs&.name) && FileTest.audio_exist?("Audio/BGS/" + bgs.name)
+      vol = bgs.volume
+      vol *= $PokemonSystem.sevolume / 100.0
+      vol = vol.to_i
+      Audio.bgs_play("Audio/BGS/" + bgs.name, vol, bgs.pitch)
     else
       @bgs_position = 0
       @playing_bgs  = nil

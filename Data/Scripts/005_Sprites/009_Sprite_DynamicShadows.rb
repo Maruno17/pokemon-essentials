@@ -221,7 +221,7 @@ end
 #===================================================
 def XPML_read(map, markup, event, max_param_number = 0)
   parameter_list = nil
-  return nil if !event || event.list.nil?
+  return nil if event&.list.nil?
   event.list.size.times do |i|
     if event.list[i].code == 108 &&
        event.list[i].parameters[0].downcase == "begin " + markup.downcase

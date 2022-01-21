@@ -195,8 +195,8 @@ class Battle::Scene
     # Set Bag starting positions
     oldLastPocket = $bag.last_viewed_pocket
     oldChoices    = $bag.last_pocket_selections.clone
-    $bag.last_viewed_pocket     = @bagLastPocket if !@bagLastPocket.nil?
-    $bag.last_pocket_selections = @bagChoices if !@bagChoices.nil?
+    $bag.last_viewed_pocket     = @bagLastPocket unless @bagLastPocket.nil?
+    $bag.last_pocket_selections = @bagChoices unless @bagChoices.nil?
     # Start Bag screen
     itemScene = PokemonBag_Scene.new
     itemScene.pbStartScene($bag, true,
