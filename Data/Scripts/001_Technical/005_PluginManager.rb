@@ -440,24 +440,17 @@ module PluginManager
   #  formats the error message
   #-----------------------------------------------------------------------------
   def self.pluginErrorMsg(name, script)
+    e = $!
     # begin message formatting
-    message  = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
+    message = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
     message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
-    message += "Error in Plugin [#{name}]:\r\n"
-    message += "#{$!.class} occurred.\r\n"
-    # go through message content
-    $!.message.split("\r\n").each do |line|
-      next if nil_or_empty?(line)
-      n = line[/\d+/]
-      err = line.split(":")[-1].strip
-      lms = line.split(":")[0].strip
-      err.gsub!(n, "") if n
-      linum = n ? "Line #{n}: " : ""
-      message += "#{linum}#{err}: #{lms}\r\n"
-    end
+    message += "Error in Plugin: [#{name}]\r\n"
+    message += "Exception: #{e.class}\r\n"
+    message += "Message: "
+    message += e.message
     # show last 10 lines of backtrace
-    message += "\r\nBacktrace:\r\n"
-    $!.backtrace[0, 10].each { |i| message += "#{i}\r\n" }
+    message += "\r\n\r\nBacktrace:\r\n"
+    e.backtrace[0, 10].each { |i| message += "#{i}\r\n" }
     # output to log
     errorlog = "errorlog.txt"
     errorlog = RTP.getSaveFileName("errorlog.txt") if (Object.const_defined?(:RTP) rescue false)
