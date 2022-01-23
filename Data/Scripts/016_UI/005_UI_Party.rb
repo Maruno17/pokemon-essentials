@@ -1163,72 +1163,69 @@ class PokemonPartyScreen
     @scene.pbStartScene(@party,
                         (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),
                         nil, false, can_access_storage)
+    # Main loop
     loop do
+      # Choose a Pokémon or cancel or press Action to quick switch
       @scene.pbSetHelpText((@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-      pkmnid = @scene.pbChoosePokemon(false, -1, 1)
-      break if (pkmnid.is_a?(Numeric) && pkmnid < 0) || (pkmnid.is_a?(Array) && pkmnid[1] < 0)
-      if pkmnid.is_a?(Array) && pkmnid[0] == 1   # Switch
+      party_idx = @scene.pbChoosePokemon(false, -1, 1)
+      break if (party_idx.is_a?(Numeric) && party_idx < 0) || (party_idx.is_a?(Array) && party_idx[1] < 0)
+      # Quick switch
+      if party_idx.is_a?(Array) && party_idx[0] == 1   # Switch
         @scene.pbSetHelpText(_INTL("Move to where?"))
-        oldpkmnid = pkmnid[1]
-        pkmnid = @scene.pbChoosePokemon(true, -1, 2)
-        if pkmnid >= 0 && pkmnid != oldpkmnid
-          pbSwitch(oldpkmnid, pkmnid)
-        end
+        old_party_idx = party_idx[1]
+        party_idx = @scene.pbChoosePokemon(true, -1, 2)
+        pbSwitch(old_party_idx, party_idx) if party_idx >= 0 && party_idx != old_party_idx
         next
       end
-      pkmn = @party[pkmnid]
-      commands   = []
-      cmdSummary = -1
-      cmdDebug   = -1
-      cmdMoves   = [-1] * pkmn.numMoves
-      cmdSwitch  = -1
-      cmdMail    = -1
-      cmdItem    = -1
-      # Build the commands
-      commands[cmdSummary = commands.length]      = _INTL("Summary")
-      commands[cmdDebug = commands.length]        = _INTL("Debug") if $DEBUG
+      # Chose a Pokémon
+      pkmn = @party[party_idx]
+      # Get all commands
+      command_list = []
+      commands = []
+      MenuHandlers.each_available(:party_menu, self, @party, party_idx) do |option, hash, name|
+        command_list.push(name)
+        commands.push(hash)
+      end
+      command_list.push(_INTL("Cancel"))
+      # Add field move commands
       if !pkmn.egg?
-        # Check for hidden moves and add any that were found
-        pkmn.moves.each_with_index do |m, i|
-          if [:MILKDRINK, :SOFTBOILED].include?(m.id) ||
-             HiddenMoveHandlers.hasHandler(m.id)
-            commands[cmdMoves[i] = commands.length] = [m.name, 1]
-          end
+        insert_index = ($DEBUG) ? 2 : 1
+        pkmn.moves.each_with_index do |move, i|
+          next if !HiddenMoveHandlers.hasHandler(move.id) &&
+                  ![:MILKDRINK, :SOFTBOILED].include?(move.id)
+          command_list.insert(insert_index, [move.name, 1])
+          commands.insert(insert_index, i)
+          insert_index += 1
         end
       end
-      commands[cmdSwitch = commands.length] = _INTL("Switch") if @party.length > 1
-      if !pkmn.egg?
-        if pkmn.mail
-          commands[cmdMail = commands.length]     = _INTL("Mail")
-        else
-          commands[cmdItem = commands.length]     = _INTL("Item")
-        end
-      end
-      commands[commands.length] = _INTL("Cancel")
-      command = @scene.pbShowCommands(_INTL("Do what with {1}?", pkmn.name), commands)
-      havecommand = false
-      cmdMoves.each_with_index do |cmd, i|
-        next if cmd < 0 || cmd != command
-        havecommand = true
-        if [:MILKDRINK, :SOFTBOILED].include?(pkmn.moves[i].id)
+      # Choose a menu option
+      choice = @scene.pbShowCommands(_INTL("Do what with {1}?", pkmn.name), command_list)
+      next if choice < 0 || choice >= commands.length
+      # Effect of chosen menu option
+      case commands[choice]
+      when Hash   # Option defined via a MenuHandler below
+        commands[choice]["effect"].call(self, @party, party_idx)
+      when Integer   # Hidden move's index
+        move = pkmn.moves[commands[choice]]
+        if [:MILKDRINK, :SOFTBOILED].include?(move.id)
           amt = [(pkmn.totalhp / 5).floor, 1].max
           if pkmn.hp <= amt
             pbDisplay(_INTL("Not enough HP..."))
-            break
+            next
           end
           @scene.pbSetHelpText(_INTL("Use on which Pokémon?"))
-          oldpkmnid = pkmnid
+          old_party_idx = party_idx
           loop do
-            @scene.pbPreSelect(oldpkmnid)
-            pkmnid = @scene.pbChoosePokemon(true, pkmnid)
-            break if pkmnid < 0
-            newpkmn = @party[pkmnid]
-            movename = pkmn.moves[i].name
-            if pkmnid == oldpkmnid
+            @scene.pbPreSelect(old_party_idx)
+            party_idx = @scene.pbChoosePokemon(true, party_idx)
+            break if party_idx < 0
+            newpkmn = @party[party_idx]
+            movename = move.name
+            if party_idx == old_party_idx
               pbDisplay(_INTL("{1} can't use {2} on itself!", pkmn.name, movename))
             elsif newpkmn.egg?
               pbDisplay(_INTL("{1} can't be used on an Egg!", movename))
-            elsif newpkmn.hp == 0 || newpkmn.hp == newpkmn.totalhp
+            elsif newpkmn.fainted? || newpkmn.hp == newpkmn.totalhp
               pbDisplay(_INTL("{1} can't be used on that Pokémon.", movename))
             else
               pkmn.hp -= amt
@@ -1238,131 +1235,25 @@ class PokemonPartyScreen
             end
             break if pkmn.hp <= amt
           end
-          @scene.pbSelect(oldpkmnid)
+          @scene.pbSelect(old_party_idx)
           pbRefresh
-          break
-        elsif pbCanUseHiddenMove?(pkmn, pkmn.moves[i].id)
-          if pbConfirmUseHiddenMove(pkmn, pkmn.moves[i].id)
+        elsif pbCanUseHiddenMove?(pkmn, move.id)
+          if pbConfirmUseHiddenMove(pkmn, move.id)
             @scene.pbEndScene
-            if pkmn.moves[i].id == :FLY
+            if move.id == :FLY
               scene = PokemonRegionMap_Scene.new(-1, false)
               screen = PokemonRegionMapScreen.new(scene)
               ret = screen.pbStartFlyScreen
               if ret
                 $game_temp.fly_destination = ret
-                return [pkmn, pkmn.moves[i].id]
+                return [pkmn, move.id]
               end
-              @scene.pbStartScene(@party,
-                                  (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-              break
+              @scene.pbStartScene(
+                @party, (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel.")
+              )
+              next
             end
-            return [pkmn, pkmn.moves[i].id]
-          end
-        end
-      end
-      next if havecommand
-      if cmdSummary >= 0 && command == cmdSummary
-        @scene.pbSummary(pkmnid) {
-          @scene.pbSetHelpText((@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-        }
-      elsif cmdDebug >= 0 && command == cmdDebug
-        pbPokemonDebug(pkmn, pkmnid)
-      elsif cmdSwitch >= 0 && command == cmdSwitch
-        @scene.pbSetHelpText(_INTL("Move to where?"))
-        oldpkmnid = pkmnid
-        pkmnid = @scene.pbChoosePokemon(true)
-        if pkmnid >= 0 && pkmnid != oldpkmnid
-          pbSwitch(oldpkmnid, pkmnid)
-        end
-      elsif cmdMail >= 0 && command == cmdMail
-        command = @scene.pbShowCommands(_INTL("Do what with the mail?"),
-                                        [_INTL("Read"), _INTL("Take"), _INTL("Cancel")])
-        case command
-        when 0   # Read
-          pbFadeOutIn {
-            pbDisplayMail(pkmn.mail, pkmn)
-            @scene.pbSetHelpText((@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-          }
-        when 1   # Take
-          if pbTakeItemFromPokemon(pkmn, self)
-            pbRefreshSingle(pkmnid)
-          end
-        end
-      elsif cmdItem >= 0 && command == cmdItem
-        itemcommands = []
-        cmdUseItem   = -1
-        cmdGiveItem  = -1
-        cmdTakeItem  = -1
-        cmdMoveItem  = -1
-        # Build the commands
-        itemcommands[cmdUseItem = itemcommands.length]  = _INTL("Use")
-        itemcommands[cmdGiveItem = itemcommands.length] = _INTL("Give")
-        itemcommands[cmdTakeItem = itemcommands.length] = _INTL("Take") if pkmn.hasItem?
-        itemcommands[cmdMoveItem = itemcommands.length] = _INTL("Move") if pkmn.hasItem? &&
-                                                                           !GameData::Item.get(pkmn.item).is_mail?
-        itemcommands[itemcommands.length]               = _INTL("Cancel")
-        command = @scene.pbShowCommands(_INTL("Do what with an item?"), itemcommands)
-        if cmdUseItem >= 0 && command == cmdUseItem   # Use
-          item = @scene.pbUseItem($bag, pkmn) {
-            @scene.pbSetHelpText((@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-          }
-          if item
-            pbUseItemOnPokemon(item, pkmn, self)
-            pbRefreshSingle(pkmnid)
-          end
-        elsif cmdGiveItem >= 0 && command == cmdGiveItem   # Give
-          item = @scene.pbChooseItem($bag) {
-            @scene.pbSetHelpText((@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-          }
-          if item && pbGiveItemToPokemon(item, pkmn, self, pkmnid)
-            pbRefreshSingle(pkmnid)
-          end
-        elsif cmdTakeItem >= 0 && command == cmdTakeItem   # Take
-          if pbTakeItemFromPokemon(pkmn, self)
-            pbRefreshSingle(pkmnid)
-          end
-        elsif cmdMoveItem >= 0 && command == cmdMoveItem   # Move
-          item = pkmn.item
-          itemname = item.name
-          @scene.pbSetHelpText(_INTL("Move {1} to where?", itemname))
-          oldpkmnid = pkmnid
-          loop do
-            @scene.pbPreSelect(oldpkmnid)
-            pkmnid = @scene.pbChoosePokemon(true, pkmnid)
-            break if pkmnid < 0
-            newpkmn = @party[pkmnid]
-            break if pkmnid == oldpkmnid
-            if newpkmn.egg?
-              pbDisplay(_INTL("Eggs can't hold items."))
-            elsif !newpkmn.hasItem?
-              newpkmn.item = item
-              pkmn.item = nil
-              @scene.pbClearSwitching
-              pbRefresh
-              pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, itemname))
-              break
-            elsif GameData::Item.get(newpkmn.item).is_mail?
-              pbDisplay(_INTL("{1}'s mail must be removed before giving it an item.", newpkmn.name))
-            else
-              newitem = newpkmn.item
-              newitemname = newitem.name
-              if newitem == :LEFTOVERS
-                pbDisplay(_INTL("{1} is already holding some {2}.\1", newpkmn.name, newitemname))
-              elsif newitemname.starts_with_vowel?
-                pbDisplay(_INTL("{1} is already holding an {2}.\1", newpkmn.name, newitemname))
-              else
-                pbDisplay(_INTL("{1} is already holding a {2}.\1", newpkmn.name, newitemname))
-              end
-              if pbConfirm(_INTL("Would you like to switch the two items?"))
-                newpkmn.item = item
-                pkmn.item = newitem
-                @scene.pbClearSwitching
-                pbRefresh
-                pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, itemname))
-                pbDisplay(_INTL("{1} was given the {2} to hold.", pkmn.name, newitemname))
-                break
-              end
-            end
+            return [pkmn, move.id]
           end
         end
       end
@@ -1371,6 +1262,181 @@ class PokemonPartyScreen
     return nil
   end
 end
+
+#===============================================================================
+# Party screen menu commands.
+# Note that field moves are inserted into the list of commands after the first
+# command, which is usually "Summary". If playing in Debug mode, they are
+# inserted after the second command instead, which is usually "Debug". See
+# insert_index above if you need to change this.
+#===============================================================================
+MenuHandlers.add(:party_menu, :summary, {
+  "name"      => _INTL("Summary"),
+  "order"     => 10,
+  "effect"    => proc { |screen, party, party_idx|
+    screen.scene.pbSummary(party_idx) {
+      screen.scene.pbSetHelpText((party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
+    }
+  }
+})
+
+MenuHandlers.add(:party_menu, :debug, {
+  "name"      => _INTL("Debug"),
+  "order"     => 20,
+  "condition" => proc { |screen, party, party_idx| next $DEBUG },
+  "effect"    => proc { |screen, party, party_idx|
+    screen.pbPokemonDebug(party[party_idx], party_idx)
+  }
+})
+
+MenuHandlers.add(:party_menu, :switch, {
+  "name"      => _INTL("Switch"),
+  "order"     => 30,
+  "condition" => proc { |screen, party, party_idx| next party.length > 1 },
+  "effect"    => proc { |screen, party, party_idx|
+    screen.scene.pbSetHelpText(_INTL("Move to where?"))
+    old_party_idx = party_idx
+    party_idx = screen.scene.pbChoosePokemon(true)
+    screen.pbSwitch(old_party_idx, party_idx) if party_idx >= 0 && party_idx != old_party_idx
+  }
+})
+
+MenuHandlers.add(:party_menu, :mail, {
+  "name"      => _INTL("Mail"),
+  "order"     => 40,
+  "condition" => proc { |screen, party, party_idx| next !party[party_idx].egg? && party[party_idx].mail },
+  "effect"    => proc { |screen, party, party_idx|
+    pkmn = party[party_idx]
+    command = screen.scene.pbShowCommands(_INTL("Do what with the mail?"),
+                                          [_INTL("Read"), _INTL("Take"), _INTL("Cancel")])
+    case command
+    when 0   # Read
+      pbFadeOutIn {
+        pbDisplayMail(pkmn.mail, pkmn)
+        screen.scene.pbSetHelpText((party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
+      }
+    when 1   # Take
+      if pbTakeItemFromPokemon(pkmn, screen)
+        screen.pbRefreshSingle(party_idx)
+      end
+    end
+  }
+})
+
+MenuHandlers.add(:party_menu, :item, {
+  "name"      => _INTL("Item"),
+  "order"     => 50,
+  "condition" => proc { |screen, party, party_idx| next !party[party_idx].egg? && !party[party_idx].mail },
+  "effect"    => proc { |screen, party, party_idx|
+    pkmn = party[party_idx]
+    # Get all commands
+    command_list = []
+    commands = []
+    MenuHandlers.each_available(:party_menu_item, screen, party, party_idx) do |option, hash, name|
+      command_list.push(name)
+      commands.push(hash)
+    end
+    command_list.push(_INTL("Cancel"))
+    # Choose a menu option
+    choice = screen.scene.pbShowCommands(_INTL("Do what with an item?"), command_list)
+    next if choice < 0 || choice >= commands.length
+    commands[choice]["effect"].call(screen, party, party_idx)
+  }
+})
+
+MenuHandlers.add(:party_menu_item, :use, {
+  "name"      => _INTL("Use"),
+  "order"     => 10,
+  "effect"    => proc { |screen, party, party_idx|
+    pkmn = party[party_idx]
+    item = screen.scene.pbUseItem($bag, pkmn) {
+      screen.scene.pbSetHelpText((party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
+    }
+    next if !item
+    pbUseItemOnPokemon(item, pkmn, screen)
+    screen.pbRefreshSingle(party_idx)
+  }
+})
+
+MenuHandlers.add(:party_menu_item, :give, {
+  "name"      => _INTL("Give"),
+  "order"     => 20,
+  "effect"    => proc { |screen, party, party_idx|
+    pkmn = party[party_idx]
+    item = screen.scene.pbChooseItem($bag) {
+      screen.scene.pbSetHelpText((party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
+    }
+    next if !item || !pbGiveItemToPokemon(item, pkmn, screen, party_idx)
+    screen.pbRefreshSingle(party_idx)
+  }
+})
+
+MenuHandlers.add(:party_menu_item, :take, {
+  "name"      => _INTL("Take"),
+  "order"     => 30,
+  "condition" => proc { |screen, party, party_idx| next party[party_idx].hasItem? },
+  "effect"    => proc { |screen, party, party_idx|
+    pkmn = party[party_idx]
+    next if !pbTakeItemFromPokemon(pkmn, screen)
+    screen.pbRefreshSingle(party_idx)
+  }
+})
+
+MenuHandlers.add(:party_menu_item, :move, {
+  "name"      => _INTL("Move"),
+  "order"     => 40,
+  "condition" => proc { |screen, party, party_idx| next party[party_idx].hasItem? && !party[party_idx].item.is_mail? },
+  "effect"    => proc { |screen, party, party_idx|
+    pkmn = party[party_idx]
+    item = pkmn.item
+    itemname = item.name
+    screen.scene.pbSetHelpText(_INTL("Move {1} to where?", itemname))
+    old_party_idx = party_idx
+    moved = false
+    loop do
+      screen.scene.pbPreSelect(old_party_idx)
+      party_idx = screen.scene.pbChoosePokemon(true, party_idx)
+      break if party_idx < 0
+      newpkmn = party[party_idx]
+      break if party_idx == old_party_idx
+      if newpkmn.egg?
+        screen.pbDisplay(_INTL("Eggs can't hold items."))
+        next
+      elsif !newpkmn.hasItem?
+        newpkmn.item = item
+        pkmn.item = nil
+        screen.scene.pbClearSwitching
+        screen.pbRefresh
+        screen.pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, itemname))
+        moved = true
+        break
+      elsif newpkmn.item.is_mail?
+        screen.pbDisplay(_INTL("{1}'s mail must be removed before giving it an item.", newpkmn.name))
+        next
+      end
+      # New Pokémon is also holding an item; ask what to do with it
+      newitem = newpkmn.item
+      newitemname = newitem.name
+      if newitem == :LEFTOVERS
+        screen.pbDisplay(_INTL("{1} is already holding some {2}.\1", newpkmn.name, newitemname))
+      elsif newitemname.starts_with_vowel?
+        screen.pbDisplay(_INTL("{1} is already holding an {2}.\1", newpkmn.name, newitemname))
+      else
+        screen.pbDisplay(_INTL("{1} is already holding a {2}.\1", newpkmn.name, newitemname))
+      end
+      next if !screen.pbConfirm(_INTL("Would you like to switch the two items?"))
+      newpkmn.item = item
+      pkmn.item = newitem
+      screen.scene.pbClearSwitching
+      screen.pbRefresh
+      screen.pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, itemname))
+      screen.pbDisplay(_INTL("{1} was given the {2} to hold.", pkmn.name, newitemname))
+      moved = true
+      break
+    end
+    screen.scene.pbSelect(old_party_idx) if !moved
+  }
+})
 
 #===============================================================================
 # Open the party screen

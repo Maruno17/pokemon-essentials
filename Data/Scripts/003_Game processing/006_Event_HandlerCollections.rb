@@ -71,6 +71,7 @@ end
 # Menus that use this module are:
 #-------------------------------------------------------------------------------
 # Pause menu
+# Party screen main interact menu
 # Pokégear main menu
 # Options screen
 # PC main menu
@@ -97,14 +98,14 @@ module MenuHandlers
     @@handlers[menu].each { |option, hash| yield option, hash }
   end
 
-  def self.each_available(menu)
+  def self.each_available(menu, *args)
     return if !@@handlers.has_key?(menu)
     options = @@handlers[menu]
     keys = options.keys
     sorted_keys = keys.sort_by { |option| options[option]["order"] || keys.index(option) }
     sorted_keys.each do |option|
       hash = options[option]
-      next if hash["condition"] && !hash["condition"].call
+      next if hash["condition"] && !hash["condition"].call(*args)
       if hash["name"].is_a?(Proc)
         name = hash["name"].call
       else
