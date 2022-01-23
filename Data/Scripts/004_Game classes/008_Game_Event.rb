@@ -246,7 +246,7 @@ class Game_Event < Game_Character
   def should_update?(recalc = false)
     return @to_update if !recalc
     return true if @trigger && (@trigger == 3 || @trigger == 4)
-    return true if @move_route_forcing
+    return true if @move_route_forcing || @moveto_happened
     return true if @event.name[/update/i]
     range = 2   # Number of tiles
     return false if self.screen_x - (@sprite_size[0] / 2) > Graphics.width + (range * Game_Map::TILE_WIDTH)
@@ -259,6 +259,7 @@ class Game_Event < Game_Character
   def update
     @to_update = should_update?(true)
     return if !@to_update
+    @moveto_happened = false
     last_moving = moving?
     super
     if !moving? && last_moving
