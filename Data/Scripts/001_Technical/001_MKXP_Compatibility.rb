@@ -1,4 +1,4 @@
-# Using mkxp-z v2.2.3 - https://gitlab.com/mkxp-z/mkxp-z/-/releases/v2.2.3
+# Using mkxp-z v2.3.0 - https://gitlab.com/mkxp-z/mkxp-z/-/releases/v2.3.0
 $VERBOSE = nil
 Font.default_shadow = false if Font.respond_to?(:default_shadow)
 Graphics.frame_rate = 40

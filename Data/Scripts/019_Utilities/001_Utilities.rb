@@ -581,6 +581,6 @@ def pbScreenCapture
   t = pbGetTimeNow
   filestart = t.strftime("[%Y-%m-%d] %H_%M_%S.%L")
   capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
-  Graphics.snap_to_bitmap.to_file(capturefile)
+  Graphics.screenshot(capturefile)
   pbSEPlay("Pkmn exp full") if FileTest.audio_exist?("Audio/SE/Pkmn exp full")
 end
