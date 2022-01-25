@@ -102,10 +102,10 @@ class Hash
     # failsafe
     return h unless hash.is_a?(Hash)
     hash.each do |key, val|
-      if self[key].is_a?(Hash)
+      if h[key].is_a?(Hash)
         h.deep_merge!(val)
       else
-        h = val
+        h[key] = val
       end
     end
     return h
