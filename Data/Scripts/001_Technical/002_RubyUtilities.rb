@@ -50,6 +50,10 @@ class String
     end
     return new_string
   end
+
+  def is_numeric?
+    self.scan(/[^0-9\.\-]/).count < 1
+  end
 end
 
 #===============================================================================
@@ -96,24 +100,25 @@ class Hash
   def deep_merge(hash)
     h = self.clone
     # failsafe
-    return h if !hash.is_a?(Hash)
-    hash.keys.each do |key|
+    return h unless hash.is_a?(Hash)
+    hash.each do |key, val|
       if self[key].is_a?(Hash)
-        h.deep_merge!(hash[key])
+        h.deep_merge!(val)
       else
-        h = hash[key]
+        h = val
       end
     end
     return h
   end
 
   def deep_merge!(hash)
-    return if !hash.is_a?(Hash)
-    hash.keys.each do |key|
+    # failsafe
+    return unless hash.is_a?(Hash)
+    hash.each do |key, val|
       if self[key].is_a?(Hash)
-        self[key].deep_merge!(hash[key])
+        self[key].deep_merge!(val)
       else
-        self[key] = hash[key]
+        self[key] = val
       end
     end
   end
