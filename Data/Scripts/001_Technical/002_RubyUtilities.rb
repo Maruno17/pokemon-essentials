@@ -98,17 +98,7 @@ end
 #===============================================================================
 class Hash
   def deep_merge(hash)
-    h = self.clone
-    # failsafe
-    return h unless hash.is_a?(Hash)
-    hash.each do |key, val|
-      if h[key].is_a?(Hash)
-        h.deep_merge!(val)
-      else
-        h[key] = val
-      end
-    end
-    return h
+    return hash.is_a?(Hash) ? self.clone.deep_merge!(hash) : self.clone
   end
 
   def deep_merge!(hash)
