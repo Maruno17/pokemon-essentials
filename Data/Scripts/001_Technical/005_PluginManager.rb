@@ -742,3 +742,67 @@ module PluginManager
   end
   #-----------------------------------------------------------------------------
 end
+#===============================================================================
+#  Class extension to alias functions with content from modules
+#    allows plugins to structure methods encapsulate components they're
+#    overwriting in separate modules, and automatically apply those methods
+#    to a desired class, aliasing any potential overlap
+#  Example usage:
+#
+#     module BattleExtensions
+#       def pbPlayer; end
+#       def pbNewFunc; end
+#     end
+#
+#     class Battle
+#       include PluginManager::Aliaser
+#       alias_with_module(BattleExtensions)
+#     end
+#
+#     Battle.new now has methods `pbNewFunc`, `pbPlayer` and `pbPlayer_old`
+#===============================================================================
+module PluginManager
+  module Aliaser
+    #---------------------------------------------------------------------------
+    #  extend the base class with new class methods
+    #---------------------------------------------------------------------------
+    def self.included(base)
+      base.extend ClassMethods
+    end
+    #---------------------------------------------------------------------------
+    #  class methods to include
+    #---------------------------------------------------------------------------
+    module ClassMethods
+      private
+      #-------------------------------------------------------------------------
+      #  include a module in base class and alias any overlapping functions
+      #-------------------------------------------------------------------------
+      def alias_with_module(alias_module, extension = 'old')
+        module_functions = alias_module.instance_methods(false)
+                                      .private_methods(false)
+        name_pattern = /[a-zA-Z0-9_]+/
+        misc_pattern = /[^a-zA-Z0-9_]+/
+
+        map_methods_for_alias(alias_module).sort.each do |method_name|
+          aliased_name = "#{method_name[name_pattern]}_#{extension}#{method_name[misc_pattern]}"
+          next if self.method_defined?(aliased_name) || self.private_method_defined?(aliased_name)
+          self.alias_method(aliased_name, method_name)
+        end
+        self.prepend(alias_module)
+      end
+
+      def map_methods_for_alias(alias_module)
+        module_methods = alias_module.instance_methods(false)
+                                     .concat(alias_module.private_instance_methods(false))
+
+        self.instance_methods(false)
+            .concat(self.private_methods(false))
+            .select do |method_name|
+              module_methods.include?(method_name)
+            end
+      end
+      #-------------------------------------------------------------------------
+    end
+    #---------------------------------------------------------------------------
+  end
+end
