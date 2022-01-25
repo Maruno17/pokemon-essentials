@@ -273,6 +273,40 @@ class Color
 end
 
 #===============================================================================
+#  Wrap code blocks in class which passes data accessible as instance
+#  variables within the code block
+#
+#  wrapper = CallbackWrapper.new { puts @test }
+#  wrapper.set(test: 'Hi')
+#  wrapper.execute  #=>  'Hi'
+#===============================================================================
+class CallbackWrapper
+  @params = {}
+  #-----------------------------------------------------------------------------
+  #  constructor
+  #-----------------------------------------------------------------------------
+  def initialize(&block)
+    @code_block = block
+  end
+  #-----------------------------------------------------------------------------
+  #  execute callback
+  #-----------------------------------------------------------------------------
+  def execute(block = @code_block, *args)
+    @params.each do |key, value|
+      args.instance_variable_set("@#{key.to_s}", value)
+    end
+    args.instance_eval(&block)
+  end
+  #-----------------------------------------------------------------------------
+  #  set instance variables
+  #-----------------------------------------------------------------------------
+  def set(params = {})
+    @params = params
+  end
+  #-----------------------------------------------------------------------------
+end
+
+#===============================================================================
 # Kernel methods
 #===============================================================================
 def rand(*args)
