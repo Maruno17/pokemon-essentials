@@ -169,18 +169,18 @@ class Color
   def initialize(*args)
   	pbPrintException("Wrong number of arguments! At least 1 is needed!") if args.length < 1
   	if args.length == 1
-  		if args[0].is_a?(Fixnum)
-  			hex = args[0].dup.to_s(16)
-  		elsif args[0].is_a?(String)
+      if args[0].is_a?(Fixnum)
+      	hex = args[0].dup.to_s(16)
+      elsif args[0].is_a?(String)
         hex = args[0].dup
-  			hex.gsub!("#", "") if hex.include?("#")
-  		end
-  		pbPrintException("Wrong type of argument given!") if !hex
-  		r = hex[0...2].to_i(16)
-  		g = hex[2...4].to_i(16)
-  		b = hex[4...6].to_i(16)
+      	hex.gsub!("#", "") if hex.include?("#")
+      end
+      pbPrintException("Wrong type of argument given!") if !hex
+      r = hex[0...2].to_i(16)
+      g = hex[2...4].to_i(16)
+      b = hex[4...6].to_i(16)
   	elsif args.length == 3
-  		r, g, b = *args
+      r, g, b = *args
   	end
   	return init_original(r, g, b) if r && g && b
   	return init_original(*args)
