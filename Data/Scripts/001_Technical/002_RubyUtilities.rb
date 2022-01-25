@@ -170,10 +170,10 @@ class Color
   	pbPrintException("Wrong number of arguments! At least 1 is needed!") if args.length < 1
   	if args.length == 1
       if args[0].is_a?(Fixnum)
-      	hex = args[0].dup.to_s(16)
+        hex = args[0].dup.to_s(16)
       elsif args[0].is_a?(String)
         hex = args[0].dup
-      	hex.gsub!("#", "") if hex.include?("#")
+        hex.gsub!("#", "") if hex.include?("#")
       end
       pbPrintException("Wrong type of argument given!") if !hex
       r = hex[0...2].to_i(16)
