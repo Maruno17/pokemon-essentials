@@ -798,8 +798,8 @@ module PluginManager
         self.instance_methods(false)
             .concat(self.private_methods(false))
             .select do |method_name|
-              module_methods.include?(method_name)
-            end
+                      module_methods.include?(method_name)
+                    end
       end
       #-------------------------------------------------------------------------
     end

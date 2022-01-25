@@ -161,63 +161,63 @@ end
 #  Extensions for the `Color` class
 #===============================================================================
 class Color
-	# alias for old constructor
-	alias init_original initialize unless self.private_method_defined?(:init_original)
+  # alias for old constructor
+  alias init_original initialize unless self.private_method_defined?(:init_original)
   #-----------------------------------------------------------------------------
-	# new constructor accepts RGB values as well as a hex number or string value
+  # new constructor accepts RGB values as well as a hex number or string value
   #-----------------------------------------------------------------------------
-	def initialize(*args)
-		pbPrintException("Wrong number of arguments! At least 1 is needed!") if args.length < 1
-		if args.length == 1
-			if args[0].is_a?(Fixnum)
-				hex = args[0].dup.to_s(16)
-			elsif args[0].is_a?(String)
+  def initialize(*args)
+  	pbPrintException("Wrong number of arguments! At least 1 is needed!") if args.length < 1
+  	if args.length == 1
+  		if args[0].is_a?(Fixnum)
+  			hex = args[0].dup.to_s(16)
+  		elsif args[0].is_a?(String)
         hex = args[0].dup
-				hex.gsub!("#", "") if hex.include?("#")
-			end
-			pbPrintException("Wrong type of argument given!") if !hex
-			r = hex[0...2].to_i(16)
-			g = hex[2...4].to_i(16)
-			b = hex[4...6].to_i(16)
-		elsif args.length == 3
-			r, g, b = *args
-		end
-		return init_original(r, g, b) if r && g && b
-		return init_original(*args)
-	end
+  			hex.gsub!("#", "") if hex.include?("#")
+  		end
+  		pbPrintException("Wrong type of argument given!") if !hex
+  		r = hex[0...2].to_i(16)
+  		g = hex[2...4].to_i(16)
+  		b = hex[4...6].to_i(16)
+  	elsif args.length == 3
+  		r, g, b = *args
+  	end
+  	return init_original(r, g, b) if r && g && b
+  	return init_original(*args)
+  end
   #-----------------------------------------------------------------------------
-	# returns an RGB color value as a hex value
+  # returns an RGB color value as a hex value
   #-----------------------------------------------------------------------------
-	def to_hex
-		r = sprintf("%02X", self.red)
-		g = sprintf("%02X", self.green)
-		b = sprintf("%02X", self.blue)
-		return ("#" + r + g + b).upcase
-	end
+  def to_hex
+  	r = sprintf("%02X", self.red)
+  	g = sprintf("%02X", self.green)
+  	b = sprintf("%02X", self.blue)
+  	return ("#" + r + g + b).upcase
+  end
   #-----------------------------------------------------------------------------
-	# returns Hex color value as RGB
+  # returns Hex color value as RGB
   #-----------------------------------------------------------------------------
-	def to_rgb(hex)
-		hex = hex.to_s(16) if hex.is_a?(Numeric)
-		r = hex[0...2].to_i(16)
-		g = hex[2...4].to_i(16)
-		b = hex[4...6].to_i(16)
-		return r, g, b
-	end
+  def to_rgb(hex)
+  	hex = hex.to_s(16) if hex.is_a?(Numeric)
+  	r = hex[0...2].to_i(16)
+  	g = hex[2...4].to_i(16)
+  	b = hex[4...6].to_i(16)
+  	return r, g, b
+  end
   #-----------------------------------------------------------------------------
-	# returns decimal color
+  # returns decimal color
   #-----------------------------------------------------------------------------
-	def to_dec
-		return self.to_hex.delete("#").to_i(16)
-	end
+  def to_dec
+  	return self.to_hex.delete("#").to_i(16)
+  end
   #-----------------------------------------------------------------------------
-	# byte order in ARGB instead of RGBA.
+  # byte order in ARGB instead of RGBA.
   #-----------------------------------------------------------------------------
   def to_i
     return self.alpha.to_i << 24 | self.blue.to_i << 16 | self.green.to_i << 8 | self.red.to_i
   end
   #-----------------------------------------------------------------------------
-	# return color from byte integer value
+  # return color from byte integer value
   #-----------------------------------------------------------------------------
   def self.from_i(color)
     b =  color & 255
@@ -227,7 +227,7 @@ class Color
     return Color.new(r, g, b, a)
   end
   #-----------------------------------------------------------------------------
-	# parse color input to return color object
+  # parse color input to return color object
   #-----------------------------------------------------------------------------
   def self.parse(color)
     if color.is_a?(Color) # color object
@@ -246,7 +246,7 @@ class Color
     return nil
   end
   #-----------------------------------------------------------------------------
-	# returns color object for some commonly used colors
+  # returns color object for some commonly used colors
   #-----------------------------------------------------------------------------
   def self.red; return Color.new(255, 0, 0); end
   def self.green; return Color.new(0, 255, 0); end
