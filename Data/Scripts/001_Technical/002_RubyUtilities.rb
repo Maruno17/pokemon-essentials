@@ -98,7 +98,9 @@ end
 #===============================================================================
 class Hash
   def deep_merge(hash)
-    return hash.is_a?(Hash) ? self.clone.deep_merge!(hash) : self.clone
+    merged_hash = self.clone
+    merged_hash.deep_merge!(hash) if hash.is_a?(Hash)
+    return merged_hash
   end
 
   def deep_merge!(hash)
