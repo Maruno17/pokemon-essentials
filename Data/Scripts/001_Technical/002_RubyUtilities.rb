@@ -52,7 +52,7 @@ class String
   end
 
   def is_numeric?
-    self.scan(/[^0-9\.\-]/).count < 1
+    return self.scan(/^[+-]?([0-9]+)(?:\.[0-9]+)?$/)
   end
 end
 
@@ -171,11 +171,12 @@ class Color
   def initialize(*args)
   	pbPrintException("Wrong number of arguments! At least 1 is needed!") if args.length < 1
   	if args.length == 1
-      if args[0].is_a?(Fixnum)
-        hex = args[0].dup.to_s(16)
-      elsif args[0].is_a?(String)
-        hex = args[0].dup
-        hex.gsub!("#", "") if hex.include?("#")
+      if args.first.is_a?(Fixnum)
+        hex = args.first.to_s(16)
+      elsif args.first.is_a?(String)
+        try_rgb_format = args.first.split(',')
+        return init_original(*try_rgb_format) if try_rgb_format.length.between?(3, 4)
+        hex = args.first.delete('#')
       end
       pbPrintException("Wrong type of argument given!") if !hex
       r = hex[0...2].to_i(16)
@@ -195,16 +196,6 @@ class Color
   	g = sprintf("%02X", self.green)
   	b = sprintf("%02X", self.blue)
   	return ("#" + r + g + b).upcase
-  end
-  #-----------------------------------------------------------------------------
-  # returns Hex color value as RGB
-  #-----------------------------------------------------------------------------
-  def to_rgb(hex)
-  	hex = hex.to_s(16) if hex.is_a?(Numeric)
-  	r = hex[0...2].to_i(16)
-  	g = hex[2...4].to_i(16)
-  	b = hex[4...6].to_i(16)
-  	return r, g, b
   end
   #-----------------------------------------------------------------------------
   # returns decimal color
@@ -227,6 +218,16 @@ class Color
     r = (color >> 16) & 255
     a = (color >> 24) & 255
     return Color.new(r, g, b, a)
+  end
+  #-----------------------------------------------------------------------------
+  # returns Hex color value as RGB
+  #-----------------------------------------------------------------------------
+  def self.to_rgb(hex)
+  	hex = hex.to_s(16) if hex.is_a?(Numeric)
+  	r = hex[0...2].to_i(16)
+  	g = hex[2...4].to_i(16)
+  	b = hex[4...6].to_i(16)
+  	return r, g, b
   end
   #-----------------------------------------------------------------------------
   # parse color input to return color object
@@ -283,11 +284,12 @@ class CallbackWrapper
   #-----------------------------------------------------------------------------
   #  execute callback
   #-----------------------------------------------------------------------------
-  def execute(block = @code_block, *args)
+  def execute(given_block = nil, *args)
+    execute_block = given_block || @code_block
     @params.each do |key, value|
       args.instance_variable_set("@#{key.to_s}", value)
     end
-    args.instance_eval(&block)
+    args.instance_eval(&execute_block)
   end
   #-----------------------------------------------------------------------------
   #  set instance variables

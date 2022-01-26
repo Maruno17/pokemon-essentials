@@ -778,8 +778,7 @@ module PluginManager
       #  include a module in base class and alias any overlapping functions
       #-------------------------------------------------------------------------
       def alias_with_module(alias_module, extension = 'old')
-        module_functions = alias_module.instance_methods(false)
-                                      .private_methods(false)
+        module_functions = alias_module.instance_methods(false).private_methods(false)
         name_pattern = /[a-zA-Z0-9_]+/
         misc_pattern = /[^a-zA-Z0-9_]+/
 
@@ -790,16 +789,14 @@ module PluginManager
         end
         self.prepend(alias_module)
       end
-
+      #-------------------------------------------------------------------------
+      #  get list of all defined instance and private methods
+      #-------------------------------------------------------------------------
       def map_methods_for_alias(alias_module)
-        module_methods = alias_module.instance_methods(false)
-                                     .concat(alias_module.private_instance_methods(false))
-
-        self.instance_methods(false)
-            .concat(self.private_methods(false))
-            .select do |method_name|
-                      module_methods.include?(method_name)
-                    end
+        module_methods = alias_module.instance_methods(false).concat(alias_module.private_instance_methods(false))
+        all_methods = self.instance_methods(false).concat(self.private_methods(false))
+        method_collection = all_methods.select { |method_name| module_methods.include?(method_name) }
+        return method_collection
       end
       #-------------------------------------------------------------------------
     end
