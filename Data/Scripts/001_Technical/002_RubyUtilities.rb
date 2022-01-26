@@ -52,7 +52,7 @@ class String
   end
 
   def is_numeric?
-    return self.scan(/^[+-]?([0-9]+)(?:\.[0-9]+)?$/)
+    return self.scan(/^[+-]?([0-9]+)(?:\.[0-9]+)?$/).count > 1
   end
 end
 
