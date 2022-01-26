@@ -222,7 +222,7 @@ class Color
   #-----------------------------------------------------------------------------
   # returns Hex color value as RGB
   #-----------------------------------------------------------------------------
-  def self.to_rgb(hex)
+  def self.hex_to_rgb(hex)
   	hex = hex.to_s(16) if hex.is_a?(Numeric)
   	r = hex[0...2].to_i(16)
   	g = hex[2...4].to_i(16)
