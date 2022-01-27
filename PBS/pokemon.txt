@@ -25,6 +25,7 @@ Habitat = Grassland
 Category = Seed
 Pokedex = Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun's rays, the seed grows progressively larger.
 Generation = 1
+Flags = Starter
 Evolutions = IVYSAUR,Level,16
 #-------------------------------
 [IVYSAUR]
@@ -51,6 +52,7 @@ Habitat = Grassland
 Category = Seed
 Pokedex = To support its bulb, Ivysaur's legs grow sturdy. If it spends more time lying in the sunlight, the bud will soon bloom into a large flower.
 Generation = 1
+Flags = Starter
 Evolutions = VENUSAUR,Level,32
 #-------------------------------
 [VENUSAUR]
@@ -77,6 +79,7 @@ Habitat = Grassland
 Category = Seed
 Pokedex = Venusaur's flower is said to take on vivid colors if it gets plenty of nutrition and sunlight. The flower's aroma soothes the emotions of people.
 Generation = 1
+Flags = Starter
 #-------------------------------
 [CHARMANDER]
 Name = Charmander
@@ -103,6 +106,7 @@ Habitat = Mountain
 Category = Lizard
 Pokedex = The flame that burns at the tip of its tail is an indication of its emotions. The flame wavers when Charmander is happy, and blazes when it is enraged.
 Generation = 1
+Flags = Starter
 Evolutions = CHARMELEON,Level,16
 #-------------------------------
 [CHARMELEON]
@@ -129,6 +133,7 @@ Habitat = Mountain
 Category = Flame
 Pokedex = Without pity, its sharp claws destroy foes. If it encounters a strong enemy, it becomes agitated, and the flame on its tail flares with a bluish white color.
 Generation = 1
+Flags = Starter
 Evolutions = CHARIZARD,Level,36
 #-------------------------------
 [CHARIZARD]
@@ -155,6 +160,7 @@ Habitat = Mountain
 Category = Flame
 Pokedex = A Charizard flies about in search of strong opponents. It breathes intense flames that can melt any material. However, it will never torch a weaker foe.
 Generation = 1
+Flags = Starter
 #-------------------------------
 [SQUIRTLE]
 Name = Squirtle
@@ -181,6 +187,7 @@ Habitat = WatersEdge
 Category = Tiny Turtle
 Pokedex = Its shell is not just for protection. Its rounded shape and the grooves on its surface minimize resistance in water, enabling Squirtle to swim at high speeds.
 Generation = 1
+Flags = Starter
 Evolutions = WARTORTLE,Level,16
 #-------------------------------
 [WARTORTLE]
@@ -207,6 +214,7 @@ Habitat = WatersEdge
 Category = Turtle
 Pokedex = Its large tail is covered with rich, thick fur that deepens in color with age. The scratches on its shell are evidence of this Pokémon's toughness in battle.
 Generation = 1
+Flags = Starter
 Evolutions = BLASTOISE,Level,36
 #-------------------------------
 [BLASTOISE]
@@ -233,6 +241,7 @@ Habitat = WatersEdge
 Category = Shellfish
 Pokedex = The waterspouts that protrude from its shell are highly accurate. Their bullets of water can precisely nail tin cans from a distance of over 160 feet.
 Generation = 1
+Flags = Starter
 #-------------------------------
 [CATERPIE]
 Name = Caterpie
@@ -1373,7 +1382,7 @@ Category = Scratch Cat
 Pokedex = Meowth withdraw their sharp claws into their paws to silently sneak about. For some reason, this Pokémon loves shiny coins that glitter with light.
 Generation = 1
 WildItemUncommon = QUICKCLAW
-Evolutions = PERSIAN,Level,28
+Evolutions = PERSIAN,Level,28,PERRSERKER,None,
 #-------------------------------
 [PERSIAN]
 Name = Persian
@@ -2198,6 +2207,7 @@ Category = Wild Duck
 Pokedex = It is always seen with a stick from a plant. Apparently, there are good sticks and bad sticks. This Pokémon occasionally fights with others over choice sticks.
 Generation = 1
 WildItemUncommon = LEEK
+Evolutions = SIRFETCHD,None,
 #-------------------------------
 [DODUO]
 Name = Doduo
@@ -3234,6 +3244,7 @@ Habitat = Urban
 Category = Barrier
 Pokedex = A Mr. Mime is a master of pantomime. It can convince others that something unseeable actually exists. Once believed, the imaginary object does become real.
 Generation = 1
+Evolutions = MRRIME,None,
 #-------------------------------
 [SCYTHER]
 Name = Scyther
@@ -4018,6 +4029,7 @@ Habitat = Grassland
 Category = Leaf
 Pokedex = It waves its leaf around to keep foes at bay. However, a sweet fragrance also wafts from the leaf, creating a friendly atmosphere that becalms the battlers.
 Generation = 2
+Flags = Starter
 Evolutions = BAYLEEF,Level,16
 #-------------------------------
 [BAYLEEF]
@@ -4044,6 +4056,7 @@ Habitat = Grassland
 Category = Leaf
 Pokedex = A Bayleef's neck is ringed by curled-up leaves. Inside each leaf is a small tree shoot. The fragrance of this shoot makes people peppy.
 Generation = 2
+Flags = Starter
 Evolutions = MEGANIUM,Level,32
 #-------------------------------
 [MEGANIUM]
@@ -4070,6 +4083,7 @@ Habitat = Grassland
 Category = Herb
 Pokedex = The fragrance of a Meganium's flower soothes and calms emotions. In battle, it gives off more of its becalming scent to blunt the foe's fighting spirit.
 Generation = 2
+Flags = Starter
 #-------------------------------
 [CYNDAQUIL]
 Name = Cyndaquil
@@ -4096,6 +4110,7 @@ Habitat = Grassland
 Category = Fire Mouse
 Pokedex = It flares flames from its back to protect itself. The fire burns vigorously if the Pokémon is angry. When it is tired, it sputters with incomplete combustion.
 Generation = 2
+Flags = Starter
 Evolutions = QUILAVA,Level,14
 #-------------------------------
 [QUILAVA]
@@ -4122,6 +4137,7 @@ Habitat = Grassland
 Category = Volcano
 Pokedex = It intimidates foes with intense gusts of flames and superheated air. Its quick nimbleness lets it dodge attacks even while scorching an enemy.
 Generation = 2
+Flags = Starter
 Evolutions = TYPHLOSION,Level,36
 #-------------------------------
 [TYPHLOSION]
@@ -4148,6 +4164,7 @@ Habitat = Grassland
 Category = Volcano
 Pokedex = It can hide behind a shimmering heat haze that it creates using its intense flames. Typhlosion create blazing explosive blasts that burn everything to cinders.
 Generation = 2
+Flags = Starter
 #-------------------------------
 [TOTODILE]
 Name = Totodile
@@ -4174,6 +4191,7 @@ Habitat = WatersEdge
 Category = Big Jaw
 Pokedex = Despite its small body, Totodile's jaws are very powerful. While it may think it is just playfully nipping, its bite has enough strength to cause serious injury.
 Generation = 2
+Flags = Starter
 Evolutions = CROCONAW,Level,18
 #-------------------------------
 [CROCONAW]
@@ -4200,6 +4218,7 @@ Habitat = WatersEdge
 Category = Big Jaw
 Pokedex = Once its jaws clamp down on its foe, it will absolutely not let go. Because the tips of its fangs are forked back like fishhooks, they become irremovably embedded.
 Generation = 2
+Flags = Starter
 Evolutions = FERALIGATR,Level,30
 #-------------------------------
 [FERALIGATR]
@@ -4226,6 +4245,7 @@ Habitat = WatersEdge
 Category = Big Jaw
 Pokedex = It opens its huge mouth to intimidate enemies. In battle, it runs using its thick and powerful hind legs to charge the foe with incredible speed.
 Generation = 2
+Flags = Starter
 #-------------------------------
 [SENTRET]
 Name = Sentret
@@ -5852,6 +5872,7 @@ Category = Coral
 Pokedex = Corsola live in warm southern seas. If the sea becomes polluted, the beautiful coral stalks become discolored and crumble away in tatters.
 Generation = 2
 WildItemUncommon = LUMINOUSMOSS
+Evolutions = CURSOLA,None,
 #-------------------------------
 [REMORAID]
 Name = Remoraid
@@ -6639,6 +6660,7 @@ Habitat = Forest
 Category = Wood Gecko
 Pokedex = It makes its nest in a giant tree in the forest. It ferociously guards against anything nearing its territory. It is said to be the protector of the trees.
 Generation = 3
+Flags = Starter
 Evolutions = GROVYLE,Level,16
 #-------------------------------
 [GROVYLE]
@@ -6665,6 +6687,7 @@ Habitat = Forest
 Category = Wood Gecko
 Pokedex = Leaves grow out of this Pokémon's body. They help obscure a Grovyle from the eyes of its enemies while it is in a thickly overgrown forest.
 Generation = 3
+Flags = Starter
 Evolutions = SCEPTILE,Level,36
 #-------------------------------
 [SCEPTILE]
@@ -6691,6 +6714,7 @@ Habitat = Forest
 Category = Forest
 Pokedex = In the jungle, its power is without equal. This Pokémon carefully grows trees and plants. It regulates its body temperature by basking in sunlight.
 Generation = 3
+Flags = Starter
 #-------------------------------
 [TORCHIC]
 Name = Torchic
@@ -6717,6 +6741,7 @@ Habitat = Grassland
 Category = Chick
 Pokedex = If attacked, it strikes back by spitting balls of fire it forms in its stomach. A Torchic dislikes darkness because it can't see its surroundings.
 Generation = 3
+Flags = Starter
 Evolutions = COMBUSKEN,Level,16
 #-------------------------------
 [COMBUSKEN]
@@ -6743,6 +6768,7 @@ Habitat = Grassland
 Category = Young Fowl
 Pokedex = It lashes out with 10 kicks per second. Its strong fighting instinct compels it to keep up its offensive until the opponent gives up.
 Generation = 3
+Flags = Starter
 Evolutions = BLAZIKEN,Level,36
 #-------------------------------
 [BLAZIKEN]
@@ -6769,6 +6795,7 @@ Habitat = Grassland
 Category = Blaze
 Pokedex = It learns martial arts that use punches and kicks. Every several years, its old feathers burn off, and new, supple feathers grow back in their place.
 Generation = 3
+Flags = Starter
 #-------------------------------
 [MUDKIP]
 Name = Mudkip
@@ -6795,6 +6822,7 @@ Habitat = WatersEdge
 Category = Mud Fish
 Pokedex = On land, it can powerfully lift large boulders by planting its four feet and heaving. It sleeps by burying itself in soil at the water's edge.
 Generation = 3
+Flags = Starter
 Evolutions = MARSHTOMP,Level,16
 #-------------------------------
 [MARSHTOMP]
@@ -6821,6 +6849,7 @@ Habitat = WatersEdge
 Category = Mud Fish
 Pokedex = Its toughened hind legs enable it to stand upright. Because it weakens if its skin dries out, it replenishes fluids by playing in mud.
 Generation = 3
+Flags = Starter
 Evolutions = SWAMPERT,Level,36
 #-------------------------------
 [SWAMPERT]
@@ -6847,6 +6876,7 @@ Habitat = WatersEdge
 Category = Mud Fish
 Pokedex = If it senses the approach of a storm and a tidal wave, it protects its seaside nest by piling up boulders. It swims as fast as a jet ski.
 Generation = 3
+Flags = Starter
 #-------------------------------
 [POOCHYENA]
 Name = Poochyena
@@ -6955,6 +6985,7 @@ Pokedex = It is exceedingly fast if it only has to run in a straight line. When 
 Generation = 3
 WildItemCommon = POTION
 WildItemUncommon = MAXREVIVE
+Evolutions = OBSTAGOON,None,
 #-------------------------------
 [WURMPLE]
 Name = Wurmple
@@ -10199,6 +10230,7 @@ Shape = Quadruped
 Category = Tiny Leaf
 Pokedex = Made from soil, the shell on its back hardens when it drinks water. It lives along lakes.
 Generation = 4
+Flags = Starter
 Evolutions = GROTLE,Level,18
 #-------------------------------
 [GROTLE]
@@ -10224,6 +10256,7 @@ Shape = Quadruped
 Category = Grove
 Pokedex = It lives along water in forests. In the daytime, it leaves the forest to sunbathe its treed shell.
 Generation = 4
+Flags = Starter
 Evolutions = TORTERRA,Level,32
 #-------------------------------
 [TORTERRA]
@@ -10249,6 +10282,7 @@ Shape = Quadruped
 Category = Continent
 Pokedex = Small Pokémon occasionally gather on its unmoving back to begin building their nests.
 Generation = 4
+Flags = Starter
 #-------------------------------
 [CHIMCHAR]
 Name = Chimchar
@@ -10274,6 +10308,7 @@ Shape = BipedalTail
 Category = Chimp
 Pokedex = It agilely scales sheer cliffs to live atop craggy mountains. Its fire is put out when it sleeps.
 Generation = 4
+Flags = Starter
 Evolutions = MONFERNO,Level,14
 #-------------------------------
 [MONFERNO]
@@ -10299,6 +10334,7 @@ Shape = BipedalTail
 Category = Playful
 Pokedex = To intimidate attackers, it stretches the fire on its tail to make itself appear bigger.
 Generation = 4
+Flags = Starter
 Evolutions = INFERNAPE,Level,36
 #-------------------------------
 [INFERNAPE]
@@ -10324,6 +10360,7 @@ Shape = BipedalTail
 Category = Flame
 Pokedex = It uses a special kind of martial arts involving all its limbs. Its fire never goes out.
 Generation = 4
+Flags = Starter
 #-------------------------------
 [PIPLUP]
 Name = Piplup
@@ -10349,6 +10386,7 @@ Shape = Bipedal
 Category = Penguin
 Pokedex = Because it is very proud, it hates accepting food from people. Its thick down guards it from cold.
 Generation = 4
+Flags = Starter
 Evolutions = PRINPLUP,Level,16
 #-------------------------------
 [PRINPLUP]
@@ -10374,6 +10412,7 @@ Shape = BipedalTail
 Category = Penguin
 Pokedex = It lives alone, away from others. Apparently, every one of them believes it is the most important.
 Generation = 4
+Flags = Starter
 Evolutions = EMPOLEON,Level,36
 #-------------------------------
 [EMPOLEON]
@@ -10399,6 +10438,7 @@ Shape = BipedalTail
 Category = Emperor
 Pokedex = The three horns that extend from its beak attest to its power. The leader has the biggest horns.
 Generation = 4
+Flags = Starter
 #-------------------------------
 [STARLY]
 Name = Starly
@@ -12902,6 +12942,7 @@ Shape = BipedalTail
 Category = Grass Snake
 Pokedex = They photosynthesize by bathing their tails in sunlight. When they are not feeling well, their tails droop.
 Generation = 5
+Flags = Starter
 Evolutions = SERVINE,Level,17
 #-------------------------------
 [SERVINE]
@@ -12927,6 +12968,7 @@ Shape = BipedalTail
 Category = Grass Snake
 Pokedex = They avoid attacks by sinking into the shadows of thick foliage. They retaliate with masterful whipping techniques.
 Generation = 5
+Flags = Starter
 Evolutions = SERPERIOR,Level,36
 #-------------------------------
 [SERPERIOR]
@@ -12952,6 +12994,7 @@ Shape = Serpentine
 Category = Regal
 Pokedex = They raise their heads to intimidate opponents, but only give it their all when fighting a powerful opponent.
 Generation = 5
+Flags = Starter
 #-------------------------------
 [TEPIG]
 Name = Tepig
@@ -12977,6 +13020,7 @@ Shape = Quadruped
 Category = Fire Pig
 Pokedex = It blows fire through its nose. When it catches a cold, the fire becomes pitch-black smoke instead.
 Generation = 5
+Flags = Starter
 Evolutions = PIGNITE,Level,17
 #-------------------------------
 [PIGNITE]
@@ -13002,6 +13046,7 @@ Shape = BipedalTail
 Category = Fire Pig
 Pokedex = Whatever it eats becomes fuel for the flame in its stomach. When it is angered, the intensity of the flame increases.
 Generation = 5
+Flags = Starter
 Evolutions = EMBOAR,Level,36
 #-------------------------------
 [EMBOAR]
@@ -13027,6 +13072,7 @@ Shape = BipedalTail
 Category = Mega Fire Pig
 Pokedex = It can throw a fire punch by setting its fists on fire with its fiery chin. It cares deeply about its friends.
 Generation = 5
+Flags = Starter
 #-------------------------------
 [OSHAWOTT]
 Name = Oshawott
@@ -13052,6 +13098,7 @@ Shape = BipedalTail
 Category = Sea Otter
 Pokedex = The scalchop on its stomach is made from the same elements as claws. It detaches the scalchop for use as a blade.
 Generation = 5
+Flags = Starter
 Evolutions = DEWOTT,Level,17
 #-------------------------------
 [DEWOTT]
@@ -13077,6 +13124,7 @@ Shape = BipedalTail
 Category = Discipline
 Pokedex = Scalchop techniques differ from one Dewott to another. It never neglects maintaining its scalchops.
 Generation = 5
+Flags = Starter
 Evolutions = SAMUROTT,Level,36
 #-------------------------------
 [SAMUROTT]
@@ -13102,6 +13150,7 @@ Shape = Quadruped
 Category = Formidable
 Pokedex = Part of the armor on its anterior legs becomes a giant sword. Its cry alone is enough to intimidate most enemies.
 Generation = 5
+Flags = Starter
 #-------------------------------
 [PATRAT]
 Name = Patrat
@@ -14607,7 +14656,7 @@ Category = Spirit
 Pokedex = These Pokémon arose from the spirits of people interred in graves in past ages. Each retains memories of its former life.
 Generation = 5
 WildItemUncommon = SPELLTAG
-Evolutions = COFAGRIGUS,Level,34
+Evolutions = COFAGRIGUS,Level,34,RUNERIGUS,None,
 #-------------------------------
 [COFAGRIGUS]
 Name = Cofagrigus
@@ -16800,6 +16849,7 @@ Shape = BipedalTail
 Category = Spiny Nut
 Pokedex = The quills on its head are usually soft. When it flexes them, the points become so hard and sharp that they can pierce rock.
 Generation = 6
+Flags = Starter
 Evolutions = QUILLADIN,Level,16
 #-------------------------------
 [QUILLADIN]
@@ -16825,6 +16875,7 @@ Shape = BipedalTail
 Category = Spiny Armor
 Pokedex = They strengthen their lower bodies by running into one another. They are very kind and won't start fights.
 Generation = 6
+Flags = Starter
 Evolutions = CHESNAUGHT,Level,36
 #-------------------------------
 [CHESNAUGHT]
@@ -16850,6 +16901,7 @@ Shape = BipedalTail
 Category = Spiny Armor
 Pokedex = Its Tackle is forceful enough to flip a 50-ton tank. It shields its allies from danger with its own body.
 Generation = 6
+Flags = Starter
 #-------------------------------
 [FENNEKIN]
 Name = Fennekin
@@ -16875,6 +16927,7 @@ Shape = Quadruped
 Category = Fox
 Pokedex = As it walks, it munches on a twig in place of a snack. It intimidates opponents by puffing hot air out of its ears.
 Generation = 6
+Flags = Starter
 Evolutions = BRAIXEN,Level,16
 #-------------------------------
 [BRAIXEN]
@@ -16900,6 +16953,7 @@ Shape = BipedalTail
 Category = Fox
 Pokedex = When the twig is plucked from its tail, friction sets the twig alight. The flame is used to send signals to its allies.
 Generation = 6
+Flags = Starter
 Evolutions = DELPHOX,Level,36
 #-------------------------------
 [DELPHOX]
@@ -16925,6 +16979,7 @@ Shape = BipedalTail
 Category = Fox
 Pokedex = It gazes into the flame at the tip of its branch to achieve a focused state, which allows it to see into the future.
 Generation = 6
+Flags = Starter
 #-------------------------------
 [FROAKIE]
 Name = Froakie
@@ -16950,6 +17005,7 @@ Shape = Quadruped
 Category = Bubble Frog
 Pokedex = It protects its skin by covering its body in delicate bubbles. Beneath its happy-go-lucky air, it keeps a watchful eye on its surroundings.
 Generation = 6
+Flags = Starter
 Evolutions = FROGADIER,Level,16
 #-------------------------------
 [FROGADIER]
@@ -16975,6 +17031,7 @@ Shape = Bipedal
 Category = Bubble Frog
 Pokedex = It can throw bubble-covered pebbles with precise control, hitting empty cans up to a hundred feet away.
 Generation = 6
+Flags = Starter
 Evolutions = GRENINJA,Level,36
 #-------------------------------
 [GRENINJA]
@@ -17000,6 +17057,7 @@ Shape = Bipedal
 Category = Ninja
 Pokedex = It appears and vanishes with a ninja’s grace. It toys with its enemies using swift movements, while slicing them with throwing stars of sharpest water.
 Generation = 6
+Flags = Starter
 #-------------------------------
 [BUNNELBY]
 Name = Bunnelby
@@ -18600,6 +18658,7 @@ Shape = Winged
 Category = Grass Quill
 Pokedex = It sends its feathers, which are as sharp as blades, flying in attack. Its legs are strong, so its kicks are also formidable.
 Generation = 7
+Flags = Starter
 Evolutions = DARTRIX,Level,17
 #-------------------------------
 [DARTRIX]
@@ -18625,6 +18684,7 @@ Shape = Winged
 Category = Blade Quill
 Pokedex = A bit of a dandy, it spends its free time preening its wings. Its preoccupation with any dirt on its plumage can leave it unable to battle.
 Generation = 7
+Flags = Starter
 Evolutions = DECIDUEYE,Level,34
 #-------------------------------
 [DECIDUEYE]
@@ -18650,6 +18710,7 @@ Shape = Winged
 Category = Arrow Quill
 Pokedex = It fires arrow quills from its wings with such precision, they can pierce a pebble at distances over a hundred yards.
 Generation = 7
+Flags = Starter
 #-------------------------------
 [LITTEN]
 Name = Litten
@@ -18675,6 +18736,7 @@ Shape = Quadruped
 Category = Fire Cat
 Pokedex = Its coat regrows twice a year. When the time comes, Litten sets its own body on fire and burns away the old fur.
 Generation = 7
+Flags = Starter
 Evolutions = TORRACAT,Level,17
 #-------------------------------
 [TORRACAT]
@@ -18700,6 +18762,7 @@ Shape = Quadruped
 Category = Fire Cat
 Pokedex = It can act spoiled if it grows close to its Trainer. A powerful Pokémon, its sharp claws can leave its Trainer's whole body covered in scratches.
 Generation = 7
+Flags = Starter
 Evolutions = INCINEROAR,Level,34
 #-------------------------------
 [INCINEROAR]
@@ -18725,6 +18788,7 @@ Shape = BipedalTail
 Category = Heel
 Pokedex = Although it's rough mannered and egotistical, it finds beating down unworthy opponents boring. It gets motivated for stronger opponents.
 Generation = 7
+Flags = Starter
 #-------------------------------
 [POPPLIO]
 Name = Popplio
@@ -18750,6 +18814,7 @@ Shape = Finned
 Category = Sea Lion
 Pokedex = This Pokémon snorts body fluids from its nose, blowing balloons to smash into its foes. It's famous for being a hard worker.
 Generation = 7
+Flags = Starter
 Evolutions = BRIONNE,Level,17
 #-------------------------------
 [BRIONNE]
@@ -18775,6 +18840,7 @@ Shape = Finned
 Category = Pop Star
 Pokedex = It gets excited when it sees a dance it doesn't know. This hard worker practices diligently until it can learn that dance.
 Generation = 7
+Flags = Starter
 Evolutions = PRIMARINA,Level,34
 #-------------------------------
 [PRIMARINA]
@@ -18800,6 +18866,7 @@ Shape = Finned
 Category = Soloist
 Pokedex = It controls its water balloons with song. The melody is learned from others of its kind and is passed down from one generation to the next.
 Generation = 7
+Flags = Starter
 #-------------------------------
 [PIKIPEK]
 Name = Pikipek
@@ -20798,6 +20865,7 @@ Shape = BipedalTail
 Category = Chimp
 Pokedex = When it uses its special stick to strike up a beat, the sound waves produced carry revitalizing energy to the plants and flowers in the area.
 Generation = 8
+Flags = Starter
 Evolutions = THWACKEY,Level,16
 #-------------------------------
 [THWACKEY]
@@ -20823,6 +20891,7 @@ Shape = BipedalTail
 Category = Beat
 Pokedex = When it's drumming out rapid beats in battle, it gets so caught up in the rhythm that it won't even notice that it's already knocked out its opponent.
 Generation = 8
+Flags = Starter
 Evolutions = RILLABOOM,Level,35
 #-------------------------------
 [RILLABOOM]
@@ -20848,6 +20917,7 @@ Shape = Bipedal
 Category = Drummer
 Pokedex = By drumming, it taps into the power of its special tree stump. The roots of the stump follow its direction in battle.
 Generation = 8
+Flags = Starter
 #-------------------------------
 [SCORBUNNY]
 Name = Scorbunny
@@ -20873,6 +20943,7 @@ Shape = BipedalTail
 Category = Rabbit
 Pokedex = A warm-up of running around gets fire energy coursing through this Pokémon's body. Once that happens, it's ready to fight at full power.
 Generation = 8
+Flags = Starter
 Evolutions = RABOOT,Level,16
 #-------------------------------
 [RABOOT]
@@ -20898,6 +20969,7 @@ Shape = BipedalTail
 Category = Rabbit
 Pokedex = It kicks berries right off the branches of trees and then juggles them with its feet, practicing its footwork.
 Generation = 8
+Flags = Starter
 Evolutions = CINDERACE,Level,35
 #-------------------------------
 [CINDERACE]
@@ -20923,6 +20995,7 @@ Shape = BipedalTail
 Category = Striker
 Pokedex = It juggles a pebble with its feet, turning it into a burning soccer ball. Its shots strike opponents hard and leave them scorched.
 Generation = 8
+Flags = Starter
 #-------------------------------
 [SOBBLE]
 Name = Sobble
@@ -20948,6 +21021,7 @@ Shape = Quadruped
 Category = Water Lizard
 Pokedex = When scared, this Pokémon cries. Its tears pack the chemical punch of 100 onions, and attackers won't be able to resist weeping.
 Generation = 8
+Flags = Starter
 Evolutions = DRIZZILE,Level,16
 #-------------------------------
 [DRIZZILE]
@@ -20973,6 +21047,7 @@ Shape = BipedalTail
 Category = Water Lizard
 Pokedex = A clever combatant, this Pokémon battles using water balloons created with moisture secreted from its palms.
 Generation = 8
+Flags = Starter
 Evolutions = INTELEON,Level,35
 #-------------------------------
 [INTELEON]
@@ -20998,6 +21073,7 @@ Shape = BipedalTail
 Category = Secret Agent
 Pokedex = It has many hidden capabilities, such as fingertips that can shoot water and a membrane on its back that it can use to glide through the air.
 Generation = 8
+Flags = Starter
 #-------------------------------
 [SKWOVET]
 Name = Skwovet
