@@ -4004,6 +4004,7 @@ Habitat = Rare
 Category = New Species
 Pokedex = A Mew is said to possess the genes of all Pokémon. It is capable of making itself invisible at will, so it entirely avoids notice even if it approaches people.
 Generation = 1
+Flags = Mythical
 WildItemCommon = LUMBERRY
 WildItemUncommon = LUMBERRY
 WildItemRare = LUMBERRY
@@ -6640,6 +6641,7 @@ Habitat = Forest
 Category = Time Travel
 Pokedex = This Pokémon came from the future by crossing over time. It is thought that so long as Celebi appears, a bright and shining future awaits us.
 Generation = 2
+Flags = Mythical
 WildItemCommon = LUMBERRY
 WildItemUncommon = LUMBERRY
 WildItemRare = LUMBERRY
@@ -10194,6 +10196,7 @@ Habitat = Mountain
 Category = Wish
 Pokedex = Jirachi is said to make wishes come true. While it sleeps, a tough crystalline shell envelops the body to protect it from enemies.
 Generation = 3
+Flags = Mythical
 WildItemCommon = STARPIECE
 WildItemUncommon = STARPIECE
 WildItemRare = STARPIECE
@@ -10222,6 +10225,7 @@ Category = DNA
 Pokedex = A Pokémon that mutated from an extraterrestrial virus exposed to a laser beam. Its body is configured for superior agility and speed.
 FormName = Normal Forme
 Generation = 3
+Flags = Mythical
 #-------------------------------
 [TURTWIG]
 Name = Turtwig
@@ -12822,6 +12826,7 @@ Shape = HeadArms
 Category = Sea Drifter
 Pokedex = A Pokémon that lives in warm seas. It inflates the flotation sac on its head to drift and search for food.
 Generation = 4
+Flags = Mythical
 #-------------------------------
 [MANAPHY]
 Name = Manaphy
@@ -12846,6 +12851,7 @@ Shape = Bipedal
 Category = Seafaring
 Pokedex = Born on a cold seafloor, it will swim great distances to return to its birthplace.
 Generation = 4
+Flags = Mythical
 #-------------------------------
 [DARKRAI]
 Name = Darkrai
@@ -12869,6 +12875,7 @@ Shape = Bipedal
 Category = Pitch-Black
 Pokedex = It can lull people to sleep and make them dream. It is active during nights of the new moon.
 Generation = 4
+Flags = Mythical
 #-------------------------------
 [SHAYMIN]
 Name = Shaymin
@@ -12893,6 +12900,7 @@ Category = Gratitude
 Pokedex = It lives in flower patches and avoids detection by curling up to look like a flowering plant.
 FormName = Land Forme
 Generation = 4
+Flags = Mythical
 WildItemCommon = LUMBERRY
 WildItemUncommon = LUMBERRY
 WildItemRare = LUMBERRY
@@ -12920,6 +12928,7 @@ Category = Alpha
 Pokedex = It is described in mythology as the Pokémon that shaped the universe with its 1,000 arms.
 FormName = Normal Type
 Generation = 4
+Flags = Mythical
 #-------------------------------
 [VICTINI]
 Name = Victini
@@ -12943,6 +12952,7 @@ Shape = Bipedal
 Category = Victory
 Pokedex = This Pokémon brings victory. It is said that Trainers with Victini always win, regardless of the type of encounter.
 Generation = 5
+Flags = Mythical
 #-------------------------------
 [SNIVY]
 Name = Snivy
@@ -16808,6 +16818,7 @@ Category = Colt
 Pokedex = It crosses the world, running over the surfaces of oceans and rivers. It appears at scenic waterfronts.
 FormName = Ordinary Form
 Generation = 5
+Flags = Mythical
 #-------------------------------
 [MELOETTA]
 Name = Meloetta
@@ -16832,6 +16843,7 @@ Category = Melody
 Pokedex = Many famous songs have been inspired by the melodies that Meloetta plays.
 FormName = Aria Forme
 Generation = 5
+Flags = Mythical
 WildItemCommon = STARPIECE
 WildItemUncommon = STARPIECE
 WildItemRare = STARPIECE
@@ -16859,6 +16871,7 @@ Category = Paleozoic
 Pokedex = This ancient bug Pokémon was altered by Team Plasma. They upgraded the cannon on its back.
 FormName = Normal
 Generation = 5
+Flags = Mythical
 #-------------------------------
 [CHESPIN]
 Name = Chespin
@@ -18624,6 +18637,7 @@ Shape = HeadArms
 Category = Jewel
 Pokedex = A sudden transformation of Carbink, its pink, glimmering body is said to be the loveliest sight in the whole world.
 Generation = 6
+Flags = Mythical
 #-------------------------------
 [HOOPA]
 Name = Hoopa
@@ -18648,6 +18662,7 @@ Category = Mischief
 Pokedex = This troublemaker sends anything and everything to faraway places using its loop, which can warp space.
 FormName = Hoopa Confined
 Generation = 6
+Flags = Mythical
 #-------------------------------
 [VOLCANION]
 Name = Volcanion
@@ -18671,6 +18686,7 @@ Shape = Quadruped
 Category = Steam
 Pokedex = It lets out billows of steam and disappears into the dense fog. It's said to live in mountains where humans do not tread.
 Generation = 6
+Flags = Mythical
 #-------------------------------
 [ROWLET]
 Name = Rowlet
@@ -20699,6 +20715,7 @@ Shape = Bipedal
 Category = Artificial
 Pokedex = This artificial Pokémon, constructed more than 500 years ago, can understand human speech but cannot itself speak.
 Generation = 7
+Flags = Mythical
 #-------------------------------
 [MARSHADOW]
 Name = Marshadow
@@ -20722,6 +20739,7 @@ Shape = Bipedal
 Category = Gloomdweller
 Pokedex = Able to conceal itself in shadows, it never appears before humans, so its very existence was the stuff of myth.
 Generation = 7
+Flags = Mythical
 #-------------------------------
 [POIPOLE]
 Name = Poipole
@@ -20842,6 +20860,7 @@ Shape = Bipedal
 Category = Thunderclap
 Pokedex = It approaches its enemies at the speed of lightning, then tears them limb from limb with its sharp claws.
 Generation = 7
+Flags = Mythical
 #-------------------------------
 [MELTAN]
 Name = Meltan
@@ -20865,6 +20884,7 @@ Shape = Head
 Category = Hex Nut
 Pokedex = It melts particles of iron and other metals found in the subsoil, so it can absorb them into its body of molten steel.
 Generation = 7
+Flags = Mythical
 Evolutions = MELMETAL,Level,45
 #-------------------------------
 [MELMETAL]
@@ -20889,6 +20909,7 @@ Shape = Bipedal
 Category = Hex Nut
 Pokedex = Revered long ago for its capacity to create iron from nothing, for some reason it has come back to life after 3,000 years.
 Generation = 7
+Flags = Mythical
 #-------------------------------
 [GROOKEY]
 Name = Grookey
@@ -23006,6 +23027,7 @@ Shape = BipedalTail
 Category = Rogue Monkey
 Pokedex = Once the vines on Zarude's body tear off, they become nutrients in the soil. This helps the plants of the forest grow.
 Generation = 8
+Flags = Mythical
 #-------------------------------
 [REGIELEKI]
 Name = Regieleki

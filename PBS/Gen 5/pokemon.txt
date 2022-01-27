@@ -4008,6 +4008,7 @@ Habitat = Rare
 Category = New Species
 Pokedex = A Mew is said to possess the genes of all Pokémon. It is capable of making itself invisible at will, so it entirely avoids notice even if it approaches people.
 Generation = 1
+Flags = Mythical
 WildItemCommon = LUMBERRY
 WildItemUncommon = LUMBERRY
 WildItemRare = LUMBERRY
@@ -6653,6 +6654,7 @@ Habitat = Forest
 Category = Time Travel
 Pokedex = This Pokémon came from the future by crossing over time. It is thought that so long as Celebi appears, a bright and shining future awaits us.
 Generation = 2
+Flags = Mythical
 WildItemCommon = LUMBERRY
 WildItemUncommon = LUMBERRY
 WildItemRare = LUMBERRY
@@ -10193,6 +10195,7 @@ Habitat = Mountain
 Category = Wish
 Pokedex = Jirachi is said to make wishes come true. While it sleeps, a tough crystalline shell envelops the body to protect it from enemies.
 Generation = 3
+Flags = Mythical
 WildItemCommon = STARPIECE
 WildItemUncommon = STARPIECE
 WildItemRare = STARPIECE
@@ -10221,6 +10224,7 @@ Category = DNA
 Pokedex = A Pokémon that mutated from an extraterrestrial virus exposed to a laser beam. Its body is configured for superior agility and speed.
 FormName = Normal Forme
 Generation = 3
+Flags = Mythical
 #-------------------------------
 [TURTWIG]
 Name = Turtwig
@@ -12843,6 +12847,7 @@ Shape = HeadArms
 Category = Sea Drifter
 Pokedex = A Pokémon that lives in warm seas. It inflates the flotation sac on its head to drift and search for food.
 Generation = 4
+Flags = Mythical
 #-------------------------------
 [MANAPHY]
 Name = Manaphy
@@ -12867,6 +12872,7 @@ Shape = Bipedal
 Category = Seafaring
 Pokedex = Born on a cold seafloor, it will swim great distances to return to its birthplace.
 Generation = 4
+Flags = Mythical
 #-------------------------------
 [DARKRAI]
 Name = Darkrai
@@ -12890,6 +12896,7 @@ Shape = Bipedal
 Category = Pitch-Black
 Pokedex = It can lull people to sleep and make them dream. It is active during nights of the new moon.
 Generation = 4
+Flags = Mythical
 #-------------------------------
 [SHAYMIN]
 Name = Shaymin
@@ -12914,6 +12921,7 @@ Category = Gratitude
 Pokedex = It lives in flower patches and avoids detection by curling up to look like a flowering plant.
 FormName = Land Forme
 Generation = 4
+Flags = Mythical
 WildItemCommon = LUMBERRY
 WildItemUncommon = LUMBERRY
 WildItemRare = LUMBERRY
@@ -12941,6 +12949,7 @@ Category = Alpha
 Pokedex = It is described in mythology as the Pokémon that shaped the universe with its 1,000 arms.
 FormName = Normal Type
 Generation = 4
+Flags = Mythical
 #-------------------------------
 [VICTINI]
 Name = Victini
@@ -12964,6 +12973,7 @@ Shape = Bipedal
 Category = Victory
 Pokedex = This Pokémon brings victory. It is said that Trainers with Victini always win, regardless of the type of encounter.
 Generation = 5
+Flags = Mythical
 #-------------------------------
 [SNIVY]
 Name = Snivy
@@ -16862,6 +16872,7 @@ Category = Colt
 Pokedex = It crosses the world, running over the surfaces of oceans and rivers. It appears at scenic waterfronts.
 FormName = Ordinary Form
 Generation = 5
+Flags = Mythical
 #-------------------------------
 [MELOETTA]
 Name = Meloetta
@@ -16886,6 +16897,7 @@ Category = Melody
 Pokedex = Many famous songs have been inspired by the melodies that Meloetta plays.
 FormName = Aria Forme
 Generation = 5
+Flags = Mythical
 WildItemCommon = STARPIECE
 WildItemUncommon = STARPIECE
 WildItemRare = STARPIECE
@@ -16913,3 +16925,4 @@ Category = Paleozoic
 Pokedex = This ancient bug Pokémon was altered by Team Plasma. They upgraded the cannon on its back.
 FormName = Normal
 Generation = 5
+Flags = Mythical
