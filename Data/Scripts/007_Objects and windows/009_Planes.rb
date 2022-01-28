@@ -49,10 +49,12 @@ class AnimatedPlane < Plane
   end
 
   def set_panorama(file, hue = 0)
+    return clear_bitmap if file.nil?
     setBitmap("Graphics/Panoramas/" + file, hue)
   end
 
   def set_fog(file, hue = 0)
+    return clear_bitmap if file.nil?
     setBitmap("Graphics/Fogs/" + file, hue)
   end
 
