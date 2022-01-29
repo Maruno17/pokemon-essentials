@@ -960,7 +960,7 @@ class Battle::Move::UseRandomMove < Battle::Move
       move_id = move_keys[@battle.pbRandom(move_keys.length)]
       move_data = GameData::Move.get(move_id)
       next if @moveBlacklist.include?(move_data.function_code)
-      next if move_data.has_flag?("CannnotMetronome")
+      next if move_data.has_flag?("CannotMetronome")
       next if move_data.type == :SHADOW
       @metronomeMove = move_data.id
       break
