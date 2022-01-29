@@ -245,7 +245,7 @@ class Battle::Move::CorrodeTargetItem < Battle::Move
 end
 
 #===============================================================================
-# For 5 rounds, the target cannnot use its held item, its held item has no
+# For 5 rounds, the target cannot use its held item, its held item has no
 # effect, and no items can be used on it. (Embargo)
 #===============================================================================
 class Battle::Move::StartTargetCannotUseItem < Battle::Move
