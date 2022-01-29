@@ -172,13 +172,14 @@ def pbExclaim(event, id = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
     sprite = nil
     done = []
     event.each do |i|
-      if !done.include?(i.id)
-        sprite = $scene.spriteset.addUserAnimation(id, i.x, i.y, tinting, 2)
-        done.push(i.id)
-      end
+      next if done.include?(i.id)
+      spriteset = $scene.spriteset(i.map_id)
+      sprite ||= spriteset&.addUserAnimation(id, i.x, i.y, tinting, 2)
+      done.push(i.id)
     end
   else
-    sprite = $scene.spriteset.addUserAnimation(id, event.x, event.y, tinting, 2)
+    spriteset = $scene.spriteset(event.map_id)
+    sprite = spriteset&.addUserAnimation(id, event.x, event.y, tinting, 2)
   end
   until sprite.disposed?
     Graphics.update

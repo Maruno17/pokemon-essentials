@@ -27,6 +27,10 @@ class Game_Player < Game_Character
     return $game_map
   end
 
+  def map_id
+    return $game_map.map_id
+  end
+
   def screen_z(height = 0)
     ret = super
     return ret + 1
