@@ -731,6 +731,8 @@ class PokemonEntryScene2
             @sprites["cursor"].setCursorPos(@cursorpos)
           end
           pbUpdateOverlay
+          # Auto-switch to lowercase letters after the first uppercase letter is selected
+          pbChangeTab(1) if @mode == 0 && @helper.cursor == 1
         end
       end
     end
