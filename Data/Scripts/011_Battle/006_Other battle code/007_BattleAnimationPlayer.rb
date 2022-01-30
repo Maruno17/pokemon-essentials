@@ -730,31 +730,23 @@ class PBAnimationPlayerX
     end
     # Create background colour sprite
     @bgColor = ColoredPlane.new(Color.new(0, 0, 0), @viewport)
-    @bgColor.borderX = 64 if @inEditor
-    @bgColor.borderY = 64 if @inEditor
     @bgColor.z       = 5
     @bgColor.opacity = 0
     @bgColor.refresh
     # Create background graphic sprite
     @bgGraphic = AnimatedPlane.new(@viewport)
     @bgGraphic.setBitmap(nil)
-    @bgGraphic.borderX = 64 if @inEditor
-    @bgGraphic.borderY = 64 if @inEditor
     @bgGraphic.z       = 5
     @bgGraphic.opacity = 0
     @bgGraphic.refresh
     # Create foreground colour sprite
     @foColor = ColoredPlane.new(Color.new(0, 0, 0), @viewport)
-    @foColor.borderX = 64 if @inEditor
-    @foColor.borderY = 64 if @inEditor
     @foColor.z       = 85
     @foColor.opacity = 0
     @foColor.refresh
     # Create foreground graphic sprite
     @foGraphic = AnimatedPlane.new(@viewport)
     @foGraphic.setBitmap(nil)
-    @foGraphic.borderX = 64 if @inEditor
-    @foGraphic.borderY = 64 if @inEditor
     @foGraphic.z       = 85
     @foGraphic.opacity = 0
     @foGraphic.refresh

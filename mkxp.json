@@ -20,12 +20,18 @@
     //
     // "rgssVersion": 1,
 
-
-    // Create a debug context and log
-    // OpenGL debug information to the console
-    // (default: disabled)
+    // Render using Metal instead of OpenGL, if possible. It should
+    // be far more reliable across all kinds of Macs.
     //
-    // "debugMode": false,
+    // Using Metal requires macOS 10.13+ and a compatible GPU.
+    // Any machine supporting 10.14+ or newer should automatically
+    // support Metal.
+    //
+    // Unless there's some kind of problem, you should really leave
+    // this on. OpenGL will cause trouble, such as blitting problems,
+    // the Steam overlay not working, and v-sync failing completely.
+
+    // "preferMetalRenderer": true,
 
 
     // Continuously print average FPS to console.
@@ -94,7 +100,6 @@
 
 
     // Enforce a static frame rate
-    // This option may be force-disabled at build time.
     // (0 = disabled)
     //
     // "fixedFramerate": 0,
@@ -209,7 +214,6 @@
 
     // Define raw scripts to be executed before the
     // actual Scripts.rxdata execution starts
-    // This option may be force-disabled at build time.
     // (default: none)
     //
     // "preloadScript": ["my_win32_wrapper.rb",
@@ -221,6 +225,7 @@
     // (default: enabled)
     //
     // "pathCache": true,
+
 
     // Add 'rtp1', 'rtp2.zip' and 'game.rgssad' to the
     // asset search path (multiple allowed)
@@ -346,6 +351,6 @@
       "z": "Special",
       "l": "(unused)",
       "r": "(unused)"
-    },
+    }
 
 }

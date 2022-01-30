@@ -73,6 +73,7 @@ class Game_Character
     @bob_height                = 0
     @wait_count                = 0
     @moved_this_frame          = false
+    @moveto_happened           = false
     @locked                    = false
     @prelock_direction         = 0
   end
@@ -375,6 +376,7 @@ class Game_Character
     @real_x = @x * Game_Map::REAL_RES_X
     @real_y = @y * Game_Map::REAL_RES_Y
     @prelock_direction = 0
+    @moveto_happened = true
     calculate_bush_depth
     triggerLeaveTile
   end

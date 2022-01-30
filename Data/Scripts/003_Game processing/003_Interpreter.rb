@@ -35,6 +35,8 @@ class Interpreter
     @child_interpreter  = nil     # child interpreter
     @branch             = {}      # branch data
     @buttonInput        = false
+    @hidden_choices     = []
+    @renamed_choices    = []
     end_follower_overrides
   end
   #-----------------------------------------------------------------------------

@@ -14,13 +14,11 @@ def pbFishingBegin
         pbUpdateSceneMap
       end
     end
-    $game_player.lock_pattern = false
   end
 end
 
 def pbFishingEnd
   if !pbCommonEvent(Settings::FISHING_END_COMMON_EVENT)
-    $game_player.lock_pattern = true
     4.times do |pattern|
       $game_player.pattern = pattern
       (Graphics.frame_rate / 20).times do

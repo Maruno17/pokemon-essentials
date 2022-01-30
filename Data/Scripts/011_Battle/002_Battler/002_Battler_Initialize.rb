@@ -105,13 +105,7 @@ class Battle::Battler
       @effects[PBEffects::GastroAcid]  = false if unstoppableAbility?
     else
       # These effects are passed on if Baton Pass is used
-      @stages[:ATTACK]          = 0
-      @stages[:DEFENSE]         = 0
-      @stages[:SPEED]           = 0
-      @stages[:SPECIAL_ATTACK]  = 0
-      @stages[:SPECIAL_DEFENSE] = 0
-      @stages[:ACCURACY]        = 0
-      @stages[:EVASION]         = 0
+      GameData::Stat.each_battle { |stat| @stages[stat.id] = 0 }
       @effects[PBEffects::AquaRing]          = false
       @effects[PBEffects::Confusion]         = 0
       @effects[PBEffects::Curse]             = false

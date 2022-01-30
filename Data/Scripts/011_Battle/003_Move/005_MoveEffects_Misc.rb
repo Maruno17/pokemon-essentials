@@ -528,8 +528,7 @@ class Battle::Move::UserMakeSubstitute < Battle::Move
       @battle.pbDisplay(_INTL("{1} already has a substitute!", user.pbThis))
       return true
     end
-    @subLife = user.totalhp / 4
-    @subLife = 1 if @subLife < 1
+    @subLife = [user.totalhp / 4, 1].max
     if user.hp <= @subLife
       @battle.pbDisplay(_INTL("But it does not have enough HP left to make a substitute!"))
       return true

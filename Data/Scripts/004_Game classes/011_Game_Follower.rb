@@ -151,7 +151,8 @@ class Game_Follower < Game_Event
     was_jumping = jumping?
     super
     if was_jumping && !jumping?
-      $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID, self.x, self.y, true, 1)
+      spriteset = $scene.spriteset(map_id)
+      spriteset&.addUserAnimation(Settings::DUST_ANIMATION_ID, self.x, self.y, true, 1)
     end
   end
 

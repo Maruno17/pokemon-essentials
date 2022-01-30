@@ -1,17 +1,13 @@
 =begin
 # TODO:
 
-Positions (Battle::ActivePosition)
-  PBEffects::HealingWish
-  PBEffects::LunarDance
-turnCount
-items (of foe trainers)
-initialItems       - Array of two arrays, each with one value per party index
-recycleItems       - Array of two arrays, each with one value per party index
-belch              - Array of two arrays, each with one value per party index
-corrosiveGas       - Array of two arrays, each with one value per party index
-first_poke_ball    - both for Ball Fetch
-poke_ball_failed   - both for Ball Fetch
+turnCount        - Is currently read-only, probably not worth being able to set
+initialItems     - Array of two arrays, each with one value per party index
+recycleItems     - Array of two arrays, each with one value per party index
+belch            - Array of two arrays, each with one value per party index
+corrosiveGas     - Array of two arrays, each with one value per party index
+first_poke_ball  - both for Ball Fetch
+poke_ball_failed - both for Ball Fetch
 
 View party screen for each trainer's team, be able to edit properties of Pokémon
 that aren't in battle.
@@ -38,7 +34,7 @@ MenuHandlers.add(:battle_debug_menu, :list_player_battlers, {
     cmds = []
     battle.allSameSideBattlers.each do |b|
       battlers.push(b)
-      text = "[#{b.index}] #{b.name} "
+      text = "[#{b.index}] #{b.name}"
       if b.pbOwnedByPlayer?
         text += " (yours)"
       else
@@ -64,7 +60,7 @@ MenuHandlers.add(:battle_debug_menu, :list_foe_battlers, {
     cmds = []
     battle.allOtherSideBattlers.each do |b|
       battlers.push(b)
-      cmds.push("[#{b.index}] #{b.name} ")
+      cmds.push("[#{b.index}] #{b.name}")
     end
     cmd = 0
     loop do
@@ -303,6 +299,42 @@ MenuHandlers.add(:battle_debug_menu, :opposing_side, {
   }
 })
 
+MenuHandlers.add(:battle_debug_menu, :position_effects, {
+  "name"        => _INTL("Battler Position Effects..."),
+  "parent"      => :field,
+  "description" => _INTL("Effects that apply to individual battler positions."),
+  "effect"      => proc { |battle|
+    positions = []
+    cmds = []
+    battle.positions.each_with_index do |position, i|
+      next if !position
+      positions.push(i)
+      battler = battle.battlers[i]
+      if battler && !battler.fainted?
+        text = "[#{i}] #{battler.name}"
+      else
+        text = _INTL("[#{i}] (empty)", i)
+      end
+      if battler.pbOwnedByPlayer?
+        text += " (yours)"
+      elsif battle.opposes?(i)
+        text += " (opposing)"
+      else
+        text += " (ally's)"
+      end
+      cmds.push(text)
+    end
+    cmd = 0
+    loop do
+      cmd = pbMessage("\\ts[]" + _INTL("Choose a battler position."), cmds, -1, nil, cmd)
+      break if cmd < 0
+      editor = Battle::DebugSetEffects.new(battle, :position, positions[cmd])
+      editor.update
+      editor.dispose
+    end
+  }
+})
+
 #===============================================================================
 # Trainer Options
 #===============================================================================
@@ -310,6 +342,58 @@ MenuHandlers.add(:battle_debug_menu, :trainers, {
   "name"        => _INTL("Trainer Options..."),
   "parent"      => :main,
   "description" => _INTL("Variables that apply to trainers.")
+})
+
+MenuHandlers.add(:battle_debug_menu, :trainer_items, {
+  "name"        => _INTL("NPC Trainer Items"),
+  "parent"      => :trainers,
+  "description" => _INTL("View and change the items each NPC trainer has access to."),
+  "effect"      => proc { |battle|
+    cmd = 0
+    loop do
+      # Find all NPC trainers and their items
+      commands = []
+      item_arrays = []
+      trainer_indices = []
+      if battle.opponent
+        battle.opponent.each_with_index do |trainer, i|
+          items = battle.items ? battle.items[i].clone : []
+          commands.push(_INTL("Opponent {1}: {2} ({3} items)", i + 1, trainer.full_name, items.length))
+          item_arrays.push(items)
+          trainer_indices.push([1, i])
+        end
+      end
+      if battle.player.length > 1
+        battle.player.each_with_index do |trainer, i|
+          next if i == 0   # Player
+          items = battle.ally_items ? battle.ally_items[i].clone : []
+          commands.push(_INTL("Ally {1}: {2} ({3} items)", i, trainer.full_name, items.length))
+          item_arrays.push(items)
+          trainer_indices.push([0, i])
+        end
+      end
+      if commands.length == 0
+        pbMessage("\\ts[]" + _INTL("There are no NPC trainers in this battle."))
+        break
+      end
+      # Choose a trainer
+      cmd = pbMessage("\\ts[]" + _INTL("Choose a trainer."), commands, -1, nil, cmd)
+      break if cmd < 0
+      # Get trainer's items
+      items = item_arrays[cmd]
+      indices = trainer_indices[cmd]
+      # Edit trainer's items
+      item_list_property = GameDataPoolProperty.new(:Item)
+      new_items = item_list_property.set(nil, items)
+      if indices[0] == 0   # Ally
+        battle.ally_items = [] if !battle.ally_items
+        battle.ally_items[indices[1]] = new_items
+      else   # Opponent
+        battle.items = [] if !battle.items
+        battle.items[indices[1]] = new_items
+      end
+    end
+  }
 })
 
 MenuHandlers.add(:battle_debug_menu, :mega_evolution, {

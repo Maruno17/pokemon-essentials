@@ -63,6 +63,10 @@ module GameData
       return pbGetMessageFromHash(MessageTypes::MoveDescriptions, @real_description)
     end
 
+    def has_flag?(flag)
+      return @flags.any? { |f| f.downcase == flag.downcase }
+    end
+
     def physical?
       return false if @base_damage == 0
       return @category == 0 if Settings::MOVE_CATEGORY_PER_MOVE

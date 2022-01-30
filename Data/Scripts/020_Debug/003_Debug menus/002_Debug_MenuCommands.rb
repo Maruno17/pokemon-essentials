@@ -787,6 +787,28 @@ MenuHandlers.add(:debug_menu, :toggle_pokedex, {
   }
 })
 
+MenuHandlers.add(:debug_menu, :toggle_box_link, {
+  "name"        => _INTL("Toggle Pokémon Box Link's Effect"),
+  "parent"      => :player_menu,
+  "description" => _INTL("Toggle Box Link's effect of accessing Pokémon storage via the party screen."),
+  "effect"      => proc {
+    $player.has_box_link = !$player.has_box_link
+    pbMessage(_INTL("Enabled Pokémon Box Link's effect.")) if $player.has_box_link
+    pbMessage(_INTL("Disabled Pokémon Box Link's effect.")) if !$player.has_box_link
+  }
+})
+
+MenuHandlers.add(:debug_menu, :toggle_exp_all, {
+  "name"        => _INTL("Toggle Exp. All's Effect"),
+  "parent"      => :player_menu,
+  "description" => _INTL("Toggle Exp. All's effect of giving Exp. to non-participants."),
+  "effect"      => proc {
+    $player.has_exp_all = !$player.has_exp_all
+    pbMessage(_INTL("Enabled Exp. All's effect.")) if $player.has_exp_all
+    pbMessage(_INTL("Disabled Exp. All's effect.")) if !$player.has_exp_all
+  }
+})
+
 MenuHandlers.add(:debug_menu, :set_player_character, {
   "name"        => _INTL("Set Player Character"),
   "parent"      => :player_menu,

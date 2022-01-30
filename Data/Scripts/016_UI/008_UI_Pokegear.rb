@@ -6,6 +6,9 @@ class PokegearButton < SpriteWrapper
   attr_reader :name
   attr_reader :selected
 
+  TEXT_BASE_COLOR = Color.new(248, 248, 248)
+  TEXT_SHADOW_COLOR = Color.new(40, 40, 40)
+
   def initialize(command, x, y, viewport = nil)
     super(viewport)
     @image = command[0]
@@ -18,7 +21,7 @@ class PokegearButton < SpriteWrapper
     end
     @contents = BitmapWrapper.new(@button.width, @button.height)
     self.bitmap = @contents
-    self.x = x
+    self.x = x - (@button.width / 2)
     self.y = y
     pbSetSystemFont(self.bitmap)
     refresh
@@ -42,7 +45,7 @@ class PokegearButton < SpriteWrapper
     rect.y = @button.height / 2 if @selected
     self.bitmap.blt(0, 0, @button.bitmap, rect)
     textpos = [
-      [@name, self.bitmap.width / 2, 4, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)]
+      [@name, rect.width / 2, (rect.height / 2) - 22, 2, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]
     ]
     pbDrawTextPositions(self.bitmap, textpos)
     imagepos = [
@@ -76,8 +79,9 @@ class PokemonPokegear_Scene
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
     end
     @commands.length.times do |i|
-      y = 196 - (@commands.length * 24) + (i * 48)
-      @sprites["button#{i}"] = PokegearButton.new(@commands[i], 118, y, @viewport)
+      @sprites["button#{i}"] = PokegearButton.new(@commands[i], Graphics.width / 2, 0, @viewport)
+      button_height = @sprites["button#{i}"].bitmap.height / 2
+      @sprites["button#{i}"].y = ((Graphics.height - (@commands.length * button_height)) / 2) + (i * button_height)
     end
     pbFadeInAndShow(@sprites) { pbUpdate }
   end

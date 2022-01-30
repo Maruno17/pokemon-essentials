@@ -341,7 +341,7 @@ Accuracy = 0
 TotalPP = 5
 Target = NearOther
 FunctionCode = HoopaRemoveProtectionsBypassSubstituteLowerUserDef1
-Flags = CanMirrorMove
+Flags = CanMirrorMove,CannotMetronome
 Description = Unleashes a barrage of multi-arm attacks, skipping protections. The user's Defense stat falls.
 #-------------------------------
 [FOULPLAY]
@@ -527,7 +527,7 @@ Accuracy = 95
 TotalPP = 15
 Target = AllNearFoes
 FunctionCode = LowerTargetSpAtk1
-Flags = CanProtect,CanMirrorMove,Sound
+Flags = CanProtect,CanMirrorMove,Sound,CannotMetronome
 EffectChance = 100
 Description = The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease.
 #-------------------------------
@@ -1023,7 +1023,7 @@ Accuracy = 100
 TotalPP = 15
 Target = NearOther
 FunctionCode = NormalMovesBecomeElectric
-Flags = Contact,CanProtect,CanMirrorMove,Punching
+Flags = Contact,CanProtect,CanMirrorMove,Punching,CannotMetronome
 Description = The user attacks with electrically charged fists. Normal-type moves become Electric-type.
 #-------------------------------
 [THUNDERBOLT]
@@ -1309,7 +1309,7 @@ Accuracy = 90
 TotalPP = 5
 Target = NearOther
 FunctionCode = RecoilHalfOfDamageDealt
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = Fires a powerful beam of light drawn from the Eternal Flower. It also damages the user a lot.
 #-------------------------------
 [FLEURCANNON]
@@ -1321,7 +1321,7 @@ Accuracy = 90
 TotalPP = 5
 Target = NearOther
 FunctionCode = LowerUserSpAtk2
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user unleashes a strong beam. The attack's recoil harshly lowers the user's Sp. Atk stat.
 #-------------------------------
 [MOONBLAST]
@@ -1671,7 +1671,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = UseTargetDefenseInsteadOfTargetSpDef
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user cuts with its long horn. The odd power contained in it does physical damage to the foe.
 #-------------------------------
 [SKYUPPERCUT]
@@ -2048,7 +2048,7 @@ Accuracy = 95
 TotalPP = 5
 Target = NearOther
 FunctionCode = LowerUserDefSpDefSpd1
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = With a fiery forehead, the user hurls itself at the foe. It lowers the user's Defense, Sp. Def, and Speed.
 #-------------------------------
 [BLASTBURN]
@@ -2084,7 +2084,7 @@ Accuracy = 100
 TotalPP = 5
 Target = AllNearOthers
 FunctionCode = UserLosesHalfOfTotalHPExplosive
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks everything by causing its own head to explode. This also damages the user.
 #-------------------------------
 [SHELLTRAP]
@@ -2805,7 +2805,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = UserStealTargetPositiveStatStages
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user hides in the target's shadow, steals the target's stat boosts, and then attacks.
 #-------------------------------
 [SHADOWBONE]
@@ -3568,7 +3568,7 @@ Accuracy = 100
 TotalPP = 10
 Target = AllNearFoes
 FunctionCode = HitsTargetInSkyGroundsTarget
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = This move also hits Pokémon that are in the air. Those Pokémon are knocked down to the ground.
 #-------------------------------
 [THOUSANDWAVES]
@@ -3580,7 +3580,7 @@ Accuracy = 100
 TotalPP = 10
 Target = AllNearFoes
 FunctionCode = TrapTargetInBattle
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks with a wave that crawls along the ground. Those it hits can't flee from battle.
 #-------------------------------
 [DIG]
@@ -3804,7 +3804,7 @@ Accuracy = 90
 TotalPP = 5
 Target = NearOther
 FunctionCode = TwoTurnAttackParalyzeTarget
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 30
 Description = On the second turn, the user hits the foe with electrically charged ice. It may also paralyze the foe.
 #-------------------------------
@@ -3817,7 +3817,7 @@ Accuracy = 90
 TotalPP = 5
 Target = NearOther
 FunctionCode = TwoTurnAttackBurnTarget
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 30
 Description = On the second turn, an ultracold, freezing wind surrounds the foe. This may leave it with a burn.
 #-------------------------------
@@ -4206,7 +4206,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = TypeDependsOnUserDrive
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user fires a beam of light at its target. The type changes depending on the Drive the user holds.
 #-------------------------------
 [THRASH]
@@ -4440,7 +4440,7 @@ Accuracy = 100
 TotalPP = 10
 Target = AllNearFoes
 FunctionCode = SleepTargetChangeUserMeloettaForm
-Flags = CanProtect,CanMirrorMove,Sound
+Flags = CanProtect,CanMirrorMove,Sound,CannotMetronome
 EffectChance = 10
 Description = An ancient song appeals to the hearts of those listening. It may also induce sleep.
 #-------------------------------
@@ -6467,7 +6467,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = CategoryDependsOnHigherDamageIgnoreTargetAbility
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks with a pillar of light. This move the higher of the user's Attack or Sp. Atk stat.
 #-------------------------------
 [PSYSTRIKE]
@@ -6529,7 +6529,7 @@ Accuracy = 0
 TotalPP = 5
 Target = NearOther
 FunctionCode = RemoveProtectionsBypassSubstitute
-Flags = CanMirrorMove
+Flags = CanMirrorMove,CannotMetronome
 Description = Using a hyperspace hole, the user appears right next to the target and strikes. Skips protections.
 #-------------------------------
 [PSYSHOCK]
@@ -7108,7 +7108,7 @@ Accuracy = 95
 TotalPP = 5
 Target = AllNearFoes
 FunctionCode = RaiseUserDefense2
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 50
 Description = The user whips up a storm of diamonds to damage foes. This may also sharply raise the user's Defense stat.
 #-------------------------------
@@ -7621,7 +7621,7 @@ Accuracy = 95
 TotalPP = 5
 Target = NearOther
 FunctionCode = BurnTarget
-Flags = CanProtect,CanMirrorMove,ThawsUser
+Flags = CanProtect,CanMirrorMove,ThawsUser,CannotMetronome
 EffectChance = 30
 Description = The user immerses the target in superheated steam. This may also leave the target with a burn.
 #-------------------------------

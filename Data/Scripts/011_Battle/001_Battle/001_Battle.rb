@@ -105,7 +105,7 @@ class Battle
     @field             = ActiveField.new    # Whole field (gravity/rooms)
     @sides             = [ActiveSide.new,   # Player's side
                           ActiveSide.new]   # Foe's side
-    @positions         = []                         # Battler positions
+    @positions         = []                 # Battler positions
     @battlers          = []
     @sideSizes         = [1, 1]   # Single battle, 1v1
     @backdrop          = ""

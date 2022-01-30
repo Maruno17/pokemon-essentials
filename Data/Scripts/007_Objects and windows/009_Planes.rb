@@ -49,11 +49,19 @@ class AnimatedPlane < Plane
   end
 
   def set_panorama(file, hue = 0)
-    setBitmap("Graphics/Panoramas/" + file, hue)
+    if file.is_a?(String) && file.length > 0
+      setBitmap("Graphics/Panoramas/" + file, hue)
+    else
+      clear_bitmap
+    end
   end
 
   def set_fog(file, hue = 0)
-    setBitmap("Graphics/Fogs/" + file, hue)
+    if file.is_a?(String) && file.length > 0
+      setBitmap("Graphics/Fogs/" + file, hue)
+    else
+      clear_bitmap
+    end
   end
 
   private
