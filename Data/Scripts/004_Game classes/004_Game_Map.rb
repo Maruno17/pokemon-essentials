@@ -96,6 +96,7 @@ class Game_Map
   def encounter_step; return @map.encounter_step; end
   def data;           return @map.data;           end
   def tileset_id;     return @map.tileset_id;     end
+  def bgm;            return @map.bgm;            end
 
   def name
     return pbGetMapNameFromId(@map_id)
@@ -104,37 +105,32 @@ class Game_Map
   def metadata
     return GameData::MapMetadata.try_get(@map_id)
   end
+
+  #-----------------------------------------------------------------------------
+  # Returns the name of this map's BGM. If it's night time, returns the night
+  # version of the BGM (if it exists).
+  #-----------------------------------------------------------------------------
+  def bgm_name
+    if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + @map.bgm.name + "_n")
+      return @map.bgm.name + "_n"
+    end
+    return @map.bgm.name
+  end
   #-----------------------------------------------------------------------------
   # * Autoplays background music
   #   Plays music called "[normal BGM]_n" if it's night time and it exists
   #-----------------------------------------------------------------------------
   def autoplayAsCue
-    if @map.autoplay_bgm
-      if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + @map.bgm.name + "_n")
-        pbCueBGM(@map.bgm.name + "_n", 1.0, @map.bgm.volume, @map.bgm.pitch)
-      else
-        pbCueBGM(@map.bgm, 1.0)
-      end
-    end
-    if @map.autoplay_bgs
-      pbBGSPlay(@map.bgs)
-    end
+    pbCueBGM(bgm_name, 1.0, @map.bgm.volume, @map.bgm.pitch) if @map.autoplay_bgm
+    pbBGSPlay(@map.bgs) if @map.autoplay_bgs
   end
   #-----------------------------------------------------------------------------
   # * Plays background music
   #   Plays music called "[normal BGM]_n" if it's night time and it exists
   #-----------------------------------------------------------------------------
   def autoplay
-    if @map.autoplay_bgm
-      if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + @map.bgm.name + "_n")
-        pbBGMPlay(@map.bgm.name + "_n", @map.bgm.volume, @map.bgm.pitch)
-      else
-        pbBGMPlay(@map.bgm)
-      end
-    end
-    if @map.autoplay_bgs
-      pbBGSPlay(@map.bgs)
-    end
+    pbBGMPlay(bgm_name, @map.bgm.volume, @map.bgm.pitch) if @map.autoplay_bgm
+    pbBGSPlay(@map.bgs) if @map.autoplay_bgs
   end
 
   def valid?(x, y)
