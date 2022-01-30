@@ -132,8 +132,8 @@ BaseDamage = 65
 Accuracy = 100
 TotalPP = 20
 Target = NearOther
-FunctionCode = FlinchTargetTrampleMinimize
-Flags = Contact,CanProtect,CanMirrorMove
+FunctionCode = FlinchTarget
+Flags = Contact,CanProtect,CanMirrorMove,TramplesMinimize
 EffectChance = 30
 Description = The user crushes its foes by rolling over them. This attack may make the target flinch.
 #-------------------------------
@@ -823,8 +823,8 @@ BaseDamage = 100
 Accuracy = 75
 TotalPP = 10
 Target = NearOther
-FunctionCode = FlinchTargetTrampleMinimize
-Flags = Contact,CanProtect,CanMirrorMove
+FunctionCode = FlinchTarget
+Flags = Contact,CanProtect,CanMirrorMove,TramplesMinimize
 EffectChance = 20
 Description = The user tackles the foe while exhibiting overwhelming menace. It may also make the target flinch.
 #-------------------------------
@@ -1623,7 +1623,7 @@ Accuracy = 95
 TotalPP = 10
 Target = Other
 FunctionCode = EffectivenessIncludesFlyingType
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,TramplesMinimize
 Description = The user dives down onto the target from the sky. This move is Fighting and Flying type simultaneously.
 #-------------------------------
 [HAMMERARM]
@@ -2439,7 +2439,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = PowerHigherWithUserHeavierThanTarget
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,TramplesMinimize
 Description = The user slams the foe with its flaming body. The heavier the user is, the greater the damage.
 #-------------------------------
 [SUNNYDAY]
@@ -4326,8 +4326,8 @@ BaseDamage = 85
 Accuracy = 100
 TotalPP = 15
 Target = NearOther
-FunctionCode = ParalyzeTargetTrampleMinimize
-Flags = Contact,CanProtect,CanMirrorMove
+FunctionCode = ParalyzeTarget
+Flags = Contact,CanProtect,CanMirrorMove,TramplesMinimize
 EffectChance = 30
 Description = The user drops onto the target with its full body weight. It may leave the target with paralysis.
 #-------------------------------
@@ -4563,8 +4563,8 @@ BaseDamage = 65
 Accuracy = 100
 TotalPP = 20
 Target = NearOther
-FunctionCode = FlinchTargetTrampleMinimize
-Flags = Contact,CanProtect,CanMirrorMove
+FunctionCode = FlinchTarget
+Flags = Contact,CanProtect,CanMirrorMove,TramplesMinimize
 EffectChance = 30
 Description = The target is stomped with a big foot. It may also make the target flinch.
 #-------------------------------
@@ -7399,7 +7399,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = HitTwoTimesFlinchTarget
-Flags = Contact,CanProtect,Punching
+Flags = Contact,CanProtect,Punching,TramplesMinimize
 EffectChance = 30
 Description = The user rotates, centering the hex nut in its chest, and then strikes twice. May cause flinching.
 #-------------------------------
@@ -7487,7 +7487,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = PowerHigherWithUserHeavierThanTarget
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,TramplesMinimize
 Description = The user slams into the foe with its heavy body. The heavier the user, the greater the damage.
 #-------------------------------
 [METALBURST]

@@ -132,9 +132,9 @@ class Battle::Move
   def pulseMove?;         return @flags.any? { |f| f[/^Pulse$/i] };               end
   def bombMove?;          return @flags.any? { |f| f[/^Bomb$/i] };                end
   def danceMove?;         return @flags.any? { |f| f[/^Dance$/i] };               end
+  # Causes perfect accuracy and double damage if target used Minimize. Perfect accuracy only with Gen 6+ mechanics.
+  def tramplesMinimize?;  return @flags.any? { |f| f[/^TramplesMinimize$/i] };    end
 
-  # Causes perfect accuracy (param=1) and double damage (param=2).
-  def tramplesMinimize?(_param = 1); return false; end
   def nonLethal?(_user, _target); return false; end   # For False Swipe
 
   def ignoresSubstitute?(user)   # user is the Pokémon using this move
