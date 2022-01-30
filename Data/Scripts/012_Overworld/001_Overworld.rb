@@ -806,3 +806,17 @@ def pbReceiveItem(item, quantity = 1)
   end
   return false   # Can't add the item
 end
+
+#===============================================================================
+# Buying a prize item from the Game Corner
+#===============================================================================
+def pbBuyPrize(item, quantity = 1)
+  item = GameData::Item.get(item)
+  return false if !item || quantity < 1
+  item_name = (quantity > 1) ? item.name_plural : item.name
+  pocket = item.pocket
+  return false if !$bag.add(item, quantity)
+  pbMessage(_INTL("\\CNYou put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+                  item_name, pocket, PokemonBag.pocket_names[pocket - 1]))
+  return true
+end

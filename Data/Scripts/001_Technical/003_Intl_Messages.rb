@@ -758,8 +758,8 @@ def _ISPRINTF(*arg)
   return string
 end
 
-def _I(str)
-  return _MAPINTL($game_map.map_id, str)
+def _I(str, *arg)
+  return _MAPINTL($game_map.map_id, str, *arg)
 end
 
 def _MAPINTL(mapid, *arg)
