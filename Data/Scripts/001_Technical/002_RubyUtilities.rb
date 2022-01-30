@@ -51,7 +51,7 @@ class String
     return new_string
   end
 
-  def is_numeric?
+  def numeric?
     return self.scan(/^[+-]?([0-9]+)(?:\.[0-9]+)?$/).count > 1
   end
 end
