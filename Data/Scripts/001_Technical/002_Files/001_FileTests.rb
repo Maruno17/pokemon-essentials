@@ -46,9 +46,10 @@ class Dir
   #  Creates all the required directories for filename path
   #-----------------------------------------------------------------------------
   def self.create(path)
-    path.gsub!("\\", "/") # Windows compatibility
+    path.gsub!("\\", "/")   # Windows compatibility
     # get path tree
-    dirs = path.split("/"); full = ""
+    dirs = path.split("/")
+    full = ""
     for dir in dirs
       full += dir + "/"
       # creates directories
