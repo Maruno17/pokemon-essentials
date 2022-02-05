@@ -831,7 +831,7 @@ module PluginManager
     #  call back original method
     #---------------------------------------------------------------------------
     def aliased_method(*args)
-      original_function = "#{__callee__}#{self.class.alias_extension}"
+      original_function = "#{caller_locations(1,1)[0].label}#{self.class.alias_extension}"
 
       return send(original_function, *args) if self.respond_to?(original_function)
     end
