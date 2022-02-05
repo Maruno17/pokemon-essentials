@@ -175,7 +175,7 @@ class Color
         hex = args.first.to_s(16)
       elsif args.first.is_a?(String)
         try_rgb_format = args.first.split(',')
-        return init_original(*try_rgb_format) if try_rgb_format.length.between?(3, 4)
+        return init_original(*try_rgb_format.map(&:to_i)) if try_rgb_format.length.between?(3, 4)
         hex = args.first.delete('#')
       end
       pbPrintException("Wrong type of argument given!") if !hex
