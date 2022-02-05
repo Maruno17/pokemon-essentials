@@ -779,6 +779,7 @@ module PluginManager
       #-------------------------------------------------------------------------
       def alias_with_module(alias_module, extension = 'old')
         module_functions = alias_module.instance_methods(false).private_methods(false)
+        module_functions.concat(private_instance_methods(false))
         name_pattern = /[a-zA-Z0-9_]+/
         misc_pattern = /[^a-zA-Z0-9_]+/
 
@@ -787,18 +788,52 @@ module PluginManager
           next if self.method_defined?(aliased_name) || self.private_method_defined?(aliased_name)
           self.alias_method(aliased_name, method_name)
         end
+
+        map_class_methods_for_alias(alias_module).sort.each do |method_name|
+          aliased_name = "#{method_name[name_pattern]}_#{extension}#{method_name[misc_pattern]}"
+          next if singleton_class.method_defined?(aliased_name)
+          self.singleton_class.alias_method(aliased_name, method_name)
+        end
+
         self.prepend(alias_module)
+        self.singleton_class.prepend(alias_module::ClassMethods)
+        @alias_extension = "_#{extension}"
       end
       #-------------------------------------------------------------------------
       #  get list of all defined instance and private methods
       #-------------------------------------------------------------------------
       def map_methods_for_alias(alias_module)
         module_methods = alias_module.instance_methods(false).concat(alias_module.private_instance_methods(false))
-        all_methods = self.instance_methods(false).concat(self.private_methods(false))
+        all_methods = self.instance_methods(false).concat(self.private_instance_methods(false))
+        method_collection = all_methods.select { |method_name| module_methods.include?(method_name) }
+        return method_collection
+      end
+      #---------------------------------------------------------------------------
+      #  get list of all class methods (doesn't include private class methods)
+      #---------------------------------------------------------------------------
+      def map_class_methods_for_alias(alias_module)
+        module_methods = alias_module::ClassMethods.instance_methods(false)
+        all_methods = self.singleton_class.instance_methods(false)
         method_collection = all_methods.select { |method_name| module_methods.include?(method_name) }
         return method_collection
       end
       #-------------------------------------------------------------------------
+      #  get alias extension
+      #-------------------------------------------------------------------------
+      def alias_extension
+        @alias_extension ||= nil
+      end
+      #-------------------------------------------------------------------------
+    end
+    #---------------------------------------------------------------------------
+    private
+    #---------------------------------------------------------------------------
+    #  call back original method
+    #---------------------------------------------------------------------------
+    def aliased_method(*args)
+      original_function = "#{__callee__}#{self.class.alias_extension}"
+
+      return send(original_function, *args) if self.respond_to?(original_function)
     end
     #---------------------------------------------------------------------------
   end
