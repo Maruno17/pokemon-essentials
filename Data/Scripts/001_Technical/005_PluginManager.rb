@@ -710,10 +710,7 @@ module PluginManager
         # try to run the code
         begin
           eval(code, TOPLEVEL_BINDING, fname)
-          next if echoed_plugins.include?(name)
-          name_str    = Console.markup_style(name, text: :light_red)
-          version_str = Console.markup_style("v#{meta[:version]}", text: :purple)
-          Console.echoln_li "Loaded plugin: #{name_str} #{version_str}"
+          Console.echoln_li "Loaded plugin: '#{name}' (ver. #{meta[:version]})" if !echoed_plugins.include?(name)
           echoed_plugins.push(name)
         rescue Exception   # format error message to display
           self.pluginErrorMsg(name, sname)
