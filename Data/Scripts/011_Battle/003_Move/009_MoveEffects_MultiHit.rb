@@ -18,8 +18,8 @@ end
 # Hits twice. Causes the target to flinch. (Double Iron Bash)
 #===============================================================================
 class Battle::Move::HitTwoTimesFlinchTarget < Battle::Move::FlinchTarget
-  def multiHitMove?;                return true;                                end
-  def pbNumHits(user, targets);     return 2;                                   end
+  def multiHitMove?;            return true; end
+  def pbNumHits(user, targets); return 2;    end
 end
 
 #===============================================================================
