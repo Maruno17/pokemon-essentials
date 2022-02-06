@@ -726,30 +726,34 @@ module Compiler
     Graphics.update
   end
 
+  def compile_pbs_files
+    compile_town_map
+    compile_connections
+    compile_phone
+    compile_types
+    compile_abilities
+    compile_moves             # Depends on Type
+    compile_items             # Depends on Move
+    compile_berry_plants      # Depends on Item
+    compile_pokemon           # Depends on Move, Item, Type, Ability
+    compile_pokemon_forms     # Depends on Species, Move, Item, Type, Ability
+    compile_pokemon_metrics   # Depends on Species
+    compile_shadow_pokemon    # Depends on Species
+    compile_regional_dexes    # Depends on Species
+    compile_ribbons
+    compile_encounters        # Depends on Species
+    compile_trainer_types
+    compile_trainers          # Depends on Species, Item, Move
+    compile_trainer_lists     # Depends on TrainerType
+    compile_metadata          # Depends on TrainerType
+    compile_map_metadata
+  end
+
   def compile_all(mustCompile)
     return if !mustCompile
     FileLineData.clear
     Console.echo_h1 _INTL("Starting full compile")
-    compile_town_map               # No dependencies
-    compile_connections            # No dependencies
-    compile_phone                  # No dependencies
-    compile_types                  # No dependencies
-    compile_abilities              # No dependencies
-    compile_moves                  # Depends on Type
-    compile_items                  # Depends on Move
-    compile_berry_plants           # Depends on Item
-    compile_pokemon                # Depends on Move, Item, Type, Ability
-    compile_pokemon_forms          # Depends on Species, Move, Item, Type, Ability
-    compile_pokemon_metrics        # Depends on Species
-    compile_shadow_pokemon         # Depends on Species
-    compile_regional_dexes         # Depends on Species
-    compile_ribbons                # No dependencies
-    compile_encounters             # Depends on Species
-    compile_trainer_types          # No dependencies
-    compile_trainers               # Depends on Species, Item, Move
-    compile_trainer_lists          # Depends on TrainerType
-    compile_metadata               # Depends on TrainerType
-    compile_map_metadata           # No dependencies
+    compile_pbs_files
     compile_animations
     compile_trainer_events(mustCompile)
     Console.echo_li _INTL("Saving messages...")
