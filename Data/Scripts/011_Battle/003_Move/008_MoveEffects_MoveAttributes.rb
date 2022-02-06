@@ -307,14 +307,8 @@ end
 
 #===============================================================================
 # Power increases the heavier the user is than the target. (Heat Crash, Heavy Slam)
-# Does double damage and has perfect accuracy if the target is Minimized.
 #===============================================================================
 class Battle::Move::PowerHigherWithUserHeavierThanTarget < Battle::Move
-  def tramplesMinimize?(param = 1)
-    return true if Settings::MECHANICS_GENERATION >= 7   # Perfect accuracy and double damage
-    return super
-  end
-
   def pbBaseDamage(baseDmg, user, target)
     ret = 40
     n = (user.pbWeight / target.pbWeight).floor
@@ -1113,16 +1107,9 @@ end
 
 #===============================================================================
 # Type effectiveness is multiplied by the Flying-type's effectiveness against
-# the target. Does double damage and has perfect accuracy if the target is
-# Minimized. (Flying Press)
+# the target. (Flying Press)
 #===============================================================================
 class Battle::Move::EffectivenessIncludesFlyingType < Battle::Move
-  def tramplesMinimize?(param = 1)
-    return true if param == 1 && Settings::MECHANICS_GENERATION >= 6   # Perfect accuracy
-    return true if param == 2   # Double damage
-    return super
-  end
-
   def pbCalcTypeModSingle(moveType, defType, user, target)
     ret = super
     if GameData::Type.exists?(:FLYING)

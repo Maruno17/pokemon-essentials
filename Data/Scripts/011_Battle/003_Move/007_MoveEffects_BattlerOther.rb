@@ -170,18 +170,6 @@ class Battle::Move::ParalyzeTargetIfNotTypeImmune < Battle::Move::ParalyzeTarget
 end
 
 #===============================================================================
-# Paralyzes the target. Does double damage and has perfect accuracy if target is
-# Minimized. (Body Slam (Gen 6+))
-#===============================================================================
-class Battle::Move::ParalyzeTargetTrampleMinimize < Battle::Move::ParalyzeTarget
-  def tramplesMinimize?(param = 1)
-    return true if param == 1 && Settings::MECHANICS_GENERATION >= 6   # Perfect accuracy
-    return true if param == 2   # Double damage
-    return super
-  end
-end
-
-#===============================================================================
 # Paralyzes the target. Accuracy perfect in rain, 50% in sunshine. Hits some
 # semi-invulnerable targets. (Thunder)
 #===============================================================================
@@ -545,18 +533,6 @@ class Battle::Move::FlinchTarget < Battle::Move
   def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
     target.pbFlinch(user)
-  end
-end
-
-#===============================================================================
-# Causes the target to flinch. Does double damage and has perfect accuracy if
-# the target is Minimized. (Dragon Rush (Gen 6+), Steamroller, Stomp)
-#===============================================================================
-class Battle::Move::FlinchTargetTrampleMinimize < Battle::Move::FlinchTarget
-  def tramplesMinimize?(param = 1)
-    return true if param == 1 && Settings::MECHANICS_GENERATION >= 6   # Perfect accuracy
-    return true if param == 2   # Double damage
-    return super
   end
 end
 

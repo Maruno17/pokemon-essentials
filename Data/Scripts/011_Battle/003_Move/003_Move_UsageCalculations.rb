@@ -94,7 +94,7 @@ class Battle::Move
   def pbAccuracyCheck(user, target)
     # "Always hit" effects and "always hit" accuracy
     return true if target.effects[PBEffects::Telekinesis] > 0
-    return true if target.effects[PBEffects::Minimize] && tramplesMinimize?(1)
+    return true if target.effects[PBEffects::Minimize] && tramplesMinimize? && Settings::MECHANICS_GENERATION >= 6
     baseAcc = pbBaseAccuracy(user, target)
     return true if baseAcc == 0
     # Calculate all multiplier effects
@@ -479,7 +479,7 @@ class Battle::Move
       end
     end
     # Minimize
-    if target.effects[PBEffects::Minimize] && tramplesMinimize?(2)
+    if target.effects[PBEffects::Minimize] && tramplesMinimize?
       multipliers[:final_damage_multiplier] *= 2
     end
     # Move-specific base damage modifiers

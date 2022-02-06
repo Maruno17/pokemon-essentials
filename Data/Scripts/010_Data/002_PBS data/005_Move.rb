@@ -401,8 +401,6 @@ module GameData
       when "007"
         if data[:id] == :THUNDERWAVE
           new_code = "ParalyzeTargetIfNotTypeImmune"
-        elsif data[:id] == :BODYSLAM && Settings::MECHANICS_GENERATION >= 6
-          new_code = "ParalyzeTargetTrampleMinimize"
         else
           new_code = "ParalyzeTarget"
         end
@@ -413,8 +411,7 @@ module GameData
       when "00C" then new_code = "FreezeTarget"
       when "00D" then new_code = "FreezeTargetAlwaysHitsInHail"
       when "00E" then new_code = "FreezeFlinchTarget"
-      when "00F" then new_code = "FlinchTarget"
-      when "010" then new_code = "FlinchTargetTrampleMinimize"
+      when "00F", "010" then new_code = "FlinchTarget"
       when "011" then new_code = "FlinchTargetFailsIfUserNotAsleep"
       when "012" then new_code = "FlinchTargetFailsIfNotUserFirstTurn"
       when "013", "014" then new_code = "ConfuseTarget"
