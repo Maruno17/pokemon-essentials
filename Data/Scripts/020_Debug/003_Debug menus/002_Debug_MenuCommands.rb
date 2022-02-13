@@ -368,7 +368,7 @@ MenuHandlers.add(:debug_menu, :reset_trainers, {
   "description" => _INTL("Turn off Self Switches A and B for all events with \"Trainer\" in their name."),
   "effect"      => proc {
     if $game_map
-      $game_map.events.values.each do |event|
+      $game_map.events.each_value do |event|
         if event.name[/trainer/i]
           $game_self_switches[[$game_map.map_id, event.id, "A"]] = false
           $game_self_switches[[$game_map.map_id, event.id, "B"]] = false

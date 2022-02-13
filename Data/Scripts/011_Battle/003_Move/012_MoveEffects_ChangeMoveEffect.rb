@@ -762,7 +762,7 @@ class Battle::Move::UseLastMoveUsedByTarget < Battle::Move
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if !target.lastRegularMoveUsed ||
-       !GameData::Move.get(target.lastRegularMoveUsed).flags.any? { |f| f[/^CanMirrorMove$/i] }
+       GameData::Move.get(target.lastRegularMoveUsed).flags.none? { |f| f[/^CanMirrorMove$/i] }
       @battle.pbDisplay(_INTL("The mirror move failed!")) if show_message
       return true
     end

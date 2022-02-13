@@ -123,16 +123,15 @@ class SpritePositioner
       @sprites["pokemon_#{i}"].y = pos[1]
       metrics_data.apply_metrics_to_sprite(@sprites["pokemon_#{i}"], i)
       @sprites["pokemon_#{i}"].visible = true
-      if i == 1
-        @sprites["shadow_1"].x = pos[0]
-        @sprites["shadow_1"].y = pos[1]
-        if @sprites["shadow_1"].bitmap
-          @sprites["shadow_1"].x -= @sprites["shadow_1"].bitmap.width / 2
-          @sprites["shadow_1"].y -= @sprites["shadow_1"].bitmap.height / 2
-        end
-        metrics_data.apply_metrics_to_sprite(@sprites["shadow_1"], i, true)
-        @sprites["shadow_1"].visible = true
+      next if i != 1
+      @sprites["shadow_1"].x = pos[0]
+      @sprites["shadow_1"].y = pos[1]
+      if @sprites["shadow_1"].bitmap
+        @sprites["shadow_1"].x -= @sprites["shadow_1"].bitmap.width / 2
+        @sprites["shadow_1"].y -= @sprites["shadow_1"].bitmap.height / 2
       end
+      metrics_data.apply_metrics_to_sprite(@sprites["shadow_1"], i, true)
+      @sprites["shadow_1"].visible = true
     end
   end
 

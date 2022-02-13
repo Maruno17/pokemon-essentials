@@ -44,7 +44,7 @@ def pbEntryScreen(*arg)
     # Set party
     pbBattleChallenge.setParty(ret) if ret
     # Continue (return true) if Pokémon were chosen
-    retval = (ret != nil && ret.length > 0)
+    retval = (ret && ret.length > 0)
   }
   return retval
 end

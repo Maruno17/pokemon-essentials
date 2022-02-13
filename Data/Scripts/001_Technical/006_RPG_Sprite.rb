@@ -92,7 +92,7 @@ class SpriteAnimation
   def dispose_animation
     return if @_animation_sprites.nil?
     sprite = @_animation_sprites[0]
-    if sprite != nil
+    if sprite
       @@_reference_count[sprite.bitmap] -= 1
       if @@_reference_count[sprite.bitmap] == 0
         sprite.bitmap.dispose
@@ -108,7 +108,7 @@ class SpriteAnimation
   def dispose_loop_animation
     return if @_loop_animation_sprites.nil?
     sprite = @_loop_animation_sprites[0]
-    if sprite != nil
+    if sprite
       @@_reference_count[sprite.bitmap] -= 1
       if @@_reference_count[sprite.bitmap] == 0
         sprite.bitmap.dispose
@@ -122,7 +122,7 @@ class SpriteAnimation
   end
 
   def active?
-    return @_loop_animation_sprites != nil || @_animation_sprites != nil
+    return @_loop_animation_sprites || @_animation_sprites
   end
 
   def effect?
@@ -130,7 +130,7 @@ class SpriteAnimation
   end
 
   def update
-    if @_animation != nil
+    if @_animation
       quick_update = true
       if Graphics.frame_count % @_animation_frame_skip == 0
         @_animation_duration -= 1
@@ -138,7 +138,7 @@ class SpriteAnimation
       end
       update_animation(quick_update)
     end
-    if @_loop_animation != nil
+    if @_loop_animation
       quick_update = (Graphics.frame_count % @_loop_animation_frame_skip != 0)
       update_loop_animation(quick_update)
       if !quick_update
@@ -180,7 +180,7 @@ class SpriteAnimation
     sprite_x = 320
     sprite_y = 240
     if position == 3
-      if self.viewport != nil
+      if self.viewport
         sprite_x = self.viewport.rect.width / 2
         sprite_y = self.viewport.rect.height - 160
       end
@@ -194,7 +194,7 @@ class SpriteAnimation
       sprite = sprites[i]
       pattern = cell_data[i, 0]
       if sprite.nil? || pattern.nil? || pattern == -1
-        sprite.visible = false if sprite != nil
+        sprite.visible = false if sprite
         next
       end
       sprite.x = sprite_x + cell_data[i, 1]
@@ -232,9 +232,7 @@ class SpriteAnimation
       when 1
         self.flash(timing.flash_color, timing.flash_duration * 2)
       when 2
-        if self.viewport != nil
-          self.viewport.flash(timing.flash_color, timing.flash_duration * 2)
-        end
+        self.viewport.flash(timing.flash_color, timing.flash_duration * 2) if self.viewport
       when 3
         self.flash(nil, timing.flash_duration * 2)
       end
@@ -244,30 +242,22 @@ class SpriteAnimation
   def x=(x)
     sx = x - self.x
     return if sx == 0
-    if @_animation_sprites != nil
-      16.times do |i|
-        @_animation_sprites[i].x += sx
-      end
+    if @_animation_sprites
+      16.times { |i| @_animation_sprites[i].x += sx }
     end
-    if @_loop_animation_sprites != nil
-      16.times do |i|
-        @_loop_animation_sprites[i].x += sx
-      end
+    if @_loop_animation_sprites
+      16.times { |i| @_loop_animation_sprites[i].x += sx }
     end
   end
 
   def y=(y)
     sy = y - self.y
     return if sy == 0
-    if @_animation_sprites != nil
-      16.times do |i|
-        @_animation_sprites[i].y += sy
-      end
+    if @_animation_sprites
+      16.times { |i| @_animation_sprites[i].y += sy }
     end
-    if @_loop_animation_sprites != nil
-      16.times do |i|
-        @_loop_animation_sprites[i].y += sy
-      end
+    if @_loop_animation_sprites
+      16.times { |i| @_loop_animation_sprites[i].y += sy }
     end
   end
 end

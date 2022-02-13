@@ -9,7 +9,7 @@
 # of them in order to convert planted berry data properly.
 SaveData.register_conversion(:v19_2_fix_planted_berry_numerical_ids) do
   essentials_version 19.2
-  display_title 'Fixing berry plant IDs data'
+  display_title "Fixing berry plant IDs data"
   to_value :global_metadata do |global|
     berry_conversion = {
       389 => :CHERIBERRY,
@@ -100,7 +100,7 @@ end
 
 SaveData.register_conversion(:v20_refactor_planted_berries_data) do
   essentials_version 20
-  display_title 'Updating berry plant data format'
+  display_title "Updating berry plant data format"
   to_value :global_metadata do |global|
     if global.eventvars
       global.eventvars.each_pair do |key, value|
@@ -144,7 +144,7 @@ end
 
 SaveData.register_conversion(:v20_refactor_follower_data) do
   essentials_version 20
-  display_title 'Updating follower data format'
+  display_title "Updating follower data format"
   to_value :global_metadata do |global|
     # NOTE: dependentEvents is still defined in class PokemonGlobalMetadata just
     #       for the sake of this conversion. It will be removed in future.
@@ -167,7 +167,7 @@ end
 
 SaveData.register_conversion(:v20_refactor_day_care_variables) do
   essentials_version 20
-  display_title 'Refactoring Day Care variables'
+  display_title "Refactoring Day Care variables"
   to_value :global_metadata do |global|
     global.instance_eval do
       @day_care = DayCare.new if @day_care.nil?
@@ -205,7 +205,7 @@ end
 
 SaveData.register_conversion(:v20_rename_bag_variables) do
   essentials_version 20
-  display_title 'Renaming Bag variables'
+  display_title "Renaming Bag variables"
   to_value :bag do |bag|
     bag.instance_eval do
       if !@lastpocket.nil?
@@ -232,7 +232,7 @@ end
 
 SaveData.register_conversion(:v20_increment_player_character_id) do
   essentials_version 19.1
-  display_title 'Incrementing player character ID'
+  display_title "Incrementing player character ID"
   to_value :player do |player|
     player.character_ID += 1
   end
@@ -242,7 +242,7 @@ end
 
 SaveData.register_conversion(:v20_add_pokedex_records) do
   essentials_version 20
-  display_title 'Adding more Pokédex records'
+  display_title "Adding more Pokédex records"
   to_value :player do |player|
     player.pokedex.instance_eval do
       @caught_counts = {} if @caught_counts.nil?
@@ -261,7 +261,7 @@ end
 
 SaveData.register_conversion(:v20_add_default_nicknaming_option) do
   essentials_version 20
-  display_title 'Updating Options to include nicknaming setting'
+  display_title "Updating Options to include nicknaming setting"
   to_value :pokemon_system do |option|
     option.givenicknames = 0 if option.givenicknames.nil?
   end
@@ -271,7 +271,7 @@ end
 
 SaveData.register_conversion(:v20_fix_default_weather_type) do
   essentials_version 20
-  display_title 'Fixing weather type 0 in effect'
+  display_title "Fixing weather type 0 in effect"
   to_value :game_screen do |game_screen|
     game_screen.instance_eval do
       @weather_type = :None if @weather_type == 0
@@ -283,7 +283,7 @@ end
 
 SaveData.register_conversion(:v20_add_stats) do
   essentials_version 20
-  display_title 'Adding stats to save data'
+  display_title "Adding stats to save data"
   to_all do |save_data|
     unless save_data.has_key?(:stats)
       save_data[:stats] = GameStats.new
@@ -298,7 +298,7 @@ end
 
 SaveData.register_conversion(:v20_convert_pokemon_markings) do
   essentials_version 20
-  display_title 'Updating format of Pokémon markings'
+  display_title "Updating format of Pokémon markings"
   to_all do |save_data|
     # Create a lambda function that updates a Pokémon's markings
     update_markings = lambda do |pkmn|
@@ -338,10 +338,10 @@ SaveData.register_conversion(:v20_convert_pokemon_markings) do
     variables = save_data[:variables]
     (0..5000).each do |i|
       value = variables[i]
-      next if value.nil?
-      if value.is_a?(Array)
+      case value
+      when Array
         value.each { |value2| update_markings.call(value2) if value2.is_a?(Pokemon) }
-      elsif value.is_a?(Pokemon)
+      when Pokemon
         update_markings.call(value)
       end
     end

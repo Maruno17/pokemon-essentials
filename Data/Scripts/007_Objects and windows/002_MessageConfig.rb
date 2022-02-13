@@ -503,7 +503,7 @@ end
 # Disposes all objects in the specified hash.
 def pbDisposeSpriteHash(sprites)
   return if !sprites
-  sprites.keys.each do |i|
+  sprites.each_key do |i|
     pbDisposeSprite(sprites, i)
   end
   sprites.clear
@@ -665,7 +665,7 @@ end
 # _activeStatuses_ is the result of a previous call to pbActivateWindows
 def pbRestoreActivations(sprites, activeStatuses)
   return if !sprites || !activeStatuses
-  activeStatuses.keys.each do |k|
+  activeStatuses.each_key do |k|
     if sprites[k].is_a?(Window) && !pbDisposed?(sprites[k])
       sprites[k].active = activeStatuses[k] ? true : false
     end
@@ -723,7 +723,7 @@ def addBackgroundPlane(sprites, planename, background, viewport = nil)
     sprites[planename].visible = false
   else
     sprites[planename].setBitmap(bitmapName)
-    sprites.values.each do |spr|
+    sprites.each_value do |spr|
       if spr.is_a?(Window)
         spr.windowskin = nil
       end
@@ -745,7 +745,7 @@ def addBackgroundOrColoredPlane(sprites, planename, background, color, viewport 
   else
     sprites[planename] = AnimatedPlane.new(viewport)
     sprites[planename].setBitmap(bitmapName)
-    sprites.values.each do |spr|
+    sprites.each_value do |spr|
       if spr.is_a?(Window)
         spr.windowskin = nil
       end

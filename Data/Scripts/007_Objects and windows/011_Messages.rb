@@ -30,16 +30,14 @@ def pbEventCommentInput(*args)
   return nil if list.nil?
   return nil unless list.is_a?(Array)
   list.each do |item|
-    next unless item.code == 108 || item.code == 408
-    if item.parameters[0] == trigger
-      start = list.index(item) + 1
-      finish = start + elements
-      (start...finish).each do |id|
-        next if !list[id]
-        parameters.push(list[id].parameters[0])
-      end
-      return parameters
+    next if ![108, 108].include?(item.code)
+    next if item.parameters[0] != trigger
+    start = list.index(item) + 1
+    finish = start + elements
+    (start...finish).each do |id|
+      parameters.push(list[id].parameters[0]) if list[id]
     end
+    return parameters
   end
   return nil
 end
@@ -557,7 +555,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       end
     end
   end
-  if startSE != nil
+  if startSE
     pbSEPlay(pbStringToAudioFile(startSE))
   elsif signWaitCount == 0 && letterbyletter
     pbPlayDecisionSE

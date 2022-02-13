@@ -9,7 +9,7 @@ class Scene_Map
 
   def spriteset(map_id = -1)
     return @spritesets[map_id] if map_id > 0 && @spritesets[map_id]
-    @spritesets.values.each do |i|
+    @spritesets.each_value do |i|
       return i if i.map == $game_map
     end
     return @spritesets.values[0]
@@ -36,7 +36,7 @@ class Scene_Map
 
   def disposeSpritesets
     return if !@spritesets
-    @spritesets.keys.each do |i|
+    @spritesets.each_key do |i|
       next if !@spritesets[i]
       @spritesets[i].dispose
       @spritesets[i] = nil

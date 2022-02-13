@@ -68,7 +68,7 @@ module Battle::AbilityEffects
 
   def self.trigger(hash, *args, ret: false)
     new_ret = hash.trigger(*args)
-    return (new_ret != nil) ? new_ret : ret
+    return (!new_ret.nil?) ? new_ret : ret
   end
 
   #=============================================================================

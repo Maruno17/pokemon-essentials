@@ -20,7 +20,7 @@ def pbWarpToMap
       y = rand(map.height)
       next if !map.passableStrict?(x, y, 0, $game_player)
       blocked = false
-      map.events.values.each do |event|
+      map.events.each_value do |event|
         if event.at_coordinate?(x, y) && !event.through && event.character_name != ""
           blocked = true
         end
@@ -101,7 +101,7 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
       status = $game_variables[index + 1].to_s
       status = "\"__\"" if nil_or_empty?(status)
     end
-    name = '' if name.nil?
+    name ||= ""
     id_text = sprintf("%04d:", index + 1)
     rect = drawCursor(index, rect)
     totalWidth = rect.width
@@ -655,12 +655,11 @@ def pbImportAllAnimations
             missingFiles.push(textdata.graphic)
           end
           textdata.timing.each do |timing|
-            if timing.name && timing.name != "" &&
-               !safeExists?(folder + "/" + timing.name) &&
-               !FileTest.audio_exist?("Audio/SE/Anim/" + timing.name)
-              timing.name = ""
-              missingFiles.push(timing.name)
-            end
+            next if !timing.name || timing.name == "" ||
+                    safeExists?(folder + "/" + timing.name) ||
+                    FileTest.audio_exist?("Audio/SE/Anim/" + timing.name)
+            timing.name = ""
+            missingFiles.push(timing.name)
           end
           animations[index] = textdata
         end
@@ -706,7 +705,7 @@ def pbDebugFixInvalidTiles
       end
     end
     # Check all events in map for page graphics using a non-existent tile
-    map.events.keys.each do |key|
+    map.events.each_key do |key|
       event = map.events[key]
       event.pages.each do |page|
         next if page.graphic.tile_id <= 0

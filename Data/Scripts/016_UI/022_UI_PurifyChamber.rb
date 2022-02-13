@@ -126,7 +126,7 @@ class PurifyChamberSet
     unless value&.shadowPokemon?
       @list.insert(index + 1, value)
       @list.compact!
-      @facing += 1 if @facing > index && value != nil
+      @facing += 1 if @facing > index && value
       @facing = [[@facing, @list.length - 1].min, 0].max
     end
   end
@@ -246,16 +246,16 @@ class PurifyChamber
     isPurifiableIgnoreRegular?(set) && setCount(set) > 0
   end
 
-  def update # called each step
+  # Called upon each step taken in the overworld
+  def update
     NUMSETS.times do |set|
-      # If a shadow Pokemon and a regular Pokemon are on the same set
-      if @sets[set].shadow && @sets[set].shadow.heart_gauge > 0
-        flow = self.chamberFlow(set)
-        @sets[set].shadow.adjustHeart(-flow)
-        if isPurifiable?(set)
-          pbMessage(_INTL("Your {1} in the Purify Chamber is ready for purification!", @sets[set].shadow.name))
-        end
-      end
+      next if !@sets[set].shadow || @sets[set].shadow.heart_gauge <= 0
+      # If a Shadow Pokemon and a regular Pokemon are on the same set
+      flow = self.chamberFlow(set)
+      @sets[set].shadow.adjustHeart(-flow)
+      next if !isPurifiable?(set)
+      pbMessage(_INTL("Your {1} in the Purify Chamber is ready for purification!",
+                      @sets[set].shadow.name))
     end
   end
 
@@ -1261,11 +1261,10 @@ class PurifyChamberScene
     set = @sprites["setview"].set
     (@chamber.setCount(set) * 2).times do |i|
       p = PurifyChamberHelper.pbGetPokemon2(@chamber, set, i)
-      if p
-        startindex = party.length if i == pos
-        party.push(p)
-        indexes.push(i)
-      end
+      next if !p
+      startindex = party.length if i == pos
+      party.push(p)
+      indexes.push(i)
     end
     return if party.length == 0
     oldsprites = pbFadeOutAndHide(@sprites)

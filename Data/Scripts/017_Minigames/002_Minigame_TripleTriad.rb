@@ -553,11 +553,10 @@ class TriadScene
     (@battle.width * @battle.height).times do |i|
       x = i % @battle.width
       y = i / @battle.width
-      if @boardSprites[i]
-        owner = @battle.getOwner(x, y)
-        @boardSprites[i].bitmap&.dispose
-        @boardSprites[i].bitmap = @boardCards[i].createBitmap(owner)
-      end
+      next if !@boardSprites[i]
+      @boardSprites[i].bitmap&.dispose
+      owner = @battle.getOwner(x, y)
+      @boardSprites[i].bitmap = @boardCards[i].createBitmap(owner)
     end
   end
 
@@ -655,7 +654,7 @@ class TriadScreen
     panels[7] = (@wrapAround ? 0 : @height - 1) if panels[7] > @height - 1   # bottom
     attacker = attackerParam.nil? ? @board[(y * @width) + x] : attackerParam
     flips = []
-    return nil if attackerParam != nil && @board[(y * @width) + x].owner != 0
+    return nil if attackerParam && @board[(y * @width) + x].owner != 0
     return nil if !attacker.card || attacker.owner == 0
     4.times do |i|
       defenderX = panels[i * 2]
@@ -830,9 +829,7 @@ class TriadScreen
             y = i / @width
             square.type = @board[i].type
             flips = flipBoard(x, y, square)
-            if flips != nil
-              scores.push([cardIndex, x, y, flips.length])
-            end
+            scores.push([cardIndex, x, y, flips.length]) if flips
           end
         end
         # Sort by number of flips

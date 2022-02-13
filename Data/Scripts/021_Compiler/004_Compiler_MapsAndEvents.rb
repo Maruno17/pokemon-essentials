@@ -1,37 +1,37 @@
 module Compiler
   SCRIPT_REPLACEMENTS = [
-    ['Kernel.',                      ''],
-    ['$PokemonBag.pbQuantity',       '$bag.quantity'],
-    ['$PokemonBag.pbHasItem?',       '$bag.has?'],
-    ['$PokemonBag.pbCanStore?',      '$bag.can_add?'],
-    ['$PokemonBag.pbStoreItem',      '$bag.add'],
-    ['$PokemonBag.pbStoreAllOrNone', '$bag.add_all'],
-    ['$PokemonBag.pbChangeItem',     '$bag.replace_item'],
-    ['$PokemonBag.pbDeleteItem',     '$bag.remove'],
-    ['$PokemonBag.pbIsRegistered?',  '$bag.registered?'],
-    ['$PokemonBag.pbRegisterItem',   '$bag.register'],
-    ['$PokemonBag.pbUnregisterItem', '$bag.unregister'],
-    ['$PokemonBag',                  '$bag'],
-    ['pbQuantity',                   '$bag.quantity'],
-    ['pbHasItem?',                   '$bag.has?'],
-    ['pbCanStore?',                  '$bag.can_add?'],
-    ['pbStoreItem',                  '$bag.add'],
-    ['pbStoreAllOrNone',             '$bag.add_all'],
-    ['$Trainer',                     '$player'],
-    ['$SaveVersion',                 '$save_engine_version'],
-    ['$game_version',                '$save_game_version'],
-    ['$MapFactory',                  '$map_factory'],
-    ['pbDayCareDeposited',           'DayCare.count'],
-    ['pbDayCareGetDeposited',        'DayCare.get_details'],
-    ['pbDayCareGetLevelGain',        'DayCare.get_level_gain'],
-    ['pbDayCareDeposit',             'DayCare.deposit'],
-    ['pbDayCareWithdraw',            'DayCare.withdraw'],
-    ['pbDayCareChoose',              'DayCare.choose'],
-    ['pbDayCareGetCompatibility',    'DayCare.get_compatibility'],
-    ['pbEggGenerated?',              'DayCare.egg_generated?'],
-    ['pbDayCareGenerateEgg',         'DayCare.collect_egg'],
-    ['get_character(0)',             'get_self'],
-    ['get_character(-1)',            'get_player']
+    ["Kernel.",                      ""],
+    ["$PokemonBag.pbQuantity",       "$bag.quantity"],
+    ["$PokemonBag.pbHasItem?",       "$bag.has?"],
+    ["$PokemonBag.pbCanStore?",      "$bag.can_add?"],
+    ["$PokemonBag.pbStoreItem",      "$bag.add"],
+    ["$PokemonBag.pbStoreAllOrNone", "$bag.add_all"],
+    ["$PokemonBag.pbChangeItem",     "$bag.replace_item"],
+    ["$PokemonBag.pbDeleteItem",     "$bag.remove"],
+    ["$PokemonBag.pbIsRegistered?",  "$bag.registered?"],
+    ["$PokemonBag.pbRegisterItem",   "$bag.register"],
+    ["$PokemonBag.pbUnregisterItem", "$bag.unregister"],
+    ["$PokemonBag",                  "$bag"],
+    ["pbQuantity",                   "$bag.quantity"],
+    ["pbHasItem?",                   "$bag.has?"],
+    ["pbCanStore?",                  "$bag.can_add?"],
+    ["pbStoreItem",                  "$bag.add"],
+    ["pbStoreAllOrNone",             "$bag.add_all"],
+    ["$Trainer",                     "$player"],
+    ["$SaveVersion",                 "$save_engine_version"],
+    ["$game_version",                "$save_game_version"],
+    ["$MapFactory",                  "$map_factory"],
+    ["pbDayCareDeposited",           "DayCare.count"],
+    ["pbDayCareGetDeposited",        "DayCare.get_details"],
+    ["pbDayCareGetLevelGain",        "DayCare.get_level_gain"],
+    ["pbDayCareDeposit",             "DayCare.deposit"],
+    ["pbDayCareWithdraw",            "DayCare.withdraw"],
+    ["pbDayCareChoose",              "DayCare.choose"],
+    ["pbDayCareGetCompatibility",    "DayCare.get_compatibility"],
+    ["pbEggGenerated?",              "DayCare.egg_generated?"],
+    ["pbDayCareGenerateEgg",         "DayCare.collect_egg"],
+    ["get_character(0)",             "get_self"],
+    ["get_character(-1)",            "get_player"]
   ]
 
   module_function
@@ -52,7 +52,7 @@ module Compiler
     mapinfos = pbLoadMapInfos
     maxOrder = 0
     # Exclude maps found in mapinfos
-    mapinfos.keys.each do |id|
+    mapinfos.each_key do |id|
       next if !mapinfos[id]
       mapfiles.delete(id) if mapfiles[id]
       maxOrder = [maxOrder, mapinfos[id].order].max
@@ -61,7 +61,7 @@ module Compiler
     maxOrder += 1
     imported = false
     count = 0
-    mapfiles.keys.each do |id|
+    mapfiles.each_key do |id|
       next if id == 999   # Ignore 999 (random dungeon map)
       mapinfo = RPG::MapInfo.new
       mapinfo.order = maxOrder
@@ -314,7 +314,7 @@ module Compiler
       @mapHeights[mapID] = map.height
       mapPositions = []
       width = map.width
-      map.events.values.each do |e|
+      map.events.each_value do |e|
         mapPositions[(e.y * width) + e.x] = e if e
       end
       @mapxy[mapID] = mapPositions
@@ -780,7 +780,7 @@ module Compiler
       if mapData.switchName(lastPage.condition.switch1_id) == 's:tsOff?("A")'
         list = event.pages[event.pages.length - 2].list
         transferCommand = list.find_all { |cmd| cmd.code == 201 }   # Transfer Player
-        if transferCommand.length == 1 && !list.any? { |cmd| cmd.code == 208 }   # Change Transparent Flag
+        if transferCommand.length == 1 && list.none? { |cmd| cmd.code == 208 }   # Change Transparent Flag
           # Rewrite penultimate page
           list.clear
           push_move_route_and_wait(   # Move Route for door opening
@@ -1431,7 +1431,7 @@ module Compiler
   def check_counters(map, mapID, mapData)
     toDelete = []
     changed = false
-    map.events.keys.each do |key|
+    map.events.each_key do |key|
       event = map.events[key]
       next if !plain_event_or_mart?(event)
       # Found an event that is empty or looks like a simple Mart or a Poké
@@ -1478,7 +1478,7 @@ module Compiler
       changed = false
       map = mapData.getMap(id)
       next if !map || !mapData.mapinfos[id]
-      map.events.keys.each do |key|
+      map.events.each_key do |key|
         if Time.now.to_i - t >= 5
           Graphics.update
           t = Time.now.to_i

@@ -40,11 +40,11 @@ class Module
       raise ArgumentError, "#{class_name} does not have method #{aliased_method} defined"
     end
 
-    delimiter = class_method ? '.' : '#'
+    delimiter = class_method ? "." : "#"
 
     target.define_method(name) do |*args, **kvargs|
-      alias_name = sprintf('%s%s%s', class_name, delimiter, name)
-      aliased_method_name = sprintf('%s%s%s', class_name, delimiter, aliased_method)
+      alias_name = sprintf("%s%s%s", class_name, delimiter, name)
+      aliased_method_name = sprintf("%s%s%s", class_name, delimiter, aliased_method)
       Deprecation.warn_method(alias_name, removal_in, aliased_method_name)
       method(aliased_method).call(*args, **kvargs)
     end

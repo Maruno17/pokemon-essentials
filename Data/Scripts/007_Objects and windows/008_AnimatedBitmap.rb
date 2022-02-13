@@ -6,10 +6,10 @@ class AnimatedBitmap
     raise "Filename is nil (missing graphic)." if file.nil?
     path     = file
     filename = ""
-    if file.last != '/'   # Isn't just a directory
+    if file.last != "/"   # Isn't just a directory
       split_file = file.split(/[\\\/]/)
       filename = split_file.pop
-      path = split_file.join('/') + '/'
+      path = split_file.join("/") + "/"
     end
     if filename[/^\[\d+(?:,\d+)?\]/]   # Starts with 1 or 2 numbers in square brackets
       @bitmap = PngAnimatedBitmap.new(path, filename, hue)

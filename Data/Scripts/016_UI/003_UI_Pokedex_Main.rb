@@ -419,7 +419,7 @@ class PokemonPokedex_Scene
     dexname = _INTL("Pokédex")
     if $player.pokedex.dexes_count > 1
       thisdex = Settings.pokedex_names[pbGetSavePositionIndex]
-      if thisdex != nil
+      if thisdex
         dexname = (thisdex.is_a?(Array)) ? thisdex[0] : thisdex
       end
     end
@@ -1166,40 +1166,40 @@ class PokemonPokedex_Scene
         case index
         when 0   # Choose sort order
           newparam = pbDexSearchCommands(0, [params[0]], index)
-          params[0] = newparam[0] if newparam != nil
+          params[0] = newparam[0] if newparam
           pbRefreshDexSearch(params, index)
         when 1   # Filter by name
           newparam = pbDexSearchCommands(1, [params[1]], index)
-          params[1] = newparam[0] if newparam != nil
+          params[1] = newparam[0] if newparam
           pbRefreshDexSearch(params, index)
         when 2   # Filter by type
           newparam = pbDexSearchCommands(2, [params[2], params[3]], index)
-          if newparam != nil
+          if newparam
             params[2] = newparam[0]
             params[3] = newparam[1]
           end
           pbRefreshDexSearch(params, index)
         when 3   # Filter by height range
           newparam = pbDexSearchCommands(3, [params[4], params[5]], index)
-          if newparam != nil
+          if newparam
             params[4] = newparam[0]
             params[5] = newparam[1]
           end
           pbRefreshDexSearch(params, index)
         when 4   # Filter by weight range
           newparam = pbDexSearchCommands(4, [params[6], params[7]], index)
-          if newparam != nil
+          if newparam
             params[6] = newparam[0]
             params[7] = newparam[1]
           end
           pbRefreshDexSearch(params, index)
         when 5   # Filter by color filter
           newparam = pbDexSearchCommands(5, [params[8]], index)
-          params[8] = newparam[0] if newparam != nil
+          params[8] = newparam[0] if newparam
           pbRefreshDexSearch(params, index)
         when 6   # Filter by shape
           newparam = pbDexSearchCommands(6, [params[9]], index)
-          params[9] = newparam[0] if newparam != nil
+          params[9] = newparam[0] if newparam
           pbRefreshDexSearch(params, index)
         when 7   # Clear filters
           10.times do |i|

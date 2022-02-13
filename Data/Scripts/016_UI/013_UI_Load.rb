@@ -226,9 +226,9 @@ class PokemonLoadScreen
   def load_save_file(file_path)
     save_data = SaveData.read_from_file(file_path)
     unless SaveData.valid?(save_data)
-      if File.file?(file_path + '.bak')
-        pbMessage(_INTL('The save file is corrupt. A backup will be loaded.'))
-        save_data = load_save_file(file_path + '.bak')
+      if File.file?(file_path + ".bak")
+        pbMessage(_INTL("The save file is corrupt. A backup will be loaded."))
+        save_data = load_save_file(file_path + ".bak")
       else
         self.prompt_save_deletion
         return {}
@@ -240,9 +240,9 @@ class PokemonLoadScreen
   # Called if all save data is invalid.
   # Prompts the player to delete the save files.
   def prompt_save_deletion
-    pbMessage(_INTL('The save file is corrupt, or is incompatible with this game.'))
+    pbMessage(_INTL("The save file is corrupt, or is incompatible with this game."))
     exit unless pbConfirmMessageSerious(
-      _INTL('Do you want to delete the save file and start anew?')
+      _INTL("Do you want to delete the save file and start anew?")
     )
     self.delete_save_data
     $game_system   = Game_System.new
@@ -270,9 +270,9 @@ class PokemonLoadScreen
   def delete_save_data
     begin
       SaveData.delete_file
-      pbMessage(_INTL('The saved data was deleted.'))
+      pbMessage(_INTL("The saved data was deleted."))
     rescue SystemCallError
-      pbMessage(_INTL('All saved data could not be deleted.'))
+      pbMessage(_INTL("All saved data could not be deleted."))
     end
   end
 
@@ -287,16 +287,16 @@ class PokemonLoadScreen
     cmd_quit         = -1
     show_continue = !@save_data.empty?
     if show_continue
-      commands[cmd_continue = commands.length] = _INTL('Continue')
+      commands[cmd_continue = commands.length] = _INTL("Continue")
       if @save_data[:player].mystery_gift_unlocked
-        commands[cmd_mystery_gift = commands.length] = _INTL('Mystery Gift')
+        commands[cmd_mystery_gift = commands.length] = _INTL("Mystery Gift")
       end
     end
-    commands[cmd_new_game = commands.length]  = _INTL('New Game')
-    commands[cmd_options = commands.length]   = _INTL('Options')
-    commands[cmd_language = commands.length]  = _INTL('Language') if Settings::LANGUAGES.length >= 2
-    commands[cmd_debug = commands.length]     = _INTL('Debug') if $DEBUG
-    commands[cmd_quit = commands.length]      = _INTL('Quit Game')
+    commands[cmd_new_game = commands.length]  = _INTL("New Game")
+    commands[cmd_options = commands.length]   = _INTL("Options")
+    commands[cmd_language = commands.length]  = _INTL("Language") if Settings::LANGUAGES.length >= 2
+    commands[cmd_debug = commands.length]     = _INTL("Debug") if $DEBUG
+    commands[cmd_quit = commands.length]      = _INTL("Quit Game")
     map_id = show_continue ? @save_data[:map_factory].map.map_id : 0
     @scene.pbStartScene(commands, show_continue, @save_data[:player],
                         @save_data[:frame_count] || 0, @save_data[:stats], map_id)
@@ -325,10 +325,10 @@ class PokemonLoadScreen
       when cmd_language
         @scene.pbEndScene
         $PokemonSystem.language = pbChooseLanguage
-        pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
+        pbLoadMessages("Data/" + Settings::LANGUAGES[$PokemonSystem.language][1])
         if show_continue
           @save_data[:pokemon_system] = $PokemonSystem
-          File.open(SaveData::FILE_PATH, 'wb') { |file| Marshal.dump(@save_data, file) }
+          File.open(SaveData::FILE_PATH, "wb") { |file| Marshal.dump(@save_data, file) }
         end
         $scene = pbCallTitle
         return

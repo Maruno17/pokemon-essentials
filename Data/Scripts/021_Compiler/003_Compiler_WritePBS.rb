@@ -736,7 +736,7 @@ module Compiler
         next if !bttrainers[i]
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%03d]\r\n", i))
-        btTrainersRequiredTypes.keys.each do |key|
+        btTrainersRequiredTypes.each_key do |key|
           schema = btTrainersRequiredTypes[key]
           record = bttrainers[i][schema[0]]
           next if record.nil?

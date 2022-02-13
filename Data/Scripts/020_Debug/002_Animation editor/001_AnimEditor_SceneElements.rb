@@ -269,12 +269,11 @@ class AnimationWindow < SpriteWrapper
       swatchrects.push(Rect.new(arrowwidth + (i * 96) + self.x, self.y, 96, 96))
     end
     NUMFRAMES.times do |i|
-      if swatchrects[i].contains(mousepos[0], mousepos[1])
-        @selected = @start + i
-        @changed = true
-        refresh
-        return
-      end
+      next if !swatchrects[i].contains(mousepos[0], mousepos[1])
+      @selected = @start + i
+      @changed = true
+      refresh
+      return
     end
     # Left arrow
     if left.contains(mousepos[0], mousepos[1])
@@ -924,17 +923,16 @@ class AnimationCanvas < Sprite
 #    self.bitmap=@testscreen.bitmap
     if @currentframe < @animation.length
       PBAnimation::MAX_SPRITES.times do |i|
-        if @dirty[i]
-          if @celsprites[i]
-            setBitmap(i, @currentframe)
-            pbSpriteSetAnimFrame(@celsprites[i], @animation[@currentframe][i], @celsprites[0], @celsprites[1], true)
-            @celsprites[i].x += BORDERSIZE
-            @celsprites[i].y += BORDERSIZE
-          end
-          setPreviousFrame(i)
-          setFrame(i)
-          @dirty[i] = false
+        next if !@dirty[i]
+        if @celsprites[i]
+          setBitmap(i, @currentframe)
+          pbSpriteSetAnimFrame(@celsprites[i], @animation[@currentframe][i], @celsprites[0], @celsprites[1], true)
+          @celsprites[i].x += BORDERSIZE
+          @celsprites[i].y += BORDERSIZE
         end
+        setPreviousFrame(i)
+        setFrame(i)
+        @dirty[i] = false
       end
     else
       PBAnimation::MAX_SPRITES.times do |i|

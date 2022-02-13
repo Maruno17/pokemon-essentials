@@ -212,15 +212,14 @@ class PokemonStorage
 
   def pbMoveCaughtToBox(pkmn, box)
     maxPokemon(box).times do |i|
-      if self[box, i].nil?
-        if Settings::HEAL_STORED_POKEMON && box >= 0
-          old_ready_evo = pkmn.ready_to_evolve
-          pkmn.heal
-          pkmn.ready_to_evolve = old_ready_evo
-        end
-        self[box, i] = pkmn
-        return true
+      next unless self[box, i].nil?
+      if Settings::HEAL_STORED_POKEMON && box >= 0
+        old_ready_evo = pkmn.ready_to_evolve
+        pkmn.heal
+        pkmn.ready_to_evolve = old_ready_evo
       end
+      self[box, i] = pkmn
+      return true
     end
     return false
   end
@@ -239,11 +238,10 @@ class PokemonStorage
     end
     self.maxBoxes.times do |j|
       maxPokemon(j).times do |i|
-        if self[j, i].nil?
-          self[j, i] = pkmn
-          @currentBox = j
-          return @currentBox
-        end
+        next unless self[j, i].nil?
+        self[j, i] = pkmn
+        @currentBox = j
+        return @currentBox
       end
     end
     return -1

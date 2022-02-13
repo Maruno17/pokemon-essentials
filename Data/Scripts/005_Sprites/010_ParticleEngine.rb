@@ -80,7 +80,7 @@ class Particle_Engine
   def update
     if @firsttime
       @firsttime = false
-      @map.events.values.each do |event|
+      @map.events.each_value do |event|
         remove_effect(event)
         add_effect(event)
       end
@@ -349,7 +349,7 @@ class ParticleEffect_Event < ParticleEffect
     @particles.each do |particle|
       particle.dispose
     end
-    @bitmaps.values.each do |bitmap|
+    @bitmaps.each_value do |bitmap|
       bitmap.dispose
     end
     @particles.clear

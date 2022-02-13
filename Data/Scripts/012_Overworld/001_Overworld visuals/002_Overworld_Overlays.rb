@@ -93,7 +93,7 @@ end
 class LightEffect
   def initialize(event, viewport = nil, map = nil, filename = nil)
     @light = IconSprite.new(0, 0, viewport)
-    if filename != nil && filename != "" && pbResolveBitmap("Graphics/Pictures/" + filename)
+    if !nil_or_empty?(filename) && pbResolveBitmap("Graphics/Pictures/" + filename)
       @light.setBitmap("Graphics/Pictures/" + filename)
     else
       @light.setBitmap("Graphics/Pictures/LE")
@@ -208,7 +208,7 @@ end
 EventHandlers.add(:on_new_spriteset_map, :add_light_effects,
   proc { |spriteset, viewport|
     map = spriteset.map   # Map associated with the spriteset (not necessarily the current map)
-    map.events.keys.each do |i|
+    map.events.each_key do |i|
       if map.events[i].name[/^outdoorlight\((\w+)\)$/i]
         filename = $~[1].to_s
         spriteset.addUserSprite(LightEffect_DayNight.new(map.events[i], viewport, map, filename))

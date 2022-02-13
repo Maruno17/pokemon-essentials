@@ -266,11 +266,9 @@ class Battle
     if opposes?(idxBattler)
       return [] if !@items
       return @items[pbGetOwnerIndexFromBattlerIndex(idxBattler)]
-    else
-      return [] if !@ally_items
-      return @ally_items[pbGetOwnerIndexFromBattlerIndex(idxBattler)]
     end
-    return []
+    return [] if !@ally_items
+    return @ally_items[pbGetOwnerIndexFromBattlerIndex(idxBattler)]
   end
 
   # Returns whether the battler in position idxBattler is owned by the same

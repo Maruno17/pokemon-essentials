@@ -457,7 +457,7 @@ module RPG
       end
       # End fading
       if @fade_time >= ((@target_type == :None) ? FADE_OLD_PARTICLES_END : FADE_NEW_TILES_END) - @time_shift &&
-         !@sprites.any? { |sprite| sprite.visible }
+         @sprites.none? { |sprite| sprite.visible }
         @type                 = @target_type
         @max                  = @target_max
         @target_type          = nil

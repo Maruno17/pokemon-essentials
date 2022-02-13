@@ -56,7 +56,7 @@ class File
   #-----------------------------------------------------------------------------
   def self.safe?(file)
     ret = false
-    self.open(file, 'rb') { ret = true } rescue nil
+    self.open(file, "rb") { ret = true } rescue nil
     return ret
   end
   #-----------------------------------------------------------------------------
@@ -258,8 +258,8 @@ end
 
 
 module FileTest
-  IMAGE_EXTENSIONS = ['.png', '.gif']   # '.jpg', '.jpeg', '.bmp',
-  AUDIO_EXTENSIONS = ['.mid', '.midi', '.ogg', '.wav', '.wma']   # '.mp3'
+  IMAGE_EXTENSIONS = [".png", ".gif"]   # ".jpg", ".jpeg", ".bmp",
+  AUDIO_EXTENSIONS = [".mid", ".midi", ".ogg", ".wav", ".wma"]   # ".mp3"
 
   def self.audio_exist?(filename)
     return RTP.exists?(filename, AUDIO_EXTENSIONS)
@@ -318,7 +318,7 @@ def pbGetFileChar(file)
   canon_file = canonicalize(file)
   if !safeExists?("./Game.rgssad")
     return nil if !safeExists?(canon_file)
-    return nil if file.last == '/'   # Is a directory
+    return nil if file.last == "/"   # Is a directory
     begin
       File.open(canon_file, "rb") { |f| return f.read(1) }   # read one byte
     rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES, Errno::EISDIR
@@ -336,7 +336,7 @@ end
 
 def pbTryString(x)
   ret = pbGetFileChar(x)
-  return (ret != nil && ret != "") ? x : nil
+  return nil_or_empty?(ret) ? nil : x
 end
 
 # Gets the contents of a file. Doesn't check RTP, but does check
@@ -401,7 +401,7 @@ class StringInput
   end
 
   def close
-    raise IOError, 'closed stream' if @closed
+    raise IOError, "closed stream" if @closed
     @pos = nil
     @closed = true
   end
@@ -409,7 +409,7 @@ class StringInput
   def closed?; @closed; end
 
   def pos
-    raise IOError, 'closed stream' if @closed
+    raise IOError, "closed stream" if @closed
     [@pos, @string.size].min
   end
 
@@ -420,7 +420,7 @@ class StringInput
   def pos=(value); seek(value); end
 
   def seek(offset, whence = IO::SEEK_SET)
-    raise IOError, 'closed stream' if @closed
+    raise IOError, "closed stream" if @closed
     case whence
     when IO::SEEK_SET then @pos = offset
     when IO::SEEK_CUR then @pos += offset
@@ -434,12 +434,12 @@ class StringInput
   end
 
   def eof?
-    raise IOError, 'closed stream' if @closed
+    raise IOError, "closed stream" if @closed
     @pos > @string.size
   end
 
   def each(&block)
-    raise IOError, 'closed stream' if @closed
+    raise IOError, "closed stream" if @closed
     begin
       @string.each(&block)
     ensure
@@ -448,7 +448,7 @@ class StringInput
   end
 
   def gets
-    raise IOError, 'closed stream' if @closed
+    raise IOError, "closed stream" if @closed
     idx = @string.index("\n", @pos)
     if idx
       idx += 1  # "\n".size
@@ -464,7 +464,7 @@ class StringInput
   end
 
   def getc
-    raise IOError, 'closed stream' if @closed
+    raise IOError, "closed stream" if @closed
     ch = @string[@pos]
     @pos += 1
     @pos += 1 if @pos == @string.size
@@ -472,7 +472,7 @@ class StringInput
   end
 
   def read(len = nil)
-    raise IOError, 'closed stream' if @closed
+    raise IOError, "closed stream" if @closed
     if !len
       return nil if eof?
       rest = @string[@pos...@string.size]

@@ -332,7 +332,7 @@ module PluginManager
         self.error("Invalid plugin registry key '#{key}'.")
       end
     end
-    @@Plugins.values.each do |plugin|
+    @@Plugins.each_value do |plugin|
       if plugin[:incompatibilities]&.include?(name)
         self.error("Plugin '#{plugin[:name]}' is incompatible with '#{name}'. " +
                    "They cannot both be used at the same time.")
@@ -488,14 +488,14 @@ module PluginManager
         raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\r\n{1}", FileLineData.linereport)
       end
       property = $~[1].upcase
-      data = $~[2].split(',')
+      data = $~[2].split(",")
       data.each_with_index { |value, i| data[i] = value.strip }
       # begin formatting data hash
       case property
-      when 'ESSENTIALS'
+      when "ESSENTIALS"
         meta[:essentials] = [] if !meta[:essentials]
         data.each { |ver| meta[:essentials].push(ver) }
-      when 'REQUIRES'
+      when "REQUIRES"
         meta[:dependencies] = [] if !meta[:dependencies]
         if data.length < 2   # No version given, just push name of plugin dependency
           meta[:dependencies].push(data[0])
@@ -505,23 +505,23 @@ module PluginManager
         else   # Push dependency type, name and version of plugin dependency
           meta[:dependencies].push([data[2].downcase.to_sym, data[0], data[1]])
         end
-      when 'EXACT'
+      when "EXACT"
         next if data.length < 2   # Exact dependencies must have a version given; ignore if not
         meta[:dependencies] = [] if !meta[:dependencies]
         meta[:dependencies].push([:exact, data[0], data[1]])
-      when 'OPTIONAL'
+      when "OPTIONAL"
         next if data.length < 2   # Optional dependencies must have a version given; ignore if not
         meta[:dependencies] = [] if !meta[:dependencies]
         meta[:dependencies].push([:optional, data[0], data[1]])
-      when 'CONFLICTS'
+      when "CONFLICTS"
         meta[:incompatibilities] = [] if !meta[:incompatibilities]
         data.each { |value| meta[:incompatibilities].push(value) if value && !value.empty? }
-      when 'SCRIPTS'
+      when "SCRIPTS"
         meta[:scripts] = [] if !meta[:scripts]
         data.each { |scr| meta[:scripts].push(scr) }
-      when 'CREDITS'
+      when "CREDITS"
         meta[:credits] = data
-      when 'LINK', 'WEBSITE'
+      when "LINK", "WEBSITE"
         meta[:link] = data[0]
       else
         meta[property.downcase.to_sym] = data[0]
@@ -665,7 +665,7 @@ module PluginManager
       dat = [o, meta, []]
       # iterate through each file to deflate
       plugins[o][:scripts].each do |file|
-        File.open("#{plugins[o][:dir]}/#{file}", 'rb') do |f|
+        File.open("#{plugins[o][:dir]}/#{file}", "rb") do |f|
           dat[2].push([file, Zlib::Deflate.deflate(f.read)])
         end
       end
@@ -673,7 +673,7 @@ module PluginManager
       scripts.push(dat)
     end
     # save to main `PluginScripts.rxdata` file
-    File.open("Data/PluginScripts.rxdata", 'wb') { |f| Marshal.dump(scripts, f) }
+    File.open("Data/PluginScripts.rxdata", "wb") { |f| Marshal.dump(scripts, f) }
     # collect garbage
     GC.start
     Console.echo_done(true)

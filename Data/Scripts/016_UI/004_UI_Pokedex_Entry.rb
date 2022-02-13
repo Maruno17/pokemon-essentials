@@ -27,14 +27,13 @@ class PokemonPokedexInfo_Scene
     @sprites["areamap"].x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
     @sprites["areamap"].y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
     Settings::REGION_MAP_EXTRAS.each do |hidden|
-      if hidden[0] == @region && hidden[1] > 0 && $game_switches[hidden[1]]
-        pbDrawImagePositions(
-          @sprites["areamap"].bitmap,
-          [["Graphics/Pictures/#{hidden[4]}",
-            hidden[2] * PokemonRegionMap_Scene::SQUARE_WIDTH,
-            hidden[3] * PokemonRegionMap_Scene::SQUARE_HEIGHT]]
-        )
-      end
+      next if hidden[0] != @region || hidden[1] <= 0 || !$game_switches[hidden[1]]
+      pbDrawImagePositions(
+        @sprites["areamap"].bitmap,
+        [["Graphics/Pictures/#{hidden[4]}",
+          hidden[2] * PokemonRegionMap_Scene::SQUARE_WIDTH,
+          hidden[3] * PokemonRegionMap_Scene::SQUARE_HEIGHT]]
+      )
     end
     @sprites["areahighlight"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["areaoverlay"] = IconSprite.new(0, 0, @viewport)
@@ -331,24 +330,23 @@ class PokemonPokedexInfo_Scene
     sqwidth = PokemonRegionMap_Scene::SQUARE_WIDTH
     sqheight = PokemonRegionMap_Scene::SQUARE_HEIGHT
     points.length.times do |j|
-      if points[j]
-        x = (j % mapwidth) * sqwidth
-        x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
-        y = (j / mapwidth) * sqheight
-        y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
-        @sprites["areahighlight"].bitmap.fill_rect(x, y, sqwidth, sqheight, pointcolor)
-        if j - mapwidth < 0 || !points[j - mapwidth]
-          @sprites["areahighlight"].bitmap.fill_rect(x, y - 2, sqwidth, 2, pointcolorhl)
-        end
-        if j + mapwidth >= points.length || !points[j + mapwidth]
-          @sprites["areahighlight"].bitmap.fill_rect(x, y + sqheight, sqwidth, 2, pointcolorhl)
-        end
-        if j % mapwidth == 0 || !points[j - 1]
-          @sprites["areahighlight"].bitmap.fill_rect(x - 2, y, 2, sqheight, pointcolorhl)
-        end
-        if (j + 1) % mapwidth == 0 || !points[j + 1]
-          @sprites["areahighlight"].bitmap.fill_rect(x + sqwidth, y, 2, sqheight, pointcolorhl)
-        end
+      next if !points[j]
+      x = (j % mapwidth) * sqwidth
+      x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
+      y = (j / mapwidth) * sqheight
+      y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
+      @sprites["areahighlight"].bitmap.fill_rect(x, y, sqwidth, sqheight, pointcolor)
+      if j - mapwidth < 0 || !points[j - mapwidth]
+        @sprites["areahighlight"].bitmap.fill_rect(x, y - 2, sqwidth, 2, pointcolorhl)
+      end
+      if j + mapwidth >= points.length || !points[j + mapwidth]
+        @sprites["areahighlight"].bitmap.fill_rect(x, y + sqheight, sqwidth, 2, pointcolorhl)
+      end
+      if j % mapwidth == 0 || !points[j - 1]
+        @sprites["areahighlight"].bitmap.fill_rect(x - 2, y, 2, sqheight, pointcolorhl)
+      end
+      if (j + 1) % mapwidth == 0 || !points[j + 1]
+        @sprites["areahighlight"].bitmap.fill_rect(x + sqwidth, y, 2, sqheight, pointcolorhl)
       end
     end
     # Set the text

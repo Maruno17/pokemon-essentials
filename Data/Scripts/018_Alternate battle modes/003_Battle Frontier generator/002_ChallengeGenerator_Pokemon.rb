@@ -305,12 +305,11 @@ def pbRandomPokemonFromRule(rules, trainer)
         hasNormal = false
         newmoves.each do |move|
           d = GameData::Move.get(move)
-          if d.base_damage >= 1
-            totalbasedamage += d.base_damage
-            hasNormal = true if d.type == :NORMAL
-            hasPhysical = true if d.category == 0
-            hasSpecial = true if d.category == 1
-          end
+          next if d.base_damage == 0
+          totalbasedamage += d.base_damage
+          hasNormal = true if d.type == :NORMAL
+          hasPhysical = true if d.category == 0
+          hasSpecial = true if d.category == 1
         end
         if !hasPhysical && ev.include?(:ATTACK) && rand(100) < 80
           # No physical attack, but emphasizes Attack
@@ -339,17 +338,17 @@ def pbRandomPokemonFromRule(rules, trainer)
         break
       end
     end
-    if item == :LIGHTCLAY && !moves.any? { |m| [:LIGHTSCREEN, :REFLECT].include?(m) }
+    if item == :LIGHTCLAY && moves.none? { |m| [:LIGHTSCREEN, :REFLECT].include?(m) }
       item = :LEFTOVERS
     end
     if item == :BLACKSLUDGE
       types = GameData::Species.get(species).types
       item = :LEFTOVERS if !types.include?(:POISON)
     end
-    if item == :HEATROCK && !moves.any? { |m| m == :SUNNYDAY }
+    if item == :HEATROCK && moves.none? { |m| m == :SUNNYDAY }
       item = :LEFTOVERS
     end
-    if item == :DAMPROCK && !moves.any? { |m| m == :RAINDANCE }
+    if item == :DAMPROCK && moves.none? { |m| m == :RAINDANCE }
       item = :LEFTOVERS
     end
     if moves.any? { |m| m == :REST }

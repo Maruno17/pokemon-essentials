@@ -147,7 +147,7 @@ module BooleanProperty2
   end
 
   def self.format(value)
-    return (value) ? _INTL("True") : (value != nil) ? _INTL("False") : "-"
+    return (value) ? _INTL("True") : (!value.nil?) ? _INTL("False") : "-"
   end
 end
 
@@ -578,7 +578,7 @@ class IVsProperty
       next if s.pbs_order < 0
       array[s.pbs_order] = value[s.id] || 0
     end
-    return array.join(',')
+    return array.join(",")
   end
 end
 
@@ -624,7 +624,7 @@ class EVsProperty
       next if s.pbs_order < 0
       array[s.pbs_order] = value[s.id] || 0
     end
-    return array.join(',')
+    return array.join(",")
   end
 end
 
@@ -913,7 +913,7 @@ module BaseStatsProperty
       next if s.pbs_order < 0
       array[s.pbs_order] = value[s.id] || 0
     end
-    return array.join(',')
+    return array.join(",")
   end
 end
 
@@ -952,7 +952,7 @@ module EffortValuesProperty
       next if s.pbs_order < 0
       array[s.pbs_order] = value[s.id] || 0
     end
-    return array.join(',')
+    return array.join(",")
   end
 end
 

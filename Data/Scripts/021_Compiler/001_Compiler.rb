@@ -586,7 +586,7 @@ module Compiler
             when Module
               file.write(getConstantName(enumer, value))
             when Hash
-              enumer.keys.each do |key|
+              enumer.each_key do |key|
                 if enumer[key] == value
                   file.write(key)
                   break
@@ -609,12 +609,11 @@ module Compiler
               file.write(getConstantNameOrValue(enumer, value))
             when Hash
               hasenum = false
-              enumer.keys.each do |key|
-                if enumer[key] == value
-                  file.write(key)
-                  hasenum = true
-                  break
-                end
+              enumer.each_key do |key|
+                next if enumer[key] != value
+                file.write(key)
+                hasenum = true
+                break
               end
               file.write(value) unless hasenum
             end

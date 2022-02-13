@@ -270,11 +270,10 @@ class PokemonBag_Scene
     @sprites["pocketicon"].bitmap.clear
     if @choosing && @filterlist
       (1...@bag.pockets.length).each do |i|
-        if @filterlist[i].length == 0
-          @sprites["pocketicon"].bitmap.blt(
-            6 + ((i - 1) * 22), 6, @pocketbitmap.bitmap, Rect.new((i - 1) * 20, 28, 20, 20)
-          )
-        end
+        next if @filterlist[i].length > 0
+        @sprites["pocketicon"].bitmap.blt(
+          6 + ((i - 1) * 22), 6, @pocketbitmap.bitmap, Rect.new((i - 1) * 20, 28, 20, 20)
+        )
       end
     end
     @sprites["pocketicon"].bitmap.blt(
@@ -685,16 +684,14 @@ class PokemonBagScreen
       if qty > 1
         qty = @scene.pbChooseNumber(_INTL("Toss out how many {1}?", itemnameplural), qty)
       end
-      if qty > 0
-        itemname = itemnameplural if qty > 1
-        if pbConfirm(_INTL("Is it OK to throw away {1} {2}?", qty, itemname))
-          if !storage.remove(item, qty)
-            raise "Can't delete items from storage"
-          end
-          @scene.pbRefresh
-          pbDisplay(_INTL("Threw away {1} {2}.", qty, itemname))
-        end
+      next if qty <= 0
+      itemname = itemnameplural if qty > 1
+      next if !pbConfirm(_INTL("Is it OK to throw away {1} {2}?", qty, itemname))
+      if !storage.remove(item, qty)
+        raise "Can't delete items from storage"
       end
+      @scene.pbRefresh
+      pbDisplay(_INTL("Threw away {1} {2}.", qty, itemname))
     end
     @scene.pbEndScene
   end

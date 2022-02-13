@@ -145,13 +145,12 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
             numbersPokemon.push(pokemonlist[index])
           else
             t = pkmntypes[index]
-            t.each { |typ|
-              if types[typ] > 0 && !numbers.include?(index)
-                numbers.push(index)
-                numbersPokemon.push(pokemonlist[index])
-                break
-              end
-            }
+            t.each do |typ|
+              next if types[typ] <= 0 || numbers.include?(index)
+              numbers.push(index)
+              numbersPokemon.push(pokemonlist[index])
+              break
+            end
           end
           break if numbers.length >= Settings::MAX_PARTY_SIZE && rules.ruleset.hasValidTeam?(numbersPokemon)
         end
@@ -192,12 +191,11 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
     break
   end
   trlists.length.times do |i|
-    if trlists[i][2].include?(trfile)
-      trIndex = i
-      trlists[i][0] = newbttrainers
-      trlists[i][1] = pbpokemonlist
-      trlists[i][5] = !hasDefault
-    end
+    next if !trlists[i][2].include?(trfile)
+    trIndex = i
+    trlists[i][0] = newbttrainers
+    trlists[i][1] = pbpokemonlist
+    trlists[i][5] = !hasDefault
   end
   yield(nil) if block_given?
   if trIndex < 0

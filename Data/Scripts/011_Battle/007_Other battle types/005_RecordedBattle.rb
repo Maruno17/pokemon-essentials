@@ -277,14 +277,12 @@ module RecordedBattle::PlaybackHelper
     trainer.each do |tr|
       if tr.length == 4   # Player
         t = Player.new(tr[1], tr[0])
-        t.id     = tr[2]
         t.badges = tr[3]
-        ret.push(t)
       else   # NPCTrainer
         t = NPCTrainer.new(tr[1], tr[0])
-        t.id = tr[2]
-        ret.push(t)
       end
+      t.id = tr[2]
+      ret.push(t)
     end
     return ret
   end

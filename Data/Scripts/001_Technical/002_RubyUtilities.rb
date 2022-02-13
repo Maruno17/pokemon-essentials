@@ -23,7 +23,7 @@ end
 #===============================================================================
 class String
   def starts_with_vowel?
-    return ['a', 'e', 'i', 'o', 'u'].include?(self[0, 1].downcase)
+    return ["a", "e", "i", "o", "u"].include?(self[0, 1].downcase)
   end
 
   def first(n = 1); return self[0...n]; end
@@ -97,7 +97,7 @@ class Hash
     h = self.clone
     # failsafe
     return h if !hash.is_a?(Hash)
-    hash.keys.each do |key|
+    hash.each_key do |key|
       if self[key].is_a?(Hash)
         h.deep_merge!(hash[key])
       else
@@ -109,7 +109,7 @@ class Hash
 
   def deep_merge!(hash)
     return if !hash.is_a?(Hash)
-    hash.keys.each do |key|
+    hash.each_key do |key|
       if self[key].is_a?(Hash)
         self[key].deep_merge!(hash[key])
       else
@@ -138,7 +138,7 @@ class File
   def self.copy(source, destination)
     data = ""
     t = Time.now
-    File.open(source, 'rb') do |f|
+    File.open(source, "rb") do |f|
       loop do
         r = f.read(4096)
         break if !r
@@ -150,7 +150,7 @@ class File
       end
     end
     File.delete(destination) if File.file?(destination)
-    f = File.new(destination, 'wb')
+    f = File.new(destination, "wb")
     f.write data
     f.close
   end

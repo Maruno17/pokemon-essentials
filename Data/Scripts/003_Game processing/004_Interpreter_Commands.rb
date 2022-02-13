@@ -1019,7 +1019,7 @@ class Interpreter
       $player.name = pbEnterPlayerName(_INTL("Your name?"), 1, @parameters[1], $player.name)
       return true
     end
-    if $game_actors && $data_actors && $data_actors[@parameters[0]] != nil
+    if $game_actors && $data_actors && $data_actors[@parameters[0]]
       $game_temp.battle_abort = true
       pbFadeOutIn {
         sscene = PokemonEntryScene.new

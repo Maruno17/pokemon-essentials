@@ -14,35 +14,35 @@ module ItemHandlers
   BattleUseOnPokemon  = ItemHandlerHash.new
 
   def self.hasUseText(item)
-    return UseText[item] != nil
+    return !UseText[item].nil?
   end
 
   def self.hasOutHandler(item)                       # Shows "Use" option in Bag
-    return UseFromBag[item] != nil || UseInField[item] != nil || UseOnPokemon[item] != nil
+    return !UseFromBag[item].nil? || !UseInField[item].nil? || !UseOnPokemon[item].nil?
   end
 
   def self.hasUseInFieldHandler(item)           # Shows "Register" option in Bag
-    return UseInField[item] != nil
+    return !UseInField[item].nil?
   end
 
   def self.hasUseOnPokemon(item)
-    return UseOnPokemon[item] != nil
+    return !UseOnPokemon[item].nil?
   end
 
   def self.hasUseOnPokemonMaximum(item)
-    return UseOnPokemonMaximum[item] != nil
+    return !UseOnPokemonMaximum[item].nil?
   end
 
   def self.hasUseInBattle(item)
-    return UseInBattle[item] != nil
+    return !UseInBattle[item].nil?
   end
 
   def self.hasBattleUseOnBattler(item)
-    return BattleUseOnBattler[item] != nil
+    return !BattleUseOnBattler[item].nil?
   end
 
   def self.hasBattleUseOnPokemon(item)
-    return BattleUseOnPokemon[item] != nil
+    return !BattleUseOnPokemon[item].nil?
   end
 
   # Returns text to display instead of "Use"
@@ -551,7 +551,7 @@ def pbClosestHiddenItem
   result = []
   playerX = $game_player.x
   playerY = $game_player.y
-  $game_map.events.values.each do |event|
+  $game_map.events.each_value do |event|
     next if !event.name[/hiddenitem/i]
     next if (playerX - event.x).abs >= 8
     next if (playerY - event.y).abs >= 6
@@ -674,16 +674,13 @@ def pbUseItem(bag, item, bagscene = nil)
           )
           screen.scene.pbSetHelpText("") if screen.is_a?(PokemonPartyScreen)
         end
-        if qty >= 1
-          ret = ItemHandlers.triggerUseOnPokemon(item, qty, pkmn, screen)
-          if ret && itm.consumed_after_use?
-            bag.remove(item, qty)
-            if !bag.has?(item)
-              pbMessage(_INTL("You used your last {1}.", itm.name)) { screen.pbUpdate }
-              break
-            end
-          end
-        end
+        next if qty <= 0
+        ret = ItemHandlers.triggerUseOnPokemon(item, qty, pkmn, screen)
+        next unless ret && itm.consumed_after_use?
+        bag.remove(item, qty)
+        next if bag.has?(item)
+        pbMessage(_INTL("You used your last {1}.", itm.name)) { screen.pbUpdate }
+        break
       end
       screen.pbEndScene
       bagscene&.pbRefresh

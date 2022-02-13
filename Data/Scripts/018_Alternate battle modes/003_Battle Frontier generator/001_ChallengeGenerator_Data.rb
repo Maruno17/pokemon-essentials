@@ -231,7 +231,7 @@ def pbGenerateChallenge(rule, tag)
     i = 0
     loop do
       changed = false
-      teams.length.times { |j|
+      teams.length.times do |j|
         yield(nil)
         other = j
         5.times do
@@ -241,19 +241,14 @@ def pbGenerateChallenge(rule, tag)
         next if other == j
         changed = true
         pbRuledBattle(teams[j], teams[other], rule)
-      }
+      end
       i += 1
       gameCount = 0
-      teams.each do |team|
-        gameCount += team.games
-      end
+      teams.each { |team| gameCount += team.games }
       yield(nil)
-      if gameCount / teams.length >= 12
-        teams.each do |team|
-          team.updateRating
-        end
-        break
-      end
+      next if gameCount / teams.length < 12
+      teams.each { |team| team.updateRating }
+      break
     end
     teams.sort! { |a, b| b.rating <=> a.rating }
     save_data(teams, tag + "_teams.rxdata")

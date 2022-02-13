@@ -632,13 +632,12 @@ def pbEvolutionCheck
       new_species = pkmn.check_evolution_on_level_up
     end
     new_species = pkmn.check_evolution_after_battle(i) if new_species.nil?
+    next if new_species.nil?
     # Evolve Pokémon if possible
-    if !new_species.nil?
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pkmn, new_species)
-      evo.pbEvolution
-      evo.pbEndScreen
-    end
+    evo = PokemonEvolutionScene.new
+    evo.pbStartScreen(pkmn, new_species)
+    evo.pbEvolution
+    evo.pbEndScreen
   end
 end
 

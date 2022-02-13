@@ -543,12 +543,11 @@ class PokemonBoxPartySprite < SpriteWrapper
     @pokemonsprites.each { |sprite| sprite&.refresh }
     Settings::MAX_PARTY_SIZE.times do |j|
       sprite = @pokemonsprites[j]
-      if sprite && !sprite.disposed?
-        sprite.viewport = self.viewport
-        sprite.x = self.x + xvalues[j]
-        sprite.y = self.y + yvalues[j]
-        sprite.z = 0
-      end
+      next if sprite.nil? || sprite.disposed?
+      sprite.viewport = self.viewport
+      sprite.x = self.x + xvalues[j]
+      sprite.y = self.y + yvalues[j]
+      sprite.z = 0
     end
   end
 

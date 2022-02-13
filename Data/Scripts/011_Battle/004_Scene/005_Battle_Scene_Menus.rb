@@ -174,9 +174,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
     @msgBox.text = value[0]
     return if USE_GRAPHICS
     commands = []
-    (1..4).each do |i|
-      commands.push(value[i]) if value[i] && value[i] != nil
-    end
+    (1..4).each { |i| commands.push(value[i]) if value[i] }
     @cmdWindow.commands = commands
   end
 

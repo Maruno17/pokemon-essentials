@@ -108,7 +108,7 @@ def pbSetTextMessages
     items.concat(choices)
     MessageTypes.setMapMessagesAsHash(0, items)
     mapinfos = pbLoadMapInfos
-    mapinfos.keys.each do |id|
+    mapinfos.each_key do |id|
       if Time.now.to_i - t >= 5
         t = Time.now.to_i
         Graphics.update
@@ -118,7 +118,7 @@ def pbSetTextMessages
       map = load_data(filename)
       items = []
       choices = []
-      map.events.values.each do |event|
+      map.events.each_value do |event|
         if Time.now.to_i - t >= 5
           t = Time.now.to_i
           Graphics.update

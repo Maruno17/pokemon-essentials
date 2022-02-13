@@ -593,7 +593,7 @@ class PokemonParty_Scene
   end
 
   def pbHasAnnotations?
-    return @sprites["pokemon0"].text != nil
+    return !@sprites["pokemon0"].text.nil?
   end
 
   def pbAnnotate(annot)
@@ -1328,7 +1328,6 @@ MenuHandlers.add(:party_menu, :item, {
   "order"     => 50,
   "condition" => proc { |screen, party, party_idx| next !party[party_idx].egg? && !party[party_idx].mail },
   "effect"    => proc { |screen, party, party_idx|
-    pkmn = party[party_idx]
     # Get all commands
     command_list = []
     commands = []

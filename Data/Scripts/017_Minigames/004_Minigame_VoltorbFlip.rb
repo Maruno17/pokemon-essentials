@@ -53,11 +53,10 @@ class VoltorbFlip
         squareValues[i] = rand(2..3)
         total *= squareValues[i]
       end
-      if total > LEVEL_RANGES[@level - 1][1]
-        # Lowers value of square to 1 if over max
-        total /= squareValues[i]
-        squareValues[i] = 1
-      end
+      next if total <= LEVEL_RANGES[@level - 1][1]
+      # Lowers value of square to 1 if over max
+      total /= squareValues[i]
+      squareValues[i] = 1
     end
     # Randomize the values a little
     25.times do |i|
@@ -67,11 +66,10 @@ class VoltorbFlip
         squareValues[i] -= 1
         total *= squareValues[i]
       end
-      if total < LEVEL_RANGES[@level - 1][0] && squareValues[i] > 0
-        total /= squareValues[i]
-        squareValues[i] = temp
-        total *= squareValues[i]
-      end
+      next if total >= LEVEL_RANGES[@level - 1][0] || squareValues[i] <= 0
+      total /= squareValues[i]
+      squareValues[i] = temp
+      total *= squareValues[i]
     end
     # Populate @squares array
     25.times do |i|

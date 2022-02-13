@@ -154,7 +154,7 @@ module Compiler
         contents["InternalName"] = type_id if !type_id[/^\d+/]
         icon_pos = (type_id[/^\d+/]) ? type_id.to_i : nil
         # Go through schema hash of compilable data and compile this section
-        schema.keys.each do |key|
+        schema.each_key do |key|
           FileLineData.setSection(type_id, key, contents[key])   # For error reporting
           # Skip empty properties, or raise an error if a required property is
           # empty
@@ -606,7 +606,7 @@ module Compiler
         contents["InternalName"] = species_id if !species_id[/^\d+/]
         # Ensure all required properties have been defined, and raise an error
         # if not
-        schema.keys.each do |key|
+        schema.each_key do |key|
           next if !nil_or_empty?(contents[key])
           if ["Name", "InternalName"].include?(key)
             raise _INTL("The entry {1} is required in {2} section {3}.", key, path, species_id)
@@ -618,7 +618,7 @@ module Compiler
           raise _INTL("Species ID '{1}' is used twice.\r\n{2}", contents["InternalName"], FileLineData.linereport)
         end
         # Go through schema hash of compilable data and compile this section
-        schema.keys.each do |key|
+        schema.each_key do |key|
           next if nil_or_empty?(contents[key])
           FileLineData.setSection(species_id, key, contents[key])   # For error reporting
           # Compile value for key
@@ -792,7 +792,7 @@ module Compiler
         used_forms[species_symbol].push(form)
         base_data = GameData::Species.get(species_symbol)
         # Go through schema hash of compilable data and compile this section
-        schema.keys.each do |key|
+        schema.each_key do |key|
           # Skip empty properties (none are required)
           if nil_or_empty?(contents[key])
             contents[key] = nil
@@ -988,7 +988,7 @@ module Compiler
         species_symbol = csvEnumField!(split_section_name[0], :Species, nil, nil)
         form           = (split_section_name[1]) ? csvPosInt!(split_section_name[1]) : 0
         # Go through schema hash of compilable data and compile this section
-        schema.keys.each do |key|
+        schema.each_key do |key|
           # Skip empty properties (none are required)
           if nil_or_empty?(contents[key])
             contents[key] = nil
@@ -1215,7 +1215,7 @@ module Compiler
       Graphics.update if idx % 250 == 0
       next if line.length == 0
       if current_type && line[/^\d+,/]   # Species line
-        values = line.split(',').collect! { |v| v.strip }
+        values = line.split(",").collect! { |v| v.strip }
         if !values || values.length < 3
           raise _INTL("Expected a species entry line for encounter type {1} for map '{2}', got \"{3}\" instead.\r\n{4}",
                       GameData::EncounterType.get(current_type).real_name, encounter_hash[:map], line, FileLineData.linereport)
@@ -1231,7 +1231,7 @@ module Compiler
         end
         encounter_hash[:types][current_type].push(values)
       elsif line[/^\[\s*(.+)\s*\]$/]   # Map ID line
-        values = $~[1].split(',').collect! { |v| v.strip.to_i }
+        values = $~[1].split(",").collect! { |v| v.strip.to_i }
         values[1] = 0 if !values[1]
         map_number = values[0]
         map_version = values[1]
@@ -1272,7 +1272,7 @@ module Compiler
         raise _INTL("Expected a map number, got \"{1}\" instead.\r\n{2}", line, FileLineData.linereport)
       else
         # Check if line is an encounter method name or not
-        values = line.split(',').collect! { |v| v.strip }
+        values = line.split(",").collect! { |v| v.strip }
         current_type = (values[0] && !values[0].empty?) ? values[0].to_sym : nil
         if current_type && GameData::EncounterType.exists?(current_type)   # Start of a new encounter method
           step_chances[current_type] = values[1].to_i if values[1] && !values[1].empty?
@@ -1546,7 +1546,7 @@ module Compiler
         Graphics.update
         next if name != "DefaultTrainerList" && name != "TrainerList"
         rsection = []
-        section.keys.each do |key|
+        section.each_key do |key|
           FileLineData.setSection(name, key, section[key])
           schema = btTrainersRequiredTypes[key]
           next if key == "Challenges" && name == "DefaultTrainerList"
@@ -1608,7 +1608,7 @@ module Compiler
         FileLineData.file = filename
         pbEachFileSection(f) { |section, name|
           rsection = []
-          section.keys.each do |key|
+          section.each_key do |key|
             FileLineData.setSection(name, key, section[key])
             schema = requiredtypes[key]
             next if !schema
@@ -1647,7 +1647,7 @@ module Compiler
       pbEachFileSectionNumbered(f) { |contents, section_id|
         schema = (section_id == 0) ? GameData::Metadata::SCHEMA : GameData::PlayerMetadata::SCHEMA
         # Go through schema hash of compilable data and compile this section
-        schema.keys.each do |key|
+        schema.each_key do |key|
           FileLineData.setSection(section_id, key, contents[key])   # For error reporting
           # Skip empty properties, or raise an error if a required property is
           # empty
@@ -1731,7 +1731,7 @@ module Compiler
         idx += 1
         Graphics.update if idx % 250 == 0
         # Go through schema hash of compilable data and compile this section
-        schema.keys.each do |key|
+        schema.each_key do |key|
           FileLineData.setSection(map_id, key, contents[key])   # For error reporting
           # Skip empty properties
           next if contents[key].nil?

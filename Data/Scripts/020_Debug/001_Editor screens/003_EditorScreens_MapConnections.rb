@@ -302,7 +302,7 @@ class MapScreenScene
 
   def saveMapSpritePos
     @mapspritepos.clear
-    @mapsprites.keys.each do |i|
+    @mapsprites.each_key do |i|
       s = @mapsprites[i]
       @mapspritepos[i] = [s.x, s.y] if s && !s.disposed?
     end
@@ -335,7 +335,7 @@ class MapScreenScene
     conns.each do |map_conns|
       next if !map_conns
       map_conns.each do |c|
-        @mapconns.push(c.clone) if !@mapconns.any? { |x| x[0] == c[0] && x[3] == c[3] }
+        @mapconns.push(c.clone) if @mapconns.none? { |x| x[0] == c[0] && x[3] == c[3] }
       end
     end
     if $game_map
@@ -347,7 +347,7 @@ class MapScreenScene
   end
 
   def setTopSprite(id)
-    @mapsprites.keys.each do |i|
+    @mapsprites.each_key do |i|
       @mapsprites[i].z = (i == id) ? 1 : 0
     end
   end
@@ -441,7 +441,7 @@ class MapScreenScene
       else
         xpos = x - @dragOffsetX
         ypos = y - @dragOffsetY
-        @mapspritepos.keys.each do |i|
+        @mapspritepos.each_key do |i|
           sprite = getMapSprite(i)
           sprite.x = (@mapspritepos[i][0] + xpos) & ~3
           sprite.y = (@mapspritepos[i][1] + ypos) & ~3
@@ -456,7 +456,7 @@ class MapScreenScene
   end
 
   def hittest(x, y)
-    @mapsprites.keys.each do |i|
+    @mapsprites.each_key do |i|
       sx = @mapsprites[i].x
       sy = @mapsprites[i].y
       sr = sx + @mapsprites[i].bitmap.width

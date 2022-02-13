@@ -622,12 +622,11 @@ module RandomDungeonGenerator
     ((tiles.length + 1) * 1000).times do
       x = ar1.get
       y = ar2.get
-      if dungeon.isRoom?(x, y) &&
-         !tiles.any? { |item| (item[0] - x).abs < 2 && (item[1] - y).abs < 2 }
-        ret = [x, y]
-        tiles.push(ret)
-        return ret
-      end
+      next if !dungeon.isRoom?(x, y) ||
+              tiles.any? { |item| (item[0] - x).abs < 2 && (item[1] - y).abs < 2 }
+      ret = [x, y]
+      tiles.push(ret)
+      return ret
     end
     return nil
   end
@@ -652,7 +651,7 @@ EventHandlers.add(:on_game_map_setup, :random_dungeon,
     dungeon.generateMapInPlace(map)
     roomtiles = []
     # Reposition events
-    map.events.values.each do |event|
+    map.events.each_value do |event|
       tile = RandomDungeonGenerator.pbRandomRoomTile(dungeon, roomtiles)
       if tile
         event.x = tile[0]

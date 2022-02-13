@@ -707,15 +707,14 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_form, {
       cmd = pbMessage("\\ts[]" + _INTL("Form is {1}.", pkmn.form), formcmds[1], -1, nil, cmd)
       next if cmd < 0
       f = formcmds[0][cmd]
-      if f != pkmn.form
-        pkmn.forced_form = nil
-        if MultipleForms.hasFunction?(pkmn, "getForm")
-          next if !pbConfirmMessage(_INTL("This species decides its own form. Override?"))
-          pkmn.forced_form = f
-        end
-        pkmn.form_simple = f
-        battler.form = pkmn.form if battler
+      next if f == pkmn.form
+      pkmn.forced_form = nil
+      if MultipleForms.hasFunction?(pkmn, "getForm")
+        next if !pbConfirmMessage(_INTL("This species decides its own form. Override?"))
+        pkmn.forced_form = f
       end
+      pkmn.form_simple = f
+      battler.form = pkmn.form if battler
     end
   }
 })

@@ -1048,15 +1048,14 @@ class PokemonSummary_Scene
         hasMovedCursor = true
         pbPlayCursorSE
       end
-      if hasMovedCursor
-        @ribbonOffset = (selribbon / 4).floor if selribbon < @ribbonOffset * 4
-        @ribbonOffset = (selribbon / 4).floor - 2 if selribbon >= (@ribbonOffset + 3) * 4
-        @ribbonOffset = 0 if @ribbonOffset < 0
-        @ribbonOffset = numRows - 3 if @ribbonOffset > numRows - 3
-        @sprites["ribbonsel"].index    = selribbon - (@ribbonOffset * 4)
-        @sprites["ribbonpresel"].index = oldselribbon - (@ribbonOffset * 4)
-        drawSelectedRibbon(@pokemon.ribbons[selribbon])
-      end
+      next if !hasMovedCursor
+      @ribbonOffset = (selribbon / 4).floor if selribbon < @ribbonOffset * 4
+      @ribbonOffset = (selribbon / 4).floor - 2 if selribbon >= (@ribbonOffset + 3) * 4
+      @ribbonOffset = 0 if @ribbonOffset < 0
+      @ribbonOffset = numRows - 3 if @ribbonOffset > numRows - 3
+      @sprites["ribbonsel"].index    = selribbon - (@ribbonOffset * 4)
+      @sprites["ribbonpresel"].index = oldselribbon - (@ribbonOffset * 4)
+      drawSelectedRibbon(@pokemon.ribbons[selribbon])
     end
     @sprites["ribbonsel"].visible = false
   end

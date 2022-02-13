@@ -180,7 +180,7 @@ class PokemonMapFactory
       return false unless map.passable?(x, y, 0, thisEvent)
     end
     # Check passability of event(s) in that spot
-    map.events.values.each do |event|
+    map.events.each_value do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)
       return false if !event.through && event.character_name != ""
     end
@@ -207,7 +207,7 @@ class PokemonMapFactory
     elsif !map.passableStrict?(x, y, 0, thisEvent)
       return false
     end
-    map.events.values.each do |event|
+    map.events.each_value do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)
       return false if !event.through && event.character_name != ""
     end

@@ -431,7 +431,7 @@ class Battle::Battler
         # NOTE: If a multi-hit move becomes disabled partway through doing those
         #       hits (e.g. by Cursed Body), the rest of the hits continue as
         #       normal.
-        break if !targets.any? { |t| !t.fainted? }   # All targets are fainted
+        break if targets.none? { |t| !t.fainted? }   # All targets are fainted
       end
       # Battle Arena only - attack is successful
       @battle.successStates[user.index].useState = 2

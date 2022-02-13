@@ -65,7 +65,7 @@ class Game_Temp
     @ending_surf            = false
     @in_mini_update         = false
     # Battle
-    @battleback_name        = ''
+    @battleback_name        = ""
     @force_single_battle    = false
     # Player transfers
     @player_transferring    = false

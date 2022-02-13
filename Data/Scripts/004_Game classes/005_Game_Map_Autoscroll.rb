@@ -81,10 +81,10 @@ class Interpreter
     if $game_map.scrolling?
       return false
     elsif !$game_map.valid?(x, y)
-      print 'Map Autoscroll: given x,y is invalid'
+      print "Map Autoscroll: given x,y is invalid"
       return command_skip
     elsif !(1..6).include?(speed)
-      print 'Map Autoscroll: invalid speed (1-6 only)'
+      print "Map Autoscroll: invalid speed (1-6 only)"
       return command_skip
     end
     center_x = ((Graphics.width / 2) - (Game_Map::TILE_WIDTH / 2)) * 4   # X coordinate in the center of the screen
@@ -126,12 +126,8 @@ class Interpreter
       end
       count = [count_x.abs, count_y.abs].min
     end
-    $game_map.start_scroll(dir, count, speed) if dir != nil
-    if @diag
-      return false
-    else
-      return true
-    end
+    $game_map.start_scroll(dir, count, speed) if dir
+    return !@diag
   end
 
   #-----------------------------------------------------------------------------

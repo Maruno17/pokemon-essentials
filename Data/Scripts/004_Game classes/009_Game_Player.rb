@@ -188,7 +188,7 @@ class Game_Player < Game_Character
     # If event is running
     return result if checkIfRunning && $game_system.map_interpreter.running?
     # All event loops
-    $game_map.events.values.each do |event|
+    $game_map.events.each_value do |event|
       next if !triggers.include?(event.trigger)
       next if !event.name[/trainer\((\d+)\)/i]
       distance = $~[1].to_i
@@ -204,7 +204,7 @@ class Game_Player < Game_Character
     # If event is running
     return result if checkIfRunning && $game_system.map_interpreter.running?
     # All event loops
-    $game_map.events.values.each do |event|
+    $game_map.events.each_value do |event|
       next if !triggers.include?(event.trigger)
       next if !event.name[/counter\((\d+)\)/i]
       distance = $~[1].to_i
@@ -238,7 +238,7 @@ class Game_Player < Game_Character
     new_x = @x + (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
     new_y = @y + (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
     return nil if !$game_map.valid?(new_x, new_y)
-    $game_map.events.values.each do |event|
+    $game_map.events.each_value do |event|
       next if !event.at_coordinate?(new_x, new_y)
       next if event.jumping? || event.over_trigger?
       return event
@@ -247,7 +247,7 @@ class Game_Player < Game_Character
     if $game_map.counter?(new_x, new_y)
       new_x += (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
       new_y += (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
-      $game_map.events.values.each do |event|
+      $game_map.events.each_value do |event|
         next if !event.at_coordinate?(new_x, new_y)
         next if event.jumping? || event.over_trigger?
         return event
@@ -332,7 +332,7 @@ class Game_Player < Game_Character
     # If event is running
     return result if $game_system.map_interpreter.running?
     # All event loops
-    $game_map.events.values.each do |event|
+    $game_map.events.each_value do |event|
       # If event coordinates and triggers are consistent
       next if !event.at_coordinate?(@x, @y)
       next if !triggers.include?(event.trigger)
@@ -356,7 +356,7 @@ class Game_Player < Game_Character
     new_y = @y + (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
     return false if !$game_map.valid?(new_x, new_y)
     # All event loops
-    $game_map.events.values.each do |event|
+    $game_map.events.each_value do |event|
       next if !triggers.include?(event.trigger)
       # If event coordinates and triggers are consistent
       next if !event.at_coordinate?(new_x, new_y)
@@ -372,7 +372,7 @@ class Game_Player < Game_Character
       new_y += (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
       return false if !$game_map.valid?(new_x, new_y)
       # All event loops
-      $game_map.events.values.each do |event|
+      $game_map.events.each_value do |event|
         next if !triggers.include?(event.trigger)
         # If event coordinates and triggers are consistent
         next if !event.at_coordinate?(new_x, new_y)
@@ -394,7 +394,7 @@ class Game_Player < Game_Character
     # All event loops
     x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
     y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
-    $game_map.events.values.each do |event|
+    $game_map.events.each_value do |event|
       next if ![1, 2].include?(event.trigger)   # Player touch, event touch
       # If event coordinates and triggers are consistent
       next if !event.at_coordinate?(@x + x_offset, @y + y_offset)

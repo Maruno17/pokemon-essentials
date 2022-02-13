@@ -106,7 +106,7 @@ class Pokemon
 
   def inspect
     str = super.chop
-    str << sprintf(' %s Lv.%s>', @species, @level.to_s || '???')
+    str << sprintf(" %s Lv.%s>", @species, @level.to_s || "???")
     return str
   end
 
@@ -143,7 +143,7 @@ class Pokemon
     return @forced_form if !@forced_form.nil?
     return @form if $game_temp.in_battle || $game_temp.in_storage
     calc_form = MultipleForms.call("getForm", self)
-    self.form = calc_form if calc_form != nil && calc_form != @form
+    self.form = calc_form if calc_form && calc_form != @form
     return @form
   end
 
@@ -250,7 +250,7 @@ class Pokemon
     return if !able?
     new_status = GameData::Status.try_get(value)
     if !new_status
-      raise ArgumentError, _INTL('Attempted to set {1} as Pokémon status', value.class.name)
+      raise ArgumentError, _INTL("Attempted to set {1} as Pokémon status", value.class.name)
     end
     @status = new_status.id
   end
@@ -311,13 +311,13 @@ class Pokemon
 
   # @deprecated This method is slated to be removed in v21.
   def type1
-    Deprecation.warn_method('type1', 'v21', 'pkmn.types')
+    Deprecation.warn_method("type1", "v21", "pkmn.types")
     return types[0]
   end
 
   # @deprecated This method is slated to be removed in v21.
   def type2
-    Deprecation.warn_method('type2', 'v21', 'pkmn.types')
+    Deprecation.warn_method("type2", "v21", "pkmn.types")
     return types[1] || types[0]
   end
 
@@ -588,7 +588,7 @@ class Pokemon
   # @param mail [Mail, nil] mail to be held by this Pokémon
   def mail=(mail)
     if !mail.nil? && !mail.is_a?(Mail)
-      raise ArgumentError, _INTL('Invalid value {1} given', mail.inspect)
+      raise ArgumentError, _INTL("Invalid value {1} given", mail.inspect)
     end
     @mail = mail
   end
@@ -1185,7 +1185,7 @@ class Pokemon
     when Player, NPCTrainer
       @owner = Owner.new_from_trainer(owner)
     else
-      @owner = Owner.new(0, '', 2, 2)
+      @owner = Owner.new(0, "", 2, 2)
     end
     @obtain_method    = 0   # Met
     @obtain_method    = 4 if $game_switches && $game_switches[Settings::FATEFUL_ENCOUNTER_SWITCH]
