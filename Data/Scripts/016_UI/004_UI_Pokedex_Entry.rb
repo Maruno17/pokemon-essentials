@@ -288,64 +288,80 @@ class PokemonPokedexInfo_Scene
     return false
   end
 
+  # Returns a 1D array of values corresponding to points on the Town Map. Each
+  # value is true or false.
+  def pbGetEncounterPoints
+    # Determine all visible points on the Town Map (i.e. only ones with a
+    # defined point in town_map.txt, and which either have no Self Switch
+    # controlling their visibility or whose Self Switch is ON)
+    visible_points = []
+    @mapdata[@region][2].each do |loc|
+      next if loc[7] && !$game_switches[loc[7]]   # Point is not visible
+      visible_points.push([loc[0], loc[1]])
+    end
+    # Find all points with a visible area for @species
+    town_map_width = 1 + PokemonRegionMap_Scene::RIGHT - PokemonRegionMap_Scene::LEFT
+    ret = []
+    GameData::Encounter.each_of_version($PokemonGlobal.encounter_version) do |enc_data|
+      next if !pbFindEncounter(enc_data.types, @species)   # Species isn't in encounter table
+      # Get the map belonging to the encounter table
+      map_metadata = GameData::MapMetadata.try_get(enc_data.map)
+      next if !map_metadata || map_metadata.has_flag?("HideEncountersInPokedex")
+      mappos = map_metadata.town_map_position
+      next if mappos[0] != @region   # Map isn't in the region being shown
+      # Get the size and shape of the map in the Town Map
+      map_size = map_metadata.town_map_size
+      map_width = 1
+      map_height = 1
+      map_shape = "1"
+      if map_size && map_size[0] && map_size[0] > 0   # Map occupies multiple points
+        map_width = map_size[0]
+        map_shape = map_size[1]
+        map_height = (map_shape.length.to_f / map_width).ceil
+      end
+      # Mark each visible point covered by the map as containing the area
+      map_width.times do |i|
+        map_height.times do |j|
+          next if map_shape[i + (j * map_width), 1].to_i == 0   # Point isn't part of map
+          next if !visible_points.include?([mappos[1] + i, mappos[2] + j])   # Point isn't visible
+          ret[mappos[1] + i + ((mappos[2] + j) * town_map_width)] = true
+        end
+      end
+    end
+    return ret
+  end
+
   def drawPageArea
     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
     overlay = @sprites["overlay"].bitmap
     base   = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
     @sprites["areahighlight"].bitmap.clear
-    # Fill the array "points" with all squares of the region map in which the
-    # species can be found
-    points = []
-    mapwidth = 1 + PokemonRegionMap_Scene::RIGHT - PokemonRegionMap_Scene::LEFT
-    GameData::Encounter.each_of_version($PokemonGlobal.encounter_version) do |enc_data|
-      next if !pbFindEncounter(enc_data.types, @species)
-      map_metadata = GameData::MapMetadata.try_get(enc_data.map)
-      mappos = (map_metadata) ? map_metadata.town_map_position : nil
-      next if !mappos || mappos[0] != @region
-      showpoint = true
-      @mapdata[@region][2].each do |loc|
-        showpoint = false if loc[0] == mappos[1] && loc[1] == mappos[2] &&
-                             loc[7] && !$game_switches[loc[7]]
-      end
-      next if !showpoint
-      mapsize = map_metadata.town_map_size
-      if mapsize && mapsize[0] && mapsize[0] > 0
-        sqwidth  = mapsize[0]
-        sqheight = (mapsize[1].length.to_f / mapsize[0]).ceil
-        sqwidth.times do |i|
-          sqheight.times do |j|
-            if mapsize[1][i + (j * sqwidth), 1].to_i > 0
-              points[mappos[1] + i + ((mappos[2] + j) * mapwidth)] = true
-            end
-          end
-        end
-      else
-        points[mappos[1] + (mappos[2] * mapwidth)] = true
-      end
-    end
-    # Draw coloured squares on each square of the region map with a nest
+    # Get all points to be shown as places where @species can be encountered
+    points = pbGetEncounterPoints
+    # Draw coloured squares on each point of the Town Map with a nest
     pointcolor   = Color.new(0, 248, 248)
     pointcolorhl = Color.new(192, 248, 248)
+    town_map_width = 1 + PokemonRegionMap_Scene::RIGHT - PokemonRegionMap_Scene::LEFT
     sqwidth = PokemonRegionMap_Scene::SQUARE_WIDTH
     sqheight = PokemonRegionMap_Scene::SQUARE_HEIGHT
     points.length.times do |j|
       next if !points[j]
-      x = (j % mapwidth) * sqwidth
+      x = (j % town_map_width) * sqwidth
       x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
-      y = (j / mapwidth) * sqheight
+      y = (j / town_map_width) * sqheight
       y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
       @sprites["areahighlight"].bitmap.fill_rect(x, y, sqwidth, sqheight, pointcolor)
-      if j - mapwidth < 0 || !points[j - mapwidth]
+      if j - town_map_width < 0 || !points[j - town_map_width]
         @sprites["areahighlight"].bitmap.fill_rect(x, y - 2, sqwidth, 2, pointcolorhl)
       end
-      if j + mapwidth >= points.length || !points[j + mapwidth]
+      if j + town_map_width >= points.length || !points[j + town_map_width]
         @sprites["areahighlight"].bitmap.fill_rect(x, y + sqheight, sqwidth, 2, pointcolorhl)
       end
-      if j % mapwidth == 0 || !points[j - 1]
+      if j % town_map_width == 0 || !points[j - 1]
         @sprites["areahighlight"].bitmap.fill_rect(x - 2, y, 2, sqheight, pointcolorhl)
       end
-      if (j + 1) % mapwidth == 0 || !points[j + 1]
+      if (j + 1) % town_map_width == 0 || !points[j + 1]
         @sprites["areahighlight"].bitmap.fill_rect(x + sqwidth, y, 2, sqheight, pointcolorhl)
       end
     end

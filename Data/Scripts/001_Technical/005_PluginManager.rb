@@ -677,6 +677,7 @@ module PluginManager
     # collect garbage
     GC.start
     Console.echo_done(true)
+    echoln "" if scripts.length == 0
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
