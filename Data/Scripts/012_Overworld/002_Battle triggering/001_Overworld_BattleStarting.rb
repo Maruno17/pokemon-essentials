@@ -32,30 +32,28 @@ class Game_Temp
     when "single", "1v1", "1v2", "2v1", "1v3", "3v1",
          "double", "2v2", "2v3", "3v2", "triple", "3v3"
       rules["size"] = rule.to_s.downcase
-    when "canlose"                then rules["canLose"]        = true
-    when "cannotlose"             then rules["canLose"]        = false
-    when "canrun"                 then rules["canRun"]         = true
-    when "cannotrun"              then rules["canRun"]         = false
-    when "roamerflees"            then rules["roamerFlees"]    = true
-    when "noexp"                  then rules["expGain"]        = false
-    when "nomoney"                then rules["moneyGain"]      = false
-    when "switchstyle"            then rules["switchStyle"]    = true
-    when "setstyle"               then rules["switchStyle"]    = false
-    when "anims"                  then rules["battleAnims"]    = true
-    when "noanims"                then rules["battleAnims"]    = false
+    when "canlose"                then rules["canLose"]          = true
+    when "cannotlose"             then rules["canLose"]          = false
+    when "canrun"                 then rules["canRun"]           = true
+    when "cannotrun"              then rules["canRun"]           = false
+    when "roamerflees"            then rules["roamerFlees"]      = true
+    when "noexp"                  then rules["expGain"]          = false
+    when "nomoney"                then rules["moneyGain"]        = false
+    when "disablepokeballs"       then rules["disablePokeBalls"] = true
+    when "switchstyle"            then rules["switchStyle"]      = true
+    when "setstyle"               then rules["switchStyle"]      = false
+    when "anims"                  then rules["battleAnims"]      = true
+    when "noanims"                then rules["battleAnims"]      = false
     when "terrain"
-      terrain_data = GameData::BattleTerrain.try_get(var)
-      rules["defaultTerrain"] = (terrain_data) ? terrain_data.id : nil
+      rules["defaultTerrain"] = GameData::BattleTerrain.try_get(var)&.id
     when "weather"
-      weather_data = GameData::BattleWeather.try_get(var)
-      rules["defaultWeather"] = (weather_data) ? weather_data.id : nil
+      rules["defaultWeather"] = GameData::BattleWeather.try_get(var)&.id
     when "environment", "environ"
-      environment_data = GameData::Environment.try_get(var)
-      rules["environment"] = (environment_data) ? environment_data.id : nil
-    when "backdrop", "battleback" then rules["backdrop"]       = var
-    when "base"                   then rules["base"]           = var
-    when "outcome", "outcomevar"  then rules["outcomeVar"]     = var
-    when "nopartner"              then rules["noPartner"]      = true
+      rules["environment"] = GameData::Environment.try_get(var)&.id
+    when "backdrop", "battleback" then rules["backdrop"]         = var
+    when "base"                   then rules["base"]             = var
+    when "outcome", "outcomevar"  then rules["outcomeVar"]       = var
+    when "nopartner"              then rules["noPartner"]        = true
     else
       raise _INTL("Battle rule \"{1}\" does not exist.", rule)
     end
@@ -102,6 +100,8 @@ def pbPrepareBattle(battle)
   battle.expGain = battleRules["expGain"] if !battleRules["expGain"].nil?
   # Whether the player gains/loses money at the end of the battle (default: true)
   battle.moneyGain = battleRules["moneyGain"] if !battleRules["moneyGain"].nil?
+  # Whether Poké Balls cannot be thrown at all
+  battle.disablePokeBalls = battleRules["disablePokeBalls"] if !battleRules["disablePokeBalls"].nil?
   # Whether the player is able to switch when an opponent's Pokémon faints
   battle.switchStyle = ($PokemonSystem.battlestyle == 0)
   battle.switchStyle = battleRules["switchStyle"] if !battleRules["switchStyle"].nil?

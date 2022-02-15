@@ -31,6 +31,10 @@ ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_pok
       scene.pbDisplay(_INTL("There is no room left in the PC!")) if showMessages
       next false
     end
+    if battle.disablePokeBalls
+      scene.pbDisplay(_INTL("You can't throw a Poké Ball!")) if showMessages
+      next false
+    end
     # NOTE: Using a Poké Ball consumes all your actions for the round. The code
     #       below is one half of making this happen; the other half is in def
     #       pbItemUsesAllActions?.
@@ -50,7 +54,7 @@ ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_pok
       if battle.pbOpposingBattlerCount == 2
         scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokémon!")) if showMessages
       elsif showMessages
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are more than one Pokémon!"))
+        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there is more than one Pokémon!"))
       end
       next false
     end

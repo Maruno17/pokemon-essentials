@@ -68,6 +68,7 @@ class Battle
   attr_accessor :controlPlayer    # Whether player's Pokémon are AI controlled
   attr_accessor :expGain          # Whether Pokémon can gain Exp/EVs
   attr_accessor :moneyGain        # Whether the player can gain/lose money
+  attr_accessor :disablePokeBalls # Whether Poké Balls cannot be thrown at all
   attr_accessor :rules
   attr_accessor :choices          # Choices made by each Pokémon this round
   attr_accessor :megaEvolution    # Battle index of each trainer's Pokémon to Mega Evolve
@@ -138,6 +139,7 @@ class Battle
     @controlPlayer     = false
     @expGain           = true
     @moneyGain         = true
+    @disablePokeBalls  = false
     @rules             = {}
     @priority          = []
     @priorityTrickRoom = false
