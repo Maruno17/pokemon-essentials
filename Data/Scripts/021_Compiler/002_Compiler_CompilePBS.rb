@@ -478,6 +478,7 @@ module Compiler
         end
         consumable = !([3, 4, 5].include?(line[7]) || line[8] >= 6)
         line[7] = 1 if line[7] == 5
+        line[7] = 5 if line[7] == 6
         line[8] -= 5 if line[8] > 5
         flags = []
         flags.push(line[9]) if !nil_or_empty?(line[9])
