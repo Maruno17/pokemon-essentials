@@ -89,7 +89,7 @@ class PurifyChamberSet
     if @list[@facing]
       ret += PurifyChamberSet.isSuperEffective(@shadow, @list[@facing]) ? 1 : 0
     end
-    return [ret + (@list.length / 2), 4].min
+    return ret + (@list.length / 2)
   end
 
   def shadowAffinity
@@ -147,7 +147,12 @@ class PurifyChamberSet
   end
 
   def self.isSuperEffective(p1, p2)
-    return (typeAdvantage(p1.types[0], p2.types[0]) || typeAdvantage(p1.types[0], p2.types[1]))
+    return true if typeAdvantage(p1.types[0], p2.types[0])
+    return true if p2.types[1] && typeAdvantage(p1.types[0], p2.types[1])
+    return false if p1.types[1].nil?
+    return true if typeAdvantage(p1.types[1], p2.types[0])
+    return true if p2.types[1] && typeAdvantage(p1.types[1], p2.types[1])
+    return false
   end
 end
 
@@ -684,7 +689,7 @@ class DirectFlowDiagram
     @strength = 0
     @offset = 0
     @x = 306
-    @y = 138
+    @y = 158
     @distance = 96
   end
 
@@ -758,7 +763,7 @@ class FlowDiagram
     @strength = 0
     @offset = 0
     @x = 306
-    @y = 138
+    @y = 158
     @distance = 96
   end
 
@@ -858,10 +863,13 @@ class PurifyChamberSetView < SpriteWrapper
     @directflow.setFlowStrength(1)
     @__sprites = []
     @__sprites[0] = PokemonIconSprite.new(nil, viewport)
+    @__sprites[0].setOffset
     (PurifyChamber::SETSIZE * 2).times do |i|
       @__sprites[i + 1] = PokemonIconSprite.new(nil, viewport)
+      @__sprites[i + 1].setOffset
     end
     @__sprites[1 + (PurifyChamber::SETSIZE * 2)] = PokemonIconSprite.new(nil, viewport)
+    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].setOffset
     @chamber = chamber
     refresh
   end
@@ -931,8 +939,8 @@ class PurifyChamberSetView < SpriteWrapper
 
   def checkCursor(index)
     if @cursor == index
-      @view.x = @__sprites[index].x - 32
-      @view.y = @__sprites[index].y - 40
+      @view.x = @__sprites[index].x - @view.bitmap.width / 2
+      @view.y = @__sprites[index].y - @view.bitmap.height / 2
       @view.visible = true
     end
   end
@@ -960,23 +968,22 @@ class PurifyChamberSetView < SpriteWrapper
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 3 / 4, 8, @info.bitmap.width * 1 / 4, 8),
                   Color.new(192, 0, 256), pkmn.heart_gauge, pkmn.max_gauge_size)
       # draw flow gauge
-      pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 3 / 4, 24 + 8, @info.bitmap.width * 1 / 4, 8),
-                  Color.new(0, 0, 248), @chamber.chamberFlow(@set), 6)
+      pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 3 / 4, 32, @info.bitmap.width * 1 / 4, 8),
+                  Color.new(0, 0, 248), @chamber.chamberFlow(@set), 7)
     end
     if @chamber.setCount(@set) > 0
       textpos.push([_INTL("TEMPO"), 2, 30, 0,
                     Color.new(248, 248, 248), Color.new(128, 128, 128)])
       # draw tempo gauge
-      pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 1 / 4, 24 + 8, @info.bitmap.width * 1 / 4, 8),
-                  Color.new(0, 0, 248), @chamber[@set].tempo,
-                  PurifyChamber.maximumTempo)
+      pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 1 / 4, 32, @info.bitmap.width * 1 / 4, 8),
+                  Color.new(0, 0, 248), @chamber[@set].tempo, PurifyChamber.maximumTempo)
     end
     pbDrawTextPositions(@info.bitmap, textpos)
     @info.x = Graphics.width - @info.bitmap.width
     @info.y = Graphics.height - @info.bitmap.height
     @__sprites[0].pokemon = pkmn
-    @__sprites[0].x = 312
-    @__sprites[0].y = 136
+    @__sprites[0].x = 306
+    @__sprites[0].y = 158
     @__sprites[0].z = 2
     @directflow.setAngle(angle)
     @directflow.setFlowStrength(0)
@@ -987,22 +994,22 @@ class PurifyChamberSetView < SpriteWrapper
     (PurifyChamber::SETSIZE * 2).times do |i|
       pkmn = (i.odd? || i >= points) ? nil : setList[i / 2]
       angle = 360 - (i * 360 / points)
-      angle += 90 # start at 12 not 3 o'clock
+      angle += 90   # start at 12 not 3 o'clock
       if pkmn && @chamber[@set].facing == i / 2
         @directflow.setAngle(angle)
         @directflow.setFlowStrength(@chamber[@set].shadowAffinity)
       end
-      point = calcPoint(280, 96, 96, angle)
-      @__sprites[i + 1].x = point[0] + 32
-      @__sprites[i + 1].y = point[1] + 40
+      point = calcPoint(306, 158, 96, angle)
+      @__sprites[i + 1].x = point[0]
+      @__sprites[i + 1].y = point[1]
       @__sprites[i + 1].z = 2
       @__sprites[i + 1].pokemon = pkmn
       checkCursor(i + 1)
     end
     @__sprites[1 + (PurifyChamber::SETSIZE * 2)].pokemon = @heldpkmn
     @__sprites[1 + (PurifyChamber::SETSIZE * 2)].visible = @view.visible
-    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].x = @view.x + 32
-    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].y = @view.y - 6 + 40
+    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].x = @view.x + @view.bitmap.width / 2
+    @__sprites[1 + (PurifyChamber::SETSIZE * 2)].y = @view.y + @view.bitmap.height / 2
     @__sprites[1 + (PurifyChamber::SETSIZE * 2)].z = 3
   end
 
@@ -1041,7 +1048,7 @@ class PurifyChamberSetView < SpriteWrapper
   def color=(value)
     super
     @__sprites.each do |sprite|
-      sprite.color = pbSrcOver(sprite.color, value.clone)
+      sprite.color = value.clone
     end
     @flows.each do |flow|
       flow.color = value.clone
@@ -1108,7 +1115,7 @@ class PurifyChamberScene
     @viewportmsg = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewportmsg.z = 99999
     addBackgroundOrColoredPlane(@sprites, "bg", "purifychamberbg",
-                                Color.new(0, 0, 0), @viewport)
+                                Color.new(64, 48, 96), @viewport)
     @sprites["setwindow"] = Window_PurifyChamberSets.new(
       @chamber, 0, 0, 112, Graphics.height, @viewport
     )
