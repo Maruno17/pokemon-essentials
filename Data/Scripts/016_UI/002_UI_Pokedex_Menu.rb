@@ -25,8 +25,8 @@ class Window_DexesList < Window_CommandPokemon
       allown  = (@commands2[index][1] >= @commands2[index][2])
       pbDrawImagePositions(
         self.contents,
-        [["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 236, rect.y + 2, (allseen) ? 24 : 0, 0, 24, 24],
-         ["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 332, rect.y + 2, (allown) ? 24 : 0, 24, 24, 24]]
+        [["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 236, rect.y + 6, (allseen) ? 24 : 0, 0, 24, 24],
+         ["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 332, rect.y + 6, (allown) ? 24 : 0, 24, 24, 24]]
       )
     end
   end

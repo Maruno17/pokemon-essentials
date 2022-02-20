@@ -10,13 +10,17 @@ def pbSetWindowText(string)
 end
 
 class Bitmap
+  attr_accessor :text_offset_y
+
   alias mkxp_draw_text draw_text unless method_defined?(:mkxp_draw_text)
 
   def draw_text(x, y, width, height = nil, text = "", align = 0)
     if x.is_a?(Rect)
+      x.y -= (@text_offset_y || 0)
       # rect, string & alignment
       mkxp_draw_text(x, y, width)
     else
+      y -= (@text_offset_y || 0)
       height = text_size(text).height
       mkxp_draw_text(x, y, width, height, text, align)
     end

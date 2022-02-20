@@ -176,15 +176,15 @@ class Window_PokemonMart < Window_DrawableCommand
     rect = drawCursor(index, rect)
     ypos = rect.y
     if index == count - 1
-      textpos.push([_INTL("CANCEL"), rect.x, ypos - 4, false, self.baseColor, self.shadowColor])
+      textpos.push([_INTL("CANCEL"), rect.x, ypos + 2, false, self.baseColor, self.shadowColor])
     else
       item = @stock[index]
       itemname = @adapter.getDisplayName(item)
       qty = @adapter.getDisplayPrice(item)
       sizeQty = self.contents.text_size(qty).width
       xQty = rect.x + rect.width - sizeQty - 2 - 16
-      textpos.push([itemname, rect.x, ypos - 4, false, self.baseColor, self.shadowColor])
-      textpos.push([qty, xQty, ypos - 4, false, self.baseColor, self.shadowColor])
+      textpos.push([itemname, rect.x, ypos + 2, false, self.baseColor, self.shadowColor])
+      textpos.push([qty, xQty, ypos + 2, false, self.baseColor, self.shadowColor])
     end
     pbDrawTextPositions(self.contents, textpos)
   end
@@ -228,7 +228,7 @@ class PokemonMart_Scene
     @sprites["icon"] = ItemIconSprite.new(36, Graphics.height - 50, nil, @viewport)
     winAdapter = buying ? BuyAdapter.new(adapter) : SellAdapter.new(adapter)
     @sprites["itemwindow"] = Window_PokemonMart.new(
-      stock, winAdapter, Graphics.width - 316 - 16, 12, 330 + 16, Graphics.height - 126
+      stock, winAdapter, Graphics.width - 316 - 16, 10, 330 + 16, Graphics.height - 124
     )
     @sprites["itemwindow"].viewport = @viewport
     @sprites["itemwindow"].index = 0

@@ -151,9 +151,9 @@ class PokemonEntryScene
         pbSetSystemFont(@sprites["gender"].bitmap)
         textpos = []
         if pokemon.male?
-          textpos.push([_INTL("♂"), 0, -6, false, Color.new(0, 128, 248), Color.new(168, 184, 184)])
+          textpos.push([_INTL("♂"), 0, 6, false, Color.new(0, 128, 248), Color.new(168, 184, 184)])
         elsif pokemon.female?
-          textpos.push([_INTL("♀"), 0, -6, false, Color.new(248, 24, 24), Color.new(168, 184, 184)])
+          textpos.push([_INTL("♀"), 0, 6, false, Color.new(248, 24, 24), Color.new(168, 184, 184)])
         end
         pbDrawTextPositions(@sprites["gender"].bitmap, textpos)
       end
@@ -389,7 +389,7 @@ class PokemonEntryScene2
       COLUMNS.times do |y|
         ROWS.times do |x|
           pos = (y * ROWS) + x
-          textPos.push([@@Characters[i][0][pos], 44 + (x * 32), 12 + (y * 38), 2,
+          textPos.push([@@Characters[i][0][pos], 44 + (x * 32), 24 + (y * 38), 2,
                         Color.new(16, 24, 32), Color.new(160, 160, 160)])
         end
       end
@@ -436,9 +436,9 @@ class PokemonEntryScene2
         pbSetSystemFont(@sprites["gender"].bitmap)
         textpos = []
         if pokemon.male?
-          textpos.push([_INTL("♂"), 0, -6, false, Color.new(0, 128, 248), Color.new(168, 184, 184)])
+          textpos.push([_INTL("♂"), 0, 6, false, Color.new(0, 128, 248), Color.new(168, 184, 184)])
         elsif pokemon.female?
-          textpos.push([_INTL("♀"), 0, -6, false, Color.new(248, 24, 24), Color.new(168, 184, 184)])
+          textpos.push([_INTL("♀"), 0, 6, false, Color.new(248, 24, 24), Color.new(168, 184, 184)])
         end
         pbDrawTextPositions(@sprites["gender"].bitmap, textpos)
       end
@@ -513,12 +513,12 @@ class PokemonEntryScene2
     bgoverlay.clear
     pbSetSystemFont(bgoverlay)
     textPositions = [
-      [@helptext, 160, 6, false, Color.new(16, 24, 32), Color.new(168, 184, 184)]
+      [@helptext, 160, 18, false, Color.new(16, 24, 32), Color.new(168, 184, 184)]
     ]
     chars = @helper.textChars
     x = 166
     chars.each do |ch|
-      textPositions.push([ch, x, 42, false, Color.new(16, 24, 32), Color.new(168, 184, 184)])
+      textPositions.push([ch, x, 54, false, Color.new(16, 24, 32), Color.new(168, 184, 184)])
       x += 24
     end
     pbDrawTextPositions(bgoverlay, textPositions)

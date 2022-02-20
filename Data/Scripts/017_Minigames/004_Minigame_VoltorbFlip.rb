@@ -83,12 +83,12 @@ class VoltorbFlip
       pbUpdateRowNumbers(0, 0, i)
       pbUpdateColumnNumbers(0, 0, i)
     end
-    pbDrawShadowText(@sprites["text"].bitmap, 8, 16, 118, 26,
+    pbDrawShadowText(@sprites["text"].bitmap, 8, 22, 118, 26,
                      _INTL("Your coins"), Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
-    pbDrawShadowText(@sprites["text"].bitmap, 8, 82, 118, 26,
+    pbDrawShadowText(@sprites["text"].bitmap, 8, 88, 118, 26,
                      _INTL("Prize coins"), Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
     # Draw current level
-    pbDrawShadowText(@sprites["level"].bitmap, 8, 148, 118, 28,
+    pbDrawShadowText(@sprites["level"].bitmap, 8, 154, 118, 28,
                      _INTL("Level {1}", @level.to_s), Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
     # Displays total and current coins
     pbUpdateCoins
@@ -314,7 +314,7 @@ class VoltorbFlip
               end
               # Update level text
               @sprites["level"].bitmap.clear
-              pbDrawShadowText(@sprites["level"].bitmap, 8, 150, 118, 28, "Level " + @level.to_s,
+              pbDrawShadowText(@sprites["level"].bitmap, 8, 154, 118, 28, "Level " + @level.to_s,
                                Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
               @points = 0
               pbUpdateCoins
@@ -365,7 +365,7 @@ class VoltorbFlip
         pbMessage(_INTL("\\se[Voltorb Flip gain coins]{1} received {2} Coins!", $player.name, @points.to_s_formatted))
         # Update level text
         @sprites["level"].bitmap.clear
-        pbDrawShadowText(@sprites["level"].bitmap, 8, 150, 118, 28, _INTL("Level {1}", @level.to_s),
+        pbDrawShadowText(@sprites["level"].bitmap, 8, 154, 118, 28, _INTL("Level {1}", @level.to_s),
                          Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
         old_coins = $player.coins
         $player.coins += @points

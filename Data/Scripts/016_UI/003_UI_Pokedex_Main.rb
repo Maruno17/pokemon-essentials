@@ -40,9 +40,9 @@ class Window_Pokedex < Window_DrawableCommand
     indexNumber -= 1 if @commands[index][5]
     if $player.seen?(species)
       if $player.owned?(species)
-        pbCopyBitmap(self.contents, @pokeballOwn.bitmap, rect.x - 6, rect.y + 8)
+        pbCopyBitmap(self.contents, @pokeballOwn.bitmap, rect.x - 6, rect.y + 10)
       else
-        pbCopyBitmap(self.contents, @pokeballSeen.bitmap, rect.x - 6, rect.y + 8)
+        pbCopyBitmap(self.contents, @pokeballSeen.bitmap, rect.x - 6, rect.y + 10)
       end
       text = sprintf("%03d%s %s", indexNumber, " ", @commands[index][1])
     else
@@ -424,17 +424,17 @@ class PokemonPokedex_Scene
       end
     end
     textpos = [
-      [dexname, Graphics.width / 2, -2, 2, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+      [dexname, Graphics.width / 2, 10, 2, Color.new(248, 248, 248), Color.new(0, 0, 0)]
     ]
-    textpos.push([GameData::Species.get(iconspecies).name, 112, 46, 2, base, shadow]) if iconspecies
+    textpos.push([GameData::Species.get(iconspecies).name, 112, 58, 2, base, shadow]) if iconspecies
     if @searchResults
-      textpos.push([_INTL("Search results"), 112, 302, 2, base, shadow])
-      textpos.push([@dexlist.length.to_s, 112, 334, 2, base, shadow])
+      textpos.push([_INTL("Search results"), 112, 314, 2, base, shadow])
+      textpos.push([@dexlist.length.to_s, 112, 346, 2, base, shadow])
     else
-      textpos.push([_INTL("Seen:"), 42, 302, 0, base, shadow])
-      textpos.push([$player.pokedex.seen_count(pbGetPokedexRegion).to_s, 182, 302, 1, base, shadow])
-      textpos.push([_INTL("Owned:"), 42, 334, 0, base, shadow])
-      textpos.push([$player.pokedex.owned_count(pbGetPokedexRegion).to_s, 182, 334, 1, base, shadow])
+      textpos.push([_INTL("Seen:"), 42, 314, 0, base, shadow])
+      textpos.push([$player.pokedex.seen_count(pbGetPokedexRegion).to_s, 182, 314, 1, base, shadow])
+      textpos.push([_INTL("Owned:"), 42, 346, 0, base, shadow])
+      textpos.push([$player.pokedex.owned_count(pbGetPokedexRegion).to_s, 182, 346, 1, base, shadow])
     end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -477,36 +477,36 @@ class PokemonPokedex_Scene
     shadow = Color.new(72, 72, 72)
     # Write various bits of text
     textpos = [
-      [_INTL("Search Mode"), Graphics.width / 2, -2, 2, base, shadow],
-      [_INTL("Order"), 136, 52, 2, base, shadow],
-      [_INTL("Name"), 58, 110, 2, base, shadow],
-      [_INTL("Type"), 58, 162, 2, base, shadow],
-      [_INTL("Height"), 58, 214, 2, base, shadow],
-      [_INTL("Weight"), 58, 266, 2, base, shadow],
-      [_INTL("Color"), 326, 110, 2, base, shadow],
-      [_INTL("Shape"), 454, 162, 2, base, shadow],
-      [_INTL("Reset"), 80, 338, 2, base, shadow, 1],
-      [_INTL("Start"), Graphics.width / 2, 338, 2, base, shadow, 1],
-      [_INTL("Cancel"), Graphics.width - 80, 338, 2, base, shadow, 1]
+      [_INTL("Search Mode"), Graphics.width / 2, 10, 2, base, shadow],
+      [_INTL("Order"), 136, 64, 2, base, shadow],
+      [_INTL("Name"), 58, 122, 2, base, shadow],
+      [_INTL("Type"), 58, 174, 2, base, shadow],
+      [_INTL("Height"), 58, 226, 2, base, shadow],
+      [_INTL("Weight"), 58, 278, 2, base, shadow],
+      [_INTL("Color"), 326, 122, 2, base, shadow],
+      [_INTL("Shape"), 454, 174, 2, base, shadow],
+      [_INTL("Reset"), 80, 346, 2, base, shadow, 1],
+      [_INTL("Start"), Graphics.width / 2, 346, 2, base, shadow, 1],
+      [_INTL("Cancel"), Graphics.width - 80, 346, 2, base, shadow, 1]
     ]
     # Write order, name and color parameters
-    textpos.push([@orderCommands[params[0]], 344, 58, 2, base, shadow, 1])
-    textpos.push([(params[1] < 0) ? "----" : @nameCommands[params[1]], 176, 116, 2, base, shadow, 1])
-    textpos.push([(params[8] < 0) ? "----" : @colorCommands[params[8]].name, 444, 116, 2, base, shadow, 1])
+    textpos.push([@orderCommands[params[0]], 344, 66, 2, base, shadow, 1])
+    textpos.push([(params[1] < 0) ? "----" : @nameCommands[params[1]], 176, 124, 2, base, shadow, 1])
+    textpos.push([(params[8] < 0) ? "----" : @colorCommands[params[8]].name, 444, 124, 2, base, shadow, 1])
     # Draw type icons
     if params[2] >= 0
       type_number = @typeCommands[params[2]].icon_position
       typerect = Rect.new(0, type_number * 32, 96, 32)
       overlay.blt(128, 168, @typebitmap.bitmap, typerect)
     else
-      textpos.push(["----", 176, 168, 2, base, shadow, 1])
+      textpos.push(["----", 176, 176, 2, base, shadow, 1])
     end
     if params[3] >= 0
       type_number = @typeCommands[params[3]].icon_position
       typerect = Rect.new(0, type_number * 32, 96, 32)
       overlay.blt(256, 168, @typebitmap.bitmap, typerect)
     else
-      textpos.push(["----", 304, 168, 2, base, shadow, 1])
+      textpos.push(["----", 304, 176, 2, base, shadow, 1])
     end
     # Write height and weight limits
     ht1 = (params[4] < 0) ? 0 : (params[4] >= @heightCommands.length) ? 999 : @heightCommands[params[4]]
@@ -519,16 +519,16 @@ class PokemonPokedex_Scene
       ht2 = (params[5] < 0) ? 99 * 12 : (ht2 / 0.254).round
       wt1 = (params[6] >= @weightCommands.length) ? 99_990 : (wt1 / 0.254).round
       wt2 = (params[7] < 0) ? 99_990 : (wt2 / 0.254).round
-      textpos.push([sprintf("%d'%02d''", ht1 / 12, ht1 % 12), 166, 220, 2, base, shadow, 1])
-      textpos.push([sprintf("%d'%02d''", ht2 / 12, ht2 % 12), 294, 220, 2, base, shadow, 1])
-      textpos.push([sprintf("%.1f", wt1 / 10.0), 166, 272, 2, base, shadow, 1])
-      textpos.push([sprintf("%.1f", wt2 / 10.0), 294, 272, 2, base, shadow, 1])
+      textpos.push([sprintf("%d'%02d''", ht1 / 12, ht1 % 12), 166, 228, 2, base, shadow, 1])
+      textpos.push([sprintf("%d'%02d''", ht2 / 12, ht2 % 12), 294, 228, 2, base, shadow, 1])
+      textpos.push([sprintf("%.1f", wt1 / 10.0), 166, 280, 2, base, shadow, 1])
+      textpos.push([sprintf("%.1f", wt2 / 10.0), 294, 280, 2, base, shadow, 1])
       hwoffset = true
     else
-      textpos.push([sprintf("%.1f", ht1 / 10.0), 166, 220, 2, base, shadow, 1])
-      textpos.push([sprintf("%.1f", ht2 / 10.0), 294, 220, 2, base, shadow, 1])
-      textpos.push([sprintf("%.1f", wt1 / 10.0), 166, 272, 2, base, shadow, 1])
-      textpos.push([sprintf("%.1f", wt2 / 10.0), 294, 272, 2, base, shadow, 1])
+      textpos.push([sprintf("%.1f", ht1 / 10.0), 166, 228, 2, base, shadow, 1])
+      textpos.push([sprintf("%.1f", ht2 / 10.0), 294, 228, 2, base, shadow, 1])
+      textpos.push([sprintf("%.1f", wt1 / 10.0), 166, 280, 2, base, shadow, 1])
+      textpos.push([sprintf("%.1f", wt2 / 10.0), 294, 280, 2, base, shadow, 1])
     end
     overlay.blt(344, 214, @hwbitmap.bitmap, Rect.new(0, (hwoffset) ? 44 : 0, 32, 44))
     overlay.blt(344, 266, @hwbitmap.bitmap, Rect.new(32, (hwoffset) ? 44 : 0, 32, 44))
@@ -549,13 +549,13 @@ class PokemonPokedex_Scene
     shadow = Color.new(72, 72, 72)
     # Write various bits of text
     textpos = [
-      [_INTL("Search Mode"), Graphics.width / 2, -2, 2, base, shadow],
-      [_INTL("OK"), 80, 338, 2, base, shadow, 1],
-      [_INTL("Cancel"), Graphics.width - 80, 338, 2, base, shadow, 1]
+      [_INTL("Search Mode"), Graphics.width / 2, 10, 2, base, shadow],
+      [_INTL("OK"), 80, 346, 2, base, shadow, 1],
+      [_INTL("Cancel"), Graphics.width - 80, 346, 2, base, shadow, 1]
     ]
     title = [_INTL("Order"), _INTL("Name"), _INTL("Type"), _INTL("Height"),
              _INTL("Weight"), _INTL("Color"), _INTL("Shape")][mode]
-    textpos.push([title, 102, (mode == 6) ? 58 : 52, 0, base, shadow])
+    textpos.push([title, 102, (mode == 6) ? 70 : 64, 0, base, shadow])
     case mode
     when 0   # Order
       xstart = 46
@@ -615,7 +615,7 @@ class PokemonPokedex_Scene
     when 2   # Type icons
       2.times do |i|
         if !sel[i] || sel[i] < 0
-          textpos.push(["----", 298 + (128 * i), 58, 2, base, shadow, 1])
+          textpos.push(["----", 298 + (128 * i), 66, 2, base, shadow, 1])
         else
           type_number = @typeCommands[sel[i]].icon_position
           typerect = Rect.new(0, type_number * 32, 96, 32)
@@ -636,8 +636,8 @@ class PokemonPokedex_Scene
         txt1 = sprintf("%.1f", ht1 / 10.0)
         txt2 = sprintf("%.1f", ht2 / 10.0)
       end
-      textpos.push([txt1, 286, 58, 2, base, shadow, 1])
-      textpos.push([txt2, 414, 58, 2, base, shadow, 1])
+      textpos.push([txt1, 286, 66, 2, base, shadow, 1])
+      textpos.push([txt2, 414, 66, 2, base, shadow, 1])
       overlay.blt(462, 52, @hwbitmap.bitmap, Rect.new(0, (hwoffset) ? 44 : 0, 32, 44))
     when 4   # Weight range
       wt1 = (sel[0] < 0) ? 0 : (sel[0] >= @weightCommands.length) ? 9999 : @weightCommands[sel[0]]
@@ -653,14 +653,14 @@ class PokemonPokedex_Scene
         txt1 = sprintf("%.1f", wt1 / 10.0)
         txt2 = sprintf("%.1f", wt2 / 10.0)
       end
-      textpos.push([txt1, 286, 58, 2, base, shadow, 1])
-      textpos.push([txt2, 414, 58, 2, base, shadow, 1])
+      textpos.push([txt1, 286, 66, 2, base, shadow, 1])
+      textpos.push([txt2, 414, 66, 2, base, shadow, 1])
       overlay.blt(462, 52, @hwbitmap.bitmap, Rect.new(32, (hwoffset) ? 44 : 0, 32, 44))
     when 5   # Color
       if sel[0] < 0
-        textpos.push(["----", 362, 58, 2, base, shadow, 1])
+        textpos.push(["----", 362, 66, 2, base, shadow, 1])
       else
-        textpos.push([cmds[sel[0]].name, 362, 58, 2, base, shadow, 1])
+        textpos.push([cmds[sel[0]].name, 362, 66, 2, base, shadow, 1])
       end
     when 6   # Shape icon
       if sel[0] >= 0
@@ -670,9 +670,9 @@ class PokemonPokedex_Scene
     else
       if sel[0] < 0
         text = ["----", "-", "----", "", "", "----", ""][mode]
-        textpos.push([text, 362, 58, 2, base, shadow, 1])
+        textpos.push([text, 362, 66, 2, base, shadow, 1])
       else
-        textpos.push([cmds[sel[0]], 362, 58, 2, base, shadow, 1])
+        textpos.push([cmds[sel[0]], 362, 66, 2, base, shadow, 1])
       end
     end
     # Draw selected option(s) button graphic
@@ -682,8 +682,8 @@ class PokemonPokedex_Scene
       xpos2 = xstart + ((sel[1] + 1) * xgap)
       xpos2 = xstart + (cols * xgap) if sel[1] < 0
       xpos2 = xstart if sel[1] >= cols - 1
-      ypos1 = ystart + 172
-      ypos2 = ystart + 28
+      ypos1 = ystart + 180
+      ypos2 = ystart + 36
       overlay.blt(16, 120, @searchsliderbitmap.bitmap, Rect.new(0, 192, 32, 44)) if sel[1] < cols - 1
       overlay.blt(464, 120, @searchsliderbitmap.bitmap, Rect.new(32, 192, 32, 44)) if sel[1] >= 0
       overlay.blt(16, 264, @searchsliderbitmap.bitmap, Rect.new(0, 192, 32, 44)) if sel[0] >= 0
@@ -698,9 +698,13 @@ class PokemonPokedex_Scene
       sel.length.times do |i|
         selrect = Rect.new(0, selbuttony, @selbitmap.bitmap.width, selbuttonheight)
         if sel[i] >= 0
-          overlay.blt(xstart + ((sel[i] % cols) * xgap), ystart + ((sel[i] / cols).floor * ygap), @selbitmap.bitmap, selrect)
+          overlay.blt(xstart + ((sel[i] % cols) * xgap),
+                      ystart + ((sel[i] / cols).floor * ygap),
+                      @selbitmap.bitmap, selrect)
         else
-          overlay.blt(xstart + ((cols - 1) * xgap), ystart + ((cmds.length / cols).floor * ygap), @selbitmap.bitmap, selrect)
+          overlay.blt(xstart + ((cols - 1) * xgap),
+                      ystart + ((cmds.length / cols).floor * ygap),
+                      @selbitmap.bitmap, selrect)
         end
       end
     end
@@ -709,34 +713,44 @@ class PokemonPokedex_Scene
     when 0, 1   # Order, name
       cmds.length.times do |i|
         x = xstart + halfwidth + ((i % cols) * xgap)
-        y = ystart + 6 + ((i / cols).floor * ygap)
+        y = ystart + 14 + ((i / cols).floor * ygap)
         textpos.push([cmds[i], x, y, 2, base, shadow, 1])
       end
       if mode != 0
         textpos.push([(mode == 1) ? "-" : "----",
-                      xstart + halfwidth + ((cols - 1) * xgap), ystart + 6 + ((cmds.length / cols).floor * ygap), 2, base, shadow, 1])
+                      xstart + halfwidth + ((cols - 1) * xgap),
+                      ystart + 14 + ((cmds.length / cols).floor * ygap),
+                      2, base, shadow, 1])
       end
     when 2   # Type
       typerect = Rect.new(0, 0, 96, 32)
       cmds.length.times do |i|
         typerect.y = @typeCommands[i].icon_position * 32
-        overlay.blt(xstart + 14 + ((i % cols) * xgap), ystart + 6 + ((i / cols).floor * ygap), @typebitmap.bitmap, typerect)
+        overlay.blt(xstart + 14 + ((i % cols) * xgap),
+                    ystart + 6 + ((i / cols).floor * ygap),
+                    @typebitmap.bitmap, typerect)
       end
       textpos.push(["----",
-                    xstart + halfwidth + ((cols - 1) * xgap), ystart + 6 + ((cmds.length / cols).floor * ygap), 2, base, shadow, 1])
+                    xstart + halfwidth + ((cols - 1) * xgap),
+                    ystart + 14 + ((cmds.length / cols).floor * ygap),
+                    2, base, shadow, 1])
     when 5   # Color
       cmds.length.times do |i|
         x = xstart + halfwidth + ((i % cols) * xgap)
-        y = ystart + 6 + ((i / cols).floor * ygap)
+        y = ystart + 14 + ((i / cols).floor * ygap)
         textpos.push([cmds[i].name, x, y, 2, base, shadow, 1])
       end
       textpos.push(["----",
-                    xstart + halfwidth + ((cols - 1) * xgap), ystart + 6 + ((cmds.length / cols).floor * ygap), 2, base, shadow, 1])
+                    xstart + halfwidth + ((cols - 1) * xgap),
+                    ystart + 14 + ((cmds.length / cols).floor * ygap),
+                    2, base, shadow, 1])
     when 6   # Shape
       shaperect = Rect.new(0, 0, 60, 60)
       cmds.length.times do |i|
         shaperect.y = @shapeCommands[i].icon_position * 60
-        overlay.blt(xstart + 4 + ((i % cols) * xgap), ystart + 4 + ((i / cols).floor * ygap), @shapebitmap.bitmap, shaperect)
+        overlay.blt(xstart + 4 + ((i % cols) * xgap),
+                    ystart + 4 + ((i / cols).floor * ygap),
+                    @shapebitmap.bitmap, shaperect)
       end
     end
     # Draw all text

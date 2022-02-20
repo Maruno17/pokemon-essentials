@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-# Represents a window with no formatting capabilities.  Its text color can be set,
+# Represents a window with no formatting capabilities. Its text color can be set,
 # though, and line breaks are supported, but the text is generally unformatted.
 class Window_UnformattedTextPokemon < SpriteWindow_Base
   attr_reader :text
@@ -101,7 +101,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     self.contents = pbDoEnsureBitmap(self.contents, self.width - self.borderX,
                                      self.height - self.borderY)
     self.contents.clear
-    drawTextEx(self.contents, 0, 4, self.contents.width, 0,
+    drawTextEx(self.contents, 0, -2, self.contents.width, 0,   # TEXT OFFSET
                @text.gsub(/\r/, ""), @baseColor, @shadowColor)
   end
 end
@@ -317,7 +317,6 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
           chy = ch[2] + ch[4]
           width  = chx if width < chx
           height = chy if height < chy
-          ch[2] += 4
           if !ch[5] && ch[0] == "\n"
             numlines += 1
             if numlines >= visiblelines
@@ -345,7 +344,6 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
           chy = ch[2] + ch[4]
           width  = chx if width < chx
           height = chy if height < chy
-          ch[2] += 4
           @textchars.push(ch[5] ? "" : ch[0])
         end
       end
@@ -715,7 +713,10 @@ class Window_InputNumberPokemon < SpriteWindow_Base
 
   def textHelper(x, y, text, i)
     textwidth = self.contents.text_size(text).width
-    pbDrawShadowText(self.contents, x + (12 - (textwidth / 2)), y, textwidth + 4, 32, text, @baseColor, @shadowColor)
+    pbDrawShadowText(self.contents,
+                     x + (12 - (textwidth / 2)),
+                     y - 2 + (self.contents.text_offset_y || 0),   # TEXT OFFSET (the - 2)
+                     textwidth + 4, 32, text, @baseColor, @shadowColor)
     if @index == i && @active && @frame / 15 == 0
       self.contents.fill_rect(x + (12 - (textwidth / 2)), y + 30, textwidth, 2, @baseColor)
     end
@@ -735,7 +736,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
     super(x, y, width, height)
     @item_max = 1
     @column_max = 1
-    @virtualOy = 0
+    @virtualOy = 2   # TEXT OFFSET
     @index = -1
     @row_height = 32
     @column_spacing = 32
@@ -803,7 +804,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
   def top_row=(row)
     row = row_max - 1 if row > row_max - 1
     row = 0 if row < 0
-    @virtualOy = row * @row_height
+    @virtualOy = (row * @row_height) + 2   # TEXT OFFSET (the + 2)
   end
 
   def top_item
@@ -1106,7 +1107,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
 
   def drawCursor(index, rect)
     if self.index == index
-      pbCopyBitmap(self.contents, @selarrow.bitmap, rect.x, rect.y)
+      pbCopyBitmap(self.contents, @selarrow.bitmap, rect.x, rect.y + 2)   # TEXT OFFSET (counters the offset above)
     end
     return Rect.new(rect.x + 16, rect.y, rect.width - 16, rect.height)
   end
@@ -1223,8 +1224,8 @@ class Window_CommandPokemon < Window_DrawableCommand
   def drawItem(index, _count, rect)
     pbSetSystemFont(self.contents) if @starting
     rect = drawCursor(index, rect)
-    pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height,
-                     @commands[index], self.baseColor, self.shadowColor)
+    pbDrawShadowText(self.contents, rect.x, rect.y + (self.contents.text_offset_y || 0),
+                     rect.width, rect.height, @commands[index], self.baseColor, self.shadowColor)
   end
 end
 

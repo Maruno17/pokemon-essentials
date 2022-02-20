@@ -352,7 +352,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
     @buttons.each_with_index do |button, i|
       next if !@visibility["button_#{i}"]
       x = button.x - self.x + (button.src_rect.width / 2)
-      y = button.y - self.y + 2
+      y = button.y - self.y + 14
       moveNameBase = TEXT_BASE_COLOR
       if GET_MOVE_TEXT_COLOR_FROM_MOVE_BUTTON && moves[i].display_type(@battler)
         # NOTE: This takes a color from a particular pixel in the button
@@ -411,7 +411,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
       ppFraction = [(4.0 * move.pp / move.total_pp).ceil, 3].min
       textPos = []
       textPos.push([_INTL("PP: {1}/{2}", move.pp, move.total_pp),
-                    448, 44, 2, PP_COLORS[ppFraction * 2], PP_COLORS[(ppFraction * 2) + 1]])
+                    448, 56, 2, PP_COLORS[ppFraction * 2], PP_COLORS[(ppFraction * 2) + 1]])
       pbDrawTextPositions(@infoOverlay.bitmap, textPos)
     end
   end
@@ -544,7 +544,7 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
     @buttons.each_with_index do |button, i|
       next if !button || nil_or_empty?(@texts[i])
       x = button.x - self.x + (button.src_rect.width / 2)
-      y = button.y - self.y + 2
+      y = button.y - self.y + 14
       textpos.push([@texts[i], x, y, 2, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR])
     end
     pbDrawTextPositions(@overlay.bitmap, textpos)

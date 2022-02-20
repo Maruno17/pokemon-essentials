@@ -655,11 +655,9 @@ class Window_PurifyChamberSets < Window_DrawableCommand
     textpos = []
     rect = drawCursor(index, rect)
     if index == @switching
-      textpos.push([(index + 1).to_s, rect.x,
-                    rect.y - 6, false, Color.new(248, 0, 0), self.shadowColor])
+      textpos.push([(index + 1).to_s, rect.x, rect.y, false, Color.new(248, 0, 0), self.shadowColor])
     else
-      textpos.push([(index + 1).to_s, rect.x,
-                    rect.y - 6, false, self.baseColor, self.shadowColor])
+      textpos.push([(index + 1).to_s, rect.x, rect.y, false, self.baseColor, self.shadowColor])
     end
     if @chamber.setCount(index) > 0
       pbDrawGauge(self.contents, Rect.new(rect.x + 16, rect.y + 6, 48, 8),
@@ -949,14 +947,14 @@ class PurifyChamberSetView < SpriteWrapper
       if pkmn.types.length == 1
         textpos.push([_INTL("{1}  Lv.{2}  {3}", pkmn.name, pkmn.level,
                             GameData::Type.get(pkmn.types[0]).name),
-                      2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
+                      2, 6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       else
         textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}", pkmn.name, pkmn.level,
                             GameData::Type.get(pkmn.types[0]).name,
                             GameData::Type.get(pkmn.types[1]).name),
-                      2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
+                      2, 6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       end
-      textpos.push([_INTL("FLOW"), 2 + (@info.bitmap.width / 2), 18, 0,
+      textpos.push([_INTL("FLOW"), 2 + (@info.bitmap.width / 2), 30, 0,
                     Color.new(248, 248, 248), Color.new(128, 128, 128)])
       # draw heart gauge
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 3 / 4, 8, @info.bitmap.width * 1 / 4, 8),
@@ -966,7 +964,7 @@ class PurifyChamberSetView < SpriteWrapper
                   Color.new(0, 0, 248), @chamber.chamberFlow(@set), 6)
     end
     if @chamber.setCount(@set) > 0
-      textpos.push([_INTL("TEMPO"), 2, 18, 0,
+      textpos.push([_INTL("TEMPO"), 2, 30, 0,
                     Color.new(248, 248, 248), Color.new(128, 128, 128)])
       # draw tempo gauge
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width * 1 / 4, 24 + 8, @info.bitmap.width * 1 / 4, 8),

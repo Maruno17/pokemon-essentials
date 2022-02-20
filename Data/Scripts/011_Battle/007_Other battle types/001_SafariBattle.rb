@@ -83,8 +83,8 @@ class Battle::Scene::SafariDataBox < SpriteWrapper
     base   = Color.new(72, 72, 72)
     shadow = Color.new(184, 184, 184)
     textpos = []
-    textpos.push([_INTL("Safari Balls"), 30, 2, false, base, shadow])
-    textpos.push([_INTL("Left: {1}", @battle.ballCount), 30, 32, false, base, shadow])
+    textpos.push([_INTL("Safari Balls"), 30, 14, false, base, shadow])
+    textpos.push([_INTL("Left: {1}", @battle.ballCount), 30, 44, false, base, shadow])
     pbDrawTextPositions(self.bitmap, textpos)
   end
 

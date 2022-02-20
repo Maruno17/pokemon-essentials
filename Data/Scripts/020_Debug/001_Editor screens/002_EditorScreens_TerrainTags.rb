@@ -88,7 +88,7 @@ class PokemonTilesetScene
       TILES_PER_ROW.times do |xx|
         tile_id = tile_ID_from_coordinates(xx, @top_y + yy)
         terr = @tileset.terrain_tags[tile_id]
-        textpos.push([terr.to_s, (xx * TILE_SIZE) + (TILE_SIZE / 2), (yy * TILE_SIZE) - 6, 2, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        textpos.push([terr.to_s, (xx * TILE_SIZE) + (TILE_SIZE / 2), (yy * TILE_SIZE) + 6, 2, TEXT_COLOR, TEXT_SHADOW_COLOR])
       end
     end
     pbDrawTextPositions(@sprites["overlay"].bitmap, textpos)
@@ -123,8 +123,8 @@ class PokemonTilesetScene
       terrain_tag_name = terrain_tag.to_s
     end
     textpos = [
-      [_INTL("Terrain Tag:"), tile_x + TILE_SIZE, tile_y + (TILE_SIZE * 2) + 10, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)],
-      [terrain_tag_name, tile_x + TILE_SIZE, tile_y + (TILE_SIZE * 2) + 42, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)]
+      [_INTL("Terrain Tag:"), tile_x + TILE_SIZE, tile_y + (TILE_SIZE * 2) + 22, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)],
+      [terrain_tag_name, tile_x + TILE_SIZE, tile_y + (TILE_SIZE * 2) + 54, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)

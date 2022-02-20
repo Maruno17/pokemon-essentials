@@ -663,7 +663,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     elsif isspace
       hadspace = true
     end
-    texty = (lineheight * y) + yDst + yStart
+    texty = (lineheight * y) + yDst + yStart - 2   # TEXT OFFSET
     colors = getLastColors(colorstack, opacitystack, defaultcolors)
     # Push character
     if heightDst < 0 || texty < yDst + heightDst
@@ -1083,8 +1083,8 @@ def drawTextEx(bitmap, x, y, width, numlines, text, baseColor, shadowColor)
 end
 
 def drawFormattedTextEx(bitmap, x, y, width, text, baseColor = nil, shadowColor = nil, lineheight = 32)
-  base = baseColor ? baseColor.clone : Color.new(12 * 8, 12 * 8, 12 * 8)
-  shadow = shadowColor ? shadowColor.clone : Color.new(26 * 8, 26 * 8, 25 * 8)
+  base = baseColor ? baseColor.clone : Color.new(96, 96, 96)
+  shadow = shadowColor ? shadowColor.clone : Color.new(208, 208, 200)
   text = "<c2=" + colorToRgb16(base) + colorToRgb16(shadow) + ">" + text
   chars = getFormattedText(bitmap, x, y, width, -1, text, lineheight)
   drawFormattedChars(bitmap, chars)
@@ -1100,7 +1100,6 @@ def pbDrawShadowText(bitmap, x, y, width, height, string, baseColor, shadowColor
   return if !bitmap || !string
   width = (width < 0) ? bitmap.text_size(string).width + 1 : width
   height = (height < 0) ? bitmap.text_size(string).height + 1 : height
-  y += 4
   if shadowColor && shadowColor.alpha > 0
     bitmap.font.color = shadowColor
     bitmap.draw_text(x + 2, y, width, height, string, align)
@@ -1148,7 +1147,7 @@ def pbDrawTextPositions(bitmap, textpos)
   textpos.each do |i|
     textsize = bitmap.text_size(i[0])
     x = i[1]
-    y = i[2] + 6
+    y = i[2]
     case i[3]
     when true, 1   # right align
       x -= textsize.width
