@@ -153,7 +153,7 @@ class LightEffect_Basic < LightEffect
     super
     if (Object.const_defined?(:ScreenPosHelper) rescue false)
       @light.x      = ScreenPosHelper.pbScreenX(@event)
-      @light.y      = ScreenPosHelper.pbScreenY(@event) - (Game_Map::TILE_HEIGHT / 2)
+      @light.y      = ScreenPosHelper.pbScreenY(@event) - (@event.height * Game_Map::TILE_HEIGHT / 2)
       @light.zoom_x = ScreenPosHelper.pbScreenZoomX(@event)
       @light.zoom_y = @light.zoom_x
     else
@@ -188,7 +188,7 @@ class LightEffect_DayNight < LightEffect
     if @light.opacity > 0
       if (Object.const_defined?(:ScreenPosHelper) rescue false)
         @light.x      = ScreenPosHelper.pbScreenX(@event)
-        @light.y      = ScreenPosHelper.pbScreenY(@event) - (Game_Map::TILE_HEIGHT / 2)
+        @light.y      = ScreenPosHelper.pbScreenY(@event) - (@event.height * Game_Map::TILE_HEIGHT / 2)
         @light.zoom_x = ScreenPosHelper.pbScreenZoomX(@event)
         @light.zoom_y = ScreenPosHelper.pbScreenZoomY(@event)
       else
