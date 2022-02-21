@@ -199,8 +199,8 @@ class TriadScene
     pbSetSystemFont(@sprites["overlay"].bitmap)
     pbDrawTextPositions(
       @sprites["overlay"].bitmap,
-      [[@battle.opponentName, 52, -2, 2, Color.new(248, 248, 248), Color.new(96, 96, 96)],
-       [@battle.playerName, Graphics.width - 52, -2, 2, Color.new(248, 248, 248), Color.new(96, 96, 96)]]
+      [[@battle.opponentName, 52, 10, 2, Color.new(248, 248, 248), Color.new(96, 96, 96)],
+       [@battle.playerName, Graphics.width - 52, 10, 2, Color.new(248, 248, 248), Color.new(96, 96, 96)]]
     )
     @sprites["score"] = Sprite.new(@viewport)
     @sprites["score"].bitmap = BitmapWrapper.new(Graphics.width, Graphics.height)
@@ -553,11 +553,10 @@ class TriadScene
     (@battle.width * @battle.height).times do |i|
       x = i % @battle.width
       y = i / @battle.width
-      if @boardSprites[i]
-        owner = @battle.getOwner(x, y)
-        @boardSprites[i].bitmap&.dispose
-        @boardSprites[i].bitmap = @boardCards[i].createBitmap(owner)
-      end
+      next if !@boardSprites[i]
+      @boardSprites[i].bitmap&.dispose
+      owner = @battle.getOwner(x, y)
+      @boardSprites[i].bitmap = @boardCards[i].createBitmap(owner)
     end
   end
 
@@ -578,7 +577,7 @@ class TriadScene
     end
     pbDrawTextPositions(
       bitmap,
-      [[_INTL("{1}-{2}", oppscore, playerscore), Graphics.width / 2, -2, 2, Color.new(248, 248, 248), Color.new(96, 96, 96)]]
+      [[_INTL("{1}-{2}", oppscore, playerscore), Graphics.width / 2, 10, 2, Color.new(248, 248, 248), Color.new(96, 96, 96)]]
     )
   end
 
@@ -655,7 +654,7 @@ class TriadScreen
     panels[7] = (@wrapAround ? 0 : @height - 1) if panels[7] > @height - 1   # bottom
     attacker = attackerParam.nil? ? @board[(y * @width) + x] : attackerParam
     flips = []
-    return nil if attackerParam != nil && @board[(y * @width) + x].owner != 0
+    return nil if attackerParam && @board[(y * @width) + x].owner != 0
     return nil if !attacker.card || attacker.owner == 0
     4.times do |i|
       defenderX = panels[i * 2]
@@ -830,9 +829,7 @@ class TriadScreen
             y = i / @width
             square.type = @board[i].type
             flips = flipBoard(x, y, square)
-            if flips != nil
-              scores.push([cardIndex, x, y, flips.length])
-            end
+            scores.push([cardIndex, x, y, flips.length]) if flips
           end
         end
         # Sort by number of flips

@@ -45,7 +45,7 @@ class PokegearButton < SpriteWrapper
     rect.y = @button.height / 2 if @selected
     self.bitmap.blt(0, 0, @button.bitmap, rect)
     textpos = [
-      [@name, rect.width / 2, (rect.height / 2) - 22, 2, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]
+      [@name, rect.width / 2, (rect.height / 2) - 10, 2, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]
     ]
     pbDrawTextPositions(self.bitmap, textpos)
     imagepos = [

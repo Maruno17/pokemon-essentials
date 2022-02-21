@@ -74,20 +74,18 @@ def pbPokeRadarHighlightGrass(showmessage = true)
       y = $game_player.y + i + 1
     end
     # Add tile to grasses array if it's a valid grass tile
-    if x >= 0 && x < $game_map.width &&
-       y >= 0 && y < $game_map.height
-      terrain = $game_map.terrain_tag(x, y)
-      if terrain.land_wild_encounters && terrain.shows_grass_rustle
-        # Choose a rarity for the grass (0=normal, 1=rare, 2=shiny)
-        s = (rand(100) < 25) ? 1 : 0
-        if $game_temp.poke_radar_data && $game_temp.poke_radar_data[2] > 0
-          v = [(65_536 / Settings::SHINY_POKEMON_CHANCE) - ([$game_temp.poke_radar_data[2], 40].min * 200), 200].max
-          v = (65_536 / v.to_f).ceil
-          s = 2 if rand(65_536) < v
-        end
-        grasses.push([x, y, i, s])
-      end
+    next if x < 0 || x >= $game_map.width ||
+            y < 0 || y >= $game_map.height
+    terrain = $game_map.terrain_tag(x, y)
+    next if !terrain.land_wild_encounters || !terrain.shows_grass_rustle
+    # Choose a rarity for the grass (0=normal, 1=rare, 2=shiny)
+    s = (rand(100) < 25) ? 1 : 0
+    if $game_temp.poke_radar_data && $game_temp.poke_radar_data[2] > 0
+      v = [(65_536 / Settings::SHINY_POKEMON_CHANCE) - ([$game_temp.poke_radar_data[2], 40].min * 200), 200].max
+      v = (65_536 / v.to_f).ceil
+      s = 2 if rand(65_536) < v
     end
+    grasses.push([x, y, i, s])
   end
   if grasses.length == 0
     # No shaking grass found, break the chain

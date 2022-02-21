@@ -311,16 +311,16 @@ class HallOfFame_Scene
       dexnumber = _ISPRINTF("No. {1:03d}", number)
     end
     textPositions = [
-      [dexnumber, 32, Graphics.height - 86, 0, BASECOLOR, SHADOWCOLOR],
-      [pokename, Graphics.width - 192, Graphics.height - 86, 2, BASECOLOR, SHADOWCOLOR],
+      [dexnumber, 32, Graphics.height - 74, 0, BASECOLOR, SHADOWCOLOR],
+      [pokename, Graphics.width - 192, Graphics.height - 74, 2, BASECOLOR, SHADOWCOLOR],
       [_INTL("Lv. {1}", pokemon.egg? ? "?" : pokemon.level),
-       64, Graphics.height - 54, 0, BASECOLOR, SHADOWCOLOR],
+       64, Graphics.height - 42, 0, BASECOLOR, SHADOWCOLOR],
       [_INTL("IDNo.{1}", pokemon.egg? ? "?????" : idno),
-       Graphics.width - 192, Graphics.height - 54, 2, BASECOLOR, SHADOWCOLOR]
+       Graphics.width - 192, Graphics.height - 42, 2, BASECOLOR, SHADOWCOLOR]
     ]
     if hallNumber > -1
-      textPositions.push([_INTL("Hall of Fame No."), (Graphics.width / 2) - 104, -6, 0, BASECOLOR, SHADOWCOLOR])
-      textPositions.push([hallNumber.to_s, (Graphics.width / 2) + 104, -6, 1, BASECOLOR, SHADOWCOLOR])
+      textPositions.push([_INTL("Hall of Fame No."), (Graphics.width / 2) - 104, 6, 0, BASECOLOR, SHADOWCOLOR])
+      textPositions.push([hallNumber.to_s, (Graphics.width / 2) + 104, 6, 1, BASECOLOR, SHADOWCOLOR])
     end
     pbDrawTextPositions(overlay, textPositions)
   end
@@ -329,7 +329,7 @@ class HallOfFame_Scene
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     pbDrawTextPositions(overlay, [[_INTL("Welcome to the Hall of Fame!"),
-                                   Graphics.width / 2, Graphics.height - 80, 2, BASECOLOR, SHADOWCOLOR]])
+                                   Graphics.width / 2, Graphics.height - 68, 2, BASECOLOR, SHADOWCOLOR]])
   end
 
   def pbAnimationLoop

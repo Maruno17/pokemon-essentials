@@ -68,10 +68,12 @@ class PokemonJukeboxScreen
     cmdLullaby = -1
     cmdOak     = -1
     cmdCustom  = -1
-    commands[cmdMarch = commands.length]   = _INTL("March")
-    commands[cmdLullaby = commands.length] = _INTL("Lullaby")
-    commands[cmdOak = commands.length]     = _INTL("Oak")
-    commands[cmdCustom = commands.length]  = _INTL("Custom...")
+    cmdTurnOff = -1
+    commands[cmdMarch = commands.length]   = _INTL("Play: Pokémon March")
+    commands[cmdLullaby = commands.length] = _INTL("Play: Pokémon Lullaby")
+    commands[cmdOak = commands.length]     = _INTL("Play: Oak")
+    commands[cmdCustom = commands.length]  = _INTL("Play: Custom...")
+    commands[cmdTurnOff = commands.length] = _INTL("Stop")
     commands[commands.length]              = _INTL("Exit")
     @scene.pbStartScene(commands)
     loop do
@@ -106,7 +108,6 @@ class PokemonJukeboxScreen
         files.map! { |f| f.chomp(File.extname(f)) }
         files.uniq!
         files.sort! { |a, b| a.downcase <=> b.downcase }
-#        files.insert(0, _INTL("(Default)"))
         @scene.pbSetCommands(files, 0)
         loop do
           cmd2 = @scene.pbScene
@@ -115,11 +116,17 @@ class PokemonJukeboxScreen
             break
           end
           pbPlayDecisionSE
-          $game_system.setDefaultBGM(files[cmd2])   # ((cmd2 == 0) ? nil : files[cmd2])
+          $game_system.setDefaultBGM(files[cmd2])
           $PokemonMap.whiteFluteUsed = false if $PokemonMap
           $PokemonMap.blackFluteUsed = false if $PokemonMap
         end
         @scene.pbSetCommands(nil, cmdCustom)
+      elsif cmdTurnOff >= 0 && cmd == cmdTurnOff
+        pbPlayDecisionSE
+        $game_system.setDefaultBGM(nil)
+        pbBGMPlay(pbResolveAudioFile($game_map.bgm_name, $game_map.bgm.volume, $game_map.bgm.pitch))
+        $PokemonMap.whiteFluteUsed = false if $PokemonMap
+        $PokemonMap.blackFluteUsed = false if $PokemonMap
       else   # Exit
         pbPlayCloseMenuSE
         break

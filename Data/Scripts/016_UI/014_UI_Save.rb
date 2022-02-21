@@ -4,8 +4,8 @@ def pbEmergencySave
   pbMessage(_INTL("The script is taking too long. The game will restart."))
   return if !$player
   if SaveData.exists?
-    File.open(SaveData::FILE_PATH, 'rb') do |r|
-      File.open(SaveData::FILE_PATH + '.bak', 'wb') do |w|
+    File.open(SaveData::FILE_PATH, "rb") do |r|
+      File.open(SaveData::FILE_PATH + ".bak", "wb") do |w|
         loop do
           s = r.read(4096)
           break if !s
@@ -84,19 +84,19 @@ class PokemonSaveScreen
   def pbSaveScreen
     ret = false
     @scene.pbStartScreen
-    if pbConfirmMessage(_INTL('Would you like to save the game?'))
+    if pbConfirmMessage(_INTL("Would you like to save the game?"))
       if SaveData.exists? && $game_temp.begun_new_game
-        pbMessage(_INTL('WARNING!'))
-        pbMessage(_INTL('There is a different game file that is already saved.'))
+        pbMessage(_INTL("WARNING!"))
+        pbMessage(_INTL("There is a different game file that is already saved."))
         pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokémon, will be entirely lost."))
-        if !pbConfirmMessageSerious(_INTL('Are you sure you want to save now and overwrite the other save file?'))
-          pbSEPlay('GUI save choice')
+        if !pbConfirmMessageSerious(_INTL("Are you sure you want to save now and overwrite the other save file?"))
+          pbSEPlay("GUI save choice")
           @scene.pbEndScreen
           return false
         end
       end
       $game_temp.begun_new_game = false
-      pbSEPlay('GUI save choice')
+      pbSEPlay("GUI save choice")
       if Game.save
         pbMessage(_INTL("\\se[]{1} saved the game.\\me[GUI save game]\\wtnp[30]", $player.name))
         ret = true
@@ -105,7 +105,7 @@ class PokemonSaveScreen
         ret = false
       end
     else
-      pbSEPlay('GUI save choice')
+      pbSEPlay("GUI save choice")
     end
     @scene.pbEndScreen
     return ret

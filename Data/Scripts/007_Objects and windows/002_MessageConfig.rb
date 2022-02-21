@@ -4,11 +4,14 @@ module MessageConfig
   DARK_TEXT_MAIN_COLOR    = Color.new(80, 80, 88)
   DARK_TEXT_SHADOW_COLOR  = Color.new(160, 160, 168)
   FONT_NAME               = "Power Green"
-  FONT_SIZE               = 29
+  FONT_SIZE               = 27
+  FONT_Y_OFFSET           = 8
   SMALL_FONT_NAME         = "Power Green Small"
-  SMALL_FONT_SIZE         = 25
+  SMALL_FONT_SIZE         = 21
+  SMALL_FONT_Y_OFFSET     = 8
   NARROW_FONT_NAME        = "Power Green Narrow"
-  NARROW_FONT_SIZE        = 29
+  NARROW_FONT_SIZE        = 27
+  NARROW_FONT_Y_OFFSET    = 8
   # 0 = Pause cursor is displayed at end of text
   # 1 = Pause cursor is displayed at bottom right
   # 2 = Pause cursor is displayed at lower middle side
@@ -408,18 +411,21 @@ end
 def pbSetSystemFont(bitmap)
   bitmap.font.name = MessageConfig.pbGetSystemFontName
   bitmap.font.size = MessageConfig::FONT_SIZE
+  bitmap.text_offset_y = MessageConfig::FONT_Y_OFFSET
 end
 
 # Sets a bitmap's font to the system small font.
 def pbSetSmallFont(bitmap)
   bitmap.font.name = MessageConfig.pbGetSmallFontName
   bitmap.font.size = MessageConfig::SMALL_FONT_SIZE
+  bitmap.text_offset_y = MessageConfig::SMALL_FONT_Y_OFFSET
 end
 
 # Sets a bitmap's font to the system narrow font.
 def pbSetNarrowFont(bitmap)
   bitmap.font.name = MessageConfig.pbGetNarrowFontName
   bitmap.font.size = MessageConfig::NARROW_FONT_SIZE
+  bitmap.text_offset_y = MessageConfig::NARROW_FONT_Y_OFFSET
 end
 
 #===============================================================================
@@ -503,7 +509,7 @@ end
 # Disposes all objects in the specified hash.
 def pbDisposeSpriteHash(sprites)
   return if !sprites
-  sprites.keys.each do |i|
+  sprites.each_key do |i|
     pbDisposeSprite(sprites, i)
   end
   sprites.clear
@@ -665,7 +671,7 @@ end
 # _activeStatuses_ is the result of a previous call to pbActivateWindows
 def pbRestoreActivations(sprites, activeStatuses)
   return if !sprites || !activeStatuses
-  activeStatuses.keys.each do |k|
+  activeStatuses.each_key do |k|
     if sprites[k].is_a?(Window) && !pbDisposed?(sprites[k])
       sprites[k].active = activeStatuses[k] ? true : false
     end
@@ -723,7 +729,7 @@ def addBackgroundPlane(sprites, planename, background, viewport = nil)
     sprites[planename].visible = false
   else
     sprites[planename].setBitmap(bitmapName)
-    sprites.values.each do |spr|
+    sprites.each_value do |spr|
       if spr.is_a?(Window)
         spr.windowskin = nil
       end
@@ -745,7 +751,7 @@ def addBackgroundOrColoredPlane(sprites, planename, background, color, viewport 
   else
     sprites[planename] = AnimatedPlane.new(viewport)
     sprites[planename].setBitmap(bitmapName)
-    sprites.values.each do |spr|
+    sprites.each_value do |spr|
       if spr.is_a?(Window)
         spr.windowskin = nil
       end

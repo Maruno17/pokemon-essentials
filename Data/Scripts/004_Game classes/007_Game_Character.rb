@@ -241,7 +241,7 @@ class Game_Character
       return false unless self.map.passable?(x, y, d, self)
       return false unless self.map.passable?(new_x, new_y, 10 - d, self)
     end
-    self.map.events.values.each do |event|
+    self.map.events.each_value do |event|
       next if self == event || !event.at_coordinate?(new_x, new_y) || event.through
       return false if self != $game_player || event.character_name != ""
     end

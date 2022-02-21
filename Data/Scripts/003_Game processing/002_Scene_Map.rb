@@ -9,7 +9,7 @@ class Scene_Map
 
   def spriteset(map_id = -1)
     return @spritesets[map_id] if map_id > 0 && @spritesets[map_id]
-    @spritesets.values.each do |i|
+    @spritesets.each_value do |i|
       return i if i.map == $game_map
     end
     return @spritesets.values[0]
@@ -36,7 +36,7 @@ class Scene_Map
 
   def disposeSpritesets
     return if !@spritesets
-    @spritesets.keys.each do |i|
+    @spritesets.each_key do |i|
       next if !@spritesets[i]
       @spritesets[i].dispose
       @spritesets[i] = nil
@@ -55,9 +55,8 @@ class Scene_Map
     return if !playingBGM && !playingBGS
     map = load_data(sprintf("Data/Map%03d.rxdata", mapid))
     if playingBGM && map.autoplay_bgm
-      if (PBDayNight.isNight? rescue false)
-        pbBGMFade(0.8) if playingBGM.name != map.bgm.name && playingBGM.name != map.bgm.name + "_n"
-      elsif playingBGM.name != map.bgm.name
+      if (PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + map.bgm.name + "_n") &&
+         playingBGM.name != map.bgm.name + "_n") || playingBGM.name != map.bgm.name
         pbBGMFade(0.8)
       end
     end

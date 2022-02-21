@@ -572,11 +572,10 @@ module Transitions
         size = (@timer - @timings[i]) / TIME_TO_ZOOM
         sprite.zoom_x = @zoom_x_target * size
         sprite.zoom_y = @zoom_y_target * size
-        if size >= 1.0
-          sprite.zoom_x = @zoom_x_target
-          sprite.zoom_y = @zoom_y_target
-          @timings[i] = -1
-        end
+        next if size < 1.0
+        sprite.zoom_x = @zoom_x_target
+        sprite.zoom_y = @zoom_y_target
+        @timings[i] = -1
       end
     end
   end

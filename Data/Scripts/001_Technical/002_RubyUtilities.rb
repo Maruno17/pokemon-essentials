@@ -23,7 +23,7 @@ end
 #===============================================================================
 class String
   def starts_with_vowel?
-    return ['a', 'e', 'i', 'o', 'u'].include?(self[0, 1].downcase)
+    return ["a", "e", "i", "o", "u"].include?(self[0, 1].downcase)
   end
 
   def first(n = 1); return self[0...n]; end
@@ -135,7 +135,7 @@ class File
   def self.copy(source, destination)
     data = ""
     t = Time.now
-    File.open(source, 'rb') do |f|
+    File.open(source, "rb") do |f|
       loop do
         r = f.read(4096)
         break if !r
@@ -147,7 +147,7 @@ class File
       end
     end
     File.delete(destination) if File.file?(destination)
-    f = File.new(destination, 'wb')
+    f = File.new(destination, "wb")
     f.write data
     f.close
   end

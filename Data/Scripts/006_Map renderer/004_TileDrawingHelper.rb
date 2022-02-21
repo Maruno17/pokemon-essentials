@@ -215,11 +215,10 @@ def getPassabilityMinimap(mapid)
   neighbors = TileDrawingHelper::NEIGHBORS_TO_AUTOTILE_INDEX
   map.width.times do |i|
     map.height.times do |j|
-      if passtable[i, j] == 0
-        nb = TileDrawingHelper.tableNeighbors(passtable, i, j)
-        tile = neighbors[nb]
-        bltMinimapAutotile(ret, i * 6, j * 6, minimap.bitmap, tile)
-      end
+      next if passtable[i, j] != 0
+      nb = TileDrawingHelper.tableNeighbors(passtable, i, j)
+      tile = neighbors[nb]
+      bltMinimapAutotile(ret, i * 6, j * 6, minimap.bitmap, tile)
     end
   end
   minimap.disposes

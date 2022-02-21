@@ -215,7 +215,7 @@ class Window_PokemonOption < Window_DrawableCommand
     when NumberOption
       value = _INTL("Type {1}/{2}", @options[index].lowest_value + self[index],
                     @options[index].highest_value - @options[index].lowest_value + 1)
-      xpos = optionwidth + rect.x * 2
+      xpos = optionwidth + (rect.x * 2)
       pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
                        SEL_VALUE_BASE_COLOR, SEL_VALUE_SHADOW_COLOR, 1)
     when SliderOption

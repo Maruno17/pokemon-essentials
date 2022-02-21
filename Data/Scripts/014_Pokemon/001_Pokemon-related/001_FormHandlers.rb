@@ -40,21 +40,20 @@ def drawSpot(bitmap, spotpattern, x, y, red, green, blue)
   height.times do |yy|
     spot = spotpattern[yy]
     width.times do |xx|
-      if spot[xx] == 1
-        xOrg = (x + xx) << 1
-        yOrg = (y + yy) << 1
-        color = bitmap.get_pixel(xOrg, yOrg)
-        r = color.red + red
-        g = color.green + green
-        b = color.blue + blue
-        color.red   = [[r, 0].max, 255].min
-        color.green = [[g, 0].max, 255].min
-        color.blue  = [[b, 0].max, 255].min
-        bitmap.set_pixel(xOrg, yOrg, color)
-        bitmap.set_pixel(xOrg + 1, yOrg, color)
-        bitmap.set_pixel(xOrg, yOrg + 1, color)
-        bitmap.set_pixel(xOrg + 1, yOrg + 1, color)
-      end
+      next if spot[xx] != 1
+      xOrg = (x + xx) << 1
+      yOrg = (y + yy) << 1
+      color = bitmap.get_pixel(xOrg, yOrg)
+      r = color.red + red
+      g = color.green + green
+      b = color.blue + blue
+      color.red   = [[r, 0].max, 255].min
+      color.green = [[g, 0].max, 255].min
+      color.blue  = [[b, 0].max, 255].min
+      bitmap.set_pixel(xOrg, yOrg, color)
+      bitmap.set_pixel(xOrg + 1, yOrg, color)
+      bitmap.set_pixel(xOrg, yOrg + 1, color)
+      bitmap.set_pixel(xOrg + 1, yOrg + 1, color)
     end
   end
 end

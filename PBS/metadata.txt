@@ -5,12 +5,12 @@ StartMoney = 3000
 StartItemStorage = POTION
 Home = 3,7,5,8
 StorageCreator = Bill
-WildBattleBGM = Battle wild.mid
-TrainerBattleBGM = Battle trainer.mid
-WildVictoryME = Battle victory wild.ogg
-TrainerVictoryME = Battle victory trainer.ogg
-SurfBGM = Surfing.mid
-BicycleBGM = Bicycle.mid
+WildBattleBGM = Battle wild
+TrainerBattleBGM = Battle trainer
+WildVictoryME = Battle victory wild
+TrainerVictoryME = Battle victory trainer
+SurfBGM = Surfing
+BicycleBGM = Bicycle
 #-------------------------------
 [1]
 TrainerType = POKEMONTRAINER_Red

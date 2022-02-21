@@ -317,7 +317,7 @@ class SpriteWindow < Window
     end
     privRefresh if mustchange
     if @flash > 0
-      @sprites.values.each do |i|
+      @sprites.each_value do |i|
         i.update
       end
       @flash -= 1

@@ -20,33 +20,25 @@ def pbLottery(winnum, nameVar = 2, positionVar = 3, matchedVar = 4)
     thismatched = 0
     id = i.owner.public_id
     5.times do |j|
-      if (id / (10**j)) % 10 == (winnum / (10**j)) % 10
-        thismatched += 1
-      else
-        break
-      end
+      break if (id / (10**j)) % 10 != (winnum / (10**j)) % 10
+      thismatched += 1
     end
-    if thismatched > winmatched
-      winpoke = i.name
-      winpos = 1 # Party
-      winmatched = thismatched
-    end
+    next if thismatched <= winmatched
+    winpoke = i.name
+    winpos = 1    # Party
+    winmatched = thismatched
   end
   pbEachPokemon { |poke, _box|
     thismatched = 0
     id = poke.owner.public_id
     5.times do |j|
-      if (id / (10**j)) % 10 == (winnum / (10**j)) % 10
-        thismatched += 1
-      else
-        break
-      end
+      break if (id / (10**j)) % 10 != (winnum / (10**j)) % 10
+      thismatched += 1
     end
-    if thismatched > winmatched
-      winpoke = poke.name
-      winpos = 2 # Storage
-      winmatched = thismatched
-    end
+    next if thismatched <= winmatched
+    winpoke = poke.name
+    winpos = 2    # Storage
+    winmatched = thismatched
   }
   $game_variables[nameVar] = winpoke
   $game_variables[positionVar] = winpos

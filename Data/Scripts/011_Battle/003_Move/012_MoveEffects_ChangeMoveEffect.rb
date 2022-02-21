@@ -762,7 +762,7 @@ class Battle::Move::UseLastMoveUsedByTarget < Battle::Move
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if !target.lastRegularMoveUsed ||
-       !GameData::Move.get(target.lastRegularMoveUsed).flags.any? { |f| f[/^CanMirrorMove$/i] }
+       GameData::Move.get(target.lastRegularMoveUsed).flags.none? { |f| f[/^CanMirrorMove$/i] }
       @battle.pbDisplay(_INTL("The mirror move failed!")) if show_message
       return true
     end
@@ -960,7 +960,7 @@ class Battle::Move::UseRandomMove < Battle::Move
       move_id = move_keys[@battle.pbRandom(move_keys.length)]
       move_data = GameData::Move.get(move_id)
       next if @moveBlacklist.include?(move_data.function_code)
-      next if move_data.has_flag?("CannnotMetronome")
+      next if move_data.has_flag?("CannotMetronome")
       next if move_data.type == :SHADOW
       @metronomeMove = move_data.id
       break

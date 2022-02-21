@@ -24,8 +24,8 @@ module FilenameUpdater
     # starts automatic renaming
     files.each_with_index do |file, i|
       next if file[/^berrytree_/]
-      next if ["berrytreewet", "berrytreedamp", "berrytreedry", "berrytreeplanted"].include?(file.split('.')[0])
-      new_file = file.gsub('berrytree', 'berrytree_')
+      next if ["berrytreewet", "berrytreedamp", "berrytreedry", "berrytreeplanted"].include?(file.split(".")[0])
+      new_file = file.gsub("berrytree", "berrytree_")
       File.move(src_dir + file, src_dir + new_file)
       ret = true
     end
@@ -47,7 +47,7 @@ module FilenameUpdater
       map = mapData.getMap(id)
       next if !map || !mapData.mapinfos[id]
       changed = false
-      map.events.keys.each do |key|
+      map.events.each_key do |key|
         if Time.now.to_i - t >= 5
           Graphics.update
           t = Time.now.to_i
@@ -56,8 +56,8 @@ module FilenameUpdater
           next if nil_or_empty?(page.graphic.character_name)
           char_name = page.graphic.character_name
           next if !char_name[/^berrytree[^_]+/]
-          next if ["berrytreewet", "berrytreedamp", "berrytreedry", "berrytreeplanted"].include?(char_name.split('.')[0])
-          new_file = page.graphic.character_name.gsub('berrytree', 'berrytree_')
+          next if ["berrytreewet", "berrytreedamp", "berrytreedry", "berrytreeplanted"].include?(char_name.split(".")[0])
+          new_file = page.graphic.character_name.gsub("berrytree", "berrytree_")
           page.graphic.character_name = new_file
           changed = true
         end

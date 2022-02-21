@@ -137,7 +137,7 @@ class Battle::Scene
         a[2] = true if a[1].animDone?
       end
       pbUpdate
-      if !inPartyAnimation? && !sendOutAnims.any? { |a| !a[2] }
+      if !inPartyAnimation? && sendOutAnims.none? { |a| !a[2] }
         break
       end
     end
@@ -515,7 +515,7 @@ class Battle::Scene
     return if !animations
     animations.each do |a|
       next if !a || a.name != "Common:" + animName
-      pbAnimationCore(a, user, (target != nil) ? target : user)
+      pbAnimationCore(a, user, target || user)
       return
     end
   end

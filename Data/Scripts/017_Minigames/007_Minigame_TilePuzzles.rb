@@ -73,12 +73,11 @@ class TilePuzzleCursor < BitmapSprite
       yin = [@tileheight - (@cursorbitmap.height / 2) + expand, (@tileheight - (@cursorbitmap.height / 2)) / 2,
              (@tileheight - (@cursorbitmap.height / 2)) / 2, -expand]
       4.times do |i|
-        if @arrows[i]
-          self.bitmap.blt(x + xin[i], y + yin[i], @cursorbitmap.bitmap,
-                          Rect.new((@cursorbitmap.width / 2) + ((i % 2) * (@cursorbitmap.width / 4)),
-                                   (i / 2) * (@cursorbitmap.height / 2),
-                                   @cursorbitmap.width / 4, @cursorbitmap.height / 2))
-        end
+        next if !@arrows[i]
+        self.bitmap.blt(x + xin[i], y + yin[i], @cursorbitmap.bitmap,
+                        Rect.new((@cursorbitmap.width / 2) + ((i % 2) * (@cursorbitmap.width / 4)),
+                                 (i / 2) * (@cursorbitmap.height / 2),
+                                 @cursorbitmap.width / 4, @cursorbitmap.height / 2))
       end
     end
   end

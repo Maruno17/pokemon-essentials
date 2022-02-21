@@ -339,91 +339,91 @@ end
 class PokemonBag
   # @deprecated This method is slated to be removed in v21.
   def pbQuantity(item)
-    Deprecation.warn_method('pbQuantity', 'v21', '$bag.quantity(item)')
+    Deprecation.warn_method("pbQuantity", "v21", "$bag.quantity(item)")
     return quantity(item)
   end
 
   # @deprecated This method is slated to be removed in v21.
   def pbHasItem?(item)
-    Deprecation.warn_method('pbHasItem?', 'v21', '$bag.has?(item)')
+    Deprecation.warn_method("pbHasItem?", "v21", "$bag.has?(item)")
     return has?(item)
   end
 
   # @deprecated This method is slated to be removed in v21.
   def pbCanStore?(item, quantity = 1)
-    Deprecation.warn_method('pbCanStore?', 'v21', '$bag.can_add?(item, quantity)')
+    Deprecation.warn_method("pbCanStore?", "v21", "$bag.can_add?(item, quantity)")
     return can_add?(item, quantity)
   end
 
   # @deprecated This method is slated to be removed in v21.
   def pbStoreItem(item, quantity = 1)
-    Deprecation.warn_method('pbStoreItem', 'v21', '$bag.add(item, quantity)')
+    Deprecation.warn_method("pbStoreItem", "v21", "$bag.add(item, quantity)")
     return add(item, quantity)
   end
 
   # @deprecated This method is slated to be removed in v21.
   def pbStoreAllOrNone(item, quantity = 1)
-    Deprecation.warn_method('pbStoreAllOrNone', 'v21', '$bag.add_all(item, quantity)')
+    Deprecation.warn_method("pbStoreAllOrNone", "v21", "$bag.add_all(item, quantity)")
     return add_all(item, quantity)
   end
 
   # @deprecated This method is slated to be removed in v21.
   def pbChangeItem(old_item, new_item)
-    Deprecation.warn_method('pbChangeItem', 'v21', '$bag.replace_item(old_item, new_item)')
+    Deprecation.warn_method("pbChangeItem", "v21", "$bag.replace_item(old_item, new_item)")
     return replace_item(old_item, new_item)
   end
 
   # @deprecated This method is slated to be removed in v21.
   def pbDeleteItem(item, quantity = 1)
-    Deprecation.warn_method('pbDeleteItem', 'v21', '$bag.remove(item, quantity)')
+    Deprecation.warn_method("pbDeleteItem", "v21", "$bag.remove(item, quantity)")
     return remove(item, quantity)
   end
 
   # @deprecated This method is slated to be removed in v21.
   def pbIsRegistered?(item)
-    Deprecation.warn_method('pbIsRegistered?', 'v21', '$bag.registered?(item)')
+    Deprecation.warn_method("pbIsRegistered?", "v21", "$bag.registered?(item)")
     return registered?(item)
   end
 
   # @deprecated This method is slated to be removed in v21.
   def pbRegisterItem(item)
-    Deprecation.warn_method('pbRegisterItem', 'v21', '$bag.register(item)')
+    Deprecation.warn_method("pbRegisterItem", "v21", "$bag.register(item)")
     register(item)
   end
 
   # @deprecated This method is slated to be removed in v21.
   def pbUnregisterItem(item)
-    Deprecation.warn_method('pbUnregisterItem', 'v21', '$bag.unregister(item)')
+    Deprecation.warn_method("pbUnregisterItem", "v21", "$bag.unregister(item)")
     unregister(item)
   end
 end
 
 # @deprecated This method is slated to be removed in v21.
 def pbQuantity(item)
-  Deprecation.warn_method('pbQuantity', 'v21', '$bag.quantity(item)')
+  Deprecation.warn_method("pbQuantity", "v21", "$bag.quantity(item)")
   return $bag.quantity(item)
 end
 
 # @deprecated This method is slated to be removed in v21.
 def pbHasItem?(item)
-  Deprecation.warn_method('pbHasItem?', 'v21', '$bag.has?(item)')
+  Deprecation.warn_method("pbHasItem?", "v21", "$bag.has?(item)")
   return $bag.has?(item)
 end
 
 # @deprecated This method is slated to be removed in v21.
 def pbCanStore?(item, quantity = 1)
-  Deprecation.warn_method('pbCanStore?', 'v21', '$bag.can_add?(item, quantity)')
+  Deprecation.warn_method("pbCanStore?", "v21", "$bag.can_add?(item, quantity)")
   return $bag.can_add?(item, quantity)
 end
 
 # @deprecated This method is slated to be removed in v21.
 def pbStoreItem(item, quantity = 1)
-  Deprecation.warn_method('pbStoreItem', 'v21', '$bag.add(item, quantity)')
+  Deprecation.warn_method("pbStoreItem", "v21", "$bag.add(item, quantity)")
   return $bag.add(item, quantity)
 end
 
 # @deprecated This method is slated to be removed in v21.
 def pbStoreAllOrNone(item, quantity = 1)
-  Deprecation.warn_method('pbStoreAllOrNone', 'v21', '$bag.add_all(item, quantity)')
+  Deprecation.warn_method("pbStoreAllOrNone", "v21", "$bag.add_all(item, quantity)")
   return $bag.add_all(item, quantity)
 end

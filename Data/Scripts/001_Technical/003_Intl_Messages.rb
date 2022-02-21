@@ -108,7 +108,7 @@ def pbSetTextMessages
     items.concat(choices)
     MessageTypes.setMapMessagesAsHash(0, items)
     mapinfos = pbLoadMapInfos
-    mapinfos.keys.each do |id|
+    mapinfos.each_key do |id|
       if Time.now.to_i - t >= 5
         t = Time.now.to_i
         Graphics.update
@@ -118,7 +118,7 @@ def pbSetTextMessages
       map = load_data(filename)
       items = []
       choices = []
-      map.events.values.each do |event|
+      map.events.each_value do |event|
         if Time.now.to_i - t >= 5
           t = Time.now.to_i
           Graphics.update
@@ -758,8 +758,8 @@ def _ISPRINTF(*arg)
   return string
 end
 
-def _I(str)
-  return _MAPINTL($game_map.map_id, str)
+def _I(str, *arg)
+  return _MAPINTL($game_map.map_id, str, *arg)
 end
 
 def _MAPINTL(mapid, *arg)

@@ -27,14 +27,13 @@ class PokemonPokedexInfo_Scene
     @sprites["areamap"].x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
     @sprites["areamap"].y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
     Settings::REGION_MAP_EXTRAS.each do |hidden|
-      if hidden[0] == @region && hidden[1] > 0 && $game_switches[hidden[1]]
-        pbDrawImagePositions(
-          @sprites["areamap"].bitmap,
-          [["Graphics/Pictures/#{hidden[4]}",
-            hidden[2] * PokemonRegionMap_Scene::SQUARE_WIDTH,
-            hidden[3] * PokemonRegionMap_Scene::SQUARE_HEIGHT]]
-        )
-      end
+      next if hidden[0] != @region || hidden[1] <= 0 || !$game_switches[hidden[1]]
+      pbDrawImagePositions(
+        @sprites["areamap"].bitmap,
+        [["Graphics/Pictures/#{hidden[4]}",
+          hidden[2] * PokemonRegionMap_Scene::SQUARE_WIDTH,
+          hidden[3] * PokemonRegionMap_Scene::SQUARE_HEIGHT]]
+      )
     end
     @sprites["areahighlight"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["areaoverlay"] = IconSprite.new(0, 0, @viewport)
@@ -216,18 +215,18 @@ class PokemonPokedexInfo_Scene
     end
     textpos = [
       [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
-       246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+       246, 48, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
     ]
     if @show_battled_count
-      textpos.push([_INTL("Number Battled"), 314, 152, 0, base, shadow])
-      textpos.push([$player.pokedex.battled_count(@species).to_s, 452, 184, 1, base, shadow])
+      textpos.push([_INTL("Number Battled"), 314, 164, 0, base, shadow])
+      textpos.push([$player.pokedex.battled_count(@species).to_s, 452, 196, 1, base, shadow])
     else
-      textpos.push([_INTL("Height"), 314, 152, 0, base, shadow])
-      textpos.push([_INTL("Weight"), 314, 184, 0, base, shadow])
+      textpos.push([_INTL("Height"), 314, 164, 0, base, shadow])
+      textpos.push([_INTL("Weight"), 314, 196, 0, base, shadow])
     end
     if $player.owned?(@species)
       # Write the category
-      textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 68, 0, base, shadow])
+      textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 80, 0, base, shadow])
       # Write the height and weight
       if !@show_battled_count
         height = species_data.height
@@ -235,15 +234,15 @@ class PokemonPokedexInfo_Scene
         if System.user_language[3..4] == "US"   # If the user is in the United States
           inches = (height / 0.254).round
           pounds = (weight / 0.45359).round
-          textpos.push([_ISPRINTF("{1:d}'{2:02d}\"", inches / 12, inches % 12), 460, 152, 1, base, shadow])
-          textpos.push([_ISPRINTF("{1:4.1f} lbs.", pounds / 10.0), 494, 184, 1, base, shadow])
+          textpos.push([_ISPRINTF("{1:d}'{2:02d}\"", inches / 12, inches % 12), 460, 164, 1, base, shadow])
+          textpos.push([_ISPRINTF("{1:4.1f} lbs.", pounds / 10.0), 494, 196, 1, base, shadow])
         else
-          textpos.push([_ISPRINTF("{1:.1f} m", height / 10.0), 470, 152, 1, base, shadow])
-          textpos.push([_ISPRINTF("{1:.1f} kg", weight / 10.0), 482, 184, 1, base, shadow])
+          textpos.push([_ISPRINTF("{1:.1f} m", height / 10.0), 470, 164, 1, base, shadow])
+          textpos.push([_ISPRINTF("{1:.1f} kg", weight / 10.0), 482, 196, 1, base, shadow])
         end
       end
       # Draw the Pokédex entry text
-      drawTextEx(overlay, 40, 244, Graphics.width - (40 * 2), 4,   # overlay, x, y, width, num lines
+      drawTextEx(overlay, 40, 246, Graphics.width - (40 * 2), 4,   # overlay, x, y, width, num lines
                  species_data.pokedex_entry, base, shadow)
       # Draw the footprint
       footprintfile = GameData::Species.footprint_filename(@species, @form)
@@ -262,15 +261,15 @@ class PokemonPokedexInfo_Scene
       end
     else
       # Write the category
-      textpos.push([_INTL("????? Pokémon"), 246, 68, 0, base, shadow])
+      textpos.push([_INTL("????? Pokémon"), 246, 80, 0, base, shadow])
       # Write the height and weight
       if !@show_battled_count
         if System.user_language[3..4] == "US"   # If the user is in the United States
-          textpos.push([_INTL("???'??\""), 460, 152, 1, base, shadow])
-          textpos.push([_INTL("????.? lbs."), 494, 184, 1, base, shadow])
+          textpos.push([_INTL("???'??\""), 460, 164, 1, base, shadow])
+          textpos.push([_INTL("????.? lbs."), 494, 196, 1, base, shadow])
         else
-          textpos.push([_INTL("????.? m"), 470, 152, 1, base, shadow])
-          textpos.push([_INTL("????.? kg"), 482, 184, 1, base, shadow])
+          textpos.push([_INTL("????.? m"), 470, 164, 1, base, shadow])
+          textpos.push([_INTL("????.? kg"), 482, 196, 1, base, shadow])
         end
       end
     end
@@ -289,66 +288,81 @@ class PokemonPokedexInfo_Scene
     return false
   end
 
+  # Returns a 1D array of values corresponding to points on the Town Map. Each
+  # value is true or false.
+  def pbGetEncounterPoints
+    # Determine all visible points on the Town Map (i.e. only ones with a
+    # defined point in town_map.txt, and which either have no Self Switch
+    # controlling their visibility or whose Self Switch is ON)
+    visible_points = []
+    @mapdata[@region][2].each do |loc|
+      next if loc[7] && !$game_switches[loc[7]]   # Point is not visible
+      visible_points.push([loc[0], loc[1]])
+    end
+    # Find all points with a visible area for @species
+    town_map_width = 1 + PokemonRegionMap_Scene::RIGHT - PokemonRegionMap_Scene::LEFT
+    ret = []
+    GameData::Encounter.each_of_version($PokemonGlobal.encounter_version) do |enc_data|
+      next if !pbFindEncounter(enc_data.types, @species)   # Species isn't in encounter table
+      # Get the map belonging to the encounter table
+      map_metadata = GameData::MapMetadata.try_get(enc_data.map)
+      next if !map_metadata || map_metadata.has_flag?("HideEncountersInPokedex")
+      mappos = map_metadata.town_map_position
+      next if mappos[0] != @region   # Map isn't in the region being shown
+      # Get the size and shape of the map in the Town Map
+      map_size = map_metadata.town_map_size
+      map_width = 1
+      map_height = 1
+      map_shape = "1"
+      if map_size && map_size[0] && map_size[0] > 0   # Map occupies multiple points
+        map_width = map_size[0]
+        map_shape = map_size[1]
+        map_height = (map_shape.length.to_f / map_width).ceil
+      end
+      # Mark each visible point covered by the map as containing the area
+      map_width.times do |i|
+        map_height.times do |j|
+          next if map_shape[i + (j * map_width), 1].to_i == 0   # Point isn't part of map
+          next if !visible_points.include?([mappos[1] + i, mappos[2] + j])   # Point isn't visible
+          ret[mappos[1] + i + ((mappos[2] + j) * town_map_width)] = true
+        end
+      end
+    end
+    return ret
+  end
+
   def drawPageArea
     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
     overlay = @sprites["overlay"].bitmap
     base   = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
     @sprites["areahighlight"].bitmap.clear
-    # Fill the array "points" with all squares of the region map in which the
-    # species can be found
-    points = []
-    mapwidth = 1 + PokemonRegionMap_Scene::RIGHT - PokemonRegionMap_Scene::LEFT
-    GameData::Encounter.each_of_version($PokemonGlobal.encounter_version) do |enc_data|
-      next if !pbFindEncounter(enc_data.types, @species)
-      map_metadata = GameData::MapMetadata.try_get(enc_data.map)
-      mappos = (map_metadata) ? map_metadata.town_map_position : nil
-      next if !mappos || mappos[0] != @region
-      showpoint = true
-      @mapdata[@region][2].each do |loc|
-        showpoint = false if loc[0] == mappos[1] && loc[1] == mappos[2] &&
-                             loc[7] && !$game_switches[loc[7]]
-      end
-      next if !showpoint
-      mapsize = map_metadata.town_map_size
-      if mapsize && mapsize[0] && mapsize[0] > 0
-        sqwidth  = mapsize[0]
-        sqheight = (mapsize[1].length.to_f / mapsize[0]).ceil
-        sqwidth.times do |i|
-          sqheight.times do |j|
-            if mapsize[1][i + (j * sqwidth), 1].to_i > 0
-              points[mappos[1] + i + ((mappos[2] + j) * mapwidth)] = true
-            end
-          end
-        end
-      else
-        points[mappos[1] + (mappos[2] * mapwidth)] = true
-      end
-    end
-    # Draw coloured squares on each square of the region map with a nest
+    # Get all points to be shown as places where @species can be encountered
+    points = pbGetEncounterPoints
+    # Draw coloured squares on each point of the Town Map with a nest
     pointcolor   = Color.new(0, 248, 248)
     pointcolorhl = Color.new(192, 248, 248)
+    town_map_width = 1 + PokemonRegionMap_Scene::RIGHT - PokemonRegionMap_Scene::LEFT
     sqwidth = PokemonRegionMap_Scene::SQUARE_WIDTH
     sqheight = PokemonRegionMap_Scene::SQUARE_HEIGHT
     points.length.times do |j|
-      if points[j]
-        x = (j % mapwidth) * sqwidth
-        x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
-        y = (j / mapwidth) * sqheight
-        y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
-        @sprites["areahighlight"].bitmap.fill_rect(x, y, sqwidth, sqheight, pointcolor)
-        if j - mapwidth < 0 || !points[j - mapwidth]
-          @sprites["areahighlight"].bitmap.fill_rect(x, y - 2, sqwidth, 2, pointcolorhl)
-        end
-        if j + mapwidth >= points.length || !points[j + mapwidth]
-          @sprites["areahighlight"].bitmap.fill_rect(x, y + sqheight, sqwidth, 2, pointcolorhl)
-        end
-        if j % mapwidth == 0 || !points[j - 1]
-          @sprites["areahighlight"].bitmap.fill_rect(x - 2, y, 2, sqheight, pointcolorhl)
-        end
-        if (j + 1) % mapwidth == 0 || !points[j + 1]
-          @sprites["areahighlight"].bitmap.fill_rect(x + sqwidth, y, 2, sqheight, pointcolorhl)
-        end
+      next if !points[j]
+      x = (j % town_map_width) * sqwidth
+      x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
+      y = (j / town_map_width) * sqheight
+      y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
+      @sprites["areahighlight"].bitmap.fill_rect(x, y, sqwidth, sqheight, pointcolor)
+      if j - town_map_width < 0 || !points[j - town_map_width]
+        @sprites["areahighlight"].bitmap.fill_rect(x, y - 2, sqwidth, 2, pointcolorhl)
+      end
+      if j + town_map_width >= points.length || !points[j + town_map_width]
+        @sprites["areahighlight"].bitmap.fill_rect(x, y + sqheight, sqwidth, 2, pointcolorhl)
+      end
+      if j % town_map_width == 0 || !points[j - 1]
+        @sprites["areahighlight"].bitmap.fill_rect(x - 2, y, 2, sqheight, pointcolorhl)
+      end
+      if (j + 1) % town_map_width == 0 || !points[j + 1]
+        @sprites["areahighlight"].bitmap.fill_rect(x + sqwidth, y, 2, sqheight, pointcolorhl)
       end
     end
     # Set the text
@@ -358,11 +372,11 @@ class PokemonPokedexInfo_Scene
         overlay,
         [[sprintf("Graphics/Pictures/Pokedex/overlay_areanone"), 108, 188]]
       )
-      textpos.push([_INTL("Area unknown"), Graphics.width / 2, (Graphics.height / 2) - 6, 2, base, shadow])
+      textpos.push([_INTL("Area unknown"), Graphics.width / 2, (Graphics.height / 2) + 6, 2, base, shadow])
     end
-    textpos.push([pbGetMessage(MessageTypes::RegionNames, @region), 414, 38, 2, base, shadow])
+    textpos.push([pbGetMessage(MessageTypes::RegionNames, @region), 414, 50, 2, base, shadow])
     textpos.push([_INTL("{1}'s area", GameData::Species.get(@species).name),
-                  Graphics.width / 2, 346, 2, base, shadow])
+                  Graphics.width / 2, 358, 2, base, shadow])
     pbDrawTextPositions(overlay, textpos)
   end
 
@@ -380,8 +394,8 @@ class PokemonPokedexInfo_Scene
       end
     end
     textpos = [
-      [GameData::Species.get(@species).name, Graphics.width / 2, Graphics.height - 94, 2, base, shadow],
-      [formname, Graphics.width / 2, Graphics.height - 62, 2, base, shadow]
+      [GameData::Species.get(@species).name, Graphics.width / 2, Graphics.height - 82, 2, base, shadow],
+      [formname, Graphics.width / 2, Graphics.height - 50, 2, base, shadow]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)

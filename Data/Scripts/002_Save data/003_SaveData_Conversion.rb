@@ -112,7 +112,7 @@ module SaveData
     # @see SaveData.register_conversion
     def to_value(value_id, &block)
       validate value_id => Symbol
-      raise ArgumentError, 'No block given to to_value' unless block_given?
+      raise ArgumentError, "No block given to to_value" unless block_given?
       if @value_procs[value_id].is_a?(Proc)
         raise "Multiple to_value definitions in conversion #{@id} for #{value_id}"
       end
@@ -122,7 +122,7 @@ module SaveData
     # Defines a conversion to the entire save data.
     # @see SaveData.register_conversion
     def to_all(&block)
-      raise ArgumentError, 'No block given to to_all' unless block_given?
+      raise ArgumentError, "No block given to to_all" unless block_given?
       if @all_proc.is_a?(Proc)
         raise "Multiple to_all definitions in conversion #{@id}"
       end
@@ -156,7 +156,7 @@ module SaveData
   def self.register_conversion(id, &block)
     validate id => Symbol
     unless block_given?
-      raise ArgumentError, 'No block given to SaveData.register_conversion'
+      raise ArgumentError, "No block given to SaveData.register_conversion"
     end
     conversion = Conversion.new(id, &block)
     @conversions[conversion.trigger_type][conversion.version] ||= []
@@ -168,8 +168,8 @@ module SaveData
   def self.get_conversions(save_data)
     conversions_to_run = []
     versions = {
-      essentials: save_data[:essentials_version] || '18.1',
-      game: save_data[:game_version] || '0.0.0'
+      essentials: save_data[:essentials_version] || "18.1",
+      game: save_data[:game_version] || "0.0.0"
     }
     [:essentials, :game].each do |trigger_type|
       # Ensure the versions are sorted from lowest to highest
@@ -194,7 +194,7 @@ module SaveData
     validate save_data => Hash
     conversions_to_run = self.get_conversions(save_data)
     return false if conversions_to_run.none?
-    File.open(SaveData::FILE_PATH + '.bak', 'wb') { |f| Marshal.dump(save_data, f) }
+    File.open(SaveData::FILE_PATH + ".bak", "wb") { |f| Marshal.dump(save_data, f) }
     Console.echo_h1 "Running #{conversions_to_run.length} save file conversions"
     conversions_to_run.each do |conversion|
       Console.echo_li "#{conversion.title}..."

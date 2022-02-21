@@ -12,10 +12,10 @@ def pbPostData(url, postdata, filename = nil, depth = 0)
     body = postdata.map { |key, value|
       keyString   = key.to_s
       valueString = value.to_s
-      keyString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf('%%%02x', s[0]) }
-      valueString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf('%%%02x', s[0]) }
+      keyString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf("%%%02x", s[0]) }
+      valueString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf("%%%02x", s[0]) }
       next "#{keyString}=#{valueString}"
-    }.join('&')
+    }.join("&")
     ret = HTTPLite.post_body(
       url,
       body,

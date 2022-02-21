@@ -532,7 +532,7 @@ class Battle::AI
       end
     end
     # Minimize
-    if skill >= PBTrainerAI.highSkill && (target.effects[PBEffects::Minimize] && move.tramplesMinimize?(2))
+    if skill >= PBTrainerAI.highSkill && target.effects[PBEffects::Minimize] && move.tramplesMinimize?
       multipliers[:final_damage_multiplier] *= 2
     end
     # Move-specific base damage modifiers
@@ -584,7 +584,8 @@ class Battle::AI
   def pbRoughAccuracy(move, user, target, skill)
     # "Always hit" effects and "always hit" accuracy
     if skill >= PBTrainerAI.mediumSkill
-      return 125 if target.effects[PBEffects::Minimize] && move.tramplesMinimize?(1)
+      return 125 if target.effects[PBEffects::Minimize] && move.tramplesMinimize? &&
+                    Settings::MECHANICS_GENERATION >= 6
       return 125 if target.effects[PBEffects::Telekinesis] > 0
     end
     baseAcc = move.accuracy

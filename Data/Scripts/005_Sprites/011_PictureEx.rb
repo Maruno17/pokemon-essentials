@@ -436,12 +436,11 @@ class PictureEx
       end
       # Increase frame counter
       process[3] += 1
-      if process[3] > process[2]
-        # Process has ended, erase it
-        callback(process[4]) if process[4]
-        @processes[i] = nil
-        procEnded = true
-      end
+      next if process[3] <= process[2]
+      # Process has ended, erase it
+      callback(process[4]) if process[4]
+      @processes[i] = nil
+      procEnded = true
     end
     # Clear out empty spaces in @processes array caused by finished processes
     @processes.compact! if procEnded

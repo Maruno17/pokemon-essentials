@@ -32,17 +32,17 @@ class Window_PokemonItemStorage < Window_DrawableCommand
     rect = drawCursor(index, rect)
     textpos = []
     if index == @bag.length
-      textpos.push([_INTL("CANCEL"), rect.x, rect.y - 6, false, self.baseColor, self.shadowColor])
+      textpos.push([_INTL("CANCEL"), rect.x, rect.y, false, self.baseColor, self.shadowColor])
     else
       item     = @bag[index][0]
       itemname = @adapter.getDisplayName(item)
       baseColor = (index == @sortIndex) ? Color.new(248, 24, 24) : self.baseColor
-      textpos.push([itemname, rect.x, rect.y - 6, false, self.baseColor, self.shadowColor])
+      textpos.push([itemname, rect.x, rect.y, false, self.baseColor, self.shadowColor])
       if !GameData::Item.get(item).is_important?   # Not a Key item/HM/TM
         qty     = _ISPRINTF("x{1: 2d}", @bag[index][1])
         sizeQty = self.contents.text_size(qty).width
         xQty = rect.x + rect.width - sizeQty - 2
-        textpos.push([qty, xQty, rect.y - 6, false, baseColor, self.shadowColor])
+        textpos.push([qty, xQty, rect.y, false, baseColor, self.shadowColor])
       end
     end
     pbDrawTextPositions(self.contents, textpos)
@@ -90,7 +90,7 @@ class ItemStorage_Scene
     @sprites["pocketwindow"].y = 16
     pbSetNarrowFont(@sprites["pocketwindow"].bitmap)
     # Item description
-    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("", 84, 270, Graphics.width - 84, 128, @viewport)
+    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("", 84, 272, Graphics.width - 84, 128, @viewport)
     @sprites["itemtextwindow"].baseColor   = ITEMTEXTBASECOLOR
     @sprites["itemtextwindow"].shadowColor = ITEMTEXTSHADOWCOLOR
     @sprites["itemtextwindow"].windowskin  = nil
@@ -132,7 +132,7 @@ class ItemStorage_Scene
   def pbRefresh
     bm = @sprites["pocketwindow"].bitmap
     # Draw title at upper left corner ("Toss Item/Withdraw Item")
-    drawTextEx(bm, 0, 4, bm.width, 2, @title, TITLEBASECOLOR, TITLESHADOWCOLOR)
+    drawTextEx(bm, 0, 8, bm.width, 2, @title, TITLEBASECOLOR, TITLESHADOWCOLOR)
     itemwindow = @sprites["itemwindow"]
     # Draw item icon
     @sprites["icon"].item = itemwindow.item

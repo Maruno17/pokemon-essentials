@@ -172,13 +172,14 @@ def pbExclaim(event, id = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
     sprite = nil
     done = []
     event.each do |i|
-      if !done.include?(i.id)
-        sprite = $scene.spriteset.addUserAnimation(id, i.x, i.y, tinting, 2)
-        done.push(i.id)
-      end
+      next if done.include?(i.id)
+      spriteset = $scene.spriteset(i.map_id)
+      sprite ||= spriteset&.addUserAnimation(id, i.x, i.y, tinting, 2)
+      done.push(i.id)
     end
   else
-    sprite = $scene.spriteset.addUserAnimation(id, event.x, event.y, tinting, 2)
+    spriteset = $scene.spriteset(event.map_id)
+    sprite = spriteset&.addUserAnimation(id, event.x, event.y, tinting, 2)
   end
   until sprite.disposed?
     Graphics.update
@@ -438,7 +439,7 @@ def pbMoveTutorChoose(move, movelist = nil, bymachine = false, oneusemachine = f
         pbMessage(_INTL("Eggs can't be taught any moves.")) { screen.pbUpdate }
       elsif pokemon.shadowPokemon?
         pbMessage(_INTL("Shadow Pokémon can't be taught any moves.")) { screen.pbUpdate }
-      elsif movelist && !movelist.any? { |j| j == pokemon.species }
+      elsif movelist && movelist.none? { |j| j == pokemon.species }
         pbMessage(_INTL("{1} can't learn {2}.", pokemon.name, movename)) { screen.pbUpdate }
       elsif !pokemon.compatible_with_move?(move)
         pbMessage(_INTL("{1} can't learn {2}.", pokemon.name, movename)) { screen.pbUpdate }

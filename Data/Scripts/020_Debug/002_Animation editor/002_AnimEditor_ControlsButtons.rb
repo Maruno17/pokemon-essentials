@@ -7,9 +7,9 @@ module ShadowText
     when 1
       x += (w / 2) - (width / 2)
     end
-    pbDrawShadowText(bitmap, x, y, w, h, t,
-                     disabled ? Color.new(26 * 8, 26 * 8, 25 * 8) : Color.new(12 * 8, 12 * 8, 12 * 8),
-                     Color.new(26 * 8, 26 * 8, 25 * 8))
+    pbDrawShadowText(bitmap, x, y + 6, w, h, t,
+                     disabled ? Color.new(208, 208, 200) : Color.new(96, 96, 96),
+                     Color.new(208, 208, 200))
   end
 end
 

@@ -24,11 +24,9 @@ module GameData
       "SellPrice"   => [:sell_price,  "u"],
       "Description" => [:description, "q"],
       "FieldUse"    => [:field_use,   "e", { "OnPokemon" => 1, "Direct" => 2, "TM" => 3,
-                                            "HM" => 4, "OnPokemonReusable" => 1, "TR" => 6 }],
+                                             "HM" => 4, "TR" => 5 }],
       "BattleUse"   => [:battle_use,  "e", { "OnPokemon" => 1, "OnMove" => 2, "OnBattler" => 3,
-                                            "OnFoe" => 4, "Direct" => 5, "OnPokemonReusable" => 1,
-                                            "OnMoveReusable" => 2, "OnBattlerReusable" => 3,
-                                            "OnFoeReusable" => 4, "DirectReusable" => 5 }],
+                                             "OnFoe" => 4, "Direct" => 5 }],
       "Consumable"  => [:consumable,  "b"],
       "Flags"       => [:flags,       "*s"],
       "Move"        => [:move,        "e", :Move]
@@ -119,7 +117,7 @@ module GameData
 
     def is_TM?;              return @field_use == 3; end
     def is_HM?;              return @field_use == 4; end
-    def is_TR?;              return @field_use == 6; end
+    def is_TR?;              return @field_use == 5; end
     def is_machine?;         return is_TM? || is_HM? || is_TR?; end
     def is_mail?;            return has_flag?("Mail") || has_flag?("IconMail"); end
     def is_icon_mail?;       return has_flag?("IconMail"); end

@@ -11,7 +11,7 @@ module HiddenMoveHandlers
   def self.addUseMove(item, proc);        UseMove.add(item, proc);        end
 
   def self.hasHandler(item)
-    return CanUseMove[item] != nil && UseMove[item] != nil
+    return !CanUseMove[item].nil? && !UseMove[item].nil?
   end
 
   # Returns whether move can be used
@@ -370,7 +370,7 @@ end
 
 # @deprecated This method is slated to be removed in v21.
 def pbTransferUnderwater(mapid, x, y, direction = $game_player.direction)
-  Deprecation.warn_method('pbTransferUnderwater', 'v21', '"Transfer Player" event command')
+  Deprecation.warn_method("pbTransferUnderwater", "v21", '"Transfer Player" event command')
   pbFadeOutIn {
     $game_temp.player_new_map_id    = mapid
     $game_temp.player_new_x         = x
@@ -787,7 +787,7 @@ end
 
 # @deprecated This method is slated to be removed in v21.
 def pbTransferSurfing(mapid, xcoord, ycoord, direction = $game_player.direction)
-  Deprecation.warn_method('pbTransferSurfing', 'v21', '"Transfer Player" event command')
+  Deprecation.warn_method("pbTransferSurfing", "v21", '"Transfer Player" event command')
   pbFadeOutIn {
     $game_temp.player_new_map_id    = mapid
     $game_temp.player_new_x         = xcoord

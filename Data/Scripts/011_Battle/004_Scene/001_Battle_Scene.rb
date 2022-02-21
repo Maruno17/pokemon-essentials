@@ -88,11 +88,10 @@ class Battle::Scene
       shouldCompact = false
       @animations.each_with_index do |a, i|
         a.update
-        if a.animDone?
-          a.dispose
-          @animations[i] = nil
-          shouldCompact = true
-        end
+        next if !a.animDone?
+        a.dispose
+        @animations[i] = nil
+        shouldCompact = true
       end
       @animations.compact! if shouldCompact
     end

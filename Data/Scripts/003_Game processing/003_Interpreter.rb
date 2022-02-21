@@ -22,7 +22,7 @@ class Interpreter
 
   def inspect
     str = super.chop
-    str << sprintf(' @event_id: %d>', @event_id)
+    str << sprintf(" @event_id: %d>", @event_id)
     return str
   end
 
@@ -62,7 +62,7 @@ class Interpreter
       return
     end
     # Check all map events for one that wants to start, and set it up
-    $game_map.events.values.each do |event|
+    $game_map.events.each_value do |event|
       next if !event.starting
       if event.trigger < 3   # Isn't autorun or parallel processing
         event.lock
@@ -80,7 +80,7 @@ class Interpreter
   end
 
   def running?
-    return @list != nil
+    return !@list.nil?
   end
   #-----------------------------------------------------------------------------
   # * Frame Update
@@ -109,7 +109,7 @@ class Interpreter
       # Do nothing if any event or the player is in the middle of a move route
       if @move_route_waiting
         return if $game_player.move_route_forcing
-        $game_map.events.values.each do |event|
+        $game_map.events.each_value do |event|
           return if event.move_route_forcing
         end
         $game_temp.followers.each_follower do |event, follower|

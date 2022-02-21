@@ -149,7 +149,7 @@ end
 #
 #===============================================================================
 def pbRelicStone
-  if !$player.party.any? { |pkmn| pkmn.purifiable? }
+  if $player.party.none? { |pkmn| pkmn.purifiable? }
     pbMessage(_INTL("You have no Pokémon that can be purified."))
     return
   end
@@ -421,17 +421,16 @@ EventHandlers.add(:on_player_step_taken, :lower_heart_gauges,
       next if pkmn.heart_gauge == 0
       pkmn.heart_gauge_step_counter = 0 if !pkmn.heart_gauge_step_counter
       pkmn.heart_gauge_step_counter += 1
-      if pkmn.heart_gauge_step_counter >= 256
-        old_stage = pkmn.heartStage
-        pkmn.change_heart_gauge("walking")
-        new_stage = pkmn.heartStage
-        if new_stage == 0
-          pkmn.check_ready_to_purify
-        elsif new_stage != old_stage
-          pkmn.update_shadow_moves
-        end
-        pkmn.heart_gauge_step_counter = 0
+      next if pkmn.heart_gauge_step_counter < 256
+      old_stage = pkmn.heartStage
+      pkmn.change_heart_gauge("walking")
+      new_stage = pkmn.heartStage
+      if new_stage == 0
+        pkmn.check_ready_to_purify
+      elsif new_stage != old_stage
+        pkmn.update_shadow_moves
       end
+      pkmn.heart_gauge_step_counter = 0
     end
     $PokemonGlobal.purifyChamber&.update
   }

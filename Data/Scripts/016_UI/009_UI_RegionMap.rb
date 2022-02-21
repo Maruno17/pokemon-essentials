@@ -39,9 +39,9 @@ class MapBottomSprite < SpriteWrapper
   def refresh
     bitmap.clear
     textpos = [
-      [@mapname,                     18,  -8, 0, TEXT_MAIN_COLOR, TEXT_SHADOW_COLOR],
-      [@maplocation,                 18, 348, 0, TEXT_MAIN_COLOR, TEXT_SHADOW_COLOR],
-      [@mapdetails, Graphics.width - 16, 348, 1, TEXT_MAIN_COLOR, TEXT_SHADOW_COLOR]
+      [@mapname,                     18,   4, 0, TEXT_MAIN_COLOR, TEXT_SHADOW_COLOR],
+      [@maplocation,                 18, 360, 0, TEXT_MAIN_COLOR, TEXT_SHADOW_COLOR],
+      [@mapdetails, Graphics.width - 16, 360, 1, TEXT_MAIN_COLOR, TEXT_SHADOW_COLOR]
     ]
     pbDrawTextPositions(bitmap, textpos)
   end
@@ -251,7 +251,7 @@ class PokemonRegionMap_Scene
     text = (@mode == 0) ? _INTL("ACTION: Fly") : _INTL("ACTION: Cancel Fly")
     pbDrawTextPositions(
       @sprites["help"].bitmap,
-      [[text, Graphics.width - 16, -8, 1, Color.new(248, 248, 248), Color.new(0, 0, 0)]]
+      [[text, Graphics.width - 16, 4, 1, Color.new(248, 248, 248), Color.new(0, 0, 0)]]
     )
     @sprites.each do |key, sprite|
       next if !key.include?("point")

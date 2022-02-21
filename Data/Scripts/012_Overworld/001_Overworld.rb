@@ -151,8 +151,9 @@ EventHandlers.add(:on_step_taken, :grass_rustling,
   proc { |event|
     next if !$scene.is_a?(Scene_Map)
     event.each_occupied_tile do |x, y|
-      next if !$map_factory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
-      $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)
+      next if !$map_factory.getTerrainTagFromCoords(event.map.map_id, x, y, true).shows_grass_rustle
+      spriteset = $scene.spriteset(event.map_id)
+      spriteset&.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)
     end
   }
 )
@@ -804,4 +805,18 @@ def pbReceiveItem(item, quantity = 1)
     return true
   end
   return false   # Can't add the item
+end
+
+#===============================================================================
+# Buying a prize item from the Game Corner
+#===============================================================================
+def pbBuyPrize(item, quantity = 1)
+  item = GameData::Item.get(item)
+  return false if !item || quantity < 1
+  item_name = (quantity > 1) ? item.name_plural : item.name
+  pocket = item.pocket
+  return false if !$bag.add(item, quantity)
+  pbMessage(_INTL("\\CNYou put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+                  item_name, pocket, PokemonBag.pocket_names[pocket - 1]))
+  return true
 end

@@ -1748,7 +1748,7 @@ class Battle::AI
       score -= 40
       if skill >= PBTrainerAI.highSkill
         score -= 100 if !target.lastRegularMoveUsed ||
-                        !GameData::Move.get(target.lastRegularMoveUsed).flags.any? { |f| f[/^CanMirrorMove$/i] }
+                        GameData::Move.get(target.lastRegularMoveUsed).flags.none? { |f| f[/^CanMirrorMove$/i] }
       end
     #---------------------------------------------------------------------------
     when "UseLastMoveUsed"

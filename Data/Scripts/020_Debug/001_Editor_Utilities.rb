@@ -62,7 +62,7 @@ def pbMapTree
   mapinfos = pbLoadMapInfos
   maplevels = []
   retarray = []
-  mapinfos.keys.each do |i|
+  mapinfos.each_key do |i|
     info = mapinfos[i]
     level = -1
     while info
@@ -98,11 +98,10 @@ def pbMapTree
     end
     retarray.push([maplevel[0], mapinfos[maplevel[0]].name, maplevel[1]])
     (index + 1...maplevels.length).each do |i|
-      if maplevels[i][2] == maplevel[0]
-        stack.push(i)
-        stack.push(maplevel[0])
-        break
-      end
+      next if maplevels[i][2] != maplevel[0]
+      stack.push(i)
+      stack.push(maplevel[0])
+      break
     end
   end
   return retarray

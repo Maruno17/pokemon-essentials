@@ -66,7 +66,7 @@ class Window_PokemonBag < Window_DrawableCommand
     rect = Rect.new(rect.x + 16, rect.y + 16, rect.width - 16, rect.height)
     thispocket = @bag.pockets[@pocket]
     if index == self.itemCount - 1
-      textpos.push([_INTL("CLOSE BAG"), rect.x, rect.y - 2, false, self.baseColor, self.shadowColor])
+      textpos.push([_INTL("CLOSE BAG"), rect.x, rect.y + 2, false, self.baseColor, self.shadowColor])
     else
       item = (@filterlist) ? thispocket[@filterlist[@pocket][index]][0] : thispocket[index][0]
       baseColor   = self.baseColor
@@ -76,7 +76,7 @@ class Window_PokemonBag < Window_DrawableCommand
         shadowColor = Color.new(248, 144, 144)
       end
       textpos.push(
-        [@adapter.getDisplayName(item), rect.x, rect.y - 2, false, baseColor, shadowColor]
+        [@adapter.getDisplayName(item), rect.x, rect.y + 2, false, baseColor, shadowColor]
       )
       if GameData::Item.get(item).is_important?
         if @bag.registered?(item)
@@ -94,7 +94,7 @@ class Window_PokemonBag < Window_DrawableCommand
         qty = (@filterlist) ? thispocket[@filterlist[@pocket][index]][1] : thispocket[index][1]
         qtytext = _ISPRINTF("x{1: 3d}", qty)
         xQty    = rect.x + rect.width - self.contents.text_size(qtytext).width - 16
-        textpos.push([qtytext, xQty, rect.y - 2, false, baseColor, shadowColor])
+        textpos.push([qtytext, xQty, rect.y + 2, false, baseColor, shadowColor])
       end
     end
     pbDrawTextPositions(self.contents, textpos)
@@ -200,7 +200,7 @@ class PokemonBag_Scene
     @sprites["itemlist"].shadowColor = ITEMLISTSHADOWCOLOR
     @sprites["itemicon"] = ItemIconSprite.new(48, Graphics.height - 48, nil, @viewport)
     @sprites["itemtext"] = Window_UnformattedTextPokemon.newWithSize(
-      "", 72, 270, Graphics.width - 72 - 24, 128, @viewport
+      "", 72, 272, Graphics.width - 72 - 24, 128, @viewport
     )
     @sprites["itemtext"].baseColor   = ITEMTEXTBASECOLOR
     @sprites["itemtext"].shadowColor = ITEMTEXTSHADOWCOLOR
@@ -270,11 +270,10 @@ class PokemonBag_Scene
     @sprites["pocketicon"].bitmap.clear
     if @choosing && @filterlist
       (1...@bag.pockets.length).each do |i|
-        if @filterlist[i].length == 0
-          @sprites["pocketicon"].bitmap.blt(
-            6 + ((i - 1) * 22), 6, @pocketbitmap.bitmap, Rect.new((i - 1) * 20, 28, 20, 20)
-          )
-        end
+        next if @filterlist[i].length > 0
+        @sprites["pocketicon"].bitmap.blt(
+          6 + ((i - 1) * 22), 6, @pocketbitmap.bitmap, Rect.new((i - 1) * 20, 28, 20, 20)
+        )
       end
     end
     @sprites["pocketicon"].bitmap.blt(
@@ -294,7 +293,7 @@ class PokemonBag_Scene
     # Draw the pocket name
     pbDrawTextPositions(
       overlay,
-      [[PokemonBag.pocket_names[@bag.last_viewed_pocket - 1], 94, 176, 2, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]]
+      [[PokemonBag.pocket_names[@bag.last_viewed_pocket - 1], 94, 186, 2, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]]
     )
     # Draw slider arrows
     showslider = false
@@ -685,16 +684,14 @@ class PokemonBagScreen
       if qty > 1
         qty = @scene.pbChooseNumber(_INTL("Toss out how many {1}?", itemnameplural), qty)
       end
-      if qty > 0
-        itemname = itemnameplural if qty > 1
-        if pbConfirm(_INTL("Is it OK to throw away {1} {2}?", qty, itemname))
-          if !storage.remove(item, qty)
-            raise "Can't delete items from storage"
-          end
-          @scene.pbRefresh
-          pbDisplay(_INTL("Threw away {1} {2}.", qty, itemname))
-        end
+      next if qty <= 0
+      itemname = itemnameplural if qty > 1
+      next if !pbConfirm(_INTL("Is it OK to throw away {1} {2}?", qty, itemname))
+      if !storage.remove(item, qty)
+        raise "Can't delete items from storage"
       end
+      @scene.pbRefresh
+      pbDisplay(_INTL("Threw away {1} {2}.", qty, itemname))
     end
     @scene.pbEndScene
   end

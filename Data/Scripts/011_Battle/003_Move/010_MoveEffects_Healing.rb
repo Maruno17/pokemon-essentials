@@ -462,7 +462,7 @@ class Battle::Move::UserLosesHalfOfTotalHPExplosive < Battle::Move
   def pbMoveFailed?(user, targets)
     if !@battle.moldBreaker
       bearer = @battle.pbCheckGlobalAbility(:DAMP)
-      if bearer != nil
+      if bearer
         @battle.pbShowAbilitySplash(bearer)
         if Battle::Scene::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} cannot use {2}!", user.pbThis, @name))
@@ -494,7 +494,7 @@ class Battle::Move::UserFaintsExplosive < Battle::Move
   def pbMoveFailed?(user, targets)
     if !@battle.moldBreaker
       bearer = @battle.pbCheckGlobalAbility(:DAMP)
-      if bearer != nil
+      if bearer
         @battle.pbShowAbilitySplash(bearer)
         if Battle::Scene::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} cannot use {2}!", user.pbThis, @name))

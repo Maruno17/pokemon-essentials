@@ -644,13 +644,13 @@ def pbEditBG(canvas, timing)
   maxsizewindow.addOptionalSlider(_INTL("Alpha:"), 0, 255, timing.colorAlpha || 0)
   maxsizewindow.addButton(_INTL("OK"))
   maxsizewindow.addButton(_INTL("Cancel"))
-  maxsizewindow.controls[1].checked = (timing.bgX != nil)
-  maxsizewindow.controls[2].checked = (timing.bgY != nil)
-  maxsizewindow.controls[3].checked = (timing.opacity != nil)
-  maxsizewindow.controls[4].checked = (timing.colorRed != nil)
-  maxsizewindow.controls[5].checked = (timing.colorGreen != nil)
-  maxsizewindow.controls[6].checked = (timing.colorBlue != nil)
-  maxsizewindow.controls[7].checked = (timing.colorAlpha != nil)
+  maxsizewindow.controls[1].checked = !timing.bgX.nil?
+  maxsizewindow.controls[2].checked = !timing.bgY.nil?
+  maxsizewindow.controls[3].checked = !timing.opacity.nil?
+  maxsizewindow.controls[4].checked = !timing.colorRed.nil?
+  maxsizewindow.controls[5].checked = !timing.colorGreen.nil?
+  maxsizewindow.controls[6].checked = !timing.colorBlue.nil?
+  maxsizewindow.controls[7].checked = !timing.colorAlpha.nil?
   maxsizewindow.opacity = 200
   maxsizewindow.viewport = canvas.viewport
   loop do

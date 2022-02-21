@@ -77,7 +77,7 @@ MenuHandlers.add(:battle_debug_menu, :list_foe_battlers, {
 MenuHandlers.add(:battle_debug_menu, :field, {
   "name"        => _INTL("Field Effects..."),
   "parent"      => :main,
-  "description" => _INTL("Effects that apply to the whole battlefield."),
+  "description" => _INTL("Effects that apply to the whole battlefield.")
 })
 
 MenuHandlers.add(:battle_debug_menu, :weather, {

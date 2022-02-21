@@ -45,7 +45,7 @@ class Sprite_Shadow < RPG::Sprite
         self.ox = 16
         self.oy = 32
       else
-        @chbitmap = AnimatedBitmap.new('Graphics/Characters/' + @character.character_name,
+        @chbitmap = AnimatedBitmap.new("Graphics/Characters/" + @character.character_name,
                                        @character.character_hue)
         @cw = @chbitmap.width / 4
         @ch = @chbitmap.height / 4
@@ -134,7 +134,7 @@ class Sprite_Character < RPG::Sprite
   def setShadows(map, shadows)
     if character.is_a?(Game_Event) && shadows.length > 0
       params = XPML_read(map, "Shadow", @character, 4)
-      if params != nil
+      if params
         shadows.each do |shadow|
           @ombrelist.push(Sprite_Shadow.new(viewport, @character, shadows))
         end
@@ -186,10 +186,10 @@ class Spriteset_Map
     map = $game_map if !map
     map.events.keys.sort.each do |k|
       ev = map.events[k]
-      warn = true if ev.list != nil && ev.list.length > 0 && ev.list[0].code == 108 &&
+      warn = true if ev.list && ev.list.length > 0 && ev.list[0].code == 108 &&
                      (ev.list[0].parameters == ["s"] || ev.list[0].parameters == ["o"])
       params = XPML_read(map, "Shadow Source", ev, 4)
-      @shadows.push([ev] + params) if params != nil
+      @shadows.push([ev] + params) if params
     end
     if warn == true
       p "Warning : At least one event on this map uses the obsolete way to add shadows"
@@ -227,26 +227,19 @@ def XPML_read(map, markup, event, max_param_number = 0)
   parameter_list = nil
   return nil if !event || event.list.nil?
   event.list.size.times do |i|
-    if event.list[i].code == 108 &&
-       event.list[i].parameters[0].downcase == "begin " + markup.downcase
-      parameter_list = [] if parameter_list.nil?
-      ((i + 1)...event.list.size).each do |j|
-        if event.list[j].code == 108
-          parts = event.list[j].parameters[0].split
-          if parts.size != 1 && parts[0].downcase != "begin"
-            if parts[1].to_i != 0 || parts[1] == "0"
-              parameter_list.push(parts[1].to_i)
-            else
-              parameter_list.push(parts[1])
-            end
-          else
-            return parameter_list
-          end
-        else
-          return parameter_list
-        end
-        return parameter_list if max_param_number != 0 && j == i + max_param_number
+    next unless event.list[i].code == 108 &&
+                event.list[i].parameters[0].downcase == "begin " + markup.downcase
+    parameter_list = [] if parameter_list.nil?
+    ((i + 1)...event.list.size).each do |j|
+      return parameter_list if event.list[j].code != 108
+      parts = event.list[j].parameters[0].split
+      return parameter_list if parts.size == 1 || parts[0].downcase == "begin"
+      if parts[1].to_i != 0 || parts[1] == "0"
+        parameter_list.push(parts[1].to_i)
+      else
+        parameter_list.push(parts[1])
       end
+      return parameter_list if max_param_number != 0 && j == i + max_param_number
     end
   end
   return parameter_list

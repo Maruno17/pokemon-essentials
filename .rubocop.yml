@@ -111,6 +111,11 @@ Style/HashSyntax:
 Style/NegatedIf:
   Enabled: false
 
+# .zero?, .positive? and .negative? are more wordy than == 0, > 0 and < 0. They
+# also aren't consistent with other value comparisons, e.g. x > 42.
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+
 # Following this just means that calls to an affected method need to know what
 # that method calls its parameters, which is ridiculous. Keep things short and
 # simple.

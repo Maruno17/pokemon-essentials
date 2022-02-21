@@ -67,15 +67,10 @@ class Game_CommonEvent
   # * Frame Update
   #-----------------------------------------------------------------------------
   def update
-    # If parallel process is valid
-    if @interpreter != nil
-      # If not running
-      unless @interpreter.running?
-        # Set up event
-        @interpreter.setup(self.list, 0)
-      end
-      # Update interpreter
-      @interpreter.update
-    end
+    return if !@interpreter
+    # Set up event if interpreter is not running
+    @interpreter.setup(self.list, 0) if !@interpreter.running?
+    # Update interpreter
+    @interpreter.update
   end
 end

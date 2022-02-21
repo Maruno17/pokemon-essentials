@@ -1,10 +1,16 @@
 =begin
 # TODO:
 
-Trigger ability (probably not)
-Some stuff relating to Shadow Pokémon?
 Actual stats? @attack, @defense, etc.
 @turnCount
+Toggle Hyper Mode for a Shadow Pokémon
+
+Stuff for Pokémon that aren't in battle:
+* Set HP to 0
+* Set species
+* Set Poké Ball
+* Set nickname
+* Make a Shadow Pokémon, set Heart Gauge (perhaps also for battlers)
 
 =end
 
@@ -582,8 +588,12 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_ability, {
     commands.push(_INTL("Set ability for battler")) if battler
     commands.push(_INTL("Reset"))
     loop do
-      msg = _INTL("Battler's ability is {1}. Pokémon's ability is {2}.",
-                  battler.abilityName, pkmn.ability.name)
+      if battler
+        msg = _INTL("Battler's ability is {1}. Pokémon's ability is {2}.",
+                    battler.abilityName, pkmn.ability.name)
+      else
+        msg = _INTL("Pokémon's ability is {1}.", pkmn.ability.name)
+      end
       cmd = pbMessage("\\ts[]" + msg, commands, -1, nil, cmd)
       break if cmd < 0
       cmd = 2 if cmd >= 1 && !battler   # Correct command for Pokémon (no battler)
@@ -707,15 +717,14 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_form, {
       cmd = pbMessage("\\ts[]" + _INTL("Form is {1}.", pkmn.form), formcmds[1], -1, nil, cmd)
       next if cmd < 0
       f = formcmds[0][cmd]
-      if f != pkmn.form
-        pkmn.forced_form = nil
-        if MultipleForms.hasFunction?(pkmn, "getForm")
-          next if !pbConfirmMessage(_INTL("This species decides its own form. Override?"))
-          pkmn.forced_form = f
-        end
-        pkmn.form_simple = f
-        battler.form = pkmn.form if battler
+      next if f == pkmn.form
+      pkmn.forced_form = nil
+      if MultipleForms.hasFunction?(pkmn, "getForm")
+        next if !pbConfirmMessage(_INTL("This species decides its own form. Override?"))
+        pkmn.forced_form = f
       end
+      pkmn.form_simple = f
+      battler.form = pkmn.form if battler
     end
   }
 })

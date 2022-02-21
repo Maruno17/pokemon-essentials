@@ -154,10 +154,7 @@ class PokemonMapMetadata
 
   def updateMap
     @erasedEvents.each do |i|
-      if i[0][0] == $game_map.map_id && i[1]
-        event = $game_map.events[i[0][1]]
-        event&.erase
-      end
+      $game_map.events[i[0][1]]&.erase if i[0][0] == $game_map.map_id && i[1]
     end
     @movedEvents.each do |i|
       if i[0][0] == $game_map.map_id && i[1]
@@ -170,9 +167,7 @@ class PokemonMapMetadata
         when 8 then $game_map.events[i[0][1]].turn_up
         end
       end
-      if i[1][3] != nil
-        $game_map.events[i[0][1]].through = i[1][3]
-      end
+      $game_map.events[i[0][1]].through = i[1][3] if i[1][3]
     end
   end
 end

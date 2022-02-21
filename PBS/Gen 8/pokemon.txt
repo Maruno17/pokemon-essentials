@@ -2170,7 +2170,7 @@ Category = Magnet
 Pokedex = It is actually three Magnemite linked by magnetism. It generates powerful radio waves that raise temperatures by 3.6 degrees F within a 3,300-foot radius.
 Generation = 1
 WildItemUncommon = METALCOAT
-Evolutions = MAGNEZONE,Item,THUNDERSTONE
+Evolutions = MAGNEZONE,LocationFlag,Magnetic,MAGNEZONE,Item,THUNDERSTONE
 #-------------------------------
 [FARFETCHD]
 Name = Farfetch'd
@@ -3523,7 +3523,7 @@ Habitat = Urban
 Category = Evolution
 Pokedex = An Eevee has an unstable genetic makeup that suddenly mutates due to its environment. Radiation from various stones causes this Pokémon to evolve.
 Generation = 1
-Evolutions = VAPOREON,Item,WATERSTONE,JOLTEON,Item,THUNDERSTONE,FLAREON,Item,FIRESTONE,LEAFEON,Item,LEAFSTONE,GLACEON,Item,ICESTONE,SYLVEON,HappinessMoveType,FAIRY,ESPEON,HappinessDay,,UMBREON,HappinessNight,
+Evolutions = VAPOREON,Item,WATERSTONE,JOLTEON,Item,THUNDERSTONE,FLAREON,Item,FIRESTONE,LEAFEON,LocationFlag,MossRock,LEAFEON,Item,LEAFSTONE,GLACEON,LocationFlag,IceRock,GLACEON,Item,ICESTONE,SYLVEON,HappinessMoveType,FAIRY,ESPEON,HappinessDay,,UMBREON,HappinessNight,
 #-------------------------------
 [VAPOREON]
 Name = Vaporeon
@@ -7880,7 +7880,7 @@ Category = Compass
 Pokedex = Its body emits a powerful magnetism. It feeds on prey that is pulled in by the force. Its magnetism is stronger in cold seasons.
 Generation = 3
 WildItemUncommon = MAGNET
-Evolutions = PROBOPASS,Item,THUNDERSTONE
+Evolutions = PROBOPASS,LocationFlag,Magnetic,PROBOPASS,Item,THUNDERSTONE
 #-------------------------------
 [SKITTY]
 Name = Skitty
@@ -18979,7 +18979,7 @@ Category = Battery
 Pokedex = It buries itself in fallen leaves and barely moves, munching away on humus. If you accidentally step on one, you'll get a shock!
 Generation = 7
 WildItemUncommon = CELLBATTERY
-Evolutions = VIKAVOLT,Item,THUNDERSTONE
+Evolutions = VIKAVOLT,LocationFlag,Magnetic,VIKAVOLT,Item,THUNDERSTONE
 #-------------------------------
 [VIKAVOLT]
 Name = Vikavolt

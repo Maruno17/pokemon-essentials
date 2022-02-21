@@ -93,7 +93,7 @@ class PictureWindow < SpriteWindow_Base
   # is ignored unless pathOrBitmap is a filename)
   def setBitmap(pathOrBitmap, hue = 0)
     clearBitmaps
-    if pathOrBitmap != nil && pathOrBitmap != ""
+    if pathOrBitmap && pathOrBitmap != ""
       case pathOrBitmap
       when Bitmap
         @_iconbitmap = pathOrBitmap

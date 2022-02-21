@@ -283,9 +283,9 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     trainer.tone = Tone.new(0, 0, 0)
     trainername = foe[0].name
     textpos = [
-      [$player.name, Graphics.width / 4, (Graphics.height / 1.5) + 4, 2,
+      [$player.name, Graphics.width / 4, (Graphics.height / 1.5) + 16, 2,
        Color.new(248, 248, 248), Color.new(72, 72, 72)],
-      [trainername, (Graphics.width / 4) + (Graphics.width / 2), (Graphics.height / 1.5) + 4, 2,
+      [trainername, (Graphics.width / 4) + (Graphics.width / 2), (Graphics.height / 1.5) + 16, 2,
        Color.new(248, 248, 248), Color.new(72, 72, 72)]
     ]
     pbDrawTextPositions(overlay.bitmap, textpos)
