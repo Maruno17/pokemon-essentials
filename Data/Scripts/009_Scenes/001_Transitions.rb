@@ -82,6 +82,7 @@ module Graphics
     when "wavythreeballup"  then @@transition = Transitions::WavyThreeBallUp.new(duration)
     when "wavyspinball"     then @@transition = Transitions::WavySpinBall.new(duration)
     when "fourballburst"    then @@transition = Transitions::FourBallBurst.new(duration)
+    when "rocketgrunt"      then @@transition = Transitions::RocketGrunt.new(duration)
     # Graphic transitions
     when "fadetoblack"      then @@transition = Transitions::FadeToBlack.new(duration)
     when "fadefromblack"    then @@transition = Transitions::FadeFromBlack.new(duration)
@@ -1216,6 +1217,93 @@ module Transitions
       else
         # Black wedges expand to fill screen
         proportion = (@timer - @ball_appear_end) / (@duration - @ball_appear_end)
+        @sprites.each_with_index do |sprite, i|
+          sprite.visible = true
+          sprite.zoom_x = proportion if i.even?
+          sprite.zoom_y = proportion if i.odd?
+        end
+      end
+    end
+  end
+
+  #=============================================================================
+  # HGSS Rocket Grunt trainer(s)
+  #=============================================================================
+  class RocketGrunt < Transition_Base
+    DURATION     = 1.6
+    ROCKET_X     = [ 1.5, -0.5, -0.5, 0.75,  1.5, -0.5]   # * Graphics.width
+    ROCKET_Y     = [-0.5,  1.0, -0.5,  1.5,  0.5, 0.75]   # * Graphics.height
+    ROCKET_ANGLE = [   1,  0.5, -1.5,   -1, -1.5,  0.5]   # * 360 * sprite.zoom_x
+
+    def initialize_bitmaps
+      @black_1_bitmap = RPG::Cache.transition("black_wedge_1")
+      @black_2_bitmap = RPG::Cache.transition("black_wedge_2")
+      @black_3_bitmap = RPG::Cache.transition("black_wedge_3")
+      @black_4_bitmap = RPG::Cache.transition("black_wedge_4")
+      @rocket_bitmap  = RPG::Cache.transition("rocket_logo")
+      dispose if !@black_1_bitmap || !@black_2_bitmap || !@black_3_bitmap ||
+                 !@black_4_bitmap || !@rocket_bitmap
+    end
+
+    def initialize_sprites
+      # Rocket sprites
+      @rocket_sprites = []
+      ROCKET_X.length.times do |i|
+        @rocket_sprites[i] = new_sprite(
+          ROCKET_X[i] * Graphics.width, ROCKET_Y[i] * Graphics.height,
+          @rocket_bitmap, @rocket_bitmap.width / 2, @rocket_bitmap.height / 2
+        )
+      end
+      # Black wedges
+      4.times do |i|
+        b = [@black_1_bitmap, @black_2_bitmap, @black_3_bitmap, @black_4_bitmap][i]
+        @sprites[i] = new_sprite((i == 1) ? 0 : Graphics.width / 2, (i == 2) ? 0 : Graphics.height / 2, b,
+                                 (i.even?) ? b.width / 2 : 0, (i.even?) ? 0 : b.height / 2)
+        @sprites[i].zoom_x = 0.0 if i.even?
+        @sprites[i].zoom_y = 0.0 if i.odd?
+        @sprites[i].visible = false
+      end
+    end
+
+    def set_up_timings
+      @rocket_appear_end = @duration * 0.75
+      @rocket_appear_delay = 1.0 / (ROCKET_X.length + 1)
+      @rocket_appear_time = @rocket_appear_delay * 2   # 2 logos on screen at once
+    end
+
+    def dispose_all
+      # Dispose sprites
+      @rocket_sprites.each { |s| s&.dispose }
+      @rocket_sprites.clear
+      # Dispose bitmaps
+      @black_1_bitmap&.dispose
+      @black_2_bitmap&.dispose
+      @black_3_bitmap&.dispose
+      @black_4_bitmap&.dispose
+      @rocket_bitmap&.dispose
+    end
+
+    def update_anim
+      if @timer <= @rocket_appear_end
+        # Rocket logos fly in from edges of screen
+        proportion = @timer / @rocket_appear_end
+        @rocket_sprites.each_with_index do |sprite, i|
+          next if !sprite.visible
+          start_time = i * @rocket_appear_delay
+          next if proportion < start_time
+          single_proportion = (proportion - start_time) / @rocket_appear_time
+          sqrt_single_proportion = Math.sqrt(single_proportion)
+          sprite.x = (ROCKET_X[i] + (0.5 - ROCKET_X[i]) * sqrt_single_proportion) * Graphics.width
+          sprite.y = (ROCKET_Y[i] + (0.5 - ROCKET_Y[i]) * sqrt_single_proportion) * Graphics.height
+          sprite.zoom_x = 2.5 * (1 - single_proportion)
+          sprite.zoom_y = sprite.zoom_x
+          sprite.angle = sprite.zoom_x * ROCKET_ANGLE[i] * 360
+          sprite.visible = false if sprite.zoom_x <= 0
+        end
+      else
+        @rocket_sprites.last.visible = false
+        # Black wedges expand to fill screen
+        proportion = (@timer - @rocket_appear_end) / (@duration - @rocket_appear_end)
         @sprites.each_with_index do |sprite, i|
           sprite.visible = true
           sprite.zoom_x = proportion if i.even?
