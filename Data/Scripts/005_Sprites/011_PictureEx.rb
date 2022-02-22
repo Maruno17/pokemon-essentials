@@ -125,7 +125,7 @@ class PictureEx
     when Proc
       cb.call(self)
     when Array
-      cb[0].method(cb[1]).call(self)
+      cb[0].method(cb[1]).call(self, *cb[2])
     when Method
       cb.call(self)
     end

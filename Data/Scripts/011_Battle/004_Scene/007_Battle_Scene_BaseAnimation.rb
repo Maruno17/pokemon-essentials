@@ -85,6 +85,30 @@ module Battle::Scene::Animation::BallAnimationMixin
     return Color.new(255, 181, 247)   # Poké Ball, Sport Ball, Apricorn Balls, others
   end
 
+  # There are three kinds of animations shown when a Poké Ball opens up: one for
+  # when attempting to capture a Pokémon, one when recalling a Pokémon, and one
+  # for all other cases (e.g. sending out). This is anim_type (one of :capture,
+  # :recall and :main). The recall animation is the same for all Poké Balls, and
+  # the other two animations are different for each Poké Ball.
+  def getBallBurstAnimationName(poke_ball, anim_type = :main)
+    animations = pbLoadBattleAnimations
+    if anim_type == :recall
+      anim_name = "BallBurstRecall"
+      return anim_name if animations&.get_from_name("Common:" + anim_name)
+    else
+      name = poke_ball.to_s
+      if anim_type == :capture
+        anim = animations&.get_from_name("Common:BallBurstCapture" + name)
+        return "BallBurstCapture" + name if anim
+        anim = animations&.get_from_name("Common:BallBurstCapture")
+        return "BallBurstCapture" if anim
+      end
+      anim = animations&.get_from_name("Common:BallBurst" + name)
+      return "BallBurst" + name if anim
+    end
+    return "BallBurst"
+  end
+
   def addBallSprite(ballX, ballY, poke_ball)
     file_path = sprintf("Graphics/Battle animations/ball_%s", poke_ball)
     ball = addNewSprite(ballX, ballY, file_path, PictureOrigin::CENTER)
@@ -249,12 +273,16 @@ module Battle::Scene::Animation::BallAnimationMixin
   end
 
   # The regular Poké Ball burst animation.
-  def ballBurst(delay, ballX, ballY, poke_ball)
+  def ballBurst(delay, ball, ballX, ballY, poke_ball)
+    ball.setDelta(delay, 0, 0, [@battler.battle.scene, :pbBallBurstCommonAnimation,
+                                [getBallBurstAnimationName(poke_ball), @battler, ballX, ballY]])
   end
 
   # The Poké Ball burst animation used when absorbing a wild Pokémon during a
   # capture attempt.
-  def ballBurstCapture(delay, ballX, ballY, poke_ball)
+  def ballBurstCapture(delay, ball, ballX, ballY, poke_ball)
+    ball.setDelta(delay, 0, 0, [@battler.battle.scene, :pbBallBurstCommonAnimation,
+                                [getBallBurstAnimationName(poke_ball, :capture), @battler, ballX, ballY]])
   end
 
   def ballCaptureSuccess(ball, delay, ballX, ballY)
@@ -263,6 +291,8 @@ module Battle::Scene::Animation::BallAnimationMixin
   end
 
   # The Poké Ball burst animation used when recalling a Pokémon.
-  def ballBurstRecall(delay, ballX, ballY, poke_ball)
+  def ballBurstRecall(delay, ball, ballX, ballY, poke_ball)
+    ball.setDelta(delay, 0, 0, [@battler.battle.scene, :pbBallBurstCommonAnimation,
+                                [getBallBurstAnimationName(poke_ball, :recall), @battler, ballX, ballY]])
   end
 end

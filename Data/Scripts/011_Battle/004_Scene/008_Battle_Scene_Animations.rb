@@ -453,7 +453,7 @@ class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
     delay = ball.totalDuration + 4
     delay += 10 * @idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
     ballOpenUp(ball, delay - 2, poke_ball)
-    ballBurst(delay, battlerStartX, battlerStartY - 18, poke_ball)
+    ballBurst(delay, ball, battlerStartX, battlerStartY - 18, poke_ball)
     ball.moveOpacity(delay + 2, 2, 0)
     # Set up battler sprite
     battler = addSprite(batSprite, PictureOrigin::BOTTOM)
@@ -517,7 +517,7 @@ class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animatio
     delay += 10 if @showingTrainer   # Give time for trainer to slide off screen
     delay += 10 * @idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
     ballOpenUp(ball, delay - 2, poke_ball)
-    ballBurst(delay, battlerStartX, battlerStartY - 18, poke_ball)
+    ballBurst(delay, ball, battlerStartX, battlerStartY - 18, poke_ball)
     ball.moveOpacity(delay + 2, 2, 0)
     # Set up battler sprite
     battler = addSprite(batSprite, PictureOrigin::BOTTOM)
@@ -552,8 +552,9 @@ end
 class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
 
-  def initialize(sprites, viewport, idxBattler)
-    @idxBattler = idxBattler
+  def initialize(sprites, viewport, battler)
+    @battler = battler
+    @idxBattler = battler.index
     super(sprites, viewport)
   end
 
@@ -579,7 +580,7 @@ class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
     # Poké Ball animation
     ballOpenUp(ball, 0, poke_ball)
     delay = ball.totalDuration
-    ballBurstRecall(delay, battlerEndX, battlerEndY, poke_ball)
+    ballBurstRecall(delay, ball, battlerEndX, battlerEndY, poke_ball)
     ball.moveOpacity(10, 2, 0)
     # Battler animation
     battlerAbsorb(battler, delay, battlerEndX, battlerEndY, col)
@@ -741,7 +742,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     battler = addSprite(batSprite, PictureOrigin::BOTTOM)
     # Poké Ball absorbs battler
     delay = ball.totalDuration
-    ballBurstCapture(delay, ballEndX, ballEndY, @poke_ball)
+    ballBurstCapture(delay, ball, ballEndX, ballEndY, @poke_ball)
     delay = ball.totalDuration + 4
     # NOTE: The Pokémon does not change color while being absorbed into a Poké
     #       Ball during a capture attempt. This may be an oversight in HGSS.
@@ -808,7 +809,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
       # Poké Ball opens
       ball.setZ(delay, batSprite.z - 1)
       ballOpenUp(ball, delay, @poke_ball, false)
-      ballBurst(delay, ballEndX, ballGroundY, @poke_ball)
+      ballBurst(delay, ball, ballEndX, ballGroundY, @poke_ball)
       ball.moveOpacity(delay + 2, 2, 0)
       # Battler emerges
       col = getBattlerColorFromPokeBall(@poke_ball)

@@ -368,6 +368,11 @@ class PBAnimations < Array
     @array[i] = value
   end
 
+  def get_from_name(name)
+    @array.each { |i| return i if i&.name == name }
+    return nil
+  end
+
   def compact
     @array.compact!
   end
@@ -749,6 +754,17 @@ class PBAnimationPlayerX
     @bgColor.dispose
     @foGraphic.dispose
     @foColor.dispose
+  end
+
+  # Makes the original user and target sprites be uninvolved with the animation.
+  # The animation shows just its particles.
+  def discard_user_and_target_sprites
+    @animsprites[0] = nil
+    @animsprites[1] = nil
+  end
+
+  def set_target_origin(x, y)
+    @targetOrig = [x, y]
   end
 
   def start
