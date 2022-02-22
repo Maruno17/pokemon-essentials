@@ -52,7 +52,7 @@ class String
   end
 
   def numeric?
-    return self.scan(/^[+-]?([0-9]+)(?:\.[0-9]+)?$/).count > 1
+    return !self[/^[+-]?([0-9]+)(?:\.[0-9]+)?$/].nil?
   end
 end
 
@@ -235,14 +235,7 @@ class Color
   def self.parse(color)
     if color.is_a?(Color) # color object
       return color
-    elsif color.is_a?(String) # string
-      if color.include?("#") # hex color
-        return Color.new(color)
-      elsif color.include(",") # RGB color
-        rgb = color.split(",").map(&:to_i)
-        return Color.new(*rgb)
-      end
-    elsif color.is_a?(Numeric) # decimal color
+    elsif color.is_a?(String) || color.is_a?(Numeric)
       return Color.new(color)
     end
     # returns nothing if wrong input
