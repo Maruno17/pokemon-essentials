@@ -1,5 +1,18 @@
 #===============================================================================
+# Registers special battle transition animations which may be used instead of
+# the default ones. There are examples below of how to register them.
 #
+# The register call has 4 arguments:
+#    1) The name of the animation. Typically unused, but helps to identify the
+#       registration code for a particular animation if necessary.
+#    2) The animation's priority. If multiple special animations could trigger
+#       for the same battle, the one with the highest priority number is used.
+#    3) A condition proc which decides whether the animation should trigger.
+#    4) The animation itself. Could be a bunch of code, or a call to, say,
+#       pbCommonEvent(20) or something else. By the end of the animation, the
+#       screen should be black.
+# Note that you can get an image of the current game screen with
+# Graphics.snap_to_bitmap.
 #===============================================================================
 module SpecialBattleIntroAnimations
   # [name, priority number, "trigger if" proc, animation proc]
@@ -31,6 +44,10 @@ end
 #===============================================================================
 # Battle intro animation
 #===============================================================================
+class Game_Temp
+  attr_accessor :transition_animation_data
+end
+
 def pbSceneStandby
   $scene.disposeSpritesets if $scene.is_a?(Scene_Map)
   RPG::Cache.clear
@@ -100,33 +117,7 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
         anim = "FourBallBurst"
       end
     end
-    # Initial screen flashing
-    c = (location == 2 || PBDayNight.isNight?) ? 0 : 255   # Dark=black, light=white
-    viewport.color = Color.new(c, c, c)   # Fade to black/white a few times
-    half_flash_time = 0.2   # seconds
-    2.times do   # 2 flashes
-      timer = 0.0
-      loop do
-        if timer < half_flash_time
-          viewport.color.alpha = 255 * timer / half_flash_time
-        else
-          viewport.color.alpha = 255 * (2 - (timer / half_flash_time))
-        end
-        timer += Graphics.delta_s
-        Graphics.update
-        pbUpdateSceneMap
-        break if timer >= half_flash_time * 2
-      end
-    end
-    # Take screenshot of game, for use in some animations
-    $game_temp.background_bitmap&.dispose
-    $game_temp.background_bitmap = Graphics.snap_to_bitmap
-    # Play main animation
-    Graphics.freeze
-    viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
-    Graphics.transition(25, "Graphics/Transitions/" + anim)
-    # Slight pause after animation before starting up the battle scene
-    pbWait(Graphics.frame_rate / 10)
+    pbBattleAnimationCore(anim, viewport, location)
   end
   pbPushFade
   # Yield to the battle scene
@@ -157,32 +148,74 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
   $game_temp.in_battle = false
 end
 
+def pbBattleAnimationCore(anim, viewport, location, num_flashes = 2)
+  # Initial screen flashing
+  if num_flashes > 0
+    c = (location == 2 || PBDayNight.isNight?) ? 0 : 255   # Dark=black, light=white
+    viewport.color = Color.new(c, c, c)   # Fade to black/white a few times
+    half_flash_time = 0.2   # seconds
+    num_flashes.times do   # 2 flashes
+      timer = 0.0
+      loop do
+        if timer < half_flash_time
+          viewport.color.alpha = 255 * timer / half_flash_time
+        else
+          viewport.color.alpha = 255 * (2 - (timer / half_flash_time))
+        end
+        timer += Graphics.delta_s
+        Graphics.update
+        pbUpdateSceneMap
+        break if timer >= half_flash_time * 2
+      end
+    end
+  end
+  # Take screenshot of game, for use in some animations
+  $game_temp.background_bitmap&.dispose
+  $game_temp.background_bitmap = Graphics.snap_to_bitmap
+  # Play main animation
+  Graphics.freeze
+  viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
+  Graphics.transition(25, "Graphics/Transitions/" + anim)
+  # Slight pause after animation before starting up the battle scene
+  pbWait(Graphics.frame_rate / 10)
+end
+
 #===============================================================================
-# Vs. battle intro animation
-# If you want to add a custom battle intro animation, copy the code below for
-# the Vs. animation and adapt it to your own. The register call has 4 arguments:
-#    1) The name of the animation. Typically unused, but helps to identify an
-#       animation.
-#    2) The animation's priority. If multiple special animations could trigger
-#       for the same battle, the one with the highest priority number is used.
-#    3) A condition proc which decides whether the animation should trigger.
-#    4) The animation itself. Could be a bunch of code, or a call to, say,
-#       pbCommonEvent(20) or something else. By the end of the animation, the
-#       screen should be black.
-# Note that you can get an image of the current game screen with
-# Graphics.snap_to_bitmap.
+# Play the HGSS "VSTrainer" battle transition animation for any single trainer
+# battle where the following graphics exist in the Graphics/Transitions/
+# folder for the opponent:
+#   * "hgss_vs_TRAINERTYPE.png" and "hgss_vsBar_TRAINERTYPE.png"
+# This animation makes use of $game_temp.transition_animation_data, and expects
+# it to be an array like so: [:TRAINERTYPE, "display name"]
+#===============================================================================
+SpecialBattleIntroAnimations.register("vs_trainer_animation", 60,   # Priority 60
+  proc { |battle_type, foe, location|   # Condition
+    next false if battle_type != 1   # Single trainer battle
+    tr_type = foe[0].trainer_type
+    next pbResolveBitmap("Graphics/Transitions/hgss_vs_#{tr_type}") &&
+         pbResolveBitmap("Graphics/Transitions/hgss_vsBar_#{tr_type}")
+  },
+  proc { |viewport, battle_type, foe, location|   # Animation
+    $game_temp.transition_animation_data = [foe[0].trainer_type, foe[0].name]
+    pbBattleAnimationCore("VSTrainer", viewport, location, 1)
+    $game_temp.transition_animation_data = nil
+  }
+)
+
+#===============================================================================
+# Play the original Vs. Trainer battle transition animation for any single
+# trainer battle where the following graphics exist in the Graphics/Transitions/
+# folder for the opponent:
+#   * "vsTrainer_TRAINERTYPE.png" and "vsBar_TRAINERTYPE.png"
 #===============================================================================
 ##### VS. animation, by Luka S.J. #####
 ##### Tweaked by Maruno           #####
-SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
+SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # Priority 50
   proc { |battle_type, foe, location|   # Condition
-    next false unless [1, 3].include?(battle_type) && foe.length == 1   # Only if a single trainer
+    next false if battle_type != 1   # Single trainer battle
     tr_type = foe[0].trainer_type
-    next false if !tr_type
-    trainer_bar_graphic = sprintf("vsBar_%s", tr_type.to_s) rescue nil
-    trainer_graphic     = sprintf("vsTrainer_%s", tr_type.to_s) rescue nil
-    next pbResolveBitmap("Graphics/Transitions/" + trainer_bar_graphic) &&
-         pbResolveBitmap("Graphics/Transitions/" + trainer_graphic)
+    next pbResolveBitmap("Graphics/Transitions/vsTrainer_#{tr_type}") &&
+         pbResolveBitmap("Graphics/Transitions/vsBar_#{tr_type}")
   },
   proc { |viewport, battle_type, foe, location|   # Animation
     # Determine filenames of graphics to be used
@@ -326,13 +359,13 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     viewvs.dispose
     viewopp.dispose
     viewplayer.dispose
-    viewport.color = Color.new(0, 0, 0, 255)
+    viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
   }
 )
 
 #===============================================================================
-# Play the "RocketGrunt" transition animation for any trainer battle involving a
-# Team Rocket Grunt. Is lower priority than the Vs. animation above.
+# Play the "RocketGrunt" battle transition animation for any trainer battle
+# involving a Team Rocket Grunt. Is lower priority than the Vs. animation above.
 #===============================================================================
 SpecialBattleIntroAnimations.register("rocket_grunt_animation", 40,   # Priority 40
   proc { |battle_type, foe, location|   # Condition
@@ -341,33 +374,6 @@ SpecialBattleIntroAnimations.register("rocket_grunt_animation", 40,   # Priority
     next foe.any? { |f| trainer_types.include?(f.trainer_type) }
   },
   proc { |viewport, battle_type, foe, location|   # Animation
-    anim = "RocketGrunt"
-    # Initial screen flashing
-    c = (location == 2 || PBDayNight.isNight?) ? 0 : 255   # Dark=black, light=white
-    viewport.color = Color.new(c, c, c)   # Fade to black/white a few times
-    half_flash_time = 0.2   # seconds
-    2.times do   # 2 flashes
-      timer = 0.0
-      loop do
-        if timer < half_flash_time
-          viewport.color.alpha = 255 * timer / half_flash_time
-        else
-          viewport.color.alpha = 255 * (2 - (timer / half_flash_time))
-        end
-        timer += Graphics.delta_s
-        Graphics.update
-        pbUpdateSceneMap
-        break if timer >= half_flash_time * 2
-      end
-    end
-    # Take screenshot of game, for use in some animations
-    $game_temp.background_bitmap&.dispose
-    $game_temp.background_bitmap = Graphics.snap_to_bitmap
-    # Play main animation
-    Graphics.freeze
-    viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
-    Graphics.transition(25, "Graphics/Transitions/" + anim)
-    # Slight pause after animation before starting up the battle scene
-    pbWait(Graphics.frame_rate / 10)
+    pbBattleAnimationCore("RocketGrunt", viewport, location)
   }
 )
