@@ -168,6 +168,7 @@ def pbBattleAnimationCore(anim, viewport, location, num_flashes = 2)
         break if timer >= half_flash_time * 2
       end
     end
+    viewport.color.alpha = 0
   end
   # Take screenshot of game, for use in some animations
   $game_temp.background_bitmap&.dispose

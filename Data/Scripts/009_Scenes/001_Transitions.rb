@@ -1255,18 +1255,28 @@ module Transitions
       @flash_viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
       @flash_viewport.z = 99999
       @flash_viewport.color = Color.new(255, 255, 255, 0)
+      # Background black
+      @rear_black_sprite = new_sprite(0, 0, @black_bitmap)
+      @rear_black_sprite.z      = 1
+      @rear_black_sprite.zoom_y = 2.0
+      @rear_black_sprite.opacity = 224
+      @rear_black_sprite.visible = false
       # Bar sprites (need 2 of them to make them loop around)
       @sprites = []
       ((Graphics.width.to_f / @bar_bitmap.width).ceil + 1).times do |i|
         spr = new_sprite(Graphics.width * i, BAR_Y, @bar_bitmap)
+        spr.z = 2
         @sprites.push(spr)
       end
       # Overworld sprite
       @bar_mask_sprite = new_sprite(0, 0, @overworld_bitmap.clone)
-      @bar_mask_sprite.z = 1
+      @bar_mask_sprite.z = 3
       # VS logo
       @vs_x = 144
       @vs_y = @sprites[0].y + (@sprites[0].height / 2)
+      @vs_main_sprite = new_sprite(@vs_x, @vs_y, @vs_1_bitmap, @vs_1_bitmap.width / 2, @vs_1_bitmap.height / 2)
+      @vs_main_sprite.visible = false
+      @vs_main_sprite.z = 4
       @vs_1_sprite = new_sprite(@vs_x, @vs_y, @vs_2_bitmap, @vs_2_bitmap.width / 2, @vs_2_bitmap.height / 2)
       @vs_1_sprite.visible = false
       @vs_1_sprite.z = 5
@@ -1274,20 +1284,18 @@ module Transitions
       @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
       @vs_2_sprite = new_sprite(@vs_x, @vs_y, @vs_2_bitmap, @vs_2_bitmap.width / 2, @vs_2_bitmap.height / 2)
       @vs_2_sprite.visible = false
-      @vs_2_sprite.z = 4
+      @vs_2_sprite.z = 6
       @vs_2_sprite.zoom_x = 2.0
       @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
-      @vs_main_sprite = new_sprite(@vs_x, @vs_y, @vs_1_bitmap, @vs_1_bitmap.width / 2, @vs_1_bitmap.height / 2)
-      @vs_main_sprite.visible = false
-      @vs_main_sprite.z = 2
       # Foe sprite
       @foe_sprite = new_sprite(Graphics.width + @foe_bitmap.width, @sprites[0].y + @sprites[0].height - 12,
                                @foe_bitmap, @foe_bitmap.width / 2, @foe_bitmap.height)
       @foe_sprite.color = Color.new(0, 0, 0)
+      @foe_sprite.z = 7
       # Sprite with foe's name written in it
       @text_sprite = BitmapSprite.new(Graphics.width, @bar_bitmap.height, @viewport)
       @text_sprite.y = BAR_Y
-      @text_sprite.z = 6
+      @text_sprite.z = 8
       @text_sprite.visible = false
       pbSetSystemFont(@text_sprite.bitmap)
       pbDrawTextPositions(@text_sprite.bitmap,
@@ -1318,12 +1326,13 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
+      @rear_black_sprite&.dispose
       @sprites.each { |s| s&.dispose }
       @sprites.clear
       @bar_mask_sprite&.dispose
+      @vs_main_sprite&.dispose
       @vs_1_sprite&.dispose
       @vs_2_sprite&.dispose
-      @vs_main_sprite&.dispose
       @foe_sprite&.dispose
       @text_sprite&.dispose
       @black_sprite&.dispose
@@ -1361,6 +1370,7 @@ module Transitions
         proportion = (@timer - @flash_start) / @flash_duration
         if proportion >= 0.5
           @flash_viewport.color.alpha = 320 * 2 * (1 - proportion)
+          @rear_black_sprite.visible = true
           @foe_sprite.color.alpha = 0
           @text_sprite.visible = true
         else
@@ -1374,28 +1384,28 @@ module Transitions
         start_x = Graphics.width + (@foe_bitmap.width / 2)
         @foe_sprite.x = start_x + (FOE_SPRITE_X_LIMIT - start_x) * proportion
       elsif @timer >= @vs_appear_final
-        @vs_2_sprite.visible = false
+        @vs_1_sprite.visible = false
       elsif @timer >= @vs_appear_start_2
         # Temp VS sprites enlarge and shrink again
-        if @vs_1_sprite.visible
-          @vs_1_sprite.zoom_x = 1.6 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
-          @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
-          if @vs_1_sprite.zoom_x <= 1.2
-            @vs_1_sprite.visible = false
+        if @vs_2_sprite.visible
+          @vs_2_sprite.zoom_x = 1.6 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
+          @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
+          if @vs_2_sprite.zoom_x <= 1.2
+            @vs_2_sprite.visible = false
             @vs_main_sprite.visible = true
           end
         end
-        @vs_2_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
-        @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
+        @vs_1_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
+        @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
       elsif @timer >= @vs_appear_start
         # Temp VS sprites appear and start shrinking
-        @vs_1_sprite.visible = true
-        @vs_1_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start) / @vs_shrink_time
-        @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
-        if @vs_2_sprite.visible || @vs_1_sprite.zoom_x <= 1.6   # Halfway between 2.0 and 1.2
-          @vs_2_sprite.visible = true
-          @vs_2_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start - (@vs_shrink_time / 2)) / @vs_shrink_time
-          @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
+        @vs_2_sprite.visible = true
+        @vs_2_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start) / @vs_shrink_time
+        @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
+        if @vs_1_sprite.visible || @vs_2_sprite.zoom_x <= 1.6   # Halfway between 2.0 and 1.2
+          @vs_1_sprite.visible = true
+          @vs_1_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start - (@vs_shrink_time / 2)) / @vs_shrink_time
+          @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
         end
       elsif @timer >= @bar_appear_end
         @bar_mask_sprite.visible = false
