@@ -160,23 +160,22 @@ class File
 end
 
 #===============================================================================
-#  Extensions for the `Color` class
+# class Color
 #===============================================================================
 class Color
   # alias for old constructor
   alias init_original initialize unless self.private_method_defined?(:init_original)
-  #-----------------------------------------------------------------------------
-  # new constructor accepts RGB values as well as a hex number or string value
-  #-----------------------------------------------------------------------------
+
+  # New constructor, accepts RGB values as well as a hex number or string value.
   def initialize(*args)
   	pbPrintException("Wrong number of arguments! At least 1 is needed!") if args.length < 1
   	if args.length == 1
       if args.first.is_a?(Fixnum)
         hex = args.first.to_s(16)
       elsif args.first.is_a?(String)
-        try_rgb_format = args.first.split(',')
+        try_rgb_format = args.first.split(",")
         return init_original(*try_rgb_format.map(&:to_i)) if try_rgb_format.length.between?(3, 4)
-        hex = args.first.delete('#')
+        hex = args.first.delete("#")
       end
       pbPrintException("Wrong type of argument given!") if !hex
       r = hex[0...2].to_i(16)
@@ -188,95 +187,71 @@ class Color
   	return init_original(r, g, b) if r && g && b
   	return init_original(*args)
   end
-  #-----------------------------------------------------------------------------
-  # returns an RGB color value as a hex value
-  #-----------------------------------------------------------------------------
+
+  # Returns this color as a hex string like "#RRGGBB".
   def to_hex
   	r = sprintf("%02X", self.red)
   	g = sprintf("%02X", self.green)
   	b = sprintf("%02X", self.blue)
   	return ("#" + r + g + b).upcase
   end
-  #-----------------------------------------------------------------------------
-  # returns decimal color
-  #-----------------------------------------------------------------------------
-  def to_dec
+
+  # Returns this color as a 24-bit color integer.
+  def to_i
   	return self.to_hex.delete("#").to_i(16)
   end
-  #-----------------------------------------------------------------------------
-  # byte order in ARGB instead of RGBA.
-  #-----------------------------------------------------------------------------
-  def to_i
-    return self.alpha.to_i << 24 | self.blue.to_i << 16 | self.green.to_i << 8 | self.red.to_i
-  end
-  #-----------------------------------------------------------------------------
-  # return color from byte integer value
-  #-----------------------------------------------------------------------------
-  def self.from_i(color)
-    b =  color & 255
-    g = (color >> 8) & 255
-    r = (color >> 16) & 255
-    a = (color >> 24) & 255
-    return Color.new(r, g, b, a)
-  end
-  #-----------------------------------------------------------------------------
-  # returns Hex color value as RGB
-  #-----------------------------------------------------------------------------
+
+  # Converts the provided hex string/24-bit integer to RGB values.
   def self.hex_to_rgb(hex)
+    hex = hex.delete("#") if hex.is_a?(String)
   	hex = hex.to_s(16) if hex.is_a?(Numeric)
   	r = hex[0...2].to_i(16)
   	g = hex[2...4].to_i(16)
   	b = hex[4...6].to_i(16)
   	return r, g, b
   end
-  #-----------------------------------------------------------------------------
-  # parse color input to return color object
-  #-----------------------------------------------------------------------------
+
+  # Parses the input as a Color and returns a Color object made from it.
   def self.parse(color)
-    if color.is_a?(Color) # color object
+    case color
+    when Color
       return color
-    elsif color.is_a?(String) || color.is_a?(Numeric)
+    when String, Numeric
       return Color.new(color)
     end
     # returns nothing if wrong input
     return nil
   end
-  #-----------------------------------------------------------------------------
-  # returns color object for some commonly used colors
-  #-----------------------------------------------------------------------------
-  def self.red; return Color.new(255, 0, 0); end
-  def self.green; return Color.new(0, 255, 0); end
-  def self.blue; return Color.new(0, 0, 255); end
-  def self.black; return Color.new(0, 0, 0); end
-  def self.white; return Color.new(255, 255, 255); end
-  def self.yellow; return Color.new(255, 255, 0); end
-  def self.orange; return Color.new(255, 155, 0); end
-  def self.purple; return Color.new(155, 0, 255); end
-  def self.brown; return Color.new(112, 72, 32); end
-  def self.teal; return Color.new(0, 255, 255); end
-  def self.magenta; return Color.new(255, 0, 255); end
-  #-----------------------------------------------------------------------------
+
+  # Returns color object for some commonly used colors
+  def self.red;     return Color.new(255,   0,   0); end
+  def self.green;   return Color.new(  0, 255,   0); end
+  def self.blue;    return Color.new(  0,   0, 255); end
+  def self.black;   return Color.new(  0,   0,   0); end
+  def self.white;   return Color.new(255, 255, 255); end
+  def self.yellow;  return Color.new(255, 255,   0); end
+  def self.magenta; return Color.new(255,   0, 255); end
+  def self.teal;    return Color.new(  0, 255, 255); end
+  def self.orange;  return Color.new(255, 155,   0); end
+  def self.purple;  return Color.new(155,   0, 255); end
+  def self.brown;   return Color.new(112,  72,  32); end
 end
 
 #===============================================================================
-#  Wrap code blocks in class which passes data accessible as instance
-#  variables within the code block
+# Wrap code blocks in a class which passes data accessible as instance variables
+# within the code block.
 #
-#  wrapper = CallbackWrapper.new { puts @test }
-#  wrapper.set(test: 'Hi')
-#  wrapper.execute  #=>  'Hi'
+# wrapper = CallbackWrapper.new { puts @test }
+# wrapper.set(test: "Hi")
+# wrapper.execute  #=>  "Hi"
 #===============================================================================
 class CallbackWrapper
   @params = {}
-  #-----------------------------------------------------------------------------
-  #  constructor
-  #-----------------------------------------------------------------------------
+
   def initialize(&block)
     @code_block = block
   end
-  #-----------------------------------------------------------------------------
-  #  execute callback
-  #-----------------------------------------------------------------------------
+
   def execute(given_block = nil, *args)
     execute_block = given_block || @code_block
     @params.each do |key, value|
@@ -284,13 +259,10 @@ class CallbackWrapper
     end
     args.instance_eval(&execute_block)
   end
-  #-----------------------------------------------------------------------------
-  #  set instance variables
-  #-----------------------------------------------------------------------------
+
   def set(params = {})
     @params = params
   end
-  #-----------------------------------------------------------------------------
 end
 
 #===============================================================================
