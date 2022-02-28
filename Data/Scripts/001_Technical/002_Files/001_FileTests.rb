@@ -43,6 +43,42 @@ class Dir
     return ret
   end
   #-----------------------------------------------------------------------------
+  #  Creates all the required directories for filename path
+  #-----------------------------------------------------------------------------
+  def self.create(path)
+    path.gsub!("\\", "/")   # Windows compatibility
+    # get path tree
+    dirs = path.split("/")
+    full = ""
+    for dir in dirs
+      full += dir + "/"
+      # creates directories
+      self.mkdir(full) if !self.safe?(full)
+    end
+  end
+  #-----------------------------------------------------------------------------
+  #  Generates entire folder tree from a certain directory
+  #-----------------------------------------------------------------------------
+  def self.all_dirs(dir)
+    # sets variables for starting
+    dirs = []
+    for file in self.get(dir, "*", true)
+      # engages in recursion to read the entire folder tree
+      dirs += self.all_dirs(file) if self.safe?(file)
+    end
+    # returns all found directories
+    return dirs.length > 0 ? (dirs + [dir]) : [dir]
+  end
+  #-----------------------------------------------------------------------------
+  #  Deletes all the files in a directory and all the sub directories (allows for non-empty dirs)
+  #-----------------------------------------------------------------------------
+  def self.delete_all(dir)
+    # delete all files in dir
+    self.all(dir).each { |f| File.delete(f) }
+    # delete all dirs in dir
+    self.all_dirs(dir).each { |f| Dir.delete(f) }
+  end
+  #-----------------------------------------------------------------------------
 end
 
 
@@ -57,6 +93,14 @@ class File
   def self.safe?(file)
     ret = false
     self.open(file, "rb") { ret = true } rescue nil
+    return ret
+  end
+  #-----------------------------------------------------------------------------
+  #  Checks for existing .rxdata file
+  #-----------------------------------------------------------------------------
+  def self.safeData?(file)
+    ret = false
+    ret = (load_data(file) ? true : false) rescue false
     return ret
   end
   #-----------------------------------------------------------------------------

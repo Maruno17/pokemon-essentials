@@ -727,4 +727,19 @@ module PluginManager
     end
   end
   #-----------------------------------------------------------------------------
+  #  Get plugin dir from name based on meta entries
+  #-----------------------------------------------------------------------------
+  def self.findDirectory(name)
+    # go through the plugins folder
+    Dir.get("Plugins").each do |dir|
+      next if !Dir.safe?(dir)
+      next if !safeExists?(dir + "/meta.txt")
+      # read meta
+      meta = self.readMeta(dir, "meta.txt")
+      return dir if meta[:name] == name
+    end
+    # return nil if no plugin dir found
+    return nil
+  end
+  #-----------------------------------------------------------------------------
 end

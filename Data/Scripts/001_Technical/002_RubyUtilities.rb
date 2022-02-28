@@ -50,6 +50,10 @@ class String
     end
     return new_string
   end
+
+  def numeric?
+    return !self[/^[+-]?([0-9]+)(?:\.[0-9]+)?$/].nil?
+  end
 end
 
 #===============================================================================
@@ -94,26 +98,19 @@ end
 #===============================================================================
 class Hash
   def deep_merge(hash)
-    h = self.clone
-    # failsafe
-    return h if !hash.is_a?(Hash)
-    hash.each_key do |key|
-      if self[key].is_a?(Hash)
-        h.deep_merge!(hash[key])
-      else
-        h = hash[key]
-      end
-    end
-    return h
+    merged_hash = self.clone
+    merged_hash.deep_merge!(hash) if hash.is_a?(Hash)
+    return merged_hash
   end
 
   def deep_merge!(hash)
-    return if !hash.is_a?(Hash)
-    hash.each_key do |key|
+    # failsafe
+    return unless hash.is_a?(Hash)
+    hash.each do |key, val|
       if self[key].is_a?(Hash)
-        self[key].deep_merge!(hash[key])
+        self[key].deep_merge!(val)
       else
-        self[key] = hash[key]
+        self[key] = val
       end
     end
   end
@@ -159,6 +156,112 @@ class File
   def self.move(source, destination)
     File.copy(source, destination)
     File.delete(source)
+  end
+end
+
+#===============================================================================
+# class Color
+#===============================================================================
+class Color
+  # alias for old constructor
+  alias init_original initialize unless self.private_method_defined?(:init_original)
+
+  # New constructor, accepts RGB values as well as a hex number or string value.
+  def initialize(*args)
+  	pbPrintException("Wrong number of arguments! At least 1 is needed!") if args.length < 1
+  	if args.length == 1
+      if args.first.is_a?(Fixnum)
+        hex = args.first.to_s(16)
+      elsif args.first.is_a?(String)
+        try_rgb_format = args.first.split(",")
+        return init_original(*try_rgb_format.map(&:to_i)) if try_rgb_format.length.between?(3, 4)
+        hex = args.first.delete("#")
+      end
+      pbPrintException("Wrong type of argument given!") if !hex
+      r = hex[0...2].to_i(16)
+      g = hex[2...4].to_i(16)
+      b = hex[4...6].to_i(16)
+  	elsif args.length == 3
+      r, g, b = *args
+  	end
+  	return init_original(r, g, b) if r && g && b
+  	return init_original(*args)
+  end
+
+  # Returns this color as a hex string like "#RRGGBB".
+  def to_hex
+  	r = sprintf("%02X", self.red)
+  	g = sprintf("%02X", self.green)
+  	b = sprintf("%02X", self.blue)
+  	return ("#" + r + g + b).upcase
+  end
+
+  # Returns this color as a 24-bit color integer.
+  def to_i
+  	return self.to_hex.delete("#").to_i(16)
+  end
+
+  # Converts the provided hex string/24-bit integer to RGB values.
+  def self.hex_to_rgb(hex)
+    hex = hex.delete("#") if hex.is_a?(String)
+  	hex = hex.to_s(16) if hex.is_a?(Numeric)
+  	r = hex[0...2].to_i(16)
+  	g = hex[2...4].to_i(16)
+  	b = hex[4...6].to_i(16)
+  	return r, g, b
+  end
+
+  # Parses the input as a Color and returns a Color object made from it.
+  def self.parse(color)
+    case color
+    when Color
+      return color
+    when String, Numeric
+      return Color.new(color)
+    end
+    # returns nothing if wrong input
+    return nil
+  end
+
+  # Returns color object for some commonly used colors
+  def self.red;     return Color.new(255,   0,   0); end
+  def self.green;   return Color.new(  0, 255,   0); end
+  def self.blue;    return Color.new(  0,   0, 255); end
+  def self.black;   return Color.new(  0,   0,   0); end
+  def self.white;   return Color.new(255, 255, 255); end
+  def self.yellow;  return Color.new(255, 255,   0); end
+  def self.magenta; return Color.new(255,   0, 255); end
+  def self.teal;    return Color.new(  0, 255, 255); end
+  def self.orange;  return Color.new(255, 155,   0); end
+  def self.purple;  return Color.new(155,   0, 255); end
+  def self.brown;   return Color.new(112,  72,  32); end
+end
+
+#===============================================================================
+# Wrap code blocks in a class which passes data accessible as instance variables
+# within the code block.
+#
+# wrapper = CallbackWrapper.new { puts @test }
+# wrapper.set(test: "Hi")
+# wrapper.execute  #=>  "Hi"
+#===============================================================================
+class CallbackWrapper
+  @params = {}
+
+  def initialize(&block)
+    @code_block = block
+  end
+
+  def execute(given_block = nil, *args)
+    execute_block = given_block || @code_block
+    @params.each do |key, value|
+      args.instance_variable_set("@#{key.to_s}", value)
+    end
+    args.instance_eval(&execute_block)
+  end
+
+  def set(params = {})
+    @params = params
   end
 end
 
