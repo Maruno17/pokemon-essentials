@@ -12,31 +12,30 @@ elsif  pokemon.gender == 1
 end
 })
 
-
 #BOOST BALL 25 - rend le pokemon traded
 #catch rate: 80% pokeball
 BallHandlers::ModifyCatchRate.add(:TRADEBALL,proc{|ball,catchRate,battle,pokemon|
-  catchRate=(catchRate*0.8).floor  
+  catchRate=(catchRate*0.8).floor(1)
 next catchRate
 })
 BallHandlers::OnCatch.add(:TRADEBALL,proc{|ball,battle,pokemon|
-  pokemon.obtainMode = 2
+  pokemon.obtain_method = 2
 })
 
 #ABILITY BALL 26 - change l'ability
 #catch rate: 60% pokeball
 BallHandlers::ModifyCatchRate.add(:ABILITYBALL,proc{|ball,catchRate,battle,pokemon|
-  catchRate=(catchRate*0.6).floor  
+  catchRate=(catchRate*0.6).floor(1)
 next catchRate
 })
 BallHandlers::OnCatch.add(:ABILITYBALL,proc{|ball,battle,pokemon|
-  pokemon.setAbility(2)
+  #pokemon.ability=2
 })
 
 #VIRUS BALL 27  - give pokerus
 #catch rate: 40% pokeball
 BallHandlers::ModifyCatchRate.add(:VIRUSBALL,proc{|ball,catchRate,battle,pokemon|
-  catchRate=(catchRate*0.4).floor  
+  catchRate=(catchRate*0.4).floor(1)
 next catchRate
 })
 BallHandlers::OnCatch.add(:VIRUSBALL,proc{|ball,battle,pokemon|
@@ -46,7 +45,7 @@ BallHandlers::OnCatch.add(:VIRUSBALL,proc{|ball,battle,pokemon|
 #SHINY BALL 28  - rend shiny
 #catchrate: 20% pokeball
 BallHandlers::ModifyCatchRate.add(:SHINYBALL,proc{|ball,catchRate,battle,pokemon|
-  catchRate=(catchRate*0.2).floor  
+  catchRate=(catchRate*0.2).floor(1)
 next catchRate
 })
 BallHandlers::OnCatch.add(:SHINYBALL,proc{|ball,battle,pokemon|
@@ -56,7 +55,7 @@ BallHandlers::OnCatch.add(:SHINYBALL,proc{|ball,battle,pokemon|
 #PERFECTBALL 29
 #catch rate: 10% pokeball
 BallHandlers::ModifyCatchRate.add(:PERFECTBALL,proc{|ball,catchRate,battle,pokemon|
-  catchRate=(catchRate*0.1).floor  
+  catchRate=(catchRate*0.1).floor(1)
 next catchRate
 })
 BallHandlers::OnCatch.add(:PERFECTBALL,proc{|ball,battle,pokemon|
@@ -70,27 +69,32 @@ BallHandlers::OnCatch.add(:PERFECTBALL,proc{|ball,battle,pokemon|
 
 #DREAMBALL  - endormi
 BallHandlers::ModifyCatchRate.add(:DREAMBALL,proc{|ball,catchRate,battle,battler|
-   battler.status = PBStatuses::SLEEP   
+   battler.status = :SLEEP
+   catchRate = 1
    next catchRate
 })
 #TOXICBALL  - empoisonné
 BallHandlers::ModifyCatchRate.add(:TOXICBALL,proc{|ball,catchRate,battle,battler|
-  battler.status = PBStatuses::POISON   
+  battler.status = :POISON
+  catchRate = 1
    next catchRate
 })
 #SCORCHBALL - brulé
 BallHandlers::ModifyCatchRate.add(:SCORCHBALL,proc{|ball,catchRate,battle,battler|
-   battler.status = PBStatuses::BURN   
+   battler.status = :BURN
+   catchRate = 1
    next catchRate
 })
 #FROSTBALL - frozen
 BallHandlers::ModifyCatchRate.add(:FROSTBALL,proc{|ball,catchRate,battle,battler|
-   battler.status = PBStatuses::FROZEN   
+   battler.status = :FROZEN
+   catchRate = 1
    next catchRate
 })
 #SPARKBALL  - paralizé
 BallHandlers::ModifyCatchRate.add(:SPARKBALL,proc{|ball,catchRate,battle,battler|
-   battler.status = PBStatuses::PARALYSIS   
+   battler.status = :PARALYSIS
+   catchRate = 1
    next catchRate
 })
 #PUREBALL  - marche mieux quand pas de status
@@ -104,9 +108,9 @@ BallHandlers::ModifyCatchRate.add(:STATUSBALL,proc{|ball,catchRate,battle,battle
    next catchRate
 })
 
-#FUSIONBALL - marche mieux quand fused
+#FUSIONBALL - marche mieux quand fusedr
 BallHandlers::ModifyCatchRate.add(:FUSIONBALL,proc{|ball,catchRate,battle,battler|
-   catchRate*=3 if battler.species > NB_POKEMON
+   catchRate*=3 if GameData::Species.get(battler.species).id_number > Settings::NB_POKEMON
    next catchRate
 })
 

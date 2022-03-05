@@ -930,13 +930,13 @@ ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
 
 #TRACKER (for roaming legendaries)
 ItemHandlers::UseInField.add(:REVEALGLASS, proc { |item|
-  if RoamingSpecies.length == 0
+  if Settings::ROAMING_SPECIES.length == 0
     Kernel.pbMessage(_INTL("No roaming Pokémon defined."))
   else
     text = "\\l[8]"
     min = $game_switches[350] ? 0 : 1
-    for i in min...RoamingSpecies.length
-      poke = RoamingSpecies[i]
+    for i in min...Settings::ROAMING_SPECIES.length
+      poke = Settings::ROAMING_SPECIES[i]
       next if poke == PBSPecies::FEEBAS
       if $game_switches[poke[2]]
         status = $PokemonGlobal.roamPokemon[i]
@@ -970,7 +970,7 @@ ItemHandlers::UseInField.add(:REVEALGLASS, proc { |item|
         #text+=_INTL("{1} does not appear to be roaming.",
         #   PBSpecies.getName(getID(PBSpecies,poke[0])),poke[1],poke[2])
       end
-      text += "\n" if i < RoamingSpecies.length - 1
+      text += "\n" if i < Settings::ROAMING_SPECIES.length - 1
     end
     Kernel.pbMessage(text)
   end
@@ -1638,14 +1638,21 @@ ItemHandlers::UseInField.add(:DEVONSCOPE, proc { |item|
 
 #TRACKER (for roaming legendaries)
 ItemHandlers::UseInField.add(:REVEALGLASS, proc { |item|
+  track_pokemon()
+})
+ItemHandlers::UseFromBag.add(:REVEALGLASS, proc { |item|
+  track_pokemon()
+})
+
+def track_pokemon()
   nbRoaming = 0
-  if RoamingSpecies.length == 0
+  if Settings::ROAMING_SPECIES.length == 0
     Kernel.pbMessage(_INTL("No roaming Pokémon defined."))
   else
     text = "\\l[8]"
     min = $game_switches[350] ? 0 : 1
-    for i in min...RoamingSpecies.length
-      poke = RoamingSpecies[i]
+    for i in min...Settings::ROAMING_SPECIES.length
+      poke = Settings::ROAMING_SPECIES[i]
       next if poke[0] == :FEEBAS
       if $game_switches[poke[2]]
         status = $PokemonGlobal.roamPokemon[i]
@@ -1680,14 +1687,14 @@ ItemHandlers::UseInField.add(:REVEALGLASS, proc { |item|
         #text+=_INTL("{1} does not appear to be roaming.",
         #   PBSpecies.getName(getID(PBSpecies,poke[0])),poke[1],poke[2])
       end
-      text += "\n" if i < RoamingSpecies.length - 1
+      #text += "\n" if i < Settings::ROAMING_SPECIES.length - 1
     end
     if nbRoaming == 0
       text = "No Pokémon appears to be roaming at this moment."
     end
     Kernel.pbMessage(text)
   end
-})
+end
 
 ####EXP. ALL
 #Methodes relative a l'exp sont pas encore la et pas compatibles

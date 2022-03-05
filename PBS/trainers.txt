@@ -4658,7 +4658,7 @@ Pokemon = B65H255,69 #Mismakazam,
 	Item = WISEGLASSES
 Pokemon = B18H169,68 #Crogeot
 	Moves = WHIRLWIND,CROSSPOISON,UTURN,AIRSLASH
-	AbilityIndex = 10	Item = WISEGLASSES
+	AbilityIndex = 1
 	Item=RAZORFANG
 Pokemon = MEW,72 #Starter
 	Item = LEFTOVERS

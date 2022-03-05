@@ -272,16 +272,32 @@ module Settings
   # A list of maps used by roaming Pokémon. Each map has an array of other maps
   # it can lead to.
   ROAMING_AREAS = {
-    5 => [21, 28, 31, 39, 41, 44, 47, 66, 69],
-    21 => [5, 28, 31, 39, 41, 44, 47, 66, 69],
-    28 => [5, 21, 31, 39, 41, 44, 47, 66, 69],
-    31 => [5, 21, 28, 39, 41, 44, 47, 66, 69],
-    39 => [5, 21, 28, 31, 41, 44, 47, 66, 69],
-    41 => [5, 21, 28, 31, 39, 44, 47, 66, 69],
-    44 => [5, 21, 28, 31, 39, 41, 47, 66, 69],
-    47 => [5, 21, 28, 31, 39, 41, 44, 66, 69],
-    66 => [5, 21, 28, 31, 39, 41, 44, 47, 69],
-    69 => [5, 21, 28, 31, 39, 41, 44, 47, 66]
+    262  => [261,311],
+    311 => [262,312],
+    312 => [311],
+    261 => [262,288,267],
+    288 => [261,267,285],
+    267 => [261,288,300,254],
+    284 => [288,266,285],
+    300 => [267,254],
+    254 => [300,265],
+    266 => [284,265],
+    265 => [266,254],
+    285 => [284,288]}
+
+  SEVII_ROAMING = {
+    528  => [526],         #Treasure beach
+    526 => [528,559],          #Knot Island
+    559 => [526,561,564],      #Kindle Road
+    561 => [559],              #Mt. Ember
+    564 => [559,562,563,594],  #brine road
+    562 => [564],              #boon island
+    563 => [564,600] ,         #kin island
+    594 => [564,566,603],      #water labyrinth
+    600 => [563,619],          #bond bridge
+    619 => [600] ,             #Berry forest
+    566 => [594,603],          #Resort gorgeous
+    603 => [566,594],          #Chrono Island
   }
   # A set of arrays, each containing the details of a roaming Pokémon. The
   # information within each array is as follows:
@@ -293,15 +309,11 @@ module Settings
   #   * Name of BGM to play for that encounter (optional).
   #   * Roaming areas specifically for this Pokémon (optional).
   ROAMING_SPECIES = [
-    [:LATIAS, 30, 53, 0, "Battle roaming"],
-    [:LATIOS, 30, 53, 0, "Battle roaming"],
-    [:KYOGRE, 40, 54, 2, nil, {
-      2 => [21, 31],
-      21 => [2, 31, 69],
-      31 => [2, 21, 69],
-      69 => [21, 31]
-    }],
-    [:ENTEI, 40, 55, 1, nil]
+    [:ENTEI, 50, 350, 1, "Legendary Birds"],
+    [:B245H243, 50, 341, 1, "Legendary Birds"],
+    [:LATIOS, 50, 602, 0, "Legendary Birds",SEVII_ROAMING],
+    [:LATIAS, 50, 602, 0, "Legendary Birds",SEVII_ROAMING],
+    [:FEEBAS, 15, 4, 3, "Pokemon HeartGold and SoulSilver - Wild Pokemon Battle (Kanto)",SEVII_ROAMING]
   ]
 
   #=============================================================================
