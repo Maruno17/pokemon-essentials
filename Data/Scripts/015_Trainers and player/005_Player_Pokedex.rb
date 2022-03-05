@@ -22,15 +22,14 @@ class Player < Trainer
 
     # Clears the Pokédex.
     def clear
-      @seen             = {}
-      @owned            = {}
-      @seen_forms       = {}   # Gender (0 or 1), shiny (0 or 1), form number
-      @seen_shiny_forms = {}
-      @seen_eggs        = {}
-      @last_seen_forms  = {}
-      @owned_shadow     = {}
-      @caught_counts    = {}
-      @defeated_counts  = {}
+      @seen            = {}
+      @owned           = {}
+      @seen_forms      = {}   # Gender (0 or 1), shiny (0 or 1), form number
+      @seen_eggs       = {}
+      @last_seen_forms = {}
+      @owned_shadow    = {}
+      @caught_counts   = {}
+      @defeated_counts = {}
       self.refresh_accessible_dexes
     end
 

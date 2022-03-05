@@ -204,6 +204,36 @@ SpecialBattleIntroAnimations.register("vs_trainer_animation", 60,   # Priority 6
 )
 
 #===============================================================================
+# Play the "VSRocketAdmin" battle transition animation for any trainer battle
+# where the following graphic exists in the Graphics/Transitions/ folder for any
+# of the opponents:
+#   * "rocket_TRAINERTYPE.png"
+# This animation makes use of $game_temp.transition_animation_data, and expects
+# it to be an array like so: [:TRAINERTYPE, "display name"]
+#===============================================================================
+SpecialBattleIntroAnimations.register("vs_admin_animation", 60,   # Priority 60
+  proc { |battle_type, foe, location|   # Condition
+    next false if ![1, 3].include?(battle_type)   # Trainer battles only
+    found = false
+    foe.each do |f|
+      found = pbResolveBitmap("Graphics/Transitions/rocket_#{f.trainer_type}")
+      break if found
+    end
+    next found
+  },
+  proc { |viewport, battle_type, foe, location|   # Animation
+    foe.each do |f|
+      tr_type = f.trainer_type
+      next if !pbResolveBitmap("Graphics/Transitions/rocket_#{tr_type}")
+      $game_temp.transition_animation_data = [tr_type, f.name]
+      break
+    end
+    pbBattleAnimationCore("VSRocketAdmin", viewport, location, 0)
+    $game_temp.transition_animation_data = nil
+  }
+)
+
+#===============================================================================
 # Play the original Vs. Trainer battle transition animation for any single
 # trainer battle where the following graphics exist in the Graphics/Transitions/
 # folder for the opponent:
