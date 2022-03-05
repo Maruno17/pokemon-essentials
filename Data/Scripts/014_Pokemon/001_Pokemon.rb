@@ -86,6 +86,8 @@ class Pokemon
   # @return [Integer] this Pokémon's personal ID
   attr_accessor :personalID
 
+  attr_accessor :hiddenPowerType
+
   # Max total IVs
   IV_STAT_LIMIT = 31
   # Max total EVs
@@ -118,6 +120,9 @@ class Pokemon
   #=============================================================================
   # Species and form
   #=============================================================================
+  def hiddenPower=(type)
+    @hiddenPowerType = type
+  end
 
   # Changes the Pokémon's species and re-calculates its statistics.
   # @param species_id [Integer] id of the species to change this Pokémon to
@@ -1150,6 +1155,8 @@ class Pokemon
     @iv = {}
     @ivMaxed = {}
     @ev = {}
+    @hiddenPowerType = nil
+
     GameData::Stat.each_main do |s|
       @iv[s.id] = rand(IV_STAT_LIMIT + 1)
       @ev[s.id] = 0

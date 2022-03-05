@@ -432,7 +432,7 @@ def pbMoveTutorAnnotations(move, movelist = nil)
   return ret
 end
 
-def pbMoveTutorChoose(move,movelist=nil,bymachine=false,oneusemachine=false)
+def pbMoveTutorChoose(move,movelist=nil,bymachine=false,oneusemachine=false,selectedPokemonVariable=nil)
   ret = false
   move = GameData::Move.get(move).id
   if movelist!=nil && movelist.is_a?(Array)
@@ -450,6 +450,9 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false,oneusemachine=false)
       chosen = screen.pbChoosePokemon
       break if chosen<0
       pokemon = $Trainer.party[chosen]
+      if selectedPokemonVariable != nil
+        pbSet(selectedPokemonVariable,pokemon)
+      end
       if pokemon.egg?
         pbMessage(_INTL("Eggs can't be taught any moves.")) { screen.pbUpdate }
       elsif pokemon.shadowPokemon?

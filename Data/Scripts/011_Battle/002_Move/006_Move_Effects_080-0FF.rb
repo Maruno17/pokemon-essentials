@@ -243,20 +243,20 @@ end
 #===============================================================================
 class PokeBattle_Move_090 < PokeBattle_Move
   def pbBaseType(user)
-    hp = pbHiddenPower(user)
+    hp = pbHiddenPower(user,user.hiddenPowerType)
     return hp[0]
   end
 
   def pbBaseDamage(baseDmg,user,target)
     return super if Settings::MECHANICS_GENERATION >= 6
-    hp = pbHiddenPower(user)
+    hp = pbHiddenPower(user,user.hiddenPowerType)
     return hp[1]
   end
 end
 
 
 
-def pbHiddenPower(pkmn)
+def pbHiddenPower(pkmn,forcedType=nil)
   # NOTE: This allows Hidden Power to be Fairy-type (if you have that type in
   #       your game). I don't care that the official games don't work like that.
   iv = pkmn.iv
@@ -282,6 +282,9 @@ def pbHiddenPower(pkmn)
     power |= (iv[:SPECIAL_ATTACK]&2)<<3
     power |= (iv[:SPECIAL_DEFENSE]&2)<<4
     power = powerMin+(powerMax-powerMin)*power/63
+  end
+  if forcedType != nil
+    return [forcedType,power]
   end
   return [type,power]
 end
