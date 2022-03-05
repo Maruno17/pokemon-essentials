@@ -67,26 +67,23 @@ class PokemonMapFactory
 
   def getNewMap(playerX, playerY)
     id = $game_map.map_id
-    conns = MapFactoryHelper.getMapConnections
-    if conns[id]
-      conns[id].each do |conn|
-        mapidB = nil
-        newx = 0
-        newy = 0
-        if conn[0] == id
-          mapidB = conn[3]
-          mapB = MapFactoryHelper.getMapDims(conn[3])
-          newx = conn[4] - conn[1] + playerX
-          newy = conn[5] - conn[2] + playerY
-        else
-          mapidB = conn[0]
-          mapB = MapFactoryHelper.getMapDims(conn[0])
-          newx = conn[1] - conn[4] + playerX
-          newy = conn[2] - conn[5] + playerY
-        end
-        if newx >= 0 && newx < mapB[0] && newy >= 0 && newy < mapB[1]
-          return [getMap(mapidB), newx, newy]
-        end
+    MapFactoryHelper.eachConnectionForMap(id) do |conn|
+      mapidB = nil
+      newx = 0
+      newy = 0
+      if conn[0] == id
+        mapidB = conn[3]
+        mapB = MapFactoryHelper.getMapDims(conn[3])
+        newx = conn[4] - conn[1] + playerX
+        newy = conn[5] - conn[2] + playerY
+      else
+        mapidB = conn[0]
+        mapB = MapFactoryHelper.getMapDims(conn[0])
+        newx = conn[1] - conn[4] + playerX
+        newy = conn[2] - conn[5] + playerY
+      end
+      if newx >= 0 && newx < mapB[0] && newy >= 0 && newy < mapB[1]
+        return [getMap(mapidB), newx, newy]
       end
     end
     return nil
@@ -117,27 +114,24 @@ class PokemonMapFactory
     return if @fixup
     @fixup = true
     id = $game_map.map_id
-    conns = MapFactoryHelper.getMapConnections
-    if conns[id]
-      conns[id].each do |conn|
-        if conn[0] == id
-          mapA = getMap(conn[0])
-          newdispx = ((conn[4] - conn[1]) * Game_Map::REAL_RES_X) + mapA.display_x
-          newdispy = ((conn[5] - conn[2]) * Game_Map::REAL_RES_Y) + mapA.display_y
-          if hasMap?(conn[3]) || MapFactoryHelper.mapInRangeById?(conn[3], newdispx, newdispy)
-            mapB = getMap(conn[3])
-            mapB.display_x = newdispx if mapB.display_x != newdispx
-            mapB.display_y = newdispy if mapB.display_y != newdispy
-          end
-        else
-          mapA = getMap(conn[3])
-          newdispx = ((conn[1] - conn[4]) * Game_Map::REAL_RES_X) + mapA.display_x
-          newdispy = ((conn[2] - conn[5]) * Game_Map::REAL_RES_Y) + mapA.display_y
-          if hasMap?(conn[0]) || MapFactoryHelper.mapInRangeById?(conn[0], newdispx, newdispy)
-            mapB = getMap(conn[0])
-            mapB.display_x = newdispx if mapB.display_x != newdispx
-            mapB.display_y = newdispy if mapB.display_y != newdispy
-          end
+    MapFactoryHelper.eachConnectionForMap(id) do |conn|
+      if conn[0] == id
+        mapA = getMap(conn[0])
+        newdispx = ((conn[4] - conn[1]) * Game_Map::REAL_RES_X) + mapA.display_x
+        newdispy = ((conn[5] - conn[2]) * Game_Map::REAL_RES_Y) + mapA.display_y
+        if hasMap?(conn[3]) || MapFactoryHelper.mapInRangeById?(conn[3], newdispx, newdispy)
+          mapB = getMap(conn[3])
+          mapB.display_x = newdispx if mapB.display_x != newdispx
+          mapB.display_y = newdispy if mapB.display_y != newdispy
+        end
+      else
+        mapA = getMap(conn[3])
+        newdispx = ((conn[1] - conn[4]) * Game_Map::REAL_RES_X) + mapA.display_x
+        newdispy = ((conn[2] - conn[5]) * Game_Map::REAL_RES_Y) + mapA.display_y
+        if hasMap?(conn[0]) || MapFactoryHelper.mapInRangeById?(conn[0], newdispx, newdispy)
+          mapB = getMap(conn[0])
+          mapB.display_x = newdispx if mapB.display_x != newdispx
+          mapB.display_y = newdispy if mapB.display_y != newdispy
         end
       end
     end
@@ -234,11 +228,8 @@ class PokemonMapFactory
 
   def areConnected?(mapID1, mapID2)
     return true if mapID1 == mapID2
-    conns = MapFactoryHelper.getMapConnections
-    if conns[mapID1]
-      conns[mapID1].each do |conn|
-        return true if conn[0] == mapID2 || conn[3] == mapID2
-      end
+    MapFactoryHelper.eachConnectionForMap(mapID1) do |conn|
+      return true if conn[0] == mapID2 || conn[3] == mapID2
     end
     return false
   end
@@ -248,18 +239,15 @@ class PokemonMapFactory
     if thisMapID == otherMapID   # Both events share the same map
       return [otherX - thisX, otherY - thisY]
     end
-    conns = MapFactoryHelper.getMapConnections
-    if conns[thisMapID]
-      conns[thisMapID].each do |conn|
-        if conn[0] == otherMapID
-          posX = conn[4] - conn[1] + otherX - thisX
-          posY = conn[5] - conn[2] + otherY - thisY
-          return [posX, posY]
-        elsif conn[3] == otherMapID
-          posX =  conn[1] - conn[4] + otherX - thisX
-          posY =  conn[2] - conn[5] + otherY - thisY
-          return [posX, posY]
-        end
+    MapFactoryHelper.eachConnectionForMap(thisMapID) do |conn|
+      if conn[0] == otherMapID
+        posX = conn[4] - conn[1] + otherX - thisX
+        posY = conn[5] - conn[2] + otherY - thisY
+        return [posX, posY]
+      elsif conn[3] == otherMapID
+        posX =  conn[1] - conn[4] + otherX - thisX
+        posY =  conn[2] - conn[5] + otherY - thisY
+        return [posX, posY]
       end
     end
     return [0, 0]
@@ -330,24 +318,21 @@ class PokemonMapFactory
   def getRealTilePos(mapID, x, y)
     id = mapID
     return [id, x, y] if getMapNoAdd(id).valid?(x, y)
-    conns = MapFactoryHelper.getMapConnections
-    if conns[id]
-      conns[id].each do |conn|
-        if conn[0] == id
-          newX = x + conn[4] - conn[1]
-          newY = y + conn[5] - conn[2]
-          next if newX < 0 || newY < 0
-          dims = MapFactoryHelper.getMapDims(conn[3])
-          next if newX >= dims[0] || newY >= dims[1]
-          return [conn[3], newX, newY]
-        else
-          newX = x + conn[1] - conn[4]
-          newY = y + conn[2] - conn[5]
-          next if newX < 0 || newY < 0
-          dims = MapFactoryHelper.getMapDims(conn[0])
-          next if newX >= dims[0] || newY >= dims[1]
-          return [conn[0], newX, newY]
-        end
+    MapFactoryHelper.eachConnectionForMap(id) do |conn|
+      if conn[0] == id
+        newX = x + conn[4] - conn[1]
+        newY = y + conn[5] - conn[2]
+        next if newX < 0 || newY < 0
+        dims = MapFactoryHelper.getMapDims(conn[3])
+        next if newX >= dims[0] || newY >= dims[1]
+        return [conn[3], newX, newY]
+      else
+        newX = x + conn[1] - conn[4]
+        newY = y + conn[2] - conn[5]
+        next if newX < 0 || newY < 0
+        dims = MapFactoryHelper.getMapDims(conn[0])
+        next if newX >= dims[0] || newY >= dims[1]
+        return [conn[0], newX, newY]
       end
     end
     return nil
@@ -453,6 +438,12 @@ module MapFactoryHelper
   def self.hasConnections?(id)
     conns = MapFactoryHelper.getMapConnections
     return conns[id] ? true : false
+  end
+
+  def self.eachConnectionForMap(id)
+    conns = MapFactoryHelper.getMapConnections
+    return if !conns[id]
+    conns[id].each { |conn| yield conn }
   end
 
   # Gets the height and width of the map with id
