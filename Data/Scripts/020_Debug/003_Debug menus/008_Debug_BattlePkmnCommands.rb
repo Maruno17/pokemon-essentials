@@ -1,13 +1,9 @@
 =begin
 # TODO:
 
-Actual stats? @attack, @defense, etc.
 @turnCount
-Toggle Hyper Mode for a Shadow Pokémon
 
 Stuff for Pokémon that aren't in battle:
-* Set HP to 0
-* Set species
 * Set Poké Ball
 * Set nickname
 * Make a Shadow Pokémon, set Heart Gauge (perhaps also for battlers)
@@ -31,15 +27,17 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_hp, {
     if pkmn.egg?
       pbMessage("\\ts[]" + _INTL("{1} is an egg.", pkmn.name))
       next
-    elsif pkmn.totalhp == 1
-      pbMessage("\\ts[]" + _INTL("Can't change HP, {1}'s maximum HP is 1.", pkmn.name))
+    elsif battler && pkmn.totalhp == 1
+      pbMessage("\\ts[]" + _INTL("Can't change HP, {1}'s maximum HP is 1 and it's in battle.", pkmn.name))
       next
     end
+    min_hp = (battler) ? 1 : 0
     params = ChooseNumberParams.new
-    params.setRange(1, pkmn.totalhp)
+    params.setRange(min_hp, pkmn.totalhp)
     params.setDefaultValue(pkmn.hp)
     new_hp = pbMessageChooseNumber(
-      "\\ts[]" + _INTL("Set {1}'s HP (1-{2}).", (battler) ? battler.pbThis(true) : pkmn.name, pkmn.totalhp), params
+      "\\ts[]" + _INTL("Set {1}'s HP ({2}-{3}).", (battler) ? battler.pbThis(true) : pkmn.name, min_hp, pkmn.totalhp),
+      params
     )
     next if new_hp == pkmn.hp
     (battler || pkmn).hp = new_hp
@@ -185,6 +183,70 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_stat_stages, {
         battler.stages[stat_ids[cmd]] = value
       else   # Reset all stats
         GameData::Stat.each_battle { |stat| battler.stages[stat.id] = 0 }
+      end
+    end
+  }
+})
+
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_stat_values, {
+  "name"   => _INTL("Set stat values"),
+  "parent" => :level_stats,
+  "usage"  => :battler,
+  "effect" => proc { |pkmn, battler, battle|
+    if pkmn.egg?
+      pbMessage("\\ts[]" + _INTL("{1} is an egg.", pkmn.name))
+      next
+    end
+    stat_ids = []
+    stat_vals = []
+    GameData::Stat.each_main_battle do |stat|
+      stat_ids.push(stat.id)
+      case stat.id
+      when :ATTACK          then stat_vals.push(battler.attack)
+      when :DEFENSE         then stat_vals.push(battler.defense)
+      when :SPECIAL_ATTACK  then stat_vals.push(battler.spatk)
+      when :SPECIAL_DEFENSE then stat_vals.push(battler.spdef)
+      when :SPEED           then stat_vals.push(battler.speed)
+      else                       stat_vals.push(1)
+      end
+    end
+    cmd = 0
+    loop do
+      commands = []
+      GameData::Stat.each_main_battle do |stat|
+        command_name = stat.name + ": " + stat_vals[stat_ids.index(stat.id)].to_s
+        commands.push(command_name)
+      end
+      commands.push(_INTL("[Reset all]"))
+      cmd = pbMessage("\\ts[]" + _INTL("Choose a stat value to change."), commands, -1, nil, cmd)
+      break if cmd < 0
+      if cmd < stat_ids.length   # Set a stat
+        params = ChooseNumberParams.new
+        params.setRange(1, 9999)
+        params.setDefaultValue(stat_vals[cmd])
+        value = pbMessageChooseNumber(
+          "\\ts[]" + _INTL("Set the value for {1}.", GameData::Stat.get(stat_ids[cmd]).name), params
+        )
+        case stat_ids[cmd]
+        when :ATTACK          then battler.attack  = value
+        when :DEFENSE         then battler.defense = value
+        when :SPECIAL_ATTACK  then battler.spatk   = value
+        when :SPECIAL_DEFENSE then battler.spdef   = value
+        when :SPEED           then battler.speed   = value
+        end
+        stat_vals[cmd] = value
+      else   # Reset all stat values
+        battler.pbUpdate
+        GameData::Stat.each_main_battle do |stat|
+          case stat.id
+          when :ATTACK          then stat_vals[stat_ids.index(stat.id)] = battler.attack
+          when :DEFENSE         then stat_vals[stat_ids.index(stat.id)] = battler.defense
+          when :SPECIAL_ATTACK  then stat_vals[stat_ids.index(stat.id)] = battler.spatk
+          when :SPECIAL_DEFENSE then stat_vals[stat_ids.index(stat.id)] = battler.spdef
+          when :SPEED           then stat_vals[stat_ids.index(stat.id)] = battler.speed
+          else                       stat_vals[stat_ids.index(stat.id)] = 1
+          end
+        end
       end
     end
   }
@@ -539,6 +601,17 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_move_pp, {
   }
 })
 
+MenuHandlers.add(:battle_pokemon_debug_menu, :reset_moves, {
+  "name"   => _INTL("Reset moves"),
+  "parent" => :moves,
+  "usage"  => :pokemon,
+  "effect" => proc { |pkmn, battler, battle|
+    next if !pbConfirmMessage(_INTL("Replace Pokémon's moves with ones it would know if it was wild?"))
+    pkmn.reset_moves
+    pbMessage("\\ts[]" + _INTL("{1}'s moves were reset.", pkmn.name))
+  }
+})
+
 #===============================================================================
 # Other options
 #===============================================================================
@@ -729,6 +802,21 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_form, {
   }
 })
 
+MenuHandlers.add(:battle_pokemon_debug_menu, :set_species, {
+  "name"   => _INTL("Set species"),
+  "parent" => :main,
+  "usage"  => :both,
+  "effect" => proc { |pkmn, battler, battle|
+    species = pbChooseSpeciesList(pkmn.species)
+    if species && species != pkmn.species
+      pkmn.species = species
+      battler.species = species if battler
+      battler&.pbUpdate(true)
+      battler.name = pkmn.name if battler
+    end
+  }
+})
+
 MenuHandlers.add(:battle_pokemon_debug_menu, :set_shininess, {
   "name"   => _INTL("Set shininess"),
   "parent" => :main,
@@ -757,6 +845,34 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_shininess, {
         pkmn.shiny = nil
         pkmn.super_shiny = nil
       end
+    end
+  }
+})
+
+MenuHandlers.add(:battle_pokemon_debug_menu, :shadow_pokemon, {
+  "name"   => _INTL("Shadow Pokémon"),
+  "parent" => :main,
+  "usage"  => :battler,
+  "effect" => proc { |pkmn, battler, battle|
+    if battler.shadowPokemon?
+      loop do
+        if battler.inHyperMode?
+          msg = _INTL("Shadow Pokémon (in Hyper Mode)")
+        else
+          msg = _INTL("Shadow Pokémon (not in Hyper Mode)")
+        end
+        cmd = pbMessage("\\ts[]" + msg, [_INTL("Toggle Hyper Mode"), _INTL("Cancel")], -1, nil, 0)
+        break if cmd != 0
+        if battler.inHyperMode?
+          pkmn.hyper_mode = false
+        elsif battler.fainted? || !battler.pbOwnedByPlayer?
+          pbMessage("\\ts[]" + _INTL("Pokémon is fainted or not the player's. Can't put it in Hyper Mode."))
+        else
+          pkmn.hyper_mode = true
+        end
+      end
+    else
+      pbMessage("\\ts[]" + _INTL("Pokémon is not a Shadow Pokémon."))
     end
   }
 })
