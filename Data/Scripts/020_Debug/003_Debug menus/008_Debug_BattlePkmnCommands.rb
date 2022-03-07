@@ -1,15 +1,3 @@
-=begin
-# TODO:
-
-@turnCount
-
-Stuff for Pokémon that aren't in battle:
-* Set Poké Ball
-* Set nickname
-* Make a Shadow Pokémon, set Heart Gauge (perhaps also for battlers)
-
-=end
-
 #===============================================================================
 # HP/Status options
 #===============================================================================
@@ -70,7 +58,7 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_status, {
         msg += " " + _INTL("(turns: {1})", pkmn.statusCount)
       elsif pkmn.status == :POISON && pkmn.statusCount > 0
         if battler
-          msg += " " + _INTL("(toxic, count: {1})", battler.statusCount)
+          msg += " " + _INTL("(toxic, count: {1})", battler.effects[PBEffects::Toxic])
         else
           msg += " " + _INTL("(toxic)")
         end
@@ -99,11 +87,11 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_status, {
           if pbConfirmMessage("\\ts[]" + _INTL("Make {1} badly poisoned (toxic)?", pkmn_name))
             if battler
               params = ChooseNumberParams.new
-              params.setRange(0, 15)
-              params.setDefaultValue(0)
+              params.setRange(0, 16)
+              params.setDefaultValue(battler.effects[PBEffects::Toxic])
               params.setCancelValue(-1)
               count = pbMessageChooseNumber(
-                "\\ts[]" + _INTL("Set {1}'s toxic count (0-15).", pkmn_name), params
+                "\\ts[]" + _INTL("Set {1}'s toxic count (0-16).", pkmn_name), params
               )
               next if count < 0
               battler.statusCount = 1
@@ -308,7 +296,7 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :hidden_values, {
     cmd = 0
     loop do
       persid = sprintf("0x%08X", pkmn.personalID)
-      cmd = pbMessage("\\ts[]" + _INTL("Personal ID is {1}.", persid),
+      cmd = pbMessage("\\ts[]" + _INTL("Choose hidden values to edit."),
                       [_INTL("Set EVs"), _INTL("Set IVs")], -1, nil, cmd)
       break if cmd < 0
       case cmd
@@ -348,7 +336,7 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :hidden_values, {
             end
           else   # (Max) Randomise all
             evTotalTarget = Pokemon::EV_LIMIT
-            if cmd2 == evcommands.length - 2   # Randomize all (not max)
+            if cmd2 == ev_commands.length - 2   # Randomize all (not max)
               evTotalTarget = rand(Pokemon::EV_LIMIT)
             end
             GameData::Stat.each_main { |s| pkmn.ev[s.id] = 0 }
@@ -378,11 +366,11 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :hidden_values, {
             iv_id.push(s.id)
             totaliv += pkmn.iv[s.id]
           end
-          msg = _INTL("Change which IV?\nHidden Power:\n{1}, power {2}\nTotal: {3}/{4} ({5}%)",
+          msg = _INTL("Change which IV?\nHidden Power: {1}, power {2}\nTotal: {3}/{4} ({5}%)",
                       GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
                       iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
           ivcommands.push(_INTL("Randomise all"))
-          cmd2 = pbMessage("\\ts[]" + msg, ivcommands, -1, nil, cmd2)
+          cmd2 = pbMessage("\\ts[]\\l[3]" + msg, ivcommands, -1, nil, cmd2)
           break if cmd2 < 0
           if cmd2 < iv_id.length
             params = ChooseNumberParams.new
@@ -788,7 +776,7 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_form, {
     end
     loop do
       cmd = pbMessage("\\ts[]" + _INTL("Form is {1}.", pkmn.form), formcmds[1], -1, nil, cmd)
-      next if cmd < 0
+      break if cmd < 0
       f = formcmds[0][cmd]
       next if f == pkmn.form
       pkmn.forced_form = nil

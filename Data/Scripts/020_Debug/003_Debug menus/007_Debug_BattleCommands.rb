@@ -1,21 +1,3 @@
-=begin
-# TODO:
-
-turnCount        - Is currently read-only, probably not worth being able to set
-initialItems     - Array of two arrays, each with one value per party index
-recycleItems     - Array of two arrays, each with one value per party index
-belch            - Array of two arrays, each with one value per party index
-corrosiveGas     - Array of two arrays, each with one value per party index
-first_poke_ball  - both for Ball Fetch
-poke_ball_failed - both for Ball Fetch
-
-View party screen for each trainer's team, be able to edit properties of Pokémon
-that aren't in battle.
-
-Choose each battler's next action.
-
-=end
-
 #===============================================================================
 # Battler Options
 #===============================================================================
@@ -67,6 +49,178 @@ MenuHandlers.add(:battle_debug_menu, :list_foe_battlers, {
       cmd = pbMessage("\\ts[]" + _INTL("Choose a Pokémon."), cmds, -1, nil, cmd)
       break if cmd < 0
       battle.pbBattlePokemonDebug(battlers[cmd].pokemon, battlers[cmd])
+    end
+  }
+})
+
+MenuHandlers.add(:battle_debug_menu, :speed_order, {
+  "name"        => _INTL("Battler Speed Order"),
+  "parent"      => :battlers,
+  "description" => _INTL("Show all battlers in order from fastest to slowest."),
+  "effect"      => proc { |battle|
+    battlers = battle.allBattlers.map { |b| [b, b.pbSpeed] }
+    battlers.sort! { |a, b| b[1] <=> a[1] }
+    commands = []
+    battlers.each do |value|
+      b = value[0]
+      commands.push(sprintf("[%d] %s (speed: %d)", b.index, b.pbThis, value[1]))
+    end
+    pbMessage("\\ts[]" + _INTL("Battlers are listed from fastest to slowest. Speeds include modifiers."),
+              commands, -1)
+  }
+})
+
+#===============================================================================
+# Pokémon
+#===============================================================================
+MenuHandlers.add(:battle_debug_menu, :pokemon_teams, {
+  "name"        => _INTL("Pokémon Teams"),
+  "parent"      => :main,
+  "description" => _INTL("Look at and edit all Pokémon in each team."),
+  "effect"      => proc { |battle|
+    player_party_starts = battle.pbPartyStarts(0)
+    foe_party_starts = battle.pbPartyStarts(1)
+    cmd = 0
+    loop do
+      # Find all teams and how many Pokémon they have
+      commands = []
+      team_indices = []
+      if battle.opponent
+        battle.opponent.each_with_index do |trainer, i|
+          first_index = foe_party_starts[i]
+          last_index   = (i < foe_party_starts.length - 1) ? foe_party_starts[i + 1] : battle.pbParty(1).length
+          num_pkmn = last_index - first_index
+          commands.push(_INTL("Opponent {1}: {2} ({3} Pokémon)", i + 1, trainer.full_name, num_pkmn))
+          team_indices.push([1, i, first_index])
+        end
+      else
+        commands.push(_INTL("Opponent: {1} wild Pokémon", battle.pbParty(1).length))
+        team_indices.push([1, 0, 0])
+      end
+      battle.player.each_with_index do |trainer, i|
+        first_index = player_party_starts[i]
+        last_index   = (i < player_party_starts.length - 1) ? player_party_starts[i + 1] : battle.pbParty(0).length
+        num_pkmn = last_index - first_index
+        if i == 0   # Player
+          commands.push(_INTL("You: {1} ({2} Pokémon)", trainer.full_name, num_pkmn))
+        else
+          commands.push(_INTL("Ally {1}: {2} ({3} Pokémon)", i, trainer.full_name, num_pkmn))
+        end
+        team_indices.push([0, i, first_index])
+      end
+      # Choose a team
+      cmd = pbMessage("\\ts[]" + _INTL("Choose a team."), commands, -1, nil, cmd)
+      break if cmd < 0
+      # Pick a Pokémon to look at
+      pkmn_cmd = 0
+      loop do
+        pkmn = []
+        pkmn_cmds = []
+        battle.eachInTeam(team_indices[cmd][0], team_indices[cmd][1]) do |p|
+          pkmn.push(p)
+          pkmn_cmds.push("[#{pkmn_cmds.length + 1}] #{p.name} Lv.#{p.level} (HP: #{p.hp}/#{p.totalhp})")
+        end
+        pkmn_cmd = pbMessage("\\ts[]" + _INTL("Choose a Pokémon."), pkmn_cmds, -1, nil, pkmn_cmd)
+        break if pkmn_cmd < 0
+        battle.pbBattlePokemonDebug(pkmn[pkmn_cmd],
+                                    battle.pbFindBattler(team_indices[cmd][2] + pkmn_cmd, team_indices[cmd][0]))
+      end
+    end
+  }
+})
+
+#===============================================================================
+# Trainer Options
+#===============================================================================
+MenuHandlers.add(:battle_debug_menu, :trainers, {
+  "name"        => _INTL("Trainer Options..."),
+  "parent"      => :main,
+  "description" => _INTL("Variables that apply to trainers.")
+})
+
+MenuHandlers.add(:battle_debug_menu, :trainer_items, {
+  "name"        => _INTL("NPC Trainer Items"),
+  "parent"      => :trainers,
+  "description" => _INTL("View and change the items each NPC trainer has access to."),
+  "effect"      => proc { |battle|
+    cmd = 0
+    loop do
+      # Find all NPC trainers and their items
+      commands = []
+      item_arrays = []
+      trainer_indices = []
+      if battle.opponent
+        battle.opponent.each_with_index do |trainer, i|
+          items = battle.items ? battle.items[i].clone : []
+          commands.push(_INTL("Opponent {1}: {2} ({3} items)", i + 1, trainer.full_name, items.length))
+          item_arrays.push(items)
+          trainer_indices.push([1, i])
+        end
+      end
+      if battle.player.length > 1
+        battle.player.each_with_index do |trainer, i|
+          next if i == 0   # Player
+          items = battle.ally_items ? battle.ally_items[i].clone : []
+          commands.push(_INTL("Ally {1}: {2} ({3} items)", i, trainer.full_name, items.length))
+          item_arrays.push(items)
+          trainer_indices.push([0, i])
+        end
+      end
+      if commands.length == 0
+        pbMessage("\\ts[]" + _INTL("There are no NPC trainers in this battle."))
+        break
+      end
+      # Choose a trainer
+      cmd = pbMessage("\\ts[]" + _INTL("Choose a trainer."), commands, -1, nil, cmd)
+      break if cmd < 0
+      # Get trainer's items
+      items = item_arrays[cmd]
+      indices = trainer_indices[cmd]
+      # Edit trainer's items
+      item_list_property = GameDataPoolProperty.new(:Item)
+      new_items = item_list_property.set(nil, items)
+      if indices[0] == 0   # Ally
+        battle.ally_items = [] if !battle.ally_items
+        battle.ally_items[indices[1]] = new_items
+      else   # Opponent
+        battle.items = [] if !battle.items
+        battle.items[indices[1]] = new_items
+      end
+    end
+  }
+})
+
+MenuHandlers.add(:battle_debug_menu, :mega_evolution, {
+  "name"        => _INTL("Mega Evolution"),
+  "parent"      => :trainers,
+  "description" => _INTL("Whether each trainer is allowed to Mega Evolve."),
+  "effect"      => proc { |battle|
+    cmd = 0
+    loop do
+      commands = []
+      cmds = []
+      battle.megaEvolution.each_with_index do |side_values, side|
+        trainers = (side == 0) ? battle.player : battle.opponent
+        next if !trainers
+        side_values.each_with_index do |value, i|
+          next if !trainers[i]
+          text = (side == 0) ? "Your side:" : "Foe side:"
+          text += sprintf(" %d: %s", i, trainers[i].name)
+          text += sprintf(" [ABLE]") if value == -1
+          text += sprintf(" [UNABLE]") if value == -2
+          commands.push(text)
+          cmds.push([side, i])
+        end
+      end
+      cmd = pbMessage("\\ts[]" + _INTL("Choose trainer to toggle whether they can Mega Evolve."),
+                      commands, -1, nil, cmd)
+      break if cmd < 0
+      real_cmd = cmds[cmd]
+      if battle.megaEvolution[real_cmd[0]][real_cmd[1]] == -1
+        battle.megaEvolution[real_cmd[0]][real_cmd[1]] = -2   # Make unable
+      else
+        battle.megaEvolution[real_cmd[0]][real_cmd[1]] = -1   # Make able
+      end
     end
   }
 })
@@ -332,118 +486,5 @@ MenuHandlers.add(:battle_debug_menu, :position_effects, {
       editor.update
       editor.dispose
     end
-  }
-})
-
-#===============================================================================
-# Trainer Options
-#===============================================================================
-MenuHandlers.add(:battle_debug_menu, :trainers, {
-  "name"        => _INTL("Trainer Options..."),
-  "parent"      => :main,
-  "description" => _INTL("Variables that apply to trainers.")
-})
-
-MenuHandlers.add(:battle_debug_menu, :trainer_items, {
-  "name"        => _INTL("NPC Trainer Items"),
-  "parent"      => :trainers,
-  "description" => _INTL("View and change the items each NPC trainer has access to."),
-  "effect"      => proc { |battle|
-    cmd = 0
-    loop do
-      # Find all NPC trainers and their items
-      commands = []
-      item_arrays = []
-      trainer_indices = []
-      if battle.opponent
-        battle.opponent.each_with_index do |trainer, i|
-          items = battle.items ? battle.items[i].clone : []
-          commands.push(_INTL("Opponent {1}: {2} ({3} items)", i + 1, trainer.full_name, items.length))
-          item_arrays.push(items)
-          trainer_indices.push([1, i])
-        end
-      end
-      if battle.player.length > 1
-        battle.player.each_with_index do |trainer, i|
-          next if i == 0   # Player
-          items = battle.ally_items ? battle.ally_items[i].clone : []
-          commands.push(_INTL("Ally {1}: {2} ({3} items)", i, trainer.full_name, items.length))
-          item_arrays.push(items)
-          trainer_indices.push([0, i])
-        end
-      end
-      if commands.length == 0
-        pbMessage("\\ts[]" + _INTL("There are no NPC trainers in this battle."))
-        break
-      end
-      # Choose a trainer
-      cmd = pbMessage("\\ts[]" + _INTL("Choose a trainer."), commands, -1, nil, cmd)
-      break if cmd < 0
-      # Get trainer's items
-      items = item_arrays[cmd]
-      indices = trainer_indices[cmd]
-      # Edit trainer's items
-      item_list_property = GameDataPoolProperty.new(:Item)
-      new_items = item_list_property.set(nil, items)
-      if indices[0] == 0   # Ally
-        battle.ally_items = [] if !battle.ally_items
-        battle.ally_items[indices[1]] = new_items
-      else   # Opponent
-        battle.items = [] if !battle.items
-        battle.items[indices[1]] = new_items
-      end
-    end
-  }
-})
-
-MenuHandlers.add(:battle_debug_menu, :mega_evolution, {
-  "name"        => _INTL("Mega Evolution"),
-  "parent"      => :trainers,
-  "description" => _INTL("Whether each trainer is allowed to Mega Evolve."),
-  "effect"      => proc { |battle|
-    cmd = 0
-    loop do
-      commands = []
-      cmds = []
-      battle.megaEvolution.each_with_index do |side_values, side|
-        trainers = (side == 0) ? battle.player : battle.opponent
-        next if !trainers
-        side_values.each_with_index do |value, i|
-          next if !trainers[i]
-          text = (side == 0) ? "Your side:" : "Foe side:"
-          text += sprintf(" %d: %s", i, trainers[i].name)
-          text += sprintf(" [ABLE]") if value == -1
-          text += sprintf(" [UNABLE]") if value == -2
-          commands.push(text)
-          cmds.push([side, i])
-        end
-      end
-      cmd = pbMessage("\\ts[]" + _INTL("Choose trainer to toggle whether they can Mega Evolve."),
-                      commands, -1, nil, cmd)
-      break if cmd < 0
-      real_cmd = cmds[cmd]
-      if battle.megaEvolution[real_cmd[0]][real_cmd[1]] == -1
-        battle.megaEvolution[real_cmd[0]][real_cmd[1]] = -2   # Make unable
-      else
-        battle.megaEvolution[real_cmd[0]][real_cmd[1]] = -1   # Make able
-      end
-    end
-  }
-})
-
-MenuHandlers.add(:battle_debug_menu, :speed_order, {
-  "name"        => _INTL("Battler Speed Order"),
-  "parent"      => :main,
-  "description" => _INTL("Show all battlers in order from fastest to slowest."),
-  "effect"      => proc { |battle|
-    battlers = battle.allBattlers.map { |b| [b, b.pbSpeed] }
-    battlers.sort! { |a, b| b[1] <=> a[1] }
-    commands = []
-    battlers.each do |value|
-      b = value[0]
-      commands.push(sprintf("[%d] %s (speed: %d)", b.index, b.pbThis, value[1]))
-    end
-    pbMessage("\\ts[]" + _INTL("Battlers are listed from fastest to slowest. Speeds include modifiers."),
-              commands, -1)
   }
 })
