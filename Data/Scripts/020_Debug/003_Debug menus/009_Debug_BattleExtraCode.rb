@@ -242,8 +242,8 @@ class SpriteWindow_DebugBattleFieldEffects < Window_DrawableCommand
     total_width = rect.width
     name_width  = total_width * 80 / 100
     value_width = total_width * 20 / 100
-    self.shadowtext(rect.x, rect.y, name_width, rect.height, variable_data[:name], 0, color)
-    self.shadowtext(rect.x + name_width, rect.y, value_width, rect.height, variable_text, 1, color)
+    self.shadowtext(rect.x, rect.y + 8, name_width, rect.height, variable_data[:name], 0, color)
+    self.shadowtext(rect.x + name_width, rect.y + 8, value_width, rect.height, variable_text, 1, color)
   end
 end
 

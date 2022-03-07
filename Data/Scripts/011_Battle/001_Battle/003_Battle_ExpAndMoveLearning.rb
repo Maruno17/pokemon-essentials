@@ -36,7 +36,7 @@ class Battle
           next if !pkmn.able?
           next unless b.participants.include?(i) || expShare.include?(i)
           pbGainEVsOne(i, b)
-          pbGainExpOne(i, b, numPartic, expShare, expAll)
+          pbGainExpOne(i, b, numPartic, expShare, expAll, !pkmn.shadowPokemon?)
         end
         # Gain EVs and Exp for all other Pokémon because of Exp All
         if expAll
