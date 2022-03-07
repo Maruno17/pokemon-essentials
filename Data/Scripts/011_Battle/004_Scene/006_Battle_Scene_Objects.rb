@@ -251,7 +251,7 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
     # Draw status icon
     if @battler.status != :NONE
       if @battler.status == :POISON && @battler.statusCount > 0   # Badly poisoned
-        s = GameData::Status.count
+        s = GameData::Status.count - 1
       else
         s = GameData::Status.get(@battler.status).icon_position
       end

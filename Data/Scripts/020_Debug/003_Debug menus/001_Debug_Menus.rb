@@ -204,6 +204,7 @@ module Battle::DebugMixin
     cmdwindow = sprites["cmdwindow"]
     cmdwindow.x        = 0
     cmdwindow.y        = 0
+    cmdwindow.width    = Graphics.width / 2
     cmdwindow.height   = Graphics.height - sprites["textbox"].height
     cmdwindow.viewport = viewport
     cmdwindow.visible  = true
