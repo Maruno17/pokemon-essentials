@@ -281,7 +281,7 @@ module Compiler
         GameData::Stat.each_main do |s|
           next if s.pbs_order < 0
           stats_array[s.pbs_order] = species.base_stats[s.id]
-          evs_array[s.pbs_order] = species.evs[s.id]
+          evs_array.concat([s.id.to_s, species.evs[s.id]]) if species.evs[s.id] > 0
         end
         f.write(sprintf("BaseStats = %s\r\n", stats_array.join(",")))
         f.write(sprintf("GenderRatio = %s\r\n", species.gender_ratio))
@@ -381,7 +381,7 @@ module Compiler
         GameData::Stat.each_main do |s|
           next if s.pbs_order < 0
           stats_array[s.pbs_order] = species.base_stats[s.id]
-          evs_array[s.pbs_order] = species.evs[s.id]
+          evs_array.concat([s.id.to_s, species.evs[s.id]]) if species.evs[s.id] > 0
         end
         f.write(sprintf("BaseStats = %s\r\n", stats_array.join(","))) if species.base_stats != base_species.base_stats
         f.write(sprintf("BaseExp = %d\r\n", species.base_exp)) if species.base_exp != base_species.base_exp

@@ -623,17 +623,34 @@ module Compiler
           next if nil_or_empty?(contents[key])
           FileLineData.setSection(species_id, key, contents[key])   # For error reporting
           # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
+          if ["EVs", "EffortPoints"].include?(key) && contents[key].split(",")[0].numeric?
+            value = pbGetCsvRecord(contents[key], key, [0, "uuuuuu"])   # Old format
+          else
+            value = pbGetCsvRecord(contents[key], key, schema[key])
+          end
           value = nil if value.is_a?(Array) && value.empty?
           contents[key] = value
           # Sanitise data
           case key
-          when "BaseStats", "EVs", "EffortPoints"
+          when "BaseStats"
             value_hash = {}
             GameData::Stat.each_main do |s|
               value_hash[s.id] = value[s.pbs_order] if s.pbs_order >= 0
             end
             contents[key] = value_hash
+          when "EVs", "EffortPoints"
+            if value[0].is_a?(Array)   # New format
+              value_hash = {}
+              value.each { |val| value_hash[val[0]] = val[1] }
+              GameData::Stat.each_main { |s| value_hash[s.id] ||= 0 }
+              contents[key] = value_hash
+            else   # Old format
+              value_hash = {}
+              GameData::Stat.each_main do |s|
+                value_hash[s.id] = value[s.pbs_order] if s.pbs_order >= 0
+              end
+              contents[key] = value_hash
+            end
           when "Height", "Weight"
             # Convert height/weight to 1 decimal place and multiply by 10
             value = (value * 10).round
@@ -801,17 +818,34 @@ module Compiler
           end
           FileLineData.setSection(section_name, key, contents[key])   # For error reporting
           # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
+          if ["EVs", "EffortPoints"].include?(key) && contents[key].split(",")[0].numeric?
+            value = pbGetCsvRecord(contents[key], key, [0, "uuuuuu"])   # Old format
+          else
+            value = pbGetCsvRecord(contents[key], key, schema[key])
+          end
           value = nil if value.is_a?(Array) && value.length == 0
           contents[key] = value
           # Sanitise data
           case key
-          when "BaseStats", "EVs", "EffortPoints"
+          when "BaseStats"
             value_hash = {}
             GameData::Stat.each_main do |s|
               value_hash[s.id] = value[s.pbs_order] if s.pbs_order >= 0
             end
             contents[key] = value_hash
+          when "EVs", "EffortPoints"
+            if value[0].is_a?(Array)   # New format
+              value_hash = {}
+              value.each { |val| value_hash[val[0]] = val[1] }
+              GameData::Stat.each_main { |s| value_hash[s.id] ||= 0 }
+              contents[key] = value_hash
+            else   # Old format
+              value_hash = {}
+              GameData::Stat.each_main do |s|
+                value_hash[s.id] = value[s.pbs_order] if s.pbs_order >= 0
+              end
+              contents[key] = value_hash
+            end
           when "Height", "Weight"
             # Convert height/weight to 1 decimal place and multiply by 10
             value = (value * 10).round

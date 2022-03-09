@@ -78,7 +78,7 @@ module GameData
         "Pokedex"           => [0, "q"],
         "Types"             => [0, "eE", :Type, :Type],
         "BaseStats"         => [0, "vvvvvv"],
-        "EVs"               => [0, "uuuuuu"],
+        "EVs"               => [0, "*ev", :Stat],
         "BaseExp"           => [0, "v"],
         "CatchRate"         => [0, "u"],
         "Happiness"         => [0, "u"],
@@ -114,7 +114,7 @@ module GameData
         "Compatibility"     => [0, "*e", :EggGroup],
         "Kind"              => [0, "s"],
         "BaseEXP"           => [0, "v"],
-        "EffortPoints"      => [0, "uuuuuu"],
+        "EffortPoints"      => [0, "*ev", :Stat],
         "HiddenAbility"     => [0, "*e", :Ability],
         "StepsToHatch"      => [0, "v"]
       }
