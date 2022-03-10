@@ -414,6 +414,7 @@ class PokemonEvolutionScene
   def pbUpdate(animating = false)
     if animating      # Pokémon shouldn't animate during the evolution animation
       @sprites["background"].update
+      @sprites["msgwindow"].update
     else
       pbUpdateSpriteHash(@sprites)
     end
@@ -532,11 +533,18 @@ class PokemonEvolutionScene
     metaplayer1.play
     metaplayer2.play
     pbBGMStop
-    @pokemon.play_cry
-    pbMessageDisplay(@sprites["msgwindow"],
-                     _INTL("\\se[]What? {1} is evolving!\\^", @pokemon.name)) { pbUpdate }
-    pbMessageWaitForInput(@sprites["msgwindow"], 50, true) { pbUpdate }
+    pbMessageDisplay(@sprites["msgwindow"], "\\se[]" + _INTL("What?") + "\\1") { pbUpdate }
     pbPlayDecisionSE
+    @pokemon.play_cry
+    @sprites["msgwindow"].text = _INTL("{1} is evolving!", @pokemon.name)
+    timer = 0.0
+    loop do
+      Graphics.update
+      Input.update
+      pbUpdate
+      timer += Graphics.delta_s
+      break if timer >= 1.0
+    end
     oldstate  = pbSaveSpriteState(@sprites["rsprite1"])
     oldstate2 = pbSaveSpriteState(@sprites["rsprite2"])
     pbMEPlay("Evolution start")
@@ -571,12 +579,12 @@ class PokemonEvolutionScene
     $stats.evolution_count += 1
     # Play cry of evolved species
     frames = (GameData::Species.cry_length(@newspecies, @pokemon.form) * Graphics.frame_rate).ceil
-    pbBGMStop
     Pokemon.play_cry(@newspecies, @pokemon.form)
     (frames + 4).times do
       Graphics.update
       pbUpdate
     end
+    pbBGMStop
     # Success jingle/message
     pbMEPlay("Evolution success")
     newspeciesname = GameData::Species.get(@newspecies).name

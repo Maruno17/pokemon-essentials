@@ -766,7 +766,7 @@ class Battle::Move::SetUserTypesToResistLastAttack < Battle::Move
 end
 
 #===============================================================================
-# User copes target's types. (Reflect Type)
+# User copies target's types. (Reflect Type)
 #===============================================================================
 class Battle::Move::SetUserTypesToTargetTypes < Battle::Move
   def ignoresSubstitute?(user); return true; end

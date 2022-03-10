@@ -17,7 +17,6 @@ class IntroEventScene < EventScene
     @pic2 = addImage(0, 0, "")   # flashing "Press Enter" picture
     @pic2.setOpacity(0, 0)       # set opacity to 0 after waiting 0 frames
     @index = 0
-    pbBGMPlay($data_system.title_bgm)
     if SPLASH_IMAGES.empty?
       open_title_screen(self, nil)
     else
@@ -64,6 +63,7 @@ class IntroEventScene < EventScene
     @pic2.setVisible(0, true)
     @pic2.moveOpacity(0, FADE_TICKS, 255)
     pictureWait
+    pbBGMPlay($data_system.title_bgm)
     onUpdate.set(method(:title_screen_update))    # called every frame
     onCTrigger.set(method(:close_title_screen))   # called when C key is pressed
   end
