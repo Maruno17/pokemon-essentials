@@ -16,6 +16,7 @@ module GameData
     attr_reader :ledge
     attr_reader :ice
     attr_reader :bridge
+    attr_reader :waterCurrent
     attr_reader :shows_reflections
     attr_reader :must_walk
     attr_reader :ignore_passability
@@ -55,6 +56,7 @@ module GameData
       @battle_environment = hash[:battle_environment]
       @ledge = hash[:ledge] || false
       @ice = hash[:ice] || false
+      @waterCurrent = hash[:waterCurrent] || false
       @bridge = hash[:bridge] || false
       @shows_reflections = false #= hash[:shows_reflections]      || false
       @must_walk = hash[:must_walk] || false
@@ -114,6 +116,7 @@ GameData::TerrainTag.register({
                                 :id_number => 6,
                                 :can_surf => true,
                                 :can_fish => true,
+                                :waterCurrent => true,
                                 :battle_environment => :MovingWater
                               })
 

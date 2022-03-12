@@ -455,7 +455,8 @@ class PokeBattle_Battle
     # Register captured Pokémon in the Pokédex, and store them
     pbRecordAndStoreCaughtPokemon
 
-    isRematch = $game_switches[200]
+    isRematch = $game_switches[IS_REMATCH_SWITCH]
+    begin
     if isRematch
       if @opponent.is_a?(Array)
         for trainer in @opponent
@@ -466,6 +467,9 @@ class PokeBattle_Battle
         rematchId = getRematchId(@opponent.name,@opponent.trainer_type)
         incrNbRematches(rematchId)
       end
+    end
+    rescue
+      $game_switches[IS_REMATCH_SWITCH]=false
     end
 
 

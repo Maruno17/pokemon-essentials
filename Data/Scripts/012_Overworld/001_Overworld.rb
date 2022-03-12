@@ -159,6 +159,8 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
         pbDescendWaterfall
       elsif currentTag.ice && !$PokemonGlobal.sliding
         pbSlideOnIce
+      elsif currentTag.waterCurrent && !$PokemonGlobal.sliding
+        pbSlideOnWater
       end
     end
   end
@@ -557,6 +559,37 @@ def pbSlideOnIce
     break if !$game_player.can_move_in_direction?(direction)
     break if !$game_player.pbTerrainTag.ice
     $game_player.move_forward
+    while $game_player.moving?
+      pbUpdateSceneMap
+      Graphics.update
+      Input.update
+    end
+  end
+  $game_player.center($game_player.x, $game_player.y)
+  $game_player.straighten
+  $game_player.walk_anime = oldwalkanime
+  $PokemonGlobal.sliding = false
+end
+
+def pbSlideOnWater
+  return if !$game_player.pbTerrainTag.waterCurrent
+  $PokemonGlobal.sliding = true
+  direction    = $game_player.direction
+  oldwalkanime = $game_player.walk_anime
+  $game_player.straighten
+  $game_player.walk_anime = false
+  loop do
+    break if !$game_player.can_move_in_direction?(direction)
+    break if !$game_player.pbTerrainTag.waterCurrent
+    if $game_map.passable?($game_player.x,$game_player.y,8)
+      $game_player.move_up
+    elsif $game_map.passable?($game_player.x,$game_player.y,4)
+      $game_player.move_left
+    elsif $game_map.passable?($game_player.x,$game_player.y,6)
+      $game_player.move_right
+    elsif $game_map.passable?($game_player.x,$game_player.y,2)
+      $game_player.move_down
+    end
     while $game_player.moving?
       pbUpdateSceneMap
       Graphics.update

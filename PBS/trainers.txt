@@ -1491,24 +1491,23 @@ Pokemon = B100H39,18 #Jigglyorb,
 ######################
 
 [BEAUTY,Tamia]
-Pokemon = B102H69,34 # Belcute,
-Pokemon = B69H41,34 # Bellbat,
+Pokemon = B10H69,31 # Belterpie,
+Pokemon = B15H70,33 # weepindrill,
 #######################
 
 [LASS,Kay]
-Pokemon = B84H70,36 #Weepinduo,
+Pokemon = B84H70,35 #Weepinduo,
 ######################
 
 [BEAUTY,Bridget]
-Pokemon = B43H102,31 #EXEGGISH,
-Pokemon = B92H43,31 #ODDTLY,
-Pokemon = B69H116,31 #Horsprout,
-Pokemon = B69H83,31 #Farsprout,
+Pokemon = B43H69,32 #ODDSPROUT,
+Pokemon = B44H69,32 #GLOOMSPROUT,
+Pokemon = B44H70,32 #GLOOMBELL,
 ##########################
 
 [PICNICKER,Tina]
-Pokemon = B1H111,34 #Rhysaur,
-Pokemon = B2H104,34 #Cuysaur,
+Pokemon = B1H69,34 #bellsaur,
+Pokemon = B2H70,34 #ivybell,
 ##########################
 
 [BEAUTY,Lori]
@@ -1516,22 +1515,18 @@ Pokemon = B102H43,36 #Oddcute,
 ###########################
 
 [LASS,Lisa]
-Pokemon = ODDISH,33 #Oddyu,
-Pokemon = B44H50,33 #Digoom,
+Pokemon = B43H25,30 #PIKAISH,
+Pokemon = B70H25,34 #PIKABELL,
 ############################
 
 [COOLTRAINER_F,Mary]
-Pokemon = B69H108,32 #Lickisprout,
-Pokemon = B72H43,32 #Oddcool,
-Pokemon = B17H70,32 #Weepineotto,
-Pokemon = B40H44,32 #Glootuff,
-Pokemon = B2H58,32 #Growysaur,
+Pokemon = B16H43,32 #oddgey,
+Pokemon = B83H44,34 #farfoom,
 
 ###########################
 
 [PICNICKER,Martine]
-Pokemon = B7H43,34 #Oddtle,
-Pokemon = B153H1,34 #bulbaleef,
+Pokemon = B58H43,34 #oddlithe,
 ###########################
 
 #####################
@@ -2045,18 +2040,18 @@ Pokemon = B254H181,70 #AMPHAPOM
 
 [LEADER_Erika,Erika,0]
 Items = HYPERPOTION
-Pokemon = B75H114,33 #Tangeler,
-	Moves = INGRAIN,GROWTH,SMACKDOWN,CONSTRICT
-	AbilityIndex = 0
-	Item = MIRACLESEED
-Pokemon = B55H71,33 #Goldbel,
-	Moves = AQUAJET,GIGADRAIN,SUNNYDAY,SLEEPPOWDER
-	AbilityIndex = 1	
-	Item = MIRACLESEED
-Pokemon = B182H78,35 #rapissom,
-	Moves = SUNNYDAY,FLAMECHARGE,SPORE,GIGADRAIN
+Pokemon = B84H103,33 #DODUO EXEGGUTOR,
+	Moves = PLUCK,FURYATTACK,SEEDBOMB,HYPNOSIS
 	AbilityIndex = 1
-	Item = 	MIRACLESEED
+	Item = MIRACLESEED
+Pokemon = B57H114,33 #PRIMEAPE TANGELA
+	Moves = ANCIENTPOWER,SEISMICTOSS,MEGADRAIN,SLEEPPOWDER
+	AbilityIndex = 0	
+	Item = MIRACLESEED
+Pokemon = B71H45,35 #VILEPLUME VICTREEBELL,
+	Moves = SYNTHESIS,SUNNYDAY,SOLARBEAM,POISONPOWDER
+	AbilityIndex = 4
+	Item = 	SITRUSBERRY
 
 [LEADER_Erika,Erika,2]
 Items = FULLRESTORE,FULLRESTORE
@@ -3412,11 +3407,31 @@ Pokemon = MEWTWO,70
 
 ####################
 
-[ROBOT,RED]
+[ROBOT,R.E.D.]
 Pokemon = B132H242,100 
 	Moves = TOXIC,COSMICPOWER,SOFTBOILED,TRANSFORM
 	AbilityIndex = 0
 	Item = LEFTOVERS
+	
+####################
+[ROBOT,G.R.E.E.N.]
+Pokemon = B299H94,100 
+	Moves = SWITCHEROO,DISABLE,RECOVER,
+	AbilityIndex = 4
+	Item = CHOICESCARF
+	
+####################
+[ROBOT,Y.E.L.L.O.W.]
+Pokemon = B309H184,100 
+	Moves = HYDROCANNON,GIGAIMPACT,CLOSECOMBAT,EARTHQUAKE
+	AbilityIndex = 4
+	Item = CHOICEBAND	
+####################
+[ROBOT,B.L.U.E.]
+Pokemon = B296H289,100 
+	Moves = ENDEAVOR,VACUUMWAVE,SHADOWSNEAK,
+	AbilityIndex = 1
+	Item = FOCUSSASH	
 ####################
 
 [ROBOT,RED_2]

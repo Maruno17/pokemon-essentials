@@ -5,7 +5,7 @@ ItemHandlers::UseText.add(:BICYCLE,proc { |item|
   next ($PokemonGlobal.bicycle) ? _INTL("Walk") : _INTL("Use")
 })
 
-ItemHandlers::UseText.copy(:BICYCLE,:MACHBIKE,:ACROBIKE)
+ItemHandlers::UseText.copy(:BICYCLE,:RACEBIKE)
 
 #===============================================================================
 # UseFromBag handlers
