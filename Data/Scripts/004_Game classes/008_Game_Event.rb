@@ -130,6 +130,7 @@ class Game_Event < Game_Character
     return @map_id == $game_map.map_id && at_coordinate?($game_player.x, $game_player.y)
   end
 
+
   def over_trigger?
     return false if @character_name != "" && !@through
     return false if @event.name[/hiddenitem/i]

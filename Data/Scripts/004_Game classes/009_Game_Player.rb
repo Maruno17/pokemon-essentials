@@ -143,12 +143,7 @@ class Game_Player < Game_Character
     return nil
   end
 
-  def pbFacingTerrainTag(dir = nil)
-    dir = self.direction if !dir
-    return $MapFactory.getFacingTerrainTag(dir, self) if $MapFactory
-    facing = pbFacingTile(dir, self)
-    return $game_map.terrain_tag(facing[1], facing[2])
-  end
+
 
   #-----------------------------------------------------------------------------
   # * Passable Determinants

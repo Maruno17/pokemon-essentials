@@ -222,6 +222,14 @@ class Game_Character
   #=============================================================================
   # Passability
   #=============================================================================
+  def pbFacingTerrainTag(dir = nil)
+    dir = self.direction if !dir
+    return $MapFactory.getFacingTerrainTag(dir, self) if $MapFactory
+    facing = pbFacingTile(dir, self)
+    return $game_map.terrain_tag(facing[1], facing[2])
+  end
+
+
   def passable?(x, y, d, strict = false)
     new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
     new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)

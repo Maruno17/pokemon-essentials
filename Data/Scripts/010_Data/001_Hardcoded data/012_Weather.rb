@@ -9,7 +9,8 @@
 # For the tone_proc, strength goes from 0 to RPG::Weather::MAX_SPRITES (60) and
 # will typically be the maximum.
 module GameData
-  class Weather
+  class
+  Weather
     attr_reader :id
     attr_reader :id_number
     attr_reader :real_name
