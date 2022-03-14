@@ -38,7 +38,7 @@ ItemHandlers::UseFromBag.add(:BICYCLE,proc { |item|
   next (pbBikeCheck) ? 2 : 0
 })
 
-ItemHandlers::UseFromBag.copy(:BICYCLE,:MACHBIKE,:ACROBIKE)
+ItemHandlers::UseFromBag.copy(:BICYCLE,:RACEBIKE)
 
 ItemHandlers::UseFromBag.add(:OLDROD,proc { |item|
   notCliff = $game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
@@ -227,7 +227,7 @@ ItemHandlers::UseInField.add(:BICYCLE,proc { |item|
   next 0
 })
 
-ItemHandlers::UseInField.copy(:BICYCLE,:MACHBIKE,:ACROBIKE)
+ItemHandlers::UseInField.copy(:BICYCLE,:RACEBIKE)
 
 ItemHandlers::UseInField.add(:OLDROD,proc { |item|
   notCliff = $game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)

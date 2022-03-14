@@ -70,31 +70,26 @@ BallHandlers::OnCatch.add(:PERFECTBALL,proc{|ball,battle,pokemon|
 #DREAMBALL  - endormi
 BallHandlers::ModifyCatchRate.add(:DREAMBALL,proc{|ball,catchRate,battle,battler|
    battler.status = :SLEEP
-   catchRate = 1
    next catchRate
 })
 #TOXICBALL  - empoisonné
 BallHandlers::ModifyCatchRate.add(:TOXICBALL,proc{|ball,catchRate,battle,battler|
   battler.status = :POISON
-  catchRate = 1
    next catchRate
 })
 #SCORCHBALL - brulé
 BallHandlers::ModifyCatchRate.add(:SCORCHBALL,proc{|ball,catchRate,battle,battler|
    battler.status = :BURN
-   catchRate = 1
    next catchRate
 })
 #FROSTBALL - frozen
 BallHandlers::ModifyCatchRate.add(:FROSTBALL,proc{|ball,catchRate,battle,battler|
    battler.status = :FROZEN
-   catchRate = 1
    next catchRate
 })
 #SPARKBALL  - paralizé
 BallHandlers::ModifyCatchRate.add(:SPARKBALL,proc{|ball,catchRate,battle,battler|
    battler.status = :PARALYSIS
-   catchRate = 1
    next catchRate
 })
 #PUREBALL  - marche mieux quand pas de status

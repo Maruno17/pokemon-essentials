@@ -131,7 +131,6 @@ class PokeBattle_Scene
     # enemyBase  = "Graphics/Battlebacks/"+baseFilename+"_base1"
     # messageBG  = "Graphics/Battlebacks/"+messageFilename+"_message"
 
-
     battleBG   = "Graphics/Battlebacks/battlebg/"+backdropFilename
     playerBase = "Graphics/Battlebacks/playerbase/"+baseFilename
     enemyBase  = "Graphics/Battlebacks/enemybase/"+baseFilename

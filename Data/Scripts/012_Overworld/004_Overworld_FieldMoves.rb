@@ -390,7 +390,8 @@ Events.onAction += proc { |_sender, _e|
       break
     end
     if surface_map_id &&
-      $MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
+      #$MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
+      $MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_surf
       pbSurfacing
     end
   else

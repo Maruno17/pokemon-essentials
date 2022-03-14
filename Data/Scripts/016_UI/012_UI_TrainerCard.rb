@@ -18,10 +18,19 @@ class PokemonTrainerCard_Scene
     end
     cardexists = pbResolveBitmap(sprintf("Graphics/Pictures/Trainer Card/card_f"))
     @sprites["card"] = IconSprite.new(0,0,@viewport)
+    is_postgame = $game_switches[BEAT_THE_LEAGUE]
     if $Trainer.female? && cardexists
-      @sprites["card"].setBitmap("Graphics/Pictures/Trainer Card/card_f")
+      path = "Graphics/Pictures/Trainer Card/card_f"
+      if is_postgame
+        path+="_postgame"
+      end
+      @sprites["card"].setBitmap(path)
     else
-      @sprites["card"].setBitmap("Graphics/Pictures/Trainer Card/card")
+      path = "Graphics/Pictures/Trainer Card/card"
+      if is_postgame
+        path+="_postgame"
+      end
+      @sprites["card"].setBitmap(path)
     end
     @sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
@@ -64,15 +73,36 @@ class PokemonTrainerCard_Scene
     ]
     pbDrawTextPositions(overlay,textPositions)
     x = 72
-    region = pbGetCurrentRegion(0) # Get the current region
     imagePositions = []
-    for i in 0...8
-      if $Trainer.badges[i+region*8]
-        imagePositions.push(["Graphics/Pictures/Trainer Card/icon_badges",x,310,i*32,region*32,32,32])
+    postgame = $game_switches[BEAT_THE_LEAGUE]
+    numberOfBadgesDisplayed = postgame ? 16 : 8
+    for i in 0...numberOfBadgesDisplayed
+      badgeRow= i<8 ? 0 : 1
+      if $Trainer.badges[i]
+        if i == 8
+          x =72
+        end
+        badge_graphic_x = badgeRow == 0 ? i*32 : (i-8)*32
+        badge_graphic_y =badgeRow*32
+        y = getBadgeDisplayHeight(postgame,i)
+        imagePositions.push(["Graphics/Pictures/Trainer Card/icon_badges",x,y,badge_graphic_x,badge_graphic_y,32,32])
       end
       x += 48
     end
     pbDrawImagePositions(overlay,imagePositions)
+  end
+
+  def getBadgeDisplayHeight(postgame,i)
+    if postgame
+      if i < 8
+        y=310
+      else
+        y=344
+      end
+    else
+      y = 312
+    end
+    return y
   end
 
   def pbTrainerCard

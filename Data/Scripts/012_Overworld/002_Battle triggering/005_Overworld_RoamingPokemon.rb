@@ -85,9 +85,12 @@ def pbRoamPokemonOne(idxRoamer)
   if rand(32)==0
     newMapChoices.push(mapIDs[rand(mapIDs.length)])
   end
-  # Choose a random new map to roam to
-  if newMapChoices.length>0
-    $PokemonGlobal.roamPosition[idxRoamer] = newMapChoices[rand(newMapChoices.length)]
+  #50% chance of moving to a new map
+  if rand(2)==0
+    # Choose a random new map to roam to
+    if newMapChoices.length>0
+      $PokemonGlobal.roamPosition[idxRoamer] = newMapChoices[rand(newMapChoices.length)]
+    end
   end
 end
 
