@@ -964,7 +964,7 @@ def animationEditorMain(animation)
   viewport = Viewport.new(0, 0, Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
   viewport.z = 99999
   # Canvas
-  canvas = AnimationCanvas.new(animation[animation.selected], viewport)
+  canvas = AnimationCanvas.new(animation[animation.selected] || animation[0], viewport)
   # Right hand menu
   sidewin = ControlWindow.new(512 + 128, 0, 160, 384 + 128)
   sidewin.addButton(_INTL("SE and BG..."))

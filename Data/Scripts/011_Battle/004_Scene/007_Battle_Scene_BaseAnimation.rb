@@ -265,10 +265,10 @@ module Battle::Scene::Animation::BallAnimationMixin
 
   def battlerAbsorb(battler, delay, battlerX, battlerY, color)
     color.alpha = 255
-    battler.moveColor(delay, 10, color)
+    battler.moveColor(delay, 10, color)   # Change color of battler to a solid shade
     delay = battler.totalDuration
     battler.moveXY(delay, 5, battlerX, battlerY)
-    battler.moveZoom(delay, 5, 0)
+    battler.moveZoom(delay, 5, 0)   # Shrink battler into Poké Ball
     battler.setVisible(delay + 5, false)
   end
 
@@ -292,7 +292,61 @@ module Battle::Scene::Animation::BallAnimationMixin
 
   # The Poké Ball burst animation used when recalling a Pokémon.
   def ballBurstRecall(delay, ball, ballX, ballY, poke_ball)
-    ball.setDelta(delay, 0, 0, [@battler.battle.scene, :pbBallBurstCommonAnimation,
-                                [getBallBurstAnimationName(poke_ball, :recall), @battler, ballX, ballY]])
+    color_duration = 10   # Change color of battler to a solid shade - see def battlerAbsorb
+    shrink_duration = 5   # Shrink battler into Poké Ball - see def battlerAbsorb
+    burst_duration = color_duration + shrink_duration
+    # Burst particles
+    num_particles = 5
+    base_angle = 55
+    base_radius = 64   # How far out from the Poké Ball the particles go
+    num_particles.times do |i|
+      # Set up particle
+      particle = addNewSprite(ballX, ballY,
+         "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
+      particle.setZ(0, 110)
+      particle.setZoom(0, 150)
+      particle.setOpacity(0, 0)
+      particle.setVisible(0, false)
+      # Particle animation
+      particle.setVisible(delay, true)
+      particle.moveOpacity(delay, 2, 255)   # Fade in quickly
+      burst_duration.times do |j|
+        angle = base_angle + (i * 360 / num_particles) + (135.0 * j / burst_duration)
+        radian = angle * Math::PI / 180
+        radius = base_radius
+        if j < burst_duration / 5
+          prop = j.to_f / (color_duration / 3)
+          radius *= 0.75 + (prop / 4)
+        elsif j >= burst_duration / 2
+          prop = (j.to_f - burst_duration / 2) / (burst_duration / 2)
+          radius *= 1 - prop
+        end
+        if j == 0
+          particle.setXY(delay + j, ballX + radius * Math.cos(radian), ballY - radius * Math.sin(radian))
+        else
+          particle.moveXY(delay + j, 1, ballX + radius * Math.cos(radian), ballY - radius * Math.sin(radian))
+        end
+      end
+      particle.moveZoom(delay, burst_duration, 0.75)
+      particle.moveTone(delay + color_duration / 2, color_duration / 2, Tone.new(0, 0, -192, -64))   # Yellow
+      particle.moveTone(delay + color_duration, shrink_duration, Tone.new(0, -128, -248, -224))   # Dark orange
+      particle.moveOpacity(delay + color_duration, shrink_duration, 0)   # Fade out at end
+      particle.setVisible(delay + burst_duration, false)
+    end
+    # Ring particles
+    ring1 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_ring1", PictureOrigin::CENTER)
+    ring1.setZ(0, 110)
+    ring1.setZoom(0, 0)
+    ring1.setVisible(0, false)
+    ring2 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_ring2", PictureOrigin::CENTER)
+    ring2.setZ(0, 110)
+    ring2.setVisible(0, false)
+    # Ring particle animations
+    ring1.setVisible(delay + burst_duration - 2, true)
+    ring1.moveZoom(delay + burst_duration - 2, 4, 100)
+    ring1.setVisible(delay + burst_duration + 2, false)
+    ring2.setVisible(delay + burst_duration + 2, true)
+    ring2.moveZoom(delay + burst_duration + 2, 4, 200)
+    ring2.moveOpacity(delay + burst_duration + 2, 4, 0)
   end
 end
