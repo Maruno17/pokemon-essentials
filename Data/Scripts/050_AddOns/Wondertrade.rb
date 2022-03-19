@@ -1,4 +1,3 @@
-
 =begin
 *** Wonder Trade Script by Black Eternity ***
 This script is to mimic Wonder Trade from an offline perspective.
@@ -45,7 +44,7 @@ It is up to you to use it how you wish, credits will be appreciated.
 # These are just names taken from a generator, add custom or change to
 # whatever you desire.
 
-RandTrainerNames_male=[
+RandTrainerNames_male = [
   "Mikaël",
   "James",
   "Keith",
@@ -107,7 +106,7 @@ RandTrainerNames_male=[
   "Vladimir"
 ]
 
-RandTrainerNames_female=[
+RandTrainerNames_female = [
   "Emily",
   "France",
   "Joan",
@@ -173,7 +172,7 @@ RandTrainerNames_female=[
   "Kathy"
 ]
 
-RandTrainerNames_others=[
+RandTrainerNames_others = [
   "Brock",
   "Misty",
   "Lt. Surge",
@@ -204,7 +203,7 @@ RandTrainerNames_others=[
 ]
 
 # List of randomly selected Pokemon Nicknames
-RandPokeNick=[
+RandPokeNick = [
   "Poncho",
   "King",
   "Batar",
@@ -842,7 +841,7 @@ RandPokeNick=[
   "MISSINGNO",
   "MISSINGNAME",
   "Proton",
-  "Numba 1","Number 2","Number 3","Number 4","Number 5","Number 6","Number 7",
+  "Numba 1", "Number 2", "Number 3", "Number 4", "Number 5", "Number 6", "Number 7",
   "pokeman",
   "hm_slave",
   "hm_slave01",
@@ -915,7 +914,7 @@ RandPokeNick=[
   "Unit-3",
   "Happy",
   "Terror",
-  "Kanto","Johto","Hoenn","Sinnoh","Unova","Kalos","Alola",
+  "Kanto", "Johto", "Hoenn", "Sinnoh", "Unova", "Kalos", "Alola",
   "Jar Jar",
   "Garcia",
   "Reaper",
@@ -936,7 +935,7 @@ RandPokeNick=[
   "yourself",
   "something",
   "something better",
-  "this","that",
+  "this", "that",
   "it",
   "愛",
   "Franz",
@@ -1004,8 +1003,7 @@ RandPokeNick=[
   "maymay"
 ]
 
-
-def pbWonderTrade(lvl,except=[],except2=[],rare=true)
+def pbWonderTrade(lvl, except = [], except2 = [], rare = true)
   # for i in 0...except.length # Gets ID of pokemon in exception array
   #   except[i]=getID(PBSpecies,except[i]) if !except[i].is_a?(Integer)
   # end
@@ -1015,60 +1013,59 @@ def pbWonderTrade(lvl,except=[],except2=[],rare=true)
   # ignoreExcept = rand(100) == 0 #tiny chance to include legendaries
   #
   # except+=[]
-  chosen=pbChoosePokemon(1,2, # Choose eligable pokemon
-                         proc {
-                           |poke| !poke.egg? && !(poke.isShadow?) && # No Eggs, No Shadow Pokemon
-                             (poke.level>=lvl) && !(except.include?(poke.species)) # None under "lvl", no exceptions.
-                         })
+  chosen = pbChoosePokemon(1, 2, # Choose eligable pokemon
+                           proc {
+                             |poke| !poke.egg? && !(poke.isShadow?) && # No Eggs, No Shadow Pokemon
+                               (poke.level >= lvl) && !(except.include?(poke.species)) # None under "lvl", no exceptions.
+                           })
   poke = $Trainer.party[pbGet(1)]
-  $PokemonBag.pbStoreItem(poke.item,1)  if poke.item != nil
+  $PokemonBag.pbStoreItem(poke.item, 1) if poke.item != nil
   myPoke = poke.species
   chosenBST = calcBaseStats(myPoke)
   # The following excecption fields are for hardcoding the blacklisted pokemon
   # without adding them in the events.
   #except+=[]
-  except2+=[:ARCEUS,:MEW,:CELEBI,:LUGIA,:HOOH,:MEWTWO]
-  if pbGet(1)>=0
-    species=0
-    luck = rand(5)+1
-    rarecap = (rand(155+poke.level)/(1+rand(5)))/luck
+  except2 += [:ARCEUS, :MEW, :CELEBI, :LUGIA, :HOOH, :MEWTWO]
+  if pbGet(1) >= 0
+    species = 0
+    luck = rand(5) + 1
+    rarecap = (rand(155 + poke.level) / (1 + rand(5))) / luck
     bonus = 0
-    while (species==0) # Loop Start
-      bonus+= 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
+    while (species == 0) # Loop Start
+      bonus += 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
 
-      species=rand(PBSpecies.maxValue)+1
+      species = rand(PBSpecies.maxValue) + 1
       bst = calcBaseStats(species)
       # Redo the loop if pokemon is too evolved for its level
       #species=0 if lvl < pbGetMinimumLevel(species)# && pbGetPreviousForm(species) != species # && pbGetPreviousForm(species)!=species
       # Redo the loop if the species is an exception.
-      species=0 if checkifBlacklisted(species,except2) && !ignoreExcept #except2.include?(species)
+      species = 0 if checkifBlacklisted(species, except2) && !ignoreExcept #except2.include?(species)
       #Redo loop if above BST
-      species=0 if bst > chosenBST+$game_variables[120]+bonus
+      species = 0 if bst > chosenBST + $game_variables[120] + bonus
 
       #Redo loop if below BST - 200
-      species=0 if bst < (chosenBST - 200)
-
+      species = 0 if bst < (chosenBST - 200)
 
       # raise _INTL("{1}'s bst ist {2}, new ist {3}",myPoke,chosenBST,bst)
 
       # species=0 if (except.include?(species) && except2.include?(species))
       # use this above line instead if you wish to neither receive pokemon that YOU
       # cannot trade.
-      if rare==true #turn on rareness
+      if rare == true #turn on rareness
         if species > 0
-          rareness=GameData::Species.get(species).catch_rate
-          species=0 if rarecap>=rareness
+          rareness = GameData::Species.get(species).catch_rate
+          species = 0 if rarecap >= rareness
         end
       end
     end
     randTrainerNames = RandTrainerNames_male + RandTrainerNames_female + RandTrainerNames_others
-    tname=randTrainerNames[rand(randTrainerNames.size)] # Randomizes Trainer Names
-    pname=RandPokeNick[rand(RandPokeNick.size)] # Randomizes Pokemon Nicknames
+    tname = randTrainerNames[rand(randTrainerNames.size)] # Randomizes Trainer Names
+    pname = RandPokeNick[rand(RandPokeNick.size)] # Randomizes Pokemon Nicknames
 
     #num of Wondertrade - 1
-    $game_variables[111] = $game_variables[111]-1
+    $game_variables[111] = $game_variables[111] - 1
 
-    newpoke = pbStartTrade(pbGet(1),species,pname,tname,0,true) # Starts the trade
+    newpoke = pbStartTrade(pbGet(1), species, pname, tname, 0, true) # Starts the trade
     #lower level by 1 to prevent abuse
     if poke.level > 25
       newpoke.level = poke.level - 1
@@ -1078,53 +1075,53 @@ def pbWonderTrade(lvl,except=[],except2=[],rare=true)
   end
 end
 
-def pbGRS(minBST,chosenBST,luck,rare,except2) #pbGenerateRandomSpecies (le nom doit etre short pour etre callé dans events)
-                                              # The following excecption fields are for hardcoding the blacklisted pokemon
-                                              # without adding them in the events.
-                                              #except+=[]
-except2+=[]
-species=0
-                                              #luck = rand(5)+1
-rarecap = (rand(rare)/(1+rand(5)))/luck
-bonus = 0
-while (species==0) # Loop Start
-  bonus+= 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
+def pbGRS(minBST, chosenBST, luck, rare, except2)
+  #pbGenerateRandomSpecies (le nom doit etre short pour etre callé dans events)
+  # The following excecption fields are for hardcoding the blacklisted pokemon
+  # without adding them in the events.
+  #except+=[]
+  except2 += []
+  species = 0
+  #luck = rand(5)+1
+  rarecap = (rand(rare) / (1 + rand(5))) / luck
+  bonus = 0
+  while (species == 0) # Loop Start
+    bonus += 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
 
-  species=rand(PBSpecies.maxValue)+1
-  bst = calcBaseStats(species)
-  # Redo the loop if pokemon is too evolved for its level
-  #species=0 if lvl < pbGetMinimumLevel(species)# && pbGetPreviousForm(species) != species # && pbGetPreviousForm(species)!=species
-  # Redo the loop if the species is an exception.
-  species=0 if checkifBlacklisted(species,except2)#except2.include?(species)
-  #Redo loop if above BST
-  species=0 if bst > chosenBST+$game_variables[120]+bonus
+    species = rand(PBSpecies.maxValue) + 1
+    bst = calcBaseStats(species)
+    # Redo the loop if pokemon is too evolved for its level
+    #species=0 if lvl < pbGetMinimumLevel(species)# && pbGetPreviousForm(species) != species # && pbGetPreviousForm(species)!=species
+    # Redo the loop if the species is an exception.
+    species = 0 if checkifBlacklisted(species, except2) #except2.include?(species)
+    #Redo loop if above BST
+    species = 0 if bst > chosenBST + $game_variables[120] + bonus
 
-  #Redo loop if below BST - 200
-  species=0 if bst < (chosenBST - 200)
+    #Redo loop if below BST - 200
+    species = 0 if bst < (chosenBST - 200)
 
+    # raise _INTL("{1}'s bst ist {2}, new ist {3}",myPoke,chosenBST,bst)
 
-  # raise _INTL("{1}'s bst ist {2}, new ist {3}",myPoke,chosenBST,bst)
-
-  # species=0 if (except.include?(species) && except2.include?(species))
-  # use this above line instead if you wish to neither receive pokemon that YOU
-  # cannot trade.
-  if rare==true #turn on rareness
-    rareness=GameData::Species.get(species).catch_rate
-    species=0 if rarecap>=rareness
+    # species=0 if (except.include?(species) && except2.include?(species))
+    # use this above line instead if you wish to neither receive pokemon that YOU
+    # cannot trade.
+    if rare == true #turn on rareness
+      rareness = GameData::Species.get(species).catch_rate
+      species = 0 if rarecap >= rareness
+    end
   end
-end
-return species
+  return species
 end
 
 def calcBaseStats(species)
   stats = GameData::Species.get(species).base_stats
-  sum =0
-  sum+= stats[:HP]
-  sum+= stats[:ATTACK]
-  sum+= stats[:DEFENSE]
-  sum+= stats[:SPECIAL_ATTACK]
-  sum+= stats[:SPECIAL_DEFENSE]
-  sum+= stats[:SPEED]
+  sum = 0
+  sum += stats[:HP]
+  sum += stats[:ATTACK]
+  sum += stats[:DEFENSE]
+  sum += stats[:SPECIAL_ATTACK]
+  sum += stats[:SPECIAL_DEFENSE]
+  sum += stats[:SPEED]
   return sum
   #
   # basestatsum = $pkmn_dex[species][5][0] # HP
@@ -1136,8 +1133,8 @@ def calcBaseStats(species)
   # return basestatsum
 end
 
-def checkifBlacklisted(species,blacklist)
-  return true if blacklist.include?(getBasePokemonID(species,true))
-  return true if blacklist.include?(getBasePokemonID(species,false))
+def checkifBlacklisted(species, blacklist)
+  return true if blacklist.include?(getBasePokemonID(species, true))
+  return true if blacklist.include?(getBasePokemonID(species, false))
   return false
 end
