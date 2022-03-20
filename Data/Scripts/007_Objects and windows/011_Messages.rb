@@ -421,8 +421,31 @@ def pbDisplayGoldWindow(msgwindow)
 end
 
 def pbDisplayBattleFactoryPointsWindow(msgwindow)
-  pointsString = $game_variables[BATTLE_FACTORY_TOKENS].to_s
-  pointswindow = Window_AdvancedTextPokemon.new(_INTL("Tokens:\n<ar>{1}</ar>", pointsString))
+  pbDisplayVariableWindow(msgwindow,"Tokens",BATTLE_FACTORY_TOKENS)
+end
+
+
+def pbDisplayVariableWindow(msgwindow,name,variable_id)
+  pointsString = $game_variables[variable_id].to_s
+  pointswindow = Window_AdvancedTextPokemon.new(_INTL("{1}:\n<ar>{2}</ar>",name, pointsString))
+  pointswindow.setSkin("Graphics/Windowskins/goldskin")
+  pointswindow.resizeToFit(pointswindow.text, Graphics.width)
+  pointswindow.width = 160 if pointswindow.width <= 160
+  if msgwindow.y == 0
+    pointswindow.y = Graphics.height - pointswindow.height
+  else
+    pointswindow.y = 0
+  end
+  pointswindow.viewport = msgwindow.viewport
+  pointswindow.z = msgwindow.z
+  return pointswindow
+end
+
+def pbDisplayTwoVariableWindow(msgwindow,name1,variable1_id,name2, variable2_id)
+  pointsString1 = $game_variables[variable1_id].to_s
+  pointsString2 = $game_variables[variable2_id].to_s
+
+  pointswindow = Window_AdvancedTextPokemon.new(_INTL("{1}:<ar>{2}</ar>\n{3}:<ar>{4}</ar>",name1, pointsString1,name2,pointsString2))
   pointswindow.setSkin("Graphics/Windowskins/goldskin")
   pointswindow.resizeToFit(pointswindow.text, Graphics.width)
   pointswindow.width = 160 if pointswindow.width <= 160
@@ -722,7 +745,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       when "ft" # Display battle factory tokens
         goldwindow.dispose if goldwindow
         goldwindow = pbDisplayBattleFactoryPointsWindow(msgwindow)
-      when "hs" # Display battle factory tokens
+      when "hs" # Display heartscakes
         goldwindow.dispose if goldwindow
         goldwindow = pbDisplayHeartScalesWindow(msgwindow)
       when "cn" # Display coins window

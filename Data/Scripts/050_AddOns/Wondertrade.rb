@@ -1003,7 +1003,7 @@ RandPokeNick = [
   "maymay"
 ]
 
-def pbWonderTrade(lvl, except = [], except2 = [], rare = true)
+def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
   # for i in 0...except.length # Gets ID of pokemon in exception array
   #   except[i]=getID(PBSpecies,except[i]) if !except[i].is_a?(Integer)
   # end
@@ -1013,6 +1013,7 @@ def pbWonderTrade(lvl, except = [], except2 = [], rare = true)
   # ignoreExcept = rand(100) == 0 #tiny chance to include legendaries
   #
   # except+=[]
+  rare = premiumWonderTrade
   chosen = pbChoosePokemon(1, 2, # Choose eligable pokemon
                            proc {
                              |poke| !poke.egg? && !(poke.isShadow?) && # No Eggs, No Shadow Pokemon
@@ -1041,8 +1042,18 @@ def pbWonderTrade(lvl, except = [], except2 = [], rare = true)
       # Redo the loop if the species is an exception.
       species = 0 if checkifBlacklisted(species, except2) && !ignoreExcept #except2.include?(species)
       #Redo loop if above BST
-      species = 0 if bst > chosenBST + $game_variables[120] + bonus
-
+      bstLimit = chosenBST + bonus# + $game_variables[120]
+      if !premiumWonderTrade
+        bstLimit-=50
+      end
+      species = 0 if bst > bstLimit
+      if species > 0 && premiumWonderTrade
+        species = 0 if !customSpriteExists(species)
+      end
+      if species > 0
+        skipLegendaryCheck = premiumWonderTrade && rand(100) < luck
+        species = 0 if pokemonIsPartLegendary(species) && !$game_switches[BEAT_THE_LEAGUE] && !skipLegendaryCheck
+      end
       #Redo loop if below BST - 200
       species = 0 if bst < (chosenBST - 200)
 
@@ -1063,7 +1074,11 @@ def pbWonderTrade(lvl, except = [], except2 = [], rare = true)
     pname = RandPokeNick[rand(RandPokeNick.size)] # Randomizes Pokemon Nicknames
 
     #num of Wondertrade - 1
-    $game_variables[111] = $game_variables[111] - 1
+    if premiumWonderTrade
+      $game_variables[PREMIUM_WONDERTRADE_LEFT] -= 1
+    else
+      $game_variables[STANDARD_WONDERTRADE_LEFT] -= 1
+    end
 
     newpoke = pbStartTrade(pbGet(1), species, pname, tname, 0, true) # Starts the trade
     #lower level by 1 to prevent abuse

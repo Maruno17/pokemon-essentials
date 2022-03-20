@@ -308,17 +308,26 @@ def obtainPokemonSpritePath(id, includeCustoms = true)
 end
 
 def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
-  hasCustom = false
   picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", headId, bodyId)
 
   if include_customs
-    pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", headId, bodyId)
+    pathCustom = getCustomSpritePath(bodyId,headId)
     if (pbResolveBitmap(pathCustom))
       picturePath = pathCustom
-      hasCustom = true
     end
   end
   return picturePath
+end
+
+def getCustomSpritePath(body,head)
+  return _INTL("Graphics/CustomBattlers/{1}.{2}.png", head, body)
+end
+
+def customSpriteExists(species)
+  head = getBasePokemonID(species, false)
+  body = getBasePokemonID(species, true)
+  pathCustom = getCustomSpritePath(body,head)
+  return pbResolveBitmap(pathCustom) != nil
 end
 
 def getArceusPlateType(heldItem)
@@ -414,6 +423,8 @@ def Kernel.getItemNamesAsString(list)
   end
   return strList
 end
+
+
 
 def Kernel.getPlateType(item)
   return :FIGHTING if item == PBItems::FISTPLATE

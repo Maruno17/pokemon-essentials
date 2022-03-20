@@ -174,6 +174,13 @@ def listLegendaryPokemonIds()
   return [144, 145, 146, 150, 151, 245, 243, 244, 245, 249, 250, 251, 315, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 378, 379, 380, 381]
 end
 
+def pokemonIsPartLegendary(species)
+  head = getBasePokemonID(species, false)
+  body = getBasePokemonID(species, true)
+  return listLegendaryPokemonIds().include?(head) || listLegendaryPokemonIds().include?(body)
+end
+
+
 def generateRandomFusionFromPokemon(dexNum, onlyCustomSprites = false, allowLegendaries=true)
   speciesList = onlyCustomSprites ? getCustomSpeciesListForPokemon(dexNum,allowLegendaries) : getAllPokemonWithBase(dexNum)
   return speciesList.sample
