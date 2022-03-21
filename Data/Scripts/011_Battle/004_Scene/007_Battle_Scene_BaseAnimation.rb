@@ -274,15 +274,195 @@ module Battle::Scene::Animation::BallAnimationMixin
 
   # The regular Poké Ball burst animation.
   def ballBurst(delay, ball, ballX, ballY, poke_ball)
-    ball.setDelta(delay, 0, 0, [@battler.battle.scene, :pbBallBurstCommonAnimation,
-                                [getBallBurstAnimationName(poke_ball), @battler, ballX, ballY]])
+    num_particles = 15
+    num_rays = 10
+    glare_fade_duration = 8   # Lifetimes/durations are in 20ths of a second
+    particle_lifetime = 15
+    particle_fade_duration = 8
+    ray_lifetime = 13
+    ray_fade_duration = 5
+    ray_min_radius = 24   # How far out from the center a ray starts
+    # Set up glare particles
+    glare1 = addNewSprite(ballX, ballY,
+       "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
+    glare2 = addNewSprite(ballX, ballY,
+       "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
+    [glare1, glare2].each_with_index do |particle, num|
+      particle.setZ(0, 105 + num)
+      particle.setZoom(0, 0)
+      particle.setVisible(0, false)
+    end
+    glare1.setTone(0, Tone.new(0, 0, -96, -32))   # Light yellow
+    glare1.moveTone(delay + glare_fade_duration + 3, glare_fade_duration / 2,
+                    Tone.new(0, 0, -192, -64))   # Yellow
+    # Animate glare particles
+    [glare1, glare2].each { |p| p.setVisible(delay, true) }
+    glare1.moveZoom(delay, glare_fade_duration, 250)
+    glare1.moveOpacity(delay + glare_fade_duration + 3, glare_fade_duration, 0)
+    glare2.moveZoom(delay, glare_fade_duration, 200)
+    glare2.moveOpacity(delay + glare_fade_duration + 3, glare_fade_duration - 2, 0)
+    [glare1, glare2].each { |p| p.setVisible(delay + 19, false) }
+    # Rays
+    num_rays.times do |i|
+      # Set up ray
+      angle = rand(360)
+      radian = (angle + 90) * Math::PI / 180
+      start_zoom = rand(50...100)
+      ray = addNewSprite(ballX + ray_min_radius * Math.cos(radian),
+                         ballY - ray_min_radius * Math.sin(radian),
+                         "Graphics/Battle animations/ballBurst_ray", PictureOrigin::BOTTOM)
+      ray.setZ(0, 100)
+      ray.setZoomXY(0, 200, start_zoom)
+      ray.setOpacity(0, 0)
+      ray.setVisible(0, false)
+      ray.setAngle(0, angle)
+      # Animate ray
+      start = delay + i / 2
+      ray.setVisible(start, true)
+      ray.moveZoomXY(start, ray_lifetime, 200, start_zoom * 6)
+      ray.moveOpacity(start, 2, 255)   # Quickly fade in
+      ray.moveOpacity(start + ray_lifetime - ray_fade_duration, ray_fade_duration, 0)   # Fade out
+      ray.moveTone(start + ray_lifetime - ray_fade_duration, ray_fade_duration,
+                   Tone.new(0, 0, -192, -64))   # Yellow
+      ray.setVisible(start + ray_lifetime, false)
+    end
+    # Particles
+    num_particles.times do |i|
+      # Set up particles
+      particle1 = addNewSprite(ballX, ballY,
+         "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
+      particle2 = addNewSprite(ballX, ballY,
+         "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
+      particle1.setTone(0, Tone.new(0, 0, -192, -64))   # Yellow
+      [particle1, particle2].each_with_index do |particle, num|
+        particle.setZ(0, 110 + num)
+        particle.setZoom(0, 80)
+        particle.setVisible(0, false)
+      end
+      # Animate particles
+      start = delay + i / 4
+      max_radius = rand(256...384)
+      angle = rand(360)
+      radian = angle * Math::PI / 180
+      particle1.moveTone(start + particle_lifetime - particle_fade_duration,
+                         particle_fade_duration / 2,
+                         Tone.new(0, -128, -248, -224))   # Dark orange
+      [particle1, particle2].each do |particle|
+        particle.setVisible(start, true)
+        particle.moveDelta(start, particle_lifetime,
+                           max_radius * Math.cos(radian),
+                           max_radius * Math.sin(radian))
+        particle.moveZoom(start, particle_lifetime, 10)
+        particle.moveOpacity(start + particle_lifetime - particle_fade_duration,
+                             particle_fade_duration,
+                             0)   # Fade out at end
+        particle.setVisible(start + particle_lifetime, false)
+      end
+    end
   end
 
   # The Poké Ball burst animation used when absorbing a wild Pokémon during a
   # capture attempt.
   def ballBurstCapture(delay, ball, ballX, ballY, poke_ball)
-    ball.setDelta(delay, 0, 0, [@battler.battle.scene, :pbBallBurstCommonAnimation,
-                                [getBallBurstAnimationName(poke_ball, :capture), @battler, ballX, ballY]])
+    particle_duration = 10
+    ring_duration = 5
+    num_particles = 9
+    base_angle = 270
+    base_radius = 144   # How far out from the Poké Ball the particles go
+    # Set up glare particles
+    glare1 = addNewSprite(ballX, ballY,
+       "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
+    glare2 = addNewSprite(ballX, ballY,
+       "Graphics/Battle animations/ballBurst_dazzle", PictureOrigin::CENTER)
+    glare3 = addNewSprite(ballX, ballY,
+       "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
+    [glare1, glare2, glare3].each_with_index do |particle, num|
+      particle.setZ(0, 100 + num)
+      particle.setZoom(0, 0)
+      particle.setVisible(0, false)
+    end
+    glare3.setOpacity(0, 160)
+    # Animate glare particles
+    [glare1, glare2, glare3].each { |p| p.setVisible(delay, true) }
+    glare1.moveZoom(delay, particle_duration, 600)
+    glare1.moveOpacity(delay + particle_duration / 2, particle_duration / 2, 0)
+    glare1.moveTone(delay, particle_duration, Tone.new(0, 0, -192, -64))   # Yellow
+    glare2.moveZoom(delay, particle_duration, 250)
+    glare2.moveOpacity(delay + particle_duration / 2, particle_duration / 3, 0)
+    glare3.moveZoom(delay, particle_duration, 500)
+    glare3.moveOpacity(delay + particle_duration / 2, particle_duration / 3, 0)
+    [glare1, glare2, glare3].each { |p| p.setVisible(delay + particle_duration, false) }
+    # Burst particles
+    num_particles.times do |i|
+      # Set up particle that keeps moving out
+      particle1 = addNewSprite(ballX, ballY,
+         "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
+      particle1.setZ(0, 105)
+      particle1.setZoom(0, 150)
+      particle1.setOpacity(0, 160)
+      particle1.setVisible(0, false)
+      # Set up particles that curve back in
+      particle2 = addNewSprite(ballX, ballY,
+         "Graphics/Battle animations/ballBurst_particle_s", PictureOrigin::CENTER)
+      particle3 = addNewSprite(ballX, ballY,
+         "Graphics/Battle animations/ballBurst_particle_s", PictureOrigin::CENTER)
+      [particle2, particle3].each_with_index do |particle, num|
+        particle.setZ(0, 110 + num)
+        particle.setZoom(0, 0)
+        particle.setVisible(0, false)
+      end
+      # Particle animations
+      [particle1, particle2, particle3].each { |p| p.setVisible(delay, true) }
+      start_angle = base_angle + (i * 360 / num_particles)
+      p1_x_offset = base_radius * Math.cos(start_angle * Math::PI / 180)
+      p1_y_offset = base_radius * Math.sin(start_angle * Math::PI / 180)
+      particle_duration.times do |j|
+        index = j + 1
+        angle = start_angle + (index * (360 / num_particles) / particle_duration)
+        radian = angle * Math::PI / 180
+        radius = base_radius
+        if j < particle_duration / 2
+          prop = index.to_f / (particle_duration / 2)
+          radius *= prop
+        else
+          prop = (index.to_f - particle_duration / 2) / (particle_duration / 2)
+          radius *= 1 - prop
+        end
+        particle1.moveXY(delay + j, 1,
+                         ballX + p1_x_offset * index * 2 / particle_duration,
+                         ballY - p1_y_offset * index * 2 / particle_duration)
+        [particle2, particle3].each do |particle|
+          particle.moveXY(delay + j, 1,
+                          ballX + radius * Math.cos(radian),
+                          ballY - radius * Math.sin(radian))
+        end
+      end
+      particle1.moveZoom(delay, particle_duration, 0)
+      particle1.moveOpacity(delay, particle_duration, 0)
+      [particle2, particle3].each_with_index do |particle, num|
+        particle.moveZoom(delay, particle_duration / 2, 100)
+        particle.moveZoom(delay + particle_duration * 2 / 3, particle_duration / 3, 25)
+        if num == 0
+          particle.moveTone(delay + particle_duration / 3, particle_duration / 3,
+                             Tone.new(0, 0, -192, -64))   # Yellow
+        end
+        particle.moveOpacity(delay + particle_duration - 3, 3, 128)   # Fade out at end
+      end
+      [particle1, particle2, particle3].each { |p| p.setVisible(delay + particle_duration, false) }
+    end
+    # Ring particle
+    ring = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_ring1", PictureOrigin::CENTER)
+    ring.setZ(0, 110)
+    ring.setZoom(0, 0)
+    ring.setTone(0, Tone.new(0, 0, -96, -32))   # Light yellow
+    ring.setVisible(0, false)
+    # Ring particle animation
+    ring.setVisible(delay + particle_duration, true)
+    ring.moveZoom(delay + particle_duration - 2, ring_duration + 2, 125)   # Start slightly early
+    ring.moveOpacity(delay + particle_duration, ring_duration, 0)
+    ring.setVisible(delay + particle_duration + ring_duration, false)
+    # Mark the end of the burst animation
+    ball.setDelta(delay + particle_duration + ring_duration, 0, 0)
   end
 
   def ballCaptureSuccess(ball, delay, ballX, ballY)
@@ -327,7 +507,7 @@ module Battle::Scene::Animation::BallAnimationMixin
           particle.moveXY(delay + j, 1, ballX + radius * Math.cos(radian), ballY - radius * Math.sin(radian))
         end
       end
-      particle.moveZoom(delay, burst_duration, 0.75)
+      particle.moveZoom(delay, burst_duration, 0)
       particle.moveTone(delay + color_duration / 2, color_duration / 2, Tone.new(0, 0, -192, -64))   # Yellow
       particle.moveTone(delay + color_duration, shrink_duration, Tone.new(0, -128, -248, -224))   # Dark orange
       particle.moveOpacity(delay + color_duration, shrink_duration, 0)   # Fade out at end

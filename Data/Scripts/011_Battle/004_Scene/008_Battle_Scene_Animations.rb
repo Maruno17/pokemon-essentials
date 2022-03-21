@@ -743,7 +743,6 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     # Poké Ball absorbs battler
     delay = ball.totalDuration
     ballBurstCapture(delay, ball, ballEndX, ballEndY, @poke_ball)
-    delay = ball.totalDuration + 4
     # NOTE: The Pokémon does not change color while being absorbed into a Poké
     #       Ball during a capture attempt. This may be an oversight in HGSS.
     battler.setSE(delay, "Battle jump to ball")
@@ -759,7 +758,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
       shadow.setVisible(delay + 5, false)
     end
     # Poké Ball closes
-    delay = battler.totalDuration
+    delay = ball.totalDuration
     ballSetClosed(ball, delay, @poke_ball)
     ball.moveTone(delay, 3, Tone.new(96, 64, -160, 160))
     ball.moveTone(delay + 5, 3, Tone.new(0, 0, 0, 0))
