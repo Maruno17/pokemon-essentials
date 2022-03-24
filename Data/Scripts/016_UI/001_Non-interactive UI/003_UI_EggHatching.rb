@@ -102,7 +102,8 @@ class PokemonEggHatch_Scene
     pbBGMStop
     pbMEPlay("Evolution success")
     @pokemon.name = nil
-    pbMessage(_INTL("\\se[]{1} hatched from the Egg!\\wt[80]", @pokemon.name)) { update }
+    # Show dex entry
+    pbShowPokedex(@pokemon)
     if $PokemonSystem.givenicknames == 0 &&
        pbConfirmMessage(
          _INTL("Would you like to nickname the newly hatched {1}?", @pokemon.name)
@@ -199,8 +200,6 @@ def pbHatch(pokemon)
   pokemon.timeEggHatched = pbGetTimeNow
   pokemon.obtain_method  = 1   # hatched from egg
   pokemon.hatched_map    = $game_map.map_id
-  $player.pokedex.register(pokemon)
-  $player.pokedex.set_owned(pokemon.species)
   $player.pokedex.set_seen_egg(pokemon.species)
   pokemon.record_first_moves
   if !pbHatchAnimation(pokemon)
@@ -208,6 +207,7 @@ def pbHatch(pokemon)
     pbMessage(_INTL("...\1"))
     pbMessage(_INTL("... .... .....\1"))
     pbMessage(_INTL("{1} hatched from the Egg!", speciesname))
+    pbShowPokedex(pokemon)
     if $PokemonSystem.givenicknames == 0 &&
        pbConfirmMessage(_INTL("Would you like to nickname the newly hatched {1}?", speciesname))
       nickname = pbEnterPokemonName(_INTL("{1}'s nickname?", speciesname),

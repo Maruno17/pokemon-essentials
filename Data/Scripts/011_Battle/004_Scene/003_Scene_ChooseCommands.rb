@@ -452,15 +452,4 @@ class Battle::Scene
   def pbNameEntry(helpText, pkmn)
     return pbEnterPokemonName(helpText, 0, Pokemon::MAX_NAME_SIZE, "", pkmn)
   end
-
-  #=============================================================================
-  # Shows the Pokédex entry screen for a newly caught Pokémon
-  #=============================================================================
-  def pbShowPokedex(species)
-    pbFadeOutIn {
-      scene = PokemonPokedexInfo_Scene.new
-      screen = PokemonPokedexInfoScreen.new(scene)
-      screen.pbDexEntry(species)
-    }
-  end
 end

@@ -185,6 +185,8 @@ class PokemonTrade_Scene
     pbMessageDisplay(@sprites["msgwindow"],
                      _ISPRINTF("{1:s}\r\nID: {2:05d}   OT: {3:s}\1",
                                @pokemon2.name, @pokemon2.owner.public_id, @pokemon2.owner.name)) { pbUpdate }
+    # See the Pokédex entry
+    pbShowPokedex(@pokemon2,false)
     pbMessageDisplay(@sprites["msgwindow"],
                      _INTL("Take good care of {1}.", speciesname2)) { pbUpdate }
   end
@@ -212,8 +214,6 @@ def pbStartTrade(pokemonIndex, newpoke, nickname, trainerName, trainerGender = 0
   yourPokemon.obtain_method = 2   # traded
   yourPokemon.reset_moves if resetmoves
   yourPokemon.record_first_moves
-  $player.pokedex.register(yourPokemon)
-  $player.pokedex.set_owned(yourPokemon.species)
   pbFadeOutInWithMusic {
     evo = PokemonTrade_Scene.new
     evo.pbStartScreen(myPokemon, yourPokemon, $player.name, trainerName)

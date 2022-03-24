@@ -36,8 +36,7 @@ def pbNicknameAndStore(pkmn)
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
     return
   end
-  $player.pokedex.set_seen(pkmn.species)
-  $player.pokedex.set_owned(pkmn.species)
+  pbShowPokedex(pkmn)
   pbNickname(pkmn)
   pbStorePokemon(pkmn)
 end
@@ -111,9 +110,8 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   else
     pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $player.name))
   end
+  pbShowPokedex(pkmn)
   pbStorePokemon(pkmn)
-  $player.pokedex.register(pkmn) if see_form
-  $player.pokedex.set_owned(pkmn.species)
   return true
 end
 

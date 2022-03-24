@@ -820,3 +820,26 @@ def pbBuyPrize(item, quantity = 1)
                   item_name, pocket, PokemonBag.pocket_names[pocket - 1]))
   return true
 end
+
+#===============================================================================
+# Shows the Pokédex entry screen for a Pokémon
+#===============================================================================
+def pbShowPokedex(pkmn,message=true,owned=true,forced=false)
+  species = pkmn.species
+  if $PokemonSystem.showdexentry>0 && !forced
+    $player.pokedex.register(pkmn)
+    $player.pokedex.set_owned(species) if owned
+    return true
+  end
+  pbMessage(_INTL("{1}'s data was added to the Pokédex.",GameData::Species.try_get(species).real_name)) if message
+  if !$player.owned?(species)
+    $player.pokedex.register(pkmn)
+    $player.pokedex.set_owned(species) if owned
+    pbFadeOutIn {
+      scene = PokemonPokedexInfo_Scene.new
+      screen = PokemonPokedexInfoScreen.new(scene)
+      screen.pbDexEntry(species)
+    }
+  end
+  return true
+end

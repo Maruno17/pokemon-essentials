@@ -14,6 +14,7 @@ class PokemonSystem
   attr_accessor :bgmvolume
   attr_accessor :sevolume
   attr_accessor :textinput
+  attr_accessor :showdexentry
 
   def initialize
     @textspeed     = 1     # Text speed (0=slow, 1=normal, 2=fast)
@@ -28,6 +29,7 @@ class PokemonSystem
     @bgmvolume     = 100   # Volume of background music and ME
     @sevolume      = 100   # Volume of sound effects
     @textinput     = 0     # Text input mode (0=cursor, 1=keyboard)
+    @showdexentry  = 0     # Shows the dex entry when receiving a new Pokemon (0=on, 1=off)
   end
 end
 
@@ -528,4 +530,14 @@ MenuHandlers.add(:options_menu, :screen_size, {
     $PokemonSystem.screensize = value
     pbSetResizeFactor($PokemonSystem.screensize)
   }
+})
+
+MenuHandlers.add(:options_menu, :show_dex_entry, {
+  "name"        => _INTL("Show Dex Entry"),
+  "order"       => 120,
+  "type"        => EnumOption,
+  "parameters"  => [_INTL("On"), _INTL("Off")],
+  "description" => _INTL("Choose whether you wish to see dex entries of newly obtained Pokémon."),
+  "get_proc"    => proc { next $PokemonSystem.showdexentry },
+  "set_proc"    => proc { |value, _scene| $PokemonSystem.showdexentry = value }
 })

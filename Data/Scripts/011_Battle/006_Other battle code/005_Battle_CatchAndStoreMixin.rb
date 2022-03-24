@@ -34,7 +34,7 @@ module Battle::CatchAndStoreMixin
         if $player.has_pokedex
           pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.", pkmn.name))
           pbPlayer.pokedex.register_last_seen(pkmn)
-          @scene.pbShowPokedex(pkmn.species)
+          @scene.pbShowPokedex(pkmn,false)
         end
       end
       # Record a Shadow Pokémon's species as having been caught

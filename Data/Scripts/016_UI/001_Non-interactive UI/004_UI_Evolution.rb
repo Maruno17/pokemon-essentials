@@ -599,9 +599,8 @@ class PokemonEvolutionScene
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calc_stats
     @pokemon.ready_to_evolve = false
-    # See and own evolved species
-    $player.pokedex.register(@pokemon)
-    $player.pokedex.set_owned(@newspecies)
+    # See the Pokédex entry
+    pbShowPokedex(@pokemon)
     # Learn moves upon evolution for evolved species
     movelist = @pokemon.getMoveList
     movelist.each do |i|
