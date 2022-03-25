@@ -100,16 +100,16 @@ def getConst(mod,constant)
 end
 
 # Unused
-def getID(mod,constant)
-  return nil if !mod || constant.nil?
-  if constant.is_a?(Symbol) || constant.is_a?(String)
-    if (mod.const_defined?(constant.to_sym) rescue false)
-      return mod.const_get(constant.to_sym) rescue 0
-    end
-    return 0
-  end
-  return constant
-end
+# def getID(mod,constant)
+#   return nil if !mod || constant.nil?
+#   if constant.is_a?(Symbol) || constant.is_a?(String)
+#     if (mod.const_defined?(constant.to_sym) rescue false)
+#       return mod.const_get(constant.to_sym) rescue 0
+#     end
+#     return 0
+#   end
+#   return constant
+# end
 
 def getConstantName(mod,value)
   mod = Object.const_get(mod) if mod.is_a?(Symbol)

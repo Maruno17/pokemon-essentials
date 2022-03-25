@@ -50,15 +50,28 @@ end
 
 def pbHasSpecies?(species)
   if species.is_a?(String) || species.is_a?(Symbol)
-    species = getID(PBSpecies, species)
+    id = getID(PBSpecies, species)
+  elsif species.is_a?(Pokemon)
+    id = species.dexNum
   end
   for pokemon in $Trainer.party
     next if pokemon.isEgg?
-    return true if pokemon.species == species
+    return true if pokemon.dexNum == id
   end
   return false
 end
 
+
+#ancienne methode qui est encore callée un peu partout dans les vieux scripts
+def getID(pbspecies_unused,species)
+  if species.is_a?(String)
+    return nil
+  elsif species.is_a?(Symbol)
+    return GameData::Species.get(species).id_number
+  elsif species.is_a?(Pokemon)
+    id = species.dexNum
+  end
+end
 #Check if the Pokemon can learn a TM
 def CanLearnMove(pokemon, move)
   species = getID(PBSpecies, pokemon)
