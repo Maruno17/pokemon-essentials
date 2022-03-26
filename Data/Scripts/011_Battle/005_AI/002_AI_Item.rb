@@ -115,9 +115,10 @@ class Battle::AI
         end
       end
       # Log Full Restores (HP healer and status curer)
-      if fullRestoreItems.include?(i) && (losthp > 0 || battler.status != :NONE)
-        usableHPItems.push([i, (preferFullRestore) ? 3 : 7, 999])
-        usableStatusItems.push([i, (preferFullRestore) ? 3 : 9])
+      if fullRestoreItems.include?(i)
+        usableHPItems.push([i, (preferFullRestore) ? 3 : 7, 999]) if losthp > 0
+        usableStatusItems.push([i, (preferFullRestore) ? 3 : 9]) if battler.status != :NONE ||
+                                                                    battler.effects[PBEffects::Confusion] > 0
         next
       end
       # Log single status-curing items
