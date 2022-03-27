@@ -93,6 +93,7 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
     next if !condition.call(battletype, foe, location)
     animation.call(viewport, battletype, foe, location)
     handled = true
+    break
   end
   # Default battle intro animation
   if !handled
@@ -199,6 +200,33 @@ SpecialBattleIntroAnimations.register("vs_trainer_animation", 60,   # Priority 6
   proc { |viewport, battle_type, foe, location|   # Animation
     $game_temp.transition_animation_data = [foe[0].trainer_type, foe[0].name]
     pbBattleAnimationCore("VSTrainer", viewport, location, 1)
+    $game_temp.transition_animation_data = nil
+  }
+)
+
+#===============================================================================
+# Play the "VSEliteFour" battle transition animation for any single trainer
+# battle where the following graphics exist in the Graphics/Transitions/
+# folder for the opponent:
+#   * "vsE4_TRAINERTYPE.png" and "vsE4Bar_TRAINERTYPE.png"
+# This animation makes use of $game_temp.transition_animation_data, and expects
+# it to be an array like so:
+#   [:TRAINERTYPE, "display name", "player sprite name minus 'vsE4_'"]
+#===============================================================================
+SpecialBattleIntroAnimations.register("vs_elite_four_animation", 60,   # Priority 60
+  proc { |battle_type, foe, location|   # Condition
+    next false if battle_type != 1   # Single trainer battle
+    tr_type = foe[0].trainer_type
+    next pbResolveBitmap("Graphics/Transitions/vsE4_#{tr_type}") &&
+         pbResolveBitmap("Graphics/Transitions/vsE4Bar_#{tr_type}")
+  },
+  proc { |viewport, battle_type, foe, location|   # Animation
+    tr_sprite_name = $player.trainer_type.to_s
+    if pbResolveBitmap("Graphics/Transitions/vsE4_#{tr_sprite_name}_#{$player.outfit}")
+      tr_sprite_name += "_#{$player.outfit}"
+    end
+    $game_temp.transition_animation_data = [foe[0].trainer_type, foe[0].name, tr_sprite_name]
+    pbBattleAnimationCore("VSEliteFour", viewport, location, 0)
     $game_temp.transition_animation_data = nil
   }
 )

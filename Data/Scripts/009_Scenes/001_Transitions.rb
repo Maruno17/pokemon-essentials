@@ -83,6 +83,7 @@ module Graphics
     when "wavyspinball"     then @@transition = Transitions::WavySpinBall.new(duration)
     when "fourballburst"    then @@transition = Transitions::FourBallBurst.new(duration)
     when "vstrainer"        then @@transition = Transitions::VSTrainer.new(duration)
+    when "vselitefour"      then @@transition = Transitions::VSEliteFour.new(duration)
     when "rocketgrunt"      then @@transition = Transitions::RocketGrunt.new(duration)
     when "vsrocketadmin"    then @@transition = Transitions::VSRocketAdmin.new(duration)
     # Graphic transitions
@@ -1263,7 +1264,6 @@ module Transitions
       @rear_black_sprite.opacity = 224
       @rear_black_sprite.visible = false
       # Bar sprites (need 2 of them to make them loop around)
-      @sprites = []
       ((Graphics.width.to_f / @bar_bitmap.width).ceil + 1).times do |i|
         spr = new_sprite(@bar_bitmap.width * i, BAR_Y, @bar_bitmap)
         spr.z = 2
@@ -1374,7 +1374,7 @@ module Transitions
           @foe_sprite.color.alpha = 0
           @text_sprite.visible = true
         else
-          @flash_viewport.color.alpha = 320 * proportion
+          @flash_viewport.color.alpha = 320 * 2 * proportion
         end
       elsif @timer >= @foe_appear_end
         @foe_sprite.x = FOE_SPRITE_X
@@ -1416,6 +1416,250 @@ module Transitions
           x = start_x - BAR_MASK[i % BAR_MASK.length] * 4
           @bar_mask_sprite.bitmap.fill_rect(x, BAR_Y + (i * 2), @bar_mask_sprite.width - x, 2, color)
         end
+      end
+    end
+  end
+
+  #=============================================================================
+  # HGSS VS Elite Four/Champion animation
+  # Uses $game_temp.transition_animation_data, and expects it to be an array
+  # like so: [:TRAINERTYPE, "display name", "player sprite name minus 'vsE4_'"]
+  # Bar graphics are named vsE4Bar_TRAINERTYPE.png.
+  # Trainer sprites are named vsE4_TRAINERTYPE.png.
+  #=============================================================================
+  class VSEliteFour < Transition_Base
+    DURATION           = 3.5
+    BAR_X_INDENT       = 48
+    BAR_Y_INDENT       = 64   # = height of trainer sprite / 2
+    BAR_OVERSHOOT      = 20
+    TRAINER_X_OFFSET   = 160
+    TRAINER_Y_OFFSET   = 8
+    BAR_HEIGHT         = 192   # = Graphics.height / 2
+    FOE_SPRITE_X_LIMIT = 384   # Slides to here before jumping to final position
+    FOE_SPRITE_X       = 428   # Final position of foe sprite
+
+    def initialize_bitmaps
+      @bar_bitmap    = RPG::Cache.transition("vsE4Bar_#{$game_temp.transition_animation_data[0]}")
+      @vs_1_bitmap   = RPG::Cache.transition("hgss_vs1")
+      @vs_2_bitmap   = RPG::Cache.transition("hgss_vs2")
+      @player_bitmap = RPG::Cache.transition("vsE4_#{$game_temp.transition_animation_data[2]}")
+      @foe_bitmap    = RPG::Cache.transition("vsE4_#{$game_temp.transition_animation_data[0]}")
+      @black_bitmap  = RPG::Cache.transition("black_half")
+      dispose if !@bar_bitmap || !@vs_1_bitmap || !@vs_2_bitmap || !@foe_bitmap || !@black_bitmap
+      @num_bar_frames = @bar_bitmap.height / BAR_HEIGHT
+    end
+
+    def initialize_sprites
+      @flash_viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
+      @flash_viewport.z     = 99999
+      @flash_viewport.color = Color.new(255, 255, 255, 0)
+      # Background black
+      @rear_black_sprite = new_sprite(0, 0, @black_bitmap)
+      @rear_black_sprite.z       = 1
+      @rear_black_sprite.zoom_y  = 2.0
+      @rear_black_sprite.opacity = 192
+      @rear_black_sprite.visible = false
+      # Player's bar sprite
+      @player_bar_x = -BAR_X_INDENT
+      @player_bar_start_x = @player_bar_x - (@bar_bitmap.width / 2)
+      @player_bar_y = BAR_Y_INDENT
+      @player_bar_sprite = new_sprite(@player_bar_start_x, @player_bar_y, @bar_bitmap)
+      @player_bar_sprite.z = 2
+      @player_bar_sprite.src_rect.width = @bar_bitmap.width / 2
+      @player_bar_sprite.src_rect.height = BAR_HEIGHT
+      # Foe's bar sprite
+      @foe_bar_x = Graphics.width + BAR_X_INDENT - (@bar_bitmap.width / 2)
+      @foe_bar_start_x = @foe_bar_x + (@bar_bitmap.width / 2)
+      @foe_bar_y = Graphics.height - BAR_HEIGHT - BAR_Y_INDENT
+      @foe_bar_sprite = new_sprite(@foe_bar_start_x, @foe_bar_y, @bar_bitmap)
+      @foe_bar_sprite.z = 2
+      @foe_bar_sprite.src_rect.x = @bar_bitmap.width / 2
+      @foe_bar_sprite.src_rect.width = @bar_bitmap.width / 2
+      @foe_bar_sprite.src_rect.height = BAR_HEIGHT
+      # Player sprite
+      @player_sprite = new_sprite(@player_bar_sprite.x + TRAINER_X_OFFSET,
+                                  @player_bar_sprite.y + BAR_HEIGHT - TRAINER_Y_OFFSET,
+                                  @player_bitmap, @player_bitmap.width / 2, @player_bitmap.height)
+      @player_sprite.z     = 7
+      @player_sprite.color = Color.new(0, 0, 0)
+      # Foe sprite
+      @foe_sprite = new_sprite(@foe_bar_sprite.x + (@bar_bitmap.width / 2) - TRAINER_X_OFFSET,
+                               @foe_bar_sprite.y + @foe_bitmap.height - TRAINER_Y_OFFSET,
+                               @foe_bitmap, @foe_bitmap.width / 2, @foe_bitmap.height)
+      @foe_sprite.z     = 7
+      @foe_sprite.color = Color.new(0, 0, 0)
+      # Sprite with foe's name written in it
+      @text_sprite = BitmapSprite.new(@bar_bitmap.width / 2, BAR_HEIGHT, @viewport)
+      @text_sprite.x = @foe_bar_start_x
+      @text_sprite.y = @foe_bar_y
+      @text_sprite.z = 8
+      pbSetSystemFont(@text_sprite.bitmap)
+      pbDrawTextPositions(@text_sprite.bitmap,
+                          [[$game_temp.transition_animation_data[1], 160, 86, 0,
+                            Color.new(248, 248, 248), Color.new(72, 80, 80)]])
+      # VS logo
+      @vs_main_sprite = new_sprite(Graphics.width / 2, Graphics.height / 2, @vs_1_bitmap,
+                                   @vs_1_bitmap.width / 2, @vs_1_bitmap.height / 2)
+      @vs_main_sprite.z       = 14
+      @vs_main_sprite.visible = false
+      @vs_1_sprite = new_sprite(Graphics.width / 2, Graphics.height / 2, @vs_2_bitmap,
+                                @vs_2_bitmap.width / 2, @vs_2_bitmap.height / 2)
+      @vs_1_sprite.z       = 15
+      @vs_1_sprite.zoom_x  = 2.0
+      @vs_1_sprite.zoom_y  = @vs_1_sprite.zoom_x
+      @vs_1_sprite.visible = false
+      @vs_2_sprite = new_sprite(Graphics.width / 2, Graphics.height / 2, @vs_2_bitmap,
+                                @vs_2_bitmap.width / 2, @vs_2_bitmap.height / 2)
+      @vs_2_sprite.z       = 16
+      @vs_2_sprite.zoom_x  = 2.0
+      @vs_2_sprite.zoom_y  = @vs_2_sprite.zoom_x
+      @vs_2_sprite.visible = false
+      # Foreground black
+      @black_sprite = new_sprite(0, 0, @black_bitmap)
+      @black_sprite.z       = 20
+      @black_sprite.zoom_y  = 2.0
+      @black_sprite.visible = false
+    end
+
+    def set_up_timings
+      @flash_1_start       = 0.0
+      @flash_1_duration    = 0.25
+      @bar_appear_start    = 0.5
+      @bar_appear_end      = 0.7
+      @vs_appear_start     = 0.6
+      @vs_appear_start_2   = 0.8
+      @vs_shrink_time      = @vs_appear_start_2 - @vs_appear_start
+      @vs_appear_final     = @vs_appear_start_2 + @vs_shrink_time
+      @flash_start         = 1.7
+      @flash_duration      = 0.35
+      @fade_to_white_start = 2.7
+      @fade_to_white_end   = 3.0
+      @fade_to_black_start = 3.3
+    end
+
+    def dispose_all
+      # Dispose sprites
+      @rear_black_sprite&.dispose
+      @player_bar_sprite&.dispose
+      @foe_bar_sprite&.dispose
+      @player_sprite&.dispose
+      @foe_sprite&.dispose
+      @text_sprite&.dispose
+      @vs_main_sprite&.dispose
+      @vs_1_sprite&.dispose
+      @vs_2_sprite&.dispose
+      @black_sprite&.dispose
+      # Dispose bitmaps
+      @bar_bitmap&.dispose
+      @vs_1_bitmap&.dispose
+      @vs_2_bitmap&.dispose
+      @player_bitmap&.dispose
+      @foe_bitmap&.dispose
+      @black_bitmap&.dispose
+      # Dispose viewport
+      @flash_viewport&.dispose
+    end
+
+    def update_anim
+      # Bars/trainer sprites slide in
+      if @timer > @bar_appear_end
+        @player_bar_sprite.x = @player_bar_x
+        @player_sprite.x = @player_bar_sprite.x + TRAINER_X_OFFSET
+        @foe_bar_sprite.x = @foe_bar_x
+        @foe_sprite.x = @foe_bar_sprite.x + (@bar_bitmap.width / 2) - TRAINER_X_OFFSET
+        @text_sprite.x = @foe_bar_sprite.x
+      elsif @timer > @bar_appear_start
+        # Bars/trainer sprites slide in
+        proportion = (@timer - @bar_appear_start) / (@bar_appear_end - @bar_appear_start)
+        sqrt_proportion = Math.sqrt(proportion)
+        @player_bar_sprite.x = @player_bar_start_x + (@player_bar_x + BAR_OVERSHOOT - @player_bar_start_x) * sqrt_proportion
+        @player_sprite.x = @player_bar_sprite.x + TRAINER_X_OFFSET
+        @foe_bar_sprite.x = @foe_bar_start_x + (@foe_bar_x - BAR_OVERSHOOT - @foe_bar_start_x) * sqrt_proportion
+        @foe_sprite.x = @foe_bar_sprite.x + (@bar_bitmap.width / 2) - TRAINER_X_OFFSET
+        @text_sprite.x = @foe_bar_sprite.x
+      end
+      # Animate bars
+      if @timer >= @flash_start + 0.33 * @flash_duration
+        bar_phase = (@timer * 30).to_i % @num_bar_frames
+        @player_bar_sprite.src_rect.y = bar_phase * BAR_HEIGHT
+        @foe_bar_sprite.src_rect.y = bar_phase * BAR_HEIGHT
+      end
+      # Vibrate VS sprite
+      vs_phase = (@timer * 30).to_i % 3
+      @vs_main_sprite.x = (Graphics.width / 2) + [0, 4, 0][vs_phase]
+      @vs_main_sprite.y = (Graphics.height / 2) + [0, 0, -4][vs_phase]
+      # VS sprites appearing
+      if @timer >= @vs_appear_final
+        @vs_1_sprite.visible = false
+      elsif @timer >= @vs_appear_start_2
+        # Temp VS sprites enlarge and shrink again
+        if @vs_2_sprite.visible
+          @vs_2_sprite.zoom_x = 1.6 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
+          @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
+          if @vs_2_sprite.zoom_x <= 1.2
+            @vs_2_sprite.visible = false
+            @vs_main_sprite.visible = true
+          end
+        end
+        @vs_1_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
+        @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
+      elsif @timer >= @vs_appear_start
+        # Temp VS sprites appear and start shrinking
+        @vs_2_sprite.visible = true
+        @vs_2_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start) / @vs_shrink_time
+        @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
+        if @vs_1_sprite.visible || @vs_2_sprite.zoom_x <= 1.6   # Halfway between 2.0 and 1.2
+          @vs_1_sprite.visible = true
+          @vs_1_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start - (@vs_shrink_time / 2)) / @vs_shrink_time
+          @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
+        end
+      end
+      # Flash white (two flashes)
+      if @timer >= @flash_start + @flash_duration
+        @flash_viewport.color.alpha = 0
+      elsif @timer >= @flash_start
+        # Flash the screen white (coming from white lasts twice as long as going to white)
+        proportion = (@timer - @flash_start) / @flash_duration
+        if proportion >= 0.33   # Coming from white
+          @flash_viewport.color.alpha = 320 * 3 * (1 - proportion) / 2
+          @player_sprite.color.alpha = 0
+          @foe_sprite.color.alpha = 0
+        else   # Going to white
+          @flash_viewport.color.alpha = 320 * 3 * proportion
+        end
+      elsif @timer >= @flash_1_start + @flash_1_duration
+        @flash_viewport.color.alpha = 0
+      elsif @timer >= @flash_1_start
+        # Flash the screen white
+        proportion = (@timer - @flash_1_start) / @flash_1_duration
+        if proportion >= 0.5   # Coming from white
+          @flash_viewport.color.alpha = 320 * 2 * (1 - proportion)
+          @rear_black_sprite.visible = true
+        else   # Going to white
+          @flash_viewport.color.alpha = 320 * 2 * proportion
+        end
+      end
+      # Fade to white at end
+      if @timer >= @fade_to_black_start
+        # Fade to black
+        @black_sprite.visible = true
+        proportion = (@timer - @fade_to_black_start) / (@duration - @fade_to_black_start)
+        @flash_viewport.color.alpha = 255 * (1 - proportion)
+      elsif @timer >= @fade_to_white_start
+        @text_sprite.visible = false
+        # Slowly fade to white
+        proportion = (@timer - @fade_to_white_start) / (@fade_to_white_end - @fade_to_white_start)
+        @flash_viewport.color.alpha = 255 * proportion
+        # Move bars and trainer sprites off-screen
+        dist = BAR_Y_INDENT + BAR_HEIGHT
+        @player_bar_sprite.x = @player_bar_x - dist * proportion
+        @player_bar_sprite.y = @player_bar_y - dist * proportion
+        @player_sprite.x = @player_bar_sprite.x + TRAINER_X_OFFSET
+        @player_sprite.y = @player_bar_sprite.y + BAR_HEIGHT - TRAINER_Y_OFFSET
+        @foe_bar_sprite.x = @foe_bar_x + dist * proportion
+        @foe_bar_sprite.y = @foe_bar_y + dist * proportion
+        @foe_sprite.x = @foe_bar_sprite.x + (@bar_bitmap.width / 2) - TRAINER_X_OFFSET
+        @foe_sprite.y = @foe_bar_sprite.y + @foe_bitmap.height - TRAINER_Y_OFFSET
       end
     end
   end
@@ -1533,7 +1777,6 @@ module Transitions
       @flash_viewport.z     = 99999
       @flash_viewport.color = Color.new(255, 255, 255, 0)
       # Strobe sprites (need 2 of them to make them loop around)
-      @sprites = []
       ((Graphics.width.to_f / @strobes_bitmap.width).ceil + 1).times do |i|
         spr = new_sprite(@strobes_bitmap.width * i, 0, @strobes_bitmap)
         spr.z       = 1
