@@ -100,7 +100,7 @@ class Battle::AI
     type = pbRoughType(move, user, skill)
     typeMod = pbCalcTypeMod(type, user, target)
     # Type effectiveness
-    return true if Effectiveness.ineffective?(typeMod) || score <= 0
+    return true if (move.damagingMove? && Effectiveness.ineffective?(typeMod)) || score <= 0
     # Immunity due to ability/item/other effects
     if skill >= PBTrainerAI.mediumSkill
       case type
@@ -115,7 +115,7 @@ class Battle::AI
       when :ELECTRIC
         return true if target.hasActiveAbility?([:LIGHTNINGROD, :MOTORDRIVE, :VOLTABSORB])
       end
-      return true if Effectiveness.not_very_effective?(typeMod) &&
+      return true if move.damagingMove? && Effectiveness.not_very_effective?(typeMod) &&
                      target.hasActiveAbility?(:WONDERGUARD)
       return true if move.damagingMove? && user.index != target.index && !target.opposes?(user) &&
                      target.hasActiveAbility?(:TELEPATHY)
@@ -128,10 +128,11 @@ class Battle::AI
         return true if target.hasActiveAbility?(:OVERCOAT)
         return true if target.hasActiveItem?(:SAFETYGOGGLES)
       end
-      return true if target.effects[PBEffects::Substitute] > 0 && move.statusMove? &&
+      return true if move.statusMove? && target.effects[PBEffects::Substitute] > 0 &&
                      !move.ignoresSubstitute?(user) && user.index != target.index
-      return true if Settings::MECHANICS_GENERATION >= 7 && user.hasActiveAbility?(:PRANKSTER) &&
-                     target.pbHasType?(:DARK) && target.opposes?(user)
+      return true if move.statusMove? && Settings::MECHANICS_GENERATION >= 7 &&
+                     user.hasActiveAbility?(:PRANKSTER) && target.pbHasType?(:DARK) &&
+                     target.opposes?(user)
       return true if move.priority > 0 && @battle.field.terrain == :Psychic &&
                      target.affectedByTerrain? && target.opposes?(user)
     end

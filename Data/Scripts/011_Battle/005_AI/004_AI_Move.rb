@@ -233,6 +233,8 @@ class Battle::AI
         end
       end
     end
+    # Don't prefer moves that are ineffective because of abilities or effects
+    return 0 if pbCheckMoveImmunity(score, move, user, target, skill)
     # Adjust score based on how much damage it can deal
     if move.damagingMove?
       score = pbGetMoveScoreDamage(score, move, user, target, skill)
@@ -254,8 +256,7 @@ class Battle::AI
   # of the target's current HP)
   #=============================================================================
   def pbGetMoveScoreDamage(score, move, user, target, skill)
-    # Don't prefer moves that are ineffective because of abilities or effects
-    return 0 if score <= 0 || pbCheckMoveImmunity(score, move, user, target, skill)
+    return 0 if score <= 0
     # Calculate how much damage the move will do (roughly)
     baseDmg = pbMoveBaseDamage(move, user, target, skill)
     realDamage = pbRoughDamage(move, user, target, skill, baseDmg)
