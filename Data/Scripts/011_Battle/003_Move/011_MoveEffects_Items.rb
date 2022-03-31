@@ -392,140 +392,13 @@ end
 # User flings its item at the target. Power/effect depend on the item. (Fling)
 #===============================================================================
 class Battle::Move::ThrowUserItemAtTarget < Battle::Move
-  def initialize(battle, move)
-    super
-    # 80 => all Mega Stones
-    # 10 => all Berries
-    @flingPowers = {
-      130 => [:IRONBALL],
-      100 => [:HARDSTONE, :RAREBONE,
-              # Fossils
-              :ARMORFOSSIL, :CLAWFOSSIL, :COVERFOSSIL, :DOMEFOSSIL, :HELIXFOSSIL,
-              :JAWFOSSIL, :OLDAMBER, :PLUMEFOSSIL, :ROOTFOSSIL, :SAILFOSSIL,
-              :SKULLFOSSIL],
-       90 => [:DEEPSEATOOTH, :GRIPCLAW, :THICKCLUB,
-              # Plates
-              :DRACOPLATE, :DREADPLATE, :EARTHPLATE, :FISTPLATE, :FLAMEPLATE,
-              :ICICLEPLATE, :INSECTPLATE, :IRONPLATE, :MEADOWPLATE, :MINDPLATE,
-              :PIXIEPLATE, :SKYPLATE, :SPLASHPLATE, :SPOOKYPLATE, :STONEPLATE,
-              :TOXICPLATE, :ZAPPLATE],
-       80 => [:ASSAULTVEST, :CHIPPEDPOT, :CRACKEDPOT, :DAWNSTONE, :DUSKSTONE,
-              :ELECTIRIZER, :HEAVYDUTYBOOTS, :MAGMARIZER, :ODDKEYSTONE, :OVALSTONE,
-              :PROTECTOR, :QUICKCLAW, :RAZORCLAW, :SACHET, :SAFETYGOGGLES,
-              :SHINYSTONE, :STICKYBARB, :WEAKNESSPOLICY, :WHIPPEDDREAM],
-       70 => [:DRAGONFANG, :POISONBARB,
-              # EV-training items (Macho Brace is 60)
-              :POWERANKLET, :POWERBAND, :POWERBELT, :POWERBRACER, :POWERLENS,
-              :POWERWEIGHT,
-              # Drives
-              :BURNDRIVE, :CHILLDRIVE, :DOUSEDRIVE, :SHOCKDRIVE],
-       60 => [:ADAMANTORB, :DAMPROCK, :GRISEOUSORB, :HEATROCK, :LEEK, :LUSTROUSORB,
-              :MACHOBRACE, :ROCKYHELMET, :STICK, :TERRAINEXTENDER],
-       50 => [:DUBIOUSDISC, :SHARPBEAK,
-              # Memories
-              :BUGMEMORY, :DARKMEMORY, :DRAGONMEMORY, :ELECTRICMEMORY, :FAIRYMEMORY,
-              :FIGHTINGMEMORY, :FIREMEMORY, :FLYINGMEMORY, :GHOSTMEMORY,
-              :GRASSMEMORY, :GROUNDMEMORY, :ICEMEMORY, :POISONMEMORY,
-              :PSYCHICMEMORY, :ROCKMEMORY, :STEELMEMORY, :WATERMEMORY],
-       40 => [:EVIOLITE, :ICYROCK, :LUCKYPUNCH],
-       30 => [:ABSORBBULB, :ADRENALINEORB, :AMULETCOIN, :BINDINGBAND, :BLACKBELT,
-              :BLACKGLASSES, :BLACKSLUDGE, :BOTTLECAP, :CELLBATTERY, :CHARCOAL,
-              :CLEANSETAG, :DEEPSEASCALE, :DRAGONSCALE, :EJECTBUTTON, :ESCAPEROPE,
-              :EXPSHARE, :FLAMEORB, :FLOATSTONE, :FLUFFYTAIL, :GOLDBOTTLECAP,
-              :HEARTSCALE, :HONEY, :KINGSROCK, :LIFEORB, :LIGHTBALL, :LIGHTCLAY,
-              :LUCKYEGG, :LUMINOUSMOSS, :MAGNET, :METALCOAT, :METRONOME,
-              :MIRACLESEED, :MYSTICWATER, :NEVERMELTICE, :PASSORB, :POKEDOLL,
-              :POKETOY, :PRISMSCALE, :PROTECTIVEPADS, :RAZORFANG, :SACREDASH,
-              :SCOPELENS, :SHELLBELL, :SHOALSALT, :SHOALSHELL, :SMOKEBALL, :SNOWBALL,
-              :SOULDEW, :SPELLTAG, :TOXICORB, :TWISTEDSPOON, :UPGRADE,
-              # Healing items
-              :ANTIDOTE, :AWAKENING, :BERRYJUICE, :BIGMALASADA, :BLUEFLUTE,
-              :BURNHEAL, :CASTELIACONE, :ELIXIR, :ENERGYPOWDER, :ENERGYROOT, :ETHER,
-              :FRESHWATER, :FULLHEAL, :FULLRESTORE, :HEALPOWDER, :HYPERPOTION,
-              :ICEHEAL, :LAVACOOKIE, :LEMONADE, :LUMIOSEGALETTE, :MAXELIXIR,
-              :MAXETHER, :MAXHONEY, :MAXPOTION, :MAXREVIVE, :MOOMOOMILK, :OLDGATEAU,
-              :PARALYZEHEAL, :PARLYZHEAL, :PEWTERCRUNCHIES, :POTION, :RAGECANDYBAR,
-              :REDFLUTE, :REVIVALHERB, :REVIVE, :SHALOURSABLE, :SODAPOP,
-              :SUPERPOTION, :SWEETHEART, :YELLOWFLUTE,
-              # Battle items
-              :XACCURACY, :XACCURACY2, :XACCURACY3, :XACCURACY6,
-              :XATTACK, :XATTACK2, :XATTACK3, :XATTACK6,
-              :XDEFEND, :XDEFEND2, :XDEFEND3, :XDEFEND6,
-              :XDEFENSE, :XDEFENSE2, :XDEFENSE3, :XDEFENSE6,
-              :XSPATK, :XSPATK2, :XSPATK3, :XSPATK6,
-              :XSPECIAL, :XSPECIAL2, :XSPECIAL3, :XSPECIAL6,
-              :XSPDEF, :XSPDEF2, :XSPDEF3, :XSPDEF6,
-              :XSPEED, :XSPEED2, :XSPEED3, :XSPEED6,
-              :DIREHIT, :DIREHIT2, :DIREHIT3,
-              :ABILITYURGE, :GUARDSPEC, :ITEMDROP, :ITEMURGE, :RESETURGE,
-              :MAXMUSHROOMS,
-              # Vitamins
-              :CALCIUM, :CARBOS, :HPUP, :IRON, :PPUP, :PPMAX, :PROTEIN, :ZINC,
-              :RARECANDY,
-              # Most evolution stones (see also 80)
-              :EVERSTONE, :FIRESTONE, :ICESTONE, :LEAFSTONE, :MOONSTONE, :SUNSTONE,
-              :THUNDERSTONE, :WATERSTONE, :SWEETAPPLE, :TARTAPPLE, :GALARICACUFF,
-              :GALARICAWREATH,
-              # Repels
-              :MAXREPEL, :REPEL, :SUPERREPEL,
-              # Mulches
-              :AMAZEMULCH, :BOOSTMULCH, :DAMPMULCH, :GOOEYMULCH, :GROWTHMULCH,
-              :RICHMULCH, :STABLEMULCH, :SURPRISEMULCH,
-              # Shards
-              :BLUESHARD, :GREENSHARD, :REDSHARD, :YELLOWSHARD,
-              # Valuables
-              :BALMMUSHROOM, :BIGMUSHROOM, :BIGNUGGET, :BIGPEARL, :COMETSHARD,
-              :NUGGET, :PEARL, :PEARLSTRING, :RELICBAND, :RELICCOPPER, :RELICCROWN,
-              :RELICGOLD, :RELICSILVER, :RELICSTATUE, :RELICVASE, :STARDUST,
-              :STARPIECE, :STRANGESOUVENIR, :TINYMUSHROOM,
-              # Exp Candies
-              :EXPCANDYXS, :EXPCANDYS, :EXPCANDYM, :EXPCANDYL, :EXPCANDYXL],
-       20 => [ # Feathers
-              :CLEVERFEATHER, :GENIUSFEATHER, :HEALTHFEATHER, :MUSCLEFEATHER,
-              :PRETTYFEATHER, :RESISTFEATHER, :SWIFTFEATHER,
-              :CLEVERWING, :GENIUSWING, :HEALTHWING, :MUSCLEWING, :PRETTYWING,
-              :RESISTWING, :SWIFTWING],
-       10 => [:AIRBALLOON, :BIGROOT, :BRIGHTPOWDER, :CHOICEBAND, :CHOICESCARF,
-              :CHOICESPECS, :DESTINYKNOT, :DISCOUNTCOUPON, :EXPERTBELT, :FOCUSBAND,
-              :FOCUSSASH, :LAGGINGTAIL, :LEFTOVERS, :MENTALHERB, :METALPOWDER,
-              :MUSCLEBAND, :POWERHERB, :QUICKPOWDER, :REAPERCLOTH, :REDCARD,
-              :RINGTARGET, :SHEDSHELL, :SILKSCARF, :SILVERPOWDER, :SMOOTHROCK,
-              :SOFTSAND, :SOOTHEBELL, :WHITEHERB, :WIDELENS, :WISEGLASSES, :ZOOMLENS,
-              # Terrain seeds
-              :ELECTRICSEED, :GRASSYSEED, :MISTYSEED, :PSYCHICSEED,
-              # Nectar
-              :PINKNECTAR, :PURPLENECTAR, :REDNECTAR, :YELLOWNECTAR,
-              # Incenses
-              :FULLINCENSE, :LAXINCENSE, :LUCKINCENSE, :ODDINCENSE, :PUREINCENSE,
-              :ROCKINCENSE, :ROSEINCENSE, :SEAINCENSE, :WAVEINCENSE,
-              # Scarves
-              :BLUESCARF, :GREENSCARF, :PINKSCARF, :REDSCARF, :YELLOWSCARF,
-              # Mints
-              :LONELYMINT, :ADAMANTMINT, :NAUGHTYMINT, :BRAVEMINT, :BOLDMINT,
-              :IMPISHMINT, :LAXMINT, :RELAXEDMINT, :MODESTMINT, :MILDMINT,
-              :RASHMINT, :QUIETMINT, :CALMMINT, :GENTLEMINT, :CAREFULMINT,
-              :SASSYMINT, :TIMIDMINT, :HASTYMINT, :JOLLYMINT, :NAIVEMINT,
-              :SERIOUSMINT,
-              # Sweets
-              :STRAWBERRYSWEET, :LOVESWEET, :BERRYSWEET, :CLOVERSWEET,
-              :FLOWERSWEET, :STARSWEET, :RIBBONSWEET]
-    }
-  end
-
   def pbCheckFlingSuccess(user)
     @willFail = false
     @willFail = true if !user.item || !user.itemActive? || user.unlosableItem?(user.item)
     return if @willFail
     @willFail = true if user.item.is_berry? && !user.canConsumeBerry?
     return if @willFail
-    return if user.item.is_mega_stone? || user.item.is_TR?
-    flingableItem = false
-    @flingPowers.each do |_power, items|
-      next if !items.include?(user.item_id)
-      flingableItem = true
-      break
-    end
-    @willFail = true if !flingableItem
+    @willFail = user.item.flags.none? { |f| f[/^Fling_/i] }
   end
 
   def pbMoveFailed?(user, targets)
@@ -548,15 +421,8 @@ class Battle::Move::ThrowUserItemAtTarget < Battle::Move
 
   def pbBaseDamage(baseDmg, user, target)
     return 0 if !user.item
-    return 10 if user.item.is_berry?
-    return 80 if user.item.is_mega_stone?
-    if user.item.is_TR?
-      ret = GameData::Move.get(user.item.move).base_damage
-      ret = 10 if ret < 10
-      return ret
-    end
-    @flingPowers.each do |power, items|
-      return power if items.include?(user.item_id)
+    user.item.flags.each do |flag|
+      return [$~[1].to_i, 10].min if flag[/^Fling_(\d+)$/i]
     end
     return 10
   end
