@@ -1352,51 +1352,11 @@ end
 # (Natural Gift)
 #===============================================================================
 class Battle::Move::TypeAndPowerDependOnUserBerry < Battle::Move
-  def initialize(battle, move)
-    super
-    @typeArray = {
-      :NORMAL   => [:CHILANBERRY],
-      :FIRE     => [:CHERIBERRY,  :BLUKBERRY,   :WATMELBERRY, :OCCABERRY],
-      :WATER    => [:CHESTOBERRY, :NANABBERRY,  :DURINBERRY,  :PASSHOBERRY],
-      :ELECTRIC => [:PECHABERRY,  :WEPEARBERRY, :BELUEBERRY,  :WACANBERRY],
-      :GRASS    => [:RAWSTBERRY,  :PINAPBERRY,  :RINDOBERRY,  :LIECHIBERRY],
-      :ICE      => [:ASPEARBERRY, :POMEGBERRY,  :YACHEBERRY,  :GANLONBERRY],
-      :FIGHTING => [:LEPPABERRY,  :KELPSYBERRY, :CHOPLEBERRY, :SALACBERRY],
-      :POISON   => [:ORANBERRY,   :QUALOTBERRY, :KEBIABERRY,  :PETAYABERRY],
-      :GROUND   => [:PERSIMBERRY, :HONDEWBERRY, :SHUCABERRY,  :APICOTBERRY],
-      :FLYING   => [:LUMBERRY,    :GREPABERRY,  :COBABERRY,   :LANSATBERRY],
-      :PSYCHIC  => [:SITRUSBERRY, :TAMATOBERRY, :PAYAPABERRY, :STARFBERRY],
-      :BUG      => [:FIGYBERRY,   :CORNNBERRY,  :TANGABERRY,  :ENIGMABERRY],
-      :ROCK     => [:WIKIBERRY,   :MAGOSTBERRY, :CHARTIBERRY, :MICLEBERRY],
-      :GHOST    => [:MAGOBERRY,   :RABUTABERRY, :KASIBBERRY,  :CUSTAPBERRY],
-      :DRAGON   => [:AGUAVBERRY,  :NOMELBERRY,  :HABANBERRY,  :JABOCABERRY],
-      :DARK     => [:IAPAPABERRY, :SPELONBERRY, :COLBURBERRY, :ROWAPBERRY, :MARANGABERRY],
-      :STEEL    => [:RAZZBERRY,   :PAMTREBERRY, :BABIRIBERRY],
-      :FAIRY    => [:ROSELIBERRY, :KEEBERRY]
-    }
-    @damageArray = {
-      60 => [:CHERIBERRY,  :CHESTOBERRY, :PECHABERRY,  :RAWSTBERRY,  :ASPEARBERRY,
-             :LEPPABERRY,  :ORANBERRY,   :PERSIMBERRY, :LUMBERRY,    :SITRUSBERRY,
-             :FIGYBERRY,   :WIKIBERRY,   :MAGOBERRY,   :AGUAVBERRY,  :IAPAPABERRY,
-             :RAZZBERRY,   :OCCABERRY,   :PASSHOBERRY, :WACANBERRY,  :RINDOBERRY,
-             :YACHEBERRY,  :CHOPLEBERRY, :KEBIABERRY,  :SHUCABERRY,  :COBABERRY,
-             :PAYAPABERRY, :TANGABERRY,  :CHARTIBERRY, :KASIBBERRY,  :HABANBERRY,
-             :COLBURBERRY, :BABIRIBERRY, :CHILANBERRY, :ROSELIBERRY],
-      70 => [:BLUKBERRY,   :NANABBERRY,  :WEPEARBERRY, :PINAPBERRY,  :POMEGBERRY,
-             :KELPSYBERRY, :QUALOTBERRY, :HONDEWBERRY, :GREPABERRY,  :TAMATOBERRY,
-             :CORNNBERRY,  :MAGOSTBERRY, :RABUTABERRY, :NOMELBERRY,  :SPELONBERRY,
-             :PAMTREBERRY],
-      80 => [:WATMELBERRY, :DURINBERRY,  :BELUEBERRY,  :LIECHIBERRY, :GANLONBERRY,
-             :SALACBERRY,  :PETAYABERRY, :APICOTBERRY, :LANSATBERRY, :STARFBERRY,
-             :ENIGMABERRY, :MICLEBERRY,  :CUSTAPBERRY, :JABOCABERRY, :ROWAPBERRY,
-             :KEEBERRY,    :MARANGABERRY]
-    }
-  end
-
   def pbMoveFailed?(user, targets)
     # NOTE: Unnerve does not stop a Pokémon using this move.
     item = user.item
-    if !item || !item.is_berry? || !user.itemActive?
+    if !item || !item.is_berry? || !user.itemActive? ||
+       item.flags.none? { |f| f[/^NaturalGift_/i] }
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1411,9 +1371,10 @@ class Battle::Move::TypeAndPowerDependOnUserBerry < Battle::Move
     item = user.item
     ret = :NORMAL
     if item
-      @typeArray.each do |type, items|
-        next if !items.include?(item.id)
-        ret = type if GameData::Type.exists?(type)
+      item.flags.each do |flag|
+        next if !flag[/^NaturalGift_(\w+)_(?:\d+)$/i]
+        typ = $~[1].to_sym
+        ret = typ if GameData::Type.exists?(typ)
         break
       end
     end
@@ -1422,14 +1383,12 @@ class Battle::Move::TypeAndPowerDependOnUserBerry < Battle::Move
 
   # This is a separate method so that the AI can use it as well
   def pbNaturalGiftBaseDamage(heldItem)
-    ret = 1
-    @damageArray.each do |dmg, items|
-      next if !items.include?(heldItem)
-      ret = dmg
-      ret += 20 if Settings::MECHANICS_GENERATION >= 6
-      break
+    if heldItem
+      GameData::Item.get(heldItem).flags.each do |flag|
+        return [$~[1].to_i, 10].max if flag[/^NaturalGift_(?:\w+)_(\d+)$/i]
+      end
     end
-    return ret
+    return 1
   end
 
   def pbBaseDamage(baseDmg, user, target)
