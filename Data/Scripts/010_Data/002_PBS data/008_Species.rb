@@ -214,7 +214,7 @@ module GameData
 
     def base_form
       @flags.each do |flag|
-        return $~[1].to_i if flag[/^DefaultForm(\d+)$/i]
+        return $~[1].to_i if flag[/^DefaultForm_(\d+)$/i]
       end
       return @form
     end

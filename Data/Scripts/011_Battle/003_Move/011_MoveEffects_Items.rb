@@ -422,7 +422,7 @@ class Battle::Move::ThrowUserItemAtTarget < Battle::Move
   def pbBaseDamage(baseDmg, user, target)
     return 0 if !user.item
     user.item.flags.each do |flag|
-      return [$~[1].to_i, 10].min if flag[/^Fling_(\d+)$/i]
+      return [$~[1].to_i, 10].max if flag[/^Fling_(\d+)$/i]
     end
     return 10
   end
