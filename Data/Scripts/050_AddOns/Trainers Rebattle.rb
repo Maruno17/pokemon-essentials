@@ -119,22 +119,45 @@ def decreaseRematchNumber(trainerId)
   end
 end
 
+# def evolveRematchPokemon(nbRematch, speciesSymbol)
+#   species = getDexNumberForSpecies(speciesSymbol)
+#   if (nbRematch >= 10 && $Trainer.numbadges >= 3)
+#     evospecies = getEvolution(species)
+#     return species if evospecies == -1
+#     if (nbRematch >= 20 && $Trainer.numbadges >= 8)
+#       secondEvoSpecies = getEvolution(evospecies)
+#       return secondEvoSpecies == -1 ? evospecies : secondEvoSpecies
+#     end
+#     return evospecies
+#   end
+#   return species
+# end
 def evolveRematchPokemon(nbRematch, speciesSymbol)
   species = getDexNumberForSpecies(speciesSymbol)
-  if (nbRematch >= 10 && $Trainer.numbadges >= 3)
-    evospecies = getEvolution(species)
-    return species if evospecies == -1
-    if (nbRematch >= 20 && $Trainer.numbadges >= 8)
-      secondEvoSpecies = getEvolution(evospecies)
-      return secondEvoSpecies == -1 ? evospecies : secondEvoSpecies
-    end
-    return evospecies
+  if (nbRematch >= 30 && $Trainer.numbadges >= 6)
+    species = getEvolution(species,:HEAD)
+    species = getEvolution(species,:BODY)
+    species = getEvolution(species,:HEAD)
+    species = getEvolution(species,:BODY)
+  elsif (nbRematch >= 20 && $Trainer.numbadges >= 3)
+    species = getEvolution(species,:HEAD)
+    species = getEvolution(species,:BODY)
+    species = getEvolution(species,:HEAD)
+  elsif  (nbRematch >= 10 && $Trainer.numbadges >= 3)
+    species = getEvolution(species,:HEAD)
+    species = getEvolution(species,:BODY)
+  elsif  (nbRematch >= 5)
+    species = getEvolution(species,:HEAD)
   end
   return species
 end
 
-def getEvolution(species)
+
+def getEvolution(species, halfToEvolve=nil)
   begin
+    prioritizeHead = halfToEvolve == :HEAD
+    prioritizeBody = halfToEvolve == :BODY
+
     if species >= Settings::NB_POKEMON
       body = getBasePokemonID(species)
       head = getBasePokemonID(species, false)
@@ -154,17 +177,33 @@ def getEvolution(species)
         evoHead = getDexNumberForSpecies(evoHeadSpecies)
       end
 
-      return -1 if evoBody == nil && evoHead == nil
+      return species if evoBody == nil && evoHead == nil
+      if prioritizeBody
+        if evoBody == nil
+          return body * Settings::NB_POKEMON + evoHead #only head evolves
+        else
+          return evoBody * Settings::NB_POKEMON + head #only body evolves
+        end
+      end
+
+      if prioritizeHead
+        if evoHead == nil
+          return evoBody * Settings::NB_POKEMON + head #only body evolves
+        else
+          return body * Settings::NB_POKEMON + evoHead #only head evolves
+        end
+      end
+
       return body * Settings::NB_POKEMON + evoHead if evoBody == nil #only head evolves
       return evoBody * Settings::NB_POKEMON + head if evoHead == nil #only body evolves
-      return evoBody * Settings::NB_POKEMON + evoHead #both evolve
+      return evoBody * Settings::NB_POKEMON + evoHead   #both evolve
     else
       evo = pbGetEvolvedFormData(species)
       newSpecies = evo[rand(evo.length - 1)][0]
-      return evo.any? ? getDexNumberForSpecies(newSpecies) : -1
+      return evo.any? ? getDexNumberForSpecies(newSpecies) : species
     end
   rescue
-    return -1
+    return species
   end
 end
 

@@ -337,7 +337,7 @@ class PokeBattle_Battle
   # End of battle
   #=============================================================================
   def pbGainMoney
-    return if $game_switches[200] #is rematch
+    return if $game_switches[IS_REMATCH_SWITCH] #is rematch
     return if !@internalBattle || !@moneyGain
     # Money rewarded from opposing trainers
     if trainerBattle?

@@ -1,14 +1,17 @@
-def Kernel.pbDisplayText(message,xposition,yposition,z=nil)
-  @hud = []
+def Kernel.pbDisplayText(message,xposition,yposition,z=nil, baseColor=nil, shadowColor=nil)
+  if @hud==nil
+    @hud = []
+  end
   # Draw the text
-    baseColor=Color.new(72,72,72)
-    shadowColor=Color.new(160,160,160)
+    baseColor= baseColor != nil ? baseColor : Color.new(72,72,72)
+    shadowColor= shadowColor !=nil ? shadowColor : Color.new(160,160,160)
     sprite = BitmapSprite.new(Graphics.width,Graphics.height,@viewport1)
     if z != nil
       sprite.z=z
     end
     @hud.push(sprite)
-    text1=_INTL(message)
+
+  text1=_INTL(message)
     textPosition=[
       [text1,xposition,yposition,2,baseColor,shadowColor],
     ]

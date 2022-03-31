@@ -130,7 +130,7 @@ module GameData
       trainer.items = @items.clone
       trainer.lose_text = self.lose_text
 
-      isRematch = $game_switches[200]
+      isRematch = $game_switches[IS_REMATCH_SWITCH]
       rematchId = getRematchId(trainer.name, trainer.trainer_type)
 
       # Create each Pokémon owned by the trainer

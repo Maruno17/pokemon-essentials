@@ -16,7 +16,6 @@ Removed Pokedex key item
 ##New Stuff
 Added Quick Surf option
 Added Kin Island Club
-Added support for multiple savefiles
 Replaced Delibird's hidden ability with Snow Warning
 Added overworld sprites for a few important trainers
 Added animations for using Rock Smash and Cut in the overworld

@@ -115,7 +115,9 @@ end
 class GenOneStyle
 
   def initialize
+    Kernel.pbDisplayText("Controls: F1", 80, 0, 99999)
     Kernel.pbDisplayText("Version " + Settings::GAME_VERSION_NUMBER, 254, 308, 99999)
+
     @maxPoke = 140 #1st gen, pas de legend la premiere fois, graduellement plus de poke
     @customPokeList = getCustomSpeciesList()
     #Get random Pokemon (1st gen orandPokenly, pas de legend la prmeiere fois)
