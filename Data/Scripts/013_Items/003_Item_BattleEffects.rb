@@ -69,7 +69,7 @@ ItemHandlers::CanUseInBattle.add(:POTION,proc { |item,pokemon,battler,move,first
 ItemHandlers::CanUseInBattle.copy(:POTION,
    :SUPERPOTION,:HYPERPOTION,:MAXPOTION,:BERRYJUICE,:SWEETHEART,:FRESHWATER,
    :SODAPOP,:LEMONADE,:MOOMOOMILK,:ORANBERRY,:SITRUSBERRY,:ENERGYPOWDER,
-   :ENERGYROOT)
+   :ENERGYROOT, :POISONMUSHROOM)
 ItemHandlers::CanUseInBattle.copy(:POTION,:RAGECANDYBAR) if !Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::CanUseInBattle.add(:AWAKENING,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|

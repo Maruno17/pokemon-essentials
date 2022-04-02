@@ -927,6 +927,41 @@ ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
 #     next true
 #   end
 # })
+ItemHandlers::UseOnPokemon.add(:POISONMUSHROOM,proc { |item,pkmn,scene|
+  if pkmn.status != :POISON
+    pkmn.status= :POISON
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} was poisoned from eating the mushroom.",pkmn.name))
+  end
+  next pbHPItem(pkmn,10,scene)
+})
+ItemHandlers::BattleUseOnPokemon.add(:POISONMUSHROOM,proc { |item,pokemon,battler,choices,scene|
+  if battler.status != :POISON
+    battler.status= :POISON
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} was poisoned from eating the mushroom.",pokemon.name))
+  end
+  pbBattleHPItem(pokemon,battler,10,scene)
+})
+
+ItemHandlers::UseOnPokemon.add(:TINYMUSHROOM,proc { |item,pkmn,scene|
+  next pbHPItem(pkmn,10,scene)
+})
+ItemHandlers::BattleUseOnPokemon.add(:TINYMUSHROOM,proc { |item,pokemon,battler,choices,scene|
+  next pbBattleHPItem(pokemon,battler,50,scene)
+})
+ItemHandlers::UseOnPokemon.add(:BIGMUSHROOM,proc { |item,pkmn,scene|
+  next pbHPItem(pkmn,10,scene)
+})
+ItemHandlers::BattleUseOnPokemon.add(:BIGMUSHROOM,proc { |item,pokemon,battler,choices,scene|
+  next pbBattleHPItem(pokemon,battler,50,scene)
+})
+ItemHandlers::UseOnPokemon.add(:BALMMUSHROOM,proc { |item,pkmn,scene|
+  next pbHPItem(pkmn,999,scene)
+})
+ItemHandlers::BattleUseOnPokemon.add(:BALMMUSHROOM,proc { |item,pokemon,battler,choices,scene|
+  next pbBattleHPItem(pokemon,battler,999,scene)
+})
 
 #TRACKER (for roaming legendaries)
 ItemHandlers::UseInField.add(:REVEALGLASS, proc { |item|
