@@ -75,6 +75,10 @@ module Settings
   # Whether a bred baby Pokémon can inherit egg moves from its mother. It can
   # always inherit egg moves from its father.
   BREEDING_CAN_INHERIT_EGG_MOVES_FROM_MOTHER = (MECHANICS_GENERATION >= 6)
+  # Whether the Pokédex entry of a newly owned species will be shown after it
+  # hatches from an egg, after it evolves and after obtaining it from a trade,
+  # in addition to after catching it in battle.
+  SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN  = (MECHANICS_GENERATION >= 7)
   # Whether you get 1 Premier Ball for every 10 of any kind of Poké Ball bought
   # at once (true), or 1 Premier Ball for buying 10+ Poké Balls (false).
   MORE_BONUS_PREMIER_BALLS                   = (MECHANICS_GENERATION >= 8)

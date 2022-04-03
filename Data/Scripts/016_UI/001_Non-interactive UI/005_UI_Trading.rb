@@ -152,9 +152,9 @@ class PokemonTrade_Scene
     spriteBall.dispose
   end
 
-  def pbEndScreen
-    pbDisposeMessageWindow(@sprites["msgwindow"])
-    pbFadeOutAndHide(@sprites)
+  def pbEndScreen(need_fade_out = true)
+    pbDisposeMessageWindow(@sprites["msgwindow"]) if @sprites["msgwindow"]
+    pbFadeOutAndHide(@sprites) if need_fade_out
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
     newspecies = @pokemon2.check_evolution_on_trade(@pokemon)
@@ -167,6 +167,9 @@ class PokemonTrade_Scene
   end
 
   def pbTrade
+    was_owned = $player.owned?(@pokemon2.species)
+    $player.pokedex.register(@pokemon2)
+    $player.pokedex.set_owned(@pokemon2.species)
     pbBGMStop
     @pokemon.play_cry
     speciesname1 = GameData::Species.get(@pokemon.species).name
@@ -187,6 +190,18 @@ class PokemonTrade_Scene
                                @pokemon2.name, @pokemon2.owner.public_id, @pokemon2.owner.name)) { pbUpdate }
     pbMessageDisplay(@sprites["msgwindow"],
                      _INTL("Take good care of {1}.", speciesname2)) { pbUpdate }
+    # Show Pokédex entry for new species if it hasn't been owned before
+    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+      pbMessageDisplay(@sprites["msgwindow"],
+                       _INTL("{1}'s data was added to the Pokédex.", speciesname2)) { pbUpdate }
+      $player.pokedex.register_last_seen(@pokemon2)
+      pbFadeOutIn {
+        scene = PokemonPokedexInfo_Scene.new
+        screen = PokemonPokedexInfoScreen.new(scene)
+        screen.pbDexEntry(@pokemon2.species)
+        pbEndScreen(false)
+      }
+    end
   end
 end
 
@@ -212,8 +227,6 @@ def pbStartTrade(pokemonIndex, newpoke, nickname, trainerName, trainerGender = 0
   yourPokemon.obtain_method = 2   # traded
   yourPokemon.reset_moves if resetmoves
   yourPokemon.record_first_moves
-  $player.pokedex.register(yourPokemon)
-  $player.pokedex.set_owned(yourPokemon.species)
   pbFadeOutInWithMusic {
     evo = PokemonTrade_Scene.new
     evo.pbStartScreen(myPokemon, yourPokemon, $player.name, trainerName)

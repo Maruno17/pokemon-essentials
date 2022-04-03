@@ -517,9 +517,11 @@ class PokemonEvolutionScene
   end
 
   # Closes the evolution screen.
-  def pbEndScreen
-    pbDisposeMessageWindow(@sprites["msgwindow"])
-    pbFadeOutAndHide(@sprites) { pbUpdate }
+  def pbEndScreen(need_fade_out = true)
+    pbDisposeMessageWindow(@sprites["msgwindow"]) if @sprites["msgwindow"]
+    if need_fade_out
+      pbFadeOutAndHide(@sprites) { pbUpdate }
+    end
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
     @bgviewport.dispose
@@ -600,13 +602,31 @@ class PokemonEvolutionScene
     @pokemon.calc_stats
     @pokemon.ready_to_evolve = false
     # See and own evolved species
+    was_owned = $player.owned?(@newspecies)
     $player.pokedex.register(@pokemon)
     $player.pokedex.set_owned(@newspecies)
-    # Learn moves upon evolution for evolved species
+    moves_to_learn = []
     movelist = @pokemon.getMoveList
     movelist.each do |i|
       next if i[0] != 0 && i[0] != @pokemon.level   # 0 is "learn upon evolution"
-      pbLearnMove(@pokemon, i[1], true) { pbUpdate }
+      moves_to_learn.push(i[1])
+    end
+    # Show Pokédex entry for new species if it hasn't been owned before
+    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+      pbMessageDisplay(@sprites["msgwindow"],
+                       _INTL("{1}'s data was added to the Pokédex.", newspeciesname)) { pbUpdate }
+      $player.pokedex.register_last_seen(@pokemon)
+      pbFadeOutIn {
+        scene = PokemonPokedexInfo_Scene.new
+        screen = PokemonPokedexInfoScreen.new(scene)
+        screen.pbDexEntry(@pokemon.species)
+        @sprites["msgwindow"].text = "" if moves_to_learn.length > 0
+        pbEndScreen(false) if moves_to_learn.length == 0
+      }
+    end
+    # Learn moves upon evolution for evolved species
+    moves_to_learn.each do |move|
+      pbLearnMove(@pokemon, move, true) { pbUpdate }
     end
   end
 

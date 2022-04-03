@@ -384,9 +384,20 @@ def pbReceiveMysteryGift(id)
     gift[2].record_first_moves
     gift[2].obtain_level = gift[2].level
     gift[2].obtain_map = $game_map&.map_id || 0
+    was_owned = $player.owned?(gift[2].species)
     if pbAddPokemonSilent(gift[2])
       pbMessage(_INTL("\\me[Pkmn get]{1} received {2}!", $player.name, gift[2].name))
       $player.mystery_gifts[index] = [id]
+      # Show Pokédex entry for new species if it hasn't been owned before
+      if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+        pbMessage(_INTL("{1}'s data was added to the Pokédex.", gift[2].name))
+        $player.pokedex.register_last_seen(gift[2])
+        pbFadeOutIn {
+          scene = PokemonPokedexInfo_Scene.new
+          screen = PokemonPokedexInfoScreen.new(scene)
+          screen.pbDexEntry(gift[2].species)
+        }
+      end
       return true
     end
   elsif gift[1] > 0   # Item

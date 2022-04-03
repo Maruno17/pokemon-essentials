@@ -729,7 +729,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_gender, {
         when 2   # Reset
           pkmn.gender = nil
         end
-        $player.pokedex.register(pkmn) if !settingUpBattle
+        $player.pokedex.register(pkmn) if !settingUpBattle && !pkmn.egg?
         screen.pbRefreshSingle(pkmnid)
       end
     end
@@ -756,7 +756,7 @@ MenuHandlers.add(:pokemon_debug_menu, :species_and_form, {
         if species && species != pkmn.species
           pkmn.species = species
           pkmn.calc_stats
-          $player.pokedex.register(pkmn) if !settingUpBattle
+          $player.pokedex.register(pkmn) if !settingUpBattle && !pkmn.egg?
           screen.pbRefreshSingle(pkmnid)
         end
       when 1   # Set form
@@ -783,7 +783,7 @@ MenuHandlers.add(:pokemon_debug_menu, :species_and_form, {
               pkmn.forced_form = f
             end
             pkmn.form = f
-            $player.pokedex.register(pkmn) if !settingUpBattle
+            $player.pokedex.register(pkmn) if !settingUpBattle && !pkmn.egg?
             screen.pbRefreshSingle(pkmnid)
           end
         end
@@ -828,7 +828,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_shininess, {
         pkmn.shiny = nil
         pkmn.super_shiny = nil
       end
-      $player.pokedex.register(pkmn) if !settingUpBattle
+      $player.pokedex.register(pkmn) if !settingUpBattle && !pkmn.egg?
       screen.pbRefreshSingle(pkmnid)
     end
     next false
@@ -1031,6 +1031,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_egg, {
           pkmn.steps_to_hatch = 0
           pkmn.hatched_map    = 0
           pkmn.obtain_method  = 0
+          $player.pokedex.register(pkmn) if !settingUpBattle
           screen.pbRefreshSingle(pkmnid)
         end
       when 2   # Set steps left to 1

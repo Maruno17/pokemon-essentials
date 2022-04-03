@@ -55,8 +55,20 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
-  pbNicknameAndStore(pkmn)
+  was_owned = $player.owned?(pkmn.species)
   $player.pokedex.register(pkmn) if see_form
+  # Show Pokédex entry for new species if it hasn't been owned before
+  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    pbMessage(_INTL("{1}'s data was added to the Pokédex.", species_name))
+    $player.pokedex.register_last_seen(pkmn)
+    pbFadeOutIn {
+      scene = PokemonPokedexInfo_Scene.new
+      screen = PokemonPokedexInfoScreen.new(scene)
+      screen.pbDexEntry(pkmn.species)
+    }
+  end
+  # Nickname and add the Pokémon
+  pbNicknameAndStore(pkmn)
   return true
 end
 
@@ -82,8 +94,20 @@ def pbAddToParty(pkmn, level = 1, see_form = true)
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
-  pbNicknameAndStore(pkmn)
+  was_owned = $player.owned?(pkmn.species)
   $player.pokedex.register(pkmn) if see_form
+  # Show Pokédex entry for new species if it hasn't been owned before
+  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    pbMessage(_INTL("{1}'s data was added to the Pokédex.", species_name))
+    $player.pokedex.register_last_seen(pkmn)
+    pbFadeOutIn {
+      scene = PokemonPokedexInfo_Scene.new
+      screen = PokemonPokedexInfoScreen.new(scene)
+      screen.pbDexEntry(pkmn.species)
+    }
+  end
+  # Nickname and add the Pokémon
+  pbNicknameAndStore(pkmn)
   return true
 end
 
@@ -100,20 +124,29 @@ end
 def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner_gender = 0, see_form = true)
   return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  # Set original trainer to a foreign one
   pkmn.owner = Pokemon::Owner.new_foreign(owner_name || "", owner_gender)
-  # Set nickname
   pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE] if !nil_or_empty?(nickname)
-  # Recalculate stats
   pkmn.calc_stats
   if owner_name
     pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon from {2}.\1", $player.name, owner_name))
   else
     pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $player.name))
   end
-  pbStorePokemon(pkmn)
+  was_owned = $player.owned?(pkmn.species)
   $player.pokedex.register(pkmn) if see_form
   $player.pokedex.set_owned(pkmn.species)
+  # Show Pokédex entry for new species if it hasn't been owned before
+  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    pbMessage(_INTL("The Pokémon's data was added to the Pokédex."))
+    $player.pokedex.register_last_seen(pkmn)
+    pbFadeOutIn {
+      scene = PokemonPokedexInfo_Scene.new
+      screen = PokemonPokedexInfoScreen.new(scene)
+      screen.pbDexEntry(pkmn.species)
+    }
+  end
+  # Add the Pokémon
+  pbStorePokemon(pkmn)
   return true
 end
 
