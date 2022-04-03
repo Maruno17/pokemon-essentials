@@ -128,14 +128,15 @@ class Player < Trainer
     # @param species [Symbol, GameData::Species] Pokémon species
     def last_form_seen(species)
       @last_seen_forms[species] ||= []
-      return @last_seen_forms[species][0] || 0, @last_seen_forms[species][1] || 0
+      return @last_seen_forms[species][0] || 0, @last_seen_forms[species][1] || 0, @last_seen_forms[species][2] || false
     end
 
     # @param species [Symbol, GameData::Species] Pokémon species
     # @param gender [Integer] gender (0=male, 1=female, 2=genderless)
     # @param form [Integer] form number
-    def set_last_form_seen(species, gender = 0, form = 0)
-      @last_seen_forms[species] = [gender, form]
+    # @param shiny [Boolean] shininess
+    def set_last_form_seen(species, gender = 0, form = 0, shiny = false)
+      @last_seen_forms[species] = [gender, form, shiny]
     end
 
     #===========================================================================
@@ -213,7 +214,7 @@ class Player < Trainer
       @seen_forms[species] ||= [[[], []], [[], []]]
       @seen_forms[species][gender][shin][form] = true
       @last_seen_forms[species] ||= []
-      @last_seen_forms[species] = [gender, form] if @last_seen_forms[species] == []
+      @last_seen_forms[species] = [gender, form, shiny] if @last_seen_forms[species] == []
       self.refresh_accessible_dexes if should_refresh_dexes
     end
 
@@ -223,7 +224,7 @@ class Player < Trainer
       species_data = pkmn.species_data
       form = species_data.pokedex_form
       form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
-      @last_seen_forms[pkmn.species] = [pkmn.gender, form]
+      @last_seen_forms[pkmn.species] = [pkmn.gender, form, pkmn.shiny?]
     end
 
     #===========================================================================

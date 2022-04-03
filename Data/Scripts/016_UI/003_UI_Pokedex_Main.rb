@@ -356,7 +356,7 @@ class PokemonPokedex_Scene
     regionalSpecies.each_with_index do |species, i|
       next if !species
       next if !pbCanAddForModeList?($PokemonGlobal.pokedexMode, species)
-      _gender, form = $player.pokedex.last_form_seen(species)
+      _gender, form, _shiny = $player.pokedex.last_form_seen(species)
       species_data = GameData::Species.get_species_form(species, form)
       color  = species_data.color
       type1  = species_data.types[0]
@@ -758,8 +758,9 @@ class PokemonPokedex_Scene
   end
 
   def setIconBitmap(species)
-    gender, form = $player.pokedex.last_form_seen(species)
-    @sprites["icon"].setSpeciesBitmap(species, gender, form)
+    gender, form, shiny = $player.pokedex.last_form_seen(species)
+    shiny = false
+    @sprites["icon"].setSpeciesBitmap(species, gender, form, shiny)
   end
 
   def pbSearchDexList(params)
