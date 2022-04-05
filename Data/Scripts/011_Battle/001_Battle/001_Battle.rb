@@ -69,6 +69,7 @@ class Battle
   attr_accessor :expGain          # Whether Pokémon can gain Exp/EVs
   attr_accessor :moneyGain        # Whether the player can gain/lose money
   attr_accessor :disablePokeBalls # Whether Poké Balls cannot be thrown at all
+  attr_accessor :sendToBoxes      # Send to Boxes (0=ask, 1=don't ask, 2=must add to party)
   attr_accessor :rules
   attr_accessor :choices          # Choices made by each Pokémon this round
   attr_accessor :megaEvolution    # Battle index of each trainer's Pokémon to Mega Evolve
@@ -140,6 +141,7 @@ class Battle
     @expGain           = true
     @moneyGain         = true
     @disablePokeBalls  = false
+    @sendToBoxes       = 1
     @rules             = {}
     @priority          = []
     @priorityTrickRoom = false
@@ -830,8 +832,10 @@ class Battle
     return @scene.pbDisplayConfirmMessage(msg)
   end
 
-  def pbShowCommands(msg, commands, canCancel = true)
-    @scene.pbShowCommands(msg, commands, canCancel)
+  # defaultValue of -1 means "can't cancel". If it's 0 or greater, returns that
+  # value when pressing the "Back" button.
+  def pbShowCommands(msg, commands, defaultValue = -1)
+    return @scene.pbShowCommands(msg, commands, defaultValue)
   end
 
   def pbAnimation(move, user, targets, hitNum = 0)

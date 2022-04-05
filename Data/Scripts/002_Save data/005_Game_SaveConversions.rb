@@ -259,11 +259,12 @@ end
 
 #===============================================================================
 
-SaveData.register_conversion(:v20_add_default_nicknaming_option) do
+SaveData.register_conversion(:v20_add_new_default_options) do
   essentials_version 20
-  display_title "Updating Options to include nicknaming setting"
+  display_title "Updating Options to include new settings"
   to_value :pokemon_system do |option|
     option.givenicknames = 0 if option.givenicknames.nil?
+    option.sendtoboxes = 0 if option.sendtoboxes.nil?
   end
 end
 

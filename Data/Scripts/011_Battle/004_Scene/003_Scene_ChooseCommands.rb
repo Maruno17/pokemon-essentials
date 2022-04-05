@@ -139,8 +139,10 @@ class Battle::Scene
   #=============================================================================
   # Opens the party screen to choose a Pokémon to switch in (or just view its
   # summary screens)
+  # mode: 0=Pokémon command, 1=choose a Pokémon to send to the Boxes, 2=view
+  #       summaries only
   #=============================================================================
-  def pbPartyScreen(idxBattler, canCancel = false)
+  def pbPartyScreen(idxBattler, canCancel = false, mode = 0)
     # Fade out and hide all sprites
     visibleSprites = pbFadeOutAndHide(@sprites)
     # Get player's party
@@ -150,11 +152,13 @@ class Battle::Scene
     # Start party screen
     scene = PokemonParty_Scene.new
     switchScreen = PokemonPartyScreen.new(scene, modParty)
-    switchScreen.pbStartScene(_INTL("Choose a Pokémon."), @battle.pbNumPositions(0, 0))
+    msg = _INTL("Choose a Pokémon.")
+    msg = _INTL("Send which Pokémon to Boxes?") if mode == 1
+    switchScreen.pbStartScene(msg, @battle.pbNumPositions(0, 0))
     # Loop while in party screen
     loop do
       # Select a Pokémon
-      scene.pbSetHelpText(_INTL("Choose a Pokémon."))
+      scene.pbSetHelpText(msg)
       idxParty = switchScreen.pbChoosePokemon
       if idxParty < 0
         next if !canCancel
@@ -162,13 +166,16 @@ class Battle::Scene
       end
       # Choose a command for the selected Pokémon
       cmdSwitch  = -1
+      cmdBoxes   = -1
       cmdSummary = -1
       commands = []
-      commands[cmdSwitch  = commands.length] = _INTL("Switch In") if modParty[idxParty].able?
+      commands[cmdSwitch  = commands.length] = _INTL("Switch In") if mode == 0 && modParty[idxParty].able?
+      commands[cmdBoxes   = commands.length] = _INTL("Send to Boxes") if mode == 1
       commands[cmdSummary = commands.length] = _INTL("Summary")
       commands[commands.length]              = _INTL("Cancel")
       command = scene.pbShowCommands(_INTL("Do what with {1}?", modParty[idxParty].name), commands)
-      if cmdSwitch >= 0 && command == cmdSwitch        # Switch In
+      if (cmdSwitch >= 0 && command == cmdSwitch) ||   # Switch In
+         (cmdBoxes >= 0 && command == cmdBoxes)        # Send to Boxes
         idxPartyRet = -1
         partyPos.each_with_index do |pos, i|
           next if pos != idxParty + partyStart

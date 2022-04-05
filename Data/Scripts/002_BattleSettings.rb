@@ -70,22 +70,26 @@ module Settings
 
   # Whether the Exp gained from beating a Pokémon should be scaled depending on
   # the gainer's level.
-  SCALED_EXP_FORMULA        = (MECHANICS_GENERATION == 5 || MECHANICS_GENERATION >= 7)
+  SCALED_EXP_FORMULA                   = (MECHANICS_GENERATION == 5 || MECHANICS_GENERATION >= 7)
   # Whether the Exp gained from beating a Pokémon should be divided equally
   # between each participant (true), or whether each participant should gain
   # that much Exp (false). This also applies to Exp gained via the Exp Share
   # (held item version) being distributed to all Exp Share holders.
-  SPLIT_EXP_BETWEEN_GAINERS = (MECHANICS_GENERATION <= 5)
+  SPLIT_EXP_BETWEEN_GAINERS            = (MECHANICS_GENERATION <= 5)
   # Whether a Pokémon holding a Power item gains 8 (true) or 4 (false) EVs in
   # the relevant stat.
-  MORE_EVS_FROM_POWER_ITEMS = (MECHANICS_GENERATION >= 7)
+  MORE_EVS_FROM_POWER_ITEMS            = (MECHANICS_GENERATION >= 7)
   # Whether the critical capture mechanic applies. Note that its calculation is
   # based on a total of 600+ species (i.e. that many species need to be caught
   # to provide the greatest critical capture chance of 2.5x), and there may be
   # fewer species in your game.
-  ENABLE_CRITICAL_CAPTURES  = (MECHANICS_GENERATION >= 5)
+  ENABLE_CRITICAL_CAPTURES             = (MECHANICS_GENERATION >= 5)
   # Whether Pokémon gain Exp for capturing a Pokémon.
-  GAIN_EXP_FOR_CAPTURE      = (MECHANICS_GENERATION >= 6)
+  GAIN_EXP_FOR_CAPTURE                 = (MECHANICS_GENERATION >= 6)
+  # Whether the player is asked what to do with a newly caught Pokémon if their
+  # party is full. If true, the player can toggle whether they are asked this in
+  # the Options screen.
+  NEW_CAPTURE_CAN_REPLACE_PARTY_MEMBER = (MECHANICS_GENERATION >= 7)
 
   #=============================================================================
 

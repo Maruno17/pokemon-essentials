@@ -5,6 +5,7 @@ class PokemonSystem
   attr_accessor :textspeed
   attr_accessor :battlescene
   attr_accessor :battlestyle
+  attr_accessor :sendtoboxes
   attr_accessor :givenicknames
   attr_accessor :frame
   attr_accessor :textskin
@@ -19,6 +20,7 @@ class PokemonSystem
     @textspeed     = 1     # Text speed (0=slow, 1=normal, 2=fast)
     @battlescene   = 0     # Battle effects (animations) (0=on, 1=off)
     @battlestyle   = 0     # Battle style (0=switch, 1=set)
+    @sendtoboxes   = 0     # Send to Boxes (0=manual, 1=automatic)
     @givenicknames = 0     # Give nicknames (0=give, 1=don't give)
     @frame         = 0     # Default window frame (see also Settings::MENU_WINDOWSKINS)
     @textskin      = 0     # Speech frame
@@ -466,9 +468,20 @@ MenuHandlers.add(:options_menu, :movement_style, {
   "set_proc"    => proc { |value, _sceme| $PokemonSystem.runstyle = value }
 })
 
+MenuHandlers.add(:options_menu, :send_to_boxes, {
+  "name"        => _INTL("Send to Boxes"),
+  "order"       => 70,
+  "type"        => EnumOption,
+  "parameters"  => [_INTL("Manual"), _INTL("Automatic")],
+  "description" => _INTL("Choose whether caught Pokémon are sent to your Boxes when your party is full."),
+  "condition"   => proc { next Settings::NEW_CAPTURE_CAN_REPLACE_PARTY_MEMBER },
+  "get_proc"    => proc { next $PokemonSystem.sendtoboxes },
+  "set_proc"    => proc { |value, _scene| $PokemonSystem.sendtoboxes = value }
+})
+
 MenuHandlers.add(:options_menu, :give_nicknames, {
   "name"        => _INTL("Give Nicknames"),
-  "order"       => 70,
+  "order"       => 80,
   "type"        => EnumOption,
   "parameters"  => [_INTL("Give"), _INTL("Don't give")],
   "description" => _INTL("Choose whether you can give a nickname to a Pokémon when you obtain it."),
@@ -478,7 +491,7 @@ MenuHandlers.add(:options_menu, :give_nicknames, {
 
 MenuHandlers.add(:options_menu, :speech_frame, {
   "name"        => _INTL("Speech Frame"),
-  "order"       => 80,
+  "order"       => 90,
   "type"        => NumberOption,
   "parameters"  => 1..Settings::SPEECH_WINDOWSKINS.length,
   "description" => _INTL("Choose the appearance of dialogue boxes."),
@@ -493,7 +506,7 @@ MenuHandlers.add(:options_menu, :speech_frame, {
 
 MenuHandlers.add(:options_menu, :menu_frame, {
   "name"        => _INTL("Menu Frame"),
-  "order"       => 90,
+  "order"       => 100,
   "type"        => NumberOption,
   "parameters"  => 1..Settings::MENU_WINDOWSKINS.length,
   "description" => _INTL("Choose the appearance of menu boxes."),
@@ -508,7 +521,7 @@ MenuHandlers.add(:options_menu, :menu_frame, {
 
 MenuHandlers.add(:options_menu, :text_input_style, {
   "name"        => _INTL("Text Entry"),
-  "order"       => 100,
+  "order"       => 110,
   "type"        => EnumOption,
   "parameters"  => [_INTL("Cursor"), _INTL("Keyboard")],
   "description" => _INTL("Choose how you want to enter text."),
@@ -518,7 +531,7 @@ MenuHandlers.add(:options_menu, :text_input_style, {
 
 MenuHandlers.add(:options_menu, :screen_size, {
   "name"        => _INTL("Screen Size"),
-  "order"       => 110,
+  "order"       => 120,
   "type"        => EnumOption,
   "parameters"  => [_INTL("S"), _INTL("M"), _INTL("L"), _INTL("XL"), _INTL("Full")],
   "description" => _INTL("Choose the size of the game window."),

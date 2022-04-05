@@ -32,28 +32,29 @@ class Game_Temp
     when "single", "1v1", "1v2", "2v1", "1v3", "3v1",
          "double", "2v2", "2v3", "3v2", "triple", "3v3"
       rules["size"] = rule.to_s.downcase
-    when "canlose"                then rules["canLose"]          = true
-    when "cannotlose"             then rules["canLose"]          = false
-    when "canrun"                 then rules["canRun"]           = true
-    when "cannotrun"              then rules["canRun"]           = false
-    when "roamerflees"            then rules["roamerFlees"]      = true
-    when "noexp"                  then rules["expGain"]          = false
-    when "nomoney"                then rules["moneyGain"]        = false
-    when "disablepokeballs"       then rules["disablePokeBalls"] = true
-    when "switchstyle"            then rules["switchStyle"]      = true
-    when "setstyle"               then rules["switchStyle"]      = false
-    when "anims"                  then rules["battleAnims"]      = true
-    when "noanims"                then rules["battleAnims"]      = false
+    when "canlose"                then rules["canLose"]             = true
+    when "cannotlose"             then rules["canLose"]             = false
+    when "canrun"                 then rules["canRun"]              = true
+    when "cannotrun"              then rules["canRun"]              = false
+    when "roamerflees"            then rules["roamerFlees"]         = true
+    when "noexp"                  then rules["expGain"]             = false
+    when "nomoney"                then rules["moneyGain"]           = false
+    when "disablepokeballs"       then rules["disablePokeBalls"]    = true
+    when "forcecatchintoparty"    then rules["forceCatchIntoParty"] = true
+    when "switchstyle"            then rules["switchStyle"]         = true
+    when "setstyle"               then rules["switchStyle"]         = false
+    when "anims"                  then rules["battleAnims"]         = true
+    when "noanims"                then rules["battleAnims"]         = false
     when "terrain"
       rules["defaultTerrain"] = GameData::BattleTerrain.try_get(var)&.id
     when "weather"
       rules["defaultWeather"] = GameData::BattleWeather.try_get(var)&.id
     when "environment", "environ"
       rules["environment"] = GameData::Environment.try_get(var)&.id
-    when "backdrop", "battleback" then rules["backdrop"]         = var
-    when "base"                   then rules["base"]             = var
-    when "outcome", "outcomevar"  then rules["outcomeVar"]       = var
-    when "nopartner"              then rules["noPartner"]        = true
+    when "backdrop", "battleback" then rules["backdrop"]            = var
+    when "base"                   then rules["base"]                = var
+    when "outcome", "outcomevar"  then rules["outcomeVar"]          = var
+    when "nopartner"              then rules["noPartner"]           = true
     else
       raise _INTL("Battle rule \"{1}\" does not exist.", rule)
     end
@@ -102,6 +103,9 @@ def pbPrepareBattle(battle)
   battle.moneyGain = battleRules["moneyGain"] if !battleRules["moneyGain"].nil?
   # Whether Poké Balls cannot be thrown at all
   battle.disablePokeBalls = battleRules["disablePokeBalls"] if !battleRules["disablePokeBalls"].nil?
+  # Whether the player is asked what to do with a new Pokémon when their party is full
+  battle.sendToBoxes = $PokemonSystem.sendtoboxes if Settings::NEW_CAPTURE_CAN_REPLACE_PARTY_MEMBER
+  battle.sendToBoxes = 2 if battleRules["forceCatchIntoParty"]
   # Whether the player is able to switch when an opponent's Pokémon faints
   battle.switchStyle = ($PokemonSystem.battlestyle == 0)
   battle.switchStyle = battleRules["switchStyle"] if !battleRules["switchStyle"].nil?
