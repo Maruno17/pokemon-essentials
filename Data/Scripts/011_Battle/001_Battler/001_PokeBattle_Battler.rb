@@ -296,6 +296,19 @@ class PokeBattle_Battler
     return @pokemon && @pokemon.isSpecies?(species)
   end
 
+  def hasBodyOf?(check_species)
+    return @pokemon.hasBodyOf?(check_species)
+  end
+
+  def hasHeadOf?(check_species)
+    return @pokemon.hasHeadOf?(check_species)
+  end
+
+
+  def isFusionOf(check_species)
+    return @pokemon.isFusionOf(check_species)
+  end
+
   # Returns the active types of this Pokémon. The array should not include the
   # same type more than once, and should not include any invalid type numbers
   # (e.g. -1).

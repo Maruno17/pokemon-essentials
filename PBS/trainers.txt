@@ -860,39 +860,39 @@ Pokemon = B55H101,46 #electrduck
 ##########################
 
 [BURGLAR,Quinn]
-Pokemon = VULPIX,42 #GROWKEY
-Pokemon = VULPIX,42 #GROWKEY
-Pokemon = B38H57,42 #PRIMETALES
+Pokemon = VULPIX,39 #GROWKEY
+Pokemon = VULPIX,39 #GROWKEY
+Pokemon = B38H57,41 #PRIMETALES
 ##########################
 
 [SUPERNERD,Erik]
-Pokemon = B37H47,42 #PARAPIX
-Pokemon = B37H47,42 #PARAPIX
-Pokemon = B38H47,42 #PARATALES
+Pokemon = B37H47,39 #PARAPIX
+Pokemon = B37H47,39 #PARAPIX
+Pokemon = B38H47,41 #PARATALES
 ###########################
 
 [SUPERNERD,Avery]
-Pokemon = B4H25,41 #PIKAMANDER
-Pokemon = B5H25,41 #PIKAMELEON
-Pokemon = B6H25,45 #PIKAIZARD
+Pokemon = B4H25,36 #PIKAMANDER
+Pokemon = B5H25,40 #PIKAMELEON
+Pokemon = B6H25,43 #PIKAIZARD
 ###########################
 
 [BURGLAR,Ramon]
-Pokemon = B5H2,49 #IVYMELEON
+Pokemon = B5H2,45 #IVYMELEON
 ###########################
 
 [SUPERNERD,Derek]
-Pokemon = B51H51,49 #DDUGTRIO
+Pokemon = B51H51,45 #DDUGTRIO
 ###########################
 
 [BURGLAR,Dusty]
-Pokemon = B58H37,44 #VULITHE
-Pokemon = B37H4,44 #CHARPIX
+Pokemon = B58H37,43 #VULITHE
+Pokemon = B37H4,43 #CHARPIX
 ###########################
 
 [SUPERNERD,Zac]
-Pokemon = B37H58,44 #GROWPIX
-Pokemon = B58H4,44 #CHARLITHE
+Pokemon = B37H58,43 #GROWPIX
+Pokemon = B58H4,43 #CHARLITHE
 
 ##############################
 #####VIRIDIAN FOREST########
@@ -1458,7 +1458,7 @@ Pokemon = B60H43,18 #Oddwag,
 #------------------------------
 
 [ENGINEER,Bernie]
-Pokemon = B109H81,21	 #Magnefing,
+Pokemon = B27H81,21	 #SANDSHEW + MAGNEMITE,
 #----------------------------
 
 [YOUNGSTER,Dave]
@@ -1553,35 +1553,32 @@ Pokemon = B25H81,23 #Magnechu,
 ######################
 
 [JUGGLER,Kayden]
-Pokemon = B97H94,39 #Geno,
+Pokemon = B96H20,36 #drowzee + raticate
 #-------------------------------------
 
 [JUGGLER,Nate]
-Pokemon = B96H42,36 #Golzee,
-Pokemon = B64H73,36 #Tentabra,
+Pokemon = B41H23,34 #zubat + ekans,
+Pokemon = B24H88,36 #arbok + grimer,
 #--------------------------------------
 
 [JUGGLER,Kirk]
-Pokemon = B96H15,32 #Beezee,
-Pokemon = B109H96,32 #Drowfing,
-Pokemon = B64H24,32 #Arbra,
-Pokemon = B93H64,32	 #Kadater,
+Pokemon = B48H41,32 #venonat + zubat
+Pokemon = B108H48,35 #lickitung + venonat,
+
 #-----------------------------------------
 
 [TAMER,Edgar]
-Pokemon = B24H113,34 #Chanbok,
-Pokemon = B24H82,34 #Magnebok,
-Pokemon = B28H48,34 #Venoslash,
+Pokemon = B27H30,32 #sandshrew + nidorina
+Pokemon = B111H33,34 #Rhyhorn + nidorino,
 #----------------------------------------
 
 [TAMER,Phil]
-Pokemon = B28H33,35 #Nidoslash,
-Pokemon = B24H110,35 #Weebok,
+Pokemon = B46H48,35 #paras + venonat,
+Pokemon = B42H47,35 #golbart + parasect ,
 #---------------------------------------
 
 [JUGGLER,Shawn]
-Pokemon = B96H45,35 #Vilezee,
-Pokemon = B12H97,35 #Hypfree,
+Pokemon = B40H109,36 #wigglytuff + koffing
 #------------------------------------------------
 
 #################
@@ -1589,47 +1586,47 @@ Pokemon = B12H97,35 #Hypfree,
 ##################
 
 [ENGINEER,Cole]
-Pokemon = B24H28,46 #SANDBOK
-Pokemon = B128H111,46 #RHYROS
+Pokemon = B24H28,44 #SANDBOK
+Pokemon = B128H111,44 #RHYROS
 ###################
 
 [BLACKBELT,Kiyo]
-Pokemon = B67H105,50 #MAROCHOKE
+Pokemon = B67H105,48 #MAROCHOKE
 	Item = BLACKBELT		
 ####################
 
 [ENGINEER,Jason]
-Pokemon = B111H53,50 #PERHORN
+Pokemon = B111H53,48 #PERHORN
 #####################
 
 [BLACKBELT,Atsushi]
-Pokemon = B66H104,47 #CUCHOP
-Pokemon = B221H121,47 
+Pokemon = B66H104,46 #CUCHOP
+Pokemon = B221H121,46 
 #####################
 
 [COOLTRAINER_M,Samuel]
-Pokemon = B28H33,45 #NIDOSLASH
-Pokemon = B111H28,45 #SANDHORN
-Pokemon = B34H104,45 #CUKING
+Pokemon = B28H33,44 #NIDOSLASH
+Pokemon = B111H28,44 #SANDHORN
+Pokemon = B34H104,44 #CUKING
 #####################
 
 [BLACKBELT,Takashi]
-Pokemon = MACHOP,45 
-Pokemon = B67H55,45 #ONCHOKE
-Pokemon = B34H67,45 #MAKING
+Pokemon = MACHOP,44 
+Pokemon = B67H55,44 #ONCHOKE
+Pokemon = B34H67,44 #MAKING
 ####################
 
 [COOLTRAINER_M,Yuji]
-Pokemon = B28H55,44 #GOLSLASH
-Pokemon = B95H135,44 #JOLTIX
-Pokemon = B105H108,44 #LICKIWAK
+Pokemon = B28H55,42 #GOLSLASH
+Pokemon = B95H135,42 #JOLTIX
+Pokemon = B105H108,42 #LICKIWAK
 Pokemon = B75H127,44 #PINELER
 #####################
 
 [COOLTRAINER_F,Justine]
-Pokemon = B111H70,45 #WEEPINHORN
-Pokemon = B105H105,45 #DMAROWAK
-Pokemon = B31H20,45 #RATQUEEN
+Pokemon = B111H70,43 #WEEPINHORN
+Pokemon = B105H105,43 #DMAROWAK
+Pokemon = B31H20,43 #RATQUEEN
 
 #################
 ###Cerulean Gym###
@@ -2079,21 +2076,22 @@ Pokemon = IVYSAUR,30
 
 [LEADER_Koga,Koga]
 Items = HYPERPOTION,HYPERPOTION
-Pokemon = B109H88,37 #koffmer
-	Moves = SELFDESTRUCT,SLUDGEBOMB,DESTINYBOND,FLING
+
+Pokemon = B88H49,35 #Grimer + Venomoth,
+	Moves = SIGNALBEAM,SLUDGEBOMB,FLING,DISABLE
+	AbilityIndex = 1
+	Item = POISONBARB
+Pokemon = B109H81,36 #magnemite + koffing
+	Moves = SLUDGEBOMB,SELFDESTRUCT,SONICBOOM,SUPERSONIC
 	AbilityIndex = 0
-	Item = 	POISONBARB
-Pokemon = B42H113,35 #chanbat,
-	Moves = EGGBOMB,LIGHTSCREEN,TOXIC,POISONFANG
-	AbilityIndex = 0
-	Item = BLACKGLASSES
-Pokemon = B119H110,39 # Weeking,
-	Moves = AQUARING,WATERFALL,SLUDGE,HORNATTACK
+	Item = 	POISONBARB	
+Pokemon = B123H15,36 # scyther + beedrill,
+	Moves = AGILITY,PINMISSILE,POISONJAB,TOXICSPIKES
 	AbilityIndex = 0		
 	Item = POISONBARB
-Pokemon = B47H89,40 #Musect,
-	Moves = POISONPOWDER,SPORE,SLUDGEBOMB,DISABLE
-	AbilityIndex = 0 		
+Pokemon = B89H113,38 #muk + chansey,
+	Moves = TOXIC,DOUBLETEAM,TAKEDOWN,ACIDARMOR
+	AbilityIndex = 1 		
 	Item = BLACKSLUDGE
 
 [LEADER_Koga,Koga,1]
@@ -2114,15 +2112,15 @@ Pokemon = B24H195,68 #ESPBOK
 
 [LEADER_Sabrina,Sabrina]
 Items = MAXPOTION,MAXPOTION
-Pokemon = B122H97,43 #HYPMIME		psych/fairy
+Pokemon = B122H97,41 #HYPMIME		psych/fairy
 	Moves = NASTYPLOT,BATONPASS,HYPNOSIS,PSYCHIC
 	AbilityIndex = 0
 	Item = TWISTEDSPOON
-Pokemon = B197H196,43 #ESREON		psych/DARK
+Pokemon = B197H196,41 #ESREON		psych/DARK
 	Moves = MOONLIGHT,FUTURESIGHT,DARKPULSE,LIGHTSCREEN
 	AbilityIndex = 0	
 	Item = TWISTEDSPOON
-Pokemon = B80H65,45 #AlaBRO,			psych/water
+Pokemon = B80H65,42 #AlaBRO,			psych/water
 	Moves = PSYCHOCUT,SURF,RECOVER,AMNESIA
 	AbilityIndex = 0			
 	Item = TWISTEDSPOON
@@ -2150,19 +2148,19 @@ Pokemon = B296H196,70 #ESPRIO
 
 [LEADER_Blaine,Blaine]
 Items = FULLRESTORE
-Pokemon = B78H44,49 #Gloodash,
+Pokemon = B78H44,47 #Gloodash,
 	Moves = SUNNYDAY,SOLARBEAM,FLAMETHROWER,TOXIC
 	AbilityIndex = 1
 	Item = CHARCOAL
-Pokemon = B59H38,49 #NINENINE
+Pokemon = B59H38,47 #NINENINE
 	Moves = ROAR,FIREFANG,CONFUSERAY,THUNDERFANG
 	AbilityIndex = 0			
 	Item = CHARCOAL
-Pokemon = B126H112,51 #Rhymar,
+Pokemon = B126H112,49 #Rhymar,
 	Moves = FIREPUNCH,DRILLRUN,CONFUSERAY,HAMMERARM
 	AbilityIndex = 0	
 	Item = PASSHOBERRY
-Pokemon = B142H6,53 #Chardactyl,
+Pokemon = B142H6,51 #Chardactyl,
 	Moves = CRUNCH,SKYDROP,FIREBLAST,HYPERBEAM
 	AbilityIndex = 0
 	Item = CHARCOAL
@@ -2185,23 +2183,23 @@ Pokemon = B268H302,71 #CRAMORTAR
 
 [LEADER_Giovanni,Giovanni,0]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B131H265,52 #Rhyras,
+Pokemon = B131H265,50 #Rhyras,
 	Moves = SURF,BULLDOZE,SANDSTORM,SING
 	AbilityIndex = 1
 	Item = 	SOFTSAND
-Pokemon = B51H125,52 #Electatrio,
+Pokemon = B51H125,50 #Electatrio,
 	Moves = BULLDOZE,LIGHTSCREEN,THUNDERWAVE,DISCHARGE
 	AbilityIndex = 0
 	Item = 	SOFTSAND
-Pokemon = B68H76,54 #GOLCHAMP,
+Pokemon = B68H76,52 #GOLCHAMP,
 	Moves = EARTHQUAKE,DYNAMICPUNCH,COUNTER,SCARYFACE
 	AbilityIndex = 0
 	Item = 	SOFTSAND
-Pokemon = B248H273,56 #DNIDOKING,
+Pokemon = B248H273,54 #DNIDOKING,
 	Moves = EARTHQUAKE,THRASH,MEGAHORN,POISONJAB
 	AbilityIndex = 1
 	Item = 	SOFTSAND
-Pokemon = B143H112,56 #snordon,
+Pokemon = B143H112,54 #snordon,
 	Moves = EARTHQUAKE,REST,SNORE,HORNDRILL
 	AbilityIndex = 0
 	Item = 	SOFTSAND
@@ -3932,7 +3930,9 @@ Pokemon = B128H5,44 #CHARROS
 Pokemon = B131H186,44 #POLIRAS
 Pokemon = B108H51,44 #DUGTUNG
 ###################
-
+[COOLTRAINER_M,Josh]
+Pokemon = B143H97,46 #snorlax + hypno
+###################
 [COOLTRAINER_F,Alexa]
 Pokemon = B25H106,42 #HITMONFABLE
 Pokemon = B40H107,42 #HITMONTUFF

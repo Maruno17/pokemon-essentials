@@ -20,7 +20,7 @@ BattleHandlers::SpeedCalcItem.copy(:MACHOBRACE,:POWERANKLET,:POWERBAND,
 
 BattleHandlers::SpeedCalcItem.add(:QUICKPOWDER,
   proc { |item,battler,mult|
-    next mult*2 if battler.isSpecies?(:DITTO) &&
+    next mult*2 if battler.isFusionOf(:DITTO) &&
                    !battler.effects[PBEffects::Transform]
   }
 )
@@ -444,7 +444,7 @@ BattleHandlers::AccuracyCalcTargetItem.copy(:BRIGHTPOWDER,:LAXINCENSE)
 
 BattleHandlers::DamageCalcUserItem.add(:ADAMANTORB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if user.isSpecies?(:DIALGA) && (type == :DRAGON || type == :STEEL)
+    if user.isFusionOf(:DIALGA) && (type == :DRAGON || type == :STEEL)
       mults[:base_damage_multiplier] *= 1.2
     end
   }
@@ -572,7 +572,7 @@ BattleHandlers::DamageCalcUserItem.add(:GRASSGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:GRISEOUSORB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if user.isSpecies?(:GIRATINA) && (type == :DRAGON || type == :GHOST)
+    if user.isFusionOf(:GIRATINA) && (type == :DRAGON || type == :GHOST)
       mults[:base_damage_multiplier] *= 1.2
     end
   }
@@ -608,7 +608,7 @@ BattleHandlers::DamageCalcUserItem.add(:LIFEORB,
 
 BattleHandlers::DamageCalcUserItem.add(:LIGHTBALL,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if user.isSpecies?(:PIKACHU)
+    if user.isFusionOf(:PIKACHU)
       mults[:attack_multiplier] *= 2
     end
   }
@@ -616,7 +616,7 @@ BattleHandlers::DamageCalcUserItem.add(:LIGHTBALL,
 
 BattleHandlers::DamageCalcUserItem.add(:LUSTROUSORB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if user.isSpecies?(:PALKIA) && (type == :DRAGON || type == :WATER)
+    if user.isFusionOf(:PALKIA) && (type == :DRAGON || type == :WATER)
       mults[:base_damage_multiplier] *= 1.2
     end
   }
@@ -745,7 +745,7 @@ BattleHandlers::DamageCalcUserItem.copy(:SOFTSAND,:EARTHPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:SOULDEW,
   proc { |item,user,target,move,mults,baseDmg,type|
-    next if !user.isSpecies?(:LATIAS) && !user.isSpecies?(:LATIOS)
+    next if !user.isFusionOf(:LATIAS) && !user.isFusionOf?(:LATIOS)
     if Settings::SOUL_DEW_POWERS_UP_TYPES
       mults[:final_damage_multiplier] *= 1.2 if type == :PSYCHIC || type == :DRAGON
     else
@@ -770,12 +770,15 @@ BattleHandlers::DamageCalcUserItem.add(:STEELGEM,
   }
 )
 
+
+
+
 BattleHandlers::DamageCalcUserItem.add(:THICKCLUB,
-  proc { |item,user,target,move,mults,baseDmg,type|
-    if (user.isSpecies?(:CUBONE) || user.isSpecies?(:MAROWAK)) && move.physicalMove?
-      mults[:attack_multiplier] *= 2
-    end
-  }
+     proc { |item,user,target,move,mults,baseDmg,type|
+       if (user.isFusionOf(:CUBONE) || user.isFusionOf(:MAROWAK)) && move.physicalMove?
+         mults[:attack_multiplier] *= 2
+       end
+     }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:TWISTEDSPOON,
@@ -887,7 +890,7 @@ BattleHandlers::DamageCalcTargetItem.add(:KEBIABERRY,
 
 BattleHandlers::DamageCalcTargetItem.add(:METALPOWDER,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if target.isSpecies?(:DITTO) && !target.effects[PBEffects::Transform]
+    if target.isFusionOf(:DITTO) && !target.effects[PBEffects::Transform]
       mults[:defense_multiplier] *= 1.5
     end
   }
@@ -932,7 +935,7 @@ BattleHandlers::DamageCalcTargetItem.add(:SHUCABERRY,
 BattleHandlers::DamageCalcTargetItem.add(:SOULDEW,
   proc { |item,user,target,move,mults,baseDmg,type|
     next if Settings::SOUL_DEW_POWERS_UP_TYPES
-    next if !target.isSpecies?(:LATIAS) && !target.isSpecies?(:LATIOS)
+    next if !target.isFusionOf(:LATIAS) && !target.isFusionOf?(:LATIOS)
     if move.specialMove? && !user.battle.rules["souldewclause"]
       mults[:defense_multiplier] *= 1.5
     end
@@ -963,7 +966,7 @@ BattleHandlers::DamageCalcTargetItem.add(:YACHEBERRY,
 
 BattleHandlers::CriticalCalcUserItem.add(:LUCKYPUNCH,
   proc { |item,user,target,c|
-    next c+2 if user.isSpecies?(:CHANSEY)
+    next c+2 if user.isFusionOf(:CHANSEY)
   }
 )
 
@@ -977,7 +980,7 @@ BattleHandlers::CriticalCalcUserItem.copy(:RAZORCLAW,:SCOPELENS)
 
 BattleHandlers::CriticalCalcUserItem.add(:STICK,
   proc { |item,user,target,c|
-    next c+2 if user.isSpecies?(:FARFETCHD)
+    next c+2 if user.isFusionOf(:FARFETCHD)
   }
 )
 

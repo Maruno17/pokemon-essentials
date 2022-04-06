@@ -254,31 +254,6 @@ ItemHandlers::UseOnPokemon.add(:TRANSGENDERSTONE, proc { |item, pokemon, scene|
   end
 })
 
-ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE, proc { |item, poke, scene|
-  abilityList = poke.getAbilityList
-  abil1 = 0; abil2 = 0
-  for i in abilityList
-    abil1 = i[0] if i[1] == 0
-    abil2 = i[1] if i[1] == 1
-  end
-  if poke.abilityIndex() >= 2 || abil1 == abil2
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  if Kernel.pbConfirmMessage(_INTL("Do you want to change {1}'s ability?",
-                                   poke.name))
-
-    if poke.abilityIndex() == 0
-      poke.setAbility(1)
-    else
-      poke.setAbility(0)
-    end
-    scene.pbDisplay(_INTL("{1}'s ability was changed!", poke.name))
-    next true
-  end
-  next false
-
-})
 
 #NOT FULLY IMPLEMENTED
 ItemHandlers::UseOnPokemon.add(:SECRETCAPSULE, proc { |item, poke, scene|
@@ -1078,31 +1053,31 @@ ItemHandlers::UseOnPokemon.add(:TRANSGENDERSTONE, proc { |item, pokemon, scene|
   end
 })
 
-ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE, proc { |item, poke, scene|
-  abilityList = poke.getAbilityList
-  abil1 = 0; abil2 = 0
-  for i in abilityList
-    abil1 = i[0] if i[1] == 0
-    abil2 = i[1] if i[1] == 1
-  end
-  if poke.abilityIndex() >= 2 || abil1 == abil2
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  if Kernel.pbConfirmMessage(_INTL("Do you want to change {1}'s ability?",
-                                   poke.name))
-
-    if poke.abilityIndex() == 0
-      poke.setAbility(1)
-    else
-      poke.setAbility(0)
-    end
-    scene.pbDisplay(_INTL("{1}'s ability was changed!", poke.name))
-    next true
-  end
-  next false
-
-})
+# ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE, proc { |item, poke, scene|
+#   abilityList = poke.getAbilityList
+#   abil1 = 0; abil2 = 0
+#   for i in abilityList
+#     abil1 = i[0] if i[1] == 0
+#     abil2 = i[1] if i[1] == 1
+#   end
+#   if poke.abilityIndex() >= 2 || abil1 == abil2
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   if Kernel.pbConfirmMessage(_INTL("Do you want to change {1}'s ability?",
+#                                    poke.name))
+#
+#     if poke.abilityIndex() == 0
+#       poke.setAbility(1)
+#     else
+#       poke.setAbility(0)
+#     end
+#     scene.pbDisplay(_INTL("{1}'s ability was changed!", poke.name))
+#     next true
+#   end
+#   next false
+#
+# })
 
 #NOT FULLY IMPLEMENTED
 ItemHandlers::UseOnPokemon.add(:SECRETCAPSULE, proc { |item, poke, scene|
