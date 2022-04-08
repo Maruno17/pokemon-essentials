@@ -83,8 +83,8 @@ module Battle::ItemEffects
 
   #=============================================================================
 
-  def self.triggerPriorityBracketChange(item, battler, sub_pri, battle)
-    return trigger(PriorityBracketChange, item, battler, sub_pri, battle, ret: sub_pri)
+  def self.triggerPriorityBracketChange(item, battler, battle)
+    return trigger(PriorityBracketChange, item, battler, battle, ret: 0)
   end
 
   def self.triggerPriorityBracketUse(item, battler, battle)
@@ -633,23 +633,22 @@ Battle::ItemEffects::StatusCure.add(:RAWSTBERRY,
 #===============================================================================
 
 Battle::ItemEffects::PriorityBracketChange.add(:CUSTAPBERRY,
-  proc { |item, battler, subPri, battle|
-    next if !battler.canConsumePinchBerry?
-    next 1 if subPri < 1
+  proc { |item, battler, battle|
+    next 1 if battler.canConsumePinchBerry?
   }
 )
 
 Battle::ItemEffects::PriorityBracketChange.add(:LAGGINGTAIL,
-  proc { |item, battler, subPri, battle|
-    next -1 if subPri == 0
+  proc { |item, battler, battle|
+    next -1
   }
 )
 
 Battle::ItemEffects::PriorityBracketChange.copy(:LAGGINGTAIL, :FULLINCENSE)
 
 Battle::ItemEffects::PriorityBracketChange.add(:QUICKCLAW,
-  proc { |item, battler, subPri, battle|
-    next 1 if subPri < 1 && battle.pbRandom(100) < 20
+  proc { |item, battler, battle|
+    next 1 if battle.pbRandom(100) < 20
   }
 )
 

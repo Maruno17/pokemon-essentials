@@ -141,8 +141,8 @@ module Battle::AbilityEffects
     return trigger(PriorityChange, ability, battler, move, priority, ret: priority)
   end
 
-  def self.triggerPriorityBracketChange(ability, battler, sub_priority, battle)
-    return trigger(PriorityBracketChange, ability, battler, sub_priority, battle, ret: sub_priority)
+  def self.triggerPriorityBracketChange(ability, battler, battle)
+    return trigger(PriorityBracketChange, ability, battler, battle, ret: 0)
   end
 
   def self.triggerPriorityBracketUse(ability, battler, battle)
@@ -814,7 +814,7 @@ Battle::AbilityEffects::OnStatLoss.add(:DEFIANT,
 Battle::AbilityEffects::PriorityChange.add(:GALEWINGS,
   proc { |ability, battler, move, pri|
     next pri + 1 if (Settings::MECHANICS_GENERATION <= 6 || battler.hp == battler.totalhp) &&
-                  move.type == :FLYING
+                    move.type == :FLYING
   }
 )
 
@@ -838,14 +838,14 @@ Battle::AbilityEffects::PriorityChange.add(:TRIAGE,
 #===============================================================================
 
 Battle::AbilityEffects::PriorityBracketChange.add(:QUICKDRAW,
-  proc { |ability, battler, subPri, battle|
-    next 1 if subPri == 0 && battle.pbRandom(100) < 30
+  proc { |ability, battler, battle|
+    next 1 if battle.pbRandom(100) < 30
   }
 )
 
 Battle::AbilityEffects::PriorityBracketChange.add(:STALL,
-  proc { |ability, battler, subPri, battle|
-    next -1 if subPri == 0
+  proc { |ability, battler, battle|
+    next -1
   }
 )
 
