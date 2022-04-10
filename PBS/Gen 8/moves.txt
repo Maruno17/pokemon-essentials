@@ -378,7 +378,7 @@ Accuracy = 100
 TotalPP = 10
 Target = AllNearFoes
 FunctionCode = FlinchTarget
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 20
 Description = The user transforms its wrath into a fire-like aura to attack. This may also make foes flinch.
 #-------------------------------
@@ -442,7 +442,7 @@ Accuracy = 0
 TotalPP = 10
 Target = NearOther
 FunctionCode = None
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user pretends to bow its head, but then it stabs the target with its disheveled hair. Never misses.
 #-------------------------------
 [JAWLOCK]
@@ -479,7 +479,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = AlwaysCriticalHit
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = Strikes with a fierce blow through mastery of the Dark style. Always results in a critical hit.
 #-------------------------------
 [LASHOUT]
@@ -849,7 +849,7 @@ Accuracy = 90
 TotalPP = 5
 Target = NearOther
 FunctionCode = AttackAndSkipNextTurn
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = This is Eternatus's most powerful attack in its original form. The user can't move on the next turn.
 #-------------------------------
 [DRAGONENERGY]
@@ -861,7 +861,7 @@ Accuracy = 100
 TotalPP = 5
 Target = AllNearFoes
 FunctionCode = PowerHigherWithUserHP
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = Converts life-force into power to attack. The lower the user's HP, the lower the move's power.
 #-------------------------------
 [ROAROFTIME]
@@ -946,7 +946,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = None
-Flags = CanProtect
+Flags = CanProtect,CannotMetronome
 Description = The user unleashes a strong beam from its core.
 #-------------------------------
 [SPACIALREND]
@@ -1006,7 +1006,7 @@ Accuracy = 100
 TotalPP = 15
 Target = AllNearFoes
 FunctionCode = LowerTargetAttack1
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 100
 Description = The user swings its tough tail wildly and attacks all foes. This also lowers their Attack stats.
 #-------------------------------
@@ -1105,7 +1105,7 @@ Accuracy = 100
 TotalPP = 5
 Target = User
 FunctionCode = RaiseUserMainStats1LoseThirdOfTotalHP
-Flags = Sound
+Flags = Sound,CannotMetronome
 Description = The user raises all its stats by using some of its HP.
 #-------------------------------
 [DRAGONDANCE]
@@ -1167,7 +1167,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = TypeDependsOnUserMorpekoFormRaiseUserSpeed1
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 100
 Description = Morpeko attacks and raises its Speed with energy stored in its cheeks. Type changes with the user's form.
 #-------------------------------
@@ -1267,7 +1267,7 @@ Accuracy = 100
 TotalPP = 10
 Target = AllNearFoes
 FunctionCode = None
-Flags = CanProtect,CanMirrorMove,Sound
+Flags = CanProtect,CanMirrorMove,Sound,CannotMetronome
 Description = The user attacks all foes by twanging a guitar or bass guitar, causing a huge echo and strong vibration.
 #-------------------------------
 [THUNDERCAGE]
@@ -1279,7 +1279,7 @@ Accuracy = 90
 TotalPP = 15
 Target = NearOther
 FunctionCode = BindTarget
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user traps the target in a cage of sparking electricity for four to five turns.
 #-------------------------------
 [ZINGZAP]
@@ -1601,7 +1601,7 @@ Accuracy = 95
 TotalPP = 10
 Target = NearOther
 FunctionCode = ConfuseTarget
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 20
 Description = The user attacks the target by emitting steam. This may also confuse the target.
 #-------------------------------
@@ -1626,7 +1626,7 @@ Accuracy = 100
 TotalPP = 15
 Target = NearOther
 FunctionCode = LowerTargetSpAtk1
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 100
 Description = The user attacks the target with immense force. This also lowers the target's Sp. Atk stat.
 #-------------------------------
@@ -1675,7 +1675,7 @@ Accuracy = 90
 TotalPP = 10
 Target = NearOther
 FunctionCode = FixedDamageHalfTargetHP
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user hits the target with the force of nature. It halves the target's HP.
 #-------------------------------
 [AROMATICMIST]
@@ -1730,6 +1730,7 @@ Accuracy = 0
 TotalPP = 15
 Target = NearOther
 FunctionCode = RaiseTargetAtkSpAtk2
+Flags = CannotMetronome
 Description = The user sharply raises the target's Attack and Sp. Atk stats by decorating the target.
 #-------------------------------
 [FAIRYLOCK]
@@ -1827,7 +1828,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = AttackAndSkipNextTurn
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks wildly with its thick leek. The user can't move on the next turn.
 #-------------------------------
 [HIGHJUMPKICK]
@@ -1961,7 +1962,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = LowerTargetDefense1
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 100
 Description = Overwhelms the target with lightning-like movement, then kicks. Lowers the target's Defense stat.
 #-------------------------------
@@ -2010,7 +2011,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = UseUserBaseDefenseInsteadOfUserBaseAttack
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks by slamming its body into the target. Power increases the higher the user's Defense is.
 #-------------------------------
 [SUBMISSION]
@@ -2506,7 +2507,7 @@ Accuracy = 90
 TotalPP = 5
 Target = NearOther
 FunctionCode = BurnTarget
-Flags = CanProtect,CanMirrorMove,ThawsUser,Bomb
+Flags = CanProtect,CanMirrorMove,ThawsUser,Bomb,CannotMetronome
 EffectChance = 10
 Description = Attacks by igniting a small stone and launching it as a fiery ball. May also burn the target.
 #-------------------------------
@@ -2869,7 +2870,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = LowerUserDefSpDef1
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user soars upward and drops at high speeds. Its Defense and Sp. Def stats are lowered.
 #-------------------------------
 [HURRICANE]
@@ -3153,7 +3154,7 @@ Accuracy = 100
 TotalPP = 5
 Target = AllNearFoes
 FunctionCode = None
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks by sending a frightful amount of small ghosts at opposing Pokémon.
 #-------------------------------
 [SHADOWFORCE]
@@ -3189,7 +3190,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = IgnoreTargetAbility
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user emits a sinister ray. This move can be used on the target regardless of its Abilities.
 #-------------------------------
 [PHANTOMFORCE]
@@ -3572,7 +3573,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = LowerTargetSpDef1
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 100
 Description = Attacks with an acidic liquid created from tart apples. This also lowers the target's Sp. Def.
 #-------------------------------
@@ -3585,7 +3586,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = LowerTargetSpeed1
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 100
 Description = The user plays its drum, controlling roots to attack. This also lowers the target's Speed stat.
 #-------------------------------
@@ -3610,7 +3611,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = LowerTargetDefense1DoublePowerInGravity
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 100
 Description = The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense.
 #-------------------------------
@@ -3746,7 +3747,7 @@ Accuracy = 100
 TotalPP = 40
 Target = NearOther
 FunctionCode = None
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks the target by poking it with a sharply pointed branch.
 #-------------------------------
 [LEAFAGE]
@@ -3782,7 +3783,7 @@ Accuracy = 100
 TotalPP = 15
 Target = NearOther
 FunctionCode = BindTarget
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user snares the target in a snap trap for four to five turns.
 #-------------------------------
 [BULLETSEED]
@@ -3902,6 +3903,7 @@ Accuracy = 0
 TotalPP = 10
 Target = UserAndAllies
 FunctionCode = HealUserAndAlliesQuarterOfTotalHPCureStatus
+Flags = CannotMetronome
 Description = The user becomes one with the jungle, and restores HP and cures status conditions of itself and allies.
 #-------------------------------
 [LEECHSEED]
@@ -4000,7 +4002,7 @@ Accuracy = 85
 TotalPP = 10
 Target = AllNearFoes
 FunctionCode = None
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks its foes by manifesting the power of the land in fearsome blades of stone.
 #-------------------------------
 [EARTHQUAKE]
@@ -4336,7 +4338,7 @@ Accuracy = 100
 TotalPP = 5
 Target = AllNearFoes
 FunctionCode = None
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks by hurling a blizzard-cloaked icicle lance at opposing Pokémon.
 #-------------------------------
 [BLIZZARD]
@@ -7090,7 +7092,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = FreezeTarget
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 10
 Description = The user shoots its psychic power from its eyes to attack. This may also leave the target frozen.
 #-------------------------------
@@ -7968,7 +7970,7 @@ Accuracy = 95
 TotalPP = 5
 Target = NearOther
 FunctionCode = UserLosesHalfOfTotalHP
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user fires a beam of steel that it collected from its entire body. This also damages the user.
 #-------------------------------
 [STEELROLLER]
@@ -7992,7 +7994,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = None
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user becomes a gigantic shield and slams into the target.
 #-------------------------------
 [BEHEMOTHBLADE]
@@ -8004,7 +8006,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = None
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user becomes a gigantic sword and cuts the target.
 #-------------------------------
 [IRONTAIL]
@@ -8029,7 +8031,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = IgnoreTargetAbility
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user slams into the target with the force of a meteor. Can't be stopped by the target's Ability.
 #-------------------------------
 [METEORMASH]
@@ -8118,7 +8120,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = HitTwoTimesFlinchTarget
-Flags = Contact,CanProtect,Punching
+Flags = Contact,CanProtect,Punching,CannotMetronome
 EffectChance = 30
 Description = The user rotates, centering the hex nut in its chest, and then strikes twice. May cause flinching.
 #-------------------------------
@@ -8328,7 +8330,7 @@ Accuracy = 85
 TotalPP = 10
 Target = AllNearFoes
 FunctionCode = None
-Flags = CanProtect,CanMirrorMove,Pulse
+Flags = CanProtect,CanMirrorMove,Pulse,CannotMetronome
 Description = The user attacks opposing Pokémon with countless beams of light that glow a deep and brilliant blue.
 #-------------------------------
 [STEAMERUPTION]
@@ -8640,7 +8642,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = HitThreeTimesAlwaysCriticalHit
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = Hits three times in a row with mastery of the Water style. This attack always deals critical hits.
 #-------------------------------
 [WATERSHURIKEN]
@@ -8674,6 +8676,7 @@ Accuracy = 0
 TotalPP = 10
 Target = UserAndAllies
 FunctionCode = HealUserAndAlliesQuarterOfTotalHP
+Flags = CannotMetronome
 Description = The user scatters mysterious water around and restores the HP of itself and its allies.
 #-------------------------------
 [RAINDANCE]

@@ -919,6 +919,7 @@ class Battle::Move::UseRandomMove < Battle::Move
       "ProtectUserSideFromDamagingMovesIfUserFirstTurn",   # Mat Block
       "ProtectUserSideFromStatusMoves",                    # Crafty Shield
       "ProtectUserFromDamagingMovesKingsShield",           # King's Shield
+      "ProtectUserFromDamagingMovesObstruct",              # Obstruct
       "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
       "ProtectUserBanefulBunker",                          # Baneful Bunker
       # Moves that call other moves

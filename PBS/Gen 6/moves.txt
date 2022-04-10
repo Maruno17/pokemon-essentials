@@ -2264,7 +2264,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = LowerUserDefSpDef1
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user soars upward and drops at high speeds. Its Defense and Sp. Def stats are lowered.
 #-------------------------------
 [HURRICANE]
@@ -3164,7 +3164,7 @@ Accuracy = 85
 TotalPP = 10
 Target = AllNearFoes
 FunctionCode = None
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks its foes by manifesting the power of the land in fearsome blades of stone.
 #-------------------------------
 [EARTHQUAKE]
@@ -6979,7 +6979,7 @@ Accuracy = 85
 TotalPP = 10
 Target = AllNearFoes
 FunctionCode = None
-Flags = CanProtect,CanMirrorMove,Pulse
+Flags = CanProtect,CanMirrorMove,Pulse,CannotMetronome
 Description = The user attacks opposing Pokémon with countless beams of light that glow a deep and brilliant blue.
 #-------------------------------
 [STEAMERUPTION]
