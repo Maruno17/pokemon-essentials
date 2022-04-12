@@ -14,11 +14,6 @@ Other notes:
     "The Weakness Policy sharply raised {1}'s Sp. Atk!"
     "The Weakness Policy was used up..."
 
-- Ask whether a captured Pokémon, or an added Pokémon, should be put in storage
-  or added to the party if the party is full. Also provide the option to look at
-  its Pokédex entry. Have a way to force adding it to the party for plot
-  purposes (battle rule?).
-
 #===============================================================================
 # Low priority or ignorable
 #===============================================================================
@@ -201,5 +196,10 @@ is like the Day Care but is only for breeding and the deposited Pokémon don't
 gain Exp (the fee is $500 per Pokémon up-front). The time it takes to do this
 is apparently the same as egg generation (e.g. a chance every 255 steps), but
 the parents don't need to be able to breed in order to learn egg moves.
+
+Ask whether a captured Pokémon, or an added Pokémon, should be put in storage
+or added to the party if the party is full. Also provide the option to look at
+its Pokédex entry. Have a way to force adding it to the party for plot
+purposes (battle rule?).
 
 =end

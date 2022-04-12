@@ -1,3 +1,6 @@
+#===============================================================================
+# Base class for all hardcoded battle animations.
+#===============================================================================
 class Battle::Scene::Animation
   def initialize(sprites, viewport)
     @sprites  = sprites
@@ -59,8 +62,9 @@ class Battle::Scene::Animation
   end
 end
 
-
-
+#===============================================================================
+# Mixin module for certain hardcoded battle animations that involve Poké Balls.
+#===============================================================================
 module Battle::Scene::Animation::BallAnimationMixin
   # Returns the color that the Pokémon turns when it goes into or out of its
   # Poké Ball.
@@ -83,30 +87,6 @@ module Battle::Scene::Animation::BallAnimationMixin
     when :CHERISHBALL then return Color.new(247,  66,  41)
     end
     return Color.new(255, 181, 247)   # Poké Ball, Sport Ball, Apricorn Balls, others
-  end
-
-  # There are three kinds of animations shown when a Poké Ball opens up: one for
-  # when attempting to capture a Pokémon, one when recalling a Pokémon, and one
-  # for all other cases (e.g. sending out). This is anim_type (one of :capture,
-  # :recall and :main). The recall animation is the same for all Poké Balls, and
-  # the other two animations are different for each Poké Ball.
-  def getBallBurstAnimationName(poke_ball, anim_type = :main)
-    animations = pbLoadBattleAnimations
-    if anim_type == :recall
-      anim_name = "BallBurstRecall"
-      return anim_name if animations&.get_from_name("Common:" + anim_name)
-    else
-      name = poke_ball.to_s
-      if anim_type == :capture
-        anim = animations&.get_from_name("Common:BallBurstCapture" + name)
-        return "BallBurstCapture" + name if anim
-        anim = animations&.get_from_name("Common:BallBurstCapture")
-        return "BallBurstCapture" if anim
-      end
-      anim = animations&.get_from_name("Common:BallBurst" + name)
-      return "BallBurst" + name if anim
-    end
-    return "BallBurst"
   end
 
   def addBallSprite(ballX, ballY, poke_ball)
@@ -364,7 +344,8 @@ module Battle::Scene::Animation::BallAnimationMixin
                      "particle", Tone.new(0, 0, -96, -32), Tone.new(0, 0, -192, -64)]   # Light yellow, yellow
   }
 
-  # The regular Poké Ball burst animation.
+  # The regular Poké Ball burst animation, for when a Pokémon appears from a
+  # Poké Ball.
   def ballBurst(delay, ball, ballX, ballY, poke_ball)
     num_particles = 15
     num_rays = 10
@@ -572,11 +553,13 @@ module Battle::Scene::Animation::BallAnimationMixin
     ball.setDelta(delay + particle_duration + ring_duration, 0, 0)
   end
 
+  # The animation shown over a thrown Poké Ball when it has successfully caught
+  # a Pokémon.
   def ballCaptureSuccess(ball, delay, ballX, ballY)
     ball.setSE(delay, "Battle catch click")
-    ball.moveTone(delay, 4, Tone.new(-128, -128, -128, 0))
+    ball.moveTone(delay, 4, Tone.new(-128, -128, -128, 0))   # Ball goes darker
     delay = ball.totalDuration
-    star_duration = 12   # 20ths of a second
+    star_duration = 12   # In 20ths of a second
     y_offsets = [[0, 74, 52], [0, 62, 28], [0, 74, 48]]
     3.times do |i|   # Left, middle, right
       # Set up particle
@@ -607,7 +590,9 @@ module Battle::Scene::Animation::BallAnimationMixin
     end
   end
 
-  # The Poké Ball burst animation used when recalling a Pokémon.
+  # The Poké Ball burst animation used when recalling a Pokémon. In HGSS, this
+  # is the same for all types of Poké Ball except for the color that the battler
+  # turns - see def getBattlerColorFromPokeBall.
   def ballBurstRecall(delay, ball, ballX, ballY, poke_ball)
     color_duration = 10   # Change color of battler to a solid shade - see def battlerAbsorb
     shrink_duration = 5   # Shrink battler into Poké Ball - see def battlerAbsorb

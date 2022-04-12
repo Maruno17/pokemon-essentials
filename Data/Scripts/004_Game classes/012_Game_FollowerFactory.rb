@@ -1,3 +1,6 @@
+#===============================================================================
+# Data saved in $PokemonGlobal.followers.
+#===============================================================================
 class FollowerData
   attr_accessor :original_map_id
   attr_accessor :event_id
@@ -39,6 +42,31 @@ class FollowerData
     $game_map.refresh if $game_map.need_refresh
     event.lock
     pbMapInterpreter.setup(event.list, event.id, event.map.map_id)
+  end
+end
+
+#===============================================================================
+# Permanently stores data of follower events (i.e. in save files).
+#===============================================================================
+class PokemonGlobalMetadata
+  attr_accessor :dependentEvents   # Deprecated
+  attr_writer   :followers
+
+  def followers
+    @followers = [] if !@followers
+    return @followers
+  end
+end
+
+#===============================================================================
+# Stores Game_Follower instances just for the current play session.
+#===============================================================================
+class Game_Temp
+  attr_writer :followers
+
+  def followers
+    @followers = Game_FollowerFactory.new if !@followers
+    return @followers
   end
 end
 
@@ -309,31 +337,6 @@ class FollowerSprites
       @last_update = $game_temp.followers.last_update
     end
     @sprites.each { |sprite| sprite.update }
-  end
-end
-
-#===============================================================================
-# Stores Game_Follower instances just for the current play session.
-#===============================================================================
-class Game_Temp
-  attr_writer :followers
-
-  def followers
-    @followers = Game_FollowerFactory.new if !@followers
-    return @followers
-  end
-end
-
-#===============================================================================
-# Permanently stores data of follower events (i.e. in save files).
-#===============================================================================
-class PokemonGlobalMetadata
-  attr_accessor :dependentEvents   # Deprecated
-  attr_writer   :followers
-
-  def followers
-    @followers = [] if !@followers
-    return @followers
   end
 end
 
