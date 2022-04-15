@@ -53,6 +53,7 @@ class PokeBattle_Battler
     end
     return if @fainted   # Has already fainted properly
     @battle.pbDisplayBrief(_INTL("{1} fainted!",pbThis)) if showMessage
+    updateSpirits()
     PBDebug.log("[Pokémon fainted] #{pbThis} (#{@index})") if !showMessage
     @battle.scene.pbFaintBattler(self)
     pbInitEffects(false)
@@ -78,6 +79,15 @@ class PokeBattle_Battler
     pbAbilitiesOnFainting
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
+  end
+
+  def updateSpirits()
+    if $PokemonBag.pbQuantity(:ODDKEYSTONE)>=1 && @pokemon.hasType?(:GHOST)
+      nbSpirits = pbGet(ODDKEYSTONE_NB_VARIABLE)
+      if nbSpirits < 108
+        pbSet(ODDKEYSTONE_NB_VARIABLE,nbSpirits+1)
+      end
+    end
   end
 
   #=============================================================================

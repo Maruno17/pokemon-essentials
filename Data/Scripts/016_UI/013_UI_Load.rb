@@ -284,6 +284,7 @@ class PokemonLoadScreen
     cmd_debug        = -1
     cmd_quit         = -1
     show_continue = !@save_data.empty?
+    new_game_plus = @save_data[:player].new_game_plus_unlocked
     if show_continue
       commands[cmd_continue = commands.length] = _INTL('Continue')
       if @save_data[:player].mystery_gift_unlocked
@@ -291,6 +292,9 @@ class PokemonLoadScreen
       end
     end
     commands[cmd_new_game = commands.length]  = _INTL('New Game')
+    if new_game_plus
+      commands[cmd_new_game_plus = commands.length]  = _INTL('New Game +')
+    end
     commands[cmd_options = commands.length]   = _INTL('Options')
     commands[cmd_language = commands.length]  = _INTL('Language') if Settings::LANGUAGES.length >= 2
     commands[cmd_debug = commands.length]     = _INTL('Debug') if $DEBUG
@@ -311,6 +315,11 @@ class PokemonLoadScreen
       when cmd_new_game
         @scene.pbEndScene
         Game.start_new
+        return
+      when cmd_new_game_plus
+        @scene.pbEndScene
+        Game.start_new(@save_data[:bag],@save_data[:storage_system],@save_data[:player])
+        @save_data[:player].new_game_plus_unlocked=true
         return
       when cmd_mystery_gift
         pbFadeOutIn { pbDownloadMysteryGift(@save_data[:player]) }

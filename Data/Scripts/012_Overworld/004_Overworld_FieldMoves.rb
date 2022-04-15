@@ -305,7 +305,7 @@ def pbDive
   move = :DIVE
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, false) || (!$DEBUG && !movefinder)
-    if $PokemonBag.pbQuantity(:SCUBAGEAR)>0
+    if $PokemonBag.pbQuantity(:SCUBAGEAR)<=0
       pbMessage(_INTL("The sea is deep here. A Pokémon may be able to go underwater."))
       return false
     end
@@ -343,10 +343,10 @@ def pbSurfacing
   return if !surface_map_id
   move = :DIVE
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, false) || (!$DEBUG && !movefinder)
-    pbMessage(_INTL("Light is filtering down from above. A Pokémon may be able to surface here."))
-    return false
-  end
+  # if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, false) || (!$DEBUG && !movefinder)
+  #   pbMessage(_INTL("Light is filtering down from above. A Pokémon may be able to surface here."))
+  #   return false
+  # end
   if pbConfirmMessage(_INTL("Light is filtering down from above. Would you like to use Dive?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))

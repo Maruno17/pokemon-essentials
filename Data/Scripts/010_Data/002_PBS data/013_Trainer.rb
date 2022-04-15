@@ -110,8 +110,46 @@ module GameData
       end
     end
 
-    # Creates a battle-ready version of a trainer's data.
-    # @return [Array] all information about a trainer in a usable form
+
+    def replaceSingleSpeciesModeIfApplicable(species)
+      if $game_switches[SINGLE_POKEMON_MODE_SWITCH]
+        if $game_switches[SINGLE_POKEMON_MODE_HEAD_SWITCH]
+          return replaceFusionsHeadWithSpecies(species)
+        elsif $game_switches[SINGLE_POKEMON_MODE_BODY_SWITCH]
+          return replaceFusionsBodyWithSpecies(species)
+        elsif $game_switches[SINGLE_POKEMON_MODE_RANDOM_SWITCH]
+          if(rand(2) == 0)
+            return replaceFusionsHeadWithSpecies(species)
+          else
+            return replaceFusionsBodyWithSpecies(species)
+          end
+        end
+      end
+      return species
+    end
+
+    def replaceFusionsHeadWithSpecies(species)
+      speciesId = getDexNumberForSpecies(species)
+      if speciesId > NB_POKEMON
+        bodyPoke = getBodyID(speciesId)
+        headPoke = pbGet(SINGLE_POKEMON_MODE_VAR)
+        newSpecies = bodyPoke*NB_POKEMON+headPoke
+        return getPokemon(newSpecies)
+      end
+      return species
+    end
+
+    def replaceFusionsBodyWithSpecies(species)
+      speciesId = getDexNumberForSpecies(species)
+      if speciesId > NB_POKEMON
+        bodyPoke = pbGet(SINGLE_POKEMON_MODE_VAR)
+        headPoke = getHeadID(species)
+        newSpecies = bodyPoke*NB_POKEMON+headPoke
+        return getPokemon(newSpecies)
+      end
+      return species
+    end
+
     def to_trainer
       placeholder_species = [Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES,
                              Settings::VAR_1_PLACEHOLDER_SPECIES,
@@ -140,12 +178,13 @@ module GameData
         if placeholder_species.include?(species)
           species = replace_species_with_placeholder(species)
         end
+        species = replaceSingleSpeciesModeIfApplicable(species)
         if $game_switches[REVERSED_MODE]
           species = reverseFusionSpecies(species)
         end
         level = pkmn_data[:level]
         if $game_switches[GAME_DIFFICULTY_HARD]
-          level = (level*Settings::HARD_MODE_LEVEL_MODIFIER).ceil
+          level = (level * Settings::HARD_MODE_LEVEL_MODIFIER).ceil
           if level > Settings::MAXIMUM_LEVEL
             level = Settings::MAXIMUM_LEVEL
           end
@@ -158,6 +197,7 @@ module GameData
           end
         end
         ####
+
 
         #trainer rematch infinite fusion edit
         if isRematch

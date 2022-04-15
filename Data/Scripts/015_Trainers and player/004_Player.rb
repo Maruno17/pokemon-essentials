@@ -30,7 +30,9 @@ class Player < Trainer
   attr_accessor :mystery_gift_unlocked
   # @return [Array<Array>] downloaded Mystery Gift data
   attr_accessor :mystery_gifts
-
+  attr_accessor :beat_league
+  attr_accessor :new_game_plus_unlocked
+  attr_accessor :new_game_plus
   def trainer_type
     if @trainer_type.is_a?(Integer)
       @trainer_type = GameData::Metadata.get_player(@character_ID || 0)[0]
@@ -52,6 +54,13 @@ class Player < Trainer
     @coins = value.clamp(0, Settings::MAX_COINS)
   end
 
+
+  def beat_league=(value)
+    @beat_league = value
+  end
+  def new_game_plus_unlocked=(value)
+    @new_game_plus_unlocked = value
+  end
   # Sets the player's Battle Points amount. It can not exceed
   # {Settings::MAX_BATTLE_POINTS}.
   # @param value [Integer] new Battle Points value
@@ -72,6 +81,10 @@ class Player < Trainer
     return @badges.count { |badge| badge == true }
   end
 
+
+  def new_game_plus=(value)
+    @new_game_plus = value
+  end
   #=============================================================================
 
   # (see Pokedex#seen?)
@@ -104,5 +117,8 @@ class Player < Trainer
     @seen_storage_creator  = false
     @mystery_gift_unlocked = false
     @mystery_gifts         = []
+    @beat_league             =  false
+    @new_game_plus_unlocked  =  false
+    @new_game_plus         = false
   end
 end

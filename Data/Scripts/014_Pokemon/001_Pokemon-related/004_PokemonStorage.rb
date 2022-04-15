@@ -1,5 +1,5 @@
 class PokemonBox
-  attr_reader   :pokemon
+  attr_accessor   :pokemon
   attr_accessor :name
   attr_accessor :background
 

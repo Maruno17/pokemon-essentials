@@ -2,13 +2,13 @@
 module Game
   # Initializes various global variables and loads the game data.
   def self.initialize
-    $PokemonTemp        = PokemonTemp.new
-    $game_temp          = Game_Temp.new
-    $game_system        = Game_System.new
-    $data_animations    = load_data('Data/Animations.rxdata')
-    $data_tilesets      = load_data('Data/Tilesets.rxdata')
+    $PokemonTemp = PokemonTemp.new
+    $game_temp = Game_Temp.new
+    $game_system = Game_System.new
+    $data_animations = load_data('Data/Animations.rxdata')
+    $data_tilesets = load_data('Data/Tilesets.rxdata')
     $data_common_events = load_data('Data/CommonEvents.rxdata')
-    $data_system        = load_data('Data/System.rxdata')
+    $data_system = load_data('Data/System.rxdata')
     pbLoadBattleAnimations
     GameData.load_all
     map_file = format('Data/Map%03d.rxdata', $data_system.start_map_id)
@@ -36,9 +36,50 @@ module Game
     end
   end
 
+  #For new game plus - resets everything in boxes/party to level 5 and 1st stage
+  def self.ngp_clean_pc_data(old_storage, old_party)
+    new_storage = old_storage
+    for pokemon in old_party
+      new_storage.pbStoreCaught(pokemon)
+    end
+
+    for box in new_storage.boxes
+      for pokemon in box.pokemon
+        if pokemon != nil
+          if !pokemon.egg?
+            pokemon.level = 5
+            pokemon.species = GameData::Species.get(pokemon.species).get_baby_species(false)
+            pokemon.reset_moves
+          end
+        end
+      end
+    end
+    return new_storage
+  end
+
+  #For new game plus - removes key items
+  def self.ngp_clean_item_data(old_bag)
+    new_storage = old_bag
+    new_storage.clear
+
+    for pocket in old_bag.pockets
+      for bagElement in pocket
+        item_id = bagElement[0]
+        item_qt = bagElement[1]
+        item = GameData::Item.get(item_id)
+        p item
+        if !item.is_key_item? && !item.is_HM?
+          new_storage.pbStoreItem(item, 1)
+        end
+      end
+    end
+    return new_storage
+  end
+
   # Called when starting a new game. Initializes global variables
   # and transfers the player into the map scene.
-  def self.start_new
+  def self.start_new(ngp_bag = nil, ngp_storage = nil, ngp_trainer = nil)
+
     if $game_map && $game_map.events
       $game_map.events.each_value { |event| event.clear_starting }
     end
@@ -53,6 +94,13 @@ module Game
     $PokemonEncounters.setup($game_map.map_id)
     $game_map.autoplay
     $game_map.update
+    #
+    # if ngp_bag != nil
+    #   $PokemonBag = ngp_clean_item_data(ngp_bag)
+    # end
+    if ngp_storage != nil
+      $PokemonStorage = ngp_clean_pc_data(ngp_storage, ngp_trainer.party)
+    end
   end
 
   # Loads the game from the given save data and starts the map scene.

@@ -373,6 +373,29 @@ ItemHandlers::UseFromBag.add(:DEBUGGER, proc { |item|
   end
 })
 
+
+ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
+  TOTAL_SPIRITS_NEEDED = 108
+  nbSpirits = pbGet(ODDKEYSTONE_NB_VARIABLE)
+  if nbSpirits == 107
+    Kernel.pbMessage(_INTL("The Odd Keystone appears to be moving on its own."))
+    Kernel.pbMessage(_INTL("Voices can be heard whispering from it..."))
+    Kernel.pbMessage(_INTL("Just... one... more..."))
+  elsif nbSpirits < TOTAL_SPIRITS_NEEDED
+    nbNeeded = TOTAL_SPIRITS_NEEDED-nbSpirits
+    Kernel.pbMessage(_INTL("Voices can be heard whispering from the Odd Keystone..."))
+    Kernel.pbMessage(_INTL("Bring... us... {1}... spirits",nbNeeded.to_s))
+  else
+    Kernel.pbMessage(_INTL("The Odd Keystone appears to be moving on its own."))
+    Kernel.pbMessage(_INTL("It seems as if some poweful energy is trying to escape from it."))
+    if (Kernel.pbMessage("Let it out?", ["No","Yes"], 0)) == 1
+      pbWildBattle(:SPIRITOMB,27)
+      pbSet(ODDKEYSTONE_NB_VARIABLE,0)
+    end
+    next 1
+  end
+})
+
 ItemHandlers::UseFromBag.add(:MAGICBOOTS, proc { |item|
   if $DEBUG
     if Kernel.pbConfirmMessageSerious(_INTL("Take off the Magic Boots?"))

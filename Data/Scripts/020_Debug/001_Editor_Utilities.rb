@@ -128,6 +128,16 @@ def pbChooseSpeciesList(default = nil)
   return GameData::Species.get(dexNum)
 end
 
+def pbChooseSpeciesTextList(default = nil)
+  commands = []
+  for i in 1..NB_POKEMON
+    species = GameData::Species.get(i)
+    commands.push([species.id_number, species.real_name, species.id])
+  end
+  return pbChooseList(commands, default, nil, -1)
+end
+
+
 def pbChooseSpeciesFormList(default = nil)
   commands = []
   GameData::Species.each do |s|
