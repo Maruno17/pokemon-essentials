@@ -146,7 +146,7 @@ class Pokemon
 
   def hasBodyOf?(check_species)
     if !self.isFusion?
-      return isSpecies(check_species)
+      return isSpecies?(check_species)
     end
     bodySpecies = getBodyID(species)
     checkSpeciesId = getID(nil,check_species)
@@ -155,7 +155,7 @@ class Pokemon
 
   def hasHeadOf?(check_species)
     if !self.isFusion?
-      return isSpecies(check_species)
+      return isSpecies?(check_species)
     end
     headSpecies = getHeadID(species)
     checkSpeciesId = getID(nil,check_species)
