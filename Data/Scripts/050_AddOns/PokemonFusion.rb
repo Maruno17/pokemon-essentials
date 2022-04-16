@@ -692,9 +692,9 @@ class PokemonFusionScene
                               _INTL("\\se[]Congratulations! Your Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
 
       #exp
-      @pokemon1.exp_when_fused_head = @pokemon2.exp   #peut-être l'inverse
-      @pokemon1.exp_when_fused_body = @pokemon1.exp   #peut-être l'inverse
-      @pokemon1.exp_gained_since_fused=0
+      @pokemon1.exp_when_fused_head = @pokemon2.exp #peut-être l'inverse
+      @pokemon1.exp_when_fused_body = @pokemon1.exp #peut-être l'inverse
+      @pokemon1.exp_gained_since_fused = 0
 
       averageFusionIvs()
       #add to pokedex 
@@ -708,17 +708,21 @@ class PokemonFusionScene
       #first check if hidden ability
       hiddenAbility1 = @pokemon1.ability == @pokemon1.getAbilityList[0][-1]
       hiddenAbility2 = @pokemon2.ability == @pokemon2.getAbilityList[0][-1]
-
+      @pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
+      if superSplicer
+        @pokemon1.nature = pbChooseNature(@pokemon1.nature, @pokemon2.nature)
+      end
+      setFusionMoves(@pokemon1, @pokemon2) if !noMoves
       #change species
       @pokemon1.species = newSpecies
 
       #Check moves for new species
-      movelist = @pokemon1.getMoveList
-      for i in movelist
-        if i[0] == @pokemon1.level
-          pbLearnMove(@pokemon1, i[1]) if !noMoves #(pokemon,move,ignoreifknown=true, byTM=false , quick =true)
-        end
-      end
+      # movelist = @pokemon1.getMoveList
+      # for i in movelist
+      #   if i[0] == @pokemon1.level
+      #     pbLearnMove(@pokemon1, i[1]) if !noMoves #(pokemon,move,ignoreifknown=true, byTM=false , quick =true)
+      #   end
+      # end
       #@pokemon1.ability = pbChooseAbility(@pokemon1,@pokemon2)
       removeItem = false
       if @pokemon2.isShiny? || @pokemon1.isShiny?
@@ -730,27 +734,32 @@ class PokemonFusionScene
       @pokemon1.owner = Pokemon::Owner.new_from_trainer($Trainer)
 
 
-      @pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
-      if superSplicer
-        @pokemon1.nature = pbChooseNature(@pokemon1.nature, @pokemon2.nature)
-      end
-
-      movelist = @pokemon2.moves
-      for k in movelist
-        if k.id != 0
-          pbLearnMove(@pokemon1, k.id, true, false,true) if !noMoves #todo: learn moves faster
-        end
-      end
-
       pbSEPlay("Voltorb Flip Point")
 
-      #@pokemon1.firstmoves = []
       @pokemon1.name = newspeciesname if @pokemon1.name == oldspeciesname
 
       @pokemon1.level = setPokemonLevel(@pokemon1.level, @pokemon2.level, superSplicer)
       @pokemon1.calc_stats
       @pokemon1.obtain_method = 0
 
+    end
+  end
+end
+
+def setFusionMoves(fusedPoke, poke2)
+  choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", fusedPoke.name), _INTL("Keep {1}'s moveset", poke2.name)], 2)
+  if choice == 1
+    return
+  elsif choice == 2
+    fusedPoke.moves = poke2.moves
+    return
+  else
+    #Learn moves
+    movelist = poke2.moves
+    for move in movelist
+      if move.id != 0
+        pbLearnMove(fusedPoke, move.id, true, false, true)
+      end
     end
   end
 end
@@ -794,14 +803,13 @@ def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
   abID1 = hidden1 ? abilityList[4][0] : abilityList[0][0]
   abID2 = hidden2 ? abilityList[5][0] : abilityList[1][0]
 
-
   ability1_name = GameData::Ability.get(abID1).name
   ability2_name = GameData::Ability.get(abID2).name
 
   if (Kernel.pbMessage("Choose an ability.", [_INTL("{1}", ability1_name), _INTL("{1}", ability2_name)], 2)) == 0
-    return abID1#hidden1 ? 4 : 0
+    return abID1 #hidden1 ? 4 : 0
   end
-  return abID2#hidden2 ? 5 : 1
+  return abID2 #hidden2 ? 5 : 1
 end
 
 def pbChooseNature(species1_nature, species2_nature)

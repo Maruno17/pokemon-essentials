@@ -24,30 +24,76 @@ class Player < Trainer
     def clear
       @seen            = {}
       @owned           = {}
+
+      @seen_fusion            = {}
+      @owned_fusion           = {}
+
       @seen_forms      = {}
       @last_seen_forms = {}
       @owned_shadow    = {}
       self.refresh_accessible_dexes
     end
 
+
+
+    def isFusion(species)
+      num = getDexNumberForSpecies(species)
+      return num > Settings::NB_POKEMON && num < Settings::ZAPMOLCUNO_NB
+    end
     #===========================================================================
 
     # Sets the given species as seen in the Pokédex.
     # @param species [Symbol, GameData::Species] species to set as seen
     # @param should_refresh_dexes [Boolean] whether Dex accessibility should be recalculated
-    def set_seen(species, should_refresh_dexes = true)
+    def set_seen_fusion(species)
+      bodyId = getBodyID(species)
+      headId = getHeadID(species,bodyId)
+      @seen_fusion[headId][bodyId] = true
+      p @seen_fusion
+    end
+
+    def set_seen_normalDex(species)
       species_id = GameData::Species.try_get(species)&.species
       return if species_id.nil?
       @seen[species_id] = true
+    end
+
+    def set_seen(species, should_refresh_dexes = true)
+      return #TODO
+
+
+      if isFusion(species)
+        set_seen_fusion(species)
+      else
+        set_seen_normalDex(species)
+      end
       self.refresh_accessible_dexes if should_refresh_dexes
     end
 
     # @param species [Symbol, GameData::Species] species to check
     # @return [Boolean] whether the species is seen
-    def seen?(species)
+
+    def seen_fusion?(species)
+      bodyId = getBodyID(species)
+      headId = getHeadID(species,bodyId)
+      return @seen_fusion[headId][bodyId]
+    end
+
+    def seen_normalDex?(species)
       species_id = GameData::Species.try_get(species)&.species
       return false if species_id.nil?
       return @seen[species_id] == true
+    end
+
+    def seen?(species)
+      return false#TODO
+
+
+      if isFusion(species)
+        return seen_fusion?(species)
+      else
+        return seen_normalDex?(species)
+      end
     end
 
     # @param species [Symbol, GameData::Species] species to check
@@ -55,10 +101,11 @@ class Player < Trainer
     # @param form [Integer] form to check
     # @return [Boolean] whether the species of the given gender and form is seen
     def seen_form?(species, gender, form)
-      species_id = GameData::Species.try_get(species)&.species
-      return false if species_id.nil?
-      @seen_forms[species_id] ||= [[], []]
-      return @seen_forms[species_id][gender][form] == true
+      return true
+      # species_id = GameData::Species.try_get(species)&.species
+      # return false if species_id.nil?
+      # @seen_forms[species_id] ||= [[], []]
+      # return @seen_forms[species_id][gender][form] == true
     end
 
     # Returns the amount of seen Pokémon.
@@ -118,25 +165,70 @@ class Player < Trainer
     # Sets the given species as owned in the Pokédex.
     # @param species [Symbol, GameData::Species] species to set as owned
     # @param should_refresh_dexes [Boolean] whether Dex accessibility should be recalculated
-    def set_owned(species, should_refresh_dexes = true)
+    def set_owned_fusion(species)
+      bodyId = getBodyID(species)
+      headId = getHeadID(species,bodyId)
+      @owned_fusion[headId][bodyId]=true
+
+      p @owned_fusion
+    end
+
+
+    def set_owned_normalDex(species)
       species_id = GameData::Species.try_get(species)&.species
       return if species_id.nil?
       @owned[species_id] = true
+    end
+
+    def set_owned(species, should_refresh_dexes = true)
+      return #TODO
+
+      if isFusion(species)
+        set_owned_fusion(species)
+      else
+        set_owned_normalDex(species)
+      end
       self.refresh_accessible_dexes if should_refresh_dexes
     end
 
     # Sets the given species as owned in the Pokédex.
     # @param species [Symbol, GameData::Species] species to set as owned
     def set_shadow_pokemon_owned(species)
-      species_id = GameData::Species.try_get(species)&.species
-      return if species_id.nil?
-      @owned_shadow[species_id] = true
-      self.refresh_accessible_dexes
+      return
+      # species_id = GameData::Species.try_get(species)&.species
+      # return if species_id.nil?
+      # @owned_shadow[species_id] = true
+      # self.refresh_accessible_dexes
     end
 
     # @param species [Symbol, GameData::Species] species to check
     # @return [Boolean] whether the species is owned
+    def owned_fusion?(species)
+      bodyId = getBodyID(species)
+      headId = getHeadID(species,bodyId)
+
+      p @owned
+      p @owned[headId]
+
+      return @owned[headId][bodyId] == true
+
+    end
+
+
+
     def owned?(species)
+      return false #TODO
+
+
+      if isFusion(species)
+        return owned_fusion?(species)
+      else
+        return owned_normalDex?(species)
+      end
+    end
+
+
+    def owned_normalDex?(species)
       species_id = GameData::Species.try_get(species)&.species
       return false if species_id.nil?
       return @owned[species_id] == true
@@ -145,9 +237,10 @@ class Player < Trainer
     # @param species [Symbol, GameData::Species] species to check
     # @return [Boolean] whether a Shadow Pokémon of the species is owned
     def owned_shadow_pokemon?(species)
-      species_id = GameData::Species.try_get(species)&.species
-      return false if species_id.nil?
-      return @owned_shadow[species_id] == true
+      return
+      # species_id = GameData::Species.try_get(species)&.species
+      # return false if species_id.nil?
+      # return @owned_shadow[species_id] == true
     end
 
     # Returns the amount of owned Pokémon.
@@ -165,16 +258,18 @@ class Player < Trainer
     # @param gender [Integer] gender to register (0=male, 1=female, 2=genderless)
     # @param form [Integer] form to register
     def register(species, gender = 0, form = 0, should_refresh_dexes = true)
-      return
-      if species.is_a?(Pokemon)
-        species_data = species.species_data
-        #gender = species.gender
-      else
-        species_data = GameData::Species.get(species)
-      end
-      species = species_data.species
-      @seen[species] = true
-      self.refresh_accessible_dexes if should_refresh_dexes
+      set_owned(species,should_refresh_dexes)
+      set_seen(species,should_refresh_dexes)
+      # return
+      # if species.is_a?(Pokemon)
+      #   species_data = species.species_data
+      #   #gender = species.gender
+      # else
+      #   species_data = GameData::Species.get(species)
+      # end
+      # species = species_data.species
+      # @seen[species] = true
+      # self.refresh_accessible_dexes if should_refresh_dexes
     end
 
     # @param pkmn [Pokemon] Pokemon to register as most recently seen
