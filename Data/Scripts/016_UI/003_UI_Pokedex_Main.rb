@@ -25,7 +25,11 @@ class Window_Pokedex < Window_DrawableCommand
   end
 
   def species
-    return (@commands.length==0) ? 0 : @commands[self.index][0]
+    if self.index > @commands.size
+      self.index = 0
+    end
+    current_position= self.index
+    return (@commands.length==0) ? 0 : @commands[current_position][0]
   end
 
   def itemCount

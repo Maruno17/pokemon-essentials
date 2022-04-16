@@ -708,14 +708,14 @@ class PokemonFusionScene
       #first check if hidden ability
       hiddenAbility1 = @pokemon1.ability == @pokemon1.getAbilityList[0][-1]
       hiddenAbility2 = @pokemon2.ability == @pokemon2.getAbilityList[0][-1]
+
+      setFusionMoves(@pokemon1, @pokemon2) if !noMoves
+      #change species
+      @pokemon1.species = newSpecies
       @pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
       if superSplicer
         @pokemon1.nature = pbChooseNature(@pokemon1.nature, @pokemon2.nature)
       end
-      setFusionMoves(@pokemon1, @pokemon2) if !noMoves
-      #change species
-      @pokemon1.species = newSpecies
-
       #Check moves for new species
       # movelist = @pokemon1.getMoveList
       # for i in movelist

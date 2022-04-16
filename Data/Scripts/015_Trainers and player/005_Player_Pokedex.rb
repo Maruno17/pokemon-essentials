@@ -22,24 +22,55 @@ class Player < Trainer
 
     # Clears the Pokédex.
     def clear
-      @seen            = {}
-      @owned           = {}
+      @seen = {} #deprecated
+      @owned = {} #deprecated
 
-      @seen_fusion            = {}
-      @owned_fusion           = {}
+      @seen_standard = initStandardDexArray()
+      @owned_standard = initStandardDexArray()
 
-      @seen_forms      = {}
+      @seen_fusion = initFusionDexArray()
+      @owned_fusion = initFusionDexArray()
+
+      @seen_forms = {}
       @last_seen_forms = {}
-      @owned_shadow    = {}
+      @owned_shadow = {}
       self.refresh_accessible_dexes
     end
 
+    def initStandardDexArray()
+      dex_array = []
+      for poke in 0..NB_POKEMON
+        if poke == 0
+          dex_array << nil
+        end
+        dex_array << false
+      end
+      return dex_array
+    end
 
+    def initFusionDexArray()
+      head_array = []
+      for head in 0..NB_POKEMON
+        body_array = []
+        if head == 0
+          head_array << nil
+        end
+        for body in 0..NB_POKEMON
+          if body == 0
+            body_array << nil
+          end
+          body_array << false
+        end
+        head_array << body_array
+      end
+      return head_array
+    end
 
     def isFusion(species)
       num = getDexNumberForSpecies(species)
       return num > Settings::NB_POKEMON && num < Settings::ZAPMOLCUNO_NB
     end
+
     #===========================================================================
 
     # Sets the given species as seen in the Pokédex.
@@ -47,21 +78,22 @@ class Player < Trainer
     # @param should_refresh_dexes [Boolean] whether Dex accessibility should be recalculated
     def set_seen_fusion(species)
       bodyId = getBodyID(species)
-      headId = getHeadID(species,bodyId)
+      headId = getHeadID(species, bodyId)
       @seen_fusion[headId][bodyId] = true
-      p @seen_fusion
     end
 
+
+    # def set_seen_normalDex(species)
+    #   species_id = GameData::Species.try_get(species)&.species
+    #   return if species_id.nil?
+    #   @seen[species_id] = true
+    # end
     def set_seen_normalDex(species)
-      species_id = GameData::Species.try_get(species)&.species
-      return if species_id.nil?
-      @seen[species_id] = true
+      dex_num = getDexNumberForSpecies(species)
+      @seen_standard[dex_num] = true
     end
 
     def set_seen(species, should_refresh_dexes = true)
-      return #TODO
-
-
       if isFusion(species)
         set_seen_fusion(species)
       else
@@ -75,20 +107,20 @@ class Player < Trainer
 
     def seen_fusion?(species)
       bodyId = getBodyID(species)
-      headId = getHeadID(species,bodyId)
+      headId = getHeadID(species, bodyId)
       return @seen_fusion[headId][bodyId]
     end
 
+    # def seen_normalDex?(species)
+    #   species_id = GameData::Species.try_get(species)&.species
+    #   return false if species_id.nil?
+    #   return @seen[species_id] == true
+    # end
     def seen_normalDex?(species)
-      species_id = GameData::Species.try_get(species)&.species
-      return false if species_id.nil?
-      return @seen[species_id] == true
+      return @seen_standard[getDexNumberForSpecies(species)]
     end
 
     def seen?(species)
-      return false#TODO
-
-
       if isFusion(species)
         return seen_fusion?(species)
       else
@@ -101,7 +133,7 @@ class Player < Trainer
     # @param form [Integer] form to check
     # @return [Boolean] whether the species of the given gender and form is seen
     def seen_form?(species, gender, form)
-      return true
+      return false
       # species_id = GameData::Species.try_get(species)&.species
       # return false if species_id.nil?
       # @seen_forms[species_id] ||= [[], []]
@@ -113,8 +145,10 @@ class Player < Trainer
     # in that region.
     # @param dex [Integer] region ID
     def seen_count(dex = -1)
-      validate dex => Integer
-      return self.count_species(@seen, dex)
+      if @seen_standard == nil || @owned_standard == nil
+        resync_pokedex()
+      end
+      count_dex(@seen_standard,@seen_fusion)
     end
 
     # Returns whether there are any seen Pokémon.
@@ -123,29 +157,38 @@ class Player < Trainer
     # @param region [Integer] region ID
     # @return [Boolean] whether there are any seen Pokémon
     def seen_any?(dex = -1)
-      validate dex => Integer
-      if dex == -1
-        GameData::Species.each { |s| return true if s.form == 0 && @seen[s.species] }
-      else
-        pbAllRegionalSpecies(dex).each { |s| return true if s && @seen[s] }
-      end
-      return false
+      return seen_count >= 1
     end
+
+    # def seen_any?(dex = -1)
+    #   validate dex => Integer
+    #   if dex == -1
+    #     GameData::Species.each { |s| return true if s.form == 0 && @seen[s.species] }
+    #   else
+    #     pbAllRegionalSpecies(dex).each { |s| return true if s && @seen[s] }
+    #   end
+    #   return false
+    # end
+
 
     # Returns the amount of seen forms for the given species.
     # @param species [Symbol, GameData::Species] Pokémon species
     # @return [Integer] amount of seen forms
     def seen_forms_count(species)
-      species_id = GameData::Species.try_get(species)&.species
-      return 0 if species_id.nil?
-      ret = 0
-      @seen_forms[species_id] ||= [[], []]
-      array = @seen_forms[species_id]
-      for i in 0...[array[0].length, array[1].length].max
-        ret += 1 if array[0][i] || array[1][i]
-      end
-      return ret
+      return 0
     end
+    # def seen_forms_count(species)
+    #   species_id = GameData::Species.try_get(species)&.species
+    #   return 0 if species_id.nil?
+    #   ret = 0
+    #   @seen_forms[species_id] ||= [[], []]
+    #   array = @seen_forms[species_id]
+    #   for i in 0...[array[0].length, array[1].length].max
+    #     ret += 1 if array[0][i] || array[1][i]
+    #   end
+    #   return ret
+    # end
+
 
     # @param species [Symbol, GameData::Species] Pokémon species
     def last_form_seen(species)
@@ -167,22 +210,21 @@ class Player < Trainer
     # @param should_refresh_dexes [Boolean] whether Dex accessibility should be recalculated
     def set_owned_fusion(species)
       bodyId = getBodyID(species)
-      headId = getHeadID(species,bodyId)
-      @owned_fusion[headId][bodyId]=true
-
-      p @owned_fusion
+      headId = getHeadID(species, bodyId)
+      @owned_fusion[headId][bodyId] = true
     end
 
 
+    # def set_owned_normalDex(species)
+    #   species_id = GameData::Species.try_get(species)&.species
+    #   return if species_id.nil?
+    #   @owned[species_id] = true
+    # end
     def set_owned_normalDex(species)
-      species_id = GameData::Species.try_get(species)&.species
-      return if species_id.nil?
-      @owned[species_id] = true
+      @owned_standard[getDexNumberForSpecies(species)] = true
     end
 
     def set_owned(species, should_refresh_dexes = true)
-      return #TODO
-
       if isFusion(species)
         set_owned_fusion(species)
       else
@@ -205,21 +247,11 @@ class Player < Trainer
     # @return [Boolean] whether the species is owned
     def owned_fusion?(species)
       bodyId = getBodyID(species)
-      headId = getHeadID(species,bodyId)
-
-      p @owned
-      p @owned[headId]
-
-      return @owned[headId][bodyId] == true
-
+      headId = getHeadID(species, bodyId)
+      return @owned_fusion[headId][bodyId] == true
     end
 
-
-
     def owned?(species)
-      return false #TODO
-
-
       if isFusion(species)
         return owned_fusion?(species)
       else
@@ -227,13 +259,14 @@ class Player < Trainer
       end
     end
 
-
+    # def owned_normalDex?(species)
+    #   species_id = GameData::Species.try_get(species)&.species
+    #   return false if species_id.nil?
+    #   return @owned[species_id] == true
+    # end
     def owned_normalDex?(species)
-      species_id = GameData::Species.try_get(species)&.species
-      return false if species_id.nil?
-      return @owned[species_id] == true
+      return @owned_standard[getDexNumberForSpecies(species)]
     end
-
     # @param species [Symbol, GameData::Species] species to check
     # @return [Boolean] whether a Shadow Pokémon of the species is owned
     def owned_shadow_pokemon?(species)
@@ -248,9 +281,44 @@ class Player < Trainer
     # in that region.
     # @param region [Integer] region ID
     def owned_count(dex = -1)
-      validate dex => Integer
-      return self.count_species(@owned, dex)
+      if @owned_standard == nil || @owned_fusion == nil
+        resync_pokedex()
+      end
+      count_dex(@owned_standard,@owned_fusion)
+      #
+      # validate dex => Integer
+      # return self.count_species(@owned, dex)
     end
+
+    def count_dex(standardList,fusedList)
+      owned_standard = count_true(standardList)
+      owned_fused = 0
+      for head_poke_list in fusedList
+        if head_poke_list != nil
+          owned_fused += count_true(head_poke_list)
+        end
+      end
+      return owned_standard + owned_fused
+    end
+
+    def count_true(list)
+      count=0
+      for owned in list
+        if owned
+          count+=1
+        end
+      end
+      return count
+    end
+
+
+    #todo:
+    # loop on @owned and @seen and add the pokemon in @owned_standard/fusion @seen_standard/fusion
+    # then clear @owned and @seen
+    def resync_pokedex()
+      self.clear
+    end
+
 
     #===========================================================================
 
@@ -258,8 +326,7 @@ class Player < Trainer
     # @param gender [Integer] gender to register (0=male, 1=female, 2=genderless)
     # @param form [Integer] form to register
     def register(species, gender = 0, form = 0, should_refresh_dexes = true)
-      set_owned(species,should_refresh_dexes)
-      set_seen(species,should_refresh_dexes)
+      set_seen(species, should_refresh_dexes)
       # return
       # if species.is_a?(Pokemon)
       #   species_data = species.species_data
@@ -330,11 +397,12 @@ class Player < Trainer
         @accessible_dexes[0] = region if self.seen_any?(region)
         return
       end
-      if dexes_count == 1   # Only National Dex is defined
+      if dexes_count == 1 # Only National Dex is defined
         if self.unlocked?(0) && self.seen_any?
           @accessible_dexes.push(-1)
         end
-      else   # Regional Dexes + National Dex
+      else
+        # Regional Dexes + National Dex
         for i in 0...dexes_count
           dex_list_to_check = (i == dexes_count - 1) ? -1 : i
           if self.unlocked?(i) && self.seen_any?(dex_list_to_check)
