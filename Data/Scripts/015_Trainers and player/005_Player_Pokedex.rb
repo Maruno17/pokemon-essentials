@@ -302,18 +302,14 @@ class Player < Trainer
     # loop on @owned and @seen and add the pokemon in @owned_standard/fusion @seen_standard/fusion
     # then clear @owned and @seen
     def resync_pokedex()
-      Kernel.pbMessage(_INTL("Syncing Pokédex... This might take some time."))
       init_new_pokedex_if_needed()
-
       @seen.each { |pokemon|
         set_seen(pokemon[0])
       }
       @owned.each { |pokemon|
         set_owned(pokemon[0])
       }
-
       self.refresh_accessible_dexes
-
       @seen = {} #deprecated
       @owned = {} #deprecated
       #self.clear

@@ -197,7 +197,7 @@ class PokemonPokedexInfo_Scene
     case page
     when 1 then drawPageInfo
     when 2 then drawPageArea
-    when 3 then drawPageForms
+    when 2 then drawPageForms
     end
   end
 
@@ -487,24 +487,24 @@ class PokemonPokedexInfo_Scene
           (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
-      elsif Input.trigger?(Input::LEFT)
-        oldpage = @page
-        @page -= 1
-        @page = 1 if @page<1
-        @page = 3 if @page>3
-        if @page!=oldpage
-          pbPlayCursorSE
-          dorefresh = true
-        end
-      elsif Input.trigger?(Input::RIGHT)
-        oldpage = @page
-        @page += 1
-        @page = 1 if @page<1
-        @page = 3 if @page>3
-        if @page!=oldpage
-          pbPlayCursorSE
-          dorefresh = true
-        end
+      # elsif Input.trigger?(Input::LEFT)
+      #   oldpage = @page
+      #   @page -= 1
+      #   @page = 1 if @page<1
+      #   @page = 3 if @page>3
+      #   if @page!=oldpage
+      #     pbPlayCursorSE
+      #     dorefresh = true
+      #   end
+      # elsif Input.trigger?(Input::RIGHT)
+      #   oldpage = @page
+      #   @page += 1
+      #   @page = 1 if @page<1
+      #   @page = 3 if @page>3
+      #   if @page!=oldpage
+      #     pbPlayCursorSE
+      #     dorefresh = true
+      #   end
       end
       if dorefresh
         drawPage(@page)
