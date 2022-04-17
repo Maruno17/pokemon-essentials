@@ -25,7 +25,7 @@ class Window_Pokedex < Window_DrawableCommand
   end
 
   def species
-    if self.index > @commands.size
+    if self.index > @commands.size-1
       self.index = 0
     end
     current_position= self.index

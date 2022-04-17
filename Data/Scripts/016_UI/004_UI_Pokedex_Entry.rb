@@ -124,7 +124,9 @@ class PokemonPokedexInfo_Scene
   def pbUpdateDummyPokemon
     @species = @dexlist[@index][0]
     @gender, @form = $Trainer.pokedex.last_form_seen(@species)
-    species_data = GameData::Species.get_species_form(@species, @form)
+
+    # species_data = pbGetSpeciesData(@species)
+     species_data = GameData::Species.get_species_form(@species, @form)
     @sprites["infosprite"].setSpeciesBitmap(@species,@gender,@form)
     if @sprites["formfront"]
       @sprites["formfront"].setSpeciesBitmap(@species,@gender,@form)
@@ -141,42 +143,43 @@ class PokemonPokedexInfo_Scene
 
   def pbGetAvailableForms
     ret = []
-    multiple_forms = false
-    # Find all genders/forms of @species that have been seen
-    GameData::Species.each do |sp|
-      next if sp.species != @species
-      next if sp.form != 0 && (!sp.real_form_name || sp.real_form_name.empty?)
-      next if sp.pokedex_form != sp.form
-      multiple_forms = true if sp.form > 0
-      case sp.gender_ratio
-      when :AlwaysMale, :AlwaysFemale, :Genderless
-        real_gender = (sp.gender_ratio == :AlwaysFemale) ? 1 : 0
-        next if !$Trainer.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
-        real_gender = 2 if sp.gender_ratio == :Genderless
-        ret.push([sp.form_name, real_gender, sp.form])
-      else   # Both male and female
-        for real_gender in 0...2
-          next if !$Trainer.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
-          ret.push([sp.form_name, real_gender, sp.form])
-          break if sp.form_name && !sp.form_name.empty?   # Only show 1 entry for each non-0 form
-        end
-      end
-    end
-    # Sort all entries
-    ret.sort! { |a, b| (a[2] == b[2]) ? a[1] <=> b[1] : a[2] <=> b[2] }
-    # Create form names for entries if they don't already exist
-    ret.each do |entry|
-      if !entry[0] || entry[0].empty?   # Necessarily applies only to form 0
-        case entry[1]
-        when 0 then entry[0] = _INTL("Male")
-        when 1 then entry[0] = _INTL("Female")
-        else
-          entry[0] = (multiple_forms) ? _INTL("One Form") : _INTL("Genderless")
-        end
-      end
-      entry[1] = 0 if entry[1] == 2   # Genderless entries are treated as male
-    end
     return ret
+    # multiple_forms = false
+    # # Find all genders/forms of @species that have been seen
+    # GameData::Species.each do |sp|
+    #   next if sp.species != @species
+    #   next if sp.form != 0 && (!sp.real_form_name || sp.real_form_name.empty?)
+    #   next if sp.pokedex_form != sp.form
+    #   multiple_forms = true if sp.form > 0
+    #   case sp.gender_ratio
+    #   when :AlwaysMale, :AlwaysFemale, :Genderless
+    #     real_gender = (sp.gender_ratio == :AlwaysFemale) ? 1 : 0
+    #     next if !$Trainer.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
+    #     real_gender = 2 if sp.gender_ratio == :Genderless
+    #     ret.push([sp.form_name, real_gender, sp.form])
+    #   else   # Both male and female
+    #     for real_gender in 0...2
+    #       next if !$Trainer.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
+    #       ret.push([sp.form_name, real_gender, sp.form])
+    #       break if sp.form_name && !sp.form_name.empty?   # Only show 1 entry for each non-0 form
+    #     end
+    #   end
+    # end
+    # # Sort all entries
+    # ret.sort! { |a, b| (a[2] == b[2]) ? a[1] <=> b[1] : a[2] <=> b[2] }
+    # # Create form names for entries if they don't already exist
+    # ret.each do |entry|
+    #   if !entry[0] || entry[0].empty?   # Necessarily applies only to form 0
+    #     case entry[1]
+    #     when 0 then entry[0] = _INTL("Male")
+    #     when 1 then entry[0] = _INTL("Female")
+    #     else
+    #       entry[0] = (multiple_forms) ? _INTL("One Form") : _INTL("Genderless")
+    #     end
+    #   end
+    #   entry[1] = 0 if entry[1] == 2   # Genderless entries are treated as male
+    # end
+    # return ret
   end
 
   def drawPage(page)

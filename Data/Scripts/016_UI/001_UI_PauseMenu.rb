@@ -156,7 +156,7 @@ class PokemonPauseMenu
             @scene.pbRefresh
           }
         else
-          if $Trainer.pokedex.accessible_dexes.length == 1
+          #if $Trainer.pokedex.accessible_dexes.length == 1
             $PokemonGlobal.pokedexDex = $Trainer.pokedex.accessible_dexes[0]
             pbFadeOutIn {
               scene = PokemonPokedex_Scene.new
@@ -164,14 +164,14 @@ class PokemonPauseMenu
               screen.pbStartScreen
               @scene.pbRefresh
             }
-          else
-            pbFadeOutIn {
-              scene = PokemonPokedexMenu_Scene.new
-              screen = PokemonPokedexMenuScreen.new(scene)
-              screen.pbStartScreen
-              @scene.pbRefresh
-            }
-          end
+          # else
+          #   pbFadeOutIn {
+          #     scene = PokemonPokedexMenu_Scene.new
+          #     screen = PokemonPokedexMenuScreen.new(scene)
+          #     screen.pbStartScreen
+          #     @scene.pbRefresh
+          #   }
+          # end
         end
       elsif cmdPokemon>=0 && command==cmdPokemon
         pbPlayDecisionSE
