@@ -125,6 +125,10 @@ module GameData
       return self.icon_filename(pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?, pkmn.shadowPokemon?, pkmn.egg?)
     end
 
+    def self.icon_filename_from_species(species)
+      return self.icon_filename(species, 0, 0, false, false, false)
+    end
+
     def self.egg_icon_bitmap(species, form)
       filename = self.egg_icon_filename(species, form)
       return (filename) ? AnimatedBitmap.new(filename).deanimate : nil

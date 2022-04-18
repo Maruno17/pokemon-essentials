@@ -4,6 +4,8 @@ end
 
 class PokemonTemp
   attr_accessor :pokeradar # [species, level, chain count, grasses (x,y,ring,rarity)]
+  attr_accessor :pokeradar_ui # [species, level, chain count, grasses (x,y,ring,rarity)]
+
 end
 
 ################################################################################
@@ -22,10 +24,10 @@ def pbCanUsePokeRadar?
     return false
   end
   # Can't use Radar while cycling
-  if $PokemonGlobal.bicycle
-    pbMessage(_INTL("Can't use that while on a bicycle."))
-    return false
-  end
+  # if $PokemonGlobal.bicycle
+  #   pbMessage(_INTL("Can't use that while on a bicycle."))
+  #   return false
+  # end
   # Debug
   return true if $DEBUG && Input.press?(Input::CTRL)
   # Can't use Radar if it isn't fully charged
@@ -41,28 +43,43 @@ def pbUsePokeRadar
   return false if !pbCanUsePokeRadar?
   $PokemonTemp.pokeradar = [0, 0, 0, []] if !$PokemonTemp.pokeradar
   $PokemonGlobal.pokeradarBattery = Settings::POKERADAR_BATTERY_STEPS
-  rareAllowed = canEncounterRarePokemon()
+  unseenPokemon = listPokemonInCurrentRoute($PokemonEncounters.encounter_type, false, true)
+  seenPokemon = listPokemonInCurrentRoute($PokemonEncounters.encounter_type, true, false)
+  rareAllowed = canEncounterRarePokemon(unseenPokemon)
+  displayPokeradarBanner(seenPokemon, unseenPokemon, rareAllowed)
   playPokeradarLightAnimation(rareAllowed)
   pbWait(20)
   pbPokeRadarHighlightGrass
   return true
 end
 
-#can only encounter rare if have seen every encounterable land pokemon on the route
-def canEncounterRarePokemon()
-  processed = []
-  for encounter in $PokemonEncounters.listPossibleEncounters($PokemonEncounters.pbEncounterType)
-    species = encounter[0]
-    if !processed.include?(species)
-      if $Trainer.seen[species]
-        processed << species
-      else
-        return false
-      end
+def listPokeradarRareEncounters()
+  map = $game_map.map_id
+  array = []
+  Settings::POKE_RADAR_ENCOUNTERS.each do |enc|
+    if enc[0] == map
+      species = enc[2]
+      array.push(species)
     end
   end
-  return true
+  return array
 end
+
+# #can only encounter rare if have seen every encounterable land pokemon on the route
+# def canEncounterRarePokemon()
+#   processed = []
+#   for encounter in $PokemonEncounters.listPossibleEncounters($PokemonEncounters.pbEncounterType)
+#     species = encounter[0]
+#     if !processed.include?(species)
+#       if $Trainer.seen[species]
+#         processed << species
+#       else
+#         return false
+#       end
+#     end
+#   end
+#   return true
+# end
 
 def playPokeradarLightAnimation(rareAllowed = false)
   if rareAllowed
@@ -72,17 +89,29 @@ def playPokeradarLightAnimation(rareAllowed = false)
   end
 end
 
+def displayPokeradarBanner(seenPokemon = [], unseenPokemon = [], includeRare = false)
+  return if $PokemonTemp.pokeradar_ui !=nil
+  rarePokemon = includeRare ? listPokeradarRareEncounters() : []
+  $PokemonTemp.pokeradar_ui = PokeRadar_UI.new(seenPokemon, unseenPokemon, rarePokemon)
+end
+
 def pbPokeRadarCancel
+  if $PokemonTemp.pokeradar_ui != nil
+    $PokemonTemp.pokeradar_ui.dispose
+    $PokemonTemp.pokeradar_ui=nil
+  end
   $PokemonTemp.pokeradar = nil
 end
 
-def listUnseenPokemonInCurrentRoute(encounterType)
+def listPokemonInCurrentRoute(encounterType, onlySeen = false, onlyUnseen = false)
   processed = []
+  seen = []
   unseen = []
   for encounter in $PokemonEncounters.listPossibleEncounters(encounterType)
     species = encounter[1]
     if !processed.include?(species)
       if $Trainer.seen?(species)
+        seen << species
         processed << species
       else
         unseen << species
@@ -90,15 +119,17 @@ def listUnseenPokemonInCurrentRoute(encounterType)
       end
     end
   end
-  return unseen
+  if onlySeen
+    return seen
+  elsif onlyUnseen
+    return unseen
+  else
+    return processed
+  end
 end
 
 #can only encounter rare if have seen every encounterable land pokemon on the route
-def canEncounterRarePokemon()
-  return true
-
-  #pokedex register seen doesn't work correctly so temporarily removed
-  unseenPokemon = listUnseenPokemonInCurrentRoute($PokemonEncounters.encounter_type)
+def canEncounterRarePokemon(unseenPokemon)
   return unseenPokemon.length == 0
 end
 
@@ -201,7 +232,7 @@ end
 ################################################################################
 EncounterModifier.register(proc { |encounter|
   if GameData::EncounterType.get($PokemonTemp.encounterType).type != :land ||
-    $PokemonGlobal.bicycle || $PokemonGlobal.partner
+    $PokemonGlobal.partner # $PokemonGlobal.bicycle || $PokemonGlobal.partner
     pbPokeRadarCancel
     next encounter
   end

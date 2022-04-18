@@ -130,6 +130,10 @@ class PokemonIconSprite < SpriteWrapper
     super(@logical_y + @adjusted_y)
   end
 
+  def animBitmap=(value)
+    @animBitmap = value
+  end
+
   def pokemon=(value)
     @pokemon = value
     @animBitmap.dispose if @animBitmap

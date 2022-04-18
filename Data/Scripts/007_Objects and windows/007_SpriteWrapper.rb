@@ -353,7 +353,6 @@ end
 #===============================================================================
 class IconSprite < SpriteWrapper
   attr_reader :name
-
   def initialize(*args)
     if args.length == 0
       super(nil)
@@ -395,6 +394,10 @@ class IconSprite < SpriteWrapper
     self.src_rect = oldrc
   end
 
+  def setColor(r = 0, g = 0, b = 0, a = 255)
+    @_iconbitmap.pbSetColor(r,g,b,a)
+  end
+
   # Sets the icon's filename.
   def setBitmap(file, hue = 0)
     oldrc = self.src_rect
@@ -427,6 +430,8 @@ class IconSprite < SpriteWrapper
       self.src_rect = oldrc
     end
   end
+
+
 end
 
 #===============================================================================
