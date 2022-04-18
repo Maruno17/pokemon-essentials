@@ -1338,9 +1338,9 @@ Pokemon = B95H23,21 #Ekix,
 #-------------------------
 
 [HIKER,Brice]
-Pokemon = GEODUDE,18 #Geokarp,
+Pokemon = DIGLETT,18 #Geokarp,
 Pokemon = DIGLETT,18 #Digchop,
-Pokemon = B76H129,20 #MagiLEM,
+Pokemon = B75H129,20 #MagiLEM,
 #-------------------------
 
 [PICNICKER,Caitlin]
@@ -3259,7 +3259,6 @@ Pokemon = MEW,22 #Charysaur,
 [RIVAL1,Blue,12]
 Items = SUPERPOTION,SUPERPOTION
 Pokemon = B17H104,25 #Cueotto,
-Pokemon = EXEGGCUTE,24 
 Pokemon = GYARADOS,23 
 Pokemon = B64H120,22 #Starbra,
 Pokemon = MEW,25 #Warmeleon,
@@ -3269,7 +3268,6 @@ Pokemon = MEW,25 #Warmeleon,
 [RIVAL1,Blue,13]
 Items = SUPERPOTION,SUPERPOTION
 Pokemon = B17H104,25 #Cueotto,
-Pokemon = EXEGGCUTE,24 
 Pokemon = GYARADOS,23 
 Pokemon = B64H120,22 #Starbra,
 Pokemon = MEW,25 #Ivytortle,
@@ -3279,7 +3277,6 @@ Pokemon = MEW,25 #Ivytortle,
 [RIVAL1,Blue,14]
 Items = SUPERPOTION,SUPERPOTION
 Pokemon = B17H104,25 #Cueotto,
-Pokemon = EXEGGCUTE,24 
 Pokemon = GYARADOS,23 
 Pokemon = B64H120,22 #Starbra,
 Pokemon = MEW,25 #Charysaur,

@@ -97,6 +97,7 @@ class BetterRegionMap
     if @show_player
       if map_metadata
         player = map_metadata.town_map_position
+
         if player && player[0] == @region
           $PokemonGlobal.regionMapSel[0] = player[1]
           $PokemonGlobal.regionMapSel[1] = player[2]
@@ -172,25 +173,25 @@ class BetterRegionMap
     @sprites["cursor"].z = 11
 
     # Center the window on the cursor
-    windowminx = -1 * (@window["map"].bmp.width - Settings::SCREEN_WIDTH)
-    windowminx = 0 if windowminx > 0
-    windowminy = -1 * (@window["map"].bmp.height - Settings::SCREEN_HEIGHT)
-    windowminy = 0 if windowminy > 0
-
-    if @sprites["cursor"].x > (Settings::SCREEN_WIDTH / 2)
-      @window.x = (Settings::SCREEN_WIDTH / 2 ) - @sprites["cursor"].x
-      if (@window.x < windowminx)
-        @window.x = windowminx
-      end
-      @sprites["cursor"].x += @window.x
-    end
-    if @sprites["cursor"].y > (Settings::SCREEN_HEIGHT / 2)
-      @window.y = (Settings::SCREEN_HEIGHT / 2 ) - @sprites["cursor"].y
-      if @window.y < windowminy
-        @window.y = windowminy
-      end
-      @sprites["cursor"].y += @window.y
-    end
+    # windowminx = -1 * (@window["map"].bmp.width - Settings::SCREEN_WIDTH)
+    # windowminx = 0 if windowminx > 0
+    # windowminy = -1 * (@window["map"].bmp.height - Settings::SCREEN_HEIGHT)
+    # windowminy = 0 if windowminy > 0
+    #
+    # if @sprites["cursor"].x > (Settings::SCREEN_WIDTH / 2)
+    #   @window.x = (Settings::SCREEN_WIDTH / 2 ) - @sprites["cursor"].x
+    #   if (@window.x < windowminx)
+    #     @window.x = windowminx
+    #   end
+    #   @sprites["cursor"].x += @window.x
+    # end
+    # if @sprites["cursor"].y > (Settings::SCREEN_HEIGHT / 2)
+    #   @window.y = (Settings::SCREEN_HEIGHT / 2 ) - @sprites["cursor"].y
+    #   if @window.y < windowminy
+    #     @window.y = windowminy
+    #   end
+    #   @sprites["cursor"].y += @window.y
+    # end
 
     @sprites["cursor"].ox = (@sprites["cursor"].bmp.height - TileWidth) / 2.0
     @sprites["cursor"].oy = @sprites["cursor"].ox

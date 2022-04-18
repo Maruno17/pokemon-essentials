@@ -358,17 +358,25 @@ module Settings
     [171, 30, :BIDOOF,2,5],             #Rt. 22
     [143, 30, :RIOLU,25,25],            #Rt. 23
     [8, 30,   :BUNEARY,12,13],          #Rt. 24
-    [145, 5, :ABSOL,30,35],             #Rt. 26
-    [147, 5, :ABSOL,30,35],             #Rt. 27
+    [145, 30, :ABSOL,30,35],             #Rt. 26
+    [147, 30, :ABSOL,30,35],             #Rt. 27
     [311, 30, :BIDOOF,5,5],             #Rt. 29
+    [284, 30, :LUXIO,40,45],             #Rt. 33
+    [288, 30, :VIGOROTH,40,45],             #Rt. 32
+    [342, 30, :GOLETT,40,45],             #Ruins of Alph
+    [261, 30, :BELLOSSOM,45,50],             #Rt. 31
+    [261, 30, :BIBAREL,45,50],             #Rt. 30
     [265, 30, :KIRLIA,25,30],           #Rt. 34
+    [267, 30, :SUDOWOODO,25,30],           #Rt. 36
     [300, 30, :ROSELIA,30,30],          #National Park
     [300, 30, :BRELOOM,30,30],          #Ilex Forest
     [670, 30, :WEAVILE,50,50],          #Ice mountains
     [528, 30, :PYUKUMUKU,20,20],        #Treasure Beach
     [690, 30, :OCTILLERY,32,45],        #Deep Ocean
     [561, 30, :MAGMAR,32,45],           #Mt. Ember
-    [654, 30, :WHIMSICOTT,32,45],       #Brine Road
+    [562, 30, :NINJASK,45,50],           #Boon Island
+    [603, 30, :KECLEON,45,50],           #Chrono Island
+    [654, 30, :WHIMSICOTT,32,45]       #Brine Road
   ]
 
   #=============================================================================

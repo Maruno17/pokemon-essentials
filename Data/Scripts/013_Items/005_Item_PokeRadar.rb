@@ -14,15 +14,19 @@ end
 def pbCanUsePokeRadar?
   # Can't use Radar if not in tall grass
   terrain = $game_map.terrain_tag($game_player.x, $game_player.y)
-  if !terrain.land_wild_encounters || !terrain.shows_grass_rustle
+  # if !terrain.land_wild_encounters || !terrain.shows_grass_rustle
+  #   pbMessage(_INTL("Can't use that here."))
+  #   return false
+  # end
+  if $PokemonEncounters.encounter_type == nil
     pbMessage(_INTL("Can't use that here."))
     return false
   end
   # Can't use Radar if map has no grass-based encounters (ignoring Bug Contest)
-  if !$PokemonEncounters.has_normal_land_encounters?
-    pbMessage(_INTL("Can't use that here."))
-    return false
-  end
+  # if !$PokemonEncounters.has_normal_land_encounters?
+  #   pbMessage(_INTL("Can't use that here."))
+  #   return false
+  # end
   # Can't use Radar while cycling
   # if $PokemonGlobal.bicycle
   #   pbMessage(_INTL("Can't use that while on a bicycle."))
@@ -90,7 +94,7 @@ def playPokeradarLightAnimation(rareAllowed = false)
 end
 
 def displayPokeradarBanner(seenPokemon = [], unseenPokemon = [], includeRare = false)
-  return if $PokemonTemp.pokeradar_ui !=nil
+  return if $PokemonTemp.pokeradar_ui != nil
   rarePokemon = includeRare ? listPokeradarRareEncounters() : []
   $PokemonTemp.pokeradar_ui = PokeRadar_UI.new(seenPokemon, unseenPokemon, rarePokemon)
 end
@@ -98,12 +102,13 @@ end
 def pbPokeRadarCancel
   if $PokemonTemp.pokeradar_ui != nil
     $PokemonTemp.pokeradar_ui.dispose
-    $PokemonTemp.pokeradar_ui=nil
+    $PokemonTemp.pokeradar_ui = nil
   end
   $PokemonTemp.pokeradar = nil
 end
 
 def listPokemonInCurrentRoute(encounterType, onlySeen = false, onlyUnseen = false)
+  return [] if encounterType == nil
   processed = []
   seen = []
   unseen = []
@@ -130,7 +135,11 @@ end
 
 #can only encounter rare if have seen every encounterable land pokemon on the route
 def canEncounterRarePokemon(unseenPokemon)
-  return unseenPokemon.length == 0
+  terrain = $game_map.terrain_tag($game_player.x, $game_player.y)
+  return unseenPokemon.length == 0 &&
+    $PokemonEncounters.has_normal_land_encounters? &&
+    terrain.land_wild_encounters &&
+    terrain.shows_grass_rustle
 end
 
 def pbPokeRadarHighlightGrass(showmessage = true)
@@ -170,7 +179,7 @@ def pbPokeRadarHighlightGrass(showmessage = true)
   end
   if grasses.length == 0
     # No shaking grass found, break the chain
-    pbMessage(_INTL("The grassy patch remained quiet...")) if showmessage
+    pbMessage(_INTL("Nothing happened...")) if showmessage
     pbPokeRadarCancel
   else
     # Show grass rustling animations
