@@ -455,6 +455,111 @@ module Battle::Scene::Animation::BallAnimationMixin
     end
   end
 
+  BALL_BURST_CAPTURE_VARIANCES = {
+    # [top glare filename, top particle start tone, top particle end tone,
+    #  middle glare filename, middle glare start tone, middle glare end tone,
+    #  bottom glare filename, bottom glare start tone, bottom glare end tone,
+    #  top particle filename, top particle start tone, top particle end tone,
+    #  bottom particle filename, bottom particle start tone, bottom particle end tone,
+    #  ring tone start, ring tone end]
+    :POKEBALL    => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle_s", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle_s", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     Tone.new(0, 0, -96), Tone.new(0, 0, -96)],   # Light yellow, light yellow
+    :GREATBALL   => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle_s", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle_s", Tone.new(0, 0, 0), Tone.new(-128, -64, 0),   # White, blue
+                     Tone.new(-128, -32, 0), Tone.new(-128, -32, 0)],   # Blue, blue
+    :SAFARIBALL  => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle_s", Tone.new(-48, 0, -48), Tone.new(-48, 0, -48),   # Light green, light green
+                     "particle_s", Tone.new(-48, 0, -48), Tone.new(-128, 0, -128),   # Light green, green
+                     Tone.new(-48, 0, -48), Tone.new(-128, 0, -128)],   # Light green, green
+    :ULTRABALL   => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     Tone.new(0, 0, -128), Tone.new(0, 0, -128)],   # Light yellow, light yellow
+    :MASTERBALL  => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(-64, -128, -64), Tone.new(-96, -160, -96),   # Purple, darker purple
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, -80, 0), Tone.new(0, -128, -64),   # Purple, hot pink
+                     Tone.new(0, 0, 0), Tone.new(-48, -200, -80)],   # White, magenta
+    :NETBALL     => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle_s", Tone.new(-128, -56, 0), Tone.new(-128, -56, 0),   # Blue, blue
+                     "particle_s", Tone.new(-128, -56, 0), Tone.new(-128, -56, 0),   # Blue, blue
+                     Tone.new(-160, -64, 0), Tone.new(-128, -56, 0)],   # Cyan, blue
+    :DIVEBALL    => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "bubble", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(-128, -48, 0), Tone.new(-128, -48, 0),   # Aqua, aqua
+                     Tone.new(-64, 0, 0), Tone.new(-180, -32, -32)],   # Light blue, turquoise
+    :NESTBALL    => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "ring3", Tone.new(-32, 0, -104), Tone.new(-104, -16, -128),   # Lime green, green
+                     "ring3", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow (unused)
+                     Tone.new(-48, 0, -48), Tone.new(-128, 0, -128)],   # Light green, green
+    :REPEATBALL  => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "ring3", Tone.new(-16, -16, -88), Tone.new(-32, -32, -176),   # Yellow, yellow
+                     "particle", Tone.new(-144, -144, -144), Tone.new(-160, -160, -160),   # Grey, grey
+                     Tone.new(0, 0, -96), Tone.new(0, 0, -96)],   # Light yellow, light yellow
+    :TIMERBALL   => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle_s", Tone.new(0, 0, 0), Tone.new(0, 0, -96),   # White, light yellow
+                     "particle_s", Tone.new(0, -48, -160), Tone.new(0, 0, -96),   # Orange, light yellow
+                     Tone.new(0, -48, -128), Tone.new(0, -160, -248)],   # Light orange, dark orange
+    :LUXURYBALL  => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, -192, -248),   # White, red
+                     "particle_s", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle_s", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     Tone.new(0, -48, -128), Tone.new(0, -192, -248)],   # Light orange, red
+    :PREMIERBALL => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "ring4", Tone.new(-16, -40, -80), Tone.new(-16, -136, -176),   # Light orange, dark orange
+                     Tone.new(0, 0, 0), Tone.new(0, 0, 0)],   # White, white
+    :DUSKBALL    => ["particle", Tone.new(-255, -255, -255), Tone.new(-255, -255, -255),   # Black, black
+                     "whirl", Tone.new(-112, -184, -128), Tone.new(-255, -255, -255),   # Purple, black
+                     "whirl", Tone.new(-112, -184, -128), Tone.new(-112, -184, -128),   # Purple, purple
+                     "particle", Tone.new(-112, -184, -128), Tone.new(-255, -255, -255),   # Purple, black
+                     "particle_s", Tone.new(-112, -184, -128), Tone.new(-255, -255, -255),   # Purple, black
+                     Tone.new(0, 0, -96), Tone.new(0, 0, -96)],   # Light yellow, light yellow
+    :HEALBALL    => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, -32, 0), Tone.new(0, -32, 0),   # Light pink, light pink
+                     "diamond", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "diamond", Tone.new(0, 0, 0), Tone.new(-160, -64, 0),   # White, cyan
+                     Tone.new(0, 0, 0), Tone.new(0, -32, 0)],   # White, light pink
+    :QUICKBALL   => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle_s", Tone.new(0, 0, 0), Tone.new(0, 0, -96),   # White, light yellow
+                     "particle_s", Tone.new(0, -48, -160), Tone.new(0, 0, -96),   # Orange, light yellow
+                     Tone.new(0, -48, -128), Tone.new(0, -160, -248)],   # Light orange, dark orange
+    :CHERISHBALL => ["particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "ring4", Tone.new(-16, -40, -80), Tone.new(-16, -136, -176),   # Light orange, dark orange
+                     Tone.new(0, 0, 0), Tone.new(0, 0, 0)]   # White, white
+  }
+
   # The Poké Ball burst animation used when absorbing a wild Pokémon during a
   # capture attempt.
   def ballBurstCapture(delay, ball, ballX, ballY, poke_ball)
@@ -462,26 +567,47 @@ module Battle::Scene::Animation::BallAnimationMixin
     ring_duration = 5
     num_particles = 9
     base_angle = 270
-    base_radius = 144   # How far out from the Poké Ball the particles go
+    base_radius = (poke_ball == :MASTERBALL) ? 192 : 144   # How far out from the Poké Ball the particles go
+    # Get array of things that vary for each kind of Poké Ball
+    variances = BALL_BURST_CAPTURE_VARIANCES[poke_ball] || BALL_BURST_CAPTURE_VARIANCES[:POKEBALL]
     # Set up glare particles
-    glare1 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
-    glare2 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_dazzle", PictureOrigin::CENTER)
-    glare3 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_particle", PictureOrigin::CENTER)
+    glare1 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_#{variances[6]}", PictureOrigin::CENTER)
+    glare2 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_#{variances[3]}", PictureOrigin::CENTER)
+    glare3 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_#{variances[0]}", PictureOrigin::CENTER)
     [glare1, glare2, glare3].each_with_index do |particle, num|
       particle.setZ(0, 100 + num)
       particle.setZoom(0, 0)
+      particle.setTone(0, variances[7 - (3 * num)])
       particle.setVisible(0, false)
     end
-    glare3.setOpacity(0, 160)
+    glare2.setOpacity(0, 160)
+    glare3.setOpacity(0, 160) if poke_ball != :DUSKBALL
     # Animate glare particles
     [glare1, glare2, glare3].each { |p| p.setVisible(delay, true) }
-    glare1.moveZoom(delay, particle_duration, 600)
+    case poke_ball
+    when :MASTERBALL
+      glare1.moveZoom(delay, particle_duration, 1200)
+    when :DUSKBALL
+      glare1.moveZoom(delay, particle_duration, 350)
+    else
+      glare1.moveZoom(delay, particle_duration, 600)
+    end
     glare1.moveOpacity(delay + particle_duration / 2, particle_duration / 2, 0)
-    glare1.moveTone(delay, particle_duration, Tone.new(0, 0, -192, -64))   # Yellow
-    glare2.moveZoom(delay, particle_duration, 250)
-    glare2.moveOpacity(delay + particle_duration / 2, particle_duration / 3, 0)
-    glare3.moveZoom(delay, particle_duration, 500)
-    glare3.moveOpacity(delay + particle_duration / 2, particle_duration / 3, 0)
+    [glare1, glare2, glare3].each_with_index do |particle, num|
+      particle.moveTone(delay, particle_duration, variances[8 - (3 * num)])
+    end
+    if poke_ball == :DUSKBALL
+      glare2.moveZoom(delay, particle_duration, 350)
+      glare3.moveZoom(delay, particle_duration, 500)
+      [glare2, glare3].each_with_index do |particle, num|
+        particle.moveOpacity(delay + particle_duration / 2, particle_duration / 2, 0)
+      end
+    else
+      glare2.moveZoom(delay, particle_duration, (poke_ball == :MASTERBALL) ? 400 : 250)
+      glare2.moveOpacity(delay + particle_duration / 2, particle_duration / 3, 0)
+      glare3.moveZoom(delay, particle_duration, (poke_ball == :MASTERBALL) ? 800 : 500)
+      glare3.moveOpacity(delay + particle_duration / 2, particle_duration / 3, 0)
+    end
     [glare1, glare2, glare3].each { |p| p.setVisible(delay + particle_duration, false) }
     # Burst particles
     num_particles.times do |i|
@@ -492,15 +618,19 @@ module Battle::Scene::Animation::BallAnimationMixin
       particle1.setOpacity(0, 160)
       particle1.setVisible(0, false)
       # Set up particles that curve back in
-      particle2 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_particle_s", PictureOrigin::CENTER)
-      particle3 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_particle_s", PictureOrigin::CENTER)
+      particle2 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_#{variances[12]}", PictureOrigin::CENTER)
+      particle3 = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_#{variances[9]}", PictureOrigin::CENTER)
       [particle2, particle3].each_with_index do |particle, num|
         particle.setZ(0, 110 + num)
-        particle.setZoom(0, 0)
+        particle.setZoom(0, (poke_ball == :NESTBALL) ? 50 : 0)
+        particle.setTone(0, variances[13 - (3 * num)])
         particle.setVisible(0, false)
+        particle.setAngle(0, rand(360)) if poke_ball == :PREMIERBALL
       end
+      particle3.setOpacity(0, 128) if poke_ball == :DIVEBALL
       # Particle animations
       [particle1, particle2, particle3].each { |p| p.setVisible(delay, true) }
+      particle2.setVisible(delay, false) if poke_ball == :NESTBALL
       start_angle = base_angle + (i * 360 / num_particles)
       p1_x_offset = base_radius * Math.cos(start_angle * Math::PI / 180)
       p1_y_offset = base_radius * Math.sin(start_angle * Math::PI / 180)
@@ -509,13 +639,9 @@ module Battle::Scene::Animation::BallAnimationMixin
         angle = start_angle + (index * (360 / num_particles) / particle_duration)
         radian = angle * Math::PI / 180
         radius = base_radius
-        if j < particle_duration / 2
-          prop = index.to_f / (particle_duration / 2)
-          radius *= prop
-        else
-          prop = (index.to_f - particle_duration / 2) / (particle_duration / 2)
-          radius *= 1 - prop
-        end
+        prop = index.to_f / (particle_duration / 2)
+        prop = 2 - prop if index > particle_duration / 2
+        radius *= prop
         particle1.moveXY(delay + j, 1,
                          ballX + p1_x_offset * index * 2 / particle_duration,
                          ballY - p1_y_offset * index * 2 / particle_duration)
@@ -528,25 +654,65 @@ module Battle::Scene::Animation::BallAnimationMixin
       particle1.moveZoom(delay, particle_duration, 0)
       particle1.moveOpacity(delay, particle_duration, 0)
       [particle2, particle3].each_with_index do |particle, num|
-        particle.moveZoom(delay, particle_duration / 2, 100)
-        particle.moveZoom(delay + particle_duration * 2 / 3, particle_duration / 3, 25)
-        if num == 0
-          particle.moveTone(delay + particle_duration / 3, particle_duration / 3,
-                            Tone.new(0, 0, -192, -64))   # Yellow
+        # Zoom in
+        if num == 0 && poke_ball == :MASTERBALL
+          particle.moveZoom(delay, particle_duration / 2, 225)
+        elsif num == 0 && poke_ball == :DIVEBALL
+          particle.moveZoom(delay, particle_duration / 2, 125)
+        elsif ["particle"].include?(variances[12 - (3 * num)])
+          particle.moveZoom(delay, particle_duration / 2, (poke_ball == :PREMIERBALL) ? 50 : 80)
+        elsif ["ring3"].include?(variances[12 - (3 * num)])
+          particle.moveZoom(delay, particle_duration / 2, 50)
+        elsif ["dazzle", "ring4", "diamond"].include?(variances[12 - (3 * num)])
+          particle.moveZoom(delay, particle_duration / 2, 60)
+        else
+          particle.moveZoom(delay, particle_duration / 2, 100)
         end
+        # Zoom out
+        if ["particle", "dazzle", "ring3", "ring4", "diamond"].include?(variances[12 - (3 * num)])
+          particle.moveZoom(delay + particle_duration * 2 / 3, particle_duration / 3, 10)
+        else
+          particle.moveZoom(delay + particle_duration * 2 / 3, particle_duration / 3, 25)
+        end
+        # Rotate (for Premier Ball)
+        particle.moveAngle(delay, particle_duration, -180) if poke_ball == :PREMIERBALL
+        # Change tone, fade out
+        particle.moveTone(delay + particle_duration / 3, (particle_duration.to_f / 3).ceil, variances[14 - (3 * num)])
         particle.moveOpacity(delay + particle_duration - 3, 3, 128)   # Fade out at end
       end
       [particle1, particle2, particle3].each { |p| p.setVisible(delay + particle_duration, false) }
+    end
+    # Web sprite (for Net Ball)
+    if poke_ball == :NETBALL
+      web = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_web", PictureOrigin::CENTER)
+      web.setZ(0, 123)
+      web.setZoom(0, 120)
+      web.setOpacity(0, 0)
+      web.setTone(0, Tone.new(-32, -32, -128))
+      web.setVisible(0, false)
+      start = particle_duration / 2
+      web.setVisible(delay + start, true)
+      web.moveOpacity(delay + start, 2, 160)
+      web_duration = particle_duration + ring_duration - (particle_duration / 2)
+      (web_duration / 4).times do |i|
+        web.moveZoom(delay + start + (i * 4), 2, 150)
+        web.moveZoom(delay + start + (i * 4) + 2, 2, 120)
+      end
+      now = start + (web_duration / 4) * 4
+      web.moveZoom(delay + now, particle_duration + ring_duration - now, 150)
+      web.moveOpacity(delay + particle_duration, ring_duration, 0)
+      web.setVisible(delay + particle_duration + ring_duration, false)
     end
     # Ring particle
     ring = addNewSprite(ballX, ballY, "Graphics/Battle animations/ballBurst_ring1", PictureOrigin::CENTER)
     ring.setZ(0, 110)
     ring.setZoom(0, 0)
-    ring.setTone(0, Tone.new(0, 0, -96, -32))   # Light yellow
+    ring.setTone(0, variances[15])
     ring.setVisible(0, false)
     # Ring particle animation
     ring.setVisible(delay + particle_duration, true)
     ring.moveZoom(delay + particle_duration - 2, ring_duration + 2, 125)   # Start slightly early
+    ring.moveTone(delay + particle_duration, ring_duration, variances[16])
     ring.moveOpacity(delay + particle_duration, ring_duration, 0)
     ring.setVisible(delay + particle_duration + ring_duration, false)
     # Mark the end of the burst animation
