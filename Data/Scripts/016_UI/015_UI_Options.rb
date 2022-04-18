@@ -14,6 +14,7 @@ class PokemonSystem
   attr_accessor :sevolume
   attr_accessor :textinput
   attr_accessor :quicksurf
+  attr_accessor :battle_type
 
   def initialize
     @textspeed = 1 # Text speed (0=slow, 1=normal, 2=fast)
@@ -28,6 +29,7 @@ class PokemonSystem
     @sevolume = 100 # Volume of sound effects
     @textinput = 1 # Text input mode (0=cursor, 1=keyboard)
     @quicksurf = 0
+    @battle_type=0
   end
 end
 
@@ -380,7 +382,7 @@ class PokemonOption_Scene
     if $game_switches && ($game_switches[NEW_GAME_PLUS] || $game_switches[BEAT_THE_LEAGUE]) #beat the league
       @PokemonOptions <<
         EnumOption.new(_INTL("Battle type"), [_INTL("1v1"), _INTL("2v2"), _INTL("3v3")],
-                       proc { $PokemonSystem.textspeed },
+                       proc { $PokemonSystem.battle_type },
                        proc { |value|
                          if value == 0
                            $game_variables[DEFAULT_BATTLE_TYPE] = [1, 1]
@@ -391,6 +393,7 @@ class PokemonOption_Scene
                          else
                            $game_variables[DEFAULT_BATTLE_TYPE] = [1, 1]
                          end
+                         $PokemonSystem.battle_type=value
                        }
         )
 
