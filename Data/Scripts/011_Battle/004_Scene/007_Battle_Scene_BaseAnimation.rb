@@ -262,86 +262,86 @@ module Battle::Scene::Animation::BallAnimationMixin
     #  bottom particle filename, bottom particle start tone, bottom particle end tone,
     #  top glare filename, top glare start tone, top glare end tone,
     #  bottom glare filename, bottom glare start tone, bottom glare end tone]
-    :POKEBALL    => [Tone.new(0, 0, 0, 0), Tone.new(0, 0, -192, -64),   # White, yellow
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, -96, -64), Tone.new(0, -128, -248, -224),   # Yellow, dark orange
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, -96, -32), Tone.new(0, 0, -192, -64)],   # Light yellow, yellow
-    :GREATBALL   => [Tone.new(0, 0, 0, 0), Tone.new(-128, -64, 0, 0),   # White, blue
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(-128, 0, 0, 0), Tone.new(-248, -64, 0, 0),   # Cyan, dark cyan
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(-96, -48, 0, 0),   # White, light blue
-                     "particle", Tone.new(-96, -48, 0, 0), Tone.new(-192, -96, 0, 0)],   # Blue, dark blue
-    :SAFARIBALL  => [Tone.new(0, 0, -32, 0), Tone.new(-128, 0, -128, 0),   # Pale yellow, green
-                     "particle", Tone.new(0, 0, -64, 0), Tone.new(-160, 0, -160, 0),   # Beige, darker green
-                     "particle", Tone.new(0, 0, -64, 0), Tone.new(-160, 0, -160, 0),   # Beige, darker green
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(-80, 0, -80, 0),   # White, light green
-                     "particle", Tone.new(-32, 0, -96, 0), Tone.new(-160, 0, -160, 0)],   # Pale green, darker green
-    :ULTRABALL   => [Tone.new(0, 0, 0, 0), Tone.new(0, 0, -192, -64),   # White, yellow
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, -64, 0), Tone.new(0, 0, -224, 0),   # Pale yellow, yellow
-                     "dazzle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, -128, 0),   # White, light yellow
-                     "particle", Tone.new(0, 0, -64, 0), Tone.new(0, 0, -224, 0)],   # Pale yellow, yellow
-    :MASTERBALL  => [Tone.new(0, 0, 0, 0), Tone.new(-48, -200, -56, 0),   # White, magenta
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(-48, -200, -56, 0),   # White, magenta
-                     "dazzle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "dazzle", Tone.new(-48, -200, -56, 0), Tone.new(-48, -200, -56, 0)],   # Magenta, magenta
-    :NETBALL     => [Tone.new(0, 0, 0, 0), Tone.new(0, -64, 0, 0),   # White, lilac
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, -64, 0, 0),   # White, lilac
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, -64, 0, 0),   # White, lilac
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, -64, 0, 0),   # White, lilac
-                     "web", Tone.new(-32, -64, -32, 0), Tone.new(-64, -128, -64, 0)],   # Light purple, purple
-    :DIVEBALL    => [Tone.new(0, 0, 0, 0), Tone.new(-192, -128, -32, 0),   # White, dark blue
-                     "bubble", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(-184, -40, 0, 0), Tone.new(-184, -40, 0, 0),   # Cyan, cyan
-                     "dazzle", Tone.new(-184, -40, 0, 0), Tone.new(-184, -40, 0, 0),   # Cyan, cyan
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(-184, -40, 0, 0)],   # White, cyan
-    :NESTBALL    => [Tone.new(0, 0, 0, 0), Tone.new(0, 0, -192, -64),   # White, yellow
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, -96, -64), Tone.new(0, -128, -248, -224),   # Light yellow, dark orange
-                     "dazzle", Tone.new(0, 0, 0, 0), Tone.new(-96, 0, -96, 0),   # White, green
-                     "particle", Tone.new(-96, 0, -96, 0), Tone.new(-192, 0, -192, 0)],   # Green, dark green
-    :REPEATBALL  => [Tone.new(0, 0, 0, 0), Tone.new(0, 0, -192, -64),   # White, yellow
-                     "ring3", Tone.new(-16, -16, -88, 0), Tone.new(-32, -32, -176, 0),   # Yellow, yellow
-                     "particle", Tone.new(-144, -144, -144, 0), Tone.new(-160, -160, -160, 0),   # Grey, grey
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, -128, -248, -224), Tone.new(0, -128, -248, -224)],   # Dark orange, dark orange
-    :TIMERBALL   => [Tone.new(0, 0, 0, 0), Tone.new(0, 0, -192, -64),   # White, yellow
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, -96, -64), Tone.new(0, -128, -248, -224),   # Yellow, dark orange
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, -96, -32), Tone.new(0, 0, -192, -64)],   # Light yellow, yellow
-    :LUXURYBALL  => [Tone.new(0, 0, 0, 0), Tone.new(0, -128, -160, 0),   # White, orange
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, -96, -64), Tone.new(0, -128, -248, -224),   # Yellow, dark orange
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, -64, -144, 0), Tone.new(0, -192, -248, 0)],   # Light orange, red
-    :PREMIERBALL => [Tone.new(0, -160, -148, 0), Tone.new(0, 0, 0, 0),   # Red, white
-                     "particle", Tone.new(0, -192, -152, 0), Tone.new(0, -192, -152, 0),   # Red, red
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, -192, -152, 0),   # White, red
-                     "dazzle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0)],   # White, white
-    :DUSKBALL    => [Tone.new(-48, -200, -56, 0), Tone.new(-160, -224, -160, 0),   # Magenta, dark purple
-                     "particle", Tone.new(-248, -248, -248, 0), Tone.new(-248, -248, -248, 0),   # Black, black
-                     "particle", Tone.new(-24, -96, -32, 0), Tone.new(-24, -96, -32, 0),   # Light magenta, light magenta
-                     "particle", Tone.new(-248, -248, -248, 0), Tone.new(-248, -248, -248, 0),   # Black, black
-                     "whirl", Tone.new(-160, -224, -160, 0), Tone.new(-160, -224, -160, 0)],   # Dark purple, dark purple
-    :HEALBALL    => [Tone.new(-8, -48, -8, 0), Tone.new(-16, -128, -112, 0),   # Pink, dark pink
-                     "diamond", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "diamond", Tone.new(0, -96, -104), Tone.new(-160, -64, 0, 0),   # Pink/orange, cyan
-                     "dazzle", Tone.new(0, 0, 0, 0), Tone.new(-32, -112, -80, 0),   # White, magenta
-                     "particle", Tone.new(-8, -48, -8, 0), Tone.new(-64, -224, -160, 0)],   # Pink, dark magenta
-    :QUICKBALL   => [Tone.new(-64, 0, 0, 0), Tone.new(-192, -96, 0, 0),   # Light cyan, dark blue
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, -96, -64), Tone.new(0, -128, -248, -224),   # Yellow, dark orange
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(-96, 0, 0, 0), Tone.new(-192, -96, 0, 0)],   # Cyan, dark blue
-    :CHERISHBALL => [Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white (unused; see below)
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, -192, -64),   # White ,yellow
-                     "particle", Tone.new(0, 0, 0, 0), Tone.new(0, 0, 0, 0),   # White, white
-                     "particle", Tone.new(0, 0, -96, -32), Tone.new(0, 0, -192, -64)]   # Light yellow, yellow
+    :POKEBALL    => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, -96), Tone.new(0, 0, -192)],   # Light yellow, yellow
+    :GREATBALL   => [Tone.new(0, 0, 0), Tone.new(-128, -64, 0),   # White, blue
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(-128, 0, 0), Tone.new(-248, -64, 0),   # Cyan, dark cyan
+                     "particle", Tone.new(0, 0, 0), Tone.new(-96, -48, 0),   # White, light blue
+                     "particle", Tone.new(-96, -48, 0), Tone.new(-192, -96, 0)],   # Blue, dark blue
+    :SAFARIBALL  => [Tone.new(0, 0, -32), Tone.new(-128, 0, -128),   # Pale yellow, green
+                     "particle", Tone.new(0, 0, -64), Tone.new(-160, 0, -160),   # Beige, darker green
+                     "particle", Tone.new(0, 0, -64), Tone.new(-160, 0, -160),   # Beige, darker green
+                     "particle", Tone.new(0, 0, 0), Tone.new(-80, 0, -80),   # White, light green
+                     "particle", Tone.new(-32, 0, -96), Tone.new(-160, 0, -160)],   # Pale green, darker green
+    :ULTRABALL   => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, -64), Tone.new(0, 0, -224),   # Pale yellow, yellow
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, -128),   # White, light yellow
+                     "particle", Tone.new(0, 0, -64), Tone.new(0, 0, -224)],   # Pale yellow, yellow
+    :MASTERBALL  => [Tone.new(0, 0, 0), Tone.new(-48, -200, -56),   # White, magenta
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(-48, -200, -56),   # White, magenta
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "dazzle", Tone.new(-48, -200, -56), Tone.new(-48, -200, -56)],   # Magenta, magenta
+    :NETBALL     => [Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
+                     "web", Tone.new(-32, -64, -32), Tone.new(-64, -128, -64)],   # Light purple, purple
+    :DIVEBALL    => [Tone.new(0, 0, 0), Tone.new(-192, -128, -32),   # White, dark blue
+                     "bubble", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(-184, -40, 0), Tone.new(-184, -40, 0),   # Cyan, cyan
+                     "dazzle", Tone.new(-184, -40, 0), Tone.new(-184, -40, 0),   # Cyan, cyan
+                     "particle", Tone.new(0, 0, 0), Tone.new(-184, -40, 0)],   # White, cyan
+    :NESTBALL    => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Light yellow, dark orange
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(-96, 0, -96),   # White, green
+                     "particle", Tone.new(-96, 0, -96), Tone.new(-192, 0, -192)],   # Green, dark green
+    :REPEATBALL  => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "ring3", Tone.new(-16, -16, -88), Tone.new(-32, -32, -176),   # Yellow, yellow
+                     "particle", Tone.new(-144, -144, -144), Tone.new(-160, -160, -160),   # Grey, grey
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, -128, -248), Tone.new(0, -128, -248)],   # Dark orange, dark orange
+    :TIMERBALL   => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, -96), Tone.new(0, 0, -192)],   # Light yellow, yellow
+    :LUXURYBALL  => [Tone.new(0, 0, 0), Tone.new(0, -128, -160),   # White, orange
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, -64, -144), Tone.new(0, -192, -248)],   # Light orange, red
+    :PREMIERBALL => [Tone.new(0, -160, -148), Tone.new(0, 0, 0),   # Red, white
+                     "particle", Tone.new(0, -192, -152), Tone.new(0, -192, -152),   # Red, red
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, -192, -152),   # White, red
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0)],   # White, white
+    :DUSKBALL    => [Tone.new(-48, -200, -56), Tone.new(-160, -224, -160),   # Magenta, dark purple
+                     "particle", Tone.new(-248, -248, -248), Tone.new(-248, -248, -248),   # Black, black
+                     "particle", Tone.new(-24, -96, -32), Tone.new(-24, -96, -32),   # Light magenta, light magenta
+                     "particle", Tone.new(-248, -248, -248), Tone.new(-248, -248, -248),   # Black, black
+                     "whirl", Tone.new(-160, -224, -160), Tone.new(-160, -224, -160)],   # Dark purple, dark purple
+    :HEALBALL    => [Tone.new(-8, -48, -8), Tone.new(-16, -128, -112),   # Pink, dark pink
+                     "diamond", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "diamond", Tone.new(0, -96, -104), Tone.new(-160, -64, 0),   # Pink/orange, cyan
+                     "dazzle", Tone.new(0, 0, 0), Tone.new(-32, -112, -80),   # White, magenta
+                     "particle", Tone.new(-8, -48, -8), Tone.new(-64, -224, -160)],   # Pink, dark magenta
+    :QUICKBALL   => [Tone.new(-64, 0, 0), Tone.new(-192, -96, 0),   # Light cyan, dark blue
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(-96, 0, 0), Tone.new(-192, -96, 0)],   # Cyan, dark blue
+    :CHERISHBALL => [Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white (unused; see below)
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White ,yellow
+                     "particle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "particle", Tone.new(0, 0, -96), Tone.new(0, 0, -192)]   # Light yellow, yellow
   }
 
   # The regular Poké Ball burst animation, for when a Pokémon appears from a
@@ -355,11 +355,11 @@ module Battle::Scene::Animation::BallAnimationMixin
     ray_lifetime = 13
     ray_fade_duration = 5
     ray_min_radius = 24   # How far out from the center a ray starts
-    cherish_ball_ray_tones = [Tone.new(-104, -144, -8, 0),   # Indigo
-                              Tone.new(-64, -144, -24, 0),   # Purple
-                              Tone.new(-8, -144, -64, 0),   # Pink
-                              Tone.new(-8, -48, -152, 0),   # Orange
-                              Tone.new(-8, -32, -160, 0)]   # Yellow
+    cherish_ball_ray_tones = [Tone.new(-104, -144, -8),   # Indigo
+                              Tone.new(-64, -144, -24),   # Purple
+                              Tone.new(-8, -144, -64),   # Pink
+                              Tone.new(-8, -48, -152),   # Orange
+                              Tone.new(-8, -32, -160)]   # Yellow
     # Get array of things that vary for each kind of Poké Ball
     variances = BALL_BURST_VARIANCES[poke_ball] || BALL_BURST_VARIANCES[:POKEBALL]
     # Set up glare particles
@@ -723,7 +723,7 @@ module Battle::Scene::Animation::BallAnimationMixin
   # a Pokémon.
   def ballCaptureSuccess(ball, delay, ballX, ballY)
     ball.setSE(delay, "Battle catch click")
-    ball.moveTone(delay, 4, Tone.new(-128, -128, -128, 0))   # Ball goes darker
+    ball.moveTone(delay, 4, Tone.new(-128, -128, -128))   # Ball goes darker
     delay = ball.totalDuration
     star_duration = 12   # In 20ths of a second
     y_offsets = [[0, 74, 52], [0, 62, 28], [0, 74, 48]]
@@ -750,8 +750,8 @@ module Battle::Scene::Animation::BallAnimationMixin
       end
       star.moveAngle(delay, star_duration, start_angle + [144, 0, 45][i]) if i.even?
       star.moveOpacity(delay, 4, 255)   # Fade in
-      star.moveTone(delay + 3, 3, Tone.new(0, 0, -96, -32))   # Light yellow
-      star.moveTone(delay + 6, 3, Tone.new(0, 0, 0, 0))   # White
+      star.moveTone(delay + 3, 3, Tone.new(0, 0, -96))   # Light yellow
+      star.moveTone(delay + 6, 3, Tone.new(0, 0, 0))   # White
       star.moveOpacity(delay + 8, 4, 0)   # Fade out
     end
   end
@@ -795,8 +795,8 @@ module Battle::Scene::Animation::BallAnimationMixin
         end
       end
       particle.moveZoom(delay, burst_duration, 0)
-      particle.moveTone(delay + color_duration / 2, color_duration / 2, Tone.new(0, 0, -192, -64))   # Yellow
-      particle.moveTone(delay + color_duration, shrink_duration, Tone.new(0, -128, -248, -224))   # Dark orange
+      particle.moveTone(delay + color_duration / 2, color_duration / 2, Tone.new(0, 0, -192))   # Yellow
+      particle.moveTone(delay + color_duration, shrink_duration, Tone.new(0, -128, -248))   # Dark orange
       particle.moveOpacity(delay + color_duration, shrink_duration, 0)   # Fade out at end
       particle.setVisible(delay + burst_duration, false)
     end
