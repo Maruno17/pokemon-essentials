@@ -606,6 +606,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
       width = graphicWidth   # +8  # No padding
       xStart = 0   # 4
       yStart = [(lineheight / 2) - (graphicHeight / 2), 0].max
+      yStart += 4   # TEXT OFFSET
       graphicRect = Rect.new(graphicX, graphicY, graphicWidth, graphicHeight)
     else
       xStart = 0
