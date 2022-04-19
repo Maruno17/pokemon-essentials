@@ -6,7 +6,7 @@
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '5.0.0'
-  GAME_VERSION_NUMBER = "5.0.19 - beta"
+  GAME_VERSION_NUMBER = "5.0.19.1 - beta"
 
   POKERADAR_LIGHT_ANIMATION_RED_ID = 17
   POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
@@ -354,7 +354,7 @@ module Settings
     [485, 30, :DEINO,20,20],            #Safari zone 3
     [486, 30, :LARVITAR,20,20],         #Safari zone 4
     [487, 30, :BELDUM,20,20],           #Safari zone 5
-    [59, 30,  :DUNSPARSE,25,30],        #Rt. 21
+    [59, 30,  :DUNSPARCE,25,30],        #Rt. 21
     [171, 30, :BIDOOF,2,5],             #Rt. 22
     [143, 30, :RIOLU,25,25],            #Rt. 23
     [8, 30,   :BUNEARY,12,13],          #Rt. 24
@@ -365,7 +365,7 @@ module Settings
     [288, 30, :VIGOROTH,40,45],             #Rt. 32
     [342, 30, :GOLETT,40,45],             #Ruins of Alph
     [261, 30, :BELLOSSOM,45,50],             #Rt. 31
-    [261, 30, :BIBAREL,45,50],             #Rt. 30
+    [262, 30, :BIBAREL,45,50],             #Rt. 30
     [265, 30, :KIRLIA,25,30],           #Rt. 34
     [267, 30, :SUDOWOODO,25,30],           #Rt. 36
     [300, 30, :ROSELIA,30,30],          #National Park

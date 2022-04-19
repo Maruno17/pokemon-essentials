@@ -174,7 +174,8 @@ def pbOnStepTaken(eventTriggered)
   $PokemonGlobal.stepcount = 0 if !$PokemonGlobal.stepcount
   $PokemonGlobal.stepcount += 1
   $PokemonGlobal.stepcount &= 0x7FFFFFFF
-  repel_active = ($PokemonGlobal.repel > 0)
+  repel_active = ($PokemonGlobal.repel > 0) ||  $PokemonTemp.pokeradar
+
   Events.onStepTaken.trigger(nil)
 #  Events.onStepTakenFieldMovement.trigger(nil,$game_player)
   handled = [nil]
@@ -186,7 +187,7 @@ end
 
 # Start wild encounters while turning on the spot
 Events.onChangeDirection += proc {
-  repel_active = ($PokemonGlobal.repel > 0)
+  repel_active = ($PokemonGlobal.repel > 0) ||  $PokemonTemp.pokeradar
   pbBattleOnStepTaken(repel_active) if !$game_temp.in_menu
 }
 

@@ -24,7 +24,6 @@ class Player < Trainer
     def clear
       @seen = {} #deprecated
       @owned = {} #deprecated
-
       @seen_standard = initStandardDexArray()
       @seen_fusion = initFusionDexArray()
       @seen_triple = {}
@@ -381,7 +380,7 @@ class Player < Trainer
     # @param dex [Integer] Dex ID (-1 is the National Dex)
     # @return [Boolean] whether the given Dex is unlocked
     def unlocked?(dex)
-      return dex == -1
+      return dex == 0
       # validate dex => Integer
       # dex = @unlocked_dexes.length - 1 if dex == -1
       # return @unlocked_dexes[dex] == true
@@ -400,6 +399,7 @@ class Player < Trainer
     # if a species in the current region has been seen - doesn't look at other
     # regions.
     def refresh_accessible_dexes
+      @accessible_dexes = []
       if self.unlocked?(0) && self.seen_any?
         @accessible_dexes.push(-1)
       end
