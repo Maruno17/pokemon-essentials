@@ -42,6 +42,8 @@ class Game_Temp
   attr_accessor :begun_new_game           # new game flag (true fron new game until saving)
   attr_accessor :menu_beep                # menu: play sound effect flag
   attr_accessor :menu_last_choice         # pause menu: index of last selection
+  attr_accessor :memorized_bgm            # set when trainer intro BGM is played
+  attr_accessor :memorized_bgm_position   # set when trainer intro BGM is played
   attr_accessor :darkness_sprite          # DarknessSprite or nil
   attr_accessor :mart_prices
 
@@ -80,6 +82,8 @@ class Game_Temp
     # Other
     @begun_new_game         = false
     @menu_beep              = false
+    @memorized_bgm          = nil
+    @memorized_bgm_position = 0
     @menu_last_choice       = 0
     @mart_prices            = {}
   end

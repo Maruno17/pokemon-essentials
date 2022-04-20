@@ -353,7 +353,7 @@ def pbTrainerTypeEditor
     [_INTL("BaseMoney"),  LimitProperty.new(9999),        _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
     [_INTL("SkillLevel"), LimitProperty.new(9999),        _INTL("Skill level of this Trainer Type.")],
     [_INTL("Flags"),      StringListProperty,             _INTL("Words/phrases that can be used to make trainers of this type behave differently to others.")],
-    [_INTL("IntroME"),    MEProperty,                     _INTL("ME played before battles against trainers of this type.")],
+    [_INTL("IntroBGM"),   BGMProperty,                    _INTL("BGM played before battles against trainers of this type.")],
     [_INTL("BattleBGM"),  BGMProperty,                    _INTL("BGM played in battles against trainers of this type.")],
     [_INTL("VictoryME"),  MEProperty,                     _INTL("ME played when player wins battles against trainers of this type.")]
   ]
@@ -377,7 +377,7 @@ def pbTrainerTypeEditor
             t_data.base_money,
             t_data.skill_level,
             t_data.flags,
-            t_data.intro_ME,
+            t_data.intro_BGM,
             t_data.battle_BGM,
             t_data.victory_ME
           ]
@@ -390,7 +390,7 @@ def pbTrainerTypeEditor
               :base_money  => data[3],
               :skill_level => data[4],
               :flags       => data[5],
-              :intro_ME    => data[6],
+              :intro_BGM   => data[6],
               :battle_BGM  => data[7],
               :victory_ME  => data[8]
             }

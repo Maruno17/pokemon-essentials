@@ -63,11 +63,13 @@ end
 #===============================================================================
 # Load/play various trainer battle music
 #===============================================================================
-def pbPlayTrainerIntroME(trainer_type)
+def pbPlayTrainerIntroBGM(trainer_type)
   trainer_type_data = GameData::TrainerType.get(trainer_type)
-  return if nil_or_empty?(trainer_type_data.intro_ME)
-  bgm = pbStringToAudioFile(trainer_type_data.intro_ME)
-  pbMEPlay(bgm)
+  return if nil_or_empty?(trainer_type_data.intro_BGM)
+  bgm = pbStringToAudioFile(trainer_type_data.intro_BGM)
+  $game_temp.memorized_bgm = $game_system.getPlayingBGM
+  $game_temp.memorized_bgm_position = (Audio.bgm_pos rescue 0)
+  pbBGMPlay(bgm)
 end
 
 def pbGetTrainerBattleBGM(trainer)   # can be a Player, NPCTrainer or an array of them

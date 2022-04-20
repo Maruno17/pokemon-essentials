@@ -68,10 +68,11 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
     playingBGM = $game_system.getPlayingBGM
     $game_system.bgm_pause
     $game_system.bgs_pause
+    if $game_temp.memorized_bgm
+      playingBGM = $game_temp.memorized_bgm
+      $game_system.bgm_position = $game_temp.memorized_bgm_position
+    end
   end
-  pbMEFade(0.25)
-  pbWait(Graphics.frame_rate / 4)
-  pbMEStop
   # Play battle music
   bgm = pbGetWildBattleBGM([]) if !bgm
   pbBGMPlay(bgm)
@@ -129,6 +130,8 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
     $game_system.bgm_resume(playingBGM)
     $game_system.bgs_resume(playingBGS)
   end
+  $game_temp.memorized_bgm           = nil
+  $game_temp.memorized_bgm_position  = 0
   $PokemonGlobal.nextBattleBGM       = nil
   $PokemonGlobal.nextBattleME        = nil
   $PokemonGlobal.nextBattleCaptureME = nil

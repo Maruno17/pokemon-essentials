@@ -1399,7 +1399,7 @@ module Compiler
           :base_money  => line[3],
           :battle_BGM  => line[4],
           :victory_ME  => line[5],
-          :intro_ME    => line[6],
+          :intro_BGM   => line[6],
           :gender      => line[7],
           :skill_level => line[8],
           :flags       => line[9]

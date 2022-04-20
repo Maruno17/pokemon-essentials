@@ -438,7 +438,7 @@ class Interpreter
     return true if $DEBUG && !GameData::TrainerType.exists?(symbol)
     tr_type = GameData::TrainerType.get(symbol).id
     pbGlobalLock
-    pbPlayTrainerIntroME(tr_type)
+    pbPlayTrainerIntroBGM(tr_type)
     return true
   end
 

@@ -453,8 +453,6 @@ def pbTrainerBattleCore(*args)
   # Set various other properties in the battle class
   pbPrepareBattle(battle)
   $game_temp.clear_battle_rules
-  # End the trainer intro music
-  Audio.me_stop
   # Perform the battle itself
   decision = 0
   pbBattleAnimation(pbGetTrainerBattleBGM(foeTrainers), (battle.singleBattle?) ? 1 : 3, foeTrainers) {
