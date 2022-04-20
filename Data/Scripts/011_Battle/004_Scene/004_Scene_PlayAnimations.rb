@@ -347,11 +347,11 @@ class Battle::Scene
     return if @battle.opponent
     @briefMessage = false
     pbMEPlay(pbGetWildCaptureME)
-    i = 0
+    timer = 0.0
     loop do
       pbUpdate
-      break if i >= Graphics.frame_rate * 3.5   # 3.5 seconds
-      i += 1
+      timer += Graphics.delta_s
+      break if timer >= 3.5
     end
     pbMEStop
   end
