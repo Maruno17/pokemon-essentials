@@ -1398,7 +1398,7 @@ module Compiler
           :name        => line[2],
           :base_money  => line[3],
           :battle_BGM  => line[4],
-          :victory_ME  => line[5],
+          :victory_BGM => line[5],
           :intro_BGM   => line[6],
           :gender      => line[7],
           :skill_level => line[8],
@@ -1700,18 +1700,18 @@ module Compiler
         if section_id == 0   # Metadata
           # Construct metadata hash
           metadata_hash = {
-            :id                 => section_id,
-            :start_money        => contents["StartMoney"],
-            :start_item_storage => contents["StartItemStorage"],
-            :home               => contents["Home"],
-            :storage_creator    => contents["StorageCreator"],
-            :wild_battle_BGM    => contents["WildBattleBGM"],
-            :trainer_battle_BGM => contents["TrainerBattleBGM"],
-            :wild_victory_ME    => contents["WildVictoryME"],
-            :trainer_victory_ME => contents["TrainerVictoryME"],
-            :wild_capture_ME    => contents["WildCaptureME"],
-            :surf_BGM           => contents["SurfBGM"],
-            :bicycle_BGM        => contents["BicycleBGM"]
+            :id                  => section_id,
+            :start_money         => contents["StartMoney"],
+            :start_item_storage  => contents["StartItemStorage"],
+            :home                => contents["Home"],
+            :storage_creator     => contents["StorageCreator"],
+            :wild_battle_BGM     => contents["WildBattleBGM"],
+            :trainer_battle_BGM  => contents["TrainerBattleBGM"],
+            :wild_victory_BGM    => contents["WildVictoryBGM"],
+            :trainer_victory_BGM => contents["TrainerVictoryBGM"],
+            :wild_capture_ME     => contents["WildCaptureME"],
+            :surf_BGM            => contents["SurfBGM"],
+            :bicycle_BGM         => contents["BicycleBGM"]
           }
           storage_creator[0] = contents["StorageCreator"]
           # Add metadata's data to records
@@ -1794,8 +1794,8 @@ module Compiler
           :battle_background    => contents["BattleBack"],
           :wild_battle_BGM      => contents["WildBattleBGM"],
           :trainer_battle_BGM   => contents["TrainerBattleBGM"],
-          :wild_victory_ME      => contents["WildVictoryME"],
-          :trainer_victory_ME   => contents["TrainerVictoryME"],
+          :wild_victory_BGM     => contents["WildVictoryBGM"],
+          :trainer_victory_BGM  => contents["TrainerVictoryBGM"],
           :wild_capture_ME      => contents["WildCaptureME"],
           :town_map_size        => contents["MapSize"],
           :battle_environment   => contents["Environment"],

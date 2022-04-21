@@ -410,13 +410,13 @@ class Battle::Scene
   # This method can change the battle's music for example.
   def pbWildBattleSuccess
     @battleEnd = true
-    pbBGMPlay(pbGetWildVictoryME)
+    pbBGMPlay(pbGetWildVictoryBGM)
   end
 
   # This method is called when the player wins a trainer battle.
   # This method can change the battle's music for example.
   def pbTrainerBattleSuccess
     @battleEnd = true
-    pbBGMPlay(pbGetTrainerVictoryME(@battle.opponent))
+    pbBGMPlay(pbGetTrainerVictoryBGM(@battle.opponent))
   end
 end

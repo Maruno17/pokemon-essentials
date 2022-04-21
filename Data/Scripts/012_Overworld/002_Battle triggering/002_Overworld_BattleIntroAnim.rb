@@ -130,12 +130,12 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
     $game_system.bgm_resume(playingBGM)
     $game_system.bgs_resume(playingBGS)
   end
-  $game_temp.memorized_bgm           = nil
-  $game_temp.memorized_bgm_position  = 0
-  $PokemonGlobal.nextBattleBGM       = nil
-  $PokemonGlobal.nextBattleME        = nil
-  $PokemonGlobal.nextBattleCaptureME = nil
-  $PokemonGlobal.nextBattleBack      = nil
+  $game_temp.memorized_bgm            = nil
+  $game_temp.memorized_bgm_position   = 0
+  $PokemonGlobal.nextBattleBGM        = nil
+  $PokemonGlobal.nextBattleVictoryBGM = nil
+  $PokemonGlobal.nextBattleCaptureME  = nil
+  $PokemonGlobal.nextBattleBack       = nil
   $PokemonEncounters.reset_step_count
   # Fade back to the overworld in 0.4 seconds
   viewport.color = Color.new(0, 0, 0, 255)

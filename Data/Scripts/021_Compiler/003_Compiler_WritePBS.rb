@@ -636,7 +636,7 @@ module Compiler
         f.write(sprintf("Flags = %s\r\n", t.flags.join(","))) if t.flags.length > 0
         f.write(sprintf("IntroBGM = %s\r\n", t.intro_BGM)) if !nil_or_empty?(t.intro_BGM)
         f.write(sprintf("BattleBGM = %s\r\n", t.battle_BGM)) if !nil_or_empty?(t.battle_BGM)
-        f.write(sprintf("VictoryME = %s\r\n", t.victory_ME)) if !nil_or_empty?(t.victory_ME)
+        f.write(sprintf("VictoryBGM = %s\r\n", t.victory_BGM)) if !nil_or_empty?(t.victory_BGM)
       end
     }
     process_pbs_file_message_end

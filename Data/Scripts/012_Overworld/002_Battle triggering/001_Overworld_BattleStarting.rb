@@ -3,7 +3,7 @@
 #===============================================================================
 class PokemonGlobalMetadata
   attr_accessor :nextBattleBGM
-  attr_accessor :nextBattleME
+  attr_accessor :nextBattleVictoryBGM
   attr_accessor :nextBattleCaptureME
   attr_accessor :nextBattleBack
 end
@@ -236,10 +236,10 @@ def pbWildBattleCore(*args)
     pbMessage(_INTL("SKIPPING BATTLE...")) if $player.pokemon_count > 0
     pbSet(outcomeVar, 1)   # Treat it as a win
     $game_temp.clear_battle_rules
-    $PokemonGlobal.nextBattleBGM       = nil
-    $PokemonGlobal.nextBattleME        = nil
-    $PokemonGlobal.nextBattleCaptureME = nil
-    $PokemonGlobal.nextBattleBack      = nil
+    $PokemonGlobal.nextBattleBGM        = nil
+    $PokemonGlobal.nextBattleVictoryBGM = nil
+    $PokemonGlobal.nextBattleCaptureME  = nil
+    $PokemonGlobal.nextBattleBack       = nil
     pbMEStop
     return 1   # Treat it as a win
   end
@@ -381,10 +381,10 @@ def pbTrainerBattleCore(*args)
     pbMessage(_INTL("AFTER WINNING...")) if $DEBUG && $player.able_pokemon_count > 0
     pbSet(outcomeVar, ($player.able_pokemon_count == 0) ? 0 : 1)   # Treat it as undecided/a win
     $game_temp.clear_battle_rules
-    $PokemonGlobal.nextBattleBGM       = nil
-    $PokemonGlobal.nextBattleME        = nil
-    $PokemonGlobal.nextBattleCaptureME = nil
-    $PokemonGlobal.nextBattleBack      = nil
+    $PokemonGlobal.nextBattleBGM        = nil
+    $PokemonGlobal.nextBattleVictoryBGM = nil
+    $PokemonGlobal.nextBattleCaptureME  = nil
+    $PokemonGlobal.nextBattleBack       = nil
     pbMEStop
     return ($player.able_pokemon_count == 0) ? 0 : 1   # Treat it as undecided/a win
   end

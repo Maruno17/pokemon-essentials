@@ -355,7 +355,7 @@ def pbTrainerTypeEditor
     [_INTL("Flags"),      StringListProperty,             _INTL("Words/phrases that can be used to make trainers of this type behave differently to others.")],
     [_INTL("IntroBGM"),   BGMProperty,                    _INTL("BGM played before battles against trainers of this type.")],
     [_INTL("BattleBGM"),  BGMProperty,                    _INTL("BGM played in battles against trainers of this type.")],
-    [_INTL("VictoryME"),  MEProperty,                     _INTL("ME played when player wins battles against trainers of this type.")]
+    [_INTL("VictoryBGM"), BGMProperty,                    _INTL("BGM played when player wins battles against trainers of this type.")]
   ]
   pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
     if tr_type
@@ -379,7 +379,7 @@ def pbTrainerTypeEditor
             t_data.flags,
             t_data.intro_BGM,
             t_data.battle_BGM,
-            t_data.victory_ME
+            t_data.victory_BGM
           ]
           if pbPropertyList(t_data.id.to_s, data, trainer_type_properties, true)
             # Construct trainer type hash
@@ -392,7 +392,7 @@ def pbTrainerTypeEditor
               :flags       => data[5],
               :intro_BGM   => data[6],
               :battle_BGM  => data[7],
-              :victory_ME  => data[8]
+              :victory_BGM => data[8]
             }
             # Add trainer type's data to records
             GameData::TrainerType.register(type_hash)
@@ -737,18 +737,18 @@ def pbEditMetadata
   if pbPropertyList(_INTL("Global Metadata"), data, properties, true)
     # Construct metadata hash
     metadata_hash = {
-      :id                 => 0,
-      :start_money        => data[0],
-      :start_item_storage => data[1],
-      :home               => data[2],
-      :storage_creator    => data[3],
-      :wild_battle_BGM    => data[4],
-      :trainer_battle_BGM => data[5],
-      :wild_victory_ME    => data[6],
-      :trainer_victory_ME => data[7],
-      :wild_capture_ME    => data[8],
-      :surf_BGM           => data[9],
-      :bicycle_BGM        => data[10]
+      :id                  => 0,
+      :start_money         => data[0],
+      :start_item_storage  => data[1],
+      :home                => data[2],
+      :storage_creator     => data[3],
+      :wild_battle_BGM     => data[4],
+      :trainer_battle_BGM  => data[5],
+      :wild_victory_BGM    => data[6],
+      :trainer_victory_BGM => data[7],
+      :wild_capture_ME     => data[8],
+      :surf_BGM            => data[9],
+      :bicycle_BGM         => data[10]
     }
     # Add metadata's data to records
     GameData::Metadata.register(metadata_hash)
@@ -841,8 +841,8 @@ def pbEditMapMetadata(map_id)
       :battle_background    => data[13],
       :wild_battle_BGM      => data[14],
       :trainer_battle_BGM   => data[15],
-      :wild_victory_ME      => data[16],
-      :trainer_victory_ME   => data[17],
+      :wild_victory_BGM     => data[16],
+      :trainer_victory_BGM  => data[17],
       :wild_capture_ME      => data[18],
       :town_map_size        => data[19],
       :battle_environment   => data[20],
