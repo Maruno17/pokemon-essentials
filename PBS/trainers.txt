@@ -899,7 +899,7 @@ Pokemon = B58H4,43 #CHARLITHE
 ##############################
 
 [BUGCATCHER,Rick]
-Pokemon = B41H13,6 
+Pokemon = WEEDLE,6 
 Pokemon = B41H10,6 
 #-------------------
 
@@ -2156,7 +2156,7 @@ Pokemon = B59H38,47 #NINENINE
 	Moves = ROAR,FIREFANG,CONFUSERAY,THUNDERFANG
 	AbilityIndex = 0			
 	Item = CHARCOAL
-Pokemon = B126H112,49 #Rhymar,
+Pokemon = B112H126,49 #magmar + rhydon,
 	Moves = FIREPUNCH,DRILLRUN,CONFUSERAY,HAMMERARM
 	AbilityIndex = 0	
 	Item = PASSHOBERRY
