@@ -80,3 +80,57 @@ def pbRockSmashRandomEncounterDive
     end
   end
 end
+
+
+
+############### MORNING SUN / MOONLIGHT
+HiddenMoveHandlers::CanUseMove.add(:MORNINGSUN,proc{|move,pkmn|
+  if !GameData::MapMetadata.get($game_map.map_id).outdoor_map
+    Kernel.pbMessage(_INTL("Can't use that here."))
+    next false
+  end
+  next true
+})
+
+HiddenMoveHandlers::UseMove.add(:MORNINGSUN,proc{|move,pokemon|
+  Kernel.pbMessage(_INTL("{1} used {2}!",pokemon.name,GameData::Move.get(move).name))
+  pbHiddenMoveAnimation(pokemon)
+  pbFadeOutIn(99999){
+    pbSkipTime(9)
+    newTime = pbGetTimeNow.strftime("%I:%M %p")
+    Kernel.pbMessage(_INTL("{1} waited until morning...",$Trainer.name))
+    Kernel.pbMessage(_INTL("The time is now {1}",newTime))
+    $game_screen.weather(:None,0,0)
+    $game_map.refresh
+  }
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:MOONLIGHT,proc{|move,pkmn|
+  if !GameData::MapMetadata.get($game_map.map_id).outdoor_map
+    Kernel.pbMessage(_INTL("Can't use that here."))
+    next false
+  end
+  next true
+})
+
+HiddenMoveHandlers::UseMove.add(:MOONLIGHT,proc{|move,pokemon|
+  Kernel.pbMessage(_INTL("{1} used {2}!",pokemon.name,GameData::Move.get(move).name))
+  pbHiddenMoveAnimation(pokemon)
+  pbFadeOutIn(99999){
+    pbSkipTime(21)
+    newTime = pbGetTimeNow.strftime("%I:%M %p")
+    Kernel.pbMessage(_INTL("{1} waited until night...",$Trainer.name))
+    Kernel.pbMessage(_INTL("The time is now {1}",newTime))
+    $game_screen.weather(:None,0,0)
+    $game_map.refresh
+  }
+  next true
+})
+
+def pbSkipTime(newTime)
+  currentTime = pbGetTimeNow.hour
+  #hoursToAdd = (24-currentTime + newTime)-24
+  hoursToAdd = newTime - currentTime
+  $game_variables[UnrealTime::EXTRA_SECONDS] += hoursToAdd*3600
+end

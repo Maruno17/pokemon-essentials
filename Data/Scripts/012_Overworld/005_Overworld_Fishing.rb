@@ -42,6 +42,7 @@ def pbFishingEnd
 end
 
 def pbFishing(hasEncounter,rodType=1)
+  autohook= Settings::FISHING_AUTO_HOOK || $game_switches[FISHING_AUTOHOOK_SWITCH]
   speedup = ($Trainer.first_pokemon && [:STICKYHOLD, :SUCTIONCUPS].include?($Trainer.first_pokemon.ability_id))
   biteChance = 20+(25*rodType)   # 45, 70, 95
   biteChance *= 1.5 if speedup   # 67.5, 100, 100
@@ -70,9 +71,30 @@ def pbFishing(hasEncounter,rodType=1)
         pbMessageDisplay(msgWindow,_INTL("The Pokémon got away..."))
         break
       end
-      if Settings::FISHING_AUTO_HOOK || rand(100) < hookChance
+
+      itemChance = rand((rodType)*4)
+      if itemChance<=1
+        #ITEM
+        items =  [:PEARL,
+                  :OLDBOOT,
+                  :OLDBOOT,
+                  :OLDBOOT,
+                  :OLDBOOT,
+                  :WATERGEM,
+                  :PEARL,
+                  :WATERGEM
+        ]
+        Kernel.pbItemBall(items[rand(items.size)],1,nil,false)
+        Kernel.pbDisposeMessageWindow(msgWindow)
         pbFishingEnd
-        pbMessageDisplay(msgWindow,_INTL("Landed a Pokémon!")) if !Settings::FISHING_AUTO_HOOK
+        $game_player.setDefaultCharName(nil,oldpattern)
+        return false
+      end
+
+
+      if autohook || rand(100) < hookChance
+        pbFishingEnd
+        pbMessageDisplay(msgWindow,_INTL("Landed a Pokémon!")) if !autohook
         $game_player.setDefaultCharName(nil,oldpattern)
         ret = true
         break
@@ -111,6 +133,7 @@ end
 
 # A Pokémon is biting, reflex test to reel it in
 def pbWaitForInput(msgWindow,message,frames)
+  autohook= Settings::FISHING_AUTO_HOOK || $game_switches[FISHING_AUTOHOOK_SWITCH]
   pbMessageDisplay(msgWindow,message,false)
   numFrame = 0
   twitchFrame = 0
@@ -131,7 +154,7 @@ def pbWaitForInput(msgWindow,message,frames)
       $game_player.pattern = 0
       return true
     end
-    break if !Settings::FISHING_AUTO_HOOK && numFrame > frames
+    break if !autohook && numFrame > frames
     numFrame += 1
   end
   return false

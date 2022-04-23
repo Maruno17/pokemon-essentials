@@ -16,6 +16,8 @@ end
 
 def pbWarpToMapFly
   pbBetterRegionMap(0,true,true,false,nil,true)
+  $game_screen.weather(:None,0,0)
+  $game_map.refresh
 end
 
 def pbWarpToMap

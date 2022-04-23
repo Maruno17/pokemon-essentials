@@ -154,7 +154,7 @@ end
 def pbChooseMoveList(default = nil)
   commands = []
   GameData::Move.each { |i| commands.push([i.id_number, i.real_name, i.id]) }
-  return pbChooseList(commands, default, nil, -1)
+  return pbChooseList(commands, default, nil, 1)
 end
 
 def pbChooseMoveListForSpecies(species, defaultMoveID = nil)

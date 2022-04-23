@@ -1692,6 +1692,7 @@ ShowArea=true
 BattleBack=Snow
 Bicycle=true
 MapPosition=1,25,4
+Weather=Snow,100
 Outdoor=true
 ShowArea=true
 Environment = Snow

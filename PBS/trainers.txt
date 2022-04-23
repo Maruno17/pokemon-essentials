@@ -991,7 +991,6 @@ Pokemon = B109H35,22
 Pokemon = RATTATA,19 
 Pokemon = B16H109,19 #Koffgey,
 Pokemon = RATTATA,19 
-Pokemon = B69H100,19 
 #########################################
 
 [PICNICKER,Dana]
@@ -1534,18 +1533,16 @@ Pokemon = B58H43,34 #oddlithe,
 #####################
 
 [SAILOR,Dwayne]
-Pokemon = B25H1,20 #Bulbchu,
-Pokemon = B25H4,20 #Charchu,
-Pokemon = B25H7,20 #Squirtchu,
+Pokemon = B86H25,20 #seel + pikachu
 #----------------------------------------
 
 [ENGINEER,Baily]
-Pokemon = B100H14,21 #Kakorb,
-Pokemon = B81H11,21 #Metamite,
+Pokemon = B43H100,21 #oddish + voltorb,
+Pokemon = B69H100,21 #bellsprout + voltorb,
 #--------------------------------------
 
 [GENTLEMAN,Tucker]
-Pokemon = B25H81,23 #Magnechu,
+Pokemon = B66H8,23 #Machop + magnemite,
 
 
 #######################
@@ -2010,8 +2007,8 @@ Pokemon = B98H100,24 #voltby,
 	Moves = METALCLAW,BUBBLE,LIGHTSCREEN,SPARK
 	AbilityIndex = 1 
 	Item = MAGNET
-Pokemon = B17H25,24 #Pikeotto,
-	Moves = GUST,SANDATTACK,QUICKATTACK,ELECTROBALL
+Pokemon = B50H25,24 #diglet + pikachu,
+	Moves = SANDATTACK,MUDSLAP,QUICKATTACK,THUNDERSHOCK
 	AbilityIndex = 1 
 	Item = MAGNET
 Pokemon = B125H26,26 #raibuzz,
