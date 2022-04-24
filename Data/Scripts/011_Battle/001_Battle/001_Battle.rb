@@ -485,7 +485,7 @@ class Battle
 
   # This method only counts the player's Pokémon, not a partner trainer's.
   def pbPlayerBattlerCount
-    return allSameSideBattlers(idxBattler).select { |b| b.pbOwnedByPlayer? }.length
+    return allSameSideBattlers.select { |b| b.pbOwnedByPlayer? }.length
   end
 
   def pbCheckGlobalAbility(abil)
