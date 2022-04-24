@@ -121,7 +121,6 @@ QUESTS = [
  #Cinnabar Island
  Quest.new(29, "Powder metallurgy", "The scientist at the hotel wants you to find some Metal Powder.", questBranchHotels, "BW (82)","Cinnabar Island", defaultQuestColor), 
  Quest.new(30, "Diamonds and Pearls", "Find a Diamond Necklace to save the man's marriage.", questBranchHotels, "BW (71)","Cinnabar Island", defaultQuestColor), 
- Quest.new(42, "Stolen artifact", "Recover a stolen vase from a burglar in the Pokémon Mansion", questBranchHotels, "BW (21)","Cinnabar Island", defaultQuestColor), 
 
  #Goldenrod City
  Quest.new(31, "Hoenn Pokémon", "A woman wants you to show her a Pokémon native to the Hoenn region.", questBranchHotels, "BW (37)","Goldenrod City", defaultQuestColor), 
@@ -142,11 +141,13 @@ QUESTS = [
 
  #Kin Island
  Quest.new(40, "Banana Slamma!", "Collect 30 bananas", questBranchHotels, "BW029","Kin Island", defaultQuestColor), 
- Quest.new(41, "Unova Pokémon", "A woman wants you to show her a Pokémon native to the Unova region.", questBranchHotels, "BW (37)","Kin Island", defaultQuestColor), 
+ Quest.new(41, "Unova Pokémon", "A woman wants you to show her a Pokémon native to the Unova region.", questBranchHotels, "BW (37)","Kin Island", defaultQuestColor),
+ Quest.new(42, "Stolen artifact", "Recover a stolen vase from a burglar in the Pokémon Mansion", questBranchHotels, "BW (21)","Cinnabar Island", defaultQuestColor),
  Quest.new(43, "Fallen Meteor", "Investigate a crater near Bond Bridge.", questBranchHotels, "BW009","Kin Island", defaultQuestColor), 
  Quest.new(44, "First Contact", "Find the missing pieces of a fallen alien spaceship", questBranchHotels, "BW (92)","Bond Bridge", questBranchField), 
  Quest.new(45, "First Contact (Part 2)", "Ask the sailor at Cinnabar Island's harbour to take you to the uncharted island where the spaceship might be located", questBranchHotels, "BW (92)","Bond Bridge", questBranchField), 
 
+ # attention: c'est un array et non un hash... l'id est en fait l'index, donc il est important de garder l'ordre
   #out of order quests
   #42 (cinnabar)
  

@@ -913,6 +913,14 @@ class PokemonSummary_Scene
   def pbChangePokemon
     @pokemon = @party[@partyindex]
     @sprites["pokemon"].setPokemonBitmap(@pokemon)
+    if @pokemon.egg?
+      @sprites["pokemon"].zoom_x = Settings::EGGSPRITE_SCALE
+      @sprites["pokemon"].zoom_y = Settings::EGGSPRITE_SCALE
+    else
+      @sprites["pokemon"].zoom_x = Settings::FRONTSPRITE_SCALE
+      @sprites["pokemon"].zoom_y = Settings::FRONTSPRITE_SCALE
+    end
+
     @sprites["itemicon"].item = @pokemon.item_id
     pbSEStop
     @pokemon.play_cry

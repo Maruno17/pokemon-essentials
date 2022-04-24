@@ -123,6 +123,10 @@ def dexNum(species)
   return getDexNumberForSpecies(species)
 end
 
+def isTripleFusion?(num)
+  return num >= Settings::ZAPMOLCUNO_NB
+end
+
 def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3)
   if customPokeList.length == 0
     customPokeList = getCustomSpeciesList()

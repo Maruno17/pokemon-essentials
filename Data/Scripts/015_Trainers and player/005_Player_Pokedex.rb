@@ -68,6 +68,10 @@ class Player < Trainer
     end
 
     def isTripleFusion(num)
+      return isTripleFusion?(num)
+    end
+
+    def isTripleFusion?(num)
       return num >= Settings::ZAPMOLCUNO_NB
     end
 

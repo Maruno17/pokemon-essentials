@@ -57,9 +57,24 @@ module GameData
       return self.check_graphic_file("Graphics/Pokemon/", species, form, gender, shiny, shadow, "Back")
     end
 
+    # def self.egg_sprite_filename(species, form)
+    #   ret = self.check_egg_graphic_file("Graphics/Pokemon/Eggs/", species, form)
+    #   return (ret) ? ret : pbResolveBitmap("Graphics/Pokemon/Eggs/000")
+    # end
     def self.egg_sprite_filename(species, form)
-      ret = self.check_egg_graphic_file("Graphics/Pokemon/Eggs/", species, form)
-      return (ret) ? ret : pbResolveBitmap("Graphics/Pokemon/Eggs/000")
+      dexNum = getDexNumberForSpecies(species)
+      bitmapFileName = sprintf("Graphics/Battlers/Eggs/%03d", dexNum) rescue nil
+      if !pbResolveBitmap(bitmapFileName)
+        if isTripleFusion?(dexNum)
+          bitmapFileName = "Graphics/Battlers/Eggs/egg_base"
+        else
+          bitmapFileName = sprintf("Graphics/Battlers/Eggs/%03d", dexNum)
+          if !pbResolveBitmap(bitmapFileName)
+            bitmapFileName = sprintf("Graphics/Battlers/Eggs/000")
+          end
+        end
+      end
+      return bitmapFileName
     end
 
     def self.sprite_filename(species, form = 0, gender = 0, shiny = false, shadow = false, back = false, egg = false)
