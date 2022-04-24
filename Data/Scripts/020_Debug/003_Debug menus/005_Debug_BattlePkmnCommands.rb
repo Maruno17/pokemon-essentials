@@ -484,7 +484,7 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :teach_move, {
       next
     end
     pkmn.learn_move(new_move)
-    battler&.moves&.push(Battle::Move.from_pokemon_move(self, pkmn.moves.last))
+    battler&.moves&.push(Battle::Move.from_pokemon_move(battle, pkmn.moves.last))
     pbMessage("\\ts[]" + _INTL("{1} learned {2}!", pkmn.name, move_name))
   }
 })

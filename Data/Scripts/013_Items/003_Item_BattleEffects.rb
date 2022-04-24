@@ -673,11 +673,12 @@ ItemHandlers::BattleUseOnBattler.add(:XACCURACY6, proc { |item, battler, scene|
 })
 
 ItemHandlers::BattleUseOnBattler.add(:MAXMUSHROOMS, proc { |item, battler, scene|
-  battler.pbRaiseStatStage(:ATTACK, 1, battler) if battler.pbCanRaiseStatStage?(:ATTACK, battler)
-  battler.pbRaiseStatStage(:DEFENSE, 1, battler) if battler.pbCanRaiseStatStage?(:DEFENSE, battler)
-  battler.pbRaiseStatStage(:SPECIAL_ATTACK, 1, battler) if battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, battler)
-  battler.pbRaiseStatStage(:SPECIAL_DEFENSE, 1, battler) if battler.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, battler)
-  battler.pbRaiseStatStage(:SPEED, 1, battler) if battler.pbCanRaiseStatStage?(:SPEED, battler)
+  show_anim = true
+  GameData::Stat.each_main_battle do |stat|
+    next if !battler.pbCanRaiseStatStage?(stat.id, battler)
+    battler.pbRaiseStatStage(stat.id, 1, battler, show_anim)
+    show_anim = false
+  end
   battler.pokemon.changeHappiness("battleitem")
 })
 
