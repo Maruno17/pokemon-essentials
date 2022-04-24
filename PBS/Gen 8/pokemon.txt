@@ -10885,6 +10885,7 @@ Shape = MultiWinged
 Category = Moth
 Pokedex = It loves the honey of flowers and steals honey collected by Combee.
 Generation = 4
+Flags = DefaultForm_0
 WildItemUncommon = SILVERPOWDER
 #-------------------------------
 [COMBEE]

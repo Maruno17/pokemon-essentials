@@ -124,7 +124,12 @@ class Pokemon
     new_species_data = GameData::Species.get(species_id)
     return if @species == new_species_data.species
     @species     = new_species_data.species
-    @form        = new_species_data.form if new_species_data.form != 0
+    default_form = new_species_data.default_form
+    if default_form >= 0
+      @form      = default_form
+    elsif new_species_data.form > 0
+      @form      = new_species_data.form
+    end
     @forced_form = nil
     @gender      = nil if singleGendered?
     @level       = nil   # In case growth rate is different for the new species

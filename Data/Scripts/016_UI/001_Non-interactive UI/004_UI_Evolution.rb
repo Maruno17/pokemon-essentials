@@ -598,7 +598,6 @@ class PokemonEvolutionScene
     pbEvolutionMethodAfterEvolution
     # Modify Pokémon to make it evolved
     @pokemon.species = @newspecies
-    @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calc_stats
     @pokemon.ready_to_evolve = false
     # See and own evolved species
