@@ -48,14 +48,14 @@ class Scene_Credits
   CREDIT = <<_END_
 
 Pokémon Infinite Fusion
-By Chardub
+By Frogman
 
 General graphics / Music / Intellectual property
 Nintendo
 GameFreak
 
 Programming / Eventing:
-Chardub
+Frogman
 
 Fused Pokemon Sprites  :
 Japeal - Pokefusion 2
@@ -72,12 +72,12 @@ Compiler optimization
 andracass (Pokémon Reborn)
   
 Maps:
-Chardub
+Frogman
 Some of the maps were based on work by:
 BenGames, Zeak6464
 
 Gameplay planning / Story:
-Chardub 
+Frogman 
 The story and dialogues were based 
 off Pokémon Red and Blue, as well as
 Pokémon Gold and Silver.
@@ -121,7 +121,7 @@ WesleyFG, BoOmxBiG,
 EternalTakai, Hek-el-grande
 
 Other tiles:
-Chardub, chimcharsfireworkd, 
+Frogman, chimcharsfireworkd, 
 Rossay, Shiney570,
 Phyromatical, Gallanty 
 
@@ -175,7 +175,7 @@ Lisa Anthony<s>
 and everyone else who helped out
 
 "Pokémon Infinite Fusion" was made by:
-Chardub
+Frogman
 
 Playtesting and Custom Sprites were made by 
 various members of the Discord channel. 

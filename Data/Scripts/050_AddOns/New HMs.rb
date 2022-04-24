@@ -130,7 +130,6 @@ HiddenMoveHandlers::UseMove.add(:MOONLIGHT,proc{|move,pokemon|
 
 def pbSkipTime(newTime)
   currentTime = pbGetTimeNow.hour
-  #hoursToAdd = (24-currentTime + newTime)-24
   hoursToAdd = newTime - currentTime
   $game_variables[UnrealTime::EXTRA_SECONDS] += hoursToAdd*3600
 end

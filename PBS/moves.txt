@@ -696,3 +696,4 @@
 677,FAINTATTACK,Feint Attack,0A5,60,DARK,Physical,0,20,0,NearOther,0,abef,"The user draws up to the foe disarmingly, then throws a sucker punch. It hits without fail."
 678,HIDDENPOWER2,Hidden Power,090,60,NORMAL,Special,100,15,0,NearOther,0,bef,"A unique attack that varies in type and intensity depending on the Pokémon using it."
 679,TRIATTACK2,Tri Attack,017,70,NORMAL,Special,100,10,20,NearOther,0,bef,"The user strikes with a simultaneous three-beam attack. May also paralyze, burn, or freeze the target."
+680,FUSIONSWAP,Fusion Beam,017,0,QMARKS,Special,100,5,20,NearOther,0,bef,"A strange move developped by Team Rocket. It temporarily inverts an opposing fused Pokémon."
