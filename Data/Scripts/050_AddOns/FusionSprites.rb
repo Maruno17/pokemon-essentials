@@ -54,6 +54,8 @@ module GameData
         return sprintf(base_path +"349.350.351")
       when Settings::ZAPMOLCUNO_NB+6
         return sprintf(base_path +"151.251.381")
+      when Settings::ZAPMOLCUNO_NB+11
+        return sprintf(base_path +"150.348.380")
         #starters
       when Settings::ZAPMOLCUNO_NB+7
         return sprintf(base_path +"3.6.9")
@@ -63,6 +65,23 @@ module GameData
         return sprintf(base_path +"278.281.284")
       when Settings::ZAPMOLCUNO_NB+10
         return sprintf(base_path +"318.321.324")
+        #starters prevos
+      when Settings::ZAPMOLCUNO_NB+12
+        return sprintf(base_path +"1.4.7")
+      when Settings::ZAPMOLCUNO_NB+13
+        return sprintf(base_path +"2.5.8")
+      when Settings::ZAPMOLCUNO_NB+14
+        return sprintf(base_path +"152.155.158")
+      when Settings::ZAPMOLCUNO_NB+15
+        return sprintf(base_path +"153.156.159")
+      when Settings::ZAPMOLCUNO_NB+16
+        return sprintf(base_path +"276.279.282")
+      when Settings::ZAPMOLCUNO_NB+17
+        return sprintf(base_path +"277.280.283")
+      when Settings::ZAPMOLCUNO_NB+18
+        return sprintf(base_path +"316.319.322")
+      when Settings::ZAPMOLCUNO_NB+19
+        return sprintf(base_path +"317.320.323")
       else
         return sprintf(base_path + "000")
       end

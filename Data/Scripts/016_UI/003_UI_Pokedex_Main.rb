@@ -359,6 +359,9 @@ class PokemonPokedex_Scene
   end
 
   def pbRefreshDexList(index=0)
+    if index == nil
+      index = 0
+    end
     dexlist = pbGetDexList
     case $PokemonGlobal.pokedexMode
     when MODENUMERICAL

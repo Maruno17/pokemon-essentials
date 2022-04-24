@@ -87,7 +87,11 @@ class Player < Trainer
     end
 
     def set_seen_triple(species)
-      species_id = GameData::Species.try_get(species)&.species
+      if species.is_a?(Pokemon)
+        species_id = species.species
+      else
+        species_id = GameData::Species.try_get(species)&.species
+      end
       return if species_id.nil?
       @seen_triple[species_id] = true
     end

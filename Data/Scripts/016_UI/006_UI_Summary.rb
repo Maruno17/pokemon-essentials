@@ -398,19 +398,19 @@ class PokemonSummary_Scene
     # Write the Regional/National Dex number
     dexnum = GameData::Species.get(@pokemon.species).id_number
     dexnumshift = false
-    if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
-      dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
-    else
-      dexnum = 0
-      for i in 0...$Trainer.pokedex.dexes_count - 1
-        next if !$Trainer.pokedex.unlocked?(i)
-        num = pbGetRegionalNumber(i,@pokemon.species)
-        next if num<=0
-        dexnum = num
-        dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(i)
-        break
-      end
-    end
+    # if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
+    #   dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
+    # else
+    #   dexnum = 0
+    #   for i in 0...$Trainer.pokedex.dexes_count - 1
+    #     next if !$Trainer.pokedex.unlocked?(i)
+    #     num = pbGetRegionalNumber(i,@pokemon.species)
+    #     next if num<=0
+    #     dexnum = num
+    #     dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(i)
+    #     break
+    #   end
+    # end
     if dexnum<=0
       textpos.push(["???",435,74,2,dexNumBase,dexNumShadow])
     else

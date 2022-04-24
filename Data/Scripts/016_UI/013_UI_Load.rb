@@ -284,7 +284,7 @@ class PokemonLoadScreen
     cmd_debug        = -1
     cmd_quit         = -1
     show_continue = !@save_data.empty?
-    new_game_plus = show_continue && @save_data[:player].new_game_plus_unlocked
+    new_game_plus = show_continue && (@save_data[:player].new_game_plus_unlocked || $DEBUG)
     if show_continue
       commands[cmd_continue = commands.length] = _INTL('Continue')
       if @save_data[:player].mystery_gift_unlocked

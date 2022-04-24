@@ -172,7 +172,11 @@ class Pokemon
   end
 
   def isFusion?
-    return species_data.id_number > NB_POKEMON
+    return species_data.id_number > NB_POKEMON && !self.isTripleFusion?
+  end
+
+  def isTripleFusion?
+    return species_data.id_number >= Settings::ZAPMOLCUNO_NB
   end
 
   def form

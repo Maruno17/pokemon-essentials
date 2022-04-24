@@ -213,11 +213,11 @@ class PokemonPokedexInfo_Scene
     species_data = GameData::Species.get_species_form(@species, @form)
     # Write various bits of text
     indexText = "???"
-    if @dexlist[@index][4] > 0
+    #if @dexlist[@index][4] > 0
       indexNumber = @dexlist[@index][4]
       indexNumber -= 1 if @dexlist[@index][5]
       indexText = sprintf("%03d", indexNumber)
-    end
+    # end
     textpos = [
        [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
           246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)],
