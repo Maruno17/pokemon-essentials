@@ -1,8 +1,8 @@
 #==============================================================================#
 #                                Plugin Manager                                #
 #                                   by Marin                                   #
-#               support for external plugin scripts by Luka S.J.               #
-#                              tweaked by Maruno                               #
+#               Support for external plugin scripts by Luka S.J.               #
+#                              Tweaked by Maruno                               #
 #------------------------------------------------------------------------------#
 #   Provides a simple interface that allows plugins to require dependencies    #
 #   at specific versions, and to specify incompatibilities between plugins.    #
@@ -12,152 +12,92 @@
 #------------------------------------------------------------------------------#
 #                                   Usage:                                     #
 #                                                                              #
-# A Pokémon Essentials plugin should register itself using the PluginManager.  #
-# The simplest way to do so, for a plugin without dependencies, is as follows: #
+# Each plugin should have its own folder in the "Plugins" folder found in the  #
+# main directory. The "Plugins" folder is similar in concept to the "PBS"      #
+# folder, in that its contents are compiled and recorded as existing. The      #
+# plugin's script file(s) are placed in its folder - they must be .rb files.   #
 #                                                                              #
-#     PluginManager.register({                                                 #
-#       :name    => "Basic Plugin",                                            #
-#       :version => "1.0",                                                     #
-#       :link    => "https://reliccastle.com/link-to-the-plugin/",             #
-#       :credits => "Marin"                                                    #
-#     })                                                                       #
+# A plugin's folder must also contain a "meta.txt" file. This file is what     #
+# makes Essentials recognise that the plugin exists, and contains important    #
+# information about the plugin; if this file does not exist, the folder's      #
+# contents are ignored. Each line in this file is a property.                  #
 #                                                                              #
-# The link portion here is optional, but recommended. This will be shown in    #
-# the error message if the PluginManager detects that this plugin needs to be  #
-# updated.                                                                     #
+# Required lines:                                                              #
 #                                                                              #
-# A plugin's version should be in the format X.Y.Z, but the number of digits   #
-# you use does not matter. You can also use Xa, Xb, Xc, Ya, etc.               #
-# What matters is that you use it consistently, so that it can be compared.    #
+#     Name       = Simple Extension                          The plugin's name #
+#     Version    = 1.0                                    The plugin's version #
+#     Essentials = 19.1,20                 Compatible version(s) of Essentials #
+#     Link       = https://reliccastle.com/link-to-the-plugin/                 #
+#     Credits    = Luka S.J.,Maruno,Marin                    One or more names #
 #                                                                              #
-# IF there are multiple people to credit, their names should be in an array.   #
-# If there is only one credit, it does not need an array:                      #
+# A plugin's version should be in the format X or X.Y or X.Y.Z, where X/Y/Z    #
+# are numbers. You can also use Xa, Xb, Xc, Ya, etc. What matters is that you  #
+# use version numbers consistently for your plugin. A later version will be    #
+# alphanumerically higher than an older version.                               #
 #                                                                              #
-#     :credits => "Marin"                                                      #
-#     :credits => ["Marin", "Maruno"],                                         #
+# Plugins can interact with each other in several ways, such as requiring      #
+# another one to exist or by clashing with each other. These interactions are  #
+# known as dependencies and conflicts. The lines below are all optional, and   #
+# go in "meta.txt" to define how your plugin works (or doesn't work) with      #
+# others. You can have multiples of each of these lines.                       #
 #                                                                              #
+#     Requires   = Basic Plugin            Must have this plugin (any version) #
+#     Requires   = Useful Utils,1.1         Must have this plugin/min. version #
+#     Exact      = Scene Tweaks,2                Must have this plugin/version #
+#     Optional   = Extended Windows,1.2   If this plugin exists, load it first #
+#     Conflicts  = Complex Extension                       Incompatible plugin #
 #                                                                              #
+# A plugin that depends on another one ("Requires"/"Exact"/"Optional") will    #
+# make that other plugin be loaded first. The "Optional" line is for a plugin  #
+# which isn't necessary, but if it does exist in the same project, it must be  #
+# at the given version or higher.                                              #
 #                                                                              #
-# Dependency:                                                                  #
+# When plugins are compiled, their scripts are stored in the file              #
+# "PluginScripts.rxdata" in the "Data" folder. Dependencies defined above will #
+# ensure that they are loaded in a suitable order. Scripts within a plugin are #
+# loaded alphanumerically, going through subfolders depth-first.               #
 #                                                                              #
-# A plugin can require another plugin to be installed in order to work. For    #
-# example, the "Simple Extension" plugin depends on the above "Basic Plugin"   #
-# like so:                                                                     #
-#                                                                              #
-#     PluginManager.register({                                                 #
-#       :name    => "Simple Extension",                                        #
-#       :version => "1.0",                                                     #
-#       :link    => "https://reliccastle.com/link-to-the-plugin/",             #
-#       :credits => ["Marin", "Maruno"],                                       #
-#       :dependencies => ["Basic Plugin"]                                      #
-#     })                                                                       #
-#                                                                              #
-# If there are multiple dependencies, they should be listed in an array. If    #
-# there is only one dependency, it does not need an array:                     #
-#                                                                              #
-#     :dependencies => "Basic Plugin"                                          #
-#                                                                              #
-# To require a minimum version of a dependency plugin, you should turn the     #
-# dependency's name into an array which contains the name and the version      #
-# (both as strings). For example, to require "Basic Plugin" version 1.2 or     #
-# higher, you would write:                                                     #
-#                                                                              #
-#     :dependencies => [                                                       #
-#       ["Basic Plugin", "1.2"]                                                #
-#     ]                                                                        #
-#                                                                              #
-# To require a specific version (no higher and no lower) of a dependency       #
-# plugin, you should add the :exact flag as the first thing in the array for   #
-# that dependency:                                                             #
-#                                                                              #
-#     :dependencies => [                                                       #
-#       [:exact, "Basic Plugin", "1.2"]                                        #
-#     ]                                                                        #
-#                                                                              #
-# If your plugin can work without another plugin, but it is incompatible with  #
-# an old version of that other plugin, you should list it as an optional       #
-# dependency. If that other plugin is present in a game, then this optional    #
-# dependency will check whether it meets the minimum version required for your #
-# plugin. Write it in the same way as any other dependency as described above, #
-# but use the :optional flag instead.                                          #
-#                                                                              #
-#     :dependencies => [                                                       #
-#       [:optional, "QoL Improvements", "1.1"]                                 #
-#     ]                                                                        #
-#                                                                              #
-# The :optional_exact flag is a combination of :optional and :exact.           #
-#                                                                              #
-#                                                                              #
-#                                                                              #
-# Incompatibility:                                                             #
-#                                                                              #
-# If your plugin is known to be incompatible with another plugin, you should   #
-# list that other plugin as such. Only one of the two plugins needs to list    #
-# that it is incompatible with the other.                                      #
-#                                                                              #
-#     PluginManager.register({                                                 #
-#       :name    => "QoL Improvements",                                        #
-#       :version => "1.0",                                                     #
-#       :link    => "https://reliccastle.com/link-to-the-plugin/",             #
-#       :credits => "Marin",                                                   #
-#       :incompatibilities => [                                                #
-#         "Simple Extension"                                                   #
-#       ]                                                                      #
-#     })                                                                       #
+# The "Plugins" folder should be deleted when the game is released. Scripts in #
+# there are compiled, but any other files used by a plugin (graphics/audio)    #
+# should go into other folders and not the plugin's folder.                    #
 #                                                                              #
 #------------------------------------------------------------------------------#
-#                               Plugin folder:                                 #
+#                           The code behind plugins:                           #
 #                                                                              #
-# The Plugin folder is treated like the PBS folder, but for script files for   #
-# plugins. Each plugin has its own folder within the Plugin folder. Each       #
-# plugin must have a meta.txt file in its folder, which contains information   #
-# about that plugin. Folders without this meta.txt file are ignored.           #
+# When a plugin's "meta.txt" file is read, its contents are registered in the  #
+# PluginManager. A simple example of registering a plugin is as follows:       #
 #                                                                              #
-# Scripts must be in .rb files. You should not put any other files into a      #
-# plugin's folder except for script files and meta.txt.                        #
+#     PluginManager.register({                                                 #
+#       :name       => "Basic Plugin",                                         #
+#       :version    => "1.0",                                                  #
+#       :essentials => "20",                                                   #
+#       :link       => "https://reliccastle.com/link-to-the-plugin/",          #
+#       :credits    => ["Marin"]                                               #
+#     })                                                                       #
 #                                                                              #
-# When the game is compiled, scripts in these folders are read and converted   #
-# into a usable format, and saved in the file Data/PluginScripts.rxdata.       #
-# Script files are loaded in order of their name and subfolder, so it is wise  #
-# to name script files "001_first script.rb", "002_second script.rb", etc. to  #
-# ensure they are loaded in the correct order.                                 #
+# The :link value is optional, but recommended. This will be shown in the      #
+# message if the PluginManager detects that this plugin needs to be updated.   #
 #                                                                              #
-# When the game is compressed for distribution, the Plugin folder and all its  #
-# contents should be deleted (like the PBS folder), because its contents will  #
-# be unused (they will have been compiled into the PluginScripts.rxdata file). #
+# Here is the same example but also with dependencies and conflicts:           #
 #                                                                              #
-# The contents of meta.txt are as follows:                                     #
+#     PluginManager.register({                                                 #
+#       :name       => "Basic Plugin",                                         #
+#       :version    => "1.0",                                                  #
+#       :essentials => "20",                                                   #
+#       :link       => "https://reliccastle.com/link-to-the-plugin/",          #
+#       :credits    => ["Marin"],                                              #
+#       :dependencies => ["Basic Plugin",                                      #
+#                         ["Useful Utils", "1.1"],                             #
+#                         [:exact, "Scene Tweaks", "2"],                       #
+#                         [:optional, "Extended Windows", "1.2"],              #
+#                        ],                                                    #
+#       :incompatibilities => ["Simple Extension"]                             #
+#     })                                                                       #
 #                                                                              #
-#     Name         = Simple Extension                                          #
-#     Version      = 1.0                                                       #
-#     Requires     = Basic Plugin                                              #
-#     Requires     = Useful Utilities,1.1                                      #
-#     Conflicts    = Complex Extension                                         #
-#     Conflicts    = Extended Windows                                          #
-#     Link         = https://reliccastle.com/link-to-the-plugin/               #
-#     Credits      = Luka S.J.,Maruno,Marin                                    #
-#                                                                              #
-# These lines are related to what is described above. You can have multiple    #
-# "Requires" and "Conflicts" lines, each listing a single other plugin that is #
-# either a dependency or a conflict respectively.                              #
-#                                                                              #
-# Examples of the "Requires" line:                                             #
-#                                                                              #
-#     Requires     = Basic Plugin                                              #
-#     Requires     = Basic Plugin,1.1                                          #
-#     Requires     = Basic Plugin,1.1,exact                                    #
-#     Requires     = Basic Plugin,1.1,optional                                 #
-#     Exact        = Basic Plugin,1.1                                          #
-#     Optional     = Basic Plugin,1.1                                          #
-#                                                                              #
-# The "Exact" and "Optional" lines are equivalent to the "Requires" lines      #
-# that contain those keywords.                                                 #
-#                                                                              #
-# There is also a "Scripts" line, which lists one or more script files that    #
-# should be loaded first. You can have multiple "Scripts" lines. However, you  #
-# can achieve the same effect by simply naming your script files in            #
-# alphanumeric order to make them load in a particular order, so the "Scripts" #
-# line should not be necessary.                                                #
+# The example dependencies/conflict are the same as the examples shown above   #
+# for lines in "meta.txt". :optional_exact is a combination of :exact and      #
+# :optional, and there is no way to make use of its combined functionality via #
+# "meta.txt".                                                                  #
 #                                                                              #
 #------------------------------------------------------------------------------#
 #                     Please give credit when using this.                      #
