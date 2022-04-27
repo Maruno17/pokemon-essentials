@@ -464,7 +464,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     next ""
   }
   isDarkSkin = isDarkWindowskin(msgwindow.windowskin)
-  text.gsub!(/\\[Cc]\[([0-9]+)\]/) {
+  text.gsub!(/\\c\[([0-9]+)\]/i) {
     m = $1.to_i
     next getSkinColor(msgwindow.windowskin, m, isDarkSkin)
   }
