@@ -649,67 +649,81 @@ def pbDynamicItemList(*args)
   return ret
 end
 
+# Common items to find via Pickup. Items from this list are added to the pool in
+# order, starting from a point dependng on the Pokémon's level. The number of
+# items added is how many probabilities are in the PICKUP_COMMON_ITEM_CHANCES
+# array below.
+# There must be 9 + PICKUP_COMMON_ITEM_CHANCES.length number of items in this
+# array (18 by default). The 9 is actually (100 / num_rarity_levels) - 1, where
+# num_rarity_levels is in def pbPickup below.
+PICKUP_COMMON_ITEMS = [
+  :POTION,        # Levels 1-10
+  :ANTIDOTE,      # Levels 1-10, 11-20
+  :SUPERPOTION,   # Levels 1-10, 11-20, 21-30
+  :GREATBALL,     # Levels 1-10, 11-20, 21-30, 31-40
+  :REPEL,         # Levels 1-10, 11-20, 21-30, 31-40, 41-50
+  :ESCAPEROPE,    # Levels 1-10, 11-20, 21-30, 31-40, 41-50, 51-60
+  :FULLHEAL,      # Levels 1-10, 11-20, 21-30, 31-40, 41-50, 51-60, 61-70
+  :HYPERPOTION,   # Levels 1-10, 11-20, 21-30, 31-40, 41-50, 51-60, 61-70, 71-80
+  :ULTRABALL,     # Levels 1-10, 11-20, 21-30, 31-40, 41-50, 51-60, 61-70, 71-80, 81-90
+  :REVIVE,        # Levels       11-20, 21-30, 31-40, 41-50, 51-60, 61-70, 71-80, 81-90, 91-100
+  :RARECANDY,     # Levels              21-30, 31-40, 41-50, 51-60, 61-70, 71-80, 81-90, 91-100
+  :SUNSTONE,      # Levels                     31-40, 41-50, 51-60, 61-70, 71-80, 81-90, 91-100
+  :MOONSTONE,     # Levels                            41-50, 51-60, 61-70, 71-80, 81-90, 91-100
+  :HEARTSCALE,    # Levels                                   51-60, 61-70, 71-80, 81-90, 91-100
+  :FULLRESTORE,   # Levels                                          61-70, 71-80, 81-90, 91-100
+  :MAXREVIVE,     # Levels                                                 71-80, 81-90, 91-100
+  :PPUP,          # Levels                                                        81-90, 91-100
+  :MAXELIXIR      # Levels                                                               91-100
+]
+# Chances to get each item added to the pool from the array above.
+PICKUP_COMMON_ITEM_CHANCES = [30, 10, 10, 10, 10, 10, 10, 4, 4]
+# Rare items to find via Pickup. Items from this list are added to the pool in
+# order, starting from a point dependng on the Pokémon's level. The number of
+# items added is how many probabilities are in the PICKUP_RARE_ITEM_CHANCES
+# array below.
+# There must be 9 + PICKUP_RARE_ITEM_CHANCES.length number of items in this
+# array (11 by default). The 9 is actually (100 / num_rarity_levels) - 1, where
+# num_rarity_levels is in def pbPickup below.
+PICKUP_RARE_ITEMS = [
+  :HYPERPOTION,   # Levels 1-10
+  :NUGGET,        # Levels 1-10, 11-20
+  :KINGSROCK,     # Levels       11-20, 21-30
+  :FULLRESTORE,   # Levels              21-30, 31-40
+  :ETHER,         # Levels                     31-40, 41-50
+  :IRONBALL,      # Levels                            41-50, 51-60
+  :DESTINYKNOT,   # Levels                                   51-60, 61-70
+  :ELIXIR,        # Levels                                          61-70, 71-80
+  :DESTINYKNOT,   # Levels                                                 71-80, 81-90
+  :LEFTOVERS,     # Levels                                                        81-90, 91-100
+  :DESTINYKNOT    # Levels                                                               91-100
+]
+# Chances to get each item added to the pool from the array above.
+PICKUP_RARE_ITEM_CHANCES = [1, 1]
+
 # Try to gain an item after a battle if a Pokemon has the ability Pickup.
 def pbPickup(pkmn)
   return if pkmn.egg? || !pkmn.hasAbility?(:PICKUP)
   return if pkmn.hasItem?
-  return unless rand(100) < 10   # 10% chance
-  # Common items to find (9 items from this list are added to the pool)
-  pickupList = pbDynamicItemList(
-    :POTION,
-    :ANTIDOTE,
-    :SUPERPOTION,
-    :GREATBALL,
-    :REPEL,
-    :ESCAPEROPE,
-    :FULLHEAL,
-    :HYPERPOTION,
-    :ULTRABALL,
-    :REVIVE,
-    :RARECANDY,
-    :SUNSTONE,
-    :MOONSTONE,
-    :HEARTSCALE,
-    :FULLRESTORE,
-    :MAXREVIVE,
-    :PPUP,
-    :MAXELIXIR
-  )
-  # Rare items to find (2 items from this list are added to the pool)
-  pickupListRare = pbDynamicItemList(
-    :HYPERPOTION,
-    :NUGGET,
-    :KINGSROCK,
-    :FULLRESTORE,
-    :ETHER,
-    :IRONBALL,
-    :DESTINYKNOT,
-    :ELIXIR,
-    :DESTINYKNOT,
-    :LEFTOVERS,
-    :DESTINYKNOT
-  )
-  return if pickupList.length < 18
-  return if pickupListRare.length < 11
+  return unless rand(100) < 10   # 10% chance for Pickup to trigger
+  num_rarity_levels = 10
+  # Ensure common and rare item lists contain defined items
+  common_items = pbDynamicItemList(PICKUP_COMMON_ITEMS)
+  rare_items = pbDynamicItemList(PICKUP_RARE_ITEMS)
+  return if common_items.length < num_rarity_levels - 1 + PICKUP_COMMON_ITEM_CHANCES.length
+  return if rare_items.length < num_rarity_levels - 1 + PICKUP_RARE_ITEM_CHANCES.length
+  # Determine the starting point for adding items from the above arrays into the
+  # pool
+  start_index = [([100, pkmn.level].min - 1) * num_rarity_levels / 100, 0].max
   # Generate a pool of items depending on the Pokémon's level
   items = []
-  pkmnLevel = [100, pkmn.level].min
-  itemStartIndex = (pkmnLevel - 1) / 10
-  itemStartIndex = 0 if itemStartIndex < 0
-  9.times do |i|
-    items.push(pickupList[itemStartIndex + i])
-  end
-  2.times do |i|
-    items.push(pickupListRare[itemStartIndex + i])
-  end
-  # Probabilities of choosing each item in turn from the pool
-  chances = [30, 10, 10, 10, 10, 10, 10, 4, 4, 1, 1]   # Needs to be 11 numbers
-  chanceSum = 0
-  chances.each { |c| chanceSum += c }
+  PICKUP_COMMON_ITEM_CHANCES.length.times { |i| items.push(common_items[start_index + i]) }
+  PICKUP_RARE_ITEM_CHANCES.length.times { |i| items.push(rare_items[start_index + i]) }
   # Randomly choose an item from the pool to give to the Pokémon
-  rnd = rand(chanceSum)
+  all_chances = PICKUP_COMMON_ITEM_CHANCES + PICKUP_RARE_ITEM_CHANCES
+  rnd = rand(all_chances.sum)
   cumul = 0
-  chances.each_with_index do |c, i|
+  all_chances.each_with_index do |c, i|
     cumul += c
     next if rnd >= cumul
     pkmn.item = items[i]
