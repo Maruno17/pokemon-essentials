@@ -87,7 +87,7 @@ ItemHandlers::ConfirmUseInField.add(:ESCAPEROPE, proc { |item|
 #===============================================================================
 
 def pbRepel(item, steps)
-  message = $game_switches[USED_AN_INCENSE_SWITCH] ? "But an incense's effect still lingers from earlier." : "But a repellent's effect still lingers from earlier."
+  message = $game_switches[SWITCH_USED_AN_INCENSE] ? "But an incense's effect still lingers from earlier." : "But a repellent's effect still lingers from earlier."
   if $PokemonGlobal.repel > 0
     pbMessage(_INTL(message))
     return 0
@@ -99,8 +99,8 @@ end
 
 
 ItemHandlers::UseInField.add(:FUSIONREPEL, proc { |item|
-  $game_switches[FORCE_ALL_WILD_FUSIONS_SWITCH] = true
-  $game_switches[USED_AN_INCENSE_SWITCH] = true
+  $game_switches[SWITCH_FORCE_ALL_WILD_FUSIONS] = true
+  $game_switches[SWITCH_USED_AN_INCENSE] = true
   next pbRepel(item, 50)
 })
 
@@ -120,9 +120,9 @@ Events.onStepTaken += proc {
   if $PokemonGlobal.repel > 0 && !$game_player.terrain_tag.ice # Shouldn't count down if on ice
     $PokemonGlobal.repel -= 1
     if $PokemonGlobal.repel <= 0
-      isIncense = $game_switches[USED_AN_INCENSE_SWITCH]
-      $game_switches[FORCE_ALL_WILD_FUSIONS_SWITCH] = false
-      $game_switches[USED_AN_INCENSE_SWITCH] = false
+      isIncense = $game_switches[SWITCH_USED_AN_INCENSE]
+      $game_switches[SWITCH_FORCE_ALL_WILD_FUSIONS] = false
+      $game_switches[SWITCH_USED_AN_INCENSE] = false
       itemName= isIncense ? "incense" : "repellent"
       if $PokemonBag.pbHasItem?(:REPEL) ||
         $PokemonBag.pbHasItem?(:SUPERREPEL) ||

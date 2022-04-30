@@ -8,7 +8,7 @@ class PokeBattle_Battle
     return if !@internalBattle || !@expGain
     # Go through each battler in turn to find the Pokémon that participated in
     # battle against it, and award those Pokémon Exp/EVs
-    expAll = (GameData::Item.exists?(:EXPALL) && $PokemonBag.pbHasItem?(:EXPALL)) || $game_switches[GAME_DIFFICULTY_EASY]
+    expAll = (GameData::Item.exists?(:EXPALL) && $PokemonBag.pbHasItem?(:EXPALL)) || $game_switches[SWITCH_GAME_DIFFICULTY_EASY]
     p1 = pbParty(0)
     @battlers.each do |b|
       next unless b && b.opposes?   # Can only gain Exp from fainted foes

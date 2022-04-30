@@ -42,7 +42,7 @@ def pbFishingEnd
 end
 
 def pbFishing(hasEncounter,rodType=1)
-  autohook= Settings::FISHING_AUTO_HOOK || $game_switches[FISHING_AUTOHOOK_SWITCH]
+  autohook= Settings::FISHING_AUTO_HOOK || $game_switches[SWITCH_FISHING_AUTOHOOK]
   speedup = ($Trainer.first_pokemon && [:STICKYHOLD, :SUCTIONCUPS].include?($Trainer.first_pokemon.ability_id))
   biteChance = 20+(25*rodType)   # 45, 70, 95
   biteChance *= 1.5 if speedup   # 67.5, 100, 100
@@ -133,7 +133,7 @@ end
 
 # A Pokémon is biting, reflex test to reel it in
 def pbWaitForInput(msgWindow,message,frames)
-  autohook= Settings::FISHING_AUTO_HOOK || $game_switches[FISHING_AUTOHOOK_SWITCH]
+  autohook= Settings::FISHING_AUTO_HOOK || $game_switches[SWITCH_FISHING_AUTOHOOK]
   pbMessageDisplay(msgWindow,message,false)
   numFrame = 0
   twitchFrame = 0

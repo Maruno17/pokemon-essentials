@@ -277,9 +277,9 @@ class HallOfFame_Scene
   end
 
   def getDifficulty
-    if $game_switches[GAME_DIFFICULTY_EASY]
+    if $game_switches[SWITCH_GAME_DIFFICULTY_EASY]
       return "Easy"
-    elsif $game_switches[GAME_DIFFICULTY_HARD]
+    elsif $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
       return "Hard"
     else
       return "Normal"

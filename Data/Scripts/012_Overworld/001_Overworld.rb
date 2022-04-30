@@ -161,7 +161,7 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
 }
 
 def isRepelActive()
-  return false if $game_switches[USED_AN_INCENSE_SWITCH]
+  return false if $game_switches[SWITCH_USED_AN_INCENSE]
   return ($PokemonGlobal.repel > 0) || $PokemonTemp.pokeradar
 end
 
@@ -191,15 +191,15 @@ Events.onChangeDirection += proc {
 }
 
 def isFusionForced?
-  return false if $game_switches[RANDOMIZED_WILD_POKEMON_SWITCH]
-  return $game_switches[FORCE_FUSE_NEXT_POKEMON_SWITCH] || $game_switches[FORCE_ALL_WILD_FUSIONS_SWITCH]
+  return false if $game_switches[SWITCH_RANDOMIZED_WILD_POKEMON]
+  return $game_switches[SWITCH_FORCE_FUSE_NEXT_POKEMON] || $game_switches[SWITCH_FORCE_ALL_WILD_FUSIONS]
 end
 
 def isFusedEncounter
-  return false if !FUSED_WILD_POKEMON_SWITCH[35]
-  return false if $game_switches[RANDOMIZED_WILD_POKEMON_SWITCH]
+  return false if !SWITCH_FUSED_WILD_POKEMON[35]
+  return false if $game_switches[SWITCH_RANDOMIZED_WILD_POKEMON]
   return true if isFusionForced?()
-  chance = pbGet(WILD_FUSION_RATE_VAR) == 0 ? 5 : pbGet(WILD_FUSION_RATE_VAR)
+  chance = pbGet(VAR_WILD_FUSION_RATE) == 0 ? 5 : pbGet(VAR_WILD_FUSION_RATE)
   return (rand(chance) == 0)
 end
 
@@ -217,7 +217,7 @@ def pbBattleOnStepTaken(repel_active)
       encounter[0] = getFusionSpecies(encounter[0], encounter_fusedWith[0])
     end
   end
-  $game_switches[FORCE_FUSE_NEXT_POKEMON_SWITCH] = false
+  $game_switches[SWITCH_FORCE_FUSE_NEXT_POKEMON] = false
 
   encounter = EncounterModifier.trigger(encounter)
   if $PokemonEncounters.allow_encounter?(encounter, repel_active)

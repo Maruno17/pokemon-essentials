@@ -112,12 +112,12 @@ module GameData
 
 
     def replaceSingleSpeciesModeIfApplicable(species)
-      if $game_switches[SINGLE_POKEMON_MODE_SWITCH]
-        if $game_switches[SINGLE_POKEMON_MODE_HEAD_SWITCH]
+      if $game_switches[SWITCH_SINGLE_POKEMON_MODE]
+        if $game_switches[SWITCH_SINGLE_POKEMON_MODE_HEAD]
           return replaceFusionsHeadWithSpecies(species)
-        elsif $game_switches[SINGLE_POKEMON_MODE_BODY_SWITCH]
+        elsif $game_switches[SWITCH_SINGLE_POKEMON_MODE_BODY]
           return replaceFusionsBodyWithSpecies(species)
-        elsif $game_switches[SINGLE_POKEMON_MODE_RANDOM_SWITCH]
+        elsif $game_switches[SWITCH_SINGLE_POKEMON_MODE_RANDOM]
           if(rand(2) == 0)
             return replaceFusionsHeadWithSpecies(species)
           else
@@ -132,7 +132,7 @@ module GameData
       speciesId = getDexNumberForSpecies(species)
       if speciesId > NB_POKEMON
         bodyPoke = getBodyID(speciesId)
-        headPoke = pbGet(SINGLE_POKEMON_MODE_VAR)
+        headPoke = pbGet(VAR_SINGLE_POKEMON_MODE)
         newSpecies = bodyPoke*NB_POKEMON+headPoke
         return getPokemon(newSpecies)
       end
@@ -142,7 +142,7 @@ module GameData
     def replaceFusionsBodyWithSpecies(species)
       speciesId = getDexNumberForSpecies(species)
       if speciesId > NB_POKEMON
-        bodyPoke = pbGet(SINGLE_POKEMON_MODE_VAR)
+        bodyPoke = pbGet(VAR_SINGLE_POKEMON_MODE)
         headPoke = getHeadID(species)
         newSpecies = bodyPoke*NB_POKEMON+headPoke
         return getPokemon(newSpecies)
@@ -168,7 +168,7 @@ module GameData
       trainer.items = @items.clone
       trainer.lose_text = self.lose_text
 
-      isRematch = $game_switches[IS_REMATCH_SWITCH]
+      isRematch = $game_switches[SWITCH_IS_REMATCH]
       rematchId = getRematchId(trainer.name, trainer.trainer_type)
 
       # Create each Pokémon owned by the trainer
@@ -179,11 +179,11 @@ module GameData
           species = replace_species_with_placeholder(species)
         end
         species = replaceSingleSpeciesModeIfApplicable(species)
-        if $game_switches[REVERSED_MODE]
+        if $game_switches[SWITCH_REVERSED_MODE]
           species = reverseFusionSpecies(species)
         end
         level = pkmn_data[:level]
-        if $game_switches[GAME_DIFFICULTY_HARD]
+        if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
           level = (level * Settings::HARD_MODE_LEVEL_MODIFIER).ceil
           if level > Settings::MAXIMUM_LEVEL
             level = Settings::MAXIMUM_LEVEL

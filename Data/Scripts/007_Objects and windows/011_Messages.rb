@@ -421,7 +421,7 @@ def pbDisplayGoldWindow(msgwindow)
 end
 
 def pbDisplayBattleFactoryPointsWindow(msgwindow)
-  pbDisplayVariableWindow(msgwindow,"Tokens",BATTLE_FACTORY_TOKENS)
+  pbDisplayVariableWindow(msgwindow, "Tokens", VAR_BATTLE_FACTORY_TOKENS)
 end
 
 
@@ -728,7 +728,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
         head = getBasePokemonID(param.to_i, false)
         body = getBasePokemonID(param.to_i, true)
         facewindow.dispose if facewindow
-        path = obtainPokemonSpritePath(body, head, $game_variables[CUSTOM_SPRITES_ENABLED] == 0)
+        path = obtainPokemonSpritePath(body, head, $game_variables[VAR_CUSTOM_SPRITES_ENABLED] == 0)
         facewindow = isFusion ? PictureWindow.new(path) : PictureWindow.new("Graphics/Battlers/#{head}/#{head}.png")
         pbPositionNearMsgWindow(facewindow, msgwindow, :left)
         facewindow.viewport = msgwindow.viewport
@@ -885,8 +885,8 @@ end
 
 def pbShowCommands(msgwindow, commands = nil, cmdIfCancel = 0, defaultCmd = 0)
   return 0 if !commands
-  if defaultCmd == 0 && $game_variables[COMMAND_WINDOW_INDEX] != 0
-    defaultCmd = $game_variables[COMMAND_WINDOW_INDEX]
+  if defaultCmd == 0 && $game_variables[VAR_COMMAND_WINDOW_INDEX] != 0
+    defaultCmd = $game_variables[VAR_COMMAND_WINDOW_INDEX]
   end
   cmdwindow = Window_CommandPokemonEx.new(commands)
   cmdwindow.z = 99999

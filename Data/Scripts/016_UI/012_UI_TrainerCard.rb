@@ -18,7 +18,7 @@ class PokemonTrainerCard_Scene
     end
     cardexists = pbResolveBitmap(sprintf("Graphics/Pictures/Trainer Card/card_f"))
     @sprites["card"] = IconSprite.new(0,0,@viewport)
-    is_postgame = $game_switches[BEAT_THE_LEAGUE]
+    is_postgame = $game_switches[SWITCH_BEAT_THE_LEAGUE]
     if $Trainer.female? && cardexists
       path = "Graphics/Pictures/Trainer Card/card_f"
       if is_postgame
@@ -74,7 +74,7 @@ class PokemonTrainerCard_Scene
     pbDrawTextPositions(overlay,textPositions)
     x = 72
     imagePositions = []
-    postgame = $game_switches[BEAT_THE_LEAGUE]
+    postgame = $game_switches[SWITCH_BEAT_THE_LEAGUE]
     numberOfBadgesDisplayed = postgame ? 16 : 8
     for i in 0...numberOfBadgesDisplayed
       badgeRow= i<8 ? 0 : 1

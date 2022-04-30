@@ -94,7 +94,7 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
       end
       if species > 0
         skipLegendaryCheck = premiumWonderTrade && rand(100) < luck
-        species = 0 if pokemonIsPartLegendary(species) && !$game_switches[BEAT_THE_LEAGUE] && !skipLegendaryCheck
+        species = 0 if pokemonIsPartLegendary(species) && !$game_switches[SWITCH_BEAT_THE_LEAGUE] && !skipLegendaryCheck
       end
       #Redo loop if below BST - 200
       species = 0 if bst < (chosenBST - 200)
@@ -117,9 +117,9 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
 
     #num of Wondertrade - 1
     if premiumWonderTrade
-      $game_variables[PREMIUM_WONDERTRADE_LEFT] -= 1
+      $game_variables[VAR_PREMIUM_WONDERTRADE_LEFT] -= 1
     else
-      $game_variables[STANDARD_WONDERTRADE_LEFT] -= 1
+      $game_variables[VAR_STANDARD_WONDERTRADE_LEFT] -= 1
     end
 
     newpoke = pbStartTrade(pbGet(1), species, pname, tname, 0, true) # Starts the trade

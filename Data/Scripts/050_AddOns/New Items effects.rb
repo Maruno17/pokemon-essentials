@@ -376,7 +376,7 @@ ItemHandlers::UseFromBag.add(:DEBUGGER, proc { |item|
 
 ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
   TOTAL_SPIRITS_NEEDED = 108
-  nbSpirits = pbGet(ODDKEYSTONE_NB_VARIABLE)
+  nbSpirits = pbGet(VAR_ODDKEYSTONE_NB)
   if nbSpirits == 107
     Kernel.pbMessage(_INTL("The Odd Keystone appears to be moving on its own."))
     Kernel.pbMessage(_INTL("Voices can be heard whispering from it..."))
@@ -390,7 +390,7 @@ ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
     Kernel.pbMessage(_INTL("It seems as if some poweful energy is trying to escape from it."))
     if (Kernel.pbMessage("Let it out?", ["No","Yes"], 0)) == 1
       pbWildBattle(:SPIRITOMB,27)
-      pbSet(ODDKEYSTONE_NB_VARIABLE,0)
+      pbSet(VAR_ODDKEYSTONE_NB, 0)
     end
     next 1
   end

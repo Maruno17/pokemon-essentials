@@ -337,7 +337,7 @@ class PokeBattle_Battle
   # End of battle
   #=============================================================================
   def pbGainMoney
-    return if $game_switches[IS_REMATCH_SWITCH] #is rematch
+    return if $game_switches[SWITCH_IS_REMATCH] #is rematch
     return if !@internalBattle || !@moneyGain
     # Money rewarded from opposing trainers
     if trainerBattle?
@@ -455,7 +455,7 @@ class PokeBattle_Battle
     # Register captured Pokémon in the Pokédex, and store them
     pbRecordAndStoreCaughtPokemon
 
-    isRematch = $game_switches[IS_REMATCH_SWITCH]
+    isRematch = $game_switches[SWITCH_IS_REMATCH]
     begin
     if isRematch
       if @opponent.is_a?(Array)
@@ -469,7 +469,7 @@ class PokeBattle_Battle
       end
     end
     rescue
-      $game_switches[IS_REMATCH_SWITCH]=false
+      $game_switches[SWITCH_IS_REMATCH]=false
     end
 
 

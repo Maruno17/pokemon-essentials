@@ -64,7 +64,7 @@ class Trainer
   end
 
   def skill_level
-    if $game_switches[GAME_DIFFICULTY_HARD]
+    if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
       return 100
     end
     return GameData::TrainerType.get(@trainer_type).skill_level;

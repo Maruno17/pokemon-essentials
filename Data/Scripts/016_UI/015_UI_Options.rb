@@ -413,19 +413,19 @@ class PokemonOption_Scene
     ]
 
 
-    if $game_switches && ($game_switches[NEW_GAME_PLUS] || $game_switches[BEAT_THE_LEAGUE]) #beat the league
+    if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) #beat the league
       options <<
         EnumOption.new(_INTL("Battle type"), [_INTL("1v1"), _INTL("2v2"), _INTL("3v3")],
                        proc { $PokemonSystem.battle_type },
                        proc { |value|
                          if value == 0
-                           $game_variables[DEFAULT_BATTLE_TYPE] = [1, 1]
+                           $game_variables[VAR_DEFAULT_BATTLE_TYPE] = [1, 1]
                          elsif value == 1
-                           $game_variables[DEFAULT_BATTLE_TYPE] = [2, 2]
+                           $game_variables[VAR_DEFAULT_BATTLE_TYPE] = [2, 2]
                          elsif value == 2
-                           $game_variables[DEFAULT_BATTLE_TYPE] = [3, 3]
+                           $game_variables[VAR_DEFAULT_BATTLE_TYPE] = [3, 3]
                          else
-                           $game_variables[DEFAULT_BATTLE_TYPE] = [1, 1]
+                           $game_variables[VAR_DEFAULT_BATTLE_TYPE] = [1, 1]
                          end
                          $PokemonSystem.battle_type=value
                        }
