@@ -160,6 +160,11 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
   end
 }
 
+def isRepelActive()
+  return false if $game_switches[USED_AN_INCENSE_SWITCH]
+  return ($PokemonGlobal.repel > 0) || $PokemonTemp.pokeradar
+end
+
 def pbOnStepTaken(eventTriggered)
   if $game_player.move_route_forcing || pbMapInterpreterRunning?
     Events.onStepTakenFieldMovement.trigger(nil, $game_player)
@@ -168,7 +173,7 @@ def pbOnStepTaken(eventTriggered)
   $PokemonGlobal.stepcount = 0 if !$PokemonGlobal.stepcount
   $PokemonGlobal.stepcount += 1
   $PokemonGlobal.stepcount &= 0x7FFFFFFF
-  repel_active = ($PokemonGlobal.repel > 0) || $PokemonTemp.pokeradar
+  repel_active = isRepelActive()
 
   Events.onStepTaken.trigger(nil)
   #  Events.onStepTakenFieldMovement.trigger(nil,$game_player)
@@ -181,7 +186,7 @@ end
 
 # Start wild encounters while turning on the spot
 Events.onChangeDirection += proc {
-  repel_active = ($PokemonGlobal.repel > 0) || $PokemonTemp.pokeradar
+  repel_active = isRepelActive()
   pbBattleOnStepTaken(repel_active) if !$game_temp.in_menu
 }
 
