@@ -15,10 +15,9 @@ class RandomizerOptionsScene < PokemonOption_Scene
     super
     @openTrainerOptions = false
     @openWildOptions = false
-
   end
 
-  def pbStartScene
+  def pbStartScene(inloadscreen = false)
     super
     @changedColor = true
     @sprites["title"]=Window_UnformattedTextPokemon.newWithSize(
@@ -27,7 +26,7 @@ class RandomizerOptionsScene < PokemonOption_Scene
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
-  def pbGetOptionsIngame()
+  def pbGetOptions(inloadscreen = false)
     options = [
         EnumOption.new(_INTL("Starters"), [_INTL("On"), _INTL("Off")],
                        proc { $game_switches[RANDOM_STARTERS] ? 0 : 1 },
@@ -77,22 +76,20 @@ class RandomizerOptionsScene < PokemonOption_Scene
 
   def openTrainerOptionsMenu()
     return if !@openTrainerOptions
-    scene = RandomizerTrainerOptionsScene.new
-    screen = PokemonOption.new(scene)
-    pbFadeOutIn(99999) {
+    pbFadeOutIn {
+      scene = RandomizerTrainerOptionsScene.new
+      screen = PokemonOptionScreen.new(scene)
       screen.pbStartScreen
-      pbUpdateSceneMap
     }
     @openTrainerOptions = false
   end
 
   def openWildPokemonOptionsMenu()
     return if !@openWildOptions
-    scene = RandomizerWildPokemonOptionsScene.new
-    screen = PokemonOption.new(scene)
-    pbFadeOutIn(99999) {
+    pbFadeOutIn {
+      scene = RandomizerWildPokemonOptionsScene.new
+      screen = PokemonOptionScreen.new(scene)
       screen.pbStartScreen
-      pbUpdateSceneMap
     }
     @openWildOptions = false
   end
@@ -110,7 +107,7 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
     @changedColor = false
   end
 
-  def pbStartScene
+  def pbStartScene(inloadscreen = false)
     super
     @sprites["option"].nameBaseColor = Color.new(35, 130, 200)
     @sprites["option"].nameShadowColor = Color.new(20, 75, 115)
@@ -131,7 +128,7 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
     super
   end
 
-  def pbGetOptionsIngame()
+  def pbGetOptions(inloadscreen = false)
     options = [
         EnumOption.new(_INTL("Custom Sprites only"), [_INTL("On"), _INTL("Off")],
                        proc { $game_switches[RANDOM_TEAMS_CUSTOM_SPRITES] ? 0 : 1 },
@@ -169,7 +166,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
     @changedColor = false
   end
 
-  def pbStartScene
+  def pbStartScene(inloadscreen = false)
     super
     @sprites["option"].nameBaseColor = Color.new(70, 170, 40)
     @sprites["option"].nameShadowColor = Color.new(40, 100, 20)
@@ -188,7 +185,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
     super
   end
 
-  def pbGetOptionsIngame()
+  def pbGetOptions(inloadscreen = false)
     options = [
         EnumOption.new(_INTL("Type"), [_INTL("Global"), _INTL("Area")],
                        proc {

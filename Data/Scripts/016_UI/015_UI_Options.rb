@@ -187,6 +187,13 @@ class Window_PokemonOption < Window_DrawableCommand
     super(x, y, width, height)
   end
 
+  def nameBaseColor=(value)
+    @nameBaseColor=value
+  end
+  def nameShadowColor=(value)
+    @nameShadowColor=value
+  end
+
   def [](i)
     return @optvalues[i]
   end
@@ -206,7 +213,7 @@ class Window_PokemonOption < Window_DrawableCommand
 
   def drawItem(index, _count, rect)
     rect = drawCursor(index, rect)
-    optionname = (index == @options.length) ? _INTL("Cancel") : @options[index].name
+    optionname = (index == @options.length) ? _INTL("Confirm") : @options[index].name
     optionwidth = rect.width * 9 / 20
     pbDrawShadowText(self.contents, rect.x, rect.y, optionwidth, rect.height, optionname,
                      @nameBaseColor, @nameShadowColor)
@@ -303,7 +310,27 @@ class PokemonOption_Scene
     # These are the different options in the game. To add an option, define a
     # setter and a getter for that option. To delete an option, comment it out
     # or delete it. The game's options may be placed in any order.
-    @PokemonOptions = [
+    @PokemonOptions = pbGetOptions(inloadscreen)
+
+
+
+    @PokemonOptions = pbAddOnOptions(@PokemonOptions)
+    @sprites["option"] = Window_PokemonOption.new(@PokemonOptions, 0,
+                                                  @sprites["title"].height, Graphics.width,
+                                                  Graphics.height - @sprites["title"].height - @sprites["textbox"].height)
+    @sprites["option"].viewport = @viewport
+    @sprites["option"].visible = true
+    # Get the values of each option
+    for i in 0...@PokemonOptions.length
+      @sprites["option"].setValueNoRefresh(i, (@PokemonOptions[i].get || 0))
+    end
+    @sprites["option"].refresh
+    pbDeactivateWindows(@sprites)
+    pbFadeInAndShow(@sprites) { pbUpdate }
+  end
+
+  def pbGetOptions(inloadscreen = false)
+    options = [
       SliderOption.new(_INTL("Music Volume"), 0, 100, 5,
                        proc { $PokemonSystem.bgmvolume },
                        proc { |value|
@@ -377,10 +404,17 @@ class PokemonOption_Scene
                          pbSetResizeFactor($PokemonSystem.screensize)
                        end
                      }
+      ),
+      EnumOption.new(_INTL("Quick Surf"), [_INTL("Off"), _INTL("On")],
+                     proc { $PokemonSystem.quicksurf },
+                     proc { |value| $PokemonSystem.quicksurf = value }
       )
+
     ]
+
+
     if $game_switches && ($game_switches[NEW_GAME_PLUS] || $game_switches[BEAT_THE_LEAGUE]) #beat the league
-      @PokemonOptions <<
+      options <<
         EnumOption.new(_INTL("Battle type"), [_INTL("1v1"), _INTL("2v2"), _INTL("3v3")],
                        proc { $PokemonSystem.battle_type },
                        proc { |value|
@@ -398,29 +432,9 @@ class PokemonOption_Scene
         )
 
     end
-
-    # if $game_switches && $game_switches[GOT_BADGE_5] #badge for Surf
-    @PokemonOptions <<
-      EnumOption.new(_INTL("Quick Surf"), [_INTL("Off"), _INTL("On")],
-                     proc { $PokemonSystem.quicksurf },
-                     proc { |value| $PokemonSystem.quicksurf = value }
-      )
-    # end
-
-    @PokemonOptions = pbAddOnOptions(@PokemonOptions)
-    @sprites["option"] = Window_PokemonOption.new(@PokemonOptions, 0,
-                                                  @sprites["title"].height, Graphics.width,
-                                                  Graphics.height - @sprites["title"].height - @sprites["textbox"].height)
-    @sprites["option"].viewport = @viewport
-    @sprites["option"].visible = true
-    # Get the values of each option
-    for i in 0...@PokemonOptions.length
-      @sprites["option"].setValueNoRefresh(i, (@PokemonOptions[i].get || 0))
-    end
-    @sprites["option"].refresh
-    pbDeactivateWindows(@sprites)
-    pbFadeInAndShow(@sprites) { pbUpdate }
+    return options
   end
+
 
   def pbAddOnOptions(options)
     return options
