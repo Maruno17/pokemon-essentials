@@ -44,6 +44,10 @@ class PokemonTrade_Scene
     @sprites["rsprite1"].x = Graphics.width/2
     @sprites["rsprite1"].y = 264
     @sprites["rsprite1"].z = 10
+    @sprites["rsprite1"].zoom_x = Settings::FRONTSPRITE_SCALE
+    @sprites["rsprite1"].zoom_y = Settings::FRONTSPRITE_SCALE
+
+
     @pokemon.species_data.apply_metrics_to_sprite(@sprites["rsprite1"], 1)
     @sprites["rsprite2"] = PokemonSprite.new(@viewport)
     @sprites["rsprite2"].setPokemonBitmap(@pokemon2,false)
@@ -51,6 +55,9 @@ class PokemonTrade_Scene
     @sprites["rsprite2"].x = Graphics.width/2
     @sprites["rsprite2"].y = 264
     @sprites["rsprite2"].z = 10
+    @sprites["rsprite2"].zoom_x = Settings::FRONTSPRITE_SCALE
+    @sprites["rsprite2"].zoom_y = Settings::FRONTSPRITE_SCALE
+
     @pokemon2.species_data.apply_metrics_to_sprite(@sprites["rsprite2"], 1)
     @sprites["rsprite2"].visible = false
     @sprites["msgwindow"] = pbCreateMessageWindow(@viewport)

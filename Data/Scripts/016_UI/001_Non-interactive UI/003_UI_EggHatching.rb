@@ -86,6 +86,9 @@ class PokemonEggHatch_Scene
     @sprites["pokemon"].setPokemonBitmap(@pokemon) # Pokémon sprite
     @sprites["pokemon"].x = Graphics.width/2
     @sprites["pokemon"].y = 264
+    @sprites["pokemon"].zoom_x=Settings::FRONTSPRITE_SCALE
+    @sprites["pokemon"].zoom_y=Settings::FRONTSPRITE_SCALE
+
     @pokemon.species_data.apply_metrics_to_sprite(@sprites["pokemon"], 1)
     @sprites["hatch"].visible=false
     for i in 1..fadeTime

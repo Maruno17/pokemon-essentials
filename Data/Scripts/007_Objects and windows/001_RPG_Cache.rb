@@ -32,6 +32,7 @@ module RPG
     end
 
     def self.need_clearing()
+      p @cache.size
       return @cache.size >= 100
     end
 

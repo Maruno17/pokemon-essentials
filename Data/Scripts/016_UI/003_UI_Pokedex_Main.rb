@@ -257,6 +257,8 @@ class PokemonPokedex_Scene
     @sprites["icon"].setOffset(PictureOrigin::Center)
     @sprites["icon"].x = 112
     @sprites["icon"].y = 196
+    @sprites["icon"].zoom_y=Settings::FRONTSPRITE_SCALE
+    @sprites["icon"].zoom_x=Settings::FRONTSPRITE_SCALE
     @sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
     @sprites["searchcursor"] = PokedexSearchSelectionSprite.new(@viewport)

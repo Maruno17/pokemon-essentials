@@ -16,6 +16,9 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"].setOffset(PictureOrigin::Center)
     @sprites["infosprite"].x = 104
     @sprites["infosprite"].y = 136
+    @sprites["infosprite"].zoom_x =  Settings::FRONTSPRITE_SCALE
+    @sprites["infosprite"].zoom_y =  Settings::FRONTSPRITE_SCALE
+
     @mapdata = pbLoadTownMapData
     map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
     mappos = (map_metadata) ? map_metadata.town_map_position : nil
@@ -42,6 +45,9 @@ class PokemonPokedexInfo_Scene
     @sprites["formfront"].setOffset(PictureOrigin::Center)
     @sprites["formfront"].x = 130
     @sprites["formfront"].y = 158
+    @sprites["formfront"].zoom_y = Settings::FRONTSPRITE_SCALE
+    @sprites["formfront"].zoom_x = Settings::FRONTSPRITE_SCALE
+
     @sprites["formback"] = PokemonSprite.new(@viewport)
     @sprites["formback"].setOffset(PictureOrigin::Bottom)
     @sprites["formback"].x = 382   # y is set below as it depends on metrics
