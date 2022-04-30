@@ -208,7 +208,9 @@ def getEvolution(species, halfToEvolve=nil)
 end
 
 def getFusionSpecies(body, head)
-  id = body * Settings::NB_POKEMON + head
+  body_num = dexNum(body)
+  head_num = dexNum(head)
+  id = body_num * Settings::NB_POKEMON + head_num
   return GameData::Species.get(id).species
 end
 
