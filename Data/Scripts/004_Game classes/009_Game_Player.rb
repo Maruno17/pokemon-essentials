@@ -49,9 +49,9 @@ class Game_Player < Game_Character
   end
 
   def can_run?
+    return @move_speed > 3 if @move_route_forcing
     return false if $game_temp.in_menu || $game_temp.in_battle ||
-                    @move_route_forcing || $game_temp.message_window_showing ||
-                    pbMapInterpreterRunning?
+                    $game_temp.message_window_showing || pbMapInterpreterRunning?
     return false if !$player.has_running_shoes && !$PokemonGlobal.diving &&
                     !$PokemonGlobal.surfing && !$PokemonGlobal.bicycle
     return false if jumping?
@@ -469,7 +469,7 @@ class Game_Player < Game_Character
     if !@moved_last_frame || @stopped_last_frame   # Started a new step
       if pbTerrainTag.ice
         set_movement_type(:ice_sliding)
-      elsif !@move_route_forcing
+      else#if !@move_route_forcing
         faster = can_run?
         if $PokemonGlobal&.diving
           set_movement_type((faster) ? :diving_fast : :diving)
