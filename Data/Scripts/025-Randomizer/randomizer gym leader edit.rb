@@ -117,20 +117,20 @@ end
 
 ####methodes utilitaires
 
-def getBaseStats(species)      
-        basestatsum = $pkmn_dex[species][5][0] # HP        
-        basestatsum +=$pkmn_dex[species][5][1] # Attack
-        basestatsum +=$pkmn_dex[species][5][2] # Defense
-        basestatsum +=$pkmn_dex[species][5][3] # Speed
-        basestatsum +=$pkmn_dex[species][5][4] # Special Attack
-        basestatsum +=$pkmn_dex[species][5][5]  # Special Defense
-     return basestatsum   
-end
-   
+# def getBaseStats(species)
+#         basestatsum = $pkmn_dex[species][5][0] # HP
+#         basestatsum +=$pkmn_dex[species][5][1] # Attack
+#         basestatsum +=$pkmn_dex[species][5][2] # Defense
+#         basestatsum +=$pkmn_dex[species][5][3] # Speed
+#         basestatsum +=$pkmn_dex[species][5][4] # Special Attack
+#         basestatsum +=$pkmn_dex[species][5][5]  # Special Defense
+#      return basestatsum
+# end
+#
    
 def bstOk(newspecies,oldPokemonSpecies,bst_range=50)
-       newBST = getBaseStats(newspecies)
-       originalBST = getBaseStats(oldPokemonSpecies)
+       newBST = calcBaseStatsSum(newspecies)
+       originalBST = calcBaseStatsSum(oldPokemonSpecies)
        return newBST < originalBST-bst_range || newBST > originalBST+bst_range
 end
 
@@ -283,32 +283,25 @@ def Kernel.pbRandomizeTM()
 end
 
 def getNewSpecies(oldSpecies,bst_range=50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue )
-  return oldSpecies if (oldSpecies == RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
-  return oldSpecies if oldSpecies >= NUM_ZAPMOLCUNO
+  return oldSpecies if (oldSpecies == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
+  return oldSpecies if oldSpecies >= Settings::ZAPMOLCUNO_NB
   newspecies = rand(maxDexNumber - 1) + 1
-  newBST = Kernel.getBaseStats(newspecies)
-  originalBST = Kernel.getBaseStats(oldSpecies)
   while  bstOk(newspecies,oldSpecies,bst_range)
     newspecies = rand(maxDexNumber - 1) + 1
-    newBST = Kernel.getBaseStats(newspecies)
-  end  
+  end
   return newspecies
 end
 
 
 def getNewCustomSpecies(oldSpecies,customSpeciesList,bst_range=50, ignoreRivalPlaceholder = false)
-  return oldSpecies if (oldSpecies == RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
-  return oldSpecies if oldSpecies >= NUM_ZAPMOLCUNO
+  return oldSpecies if (oldSpecies == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
+  return oldSpecies if oldSpecies >= Settings::ZAPMOLCUNO_NB
   i = rand(customSpeciesList.length - 1) + 1
   newspecies = customSpeciesList[i]
-  
-  newBST = Kernel.getBaseStats(newspecies)
-  originalBST = Kernel.getBaseStats(oldSpecies)
   while  bstOk(newspecies,oldSpecies,bst_range)
     i = rand(customSpeciesList.length - 1)#+1
     newspecies = customSpeciesList[i]
-    newBST = Kernel.getBaseStats(newspecies)
-  end  
+  end
   return newspecies
 end
 
@@ -321,29 +314,54 @@ end
 
 
 
-def Kernel.pbShuffleTrainers(bst_range = 50)
+def Kernel.pbShuffleTrainers(bst_range = 50,customsOnly=false,customsList=nil)
+  if customsOnly && customsList == nil
+    customsOnly = false
+  end
   randomTrainersHash = Hash.new
-
-  trainers=load_data("Data/trainers.dat")
-  i=0
-  for trainer in trainers
-    for poke in trainer[3]
-      poke[TPSPECIES]=getNewSpecies(poke[TPSPECIES])
+  trainers_data = GameData::Trainer.list_all
+  trainers_data.each do |key, value|
+    trainer = trainers_data[key]
+    i=0
+    new_party = []
+    for poke in trainer.pokemon
+      old_poke = GameData::Species.get(poke[:species]).id_number
+      new_poke = customsOnly ? getNewCustomSpecies(old_poke,customsList) : getNewSpecies(old_poke)
+      new_party << new_poke
     end
-    randomTrainersHash[i] = (trainer)
+    randomTrainersHash[trainer.id] = new_party
     playShuffleSE(i)
     i += 1
     if i % 2 == 0
-        n = (i.to_f/trainers.length)*100
-        Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
+      n = (i.to_f/trainers.length)*100
+      Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
     end
-    #Kernel.pbMessage(_INTL("pushing trainer {1}: {2} ",i,trainer))
   end
   $PokemonGlobal.randomTrainersHash = randomTrainersHash
 end
 
+# def Kernel.pbShuffleTrainers(bst_range = 50)
+#   randomTrainersHash = Hash.new
+#
+#   trainers=load_data("Data/trainers.dat")
+#   i=0
+#   for trainer in trainers
+#     for poke in trainer[3]
+#       poke[TPSPECIES]=getNewSpecies(poke[TPSPECIES])
+#     end
+#     randomTrainersHash[i] = (trainer)
+#     playShuffleSE(i)
+#     i += 1
+#     if i % 2 == 0
+#       n = (i.to_f/trainers.length)*100
+#       Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
+#     end
+#     #Kernel.pbMessage(_INTL("pushing trainer {1}: {2} ",i,trainer))
+#   end
+#   $PokemonGlobal.randomTrainersHash = randomTrainersHash
+# end
 
-def Kernel.pbShuffleTrainersCustom()(bst_range = 50)
+def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   randomTrainersHash = Hash.new
   
   Kernel.pbMessage(_INTL("Parsing custom sprites folder"))
@@ -359,30 +377,30 @@ def Kernel.pbShuffleTrainersCustom()(bst_range = 50)
        bst_range=999
       else
         Kernel.pbMessage(_INTL("Trainer Pokémon will include auto-generated sprites."))
-       return Kernel.pbShuffleTrainers(bst_range) 
+       return Kernel.pbShuffleTrainers(bst_range)     ##use regular shuffle if not enough sprites
       end
   end
-  
-  ##use regular shuffle if not enough sprites
-  
-  
-  trainers=load_data("Data/trainers.dat")
-  i=0
-  for trainer in trainers
-    for poke in trainer[3]
-      poke[TPSPECIES]=getNewCustomSpecies(poke[TPSPECIES],customsList)
-    end
-    randomTrainersHash[i] = (trainer)
-    playShuffleSE(i)
-    i += 1
-    if i % 2 == 0
-        n = (i.to_f/trainers.length)*100
-        Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers (custom sprites only)...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
-    end
-    #Kernel.pbMessage(_INTL("pushing trainer {1}: {2} ",i,trainer))
-  end
-  $PokemonGlobal.randomTrainersHash = randomTrainersHash
+  Kernel.pbShuffleTrainers(bst_range,true ,customsList)
 end
+
+
+# trainers=load_data("Data/trainers.dat")
+# i=0
+# for trainer in trainers
+#   for poke in trainer[3]
+#     poke[TPSPECIES]=getNewCustomSpecies(poke[TPSPECIES],customsList)
+#   end
+#   randomTrainersHash[i] = (trainer)
+#   playShuffleSE(i)
+#   i += 1
+#   if i % 2 == 0
+#     n = (i.to_f/trainers.length)*100
+#     Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers (custom sprites only)...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
+#   end
+#   #Kernel.pbMessage(_INTL("pushing trainer {1}: {2} ",i,trainer))
+# end
+# $PokemonGlobal.randomTrainersHash = randomTrainersHash
+
 
 
 #def getRandomCustomSprite()

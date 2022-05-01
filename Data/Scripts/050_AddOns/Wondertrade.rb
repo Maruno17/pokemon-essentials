@@ -64,7 +64,7 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
   poke = $Trainer.party[pbGet(1)]
   $PokemonBag.pbStoreItem(poke.item, 1) if poke.item != nil
   myPoke = poke.species
-  chosenBST = calcBaseStats(myPoke)
+  chosenBST = calcBaseStatsSum(myPoke)
   # The following excecption fields are for hardcoding the blacklisted pokemon
   # without adding them in the events.
   #except+=[]
@@ -78,7 +78,7 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
       bonus += 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
 
       species = rand(PBSpecies.maxValue) + 1
-      bst = calcBaseStats(species)
+      bst = calcBaseStatsSum(species)
       # Redo the loop if pokemon is too evolved for its level
       #species=0 if lvl < pbGetMinimumLevel(species)# && pbGetPreviousForm(species) != species # && pbGetPreviousForm(species)!=species
       # Redo the loop if the species is an exception.
@@ -146,7 +146,7 @@ def pbGRS(minBST, chosenBST, luck, rare, except2)
     bonus += 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
 
     species = rand(PBSpecies.maxValue) + 1
-    bst = calcBaseStats(species)
+    bst = calcBaseStatsSum(species)
     # Redo the loop if pokemon is too evolved for its level
     #species=0 if lvl < pbGetMinimumLevel(species)# && pbGetPreviousForm(species) != species # && pbGetPreviousForm(species)!=species
     # Redo the loop if the species is an exception.
@@ -172,7 +172,7 @@ end
 
 
 
-def calcBaseStats(species)
+def calcBaseStatsSum(species)
   stats = GameData::Species.get(species).base_stats
   sum = 0
   sum += stats[:HP]

@@ -70,6 +70,10 @@ module GameData
       return (self::DATA.has_key?(key)) ? self::DATA[key] : nil
     end
 
+    def self.list_all()
+      return self::DATA
+    end
+
     def initialize(hash)
       @id = hash[:id]
       @id_number = hash[:id_number]
@@ -110,6 +114,15 @@ module GameData
       end
     end
 
+    def replace_species_to_randomized(species,trainerId,pokemonIndex)
+      return species if $game_switches[SWITCH_FIRST_RIVAL_BATTLE]
+      if $PokemonGlobal.randomTrainersHash[trainerId] == nil
+        Kernel.pbMessage(_INTL("The trainers need to be re-shuffled."))
+        Kernel.pbShuffleTrainers()
+      end
+      new_species_dex = $PokemonGlobal.randomTrainersHash[trainerId][pokemonIndex]
+      return getSpecies(new_species_dex)
+    end
 
     def replaceSingleSpeciesModeIfApplicable(species)
       if $game_switches[SWITCH_SINGLE_POKEMON_MODE]
@@ -150,6 +163,8 @@ module GameData
       return species
     end
 
+
+
     def to_trainer
       placeholder_species = [Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES,
                              Settings::VAR_1_PLACEHOLDER_SPECIES,
@@ -173,9 +188,11 @@ module GameData
       rematchId = getRematchId(trainer.name, trainer.trainer_type)
 
       # Create each Pokémon owned by the trainer
+      index = 0
       @pokemon.each do |pkmn_data|
         #replace placeholder species infinite fusion edit
         species = GameData::Species.get(pkmn_data[:species]).species
+        species = replace_species_to_randomized(species,self.id,index) if isPlayingRandomized
         if placeholder_species.include?(species)
           species = replace_species_with_placeholder(species)
         end
@@ -252,6 +269,8 @@ module GameData
         end
         pkmn.poke_ball = pkmn_data[:poke_ball] if pkmn_data[:poke_ball]
         pkmn.calc_stats
+
+        index +=1
       end
       return trainer
     end

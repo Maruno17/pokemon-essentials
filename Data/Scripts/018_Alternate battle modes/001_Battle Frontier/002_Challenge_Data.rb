@@ -45,7 +45,7 @@ def generate_random_species(max_bst)
   while (species==0) # Loop Start
     bonus+= 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
     species=rand(PBSpecies.maxValue)+1
-    bst = calcBaseStats(species)
+    bst = calcBaseStatsSum(species)
     species=0 if bst > max_bst+additional_bst
   end
   return species

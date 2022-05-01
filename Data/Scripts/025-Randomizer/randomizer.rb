@@ -126,61 +126,61 @@ def getBaseStatsFormattedForRandomizer(dex_num)
   return statsArray
 end
 
-def Kernel.pbShuffleDexTrainers()
-  # create hash
-  psuedoHash = Hash.new
-  psuedoBSTHash = Hash.new
-  
-  #Create array of all pokemon dex numbers
-  pokeArray = []
-  for i in 1..PBSpecies.maxValue
-    pokeArray.push(i)
-  end
-  #randomize hash
-  pokeArrayRand = pokeArray.dup
-  pokeArrayRand.shuffle!
-  pokeArray.insert(0,nil)
-  # fill random hash
-  #random hash will have to be accessed by number, not internal name
-  for i in 1...pokeArrayRand.length
-    psuedoHash[i]=pokeArrayRand[i]
-  end
-  
-  #use pokeArrayRand to fill in the BST hash also
-  #loop through the actual dex, and use the first mon in pokeArrayRand with
-  #BST in the same 100 range
-  for i in 1..PBSpecies.maxValue
-    if i % 20 == 0
-      n = (i.to_f/PBSpecies.maxValue)*100
-      #Kernel.pbMessage(_INTL("\\ts[]Shuffling...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
-    end
-    
-    baseStats=calcBaseStats(i)
-    baseStat_target = 0
-    for k in 0...baseStats.length
-      baseStat_target+=baseStats[k]
-    end
-    baseStat_target = (baseStat_target/50).floor
-    for j in 1...pokeArrayRand.length
-      baseStats=calcBaseStats([pokeArrayRand[j]])
-      baseStat_temp = 0
-      for l in 0...baseStats.length
-        baseStat_temp+=baseStats[l]
-      end
-      baseStat_temp = (baseStat_temp/50).floor
-      #if a match, add to hash, remove from array, and cycle to next poke in dex
-      if baseStat_temp == baseStat_target
-        psuedoBSTHash[i]=pokeArrayRand[j]
-        pokeArrayRand.delete(pokeArrayRand[j])
-        break
-      end
-    end
-  end
-  
-  #add hashes to global data0
-  #$PokemonGlobal.psuedoHash = psuedoHash
-  $PokemonGlobal.pseudoBSTHashTrainers = psuedoBSTHash  
-end
+# def Kernel.pbShuffleDexTrainers()
+#   # create hash
+#   psuedoHash = Hash.new
+#   psuedoBSTHash = Hash.new
+#
+#   #Create array of all pokemon dex numbers
+#   pokeArray = []
+#   for i in 1..PBSpecies.maxValue
+#     pokeArray.push(i)
+#   end
+#   #randomize hash
+#   pokeArrayRand = pokeArray.dup
+#   pokeArrayRand.shuffle!
+#   pokeArray.insert(0,nil)
+#   # fill random hash
+#   #random hash will have to be accessed by number, not internal name
+#   for i in 1...pokeArrayRand.length
+#     psuedoHash[i]=pokeArrayRand[i]
+#   end
+#
+#   #use pokeArrayRand to fill in the BST hash also
+#   #loop through the actual dex, and use the first mon in pokeArrayRand with
+#   #BST in the same 100 range
+#   for i in 1..PBSpecies.maxValue
+#     if i % 20 == 0
+#       n = (i.to_f/PBSpecies.maxValue)*100
+#       #Kernel.pbMessage(_INTL("\\ts[]Shuffling...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
+#     end
+#
+#     baseStats=calcBaseStats(i)
+#     baseStat_target = 0
+#     for k in 0...baseStats.length
+#       baseStat_target+=baseStats[k]
+#     end
+#     baseStat_target = (baseStat_target/50).floor
+#     for j in 1...pokeArrayRand.length
+#       baseStats=calcBaseStats([pokeArrayRand[j]])
+#       baseStat_temp = 0
+#       for l in 0...baseStats.length
+#         baseStat_temp+=baseStats[l]
+#       end
+#       baseStat_temp = (baseStat_temp/50).floor
+#       #if a match, add to hash, remove from array, and cycle to next poke in dex
+#       if baseStat_temp == baseStat_target
+#         psuedoBSTHash[i]=pokeArrayRand[j]
+#         pokeArrayRand.delete(pokeArrayRand[j])
+#         break
+#       end
+#     end
+#   end
+#
+#   #add hashes to global data0
+#   #$PokemonGlobal.psuedoHash = psuedoHash
+#   $PokemonGlobal.pseudoBSTHashTrainers = psuedoBSTHash
+# end
 
 def getRandomizedTo(species)
   return species if !$PokemonGlobal.psuedoBSTHash
