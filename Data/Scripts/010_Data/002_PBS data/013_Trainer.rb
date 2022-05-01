@@ -114,14 +114,71 @@ module GameData
       end
     end
 
-    def replace_species_to_randomized(species,trainerId,pokemonIndex)
-      return species if $game_switches[SWITCH_FIRST_RIVAL_BATTLE]
+    #todo customsListinCache so it's faster
+    def generateRandomGymSpecies(old_species)
+      customsList = getCustomSpeciesList()
+      bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
+      gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
+      type_id = pbGet(VAR_GYM_TYPES_ARRAY)[gym_index]
+      gym_type = GameData::Type.get(type_id)
+      return old_species if type_id == -1
+      while true
+        new_species = $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] ? getSpecies(getNewCustomSpecies(old_species, customsList, bst_range)) : getSpecies(getNewSpecies(old_species, bst_range))
+        if new_species.hasType?(gym_type)
+          return new_species
+        end
+      end
+    end
+
+    def replace_species_to_randomized_gym(species, trainerId, pokemonIndex)
+      if $PokemonGlobal.randomGymTrainersHash == nil
+        $PokemonGlobal.randomGymTrainersHash = {}
+      end
+      if $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS] && $PokemonGlobal.randomGymTrainersHash != nil
+        if $PokemonGlobal.randomGymTrainersHash[trainerId] != nil && $PokemonGlobal.randomGymTrainersHash[trainerId].length >= $PokemonGlobal.randomTrainersHash[trainerId].length
+          return getSpecies($PokemonGlobal.randomGymTrainersHash[trainerId][pokemonIndex])
+        end
+      end
+      new_species = generateRandomGymSpecies(species)
+      if $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS]
+        add_generated_species_to_gym_array(new_species, trainerId)
+      end
+      return new_species
+    end
+
+    def add_generated_species_to_gym_array(new_species, trainerId)
+      expected_team_length =1
+      expected_team_length = $PokemonGlobal.randomTrainersHash[trainerId].length if $PokemonGlobal.randomTrainersHash[trainerId]
+      new_team = []
+      if $PokemonGlobal.randomGymTrainersHash[trainerId]
+        new_team = $PokemonGlobal.randomGymTrainersHash[trainerId]
+      end
+      if new_team.length < expected_team_length
+        new_team << new_species.id_number
+      end
+      $PokemonGlobal.randomGymTrainersHash[trainerId] = new_team
+    end
+
+    def replace_species_to_randomized_regular(species, trainerId, pokemonIndex)
       if $PokemonGlobal.randomTrainersHash[trainerId] == nil
         Kernel.pbMessage(_INTL("The trainers need to be re-shuffled."))
         Kernel.pbShuffleTrainers()
       end
       new_species_dex = $PokemonGlobal.randomTrainersHash[trainerId][pokemonIndex]
       return getSpecies(new_species_dex)
+    end
+
+    def isGymBattle
+      return ($game_switches[SWITCH_RANDOM_TRAINERS] && ($game_variables[VAR_CURRENT_GYM_TYPE] != -1) || ($game_switches[SWITCH_FIRST_RIVAL_BATTLE] && $game_switches[SWITCH_RANDOM_STARTERS]))
+    end
+
+    def replace_species_to_randomized(species, trainerId, pokemonIndex)
+      return species if $game_switches[SWITCH_FIRST_RIVAL_BATTLE]
+      if isGymBattle() && $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY]
+        return replace_species_to_randomized_gym(species, trainerId, pokemonIndex)
+      end
+      return replace_species_to_randomized_regular(species, trainerId, pokemonIndex)
+
     end
 
     def replaceSingleSpeciesModeIfApplicable(species)
@@ -131,7 +188,7 @@ module GameData
         elsif $game_switches[SWITCH_SINGLE_POKEMON_MODE_BODY]
           return replaceFusionsBodyWithSpecies(species)
         elsif $game_switches[SWITCH_SINGLE_POKEMON_MODE_RANDOM]
-          if(rand(2) == 0)
+          if (rand(2) == 0)
             return replaceFusionsHeadWithSpecies(species)
           else
             return replaceFusionsBodyWithSpecies(species)
@@ -146,7 +203,7 @@ module GameData
       if speciesId > NB_POKEMON
         bodyPoke = getBodyID(speciesId)
         headPoke = pbGet(VAR_SINGLE_POKEMON_MODE)
-        newSpecies = bodyPoke*NB_POKEMON+headPoke
+        newSpecies = bodyPoke * NB_POKEMON + headPoke
         return getPokemon(newSpecies)
       end
       return species
@@ -157,13 +214,11 @@ module GameData
       if speciesId > NB_POKEMON
         bodyPoke = pbGet(VAR_SINGLE_POKEMON_MODE)
         headPoke = getHeadID(species)
-        newSpecies = bodyPoke*NB_POKEMON+headPoke
+        newSpecies = bodyPoke * NB_POKEMON + headPoke
         return getPokemon(newSpecies)
       end
       return species
     end
-
-
 
     def to_trainer
       placeholder_species = [Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES,
@@ -184,7 +239,7 @@ module GameData
       trainer.lose_text = self.lose_text
 
       isRematch = $game_switches[SWITCH_IS_REMATCH]
-      isPlayingRandomized =  $game_switches[SWITCH_RANDOM_TRAINERS] && !$game_switches[SWITCH_FIRST_RIVAL_BATTLE]
+      isPlayingRandomized = $game_switches[SWITCH_RANDOM_TRAINERS] && !$game_switches[SWITCH_FIRST_RIVAL_BATTLE]
       rematchId = getRematchId(trainer.name, trainer.trainer_type)
 
       # Create each Pokémon owned by the trainer
@@ -192,7 +247,7 @@ module GameData
       @pokemon.each do |pkmn_data|
         #replace placeholder species infinite fusion edit
         species = GameData::Species.get(pkmn_data[:species]).species
-        species = replace_species_to_randomized(species,self.id,index) if isPlayingRandomized
+        species = replace_species_to_randomized(species, self.id, index) if isPlayingRandomized
         if placeholder_species.include?(species)
           species = replace_species_with_placeholder(species)
         end
@@ -216,14 +271,12 @@ module GameData
         end
         ####
 
-
         #trainer rematch infinite fusion edit
         if isRematch
           nbRematch = getNumberRematch(rematchId)
           level = getRematchLevel(level, nbRematch)
           species = evolveRematchPokemon(nbRematch, species)
         end
-        #
         pkmn = Pokemon.new(species, level, trainer, false)
 
         trainer.party.push(pkmn)
@@ -270,7 +323,7 @@ module GameData
         pkmn.poke_ball = pkmn_data[:poke_ball] if pkmn_data[:poke_ball]
         pkmn.calc_stats
 
-        index +=1
+        index += 1
       end
       return trainer
     end

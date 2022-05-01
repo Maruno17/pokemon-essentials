@@ -29,14 +29,16 @@
 
 
 
-GYM_TYPES_ARRAY = [0,5,11,13,12,3,14,10,4,1,0,6,2,16,7,15,1,8,15,1,7,16,18,17,7,16]
+#GYM_TYPES_ARRAY = [0,5,11,13,12,3,14,10,4,1,0,6,2,16,7,15,1,8,15,1,7,16,18,17,7,16]
+GYM_TYPES_ARRAY = [:NORMAL,:ROCK,:WATER,:ELECTRIC,:GRASS,:POISON,:PSYCHIC,:FIRE,:GROUND,:FIGHTING,:NORMAL,:BUG,:FLYING,:DRAGON,:GHOST,:ICE,:FIGHTING,:STEEL,:ICE,:FIGHTING,:GHOST,:DRAGON,:FAIRY,:DARK,:GHOST,:DRAGON]
+
 #$randomTrainersArray = []
 
 #[fighting dojo est 9eme (1), 0 au debut pour pasavoir a faire -1]
 
 def Kernel.initRandomTypeArray()
-  typesArray = [0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,18,14,15,11,17].shuffle #ne pas remettre 10 (QMARKS)
-  $game_variables[151] = $game_switches[921] ? typesArray : GYM_TYPES_ARRAY
+  typesArray = GYM_TYPES_ARRAY.shuffle #ne pas remettre 10 (QMARKS)
+  $game_variables[VAR_GYM_TYPES_ARRAY] = $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] ? typesArray : GYM_TYPES_ARRAY
 end
 
 
@@ -61,27 +63,16 @@ end
 class PokeBattle_Battle
 CONST_BST_RANGE = 25  #unused. $game_variables[197] a la place
 def randomize_opponent_party(party)
-    #return randomizedRivalFirstBattle(party) if $game_switches[46] && $game_switches[954]
-    newparty = []
-
-    for m in party
-       next if !m
+    for pokemon in party
+       next if !pokemon
        newspecies = rand(PBSpecies.maxValue - 1) + 1
-       newBST = getBaseStats(newspecies)
-       originalBST = getBaseStats(m.species)
-       while  !gymLeaderOk(newspecies) || bstOk(newspecies,m.species,$game_variables[197])
+       while  !gymLeaderOk(newspecies) || bstOk(newspecies,pokemon.species,$game_variables[VAR_RANDOMIZER_WILD_POKE_BST])
           newspecies = rand(PBSpecies.maxValue - 1) + 1
-          newBST = getBaseStats(newspecies)
-          #originalBST = getBaseStats(m.species)                                    
         end
-         # Kernel.pbMessage(_INTL("OLD = {1}",newspecies))   
-
-        m.species = newspecies
-        m.name = PBSpecies.getName(newspecies)
-        m.resetMoves
-        m.calcStats
-        #pbInitPokemon(m,m.species)
-
+       pokemon.species = newspecies
+       pokemon.name = PBSpecies.getName(newspecies)
+       pokemon.resetMoves
+       pokemon.calcStats
       end  
 
   return party
@@ -283,26 +274,28 @@ def Kernel.pbRandomizeTM()
 end
 
 def getNewSpecies(oldSpecies,bst_range=50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue )
-  return oldSpecies if (oldSpecies == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
-  return oldSpecies if oldSpecies >= Settings::ZAPMOLCUNO_NB
-  newspecies = rand(maxDexNumber - 1) + 1
-  while  bstOk(newspecies,oldSpecies,bst_range)
-    newspecies = rand(maxDexNumber - 1) + 1
+  oldSpecies_dex = dexNum(oldSpecies)
+  return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
+  return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
+  newspecies_dex = rand(maxDexNumber - 1) + 1
+  while  bstOk(newspecies_dex,oldSpecies_dex,bst_range)
+    newspecies_dex = rand(maxDexNumber - 1) + 1
   end
-  return newspecies
+  return newspecies_dex
 end
 
 
 def getNewCustomSpecies(oldSpecies,customSpeciesList,bst_range=50, ignoreRivalPlaceholder = false)
-  return oldSpecies if (oldSpecies == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
-  return oldSpecies if oldSpecies >= Settings::ZAPMOLCUNO_NB
+  oldSpecies_dex = dexNum(oldSpecies)
+  return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
+  return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
   i = rand(customSpeciesList.length - 1) + 1
-  newspecies = customSpeciesList[i]
-  while  bstOk(newspecies,oldSpecies,bst_range)
+  newspecies_dex = customSpeciesList[i]
+  while  bstOk(newspecies_dex,oldSpecies_dex,bst_range)
     i = rand(customSpeciesList.length - 1)#+1
-    newspecies = customSpeciesList[i]
+    newspecies_dex = customSpeciesList[i]
   end
-  return newspecies
+  return newspecies_dex
 end
 
 

@@ -204,6 +204,17 @@ module GameData
       return @id_number > Settings::NB_POKEMON
     end
 
+    def hasType?(type)
+      type = GameData::Type.get(type).id
+      return self.types.include?(type)
+    end
+
+    def types
+      types = [@type1]
+      types << @type2 if @type2 && @type2 != @type1
+      return types
+    end
+
     def apply_metrics_to_sprite(sprite, index, shadow = false)
       if shadow
         if (index & 1) == 1 # Foe Pokémon

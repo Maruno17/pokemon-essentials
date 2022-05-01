@@ -1,13 +1,14 @@
 class PokemonGlobalMetadata
   attr_accessor :psuedoHash
   attr_accessor :psuedoBSTHash
-  attr_accessor :pseudoBSTHashTrainers
   attr_accessor :randomTrainersHash
+  attr_accessor :randomGymTrainersHash
 
 
   alias random_init initialize
   def initialize
     random_init
+    @randomGymTrainersHash=nil
     @psuedoHash=nil
     @psuedoBSTHash=nil
   end

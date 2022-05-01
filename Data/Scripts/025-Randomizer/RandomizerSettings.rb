@@ -8,6 +8,7 @@ class RandomizerOptionsScene < PokemonOption_Scene
     super
     @openTrainerOptions = false
     @openWildOptions = false
+    @openGymOptions = false
   end
 
   def pbStartScene(inloadscreen = false)
@@ -39,6 +40,17 @@ class RandomizerOptionsScene < PokemonOption_Scene
                        }
         ),
 
+        EnumOption.new(_INTL("Gyms"), [_INTL("On"), _INTL("Off")],
+                       proc { $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] ? 0 : 1 },
+                       proc { |value|
+                         if !$game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] && value == 0
+                           @openGymOptions = true
+                           openGymOptionsMenu()
+                         end
+                         $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] = value == 0
+                       }
+        ),
+
         EnumOption.new(_INTL("Wild Pokémon"), [_INTL("On"), _INTL("Off")],
                        proc {
                          $game_switches[SWITCH_RANDOM_WILD] ? 0 : 1
@@ -65,6 +77,16 @@ class RandomizerOptionsScene < PokemonOption_Scene
         ),
     ]
     return options
+  end
+
+  def openGymOptionsMenu()
+    return if !@openGymOptions
+    pbFadeOutIn {
+      scene = RandomizerGymOptionsScene.new
+      screen = PokemonOptionScreen.new(scene)
+      screen.pbStartScreen
+    }
+    @openGymOptions = false
   end
 
   def openTrainerOptionsMenu()
@@ -134,14 +156,7 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
                        proc { |value|
                          $game_switches[RANDOM_HELD_ITEMS] = value == 0
                        }
-        ),
-
-        EnumOption.new(_INTL("Gym types"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[RANDOM_GYM_TYPES] ? 0 : 1 },
-                       proc { |value|
-                         $game_switches[RANDOM_GYM_TYPES] = value == 0
-                       }
-        ),
+        )
     ]
     return options
   end
@@ -225,6 +240,61 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
                          $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] = value == 0
                        }
         )
+    ]
+    return options
+  end
+end
+
+
+class RandomizerGymOptionsScene < PokemonOption_Scene
+  RANDOM_GYM_TYPES = 921
+
+  def initialize
+    @changedColor = false
+  end
+
+  def pbStartScene(inloadscreen = false)
+    super
+    @sprites["option"].nameBaseColor = Color.new(35, 130, 200)
+    @sprites["option"].nameShadowColor = Color.new(20, 75, 115)
+    @changedColor = true
+    for i in 0...@PokemonOptions.length
+      @sprites["option"][i] = (@PokemonOptions[i].get || 0)
+    end
+    @sprites["title"]=Window_UnformattedTextPokemon.newWithSize(
+      _INTL("Randomizer settings: Gyms"),0,0,Graphics.width,64,@viewport)
+    @sprites["textbox"].text=_INTL("Set the randomizer settings for gyms")
+
+
+    pbFadeInAndShow(@sprites) { pbUpdate }
+  end
+
+  def pbFadeInAndShow(sprites, visiblesprites = nil)
+    return if !@changedColor
+    super
+  end
+
+  def pbGetOptions(inloadscreen = false)
+    options = [
+      EnumOption.new(_INTL("Gym types"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[RANDOM_GYM_TYPES] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[RANDOM_GYM_TYPES] = value == 0
+                     }
+      ),
+      EnumOption.new(_INTL("Rerandomize each battle"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE] = value == 0
+                       $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS] = !$game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE]
+                     }
+      ),
+      EnumOption.new(_INTL("Custom sprites only (Slower)"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] = value == 0
+                     }
+      )
     ]
     return options
   end
