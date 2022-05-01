@@ -195,7 +195,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
 
   def pbGetOptions(inloadscreen = false)
     options = [
-        EnumOption.new(_INTL("Type"), [_INTL("Global"), _INTL("Area")],
+        EnumOption.new(_INTL("Type"), [_INTL("Global")],#, _INTL("Area")],
                        proc {
                          if $game_switches[RANDOM_WILD_AREA]
                            1
