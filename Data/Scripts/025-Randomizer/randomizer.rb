@@ -188,3 +188,10 @@ def getRandomizedTo(species)
   return $PokemonGlobal.psuedoBSTHash[dexNum(species)]
   # code here
 end
+
+def tryRandomizeGiftPokemon(pokemon,dontRandomize=false)
+  if $game_switches[SWITCH_RANDOM_GIFT_POKEMON] && $game_switches[SWITCH_RANDOM_WILD] && !dontRandomize
+    oldSpecies = dexNum(pokemon.species)
+    pokemon.species = getSpecies($PokemonGlobal.psuedoBSTHash[oldSpecies])
+  end
+end

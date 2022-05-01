@@ -62,7 +62,7 @@ end
 #===============================================================================
 # Giving Pokémon to the player (will send to storage if party is full)
 #===============================================================================
-def pbAddPokemon(pkmn, level = 1, see_form = true)
+def pbAddPokemon(pkmn, level = 1, see_form = true, dontRandomize=false)
   return false if !pkmn
   if pbBoxesFull?
     pbMessage(_INTL("There's no more room for Pokémon!\1"))
@@ -70,6 +70,7 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
     return false
   end
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
+  tryRandomizeGiftPokemon(pkmn,dontRandomize)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
   pbNicknameAndStore(pkmn)
@@ -94,9 +95,10 @@ end
 #===============================================================================
 # Giving Pokémon/eggs to the player (can only add to party)
 #===============================================================================
-def pbAddToParty(pkmn, level = 1, see_form = true)
+def pbAddToParty(pkmn, level = 1, see_form = true, dontRandomize=false)
   return false if !pkmn || $Trainer.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
+  tryRandomizeGiftPokemon(pkmn,dontRandomize)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
   pbNicknameAndStore(pkmn)
