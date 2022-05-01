@@ -169,6 +169,7 @@ module GameData
       trainer.lose_text = self.lose_text
 
       isRematch = $game_switches[SWITCH_IS_REMATCH]
+      isPlayingRandomized =  $game_switches[SWITCH_RANDOM_TRAINERS] && !$game_switches[SWITCH_FIRST_RIVAL_BATTLE]
       rematchId = getRematchId(trainer.name, trainer.trainer_type)
 
       # Create each Pokémon owned by the trainer

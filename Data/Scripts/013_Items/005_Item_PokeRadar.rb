@@ -107,13 +107,15 @@ def pbPokeRadarCancel
   $PokemonTemp.pokeradar = nil
 end
 
+
+
 def listPokemonInCurrentRoute(encounterType, onlySeen = false, onlyUnseen = false)
   return [] if encounterType == nil
   processed = []
   seen = []
   unseen = []
   for encounter in $PokemonEncounters.listPossibleEncounters(encounterType)
-    species = encounter[1]
+    species = $game_switches[SWITCH_RANDOM_WILD] ? getRandomizedTo(encounter[1]) : encounter[1]
     if !processed.include?(species)
       if $Trainer.seen?(species)
         seen << species

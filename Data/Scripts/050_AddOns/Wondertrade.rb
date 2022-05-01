@@ -170,6 +170,8 @@ def pbGRS(minBST, chosenBST, luck, rare, except2)
   return species
 end
 
+
+
 def calcBaseStats(species)
   stats = GameData::Species.get(species).base_stats
   sum = 0

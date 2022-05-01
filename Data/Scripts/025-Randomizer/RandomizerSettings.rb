@@ -4,13 +4,6 @@ module OptionTypes
 end
 
 class RandomizerOptionsScene < PokemonOption_Scene
-  RANDOM_WILD = 778
-  RANDOM_TRAINERS = 987
-  RANDOM_STARTERS = 954
-  RANDOM_ITEMS = 958
-  RANDOM_TMS = 959
-
-
   def initialize
     super
     @openTrainerOptions = false
@@ -29,45 +22,45 @@ class RandomizerOptionsScene < PokemonOption_Scene
   def pbGetOptions(inloadscreen = false)
     options = [
         EnumOption.new(_INTL("Starters"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[RANDOM_STARTERS] ? 0 : 1 },
+                       proc { $game_switches[SWITCH_RANDOM_STARTERS] ? 0 : 1 },
                        proc { |value|
-                         $game_switches[RANDOM_STARTERS] = value == 0
+                         $game_switches[SWITCH_RANDOM_STARTERS] = value == 0
                        }
         ),
 
         EnumOption.new(_INTL("Trainers"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[RANDOM_TRAINERS] ? 0 : 1 },
+                       proc { $game_switches[SWITCH_RANDOM_TRAINERS] ? 0 : 1 },
                        proc { |value|
-                         if !$game_switches[RANDOM_TRAINERS] && value == 0
+                         if !$game_switches[SWITCH_RANDOM_TRAINERS] && value == 0
                            @openTrainerOptions = true
                            openTrainerOptionsMenu()
                          end
-                         $game_switches[RANDOM_TRAINERS] = value == 0
+                         $game_switches[SWITCH_RANDOM_TRAINERS] = value == 0
                        }
         ),
 
         EnumOption.new(_INTL("Wild Pokémon"), [_INTL("On"), _INTL("Off")],
                        proc {
-                         $game_switches[RANDOM_WILD] ? 0 : 1
+                         $game_switches[SWITCH_RANDOM_WILD] ? 0 : 1
                        },
                        proc { |value|
-                         if !$game_switches[RANDOM_WILD] && value == 0
+                         if !$game_switches[SWITCH_RANDOM_WILD] && value == 0
                            @openWildOptions = true
                            openWildPokemonOptionsMenu()
                          end
-                         $game_switches[RANDOM_WILD] = value == 0
+                         $game_switches[SWITCH_RANDOM_WILD] = value == 0
                        }
         ),
         EnumOption.new(_INTL("Items"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[RANDOM_ITEMS] ? 0 : 1 },
+                       proc { $game_switches[SWITCH_RANDOM_ITEMS] ? 0 : 1 },
                        proc { |value|
-                         $game_switches[RANDOM_ITEMS] = value == 0
+                         $game_switches[SWITCH_RANDOM_ITEMS] = value == 0
                        }
         ),
         EnumOption.new(_INTL("TMs"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[RANDOM_TMS] ? 0 : 1 },
+                       proc { $game_switches[SWITCH_RANDOM_TMS] ? 0 : 1 },
                        proc { |value|
-                         $game_switches[RANDOM_TMS] = value == 0
+                         $game_switches[SWITCH_RANDOM_TMS] = value == 0
                        }
         ),
     ]
@@ -226,6 +219,12 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
                          $game_switches[REGULAR_TO_FUSIONS] = value == 0
                        }
         ),
+        EnumOption.new(_INTL("Custom sprites only"), [_INTL("On"), _INTL("Off")],
+                       proc { $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] ? 0 : 1 },
+                       proc { |value|
+                         $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] = value == 0
+                       }
+        )
     ]
     return options
   end

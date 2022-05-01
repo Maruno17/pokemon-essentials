@@ -550,7 +550,11 @@ end
 #===============================================================================
 # Main message-displaying function
 #===============================================================================
-def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil)
+def pbMessageDisplayNoSound(msgwindow, message, letterbyletter = true, commandProc = nil)
+  pbMessageDisplay(msgwindow,message,letterbyletter,commandProc,false)
+end
+
+def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil,withSound=true)
   return if !msgwindow
   oldletterbyletter = msgwindow.letterbyletter
   msgwindow.letterbyletter = (letterbyletter) ? true : false
@@ -692,10 +696,12 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       end
     end
   end
-  if startSE != nil
-    pbSEPlay(pbStringToAudioFile(startSE))
-  elsif signWaitCount == 0 && letterbyletter
-    pbPlayDecisionSE()
+  if withSound
+    if startSE != nil
+      pbSEPlay(pbStringToAudioFile(startSE))
+    elsif signWaitCount == 0 && letterbyletter
+      pbPlayDecisionSE()
+    end
   end
   ########## Position message window  ##############
   pbRepositionMessageWindow(msgwindow, linecount)
@@ -864,6 +870,23 @@ def pbMessage(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd =
   Input.update
   return ret
 end
+
+def pbMessageNoSound(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd = 0, &block)
+  ret = 0
+  msgwindow = pbCreateMessageWindow(nil, skin)
+  if commands
+    ret = pbMessageDisplayNoSound(msgwindow, message, true,
+                           proc { |msgwindow|
+                             next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
+                           }, &block)
+  else
+    pbMessageDisplay(msgwindow, message, &block)
+  end
+  pbDisposeMessageWindow(msgwindow)
+  Input.update
+  return ret
+end
+
 
 def pbConfirmMessage(message, &block)
   return (pbMessage(message, [_INTL("Yes"), _INTL("No")], 2, &block) == 0)

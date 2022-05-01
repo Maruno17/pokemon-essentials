@@ -191,16 +191,28 @@ Events.onChangeDirection += proc {
 }
 
 def isFusionForced?
-  return false if $game_switches[SWITCH_RANDOMIZED_WILD_POKEMON]
+  return false if $game_switches[SWITCH_RANDOM_WILD_TO_FUSION]
   return $game_switches[SWITCH_FORCE_FUSE_NEXT_POKEMON] || $game_switches[SWITCH_FORCE_ALL_WILD_FUSIONS]
 end
 
 def isFusedEncounter
   return false if !SWITCH_FUSED_WILD_POKEMON[35]
-  return false if $game_switches[SWITCH_RANDOMIZED_WILD_POKEMON]
+  return false if $game_switches[SWITCH_RANDOM_WILD_TO_FUSION]
   return true if isFusionForced?()
   chance = pbGet(VAR_WILD_FUSION_RATE) == 0 ? 5 : pbGet(VAR_WILD_FUSION_RATE)
   return (rand(chance) == 0)
+end
+
+
+
+def getEncounter(encounter_type)
+  encounter = $PokemonEncounters.choose_wild_pokemon(encounter_type)
+  if $game_switches[SWITCH_RANDOM_WILD]  #wild poke random activated
+    if $game_switches[SWITCH_WILD_RANDOM_GLOBAL] && encounter != nil
+      encounter[0] = getRandomizedTo(encounter[0])
+    end
+  end
+  return encounter
 end
 
 def pbBattleOnStepTaken(repel_active)
@@ -210,13 +222,16 @@ def pbBattleOnStepTaken(repel_active)
   return if !encounter_type
   return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)
   $PokemonTemp.encounterType = encounter_type
-  encounter = $PokemonEncounters.choose_wild_pokemon(encounter_type)
+
+  encounter = getEncounter(encounter_type)
   if isFusedEncounter()
-    encounter_fusedWith = $PokemonEncounters.choose_wild_pokemon(encounter_type)
+    encounter_fusedWith = getEncounter(encounter_type)
     if encounter[0] != encounter_fusedWith[0]
       encounter[0] = getFusionSpecies(encounter[0], encounter_fusedWith[0])
     end
   end
+
+
   $game_switches[SWITCH_FORCE_FUSE_NEXT_POKEMON] = false
 
   encounter = EncounterModifier.trigger(encounter)

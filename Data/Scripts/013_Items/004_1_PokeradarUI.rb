@@ -59,9 +59,12 @@ class PokeRadar_UI
     }
   end
 
-  def addPokemonIcon(pokemonId, blackened = false, rare=false)
+  def addPokemonIcon(species, blackened = false, rare=false)
+    pokemonId=dexNum(species)
     iconId = _INTL("icon{1}", pokemonId)
+
     pokemonBitmap = pbCheckPokemonIconFiles(getDexNumberForSpecies(pokemonId))
+
     if rare
       outlineSprite = IconSprite.new(@current_x, @current_y)
       outlineSprite.setBitmap("Graphics/Pictures/Pokeradar/highlight")
@@ -69,8 +72,13 @@ class PokeRadar_UI
       @sprites[iconId + "_outline"] = outlineSprite
     end
 
-    iconSprite = IconSprite.new(@current_x, @current_y)
-    iconSprite.setBitmap(pokemonBitmap)
+    if pokemonId > NB_POKEMON
+      iconSprite = createFusionIcon(pokemonId,@current_x,@current_y)
+    else
+      iconSprite = IconSprite.new(@current_x, @current_y)
+      iconSprite.setBitmap(pokemonBitmap)
+    end
+
     @sprites[iconId] = iconSprite
     @sprites[iconId].src_rect.width /= 2
 
@@ -90,6 +98,29 @@ class PokeRadar_UI
       @sprites["background"].zoom_y += 1
     end
 
+  end
+
+
+  def createFusionIcon(pokemonId,x,y)
+    bodyPoke_number = getBodyID(pokemonId)
+    headPoke_number = getHeadID(pokemonId, bodyPoke_number)
+
+
+    bodyPoke = GameData::Species.get(bodyPoke_number).species
+    headPoke = GameData::Species.get(headPoke_number).species
+
+    bitmap1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke))
+    bitmap2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke))
+
+    for i in 0..bitmap1.width-1
+      for j in ((bitmap1.height / 2) + Settings::FUSION_ICON_SPRITE_OFFSET)..bitmap1.height-1
+        temp = bitmap2.bitmap.get_pixel(i, j)
+        bitmap1.bitmap.set_pixel(i, j, temp)
+      end
+    end
+    icon = IconSprite.new(x, y)
+    icon.setBitmapDirectly(bitmap1)
+    return icon
   end
 
 end

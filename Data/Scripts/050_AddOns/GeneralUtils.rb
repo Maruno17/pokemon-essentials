@@ -118,6 +118,10 @@ def getPokemon(dexNum)
   return GameData::Species.get(dexNum)
 end
 
+def getSpecies(dexnum)
+  return getPokemon(dexnum)
+end
+
 #shortcut for using in game events because of script characters limit
 def dexNum(species)
   return getDexNumberForSpecies(species)

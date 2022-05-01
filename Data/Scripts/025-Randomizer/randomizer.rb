@@ -17,11 +17,10 @@ end
 # randomizer shuffle
 # ##############
 def Kernel.pbShuffleDex(range=50,type=0)
-  $game_switches[855] = true # Randomized at least once
+  $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
   
 #type 0: BST
 #type 1: full random
-#type: 2 by route (not implemented)
   range = 1 if range == 0
   # create hash
   psuedoHash = Hash.new
@@ -55,15 +54,18 @@ def Kernel.pbShuffleDex(range=50,type=0)
   #BST in the same 100 range
   
   
-  for i in 1..NB_POKEMON-1#pas de arceus   
-    baseStats=$pkmn_dex[i][5]
+  for i in 1..NB_POKEMON-1
+    baseStats=getBaseStatsFormattedForRandomizer(i)
     baseStat_target = 0
     for k in 0...baseStats.length
       baseStat_target+=baseStats[k]
     end
     baseStat_target = (baseStat_target/range).floor
     for j in 1...pokeArrayRand.length
-      baseStats=$pkmn_dex[pokeArrayRand[j]][5]
+      if $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] && $game_switches[SWITCH_RANDOM_WILD_TO_FUSION] && !customSpriteExists(pokeArrayRand[j])
+        next
+      end
+      baseStats=getBaseStatsFormattedForRandomizer(pokeArrayRand[j])
       baseStat_temp = 0
       for l in 0...baseStats.length
         baseStat_temp+=baseStats[l]
@@ -81,7 +83,6 @@ def Kernel.pbShuffleDex(range=50,type=0)
               n = (i.to_f/NB_POKEMON)*100
               Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling wild Pokémon...\\n {1}%\\^",sprintf('%.2f', n),NB_POKEMON))
             end
-        
         break
       end
     end
@@ -111,6 +112,19 @@ def Kernel.raisePartyHappiness(increment)
 
 end
 
+#Randomizer code is shit. Too lazy to redo it.
+# Here is a cheap workaround lol
+def getBaseStatsFormattedForRandomizer(dex_num)
+  statsArray=[]
+  stats = GameData::Species.get(dex_num).base_stats
+  statsArray << stats[:HP]
+  statsArray << stats[:ATTACK]
+  statsArray << stats[:DEFENSE]
+  statsArray << stats[:SPECIAL_ATTACK]
+  statsArray << stats[:SPECIAL_DEFENSE]
+  statsArray << stats[:SPEED]
+  return statsArray
+end
 
 def Kernel.pbShuffleDexTrainers()
   # create hash
@@ -141,14 +155,14 @@ def Kernel.pbShuffleDexTrainers()
       #Kernel.pbMessage(_INTL("\\ts[]Shuffling...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
     end
     
-    baseStats=$pkmn_dex[i][I]
+    baseStats=calcBaseStats(i)
     baseStat_target = 0
     for k in 0...baseStats.length
       baseStat_target+=baseStats[k]
     end
     baseStat_target = (baseStat_target/50).floor
     for j in 1...pokeArrayRand.length
-      baseStats=$pkmn_dex[pokeArrayRand[j]][5]
+      baseStats=calcBaseStats([pokeArrayRand[j]])
       baseStat_temp = 0
       for l in 0...baseStats.length
         baseStat_temp+=baseStats[l]
@@ -166,4 +180,10 @@ def Kernel.pbShuffleDexTrainers()
   #add hashes to global data0
   #$PokemonGlobal.psuedoHash = psuedoHash
   $PokemonGlobal.pseudoBSTHashTrainers = psuedoBSTHash  
+end
+
+def getRandomizedTo(species)
+  return species if !$PokemonGlobal.psuedoBSTHash
+  return $PokemonGlobal.psuedoBSTHash[dexNum(species)]
+  # code here
 end
