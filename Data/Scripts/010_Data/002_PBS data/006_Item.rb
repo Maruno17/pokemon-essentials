@@ -98,6 +98,9 @@ module GameData
       return pbGetMessage(MessageTypes::ItemDescriptions, @id_number)
     end
 
+    def has_battle_use?
+      return @battle_use != 0
+    end
     def is_TM?;              return @field_use == 3; end
     def is_HM?;              return @field_use == 4; end
     def is_TR?;              return @field_use == 6; end
@@ -123,6 +126,7 @@ module GameData
     def can_hold?;           return !is_important?; end
 
     def unlosable?(species, ability)
+      return true if $game_switches[SWITCH_RANDOM_HELD_ITEMS]
       return false if species == :ARCEUS && ability != :MULTITYPE
       return false if species == :SILVALLY && ability != :RKSSYSTEM
       combos = {

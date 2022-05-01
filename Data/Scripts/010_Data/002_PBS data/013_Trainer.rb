@@ -147,7 +147,7 @@ module GameData
     end
 
     def add_generated_species_to_gym_array(new_species, trainerId)
-      expected_team_length =1
+      expected_team_length = 1
       expected_team_length = $PokemonGlobal.randomTrainersHash[trainerId].length if $PokemonGlobal.randomTrainersHash[trainerId]
       new_team = []
       if $PokemonGlobal.randomGymTrainersHash[trainerId]
@@ -285,7 +285,12 @@ module GameData
           pkmn.forced_form = pkmn_data[:form] if MultipleForms.hasFunction?(species, "getForm")
           pkmn.form_simple = pkmn_data[:form]
         end
-        pkmn.item = pkmn_data[:item]
+
+        if $game_switches[SWITCH_RANDOM_HELD_ITEMS]
+          pkmn.item = pbGetRandomHeldItem().id
+        else
+          pkmn.item = pkmn_data[:item]
+        end
         if pkmn_data[:moves] && pkmn_data[:moves].length > 0
           pkmn_data[:moves].each { |move| pkmn.learn_move(move) }
         else
