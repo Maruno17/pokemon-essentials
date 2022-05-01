@@ -1542,7 +1542,7 @@ Pokemon = B69H100,21 #bellsprout + voltorb,
 #--------------------------------------
 
 [GENTLEMAN,Tucker]
-Pokemon = B66H8,23 #Machop + magnemite,
+Pokemon = B66H81,23 #Machop + magnemite,
 
 
 #######################

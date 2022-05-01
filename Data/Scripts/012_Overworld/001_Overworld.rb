@@ -757,7 +757,11 @@ end
 # Picking up an item found on the ground
 #===============================================================================
 def pbItemBall(item, quantity = 1, item_name = "", canRandom = true)
-  item = GameData::Item.get(item)
+  if canRandom
+    item = pbGetRandomItem(item) if canRandom #fait rien si pas activé
+  else
+    item = GameData::Item.get(item)
+  end
   return false if !item || quantity < 1
   itemname = (quantity > 1) ? item.name_plural : item.name
   pocket = item.pocket

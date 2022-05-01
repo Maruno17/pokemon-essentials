@@ -1,37 +1,54 @@
-def pbGetRandomItem(item)
+NON_RANDOMIZE_ITEMS = [:CELLBATTERY,:MAGNETSTONE]
+
+
+def pbGetRandomItem(item_id)
+  item = GameData::Item.get(item_id)
+
   #keyItem ou HM -> on randomize pas
-  return item if $ItemData[item][ITEMTYPE] == 6 || $ItemData[item][ITEMUSE] == 4
-  return item if isConst?(item, PBItems, :CELLBATTERY)
-  return item if isConst?(item, PBItems, :MAGNETSTONE)
+  return item if item.is_key_item?
+  return item if item.is_HM?
+  return item if NON_RANDOMIZE_ITEMS.include?(item.id)
 
   #TM
-  if ($ItemData[item][ITEMUSE] == 3)
-    return $game_switches[959] ? pbGetRandomTM() : item
+  if (item.is_TM?)
+    return $game_switches[SWITCH_RANDOM_TMS] ? pbGetRandomTM() : item
   end
   #item normal
-  return item if !$game_switches[958]
+  return item if !$game_switches[SWITCH_RANDOM_ITEMS]
+
   #berries
-  return pbGetRandomBerry() if $ItemData[item][ITEMTYPE] == 5
-  newItem = rand(PBItems.maxValue)
-  #on veut pas de tm ou keyitem
-  while ($ItemData[newItem][ITEMUSE] == 3 || $ItemData[newItem][ITEMUSE] == 4 || $ItemData[newItem][ITEMTYPE] == 6)
-    newItem = rand(PBItems.maxValue)
+  return pbGetRandomBerry() if item.is_berry?
+
+  items_list = GameData::Item.list_all
+  newItem_id = items_list.keys.sample
+  newItem = GameData::Item.get(newItem_id)
+  while (newItem.is_machine? || newItem.is_key_item?)
+    newItem_id = items_list.keys.sample
+    newItem = GameData::Item.get(newItem_id)
   end
   return newItem
 end
 
+
+
 def pbGetRandomBerry()
-  newItem = rand(PBItems.maxValue)
-  while (!($ItemData[newItem][ITEMTYPE] == 5))
-    newItem = rand(PBItems.maxValue)
+  items_list = GameData::Item.list_all
+  newItem_id = items_list.keys.sample
+  newItem = GameData::Item.get(newItem_id)
+  while (!newItem.is_berry?)
+    newItem_id = items_list.keys.sample
+    newItem = GameData::Item.get(newItem_id)
   end
   return newItem
 end
 
 def pbGetRandomTM()
-  newItem = rand(PBItems.maxValue)
-  while (!($ItemData[newItem][ITEMUSE] == 3)) # || $ItemData[newItem][ITEMUSE]==4))
-    newItem = rand(PBItems.maxValue)
+  items_list = GameData::Item.list_all
+  newItem_id = items_list.keys.sample
+  newItem = GameData::Item.get(newItem_id)
+  while (!newItem.is_TM?)
+    newItem_id = items_list.keys.sample
+    newItem = GameData::Item.get(newItem_id)
   end
   return newItem
 end

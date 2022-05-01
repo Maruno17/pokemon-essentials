@@ -45,6 +45,10 @@ module GameData
       return "Graphics/Items/000"
     end
 
+    def self.list_all()
+      return self::DATA
+    end
+
     def self.held_icon_filename(item)
       item_data = self.try_get(item)
       return nil if !item_data
@@ -76,6 +80,8 @@ module GameData
       @type             = hash[:type]        || 0
       @move             = hash[:move]
     end
+
+
 
     # @return [String] the translated name of this item
     def name
