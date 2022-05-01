@@ -451,13 +451,13 @@ def pbGenerateWildPokemon(species, level, isRoamer = false)
 end
 
 # Used by fishing rods and Headbutt/Rock Smash/Sweet Scent to generate a wild
-# Pokémon (or two) for a triggered wild encounter.
-def pbEncounter(enc_type)
+# Pokémon (or two if it's Sweet Scent) for a triggered wild encounter.
+def pbEncounter(enc_type, only_single = true)
   $game_temp.encounter_type = enc_type
   encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type)
   EventHandlers.trigger(:on_wild_species_chosen, encounter1)
   return false if !encounter1
-  if $PokemonEncounters.have_double_wild_battle?
+  if !only_single && $PokemonEncounters.have_double_wild_battle?
     encounter2 = $PokemonEncounters.choose_wild_pokemon(enc_type)
     EventHandlers.trigger(:on_wild_species_chosen, encounter2)
     return false if !encounter2

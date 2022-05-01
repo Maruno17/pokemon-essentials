@@ -75,7 +75,7 @@ class PokemonRegionMap_Scene
     @map_data = pbLoadTownMapData
     @fly_map = fly_map
     @mode    = fly_map ? 1 : 0
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    map_metadata = $game_map.metadata
     playerpos = (map_metadata) ? map_metadata.town_map_position : nil
     if !playerpos
       mapindex = 0
