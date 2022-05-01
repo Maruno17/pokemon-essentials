@@ -634,6 +634,8 @@ class PokemonStorageScene
     @sprites["pokemon"].setOffset(PictureOrigin::Center)
     @sprites["pokemon"].x = 90
     @sprites["pokemon"].y = 134
+    @sprites["pokemon"].zoom_y = Settings::FRONTSPRITE_SCALE
+    @sprites["pokemon"].zoom_x = Settings::FRONTSPRITE_SCALE
     @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party,@boxsidesviewport)
     if command!=2   # Drop down tab only on Deposit
       @sprites["boxparty"].x = 182
