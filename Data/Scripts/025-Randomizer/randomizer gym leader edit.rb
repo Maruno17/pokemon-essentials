@@ -50,13 +50,13 @@ def setRivalStarter(starter1, starter2, starter3, choice)
   else
     rivalStarter = starters[0]*NB_POKEMON+starters[1]
   end
-  pbSet(250,rivalStarter)
-  $game_switches[840] = true
+  pbSet(VAR_RIVAL_STARTER,rivalStarter)
+  $game_switches[SWITCH_DEFINED_RIVAL_STARTER] = true
 end
 
 def setRivalStarterSpecific(rivalStarter)
-  pbSet(250,rivalStarter)
-  $game_switches[840] = true
+  pbSet(VAR_RIVAL_STARTER,rivalStarter)
+  $game_switches[SWITCH_DEFINED_RIVAL_STARTER] = true
 end
 
 

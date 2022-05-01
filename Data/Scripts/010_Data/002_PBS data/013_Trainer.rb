@@ -247,9 +247,10 @@ module GameData
       @pokemon.each do |pkmn_data|
         #replace placeholder species infinite fusion edit
         species = GameData::Species.get(pkmn_data[:species]).species
-        species = replace_species_to_randomized(species, self.id, index) if isPlayingRandomized
         if placeholder_species.include?(species)
           species = replace_species_with_placeholder(species)
+        else
+          species = replace_species_to_randomized(species, self.id, index) if isPlayingRandomized
         end
         species = replaceSingleSpeciesModeIfApplicable(species)
         if $game_switches[SWITCH_REVERSED_MODE]

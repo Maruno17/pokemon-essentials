@@ -40,7 +40,7 @@ class RandomizerOptionsScene < PokemonOption_Scene
                        }
         ),
 
-        EnumOption.new(_INTL("Gyms"), [_INTL("On"), _INTL("Off")],
+        EnumOption.new(_INTL("Gym trainers"), [_INTL("On"), _INTL("Off")],
                        proc { $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] ? 0 : 1 },
                        proc { |value|
                          if !$game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] && value == 0
