@@ -231,6 +231,9 @@ def pbBattleOnStepTaken(repel_active)
     end
   end
 
+  if encounter[0].is_a?(Integer)
+    encounter[0] = getSpecies(encounter[0])
+  end
 
   $game_switches[SWITCH_FORCE_FUSE_NEXT_POKEMON] = false
 

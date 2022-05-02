@@ -1,6 +1,6 @@
 def pbAddPokemonID(pokemon, level = nil, seeform = true, dontRandomize = false)
   return if !pokemon || !$Trainer
-  dontRandomize = true if $game_switches[3] #when choosing starters
+  dontRandomize = true if $game_switches[SWITCH_CHOOSING_STARTER] #when choosing starters
 
   if pbBoxesFull?
     Kernel.pbMessage(_INTL("There's no more room for Pokémon!\1"))
@@ -12,9 +12,8 @@ def pbAddPokemonID(pokemon, level = nil, seeform = true, dontRandomize = false)
     pokemon = Pokemon.new(pokemon, level, $Trainer)
   end
   #random species if randomized gift pokemon &  wild poke
-  if $game_switches[780] && $game_switches[778] && !dontRandomize
-    oldSpecies = pokemon.species
-    pokemon.species = $PokemonGlobal.psuedoBSTHash[oldSpecies]
+  if $game_switches[SWITCH_RANDOM_GIFT_POKEMON] && $game_switches[SWITCH_RANDOM_WILD] && !dontRandomize
+    tryRandomizeGiftPokemon(pokemon,dontRandomize)
   end
 
   speciesname = PBSpecies.getName(pokemon.species)
@@ -26,6 +25,7 @@ end
 
 def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = false)
   return false if !pokemon_id
+  skip_randomize = true if $game_switches[SWITCH_CHOOSING_STARTER] #when choosing starters
   if pbBoxesFull?
     pbMessage(_INTL("There's no more room for Pokémon!\1"))
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
@@ -37,9 +37,8 @@ def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = fals
   end
 
   #random species if randomized gift pokemon &  wild poke
-  if $game_switches[780] && $game_switches[778] && !skip_randomize
-    oldSpecies = pokemon.species
-    pokemon.species = $PokemonGlobal.psuedoBSTHash[oldSpecies]
+  if $game_switches[SWITCH_RANDOM_GIFT_POKEMON] && $game_switches[SWITCH_RANDOM_WILD] && !skip_randomize
+    tryRandomizeGiftPokemon(pokemon,skip_randomize)
   end
 
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))

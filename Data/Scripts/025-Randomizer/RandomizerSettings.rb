@@ -214,12 +214,12 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
                          end
                        }
         ),
-        EnumOption.new(_INTL("Static encounters"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[RANDOM_STATIC] ? 0 : 1 },
-                       proc { |value|
-                         $game_switches[RANDOM_STATIC] = value == 0
-                       }
-        ),
+        # EnumOption.new(_INTL("Static encounters"), [_INTL("On"), _INTL("Off")],
+        #                proc { $game_switches[RANDOM_STATIC] ? 0 : 1 },
+        #                proc { |value|
+        #                  $game_switches[RANDOM_STATIC] = value == 0
+        #                }
+        # ),
         
         EnumOption.new(_INTL("Gift Pokémon"), [_INTL("On"), _INTL("Off")],
                proc { $game_switches[GIFT_POKEMON] ? 0 : 1 },
