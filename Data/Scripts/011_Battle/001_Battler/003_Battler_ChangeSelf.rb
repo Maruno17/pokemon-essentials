@@ -274,6 +274,10 @@ class PokeBattle_Battler
   end
 
   def pbTransform(target)
+    if target.is_a?(Integer)
+      @battle.pbDisplay(_INTL("But it failed..."))
+      return
+    end
     oldAbil = @ability_id
     @effects[PBEffects::Transform]        = true
     @effects[PBEffects::TransformSpecies] = target.species

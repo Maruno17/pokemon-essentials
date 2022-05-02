@@ -2717,34 +2717,34 @@ end
 #################
 #  Fusion Swap
 # ###############
-class PokeBattle_Move_080 < PokeBattle_Move
-  def pbMoveFailed?(user,targets)
-    if targets[0].effects[PBEffects::Transform]
-      @battle.pbDisplay(_INTL("But it failed!"))
-      return true
-    end
-    return false
-  end
-
-  def pbFailsAgainstTarget?(user,target)
-    if target.effects[PBEffects::Transform] ||
-      target.effects[PBEffects::Illusion] ||
-      !target.pokemon.isFusion?
-      @battle.pbDisplay(_INTL("But it failed!"))
-      return true
-    end
-    return false
-  end
-
-  def pbEffectAgainstTarget(user,target)
-    body = getBasePokemonID(target.pokemon.species, true)
-    head = getBasePokemonID(target.pokemon.species, false)
-    newspecies = (head) * Settings::NB_POKEMON + body
-    target.pbTransform(newspecies)
-  end
-
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
-    super
-    @battle.scene.pbChangePokemon(user,targets[0].pokemon)
-  end
-end
+# class PokeBattle_Move_XXX < PokeBattle_Move
+#   def pbMoveFailed?(user,targets)
+#     if targets[0].effects[PBEffects::Transform]
+#       @battle.pbDisplay(_INTL("But it failed!"))
+#       return true
+#     end
+#     return false
+#   end
+#
+#   def pbFailsAgainstTarget?(user,target)
+#     if target.effects[PBEffects::Transform] ||
+#       target.effects[PBEffects::Illusion] ||
+#       !target.pokemon.isFusion?
+#       @battle.pbDisplay(_INTL("But it failed!"))
+#       return true
+#     end
+#     return false
+#   end
+#
+#   def pbEffectAgainstTarget(user,target)
+#     body = getBasePokemonID(target.pokemon.species, true)
+#     head = getBasePokemonID(target.pokemon.species, false)
+#     newspecies = (head) * Settings::NB_POKEMON + body
+#     target.pbTransform(newspecies)
+#   end
+#
+#   def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
+#     super
+#     @battle.scene.pbChangePokemon(user,targets[0].pokemon)
+#   end
+# end
