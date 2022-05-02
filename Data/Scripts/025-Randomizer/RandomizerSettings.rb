@@ -234,7 +234,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
                          $game_switches[REGULAR_TO_FUSIONS] = value == 0
                        }
         ),
-        EnumOption.new(_INTL("Custom sprites only"), [_INTL("On"), _INTL("Off")],
+        EnumOption.new(_INTL("Custom sprites only (Slow)"), [_INTL("On"), _INTL("Off")],
                        proc { $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] ? 0 : 1 },
                        proc { |value|
                          $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] = value == 0
@@ -289,7 +289,7 @@ class RandomizerGymOptionsScene < PokemonOption_Scene
                        $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS] = !$game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE]
                      }
       ),
-      EnumOption.new(_INTL("Custom sprites only (Slower)"), [_INTL("On"), _INTL("Off")],
+      EnumOption.new(_INTL("Custom sprites only"), [_INTL("On"), _INTL("Off")],
                      proc { $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] ? 0 : 1 },
                      proc { |value|
                        $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] = value == 0
