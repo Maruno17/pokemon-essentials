@@ -186,12 +186,12 @@ def generateRandomFusionFromPokemon(dexNum, onlyCustomSprites = false, allowLege
   return speciesList.sample
 end
 
-def getRandomBasePokemon(includeLegendaries = false)
+def getRandomBasePokemon(includeLegendaries = false,maxNb=NB_POKEMON)
   legendaries =listLegendaryPokemonIds()
-  poke = rand(NB_POKEMON + 1)
+  poke = rand(maxNb + 1)
   return poke if includeLegendaries
   while legendaries.include?(poke)
-    poke = rand(NB_POKEMON + 1)
+    poke = rand(maxNb + 1)
   end
   return poke
 end

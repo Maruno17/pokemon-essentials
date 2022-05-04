@@ -603,7 +603,7 @@
 595,GOLDRING,Gold Ring,Gold Rings,1,20000,A ring made out of gold. It sells for a high price.,0,0,0,
 596,SEADRAFIN,Seadra Fin,Seadra Fins,1,14200,The dorsal fin of Seadra that is used as an ingredient in some medicine. It sells for a high price.,0,0,0,
 597,SACREDPOTION,Secret Potion,Secret Potions,2,7000,"An ancient, secret medicine. It fully revives all fainted Pokémon in a battle.",2,0,0,
-598,ABILITYCAPSULE,Ability Capsule,Ability Capsules,1,25000,"A capsule that allows a Pokémon with two Abilities to switch between these Abilities when it is used.",1,0,0,
+598,ABILITYCAPSULE,Ability Capsule,Ability Capsules,1,9500,"A capsule that allows a Pokémon with two Abilities to switch between these Abilities when it is used.",1,0,0,
 599,MAGICBOOTS,Magic Boots,Magic Boots,8,0,"A pair of magic boots that allow you to walk anywhere by pressing the CTRL key.",2,0,6,
 600,ANCIENTSTONE,unknown_item,unknown_items,1,1,This item has been removed from the game.,1,0,7,
 601,ICESTONE,Ice Stone,Ice Stones,1,5000,A peculiar stone that makes certain species of Pokémon evolve. It is made out of ice.,1,0,7,

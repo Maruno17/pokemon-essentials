@@ -644,7 +644,7 @@ Pokemon = B26H52,34 #Meowchu
 
 [CUEBALL,Isaiah]
 Pokemon = MACHOP,34 #GEOCHOP
-Pokemon = B68H76,34 #GOLCHAMP
+Pokemon = B67H25,34 #machoke + pikachu
 ##############################
 
 [BIKER,Virgil]
@@ -1853,11 +1853,11 @@ Pokemon = B24H42,38
 #Rocket bully
 
 [TEAMROCKET_M,Cyrus]
-Pokemon = B141H105,39 
+Pokemon = B110H20,39 #Weezing + raticate
 #########################
 
 [TEAMROCKET_F,Sam]
-Pokemon = B139H97,39 
+Pokemon = B51H24,39		#Dugtrio + arbok 
 ########################
 
 ##########################
