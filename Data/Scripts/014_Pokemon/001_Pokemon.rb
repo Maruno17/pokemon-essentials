@@ -789,7 +789,7 @@ class Pokemon
   end
 
   # Returns the Pokérus infection stage for this Pokémon. The possible stages are
-  # 0 (not infected), 1 (infected) and 2 (cured)
+  # 0 (not infected), 1 (infected) and 2 (cured).
   # @return [0, 1, 2] current Pokérus infection stage
   def pokerusStage
     return 0 if @pokerus == 0
@@ -797,11 +797,11 @@ class Pokemon
   end
 
   # Gives this Pokémon Pokérus (either the specified strain or a random one).
-  # @param strain [Integer] Pokérus strain to give
+  # @param strain [Integer] Pokérus strain to give (1-15 inclusive, or 0 for random)
   def givePokerus(strain = 0)
     return if self.pokerusStage == 2   # Can't re-infect a cured Pokémon
     $stats.pokerus_infections += 1
-    strain = rand(1..16) if strain <= 0 || strain >= 16
+    strain = rand(1...16) if strain <= 0 || strain >= 16
     time = 1 + (strain % 4)
     @pokerus = time
     @pokerus |= strain << 4
@@ -810,7 +810,7 @@ class Pokemon
   # Resets the infection time for this Pokémon's Pokérus (even if cured).
   def resetPokerusTime
     return if @pokerus == 0
-    strain = @pokerus % 16
+    strain = @pokerus / 16
     time = 1 + (strain % 4)
     @pokerus = time
     @pokerus |= strain << 4
@@ -820,6 +820,11 @@ class Pokemon
   def lowerPokerusCount
     return if self.pokerusStage != 1
     @pokerus -= 1
+  end
+
+  # Cures this Pokémon's Pokérus (if infected).
+  def curePokerus
+    @pokerus -= @pokerus % 16
   end
 
   #=============================================================================

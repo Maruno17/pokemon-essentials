@@ -17003,7 +17003,7 @@ Weight = 40.0
 Color = Blue
 Shape = Bipedal
 Category = Ninja
-Pokedex = It appears and vanishes with a ninja’s grace. It toys with its enemies using swift movements, while slicing them with throwing stars of sharpest water.
+Pokedex = It appears and vanishes with a ninja's grace. It toys with its enemies using swift movements, while slicing them with throwing stars of sharpest water.
 Generation = 6
 #-------------------------------
 [BUNNELBY]
@@ -17254,7 +17254,7 @@ Weight = 81.5
 Color = Brown
 Shape = Quadruped
 Category = Royal
-Pokedex = With fiery breath of more than 6,000 degrees Celsius, they viciously threaten any challenger. The females protect the pride’s cubs.
+Pokedex = With fiery breath of more than 6,000 degrees Celsius, they viciously threaten any challenger. The females protect the pride's cubs.
 Generation = 6
 #-------------------------------
 [FLABEBE]
