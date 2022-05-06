@@ -325,9 +325,7 @@ EventHandlers.add(:on_map_or_spriteset_change, :show_location_window,
                              Settings::NO_SIGNPOSTS[2 * i] == $game_map.map_id
         break if nosignpost
       end
-      mapinfos = pbLoadMapInfos
-      oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]].name
-      nosignpost = true if $game_map.name == oldmapname
+      nosignpost = true if $game_map.name == pbGetMapNameFromId($PokemonGlobal.mapTrail[1])
     end
     scene.spriteset.addUserSprite(LocationWindow.new($game_map.name)) if !nosignpost
   }
