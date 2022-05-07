@@ -170,6 +170,10 @@ def pbGRS(minBST, chosenBST, luck, rare, except2)
   return species
 end
 
+#utilisé dans des events - ne pas renommer
+def calcBaseStats(species)
+  return calcBaseStatsSum(species)
+end
 
 
 def calcBaseStatsSum(species)
