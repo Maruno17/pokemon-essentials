@@ -1,27 +1,47 @@
+# NOTES
+# - @tiles has the extra tile hanging off the left/top of the screen, because
+#   the pixel offset values are positive and added to the coordinates.
+
+# - An alternative to rearranging @tiles in def check_if_screen_moved would
+#   be to have extra variables that determine how much the @tiles array has
+#   wrapped around (e.g. 1 means the tile sprites should be 1 tile further right
+#   or down than their indices in the array would suggest). This would be more
+#   convenient if I also have an array of x/y/layer triplets marking tile
+#   sprites using autotiles with 2+ frames.
+
 #===============================================================================
 #
 #===============================================================================
 class TilemapRenderer
   attr_reader   :tilesets
   attr_reader   :autotiles
+  attr_reader   :graphics_width
+  attr_reader   :graphics_height
   attr_accessor :tone
   attr_accessor :color
   attr_reader   :viewport
-  attr_accessor :ox        # Does nothing
-  attr_accessor :oy        # Does nothing
-  attr_accessor :visible   # Does nothing
+  # TODO: ox, oy and visible don't do anything. Should they?
+  attr_accessor :ox
+  attr_accessor :oy
+  attr_accessor :visible
 
-  DISPLAY_TILE_WIDTH      = Game_Map::TILE_WIDTH rescue 32
-  DISPLAY_TILE_HEIGHT     = Game_Map::TILE_HEIGHT rescue 32
-  SOURCE_TILE_WIDTH       = 32
-  SOURCE_TILE_HEIGHT      = 32
-  TILESET_TILES_PER_ROW   = 8
-  AUTOTILES_COUNT         = 8   # Counting the blank tile as an autotile
-  TILES_PER_AUTOTILE      = 48
-  TILESET_START_ID        = AUTOTILES_COUNT * TILES_PER_AUTOTILE
-  # If an autotile's filename ends with "[x]", its frame duration will be x/20
+  DISPLAY_TILE_WIDTH  = Game_Map::TILE_WIDTH rescue 32
+  DISPLAY_TILE_HEIGHT = Game_Map::TILE_HEIGHT rescue 32
+  SOURCE_TILE_WIDTH   = 32
+  SOURCE_TILE_HEIGHT  = 32
+
+  # If an autotile's filename ends with [x], its frame duration will be x/20
   # seconds instead.
   AUTOTILE_FRAME_DURATION = 5   # In 1/20ths of a second
+
+  TILESET_TILES_PER_ROW = 8
+  AUTOTILES_COUNT       = 8   # Counting the blank tile as an autotile
+  TILES_PER_AUTOTILE    = 48
+  TILESET_START_ID      = AUTOTILES_COUNT * TILES_PER_AUTOTILE
+
+  # TODO: Flash duration is hardcoded to 0.05 seconds per "frame". However, this
+  #       kind of flash is unused, but it should be supported anyway.
+  FLASH_OPACITY = [100, 90, 80, 70, 80, 90]
 
   #=============================================================================
   #
@@ -57,7 +77,7 @@ class TilemapRenderer
       bitmap = pbGetTileset(filename)
       @bitmap_wraps[filename] = false
       if bitmap.mega?
-        self[filename] = TilemapRenderer::TilesetWrapper.wrapTileset(bitmap)
+        self[filename] = TileWrap::wrapTileset(bitmap)
         @bitmap_wraps[filename] = true
         bitmap.dispose
       else
@@ -241,37 +261,57 @@ class TilemapRenderer
   #
   #=============================================================================
   def initialize(viewport)
-    @tilesets               = TilesetBitmaps.new
-    @autotiles              = AutotileBitmaps.new
-    @tiles_horizontal_count = (Graphics.width.to_f / DISPLAY_TILE_WIDTH).ceil + 1
-    @tiles_vertical_count   = (Graphics.height.to_f / DISPLAY_TILE_HEIGHT).ceil + 1
-    @tone                   = Tone.new(0, 0, 0, 0)
-    @old_tone               = Tone.new(0, 0, 0, 0)
-    @color                  = Color.new(0, 0, 0, 0)
-    @old_color              = Color.new(0, 0, 0, 0)
-    @self_viewport          = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport               = (viewport) ? viewport : @self_viewport
-    @old_viewport_ox        = 0
-    @old_viewport_oy        = 0
-    # NOTE: The extra tiles horizontally/vertically hang off the left and top
-    #       edges of the screen, because the pixel_offset values are positive
-    #       and are added to the tile sprite coordinates.
-    @tiles                  = []
+    @tilesets                = TilesetBitmaps.new
+    @autotiles               = AutotileBitmaps.new
+
+    @can_query_graphics_size = (Graphics.width != nil rescue false)
+    if @can_query_graphics_size
+      @graphics_width        = Graphics.width
+      @graphics_height       = Graphics.height
+    else
+      @graphics_width        = 640
+      @graphics_height       = 480
+    end
+
+    @tiles_horizontal_count = (@graphics_width.to_f / DISPLAY_TILE_WIDTH).ceil + 1
+    @tiles_vertical_count   = (@graphics_height.to_f / DISPLAY_TILE_HEIGHT).ceil + 1
+
+    @tone                    = Tone.new(0, 0, 0, 0)
+    @old_tone                = Tone.new(0, 0, 0, 0)
+    @color                   = Color.new(0, 0, 0, 0)
+    @old_color               = Color.new(0, 0, 0, 0)
+
+    @self_viewport           = Viewport.new(0, 0, graphics_width, graphics_height)
+    @viewport                = (viewport) ? viewport : @self_viewport
+    @old_viewport_ox         = 0
+    @old_viewport_oy         = 0
+
+    @tiles                   = []
     @tiles_horizontal_count.times do |i|
       @tiles[i] = []
       @tiles_vertical_count.times do |j|
-        @tiles[i][j]        = Array.new(3) { TileSprite.new(@viewport) }
+        @tiles[i][j]         = Array.new(3) { TileSprite.new(@viewport) }
       end
     end
-    @current_map_id         = 0
-    @tile_offset_x          = 0
-    @tile_offset_y          = 0
-    @pixel_offset_x         = 0
-    @pixel_offset_y         = 0
-    @ox                     = 0
-    @oy                     = 0
-    @visible                = true
-    @disposed               = false
+
+    @current_map_id          = 0
+    @tile_offset_x           = 0
+    @tile_offset_y           = 0
+    @pixel_offset_x          = 0
+    @pixel_offset_y          = 0
+
+    @ox                      = 0      # Bitmap Offsets
+    @oy                      = 0      # Bitmap Offsets
+
+    @visible                 = true
+
+    @flash                   = nil
+    @oxFlash                 = 0
+    @oyFlash                 = 0
+    @flashChanged            = false
+    @firsttimeflash          = true
+
+    @disposed                = false
   end
 
   def dispose
@@ -280,6 +320,12 @@ class TilemapRenderer
       col.each do |coord|
         coord.each { |tile| tile.dispose }
       end
+    end
+    if @flash
+      @flash.bitmap.dispose if !@flash.disposed?
+      @flash.bitmap = nil if !@flash.disposed?
+      @flash.dispose
+      @flash = nil
     end
     @tilesets.bitmaps.each_value { |bitmap| bitmap.dispose }
     @autotiles.bitmaps.each_value { |bitmap| bitmap.dispose }
@@ -312,7 +358,87 @@ class TilemapRenderer
 
   #=============================================================================
 
-  def refresh; end
+  # TODO: Flash stuff, including usage of flash_data.
+  def refresh_flash
+    if @flash_data && !@flash
+      @flash = TileSprite.new(viewport)
+      @flash.visible    = true
+      @flash.z          = 1
+      @flash.tone       = tone
+      @flash.color      = color
+      @flash.blend_type = 1
+      @flash.bitmap     = Bitmap.new([graphics_width * 2, 1].max, [graphics_height * 2, 1].max)
+      @firsttimeflash = true
+    elsif !@flash_data && @flash
+      @flash.bitmap.dispose if @flash.bitmap
+      @flash.dispose
+      @flash = nil
+      @firsttimeflash = false
+    end
+  end
+
+  def refreshFlashSprite
+    return if !@flash || @flash_data.nil?
+    ptX = @ox-@oxFlash
+    ptY = @oy-@oyFlash
+    if !@firsttimeflash &&
+       ptX>=0 && ptX+@viewport.rect.width<=@flash.bitmap.width &&
+       ptY>=0 && ptY+@viewport.rect.height<=@flash.bitmap.height
+      @flash.ox = 0
+      @flash.oy = 0
+      @flash.src_rect.set(ptX.round,ptY.round,
+         @viewport.rect.width,@viewport.rect.height)
+      return
+    end
+    width = @flash.bitmap.width
+    height = @flash.bitmap.height
+    bitmap = @flash.bitmap
+    ysize = @map_data.ysize
+    xsize = @map_data.xsize
+    @firsttimeflash = false
+    @oxFlash = @ox-(width>>2)
+    @oyFlash = @oy-(height>>2)
+    @flash.ox = 0
+    @flash.oy = 0
+    @flash.src_rect.set(width>>2,height>>2,
+       @viewport.rect.width,@viewport.rect.height)
+    @flash.bitmap.clear
+    @oxFlash = @oxFlash.floor
+    @oyFlash = @oyFlash.floor
+    xStart = @oxFlash / DISPLAY_TILE_WIDTH
+    xStart = 0 if xStart<0
+    yStart = @oyFlash / DISPLAY_TILE_HEIGHT
+    yStart = 0 if yStart<0
+    xEnd = xStart + (width / DISPLAY_TILE_WIDTH) + 1
+    yEnd = yStart + (height / DISPLAY_TILE_HEIGHT) + 1
+    xEnd = xsize if xEnd>=xsize
+    yEnd = ysize if yEnd>=ysize
+    if xStart<xEnd && yStart<yEnd
+      yrange = yStart...yEnd
+      xrange = xStart...xEnd
+      tmpcolor = Color.new(0,0,0,0)
+      for y in yrange
+        ypos = (y * DISPLAY_TILE_HEIGHT) - @oyFlash
+        for x in xrange
+          xpos = (x * DISPLAY_TILE_WIDTH) - @oxFlash
+          id = @flash_data[x, y, 0]
+          r = (id>>8)&15
+          g = (id>>4)&15
+          b = (id)&15
+          tmpcolor.set(r<<4,g<<4,b<<4)
+          bitmap.fill_rect(xpos, ypos, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, tmpcolor)
+        end
+      end
+    end
+  end
+
+  #=============================================================================
+
+  def refresh(autotiles = false)
+    refreshFlashSprite
+  end
+
+  #=============================================================================
 
   def refresh_tile_bitmap(tile, map, tile_id)
     if tile_id < TILES_PER_AUTOTILE
@@ -393,6 +519,7 @@ class TilemapRenderer
       @current_map_id = $game_map.map_id
       ret = true
     end
+
     # Check for tile movement
     current_map_display_x = ($game_map.display_x.to_f / Game_Map::X_SUBPIXELS).round
     current_map_display_y = ($game_map.display_y.to_f / Game_Map::Y_SUBPIXELS).round
@@ -445,6 +572,7 @@ class TilemapRenderer
       @screen_moved_vertically = true
       @tile_offset_y = new_tile_offset_y
     end
+
     # Check for pixel movement
     new_pixel_offset_x = current_map_display_x % SOURCE_TILE_WIDTH
     new_pixel_offset_y = current_map_display_y % SOURCE_TILE_HEIGHT
@@ -463,8 +591,16 @@ class TilemapRenderer
   #=============================================================================
 
   def update
+    # Check if screen was resized
+    # TODO: If it was resized, change how many TileSprites there are.
+    #       CustomTilemap only uses this for the flash graphic.
+    if @can_query_graphics_size
+      @graphics_width  = Graphics.width
+      @graphics_height = Graphics.height
+    end
     # Update tone
     if @old_tone != @tone
+      @flash.tone = @tone if @flash
       @tiles.each do |col|
         col.each do |coord|
           coord.each { |tile| tile.tone = @tone }
@@ -474,6 +610,7 @@ class TilemapRenderer
     end
     # Update color
     if @old_color != @color
+      @flash.color = @color if @flash
       @tiles.each do |col|
         col.each do |coord|
           coord.each { |tile| tile.color = @tone }
@@ -484,22 +621,30 @@ class TilemapRenderer
     # Recalculate autotile frames
     @tilesets.update
     @autotiles.update
+
+    # Update flash
+    refresh_flash if @flashChanged
+    @flash.opacity = FLASH_OPACITY[(Graphics.frame_count / 2) % 6] if @flash
+
     do_full_refresh = false
     if @viewport.ox != @old_viewport_ox || @viewport.oy != @old_viewport_oy
       @old_viewport_ox = @viewport.ox
       @old_viewport_oy = @viewport.oy
       do_full_refresh = true
     end
+
     # Check whether the screen has moved since the last update
     @screen_moved = false
     @screen_moved_vertically = false
     do_full_refresh = true if check_if_screen_moved
+
     # Update all tile sprites
     visited = []
     @tiles_horizontal_count.times do |i|
       visited[i] = []
       @tiles_vertical_count.times { |j| visited[i][j] = false }
     end
+
     $MapFactory.maps.each do |map|
       # Calculate x/y ranges of tile sprites that represent them
       map_display_x = (map.display_x.to_f / Game_Map::X_SUBPIXELS).round
@@ -513,6 +658,7 @@ class TilemapRenderer
       end_y = @tiles_vertical_count - 1
       end_y = [end_y, map.height - map_display_y_tile - 1].min
       next if start_x > end_x || start_y > end_y || end_x < 0 || end_y < 0
+
       # Update all tile sprites representing this map
       for i in start_x..end_x
         tile_x = i + map_display_x_tile
@@ -535,6 +681,7 @@ class TilemapRenderer
         end
       end
     end
+
     # Clear all unvisited tile sprites
     @tiles.each_with_index do |col, i|
       col.each_with_index do |coord, j|
@@ -546,6 +693,7 @@ class TilemapRenderer
         end
       end
     end
+
     @autotiles.changed = false
   end
 end
