@@ -342,7 +342,7 @@
 339,TM52,TM52,TM52s,4,30000,"The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.",3,0,0,FOCUSBLAST
 340,TM53,TM53,TM53s,4,10000,"The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.",3,0,0,ENERGYBALL
 341,TM54,TM54,TM54s,4,10000,"A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.",3,0,0,FALSESWIPE
-342,TM55,TM55,TM55s,4,10000,"The user shoots boiling hot water at its target. It may also leave the target with a burn.",3,0,0,SCALD
+342,TM55,TM55,TM55s,4,10000,"The user attacks the target with a pulsing blast of water. It may also confuse the target.",3,0,0,WATERPULSE
 343,TM56,TM56,TM56s,4,10000,"The user flings its held item at the target as an attack. Its power and effects depend on the item.",3,0,0,FLING
 344,TM57,TM57,TM57s,4,10000,"The user fires a concentrated bundle of electricity. It may also raise the user's Sp. Atk stat.",3,0,0,CHARGEBEAM
 345,TM58,TM58,TM58s,4,10000,"The user hurls the foe into the sky, then drops it on the next turn. The foe cannot attack while in the sky.",3,0,0,SKYDROP
@@ -664,4 +664,6 @@
 656,TM119,TM119,TM119s,4,30000,"The user attacks driven by frustration. Power increases if the user's previous move failed.",3,0,0,STOMPINGTANTRUM
 657,TM120,TM120,TM120s,4,30000,"The user attacks the target's throat. The target cannot use sound-based moves for two turns.",3,0,0,THROATCHOP
 658,TM00,TM00,TM00s,4,0,"A strange TM developped by Team Rocket. It appears to be related to Pokémon fusion.",3,0,0,FUSIONSWAP
+659;TM121;TM121;TM121s;4;10000;"The user shoots boiling hot water at its target. It may also leave the target with a burn.";3;0;0;SCALD
+
 
