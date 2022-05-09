@@ -91,11 +91,11 @@ class Scene_Map
 
     $game_player.straighten
     $game_map.update
-    #disposeSpritesets
+    disposeSpritesets
     if RPG::Cache.need_clearing
       RPG::Cache.clear
     end
-    #createSpritesets
+    createSpritesets
     if $game_temp.transition_processing
       $game_temp.transition_processing = false
       Graphics.transition(20)

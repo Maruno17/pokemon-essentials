@@ -1461,8 +1461,8 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
         end
 
         #On ajoute l'autre dans le pokedex aussi
-        # $Trainer.pokedex.set_seen(poke1.species)
-        # $Trainer.pokedex.set_owned(poke1.species)
+         $Trainer.pokedex.set_seen(poke1.species)
+         $Trainer.pokedex.set_owned(poke1.species)
 
         pokemon.species = poke1.species
         pokemon.level = poke1.level

@@ -216,6 +216,8 @@ module GameData
     end
 
     def apply_metrics_to_sprite(sprite, index, shadow = false)
+      front_sprite_y = self.is_fusion ? GameData::Species.get(getBodyID(@id_number)).front_sprite_y: @front_sprite_y
+
       if shadow
         if (index & 1) == 1 # Foe Pokémon
           sprite.x += @shadow_x * 2
@@ -227,15 +229,15 @@ module GameData
         else
           # Foe Pokémon
           sprite.x += @front_sprite_x * 2
-          sprite.y += (@front_sprite_y * 2) + Settings::FRONTSPRITE_POSITION_OFFSET
+          sprite.y += (front_sprite_y * 2) + Settings::FRONTSPRITE_POSITION_OFFSET
           sprite.y -= @front_sprite_altitude * 2
         end
       end
     end
 
     def shows_shadow?
-      return true
-      #      return @front_sprite_altitude > 0
+      #return true
+            return @front_sprite_altitude > 0
     end
 
     def get_evolutions(exclude_invalid = false)

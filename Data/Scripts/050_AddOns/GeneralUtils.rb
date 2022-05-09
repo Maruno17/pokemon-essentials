@@ -466,3 +466,22 @@ def Kernel.getPlateType(item)
   return :FAIRY if item == PBItems::PIXIEPLATE
   return -1
 end
+def get_default_moves_at_level(species,level)
+  moveset = GameData::Species.get(species).moves
+  knowable_moves = []
+  moveset.each { |m| knowable_moves.push(m[1]) if m[0] <= level }
+  # Remove duplicates (retaining the latest copy of each move)
+  knowable_moves = knowable_moves.reverse
+  knowable_moves |= []
+  knowable_moves = knowable_moves.reverse
+  # Add all moves
+  moves = []
+  first_move_index = knowable_moves.length - MAX_MOVES
+  first_move_index = 0 if first_move_index < 0
+  for i in first_move_index...knowable_moves.length
+    #moves.push(Pokemon::Move.new(knowable_moves[i]))
+    moves << knowable_moves[i]
+  end
+  p moves
+  return moves
+end
