@@ -278,8 +278,13 @@ def getNewSpecies(oldSpecies,bst_range=50, ignoreRivalPlaceholder = false, maxDe
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
   newspecies_dex = rand(maxDexNumber - 1) + 1
+  i=0
   while  bstOk(newspecies_dex,oldSpecies_dex,bst_range)
     newspecies_dex = rand(maxDexNumber - 1) + 1
+    i+=1
+    if i%10 == 0
+      bst_range += 5
+    end
   end
   return newspecies_dex
 end
@@ -290,10 +295,15 @@ def getNewCustomSpecies(oldSpecies,customSpeciesList,bst_range=50, ignoreRivalPl
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
   i = rand(customSpeciesList.length - 1) + 1
+  n=0
   newspecies_dex = customSpeciesList[i]
   while  bstOk(newspecies_dex,oldSpecies_dex,bst_range)
     i = rand(customSpeciesList.length - 1)#+1
     newspecies_dex = customSpeciesList[i]
+    n+=1
+    if n % 10 == 0
+      bst_range+=5
+    end
   end
   return newspecies_dex
 end

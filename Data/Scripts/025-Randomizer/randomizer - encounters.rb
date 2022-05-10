@@ -128,11 +128,17 @@ def getRandomPokemon(originalPokemon,bstRange,maxDexNumber)
   bstMax = originalBst+bstRange
   
   foundAPokemon = false
+  int i=0
   while ! foundAPokemon
     newPoke = rand(maxDexNumber-1)+1
     newPokeBST = getBaseStatsTotal(newPoke)
     if newPokeBST >= bstMin && newPokeBST <= bstMax
       foundAPokemon = true
+    end
+    i+=1
+    if i %10 ==0
+      bstMin-=5
+      bstMax+=5
     end
   end
   return newPoke
