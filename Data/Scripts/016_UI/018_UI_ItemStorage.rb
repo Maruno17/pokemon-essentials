@@ -294,6 +294,7 @@ module UIHelper
       numwindow.update
       helpwindow.update
       yield if block_given?
+      oldnumber = curnumber
       if Input.trigger?(Input::BACK)
         ret = 0
         pbPlayCancelSE
@@ -305,23 +306,31 @@ module UIHelper
       elsif Input.repeat?(Input::UP)
         curnumber += 1
         curnumber = 1 if curnumber > maximum
-        numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
-        pbPlayCursorSE
+        if curnumber != oldnumber
+          numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
+          pbPlayCursorSE
+        end
       elsif Input.repeat?(Input::DOWN)
         curnumber -= 1
         curnumber = maximum if curnumber < 1
-        numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
-        pbPlayCursorSE
+        if curnumber != oldnumber
+          numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
+          pbPlayCursorSE
+        end
       elsif Input.repeat?(Input::LEFT)
         curnumber -= 10
         curnumber = 1 if curnumber < 1
-        numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
-        pbPlayCursorSE
+        if curnumber != oldnumber
+          numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
+          pbPlayCursorSE
+        end
       elsif Input.repeat?(Input::RIGHT)
         curnumber += 10
         curnumber = maximum if curnumber > maximum
-        numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
-        pbPlayCursorSE
+        if curnumber != oldnumber
+          numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
+          pbPlayCursorSE
+        end
       end
     end
     numwindow.dispose

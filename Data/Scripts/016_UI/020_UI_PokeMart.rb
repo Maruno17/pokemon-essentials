@@ -475,26 +475,35 @@ class PokemonMart_Scene
         Input.update
         numwindow.update
         update
+        oldnumber = curnumber
         if Input.repeat?(Input::LEFT)
-          pbPlayCursorSE
           curnumber -= 10
           curnumber = 1 if curnumber < 1
-          numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          if curnumber != oldnumber
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+            pbPlayCursorSE
+          end
         elsif Input.repeat?(Input::RIGHT)
-          pbPlayCursorSE
           curnumber += 10
           curnumber = maximum if curnumber > maximum
-          numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          if curnumber != oldnumber
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+            pbPlayCursorSE
+          end
         elsif Input.repeat?(Input::UP)
-          pbPlayCursorSE
           curnumber += 1
           curnumber = 1 if curnumber > maximum
-          numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          if curnumber != oldnumber
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+            pbPlayCursorSE
+          end
         elsif Input.repeat?(Input::DOWN)
-          pbPlayCursorSE
           curnumber -= 1
           curnumber = maximum if curnumber < 1
-          numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          if curnumber != oldnumber
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+            pbPlayCursorSE
+          end
         elsif Input.trigger?(Input::USE)
           ret = curnumber
           break
