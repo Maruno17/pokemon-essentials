@@ -397,5 +397,5 @@ VictoryME = Battle victory leader
 Name = Champion
 Gender = Male
 BaseMoney = 100
-BattleBGM = Battle Elite
+BattleBGM = Battle Champion
 VictoryME = Battle victory leader

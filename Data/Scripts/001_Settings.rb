@@ -93,6 +93,11 @@ module Settings
   # whether the machine's move retains the replaced move's PP (true), or whether
   # the machine's move has full PP (false).
   TAUGHT_MACHINES_KEEP_OLD_PP          = (MECHANICS_GENERATION == 5)
+  # Whether the Move Relearner can also teach egg moves that the Pokémon knew
+  # when it hatched and moves that the Pokémon was once taught by a TR. Moves
+  # from the Pokémon's level-up moveset of the same or a lower level than the
+  # Pokémon can always be relearned.
+  MOVE_RELEARNER_CAN_TEACH_MORE_MOVES  = (MECHANICS_GENERATION >= 6)
   # Whether various HP-healing items heal the amounts they do in Gen 7+ (true)
   # or in earlier Generations (false).
   REBALANCED_HEALING_ITEM_AMOUNTS      = (MECHANICS_GENERATION >= 7)
