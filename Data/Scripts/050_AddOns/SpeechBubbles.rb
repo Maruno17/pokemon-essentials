@@ -189,10 +189,12 @@ def pbDisposeMessageWindow(msgwindow)
   $PokemonTemp.speechbubble_vp.dispose if $PokemonTemp.speechbubble_vp
 end
 
-#3rd argument not current implemented
 def pbCallBub(status=0,value=0,always_down=false)
+  begin
   $PokemonTemp.speechbubble_talking=get_character(value).id
   $PokemonTemp.speechbubble_bubble=status
   $PokemonTemp.speechbubble_alwaysDown=always_down
-
+  rescue
+    return #Let's not crash the game if error
+  end
 end
