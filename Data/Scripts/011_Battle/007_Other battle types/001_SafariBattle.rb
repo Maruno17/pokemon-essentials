@@ -330,6 +330,8 @@ class SafariBattle
     @ballCount     = 0
   end
 
+  def disablePokeBalls=(value); end
+  def sendToBoxes=(value); end
   def defaultWeather=(value); @weather = value; end
   def defaultTerrain=(value); end
 

@@ -523,7 +523,7 @@ module Compiler
         backdrop = $~[1].gsub(/^\s+/, "").gsub(/\s+$/, "")
         push_comment(firstpage.list, command) if rewriteComments
       elsif command[/^EndSpeech\:\s*([\s\S]+)$/i]
-        endspeeches.push($~[1].gsub(/^\s+/, "").gsub(/\s+$/, ""))
+        endspeeches.push(command)
         push_comment(firstpage.list, command) if rewriteComments
       elsif command[/^Outcome\:\s*(\d+)$/i]
         outcome = $~[1].to_i
@@ -562,6 +562,7 @@ module Compiler
     safetrcombo = sprintf(":%s,\"%s\"", trtype, safequote(trname))   # :YOUNGSTER,"Joey"
     introplay   = sprintf("pbTrainerIntro(:%s)", trtype)
     # Write first page
+    push_comment(firstpage.list, endspeeches[0]) if endspeeches[0]   # Just so it isn't lost
     push_script(firstpage.list, introplay)   # pbTrainerIntro
     push_script(firstpage.list, "pbNoticePlayer(get_self)")
     push_text(firstpage.list, battles[0])
@@ -572,13 +573,10 @@ module Compiler
     push_script(firstpage.list, sprintf("setBattleRule(\"backdrop\",\"%s\")", safequote(backdrop))) if backdrop
     push_script(firstpage.list, sprintf("setBattleRule(\"outcomeVar\",%d)", outcome)) if outcome > 1
     push_script(firstpage.list, "setBattleRule(\"canLose\")") if continue
-    espeech = (endspeeches[0]) ? sprintf("_I(\"%s\")", safequote2(endspeeches[0])) : "nil"
     if battleid > 0
-      battleString = sprintf("pbTrainerBattle(%s,%s,nil,%d)", safetrcombo, espeech, battleid)
-    elsif endspeeches[0]
-      battleString = sprintf("pbTrainerBattle(%s,%s)", safetrcombo, espeech)
+      battleString = sprintf("TrainerBattle.start(%s,%d)", safetrcombo, battleid)
     else
-      battleString = sprintf("pbTrainerBattle(%s)", safetrcombo)
+      battleString = sprintf("TrainerBattle.start(%s)", safetrcombo)
     end
     push_branch(firstpage.list, battleString)
     if battles.length > 1   # Has rematches
@@ -621,12 +619,7 @@ module Compiler
       push_script(rematchpage.list, sprintf("setBattleRule(\"backdrop\",%s)", safequote(backdrop)), 1) if backdrop
       push_script(rematchpage.list, sprintf("setBattleRule(\"outcomeVar\",%d)", outcome), 1) if outcome > 1
       push_script(rematchpage.list, "setBattleRule(\"canLose\")", 1) if continue
-      espeech = nil
-      if endspeeches.length > 0
-        espeech = (endspeeches[i]) ? endspeeches[i] : endspeeches[endspeeches.length - 1]
-      end
-      espeech = (espeech) ? sprintf("_I(\"%s\")", safequote2(espeech)) : "nil"
-      battleString = sprintf("pbTrainerBattle(%s,%s,nil,%d)", safetrcombo, espeech, battleid + i)
+      battleString = sprintf("TrainerBattle.start(%s,%d)", safetrcombo, battleid + i)
       push_branch(rematchpage.list, battleString, 1)
       push_script(rematchpage.list, sprintf("pbPhoneIncrement(%s,%d)", safetrcombo, battles.length), 2)
       push_self_switch(rematchpage.list, "A", true, 2)
@@ -910,6 +903,150 @@ module Compiler
       end
     end
     return ret
+  end
+
+  def replace_old_battle_scripts(event, list, index)
+    changed = false
+    script = list[index].parameters[1]
+    if script[/^\s*pbWildBattle\((.+)\)\s*$/]
+      battle_params = $1.split(",")
+      list[index].parameters[1] = sprintf("WildBattle.start(#{battle_params[0].strip}, #{battle_params[1].strip})")
+      old_indent = list[index].indent
+      new_events = []
+      if battle_params[3] && battle_params[3][/false/]
+        push_script(new_events, "setBattleRule(\"cannotRun\")", old_indent)
+      end
+      if battle_params[4] && battle_params[4][/true/]
+        push_script(new_events, "setBattleRule(\"canLose\")", old_indent)
+      end
+      if battle_params[2] && battle_params[2].strip != "1"
+        push_script(new_events, "setBattleRule(\"outcome\", #{battle_params[2].strip})", old_indent)
+      end
+      list[index, 0] = new_events if new_events.length > 0
+      changed = true
+    elsif script[/^\s*pbDoubleWildBattle\((.+)\)\s*$/]
+      battle_params = $1.split(",")
+      pkmn1 = "#{battle_params[0].strip}, #{battle_params[1].strip}"
+      pkmn2 = "#{battle_params[2].strip}, #{battle_params[3].strip}"
+      list[index].parameters[1] = sprintf("WildBattle.start(#{pkmn1}, #{pkmn2})")
+      old_indent = list[index].indent
+      new_events = []
+      if battle_params[3] && battle_params[5][/false/]
+        push_script(new_events, "setBattleRule(\"cannotRun\")", old_indent)
+      end
+      if battle_params[4] && battle_params[6][/true/]
+        push_script(new_events, "setBattleRule(\"canLose\")", old_indent)
+      end
+      if battle_params[2] && battle_params[4].strip != "1"
+        push_script(new_events, "setBattleRule(\"outcome\", #{battle_params[4].strip})", old_indent)
+      end
+      list[index, 0] = new_events if new_events.length > 0
+      changed = true
+    elsif script[/^\s*pbTripleWildBattle\((.+)\)\s*$/]
+      battle_params = $1.split(",")
+      pkmn1 = "#{battle_params[0].strip}, #{battle_params[1].strip}"
+      pkmn2 = "#{battle_params[2].strip}, #{battle_params[3].strip}"
+      pkmn3 = "#{battle_params[4].strip}, #{battle_params[5].strip}"
+      list[index].parameters[1] = sprintf("WildBattle.start(#{pkmn1}, #{pkmn2}, #{pkmn3})")
+      old_indent = list[index].indent
+      new_events = []
+      if battle_params[3] && battle_params[7][/false/]
+        push_script(new_events, "setBattleRule(\"cannotRun\")", old_indent)
+      end
+      if battle_params[4] && battle_params[8][/true/]
+        push_script(new_events, "setBattleRule(\"canLose\")", old_indent)
+      end
+      if battle_params[2] && battle_params[6].strip != "1"
+        push_script(new_events, "setBattleRule(\"outcome\", #{battle_params[6].strip})", old_indent)
+      end
+      list[index, 0] = new_events if new_events.length > 0
+      changed = true
+    elsif script[/^\s*pbTrainerBattle\((.+)\)\s*$/]
+      battle_params = $1.split(",")
+      trainer1 = "#{battle_params[0].strip}, #{battle_params[1].strip}"
+      trainer1 += ", #{battle_params[4].strip}" if battle_params[4].strip != "nil"
+      list[index].parameters[1] = "TrainerBattle.start(#{trainer1})"
+      old_indent = list[index].indent
+      new_events = []
+      if battle_params[2] && !battle_params[2].strip.empty? && battle_params[2].strip != "nil"
+        speech = battle_params[2].gsub(/^\s*_I\(\s*"\s*/, "")
+        speech.gsub!(/\"\s*\)\s*$/, "").strip
+        push_comment(new_events, "EndSpeech: #{speech}", old_indent)
+      end
+      if battle_params[3] && battle_params[3][/true/]
+        push_script(new_events, "setBattleRule(\"double\")", old_indent)
+      end
+      if battle_params[5] && battle_params[5][/true/]
+        push_script(new_events, "setBattleRule(\"canLose\")", old_indent)
+      end
+      if battle_params[6] && battle_params[6].strip != "1"
+        push_script(new_events, "setBattleRule(\"outcome\", #{battle_params[6].strip})", old_indent)
+      end
+      list[index, 0] = new_events if new_events.length > 0
+      changed = true
+    elsif script[/^\s*pbDoubleTrainerBattle\((.+)\)\s*$/]
+      battle_params = $1.split(",")
+      trainer1 = "#{battle_params[0].strip}, #{battle_params[1].strip}"
+      trainer1 += ", #{battle_params[2].strip}" if battle_params[2].strip != "nil"
+      trainer2 = "#{battle_params[4].strip}, #{battle_params[5].strip}"
+      trainer2 += ", #{battle_params[6].strip}" if battle_params[6] && battle_params[6].strip != "nil"
+      list[index].parameters[1] = "TrainerBattle.start(#{trainer1}, #{trainer2})"
+      old_indent = list[index].indent
+      new_events = []
+      if battle_params[3] && !battle_params[3].strip.empty? && battle_params[3].strip != "nil"
+        speech = battle_params[3].gsub(/^\s*_I\(\s*"\s*/, "")
+        speech.gsub!(/\"\s*\)\s*$/, "").strip
+        push_comment(new_events, "EndSpeech1: #{speech}", old_indent)
+      end
+      if battle_params[7] && !battle_params[7].strip.empty? && battle_params[7].strip != "nil"
+        speech = battle_params[7].gsub(/^\s*_I\(\s*"\s*/, "")
+        speech.gsub!(/\"\s*\)\s*$/, "").strip
+        push_comment(new_events, "EndSpeech2: #{speech}", old_indent)
+      end
+      if battle_params[8] && battle_params[8][/true/]
+        push_script(new_events, "setBattleRule(\"canLose\")", old_indent)
+      end
+      if battle_params[9] && battle_params[9].strip != "1"
+        push_script(new_events, "setBattleRule(\"outcome\", #{battle_params[9].strip})", old_indent)
+      end
+      list[index, 0] = new_events if new_events.length > 0
+      changed = true
+    elsif script[/^\s*pbTripleTrainerBattle\((.+)\)\s*$/]
+      battle_params = $1.split(",")
+      trainer1 = "#{battle_params[0].strip}, #{battle_params[1].strip}"
+      trainer1 += ", #{battle_params[2].strip}" if battle_params[2].strip != "nil"
+      trainer2 = "#{battle_params[4].strip}, #{battle_params[5].strip}"
+      trainer2 += ", #{battle_params[6].strip}" if battle_params[6] && battle_params[6].strip != "nil"
+      trainer3 = "#{battle_params[8].strip}, #{battle_params[9].strip}"
+      trainer3 += ", #{battle_params[10].strip}" if battle_params[10] && battle_params[10].strip != "nil"
+      list[index].parameters[1] = "TrainerBattle.start(#{trainer1}, #{trainer2}, #{trainer3})"
+      old_indent = list[index].indent
+      new_events = []
+      if battle_params[3] && !battle_params[3].strip.empty? && battle_params[3].strip != "nil"
+        speech = battle_params[3].gsub(/^\s*_I\(\s*"\s*/, "")
+        speech.gsub!(/\"\s*\)\s*$/, "").strip
+        push_comment(new_events, "EndSpeech1: #{speech}", old_indent)
+      end
+      if battle_params[7] && !battle_params[7].strip.empty? && battle_params[7].strip != "nil"
+        speech = battle_params[7].gsub(/^\s*_I\(\s*"\s*/, "")
+        speech.gsub!(/\"\s*\)\s*$/, "").strip
+        push_comment(new_events, "EndSpeech2: #{speech}", old_indent)
+      end
+      if battle_params[7] && !battle_params[7].strip.empty? && battle_params[11].strip != "nil"
+        speech = battle_params[11].gsub(/^\s*_I\(\s*"\s*/, "")
+        speech.gsub!(/\"\s*\)\s*$/, "").strip
+        push_comment(new_events, "EndSpeech3: #{speech}", old_indent)
+      end
+      if battle_params[12] && battle_params[12][/true/]
+        push_script(new_events, "setBattleRule(\"canLose\")", old_indent)
+      end
+      if battle_params[13] && battle_params[13].strip != "1"
+        push_script(new_events, "setBattleRule(\"outcome\", #{battle_params[13].strip})", old_indent)
+      end
+      list[index, 0] = new_events if new_events.length > 0
+      changed = true
+    end
+    return changed
   end
 
   def fix_event_use(event, _mapID, mapData)
@@ -1283,6 +1420,7 @@ module Compiler
         when 111   # Conditional Branch
           if list[i].parameters[0] == 12   # script
             script = list[i].parameters[1]
+            changed = true if replace_old_battle_scripts(event, list, i)
             if script[trainerMoneyRE]   # Compares $player.money with a value
               # Checking money directly
               operator = $1
@@ -1313,7 +1451,7 @@ module Compiler
               # Using pbItemBall on non-item events, change it
               list[i].parameters[1] = script.sub(/pbItemBall/, "pbReceiveItem")
               changed = true
-            elsif script[/^\s*(Kernel\.)?(pbTrainerBattle|pbDoubleTrainerBattle)/]
+            elsif script[/^\s*(TrainerBattle.start)/]
               # Check if trainer battle conditional branch is empty
               j = i + 1
               isempty = true

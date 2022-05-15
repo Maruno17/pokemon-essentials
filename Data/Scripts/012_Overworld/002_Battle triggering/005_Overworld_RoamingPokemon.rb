@@ -212,7 +212,7 @@ def pbRoamingPokemonBattle(species, level)
   setBattleRule("single")
   setBattleRule("roamerFlees")
   # Perform the battle
-  decision = pbWildBattleCore($PokemonGlobal.roamPokemon[idxRoamer])
+  decision = WildBattle.start_core($PokemonGlobal.roamPokemon[idxRoamer])
   # Update Roaming Pokémon data based on result of battle
   if [1, 4].include?(decision)   # Defeated or caught
     $PokemonGlobal.roamPokemon[idxRoamer]       = true

@@ -461,9 +461,9 @@ def pbEncounter(enc_type, only_single = true)
     encounter2 = $PokemonEncounters.choose_wild_pokemon(enc_type)
     EventHandlers.trigger(:on_wild_species_chosen, encounter2)
     return false if !encounter2
-    pbDoubleWildBattle(encounter1[0], encounter1[1], encounter2[0], encounter2[1])
+    WildBattle.start(encounter1, encounter2, can_override: true)
   else
-    pbWildBattle(encounter1[0], encounter1[1])
+    WildBattle.start(encounter1, can_override: true)
   end
   $game_temp.encounter_type = nil
   $game_temp.force_single_battle = false

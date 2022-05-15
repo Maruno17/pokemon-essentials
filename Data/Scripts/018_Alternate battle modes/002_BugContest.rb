@@ -364,18 +364,18 @@ def pbBugContestBattle(species, level)
   playerParty       = $player.party
   playerPartyStarts = [0]
   # Create the battle scene (the visual side of it)
-  scene = pbNewBattleScene
+  scene = BattleCreationHelperMethods.create_battle_scene
   # Create the battle class (the mechanics side of it)
   battle = BugContestBattle.new(scene, playerParty, foeParty, playerTrainer, nil)
   battle.party1starts = playerPartyStarts
   battle.ballCount    = pbBugContestState.ballcount
   setBattleRule("single")
-  pbPrepareBattle(battle)
+  BattleCreationHelperMethods.prepare_battle(battle)
   # Perform the battle itself
   decision = 0
   pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) {
     decision = battle.pbStartBattle
-    pbAfterBattle(decision, true)
+    BattleCreationHelperMethods.after_battle(decision, true)
     if [2, 5].include?(decision)   # Lost or drew
       $game_system.bgm_unpause
       $game_system.bgs_unpause
@@ -390,19 +390,7 @@ def pbBugContestBattle(species, level)
     pbBugContestState.pbStartJudging
   end
   # Save the result of the battle in Game Variable 1
-  #    0 - Undecided or aborted
-  #    1 - Player won
-  #    2 - Player lost
-  #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
-  #    4 - Wild Pokémon was caught
-  #    5 - Draw
-  case decision
-  when 1, 4   # Won, caught
-    $stats.wild_battles_won += 1
-  when 2, 3, 5   # Lost, fled, draw
-    $stats.wild_battles_lost += 1
-  end
-  pbSet(1, decision)
+  BattleCreationHelperMethods(decision, 1)
   # Used by the Poké Radar to update/break the chain
   EventHandlers.trigger(:on_wild_battle_end, species, level, decision)
   # Return false if the player lost or drew the battle, and true if any other result

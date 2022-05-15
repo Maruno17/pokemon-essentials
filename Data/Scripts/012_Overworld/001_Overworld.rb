@@ -210,9 +210,9 @@ def pbBattleOnStepTaken(repel_active)
     if $PokemonEncounters.have_double_wild_battle?
       encounter2 = $PokemonEncounters.choose_wild_pokemon(encounter_type)
       EventHandlers.trigger(:on_wild_species_chosen, encounter2)
-      pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])
+      WildBattle.start(encounter, encounter2, can_override: true)
     else
-      pbWildBattle(encounter[0], encounter[1])
+      WildBattle.start(encounter, can_override: true)
     end
     $game_temp.encounter_type = nil
     $game_temp.encounter_triggered = true

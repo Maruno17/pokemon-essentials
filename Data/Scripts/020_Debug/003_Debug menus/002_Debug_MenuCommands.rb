@@ -176,7 +176,8 @@ MenuHandlers.add(:debug_menu, :test_wild_battle, {
                                           GameData::Species.get(species).name), params)
       if level > 0
         $game_temp.encounter_type = nil
-        pbWildBattle(species, level)
+        setBattleRule("canLose")
+        WildBattle.start(species, level)
       end
     end
     next false
@@ -205,8 +206,9 @@ MenuHandlers.add(:debug_menu, :test_wild_battle_advanced, {
           next
         end
         setBattleRule(sprintf("%dv%d", size0, pkmn.length))
+        setBattleRule("canLose")
         $game_temp.encounter_type = nil
-        pbWildBattleCore(*pkmn)
+        WildBattle.start(*pkmn)
         break
       elsif pkmnCmd == pkmnCmds.length - 2   # Set player side size
         if !pbCanDoubleBattle?
@@ -254,7 +256,8 @@ MenuHandlers.add(:debug_menu, :test_trainer_battle, {
   "effect"      => proc {
     trainerdata = pbListScreen(_INTL("SINGLE TRAINER"), TrainerBattleLister.new(0, false))
     if trainerdata
-      pbTrainerBattle(trainerdata[0], trainerdata[1], nil, false, trainerdata[2], true)
+      setBattleRule("canLose")
+      TrainerBattle.start(trainerdata[0], trainerdata[1], trainerdata[2])
     end
     next false
   }
@@ -293,9 +296,10 @@ MenuHandlers.add(:debug_menu, :test_trainer_battle_advanced, {
           next
         end
         setBattleRule(sprintf("%dv%d", size0, size1))
+        setBattleRule("canLose")
         battleArgs = []
         trainers.each { |t| battleArgs.push(t[1]) }
-        pbTrainerBattleCore(*battleArgs)
+        TrainerBattle.start(*battleArgs)
         break
       elsif trainerCmd == trainerCmds.length - 2   # Set opponent side size
         if trainers.length == 0 || (trainers.length == 1 && trainers[0][1].party_count == 1)

@@ -121,11 +121,11 @@ def pbSafariBattle(species, level)
   # Calculate who the trainer is
   playerTrainer = $player
   # Create the battle scene (the visual side of it)
-  scene = pbNewBattleScene
+  scene = BattleCreationHelperMethods.create_battle_scene
   # Create the battle class (the mechanics side of it)
   battle = SafariBattle.new(scene, playerTrainer, foeParty)
   battle.ballCount = pbSafariState.ballcount
-  pbPrepareBattle(battle)
+  BattleCreationHelperMethods.prepare_battle(battle)
   # Perform the battle itself
   decision = 0
   pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) {
