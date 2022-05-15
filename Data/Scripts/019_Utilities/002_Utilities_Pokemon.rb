@@ -137,7 +137,7 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
 end
 
 def pbGenerateEgg(pkmn, text = "")
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn #|| $Trainer.party_full?
   pkmn = Pokemon.new(pkmn, Settings::EGG_LEVEL) if !pkmn.is_a?(Pokemon)
   # Set egg's details
   pkmn.name           = _INTL("Egg")
@@ -145,7 +145,12 @@ def pbGenerateEgg(pkmn, text = "")
   pkmn.obtain_text    = text
   pkmn.calc_stats
   # Add egg to party
-  $Trainer.party[$Trainer.party.length] = pkmn
+  if $Trainer.party.length<6
+    $Trainer.party[$Trainer.party.length] = pkmn
+  else
+    $PokemonStorage.pbStoreCaught(pkmn)
+    Kernel.pbMessage(_INTL("The egg was transfered to the PC."))
+  end
   return true
 end
 alias pbAddEgg pbGenerateEgg

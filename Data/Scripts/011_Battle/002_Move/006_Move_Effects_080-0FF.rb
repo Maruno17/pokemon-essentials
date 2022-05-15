@@ -243,13 +243,13 @@ end
 #===============================================================================
 class PokeBattle_Move_090 < PokeBattle_Move
   def pbBaseType(user)
-    hp = pbHiddenPower(user,user.hiddenPowerType)
+    hp = pbHiddenPower(user,user.pokemon.hiddenPowerType)
     return hp[0]
   end
 
   def pbBaseDamage(baseDmg,user,target)
     return super if Settings::MECHANICS_GENERATION >= 6
-    hp = pbHiddenPower(user,user.hiddenPowerType)
+    hp = pbHiddenPower(user,user.pokemon.hiddenPowerType)
     return hp[1]
   end
 end
