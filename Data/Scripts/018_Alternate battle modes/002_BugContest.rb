@@ -390,7 +390,7 @@ def pbBugContestBattle(species, level)
     pbBugContestState.pbStartJudging
   end
   # Save the result of the battle in Game Variable 1
-  BattleCreationHelperMethods(decision, 1)
+  BattleCreationHelperMethods.set_outcome(decision, 1)
   # Used by the Poké Radar to update/break the chain
   EventHandlers.trigger(:on_wild_battle_end, species, level, decision)
   # Return false if the player lost or drew the battle, and true if any other result
