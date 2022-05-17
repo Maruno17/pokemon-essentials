@@ -302,7 +302,7 @@ class Battle::Battler
 
   def pbLowerAttackStatStageIntimidate(user)
     return false if fainted?
-    # NOTE: Substitute intentially blocks Intimidate even if self has Contrary.
+    # NOTE: Substitute intentionally blocks Intimidate even if self has Contrary.
     if @effects[PBEffects::Substitute] > 0
       if Battle::Scene::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} is protected by its substitute!", pbThis))

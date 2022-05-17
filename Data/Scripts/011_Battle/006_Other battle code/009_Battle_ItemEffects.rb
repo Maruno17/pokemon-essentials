@@ -1079,10 +1079,10 @@ Battle::ItemEffects::DamageCalcFromUser.add(:WISEGLASSES,
 
 #===============================================================================
 # DamageCalcFromTarget handlers
-#===============================================================================
 # NOTE: Species-specific held items consider the original species, not the
 #       transformed species, and still work while transformed. The exceptions
 #       are Metal/Quick Powder, which don't work if the holder is transformed.
+#===============================================================================
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:ASSAULTVEST,
   proc { |item, user, target, move, mults, baseDmg, type|

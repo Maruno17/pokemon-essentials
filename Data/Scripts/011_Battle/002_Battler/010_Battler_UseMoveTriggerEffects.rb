@@ -98,7 +98,7 @@ class Battle::Battler
     end
     # Destiny Bond
     # NOTE: Although Destiny Bond is similar to Grudge, they don't apply at
-    #       the same time (although Destiny Bond does check whether it's going
+    #       the same time (however, Destiny Bond does check whether it's going
     #       to trigger at the same time as Grudge).
     if user.effects[PBEffects::DestinyBondTarget] >= 0 && !user.fainted?
       dbName = @battle.battlers[user.effects[PBEffects::DestinyBondTarget]].pbThis

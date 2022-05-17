@@ -27,9 +27,8 @@ module Compiler
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%d]\r\n", i))
         rname = pbGetMessage(MessageTypes::RegionNames, i)
-        f.write(sprintf("Name = %s\r\nFilename = %s\r\n",
-                        (rname && rname != "") ? rname : _INTL("Unnamed"),
-                        csvQuote((map[1].is_a?(Array)) ? map[1][0] : map[1])))
+        f.write(sprintf("Name = %s\r\n", (rname && rname != "") ? rname : _INTL("Unnamed")))
+        f.write(sprintf("Filename = %s\r\n", csvQuote((map[1].is_a?(Array)) ? map[1][0] : map[1])))
         map[2].each do |loc|
           f.write("Point = ")
           pbWriteCsvRecord(loc, f, [nil, "uussUUUU"])

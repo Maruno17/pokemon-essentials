@@ -477,7 +477,7 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
     @buttons = Array.new(maxIndex + 1) do |i|
       numButtons = @sideSizes[i % 2]
       next if numButtons <= i / 2
-      # NOTE: Battler indexes go from left to right from the perspective of
+      # NOTE: Battler indices go from left to right from the perspective of
       #       that side's trainer, so inc is different for each side for the
       #       same value of i/2.
       inc = (i.even?) ? i / 2 : numButtons - 1 - (i / 2)

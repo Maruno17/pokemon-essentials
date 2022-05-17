@@ -20,8 +20,8 @@ class Battle
     #       battlers will move to the centre position at the end of a round, but
     #       because they cannot move into a position owned by a different
     #       trainer, it's possible that battlers will be unable to move close
-    #       enough to hit each other if there are multiple trainers on each
-    #       side.
+    #       enough to hit each other if there are multiple trainers on both
+    #       sides.
     if trainerBattle? && (@sideSizes[0] > 2 || @sideSizes[1] > 2) &&
        @player.length > 1 && @opponent.length > 1
       raise _INTL("Can't have battles larger than 2v2 where both sides have multiple trainers")

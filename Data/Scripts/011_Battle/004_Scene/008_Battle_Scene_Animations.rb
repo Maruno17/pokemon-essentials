@@ -539,7 +539,7 @@ class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animatio
   def createBallTrajectory(ball, destX, destY)
     # NOTE: In HGSS, there isn't a Poké Ball arc under any circumstance (neither
     #       when throwing out the first Pokémon nor when switching/replacing a
-    #       fainted Pokémon). This is probably worth changing.
+    #       fainted Pokémon). You may choose to change this.
     ball.setXY(0, destX, destY - 4)
   end
 end
@@ -745,6 +745,8 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     ballBurstCapture(delay, ball, ballEndX, ballEndY, @poke_ball)
     # NOTE: The Pokémon does not change color while being absorbed into a Poké
     #       Ball during a capture attempt. This may be an oversight in HGSS.
+    #       It's hard to spot due to the ball burst animation being played on
+    #       top of it.
     battler.setSE(delay, "Battle jump to ball")
     battler.moveXY(delay, 5, ballEndX, ballEndY)
     battler.moveZoom(delay, 5, 0)

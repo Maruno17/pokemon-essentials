@@ -1313,9 +1313,9 @@ class Battle::Move::TypeDependsOnUserIVs < Battle::Move
   end
 end
 
+# NOTE: This allows Hidden Power to be Fairy-type (if you have that type in your
+#       game). I don't care that the official games don't work like that.
 def pbHiddenPower(pkmn)
-  # NOTE: This allows Hidden Power to be Fairy-type (if you have that type in
-  #       your game). I don't care that the official games don't work like that.
   iv = pkmn.iv
   idxType = 0
   power = 60
@@ -1363,9 +1363,9 @@ class Battle::Move::TypeAndPowerDependOnUserBerry < Battle::Move
     return false
   end
 
-  # NOTE: The AI calls this method via pbCalcType, but it involves user.item
-  #       which here is assumed to be not nil (because item.id is called). Since
-  #       the AI won't want to use it if the user has no item anyway, perhaps
+  # NOTE: The AI calls this method via pbCalcType, and this method returns a
+  #       type assuming user has an item even though it might not. Since the AI
+  #       won't want to use this move if the user has no item, though, perhaps
   #       this is good enough.
   def pbBaseType(user)
     item = user.item

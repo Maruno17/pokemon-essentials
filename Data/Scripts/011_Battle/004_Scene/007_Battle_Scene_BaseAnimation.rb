@@ -455,6 +455,10 @@ module Battle::Scene::Animation::BallAnimationMixin
     end
   end
 
+  # NOTE: This array makes the Ball Burst capture animation differ between types
+  #       of Poké Ball in certain simple ways. The HGSS animations occasionally
+  #       have additional differences, which haven't been coded yet in
+  #       Essentials as they're more complex and I couldn't be bothered.
   BALL_BURST_CAPTURE_VARIANCES = {
     # [top glare filename, top particle start tone, top particle end tone,
     #  middle glare filename, middle glare start tone, middle glare end tone,

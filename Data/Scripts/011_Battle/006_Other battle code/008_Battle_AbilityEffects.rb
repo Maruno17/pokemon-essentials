@@ -1199,13 +1199,14 @@ Battle::AbilityEffects::DamageCalcFromUser.copy(:AERILATE, :PIXILATE, :REFRIGERA
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:ANALYTIC,
   proc { |ability, user, target, move, mults, baseDmg, type|
-    # NOTE: If another battler faints earlier in the round, but it would have
-    #       moved after the user, then Analytic would not power up the move.
-    #       However, this makes the determination so much more complicated
-    #       (involving pbPriority and counting or not counting speed/priority
-    #       modifiers depending on which Generation's mechanics are being used),
-    #       so I'm choosing to ignore it. The effect is thus: "power up the move
-    #       if all other battlers on the field right now have already moved".
+    # NOTE: In the official games, if another battler faints earlier in the
+    #       round but it would have moved after the user, then Analytic does not
+    #       power up the move. However, this makes the determination so much
+    #       more complicated (involving pbPriority and counting or not counting
+    #       speed/priority modifiers depending on which Generation's mechanics
+    #       are being used), so I'm choosing to ignore it. The effect is thus:
+    #       "power up the move if all other battlers on the field right now have
+    #       already moved".
     if move.pbMoveFailedLastInRound?(user, false)
       mults[:base_damage_multiplier] *= 1.3
     end
@@ -2213,7 +2214,7 @@ Battle::AbilityEffects::AfterMoveUseFromTarget.add(:COLORCHANGE,
 Battle::AbilityEffects::AfterMoveUseFromTarget.add(:PICKPOCKET,
   proc { |ability, target, user, move, switched_battlers, battle|
     # NOTE: According to Bulbapedia, this can still trigger to steal the user's
-    #       item even if it was switched out by a Red Card. This doesn't make
+    #       item even if it was switched out by a Red Card. That doesn't make
     #       sense, so this code doesn't do it.
     next if target.wild?
     next if switched_battlers.include?(user.index)   # User was switched out

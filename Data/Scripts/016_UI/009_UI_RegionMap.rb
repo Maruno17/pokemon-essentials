@@ -176,7 +176,6 @@ class PokemonRegionMap_Scene
     return point[1] > 0 && $game_switches[point[1]]
   end
 
-  # TODO: Why is this PBS file writer here?
   def pbSaveMapData
     File.open("PBS/town_map.txt", "wb") { |f|
       Compiler.add_PBS_header_to_file(f)
@@ -185,8 +184,8 @@ class PokemonRegionMap_Scene
         next if !map
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%d]\r\n", i))
-        f.write(sprintf("Name = %s\r\nFilename = %s\r\n",
-                        Compiler.csvQuote(map[0]), Compiler.csvQuote(map[1])))
+        f.write(sprintf("Name = %s\r\n", Compiler.csvQuote(map[0])))
+        f.write(sprintf("Filename = %s\r\n", Compiler.csvQuote(map[1])))
         map[2].each do |loc|
           f.write("Point = ")
           Compiler.pbWriteCsvRecord(loc, f, [nil, "uussUUUU"])

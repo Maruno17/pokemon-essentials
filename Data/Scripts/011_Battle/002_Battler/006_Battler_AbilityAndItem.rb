@@ -71,7 +71,7 @@ class Battle::Battler
       # NOTE: In Gen 5 only, Trace only triggers upon the Trace bearer switching
       #       in and not at any later times, even if a traceable ability turns
       #       up later. Essentials ignores this, and allows Trace to trigger
-      #       whenever it can even in the old battle mechanics.
+      #       whenever it can even in Gen 5 battle mechanics.
       choices = @battle.allOtherSideBattlers(@index).select { |b|
         next !b.ungainableAbility? &&
              ![:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(b.ability_id)

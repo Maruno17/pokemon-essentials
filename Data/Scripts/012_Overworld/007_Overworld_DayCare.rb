@@ -173,15 +173,15 @@ class DayCare
       end
     end
 
-    # NOTE: Destiny Bond's effect is only in Gen 6+, but I don't think it's
-    #       worth excluding it if the mechanics generation is 5 or lower.
     def inherit_IVs(egg, mother, father)
       # Get all stats
       stats = []
       GameData::Stat.each_main { |s| stats.push(s) }
       # Get the number of stats to inherit
       inherit_count = 3
-      inherit_count = 5 if mother.hasItem?(:DESTINYKNOT) || father.hasItem?(:DESTINYKNOT)
+      if Settings::MECHANICS_GENERATION >= 6
+        inherit_count = 5 if mother.hasItem?(:DESTINYKNOT) || father.hasItem?(:DESTINYKNOT)
+      end
       # Inherit IV because of Power items (if both parents have a Power item,
       # then only a random one of them is inherited)
       power_items = [

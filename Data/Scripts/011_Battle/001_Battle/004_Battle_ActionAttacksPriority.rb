@@ -215,14 +215,12 @@ class Battle
     @priority.each do |entry|
       entry[0].effects[PBEffects::PriorityAbility] = false
       entry[0].effects[PBEffects::PriorityItem] = false
-      # TODO: Set b.effects[PBEffects::PriorityAbility] and the other one depending
-      #       on the sub-priorities. Calculate final sub-priorities for each battler.
       subpri = entry[2]   # Sub-priority from ability
       if (subpri == 0 && entry[3] != 0) ||   # Ability has no effect, item has effect
          (subpri < 0 && entry[3] >= 1)   # Ability makes it slower, item makes it faster
         subpri = entry[3]   # Sub-priority from item
         entry[0].effects[PBEffects::PriorityItem] = true
-      elsif subpri != 0   # Ability has effect, item had no/superfluous effect
+      elsif subpri != 0   # Ability has effect, item had superfluous/no effect
         entry[0].effects[PBEffects::PriorityAbility] = true
       end
       entry[4] = subpri   # Final sub-priority
