@@ -37,12 +37,12 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
+def pbOrganizedBattleEx(opponent, challengedata)
   # Skip battle if holding Ctrl in Debug mode
   if Input.press?(Input::CTRL) && $DEBUG
     pbMessage(_INTL("SKIPPING BATTLE..."))
     pbMessage(_INTL("AFTER WINNING..."))
-    pbMessage(endspeech || "...")
+    pbMessage(opponent.lose_text || "...")
     $game_temp.last_battle_record = nil
     pbMEStop
     return true
@@ -58,8 +58,6 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
   # Create the battle class (the mechanics side of it)
   battle = challengedata.createBattle(scene, $player, opponent)
   battle.internalBattle = false
-  battle.endSpeeches    = [endspeech]
-  battle.endSpeechesWin = [endspeechwin]
   # Set various other properties in the battle class
   BattleCreationHelperMethods.prepare_battle(battle)
   # Perform the battle itself

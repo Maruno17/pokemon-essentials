@@ -484,7 +484,7 @@ class TrainerBattle
     # comparing levels for an evolution check)
     EventHandlers.trigger(:on_start_battle)
     # Generate information for the foes
-    foe_trainers, foe_items, end_speeches, foe_party, foe_party_starts = TrainerBattle.generate_foes(*args)
+    foe_trainers, foe_items, foe_party, foe_party_starts = TrainerBattle.generate_foes(*args)
     # Generate information for the player and partner trainer(s)
     player_trainers, ally_items, player_party, player_party_starts = BattleCreationHelperMethods.set_up_player_trainers(foe_party)
     # Create the battle scene (the visual side of it)
@@ -495,7 +495,6 @@ class TrainerBattle
     battle.party2starts = foe_party_starts
     battle.ally_items   = ally_items
     battle.items        = foe_items
-    battle.endSpeeches  = end_speeches
     # Set various other properties in the battle class
     setBattleRule("#{foe_trainers.length}v#{foe_trainers.length}") if $game_temp.battle_rules["size"].nil?
     BattleCreationHelperMethods.prepare_battle(battle)
@@ -517,7 +516,6 @@ class TrainerBattle
   def self.generate_foes(*args)
     trainer_array = []
     foe_items     = []
-    end_speeches  = []
     pokemon_array = []
     party_starts  = []
     trainer_type = nil
@@ -528,7 +526,6 @@ class TrainerBattle
         raise _INTL("Trainer type {1} was given but not a trainer name.", trainer_type) if trainer_type
         trainer_array.push(arg)
         foe_items.push(arg.items)
-        end_speeches.push(arg.lose_text)
         party_starts.push(pokemon_array.length)
         arg.party.each { |pkmn| pokemon_array.push(pkmn) }
       when Array   # [trainer type, trainer name, version number, speech (optional)]
@@ -538,9 +535,9 @@ class TrainerBattle
         trainer = pbLoadTrainer(arg[0], arg[1], arg[2]) if !trainer   # Try again
         raise _INTL("Trainer for data '{1}' is not defined.", arg) if !trainer
         EventHandlers.trigger(:on_trainer_load, trainer)
+        trainer.lose_text = arg[3] if arg[3] && !arg[3].empty?
         trainer_array.push(trainer)
         foe_items.push(trainer.items)
-        end_speeches.push(arg[3] || trainer.lose_text)
         party_starts.push(pokemon_array.length)
         trainer.party.each { |pkmn| pokemon_array.push(pkmn) }
       else
@@ -555,7 +552,6 @@ class TrainerBattle
           EventHandlers.trigger(:on_trainer_load, trainer)
           trainer_array.push(trainer)
           foe_items.push(trainer.items)
-          end_speeches.push(trainer.lose_text)
           party_starts.push(pokemon_array.length)
           trainer.party.each { |pkmn| pokemon_array.push(pkmn) }
           trainer_type = nil
@@ -574,7 +570,6 @@ class TrainerBattle
             EventHandlers.trigger(:on_trainer_load, trainer)
             trainer_array.push(trainer)
             foe_items.push(trainer.items)
-            end_speeches.push(trainer.lose_text)
             party_starts.push(pokemon_array.length)
             trainer.party.each { |pkmn| pokemon_array.push(pkmn) }
             trainer_type = nil
@@ -588,7 +583,7 @@ class TrainerBattle
       end
     end
     raise _INTL("Trainer type {1} was given but not a trainer name.", trainer_type) if trainer_type
-    return trainer_array, foe_items, end_speeches, pokemon_array, party_starts
+    return trainer_array, foe_items, pokemon_array, party_starts
   end
 end
 

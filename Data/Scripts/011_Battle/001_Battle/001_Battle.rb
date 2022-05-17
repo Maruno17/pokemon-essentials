@@ -55,8 +55,6 @@ class Battle
   attr_reader   :opponent         # Opponent trainer (or array of trainers)
   attr_accessor :items            # Items held by opponents
   attr_accessor :ally_items       # Items held by allies
-  attr_accessor :endSpeeches
-  attr_accessor :endSpeechesWin
   attr_accessor :party1starts     # Array of start indexes for each player-side trainer's party
   attr_accessor :party2starts     # Array of start indexes for each opponent-side trainer's party
   attr_accessor :internalBattle   # Internal battle flag
@@ -123,8 +121,6 @@ class Battle
     @opponent          = opponent   # Array of NPCTrainer objects, or nil
     @items             = nil
     @ally_items        = nil        # Array of items held by ally. This is just used for Mega Evolution for now.
-    @endSpeeches       = []
-    @endSpeechesWin    = []
     @party1            = p1
     @party2            = p2
     @party1order       = Array.new(@party1.length) { |i| i }

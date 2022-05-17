@@ -33,14 +33,14 @@ module RecordedBattleModule
         if tr.is_a?(Player)
           ret.push([tr.trainer_type, tr.name.clone, tr.id, tr.badges.clone])
         else   # NPCTrainer
-          ret.push([tr.trainer_type, tr.name.clone, tr.id])
+          ret.push([tr.trainer_type, tr.name.clone, tr.id, tr.lose_text || "...", tr.win_text || "..."])
         end
       end
       return ret
     elsif trainer[i].is_a?(Player)
       return [[trainer.trainer_type, trainer.name.clone, trainer.id, trainer.badges.clone]]
     else
-      return [[trainer.trainer_type, trainer.name.clone, trainer.id]]
+      return [[trainer.trainer_type, trainer.name.clone, trainer.id, trainer.lose_text || "...", trainer.win_text || "..."]]
     end
   end
 
@@ -53,8 +53,6 @@ module RecordedBattleModule
     @properties["party2"]          = Marshal.dump(@party2)
     @properties["party1starts"]    = Marshal.dump(@party1starts)
     @properties["party2starts"]    = Marshal.dump(@party2starts)
-    @properties["endSpeeches"]     = (@endSpeeches) ? @endSpeeches.clone : ""
-    @properties["endSpeechesWin"]  = (@endSpeechesWin) ? @endSpeechesWin.clone : ""
     @properties["weather"]         = @field.weather
     @properties["weatherDuration"] = @field.weatherDuration
     @properties["canRun"]          = @canRun
@@ -167,8 +165,6 @@ module RecordedBattlePlaybackModule
     @party1starts          = Marshal.restore(@properties["party1starts"])
     @party2starts          = Marshal.restore(@properties["party2starts"])
     @internalBattle        = @properties["internalBattle"]
-    @endSpeeches           = @properties["endSpeeches"]
-    @endSpeechesWin        = @properties["endSpeechesWin"]
     @field.weather         = @properties["weather"]
     @field.weatherDuration = @properties["weatherDuration"]
     @canRun                = @properties["canRun"]
@@ -280,6 +276,8 @@ module RecordedBattle::PlaybackHelper
         t.badges = tr[3]
       else   # NPCTrainer
         t = NPCTrainer.new(tr[1], tr[0])
+        t.lose_text = tr[3] || "..."
+        t.win_text = tr[4] || "..."
       end
       t.id = tr[2]
       ret.push(t)
