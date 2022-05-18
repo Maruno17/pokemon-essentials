@@ -142,7 +142,7 @@ class Game_Event < Game_Character
   def pbCheckEventTriggerAfterTurning
     return if $game_system.map_interpreter.running? || @starting
     return if @trigger != 2   # Event touch
-    return if !@event.name[/trainer\((\d+)\)/i]
+    return if !@event.name[/(?:sight|trainer)\((\d+)\)/i]
     distance = $~[1].to_i
     return if !pbEventCanReachPlayer?(self, $game_player, distance)
     return if jumping? || over_trigger?

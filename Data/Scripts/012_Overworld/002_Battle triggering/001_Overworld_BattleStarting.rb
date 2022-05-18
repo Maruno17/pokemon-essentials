@@ -441,7 +441,7 @@ class TrainerBattle
     if !$game_temp.waiting_trainer && pbMapInterpreterRunning? && pbCanDoubleBattle?
       thisEvent = pbMapInterpreter.get_self
       # Find all other triggered trainer events
-      triggeredEvents = $game_player.pbTriggeredTrainerEvents([2], false)
+      triggeredEvents = $game_player.pbTriggeredTrainerEvents([2], false, true)
       otherEvent = []
       triggeredEvents.each do |i|
         next if i.id == thisEvent.id
