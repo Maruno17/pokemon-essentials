@@ -6,6 +6,8 @@ class Game_Character
   attr_reader   :y
   attr_reader   :real_x
   attr_reader   :real_y
+  attr_writer   :x_offset   # In pixels, positive shifts sprite to the right
+  attr_writer   :y_offset   # In pixels, positive shifts sprite down
   attr_accessor :width
   attr_accessor :height
   attr_accessor :sprite_size
@@ -35,6 +37,8 @@ class Game_Character
     @y                         = 0
     @real_x                    = 0
     @real_y                    = 0
+    @x_offset                  = 0
+    @y_offset                  = 0
     @width                     = 1
     @height                    = 1
     @sprite_size               = [Game_Map::TILE_WIDTH, Game_Map::TILE_HEIGHT]
@@ -77,6 +81,9 @@ class Game_Character
     @locked                    = false
     @prelock_direction         = 0
   end
+
+  def x_offset; return @x_offset || 0; end
+  def y_offset; return @y_offset || 0; end
 
   def at_coordinate?(check_x, check_y)
     return check_x >= @x && check_x < @x + @width &&
@@ -284,9 +291,9 @@ class Game_Character
       ((start_y - @height + 1)..start_y).each do |i|
         return false if !passable?(start_x + x_diff, i, dir - 3, strict)
       end
-      x_offset = (dir == 9) ? 1 : -1
+      x_tile_offset = (dir == 9) ? 1 : -1
       (start_x...(start_x + @width)).each do |i|
-        return false if !passable?(i + x_offset, start_y - @height + 1, 8, strict)
+        return false if !passable?(i + x_tile_offset, start_y - @height + 1, 8, strict)
       end
       return true
     end
@@ -303,6 +310,7 @@ class Game_Character
   def screen_x
     ret = ((@real_x.to_f - self.map.display_x) / Game_Map::X_SUBPIXELS).round
     ret += @width * Game_Map::TILE_WIDTH / 2
+    ret += self.x_offset
     return ret
   end
 
@@ -322,6 +330,7 @@ class Game_Character
       end
       ret += @jump_peak * ((4 * (jump_fraction**2)) - 1)
     end
+    ret += self.y_offset
     return ret
   end
 
