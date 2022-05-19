@@ -48,6 +48,7 @@ class GameStats
   attr_accessor :battle_points_won, :battle_points_spent   # Currently unused
   attr_accessor :soot_collected
   # Special stats
+  attr_accessor :gym_leader_attempts   # An array of integers
   attr_accessor :times_to_get_badges   # An array of times in seconds
   attr_accessor :elite_four_attempts
   attr_accessor :hall_of_fame_entry_count   # See also Game Variable 13
@@ -129,7 +130,7 @@ class GameStats
     @battle_points_spent           = 0
     @soot_collected                = 0
     # Special stats
-    @gym_leader_attempts           = []   # Incremented in Gym Leader events
+    @gym_leader_attempts           = [0] * 50   # Incremented in Gym Leader events (50 is arbitrary but suitably large)
     @times_to_get_badges           = []   # Set with set_time_to_badge(number) in Gym Leader events
     @elite_four_attempts           = 0   # Incremented in door event leading to the first E4 member
     @hall_of_fame_entry_count      = 0   # Incremented in Hall of Fame event

@@ -480,6 +480,8 @@ class SafariBattle
           pbSEPlay("Battle flee")
           pbDisplayPaused(_INTL("You got away safely!"))
           @decision = 3
+        else
+          next
         end
         catchFactor  = [[catchFactor, 3].max, 20].min
         escapeFactor = [[escapeFactor, 2].max, 20].min
