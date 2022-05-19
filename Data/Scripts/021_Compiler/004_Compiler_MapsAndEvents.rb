@@ -964,7 +964,7 @@ module Compiler
     elsif script[/^\s*pbTrainerBattle\((.+)\)\s*$/]
       battle_params = $1.split(",")
       trainer1 = "#{battle_params[0].strip}, #{battle_params[1].strip}"
-      trainer1 += ", #{battle_params[4].strip}" if battle_params[4].strip != "nil"
+      trainer1 += ", #{battle_params[4].strip}" if battle_params[4] && battle_params[4].strip != "nil"
       list[index].parameters[1] = "TrainerBattle.start(#{trainer1})"
       old_indent = list[index].indent
       new_events = []
@@ -987,7 +987,7 @@ module Compiler
     elsif script[/^\s*pbDoubleTrainerBattle\((.+)\)\s*$/]
       battle_params = $1.split(",")
       trainer1 = "#{battle_params[0].strip}, #{battle_params[1].strip}"
-      trainer1 += ", #{battle_params[2].strip}" if battle_params[2].strip != "nil"
+      trainer1 += ", #{battle_params[2].strip}" if battle_params[2] && battle_params[2].strip != "nil"
       trainer2 = "#{battle_params[4].strip}, #{battle_params[5].strip}"
       trainer2 += ", #{battle_params[6].strip}" if battle_params[6] && battle_params[6].strip != "nil"
       list[index].parameters[1] = "TrainerBattle.start(#{trainer1}, #{trainer2})"
@@ -1014,7 +1014,7 @@ module Compiler
     elsif script[/^\s*pbTripleTrainerBattle\((.+)\)\s*$/]
       battle_params = $1.split(",")
       trainer1 = "#{battle_params[0].strip}, #{battle_params[1].strip}"
-      trainer1 += ", #{battle_params[2].strip}" if battle_params[2].strip != "nil"
+      trainer1 += ", #{battle_params[2].strip}" if battle_params[2] && battle_params[2].strip != "nil"
       trainer2 = "#{battle_params[4].strip}, #{battle_params[5].strip}"
       trainer2 += ", #{battle_params[6].strip}" if battle_params[6] && battle_params[6].strip != "nil"
       trainer3 = "#{battle_params[8].strip}, #{battle_params[9].strip}"

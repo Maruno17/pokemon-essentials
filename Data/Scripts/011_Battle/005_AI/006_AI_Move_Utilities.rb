@@ -390,6 +390,7 @@ class Battle::AI
         Battle::ItemEffects.triggerDamageCalcFromUser(
           user.item, user, target, move, multipliers, baseDmg, type
         )
+        user.effects[PBEffects::GemConsumed] = nil   # Untrigger consuming of Gems
       end
     end
     if skill >= PBTrainerAI.bestSkill &&

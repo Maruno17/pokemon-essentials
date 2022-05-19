@@ -219,6 +219,7 @@ def pbChangePlayer(id)
   meta = GameData::PlayerMetadata.get(id)
   return false if !meta
   $player.character_ID = id
+  return true
 end
 
 def pbTrainerName(name = nil, outfit = 0)
