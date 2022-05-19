@@ -7,8 +7,8 @@
 # numerical IDs to symbolic IDs (for the berry planted and for mulch laid down).
 # Since item numerical IDs no longer exist, this conversion needs to have a list
 # of them in order to convert planted berry data properly.
-SaveData.register_conversion(:v19_2_fix_planted_berry_numerical_ids) do
-  essentials_version 19.2
+SaveData.register_conversion(:v20_fix_planted_berry_numerical_ids) do
+  essentials_version 20
   display_title "Fixing berry plant IDs data"
   to_value :global_metadata do |global|
     berry_conversion = {
@@ -231,7 +231,7 @@ end
 #===============================================================================
 
 SaveData.register_conversion(:v20_increment_player_character_id) do
-  essentials_version 19.1
+  essentials_version 20
   display_title "Incrementing player character ID"
   to_value :player do |player|
     player.character_ID += 1
