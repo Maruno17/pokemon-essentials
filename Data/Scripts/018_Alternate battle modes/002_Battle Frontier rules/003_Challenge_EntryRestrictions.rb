@@ -112,9 +112,8 @@ module NicknameChecker
     name = name.upcase
     return true if name == getName(species)
     return false if @@names.values.include?(name)
-    GameData::Species.each do |species_data|
-      next if species_data.species == species || species_data.form != 0
-      return false if getName(species_data.id) == name
+    GameData::Species.each_species do |species_data|
+      return false if species_data.species != species && getName(species_data.id) == name
     end
     return true
   end
@@ -126,8 +125,8 @@ end
 #===============================================================================
 class NicknameClause
   def isValid?(team)
-    for i in 0...team.length - 1
-      for j in i + 1...team.length
+    (team.length - 1).times do |i|
+      (i + 1...team.length).each do |j|
         return false if team[i].name == team[j].name
         return false if !NicknameChecker.check(team[i].name, team[i].species)
       end
@@ -154,7 +153,7 @@ end
 #===============================================================================
 class AblePokemonRestriction
   def isValid?(pkmn)
-    return pkmn && pkmn.able?
+    return pkmn&.able?
   end
 end
 
@@ -327,7 +326,7 @@ class BannedItemRestriction
     @itemlist = itemlist.clone
   end
 
-  def isSpecies?(item,itemlist)
+  def isSpecies?(item, itemlist)
     return itemlist.include?(item)
   end
 

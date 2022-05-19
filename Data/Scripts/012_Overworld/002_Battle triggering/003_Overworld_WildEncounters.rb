@@ -104,7 +104,7 @@ class PokemonEncounters
       raise ArgumentError.new(_INTL("Encounter type {1} does not exist", enc_type))
     end
     return false if $game_system.encounter_disabled
-    return false if !$Trainer
+    return false if !$player
     return false if $DEBUG && Input.press?(Input::CTRL)
     # Check if enc_type has a defined step chance/encounter table
     return false if !@step_chances[enc_type] || @step_chances[enc_type] == 0
@@ -114,7 +114,7 @@ class PokemonEncounters
     return true if pbPokeRadarOnShakingGrass
     # Get base encounter chance and minimum steps grace period
     encounter_chance = @step_chances[enc_type].to_f
-    min_steps_needed = (8 - encounter_chance / 10).clamp(0, 8).to_f
+    min_steps_needed = (8 - (encounter_chance / 10)).clamp(0, 8).to_f
     # Apply modifiers to the encounter chance and the minimum steps amount
     if triggered_by_step
       encounter_chance += @chance_accumulator / 200
@@ -126,7 +126,7 @@ class PokemonEncounters
       encounter_chance *= 1.5 if $PokemonMap.whiteFluteUsed
       min_steps_needed /= 2 if $PokemonMap.whiteFluteUsed
     end
-    first_pkmn = $Trainer.first_pokemon
+    first_pkmn = $player.first_pokemon
     if first_pkmn
       case first_pkmn.item_id
       when :CLEANSETAG
@@ -140,6 +140,11 @@ class PokemonEncounters
         when :STENCH, :WHITESMOKE, :QUICKFEET
           encounter_chance /= 2
           min_steps_needed *= 2
+        when :INFILTRATOR
+          if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
+            encounter_chance /= 2
+            min_steps_needed *= 2
+          end
         when :SNOWCLOAK
           if GameData::Weather.get($game_screen.weather_type).category == :Hail
             encounter_chance /= 2
@@ -163,7 +168,7 @@ class PokemonEncounters
     # after a previous wild encounter
     if triggered_by_step && @step_count < min_steps_needed
       @step_count += 1
-      return false if rand(100) >= encounter_chance * 5 / (@step_chances[enc_type] + @chance_accumulator / 200)
+      return false if rand(100) >= encounter_chance * 5 / (@step_chances[enc_type] + (@chance_accumulator / 200))
     end
     # Decide whether the wild encounter should actually happen
     return true if rand(100) < encounter_chance
@@ -182,7 +187,7 @@ class PokemonEncounters
     return true if pbPokeRadarOnShakingGrass
     # Repel
     if repel_active
-      first_pkmn = (Settings::REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.first_pokemon : $Trainer.first_able_pokemon
+      first_pkmn = (Settings::REPEL_COUNTS_FAINTED_POKEMON) ? $player.first_pokemon : $player.first_able_pokemon
       if first_pkmn && enc_data[1] < first_pkmn.level
         @chance_accumulator = 0
         return false
@@ -190,7 +195,7 @@ class PokemonEncounters
     end
     # Some abilities make wild encounters less likely if the wild Pokémon is
     # sufficiently weaker than the Pokémon with the ability
-    first_pkmn = $Trainer.first_pokemon
+    first_pkmn = $player.first_pokemon
     if first_pkmn
       case first_pkmn.ability_id
       when :INTIMIDATE, :KEENEYE
@@ -203,10 +208,10 @@ class PokemonEncounters
   # Returns whether a wild encounter should be turned into a double wild
   # encounter.
   def have_double_wild_battle?
-    return false if $PokemonTemp.forceSingleBattle
+    return false if $game_temp.force_single_battle
     return false if pbInSafari?
     return true if $PokemonGlobal.partner
-    return false if $Trainer.able_pokemon_count <= 1
+    return false if $player.able_pokemon_count <= 1
     return true if $game_player.pbTerrainTag.double_wild_encounters && rand(100) < 30
     return false
   end
@@ -271,22 +276,32 @@ class PokemonEncounters
     # Static/Magnet Pull prefer wild encounters of certain types, if possible.
     # If they activate, they remove all Pokémon from the encounter table that do
     # not have the type they favor. If none have that type, nothing is changed.
-    first_pkmn = $Trainer.first_pokemon
+    first_pkmn = $player.first_pokemon
     if first_pkmn
       favored_type = nil
       case first_pkmn.ability_id
-      when :STATIC
-        favored_type = :ELECTRIC if GameData::Type.exists?(:ELECTRIC) && rand(100) < 50
+      when :FLASHFIRE
+        favored_type = :FIRE if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS &&
+                                GameData::Type.exists?(:FIRE) && rand(100) < 50
+      when :HARVEST
+        favored_type = :GRASS if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS &&
+                                 GameData::Type.exists?(:GRASS) && rand(100) < 50
+      when :LIGHTNINGROD
+        favored_type = :ELECTRIC if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS &&
+                                    GameData::Type.exists?(:ELECTRIC) && rand(100) < 50
       when :MAGNETPULL
         favored_type = :STEEL if GameData::Type.exists?(:STEEL) && rand(100) < 50
+      when :STATIC
+        favored_type = :ELECTRIC if GameData::Type.exists?(:ELECTRIC) && rand(100) < 50
+      when :STORMDRAIN
+        favored_type = :WATER if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS &&
+                                 GameData::Type.exists?(:WATER) && rand(100) < 50
       end
       if favored_type
         new_enc_list = []
         enc_list.each do |enc|
           species_data = GameData::Species.get(enc[1])
-          t1 = species_data.type1
-          t2 = species_data.type2
-          new_enc_list.push(enc) if t1 == favored_type || t2 == favored_type
+          new_enc_list.push(enc) if species_data.types.include?(favored_type)
         end
         enc_list = new_enc_list if new_enc_list.length > 0
       end
@@ -368,65 +383,89 @@ end
 # Creates and returns a Pokémon based on the given species and level.
 # Applies wild Pokémon modifiers (wild held item, shiny chance modifiers,
 # Pokérus, gender/nature forcing because of player's lead Pokémon).
-def pbGenerateWildPokemon(species,level,isRoamer=false)
-  genwildpoke = Pokemon.new(species,level)
+def pbGenerateWildPokemon(species, level, isRoamer = false)
+  genwildpoke = Pokemon.new(species, level)
   # Give the wild Pokémon a held item
   items = genwildpoke.wildHoldItems
-  first_pkmn = $Trainer.first_pokemon
-  chances = [50,5,1]
-  chances = [60,20,5] if first_pkmn && first_pkmn.hasAbility?(:COMPOUNDEYES)
-  itemrnd = rand(100)
-  if (items[0]==items[1] && items[1]==items[2]) || itemrnd<chances[0]
-    genwildpoke.item = items[0]
-  elsif itemrnd<(chances[0]+chances[1])
-    genwildpoke.item = items[1]
-  elsif itemrnd<(chances[0]+chances[1]+chances[2])
-    genwildpoke.item = items[2]
+  first_pkmn = $player.first_pokemon
+  chances = [50, 5, 1]
+  if first_pkmn
+    case first_pkmn.ability_id
+    when :COMPOUNDEYES
+      chances = [60, 20, 5]
+    when :SUPERLUCK
+      chances = [60, 20, 5] if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
+    end
   end
-  # Shiny Charm makes shiny Pokémon more likely to generate
-  if GameData::Item.exists?(:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
-    2.times do   # 3 times as likely
+  itemrnd = rand(100)
+  if (items[0] == items[1] && items[1] == items[2]) || itemrnd < chances[0]
+    genwildpoke.item = items[0].sample
+  elsif itemrnd < (chances[0] + chances[1])
+    genwildpoke.item = items[1].sample
+  elsif itemrnd < (chances[0] + chances[1] + chances[2])
+    genwildpoke.item = items[2].sample
+  end
+  # Improve chances of shiny Pokémon with Shiny Charm and battling more of the
+  # same species
+  shiny_retries = 0
+  shiny_retries += 2 if $bag.has?(:SHINYCHARM)
+  if Settings::HIGHER_SHINY_CHANCES_WITH_NUMBER_BATTLED
+    values = [0, 0]
+    case $player.pokedex.battled_count(species)
+    when 0...50    then values = [0, 0]
+    when 50...100  then values = [1, 15]
+    when 100...200 then values = [2, 20]
+    when 200...300 then values = [3, 25]
+    when 300...500 then values = [4, 30]
+    else                values = [5, 30]
+    end
+    shiny_retries += values[0] if values[1] > 0 && rand(1000) < values[1]
+  end
+  if shiny_retries > 0
+    shiny_retries.times do
       break if genwildpoke.shiny?
-      genwildpoke.personalID = rand(2**16) | rand(2**16) << 16
+      genwildpoke.shiny = nil   # Make it recalculate shininess
+      genwildpoke.personalID = rand(2**16) | (rand(2**16) << 16)
     end
   end
   # Give Pokérus
-  genwildpoke.givePokerus if rand(65536) < Settings::POKERUS_CHANCE
+  genwildpoke.givePokerus if rand(65_536) < Settings::POKERUS_CHANCE
   # Change wild Pokémon's gender/nature depending on the lead party Pokémon's
   # ability
   if first_pkmn
     if first_pkmn.hasAbility?(:CUTECHARM) && !genwildpoke.singleGendered?
       if first_pkmn.male?
-        (rand(3)<2) ? genwildpoke.makeFemale : genwildpoke.makeMale
+        (rand(3) < 2) ? genwildpoke.makeFemale : genwildpoke.makeMale
       elsif first_pkmn.female?
-        (rand(3)<2) ? genwildpoke.makeMale : genwildpoke.makeFemale
+        (rand(3) < 2) ? genwildpoke.makeMale : genwildpoke.makeFemale
       end
     elsif first_pkmn.hasAbility?(:SYNCHRONIZE)
-      genwildpoke.nature = first_pkmn.nature if !isRoamer && rand(100)<50
+      if !isRoamer && (Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS || (rand(100) < 50))
+        genwildpoke.nature = first_pkmn.nature
+      end
     end
   end
   # Trigger events that may alter the generated Pokémon further
-  Events.onWildPokemonCreate.trigger(nil,genwildpoke)
+  EventHandlers.trigger(:on_wild_pokemon_created, genwildpoke)
   return genwildpoke
 end
 
 # Used by fishing rods and Headbutt/Rock Smash/Sweet Scent to generate a wild
-# Pokémon (or two) for a triggered wild encounter.
-def pbEncounter(enc_type)
-  $PokemonTemp.encounterType = enc_type
+# Pokémon (or two if it's Sweet Scent) for a triggered wild encounter.
+def pbEncounter(enc_type, only_single = true)
+  $game_temp.encounter_type = enc_type
   encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type)
-  encounter1 = EncounterModifier.trigger(encounter1)
+  EventHandlers.trigger(:on_wild_species_chosen, encounter1)
   return false if !encounter1
-  if $PokemonEncounters.have_double_wild_battle?
+  if !only_single && $PokemonEncounters.have_double_wild_battle?
     encounter2 = $PokemonEncounters.choose_wild_pokemon(enc_type)
-    encounter2 = EncounterModifier.trigger(encounter2)
+    EventHandlers.trigger(:on_wild_species_chosen, encounter2)
     return false if !encounter2
-    pbDoubleWildBattle(encounter1[0], encounter1[1], encounter2[0], encounter2[1])
+    WildBattle.start(encounter1, encounter2, can_override: true)
   else
-    pbWildBattle(encounter1[0], encounter1[1])
+    WildBattle.start(encounter1, can_override: true)
   end
-	$PokemonTemp.encounterType = nil
-  $PokemonTemp.forceSingleBattle = false
-  EncounterModifier.triggerEncounterEnd
+  $game_temp.encounter_type = nil
+  $game_temp.force_single_battle = false
   return true
 end

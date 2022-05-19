@@ -1,8 +1,8 @@
 #==============================================================================#
 #                                Plugin Manager                                #
 #                                   by Marin                                   #
-#               support for external plugin scripts by Luka S.J.               #
-#                              tweaked by Maruno                               #
+#               Support for external plugin scripts by Luka S.J.               #
+#                              Tweaked by Maruno                               #
 #------------------------------------------------------------------------------#
 #   Provides a simple interface that allows plugins to require dependencies    #
 #   at specific versions, and to specify incompatibilities between plugins.    #
@@ -12,152 +12,92 @@
 #------------------------------------------------------------------------------#
 #                                   Usage:                                     #
 #                                                                              #
-# A Pokémon Essentials plugin should register itself using the PluginManager.  #
-# The simplest way to do so, for a plugin without dependencies, is as follows: #
+# Each plugin should have its own folder in the "Plugins" folder found in the  #
+# main directory. The "Plugins" folder is similar in concept to the "PBS"      #
+# folder, in that its contents are compiled and recorded as existing. The      #
+# plugin's script file(s) are placed in its folder - they must be .rb files.   #
 #                                                                              #
-#     PluginManager.register({                                                 #
-#       :name    => "Basic Plugin",                                            #
-#       :version => "1.0",                                                     #
-#       :link    => "https://reliccastle.com/link-to-the-plugin/",             #
-#       :credits => "Marin"                                                    #
-#     })                                                                       #
+# A plugin's folder must also contain a "meta.txt" file. This file is what     #
+# makes Essentials recognise that the plugin exists, and contains important    #
+# information about the plugin; if this file does not exist, the folder's      #
+# contents are ignored. Each line in this file is a property.                  #
 #                                                                              #
-# The link portion here is optional, but recommended. This will be shown in    #
-# the error message if the PluginManager detects that this plugin needs to be  #
-# updated.                                                                     #
+# Required lines:                                                              #
 #                                                                              #
-# A plugin's version should be in the format X.Y.Z, but the number of digits   #
-# you use does not matter. You can also use Xa, Xb, Xc, Ya, etc.               #
-# What matters is that you use it consistently, so that it can be compared.    #
+#     Name       = Simple Extension                          The plugin's name #
+#     Version    = 1.0                                    The plugin's version #
+#     Essentials = 19.1,20                 Compatible version(s) of Essentials #
+#     Link       = https://reliccastle.com/link-to-the-plugin/                 #
+#     Credits    = Luka S.J.,Maruno,Marin                    One or more names #
 #                                                                              #
-# IF there are multiple people to credit, their names should be in an array.   #
-# If there is only one credit, it does not need an array:                      #
+# A plugin's version should be in the format X or X.Y or X.Y.Z, where X/Y/Z    #
+# are numbers. You can also use Xa, Xb, Xc, Ya, etc. What matters is that you  #
+# use version numbers consistently for your plugin. A later version will be    #
+# alphanumerically higher than an older version.                               #
 #                                                                              #
-#     :credits => "Marin"                                                      #
-#     :credits => ["Marin", "Maruno"],                                         #
+# Plugins can interact with each other in several ways, such as requiring      #
+# another one to exist or by clashing with each other. These interactions are  #
+# known as dependencies and conflicts. The lines below are all optional, and   #
+# go in "meta.txt" to define how your plugin works (or doesn't work) with      #
+# others. You can have multiples of each of these lines.                       #
 #                                                                              #
+#     Requires   = Basic Plugin            Must have this plugin (any version) #
+#     Requires   = Useful Utils,1.1         Must have this plugin/min. version #
+#     Exact      = Scene Tweaks,2                Must have this plugin/version #
+#     Optional   = Extended Windows,1.2   If this plugin exists, load it first #
+#     Conflicts  = Complex Extension                       Incompatible plugin #
 #                                                                              #
+# A plugin that depends on another one ("Requires"/"Exact"/"Optional") will    #
+# make that other plugin be loaded first. The "Optional" line is for a plugin  #
+# which isn't necessary, but if it does exist in the same project, it must be  #
+# at the given version or higher.                                              #
 #                                                                              #
-# Dependency:                                                                  #
+# When plugins are compiled, their scripts are stored in the file              #
+# "PluginScripts.rxdata" in the "Data" folder. Dependencies defined above will #
+# ensure that they are loaded in a suitable order. Scripts within a plugin are #
+# loaded alphanumerically, going through subfolders depth-first.               #
 #                                                                              #
-# A plugin can require another plugin to be installed in order to work. For    #
-# example, the "Simple Extension" plugin depends on the above "Basic Plugin"   #
-# like so:                                                                     #
-#                                                                              #
-#     PluginManager.register({                                                 #
-#       :name    => "Simple Extension",                                        #
-#       :version => "1.0",                                                     #
-#       :link    => "https://reliccastle.com/link-to-the-plugin/",             #
-#       :credits => ["Marin", "Maruno"],                                       #
-#       :dependencies => ["Basic Plugin"]                                      #
-#     })                                                                       #
-#                                                                              #
-# If there are multiple dependencies, they should be listed in an array. If    #
-# there is only one dependency, it does not need an array:                     #
-#                                                                              #
-#     :dependencies => "Basic Plugin"                                          #
-#                                                                              #
-# To require a minimum version of a dependency plugin, you should turn the     #
-# dependency's name into an array which contains the name and the version      #
-# (both as strings). For example, to require "Basic Plugin" version 1.2 or     #
-# higher, you would write:                                                     #
-#                                                                              #
-#     :dependencies => [                                                       #
-#       ["Basic Plugin", "1.2"]                                                #
-#     ]                                                                        #
-#                                                                              #
-# To require a specific version (no higher and no lower) of a dependency       #
-# plugin, you should add the :exact flag as the first thing in the array for   #
-# that dependency:                                                             #
-#                                                                              #
-#     :dependencies => [                                                       #
-#       [:exact, "Basic Plugin", "1.2"]                                        #
-#     ]                                                                        #
-#                                                                              #
-# If your plugin can work without another plugin, but it is incompatible with  #
-# an old version of that other plugin, you should list it as an optional       #
-# dependency. If that other plugin is present in a game, then this optional    #
-# dependency will check whether it meets the minimum version required for your #
-# plugin. Write it in the same way as any other dependency as described above, #
-# but use the :optional flag instead.                                          #
-#                                                                              #
-#     :dependencies => [                                                       #
-#       [:optional, "QoL Improvements", "1.1"]                                 #
-#     ]                                                                        #
-#                                                                              #
-# The :optional_exact flag is a combination of :optional and :exact.           #
-#                                                                              #
-#                                                                              #
-#                                                                              #
-# Incompatibility:                                                             #
-#                                                                              #
-# If your plugin is known to be incompatible with another plugin, you should   #
-# list that other plugin as such. Only one of the two plugins needs to list    #
-# that it is incompatible with the other.                                      #
-#                                                                              #
-#     PluginManager.register({                                                 #
-#       :name    => "QoL Improvements",                                        #
-#       :version => "1.0",                                                     #
-#       :link    => "https://reliccastle.com/link-to-the-plugin/",             #
-#       :credits => "Marin",                                                   #
-#       :incompatibilities => [                                                #
-#         "Simple Extension"                                                   #
-#       ]                                                                      #
-#     })                                                                       #
+# The "Plugins" folder should be deleted when the game is released. Scripts in #
+# there are compiled, but any other files used by a plugin (graphics/audio)    #
+# should go into other folders and not the plugin's folder.                    #
 #                                                                              #
 #------------------------------------------------------------------------------#
-#                               Plugin folder:                                 #
+#                           The code behind plugins:                           #
 #                                                                              #
-# The Plugin folder is treated like the PBS folder, but for script files for   #
-# plugins. Each plugin has its own folder within the Plugin folder. Each       #
-# plugin must have a meta.txt file in its folder, which contains information   #
-# about that plugin. Folders without this meta.txt file are ignored.           #
+# When a plugin's "meta.txt" file is read, its contents are registered in the  #
+# PluginManager. A simple example of registering a plugin is as follows:       #
 #                                                                              #
-# Scripts must be in .rb files. You should not put any other files into a      #
-# plugin's folder except for script files and meta.txt.                        #
+#     PluginManager.register({                                                 #
+#       :name       => "Basic Plugin",                                         #
+#       :version    => "1.0",                                                  #
+#       :essentials => "20",                                                   #
+#       :link       => "https://reliccastle.com/link-to-the-plugin/",          #
+#       :credits    => ["Marin"]                                               #
+#     })                                                                       #
 #                                                                              #
-# When the game is compiled, scripts in these folders are read and converted   #
-# into a usable format, and saved in the file Data/PluginScripts.rxdata.       #
-# Script files are loaded in order of their name and subfolder, so it is wise  #
-# to name script files "001_first script.rb", "002_second script.rb", etc. to  #
-# ensure they are loaded in the correct order.                                 #
+# The :link value is optional, but recommended. This will be shown in the      #
+# message if the PluginManager detects that this plugin needs to be updated.   #
 #                                                                              #
-# When the game is compressed for distribution, the Plugin folder and all its  #
-# contents should be deleted (like the PBS folder), because its contents will  #
-# be unused (they will have been compiled into the PluginScripts.rxdata file). #
+# Here is the same example but also with dependencies and conflicts:           #
 #                                                                              #
-# The contents of meta.txt are as follows:                                     #
+#     PluginManager.register({                                                 #
+#       :name       => "Basic Plugin",                                         #
+#       :version    => "1.0",                                                  #
+#       :essentials => "20",                                                   #
+#       :link       => "https://reliccastle.com/link-to-the-plugin/",          #
+#       :credits    => ["Marin"],                                              #
+#       :dependencies => ["Basic Plugin",                                      #
+#                         ["Useful Utils", "1.1"],                             #
+#                         [:exact, "Scene Tweaks", "2"],                       #
+#                         [:optional, "Extended Windows", "1.2"],              #
+#                        ],                                                    #
+#       :incompatibilities => ["Simple Extension"]                             #
+#     })                                                                       #
 #                                                                              #
-#     Name         = Simple Extension                                          #
-#     Version      = 1.0                                                       #
-#     Requires     = Basic Plugin                                              #
-#     Requires     = Useful Utilities,1.1                                      #
-#     Conflicts    = Complex Extension                                         #
-#     Conflicts    = Extended Windows                                          #
-#     Link         = https://reliccastle.com/link-to-the-plugin/               #
-#     Credits      = Luka S.J.,Maruno,Marin                                    #
-#                                                                              #
-# These lines are related to what is described above. You can have multiple    #
-# "Requires" and "Conflicts" lines, each listing a single other plugin that is #
-# either a dependency or a conflict respectively.                              #
-#                                                                              #
-# Examples of the "Requires" line:                                             #
-#                                                                              #
-#     Requires     = Basic Plugin                                              #
-#     Requires     = Basic Plugin,1.1                                          #
-#     Requires     = Basic Plugin,1.1,exact                                    #
-#     Requires     = Basic Plugin,1.1,optional                                 #
-#     Exact        = Basic Plugin,1.1                                          #
-#     Optional     = Basic Plugin,1.1                                          #
-#                                                                              #
-# The "Exact" and "Optional" lines are equivalent to the "Requires" lines      #
-# that contain those keywords.                                                 #
-#                                                                              #
-# There is also a "Scripts" line, which lists one or more script files that    #
-# should be loaded first. You can have multiple "Scripts" lines. However, you  #
-# can achieve the same effect by simply naming your script files in            #
-# alphanumeric order to make them load in a particular order, so the "Scripts" #
-# line should not be necessary.                                                #
+# The example dependencies/conflict are the same as the examples shown above   #
+# for lines in "meta.txt". :optional_exact is a combination of :exact and      #
+# :optional, and there is no way to make use of its combined functionality via #
+# "meta.txt".                                                                  #
 #                                                                              #
 #------------------------------------------------------------------------------#
 #                     Please give credit when using this.                      #
@@ -172,21 +112,20 @@ module PluginManager
   def self.register(options)
     name         = nil
     version      = nil
+    essentials   = nil
     link         = nil
     dependencies = nil
     incompats    = nil
     credits      = []
-    order = [:name, :version, :link, :dependencies, :incompatibilities, :credits]
+    order = [:name, :version, :essentials, :link, :dependencies, :incompatibilities, :credits]
     # Ensure it first reads the plugin's name, which is used in error reporting,
     # by sorting the keys
     keys = options.keys.sort do |a, b|
-      idx_a = order.index(a)
-      idx_a = order.size if idx_a == -1
-      idx_b = order.index(b)
-      idx_b = order.size if idx_b == -1
+      idx_a = order.index(a) || order.size
+      idx_b = order.index(b) || order.size
       next idx_a <=> idx_b
     end
-    for key in keys
+    keys.each do |key|
       value = options[key]
       case key
       when :name   # Plugin name
@@ -202,6 +141,8 @@ module PluginManager
           self.error("Plugin version must be a string.")
         end
         version = value
+      when :essentials
+        essentials = value
       when :link   # Plugin website
         if nil_or_empty?(value)
           self.error("Plugin link must be a non-empty string.")
@@ -210,12 +151,13 @@ module PluginManager
       when :dependencies   # Plugin dependencies
         dependencies = value
         dependencies = [dependencies] if !dependencies.is_a?(Array) || !dependencies[0].is_a?(Array)
-        for dep in value
-          if dep.is_a?(String)   # "plugin name"
+        value.each do |dep|
+          case dep
+          when String   # "plugin name"
             if !self.installed?(dep)
               self.error("Plugin '#{name}' requires plugin '#{dep}' to be installed above it.")
             end
-          elsif dep.is_a?(Array)
+          when Array
             case dep.size
             when 1   # ["plugin name"]
               if dep[0].is_a?(String)
@@ -236,7 +178,8 @@ module PluginManager
                 if self.installed?(dep_name)   # Have plugin but lower version
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' version #{dep_version} or higher, " +
                         "but the installed version is #{self.version(dep_name)}."
-                  if dep_link = self.link(dep_name)
+                  dep_link = self.link(dep_name)
+                  if dep_link
                     msg += "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
                   self.error(msg)
@@ -278,7 +221,8 @@ module PluginManager
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}', if installed, to be version #{dep_version}"
                   msg << " or higher" if !exact
                   msg << ", but the installed version was #{self.version(dep_name)}."
-                  if dep_link = self.link(dep_name)
+                  dep_link = self.link(dep_name)
+                  if dep_link
                     msg << "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
                   self.error(msg)
@@ -288,16 +232,16 @@ module PluginManager
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' to be version #{dep_version}"
                   msg << " or later" if !exact
                   msg << ", but the installed version was #{self.version(dep_name)}."
-                  if dep_link = self.link(dep_name)
+                  dep_link = self.link(dep_name)
+                  if dep_link
                     msg << "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
-                  self.error(msg)
                 else   # Don't have plugin
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' version #{dep_version} "
-                  msg << "or later" if !exact
+                  msg << "or later " if !exact
                   msg << "to be installed above it."
-                  self.error(msg)
                 end
+                self.error(msg)
               end
             end
           end
@@ -305,7 +249,7 @@ module PluginManager
       when :incompatibilities   # Plugin incompatibilities
         incompats = value
         incompats = [incompats] if !incompats.is_a?(Array)
-        for incompat in incompats
+        incompats.each do |incompat|
           if self.installed?(incompat)
             self.error("Plugin '#{name}' is incompatible with '#{incompat}'. " +
                        "They cannot both be used at the same time.")
@@ -314,11 +258,11 @@ module PluginManager
       when :credits # Plugin credits
         value = [value] if value.is_a?(String)
         if value.is_a?(Array)
-          for entry in value
-            if !entry.is_a?(String)
-              self.error("Plugin '#{name}'s credits array contains a non-string value.")
-            else
+          value.each do |entry|
+            if entry.is_a?(String)
               credits << entry
+            else
+              self.error("Plugin '#{name}'s credits array contains a non-string value.")
             end
           end
         else
@@ -328,8 +272,8 @@ module PluginManager
         self.error("Invalid plugin registry key '#{key}'.")
       end
     end
-    for plugin in @@Plugins.values
-      if plugin[:incompatibilities] && plugin[:incompatibilities].include?(name)
+    @@Plugins.each_value do |plugin|
+      if plugin[:incompatibilities]&.include?(name)
         self.error("Plugin '#{plugin[:name]}' is incompatible with '#{name}'. " +
                    "They cannot both be used at the same time.")
       end
@@ -338,6 +282,7 @@ module PluginManager
     @@Plugins[name] = {
       :name => name,
       :version => version,
+      :essentials => essentials,
       :link => link,
       :dependencies => dependencies,
       :incompatibilities => incompats,
@@ -350,8 +295,8 @@ module PluginManager
   def self.error(msg)
     Graphics.update
     t = Thread.new do
-      echoln "Plugin Error:\r\n#{msg}"
-      p "Plugin Error: #{msg}"
+      Console.echo_error "Plugin Error:\r\n#{msg}"
+      print("Plugin Error:\r\n#{msg}")
       Thread.exit
     end
     while t.status
@@ -408,21 +353,25 @@ module PluginManager
   #     -1 if v1 is lower than v2
   #-----------------------------------------------------------------------------
   def self.compare_versions(v1, v2)
-    d1 = v1.split("")
-    d1.insert(0, "0") if d1[0] == "."          # Turn ".123" into "0.123"
-    while d1[-1] == "."; d1 = d1[0..-2]; end   # Turn "123." into "123"
-    d2 = v2.split("")
-    d2.insert(0, "0") if d2[0] == "."          # Turn ".123" into "0.123"
-    while d2[-1] == "."; d2 = d2[0..-2]; end   # Turn "123." into "123"
-    for i in 0...[d1.size, d2.size].max   # Compare each digit in turn
+    d1 = v1.chars
+    d1.insert(0, "0") if d1[0] == "."   # Turn ".123" into "0.123"
+    while d1[-1] == "."                 # Turn "123." into "123"
+      d1 = d1[0..-2]
+    end
+    d2 = v2.chars
+    d2.insert(0, "0") if d2[0] == "."   # Turn ".123" into "0.123"
+    while d2[-1] == "."                 # Turn "123." into "123"
+      d2 = d2[0..-2]
+    end
+    [d1.size, d2.size].max.times do |i|   # Compare each digit in turn
       c1 = d1[i]
       c2 = d2[i]
       if c1
         return 1 if !c2
         return 1 if c1.to_i(16) > c2.to_i(16)
         return -1 if c1.to_i(16) < c2.to_i(16)
-      else
-        return -1 if c2
+      elsif c2
+        return -1
       end
     end
     return 0
@@ -431,25 +380,17 @@ module PluginManager
   #  formats the error message
   #-----------------------------------------------------------------------------
   def self.pluginErrorMsg(name, script)
+    e = $!
     # begin message formatting
-    message  = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
+    message = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
     message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
-    message += "Error in Plugin [#{name}]:\r\n"
-    message += "#{$!.class} occurred.\r\n"
-    # go through message content
-    for line in $!.message.split("\r\n")
-      next if nil_or_empty?(line)
-      n = line[/\d+/]
-      err = line.split(":")[-1].strip
-      lms = line.split(":")[0].strip
-      err.gsub!(n, "") if n
-      err = err.capitalize if err.is_a?(String) && !err.empty?
-      linum = n ? "Line #{n}: " : ""
-      message += "#{linum}#{err}: #{lms}\r\n"
-    end
+    message += "Error in Plugin: [#{name}]\r\n"
+    message += "Exception: #{e.class}\r\n"
+    message += "Message: "
+    message += e.message
     # show last 10 lines of backtrace
-    message += "\r\nBacktrace:\r\n"
-    $!.backtrace[0, 10].each { |i| message += "#{i}\r\n" }
+    message += "\r\n\r\nBacktrace:\r\n"
+    e.backtrace[0, 10].each { |i| message += "#{i}\r\n" }
     # output to log
     errorlog = "errorlog.txt"
     errorlog = RTP.getSaveFileName("errorlog.txt") if (Object.const_defined?(:RTP) rescue false)
@@ -466,7 +407,7 @@ module PluginManager
     print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl when closing this message to copy it to the clipboard.")
     # Give a ~500ms coyote time to start holding Control
     t = System.delta
-    until (System.delta - t) >= 500000
+    until (System.delta - t) >= 500_000
       Input.update
       if Input.press?(Input::CTRL)
         Input.clipboard = message
@@ -487,11 +428,14 @@ module PluginManager
         raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\r\n{1}", FileLineData.linereport)
       end
       property = $~[1].upcase
-      data = $~[2].split(',')
+      data = $~[2].split(",")
       data.each_with_index { |value, i| data[i] = value.strip }
       # begin formatting data hash
       case property
-      when 'REQUIRES'
+      when "ESSENTIALS"
+        meta[:essentials] = [] if !meta[:essentials]
+        data.each { |ver| meta[:essentials].push(ver) }
+      when "REQUIRES"
         meta[:dependencies] = [] if !meta[:dependencies]
         if data.length < 2   # No version given, just push name of plugin dependency
           meta[:dependencies].push(data[0])
@@ -501,23 +445,23 @@ module PluginManager
         else   # Push dependency type, name and version of plugin dependency
           meta[:dependencies].push([data[2].downcase.to_sym, data[0], data[1]])
         end
-      when 'EXACT'
+      when "EXACT"
         next if data.length < 2   # Exact dependencies must have a version given; ignore if not
         meta[:dependencies] = [] if !meta[:dependencies]
         meta[:dependencies].push([:exact, data[0], data[1]])
-      when 'OPTIONAL'
+      when "OPTIONAL"
         next if data.length < 2   # Optional dependencies must have a version given; ignore if not
         meta[:dependencies] = [] if !meta[:dependencies]
         meta[:dependencies].push([:optional, data[0], data[1]])
-      when 'CONFLICTS'
+      when "CONFLICTS"
         meta[:incompatibilities] = [] if !meta[:incompatibilities]
         data.each { |value| meta[:incompatibilities].push(value) if value && !value.empty? }
-      when 'SCRIPTS'
+      when "SCRIPTS"
         meta[:scripts] = [] if !meta[:scripts]
         data.each { |scr| meta[:scripts].push(scr) }
-      when 'CREDITS'
+      when "CREDITS"
         meta[:credits] = data
-      when 'LINK', 'WEBSITE'
+      when "LINK", "WEBSITE"
         meta[:link] = data[0]
       else
         meta[property.downcase.to_sym] = data[0]
@@ -527,7 +471,7 @@ module PluginManager
     # be loaded (files listed in the meta file are loaded first)
     meta[:scripts] = [] if !meta[:scripts]
     # get all script files from plugin Dir
-    for fl in Dir.all(dir)
+    Dir.all(dir).each do |fl|
       next if !fl.include?(".rb")
       meta[:scripts].push(fl.gsub("#{dir}/", ""))
     end
@@ -555,7 +499,7 @@ module PluginManager
     return nil if !meta[name] || !meta[name][:dependencies]
     og = [name] if !og
     # go through all dependencies
-    for dname in meta[name][:dependencies]
+    meta[name][:dependencies].each do |dname|
       # clean the name to a simple string
       dname = dname[0] if dname.is_a?(Array) && dname.length == 2
       dname = dname[1] if dname.is_a?(Array) && dname.length == 3
@@ -572,14 +516,14 @@ module PluginManager
   #-----------------------------------------------------------------------------
   def self.sortLoadOrder(order, plugins)
     # go through the load order
-    for o in order
+    order.each do |o|
       next if !plugins[o] || !plugins[o][:dependencies]
       # go through all dependencies
-      for dname in plugins[o][:dependencies]
+      plugins[o][:dependencies].each do |dname|
         optional = false
         # clean the name to a simple string
         if dname.is_a?(Array)
-          optional = [:optional,:optional_exact].include?(dname[0])
+          optional = [:optional, :optional_exact].include?(dname[0])
           dname = dname[dname.length - 2]
         end
         # catch missing dependency
@@ -604,7 +548,7 @@ module PluginManager
     order = []
     # Find all plugin folders that have a meta.txt and add them to the list of
     # plugins.
-    for dir in self.listAll
+    self.listAll.each do |dir|
       # skip if there is no meta file
       next if !safeExists?(dir + "/meta.txt")
       ndx = order.length
@@ -632,14 +576,14 @@ module PluginManager
     return false if !$DEBUG || safeExists?("Game.rgssad")
     return true if !safeExists?("Data/PluginScripts.rxdata")
     Input.update
-    return true if Input.press?(Input::CTRL)
+    return true if Input.press?(Input::SHIFT) || Input.press?(Input::CTRL)
     # analyze whether or not to push recompile
     mtime = File.mtime("Data/PluginScripts.rxdata")
-    for o in order
+    order.each do |o|
       # go through all the registered plugin scripts
       scr = plugins[o][:scripts]
       dir = plugins[o][:dir]
-      for sc in scr
+      scr.each do |sc|
         return true if File.mtime("#{dir}/#{sc}") > mtime
       end
       return true if File.mtime("#{dir}/meta.txt") > mtime
@@ -650,18 +594,18 @@ module PluginManager
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.compilePlugins(order, plugins)
-    echo 'Compiling plugin scripts...'
+    Console.echo_li "Compiling plugin scripts..."
     scripts = []
     # go through the entire order one by one
-    for o in order
+    order.each do |o|
       # save name, metadata and scripts array
       meta = plugins[o].clone
       meta.delete(:scripts)
       meta.delete(:dir)
       dat = [o, meta, []]
       # iterate through each file to deflate
-      for file in plugins[o][:scripts]
-        File.open("#{plugins[o][:dir]}/#{file}", 'rb') do |f|
+      plugins[o][:scripts].each do |file|
+        File.open("#{plugins[o][:dir]}/#{file}", "rb") do |f|
           dat[2].push([file, Zlib::Deflate.deflate(f.read)])
         end
       end
@@ -669,16 +613,17 @@ module PluginManager
       scripts.push(dat)
     end
     # save to main `PluginScripts.rxdata` file
-    File.open("Data/PluginScripts.rxdata", 'wb') { |f| Marshal.dump(scripts, f) }
+    File.open("Data/PluginScripts.rxdata", "wb") { |f| Marshal.dump(scripts, f) }
     # collect garbage
     GC.start
-    echoln ' done.'
-    echoln ''
+    Console.echo_done(true)
+    echoln "" if scripts.length == 0
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.runPlugins
+    Console.echo_h1 "Checking plugins"
     # get the order of plugins to interpret
     order, plugins = self.getPluginOrder
     # compile if necessary
@@ -686,24 +631,27 @@ module PluginManager
     # load plugins
     scripts = load_data("Data/PluginScripts.rxdata")
     echoed_plugins = []
-    for plugin in scripts
+    scripts.each do |plugin|
       # get the required data
       name, meta, script = plugin
+      if !meta[:essentials] || !meta[:essentials].include?(Essentials::VERSION)
+        Console.echo_warn "Plugin '#{name}' may not be compatible with Essentials v#{Essentials::VERSION}. Trying to load anyway."
+      end
       # register plugin
       self.register(meta)
       # go through each script and interpret
-      for scr in script
+      script.each do |scr|
         # turn code into plaintext
         code = Zlib::Inflate.inflate(scr[1]).force_encoding(Encoding::UTF_8)
         # get rid of tabs
         code.gsub!("\t", "  ")
         # construct filename
-        sname = scr[0].gsub("\\","/").split("/")[-1]
+        sname = scr[0].gsub("\\", "/").split("/")[-1]
         fname = "[#{name}] #{sname}"
         # try to run the code
         begin
           eval(code, TOPLEVEL_BINDING, fname)
-          echoln "Loaded plugin: #{name}" if !echoed_plugins.include?(name)
+          Console.echoln_li "Loaded plugin: '#{name}' (ver. #{meta[:version]})" if !echoed_plugins.include?(name)
           echoed_plugins.push(name)
         rescue Exception   # format error message to display
           self.pluginErrorMsg(name, sname)
@@ -711,7 +659,27 @@ module PluginManager
         end
       end
     end
-    echoln '' if !echoed_plugins.empty?
+    if scripts.length > 0
+      echoln ""
+      Console.echo_h2("Successfully loaded #{scripts.length} plugin(s)", text: :green)
+    else
+      Console.echo_h2("No plugins found", text: :green)
+    end
+  end
+  #-----------------------------------------------------------------------------
+  #  Get plugin dir from name based on meta entries
+  #-----------------------------------------------------------------------------
+  def self.findDirectory(name)
+    # go through the plugins folder
+    Dir.get("Plugins").each do |dir|
+      next if !Dir.safe?(dir)
+      next if !safeExists?(dir + "/meta.txt")
+      # read meta
+      meta = self.readMeta(dir, "meta.txt")
+      return dir if meta[:name] == name
+    end
+    # return nil if no plugin dir found
+    return nil
   end
   #-----------------------------------------------------------------------------
 end

@@ -1,11 +1,16 @@
+#===============================================================================
+#
+#===============================================================================
 class SafariState
   attr_accessor :ballcount
+  attr_accessor :captures
   attr_accessor :decision
   attr_accessor :steps
 
   def initialize
     @start      = nil
     @ballcount  = 0
+    @captures   = 0
     @inProgress = false
     @steps      = 0
     @decision   = 0
@@ -34,7 +39,7 @@ class SafariState
   end
 
   def pbStart(ballcount)
-    @start      = [$game_map.map_id,$game_player.x,$game_player.y,$game_player.direction]
+    @start      = [$game_map.map_id, $game_player.x, $game_player.y, $game_player.direction]
     @ballcount  = ballcount
     @inProgress = true
     @steps      = Settings::SAFARI_STEPS
@@ -43,6 +48,7 @@ class SafariState
   def pbEnd
     @start      = nil
     @ballcount  = 0
+    @captures   = 0
     @inProgress = false
     @steps      = 0
     @decision   = 0
@@ -50,20 +56,16 @@ class SafariState
   end
 end
 
-
-
-Events.onMapChange += proc { |_sender,*args|
-  pbSafariState.pbEnd if !pbInSafari?
-}
-
+#===============================================================================
+#
+#===============================================================================
 def pbInSafari?
   if pbSafariState.inProgress?
     # Reception map is handled separately from safari map since the reception
     # map can be outdoors, with its own grassy patches.
     reception = pbSafariState.pbReceptionMap
     return true if $game_map.map_id == reception
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    return true if map_metadata && map_metadata.safari_map
+    return true if $game_map.metadata&.safari_map
   end
   return false
 end
@@ -73,45 +75,60 @@ def pbSafariState
   return $PokemonGlobal.safariState
 end
 
-Events.onStepTakenTransferPossible += proc { |_sender,e|
-  handled = e[0]
-  next if handled[0]
-  if pbInSafari? && pbSafariState.decision==0 && Settings::SAFARI_STEPS > 0
+#===============================================================================
+#
+#===============================================================================
+EventHandlers.add(:on_enter_map, :end_safari_game,
+  proc { |_old_map_id|
+    pbSafariState.pbEnd if !pbInSafari?
+  }
+)
+
+EventHandlers.add(:on_player_step_taken_can_transfer, :safari_game_counter,
+  proc { |handled|
+    # handled is an array: [nil]. If [true], a transfer has happened because of
+    # this event, so don't do anything that might cause another one
+    next if handled[0]
+    next if Settings::SAFARI_STEPS == 0 || !pbInSafari? || pbSafariState.decision != 0
     pbSafariState.steps -= 1
-    if pbSafariState.steps<=0
-      pbMessage(_INTL("PA:  Ding-dong!\1"))
-      pbMessage(_INTL("PA:  Your safari game is over!"))
-      pbSafariState.decision = 1
-      pbSafariState.pbGoToStart
-      handled[0] = true
-    end
-  end
-}
+    next if pbSafariState.steps > 0
+    pbMessage(_INTL("PA: Ding-dong!\1"))
+    pbMessage(_INTL("PA: Your safari game is over!"))
+    pbSafariState.decision = 1
+    pbSafariState.pbGoToStart
+    handled[0] = true
+  }
+)
 
-Events.onWildBattleOverride += proc { |_sender,e|
-  species = e[0]
-  level   = e[1]
-  handled = e[2]
-  next if handled[0]!=nil
-  next if !pbInSafari?
-  handled[0] = pbSafariBattle(species,level)
-}
+#===============================================================================
+#
+#===============================================================================
+EventHandlers.add(:on_calling_wild_battle, :safari_battle,
+  proc { |species, level, handled|
+    # handled is an array: [nil]. If [true] or [false], the battle has already
+    # been overridden (the boolean is its outcome), so don't do anything that
+    # would override it again
+    next if !handled[0].nil?
+    next if !pbInSafari?
+    handled[0] = pbSafariBattle(species, level)
+  }
+)
 
-def pbSafariBattle(species,level)
+def pbSafariBattle(species, level)
   # Generate a wild Pokémon based on the species and level
-  pkmn = pbGenerateWildPokemon(species,level)
+  pkmn = pbGenerateWildPokemon(species, level)
   foeParty = [pkmn]
   # Calculate who the trainer is
-  playerTrainer = $Trainer
+  playerTrainer = $player
   # Create the battle scene (the visual side of it)
-  scene = pbNewBattleScene
+  scene = BattleCreationHelperMethods.create_battle_scene
   # Create the battle class (the mechanics side of it)
-  battle = PokeBattle_SafariZone.new(scene,playerTrainer,foeParty)
+  battle = SafariBattle.new(scene, playerTrainer, foeParty)
   battle.ballCount = pbSafariState.ballcount
-  pbPrepareBattle(battle)
+  BattleCreationHelperMethods.prepare_battle(battle)
   # Perform the battle itself
   decision = 0
-  pbBattleAnimation(pbGetWildBattleBGM(foeParty),0,foeParty) {
+  pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) {
     pbSceneStandby {
       decision = battle.pbStartBattle
     }
@@ -119,8 +136,8 @@ def pbSafariBattle(species,level)
   Input.update
   # Update Safari game data based on result of battle
   pbSafariState.ballcount = battle.ballCount
-  if pbSafariState.ballcount<=0
-    if decision!=2   # Last Safari Ball was used to catch the wild Pokémon
+  if pbSafariState.ballcount <= 0
+    if decision != 2   # Last Safari Ball was used to catch the wild Pokémon
       pbMessage(_INTL("Announcer: You're out of Safari Balls! Game over!"))
     end
     pbSafariState.decision = 1
@@ -131,9 +148,50 @@ def pbSafariBattle(species,level)
   #    2 - Player ran out of Safari Balls
   #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
   #    4 - Wild Pokémon was caught
-  pbSet(1,decision)
+  if decision == 4
+    $stats.safari_pokemon_caught += 1
+    pbSafariState.captures += 1
+    $stats.most_captures_per_safari_game = [$stats.most_captures_per_safari_game, pbSafariState.captures].max
+  end
+  pbSet(1, decision)
   # Used by the Poké Radar to update/break the chain
-  Events.onWildBattleEnd.trigger(nil,species,level,decision)
+  EventHandlers.trigger(:on_wild_battle_end, species, level, decision)
   # Return the outcome of the battle
   return decision
 end
+
+#===============================================================================
+#
+#===============================================================================
+class PokemonPauseMenu
+  alias __safari_pbShowInfo pbShowInfo unless method_defined?(:__safari_pbShowInfo)
+
+  def pbShowInfo
+    __safari_pbShowInfo
+    return if !pbInSafari?
+    if Settings::SAFARI_STEPS <= 0
+      @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
+    else
+      @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
+                              pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
+    end
+  end
+end
+
+MenuHandlers.add(:pause_menu, :quit_safari_game, {
+  "name"      => _INTL("Quit"),
+  "order"     => 60,
+  "condition" => proc { next pbInSafari? },
+  "effect"    => proc { |menu|
+    menu.pbHideMenu
+    if pbConfirmMessage(_INTL("Would you like to leave the Safari Game right now?"))
+      menu.pbEndScene
+      pbSafariState.decision = 1
+      pbSafariState.pbGoToStart
+      next true
+    end
+    menu.pbRefresh
+    menu.pbShowMenu
+    next false
+  }
+})

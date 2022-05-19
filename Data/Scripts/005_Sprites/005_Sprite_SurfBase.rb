@@ -2,7 +2,7 @@ class Sprite_SurfBase
   attr_reader   :visible
   attr_accessor :event
 
-  def initialize(sprite,event,viewport=nil)
+  def initialize(sprite, event, viewport = nil)
     @rsprite  = sprite
     @sprite   = nil
     @event    = event
@@ -12,16 +12,16 @@ class Sprite_SurfBase
     @divebitmap = AnimatedBitmap.new("Graphics/Characters/base_dive")
     RPG::Cache.retain("Graphics/Characters/base_surf")
     RPG::Cache.retain("Graphics/Characters/base_dive")
-    @cws = @surfbitmap.width/4
-    @chs = @surfbitmap.height/4
-    @cwd = @divebitmap.width/4
-    @chd = @divebitmap.height/4
+    @cws = @surfbitmap.width / 4
+    @chs = @surfbitmap.height / 4
+    @cwd = @divebitmap.width / 4
+    @chd = @divebitmap.height / 4
     update
   end
 
   def dispose
     return if @disposed
-    @sprite.dispose if @sprite
+    @sprite&.dispose
     @sprite   = nil
     @surfbitmap.dispose
     @divebitmap.dispose
@@ -59,20 +59,20 @@ class Sprite_SurfBase
         cw = @cwd
         ch = @chd
       end
-      sx = @event.pattern_surf*cw
-      sy = ((@event.direction-2)/2)*ch
-      @sprite.src_rect.set(sx,sy,cw,ch)
-      if $PokemonTemp.surfJump
-        @sprite.x = ($PokemonTemp.surfJump[0]*Game_Map::REAL_RES_X-@event.map.display_x+3)/4+(Game_Map::TILE_WIDTH/2)
-        @sprite.y = ($PokemonTemp.surfJump[1]*Game_Map::REAL_RES_Y-@event.map.display_y+3)/4+(Game_Map::TILE_HEIGHT/2)+16
+      sx = @event.pattern_surf * cw
+      sy = ((@event.direction - 2) / 2) * ch
+      @sprite.src_rect.set(sx, sy, cw, ch)
+      if $game_temp.surf_base_coords
+        @sprite.x = ((($game_temp.surf_base_coords[0] * Game_Map::REAL_RES_X) - @event.map.display_x + 3) / 4) + (Game_Map::TILE_WIDTH / 2)
+        @sprite.y = ((($game_temp.surf_base_coords[1] * Game_Map::REAL_RES_Y) - @event.map.display_y + 3) / 4) + (Game_Map::TILE_HEIGHT / 2) + 16
       else
         @sprite.x = @rsprite.x
         @sprite.y = @rsprite.y
       end
-      @sprite.ox      = cw/2
-      @sprite.oy      = ch-16   # Assume base needs offsetting
+      @sprite.ox      = cw / 2
+      @sprite.oy      = ch - 16   # Assume base needs offsetting
       @sprite.oy      -= @event.bob_height
-      @sprite.z       = @event.screen_z(ch)-1
+      @sprite.z       = @event.screen_z(ch) - 1
       @sprite.zoom_x  = @rsprite.zoom_x
       @sprite.zoom_y  = @rsprite.zoom_y
       @sprite.tone    = @rsprite.tone

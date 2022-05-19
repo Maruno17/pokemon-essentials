@@ -9,7 +9,7 @@ $tmMoves         = nil   # Array of all moves teachable by a HM/TM/TR
 def pbBaseStatTotal(species)
   baseStats = GameData::Species.get(species).base_stats
   ret = 0
-  baseStats.each { |s| ret += s }
+  baseStats.each_value { |s| ret += s }
   return ret
 end
 
@@ -38,11 +38,11 @@ end
 #===============================================================================
 # Used to replace Sketch with any other move.
 def pbRandomMove
-  keys = GameData::Move::DATA.keys
+  keys = GameData::Move.keys
   loop do
-    move_id = keys[rand(keys.length)]
+    move_id = keys.sample
     move = GameData::Move.get(move_id)
-    next if move.id_number > 384 || move.id == :SKETCH || move.id == :STRUGGLE
+    next if move.id == :SKETCH || move.id == :STRUGGLE
     return move.id
   end
 end
@@ -60,9 +60,8 @@ def pbGetLegalMoves2(species, maxlevel)
   species_data.tutor_moves.each { |m| addMove(moves, m, 0) if $tmMoves.include?(m) }
   babyspecies = babySpecies(species)
   GameData::Species.get(babyspecies).egg_moves.each { |m| addMove(moves, m, 2) }
-  #
   movedatas = []
-  for move in moves
+  moves.each do |move|
     movedatas.push([move, GameData::Move.get(move)])
   end
   # Delete less powerful moves
@@ -71,31 +70,31 @@ def pbGetLegalMoves2(species, maxlevel)
       a.delete(item)
     end
   }
-  for move in moves
+  moves.each do |move|
     md = GameData::Move.get(move)
-    for move2 in movedatas
+    movedatas.each do |move2|
       # If we have a move that always hits, remove all other moves with no
       # effect of the same type and <= base power
-      if md.function_code == "0A5" && move2[1].function_code == "000" &&   # Always hits
+      if md.accuracy == 0 && move2[1].function_code == "None" &&
          md.type == move2[1].type && md.base_damage >= move2[1].base_damage
         deleteAll.call(moves, move2[0])
       # If we have two status moves that have the same function code, delete the
       # one with lower accuracy (Supersonic vs. Confuse Ray, etc.)
       elsif md.function_code == move2[1].function_code && md.base_damage == 0 &&
-         move2[1].base_damage == 0 && md.accuracy > move2[1].accuracy
+            move2[1].base_damage == 0 && md.accuracy > move2[1].accuracy
         deleteAll.call(moves, move2[0])
       # Delete poison-causing moves if we have a move that causes toxic
-      elsif md.function_code == "006" && move2[1].function_code == "005"
+      elsif md.function_code == "BadPoisonTarget" && move2[1].function_code == "PoisonTarget"
         deleteAll.call(moves, move2[0])
       # If we have two moves with the same function code and type, and one of
       # them is damaging and has 10/15/the same PP as the other move and EITHER
       # does more damage than the other move OR does the same damage but is more
       # accurate, delete the other move (Surf, Flamethrower, Thunderbolt, etc.)
       elsif md.function_code == move2[1].function_code && md.base_damage != 0 &&
-         md.type == move2[1].type &&
-         (md.total_pp == 15 || md.total_pp == 10 || md.total_pp == move2[1].total_pp) &&
-         (md.base_damage > move2[1].base_damage ||
-         (md.base_damage == move2[1].base_damage && md.accuracy > move2[1].accuracy))
+            md.type == move2[1].type &&
+            (md.total_pp == 15 || md.total_pp == 10 || md.total_pp == move2[1].total_pp) &&
+            (md.base_damage > move2[1].base_damage ||
+            (md.base_damage == move2[1].base_damage && md.accuracy > move2[1].accuracy))
         deleteAll.call(moves, move2[0])
       end
     end
@@ -108,7 +107,7 @@ def addMove(moves, move, base)
   return if moves.include?(data.id)
   return if [:BUBBLE, :BUBBLEBEAM].include?(data.id)   # Never add these moves
   count = base + 1   # Number of times to add move to moves
-  count = base if data.function_code == "000" && data.base_damage <= 40
+  count = base if data.function_code == "None" && data.base_damage <= 40
   if data.base_damage <= 30 || [:GROWL, :TAILWHIP, :LEER].include?(data.id)
     count = base
   end
@@ -131,7 +130,7 @@ end
 def hasMorePowerfulMove(moves, thismove)
   thisdata = GameData::Move.get(thismove)
   return false if thisdata.base_damage == 0
-  for move in moves
+  moves.each do |move|
     next if !move
     moveData = GameData::Move.get(move)
     if moveData.type == thisdata.type && moveData.base_damage > thisdata.base_damage
@@ -151,16 +150,16 @@ def pbRandomPokemonFromRule(rules, trainer)
     iteration += 1
     species = nil
     level = rules.ruleset.suggestedLevel
-    keys = GameData::Species::DATA.keys
+    keys = GameData::Species.keys
     loop do
       loop do
-        species = keys[rand(keys.length)]
+        species = keys.sample
         break if GameData::Species.get(species).form == 0
       end
       r = rand(20)
       bst = baseStatTotal(species)
       next if level < minimumLevel(species)
-      if iteration % 2 == 0
+      if iteration.even?
         next if r < 16 && bst < 400
         next if r < 13 && bst < 500
       else
@@ -174,9 +173,9 @@ def pbRandomPokemonFromRule(rules, trainer)
     ev = []
     GameData::Stat.each_main { |s| ev.push(s.id) if rand(100) < 50 }
     nature = nil
-    keys = GameData::Nature::DATA.keys
+    keys = GameData::Nature.keys
     loop do
-      nature = keys[rand(keys.length)]
+      nature = keys.sample
       nature_data = GameData::Nature.get(nature)
       if [:LAX, :GENTLE].include?(nature_data.id) || nature_data.stat_changes.length == 0
         next if rand(20) < 19
@@ -197,15 +196,15 @@ def pbRandomPokemonFromRule(rules, trainer)
     $legalMovesLevel = level
     $legalMoves[species] = pbGetLegalMoves2(species, level) if !$legalMoves[species]
     itemlist = [
-       :ORANBERRY, :SITRUSBERRY, :ADAMANTORB, :BABIRIBERRY,
-       :BLACKSLUDGE, :BRIGHTPOWDER, :CHESTOBERRY, :CHOICEBAND,
-       :CHOICESCARF, :CHOICESPECS, :CHOPLEBERRY, :DAMPROCK,
-       :DEEPSEATOOTH, :EXPERTBELT, :FLAMEORB, :FOCUSSASH,
-       :FOCUSBAND, :HEATROCK, :LEFTOVERS, :LIFEORB, :LIGHTBALL,
-       :LIGHTCLAY, :LUMBERRY, :OCCABERRY, :PETAYABERRY, :SALACBERRY,
-       :SCOPELENS, :SHEDSHELL, :SHELLBELL, :SHUCABERRY, :LIECHIBERRY,
-       :SILKSCARF, :THICKCLUB, :TOXICORB, :WIDELENS, :YACHEBERRY,
-       :HABANBERRY, :SOULDEW, :PASSHOBERRY, :QUICKCLAW, :WHITEHERB
+      :ORANBERRY, :SITRUSBERRY, :ADAMANTORB, :BABIRIBERRY,
+      :BLACKSLUDGE, :BRIGHTPOWDER, :CHESTOBERRY, :CHOICEBAND,
+      :CHOICESCARF, :CHOICESPECS, :CHOPLEBERRY, :DAMPROCK,
+      :DEEPSEATOOTH, :EXPERTBELT, :FLAMEORB, :FOCUSSASH,
+      :FOCUSBAND, :HEATROCK, :LEFTOVERS, :LIFEORB, :LIGHTBALL,
+      :LIGHTCLAY, :LUMBERRY, :OCCABERRY, :PETAYABERRY, :SALACBERRY,
+      :SCOPELENS, :SHEDSHELL, :SHELLBELL, :SHUCABERRY, :LIECHIBERRY,
+      :SILKSCARF, :THICKCLUB, :TOXICORB, :WIDELENS, :YACHEBERRY,
+      :HABANBERRY, :SOULDEW, :PASSHOBERRY, :QUICKCLAW, :WHITEHERB
     ]
     # Most used: Leftovers, Life Orb, Choice Band, Choice Scarf, Focus Sash
     item = nil
@@ -263,9 +262,7 @@ def pbRandomPokemonFromRule(rules, trainer)
     sketch = false
     if moves[0] == :SKETCH
       sketch = true
-      for m in 0...Pokemon::MAX_MOVES
-        moves[m] = pbRandomMove
-      end
+      Pokemon::MAX_MOVES.times { |m| moves[m] = pbRandomMove }
     end
     next if moves.length == 0
     if (moves | []).length < Pokemon::MAX_MOVES
@@ -287,39 +284,40 @@ def pbRandomPokemonFromRule(rules, trainer)
           newmoves.push(m) if m && !newmoves.include?(m)
         end
         if (newmoves.include?(spitup) || newmoves.include?(swallow)) &&
-           !newmoves.include?(stockpile)
-          next unless sketch
+           !newmoves.include?(stockpile) && !sketch
+          next
         end
         if (!newmoves.include?(spitup) && !newmoves.include?(swallow)) &&
-           newmoves.include?(stockpile)
-          next unless sketch
+           newmoves.include?(stockpile) && !sketch
+          next
         end
-        if newmoves.include?(sleeptalk) && !newmoves.include?(rest)
-          next unless (sketch || !moves.include?(rest)) && rand(100) < 20
+        if newmoves.include?(sleeptalk) && !newmoves.include?(rest) &&
+           !((sketch || !moves.include?(rest)) && rand(100) < 20)
+          next
         end
-        if newmoves.include?(snore) && !newmoves.include?(rest)
-          next unless (sketch || !moves.include?(rest)) && rand(100) < 20
+        if newmoves.include?(snore) && !newmoves.include?(rest) &&
+           !((sketch || !moves.include?(rest)) && rand(100) < 20)
+          next
         end
         totalbasedamage = 0
         hasPhysical = false
         hasSpecial = false
         hasNormal = false
-        for move in newmoves
+        newmoves.each do |move|
           d = GameData::Move.get(move)
-          if d.base_damage >= 1
-            totalbasedamage += d.base_damage
-            hasNormal = true if d.type == :NORMAL
-            hasPhysical = true if d.category == 0
-            hasSpecial = true if d.category == 1
-          end
+          next if d.base_damage == 0
+          totalbasedamage += d.base_damage
+          hasNormal = true if d.type == :NORMAL
+          hasPhysical = true if d.category == 0
+          hasSpecial = true if d.category == 1
         end
-        if !hasPhysical && ev.include?(:ATTACK)
+        if !hasPhysical && ev.include?(:ATTACK) && rand(100) < 80
           # No physical attack, but emphasizes Attack
-          next if rand(100) < 80
+          next
         end
-        if !hasSpecial && ev.include?(:SPECIAL_ATTACK)
+        if !hasSpecial && ev.include?(:SPECIAL_ATTACK) && rand(100) < 80
           # No special attack, but emphasizes Special Attack
-          next if rand(100) < 80
+          next
         end
         r = rand(10)
         next if r > 6 && totalbasedamage > 180
@@ -340,18 +338,17 @@ def pbRandomPokemonFromRule(rules, trainer)
         break
       end
     end
-    if item == :LIGHTCLAY && !moves.any? { |m| m == :LIGHTSCREEN || m == :REFLECT }
+    if item == :LIGHTCLAY && moves.none? { |m| [:LIGHTSCREEN, :REFLECT].include?(m) }
       item = :LEFTOVERS
     end
     if item == :BLACKSLUDGE
-      type1 = GameData::Species.get(species).type1
-      type2 = GameData::Species.get(species).type2 || type1
-      item = :LEFTOVERS if type1 != :POISON && type2 != :POISON
+      types = GameData::Species.get(species).types
+      item = :LEFTOVERS if !types.include?(:POISON)
     end
-    if item == :HEATROCK && !moves.any? { |m| m == :SUNNYDAY }
+    if item == :HEATROCK && moves.none? { |m| m == :SUNNYDAY }
       item = :LEFTOVERS
     end
-    if item == :DAMPROCK && !moves.any? { |m| m == :RAINDANCE }
+    if item == :DAMPROCK && moves.none? { |m| m == :RAINDANCE }
       item = :LEFTOVERS
     end
     if moves.any? { |m| m == :REST }

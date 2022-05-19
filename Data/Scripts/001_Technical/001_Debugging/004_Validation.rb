@@ -1,7 +1,7 @@
 # The Kernel module is extended to include the validate method.
 module Kernel
   private
-  
+
   # Used to check whether method arguments are of a given class or respond to a method.
   # @param value_pairs [Hash{Object => Class, Array<Class>, Symbol}] value pairs to validate
   # @example Validate a class or method

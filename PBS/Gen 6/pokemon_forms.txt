@@ -1,0 +1,1123 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[VENUSAUR,1]
+FormName = Mega Venusaur
+MegaStone = VENUSAURITE
+BaseStats = 80,100,123,80,122,120
+Abilities = THICKFAT
+HiddenAbilities = THICKFAT
+Height = 2.4
+Weight = 155.5
+Pokedex = In order to support its flower, which has grown larger due to Mega Evolution, its back and legs have become stronger.
+Generation = 6
+#-------------------------------
+[CHARIZARD,1]
+FormName = Mega Charizard X
+MegaStone = CHARIZARDITEX
+Types = FIRE,DRAGON
+BaseStats = 78,130,111,100,130,85
+Abilities = TOUGHCLAWS
+HiddenAbilities = TOUGHCLAWS
+Weight = 110.5
+Color = Black
+Pokedex = The overwhelming power that fills its entire body causes it to turn black and create intense blue flames.
+Generation = 6
+#-------------------------------
+[CHARIZARD,2]
+FormName = Mega Charizard Y
+MegaStone = CHARIZARDITEY
+BaseStats = 78,104,78,100,159,115
+Abilities = DROUGHT
+HiddenAbilities = DROUGHT
+Weight = 100.5
+Pokedex = Its bond with its Trainer is the source of its power. It boasts speed and maneuverability greater than that of a jet fighter.
+Generation = 6
+#-------------------------------
+[BLASTOISE,1]
+FormName = Mega Blastoise
+MegaStone = BLASTOISINITE
+BaseStats = 79,103,120,78,135,115
+Abilities = MEGALAUNCHER
+HiddenAbilities = MEGALAUNCHER
+Weight = 101.1
+Pokedex = The cannon on its back is as powerful as a tank gun. Its tough legs and back enable it to withstand the recoil from firing the cannon.
+Generation = 6
+#-------------------------------
+[BEEDRILL,1]
+FormName = Mega Beedrill
+MegaStone = BEEDRILLITE
+BaseStats = 65,150,40,145,15,80
+Abilities = ADAPTABILITY
+HiddenAbilities = ADAPTABILITY
+Height = 1.4
+Weight = 40.5
+Pokedex = Its legs have become poison stingers. It stabs its prey repeatedly with the stingers on its limbs, dealing the final blow with the stinger on its rear.
+Generation = 6
+#-------------------------------
+[PIDGEOT,1]
+FormName = Mega Pidgeot
+MegaStone = PIDGEOTITE
+BaseStats = 83,80,80,121,135,80
+Abilities = NOGUARD
+HiddenAbilities = NOGUARD
+Height = 2.2
+Weight = 50.5
+Pokedex = With its muscular strength now greatly increased, it can fly continuously for two weeks without resting.
+Generation = 6
+#-------------------------------
+[ALAKAZAM,1]
+FormName = Mega Alakazam
+MegaStone = ALAKAZITE
+BaseStats = 55,50,65,150,175,95
+Abilities = TRACE
+HiddenAbilities = TRACE
+Height = 1.2
+Pokedex = Having traded away its muscles, Alakazam's true power has been unleashed. With its psychic powers, it can foresee all things.
+Generation = 6
+#-------------------------------
+[SLOWBRO,1]
+FormName = Mega Slowbro
+MegaStone = SLOWBRONITE
+BaseStats = 95,75,180,30,130,80
+Abilities = SHELLARMOR
+HiddenAbilities = SHELLARMOR
+Height = 2.0
+Weight = 120.0
+Shape = HeadArms
+Pokedex = Having been swallowed whole by Shellder, Slowbro now has an iron defense. It's pretty comfortable in there, too.
+Generation = 6
+#-------------------------------
+[GENGAR,1]
+FormName = Mega Gengar
+MegaStone = GENGARITE
+BaseStats = 60,65,80,130,170,95
+Abilities = SHADOWTAG
+HiddenAbilities = SHADOWTAG
+Height = 1.4
+Pokedex = The energy of Mega Evolution awakened it. It sinks into another dimension, where it keeps a patient watch for its chance to attack.
+Generation = 6
+#-------------------------------
+[KANGASKHAN,1]
+FormName = Mega Kangaskhan
+MegaStone = KANGASKHANITE
+BaseStats = 105,125,100,100,60,100
+Abilities = PARENTALBOND
+HiddenAbilities = PARENTALBOND
+Weight = 100.0
+Pokedex = The explosive energy the child is bathed in causes temporary growth. The mother is beside herself with worry about it.
+Generation = 6
+#-------------------------------
+[PINSIR,1]
+FormName = Mega Pinsir
+MegaStone = PINSIRITE
+Types = BUG,FLYING
+BaseStats = 65,155,120,105,65,90
+Abilities = AERILATE
+HiddenAbilities = AERILATE
+Height = 1.7
+Weight = 59.0
+Shape = MultiWinged
+Pokedex = It zips around at blistering speeds, looking for an opening to skewer its opponent on its giant pincers.
+Generation = 6
+#-------------------------------
+[GYARADOS,1]
+FormName = Mega Gyarados
+MegaStone = GYARADOSITE
+Types = WATER,DARK
+BaseStats = 95,155,109,81,70,130
+Abilities = MOLDBREAKER
+HiddenAbilities = MOLDBREAKER
+Weight = 305.0
+Pokedex = It zooms out of the water at Mach speeds. Even large ships caught in its path are split cleanly in two!
+Generation = 6
+#-------------------------------
+[AERODACTYL,1]
+FormName = Mega Aerodactyl
+MegaStone = AERODACTYLITE
+BaseStats = 80,135,85,150,70,95
+Abilities = TOUGHCLAWS
+HiddenAbilities = TOUGHCLAWS
+Height = 2.1
+Weight = 79.0
+Pokedex = When it Mega Evolves, it becomes more vicious than ever before. Some say that's because its excess of power is causing it pain.
+Generation = 6
+#-------------------------------
+[MEWTWO,1]
+FormName = Mega Mewtwo X
+MegaStone = MEWTWONITEX
+Types = PSYCHIC,FIGHTING
+BaseStats = 106,190,100,130,154,100
+Abilities = STEADFAST
+HiddenAbilities = STEADFAST
+Height = 2.3
+Weight = 127.0
+Pokedex = Psychic power has augmented its muscles. It has a grip strength of one ton and can sprint a hundred meters in two seconds flat!
+Generation = 6
+#-------------------------------
+[MEWTWO,2]
+FormName = Mega Mewtwo Y
+MegaStone = MEWTWONITEY
+BaseStats = 106,150,70,140,194,120
+Abilities = INSOMNIA
+HiddenAbilities = INSOMNIA
+Height = 1.5
+Weight = 33.0
+Pokedex = Despite its diminished size, its mental power has grown phenomenally. With a mere thought, it can smash a skyscraper to smithereens.
+Generation = 6
+#-------------------------------
+[PICHU,2]
+FormName = Spiky-Eared
+Generation = 4
+Evolutions = PIKACHU,None,
+#-------------------------------
+[AMPHAROS,1]
+FormName = Mega Ampharos
+MegaStone = AMPHAROSITE
+Types = ELECTRIC,DRAGON
+BaseStats = 90,95,105,45,165,110
+Abilities = MOLDBREAKER
+HiddenAbilities = MOLDBREAKER
+Pokedex = Massive amounts of energy intensely stimulated Ampharos's cells, apparently awakening its long-sleeping dragon's blood.
+Generation = 6
+#-------------------------------
+[UNOWN,1]
+FormName = B
+#-------------------------------
+[UNOWN,2]
+FormName = C
+#-------------------------------
+[UNOWN,3]
+FormName = D
+#-------------------------------
+[UNOWN,4]
+FormName = E
+#-------------------------------
+[UNOWN,5]
+FormName = F
+#-------------------------------
+[UNOWN,6]
+FormName = G
+#-------------------------------
+[UNOWN,7]
+FormName = H
+#-------------------------------
+[UNOWN,8]
+FormName = I
+#-------------------------------
+[UNOWN,9]
+FormName = J
+#-------------------------------
+[UNOWN,10]
+FormName = K
+#-------------------------------
+[UNOWN,11]
+FormName = L
+#-------------------------------
+[UNOWN,12]
+FormName = M
+#-------------------------------
+[UNOWN,13]
+FormName = N
+#-------------------------------
+[UNOWN,14]
+FormName = O
+#-------------------------------
+[UNOWN,15]
+FormName = P
+#-------------------------------
+[UNOWN,16]
+FormName = Q
+#-------------------------------
+[UNOWN,17]
+FormName = R
+#-------------------------------
+[UNOWN,18]
+FormName = S
+#-------------------------------
+[UNOWN,19]
+FormName = T
+#-------------------------------
+[UNOWN,20]
+FormName = U
+#-------------------------------
+[UNOWN,21]
+FormName = V
+#-------------------------------
+[UNOWN,22]
+FormName = W
+#-------------------------------
+[UNOWN,23]
+FormName = X
+#-------------------------------
+[UNOWN,24]
+FormName = Y
+#-------------------------------
+[UNOWN,25]
+FormName = Z
+#-------------------------------
+[UNOWN,26]
+FormName = ?
+Generation = 3
+#-------------------------------
+[UNOWN,27]
+FormName = !
+Generation = 3
+#-------------------------------
+[STEELIX,1]
+FormName = Mega Steelix
+MegaStone = STEELIXITE
+BaseStats = 75,125,230,30,55,95
+Abilities = SANDFORCE
+HiddenAbilities = SANDFORCE
+Height = 10.5
+Weight = 740.0
+Generation = 6
+#-------------------------------
+[SCIZOR,1]
+FormName = Mega Scizor
+MegaStone = SCIZORITE
+BaseStats = 70,150,140,65,100,75
+Abilities = TECHNICIAN
+HiddenAbilities = TECHNICIAN
+Height = 2.0
+Weight = 125.0
+Pokedex = It's better at beating things than grasping them. When it battles for a long time, the weight of its pincers becomes too much to bear.
+Generation = 6
+#-------------------------------
+[HERACROSS,1]
+FormName = Mega Heracross
+MegaStone = HERACRONITE
+BaseStats = 80,185,115,75,40,105
+Abilities = SKILLLINK
+HiddenAbilities = SKILLLINK
+Height = 1.7
+Weight = 62.5
+Pokedex = A tremendous influx of energy builds it up, but when Mega Evolution ends, Heracross is bothered by terrible soreness in its muscles.
+Generation = 6
+#-------------------------------
+[HOUNDOOM,1]
+FormName = Mega Houndoom
+MegaStone = HOUNDOOMINITE
+BaseStats = 75,90,90,115,140,90
+Abilities = SOLARPOWER
+HiddenAbilities = SOLARPOWER
+Height = 1.9
+Weight = 49.5
+Pokedex = Its red claws and the tips of its tail are melting from high internal temperatures that are painful to Houndoom itself.
+Generation = 6
+#-------------------------------
+[TYRANITAR,1]
+FormName = Mega Tyranitar
+MegaStone = TYRANITARITE
+BaseStats = 100,164,150,71,95,120
+HiddenAbilities = SANDSTREAM
+Height = 2.5
+Weight = 255.0
+Pokedex = Due to the colossal power poured into it, this Pokémon's back split right open. Its destructive instincts are the only thing keeping it moving.
+Generation = 6
+#-------------------------------
+[SCEPTILE,1]
+FormName = Mega Sceptile
+MegaStone = SCEPTILITE
+Types = GRASS,DRAGON
+BaseStats = 70,110,75,145,145,85
+Abilities = LIGHTNINGROD
+HiddenAbilities = LIGHTNINGROD
+Height = 1.9
+Weight = 55.2
+Generation = 6
+#-------------------------------
+[BLAZIKEN,1]
+FormName = Mega Blaziken
+MegaStone = BLAZIKENITE
+BaseStats = 80,160,80,100,130,80
+Abilities = SPEEDBOOST
+Generation = 6
+#-------------------------------
+[SWAMPERT,1]
+FormName = Mega Swampert
+MegaStone = SWAMPERTITE
+BaseStats = 100,150,110,70,95,110
+Abilities = SWIFTSWIM
+HiddenAbilities = SWIFTSWIM
+Height = 1.9
+Weight = 102.0
+Generation = 6
+#-------------------------------
+[GARDEVOIR,1]
+FormName = Mega Gardevoir
+MegaStone = GARDEVOIRITE
+BaseStats = 68,85,65,100,165,135
+Abilities = PIXILATE
+HiddenAbilities = PIXILATE
+Generation = 6
+#-------------------------------
+[SABLEYE,1]
+FormName = Mega Sableye
+MegaStone = SABLENITE
+BaseStats = 50,85,125,20,85,115
+Abilities = MAGICBOUNCE
+HiddenAbilities = MAGICBOUNCE
+Weight = 161.0
+Pokedex = Supporting a giant heavy jewel, it can't change direction very nimbly and is vulnerable to attack from behind.
+Generation = 6
+#-------------------------------
+[MAWILE,1]
+FormName = Mega Mawile
+MegaStone = MAWILITE
+BaseStats = 50,105,125,50,55,95
+Abilities = HUGEPOWER
+HiddenAbilities = HUGEPOWER
+Height = 1.0
+Weight = 23.5
+Pokedex = Its two sets of jaws thrash about violently as if they each had a will of their own. One gnash from them can turn a boulder to dust.
+Generation = 6
+#-------------------------------
+[AGGRON,1]
+FormName = Mega Aggron
+MegaStone = AGGRONITE
+Types = STEEL
+BaseStats = 70,140,230,50,60,80
+Abilities = FILTER
+HiddenAbilities = FILTER
+Height = 2.2
+Weight = 395.0
+Generation = 6
+#-------------------------------
+[MEDICHAM,1]
+FormName = Mega Medicham
+MegaStone = MEDICHAMITE
+BaseStats = 60,100,85,100,80,85
+HiddenAbilities = PUREPOWER
+Generation = 6
+#-------------------------------
+[MANECTRIC,1]
+FormName = Mega Manectric
+MegaStone = MANECTITE
+BaseStats = 70,75,80,135,135,80
+Abilities = INTIMIDATE
+HiddenAbilities = INTIMIDATE
+Height = 1.8
+Weight = 44.0
+Pokedex = Too much electricity has built up in its body, irritating Manectric. Its explosive speed is equal to that of a lightning bolt.
+Generation = 6
+#-------------------------------
+[SHARPEDO,1]
+FormName = Mega Sharpedo
+MegaStone = SHARPEDONITE
+BaseStats = 70,140,70,105,110,65
+Abilities = STRONGJAW
+HiddenAbilities = STRONGJAW
+Height = 2.5
+Weight = 130.3
+Pokedex = The yellow patterns it bears are old scars. The energy from Mega Evolution runs through them, causing it sharp pain and suffering.
+Generation = 6
+#-------------------------------
+[CAMERUPT,1]
+FormName = Mega Camerupt
+MegaStone = CAMERUPTITE
+BaseStats = 70,120,100,20,145,105
+Abilities = SHEERFORCE
+HiddenAbilities = SHEERFORCE
+Height = 2.5
+Weight = 320.5
+Generation = 6
+#-------------------------------
+[ALTARIA,1]
+FormName = Mega Altaria
+MegaStone = ALTARIANITE
+Types = DRAGON,FAIRY
+BaseStats = 75,110,110,80,110,105
+Abilities = PIXILATE
+HiddenAbilities = PIXILATE
+Height = 1.5
+Generation = 6
+#-------------------------------
+[CASTFORM,1]
+FormName = Sunny Form
+Types = FIRE
+Color = Red
+Pokedex = This is the form Castform takes on the brightest of days. Its skin is unexpectedly hot to the touch, so approach with care.
+#-------------------------------
+[CASTFORM,2]
+FormName = Rainy Form
+Types = WATER
+Color = Blue
+Pokedex = This is the form Castform takes when soaked with rain. When its body is compressed, water will seep out as if from a sponge.
+#-------------------------------
+[CASTFORM,3]
+FormName = Snowy Form
+Types = ICE
+Color = White
+Pokedex = This is the form Castform takes when covered in snow. Its body becomes an ice-like material, with a temperature near -5 degrees Celsius.
+#-------------------------------
+[BANETTE,1]
+FormName = Mega Banette
+MegaStone = BANETTITE
+BaseStats = 64,165,75,75,93,83
+Abilities = PRANKSTER
+HiddenAbilities = PRANKSTER
+Height = 1.2
+Weight = 13.0
+Pokedex = Extraordinary energy amplifies its cursing power to such an extent that it can't help but curse its own Trainer.
+Generation = 6
+#-------------------------------
+[ABSOL,1]
+FormName = Mega Absol
+MegaStone = ABSOLITE
+BaseStats = 65,150,60,115,115,60
+Abilities = MAGICBOUNCE
+HiddenAbilities = MAGICBOUNCE
+Weight = 49.0
+Pokedex = When this Pokémon whips the winglike fur on its back as though beating its wings, it sends an intimidating aura flying at its opponents.
+Generation = 6
+#-------------------------------
+[GLALIE,1]
+FormName = Mega Glalie
+MegaStone = GLALITITE
+BaseStats = 80,120,80,100,120,80
+Abilities = REFRIGERATE
+HiddenAbilities = REFRIGERATE
+Height = 2.1
+Weight = 350.2
+Pokedex = It envelops prey in its mouth, freezing them instantly. But its jaw is dislocated, so it's unable to eat them.
+Generation = 6
+#-------------------------------
+[SALAMENCE,1]
+FormName = Mega Salamence
+MegaStone = SALAMENCITE
+BaseStats = 95,145,130,120,120,90
+Abilities = AERILATE
+HiddenAbilities = AERILATE
+Height = 1.8
+Weight = 112.6
+Pokedex = It puts its forelegs inside its shell to streamline itself for flight. Salamence flies at high speeds over all kinds of topographical features.
+Generation = 6
+#-------------------------------
+[METAGROSS,1]
+FormName = Mega Metagross
+MegaStone = METAGROSSITE
+BaseStats = 95,145,130,120,120,90
+Abilities = TOUGHCLAWS
+HiddenAbilities = TOUGHCLAWS
+Height = 2.5
+Weight = 942.9
+Pokedex = Its intellect surpasses its previous level, resulting in battles so cruel, they'll make you want to cover your eyes.
+Generation = 6
+#-------------------------------
+[LATIAS,1]
+FormName = Mega Latias
+MegaStone = LATIASITE
+BaseStats = 80,100,120,110,140,150
+Height = 1.8
+Weight = 52.0
+Color = Purple
+Generation = 6
+#-------------------------------
+[LATIOS,1]
+FormName = Mega Latios
+MegaStone = LATIOSITE
+BaseStats = 80,130,100,110,160,120
+Height = 2.3
+Weight = 70.0
+Color = Purple
+Generation = 6
+#-------------------------------
+[KYOGRE,1]
+FormName = Primal Kyogre
+BaseStats = 100,150,90,90,180,160
+Abilities = PRIMORDIALSEA
+Height = 9.8
+Weight = 430.0
+Generation = 6
+#-------------------------------
+[GROUDON,1]
+FormName = Primal Groudon
+Types = GROUND,FIRE
+BaseStats = 100,180,160,90,150,90
+Abilities = DESOLATELAND
+Height = 5.0
+Weight = 999.7
+Generation = 6
+#-------------------------------
+[RAYQUAZA,1]
+FormName = Mega Rayquaza
+MegaMove = DRAGONASCENT
+MegaMessage = 1
+BaseStats = 105,180,100,115,180,100
+Abilities = DELTASTREAM
+HiddenAbilities = DELTASTREAM
+Height = 10.8
+Weight = 392.0
+Generation = 6
+#-------------------------------
+[DEOXYS,1]
+FormName = Attack Forme
+BaseStats = 50,180,20,150,180,20
+EVs = ATTACK,2,SPECIAL_ATTACK,1
+Moves = 1,LEER,1,WRAP,7,NIGHTSHADE,13,TELEPORT,19,TAUNT,25,PURSUIT,31,PSYCHIC,37,SUPERPOWER,43,PSYCHOSHIFT,49,ZENHEADBUTT,55,COSMICPOWER,61,ZAPCANNON,67,PSYCHOBOOST,73,HYPERBEAM
+TutorMoves = AERIALACE,BIND,BRICKBREAK,CALMMIND,CHARGEBEAM,CONFIDE,CUT,DARKPULSE,DOUBLETEAM,DRAINPUNCH,DREAMEATER,ENERGYBALL,FACADE,FLASH,FLASHCANNON,FLING,FOCUSBLAST,FOCUSPUNCH,FRUSTRATION,GIGAIMPACT,GRASSKNOT,GRAVITY,HIDDENPOWER,HYPERBEAM,ICEBEAM,LOWKICK,LOWSWEEP,MAGICCOAT,POISONJAB,POWERUPPUNCH,PROTECT,PSYCHIC,PSYCHUP,PSYSHOCK,RAINDANCE,RECYCLE,REFLECT,REST,RETURN,ROCKSLIDE,ROCKSMASH,ROCKTOMB,ROLEPLAY,ROUND,SAFEGUARD,SECRETPOWER,SHADOWBALL,SHOCKWAVE,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNATCH,SNORE,SOLARBEAM,STEALTHROCK,STRENGTH,SUBSTITUTE,SUNNYDAY,SWAGGER,TAUNT,THUNDER,THUNDERBOLT,THUNDERWAVE,TORMENT,TOXIC,TRICK,TRICKROOM,WATERPULSE,WONDERROOM,ZENHEADBUTT
+#-------------------------------
+[DEOXYS,2]
+FormName = Defense Forme
+BaseStats = 50,70,160,90,70,160
+EVs = DEFENSE,2,SPECIAL_DEFENSE,1
+Moves = 1,LEER,1,WRAP,7,NIGHTSHADE,13,TELEPORT,19,KNOCKOFF,25,SPIKES,31,PSYCHIC,37,SNATCH,43,PSYCHOSHIFT,49,ZENHEADBUTT,55,IRONDEFENSE,55,AMNESIA,61,RECOVER,67,PSYCHOBOOST,73,COUNTER,73,MIRRORCOAT
+TutorMoves = AERIALACE,BIND,BRICKBREAK,CALMMIND,CHARGEBEAM,CONFIDE,CUT,DARKPULSE,DOUBLETEAM,DRAINPUNCH,DREAMEATER,ENERGYBALL,FACADE,FLASH,FLASHCANNON,FLING,FOCUSBLAST,FOCUSPUNCH,FRUSTRATION,GIGAIMPACT,GRASSKNOT,GRAVITY,HIDDENPOWER,HYPERBEAM,ICEBEAM,IRONDEFENSE,KNOCKOFF,LIGHTSCREEN,LOWKICK,LOWSWEEP,MAGICCOAT,POISONJAB,POWERUPPUNCH,PROTECT,PSYCHIC,PSYCHUP,PSYSHOCK,RAINDANCE,RECYCLE,REFLECT,REST,RETURN,ROCKSLIDE,ROCKSMASH,ROCKTOMB,ROLEPLAY,ROUND,SAFEGUARD,SECRETPOWER,SHADOWBALL,SHOCKWAVE,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNATCH,SNORE,SOLARBEAM,STEALTHROCK,STRENGTH,SUBSTITUTE,SUNNYDAY,SWAGGER,TAUNT,THUNDER,THUNDERBOLT,THUNDERWAVE,TORMENT,TOXIC,TRICK,TRICKROOM,WATERPULSE,WONDERROOM,ZENHEADBUTT
+#-------------------------------
+[DEOXYS,3]
+FormName = Speed Forme
+BaseStats = 50,95,90,180,95,90
+EVs = SPEED,3
+Moves = 1,LEER,1,WRAP,7,NIGHTSHADE,13,DOUBLETEAM,19,KNOCKOFF,25,PURSUIT,31,PSYCHIC,37,SWIFT,43,PSYCHOSHIFT,49,ZENHEADBUTT,55,AGILITY,61,RECOVER,67,PSYCHOBOOST,73,EXTREMESPEED
+TutorMoves = AERIALACE,BIND,BRICKBREAK,CALMMIND,CHARGEBEAM,CONFIDE,CUT,DARKPULSE,DOUBLETEAM,DRAINPUNCH,DREAMEATER,ENERGYBALL,FACADE,FIREPUNCH,FLASH,FLASHCANNON,FLING,FOCUSBLAST,FOCUSPUNCH,FRUSTRATION,GIGAIMPACT,GRASSKNOT,GRAVITY,HIDDENPOWER,HYPERBEAM,ICEBEAM,ICEPUNCH,KNOCKOFF,LIGHTSCREEN,LOWKICK,LOWSWEEP,MAGICCOAT,POISONJAB,POWERUPPUNCH,PROTECT,PSYCHIC,PSYCHUP,PSYSHOCK,RAINDANCE,RECYCLE,REFLECT,REST,RETURN,ROCKSLIDE,ROCKSMASH,ROCKTOMB,ROLEPLAY,ROUND,SAFEGUARD,SECRETPOWER,SHADOWBALL,SHOCKWAVE,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNATCH,SNORE,SOLARBEAM,STEALTHROCK,STRENGTH,SUBSTITUTE,SUNNYDAY,SWAGGER,TAUNT,THUNDER,THUNDERBOLT,THUNDERPUNCH,THUNDERWAVE,TORMENT,TOXIC,TRICK,TRICKROOM,WATERPULSE,WONDERROOM,ZENHEADBUTT
+#-------------------------------
+[BURMY,1]
+FormName = Sandy Cloak
+Color = Brown
+#-------------------------------
+[BURMY,2]
+FormName = Trash Cloak
+Color = Red
+#-------------------------------
+[WORMADAM,1]
+FormName = Sandy Cloak
+Types = BUG,GROUND
+BaseStats = 60,79,105,36,59,85
+EVs = DEFENSE,2
+Moves = 1,TACKLE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,ROCKBLAST,29,HARDEN,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,FISSURE
+TutorMoves = ATTRACT,BUGBITE,BULLDOZE,CONFIDE,DIG,DOUBLETEAM,DREAMEATER,EARTHPOWER,EARTHQUAKE,ELECTROWEB,ENDEAVOR,FACADE,FLASH,FRUSTRATION,GIGAIMPACT,HIDDENPOWER,HYPERBEAM,INFESTATION,PROTECT,PSYCHIC,PSYCHUP,RAINDANCE,REST,RETURN,ROCKTOMB,ROUND,SAFEGUARD,SANDSTORM,SECRETPOWER,SHADOWBALL,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNORE,STEALTHROCK,STRUGGLEBUG,SUBSTITUTE,SUNNYDAY,SWAGGER,THIEF,TOXIC,UPROAR,VENOSHOCK
+Color = Brown
+#-------------------------------
+[WORMADAM,2]
+FormName = Trash Cloak
+Types = BUG,STEEL
+BaseStats = 60,69,95,36,69,95
+EVs = DEFENSE,1,SPECIAL_DEFENSE,1
+Moves = 1,TACKLE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,MIRRORSHOT,29,METALSOUND,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,IRONHEAD
+TutorMoves = ATTRACT,BUGBITE,CONFIDE,DOUBLETEAM,DREAMEATER,ELECTROWEB,ENDEAVOR,FACADE,FLASH,FLASHCANNON,FRUSTRATION,GIGAIMPACT,GUNKSHOT,GYROBALL,HIDDENPOWER,HYPERBEAM,INFESTATION,IRONDEFENSE,IRONHEAD,MAGNETRISE,PROTECT,PSYCHIC,PSYCHUP,RAINDANCE,REST,RETURN,ROUND,SAFEGUARD,SECRETPOWER,SHADOWBALL,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNORE,STEALTHROCK,STRUGGLEBUG,SUBSTITUTE,SUNNYDAY,SWAGGER,THIEF,TOXIC,UPROAR,VENOSHOCK
+Color = Red
+#-------------------------------
+[CHERRIM,1]
+FormName = Sunshine Form
+Color = Pink
+#-------------------------------
+[SHELLOS,1]
+FormName = East Sea
+Color = Blue
+#-------------------------------
+[GASTRODON,1]
+FormName = East Sea
+Color = Blue
+#-------------------------------
+[LOPUNNY,1]
+FormName = Mega Lopunny
+MegaStone = LOPUNNITE
+Types = NORMAL,FIGHTING
+BaseStats = 65,136,94,135,54,96
+Abilities = SCRAPPY
+HiddenAbilities = SCRAPPY
+Height = 1.3
+Weight = 28.3
+Pokedex = It swings its ears like whips and strikes its enemies with them. It has an intensely combative disposition.
+Generation = 6
+#-------------------------------
+[GARCHOMP,1]
+FormName = Mega Garchomp
+MegaStone = GARCHOMPITE
+BaseStats = 108,170,115,92,120,95
+Abilities = SANDFORCE
+HiddenAbilities = SANDFORCE
+Pokedex = Its vaunted wings become scythes, sending it mad with rage. It swings its scythes wildly and slices the ground to pieces.
+Generation = 6
+#-------------------------------
+[LUCARIO,1]
+FormName = Mega Lucario
+MegaStone = LUCARIONITE
+BaseStats = 70,145,88,112,140,70
+Abilities = ADAPTABILITY
+HiddenAbilities = ADAPTABILITY
+Height = 1.3
+Weight = 57.5
+Pokedex = It readies itself to face its enemies by focusing its mental energies. Its fighting style can be summed up in a single word: heartless.
+Generation = 6
+#-------------------------------
+[ABOMASNOW,1]
+FormName = Mega Abomasnow
+MegaStone = ABOMASITE
+BaseStats = 90,132,105,30,132,105
+HiddenAbilities = SNOWWARNING
+Height = 2.7
+Weight = 185.0
+Generation = 6
+#-------------------------------
+[GALLADE,1]
+FormName = Mega Gallade
+MegaStone = GALLADITE
+BaseStats = 68,165,95,110,65,115
+Abilities = INNERFOCUS
+HiddenAbilities = INNERFOCUS
+Weight = 56.4
+Generation = 6
+#-------------------------------
+[ROTOM,1]
+FormName = Heat Rotom
+Types = ELECTRIC,FIRE
+BaseStats = 50,65,107,86,105,107
+Pokedex = This Rotom has possessed a convection microwave oven that uses a special motor. It also has a flair for manipulating flames.
+#-------------------------------
+[ROTOM,2]
+FormName = Wash Rotom
+Types = ELECTRIC,WATER
+BaseStats = 50,65,107,86,105,107
+Pokedex = This form of Rotom enjoys coming up with water-based pranks. Be careful with it if you don't want your room flooded.
+#-------------------------------
+[ROTOM,3]
+FormName = Frost Rotom
+Types = ELECTRIC,ICE
+BaseStats = 50,65,107,86,105,107
+Pokedex = Rotom assumes this form when it takes over a refrigerator powered by a special motor. It battles by spewing cold air.
+#-------------------------------
+[ROTOM,4]
+FormName = Fan Rotom
+Types = ELECTRIC,FLYING
+BaseStats = 50,65,107,86,105,107
+Pokedex = In this form, Rotom applies its new power over wind to its love of pranks. It will happily blow away any important documents it can find.
+#-------------------------------
+[ROTOM,5]
+FormName = Mow Rotom
+Types = ELECTRIC,GRASS
+BaseStats = 50,65,107,86,105,107
+Pokedex = This is Rotom after it's seized control of a lawn mower that has a special motor. As it mows down grass, it scatters the clippings everywhere.
+#-------------------------------
+[GIRATINA,1]
+FormName = Origin Forme
+BaseStats = 150,120,100,90,120,100
+Abilities = LEVITATE
+HiddenAbilities = LEVITATE
+TutorMoves = AERIALACE,AQUATAIL,BULLDOZE,CALMMIND,CHARGEBEAM,CONFIDE,CUT,DARKPULSE,DOUBLETEAM,DRACOMETEOR,DRAGONCLAW,DRAGONPULSE,DRAGONTAIL,DREAMEATER,EARTHPOWER,EARTHQUAKE,ECHOEDVOICE,ENERGYBALL,FACADE,FLY,FRUSTRATION,GIGAIMPACT,GRAVITY,HIDDENPOWER,HONECLAWS,HYPERBEAM,HYPERVOICE,ICYWIND,IRONHEAD,IRONTAIL,MAGICCOAT,OUTRAGE,PAYBACK,PROTECT,PSYCHIC,PSYCHUP,RAINDANCE,REST,RETURN,ROAR,ROCKSMASH,ROUND,SAFEGUARD,SECRETPOWER,SHADOWBALL,SHADOWCLAW,SHOCKWAVE,SLEEPTALK,SNORE,SPITE,STEELWING,STONEEDGE,STRENGTH,SUBSTITUTE,SUNNYDAY,SWAGGER,TAILWIND,THUNDER,THUNDERBOLT,THUNDERWAVE,TOXIC,WILLOWISP
+Height = 6.9
+Weight = 650.0
+Shape = Serpentine
+#-------------------------------
+[SHAYMIN,1]
+FormName = Sky Forme
+Types = GRASS,FLYING
+BaseStats = 100,103,75,127,120,75
+EVs = SPEED,3
+Abilities = SERENEGRACE
+Moves = 1,GROWTH,10,MAGICALLEAF,19,LEECHSEED,28,QUICKATTACK,37,SWEETSCENT,46,NATURALGIFT,55,WORRYSEED,64,AIRSLASH,73,ENERGYBALL,82,SWEETKISS,91,LEAFSTORM,100,SEEDFLARE
+TutorMoves = CONFIDE,COVET,DAZZLINGGLEAM,DOUBLETEAM,ENERGYBALL,FACADE,FLASH,FRUSTRATION,GIGADRAIN,GIGAIMPACT,GRASSKNOT,HIDDENPOWER,HYPERBEAM,LASTRESORT,NATUREPOWER,PROTECT,PSYCHIC,PSYCHUP,REST,RETURN,ROUND,SAFEGUARD,SECRETPOWER,SEEDBOMB,SLEEPTALK,SNORE,SOLARBEAM,SUBSTITUTE,SUNNYDAY,SWAGGER,SWORDSDANCE,SYNTHESIS,TAILWIND,TOXIC,WORRYSEED,ZENHEADBUTT
+Height = 0.4
+Weight = 5.2
+#-------------------------------
+[ARCEUS,1]
+FormName = Fighting Type
+Types = FIGHTING
+#-------------------------------
+[ARCEUS,2]
+FormName = Flying Type
+Types = FLYING
+#-------------------------------
+[ARCEUS,3]
+FormName = Poison Type
+Types = POISON
+#-------------------------------
+[ARCEUS,4]
+FormName = Ground Type
+Types = GROUND
+#-------------------------------
+[ARCEUS,5]
+FormName = Rock Type
+Types = ROCK
+#-------------------------------
+[ARCEUS,6]
+FormName = Bug Type
+Types = BUG
+#-------------------------------
+[ARCEUS,7]
+FormName = Ghost Type
+Types = GHOST
+#-------------------------------
+[ARCEUS,8]
+FormName = Steel Type
+Types = STEEL
+#-------------------------------
+[ARCEUS,9]
+FormName = Unknown Type
+Types = QMARKS
+#-------------------------------
+[ARCEUS,10]
+FormName = Fire Type
+Types = FIRE
+#-------------------------------
+[ARCEUS,11]
+FormName = Water Type
+Types = WATER
+#-------------------------------
+[ARCEUS,12]
+FormName = Grass Type
+Types = GRASS
+#-------------------------------
+[ARCEUS,13]
+FormName = Electric Type
+Types = ELECTRIC
+#-------------------------------
+[ARCEUS,14]
+FormName = Psychic Type
+Types = PSYCHIC
+#-------------------------------
+[ARCEUS,15]
+FormName = Ice Type
+Types = ICE
+#-------------------------------
+[ARCEUS,16]
+FormName = Dragon Type
+Types = DRAGON
+TutorMoves = AERIALACE,AQUATAIL,BLIZZARD,BRICKBREAK,BULLDOZE,CALMMIND,CHARGEBEAM,CONFIDE,CUT,DARKPULSE,DIVE,DOUBLETEAM,DRACOMETEOR,DRAGONCLAW,DRAGONPULSE,DREAMEATER,EARTHPOWER,EARTHQUAKE,ECHOEDVOICE,ENERGYBALL,FACADE,FIREBLAST,FLAMETHROWER,FLASH,FLASHCANNON,FLY,FOCUSBLAST,FRUSTRATION,GIGADRAIN,GIGAIMPACT,GRASSKNOT,GRAVITY,HAIL,HEATWAVE,HIDDENPOWER,HONECLAWS,HYPERBEAM,HYPERVOICE,ICEBEAM,ICYWIND,INCINERATE,IRONDEFENSE,IRONHEAD,IRONTAIL,LASTRESORT,LIGHTSCREEN,MAGICCOAT,OUTRAGE,OVERHEAT,PAYBACK,POISONJAB,PROTECT,PSYCHIC,PSYCHUP,PSYSHOCK,QUASH,RAINDANCE,RECYCLE,REFLECT,REST,RETALIATE,RETURN,ROAR,ROCKSLIDE,ROCKSMASH,ROCKTOMB,ROUND,SAFEGUARD,SANDSTORM,SECRETPOWER,SHADOWBALL,SHADOWCLAW,SHOCKWAVE,SIGNALBEAM,SLEEPTALK,SLUDGEBOMB,SNARL,SNORE,SOLARBEAM,STEALTHROCK,STONEEDGE,STRENGTH,SUBSTITUTE,SUNNYDAY,SURF,SWAGGER,SWORDSDANCE,TAILWIND,THUNDER,THUNDERBOLT,THUNDERWAVE,TOXIC,TRICK,TRICKROOM,WATERFALL,WATERPULSE,WILLOWISP,XSCISSOR,ZENHEADBUTT
+#-------------------------------
+[ARCEUS,17]
+FormName = Dark Type
+Types = DARK
+#-------------------------------
+[ARCEUS,18]
+FormName = Fairy Type
+Types = FAIRY
+Generation = 6
+#-------------------------------
+[AUDINO,1]
+FormName = Mega Audino
+MegaStone = AUDINITE
+Types = NORMAL,FAIRY
+BaseStats = 103,60,126,50,80,126
+Abilities = HEALER
+HiddenAbilities = HEALER
+Height = 1.5
+Weight = 32.0
+Color = White
+Generation = 6
+#-------------------------------
+[BASCULIN,1]
+FormName = Blue-Striped
+Abilities = ROCKHEAD,ADAPTABILITY
+Pokedex = Even Basculin, which devours everything it can with its huge jaws, is nothing more than food to organisms stronger than itself.
+WildItemUncommon = DEEPSEASCALE
+#-------------------------------
+[DARMANITAN,1]
+FormName = Zen Mode
+Types = FIRE,PSYCHIC
+BaseStats = 105,30,105,55,140,105
+EVs = SPECIAL_ATTACK,2
+Color = Blue
+Pokedex = When wounded, it stops moving. It goes as still as stone to meditate, sharpening its mind and spirit.
+#-------------------------------
+[DEERLING,1]
+FormName = Summer Form
+Color = Green
+#-------------------------------
+[DEERLING,2]
+FormName = Autumn Form
+Color = Red
+#-------------------------------
+[DEERLING,3]
+FormName = Winter Form
+Color = Brown
+#-------------------------------
+[SAWSBUCK,1]
+FormName = Summer Form
+#-------------------------------
+[SAWSBUCK,2]
+FormName = Autumn Form
+#-------------------------------
+[SAWSBUCK,3]
+FormName = Winter Form
+#-------------------------------
+[TORNADUS,1]
+FormName = Therian Forme
+BaseStats = 79,100,80,121,110,90
+EVs = SPEED,3
+Abilities = REGENERATOR
+HiddenAbilities = REGENERATOR
+Height = 1.4
+Shape = Winged
+#-------------------------------
+[THUNDURUS,1]
+FormName = Therian Forme
+BaseStats = 79,105,70,101,145,80
+EVs = SPECIAL_ATTACK,3
+Abilities = VOLTABSORB
+HiddenAbilities = VOLTABSORB
+Height = 3.0
+Shape = BipedalTail
+#-------------------------------
+[LANDORUS,1]
+FormName = Therian Forme
+BaseStats = 89,145,90,91,105,80
+EVs = ATTACK,3
+Abilities = INTIMIDATE
+HiddenAbilities = INTIMIDATE
+Height = 1.3
+Shape = Quadruped
+#-------------------------------
+[KYUREM,1]
+FormName = White Kyurem
+BaseStats = 125,120,90,95,170,100
+EVs = SPECIAL_ATTACK,3
+Abilities = TURBOBLAZE
+Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONFLARE,50,ICEBURN,57,DRAGONPULSE,64,IMPRISON,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
+Height = 3.6
+Pokedex = It has foreseen that a world of truth will arrive for people and Pokémon. It strives to protect that future.
+#-------------------------------
+[KYUREM,2]
+FormName = Black Kyurem
+BaseStats = 125,170,100,95,120,90
+EVs = ATTACK,3
+Abilities = TERAVOLT
+Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONBOLT,50,FREEZESHOCK,57,DRAGONPULSE,64,IMPRISON,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
+Height = 3.3
+Pokedex = It's said that this Pokémon battles in order to protect the ideal world that will exist in the future for people and Pokémon.
+#-------------------------------
+[KYUREM,3]
+PokedexForm = 1
+BaseStats = 125,120,90,95,170,100
+EVs = SPECIAL_ATTACK,3
+Abilities = TURBOBLAZE
+Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONFLARE,50,ICEBURN,57,DRAGONPULSE,64,IMPRISON,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
+Height = 3.6
+#-------------------------------
+[KYUREM,4]
+PokedexForm = 2
+BaseStats = 125,170,100,95,120,90
+EVs = ATTACK,3
+Abilities = TERAVOLT
+Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONBOLT,50,FREEZESHOCK,57,DRAGONPULSE,64,IMPRISON,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
+Height = 3.3
+#-------------------------------
+[KELDEO,1]
+FormName = Resolute Form
+Pokedex = The power that lay hidden in its body now covers its horn, turning it into a sword that can slice through anything.
+#-------------------------------
+[MELOETTA,1]
+FormName = Pirouette Forme
+Types = NORMAL,FIGHTING
+BaseStats = 100,128,90,128,77,77
+EVs = ATTACK,1,DEFENSE,1,SPEED,1
+#-------------------------------
+[GENESECT,1]
+FormName = Shock Drive
+#-------------------------------
+[GENESECT,2]
+FormName = Burn Drive
+#-------------------------------
+[GENESECT,3]
+FormName = Chill Drive
+#-------------------------------
+[GENESECT,4]
+FormName = Douse Drive
+#-------------------------------
+[VIVILLON,1]
+FormName = Continental Pattern
+#-------------------------------
+[VIVILLON,2]
+FormName = Elegant Pattern
+#-------------------------------
+[VIVILLON,3]
+FormName = Garden Pattern
+#-------------------------------
+[VIVILLON,4]
+FormName = High Plains Pattern
+#-------------------------------
+[VIVILLON,5]
+FormName = Icy Snow Pattern
+#-------------------------------
+[VIVILLON,6]
+FormName = Jungle Pattern
+#-------------------------------
+[VIVILLON,7]
+FormName = Marine Pattern
+#-------------------------------
+[VIVILLON,8]
+FormName = Meadow Pattern
+#-------------------------------
+[VIVILLON,9]
+FormName = Modern Pattern
+#-------------------------------
+[VIVILLON,10]
+FormName = Monsoon Pattern
+#-------------------------------
+[VIVILLON,11]
+FormName = Ocean Pattern
+#-------------------------------
+[VIVILLON,12]
+FormName = Polar Pattern
+#-------------------------------
+[VIVILLON,13]
+FormName = River Pattern
+#-------------------------------
+[VIVILLON,14]
+FormName = Sandstorm Pattern
+#-------------------------------
+[VIVILLON,15]
+FormName = Savanna Pattern
+#-------------------------------
+[VIVILLON,16]
+FormName = Sun Pattern
+#-------------------------------
+[VIVILLON,17]
+FormName = Tundra Pattern
+#-------------------------------
+[VIVILLON,18]
+FormName = Fancy Pattern
+#-------------------------------
+[VIVILLON,19]
+FormName = Poké Ball Pattern
+#-------------------------------
+[FLABEBE,1]
+FormName = Yellow Flower
+#-------------------------------
+[FLABEBE,2]
+FormName = Orange Flower
+#-------------------------------
+[FLABEBE,3]
+FormName = Blue Flower
+#-------------------------------
+[FLABEBE,4]
+FormName = White Flower
+#-------------------------------
+[FLOETTE,1]
+FormName = Yellow Flower
+#-------------------------------
+[FLOETTE,2]
+FormName = Orange Flower
+#-------------------------------
+[FLOETTE,3]
+FormName = Blue Flower
+#-------------------------------
+[FLOETTE,4]
+FormName = White Flower
+#-------------------------------
+[FLOETTE,5]
+FormName = Eternal Flower
+BaseStats = 74,65,67,92,125,128
+BaseExp = 243
+Moves = 1,TACKLE,1,VINEWHIP,6,FAIRYWIND,10,LUCKYCHANT,15,RAZORLEAF,20,WISH,25,MAGICALLEAF,27,GRASSYTERRAIN,33,PETALBLIZZARD,38,AROMATHERAPY,43,MISTYTERRAIN,46,MOONBLAST,50,LIGHTOFRUIN,51,PETALDANCE,58,SOLARBEAM
+EggGroups = Undiscovered
+Pokedex = The flower it's holding can no longer be found blooming anywhere. It's also thought to contain terrifying power.
+Evolutions = FLORGES,None,
+#-------------------------------
+[FLORGES,1]
+FormName = Yellow Flower
+#-------------------------------
+[FLORGES,2]
+FormName = Orange Flower
+#-------------------------------
+[FLORGES,3]
+FormName = Blue Flower
+#-------------------------------
+[FLORGES,4]
+FormName = White Flower
+#-------------------------------
+[FURFROU,1]
+FormName = Heart Trim
+#-------------------------------
+[FURFROU,2]
+FormName = Star Trim
+#-------------------------------
+[FURFROU,3]
+FormName = Diamond Trim
+#-------------------------------
+[FURFROU,4]
+FormName = Debutante Trim
+#-------------------------------
+[FURFROU,5]
+FormName = Matron Trim
+#-------------------------------
+[FURFROU,6]
+FormName = Dandy Trim
+#-------------------------------
+[FURFROU,7]
+FormName = La Reine Trim
+#-------------------------------
+[FURFROU,8]
+FormName = Kabuki Trim
+#-------------------------------
+[FURFROU,9]
+FormName = Pharaoh Trim
+#-------------------------------
+[MEOWSTIC,1]
+FormName = Female
+HiddenAbilities = COMPETITIVE
+Moves = 1,STOREDPOWER,1,MEFIRST,1,MAGICALLEAF,1,SCRATCH,1,LEER,5,COVET,9,CONFUSION,13,LIGHTSCREEN,17,PSYBEAM,19,FAKEOUT,22,DISARMINGVOICE,25,PSYSHOCK,28,CHARGEBEAM,31,SHADOWBALL,35,EXTRASENSORY,40,PSYCHIC,43,ROLEPLAY,45,SIGNALBEAM,48,SUCKERPUNCH,50,FUTURESIGHT,53,STOREDPOWER
+Color = White
+#-------------------------------
+[AEGISLASH,1]
+FormName = Blade Forme
+BaseStats = 60,150,50,60,150,50
+EVs = ATTACK,2,SPECIAL_ATTACK,1
+#-------------------------------
+[PUMPKABOO,1]
+FormName = Average Size
+BaseStats = 49,66,70,51,44,55
+HiddenAbilities = INSOMNIA
+Height = 0.4
+Weight = 5.0
+#-------------------------------
+[PUMPKABOO,2]
+FormName = Large Size
+BaseStats = 54,66,70,46,44,55
+Height = 0.5
+Weight = 7.5
+#-------------------------------
+[PUMPKABOO,3]
+FormName = Super Size
+BaseStats = 59,66,70,41,44,55
+HiddenAbilities = INSOMNIA
+Height = 0.8
+Weight = 15.0
+WildItemCommon = MIRACLESEED
+WildItemUncommon = MIRACLESEED
+WildItemRare = MIRACLESEED
+#-------------------------------
+[GOURGEIST,1]
+FormName = Average Size
+BaseStats = 65,90,122,84,58,75
+HiddenAbilities = INSOMNIA
+Height = 0.9
+Weight = 12.5
+#-------------------------------
+[GOURGEIST,2]
+FormName = Large Size
+BaseStats = 75,95,122,69,58,75
+Height = 1.1
+Weight = 14.0
+#-------------------------------
+[GOURGEIST,3]
+FormName = Super Size
+BaseStats = 85,100,122,54,58,75
+HiddenAbilities = INSOMNIA
+Height = 1.7
+Weight = 39.0
+WildItemCommon = MIRACLESEED
+WildItemUncommon = MIRACLESEED
+WildItemRare = MIRACLESEED
+#-------------------------------
+[XERNEAS,1]
+FormName = Active Mode
+#-------------------------------
+[DIANCIE,1]
+FormName = Mega Diancie
+MegaStone = DIANCITE
+BaseStats = 50,160,110,110,160,110
+Abilities = MAGICBOUNCE
+HiddenAbilities = MAGICBOUNCE
+Height = 1.1
+Weight = 27.8
+#-------------------------------
+[HOOPA,1]
+FormName = Hoopa Unbound
+Types = PSYCHIC,DARK
+BaseStats = 80,160,60,80,170,130
+Moves = 1,HYPERSPACEFURY,1,TRICK,1,DESTINYBOND,1,ALLYSWITCH,1,CONFUSION,6,ASTONISH,10,MAGICCOAT,15,LIGHTSCREEN,19,PSYBEAM,25,SKILLSWAP,29,POWERSPLIT,29,GUARDSPLIT,46,KNOCKOFF,50,WONDERROOM,50,TRICKROOM,55,DARKPULSE,75,PSYCHIC,85,HYPERSPACEFURY
+Height = 6.5
+Weight = 490.0
+Shape = BipedalTail

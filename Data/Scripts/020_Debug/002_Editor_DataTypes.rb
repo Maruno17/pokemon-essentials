@@ -2,7 +2,7 @@
 # Data type properties
 #===============================================================================
 module UndefinedProperty
-  def self.set(_settingname,oldsetting)
+  def self.set(_settingname, oldsetting)
     pbMessage(_INTL("This property can't be edited here at this time."))
     return oldsetting
   end
@@ -15,7 +15,7 @@ end
 
 
 module ReadOnlyProperty
-  def self.set(_settingname,oldsetting)
+  def self.set(_settingname, oldsetting)
     pbMessage(_INTL("This property cannot be edited."))
     return oldsetting
   end
@@ -32,11 +32,11 @@ class UIntProperty
     @maxdigits = maxdigits
   end
 
-  def set(settingname,oldsetting)
+  def set(settingname, oldsetting)
     params = ChooseNumberParams.new
     params.setMaxDigits(@maxdigits)
     params.setDefaultValue(oldsetting || 0)
-    return pbMessageChooseNumber(_INTL("Set the value for {1}.",settingname),params)
+    return pbMessageChooseNumber(_INTL("Set the value for {1}.", settingname), params)
   end
 
   def defaultValue
@@ -55,12 +55,12 @@ class LimitProperty
     @maxvalue = maxvalue
   end
 
-  def set(settingname,oldsetting)
+  def set(settingname, oldsetting)
     oldsetting = 1 if !oldsetting
     params = ChooseNumberParams.new
-    params.setRange(0,@maxvalue)
+    params.setRange(0, @maxvalue)
     params.setDefaultValue(oldsetting)
-    return pbMessageChooseNumber(_INTL("Set the value for {1} (0-#{@maxvalue}).",settingname),params)
+    return pbMessageChooseNumber(_INTL("Set the value for {1} (0-#{@maxvalue}).", settingname), params)
   end
 
   def defaultValue
@@ -79,14 +79,14 @@ class LimitProperty2
     @maxvalue = maxvalue
   end
 
-  def set(settingname,oldsetting)
+  def set(settingname, oldsetting)
     oldsetting = 0 if !oldsetting
     params = ChooseNumberParams.new
-    params.setRange(0,@maxvalue)
+    params.setRange(0, @maxvalue)
     params.setDefaultValue(oldsetting)
     params.setCancelValue(-1)
-    ret = pbMessageChooseNumber(_INTL("Set the value for {1} (0-#{@maxvalue}).",settingname),params)
-    return (ret>=0) ? ret : nil
+    ret = pbMessageChooseNumber(_INTL("Set the value for {1} (0-#{@maxvalue}).", settingname), params)
+    return (ret >= 0) ? ret : nil
   end
 
   def defaultValue
@@ -105,12 +105,12 @@ class NonzeroLimitProperty
     @maxvalue = maxvalue
   end
 
-  def set(settingname,oldsetting)
+  def set(settingname, oldsetting)
     oldsetting = 1 if !oldsetting
     params = ChooseNumberParams.new
-    params.setRange(1,@maxvalue)
+    params.setRange(1, @maxvalue)
     params.setDefaultValue(oldsetting)
-    return pbMessageChooseNumber(_INTL("Set the value for {1}.",settingname),params)
+    return pbMessageChooseNumber(_INTL("Set the value for {1}.", settingname), params)
   end
 
   def defaultValue
@@ -125,8 +125,8 @@ end
 
 
 module BooleanProperty
-  def self.set(settingname,_oldsetting)
-    return pbConfirmMessage(_INTL("Enable the setting {1}?",settingname)) ? true : false
+  def self.set(settingname, _oldsetting)
+    return pbConfirmMessage(_INTL("Enable the setting {1}?", settingname)) ? true : false
   end
 
   def self.format(value)
@@ -137,9 +137,9 @@ end
 
 
 module BooleanProperty2
-  def self.set(_settingname,_oldsetting)
-    ret = pbShowCommands(nil,[_INTL("True"),_INTL("False")],-1)
-    return (ret>=0) ? (ret==0) : nil
+  def self.set(_settingname, _oldsetting)
+    ret = pbShowCommands(nil, [_INTL("True"), _INTL("False")], -1)
+    return (ret >= 0) ? (ret == 0) : nil
   end
 
   def self.defaultValue
@@ -147,16 +147,16 @@ module BooleanProperty2
   end
 
   def self.format(value)
-    return (value) ? _INTL("True") : (value!=nil) ? _INTL("False") : "-"
+    return (value) ? _INTL("True") : (!value.nil?) ? _INTL("False") : "-"
   end
 end
 
 
 
 module StringProperty
-  def self.set(settingname,oldsetting)
-    return pbMessageFreeText(_INTL("Set the value for {1}.",settingname),
-       (oldsetting) ? oldsetting : "",false,250,Graphics.width)
+  def self.set(settingname, oldsetting)
+    return pbMessageFreeText(_INTL("Set the value for {1}.", settingname),
+                             (oldsetting) ? oldsetting : "", false, 250, Graphics.width)
   end
 
   def self.format(value)
@@ -175,9 +175,9 @@ class LimitStringProperty
     return value
   end
 
-  def set(settingname,oldsetting)
-    return pbMessageFreeText(_INTL("Set the value for {1}.",settingname),
-       (oldsetting) ? oldsetting : "",false,@limit)
+  def set(settingname, oldsetting)
+    return pbMessageFreeText(_INTL("Set the value for {1}.", settingname),
+                             (oldsetting) ? oldsetting : "", false, @limit)
   end
 end
 
@@ -188,13 +188,13 @@ class EnumProperty
     @values = values
   end
 
-  def set(settingname,oldsetting)
+  def set(settingname, oldsetting)
     commands = []
-    for value in @values
+    @values.each do |value|
       commands.push(value)
     end
-    cmd = pbMessage(_INTL("Choose a value for {1}.",settingname),commands,-1)
-    return oldsetting if cmd<0
+    cmd = pbMessage(_INTL("Choose a value for {1}.", settingname), commands, -1)
+    return oldsetting if cmd < 0
     return cmd
   end
 
@@ -215,9 +215,9 @@ class EnumProperty2
     @module = value
   end
 
-  def set(settingname,oldsetting)
+  def set(settingname, oldsetting)
     commands = []
-    for i in 0..@module.maxValue
+    (0..@module.maxValue).each do |i|
       commands.push(getConstantName(@module, i))
     end
     cmd = pbMessage(_INTL("Choose a value for {1}.", settingname), commands, -1, nil, oldsetting)
@@ -231,6 +231,95 @@ class EnumProperty2
 
   def format(value)
     return (value) ? getConstantName(@module, value) : "-"
+  end
+end
+
+
+
+class StringListProperty
+  def self.set(_setting_name, old_setting)
+    real_cmds = []
+    real_cmds.push([_INTL("[ADD VALUE]"), -1])
+    old_setting.length.times do
+      real_cmds.push([old_setting[i], 0])
+    end
+    # Edit list
+    cmdwin = pbListWindow([], 200)
+    oldsel = nil
+    ret = old_setting
+    cmd = 0
+    commands = []
+    do_refresh = true
+    loop do
+      if do_refresh
+        commands = []
+        real_cmds.each_with_index do |entry, i|
+          commands.push(entry[0])
+          cmd = i if oldsel && entry[0] == oldsel
+        end
+      end
+      do_refresh = false
+      oldsel = nil
+      cmd = pbCommands2(cmdwin, commands, -1, cmd, true)
+      if cmd >= 0   # Chose a value
+        entry = real_cmds[cmd]
+        if entry[1] == -1   # Add new value
+          new_value = pbMessageFreeText(_INTL("Enter the new value."),
+                                        "", false, 250, Graphics.width)
+          if !nil_or_empty?(new_value)
+            if real_cmds.any? { |e| e[0] == new_value }
+              oldsel = new_value   # Already have value; just move cursor to it
+            else
+              real_cmds.push([new_value, 0])
+            end
+            do_refresh = true
+          end
+        else   # Edit value
+          case pbMessage(_INTL("\\ts[]Do what with this value?"),
+                         [_INTL("Edit"), _INTL("Delete"), _INTL("Cancel")], 3)
+          when 0   # Edit
+            new_value = pbMessageFreeText(_INTL("Enter the new value."),
+                                          entry[0], false, 250, Graphics.width)
+            if !nil_or_empty?(new_value)
+              if real_cmds.any? { |e| e[0] == new_value }   # Already have value; delete this one
+                real_cmds.delete_at(cmd)
+                cmd = [cmd, real_cmds.length - 1].min
+              else   # Change value
+                entry[0] = new_value
+              end
+              oldsel = new_value
+              do_refresh = true
+            end
+          when 1   # Delete
+            real_cmds.delete_at(cmd)
+            cmd = [cmd, real_cmds.length - 1].min
+            do_refresh = true
+          end
+        end
+      else   # Cancel/quit
+        case pbMessage(_INTL("Keep changes?"), [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+        when 0
+          real_cmds.length.times do |i|
+            real_cmds[i] = (real_cmds[i][1] == -1) ? nil : real_cmds[i][0]
+          end
+          real_cmds.compact!
+          ret = real_cmds
+          break
+        when 1
+          break
+        end
+      end
+    end
+    cmdwin.dispose
+    return ret
+  end
+
+  def self.defaultValue
+    return []
+  end
+
+  def self.format(value)
+    return value.join(",")
   end
 end
 
@@ -268,9 +357,9 @@ end
 
 
 module BGMProperty
-  def self.set(settingname,oldsetting)
-    chosenmap = pbListScreen(settingname,MusicFileLister.new(true,oldsetting))
-    return (chosenmap && chosenmap!="") ? chosenmap : oldsetting
+  def self.set(settingname, oldsetting)
+    chosenmap = pbListScreen(settingname, MusicFileLister.new(true, oldsetting))
+    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
   end
 
   def self.format(value)
@@ -281,9 +370,9 @@ end
 
 
 module MEProperty
-  def self.set(settingname,oldsetting)
-    chosenmap = pbListScreen(settingname,MusicFileLister.new(false,oldsetting))
-    return (chosenmap && chosenmap!="") ? chosenmap : oldsetting
+  def self.set(settingname, oldsetting)
+    chosenmap = pbListScreen(settingname, MusicFileLister.new(false, oldsetting))
+    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
   end
 
   def self.format(value)
@@ -294,9 +383,9 @@ end
 
 
 module WindowskinProperty
-  def self.set(settingname,oldsetting)
-    chosenmap = pbListScreen(settingname,GraphicsLister.new("Graphics/Windowskins/",oldsetting))
-    return (chosenmap && chosenmap!="") ? chosenmap : oldsetting
+  def self.set(settingname, oldsetting)
+    chosenmap = pbListScreen(settingname, GraphicsLister.new("Graphics/Windowskins/", oldsetting))
+    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
   end
 
   def self.format(value)
@@ -320,7 +409,7 @@ end
 
 
 module SpeciesProperty
-  def self.set(_settingname,oldsetting)
+  def self.set(_settingname, oldsetting)
     ret = pbChooseSpeciesList(oldsetting || nil)
     return ret || oldsetting
   end
@@ -341,7 +430,7 @@ class SpeciesFormProperty
     @default_value = default_value
   end
 
-  def set(_settingname,oldsetting)
+  def set(_settingname, oldsetting)
     ret = pbChooseSpeciesFormList(oldsetting || nil)
     return ret || oldsetting
   end
@@ -421,9 +510,9 @@ end
 
 
 module GenderProperty
-  def self.set(_settingname,_oldsetting)
-    ret = pbShowCommands(nil,[_INTL("Male"),_INTL("Female")],-1)
-    return (ret>=0) ? ret : nil
+  def self.set(_settingname, _oldsetting)
+    ret = pbShowCommands(nil, [_INTL("Male"), _INTL("Female")], -1)
+    return (ret >= 0) ? ret : nil
   end
 
   def self.defaultValue
@@ -432,7 +521,7 @@ module GenderProperty
 
   def self.format(value)
     return _INTL("-") if !value
-    return (value==0) ? _INTL("Male") : (value==1) ? _INTL("Female") : "-"
+    return (value == 0) ? _INTL("Male") : (value == 1) ? _INTL("Female") : "-"
   end
 end
 
@@ -489,7 +578,7 @@ class IVsProperty
       next if s.pbs_order < 0
       array[s.pbs_order] = value[s.id] || 0
     end
-    return array.join(',')
+    return array.join(",")
   end
 end
 
@@ -535,7 +624,7 @@ class EVsProperty
       next if s.pbs_order < 0
       array[s.pbs_order] = value[s.id] || 0
     end
-    return array.join(',')
+    return array.join(",")
   end
 end
 
@@ -546,7 +635,7 @@ class BallProperty
     @pokemondata = pokemondata
   end
 
-  def set(_settingname,oldsetting)
+  def set(_settingname, oldsetting)
     return pbChooseBallList(oldsetting)
   end
 
@@ -562,9 +651,9 @@ end
 
 
 module CharacterProperty
-  def self.set(settingname,oldsetting)
-    chosenmap = pbListScreen(settingname,GraphicsLister.new("Graphics/Characters/",oldsetting))
-    return (chosenmap && chosenmap!="") ? chosenmap : oldsetting
+  def self.set(settingname, oldsetting)
+    chosenmap = pbListScreen(settingname, GraphicsLister.new("Graphics/Characters/", oldsetting))
+    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
   end
 
   def self.format(value)
@@ -574,38 +663,14 @@ end
 
 
 
-module PlayerProperty
-  def self.set(settingname,oldsetting)
-    oldsetting = [nil,"xxx","xxx","xxx","xxx","xxx","xxx","xxx"] if !oldsetting
-    properties = [
-       [_INTL("Trainer Type"), TrainerTypeProperty, _INTL("Trainer type of this player.")],
-       [_INTL("Sprite"),       CharacterProperty,   _INTL("Walking character sprite.")],
-       [_INTL("Cycling"),      CharacterProperty,   _INTL("Cycling character sprite.")],
-       [_INTL("Surfing"),      CharacterProperty,   _INTL("Surfing character sprite.")],
-       [_INTL("Running"),      CharacterProperty,   _INTL("Running character sprite.")],
-       [_INTL("Diving"),       CharacterProperty,   _INTL("Diving character sprite.")],
-       [_INTL("Fishing"),      CharacterProperty,   _INTL("Fishing character sprite.")],
-       [_INTL("Field Move"),   CharacterProperty,   _INTL("Using a field move character sprite.")]
-    ]
-    pbPropertyList(settingname,oldsetting,properties,false)
-    return oldsetting
-  end
-
-  def self.format(value)
-    return value.inspect
-  end
-end
-
-
-
 module MapSizeProperty
-  def self.set(settingname,oldsetting)
-    oldsetting = [0,""] if !oldsetting
+  def self.set(settingname, oldsetting)
+    oldsetting = [0, ""] if !oldsetting
     properties = [
-       [_INTL("Width"),         NonzeroLimitProperty.new(30), _INTL("The width of this map in Region Map squares.")],
-       [_INTL("Valid Squares"), StringProperty,               _INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")],
+      [_INTL("Width"),         NonzeroLimitProperty.new(30), _INTL("The width of this map in Region Map squares.")],
+      [_INTL("Valid Squares"), StringProperty,               _INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")]
     ]
-    pbPropertyList(settingname,oldsetting,properties,false)
+    pbPropertyList(settingname, oldsetting, properties, false)
     return oldsetting
   end
 
@@ -616,29 +681,30 @@ end
 
 
 
-def chooseMapPoint(map,rgnmap=false)
-  viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
-  viewport.z=99999
-  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Click a point on the map."),
-     0, Graphics.height - 64, Graphics.width, 64, viewport)
+def chooseMapPoint(map, rgnmap = false)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
+  viewport.z = 99999
+  title = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Click a point on the map."), 0, Graphics.height - 64, Graphics.width, 64, viewport
+  )
   title.z = 2
   if rgnmap
-    sprite=RegionMapSprite.new(map,viewport)
+    sprite = RegionMapSprite.new(map, viewport)
   else
-    sprite=MapSprite.new(map,viewport)
+    sprite = MapSprite.new(map, viewport)
   end
-  sprite.z=2
-  ret=nil
+  sprite.z = 2
+  ret = nil
   loop do
     Graphics.update
     Input.update
-    xy=sprite.getXY
+    xy = sprite.getXY
     if xy
-      ret=xy
+      ret = xy
       break
     end
     if Input.trigger?(Input::BACK)
-      ret=nil
+      ret = nil
       break
     end
   end
@@ -650,11 +716,11 @@ end
 
 
 module MapCoordsProperty
-  def self.set(settingname,oldsetting)
-    chosenmap = pbListScreen(settingname,MapLister.new((oldsetting) ? oldsetting[0] : 0))
-    if chosenmap>=0
+  def self.set(settingname, oldsetting)
+    chosenmap = pbListScreen(settingname, MapLister.new((oldsetting) ? oldsetting[0] : 0))
+    if chosenmap >= 0
       mappoint = chooseMapPoint(chosenmap)
-      return (mappoint) ? [chosenmap,mappoint[0],mappoint[1]] : oldsetting
+      return (mappoint) ? [chosenmap, mappoint[0], mappoint[1]] : oldsetting
     else
       return oldsetting
     end
@@ -668,14 +734,14 @@ end
 
 
 module MapCoordsFacingProperty
-  def self.set(settingname,oldsetting)
-    chosenmap = pbListScreen(settingname,MapLister.new((oldsetting) ? oldsetting[0] : 0))
-    if chosenmap>=0
+  def self.set(settingname, oldsetting)
+    chosenmap = pbListScreen(settingname, MapLister.new((oldsetting) ? oldsetting[0] : 0))
+    if chosenmap >= 0
       mappoint = chooseMapPoint(chosenmap)
       if mappoint
         facing = pbMessage(_INTL("Choose the direction to face in."),
-           [_INTL("Down"),_INTL("Left"),_INTL("Right"),_INTL("Up")],-1)
-        return (facing>=0) ? [chosenmap,mappoint[0],mappoint[1],[2,4,6,8][facing]] : oldsetting
+                           [_INTL("Down"), _INTL("Left"), _INTL("Right"), _INTL("Up")], -1)
+        return (facing >= 0) ? [chosenmap, mappoint[0], mappoint[1], [2, 4, 6, 8][facing]] : oldsetting
       else
         return oldsetting
       end
@@ -692,28 +758,29 @@ end
 
 
 module RegionMapCoordsProperty
-  def self.set(_settingname,oldsetting)
+  def self.set(_settingname, oldsetting)
     regions = self.getMapNameList
     selregion = -1
-    if regions.length==0
+    case regions.length
+    when 0
       pbMessage(_INTL("No region maps are defined."))
       return oldsetting
-    elsif regions.length==1
+    when 1
       selregion = regions[0][0]
     else
       cmds = []
-      for region in regions
+      regions.each do |region|
         cmds.push(region[1])
       end
-      selcmd = pbMessage(_INTL("Choose a region map."),cmds,-1)
-      if selcmd>=0
+      selcmd = pbMessage(_INTL("Choose a region map."), cmds, -1)
+      if selcmd >= 0
         selregion = regions[selcmd][0]
       else
         return oldsetting
       end
     end
-    mappoint = chooseMapPoint(selregion,true)
-    return (mappoint) ? [selregion,mappoint[0],mappoint[1]] : oldsetting
+    mappoint = chooseMapPoint(selregion, true)
+    return (mappoint) ? [selregion, mappoint[0], mappoint[1]] : oldsetting
   end
 
   def self.format(value)
@@ -722,12 +789,10 @@ module RegionMapCoordsProperty
 
   def self.getMapNameList
     mapdata = pbLoadTownMapData
-    ret=[]
-    for i in 0...mapdata.length
+    ret = []
+    mapdata.length.times do |i|
       next if !mapdata[i]
-      ret.push(
-         [i,pbGetMessage(MessageTypes::RegionNames,i)]
-      )
+      ret.push([i, pbGetMessage(MessageTypes::RegionNames, i)])
     end
     return ret
   end
@@ -736,7 +801,7 @@ end
 
 
 module WeatherEffectProperty
-  def self.set(_settingname,oldsetting)
+  def self.set(_settingname, oldsetting)
     oldsetting = [:None, 100] if !oldsetting
     options = []
     ids = []
@@ -763,9 +828,9 @@ end
 
 
 module MapProperty
-  def self.set(settingname,oldsetting)
-    chosenmap = pbListScreen(settingname,MapLister.new(oldsetting ? oldsetting : 0))
-    return (chosenmap>0) ? chosenmap : oldsetting
+  def self.set(settingname, oldsetting)
+    chosenmap = pbListScreen(settingname, MapLister.new(oldsetting || 0))
+    return (chosenmap > 0) ? chosenmap : oldsetting
   end
 
   def self.defaultValue
@@ -781,8 +846,8 @@ end
 
 module ItemNameProperty
   def self.set(settingname, oldsetting)
-    return pbMessageFreeText(_INTL("Set the value for {1}.",settingname),
-       (oldsetting) ? oldsetting : "",false,30)
+    return pbMessageFreeText(_INTL("Set the value for {1}.", settingname),
+                             (oldsetting) ? oldsetting : "", false, 30)
   end
 
   def self.defaultValue
@@ -799,7 +864,6 @@ end
 module PocketProperty
   def self.set(_settingname, oldsetting)
     commands = Settings.bag_pocket_names.clone
-    commands.shift
     cmd = pbMessage(_INTL("Choose a pocket for this item."), commands, -1)
     return (cmd >= 0) ? cmd + 1 : oldsetting
   end
@@ -810,14 +874,14 @@ module PocketProperty
 
   def self.format(value)
     return _INTL("No Pocket") if value == 0
-    return (value) ? Settings.bag_pocket_names[value] : value.inspect
+    return (value) ? Settings.bag_pocket_names[value - 1] : value.inspect
   end
 end
 
 
 
 module BaseStatsProperty
-  def self.set(settingname,oldsetting)
+  def self.set(settingname, oldsetting)
     return oldsetting if !oldsetting
     properties = []
     data = []
@@ -849,14 +913,14 @@ module BaseStatsProperty
       next if s.pbs_order < 0
       array[s.pbs_order] = value[s.id] || 0
     end
-    return array.join(',')
+    return array.join(",")
   end
 end
 
 
 
 module EffortValuesProperty
-  def self.set(settingname,oldsetting)
+  def self.set(settingname, oldsetting)
     return oldsetting if !oldsetting
     properties = []
     data = []
@@ -888,7 +952,7 @@ module EffortValuesProperty
       next if s.pbs_order < 0
       array[s.pbs_order] = value[s.id] || 0
     end
-    return array.join(',')
+    return array.join(",")
   end
 end
 
@@ -911,12 +975,139 @@ end
 
 
 
-module MovePoolProperty
+class GameDataPoolProperty
+  def initialize(game_data, allow_multiple = true, auto_sort = false)
+    if !GameData.const_defined?(game_data.to_sym)
+      raise _INTL("Couldn't find class {1} in module GameData.", game_data.to_s)
+    end
+    @game_data = game_data
+    @game_data_module = GameData.const_get(game_data.to_sym)
+    @allow_multiple = allow_multiple
+    @auto_sort = auto_sort   # Alphabetically
+  end
+
+  def set(setting_name, old_setting)
+    ret = old_setting
+    old_setting.uniq! if !@allow_multiple
+    old_setting.sort! if @auto_sort
+    # Get all values already in the pool
+    values = []
+    values.push([nil, _INTL("[ADD VALUE]")])   # Value ID, name
+    old_setting.each do |value|
+      values.push([value, @game_data_module.get(value).real_name])
+    end
+    # Set things up
+    command_window = pbListWindow([], 200)
+    cmd = [0, 0]   # [input type, list index] (input type: 0=select, 1=swap up, 2=swap down)
+    commands = []
+    need_refresh = true
+    # Edit value pool
+    loop do
+      if need_refresh
+        if @auto_sort
+          values.sort! { |a, b| (a[0].nil?) ? -1 : b[0].nil? ? 1 : a[1] <=> b[1] }
+        end
+        commands = values.map { |entry| entry[1] }
+        need_refresh = false
+      end
+      # Choose a value
+      cmd = pbCommands3(command_window, commands, -1, cmd[1], true)
+      case cmd[0]   # 0=selected/cancelled, 1=pressed Action+Up, 2=pressed Action+Down
+      when 1   # Swap value up
+        if cmd[1] > 0 && cmd[1] < values.length - 1
+          values[cmd[1] + 1], values[cmd[1]] = values[cmd[1]], values[cmd[1] + 1]
+          need_refresh = true
+        end
+      when 2   # Swap value down
+        if cmd[1] > 1
+          values[cmd[1] - 1], values[cmd[1]] = values[cmd[1]], values[cmd[1] - 1]
+          need_refresh = true
+        end
+      when 0
+        if cmd[1] >= 0   # Chose an entry
+          entry = values[cmd[1]]
+          if entry[0].nil?   # Add new value
+            new_value = pbChooseFromGameDataList(@game_data)
+            if new_value
+              if !@allow_multiple && values.any? { |val| val[0] == new_value }
+                cmd[1] = values.index { |val| val[0] == new_value }
+                next
+              end
+              values.push([new_value, @game_data_module.get(new_value).real_name])
+              need_refresh = true
+            end
+          else   # Edit existing value
+            case pbMessage(_INTL("\\ts[]Do what with this value?"),
+                           [_INTL("Change value"), _INTL("Delete"), _INTL("Cancel")], 3)
+            when 0   # Change value
+              new_value = pbChooseFromGameDataList(@game_data, entry[0])
+              if new_value && new_value != entry[0]
+                if !@allow_multiple && values.any? { |val| val[0] == new_value }
+                  values.delete_at(cmd[1])
+                  cmd[1] = values.index { |val| val[0] == new_value }
+                  need_refresh = true
+                  next
+                end
+                entry[0] = new_value
+                entry[1] = @game_data_module.get(new_value).real_name
+                if @auto_sort
+                  values.sort! { |a, b| a[1] <=> b[1] }
+                  cmd[1] = values.index { |val| val[0] == new_value }
+                end
+                need_refresh = true
+              end
+            when 1   # Delete
+              values.delete_at(cmd[1])
+              cmd[1] = [cmd[1], values.length - 1].min
+              need_refresh = true
+            end
+          end
+        else   # Cancel/quit
+          case pbMessage(_INTL("Apply changes?"),
+                         [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+          when 0
+            values.shift   # Remove the "add value" option
+            values.length.times do |i|
+              values[i] = values[i][0]
+            end
+            values.compact!
+            ret = values
+            break
+          when 1
+            break
+          end
+        end
+      end
+    end
+    command_window.dispose
+    return ret
+  end
+
+  def defaultValue
+    return []
+  end
+
+  def format(value)
+    return value.map { |val| @game_data_module.get(val).real_name }.join(",")
+  end
+end
+
+
+
+class EggMovesProperty < GameDataPoolProperty
+  def initialize
+    super(:Move, false, true)
+  end
+end
+
+
+
+module LevelUpMovesProperty
   def self.set(_settingname, oldsetting)
     # Get all moves in move pool
     realcmds = []
     realcmds.push([-1, nil, -1, "-"])   # Level, move ID, index in this list, name
-    for i in 0...oldsetting.length
+    oldsetting.length.times do |i|
       realcmds.push([oldsetting[i][0], oldsetting[i][1], i, GameData::Move.get(oldsetting[i][1]).real_name])
     end
     # Edit move pool
@@ -961,7 +1152,7 @@ module MovePoolProperty
             params.setRange(0, GameData::GrowthRate.max_level)
             params.setDefaultValue(1)
             params.setCancelValue(-1)
-            newlevel = pbMessageChooseNumber(_INTL("Choose a level."),params)
+            newlevel = pbMessageChooseNumber(_INTL("Choose a level."), params)
             if newlevel >= 0
               newmove = pbChooseMoveList
               if newmove
@@ -981,7 +1172,7 @@ module MovePoolProperty
             end
           else   # Edit existing move
             case pbMessage(_INTL("\\ts[]Do what with this move?"),
-               [_INTL("Change level"), _INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 4)
+                           [_INTL("Change level"), _INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 4)
             when 0   # Change level
               params = ChooseNumberParams.new
               params.setRange(0, GameData::GrowthRate.max_level)
@@ -993,8 +1184,7 @@ module MovePoolProperty
                   havemove = e[2] if e[0] == newlevel && e[1] == entry[1]
                 end
                 if havemove >= 0   # Move already known at new level; delete this move
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   oldsel = havemove
                 else   # Apply the new level
                   entry[0] = newlevel
@@ -1010,8 +1200,7 @@ module MovePoolProperty
                   havemove = e[2] if e[0] == entry[0] && e[1] == newmove
                 end
                 if havemove >= 0   # New move already known at level; delete this move
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   cmd[1] = [cmd[1], realcmds.length - 1].min
                   oldsel = havemove
                 else   # Apply the new move
@@ -1022,17 +1211,17 @@ module MovePoolProperty
                 refreshlist = true
               end
             when 2   # Delete
-              realcmds[cmd[1]] = nil
-              realcmds.compact!
+              realcmds.delete_at(cmd[1])
               cmd[1] = [cmd[1], realcmds.length - 1].min
               refreshlist = true
             end
           end
         else   # Cancel/quit
           case pbMessage(_INTL("Save changes?"),
-             [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+                         [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           when 0
-            for i in 0...realcmds.length
+            realcmds.shift
+            realcmds.length.times do |i|
               realcmds[i].pop   # Remove name
               realcmds[i].pop   # Remove index in this list
             end
@@ -1055,106 +1244,9 @@ module MovePoolProperty
 
   def self.format(value)
     ret = ""
-    for i in 0...value.length
+    value.length.times do |i|
       ret << "," if i > 0
       ret << sprintf("%s,%s", value[i][0], GameData::Move.get(value[i][1]).real_name)
-    end
-    return ret
-  end
-end
-
-
-
-module EggMovesProperty
-  def self.set(_settingname, oldsetting)
-    # Get all egg moves
-    realcmds = []
-    realcmds.push([nil, _INTL("[ADD MOVE]"), -1])
-    for i in 0...oldsetting.length
-      realcmds.push([oldsetting[i], GameData::Move.get(oldsetting[i]).real_name, 0])
-    end
-    # Edit egg moves list
-    cmdwin = pbListWindow([], 200)
-    oldsel = nil
-    ret = oldsetting
-    cmd = 0
-    commands = []
-    refreshlist = true
-    loop do
-      if refreshlist
-        realcmds.sort! { |a, b| (a[2] == b[2]) ? a[1] <=> b[1] : a[2] <=> b[2] }
-        commands = []
-        realcmds.each_with_index do |entry, i|
-          commands.push(entry[1])
-          cmd = i if oldsel && entry[0] == oldsel
-        end
-      end
-      refreshlist = false
-      oldsel = nil
-      cmd = pbCommands2(cmdwin, commands, -1, cmd, true)
-      if cmd >= 0   # Chose an entry
-        entry = realcmds[cmd]
-        if entry[2] == -1   # Add new move
-          newmove = pbChooseMoveList
-          if newmove
-            if realcmds.any? { |e| e[0] == newmove }
-              oldsel = newmove   # Already have move; just move cursor to it
-            else
-              realcmds.push([newmove, GameData::Move.get(newmove).name, 0])
-            end
-            refreshlist = true
-          end
-        else   # Edit move
-          case pbMessage(_INTL("\\ts[]Do what with this move?"),
-             [_INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 3)
-          when 0   # Change move
-            newmove = pbChooseMoveList(entry[0])
-            if newmove
-              if realcmds.any? { |e| e[0] == newmove }   # Already have move; delete this one
-                realcmds[cmd] = nil
-                realcmds.compact!
-                cmd = [cmd, realcmds.length - 1].min
-              else   # Change move
-                realcmds[cmd] = [newmove, GameData::Move.get(newmove).name, 0]
-              end
-              oldsel = newmove
-              refreshlist = true
-            end
-          when 1   # Delete
-            realcmds[cmd] = nil
-            realcmds.compact!
-            cmd = [cmd, realcmds.length - 1].min
-            refreshlist = true
-          end
-        end
-      else   # Cancel/quit
-        case pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
-        when 0
-          for i in 0...realcmds.length
-            realcmds[i] = realcmds[i][0]
-          end
-          realcmds.compact!
-          ret = realcmds
-          break
-        when 1
-          break
-        end
-      end
-    end
-    cmdwin.dispose
-    return ret
-  end
-
-  def self.defaultValue
-    return []
-  end
-
-  def self.format(value)
-    ret = ""
-    for i in 0...value.length
-      ret << "," if i > 0
-      ret << GameData::Move.get(value[i]).real_name
     end
     return ret
   end
@@ -1166,7 +1258,7 @@ class EvolutionsProperty
   def initialize
     @methods = []
     @evo_ids = []
-    GameData::Evolution.each do |e|
+    GameData::Evolution.each_alphabetically do |e|
       @methods.push(e.real_name)
       @evo_ids.push(e.id)
     end
@@ -1187,9 +1279,13 @@ class EvolutionsProperty
       ret = pbChooseTypeList(value)
     when :Ability
       ret = pbChooseAbilityList(value)
+    when String
+      ret = pbMessageFreeText(_INTL("Enter a value."), ret || "", false, 250, Graphics.width)
+      ret.strip!
+      ret = nil if ret.empty?
     else
       params = ChooseNumberParams.new
-      params.setRange(0, 65535)
+      params.setRange(0, 65_535)
       params.setDefaultValue(value) if value
       params.setCancelValue(-1)
       ret = pbMessageChooseNumber(_INTL("Choose a parameter."), params)
@@ -1198,24 +1294,24 @@ class EvolutionsProperty
     return ret
   end
 
-  def set(_settingname,oldsetting)
+  def set(_settingname, oldsetting)
     ret = oldsetting
     cmdwin = pbListWindow([])
     commands = []
     realcmds = []
-    realcmds.push([-1,0,0,-1])
-    for i in 0...oldsetting.length
-      realcmds.push([oldsetting[i][0],oldsetting[i][1],oldsetting[i][2],i])
+    realcmds.push([-1, 0, 0, -1])
+    oldsetting.length.times do |i|
+      realcmds.push([oldsetting[i][0], oldsetting[i][1], oldsetting[i][2], i])
     end
     refreshlist = true
     oldsel = -1
-    cmd = [0,0]
+    cmd = [0, 0]
     loop do
       if refreshlist
-        realcmds.sort! { |a,b| a[3]<=>b[3] }
+        realcmds.sort! { |a, b| a[3] <=> b[3] }
         commands = []
-        for i in 0...realcmds.length
-          if realcmds[i][3]<0
+        realcmds.length.times do |i|
+          if realcmds[i][3] < 0
             commands.push(_INTL("[ADD EVOLUTION]"))
           else
             level = realcmds[i][2]
@@ -1223,57 +1319,58 @@ class EvolutionsProperty
             param_type = evo_method_data.parameter
             if param_type.nil?
               commands.push(_INTL("{1}: {2}",
-                 GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name))
+                                  GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name))
             else
-              if !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
+              if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
                 level = getConstantName(param_type, level)
               end
               level = "???" if !level || (level.is_a?(String) && level.empty?)
               commands.push(_INTL("{1}: {2}, {3}",
-                 GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name, level.to_s))
+                                  GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name, level.to_s))
             end
           end
-          cmd[1] = i if oldsel>=0 && realcmds[i][3]==oldsel
+          cmd[1] = i if oldsel >= 0 && realcmds[i][3] == oldsel
         end
       end
       refreshlist = false
       oldsel = -1
-      cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
-      if cmd[0]==1   # Swap evolution up
-        if cmd[1]>0 && cmd[1]<realcmds.length-1
-          realcmds[cmd[1]+1][3],realcmds[cmd[1]][3] = realcmds[cmd[1]][3],realcmds[cmd[1]+1][3]
+      cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
+      case cmd[0]
+      when 1   # Swap evolution up
+        if cmd[1] > 0 && cmd[1] < realcmds.length - 1
+          realcmds[cmd[1] + 1][3], realcmds[cmd[1]][3] = realcmds[cmd[1]][3], realcmds[cmd[1] + 1][3]
           refreshlist = true
         end
-      elsif cmd[0]==2   # Swap evolution down
-        if cmd[1]>1
-          realcmds[cmd[1]-1][3],realcmds[cmd[1]][3] = realcmds[cmd[1]][3],realcmds[cmd[1]-1][3]
+      when 2   # Swap evolution down
+        if cmd[1] > 1
+          realcmds[cmd[1] - 1][3], realcmds[cmd[1]][3] = realcmds[cmd[1]][3], realcmds[cmd[1] - 1][3]
           refreshlist = true
         end
-      elsif cmd[0]==0
-        if cmd[1]>=0
+      when 0
+        if cmd[1] >= 0
           entry = realcmds[cmd[1]]
-          if entry[3]==-1   # Add new evolution path
+          if entry[3] == -1   # Add new evolution path
             pbMessage(_INTL("Choose an evolved form, method and parameter."))
             newspecies = pbChooseSpeciesList
             if newspecies
-              newmethodindex = pbMessage(_INTL("Choose an evolution method."),@methods,-1)
+              newmethodindex = pbMessage(_INTL("Choose an evolution method."), @methods, -1)
               if newmethodindex >= 0
                 newmethod = @evo_ids[newmethodindex]
                 newparam = edit_parameter(newmethod)
                 if newparam || GameData::Evolution.get(newmethod).parameter.nil?
                   existing_evo = -1
-                  for i in 0...realcmds.length
-                    existing_evo = realcmds[i][3] if realcmds[i][0]==newspecies &&
-                                                     realcmds[i][1]==newmethod &&
-                                                     realcmds[i][2]==newparam
+                  realcmds.length.times do |i|
+                    existing_evo = realcmds[i][3] if realcmds[i][0] == newspecies &&
+                                                     realcmds[i][1] == newmethod &&
+                                                     realcmds[i][2] == newparam
                   end
                   if existing_evo >= 0
                     oldsel = existing_evo
                   else
                     maxid = -1
-                    realcmds.each { |i| maxid = [maxid,i[3]].max }
-                    realcmds.push([newspecies,newmethod,newparam,maxid+1])
-                    oldsel = maxid+1
+                    realcmds.each { |i| maxid = [maxid, i[3]].max }
+                    realcmds.push([newspecies, newmethod, newparam, maxid + 1])
+                    oldsel = maxid + 1
                   end
                   refreshlist = true
                 end
@@ -1281,20 +1378,19 @@ class EvolutionsProperty
             end
           else   # Edit evolution
             case pbMessage(_INTL("\\ts[]Do what with this evolution?"),
-               [_INTL("Change species"),_INTL("Change method"),
-                _INTL("Change parameter"),_INTL("Delete"),_INTL("Cancel")],5)
+                           [_INTL("Change species"), _INTL("Change method"),
+                            _INTL("Change parameter"), _INTL("Delete"), _INTL("Cancel")], 5)
             when 0   # Change species
               newspecies = pbChooseSpeciesList(entry[0])
               if newspecies
                 existing_evo = -1
-                for i in 0...realcmds.length
-                  existing_evo = realcmds[i][3] if realcmds[i][0]==newspecies &&
-                                                   realcmds[i][1]==entry[1] &&
-                                                   realcmds[i][2]==entry[2]
+                realcmds.length.times do |i|
+                  existing_evo = realcmds[i][3] if realcmds[i][0] == newspecies &&
+                                                   realcmds[i][1] == entry[1] &&
+                                                   realcmds[i][2] == entry[2]
                 end
                 if existing_evo >= 0
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   oldsel = existing_evo
                 else
                   entry[0] = newspecies
@@ -1305,18 +1401,17 @@ class EvolutionsProperty
             when 1   # Change method
               default_index = 0
               @evo_ids.each_with_index { |evo, i| default_index = i if evo == entry[1] }
-              newmethodindex = pbMessage(_INTL("Choose an evolution method."),@methods,-1,nil,default_index)
+              newmethodindex = pbMessage(_INTL("Choose an evolution method."), @methods, -1, nil, default_index)
               if newmethodindex >= 0
                 newmethod = @evo_ids[newmethodindex]
                 existing_evo = -1
-                for i in 0...realcmds.length
-                  existing_evo = realcmds[i][3] if realcmds[i][0]==entry[0] &&
-                                                   realcmds[i][1]==newmethod &&
-                                                   realcmds[i][2]==entry[2]
+                realcmds.length.times do |i|
+                  existing_evo = realcmds[i][3] if realcmds[i][0] == entry[0] &&
+                                                   realcmds[i][1] == newmethod &&
+                                                   realcmds[i][2] == entry[2]
                 end
                 if existing_evo >= 0
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   oldsel = existing_evo
                 elsif newmethod != entry[1]
                   entry[1] = newmethod
@@ -1332,14 +1427,13 @@ class EvolutionsProperty
                 newparam = edit_parameter(entry[1], entry[2])
                 if newparam
                   existing_evo = -1
-                  for i in 0...realcmds.length
-                    existing_evo = realcmds[i][3] if realcmds[i][0]==entry[0] &&
-                                                     realcmds[i][1]==entry[1] &&
-                                                     realcmds[i][2]==newparam
+                  realcmds.length.times do |i|
+                    existing_evo = realcmds[i][3] if realcmds[i][0] == entry[0] &&
+                                                     realcmds[i][1] == entry[1] &&
+                                                     realcmds[i][2] == newparam
                   end
                   if existing_evo >= 0
-                    realcmds[cmd[1]] = nil
-                    realcmds.compact!
+                    realcmds.delete_at(cmd[1])
                     oldsel = existing_evo
                   else
                     entry[2] = newparam
@@ -1349,20 +1443,19 @@ class EvolutionsProperty
                 end
               end
             when 3   # Delete
-              realcmds[cmd[1]] = nil
-              realcmds.compact!
-              cmd[1] = [cmd[1],realcmds.length-1].min
+              realcmds.delete_at(cmd[1])
+              cmd[1] = [cmd[1], realcmds.length - 1].min
               refreshlist = true
             end
           end
         else
           cmd2 = pbMessage(_INTL("Save changes?"),
-             [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-          if cmd2==0 || cmd2==1
-            if cmd2==0
-              for i in 0...realcmds.length
+                           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+          if [0, 1].include?(cmd2)
+            if cmd2 == 0
+              realcmds.length.times do |i|
                 realcmds[i].pop
-                realcmds[i] = nil if realcmds[i][0]==-1
+                realcmds[i] = nil if realcmds[i][0] == -1
               end
               realcmds.compact!
               ret = realcmds
@@ -1382,14 +1475,14 @@ class EvolutionsProperty
 
   def format(value)
     ret = ""
-    for i in 0...value.length
+    value.length.times do |i|
       ret << "," if i > 0
       param = value[i][2]
       evo_method_data = GameData::Evolution.get(value[i][1])
       param_type = evo_method_data.parameter
       if param_type.nil?
         param = ""
-      elsif !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
+      elsif param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
         param = getConstantName(param_type, param)
       else
         param = param.to_s
@@ -1437,10 +1530,10 @@ module EncounterSlotProperty
     if species_data.form > 0
       if value[2] == value[3]
         return sprintf("%d, %s_%d (Lv.%d)", value[0],
-           species_data.real_name, species_data.form, value[2])
+                       species_data.real_name, species_data.form, value[2])
       end
       return sprintf("%d, %s_%d (Lv.%d-%d)", value[0],
-         species_data.real_name, species_data.form, value[2], value[3])
+                     species_data.real_name, species_data.form, value[2], value[3])
     end
     if value[2] == value[3]
       return sprintf("%d, %s (Lv.%d)", value[0], species_data.real_name, value[2])
@@ -1454,41 +1547,43 @@ end
 #===============================================================================
 # Core property editor script
 #===============================================================================
-def pbPropertyList(title,data,properties,saveprompt=false)
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+def pbPropertyList(title, data, properties, saveprompt = false)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   list = pbListWindow([], Graphics.width / 2)
   list.viewport = viewport
   list.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(title,
-     list.width, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    title, list.width, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
-  desc = Window_UnformattedTextPokemon.newWithSize("",
-     list.width, title.height, Graphics.width / 2, Graphics.height - title.height, viewport)
+  desc = Window_UnformattedTextPokemon.newWithSize(
+    "", list.width, title.height, Graphics.width / 2, Graphics.height - title.height, viewport
+  )
   desc.z = 2
   selectedmap = -1
   retval = nil
   commands = []
-  for i in 0...properties.length
+  properties.length.times do |i|
     propobj = properties[i][1]
-    commands.push(sprintf("%s=%s",properties[i][0],propobj.format(data[i])))
+    commands.push(sprintf("%s=%s", properties[i][0], propobj.format(data[i])))
   end
   list.commands = commands
   list.index    = 0
-  begin
+  loop do
     loop do
       Graphics.update
       Input.update
       list.update
       desc.update
-      if list.index!=selectedmap
+      if list.index != selectedmap
         desc.text = properties[list.index][2]
         selectedmap = list.index
       end
       if Input.trigger?(Input::ACTION)
         propobj = properties[selectedmap][1]
-        if propobj!=ReadOnlyProperty && !propobj.is_a?(ReadOnlyProperty) &&
-           pbConfirmMessage(_INTL("Reset the setting {1}?",properties[selectedmap][0]))
+        if propobj != ReadOnlyProperty && !propobj.is_a?(ReadOnlyProperty) &&
+           pbConfirmMessage(_INTL("Reset the setting {1}?", properties[selectedmap][0]))
           if propobj.respond_to?("defaultValue")
             data[selectedmap] = propobj.defaultValue
           else
@@ -1496,9 +1591,9 @@ def pbPropertyList(title,data,properties,saveprompt=false)
           end
         end
         commands.clear
-        for i in 0...properties.length
+        properties.length.times do |i|
           propobj = properties[i][1]
-          commands.push(sprintf("%s=%s",properties[i][0],propobj.format(data[i])))
+          commands.push(sprintf("%s=%s", properties[i][0], propobj.format(data[i])))
         end
         list.commands = commands
       elsif Input.trigger?(Input::BACK)
@@ -1507,27 +1602,28 @@ def pbPropertyList(title,data,properties,saveprompt=false)
       elsif Input.trigger?(Input::USE)
         propobj = properties[selectedmap][1]
         oldsetting = data[selectedmap]
-        newsetting = propobj.set(properties[selectedmap][0],oldsetting)
+        newsetting = propobj.set(properties[selectedmap][0], oldsetting)
         data[selectedmap] = newsetting
         commands.clear
-        for i in 0...properties.length
+        properties.length.times do |i|
           propobj = properties[i][1]
-          commands.push(sprintf("%s=%s",properties[i][0],propobj.format(data[i])))
+          commands.push(sprintf("%s=%s", properties[i][0], propobj.format(data[i])))
         end
         list.commands = commands
         break
       end
     end
-    if selectedmap==-1 && saveprompt
+    if selectedmap == -1 && saveprompt
       cmd = pbMessage(_INTL("Save changes?"),
-         [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-      if cmd==2
+                      [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+      if cmd == 2
         selectedmap = list.index
       else
-        retval = (cmd==0)
+        retval = (cmd == 0)
       end
     end
-  end while selectedmap!=-1
+    break unless selectedmap != -1
+  end
   title.dispose
   list.dispose
   desc.dispose

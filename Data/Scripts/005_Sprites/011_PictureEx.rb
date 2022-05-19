@@ -1,71 +1,75 @@
 class PictureOrigin
-  TopLeft     = 0
-  Center      = 1
-  TopRight    = 2
-  BottomLeft  = 3
-  LowerLeft   = 3
-  BottomRight = 4
-  LowerRight  = 4
-  Top         = 5
-  Bottom      = 6
-  Left        = 7
-  Right       = 8
+  TOP_LEFT     = 0
+  CENTER       = 1
+  TOP_RIGHT    = 2
+  BOTTOM_LEFT  = 3
+  LOWER_LEFT   = 3
+  BOTTOM_RIGHT = 4
+  LOWER_RIGHT  = 4
+  TOP          = 5
+  BOTTOM       = 6
+  LEFT         = 7
+  RIGHT        = 8
 end
 
 
 
 class Processes
-  XY         = 0
-  DeltaXY    = 1
-  Z          = 2
-  Curve      = 3
-  Zoom       = 4
-  Angle      = 5
-  Tone       = 6
-  Color      = 7
-  Hue        = 8
-  Opacity    = 9
-  Visible    = 10
-  BlendType  = 11
-  SE         = 12
-  Name       = 13
-  Origin     = 14
-  Src        = 15
-  SrcSize    = 16
-  CropBottom = 17
+  XY          = 0
+  DELTA_XY    = 1
+  Z           = 2
+  CURVE       = 3
+  ZOOM        = 4
+  ANGLE       = 5
+  TONE        = 6
+  COLOR       = 7
+  HUE         = 8
+  OPACITY     = 9
+  VISIBLE     = 10
+  BLEND_TYPE  = 11
+  SE          = 12
+  NAME        = 13
+  ORIGIN      = 14
+  SRC         = 15
+  SRC_SIZE    = 16
+  CROP_BOTTOM = 17
 end
 
 
 
-def getCubicPoint2(src,t)
-  x0  = src[0];  y0 = src[1]
-  cx0 = src[2]; cy0 = src[3]
-  cx1 = src[4]; cy1 = src[5]
-  x1  = src[6];  y1 = src[7]
+def getCubicPoint2(src, t)
+  x0  = src[0]
+  y0  = src[1]
+  cx0 = src[2]
+  cy0 = src[3]
+  cx1 = src[4]
+  cy1 = src[5]
+  x1  = src[6]
+  y1  = src[7]
 
-  x1 = cx1+(x1-cx1)*t
-  x0 = x0+(cx0-x0)*t
-  cx0 = cx0+(cx1-cx0)*t
-  cx1 = cx0+(x1-cx0)*t
-  cx0 = x0+(cx0-x0)*t
-  cx = cx0+(cx1-cx0)*t
+  x1 = cx1 + ((x1 - cx1) * t)
+  x0 = x0 + ((cx0 - x0) * t)
+  cx0 = cx0 + ((cx1 - cx0) * t)
+  cx1 = cx0 + ((x1 - cx0) * t)
+  cx0 = x0 + ((cx0 - x0) * t)
+  cx = cx0 + ((cx1 - cx0) * t)
   # a = x1 - 3 * cx1 + 3 * cx0 - x0
   # b = 3 * (cx1 - 2 * cx0 + x0)
   # c = 3 * (cx0 - x0)
   # d = x0
   # cx = a*t*t*t + b*t*t + c*t + d
-  y1 = cy1+(y1-cy1)*t
-  y0 = y0+(cy0-y0)*t
-  cy0 = cy0+(cy1-cy0)*t
-  cy1 = cy0+(y1-cy0)*t
-  cy0 = y0+(cy0-y0)*t
-  cy = cy0+(cy1-cy0)*t
+  y1 = cy1 + ((y1 - cy1) * t)
+  y0 = y0 + ((cy0 - y0) * t)
+  cy0 = cy0 + ((cy1 - cy0) * t)
+  cy1 = cy0 + ((y1 - cy0) * t)
+  cy0 = y0 + ((cy0 - y0) * t)
+  cy = cy0 + ((cy1 - cy0) * t)
   # a = y1 - 3 * cy1 + 3 * cy0 - y0
   # b = 3 * (cy1 - 2 * cy0 + y0)
   # c = 3 * (cy0 - y0)
   # d = y0
   # cy = a*t*t*t + b*t*t + c*t + d
-  return [cx,cy]
+  return [cx, cy]
 end
 
 
@@ -110,43 +114,47 @@ class PictureEx
     @visible       = true
     @blend_type    = 0
     @name          = ""
-    @origin        = PictureOrigin::TopLeft
-    @src_rect      = Rect.new(0,0,-1,-1)
+    @origin        = PictureOrigin::TOP_LEFT
+    @src_rect      = Rect.new(0, 0, -1, -1)
     @cropBottom    = -1
     @frameUpdates  = []
   end
 
   def callback(cb)
-    if cb.is_a?(Proc);      cb.call(self)
-    elsif cb.is_a?(Array);  cb[0].method(cb[1]).call(self)
-    elsif cb.is_a?(Method); cb.call(self)
+    case cb
+    when Proc
+      cb.call(self)
+    when Array
+      cb[0].method(cb[1]).call(self, *cb[2])
+    when Method
+      cb.call(self)
     end
   end
 
-  def setCallback(delay, cb=nil)
+  def setCallback(delay, cb = nil)
     delay = ensureDelayAndDuration(delay)
-    @processes.push([nil,delay,0,0,cb])
+    @processes.push([nil, delay, 0, 0, cb])
   end
 
   def running?
-    return @processes.length>0
+    return @processes.length > 0
   end
 
   def totalDuration
     ret = 0
-    for process in @processes
-      dur = process[1]+process[2]
-      ret = dur if dur>ret
+    @processes.each do |process|
+      dur = process[1] + process[2]
+      ret = dur if dur > ret
     end
-    ret *= 20.0/Graphics.frame_rate
+    ret *= 20.0 / Graphics.frame_rate
     return ret.to_i
   end
 
-  def ensureDelayAndDuration(delay, duration=nil)
-    delay = self.totalDuration if delay<0
-    delay *= Graphics.frame_rate/20.0
+  def ensureDelayAndDuration(delay, duration = nil)
+    delay = self.totalDuration if delay < 0
+    delay *= Graphics.frame_rate / 20.0
     if !duration.nil?
-      duration *= Graphics.frame_rate/20.0
+      duration *= Graphics.frame_rate / 20.0
       return delay.to_i, duration.to_i
     end
     return delay.to_i
@@ -162,8 +170,10 @@ class PictureEx
   #       point. If you make a sprite auto-rotate, you should not try to alter
   #       the angle another way too.
   def rotate(speed)
-    @rotate_speed = speed*20.0/Graphics.frame_rate
-    while @rotate_speed<0; @rotate_speed += 360; end
+    @rotate_speed = speed * 20.0 / Graphics.frame_rate
+    while @rotate_speed < 0
+      @rotate_speed += 360
+    end
     @rotate_speed %= 360
   end
 
@@ -176,8 +186,8 @@ class PictureEx
   end
 
   def adjustPosition(xOffset, yOffset)
-    for process in @processes
-      next if process[0]!=Processes::XY
+    @processes.each do |process|
+      next if process[0] != Processes::XY
       process[5] += xOffset
       process[6] += yOffset
       process[7] += xOffset
@@ -185,262 +195,262 @@ class PictureEx
     end
   end
 
-  def move(delay, duration, origin, x, y, zoom_x=100.0, zoom_y=100.0, opacity=255)
-    setOrigin(delay,duration,origin)
-    moveXY(delay,duration,x,y)
-    moveZoomXY(delay,duration,zoom_x,zoom_y)
-    moveOpacity(delay,duration,opacity)
+  def move(delay, duration, origin, x, y, zoom_x = 100.0, zoom_y = 100.0, opacity = 255)
+    setOrigin(delay, duration, origin)
+    moveXY(delay, duration, x, y)
+    moveZoomXY(delay, duration, zoom_x, zoom_y)
+    moveOpacity(delay, duration, opacity)
   end
 
-  def moveXY(delay, duration, x, y, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    @processes.push([Processes::XY,delay,duration,0,cb,@x,@y,x,y])
+  def moveXY(delay, duration, x, y, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    @processes.push([Processes::XY, delay, duration, 0, cb, @x, @y, x, y])
   end
 
-  def setXY(delay, x, y, cb=nil)
-    moveXY(delay,0,x,y,cb)
+  def setXY(delay, x, y, cb = nil)
+    moveXY(delay, 0, x, y, cb)
   end
 
-  def moveCurve(delay, duration, x1, y1, x2, y2, x3, y3, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    @processes.push([Processes::Curve,delay,duration,0,cb,[@x,@y,x1,y1,x2,y2,x3,y3]])
+  def moveCurve(delay, duration, x1, y1, x2, y2, x3, y3, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    @processes.push([Processes::CURVE, delay, duration, 0, cb, [@x, @y, x1, y1, x2, y2, x3, y3]])
   end
 
-  def moveDelta(delay, duration, x, y, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    @processes.push([Processes::DeltaXY,delay,duration,0,cb,@x,@y,x,y])
+  def moveDelta(delay, duration, x, y, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    @processes.push([Processes::DELTA_XY, delay, duration, 0, cb, @x, @y, x, y])
   end
 
-  def setDelta(delay, x, y, cb=nil)
-    moveDelta(delay,0,x,y,cb)
+  def setDelta(delay, x, y, cb = nil)
+    moveDelta(delay, 0, x, y, cb)
   end
 
-  def moveZ(delay, duration, z, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    @processes.push([Processes::Z,delay,duration,0,cb,@z,z])
+  def moveZ(delay, duration, z, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    @processes.push([Processes::Z, delay, duration, 0, cb, @z, z])
   end
 
-  def setZ(delay, z, cb=nil)
-    moveZ(delay,0,z,cb)
+  def setZ(delay, z, cb = nil)
+    moveZ(delay, 0, z, cb)
   end
 
-  def moveZoomXY(delay, duration, zoom_x, zoom_y, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    @processes.push([Processes::Zoom,delay,duration,0,cb,@zoom_x,@zoom_y,zoom_x,zoom_y])
+  def moveZoomXY(delay, duration, zoom_x, zoom_y, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    @processes.push([Processes::ZOOM, delay, duration, 0, cb, @zoom_x, @zoom_y, zoom_x, zoom_y])
   end
 
-  def setZoomXY(delay, zoom_x, zoom_y, cb=nil)
-    moveZoomXY(delay,0,zoom_x,zoom_y,cb)
+  def setZoomXY(delay, zoom_x, zoom_y, cb = nil)
+    moveZoomXY(delay, 0, zoom_x, zoom_y, cb)
   end
 
-  def moveZoom(delay, duration, zoom, cb=nil)
-    moveZoomXY(delay,duration,zoom,zoom,cb)
+  def moveZoom(delay, duration, zoom, cb = nil)
+    moveZoomXY(delay, duration, zoom, zoom, cb)
   end
 
-  def setZoom(delay, zoom, cb=nil)
-    moveZoomXY(delay,0,zoom,zoom,cb)
+  def setZoom(delay, zoom, cb = nil)
+    moveZoomXY(delay, 0, zoom, zoom, cb)
   end
 
-  def moveAngle(delay, duration, angle, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    @processes.push([Processes::Angle,delay,duration,0,cb,@angle,angle])
+  def moveAngle(delay, duration, angle, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    @processes.push([Processes::ANGLE, delay, duration, 0, cb, @angle, angle])
   end
 
-  def setAngle(delay, angle, cb=nil)
-    moveAngle(delay,0,angle,cb)
+  def setAngle(delay, angle, cb = nil)
+    moveAngle(delay, 0, angle, cb)
   end
 
-  def moveTone(delay, duration, tone, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    target = (tone) ? tone.clone : Tone.new(0,0,0,0)
-    @processes.push([Processes::Tone,delay,duration,0,cb,@tone.clone,target])
+  def moveTone(delay, duration, tone, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    target = (tone) ? tone.clone : Tone.new(0, 0, 0, 0)
+    @processes.push([Processes::TONE, delay, duration, 0, cb, @tone.clone, target])
   end
 
-  def setTone(delay, tone, cb=nil)
-    moveTone(delay,0,tone,cb)
+  def setTone(delay, tone, cb = nil)
+    moveTone(delay, 0, tone, cb)
   end
 
-  def moveColor(delay, duration, color, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    target = (color) ? color.clone : Color.new(0,0,0,0)
-    @processes.push([Processes::Color,delay,duration,0,cb,@color.clone,target])
+  def moveColor(delay, duration, color, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    target = (color) ? color.clone : Color.new(0, 0, 0, 0)
+    @processes.push([Processes::COLOR, delay, duration, 0, cb, @color.clone, target])
   end
 
-  def setColor(delay, color, cb=nil)
-    moveColor(delay,0,color,cb)
-  end
-
-  # Hue changes don't actually work.
-  def moveHue(delay, duration, hue, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    @processes.push([Processes::Hue,delay,duration,0,cb,@hue,hue])
+  def setColor(delay, color, cb = nil)
+    moveColor(delay, 0, color, cb)
   end
 
   # Hue changes don't actually work.
-  def setHue(delay, hue, cb=nil)
-    moveHue(delay,0,hue,cb)
+  def moveHue(delay, duration, hue, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    @processes.push([Processes::HUE, delay, duration, 0, cb, @hue, hue])
   end
 
-  def moveOpacity(delay, duration, opacity, cb=nil)
-    delay, duration = ensureDelayAndDuration(delay,duration)
-    @processes.push([Processes::Opacity,delay,duration,0,cb,@opacity,opacity])
+  # Hue changes don't actually work.
+  def setHue(delay, hue, cb = nil)
+    moveHue(delay, 0, hue, cb)
   end
 
-  def setOpacity(delay, opacity, cb=nil)
-    moveOpacity(delay,0,opacity,cb)
+  def moveOpacity(delay, duration, opacity, cb = nil)
+    delay, duration = ensureDelayAndDuration(delay, duration)
+    @processes.push([Processes::OPACITY, delay, duration, 0, cb, @opacity, opacity])
   end
 
-  def setVisible(delay, visible, cb=nil)
+  def setOpacity(delay, opacity, cb = nil)
+    moveOpacity(delay, 0, opacity, cb)
+  end
+
+  def setVisible(delay, visible, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::Visible,delay,0,0,cb,visible])
+    @processes.push([Processes::VISIBLE, delay, 0, 0, cb, visible])
   end
 
   # Only values of 0 (normal), 1 (additive) and 2 (subtractive) are allowed.
-  def setBlendType(delay, blend, cb=nil)
+  def setBlendType(delay, blend, cb = nil)
     delay = ensureDelayAndDuration(delay)
-    @processes.push([Processes::BlendType,delay,0,0,cb,blend])
+    @processes.push([Processes::BLEND_TYPE, delay, 0, 0, cb, blend])
   end
 
-  def setSE(delay, seFile, volume=nil, pitch=nil, cb=nil)
+  def setSE(delay, seFile, volume = nil, pitch = nil, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::SE,delay,0,0,cb,seFile,volume,pitch])
+    @processes.push([Processes::SE, delay, 0, 0, cb, seFile, volume, pitch])
   end
 
-  def setName(delay, name, cb=nil)
+  def setName(delay, name, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::Name,delay,0,0,cb,name])
+    @processes.push([Processes::NAME, delay, 0, 0, cb, name])
   end
 
-  def setOrigin(delay, origin, cb=nil)
+  def setOrigin(delay, origin, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::Origin,delay,0,0,cb,origin])
+    @processes.push([Processes::ORIGIN, delay, 0, 0, cb, origin])
   end
 
-  def setSrc(delay, srcX, srcY, cb=nil)
+  def setSrc(delay, srcX, srcY, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::Src,delay,0,0,cb,srcX,srcY])
+    @processes.push([Processes::SRC, delay, 0, 0, cb, srcX, srcY])
   end
 
-  def setSrcSize(delay, srcWidth, srcHeight, cb=nil)
+  def setSrcSize(delay, srcWidth, srcHeight, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::SrcSize,delay,0,0,cb,srcWidth,srcHeight])
+    @processes.push([Processes::SRC_SIZE, delay, 0, 0, cb, srcWidth, srcHeight])
   end
 
   # Used to cut Pokémon sprites off when they faint and sink into the ground.
-  def setCropBottom(delay, y, cb=nil)
+  def setCropBottom(delay, y, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::CropBottom,delay,0,0,cb,y])
+    @processes.push([Processes::CROP_BOTTOM, delay, 0, 0, cb, y])
   end
 
   def update
     procEnded = false
     @frameUpdates.clear
-    for i in 0...@processes.length
-      process = @processes[i]
+    @processes.each_with_index do |process, i|
       # Decrease delay of processes that are scheduled to start later
-      if process[1]>=0
+      if process[1] >= 0
         # Set initial values if the process will start this frame
-        if process[1]==0
+        if process[1] == 0
           case process[0]
           when Processes::XY
             process[5] = @x
             process[6] = @y
-          when Processes::DeltaXY
+          when Processes::DELTA_XY
             process[5] = @x
             process[6] = @y
             process[7] += @x
             process[8] += @y
-          when Processes::Curve
+          when Processes::CURVE
             process[5][0] = @x
             process[5][1] = @y
           when Processes::Z
             process[5] = @z
-          when Processes::Zoom
+          when Processes::ZOOM
             process[5] = @zoom_x
             process[6] = @zoom_y
-          when Processes::Angle
+          when Processes::ANGLE
             process[5] = @angle
-          when Processes::Tone
+          when Processes::TONE
             process[5] = @tone.clone
-          when Processes::Color
+          when Processes::COLOR
             process[5] = @color.clone
-          when Processes::Hue
+          when Processes::HUE
             process[5] = @hue
-          when Processes::Opacity
+          when Processes::OPACITY
             process[5] = @opacity
           end
         end
         # Decrease delay counter
         process[1] -= 1
         # Process hasn't started yet, skip to the next one
-        next if process[1]>=0
+        next if process[1] >= 0
       end
       # Update process
       @frameUpdates.push(process[0]) if !@frameUpdates.include?(process[0])
-      fra = (process[2]==0) ? 1 : process[3]   # Frame counter
-      dur = (process[2]==0) ? 1 : process[2]   # Total duration of process
+      fra = (process[2] == 0) ? 1 : process[3]   # Frame counter
+      dur = (process[2] == 0) ? 1 : process[2]   # Total duration of process
       case process[0]
-      when Processes::XY, Processes::DeltaXY
-        @x = process[5] + fra * (process[7] - process[5]) / dur
-        @y = process[6] + fra * (process[8] - process[6]) / dur
-      when Processes::Curve
-        @x, @y = getCubicPoint2(process[5],fra.to_f/dur)
+      when Processes::XY, Processes::DELTA_XY
+        @x = process[5] + (fra * (process[7] - process[5]) / dur)
+        @y = process[6] + (fra * (process[8] - process[6]) / dur)
+      when Processes::CURVE
+        @x, @y = getCubicPoint2(process[5], fra.to_f / dur)
       when Processes::Z
-        @z = process[5] + fra * (process[6] - process[5]) / dur
-      when Processes::Zoom
-        @zoom_x = process[5] + fra * (process[7] - process[5]) / dur
-        @zoom_y = process[6] + fra * (process[8] - process[6]) / dur
-      when Processes::Angle
-        @angle = process[5] + fra * (process[6] - process[5]) / dur
-      when Processes::Tone
-        @tone.red   = process[5].red + fra * (process[6].red - process[5].red) / dur
-        @tone.green = process[5].green + fra * (process[6].green - process[5].green) / dur
-        @tone.blue  = process[5].blue + fra * (process[6].blue - process[5].blue) / dur
-        @tone.gray  = process[5].gray + fra * (process[6].gray - process[5].gray) / dur
-      when Processes::Color
-        @color.red   = process[5].red + fra * (process[6].red - process[5].red) / dur
-        @color.green = process[5].green + fra * (process[6].green - process[5].green) / dur
-        @color.blue  = process[5].blue + fra * (process[6].blue - process[5].blue) / dur
-        @color.alpha = process[5].alpha + fra * (process[6].alpha - process[5].alpha) / dur
-      when Processes::Hue
+        @z = process[5] + (fra * (process[6] - process[5]) / dur)
+      when Processes::ZOOM
+        @zoom_x = process[5] + (fra * (process[7] - process[5]) / dur)
+        @zoom_y = process[6] + (fra * (process[8] - process[6]) / dur)
+      when Processes::ANGLE
+        @angle = process[5] + (fra * (process[6] - process[5]) / dur)
+      when Processes::TONE
+        @tone.red   = process[5].red + (fra * (process[6].red - process[5].red) / dur)
+        @tone.green = process[5].green + (fra * (process[6].green - process[5].green) / dur)
+        @tone.blue  = process[5].blue + (fra * (process[6].blue - process[5].blue) / dur)
+        @tone.gray  = process[5].gray + (fra * (process[6].gray - process[5].gray) / dur)
+      when Processes::COLOR
+        @color.red   = process[5].red + (fra * (process[6].red - process[5].red) / dur)
+        @color.green = process[5].green + (fra * (process[6].green - process[5].green) / dur)
+        @color.blue  = process[5].blue + (fra * (process[6].blue - process[5].blue) / dur)
+        @color.alpha = process[5].alpha + (fra * (process[6].alpha - process[5].alpha) / dur)
+      when Processes::HUE
         @hue = (process[6] - process[5]).to_f / dur
-      when Processes::Opacity
-        @opacity = process[5] + fra * (process[6] - process[5]) / dur
-      when Processes::Visible
+      when Processes::OPACITY
+        @opacity = process[5] + (fra * (process[6] - process[5]) / dur)
+      when Processes::VISIBLE
         @visible = process[5]
-      when Processes::BlendType
+      when Processes::BLEND_TYPE
         @blend_type = process[5]
       when Processes::SE
-        pbSEPlay(process[5],process[6],process[7])
-      when Processes::Name
+        pbSEPlay(process[5], process[6], process[7])
+      when Processes::NAME
         @name = process[5]
-      when Processes::Origin
+      when Processes::ORIGIN
         @origin = process[5]
-      when Processes::Src
+      when Processes::SRC
         @src_rect.x = process[5]
         @src_rect.y = process[6]
-      when Processes::SrcSize
+      when Processes::SRC_SIZE
         @src_rect.width  = process[5]
         @src_rect.height = process[6]
-      when Processes::CropBottom
+      when Processes::CROP_BOTTOM
         @cropBottom = process[5]
       end
       # Increase frame counter
       process[3] += 1
-      if process[3]>process[2]
-        # Process has ended, erase it
-        callback(process[4]) if process[4]
-        @processes[i] = nil
-        procEnded = true
-      end
+      next if process[3] <= process[2]
+      # Process has ended, erase it
+      callback(process[4]) if process[4]
+      @processes[i] = nil
+      procEnded = true
     end
     # Clear out empty spaces in @processes array caused by finished processes
     @processes.compact! if procEnded
     # Add the constant rotation speed
     if @rotate_speed != 0
-      @frameUpdates.push(Processes::Angle) if !@frameUpdates.include?(Processes::Angle)
+      @frameUpdates.push(Processes::ANGLE) if !@frameUpdates.include?(Processes::ANGLE)
       @angle += @rotate_speed
-      while @angle<0; @angle += 360; end
+      while @angle < 0
+        @angle += 360
+      end
       @angle %= 360
     end
   end
@@ -451,69 +461,69 @@ end
 #===============================================================================
 #
 #===============================================================================
-def setPictureSprite(sprite, picture, iconSprite=false)
-  return if picture.frameUpdates.length==0
-  for i in 0...picture.frameUpdates.length
-    case picture.frameUpdates[i]
-    when Processes::XY, Processes::DeltaXY
+def setPictureSprite(sprite, picture, iconSprite = false)
+  return if picture.frameUpdates.length == 0
+  picture.frameUpdates.each do |type|
+    case type
+    when Processes::XY, Processes::DELTA_XY
       sprite.x = picture.x.round
       sprite.y = picture.y.round
     when Processes::Z
       sprite.z = picture.z
-    when Processes::Zoom
+    when Processes::ZOOM
       sprite.zoom_x = picture.zoom_x / 100.0
       sprite.zoom_y = picture.zoom_y / 100.0
-    when Processes::Angle
+    when Processes::ANGLE
       sprite.angle = picture.angle
-    when Processes::Tone
+    when Processes::TONE
       sprite.tone = picture.tone
-    when Processes::Color
+    when Processes::COLOR
       sprite.color = picture.color
-    when Processes::Hue
+    when Processes::HUE
       # This doesn't do anything.
-    when Processes::BlendType
+    when Processes::BLEND_TYPE
       sprite.blend_type = picture.blend_type
-    when Processes::Opacity
+    when Processes::OPACITY
       sprite.opacity = picture.opacity
-    when Processes::Visible
+    when Processes::VISIBLE
       sprite.visible = picture.visible
-    when Processes::Name
+    when Processes::NAME
       sprite.name = picture.name if iconSprite && sprite.name != picture.name
-    when Processes::Origin
+    when Processes::ORIGIN
       case picture.origin
-      when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
+      when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
         sprite.ox = 0
-      when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
-        sprite.ox = (sprite.bitmap && !sprite.bitmap.disposed?) ? sprite.src_rect.width/2 : 0
-      when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
+      when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
+        sprite.ox = (sprite.bitmap && !sprite.bitmap.disposed?) ? sprite.src_rect.width / 2 : 0
+      when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
         sprite.ox = (sprite.bitmap && !sprite.bitmap.disposed?) ? sprite.src_rect.width : 0
       end
       case picture.origin
-      when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
+      when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
         sprite.oy = 0
-      when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
-        sprite.oy = (sprite.bitmap && !sprite.bitmap.disposed?) ? sprite.src_rect.height/2 : 0
-      when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
+      when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
+        sprite.oy = (sprite.bitmap && !sprite.bitmap.disposed?) ? sprite.src_rect.height / 2 : 0
+      when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
         sprite.oy = (sprite.bitmap && !sprite.bitmap.disposed?) ? sprite.src_rect.height : 0
       end
-    when Processes::Src
+    when Processes::SRC
       next unless iconSprite && sprite.src_rect
       sprite.src_rect.x = picture.src_rect.x
       sprite.src_rect.y = picture.src_rect.y
-    when Processes::SrcSize
+    when Processes::SRC_SIZE
       next unless iconSprite && sprite.src_rect
       sprite.src_rect.width  = picture.src_rect.width
       sprite.src_rect.height = picture.src_rect.height
     end
   end
-  if iconSprite && sprite.src_rect && picture.cropBottom>=0
-    spriteBottom = sprite.y-sprite.oy+sprite.src_rect.height
-    if spriteBottom>picture.cropBottom
-      sprite.src_rect.height = [picture.cropBottom-sprite.y+sprite.oy,0].max
+  if iconSprite && sprite.src_rect && picture.cropBottom >= 0
+    spriteBottom = sprite.y - sprite.oy + sprite.src_rect.height
+    if spriteBottom > picture.cropBottom
+      sprite.src_rect.height = [picture.cropBottom - sprite.y + sprite.oy, 0].max
     end
   end
 end
 
 def setPictureIconSprite(sprite, picture)
-  setPictureSprite(sprite,picture,true)
+  setPictureSprite(sprite, picture, true)
 end

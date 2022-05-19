@@ -12,7 +12,7 @@ end
 
 # Used in events
 def pbHasEligible?(*arg)
-  return pbBattleChallenge.rules.ruleset.hasValidTeam?($Trainer.party)
+  return pbBattleChallenge.rules.ruleset.hasValidTeam?($player.party)
 end
 
 #===============================================================================
@@ -39,12 +39,12 @@ def pbEntryScreen(*arg)
   retval = false
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene, $Trainer.party)
+    screen = PokemonPartyScreen.new(scene, $player.party)
     ret = screen.pbPokemonMultipleEntryScreenEx(pbBattleChallenge.rules.ruleset)
     # Set party
     pbBattleChallenge.setParty(ret) if ret
     # Continue (return true) if Pokémon were chosen
-    retval = (ret != nil && ret.length > 0)
+    retval = (ret && ret.length > 0)
   }
   return retval
 end
@@ -130,13 +130,11 @@ class PBPokemon
     end
     moves = pieces[4].split(/\s*,\s*/)
     moveid = []
-    for i in 0...Pokemon::MAX_MOVES
+    Pokemon::MAX_MOVES.times do |i|
       move_data = GameData::Move.try_get(moves[i])
       moveid.push(move_data.id) if move_data
     end
-    if moveid.length == 0
-      GameData::Move.each { |mov| moveid.push(mov.id); break }   # Get any one move
-    end
+    moveid.push(GameData::Move.keys.first) if moveid.length == 0   # Get any one move
     return self.new(species, item, nature, moveid[0], moveid[1], moveid[2], moveid[3], ev_array)
   end
 
@@ -150,7 +148,7 @@ class PBPokemon
       ev_array.push(s.id) if pkmn.ev[s.id] > 60
     end
     return self.new(pkmn.species, pkmn.item_id, pkmn.nature,
-       mov1, mov2, mov3, mov4, ev_array)
+                    mov1, mov2, mov3, mov4, ev_array)
   end
 
   def initialize(species, item, nature, move1, move2, move3, move4, ev)
@@ -205,7 +203,7 @@ class PBPokemon
   def createPokemon(level, iv, trainer)
     pkmn = Pokemon.new(@species, level, trainer, false)
     pkmn.item = @item
-    pkmn.personalID = rand(2**16) | rand(2**16) << 16
+    pkmn.personalID = rand(2**16) | (rand(2**16) << 16)
     pkmn.nature = nature
     pkmn.happiness = 0
     pkmn.moves.push(Pokemon::Move.new(self.convertMove(@move1)))

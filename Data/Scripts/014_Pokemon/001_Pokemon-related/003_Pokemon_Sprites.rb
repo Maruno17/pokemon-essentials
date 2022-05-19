@@ -2,67 +2,67 @@
 # Pokémon sprite (used out of battle)
 #===============================================================================
 class PokemonSprite < SpriteWrapper
-  def initialize(viewport=nil)
+  def initialize(viewport = nil)
     super(viewport)
     @_iconbitmap = nil
   end
 
   def dispose
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = nil
     self.bitmap = nil if !self.disposed?
     super
   end
 
   def clearBitmap
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = nil
     self.bitmap = nil
   end
 
-  def setOffset(offset=PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::CENTER)
     @offset = offset
     changeOrigin
   end
 
   def changeOrigin
     return if !self.bitmap
-    @offset = PictureOrigin::Center if !@offset
+    @offset = PictureOrigin::CENTER if !@offset
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
+    when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
       self.ox = 0
-    when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
-      self.ox = self.bitmap.width/2
-    when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
+    when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
+      self.ox = self.bitmap.width / 2
+    when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
       self.ox = self.bitmap.width
     end
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
+    when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
       self.oy = 0
-    when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
-      self.oy = self.bitmap.height/2
-    when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
+    when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
+      self.oy = self.bitmap.height / 2
+    when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
       self.oy = self.bitmap.height
     end
   end
 
-  def setPokemonBitmap(pokemon,back=false)
-    @_iconbitmap.dispose if @_iconbitmap
+  def setPokemonBitmap(pokemon, back = false)
+    @_iconbitmap&.dispose
     @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back) : nil
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
-    self.color = Color.new(0,0,0,0)
+    self.color = Color.new(0, 0, 0, 0)
     changeOrigin
   end
 
-  def setPokemonBitmapSpecies(pokemon,species,back=false)
-    @_iconbitmap.dispose if @_iconbitmap
+  def setPokemonBitmapSpecies(pokemon, species, back = false)
+    @_iconbitmap&.dispose
     @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back, species) : nil
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     changeOrigin
   end
 
   def setSpeciesBitmap(species, gender = 0, form = 0, shiny = false, shadow = false, back = false, egg = false)
-    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap&.dispose
     @_iconbitmap = GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     changeOrigin
@@ -87,7 +87,7 @@ class PokemonIconSprite < SpriteWrapper
   attr_accessor :active
   attr_reader   :pokemon
 
-  def initialize(pokemon,viewport=nil)
+  def initialize(pokemon, viewport = nil)
     super(viewport)
     @selected     = false
     @active       = false
@@ -102,7 +102,7 @@ class PokemonIconSprite < SpriteWrapper
   end
 
   def dispose
-    @animBitmap.dispose if @animBitmap
+    @animBitmap&.dispose
     super
   end
 
@@ -111,17 +111,17 @@ class PokemonIconSprite < SpriteWrapper
 
   def x=(value)
     @logical_x = value
-    super(@logical_x+@adjusted_x)
+    super(@logical_x + @adjusted_x)
   end
 
   def y=(value)
     @logical_y = value
-    super(@logical_y+@adjusted_y)
+    super(@logical_y + @adjusted_y)
   end
 
   def pokemon=(value)
     @pokemon = value
-    @animBitmap.dispose if @animBitmap
+    @animBitmap&.dispose
     @animBitmap = nil
     if !@pokemon
       self.bitmap = nil
@@ -133,35 +133,35 @@ class PokemonIconSprite < SpriteWrapper
     self.bitmap = @animBitmap.bitmap
     self.src_rect.width  = @animBitmap.height
     self.src_rect.height = @animBitmap.height
-    @numFrames    = @animBitmap.width/@animBitmap.height
-    @currentFrame = 0 if @currentFrame>=@numFrames
+    @numFrames    = @animBitmap.width / @animBitmap.height
+    @currentFrame = 0 if @currentFrame >= @numFrames
     changeOrigin
   end
 
-  def setOffset(offset=PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::CENTER)
     @offset = offset
     changeOrigin
   end
 
   def changeOrigin
     return if !self.bitmap
-    @offset = PictureOrigin::TopLeft if !@offset
+    @offset = PictureOrigin::TOP_LEFT if !@offset
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
+    when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
       self.ox = 0
-    when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
-      self.ox = self.src_rect.width/2
-    when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
+    when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
+      self.ox = self.src_rect.width / 2
+    when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
       self.ox = self.src_rect.width
     end
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
+    when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
       self.oy = 0
-    when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
+    when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
       # NOTE: This assumes the top quarter of the icon is blank, so oy is placed
       #       in the middle of the lower three quarters of the image.
-      self.oy = self.src_rect.height*5/8
-    when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
+      self.oy = self.src_rect.height * 5 / 8
+    when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
       self.oy = self.src_rect.height
     end
   end
@@ -171,12 +171,14 @@ class PokemonIconSprite < SpriteWrapper
     return 0 if @pokemon.fainted?    # Fainted - no animation
     # ret is initially the time a whole animation cycle lasts. It is divided by
     # the number of frames in that cycle at the end.
-    ret = Graphics.frame_rate/4                       # Green HP - 0.25 seconds
-    if @pokemon.hp<=@pokemon.totalhp/4;    ret *= 4   # Red HP - 1 second
-    elsif @pokemon.hp<=@pokemon.totalhp/2; ret *= 2   # Yellow HP - 0.5 seconds
+    ret = Graphics.frame_rate / 4               # Green HP - 0.25 seconds
+    if @pokemon.hp <= @pokemon.totalhp / 4      # Red HP - 1 second
+      ret *= 4
+    elsif @pokemon.hp <= @pokemon.totalhp / 2   # Yellow HP - 0.5 seconds
+      ret *= 2
     end
     ret /= @numFrames
-    ret = 1 if ret<1
+    ret = 1 if ret < 1
     return ret
   end
 
@@ -187,20 +189,20 @@ class PokemonIconSprite < SpriteWrapper
     self.bitmap = @animBitmap.bitmap
     # Update animation
     cl = self.counterLimit
-    if cl==0
+    if cl == 0
       @currentFrame = 0
     else
       @counter += 1
-      if @counter>=cl
-        @currentFrame = (@currentFrame+1)%@numFrames
+      if @counter >= cl
+        @currentFrame = (@currentFrame + 1) % @numFrames
         @counter = 0
       end
     end
-    self.src_rect.x = self.src_rect.width*@currentFrame
+    self.src_rect.x = self.src_rect.width * @currentFrame
     # Update "jumping" animation (used in party screen)
     if @selected
       @adjusted_x = 4
-      @adjusted_y = (@currentFrame>=@numFrames/2) ? -2 : 6
+      @adjusted_y = (@currentFrame >= @numFrames / 2) ? -2 : 6
     else
       @adjusted_x = 0
       @adjusted_y = 0
@@ -221,7 +223,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
   attr_reader :form
   attr_reader :shiny
 
-  def initialize(species,viewport=nil)
+  def initialize(species, viewport = nil)
     super(viewport)
     @species      = species
     @gender       = 0
@@ -234,7 +236,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
   end
 
   def dispose
-    @animBitmap.dispose if @animBitmap
+    @animBitmap&.dispose
     super
   end
 
@@ -258,7 +260,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
     refresh
   end
 
-  def pbSetParams(species,gender,form,shiny=false)
+  def pbSetParams(species, gender, form, shiny = false)
     @species = species
     @gender  = gender
     @form    = form
@@ -266,30 +268,30 @@ class PokemonSpeciesIconSprite < SpriteWrapper
     refresh
   end
 
-  def setOffset(offset=PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::CENTER)
     @offset = offset
     changeOrigin
   end
 
   def changeOrigin
     return if !self.bitmap
-    @offset = PictureOrigin::TopLeft if !@offset
+    @offset = PictureOrigin::TOP_LEFT if !@offset
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
+    when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
       self.ox = 0
-    when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
-      self.ox = self.src_rect.width/2
-    when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
+    when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
+      self.ox = self.src_rect.width / 2
+    when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
       self.ox = self.src_rect.width
     end
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
+    when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
       self.oy = 0
-    when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
+    when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
       # NOTE: This assumes the top quarter of the icon is blank, so oy is placed
       #       in the middle of the lower three quarters of the image.
-      self.oy = self.src_rect.height*5/8
-    when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
+      self.oy = self.src_rect.height * 5 / 8
+    when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
       self.oy = self.src_rect.height
     end
   end
@@ -298,14 +300,14 @@ class PokemonSpeciesIconSprite < SpriteWrapper
   def counterLimit
     # ret is initially the time a whole animation cycle lasts. It is divided by
     # the number of frames in that cycle at the end.
-    ret = Graphics.frame_rate/4   # 0.25 seconds
+    ret = Graphics.frame_rate / 4   # 0.25 seconds
     ret /= @numFrames
-    ret = 1 if ret<1
+    ret = 1 if ret < 1
     return ret
   end
 
   def refresh
-    @animBitmap.dispose if @animBitmap
+    @animBitmap&.dispose
     @animBitmap = nil
     bitmapFileName = GameData::Species.icon_filename(@species, @form, @gender, @shiny)
     return if !bitmapFileName
@@ -314,7 +316,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
     self.src_rect.width  = @animBitmap.height
     self.src_rect.height = @animBitmap.height
     @numFrames = @animBitmap.width / @animBitmap.height
-    @currentFrame = 0 if @currentFrame>=@numFrames
+    @currentFrame = 0 if @currentFrame >= @numFrames
     changeOrigin
   end
 
@@ -325,10 +327,10 @@ class PokemonSpeciesIconSprite < SpriteWrapper
     self.bitmap = @animBitmap.bitmap
     # Update animation
     @counter += 1
-    if @counter>=self.counterLimit
-      @currentFrame = (@currentFrame+1)%@numFrames
+    if @counter >= self.counterLimit
+      @currentFrame = (@currentFrame + 1) % @numFrames
       @counter = 0
     end
-    self.src_rect.x = self.src_rect.width*@currentFrame
+    self.src_rect.x = self.src_rect.width * @currentFrame
   end
 end

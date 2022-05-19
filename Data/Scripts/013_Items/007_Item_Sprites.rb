@@ -3,10 +3,11 @@
 #===============================================================================
 class ItemIconSprite < SpriteWrapper
   attr_reader :item
+
   ANIM_ICON_SIZE   = 48
   FRAMES_PER_CYCLE = Graphics.frame_rate
 
-  def initialize(x,y,item,viewport=nil)
+  def initialize(x, y, item, viewport = nil)
     super(viewport)
     @animbitmap = nil
     @animframe = 0
@@ -21,13 +22,13 @@ class ItemIconSprite < SpriteWrapper
   end
 
   def dispose
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     super
   end
 
   def width
     return 0 if !self.bitmap || self.bitmap.disposed?
-    return (@numframes==1) ? self.bitmap.width : ANIM_ICON_SIZE
+    return (@numframes == 1) ? self.bitmap.width : ANIM_ICON_SIZE
   end
 
   def height
@@ -41,45 +42,45 @@ class ItemIconSprite < SpriteWrapper
     @forceitemchange = false
   end
 
-  def setOffset(offset=PictureOrigin::Center)
+  def setOffset(offset = PictureOrigin::CENTER)
     @offset = offset
     changeOrigin
   end
 
   def changeOrigin
-    @offset = PictureOrigin::Center if !@offset
+    @offset = PictureOrigin::CENTER if !@offset
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
+    when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
       self.oy = 0
-    when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
-      self.oy = self.height/2
-    when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
+    when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
+      self.oy = self.height / 2
+    when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
       self.oy = self.height
     end
     case @offset
-    when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
+    when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
       self.ox = 0
-    when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
-      self.ox = self.width/2
-    when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
+    when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
+      self.ox = self.width / 2
+    when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
       self.ox = self.width
     end
   end
 
   def item=(value)
-    return if @item==value && !@forceitemchange
+    return if @item == value && !@forceitemchange
     @item = value
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     @animbitmap = nil
     if @item || !@blankzero
       @animbitmap = AnimatedBitmap.new(GameData::Item.icon_filename(@item))
       self.bitmap = @animbitmap.bitmap
-      if self.bitmap.height==ANIM_ICON_SIZE
-        @numframes = [(self.bitmap.width/ANIM_ICON_SIZE).floor,1].max
-        self.src_rect = Rect.new(0,0,ANIM_ICON_SIZE,ANIM_ICON_SIZE)
+      if self.bitmap.height == ANIM_ICON_SIZE
+        @numframes = [(self.bitmap.width / ANIM_ICON_SIZE).floor, 1].max
+        self.src_rect = Rect.new(0, 0, ANIM_ICON_SIZE, ANIM_ICON_SIZE)
       else
         @numframes = 1
-        self.src_rect = Rect.new(0,0,self.bitmap.width,self.bitmap.height)
+        self.src_rect = Rect.new(0, 0, self.bitmap.width, self.bitmap.height)
       end
       @animframe = 0
       @frame = 0
@@ -95,12 +96,12 @@ class ItemIconSprite < SpriteWrapper
     if @animbitmap
       @animbitmap.update
       self.bitmap = @animbitmap.bitmap
-      if @numframes>1
-        frameskip = (FRAMES_PER_CYCLE/@numframes).floor
-        @frame = (@frame+1)%FRAMES_PER_CYCLE
-        if @frame>=frameskip
-          @animframe = (@animframe+1)%@numframes
-          self.src_rect.x = @animframe*ANIM_ICON_SIZE
+      if @numframes > 1
+        frameskip = (FRAMES_PER_CYCLE / @numframes).floor
+        @frame = (@frame + 1) % FRAMES_PER_CYCLE
+        if @frame >= frameskip
+          @animframe = (@animframe + 1) % @numframes
+          self.src_rect.x = @animframe * ANIM_ICON_SIZE
           @frame = 0
         end
       end
@@ -115,7 +116,7 @@ end
 # Item held icon (used in the party screen)
 #===============================================================================
 class HeldItemIconSprite < SpriteWrapper
-  def initialize(x,y,pokemon,viewport=nil)
+  def initialize(x, y, pokemon, viewport = nil)
     super(viewport)
     self.x = x
     self.y = y
@@ -125,7 +126,7 @@ class HeldItemIconSprite < SpriteWrapper
   end
 
   def dispose
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     super
   end
 
@@ -135,9 +136,9 @@ class HeldItemIconSprite < SpriteWrapper
   end
 
   def item=(value)
-    return if @item==value
+    return if @item == value
     @item = value
-    @animbitmap.dispose if @animbitmap
+    @animbitmap&.dispose
     @animbitmap = nil
     if @item
       @animbitmap = AnimatedBitmap.new(GameData::Item.held_icon_filename(@item))

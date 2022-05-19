@@ -22,7 +22,7 @@ class Interpreter
 
   def inspect
     str = super.chop
-    str << format(' @event_id: %d>', @event_id)
+    str << sprintf(" @event_id: %d>", @event_id)
     return str
   end
 
@@ -35,6 +35,9 @@ class Interpreter
     @child_interpreter  = nil     # child interpreter
     @branch             = {}      # branch data
     @buttonInput        = false
+    @hidden_choices     = []
+    @renamed_choices    = []
+    end_follower_overrides
   end
   #-----------------------------------------------------------------------------
   # * Event Setup
@@ -59,7 +62,7 @@ class Interpreter
       return
     end
     # Check all map events for one that wants to start, and set it up
-    for event in $game_map.events.values
+    $game_map.events.each_value do |event|
       next if !event.starting
       if event.trigger < 3   # Isn't autorun or parallel processing
         event.lock
@@ -69,7 +72,7 @@ class Interpreter
       return
     end
     # Check all common events for one that is autorun, and set it up
-    for common_event in $data_common_events.compact
+    $data_common_events.compact.each do |common_event|
       next if common_event.trigger != 1 || !$game_switches[common_event.switch_id]
       setup(common_event.list, 0)
       return
@@ -77,7 +80,7 @@ class Interpreter
   end
 
   def running?
-    return @list != nil
+    return !@list.nil?
   end
   #-----------------------------------------------------------------------------
   # * Frame Update
@@ -92,7 +95,7 @@ class Interpreter
       end
       # If this interpreter's map isn't the current map or connected to it,
       # forget this interpreter's event ID
-      if $game_map.map_id != @map_id && !$MapFactory.areConnected?($game_map.map_id, @map_id)
+      if $game_map.map_id != @map_id && !$map_factory.areConnected?($game_map.map_id, @map_id)
         @event_id = 0
       end
       # Update child interpreter if one exists
@@ -106,7 +109,10 @@ class Interpreter
       # Do nothing if any event or the player is in the middle of a move route
       if @move_route_waiting
         return if $game_player.move_route_forcing
-        for event in $game_map.events.values
+        $game_map.events.each_value do |event|
+          return if event.move_route_forcing
+        end
+        $game_temp.followers.each_follower do |event, follower|
           return if event.move_route_forcing
         end
         @move_route_waiting = false
@@ -138,55 +144,42 @@ class Interpreter
       return result
     rescue Exception
       e = $!
-      raise if e.is_a?(SystemExit) || "#{e.class}" == "Reset"
+      raise if e.is_a?(SystemExit) || e.class.to_s == "Reset"
       event = get_self
-      s = "Backtrace:\r\n"
+      # Gather text for error message
       message = pbGetExceptionMessage(e)
+      backtrace_text = ""
       if e.is_a?(SyntaxError)
         script.each_line { |line|
           line.gsub!(/\s+$/, "")
           if line[/^\s*\(/]
-            message += "\r\n***Line '#{line}' shouldn't begin with '('. Try\r\n"
-            message += "putting the '(' at the end of the previous line instead,\r\n"
-            message += "or using 'extendtext.exe'."
-          end
-          if line[/\:\:\s*$/]
-            message += "\r\n***Line '#{line}' can't end with '::'. Try putting\r\n"
-            message += "the next word on the same line, e.g. 'PBSpecies:" + ":MEW'"
+            message += "\r\n***Line '#{line}' shouldn't begin with '('. Try putting the '('\r\n"
+            message += "at the end of the previous line instead, or using 'extendtext.exe'."
           end
         }
       else
-        for bt in e.backtrace[0, 10]
-          s += bt + "\r\n"
-        end
-        s.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] }
+        backtrace_text += "\r\n"
+        backtrace_text += "Backtrace:"
+        e.backtrace[0, 10].each { |i| backtrace_text += "\r\n#{i}" }
+        backtrace_text.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
+        backtrace_text += "\r\n"
       end
-      message = "Exception: #{e.class}\r\nMessage: " + message + "\r\n"
-      message += "\r\n***Full script:\r\n#{script}\r\n"
-      if event && $game_map
+      # Assemble error message
+      err = "Script error in Interpreter\r\n"
+      if $game_map
         map_name = ($game_map.name rescue nil) || "???"
-        err  = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name}):\r\n"
-        err += "#{message}\r\n#{s}"
-        if e.is_a?(Hangup)
-          $EVENTHANGUPMSG = err
-          raise
-        end
-      elsif $game_map
-        map_name = ($game_map.name rescue nil) || "???"
-        err = "Script error in map #{$game_map.map_id} (#{map_name}):\r\n"
-        err += "#{message}\r\n#{s}"
-        if e.is_a?(Hangup)
-          $EVENTHANGUPMSG = err
-          raise
-        end
-      else
-        err = "Script error in interpreter:\r\n#{message}\r\n#{s}"
-        if e.is_a?(Hangup)
-          $EVENTHANGUPMSG = err
-          raise
+        if event
+          err = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name})\r\n"
+        else
+          err = "Script error in Common Event, map #{$game_map.map_id} (#{map_name})\r\n"
         end
       end
-      raise err
+      err += "Exception: #{e.class}\r\n"
+      err += "Message: #{message}\r\n\r\n"
+      err += "***Full script:\r\n#{script}"   # \r\n"
+      err += backtrace_text
+      # Raise error
+      raise EventScriptError.new(err)
     end
   end
   #-----------------------------------------------------------------------------
@@ -221,13 +214,13 @@ class Interpreter
   # * Freezes all events on the map (for use at the beginning of common events)
   #-----------------------------------------------------------------------------
   def pbGlobalLock
-    $game_map.events.values.each { |event| event.minilock }
+    $game_map.events.each_value { |event| event.minilock }
   end
   #-----------------------------------------------------------------------------
   # * Unfreezes all events on the map (for use at the end of common events)
   #-----------------------------------------------------------------------------
   def pbGlobalUnlock
-    $game_map.events.values.each { |event| event.unlock }
+    $game_map.events.each_value { |event| event.unlock }
   end
   #-----------------------------------------------------------------------------
   # * Gets the next index in the interpreter, ignoring certain commands between messages
@@ -281,12 +274,30 @@ class Interpreter
       temp_index += 1
     end
   end
+
+  def follower_move_route(id = nil)
+    @follower_move_route = true
+    @follower_move_route_id = id
+  end
+
+  def follower_animation(id = nil)
+    @follower_animation = true
+    @follower_animation_id = id
+  end
+
+  def end_follower_overrides
+    @follower_move_route = false
+    @follower_move_route_id = nil
+    @follower_animation = false
+    @follower_animation_id = nil
+  end
+
   #-----------------------------------------------------------------------------
   # * Various methods to be used in a script event command.
   #-----------------------------------------------------------------------------
   # Helper function that shows a picture in a script.
   def pbShowPicture(number, name, origin, x, y, zoomX = 100, zoomY = 100, opacity = 255, blendType = 0)
-    number = number + ($game_temp.in_battle ? 50 : 0)
+    number += ($game_temp.in_battle ? 50 : 0)
     $game_screen.pictures[number].show(name, origin, x, y, zoomX, zoomY, opacity, blendType)
   end
 
@@ -295,7 +306,7 @@ class Interpreter
   def pbEraseThisEvent
     if $game_map.events[@event_id]
       $game_map.events[@event_id].erase
-      $PokemonMap.addErasedEvent(@event_id) if $PokemonMap
+      $PokemonMap&.addErasedEvent(@event_id)
     end
     @index += 1
     return true
@@ -325,8 +336,8 @@ class Interpreter
     mapid = @map_id if mapid < 0
     old_value = $game_self_switches[[mapid, eventid, switch_name]]
     $game_self_switches[[mapid, eventid, switch_name]] = value
-    if value != old_value && $MapFactory.hasMap?(mapid)
-      $MapFactory.getMap(mapid, false).need_refresh = true
+    if value != old_value && $map_factory.hasMap?(mapid)
+      $map_factory.getMap(mapid, false).need_refresh = true
     end
   end
 
@@ -368,7 +379,7 @@ class Interpreter
   end
 
   def pbGetPokemon(id)
-    return $Trainer.party[pbGet(id)]
+    return $player.party[pbGet(id)]
   end
 
   def pbSetEventTime(*arg)
@@ -377,7 +388,7 @@ class Interpreter
     time = time.to_i
     pbSetSelfSwitch(@event_id, "A", true)
     $PokemonGlobal.eventvars[[@map_id, @event_id]] = time
-    for otherevt in arg
+    arg.each do |otherevt|
       pbSetSelfSwitch(otherevt, "A", true)
       $PokemonGlobal.eventvars[[@map_id, otherevt]] = time
     end
@@ -391,13 +402,14 @@ class Interpreter
     # Apply strict version of passable, which treats tiles that are passable
     # only from certain directions as fully impassible
     return if !event.can_move_in_direction?($game_player.direction, true)
+    $stats.strength_push_count += 1
     case $game_player.direction
     when 2 then event.move_down
     when 4 then event.move_left
     when 6 then event.move_right
     when 8 then event.move_up
     end
-    $PokemonMap.addMovedEvent(@event_id) if $PokemonMap
+    $PokemonMap&.addMovedEvent(@event_id)
     if old_x != event.x || old_y != event.y
       $game_player.lock
       loop do
@@ -426,14 +438,14 @@ class Interpreter
     return true if $DEBUG && !GameData::TrainerType.exists?(symbol)
     tr_type = GameData::TrainerType.get(symbol).id
     pbGlobalLock
-    pbPlayTrainerIntroME(tr_type)
+    pbPlayTrainerIntroBGM(tr_type)
     return true
   end
 
   def pbTrainerEnd
     pbGlobalUnlock
     event = get_self
-    event.erase_route if event
+    event&.erase_route
   end
 
   def setPrice(item, buy_price = -1, sell_price = -1)
@@ -442,8 +454,8 @@ class Interpreter
     $game_temp.mart_prices[item][0] = buy_price if buy_price > 0
     if sell_price >= 0   # 0=can't sell
       $game_temp.mart_prices[item][1] = sell_price * 2
-    else
-      $game_temp.mart_prices[item][1] = buy_price if buy_price > 0
+    elsif buy_price > 0
+      $game_temp.mart_prices[item][1] = buy_price
     end
   end
 

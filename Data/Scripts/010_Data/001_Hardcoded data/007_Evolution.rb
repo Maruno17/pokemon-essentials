@@ -7,6 +7,8 @@ module GameData
     attr_reader :level_up_proc
     attr_reader :use_item_proc
     attr_reader :on_trade_proc
+    attr_reader :after_battle_proc
+    attr_reader :event_proc
     attr_reader :after_evolution_proc
 
     DATA = {}
@@ -25,6 +27,8 @@ module GameData
       @level_up_proc        = hash[:level_up_proc]
       @use_item_proc        = hash[:use_item_proc]
       @on_trade_proc        = hash[:on_trade_proc]
+      @after_battle_proc    = hash[:after_battle_proc]
+      @event_proc           = hash[:event_proc]
       @after_evolution_proc = hash[:after_evolution_proc]
     end
 
@@ -40,8 +44,16 @@ module GameData
       return (@on_trade_proc) ? @on_trade_proc.call(*args) : nil
     end
 
+    def call_after_battle(*args)
+      return (@after_battle_proc) ? @after_battle_proc.call(*args) : nil
+    end
+
+    def call_event(*args)
+      return (@event_proc) ? @event_proc.call(*args) : nil
+    end
+
     def call_after_evolution(*args)
-      @after_evolution_proc.call(*args) if @after_evolution_proc
+      @after_evolution_proc&.call(*args)
     end
   end
 end
@@ -188,8 +200,7 @@ GameData::Evolution.register({
   :id            => :LevelDarkness,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    next pkmn.level >= parameter && map_metadata && map_metadata.dark_map
+    next pkmn.level >= parameter && $game_map.metadata&.dark_map
   }
 })
 
@@ -197,7 +208,7 @@ GameData::Evolution.register({
   :id            => :LevelDarkInParty,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.level >= parameter && $Trainer.has_pokemon_of_type?(:DARK)
+    next pkmn.level >= parameter && $player.has_pokemon_of_type?(:DARK)
   }
 })
 
@@ -252,14 +263,11 @@ GameData::Evolution.register({
 GameData::Evolution.register({
   :id                   => :Shedinja,
   :parameter            => Integer,
-  :level_up_proc        => proc { |pkmn, parameter|
-    next false   # This is a dummy proc and shouldn't next true
-  },
   :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
-    next false if $Trainer.party_full?
-    next false if !$PokemonBag.pbHasItem?(:POKEBALL)
+    next false if $player.party_full?
+    next false if !$bag.has?(:POKEBALL)
     PokemonEvolutionScene.pbDuplicatePokemon(pkmn, new_species)
-    $PokemonBag.pbDeleteItem(:POKEBALL)
+    $bag.remove(:POKEBALL)
     next true
   }
 })
@@ -268,7 +276,7 @@ GameData::Evolution.register({
   :id            => :Happiness,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
   }
 })
 
@@ -276,7 +284,7 @@ GameData::Evolution.register({
   :id            => :HappinessMale,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220 && pkmn.male?
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220) && pkmn.male?
   }
 })
 
@@ -284,7 +292,7 @@ GameData::Evolution.register({
   :id            => :HappinessFemale,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220 && pkmn.female?
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220) && pkmn.female?
   }
 })
 
@@ -292,7 +300,7 @@ GameData::Evolution.register({
   :id            => :HappinessDay,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220 && PBDayNight.isDay?
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220) && PBDayNight.isDay?
   }
 })
 
@@ -300,7 +308,7 @@ GameData::Evolution.register({
   :id            => :HappinessNight,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220 && PBDayNight.isNight?
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220) && PBDayNight.isNight?
   }
 })
 
@@ -309,7 +317,7 @@ GameData::Evolution.register({
   :parameter     => :Move,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    if pkmn.happiness >= 220
+    if pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
       next pkmn.moves.any? { |m| m && m.id == parameter }
     end
   }
@@ -320,7 +328,7 @@ GameData::Evolution.register({
   :parameter     => :Type,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    if pkmn.happiness >= 220
+    if pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
       next pkmn.moves.any? { |m| m && m.type == parameter }
     end
   }
@@ -331,7 +339,7 @@ GameData::Evolution.register({
   :parameter            => :Item,
   :minimum_level        => 1,   # Needs any level up
   :level_up_proc        => proc { |pkmn, parameter|
-    next pkmn.item == parameter && pkmn.happiness >= 220
+    next pkmn.item == parameter && pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
   },
   :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
@@ -432,7 +440,7 @@ GameData::Evolution.register({
   :parameter            => :Item,
   :minimum_level        => 1,   # Needs any level up
   :level_up_proc        => proc { |pkmn, parameter|
-    next pkmn.item == parameter && pkmn.happiness >= 220
+    next pkmn.item == parameter && pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
   },
   :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
@@ -464,7 +472,7 @@ GameData::Evolution.register({
   :parameter     => :Species,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next $Trainer.has_species?(parameter)
+    next $player.has_species?(parameter)
   }
 })
 
@@ -478,13 +486,21 @@ GameData::Evolution.register({
 })
 
 GameData::Evolution.register({
+  :id            => :LocationFlag,
+  :parameter     => String,
+  :minimum_level => 1,   # Needs any level up
+  :level_up_proc => proc { |pkmn, parameter|
+    next $game_map.metadata&.has_flag?(parameter)
+  }
+})
+
+GameData::Evolution.register({
   :id            => :Region,
   :parameter     => Integer,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    next map_metadata && map_metadata.town_map_position &&
-         map_metadata.town_map_position[0] == parameter
+    map_metadata = $game_map.metadata
+    next map_metadata&.town_map_position && map_metadata.town_map_position[0] == parameter
   }
 })
 
@@ -535,7 +551,7 @@ GameData::Evolution.register({
   :id            => :ItemHappiness,
   :parameter     => :Item,
   :use_item_proc => proc { |pkmn, parameter, item|
-    next item == parameter && pkmn.happiness >= 220
+    next item == parameter && pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
   }
 })
 
@@ -595,5 +611,64 @@ GameData::Evolution.register({
   :parameter     => :Species,
   :on_trade_proc => proc { |pkmn, parameter, other_pkmn|
     next pkmn.species == parameter && !other_pkmn.hasItem?(:EVERSTONE)
+  }
+})
+
+#===============================================================================
+# Evolution methods that are triggered after any battle
+#===============================================================================
+GameData::Evolution.register({
+  :id                => :BattleDealCriticalHit,
+  :parameter         => Integer,
+  :after_battle_proc => proc { |pkmn, party_index, parameter|
+    next $game_temp.party_critical_hits_dealt &&
+         $game_temp.party_critical_hits_dealt[party_index] &&
+         $game_temp.party_critical_hits_dealt[party_index] >= parameter
+  }
+})
+
+#===============================================================================
+# Evolution methods that are triggered by an event
+# Each event has its own number, which is the value of the parameter as defined
+# in pokemon.txt/pokemon_forms.txt. It is also 'number' in def pbEvolutionEvent,
+# which triggers evolution checks for a particular event number. 'value' in an
+# event_proc is the number of the evolution event currently being triggered.
+# Evolutions caused by different events should have different numbers. Used
+# event numbers are:
+#   1: Kubfu -> Urshifu
+#   2: Galarian Yamask -> Runerigus
+# These used event numbers are only used in pokemon.txt/pokemon_forms.txt and in
+# map events that call pbEvolutionEvent, so they are relatively easy to change
+# if you need to (no script changes are required). However, you could just
+# ignore them instead if you don't want to use them.
+#===============================================================================
+def pbEvolutionEvent(number)
+  return if !$player
+  $player.able_party.each do |pkmn|
+    pkmn.trigger_event_evolution(number)
+  end
+end
+
+GameData::Evolution.register({
+  :id         => :Event,
+  :parameter  => Integer,
+  :event_proc => proc { |pkmn, parameter, value|
+    next value == parameter
+  }
+})
+
+GameData::Evolution.register({
+  :id                => :EventAfterDamageTaken,
+  :parameter         => Integer,
+  :after_battle_proc => proc { |pkmn, party_index, parameter|
+    if $game_temp.party_direct_damage_taken &&
+       $game_temp.party_direct_damage_taken[party_index] &&
+       $game_temp.party_direct_damage_taken[party_index] >= 49
+      pkmn.ready_to_evolve = true
+    end
+    next false
+  },
+  :event_proc        => proc { |pkmn, parameter, value|
+    next value == parameter && pkmn.ready_to_evolve
   }
 })

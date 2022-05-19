@@ -6,10 +6,10 @@ class AnimatedBitmap
     raise "Filename is nil (missing graphic)." if file.nil?
     path     = file
     filename = ""
-    if file.last != '/'   # Isn't just a directory
+    if file.last != "/"   # Isn't just a directory
       split_file = file.split(/[\\\/]/)
       filename = split_file.pop
-      path = split_file.join('/') + '/'
+      path = split_file.join("/") + "/"
     end
     if filename[/^\[\d+(?:,\d+)?\]/]   # Starts with 1 or 2 numbers in square brackets
       @bitmap = PngAnimatedBitmap.new(path, filename, hue)
@@ -57,7 +57,7 @@ class PngAnimatedBitmap
       end
       @frameDelay = delay
       subWidth = panorama.width / numFrames
-      for i in 0...numFrames
+      numFrames.times do |i|
         subBitmap = BitmapWrapper.new(subWidth, panorama.height)
         subBitmap.blt(0, 0, panorama, Rect.new(subWidth * i, 0, subWidth, panorama.height))
         @frames.push(subBitmap)
@@ -76,7 +76,7 @@ class PngAnimatedBitmap
   def height; self.bitmap.height; end
 
   def deanimate
-    for i in 1...@frames.length
+    (1...@frames.length).each do |i|
       @frames[i].dispose
     end
     @frames = [@frames[0]]
@@ -134,9 +134,7 @@ class PngAnimatedBitmap
   def copy
     x = self.clone
     x.frames = x.frames.clone
-    for i in 0...x.frames.length
-      x.frames[i] = x.frames[i].copy
-    end
+    x.frames.each_with_index { |frame, i| x.frames[i] = frame.copy }
     return x
   end
 end
@@ -225,14 +223,14 @@ def pbGetTileBitmap(filename, tile_id, hue, width = 1, height = 1)
   }
 end
 
-def pbGetTileset(name,hue=0)
+def pbGetTileset(name, hue = 0)
   return AnimatedBitmap.new("Graphics/Tilesets/" + name, hue).deanimate
 end
 
-def pbGetAutotile(name,hue=0)
+def pbGetAutotile(name, hue = 0)
   return AnimatedBitmap.new("Graphics/Autotiles/" + name, hue).deanimate
 end
 
-def pbGetAnimation(name,hue=0)
+def pbGetAnimation(name, hue = 0)
   return AnimatedBitmap.new("Graphics/Animations/" + name, hue).deanimate
 end

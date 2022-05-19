@@ -4,12 +4,23 @@
 class Reset < Exception
 end
 
-def pbGetExceptionMessage(e,_script="")
+class EventScriptError < Exception
+  attr_accessor :event_message
+
+  def initialize(message)
+    super(nil)
+    @event_message = message
+  end
+end
+
+def pbGetExceptionMessage(e, _script = "")
+  return e.event_message.dup if e.is_a?(EventScriptError)   # Message with map/event ID generated elsewhere
   emessage = e.message.dup
   emessage.force_encoding(Encoding::UTF_8)
-  if e.is_a?(Hangup)
+  case e
+  when Hangup
     emessage = "The script is taking too long. The game will restart."
-  elsif e.is_a?(Errno::ENOENT)
+  when Errno::ENOENT
     filename = emessage.sub("No such file or directory - ", "")
     emessage = "File #{filename} not found."
   end
@@ -18,27 +29,26 @@ def pbGetExceptionMessage(e,_script="")
 end
 
 def pbPrintException(e)
-  emessage = ""
-  if $EVENTHANGUPMSG && $EVENTHANGUPMSG!=""
-    emessage = $EVENTHANGUPMSG   # Message with map/event ID generated elsewhere
-    $EVENTHANGUPMSG = nil
-  else
-    emessage = pbGetExceptionMessage(e)
-  end
+  emessage = pbGetExceptionMessage(e)
   # begin message formatting
   message = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
   message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
-  message += "Exception: #{e.class}\r\n"
-  message += "Message: #{emessage}\r\n"
-  # show last 10/25 lines of backtrace
-  message += "\r\nBacktrace:\r\n"
-  btrace = ""
-  if e.backtrace
-    maxlength = ($INTERNAL) ? 25 : 10
-    e.backtrace[0, maxlength].each { |i| btrace += "#{i}\r\n" }
+  if !e.is_a?(EventScriptError)
+    message += "Exception: #{e.class}\r\n"
+    message += "Message: "
   end
-  btrace.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
-  message += btrace
+  message += emessage
+  # show last 10/25 lines of backtrace
+  if !e.is_a?(EventScriptError)
+    message += "\r\n\r\nBacktrace:\r\n"
+    backtrace_text = ""
+    if e.backtrace
+      maxlength = ($INTERNAL) ? 25 : 10
+      e.backtrace[0, maxlength].each { |i| backtrace_text += "#{i}\r\n" }
+    end
+    backtrace_text.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
+    message += backtrace_text
+  end
   # output to log
   errorlog = "errorlog.txt"
   errorlog = RTP.getSaveFileName("errorlog.txt") if (Object.const_defined?(:RTP) rescue false)
@@ -55,7 +65,7 @@ def pbPrintException(e)
   print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl when closing this message to copy it to the clipboard.")
   # Give a ~500ms coyote time to start holding Control
   t = System.delta
-  until (System.delta - t) >= 500000
+  until (System.delta - t) >= 500_000
     Input.update
     if Input.press?(Input::CTRL)
       Input.clipboard = message

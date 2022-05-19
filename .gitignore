@@ -17,6 +17,7 @@ RGSS*.dll
 .vscode/
 *.code-workspace
 .idea/
+*.mkproj
 
 # Operating system generated files & folders
 .DS_Store

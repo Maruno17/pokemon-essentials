@@ -8,8 +8,9 @@ def pbEncountersEditor
   commands = []
   maps = []
   list = pbListWindow([])
-  help_window = Window_UnformattedTextPokemon.newWithSize(_INTL("Edit wild encounters"),
-     Graphics.width / 2, 0, Graphics.width / 2, 96)
+  help_window = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Edit wild encounters"), Graphics.width / 2, 0, Graphics.width / 2, 96
+  )
   help_window.z = 99999
   ret = 0
   need_refresh = true
@@ -128,8 +129,9 @@ def pbEncounterMapVersionEditor(enc_data)
   commands = []
   enc_types = []
   list = pbListWindow([])
-  help_window = Window_UnformattedTextPokemon.newWithSize(_INTL("Edit map's encounters"),
-     Graphics.width / 2, 0, Graphics.width / 2, 96)
+  help_window = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Edit map's encounters"), Graphics.width / 2, 0, Graphics.width / 2, 96
+  )
   help_window.z = 99999
   ret = 0
   need_refresh = true
@@ -184,7 +186,7 @@ def pbEncounterMapVersionEditor(enc_data)
     elsif ret == commands.length - 1   # Add new encounter type
       new_type_commands = []
       new_types = []
-      GameData::EncounterType.each do |enc|
+      GameData::EncounterType.each_alphabetically do |enc|
         next if enc_data.types[enc.id]
         new_type_commands.push(enc.real_name)
         new_types.push(enc.id)
@@ -212,14 +214,14 @@ def pbEncounterMapVersionEditor(enc_data)
       when 1   # Copy
         new_type_commands = []
         new_types = []
-        GameData::EncounterType.each do |enc|
+        GameData::EncounterType.each_alphabetically do |enc|
           next if enc_data.types[enc.id]
           new_type_commands.push(enc.real_name)
           new_types.push(enc.id)
         end
         if new_type_commands.length > 0
           chosen_type_cmd = pbMessage(_INTL("Choose an encounter type to copy to."),
-             new_type_commands, -1)
+                                      new_type_commands, -1)
           if chosen_type_cmd >= 0
             new_type = new_types[chosen_type_cmd]
             enc_data.step_chances[new_type] = enc_data.step_chances[this_type]
@@ -253,8 +255,9 @@ end
 def pbEncounterTypeEditor(enc_data, enc_type)
   commands = []
   list = pbListWindow([])
-  help_window = Window_UnformattedTextPokemon.newWithSize(_INTL("Edit encounter slots"),
-     Graphics.width / 2, 0, Graphics.width / 2, 96)
+  help_window = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Edit encounter slots"), Graphics.width / 2, 0, Graphics.width / 2, 96
+  )
   help_window.z = 99999
   enc_type_name = ""
   ret = 0
@@ -285,7 +288,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
       new_type_commands = []
       new_types = []
       chosen_type_cmd = 0
-      GameData::EncounterType.each do |enc|
+      GameData::EncounterType.each_alphabetically do |enc|
         next if enc_data.types[enc.id] && enc.id != enc_type
         new_type_commands.push(enc.real_name)
         new_types.push(enc.id)
@@ -322,8 +325,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
         need_refresh = true
       when 2   # Delete
         if pbConfirmMessage(_INTL("Delete this encounter slot?"))
-          enc_data.types[enc_type][ret - 2] = nil
-          enc_data.types[enc_type].compact!
+          enc_data.types[enc_type].delete_at(ret - 2)
           need_refresh = true
         end
       end
@@ -342,59 +344,55 @@ end
 # Trainer type editor
 #===============================================================================
 def pbTrainerTypeEditor
+  gender_array = []
+  GameData::TrainerType::SCHEMA["Gender"][2].each { |key, value| gender_array[value] = key if !gender_array[value] }
   trainer_type_properties = [
-    [_INTL("Internal Name"),   ReadOnlyProperty,        _INTL("Internal name that is used as a symbol like :XXX.")],
-    [_INTL("Trainer Name"),    StringProperty,          _INTL("Name of the trainer type as displayed by the game.")],
-    [_INTL("Base Money"),      LimitProperty.new(9999), _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
-    [_INTL("Battle BGM"),      BGMProperty,             _INTL("BGM played in battles against trainers of this type.")],
-    [_INTL("Battle End ME"),   MEProperty,              _INTL("ME played when player wins battles against trainers of this type.")],
-    [_INTL("Battle Intro ME"), MEProperty,              _INTL("ME played before battles against trainers of this type.")],
-    [_INTL("Gender"),          EnumProperty.new([
-       _INTL("Male"), _INTL("Female"), _INTL("Undefined")]),
-                                                        _INTL("Gender of this Trainer type.")],
-    [_INTL("Skill Level"),     LimitProperty.new(9999), _INTL("Skill level of this Trainer type.")],
-    [_INTL("Skill Code"),      StringProperty,          _INTL("Letters/phrases representing AI modifications of trainers of this type.")],
+    [_INTL("ID"),         ReadOnlyProperty,               _INTL("ID of this Trainer Type (used as a symbol like :XXX).")],
+    [_INTL("Name"),       StringProperty,                 _INTL("Name of this Trainer Type as displayed by the game.")],
+    [_INTL("Gender"),     EnumProperty.new(gender_array), _INTL("Gender of this Trainer Type.")],
+    [_INTL("BaseMoney"),  LimitProperty.new(9999),        _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
+    [_INTL("SkillLevel"), LimitProperty.new(9999),        _INTL("Skill level of this Trainer Type.")],
+    [_INTL("Flags"),      StringListProperty,             _INTL("Words/phrases that can be used to make trainers of this type behave differently to others.")],
+    [_INTL("IntroBGM"),   BGMProperty,                    _INTL("BGM played before battles against trainers of this type.")],
+    [_INTL("BattleBGM"),  BGMProperty,                    _INTL("BGM played in battles against trainers of this type.")],
+    [_INTL("VictoryBGM"), BGMProperty,                    _INTL("BGM played when player wins battles against trainers of this type.")]
   ]
   pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
     if tr_type
-      if button == Input::ACTION
-        if tr_type.is_a?(Symbol)
-          if pbConfirmMessageSerious("Delete this trainer type?")
-            id_number = GameData::TrainerType.get(tr_type).id_number
-            GameData::TrainerType::DATA.delete(tr_type)
-            GameData::TrainerType::DATA.delete(id_number)
-            GameData::TrainerType.save
-            pbConvertTrainerData
-            pbMessage(_INTL("The Trainer type was deleted."))
-          end
+      case button
+      when Input::ACTION
+        if tr_type.is_a?(Symbol) && pbConfirmMessageSerious("Delete this trainer type?")
+          GameData::TrainerType::DATA.delete(tr_type)
+          GameData::TrainerType.save
+          pbConvertTrainerData
+          pbMessage(_INTL("The Trainer type was deleted."))
         end
-      elsif button == Input::USE
+      when Input::USE
         if tr_type.is_a?(Symbol)
           t_data = GameData::TrainerType.get(tr_type)
           data = [
             t_data.id.to_s,
             t_data.real_name,
-            t_data.base_money,
-            t_data.battle_BGM,
-            t_data.victory_ME,
-            t_data.intro_ME,
             t_data.gender,
+            t_data.base_money,
             t_data.skill_level,
-            t_data.skill_code
+            t_data.flags,
+            t_data.intro_BGM,
+            t_data.battle_BGM,
+            t_data.victory_BGM
           ]
           if pbPropertyList(t_data.id.to_s, data, trainer_type_properties, true)
             # Construct trainer type hash
             type_hash = {
-              :id_number   => t_data.id_number,
               :id          => t_data.id,
               :name        => data[1],
-              :base_money  => data[2],
-              :battle_BGM  => data[3],
-              :victory_ME  => data[4],
-              :intro_ME    => data[5],
-              :gender      => data[6],
-              :skill_level => data[7],
-              :skill_code  => data[8]
+              :gender      => data[2],
+              :base_money  => data[3],
+              :skill_level => data[4],
+              :flags       => data[5],
+              :intro_BGM   => data[6],
+              :battle_BGM  => data[7],
+              :victory_BGM => data[8]
             }
             # Add trainer type's data to records
             GameData::TrainerType.register(type_hash)
@@ -410,13 +408,9 @@ def pbTrainerTypeEditor
 end
 
 def pbTrainerTypeEditorNew(default_name)
-  # Get an unused ID number for the new item
-  max_id = 0
-  GameData::TrainerType.each { |t| max_id = t.id_number if max_id < t.id_number }
-  id_number = max_id + 1
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the trainer type's name."),
-     (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
+                           (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
   if nil_or_empty?(name)
     return nil if !default_name
     name = default_name
@@ -426,12 +420,12 @@ def pbTrainerTypeEditorNew(default_name)
   id = id.gsub(/[^A-Za-z0-9_]/, "")
   id = id.upcase
   if id.length == 0
-    id = sprintf("T_%03d", id_number)
+    id = sprintf("T_%03d", GameData::TrainerType.count)
   elsif !id[0, 1][/[A-Z]/]
     id = "T_" + id
   end
   if GameData::TrainerType.exists?(id)
-    for i in 1..100
+    (1..100).each do |i|
       trial_id = sprintf("%s_%d", id, i)
       next if GameData::TrainerType.exists?(trial_id)
       id = trial_id
@@ -443,8 +437,8 @@ def pbTrainerTypeEditorNew(default_name)
     return nil
   end
   # Choose a gender
-  gender = pbMessage(_INTL("Is the Trainer male, female or undefined?"), [
-     _INTL("Male"), _INTL("Female"), _INTL("Undefined")], 0)
+  gender = pbMessage(_INTL("Is the Trainer male, female or unknown?"),
+                     [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], 0)
   # Choose a base money value
   params = ChooseNumberParams.new
   params.setRange(0, 255)
@@ -452,11 +446,10 @@ def pbTrainerTypeEditorNew(default_name)
   base_money = pbMessageChooseNumber(_INTL("Set the money per level won for defeating the Trainer."), params)
   # Construct trainer type hash
   tr_type_hash = {
-    :id_number   => id_number,
-    :id          => id.to_sym,
-    :name        => name,
-    :base_money  => base_money,
-    :gender      => gender
+    :id         => id.to_sym,
+    :name       => name,
+    :gender     => gender,
+    :base_money => base_money
   }
   # Add trainer type's data to records
   GameData::TrainerType.register(tr_type_hash)
@@ -478,10 +471,10 @@ module TrainerBattleProperty
   def self.set(settingname, oldsetting)
     return nil if !oldsetting
     properties = [
-       [_INTL("Trainer Type"), TrainerTypeProperty,     _INTL("Name of the trainer type for this Trainer.")],
-       [_INTL("Trainer Name"), StringProperty,          _INTL("Name of the Trainer.")],
-       [_INTL("Version"),      LimitProperty.new(9999), _INTL("Number used to distinguish Trainers with the same name and trainer type.")],
-       [_INTL("Lose Text"),    StringProperty,          _INTL("Message shown in battle when the Trainer is defeated.")]
+      [_INTL("Trainer Type"), TrainerTypeProperty,     _INTL("Name of the trainer type for this Trainer.")],
+      [_INTL("Trainer Name"), StringProperty,          _INTL("Name of the Trainer.")],
+      [_INTL("Version"),      LimitProperty.new(9999), _INTL("Number used to distinguish Trainers with the same name and trainer type.")],
+      [_INTL("Lose Text"),    StringProperty,          _INTL("Message shown in battle when the Trainer is defeated.")]
     ]
     Settings::MAX_PARTY_SIZE.times do |i|
       properties.push([_INTL("Pokémon {1}", i + 1), TrainerPokemonProperty, _INTL("A Pokémon owned by the Trainer.")])
@@ -505,17 +498,15 @@ def pbTrainerBattleEditor
   modified = false
   pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) { |button, trainer_id|
     if trainer_id
-      if button == Input::ACTION
-        if trainer_id.is_a?(Array)
-          if pbConfirmMessageSerious("Delete this trainer battle?")
-            tr_data = GameData::Trainer::DATA[trainer_id]
-            GameData::Trainer::DATA.delete(trainer_id)
-            GameData::Trainer::DATA.delete(tr_data.id_number)
-            modified = true
-            pbMessage(_INTL("The Trainer battle was deleted."))
-          end
+      case button
+      when Input::ACTION
+        if trainer_id.is_a?(Array) && pbConfirmMessageSerious("Delete this trainer battle?")
+          tr_data = GameData::Trainer::DATA[trainer_id]
+          GameData::Trainer::DATA.delete(trainer_id)
+          modified = true
+          pbMessage(_INTL("The Trainer battle was deleted."))
         end
-      elsif button == Input::USE
+      when Input::USE
         if trainer_id.is_a?(Array)   # Edit existing trainer
           tr_data = GameData::Trainer::DATA[trainer_id]
           old_type = tr_data.trainer_type
@@ -527,10 +518,10 @@ def pbTrainerBattleEditor
             tr_data.version,
             tr_data.real_lose_text
           ]
-          for i in 0...Settings::MAX_PARTY_SIZE
+          Settings::MAX_PARTY_SIZE.times do |i|
             data.push(tr_data.pokemon[i])
           end
-          for i in 0...TrainerBattleProperty::NUM_ITEMS
+          TrainerBattleProperty::NUM_ITEMS.times do |i|
             data.push(tr_data.items[i])
           end
           loop do
@@ -538,10 +529,10 @@ def pbTrainerBattleEditor
             break if !data
             party = []
             items = []
-            for i in 0...Settings::MAX_PARTY_SIZE
+            Settings::MAX_PARTY_SIZE.times do |i|
               party.push(data[4 + i]) if data[4 + i] && data[4 + i][:species]
             end
-            for i in 0...TrainerBattleProperty::NUM_ITEMS
+            TrainerBattleProperty::NUM_ITEMS.times do |i|
               items.push(data[4 + Settings::MAX_PARTY_SIZE + i]) if data[4 + Settings::MAX_PARTY_SIZE + i]
             end
             if !data[0]
@@ -552,7 +543,6 @@ def pbTrainerBattleEditor
               pbMessage(_INTL("Can't save. The Pokémon list is empty."))
             else
               trainer_hash = {
-                :id_number    => tr_data.id_number,
                 :trainer_type => data[0],
                 :name         => data[1],
                 :version      => data[2],
@@ -572,10 +562,10 @@ def pbTrainerBattleEditor
           end
         else   # New trainer
           tr_type = nil
-          ret = pbMessage(_INTL("First, define the new trainer's type."), [
-             _INTL("Use existing type"),
-             _INTL("Create new type"),
-             _INTL("Cancel")], 3)
+          ret = pbMessage(_INTL("First, define the new trainer's type."),
+                          [_INTL("Use existing type"),
+                           _INTL("Create new type"),
+                           _INTL("Cancel")], 3)
           case ret
           when 0
             tr_type = pbListScreen(_INTL("TRAINER TYPE"), TrainerTypeLister.new(0, false))
@@ -595,17 +585,18 @@ def pbTrainerBattleEditor
           t = pbNewTrainer(tr_type, tr_name, tr_version, false)
           if t
             trainer_hash = {
-              :id_number    => GameData::Trainer::DATA.keys.length / 2,
               :trainer_type => tr_type,
               :name         => tr_name,
               :version      => tr_version,
               :pokemon      => []
             }
             t[3].each do |pkmn|
-              trainer_hash[:pokemon].push({
-                :species => pkmn[0],
-                :level   => pkmn[1]
-              })
+              trainer_hash[:pokemon].push(
+                {
+                  :species => pkmn[0],
+                  :level   => pkmn[1]
+                }
+              )
             end
             # Add trainer's data to records
             trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
@@ -631,8 +622,8 @@ end
 # Trainer Pokémon editor
 #===============================================================================
 module TrainerPokemonProperty
-  def self.set(settingname,initsetting)
-    initsetting = {:species => nil, :level => 10} if !initsetting
+  def self.set(settingname, initsetting)
+    initsetting = { :species => nil, :level => 10 } if !initsetting
     oldsetting = [
       initsetting[:species],
       initsetting[:level],
@@ -640,63 +631,64 @@ module TrainerPokemonProperty
       initsetting[:form],
       initsetting[:gender],
       initsetting[:shininess],
+      initsetting[:super_shininess],
       initsetting[:shadowness]
     ]
     Pokemon::MAX_MOVES.times do |i|
       oldsetting.push((initsetting[:moves]) ? initsetting[:moves][i] : nil)
     end
-    oldsetting.concat([
-      initsetting[:ability],
-      initsetting[:ability_index],
-      initsetting[:item],
-      initsetting[:nature],
-      initsetting[:iv],
-      initsetting[:ev],
-      initsetting[:happiness],
-      initsetting[:poke_ball]
-    ])
+    oldsetting.concat([initsetting[:ability],
+                       initsetting[:ability_index],
+                       initsetting[:item],
+                       initsetting[:nature],
+                       initsetting[:iv],
+                       initsetting[:ev],
+                       initsetting[:happiness],
+                       initsetting[:poke_ball]])
     max_level = GameData::GrowthRate.max_level
     pkmn_properties = [
-       [_INTL("Species"),       SpeciesProperty,                         _INTL("Species of the Pokémon.")],
-       [_INTL("Level"),         NonzeroLimitProperty.new(max_level),     _INTL("Level of the Pokémon (1-{1}).", max_level)],
-       [_INTL("Name"),          StringProperty,                          _INTL("Name of the Pokémon.")],
-       [_INTL("Form"),          LimitProperty2.new(999),                 _INTL("Form of the Pokémon.")],
-       [_INTL("Gender"),        GenderProperty,                          _INTL("Gender of the Pokémon.")],
-       [_INTL("Shiny"),         BooleanProperty2,                        _INTL("If set to true, the Pokémon is a different-colored Pokémon.")],
-       [_INTL("Shadow"),        BooleanProperty2,                        _INTL("If set to true, the Pokémon is a Shadow Pokémon.")]
+      [_INTL("Species"),       SpeciesProperty,                         _INTL("Species of the Pokémon.")],
+      [_INTL("Level"),         NonzeroLimitProperty.new(max_level),     _INTL("Level of the Pokémon (1-{1}).", max_level)],
+      [_INTL("Name"),          StringProperty,                          _INTL("Name of the Pokémon.")],
+      [_INTL("Form"),          LimitProperty2.new(999),                 _INTL("Form of the Pokémon.")],
+      [_INTL("Gender"),        GenderProperty,                          _INTL("Gender of the Pokémon.")],
+      [_INTL("Shiny"),         BooleanProperty2,                        _INTL("If set to true, the Pokémon is a different-colored Pokémon.")],
+      [_INTL("SuperShiny"),    BooleanProperty2,                        _INTL("Whether the Pokémon is super shiny (shiny with a special shininess animation).")],
+      [_INTL("Shadow"),        BooleanProperty2,                        _INTL("If set to true, the Pokémon is a Shadow Pokémon.")]
     ]
     Pokemon::MAX_MOVES.times do |i|
       pkmn_properties.push([_INTL("Move {1}", i + 1),
-         MovePropertyForSpecies.new(oldsetting), _INTL("A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.")])
+                            MovePropertyForSpecies.new(oldsetting), _INTL("A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.")])
     end
-    pkmn_properties.concat([
-       [_INTL("Ability"),       AbilityProperty,                         _INTL("Ability of the Pokémon. Overrides the ability index.")],
+    pkmn_properties.concat(
+      [[_INTL("Ability"),       AbilityProperty,                         _INTL("Ability of the Pokémon. Overrides the ability index.")],
        [_INTL("Ability index"), LimitProperty2.new(99),                  _INTL("Ability index. 0=first ability, 1=second ability, 2+=hidden ability.")],
        [_INTL("Held item"),     ItemProperty,                            _INTL("Item held by the Pokémon.")],
        [_INTL("Nature"),        GameDataProperty.new(:Nature),           _INTL("Nature of the Pokémon.")],
        [_INTL("IVs"),           IVsProperty.new(Pokemon::IV_STAT_LIMIT), _INTL("Individual values for each of the Pokémon's stats.")],
        [_INTL("EVs"),           EVsProperty.new(Pokemon::EV_STAT_LIMIT), _INTL("Effort values for each of the Pokémon's stats.")],
        [_INTL("Happiness"),     LimitProperty2.new(255),                 _INTL("Happiness of the Pokémon (0-255).")],
-       [_INTL("Poké Ball"),     BallProperty.new(oldsetting),            _INTL("The kind of Poké Ball the Pokémon is kept in.")]
-    ])
+       [_INTL("Poké Ball"),     BallProperty.new(oldsetting),            _INTL("The kind of Poké Ball the Pokémon is kept in.")]]
+    )
     pbPropertyList(settingname, oldsetting, pkmn_properties, false)
     return nil if !oldsetting[0]   # Species is nil
     ret = {
-      :species       => oldsetting[0],
-      :level         => oldsetting[1],
-      :name          => oldsetting[2],
-      :form          => oldsetting[3],
-      :gender        => oldsetting[4],
-      :shininess     => oldsetting[5],
-      :shadowness    => oldsetting[6],
-      :ability       => oldsetting[7 + Pokemon::MAX_MOVES],
-      :ability_index => oldsetting[8 + Pokemon::MAX_MOVES],
-      :item          => oldsetting[9 + Pokemon::MAX_MOVES],
-      :nature        => oldsetting[10 + Pokemon::MAX_MOVES],
-      :iv            => oldsetting[11 + Pokemon::MAX_MOVES],
-      :ev            => oldsetting[12 + Pokemon::MAX_MOVES],
-      :happiness     => oldsetting[13 + Pokemon::MAX_MOVES],
-      :poke_ball     => oldsetting[14 + Pokemon::MAX_MOVES],
+      :species         => oldsetting[0],
+      :level           => oldsetting[1],
+      :name            => oldsetting[2],
+      :form            => oldsetting[3],
+      :gender          => oldsetting[4],
+      :shininess       => oldsetting[5],
+      :super_shininess => oldsetting[6],
+      :shadowness      => oldsetting[7],
+      :ability         => oldsetting[8 + Pokemon::MAX_MOVES],
+      :ability_index   => oldsetting[9 + Pokemon::MAX_MOVES],
+      :item            => oldsetting[10 + Pokemon::MAX_MOVES],
+      :nature          => oldsetting[11 + Pokemon::MAX_MOVES],
+      :iv              => oldsetting[12 + Pokemon::MAX_MOVES],
+      :ev              => oldsetting[13 + Pokemon::MAX_MOVES],
+      :happiness       => oldsetting[14 + Pokemon::MAX_MOVES],
+      :poke_ball       => oldsetting[15 + Pokemon::MAX_MOVES]
     }
     moves = []
     Pokemon::MAX_MOVES.times do |i|
@@ -719,85 +711,147 @@ end
 #===============================================================================
 # Metadata editor
 #===============================================================================
-def pbMetadataScreen(map_id = 0)
+def pbMetadataScreen
+  sel_player = -1
   loop do
-    map_id = pbListScreen(_INTL("SET METADATA"), MapLister.new(map_id, true))
-    break if map_id < 0
-    pbEditMetadata(map_id)
+    sel_player = pbListScreen(_INTL("SET METADATA"), MetadataLister.new(sel_player, true))
+    break if sel_player == -1
+    case sel_player
+    when -2   # Add new player
+      pbEditPlayerMetadata(-1)
+    when 0   # Edit global metadata
+      pbEditMetadata
+    else   # Edit player character
+      pbEditPlayerMetadata(sel_player) if sel_player >= 1
+    end
   end
 end
 
-def pbEditMetadata(map_id = 0)
+def pbEditMetadata
+  data = []
+  metadata = GameData::Metadata.get
+  properties = GameData::Metadata.editor_properties
+  properties.each do |property|
+    data.push(metadata.property_from_string(property[0]))
+  end
+  if pbPropertyList(_INTL("Global Metadata"), data, properties, true)
+    # Construct metadata hash
+    metadata_hash = {
+      :id                  => 0,
+      :start_money         => data[0],
+      :start_item_storage  => data[1],
+      :home                => data[2],
+      :storage_creator     => data[3],
+      :wild_battle_BGM     => data[4],
+      :trainer_battle_BGM  => data[5],
+      :wild_victory_BGM    => data[6],
+      :trainer_victory_BGM => data[7],
+      :wild_capture_ME     => data[8],
+      :surf_BGM            => data[9],
+      :bicycle_BGM         => data[10]
+    }
+    # Add metadata's data to records
+    GameData::Metadata.register(metadata_hash)
+    GameData::Metadata.save
+    Compiler.write_metadata
+  end
+end
+
+def pbEditPlayerMetadata(player_id = 1)
+  metadata = nil
+  if player_id < 1
+    # Adding new player character; get lowest unused player character ID
+    ids = GameData::PlayerMetadata.keys
+    1.upto(ids.max + 1) do |i|
+      next if ids.include?(i)
+      player_id = i
+      break
+    end
+    metadata = GameData::PlayerMetadata.new({ :id => player_id })
+  elsif !GameData::PlayerMetadata.exists?(player_id)
+    pbMessage(_INTL("Metadata for player character {1} was not found.", player_id))
+    return
+  end
+  data = []
+  metadata = GameData::PlayerMetadata.try_get(player_id) if metadata.nil?
+  properties = GameData::PlayerMetadata.editor_properties
+  properties.each do |property|
+    data.push(metadata.property_from_string(property[0]))
+  end
+  if pbPropertyList(_INTL("Player {1}", metadata.id), data, properties, true)
+    # Construct player metadata hash
+    metadata_hash = {
+      :id                => player_id,
+      :trainer_type      => data[0],
+      :walk_charset      => data[1],
+      :run_charset       => data[2],
+      :cycle_charset     => data[3],
+      :surf_charset      => data[4],
+      :dive_charset      => data[5],
+      :fish_charset      => data[6],
+      :surf_fish_charset => data[7]
+    }
+    # Add player metadata's data to records
+    GameData::PlayerMetadata.register(metadata_hash)
+    GameData::PlayerMetadata.save
+    Compiler.write_metadata
+  end
+end
+
+
+
+#===============================================================================
+# Map metadata editor
+#===============================================================================
+def pbMapMetadataScreen(map_id = 0)
+  loop do
+    map_id = pbListScreen(_INTL("SET METADATA"), MapLister.new(map_id))
+    break if map_id < 0
+    (map_id == 0) ? pbEditMetadata : pbEditMapMetadata(map_id)
+  end
+end
+
+def pbEditMapMetadata(map_id)
   mapinfos = pbLoadMapInfos
   data = []
-  if map_id == 0   # Global metadata
-    map_name = _INTL("Global Metadata")
-    metadata = GameData::Metadata.get
-    properties = GameData::Metadata.editor_properties
-  else   # Map metadata
-    map_name = mapinfos[map_id].name
-    metadata = GameData::MapMetadata.try_get(map_id)
-    metadata = GameData::Metadata.new({}) if !metadata
-    properties = GameData::MapMetadata.editor_properties
-  end
+  map_name = mapinfos[map_id].name
+  metadata = GameData::MapMetadata.try_get(map_id)
+  metadata = GameData::MapMetadata.new({ :id => map_id }) if !metadata
+  properties = GameData::MapMetadata.editor_properties
   properties.each do |property|
     data.push(metadata.property_from_string(property[0]))
   end
   if pbPropertyList(map_name, data, properties, true)
-    if map_id == 0   # Global metadata
-      # Construct metadata hash
-      metadata_hash = {
-        :id                 => map_id,
-        :home               => data[0],
-        :wild_battle_BGM    => data[1],
-        :trainer_battle_BGM => data[2],
-        :wild_victory_ME    => data[3],
-        :trainer_victory_ME => data[4],
-        :wild_capture_ME    => data[5],
-        :surf_BGM           => data[6],
-        :bicycle_BGM        => data[7],
-        :player_A           => data[8],
-        :player_B           => data[9],
-        :player_C           => data[10],
-        :player_D           => data[11],
-        :player_E           => data[12],
-        :player_F           => data[13],
-        :player_G           => data[14],
-        :player_H           => data[15]
-      }
-      # Add metadata's data to records
-      GameData::Metadata.register(metadata_hash)
-      GameData::Metadata.save
-    else   # Map metadata
-      # Construct metadata hash
-      metadata_hash = {
-        :id                   => map_id,
-        :outdoor_map          => data[0],
-        :announce_location    => data[1],
-        :can_bicycle          => data[2],
-        :always_bicycle       => data[3],
-        :teleport_destination => data[4],
-        :weather              => data[5],
-        :town_map_position    => data[6],
-        :dive_map_id          => data[7],
-        :dark_map             => data[8],
-        :safari_map           => data[9],
-        :snap_edges           => data[10],
-        :random_dungeon       => data[11],
-        :battle_background    => data[12],
-        :wild_battle_BGM      => data[13],
-        :trainer_battle_BGM   => data[14],
-        :wild_victory_ME      => data[15],
-        :trainer_victory_ME   => data[16],
-        :wild_capture_ME      => data[17],
-        :town_map_size        => data[18],
-        :battle_environment   => data[19]
-      }
-      # Add metadata's data to records
-      GameData::MapMetadata.register(metadata_hash)
-      GameData::MapMetadata.save
-    end
-    Compiler.write_metadata
+    # Construct map metadata hash
+    metadata_hash = {
+      :id                   => map_id,
+      :name                 => data[0],
+      :outdoor_map          => data[1],
+      :announce_location    => data[2],
+      :can_bicycle          => data[3],
+      :always_bicycle       => data[4],
+      :teleport_destination => data[5],
+      :weather              => data[6],
+      :town_map_position    => data[7],
+      :dive_map_id          => data[8],
+      :dark_map             => data[9],
+      :safari_map           => data[10],
+      :snap_edges           => data[11],
+      :random_dungeon       => data[12],
+      :battle_background    => data[13],
+      :wild_battle_BGM      => data[14],
+      :trainer_battle_BGM   => data[15],
+      :wild_victory_BGM     => data[16],
+      :trainer_victory_BGM  => data[17],
+      :wild_capture_ME      => data[18],
+      :town_map_size        => data[19],
+      :battle_environment   => data[20],
+      :flags                => data[21]
+    }
+    # Add map metadata's data to records
+    GameData::MapMetadata.register(metadata_hash)
+    GameData::MapMetadata.save
+    Compiler.write_map_metadata
   end
 end
 
@@ -807,45 +861,35 @@ end
 # Item editor
 #===============================================================================
 def pbItemEditor
+  field_use_array = [_INTL("Can't use in field")]
+  GameData::Item::SCHEMA["FieldUse"][2].each { |key, value| field_use_array[value] = key if !field_use_array[value] }
+  battle_use_array = [_INTL("Can't use in battle")]
+  GameData::Item::SCHEMA["BattleUse"][2].each { |key, value| battle_use_array[value] = key if !battle_use_array[value] }
   item_properties = [
-     [_INTL("Internal Name"),     ReadOnlyProperty,          _INTL("Internal name that is used as a symbol like :XXX.")],
-     [_INTL("Item Name"),         ItemNameProperty,          _INTL("Name of the item as displayed by the game.")],
-     [_INTL("Item Name Plural"),  ItemNameProperty,          _INTL("Plural name of the item as displayed by the game.")],
-     [_INTL("Pocket"),            PocketProperty,            _INTL("Pocket in the bag where the item is stored.")],
-     [_INTL("Purchase price"),    LimitProperty.new(999999), _INTL("Purchase price of the item.")],
-     [_INTL("Description"),       StringProperty,            _INTL("Description of the item")],
-     [_INTL("Use Out of Battle"), EnumProperty.new([
-        _INTL("Can't Use"), _INTL("On a Pokémon"), _INTL("Use directly"),
-        _INTL("TM"), _INTL("HM"), _INTL("On a Pokémon reusable"),
-       _INTL("TR")]),                                        _INTL("Specifies how this item can be used outside of battle.")],
-     [_INTL("Use In Battle"),     EnumProperty.new([
-        _INTL("Can't Use"), _INTL("On a Pokémon"), _INTL("On Pokémon's move"),
-        _INTL("On battler"), _INTL("On foe battler"), _INTL("Use directly"),
-        _INTL("On a Pokémon reusable"), _INTL("On Pokémon's move reusable"),
-        _INTL("On battler reusable"), _INTL("On foe battler reusable"),
-        _INTL("Use directly reusable")]),                    _INTL("Specifies how this item can be used within a battle.")],
-     [_INTL("Special Items"),     EnumProperty.new([
-        _INTL("None of below"), _INTL("Mail"), _INTL("Mail with Pictures"),
-        _INTL("Snag Ball"), _INTL("Poké Ball"), _INTL("Plantable Berry"),
-        _INTL("Key Item"), _INTL("Evolution Stone"), _INTL("Fossil"),
-        _INTL("Apricorn"), _INTL("Type-boosting Gem"), _INTL("Mulch"),
-        _INTL("Mega Stone")]),                               _INTL("For special kinds of items.")],
-     [_INTL("Machine"),           MoveProperty,              _INTL("Move taught by this TM or HM.")]
+    [_INTL("ID"),          ReadOnlyProperty,                   _INTL("ID of this item (used as a symbol like :XXX).")],
+    [_INTL("Name"),        ItemNameProperty,                   _INTL("Name of this item as displayed by the game.")],
+    [_INTL("NamePlural"),  ItemNameProperty,                   _INTL("Plural name of this item as displayed by the game.")],
+    [_INTL("Pocket"),      PocketProperty,                     _INTL("Pocket in the Bag where this item is stored.")],
+    [_INTL("Price"),       LimitProperty.new(999_999),         _INTL("Purchase price of this item.")],
+    [_INTL("SellPrice"),   LimitProperty.new(999_999),         _INTL("Sell price of this item. If blank, is half the purchase price.")],
+    [_INTL("Description"), StringProperty,                     _INTL("Description of this item")],
+    [_INTL("FieldUse"),    EnumProperty.new(field_use_array),  _INTL("How this item can be used outside of battle.")],
+    [_INTL("BattleUse"),   EnumProperty.new(battle_use_array), _INTL("How this item can be used within a battle.")],
+    [_INTL("Consumable"),  BooleanProperty,                    _INTL("Whether this item is consumed after use.")],
+    [_INTL("Flags"),       StringListProperty,                 _INTL("Words/phrases that can be used to group certain kinds of items.")],
+    [_INTL("Move"),        MoveProperty,                       _INTL("Move taught by this HM, TM or TR.")]
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
     if item
-      if button == Input::ACTION
-        if item.is_a?(Symbol)
-          if pbConfirmMessageSerious("Delete this item?")
-            id_number = GameData::Item.get(item).id_number
-            GameData::Item::DATA.delete(item)
-            GameData::Item::DATA.delete(id_number)
-            GameData::Item.save
-            Compiler.write_items
-            pbMessage(_INTL("The item was deleted."))
-          end
+      case button
+      when Input::ACTION
+        if item.is_a?(Symbol) && pbConfirmMessageSerious("Delete this item?")
+          GameData::Item::DATA.delete(item)
+          GameData::Item.save
+          Compiler.write_items
+          pbMessage(_INTL("The item was deleted."))
         end
-      elsif button == Input::USE
+      when Input::USE
         if item.is_a?(Symbol)
           itm = GameData::Item.get(item)
           data = [
@@ -854,26 +898,29 @@ def pbItemEditor
             itm.real_name_plural,
             itm.pocket,
             itm.price,
+            itm.sell_price,
             itm.real_description,
             itm.field_use,
             itm.battle_use,
-            itm.type,
+            itm.consumable,
+            itm.flags,
             itm.move
           ]
           if pbPropertyList(itm.id.to_s, data, item_properties, true)
             # Construct item hash
             item_hash = {
-              :id_number   => itm.id_number,
               :id          => itm.id,
               :name        => data[1],
               :name_plural => data[2],
               :pocket      => data[3],
               :price       => data[4],
-              :description => data[5],
-              :field_use   => data[6],
-              :battle_use  => data[7],
-              :type        => data[8],
-              :move        => data[9]
+              :sell_price  => data[5],
+              :description => data[6],
+              :field_use   => data[7],
+              :battle_use  => data[8],
+              :consumable  => data[9],
+              :flags       => data[10],
+              :move        => data[11]
             }
             # Add item's data to records
             GameData::Item.register(item_hash)
@@ -889,13 +936,9 @@ def pbItemEditor
 end
 
 def pbItemEditorNew(default_name)
-  # Get an unused ID number for the new item
-  max_id = 0
-  GameData::Item.each { |i| max_id = i.id_number if max_id < i.id_number }
-  id_number = max_id + 1
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the item's name."),
-     (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
+                           (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
   if nil_or_empty?(name)
     return if !default_name
     name = default_name
@@ -905,12 +948,12 @@ def pbItemEditorNew(default_name)
   id = id.gsub(/[^A-Za-z0-9_]/, "")
   id = id.upcase
   if id.length == 0
-    id = sprintf("ITEM_%03d", id_number)
+    id = sprintf("ITEM_%03d", GameData::Item.count)
   elsif !id[0, 1][/[A-Z]/]
     id = "ITEM_" + id
   end
   if GameData::Item.exists?(id)
-    for i in 1..100
+    (1..100).each do |i|
       trial_id = sprintf("%s_%d", id, i)
       next if GameData::Item.exists?(trial_id)
       id = trial_id
@@ -925,13 +968,12 @@ def pbItemEditorNew(default_name)
   pocket = PocketProperty.set("", 0)
   return if pocket == 0
   # Choose a price
-  price = LimitProperty.new(999999).set(_INTL("Purchase price"), -1)
+  price = LimitProperty.new(999_999).set(_INTL("Purchase price"), -1)
   return if price == -1
   # Choose a description
   description = StringProperty.set(_INTL("Description"), "")
   # Construct item hash
   item_hash = {
-    :id_number   => id_number,
     :id          => id.to_sym,
     :name        => name,
     :name_plural => name + "s",
@@ -954,65 +996,57 @@ end
 #===============================================================================
 def pbPokemonEditor
   species_properties = [
-     [_INTL("InternalName"),      ReadOnlyProperty,                   _INTL("Internal name of the Pokémon.")],
-     [_INTL("Name"),              LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
-     [_INTL("FormName"),          StringProperty,                     _INTL("Name of this form of the Pokémon.")],
-     [_INTL("Kind"),              StringProperty,                     _INTL("Kind of Pokémon species.")],
-     [_INTL("Pokédex"),           StringProperty,                     _INTL("Description of the Pokémon as displayed in the Pokédex.")],
-     [_INTL("Type1"),             TypeProperty,                       _INTL("Pokémon's type. If same as Type2, this Pokémon has a single type.")],
-     [_INTL("Type2"),             TypeProperty,                       _INTL("Pokémon's type. If same as Type1, this Pokémon has a single type.")],
-     [_INTL("BaseStats"),         BaseStatsProperty,                  _INTL("Base stats of the Pokémon.")],
-     [_INTL("EffortPoints"),      EffortValuesProperty,               _INTL("Effort Value points earned when this species is defeated.")],
-     [_INTL("BaseEXP"),           LimitProperty.new(9999),            _INTL("Base experience earned when this species is defeated.")],
-     [_INTL("GrowthRate"),        GameDataProperty.new(:GrowthRate),  _INTL("Pokémon's growth rate.")],
-     [_INTL("GenderRate"),        GameDataProperty.new(:GenderRatio), _INTL("Proportion of males to females for this species.")],
-     [_INTL("Rareness"),          LimitProperty.new(255),             _INTL("Catch rate of this species (0-255).")],
-     [_INTL("Happiness"),         LimitProperty.new(255),             _INTL("Base happiness of this species (0-255).")],
-     [_INTL("Moves"),             MovePoolProperty,                   _INTL("Moves which the Pokémon learns while levelling up.")],
-     [_INTL("TutorMoves"),        EggMovesProperty,                   _INTL("Moves which the Pokémon can be taught by TM/HM/Move Tutor.")],
-     [_INTL("EggMoves"),          EggMovesProperty,                   _INTL("Moves which the Pokémon can learn via breeding.")],
-     [_INTL("Ability1"),          AbilityProperty,                    _INTL("One ability which the Pokémon can have.")],
-     [_INTL("Ability2"),          AbilityProperty,                    _INTL("Another ability which the Pokémon can have.")],
-     [_INTL("HiddenAbility 1"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
-     [_INTL("HiddenAbility 2"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
-     [_INTL("HiddenAbility 3"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
-     [_INTL("HiddenAbility 4"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
-     [_INTL("WildItemCommon"),    ItemProperty,                       _INTL("Item commonly held by wild Pokémon of this species.")],
-     [_INTL("WildItemUncommon"),  ItemProperty,                       _INTL("Item uncommonly held by wild Pokémon of this species.")],
-     [_INTL("WildItemRare"),      ItemProperty,                       _INTL("Item rarely held by wild Pokémon of this species.")],
-     [_INTL("Compat1"),           GameDataProperty.new(:EggGroup),    _INTL("Compatibility group (egg group) for breeding purposes.")],
-     [_INTL("Compat2"),           GameDataProperty.new(:EggGroup),    _INTL("Compatibility group (egg group) for breeding purposes.")],
-     [_INTL("StepsToHatch"),      LimitProperty.new(99999),           _INTL("Number of steps until an egg of this species hatches.")],
-     [_INTL("Incense"),           ItemProperty,                       _INTL("Item needed to be held by a parent to produce an egg of this species.")],
-     [_INTL("Evolutions"),        EvolutionsProperty.new,             _INTL("Evolution paths of this species.")],
-     [_INTL("Height"),            NonzeroLimitProperty.new(999),      _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
-     [_INTL("Weight"),            NonzeroLimitProperty.new(9999),     _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
-     [_INTL("Color"),             GameDataProperty.new(:BodyColor),   _INTL("Pokémon's body color.")],
-     [_INTL("Shape"),             GameDataProperty.new(:BodyShape),   _INTL("Body shape of this species.")],
-     [_INTL("Habitat"),           GameDataProperty.new(:Habitat),     _INTL("The habitat of this species.")],
-     [_INTL("Generation"),        LimitProperty.new(99999),           _INTL("The number of the generation the Pokémon debuted in.")],
-     [_INTL("BattlerPlayerX"),    ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerPlayerY"),    ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerEnemyX"),     ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerEnemyY"),     ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerAltitude"),   ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerShadowX"),    ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerShadowSize"), ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
+    [_INTL("ID"),                ReadOnlyProperty,                   _INTL("The ID of the Pokémon.")],
+    [_INTL("Name"),              LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
+    [_INTL("FormName"),          StringProperty,                     _INTL("Name of this form of the Pokémon.")],
+    [_INTL("Category"),          StringProperty,                     _INTL("Kind of Pokémon species.")],
+    [_INTL("Pokédex"),           StringProperty,                     _INTL("Description of the Pokémon as displayed in the Pokédex.")],
+    [_INTL("Type 1"),            TypeProperty,                       _INTL("Pokémon's type. If same as Type 2, this Pokémon has a single type.")],
+    [_INTL("Type 2"),            TypeProperty,                       _INTL("Pokémon's type. If same as Type 1, this Pokémon has a single type.")],
+    [_INTL("BaseStats"),         BaseStatsProperty,                  _INTL("Base stats of the Pokémon.")],
+    [_INTL("EVs"),               EffortValuesProperty,               _INTL("Effort Value points earned when this species is defeated.")],
+    [_INTL("BaseExp"),           LimitProperty.new(9999),            _INTL("Base experience earned when this species is defeated.")],
+    [_INTL("GrowthRate"),        GameDataProperty.new(:GrowthRate),  _INTL("Pokémon's growth rate.")],
+    [_INTL("GenderRatio"),       GameDataProperty.new(:GenderRatio), _INTL("Proportion of males to females for this species.")],
+    [_INTL("CatchRate"),         LimitProperty.new(255),             _INTL("Catch rate of this species (0-255).")],
+    [_INTL("Happiness"),         LimitProperty.new(255),             _INTL("Base happiness of this species (0-255).")],
+    [_INTL("Moves"),             LevelUpMovesProperty,               _INTL("Moves which the Pokémon learns while levelling up.")],
+    [_INTL("TutorMoves"),        EggMovesProperty.new,               _INTL("Moves which the Pokémon can be taught by TM/HM/Move Tutor.")],
+    [_INTL("EggMoves"),          EggMovesProperty.new,               _INTL("Moves which the Pokémon can learn via breeding.")],
+    [_INTL("Ability 1"),         AbilityProperty,                    _INTL("One ability which the Pokémon can have.")],
+    [_INTL("Ability 2"),         AbilityProperty,                    _INTL("Another ability which the Pokémon can have.")],
+    [_INTL("HiddenAbility 1"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
+    [_INTL("HiddenAbility 2"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
+    [_INTL("HiddenAbility 3"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
+    [_INTL("HiddenAbility 4"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
+    [_INTL("WildItemCommon"),    GameDataPoolProperty.new(:Item),    _INTL("Item(s) commonly held by wild Pokémon of this species.")],
+    [_INTL("WildItemUncommon"),  GameDataPoolProperty.new(:Item),    _INTL("Item(s) uncommonly held by wild Pokémon of this species.")],
+    [_INTL("WildItemRare"),      GameDataPoolProperty.new(:Item),    _INTL("Item(s) rarely held by wild Pokémon of this species.")],
+    [_INTL("EggGroup 1"),        GameDataProperty.new(:EggGroup),    _INTL("Compatibility group (egg group) for breeding purposes.")],
+    [_INTL("EggGroup 2"),        GameDataProperty.new(:EggGroup),    _INTL("Compatibility group (egg group) for breeding purposes.")],
+    [_INTL("HatchSteps"),        LimitProperty.new(99_999),          _INTL("Number of steps until an egg of this species hatches.")],
+    [_INTL("Incense"),           ItemProperty,                       _INTL("Item needed to be held by a parent to produce an egg of this species.")],
+    [_INTL("Offspring"),         GameDataPoolProperty.new(:Species), _INTL("All possible species that an egg can be when breeding for an egg of this species (if blank, the egg can only be this species).")],
+    [_INTL("Evolutions"),        EvolutionsProperty.new,             _INTL("Evolution paths of this species.")],
+    [_INTL("Height"),            NonzeroLimitProperty.new(999),      _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
+    [_INTL("Weight"),            NonzeroLimitProperty.new(9999),     _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
+    [_INTL("Color"),             GameDataProperty.new(:BodyColor),   _INTL("Pokémon's body color.")],
+    [_INTL("Shape"),             GameDataProperty.new(:BodyShape),   _INTL("Body shape of this species.")],
+    [_INTL("Habitat"),           GameDataProperty.new(:Habitat),     _INTL("The habitat of this species.")],
+    [_INTL("Generation"),        LimitProperty.new(99_999),          _INTL("The number of the generation the Pokémon debuted in.")],
+    [_INTL("Flags"),             StringListProperty,                 _INTL("Words/phrases that distinguish this species from others.")]
   ]
   pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
     if species
-      if button == Input::ACTION
-        if species.is_a?(Symbol)
-          if pbConfirmMessageSerious("Delete this species?")
-            id_number = GameData::Species.get(species).id_number
-            GameData::Species::DATA.delete(species)
-            GameData::Species::DATA.delete(id_number)
-            GameData::Species.save
-            Compiler.write_pokemon
-            pbMessage(_INTL("The species was deleted."))
-          end
+      case button
+      when Input::ACTION
+        if species.is_a?(Symbol) && pbConfirmMessageSerious("Delete this species?")
+          GameData::Species::DATA.delete(species)
+          GameData::Species.save
+          Compiler.write_pokemon
+          pbMessage(_INTL("The species was deleted."))
         end
-      elsif button == Input::USE
+      when Input::USE
         if species.is_a?(Symbol)
           spec = GameData::Species.get(species)
           moves = []
@@ -1027,8 +1061,8 @@ def pbPokemonEditor
             spec.real_form_name,
             spec.real_category,
             spec.real_pokedex_entry,
-            spec.type1,
-            (spec.type2 == spec.type1) ? nil : spec.type2,
+            spec.types[0],
+            spec.types[1],
             spec.base_stats,
             spec.evs,
             spec.base_exp,
@@ -1045,13 +1079,14 @@ def pbPokemonEditor
             spec.hidden_abilities[1],
             spec.hidden_abilities[2],
             spec.hidden_abilities[3],
-            spec.wild_item_common,
-            spec.wild_item_uncommon,
-            spec.wild_item_rare,
+            spec.wild_item_common.clone,
+            spec.wild_item_uncommon.clone,
+            spec.wild_item_rare.clone,
             spec.egg_groups[0],
             spec.egg_groups[1],
             spec.hatch_steps,
             spec.incense,
+            spec.offspring,
             evolutions,
             spec.height,
             spec.weight,
@@ -1059,65 +1094,52 @@ def pbPokemonEditor
             spec.shape,
             spec.habitat,
             spec.generation,
-            spec.back_sprite_x,
-            spec.back_sprite_y,
-            spec.front_sprite_x,
-            spec.front_sprite_y,
-            spec.front_sprite_altitude,
-            spec.shadow_x,
-            spec.shadow_size
+            spec.flags.clone
           ]
           # Edit the properties
           if pbPropertyList(spec.id.to_s, data, species_properties, true)
             # Sanitise data
-            data[5] = data[6] if !data[5]                    # Type1
-            data[6] = data[5] if !data[6]                    # Type2
+            types = [data[5], data[6]].uniq.compact          # Types
+            types = nil if types.empty?
             egg_groups = [data[26], data[27]].uniq.compact   # Egg groups
-            egg_groups.push(:Undiscovered) if egg_groups.length == 0
+            egg_groups = nil if egg_groups.empty?
             abilities = [data[17], data[18]].uniq.compact    # Abilities
             hidden_abilities = [data[19], data[20], data[21], data[22]].uniq.compact   # Hidden abilities
             # Construct species hash
             species_hash = {
-              :id                    => spec.id,
-              :id_number             => spec.id_number,
-              :name                  => data[1],
-              :form_name             => data[2],
-              :category              => data[3],
-              :pokedex_entry         => data[4],
-              :type1                 => data[5],
-              :type2                 => data[6],
-              :base_stats            => data[7],
-              :evs                   => data[8],
-              :base_exp              => data[9],
-              :growth_rate           => data[10],
-              :gender_ratio          => data[11],
-              :catch_rate            => data[12],
-              :happiness             => data[13],
-              :moves                 => data[14],
-              :tutor_moves           => data[15],
-              :egg_moves             => data[16],
-              :abilities             => abilities,          # 17, 18
-              :hidden_abilities      => hidden_abilities,   # 19, 20, 21, 22
-              :wild_item_common      => data[23],
-              :wild_item_uncommon    => data[24],
-              :wild_item_rare        => data[25],
-              :egg_groups            => egg_groups,         # 26, 27
-              :hatch_steps           => data[28],
-              :incense               => data[29],
-              :evolutions            => data[30],
-              :height                => data[31],
-              :weight                => data[32],
-              :color                 => data[33],
-              :shape                 => data[34],
-              :habitat               => data[35],
-              :generation            => data[36],
-              :back_sprite_x         => data[37],
-              :back_sprite_y         => data[38],
-              :front_sprite_x        => data[39],
-              :front_sprite_y        => data[40],
-              :front_sprite_altitude => data[41],
-              :shadow_x              => data[42],
-              :shadow_size           => data[43]
+              :id                 => spec.id,
+              :name               => data[1],
+              :form_name          => data[2],
+              :category           => data[3],
+              :pokedex_entry      => data[4],
+              :types              => types,              # 5, 6
+              :base_stats         => data[7],
+              :evs                => data[8],
+              :base_exp           => data[9],
+              :growth_rate        => data[10],
+              :gender_ratio       => data[11],
+              :catch_rate         => data[12],
+              :happiness          => data[13],
+              :moves              => data[14],
+              :tutor_moves        => data[15],
+              :egg_moves          => data[16],
+              :abilities          => abilities,          # 17, 18
+              :hidden_abilities   => hidden_abilities,   # 19, 20, 21, 22
+              :wild_item_common   => data[23],
+              :wild_item_uncommon => data[24],
+              :wild_item_rare     => data[25],
+              :egg_groups         => egg_groups,         # 26, 27
+              :hatch_steps        => data[28],
+              :incense            => data[29],
+              :offspring          => data[30],
+              :evolutions         => data[31],
+              :height             => data[32],
+              :weight             => data[33],
+              :color              => data[34],
+              :shape              => data[35],
+              :habitat            => data[36],
+              :generation         => data[37],
+              :flags              => data[38]
             }
             # Add species' data to records
             GameData::Species.register(species_hash)
@@ -1143,8 +1165,9 @@ def pbRegionalDexEditor(dex)
   viewport.z = 99999
   cmd_window = pbListWindow([])
   info = Window_AdvancedTextPokemon.newWithSize(
-     _INTL("Z+Up/Down: Rearrange entries\nZ+Right: Insert new entry\nZ+Left: Delete entry\nD: Clear entry"),
-     Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
+    _INTL("Z+Up/Down: Rearrange entries\nZ+Right: Insert new entry\nZ+Left: Delete entry\nD: Clear entry"),
+    Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport
+  )
   info.z = 2
   dex.compact!
   ret = dex.clone
@@ -1175,7 +1198,7 @@ def pbRegionalDexEditor(dex)
         dex[cmd[1] + 1], dex[cmd[1]] = dex[cmd[1]], dex[cmd[1] + 1]
         refresh_list = true
       end
-     when 2   # Swap entry down
+    when 2   # Swap entry down
       if cmd[1] > 0
         dex[cmd[1] - 1], dex[cmd[1]] = dex[cmd[1]], dex[cmd[1] - 1]
         refresh_list = true
@@ -1198,7 +1221,9 @@ def pbRegionalDexEditor(dex)
     when 0
       if cmd[1] >= 0   # Edit entry
         case pbMessage(_INTL("\\ts[]Do what with this entry?"),
-           [_INTL("Change species"), _INTL("Clear"), _INTL("Insert entry"), _INTL("Delete entry"), _INTL("Cancel")], 5)
+                       [_INTL("Change species"), _INTL("Clear"),
+                        _INTL("Insert entry"), _INTL("Delete entry"),
+                        _INTL("Cancel")], 5)
         when 0   # Change species
           species = pbChooseSpeciesList(dex[cmd[1]])
           if species
@@ -1224,9 +1249,9 @@ def pbRegionalDexEditor(dex)
         end
       else   # Cancel
         case pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
+                       [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
         when 0   # Save all changes to Dex
-          dex.slice!(-1) while !dex[-1]
+          dex.slice!(-1) until dex[-1]
           ret = dex
           break
         when 1   # Just quit
@@ -1248,11 +1273,14 @@ def pbRegionalDexEditorMain
   cmd_window = pbListWindow([])
   cmd_window.viewport = viewport
   cmd_window.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Regional Dexes Editor"),
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Regional Dexes Editor"), Graphics.width / 2, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
-  info = Window_AdvancedTextPokemon.newWithSize(_INTL("Z+Up/Down: Rearrange Dexes"),
-     Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
+  info = Window_AdvancedTextPokemon.newWithSize(
+    _INTL("Z+Up/Down: Rearrange Dexes"), Graphics.width / 2, 64,
+    Graphics.width / 2, Graphics.height - 64, viewport
+  )
   info.z = 2
   dex_lists = []
   pbLoadRegionalDexes.each_with_index { |d, index| dex_lists[index] = d.clone }
@@ -1286,21 +1314,22 @@ def pbRegionalDexEditorMain
     when 0   # Clicked on a command/Dex
       if cmd[1] == 0   # Add new Dex
         case pbMessage(_INTL("Fill in this new Dex?"),
-           [_INTL("Leave blank"), _INTL("National Dex"), _INTL("Nat. Dex grouped families"), _INTL("Cancel")], 4)
+                       [_INTL("Leave blank"), _INTL("National Dex"),
+                        _INTL("Nat. Dex grouped families"), _INTL("Cancel")], 4)
         when 0   # Leave blank
           dex_lists.push([])
           refresh_list = true
         when 1   # Fill with National Dex
           new_dex = []
-          GameData::Species.each { |s| new_dex.push(s.species) if s.form == 0 }
+          GameData::Species.each_species { |s| new_dex.push(s.species) }
           dex_lists.push(new_dex)
           refresh_list = true
         when 2   # Fill with National Dex (grouped families)
           new_dex = []
           seen = []
-          GameData::Species.each do |s|
-            next if s.form != 0 || seen.include?(s.species)
-            family = s.get_related_species
+          GameData::Species.each_species do |s|
+            next if seen.include?(s.species)
+            family = s.get_family_species
             new_dex.concat(family)
             seen.concat(family)
           end
@@ -1309,7 +1338,7 @@ def pbRegionalDexEditorMain
         end
       elsif cmd[1] > 0   # Edit a Dex
         case pbMessage(_INTL("\\ts[]Do what with this Dex?"),
-            [_INTL("Edit"), _INTL("Copy"), _INTL("Delete"), _INTL("Cancel")], 4)
+                       [_INTL("Edit"), _INTL("Copy"), _INTL("Delete"), _INTL("Cancel")], 4)
         when 0   # Edit
           dex_lists[cmd[1] - 1] = pbRegionalDexEditor(dex_lists[cmd[1] - 1])
           refresh_list = true
@@ -1318,17 +1347,16 @@ def pbRegionalDexEditorMain
           cmd[1] = dex_lists.length
           refresh_list = true
         when 2   # Delete
-          dex_lists[cmd[1] - 1] = nil
-          dex_lists.compact!
+          dex_lists.delete_at(cmd[1] - 1)
           cmd[1] = [cmd[1], dex_lists.length].min
           refresh_list = true
         end
       else   # Cancel
         case pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+                       [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
         when 0   # Save all changes to Dexes
           save_data(dex_lists, "Data/regional_dexes.dat")
-          $PokemonTemp.regionalDexes = nil
+          $game_temp.regional_dexes_data = nil
           Compiler.write_regional_dexes
           pbMessage(_INTL("Data saved."))
           break
@@ -1350,9 +1378,8 @@ def pbAppendEvoToFamilyArray(species, array, seenarray)
   seenarray[species] = true
   evos = GameData::Species.get(species).get_evolutions
   if evos.length > 0
-    evos.sort! { |a, b| GameData::Species.get(a[0]).id_number <=> GameData::Species.get(b[0]).id_number }
     subarray = []
-    for i in evos
+    evos.each do |i|
       pbAppendEvoToFamilyArray(i[0], subarray, seenarray)
     end
     array.push(subarray) if subarray.length > 0
@@ -1362,8 +1389,7 @@ end
 def pbGetEvoFamilies
   seen = []
   ret = []
-  GameData::Species.each do |sp|
-    next if sp.form > 0
+  GameData::Species.each_species do |sp|
     species = sp.get_baby_species
     next if seen[species]
     subret = []
@@ -1376,10 +1402,10 @@ end
 def pbEvoFamiliesToStrings
   ret = []
   families = pbGetEvoFamilies
-  for fam in 0...families.length
+  families.length.times do |fam|
     string = ""
-    for p in 0...families[fam].length
-      if p>=3
+    families[fam].length.times do |p|
+      if p >= 3
         string += " + #{families[fam].length - 3} more"
         break
       end
@@ -1402,56 +1428,62 @@ def pbAnimationsOrganiser
     pbMessage(_INTL("No animations exist."))
     return
   end
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   cmdwin = pbListWindow([])
   cmdwin.viewport = viewport
   cmdwin.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Animations Organiser"),
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    _INTL("Animations Organiser"), Graphics.width / 2, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
-  info = Window_AdvancedTextPokemon.newWithSize(_INTL("Z+Up/Down: Swap\nZ+Left: Delete\nZ+Right: Insert"),
-     Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
+  info = Window_AdvancedTextPokemon.newWithSize(
+    _INTL("Z+Up/Down: Swap\nZ+Left: Delete\nZ+Right: Insert"),
+    Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport
+  )
   info.z = 2
   commands = []
-  refreshlist = true; oldsel = -1
-  cmd = [0,0]
+  refreshlist = true
+  oldsel = -1
+  cmd = [0, 0]
   loop do
     if refreshlist
       commands = []
-      for i in 0...list.length
-        commands.push(sprintf("%d: %s",i,(list[i]) ? list[i].name : "???"))
+      list.length.times do |i|
+        commands.push(sprintf("%d: %s", i, (list[i]) ? list[i].name : "???"))
       end
     end
-    refreshlist = false; oldsel = -1
-    cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
-    if cmd[0]==1   # Swap animation up
-      if cmd[1]>=0 && cmd[1]<commands.length-1
-        list[cmd[1]+1],list[cmd[1]] = list[cmd[1]],list[cmd[1]+1]
+    refreshlist = false
+    oldsel = -1
+    cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
+    case cmd[0]
+    when 1   # Swap animation up
+      if cmd[1] >= 0 && cmd[1] < commands.length - 1
+        list[cmd[1] + 1], list[cmd[1]] = list[cmd[1]], list[cmd[1] + 1]
         refreshlist = true
       end
-    elsif cmd[0]==2   # Swap animation down
-      if cmd[1]>0
-        list[cmd[1]-1],list[cmd[1]] = list[cmd[1]],list[cmd[1]-1]
+    when 2   # Swap animation down
+      if cmd[1] > 0
+        list[cmd[1] - 1], list[cmd[1]] = list[cmd[1]], list[cmd[1] - 1]
         refreshlist = true
       end
-    elsif cmd[0]==3   # Delete spot
+    when 3   # Delete spot
       list.delete_at(cmd[1])
-      cmd[1] = [cmd[1],list.length-1].min
+      cmd[1] = [cmd[1], list.length - 1].min
       refreshlist = true
-      pbWait(Graphics.frame_rate*2/10)
-    elsif cmd[0]==4   # Insert spot
-      list.insert(cmd[1],PBAnimation.new)
+      pbWait(Graphics.frame_rate * 2 / 10)
+    when 4   # Insert spot
+      list.insert(cmd[1], PBAnimation.new)
       refreshlist = true
-      pbWait(Graphics.frame_rate*2/10)
-    elsif cmd[0]==0
+      pbWait(Graphics.frame_rate * 2 / 10)
+    when 0
       cmd2 = pbMessage(_INTL("Save changes?"),
-          [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-      if cmd2==0 || cmd2==1
-        if cmd2==0
+                       [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+      if [0, 1].include?(cmd2)
+        if cmd2 == 0
           # Save animations here
-          save_data(list,"Data/PkmnAnimations.rxdata")
-          $PokemonTemp.battleAnims = nil
+          save_data(list, "Data/PkmnAnimations.rxdata")
+          $game_temp.battle_animations_data = nil
           pbMessage(_INTL("Data saved."))
         end
         break

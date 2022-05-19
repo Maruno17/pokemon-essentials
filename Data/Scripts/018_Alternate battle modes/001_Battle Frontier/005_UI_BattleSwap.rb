@@ -7,13 +7,17 @@ class BattleSwapScene
     @sprites = {}
     addBackgroundPlane(@sprites, "bg", "rentbg", @viewport)
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-       _INTL("RENTAL POKéMON"), 0, 0, Graphics.width, 64, @viewport)
+      _INTL("RENTAL POKéMON"), 0, 0, Graphics.width, 64, @viewport
+    )
     @sprites["list"] = Window_AdvancedCommandPokemonEx.newWithSize(
-       [], 0, 64, Graphics.width, Graphics.height - 128 , @viewport)
-    @sprites["help"] = Window_UnformattedTextPokemon.newWithSize("",
-       0, Graphics.height - 64, Graphics.width, 64, @viewport)
-    @sprites["msgwindow"] = Window_AdvancedTextPokemon.newWithSize("",
-       0, Graphics.height - 64, Graphics.height, 64, @viewport)
+      [], 0, 64, Graphics.width, Graphics.height - 128, @viewport
+    )
+    @sprites["help"] = Window_UnformattedTextPokemon.newWithSize(
+      "", 0, Graphics.height - 64, Graphics.width, 64, @viewport
+    )
+    @sprites["msgwindow"] = Window_AdvancedTextPokemon.newWithSize(
+      "", 0, Graphics.height - 64, Graphics.height, 64, @viewport
+    )
     @sprites["msgwindow"].visible = false
     pbUpdateChoices([])
     pbDeactivateWindows(@sprites)
@@ -29,13 +33,17 @@ class BattleSwapScene
     @sprites = {}
     addBackgroundPlane(@sprites, "bg", "swapbg", @viewport)
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-       _INTL("POKéMON SWAP"), 0, 0, Graphics.width, 64, @viewport)
+      _INTL("POKéMON SWAP"), 0, 0, Graphics.width, 64, @viewport
+    )
     @sprites["list"] = Window_AdvancedCommandPokemonEx.newWithSize(
-       [], 0, 64, Graphics.width, Graphics.height - 128, @viewport)
+      [], 0, 64, Graphics.width, Graphics.height - 128, @viewport
+    )
     @sprites["help"] = Window_UnformattedTextPokemon.newWithSize(
-       "", 0, Graphics.height - 64, Graphics.width, 64, @viewport)
+      "", 0, Graphics.height - 64, Graphics.width, 64, @viewport
+    )
     @sprites["msgwindow"] = Window_AdvancedTextPokemon.newWithSize(
-       "", 0, Graphics.height - 64, Graphics.width, 64, @viewport)
+      "", 0, Graphics.height - 64, Graphics.width, 64, @viewport
+    )
     @sprites["msgwindow"].visible = false
     pbInitSwapScreen
     pbDeactivateWindows(@sprites)
@@ -68,7 +76,7 @@ class BattleSwapScene
 
   def pbGetCommands(list, choices)
     commands = []
-    for i in 0...list.length
+    list.length.times do |i|
       pkmn = list[i]
       category = pkmn.species_data.category
       cmd = _INTL("{1} - {2} Pokémon", pkmn.speciesName, category)
@@ -104,9 +112,10 @@ class BattleSwapScene
   def pbUpdateChoices(choices)
     commands = pbGetCommands(@rentals, choices)
     @choices = choices
-    if choices.length == 0
+    case choices.length
+    when 0
       @sprites["help"].text = _INTL("Choose the first Pokémon.")
-    elsif choices.length == 1
+    when 1
       @sprites["help"].text = _INTL("Choose the second Pokémon.")
     else
       @sprites["help"].text = _INTL("Choose the third Pokémon.")
@@ -115,7 +124,7 @@ class BattleSwapScene
   end
 
   def pbSwapChosen(_pkmnindex)
-    commands=pbGetCommands(@newPokemon, [])
+    commands = pbGetCommands(@newPokemon, [])
     commands.push(_INTL("PKMN FOR SWAP"))
     commands.push(_INTL("CANCEL"))
     @sprites["help"].text = _INTL("Select Pokémon to accept.")
@@ -162,9 +171,10 @@ class BattleSwapScreen
       end
       commands.push(_INTL("OTHERS"))
       command = @scene.pbShowCommands(commands)
-      if command == 0
+      case command
+      when 0
         @scene.pbSummary(rentals, index)
-      elsif command == 1
+      when 1
         if chosen.include?(index)
           chosen.delete(index)
           @scene.pbUpdateChoices(chosen.clone)
@@ -194,9 +204,10 @@ class BattleSwapScreen
       if pkmn >= 0
         commands = [_INTL("SUMMARY"), _INTL("SWAP"), _INTL("RECHOOSE")]
         command = @scene.pbShowCommands(commands)
-        if command == 0
+        case command
+        when 0
           @scene.pbSummary(currentPokemon, pkmn)
-        elsif command == 1
+        when 1
           @scene.pbSwapChosen(pkmn)
           yourPkmn = pkmn
           loop do
@@ -218,12 +229,10 @@ class BattleSwapScreen
             end
           end
         end
-      else
+      elsif @scene.pbConfirm(_INTL("Quit swapping?"))
         # Canceled
-        if @scene.pbConfirm(_INTL("Quit swapping?"))
-          @scene.pbEndScene
-          return false
-        end
+        @scene.pbEndScene
+        return false
       end
     end
   end

@@ -7,11 +7,11 @@ class Sprite_Picture
   end
 
   def dispose
-    @sprite.dispose if @sprite
+    @sprite&.dispose
   end
 
   def update
-    @sprite.update if @sprite
+    @sprite&.update
     # If picture file name is different from current one
     if @picture_name != @picture.name
       # Remember file name to instance variables
@@ -19,16 +19,16 @@ class Sprite_Picture
       # If file name is not empty
       if @picture_name != ""
         # Get picture graphic
-        @sprite=IconSprite.new(0,0,@viewport) if !@sprite
-        @sprite.setBitmap("Graphics/Pictures/"+@picture_name)
+        @sprite = IconSprite.new(0, 0, @viewport) if !@sprite
+        @sprite.setBitmap("Graphics/Pictures/" + @picture_name)
       end
     end
     # If file name is empty
     if @picture_name == ""
       # Set sprite to invisible
       if @sprite
-        @sprite.dispose if @sprite
-        @sprite=nil
+        @sprite&.dispose
+        @sprite = nil
       end
       return
     end

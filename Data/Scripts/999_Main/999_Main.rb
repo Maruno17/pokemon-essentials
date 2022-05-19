@@ -33,7 +33,7 @@ def mainFunctionDebug
     Graphics.freeze
     $scene = pbCallTitle
     $scene.main until $scene.nil?
-    Graphics.transition(20)
+    Graphics.transition
   rescue Hangup
     pbPrintException($!) if !$DEBUG
     pbEmergencySave
@@ -43,11 +43,12 @@ end
 
 loop do
   retval = mainFunction
-  if retval == 0   # failed
+  case retval
+  when 0   # failed
     loop do
       Graphics.update
     end
-  elsif retval == 1   # ended successfully
+  when 1   # ended successfully
     break
   end
 end

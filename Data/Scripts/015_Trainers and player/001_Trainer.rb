@@ -11,7 +11,7 @@ class Trainer
   def inspect
     str = super.chop
     party_str = @party.map { |p| p.species_data.species }.inspect
-    str << format(' %s @party=%s>', self.full_name, party_str)
+    str << sprintf(" %s @party=%s>", self.full_name, party_str)
     return str
   end
 
@@ -34,7 +34,7 @@ class Trainer
   # Random ID other than this Trainer's ID
   def make_foreign_ID
     loop do
-      ret = rand(2 ** 16) | rand(2 ** 16) << 16
+      ret = rand(2**16) | (rand(2**16) << 16)
       return ret if ret != @id
     end
     return 0
@@ -42,18 +42,14 @@ class Trainer
 
   #=============================================================================
 
-  def trainer_type_name; return GameData::TrainerType.get(@trainer_type).name;        end
-  def base_money;        return GameData::TrainerType.get(@trainer_type).base_money;  end
-  def gender;            return GameData::TrainerType.get(@trainer_type).gender;      end
-  def male?;             return GameData::TrainerType.get(@trainer_type).male?;       end
-  def female?;           return GameData::TrainerType.get(@trainer_type).female?;     end
-  def skill_level;       return GameData::TrainerType.get(@trainer_type).skill_level; end
-  def skill_code;        return GameData::TrainerType.get(@trainer_type).skill_code;  end
-
-  def has_skill_code?(code)
-    c = skill_code
-    return c && c != "" && c[/#{code}/]
-  end
+  def trainer_type_name; return GameData::TrainerType.get(self.trainer_type).name;        end
+  def base_money;        return GameData::TrainerType.get(self.trainer_type).base_money;  end
+  def gender;            return GameData::TrainerType.get(self.trainer_type).gender;      end
+  def male?;             return GameData::TrainerType.get(self.trainer_type).male?;       end
+  def female?;           return GameData::TrainerType.get(self.trainer_type).female?;     end
+  def skill_level;       return GameData::TrainerType.get(self.trainer_type).skill_level; end
+  def flags;             return GameData::TrainerType.get(self.trainer_type).flags;       end
+  def has_flag?(flag);   return GameData::TrainerType.get(self.trainer_type).has_flag?(flag); end
 
   #=============================================================================
 
@@ -138,13 +134,13 @@ class Trainer
   # Returns true if there is a Pokémon of the given species in the trainer's
   # party. You may also specify a particular form it should be.
   def has_species?(species, form = -1)
-    return pokemon_party.any? { |p| p && p.isSpecies?(species) && (form < 0 || p.form == form) }
+    return pokemon_party.any? { |p| p&.isSpecies?(species) && (form < 0 || p.form == form) }
   end
 
   # Returns whether there is a fatefully met Pokémon of the given species in the
   # trainer's party.
   def has_fateful_species?(species)
-    return pokemon_party.any? { |p| p && p.isSpecies?(species) && p.obtain_method == 4 }
+    return pokemon_party.any? { |p| p&.isSpecies?(species) && p.obtain_method == 4 }
   end
 
   # Returns whether there is a Pokémon with the given type in the trainer's
@@ -152,7 +148,7 @@ class Trainer
   def has_pokemon_of_type?(type)
     return false if !GameData::Type.exists?(type)
     type = GameData::Type.get(type).id
-    return pokemon_party.any? { |p| p && p.hasType?(type) }
+    return pokemon_party.any? { |p| p&.hasType?(type) }
   end
 
   # Checks whether any Pokémon in the party knows the given move, and returns
@@ -172,7 +168,7 @@ class Trainer
   def initialize(name, trainer_type)
     @trainer_type = GameData::TrainerType.get(trainer_type).id
     @name         = name
-    @id           = rand(2 ** 16) | rand(2 ** 16) << 16
+    @id           = rand(2**16) | (rand(2**16) << 16)
     @language     = pbGetLanguage
     @party        = []
   end
@@ -184,10 +180,12 @@ end
 class NPCTrainer < Trainer
   attr_accessor :items
   attr_accessor :lose_text
+  attr_accessor :win_text
 
   def initialize(name, trainer_type)
     super
     @items     = []
     @lose_text = nil
+    @win_text  = nil
   end
 end

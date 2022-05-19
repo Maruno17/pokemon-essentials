@@ -1,51 +1,59 @@
 module GameData
   class Type
     attr_reader :id
-    attr_reader :id_number
     attr_reader :real_name
     attr_reader :special_type
     attr_reader :pseudo_type
+    attr_reader :flags
     attr_reader :weaknesses
     attr_reader :resistances
     attr_reader :immunities
+    attr_reader :icon_position   # Where this type's icon is within types.png
 
     DATA = {}
     DATA_FILENAME = "types.dat"
 
     SCHEMA = {
-      "Name"          => [1, "s"],
-      "InternalName"  => [2, "s"],
-      "IsPseudoType"  => [3, "b"],
-      "IsSpecialType" => [4, "b"],
-      "Weaknesses"    => [5, "*s"],
-      "Resistances"   => [6, "*s"],
-      "Immunities"    => [7, "*s"]
+      "Name"          => [0, "s"],
+      "InternalName"  => [0, "s"],
+      "IsSpecialType" => [0, "b"],
+      "IsPseudoType"  => [0, "b"],
+      "Flags"         => [0, "*s"],
+      "Weaknesses"    => [0, "*s"],
+      "Resistances"   => [0, "*s"],
+      "Immunities"    => [0, "*s"],
+      "IconPosition"  => [0, "u"]
     }
 
-    extend ClassMethods
+    extend ClassMethodsSymbols
     include InstanceMethods
 
     def initialize(hash)
-      @id           = hash[:id]
-      @id_number    = hash[:id_number]    || -1
-      @real_name    = hash[:name]         || "Unnamed"
-      @pseudo_type  = hash[:pseudo_type]  || false
-      @special_type = hash[:special_type] || false
-      @weaknesses   = hash[:weaknesses]   || []
-      @weaknesses   = [@weaknesses] if !@weaknesses.is_a?(Array)
-      @resistances  = hash[:resistances]  || []
-      @resistances  = [@resistances] if !@resistances.is_a?(Array)
-      @immunities   = hash[:immunities]   || []
-      @immunities   = [@immunities] if !@immunities.is_a?(Array)
+      @id            = hash[:id]
+      @real_name     = hash[:name]          || "Unnamed"
+      @special_type  = hash[:special_type]  || false
+      @pseudo_type   = hash[:pseudo_type]   || false
+      @flags         = hash[:flags]         || []
+      @weaknesses    = hash[:weaknesses]    || []
+      @weaknesses    = [@weaknesses] if !@weaknesses.is_a?(Array)
+      @resistances   = hash[:resistances]   || []
+      @resistances   = [@resistances] if !@resistances.is_a?(Array)
+      @immunities    = hash[:immunities]    || []
+      @immunities    = [@immunities] if !@immunities.is_a?(Array)
+      @icon_position = hash[:icon_position] || 0
     end
 
     # @return [String] the translated name of this item
     def name
-      return pbGetMessage(MessageTypes::Types, @id_number)
+      return pbGetMessageFromHash(MessageTypes::Types, @real_name)
     end
 
     def physical?; return !@special_type; end
     def special?;  return @special_type; end
+
+    def has_flag?(flag)
+      return @flags.any? { |f| f.downcase == flag.downcase }
+    end
 
     def effectiveness(other_type)
       return Effectiveness::NORMAL_EFFECTIVE_ONE if !other_type
@@ -64,7 +72,7 @@ module Effectiveness
   NOT_VERY_EFFECTIVE_ONE = 1
   NORMAL_EFFECTIVE_ONE   = 2
   SUPER_EFFECTIVE_ONE    = 4
-  NORMAL_EFFECTIVE       = NORMAL_EFFECTIVE_ONE ** 3
+  NORMAL_EFFECTIVE       = NORMAL_EFFECTIVE_ONE**3
 
   module_function
 

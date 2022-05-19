@@ -114,21 +114,21 @@ module SaveData
     # Requires a block with the loaded value as its parameter.
     # @see SaveData.register
     def load_value(&block)
-      raise ArgumentError, 'No block given to load_value' unless block_given?
+      raise ArgumentError, "No block given to load_value" unless block_given?
       @load_proc = block
     end
 
     # Defines what is saved into save data. Requires a block.
     # @see SaveData.register
     def save_value(&block)
-      raise ArgumentError, 'No block given to save_value' unless block_given?
+      raise ArgumentError, "No block given to save_value" unless block_given?
       @save_proc = block
     end
 
     # If present, defines what the value is set to at the start of a new game.
     # @see SaveData.register
     def new_game_value(&block)
-      raise ArgumentError, 'No block given to new_game_value' unless block_given?
+      raise ArgumentError, "No block given to new_game_value" unless block_given?
       @new_game_value_proc = block
     end
 
@@ -142,7 +142,7 @@ module SaveData
     # save format. Requires a block with the old format array as its parameter.
     # @see SaveData.register
     def from_old_format(&block)
-      raise ArgumentError, 'No block given to from_old_format' unless block_given?
+      raise ArgumentError, "No block given to from_old_format" unless block_given?
       @old_format_get_proc = block
     end
 
@@ -181,11 +181,11 @@ module SaveData
   #     new_game_value { Bar.new }
   #   end
   # @param id [Symbol] value id
-  # @yieldself [Value]
+  # @yield the block of code to be saved as a Value
   def self.register(id, &block)
     validate id => Symbol
     unless block_given?
-      raise ArgumentError, 'No block given to SaveData.register'
+      raise ArgumentError, "No block given to SaveData.register"
     end
     @values << Value.new(id, &block)
   end

@@ -3,9 +3,9 @@
 #===============================================================================
 class Player < Trainer
   # @return [Integer] the character ID of the player
-  attr_accessor :character_ID
+  attr_reader   :character_ID
   # @return [Integer] the player's outfit
-  attr_accessor :outfit
+  attr_reader   :outfit
   # @return [Array<Boolean>] the player's Gym Badges (true if owned)
   attr_accessor :badges
   # @return [Integer] the player's money
@@ -24,18 +24,31 @@ class Player < Trainer
   attr_accessor :has_pokegear
   # @return [Boolean] whether the player has running shoes (i.e. can run)
   attr_accessor :has_running_shoes
+  # @return [Boolean] whether the player has an innate ability to access Pokémon storage
+  attr_accessor :has_box_link
   # @return [Boolean] whether the creator of the Pokémon Storage System has been seen
   attr_accessor :seen_storage_creator
+  # @return [Boolean] whether the effect of Exp All applies innately
+  attr_accessor :has_exp_all
   # @return [Boolean] whether Mystery Gift can be used from the load screen
   attr_accessor :mystery_gift_unlocked
   # @return [Array<Array>] downloaded Mystery Gift data
   attr_accessor :mystery_gifts
 
+  def character_ID=(value)
+    return if @character_ID == value
+    @character_ID = value
+    $game_player&.refresh_charset
+  end
+
+  def outfit=(value)
+    return if @outfit == value
+    @outfit = value
+    $game_player&.refresh_charset
+  end
+
   def trainer_type
-    if @trainer_type.is_a?(Integer)
-      @trainer_type = GameData::Metadata.get_player(@character_ID || 0)[0]
-    end
-    return @trainer_type
+    return GameData::PlayerMetadata.get(@character_ID || 1).trainer_type
   end
 
   # Sets the player's money. It can not exceed {Settings::MAX_MONEY}.
@@ -90,10 +103,10 @@ class Player < Trainer
 
   def initialize(name, trainer_type)
     super
-    @character_ID          = -1
+    @character_ID          = 0
     @outfit                = 0
     @badges                = [false] * 8
-    @money                 = Settings::INITIAL_MONEY
+    @money                 = GameData::Metadata.get.start_money
     @coins                 = 0
     @battle_points         = 0
     @soot                  = 0
@@ -101,7 +114,9 @@ class Player < Trainer
     @has_pokedex           = false
     @has_pokegear          = false
     @has_running_shoes     = false
+    @has_box_link          = false
     @seen_storage_creator  = false
+    @has_exp_all           = false
     @mystery_gift_unlocked = false
     @mystery_gifts         = []
   end

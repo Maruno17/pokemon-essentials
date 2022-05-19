@@ -1,9 +1,9 @@
 class IntroEventScene < EventScene
   # Splash screen images that appear for a few seconds and then disappear.
-  SPLASH_IMAGES         = ['splash1']
+  SPLASH_IMAGES         = ["splash1", "splash2"]
   # The main title screen background image.
-  TITLE_BG_IMAGE        = 'title'
-  TITLE_START_IMAGE     = 'start'
+  TITLE_BG_IMAGE        = "title"
+  TITLE_START_IMAGE     = "start"
   TITLE_START_IMAGE_X   = 0
   TITLE_START_IMAGE_Y   = 322
   SECONDS_PER_SPLASH    = 2
@@ -17,8 +17,11 @@ class IntroEventScene < EventScene
     @pic2 = addImage(0, 0, "")   # flashing "Press Enter" picture
     @pic2.setOpacity(0, 0)       # set opacity to 0 after waiting 0 frames
     @index = 0
-    pbBGMPlay($data_system.title_bgm)
-    open_splash(self, nil)
+    if SPLASH_IMAGES.empty?
+      open_title_screen(self, nil)
+    else
+      open_splash(self, nil)
+    end
   end
 
   def open_splash(_scene, *args)
@@ -60,6 +63,7 @@ class IntroEventScene < EventScene
     @pic2.setVisible(0, true)
     @pic2.moveOpacity(0, FADE_TICKS, 255)
     pictureWait
+    pbBGMPlay($data_system.title_bgm)
     onUpdate.set(method(:title_screen_update))    # called every frame
     onCTrigger.set(method(:close_title_screen))   # called when C key is pressed
   end
@@ -68,8 +72,8 @@ class IntroEventScene < EventScene
     onUpdate.clear
     onCTrigger.clear
     # Play random cry
-    species_keys = GameData::Species::DATA.keys
-    species_data = GameData::Species.get(species_keys[rand(species_keys.length)])
+    species_keys = GameData::Species.keys
+    species_data = GameData::Species.get(species_keys.sample)
     Pokemon.play_cry(species_data.species, species_data.form)
     @pic.moveXY(0, 20, 0, 0)   # Adds 20 ticks (1 second) pause
     pictureWait

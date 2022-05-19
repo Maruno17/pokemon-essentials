@@ -77,23 +77,38 @@ class Interpreter
   #     y     : y coordinate to scroll to and center on
   #     speed : (optional) scroll speed (from 1-6, default being 4)
   #-----------------------------------------------------------------------------
-  def autoscroll(x,y,speed=SCROLL_SPEED_DEFAULT)
+  def autoscroll(x, y, speed = SCROLL_SPEED_DEFAULT)
     if $game_map.scrolling?
       return false
-    elsif !$game_map.valid?(x,y)
-      print 'Map Autoscroll: given x,y is invalid'
+    elsif !$game_map.valid?(x, y)
+      print "Map Autoscroll: given x,y is invalid"
       return command_skip
     elsif !(1..6).include?(speed)
-      print 'Map Autoscroll: invalid speed (1-6 only)'
+      print "Map Autoscroll: invalid speed (1-6 only)"
       return command_skip
     end
-    center_x = (Graphics.width/2 - Game_Map::TILE_WIDTH/2) * 4    # X coordinate in the center of the screen
-    center_y = (Graphics.height/2 - Game_Map::TILE_HEIGHT/2) * 4   # Y coordinate in the center of the screen
-    max_x = ($game_map.width - Graphics.width*1.0/Game_Map::TILE_WIDTH) * 4 * Game_Map::TILE_WIDTH
-    max_y = ($game_map.height - Graphics.height*1.0/Game_Map::TILE_HEIGHT) * 4 * Game_Map::TILE_HEIGHT
-    count_x = ($game_map.display_x - [0,[x*Game_Map::REAL_RES_X-center_x,max_x].min].max)/Game_Map::REAL_RES_X
-    count_y = ($game_map.display_y - [0,[y*Game_Map::REAL_RES_Y-center_y,max_y].min].max)/Game_Map::REAL_RES_Y
-    if !@diag
+    center_x = ((Graphics.width / 2) - (Game_Map::TILE_WIDTH / 2)) * 4   # X coordinate in the center of the screen
+    center_y = ((Graphics.height / 2) - (Game_Map::TILE_HEIGHT / 2)) * 4   # Y coordinate in the center of the screen
+    max_x = ($game_map.width - (Graphics.width.to_f / Game_Map::TILE_WIDTH)) * 4 * Game_Map::TILE_WIDTH
+    max_y = ($game_map.height - (Graphics.height.to_f / Game_Map::TILE_HEIGHT)) * 4 * Game_Map::TILE_HEIGHT
+    count_x = ($game_map.display_x - [0, [(x * Game_Map::REAL_RES_X) - center_x, max_x].min].max) / Game_Map::REAL_RES_X
+    count_y = ($game_map.display_y - [0, [(y * Game_Map::REAL_RES_Y) - center_y, max_y].min].max) / Game_Map::REAL_RES_Y
+    if @diag
+      @diag = false
+      dir = nil
+      if count_x != 0 && count_y != 0
+        return false
+      elsif count_x > 0
+        dir = 4
+      elsif count_x < 0
+        dir = 6
+      elsif count_y > 0
+        dir = 8
+      elsif count_y < 0
+        dir = 2
+      end
+      count = count_x == 0 ? count_y.abs : count_x.abs
+    else
       @diag = true
       dir = nil
       if count_x > 0
@@ -109,37 +124,18 @@ class Interpreter
           dir = 3
         end
       end
-      count = [count_x.abs,count_y.abs].min
-    else
-      @diag = false
-      dir = nil
-      if count_x != 0 && count_y != 0
-        return false
-      elsif count_x > 0
-        dir = 4
-      elsif count_x < 0
-        dir = 6
-      elsif count_y > 0
-        dir = 8
-      elsif count_y < 0
-        dir = 2
-      end
-      count = count_x != 0 ? count_x.abs : count_y.abs
+      count = [count_x.abs, count_y.abs].min
     end
-    $game_map.start_scroll(dir, count, speed) if dir != nil
-    if @diag
-      return false
-    else
-      return true
-    end
+    $game_map.start_scroll(dir, count, speed) if dir
+    return !@diag
   end
 
   #-----------------------------------------------------------------------------
   # * Map Autoscroll (to Player)
   #     speed : (optional) scroll speed (from 1-6, default being 4)
   #-----------------------------------------------------------------------------
-  def autoscroll_player(speed=SCROLL_SPEED_DEFAULT)
-    autoscroll($game_player.x,$game_player.y,speed)
+  def autoscroll_player(speed = SCROLL_SPEED_DEFAULT)
+    autoscroll($game_player.x, $game_player.y, speed)
   end
 end
 
@@ -148,20 +144,20 @@ end
 class Game_Map
   def scroll_downright(distance)
     @display_x = [@display_x + distance,
-       (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X].min
+                  (self.width - (Graphics.width.to_f / TILE_WIDTH)) * REAL_RES_X].min
     @display_y = [@display_y + distance,
-       (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y].min
+                  (self.height - (Graphics.height.to_f / TILE_HEIGHT)) * REAL_RES_Y].min
   end
 
   def scroll_downleft(distance)
     @display_x = [@display_x - distance, 0].max
     @display_y = [@display_y + distance,
-       (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y].min
+                  (self.height - (Graphics.height.to_f / TILE_HEIGHT)) * REAL_RES_Y].min
   end
 
   def scroll_upright(distance)
     @display_x = [@display_x + distance,
-       (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X].min
+                  (self.width - (Graphics.width.to_f / TILE_WIDTH)) * REAL_RES_X].min
     @display_y = [@display_y - distance, 0].max
   end
 
@@ -174,8 +170,8 @@ class Game_Map
     # If scrolling
     if @scroll_rest > 0
       # Change from scroll speed to distance in map coordinates
-      distance = (1<<@scroll_speed)*40/Graphics.frame_rate
-      distance = @scroll_rest if distance>@scroll_rest
+      distance = (1 << @scroll_speed) * 40 / Graphics.frame_rate
+      distance = @scroll_rest if distance > @scroll_rest
       # Execute scrolling
       case @scroll_direction
       when 1 then scroll_downleft(distance)

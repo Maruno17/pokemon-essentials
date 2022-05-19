@@ -4,16 +4,16 @@
 class IconWindow < SpriteWindow_Base
   attr_reader :name
 
-  def initialize(x,y,width,height,viewport=nil)
-    super(x,y,width,height)
-    self.viewport=viewport
-    self.contents=nil
-    @name=""
-    @_iconbitmap=nil
+  def initialize(x, y, width, height, viewport = nil)
+    super(x, y, width, height)
+    self.viewport = viewport
+    self.contents = nil
+    @name = ""
+    @_iconbitmap = nil
   end
 
   def dispose
-    clearBitmaps()
+    clearBitmaps
     super
   end
 
@@ -21,14 +21,14 @@ class IconWindow < SpriteWindow_Base
     super
     if @_iconbitmap
       @_iconbitmap.update
-      self.contents=@_iconbitmap.bitmap
+      self.contents = @_iconbitmap.bitmap
     end
   end
 
   def clearBitmaps
-    @_iconbitmap.dispose if @_iconbitmap
-    @_iconbitmap=nil
-    self.contents=nil if !self.disposed?
+    @_iconbitmap&.dispose
+    @_iconbitmap = nil
+    self.contents = nil if !self.disposed?
   end
 
   # Sets the icon's filename.  Alias for setBitmap.
@@ -37,16 +37,16 @@ class IconWindow < SpriteWindow_Base
   end
 
   # Sets the icon's filename.
-  def setBitmap(file,hue=0)
-    clearBitmaps()
-    @name=file
-    return if file==nil
-    if file!=""
-      @_iconbitmap=AnimatedBitmap.new(file,hue)
-      # for compatibility
-      self.contents=@_iconbitmap ? @_iconbitmap.bitmap : nil
+  def setBitmap(file, hue = 0)
+    clearBitmaps
+    @name = file
+    return if file.nil?
+    if file == ""
+      @_iconbitmap = nil
     else
-      @_iconbitmap=nil
+      @_iconbitmap = AnimatedBitmap.new(file, hue)
+      # for compatibility
+      self.contents = @_iconbitmap ? @_iconbitmap.bitmap : nil
     end
   end
 end
@@ -59,15 +59,15 @@ end
 #===============================================================================
 class PictureWindow < SpriteWindow_Base
   def initialize(pathOrBitmap)
-    super(0,0,32,32)
-    self.viewport=viewport
-    self.contents=nil
-    @_iconbitmap=nil
+    super(0, 0, 32, 32)
+    self.viewport = viewport
+    self.contents = nil
+    @_iconbitmap = nil
     setBitmap(pathOrBitmap)
   end
 
   def dispose
-    clearBitmaps()
+    clearBitmaps
     super
   end
 
@@ -75,47 +75,46 @@ class PictureWindow < SpriteWindow_Base
     super
     if @_iconbitmap
       if @_iconbitmap.is_a?(Bitmap)
-        self.contents=@_iconbitmap
+        self.contents = @_iconbitmap
       else
         @_iconbitmap.update
-        self.contents=@_iconbitmap.bitmap
+        self.contents = @_iconbitmap.bitmap
       end
     end
   end
 
   def clearBitmaps
-    @_iconbitmap.dispose if @_iconbitmap
-    @_iconbitmap=nil
-    self.contents=nil if !self.disposed?
+    @_iconbitmap&.dispose
+    @_iconbitmap = nil
+    self.contents = nil if !self.disposed?
   end
 
   # Sets the icon's bitmap or filename. (hue parameter
   # is ignored unless pathOrBitmap is a filename)
-  def setBitmap(pathOrBitmap,hue=0)
-    clearBitmaps()
-    if pathOrBitmap!=nil && pathOrBitmap!=""
-      if pathOrBitmap.is_a?(Bitmap)
-        @_iconbitmap=pathOrBitmap
-        self.contents=@_iconbitmap
-        self.width=@_iconbitmap.width+self.borderX
-        self.height=@_iconbitmap.height+self.borderY
-      elsif pathOrBitmap.is_a?(AnimatedBitmap)
-        @_iconbitmap=pathOrBitmap
-        self.contents=@_iconbitmap.bitmap
-        self.width=@_iconbitmap.bitmap.width+self.borderX
-        self.height=@_iconbitmap.bitmap.height+self.borderY
+  def setBitmap(pathOrBitmap, hue = 0)
+    clearBitmaps
+    if pathOrBitmap && pathOrBitmap != ""
+      case pathOrBitmap
+      when Bitmap
+        @_iconbitmap = pathOrBitmap
+        self.contents = @_iconbitmap
+        self.width = @_iconbitmap.width + self.borderX
+        self.height = @_iconbitmap.height + self.borderY
+      when AnimatedBitmap
+        @_iconbitmap = pathOrBitmap
+        self.contents = @_iconbitmap.bitmap
+        self.width = @_iconbitmap.bitmap.width + self.borderX
+        self.height = @_iconbitmap.bitmap.height + self.borderY
       else
-        @_iconbitmap=AnimatedBitmap.new(pathOrBitmap,hue)
-        self.contents=@_iconbitmap ? @_iconbitmap.bitmap : nil
-        self.width=@_iconbitmap ? @_iconbitmap.bitmap.width+self.borderX :
-           32+self.borderX
-        self.height=@_iconbitmap ? @_iconbitmap.bitmap.height+self.borderY :
-           32+self.borderY
+        @_iconbitmap = AnimatedBitmap.new(pathOrBitmap, hue)
+        self.contents = @_iconbitmap&.bitmap
+        self.width = self.borderX + (@_iconbitmap&.bitmap&.width || 32)
+        self.height = self.borderY + (@_iconbitmap&.bitmap&.height || 32)
       end
     else
-      @_iconbitmap=nil
-      self.width=32+self.borderX
-      self.height=32+self.borderY
+      @_iconbitmap = nil
+      self.width = 32 + self.borderX
+      self.height = 32 + self.borderY
     end
   end
 end

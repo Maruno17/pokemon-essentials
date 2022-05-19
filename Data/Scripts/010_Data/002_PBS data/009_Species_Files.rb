@@ -13,10 +13,10 @@ module GameData
       factors.push([1, try_form, ""]) if form > 0
       factors.push([0, try_species, "000"])
       # Go through each combination of parameters in turn to find an existing sprite
-      for i in 0...2 ** factors.length
+      (2**factors.length).times do |i|
         # Set try_ parameters for this combination
         factors.each_with_index do |factor, index|
-          value = ((i / (2 ** index)) % 2 == 0) ? factor[1] : factor[2]
+          value = ((i / (2**index)).even?) ? factor[1] : factor[2]
           case factor[0]
           when 0 then try_species   = value
           when 1 then try_form      = value
@@ -28,7 +28,7 @@ module GameData
         # Look for a graphic matching this combination's parameters
         try_species_text = try_species
         ret = pbResolveBitmap(sprintf("%s%s%s%s%s%s", path, try_subfolder,
-           try_species_text, try_form, try_gender, try_shadow))
+                                      try_species_text, try_form, try_gender, try_shadow))
         return ret if ret
       end
       return nil
@@ -158,7 +158,8 @@ module GameData
       ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%s", species_data.species))
       return ret if ret
       # Use general shadow graphic
-      return pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%d", species_data.shadow_size))
+      metrics_data = GameData::SpeciesMetrics.get_species_form(species_data.species, form)
+      return pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%d", metrics_data.shadow_size))
     end
 
     def self.shadow_bitmap(species, form = 0)
@@ -173,23 +174,23 @@ module GameData
 
     #===========================================================================
 
-    def self.check_cry_file(species, form)
+    def self.check_cry_file(species, form, suffix = "")
       species_data = self.get_species_form(species, form)
       return nil if species_data.nil?
       if form > 0
-        ret = sprintf("Cries/%s_%d", species_data.species, form)
+        ret = sprintf("Cries/%s_%d%s", species_data.species, form, suffix)
         return ret if pbResolveAudioSE(ret)
       end
-      ret = sprintf("Cries/%s", species_data.species)
+      ret = sprintf("Cries/%s%s", species_data.species, suffix)
       return (pbResolveAudioSE(ret)) ? ret : nil
     end
 
-    def self.cry_filename(species, form = 0)
-      return self.check_cry_file(species, form)
+    def self.cry_filename(species, form = 0, suffix = "")
+      return self.check_cry_file(species, form || 0, suffix)
     end
 
-    def self.cry_filename_from_pokemon(pkmn)
-      return self.check_cry_file(pkmn.species, pkmn.form)
+    def self.cry_filename_from_pokemon(pkmn, suffix = "")
+      return self.check_cry_file(pkmn.species, pkmn.form, suffix)
     end
 
     def self.play_cry_from_species(species, form = 0, volume = 90, pitch = 100)
@@ -198,122 +199,42 @@ module GameData
       pbSEPlay(RPG::AudioFile.new(filename, volume, pitch)) rescue nil
     end
 
-    def self.play_cry_from_pokemon(pkmn, volume = 90, pitch = nil)
+    def self.play_cry_from_pokemon(pkmn, volume = 90, pitch = 100)
       return if !pkmn || pkmn.egg?
       filename = self.cry_filename_from_pokemon(pkmn)
       return if !filename
-      pitch ||= 75 + (pkmn.hp * 25 / pkmn.totalhp)
+      pitch ||= 100
       pbSEPlay(RPG::AudioFile.new(filename, volume, pitch)) rescue nil
     end
 
-    def self.play_cry(pkmn, volume = 90, pitch = nil)
+    def self.play_cry(pkmn, volume = 90, pitch = 100)
       if pkmn.is_a?(Pokemon)
         self.play_cry_from_pokemon(pkmn, volume, pitch)
       else
-        self.play_cry_from_species(pkmn, nil, volume, pitch)
+        self.play_cry_from_species(pkmn, 0, volume, pitch)
       end
     end
 
-    def self.cry_length(species, form = 0, pitch = 100)
+    def self.cry_length(species, form = 0, pitch = 100, suffix = "")
+      pitch ||= 100
       return 0 if !species || pitch <= 0
       pitch = pitch.to_f / 100
       ret = 0.0
       if species.is_a?(Pokemon)
         if !species.egg?
-          filename = pbResolveAudioSE(GameData::Species.cry_filename_from_pokemon(species))
+          filename = self.cry_filename_from_pokemon(species, suffix)
+          filename = self.cry_filename_from_pokemon(species) if !filename && !nil_or_empty?(suffix)
+          filename = pbResolveAudioSE(filename)
           ret = getPlayTime(filename) if filename
         end
       else
-        filename = pbResolveAudioSE(GameData::Species.cry_filename(species, form))
+        filename = self.cry_filename(species, form, suffix)
+        filename = self.cry_filename(species, form) if !filename && !nil_or_empty?(suffix)
+        filename = pbResolveAudioSE(filename)
         ret = getPlayTime(filename) if filename
       end
       ret /= pitch   # Sound played at a lower pitch lasts longer
-      return (ret * Graphics.frame_rate).ceil + 4   # 4 provides a buffer between sounds
+      return ret
     end
   end
-end
-
-#===============================================================================
-# Deprecated methods
-#===============================================================================
-# @deprecated This alias is slated to be removed in v20.
-def pbLoadSpeciesBitmap(species, gender = 0, form = 0, shiny = false, shadow = false, back = false , egg = false)
-  Deprecation.warn_method('pbLoadSpeciesBitmap', 'v20', 'GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)')
-  return GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbLoadPokemonBitmap(pkmn, back = false)
-  Deprecation.warn_method('pbLoadPokemonBitmap', 'v20', 'GameData::Species.sprite_bitmap_from_pokemon(pkmn)')
-  return GameData::Species.sprite_bitmap_from_pokemon(pkmn, back)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbLoadPokemonBitmapSpecies(pkmn, species, back = false)
-  Deprecation.warn_method('pbLoadPokemonBitmapSpecies', 'v20', 'GameData::Species.sprite_bitmap_from_pokemon(pkmn, back, species)')
-  return GameData::Species.sprite_bitmap_from_pokemon(pkmn, back, species)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbPokemonIconFile(pkmn)
-  Deprecation.warn_method('pbPokemonIconFile', 'v20', 'GameData::Species.icon_filename_from_pokemon(pkmn)')
-  return GameData::Species.icon_filename_from_pokemon(pkmn)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbLoadPokemonIcon(pkmn)
-  Deprecation.warn_method('pbLoadPokemonIcon', 'v20', 'GameData::Species.icon_bitmap_from_pokemon(pkmn)')
-  return GameData::Species.icon_bitmap_from_pokemon(pkmn)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbPokemonFootprintFile(species, form = 0)
-  Deprecation.warn_method('pbPokemonFootprintFile', 'v20', 'GameData::Species.footprint_filename(species, form)')
-  return GameData::Species.footprint_filename(species, form)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbCheckPokemonShadowBitmapFiles(species, form = 0)
-  Deprecation.warn_method('pbCheckPokemonShadowBitmapFiles', 'v20', 'GameData::Species.shadow_filename(species, form)')
-  return GameData::Species.shadow_filename(species, form)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbLoadPokemonShadowBitmap(pkmn)
-  Deprecation.warn_method('pbLoadPokemonShadowBitmap', 'v20', 'GameData::Species.shadow_bitmap_from_pokemon(pkmn)')
-  return GameData::Species.shadow_bitmap_from_pokemon(pkmn)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbCryFile(species, form = 0)
-  if species.is_a?(Pokemon)
-    Deprecation.warn_method('pbCryFile', 'v20', 'GameData::Species.cry_filename_from_pokemon(pkmn)')
-    return GameData::Species.cry_filename_from_pokemon(species)
-  end
-  Deprecation.warn_method('pbCryFile', 'v20', 'GameData::Species.cry_filename(species, form)')
-  return GameData::Species.cry_filename(species, form)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbPlayCry(pkmn, volume = 90, pitch = nil)
-  Deprecation.warn_method('pbPlayCry', 'v20', 'GameData::Species.play_cry(pkmn)')
-  GameData::Species.play_cry(pkmn, volume, pitch)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbPlayCrySpecies(species, form = 0, volume = 90, pitch = nil)
-  Deprecation.warn_method('pbPlayCrySpecies', 'v20', 'Pokemon.play_cry(species, form)')
-  Pokemon.play_cry(species, form, volume, pitch)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbPlayCryPokemon(pkmn, volume = 90, pitch = nil)
-  Deprecation.warn_method('pbPlayCryPokemon', 'v20', 'pkmn.play_cry')
-  pkmn.play_cry(volume, pitch)
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbCryFrameLength(species, form = 0, pitch = 100)
-  Deprecation.warn_method('pbCryFrameLength', 'v20', 'GameData::Species.cry_length(species, form)')
-  return GameData::Species.cry_length(species, form, pitch)
 end

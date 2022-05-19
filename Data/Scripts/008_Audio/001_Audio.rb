@@ -1,10 +1,10 @@
 #####################################
 # Needed because RGSS doesn't call at_exit procs on exit
 # Exit is not called when game is reset (using F12)
-$AtExitProcs=[] if !$AtExitProcs
+$AtExitProcs = [] if !$AtExitProcs
 
-def exit(code=0)
-  for p in $AtExitProcs
+def exit(code = 0)
+  $AtExitProcs.each do |p|
     p.call
   end
   raise SystemExit.new(code)
@@ -51,7 +51,7 @@ def oggfiletime(file)
   i = -1
   pcmlengths = []
   rates = []
-  for page in pages
+  pages.each do |page|
     header = page[0]
     serial = header[10, 4].unpack("V")
     frame = header[2, 8].unpack("C*")
@@ -78,9 +78,7 @@ def oggfiletime(file)
     pcmlengths[i] = frameno
   end
   ret = 0.0
-  for i in 0...pcmlengths.length
-    ret += pcmlengths[i].to_f / rates[i].to_f
-  end
+  pcmlengths.each_with_index { |length, i| ret += length.to_f / rates[i] }
   return ret * 256.0
 end
 
@@ -110,36 +108,37 @@ def getPlayTime2(filename)
   File.open(filename, "rb") { |file|
     file.pos = 0
     fdw = fgetdw.call(file)
-    if fdw == 0x46464952   # "RIFF"
+    case fdw
+    when 0x46464952   # "RIFF"
       filesize = fgetdw.call(file)
       wave = fgetdw.call(file)
       return -1 if wave != 0x45564157   # "WAVE"
       fmt = fgetdw.call(file)
       return -1 if fmt != 0x20746d66   # "fmt "
-      fmtsize = fgetdw.call(file)
-      format = fgetw.call(file)
-      channels = fgetw.call(file)
-      rate = fgetdw.call(file)
+      fgetdw.call(file)   # fmtsize
+      fgetw.call(file)   # format
+      fgetw.call(file)   # channels
+      fgetdw.call(file)   # rate
       bytessec = fgetdw.call(file)
       return -1 if bytessec == 0
-      bytessample = fgetw.call(file)
-      bitssample = fgetw.call(file)
+      fgetw.call(file)   # bytessample
+      fgetw.call(file)   # bitssample
       data = fgetdw.call(file)
       return -1 if data != 0x61746164   # "data"
       datasize = fgetdw.call(file)
-      time = (datasize*1.0)/bytessec
+      time = datasize.to_f / bytessec
       return time
-    elsif fdw == 0x5367674F   # "OggS"
+    when 0x5367674F   # "OggS"
       file.pos = 0
       time = oggfiletime(file)
       return time
     end
     file.pos = 0
     # Find the length of an MP3 file
-    while true
+    loop do
       rstr = ""
       ateof = false
-      while !file.eof?
+      until file.eof?
         if (file.read(1)[0] rescue 0) == 0xFF
           begin
             rstr = file.read(3)
@@ -152,15 +151,15 @@ def getPlayTime2(filename)
       break if ateof || !rstr || rstr.length != 3
       if rstr[0] == 0xFB
         t = rstr[1] >> 4
-        next if t == 0 || t == 15
-        freqs = [44100, 22050, 11025, 48000]
+        next if [0, 15].include?(t)
+        freqs = [44_100, 22_050, 11_025, 48_000]
         bitrates = [32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320]
         bitrate = bitrates[t]
         t = (rstr[1] >> 2) & 3
         freq = freqs[t]
         t = (rstr[1] >> 1) & 1
         filesize = FileTest.size(filename)
-        frameLength = ((144000 * bitrate) / freq) + t
+        frameLength = ((144_000 * bitrate) / freq) + t
         numFrames = filesize / (frameLength + 4)
         time = (numFrames * 1152.0 / freq)
         break

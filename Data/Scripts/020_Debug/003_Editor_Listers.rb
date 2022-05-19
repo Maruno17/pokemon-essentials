@@ -10,20 +10,21 @@ def pbListWindow(cmds, width = Graphics.width / 2)
   return list
 end
 
-def pbListScreen(title,lister)
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+def pbListScreen(title, lister)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   list = pbListWindow([])
   list.viewport = viewport
   list.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(title,
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    title, Graphics.width / 2, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
   lister.setViewport(viewport)
   selectedmap = -1
   commands = lister.commands
   selindex = lister.startIndex
-  if commands.length==0
+  if commands.length == 0
     value = lister.value(-1)
     lister.dispose
     title.dispose
@@ -37,7 +38,7 @@ def pbListScreen(title,lister)
     Graphics.update
     Input.update
     list.update
-    if list.index!=selectedmap
+    if list.index != selectedmap
       lister.refresh(list.index)
       selectedmap = list.index
     end
@@ -57,20 +58,21 @@ def pbListScreen(title,lister)
   return value
 end
 
-def pbListScreenBlock(title,lister)
+def pbListScreenBlock(title, lister)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   list = pbListWindow([], Graphics.width / 2)
   list.viewport = viewport
   list.z        = 2
-  title = Window_UnformattedTextPokemon.newWithSize(title,
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title = Window_UnformattedTextPokemon.newWithSize(
+    title, Graphics.width / 2, 0, Graphics.width / 2, 64, viewport
+  )
   title.z = 2
   lister.setViewport(viewport)
   selectedmap = -1
   commands = lister.commands
   selindex = lister.startIndex
-  if commands.length==0
+  if commands.length == 0
     value = lister.value(-1)
     lister.dispose
     title.dispose
@@ -84,14 +86,14 @@ def pbListScreenBlock(title,lister)
     Graphics.update
     Input.update
     list.update
-    if list.index!=selectedmap
+    if list.index != selectedmap
       lister.refresh(list.index)
       selectedmap = list.index
     end
     if Input.trigger?(Input::ACTION)
       yield(Input::ACTION, lister.value(selectedmap))
       list.commands = lister.commands
-      if list.index==list.commands.length
+      if list.index == list.commands.length
         list.index = list.commands.length
       end
       lister.refresh(list.index)
@@ -100,7 +102,7 @@ def pbListScreenBlock(title,lister)
     elsif Input.trigger?(Input::USE)
       yield(Input::USE, lister.value(selectedmap))
       list.commands = lister.commands
-      if list.index==list.commands.length
+      if list.index == list.commands.length
         list.index = list.commands.length
       end
       lister.refresh(list.index)
@@ -117,11 +119,11 @@ end
 #
 #===============================================================================
 class GraphicsLister
-  def initialize(folder,selection)
-    @sprite = IconSprite.new(0,0)
+  def initialize(folder, selection)
+    @sprite = IconSprite.new(0, 0)
     @sprite.bitmap = nil
     @sprite.x      = Graphics.width * 3 / 4
-    @sprite.y      = (Graphics.height - 64) / 2 + 64
+    @sprite.y      = ((Graphics.height - 64) / 2) + 64
     @sprite.z      = 2
     @folder = folder
     @selection = selection
@@ -130,7 +132,7 @@ class GraphicsLister
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
   end
 
@@ -158,26 +160,26 @@ class GraphicsLister
     }
     @commands.sort!
     @commands.length.times do |i|
-      @index = i if @commands[i]==@selection
+      @index = i if @commands[i] == @selection
     end
-    pbMessage(_INTL("There are no files.")) if @commands.length==0
+    pbMessage(_INTL("There are no files.")) if @commands.length == 0
     return @commands
   end
 
   def value(index)
-    return (index<0) ? "" : @commands[index]
+    return (index < 0) ? "" : @commands[index]
   end
 
   def refresh(index)
-    return if index<0
-    @sprite.setBitmap(@folder+@commands[index])
+    return if index < 0
+    @sprite.setBitmap(@folder + @commands[index])
     sprite_width = @sprite.bitmap.width
     sprite_height = @sprite.bitmap.height
-    @sprite.ox = sprite_width/2
-    @sprite.oy = sprite_height/2
-    scale_x = (Graphics.width/2).to_f/sprite_width
-    scale_y = (Graphics.height-64).to_f/sprite_height
-    if scale_x<1.0 || scale_y<1.0
+    @sprite.ox = sprite_width / 2
+    @sprite.oy = sprite_height / 2
+    scale_x = (Graphics.width / 2).to_f / sprite_width
+    scale_y = (Graphics.height - 64).to_f / sprite_height
+    if scale_x < 1.0 || scale_y < 1.0
       min_scale = [scale_x, scale_y].min
       @sprite.zoom_x = @sprite.zoom_y = min_scale
     else
@@ -190,7 +192,7 @@ end
 #
 #===============================================================================
 class MusicFileLister
-  def initialize(bgm,setting)
+  def initialize(bgm, setting)
     @oldbgm = getPlayingBGM
     @commands = []
     @bgm = bgm
@@ -221,8 +223,8 @@ class MusicFileLister
     folder = (@bgm) ? "Audio/BGM/" : "Audio/ME/"
     @commands.clear
     Dir.chdir(folder) {
-      Dir.glob("*.mp3") { |f| @commands.push(f) }
-      Dir.glob("*.MP3") { |f| @commands.push(f) }
+#      Dir.glob("*.mp3") { |f| @commands.push(f) }
+#      Dir.glob("*.MP3") { |f| @commands.push(f) }
       Dir.glob("*.ogg") { |f| @commands.push(f) }
       Dir.glob("*.OGG") { |f| @commands.push(f) }
       Dir.glob("*.wav") { |f| @commands.push(f) }
@@ -234,22 +236,22 @@ class MusicFileLister
     }
     @commands.sort!
     @commands.length.times do |i|
-      @index = i if @commands[i]==@setting
+      @index = i if @commands[i] == @setting
     end
-    pbMessage(_INTL("There are no files.")) if @commands.length==0
+    pbMessage(_INTL("There are no files.")) if @commands.length == 0
     return @commands
   end
 
   def value(index)
-    return (index<0) ? "" : @commands[index]
+    return (index < 0) ? "" : @commands[index]
   end
 
   def refresh(index)
-    return if index<0
+    return if index < 0
     if @bgm
       pbPlayBGM(@commands[index])
     else
-      pbPlayBGM("../../Audio/ME/"+@commands[index])
+      pbPlayBGM("../../Audio/ME/" + @commands[index])
     end
   end
 end
@@ -257,24 +259,68 @@ end
 #===============================================================================
 #
 #===============================================================================
+class MetadataLister
+  def initialize(sel_player_id = -1, new_player = false)
+    @index = 0
+    @commands = []
+    @player_ids = []
+    GameData::PlayerMetadata.each do |player|
+      @index = @commands.length + 1 if sel_player_id > 0 && player.id == sel_player_id
+      @player_ids.push(player.id)
+    end
+    @new_player = new_player
+  end
+
+  def dispose; end
+
+  def setViewport(viewport); end
+
+  def startIndex
+    return @index
+  end
+
+  def commands
+    @commands.clear
+    @commands.push(_INTL("[GLOBAL METADATA]"))
+    @player_ids.each { |id| @commands.push(_INTL("Player {1}", id)) }
+    @commands.push(_INTL("[ADD NEW PLAYER]")) if @new_player
+    return @commands
+  end
+
+  # Cancel: -1
+  # New player: -2
+  # Global metadata: 0
+  # Player character: 1+ (the player ID itself)
+  def value(index)
+    return index if index < 1
+    return -2 if @new_player && index == @commands.length - 1
+    return @player_ids[index - 1]
+  end
+
+  def refresh(index); end
+end
+
+#===============================================================================
+#
+#===============================================================================
 class MapLister
-  def initialize(selmap,addGlobal=false)
+  def initialize(selmap, addGlobal = false)
     @sprite = SpriteWrapper.new
     @sprite.bitmap = nil
     @sprite.x      = Graphics.width * 3 / 4
-    @sprite.y      = (Graphics.height - 64) / 2 + 64
+    @sprite.y      = ((Graphics.height - 64) / 2) + 64
     @sprite.z      = -2
     @commands = []
     @maps = pbMapTree
     @addGlobalOffset = (addGlobal) ? 1 : 0
     @index = 0
-    for i in 0...@maps.length
-      @index = i+@addGlobalOffset if @maps[i][0]==selmap
+    @maps.length.times do |i|
+      @index = i + @addGlobalOffset if @maps[i][0] == selmap
     end
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
   end
 
@@ -288,29 +334,27 @@ class MapLister
 
   def commands
     @commands.clear
-    if @addGlobalOffset==1
+    if @addGlobalOffset == 1
       @commands.push(_INTL("[GLOBAL]"))
     end
-    for i in 0...@maps.length
-      @commands.push(sprintf("%s%03d %s",("  "*@maps[i][2]),@maps[i][0],@maps[i][1]))
+    @maps.length.times do |i|
+      @commands.push(sprintf("%s%03d %s", ("  " * @maps[i][2]), @maps[i][0], @maps[i][1]))
     end
     return @commands
   end
 
   def value(index)
-    if @addGlobalOffset==1
-      return 0 if index==0
-    end
-    return (index<0) ? -1 : @maps[index-@addGlobalOffset][0]
+    return 0 if @addGlobalOffset == 1 && index == 0
+    return (index < 0) ? -1 : @maps[index - @addGlobalOffset][0]
   end
 
   def refresh(index)
-    @sprite.bitmap.dispose if @sprite.bitmap
-    return if index<0
-    return if index==0 && @addGlobalOffset==1
-    @sprite.bitmap = createMinimap(@maps[index-@addGlobalOffset][0])
-    @sprite.ox = @sprite.bitmap.width/2
-    @sprite.oy = @sprite.bitmap.height/2
+    @sprite.bitmap&.dispose
+    return if index < 0
+    return if index == 0 && @addGlobalOffset == 1
+    @sprite.bitmap = createMinimap(@maps[index - @addGlobalOffset][0])
+    @sprite.ox = @sprite.bitmap.width / 2
+    @sprite.oy = @sprite.bitmap.height / 2
   end
 end
 
@@ -337,16 +381,17 @@ class SpeciesLister
     @commands.clear
     @ids.clear
     cmds = []
-    GameData::Species.each do |species|
-      next if species.form != 0
-      cmds.push([species.id_number, species.id, species.real_name])
+    idx = 1
+    GameData::Species.each_species do |species|
+      cmds.push([idx, species.id, species.real_name])
+      idx += 1
     end
     cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
     if @includeNew
       @commands.push(_INTL("[NEW SPECIES]"))
       @ids.push(true)
     end
-    for i in cmds
+    cmds.each do |i|
       @commands.push(sprintf("%03d: %s", i[0], i[2]))
       @ids.push(i[1])
     end
@@ -379,7 +424,7 @@ class ItemLister
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
   end
 
@@ -395,15 +440,17 @@ class ItemLister
     @commands.clear
     @ids.clear
     cmds = []
+    idx = 1
     GameData::Item.each do |item|
-      cmds.push([item.id_number, item.id, item.real_name])
+      cmds.push([idx, item.id, item.real_name])
+      idx += 1
     end
     cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
     if @includeNew
       @commands.push(_INTL("[NEW ITEM]"))
       @ids.push(true)
     end
-    for i in cmds
+    cmds.each do |i|
       @commands.push(sprintf("%03d: %s", i[0], i[2]))
       @ids.push(i[1])
     end
@@ -428,7 +475,7 @@ end
 #===============================================================================
 class TrainerTypeLister
   def initialize(selection = 0, includeNew = false)
-    @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height - 64) / 2 + 64)
+    @sprite = IconSprite.new(Graphics.width * 3 / 4, ((Graphics.height - 64) / 2) + 64)
     @sprite.z = 2
     @selection = selection
     @commands = []
@@ -438,7 +485,7 @@ class TrainerTypeLister
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
   end
 
@@ -454,15 +501,17 @@ class TrainerTypeLister
     @commands.clear
     @ids.clear
     cmds = []
+    idx = 1
     GameData::TrainerType.each do |tr_type|
-      cmds.push([tr_type.id_number, tr_type.id, tr_type.real_name])
+      cmds.push([idx, tr_type.id, tr_type.real_name])
+      idx += 1
     end
     cmds.sort! { |a, b| a[2] == b[2] ? a[0] <=> b[0] : a[2].downcase <=> b[2].downcase }
     if @includeNew
       @commands.push(_INTL("[NEW TRAINER TYPE]"))
       @ids.push(true)
     end
-    for t in cmds
+    cmds.each do |t|
       @commands.push(sprintf("%03d: %s", t[0], t[2]))
       @ids.push(t[1])
     end
@@ -478,7 +527,7 @@ class TrainerTypeLister
   end
 
   def refresh(index)
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     return if index < 0
     begin
       if @ids[index].is_a?(Symbol)
@@ -500,11 +549,12 @@ end
 #
 #===============================================================================
 class TrainerBattleLister
-  def initialize(selection,includeNew)
+  def initialize(selection, includeNew)
     @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height / 2) + 32)
     @sprite.z = 2
-    @pkmnList = Window_UnformattedTextPokemon.newWithSize("",
-      Graphics.width / 2, Graphics.height - 64, Graphics.width / 2, 64)
+    @pkmnList = Window_UnformattedTextPokemon.newWithSize(
+      "", Graphics.width / 2, Graphics.height - 64, Graphics.width / 2, 64
+    )
     @pkmnList.z = 3
     @selection = selection
     @commands = []
@@ -514,7 +564,7 @@ class TrainerBattleLister
   end
 
   def dispose
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     @sprite.dispose
     @pkmnList.dispose
   end
@@ -532,8 +582,10 @@ class TrainerBattleLister
     @commands.clear
     @ids.clear
     cmds = []
+    idx = 1
     GameData::Trainer.each do |trainer|
-      cmds.push([trainer.id_number, trainer.trainer_type, trainer.real_name, trainer.version])
+      cmds.push([idx, trainer.trainer_type, trainer.real_name, trainer.version])
+      idx += 1
     end
     cmds.sort! { |a, b|
       if a[1] == b[1]
@@ -550,15 +602,15 @@ class TrainerBattleLister
       @commands.push(_INTL("[NEW TRAINER BATTLE]"))
       @ids.push(true)
     end
-    for t in cmds
+    cmds.each do |t|
       if t[3] > 0
         @commands.push(_INTL("{1} {2} ({3}) x{4}",
-           GameData::TrainerType.get(t[1]).name, t[2], t[3],
-           GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
+                             GameData::TrainerType.get(t[1]).name, t[2], t[3],
+                             GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       else
         @commands.push(_INTL("{1} {2} x{3}",
-           GameData::TrainerType.get(t[1]).name, t[2],
-           GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
+                             GameData::TrainerType.get(t[1]).name, t[2],
+                             GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       end
       @ids.push([t[1], t[2], t[3]])
     end
@@ -575,7 +627,7 @@ class TrainerBattleLister
 
   def refresh(index)
     # Refresh trainer sprite
-    @sprite.bitmap.dispose if @sprite.bitmap
+    @sprite.bitmap&.dispose
     return if index < 0
     begin
       if @ids[index].is_a?(Array)
@@ -602,7 +654,7 @@ class TrainerBattleLister
       end
     end
     @pkmnList.text = text
-    @pkmnList.resizeHeightToFit(text,Graphics.width / 2)
+    @pkmnList.resizeHeightToFit(text, Graphics.width / 2)
     @pkmnList.y = Graphics.height - @pkmnList.height
   end
 end

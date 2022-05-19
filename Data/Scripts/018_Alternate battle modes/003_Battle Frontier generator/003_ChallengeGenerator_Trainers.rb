@@ -3,9 +3,7 @@
 #===============================================================================
 def getTypes(species)
   species_data = GameData::Species.get(species)
-  type1 = species_data.type1
-  type2 = species_data.type2
-  return (type1 == type2) ? [type1] : [type1, type2]
+  return species_data.types.clone
 end
 
 #===============================================================================
@@ -19,15 +17,15 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   # No battle trainers found; fill bttrainers with 200 randomly chosen ones from
   # all that exist (with a base money < 100)
   if bttrainers.length == 0
-    for i in 0...200
+    200.times do |i|
       yield(nil) if block_given? && i % 50 == 0
       trainerid = nil
       if GameData::TrainerType.exists?(:YOUNGSTER) && rand(30) == 0
         trainerid = :YOUNGSTER
       else
-        tr_typekeys = GameData::TrainerType::DATA.keys
+        tr_typekeys = GameData::TrainerType.keys
         loop do
-          tr_type = tr_typekeys[rand(tr_typekeys.length)]
+          tr_type = tr_typekeys.sample
           tr_type_data = GameData::TrainerType.get(tr_type)
           next if tr_type_data.base_money >= 100
           trainerid = tr_type_data.id
@@ -38,7 +36,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
       randomName = getRandomNameEx(gender, nil, 0, 12)
       # Add the trainer to bttrainers
       tr = [trainerid, randomName, _INTL("Here I come!"), _INTL("Yes, I won!"),
-         _INTL("Man, I lost!"), []]
+            _INTL("Man, I lost!"), []]
       bttrainers.push(tr)
     end
     # Sort all the randomly chosen trainers by their base money (smallest first)
@@ -55,7 +53,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   rulesetTeam = rules.ruleset.copy.clearPokemonRules
   pkmntypes = []
   validities = []
-  for pkmn in pokemonlist
+  pokemonlist.each do |pkmn|
     pkmn.level = suggestedLevel if pkmn.level != suggestedLevel
     pkmntypes.push(getTypes(pkmn.species))
     validities.push(rules.ruleset.isPokemonValid?(pkmn))
@@ -64,7 +62,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   # pokemonlist for that trainer, and copy the trainer and their set of Pokémon
   # to newbttrainers
   newbttrainers = []
-  for btt in 0...bttrainers.length
+  bttrainers.length.times do |btt|
     yield(nil) if block_given? && btt % 50 == 0
     trainerdata = bttrainers[btt]
     pokemonnumbers = trainerdata[5] || []
@@ -73,7 +71,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
     species = []
     types = {}
     GameData::Type.each { |t| types[t.id] = 0 }
-    for pn in pokemonnumbers
+    pokemonnumbers.each do |pn|
       pkmn = btpokemon[pn]
       species.push(pkmn.species)
       t = getTypes(pkmn.species)
@@ -106,7 +104,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
       # pokemonlist, or if the trainer is positioned earlier in bttrainers (i.e.
       # later trainers get better Pokémon).
       numbersPokemon = []
-      for index in 0...pokemonlist.length
+      pokemonlist.length.times do |index|
         next if !validities[index]
         pkmn = pokemonlist[index]
         absDiff = ((index * 8 / pokemonlist.length) - (btt * 8 / bttrainers.length)).abs
@@ -139,7 +137,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
       # formed from what's in numbers
       if numbers.length < Settings::MAX_PARTY_SIZE ||
          !rulesetTeam.hasValidTeam?(numbersPokemon)
-        for index in 0...pokemonlist.length
+        pokemonlist.length.times do |index|
           pkmn = pokemonlist[index]
           next if !validities[index]
           if species.include?(pkmn.species)
@@ -147,13 +145,12 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
             numbersPokemon.push(pokemonlist[index])
           else
             t = pkmntypes[index]
-            t.each { |typ|
-              if types[typ] > 0 && !numbers.include?(index)
-                numbers.push(index)
-                numbersPokemon.push(pokemonlist[index])
-                break
-              end
-            }
+            t.each do |typ|
+              next if types[typ] <= 0 || numbers.include?(index)
+              numbers.push(index)
+              numbersPokemon.push(pokemonlist[index])
+              break
+            end
           end
           break if numbers.length >= Settings::MAX_PARTY_SIZE && rules.ruleset.hasValidTeam?(numbersPokemon)
         end
@@ -162,7 +159,7 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
         # until a valid team can be formed from what's in numbers
         if numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon)
           while numbers.length < pokemonlist.length &&
-             (numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon))
+                (numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon))
             index = rand(pokemonlist.length)
             if !numbers.include?(index)
               numbers.push(index)
@@ -182,29 +179,28 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
   # Add the trainer and Pokémon data from above to trainer_lists.dat, and then
   # create all PBS files from it
   pbpokemonlist = []
-  for pkmn in pokemonlist
+  pokemonlist.each do |pkmn|
     pbpokemonlist.push(PBPokemon.fromPokemon(pkmn))
   end
   trlists = (load_data("Data/trainer_lists.dat") rescue [])
   hasDefault = false
   trIndex = -1
-  for i in 0...trlists.length
+  trlists.length.times do |i|
     next if !trlists[i][5]
     hasDefault = true
     break
   end
-  for i in 0...trlists.length
-    if trlists[i][2].include?(trfile)
-      trIndex = i
-      trlists[i][0] = newbttrainers
-      trlists[i][1] = pbpokemonlist
-      trlists[i][5] = !hasDefault
-    end
+  trlists.length.times do |i|
+    next if !trlists[i][2].include?(trfile)
+    trIndex = i
+    trlists[i][0] = newbttrainers
+    trlists[i][1] = pbpokemonlist
+    trlists[i][5] = !hasDefault
   end
   yield(nil) if block_given?
   if trIndex < 0
     info = [newbttrainers, pbpokemonlist, [trfile],
-          trfile + "tr.txt", trfile + "pm.txt", !hasDefault]
+            trfile + "_trainers.txt", trfile + "_pkmn.txt", !hasDefault]
     trlists.push(info)
   end
   yield(nil) if block_given?

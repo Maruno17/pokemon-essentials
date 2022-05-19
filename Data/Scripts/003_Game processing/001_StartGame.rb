@@ -2,18 +2,17 @@
 module Game
   # Initializes various global variables and loads the game data.
   def self.initialize
-    $PokemonTemp        = PokemonTemp.new
     $game_temp          = Game_Temp.new
     $game_system        = Game_System.new
-    $data_animations    = load_data('Data/Animations.rxdata')
-    $data_tilesets      = load_data('Data/Tilesets.rxdata')
-    $data_common_events = load_data('Data/CommonEvents.rxdata')
-    $data_system        = load_data('Data/System.rxdata')
+    $data_animations    = load_data("Data/Animations.rxdata")
+    $data_tilesets      = load_data("Data/Tilesets.rxdata")
+    $data_common_events = load_data("Data/CommonEvents.rxdata")
+    $data_system        = load_data("Data/System.rxdata")
     pbLoadBattleAnimations
     GameData.load_all
-    map_file = format('Data/Map%03d.rxdata', $data_system.start_map_id)
+    map_file = sprintf("Data/Map%03d.rxdata", $data_system.start_map_id)
     if $data_system.start_map_id == 0 || !pbRgssExists?(map_file)
-      raise _INTL('No starting position was set in the map editor.')
+      raise _INTL("No starting position was set in the map editor.")
     end
   end
 
@@ -32,21 +31,22 @@ module Game
     # Set language (and choose language if there is no save file)
     if Settings::LANGUAGES.length >= 2
       $PokemonSystem.language = pbChooseLanguage if save_data.empty?
-      pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
+      pbLoadMessages("Data/" + Settings::LANGUAGES[$PokemonSystem.language][1])
     end
   end
 
   # Called when starting a new game. Initializes global variables
   # and transfers the player into the map scene.
   def self.start_new
-    if $game_map && $game_map.events
+    if $game_map&.events
       $game_map.events.each_value { |event| event.clear_starting }
     end
     $game_temp.common_event_id = 0 if $game_temp
-    $PokemonTemp.begunNewGame = true
+    $game_temp.begun_new_game = true
     $scene = Scene_Map.new
     SaveData.load_new_game_values
-    $MapFactory = PokemonMapFactory.new($data_system.start_map_id)
+    $stats.play_sessions += 1
+    $map_factory = PokemonMapFactory.new($data_system.start_map_id)
     $game_player.moveto($data_system.start_x, $data_system.start_y)
     $game_player.refresh
     $PokemonEncounters = PokemonEncounters.new
@@ -61,6 +61,7 @@ module Game
   def self.load(save_data)
     validate save_data => Hash
     SaveData.load_all_values(save_data)
+    $stats.play_sessions += 1
     self.load_map
     pbAutoplayOnSave
     $game_map.update
@@ -70,31 +71,31 @@ module Game
 
   # Loads and validates the map. Called when loading a saved game.
   def self.load_map
-    $game_map = $MapFactory.map
+    $game_map = $map_factory.map
     magic_number_matches = ($game_system.magic_number == $data_system.magic_number)
     if !magic_number_matches || $PokemonGlobal.safesave
       if pbMapInterpreterRunning?
         pbMapInterpreter.setup(nil, 0)
       end
       begin
-        $MapFactory.setup($game_map.map_id)
+        $map_factory.setup($game_map.map_id)
       rescue Errno::ENOENT
         if $DEBUG
-          pbMessage(_INTL('Map {1} was not found.', $game_map.map_id))
+          pbMessage(_INTL("Map {1} was not found.", $game_map.map_id))
           map = pbWarpToMap
           exit unless map
-          $MapFactory.setup(map[0])
+          $map_factory.setup(map[0])
           $game_player.moveto(map[1], map[2])
         else
-          raise _INTL('The map was not found. The game cannot continue.')
+          raise _INTL("The map was not found. The game cannot continue.")
         end
       end
       $game_player.center($game_player.x, $game_player.y)
     else
-      $MapFactory.setMapChanged($game_map.map_id)
+      $map_factory.setMapChanged($game_map.map_id)
     end
     if $game_map.events.nil?
-      raise _INTL('The map is corrupt. The game cannot continue.')
+      raise _INTL("The map is corrupt. The game cannot continue.")
     end
     $PokemonEncounters = PokemonEncounters.new
     $PokemonEncounters.setup($game_map.map_id)
@@ -111,6 +112,7 @@ module Game
     $PokemonGlobal.safesave = safe
     $game_system.save_count += 1
     $game_system.magic_number = $data_system.magic_number
+    $stats.set_time_last_saved
     begin
       SaveData.save_to_file(save_file)
       Graphics.frame_reset

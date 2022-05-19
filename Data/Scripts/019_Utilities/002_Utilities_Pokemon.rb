@@ -2,10 +2,11 @@
 # Nicknaming and storing Pokémon
 #===============================================================================
 def pbBoxesFull?
-  return ($Trainer.party_full? && $PokemonStorage.full?)
+  return ($player.party_full? && $PokemonStorage.full?)
 end
 
 def pbNickname(pkmn)
+  return if $PokemonSystem.givenicknames != 0
   species_name = pkmn.speciesName
   if pbConfirmMessage(_INTL("Would you like to give a nickname to {1}?", species_name))
     pkmn.name = pbEnterPokemonName(_INTL("{1}'s nickname?", species_name),
@@ -20,30 +21,12 @@ def pbStorePokemon(pkmn)
     return
   end
   pkmn.record_first_moves
-  if $Trainer.party_full?
-    oldcurbox = $PokemonStorage.currentBox
-    storedbox = $PokemonStorage.pbStoreCaught(pkmn)
-    curboxname = $PokemonStorage[oldcurbox].name
-    boxname = $PokemonStorage[storedbox].name
-    creator = nil
-    creator = pbGetStorageCreator if $Trainer.seen_storage_creator
-    if storedbox != oldcurbox
-      if creator
-        pbMessage(_INTL("Box \"{1}\" on {2}'s PC was full.\1", curboxname, creator))
-      else
-        pbMessage(_INTL("Box \"{1}\" on someone's PC was full.\1", curboxname))
-      end
-      pbMessage(_INTL("{1} was transferred to box \"{2}.\"", pkmn.name, boxname))
-    else
-      if creator
-        pbMessage(_INTL("{1} was transferred to {2}'s PC.\1", pkmn.name, creator))
-      else
-        pbMessage(_INTL("{1} was transferred to someone's PC.\1", pkmn.name))
-      end
-      pbMessage(_INTL("It was stored in box \"{1}.\"", boxname))
-    end
+  if $player.party_full?
+    stored_box = $PokemonStorage.pbStoreCaught(pkmn)
+    box_name   = $PokemonStorage[stored_box].name
+    pbMessage(_INTL("{1} has been sent to Box \"{2}\"!", pkmn.name, box_name))
   else
-    $Trainer.party[$Trainer.party.length] = pkmn
+    $player.party[$player.party.length] = pkmn
   end
 end
 
@@ -53,8 +36,8 @@ def pbNicknameAndStore(pkmn)
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
     return
   end
-  $Trainer.pokedex.set_seen(pkmn.species)
-  $Trainer.pokedex.set_owned(pkmn.species)
+  $player.pokedex.set_seen(pkmn.species)
+  $player.pokedex.set_owned(pkmn.species)
   pbNickname(pkmn)
   pbStorePokemon(pkmn)
 end
@@ -71,22 +54,34 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
   end
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
-  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
+  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
+  was_owned = $player.owned?(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
+  # Show Pokédex entry for new species if it hasn't been owned before
+  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    pbMessage(_INTL("{1}'s data was added to the Pokédex.", species_name))
+    $player.pokedex.register_last_seen(pkmn)
+    pbFadeOutIn {
+      scene = PokemonPokedexInfo_Scene.new
+      screen = PokemonPokedexInfoScreen.new(scene)
+      screen.pbDexEntry(pkmn.species)
+    }
+  end
+  # Nickname and add the Pokémon
   pbNicknameAndStore(pkmn)
-  $Trainer.pokedex.register(pkmn) if see_form
   return true
 end
 
 def pbAddPokemonSilent(pkmn, level = 1, see_form = true)
   return false if !pkmn || pbBoxesFull?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  $Trainer.pokedex.register(pkmn) if see_form
-  $Trainer.pokedex.set_owned(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
+  $player.pokedex.set_owned(pkmn.species)
   pkmn.record_first_moves
-  if $Trainer.party_full?
+  if $player.party_full?
     $PokemonStorage.pbStoreCaught(pkmn)
   else
-    $Trainer.party[$Trainer.party.length] = pkmn
+    $player.party[$player.party.length] = pkmn
   end
   return true
 end
@@ -95,47 +90,68 @@ end
 # Giving Pokémon/eggs to the player (can only add to party)
 #===============================================================================
 def pbAddToParty(pkmn, level = 1, see_form = true)
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
-  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
+  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
+  was_owned = $player.owned?(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
+  # Show Pokédex entry for new species if it hasn't been owned before
+  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    pbMessage(_INTL("{1}'s data was added to the Pokédex.", species_name))
+    $player.pokedex.register_last_seen(pkmn)
+    pbFadeOutIn {
+      scene = PokemonPokedexInfo_Scene.new
+      screen = PokemonPokedexInfoScreen.new(scene)
+      screen.pbDexEntry(pkmn.species)
+    }
+  end
+  # Nickname and add the Pokémon
   pbNicknameAndStore(pkmn)
-  $Trainer.pokedex.register(pkmn) if see_form
   return true
 end
 
 def pbAddToPartySilent(pkmn, level = nil, see_form = true)
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  $Trainer.pokedex.register(pkmn) if see_form
-  $Trainer.pokedex.set_owned(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
+  $player.pokedex.set_owned(pkmn.species)
   pkmn.record_first_moves
-  $Trainer.party[$Trainer.party.length] = pkmn
+  $player.party[$player.party.length] = pkmn
   return true
 end
 
 def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner_gender = 0, see_form = true)
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  # Set original trainer to a foreign one
   pkmn.owner = Pokemon::Owner.new_foreign(owner_name || "", owner_gender)
-  # Set nickname
   pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE] if !nil_or_empty?(nickname)
-  # Recalculate stats
   pkmn.calc_stats
   if owner_name
-    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon from {2}.\1", $Trainer.name, owner_name))
+    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon from {2}.\1", $player.name, owner_name))
   else
-    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $Trainer.name))
+    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $player.name))
   end
+  was_owned = $player.owned?(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
+  $player.pokedex.set_owned(pkmn.species)
+  # Show Pokédex entry for new species if it hasn't been owned before
+  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    pbMessage(_INTL("The Pokémon's data was added to the Pokédex."))
+    $player.pokedex.register_last_seen(pkmn)
+    pbFadeOutIn {
+      scene = PokemonPokedexInfo_Scene.new
+      screen = PokemonPokedexInfoScreen.new(scene)
+      screen.pbDexEntry(pkmn.species)
+    }
+  end
+  # Add the Pokémon
   pbStorePokemon(pkmn)
-  $Trainer.pokedex.register(pkmn) if see_form
-  $Trainer.pokedex.set_owned(pkmn.species)
   return true
 end
 
 def pbGenerateEgg(pkmn, text = "")
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, Settings::EGG_LEVEL) if !pkmn.is_a?(Pokemon)
   # Set egg's details
   pkmn.name           = _INTL("Egg")
@@ -143,7 +159,7 @@ def pbGenerateEgg(pkmn, text = "")
   pkmn.obtain_text    = text
   pkmn.calc_stats
   # Add egg to party
-  $Trainer.party[$Trainer.party.length] = pkmn
+  $player.party[$player.party.length] = pkmn
   return true
 end
 alias pbAddEgg pbGenerateEgg
@@ -154,7 +170,7 @@ alias pbGenEgg pbGenerateEgg
 #===============================================================================
 # Returns the first unfainted, non-egg Pokémon in the player's party.
 def pbFirstAblePokemon(variable_ID)
-  $Trainer.party.each_with_index do |pkmn, i|
+  $player.party.each_with_index do |pkmn, i|
     next if !pkmn.able?
     pbSet(variable_ID, i)
     return pkmn
@@ -173,7 +189,7 @@ def pbBalancedLevel(party)
   party.each { |p| sum += p.level }
   return 1 if sum == 0
   mLevel = GameData::GrowthRate.max_level
-  average = sum.to_f / party.length.to_f
+  average = sum.to_f / party.length
   # Calculate the standard deviation
   varianceTimesN = 0
   party.each do |pkmn|
@@ -187,7 +203,7 @@ def pbBalancedLevel(party)
   weights = []
   # Skew weights according to standard deviation
   party.each do |pkmn|
-    weight = pkmn.level.to_f / sum.to_f
+    weight = pkmn.level.to_f / sum
     if weight < 0.5
       weight -= (stdev / mLevel.to_f)
       weight = 0.001 if weight <= 0.001
@@ -225,25 +241,25 @@ def pbSize(pkmn)
   spiv = pkmn.iv[:SPEED] & 15
   m = pkmn.personalID & 0xFF
   n = (pkmn.personalID >> 8) & 0xFF
-  s = (((ativ ^ dfiv) * hpiv) ^ m) * 256 + (((saiv ^ sdiv) * spiv) ^ n)
-  xyz = []
-  if s < 10;       xyz = [ 290,   1,     0]
-  elsif s < 110;   xyz = [ 300,   1,    10]
-  elsif s < 310;   xyz = [ 400,   2,   110]
-  elsif s < 710;   xyz = [ 500,   4,   310]
-  elsif s < 2710;  xyz = [ 600,  20,   710]
-  elsif s < 7710;  xyz = [ 700,  50,  2710]
-  elsif s < 17710; xyz = [ 800, 100,  7710]
-  elsif s < 32710; xyz = [ 900, 150, 17710]
-  elsif s < 47710; xyz = [1000, 150, 32710]
-  elsif s < 57710; xyz = [1100, 100, 47710]
-  elsif s < 62710; xyz = [1200,  50, 57710]
-  elsif s < 64710; xyz = [1300,  20, 62710]
-  elsif s < 65210; xyz = [1400,   5, 64710]
-  elsif s < 65410; xyz = [1500,   2, 65210]
-  else;            xyz = [1700,   1, 65510]
+  s = ((((ativ ^ dfiv) * hpiv) ^ m) * 256) + (((saiv ^ sdiv) * spiv) ^ n)
+  xyz = [1700, 1, 65_510]
+  case s
+  when 0...10          then xyz = [ 290,   1,      0]
+  when 10...110        then xyz = [ 300,   1,     10]
+  when 110...310       then xyz = [ 400,   2,    110]
+  when 310...710       then xyz = [ 500,   4,    310]
+  when 710...2710      then xyz = [ 600,  20,    710]
+  when 2710...7710     then xyz = [ 700,  50,   2710]
+  when 7710...17_710   then xyz = [ 800, 100,   7710]
+  when 17_710...32_710 then xyz = [ 900, 150, 17_710]
+  when 32_710...47_710 then xyz = [1000, 150, 32_710]
+  when 47_710...57_710 then xyz = [1100, 100, 47_710]
+  when 57_710...62_710 then xyz = [1200,  50, 57_710]
+  when 62_710...64_710 then xyz = [1300,  20, 62_710]
+  when 64_710...65_210 then xyz = [1400,   5, 64_710]
+  when 65_210...65_410 then xyz = [1500,   2, 65_210]
   end
-  return (((s - xyz[2]) / xyz[1] + xyz[0]).floor * baseheight / 10).floor
+  return ((((s - xyz[2]) / xyz[1]) + xyz[0]).floor * baseheight / 10).floor
 end
 
 #===============================================================================

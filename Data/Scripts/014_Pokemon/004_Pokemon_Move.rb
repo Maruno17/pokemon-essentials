@@ -11,7 +11,7 @@ class Pokemon
     attr_reader :ppup
 
     # Creates a new Move object.
-    # @param move_id [Symbol, String, Integer] move ID
+    # @param move_id [Symbol, String, GameData::Move] move ID
     def initialize(move_id)
       @id   = GameData::Move.get(move_id).id
       @ppup = 0
@@ -20,7 +20,7 @@ class Pokemon
 
     # Sets this move's ID, and caps the PP amount if it is now greater than this
     # move's total PP.
-    # @param value [Symbol, String, Integer] the new move ID
+    # @param value [Symbol, String, GameData::Move] the new move ID
     def id=(value)
       @id = GameData::Move.get(value).id
       @pp = @pp.clamp(0, total_pp)
@@ -43,7 +43,7 @@ class Pokemon
     # @return [Integer] total PP
     def total_pp
       max_pp = GameData::Move.get(@id).total_pp
-      return max_pp + max_pp * @ppup / 5
+      return max_pp + (max_pp * @ppup / 5)
     end
     alias totalpp total_pp
 
@@ -59,20 +59,10 @@ class Pokemon
     def name;          return GameData::Move.get(@id).name;          end
     def description;   return GameData::Move.get(@id).description;   end
     def hidden_move?;  return GameData::Move.get(@id).hidden_move?;  end
-  end
-end
 
-#===============================================================================
-# Legacy move object known by Pokémon.
-#===============================================================================
-# @deprecated Use {Pokemon#Move} instead. PBMove is slated to be removed in v20.
-class PBMove
-  attr_reader :id, :pp, :ppup
-
-  def self.convert(move)
-    ret = Pokemon::Move.new(move.id)
-    ret.ppup = move.ppup
-    ret.pp = move.pp
-    return ret
+    def display_type(pkmn);     return GameData::Move.get(@id).display_type(pkmn, self);     end
+    def display_category(pkmn); return GameData::Move.get(@id).display_category(pkmn, self); end
+    def display_damage(pkmn);   return GameData::Move.get(@id).display_damage(pkmn, self);   end
+    def display_accuracy(pkmn); return GameData::Move.get(@id).display_accuracy(pkmn, self); end
   end
 end
