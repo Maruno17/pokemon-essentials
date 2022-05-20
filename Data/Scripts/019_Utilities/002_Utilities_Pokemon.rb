@@ -60,7 +60,7 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
   $player.pokedex.set_owned(pkmn.species)
   $player.pokedex.register(pkmn) if see_form
   # Show Pokédex entry for new species if it hasn't been owned before
-  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && see_form && !was_owned && $player.has_pokedex
     pbMessage(_INTL("{1}'s data was added to the Pokédex.", species_name))
     $player.pokedex.register_last_seen(pkmn)
     pbFadeOutIn {
@@ -102,7 +102,7 @@ def pbAddToParty(pkmn, level = 1, see_form = true)
   $player.pokedex.set_owned(pkmn.species)
   $player.pokedex.register(pkmn) if see_form
   # Show Pokédex entry for new species if it hasn't been owned before
-  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && see_form && !was_owned && $player.has_pokedex
     pbMessage(_INTL("{1}'s data was added to the Pokédex.", species_name))
     $player.pokedex.register_last_seen(pkmn)
     pbFadeOutIn {
@@ -142,7 +142,7 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   $player.pokedex.set_owned(pkmn.species)
   $player.pokedex.register(pkmn) if see_form
   # Show Pokédex entry for new species if it hasn't been owned before
-  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+  if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && see_form && !was_owned && $player.has_pokedex
     pbMessage(_INTL("The Pokémon's data was added to the Pokédex."))
     $player.pokedex.register_last_seen(pkmn)
     pbFadeOutIn {
