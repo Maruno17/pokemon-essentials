@@ -1009,7 +1009,7 @@ class Pokemon
   # @param value [Integer] a value that may be used by the evolution method
   # @return [Symbol, nil] the ID of the species to evolve into
   def check_evolution_by_event(value = 0)
-    return check_evolution_internal { |pkmn, new_species, method, parameter, value|
+    return check_evolution_internal { |pkmn, new_species, method, parameter|
       success = GameData::Evolution.get(method).call_event(pkmn, parameter, value)
       next (success) ? new_species : nil
     }
