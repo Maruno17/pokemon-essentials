@@ -31,7 +31,10 @@ module Compiler
     ["pbEggGenerated?",              "DayCare.egg_generated?"],
     ["pbDayCareGenerateEgg",         "DayCare.collect_egg"],
     ["get_character(0)",             "get_self"],
-    ["get_character(-1)",            "get_player"]
+    ["get_character(-1)",            "get_player"],
+    ["pbCheckAble",                  "$player.has_other_able_pokemon?"],
+    ["$PokemonTemp.lastbattle",      "$game_temp.last_battle_record"],
+    ["calcStats",                    "calc_stats"]
   ]
 
   module_function
