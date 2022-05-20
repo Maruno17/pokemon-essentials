@@ -56,6 +56,8 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
   was_owned = $player.owned?(pkmn.species)
+  $player.pokedex.set_seen(pkmn.species)
+  $player.pokedex.set_owned(pkmn.species)
   $player.pokedex.register(pkmn) if see_form
   # Show Pokédex entry for new species if it hasn't been owned before
   if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
@@ -75,8 +77,9 @@ end
 def pbAddPokemonSilent(pkmn, level = 1, see_form = true)
   return false if !pkmn || pbBoxesFull?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  $player.pokedex.register(pkmn) if see_form
+  $player.pokedex.set_seen(pkmn.species)
   $player.pokedex.set_owned(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
   pkmn.record_first_moves
   if $player.party_full?
     $PokemonStorage.pbStoreCaught(pkmn)
@@ -95,6 +98,8 @@ def pbAddToParty(pkmn, level = 1, see_form = true)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
   was_owned = $player.owned?(pkmn.species)
+  $player.pokedex.set_seen(pkmn.species)
+  $player.pokedex.set_owned(pkmn.species)
   $player.pokedex.register(pkmn) if see_form
   # Show Pokédex entry for new species if it hasn't been owned before
   if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
@@ -133,8 +138,9 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
     pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $player.name))
   end
   was_owned = $player.owned?(pkmn.species)
-  $player.pokedex.register(pkmn) if see_form
+  $player.pokedex.set_seen(pkmn.species)
   $player.pokedex.set_owned(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
   # Show Pokédex entry for new species if it hasn't been owned before
   if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
     pbMessage(_INTL("The Pokémon's data was added to the Pokédex."))
