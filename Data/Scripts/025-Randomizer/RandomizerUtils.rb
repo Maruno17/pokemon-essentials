@@ -20,6 +20,8 @@ HELD_ITEMS = [:AIRBALLOON, :BRIGHTPOWDER, :EVIOLITE, :FLOATSTONE, :DESTINYKNOT, 
               :PETAYABERRY, :APICOTBERRY, :LANSATBERRY, :STARFBERRY, :ENIGMABERRY, :MICLEBERRY, :CUSTAPBERRY,
               :JABOCABERRY, :ROWAPBERRY, :FAIRYGEM]
 
+ITEM_EXCEPTIONS= [:COVERFOSSIL, :PLUMEFOSSIL, :ACCURACYUP,:DAMAGEUP,:ANCIENTSTONE,:ODDKEYSTONE_FULL,:TM00 ]
+
 def pbGetRandomItem(item_id)
   return nil if item_id == nil
   item = GameData::Item.get(item_id)
@@ -41,7 +43,7 @@ def pbGetRandomItem(item_id)
   items_list = GameData::Item.list_all
   newItem_id = items_list.keys.sample
   newItem = GameData::Item.get(newItem_id)
-  while (newItem.is_machine? || newItem.is_key_item?)
+  while (newItem.is_machine? || newItem.is_key_item? || ITEM_EXCEPTIONS.include?(newItem))
     newItem_id = items_list.keys.sample
     newItem = GameData::Item.get(newItem_id)
   end
