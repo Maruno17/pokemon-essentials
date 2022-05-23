@@ -517,6 +517,7 @@ class Game_Player < Game_Character
       @pattern = p if !@lock_pattern
       @pattern_surf = p
       @bob_height = (p >= 2) ? 2 : 0
+      @anime_count = 0
     else
       @bob_height = 0
       super
