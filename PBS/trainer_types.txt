@@ -314,88 +314,88 @@ Name = Gym Leader
 Gender = Male
 BaseMoney = 100
 BattleBGM = Battle Gym Leader
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [LEADER_Misty]
 Name = Gym Leader
 Gender = Female
 BaseMoney = 100
 BattleBGM = Battle Gym Leader
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [LEADER_Surge]
 Name = Gym Leader
 Gender = Male
 BaseMoney = 100
 BattleBGM = Battle Gym Leader
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [LEADER_Erika]
 Name = Gym Leader
 Gender = Female
 BaseMoney = 100
 BattleBGM = Battle Gym Leader
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [LEADER_Koga]
 Name = Gym Leader
 Gender = Male
 BaseMoney = 100
 BattleBGM = Battle Gym Leader
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [LEADER_Sabrina]
 Name = Gym Leader
 Gender = Female
 BaseMoney = 100
 BattleBGM = Battle Gym Leader
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [LEADER_Blaine]
 Name = Gym Leader
 Gender = Male
 BaseMoney = 100
 BattleBGM = Battle Gym Leader
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [LEADER_Giovanni]
 Name = Gym Leader
 Gender = Male
 BaseMoney = 100
 BattleBGM = Battle Gym Leader
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [ELITEFOUR_Lorelei]
 Name = Elite Four
 Gender = Female
 BaseMoney = 100
 BattleBGM = Battle Elite
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [ELITEFOUR_Bruno]
 Name = Elite Four
 Gender = Male
 BaseMoney = 100
 BattleBGM = Battle Elite
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [ELITEFOUR_Agatha]
 Name = Elite Four
 Gender = Female
 BaseMoney = 100
 BattleBGM = Battle Elite
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [ELITEFOUR_Lance]
 Name = Elite Four
 Gender = Male
 BaseMoney = 100
 BattleBGM = Battle Elite
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader
 #-------------------------------
 [CHAMPION]
 Name = Champion
 Gender = Male
 BaseMoney = 100
 BattleBGM = Battle Champion
-VictoryME = Battle victory leader
+VictoryBGM = Battle victory leader

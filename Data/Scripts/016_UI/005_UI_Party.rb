@@ -383,11 +383,11 @@ class PokemonPartyPanel < SpriteWrapper
           # Draw status
           status = -1
           if @pokemon.fainted?
-            status = GameData::Status.count
+            status = GameData::Status.count - 1
           elsif @pokemon.status != :NONE
             status = GameData::Status.get(@pokemon.status).icon_position
           elsif @pokemon.pokerusStage == 1
-            status = GameData::Status.count + 1
+            status = GameData::Status.count
           end
           if status >= 0
             statusrect = Rect.new(0, 16 * status, 44, 16)

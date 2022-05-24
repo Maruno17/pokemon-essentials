@@ -152,7 +152,7 @@ module Console
   # Text markup that turns text between them a certain color
   def markup_colors
     {
-      "`" => :cyan, '"' => :purple, "'" => :purple, "$" => :green, "~" => :red
+      "`" => :cyan, '"' => :purple, "==" => :purple, "$" => :green, "~" => :red
     }
   end
 

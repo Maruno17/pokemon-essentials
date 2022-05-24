@@ -463,7 +463,7 @@ class DayCare
     day_care.reset_egg_counters
   end
 
-  def self.choose(text, choice_var)
+  def self.choose(message, choice_var)
     day_care = $PokemonGlobal.day_care
     case day_care.count
     when 0
@@ -474,13 +474,13 @@ class DayCare
       commands = []
       indices = []
       day_care.slots.each_with_index do |slot, i|
-        text = slot.choice_text
-        next if !text
-        commands.push(text)
+        choice_text = slot.choice_text
+        next if !choice_text
+        commands.push(choice_text)
         indices.push(i)
       end
       commands.push(_INTL("CANCEL"))
-      command = pbMessage(text, commands, commands.length)
+      command = pbMessage(message, commands, commands.length)
       $game_variables[choice_var] = (command == commands.length - 1) ? -1 : indices[command]
     end
   end

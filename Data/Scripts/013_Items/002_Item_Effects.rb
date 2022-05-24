@@ -1210,7 +1210,7 @@ ItemHandlers::UseOnPokemon.add(:ROTOMCATALOG, proc { |item, qty, pkmn, scene|
     _INTL("Cancel")
   ]
   new_form = scene.pbShowCommands(_INTL("Which appliance would you like to order?"),
-     commands, pkmn.form)
+     choices, pkmn.form)
   if new_form == pkmn.form
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
