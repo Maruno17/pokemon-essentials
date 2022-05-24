@@ -741,7 +741,7 @@ class Battle::Move::RaiseTargetAttack1 < Battle::Move
     return false if damagingMove?
     failed = true
     targets.each do |b|
-      next if b.pbCanRaiseStatStage?(:ATTACK, user, self)
+      next if !b.pbCanRaiseStatStage?(:ATTACK, user, self)
       failed = false
       break
     end
