@@ -1,14 +1,14 @@
-# Pokémon Essentials
+﻿# Pokémon Essentials
 
-Based on Essentials v19.
+Based on Essentials v20.
 
 You can build your fangame on top of a fork of this repository. Doing so will let you update your fangame with improvements made to this repo as soon as they are made.
 
 ## Usage
 
 1. Fork this repo.
-2. Get a copy of Essentials v19 (a download link cannot be provided here).
-3. Clone your forked repo into the Essentials v19 folder, replacing the existing files with the ones from the repo.
+2. Get a copy of Essentials v20 (a download link cannot be provided here).
+3. Clone your forked repo into the Essentials v20 folder, replacing the existing files with the ones from the repo.
 
 From here, you can edit this project to turn it into your fangame/develop mods. When this repo is updated, you can pull the changes to update your fork and get the updates into your fangame/modding environment.
 
