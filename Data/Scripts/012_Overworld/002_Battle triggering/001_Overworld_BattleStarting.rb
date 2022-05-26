@@ -701,8 +701,8 @@ def pbPickup(pkmn)
   return unless rand(100) < 10   # 10% chance for Pickup to trigger
   num_rarity_levels = 10
   # Ensure common and rare item lists contain defined items
-  common_items = pbDynamicItemList(PICKUP_COMMON_ITEMS)
-  rare_items = pbDynamicItemList(PICKUP_RARE_ITEMS)
+  common_items = pbDynamicItemList(*PICKUP_COMMON_ITEMS)
+  rare_items = pbDynamicItemList(*PICKUP_RARE_ITEMS)
   return if common_items.length < num_rarity_levels - 1 + PICKUP_COMMON_ITEM_CHANCES.length
   return if rare_items.length < num_rarity_levels - 1 + PICKUP_RARE_ITEM_CHANCES.length
   # Determine the starting point for adding items from the above arrays into the
