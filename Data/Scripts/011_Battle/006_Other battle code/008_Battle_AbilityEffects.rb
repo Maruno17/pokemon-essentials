@@ -2678,7 +2678,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:DARKAURA,
 
 Battle::AbilityEffects::OnSwitchIn.add(:DAUNTLESSSHIELD,
   proc { |ability, battler, battle, switch_in|
-    battler.pbRaiseStatStageByAbility(:ATTACK, 1, battler)
+    battler.pbRaiseStatStageByAbility(:DEFENSE, 1, battler)
   }
 )
 
