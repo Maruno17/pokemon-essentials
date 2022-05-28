@@ -126,7 +126,7 @@ module Effectiveness
   end
 
   def calculate(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    mod1 = calculate_one(attack_type, defend_type1)
+    mod1 = (defend_type1) ? calculate_one(attack_type, defend_type1) : NORMAL_EFFECTIVE_ONE
     mod2 = NORMAL_EFFECTIVE_ONE
     mod3 = NORMAL_EFFECTIVE_ONE
     if defend_type2 && defend_type1 != defend_type2
