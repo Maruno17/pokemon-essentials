@@ -949,9 +949,9 @@ end
 # Decreases the target's Defense by 1 stage. Power is mutliplied by 1.5 if 
 # Gravity is in effect. (Grav Apple)
 #===============================================================================
-class Battle::Move::LowerTargetDefense1BoostPowerInGravity < Battle::Move::LowerTargetDefense1
+class Battle::Move::LowerTargetDefense1PowersUpInGravity < Battle::Move::LowerTargetDefense1
   def pbBaseDamage(baseDmg, user, target)
-    baseDmg *= 1.5 if @battle.field.effects[PBEffects::Gravity] > 0
+    baseDmg = baseDmg * 3 / 2 if @battle.field.effects[PBEffects::Gravity] > 0
     return baseDmg
   end
 end
