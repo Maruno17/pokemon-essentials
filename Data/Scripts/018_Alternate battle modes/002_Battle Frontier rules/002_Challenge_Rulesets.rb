@@ -148,7 +148,7 @@ class PokemonRuleSet
   def canRegisterTeam?(team)
     return false if !team || team.length < self.minTeamLength
     return false if team.length > self.maxTeamLength
-    teamNumber = [self.maxLength, team.length].min
+    teamNumber = self.minTeamLength
     team.each do |pkmn|
       return false if !isPokemonValid?(pkmn)
     end
@@ -175,7 +175,7 @@ class PokemonRuleSet
   # team rules and subset rules. Not all Pokemon in the team have to be valid.
   def hasValidTeam?(team)
     return false if !team || team.length < self.minTeamLength
-    teamNumber = [self.maxLength, team.length].min
+    teamNumber = self.minTeamLength
     validPokemon = []
     team.each do |pkmn|
       validPokemon.push(pkmn) if isPokemonValid?(pkmn)
