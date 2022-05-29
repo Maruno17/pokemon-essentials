@@ -36,6 +36,12 @@ class Battle::Peer
     return (box < 0) ? "" : $PokemonStorage[box].name
   end
 
+  def pbOnStartingBattle(battle, pkmn, wild = false)
+    f = MultipleForms.call("getFormOnStartingBattle", pkmn, wild)
+    pkmn.form = f if f
+    MultipleForms.call("changePokemonOnStartingBattle", pkmn, battle)
+  end
+
   def pbOnEnteringBattle(battle, battler, pkmn, wild = false)
     f = MultipleForms.call("getFormOnEnteringBattle", pkmn, wild)
     pkmn.form = f if f

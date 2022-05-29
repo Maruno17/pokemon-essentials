@@ -454,11 +454,11 @@ MultipleForms.register(:PUMPKABOO, {
 MultipleForms.copy(:PUMPKABOO, :GOURGEIST)
 
 MultipleForms.register(:XERNEAS, {
-  "getFormOnEnteringBattle" => proc { |pkmn, wild|
+  "getFormOnStartingBattle" => proc { |pkmn, wild|
     next 1
   },
   "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
-    next 0
+    next 0 if endBattle
   }
 })
 
@@ -647,52 +647,42 @@ MultipleForms.register(:MORPEKO, {
 })
 
 MultipleForms.register(:ZACIAN, {
-  "getFormOnEnteringBattle" => proc { |pkmn, wild|
+  "getFormOnStartingBattle" => proc { |pkmn, wild|
     next 1 if pkmn.hasItem?(:RUSTEDSWORD)
     next 0
   },
-  "changePokemonOnEnteringBattle" => proc { |battler, pkmn, battle|
+  "changePokemonOnStartingBattle" => proc { |pkmn, battle|
     if GameData::Move.exists?(:BEHEMOTHBLADE) && pkmn.hasItem?(:RUSTEDSWORD)
-      pkmn.moves.each do |move|
-        next if move.id != :IRONHEAD
-        move.id = :BEHEMOTHBLADE
-        battler.moves.each_with_index do |b_move, i|
-          next if b_move.id != :IRONHEAD
-          battler.moves[i] = Battle::Move.from_pokemon_move(battle, move)
-        end
-      end
+      pkmn.moves.each { |move| move.id = :BEHEMOTHBLADE if move.id == :IRONHEAD }
     end
   },
   "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
-    next 0
+    next 0 if endBattle
   },
   "changePokemonOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
-    pkmn.moves.each { |move| move.id = :IRONHEAD if move.id == :BEHEMOTHBLADE }
+    if endBattle
+      pkmn.moves.each { |move| move.id = :IRONHEAD if move.id == :BEHEMOTHBLADE }
+    end
   }
 })
 
 MultipleForms.register(:ZAMAZENTA, {
-  "getFormOnEnteringBattle" => proc { |pkmn, wild|
+  "getFormOnStartingBattle" => proc { |pkmn, wild|
     next 1 if pkmn.hasItem?(:RUSTEDSHIELD)
     next 0
   },
-  "changePokemonOnEnteringBattle" => proc { |battler, pkmn, battle|
+  "changePokemonOnStartingBattle" => proc { |pkmn, battle|
     if GameData::Move.exists?(:BEHEMOTHBASH) && pkmn.hasItem?(:RUSTEDSHIELD)
-      pkmn.moves.each do |move|
-        next if move.id != :IRONHEAD
-        move.id = :BEHEMOTHBASH
-        battler.moves.each_with_index do |b_move, i|
-          next if b_move.id != :IRONHEAD
-          battler.moves[i] = Battle::Move.from_pokemon_move(battle, move)
-        end
-      end
+      pkmn.moves.each { |move| move.id = :BEHEMOTHBASH if move.id == :IRONHEAD }
     end
   },
   "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
-    next 0
+    next 0 if endBattle
   },
   "changePokemonOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
-    pkmn.moves.each { |move| move.id = :IRONHEAD if move.id == :BEHEMOTHBASH }
+    if endBattle
+      pkmn.moves.each { |move| move.id = :IRONHEAD if move.id == :BEHEMOTHBASH }
+    end
   }
 })
 

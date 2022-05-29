@@ -258,6 +258,8 @@ class Battle
     logMsg += "#{@opponent.length} trainer(s))" if trainerBattle?
     PBDebug.log(logMsg)
     pbEnsureParticipants
+    pbParty(0).each { |pkmn| @peer.pbOnStartingBattle(self, pkmn, wildBattle?) if pkmn }
+    pbParty(1).each { |pkmn| @peer.pbOnStartingBattle(self, pkmn, wildBattle?) if pkmn }
     begin
       pbStartBattleCore
     rescue BattleAbortedException
