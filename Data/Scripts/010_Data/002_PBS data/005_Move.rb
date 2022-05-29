@@ -4,6 +4,7 @@ module GameData
     attr_reader :real_name
     attr_reader :type
     attr_reader :category
+    # TODO: Rename base_damage to power everywhere.
     attr_reader :base_damage
     attr_reader :accuracy
     attr_reader :total_pp
@@ -21,7 +22,7 @@ module GameData
       "Name"         => [:name,          "s"],
       "Type"         => [:type,          "e", :Type],
       "Category"     => [:category,      "e", ["Physical", "Special", "Status"]],
-      "BaseDamage"   => [:base_damage,   "u"],
+      "Power"        => [:base_damage,   "u"],
       "Accuracy"     => [:accuracy,      "u"],
       "TotalPP"      => [:total_pp,      "u"],
       "Target"       => [:target,        "e", :Target],
@@ -29,7 +30,10 @@ module GameData
       "FunctionCode" => [:function_code, "s"],
       "Flags"        => [:flags,         "*s"],
       "EffectChance" => [:effect_chance, "u"],
-      "Description"  => [:description,   "q"]
+      "Description"  => [:description,   "q"],
+      # All properties below here are old names for some properties above.
+      # They will be removed in v21.
+      "BaseDamage"   => [:base_damage,   "u"]
     }
 
     extend ClassMethodsSymbols

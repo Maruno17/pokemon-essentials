@@ -708,6 +708,34 @@ module Compiler
   end
 
   #=============================================================================
+  # Replace text in PBS files before compiling them
+  #=============================================================================
+  def edit_and_rewrite_pbs_file_text(filename)
+    return if !block_given?
+    lines = []
+    File.open(filename, "rb") { |f|
+      f.each_line { |line| lines.push(line) }
+    }
+    changed = false
+    lines.each { |line| changed = true if yield line }
+    if changed
+      Console.markup_style("Changes made to file #{filename}.", text: :yellow)
+      File.open(filename, "wb") { |f|
+        lines.each { |line| f.write(line) }
+      }
+    end
+  end
+
+  def modify_pbs_file_contents_before_compiling
+    edit_and_rewrite_pbs_file_text("PBS/trainer_types.txt") do |line|
+      next line.gsub!(/^\s*VictoryME\s*=/, "VictoryBGM =")
+    end
+    edit_and_rewrite_pbs_file_text("PBS/moves.txt") do |line|
+      next line.gsub!(/^\s*BaseDamage\s*=/, "Power =")
+    end
+  end
+
+  #=============================================================================
   # Compile all data
   #=============================================================================
   def compile_pbs_file_message_start(filename)
@@ -726,6 +754,7 @@ module Compiler
   end
 
   def compile_pbs_files
+    modify_pbs_file_contents_before_compiling
     compile_town_map
     compile_connections
     compile_phone
