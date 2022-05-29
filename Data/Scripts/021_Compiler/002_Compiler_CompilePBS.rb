@@ -303,9 +303,11 @@ module Compiler
         if move_hash
           # Sanitise data
           if (move_hash[:category] || 2) == 2 && (move_hash[:base_damage] || 0) != 0
-            raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}", line[2], FileLineData.linereport)
+            raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}",
+                        move_hash[:name], FileLineData.linereport)
           elsif (move_hash[:category] || 2) != 2 && (move_hash[:base_damage] || 0) == 0
-            print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
+            print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}",
+                        move_hash[:name], FileLineData.linereport)
             move_hash[:category] = 2
           end
           GameData::Move.register(move_hash)
@@ -341,9 +343,11 @@ module Compiler
         if move_hash
           # Sanitise data
           if (move_hash[:category] || 2) == 2 && (move_hash[:base_damage] || 0) != 0
-            raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}", line[2], FileLineData.linereport)
+            raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}",
+                        move_hash[:name], FileLineData.linereport)
           elsif (move_hash[:category] || 2) != 2 && (move_hash[:base_damage] || 0) == 0
-            print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
+            print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}",
+                        move_hash[:name], FileLineData.linereport)
             move_hash[:category] = 2
           end
           GameData::Move.register(move_hash)
