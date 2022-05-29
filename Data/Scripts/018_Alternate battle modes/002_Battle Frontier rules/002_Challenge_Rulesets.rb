@@ -180,9 +180,9 @@ class PokemonRuleSet
     team.each do |pkmn|
       validPokemon.push(pkmn) if isPokemonValid?(pkmn)
     end
-    return false if validPokemon.length < teamNumber
+    return false if validPokemon.length < self.minLength
     if @teamRules.length > 0
-      pbEachCombination(team, teamNumber) { |comb| return true if isValid?(comb) }
+      pbEachCombination(team, self.minLength) { |comb| return true if isValid?(comb) }
       return false
     end
     return true
