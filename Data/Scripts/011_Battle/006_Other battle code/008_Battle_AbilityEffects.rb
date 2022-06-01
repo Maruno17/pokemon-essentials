@@ -1259,7 +1259,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:FLOWERGIFT,
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:GORILLATACTICS,
   proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:attack_multiplier] *= 1.5
+    mults[:attack_multiplier] *= 1.5 if move.physicalMove?
   }
 )
 
