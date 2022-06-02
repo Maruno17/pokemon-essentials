@@ -886,7 +886,7 @@ def pbChooseFossil(var = 0)
 end
 
 # Shows a list of items to choose from, with the chosen item's ID being stored
-# in the given Global Variable. Only items which the player has are listed.
+# in the given Game Variable. Only items which the player has are listed.
 def pbChooseItemFromList(message, variable, *args)
   commands = []
   itemid   = []
@@ -898,16 +898,16 @@ def pbChooseItemFromList(message, variable, *args)
     itemid.push(itm.id)
   end
   if commands.length == 0
-    $game_variables[variable] = 0
+    $game_variables[variable] = :NONE
     return nil
   end
   commands.push(_INTL("Cancel"))
   itemid.push(nil)
   ret = pbMessage(message, commands, -1)
   if ret < 0 || ret >= commands.length - 1
-    $game_variables[variable] = nil
+    $game_variables[variable] = :NONE
     return nil
   end
-  $game_variables[variable] = itemid[ret]
+  $game_variables[variable] = itemid[ret] || :NONE
   return itemid[ret]
 end
