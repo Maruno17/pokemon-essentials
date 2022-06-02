@@ -455,6 +455,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = TrapUserAndTargetInBattle
 Flags = Contact,CanProtect,CanMirrorMove
+EffectChance = 100
 Description = This move prevents the user and the target from switching out until either of them faints.
 #-------------------------------
 [THROATCHOP]
@@ -2713,6 +2714,7 @@ TotalPP = 5
 Target = AllNearFoes
 FunctionCode = BurnTargetIfTargetStatsRaisedThisTurn
 Flags = CanProtect,CanMirrorMove
+EffectChance = 100
 Description = The user attacks with energy from jealousy. This burns all foes that had their stats boosted this turn.
 #-------------------------------
 [FLAMEBURST]
@@ -2906,6 +2908,7 @@ Power = 100
 Accuracy = 100
 TotalPP = 15
 Target = NearOther
+Priority = -3
 FunctionCode = BurnAttackerBeforeUserActs
 Flags = CanProtect,Bomb
 Description = The user heats up its beak before attacking. Making contact in this time results in a burn.

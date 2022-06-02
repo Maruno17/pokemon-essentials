@@ -2533,6 +2533,7 @@ Power = 100
 Accuracy = 100
 TotalPP = 15
 Target = NearOther
+Priority = -3
 FunctionCode = BurnAttackerBeforeUserActs
 Flags = CanProtect,Bomb
 Description = The user heats up its beak before attacking. Making contact in this time results in a burn.
