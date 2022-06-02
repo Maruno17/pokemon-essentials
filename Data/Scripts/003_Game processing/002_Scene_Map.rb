@@ -15,8 +15,8 @@ class Scene_Map
   end
 
   def createSpritesets
-    @map_renderer = TilemapRenderer.new(Spriteset_Map.viewport)
-    @spritesetGlobal = Spriteset_Global.new
+    @map_renderer = TilemapRenderer.new(Spriteset_Map.viewport) if !@map_renderer || @map_renderer.disposed?
+    @spritesetGlobal = Spriteset_Global.new if !@spritesetGlobal
     @spritesets = {}
     for map in $MapFactory.maps
       @spritesets[map.map_id] = Spriteset_Map.new(map)
@@ -42,10 +42,6 @@ class Scene_Map
     end
     @spritesets.clear
     @spritesets = {}
-    @spritesetGlobal.dispose
-    @spritesetGlobal = nil
-    @map_renderer.dispose
-    @map_renderer = nil
   end
 
   def autofade(mapid)
