@@ -572,7 +572,7 @@ def pbLoadRpgxpScene(scene)
   oldscene = $scene
   $scene = scene
   Graphics.freeze
-  oldscene.disposeSpritesets
+  #oldscene.disposeSpritesets
   visibleObjects = pbHideVisibleObjects
   Graphics.transition(20)
   Graphics.freeze
@@ -582,7 +582,7 @@ def pbLoadRpgxpScene(scene)
   Graphics.transition(20)
   Graphics.freeze
   $scene = oldscene
-  $scene.createSpritesets
+  #$scene.createSpritesets
   pbShowObjects(visibleObjects)
   Graphics.transition(20)
 end
