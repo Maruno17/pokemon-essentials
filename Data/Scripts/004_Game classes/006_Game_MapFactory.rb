@@ -65,8 +65,8 @@ class PokemonMapFactory
     return getMap(id, false)
   end
 
-  def getNewMap(playerX, playerY)
-    id = $game_map.map_id
+  def getNewMap(playerX, playerY, map_id = nil)
+    id = map_id || $game_map.map_id
     MapFactoryHelper.eachConnectionForMap(id) do |conn|
       mapidB = nil
       newx = 0
