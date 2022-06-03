@@ -687,50 +687,7 @@ def drawPokemonType(pokemon_id, x_pos = 192, y_pos = 264)
   return viewport
 end
 
-def pbFuse(pokemon, poke2, supersplicers = false)
 
-  newid = (pokemon.species) * NB_POKEMON + poke2.species
-  playingBGM = $game_system.getPlayingBGM
-
-  pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", poke2.species, pokemon.species)
-  #pbResolveBitmap(pathCustom) && $game_variables[196]==0 ? pathCustom : pathReg
-  hasCustom = false
-  if (pbResolveBitmap(pathCustom))
-    picturePath = pathCustom
-    hasCustom = true
-  else
-    picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", poke2.species, pokemon.species)
-  end
-
-  previewwindow = PictureWindow.new(picturePath)
-
-  if hasCustom
-    previewwindow.picture.pbSetColor(0, 255, 255, 200)
-  else
-    previewwindow.picture.pbSetColor(255, 255, 255, 200)
-  end
-  previewwindow.x = (Graphics.width / 2) - (previewwindow.width / 2)
-  previewwindow.y = ((Graphics.height - 96) / 2) - (previewwindow.height / 2)
-  previewwindow.z = 1000000
-
-  if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
-    previewwindow.dispose
-    fus = PokemonFusionScene.new
-    if (fus.pbStartScreen(pokemon, poke2, newid))
-      returnItemsToBag(pokemon, poke2)
-      fus.pbFusionScreen(false, supersplicers)
-      $game_variables[126] += 1 #fuse counter
-      fus.pbEndScreen
-      scene.pbHardRefresh
-      pbBGMPlay(playingBGM)
-      return true
-    end
-  else
-    previewwindow.dispose
-    return false
-  end
-
-end
 
 ItemHandlers::UseOnPokemon.add(:SUPERSPLICERS, proc { |item, pokemon, scene|
   next true if pbDNASplicing(pokemon, scene, true, true)
@@ -1333,53 +1290,11 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
             scene.pbDisplay(_INTL("A fainted Pokémon cannot be fused!"))
             return false
           end
-
-          newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
-
-          pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
-          #pbResolveBitmap(pathCustom) && $game_variables[196]==0 ? pathCustom : pathReg
-          hasCustom = false
-          if (pbResolveBitmap(pathCustom))
-            picturePath = pathCustom
-            hasCustom = true
-          else
-            picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
+          if(pbFuse(pokemon,poke2,superSplicer))
+            pbRemovePokemonAt(chosen)
+            scene.pbHardRefresh
+            pbBGMPlay(playingBGM)
           end
-
-          previewwindow = PictureWindow.new(picturePath)
-
-          typeWindow = drawPokemonType(newid)
-
-          if hasCustom
-            previewwindow.picture.pbSetColor(220, 255, 220, 200)
-          else
-            previewwindow.picture.pbSetColor(255, 255, 255, 200)
-          end
-          previewwindow.x = (Graphics.width / 2) - (previewwindow.width / 2)
-          previewwindow.y = ((Graphics.height - 96) / 2) - (previewwindow.height / 2)
-          previewwindow.z = 1000000
-
-          if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
-            previewwindow.dispose
-            typeWindow.dispose
-            fus = PokemonFusionScene.new
-            if (fus.pbStartScreen(pokemon, poke2, newid))
-              returnItemsToBag(pokemon, poke2)
-              fus.pbFusionScreen(false, supersplicers)
-              $game_variables[126] += 1 #fuse counter
-              pbRemovePokemonAt(chosen)
-              fus.pbEndScreen
-              scene.pbHardRefresh
-              pbBGMPlay(playingBGM)
-              return true
-
-            end
-          else
-            previewwindow.dispose
-            typeWindow.dispose
-            return false
-          end
-
         elsif pokemon == poke2
           scene.pbDisplay(_INTL("{1} can't be fused with itself!", pokemon.name))
           return false
@@ -1398,8 +1313,53 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
   end
 end
 
+def pbFuse(pokemon,poke2,supersplicers=false)
+  newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
 
-def pbUnfuse(pokemon, scene,supersplicers)
+  pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
+  hasCustom = false
+  if (pbResolveBitmap(pathCustom))
+    picturePath = pathCustom
+    hasCustom = true
+  else
+    picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
+  end
+
+  previewwindow = PictureWindow.new(picturePath)
+
+  typeWindow = drawPokemonType(newid)
+
+  if hasCustom
+    previewwindow.picture.pbSetColor(220, 255, 220, 200)
+  else
+    previewwindow.picture.pbSetColor(255, 255, 255, 200)
+  end
+  previewwindow.x = (Graphics.width / 2) - (previewwindow.width / 2)
+  previewwindow.y = ((Graphics.height - 96) / 2) - (previewwindow.height / 2)
+  previewwindow.z = 1000000
+
+  if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
+    previewwindow.dispose
+    typeWindow.dispose
+    fus = PokemonFusionScene.new
+    if (fus.pbStartScreen(pokemon, poke2, newid))
+      returnItemsToBag(pokemon, poke2)
+      fus.pbFusionScreen(false, supersplicers)
+      $game_variables[126] += 1 #fuse counter
+      fus.pbEndScreen
+      return true
+
+    end
+  else
+    previewwindow.dispose
+    typeWindow.dispose
+    return false
+  end
+
+end
+
+
+def pbUnfuse(pokemon, scene,supersplicers,pcPosition=nil)
 
   bodyPoke = getBasePokemonID(pokemon.species_data.id_number, true)
   headPoke = getBasePokemonID(pokemon.species_data.id_number, false)
