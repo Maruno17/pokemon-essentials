@@ -116,12 +116,15 @@ module GameData
 
     #todo customsListinCache so it's faster
     def generateRandomGymSpecies(old_species)
+      gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
+      return old_species if gym_index == -1 || gym_index == 999
+
+      type_id = pbGet(VAR_GYM_TYPES_ARRAY)[gym_index]
+      return old_species if type_id == -1
+
       customsList = getCustomSpeciesList()
       bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
-      gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
-      type_id = pbGet(VAR_GYM_TYPES_ARRAY)[gym_index]
       gym_type = GameData::Type.get(type_id)
-      return old_species if type_id == -1
       while true
         new_species = $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] ? getSpecies(getNewCustomSpecies(old_species, customsList, bst_range)) : getSpecies(getNewSpecies(old_species, bst_range))
         if new_species.hasType?(gym_type)
@@ -147,6 +150,12 @@ module GameData
     end
 
     def add_generated_species_to_gym_array(new_species, trainerId)
+      if(new_species.is_a?(Symbol))
+        id = new_species
+      else
+        id = new_species.id_number
+      end
+
       expected_team_length = 1
       expected_team_length = $PokemonGlobal.randomTrainersHash[trainerId].length if $PokemonGlobal.randomTrainersHash[trainerId]
       new_team = []
@@ -154,7 +163,7 @@ module GameData
         new_team = $PokemonGlobal.randomGymTrainersHash[trainerId]
       end
       if new_team.length < expected_team_length
-        new_team << new_species.id_number
+        new_team << id
       end
       $PokemonGlobal.randomGymTrainersHash[trainerId] = new_team
     end
