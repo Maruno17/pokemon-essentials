@@ -49,11 +49,11 @@ class Game_Temp
 end
 
 def pbSceneStandby
-  $scene.disposeSpritesets if $scene.is_a?(Scene_Map)
-  RPG::Cache.clear
-  Graphics.frame_reset
+#  $scene.disposeSpritesets if $scene.is_a?(Scene_Map)
+#  RPG::Cache.clear
+#  Graphics.frame_reset
   yield
-  $scene.createSpritesets if $scene.is_a?(Scene_Map)
+#  $scene.createSpritesets if $scene.is_a?(Scene_Map)
 end
 
 def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
