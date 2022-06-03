@@ -1394,88 +1394,93 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
     end
   else
     #UNFUSE
+    return true if pbUnfuse(pokemon,scene,supersplicers)
+  end
+end
 
-    bodyPoke = getBasePokemonID(pokemon.species_data.id_number, true)
-    headPoke = getBasePokemonID(pokemon.species_data.id_number, false)
 
-    if (pokemon.obtain_method == 2 || pokemon.ot != $Trainer.name) # && !canunfuse
-      scene.pbDisplay(_INTL("You can't unfuse a Pokémon obtained in a trade!"))
-      return false
-    else
-      if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be unfused?", pokemon.name))
-        if pokemon.species_data.id_number > (NB_POKEMON * NB_POKEMON) + NB_POKEMON #triple fusion
-          scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
-          return false
-        end
+def pbUnfuse(pokemon, scene,supersplicers)
 
-        keepInParty = 0
-        if $Trainer.party.length >= 6
-          scene.pbDisplay(_INTL("Your party is full! Keep which Pokémon in party?"))
-          choice = Kernel.pbMessage("Select a Pokémon to keep in your party.", [_INTL("{1}", PBSpecies.getName(bodyPoke)), _INTL("{1}", PBSpecies.getName(headPoke)), "Cancel"], 2)
-          if choice == 2
-            return false
-          else
-            keepInParty = choice
-          end
-        end
+  bodyPoke = getBasePokemonID(pokemon.species_data.id_number, true)
+  headPoke = getBasePokemonID(pokemon.species_data.id_number, false)
 
-        scene.pbDisplay(_INTL("Unfusing ... "))
-        scene.pbDisplay(_INTL(" ... "))
-        scene.pbDisplay(_INTL(" ... "))
-
-        if pokemon.exp_when_fused_head == nil || pokemon.exp_when_fused_body == nil
-          new_level = calculateUnfuseLevelOldMethod(pokemon, supersplicers)
-          body_level = new_level
-          head_level = new_level
-          poke1 = Pokemon.new(bodyPoke, body_level)
-          poke2 = Pokemon.new(headPoke, head_level)
-        else
-          exp_body = pokemon.exp_when_fused_body + pokemon.exp_gained_since_fused
-          exp_head = pokemon.exp_when_fused_head + pokemon.exp_gained_since_fused
-
-          poke1 = Pokemon.new(bodyPoke, pokemon.level)
-          poke2 = Pokemon.new(headPoke, pokemon.level)
-          poke1.exp = exp_body
-          poke2.exp = exp_head
-        end
-        body_level = poke1.level
-        head_level = poke2.level
-
-        pokemon.exp_gained_since_fused=0
-        pokemon.exp_when_fused_head=nil
-        pokemon.exp_when_fused_body=nil
-
-        if $Trainer.party.length >= 6
-          if (keepInParty == 0)
-            $PokemonStorage.pbStoreCaught(poke2)
-            scene.pbDisplay(_INTL("{1} was sent to the PC.", poke2.name))
-          else
-            poke2 = Pokemon.new(bodyPoke, body_level)
-            poke1 = Pokemon.new(headPoke, head_level)
-
-            $PokemonStorage.pbStoreCaught(poke2)
-            scene.pbDisplay(_INTL("{1} was sent to the PC.", poke2.name))
-          end
-        else
-          Kernel.pbAddPokemonSilent(poke2, poke2.level)
-        end
-
-        #On ajoute l'autre dans le pokedex aussi
-         $Trainer.pokedex.set_seen(poke1.species)
-         $Trainer.pokedex.set_owned(poke1.species)
-
-        pokemon.species = poke1.species
-        pokemon.level = poke1.level
-        pokemon.name = poke1.name
-        pokemon.moves = poke1.moves
-        pokemon.obtain_method = 0
-        poke1.obtain_method = 0
-
-        #scene.pbDisplay(_INTL(p1.to_s + " " + p2.to_s))
-        scene.pbHardRefresh
-        scene.pbDisplay(_INTL("Your Pokémon were successfully unfused! "))
-        return true
+  if (pokemon.obtain_method == 2 || pokemon.ot != $Trainer.name) # && !canunfuse
+    scene.pbDisplay(_INTL("You can't unfuse a Pokémon obtained in a trade!"))
+    return false
+  else
+    if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be unfused?", pokemon.name))
+      if pokemon.species_data.id_number > (NB_POKEMON * NB_POKEMON) + NB_POKEMON #triple fusion
+        scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
+        return false
       end
+
+      keepInParty = 0
+      if $Trainer.party.length >= 6
+        scene.pbDisplay(_INTL("Your party is full! Keep which Pokémon in party?"))
+        choice = Kernel.pbMessage("Select a Pokémon to keep in your party.", [_INTL("{1}", PBSpecies.getName(bodyPoke)), _INTL("{1}", PBSpecies.getName(headPoke)), "Cancel"], 2)
+        if choice == 2
+          return false
+        else
+          keepInParty = choice
+        end
+      end
+
+      scene.pbDisplay(_INTL("Unfusing ... "))
+      scene.pbDisplay(_INTL(" ... "))
+      scene.pbDisplay(_INTL(" ... "))
+
+      if pokemon.exp_when_fused_head == nil || pokemon.exp_when_fused_body == nil
+        new_level = calculateUnfuseLevelOldMethod(pokemon, supersplicers)
+        body_level = new_level
+        head_level = new_level
+        poke1 = Pokemon.new(bodyPoke, body_level)
+        poke2 = Pokemon.new(headPoke, head_level)
+      else
+        exp_body = pokemon.exp_when_fused_body + pokemon.exp_gained_since_fused
+        exp_head = pokemon.exp_when_fused_head + pokemon.exp_gained_since_fused
+
+        poke1 = Pokemon.new(bodyPoke, pokemon.level)
+        poke2 = Pokemon.new(headPoke, pokemon.level)
+        poke1.exp = exp_body
+        poke2.exp = exp_head
+      end
+      body_level = poke1.level
+      head_level = poke2.level
+
+      pokemon.exp_gained_since_fused=0
+      pokemon.exp_when_fused_head=nil
+      pokemon.exp_when_fused_body=nil
+
+      if $Trainer.party.length >= 6
+        if (keepInParty == 0)
+          $PokemonStorage.pbStoreCaught(poke2)
+          scene.pbDisplay(_INTL("{1} was sent to the PC.", poke2.name))
+        else
+          poke2 = Pokemon.new(bodyPoke, body_level)
+          poke1 = Pokemon.new(headPoke, head_level)
+
+          $PokemonStorage.pbStoreCaught(poke2)
+          scene.pbDisplay(_INTL("{1} was sent to the PC.", poke2.name))
+        end
+      else
+        Kernel.pbAddPokemonSilent(poke2, poke2.level)
+      end
+
+      #On ajoute l'autre dans le pokedex aussi
+      $Trainer.pokedex.set_seen(poke1.species)
+      $Trainer.pokedex.set_owned(poke1.species)
+
+      pokemon.species = poke1.species
+      pokemon.level = poke1.level
+      pokemon.name = poke1.name
+      pokemon.moves = poke1.moves
+      pokemon.obtain_method = 0
+      poke1.obtain_method = 0
+
+      #scene.pbDisplay(_INTL(p1.to_s + " " + p2.to_s))
+      scene.pbHardRefresh
+      scene.pbDisplay(_INTL("Your Pokémon were successfully unfused! "))
+      return true
     end
   end
 end
