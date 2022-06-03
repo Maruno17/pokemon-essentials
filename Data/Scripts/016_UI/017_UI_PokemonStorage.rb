@@ -175,12 +175,35 @@ class PokemonBoxArrow < SpriteWrapper
     @handsprite.changeBitmap("fist")
     @spriteX = self.x
     @spriteY = self.y
+    @splicerType=0
   end
 
   def dispose
     @handsprite.dispose
     @heldpkmn.dispose if @heldpkmn
     super
+  end
+
+  def getSplicerIcon
+    case @splicerType
+    when 2
+      return AnimatedBitmap.new("Graphics/Pictures/boxinfinitesplicer")
+    when 1
+      return AnimatedBitmap.new("Graphics/Pictures/boxsupersplicer")
+    end
+    return AnimatedBitmap.new("Graphics/Pictures/boxsplicer")
+  end
+
+  def setSplicerType(type)
+    @splicerType = type
+  end
+
+  def setFusing(fusing)
+    @fusing = fusing
+  end
+
+  def fusing?
+    return @fusing
   end
 
   def heldPokemon
@@ -604,6 +627,21 @@ class PokemonStorageScene
 
   def initialize
     @command = 1
+  end
+
+  def pbReleaseInstant(selected,heldpoke)
+    box=selected[0]
+    index=selected[1]
+    if heldpoke
+      sprite=@sprites["arrow"].heldPokemon
+    elsif box==-1
+      sprite=@sprites["boxparty"].getPokemon(index)
+    else
+      sprite=@sprites["box"].getPokemon(index)
+    end
+    if sprite
+      sprite.dispose
+    end
   end
 
   def pbStartBox(screen,command)
@@ -1493,6 +1531,22 @@ class PokemonStorageScene
   def update
     pbUpdateSpriteHash(@sprites)
   end
+
+
+
+
+  def setFusing(fusing,item=0)
+    sprite=@sprites["arrow"].setFusing(fusing)
+    if item == :INFINITESPLICERS
+      @sprites["arrow"].setSplicerType(2)
+    elsif item == :SUPERSPLICERS
+      @sprites["arrow"].setSplicerType(1)
+    else
+      @sprites["arrow"].setSplicerType(0)
+    end
+    pbRefresh
+  end
+
 end
 
 #===============================================================================
@@ -1508,6 +1562,8 @@ class PokemonStorageScreen
     @storage = storage
     @pbHeldPokemon = nil
   end
+
+
 
   def pbStartScreen(command)
     @heldpkmn = nil
@@ -1545,12 +1601,16 @@ class PokemonStorageScreen
               pbHold(selected)
             end
           else
+            if @fusionMode
+              pbFusionCommands(selected)
+            else
             commands = []
             cmdMove     = -1
             cmdSummary  = -1
             cmdWithdraw = -1
             cmdItem     = -1
-            cmdMark     = -1
+            cmdFuse     = -1
+            cmdUnfuse     = -1
             cmdRelease  = -1
             cmdDebug    = -1
             cmdCancel   = -1
@@ -1562,9 +1622,16 @@ class PokemonStorageScreen
               commands[cmdMove=commands.length]   = _INTL("Move")
             end
             commands[cmdSummary=commands.length]  = _INTL("Summary")
+            if pokemon != nil
+              if dexNum(pokemon.species) > NB_POKEMON
+                commands[cmdUnfuse=commands.length]     = _INTL("Unfuse")
+              else
+                commands[cmdFuse=commands.length]     = _INTL("Fuse")
+              end
+            end
             commands[cmdWithdraw=commands.length] = (selected[0]==-1) ? _INTL("Store") : _INTL("Withdraw")
             commands[cmdItem=commands.length]     = _INTL("Item")
-            commands[cmdMark=commands.length]     = _INTL("Mark")
+
             commands[cmdRelease=commands.length]  = _INTL("Release")
             commands[cmdDebug=commands.length]    = _INTL("Debug") if $DEBUG
             commands[cmdCancel=commands.length]   = _INTL("Cancel")
@@ -1581,12 +1648,15 @@ class PokemonStorageScreen
               (selected[0]==-1) ? pbStore(selected,@heldpkmn) : pbWithdraw(selected,@heldpkmn)
             elsif cmdItem>=0 && command==cmdItem   # Item
               pbItem(selected,@heldpkmn)
-            elsif cmdMark>=0 && command==cmdMark   # Mark
-              pbMark(selected,@heldpkmn)
+            elsif cmdFuse>=0 && command==cmdFuse   # fuse
+              pbFuseFromPC(selected,@heldpkmn)
+            elsif cmdUnfuse>=0 && command==cmdUnfuse   # unfuse
+              pbUnfuseFromPC(selected)
             elsif cmdRelease>=0 && command==cmdRelease   # Release
               pbRelease(selected,@heldpkmn)
             elsif cmdDebug>=0 && command==cmdDebug   # Debug
               pbPokemonDebug((@heldpkmn) ? @heldpkmn : pokemon,selected,heldpoke)
+            end
             end
           end
         end
@@ -1614,20 +1684,24 @@ class PokemonStorageScreen
             pbBoxCommands
             next
           end
+          if @fusionMode
+            pbFusionCommands(selected)
+          else
           pokemon = @storage[selected[0],selected[1]]
           next if !pokemon
           command = pbShowCommands(_INTL("{1} is selected.",pokemon.name),[
              _INTL("Withdraw"),
              _INTL("Summary"),
-             _INTL("Mark"),
              _INTL("Release"),
              _INTL("Cancel")
           ])
           case command
           when 0 then pbWithdraw(selected, nil)
           when 1 then pbSummary(selected, nil)
-          when 2 then pbMark(selected, nil)
-          when 3 then pbRelease(selected, nil)
+          #when 2 then pbMark(selected, nil)
+          when 2 then pbRelease(selected, nil)
+          end
+
           end
         end
       end
@@ -2020,4 +2094,189 @@ class PokemonStorageScreen
     @scene.pbCloseBox
     return retval
   end
+
+
+  #
+  # Fusion stuff
+  #
+
+  def pbFuseFromPC(selected,heldpoke)
+    box=selected[0]
+    index=selected[1]
+    poke_body = @storage[box,index]
+    poke_head = heldpoke
+    if heldpoke
+      if dexNum(heldpoke.species) > NB_POKEMON
+        pbDisplay(_INTL("{1} is already fused!",heldpoke.name))
+        return
+      end
+    end
+
+
+    splicerItem = selectSplicer()
+    if splicerItem == nil
+      cancelFusion()
+      return
+    end
+    isSuperSplicer = isSuperSplicer?(splicerItem)
+
+    if !heldpoke
+      @fusionMode = true
+      @fusionItem = splicerItem
+      @scene.setFusing(true,@fusionItem)
+      pbHold(selected)
+      pbDisplay(_INTL("Select a Pokémon to fuse it with"))
+      return
+    end
+    if !poke_body
+      pbDisplay(_INTL("Select a Pokémon to fuse it with"))
+      @fusionMode = true
+      @fusionItem = splicerItem
+      @scene.setFusing(true,@fusionItem)
+      return
+    end
+  end
+
+  def deleteHeldPokemon(heldpoke,selected)
+    @scene.pbReleaseInstant(selected,heldpoke)
+    @heldpkmn = nil
+  end
+
+  def cancelFusion
+    @splicerItem =nil
+    @scene.setFusing(false)
+    @fusionMode = false
+  end
+
+  def canDeleteItem(item)
+    return item == :SUPERSPLICERS || item == :DNASPLICERS
+  end
+
+  def isSuperSplicer?(item)
+    return item == :SUPERSPLICERS || item == :INFINITESPLICERS2
+  end
+
+
+  def pbFusionCommands(selected)
+      heldpoke=pbHeldPokemon
+      pokemon=@storage[selected[0],selected[1]]
+
+      if !pokemon
+        command=pbShowCommands("Select an action",["Cancel","Stop fusing"])
+        case command
+        when 1 #stop
+          cancelFusion()
+        end
+      else
+        commands=[
+          _INTL("Fuse"),
+          _INTL("Swap")
+        ]
+        commands.push(_INTL("Stop fusing"))
+        commands.push(_INTL("Cancel"))
+
+        if !heldpoke
+          pbPlace(selected)
+          @fusionMode =false
+          @scene.setFusing(false)
+          return
+        end
+        command=pbShowCommands("Select an action",commands)
+        case command
+        when 0 #Fuse
+          if !pokemon
+            pbDisplay(_INTL("No Pokémon selected!"))
+            return
+          else
+            if dexNum(pokemon.species) > NB_POKEMON
+              pbDisplay(_INTL("This Pokémon is already fused!"))
+              return
+            end
+          end
+          isSuperSplicer = isSuperSplicer?(@fusionItem)
+
+          if pbFuse(pokemon,heldpoke,isSuperSplicer)
+            if canDeleteItem(@fusionItem)
+              $PokemonBag.pbDeleteItem(@fusionItem)
+            end
+            deleteHeldPokemon(heldpoke,selected)
+            @scene.setFusing(false)
+            @fusionMode = false
+            return
+          else
+            # print "fusion cancelled"
+            # @fusionMode = false
+          end
+        when 1 #swap
+          if pokemon
+            if dexNum(pokemon.species) <= NB_POKEMON
+              pbSwap(selected)
+            else
+              pbDisplay(_INTL("This Pokémon is already fused!"))
+            end
+          else
+            pbDisplay(_INTL("Select a Pokémon!"))
+          end
+        when 2 #cancel
+          cancelFusion()
+          return
+        end
+      end
+    end
+
+  def pbUnfuseFromPC(selected)
+    box=selected[0]
+    index=selected[1]
+    pokemon = @storage[box,index]
+
+    if pbConfirm(_INTL("Unfuse {1}?",pokemon.name))
+      item = selectSplicer()
+      return if item == nil
+      isSuperSplicer = isSuperSplicer?(item)
+      if pbUnfuse(pokemon,@scene,isSuperSplicer,selected)
+        if canDeleteItem(item)
+          $PokemonBag.pbDeleteItem(item)
+        end
+      end
+      @scene.pbHardRefresh
+    end
+  end
+
+
+  def selectSplicer()
+    dna_splicers_const = "DNA Splicers"
+    super_splicers_const = "Super Splicers"
+    infinite_splicers_const = "Infinite Splicers"
+
+    dnaSplicersQt = $PokemonBag.pbQuantity(:DNASPLICERS)
+    superSplicersQt = $PokemonBag.pbQuantity(:SUPERSPLICERS)
+    infiniteSplicersQt = $PokemonBag.pbQuantity(:INFINITESPLICERS)
+    infiniteSplicers2Qt = $PokemonBag.pbQuantity(:INFINITESPLICERS2)
+
+    options = []
+    options.push(_INTL"{1}",infinite_splicers_const)if infiniteSplicers2Qt > 0 || infiniteSplicersQt > 0
+    options.push(_INTL("{1} ({2})",super_splicers_const,superSplicersQt))if superSplicersQt > 0
+    options.push(_INTL("{1} ({2})",dna_splicers_const,dnaSplicersQt))if dnaSplicersQt > 0
+
+    if options.length <= 0
+      pbDisplay(_INTL("You have no fusion items available."))
+      return nil
+    end
+
+    cmd=pbShowCommands("Use which splicers?",options)
+    if cmd == -1
+      return nil
+    end
+    ret = options[cmd]
+    if ret.start_with?(dna_splicers_const)
+      return :DNASPLICERS
+    elsif ret.start_with?(super_splicers_const)
+      return :SUPERSPLICERS
+    elsif ret.start_with?(infinite_splicers_const)
+      return infiniteSplicers2Qt >= 1 ? :INFINITESPLICERS2 : :INFINITESPLICERS
+    end
+    return nil
+  end
+
+
 end

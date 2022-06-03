@@ -71,6 +71,9 @@ class PokemonStorage
     for i in 0...allWallpapers.length
       @unlockedWallpapers[i] = false
     end
+
+    @fusionMode=false
+    @fusionItem=nil
   end
 
   def allWallpapers

@@ -254,7 +254,6 @@ ItemHandlers::UseOnPokemon.add(:TRANSGENDERSTONE, proc { |item, pokemon, scene|
   end
 })
 
-
 #NOT FULLY IMPLEMENTED
 ItemHandlers::UseOnPokemon.add(:SECRETCAPSULE, proc { |item, poke, scene|
   abilityList = poke.getAbilityList
@@ -373,7 +372,6 @@ ItemHandlers::UseFromBag.add(:DEBUGGER, proc { |item|
   end
 })
 
-
 ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
   TOTAL_SPIRITS_NEEDED = 108
   nbSpirits = pbGet(VAR_ODDKEYSTONE_NB)
@@ -382,14 +380,14 @@ ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
     Kernel.pbMessage(_INTL("Voices can be heard whispering from it..."))
     Kernel.pbMessage(_INTL("Just... one... more..."))
   elsif nbSpirits < TOTAL_SPIRITS_NEEDED
-    nbNeeded = TOTAL_SPIRITS_NEEDED-nbSpirits
+    nbNeeded = TOTAL_SPIRITS_NEEDED - nbSpirits
     Kernel.pbMessage(_INTL("Voices can be heard whispering from the Odd Keystone..."))
-    Kernel.pbMessage(_INTL("Bring... us... {1}... spirits",nbNeeded.to_s))
+    Kernel.pbMessage(_INTL("Bring... us... {1}... spirits", nbNeeded.to_s))
   else
     Kernel.pbMessage(_INTL("The Odd Keystone appears to be moving on its own."))
     Kernel.pbMessage(_INTL("It seems as if some poweful energy is trying to escape from it."))
-    if (Kernel.pbMessage("Let it out?", ["No","Yes"], 0)) == 1
-      pbWildBattle(:SPIRITOMB,27)
+    if (Kernel.pbMessage("Let it out?", ["No", "Yes"], 0)) == 1
+      pbWildBattle(:SPIRITOMB, 27)
       pbSet(VAR_ODDKEYSTONE_NB, 0)
     end
     next 1
@@ -687,8 +685,6 @@ def drawPokemonType(pokemon_id, x_pos = 192, y_pos = 264)
   return viewport
 end
 
-
-
 ItemHandlers::UseOnPokemon.add(:SUPERSPLICERS, proc { |item, pokemon, scene|
   next true if pbDNASplicing(pokemon, scene, true, true)
 })
@@ -882,40 +878,40 @@ ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
 #     next true
 #   end
 # })
-ItemHandlers::UseOnPokemon.add(:POISONMUSHROOM,proc { |item,pkmn,scene|
+ItemHandlers::UseOnPokemon.add(:POISONMUSHROOM, proc { |item, pkmn, scene|
   if pkmn.status != :POISON
-    pkmn.status= :POISON
+    pkmn.status = :POISON
     scene.pbRefresh
-    scene.pbDisplay(_INTL("{1} was poisoned from eating the mushroom.",pkmn.name))
+    scene.pbDisplay(_INTL("{1} was poisoned from eating the mushroom.", pkmn.name))
   end
-  next pbHPItem(pkmn,10,scene)
+  next pbHPItem(pkmn, 10, scene)
 })
-ItemHandlers::BattleUseOnPokemon.add(:POISONMUSHROOM,proc { |item,pokemon,battler,choices,scene|
+ItemHandlers::BattleUseOnPokemon.add(:POISONMUSHROOM, proc { |item, pokemon, battler, choices, scene|
   if battler.status != :POISON
-    battler.status= :POISON
+    battler.status = :POISON
     scene.pbRefresh
-    scene.pbDisplay(_INTL("{1} was poisoned from eating the mushroom.",pokemon.name))
+    scene.pbDisplay(_INTL("{1} was poisoned from eating the mushroom.", pokemon.name))
   end
-  pbBattleHPItem(pokemon,battler,10,scene)
+  pbBattleHPItem(pokemon, battler, 10, scene)
 })
 
-ItemHandlers::UseOnPokemon.add(:TINYMUSHROOM,proc { |item,pkmn,scene|
-  next pbHPItem(pkmn,10,scene)
+ItemHandlers::UseOnPokemon.add(:TINYMUSHROOM, proc { |item, pkmn, scene|
+  next pbHPItem(pkmn, 10, scene)
 })
-ItemHandlers::BattleUseOnPokemon.add(:TINYMUSHROOM,proc { |item,pokemon,battler,choices,scene|
-  next pbBattleHPItem(pokemon,battler,50,scene)
+ItemHandlers::BattleUseOnPokemon.add(:TINYMUSHROOM, proc { |item, pokemon, battler, choices, scene|
+  next pbBattleHPItem(pokemon, battler, 50, scene)
 })
-ItemHandlers::UseOnPokemon.add(:BIGMUSHROOM,proc { |item,pkmn,scene|
-  next pbHPItem(pkmn,10,scene)
+ItemHandlers::UseOnPokemon.add(:BIGMUSHROOM, proc { |item, pkmn, scene|
+  next pbHPItem(pkmn, 10, scene)
 })
-ItemHandlers::BattleUseOnPokemon.add(:BIGMUSHROOM,proc { |item,pokemon,battler,choices,scene|
-  next pbBattleHPItem(pokemon,battler,50,scene)
+ItemHandlers::BattleUseOnPokemon.add(:BIGMUSHROOM, proc { |item, pokemon, battler, choices, scene|
+  next pbBattleHPItem(pokemon, battler, 50, scene)
 })
-ItemHandlers::UseOnPokemon.add(:BALMMUSHROOM,proc { |item,pkmn,scene|
-  next pbHPItem(pkmn,999,scene)
+ItemHandlers::UseOnPokemon.add(:BALMMUSHROOM, proc { |item, pkmn, scene|
+  next pbHPItem(pkmn, 999, scene)
 })
-ItemHandlers::BattleUseOnPokemon.add(:BALMMUSHROOM,proc { |item,pokemon,battler,choices,scene|
-  next pbBattleHPItem(pokemon,battler,999,scene)
+ItemHandlers::BattleUseOnPokemon.add(:BALMMUSHROOM, proc { |item, pokemon, battler, choices, scene|
+  next pbBattleHPItem(pokemon, battler, 999, scene)
 })
 
 #TRACKER (for roaming legendaries)
@@ -1290,7 +1286,7 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
             scene.pbDisplay(_INTL("A fainted Pokémon cannot be fused!"))
             return false
           end
-          if(pbFuse(pokemon,poke2,superSplicer))
+          if (pbFuse(pokemon, poke2, superSplicer))
             pbRemovePokemonAt(chosen)
             scene.pbHardRefresh
             pbBGMPlay(playingBGM)
@@ -1309,11 +1305,11 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
     end
   else
     #UNFUSE
-    return true if pbUnfuse(pokemon,scene,supersplicers)
+    return true if pbUnfuse(pokemon, scene, supersplicers)
   end
 end
 
-def pbFuse(pokemon,poke2,supersplicers=false)
+def pbFuse(pokemon, poke2, supersplicers = false)
   newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
 
   pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
@@ -1358,8 +1354,7 @@ def pbFuse(pokemon,poke2,supersplicers=false)
 
 end
 
-
-def pbUnfuse(pokemon, scene,supersplicers,pcPosition=nil)
+def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
 
   bodyPoke = getBasePokemonID(pokemon.species_data.id_number, true)
   headPoke = getBasePokemonID(pokemon.species_data.id_number, false)
@@ -1375,7 +1370,7 @@ def pbUnfuse(pokemon, scene,supersplicers,pcPosition=nil)
       end
 
       keepInParty = 0
-      if $Trainer.party.length >= 6
+      if $Trainer.party.length >= 6 && !pcPosition
         scene.pbDisplay(_INTL("Your party is full! Keep which Pokémon in party?"))
         choice = Kernel.pbMessage("Select a Pokémon to keep in your party.", [_INTL("{1}", PBSpecies.getName(bodyPoke)), _INTL("{1}", PBSpecies.getName(headPoke)), "Cancel"], 2)
         if choice == 2
@@ -1407,9 +1402,9 @@ def pbUnfuse(pokemon, scene,supersplicers,pcPosition=nil)
       body_level = poke1.level
       head_level = poke2.level
 
-      pokemon.exp_gained_since_fused=0
-      pokemon.exp_when_fused_head=nil
-      pokemon.exp_when_fused_body=nil
+      pokemon.exp_gained_since_fused = 0
+      pokemon.exp_when_fused_head = nil
+      pokemon.exp_when_fused_body = nil
 
       if $Trainer.party.length >= 6
         if (keepInParty == 0)
@@ -1419,11 +1414,27 @@ def pbUnfuse(pokemon, scene,supersplicers,pcPosition=nil)
           poke2 = Pokemon.new(bodyPoke, body_level)
           poke1 = Pokemon.new(headPoke, head_level)
 
-          $PokemonStorage.pbStoreCaught(poke2)
-          scene.pbDisplay(_INTL("{1} was sent to the PC.", poke2.name))
+          if pcPosition != nil
+            box = pcPosition[0]
+            index = pcPosition[1]
+            #todo: store at next available position from current position
+            $PokemonStorage.pbStoreCaught(poke2)
+          else
+            $PokemonStorage.pbStoreCaught(poke2)
+            scene.pbDisplay(_INTL("{1} was sent to the PC.", poke2.name))
+          end
+
         end
       else
-        Kernel.pbAddPokemonSilent(poke2, poke2.level)
+        if pcPosition != nil
+          box = pcPosition[0]
+          index = pcPosition[1]
+
+          #todo: store at next available position from current position
+          $PokemonStorage.pbStoreCaught(poke2)
+        else
+          Kernel.pbAddPokemonSilent(poke2, poke2.level)
+        end
       end
 
       #On ajoute l'autre dans le pokedex aussi
