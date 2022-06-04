@@ -262,6 +262,8 @@ _END_
     #-------------------------------
     # Make background and text sprites
     #-------------------------------
+    viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
+    viewport.z = 99999
     text_viewport = Viewport.new(0, @trim, Graphics.width, Graphics.height - (@trim * 2))
     text_viewport.z = 99999
     @background_sprite = IconSprite.new(0, 0)
@@ -326,10 +328,12 @@ _END_
     end
     pbBGMFade(2.0)
     Graphics.freeze
+    viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
     Graphics.transition(20, "fadetoblack")
     @background_sprite.dispose
     @credit_sprites.each { |s| s.dispose if s }
     text_viewport.dispose
+    viewport.dispose
     $PokemonGlobal.creditsPlayed = true
     pbBGMPlay(previousBGM)
   end
@@ -357,13 +361,15 @@ _END_
   def update
     delta = Graphics.delta_s
     @counter += delta
-    # Go to next slide
-    if @counter >= SECONDS_PER_BACKGROUND
-      @counter -= SECONDS_PER_BACKGROUND
-      @bg_index += 1
-      @bg_index = 0 if @bg_index >= BACKGROUNDS_LIST.length
-      @background_sprite.setBitmap("Graphics/Titles/" + BACKGROUNDS_LIST[@bg_index])
-    end
+    @background_sprite.setBitmap("Graphics/Titles/" + BACKGROUNDS_LIST[@bg_index])
+
+    # # Go to next slide
+    # if @counter >= SECONDS_PER_BACKGROUND
+    #   @counter -= SECONDS_PER_BACKGROUND
+    #   @bg_index += 1
+    #   @bg_index = 0 if @bg_index >= BACKGROUNDS_LIST.length
+    #   @background_sprite.setBitmap("Graphics/Titles/" + BACKGROUNDS_LIST[@bg_index])
+    # end
     return if cancel?
     return if last?
     @realOY += SCROLL_SPEED * delta

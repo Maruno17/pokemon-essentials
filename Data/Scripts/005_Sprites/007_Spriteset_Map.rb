@@ -62,8 +62,10 @@ class Spriteset_Map
   end
 
   def dispose
-    $scene.map_renderer.remove_tileset(@map.tileset_name)
-    @map.autotile_names.each { |filename| $scene.map_renderer.remove_autotile(filename) }
+    if $scene.is_a?(Scene_Map)
+      $scene.map_renderer.remove_tileset(@map.tileset_name)
+      @map.autotile_names.each { |filename| $scene.map_renderer.remove_autotile(filename) }
+    end
     @panorama.dispose
     @fog.dispose
     for sprite in @character_sprites
