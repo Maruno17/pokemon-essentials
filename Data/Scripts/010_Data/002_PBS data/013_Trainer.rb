@@ -114,11 +114,22 @@ module GameData
       end
     end
 
-    #todo customsListinCache so it's faster
+    def generateRandomChampionSpecies(old_species)
+      customsList = getCustomSpeciesList()
+      bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
+      new_species = $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] ? getSpecies(getNewCustomSpecies(old_species, customsList, bst_range)) : getSpecies(getNewSpecies(old_species, bst_range))
+      #every pokemon should be fully evolved
+      evolved_species_id = getEvolution(new_species)
+      evolved_species_id = getEvolution(evolved_species_id)
+      evolved_species_id = getEvolution(evolved_species_id)
+      evolved_species_id = getEvolution(evolved_species_id)
+      return getSpecies(evolved_species_id)
+    end
+
     def generateRandomGymSpecies(old_species)
       gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
-      return old_species if gym_index == -1 || gym_index == 999
-
+      return old_species if gym_index == -1
+      return generateRandomChampionSpecies(old_species) if gym_index == 999
       type_id = pbGet(VAR_GYM_TYPES_ARRAY)[gym_index]
       return old_species if type_id == -1
 
@@ -150,7 +161,7 @@ module GameData
     end
 
     def add_generated_species_to_gym_array(new_species, trainerId)
-      if(new_species.is_a?(Symbol))
+      if (new_species.is_a?(Symbol))
         id = new_species
       else
         id = new_species.id_number

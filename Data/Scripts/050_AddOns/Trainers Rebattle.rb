@@ -153,7 +153,8 @@ def evolveRematchPokemon(nbRematch, speciesSymbol)
 end
 
 
-def getEvolution(species, halfToEvolve=nil)
+def getEvolution(speciesParam, halfToEvolve=nil)
+  species = dexNum(speciesParam)
   begin
     prioritizeHead = halfToEvolve == :HEAD
     prioritizeBody = halfToEvolve == :BODY
