@@ -17,7 +17,7 @@
 class HallOfFame_Scene
   # When true, all pokémon will be in one line
   # When false, all pokémon will be in two lines
-  SINGLEROW = true
+  SINGLEROW = false
   # Make the pokémon movement ON in hall entry
   ANIMATION = true
   # Speed in pokémon movement in hall entry. Don't use less than 2!
