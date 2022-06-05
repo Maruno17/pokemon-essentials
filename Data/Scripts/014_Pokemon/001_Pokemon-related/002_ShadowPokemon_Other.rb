@@ -253,25 +253,25 @@ def pbRaiseHappinessAndReduceHeart(pkmn, scene, multiplier)
   return true
 end
 
-ItemHandlers::UseOnPokemon.add(:JOYSCENT, proc { |item, pokemon, scene|
-  pbRaiseHappinessAndReduceHeart(pokemon, scene, 1)
+ItemHandlers::UseOnPokemon.add(:JOYSCENT, proc { |item, qty, pkmn, scene|
+  pbRaiseHappinessAndReduceHeart(pkmn, scene, 1)
 })
 
-ItemHandlers::UseOnPokemon.add(:EXCITESCENT, proc { |item, pokemon, scene|
-  pbRaiseHappinessAndReduceHeart(pokemon, scene, 2)
+ItemHandlers::UseOnPokemon.add(:EXCITESCENT, proc { |item, qty, pkmn, scene|
+  pbRaiseHappinessAndReduceHeart(pkmn, scene, 2)
 })
 
-ItemHandlers::UseOnPokemon.add(:VIVIDSCENT, proc { |item, pokemon, scene|
-  pbRaiseHappinessAndReduceHeart(pokemon, scene, 3)
+ItemHandlers::UseOnPokemon.add(:VIVIDSCENT, proc { |item, qty, pkmn, scene|
+  pbRaiseHappinessAndReduceHeart(pkmn, scene, 3)
 })
 
-ItemHandlers::UseOnPokemon.add(:TIMEFLUTE, proc { |item, pokemon, scene|
-  if !pokemon.shadowPokemon? || pokemon.heart_gauge == 0
+ItemHandlers::UseOnPokemon.add(:TIMEFLUTE, proc { |item, qty, pkmn, scene|
+  if !pkmn.shadowPokemon? || pkmn.heart_gauge == 0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pokemon.heart_gauge = 0
-  pokemon.check_ready_to_purify
+  pkmn.heart_gauge = 0
+  pkmn.check_ready_to_purify
   next true
 })
 
