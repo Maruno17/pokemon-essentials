@@ -271,6 +271,7 @@ class TilemapRenderer
     @ox                     = 0
     @oy                     = 0
     @visible                = true
+    @need_refresh           = true
     @disposed               = false
   end
 
@@ -312,7 +313,9 @@ class TilemapRenderer
 
   #=============================================================================
 
-  def refresh; end
+  def refresh
+    @need_refresh = true
+  end
 
   def refresh_tile_bitmap(tile, map, tile_id)
     if tile_id < TILES_PER_AUTOTILE
@@ -484,7 +487,7 @@ class TilemapRenderer
     # Recalculate autotile frames
     @tilesets.update
     @autotiles.update
-    do_full_refresh = false
+    do_full_refresh = @need_refresh
     if @viewport.ox != @old_viewport_ox || @viewport.oy != @old_viewport_oy
       @old_viewport_ox = @viewport.ox
       @old_viewport_oy = @viewport.oy
@@ -546,6 +549,7 @@ class TilemapRenderer
         end
       end
     end
+    @need_refresh = false
     @autotiles.changed = false
   end
 end

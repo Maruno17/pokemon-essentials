@@ -22,7 +22,7 @@ class Scene_Map
       @spritesets[map.map_id] = Spriteset_Map.new(map)
     end
     $MapFactory.setSceneStarted(self)
-    updateSpritesets
+    updateSpritesets(true)
   end
 
   def createSingleSpriteset(map)
@@ -30,7 +30,7 @@ class Scene_Map
     @spritesets[map] = Spriteset_Map.new($MapFactory.maps[map])
     $scene.spriteset.restoreAnimations(temp)
     $MapFactory.setSceneStarted(self)
-    updateSpritesets
+    updateSpritesets(true)
   end
 
   def disposeSpritesets
@@ -145,7 +145,7 @@ class Scene_Map
     $MapFactory.updateMaps(self)
   end
 
-  def updateSpritesets
+  def updateSpritesets(refresh = false)
     @spritesets = {} if !@spritesets
     keys = @spritesets.keys.clone
     for i in keys
@@ -162,6 +162,7 @@ class Scene_Map
       @spritesets[map.map_id] = Spriteset_Map.new(map) if !@spritesets[map.map_id]
     end
     pbDayNightTint(@map_renderer)
+    @map_renderer.refresh if refresh
     @map_renderer.update
     Events.onMapUpdate.trigger(self)
   end

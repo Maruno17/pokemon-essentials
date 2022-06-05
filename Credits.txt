@@ -113,7 +113,11 @@ with their respective authors' consent
 		UnworthyPie (Bruno battle sprite, Lance backsprite)
 		
 	Triple Fusion sprites
-		Sinnoh legendaries: 	Blackboot
+		Tom spiste grønt
+		Scrapped Bones
+		Blackboot
+		Kiwi
+		Solo Queue
 ### Tileset graphics ### 
 	Jorginho (OutsideEmerald)
 	ThatsSoWitty (Cave) http://thatssowitty.deviantart.com/art/The-Public-Pokemon-Tileset-281342410
@@ -153,6 +157,13 @@ with their respective authors' consent
 ### Other graphics			
 Region map: Pokemon-Diamond (http://www.deviantart.com/art/Kanto-BW-styled-map-275298527)
 Move animations:
+
+	Augmented Reborn Animations Project
+	Project lead by StCooler.
+	Contributors: StCooler, DarryBD99, WolfPP, ardicoozer, riddlemeree.
+	Thanks to the Reborn team for letting people use their resources. You are awesome.
+	Thanks to BellBlitzKing for his Pokemon Sound Effects Pack: Gen 1 to Gen 7 - All Attacks SFX.
+
 	Dig:  WolfPP (Pokecommunity)
 	Bone Club, Bonemerang, Bone Rush: rekman (Pokecommunity)
 ###########################################################

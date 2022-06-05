@@ -6,12 +6,13 @@
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '5.0.0'
-  GAME_VERSION_NUMBER = "5.0.24.1 - beta"
+  GAME_VERSION_NUMBER = "5.0.25.1 - beta"
 
   POKERADAR_LIGHT_ANIMATION_RED_ID = 17
   POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
   POKERADAR_HIDDEN_ABILITY_POKE_CHANCE = 32
   POKERADAR_BATTERY_STEPS = 0
+
 
   #
   FUSION_ICON_SPRITE_OFFSET = 10
@@ -374,7 +375,7 @@ module Settings
     [670, 30, :WEAVILE,50,50],          #Ice mountains
     [528, 30, :PYUKUMUKU,20,20],        #Treasure Beach
     [690, 30, :OCTILLERY,32,45],        #Deep Ocean
-    [561, 30, :MAGMAR,32,45],           #Mt. Ember
+    [561, 30, :FLETCHINDER,32,45],      #Mt. Ember
     [562, 30, :NINJASK,45,50],          #Boon Island
     [603, 30, :KECLEON,45,50],          #Chrono Island
     [654, 30, :WHIMSICOTT,32,45]        #Brine Road

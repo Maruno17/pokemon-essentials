@@ -664,6 +664,6 @@
 656,TM119,TM119,TM119s,4,30000,"The user attacks driven by frustration. Power increases if the user's previous move failed.",3,0,0,STOMPINGTANTRUM
 657,TM120,TM120,TM120s,4,30000,"The user attacks the target's throat. The target cannot use sound-based moves for two turns.",3,0,0,THROATCHOP
 658,TM00,TM00,TM00s,4,0,"A strange TM developped by Team Rocket. It appears to be related to Pokémon fusion.",3,0,0,FUSIONSWAP
-659;TM121;TM121;TM121s;4;10000;"The user shoots boiling hot water at its target. It may also leave the target with a burn.";3;0;0;SCALD
+659,TM121,TM121,TM121s,4,10000,"The user shoots boiling hot water at its target. It may also leave the target with a burn.",3,0,0,SCALD
 
 

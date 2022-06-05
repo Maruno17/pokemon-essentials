@@ -218,11 +218,13 @@ class PokeBattle_Battler
       end
     end
     # Stance Change
-    if isSpecies?(:AEGISLASH) && self.ability == :STANCECHANGE
+    if self.ability == :STANCECHANGE
       if move.damagingMove?
-        pbChangeForm(1,_INTL("{1} changed to Blade Forme!",pbThis))
+        user = pbFindUser(choice,move)
+        stanceChangeEffect(user,true)
       elsif move.id == :KINGSSHIELD
-        pbChangeForm(0,_INTL("{1} changed to Shield Forme!",pbThis))
+        user = pbFindUser(choice,move)
+        stanceChangeEffect(user,false)
       end
     end
     # Calculate the move's type during this usage
@@ -567,6 +569,20 @@ class PokeBattle_Battler
         @battle.pbJudge
         return if @battle.decision>0
       end
+    end
+  end
+
+
+  def stanceChangeEffect(user,attacking=false)
+    inSwordForm  = user.effects[PBEffects::PowerTrick]
+    if !inSwordForm && attacking
+      user.effects[PBEffects::PowerTrick] = true
+      user.attack,user.defense = user.defense,user.attack
+      @battle.pbDisplay(_INTL("{1} changed to Sword Mode!",pbThis))
+    elsif inSwordForm && !attacking
+       user.effects[PBEffects::PowerTrick] = false
+       user.attack,user.defense = user.defense,user.attack
+       @battle.pbDisplay(_INTL("{1} changed to Shield Mode!",pbThis))
     end
   end
 
