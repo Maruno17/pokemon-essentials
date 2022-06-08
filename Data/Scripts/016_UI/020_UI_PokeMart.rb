@@ -388,8 +388,8 @@ class PokemonMart_Scene
         return if brief
         pbRefresh if i == 0
       end
-      if Input.trigger?(Input::USE) && cw.busy?
-        cw.resume
+      if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
+        cw.resume if cw.busy?
       end
       return if i >= Graphics.frame_rate * 3 / 2
       i += 1 if !cw.busy?
@@ -414,9 +414,11 @@ class PokemonMart_Scene
         yielded = true
       end
       pbRefresh if !cw.busy? && wasbusy
-      if Input.trigger?(Input::USE) && cw.resume && !cw.busy?
-        @sprites["helpwindow"].visible = false
-        return
+      if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
+        if cw.resume && !cw.busy?
+          @sprites["helpwindow"].visible = false
+          break
+        end
       end
     end
   end
