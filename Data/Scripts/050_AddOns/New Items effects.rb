@@ -219,22 +219,6 @@ ItemHandlers::UseFromBag.add(:LANTERN, proc { |item|
   next true
 })
 
-ItemHandlers::UseFromBag.add(:AZUREFLUTE, proc { |item|
-  if Kernel.pbConfirmMessage(_INTL("Play the Azure Flute?"))
-    Kernel.pbMessage(_INTL("You blew into the Azure Flute."))
-    if $game_map.map_id == 694
-      Kernel.pbMessage(_INTL("A strange sound echoed from the sky..."))
-      $game_switches[469] = true
-      next true
-    else
-      Kernel.pbMessage(_INTL("But nothing happened..."))
-      next false
-    end
-    #Kernel.pbMessage(_INTL("{1} was transported somewhere...",$Trainer.name))
-    #Kernel.pbTransfer(376,14,51)
-  end
-  return false
-})
 
 ItemHandlers::UseOnPokemon.add(:TRANSGENDERSTONE, proc { |item, pokemon, scene|
   if pokemon.gender == 0
@@ -1041,22 +1025,7 @@ ItemHandlers::UseOnPokemon.add(:GOLDENBANANA, proc { |item, pokemon, scene|
   next pbHPItem(pokemon, 50, scene)
 })
 
-ItemHandlers::UseFromBag.add(:AZUREFLUTE, proc { |item|
-  if Kernel.pbConfirmMessage(_INTL("Play the Azure Flute?"))
-    Kernel.pbMessage(_INTL("You blew into the Azure Flute."))
-    if pbGet(222) >= 30 #if very good karma
-      Kernel.pbMessage(_INTL("A strange sound echoed from the sky..."))
-      Kernel.pbMessage(_INTL("{1} was transported somewhere...", $Trainer.name))
-      Kernel.pbTransfer(376, 14, 51)
-      next true
-    else
-      Kernel.pbMessage(_INTL("But nothing happened..."))
-      next false
-    end
 
-  end
-  return false
-})
 
 ItemHandlers::UseOnPokemon.add(:TRANSGENDERSTONE, proc { |item, pokemon, scene|
   if pokemon.gender == 0
