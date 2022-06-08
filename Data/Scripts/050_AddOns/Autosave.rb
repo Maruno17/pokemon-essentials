@@ -32,6 +32,7 @@ if AUTOSAVE_STEPS_SWITCH
     if stepsNum > 0 && !$PokemonGlobal.sliding
       return if $PokemonGlobal.stepcount < 100
       if $PokemonGlobal.stepcount % stepsNum == 0
+        $PokemonGlobal.stepcount+=1
         Kernel.tryAutosave()
       end
     end
