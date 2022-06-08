@@ -24,10 +24,11 @@ class BugContestState
     @lastContest = nil
   end
 
+  # Returns whether the last contest ended less than 24 hours ago.
   def pbContestHeld?
     return false if !@lastContest
     timenow = pbGetTimeNow
-    return timenow.to_i - @lastContest < 86_400
+    return timenow.to_i - @lastContest < 24 * 60 * 60   # 24 hours
   end
 
   def expired?
@@ -39,17 +40,17 @@ class BugContestState
   end
 
   def clear
-    @ballcount = 0
-    @ended = false
-    @inProgress = false
-    @decision = 0
-    @encounterMap = 0
-    @lastPokemon = nil
-    @otherparty = []
-    @contestants = []
-    @places = []
-    @start = nil
-    @reception = []
+    @ballcount    = 0
+    @ended        = false
+    @inProgress   = false
+    @decision     = 0
+    @lastPokemon  = nil
+    @otherparty   = []
+    @contestants  = []
+    @places       = []
+    @start        = nil
+    @contestMaps  = []
+    @reception    = []
   end
 
   def inProgress?
@@ -68,21 +69,19 @@ class BugContestState
     @chosenPokemon = chosenpoke
   end
 
+  def pbSetContestMap(*maps)
+    @contestMaps = maps
+  end
+
   # Reception map is handled separately from contest map since the reception map
   # can be outdoors, with its own grassy patches.
-  def pbSetReception(*arg)
-    @reception = []
-    arg.each do |i|
-      @reception.push(i)
-    end
+  def pbSetReception(*maps)
+    @reception = maps
   end
 
   def pbOffLimits?(map)
-#    p [map,@contestMap,@reception]
-    return false if map == @contestMap
-    @reception.each do |i|
-      return false if map == i
-    end
+    return false if @contestMaps.include?(map)
+    return false if @reception.include?(map)
     return true
   end
 
@@ -90,26 +89,26 @@ class BugContestState
     @start = [startMap, startX, startY, dir]
   end
 
-  def pbSetContestMap(map)
-    @contestMap = map
-  end
-
   def pbJudge
     judgearray = []
     if @lastPokemon
       judgearray.push([-1, @lastPokemon.species, pbBugContestScore(@lastPokemon)])
     end
-    enctype = :BugContest
-    if !$PokemonEncounters.map_has_encounter_type?(@contestMap, enctype)
-      enctype = :Land
-    end
-    @contestants.each do |cont|
-      enc = $PokemonEncounters.choose_wild_pokemon_for_map(@contestMap, enctype)
-      if !enc
-        raise _INTL("No encounters for map {1}, so can't judge contest", @contestMap)
+    maps_with_encounters = []
+    @contestMaps.each do |map|
+      enc_type = :BugContest
+      enc_type = :Land if !$PokemonEncounters.map_has_encounter_type?(@contestMaps, enc_type)
+      if $PokemonEncounters.map_has_encounter_type?(@contestMaps, enc_type)
+        maps_with_encounters.push([map, enc_type])
       end
+    end
+    raise _INTL("There are no Bug Contest/Land encounters for any Bug Contest maps.") if maps_with_encounters.empty?
+    @contestants.each do |cont|
+      enc_data = maps_with_encounters.sample
+      enc = $PokemonEncounters.choose_wild_pokemon_for_map(enc_data[0], enc_data[1])
+      raise _INTL("No encounters for map {1} somehow, so can't judge contest.", enc_data[0]) if !enc
       pokemon = Pokemon.new(enc[0], enc[1])
-      pokemon.hp = rand(1..pokemon.totalhp - 1)
+      pokemon.hp = rand(1...pokemon.totalhp)
       score = pbBugContestScore(pokemon)
       judgearray.push([cont, pokemon.species, score])
     end
@@ -142,7 +141,7 @@ class BugContestState
     pbJudge
     if $scene.is_a?(Scene_Map)
       pbFadeOutIn {
-        $game_temp.player_transferring = true
+        $game_temp.player_transferring  = true
         $game_temp.player_new_map_id    = @start[0]
         $game_temp.player_new_x         = @start[1]
         $game_temp.player_new_y         = @start[2]
@@ -193,24 +192,21 @@ class BugContestState
 
   def pbEnd(interrupted = false)
     return if !@inProgress
-    @otherparty.each do |poke|
-      $player.party.push(poke)
-    end
+    @otherparty.each { |pkmn| $player.party.push(pkmn) }
     if interrupted
       @ended = false
     else
-      if @lastPokemon
-        pbNicknameAndStore(@lastPokemon)
-      end
+      pbNicknameAndStore(@lastPokemon) if @lastPokemon
       @ended = true
     end
     $stats.bug_contest_wins += 1 if place == 0
-    @lastPokemon = nil
-    @otherparty = []
-    @reception = []
     @ballcount = 0
     @inProgress = false
     @decision = 0
+    @lastPokemon = nil
+    @otherparty = []
+    @contestMaps = []
+    @reception = []
     timenow = pbGetTimeNow
     @lastContest = timenow.to_i
     $game_map.need_refresh = true
