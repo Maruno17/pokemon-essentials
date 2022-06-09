@@ -124,7 +124,8 @@ module GameData
       return (filename) ? AnimatedBitmap.new(filename).deanimate : nil
     end
 
-    def self.icon_bitmap(species, form = 0, gender = 0, shiny = false, shadow = false)
+    def self.icon_bitmap(species, form = 0, gender = 0, shiny = false, shadow = false, egg = false)
+      return self.egg_icon_bitmap(species, form) if egg
       filename = self.icon_filename(species, form, gender, shiny, shadow)
       return (filename) ? AnimatedBitmap.new(filename).deanimate : nil
     end
