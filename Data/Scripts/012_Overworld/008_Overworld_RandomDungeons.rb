@@ -50,7 +50,7 @@ module RandomDungeonGenerator
     TEXT_SYMBOLS = {
       VOID     => "#",
       ROOM     => " ",
-      WALL     => "-",
+      WALL     => "=",
       CORRIDOR => "."
     }
 
@@ -61,7 +61,7 @@ module RandomDungeonGenerator
     end
 
     def to_text(value)
-      return TEXT_SYMBOLS[value] || TEXT_SYMBOLS[VOID]
+      return TEXT_SYMBOLS[value] || "\e[30m\e[41m?\e[0m"
     end
   end
 

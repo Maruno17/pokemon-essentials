@@ -270,7 +270,7 @@ def pbPlayBuzzerSE
   end
 end
 
-# Plays a sound effect that plays when the player moves the cursor.
+# Plays a sound effect that plays when the player closes a menu.
 def pbPlayCloseMenuSE
   if FileTest.audio_exist?("Audio/SE/GUI menu close")
     pbSEPlay("GUI menu close", 80)

@@ -208,10 +208,6 @@ module GameData
       return pbGetMessageFromHash(MessageTypes::Entries, @real_pokedex_entry)
     end
 
-    def single_gendered?
-      return GameData::GenderRatio.get(@gender_ratio).single_gendered?
-    end
-
     def default_form
       @flags.each do |flag|
         return $~[1].to_i if flag[/^DefaultForm_(\d+)$/i]
@@ -222,6 +218,14 @@ module GameData
     def base_form
       default = default_form
       return (default >= 0) ? default : @form
+    end
+
+    def single_gendered?
+      return GameData::GenderRatio.get(@gender_ratio).single_gendered?
+    end
+
+    def base_stat_total
+      return @base_stats.values.sum
     end
 
     def has_flag?(flag)
