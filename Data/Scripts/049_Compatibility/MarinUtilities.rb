@@ -1251,17 +1251,8 @@ end
 #     p_msg(msg, title, :question)
 #   end
 #
-#   trace_var(:$scene, proc do |object|
-#     break unless object
-#     unless object.instance_variable_get(:@__old_main)
-#       object.instance_variable_set(:@__old_main, object.method(:main))
-#       def object.main
-#         self.instance_variable_get(:@__old_main).call
-#       rescue
-#         p_err
-#       end
-#     end
-#   end)
+
+
 #
 # else
 #
