@@ -6,14 +6,16 @@
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '5.0.0'
-  GAME_VERSION_NUMBER = "5.0.25.1 - beta"
+  GAME_VERSION_NUMBER = "5.0.26 - beta"
 
   POKERADAR_LIGHT_ANIMATION_RED_ID = 17
   POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
   POKERADAR_HIDDEN_ABILITY_POKE_CHANCE = 32
   POKERADAR_BATTERY_STEPS = 0
 
-
+  LEADER_VICTORY_MUSIC="Battle victory leader"
+  TRAINER_VICTORY_MUSIC="trainer-victory"
+  WILD_VICTORY_MUSIC="wild-victory"
   #
   FUSION_ICON_SPRITE_OFFSET = 10
 

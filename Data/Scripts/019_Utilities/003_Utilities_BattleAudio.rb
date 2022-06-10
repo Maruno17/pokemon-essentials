@@ -25,19 +25,7 @@ def pbGetWildVictoryME
   if $PokemonGlobal.nextBattleME
     return $PokemonGlobal.nextBattleME.clone
   end
-  ret = nil
-  if !ret
-    # Check map metadata
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    music = (map_metadata) ? map_metadata.wild_victory_ME : nil
-    ret = pbStringToAudioFile(music) if music && music != ""
-  end
-  if !ret
-    # Check global metadata
-    music = GameData::Metadata.get.wild_victory_ME
-    ret = pbStringToAudioFile(music) if music && music!=""
-  end
-  ret = pbStringToAudioFile("Battle victory") if !ret
+  ret = pbStringToAudioFile(Settings::WILD_VICTORY_MUSIC)
   ret.name = "../../Audio/ME/"+ret.name
   return ret
 end
@@ -124,33 +112,35 @@ def pbGetTrainerBattleBGMFromType(trainertype)
 end
 
 def pbGetTrainerVictoryME(trainer)   # can be a Player, NPCTrainer or an array of them
+begin
   if $PokemonGlobal.nextBattleME
     return $PokemonGlobal.nextBattleME.clone
   end
-  music = nil
-  trainerarray = (trainer.is_a?(Array)) ? trainer : [trainer]
-  trainerarray.each do |t|
-    trainer_type_data = GameData::TrainerType.get(t.trainer_type)
-    music = trainer_type_data.victory_ME if trainer_type_data.victory_ME
+  if trainer.is_a?(Array)
+    npcTrainer=trainer[0]
+  else
+    npcTrainer=trainer
   end
-  ret = nil
-  if music && music!=""
-    ret = pbStringToAudioFile(music)
+
+  if is_gym_leader(npcTrainer)
+    ret = pbStringToAudioFile(Settings::LEADER_VICTORY_MUSIC)
+  else
+    ret = pbStringToAudioFile(Settings::TRAINER_VICTORY_MUSIC)
   end
-  if !ret
-    # Check map metadata
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    music = (map_metadata) ? map_metadata.trainer_victory_ME : nil
-    ret = pbStringToAudioFile(music) if music && music != ""
-  end
-  if !ret
-    # Check global metadata
-    music = GameData::Metadata.get.trainer_victory_ME
-    if music && music!=""
-      ret = pbStringToAudioFile(music)
-    end
-  end
-  ret = pbStringToAudioFile("Battle victory") if !ret
   ret.name = "../../Audio/ME/"+ret.name
   return ret
+rescue
+  ret = pbStringToAudioFile(Settings::TRAINER_VICTORY_MUSIC)
+  ret.name = "../../Audio/ME/"+ret.name
+  return ret
+end
+
+end
+
+GYM_LEADERS=[:LEADER_Brock,:LEADER_Misty, :LEADER_Surge, :LEADER_Erika, :LEADER_Koga, :LEADER_Sabrina, :LEADER_Blaine,
+             :LEADER_Giovanni, :ELITEFOUR_Lorelei, :ELITEFOUR_Bruno, :ELITEFOUR_Agatha, :ELITEFOUR_Lance, :CHAMPION,
+             :LEADER_Whitney, :LEADER_Kurt, :LEADER_Falkner, :LEADER_Clair, :LEADER_Morty, :LEADER_Pryce, :LEADER_Chuck,
+             :LEADER_Jasmine, :CHAMPION_Sinnoh]
+def is_gym_leader(trainer)
+  return GYM_LEADERS.include?(trainer.trainer_type)
 end
