@@ -147,6 +147,7 @@ module BattleCreationHelperMethods
     pbMessage(_INTL("AFTER WINNING...")) if trainer_battle && $player.able_pokemon_count > 0
     $game_temp.clear_battle_rules
     if $game_temp.memorized_bgm && $game_system.is_a?(Game_System)
+      $game_system.bgm_pause
       $game_system.bgm_position = $game_temp.memorized_bgm_position
       $game_system.bgm_resume($game_temp.memorized_bgm)
     end
