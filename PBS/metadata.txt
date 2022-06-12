@@ -8,12 +8,12 @@ PlayerF=POKEMONTRAINER_Red,trchar006,girl_bike,girl_surf_offset,girl_run,girl_di
 PlayerG=POKEMONTRAINER_Red,trchar007,girl_bike,girl_surf_offset,girl_run,girl_dive_offset,girl_fish_offset,girl_fishsurf_offset
 PlayerH=POKEMONTRAINER_Red,trchar008,girl_bike,girl_surf_offset,girl_run,girl_dive_offset,girl_fish_offset,girl_fishsurf_offset
 TrainerBattleBGM=Pokemon HeartGold and SoulSilver - Trainer Battle (Kanto)
-TrainerVictoryBGM =trainer-victory
+TrainerVictoryBGM =trainer-victory.mp3
 SurfBGM=Surfing (Kanto) - Remastered.mp3
 BicycleBGM=SSANNE.ogg
 Home=3,7,5,8
 WildBattleBGM=Pokemon HeartGold and SoulSilver - Wild Pokemon Battle (Kanto)
-WildVictoryBGM=wild-victory
+WildVictoryBGM=wild-victory.mp3
 [001]
 # Cerulean City
 BattleBack=Bridge
