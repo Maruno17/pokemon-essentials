@@ -14,7 +14,6 @@ module Console
     echoln ""
     echoln "Closing this window will close the game. If you want to get rid of this window,"
     echoln "run the program from the Shell, or download a release version of the game."
-    echoln ""
     echoln "-------------------------------------------------------------------------------"
     echoln "Debug Output:"
     echoln "-------------------------------------------------------------------------------"

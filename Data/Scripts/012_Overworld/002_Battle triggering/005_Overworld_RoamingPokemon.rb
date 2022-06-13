@@ -77,14 +77,9 @@ def pbRoamPokemonOne(idxRoamer)
   newMapChoices = []
   nextMaps = pbRoamingAreas(idxRoamer)[currentMap]
   return if !nextMaps
-  nextMaps.each do |map|
-    # Only add map as a choice if the player hasn't been there recently
-    newMapChoices.push(map)
-  end
+  nextMaps.each { |map| newMapChoices.push(map) }
   # Rarely, add a random possible map into the mix
-  if rand(32) == 0
-    newMapChoices.push(mapIDs[rand(mapIDs.length)])
-  end
+  newMapChoices.push(mapIDs[rand(mapIDs.length)]) if rand(32) == 0
   # Choose a random new map to roam to
   if newMapChoices.length > 0
     $PokemonGlobal.roamPosition[idxRoamer] = newMapChoices[rand(newMapChoices.length)]

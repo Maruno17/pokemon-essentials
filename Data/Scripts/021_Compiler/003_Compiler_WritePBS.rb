@@ -195,7 +195,7 @@ module Compiler
         f.write("Type = #{move.type}\r\n")
         category = GameData::Move::SCHEMA["Category"][2][move.category]
         f.write("Category = #{category}\r\n")
-        f.write("BaseDamage = #{move.base_damage}\r\n") if move.base_damage > 0
+        f.write("Power = #{move.base_damage}\r\n") if move.base_damage > 0
         f.write("Accuracy = #{move.accuracy}\r\n")
         f.write("TotalPP = #{move.total_pp}\r\n")
         f.write("Target = #{move.target}\r\n")
