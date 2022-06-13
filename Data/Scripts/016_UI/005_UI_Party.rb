@@ -364,9 +364,9 @@ class PokemonPartyPanel < SpriteWrapper
     @overlaysprite.bitmap&.clear
     draw_name
     draw_level
+    draw_gender
     draw_hp
     draw_status
-    draw_gender
     draw_shiny_icon
     draw_annotation
   end
@@ -386,6 +386,15 @@ class PokemonPartyPanel < SpriteWrapper
     pbDrawTextPositions(@overlaysprite.bitmap,
                         [[@pokemon.level.to_s, 42, 68, 0, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]])
     pbSetSystemFont(@overlaysprite.bitmap)
+  end
+
+  def draw_gender
+    return if @pokemon.egg? || @pokemon.genderless?
+    gender_text  = (@pokemon.male?) ? _INTL("♂") : _INTL("♀")
+    base_color   = (@pokemon.male?) ? Color.new(0, 112, 248) : Color.new(232, 32, 16)
+    shadow_color = (@pokemon.male?) ? Color.new(120, 184, 232) : Color.new(248, 168, 184)
+    pbDrawTextPositions(@overlaysprite.bitmap,
+                        [[gender_text, 224, 22, 0, base_color, shadow_color]])
   end
 
   def draw_hp
@@ -420,15 +429,6 @@ class PokemonPartyPanel < SpriteWrapper
     return if status < 0
     statusrect = Rect.new(0, STATUS_ICON_HEIGHT * status, STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT)
     @overlaysprite.bitmap.blt(78, 68, @statuses.bitmap, statusrect)
-  end
-
-  def draw_gender
-    return if @pokemon.egg? || @pokemon.genderless?
-    gender_text  = (@pokemon.male?) ? _INTL("♂") : _INTL("♀")
-    base_color   = (@pokemon.male?) ? Color.new(0, 112, 248) : Color.new(232, 32, 16)
-    shadow_color = (@pokemon.male?) ? Color.new(120, 184, 232) : Color.new(248, 168, 184)
-    pbDrawTextPositions(@overlaysprite.bitmap,
-                        [[gender_text, 224, 22, 0, base_color, shadow_color]])
   end
 
   def draw_shiny_icon
