@@ -294,7 +294,7 @@ ItemHandlers::UseOnPokemon.add(:TIMEFLUTE, proc { |item, qty, pkmn, scene|
 })
 
 ItemHandlers::CanUseInBattle.add(:JOYSCENT, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
-  if !battler || !battler.shadowPokemon? || !battler.inHyperMode?
+  if !pokemon.shadowPokemon? || (pokemon.happiness == 255 && pokemon.heart_gauge == 0)
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
   end
@@ -303,24 +303,33 @@ ItemHandlers::CanUseInBattle.add(:JOYSCENT, proc { |item, pokemon, battler, move
 
 ItemHandlers::CanUseInBattle.copy(:JOYSCENT, :EXCITESCENT, :VIVIDSCENT)
 
-ItemHandlers::BattleUseOnBattler.add(:JOYSCENT, proc { |item, battler, scene|
-  battler.pokemon.hyper_mode = false
-  battler.pokemon.change_heart_gauge("scent", 1)
-  scene.pbDisplay(_INTL("{1} came to its senses from the {2}!", battler.pbThis, GameData::Item.get(item).name))
+ItemHandlers::BattleUseOnPokemon.add(:JOYSCENT, proc { |item, pokemon, battler, choices, scene|
+  if pokemon.hyper_mode
+    pokemon.hyper_mode = false
+    scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",
+       battler&.pbThis || pokemon.name, GameData::Item.get(item).name))
+  end
+  pbRaiseHappinessAndReduceHeart(pokemon, scene, 1, false)
   next true
 })
 
-ItemHandlers::BattleUseOnBattler.add(:EXCITESCENT, proc { |item, battler, scene|
-  battler.pokemon.hyper_mode = false
-  battler.pokemon.change_heart_gauge("scent", 2)
-  scene.pbDisplay(_INTL("{1} came to its senses from the {2}!", battler.pbThis, GameData::Item.get(item).name))
+ItemHandlers::BattleUseOnPokemon.add(:EXCITESCENT, proc { |item, pokemon, battler, choices, scene|
+  if pokemon.hyper_mode
+    pokemon.hyper_mode = false
+    scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",
+       battler&.pbThis || pokemon.name, GameData::Item.get(item).name))
+  end
+  pbRaiseHappinessAndReduceHeart(pokemon, scene, 2, false)
   next true
 })
 
-ItemHandlers::BattleUseOnBattler.add(:VIVIDSCENT, proc { |item, battler, scene|
-  battler.pokemon.hyper_mode = false
-  battler.pokemon.change_heart_gauge("scent", 3)
-  scene.pbDisplay(_INTL("{1} came to its senses from the {2}!", battler.pbThis, GameData::Item.get(item).name))
+ItemHandlers::BattleUseOnPokemon.add(:VIVIDSCENT, proc { |item, pokemon, battler, choices, scene|
+  if pokemon.hyper_mode
+    pokemon.hyper_mode = false
+    scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",
+       battler&.pbThis || pokemon.name, GameData::Item.get(item).name))
+  end
+  pbRaiseHappinessAndReduceHeart(pokemon, scene, 3, false)
   next true
 })
 
