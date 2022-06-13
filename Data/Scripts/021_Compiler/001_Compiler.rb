@@ -851,6 +851,7 @@ module Compiler
       # If no PBS file, create one and fill it, then recompile
       if !safeIsDirectory?("PBS")
         Dir.mkdir("PBS") rescue nil
+        GameData.load_all
         write_all
         mustCompile = true
       end
