@@ -765,8 +765,8 @@ def pbUseItemMessage(item)
   end
 end
 
-def pbCheckUseOnPokemon(_item, pkmn, _screen)
-  return pkmn && !pkmn.egg?
+def pbCheckUseOnPokemon(item, pkmn, _screen)
+  return pkmn && !pkmn.egg? && (!pkmn.hyper_mode || GameData::Item.get(item)&.is_scent?)
 end
 
 #===============================================================================

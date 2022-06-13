@@ -20,6 +20,7 @@ def pbPurify(pkmn, scene)
   return if !pkmn.shadowPokemon? || pkmn.heart_gauge != 0
   $stats.shadow_pokemon_purified += 1
   pkmn.shadow = false
+  pkmn.hyper_mode = false
   pkmn.giveRibbon(:NATIONAL)
   scene.pbDisplay(_INTL("{1} opened the door to its heart!", pkmn.name))
   old_moves = []
@@ -35,7 +36,7 @@ def pbPurify(pkmn, scene)
     pkmn.saved_ev = nil
   end
   if pkmn.saved_exp
-    newexp = pkmn.growth_rate.add_exp(pkmn.exp, pkmn.saved_exp || 0)
+    newexp = pkmn.growth_rate.add_exp(pkmn.exp, (pkmn.saved_exp * 4 / 5) || 0)
     pkmn.saved_exp = nil
     newlevel = pkmn.growth_rate.level_from_exp(newexp)
     curlevel = pkmn.level
@@ -232,9 +233,9 @@ end
 #===============================================================================
 # Shadow item effects.
 #===============================================================================
-def pbRaiseHappinessAndReduceHeart(pkmn, scene, multiplier)
+def pbRaiseHappinessAndReduceHeart(pkmn, scene, multiplier, show_fail_message = true)
   if !pkmn.shadowPokemon? || (pkmn.happiness == 255 && pkmn.heart_gauge == 0)
-    scene.pbDisplay(_INTL("It won't have any effect."))
+    scene.pbDisplay(_INTL("It won't have any effect.")) if show_fail_message
     return false
   end
   old_gauge = pkmn.heart_gauge
@@ -254,24 +255,41 @@ def pbRaiseHappinessAndReduceHeart(pkmn, scene, multiplier)
 end
 
 ItemHandlers::UseOnPokemon.add(:JOYSCENT, proc { |item, qty, pkmn, scene|
-  pbRaiseHappinessAndReduceHeart(pkmn, scene, 1)
+  ret = false
+  if pkmn.hyper_mode
+    scene.pbDisplay(_INTL("{1} came to its senses from the {2}.", pkmn.name, GameData::Item.get(item).name))
+    pkmn.hyper_mode = false
+    ret = true
+  end
+  next pbRaiseHappinessAndReduceHeart(pkmn, scene, 1, !ret) || ret
 })
 
 ItemHandlers::UseOnPokemon.add(:EXCITESCENT, proc { |item, qty, pkmn, scene|
-  pbRaiseHappinessAndReduceHeart(pkmn, scene, 2)
+  ret = false
+  if pkmn.hyper_mode
+    scene.pbDisplay(_INTL("{1} came to its senses from the {2}.", pkmn.name, GameData::Item.get(item).name))
+    pkmn.hyper_mode = false
+    ret = true
+  end
+  next pbRaiseHappinessAndReduceHeart(pkmn, scene, 2, !ret) || ret
 })
 
 ItemHandlers::UseOnPokemon.add(:VIVIDSCENT, proc { |item, qty, pkmn, scene|
-  pbRaiseHappinessAndReduceHeart(pkmn, scene, 3)
+  ret = false
+  if pkmn.hyper_mode
+    scene.pbDisplay(_INTL("{1} came to its senses from the {2}.", pkmn.name, GameData::Item.get(item).name))
+    pkmn.hyper_mode = false
+    ret = true
+  end
+  next pbRaiseHappinessAndReduceHeart(pkmn, scene, 3, !ret) || ret
 })
 
 ItemHandlers::UseOnPokemon.add(:TIMEFLUTE, proc { |item, qty, pkmn, scene|
-  if !pkmn.shadowPokemon? || pkmn.heart_gauge == 0
+  if !pkmn.shadowPokemon? || pkmn.heart_gauge == 0 || pkmn.isSpecies?(:LUGIA)
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.heart_gauge = 0
-  pkmn.check_ready_to_purify
+  pbPurify(pkmn, scene)
   next true
 })
 
