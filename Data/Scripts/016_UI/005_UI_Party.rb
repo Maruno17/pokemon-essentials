@@ -170,6 +170,12 @@ class PokemonPartyPanel < SpriteWrapper
   attr_reader :switching
   attr_reader :text
 
+  TEXT_BASE_COLOR    = Color.new(248, 248, 248)
+  TEXT_SHADOW_COLOR  = Color.new(40, 40, 40)
+  HP_BAR_WIDTH       = 96
+  STATUS_ICON_WIDTH  = 44
+  STATUS_ICON_HEIGHT = 16
+
   def initialize(pokemon, index, viewport = nil)
     super(viewport)
     @pokemon = pokemon
@@ -213,6 +219,7 @@ class PokemonPartyPanel < SpriteWrapper
     @helditemsprite.z = self.z + 3
     @overlaysprite = BitmapSprite.new(Graphics.width, Graphics.height, viewport)
     @overlaysprite.z = self.z + 4
+    pbSetSystemFont(@overlaysprite.bitmap)
     @hpbar    = AnimatedBitmap.new("Graphics/Pictures/Party/overlay_hp")
     @statuses = AnimatedBitmap.new(_INTL("Graphics/Pictures/statuses"))
     @selected      = false
@@ -253,11 +260,10 @@ class PokemonPartyPanel < SpriteWrapper
   end
 
   def text=(value)
-    if @text != value
-      @text = value
-      @refreshBitmap = true
-      refresh
-    end
+    return if @text == value
+    @text = value
+    @refreshBitmap = true
+    refresh
   end
 
   def pokemon=(value)
@@ -269,159 +275,190 @@ class PokemonPartyPanel < SpriteWrapper
   end
 
   def selected=(value)
-    if @selected != value
-      @selected = value
-      refresh
-    end
+    return if @selected == value
+    @selected = value
+    refresh
   end
 
   def preselected=(value)
-    if @preselected != value
-      @preselected = value
-      refresh
-    end
+    return if @preselected == value
+    @preselected = value
+    refresh
   end
 
   def switching=(value)
-    if @switching != value
-      @switching = value
-      refresh
-    end
+    return if @switching == value
+    @switching = value
+    refresh
   end
 
   def hp; return @pokemon.hp; end
+
+  def refresh_panel_graphic
+    return if !@panelbgsprite || @panelbgsprite.disposed?
+    if self.selected
+      if self.preselected
+        @panelbgsprite.changeBitmap("swapsel2")
+      elsif @switching
+        @panelbgsprite.changeBitmap("swapsel")
+      elsif @pokemon.fainted?
+        @panelbgsprite.changeBitmap("faintedsel")
+      else
+        @panelbgsprite.changeBitmap("ablesel")
+      end
+    else
+      if self.preselected
+        @panelbgsprite.changeBitmap("swap")
+      elsif @pokemon.fainted?
+        @panelbgsprite.changeBitmap("fainted")
+      else
+        @panelbgsprite.changeBitmap("able")
+      end
+    end
+    @panelbgsprite.x     = self.x
+    @panelbgsprite.y     = self.y
+    @panelbgsprite.color = self.color
+  end
+
+  def refresh_hp_bar_graphic
+    return if !@hpbgsprite || @hpbgsprite.disposed?
+    @hpbgsprite.visible = (!@pokemon.egg? && !(@text && @text.length > 0))
+    return if !@hpbgsprite.visible
+    if self.preselected || (self.selected && @switching)
+      @hpbgsprite.changeBitmap("swap")
+    elsif @pokemon.fainted?
+      @hpbgsprite.changeBitmap("fainted")
+    else
+      @hpbgsprite.changeBitmap("able")
+    end
+    @hpbgsprite.x     = self.x + 96
+    @hpbgsprite.y     = self.y + 50
+    @hpbgsprite.color = self.color
+  end
+
+  def refresh_ball_graphic
+    return if !@ballsprite || @ballsprite.disposed?
+    @ballsprite.changeBitmap((self.selected) ? "sel" : "desel")
+    @ballsprite.x     = self.x + 10
+    @ballsprite.y     = self.y
+    @ballsprite.color = self.color
+  end
+
+  def refresh_pokemon_icon
+    return if !@pkmnsprite || @pkmnsprite.disposed?
+    @pkmnsprite.x        = self.x + 60
+    @pkmnsprite.y        = self.y + 40
+    @pkmnsprite.color    = self.color
+    @pkmnsprite.selected = self.selected
+  end
+
+  def refresh_held_item_icon
+    return if !@helditemsprite || @helditemsprite.disposed? || !@helditemsprite.visible
+    @helditemsprite.x     = self.x + 62
+    @helditemsprite.y     = self.y + 48
+    @helditemsprite.color = self.color
+  end
+
+  def refresh_overlay_information
+    return if !@refreshBitmap
+    @overlaysprite.bitmap&.clear
+    draw_name
+    draw_level
+    draw_hp
+    draw_status
+    draw_gender
+    draw_shiny_icon
+    draw_annotation
+  end
+
+  def draw_name
+    pbDrawTextPositions(@overlaysprite.bitmap,
+                        [[@pokemon.name, 96, 22, 0, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]])
+  end
+
+  def draw_level
+    return if @pokemon.egg?
+    # "Lv" graphic
+    pbDrawImagePositions(@overlaysprite.bitmap,
+                         [["Graphics/Pictures/Party/overlay_lv", 20, 70, 0, 0, 22, 14]])
+    # Level number
+    pbSetSmallFont(@overlaysprite.bitmap)
+    pbDrawTextPositions(@overlaysprite.bitmap,
+                        [[@pokemon.level.to_s, 42, 68, 0, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]])
+    pbSetSystemFont(@overlaysprite.bitmap)
+  end
+
+  def draw_hp
+    return if @pokemon.egg? || (@text && @text.length > 0)
+    # HP numbers
+    hp_text = sprintf("% 3d /% 3d", @pokemon.hp, @pokemon.totalhp)
+    pbDrawTextPositions(@overlaysprite.bitmap,
+                        [[hp_text, 224, 66, 1, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]])
+    # HP bar
+    if @pokemon.able?
+      w = @pokemon.hp * HP_BAR_WIDTH / @pokemon.totalhp.to_f
+      w = 1 if w < 1
+      w = ((w / 2).round) * 2   # Round to the nearest 2 pixels
+      hpzone = 0
+      hpzone = 1 if @pokemon.hp <= (@pokemon.totalhp / 2).floor
+      hpzone = 2 if @pokemon.hp <= (@pokemon.totalhp / 4).floor
+      hprect = Rect.new(0, hpzone * 8, w, 8)
+      @overlaysprite.bitmap.blt(128, 52, @hpbar.bitmap, hprect)
+    end
+  end
+
+  def draw_status
+    return if @pokemon.egg? || (@text && @text.length > 0)
+    status = -1
+    if @pokemon.fainted?
+      status = GameData::Status.count - 1
+    elsif @pokemon.status != :NONE
+      status = GameData::Status.get(@pokemon.status).icon_position
+    elsif @pokemon.pokerusStage == 1
+      status = GameData::Status.count
+    end
+    return if status < 0
+    statusrect = Rect.new(0, STATUS_ICON_HEIGHT * status, STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT)
+    @overlaysprite.bitmap.blt(78, 68, @statuses.bitmap, statusrect)
+  end
+
+  def draw_gender
+    return if @pokemon.egg? || @pokemon.genderless?
+    gender_text  = (@pokemon.male?) ? _INTL("♂") : _INTL("♀")
+    base_color   = (@pokemon.male?) ? Color.new(0, 112, 248) : Color.new(232, 32, 16)
+    shadow_color = (@pokemon.male?) ? Color.new(120, 184, 232) : Color.new(248, 168, 184)
+    pbDrawTextPositions(@overlaysprite.bitmap,
+                        [[gender_text, 224, 22, 0, base_color, shadow_color]])
+  end
+
+  def draw_shiny_icon
+    return if @pokemon.egg? || !@pokemon.shiny?
+    pbDrawImagePositions(@overlaysprite.bitmap,
+                         [["Graphics/Pictures/shiny", 80, 48, 0, 0, 16, 16]])
+  end
+
+  def draw_annotation
+    return if !@text || @text.length == 0
+    pbDrawTextPositions(@overlaysprite.bitmap,
+                        [[@text, 96, 62, 0, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]])
+  end
 
   def refresh
     return if disposed?
     return if @refreshing
     @refreshing = true
-    if @panelbgsprite && !@panelbgsprite.disposed?
-      if self.selected
-        if self.preselected
-          @panelbgsprite.changeBitmap("swapsel2")
-        elsif @switching
-          @panelbgsprite.changeBitmap("swapsel")
-        elsif @pokemon.fainted?
-          @panelbgsprite.changeBitmap("faintedsel")
-        else
-          @panelbgsprite.changeBitmap("ablesel")
-        end
-      else
-        if self.preselected
-          @panelbgsprite.changeBitmap("swap")
-        elsif @pokemon.fainted?
-          @panelbgsprite.changeBitmap("fainted")
-        else
-          @panelbgsprite.changeBitmap("able")
-        end
-      end
-      @panelbgsprite.x     = self.x
-      @panelbgsprite.y     = self.y
-      @panelbgsprite.color = self.color
-    end
-    if @hpbgsprite && !@hpbgsprite.disposed?
-      @hpbgsprite.visible = (!@pokemon.egg? && !(@text && @text.length > 0))
-      if @hpbgsprite.visible
-        if self.preselected || (self.selected && @switching)
-          @hpbgsprite.changeBitmap("swap")
-        elsif @pokemon.fainted?
-          @hpbgsprite.changeBitmap("fainted")
-        else
-          @hpbgsprite.changeBitmap("able")
-        end
-        @hpbgsprite.x     = self.x + 96
-        @hpbgsprite.y     = self.y + 50
-        @hpbgsprite.color = self.color
-      end
-    end
-    if @ballsprite && !@ballsprite.disposed?
-      @ballsprite.changeBitmap((self.selected) ? "sel" : "desel")
-      @ballsprite.x     = self.x + 10
-      @ballsprite.y     = self.y
-      @ballsprite.color = self.color
-    end
-    if @pkmnsprite && !@pkmnsprite.disposed?
-      @pkmnsprite.x        = self.x + 60
-      @pkmnsprite.y        = self.y + 40
-      @pkmnsprite.color    = self.color
-      @pkmnsprite.selected = self.selected
-    end
-    if @helditemsprite&.visible && !@helditemsprite.disposed?
-      @helditemsprite.x     = self.x + 62
-      @helditemsprite.y     = self.y + 48
-      @helditemsprite.color = self.color
-    end
+    refresh_panel_graphic
+    refresh_hp_bar_graphic
+    refresh_ball_graphic
+    refresh_pokemon_icon
+    refresh_held_item_icon
     if @overlaysprite && !@overlaysprite.disposed?
       @overlaysprite.x     = self.x
       @overlaysprite.y     = self.y
       @overlaysprite.color = self.color
     end
-    if @refreshBitmap
-      @refreshBitmap = false
-      @overlaysprite.bitmap&.clear
-      basecolor   = Color.new(248, 248, 248)
-      shadowcolor = Color.new(40, 40, 40)
-      pbSetSystemFont(@overlaysprite.bitmap)
-      textpos = []
-      # Draw Pokémon name
-      textpos.push([@pokemon.name, 96, 22, 0, basecolor, shadowcolor])
-      if !@pokemon.egg?
-        if !@text || @text.length == 0
-          # Draw HP numbers
-          textpos.push([sprintf("% 3d /% 3d", @pokemon.hp, @pokemon.totalhp), 224, 66, 1, basecolor, shadowcolor])
-          # Draw HP bar
-          if @pokemon.hp > 0
-            w = @pokemon.hp * 96 / @pokemon.totalhp.to_f
-            w = 1 if w < 1
-            w = ((w / 2).round) * 2
-            hpzone = 0
-            hpzone = 1 if @pokemon.hp <= (@pokemon.totalhp / 2).floor
-            hpzone = 2 if @pokemon.hp <= (@pokemon.totalhp / 4).floor
-            hprect = Rect.new(0, hpzone * 8, w, 8)
-            @overlaysprite.bitmap.blt(128, 52, @hpbar.bitmap, hprect)
-          end
-          # Draw status
-          status = -1
-          if @pokemon.fainted?
-            status = GameData::Status.count - 1
-          elsif @pokemon.status != :NONE
-            status = GameData::Status.get(@pokemon.status).icon_position
-          elsif @pokemon.pokerusStage == 1
-            status = GameData::Status.count
-          end
-          if status >= 0
-            statusrect = Rect.new(0, 16 * status, 44, 16)
-            @overlaysprite.bitmap.blt(78, 68, @statuses.bitmap, statusrect)
-          end
-        end
-        # Draw gender symbol
-        if @pokemon.male?
-          textpos.push([_INTL("♂"), 224, 22, 0, Color.new(0, 112, 248), Color.new(120, 184, 232)])
-        elsif @pokemon.female?
-          textpos.push([_INTL("♀"), 224, 22, 0, Color.new(232, 32, 16), Color.new(248, 168, 184)])
-        end
-        # Draw shiny icon
-        if @pokemon.shiny?
-          pbDrawImagePositions(@overlaysprite.bitmap,
-                               [["Graphics/Pictures/shiny", 80, 48, 0, 0, 16, 16]])
-        end
-      end
-      pbDrawTextPositions(@overlaysprite.bitmap, textpos)
-      # Draw level text
-      if !@pokemon.egg?
-        pbDrawImagePositions(@overlaysprite.bitmap,
-                             [["Graphics/Pictures/Party/overlay_lv", 20, 70, 0, 0, 22, 14]])
-        pbSetSmallFont(@overlaysprite.bitmap)
-        pbDrawTextPositions(@overlaysprite.bitmap,
-                            [[@pokemon.level.to_s, 42, 68, 0, basecolor, shadowcolor]])
-      end
-      # Draw annotation text
-      if @text && @text.length > 0
-        pbSetSystemFont(@overlaysprite.bitmap)
-        pbDrawTextPositions(@overlaysprite.bitmap,
-                            [[@text, 96, 62, 0, basecolor, shadowcolor]])
-      end
-    end
+    refresh_overlay_information
+    @refreshBitmap = false
     @refreshing = false
   end
 
