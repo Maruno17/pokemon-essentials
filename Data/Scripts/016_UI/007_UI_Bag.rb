@@ -586,6 +586,7 @@ class PokemonBagScreen
   def pbChooseItemScreen(proc = nil)
     oldlastpocket = @bag.last_viewed_pocket
     oldchoices = @bag.last_pocket_selections.clone
+    @bag.reset_last_selections if proc
     @scene.pbStartScene(@bag, true, proc)
     item = @scene.pbChooseItem
     @scene.pbEndScene

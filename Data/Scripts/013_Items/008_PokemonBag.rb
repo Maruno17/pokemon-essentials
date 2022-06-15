@@ -16,15 +16,17 @@ class PokemonBag
   end
 
   def initialize
-    @last_viewed_pocket     = 1
-    @pockets                = []
-    @last_pocket_selections = []
-    (0..PokemonBag.pocket_count).each do |i|
-      @pockets[i] = []
-      @last_pocket_selections[i] = 0
-    end
+    @pockets              = []
+    (0..PokemonBag.pocket_count).each { |i| @pockets[i] = [] }
+    reset_last_selections
     @registered_items     = []
     @ready_menu_selection = [0, 0, 1]   # Used by the Ready Menu to remember cursor positions
+  end
+
+  def reset_last_selections
+    @last_viewed_pocket     = 1
+    @last_pocket_selections ||= []
+    (0..PokemonBag.pocket_count).each { |i| @last_pocket_selections[i] = 0 }
   end
 
   def clear
