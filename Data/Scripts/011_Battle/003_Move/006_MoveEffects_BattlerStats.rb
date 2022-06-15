@@ -718,8 +718,6 @@ class Battle::Move::LowerUserDefSpDef1 < Battle::Move::StatDownMove
   end
 end
 
-
-
 #===============================================================================
 # Decreases the user's Defense, Special Defense and Speed by 1 stage each.
 # (V-create)
@@ -946,7 +944,7 @@ class Battle::Move::LowerTargetDefense1 < Battle::Move::TargetStatDownMove
 end
 
 #===============================================================================
-# Decreases the target's Defense by 1 stage. Power is mutliplied by 1.5 if 
+# Decreases the target's Defense by 1 stage. Power is mutliplied by 1.5 if
 # Gravity is in effect. (Grav Apple)
 #===============================================================================
 class Battle::Move::LowerTargetDefense1PowersUpInGravity < Battle::Move::LowerTargetDefense1

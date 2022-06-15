@@ -175,8 +175,6 @@ class Battle::AI
     return baseDmg if skill < PBTrainerAI.mediumSkill
     # Covers all function codes which have their own def pbBaseDamage
     case move.function
-    when "FlinchTargetTrampleMinimize"   # Stomp
-      baseDmg *= 2 if skill >= PBTrainerAI.mediumSkill && target.effects[PBEffects::Minimize]
     # Sonic Boom, Dragon Rage, Super Fang, Night Shade, Endeavor
     when "FixedDamage20", "FixedDamage40", "FixedDamageHalfTargetHP",
          "FixedDamageUserLevel", "LowerTargetHPToUserHP"
