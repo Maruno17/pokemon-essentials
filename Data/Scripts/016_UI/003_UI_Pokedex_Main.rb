@@ -75,7 +75,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-class PokedexSearchSelectionSprite < SpriteWrapper
+class PokedexSearchSelectionSprite < Sprite
   attr_reader :index
   attr_accessor :cmds
   attr_accessor :minmax

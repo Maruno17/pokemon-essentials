@@ -43,7 +43,7 @@ end
 #===============================================================================
 # Visibility circle in dark maps
 #===============================================================================
-class DarknessSprite < SpriteWrapper
+class DarknessSprite < Sprite
   attr_reader :radius
 
   def initialize(viewport = nil)

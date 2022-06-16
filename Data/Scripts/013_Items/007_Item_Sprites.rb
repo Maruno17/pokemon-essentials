@@ -1,7 +1,7 @@
 #===============================================================================
 # Item icon
 #===============================================================================
-class ItemIconSprite < SpriteWrapper
+class ItemIconSprite < Sprite
   attr_reader :item
 
   ANIM_ICON_SIZE   = 48
@@ -115,7 +115,7 @@ end
 #===============================================================================
 # Item held icon (used in the party screen)
 #===============================================================================
-class HeldItemIconSprite < SpriteWrapper
+class HeldItemIconSprite < Sprite
   def initialize(x, y, pokemon, viewport = nil)
     super(viewport)
     self.x = x

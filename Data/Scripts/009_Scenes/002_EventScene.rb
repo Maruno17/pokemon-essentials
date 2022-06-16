@@ -1,4 +1,4 @@
-class PictureSprite < SpriteWrapper
+class PictureSprite < Sprite
   def initialize(viewport, picture)
     super(viewport)
     @picture = picture

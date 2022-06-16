@@ -1,7 +1,7 @@
 #===============================================================================
 # Data box for regular battles
 #===============================================================================
-class Battle::Scene::PokemonDataBox < SpriteWrapper
+class Battle::Scene::PokemonDataBox < Sprite
   attr_reader   :battler
   attr_accessor :selected
   attr_reader   :animatingHP
@@ -84,12 +84,12 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
 #    pbSetSmallFont(@hpNumbers.bitmap)
     @sprites["hpNumbers"] = @hpNumbers
     # Create sprite wrapper that displays HP bar
-    @hpBar = SpriteWrapper.new(viewport)
+    @hpBar = Sprite.new(viewport)
     @hpBar.bitmap = @hpBarBitmap.bitmap
     @hpBar.src_rect.height = @hpBarBitmap.height / 3
     @sprites["hpBar"] = @hpBar
     # Create sprite wrapper that displays Exp bar
-    @expBar = SpriteWrapper.new(viewport)
+    @expBar = Sprite.new(viewport)
     @expBar.bitmap = @expBarBitmap.bitmap
     @sprites["expBar"] = @expBar
     # Create sprite wrapper that displays everything except the above
@@ -407,7 +407,7 @@ end
 #===============================================================================
 # Splash bar to announce a triggered ability
 #===============================================================================
-class Battle::Scene::AbilitySplashBar < SpriteWrapper
+class Battle::Scene::AbilitySplashBar < Sprite
   attr_reader :battler
 
   TEXT_BASE_COLOR   = Color.new(0, 0, 0)
@@ -419,7 +419,7 @@ class Battle::Scene::AbilitySplashBar < SpriteWrapper
     @battler = nil
     # Create sprite wrapper that displays background graphic
     @bgBitmap = AnimatedBitmap.new("Graphics/Pictures/Battle/ability_bar")
-    @bgSprite = SpriteWrapper.new(viewport)
+    @bgSprite = Sprite.new(viewport)
     @bgSprite.bitmap = @bgBitmap.bitmap
     @bgSprite.src_rect.y      = (side == 0) ? 0 : @bgBitmap.height / 2
     @bgSprite.src_rect.height = @bgBitmap.height / 2

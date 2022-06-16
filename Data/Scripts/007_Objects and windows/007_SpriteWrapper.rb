@@ -1,5 +1,6 @@
 #===============================================================================
 # SpriteWrapper is a class which wraps (most of) Sprite's properties.
+# (unused) Use class Sprite instead
 #===============================================================================
 class SpriteWrapper
   def initialize(viewport = nil)
@@ -93,7 +94,7 @@ end
 # Sprite class that maintains a bitmap of its own.
 # This bitmap can't be changed to a different one.
 #===============================================================================
-class BitmapSprite < SpriteWrapper
+class BitmapSprite < Sprite
   def initialize(width, height, viewport = nil)
     super(viewport)
     self.bitmap = Bitmap.new(width, height)
@@ -115,7 +116,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-class AnimatedSprite < SpriteWrapper
+class AnimatedSprite < Sprite
   attr_reader :frame
   attr_reader :framewidth
   attr_reader :frameheight
@@ -241,7 +242,7 @@ end
 #===============================================================================
 # Displays an icon bitmap in a sprite. Supports animated images.
 #===============================================================================
-class IconSprite < SpriteWrapper
+class IconSprite < Sprite
   attr_reader :name
 
   def initialize(*args)
@@ -312,21 +313,9 @@ end
 
 
 #===============================================================================
-# Old GifSprite class, retained for compatibility
+# Sprite class that stores multiple bitmaps, and displays only one at once.
 #===============================================================================
-class GifSprite < IconSprite
-  def initialize(path)
-    super(0, 0)
-    setBitmap(path)
-  end
-end
-
-
-
-#===============================================================================
-# SpriteWrapper that stores multiple bitmaps, and displays only one at once.
-#===============================================================================
-class ChangelingSprite < SpriteWrapper
+class ChangelingSprite < Sprite
   def initialize(x = 0, y = 0, viewport = nil)
     super(viewport)
     self.x = x

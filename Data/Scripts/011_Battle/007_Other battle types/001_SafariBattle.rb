@@ -59,7 +59,7 @@ end
 #===============================================================================
 # Data box for safari battles
 #===============================================================================
-class Battle::Scene::SafariDataBox < SpriteWrapper
+class Battle::Scene::SafariDataBox < Sprite
   attr_accessor :selected
 
   def initialize(battle, viewport = nil)

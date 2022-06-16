@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-class MoveSelectionSprite < SpriteWrapper
+class MoveSelectionSprite < Sprite
   attr_reader :preselected
   attr_reader :index
 

@@ -1,7 +1,7 @@
 ################################################################################
 # Paths and interpolation
 ################################################################################
-class ControlPointSprite < SpriteWrapper
+class ControlPointSprite < Sprite
   attr_accessor :dragging
 
   def initialize(red, viewport = nil)
@@ -50,7 +50,7 @@ end
 
 
 
-class PointSprite < SpriteWrapper
+class PointSprite < Sprite
   def initialize(x, y, viewport = nil)
     super(viewport)
     self.bitmap = Bitmap.new(2, 2)

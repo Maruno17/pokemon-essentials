@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-class PokemonLoadPanel < SpriteWrapper
+class PokemonLoadPanel < Sprite
   attr_reader :selected
 
   TEXTCOLOR             = Color.new(232, 232, 232)

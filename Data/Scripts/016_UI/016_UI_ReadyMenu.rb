@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-class ReadyMenuButton < SpriteWrapper
+class ReadyMenuButton < Sprite
   attr_reader :index   # ID of button
   attr_reader :selected
   attr_reader :side
