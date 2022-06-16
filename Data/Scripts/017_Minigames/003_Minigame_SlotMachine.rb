@@ -32,7 +32,7 @@ class SlotMachineReel < BitmapSprite
     @stopping = false
     @slipping = 0
     @index = rand(@reel.length)
-    @images = AnimatedBitmap.new(_INTL("Graphics/Pictures/Slot Machine/images"))
+    @images = AnimatedBitmap.new("Graphics/Pictures/Slot Machine/images")
     @shading = AnimatedBitmap.new("Graphics/Pictures/Slot Machine/ReelOverlay")
     update
   end

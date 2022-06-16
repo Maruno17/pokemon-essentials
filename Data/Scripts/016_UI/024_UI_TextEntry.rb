@@ -484,7 +484,7 @@ class PokemonEntryScene2
     @sprites["controls"] = IconSprite.new(0, 0, @viewport)
     @sprites["controls"].x = 16
     @sprites["controls"].y = 96
-    @sprites["controls"].setBitmap(_INTL("Graphics/Pictures/Naming/overlay_controls"))
+    @sprites["controls"].setBitmap("Graphics/Pictures/Naming/overlay_controls")
     @init = true
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbDoUpdateOverlay2
@@ -502,7 +502,7 @@ class PokemonEntryScene2
   def pbDoUpdateOverlay2
     overlay = @sprites["overlay"].bitmap
     overlay.clear
-    modeIcon = [[_INTL("Graphics/Pictures/Naming/icon_mode"), 44 + (@mode * 62), 120, @mode * 60, 0, 60, 44]]
+    modeIcon = [["Graphics/Pictures/Naming/icon_mode", 44 + (@mode * 62), 120, @mode * 60, 0, 60, 44]]
     pbDrawImagePositions(overlay, modeIcon)
   end
 

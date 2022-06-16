@@ -46,7 +46,7 @@ class PokemonPokedexMenu_Scene
     @viewport.z = 99999
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_menu"))
+    @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_menu")
     @sprites["headings"] = Window_AdvancedTextPokemon.newWithSize(
       _INTL("<c3=F8F8F8,C02028>SEEN<r>OBTAINED</c3>"), 286, 136, 208, 64, @viewport
     )

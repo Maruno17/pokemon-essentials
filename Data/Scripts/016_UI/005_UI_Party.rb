@@ -221,7 +221,7 @@ class PokemonPartyPanel < SpriteWrapper
     @overlaysprite.z = self.z + 4
     pbSetSystemFont(@overlaysprite.bitmap)
     @hpbar    = AnimatedBitmap.new("Graphics/Pictures/Party/overlay_hp")
-    @statuses = AnimatedBitmap.new(_INTL("Graphics/Pictures/statuses"))
+    @statuses = AnimatedBitmap.new("Graphics/Pictures/statuses")
     @selected      = false
     @preselected   = false
     @switching     = false

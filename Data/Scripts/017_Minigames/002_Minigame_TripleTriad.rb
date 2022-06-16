@@ -89,7 +89,7 @@ class TriadCard
       cardbitmap.dispose
     end
     if type
-      typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+      typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
       type_number = GameData::Type.get(type).icon_position
       typerect = Rect.new(0, type_number * 28, 64, 28)
       bitmap.blt(8, 50, typebitmap.bitmap, typerect, 192)
@@ -106,7 +106,7 @@ class TriadCard
     else            # Player
       cardbitmap = AnimatedBitmap.new("Graphics/Pictures/triad_card_player")
     end
-    typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+    typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
     iconbitmap = AnimatedBitmap.new(GameData::Species.icon_filename(@species, @form))
     numbersbitmap = AnimatedBitmap.new("Graphics/Pictures/triad_numbers")
     # Draw card background

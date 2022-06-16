@@ -117,7 +117,7 @@ class PokemonSummary_Scene
     @pokemon    = @party[@partyindex]
     @inbattle   = inbattle
     @page = 1
-    @typebitmap    = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+    @typebitmap    = AnimatedBitmap.new("Graphics/Pictures/types")
     @markingbitmap = AnimatedBitmap.new("Graphics/Pictures/Summary/markings")
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
@@ -183,7 +183,7 @@ class PokemonSummary_Scene
     @partyindex = partyindex
     @pokemon    = @party[@partyindex]
     @page = 4
-    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+    @typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)

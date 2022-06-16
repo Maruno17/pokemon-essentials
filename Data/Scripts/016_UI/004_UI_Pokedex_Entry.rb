@@ -10,7 +10,7 @@ class PokemonPokedexInfo_Scene
     @region  = region
     @page = 1
     @show_battled_count = false
-    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Pokedex/icon_types"))
+    @typebitmap = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_types")
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["infosprite"] = PokemonSprite.new(@viewport)
@@ -94,7 +94,7 @@ class PokemonPokedexInfo_Scene
     @index   = 0
     @page = 1
     @brief = true
-    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Pokedex/icon_types"))
+    @typebitmap = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_types")
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["infosprite"] = PokemonSprite.new(@viewport)
@@ -198,13 +198,13 @@ class PokemonPokedexInfo_Scene
   end
 
   def drawPageInfo
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_info"))
+    @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_info")
     overlay = @sprites["overlay"].bitmap
     base   = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
     imagepos = []
     if @brief
-      imagepos.push([_INTL("Graphics/Pictures/Pokedex/overlay_info"), 0, 0])
+      imagepos.push(["Graphics/Pictures/Pokedex/overlay_info", 0, 0])
     end
     species_data = GameData::Species.get_species_form(@species, @form)
     # Write various bits of text
@@ -333,7 +333,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def drawPageArea
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
+    @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_area")
     overlay = @sprites["overlay"].bitmap
     base   = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
@@ -382,7 +382,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def drawPageForms
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_forms"))
+    @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_forms")
     overlay = @sprites["overlay"].bitmap
     base   = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)

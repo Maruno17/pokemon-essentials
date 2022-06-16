@@ -259,11 +259,11 @@ class PokemonPokedex_Scene
 
   def pbStartScene
     @sliderbitmap       = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_slider")
-    @typebitmap         = AnimatedBitmap.new(_INTL("Graphics/Pictures/Pokedex/icon_types"))
+    @typebitmap         = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_types")
     @shapebitmap        = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_shapes")
     @hwbitmap           = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_hw")
     @selbitmap          = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_searchsel")
-    @searchsliderbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Pokedex/icon_searchslider"))
+    @searchsliderbitmap = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_searchslider")
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999

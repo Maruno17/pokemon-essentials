@@ -1444,7 +1444,7 @@ class PokemonStorageScene
       if pokemon.shiny?
         imagepos.push(["Graphics/Pictures/shiny", 156, 198])
       end
-      typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+      typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
       pokemon.types.each_with_index do |type, i|
         type_number = GameData::Type.get(type).icon_position
         type_rect = Rect.new(0, type_number * 28, 64, 28)
