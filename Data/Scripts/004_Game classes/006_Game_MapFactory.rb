@@ -83,6 +83,7 @@ class PokemonMapFactory
         newy = conn[2] - conn[5] + playerY
       end
       if newx >= 0 && newx < mapB[0] && newy >= 0 && newy < mapB[1]
+        return [getMapNoAdd(mapidB), newx, newy] if map_id
         return [getMap(mapidB), newx, newy]
       end
     end
@@ -155,7 +156,7 @@ class PokemonMapFactory
   # Similar to Game_Player#passable?, but supports map connections
   def isPassableFromEdge?(x, y)
     return true if $game_map.valid?(x, y)
-    newmap = getNewMap(x, y)
+    newmap = getNewMap(x, y, $game_map.map_id)
     return false if !newmap
     return isPassable?(newmap[0].map_id, newmap[1], newmap[2])
   end
@@ -373,10 +374,13 @@ class PokemonMapFactory
     return if $game_player.moving?
     if !MapFactoryHelper.hasConnections?($game_map.map_id)
       return if @maps.length == 1
-      @maps.delete_if { |map| $game_map.map_id != map.map_id }
+      @maps.delete_if { |map| map.map_id != $game_map.map_id }
       @mapIndex = getMapIndex($game_map.map_id)
       return
     end
+    old_num_maps = @maps.length
+    @maps.delete_if { |map| !MapFactoryHelper.mapsConnected?($game_map.map_id, map.map_id) }
+    @mapIndex = getMapIndex($game_map.map_id) if @maps.length != old_num_maps
     setMapsInRange
     old_num_maps = @maps.length
     @maps.delete_if { |map| !MapFactoryHelper.mapInRange?(map) }
@@ -438,6 +442,13 @@ module MapFactoryHelper
   def self.hasConnections?(id)
     conns = MapFactoryHelper.getMapConnections
     return conns[id] ? true : false
+  end
+
+  def self.mapsConnected?(id1, id2)
+    MapFactoryHelper.eachConnectionForMap(id1) { |conn|
+      return true if conn[0] == id2 || conn[3] == id2
+    }
+    return false
   end
 
   def self.eachConnectionForMap(id)
