@@ -35,7 +35,7 @@ class TilePuzzleCursor < BitmapSprite
     @arrows = []
     @selected = false
     @holding = false
-    @cursorbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Tile Puzzle/cursor"))
+    @cursorbitmap = AnimatedBitmap.new("Graphics/Pictures/Tile Puzzle/cursor")
     update
   end
 

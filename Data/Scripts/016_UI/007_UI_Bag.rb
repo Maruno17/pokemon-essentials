@@ -172,8 +172,8 @@ class PokemonBag_Scene
       end
     end
     @bag.last_viewed_pocket = lastpocket
-    @sliderbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Bag/icon_slider"))
-    @pocketbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Bag/icon_pocket"))
+    @sliderbitmap = AnimatedBitmap.new("Graphics/Pictures/Bag/icon_slider")
+    @pocketbitmap = AnimatedBitmap.new("Graphics/Pictures/Bag/icon_pocket")
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)

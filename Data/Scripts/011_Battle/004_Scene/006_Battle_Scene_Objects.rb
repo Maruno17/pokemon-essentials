@@ -76,9 +76,9 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
 
   def initializeOtherGraphics(viewport)
     # Create other bitmaps
-    @numbersBitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/icon_numbers"))
-    @hpBarBitmap   = AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/overlay_hp"))
-    @expBarBitmap  = AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/overlay_exp"))
+    @numbersBitmap = AnimatedBitmap.new("Graphics/Pictures/Battle/icon_numbers")
+    @hpBarBitmap   = AnimatedBitmap.new("Graphics/Pictures/Battle/overlay_hp")
+    @expBarBitmap  = AnimatedBitmap.new("Graphics/Pictures/Battle/overlay_exp")
     # Create sprite to draw HP numbers on
     @hpNumbers = BitmapSprite.new(124, 16, viewport)
 #    pbSetSmallFont(@hpNumbers.bitmap)
@@ -418,7 +418,7 @@ class Battle::Scene::AbilitySplashBar < SpriteWrapper
     @side    = side
     @battler = nil
     # Create sprite wrapper that displays background graphic
-    @bgBitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/ability_bar"))
+    @bgBitmap = AnimatedBitmap.new("Graphics/Pictures/Battle/ability_bar")
     @bgSprite = SpriteWrapper.new(viewport)
     @bgSprite.bitmap = @bgBitmap.bitmap
     @bgSprite.src_rect.y      = (side == 0) ? 0 : @bgBitmap.height / 2

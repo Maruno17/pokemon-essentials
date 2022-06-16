@@ -472,7 +472,7 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
     # NOTE: @mode is for which buttons are shown as selected.
     #       0=select 1 button (@index), 1=select all buttons with text
     # Create bitmaps
-    @buttonBitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/cursor_target"))
+    @buttonBitmap = AnimatedBitmap.new("Graphics/Pictures/Battle/cursor_target")
     # Create target buttons
     @buttons = Array.new(maxIndex + 1) do |i|
       numButtons = @sideSizes[i % 2]

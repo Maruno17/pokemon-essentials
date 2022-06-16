@@ -84,7 +84,7 @@ class TriadCard
   def self.createBack(type = nil, noback = false)
     bitmap = BitmapWrapper.new(80, 96)
     if !noback
-      cardbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/triad_card_opponent"))
+      cardbitmap = AnimatedBitmap.new("Graphics/Pictures/triad_card_opponent")
       bitmap.blt(0, 0, cardbitmap.bitmap, Rect.new(0, 0, cardbitmap.width, cardbitmap.height))
       cardbitmap.dispose
     end
@@ -102,13 +102,13 @@ class TriadCard
     return TriadCard.createBack if owner == 0
     bitmap = BitmapWrapper.new(80, 96)
     if owner == 2   # Opponent
-      cardbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/triad_card_opponent"))
+      cardbitmap = AnimatedBitmap.new("Graphics/Pictures/triad_card_opponent")
     else            # Player
-      cardbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/triad_card_player"))
+      cardbitmap = AnimatedBitmap.new("Graphics/Pictures/triad_card_player")
     end
     typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
     iconbitmap = AnimatedBitmap.new(GameData::Species.icon_filename(@species, @form))
-    numbersbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/triad_numbers"))
+    numbersbitmap = AnimatedBitmap.new("Graphics/Pictures/triad_numbers")
     # Draw card background
     bitmap.blt(0, 0, cardbitmap.bitmap, Rect.new(0, 0, cardbitmap.width, cardbitmap.height))
     # Draw type icon
