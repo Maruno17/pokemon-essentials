@@ -57,7 +57,7 @@ class PokemonPokedexInfo_Scene
     @sprites["formicon"].y = 328
     @sprites["uparrow"] = AnimatedSprite.new("Graphics/Pictures/uparrow",8,28,40,2,@viewport)
     @sprites["uparrow"].x = 242
-    @sprites["uparrow"].y = 268
+    @sprites["uparrow"].y = 20#268
     @sprites["uparrow"].play
     @sprites["uparrow"].visible = false
     @sprites["downarrow"] = AnimatedSprite.new("Graphics/Pictures/downarrow",8,28,40,2,@viewport)
@@ -131,20 +131,30 @@ class PokemonPokedexInfo_Scene
     @species = @dexlist[@index][0]
     @gender, @form = $Trainer.pokedex.last_form_seen(@species)
 
+
+    if @sprites["selectedSprite"]
+      @sprites["selectedSprite"].visible=false
+    end
+    if @sprites["nextSprite"]
+      @sprites["nextSprite"].visible=false
+    end
+    if @sprites["previousSprite"]
+      @sprites["previousSprite"].visible=false
+    end
     # species_data = pbGetSpeciesData(@species)
      species_data = GameData::Species.get_species_form(@species, @form)
     @sprites["infosprite"].setSpeciesBitmap(@species,@gender,@form)
-    if @sprites["formfront"]
-      @sprites["formfront"].setSpeciesBitmap(@species,@gender,@form)
-    end
-    if @sprites["formback"]
-      @sprites["formback"].setSpeciesBitmap(@species,@gender,@form,false,false,true)
-      @sprites["formback"].y = 256
-      @sprites["formback"].y += species_data.back_sprite_y * 2
-    end
-    if @sprites["formicon"]
-      @sprites["formicon"].pbSetParams(@species,@gender,@form)
-    end
+    # if @sprites["formfront"]
+    #   @sprites["formfront"].setSpeciesBitmap(@species,@gender,@form)
+    # end
+    # if @sprites["formback"]
+    #   @sprites["formback"].setSpeciesBitmap(@species,@gender,@form,false,false,true)
+    #   @sprites["formback"].y = 256
+    #   @sprites["formback"].y += species_data.back_sprite_y * 2
+    # end
+    # if @sprites["formicon"]
+    #   @sprites["formicon"].pbSetParams(@species,@gender,@form)
+    # end
   end
 
   def pbGetAvailableForms
@@ -203,7 +213,7 @@ class PokemonPokedexInfo_Scene
     case page
     when 1 then drawPageInfo
     when 2 then drawPageArea
-    when 2 then drawPageForms
+    when 3 then drawPageForms
     end
   end
 
@@ -493,24 +503,24 @@ class PokemonPokedexInfo_Scene
           (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
-      # elsif Input.trigger?(Input::LEFT)
-      #   oldpage = @page
-      #   @page -= 1
-      #   @page = 1 if @page<1
-      #   @page = 3 if @page>3
-      #   if @page!=oldpage
-      #     pbPlayCursorSE
-      #     dorefresh = true
-      #   end
-      # elsif Input.trigger?(Input::RIGHT)
-      #   oldpage = @page
-      #   @page += 1
-      #   @page = 1 if @page<1
-      #   @page = 3 if @page>3
-      #   if @page!=oldpage
-      #     pbPlayCursorSE
-      #     dorefresh = true
-      #   end
+      elsif Input.trigger?(Input::LEFT)
+        oldpage = @page
+        @page -= 2
+        @page = 1 if @page<1
+        @page = 3 if @page>3
+        if @page!=oldpage
+          pbPlayCursorSE
+          dorefresh = true
+        end
+      elsif Input.trigger?(Input::RIGHT)
+        oldpage = @page
+        @page += 2
+        @page = 1 if @page<1
+        @page = 3 if @page>3
+        if @page!=oldpage
+          pbPlayCursorSE
+          dorefresh = true
+        end
       end
       if dorefresh
         drawPage(@page)
