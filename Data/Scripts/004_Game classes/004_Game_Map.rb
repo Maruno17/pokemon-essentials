@@ -189,6 +189,7 @@ class Game_Map
       if self_event && terrain.can_surf_freely
         [2, 1, 0].each do |j|
           facing_tile_id = data[newx, newy, j]
+          next if facing_tile_id == 0
           return false if facing_tile_id.nil?
           facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
           if facing_terrain.id != :None && !facing_terrain.ignore_passability
@@ -203,6 +204,7 @@ class Game_Map
         # Can't walk onto ledges
         [2, 1, 0].each do |j|
           facing_tile_id = data[newx, newy, j]
+          next if facing_tile_id == 0
           return false if facing_tile_id.nil?
           facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
           return false if facing_terrain.ledge
@@ -210,6 +212,7 @@ class Game_Map
         end
       end
       next if terrain&.ignore_passability
+      next if tile_id == 0
       # Regular passability checks
       passage = @passages[tile_id]
       return false if passage & bit != 0 || passage & 0x0f == 0x0f
@@ -222,6 +225,7 @@ class Game_Map
     bit = (1 << ((d / 2) - 1)) & 0x0f
     [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
+      next if tile_id == 0
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       passage = @passages[tile_id]
       if terrain
@@ -257,6 +261,7 @@ class Game_Map
     end
     [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
+      next if tile_id == 0
       next if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).ignore_passability
       return false if @passages[tile_id] & 0x0f != 0
       return true if @priorities[tile_id] == 0
@@ -267,6 +272,7 @@ class Game_Map
   def bush?(x, y)
     [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
+      next if tile_id == 0
       return false if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).bridge &&
                       $PokemonGlobal.bridge > 0
       return true if @passages[tile_id] & 0x40 == 0x40
@@ -277,6 +283,7 @@ class Game_Map
   def deepBush?(x, y)
     [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
+      next if tile_id == 0
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       return false if terrain.bridge && $PokemonGlobal.bridge > 0
       return true if terrain.deep_bush && @passages[tile_id] & 0x40 == 0x40
@@ -287,6 +294,7 @@ class Game_Map
   def counter?(x, y)
     [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
+      next if tile_id == 0
       passage = @passages[tile_id]
       return true if passage & 0x80 == 0x80
     end
@@ -297,6 +305,7 @@ class Game_Map
     if valid?(x, y)
       [2, 1, 0].each do |i|
         tile_id = data[x, y, i]
+        next if tile_id == 0
         terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
         next if terrain.id == :None || terrain.ignore_passability
         next if !countBridge && terrain.bridge && $PokemonGlobal.bridge == 0
