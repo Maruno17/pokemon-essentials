@@ -3,6 +3,7 @@
 #===============================================================================
 class PokemonPokedexInfo_Scene
   def pbStartScene(dexlist,index,region)
+    @endscene=false
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
     @dexlist = dexlist
@@ -55,20 +56,27 @@ class PokemonPokedexInfo_Scene
     @sprites["formicon"].setOffset(PictureOrigin::Center)
     @sprites["formicon"].x = 82
     @sprites["formicon"].y = 328
-    @sprites["uparrow"] = AnimatedSprite.new("Graphics/Pictures/uparrow",8,28,40,2,@viewport)
-    @sprites["uparrow"].x = 242
-    @sprites["uparrow"].y = 20#268
+    @sprites["formicon"].visible=false
+
+    @sprites["uparrow"] = AnimatedSprite.new("Graphics/Pictures/leftarrow",8,40,28,2,@viewport)
+    @sprites["uparrow"].x = 20
+    @sprites["uparrow"].y = 250#268
     @sprites["uparrow"].play
     @sprites["uparrow"].visible = false
-    @sprites["downarrow"] = AnimatedSprite.new("Graphics/Pictures/downarrow",8,28,40,2,@viewport)
-    @sprites["downarrow"].x = 242
-    @sprites["downarrow"].y = 348
+    @sprites["downarrow"] = AnimatedSprite.new("Graphics/Pictures/rightarrow",8,40,28,2,@viewport)
+    @sprites["downarrow"].x = 440
+    @sprites["downarrow"].y = 250
     @sprites["downarrow"].play
     @sprites["downarrow"].visible = false
     @sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
+
+
+
+
     pbSetSystemFont(@sprites["overlay"].bitmap)
     pbUpdateDummyPokemon
     @available = pbGetAvailableForms
+    initializeSpritesPage(@available)
     drawPage(@page)
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
@@ -206,9 +214,13 @@ class PokemonPokedexInfo_Scene
     @sprites["areamap"].visible       = (@page==2) if @sprites["areamap"]
     @sprites["areahighlight"].visible = (@page==2) if @sprites["areahighlight"]
     @sprites["areaoverlay"].visible   = (@page==2) if @sprites["areaoverlay"]
-    @sprites["formfront"].visible     = (@page==3) if @sprites["formfront"]
-    @sprites["formback"].visible      = (@page==3) if @sprites["formback"]
-    @sprites["formicon"].visible      = (@page==3) if @sprites["formicon"]
+    # @sprites["formfront"].visible     = (@page==3) if @sprites["formfront"]
+    #@sprites["formback"].visible      = (@page==3) if @sprites["formback"]
+    #@sprites["formicon"].visible      = (@page==3) if @sprites["formicon"]
+
+    @sprites["previousSprite"].visible = (@page==3) if @sprites["previousSprite"]
+    @sprites["selectedSprite"].visible = (@page==3) if @sprites["selectedSprite"]
+    @sprites["nextSprite"].visible = (@page==3) if @sprites["nextSprite"]
     # Draw page-specific information
     case page
     when 1 then drawPageInfo
@@ -462,7 +474,7 @@ class PokemonPokedexInfo_Scene
 
   def pbScene
     Pokemon.play_cry(@species, @form)
-    loop do
+    until @endscene
       Graphics.update
       Input.update
       pbUpdate
@@ -474,10 +486,10 @@ class PokemonPokedexInfo_Scene
         pbPlayCloseMenuSE
         break
       elsif Input.trigger?(Input::USE)
-        if @page==2   # Area
-#          dorefresh = true
-        elsif @page==3   # Forms
-          if @available.length>1
+        if @page == 2 # Area
+          #          dorefresh = true
+        elsif @page == 3 # Forms
+          if @available.length > 1
             pbPlayDecisionSE
             pbChooseForm
             dorefresh = true
@@ -486,38 +498,38 @@ class PokemonPokedexInfo_Scene
       elsif Input.trigger?(Input::UP)
         oldindex = @index
         pbGoToPrevious
-        if @index!=oldindex
+        if @index != oldindex
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
-          (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
+          (@page == 1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
       elsif Input.trigger?(Input::DOWN)
         oldindex = @index
         pbGoToNext
-        if @index!=oldindex
+        if @index != oldindex
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
-          (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
+          (@page == 1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
       elsif Input.trigger?(Input::LEFT)
         oldpage = @page
         @page -= 2
-        @page = 1 if @page<1
-        @page = 3 if @page>3
-        if @page!=oldpage
+        @page = 1 if @page < 1
+        @page = 3 if @page > 3
+        if @page != oldpage
           pbPlayCursorSE
           dorefresh = true
         end
       elsif Input.trigger?(Input::RIGHT)
         oldpage = @page
         @page += 2
-        @page = 1 if @page<1
-        @page = 3 if @page>3
-        if @page!=oldpage
+        @page = 1 if @page < 1
+        @page = 3 if @page > 3
+        if @page != oldpage
           pbPlayCursorSE
           dorefresh = true
         end
