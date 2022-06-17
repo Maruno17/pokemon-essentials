@@ -168,12 +168,8 @@ class PokemonMapFactory
     return false if !map.valid?(x, y)
     return true if thisEvent.through
     # Check passability of tile
-    if thisEvent.is_a?(Game_Player)
-      return false unless ($DEBUG && Input.press?(Input::CTRL)) ||
-                          map.passable?(x, y, 0, thisEvent)
-    else
-      return false unless map.passable?(x, y, 0, thisEvent)
-    end
+    return true if $DEBUG && Input.press?(Input::CTRL) && thisEvent.is_a?(Game_Player)
+    return false if !map.passable?(x, y, 0, thisEvent)
     # Check passability of event(s) in that spot
     map.events.each_value do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)
@@ -188,20 +184,15 @@ class PokemonMapFactory
     return true
   end
 
-  # Only used by dependent events
+  # Only used by follower events
   def isPassableStrict?(mapID, x, y, thisEvent = nil)
     thisEvent = $game_player if !thisEvent
     map = getMapNoAdd(mapID)
     return false if !map
     return false if !map.valid?(x, y)
     return true if thisEvent.through
-    if thisEvent == $game_player
-      if !($DEBUG && Input.press?(Input::CTRL)) && !map.passableStrict?(x, y, 0, thisEvent)
-        return false
-      end
-    elsif !map.passableStrict?(x, y, 0, thisEvent)
-      return false
-    end
+    return true if $DEBUG && Input.press?(Input::CTRL) && thisEvent.is_a?(Game_Player)
+    return false if !map.passableStrict?(x, y, 0, thisEvent)
     map.events.each_value do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)
       return false if !event.through && event.character_name != ""
@@ -229,10 +220,7 @@ class PokemonMapFactory
 
   def areConnected?(mapID1, mapID2)
     return true if mapID1 == mapID2
-    MapFactoryHelper.eachConnectionForMap(mapID1) do |conn|
-      return true if conn[0] == mapID2 || conn[3] == mapID2
-    end
-    return false
+    return MapFactoryHelper.mapsConnected?(mapID1, mapID2)
   end
 
   # Returns the coordinate change to go from this position to other position
