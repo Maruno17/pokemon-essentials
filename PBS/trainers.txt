@@ -1412,9 +1412,7 @@ Pokemon = B19H46,13
 #------------------
 
 [SUPERNERD,Miguel]
-Pokemon = B88H109,12 
-Pokemon = B109H41,12 
-Pokemon = B100H43,12 
+Pokemon = B88H109,16 
 #########Route 6 ############
 
 [TWINS,Day & Dani]

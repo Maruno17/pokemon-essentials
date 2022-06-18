@@ -63,35 +63,28 @@ http://japeal.com/pkm
 
 Special thanks to Aegide for helping to 
 rip the sprites and to the owners of Japeal 
-for accepting to share their sprites.
+for accepting to share their generated sprites.
 
-Custom sprites by various 
-members of the Discord
-
-Compiler optimization
-andracass (Pokémon Reborn)
-  
 Maps:
 Frogman
 Some of the maps were based on work by:
 BenGames, Zeak6464
 
-Gameplay planning / Story:
+Gameplay / Story:
 Frogman 
 The story and dialogues were based 
 off Pokémon Red and Blue, as well as
 Pokémon Gold and Silver.
 Both games are made by Game Freak.
 
-Custom legendary Pokémon sprites:
-Universez, Milchik, magnuzone, mammuth89
+ALl of the custom fused Pokémon sprites 
+were madeby various members of the 
+Pokémon Infinite Fusion Discord
 
-Endgame challenge teams planning:
-DemICE 
-
-Social media:
-ChippyYYZ, qt314xxx, Bizmythe, Terminaut
-
+Other custom graphics:
+calicorn, Doctor Miawoo, Frogman, Kiwi,
+Knuckles, magnuzone, ,mammuth89, Miawoo, 
+Milchik, Rick1234, Universez, UnworthyPie,
 
 
 The following free ressources were also used 
@@ -101,44 +94,29 @@ Pokémon Sprites:
 The Smogon XY Sprite Project:
 Smogon Sun/Moon Sprite Project:
 
-Overworld Sprites:
-Rick1234, Hankiro, SailorVicious, OceansLugiaSpirit 
-
-Battle sprites: 
-luckygirl88, Nalty   
+Other sprites:
+Hankiro, luckygirl88, Nalty, 
+OceansLugiaSpirit,Pokemon-Diamond,
+rekman, Rick1234, SailorVicious,WolfPP
 
 Tileset graphics:
-Jorginho, ThatsSoWitty DirtyWiggles 
-
-Including tiles by the following DeviantArt users:
-kyle-dove, rayd12smitty, Speedialga, 
-Spacemotion, Alucus ,Pokemon-Diamond, 
-kizemaru-kurunosuke, EpicDay,
-Thurpok, UltimoSpriter, iametrine, 
-Minorthreat0987 , TyranitarDark,  
-Heavy-Metal-Lover, KKKaito,
-WesleyFG, BoOmxBiG, 
-EternalTakai, Hek-el-grande
-
-Other tiles:
-Frogman, chimcharsfireworkd, 
-Rossay, Shiney570,
-Phyromatical, Gallanty 
+Alucus BoOmxBiG, chimcharsfireworkd, 
+EpicDay, EternalTakai, Gallanty Heavy-Metal-Lover, 
+Hek-el-grande,DirtyWiggles, iametrine, Jorginho, 
+kizemaru-kurunosuke, KKKaito, kyle-dove, Minorthreat0987,
+ Phyromatical, Pokemon-Diamond, rayd12smitty, Rossay, 
+Shiney570, Spacemotion, Speedialga, ThatsSoWitty Thurpok, 
+TyranitarDark, UltimoSpriter, WesleyFG,
 
 Music:    
 Pokeli, TailDoll666100
 Kazune Sawatari, sentsinkantéun,
 Nanashima, CharizardTheMaster, The Zame Jack 
 
-Other graphics  :    
-Pokemon-Diamond, WolfPP,
-rekman (Pokecommunity)
-
 RPG Maker Scripts:
 Luka S.J, shiney570, Erasus, Umbreon
 FL, KleinStudio, carmaniac, Wootius,
 andracass
-
 {INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}
 
 
@@ -174,35 +152,6 @@ KitsuneKouta<s>xLeD
 Lisa Anthony<s>
 and everyone else who helped out
 
-"Pokémon Infinite Fusion" was made by:
-Frogman
-
-Playtesting and Custom Sprites were made by 
-various members of the Discord channel. 
-Special thanks to all of you and to 
-everyone who has been involved in the 
-development of the game!
-
-"Pokémon Essentials" was created by:
-Flameguru
-Poccil (Peter O.)
-Maruno
-
-With contributions from:
-AvatarMonkeyKirby<s>Marin
-Boushy<s>MiDas Mike
-Brother1440<s>Near Fantastica
-FL.<s>PinkMan
-Genzai Kawakami<s>Popper
-Golisopod User<s>Rataime
-help-14<s>Savordez
-IceGod64<s>SoundSpawn
-Jacob O. Wobbrock<s>the__end
-KitsuneKouta<s>Venom12
-Lisa Anthony<s>Wachunga
-Luka S.J.<s> 
-and everyone else who helped out
-
 "mkxp-z" by:
 Roza
 Based on MKXP by Ancurio et al.
@@ -217,6 +166,12 @@ alexonsager.alexonsager.net
 All generated fusion sprites in this game
 come from the Pokémon Fusion Generator:
 https://japeal.com/pkm/
+
+Playtesting and Custom Sprites were made by 
+various members of the Discord channel. 
+Special thanks to all of you and to 
+everyone who has been involved in the 
+development of the game!
 
 Pokémon is owned by:
 The Pokémon Company

@@ -2,8 +2,8 @@ class PokemonPokedexInfo_Scene
   #todo add indicator to show which one is the main sprite -
   # also maybe add an indicator in main list for when a sprite has available alts
 
-  Y_POSITION_SMALL = 80
-  Y_POSITION_BIG = 90
+  Y_POSITION_SMALL = 40
+  Y_POSITION_BIG = 50
 
   X_POSITION_PREVIOUS=-20
   X_POSITION_SELECTED=120
@@ -128,14 +128,14 @@ class PokemonPokedexInfo_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::LEFT)
+      if Input.trigger?(Input::RIGHT)
         pbPlayCursorSE
         @selected_index -=1#(index+@available.length-1)%@available.length
         if @selected_index < 0
           @selected_index = @available.size-1
         end
         update_displayed
-      elsif Input.trigger?(Input::RIGHT)
+      elsif Input.trigger?(Input::LEFT)
         pbPlayCursorSE
         @selected_index +=1#= (index+1)%@available.length
         if @selected_index > @available.size-1
