@@ -46,14 +46,6 @@ class Battle::Battler
       pbEndTurn(choice)
       return false
     end
-    # Turn is skipped if Pursuit was used during switch
-    if @effects[PBEffects::Pursuit]
-      @effects[PBEffects::Pursuit] = false
-      pbCancelMoves
-      pbEndTurn(choice)
-      @battle.pbJudge
-      return false
-    end
     # Use the move
     PBDebug.log("[Move usage] #{pbThis} started using #{choice[2].name}")
     PBDebug.logonerr {

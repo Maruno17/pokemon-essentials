@@ -39,9 +39,7 @@ class Battle
       end
       # Use Pursuit
       @choices[b.index][3] = idxSwitcher   # Change Pursuit's target
-      if b.pbProcessTurn(@choices[b.index], false)
-        b.effects[PBEffects::Pursuit] = true
-      end
+      b.pbProcessTurn(@choices[b.index], false)
       break if @decision > 0 || @battlers[idxSwitcher].fainted?
     end
     @switching = false

@@ -236,7 +236,6 @@ class Battle::Battler
     @effects[PBEffects::PriorityItem]        = false
     @effects[PBEffects::Protect]             = false
     @effects[PBEffects::ProtectRate]         = 1
-    @effects[PBEffects::Pursuit]             = false
     @effects[PBEffects::Quash]               = 0
     @effects[PBEffects::Rage]                = false
     @effects[PBEffects::RagePowder]          = false

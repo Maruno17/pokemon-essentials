@@ -86,7 +86,6 @@ module Battle::DebugVariables
 #    PBEffects::PriorityItem - not suitable for setting via debug
     PBEffects::Protect        => { name: "Protect applies this round",                      default: false },
     PBEffects::ProtectRate    => { name: "Protect success chance 1/x",                      default: 1, max: 999 },
-#    PBEffects::Pursuit - not suitable for setting via debug
 #    PBEffects::Quash - not suitable for setting via debug
 #    PBEffects::Rage - only applies to use of specific move, not suitable for setting via debug
     PBEffects::Rollout        => { name: "Rollout rounds remaining (lower=stronger)",       default: 0 },
