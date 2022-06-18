@@ -692,7 +692,7 @@ module TrainerPokemonProperty
     }
     moves = []
     Pokemon::MAX_MOVES.times do |i|
-      moves.push(oldsetting[7 + i])
+      moves.push(oldsetting[8 + i])
     end
     moves.uniq!
     moves.compact!
