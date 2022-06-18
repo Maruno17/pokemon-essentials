@@ -104,7 +104,7 @@ class Battle
     #       Stomping Tantrum.
     userLastMoveFailed = moveUser.lastMoveFailed
     @futureSight = true
-    moveUser.pbUseMoveSimple(move, idxPos)
+    moveUser.pbUseMoveSimple(move, position_index)
     @futureSight = false
     moveUser.lastMoveFailed = userLastMoveFailed
     @battlers[position_index].pbFaint if @battlers[position_index].fainted?
