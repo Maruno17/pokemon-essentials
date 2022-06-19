@@ -373,6 +373,7 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
   end
 
   def shadowtext(t, x, y, w, h, align = 0, colors = 0)
+    y += 8   # TEXT OFFSET
     width = self.contents.text_size(t).width
     case align
     when 1
