@@ -420,6 +420,7 @@ class Game_Player < Game_Character
     last_real_x = @real_x
     last_real_y = @real_y
     super
+    update_stop if $game_temp.in_menu && @stopped_last_frame
     update_screen_position(last_real_x, last_real_y)
     # Update dependent events
     if (!@moved_last_frame || @stopped_last_frame ||
