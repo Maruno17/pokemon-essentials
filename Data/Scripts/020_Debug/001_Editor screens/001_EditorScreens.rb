@@ -147,7 +147,7 @@ def pbEncounterMapVersionEditor(enc_data)
       end
       commands.push(_INTL("Version={1}", enc_data.version))
       enc_data.types.each do |enc_type, slots|
-        next if !enc_type || !slots || slots.length == 0
+        next if !enc_type
         commands.push(_INTL("{1} (x{2})", enc_type.to_s, slots.length))
         enc_types.push(enc_type)
       end
