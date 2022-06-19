@@ -117,7 +117,7 @@ end
 #===============================================================================
 # Cursor
 #===============================================================================
-class PokemonBoxArrow < SpriteWrapper
+class PokemonBoxArrow < Sprite
   attr_accessor :quickswap
 
   def initialize(viewport = nil)
@@ -288,7 +288,7 @@ end
 #===============================================================================
 # Box
 #===============================================================================
-class PokemonBoxSprite < SpriteWrapper
+class PokemonBoxSprite < Sprite
   attr_accessor :refreshBox
   attr_accessor :refreshSprites
 
@@ -443,7 +443,7 @@ end
 #===============================================================================
 # Party pop-up panel
 #===============================================================================
-class PokemonBoxPartySprite < SpriteWrapper
+class PokemonBoxPartySprite < Sprite
   def initialize(party, viewport = nil)
     super(viewport)
     @party = party

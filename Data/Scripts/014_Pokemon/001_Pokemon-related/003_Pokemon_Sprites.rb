@@ -1,7 +1,7 @@
 #===============================================================================
 # Pokémon sprite (used out of battle)
 #===============================================================================
-class PokemonSprite < SpriteWrapper
+class PokemonSprite < Sprite
   def initialize(viewport = nil)
     super(viewport)
     @_iconbitmap = nil
@@ -82,7 +82,7 @@ end
 #===============================================================================
 # Pokémon icon (for defined Pokémon)
 #===============================================================================
-class PokemonIconSprite < SpriteWrapper
+class PokemonIconSprite < Sprite
   attr_accessor :selected
   attr_accessor :active
   attr_reader   :pokemon
@@ -217,7 +217,7 @@ end
 #===============================================================================
 # Pokémon icon (for species)
 #===============================================================================
-class PokemonSpeciesIconSprite < SpriteWrapper
+class PokemonSpeciesIconSprite < Sprite
   attr_reader :species
   attr_reader :gender
   attr_reader :form

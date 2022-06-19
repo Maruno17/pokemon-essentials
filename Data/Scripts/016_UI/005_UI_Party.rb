@@ -1,7 +1,7 @@
 #===============================================================================
 # Pokémon party buttons and menu
 #===============================================================================
-class PokemonPartyConfirmCancelSprite < SpriteWrapper
+class PokemonPartyConfirmCancelSprite < Sprite
   attr_reader :selected
 
   def initialize(text, x, y, narrowbox = false, viewport = nil)
@@ -133,7 +133,7 @@ end
 #===============================================================================
 # Blank party panel
 #===============================================================================
-class PokemonPartyBlankPanel < SpriteWrapper
+class PokemonPartyBlankPanel < Sprite
   attr_accessor :text
 
   def initialize(_pokemon, index, viewport = nil)
@@ -162,7 +162,7 @@ end
 #===============================================================================
 # Pokémon party panel
 #===============================================================================
-class PokemonPartyPanel < SpriteWrapper
+class PokemonPartyPanel < Sprite
   attr_reader :pokemon
   attr_reader :active
   attr_reader :selected

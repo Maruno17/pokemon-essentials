@@ -173,7 +173,7 @@ class TriadScene
       "", 0, Graphics.height - 64, Graphics.width, 64, @viewport
     )
     (@battle.width * @battle.height).times do |i|
-      @sprites["sprite#{i}"] = SpriteWrapper.new(@viewport)
+      @sprites["sprite#{i}"] = Sprite.new(@viewport)
       @sprites["sprite#{i}"].x = (Graphics.width / 2) - 118 + ((i % 3) * 78)
       @sprites["sprite#{i}"].y = 36 + ((i / 3) * 94)
       @sprites["sprite#{i}"].z = 2

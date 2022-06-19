@@ -163,7 +163,7 @@ end
 ################################################################################
 # Sprite sheet scrolling bar
 ################################################################################
-class AnimationWindow < SpriteWrapper
+class AnimationWindow < Sprite
   attr_reader :animbitmap
   attr_reader :start
   attr_reader :selected

@@ -33,7 +33,7 @@ class PokemonEggHatch_Scene
     crackfilename = pbResolveBitmap(crackfilename)
     @hatchSheet = AnimatedBitmap.new(crackfilename)
     # Create egg cracks sprite
-    @sprites["hatch"] = SpriteWrapper.new(@viewport)
+    @sprites["hatch"] = Sprite.new(@viewport)
     @sprites["hatch"].x = @sprites["pokemon"].x
     @sprites["hatch"].y = @sprites["pokemon"].y
     @sprites["hatch"].ox = @sprites["pokemon"].ox

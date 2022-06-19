@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-class PokegearButton < SpriteWrapper
+class PokegearButton < Sprite
   attr_reader :index
   attr_reader :name
   attr_reader :selected

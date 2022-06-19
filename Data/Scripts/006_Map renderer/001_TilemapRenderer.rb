@@ -30,7 +30,7 @@ class TilemapRenderer
   #     tile layouts. For example, "Brick path" and "Sea".
   #   - The second is for single tile autotiles. For example, "Flowers1" and
   #     "Waterfall"
-  # Ihe top tiles of the tileset will instead use these autotiles. Large
+  # The top tiles of the tileset will instead use these autotiles. Large
   # autotiles come first, in the same 8x6 layout as you see when you double-
   # click on a real autotile in RMXP. After that are the single tile autotiles.
   # Extra autotiles are only useful if the tiles are animated, because otherwise

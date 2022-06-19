@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-class MapBottomSprite < SpriteWrapper
+class MapBottomSprite < Sprite
   attr_reader :mapname, :maplocation
 
   TEXT_MAIN_COLOR   = Color.new(248, 248, 248)

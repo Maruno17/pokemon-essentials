@@ -1,7 +1,7 @@
 #===============================================================================
 # Walking charset, for use in text entry screens and load game screen
 #===============================================================================
-class TrainerWalkingCharSprite < SpriteWrapper
+class TrainerWalkingCharSprite < Sprite
   def initialize(charset, viewport = nil)
     super(viewport)
     @animbitmap = nil

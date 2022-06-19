@@ -843,7 +843,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-class PurifyChamberSetView < SpriteWrapper
+class PurifyChamberSetView < Sprite
   attr_reader :set
   attr_reader :cursor
   attr_reader :heldpkmn
