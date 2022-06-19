@@ -51,25 +51,10 @@ their sprites.
 Maruno (http://pokemonessentials.wikia.com/wiki/Pok%C3%A9mon_Essentials_Wiki)
 
 ###########################################################
-###		Postgame add-ons				###
-###########################################################
-Endgame Challenge:
-	DemICE (https://www.rebornevo.com/forum/index.php?/profile/62307-demice/)
-	Adapted from the infinity fusion endgame challenge mod
-	https://www.rebornevo.com/forum/index.php?/messenger/30070/&tab=comments#comment-297286
-
-Bill's Battletower:
-	barafanatic
-###########################################################
 ###			Playtesting			###
 ###########################################################
 Playtesting was done by various members of the Discord channel. 
 Special thanks to all of you!
-###########################################################
-###			Social media 			###
-###########################################################
-ChippyYYZ (Discord. reddit)
-qt314xxx (Discord)
 ###########################################################
 ###			Graphics			  #
 ###########################################################

@@ -104,8 +104,12 @@ module GameData
         end
       end
       customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER + filename)
-      regularPath = Settings::BATTLERS_FOLDER + folder + "/" + filename
-      return customPath ? customPath : pbResolveBitmap(regularPath)
+      species = getSpecies(dex_number)
+      use_custom = customPath && !species.always_use_generated
+      if use_custom
+        return customPath
+      end
+      return Settings::BATTLERS_FOLDER + folder + "/" + filename
     end
 
   end

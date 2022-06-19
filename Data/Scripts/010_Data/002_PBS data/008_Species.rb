@@ -47,6 +47,7 @@ module GameData
     attr_accessor :front_sprite_altitude
     attr_accessor :shadow_x
     attr_accessor :shadow_size
+    attr_accessor :alwaysUseGeneratedSprite
 
     DATA = {}
     DATA_FILENAME = "species.dat"
@@ -178,8 +179,16 @@ module GameData
       @front_sprite_altitude = hash[:front_sprite_altitude] || 0
       @shadow_x = hash[:shadow_x] || 0
       @shadow_size = hash[:shadow_size] || 2
+      @alwaysUseGeneratedSprite=false
     end
 
+    def set_always_use_generated_sprite(useGeneratedSprite)
+      @alwaysUseGeneratedSprite=useGeneratedSprite
+    end
+
+    def always_use_generated
+      return @alwaysUseGeneratedSprite
+    end
     # @return [String] the translated name of this species
     def name
       return pbGetMessage(MessageTypes::Species, @id_number)
