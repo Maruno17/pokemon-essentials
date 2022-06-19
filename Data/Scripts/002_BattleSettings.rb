@@ -64,7 +64,7 @@ module Settings
   # based on a total of 600+ species (i.e. that many species need to be caught
   # to provide the greatest critical capture chance of 2.5x), and there may be
   # fewer species in your game.
-  ENABLE_CRITICAL_CAPTURES  = (MECHANICS_GENERATION >= 5)
+  ENABLE_CRITICAL_CAPTURES  = false#(MECHANICS_GENERATION >= 5)
   # Whether Pokémon gain Exp for capturing a Pokémon.
   GAIN_EXP_FOR_CAPTURE      = (MECHANICS_GENERATION >= 5)
   # The Game Switch which, whie ON, prevents the player from losing money if

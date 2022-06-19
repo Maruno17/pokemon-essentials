@@ -221,6 +221,8 @@ class PokemonPokedexInfo_Scene
     @sprites["previousSprite"].visible = (@page==3) if @sprites["previousSprite"]
     @sprites["selectedSprite"].visible = (@page==3) if @sprites["selectedSprite"]
     @sprites["nextSprite"].visible = (@page==3) if @sprites["nextSprite"]
+
+    hide_all_selected_windows
     # Draw page-specific information
     case page
     when 1 then drawPageInfo

@@ -5,7 +5,7 @@ class PokemonPokedexInfo_Scene
   Y_POSITION_SMALL = 80#40
   Y_POSITION_BIG = 50
   X_POSITION_PREVIOUS = 20#-20
-  X_POSITION_SELECTED = 120
+  X_POSITION_SELECTED = 115
   X_POSITION_NEXT = 380#340
 
   Y_POSITION_BG_SMALL = 70
@@ -98,11 +98,14 @@ class PokemonPokedexInfo_Scene
     return pbGetAvailableAlts
   end
 
-  def update_selected
+  def hide_all_selected_windows
     @sprites["bgSelected_previous"].visible = false
     @sprites["bgSelected_center"].visible = false
     @sprites["bgSelected_next"].visible = false
+  end
 
+  def update_selected
+    hide_all_selected_windows
     previous_index = @selected_index == 0 ? @available.size - 1 : @selected_index - 1
     next_index = @selected_index == @available.size - 1 ? 0 : @selected_index + 1
 
