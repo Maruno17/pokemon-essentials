@@ -143,6 +143,8 @@ class Battle
       # For each trainer in turn, find the needed number of Pokémon for them to
       # send out, and initialize them
       battlerNumber = 0
+      partyOrder = pbPartyOrder(side)
+      starts = pbPartyStarts(side)
       trainer.each_with_index do |_t, idxTrainer|
         ret[side][idxTrainer] = []
         eachInTeam(side, idxTrainer) do |pkmn, idxPkmn|
@@ -150,6 +152,10 @@ class Battle
           idxBattler = (2 * battlerNumber) + side
           pbCreateBattler(idxBattler, pkmn, idxPkmn)
           ret[side][idxTrainer].push(idxBattler)
+          if idxPkmn != starts[idxTrainer] + battlerNumber
+            idxOther = starts[idxTrainer] + battlerNumber
+            partyOrder[idxPkmn], partyOrder[idxOther] = partyOrder[idxOther], partyOrder[idxPkmn]
+          end
           battlerNumber += 1
           break if ret[side][idxTrainer].length >= requireds[idxTrainer]
         end
