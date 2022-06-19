@@ -67,6 +67,8 @@ class Sprite_Character < RPG::Sprite
       @reflection = Sprite_Reflection.new(self, character, viewport)
     end
     @surfbase = Sprite_SurfBase.new(self, character, viewport) if character == $game_player
+    self.zoom_x = TilemapRenderer::ZOOM_X
+    self.zoom_y = TilemapRenderer::ZOOM_Y
     update
   end
 
@@ -153,8 +155,12 @@ class Sprite_Character < RPG::Sprite
         pbDayNightTint(self)
       end
     end
-    self.x          = @character.screen_x
-    self.y          = @character.screen_y
+    this_x = @character.screen_x
+    this_x = ((this_x - (Graphics.width / 2)) * TilemapRenderer::ZOOM_X) + (Graphics.width / 2) if TilemapRenderer::ZOOM_X != 1
+    self.x          = this_x
+    this_y = @character.screen_y
+    this_y = ((this_y - (Graphics.height / 2)) * TilemapRenderer::ZOOM_Y) + (Graphics.height / 2) if TilemapRenderer::ZOOM_Y != 1
+    self.y          = this_y
     self.z          = @character.screen_z(@ch)
     self.opacity    = @character.opacity
     self.blend_type = @character.blend_type
