@@ -68,7 +68,7 @@ class Battle::Battler
       end
       # Grudge
       if target.effects[PBEffects::Grudge] && target.fainted?
-        move.pp = 0
+        user.pbSetPP(move, 0)
         @battle.pbDisplay(_INTL("{1}'s {2} lost all of its PP due to the grudge!",
                                 user.pbThis, move.name))
       end

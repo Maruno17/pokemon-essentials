@@ -413,7 +413,7 @@ class Battle
         pbDisplay(_INTL("{1} became cloaked in mystical moonlight!", battler.pbThis))
         battler.pbRecoverHP(battler.totalhp)
         battler.pbCureStatus(false)
-        battler.eachMove { |m| m.pp = m.total_pp }
+        battler.eachMove { |m| battler.pbSetPP(m, m.total_pp) }
         position.effects[PBEffects::LunarDance] = false
       elsif Settings::MECHANICS_GENERATION < 8
         position.effects[PBEffects::LunarDance] = false
