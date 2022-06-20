@@ -224,17 +224,13 @@ class MusicFileLister
     @commands.clear
     Dir.chdir(folder) {
 #      Dir.glob("*.mp3") { |f| @commands.push(f) }
-#      Dir.glob("*.MP3") { |f| @commands.push(f) }
       Dir.glob("*.ogg") { |f| @commands.push(f) }
-      Dir.glob("*.OGG") { |f| @commands.push(f) }
       Dir.glob("*.wav") { |f| @commands.push(f) }
-      Dir.glob("*.WAV") { |f| @commands.push(f) }
       Dir.glob("*.mid") { |f| @commands.push(f) }
-      Dir.glob("*.MID") { |f| @commands.push(f) }
       Dir.glob("*.midi") { |f| @commands.push(f) }
-      Dir.glob("*.MIDI") { |f| @commands.push(f) }
     }
-    @commands.sort!
+    @commands.uniq!
+    @commands.sort! { |a, b| a.downcase <=> b.downcase }
     @commands.length.times do |i|
       @index = i if @commands[i] == @setting
     end

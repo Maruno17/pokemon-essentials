@@ -514,7 +514,8 @@ def pbSelectSE(canvas, audio)
     animfiles.concat(Dir.glob("*.ogg"))
     animfiles.concat(Dir.glob("*.wma"))
   }
-  animfiles.sort! { |a, b| a.upcase <=> b.upcase }
+  animfiles.uniq!
+  animfiles.sort! { |a, b| a.downcase <=> b.downcase }
   animfiles = [_INTL("[Play user's cry]")] + animfiles
   cmdwin = pbListWindow(animfiles, 320)
   cmdwin.height = 480
