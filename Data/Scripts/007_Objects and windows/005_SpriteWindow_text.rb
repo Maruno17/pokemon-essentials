@@ -837,8 +837,11 @@ class SpriteWindow_Selectable < SpriteWindow_Base
 
   def refresh; end
 
+  def changedPosition; end
+
   def update_cursor_rect
     priv_update_cursor_rect
+    changedPosition
   end
 
   def update
@@ -1042,6 +1045,7 @@ end
 class Window_DrawableCommand < SpriteWindow_SelectableEx
   attr_reader :baseColor
   attr_reader :shadowColor
+  attr_reader :index
 
   def initialize(x,y,width,height,viewport=nil)
     super(x,y,width,height)
@@ -1059,6 +1063,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     @shadowColor = colors[1]
     refresh
   end
+
 
   def dispose
     @selarrow.dispose

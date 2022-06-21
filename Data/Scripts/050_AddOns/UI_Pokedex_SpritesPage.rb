@@ -2,11 +2,11 @@ class PokemonPokedexInfo_Scene
   #todo add indicator to show which one is the main sprite -
   # also maybe add an indicator in main list for when a sprite has available alts
 
-  Y_POSITION_SMALL = 80#40
-  Y_POSITION_BIG = 50
-  X_POSITION_PREVIOUS = 20#-20
-  X_POSITION_SELECTED = 115
-  X_POSITION_NEXT = 380#340
+  Y_POSITION_SMALL = 40#90
+  Y_POSITION_BIG = 60
+  X_POSITION_PREVIOUS = -30#20
+  X_POSITION_SELECTED = 105
+  X_POSITION_NEXT = 340#380
 
   Y_POSITION_BG_SMALL = 70
   Y_POSITION_BG_BIG = 93
@@ -64,15 +64,15 @@ class PokemonPokedexInfo_Scene
     @sprites["previousSprite"].x = X_POSITION_PREVIOUS
     @sprites["previousSprite"].y = Y_POSITION_SMALL
     @sprites["previousSprite"].visible = false
-    @sprites["previousSprite"].zoom_x = Settings::FRONTSPRITE_SCALE/2
-    @sprites["previousSprite"].zoom_y = Settings::FRONTSPRITE_SCALE/2
+    @sprites["previousSprite"].zoom_x = Settings::FRONTSPRITE_SCALE#/2
+    @sprites["previousSprite"].zoom_y = Settings::FRONTSPRITE_SCALE#/2
 
     @sprites["nextSprite"] = IconSprite.new(0, 0, @viewport)
     @sprites["nextSprite"].x = X_POSITION_NEXT
     @sprites["nextSprite"].y = Y_POSITION_SMALL
     @sprites["nextSprite"].visible = false
-    @sprites["nextSprite"].zoom_x = Settings::FRONTSPRITE_SCALE/2
-    @sprites["nextSprite"].zoom_y = Settings::FRONTSPRITE_SCALE/2
+    @sprites["nextSprite"].zoom_x = Settings::FRONTSPRITE_SCALE#/2
+    @sprites["nextSprite"].zoom_y = Settings::FRONTSPRITE_SCALE#/2
 
     @sprites["selectedSprite"].z = 9999999
     @sprites["previousSprite"].z = 9999999
@@ -99,9 +99,9 @@ class PokemonPokedexInfo_Scene
   end
 
   def hide_all_selected_windows
-    @sprites["bgSelected_previous"].visible = false
-    @sprites["bgSelected_center"].visible = false
-    @sprites["bgSelected_next"].visible = false
+    @sprites["bgSelected_previous"].visible = false if @sprites["bgSelected_previous"]
+    @sprites["bgSelected_center"].visible = false if @sprites["bgSelected_center"]
+    @sprites["bgSelected_next"].visible = false if @sprites["bgSelected_next"]
   end
 
   def update_selected

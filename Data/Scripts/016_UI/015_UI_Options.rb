@@ -46,15 +46,25 @@ module PropertyMixin
   end
 end
 
+
+class Option
+  attr_reader :description
+  def initialize(description)
+    @description=description
+  end
+end
+
+
 #===============================================================================
 #
 #===============================================================================
-class EnumOption
+class EnumOption < Option
   include PropertyMixin
   attr_reader :values
   attr_reader :name
 
-  def initialize(name, options, getProc, setProc)
+  def initialize(name, options, getProc, setProc,description="")
+    super(description)
     @name = name
     @values = options
     @getProc = getProc
@@ -137,13 +147,14 @@ end
 #===============================================================================
 #
 #===============================================================================
-class SliderOption
+class SliderOption < Option
   include PropertyMixin
   attr_reader :name
   attr_reader :optstart
   attr_reader :optend
 
-  def initialize(name, optstart, optend, optinterval, getProc, setProc)
+  def initialize(name, optstart, optend, optinterval, getProc, setProc, description="")
+    super(description)
     @name = name
     @optstart = optstart
     @optend = optend
@@ -172,8 +183,10 @@ end
 #===============================================================================
 class Window_PokemonOption < Window_DrawableCommand
   attr_reader :mustUpdateOptions
+  attr_reader :mustUpdateDescription
 
   def initialize(options, x, y, width, height)
+    @previous_Index=0
     @options = options
     @nameBaseColor = Color.new(24 * 8, 15 * 8, 0)
     @nameShadowColor = Color.new(31 * 8, 22 * 8, 10 * 8)
@@ -181,10 +194,20 @@ class Window_PokemonOption < Window_DrawableCommand
     @selShadowColor = Color.new(31 * 8, 17 * 8, 16 * 8)
     @optvalues = []
     @mustUpdateOptions = false
+    @mustUpdateDescription = false
     for i in 0...@options.length
       @optvalues[i] = 0
     end
     super(x, y, width, height)
+  end
+
+  def changedPosition
+    @mustUpdateDescription=true
+    super
+  end
+
+  def descriptionUpdated
+    @mustUpdateDescription=false
   end
 
   def nameBaseColor=(value)
@@ -293,8 +316,16 @@ end
 # Options main screen
 #===============================================================================
 class PokemonOption_Scene
+  def getDefaultDescription
+    return  _INTL("Speech frame {1}.", 1 + $PokemonSystem.textskin)
+  end
+
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
+    if @sprites["option"].mustUpdateDescription
+      updateDescription(@sprites["option"].index)
+      @sprites["option"].descriptionUpdated
+    end
   end
 
   def pbStartScene(inloadscreen = false)
@@ -328,6 +359,16 @@ class PokemonOption_Scene
     pbDeactivateWindows(@sprites)
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
+  def updateDescription(index)
+    index=0 if !index
+    begin
+      new_description = @PokemonOptions[index].description
+      new_description = getDefaultDescription if new_description == ""
+      @sprites["textbox"].text = _INTL(new_description)
+    rescue
+      @sprites["textbox"].text = getDefaultDescription
+    end
+  end
 
   def pbGetOptions(inloadscreen = false)
     options = []
@@ -342,7 +383,7 @@ class PokemonOption_Scene
                              $game_system.bgm_resume(playingBGM)
                            end
                          end
-                       }
+                       },"Sets the volume for background music"
       )
 
     options <<  SliderOption.new(_INTL("SE Volume"), 0, 100, 5,
@@ -358,7 +399,7 @@ class PokemonOption_Scene
                            end
                            pbPlayCursorSE
                          end
-                       }
+                       },"Sets the volume for sound effects"
       )
 
     if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) #beat the league
@@ -367,7 +408,7 @@ class PokemonOption_Scene
                                 proc { |value|
                                   $PokemonSystem.textspeed = value
                                   MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
-                                }
+                                },"Sets the speed at which the text is displayed"
       )
     else
       options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast")],
@@ -375,7 +416,7 @@ class PokemonOption_Scene
                                 proc { |value|
                                   $PokemonSystem.textspeed = value
                                   MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
-                                }
+                                },"Sets the speed at which the text is displayed"
       )
     end
 
@@ -384,7 +425,8 @@ class PokemonOption_Scene
       options <<
         EnumOption.new(_INTL("Autosave"),[_INTL("On"),_INTL("Off")],
                        proc {  $game_switches[AUTOSAVE_ENABLED_SWITCH] ? 0 : 1},
-                       proc {|value| $game_switches[AUTOSAVE_ENABLED_SWITCH]=value==0 }
+                       proc {|value| $game_switches[AUTOSAVE_ENABLED_SWITCH]=value==0 },
+                       "Automatically saves when healing at Pokémon centers"
         )
     end
 
@@ -403,24 +445,27 @@ class PokemonOption_Scene
                            $game_variables[VAR_DEFAULT_BATTLE_TYPE] = [1, 1]
                          end
                          $PokemonSystem.battle_type=value
-                       }
+                       },"Sets the number of Pokémon sent out in battles (when possible)"
         )
     end
 
     options <<  EnumOption.new(_INTL("Battle Effects"), [_INTL("On"), _INTL("Off")],
                      proc { $PokemonSystem.battlescene },
-                     proc { |value| $PokemonSystem.battlescene = value }
+                     proc { |value| $PokemonSystem.battlescene = value },
+                               "Display move animations in battles"
       )
 
 
     options << EnumOption.new(_INTL("Battle Style"), [_INTL("Switch"), _INTL("Set")],
                      proc { $PokemonSystem.battlestyle },
-                     proc { |value| $PokemonSystem.battlestyle = value }
+                     proc { |value| $PokemonSystem.battlestyle = value },
+                              "Prompts to switch Pokémon before the opponent sends out the next one"
       )
 
     options << EnumOption.new(_INTL("Default Movement"), [_INTL("Walking"), _INTL("Running")],
                      proc { $PokemonSystem.runstyle },
-                     proc { |value| $PokemonSystem.runstyle = value }
+                     proc { |value| $PokemonSystem.runstyle = value },
+                              "Sets the movements when not holding the Run key"
       )
 
     options << NumberOption.new(_INTL("Speech Frame"), 1, Settings::SPEECH_WINDOWSKINS.length,
@@ -439,7 +484,8 @@ class PokemonOption_Scene
       # ),
     options << EnumOption.new(_INTL("Text Entry"), [_INTL("Cursor"), _INTL("Keyboard")],
                      proc { $PokemonSystem.textinput },
-                     proc { |value| $PokemonSystem.textinput = value }
+                     proc { |value| $PokemonSystem.textinput = value },
+                              "Enter text by selecting letters or by typing on the keyboard"
       )
       EnumOption.new(_INTL("Screen Size"), [_INTL("S"), _INTL("M"), _INTL("L"), _INTL("XL"), _INTL("Full")],
                      proc { [$PokemonSystem.screensize, 4].min },
@@ -448,14 +494,13 @@ class PokemonOption_Scene
                          $PokemonSystem.screensize = value
                          pbSetResizeFactor($PokemonSystem.screensize)
                        end
-                     }
+                     },"Sets the size of the screen"
       )
     options << EnumOption.new(_INTL("Quick Surf"), [_INTL("Off"), _INTL("On")],
                      proc { $PokemonSystem.quicksurf },
-                     proc { |value| $PokemonSystem.quicksurf = value }
+                     proc { |value| $PokemonSystem.quicksurf = value },
+                              "Start surfing automatically when interacting with water"
       )
-
-
 
     return options
   end

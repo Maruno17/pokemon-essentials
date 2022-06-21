@@ -747,7 +747,7 @@ class PokemonFusionScene
 end
 
 def setFusionMoves(fusedPoke, poke2)
-  choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", fusedPoke.name), _INTL("Keep {1}'s moveset", poke2.name)], 2)
+  choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", fusedPoke.name), _INTL("Keep {1}'s moveset", poke2.name)], 0)
   if choice == 1
     return
   elsif choice == 2
@@ -806,7 +806,7 @@ def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
   ability1_name = GameData::Ability.get(abID1).name
   ability2_name = GameData::Ability.get(abID2).name
 
-  if (Kernel.pbMessage("Choose an ability.", [_INTL("{1}", ability1_name), _INTL("{1}", ability2_name)], 2)) == 0
+  if (Kernel.pbMessage("Choose an ability. ???", [_INTL("{1}", ability1_name), _INTL("{1}", ability2_name)], 2)) == 0
     return abID1 #hidden1 ? 4 : 0
   end
   return abID2 #hidden2 ? 5 : 1
