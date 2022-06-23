@@ -184,6 +184,7 @@ end
 class Window_PokemonOption < Window_DrawableCommand
   attr_reader :mustUpdateOptions
   attr_reader :mustUpdateDescription
+  attr_reader :selected_position
 
   def initialize(options, x, y, width, height)
     @previous_Index=0
@@ -195,6 +196,7 @@ class Window_PokemonOption < Window_DrawableCommand
     @optvalues = []
     @mustUpdateOptions = false
     @mustUpdateDescription = false
+    @selected_position=0
     for i in 0...@options.length
       @optvalues[i] = 0
     end
@@ -300,12 +302,16 @@ class Window_PokemonOption < Window_DrawableCommand
     if self.active && self.index < @options.length
       if Input.repeat?(Input::LEFT)
         self[self.index] = @options[self.index].prev(self[self.index])
-        dorefresh = true
+        dorefresh =
+        @selected_position=self[self.index]
         @mustUpdateOptions = true
+        @mustUpdateDescription=true
       elsif Input.repeat?(Input::RIGHT)
         self[self.index] = @options[self.index].next(self[self.index])
         dorefresh = true
+        @selected_position=self[self.index]
         @mustUpdateOptions = true
+        @mustUpdateDescription=true
       end
     end
     refresh if dorefresh
@@ -359,10 +365,23 @@ class PokemonOption_Scene
     pbDeactivateWindows(@sprites)
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
+
+
   def updateDescription(index)
     index=0 if !index
     begin
-      new_description = @PokemonOptions[index].description
+      horizontal_position = @sprites["option"].selected_position
+      optionDescription =  @PokemonOptions[index].description
+      if optionDescription.is_a?(Array)
+        if horizontal_position < optionDescription.size
+          new_description = optionDescription[horizontal_position]
+        else
+          new_description = getDefaultDescription
+        end
+      else
+        new_description = optionDescription
+      end
+
       new_description = getDefaultDescription if new_description == ""
       @sprites["textbox"].text = _INTL(new_description)
     rescue
@@ -459,13 +478,15 @@ class PokemonOption_Scene
     options << EnumOption.new(_INTL("Battle Style"), [_INTL("Switch"), _INTL("Set")],
                      proc { $PokemonSystem.battlestyle },
                      proc { |value| $PokemonSystem.battlestyle = value },
-                              "Prompts to switch Pokémon before the opponent sends out the next one"
+                              ["Prompts to switch Pokémon before the opponent sends out the next one",
+                               "No prompt to switch Pokémon before the opponent sends the next one"]
       )
 
     options << EnumOption.new(_INTL("Default Movement"), [_INTL("Walking"), _INTL("Running")],
                      proc { $PokemonSystem.runstyle },
                      proc { |value| $PokemonSystem.runstyle = value },
-                              "Sets the movements when not holding the Run key"
+                              ["Default to walking when not holding the Run key",
+                               "Default to running when not holding the Run key"]
       )
 
     options << NumberOption.new(_INTL("Speech Frame"), 1, Settings::SPEECH_WINDOWSKINS.length,
@@ -485,7 +506,8 @@ class PokemonOption_Scene
     options << EnumOption.new(_INTL("Text Entry"), [_INTL("Cursor"), _INTL("Keyboard")],
                      proc { $PokemonSystem.textinput },
                      proc { |value| $PokemonSystem.textinput = value },
-                              "Enter text by selecting letters or by typing on the keyboard"
+                              ["Enter text by selecting letters on the screen",
+                               "Enter text by typing on the keyboard"]
       )
       EnumOption.new(_INTL("Screen Size"), [_INTL("S"), _INTL("M"), _INTL("L"), _INTL("XL"), _INTL("Full")],
                      proc { [$PokemonSystem.screensize, 4].min },

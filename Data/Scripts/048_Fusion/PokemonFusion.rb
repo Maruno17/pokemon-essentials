@@ -747,21 +747,27 @@ class PokemonFusionScene
 end
 
 def setFusionMoves(fusedPoke, poke2)
-  choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", fusedPoke.name), _INTL("Keep {1}'s moveset", poke2.name)], 0)
-  if choice == 1
-    return
-  elsif choice == 2
-    fusedPoke.moves = poke2.moves
-    return
-  else
-    #Learn moves
-    movelist = poke2.moves
-    for move in movelist
-      if move.id != 0
-        pbLearnMove(fusedPoke, move.id, true, false, true)
-      end
-    end
-  end
+  pbFadeOutIn {
+    scene = FusionMovesOptionsScene.new(fusedPoke,poke2)
+    screen = PokemonOptionScreen.new(scene)
+    screen.pbStartScreen
+  }
+
+  # choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", fusedPoke.name), _INTL("Keep {1}'s moveset", poke2.name)], 0)
+  # if choice == 1
+  #   return
+  # elsif choice == 2
+  #   fusedPoke.moves = poke2.moves
+  #   return
+  # else
+  #   #Learn moves
+  #   movelist = poke2.moves
+  #   for move in movelist
+  #     if move.id != 0
+  #       pbLearnMove(fusedPoke, move.id, true, false, true)
+  #     end
+  #   end
+  # end
 end
 
 def setPokemonLevel(pokemon1, pokemon2, superSplicers)
