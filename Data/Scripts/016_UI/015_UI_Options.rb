@@ -236,7 +236,12 @@ class Window_PokemonOption < Window_DrawableCommand
     return @options.length + 1
   end
 
+  def dont_draw_item(index)
+    return false
+  end
+
   def drawItem(index, _count, rect)
+    return if dont_draw_item(index)
     rect = drawCursor(index, rect)
     optionname = (index == @options.length) ? _INTL("Confirm") : @options[index].name
     optionwidth = rect.width * 9 / 20
@@ -334,29 +339,26 @@ class PokemonOption_Scene
     end
   end
 
-  def pbStartScene(inloadscreen = false)
-    @sprites = {}
-    @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+  def initUIElements
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
       _INTL("Options"), 0, 0, Graphics.width, 64, @viewport)
     @sprites["textbox"] = pbCreateMessageWindow
     @sprites["textbox"].text = _INTL("Speech frame {1}.", 1 + $PokemonSystem.textskin)
     @sprites["textbox"].letterbyletter = false
     pbSetSystemFont(@sprites["textbox"].contents)
+  end
+
+  def pbStartScene(inloadscreen = false)
+    @sprites = {}
+    @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
+    @viewport.z = 99999
+    initUIElements
     # These are the different options in the game. To add an option, define a
     # setter and a getter for that option. To delete an option, comment it out
     # or delete it. The game's options may be placed in any order.
     @PokemonOptions = pbGetOptions(inloadscreen)
-
-
-
     @PokemonOptions = pbAddOnOptions(@PokemonOptions)
-    @sprites["option"] = Window_PokemonOption.new(@PokemonOptions, 0,
-                                                  @sprites["title"].height, Graphics.width,
-                                                  Graphics.height - @sprites["title"].height - @sprites["textbox"].height)
-    @sprites["option"].viewport = @viewport
-    @sprites["option"].visible = true
+    @sprites["option"] = initOptionsWindow
     # Get the values of each option
     for i in 0...@PokemonOptions.length
       @sprites["option"].setValueNoRefresh(i, (@PokemonOptions[i].get || 0))
@@ -364,6 +366,15 @@ class PokemonOption_Scene
     @sprites["option"].refresh
     pbDeactivateWindows(@sprites)
     pbFadeInAndShow(@sprites) { pbUpdate }
+  end
+
+  def initOptionsWindow
+    optionsWindow = Window_PokemonOption.new(@PokemonOptions, 0,
+                                                  @sprites["title"].height, Graphics.width,
+                                                  Graphics.height - @sprites["title"].height - @sprites["textbox"].height)
+    optionsWindow.viewport = @viewport
+    optionsWindow.visible = true
+    return optionsWindow
   end
 
 
@@ -532,6 +543,8 @@ class PokemonOption_Scene
     return options
   end
 
+
+
   def pbOptions
     oldSystemSkin = $PokemonSystem.frame # Menu
     oldTextSkin = $PokemonSystem.textskin # Speech
@@ -559,10 +572,14 @@ class PokemonOption_Scene
         if Input.trigger?(Input::BACK)
           break
         elsif Input.trigger?(Input::USE)
-          break if @sprites["option"].index == @PokemonOptions.length
+          break if isConfirmedOnKeyPress
         end
       end
     }
+  end
+
+  def isConfirmedOnKeyPress
+    return @sprites["option"].index == @PokemonOptions.length
   end
 
   def pbEndScene
@@ -589,7 +606,7 @@ class PokemonOptionScreen
 
   def pbStartScreen(inloadscreen = false)
     @scene.pbStartScene(inloadscreen)
-    @scene.pbOptions
+     @scene.pbOptions
     @scene.pbEndScene
   end
 end

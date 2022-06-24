@@ -531,36 +531,33 @@ class PokemonFusionScene
     poke1_number = GameData::Species.get(@pokemon1.species).id_number
     poke2_number = GameData::Species.get(@pokemon2.species).id_number
 
-    rsprite1 = PokemonSprite.new(@viewport)
-    rsprite2 = PokemonSprite.new(@viewport)
-    rsprite3 = PokemonSprite.new(@viewport)
+    @sprites["rsprite1"] = PokemonSprite.new(@viewport)
+    @sprites["rsprite2"] = PokemonSprite.new(@viewport)
+    @sprites["rsprite3"] = PokemonSprite.new(@viewport)
 
-    rsprite1.setPokemonBitmapFromId(poke1_number, false)
-    rsprite3.setPokemonBitmapFromId(poke2_number, false)
+    @sprites["rsprite1"].setPokemonBitmapFromId(poke1_number, false)
+    @sprites["rsprite3"].setPokemonBitmapFromId(poke2_number, false)
 
-    rsprite2.setPokemonBitmapFromId(@newspecies, false)
+    @sprites["rsprite2"].setPokemonBitmapFromId(@newspecies, false)
 
-    rsprite1.ox = rsprite1.bitmap.width / 2
-    rsprite1.oy = rsprite1.bitmap.height / 2
+    @sprites["rsprite1"].ox = @sprites["rsprite1"].bitmap.width / 2
+    @sprites["rsprite1"].oy = @sprites["rsprite1"].bitmap.height / 2
 
-    rsprite3.ox = rsprite3.bitmap.width / 2
-    rsprite3.oy = rsprite3.bitmap.height / 2
+    @sprites["rsprite3"].ox = @sprites["rsprite3"].bitmap.width / 2
+    @sprites["rsprite3"].oy = @sprites["rsprite3"].bitmap.height / 2
 
-    rsprite2.ox = rsprite2.bitmap.width / 2
-    rsprite2.oy = rsprite2.bitmap.height / 2
+    @sprites["rsprite2"].ox = @sprites["rsprite2"].bitmap.width / 2
+    @sprites["rsprite2"].oy = @sprites["rsprite2"].bitmap.height / 2
 
-    rsprite2.x = Graphics.width / 2
-    rsprite1.y = (Graphics.height - 96) / 2
-    rsprite3.y = (Graphics.height - 96) / 2
+    @sprites["rsprite2"].x = Graphics.width / 2
+    @sprites["rsprite1"].y = (Graphics.height - 96) / 2
+    @sprites["rsprite3"].y = (Graphics.height - 96) / 2
 
-    rsprite1.x = (Graphics.width / 2) - 100
-    rsprite3.x = (Graphics.width / 2) + 100
+    @sprites["rsprite1"].x = (Graphics.width / 2) - 100
+    @sprites["rsprite3"].x = (Graphics.width / 2) + 100
 
-    rsprite2.y = (Graphics.height - 96) / 2
-    rsprite2.opacity = 0
-    @sprites["rsprite1"] = rsprite1
-    @sprites["rsprite2"] = rsprite2
-    @sprites["rsprite3"] = rsprite3
+    @sprites["rsprite2"].y = (Graphics.height - 96) / 2
+    @sprites["rsprite2"].opacity = 0
 
     @sprites["rsprite1"].zoom_x = Settings::FRONTSPRITE_SCALE
     @sprites["rsprite1"].zoom_y = Settings::FRONTSPRITE_SCALE
@@ -571,7 +568,7 @@ class PokemonFusionScene
     @sprites["rsprite3"].zoom_x = Settings::FRONTSPRITE_SCALE
     @sprites["rsprite3"].zoom_y = Settings::FRONTSPRITE_SCALE
 
-    pbGenerateMetafiles(rsprite1.ox, rsprite1.oy, rsprite2.ox, rsprite2.oy, rsprite3.ox, rsprite3.oy, rsprite1.x, rsprite3.x)
+    pbGenerateMetafiles(@sprites["rsprite1"].ox, @sprites["rsprite1"].oy, @sprites["rsprite2"].ox, @sprites["rsprite2"].oy, @sprites["rsprite3"].ox, @sprites["rsprite3"].oy, @sprites["rsprite1"].x, @sprites["rsprite3"].x)
 
     @sprites["msgwindow"] = Kernel.pbCreateMessageWindow(@viewport)
     pbFadeInAndShow(@sprites)
@@ -626,9 +623,9 @@ class PokemonFusionScene
 
   # Closes the evolution screen.
   def pbEndScreen
-    Kernel.pbDisposeMessageWindow(@sprites["msgwindow"])
+    Kernel.pbDisposeMessageWindow(@sprites["msgwindow"]) if @sprites["msgwindow"]
     pbFadeOutAndHide(@sprites)
-    pbDisposeSpriteHash(@sprites)
+    pbDisposeSpriteHash(@sprites) if @sprites
     @viewport.dispose
   end
 
@@ -746,13 +743,23 @@ class PokemonFusionScene
   end
 end
 
-def setFusionMoves(fusedPoke, poke2)
-  pbFadeOutIn {
-    scene = FusionMovesOptionsScene.new(fusedPoke,poke2)
-    screen = PokemonOptionScreen.new(scene)
-    screen.pbStartScreen
-  }
+def clearUIForMoves
+  addBackgroundOrColoredPlane(@sprites, "background", "DNAbg",
+                              Color.new(248, 248, 248), @viewport)
+  pbDisposeSpriteHash(@sprites)
 
+end
+
+def setFusionMoves(fusedPoke, poke2)
+  clearUIForMoves
+
+  moves=fusedPoke.moves
+  scene = FusionMovesOptionsScene.new(fusedPoke,poke2)
+  screen = PokemonOptionScreen.new(scene)
+  screen.pbStartScreen
+  moves =[scene.move1,scene.move2,scene.move3,scene.move3]
+
+  fusedPoke.moves=moves
   # choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", fusedPoke.name), _INTL("Keep {1}'s moveset", poke2.name)], 0)
   # if choice == 1
   #   return
