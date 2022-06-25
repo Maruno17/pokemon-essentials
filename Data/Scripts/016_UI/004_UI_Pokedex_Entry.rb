@@ -20,28 +20,28 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"].zoom_x =  Settings::FRONTSPRITE_SCALE
     @sprites["infosprite"].zoom_y =  Settings::FRONTSPRITE_SCALE
 
-    @mapdata = pbLoadTownMapData
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    mappos = (map_metadata) ? map_metadata.town_map_position : nil
-    if @region < 0                                 # Use player's current region
-      @region = (mappos) ? mappos[0] : 0                      # Region 0 default
-    end
-    @sprites["areamap"] = IconSprite.new(0,0,@viewport)
-    @sprites["areamap"].setBitmap("Graphics/Pictures/#{@mapdata[@region][1]}")
-    @sprites["areamap"].x += (Graphics.width-@sprites["areamap"].bitmap.width)/2
-    @sprites["areamap"].y += (Graphics.height+32-@sprites["areamap"].bitmap.height)/2
-    for hidden in Settings::REGION_MAP_EXTRAS
-      if hidden[0]==@region && hidden[1]>0 && $game_switches[hidden[1]]
-        pbDrawImagePositions(@sprites["areamap"].bitmap,[
-           ["Graphics/Pictures/#{hidden[4]}",
-              hidden[2]*PokemonRegionMap_Scene::SQUAREWIDTH,
-              hidden[3]*PokemonRegionMap_Scene::SQUAREHEIGHT]
-        ])
-      end
-    end
-    @sprites["areahighlight"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
-    @sprites["areaoverlay"] = IconSprite.new(0,0,@viewport)
-    @sprites["areaoverlay"].setBitmap("Graphics/Pictures/Pokedex/overlay_area")
+    # @mapdata = pbLoadTownMapData
+    # map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    # mappos = (map_metadata) ? map_metadata.town_map_position : nil
+    # if @region < 0                                 # Use player's current region
+    #   @region = (mappos) ? mappos[0] : 0                      # Region 0 default
+    # end
+    # @sprites["areamap"] = IconSprite.new(0,0,@viewport)
+    # @sprites["areamap"].setBitmap("Graphics/Pictures/#{@mapdata[@region][1]}")
+    # @sprites["areamap"].x += (Graphics.width-@sprites["areamap"].bitmap.width)/2
+    # @sprites["areamap"].y += (Graphics.height+32-@sprites["areamap"].bitmap.height)/2
+    # for hidden in Settings::REGION_MAP_EXTRAS
+    #   if hidden[0]==@region && hidden[1]>0 && $game_switches[hidden[1]]
+    #     pbDrawImagePositions(@sprites["areamap"].bitmap,[
+    #        ["Graphics/Pictures/#{hidden[4]}",
+    #           hidden[2]*PokemonRegionMap_Scene::SQUAREWIDTH,
+    #           hidden[3]*PokemonRegionMap_Scene::SQUAREHEIGHT]
+    #     ])
+    #   end
+    # end
+    # @sprites["areahighlight"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
+    # @sprites["areaoverlay"] = IconSprite.new(0,0,@viewport)
+    # @sprites["areaoverlay"].setBitmap("Graphics/Pictures/Pokedex/overlay_area")
     @sprites["formfront"] = PokemonSprite.new(@viewport)
     @sprites["formfront"].setOffset(PictureOrigin::Center)
     @sprites["formfront"].x = 130

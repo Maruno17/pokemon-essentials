@@ -805,6 +805,8 @@ end
 #===============================================================================
 # Being given an item
 #===============================================================================
+
+
 def pbReceiveItem(item, quantity = 1, item_name = "", music = nil)
   #item_name -> pour donner un autre nom à l'item. Pas encore réimplémenté et surtout là pour éviter que ça plante quand des events essaient de le faire
   item = GameData::Item.get(item)
@@ -816,6 +818,9 @@ def pbReceiveItem(item, quantity = 1, item_name = "", music = nil)
   if item == :LEFTOVERS
     pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
   elsif item.is_machine? # TM or HM
+    if $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] && $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] && $game_variables[VAR_CURRENT_GYM_TYPE]>-1
+      item=randomizeGymTM(item)
+    end
     pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]", meName, itemname, GameData::Move.get(move).name))
   elsif quantity > 1
     pbMessage(_INTL("\\me[{1}]You obtained {2} \\c[1]{3}\\c[0]!\\wtnp[30]", meName, quantity, itemname))
@@ -830,4 +835,27 @@ def pbReceiveItem(item, quantity = 1, item_name = "", music = nil)
     return true
   end
   return false # Can't add the item
+end
+
+
+
+
+
+def randomizeGymTM(old_item)
+  gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
+  type_id = pbGet(VAR_GYM_TYPES_ARRAY)[gym_index]
+  idx=0
+  if $Trainer.badge_count >= 3
+    idx=1
+  end
+  if $Trainer.badge_count >= 6
+    idx=2
+  end
+  if $Trainer.badge_count >= 8
+    idx=3
+  end
+  typed_tms_array = Settings::RANDOMIZED_GYM_TYPE_TM[type_id]
+  return old_item if !typed_tms_array
+  return old_item if idx > typed_tms_array.size
+  return typed_tms_array[idx]
 end
