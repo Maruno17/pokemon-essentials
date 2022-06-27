@@ -630,6 +630,8 @@ class PokemonFusionScene
   end
 
   # Opens the fusion screen
+
+
   def pbFusionScreen(cancancel = false, superSplicer = false)
     metaplayer1 = SpriteMetafilePlayer.new(@metafile1, @sprites["rsprite1"])
     metaplayer2 = SpriteMetafilePlayer.new(@metafile2, @sprites["rsprite2"])
@@ -706,13 +708,15 @@ class PokemonFusionScene
       hiddenAbility1 = @pokemon1.ability == @pokemon1.getAbilityList[0][-1]
       hiddenAbility2 = @pokemon2.ability == @pokemon2.getAbilityList[0][-1]
 
-      setFusionMoves(@pokemon1, @pokemon2) if !noMoves
+
       #change species
       @pokemon1.species = newSpecies
-      @pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
-      if superSplicer
-        @pokemon1.nature = pbChooseNature(@pokemon1.nature, @pokemon2.nature)
-      end
+      #@pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
+      setFusionMoves(@pokemon1, @pokemon2) if !noMoves
+
+      # if superSplicer
+      #   @pokemon1.nature = pbChooseNature(@pokemon1.nature, @pokemon2.nature)
+      # end
       #Check moves for new species
       # movelist = @pokemon1.getMoveList
       # for i in movelist
@@ -747,6 +751,16 @@ def clearUIForMoves
   addBackgroundOrColoredPlane(@sprites, "background", "DNAbg",
                               Color.new(248, 248, 248), @viewport)
   pbDisposeSpriteHash(@sprites)
+
+end
+
+def setAbilityAndNature(abilitiesList, naturesList)
+  scene = FusionSelectOptionsScene.new(abilitiesList,naturesList)
+  screen = PokemonOptionScreen.new(scene)
+  screen.pbStartScreen
+
+  @pokemon1.ability = scene.selectedAbility
+  @pokemon1.nature = scene.selectedNature
 
 end
 
@@ -818,11 +832,16 @@ def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
 
   ability1_name = GameData::Ability.get(abID1).name
   ability2_name = GameData::Ability.get(abID2).name
+  availableNatures = []
+  availableNatures << @pokemon1.nature
+  availableNatures << @pokemon2.nature
 
-  if (Kernel.pbMessage("Choose an ability. ???", [_INTL("{1}", ability1_name), _INTL("{1}", ability2_name)], 2)) == 0
-    return abID1 #hidden1 ? 4 : 0
-  end
-  return abID2 #hidden2 ? 5 : 1
+  setAbilityAndNature([GameData::Ability.get(abID1),GameData::Ability.get(abID2)],availableNatures)
+
+  # if (Kernel.pbMessage("Choose an ability. ???", [_INTL("{1}", ability1_name), _INTL("{1}", ability2_name)], 2)) == 0
+  #   return abID1 #hidden1 ? 4 : 0
+  # end
+  # return abID2 #hidden2 ? 5 : 1
 end
 
 def pbChooseNature(species1_nature, species2_nature)
