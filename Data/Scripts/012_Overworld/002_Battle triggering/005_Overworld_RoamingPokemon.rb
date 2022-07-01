@@ -121,7 +121,7 @@ end
 # Returns whether the given category of encounter contains the actual encounter
 # method that will occur in the player's current position.
 def pbRoamingMethodAllowed(roamer_method)
-  enc_type = $PokemonEncounters.encounter_type
+  enc_type = $PokemonTemp.encounterType #$PokemonEncounters.encounter_type
   type = GameData::EncounterType.get(enc_type).type
   case roamer_method
   when 0   # Any step-triggered method (except Bug Contest)
@@ -145,7 +145,7 @@ EncounterModifier.register(proc { |encounter|
   next encounter if $PokemonGlobal.roamedAlready
   next encounter if $PokemonGlobal.partner
   next encounter if $PokemonTemp.pokeradar
-  next encounter if rand(100) < 75   # 25% chance of encountering a roaming Pokémon
+  #next encounter if rand(100) < 75   # 25% chance of encountering a roaming Pokémon
   # Look at each roaming Pokémon in turn and decide whether it's possible to
   # encounter it
   currentRegion = pbGetCurrentRegion

@@ -1941,6 +1941,13 @@ Items = MAXPOTION
 Pokemon = B95H24,32 #Arbix,
 Pokemon = B131H111,32 #Rhyras,
 Pokemon = B115H93,35 #Hauntkan,
+[ROCKETBOSS,Giovanni,4]		#Silph co
+Items = MAXPOTION
+Pokemon = B33H57,45 #nidorino + primeape
+Pokemon = B131H112,45 #rhydon + lapras
+Pokemon = B115H94,47 #gengar + kangaskhan
+Pokemon = B31H28,51 #nidoqueen + Sandslash
+
 ##############################
 
 ##################
@@ -3487,7 +3494,7 @@ Pokemon = B145H150,45 #Mewdos
 
 [ROCKETBOSS,Giovanni,3]
 Items = FULLHEAL
-Pokemon = BIRDBOSS,50 #
+Pokemon = BIRDBOSS,60 #
 	Moves = TRIATTACK2,DRILLPECK,SKYATTACK,HAZE
 	Ball = MASTERBALL
 	AbilityIndex = 2

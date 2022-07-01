@@ -271,6 +271,18 @@ Events.onMapChanging += proc { |_sender, e|
   end
   $game_screen.weather(:None, 0, 0)
 }
+Events.onMapChange += proc { |_sender, e|
+  next if !Settings::SEVII_ROAMING.include?($game_map.map_id)
+  new_map_ID = e[0]
+  new_map_metadata = GameData::MapMetadata.try_get(new_map_ID)
+  next if new_map_metadata && new_map_metadata.weather
+  feebas_map = $PokemonGlobal.roamPosition[4]
+  if $game_map.map_id == feebas_map
+    $game_screen.weather(:Rain, 4, 0)
+  else
+    $game_screen.weather(:None, 0, 0)
+  end
+}
 
 # Set up various data related to the new map
 Events.onMapChange += proc { |_sender, e|
@@ -292,6 +304,9 @@ Events.onMapChange += proc { |_sender, e|
   new_weather = new_map_metadata.weather
   $game_screen.weather(new_weather[0], 9, 0) if rand(100) < new_weather[1]
 }
+
+
+
 
 Events.onMapSceneChange += proc { |_sender, e|
   scene = e[0]
