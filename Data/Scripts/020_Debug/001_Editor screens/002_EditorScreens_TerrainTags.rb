@@ -40,7 +40,7 @@ class PokemonTilesetScene
       $map_factory.setup($game_map.map_id)
       $game_player.center($game_player.x, $game_player.y)
       if $scene.is_a?(Scene_Map)
-        $scene.disposeSpritesets
+        $scene.dispose
         $scene.createSpritesets
       end
     end

@@ -422,7 +422,7 @@ class PokemonBoxSprite < Sprite
           sprite.viewport = self.viewport
           sprite.x = xval
           sprite.y = yval
-          sprite.z = 0
+          sprite.z = 1
         end
         xval += 48
       end
@@ -547,7 +547,7 @@ class PokemonBoxPartySprite < Sprite
       sprite.viewport = self.viewport
       sprite.x = self.x + xvalues[j]
       sprite.y = self.y + yvalues[j]
-      sprite.z = 0
+      sprite.z = 1
     end
   end
 
