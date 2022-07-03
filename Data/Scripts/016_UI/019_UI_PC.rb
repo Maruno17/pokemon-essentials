@@ -180,6 +180,12 @@ MenuHandlers.add(:pc_menu, :pokemon_storage, {
           _INTL("Return to the previous menu.")], -1, command)
       break if command < 0
       case command
+      when 0   # Organize
+        pbFadeOutIn {
+          scene = PokemonStorageScene.new
+          screen = PokemonStorageScreen.new(scene, $PokemonStorage)
+          screen.pbStartScreen(command)
+        }
       when 1   # Withdraw
         if $PokemonStorage.party_full?
           pbMessage(_INTL("Your party is full!"))
@@ -194,12 +200,9 @@ MenuHandlers.add(:pc_menu, :pokemon_storage, {
           pbMessage(_INTL("Can't deposit the last Pokémon!"))
           next
         end
+      else
+        break
       end
-      pbFadeOutIn {
-        scene = PokemonStorageScene.new
-        screen = PokemonStorageScreen.new(scene, $PokemonStorage)
-        screen.pbStartScreen(command)
-      }
     end
     next false
   }

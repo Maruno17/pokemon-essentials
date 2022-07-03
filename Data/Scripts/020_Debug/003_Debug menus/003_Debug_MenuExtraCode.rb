@@ -62,16 +62,17 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
   def shadowtext(x, y, w, h, t, align = 0, colors = 0)
     width = self.contents.text_size(t).width
     case align
-    when 1 # Right aligned
+    when 1   # Right aligned
       x += (w - width)
-    when 2 # Centre aligned
+    when 2   # Centre aligned
       x += (w / 2) - (width / 2)
     end
+    y += 8   # TEXT OFFSET
     base = Color.new(12 * 8, 12 * 8, 12 * 8)
     case colors
-    when 1 # Red
+    when 1   # Red
       base = Color.new(168, 48, 56)
-    when 2 # Green
+    when 2   # Green
       base = Color.new(0, 144, 0)
     end
     pbDrawShadowText(self.contents, x, y, [width, w].max, h, t, base, Color.new(26 * 8, 26 * 8, 25 * 8))
