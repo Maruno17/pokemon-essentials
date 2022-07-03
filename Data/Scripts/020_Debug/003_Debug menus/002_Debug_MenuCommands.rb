@@ -522,7 +522,18 @@ MenuHandlers.add(:debug_menu, :add_pokemon, {
       params.setInitialValue(5)
       params.setCancelValue(0)
       level = pbMessageChooseNumber(_INTL("Set the Pokémon's level."), params)
-      pbAddPokemon(species, level) if level > 0
+      if level > 0
+        goes_to_party = !$player.party_full?
+        if pbAddPokemonSilent(species, level)
+          if goes_to_party
+            pbMessage(_INTL("Added {1} to party.", GameData::Species.get(species).name))
+          else
+            pbMessage(_INTL("Added {1} to Pokémon storage.", GameData::Species.get(species).name))
+          end
+        else
+          pbMessage(_INTL("Couldn't add Pokémon because party and storage are full."))
+        end
+      end
     end
   }
 })

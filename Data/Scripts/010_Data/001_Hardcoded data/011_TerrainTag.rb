@@ -60,6 +60,8 @@ module GameData
       @ignore_passability     = hash[:ignore_passability]     || false
     end
 
+    alias name real_name
+
     def can_surf_freely
       return @can_surf && !@waterfall && !@waterfall_crest
     end

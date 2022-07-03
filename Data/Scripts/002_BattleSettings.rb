@@ -76,6 +76,9 @@ module Settings
   # that much Exp (false). This also applies to Exp gained via the Exp Share
   # (held item version) being distributed to all Exp Share holders.
   SPLIT_EXP_BETWEEN_GAINERS            = (MECHANICS_GENERATION <= 5)
+  # Whether the Exp gained from beating a Pokémon is multiplied by 1.5 if that
+  # Pokémon is owned by another trainer.
+  MORE_EXP_FROM_TRAINER_POKEMON        = (MECHANICS_GENERATION <= 6)
   # Whether a Pokémon holding a Power item gains 8 (true) or 4 (false) EVs in
   # the relevant stat.
   MORE_EVS_FROM_POWER_ITEMS            = (MECHANICS_GENERATION >= 7)

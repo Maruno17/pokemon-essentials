@@ -19,6 +19,8 @@ module GameData
       @type           = hash[:type]           || :none
       @trigger_chance = hash[:trigger_chance] || 0
     end
+
+    alias name real_name
   end
 end
 

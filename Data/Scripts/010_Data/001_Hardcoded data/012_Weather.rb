@@ -44,6 +44,8 @@ module GameData
       @tone_proc              = hash[:tone_proc]
     end
 
+    alias name real_name
+
     def has_particles?
       return @graphics[0] && @graphics[0].length > 0
     end

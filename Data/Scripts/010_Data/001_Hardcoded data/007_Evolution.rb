@@ -32,6 +32,8 @@ module GameData
       @after_evolution_proc = hash[:after_evolution_proc]
     end
 
+    alias name real_name
+
     def call_level_up(*args)
       return (@level_up_proc) ? @level_up_proc.call(*args) : nil
     end
