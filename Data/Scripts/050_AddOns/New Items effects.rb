@@ -110,7 +110,7 @@ def useTeleporter()
   if HiddenMoveHandlers.triggerCanUseMove(:TELEPORT, 0, true)
     Kernel.pbMessage(_INTL("Teleport to where?", $Trainer.name))
     ret = pbBetterRegionMap(-1, true, true)
-    pbShowMenu unless ret
+    return false unless ret
     ###############################################
     if ret
       $PokemonTemp.flydata = ret
