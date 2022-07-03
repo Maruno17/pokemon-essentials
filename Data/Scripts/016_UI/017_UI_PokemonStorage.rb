@@ -499,7 +499,7 @@ class PokemonBoxSprite < SpriteWrapper
           sprite.viewport = self.viewport
           sprite.x = xval
           sprite.y = yval
-          sprite.z = 0
+          sprite.z = 1
         end
         xval += 48
       end
@@ -630,12 +630,11 @@ class PokemonBoxPartySprite < SpriteWrapper
     @pokemonsprites.compact!
     for j in 0...Settings::MAX_PARTY_SIZE
       sprite = @pokemonsprites[j]
-      if sprite && !sprite.disposed?
-        sprite.viewport = self.viewport
-        sprite.x = self.x + xvalues[j]
-        sprite.y = self.y + yvalues[j]
-        sprite.z = 0
-      end
+      next if sprite.nil? || sprite.disposed?
+      sprite.viewport = self.viewport
+      sprite.x = self.x + xvalues[j]
+      sprite.y = self.y + yvalues[j]
+      sprite.z = 1
     end
   end
 

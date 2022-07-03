@@ -280,10 +280,14 @@ class TilemapRenderer
     @tiles.each do |col|
       col.each do |coord|
         coord.each { |tile| tile.dispose }
+        coord.clear
       end
     end
+    @tiles.clear
     @tilesets.bitmaps.each_value { |bitmap| bitmap.dispose }
+    @tilesets.bitmaps.clear
     @autotiles.bitmaps.each_value { |bitmap| bitmap.dispose }
+    @autotiles.bitmaps.clear
     @self_viewport.dispose
     @self_viewport = nil
     @disposed = true

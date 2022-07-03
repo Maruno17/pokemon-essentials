@@ -44,6 +44,14 @@ class Scene_Map
     @spritesets = {}
   end
 
+  def dispose
+    disposeSpritesets
+    @map_renderer.dispose
+    @map_renderer = nil
+    @spritesetGlobal.dispose
+    @spritesetGlobal = nil
+  end
+
   def autofade(mapid)
     playingBGM = $game_system.playing_bgm
     playingBGS = $game_system.playing_bgs
@@ -252,7 +260,7 @@ class Scene_Map
       break if $scene != self
     end
     Graphics.freeze
-    disposeSpritesets
+    dispose
     if $game_temp.to_title
       Graphics.transition(20)
       Graphics.freeze
