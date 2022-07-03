@@ -64,7 +64,6 @@ class Scene_Map
 
   #todo
   def cacheNeedsClearing
-    p RPG::Cache.size
     return RPG::Cache.size >= 100
   end
 

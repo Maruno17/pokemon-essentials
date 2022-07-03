@@ -3,7 +3,9 @@
 #===============================================================================
 def pbSceneStandby
   $scene.disposeSpritesets if $scene.is_a?(Scene_Map)
-  RPG::Cache.clear
+  if RPG::Cache.need_clearing
+    RPG::Cache.clear
+  end
   Graphics.frame_reset
   yield
   $scene.createSpritesets if $scene.is_a?(Scene_Map)
@@ -23,7 +25,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     $game_system.bgs_pause
   end
   pbMEFade(0.25)
-  pbWait(Graphics.frame_rate/4)
+  #pbWait(Graphics.frame_rate/4)
   pbMEStop
   # Play battle music
   bgm = pbGetWildBattleBGM([]) if !bgm
@@ -113,7 +115,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
   $PokemonEncounters.reset_step_count
   # Fade back to the overworld
   viewport.color = Color.new(0,0,0,255)
-  numFrames = Graphics.frame_rate*4/10   # 0.4 seconds, 16 frames
+  numFrames = Graphics.frame_rate*1/10   #4/10 0.4 seconds, 16 frames
   alphaDiff = (255.0/numFrames).ceil
   numFrames.times do
     viewport.color.alpha -= alphaDiff
