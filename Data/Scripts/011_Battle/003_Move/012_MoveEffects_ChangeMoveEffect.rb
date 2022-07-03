@@ -695,6 +695,7 @@ class Battle::Move::UseLastMoveUsed < Battle::Move
       "ProtectUserSideFromDamagingMovesIfUserFirstTurn",   # Mat Block
       "ProtectUserSideFromStatusMoves",                    # Crafty Shield      # Not listed on Bulbapedia
       "ProtectUserFromDamagingMovesKingsShield",           # King's Shield
+      "ProtectUserFromDamagingMovesObstruct",              # Obstruct           # Not listed on Bulbapedia
       "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
       "ProtectUserBanefulBunker",                          # Baneful Bunker
       # Moves that call other moves
@@ -1009,6 +1010,7 @@ class Battle::Move::UseRandomMoveFromUserParty < Battle::Move
       "ProtectUserSideFromDamagingMovesIfUserFirstTurn",   # Mat Block
       "ProtectUserSideFromStatusMoves",                    # Crafty Shield      # Not listed on Bulbapedia
       "ProtectUserFromDamagingMovesKingsShield",           # King's Shield
+      "ProtectUserFromDamagingMovesObstruct",              # Obstruct           # Not listed on Bulbapedia
       "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
       "ProtectUserBanefulBunker",                          # Baneful Bunker
       # Moves that call other moves

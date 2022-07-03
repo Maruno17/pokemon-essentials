@@ -121,7 +121,7 @@ Battle::PokeBallEffects::ModifyCatchRate.add(:LUREBALL, proc { |ball, catchRate,
 
 Battle::PokeBallEffects::ModifyCatchRate.add(:HEAVYBALL, proc { |ball, catchRate, battle, battler|
   next 0 if catchRate == 0
-  weight = battler.pokemon.species_data.base_stats[:SPEED]
+  weight = battler.pbWeight
   if Settings::NEW_POKE_BALL_CATCH_RATES
     if weight >= 3000
       catchRate += 30
@@ -141,8 +141,7 @@ Battle::PokeBallEffects::ModifyCatchRate.add(:HEAVYBALL, proc { |ball, catchRate
       catchRate -= 20
     end
   end
-  catchRate = [catchRate, 1].max
-  next [catchRate, 255].min
+  next catchRate.clamp(1, 255)
 })
 
 Battle::PokeBallEffects::ModifyCatchRate.add(:LOVEBALL, proc { |ball, catchRate, battle, battler|
