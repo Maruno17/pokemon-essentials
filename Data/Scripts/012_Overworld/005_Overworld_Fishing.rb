@@ -29,7 +29,7 @@ def pbFishingEnd
     end
   end
   yield if block_given?
-  $game_player.set_movement_type(($PokemonGlobal.surfing) ? :surfing : :walking)
+  $game_player.set_movement_type(($PokemonGlobal.surfing) ? :surfing_stopped : :walking_stopped)
   $game_player.lock_pattern = false
   $game_player.straighten
   $PokemonGlobal.fishing = false
