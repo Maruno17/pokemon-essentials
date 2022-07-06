@@ -147,6 +147,7 @@ def pbChangeLevel(pkmn, new_level, scene)
   old_speed           = pkmn.speed
   pkmn.level = new_level
   pkmn.calc_stats
+  pkmn.hp = 1 if new_level > old_level && pkmn.species_data.base_stats[:HP] == 1
   scene.pbRefresh
   if old_level > new_level
     if scene.is_a?(PokemonPartyScreen)

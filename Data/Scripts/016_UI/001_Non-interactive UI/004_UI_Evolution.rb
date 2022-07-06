@@ -597,7 +597,9 @@ class PokemonEvolutionScene
     # Check for consumed item and check if Pokémon should be duplicated
     pbEvolutionMethodAfterEvolution
     # Modify Pokémon to make it evolved
+    was_fainted = @pokemon.fainted?
     @pokemon.species = @newspecies
+    @pokemon.hp = 0 if was_fainted
     @pokemon.calc_stats
     @pokemon.ready_to_evolve = false
     # See and own evolved species
