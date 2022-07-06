@@ -792,7 +792,7 @@ module Compiler
           )
           push_event(list, 208, [0])   # Change Transparent Flag (invisible)
           push_script(list, "Followers.follow_into_door")
-          push_event(list, 210, [], indent)   # Wait for Move's Completion
+          push_event(list, 210, [])   # Wait for Move's Completion
           push_move_route_and_wait(   # Move Route for door closing
             list, 0,
             [PBMoveRoute::Wait, 2,
