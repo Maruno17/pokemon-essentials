@@ -26,7 +26,7 @@ module Battle::CatchAndStoreMixin
         when 0   # Add to your party
           pbDisplay(_INTL("Choose a Pokémon in your party to send to your Boxes."))
           party_index = -1
-          @scene.pbPartyScreen(0, true, 1) { |idxParty, _partyScene|
+          @scene.pbPartyScreen(0, (@sendToBoxes != 2), 1) { |idxParty, _partyScene|
             party_index = idxParty
             next true
           }
@@ -43,8 +43,9 @@ module Battle::CatchAndStoreMixin
           #       this would take a surprising amount of code, and it's very
           #       unlikely to be needed anyway, so I'm ignoring it for now.
           send_pkmn = pbPlayer.party[party_index]
-          box_name = @peer.pbStorePokemon(pbPlayer, send_pkmn)
+          stored_box = @peer.pbStorePokemon(pbPlayer, send_pkmn)
           pbPlayer.party.delete_at(party_index)
+          box_name = @peer.pbBoxName(stored_box)
           pbDisplayPaused(_INTL("{1} has been sent to Box \"{2}\".", send_pkmn.name, box_name))
           # Rearrange all remembered properties of party Pokémon
           (party_index...party_size).each do |idx|

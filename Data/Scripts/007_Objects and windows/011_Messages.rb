@@ -30,7 +30,7 @@ def pbEventCommentInput(*args)
   return nil if list.nil?
   return nil unless list.is_a?(Array)
   list.each do |item|
-    next if ![108, 108].include?(item.code)
+    next if ![108, 408].include?(item.code)
     next if item.parameters[0] != trigger
     start = list.index(item) + 1
     finish = start + elements
