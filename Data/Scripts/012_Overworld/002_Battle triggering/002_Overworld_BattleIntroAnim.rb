@@ -195,7 +195,7 @@ end
 #===============================================================================
 SpecialBattleIntroAnimations.register("vs_trainer_animation", 60,   # Priority 60
   proc { |battle_type, foe, location|   # Condition
-    next false if battle_type != 1   # Single trainer battle
+    next false if battle_type.even? || foe.length != 1   # Trainer battle against 1 trainer
     tr_type = foe[0].trainer_type
     next pbResolveBitmap("Graphics/Transitions/hgss_vs_#{tr_type}") &&
          pbResolveBitmap("Graphics/Transitions/hgss_vsBar_#{tr_type}")
@@ -218,7 +218,7 @@ SpecialBattleIntroAnimations.register("vs_trainer_animation", 60,   # Priority 6
 #===============================================================================
 SpecialBattleIntroAnimations.register("vs_elite_four_animation", 60,   # Priority 60
   proc { |battle_type, foe, location|   # Condition
-    next false if battle_type != 1   # Single trainer battle
+    next false if battle_type.even? || foe.length != 1   # Trainer battle against 1 trainer
     tr_type = foe[0].trainer_type
     next pbResolveBitmap("Graphics/Transitions/vsE4_#{tr_type}") &&
          pbResolveBitmap("Graphics/Transitions/vsE4Bar_#{tr_type}")
@@ -274,7 +274,7 @@ SpecialBattleIntroAnimations.register("vs_admin_animation", 60,   # Priority 60
 ##### Tweaked by Maruno           #####
 SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # Priority 50
   proc { |battle_type, foe, location|   # Condition
-    next false if battle_type != 1   # Single trainer battle
+    next false if battle_type.even? || foe.length != 1   # Trainer battle against 1 trainer
     tr_type = foe[0].trainer_type
     next pbResolveBitmap("Graphics/Transitions/vsTrainer_#{tr_type}") &&
          pbResolveBitmap("Graphics/Transitions/vsBar_#{tr_type}")

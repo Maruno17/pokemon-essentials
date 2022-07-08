@@ -649,7 +649,7 @@ end
 class Battle::Move::HigherPriorityInGrassyTerrain < Battle::Move
   def pbPriority(user)
     ret = super
-    ret += 1 if @battle.field.terrain == :Grass && user.affectedByTerrain?
+    ret += 1 if @battle.field.terrain == :Grassy && user.affectedByTerrain?
     return ret
   end
 end
