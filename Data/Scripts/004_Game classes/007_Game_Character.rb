@@ -209,13 +209,16 @@ class Game_Character
       @bush_depth = 0
       return
     end
-    xbehind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
-    ybehind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
     this_map = (self.map.valid?(@x, @y)) ? [self.map, @x, @y] : $map_factory&.getNewMap(@x, @y, self.map.map_id)
-    behind_map = (self.map.valid?(xbehind, ybehind)) ? [self.map, xbehind, ybehind] : $map_factory&.getNewMap(xbehind, ybehind, self.map.map_id)
-    if this_map && this_map[0].deepBush?(this_map[1], this_map[2]) &&
-       (!behind_map || behind_map[0].deepBush?(behind_map[1], behind_map[2]))
-      @bush_depth = Game_Map::TILE_HEIGHT
+    if this_map && this_map[0].deepBush?(this_map[1], this_map[2])
+      xbehind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
+      ybehind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
+      if moving?
+        behind_map = (self.map.valid?(xbehind, ybehind)) ? [self.map, xbehind, ybehind] : $map_factory&.getNewMap(xbehind, ybehind, self.map.map_id)
+        @bush_depth = Game_Map::TILE_HEIGHT if behind_map[0].deepBush?(behind_map[1], behind_map[2])
+      else
+        @bush_depth = Game_Map::TILE_HEIGHT
+      end
     elsif this_map && this_map[0].bush?(this_map[1], this_map[2]) && !moving?
       @bush_depth = 12
     else
