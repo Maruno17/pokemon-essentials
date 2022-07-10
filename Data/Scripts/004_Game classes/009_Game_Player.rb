@@ -228,7 +228,7 @@ class Game_Player < Game_Character
   end
 
   def pbTerrainTag(countBridge = false)
-    return $map_factory.getTerrainTag(self.map.map_id, @x, @y, countBridge) if $map_factory
+    return $map_factory.getTerrainTagFromCoords(self.map.map_id, @x, @y, countBridge) if $map_factory
     return $game_map.terrain_tag(@x, @y, countBridge)
   end
 
