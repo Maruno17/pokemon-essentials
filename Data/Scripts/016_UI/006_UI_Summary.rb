@@ -405,7 +405,7 @@ class PokemonSummary_Scene
       ($player.pokedex.dexes_count - 1).times do |i|
         next if !$player.pokedex.unlocked?(i)
         num = pbGetRegionalNumber(i, @pokemon.species)
-        next if num <= 0
+        break if num <= 0
         dexnum = num
         dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(i)
         break
