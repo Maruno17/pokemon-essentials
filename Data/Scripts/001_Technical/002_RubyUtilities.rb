@@ -52,7 +52,7 @@ class String
   end
 
   def numeric?
-    return !self[/^[+-]?([0-9]+)(?:\.[0-9]+)?$/].nil?
+    return !self[/\A[+-]?\d+(?:\.\d+)?\Z/].nil?
   end
 end
 
