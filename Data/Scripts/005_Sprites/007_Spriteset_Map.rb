@@ -45,6 +45,7 @@ class Spriteset_Map
   end
 
   def initialize(map=nil)
+    return if $scene.is_a?(Scene_Intro) || $scene.is_a?(Scene_DebugIntro)
     @map = (map) ? map : $game_map
     $scene.map_renderer.add_tileset(@map.tileset_name)
     @map.autotile_names.each { |filename| $scene.map_renderer.add_autotile(filename) }

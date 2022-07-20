@@ -1,4 +1,5 @@
 class Scene_DebugIntro
+  attr_accessor :map_renderer
   def main
     Graphics.transition(0)
     sscene = PokemonLoad_Scene.new
@@ -8,8 +9,41 @@ class Scene_DebugIntro
   end
 end
 
+def resetPlayerPosition
+  save_data = load_save_file(SaveData::FILE_PATH)
+  map = save_data[:map_factory].map.map_id
+  x = save_data[:game_player].x
+  y = save_data[:game_player].y
+  dir = save_data[:game_player].direction
+  $MapFactory.setup(map)
+  $game_player.moveto(x,y)
+  $game_player.direction = dir
+end
+
+
+def load_save_file(file_path)
+  save_data = SaveData.read_from_file(file_path)
+  unless SaveData.valid?(save_data)
+    if File.file?(file_path + '.bak')
+      pbMessage(_INTL('The save file is corrupt. A backup will be loaded.'))
+      save_data = load_save_file(file_path + '.bak')
+    else
+      self.prompt_save_deletion
+      return {}
+    end
+  end
+  return save_data
+end
+
+def returnToTitle()
+  resetPlayerPosition
+  pbMapInterpreter.command_end
+  $game_temp.to_title = true
+end
+
 def pbCallTitle
-  return Scene_DebugIntro.new if $DEBUG
+  $game_temp.to_title = false
+  #return Scene_DebugIntro.new if $DEBUG
   return Scene_Intro.new
 end
 

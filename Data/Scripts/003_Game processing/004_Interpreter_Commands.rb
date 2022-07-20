@@ -1006,6 +1006,7 @@ class Interpreter
   # * Return to Title Screen
   #-----------------------------------------------------------------------------
   def command_354
+    resetPlayerPosition
     $game_temp.to_title = true
     return false
   end
