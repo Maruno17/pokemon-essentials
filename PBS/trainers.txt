@@ -92,7 +92,7 @@ Pokemon = B51H93,34 #Hauntrio,
 #########################
 
 [HAUNTEDGIRL,???]
-Pokemon = B105H93,40 #Hauntwak,
+Pokemon = B105H94,40 #Hauntwak,
 
 ############################
 #### ROUTE 8 #############
@@ -1197,11 +1197,11 @@ Pokemon = B66H61,21 #Polichop,
 ##  Celadon Café ######
 #####################
 
-[HIPSTER,Jerry,0]
+[COOLTRAINER_M,Jerry,0]
 Pokemon = B24H120,25 #Starbok
 ######################
 
-[HIPSTER,Jerry,1]
+[COOLTRAINER_M,Jerry,1]
 Pokemon = B24H121,32 #Starbok
 Pokemon = B91H97,32 #Hypster
 ###################
@@ -1396,8 +1396,8 @@ Pokemon = B23H41,11
 #----------------
 
 [TEAMROCKET_M,Francis]
-Pokemon = ZUBAT,11 
-Pokemon = B41H88,11 
+Pokemon = ZUBAT,10
+Pokemon = B14H41,13
 #----------------
 
 [TEAMROCKET_F,Samantha]
