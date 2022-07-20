@@ -1,0 +1,401 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[HOENNCOOL]
+Name = Cool Ribbon
+IconPosition = 0
+Description = Hoenn Cool Contest Normal Rank winner!
+#-------------------------------
+[HOENNCOOLSUPER]
+Name = Cool Ribbon Super
+IconPosition = 1
+Description = Hoenn Cool Contest Super Rank winner!
+#-------------------------------
+[HOENNCOOLHYPER]
+Name = Cool Ribbon Hyper
+IconPosition = 2
+Description = Hoenn Cool Contest Hyper Rank winner!
+#-------------------------------
+[HOENNCOOLMASTER]
+Name = Cool Ribbon Master
+IconPosition = 3
+Description = Hoenn Cool Contest Master Rank winner!
+#-------------------------------
+[HOENNBEAUTY]
+Name = Beauty Ribbon
+IconPosition = 4
+Description = Hoenn Beauty Contest Normal Rank winner!
+#-------------------------------
+[HOENNBEAUTYSUPER]
+Name = Beauty Ribbon Super
+IconPosition = 5
+Description = Hoenn Beauty Contest Super Rank winner!
+#-------------------------------
+[HOENNBEAUTYHYPER]
+Name = Beauty Ribbon Hyper
+IconPosition = 6
+Description = Hoenn Beauty Contest Hyper Rank winner!
+#-------------------------------
+[HOENNBEAUTYMASTER]
+Name = Beauty Ribbon Master
+IconPosition = 7
+Description = Hoenn Beauty Contest Master Rank winner!
+#-------------------------------
+[HOENNCUTE]
+Name = Cute Ribbon
+IconPosition = 8
+Description = Hoenn Cute Contest Normal Rank winner!
+#-------------------------------
+[HOENNCUTESUPER]
+Name = Cute Ribbon Super
+IconPosition = 9
+Description = Hoenn Cute Contest Super Rank winner!
+#-------------------------------
+[HOENNCUTEHYPER]
+Name = Cute Ribbon Hyper
+IconPosition = 10
+Description = Hoenn Cute Contest Hyper Rank winner!
+#-------------------------------
+[HOENNCUTEMASTER]
+Name = Cute Ribbon Master
+IconPosition = 11
+Description = Hoenn Cute Contest Master Rank winner!
+#-------------------------------
+[HOENNSMART]
+Name = Smart Ribbon
+IconPosition = 12
+Description = Hoenn Smart Contest Normal Rank winner!
+#-------------------------------
+[HOENNSMARTSUPER]
+Name = Smart Ribbon Super
+IconPosition = 13
+Description = Hoenn Smart Contest Super Rank winner!
+#-------------------------------
+[HOENNSMARTHYPER]
+Name = Smart Ribbon Hyper
+IconPosition = 14
+Description = Hoenn Smart Contest Hyper Rank winner!
+#-------------------------------
+[HOENNSMARTMASTER]
+Name = Smart Ribbon Master
+IconPosition = 15
+Description = Hoenn Smart Contest Master Rank winner!
+#-------------------------------
+[HOENNTOUGH]
+Name = Tough Ribbon
+IconPosition = 16
+Description = Hoenn Tough Contest Normal Rank winner!
+#-------------------------------
+[HOENNTOUGHSUPER]
+Name = Tough Ribbon Super
+IconPosition = 17
+Description = Hoenn Tough Contest Super Rank winner!
+#-------------------------------
+[HOENNTOUGHHYPER]
+Name = Tough Ribbon Hyper
+IconPosition = 18
+Description = Hoenn Tough Contest Hyper Rank winner!
+#-------------------------------
+[HOENNTOUGHMASTER]
+Name = Tough Ribbon Master
+IconPosition = 19
+Description = Hoenn Tough Contest Master Rank winner!
+#-------------------------------
+[SINNOHCOOL]
+Name = Cool Ribbon
+IconPosition = 20
+Description = Super Contest Cool Category Normal Rank winner!
+#-------------------------------
+[SINNOHCOOLSUPER]
+Name = Cool Ribbon Great
+IconPosition = 21
+Description = Super Contest Cool Category Great Rank winner!
+#-------------------------------
+[SINNOHCOOLHYPER]
+Name = Cool Ribbon Ultra
+IconPosition = 22
+Description = Super Contest Cool Category Ultra Rank winner!
+#-------------------------------
+[SINNOHCOOLMASTER]
+Name = Cool Ribbon Master
+IconPosition = 23
+Description = Super Contest Cool Category Master Rank winner!
+#-------------------------------
+[SINNOHBEAUTY]
+Name = Beauty Ribbon
+IconPosition = 24
+Description = Super Contest Beauty Category Normal Rank winner!
+#-------------------------------
+[SINNOHBEAUTYSUPER]
+Name = Beauty Ribbon Great
+IconPosition = 25
+Description = Super Contest Beauty Category Great Rank winner!
+#-------------------------------
+[SINNOHBEAUTYHYPER]
+Name = Beauty Ribbon Ultra
+IconPosition = 26
+Description = Super Contest Beauty Category Ultra Rank winner!
+#-------------------------------
+[SINNOHBEAUTYMASTER]
+Name = Beauty Ribbon Master
+IconPosition = 27
+Description = Super Contest Beauty Category Master Rank winner!
+#-------------------------------
+[SINNOHCUTE]
+Name = Cute Ribbon
+IconPosition = 28
+Description = Super Contest Cute Category Normal Rank winner!
+#-------------------------------
+[SINNOHCUTESUPER]
+Name = Cute Ribbon Great
+IconPosition = 29
+Description = Super Contest Cute Category Great Rank winner!
+#-------------------------------
+[SINNOHCUTEHYPER]
+Name = Cute Ribbon Ultra
+IconPosition = 30
+Description = Super Contest Cute Category Ultra Rank winner!
+#-------------------------------
+[SINNOHCUTEMASTER]
+Name = Cute Ribbon Master
+IconPosition = 31
+Description = Super Contest Cute Category Master Rank winner!
+#-------------------------------
+[SINNOHSMART]
+Name = Smart Ribbon
+IconPosition = 32
+Description = Super Contest Smart Category Normal Rank winner!
+#-------------------------------
+[SINNOHSMARTSUPER]
+Name = Smart Ribbon Great
+IconPosition = 33
+Description = Super Contest Smart Category Great Rank winner!
+#-------------------------------
+[SINNOHSMARTHYPER]
+Name = Smart Ribbon Ultra
+IconPosition = 34
+Description = Super Contest Smart Category Ultra Rank winner!
+#-------------------------------
+[SINNOHSMARTMASTER]
+Name = Smart Ribbon Master
+IconPosition = 35
+Description = Super Contest Smart Category Master Rank winner!
+#-------------------------------
+[SINNOHTOUGH]
+Name = Tough Ribbon
+IconPosition = 36
+Description = Super Contest Tough Category Normal Rank winner!
+#-------------------------------
+[SINNOHTOUGHSUPER]
+Name = Tough Ribbon Great
+IconPosition = 37
+Description = Super Contest Tough Category Great Rank winner!
+#-------------------------------
+[SINNOHTOUGHHYPER]
+Name = Tough Ribbon Ultra
+IconPosition = 38
+Description = Super Contest Tough Category Ultra Rank winner!
+#-------------------------------
+[SINNOHTOUGHMASTER]
+Name = Tough Ribbon Master
+IconPosition = 39
+Description = Super Contest Tough Category Master Rank winner!
+#-------------------------------
+[WINNING]
+Name = Winning Ribbon
+IconPosition = 40
+Description = Ribbon awarded for clearing Hoenn's Battle Tower's Lv. 50 challenge.
+#-------------------------------
+[VICTORY]
+Name = Victory Ribbon
+IconPosition = 41
+Description = Ribbon awarded for clearing Hoenn's Battle Tower's Lv. 100 challenge.
+#-------------------------------
+[ABILITY]
+Name = Ability Ribbon
+IconPosition = 42
+Description = A Ribbon awarded for defeating the Tower Tycoon at the Battle Tower.
+#-------------------------------
+[GREATABILITY]
+Name = Great Ability Ribbon
+IconPosition = 43
+Description = A Ribbon awarded for defeating the Tower Tycoon at the Battle Tower.
+#-------------------------------
+[DOUBLEABILITY]
+Name = Double Ability Ribbon
+IconPosition = 44
+Description = A Ribbon awarded for completing the Battle Tower Double challenge.
+#-------------------------------
+[MULTIABILITY]
+Name = Multi Ability Ribbon
+IconPosition = 45
+Description = A Ribbon awarded for completing the Battle Tower Multi challenge.
+#-------------------------------
+[PAIRABILITY]
+Name = Pair Ability Ribbon
+IconPosition = 46
+Description = A Ribbon awarded for completing the Battle Tower Link Multi challenge.
+#-------------------------------
+[WORLDABILITY]
+Name = World Ability Ribbon
+IconPosition = 47
+Description = A Ribbon awarded for completing the Wi-Fi Battle Tower challenge.
+#-------------------------------
+[CHAMPION]
+Name = Champion Ribbon
+IconPosition = 48
+Description = Ribbon for clearing the Pokémon League and entering the Hall of Fame in another region.
+#-------------------------------
+[SINNOHCHAMP]
+Name = Sinnoh Champ Ribbon
+IconPosition = 49
+Description = Ribbon awarded for beating the Sinnoh Champion and entering the Hall of Fame.
+#-------------------------------
+[RECORD]
+Name = Record Ribbon
+IconPosition = 50
+Description = A Ribbon awarded for setting an incredible record.
+#-------------------------------
+[EVENT]
+Name = Event Ribbon
+IconPosition = 51
+Description = Pokémon Event Participation Ribbon.
+#-------------------------------
+[LEGEND]
+Name = Legend Ribbon
+IconPosition = 52
+Description = A Ribbon awarded for setting a legendary record.
+#-------------------------------
+[GORGEOUS]
+Name = Gorgeous Ribbon
+IconPosition = 53
+Description = An extraordinarily gorgeous and extravagant Ribbon.
+#-------------------------------
+[ROYAL]
+Name = Royal Ribbon
+IconPosition = 54
+Description = An incredibly regal Ribbon with an air of nobility.
+#-------------------------------
+[GORGEOUSROYAL]
+Name = Gorgeous Royal Ribbon
+IconPosition = 55
+Description = A gorgeous and regal Ribbon that is the peak of fabulous.
+#-------------------------------
+[ALERT]
+Name = Alert Ribbon
+IconPosition = 56
+Description = A Ribbon for recalling an invigorating event that created life energy.
+#-------------------------------
+[SHOCK]
+Name = Shock Ribbon
+IconPosition = 57
+Description = A Ribbon for recalling a thrilling event that made life more exciting.
+#-------------------------------
+[DOWNCAST]
+Name = Downcast Ribbon
+IconPosition = 58
+Description = A Ribbon for recalling feelings of sadness that added spice to life.
+#-------------------------------
+[CARELESS]
+Name = Careless Ribbon
+IconPosition = 59
+Description = A Ribbon for recalling a careless error that helped steer life decisions.
+#-------------------------------
+[RELAX]
+Name = Relax Ribbon
+IconPosition = 60
+Description = A Ribbon for recalling a refreshing event that added sparkle to life.
+#-------------------------------
+[SNOOZE]
+Name = Snooze Ribbon
+IconPosition = 61
+Description = A Ribbon for recalling a deep slumber that made life soothing.
+#-------------------------------
+[SMILE]
+Name = Smile Ribbon
+IconPosition = 62
+Description = A Ribbon for recalling that smiles enrich the quality of life.
+#-------------------------------
+[FOOTPRINT]
+Name = Footprint Ribbon
+IconPosition = 63
+Description = A Ribbon awarded to a Pokémon deemed to have a top-quality footprint.
+#-------------------------------
+[ARTIST]
+Name = Artist Ribbon
+IconPosition = 64
+Description = Ribbon awarded for being chosen as a super sketch model in Hoenn.
+#-------------------------------
+[EFFORT]
+Name = Effort Ribbon
+IconPosition = 65
+Description = Ribbon awarded for being an exceptionally hard worker.
+#-------------------------------
+[BIRTHDAY]
+Name = Birthday Ribbon
+IconPosition = 66
+Description = A Ribbon to celebrate a birthday.
+#-------------------------------
+[SPECIAL]
+Name = Special Ribbon
+IconPosition = 67
+Description = A special Ribbon for a special day.
+#-------------------------------
+[CLASSIC]
+Name = Classic Ribbon
+IconPosition = 68
+Description = A Ribbon that proclaims love for Pokémon.
+#-------------------------------
+[PREMIER]
+Name = Premier Ribbon
+IconPosition = 69
+Description = Special Holiday Ribbon.
+#-------------------------------
+[SOUVENIR]
+Name = Souvenir Ribbon
+IconPosition = 70
+Description = A Ribbon to cherish a special memory.
+#-------------------------------
+[WISHING]
+Name = Wishing Ribbon
+IconPosition = 71
+Description = A Ribbon said to make your wish come true.
+#-------------------------------
+[NATIONAL]
+Name = National Ribbon
+IconPosition = 72
+Description = A Ribbon awarded for overcoming all difficult challenges.
+#-------------------------------
+[COUNTRY]
+Name = Country Ribbon
+IconPosition = 73
+Description = Pokémon League Champion Ribbon.
+#-------------------------------
+[BATTLECHAMPION]
+Name = Battle Champion Ribbon
+IconPosition = 74
+Description = Battle Competition Champion Ribbon.
+#-------------------------------
+[REGIONALCHAMPION]
+Name = Regional Champion Ribbon
+IconPosition = 75
+Description = Pokémon World Championships Regional Champion Ribbon.
+#-------------------------------
+[EARTH]
+Name = Earth Ribbon
+IconPosition = 76
+Description = A Ribbon awarded for winning 100 matches in a row.
+#-------------------------------
+[WORLD]
+Name = World Ribbon
+IconPosition = 77
+Description = Pokémon League Champion Ribbon.
+#-------------------------------
+[NATIONALCHAMPION]
+Name = National Champion Ribbon
+IconPosition = 78
+Description = Pokémon World Championships National Champion Ribbon.
+#-------------------------------
+[WORLDCHAMPION]
+Name = World Champion Ribbon
+IconPosition = 79
+Description = Pokémon World Championships World Champion Ribbon.
