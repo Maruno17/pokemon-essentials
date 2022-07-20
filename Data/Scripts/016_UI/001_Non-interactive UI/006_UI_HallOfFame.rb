@@ -138,7 +138,7 @@ class HallOfFame_Scene
   def xpointformula(battlernumber)
     ret = 0
     if !SINGLEROW
-      ret = 32 + 160 * xpositionformula(battlernumber)
+      ret = 72 + 160 * xpositionformula(battlernumber) #32
     else
       ret = (60 * (battlernumber / 2) + 48) * (xpositionformula(battlernumber) - 1)
       ret += Graphics.width / 2 - 56
@@ -211,8 +211,8 @@ class HallOfFame_Scene
       @sprites["pokemon#{i}"] = PokemonSprite.new(@viewport)
       @sprites["pokemon#{i}"].setOffset(PictureOrigin::TopLeft)
       @sprites["pokemon#{i}"].setPokemonBitmap(pok)
-      @sprites["pokemon#{i}"].zoom_x = Settings::BACKRPSPRITE_SCALE
-      @sprites["pokemon#{i}"].zoom_y = Settings::BACKRPSPRITE_SCALE
+      @sprites["pokemon#{i}"].zoom_x = Settings::FRONTSPRITE_SCALE
+      @sprites["pokemon#{i}"].zoom_y = Settings::FRONTSPRITE_SCALE
 
       # This method doesn't put the exact coordinates
       @sprites["pokemon#{i}"].x = xpoint
