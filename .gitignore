@@ -1,6 +1,7 @@
-# Audio and Graphics folders
+# Audio, Graphics and Plugins folders
 Audio/
 Graphics/
+Plugins/
 
 # Data folder, but not Data/Scripts folder
 Data/*
@@ -11,6 +12,19 @@ Data/*
 Game.ini
 Game.rxproj
 RGSS*.dll
+
+# Common code editor folders & files
+.vscode/
+*.code-workspace
+.idea/
+*.mkproj
+
+# Operating system generated files & folders
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
 
 # Temp files
 
