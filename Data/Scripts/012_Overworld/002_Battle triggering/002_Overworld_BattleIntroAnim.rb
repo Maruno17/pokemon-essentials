@@ -115,7 +115,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
   $PokemonEncounters.reset_step_count
   # Fade back to the overworld
   viewport.color = Color.new(0,0,0,255)
-  numFrames = Graphics.frame_rate*1/10   #4/10 0.4 seconds, 16 frames
+  numFrames = Graphics.frame_rate*4/10   # 0.4 seconds, 16 frames
   alphaDiff = (255.0/numFrames).ceil
   numFrames.times do
     viewport.color.alpha -= alphaDiff

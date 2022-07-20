@@ -712,6 +712,8 @@ class PokemonFusionScene
       #change species
       @pokemon1.species = newSpecies
       #@pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
+     pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
+
       setFusionMoves(@pokemon1, @pokemon2) if !noMoves
 
       # if superSplicer
@@ -755,6 +757,8 @@ def clearUIForMoves
 end
 
 def setAbilityAndNature(abilitiesList, naturesList)
+  clearUIForMoves
+
   scene = FusionSelectOptionsScene.new(abilitiesList,naturesList)
   screen = PokemonOptionScreen.new(scene)
   screen.pbStartScreen
@@ -765,35 +769,43 @@ def setAbilityAndNature(abilitiesList, naturesList)
 end
 
 def setFusionMoves(fusedPoke, poke2)
-  clearUIForMoves
+  #NEW METHOD (not ready)
 
-  moves=fusedPoke.moves
-  scene = FusionMovesOptionsScene.new(fusedPoke,poke2)
-  screen = PokemonOptionScreen.new(scene)
-  screen.pbStartScreen
-  moves =[scene.move1,scene.move2,scene.move3,scene.move3]
+  # clearUIForMoves
+  #
+  # moves=fusedPoke.moves
+  # scene = FusionMovesOptionsScene.new(fusedPoke,poke2)
+  # screen = PokemonOptionScreen.new(scene)
+  # screen.pbStartScreen
+  # moves =[scene.move1,scene.move2,scene.move3,scene.move3]
+  #
+  # fusedPoke.moves=moves
 
-  fusedPoke.moves=moves
-  # choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", fusedPoke.name), _INTL("Keep {1}'s moveset", poke2.name)], 0)
-  # if choice == 1
-  #   return
-  # elsif choice == 2
-  #   fusedPoke.moves = poke2.moves
-  #   return
-  # else
-  #   #Learn moves
-  #   movelist = poke2.moves
-  #   for move in movelist
-  #     if move.id != 0
-  #       pbLearnMove(fusedPoke, move.id, true, false, true)
-  #     end
-  #   end
-  # end
+
+  choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", fusedPoke.name), _INTL("Keep {1}'s moveset", poke2.name)], 0)
+  if choice == 1
+    return
+  elsif choice == 2
+    fusedPoke.moves = poke2.moves
+    return
+  else
+    #Learn moves
+    movelist = poke2.moves
+    for move in movelist
+      if move.id != 0
+        pbLearnMove(fusedPoke, move.id, true, false, true)
+      end
+    end
+  end
 end
 
 def setPokemonLevel(pokemon1, pokemon2, superSplicers)
   lv1 = @pokemon1.level
   lv2 = @pokemon2.level
+  return calculateFusedPokemonLevel(lv1,lv2,superSplicers)
+end
+
+def calculateFusedPokemonLevel(lv1, lv2, superSplicers)
   if superSplicers
     if lv1 > lv2
       return lv1

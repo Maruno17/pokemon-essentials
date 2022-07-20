@@ -1259,6 +1259,7 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
             pbRemovePokemonAt(chosen)
             scene.pbHardRefresh
             pbBGMPlay(playingBGM)
+            return true
           end
         elsif pokemon == poke2
           scene.pbDisplay(_INTL("{1} can't be fused with itself!", pokemon.name))
@@ -1266,7 +1267,6 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
         else
           scene.pbDisplay(_INTL("{1} can't be fused with {2}.", poke2.name, pokemon.name))
           return false
-
         end
       else
         return false
