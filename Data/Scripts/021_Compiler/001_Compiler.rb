@@ -753,6 +753,12 @@ module Compiler
     Graphics.update
   end
 
+  def compile_pbs_file_message_start(filename)
+    # The `` around the file's name turns it cyan
+    Console.echo_li _INTL("Compiling PBS file `{1}`...", filename.split("/").last)
+    show_visual_cue("Compiling #{filename.split("/").last}...")
+  end
+
   def compile_pbs_files
     modify_pbs_file_contents_before_compiling
     compile_town_map
@@ -779,6 +785,8 @@ module Compiler
 
   def compile_all(mustCompile)
     return if !mustCompile
+    initialize_visual_cues
+    show_visual_cue("Compiling...")
     FileLineData.clear
     Console.echo_h1 _INTL("Starting full compile")
     compile_pbs_files
@@ -794,6 +802,38 @@ module Compiler
     Console.echo_done(true)
     echoln ""
     Console.echo_h2("Successfully fully compiled", text: :green)
+    dispose_visual_cues
+  end
+
+  def initialize_visual_cues
+    $compiler_vp = Viewport.new(0, 0, Graphics.width, Graphics.height)
+    $compiler_sprite = s = Sprite.new($compiler_vp)
+    s.bitmap = Bitmap.new(1,1)
+    pbSetSystemFont(s.bitmap)
+  end
+
+  def show_visual_cue(text)
+    s = $compiler_sprite
+    rect = s.bitmap.text_size(text)
+    s.bitmap&.dispose
+    s.bitmap = Bitmap.new(rect.width, rect.height)
+    s.zoom_x = s.zoom_y = 2.0
+    w = rect.width * s.zoom_x
+    h = rect.height * s.zoom_y
+    s.x = Graphics.width / 2 - w / 2
+    s.y = Graphics.height / 2 - h / 2
+    pbSetSystemFont(s.bitmap)
+    pbDrawTextPositions(s.bitmap, [
+        [text, 0, 0, 0, Color.new(255,255,255), Color.new(128,128,128)]
+    ])
+  end
+
+  def dispose_visual_cues
+    $compiler_sprite.bitmap.dispose
+    $compiler_sprite.dispose
+    $compiler_sprite = nil
+    $compiler_vp.dispose
+    $compiler_vp = nil
   end
 
   def main
