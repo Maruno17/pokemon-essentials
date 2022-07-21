@@ -1165,7 +1165,7 @@ class PokemonPartyScreen
         break
         # Rename
       elsif cmd == 0
-        newname = pbEnterPokemonName(_INTL("{1}'s nickname?", speciesname), 0, 16, "", pkmn)
+        newname = pbEnterPokemonName(_INTL("{1}'s nickname?", speciesname), 0, Pokemon::MAX_NAME_SIZE, "", pkmn)
         pkmn.name = (newname == "") ? speciesname : newname
         pbRefreshSingle(pkmnid)
         # Erase name
