@@ -781,6 +781,9 @@ def pbTransferSurfing(mapid, xcoord, ycoord, direction = $game_player.direction)
     $game_map.autoplay
     $game_map.refresh
   }
+  $PokemonGlobal.surfing = true
+  $PokemonGlobal.diving = false
+  pbUpdateVehicle
 end
 
 Events.onAction += proc { |_sender, _e|
