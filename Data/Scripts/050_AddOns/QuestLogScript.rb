@@ -724,8 +724,12 @@ class Questlog
       @sprites["bg2"].opacity -= 32 rescue nil if i > 1
       @sprites["pager"].opacity -= 32 rescue nil if i > 1
       @sprites["pager2"].opacity -= 32 rescue nil if i > 1
-      @sprites["char"].opacity -= 32 rescue nil
-      @sprites["char2"].opacity -= 32 rescue nil
+      if @sprites["char"]
+        @sprites["char"].opacity -= 32 rescue nil
+      end
+      if @sprites["char2"]
+        @sprites["char2"].opacity -= 32 rescue nil
+      end
       @sprites["text"].opacity -= 32 rescue nil if i > 1
       @sprites["text2"].opacity -= 32 rescue nil if i > 1
     end
