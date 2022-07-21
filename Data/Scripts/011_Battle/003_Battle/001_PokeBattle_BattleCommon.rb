@@ -56,6 +56,10 @@ module PokeBattle_BattleCommon
       pbPlayer.pokedex.set_shadow_pokemon_owned(pkmn.species) if pkmn.shadowPokemon?
       # Store caught Pokémon
       pbStorePokemon(pkmn)
+      if $game_switches[AUTOSAVE_CATCH_SWITCH]
+        Kernel.tryAutosave()
+      end
+
     end
     @caughtPokemon.clear
   end

@@ -417,6 +417,10 @@ class PokeBattle_Battle
       pbGainMoney if @decision!=4
       # Hide remaining trainer
       @scene.pbShowOpponent(@opponent.length) if trainerBattle? && @caughtPokemon.length>0
+      if $game_switches[AUTOSAVE_WIN_SWITCH]
+        Kernel.tryAutosave()
+      end
+
     ##### LOSE, DRAW #####
     when 2, 5
       PBDebug.log("")

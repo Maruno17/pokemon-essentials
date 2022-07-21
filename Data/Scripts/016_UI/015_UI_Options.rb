@@ -339,6 +339,10 @@ class PokemonOption_Scene
     end
   end
 
+  def initialize
+    @autosave_menu=false
+  end
+
   def initUIElements
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
       _INTL("Options"), 0, 0, Graphics.width, 64, @viewport)
@@ -454,8 +458,14 @@ class PokemonOption_Scene
     if $game_switches
       options <<
         EnumOption.new(_INTL("Autosave"),[_INTL("On"),_INTL("Off")],
-                       proc {  $game_switches[AUTOSAVE_ENABLED_SWITCH] ? 0 : 1},
-                       proc {|value| $game_switches[AUTOSAVE_ENABLED_SWITCH]=value==0 },
+                       proc { $game_switches[AUTOSAVE_ENABLED_SWITCH] ? 0 : 1 },
+                       proc { |value|
+                         if !$game_switches[AUTOSAVE_ENABLED_SWITCH] && value == 0
+                           @autosave_menu = true
+                           openAutosaveMenu()
+                         end
+                         $game_switches[AUTOSAVE_ENABLED_SWITCH] = value == 0
+                       },
                        "Automatically saves when healing at Pokémon centers"
         )
     end
@@ -543,6 +553,15 @@ class PokemonOption_Scene
     return options
   end
 
+  def openAutosaveMenu()
+    return if !@autosave_menu
+    pbFadeOutIn {
+      scene = AutosaveOptionsScene.new
+      screen = PokemonOptionScreen.new(scene)
+      screen.pbStartScreen
+    }
+    @autosave_menu = false
+  end
 
 
   def pbOptions
