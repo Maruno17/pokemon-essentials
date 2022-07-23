@@ -1150,7 +1150,6 @@ class PokemonStorageScene
         pbSwitchBoxToLeft(newbox)
       end
       @storage.currentBox = newbox
-      newbox.refreshAllBoxSprites
     end
   end
 
