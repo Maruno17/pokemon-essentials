@@ -456,30 +456,35 @@ ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
     next false
   end
   if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be reversed?", pokemon.name))
-    body = getBasePokemonID(pokemon.species, true)
-    head = getBasePokemonID(pokemon.species, false)
-    newspecies = (head) * Settings::NB_POKEMON + body
-
-    body_exp = pokemon.exp_when_fused_body
-    head_exp = pokemon.exp_when_fused_head
-
-    pokemon.exp_when_fused_body = head_exp
-    pokemon.exp_when_fused_head = body_exp
-
-    #play animation
-    pbFadeOutInWithMusic(99999) {
-      fus = PokemonEvolutionScene.new
-      fus.pbStartScreen(pokemon, newspecies, true)
-      fus.pbEvolution(false, true)
-      fus.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
+    reverseFusion(pokemon)
+    scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+    scene.pbRefresh
     next true
   end
 
   next false
 })
+
+def reverseFusion(pokemon)
+  body = getBasePokemonID(pokemon.species, true)
+  head = getBasePokemonID(pokemon.species, false)
+  newspecies = (head) * Settings::NB_POKEMON + body
+
+  body_exp = pokemon.exp_when_fused_body
+  head_exp = pokemon.exp_when_fused_head
+
+  pokemon.exp_when_fused_body = head_exp
+  pokemon.exp_when_fused_head = body_exp
+
+  #play animation
+  pbFadeOutInWithMusic(99999) {
+    fus = PokemonEvolutionScene.new
+    fus.pbStartScreen(pokemon, newspecies, true)
+    fus.pbEvolution(false, true)
+    fus.pbEndScreen
+  }
+end
+
 
 ItemHandlers::UseOnPokemon.add(:INFINITEREVERSERS, proc { |item, pokemon, scene|
   if !pokemon.isFusion?
@@ -812,7 +817,7 @@ ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
       evo.pbStartScreen(pokemon, newspecies)
       evo.pbEvolution(false)
       evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 }) if scene.pbHasAnnotations?
       scene.pbRefresh
     }
     next true
@@ -1295,7 +1300,7 @@ def pbFuse(pokemon, poke2, supersplicers = false)
   typeWindow = drawPokemonType(newid)
 
   if hasCustom
-    previewwindow.picture.pbSetColor(220, 255, 220, 200)
+    previewwindow.picture.pbSetColor(150, 255, 150, 200)
   else
     previewwindow.picture.pbSetColor(255, 255, 255, 200)
   end
