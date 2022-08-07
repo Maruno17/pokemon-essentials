@@ -138,7 +138,7 @@ class HallOfFame_Scene
   def xpointformula(battlernumber)
     ret = 0
     if !SINGLEROW
-      ret = 72 + 160 * xpositionformula(battlernumber) #32
+      ret = 92 + 160 * xpositionformula(battlernumber) #32
     else
       ret = (60 * (battlernumber / 2) + 48) * (xpositionformula(battlernumber) - 1)
       ret += Graphics.width / 2 - 56
@@ -149,7 +149,7 @@ class HallOfFame_Scene
   def ypointformula(battlernumber)
     ret = 0
     if !SINGLEROW
-      ret = 32 + 128 * ypositionformula(battlernumber) / 2
+      ret = 92 + 128 * ypositionformula(battlernumber) / 2
     else
       ret = 96 - 8 * (battlernumber / 2)
     end

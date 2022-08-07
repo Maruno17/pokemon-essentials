@@ -219,7 +219,6 @@ ItemHandlers::UseFromBag.add(:LANTERN, proc { |item|
   next true
 })
 
-
 ItemHandlers::UseOnPokemon.add(:TRANSGENDERSTONE, proc { |item, pokemon, scene|
   if pokemon.gender == 0
     pokemon.makeFemale
@@ -485,7 +484,6 @@ def reverseFusion(pokemon)
   }
 end
 
-
 ItemHandlers::UseOnPokemon.add(:INFINITEREVERSERS, proc { |item, pokemon, scene|
   if !pokemon.isFusion?
     scene.pbDisplay(_INTL("It won't have any effect."))
@@ -649,6 +647,14 @@ def calculateUnfuseLevelOldMethod(pokemon, supersplicers)
     lev = 1
   end
   return lev.floor
+end
+
+def drawFusionPreviewText(viewport, text, x, y)
+  label_base_color = Color.new(248, 248, 248)
+  label_shadow_color = Color.new(104, 104, 104)
+  overlay = BitmapSprite.new(Graphics.width, Graphics.height, viewport).bitmap
+  textpos = [[text, x, y, 0, label_base_color, label_shadow_color]]
+  pbDrawTextPositions(overlay, textpos)
 end
 
 def drawPokemonType(pokemon_id, x_pos = 192, y_pos = 264)
@@ -983,8 +989,6 @@ ItemHandlers::UseOnPokemon.add(:GOLDENBANANA, proc { |item, pokemon, scene|
   next pbHPItem(pokemon, 50, scene)
 })
 
-
-
 ItemHandlers::UseOnPokemon.add(:TRANSGENDERSTONE, proc { |item, pokemon, scene|
   if pokemon.gender == 0
     pokemon.makeFemale
@@ -1297,7 +1301,9 @@ def pbFuse(pokemon, poke2, supersplicers = false)
 
   previewwindow = PictureWindow.new(picturePath)
 
+  new_level = calculateFusedPokemonLevel(pokemon.level, poke2.level, supersplicers)
   typeWindow = drawPokemonType(newid)
+  drawFusionPreviewText(typeWindow, "Lv. " + new_level.to_s, 232, 0,)
 
   if hasCustom
     previewwindow.picture.pbSetColor(150, 255, 150, 200)
