@@ -176,7 +176,6 @@ class Scene_Map
     end
     updateSpritesets
     if $game_temp.title_screen_calling
-      $game_temp.title_screen_calling = false
       SaveData.mark_values_as_unloaded
       $scene = pbCallTitle
       return
@@ -235,6 +234,8 @@ class Scene_Map
     Graphics.freeze
     dispose
     if $game_temp.title_screen_calling
+      pbMapInterpreter.command_end if pbMapInterpreterRunning?
+      $game_temp.title_screen_calling = false
       Graphics.transition
       Graphics.freeze
     end
