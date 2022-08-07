@@ -20,6 +20,7 @@ module SaveData
       @id = id
       @loaded = false
       @load_in_bootup = false
+      @reset_on_new_game = false
       instance_eval(&block)
       raise "No save_value defined for save value #{id.inspect}" if @save_proc.nil?
       raise "No load_value defined for save value #{id.inspect}" if @load_proc.nil?
@@ -68,6 +69,14 @@ module SaveData
     # @return [Boolean] whether the value should be loaded during bootup
     def load_in_bootup?
       return @load_in_bootup
+    end
+
+    def reset_on_new_game
+      @reset_on_new_game = true
+    end
+
+    def reset_on_new_game?
+      return @reset_on_new_game
     end
 
     # @return [Boolean] whether the value has been loaded
@@ -171,7 +180,6 @@ module SaveData
   #     save_value { $foo }
   #     load_value { |value| $foo = value }
   #     new_game_value { Foo.new }
-  #     from_old_format { |old_format| old_format[16] if old_format[16].is_a?(Foo) }
   #   end
   # @example Registering a value to be loaded on bootup
   #   SaveData.register(:bar) do
@@ -190,6 +198,11 @@ module SaveData
     @values << Value.new(id, &block)
   end
 
+  def self.unregister(id)
+    validate id => Symbol
+    @values.delete_if { |value| value.id == id }
+  end
+    
   # @param save_data [Hash] save data to validate
   # @return [Boolean] whether the given save data is valid
   def self.valid?(save_data)
@@ -229,7 +242,7 @@ module SaveData
   # Marks all values that aren't loaded on bootup as unloaded.
   def self.mark_values_as_unloaded
     @values.each do |value|
-      value.mark_as_unloaded unless value.load_in_bootup?
+      value.mark_as_unloaded if !value.load_in_bootup? || value.reset_on_new_game?
     end
   end
 
@@ -255,7 +268,7 @@ module SaveData
   # new game.
   def self.load_new_game_values
     @values.each do |value|
-      value.load_new_game_value if value.has_new_game_proc? && !value.loaded?
+      value.load_new_game_value if value.has_new_game_proc? && (!value.loaded? || value.reset_on_new_game?)
     end
   end
 

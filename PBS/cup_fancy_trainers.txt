@@ -1009,7 +1009,7 @@ EndSpeechLose = I SAID THAT YOU SHOULD STOP
 PokemonNos = 211,212,314,367,569,579,603,610,613
 #-------------------------------
 [Trainer]
-Type = CHANELLER
+Type = CHANNELER
 Name = MOLLY
 BeginSpeech = MOLLY
 EndSpeechWin = WILL MY CUTE CHARM ATTRACT YOU ?
@@ -1017,7 +1017,7 @@ EndSpeechLose = YOUR POKéMON ARE MY TOYS NOW
 PokemonNos = 303,314,316,369,389,408,577,596,613
 #-------------------------------
 [Trainer]
-Type = CHANELLER
+Type = CHANNELER
 Name = JAZMIN
 BeginSpeech = JAZMIN
 EndSpeechWin = I FORECAST TERRIBLE THINGS FOR YOU
@@ -1025,7 +1025,7 @@ EndSpeechLose = THERE WASN'T MY FORECAST RIGHT ?
 PokemonNos = 300,303,315,316,367,385,562,563,576,587,610,613
 #-------------------------------
 [Trainer]
-Type = CHANELLER
+Type = CHANNELER
 Name = KELSEY
 BeginSpeech = KELSEY
 EndSpeechWin = I HAVEN'T SLEPT IN DAYS ...
@@ -2041,7 +2041,7 @@ EndSpeechLose = WASN'T THAT A GOOD MATCH ?
 PokemonNos = 17,178,194,198,314,316,367,368,440,441,452,453,454,573,575,609,610,611,612,613,615,616,617
 #-------------------------------
 [Trainer]
-Type = CHANELLER
+Type = CHANNELER
 Name = DELILAH
 BeginSpeech = DELILAH
 EndSpeechWin = DON'T GRUDGE ME IF I WIN OK?
@@ -2049,7 +2049,7 @@ EndSpeechLose = I AM SORRY TO SEE YOU ANGRY
 PokemonNos = 43,44,46,162,412,583,593,594
 #-------------------------------
 [Trainer]
-Type = CHANELLER
+Type = CHANNELER
 Name = CARLY
 BeginSpeech = CARLY
 EndSpeechWin = I WILL SCATTER SOME POISONPOWDER ABOUT
@@ -2057,7 +2057,7 @@ EndSpeechLose = IT'S SCARY HOW MY STRATEGY WORKS
 PokemonNos = 136,137,202,256,273,302,341,388,389,411,412,413,423,426,508,509,577,593,608,614
 #-------------------------------
 [Trainer]
-Type = CHANELLER
+Type = CHANNELER
 Name = LEXIE
 BeginSpeech = LEXIE
 EndSpeechWin = WANT TO SEE SCARY POKéMON ?

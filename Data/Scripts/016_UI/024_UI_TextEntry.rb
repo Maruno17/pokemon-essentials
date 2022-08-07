@@ -516,9 +516,9 @@ class PokemonEntryScene2
       [@helptext, 160, 18, false, Color.new(16, 24, 32), Color.new(168, 184, 184)]
     ]
     chars = @helper.textChars
-    x = 166
+    x = 172
     chars.each do |ch|
-      textPositions.push([ch, x, 54, false, Color.new(16, 24, 32), Color.new(168, 184, 184)])
+      textPositions.push([ch, x, 54, 2, Color.new(16, 24, 32), Color.new(168, 184, 184)])
       x += 24
     end
     pbDrawTextPositions(bgoverlay, textPositions)

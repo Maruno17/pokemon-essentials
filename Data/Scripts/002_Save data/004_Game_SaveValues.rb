@@ -140,4 +140,5 @@ SaveData.register(:stats) do
   save_value { $stats }
   load_value { |value| $stats = value }
   new_game_value { GameStats.new }
+  reset_on_new_game
 end

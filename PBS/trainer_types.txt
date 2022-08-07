@@ -61,7 +61,7 @@ Gender = Male
 BaseMoney = 88
 SkillLevel = 32
 #-------------------------------
-[CHANELLER]
+[CHANNELER]
 Name = Channeler
 Gender = Female
 BaseMoney = 32

@@ -655,21 +655,13 @@ class Battle::Move::HigherPriorityInGrassyTerrain < Battle::Move
 end
 
 #===============================================================================
-# Decreases the PP of the last attack used by the target by 3 (or as much as
-# possible). (Eerie Spell)
+# Target's last move used loses 3 PP. Damaging move. (Eerie Spell)
 #===============================================================================
 class Battle::Move::LowerPPOfTargetLastMoveBy3 < Battle::Move
-  def pbFailsAgainstTarget?(user, target, show_message)
-    last_move = target.pbGetMoveWithID(target.lastRegularMoveUsed)
-    if !last_move || last_move.pp == 0 || last_move.total_pp <= 0
-      @battle.pbDisplay(_INTL("But it failed!")) if show_message
-      return true
-    end
-    return false
-  end
-
   def pbEffectAgainstTarget(user, target)
+    return if target.fainted?
     last_move = target.pbGetMoveWithID(target.lastRegularMoveUsed)
+    return if !last_move || last_move.pp == 0 || last_move.total_pp <= 0
     reduction = [3, last_move.pp].min
     target.pbSetPP(last_move, last_move.pp - reduction)
     @battle.pbDisplay(_INTL("It reduced the PP of {1}'s {2} by {3}!",
@@ -678,7 +670,7 @@ class Battle::Move::LowerPPOfTargetLastMoveBy3 < Battle::Move
 end
 
 #===============================================================================
-# Target's last move used loses 4 PP. (Spite)
+# Target's last move used loses 4 PP. Status move. (Spite)
 #===============================================================================
 class Battle::Move::LowerPPOfTargetLastMoveBy4 < Battle::Move
   def ignoresSubstitute?(user); return true; end

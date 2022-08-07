@@ -1013,7 +1013,7 @@ EndSpeechLose = OH HOW COULD YOU ?
 Name = MOLLY
 PokemonNos = 9,21,22,85,86,177
 BeginSpeech = WILL MY CUTE CHARM ATTRACT YOU ?
-Type = CHANELLER
+Type = CHANNELER
 EndSpeechWin = YOUR POKéMON ARE MY TOYS NOW
 #-------------------------------
 [127]
@@ -1021,7 +1021,7 @@ EndSpeechLose = MY FORESIGHT DIDN'T SHOW ME THIS
 Name = JAZMIN
 PokemonNos = 9,86,232,233,251,253
 BeginSpeech = I FORECAST TERRIBLE THINGS FOR YOU
-Type = CHANELLER
+Type = CHANNELER
 EndSpeechWin = THERE WASN'T MY FORECAST RIGHT ?
 #-------------------------------
 [128]
@@ -1029,7 +1029,7 @@ EndSpeechLose = YOU HAVE DESTROYED MY SLEEP ...
 Name = KELSEY
 PokemonNos = 9,21,22,112,125,136
 BeginSpeech = I HAVEN'T SLEPT IN DAYS ...
-Type = CHANELLER
+Type = CHANNELER
 EndSpeechWin = MY SLEEP WILL BE EXCELLENT NOW
 #-------------------------------
 [129]
@@ -2045,7 +2045,7 @@ EndSpeechLose = I HAVE A GRUDGE WITH YOU
 Name = DELILAH
 PokemonNos = 9,21,22,23,102,163
 BeginSpeech = DON'T GRUDGE ME IF I WIN OK?
-Type = CHANELLER
+Type = CHANNELER
 EndSpeechWin = I AM SORRY TO SEE YOU ANGRY
 #-------------------------------
 [256]
@@ -2053,7 +2053,7 @@ EndSpeechLose = I DISLIKE YOU AND YOUR POKéMON
 Name = CARLY
 PokemonNos = 48,86,97,100,103,112,125,128,144,147,159,163,203,229,234,243
 BeginSpeech = I WILL SCATTER SOME POISONPOWDER ABOUT
-Type = CHANELLER
+Type = CHANNELER
 EndSpeechWin = IT'S SCARY HOW MY STRATEGY WORKS
 #-------------------------------
 [257]
@@ -2061,7 +2061,7 @@ EndSpeechLose = YOU'RE MORE SCARY THAN MY POKéMON
 Name = LEXIE
 PokemonNos = 46,47,64,71,73,91,125,126,127,146,159,165,203
 BeginSpeech = WANT TO SEE SCARY POKéMON ?
-Type = CHANELLER
+Type = CHANNELER
 EndSpeechWin = WASN'T THAT SCARY EH?
 #-------------------------------
 [258]

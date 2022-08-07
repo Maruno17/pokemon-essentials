@@ -517,7 +517,7 @@ EndSpeechLose = "Man, I lost!"
 Name = GLOROB
 PokemonNos = 5,11,19,38,52,59,62,63,67,74,76,81,84,97,99,102,105,106,108
 BeginSpeech = Here I come!
-Type = CHANELLER
+Type = CHANNELER
 EndSpeechWin = "Yes, I won!"
 #-------------------------------
 [065]
@@ -525,7 +525,7 @@ EndSpeechLose = "Man, I lost!"
 Name = REG
 PokemonNos = 14,22,32,37,50,66,76,84,115
 BeginSpeech = Here I come!
-Type = CHANELLER
+Type = CHANNELER
 EndSpeechWin = "Yes, I won!"
 #-------------------------------
 [066]
@@ -533,7 +533,7 @@ EndSpeechLose = "Man, I lost!"
 Name = GRAVIUS
 PokemonNos = 0,3,10,24,30,31,34,35,36,42,48,73,74,78,88,91,96,97,106,114,121
 BeginSpeech = Here I come!
-Type = CHANELLER
+Type = CHANNELER
 EndSpeechWin = "Yes, I won!"
 #-------------------------------
 [067]

@@ -44,12 +44,16 @@ class Window_Pokedex < Window_DrawableCommand
       else
         pbCopyBitmap(self.contents, @pokeballSeen.bitmap, rect.x - 6, rect.y + 10)
       end
-      text = sprintf("%03d%s %s", indexNumber, " ", @commands[index][1])
+      num_text = sprintf("%03d", indexNumber)
+      name_text = @commands[index][1]
     else
-      text = sprintf("%03d  ----------", indexNumber)
+      num_text = sprintf("%03d", indexNumber)
+      name_text = "----------"
     end
     pbDrawShadowText(self.contents, rect.x + 36, rect.y + 6, rect.width, rect.height,
-                     text, self.baseColor, self.shadowColor)
+                     num_text, self.baseColor, self.shadowColor)
+    pbDrawShadowText(self.contents, rect.x + 84, rect.y + 6, rect.width, rect.height,
+                     name_text, self.baseColor, self.shadowColor)
   end
 
   def refresh
