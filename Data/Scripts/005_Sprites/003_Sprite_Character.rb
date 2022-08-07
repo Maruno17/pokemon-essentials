@@ -105,33 +105,37 @@ class Sprite_Character < RPG::Sprite
       @character_hue  = @character.character_hue
       @oldbushdepth   = @character.bush_depth
       @charbitmap&.dispose
+      @charbitmap = nil
+      @bushbitmap&.dispose
+      @bushbitmap = nil
       if @tile_id >= 384
         @charbitmap = pbGetTileBitmap(@character.map.tileset_name, @tile_id,
                                       @character_hue, @character.width, @character.height)
         @charbitmapAnimated = false
-        @bushbitmap&.dispose
-        @bushbitmap = nil
         @spriteoffset = false
         @cw = Game_Map::TILE_WIDTH * @character.width
         @ch = Game_Map::TILE_HEIGHT * @character.height
         self.src_rect.set(0, 0, @cw, @ch)
         self.ox = @cw / 2
         self.oy = @ch
-      else
+      elsif @character_name != ""
         @charbitmap = AnimatedBitmap.new(
           "Graphics/Characters/" + @character_name, @character_hue
         )
         RPG::Cache.retain("Graphics/Characters/", @character_name, @character_hue) if @character == $game_player
         @charbitmapAnimated = true
-        @bushbitmap&.dispose
-        @bushbitmap = nil
         @spriteoffset = @character_name[/offset/i]
         @cw = @charbitmap.width / 4
         @ch = @charbitmap.height / 4
         self.ox = @cw / 2
+      else
+        self.bitmap = nil
+        @cw = 0
+        @ch = 0
       end
       @character.sprite_size = [@cw, @ch]
     end
+    return if !@charbitmap
     @charbitmap.update if @charbitmapAnimated
     bushdepth = @character.bush_depth
     if bushdepth == 0
