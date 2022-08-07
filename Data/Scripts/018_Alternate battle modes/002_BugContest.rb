@@ -164,6 +164,7 @@ class BugContestState
         $game_temp.player_new_x         = @start[1]
         $game_temp.player_new_y         = @start[2]
         $game_temp.player_new_direction = @start[3]
+        pbDismountBike
         $scene.transfer_player
         $game_map.need_refresh = true   # in case player moves to the same map
       }

@@ -101,6 +101,7 @@ def pbStartOver(gameover = false)
     $game_temp.player_new_x         = $PokemonGlobal.pokecenterX
     $game_temp.player_new_y         = $PokemonGlobal.pokecenterY
     $game_temp.player_new_direction = $PokemonGlobal.pokecenterDirection
+    pbDismountBike
     $scene.transfer_player if $scene.is_a?(Scene_Map)
     $game_map.refresh
   else
@@ -126,6 +127,7 @@ def pbStartOver(gameover = false)
       $game_temp.player_new_x         = homedata[1]
       $game_temp.player_new_y         = homedata[2]
       $game_temp.player_new_direction = homedata[3]
+      pbDismountBike
       $scene.transfer_player if $scene.is_a?(Scene_Map)
       $game_map.refresh
     else

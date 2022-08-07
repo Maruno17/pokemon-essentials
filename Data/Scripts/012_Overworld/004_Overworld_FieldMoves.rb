@@ -283,6 +283,7 @@ HiddenMoveHandlers::UseMove.add(:DIG, proc { |move, pokemon|
       $game_temp.player_new_x         = escape[1]
       $game_temp.player_new_y         = escape[2]
       $game_temp.player_new_direction = escape[3]
+      pbDismountBike
       $scene.transfer_player
       $game_map.autoplay
       $game_map.refresh
@@ -535,6 +536,7 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
     $game_temp.player_new_y         = $game_temp.fly_destination[2]
     $game_temp.player_new_direction = 2
     $game_temp.fly_destination = nil
+    pbDismountBike
     $scene.transfer_player
     $game_map.autoplay
     $game_map.refresh
@@ -940,6 +942,7 @@ HiddenMoveHandlers::UseMove.add(:TELEPORT, proc { |move, pokemon|
     $game_temp.player_new_x         = healing[1]
     $game_temp.player_new_y         = healing[2]
     $game_temp.player_new_direction = 2
+    pbDismountBike
     $scene.transfer_player
     $game_map.autoplay
     $game_map.refresh

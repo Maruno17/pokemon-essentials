@@ -234,6 +234,7 @@ class BattleChallengeData
       $game_temp.player_new_x         = @start[1]
       $game_temp.player_new_y         = @start[2]
       $game_temp.player_new_direction = 8
+      pbDismountBike
       $scene.transfer_player
     end
   end
