@@ -132,16 +132,18 @@ Outdoor = true
 ShowArea = true
 MapPosition = 0,16,8
 BattleBack = field
-Flags = MossRock
+Flags = MossRock,BugContest
 #-------------------------------
 [029]   # Natural Park Entrance
 Name = Natural Park
 Bicycle = true
 MapPosition = 0,16,8
+Flags = BugContestReception
 #-------------------------------
 [030]   # Natural Park Pavillion
 Name = Natural Park
 MapPosition = 0,16,8
+Flags = BugContestReception
 #-------------------------------
 [031]   # Route 3
 Name = Route 3

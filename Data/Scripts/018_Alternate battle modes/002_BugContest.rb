@@ -70,13 +70,31 @@ class BugContestState
   end
 
   def pbSetContestMap(*maps)
-    @contestMaps = maps
+    maps.each do |map|
+      if map.is_a?(String)   # Map metadata flag
+        GameData::MapMetadata.each do |map_data|
+          @contestMaps.push(map_data.id) if map_data.has_flag?(map)
+        end
+      else
+        @contestMaps.push(map)
+      end
+    end
+    echoln "contest maps: #{@contestMaps}"
   end
 
   # Reception map is handled separately from contest map since the reception map
   # can be outdoors, with its own grassy patches.
   def pbSetReception(*maps)
-    @reception = maps
+    maps.each do |map|
+      if map.is_a?(String)   # Map metadata flag
+        GameData::MapMetadata.each do |map_data|
+          @reception.push(map_data.id) if map_data.has_flag?(map)
+        end
+      else
+        @reception.push(map)
+      end
+    end
+    echoln "reception maps: #{@reception}"
   end
 
   def pbOffLimits?(map)
@@ -97,8 +115,8 @@ class BugContestState
     maps_with_encounters = []
     @contestMaps.each do |map|
       enc_type = :BugContest
-      enc_type = :Land if !$PokemonEncounters.map_has_encounter_type?(@contestMaps, enc_type)
-      if $PokemonEncounters.map_has_encounter_type?(@contestMaps, enc_type)
+      enc_type = :Land if !$PokemonEncounters.map_has_encounter_type?(map, enc_type)
+      if $PokemonEncounters.map_has_encounter_type?(map, enc_type)
         maps_with_encounters.push([map, enc_type])
       end
     end
