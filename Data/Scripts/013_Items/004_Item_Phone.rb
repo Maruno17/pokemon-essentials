@@ -40,13 +40,13 @@ def pbPhoneDeleteContact(index)
 end
 
 def pbPhoneRegisterBattle(message, event, trainertype, trainername, maxbattles)
-  return if !$player.has_pokegear           # Can't register without a Pokégear
+  return false if !$player.has_pokegear           # Can't register without a Pokégear
   return false if !GameData::TrainerType.exists?(trainertype)
   trainertype = GameData::TrainerType.get(trainertype).id
   contact = pbFindPhoneTrainer(trainertype, trainername)
-  return if contact && contact[0]              # Existing contact and is visible
+  return false if contact && contact[0]              # Existing contact and is visible
   message = _INTL("Let me register you.") if !message
-  return if !pbConfirmMessage(message)
+  return false if !pbConfirmMessage(message)
   displayname = _INTL("{1} {2}", GameData::TrainerType.get(trainertype).name,
                       pbGetMessageFromHash(MessageTypes::TrainerNames, trainername))
   if contact                          # Previously registered, just make visible
@@ -56,6 +56,7 @@ def pbPhoneRegisterBattle(message, event, trainertype, trainername, maxbattles)
     pbPhoneIncrement(trainertype, trainername, maxbattles)
   end
   pbMessage(_INTL("\\me[Register phone]Registered {1} in the Pokégear.", displayname))
+  return true
 end
 
 #===============================================================================

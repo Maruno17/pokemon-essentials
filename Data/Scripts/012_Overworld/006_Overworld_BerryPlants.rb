@@ -323,7 +323,11 @@ def pbBerryPlant
     case berry_plant.growth_stage
     when 1   # X planted
       this_event.turn_down   # Stop the event turning towards the player
-      pbMessage(_INTL("A {1} was planted here.", berry_name))
+      if berry_name.starts_with_vowel?
+        pbMessage(_INTL("An {1} was planted here.", berry_name))
+      else
+        pbMessage(_INTL("A {1} was planted here.", berry_name))
+      end
     when 2   # X sprouted
       this_event.turn_down   # Stop the event turning towards the player
       pbMessage(_INTL("The {1} has sprouted.", berry_name))
@@ -415,6 +419,9 @@ def pbBerryPlant
       if Settings::NEW_BERRY_PLANTS
         pbMessage(_INTL("The {1} was planted in the soft, earthy soil.",
                         GameData::Item.get(berry).name))
+      elsif GameData::Item.get(berry).name.starts_with_vowel?
+        pbMessage(_INTL("{1} planted an {2} in the soft loamy soil.",
+                        $player.name, GameData::Item.get(berry).name))
       else
         pbMessage(_INTL("{1} planted a {2} in the soft loamy soil.",
                         $player.name, GameData::Item.get(berry).name))
