@@ -578,13 +578,13 @@ end
 
 def pbUpdateVehicle
   if $PokemonGlobal&.diving
-    $game_player.set_movement_type(:diving)
+    $game_player.set_movement_type(:diving_stopped)
   elsif $PokemonGlobal&.surfing
-    $game_player.set_movement_type(:surfing)
+    $game_player.set_movement_type(:surfing_stopped)
   elsif $PokemonGlobal&.bicycle
-    $game_player.set_movement_type(:cycling)
+    $game_player.set_movement_type(:cycling_stopped)
   else
-    $game_player.set_movement_type(:walking)
+    $game_player.set_movement_type(:walking_stopped)
   end
 end
 
