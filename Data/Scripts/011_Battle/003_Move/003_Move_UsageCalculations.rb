@@ -183,8 +183,6 @@ class Battle::Move
   # Returns whether the move will be a critical hit.
   def pbIsCritical?(user, target)
     return false if target.pbOwnSide.effects[PBEffects::LuckyChant] > 0
-    # Set up the critical hit ratios
-    ratios = (Settings::NEW_CRITICAL_HIT_RATE_MECHANICS) ? [24, 8, 2, 1] : [16, 8, 4, 3, 2]
     c = 0
     # Ability effects that alter critical hit rate
     if c >= 0 && user.abilityActive?
@@ -212,6 +210,8 @@ class Battle::Move
     c += 1 if highCriticalRate?
     c += user.effects[PBEffects::FocusEnergy]
     c += 1 if user.inHyperMode? && @type == :SHADOW
+    # Set up the critical hit ratios
+    ratios = CRITICAL_HIT_RATIOS
     c = ratios.length - 1 if c >= ratios.length
     # Calculation
     return true if ratios[c] == 1
