@@ -6,6 +6,7 @@ module GameData
     attr_reader :pocket
     attr_reader :price
     attr_reader :sell_price
+    attr_reader :bp_price
     attr_reader :real_description
     attr_reader :field_use
     attr_reader :battle_use
@@ -22,6 +23,7 @@ module GameData
       "Pocket"      => [:pocket,      "v"],
       "Price"       => [:price,       "u"],
       "SellPrice"   => [:sell_price,  "u"],
+      "BPPrice"     => [:bp_price,    "u"],
       "Description" => [:description, "q"],
       "FieldUse"    => [:field_use,   "e", { "OnPokemon" => 1, "Direct" => 2, "TM" => 3,
                                              "HM" => 4, "TR" => 5 }],
@@ -87,6 +89,7 @@ module GameData
       @pocket           = hash[:pocket]      || 1
       @price            = hash[:price]       || 0
       @sell_price       = hash[:sell_price]  || (@price / 2)
+      @bp_price         = hash[:bp_price]    || 1
       @real_description = hash[:description] || "???"
       @field_use        = hash[:field_use]   || 0
       @battle_use       = hash[:battle_use]  || 0
