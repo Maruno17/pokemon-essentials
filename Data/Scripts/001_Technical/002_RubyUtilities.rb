@@ -23,7 +23,7 @@ end
 #===============================================================================
 class String
   def starts_with_vowel?
-    return ["a", "e", "i", "o", "u"].include?(self[0, 1].downcase)
+    return ["a", "e", "i", "o", "u"].include?(self[0].downcase)
   end
 
   def first(n = 1); return self[0...n]; end
@@ -52,7 +52,7 @@ class String
   end
 
   def numeric?
-    return !self[/^[+-]?([0-9]+)(?:\.[0-9]+)?$/].nil?
+    return !self[/\A[+-]?\d+(?:\.\d+)?\Z/].nil?
   end
 end
 
