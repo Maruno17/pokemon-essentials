@@ -293,6 +293,7 @@ class PokemonDataBox < SpriteWrapper
 
   def refreshExp
     return if !@showExp
+    return if @battler.level >= 100
     w = exp_fraction * @expBarBitmap.width
     # NOTE: The line below snaps the bar's width to the nearest 2 pixels, to
     #       fit in with the rest of the graphics which are doubled in size.
