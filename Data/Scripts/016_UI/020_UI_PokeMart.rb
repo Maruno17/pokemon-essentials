@@ -460,7 +460,6 @@ class PokemonMart_Scene
     ret = 0
     helpwindow = @sprites["helpwindow"]
     itemprice = @adapter.getPrice(item, !@buying)
-    itemprice /= 2 if !@buying
     pbDisplay(helptext, true)
     using(numwindow = Window_AdvancedTextPokemon.new("")) do   # Showing number of items
       pbPrepareWindow(numwindow)
@@ -681,7 +680,6 @@ class PokemonMartScreen
         @scene.pbHideMoney
         next
       end
-      price /= 2
       price *= qty
       if pbConfirm(_INTL("I can pay ${1}.\nWould that be OK?", price.to_s_formatted))
         old_money = @adapter.getMoney
