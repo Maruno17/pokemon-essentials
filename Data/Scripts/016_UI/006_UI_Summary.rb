@@ -1215,9 +1215,11 @@ class PokemonSummary_Scene
     cmdPokedex = -1
     cmdMark = -1
     if !@pokemon.egg?
-      commands[cmdGiveItem = commands.length] = _INTL("Give item")
-      commands[cmdTakeItem = commands.length] = _INTL("Take item") if @pokemon.hasItem?
-      #commands[cmdPokedex = commands.length]  = _INTL("View Pokédex") if $Trainer.has_pokedex
+      if pbBattleChallenge.currentChallenge == -1
+        commands[cmdGiveItem = commands.length] = _INTL("Give item")
+        commands[cmdTakeItem = commands.length] = _INTL("Take item") if @pokemon.hasItem?
+      end
+      commands[cmdPokedex = commands.length]  = _INTL("View Pokédex") if $Trainer.has_pokedex
     end
     commands[cmdMark = commands.length] = _INTL("Mark")
     commands[commands.length] = _INTL("Cancel")

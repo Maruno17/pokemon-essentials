@@ -603,22 +603,39 @@ class PokemonFusionScene
     return 1
   end
 
+  def calculateAverageValue(value1, value2)
+    return ((value1 + value2) / 2).floor
+  end
+
+  def pickHighestOfTwoValues(value1, value2)
+    return value1 >= value2 ? value1 : value2
+  end
+
+  def setFusionIVs(supersplicers)
+    if supersplicers
+      setHighestFusionIvs()
+    else
+      averageFusionIvs()
+    end
+  end
+
   def averageFusionIvs()
-    return
-    # for i in 0..@pokemon1.iv.length-1
-    #   poke1Iv = @pokemon1.iv[i]
-    #   poke2Iv = @pokemon2.iv[i]
-    #   @pokemon1.iv[i] = ((poke1Iv+poke2Iv)/2).floor
-    # end
+    @pokemon1.iv[:HP] = calculateAverageValue(@pokemon1.iv[:HP], @pokemon2.iv[:HP])
+    @pokemon1.iv[:ATTACK] = calculateAverageValue(@pokemon1.iv[:ATTACK], @pokemon2.iv[:ATTACK])
+    @pokemon1.iv[:DEFENSE] = calculateAverageValue(@pokemon1.iv[:DEFENSE], @pokemon2.iv[:DEFENSE])
+    @pokemon1.iv[:SPECIAL_ATTACK] = calculateAverageValue(@pokemon1.iv[:SPECIAL_ATTACK], @pokemon2.iv[:SPECIAL_ATTACK])
+    @pokemon1.iv[:SPECIAL_DEFENSE] = calculateAverageValue(@pokemon1.iv[:SPECIAL_DEFENSE], @pokemon2.iv[:SPECIAL_DEFENSE])
+    @pokemon1.iv[:SPEED] = calculateAverageValue(@pokemon1.iv[:SPEED], @pokemon2.iv[:SPEED])
   end
 
   #unused. was meant for super splicers, but too broken
-  def setHighestFusionIvs()
-    for i in 0..@pokemon1.iv.length - 1
-      iv1 = @pokemon1.iv[i]
-      iv2 = @pokemon2.iv[i]
-      @pokemon1.iv[i] = iv1 >= iv2 ? iv1 : iv2
-    end
+  def setHighestFusionIvs()«
+    @pokemon1.iv[:HP] = pickHighestOfTwoValues(@pokemon1.iv[:HP], @pokemon2.iv[:HP])
+    @pokemon1.iv[:ATTACK] = pickHighestOfTwoValues(@pokemon1.iv[:ATTACK], @pokemon2.iv[:ATTACK])
+    @pokemon1.iv[:DEFENSE] = pickHighestOfTwoValues(@pokemon1.iv[:DEFENSE], @pokemon2.iv[:DEFENSE])
+    @pokemon1.iv[:SPECIAL_ATTACK] = pickHighestOfTwoValues(@pokemon1.iv[:SPECIAL_ATTACK], @pokemon2.iv[:SPECIAL_ATTACK])
+    @pokemon1.iv[:SPECIAL_DEFENSE] = pickHighestOfTwoValues(@pokemon1.iv[:SPECIAL_DEFENSE], @pokemon2.iv[:SPECIAL_DEFENSE])
+    @pokemon1.iv[:SPEED] = pickHighestOfTwoValues(@pokemon1.iv[:SPEED], @pokemon2.iv[:SPEED])
   end
 
   # Closes the evolution screen.
@@ -630,7 +647,6 @@ class PokemonFusionScene
   end
 
   # Opens the fusion screen
-
 
   def pbFusionScreen(cancancel = false, superSplicer = false)
     metaplayer1 = SpriteMetafilePlayer.new(@metafile1, @sprites["rsprite1"])
@@ -695,7 +711,7 @@ class PokemonFusionScene
       @pokemon1.exp_when_fused_body = @pokemon1.exp #peut-être l'inverse
       @pokemon1.exp_gained_since_fused = 0
 
-      averageFusionIvs()
+      setFusionIVs(superSplicer)
       #add to pokedex 
       if !$Trainer.pokedex.owned?(newSpecies)
         $Trainer.pokedex.set_seen(newSpecies)
@@ -708,11 +724,10 @@ class PokemonFusionScene
       hiddenAbility1 = @pokemon1.ability == @pokemon1.getAbilityList[0][-1]
       hiddenAbility2 = @pokemon2.ability == @pokemon2.getAbilityList[0][-1]
 
-
       #change species
       @pokemon1.species = newSpecies
       #@pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
-     pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
+      pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
 
       setFusionMoves(@pokemon1, @pokemon2) if !noMoves
 
@@ -736,7 +751,6 @@ class PokemonFusionScene
       @pokemon1.obtain_method = 0
       @pokemon1.owner = Pokemon::Owner.new_from_trainer($Trainer)
 
-
       pbSEPlay("Voltorb Flip Point")
 
       @pokemon1.name = newspeciesname if @pokemon1.name == oldspeciesname
@@ -759,7 +773,7 @@ end
 def setAbilityAndNature(abilitiesList, naturesList)
   clearUIForMoves
 
-  scene = FusionSelectOptionsScene.new(abilitiesList,naturesList)
+  scene = FusionSelectOptionsScene.new(abilitiesList, naturesList)
   screen = PokemonOptionScreen.new(scene)
   screen.pbStartScreen
 
@@ -781,7 +795,6 @@ def setFusionMoves(fusedPoke, poke2)
   #
   # fusedPoke.moves=moves
 
-
   choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", fusedPoke.name), _INTL("Keep {1}'s moveset", poke2.name)], 0)
   if choice == 1
     return
@@ -802,7 +815,7 @@ end
 def setPokemonLevel(pokemon1, pokemon2, superSplicers)
   lv1 = @pokemon1.level
   lv2 = @pokemon2.level
-  return calculateFusedPokemonLevel(lv1,lv2,superSplicers)
+  return calculateFusedPokemonLevel(lv1, lv2, superSplicers)
 end
 
 def calculateFusedPokemonLevel(lv1, lv2, superSplicers)
@@ -848,7 +861,7 @@ def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
   availableNatures << @pokemon1.nature
   availableNatures << @pokemon2.nature
 
-  setAbilityAndNature([GameData::Ability.get(abID1),GameData::Ability.get(abID2)],availableNatures)
+  setAbilityAndNature([GameData::Ability.get(abID1), GameData::Ability.get(abID2)], availableNatures)
 
   # if (Kernel.pbMessage("Choose an ability. ???", [_INTL("{1}", ability1_name), _INTL("{1}", ability2_name)], 2)) == 0
   #   return abID1 #hidden1 ? 4 : 0

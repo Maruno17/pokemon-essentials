@@ -1305,10 +1305,12 @@ def pbFuse(pokemon, poke2, supersplicers = false)
   typeWindow = drawPokemonType(newid)
   drawFusionPreviewText(typeWindow, "Lv. " + new_level.to_s, 232, 0,)
 
-  if hasCustom
-    previewwindow.picture.pbSetColor(150, 255, 150, 200)
-  else
-    previewwindow.picture.pbSetColor(255, 255, 255, 200)
+  if !$Trainer.seen?(newid)
+    if hasCustom
+      previewwindow.picture.pbSetColor(150, 255, 150, 200)
+    else
+      previewwindow.picture.pbSetColor(255, 255, 255, 200)
+    end
   end
   previewwindow.x = (Graphics.width / 2) - (previewwindow.width / 2)
   previewwindow.y = ((Graphics.height - 96) / 2) - (previewwindow.height / 2)

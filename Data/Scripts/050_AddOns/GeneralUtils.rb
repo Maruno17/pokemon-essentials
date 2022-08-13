@@ -130,7 +130,7 @@ def isTripleFusion?(num)
   return num >= Settings::ZAPMOLCUNO_NB
 end
 
-def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3)
+def getRandomCustomFusionForIntro(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3)
   if customPokeList.length == 0
     customPokeList = getCustomSpeciesList()
   end
@@ -158,6 +158,31 @@ def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList 
 
   return randPoke
 end
+
+
+def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3, maxBST=300)
+  if customPokeList.length == 0
+    customPokeList = getCustomSpeciesList()
+  end
+  randPoke = []
+  if customPokeList.length >= 5000
+    chosen = false
+    i = 0 #loop pas plus que 3 fois pour pas lag
+    while chosen == false
+      fusedPoke = customPokeList[rand(customPokeList.length)]
+      if (i >= recursionLimit) || maxPoke == -1
+        return fusedPoke
+      end
+    end
+  else
+    if returnRandomPokemonIfNoneFound
+      return rand(maxPoke) + 1
+    end
+  end
+
+  return randPoke
+end
+
 
 def getBodyID(species)
   dexNum = getDexNumberForSpecies(species)

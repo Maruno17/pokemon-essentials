@@ -122,7 +122,7 @@ class GenOneStyle
     @customPokeList = getCustomSpeciesList()
     #Get random Pokemon (1st gen orandPokenly, pas de legend la prmeiere fois)
 
-    randPoke = getRandomCustomFusion(true, @customPokeList, @maxPoke)
+    randPoke = getRandomCustomFusionForIntro(true, @customPokeList, @maxPoke)
     randpoke1 = randPoke[0] #rand(@maxPoke)+1
     randpoke2 = randPoke[1] #rand(@maxPoke)+1
 
@@ -358,7 +358,7 @@ class GenOneStyle
       if @maxPoke < NB_POKEMON - 1
         @maxPoke += 5 #-1 pour que ca arrive pile. tant pis pour kyurem
       end
-      randPoke = getRandomCustomFusion(true, @customPokeList, @maxPoke)
+      randPoke = getRandomCustomFusionForIntro(true, @customPokeList, @maxPoke)
       randpoke1 = randPoke[0] #rand(@maxPoke)+1
       randpoke2 = randPoke[1] #rand(@maxPoke)+1
 
