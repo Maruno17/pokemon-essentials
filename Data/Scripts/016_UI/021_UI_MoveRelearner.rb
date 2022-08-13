@@ -69,7 +69,7 @@ class MoveRelearner_Scene
         moveData = GameData::Move.get(moveobject)
         type_number = GameData::Type.get(moveData.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/Pictures/types", 12, yPos - 4, 0, type_number * 28, 64, 28])
-        textpos.push([moveData.name, 80, yPos, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
+        textpos.push([moveData.name, 80, yPos, 0, Color.new(248, 248, 248), Color.black])
         textpos.push([_INTL("PP"), 112, yPos + 32, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)])
         if moveData.total_pp > 0
           textpos.push([_INTL("{1}/{1}", moveData.total_pp), 230, yPos + 32, 1,
@@ -87,11 +87,11 @@ class MoveRelearner_Scene
     basedamage = selMoveData.display_damage(@pokemon)
     category = selMoveData.display_category(@pokemon)
     accuracy = selMoveData.display_accuracy(@pokemon)
-    textpos.push([_INTL("CATEGORY"), 272, 120, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
-    textpos.push([_INTL("POWER"), 272, 152, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
+    textpos.push([_INTL("CATEGORY"), 272, 120, 0, Color.new(248, 248, 248), Color.black])
+    textpos.push([_INTL("POWER"), 272, 152, 0, Color.new(248, 248, 248), Color.black])
     textpos.push([basedamage <= 1 ? basedamage == 1 ? "???" : "---" : sprintf("%d", basedamage),
                   468, 152, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
-    textpos.push([_INTL("ACCURACY"), 272, 184, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
+    textpos.push([_INTL("ACCURACY"), 272, 184, 0, Color.new(248, 248, 248), Color.black])
     textpos.push([accuracy == 0 ? "---" : "#{accuracy}%",
                   468, 184, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
     pbDrawTextPositions(overlay, textpos)

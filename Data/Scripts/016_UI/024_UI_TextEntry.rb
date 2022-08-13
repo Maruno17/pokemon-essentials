@@ -125,21 +125,21 @@ class PokemonEntryScene
       if meta
         @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
         @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
-        @sprites["shadow"].x = 33 * 2
-        @sprites["shadow"].y = 32 * 2
+        @sprites["shadow"].x = 66
+        @sprites["shadow"].y = 64
         filename = pbGetPlayerCharset(meta.walk_charset, nil, true)
         @sprites["subject"] = TrainerWalkingCharSprite.new(filename, @viewport)
         charwidth = @sprites["subject"].bitmap.width
         charheight = @sprites["subject"].bitmap.height
-        @sprites["subject"].x = (44 * 2) - (charwidth / 8)
-        @sprites["subject"].y = (38 * 2) - (charheight / 4)
+        @sprites["subject"].x = 88 - (charwidth / 8)
+        @sprites["subject"].y = 76 - (charheight / 4)
       end
     when 2   # Pokémon
       if pokemon
         @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
         @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
-        @sprites["shadow"].x = 33 * 2
-        @sprites["shadow"].y = 32 * 2
+        @sprites["shadow"].x = 66
+        @sprites["shadow"].y = 64
         @sprites["subject"] = PokemonIconSprite.new(pokemon, @viewport)
         @sprites["subject"].setOffset(PictureOrigin::CENTER)
         @sprites["subject"].x = 88
@@ -160,21 +160,21 @@ class PokemonEntryScene
     when 3   # NPC
       @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
       @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
-      @sprites["shadow"].x = 33 * 2
-      @sprites["shadow"].y = 32 * 2
+      @sprites["shadow"].x = 66
+      @sprites["shadow"].y = 64
       @sprites["subject"] = TrainerWalkingCharSprite.new(pokemon.to_s, @viewport)
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
-      @sprites["subject"].x = (44 * 2) - (charwidth / 8)
-      @sprites["subject"].y = (38 * 2) - (charheight / 4)
+      @sprites["subject"].x = 88 - (charwidth / 8)
+      @sprites["subject"].y = 76 - (charheight / 4)
     when 4   # Storage box
       @sprites["subject"] = TrainerWalkingCharSprite.new(nil, @viewport)
       @sprites["subject"].altcharset = "Graphics/Pictures/Naming/icon_storage"
       @sprites["subject"].animspeed = 4
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
-      @sprites["subject"].x = (44 * 2) - (charwidth / 8)
-      @sprites["subject"].y = (26 * 2) - (charheight / 2)
+      @sprites["subject"].x = 88 - (charwidth / 8)
+      @sprites["subject"].y = 52 - (charheight / 2)
     end
     pbFadeInAndShow(@sprites)
   end

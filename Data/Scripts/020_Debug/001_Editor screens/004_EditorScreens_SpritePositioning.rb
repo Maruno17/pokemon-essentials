@@ -339,7 +339,7 @@ class SpritePositioner
       pbFadeInAndShow(@sprites) { update }
       @starting = false
     end
-    cw = Window_CommandPokemonEx.newEmpty(0, 0, 260, 32 + (24 * 6), @viewport)
+    cw = Window_CommandPokemonEx.newEmpty(0, 0, 260, 176, @viewport)
     cw.rowHeight = 24
     pbSetSmallFont(cw.contents)
     cw.x = Graphics.width - cw.width

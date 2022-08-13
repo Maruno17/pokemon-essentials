@@ -507,7 +507,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     bitmap.clear
     getTextChars
     height = self.height - self.borderY
-    cursorcolor = Color.new(0, 0, 0)
+    cursorcolor = Color.black
     textchars = getTextChars
     startY = getLineY(@firstline)
     textchars.each do |text|

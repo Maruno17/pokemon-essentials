@@ -68,7 +68,7 @@ class ButtonEventScene < EventScene
       # End scene
       $game_temp.background_bitmap = Graphics.snap_to_bitmap
       Graphics.freeze
-      @viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
+      @viewport.color = Color.black   # Ensure screen is black
       Graphics.transition(8, "fadetoblack")
       $game_temp.background_bitmap.dispose
       scene.dispose

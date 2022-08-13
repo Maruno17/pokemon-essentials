@@ -447,13 +447,13 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     when 1   # Lower right
       pauseWidth  = @pausesprite.bitmap ? @pausesprite.framewidth : 16
       pauseHeight = @pausesprite.bitmap ? @pausesprite.frameheight : 16
-      @pausesprite.x = self.x + self.width - (20 * 2) + (pauseWidth / 2)
-      @pausesprite.y = self.y + self.height - (30 * 2) + (pauseHeight / 2)
+      @pausesprite.x = self.x + self.width - 40 + (pauseWidth / 2)
+      @pausesprite.y = self.y + self.height - 60 + (pauseHeight / 2)
     when 2   # Lower middle
       pauseWidth  = @pausesprite.bitmap ? @pausesprite.framewidth : 16
       pauseHeight = @pausesprite.bitmap ? @pausesprite.frameheight : 16
       @pausesprite.x = self.x + (self.width / 2) - (pauseWidth / 2)
-      @pausesprite.y = self.y + self.height - (18 * 2) + (pauseHeight / 2)
+      @pausesprite.y = self.y + self.height - 36 + (pauseHeight / 2)
     end
   end
 

@@ -45,8 +45,7 @@ class PokemonEggHatch_Scene
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["overlay"].z = 200
     @sprites["overlay"].bitmap = Bitmap.new(Graphics.width, Graphics.height)
-    @sprites["overlay"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height,
-                                         Color.new(255, 255, 255))
+    @sprites["overlay"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.white)
     @sprites["overlay"].opacity = 0
     # Start up scene
     pbFadeInAndShow(@sprites)

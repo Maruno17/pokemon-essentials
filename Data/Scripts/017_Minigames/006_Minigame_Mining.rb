@@ -531,7 +531,7 @@ class MiningGameScene
         collapseFraction = (Graphics.height.to_f / collapseTime).ceil
         (1..collapseTime).each do |i|
           @sprites["collapse"].bitmap.fill_rect(0, collapseFraction * (i - 1),
-                                                Graphics.width, collapseFraction * i, Color.new(0, 0, 0))
+                                                Graphics.width, collapseFraction * i, Color.black)
           Graphics.update
         end
         pbMessage(_INTL("The wall collapsed!"))

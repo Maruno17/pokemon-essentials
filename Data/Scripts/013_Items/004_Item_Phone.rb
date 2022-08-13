@@ -13,6 +13,8 @@
 #       trainers, but allow scripted calls as normal).
 
 # TODO: Better messages, more customisation of messages.
+# TODO: Add a Debug way of upgrading old phone script calls to new ones, or at
+#       least to find events using old phone scripts for the dev to update.
 #===============================================================================
 #
 #===============================================================================
@@ -550,25 +552,25 @@ EventHandlers.add(:on_frame_update, :phone_call_counter,
 #    : Branch End
 #  : Branch End
 # @>
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneRegisterBattle(message, event, trainer_type, name, versions_count)
-  Deprecation.warn_method("pbPhoneRegisterBattle", "v21", "several scripts and event commands; see def pbPhoneRegisterBattle")
+  Deprecation.warn_method("pbPhoneRegisterBattle", "v22", "several scripts and event commands; see def pbPhoneRegisterBattle")
   return false if !Phone.can_add?(trainer_type, name, 0)
   message = _INTL("Let me register you.") if !message
   return false if !pbConfirmMessage(message)
   return Phone.add(event, trainer_type, name, 0, versions_count)
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneRegister(event, trainer_type, name)
-  Deprecation.warn_method("pbPhoneRegister", "v21", "Phone.add_silent(event, trainer_type, name)")
+  Deprecation.warn_method("pbPhoneRegister", "v22", "Phone.add_silent(event, trainer_type, name)")
   Phone.add_silent(event, trainer_type, name)
 end
 
 # Called by events.
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneRegisterNPC(common_event_id, name, map_id, show_message = true)
-  Deprecation.warn_method("pbPhoneRegisterNPC", "v21", "Phone.add(map_id, name, common_event_id) or Phone.add_silent(map_id, name, common_event_id)")
+  Deprecation.warn_method("pbPhoneRegisterNPC", "v22", "Phone.add(map_id, name, common_event_id) or Phone.add_silent(map_id, name, common_event_id)")
   if show_message
     Phone.add(map_id, name, common_event_id)
   else
@@ -576,34 +578,34 @@ def pbPhoneRegisterNPC(common_event_id, name, map_id, show_message = true)
   end
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneDeleteContact(index)
-  Deprecation.warn_method("pbPhoneDeleteContact", "v21", "$PokemonGlobal.phone.contacts[index].visible = false")
+  Deprecation.warn_method("pbPhoneDeleteContact", "v22", "$PokemonGlobal.phone.contacts[index].visible = false")
   $PokemonGlobal.phone.contacts[index].visible = false
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbFindPhoneTrainer(trainer_type, name)
-  Deprecation.warn_method("pbFindPhoneTrainer", "v21", "Phone.get(trainer_type, name)")
+  Deprecation.warn_method("pbFindPhoneTrainer", "v22", "Phone.get(trainer_type, name)")
   return Phone.get(trainer_type, name)
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbHasPhoneTrainer?(trainer_type, name)
-  Deprecation.warn_method("pbHasPhoneTrainer", "v21", "Phone.get(trainer_type, name) != nil")
+  Deprecation.warn_method("pbHasPhoneTrainer", "v22", "Phone.get(trainer_type, name) != nil")
   return Phone.get(trainer_type, name) != nil
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneReadyToBattle?(trainer_type, name)
-  Deprecation.warn_method("pbPhoneReadyToBattle", "v21", "Phone.get(trainer_type, name).can_rematch?")
+  Deprecation.warn_method("pbPhoneReadyToBattle", "v22", "Phone.get(trainer_type, name).can_rematch?")
   contact = Phone.get(trainer_type, name)
   return contact && contact.can_rematch?
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneReset(tr_type, tr_name)
-  Deprecation.warn_method("pbPhoneReadyToBattle", "v21", "Phone.get(trainer_type, name) and other things")
+  Deprecation.warn_method("pbPhoneReadyToBattle", "v22", "Phone.get(trainer_type, name) and other things")
   contact = Phone.get(trainer_type, name)
   return false if !contact
   contact.time_to_ready = 0
@@ -614,64 +616,64 @@ def pbPhoneReset(tr_type, tr_name)
 end
 
 # Called by events.
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneBattleCount(trainer_type, name)
-  Deprecation.warn_method("pbPhoneBattleCount", "v21", "Phone.variant(trainer_type, name)")
+  Deprecation.warn_method("pbPhoneBattleCount", "v22", "Phone.variant(trainer_type, name)")
   return Phone.variant(trainer_type, name)
 end
 
 # Called by events.
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneIncrement(trainer_type, name, versions_count)
-  Deprecation.warn_method("pbPhoneIncrement", "v21", "Phone.increment_version(trainer_type, name, start_version)")
+  Deprecation.warn_method("pbPhoneIncrement", "v22", "Phone.increment_version(trainer_type, name, start_version)")
   Phone.increment_version(trainer_type, name, 0)
 end
 
 # Used in phone calls that say they're ready for a rematch, used in Debug function.
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbSetReadyToBattle(contact)
-  Deprecation.warn_method("pbSetReadyToBattle", "v21", "contact.set_trainer_event_ready_for_rematch")
+  Deprecation.warn_method("pbSetReadyToBattle", "v22", "contact.set_trainer_event_ready_for_rematch")
   contact.set_trainer_event_ready_for_rematch
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbRandomPhoneTrainer
-  Deprecation.warn_method("pbRandomPhoneTrainer", "v21", "Phone::Call.get_random_trainer_for_incoming_call")
+  Deprecation.warn_method("pbRandomPhoneTrainer", "v22", "Phone::Call.get_random_trainer_for_incoming_call")
   return Phone::Call.get_random_trainer_for_incoming_call
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbCallTrainer(trainer_type, name)
-  Deprecation.warn_method("pbCallTrainer", "v21", "Phone::Call.make_outgoing(trainer_type, name)")
+  Deprecation.warn_method("pbCallTrainer", "v22", "Phone::Call.make_outgoing(trainer_type, name)")
   Phone::Call.make_outgoing(trainer_type, name)
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneGenerateCall(contact)
-  Deprecation.warn_method("pbPhoneGenerateCall", "v21", "Phone::Call.generate_trainer_dialogue(contact)")
+  Deprecation.warn_method("pbPhoneGenerateCall", "v22", "Phone::Call.generate_trainer_dialogue(contact)")
   return Phone::Call.generate_trainer_dialogue(contact)
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbPhoneCall(dialogue, contact)
-  Deprecation.warn_method("pbPhoneCall", "v21", "Phone::Call.play(dialogue, contact)")
+  Deprecation.warn_method("pbPhoneCall", "v22", "Phone::Call.play(dialogue, contact)")
   Phone::Call.play(dialogue, contact)
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbEncounterSpecies(contact)
-  Deprecation.warn_method("pbEncounterSpecies", "v21", "Phone::Call.get_random_encounter_species(contact)")
+  Deprecation.warn_method("pbEncounterSpecies", "v22", "Phone::Call.get_random_encounter_species(contact)")
   return Phone::Call.get_random_encounter_species(contact)
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbTrainerSpecies(contact)
-  Deprecation.warn_method("pbTrainerSpecies", "v21", "Phone::Call.get_random_contact_pokemon_species(contact)")
+  Deprecation.warn_method("pbTrainerSpecies", "v22", "Phone::Call.get_random_contact_pokemon_species(contact)")
   return Phone::Call.get_random_contact_pokemon_species(contact)
 end
 
-# @deprecated This method is slated to be removed in v21.
+# @deprecated This method is slated to be removed in v22.
 def pbTrainerMapName(contact)
-  Deprecation.warn_method("pbTrainerMapName", "v21", "Phone::Call.get_map_name(contact)")
+  Deprecation.warn_method("pbTrainerMapName", "v22", "Phone::Call.get_map_name(contact)")
   return Phone::Call.get_map_name(contact)
 end

@@ -17,7 +17,7 @@ class PokemonJukebox_Scene
       _INTL("Jukebox"), 2, -18, 128, 64, @viewport
     )
     @sprites["header"].baseColor   = Color.new(248, 248, 248)
-    @sprites["header"].shadowColor = Color.new(0, 0, 0)
+    @sprites["header"].shadowColor = Color.black
     @sprites["header"].windowskin  = nil
     @sprites["commands"] = Window_CommandPokemon.newWithSize(
       @commands, 94, 92, 324, 224, @viewport

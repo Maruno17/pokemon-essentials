@@ -69,13 +69,13 @@ def pbDisplayMail(mail, _bearer = nil)
   baseForLightBG   = Color.new(80, 80, 88)
   shadowForLightBG = Color.new(168, 168, 176)
   if mail.message && mail.message != ""
-    isDark = isDarkBackground(sprites["card"].bitmap, Rect.new(48, 48, Graphics.width - 96, 32 * 7))
+    isDark = isDarkBackground(sprites["card"].bitmap, Rect.new(48, 48, Graphics.width - 96, 224))
     drawTextEx(overlay, 48, 52, Graphics.width - 94, 7, mail.message,
                (isDark) ? baseForDarkBG : baseForLightBG,
                (isDark) ? shadowForDarkBG : shadowForLightBG)
   end
   if mail.sender && mail.sender != ""
-    isDark = isDarkBackground(sprites["card"].bitmap, Rect.new(336, 322, 144, 32 * 1))
+    isDark = isDarkBackground(sprites["card"].bitmap, Rect.new(336, 322, 144, 32))
     drawTextEx(overlay, 336, 328, 144, 1, mail.sender,
                (isDark) ? baseForDarkBG : baseForLightBG,
                (isDark) ? shadowForDarkBG : shadowForLightBG)

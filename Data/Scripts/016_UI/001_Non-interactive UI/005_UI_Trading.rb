@@ -70,7 +70,7 @@ class PokemonTrade_Scene
     picturePoke.setOrigin(0, PictureOrigin::BOTTOM)
     picturePoke.setVisible(0, true)
     # Change Pokémon color
-    picturePoke.moveColor(2, 5, Color.new(31 * 8, 22 * 8, 30 * 8, 255))
+    picturePoke.moveColor(2, 5, Color.new(248, 176, 140))
     # Recall
     delay = picturePoke.totalDuration
     picturePoke.setSE(delay, "Battle recall")
@@ -110,7 +110,7 @@ class PokemonTrade_Scene
     # Starting position of sprite
     picturePoke.setOrigin(0, PictureOrigin::BOTTOM)
     picturePoke.setZoom(0, 0)
-    picturePoke.setColor(0, Color.new(31 * 8, 22 * 8, 30 * 8, 255))
+    picturePoke.setColor(0, Color.new(248, 176, 240))
     picturePoke.setVisible(0, false)
     # Dropping ball
     y = Graphics.height - 96 - 16 - 16   # end point of Poké Ball
@@ -141,7 +141,7 @@ class PokemonTrade_Scene
     picturePoke.moveXY(delay, 8, Graphics.width / 2, @sprites["rsprite2"].y)
     # Return Pokémon's color to normal and play cry
     delay = picturePoke.totalDuration
-    picturePoke.moveColor(delay, 5, Color.new(31 * 8, 22 * 8, 30 * 8, 0))
+    picturePoke.moveColor(delay, 5, Color.new(248, 176, 240, 0))
     cry = GameData::Species.cry_filename_from_pokemon(@pokemon2)
     picturePoke.setSE(delay, cry) if cry
     # Play animation

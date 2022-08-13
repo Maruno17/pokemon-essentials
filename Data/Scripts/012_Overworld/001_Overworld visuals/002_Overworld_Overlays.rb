@@ -69,7 +69,7 @@ class DarknessSprite < Sprite
   end
 
   def refresh
-    @darkness.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0, 255))
+    @darkness.fill_rect(0, 0, Graphics.width, Graphics.height, Color.black)
     cx = Graphics.width / 2
     cy = Graphics.height / 2
     cradius = @radius

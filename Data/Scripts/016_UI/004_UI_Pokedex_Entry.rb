@@ -216,7 +216,7 @@ class PokemonPokedexInfo_Scene
     end
     textpos = [
       [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
-       246, 48, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+       246, 48, 0, Color.new(248, 248, 248), Color.black]
     ]
     if @show_battled_count
       textpos.push([_INTL("Number Battled"), 314, 164, 0, base, shadow])
@@ -243,7 +243,7 @@ class PokemonPokedexInfo_Scene
         end
       end
       # Draw the Pokédex entry text
-      drawTextEx(overlay, 40, 246, Graphics.width - (40 * 2), 4,   # overlay, x, y, width, num lines
+      drawTextEx(overlay, 40, 246, Graphics.width - 80, 4,   # overlay, x, y, width, num lines
                  species_data.pokedex_entry, base, shadow)
       # Draw the footprint
       footprintfile = GameData::Species.footprint_filename(@species, @form)

@@ -368,7 +368,7 @@ class SpriteFrame < InvalidatableSprite
     @previous = previous
     @locked = false
     @selected = false
-    @selcolor = Color.new(0, 0, 0)
+    @selcolor = Color.black
     @unselcolor = Color.new(220, 220, 220)
     @prevcolor = Color.new(64, 128, 192)
     @contents = Bitmap.new(64, 64)

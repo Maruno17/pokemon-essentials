@@ -695,15 +695,15 @@ class PokemonStorageScene
 
   def pbSetArrow(arrow, selection)
     case selection
-    when -1, -4, -5 # Box name, move left, move right
-      arrow.x = 157 * 2
-      arrow.y = -12 * 2
-    when -2 # Party Pokémon
-      arrow.x = 119 * 2
-      arrow.y = 139 * 2
-    when -3 # Close Box
-      arrow.x = 207 * 2
-      arrow.y = 139 * 2
+    when -1, -4, -5   # Box name, move left, move right
+      arrow.x = 314
+      arrow.y = -24
+    when -2   # Party Pokémon
+      arrow.x = 238
+      arrow.y = 278
+    when -3   # Close Box
+      arrow.x = 414
+      arrow.y = 278
     else
       arrow.x = (97 + (24 * (selection % PokemonBox::BOX_WIDTH))) * 2
       arrow.y = (8 + (24 * (selection / PokemonBox::BOX_WIDTH))) * 2

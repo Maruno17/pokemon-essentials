@@ -57,7 +57,7 @@ class PokemonPhoneScene
       _INTL("Phone"), 2, -18, 128, 64, @viewport
     )
     @sprites["header"].baseColor   = Color.new(248, 248, 248)
-    @sprites["header"].shadowColor = Color.new(0, 0, 0)
+    @sprites["header"].shadowColor = Color.black
     @sprites["header"].windowskin = nil
     @sprites["bottom"] = Window_AdvancedTextPokemon.newWithSize(
       "", 162, Graphics.height - 64, Graphics.width - 158, 64, @viewport

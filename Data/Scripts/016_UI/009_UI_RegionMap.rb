@@ -104,7 +104,7 @@ class PokemonRegionMap_Scene
       pbMessage(_INTL("The map data cannot be found."))
       return false
     end
-    addBackgroundOrColoredPlane(@sprites, "background", "mapbg", Color.new(0, 0, 0), @viewport)
+    addBackgroundOrColoredPlane(@sprites, "background", "mapbg", Color.black, @viewport)
     @sprites["map"] = IconSprite.new(0, 0, @viewport)
     @sprites["map"].setBitmap("Graphics/Pictures/#{@map[1]}")
     @sprites["map"].x += (Graphics.width - @sprites["map"].bitmap.width) / 2
@@ -250,7 +250,7 @@ class PokemonRegionMap_Scene
     text = (@mode == 0) ? _INTL("ACTION: Fly") : _INTL("ACTION: Cancel Fly")
     pbDrawTextPositions(
       @sprites["help"].bitmap,
-      [[text, Graphics.width - 16, 4, 1, Color.new(248, 248, 248), Color.new(0, 0, 0)]]
+      [[text, Graphics.width - 16, 4, 1, Color.new(248, 248, 248), Color.black]]
     )
     @sprites.each do |key, sprite|
       next if !key.include?("point")

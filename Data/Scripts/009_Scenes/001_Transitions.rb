@@ -256,7 +256,7 @@ module Transitions
       @overworld_sprite.visible = false
       # Black background
       @black_sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @black_sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
+      @black_sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.black)
       # Overworld sprites
       sprite_width = @overworld_bitmap.width / NUM_SPRITES_X
       sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
@@ -1292,7 +1292,7 @@ module Transitions
       @foe_sprite = new_sprite(Graphics.width + @foe_bitmap.width, @sprites[0].y + @sprites[0].height - 12,
                                @foe_bitmap, @foe_bitmap.width / 2, @foe_bitmap.height)
       @foe_sprite.z     = 7
-      @foe_sprite.color = Color.new(0, 0, 0)
+      @foe_sprite.color = Color.black
       # Sprite with foe's name written in it
       @text_sprite = BitmapSprite.new(Graphics.width, @bar_bitmap.height, @viewport)
       @text_sprite.y       = BAR_Y
@@ -1481,13 +1481,13 @@ module Transitions
                                   @player_bar_sprite.y + BAR_HEIGHT - TRAINER_Y_OFFSET,
                                   @player_bitmap, @player_bitmap.width / 2, @player_bitmap.height)
       @player_sprite.z     = 7
-      @player_sprite.color = Color.new(0, 0, 0)
+      @player_sprite.color = Color.black
       # Foe sprite
       @foe_sprite = new_sprite(@foe_bar_sprite.x + (@bar_bitmap.width / 2) - TRAINER_X_OFFSET,
                                @foe_bar_sprite.y + @foe_bitmap.height - TRAINER_Y_OFFSET,
                                @foe_bitmap, @foe_bitmap.width / 2, @foe_bitmap.height)
       @foe_sprite.z     = 7
-      @foe_sprite.color = Color.new(0, 0, 0)
+      @foe_sprite.color = Color.black
       # Sprite with foe's name written in it
       @text_sprite = BitmapSprite.new(@bar_bitmap.width / 2, BAR_HEIGHT, @viewport)
       @text_sprite.x = @foe_bar_start_x

@@ -10,7 +10,7 @@ class Window_DexesList < Window_CommandPokemon
     super(commands, width)
     @selarrow = AnimatedBitmap.new("Graphics/Pictures/selarrow_white")
     self.baseColor   = Color.new(248, 248, 248)
-    self.shadowColor = Color.new(0, 0, 0)
+    self.shadowColor = Color.black
     self.windowskin  = nil
   end
 
