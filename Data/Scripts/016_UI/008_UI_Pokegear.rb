@@ -180,7 +180,7 @@ MenuHandlers.add(:pokegear_menu, :phone, {
   "name"      => _INTL("Phone"),
   "icon_name" => "phone",
   "order"     => 20,
-  "condition" => proc { next $PokemonGlobal.phoneNumbers && $PokemonGlobal.phoneNumbers.length > 0 },
+#  "condition" => proc { next $PokemonGlobal.phone && $PokemonGlobal.phone.contacts.length > 0 },
   "effect"    => proc { |menu|
     pbFadeOutIn { PokemonPhoneScene.new.start }
     next false
