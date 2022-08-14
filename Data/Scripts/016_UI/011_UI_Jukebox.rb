@@ -12,7 +12,7 @@ class PokemonJukebox_Scene
     @viewport.z = 99999
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
-    @sprites["background"].setBitmap("Graphics/Pictures/jukeboxbg")
+    @sprites["background"].setBitmap("Graphics/UI/jukebox_bg")
     @sprites["header"] = Window_UnformattedTextPokemon.newWithSize(
       _INTL("Jukebox"), 2, -18, 128, 64, @viewport
     )

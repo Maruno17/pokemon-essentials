@@ -173,7 +173,7 @@ class AnimationWindow < Sprite
   def initialize(x, y, width, height, viewport = nil)
     super(viewport)
     @animbitmap = nil
-    @arrows = AnimatedBitmap.new("Graphics/Pictures/arrows")
+    @arrows = AnimatedBitmap.new("Graphics/UI/Debug/anim_editor_arrows")
     self.x = x
     self.y = y
     @start = 0
@@ -373,7 +373,7 @@ class SpriteFrame < InvalidatableSprite
     @prevcolor = Color.new(64, 128, 192)
     @contents = Bitmap.new(64, 64)
     self.z = (@previous) ? 49 : 50
-    @iconbitmap = AnimatedBitmap.new("Graphics/Pictures/animFrameIcon")
+    @iconbitmap = AnimatedBitmap.new("Graphics/UI/Debug/anim_editor_frame_icons")
     self.bitmap = @contents
     self.invalidate
   end
@@ -453,9 +453,9 @@ class AnimationCanvas < Sprite
     @playingframe = 0
     @player = nil
     @battle = MiniBattle.new
-    @user = AnimatedBitmap.new("Graphics/Pictures/testback").deanimate
-    @target = AnimatedBitmap.new("Graphics/Pictures/testfront").deanimate
-    @testscreen = AnimatedBitmap.new("Graphics/Pictures/testscreen")
+    @user = AnimatedBitmap.new("Graphics/UI/Debug/anim_editor_battler_back").deanimate
+    @target = AnimatedBitmap.new("Graphics/UI/Debug/anim_editor_battler_front").deanimate
+    @testscreen = AnimatedBitmap.new("Graphics/UI/Debug/anim_editor_battle_bg")
     self.bitmap = @testscreen.bitmap
     PBAnimation::MAX_SPRITES.times do |i|
       @lastframesprites[i] = SpriteFrame.new(i, @celsprites[i], viewport, true)

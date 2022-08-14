@@ -86,6 +86,10 @@ module RPG
       self.load_bitmap("Graphics/Transitions/", filename)
     end
 
+    def self.ui(filename)
+      self.load_bitmap("Graphics/UI/", filename)
+    end
+
     def self.retain(folder_name, filename = "", hue = 0)
       path = folder_name + filename
       ret = fromCache(path)

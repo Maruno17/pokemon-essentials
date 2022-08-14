@@ -196,7 +196,7 @@ end
 def getPassabilityMinimap(mapid)
   map = load_data(sprintf("Data/Map%03d.rxdata", mapid))
   tileset = $data_tilesets[map.tileset_id]
-  minimap = AnimatedBitmap.new("Graphics/Pictures/minimap_tiles")
+  minimap = AnimatedBitmap.new("Graphics/UI/minimap_tiles")
   ret = Bitmap.new(map.width * 6, map.height * 6)
   passtable = Table.new(map.width, map.height)
   passages = tileset.passages
@@ -221,6 +221,6 @@ def getPassabilityMinimap(mapid)
       bltMinimapAutotile(ret, i * 6, j * 6, minimap.bitmap, tile)
     end
   end
-  minimap.disposes
+  minimap.dispose
   return ret
 end

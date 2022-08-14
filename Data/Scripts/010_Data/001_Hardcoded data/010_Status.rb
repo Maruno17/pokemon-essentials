@@ -1,7 +1,7 @@
-# NOTE: "Graphics/Pictures/statuses.png" also contains icons for being fainted
-#       and for having Pokérus, in that order, at the bottom of the graphic.
-#       "Graphics/Pictures/Battle/icon_statuses.png" also contains an icon for
-#       bad poisoning (toxic), at the bottom of the graphic.
+# NOTE: "Graphics/UI/statuses.png" also contains icons for being fainted and for
+#       having Pokérus, in that order, at the bottom of the graphic.
+#       "Graphics/UI/Battle/icon_statuses.png" also contains an icon for bad
+#       poisoning (toxic), at the bottom of the graphic.
 #       Both graphics automatically handle varying numbers of defined statuses,
 #       as long as their extra icons remain at the bottom of them.
 module GameData

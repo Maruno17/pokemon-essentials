@@ -417,7 +417,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
 
   def allocPause
     return if @pausesprite
-    @pausesprite = AnimatedSprite.create("Graphics/Pictures/pause", 4, 3)
+    @pausesprite = AnimatedSprite.create("Graphics/UI/pause_arrow", 4, 3)
     @pausesprite.z       = 100000
     @pausesprite.visible = false
   end
@@ -958,10 +958,10 @@ end
 #===============================================================================
 module UpDownArrowMixin
   def initUpDownArrow
-    @uparrow   = AnimatedSprite.create("Graphics/Pictures/uparrow", 8, 2, self.viewport)
-    @downarrow = AnimatedSprite.create("Graphics/Pictures/downarrow", 8, 2, self.viewport)
-    RPG::Cache.retain("Graphics/Pictures/uparrow")
-    RPG::Cache.retain("Graphics/Pictures/downarrow")
+    @uparrow   = AnimatedSprite.create("Graphics/UI/up_arrow", 8, 2, self.viewport)
+    @downarrow = AnimatedSprite.create("Graphics/UI/down_arrow", 8, 2, self.viewport)
+    RPG::Cache.retain("Graphics/UI/up_arrow")
+    RPG::Cache.retain("Graphics/UI/down_arrow")
     @uparrow.z   = 99998
     @downarrow.z = 99998
     @uparrow.visible   = false
@@ -1043,11 +1043,11 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     super(x, y, width, height)
     self.viewport = viewport if viewport
     if isDarkWindowskin(self.windowskin)
-      @selarrow = AnimatedBitmap.new("Graphics/Pictures/selarrow_white")
-      RPG::Cache.retain("Graphics/Pictures/selarrow_white")
+      @selarrow = AnimatedBitmap.new("Graphics/UI/sel_arrow_white")
+      RPG::Cache.retain("Graphics/UI/sel_arrow_white")
     else
-      @selarrow = AnimatedBitmap.new("Graphics/Pictures/selarrow")
-      RPG::Cache.retain("Graphics/Pictures/selarrow")
+      @selarrow = AnimatedBitmap.new("Graphics/UI/sel_arrow")
+      RPG::Cache.retain("Graphics/UI/sel_arrow")
     end
     @index = 0
     colors = getDefaultTextColors(self.windowskin)

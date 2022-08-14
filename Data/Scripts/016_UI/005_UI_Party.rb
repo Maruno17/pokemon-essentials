@@ -9,11 +9,11 @@ class PokemonPartyConfirmCancelSprite < Sprite
     @refreshBitmap = true
     @bgsprite = ChangelingSprite.new(0, 0, viewport)
     if narrowbox
-      @bgsprite.addBitmap("desel", "Graphics/Pictures/Party/icon_cancel_narrow")
-      @bgsprite.addBitmap("sel", "Graphics/Pictures/Party/icon_cancel_narrow_sel")
+      @bgsprite.addBitmap("desel", "Graphics/UI/Party/icon_cancel_narrow")
+      @bgsprite.addBitmap("sel", "Graphics/UI/Party/icon_cancel_narrow_sel")
     else
-      @bgsprite.addBitmap("desel", "Graphics/Pictures/Party/icon_cancel")
-      @bgsprite.addBitmap("sel", "Graphics/Pictures/Party/icon_cancel_sel")
+      @bgsprite.addBitmap("desel", "Graphics/UI/Party/icon_cancel")
+      @bgsprite.addBitmap("sel", "Graphics/UI/Party/icon_cancel_sel")
     end
     @bgsprite.changeBitmap("desel")
     @overlaysprite = BitmapSprite.new(@bgsprite.bitmap.width, @bgsprite.bitmap.height, viewport)
@@ -140,7 +140,7 @@ class PokemonPartyBlankPanel < Sprite
     super(viewport)
     self.x = (index % 2) * Graphics.width / 2
     self.y = (16 * (index % 2)) + (96 * (index / 2))
-    @panelbgsprite = AnimatedBitmap.new("Graphics/Pictures/Party/panel_blank")
+    @panelbgsprite = AnimatedBitmap.new("Graphics/UI/Party/panel_blank")
     self.bitmap = @panelbgsprite.bitmap
     @text = nil
   end
@@ -186,31 +186,31 @@ class PokemonPartyPanel < Sprite
     @panelbgsprite = ChangelingSprite.new(0, 0, viewport)
     @panelbgsprite.z = self.z
     if @active   # Rounded panel
-      @panelbgsprite.addBitmap("able", "Graphics/Pictures/Party/panel_round")
-      @panelbgsprite.addBitmap("ablesel", "Graphics/Pictures/Party/panel_round_sel")
-      @panelbgsprite.addBitmap("fainted", "Graphics/Pictures/Party/panel_round_faint")
-      @panelbgsprite.addBitmap("faintedsel", "Graphics/Pictures/Party/panel_round_faint_sel")
-      @panelbgsprite.addBitmap("swap", "Graphics/Pictures/Party/panel_round_swap")
-      @panelbgsprite.addBitmap("swapsel", "Graphics/Pictures/Party/panel_round_swap_sel")
-      @panelbgsprite.addBitmap("swapsel2", "Graphics/Pictures/Party/panel_round_swap_sel2")
+      @panelbgsprite.addBitmap("able", "Graphics/UI/Party/panel_round")
+      @panelbgsprite.addBitmap("ablesel", "Graphics/UI/Party/panel_round_sel")
+      @panelbgsprite.addBitmap("fainted", "Graphics/UI/Party/panel_round_faint")
+      @panelbgsprite.addBitmap("faintedsel", "Graphics/UI/Party/panel_round_faint_sel")
+      @panelbgsprite.addBitmap("swap", "Graphics/UI/Party/panel_round_swap")
+      @panelbgsprite.addBitmap("swapsel", "Graphics/UI/Party/panel_round_swap_sel")
+      @panelbgsprite.addBitmap("swapsel2", "Graphics/UI/Party/panel_round_swap_sel2")
     else   # Rectangular panel
-      @panelbgsprite.addBitmap("able", "Graphics/Pictures/Party/panel_rect")
-      @panelbgsprite.addBitmap("ablesel", "Graphics/Pictures/Party/panel_rect_sel")
-      @panelbgsprite.addBitmap("fainted", "Graphics/Pictures/Party/panel_rect_faint")
-      @panelbgsprite.addBitmap("faintedsel", "Graphics/Pictures/Party/panel_rect_faint_sel")
-      @panelbgsprite.addBitmap("swap", "Graphics/Pictures/Party/panel_rect_swap")
-      @panelbgsprite.addBitmap("swapsel", "Graphics/Pictures/Party/panel_rect_swap_sel")
-      @panelbgsprite.addBitmap("swapsel2", "Graphics/Pictures/Party/panel_rect_swap_sel2")
+      @panelbgsprite.addBitmap("able", "Graphics/UI/Party/panel_rect")
+      @panelbgsprite.addBitmap("ablesel", "Graphics/UI/Party/panel_rect_sel")
+      @panelbgsprite.addBitmap("fainted", "Graphics/UI/Party/panel_rect_faint")
+      @panelbgsprite.addBitmap("faintedsel", "Graphics/UI/Party/panel_rect_faint_sel")
+      @panelbgsprite.addBitmap("swap", "Graphics/UI/Party/panel_rect_swap")
+      @panelbgsprite.addBitmap("swapsel", "Graphics/UI/Party/panel_rect_swap_sel")
+      @panelbgsprite.addBitmap("swapsel2", "Graphics/UI/Party/panel_rect_swap_sel2")
     end
     @hpbgsprite = ChangelingSprite.new(0, 0, viewport)
     @hpbgsprite.z = self.z + 1
-    @hpbgsprite.addBitmap("able", "Graphics/Pictures/Party/overlay_hp_back")
-    @hpbgsprite.addBitmap("fainted", "Graphics/Pictures/Party/overlay_hp_back_faint")
-    @hpbgsprite.addBitmap("swap", "Graphics/Pictures/Party/overlay_hp_back_swap")
+    @hpbgsprite.addBitmap("able", "Graphics/UI/Party/overlay_hp_back")
+    @hpbgsprite.addBitmap("fainted", "Graphics/UI/Party/overlay_hp_back_faint")
+    @hpbgsprite.addBitmap("swap", "Graphics/UI/Party/overlay_hp_back_swap")
     @ballsprite = ChangelingSprite.new(0, 0, viewport)
     @ballsprite.z = self.z + 1
-    @ballsprite.addBitmap("desel", "Graphics/Pictures/Party/icon_ball")
-    @ballsprite.addBitmap("sel", "Graphics/Pictures/Party/icon_ball_sel")
+    @ballsprite.addBitmap("desel", "Graphics/UI/Party/icon_ball")
+    @ballsprite.addBitmap("sel", "Graphics/UI/Party/icon_ball_sel")
     @pkmnsprite = PokemonIconSprite.new(pokemon, viewport)
     @pkmnsprite.setOffset(PictureOrigin::CENTER)
     @pkmnsprite.active = @active
@@ -220,8 +220,8 @@ class PokemonPartyPanel < Sprite
     @overlaysprite = BitmapSprite.new(Graphics.width, Graphics.height, viewport)
     @overlaysprite.z = self.z + 4
     pbSetSystemFont(@overlaysprite.bitmap)
-    @hpbar    = AnimatedBitmap.new("Graphics/Pictures/Party/overlay_hp")
-    @statuses = AnimatedBitmap.new(_INTL("Graphics/Pictures/statuses"))
+    @hpbar    = AnimatedBitmap.new("Graphics/UI/Party/overlay_hp")
+    @statuses = AnimatedBitmap.new(_INTL("Graphics/UI/statuses"))
     @selected      = false
     @preselected   = false
     @switching     = false
@@ -380,7 +380,7 @@ class PokemonPartyPanel < Sprite
     return if @pokemon.egg?
     # "Lv" graphic
     pbDrawImagePositions(@overlaysprite.bitmap,
-                         [["Graphics/Pictures/Party/overlay_lv", 20, 70, 0, 0, 22, 14]])
+                         [["Graphics/UI/Party/overlay_lv", 20, 70, 0, 0, 22, 14]])
     # Level number
     pbSetSmallFont(@overlaysprite.bitmap)
     pbDrawTextPositions(@overlaysprite.bitmap,
@@ -434,7 +434,7 @@ class PokemonPartyPanel < Sprite
   def draw_shiny_icon
     return if @pokemon.egg? || !@pokemon.shiny?
     pbDrawImagePositions(@overlaysprite.bitmap,
-                         [["Graphics/Pictures/shiny", 80, 48, 0, 0, 16, 16]])
+                         [["Graphics/UI/shiny", 80, 48, 0, 0, 16, 16]])
   end
 
   def draw_annotation

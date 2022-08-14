@@ -130,14 +130,14 @@ class PokemonBoxArrow < Sprite
     @placingState  = 0
     @heldpkmn      = nil
     @handsprite    = ChangelingSprite.new(0, 0, viewport)
-    @handsprite.addBitmap("point1", "Graphics/Pictures/Storage/cursor_point_1")
-    @handsprite.addBitmap("point2", "Graphics/Pictures/Storage/cursor_point_2")
-    @handsprite.addBitmap("grab", "Graphics/Pictures/Storage/cursor_grab")
-    @handsprite.addBitmap("fist", "Graphics/Pictures/Storage/cursor_fist")
-    @handsprite.addBitmap("point1q", "Graphics/Pictures/Storage/cursor_point_1_q")
-    @handsprite.addBitmap("point2q", "Graphics/Pictures/Storage/cursor_point_2_q")
-    @handsprite.addBitmap("grabq", "Graphics/Pictures/Storage/cursor_grab_q")
-    @handsprite.addBitmap("fistq", "Graphics/Pictures/Storage/cursor_fist_q")
+    @handsprite.addBitmap("point1", "Graphics/UI/Storage/cursor_point_1")
+    @handsprite.addBitmap("point2", "Graphics/UI/Storage/cursor_point_2")
+    @handsprite.addBitmap("grab", "Graphics/UI/Storage/cursor_grab")
+    @handsprite.addBitmap("fist", "Graphics/UI/Storage/cursor_fist")
+    @handsprite.addBitmap("point1q", "Graphics/UI/Storage/cursor_point_1_q")
+    @handsprite.addBitmap("point2q", "Graphics/UI/Storage/cursor_point_2_q")
+    @handsprite.addBitmap("grabq", "Graphics/UI/Storage/cursor_grab_q")
+    @handsprite.addBitmap("fistq", "Graphics/UI/Storage/cursor_fist_q")
     @handsprite.changeBitmap("fist")
     @spriteX = self.x
     @spriteY = self.y
@@ -372,7 +372,7 @@ class PokemonBoxSprite < Sprite
         @storage[@boxnumber].background = @bg
       end
       @boxbitmap&.dispose
-      @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/box_#{@bg}")
+      @boxbitmap = AnimatedBitmap.new("Graphics/UI/Storage/box_#{@bg}")
     end
   end
 
@@ -447,7 +447,7 @@ class PokemonBoxPartySprite < Sprite
   def initialize(party, viewport = nil)
     super(viewport)
     @party = party
-    @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/overlay_party")
+    @boxbitmap = AnimatedBitmap.new("Graphics/UI/Storage/overlay_party")
     @pokemonsprites = []
     Settings::MAX_PARTY_SIZE.times do |i|
       @pokemonsprites[i] = nil
@@ -593,7 +593,7 @@ class PokemonStorageScene
     addBackgroundPlane(@sprites, "background", "Storage/bg", @bgviewport)
     @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport)
     @sprites["boxsides"] = IconSprite.new(0, 0, @boxsidesviewport)
-    @sprites["boxsides"].setBitmap("Graphics/Pictures/Storage/overlay_main")
+    @sprites["boxsides"].setBitmap("Graphics/UI/Storage/overlay_main")
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @boxsidesviewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
     @sprites["pokemon"] = AutoMosaicPokemonSprite.new(@boxsidesviewport)
@@ -605,9 +605,9 @@ class PokemonStorageScene
       @sprites["boxparty"].x = 182
       @sprites["boxparty"].y = Graphics.height
     end
-    @markingbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/markings")
+    @markingbitmap = AnimatedBitmap.new("Graphics/UI/Storage/markings")
     @sprites["markingbg"] = IconSprite.new(292, 68, @boxsidesviewport)
-    @sprites["markingbg"].setBitmap("Graphics/Pictures/Storage/overlay_marking")
+    @sprites["markingbg"].setBitmap("Graphics/UI/Storage/overlay_marking")
     @sprites["markingbg"].visible = false
     @sprites["markingoverlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @boxsidesviewport)
     @sprites["markingoverlay"].visible = false
@@ -1429,7 +1429,7 @@ class PokemonStorageScene
       elsif pokemon.female?
         textstrings.push([_INTL("♀"), 148, 14, false, Color.new(248, 56, 32), Color.new(224, 152, 144)])
       end
-      imagepos.push(["Graphics/Pictures/Storage/overlay_lv", 6, 246])
+      imagepos.push(["Graphics/UI/Storage/overlay_lv", 6, 246])
       textstrings.push([pokemon.level.to_s, 28, 240, false, base, shadow])
       if pokemon.ability
         textstrings.push([pokemon.ability.name, 86, 312, 2, base, shadow])
@@ -1442,9 +1442,9 @@ class PokemonStorageScene
         textstrings.push([_INTL("No item"), 86, 348, 2, nonbase, nonshadow])
       end
       if pokemon.shiny?
-        imagepos.push(["Graphics/Pictures/shiny", 156, 198])
+        imagepos.push(["Graphics/UI/shiny", 156, 198])
       end
-      typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+      typebitmap = AnimatedBitmap.new(_INTL("Graphics/UI/types"))
       pokemon.types.each_with_index do |type, i|
         type_number = GameData::Type.get(type).icon_position
         type_rect = Rect.new(0, type_number * 28, 64, 28)

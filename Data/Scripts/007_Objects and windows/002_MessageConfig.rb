@@ -717,12 +717,12 @@ end
 #===============================================================================
 # Adds a background to the sprite hash.
 # _planename_ is the hash key of the background.
-# _background_ is a filename within the Graphics/Pictures/ folder and can be
+# _background_ is a filename within the Graphics/UI/ folder and can be
 #     an animated image.
 # _viewport_ is a viewport to place the background in.
 def addBackgroundPlane(sprites, planename, background, viewport = nil)
   sprites[planename] = AnimatedPlane.new(viewport)
-  bitmapName = pbResolveBitmap("Graphics/Pictures/#{background}")
+  bitmapName = pbResolveBitmap("Graphics/UI/#{background}")
   if bitmapName.nil?
     # Plane should exist in any case
     sprites[planename].bitmap = nil
@@ -739,12 +739,12 @@ end
 
 # Adds a background to the sprite hash.
 # _planename_ is the hash key of the background.
-# _background_ is a filename within the Graphics/Pictures/ folder and can be
+# _background_ is a filename within the Graphics/UI/ folder and can be
 #       an animated image.
 # _color_ is the color to use if the background can't be found.
 # _viewport_ is a viewport to place the background in.
 def addBackgroundOrColoredPlane(sprites, planename, background, color, viewport = nil)
-  bitmapName = pbResolveBitmap("Graphics/Pictures/#{background}")
+  bitmapName = pbResolveBitmap("Graphics/UI/#{background}")
   if bitmapName.nil?
     # Plane should exist in any case
     sprites[planename] = ColoredPlane.new(color, viewport)

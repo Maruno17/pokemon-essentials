@@ -246,11 +246,11 @@ module Settings
   #   * Game Switch; the graphic is shown if this is ON (non-wall maps only).
   #   * X coordinate of the graphic on the map, in squares.
   #   * Y coordinate of the graphic on the map, in squares.
-  #   * Name of the graphic, found in the Graphics/Pictures folder.
+  #   * Name of the graphic, found in the Graphics/UI/Town Map folder.
   #   * The graphic will always (true) or never (false) be shown on a wall map.
   REGION_MAP_EXTRAS = [
-    [0, 51, 16, 15, "mapHiddenBerth", false],
-    [0, 52, 20, 14, "mapHiddenFaraday", false]
+    [0, 51, 16, 15, "hidden_Berth", false],
+    [0, 52, 20, 14, "hidden_Faraday", false]
   ]
 
   # Whether the player can use Fly while looking at the Town Map. This is only

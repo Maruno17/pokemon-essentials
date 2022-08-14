@@ -3,7 +3,7 @@
 #===============================================================================
 class Window_PhoneList < Window_CommandPokemon
   def drawCursor(index, rect)
-    selarrow = AnimatedBitmap.new("Graphics/Pictures/phoneSel")
+    selarrow = AnimatedBitmap.new("Graphics/UI/Phone/cursor")
     if self.index == index
       pbCopyBitmap(self.contents, selarrow.bitmap, rect.x, rect.y + 2)
     end
@@ -42,7 +42,7 @@ class PokemonPhoneScene
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
-    addBackgroundPlane(@sprites, "bg", "phonebg", @viewport)
+    addBackgroundPlane(@sprites, "bg", "Phone/bg", @viewport)
     @sprites["list"] = Window_PhoneList.newEmpty(152, 32, Graphics.width - 142, Graphics.height - 80, @viewport)
     @sprites["list"].windowskin = nil
     @sprites["list"].commands = commands
@@ -50,7 +50,7 @@ class PokemonPhoneScene
       @sprites["rematch[#{i}]"] = IconSprite.new(468, 62 + (i * 32), @viewport)
       j = i + @sprites["list"].top_item
       if j < @contacts.length && @contacts[j].can_rematch?
-        @sprites["rematch[#{i}]"].setBitmap("Graphics/Pictures/phoneRematch")
+        @sprites["rematch[#{i}]"].setBitmap("Graphics/UI/Phone/icon_rematch")
       end
     end
     @sprites["header"] = Window_UnformattedTextPokemon.newWithSize(
@@ -111,7 +111,7 @@ class PokemonPhoneScene
             @sprites["rematch[#{i}]"].clearBitmaps
             j = i + @sprites["list"].top_item
             if j < @contacts.length && @contacts[j].can_rematch?
-              @sprites["rematch[#{i}]"].setBitmap("Graphics/Pictures/phoneRematch")
+              @sprites["rematch[#{i}]"].setBitmap("Graphics/UI/Phone/icon_rematch")
             end
           end
         end

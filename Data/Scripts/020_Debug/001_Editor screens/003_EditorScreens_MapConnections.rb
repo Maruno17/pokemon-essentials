@@ -107,7 +107,7 @@ class RegionMapSprite
   def createRegionMap(map)
     @mapdata = pbLoadTownMapData
     @map = @mapdata[map]
-    bitmap = AnimatedBitmap.new("Graphics/Pictures/#{@map[1]}").deanimate
+    bitmap = AnimatedBitmap.new("Graphics/UI/Town Map/#{@map[1]}").deanimate
     retbitmap = BitmapWrapper.new(bitmap.width / 2, bitmap.height / 2)
     retbitmap.stretch_blt(
       Rect.new(0, 0, bitmap.width / 2, bitmap.height / 2),

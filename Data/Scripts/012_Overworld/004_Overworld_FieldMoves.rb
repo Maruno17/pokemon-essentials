@@ -72,13 +72,13 @@ def pbHiddenMoveAnimation(pokemon)
   viewport = Viewport.new(0, 0, 0, 0)
   viewport.z = 99999
   bg = Sprite.new(viewport)
-  bg.bitmap = RPG::Cache.picture("hiddenMovebg")
+  bg.bitmap = RPG::Cache.ui("Field move/bg")
   sprite = PokemonSprite.new(viewport)
   sprite.setOffset(PictureOrigin::CENTER)
   sprite.setPokemonBitmap(pokemon)
   sprite.z = 1
   sprite.visible = false
-  strobebitmap = AnimatedBitmap.new("Graphics/Pictures/hiddenMoveStrobes")
+  strobebitmap = AnimatedBitmap.new("Graphics/UI/Field move/strobes")
   strobes = []
   15.times do |i|
     strobe = BitmapSprite.new(52, 16, viewport)

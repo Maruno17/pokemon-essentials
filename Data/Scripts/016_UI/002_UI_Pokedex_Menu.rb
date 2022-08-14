@@ -8,7 +8,7 @@ class Window_DexesList < Window_CommandPokemon
   def initialize(commands, commands2, width)
     @commands2 = commands2
     super(commands, width)
-    @selarrow = AnimatedBitmap.new("Graphics/Pictures/selarrow_white")
+    @selarrow = AnimatedBitmap.new("Graphics/UI/sel_arrow_white")
     self.baseColor   = Color.new(248, 248, 248)
     self.shadowColor = Color.black
     self.windowskin  = nil
@@ -25,8 +25,8 @@ class Window_DexesList < Window_CommandPokemon
       allown  = (@commands2[index][1] >= @commands2[index][2])
       pbDrawImagePositions(
         self.contents,
-        [["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 236, rect.y + 6, (allseen) ? 24 : 0, 0, 24, 24],
-         ["Graphics/Pictures/Pokedex/icon_menuseenown", rect.x + 332, rect.y + 6, (allown) ? 24 : 0, 24, 24, 24]]
+        [["Graphics/UI/Pokedex/icon_menuseenown", rect.x + 236, rect.y + 6, (allseen) ? 24 : 0, 0, 24, 24],
+         ["Graphics/UI/Pokedex/icon_menuseenown", rect.x + 332, rect.y + 6, (allown) ? 24 : 0, 24, 24, 24]]
       )
     end
   end
@@ -46,7 +46,7 @@ class PokemonPokedexMenu_Scene
     @viewport.z = 99999
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_menu"))
+    @sprites["background"].setBitmap(_INTL("Graphics/UI/Pokedex/bg_menu"))
     @sprites["headings"] = Window_AdvancedTextPokemon.newWithSize(
       _INTL("<c3=F8F8F8,C02028>SEEN<r>OBTAINED</c3>"), 286, 136, 208, 64, @viewport
     )

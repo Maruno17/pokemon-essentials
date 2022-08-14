@@ -496,7 +496,7 @@ class PokemonEvolutionScene
     @viewport.z = 99999
     @msgviewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @msgviewport.z = 99999
-    addBackgroundOrColoredPlane(@sprites, "background", "evolutionbg",
+    addBackgroundOrColoredPlane(@sprites, "background", "evolution_bg",
                                 Color.new(248, 248, 248), @bgviewport)
     rsprite1 = PokemonSprite.new(@viewport)
     rsprite1.setOffset(PictureOrigin::CENTER)

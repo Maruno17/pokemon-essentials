@@ -17,7 +17,7 @@ class PokemonEggHatch_Scene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     # Create background image
-    addBackgroundOrColoredPlane(@sprites, "background", "hatchbg",
+    addBackgroundOrColoredPlane(@sprites, "background", "hatch_bg",
                                 Color.new(248, 248, 248), @viewport)
     # Create egg sprite/Pokémon sprite
     @sprites["pokemon"] = PokemonSprite.new(@viewport)

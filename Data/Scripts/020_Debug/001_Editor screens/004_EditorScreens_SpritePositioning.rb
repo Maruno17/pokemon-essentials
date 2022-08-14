@@ -67,7 +67,7 @@ class SpritePositioner
     @sprites["base_1"].y -= @sprites["base_1"].bitmap.height / 2 if @sprites["base_1"].bitmap
     @sprites["base_1"].z = 1
     @sprites["messageBox"] = IconSprite.new(0, Graphics.height - 96, @viewport)
-    @sprites["messageBox"].setBitmap("Graphics/Pictures/Battle/debug_message")
+    @sprites["messageBox"].setBitmap("Graphics/UI/Debug/battle_message")
     @sprites["messageBox"].z = 2
     @sprites["shadow_1"] = IconSprite.new(0, 0, @viewport)
     @sprites["shadow_1"].z = 3

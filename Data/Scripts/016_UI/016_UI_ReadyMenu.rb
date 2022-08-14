@@ -13,9 +13,9 @@ class ReadyMenuButton < Sprite
     @selected = selected
     @side = side
     if @command[2]
-      @button = AnimatedBitmap.new("Graphics/Pictures/Ready Menu/icon_movebutton")
+      @button = AnimatedBitmap.new("Graphics/UI/Ready Menu/icon_movebutton")
     else
-      @button = AnimatedBitmap.new("Graphics/Pictures/Ready Menu/icon_itembutton")
+      @button = AnimatedBitmap.new("Graphics/UI/Ready Menu/icon_itembutton")
     end
     @contents = BitmapWrapper.new(@button.width, @button.height / 2)
     self.bitmap = @contents

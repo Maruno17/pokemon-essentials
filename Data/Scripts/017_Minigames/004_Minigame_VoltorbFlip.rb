@@ -37,7 +37,7 @@ class VoltorbFlip
     @index = [0, 0]
     # [x,y,points,selected]
     @squares = [0, 0, 0, false]
-    @directory = "Graphics/Pictures/Voltorb Flip/"
+    @directory = "Graphics/UI/Voltorb Flip/"
     squareValues = []
     total = 1
     voltorbs = 0
@@ -152,7 +152,7 @@ class VoltorbFlip
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites["bg"] = Sprite.new(@viewport)
-    @sprites["bg"].bitmap = RPG::Cache.load_bitmap(@directory, "boardbg")
+    @sprites["bg"].bitmap = RPG::Cache.load_bitmap(@directory, "bg")
     @sprites["text"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["text"].bitmap)
     @sprites["level"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)

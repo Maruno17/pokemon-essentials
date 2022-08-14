@@ -1114,7 +1114,7 @@ class PurifyChamberScene
     @viewport.z = 99999
     @viewportmsg = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewportmsg.z = 99999
-    addBackgroundOrColoredPlane(@sprites, "bg", "purifychamberbg",
+    addBackgroundOrColoredPlane(@sprites, "bg", "purifychamber_bg",
                                 Color.new(64, 48, 96), @viewport)
     @sprites["setwindow"] = Window_PurifyChamberSets.new(
       @chamber, 0, 0, 112, Graphics.height, @viewport

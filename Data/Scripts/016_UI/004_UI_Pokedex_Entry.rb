@@ -10,7 +10,7 @@ class PokemonPokedexInfo_Scene
     @region  = region
     @page = 1
     @show_battled_count = false
-    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Pokedex/icon_types"))
+    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_types"))
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["infosprite"] = PokemonSprite.new(@viewport)
@@ -23,21 +23,21 @@ class PokemonPokedexInfo_Scene
       @region = (mappos) ? mappos[0] : 0                      # Region 0 default
     end
     @sprites["areamap"] = IconSprite.new(0, 0, @viewport)
-    @sprites["areamap"].setBitmap("Graphics/Pictures/#{@mapdata[@region][1]}")
+    @sprites["areamap"].setBitmap("Graphics/UI/Town Map/#{@mapdata[@region][1]}")
     @sprites["areamap"].x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
     @sprites["areamap"].y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
     Settings::REGION_MAP_EXTRAS.each do |hidden|
       next if hidden[0] != @region || hidden[1] <= 0 || !$game_switches[hidden[1]]
       pbDrawImagePositions(
         @sprites["areamap"].bitmap,
-        [["Graphics/Pictures/#{hidden[4]}",
+        [["Graphics/UI/Town Map/#{hidden[4]}",
           hidden[2] * PokemonRegionMap_Scene::SQUARE_WIDTH,
           hidden[3] * PokemonRegionMap_Scene::SQUARE_HEIGHT]]
       )
     end
     @sprites["areahighlight"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["areaoverlay"] = IconSprite.new(0, 0, @viewport)
-    @sprites["areaoverlay"].setBitmap("Graphics/Pictures/Pokedex/overlay_area")
+    @sprites["areaoverlay"].setBitmap("Graphics/UI/Pokedex/overlay_area")
     @sprites["formfront"] = PokemonSprite.new(@viewport)
     @sprites["formfront"].setOffset(PictureOrigin::CENTER)
     @sprites["formfront"].x = 130
@@ -49,12 +49,12 @@ class PokemonPokedexInfo_Scene
     @sprites["formicon"].setOffset(PictureOrigin::CENTER)
     @sprites["formicon"].x = 82
     @sprites["formicon"].y = 328
-    @sprites["uparrow"] = AnimatedSprite.new("Graphics/Pictures/uparrow", 8, 28, 40, 2, @viewport)
+    @sprites["uparrow"] = AnimatedSprite.new("Graphics/UI/up_arrow", 8, 28, 40, 2, @viewport)
     @sprites["uparrow"].x = 242
     @sprites["uparrow"].y = 268
     @sprites["uparrow"].play
     @sprites["uparrow"].visible = false
-    @sprites["downarrow"] = AnimatedSprite.new("Graphics/Pictures/downarrow", 8, 28, 40, 2, @viewport)
+    @sprites["downarrow"] = AnimatedSprite.new("Graphics/UI/down_arrow", 8, 28, 40, 2, @viewport)
     @sprites["downarrow"].x = 242
     @sprites["downarrow"].y = 348
     @sprites["downarrow"].play
@@ -94,7 +94,7 @@ class PokemonPokedexInfo_Scene
     @index   = 0
     @page = 1
     @brief = true
-    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Pokedex/icon_types"))
+    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_types"))
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["infosprite"] = PokemonSprite.new(@viewport)
@@ -198,13 +198,13 @@ class PokemonPokedexInfo_Scene
   end
 
   def drawPageInfo
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_info"))
+    @sprites["background"].setBitmap(_INTL("Graphics/UI/Pokedex/bg_info"))
     overlay = @sprites["overlay"].bitmap
     base   = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
     imagepos = []
     if @brief
-      imagepos.push([_INTL("Graphics/Pictures/Pokedex/overlay_info"), 0, 0])
+      imagepos.push([_INTL("Graphics/UI/Pokedex/overlay_info"), 0, 0])
     end
     species_data = GameData::Species.get_species_form(@species, @form)
     # Write various bits of text
@@ -253,7 +253,7 @@ class PokemonPokedexInfo_Scene
         footprint.dispose
       end
       # Show the owned icon
-      imagepos.push(["Graphics/Pictures/Pokedex/icon_own", 212, 44])
+      imagepos.push(["Graphics/UI/Pokedex/icon_own", 212, 44])
       # Draw the type icon(s)
       species_data.types.each_with_index do |type, i|
         type_number = GameData::Type.get(type).icon_position
@@ -333,7 +333,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def drawPageArea
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
+    @sprites["background"].setBitmap(_INTL("Graphics/UI/Pokedex/bg_area"))
     overlay = @sprites["overlay"].bitmap
     base   = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
@@ -371,7 +371,7 @@ class PokemonPokedexInfo_Scene
     if points.length == 0
       pbDrawImagePositions(
         overlay,
-        [[sprintf("Graphics/Pictures/Pokedex/overlay_areanone"), 108, 188]]
+        [[sprintf("Graphics/UI/Pokedex/overlay_areanone"), 108, 188]]
       )
       textpos.push([_INTL("Area unknown"), Graphics.width / 2, (Graphics.height / 2) + 6, 2, base, shadow])
     end
@@ -382,7 +382,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def drawPageForms
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_forms"))
+    @sprites["background"].setBitmap(_INTL("Graphics/UI/Pokedex/bg_forms"))
     overlay = @sprites["overlay"].bitmap
     base   = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
