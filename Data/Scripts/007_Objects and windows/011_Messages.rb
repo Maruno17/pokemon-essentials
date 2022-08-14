@@ -410,7 +410,7 @@ def pbDisplayGoldWindow(msgwindow)
   goldwindow.setSkin("Graphics/Windowskins/goldskin")
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
   goldwindow.width = 160 if goldwindow.width <= 160
-  if msgwindow.y == 0
+  if msgwindow.y <= 10
     goldwindow.y = Graphics.height - goldwindow.height
   else
     goldwindow.y = 0
