@@ -530,7 +530,14 @@ class PokemonOption_Scene
                               ["Enter text by selecting letters on the screen",
                                "Enter text by typing on the keyboard"]
       )
-      EnumOption.new(_INTL("Screen Size"), [_INTL("S"), _INTL("M"), _INTL("L"), _INTL("XL"), _INTL("Full")],
+    options << EnumOption.new(_INTL("Fusion icons"), [_INTL("Combined"), _INTL("DNA")],
+                              proc { $game_variables[VAR_FUSION_ICON_STYLE]},
+                              proc { |value| $game_variables[VAR_FUSION_ICON_STYLE]=value },
+                              ["Combines both Pokémon's party icons",
+                               "Uses the same party icon for all fusions"]
+    )
+
+    options << EnumOption.new(_INTL("Screen Size"), [_INTL("S"), _INTL("M"), _INTL("L"), _INTL("XL"), _INTL("Full")],
                      proc { [$PokemonSystem.screensize, 4].min },
                      proc { |value|
                        if $PokemonSystem.screensize != value

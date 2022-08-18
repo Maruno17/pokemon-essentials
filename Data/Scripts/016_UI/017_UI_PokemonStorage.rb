@@ -18,7 +18,7 @@ class PokemonBoxIcon < IconSprite
     dexNum = getDexNumberForSpecies(species)
     return true if dexNum <= Settings::NB_POKEMON
     return false if $game_variables == nil
-    return true if $game_variables[220] != 0
+    return true if $game_variables[VAR_FUSION_ICON_STYLE] != 0
     bitmapFileName = sprintf("Graphics/Icons/icon%03d", dexNum)
     return true if pbResolveBitmap(bitmapFileName)
     return false

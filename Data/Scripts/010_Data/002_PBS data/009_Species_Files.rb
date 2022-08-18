@@ -137,6 +137,10 @@ module GameData
     end
 
     def self.icon_filename_from_pokemon(pkmn)
+      if pkmn.isFusion?
+        return  pbResolveBitmap(sprintf("Graphics/Icons/iconDNA"))
+      end
+
       return self.icon_filename(pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?, pkmn.shadowPokemon?, pkmn.egg?)
     end
 
