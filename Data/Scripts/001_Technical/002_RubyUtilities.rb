@@ -229,21 +229,21 @@ class Color
 
   # @return [String] the 15-bit representation of this color in a string, ignoring its alpha
   def to_rgb15
-    ret = (self.red >> 3)
-    ret |= ((self.green >> 3) << 5)
-    ret |= ((self.blue >> 3) << 10)
+    ret = (self.red.to_i >> 3)
+    ret |= ((self.green.to_i >> 3) << 5)
+    ret |= ((self.blue.to_i >> 3) << 10)
     return sprintf("%04X", ret)
   end
 
   # @return [String] this color in the format "RRGGBB", ignoring its alpha
   def to_rgb24
-    return sprintf("%02X%02X%02X", self.red, self.green, self.blue)
+    return sprintf("%02X%02X%02X", self.red.to_i, self.green.to_i, self.blue.to_i)
   end
 
   # @return [String] this color in the format "RRGGBBAA" (or "RRGGBB" if this color's alpha is 255)
   def to_rgb32(always_include_alpha = false)
-    return sprintf("%02X%02X%02X", self.red, self.green, self.blue) if self.alpha == 255 && !always_include_alpha
-    return sprintf("%02X%02X%02X%02X", self.red, self.green, self.blue, self.alpha)
+    return sprintf("%02X%02X%02X", self.red.to_i, self.green.to_i, self.blue.to_i) if self.alpha.to_i == 255 && !always_include_alpha
+    return sprintf("%02X%02X%02X%02X", self.red.to_i, self.green.to_i, self.blue.to_i, self.alpha.to_i)
   end
 
   # @return [String] this color in the format "#RRGGBB", ignoring its alpha
