@@ -52,7 +52,7 @@ class RandomizerOptionsScene < PokemonOption_Scene
                            openGymOptionsMenu()
                          end
                          $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] = value == 0
-                       }, "Randomize gym trainers/leaders separately from regular trainers (All Pokémon of a single type)"
+                       }, "Limit gym trainers to a single type"
         ),
 
         EnumOption.new(_INTL("Wild Pokémon"), [_INTL("On"), _INTL("Off")],
@@ -239,7 +239,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
                          $game_switches[REGULAR_TO_FUSIONS] = value == 0
                        },"Include fused Pokémon in the randomize pool for wild Pokémon"
         ),
-        EnumOption.new(_INTL("Custom sprites only (Slow)"), [_INTL("On"), _INTL("Off")],
+        EnumOption.new(_INTL("Custom sprites only"), [_INTL("On"), _INTL("Off")],
                        proc { $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] ? 0 : 1 },
                        proc { |value|
                          $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] = value == 0

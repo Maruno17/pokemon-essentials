@@ -318,6 +318,8 @@ end
 
 
 def Kernel.pbShuffleTrainers(bst_range = 50,customsOnly=false,customsList=nil)
+  bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
+
   if customsOnly && customsList == nil
     customsOnly = false
   end
@@ -329,7 +331,7 @@ def Kernel.pbShuffleTrainers(bst_range = 50,customsOnly=false,customsList=nil)
     new_party = []
     for poke in trainer.pokemon
       old_poke = GameData::Species.get(poke[:species]).id_number
-      new_poke = customsOnly ? getNewCustomSpecies(old_poke,customsList) : getNewSpecies(old_poke)
+      new_poke = customsOnly ? getNewCustomSpecies(old_poke,customsList,bst_range) : getNewSpecies(old_poke,bst_range)
       new_party << new_poke
     end
     randomTrainersHash[trainer.id] = new_party
@@ -366,7 +368,8 @@ end
 
 def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   randomTrainersHash = Hash.new
-  
+  bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
+
   Kernel.pbMessage(_INTL("Parsing custom sprites folder"))
   customsList = getCustomSpeciesList()
   Kernel.pbMessage(_INTL("{1} Pokémon found",customsList.length.to_s))
