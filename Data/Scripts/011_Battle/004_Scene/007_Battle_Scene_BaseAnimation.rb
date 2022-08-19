@@ -105,7 +105,7 @@ module Battle::Scene::Animation::BallAnimationMixin
     if traSprite.bitmap.width < traSprite.bitmap.height * 2
       ball.setVisible(7, true)
       ballStartX = traSprite.x
-      ballStartX -= ball.totalDuration * (Graphics.width / (2 * 16)) if !safariThrow
+      ballStartX -= ball.totalDuration * (Graphics.width / 32) if !safariThrow
       ballStartY = traSprite.y - (traSprite.bitmap.height / 2)
       return ballStartX, ballStartY
     end
@@ -122,11 +122,11 @@ module Battle::Scene::Animation::BallAnimationMixin
     # Arm stretched out behind player
     ball.setVisible(0, true)
     ball.setXY(0, coordSets[0][0], coordSets[0][1])
-    ball.moveDelta(0, 5, -5 * (Graphics.width / (2 * 16)), 0) if !safariThrow
+    ball.moveDelta(0, 5, -5 * (Graphics.width / 32), 0) if !safariThrow
     ball.setDelta(0, -12, 0) if safariThrow
     # Arm mid throw
     ball.setDelta(5, coordSets[1][0], coordSets[1][1])
-    ball.moveDelta(5, 2, -2 * (Graphics.width / (2 * 16)), 0) if !safariThrow
+    ball.moveDelta(5, 2, -2 * (Graphics.width / 32), 0) if !safariThrow
     ball.setDelta(5, 34, 0) if safariThrow
     # Start of throw
     ball.setDelta(7, coordSets[2][0], coordSets[2][1])
@@ -137,7 +137,7 @@ module Battle::Scene::Animation::BallAnimationMixin
       ballStartX += c[0]
       ballStartY += c[1]
     end
-    ballStartX -= ball.totalDuration * (Graphics.width / (2 * 16)) if !safariThrow
+    ballStartX -= ball.totalDuration * (Graphics.width / 32) if !safariThrow
     ballStartX += 8 if safariThrow   # -12 + 34 - 14
     return ballStartX, ballStartY
   end

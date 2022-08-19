@@ -138,7 +138,7 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
   $PokemonGlobal.nextBattleBack       = nil
   $PokemonEncounters.reset_step_count
   # Fade back to the overworld in 0.4 seconds
-  viewport.color = Color.new(0, 0, 0, 255)
+  viewport.color = Color.black
   timer = 0.0
   loop do
     Graphics.update
@@ -179,7 +179,7 @@ def pbBattleAnimationCore(anim, viewport, location, num_flashes = 2)
   $game_temp.background_bitmap = Graphics.snap_to_bitmap
   # Play main animation
   Graphics.freeze
-  viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
+  viewport.color = Color.black   # Ensure screen is black
   Graphics.transition(25, "Graphics/Transitions/" + anim)
   # Slight pause after animation before starting up the battle scene
   pbWait(Graphics.frame_rate / 10)
@@ -421,7 +421,7 @@ SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # 
     viewvs.dispose
     viewopp.dispose
     viewplayer.dispose
-    viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
+    viewport.color = Color.black   # Ensure screen is black
   }
 )
 

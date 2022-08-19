@@ -342,10 +342,10 @@ def getSkinColor(windowskin, color, isDarkSkin)
       "F0F0F8", "C8C8D0",   # 8  White
       "9040E8", "B8A8E0",   # 9  Purple
       "F89818", "F8C898",   # 10 Orange
-      colorToRgb32(MessageConfig::DARK_TEXT_MAIN_COLOR),
-      colorToRgb32(MessageConfig::DARK_TEXT_SHADOW_COLOR),   # 11 Dark default
-      colorToRgb32(MessageConfig::LIGHT_TEXT_MAIN_COLOR),
-      colorToRgb32(MessageConfig::LIGHT_TEXT_SHADOW_COLOR)   # 12 Light default
+      MessageConfig::DARK_TEXT_MAIN_COLOR.to_rgb24,
+      MessageConfig::DARK_TEXT_SHADOW_COLOR.to_rgb24,   # 11 Dark default
+      MessageConfig::LIGHT_TEXT_MAIN_COLOR.to_rgb24,
+      MessageConfig::LIGHT_TEXT_SHADOW_COLOR.to_rgb24   # 12 Light default
     ]
     if color == 0 || color > textcolors.length / 2   # No special colour, use default
       if isDarkSkin   # Dark background, light text
@@ -365,7 +365,7 @@ def getSkinColor(windowskin, color, isDarkSkin)
     x = 64 + ((color % 8) * 8)
     y = 96 + ((color / 8) * 8)
     pixel = windowskin.get_pixel(x, y)
-    return shadowctagFromColor(pixel)
+    return shadowc3tag(pixel, pixel.get_contrast_color)
   end
 end
 
@@ -717,12 +717,12 @@ end
 #===============================================================================
 # Adds a background to the sprite hash.
 # _planename_ is the hash key of the background.
-# _background_ is a filename within the Graphics/Pictures/ folder and can be
+# _background_ is a filename within the Graphics/UI/ folder and can be
 #     an animated image.
 # _viewport_ is a viewport to place the background in.
 def addBackgroundPlane(sprites, planename, background, viewport = nil)
   sprites[planename] = AnimatedPlane.new(viewport)
-  bitmapName = pbResolveBitmap("Graphics/Pictures/#{background}")
+  bitmapName = pbResolveBitmap("Graphics/UI/#{background}")
   if bitmapName.nil?
     # Plane should exist in any case
     sprites[planename].bitmap = nil
@@ -739,12 +739,12 @@ end
 
 # Adds a background to the sprite hash.
 # _planename_ is the hash key of the background.
-# _background_ is a filename within the Graphics/Pictures/ folder and can be
+# _background_ is a filename within the Graphics/UI/ folder and can be
 #       an animated image.
 # _color_ is the color to use if the background can't be found.
 # _viewport_ is a viewport to place the background in.
 def addBackgroundOrColoredPlane(sprites, planename, background, color, viewport = nil)
-  bitmapName = pbResolveBitmap("Graphics/Pictures/#{background}")
+  bitmapName = pbResolveBitmap("Graphics/UI/#{background}")
   if bitmapName.nil?
     # Plane should exist in any case
     sprites[planename] = ColoredPlane.new(color, viewport)

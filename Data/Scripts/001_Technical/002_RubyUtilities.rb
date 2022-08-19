@@ -23,7 +23,7 @@ end
 #===============================================================================
 class String
   def starts_with_vowel?
-    return ["a", "e", "i", "o", "u"].include?(self[0, 1].downcase)
+    return ["a", "e", "i", "o", "u"].include?(self[0].downcase)
   end
 
   def first(n = 1); return self[0...n]; end
@@ -52,7 +52,7 @@ class String
   end
 
   def numeric?
-    return !self[/^[+-]?([0-9]+)(?:\.[0-9]+)?$/].nil?
+    return !self[/\A[+-]?\d+(?:\.\d+)?\Z/].nil?
   end
 end
 
@@ -188,17 +188,95 @@ class Color
   	return init_original(*args)
   end
 
-  # Returns this color as a hex string like "#RRGGBB".
-  def to_hex
-  	r = sprintf("%02X", self.red)
-  	g = sprintf("%02X", self.green)
-  	b = sprintf("%02X", self.blue)
-  	return ("#" + r + g + b).upcase
+  def self.new_from_rgb(param)
+    return Font.default_color if !param
+    base_int = param.to_i(16)
+    case param.length
+    when 8   # 32-bit hex
+      return Color.new(
+        (base_int >> 24) & 0xFF,
+        (base_int >> 16) & 0xFF,
+        (base_int >> 8) & 0xFF,
+        (base_int) & 0xFF
+      )
+    when 6   # 24-bit hex
+      return Color.new(
+        (base_int >> 16) & 0xFF,
+        (base_int >> 8) & 0xFF,
+        (base_int) & 0xFF
+      )
+    when 4   # 15-bit hex
+      return Color.new(
+        ((base_int) & 0x1F) << 3,
+        ((base_int >> 5) & 0x1F) << 3,
+        ((base_int >> 10) & 0x1F) << 3
+      )
+    when 1, 2   # Color number
+      case base_int
+      when 0 then return Color.white
+      when 1 then return Color.blue
+      when 2 then return Color.red
+      when 3 then return Color.green
+      when 4 then return Color.cyan
+      when 5 then return Color.pink
+      when 6 then return Color.yellow
+      when 7 then return Color.gray
+      else        return Font.default_color
+      end
+    end
+    return Font.default_color
   end
 
-  # Returns this color as a 24-bit color integer.
+  # @return [String] the 15-bit representation of this color in a string, ignoring its alpha
+  def to_rgb15
+    ret = (self.red >> 3)
+    ret |= ((self.green >> 3) << 5)
+    ret |= ((self.blue >> 3) << 10)
+    return sprintf("%04X", ret)
+  end
+
+  # @return [String] this color in the format "RRGGBB", ignoring its alpha
+  def to_rgb24
+    return sprintf("%02X%02X%02X", self.red, self.green, self.blue)
+  end
+
+  # @return [String] this color in the format "RRGGBBAA" (or "RRGGBB" if this color's alpha is 255)
+  def to_rgb32(always_include_alpha = false)
+    return sprintf("%02X%02X%02X", self.red, self.green, self.blue) if self.alpha == 255 && !always_include_alpha
+    return sprintf("%02X%02X%02X%02X", self.red, self.green, self.blue, self.alpha)
+  end
+
+  # @return [String] this color in the format "#RRGGBB", ignoring its alpha
+  def to_hex
+    return "#" + to_rgb24
+  end
+
+  # @return [Integer] this color in RGB format converted to an integer
   def to_i
-  	return self.to_hex.delete("#").to_i(16)
+  	return self.to_rgb24.to_i(16)
+  end
+
+  # @return [Color] the contrasting color to this one
+  def get_contrast_color
+    r = self.red
+    g = self.green
+    b = self.blue
+    yuv = [
+      (r * 0.299) + (g * 0.587) + (b * 0.114),
+      (r * -0.1687) + (g * -0.3313) + (b *  0.500) + 0.5,
+      (r * 0.500) + (g * -0.4187) + (b * -0.0813) + 0.5
+    ]
+    if yuv[0] < 127.5
+      yuv[0] += (255 - yuv[0]) / 2
+    else
+      yuv[0] = yuv[0] / 2
+    end
+    return Color.new(
+      yuv[0] + (1.4075 * (yuv[2] - 0.5)),
+      yuv[0] - (0.3455 * (yuv[1] - 0.5)) - (0.7169 * (yuv[2] - 0.5)),
+      yuv[0] + (1.7790 * (yuv[1] - 0.5)),
+      self.alpha
+    )
   end
 
   # Converts the provided hex string/24-bit integer to RGB values.
@@ -223,18 +301,44 @@ class Color
     return nil
   end
 
-  # Returns color object for some commonly used colors
-  def self.red;     return Color.new(255,   0,   0); end
-  def self.green;   return Color.new(  0, 255,   0); end
-  def self.blue;    return Color.new(  0,   0, 255); end
-  def self.black;   return Color.new(  0,   0,   0); end
-  def self.white;   return Color.new(255, 255, 255); end
-  def self.yellow;  return Color.new(255, 255,   0); end
+  # Returns color object for some commonly used colors.
+  def self.red;     return Color.new(255, 128, 128); end
+  def self.green;   return Color.new(128, 255, 128); end
+  def self.blue;    return Color.new(128, 128, 255); end
+  def self.yellow;  return Color.new(255, 255, 128); end
   def self.magenta; return Color.new(255,   0, 255); end
-  def self.teal;    return Color.new(  0, 255, 255); end
+  def self.cyan;    return Color.new(128, 255, 255); end
+  def self.white;   return Color.new(255, 255, 255); end
+  def self.gray;    return Color.new(192, 192, 192); end
+  def self.black;   return Color.new(  0,   0,   0); end
+  def self.pink;    return Color.new(255, 128, 255); end
   def self.orange;  return Color.new(255, 155,   0); end
   def self.purple;  return Color.new(155,   0, 255); end
   def self.brown;   return Color.new(112,  72,  32); end
+
+  # TODO: These are from def getSkinColor. It isn't appropriate to make Color
+  #       objects of these, though, as they're just converted straight back into
+  #       hex strings.
+#  def self.text_blue;          return Color.new(  0, 112, 248); end
+#  def self.text_blue_light;    return Color.new(120, 184, 232); end
+#  def self.text_red;           return Color.new(232,  32,  16); end
+#  def self.text_red_light;     return Color.new(248, 168, 184); end
+#  def self.text_green;         return Color.new( 96, 176,  72); end
+#  def self.text_green_light;   return Color.new(174, 208, 144); end
+#  def self.text_cyan;          return Color.new( 72, 216, 216); end
+#  def self.text_cyan_light;    return Color.new(168, 224, 224); end
+#  def self.text_magenta;       return Color.new(208,  56, 184); end
+#  def self.text_magenta_light; return Color.new(232, 160, 224); end
+#  def self.text_yellow;        return Color.new(232, 208,  32); end
+#  def self.text_yellow_light;  return Color.new(248, 232, 136); end
+#  def self.text_gray;          return Color.new(160, 160, 168); end
+#  def self.text_gray_light;    return Color.new(208, 208, 216); end
+#  def self.text_white;         return Color.new(240, 240, 248); end
+#  def self.text_white_light;   return Color.new(200, 200, 208); end   # Intentionally darker than text_white
+#  def self.text_purple;        return Color.new(114,  64, 232); end
+#  def self.text_purple_light;  return Color.new(184, 168, 224); end
+#  def self.text_orange;        return Color.new(248, 152,  24); end
+#  def self.text_orange_light;  return Color.new(248, 200, 152); end
 end
 
 #===============================================================================

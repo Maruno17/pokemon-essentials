@@ -157,7 +157,7 @@ class Window_PokemonMart < Window_DrawableCommand
     @stock       = stock
     @adapter     = adapter
     super(x, y, width, height, viewport)
-    @selarrow    = AnimatedBitmap.new("Graphics/Pictures/martSel")
+    @selarrow    = AnimatedBitmap.new("Graphics/UI/Mart/cursor")
     @baseColor   = Color.new(88, 88, 80)
     @shadowColor = Color.new(168, 184, 184)
     self.windowskin = nil
@@ -224,7 +224,7 @@ class PokemonMart_Scene
     @adapter = adapter
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
-    @sprites["background"].setBitmap("Graphics/Pictures/martScreen")
+    @sprites["background"].setBitmap("Graphics/UI/Mart/bg")
     @sprites["icon"] = ItemIconSprite.new(36, Graphics.height - 50, nil, @viewport)
     winAdapter = buying ? BuyAdapter.new(adapter) : SellAdapter.new(adapter)
     @sprites["itemwindow"] = Window_PokemonMart.new(
@@ -238,7 +238,7 @@ class PokemonMart_Scene
     )
     pbPrepareWindow(@sprites["itemtextwindow"])
     @sprites["itemtextwindow"].baseColor = Color.new(248, 248, 248)
-    @sprites["itemtextwindow"].shadowColor = Color.new(0, 0, 0)
+    @sprites["itemtextwindow"].shadowColor = Color.black
     @sprites["itemtextwindow"].windowskin = nil
     @sprites["helpwindow"] = Window_AdvancedTextPokemon.new("")
     pbPrepareWindow(@sprites["helpwindow"])
@@ -460,7 +460,6 @@ class PokemonMart_Scene
     ret = 0
     helpwindow = @sprites["helpwindow"]
     itemprice = @adapter.getPrice(item, !@buying)
-    itemprice /= 2 if !@buying
     pbDisplay(helptext, true)
     using(numwindow = Window_AdvancedTextPokemon.new("")) do   # Showing number of items
       pbPrepareWindow(numwindow)
@@ -681,7 +680,6 @@ class PokemonMartScreen
         @scene.pbHideMoney
         next
       end
-      price /= 2
       price *= qty
       if pbConfirm(_INTL("I can pay ${1}.\nWould that be OK?", price.to_s_formatted))
         old_money = @adapter.getMoney

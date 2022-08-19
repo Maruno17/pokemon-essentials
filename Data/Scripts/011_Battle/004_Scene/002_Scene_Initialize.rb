@@ -28,7 +28,7 @@ class Battle::Scene
     pbCreateBackdropSprites
     # Create message box graphic
     messageBox = pbAddSprite("messageBox", 0, Graphics.height - 96,
-                             "Graphics/Pictures/Battle/overlay_message", @viewport)
+                             "Graphics/UI/Battle/overlay_message", @viewport)
     messageBox.z = 195
     # Create message window (displays the message)
     msgWindow = Window_AdvancedTextPokemon.newWithSize(
@@ -50,7 +50,7 @@ class Battle::Scene
     # The party lineup graphics (bar and balls) for both sides
     2.times do |side|
       partyBar = pbAddSprite("partyBar_#{side}", 0, 0,
-                             "Graphics/Pictures/Battle/overlay_lineup", @viewport)
+                             "Graphics/UI/Battle/overlay_lineup", @viewport)
       partyBar.z       = 120
       partyBar.mirror  = true if side == 0   # Player's lineup bar only
       partyBar.visible = false

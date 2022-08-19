@@ -104,7 +104,7 @@ class TileDrawingHelper
       src = Rect.new(0, 0, 0, 0)
       4.times do |i|
         tile_position = tiles[i] - 1
-        src.set((tile_position % 6 * 16) + anim, tile_position / 6 * 16, 16, 16)
+        src.set(((tile_position % 6) * 16) + anim, (tile_position / 6) * 16, 16, 16)
         bitmap.stretch_blt(Rect.new((i % 2 * cxTile) + x, (i / 2 * cyTile) + y, cxTile, cyTile),
                            autotile, src)
       end
@@ -113,7 +113,7 @@ class TileDrawingHelper
 
   def bltSmallRegularTile(bitmap, x, y, cxTile, cyTile, id)
     return if id < 384 || !@tileset || @tileset.disposed?
-    rect = Rect.new((id - 384) % 8 * 32, (id - 384) / 8 * 32, 32, 32)
+    rect = Rect.new(((id - 384) % 8) * 32, ((id - 384) / 8) * 32, 32, 32)
     rect = TilemapRenderer::TilesetWrapper.getWrappedRect(rect) if @shouldWrap
     bitmap.stretch_blt(Rect.new(x, y, cxTile, cyTile), @tileset, rect)
   end
@@ -150,7 +150,7 @@ def createMinimap(mapid)
   map = load_data(sprintf("Data/Map%03d.rxdata", mapid)) rescue nil
   return BitmapWrapper.new(32, 32) if !map
   bitmap = BitmapWrapper.new(map.width * 4, map.height * 4)
-  black = Color.new(0, 0, 0)
+  black = Color.black
   tilesets = $data_tilesets
   tileset = tilesets[map.tileset_id]
   return bitmap if !tileset
@@ -196,7 +196,7 @@ end
 def getPassabilityMinimap(mapid)
   map = load_data(sprintf("Data/Map%03d.rxdata", mapid))
   tileset = $data_tilesets[map.tileset_id]
-  minimap = AnimatedBitmap.new("Graphics/Pictures/minimap_tiles")
+  minimap = AnimatedBitmap.new("Graphics/UI/minimap_tiles")
   ret = Bitmap.new(map.width * 6, map.height * 6)
   passtable = Table.new(map.width, map.height)
   passages = tileset.passages
@@ -221,6 +221,6 @@ def getPassabilityMinimap(mapid)
       bltMinimapAutotile(ret, i * 6, j * 6, minimap.bitmap, tile)
     end
   end
-  minimap.disposes
+  minimap.dispose
   return ret
 end

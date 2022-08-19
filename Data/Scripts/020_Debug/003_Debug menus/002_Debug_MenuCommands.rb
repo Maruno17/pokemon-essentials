@@ -391,13 +391,13 @@ MenuHandlers.add(:debug_menu, :ready_rematches, {
   "parent"      => :battle_menu,
   "description" => _INTL("Make all trainers in the phone ready for rematches."),
   "effect"      => proc {
-    if !$PokemonGlobal.phoneNumbers || $PokemonGlobal.phoneNumbers.length == 0
+    if !$PokemonGlobal.phone || $PokemonGlobal.phone.contacts.length == 0
       pbMessage(_INTL("There are no trainers in the Phone."))
     else
-      $PokemonGlobal.phoneNumbers.each do |i|
-        next if i.length != 8   # Isn't a trainer with an event
-        i[4] = 2
-        pbSetReadyToBattle(i)
+      $PokemonGlobal.phone.contacts.each do |contact|
+        next if !contact.trainer?
+        contact.rematch_flag = 1
+        contact.set_trainer_event_ready_for_rematch
       end
       pbMessage(_INTL("All trainers in the Phone are now ready to rebattle."))
     end

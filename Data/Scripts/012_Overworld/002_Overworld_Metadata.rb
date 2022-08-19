@@ -14,8 +14,9 @@ class PokemonGlobalMetadata
   attr_accessor :stepcount
   attr_accessor :pcItemStorage
   attr_accessor :mailbox
-  attr_accessor :phoneNumbers
-  attr_accessor :phoneTime
+  attr_accessor :phoneNumbers   # Deprecated
+  attr_accessor :phoneTime   # Deprecated
+  attr_accessor :phone
   attr_accessor :partner
   attr_accessor :creditsPlayed
   # Pokédex
@@ -64,8 +65,7 @@ class PokemonGlobalMetadata
     @stepcount            = 0
     @pcItemStorage        = nil
     @mailbox              = nil
-    @phoneNumbers         = []
-    @phoneTime            = 0
+    @phone                = Phone.new
     @partner              = nil
     @creditsPlayed        = false
     # Pokédex

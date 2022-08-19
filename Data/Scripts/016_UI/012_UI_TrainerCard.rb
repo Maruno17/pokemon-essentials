@@ -10,18 +10,18 @@ class PokemonTrainerCard_Scene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites = {}
-    background = pbResolveBitmap(sprintf("Graphics/Pictures/Trainer Card/bg_f"))
+    background = pbResolveBitmap(sprintf("Graphics/UI/Trainer Card/bg_f"))
     if $player.female? && background
       addBackgroundPlane(@sprites, "bg", "Trainer Card/bg_f", @viewport)
     else
       addBackgroundPlane(@sprites, "bg", "Trainer Card/bg", @viewport)
     end
-    cardexists = pbResolveBitmap(sprintf("Graphics/Pictures/Trainer Card/card_f"))
+    cardexists = pbResolveBitmap(sprintf("Graphics/UI/Trainer Card/card_f"))
     @sprites["card"] = IconSprite.new(0, 0, @viewport)
     if $player.female? && cardexists
-      @sprites["card"].setBitmap("Graphics/Pictures/Trainer Card/card_f")
+      @sprites["card"].setBitmap("Graphics/UI/Trainer Card/card_f")
     else
-      @sprites["card"].setBitmap("Graphics/Pictures/Trainer Card/card")
+      @sprites["card"].setBitmap("Graphics/UI/Trainer Card/card")
     end
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
@@ -68,7 +68,7 @@ class PokemonTrainerCard_Scene
     imagePositions = []
     8.times do |i|
       if $player.badges[i + (region * 8)]
-        imagePositions.push(["Graphics/Pictures/Trainer Card/icon_badges", x, 310, i * 32, region * 32, 32, 32])
+        imagePositions.push(["Graphics/UI/Trainer Card/icon_badges", x, 310, i * 32, region * 32, 32, 32])
       end
       x += 48
     end

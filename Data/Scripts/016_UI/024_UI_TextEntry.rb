@@ -124,22 +124,22 @@ class PokemonEntryScene
       meta = GameData::PlayerMetadata.get($player.character_ID)
       if meta
         @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
-        @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
-        @sprites["shadow"].x = 33 * 2
-        @sprites["shadow"].y = 32 * 2
+        @sprites["shadow"].setBitmap("Graphics/UI/Naming/icon_shadow")
+        @sprites["shadow"].x = 66
+        @sprites["shadow"].y = 64
         filename = pbGetPlayerCharset(meta.walk_charset, nil, true)
         @sprites["subject"] = TrainerWalkingCharSprite.new(filename, @viewport)
         charwidth = @sprites["subject"].bitmap.width
         charheight = @sprites["subject"].bitmap.height
-        @sprites["subject"].x = (44 * 2) - (charwidth / 8)
-        @sprites["subject"].y = (38 * 2) - (charheight / 4)
+        @sprites["subject"].x = 88 - (charwidth / 8)
+        @sprites["subject"].y = 76 - (charheight / 4)
       end
     when 2   # Pokémon
       if pokemon
         @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
-        @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
-        @sprites["shadow"].x = 33 * 2
-        @sprites["shadow"].y = 32 * 2
+        @sprites["shadow"].setBitmap("Graphics/UI/Naming/icon_shadow")
+        @sprites["shadow"].x = 66
+        @sprites["shadow"].y = 64
         @sprites["subject"] = PokemonIconSprite.new(pokemon, @viewport)
         @sprites["subject"].setOffset(PictureOrigin::CENTER)
         @sprites["subject"].x = 88
@@ -159,22 +159,22 @@ class PokemonEntryScene
       end
     when 3   # NPC
       @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
-      @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
-      @sprites["shadow"].x = 33 * 2
-      @sprites["shadow"].y = 32 * 2
+      @sprites["shadow"].setBitmap("Graphics/UI/Naming/icon_shadow")
+      @sprites["shadow"].x = 66
+      @sprites["shadow"].y = 64
       @sprites["subject"] = TrainerWalkingCharSprite.new(pokemon.to_s, @viewport)
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
-      @sprites["subject"].x = (44 * 2) - (charwidth / 8)
-      @sprites["subject"].y = (38 * 2) - (charheight / 4)
+      @sprites["subject"].x = 88 - (charwidth / 8)
+      @sprites["subject"].y = 76 - (charheight / 4)
     when 4   # Storage box
       @sprites["subject"] = TrainerWalkingCharSprite.new(nil, @viewport)
-      @sprites["subject"].altcharset = "Graphics/Pictures/Naming/icon_storage"
+      @sprites["subject"].altcharset = "Graphics/UI/Naming/icon_storage"
       @sprites["subject"].animspeed = 4
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
-      @sprites["subject"].x = (44 * 2) - (charwidth / 8)
-      @sprites["subject"].y = (26 * 2) - (charheight / 2)
+      @sprites["subject"].x = 88 - (charwidth / 8)
+      @sprites["subject"].y = 52 - (charheight / 2)
     end
     pbFadeInAndShow(@sprites)
   end
@@ -281,9 +281,9 @@ class PokemonEntryScene2
     def initialize(viewport)
       @sprite = Sprite.new(viewport)
       @cursortype = 0
-      @cursor1 = AnimatedBitmap.new("Graphics/Pictures/Naming/cursor_1")
-      @cursor2 = AnimatedBitmap.new("Graphics/Pictures/Naming/cursor_2")
-      @cursor3 = AnimatedBitmap.new("Graphics/Pictures/Naming/cursor_3")
+      @cursor1 = AnimatedBitmap.new("Graphics/UI/Naming/cursor_1")
+      @cursor2 = AnimatedBitmap.new("Graphics/UI/Naming/cursor_2")
+      @cursor3 = AnimatedBitmap.new("Graphics/UI/Naming/cursor_3")
       @cursorPos = 0
       updateInternal
     end
@@ -382,7 +382,7 @@ class PokemonEntryScene2
     # Create bitmaps
     @bitmaps = []
     @@Characters.length.times do |i|
-      @bitmaps[i] = AnimatedBitmap.new(sprintf("Graphics/Pictures/Naming/overlay_tab_#{i + 1}"))
+      @bitmaps[i] = AnimatedBitmap.new(sprintf("Graphics/UI/Naming/overlay_tab_#{i + 1}"))
       b = @bitmaps[i].bitmap.clone
       pbSetSystemFont(b)
       textPos = []
@@ -403,13 +403,13 @@ class PokemonEntryScene2
     # Create sprites
     @sprites = {}
     @sprites["bg"] = IconSprite.new(0, 0, @viewport)
-    @sprites["bg"].setBitmap("Graphics/Pictures/Naming/bg")
+    @sprites["bg"].setBitmap("Graphics/UI/Naming/bg")
     case subject
     when 1   # Player
       meta = GameData::PlayerMetadata.get($player.character_ID)
       if meta
         @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
-        @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
+        @sprites["shadow"].setBitmap("Graphics/UI/Naming/icon_shadow")
         @sprites["shadow"].x = 66
         @sprites["shadow"].y = 64
         filename = pbGetPlayerCharset(meta.walk_charset, nil, true)
@@ -422,7 +422,7 @@ class PokemonEntryScene2
     when 2   # Pokémon
       if pokemon
         @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
-        @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
+        @sprites["shadow"].setBitmap("Graphics/UI/Naming/icon_shadow")
         @sprites["shadow"].x = 66
         @sprites["shadow"].y = 64
         @sprites["subject"] = PokemonIconSprite.new(pokemon, @viewport)
@@ -444,7 +444,7 @@ class PokemonEntryScene2
       end
     when 3   # NPC
       @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
-      @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
+      @sprites["shadow"].setBitmap("Graphics/UI/Naming/icon_shadow")
       @sprites["shadow"].x = 66
       @sprites["shadow"].y = 64
       @sprites["subject"] = TrainerWalkingCharSprite.new(pokemon.to_s, @viewport)
@@ -454,7 +454,7 @@ class PokemonEntryScene2
       @sprites["subject"].y = 76 - (charheight / 4)
     when 4   # Storage box
       @sprites["subject"] = TrainerWalkingCharSprite.new(nil, @viewport)
-      @sprites["subject"].altcharset = "Graphics/Pictures/Naming/icon_storage"
+      @sprites["subject"].altcharset = "Graphics/UI/Naming/icon_storage"
       @sprites["subject"].animspeed = 4
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
@@ -484,7 +484,7 @@ class PokemonEntryScene2
     @sprites["controls"] = IconSprite.new(0, 0, @viewport)
     @sprites["controls"].x = 16
     @sprites["controls"].y = 96
-    @sprites["controls"].setBitmap(_INTL("Graphics/Pictures/Naming/overlay_controls"))
+    @sprites["controls"].setBitmap(_INTL("Graphics/UI/Naming/overlay_controls"))
     @init = true
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbDoUpdateOverlay2
@@ -502,7 +502,7 @@ class PokemonEntryScene2
   def pbDoUpdateOverlay2
     overlay = @sprites["overlay"].bitmap
     overlay.clear
-    modeIcon = [[_INTL("Graphics/Pictures/Naming/icon_mode"), 44 + (@mode * 62), 120, @mode * 60, 0, 60, 44]]
+    modeIcon = [[_INTL("Graphics/UI/Naming/icon_mode"), 44 + (@mode * 62), 120, @mode * 60, 0, 60, 44]]
     pbDrawImagePositions(overlay, modeIcon)
   end
 

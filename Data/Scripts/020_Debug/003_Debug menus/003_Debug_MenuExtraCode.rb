@@ -68,14 +68,14 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
       x += (w / 2) - (width / 2)
     end
     y += 8   # TEXT OFFSET
-    base = Color.new(12 * 8, 12 * 8, 12 * 8)
+    base = Color.new(96, 96, 96)
     case colors
     when 1   # Red
       base = Color.new(168, 48, 56)
     when 2   # Green
       base = Color.new(0, 144, 0)
     end
-    pbDrawShadowText(self.contents, x, y, [width, w].max, h, t, base, Color.new(26 * 8, 26 * 8, 25 * 8))
+    pbDrawShadowText(self.contents, x, y, [width, w].max, h, t, base, Color.new(208, 208, 200))
   end
 
   def drawItem(index, _count, rect)
@@ -394,18 +394,18 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
     width = self.contents.text_size(t).width
     case align
     when 1
-      x += (w - width)         # Right aligned
+      x += (w - width)             # Right aligned
     when 2
       x += (w / 2) - (width / 2)   # Centre aligned
     end
-    base = Color.new(12 * 8, 12 * 8, 12 * 8)
+    base = Color.new(96, 96, 96)
     case colors
     when 1
       base = Color.new(168, 48, 56)   # Red
     when 2
       base = Color.new(0, 144, 0)     # Green
     end
-    pbDrawShadowText(self.contents, x, y, [width, w].max, h, t, base, Color.new(26 * 8, 26 * 8, 25 * 8))
+    pbDrawShadowText(self.contents, x, y, [width, w].max, h, t, base, Color.new(208, 208, 200))
   end
 
   def drawItem(index, _count, rect)

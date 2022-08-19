@@ -12,8 +12,8 @@ class Window_PokemonBag < Window_DrawableCommand
     @sorting = false
     @adapter = PokemonMartAdapter.new
     super(x, y, width, height)
-    @selarrow  = AnimatedBitmap.new("Graphics/Pictures/Bag/cursor")
-    @swaparrow = AnimatedBitmap.new("Graphics/Pictures/Bag/cursor_swap")
+    @selarrow  = AnimatedBitmap.new("Graphics/UI/Bag/cursor")
+    @swaparrow = AnimatedBitmap.new("Graphics/UI/Bag/cursor_swap")
     self.windowskin = nil
   end
 
@@ -82,12 +82,12 @@ class Window_PokemonBag < Window_DrawableCommand
         if @bag.registered?(item)
           pbDrawImagePositions(
             self.contents,
-            [["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 0, -1, 24]]
+            [["Graphics/UI/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 0, -1, 24]]
           )
         elsif pbCanRegisterItem?(item)
           pbDrawImagePositions(
             self.contents,
-            [["Graphics/Pictures/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 24, -1, 24]]
+            [["Graphics/UI/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 24, -1, 24]]
           )
         end
       else
@@ -172,8 +172,8 @@ class PokemonBag_Scene
       end
     end
     @bag.last_viewed_pocket = lastpocket
-    @sliderbitmap = AnimatedBitmap.new("Graphics/Pictures/Bag/icon_slider")
-    @pocketbitmap = AnimatedBitmap.new("Graphics/Pictures/Bag/icon_pocket")
+    @sliderbitmap = AnimatedBitmap.new("Graphics/UI/Bag/icon_slider")
+    @pocketbitmap = AnimatedBitmap.new("Graphics/UI/Bag/icon_pocket")
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
@@ -182,12 +182,12 @@ class PokemonBag_Scene
     @sprites["pocketicon"] = BitmapSprite.new(186, 32, @viewport)
     @sprites["pocketicon"].x = 0
     @sprites["pocketicon"].y = 224
-    @sprites["leftarrow"] = AnimatedSprite.new("Graphics/Pictures/leftarrow", 8, 40, 28, 2, @viewport)
+    @sprites["leftarrow"] = AnimatedSprite.new("Graphics/UI/left_arrow", 8, 40, 28, 2, @viewport)
     @sprites["leftarrow"].x       = -4
     @sprites["leftarrow"].y       = 76
     @sprites["leftarrow"].visible = (!@choosing || numfilledpockets > 1)
     @sprites["leftarrow"].play
-    @sprites["rightarrow"] = AnimatedSprite.new("Graphics/Pictures/rightarrow", 8, 40, 28, 2, @viewport)
+    @sprites["rightarrow"] = AnimatedSprite.new("Graphics/UI/right_arrow", 8, 40, 28, 2, @viewport)
     @sprites["rightarrow"].x       = 150
     @sprites["rightarrow"].y       = 76
     @sprites["rightarrow"].visible = (!@choosing || numfilledpockets > 1)
@@ -258,13 +258,13 @@ class PokemonBag_Scene
 
   def pbRefresh
     # Set the background image
-    @sprites["background"].setBitmap(sprintf("Graphics/Pictures/Bag/bg_#{@bag.last_viewed_pocket}"))
+    @sprites["background"].setBitmap(sprintf("Graphics/UI/Bag/bg_#{@bag.last_viewed_pocket}"))
     # Set the bag sprite
-    fbagexists = pbResolveBitmap(sprintf("Graphics/Pictures/Bag/bag_#{@bag.last_viewed_pocket}_f"))
+    fbagexists = pbResolveBitmap(sprintf("Graphics/UI/Bag/bag_#{@bag.last_viewed_pocket}_f"))
     if $player.female? && fbagexists
-      @sprites["bagsprite"].setBitmap("Graphics/Pictures/Bag/bag_#{@bag.last_viewed_pocket}_f")
+      @sprites["bagsprite"].setBitmap("Graphics/UI/Bag/bag_#{@bag.last_viewed_pocket}_f")
     else
-      @sprites["bagsprite"].setBitmap("Graphics/Pictures/Bag/bag_#{@bag.last_viewed_pocket}")
+      @sprites["bagsprite"].setBitmap("Graphics/UI/Bag/bag_#{@bag.last_viewed_pocket}")
     end
     # Draw the pocket icons
     @sprites["pocketicon"].bitmap.clear

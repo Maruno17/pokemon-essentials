@@ -67,7 +67,7 @@ module RPG
         ret.addRef
       else
         ret = BitmapWrapper.new(32 * width, 32 * height)
-        x = (tile_id - 384) % 8 * 32
+        x = ((tile_id - 384) % 8) * 32
         y = (((tile_id - 384) / 8) - height + 1) * 32
         tileset = yield(filename)
         ret.blt(0, 0, tileset, Rect.new(x, y, 32 * width, 32 * height))
@@ -84,6 +84,10 @@ module RPG
 
     def self.transition(filename)
       self.load_bitmap("Graphics/Transitions/", filename)
+    end
+
+    def self.ui(filename)
+      self.load_bitmap("Graphics/UI/", filename)
     end
 
     def self.retain(folder_name, filename = "", hue = 0)
