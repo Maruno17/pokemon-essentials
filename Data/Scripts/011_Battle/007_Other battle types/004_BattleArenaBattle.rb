@@ -215,8 +215,8 @@ class Battle::AI
     alias _battleArena_pbEnemyShouldWithdraw? pbEnemyShouldWithdraw?
   end
 
-  def pbEnemyShouldWithdraw?(idxBattler)
-    return _battleArena_pbEnemyShouldWithdraw?(idxBattler) if !@battleArena
+  def pbEnemyShouldWithdraw?
+    return _battleArena_pbEnemyShouldWithdraw? if !@battleArena
     return false
   end
 end

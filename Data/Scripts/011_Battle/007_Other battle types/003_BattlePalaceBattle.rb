@@ -183,9 +183,10 @@ class Battle::AI
     alias _battlePalace_pbEnemyShouldWithdraw? pbEnemyShouldWithdraw?
   end
 
-  def pbEnemyShouldWithdraw?(idxBattler)
-    return _battlePalace_pbEnemyShouldWithdraw?(idxBattler) if !@battlePalace
-    thispkmn = @battle.battlers[idxBattler]
+  def pbEnemyShouldWithdraw?
+    return _battlePalace_pbEnemyShouldWithdraw? if !@battlePalace
+    thispkmn = @user
+    idxBattler = @user.index
     shouldswitch = false
     if thispkmn.effects[PBEffects::PerishSong] == 1
       shouldswitch = true

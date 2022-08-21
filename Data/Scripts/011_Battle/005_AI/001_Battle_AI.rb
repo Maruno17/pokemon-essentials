@@ -1,25 +1,34 @@
-# AI skill levels:
-#     0:     Wild Pokémon
-#     1-31:  Basic trainer (young/inexperienced)
-#     32-47: Some skill
-#     48-99: High skill
-#     100+:  Best trainers (Gym Leaders, Elite Four, Champion)
-# NOTE: A trainer's skill value can range from 0-255, but by default only four
-#       distinct skill levels exist. The skill value is typically the same as
-#       the trainer's base money value.
-module PBTrainerAI
-  # Minimum skill level to be in each AI category.
-  def self.minimumSkill; return 1;   end
-  def self.mediumSkill;  return 32;  end
-  def self.highSkill;    return 48;  end
-  def self.bestSkill;    return 100; end
-end
-
-
-
+#===============================================================================
+#
+#===============================================================================
 class Battle::AI
+  # AI skill levels:
+  #     0:     Wild Pokémon
+  #     1-31:  Basic trainer (young/inexperienced)
+  #     32-47: Some skill
+  #     48-99: High skill
+  #     100+:  Best trainers (Gym Leaders, Elite Four, Champion)
+  # NOTE: A trainer's skill value can range from 0-255, but by default only four
+  #       distinct skill levels exist. The skill value is typically the same as
+  #       the trainer's base money value.
+  module AILevel
+    # Minimum skill level to be in each AI skill bracket.
+    def self.minimum; return 1;   end
+    def self.medium;  return 32;  end
+    def self.high;    return 48;  end
+    def self.best;    return 100; end
+  end
+
+  #=============================================================================
+  #
+  #=============================================================================
   def initialize(battle)
-    @battle = battle
+    @battle      = battle
+    @skill       = 0
+    @user        = nil
+    @wildBattler = @battle.wildBattle?   # Whether AI is choosing for a wild Pokémon
+    @roles       = [Array.new(@battle.pbParty(0).length) { |i| determine_roles(0, i) },
+                    Array.new(@battle.pbParty(1).length) { |i| determine_roles(1, i) }]
   end
 
   def pbAIRandom(x); return rand(x); end
@@ -44,26 +53,66 @@ class Battle::AI
     return Math.sqrt(varianceTimesN / n)
   end
 
-  #=============================================================================
-  # Decide whether the opponent should Mega Evolve their Pokémon
-  #=============================================================================
-  def pbEnemyShouldMegaEvolve?(idxBattler)
-    battler = @battle.battlers[idxBattler]
-    if @battle.pbCanMegaEvolve?(idxBattler)   # Simple "always should if possible"
-      PBDebug.log("[AI] #{battler.pbThis} (#{idxBattler}) will Mega Evolve")
+  # Decide whether the opponent should Mega Evolve their Pokémon.
+  def pbEnemyShouldMegaEvolve?
+    if @battle.pbCanMegaEvolve?(@user.index)   # Simple "always should if possible"
+      PBDebug.log("[AI] #{@user.pbThis} (#{@user.index}) will Mega Evolve")
       return true
     end
     return false
   end
 
-  #=============================================================================
-  # Choose an action
-  #=============================================================================
+  # Choose an action.
   def pbDefaultChooseEnemyCommand(idxBattler)
-    return if pbEnemyShouldUseItem?(idxBattler)
-    return if pbEnemyShouldWithdraw?(idxBattler)
+    set_up(idxBattler)
+    choices = pbGetMoveScores
+    return if pbEnemyShouldUseItem?
+    return if pbEnemyShouldWithdraw?
     return if @battle.pbAutoFightMenu(idxBattler)
-    @battle.pbRegisterMegaEvolution(idxBattler) if pbEnemyShouldMegaEvolve?(idxBattler)
-    pbChooseMoves(idxBattler)
+    @battle.pbRegisterMegaEvolution(idxBattler) if pbEnemyShouldMegaEvolve?
+    pbChooseMove(choices)
+  end
+
+  # Set some class variables for the Pokémon whose action is being chosen
+  def set_up(idxBattler)
+    # TODO: Where relevant, pretend the user is Mega Evolved if it isn't but can
+    #       be.
+    @user        = @battle.battlers[idxBattler]
+    @wildBattler = (@battle.wildBattle? && @user.opposes?)
+    @skill       = 0
+    if !@wildBattler
+      @skill     = @battle.pbGetOwnerFromBattlerIndex(@user.index).skill_level || 0
+      @skill     = AILevel.minimum if @skill < AILevel.minimum
+    end
+  end
+
+  def skill_check(threshold)
+    return @skill >= threshold
+  end
+end
+
+#===============================================================================
+#
+#===============================================================================
+module Battle::AI::Handlers
+  MoveEffectScore = HandlerHash.new
+  MoveBasePower   = HandlerHash.new
+  # Move type
+  # Move accuracy
+  # Move target
+  # Move additional effect chance
+  # Move unselectable check
+  # Move failure check
+
+  def self.apply_move_effect_score(function_code, score, *args)
+    function_code = function_code.to_sym
+    ret = MoveEffectScore.trigger(function_code, score, *args)
+    return (ret.nil?) ? score : ret
+  end
+
+  def self.get_base_power(function_code, power, *args)
+    function_code = function_code.to_sym
+    ret = MoveBasePower.trigger(function_code, *args)
+    return (ret.nil?) ? power : ret
   end
 end

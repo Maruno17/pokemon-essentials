@@ -3,25 +3,7 @@ class Battle::AI
   # Main move-choosing method (moves with higher scores are more likely to be
   # chosen)
   #=============================================================================
-  def pbChooseMoves(idxBattler)
-    user        = @battle.battlers[idxBattler]
-    wildBattler = user.wild?
-    skill       = 0
-    if !wildBattler
-      skill     = @battle.pbGetOwnerFromBattlerIndex(user.index).skill_level || 0
-    end
-    # Get scores and targets for each move
-    # NOTE: A move is only added to the choices array if it has a non-zero
-    #       score.
-    choices     = []
-    user.eachMoveWithIndex do |_m, i|
-      next if !@battle.pbCanChooseMove?(idxBattler, i, false)
-      if wildBattler
-        pbRegisterMoveWild(user, i, choices)
-      else
-        pbRegisterMoveTrainer(user, i, choices, skill)
-      end
-    end
+  def pbChooseMove(choices)
     # Figure out useful information about the choices
     totalScore = 0
     maxScore   = 0
@@ -29,18 +11,9 @@ class Battle::AI
       totalScore += c[1]
       maxScore = c[1] if maxScore < c[1]
     end
-    # Log the available choices
-    if $INTERNAL
-      logMsg = "[AI] Move choices for #{user.pbThis(true)} (#{user.index}): "
-      choices.each_with_index do |c, i|
-        logMsg += "#{user.moves[c[0]].name}=#{c[1]}"
-        logMsg += " (target #{c[2]})" if c[2] >= 0
-        logMsg += ", " if i < choices.length - 1
-      end
-      PBDebug.log(logMsg)
-    end
+
     # Find any preferred moves and just choose from them
-    if !wildBattler && skill >= PBTrainerAI.highSkill && maxScore > 100
+    if skill_check(AILevel.high) && maxScore > 100
       stDev = pbStdDev(choices)
       if stDev >= 40 && pbAIRandom(100) < 90
         preferredMoves = []
@@ -51,97 +24,141 @@ class Battle::AI
         end
         if preferredMoves.length > 0
           m = preferredMoves[pbAIRandom(preferredMoves.length)]
-          PBDebug.log("[AI] #{user.pbThis} (#{user.index}) prefers #{user.moves[m[0]].name}")
-          @battle.pbRegisterMove(idxBattler, m[0], false)
-          @battle.pbRegisterTarget(idxBattler, m[2]) if m[2] >= 0
+          PBDebug.log("[AI] #{@user.pbThis} (#{@user.index}) prefers #{@user.moves[m[0]].name}")
+          @battle.pbRegisterMove(@user.index, m[0], false)
+          @battle.pbRegisterTarget(@user.index, m[2]) if m[2] >= 0
           return
         end
       end
     end
+
     # Decide whether all choices are bad, and if so, try switching instead
-    if !wildBattler && skill >= PBTrainerAI.highSkill
+    if !@wildBattler && skill_check(AILevel.high)
       badMoves = false
-      if ((maxScore <= 20 && user.turnCount > 2) ||
-         (maxScore <= 40 && user.turnCount > 5)) && pbAIRandom(100) < 80
-        badMoves = true
+      if (maxScore <= 20 && @user.turnCount > 2) ||
+         (maxScore <= 40 && @user.turnCount > 5)
+        badMoves = true if pbAIRandom(100) < 80
       end
-      if !badMoves && totalScore < 100 && user.turnCount > 1
+      if !badMoves && totalScore < 100 && @user.turnCount > 1
         badMoves = true
         choices.each do |c|
-          next if !user.moves[c[0]].damagingMove?
+          next if !@user.moves[c[0]].damagingMove?
           badMoves = false
           break
         end
         badMoves = false if badMoves && pbAIRandom(100) < 10
       end
-      if badMoves && pbEnemyShouldWithdrawEx?(idxBattler, true)
+      if badMoves && pbEnemyShouldWithdrawEx?(true)
         if $INTERNAL
-          PBDebug.log("[AI] #{user.pbThis} (#{user.index}) will switch due to terrible moves")
+          PBDebug.log("[AI] #{@user.pbThis} (#{@user.index}) will switch due to terrible moves")
         end
         return
       end
     end
+
     # If there are no calculated choices, pick one at random
     if choices.length == 0
-      PBDebug.log("[AI] #{user.pbThis} (#{user.index}) doesn't want to use any moves; picking one at random")
-      user.eachMoveWithIndex do |_m, i|
-        next if !@battle.pbCanChooseMove?(idxBattler, i, false)
+      PBDebug.log("[AI] #{@user.pbThis} (#{@user.index}) doesn't want to use any moves; picking one at random")
+      @user.eachMoveWithIndex do |_m, i|
+        next if !@battle.pbCanChooseMove?(@user.index, i, false)
         choices.push([i, 100, -1])   # Move index, score, target
       end
       if choices.length == 0   # No moves are physically possible to use; use Struggle
-        @battle.pbAutoChooseMove(user.index)
+        @battle.pbAutoChooseMove(@user.index)
       end
     end
+
     # Randomly choose a move from the choices and register it
     randNum = pbAIRandom(totalScore)
     choices.each do |c|
       randNum -= c[1]
       next if randNum >= 0
-      @battle.pbRegisterMove(idxBattler, c[0], false)
-      @battle.pbRegisterTarget(idxBattler, c[2]) if c[2] >= 0
+      @battle.pbRegisterMove(@user.index, c[0], false)
+      @battle.pbRegisterTarget(@user.index, c[2]) if c[2] >= 0
       break
     end
     # Log the result
-    if @battle.choices[idxBattler][2]
-      PBDebug.log("[AI] #{user.pbThis} (#{user.index}) will use #{@battle.choices[idxBattler][2].name}")
+    if @battle.choices[@user.index][2]
+      PBDebug.log("[AI] #{@user.pbThis} (#{@user.index}) will use #{@battle.choices[@user.index][2].name}")
     end
+  end
+
+  #=============================================================================
+  # Get scores for the user's moves (done before any action is assessed)
+  # NOTE: A move is only added to the choices array if it has a non-zero score.
+  #=============================================================================
+  def pbGetMoveScores
+    # Get scores and targets for each move
+    choices = []
+    # TODO: Split this into two, the first part being the calculation of all
+    #       predicted damages and the second part being the score calculations
+    #       (which are based on the predicted damages). Note that this requires
+    #       saving each of the scoresAndTargets entries in here rather than in
+    #       def pbRegisterMoveTrainer, and only at the very end are they
+    #       whittled down to one per move which are chosen from. Multi-target
+    #       moves could be fiddly since damages should be calculated for each
+    #       target but they're all related.
+    @user.eachMoveWithIndex do |_m, i|
+      next if !@battle.pbCanChooseMove?(@user.index, i, false)
+      if @wildBattler
+        pbRegisterMoveWild(i, choices)
+      else
+        pbRegisterMoveTrainer(i, choices)
+      end
+    end
+    # Log the available choices
+    if $INTERNAL
+      logMsg = "[AI] Move choices for #{@user.pbThis(true)} (#{@user.index}): "
+      choices.each_with_index do |c, i|
+        logMsg += "#{@user.moves[c[0]].name}=#{c[1]}"
+        logMsg += " (target #{c[2]})" if c[2] >= 0
+        logMsg += ", " if i < choices.length-1
+      end
+      PBDebug.log(logMsg)
+    end
+    return choices
   end
 
   #=============================================================================
   # Get scores for the given move against each possible target
   #=============================================================================
   # Wild Pokémon choose their moves randomly.
-  def pbRegisterMoveWild(_user, idxMove, choices)
+  def pbRegisterMoveWild(idxMove, choices)
+    score = 100
+    # Doubly prefer one of the user's moves (the choice is random but consistent
+    # and does not correlate to any other property of the user)
+    score *= 2 if @user.pokemon.personalID % @user.moves.length == idxMove
     choices.push([idxMove, 100, -1])   # Move index, score, target
   end
 
   # Trainer Pokémon calculate how much they want to use each of their moves.
-  def pbRegisterMoveTrainer(user, idxMove, choices, skill)
-    move = user.moves[idxMove]
-    target_data = move.pbTarget(user)
+  def pbRegisterMoveTrainer(idxMove, choices)
+    move = @user.moves[idxMove]
+    target_data = move.pbTarget(@user)
+    # TODO: Alter target_data if user has Protean and move is Curse.
     if [:UserAndAllies, :AllAllies, :AllBattlers].include?(target_data.id) ||
        target_data.num_targets == 0
       # If move has no targets, affects the user, a side or the whole field, or
       # specially affects multiple Pokémon and the AI calculates an overall
       # score at once instead of per target
-      score = pbGetMoveScore(move, user, user, skill)
+      score = pbGetMoveScore(move, @user)
       choices.push([idxMove, score, -1]) if score > 0
     elsif target_data.num_targets > 1
       # If move affects multiple battlers and you don't choose a particular one
       totalScore = 0
       @battle.allBattlers.each do |b|
-        next if !@battle.pbMoveCanTarget?(user.index, b.index, target_data)
-        score = pbGetMoveScore(move, user, b, skill)
-        totalScore += ((user.opposes?(b)) ? score : -score)
+        next if !@battle.pbMoveCanTarget?(@user.index, b.index, target_data)
+        score = pbGetMoveScore(move, b)
+        totalScore += ((@user.opposes?(b)) ? score : -score)
       end
       choices.push([idxMove, totalScore, -1]) if totalScore > 0
     else
       # If move affects one battler and you have to choose which one
       scoresAndTargets = []
       @battle.allBattlers.each do |b|
-        next if !@battle.pbMoveCanTarget?(user.index, b.index, target_data)
-        next if target_data.targets_foe && !user.opposes?(b)
-        score = pbGetMoveScore(move, user, b, skill)
+        next if !@battle.pbMoveCanTarget?(@user.index, b.index, target_data)
+        next if target_data.targets_foe && !@user.opposes?(b)
+        score = pbGetMoveScore(move, b)
         scoresAndTargets.push([score, b.index]) if score > 0
       end
       if scoresAndTargets.length > 0
@@ -153,33 +170,133 @@ class Battle::AI
   end
 
   #=============================================================================
+  # Set some class variables for the move being assessed
+  #=============================================================================
+  def set_up_move_check(move, target)
+    @move   = move
+    @target = target
+    # TODO: Calculate pbRoughType once here.
+    # Determine whether user or target is faster, and store that result so it
+    # doesn't need recalculating
+    if @target
+      user_speed   = pbRoughStat(@user, :SPEED)
+      target_speed = pbRoughStat(@target, :SPEED)
+      @user_faster = (user_speed > target_speed) ^ (@battle.field.effects[PBEffects::TrickRoom] > 0)
+    else
+      @user_faster = false   # Won't be used if there is no target
+    end
+  end
+
+  #=============================================================================
   # Get a score for the given move being used against the given target
   #=============================================================================
-  def pbGetMoveScore(move, user, target, skill = 100)
-    skill = PBTrainerAI.minimumSkill if skill < PBTrainerAI.minimumSkill
-    score = 100
-    score = pbGetMoveScoreFunctionCode(score, move, user, target, skill)
+  def pbGetMoveScore(move, target = nil)
+    set_up_move_check(move, target)
+
+    # Get the base score for the move
+    if @move.damagingMove?
+      # Is also the predicted damage amount as a percentage of target's current HP
+      score = pbGetDamagingMoveBaseScore
+    else   # Status moves
+      # Depends on the move's effect
+      score = pbGetStatusMoveBaseScore
+    end
+    # Modify the score according to the move's effect
+    score = Battle::AI::Handlers.apply_move_effect_score(move.function,
+       score, move, @user, target, @skill, self, @battle)
+
     # A score of 0 here means it absolutely should not be used
     return 0 if score <= 0
-    if skill >= PBTrainerAI.mediumSkill
+
+    # TODO: High priority checks:
+    # => Prefer move if it will KO the target (moreso if user is slower than target)
+    # => Don't prefer damaging move if it won't KO, user has Stance Change and
+    #    is in shield form, and user is slower than the target
+    # => Check memory for past damage dealt by a target's non-high priority move,
+    #    and prefer move if user is slower than the target and another hit from
+    #    the same amount will KO the user
+    # => Check memory for past damage dealt by a target's priority move, and don't
+    #    prefer the move if user is slower than the target and can't move faster
+    #    than it because of priority
+    # => Discard move if user is slower than the target and target is semi-
+    #    invulnerable (and move won't hit it)
+    # => Check memory for whether target has previously used Quick Guard, and
+    #    don't prefer move if so
+
+    # TODO: Low priority checks:
+    # => Don't prefer move if user is faster than the target
+    # => Prefer move if user is faster than the target and target is semi-
+    #    invulnerable
+
+    # Don't prefer a dancing move if the target has the Dancer ability
+    # TODO: Check all battlers, not just the target.
+    if skill_check(AILevel.high) && @move.danceMove? && @target.hasActiveAbility?(:DANCER)
+      score /= 2
+    end
+
+    # TODO: Check memory for whether target has previously used Ion Deluge, and
+    #       don't prefer move if it's Normal-type and target is immune because
+    #       of its ability (Lightning Rod, etc.).
+
+    # TODO: Discard move if it can be redirected by a non-target's ability
+    #       (Lightning Rod/Storm Drain). Include checking for a previous use of
+    #       Ion Deluge and this move being Normal-type.
+    # => If non-target is a user's ally, don't prefer move (rather than discarding
+    #    it)
+
+    # TODO: Discard move if it's sound-based and user has been Throat Chopped.
+    #       Don't prefer move if user hasn't been Throat Chopped but target has
+    #       previously used Throat Chop. The first part of this would probably
+    #       go elsewhere (damage calc?).
+
+    # TODO: Prefer move if it has a high critical hit rate, critical hits are
+    #       possible but not certain, and target has raised defences/user has
+    #       lowered offences (Atk/Def or SpAtk/SpDef, whichever is relevant).
+
+    # TODO: Don't prefer damaging moves if target is Destiny Bonding.
+    # => Also don't prefer damaging moves if user is slower than the target, move
+    #    is likely to be lethal, and target has previously used Destiny Bond
+
+    # TODO: Don't prefer a move that is stopped by Wide Guard if target has
+    #       previously used Wide Guard.
+
+    # TODO: Don't prefer Fire-type moves if target has previously used Powder.
+
+    # TODO: Don't prefer contact move if making contact with the target could
+    #       trigger an effect that's bad for the user (Static, etc.).
+    # => Also check if target has previously used Spiky Shield.King's Shield/
+    #    Baneful Bunker, and don't prefer move if so
+
+    # TODO: Prefer a contact move if making contact with the target could trigger
+    #       an effect that's good for the user (Poison Touch/Pickpocket).
+
+    # TODO: Don't prefer a status move if user has a damaging move that will KO
+    #       the target.
+    # => If target has previously used a move that will hurt the user by 30% of
+    #    its current HP or more, moreso don't prefer a status move.
+
+    if skill_check(AILevel.medium)
+
       # Prefer damaging moves if AI has no more Pokémon or AI is less clever
-      if @battle.pbAbleNonActiveCount(user.idxOwnSide) == 0 &&
-         !(skill >= PBTrainerAI.highSkill && @battle.pbAbleNonActiveCount(target.idxOwnSide) > 0)
-        if move.statusMove?
-          score /= 1.5
-        elsif target.hp <= target.totalhp / 2
-          score *= 1.5
+      if @battle.pbAbleNonActiveCount(@user.idxOwnSide) == 0 &&
+         !(skill_check(AILevel.high) && @battle.pbAbleNonActiveCount(@target.idxOwnSide) > 0)
+        if @move.statusMove?
+          score *= 0.9
+        elsif @target.hp <= @target.totalhp / 2
+          score *= 1.1
         end
       end
+
       # Don't prefer attacking the target if they'd be semi-invulnerable
-      if skill >= PBTrainerAI.highSkill && move.accuracy > 0 &&
-         (target.semiInvulnerable? || target.effects[PBEffects::SkyDrop] >= 0)
+      if skill_check(AILevel.high) && @move.accuracy > 0 && @user_faster &&
+         (@target.semiInvulnerable? || @target.effects[PBEffects::SkyDrop] >= 0)
         miss = true
-        miss = false if user.hasActiveAbility?(:NOGUARD) || target.hasActiveAbility?(:NOGUARD)
-        if miss && pbRoughStat(user, :SPEED, skill) > pbRoughStat(target, :SPEED, skill)
+        miss = false if @user.hasActiveAbility?(:NOGUARD)
+        miss = false if skill_check(AILevel.best) && @target.hasActiveAbility?(:NOGUARD)
+        if skill_check(AILevel.best) && miss
           # Knows what can get past semi-invulnerability
-          if target.effects[PBEffects::SkyDrop] >= 0 ||
-             target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+          if @target.effects[PBEffects::SkyDrop] >= 0 ||
+             @target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
                                      "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
                                      "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
             miss = false if move.hitsFlyingTargets?
@@ -189,107 +306,388 @@ class Battle::AI
             miss = false if move.hitsDivingTargets?
           end
         end
-        score -= 80 if miss
+        score = 0 if miss
       end
+
       # Pick a good move for the Choice items
-      if user.hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
-         user.hasActiveAbility?(:GORILLATACTICS)
-        if move.baseDamage >= 60
-          score += 60
-        elsif move.damagingMove?
-          score += 30
-        elsif move.function == "UserTargetSwapItems"
-          score += 70   # Trick
-        else
-          score -= 60
-        end
+      if @user.hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
+         @user.hasActiveAbility?(:GORILLATACTICS)
+        # Really don't prefer status moves (except Trick)
+        score *= 0.1 if @move.statusMove? && @move.function != "UserTargetSwapItems"
+        # Don't prefer moves of certain types
+        move_type = pbRoughType(@move)
+        # Most unpreferred types are 0x effective against another type, except
+        # Fire/Water/Grass
+        # TODO: Actually check through the types for 0x instead of hardcoding
+        #       them.
+        # TODO: Reborn separately doesn't prefer Fire/Water/Grass/Electric, also
+        #       with a 0.95x score, meaning Electric can be 0.95x twice. Why are
+        #       these four types not preferred? Maybe because they're all not
+        #       very effective against Dragon.
+        unpreferred_types = [:NORMAL, :FIGHTING, :POISON, :GROUND, :GHOST,
+                             :FIRE, :WATER, :GRASS, :ELECTRIC, :PSYCHIC, :DRAGON]
+        score *= 0.95 if unpreferred_types.include?(move_type)
+        # Don't prefer moves with lower accuracy
+        score *= @move.accuracy / 100.0 if @move.accuracy > 0
+        # Don't prefer moves with low PP
+        score *= 0.9 if @move.pp < 6
       end
-      # If user is asleep, prefer moves that are usable while asleep
-      if user.status == :SLEEP && !move.usableWhenAsleep?
-        user.eachMove do |m|
-          next unless m.usableWhenAsleep?
-          score -= 60
-          break
-        end
+
+      # If user is asleep, don't prefer moves that can't be used while asleep
+      if skill_check(AILevel.medium) && @user.asleep? && @user.statusCount > 1 &&
+         !@move.usableWhenAsleep?
+        score *= 0.2
       end
+
       # If user is frozen, prefer a move that can thaw the user
-      if user.status == :FROZEN
-        if move.thawsUser?
-          score += 40
+      if skill_check(AILevel.medium) && @user.status == :FROZEN
+        if @move.thawsUser?
+          score += 30
         else
-          user.eachMove do |m|
+          @user.eachMove do |m|
             next unless m.thawsUser?
-            score -= 60
+            score = 0   # Discard this move if user knows another move that thaws
             break
           end
         end
       end
+
       # If target is frozen, don't prefer moves that could thaw them
-      if target.status == :FROZEN
-        user.eachMove do |m|
-          next if m.thawsUser?
-          score -= 60
-          break
+      if @target.status == :FROZEN
+        if pbRoughType(@move) == :FIRE || (Settings::MECHANICS_GENERATION >= 6 && @move.thawsUser?)
+          score *= 0.1
         end
       end
     end
-    # Don't prefer moves that are ineffective because of abilities or effects
-    return 0 if pbCheckMoveImmunity(score, move, user, target, skill)
-    # Adjust score based on how much damage it can deal
-    if move.damagingMove?
-      score = pbGetMoveScoreDamage(score, move, user, target, skill)
-    else   # Status moves
-      # Don't prefer attacks which don't deal damage
-      score -= 10
-      # Account for accuracy of move
-      accuracy = pbRoughAccuracy(move, user, target, skill)
-      score *= accuracy / 100.0
-      score = 0 if score <= 10 && skill >= PBTrainerAI.highSkill
+
+    # Don't prefer hitting a wild shiny Pokémon
+    if @battle.wildBattle? && @target.opposes? && @target.shiny?
+      score *= 0.15
     end
+
+    # TODO: Discard a move that can be Magic Coated if either opponent has Magic
+    #       Bounce.
+
+    # Account for accuracy of move
+    accuracy = pbRoughAccuracy(@move, @target)
+    score *= accuracy / 100.0
+
+    # Prefer flinching external effects (note that move effects which cause
+    # flinching are dealt with in the function code part of score calculation)
+    if skill_check(AILevel.medium)
+      if !@target.hasActiveAbility?([:INNERFOCUS, :SHIELDDUST]) &&
+         @target.effects[PBEffects::Substitute] == 0
+        if @move.flinchingMove? ||
+           (@move.damagingMove? &&
+           (@user.hasActiveItem?([:KINGSROCK, :RAZORFANG]) ||
+           @user.hasActiveAbility?(:STENCH)))
+          score *= 1.3
+        end
+      end
+    end
+
+    # # Adjust score based on how much damage it can deal
+    # if move.damagingMove?
+    #   score = pbGetMoveScoreDamage(score, move, @user, @target, @skill)
+    # else   # Status moves
+    #   # Don't prefer attacks which don't deal damage
+    #   score -= 10
+    #   # Account for accuracy of move
+    #   accuracy = pbRoughAccuracy(move, target)
+    #   score *= accuracy / 100.0
+    #   score = 0 if score <= 10 && skill_check(AILevel.high)
+    # end
     score = score.to_i
     score = 0 if score < 0
     return score
   end
 
   #=============================================================================
-  # Add to a move's score based on how much damage it will deal (as a percentage
-  # of the target's current HP)
+  # Calculate how much damage a move is likely to do to a given target (as a
+  # percentage of the target's current HP)
   #=============================================================================
-  def pbGetMoveScoreDamage(score, move, user, target, skill)
-    return 0 if score <= 0
+  def pbGetDamagingMoveBaseScore
+    # Don't prefer moves that are ineffective because of abilities or effects
+    return 0 if pbCheckMoveImmunity(@move, @target)
+
     # Calculate how much damage the move will do (roughly)
-    baseDmg = pbMoveBaseDamage(move, user, target, skill)
-    realDamage = pbRoughDamage(move, user, target, skill, baseDmg)
-    # Account for accuracy of move
-    accuracy = pbRoughAccuracy(move, user, target, skill)
-    realDamage *= accuracy / 100.0
+    base_damage = pbMoveBaseDamage(@move, @target)
+    calc_damage = pbRoughDamage(@move, @target, base_damage)
+
+    # TODO: Maybe move this check elsewhere? Note that Reborn's base score does
+    #       not include this halving, but the predicted damage does.
     # Two-turn attacks waste 2 turns to deal one lot of damage
-    if move.chargingTurnMove? || move.function == "AttackAndSkipNextTurn"   # Hyper Beam
-      realDamage *= 2 / 3   # Not halved because semi-invulnerable during use or hits first turn
-    end
-    # Prefer flinching external effects (note that move effects which cause
-    # flinching are dealt with in the function code part of score calculation)
-    if skill >= PBTrainerAI.mediumSkill && !move.flinchingMove? &&
-       !target.hasActiveAbility?(:INNERFOCUS) &&
-       !target.hasActiveAbility?(:SHIELDDUST) &&
-       target.effects[PBEffects::Substitute] == 0
-      canFlinch = false
-      if user.hasActiveItem?([:KINGSROCK, :RAZORFANG]) ||
-         user.hasActiveAbility?(:STENCH)
-        canFlinch = true
+    calc_damage /= 2 if @move.chargingTurnMove?
+
+    # TODO: Maybe move this check elsewhere?
+    # Increased critical hit rate
+    if skill_check(AILevel.medium)
+      crit_stage = pbRoughCriticalHitStage(@move, @target)
+      if crit_stage >= 0
+        crit_fraction = (crit_stage > 50) ? 1 : Battle::Move::CRITICAL_HIT_RATIOS[crit_stage]
+        crit_mult = (Settings::NEW_CRITICAL_HIT_RATE_MECHANICS) ? 0.5 : 1
+        calc_damage *= (1 + crit_mult / crit_fraction)
       end
-      realDamage *= 1.3 if canFlinch
     end
+
     # Convert damage to percentage of target's remaining HP
-    damagePercentage = realDamage * 100.0 / target.hp
+    damage_percentage = calc_damage * 100.0 / @target.hp
+
     # Don't prefer weak attacks
-#    damagePercentage /= 2 if damagePercentage<20
+#    damage_percentage /= 2 if damage_percentage < 20
+
     # Prefer damaging attack if level difference is significantly high
-    damagePercentage *= 1.2 if user.level - 10 > target.level
+#    damage_percentage *= 1.2 if @user.level - 10 > @target.level
+
     # Adjust score
-    damagePercentage = 120 if damagePercentage > 120   # Treat all lethal moves the same
-    damagePercentage += 40 if damagePercentage > 100   # Prefer moves likely to be lethal
-    score += damagePercentage.to_i
-    return score
+    damage_percentage = 110 if damage_percentage > 110   # Treat all lethal moves the same
+    damage_percentage += 40 if damage_percentage > 100   # Prefer moves likely to be lethal
+
+    return damage_percentage.to_i
+  end
+
+  def pbGetStatusMoveBaseScore
+    # TODO: Call pbCheckMoveImmunity here too, not just for damaging moves
+    #       (only if this status move will be affected).
+
+    # TODO: Make sure all status moves are accounted for.
+    # TODO: Duplicates in Reborn's AI:
+    # "SleepTarget"  Grass Whistle (15), Hypnosis (15), Sing (15),
+    #                Lovely Kiss (20), Sleep Powder (20), Spore (60)
+    # "PoisonTarget" - Poison Powder (15), Poison Gas (20)
+    # "ParalyzeTarget" - Stun Spore (25), Glare (30)
+    # "ConfuseTarget" - Teeter Dance (5), Supersonic (10),
+    #                   Sweet Kiss (20), Confuse Ray (25)
+    # "RaiseUserAttack1" - Howl (10), Sharpen (10), Medicate (15)
+    # "RaiseUserSpeed2" - Agility (15), Rock Polish (25)
+    # "LowerTargetAttack1" - Growl (10), Baby-Doll Eyes (15)
+    # "LowerTargetAccuracy1" - Sand Attack (5), Flash (10), Kinesis (10), Smokescreen (10)
+    # "LowerTargetAttack2" - Charm (10), Feather Dance (15)
+    # "LowerTargetSpeed2" - String Shot (10), Cotton Spore (15), Scary Face (15)
+    # "LowerTargetSpDef2" - Metal Sound (10), Fake Tears (15)
+    case @move.function
+    when "ConfuseTarget",
+         "LowerTargetAccuracy1",
+         "LowerTargetEvasion1RemoveSideEffects",
+         "UserTargetSwapAtkSpAtkStages",
+         "UserTargetSwapDefSpDefStages",
+         "UserSwapBaseAtkDef",
+         "UserTargetAverageBaseAtkSpAtk",
+         "UserTargetAverageBaseDefSpDef",
+         "SetUserTypesToUserMoveType",
+         "SetTargetTypesToWater",
+         "SetUserTypesToTargetTypes",
+         "SetTargetAbilityToUserAbility",
+         "UserTargetSwapAbilities",
+         "PowerUpAllyMove",
+         "StartWeakenElectricMoves",
+         "StartWeakenFireMoves",
+         "EnsureNextMoveAlwaysHits",
+         "StartNegateTargetEvasionStatStageAndGhostImmunity",
+         "StartNegateTargetEvasionStatStageAndDarkImmunity",
+         "ProtectUserSideFromPriorityMoves",
+         "ProtectUserSideFromMultiTargetDamagingMoves",
+         "BounceBackProblemCausingStatusMoves",
+         "StealAndUseBeneficialStatusMove",
+         "DisableTargetMovesKnownByUser",
+         "DisableTargetHealingMoves",
+         "SetAttackerMovePPTo0IfUserFaints",
+         "UserEnduresFaintingThisTurn",
+         "RestoreUserConsumedItem",
+         "StartNegateHeldItems",
+         "StartDamageTargetEachTurnIfTargetAsleep",
+         "HealUserDependingOnUserStockpile",
+         "StartGravity",
+         "StartUserAirborne",
+         "UserSwapsPositionsWithAlly",
+         "StartSwapAllBattlersBaseDefensiveStats",
+         "RaiseTargetSpDef1",
+         "RaiseGroundedGrassBattlersAtkSpAtk1",
+         "RaiseGrassBattlersDef1",
+         "AddGrassTypeToTarget",
+         "TrapAllBattlersInBattleForOneTurn",
+         "EnsureNextCriticalHit",
+         "UserTargetSwapBaseSpeed",
+         "RedirectAllMovesToTarget",
+         "TargetUsesItsLastUsedMoveAgain"
+      return 5
+    when "RaiseUserAttack1",
+         "RaiseUserDefense1",
+         "RaiseUserDefense1CurlUpUser",
+         "RaiseUserCriticalHitRate2",
+         "RaiseUserAtkSpAtk1",
+         "RaiseUserAtkSpAtk1Or2InSun",
+         "RaiseUserAtkAcc1",
+         "RaiseTargetRandomStat2",
+         "LowerTargetAttack1",
+         "LowerTargetDefense1",
+         "LowerTargetAccuracy1",
+         "LowerTargetAttack2",
+         "LowerTargetSpeed2",
+         "LowerTargetSpDef2",
+         "ResetAllBattlersStatStages",
+         "UserCopyTargetStatStages",
+         "SetUserTypesBasedOnEnvironment",
+         "DisableTargetUsingSameMoveConsecutively",
+         "StartTargetCannotUseItem",
+         "LowerTargetAttack1BypassSubstitute",
+         "LowerTargetAtkSpAtk1",
+         "LowerTargetSpAtk1",
+         "TargetNextFireMoveDamagesTarget"
+      return 10
+    when "SleepTarget",
+         "SleepTargetIfUserDarkrai",
+         "SleepTargetChangeUserMeloettaForm",
+         "PoisonTarget",
+         "CureUserBurnPoisonParalysis",
+         "RaiseUserAttack1",
+         "RaiseUserSpDef1PowerUpElectricMove",
+         "RaiseUserEvasion1",
+         "RaiseUserSpeed2",
+         "LowerTargetAttack1",
+         "LowerTargetAtkDef1",
+         "LowerTargetAttack2",
+         "LowerTargetDefense2",
+         "LowerTargetSpeed2",
+         "LowerTargetSpAtk2IfCanAttract",
+         "LowerTargetSpDef2",
+         "ReplaceMoveThisBattleWithTargetLastMoveUsed",
+         "ReplaceMoveWithTargetLastMoveUsed",
+         "SetUserAbilityToTargetAbility",
+         "UseMoveTargetIsAboutToUse",
+         "UseRandomMoveFromUserParty",
+         "StartHealUserEachTurnTrapUserInBattle",
+         "HealTargetHalfOfTotalHP",
+         "UserFaintsHealAndCureReplacement",
+         "UserFaintsHealAndCureReplacementRestorePP",
+         "StartSunWeather",
+         "StartRainWeather",
+         "StartSandstormWeather",
+         "StartHailWeather",
+         "RaisePlusMinusUserAndAlliesDefSpDef1",
+         "LowerTargetSpAtk2",
+         "LowerPoisonedTargetAtkSpAtkSpd1",
+         "AddGhostTypeToTarget",
+         "LowerTargetAtkSpAtk1SwitchOutUser",
+         "RaisePlusMinusUserAndAlliesAtkSpAtk1",
+         "HealTargetDependingOnGrassyTerrain"
+      return 15
+    when "SleepTarget",
+         "SleepTargetChangeUserMeloettaForm",
+         "SleepTargetNextTurn",
+         "PoisonTarget",
+         "ConfuseTarget",
+         "RaiseTargetSpAtk1ConfuseTarget",
+         "RaiseTargetAttack2ConfuseTarget",
+         "UserTargetSwapStatStages",
+         "StartUserSideImmunityToStatStageLowering",
+         "SetUserTypesToResistLastAttack",
+         "SetTargetAbilityToSimple",
+         "SetTargetAbilityToInsomnia",
+         "NegateTargetAbility",
+         "TransformUserIntoTarget",
+         "UseLastMoveUsedByTarget",
+         "UseLastMoveUsed",
+         "UseRandomMove",
+         "HealUserFullyAndFallAsleep",
+         "StartHealUserEachTurn",
+         "StartPerishCountsForAllBattlers",
+         "SwitchOutTargetStatusMove",
+         "TrapTargetInBattle",
+         "TargetMovesBecomeElectric",
+         "NormalMovesBecomeElectric",
+         "PoisonTargetLowerTargetSpeed1"
+      return 20
+    when "BadPoisonTarget",
+         "ParalyzeTarget",
+         "BurnTarget",
+         "ConfuseTarget",
+         "AttractTarget",
+         "GiveUserStatusToTarget",
+         "RaiseUserDefSpDef1",
+         "RaiseUserDefense2",
+         "RaiseUserSpeed2",
+         "RaiseUserSpeed2LowerUserWeight",
+         "RaiseUserSpDef2",
+         "RaiseUserEvasion2MinimizeUser",
+         "RaiseUserDefense3",
+         "MaxUserAttackLoseHalfOfTotalHP",
+         "UserTargetAverageHP",
+         "ProtectUser",
+         "DisableTargetLastMoveUsed",
+         "DisableTargetStatusMoves",
+         "HealUserHalfOfTotalHP",
+         "HealUserHalfOfTotalHPLoseFlyingTypeThisTurn",
+         "HealUserPositionNextTurn",
+         "HealUserDependingOnWeather",
+         "StartLeechSeedTarget",
+         "AttackerFaintsIfUserFaints",
+         "UserTargetSwapItems",
+         "UserMakeSubstitute",
+         "UserAddStockpileRaiseDefSpDef1",
+         "RedirectAllMovesToUser",
+         "InvertTargetStatStages",
+         "HealUserByTargetAttackLowerTargetAttack1",
+         "HealUserDependingOnSandstorm"
+      return 25
+    when "ParalyzeTarget",
+         "ParalyzeTargetIfNotTypeImmune",
+         "RaiseUserAtkDef1",
+         "RaiseUserAtkDefAcc1",
+         "RaiseUserSpAtkSpDef1",
+         "UseMoveDependingOnEnvironment",
+         "UseRandomUserMoveIfAsleep",
+         "DisableTargetUsingDifferentMove",
+         "SwitchOutUserPassOnEffects",
+         "AddSpikesToFoeSide",
+         "AddToxicSpikesToFoeSide",
+         "AddStealthRocksToFoeSide",
+         "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
+         "StartSlowerBattlersActFirst",
+         "ProtectUserFromTargetingMovesSpikyShield",
+         "StartElectricTerrain",
+         "StartGrassyTerrain",
+         "StartMistyTerrain",
+         "StartPsychicTerrain",
+         "CureTargetStatusHealUserHalfOfTotalHP"
+      return 30
+    when "CureUserPartyStatus",
+         "RaiseUserAttack2",
+         "RaiseUserSpAtk2",
+         "RaiseUserSpAtk3",
+         "StartUserSideDoubleSpeed",
+         "StartWeakenPhysicalDamageAgainstUserSide",
+         "StartWeakenSpecialDamageAgainstUserSide",
+         "ProtectUserSideFromDamagingMovesIfUserFirstTurn",
+         "ProtectUserFromDamagingMovesKingsShield",
+         "ProtectUserBanefulBunker"
+      return 35
+    when "RaiseUserAtkSpd1",
+         "RaiseUserSpAtkSpDefSpd1",
+         "LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2",
+         "RaiseUserAtk1Spd2",
+         "TwoTurnAttackRaiseUserSpAtkSpDefSpd2"
+      return 40
+    when "SleepTarget",
+         "SleepTargetChangeUserMeloettaForm",
+         "AddStickyWebToFoeSide",
+         "StartWeakenDamageAgainstUserSideIfHail"
+      return 60
+    end
+    # "DoesNothingUnusableInGravity",
+    # "StartUserSideImmunityToInflictedStatus",
+    # "LowerTargetEvasion1",
+    # "LowerTargetEvasion2",
+    # "StartPreventCriticalHitsAgainstUserSide",
+    # "UserFaintsLowerTargetAtkSpAtk2",
+    # "FleeFromBattle",
+    # "SwitchOutUserStatusMove"
+    # "TargetTakesUserItem",
+    # "LowerPPOfTargetLastMoveBy4",
+    # "StartTargetAirborneAndAlwaysHitByMoves",
+    # "TargetActsNext",
+    # "TargetActsLast",
+    # "ProtectUserSideFromStatusMoves"
+    return 0
   end
 end
