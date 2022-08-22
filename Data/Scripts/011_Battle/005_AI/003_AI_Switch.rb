@@ -7,19 +7,20 @@ class Battle::AI
   end
 
   def pbEnemyShouldWithdrawEx?(forceSwitch)
-    return false if @wildBattler
+    return false if @user.wild?
     shouldSwitch = forceSwitch
+    battler = @user.battler
     batonPass = -1
     moveType = nil
     # If Pokémon is within 6 levels of the foe, and foe's last move was
     # super-effective and powerful
-    if !shouldSwitch && @user.turnCount > 0 && skill_check(AILevel.high)
-      target = @user.pbDirectOpposing(true)
+    if !shouldSwitch && battler.turnCount > 0 && @trainer.high_skill?
+      target = battler.pbDirectOpposing(true)
       if !target.fainted? && target.lastMoveUsed &&
-         (target.level - @user.level).abs <= 6
+         (target.level - battler.level).abs <= 6
         moveData = GameData::Move.get(target.lastMoveUsed)
         moveType = moveData.type
-        typeMod = pbCalcTypeMod(moveType, target, @user)
+        typeMod = battler.effectiveness_of_type_against_battler(moveType, target)
         if Effectiveness.super_effective?(typeMod) && moveData.base_damage > 50
           switchChance = (moveData.base_damage > 70) ? 30 : 20
           shouldSwitch = (pbAIRandom(100) < switchChance)
@@ -27,36 +28,36 @@ class Battle::AI
       end
     end
     # Pokémon can't do anything (must have been in battle for at least 5 rounds)
-    if !@battle.pbCanChooseAnyMove?(@user.index) &&
-       @user.turnCount && @user.turnCount >= 5
+    if !shouldSwitch && !@battle.pbCanChooseAnyMove?(battler.index) &&
+       battler.turnCount && battler.turnCount >= 5
       shouldSwitch = true
     end
     # Pokémon is Perish Songed and has Baton Pass
-    if skill_check(AILevel.high) && @user.effects[PBEffects::PerishSong] == 1
-      @user.eachMoveWithIndex do |m, i|
+    if @trainer.high_skill? && battler.effects[PBEffects::PerishSong] == 1
+      battler.eachMoveWithIndex do |m, i|
         next if m.function != "SwitchOutUserPassOnEffects"   # Baton Pass
-        next if !@battle.pbCanChooseMove?(@user.index, i, false)
+        next if !@battle.pbCanChooseMove?(battler.index, i, false)
         batonPass = i
         break
       end
     end
     # Pokémon will faint because of bad poisoning at the end of this round, but
     # would survive at least one more round if it were regular poisoning instead
-    if @user.status == :POISON && @user.statusCount > 0 && skill_check(AILevel.high)
-      toxicHP = @user.totalhp / 16
-      nextToxicHP = toxicHP * (@user.effects[PBEffects::Toxic] + 1)
-      if @user.hp <= nextToxicHP && @user.hp > toxicHP * 2
+    if !shouldSwitch && battler.status == :POISON && battler.statusCount > 0 && @trainer.high_skill?
+      toxicHP = battler.totalhp / 16
+      nextToxicHP = toxicHP * (battler.effects[PBEffects::Toxic] + 1)
+      if battler.hp <= nextToxicHP && battler.hp > toxicHP * 2
         shouldSwitch = true if pbAIRandom(100) < 80
       end
     end
     # Pokémon is Encored into an unfavourable move
-    if @user.effects[PBEffects::Encore] > 0 && skill_check(AILevel.medium)
-      idxEncoredMove = @user.pbEncoredMoveIndex
+    if !shouldSwitch && battler.effects[PBEffects::Encore] > 0 && @trainer.medium_skill?
+      idxEncoredMove = battler.pbEncoredMoveIndex
       if idxEncoredMove >= 0
         scoreSum   = 0
         scoreCount = 0
-        @user.allOpposing.each do |b|
-          scoreSum += pbGetMoveScore(@user.moves[idxEncoredMove], b)
+        battler.allOpposing.each do |b|
+          scoreSum += pbGetMoveScore(battler.moves[idxEncoredMove], b)
           scoreCount += 1
         end
         if scoreCount > 0 && scoreSum / scoreCount <= 20
@@ -66,37 +67,37 @@ class Battle::AI
     end
     # If there is a single foe and it is resting after Hyper Beam or is
     # Truanting (i.e. free turn)
-    if @battle.pbSideSize(@user.index + 1) == 1 &&
-       !@user.pbDirectOpposing.fainted? && skill_check(AILevel.high)
-      opp = @user.pbDirectOpposing
+    if shouldSwitch && @battle.pbSideSize(battler.index + 1) == 1 &&
+       !battler.pbDirectOpposing.fainted? && @trainer.high_skill?
+      opp = battler.pbDirectOpposing
       if (opp.effects[PBEffects::HyperBeam] > 0 ||
          (opp.hasActiveAbility?(:TRUANT) && opp.effects[PBEffects::Truant]))
         shouldSwitch = false if pbAIRandom(100) < 80
       end
     end
     # Sudden Death rule - I'm not sure what this means
-    if @battle.rules["suddendeath"] && @user.turnCount > 0
-      if @user.hp <= @user.totalhp / 4 && pbAIRandom(100) < 30
+    if !shouldSwitch && @battle.rules["suddendeath"] && battler.turnCount > 0
+      if battler.hp <= battler.totalhp / 4 && pbAIRandom(100) < 30
         shouldSwitch = true
-      elsif @user.hp <= @user.totalhp / 2 && pbAIRandom(100) < 80
+      elsif battler.hp <= battler.totalhp / 2 && pbAIRandom(100) < 80
         shouldSwitch = true
       end
     end
     # Pokémon is about to faint because of Perish Song
-    if @user.effects[PBEffects::PerishSong] == 1
+    if !shouldSwitch && battler.effects[PBEffects::PerishSong] == 1
       shouldSwitch = true
     end
     if shouldSwitch
       list = []
-      idxPartyStart, idxPartyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(@user.index)
-      @battle.pbParty(@user.index).each_with_index do |pkmn, i|
+      idxPartyStart, idxPartyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(battler.index)
+      @battle.pbParty(battler.index).each_with_index do |pkmn, i|
         next if i == idxPartyEnd - 1   # Don't choose to switch in ace
-        next if !@battle.pbCanSwitch?(@user.index, i)
+        next if !@battle.pbCanSwitch?(battler.index, i)
         # If perish count is 1, it may be worth it to switch
         # even with Spikes, since Perish Song's effect will end
-        if @user.effects[PBEffects::PerishSong] != 1
+        if battler.effects[PBEffects::PerishSong] != 1
           # Will contain effects that recommend against switching
-          spikes = @user.pbOwnSide.effects[PBEffects::Spikes]
+          spikes = battler.pbOwnSide.effects[PBEffects::Spikes]
           # Don't switch to this if too little HP
           if spikes > 0
             spikesDmg = [8, 6, 4][spikes - 1]
@@ -105,17 +106,17 @@ class Battle::AI
           end
         end
         # moveType is the type of the target's last used move
-        if moveType && Effectiveness.ineffective?(pbCalcTypeMod(moveType, @user, @user))
+        if moveType && Effectiveness.ineffective?(battler.effectiveness_of_type_against_battler(moveType))
           weight = 65
-          typeMod = pbCalcTypeModPokemon(pkmn, @user.pbDirectOpposing(true))
+          typeMod = pbCalcTypeModPokemon(pkmn, battler.pbDirectOpposing(true))
           if Effectiveness.super_effective?(typeMod)
             # Greater weight if new Pokemon's type is effective against target
             weight = 85
           end
           list.unshift(i) if pbAIRandom(100) < weight   # Put this Pokemon first
-        elsif moveType && Effectiveness.resistant?(pbCalcTypeMod(moveType, @user, @user))
+        elsif moveType && Effectiveness.resistant?(battler.effectiveness_of_type_against_battler(moveType))
           weight = 40
-          typeMod = pbCalcTypeModPokemon(pkmn, @user.pbDirectOpposing(true))
+          typeMod = pbCalcTypeModPokemon(pkmn, battler.pbDirectOpposing(true))
           if Effectiveness.super_effective?(typeMod)
             # Greater weight if new Pokemon's type is effective against target
             weight = 60
@@ -126,13 +127,13 @@ class Battle::AI
         end
       end
       if list.length > 0
-        if batonPass >= 0 && @battle.pbRegisterMove(@user.index, batonPass, false)
-          PBDebug.log("[AI] #{@user.pbThis} (#{@user.index}) will use Baton Pass to avoid Perish Song")
+        if batonPass >= 0 && @battle.pbRegisterMove(battler.index, batonPass, false)
+          PBDebug.log("[AI] #{battler.pbThis} (#{battler.index}) will use Baton Pass to avoid Perish Song")
           return true
         end
-        if @battle.pbRegisterSwitch(@user.index, list[0])
-          PBDebug.log("[AI] #{@user.pbThis} (#{@user.index}) will switch with " +
-                      @battle.pbParty(@user.index)[list[0]].name)
+        if @battle.pbRegisterSwitch(battler.index, list[0])
+          PBDebug.log("[AI] #{battler.pbThis} (#{battler.index}) will switch with " +
+                      @battle.pbParty(battler.index)[list[0]].name)
           return true
         end
       end

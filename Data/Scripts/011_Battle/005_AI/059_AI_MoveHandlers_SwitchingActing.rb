@@ -2,13 +2,13 @@
 #
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("FleeFromBattle",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if battle.trainerBattle?
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if !battle.pbCanChooseNonActive?(user.index) ||
        battle.pbTeamAbleNonActiveCount(user.index) > 1   # Don't switch in ace
       score -= 100
@@ -22,7 +22,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
         score -= total * 10
         # special case: user has no damaging moves
         hasDamagingMove = false
-        user.eachMove do |m|
+        user.battler.eachMove do |m|
           next if !m.damagingMove?
           hasDamagingMove = true
           break
@@ -35,14 +35,14 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserDamagingMove",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if !battle.pbCanChooseNonActive?(user.index) ||
               battle.pbTeamAbleNonActiveCount(user.index) > 1   # Don't switch in ace
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkSpAtk1SwitchOutUser",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     avg  = target.stages[:ATTACK] * 10
     avg += target.stages[:SPECIAL_ATTACK] * 10
     score += avg / 2
@@ -51,7 +51,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkSpAtk1SwitchOutUser",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if battle.pbCanChooseNonActive?(user.index)
       score -= 40 if user.effects[PBEffects::Confusion] > 0
       total = 0
@@ -62,7 +62,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
         score += total * 10
         # special case: user has no damaging moves
         hasDamagingMove = false
-        user.eachMove do |m|
+        user.battler.eachMove do |m|
           next if !m.damagingMove?
           hasDamagingMove = true
           break
@@ -77,9 +77,9 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetStatusMove",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if target.effects[PBEffects::Ingrain] ||
-       (ai.skill_check(Battle::AI::AILevel.high) && target.hasActiveAbility?(:SUCTIONCUPS))
+       target.has_active_ability?(:SUCTIONCUPS)
       score -= 90
     else
       ch = 0
@@ -98,9 +98,9 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetStatusMove",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetDamagingMove",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if !target.effects[PBEffects::Ingrain] &&
-       !(ai.skill_check(Battle::AI::AILevel.high) && target.hasActiveAbility?(:SUCTIONCUPS))
+       !target.has_active_ability?(:SUCTIONCUPS)
       score += 40 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
       score += 40 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
       score += 40 if target.pbOwnSide.effects[PBEffects::StealthRock]
@@ -110,37 +110,37 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetDamagingMove",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("BindTarget",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next score + 40 if target.effects[PBEffects::Trapping] == 0
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("BindTargetDoublePowerIfTargetUnderwater",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next score + 40 if target.effects[PBEffects::Trapping] == 0
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("TrapTargetInBattle",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::MeanLook] >= 0
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("TrapTargetInBattleLowerTargetDefSpDef1EachTurn",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::Octolock] >= 0
-    score += 30 if !target.trappedInBattle?
-    score -= 100 if !target.pbCanLowerStatStage?(:DEFENSE, user, move) &&
-                    !target.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user, move)
+    score += 30 if !target.battler.trappedInBattle?
+    score -= 100 if !target.battler.pbCanLowerStatStage?(:DEFENSE, user.battler, move.move) &&
+                    !target.battler.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
     next score
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("TrapUserAndTargetInBattle",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if target.effects[PBEffects::JawLock] < 0
-      score += 40 if !user.trappedInBattle? && !target.trappedInBattle?
+      score += 40 if !user.battler.trappedInBattle? && !target.battler.trappedInBattle?
     end
     next score
   }
@@ -151,10 +151,10 @@ Battle::AI::Handlers::MoveEffectScore.add("TrapUserAndTargetInBattle",
 # PursueSwitchingFoe
 
 Battle::AI::Handlers::MoveEffectScore.add("UsedAfterUserTakesPhysicalDamage",
-  proc { |score, move, user, target, skill, ai, battle|
-    if ai.skill_check(Battle::AI::AILevel.medium)
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.medium_skill?
       hasPhysicalAttack = false
-      target.eachMove do |m|
+      target.battler.eachMove do |m|
         next if !m.physicalMove?(m.type)
         hasPhysicalAttack = true
         break
@@ -166,9 +166,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterUserTakesPhysicalDamage",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
-  proc { |score, move, user, target, skill, ai, battle|
-    if ai.skill_check(Battle::AI::AILevel.medium)
-      user.allAllies.each do |b|
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.medium_skill?
+      user.battler.allAllies.each do |b|
         next if !b.pbHasMove?(move.id)
         score += 20
       end
@@ -182,11 +182,11 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
 # TargetActsLast
 
 Battle::AI::Handlers::MoveEffectScore.add("TargetUsesItsLastUsedMoveAgain",
-  proc { |score, move, user, target, skill, ai, battle|
-    if ai.skill_check(Battle::AI::AILevel.medium)
-      if !target.lastRegularMoveUsed ||
-         !target.pbHasMove?(target.lastRegularMoveUsed) ||
-         target.usingMultiTurnAttack?
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.medium_skill?
+      if !target.battler.lastRegularMoveUsed ||
+         !target.battler.pbHasMove?(target.battler.lastRegularMoveUsed) ||
+         target.battler.usingMultiTurnAttack?
         score -= 90
       else
         # Without lots of code here to determine good/bad moves and relative
@@ -201,19 +201,17 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetUsesItsLastUsedMoveAgain",
 # StartSlowerBattlersActFirst
 
 Battle::AI::Handlers::MoveEffectScore.add("HigherPriorityInGrassyTerrain",
-  proc { |score, move, user, target, skill, ai, battle|
-    if ai.skill_check(Battle::AI::AILevel.medium) && @battle.field.terrain == :Grassy
-      aspeed = pbRoughStat(user, :SPEED)
-      ospeed = pbRoughStat(target, :SPEED)
-      score += 40 if aspeed < ospeed
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.medium_skill? && @battle.field.terrain == :Grassy
+      score += 40 if target.faster_than?(user)
     end
     next score
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("LowerPPOfTargetLastMoveBy3",
-  proc { |score, move, user, target, skill, ai, battle|
-    last_move = target.pbGetMoveWithID(target.lastRegularMoveUsed)
+  proc { |score, move, user, target, ai, battle|
+    last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
     if last_move && last_move.total_pp > 0 && last_move.pp <= 3
       score += 50
     end
@@ -222,38 +220,36 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerPPOfTargetLastMoveBy3",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("LowerPPOfTargetLastMoveBy4",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next score - 40
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetLastMoveUsed",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::Disable] > 0
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetUsingSameMoveConsecutively",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::Torment]
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetUsingDifferentMove",
-  proc { |score, move, user, target, skill, ai, battle|
-    aspeed = pbRoughStat(user, :SPEED)
-    ospeed = pbRoughStat(target, :SPEED)
+  proc { |score, move, user, target, ai, battle|
     if target.effects[PBEffects::Encore] > 0
       score -= 90
-    elsif aspeed > ospeed
-      if target.lastRegularMoveUsed
-        moveData = GameData::Move.get(target.lastRegularMoveUsed)
+    elsif user.faster_than?(target)
+      if target.battler.lastRegularMoveUsed
+        moveData = GameData::Move.get(target.battler.lastRegularMoveUsed)
         if moveData.category == 2 &&   # Status move
            [:User, :BothSides].include?(moveData.target)
           score += 60
         elsif moveData.category != 2 &&   # Damaging move
               moveData.target == :NearOther &&
-              Effectiveness.ineffective?(pbCalcTypeMod(moveData.type, target, user))
+              Effectiveness.ineffective?(user.effectiveness_of_type_against_battler(moveData.type, target))
           score += 60
         end
       else
@@ -265,22 +261,22 @@ Battle::AI::Handlers::MoveEffectScore.add("DisableTargetUsingDifferentMove",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetStatusMoves",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::Taunt] > 0
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetHealingMoves",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::HealBlock] > 0
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetSoundMoves",
-  proc { |score, move, user, target, skill, ai, battle|
-    if target.effects[PBEffects::ThroatChop] == 0 && ai.skill_check(Battle::AI::AILevel.high)
+  proc { |score, move, user, target, ai, battle|
+    if target.effects[PBEffects::ThroatChop] == 0 && ai.trainer.high_skill?
       hasSoundMove = false
-      user.eachMove do |m|
+      user.battler.eachMove do |m|
         next if !m.soundMove?
         hasSoundMove = true
         break
@@ -292,13 +288,13 @@ Battle::AI::Handlers::MoveEffectScore.add("DisableTargetSoundMoves",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetMovesKnownByUser",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::Imprison]
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
     score += 20 if target.hp >= target.totalhp / 2
     score -= 20 if user.hp < user.hp / 2
@@ -307,7 +303,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTur
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
     score -= 40
     next score
@@ -315,7 +311,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTur
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
     if battle.pbCheckGlobalAbility(:AIRLOCK) ||
        battle.pbCheckGlobalAbility(:CLOUDNINE)
@@ -328,7 +324,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("RemoveAllScreens",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
     if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
        target.pbOwnSide.effects[PBEffects::Reflect] > 0 ||

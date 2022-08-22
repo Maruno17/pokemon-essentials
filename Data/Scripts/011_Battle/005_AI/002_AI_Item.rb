@@ -24,7 +24,7 @@ class Battle::AI
     return nil if !items || items.length == 0
     # Determine target of item (always the Pokémon choosing the action)
     idxTarget = @user.index   # Battler using the item
-    battler = @battle.battlers[idxTarget]
+    battler = @user.battler
     pkmn = battler.pokemon
     # Item categories
     hpItems = {

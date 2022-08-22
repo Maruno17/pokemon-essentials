@@ -5,25 +5,25 @@
 # HitTwoTimes
 
 Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
-  proc { |score, move, user, target, skill, ai, battle|
-    next 0 if !target.pbCanPoison?(user, false)
+  proc { |score, move, user, target, ai, battle|
+    next 0 if !target.battler.pbCanPoison?(user.battler, false)
     score += 30
-    if ai.skill_check(Battle::AI::AILevel.medium)
+    if ai.trainer.medium_skill?
       score += 30 if target.hp <= target.totalhp / 4
       score += 50 if target.hp <= target.totalhp / 8
       score -= 40 if target.effects[PBEffects::Yawn] > 0
     end
-    if ai.skill_check(Battle::AI::AILevel.high)
-      score += 10 if pbRoughStat(target, :DEFENSE) > 100
-      score += 10 if pbRoughStat(target, :SPECIAL_DEFENSE) > 100
-      score -= 40 if target.hasActiveAbility?([:GUTS, :MARVELSCALE, :TOXICBOOST])
+    if ai.trainer.high_skill?
+      score += 10 if target.rough_stat(:DEFENSE) > 100
+      score += 10 if target.rough_stat(:SPECIAL_DEFENSE) > 100
     end
+    score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :TOXICBOOST])
     next score
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesFlinchTarget",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next score + 30 if target.effects[PBEffects::Minimize]
   }
 )
@@ -33,10 +33,10 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesFlinchTarget",
 # HitThreeTimesPowersUpWithEachHit
 
 Battle::AI::Handlers::MoveEffectScore.add("HitThreeTimesAlwaysCriticalHit",
-  proc { |score, move, user, target, skill, ai, battle|
-    if ai.skill_check(Battle::AI::AILevel.high)
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.high_skill?
       stat = (move.physicalMove?) ? :DEFENSE : :SPECIAL_DEFENSE
-      next score + 50 if targets.stages[stat] > 1
+      next score + 50 if target.stages[stat] > 1
     end
   }
 )
@@ -46,9 +46,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HitThreeTimesAlwaysCriticalHit",
 # HitTwoToFiveTimesOrThreeForAshGreninja
 
 Battle::AI::Handlers::MoveEffectScore.add("HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1",
-  proc { |score, move, user, target, skill, ai, battle|
-    aspeed = pbRoughStat(user, :SPEED)
-    ospeed = pbRoughStat(target, :SPEED)
+  proc { |score, move, user, target, ai, battle|
+    aspeed = user.rough_stat(:SPEED)
+    ospeed = target.rough_stat(:SPEED)
     if aspeed > ospeed && aspeed * 2 / 3 < ospeed
       score -= 50
     elsif aspeed < ospeed && aspeed * 1.5 > ospeed
@@ -68,25 +68,20 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoToFiveTimesRaiseUserSpd1LowerUs
 # TwoTurnAttackOneTurnInSun
 
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
-  proc { |score, move, user, target, skill, ai, battle|
-    if target.pbCanParalyze?(user, false) &&
-       !(ai.skill_check(Battle::AI::AILevel.medium) &&
-       move.id == :THUNDERWAVE &&
-       Effectiveness.ineffective?(pbCalcTypeMod(move.type, user, target)))
+  proc { |score, move, user, target, ai, battle|
+    if target.battler.pbCanParalyze?(user.battler, false)
       score += 30
-      if ai.skill_check(Battle::AI::AILevel.medium)
-        aspeed = pbRoughStat(user, :SPEED)
-        ospeed = pbRoughStat(target, :SPEED)
+      if ai.trainer.medium_skill?
+        aspeed = user.rough_stat(:SPEED)
+        ospeed = target.rough_stat(:SPEED)
         if aspeed < ospeed
           score += 30
         elsif aspeed > ospeed
           score -= 40
         end
       end
-      if ai.skill_check(Battle::AI::AILevel.high)
-        score -= 40 if target.hasActiveAbility?([:GUTS, :MARVELSCALE, :QUICKFEET])
-      end
-    elsif ai.skill_check(Battle::AI::AILevel.medium)
+      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
+    elsif ai.trainer.medium_skill?
       score -= 90 if move.statusMove?
     end
     next score
@@ -94,29 +89,25 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
-  proc { |score, move, user, target, skill, ai, battle|
-    next 0 if !target.pbCanBurn?(user, false)
+  proc { |score, move, user, target, ai, battle|
+    next 0 if !target.battler.pbCanBurn?(user.battler, false)
     score += 30
-    if ai.skill_check(Battle::AI::AILevel.high)
-      score -= 40 if target.hasActiveAbility?([:GUTS, :MARVELSCALE, :QUICKFEET, :FLAREBOOST])
-    end
+    score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :FLAREBOOST])
     next score
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     score += 20 if user.effects[PBEffects::FocusEnergy] > 0
-    if ai.skill_check(Battle::AI::AILevel.high)
-      score += 20 if !target.hasActiveAbility?(:INNERFOCUS) &&
-                     target.effects[PBEffects::Substitute] == 0
-    end
+    score += 20 if !target.has_active_ability?(:INNERFOCUS) &&
+                   target.effects[PBEffects::Substitute] == 0
     next score
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if user.statStageAtMax?(:SPECIAL_ATTACK) &&
        user.statStageAtMax?(:SPECIAL_DEFENSE) &&
        user.statStageAtMax?(:SPEED)
@@ -125,22 +116,22 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2"
       score -= user.stages[:SPECIAL_ATTACK] * 10   # Only *10 instead of *20
       score -= user.stages[:SPECIAL_DEFENSE] * 10   # because two-turn attack
       score -= user.stages[:SPEED] * 10
-      if ai.skill_check(Battle::AI::AILevel.medium)
+      if ai.trainer.medium_skill?
         hasSpecialAttack = false
-        user.eachMove do |m|
+        user.battler.eachMove do |m|
           next if !m.specialMove?(m.type)
           hasSpecialAttack = true
           break
         end
         if hasSpecialAttack
           score += 20
-        elsif ai.skill_check(Battle::AI::AILevel.high)
+        elsif ai.trainer.high_skill?
           score -= 90
         end
       end
-      if ai.skill_check(Battle::AI::AILevel.high)
-        aspeed = pbRoughStat(user, :SPEED)
-        ospeed = pbRoughStat(target, :SPEED)
+      if ai.trainer.high_skill?
+        aspeed = user.rough_stat(:SPEED)
+        ospeed = target.rough_stat(:SPEED)
         score += 30 if aspeed < ospeed && aspeed * 2 > ospeed
       end
     end
@@ -149,7 +140,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2"
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserDefense1",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if move.statusMove?
       if user.statStageAtMax?(:DEFENSE)
         score -= 90
@@ -164,9 +155,9 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserDefense1"
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
-  proc { |score, move, user, target, skill, ai, battle|
-    aspeed = pbRoughStat(user, :SPEED)
-    ospeed = pbRoughStat(target, :SPEED)
+  proc { |score, move, user, target, ai, battle|
+    aspeed = user.rough_stat(:SPEED)
+    ospeed = target.rough_stat(:SPEED)
     if (aspeed > ospeed && user.hp > user.totalhp / 3) || user.hp > user.totalhp / 2
       score += 60
     else
@@ -196,7 +187,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
 # MultiTurnAttackPowersUpEachTurn
 
 Battle::AI::Handlers::MoveEffectScore.add("MultiTurnAttackBideThenReturnDoubleDamage",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if user.hp <= user.totalhp / 4
       score -= 90
     elsif user.hp <= user.totalhp / 2

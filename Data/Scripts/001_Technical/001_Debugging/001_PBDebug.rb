@@ -16,14 +16,24 @@ module PBDebug
 
   def self.flush
     if $DEBUG && $INTERNAL && @@log.length > 0
-      File.open("Data/debuglog.txt", "a+b") { |f| f.write(@@log.to_s) }
+      File.open("Data/debuglog.txt", "a+b") { |f| f.write(@@log.join) }
     end
     @@log.clear
   end
 
   def self.log(msg)
     if $DEBUG && $INTERNAL
-      @@log.push("#{msg}\r\n")
+      echoln msg
+      @@log.push(msg + "\r\n")
+      PBDebug.flush   # if @@log.length > 1024
+    end
+  end
+
+  def self.log_message(msg)
+    if $DEBUG && $INTERNAL
+      msg = "\"" + msg + "\""
+      echoln Console.markup_style(msg, text: :dark_gray)
+      @@log.push(msg + "\r\n")
       PBDebug.flush   # if @@log.length > 1024
     end
   end

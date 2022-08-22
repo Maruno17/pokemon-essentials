@@ -6,8 +6,8 @@
 # None
 
 Battle::AI::Handlers::MoveEffectScore.add("DoesNothingCongratulations",
-  proc { |score, move, user, target, skill, ai, battle|
-    next 0 if ai.skill_check(Battle::AI::AILevel.high)
+  proc { |score, move, user, target, ai, battle|
+    next 0 if ai.trainer.high_skill?
     next score - 95
   }
 )
@@ -20,7 +20,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("DoesNothingCongratulations",
 # AddMoneyGainedFromBattle
 
 Battle::AI::Handlers::MoveEffectScore.add("FailsIfNotUserFirstTurn",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next score - 90 if user.turnCount > 0
   }
 )
@@ -28,31 +28,31 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfNotUserFirstTurn",
 # FailsIfUserHasUnusedMove
 
 Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserNotConsumedBerry",
-  proc { |score, move, user, target, skill, ai, battle|
-    next score - 90 if !user.belched?
+  proc { |score, move, user, target, ai, battle|
+    next score - 90 if !user.battler.belched?
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("FailsIfTargetHasNoItem",
-  proc { |score, move, user, target, skill, ai, battle|
-    if ai.skill_check(Battle::AI::AILevel.medium)
-      next score - 90 if !target.item || !target.itemActive?
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.medium_skill?
+      next score - 90 if !target.item || !target.item_active?
       next score + 50
     end
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("FailsUnlessTargetSharesTypeWithUser",
-  proc { |score, move, user, target, skill, ai, battle|
-    if !(user.types[0] && target.pbHasType?(user.types[0])) &&
-       !(user.types[1] && target.pbHasType?(user.types[1]))
+  proc { |score, move, user, target, ai, battle|
+    if !(user.types[0] && target.has_type?(user.types[0])) &&
+       !(user.types[1] && target.has_type?(user.types[1]))
       next score - 90
     end
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserDamagedThisTurn",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     score += 50 if target.effects[PBEffects::HyperBeam] > 0
     score -= 35 if target.hp <= target.totalhp / 2   # If target is weak, no
     score -= 70 if target.hp <= target.totalhp / 4   # need to risk this move
@@ -63,20 +63,20 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserDamagedThisTurn",
 # FailsIfTargetActed
 
 Battle::AI::Handlers::MoveEffectScore.add("CrashDamageIfFailsUnusableInGravity",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next score + 10 * (user.stages[:ACCURACY] - target.stages[:EVASION])
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if battle.pbCheckGlobalAbility(:AIRLOCK) ||
        battle.pbCheckGlobalAbility(:CLOUDNINE)
       next score - 90
     elsif battle.field.weather == :Sun
       next score - 90
     else
-      user.eachMove do |m|
+      user.battler.eachMove do |m|
         next if !m.damagingMove? || m.type != :FIRE
         score += 20
       end
@@ -86,14 +86,14 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if battle.pbCheckGlobalAbility(:AIRLOCK) ||
        battle.pbCheckGlobalAbility(:CLOUDNINE)
       next score - 90
     elsif battle.field.weather == :Rain
       next score - 90
     else
-      user.eachMove do |m|
+      user.battler.eachMove do |m|
         next if !m.damagingMove? || m.type != :WATER
         score += 20
       end
@@ -103,7 +103,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if battle.pbCheckGlobalAbility(:AIRLOCK) ||
        battle.pbCheckGlobalAbility(:CLOUDNINE)
       next score - 90
@@ -114,7 +114,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if battle.pbCheckGlobalAbility(:AIRLOCK) ||
        battle.pbCheckGlobalAbility(:CLOUDNINE)
       next score - 90
@@ -133,16 +133,16 @@ Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
 # StartPsychicTerrain
 
 Battle::AI::Handlers::MoveEffectScore.add("RemoveTerrain",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next 0 if battle.field.terrain == :None
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if user.pbOpposingSide.effects[PBEffects::Spikes] >= 3
       next score - 90
-    elsif user.allOpposing.none? { |b| battle.pbCanChooseNonActive?(b.index) }
+    elsif user.battler.allOpposing.none? { |b| battle.pbCanChooseNonActive?(b.index) }
       next score - 90   # Opponent can't switch in any Pokemon
     else
       score += 10 * battle.pbAbleNonActiveCount(user.idxOpposingSide)
@@ -153,10 +153,10 @@ Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if user.pbOpposingSide.effects[PBEffects::ToxicSpikes] >= 2
       next score - 90
-    elsif user.allOpposing.none? { |b| battle.pbCanChooseNonActive?(b.index) }
+    elsif user.battler.allOpposing.none? { |b| battle.pbCanChooseNonActive?(b.index) }
       next score - 90   # Opponent can't switch in any Pokemon
     else
       score += 8 * battle.pbAbleNonActiveCount(user.idxOpposingSide)
@@ -167,10 +167,10 @@ Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if user.pbOpposingSide.effects[PBEffects::StealthRock]
       next score - 90
-    elsif user.allOpposing.none? { |b| battle.pbCanChooseNonActive?(b.index) }
+    elsif user.battler.allOpposing.none? { |b| battle.pbCanChooseNonActive?(b.index) }
       next score - 90   # Opponent can't switch in any Pokemon
     else
       next score + 10 * battle.pbAbleNonActiveCount(user.idxOpposingSide)
@@ -179,14 +179,14 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("AddStickyWebToFoeSide",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next score - 95 if user.pbOpposingSide.effects[PBEffects::StickyWeb]
   }
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("SwapSideEffects",
-  proc { |score, move, user, target, skill, ai, battle|
-    if ai.skill_check(Battle::AI::AILevel.medium)
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.medium_skill?
       good_effects = [:Reflect, :LightScreen, :AuroraVeil, :SeaOfFire,
                       :Swamp, :Rainbow, :Mist, :Safeguard,
                       :Tailwind].map! { |e| PBEffects.const_get(e) }
@@ -195,7 +195,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwapSideEffects",
         score += 10 if ![0, false, nil].include?(user.pbOwnSide.effects[e])
         score -= 10 if ![0, 1, false, nil].include?(user.pbOpposingSide.effects[e])
       end
-      if ai.skill_check(Battle::AI::AILevel.high)
+      if ai.trainer.high_skill?
         good_effects.each do |e|
           score += 10 if ![0, 1, false, nil].include?(user.pbOpposingSide.effects[e])
           score -= 10 if ![0, false, nil].include?(user.pbOwnSide.effects[e])
@@ -207,7 +207,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwapSideEffects",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("UserMakeSubstitute",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if user.effects[PBEffects::Substitute] > 0
       next score - 90
     elsif user.hp <= user.totalhp / 4
@@ -217,7 +217,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserMakeSubstitute",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("RemoveUserBindingAndEntryHazards",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     score += 30 if user.effects[PBEffects::Trapping] > 0
     score += 30 if user.effects[PBEffects::LeechSeed] >= 0
     if battle.pbAbleNonActiveCount(user.idxOwnSide) > 0
@@ -230,7 +230,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveUserBindingAndEntryHazards",
 )
 
 Battle::AI::Handlers::MoveEffectScore.add("AttackTwoTurnsLater",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     if battle.positions[target.index].effects[PBEffects::FutureSightCounter] > 0
       next 0
     elsif battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
@@ -243,7 +243,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AttackTwoTurnsLater",
 # UserSwapsPositionsWithAlly
 
 Battle::AI::Handlers::MoveEffectScore.add("BurnAttackerBeforeUserActs",
-  proc { |score, move, user, target, skill, ai, battle|
+  proc { |score, move, user, target, ai, battle|
     next score + 20   # Because of possible burning
   }
 )

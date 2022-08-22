@@ -112,7 +112,7 @@ class Battle::AI
     #       instead if the move raises evasion. Note this comes after the
     #       dissociation of Bulk Up from sweeping_stat.
 
-    if skill_check(AILevel.medium)
+    if @trainer.medium_skill?
       # TODO: Prefer if the maximum damage the target has dealt wouldn't hurt
       #       the user much.
     end

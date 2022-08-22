@@ -278,6 +278,7 @@ class Battle
   def pbStartBattleCore
     # Set up the battlers on each side
     sendOuts = pbSetUpSides
+    @battleAI.create_ai_objects
     # Create all the sprites and play the battle intro animation
     @scene.pbStartBattle(self)
     # Show trainers on both sides sending out Pokémon
