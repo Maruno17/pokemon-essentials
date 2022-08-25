@@ -16,6 +16,7 @@ class Battle::AI::AIMove
   #=============================================================================
 
   # pp
+  # totalpp
   # priority
   # usableWhenAsleep?
   # thawsUser?
@@ -81,121 +82,281 @@ class Battle::AI::AIMove
     ret = @move.baseDamage
     ret = 60 if ret == 1
     return ret if !@ai.trainer.medium_skill?
+    return Battle::AI::Handlers.get_base_power(function,
+       ret, self, @ai.user, @ai.target, @ai, @ai.battle)
+  end
+
+  def rough_damage
+    power = base_power
+    return power if @move.is_a?(Battle::Move::FixedDamageMove)
+    # Get the user and target of this move
     user = @ai.user
     user_battler = user.battler
     target = @ai.target
     target_battler = target.battler
-    # Covers all function codes which have their own def pbBaseDamage
-    case @move.function
-    when "FixedDamage20", "FixedDamage40", "FixedDamageHalfTargetHP",
-         "FixedDamageUserLevel", "LowerTargetHPToUserHP"
-      ret = @move.pbFixedDamage(user_battler, target_battler)
-    when "FixedDamageUserLevelRandom"
-      ret = user_battler.level
-    when "OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"
-      ret = 200
-    when "CounterPhysicalDamage", "CounterSpecialDamage", "CounterDamagePlusHalf"
-      ret = 60
-    when "DoublePowerIfTargetUnderwater", "DoublePowerIfTargetUnderground",
-         "BindTargetDoublePowerIfTargetUnderwater"
-      ret = @move.pbModifyDamage(ret, user_battler, target_battler)
-    when "DoublePowerIfTargetInSky",
-         "FlinchTargetDoublePowerIfTargetInSky",
-         "DoublePowerIfTargetPoisoned",
-         "DoublePowerIfTargetParalyzedCureTarget",
-         "DoublePowerIfTargetAsleepCureTarget",
-         "DoublePowerIfUserPoisonedBurnedParalyzed",
-         "DoublePowerIfTargetStatusProblem",
-         "DoublePowerIfTargetHPLessThanHalf",
-         "DoublePowerIfAllyFaintedLastTurn",
-         "TypeAndPowerDependOnWeather",
-         "PowerHigherWithUserHappiness",
-         "PowerLowerWithUserHappiness",
-         "PowerHigherWithUserHP",
-         "PowerHigherWithTargetHP",
-         "PowerHigherWithUserPositiveStatStages",
-         "PowerHigherWithTargetPositiveStatStages",
-         "TypeDependsOnUserIVs",
-         "PowerHigherWithConsecutiveUse",
-         "PowerHigherWithConsecutiveUseOnUserSide",
-         "PowerHigherWithLessPP",
-         "PowerLowerWithUserHP",
-         "PowerHigherWithUserFasterThanTarget",
-         "PowerHigherWithTargetWeight",
-         "ThrowUserItemAtTarget",
-         "PowerDependsOnUserStockpile"
-      ret = @move.pbBaseDamage(ret, user_battler, target_battler)
-    when "DoublePowerIfUserHasNoItem"
-      ret *= 2 if !user_battler.item || user.has_active_item?(:FLYINGGEM)
-    when "PowerHigherWithTargetFasterThanUser"
-      targetSpeed = target.rough_stat(:SPEED)
-      userSpeed = user.rough_stat(:SPEED)
-      ret = [[(25 * targetSpeed / userSpeed).floor, 150].min, 1].max
-    when "RandomlyDamageOrHealTarget"
-      ret = 50
-    when "RandomPowerDoublePowerIfTargetUnderground"
-      ret = 71
-      ret *= 2 if target_battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")   # Dig
-    when "TypeAndPowerDependOnUserBerry"
-      ret = @move.pbNaturalGiftBaseDamage(user_battler.item_id)
-    when "PowerHigherWithUserHeavierThanTarget"
-      ret = @move.pbBaseDamage(ret, user_battler, target_battler)
-      ret *= 2 if Settings::MECHANICS_GENERATION >= 7 && @trainer.medium_skill? &&
-                      target_battler.effects[PBEffects::Minimize]
-    when "AlwaysCriticalHit", "HitTwoTimes", "HitTwoTimesPoisonTarget"
-      ret *= 2
-    when "HitThreeTimesPowersUpWithEachHit"
-      ret *= 6   # Hits do x1, x2, x3 ret in turn, for x6 in total
-    when "HitTwoToFiveTimes"
-      if user.has_active_ability?(:SKILLLINK)
-        ret *= 5
+
+    # Get the move's type
+    calc_type = rough_type
+
+    ##### Calculate user's attack stat #####
+    atk = user.rough_stat(:ATTACK)
+    if function == "UseTargetAttackInsteadOfUserAttack"   # Foul Play
+      atk = target.rough_stat(:ATTACK)
+    elsif function == "UseUserBaseDefenseInsteadOfUserBaseAttack"   # Body Press
+      atk = user.rough_stat(:DEFENSE)
+    elsif specialMove?(calc_type)
+      if function == "UseTargetAttackInsteadOfUserAttack"   # Foul Play
+        atk = target.rough_stat(:SPECIAL_ATTACK)
       else
-        ret = (ret * 31 / 10).floor   # Average damage dealt
+        atk = user.rough_stat(:SPECIAL_ATTACK)
       end
-    when "HitTwoToFiveTimesOrThreeForAshGreninja"
-      if user_battler.isSpecies?(:GRENINJA) && user_battler.form == 2
-        ret *= 4   # 3 hits at 20 power = 4 hits at 15 power
-      elsif user.has_active_ability?(:SKILLLINK)
-        ret *= 5
-      else
-        ret = (ret * 31 / 10).floor   # Average damage dealt
-      end
-    when "HitOncePerUserTeamMember"
-      mult = 0
-      @ai.battle.eachInTeamFromBattlerIndex(user.index) do |pkmn, _i|
-        mult += 1 if pkmn&.able? && pkmn.status == :NONE
-      end
-      ret *= mult
-    when "TwoTurnAttackOneTurnInSun"
-      ret = @move.pbBaseDamageMultiplier(ret, user_battler, target_battler)
-    when "MultiTurnAttackPowersUpEachTurn"
-      ret *= 2 if user_battler.effects[PBEffects::DefenseCurl]
-    when "MultiTurnAttackBideThenReturnDoubleDamage"
-      ret = 40
-    when "UserFaintsFixedDamageUserHP"
-      ret = user_battler.hp
-    when "EffectivenessIncludesFlyingType"
-      if GameData::Type.exists?(:FLYING)
-        if @trainer.high_skill?
-          targetTypes = target_battler.pbTypes(true)
-          mult = Effectiveness.calculate(
-            :FLYING, targetTypes[0], targetTypes[1], targetTypes[2]
-          )
-        else
-          mult = Effectiveness.calculate(
-            :FLYING, target.types[0], target.types[1], target.effects[PBEffects::Type3]
-          )
-        end
-        ret = (ret.to_f * mult / Effectiveness::NORMAL_EFFECTIVE).round
-      end
-      ret *= 2 if @trainer.medium_skill? && target_battler.effects[PBEffects::Minimize]
-    when "DoublePowerIfUserLastMoveFailed"
-      ret *= 2 if user_battler.lastRoundMoveFailed
-    when "HitTwoTimesFlinchTarget"
-      ret *= 2
-      ret *= 2 if @trainer.medium_skill? && target_battler.effects[PBEffects::Minimize]
     end
-    return ret
+
+    ##### Calculate target's defense stat #####
+    defense = target.rough_stat(:DEFENSE)
+    if specialMove?(calc_type) && function != "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
+      defense = target.rough_stat(:SPECIAL_DEFENSE)
+    end
+
+    ##### Calculate all multiplier effects #####
+    multipliers = {
+      :base_damage_multiplier  => 1.0,
+      :attack_multiplier       => 1.0,
+      :defense_multiplier      => 1.0,
+      :final_damage_multiplier => 1.0
+    }
+    # Ability effects that alter damage
+    moldBreaker = @ai.trainer.high_skill? && target_battler.hasMoldBreaker?
+
+    if user.ability_active?
+      # NOTE: These abilities aren't suitable for checking at the start of the
+      #       round.
+      abilityBlacklist = [:ANALYTIC, :SNIPER, :TINTEDLENS, :AERILATE, :PIXILATE, :REFRIGERATE]
+      if !abilityBlacklist.include?(user.ability_id)
+        Battle::AbilityEffects.triggerDamageCalcFromUser(
+          user.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+        )
+      end
+    end
+
+    if @ai.trainer.medium_skill? && !moldBreaker
+      user_battler.allAllies.each do |b|
+        next if !b.abilityActive?
+        Battle::AbilityEffects.triggerDamageCalcFromAlly(
+          b.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+        )
+      end
+    end
+
+    if !moldBreaker && target.ability_active?
+      # NOTE: These abilities aren't suitable for checking at the start of the
+      #       round.
+      abilityBlacklist = [:FILTER, :SOLIDROCK]
+      if !abilityBlacklist.include?(target.ability_id)
+        Battle::AbilityEffects.triggerDamageCalcFromTarget(
+          target.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+        )
+      end
+    end
+
+    if @ai.trainer.high_skill? && !moldBreaker
+      target_battler.allAllies.each do |b|
+        next if !b.abilityActive?
+        Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(
+          b.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+        )
+      end
+    end
+
+    # Item effects that alter damage
+    # NOTE: Type-boosting gems aren't suitable for checking at the start of the
+    #       round.
+    if user.item_active?
+      # NOTE: These items aren't suitable for checking at the start of the
+      #       round.
+      itemBlacklist = [:EXPERTBELT, :LIFEORB]
+      if !itemBlacklist.include?(user.item_id)
+        Battle::ItemEffects.triggerDamageCalcFromUser(
+          user.item, user_battler, target_battler, @move, multipliers, power, calc_type
+        )
+        user.effects[PBEffects::GemConsumed] = nil   # Untrigger consuming of Gems
+      end
+      # TODO: Prefer (1.5x?) if item will be consumed and user has Unburden.
+    end
+
+    if target.item_active? && target.item && !target.item.is_berry?
+      Battle::ItemEffects.triggerDamageCalcFromTarget(
+        target.item, user_battler, target_battler, @move, multipliers, power, calc_type
+      )
+    end
+
+    # Global abilities
+    if @ai.trainer.medium_skill? &&
+       ((@ai.battle.pbCheckGlobalAbility(:DARKAURA) && calc_type == :DARK) ||
+        (@ai.battle.pbCheckGlobalAbility(:FAIRYAURA) && calc_type == :FAIRY))
+      if @ai.battle.pbCheckGlobalAbility(:AURABREAK)
+        multipliers[:base_damage_multiplier] *= 2 / 3.0
+      else
+        multipliers[:base_damage_multiplier] *= 4 / 3.0
+      end
+    end
+
+    # Parental Bond
+    if user.has_active_ability?(:PARENTALBOND)
+      multipliers[:base_damage_multiplier] *= 1.25
+    end
+
+    # Me First
+    # TODO
+
+    # Helping Hand - n/a
+
+    # Charge
+    if @ai.trainer.medium_skill? &&
+       user.effects[PBEffects::Charge] > 0 && calc_type == :ELECTRIC
+      multipliers[:base_damage_multiplier] *= 2
+    end
+
+    # Mud Sport and Water Sport
+    if @ai.trainer.medium_skill?
+      if calc_type == :ELECTRIC
+        if @ai.battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
+          multipliers[:base_damage_multiplier] /= 3
+        end
+        if @ai.battle.field.effects[PBEffects::MudSportField] > 0
+          multipliers[:base_damage_multiplier] /= 3
+        end
+      elsif calc_type == :FIRE
+        if @ai.battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
+          multipliers[:base_damage_multiplier] /= 3
+        end
+        if @ai.battle.field.effects[PBEffects::WaterSportField] > 0
+          multipliers[:base_damage_multiplier] /= 3
+        end
+      end
+    end
+
+    # Terrain moves
+    if @ai.trainer.medium_skill?
+      case @ai.battle.field.terrain
+      when :Electric
+        multipliers[:base_damage_multiplier] *= 1.5 if calc_type == :ELECTRIC && user_battler.affectedByTerrain?
+      when :Grassy
+        multipliers[:base_damage_multiplier] *= 1.5 if calc_type == :GRASS && user_battler.affectedByTerrain?
+      when :Psychic
+        multipliers[:base_damage_multiplier] *= 1.5 if calc_type == :PSYCHIC && user_battler.affectedByTerrain?
+      when :Misty
+        multipliers[:base_damage_multiplier] /= 2 if calc_type == :DRAGON && target_battler.affectedByTerrain?
+      end
+    end
+
+    # Badge multipliers
+    if @ai.trainer.high_skill? && @ai.battle.internalBattle && target_battler.pbOwnedByPlayer?
+      # Don't need to check the Atk/Sp Atk-boosting badges because the AI
+      # won't control the player's Pokémon.
+      if physicalMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE
+        multipliers[:defense_multiplier] *= 1.1
+      elsif specialMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPDEF
+        multipliers[:defense_multiplier] *= 1.1
+      end
+    end
+
+    # Multi-targeting attacks
+    if @ai.trainer.high_skill? && targets_multiple_battlers?
+      multipliers[:final_damage_multiplier] *= 0.75
+    end
+
+    # Weather
+    if @ai.trainer.medium_skill?
+      case user_battler.effectiveWeather
+      when :Sun, :HarshSun
+        case calc_type
+        when :FIRE
+          multipliers[:final_damage_multiplier] *= 1.5
+        when :WATER
+          multipliers[:final_damage_multiplier] /= 2
+        end
+      when :Rain, :HeavyRain
+        case calc_type
+        when :FIRE
+          multipliers[:final_damage_multiplier] /= 2
+        when :WATER
+          multipliers[:final_damage_multiplier] *= 1.5
+        end
+      when :Sandstorm
+        if target.has_type?(:ROCK) && specialMove?(calc_type) &&
+           function != "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
+          multipliers[:defense_multiplier] *= 1.5
+        end
+      end
+    end
+
+    # Critical hits - n/a
+
+    # Random variance - n/a
+
+    # STAB
+    if calc_type && user.has_type?(calc_type)
+      if user.has_active_ability?(:ADAPTABILITY)
+        multipliers[:final_damage_multiplier] *= 2
+      else
+        multipliers[:final_damage_multiplier] *= 1.5
+      end
+    end
+
+    # Type effectiveness
+    typemod = target.effectiveness_of_type_against_battler(calc_type, user)
+    multipliers[:final_damage_multiplier] *= typemod.to_f / Effectiveness::NORMAL_EFFECTIVE
+
+    # Burn
+    if @ai.trainer.high_skill? && physicalMove?(calc_type) &&
+       user.status == :BURN && !user.has_active_ability?(:GUTS) &&
+       !(Settings::MECHANICS_GENERATION >= 6 &&
+         function == "DoublePowerIfUserPoisonedBurnedParalyzed")   # Facade
+      multipliers[:final_damage_multiplier] /= 2
+    end
+
+    # Aurora Veil, Reflect, Light Screen
+    if @ai.trainer.medium_skill? && !@move.ignoresReflect? && !user.has_active_ability?(:INFILTRATOR)
+      if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+        if @ai.battle.pbSideBattlerCount(target_battler) > 1
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
+        else
+          multipliers[:final_damage_multiplier] /= 2
+        end
+      elsif target.pbOwnSide.effects[PBEffects::Reflect] > 0 && physicalMove?(calc_type)
+        if @ai.battle.pbSideBattlerCount(target_battler) > 1
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
+        else
+          multipliers[:final_damage_multiplier] /= 2
+        end
+      elsif target.pbOwnSide.effects[PBEffects::LightScreen] > 0 && specialMove?(calc_type)
+        if @ai.battle.pbSideBattlerCount(target_battler) > 1
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
+        else
+          multipliers[:final_damage_multiplier] /= 2
+        end
+      end
+    end
+
+    # Minimize
+    if @ai.trainer.medium_skill? && target.effects[PBEffects::Minimize] && @move.tramplesMinimize?
+      multipliers[:final_damage_multiplier] *= 2
+    end
+
+    # Move-specific base damage modifiers
+    # TODO
+
+    # Move-specific final damage modifiers
+    # TODO
+
+    ##### Main damage calculation #####
+    power   = [(power   * multipliers[:base_damage_multiplier]).round, 1].max
+    atk     = [(atk     * multipliers[:attack_multiplier]).round, 1].max
+    defense = [(defense * multipliers[:defense_multiplier]).round, 1].max
+    damage  = ((((2.0 * user.level / 5) + 2).floor * power * atk / defense).floor / 50).floor + 2
+    damage  = [(damage * multipliers[:final_damage_multiplier]).round, 1].max
+    return damage.floor
   end
 
   #=============================================================================

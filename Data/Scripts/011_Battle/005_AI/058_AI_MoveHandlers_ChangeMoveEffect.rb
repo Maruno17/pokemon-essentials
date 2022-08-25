@@ -32,7 +32,11 @@ Battle::AI::Handlers::MoveEffectScore.add("CannotBeRedirected",
   }
 )
 
-# RandomlyDamageOrHealTarget
+Battle::AI::Handlers::MoveBasePower.add("RandomlyDamageOrHealTarget",
+  proc { |power, move, user, target, ai, battle|
+    next 50   # Average power, ish
+  }
+}
 
 Battle::AI::Handlers::MoveEffectScore.add("HealAllyOrDamageFoe",
   proc { |score, move, user, target, ai, battle|
@@ -73,6 +77,11 @@ Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAt
 
 # EffectDependsOnEnvironment
 
+Battle::AI::Handlers::MoveBasePower.add("HitsAllFoesAndPowersUpInPsychicTerrain",
+  proc { |power, move, user, target, ai, battle|
+    next move.pbBaseDamage(power, user.battler, target.battler)
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("HitsAllFoesAndPowersUpInPsychicTerrain",
   proc { |score, move, user, target, ai, battle|
     next score + 40 if battle.field.terrain == :Psychic && user.battler.affectedByTerrain?
@@ -103,6 +112,11 @@ Battle::AI::Handlers::MoveEffectScore.add("PowerUpAllyMove",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.add("CounterPhysicalDamage",
+  proc { |power, move, user, target, ai, battle|
+    next 60   # Representative value
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
   proc { |score, move, user, target, ai, battle|
     if target.effects[PBEffects::HyperBeam] > 0
@@ -121,6 +135,11 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.add("CounterSpecialDamage",
+  proc { |power, move, user, target, ai, battle|
+    next 60   # Representative value
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
   proc { |score, move, user, target, ai, battle|
     if target.effects[PBEffects::HyperBeam] > 0
@@ -139,6 +158,11 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.add("CounterDamagePlusHalf",
+  proc { |power, move, user, target, ai, battle|
+    next 60   # Representative value
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
   proc { |score, move, user, target, ai, battle|
     next score - 90 if target.effects[PBEffects::HyperBeam] > 0
@@ -161,6 +185,11 @@ Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.add("PowerDependsOnUserStockpile",
+  proc { |power, move, user, target, ai, battle|
+    next move.pbBaseDamage(power, user.battler, target.battler)
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("PowerDependsOnUserStockpile",
   proc { |score, move, user, target, ai, battle|
     next 0 if user.effects[PBEffects::Stockpile] == 0

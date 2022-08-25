@@ -115,6 +115,11 @@ Battle::AI::Handlers::MoveEffectScore.add("BindTarget",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.add("BindTargetDoublePowerIfTargetUnderwater",
+  proc { |power, move, user, target, ai, battle|
+    next move.pbModifyDamage(power, user.battler, target.battler)
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("BindTargetDoublePowerIfTargetUnderwater",
   proc { |score, move, user, target, ai, battle|
     next score + 40 if target.effects[PBEffects::Trapping] == 0

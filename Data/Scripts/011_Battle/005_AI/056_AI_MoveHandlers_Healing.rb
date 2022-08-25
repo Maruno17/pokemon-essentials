@@ -273,6 +273,11 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsExplosive",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.add("UserFaintsPowersUpInMistyTerrainExplosive",
+  proc { |power, move, user, target, ai, battle|
+    next power * 3 / 2 if battle.field.terrain == :Misty
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsPowersUpInMistyTerrainExplosive",
   proc { |score, move, user, target, ai, battle|
     reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
@@ -292,7 +297,11 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsPowersUpInMistyTerrainExplo
   }
 )
 
-# UserFaintsFixedDamageUserHP
+Battle::AI::Handlers::MoveBasePower.add("UserFaintsFixedDamageUserHP",
+  proc { |power, move, user, target, ai, battle|
+    next user.hp
+  }
+}
 
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsLowerTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|

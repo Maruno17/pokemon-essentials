@@ -58,6 +58,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RestoreUserConsumedItem",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.add("RemoveTargetItem",
+  proc { |power, move, user, target, ai, battle|
+    next move.pbBaseDamage(power, user.battler, target.battler)
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("RemoveTargetItem",
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.high_skill?
@@ -186,6 +191,11 @@ Battle::AI::Handlers::MoveEffectScore.add("UserConsumeTargetBerry",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.add("ThrowUserItemAtTarget",
+  proc { |power, move, user, target, ai, battle|
+    next move.pbBaseDamage(power, user.battler, target.battler)
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("ThrowUserItemAtTarget",
   proc { |score, move, user, target, ai, battle|
     next 0 if !user.item || !user.item_active? ||

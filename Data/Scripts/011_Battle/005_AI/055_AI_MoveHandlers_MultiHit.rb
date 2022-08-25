@@ -2,8 +2,14 @@
 #
 #===============================================================================
 
-# HitTwoTimes
+Battle::AI::Handlers::MoveBasePower.add("HitTwoTimes",
+  proc { |power, move, user, target, ai, battle|
+    next power * move.pbNumHits(user.battler, [target.battler])
+  }
+}
 
+Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
+                                         "HitTwoTimesPoisonTarget")
 Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
   proc { |score, move, user, target, ai, battle|
     next 0 if !target.battler.pbCanPoison?(user.battler, false)
@@ -22,16 +28,31 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
+                                         "HitTwoTimesFlinchTarget")
 Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesFlinchTarget",
   proc { |score, move, user, target, ai, battle|
     next score + 30 if target.effects[PBEffects::Minimize]
   }
 )
 
-# HitTwoTimesTargetThenTargetAlly
+Battle::AI::Handlers::MoveBasePower.add("HitTwoTimesTargetThenTargetAlly",
+  proc { |power, move, user, target, ai, battle|
+    next power * 2
+  }
+}
 
-# HitThreeTimesPowersUpWithEachHit
+Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesPowersUpWithEachHit",
+  proc { |power, move, user, target, ai, battle|
+    next power * 6   # Hits do x1, x2, x3 ret in turn, for x6 in total
+  }
+}
 
+Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesAlwaysCriticalHit",
+  proc { |power, move, user, target, ai, battle|
+    next power * move.pbNumHits(user.battler, [target.battler])
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("HitThreeTimesAlwaysCriticalHit",
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.high_skill?
@@ -41,10 +62,29 @@ Battle::AI::Handlers::MoveEffectScore.add("HitThreeTimesAlwaysCriticalHit",
   }
 )
 
-# HitTwoToFiveTimes
+Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimes",
+  proc { |power, move, user, target, ai, battle|
+    next power * 5 if user.has_active_ability?(:SKILLLINK)
+    next power * 31 / 10   # Average damage dealt
+  }
+}
 
-# HitTwoToFiveTimesOrThreeForAshGreninja
+Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesOrThreeForAshGreninja",
+  proc { |power, move, user, target, ai, battle|
+    if user.battler.isSpecies?(:GRENINJA) && user.battler.form == 2
+      next move.pbBaseDamage(power, user.battler, target.battler) * move.pbNumHits(user.battler, [target.battler])
+    end
+    next power * 5 if user.has_active_ability?(:SKILLLINK)
+    next power * 31 / 10   # Average damage dealt
+  }
+}
 
+Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1",
+  proc { |power, move, user, target, ai, battle|
+    next power * 5 if user.has_active_ability?(:SKILLLINK)
+    next power * 31 / 10   # Average damage dealt
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1",
   proc { |score, move, user, target, ai, battle|
     aspeed = user.rough_stat(:SPEED)
@@ -59,13 +99,25 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoToFiveTimesRaiseUserSpd1LowerUs
   }
 )
 
-# HitOncePerUserTeamMember
+Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1",
+  proc { |power, move, user, target, ai, battle|
+    ret = 0
+    ai.battle.eachInTeamFromBattlerIndex(user.index) do |pkmn, _i|
+      ret += 5 + (pkmn.baseStats[:ATTACK] / 10)
+    end
+    next ret
+  }
+}
 
 # AttackAndSkipNextTurn
 
 # TwoTurnAttack
 
-# TwoTurnAttackOneTurnInSun
+Battle::AI::Handlers::MoveBasePower.add("TwoTurnAttackOneTurnInSun",
+  proc { |power, move, user, target, ai, battle|
+    next move.pbBaseDamageMultiplier(power, user.battler, target.battler)
+  }
+}
 
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
@@ -184,8 +236,17 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
 
 # MultiTurnAttackConfuseUserAtEnd
 
-# MultiTurnAttackPowersUpEachTurn
+Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackPowersUpEachTurn",
+  proc { |power, move, user, target, ai, battle|
+    next power * 2 if user.effects[PBEffects::DefenseCurl]
+  }
+}
 
+Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackBideThenReturnDoubleDamage",
+  proc { |power, move, user, target, ai, battle|
+    next 40   # Representative value
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("MultiTurnAttackBideThenReturnDoubleDamage",
   proc { |score, move, user, target, ai, battle|
     if user.hp <= user.totalhp / 4

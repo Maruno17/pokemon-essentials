@@ -29,7 +29,7 @@ class Battle::AI
       choices.each_with_index do |c, i|
         logMsg += "#{battler.moves[c[0]].name}=#{c[1]}"
         logMsg += " (target #{c[2]})" if c[2] >= 0
-        logMsg += ", " if i < choices.length-1
+        logMsg += ", " if i < choices.length - 1
       end
       PBDebug.log(logMsg)
     end
@@ -117,8 +117,8 @@ class Battle::AI
       score = pbGetStatusMoveBaseScore
     end
     # Modify the score according to the move's effect
-    score = Battle::AI::Handlers.apply_move_effect_score(@move.move.function,
-       score, @move.move, user_battler, target_battler, self, @battle)
+    score = Battle::AI::Handlers.apply_move_effect_score(@move.function,
+       score, @move, @user, @target, self, @battle)
 
     # A score of 0 here means it absolutely should not be used
     return 0 if score <= 0
@@ -327,8 +327,7 @@ class Battle::AI
     target_battler = @target.battler
 
     # Calculate how much damage the move will do (roughly)
-    base_damage = @move.base_power
-    calc_damage = pbRoughDamage(@move, @target, base_damage)
+    calc_damage = @move.rough_damage
 
     # TODO: Maybe move this check elsewhere? Note that Reborn's base score does
     #       not include this halving, but the predicted damage does.
@@ -362,6 +361,9 @@ class Battle::AI
     return damage_percentage.to_i
   end
 
+  #=============================================================================
+  #
+  #=============================================================================
   def pbGetStatusMoveBaseScore
     # TODO: Call @target.immune_to_move? here too, not just for damaging moves
     #       (only if this status move will be affected).

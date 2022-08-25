@@ -73,14 +73,12 @@ module Battle::AI::Handlers
   # Move failure check
 
   def self.apply_move_effect_score(function_code, score, *args)
-    function_code = function_code.to_sym
     ret = MoveEffectScore.trigger(function_code, score, *args)
     return (ret.nil?) ? score : ret
   end
 
   def self.get_base_power(function_code, power, *args)
-    function_code = function_code.to_sym
-    ret = MoveBasePower.trigger(function_code, *args)
+    ret = MoveBasePower.trigger(function_code, power, *args)
     return (ret.nil?) ? power : ret
   end
 end

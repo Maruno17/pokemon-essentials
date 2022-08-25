@@ -920,6 +920,11 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense1",
   }
 )
 
+Battle::AI::Handlers::MoveBasePower.add("LowerTargetDefense1PowersUpInGravity",
+  proc { |power, move, user, target, ai, battle|
+    next move.pbBaseDamage(power, user.battler, target.battler)
+  }
+}
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense1PowersUpInGravity",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
@@ -1088,6 +1093,12 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed1",
 
 Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetSpeed1",
                                            "LowerTargetSpeed1WeakerInGrassyTerrain")
+
+Battle::AI::Handlers::MoveBasePower.add("LowerTargetSpeed1WeakerInGrassyTerrain",
+  proc { |power, move, user, target, ai, battle|
+    next move.pbBaseDamage(power, user.battler, target.battler)
+  }
+}
 
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed1MakeTargetWeakerToFire",
   proc { |score, move, user, target, ai, battle|
@@ -1394,6 +1405,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserCopyTargetStatStages",
   }
 )
 
+# TODO: Account for stat theft before damage calculation.
 Battle::AI::Handlers::MoveEffectScore.add("UserStealTargetPositiveStatStages",
   proc { |score, move, user, target, ai, battle|
     numStages = 0
