@@ -9,12 +9,9 @@ class Battle::AI
     choices = []
     # TODO: Split this into two, the first part being the calculation of all
     #       predicted damages and the second part being the score calculations
-    #       (which are based on the predicted damages). Note that this requires
-    #       saving each of the scoresAndTargets entries in here rather than in
-    #       def pbRegisterMoveTrainer, and only at the very end are they
-    #       whittled down to one per move which are chosen from. Multi-target
-    #       moves could be fiddly since damages should be calculated for each
-    #       target but they're all related.
+    #       (which are based on the predicted damages). Multi-target moves could
+    #       be fiddly since damages should be calculated for each target but
+    #       they're all related.
     battler.eachMoveWithIndex do |_m, i|
       next if !@battle.pbCanChooseMove?(battler.index, i, false)
       if @user.wild?
@@ -73,17 +70,11 @@ class Battle::AI
       choices.push([idxMove, totalScore, -1]) if totalScore > 0
     else
       # If move affects one battler and you have to choose which one
-      scoresAndTargets = []
       @battle.allBattlers.each do |b|
         next if !@battle.pbMoveCanTarget?(battler.index, b.index, target_data)
         next if target_data.targets_foe && !battler.opposes?(b)
         score = pbGetMoveScore(move, b)
-        scoresAndTargets.push([score, b.index]) if score > 0
-      end
-      if scoresAndTargets.length > 0
-        # Get the one best target for the move
-        scoresAndTargets.sort! { |a, b| b[0] <=> a[0] }
-        choices.push([idxMove, scoresAndTargets[0][0], scoresAndTargets[0][1]])
+        choices.push([idxMove, score, b.index]) if score > 0
       end
     end
   end
@@ -466,7 +457,7 @@ class Battle::AI
          "UserTargetSwapBaseSpeed",
          "RedirectAllMovesToTarget",
          "TargetUsesItsLastUsedMoveAgain"
-      return 5
+      return 55
     when "RaiseUserAttack1",
          "RaiseUserDefense1",
          "RaiseUserDefense1CurlUpUser",
@@ -490,7 +481,7 @@ class Battle::AI
          "LowerTargetAtkSpAtk1",
          "LowerTargetSpAtk1",
          "TargetNextFireMoveDamagesTarget"
-      return 10
+      return 60
     when "SleepTarget",
          "SleepTargetIfUserDarkrai",
          "SleepTargetChangeUserMeloettaForm",
@@ -527,7 +518,7 @@ class Battle::AI
          "LowerTargetAtkSpAtk1SwitchOutUser",
          "RaisePlusMinusUserAndAlliesAtkSpAtk1",
          "HealTargetDependingOnGrassyTerrain"
-      return 15
+      return 65
     when "SleepTarget",
          "SleepTargetChangeUserMeloettaForm",
          "SleepTargetNextTurn",
@@ -553,7 +544,7 @@ class Battle::AI
          "TargetMovesBecomeElectric",
          "NormalMovesBecomeElectric",
          "PoisonTargetLowerTargetSpeed1"
-      return 20
+      return 70
     when "BadPoisonTarget",
          "ParalyzeTarget",
          "BurnTarget",
@@ -585,7 +576,7 @@ class Battle::AI
          "InvertTargetStatStages",
          "HealUserByTargetAttackLowerTargetAttack1",
          "HealUserDependingOnSandstorm"
-      return 25
+      return 75
     when "ParalyzeTarget",
          "ParalyzeTargetIfNotTypeImmune",
          "RaiseUserAtkDef1",
@@ -606,7 +597,7 @@ class Battle::AI
          "StartMistyTerrain",
          "StartPsychicTerrain",
          "CureTargetStatusHealUserHalfOfTotalHP"
-      return 30
+      return 80
     when "CureUserPartyStatus",
          "RaiseUserAttack2",
          "RaiseUserSpAtk2",
@@ -617,18 +608,18 @@ class Battle::AI
          "ProtectUserSideFromDamagingMovesIfUserFirstTurn",
          "ProtectUserFromDamagingMovesKingsShield",
          "ProtectUserBanefulBunker"
-      return 35
+      return 85
     when "RaiseUserAtkSpd1",
          "RaiseUserSpAtkSpDefSpd1",
          "LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2",
          "RaiseUserAtk1Spd2",
          "TwoTurnAttackRaiseUserSpAtkSpDefSpd2"
-      return 40
+      return 90
     when "SleepTarget",
          "SleepTargetChangeUserMeloettaForm",
          "AddStickyWebToFoeSide",
          "StartWeakenDamageAgainstUserSideIfHail"
-      return 60
+      return 100
     end
     # "DoesNothingUnusableInGravity",
     # "StartUserSideImmunityToInflictedStatus",
@@ -644,7 +635,7 @@ class Battle::AI
     # "TargetActsNext",
     # "TargetActsLast",
     # "ProtectUserSideFromStatusMoves"
-    return 0
+    return 100
   end
 
   #=============================================================================
@@ -654,48 +645,33 @@ class Battle::AI
   def pbChooseMove(choices)
     user_battler = @user.battler
 
-    # Figure out useful information about the choices
-    totalScore = 0
-    maxScore   = 0
-    choices.each do |c|
-      totalScore += c[1]
-      maxScore = c[1] if maxScore < c[1]
+    # If there are no calculated choices, pick one at random
+    if choices.length == 0
+      user_battler.eachMoveWithIndex do |_m, i|
+        next if !@battle.pbCanChooseMove?(user_battler.index, i, false)
+        choices.push([i, 100, -1])   # Move index, score, target
+      end
+      if choices.length == 0   # No moves are physically possible to use; use Struggle
+        @battle.pbAutoChooseMove(user_battler.index)
+        PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will auto-use a move or Struggle")
+        return
+      end
+      PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) doesn't want to use any moves; picking one at random")
     end
 
-    # Find any preferred moves and just choose from them
-    if @trainer.high_skill? && maxScore > 100
-      stDev = pbStdDev(choices)
-      if stDev >= 40 && pbAIRandom(100) < 90
-        preferredMoves = []
-        choices.each do |c|
-          next if c[1] < 200 && c[1] < maxScore * 0.8
-          preferredMoves.push(c)
-          preferredMoves.push(c) if c[1] == maxScore   # Doubly prefer the best move
-        end
-        if preferredMoves.length > 0
-          m = preferredMoves[pbAIRandom(preferredMoves.length)]
-          PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) prefers #{user_battler.moves[m[0]].name}")
-          @battle.pbRegisterMove(user_battler.index, m[0], false)
-          @battle.pbRegisterTarget(user_battler.index, m[2]) if m[2] >= 0
-          return
-        end
-      end
-    end
+    # Figure out useful information about the choices
+    max_score = 0
+    choices.each { |c| max_score = c[1] if max_score < c[1] }
 
     # Decide whether all choices are bad, and if so, try switching instead
     if @trainer.high_skill? && @user.can_switch_lax?
       badMoves = false
-      if (maxScore <= 20 && user_battler.turnCount > 2) ||
-         (maxScore <= 40 && user_battler.turnCount > 5)
+      if (max_score <= 20 && user_battler.turnCount > 2) ||
+         (max_score <= 40 && user_battler.turnCount > 5)
         badMoves = true if pbAIRandom(100) < 80
       end
-      if !badMoves && totalScore < 100 && user_battler.turnCount > 1
-        badMoves = true
-        choices.each do |c|
-          next if !user_battler.moves[c[0]].damagingMove?
-          badMoves = false
-          break
-        end
+      if !badMoves && max_score < 60 && user_battler.turnCount > 1
+        badMoves = choices.none? { |c| user_battler.moves[c[0]].damagingMove? }
         badMoves = false if badMoves && pbAIRandom(100) < 10
       end
       if badMoves && pbEnemyShouldWithdrawEx?(true)
@@ -706,20 +682,13 @@ class Battle::AI
       end
     end
 
-    # If there are no calculated choices, pick one at random
-    if choices.length == 0
-      PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) doesn't want to use any moves; picking one at random")
-      user_battler.eachMoveWithIndex do |_m, i|
-        next if !@battle.pbCanChooseMove?(user_battler.index, i, false)
-        choices.push([i, 100, -1])   # Move index, score, target
-      end
-      if choices.length == 0   # No moves are physically possible to use; use Struggle
-        @battle.pbAutoChooseMove(user_battler.index)
-      end
-    end
+    # Calculate a minimum score threshold and reduce all move scores by it
+    threshold = (max_score * 0.85).floor
+    choices.each { |c| c[1] = [c[1] - threshold, 0].max }
+    total_score = choices.sum { |c| c[1] }
 
-    # Randomly choose a move from the choices and register it
-    randNum = pbAIRandom(totalScore)
+    # Pick a move randomly from choices weighted by their scores
+    randNum = pbAIRandom(total_score)
     choices.each do |c|
       randNum -= c[1]
       next if randNum >= 0
@@ -727,6 +696,7 @@ class Battle::AI
       @battle.pbRegisterTarget(user_battler.index, c[2]) if c[2] >= 0
       break
     end
+
     # Log the result
     if @battle.choices[user_battler.index][2]
       PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will use #{@battle.choices[user_battler.index][2].name}")

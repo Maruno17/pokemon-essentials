@@ -1,13 +1,15 @@
 #===============================================================================
 #
 #===============================================================================
-
 Battle::AI::Handlers::MoveBasePower.add("HitTwoTimes",
   proc { |power, move, user, target, ai, battle|
     next power * move.pbNumHits(user.battler, [target.battler])
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
                                          "HitTwoTimesPoisonTarget")
 Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
@@ -28,6 +30,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
                                          "HitTwoTimesFlinchTarget")
 Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesFlinchTarget",
@@ -36,18 +41,27 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesFlinchTarget",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoTimesTargetThenTargetAlly",
   proc { |power, move, user, target, ai, battle|
     next power * 2
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesPowersUpWithEachHit",
   proc { |power, move, user, target, ai, battle|
     next power * 6   # Hits do x1, x2, x3 ret in turn, for x6 in total
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesAlwaysCriticalHit",
   proc { |power, move, user, target, ai, battle|
     next power * move.pbNumHits(user.battler, [target.battler])
@@ -62,6 +76,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HitThreeTimesAlwaysCriticalHit",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimes",
   proc { |power, move, user, target, ai, battle|
     next power * 5 if user.has_active_ability?(:SKILLLINK)
@@ -69,6 +86,9 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimes",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesOrThreeForAshGreninja",
   proc { |power, move, user, target, ai, battle|
     if user.battler.isSpecies?(:GRENINJA) && user.battler.form == 2
@@ -79,6 +99,9 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesOrThreeForAshGreninja"
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1",
   proc { |power, move, user, target, ai, battle|
     next power * 5 if user.has_active_ability?(:SKILLLINK)
@@ -99,6 +122,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoToFiveTimesRaiseUserSpd1LowerUs
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HitOncePerUserTeamMember",
   proc { |move, user, target, ai, battle|
     will_fail = true
@@ -120,16 +146,28 @@ Battle::AI::Handlers::MoveBasePower.add("HitOncePerUserTeamMember",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # AttackAndSkipNextTurn
 
+#===============================================================================
+#
+#===============================================================================
 # TwoTurnAttack
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("TwoTurnAttackOneTurnInSun",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamageMultiplier(power, user.battler, target.battler)
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
     if target.battler.pbCanParalyze?(user.battler, false)
@@ -151,6 +189,9 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
   proc { |score, move, user, target, ai, battle|
     next 0 if !target.battler.pbCanBurn?(user.battler, false)
@@ -160,6 +201,9 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
   proc { |score, move, user, target, ai, battle|
     score += 20 if user.effects[PBEffects::FocusEnergy] > 0
@@ -169,6 +213,9 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2",
   proc { |move, user, target, ai, battle|
     next true if !user.battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move) &&
@@ -209,6 +256,9 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2"
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserDefense1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
@@ -224,6 +274,9 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserDefense1"
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
   proc { |score, move, user, target, ai, battle|
     aspeed = user.rough_stat(:SPEED)
@@ -238,14 +291,29 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # TwoTurnAttackInvulnerableUnderground
 
+#===============================================================================
+#
+#===============================================================================
 # TwoTurnAttackInvulnerableUnderwater
 
+#===============================================================================
+#
+#===============================================================================
 # TwoTurnAttackInvulnerableInSky
 
+#===============================================================================
+#
+#===============================================================================
 # TwoTurnAttackInvulnerableInSkyParalyzeTarget
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackInvulnerableInSkyTargetCannotAct",
   proc { |move, user, target, ai, battle|
     next true if !target.opposes?(user)
@@ -255,18 +323,33 @@ Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackInvulnerableInSkyTarget
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # TwoTurnAttackInvulnerableRemoveProtections
 
+#===============================================================================
+#
+#===============================================================================
 # MultiTurnAttackPreventSleeping
 
+#===============================================================================
+#
+#===============================================================================
 # MultiTurnAttackConfuseUserAtEnd
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackPowersUpEachTurn",
   proc { |power, move, user, target, ai, battle|
     next power * 2 if user.effects[PBEffects::DefenseCurl]
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackBideThenReturnDoubleDamage",
   proc { |power, move, user, target, ai, battle|
     next 40   # Representative value

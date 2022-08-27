@@ -7,6 +7,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("FleeFromBattle",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserStatusMove",
   proc { |move, user, target, ai, battle|
     if user.wild?
@@ -42,6 +45,9 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserDamagingMove",
   proc { |score, move, user, target, ai, battle|
     next 0 if !battle.pbCanChooseNonActive?(user.index) ||
@@ -49,6 +55,9 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserDamagingMove",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetAtkSpAtk1SwitchOutUser",
   proc { |move, user, target, ai, battle|
     will_fail = true
@@ -69,6 +78,9 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkSpAtk1SwitchOutUser",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserPassOnEffects",
   proc { |move, user, target, ai, battle|
     next true if !battle.pbCanChooseNonActive?(user.index)
@@ -100,6 +112,9 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutTargetStatusMove",
   proc { |move, user, target, ai, battle|
     next true if target.has_active_ability?(:SUCTIONCUPS) ||
@@ -126,6 +141,9 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetStatusMove",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetDamagingMove",
   proc { |score, move, user, target, ai, battle|
     if !target.effects[PBEffects::Ingrain] &&
@@ -138,12 +156,18 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetDamagingMove",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("BindTarget",
   proc { |score, move, user, target, ai, battle|
     next score + 40 if target.effects[PBEffects::Trapping] == 0
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("BindTargetDoublePowerIfTargetUnderwater",
   proc { |power, move, user, target, ai, battle|
     next move.pbModifyDamage(power, user.battler, target.battler)
@@ -155,6 +179,9 @@ Battle::AI::Handlers::MoveEffectScore.add("BindTargetDoublePowerIfTargetUnderwat
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TrapTargetInBattle",
   proc { |move, user, target, ai, battle|
     if move.statusMove?
@@ -164,6 +191,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("TrapTargetInBattle",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TrapTargetInBattle",
   proc { |move, user, target, ai, battle|
     if move.statusMove?
@@ -181,6 +211,9 @@ Battle::AI::Handlers::MoveEffectScore.add("TrapTargetInBattleLowerTargetDefSpDef
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TrapUserAndTargetInBattle",
   proc { |score, move, user, target, ai, battle|
     if target.effects[PBEffects::JawLock] < 0
@@ -190,14 +223,23 @@ Battle::AI::Handlers::MoveEffectScore.add("TrapUserAndTargetInBattle",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TrapAllBattlersInBattleForOneTurn",
   proc { |move, user, target, ai, battle|
     next true if battle.field.effects[PBEffects::FairyLock] > 0
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # PursueSwitchingFoe
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UsedAfterUserTakesPhysicalDamage",
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.medium_skill?
@@ -213,6 +255,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterUserTakesPhysicalDamage",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.medium_skill?
@@ -225,10 +270,19 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # TargetActsNext
 
+#===============================================================================
+#
+#===============================================================================
 # TargetActsLast
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TargetUsesItsLastUsedMoveAgain",
   proc { |move, user, target, ai, battle|
     next true if !target.battler.lastRegularMoveUsed ||
@@ -250,8 +304,14 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetUsesItsLastUsedMoveAgain",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # StartSlowerBattlersActFirst
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("HigherPriorityInGrassyTerrain",
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.medium_skill? && @battle.field.terrain == :Grassy
@@ -261,6 +321,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HigherPriorityInGrassyTerrain",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerPPOfTargetLastMoveBy3",
   proc { |score, move, user, target, ai, battle|
     last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
@@ -271,6 +334,9 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerPPOfTargetLastMoveBy3",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerPPOfTargetLastMoveBy4",
   proc { |move, user, target, ai, battle|
     last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
@@ -283,6 +349,9 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerPPOfTargetLastMoveBy4",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Disable] > 0 || !target.battler.lastRegularMoveUsed
@@ -298,6 +367,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetLastMoveUsed",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetUsingSameMoveConsecutively",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Torment]
@@ -310,6 +382,9 @@ Battle::AI::Handlers::MoveEffectScore.add("DisableTargetUsingSameMoveConsecutive
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetUsingDifferentMove",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Encore] > 0
@@ -344,6 +419,9 @@ Battle::AI::Handlers::MoveEffectScore.add("DisableTargetUsingDifferentMove",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetStatusMoves",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Taunt] > 0
@@ -352,6 +430,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetStatusMoves",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetHealingMoves",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::HealBlock] > 0
@@ -359,6 +440,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetHealingMoves",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetSoundMoves",
   proc { |score, move, user, target, ai, battle|
     if target.effects[PBEffects::ThroatChop] == 0 && ai.trainer.high_skill?
@@ -374,12 +458,18 @@ Battle::AI::Handlers::MoveEffectScore.add("DisableTargetSoundMoves",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetMovesKnownByUser",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Imprison]
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
   proc { |move, user, target, ai, battle|
     next true if battle.allBattlers.none? { |b| b.hp > 1 }
@@ -394,6 +484,9 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTur
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfHP",
   proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
@@ -402,6 +495,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfHP",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartShadowSkyWeather")
 Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
@@ -415,6 +511,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RemoveAllScreens",
   proc { |move, user, target, ai, battle|
     will_fail = true

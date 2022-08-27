@@ -17,6 +17,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserFullyAndFallAsleep",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
     next true if !user.battler.canHeal?
@@ -30,6 +33,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHP",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
                                             "HealUserDependingOnWeather")
 Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnWeather",
@@ -47,6 +53,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnWeather",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
                                             "HealUserDependingOnSandstorm")
 Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnSandstorm",
@@ -58,6 +67,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnSandstorm",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
                                             "HealUserHalfOfTotalHPLoseFlyingTypeThisTurn")
 Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHPLoseFlyingTypeThisTurn",
@@ -68,6 +80,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHPLoseFlyingTypeTh
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CureTargetStatusHealUserHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
     next true if !user.battler.canHeal?
@@ -82,6 +97,9 @@ Battle::AI::Handlers::MoveEffectScore.add("CureTargetStatusHealUserHalfOfTotalHP
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserByTargetAttackLowerTargetAttack1",
   proc { |move, user, target, ai, battle|
     if target.has_active_ability?(:CONTRARY)
@@ -114,6 +132,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByTargetAttackLowerTargetAtta
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDone",
   proc { |score, move, user, target, ai, battle|
     if target.has_active_ability?(:LIQUIDOOZE)
@@ -125,6 +146,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDone",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserByHalfOfDamageDoneIfTargetAsleep",
   proc { |move, user, target, ai, battle|
     next true if !target.battler.asleep?
@@ -141,6 +165,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDoneIfTargetAsl
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("HealUserByThreeQuartersOfDamageDone",
   proc { |score, move, user, target, ai, battle|
     if target.has_active_ability?(:LIQUIDOOZE)
@@ -152,6 +179,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByThreeQuartersOfDamageDone",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserAndAlliesQuarterOfTotalHP",
   proc { |move, user, target, ai, battle|
     next true if battle.allSameSideBattlers(user.battler).none? { |b| b.canHeal? }
@@ -171,6 +201,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHP",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserAndAlliesQuarterOfTotalHPCureStatus",
   proc { |move, user, target, ai, battle|
     next true if battle.allSameSideBattlers(user.battler).none? { |b| b.canHeal? || b.status != :NONE }
@@ -191,6 +224,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHPCure
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealTargetHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
     next true if !target.battler.canHeal?
@@ -206,6 +242,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealTargetHalfOfTotalHP",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealTargetHalfOfTotalHP",
                                             "HealTargetDependingOnGrassyTerrain")
 Battle::AI::Handlers::MoveEffectScore.add("HealTargetDependingOnGrassyTerrain",
@@ -221,24 +260,36 @@ Battle::AI::Handlers::MoveEffectScore.add("HealTargetDependingOnGrassyTerrain",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserPositionNextTurn",
   proc { |move, user, target, ai, battle|
     next true if battle.positions[user.index].effects[PBEffects::Wish] > 0
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurn",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::AquaRing]
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurnTrapUserInBattle",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Ingrain]
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartDamageTargetEachTurnIfTargetAsleep",
   proc { |move, user, target, ai, battle|
     next true if !target.battler.asleep? || target.effects[PBEffects::Nightmare]
@@ -256,6 +307,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartDamageTargetEachTurnIfTargetAsle
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartLeechSeedTarget",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::LeechSeed] >= 0
@@ -275,12 +329,18 @@ Battle::AI::Handlers::MoveEffectScore.add("StartLeechSeedTarget",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
     next 0 if user.hp <= user.totalhp / 2
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserLosesHalfOfTotalHPExplosive",
   proc { |move, user, target, ai, battle|
     next true if battle.pbCheckGlobalAbility(:DAMP)
@@ -301,6 +361,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHPExplosive",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("UserLosesHalfOfTotalHPExplosive",
                                             "UserFaintsExplosive")
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsExplosive",
@@ -318,6 +381,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsExplosive",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("UserLosesHalfOfTotalHPExplosive",
                                             "UserFaintsPowersUpInMistyTerrainExplosive")
 Battle::AI::Handlers::MoveBasePower.add("UserFaintsPowersUpInMistyTerrainExplosive",
@@ -340,12 +406,18 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsPowersUpInMistyTerrainExplo
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("UserFaintsFixedDamageUserHP",
   proc { |power, move, user, target, ai, battle|
     next user.hp
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsLowerTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|
     if !target.battler.pbCanLowerStatStage?(:ATTACK, user.battler) &&
@@ -362,6 +434,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsLowerTargetAtkSpAtk2",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserFaintsHealAndCureReplacement",
   proc { |move, user, target, ai, battle|
     next true if !battle.pbCanChooseNonActive?(user.index)
@@ -373,11 +448,17 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsHealAndCureReplacement",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("UserFaintsHealAndCureReplacement",
                                             "UserFaintsHealAndCureReplacementRestorePP")
 Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsHealAndCureReplacement",
                                            "UserFaintsHealAndCureReplacementRestorePP")
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartPerishCountsForAllBattlers",
   proc { |move, user, target, ai, battle|
     next target.effects[PBEffects::PerishSong] > 0
@@ -392,6 +473,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPerishCountsForAllBattlers",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AttackerFaintsIfUserFaints",
   proc { |move, user, target, ai, battle|
     next Settings::MECHANICS_GENERATION >= 7 && user.effects[PBEffects::DestinyBondPrevious]
@@ -406,6 +490,9 @@ Battle::AI::Handlers::MoveEffectScore.add("AttackerFaintsIfUserFaints",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("SetAttackerMovePPTo0IfUserFaints",
   proc { |score, move, user, target, ai, battle|
     score += 50

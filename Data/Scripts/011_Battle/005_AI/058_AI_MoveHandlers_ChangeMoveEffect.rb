@@ -7,12 +7,18 @@ Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToTarget",
   proc { |score, move, user, target, ai, battle|
     next 0 if user.battler.allAllies.length == 0
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("CannotBeRedirected",
   proc { |score, move, user, target, ai, battle|
     redirection = false
@@ -32,12 +38,18 @@ Battle::AI::Handlers::MoveEffectScore.add("CannotBeRedirected",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("RandomlyDamageOrHealTarget",
   proc { |power, move, user, target, ai, battle|
     next 50   # Average power, ish
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealAllyOrDamageFoe",
   proc { |move, user, target, ai, battle|
     next true if !target.opposes?(user) && target.battler.canHeal?
@@ -53,6 +65,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HealAllyOrDamageFoe",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |move, user, target, ai, battle|
     if user.has_type?(:GHOST)
@@ -85,8 +100,14 @@ Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAt
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # EffectDependsOnEnvironment
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitsAllFoesAndPowersUpInPsychicTerrain",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
@@ -98,6 +119,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HitsAllFoesAndPowersUpInPsychicTerrai
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TargetNextFireMoveDamagesTarget",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Powder]
@@ -116,10 +140,19 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetNextFireMoveDamagesTarget",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # DoublePowerAfterFusionFlare
 
+#===============================================================================
+#
+#===============================================================================
 # DoublePowerAfterFusionBolt
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PowerUpAllyMove",
   proc { |move, user, target, ai, battle|
     next true if target.fainted? || target.effects[PBEffects::HelpingHand]
@@ -132,6 +165,9 @@ Battle::AI::Handlers::MoveEffectScore.add("PowerUpAllyMove",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterPhysicalDamage",
   proc { |power, move, user, target, ai, battle|
     next 60   # Representative value
@@ -155,6 +191,9 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterSpecialDamage",
   proc { |power, move, user, target, ai, battle|
     next 60   # Representative value
@@ -178,6 +217,9 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterDamagePlusHalf",
   proc { |power, move, user, target, ai, battle|
     next 60   # Representative value
@@ -189,6 +231,9 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserAddStockpileRaiseDefSpDef1",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Stockpile] >= 3
@@ -208,6 +253,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PowerDependsOnUserStockpile",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Stockpile] == 0
@@ -219,6 +267,9 @@ Battle::AI::Handlers::MoveBasePower.add("PowerDependsOnUserStockpile",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserDependingOnUserStockpile",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Stockpile] == 0
@@ -236,12 +287,24 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnUserStockpile",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # GrassPledge
 
+#===============================================================================
+#
+#===============================================================================
 # FirePledge
 
+#===============================================================================
+#
+#===============================================================================
 # WaterPledge
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
   proc { |move, user, target, ai, battle|
     next true if !battle.lastMoveUsed
@@ -249,6 +312,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsedByTarget",
   proc { |move, user, target, ai, battle|
     next true if !target.battle.lastRegularMoveUsed
@@ -261,12 +327,24 @@ Battle::AI::Handlers::MoveEffectScore.add("UseLastMoveUsedByTarget",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # UseMoveTargetIsAboutToUse
 
+#===============================================================================
+#
+#===============================================================================
 # UseMoveDependingOnEnvironment
 
+#===============================================================================
+#
+#===============================================================================
 # UseRandomMove
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseRandomMoveFromUserParty",
   proc { |move, user, target, ai, battle|
     will_fail = true
@@ -285,6 +363,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseRandomMoveFromUserParty",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseRandomUserMoveIfAsleep",
   proc { |move, user, target, ai, battle|
     next true if !user.battler.asleep?
@@ -304,10 +385,19 @@ Battle::AI::Handlers::MoveEffectScore.add("UseRandomUserMoveIfAsleep",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 # BounceBackProblemCausingStatusMoves
 
+#===============================================================================
+#
+#===============================================================================
 # StealAndUseBeneficialStatusMove
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Transform] || user.battler.pbHasMove?(move.id)
@@ -319,6 +409,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveThisBattleWithTargetLastM
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveWithTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Transform] || !user.battler.pbHasMove?(move.id)
