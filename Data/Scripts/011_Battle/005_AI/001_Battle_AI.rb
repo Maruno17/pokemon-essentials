@@ -63,14 +63,19 @@ end
 #
 #===============================================================================
 module Battle::AI::Handlers
-  MoveEffectScore = HandlerHash.new
-  MoveBasePower   = HandlerHash.new
+  MoveEffectScore  = HandlerHash.new
+  MoveBasePower    = HandlerHash.new
+  MoveFailureCheck = HandlerHash.new
   # Move type
   # Move accuracy
   # Move target
   # Move additional effect chance
   # Move unselectable check
   # Move failure check
+
+  def self.move_will_fail?(function_code, *args)
+    return MoveFailureCheck.trigger(function_code, *args) || false
+  end
 
   def self.apply_move_effect_score(function_code, score, *args)
     ret = MoveEffectScore.trigger(function_code, score, *args)

@@ -65,6 +65,13 @@ class Battle::AI::AIMove
 
   #=============================================================================
 
+  def rough_priority(user)
+    # TODO: More calculations here.
+    return @move.priority
+  end
+
+  #=============================================================================
+
   def type; return @move.type; end
 
   def rough_type
@@ -486,23 +493,23 @@ class Battle::AI::AIMove
     crit_stage = 0
     # Ability effects that alter critical hit rate
     if user.ability_active?
-      crit_stage = BattleHandlers.triggerCriticalCalcUserAbility(user_battler.ability,
+      crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(user_battler.ability,
          user_battler, target_battler, crit_stage)
       return -1 if crit_stage < 0
     end
     if !mold_breaker && target.ability_active?
-      crit_stage = BattleHandlers.triggerCriticalCalcTargetAbility(target_battler.ability,
+      crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target_battler.ability,
          user_battler, target_battler, crit_stage)
       return -1 if crit_stage < 0
     end
     # Item effects that alter critical hit rate
     if user.item_active?
-      crit_stage = BattleHandlers.triggerCriticalCalcUserItem(user_battler.item,
+      crit_stage = Battle::ItemEffects.triggerCriticalCalcFromUser(user_battler.item,
          user_battler, target_battler, crit_stage)
       return -1 if crit_stage < 0
     end
     if target.item_active?
-      crit_stage = BattleHandlers.triggerCriticalCalcTargetItem(user_battler.item,
+      crit_stage = Battle::ItemEffects.triggerCriticalCalcFromTarget(user_battler.item,
          user_battler, target_battler, crit_stage)
       return -1 if crit_stage < 0
     end

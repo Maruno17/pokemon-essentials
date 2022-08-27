@@ -137,7 +137,7 @@ class Battle::Move::RestoreUserConsumedItem < Battle::Move
   def canSnatch?; return true; end
 
   def pbMoveFailed?(user, targets)
-    if !user.recycleItem
+    if !user.recycleItem || user.item
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -317,6 +317,7 @@ class Battle::Move::UserConsumeBerryRaiseDefense2 < Battle::Move::StatUpMove
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
+    # TODO: Should this return super? It can consume the berry at this point.
     return super
   end
 

@@ -10,6 +10,7 @@
 #       the trainer's base money value.
 #
 # Skill flags:
+#   PredictMoveFailure
 #===============================================================================
 class Battle::AI::AITrainer
   attr_reader :side, :trainer_index
@@ -27,9 +28,9 @@ class Battle::AI::AITrainer
   end
 
   def set_up_skill
-    return if !@trainer
-    @skill = @trainer.skill_level
+    @skill = @trainer.skill_level if @trainer
     # TODO: Add skill flags depending on @skill.
+    @skill_flags.push("PredictMoveFailure") if @skill > 0
   end
 
   def has_skill_flag?(flag)

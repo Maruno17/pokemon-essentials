@@ -1,10 +1,15 @@
 #===============================================================================
 #
 #===============================================================================
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserAttack1",
+  proc { |move, user, target, ai, battle|
+    next true if move.statusMove? &&
+                 !user.battler.pbCanRaiseStatStage?(move.move.statUp[0], user.battler, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAttack1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next score - 90 if user.statStageAtMax?(:ATTACK)
       score -= user.stages[:ATTACK] * 20
       if ai.trainer.medium_skill?
         hasPhysicalAttack = false
@@ -35,6 +40,8 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAttack1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack1",
+                                            "RaiseUserAttack2")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAttack2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
@@ -72,13 +79,24 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAttack2",
 )
 
 Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAttack2",
-                                           "RaiseUserAttack2IfTargetFaints",
-                                           "RaiseUserAttack3",
+                                           "RaiseUserAttack2IfTargetFaints")
+
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack2",
+                                            "RaiseUserAttack3")
+Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAttack2",
+                                           "RaiseUserAttack3")
+
+Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAttack2IfTargetFaints",
                                            "RaiseUserAttack3IfTargetFaints")
 
+Battle::AI::Handlers::MoveFailureCheck.add("MaxUserAttackLoseHalfOfTotalHP",
+  proc { |move, user, target, ai, battle|
+    next true if user.hp <= [user.totalhp / 2, 1].max
+    next true if !user.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("MaxUserAttackLoseHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.statStageAtMax?(:ATTACK) || user.hp <= user.totalhp / 2
     score += (6 - user.stages[:ATTACK]) * 10
     if ai.trainer.medium_skill?
       hasPhysicalAttack = false
@@ -97,10 +115,11 @@ Battle::AI::Handlers::MoveEffectScore.add("MaxUserAttackLoseHalfOfTotalHP",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack1",
+                                            "RaiseUserDefense1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:DEFENSE)
       next score - user.stages[:DEFENSE] * 20
     elsif user.stages[:DEFENSE] < 0
       next score + 20
@@ -108,13 +127,16 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
+                                            "RaiseUserDefense1CurlUpUser")
 Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserDefense1",
                                            "RaiseUserDefense1CurlUpUser")
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
+                                            "RaiseUserDefense2")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:DEFENSE)
       score += 40 if user.turnCount == 0
       score -= user.stages[:DEFENSE] * 20
     else
@@ -125,10 +147,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
+                                            "RaiseUserDefense3")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense3",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:DEFENSE)
       score += 40 if user.turnCount == 0
       score -= user.stages[:DEFENSE] * 30
     else
@@ -139,10 +162,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense3",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack1",
+                                            "RaiseUserSpAtk1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtk1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:SPECIAL_ATTACK)
       score -= user.stages[:SPECIAL_ATTACK] * 20
       if ai.trainer.medium_skill?
         hasSpecicalAttack = false
@@ -173,10 +197,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtk1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpAtk1",
+                                            "RaiseUserSpAtk2")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtk2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:SPECIAL_ATTACK)
       score += 40 if user.turnCount == 0
       score -= user.stages[:SPECIAL_ATTACK] * 20
       if ai.trainer.medium_skill?
@@ -209,10 +234,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtk2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpAtk1",
+                                            "RaiseUserSpAtk3")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtk3",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:SPECIAL_ATTACK)
       score += 40 if user.turnCount == 0
       score -= user.stages[:SPECIAL_ATTACK] * 30
       if ai.trainer.medium_skill?
@@ -245,10 +271,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtk3",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
+                                            "RaiseUserSpDef1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:SPECIAL_DEFENSE)
       score += 40 if user.turnCount == 0
       score -= user.stages[:SPECIAL_DEFENSE] * 20
     else
@@ -259,10 +286,8 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1",
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserSpDef1",
-                                           "RaiseUserSpDef2",
-                                           "RaiseUserSpDef3")
-
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
+                                            "RaiseUserSpDef1PowerUpElectricMove")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1PowerUpElectricMove",
   proc { |score, move, user, target, ai, battle|
     foundMove = false
@@ -273,11 +298,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1PowerUpElectricMove",
     end
     score += 20 if foundMove
     if move.statusMove?
-      if user.statStageAtMax?(:SPECIAL_DEFENSE)
-        score -= 90
-      else
-        score -= user.stages[:SPECIAL_DEFENSE] * 20
-      end
+      score -= user.stages[:SPECIAL_DEFENSE] * 20
     elsif user.stages[:SPECIAL_DEFENSE] < 0
       score += 20
     end
@@ -285,10 +306,18 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1PowerUpElectricMove",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
+                                            "RaiseUserSpDef2",
+                                            "RaiseUserSpDef3")
+Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserSpDef1",
+                                           "RaiseUserSpDef2",
+                                           "RaiseUserSpDef3")
+
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
+                                            "RaiseUserSpeed1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:SPEED)
       score -= user.stages[:SPEED] * 10
       if ai.trainer.high_skill?
         aspeed = user.rough_stat(:SPEED)
@@ -302,10 +331,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed1",
+                                            "RaiseUserSpeed2")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:SPEED)
       score += 20 if user.turnCount == 0
       score -= user.stages[:SPEED] * 10
       if ai.trainer.high_skill?
@@ -321,14 +351,18 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed2",
+                                            "RaiseUserSpeed2LowerUserWeight",
+                                            "RaiseUserSpeed3")
 Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserSpeed2",
                                            "RaiseUserSpeed2LowerUserWeight",
                                            "RaiseUserSpeed3")
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed1",
+                                            "RaiseUserAccuracy1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAccuracy1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:ACCURACY)
       score += 40 if user.turnCount == 0
       score -= user.stages[:ACCURACY] * 20
     else
@@ -339,14 +373,18 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAccuracy1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAccuracy1",
+                                            "RaiseUserAccuracy2",
+                                            "RaiseUserAccuracy3")
 Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAccuracy1",
                                            "RaiseUserAccuracy2",
                                            "RaiseUserAccuracy3")
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAccuracy1",
+                                            "RaiseUserEvasion1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserEvasion1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:EVASION)
       score -= user.stages[:EVASION] * 10
     elsif user.stages[:EVASION] < 0
       score += 20
@@ -355,10 +393,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserEvasion1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserEvasion1",
+                                            "RaiseUserEvasion2")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserEvasion2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if user.statStageAtMax?(:EVASION)
       score += 40 if user.turnCount == 0
       score -= user.stages[:EVASION] * 10
     else
@@ -369,25 +408,41 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserEvasion2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserEvasion2",
+                                            "RaiseUserEvasion2MinimizeUser",
+                                            "RaiseUserEvasion3")
 Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserEvasion2",
                                            "RaiseUserEvasion2MinimizeUser",
                                            "RaiseUserEvasion3")
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserCriticalHitRate2",
+  proc { |move, user, target, ai, battle|
+    next true if user.effects[PBEffects::FocusEnergy] >= 2
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserCriticalHitRate2",
   proc { |score, move, user, target, ai, battle|
-    if move.statusMove?
-      next 0 if user.effects[PBEffects::FocusEnergy] >= 2
-      next score + 30
-    elsif user.effects[PBEffects::FocusEnergy] < 2
+    if move.statusMove? || user.effects[PBEffects::FocusEnergy] < 2
       next score + 30
     end
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserAtkDef1",
+  proc { |move, user, target, ai, battle|
+    if move.statusMove?
+      will_fail = true
+      (move.move.statUp.length / 2).times do |i|
+        next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
+        will_fail = false
+        break
+      end
+      next will_fail
+    end
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkDef1",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.statStageAtMax?(:ATTACK) &&
-                       user.statStageAtMax?(:DEFENSE)
     score -= user.stages[:ATTACK] * 10
     score -= user.stages[:DEFENSE] * 10
     if ai.trainer.medium_skill?
@@ -407,11 +462,10 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkDef1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkDef1",
+                                            "RaiseUserAtkDefAcc1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkDefAcc1",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.statStageAtMax?(:ATTACK) &&
-                       user.statStageAtMax?(:DEFENSE) &&
-                       user.statStageAtMax?(:ACCURACY)
     score -= user.stages[:ATTACK] * 10
     score -= user.stages[:DEFENSE] * 10
     score -= user.stages[:ACCURACY] * 10
@@ -432,10 +486,10 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkDefAcc1",
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkDefAcc1",
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkDef1",
+                                            "RaiseUserAtkSpAtk1")
+Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpAtk1",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.statStageAtMax?(:ATTACK) &&
-                       user.statStageAtMax?(:SPECIAL_ATTACK)
     score -= user.stages[:ATTACK] * 10
     score -= user.stages[:SPECIAL_ATTACK] * 10
     if ai.trainer.medium_skill?
@@ -458,9 +512,27 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkDefAcc1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
+                                            "RaiseUserAtkSpAtk1Or2InSun")
 Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAtkSpAtk1",
                                            "RaiseUserAtkSpAtk1Or2InSun")
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    (move.move.statUp.length / 2).times do |i|
+      next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
+      will_fail = false
+      break
+    end
+    (move.move.statDown.length / 2).times do |i|
+      next if !user.battler.pbCanLowerStatStage?(move.move.statDown[i * 2], user.battler, move.move)
+      will_fail = false
+      break
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2",
   proc { |score, move, user, target, ai, battle|
     score -= user.stages[:ATTACK] * 20
@@ -481,10 +553,10 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDef1RaiseUserAtkSpAtkSp
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
+                                            "RaiseUserAtkSpd1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpd1",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.statStageAtMax?(:ATTACK) &&
-                       user.statStageAtMax?(:SPEED)
     score += 40 if user.turnCount == 0   # Dragon Dance tends to be popular
     score -= user.stages[:ATTACK] * 10
     score -= user.stages[:SPEED] * 10
@@ -510,10 +582,10 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpd1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
+                                            "RaiseUserAtk1Spd2")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtk1Spd2",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.statStageAtMax?(:ATTACK) &&
-                       user.statStageAtMax?(:SPEED)
     score -= user.stages[:ATTACK] * 10
     score -= user.stages[:SPEED] * 10
     if ai.trainer.medium_skill?
@@ -538,10 +610,10 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtk1Spd2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
+                                            "RaiseUserAtkAcc1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkAcc1",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.statStageAtMax?(:ATTACK) &&
-                       user.statStageAtMax?(:ACCURACY)
     score -= user.stages[:ATTACK] * 10
     score -= user.stages[:ACCURACY] * 10
     if ai.trainer.medium_skill?
@@ -561,20 +633,20 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkAcc1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
+                                            "RaiseUserDefSpDef1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefSpDef1",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.statStageAtMax?(:DEFENSE) &&
-                       user.statStageAtMax?(:SPECIAL_DEFENSE)
     score -= user.stages[:DEFENSE] * 10
     score -= user.stages[:SPECIAL_DEFENSE] * 10
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
+                                            "RaiseUserSpAtkSpDef1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtkSpDef1",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.statStageAtMax?(:SPECIAL_ATTACK) &&
-                       user.statStageAtMax?(:SPECIAL_DEFENSE)
     score += 40 if user.turnCount == 0   # Calm Mind tends to be popular
     score -= user.stages[:SPECIAL_ATTACK] * 10
     score -= user.stages[:SPECIAL_DEFENSE] * 10
@@ -595,11 +667,10 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtkSpDef1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
+                                            "RaiseUserSpAtkSpDefSpd1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtkSpDefSpd1",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.statStageAtMax?(:SPECIAL_ATTACK) &&
-                       user.statStageAtMax?(:SPECIAL_DEFENSE) &&
-                       user.statStageAtMax?(:SPEED)
     score += 40 if user.turnCount == 0   # Calm Mind tends to be popular
     score -= user.stages[:SPECIAL_ATTACK] * 10
     score -= user.stages[:SPECIAL_DEFENSE] * 10
@@ -626,6 +697,8 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtkSpDefSpd1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
+                                            "RaiseUserMainStats1")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1",
   proc { |score, move, user, target, ai, battle|
     GameData::Stat.each_main_battle { |s| score += 10 if user.stages[s.id] < 0 }
@@ -642,17 +715,21 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1",
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1LoseThirdOfTotalHP",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.hp <= user.totalhp / 2
-    next 0 if user.has_active_ability?(:CONTRARY)
-    stats_maxed = true
-    GameData::Stat.each_main_battle do |s|
-      next if user.statStageAtMax?(s.id)
-      stats_maxed = false
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1LoseThirdOfTotalHP",
+  proc { |move, user, target, ai, battle|
+    next true if user.hp <= [user.totalhp / 3, 1].max
+    will_fail = true
+    (move.move.statUp.length / 2).times do |i|
+      next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
+      will_fail = false
       break
     end
-    next 0 if stats_maxed
+    next will_fail
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1LoseThirdOfTotalHP",
+  proc { |score, move, user, target, ai, battle|
+    next 0 if user.has_active_ability?(:CONTRARY)
     score += 30 if ai.trainer.high_skill? && user.hp >= user.totalhp * 0.75
     GameData::Stat.each_main_battle { |s| score += 10 if user.stages[s.id] <= 0 }
     if ai.trainer.medium_skill?
@@ -663,17 +740,21 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1LoseThirdOfTotalHP
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1TrapUserInBattle",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.effects[PBEffects::NoRetreat]
-    next 0 if user.has_active_ability?(:CONTRARY)
-    stats_maxed = true
-    GameData::Stat.each_main_battle do |s|
-      next if user.statStageAtMax?(s.id)
-      stats_maxed = false
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1TrapUserInBattle",
+  proc { |move, user, target, ai, battle|
+    next true if user.effects[PBEffects::NoRetreat]
+    will_fail = true
+    (move.move.statUp.length / 2).times do |i|
+      next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
+      will_fail = false
       break
     end
-    next 0 if stats_maxed
+    next will_fail
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1TrapUserInBattle",
+  proc { |score, move, user, target, ai, battle|
+    next 0 if user.has_active_ability?(:CONTRARY)
     if ai.trainer.high_skill?
       score -= 50 if user.hp <= user.totalhp / 2
       score += 30 if user.battler.trappedInBattle?
@@ -763,8 +844,19 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDefSpd1",
   }
 )
 
-# RaiseTargetAttack1
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAttack1",
+  proc { |move, user, target, ai, battle|
+    next true if move.statusMove? &&
+                 !target.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move)
+  }
+)
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAttack2ConfuseTarget",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
+                 !target.battler.pbCanConfuse?(user.battler, false, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetAttack2ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
     next score - 90 if !target.battler.pbCanConfuse?(user.battler, false)
@@ -772,6 +864,12 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetAttack2ConfuseTarget",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetSpAtk1ConfuseTarget",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move) &&
+                 !target.battler.pbCanConfuse?(user.battler, false, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetSpAtk1ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
     next score - 90 if !target.battler.pbCanConfuse?(user.battler, false)
@@ -779,31 +877,44 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetSpAtk1ConfuseTarget",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetSpDef1",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetSpDef1",
   proc { |score, move, user, target, ai, battle|
-    next score + 30 if target.statStageAtMax?(:SPECIAL_DEFENSE)
     next score - target.stages[:SPECIAL_DEFENSE] * 10
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetRandomStat2",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    GameData::Stat.each_battle do |s|
+      next if !target.battler.pbCanRaiseStatStage?(s.id, user.battler, move.move)
+      will_fail = false
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetRandomStat2",
   proc { |score, move, user, target, ai, battle|
     avgStat = 0
-    canChangeStat = false
     GameData::Stat.each_battle do |s|
-      next if target.statStageAtMax?(s.id)
-      avgStat -= target.stages[s.id]
-      canChangeStat = true
+      avgStat -= target.stages[s.id] if !target.statStageAtMax?(s.id)
     end
-    if canChangeStat
-      avgStat = avgStat / 2 if avgStat < 0   # More chance of getting even better
-      next + avgStat * 10
-    else
-      next score - 90
-    end
+    avgStat = avgStat / 2 if avgStat < 0   # More chance of getting even better
+    next + avgStat * 10
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAtkSpAtk2",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
+                 !target.battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|
     next 0 if target.opposes?(user)
@@ -814,10 +925,15 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetAtkSpAtk2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetAttack1",
+  proc { |move, user, target, ai, battle|
+    next true if move.statusMove? &&
+                 !target.battler.pbCanLowerStatStage?(move.move.statDown[0], user.battler, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAttack1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:ATTACK, user.battler)
       score += target.stages[:ATTACK] * 20
       if ai.trainer.medium_skill?
         hasPhysicalAttack = false
@@ -848,9 +964,10 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAttack1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack1",
+                                            "LowerTargetAttack1BypassSubstitute")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAttack1BypassSubstitute",
   proc { |score, move, user, target, ai, battle|
-    next 0 if !target.battler.pbCanLowerStatStage?(:ATTACK, user.battler)
     score += target.stages[:ATTACK] * 20
     if ai.trainer.medium_skill?
       hasPhysicalAttack = false
@@ -869,10 +986,11 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAttack1BypassSubstitute",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack1",
+                                            "LowerTargetAttack2")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAttack2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:ATTACK, user.battler)
       score += 40 if user.turnCount == 0
       score += target.stages[:ATTACK] * 20
       if ai.trainer.medium_skill?
@@ -905,13 +1023,16 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAttack2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack2",
+                                            "LowerTargetAttack3")
 Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetAttack2",
                                            "LowerTargetAttack3")
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack1",
+                                            "LowerTargetDefense1")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:DEFENSE, user.battler)
       score += target.stages[:DEFENSE] * 20
     elsif target.stages[:DEFENSE] > 0
       score += 20
@@ -920,28 +1041,29 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetDefense1",
+                                            "LowerTargetDefense1PowersUpInGravity")
 Battle::AI::Handlers::MoveBasePower.add("LowerTargetDefense1PowersUpInGravity",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense1PowersUpInGravity",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:DEFENSE, user.battler)
       score += target.stages[:DEFENSE] * 20
     elsif target.stages[:DEFENSE] > 0
       score += 20
     end
-    score += 30 if battle.field.effects[PBEffects::Gravity] > 0
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetDefense1",
+                                            "LowerTargetDefense2")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:DEFENSE, user.battler)
       score += 40 if user.turnCount == 0
       score += target.stages[:DEFENSE] * 20
     else
@@ -952,13 +1074,16 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetDefense2",
+                                            "LowerTargetDefense3")
 Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetDefense2",
                                            "LowerTargetDefense3")
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack1",
+                                            "LowerTargetSpAtk1")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler)
       score += user.stages[:SPECIAL_ATTACK] * 20
       if ai.trainer.medium_skill?
         hasSpecicalAttack = false
@@ -989,21 +1114,27 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpAtk1",
+                                            "LowerTargetSpAtk2")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk2",
   proc { |score, move, user, target, ai, battle|
-    next 0 if !target.battler.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler)
     score += 40 if user.turnCount == 0
     score += target.stages[:SPECIAL_ATTACK] * 20
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetSpAtk2IfCanAttract",
+  proc { |move, user, target, ai, battle|
+    next true if move.statusMove? &&
+                 !target.battler.pbCanLowerStatStage?(move.move.statDown[0], user.battler, move.move)
+    next true if user.gender == 2 || target.gender == 2 || user.gender == target.gender
+    next true if target.has_active_ability?(:OBLIVIOUS)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk2IfCanAttract",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.gender == 2 || target.gender == 2 ||
-              user.gender == target.gender || target.has_active_ability?(:OBLIVIOUS)
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler)
       score += 40 if user.turnCount == 0
       score += target.stages[:SPECIAL_ATTACK] * 20
       if ai.trainer.medium_skill?
@@ -1036,19 +1167,21 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk2IfCanAttract",
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk2",
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpAtk1",
+                                            "LowerTargetSpAtk3")
+Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk3",
   proc { |score, move, user, target, ai, battle|
-    next 0 if !target.battler.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler)
     score += 40 if user.turnCount == 0
     score += target.stages[:SPECIAL_ATTACK] * 20
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetDefense1",
+                                            "LowerTargetSpDef1")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpDef1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user.battler)
       score += target.stages[:SPECIAL_DEFENSE] * 20
     elsif target.stages[:SPECIAL_DEFENSE] > 0
       score += 20
@@ -1057,10 +1190,11 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpDef1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpDef1",
+                                            "LowerTargetSpDef2")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpDef2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user.battler)
       score += 40 if user.turnCount == 0
       score += target.stages[:SPECIAL_DEFENSE] * 20
     else
@@ -1071,13 +1205,16 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpDef2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpDef2",
+                                            "LowerTargetSpDef3")
 Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetSpDef2",
                                            "LowerTargetSpDef3")
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpDef1",
+                                            "LowerTargetSpeed1")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:SPEED, user.battler)
       score += target.stages[:SPEED] * 10
       if ai.trainer.high_skill?
         aspeed = user.rough_stat(:SPEED)
@@ -1091,19 +1228,25 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed1",
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetSpeed1",
-                                           "LowerTargetSpeed1WeakerInGrassyTerrain")
-
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpeed1",
+                                            "LowerTargetSpeed1WeakerInGrassyTerrain")
 Battle::AI::Handlers::MoveBasePower.add("LowerTargetSpeed1WeakerInGrassyTerrain",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
+Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetSpeed1",
+                                           "LowerTargetSpeed1WeakerInGrassyTerrain")
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetSpeed1MakeTargetWeakerToFire",
+  proc { |move, user, target, ai, battle|
+    next false if !target.effects[PBEffects::TarShot]
+    next true if move.statusMove? &&
+                 !target.battler.pbCanLowerStatStage?(move.move.statDown[0], user.battler, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed1MakeTargetWeakerToFire",
   proc { |score, move, user, target, ai, battle|
-    next 0 if !target.battler.pbCanLowerStatStage?(:SPEED, user.battler) &&
-              target.effects[PBEffects::TarShot]
     score += target.stages[:SPEED] * 10
     if ai.trainer.high_skill?
       aspeed = user.rough_stat(:SPEED)
@@ -1115,10 +1258,11 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed1MakeTargetWeakerToFi
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpeed1",
+                                            "LowerTargetSpeed2")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:SPEED, user.battler)
       score += 20 if user.turnCount == 0
       score += target.stages[:SPEED] * 20
       if ai.trainer.high_skill?
@@ -1134,13 +1278,16 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpeed2",
+                                            "LowerTargetSpeed3")
 Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetSpeed2",
                                            "LowerTargetSpeed3")
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpeed1",
+                                            "LowerTargetAccuracy1")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAccuracy1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      return 0 if !target.battler.pbCanLowerStatStage?(:ACCURACY, user.battler)
       score += target.stages[:ACCURACY] * 10
     elsif target.stages[:ACCURACY] > 0
       score += 20
@@ -1149,14 +1296,18 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAccuracy1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAccuracy1",
+                                            "LowerTargetAccuracy2",
+                                            "LowerTargetAccuracy3")
 Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetAccuracy1",
                                            "LowerTargetAccuracy2",
                                            "LowerTargetAccuracy3")
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAccuracy1",
+                                            "LowerTargetEvasion1")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetEvasion1",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      return 0 if !target.battler.pbCanLowerStatStage?(:EVASION, user.battler)
       score += target.stages[:EVASION] * 10
     elsif target.stages[:EVASION] > 0
       score += 20
@@ -1165,10 +1316,32 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetEvasion1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetEvasion1RemoveSideEffects",
+  proc { |move, user, target, ai, battle|
+    target_side = target.pbOwnSide
+    target_opposing_side = target.pbOpposingSide
+    next false if target_side.effects[PBEffects::AuroraVeil] > 0 ||
+                  target_side.effects[PBEffects::LightScreen] > 0 ||
+                  target_side.effects[PBEffects::Reflect] > 0 ||
+                  target_side.effects[PBEffects::Mist] > 0 ||
+                  target_side.effects[PBEffects::Safeguard] > 0
+    next false if target_side.effects[PBEffects::StealthRock] ||
+                  target_side.effects[PBEffects::Spikes] > 0 ||
+                  target_side.effects[PBEffects::ToxicSpikes] > 0 ||
+                  target_side.effects[PBEffects::StickyWeb]
+    next false if Settings::MECHANICS_GENERATION >= 6 &&
+                  (target_opposing_side.effects[PBEffects::StealthRock] ||
+                  target_opposing_side.effects[PBEffects::Spikes] > 0 ||
+                  target_opposing_side.effects[PBEffects::ToxicSpikes] > 0 ||
+                  target_opposing_side.effects[PBEffects::StickyWeb])
+    next false if Settings::MECHANICS_GENERATION >= 8 && battle.field.terrain != :None
+    next true if move.statusMove? &&
+                 !target.battler.pbCanLowerStatStage?(move.move.statDown[0], user.battler, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetEvasion1RemoveSideEffects",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      next 0 if !target.battler.pbCanLowerStatStage?(:EVASION, user.battler)
       score += target.stages[:EVASION] * 10
     elsif target.stages[:EVASION] > 0
       score += 20
@@ -1185,10 +1358,11 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetEvasion1RemoveSideEffects"
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetEvasion1",
+                                            "LowerTargetEvasion2")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetEvasion2",
   proc { |score, move, user, target, ai, battle|
     if move.statusMove?
-      return 0 if !target.battler.pbCanLowerStatStage?(:EVASION, user.battler)
       score += target.stages[:EVASION] * 10
     elsif target.stages[:EVASION] > 0
       score += 20
@@ -1197,9 +1371,22 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetEvasion2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetEvasion2",
+                                            "LowerTargetEvasion3")
 Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetEvasion2",
                                            "LowerTargetEvasion3")
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetAtkDef1",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    (move.move.statDown.length / 2).times do |i|
+      next if !target.battler.pbCanLowerStatStage?(move.move.statDown[i * 2], user.battler, move.move)
+      will_fail = false
+      break
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkDef1",
   proc { |score, move, user, target, ai, battle|
     avg =  target.stages[:ATTACK] * 10
@@ -1208,6 +1395,8 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkDef1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAtkDef1",
+                                            "LowerTargetAtkSpAtk1")
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkSpAtk1",
   proc { |score, move, user, target, ai, battle|
     avg =  target.stages[:ATTACK] * 10
@@ -1216,36 +1405,43 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkSpAtk1",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerPoisonedTargetAtkSpAtkSpd1",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.poisoned?
+    next true if !target.battler.pbCanLowerStatStage?(:ATTACK, user.battler, move.move) &&
+                 !target.battler.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler, move.move) &&
+                 !target.battler.pbCanLowerStatStage?(:SPEED, user.battler, move.move)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerPoisonedTargetAtkSpAtkSpd1",
   proc { |score, move, user, target, ai, battle|
-    count = 0
-    battle.allBattlers.each do |b|
-      if b.poisoned? &&
-         (!b.statStageAtMin?(:ATTACK) ||
-         !b.statStageAtMin?(:SPECIAL_ATTACK) ||
-         !b.statStageAtMin?(:SPEED))
-        count += 1
-        if user.battler.opposes?(b)
-          score += user.stages[:ATTACK] * 10
-          score += user.stages[:SPECIAL_ATTACK] * 10
-          score += user.stages[:SPEED] * 10
-        else
-          score -= 20
-        end
-      end
+    if target.opposes?(user)
+      score += target.stages[:ATTACK] * 10
+      score += target.stages[:SPECIAL_ATTACK] * 10
+      score += target.stages[:SPEED] * 10
+    else
+      score -= 20
     end
-    next 0 if count == 0
     next score
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAndAlliesAtkDef1",
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseAlliesAtkDef1",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    battle.allSameSideBattlers(user.battler).each do |b|
+      next if b.index == user.index
+      next if !b.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
+              !b.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move)
+      will_fail = false
+      break
+    end
+    next will_fail
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("RaiseAlliesAtkDef1",
   proc { |score, move, user, target, ai, battle|
-    has_ally = false
     user.battler.allAllies.each do |b|
-      next if !b.pbCanLowerStatStage?(:ATTACK, user.battler) &&
-              !b.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler)
-      has_ally = true
       if b.hasActiveAbility?(:CONTRARY)
         score -= 90
       else
@@ -1254,53 +1450,78 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAndAlliesAtkDef1",
         score -= b.stages[:SPECIAL_ATTACK] * 20
       end
     end
-    next 0 if !has_ally
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    battle.allSameSideBattlers(user.battler).each do |b|
+      next if !b.hasActiveAbility?([:MINUS, :PLUS])
+      next if !b.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
+              !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
+      will_fail = false
+      break
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
   proc { |score, move, user, target, ai, battle|
-    hasEffect = user.statStageAtMax?(:ATTACK) &&
-                user.statStageAtMax?(:SPECIAL_ATTACK)
     user.battler.allAllies.each do |b|
       next if b.statStageAtMax?(:ATTACK) && b.statStageAtMax?(:SPECIAL_ATTACK)
-      hasEffect = true
       score -= b.stages[:ATTACK] * 10
       score -= b.stages[:SPECIAL_ATTACK] * 10
     end
-    next 0 if !hasEffect
     score -= user.stages[:ATTACK] * 10
     score -= user.stages[:SPECIAL_ATTACK] * 10
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    battle.allSameSideBattlers(user.battler).each do |b|
+      next if !b.hasActiveAbility?([:MINUS, :PLUS])
+      next if !b.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move) &&
+              !b.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
+      will_fail = false
+      break
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaisePlusMinusUserAndAlliesDefSpDef1",
   proc { |score, move, user, target, ai, battle|
-    hasEffect = user.statStageAtMax?(:DEFENSE) &&
-                user.statStageAtMax?(:SPECIAL_DEFENSE)
     user.battler.allAllies.each do |b|
       next if b.statStageAtMax?(:DEFENSE) && b.statStageAtMax?(:SPECIAL_DEFENSE)
-      hasEffect = true
       score -= b.stages[:DEFENSE] * 10
       score -= b.stages[:SPECIAL_DEFENSE] * 10
     end
-    next 0 if !hasEffect
     score -= user.stages[:DEFENSE] * 10
     score -= user.stages[:SPECIAL_DEFENSE] * 10
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseGroundedGrassBattlersAtkSpAtk1",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    battle.allBattlers.each do |b|
+      next if !b.pbHasType?(:GRASS) || b.airborne? || b.semiInvulnerable?
+      next if !b.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
+              !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
+      will_fail = false
+      break
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseGroundedGrassBattlersAtkSpAtk1",
   proc { |score, move, user, target, ai, battle|
-    count = 0
     battle.allBattlers.each do |b|
-      next if !b.pbHasType?(:GRASS)
-      next if b.airborne?
-      next if b.statStageAtMax?(:ATTACK) && b.statStageAtMax?(:SPECIAL_ATTACK)
-      count += 1
       if user.battler.opposes?(b)
         score -= 20
       else
@@ -1308,25 +1529,31 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseGroundedGrassBattlersAtkSpAtk1",
         score -= user.stages[:SPECIAL_ATTACK] * 10
       end
     end
-    next 0 if count == 0
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RaiseGrassBattlersDef1",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    battle.allBattlers.each do |b|
+      next if !b.pbHasType?(:GRASS) || b.semiInvulnerable?
+      next if !b.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move)
+      will_fail = false
+      break
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RaiseGrassBattlersDef1",
   proc { |score, move, user, target, ai, battle|
-    count = 0
     battle.allBattlers.each do |b|
-      if b.pbHasType?(:GRASS) && !b.statStageAtMax?(:DEFENSE)
-        count += 1
-        if user.battler.opposes?(b)
-          score -= 20
-        else
-          score -= user.stages[:DEFENSE] * 10
-        end
+      if user.battler.opposes?(b)
+        score -= 20
+      else
+        score -= user.stages[:DEFENSE] * 10
       end
     end
-    next 0 if count == 0
     next score
   }
 )
@@ -1417,6 +1644,11 @@ Battle::AI::Handlers::MoveEffectScore.add("UserStealTargetPositiveStatStages",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("InvertTargetStatStages",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.hasAlteredStatStages?
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("InvertTargetStatStages",
   proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::Substitute] > 0
@@ -1426,7 +1658,6 @@ Battle::AI::Handlers::MoveEffectScore.add("InvertTargetStatStages",
       numpos += target.stages[s.id] if target.stages[s.id] > 0
       numneg += target.stages[s.id] if target.stages[s.id] < 0
     end
-    next 0 if numpos == 0 && numneg == 0
     next score + (numpos - numneg) * 10
   }
 )
@@ -1446,6 +1677,11 @@ Battle::AI::Handlers::MoveEffectScore.add("ResetTargetStatStages",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("ResetAllBattlersStatStages",
+  proc { |move, user, target, ai, battle|
+    next true if battle.allBattlers.none? { |b| b.hasAlteredStatStages? }
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("ResetAllBattlersStatStages",
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.medium_skill?
@@ -1464,9 +1700,9 @@ Battle::AI::Handlers::MoveEffectScore.add("ResetAllBattlersStatStages",
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToStatStageLowering",
-  proc { |score, move, user, target, ai, battle|
-    next score - 80 if user.pbOwnSide.effects[PBEffects::Mist] > 0
+Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideImmunityToStatStageLowering",
+  proc { |move, user, target, ai, battle|
+    next true if user.pbOwnSide.effects[PBEffects::Mist] > 0
   }
 )
 
@@ -1558,9 +1794,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetAverageHP",
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("StartUserSideDoubleSpeed",
-  proc { |score, move, user, target, ai, battle|
-    next score - 90 if user.pbOwnSide.effects[PBEffects::Tailwind] > 0
+Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideDoubleSpeed",
+  proc { |move, user, target, ai, battle|
+    next true if user.pbOwnSide.effects[PBEffects::Tailwind] > 0
   }
 )
 

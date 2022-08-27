@@ -43,10 +43,10 @@ class Battle::AI
   def pbRegisterMoveWild(idxMove, choices)
     battler = @user.battler
     score = 100
+    choices.push([idxMove, score, -1])   # Move index, score, target
     # Doubly prefer one of the user's moves (the choice is random but consistent
     # and does not correlate to any other property of the user)
-    score *= 2 if battler.pokemon.personalID % battler.moves.length == idxMove
-    choices.push([idxMove, 100, -1])   # Move index, score, target
+    choices.push([idxMove, score, -1]) if battler.pokemon.personalID % battler.moves.length == idxMove
   end
 
   # Trainer Pokémon calculate how much they want to use each of their moves.
@@ -101,6 +101,55 @@ class Battle::AI
   end
 
   #=============================================================================
+  # Returns whether the move will definitely fail (assuming no battle conditions
+  # change between now and using the move)
+  #=============================================================================
+  def pbPredictMoveFailure
+    return false if !@trainer.has_skill_flag?("PredictMoveFailure")
+    # TODO: Something involving pbCanChooseMove? (see Assault Vest).
+    # TODO: Something involving user.usingMultiTurnAttack? (perhaps earlier than
+    #       this?).
+    # User is asleep and will not wake up
+    return true if @trainer.medium_skill? && @user.battler.asleep? &&
+                   @user.statusCount > 1 && !@move.move.usableWhenAsleep?
+    # User will be truanting
+    return true if @user.has_active_ability?(:TRUANT) && @user.effects[PBEffects::Truant]
+    # Move effect-specific checks
+    return true if Battle::AI::Handlers.move_will_fail?(@move.function, @move, @user, @target, self, @battle)
+    # Immunity to priority moves because of Psychic Terrain
+    return true if @battle.field.terrain == :Psychic && @target.battler.affectedByTerrain? &&
+                   @target.opposes?(@user) && @move.rough_priority(@user) > 0
+    # Immunity because of ability (intentionally before type immunity check)
+    # TODO: Check for target-redirecting abilities that also provide immunity.
+    #       If an ally has such an ability, may want to just not prefer the move
+    #       instead of predicting its failure, as might want to hit the ally
+    #       after all.
+    return true if @move.move.pbImmunityByAbility(@user.battler, @target.battler, false)
+    # Type immunity
+    calc_type = @move.pbCalcType(@user.battler)
+    typeMod = @move.move.pbCalcTypeMod(calc_type, @user.battler, @target.battler)
+    return true if @move.move.pbDamagingMove? && Effectiveness.ineffective?(typeMod)
+    # Dark-type immunity to moves made faster by Prankster
+    return true if Settings::MECHANICS_GENERATION >= 7 && @user.has_active_ability?(:PRANKSTER) &&
+                   @target.has_type?(:DARK) && @target.opposes?(@user)
+    # Airborne-based immunity to Ground moves
+    return true if @move.damagingMove? && calc_type == :GROUND &&
+                   @target.battler.airborne? && !@move.move.hitsFlyingTargets?
+    # Immunity to powder-based moves
+    if @move.move.powderMove?
+      return true if @target.has_type?(:GRASS) && Settings::MORE_TYPE_EFFECTS
+      if Settings::MECHANICS_GENERATION >= 6
+        return true if @target.has_active_ability?(:OVERCOAT) ||
+                       @target.has_active_item?(:SAFETYGOGGLES)
+      end
+    end
+    # Substitute
+    return true if @target.effects[PBEffects::Substitute] > 0 && @move.statusMove? &&
+                   !@move.move.ignoresSubstitute?(@user.battler) && @user.index != @target.index
+    return false
+  end
+
+  #=============================================================================
   # Get a score for the given move being used against the given target
   #=============================================================================
   def pbGetMoveScore(move, target = nil)
@@ -108,8 +157,11 @@ class Battle::AI
     user_battler = @user.battler
     target_battler = @target.battler
 
+    # Predict whether the move will fail
+    return 10 if pbPredictMoveFailure
+
     # Get the base score for the move
-    if @move.move.damagingMove?
+    if @move.damagingMove?
       # Is also the predicted damage amount as a percentage of target's current HP
       score = pbGetDamagingMoveBaseScore
     else   # Status moves
@@ -153,16 +205,8 @@ class Battle::AI
     #       don't prefer move if it's Normal-type and target is immune because
     #       of its ability (Lightning Rod, etc.).
 
-    # TODO: Discard move if it can be redirected by a non-target's ability
-    #       (Lightning Rod/Storm Drain). Include checking for a previous use of
-    #       Ion Deluge and this move being Normal-type.
-    # => If non-target is a user's ally, don't prefer move (rather than discarding
-    #    it)
-
-    # TODO: Discard move if it's sound-based and user has been Throat Chopped.
-    #       Don't prefer move if user hasn't been Throat Chopped but target has
-    #       previously used Throat Chop. The first part of this would probably
-    #       go elsewhere (damage calc?).
+    # TODO: Don't prefer sound move if user hasn't been Throat Chopped but
+    #       target has previously used Throat Chop.
 
     # TODO: Prefer move if it has a high critical hit rate, critical hits are
     #       possible but not certain, and target has raised defences/user has
@@ -248,12 +292,6 @@ class Battle::AI
       end
     end
 
-    # If user is asleep, don't prefer moves that can't be used while asleep
-    if @trainer.medium_skill? && user_battler.asleep? && user_battler.statusCount > 1 &&
-       !@move.move.usableWhenAsleep?
-      score *= 0.2
-    end
-
     # If user is frozen, prefer a move that can thaw the user
     if @trainer.medium_skill? && user_battler.status == :FROZEN
       if @move.move.thawsUser?
@@ -261,7 +299,7 @@ class Battle::AI
       else
         user_battler.eachMove do |m|
           next unless m.thawsUser?
-          score = 0   # Discard this move if user knows another move that thaws
+          score -= 30   # Don't prefer this move if user knows another move that thaws
           break
         end
       end

@@ -957,7 +957,7 @@ class Battle::Move::SetTargetAbilityToSimple < Battle::Move
   end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.unstoppableAbility? || [:TRUANT, :SIMPLE].include?(target.ability)
+    if target.unstoppableAbility? || [:TRUANT, :SIMPLE].include?(target.ability_id)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -1165,7 +1165,7 @@ class Battle::Move::NegateTargetAbility < Battle::Move
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.unstoppableAbility?
+    if target.unstoppableAbility? || target.effects[PBEffects::GastroAcid]
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end

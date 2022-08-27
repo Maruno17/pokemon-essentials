@@ -407,6 +407,8 @@ end
 # (Shell Smash)
 #===============================================================================
 class Battle::Move::LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2 < Battle::Move
+  attr_reader :statUp, :statDown
+
   def canSnatch?; return true; end
 
   def initialize(battle, move)
@@ -1397,7 +1399,7 @@ end
 # Raises the Attack and Defense of all user's allies by 1 stage each. Bypasses
 # protections, including Crafty Shield. Fails if there is no ally. (Coaching)
 #===============================================================================
-class Battle::Move::RaiseUserAndAlliesAtkDef1 < Battle::Move
+class Battle::Move::RaiseAlliesAtkDef1 < Battle::Move
   def ignoresSubstitute?(user); return true; end
   def canSnatch?; return true; end
 

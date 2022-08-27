@@ -1,17 +1,25 @@
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("FleeFromBattle",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if battle.trainerBattle?
+Battle::AI::Handlers::MoveFailureCheck.add("FleeFromBattle",
+  proc { |move, user, target, ai, battle|
+    next true if battle.pbCanRun?(user.index)
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserStatusMove",
+  proc { |move, user, target, ai, battle|
+    if user.wild?
+      next true if !battle.pbCanRun?(user.index)
+    else
+      next true if !battle.pbCanChooseNonActive?(user.index)
+    end
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
   proc { |score, move, user, target, ai, battle|
-    if !battle.pbCanChooseNonActive?(user.index) ||
-       battle.pbTeamAbleNonActiveCount(user.index) > 1   # Don't switch in ace
-      score -= 100
+    if battle.pbTeamAbleNonActiveCount(user.index) > 1   # Don't switch in ace
+      score -= 60
     else
       score += 40 if user.effects[PBEffects::Confusion] > 0
       total = 0
@@ -41,6 +49,17 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserDamagingMove",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetAtkSpAtk1SwitchOutUser",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    (move.move.statDown.length / 2).times do |i|
+      next if !target.battler.pbCanLowerStatStage?(move.move.statDown[i * 2], user.battler, move.move)
+      will_fail = false
+      break
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkSpAtk1SwitchOutUser",
   proc { |score, move, user, target, ai, battle|
     avg  = target.stages[:ATTACK] * 10
@@ -50,6 +69,11 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkSpAtk1SwitchOutUser",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserPassOnEffects",
+  proc { |move, user, target, ai, battle|
+    next true if !battle.pbCanChooseNonActive?(user.index)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
   proc { |score, move, user, target, ai, battle|
     if battle.pbCanChooseNonActive?(user.index)
@@ -76,23 +100,28 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutTargetStatusMove",
+  proc { |move, user, target, ai, battle|
+    next true if target.has_active_ability?(:SUCTIONCUPS) ||
+                 target.effects[PBEffects::Ingrain]
+    next true if !battle.canRun
+    next true if battle.wildBattle? && target.level > user.level
+    if battle.trainerBattle?
+      will_fail = true
+      battle.eachInTeamFromBattlerIndex(target.index) do |_pkmn, i|
+        next if !battle.pbCanSwitchLax?(target.index, i)
+        will_fail = false
+        break
+      end
+      next will_fail
+    end
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetStatusMove",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::Ingrain] ||
-       target.has_active_ability?(:SUCTIONCUPS)
-      score -= 90
-    else
-      ch = 0
-      battle.pbParty(target.index).each_with_index do |pkmn, i|
-        ch += 1 if battle.pbCanSwitchLax?(target.index, i)
-      end
-      score -= 90 if ch == 0
-    end
-    if score > 20
-      score += 50 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
-      score += 50 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
-      score += 50 if target.pbOwnSide.effects[PBEffects::StealthRock]
-    end
+    score += 20 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
+    score += 20 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
+    score += 20 if target.pbOwnSide.effects[PBEffects::StealthRock]
     next score
   }
 )
@@ -101,9 +130,9 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetDamagingMove",
   proc { |score, move, user, target, ai, battle|
     if !target.effects[PBEffects::Ingrain] &&
        !target.has_active_ability?(:SUCTIONCUPS)
-      score += 40 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
-      score += 40 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
-      score += 40 if target.pbOwnSide.effects[PBEffects::StealthRock]
+      score += 20 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
+      score += 20 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
+      score += 20 if target.pbOwnSide.effects[PBEffects::StealthRock]
     end
     next score
   }
@@ -119,25 +148,35 @@ Battle::AI::Handlers::MoveBasePower.add("BindTargetDoublePowerIfTargetUnderwater
   proc { |power, move, user, target, ai, battle|
     next move.pbModifyDamage(power, user.battler, target.battler)
   }
-}
+)
 Battle::AI::Handlers::MoveEffectScore.add("BindTargetDoublePowerIfTargetUnderwater",
   proc { |score, move, user, target, ai, battle|
     next score + 40 if target.effects[PBEffects::Trapping] == 0
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("TrapTargetInBattle",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if target.effects[PBEffects::MeanLook] >= 0
+Battle::AI::Handlers::MoveFailureCheck.add("TrapTargetInBattle",
+  proc { |move, user, target, ai, battle|
+    if move.statusMove?
+      next true if target.effects[PBEffects::MeanLook] >= 0
+      next true if Settings::MORE_TYPE_EFFECTS && target.has_type?(:GHOST)
+    end
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("TrapTargetInBattle",
+  proc { |move, user, target, ai, battle|
+    if move.statusMove?
+      next true if target.effects[PBEffects::Octolock] >= 0
+      next true if Settings::MORE_TYPE_EFFECTS && target.has_type?(:GHOST)
+    end
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("TrapTargetInBattleLowerTargetDefSpDef1EachTurn",
   proc { |score, move, user, target, ai, battle|
-    next 0 if target.effects[PBEffects::Octolock] >= 0
     score += 30 if !target.battler.trappedInBattle?
-    score -= 100 if !target.battler.pbCanLowerStatStage?(:DEFENSE, user.battler, move.move) &&
-                    !target.battler.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
+    score -= 50 if !target.battler.pbCanLowerStatStage?(:DEFENSE, user.battler, move.move) &&
+                   !target.battler.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
     next score
   }
 )
@@ -151,7 +190,11 @@ Battle::AI::Handlers::MoveEffectScore.add("TrapUserAndTargetInBattle",
   }
 )
 
-# TrapAllBattlersInBattleForOneTurn
+Battle::AI::Handlers::MoveFailureCheck.add("TrapAllBattlersInBattleForOneTurn",
+  proc { |move, user, target, ai, battle|
+    next true if battle.field.effects[PBEffects::FairyLock] > 0
+  }
+)
 
 # PursueSwitchingFoe
 
@@ -164,7 +207,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterUserTakesPhysicalDamage",
         hasPhysicalAttack = true
         break
       end
-      score -= 80 if !hasPhysicalAttack
+      score -= 50 if !hasPhysicalAttack
     end
     next score
   }
@@ -186,20 +229,24 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
 
 # TargetActsLast
 
+Battle::AI::Handlers::MoveFailureCheck.add("TargetUsesItsLastUsedMoveAgain",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.lastRegularMoveUsed ||
+                 !target.battler.pbHasMove?(target.battler.lastRegularMoveUsed)
+    next true if target.usingMultiTurnAttack?
+    next true if move.move.moveBlacklist.include?(GameData::Move.get(target.battler.lastRegularMoveUsed).function_code)
+    idxMove = -1
+    target.battler.eachMoveWithIndex do |m, i|
+      idxMove = i if m.id == target.battler.lastRegularMoveUsed
+    end
+    next true if target.battler.moves[idxMove].pp == 0 && target.battler.moves[idxMove].total_pp > 0
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("TargetUsesItsLastUsedMoveAgain",
   proc { |score, move, user, target, ai, battle|
-    if ai.trainer.medium_skill?
-      if !target.battler.lastRegularMoveUsed ||
-         !target.battler.pbHasMove?(target.battler.lastRegularMoveUsed) ||
-         target.battler.usingMultiTurnAttack?
-        score -= 90
-      else
-        # Without lots of code here to determine good/bad moves and relative
-        # speeds, using this move is likely to just be a waste of a turn
-        score -= 50
-      end
-    end
-    next score
+    # Without lots of code here to determine good/bad moves and relative
+    # speeds, using this move is likely to just be a waste of a turn
+    next score - 50
   }
 )
 
@@ -224,56 +271,91 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerPPOfTargetLastMoveBy3",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerPPOfTargetLastMoveBy4",
+  proc { |move, user, target, ai, battle|
+    last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
+    next true if !last_move || last_move.pp == 0 || last_move.total_pp <= 0
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerPPOfTargetLastMoveBy4",
   proc { |score, move, user, target, ai, battle|
     next score - 40
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("DisableTargetLastMoveUsed",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if target.effects[PBEffects::Disable] > 0
+Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetLastMoveUsed",
+  proc { |move, user, target, ai, battle|
+    next true if target.effects[PBEffects::Disable] > 0 || !target.battler.lastRegularMoveUsed
+    next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
+    will_fail = true
+    target.battler.eachMove do |m|
+      next if m.id != target.battler.lastRegularMoveUsed
+      next if m.pp == 0 && m.total_pp > 0
+      will_fail = false
+      break
+    end
+    next will_fail
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetUsingSameMoveConsecutively",
+  proc { |move, user, target, ai, battle|
+    next true if target.effects[PBEffects::Torment]
+    next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetUsingSameMoveConsecutively",
   proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::Torment]
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetUsingDifferentMove",
+  proc { |move, user, target, ai, battle|
+    next true if target.effects[PBEffects::Encore] > 0
+    next true if !target.battler.lastRegularMoveUsed ||
+                 move.move.moveBlacklist.include?(GameData::Move.get(target.battler.lastRegularMoveUsed).function_code)
+    next true if target.effects[PBEffects::ShellTrap]
+    next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
+    will_fail = true
+    target.battler.eachMove do |m|
+      next if m.id != target.battler.lastRegularMoveUsed
+      next if m.pp == 0 && m.total_pp > 0
+      will_fail = false
+      break
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("DisableTargetUsingDifferentMove",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::Encore] > 0
-      score -= 90
-    elsif user.faster_than?(target)
-      if target.battler.lastRegularMoveUsed
-        moveData = GameData::Move.get(target.battler.lastRegularMoveUsed)
-        if moveData.category == 2 &&   # Status move
-           [:User, :BothSides].include?(moveData.target)
-          score += 60
-        elsif moveData.category != 2 &&   # Damaging move
-              moveData.target == :NearOther &&
-              Effectiveness.ineffective?(user.effectiveness_of_type_against_battler(moveData.type, target))
-          score += 60
-        end
-      else
-        score -= 90
+    if user.faster_than?(target)
+      moveData = GameData::Move.get(target.battler.lastRegularMoveUsed)
+      if moveData.category == 2 &&   # Status move
+         [:User, :BothSides].include?(moveData.target)
+        score += 60
+      elsif moveData.category != 2 &&   # Damaging move
+            moveData.target == :NearOther &&
+            Effectiveness.ineffective?(user.effectiveness_of_type_against_battler(moveData.type, target))
+        score += 60
       end
     end
     next score
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("DisableTargetStatusMoves",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if target.effects[PBEffects::Taunt] > 0
+Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetStatusMoves",
+  proc { |move, user, target, ai, battle|
+    next true if target.effects[PBEffects::Taunt] > 0
+    next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
+    next true if Settings::MECHANICS_GENERATION >= 6 && target.has_active_ability?(:OBLIVIOUS)
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("DisableTargetHealingMoves",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if target.effects[PBEffects::HealBlock] > 0
+Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetHealingMoves",
+  proc { |move, user, target, ai, battle|
+    next true if target.effects[PBEffects::HealBlock] > 0
+    next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
   }
 )
 
@@ -292,12 +374,17 @@ Battle::AI::Handlers::MoveEffectScore.add("DisableTargetSoundMoves",
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("DisableTargetMovesKnownByUser",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if target.effects[PBEffects::Imprison]
+Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetMovesKnownByUser",
+  proc { |move, user, target, ai, battle|
+    next true if user.effects[PBEffects::Imprison]
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
+  proc { |move, user, target, ai, battle|
+    next true if battle.allBattlers.none? { |b| b.hp > 1 }
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
   proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
@@ -307,7 +394,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTur
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
+Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfHP",
   proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
     score -= 40
@@ -315,33 +402,45 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTur
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
+                                            "StartShadowSkyWeather")
 Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
   proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
     if battle.pbCheckGlobalAbility(:AIRLOCK) ||
        battle.pbCheckGlobalAbility(:CLOUDNINE)
-      score -= 90
-    elsif battle.field.weather == :ShadowSky
-      score -= 90
+      score -= 50
     end
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("RemoveAllScreens",
+  proc { |move, user, target, ai, battle|
+    will_fail = true
+    battle.sides.each do |side|
+      will_fail = false if side.effects[PBEffects::AuroraVeil] > 0 ||
+                           side.effects[PBEffects::Reflect] > 0 ||
+                           side.effects[PBEffects::LightScreen] > 0 ||
+                           side.effects[PBEffects::Safeguard] > 0
+    end
+    next will_fail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("RemoveAllScreens",
   proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
-    if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
-       target.pbOwnSide.effects[PBEffects::Reflect] > 0 ||
-       target.pbOwnSide.effects[PBEffects::LightScreen] > 0 ||
-       target.pbOwnSide.effects[PBEffects::Safeguard] > 0
+    if user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::Reflect] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::LightScreen] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::Safeguard] > 0
       score += 30
-      score -= 90 if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
-                     user.pbOwnSide.effects[PBEffects::Reflect] > 0 ||
-                     user.pbOwnSide.effects[PBEffects::LightScreen] > 0 ||
-                     user.pbOwnSide.effects[PBEffects::Safeguard] > 0
-    else
-      next 0
+    end
+    if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
+       user.pbOwnSide.effects[PBEffects::Reflect] > 0 ||
+       user.pbOwnSide.effects[PBEffects::LightScreen] > 0 ||
+       user.pbOwnSide.effects[PBEffects::Safeguard] > 0
+      score -= 70
     end
     next score
   }

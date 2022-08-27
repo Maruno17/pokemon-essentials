@@ -2331,7 +2331,7 @@ Category = Status
 Accuracy = 0
 TotalPP = 10
 Target = AllAllies
-FunctionCode = RaiseUserAndAlliesAtkDef1
+FunctionCode = RaiseAlliesAtkDef1
 Flags = CanMirrorMove
 Description = The user properly coaches its ally Pokémon, boosting their Attack and Defense stats.
 #-------------------------------

@@ -85,6 +85,8 @@ end
 # Raise one of user's stats.
 #===============================================================================
 class Battle::Move::StatUpMove < Battle::Move
+  attr_reader :statUp
+
   def canSnatch?; return true; end
 
   def pbMoveFailed?(user, targets)
@@ -108,6 +110,8 @@ end
 # Raise multiple of user's stats.
 #===============================================================================
 class Battle::Move::MultiStatUpMove < Battle::Move
+  attr_reader :statUp
+
   def canSnatch?; return true; end
 
   def pbMoveFailed?(user, targets)
@@ -167,6 +171,8 @@ end
 # Lower one of target's stats.
 #===============================================================================
 class Battle::Move::TargetStatDownMove < Battle::Move
+  attr_reader :statDown
+
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
@@ -190,6 +196,8 @@ end
 # Lower multiple of target's stats.
 #===============================================================================
 class Battle::Move::TargetMultiStatDownMove < Battle::Move
+  attr_reader :statDown
+
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
@@ -479,6 +487,8 @@ end
 # Weather-inducing move.
 #===============================================================================
 class Battle::Move::WeatherMove < Battle::Move
+  attr_reader :weatherType
+
   def initialize(battle, move)
     super
     @weatherType = :None

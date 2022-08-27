@@ -668,6 +668,8 @@ end
 # Uses the last move that was used. (Copycat)
 #===============================================================================
 class Battle::Move::UseLastMoveUsed < Battle::Move
+  attr_reader :moveBlacklist
+
   def callsAnotherMove?; return true; end
 
   def initialize(battle, move)
@@ -983,6 +985,8 @@ end
 # Uses a random move known by any non-user Pokémon in the user's party. (Assist)
 #===============================================================================
 class Battle::Move::UseRandomMoveFromUserParty < Battle::Move
+  attr_reader :moveBlacklist
+
   def callsAnotherMove?; return true; end
 
   def initialize(battle, move)
@@ -1098,6 +1102,8 @@ end
 # Uses a random move the user knows. Fails if user is not asleep. (Sleep Talk)
 #===============================================================================
 class Battle::Move::UseRandomUserMoveIfAsleep < Battle::Move
+  attr_reader :moveBlacklist
+
   def usableWhenAsleep?; return true; end
   def callsAnotherMove?; return true; end
 
@@ -1192,6 +1198,8 @@ end
 # out. (Mimic)
 #===============================================================================
 class Battle::Move::ReplaceMoveThisBattleWithTargetLastMoveUsed < Battle::Move
+  attr_reader :moveBlacklist
+
   def ignoresSubstitute?(user); return true; end
 
   def initialize(battle, move)
@@ -1243,6 +1251,8 @@ end
 # This move permanently turns into the last move used by the target. (Sketch)
 #===============================================================================
 class Battle::Move::ReplaceMoveWithTargetLastMoveUsed < Battle::Move
+  attr_reader :moveBlacklist
+
   def ignoresSubstitute?(user); return true; end
 
   def initialize(battle, move)

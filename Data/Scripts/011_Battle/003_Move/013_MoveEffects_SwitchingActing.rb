@@ -540,6 +540,8 @@ end
 # The target uses its most recent move again. (Instruct)
 #===============================================================================
 class Battle::Move::TargetUsesItsLastUsedMoveAgain < Battle::Move
+  attr_reader :moveBlacklist
+
   def ignoresSubstitute?(user); return true; end
 
   def initialize(battle, move)
@@ -757,6 +759,8 @@ end
 # For 4 rounds, the target must use the same move each round. (Encore)
 #===============================================================================
 class Battle::Move::DisableTargetUsingDifferentMove < Battle::Move
+  attr_reader :moveBlacklist
+
   def ignoresSubstitute?(user); return true; end
   def canMagicCoat?;            return true; end
 

@@ -459,6 +459,8 @@ end
 # side. (Court Change)
 #===============================================================================
 class Battle::Move::SwapSideEffects < Battle::Move
+  attr_reader :number_effects, :boolean_effects
+
   def initialize(battle, move)
     super
     @number_effects = [

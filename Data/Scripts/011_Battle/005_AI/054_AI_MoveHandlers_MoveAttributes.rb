@@ -5,7 +5,7 @@ Battle::AI::Handlers::MoveBasePower.add("FixedDamage20",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
   }
-}
+)
 Battle::AI::Handlers::MoveEffectScore.add("FixedDamage20",
   proc { |score, move, user, target, ai, battle|
     if target.hp <= 20
@@ -21,7 +21,7 @@ Battle::AI::Handlers::MoveBasePower.add("FixedDamage40",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
   }
-}
+)
 Battle::AI::Handlers::MoveEffectScore.add("FixedDamage40",
   proc { |score, move, user, target, ai, battle|
     next score + 80 if target.hp <= 40
@@ -32,7 +32,7 @@ Battle::AI::Handlers::MoveBasePower.add("FixedDamageHalfTargetHP",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
   }
-}
+)
 Battle::AI::Handlers::MoveEffectScore.add("FixedDamageHalfTargetHP",
   proc { |score, move, user, target, ai, battle|
     score -= 50
@@ -44,7 +44,7 @@ Battle::AI::Handlers::MoveBasePower.add("FixedDamageUserLevel",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
   }
-}
+)
 Battle::AI::Handlers::MoveEffectScore.add("FixedDamageUserLevel",
   proc { |score, move, user, target, ai, battle|
     next score + 80 if target.hp <= user.level
@@ -55,18 +55,23 @@ Battle::AI::Handlers::MoveBasePower.add("FixedDamageUserLevelRandom",
   proc { |power, move, user, target, ai, battle|
     next user.level   # Average power
   }
-}
+)
 Battle::AI::Handlers::MoveEffectScore.add("FixedDamageUserLevelRandom",
   proc { |score, move, user, target, ai, battle|
     next score + 30 if target.hp <= user.level
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetHPToUserHP",
+  proc { |move, user, target, ai, battle|
+    next true if user.hp >= target.hp
+  }
+)
 Battle::AI::Handlers::MoveBasePower.add("LowerTargetHPToUserHP",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
   }
-}
+)
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetHPToUserHP",
   proc { |score, move, user, target, ai, battle|
     if user.hp >= target.hp
@@ -78,23 +83,33 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetHPToUserHP",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("OHKO",
+  proc { |move, user, target, ai, battle|
+    next true if target.level > user.level
+    next true if target.has_active_ability?(:STURDY)
+  }
+)
 Battle::AI::Handlers::MoveBasePower.add("OHKO",
   proc { |power, move, user, target, ai, battle|
     next 999
   }
-}
-Battle::AI::Handlers::MoveEffectScore.add("OHKO",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if target.has_active_ability?(:STURDY)
-    next 0 if target.level > user.level
-  }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("OHKOIce",
+  proc { |move, user, target, ai, battle|
+    next true if target.level > user.level
+    next true if target.has_active_ability?(:STURDY)
+    next true if target.has_type?(:ICE)
+  }
+)
 Battle::AI::Handlers::MoveBasePower.copy("OHKO",
-                                         "OHKOIce",
+                                         "OHKOIce")
+Battle::AI::Handlers::MoveEffectScore.copy("OHKO",
+                                           "OHKOIce")
+
+Battle::AI::Handlers::MoveBasePower.copy("OHKO",
                                          "OHKOHitsUndergroundTarget")
 Battle::AI::Handlers::MoveEffectScore.copy("OHKO",
-                                           "OHKOIce",
                                            "OHKOHitsUndergroundTarget")
 
 Battle::AI::Handlers::MoveEffectScore.add("DamageTargetAlly",
@@ -111,7 +126,7 @@ Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithUserHP",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
                                          "PowerLowerWithUserHP",
@@ -130,13 +145,13 @@ Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithLessPP",
     ppLeft = [move.pp - 1, dmgs.length - 1].min
     next dmgs[ppLeft]
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithTargetWeight",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithTargetWeight",
                                          "PowerHigherWithUserHeavierThanTarget")
@@ -145,26 +160,26 @@ Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithConsecutiveUse",
   proc { |power, move, user, target, ai, battle|
     next power << user.effects[PBEffects::FuryCutter]
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithConsecutiveUseOnUserSide",
   proc { |power, move, user, target, ai, battle|
     next power * (user.pbOwnSide.effects[PBEffects::EchoedVoiceCounter] + 1)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.add("RandomPowerDoublePowerIfTargetUnderground",
   proc { |power, move, user, target, ai, battle|
     power = 71   # Average damage
     next move.pbModifyDamage(power, user.battler, target.battler)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetHPLessThanHalf",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetHPLessThanHalf",
                                          "DoublePowerIfUserPoisonedBurnedParalyzed")
@@ -182,7 +197,7 @@ Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetPoisoned",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetPoisoned",
                                          "DoublePowerIfTargetParalyzedCureTarget")
@@ -196,19 +211,19 @@ Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetStatusProblem",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfUserHasNoItem",
   proc { |power, move, user, target, ai, battle|
     next power * 2 if !user.item || user.has_active_item?(:FLYINGGEM)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetUnderwater",
   proc { |power, move, user, target, ai, battle|
     next move.pbModifyDamage(power, user.battler, target.battler)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetUnderwater",
                                          "DoublePowerIfTargetUnderground")
@@ -217,7 +232,7 @@ Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetInSky",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetInSky",
                                          "DoublePowerInElectricTerrain",
@@ -265,6 +280,17 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("StartPreventCriticalHitsAgainstUserSide",
+  proc { |move, user, target, ai, battle|
+    next true if user.pbOwnSide.effects[PBEffects::LuckyChant] > 0
+  }
+)
+
+Battle::AI::Handlers::MoveFailureCheck.add("CannotMakeTargetFaint",
+  proc { |move, user, target, ai, battle|
+    next true if target.hp == 1
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("CannotMakeTargetFaint",
   proc { |score, move, user, target, ai, battle|
     next 0 if target.hp == 1
@@ -281,8 +307,8 @@ Battle::AI::Handlers::MoveEffectScore.add("UserEnduresFaintingThisTurn",
   proc { |score, move, user, target, ai, battle|
     score -= 25 if user.hp > user.totalhp / 2
     if ai.trainer.medium_skill?
-      score -= 90 if user.effects[PBEffects::ProtectRate] > 1
-      score -= 90 if target.effects[PBEffects::HyperBeam] > 0
+      score -= 50 if user.effects[PBEffects::ProtectRate] > 1
+      score -= 50 if target.effects[PBEffects::HyperBeam] > 0
     else
       score -= user.effects[PBEffects::ProtectRate] * 40
     end
@@ -290,34 +316,56 @@ Battle::AI::Handlers::MoveEffectScore.add("UserEnduresFaintingThisTurn",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenElectricMoves",
+  proc { |move, user, target, ai, battle|
+    if Settings::MECHANICS_GENERATION >= 6
+      next true if battle.field.effects[PBEffects::MudSportField] > 0
+    else
+      next true if battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
+    end
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("StartWeakenElectricMoves",
   proc { |score, move, user, target, ai, battle|
     next 0 if user.effects[PBEffects::MudSport]
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenFireMoves",
+  proc { |move, user, target, ai, battle|
+    if Settings::MECHANICS_GENERATION >= 6
+      next true if battle.field.effects[PBEffects::WaterSportField] > 0
+    else
+      next true if battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
+    end
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("StartWeakenFireMoves",
   proc { |score, move, user, target, ai, battle|
     next 0 if user.effects[PBEffects::WaterSport]
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("StartWeakenPhysicalDamageAgainstUserSide",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.pbOwnSide.effects[PBEffects::Reflect] > 0
+Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenPhysicalDamageAgainstUserSide",
+  proc { |move, user, target, ai, battle|
+    next true if user.pbOwnSide.effects[PBEffects::Reflect] > 0
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSide",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.pbOwnSide.effects[PBEffects::LightScreen] > 0
+Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenSpecialDamageAgainstUserSide",
+  proc { |move, user, target, ai, battle|
+    next true if user.pbOwnSide.effects[PBEffects::LightScreen] > 0
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenDamageAgainstUserSideIfHail",
+  proc { |move, user, target, ai, battle|
+    next true if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+    next true if user.battler.effectiveWeather != :Hail
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHail",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
-              user.battler.effectiveWeather != :Hail
     next score + 40
   }
 )
@@ -335,7 +383,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
   proc { |score, move, user, target, ai, battle|
     if user.effects[PBEffects::ProtectRate] > 1 ||
        target.effects[PBEffects::HyperBeam] > 0
-      score -= 90
+      score -= 50
     else
       if ai.trainer.medium_skill?
         score -= user.effects[PBEffects::ProtectRate] * 40
@@ -351,7 +399,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
   proc { |score, move, user, target, ai, battle|
     if user.effects[PBEffects::ProtectRate] > 1 ||
        target.effects[PBEffects::HyperBeam] > 0
-      score -= 90
+      score -= 50
     else
       if ai.trainer.medium_skill?
         score -= user.effects[PBEffects::ProtectRate] * 40
@@ -368,7 +416,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
   proc { |score, move, user, target, ai, battle|
     if user.effects[PBEffects::ProtectRate] > 1 ||
        target.effects[PBEffects::HyperBeam] > 0
-      score -= 90
+      score -= 50
     else
       if ai.trainer.medium_skill?
         score -= user.effects[PBEffects::ProtectRate] * 40
@@ -384,7 +432,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesObstruct"
   proc { |score, move, user, target, ai, battle|
     if user.effects[PBEffects::ProtectRate] > 1 ||
        target.effects[PBEffects::HyperBeam] > 0
-      score -= 90
+      score -= 50
     else
       if ai.trainer.medium_skill?
         score -= user.effects[PBEffects::ProtectRate] * 40
@@ -412,14 +460,22 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromTargetingMovesSpikyShi
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("ProtectUserSideFromDamagingMovesIfUserFirstTurn",
+  proc { |move, user, target, ai, battle|
+    next true if user.turnCount > 0
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromDamagingMovesIfUserFirstTurn",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.turnCount != 0
     next score + 30
   }
 )
 
-# ProtectUserSideFromStatusMoves
+Battle::AI::Handlers::MoveFailureCheck.add("ProtectUserSideFromStatusMoves",
+  proc { |move, user, target, ai, battle|
+    next true if user.pbOwnSide.effects[PBEffects::CraftyShield]
+  }
+)
 
 # ProtectUserSideFromPriorityMoves
 
@@ -429,9 +485,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromDamagingMovesIfUse
 
 # RemoveProtectionsBypassSubstitute
 
+Battle::AI::Handlers::MoveFailureCheck.add("HoopaRemoveProtectionsBypassSubstituteLowerUserDef1",
+  proc { |move, user, target, ai, battle|
+    next true if !user.battler.isSpecies?(:HOOPA) || user.battler.form != 1
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("HoopaRemoveProtectionsBypassSubstituteLowerUserDef1",
   proc { |score, move, user, target, ai, battle|
-    next 0 if !user.battler.isSpecies?(:HOOPA) || user.battler.form != 1
     next score + 20 if target.stages[:DEFENSE] > 0
   }
 )
@@ -495,7 +555,7 @@ Battle::AI::Handlers::MoveBasePower.add("EffectivenessIncludesFlyingType",
       next (power.to_f * mult / Effectiveness::NORMAL_EFFECTIVE).round
     end
   }
-}
+)
 
 Battle::AI::Handlers::MoveEffectScore.add("CategoryDependsOnHigherDamagePoisonTarget",
   proc { |score, move, user, target, ai, battle|
@@ -513,8 +573,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CategoryDependsOnHigherDamagePoisonTa
 
 Battle::AI::Handlers::MoveEffectScore.add("EnsureNextMoveAlwaysHits",
   proc { |score, move, user, target, ai, battle|
-    next 0 if target.effects[PBEffects::Substitute] > 0
-    next 0 if user.effects[PBEffects::LockOn] > 0
+    next score - 50 if user.effects[PBEffects::LockOn] > 0
   }
 )
 
@@ -534,7 +593,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartNegateTargetEvasionStatStageAndG
 Battle::AI::Handlers::MoveEffectScore.add("StartNegateTargetEvasionStatStageAndDarkImmunity",
   proc { |score, move, user, target, ai, battle|
     if target.effects[PBEffects::MiracleEye]
-      score -= 90
+      score -= 50
     elsif target.has_type?(:DARK)
       score += 70
     elsif target.stages[:EVASION] <= 0
@@ -552,18 +611,20 @@ Battle::AI::Handlers::MoveBasePower.add("TypeDependsOnUserIVs",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
 
+Battle::AI::Handlers::MoveFailureCheck.add("TypeAndPowerDependOnUserBerry",
+  proc { |move, user, target, ai, battle|
+    item = user.item
+    next true if !item || !item.is_berry? || !user.item_active?
+    next true if item.flags.none? { |f| f[/^NaturalGift_/i] }
+  }
+)
 Battle::AI::Handlers::MoveBasePower.add("TypeAndPowerDependOnUserBerry",
   proc { |power, move, user, target, ai, battle|
     # TODO: Can't this just call move.pbBaseDamage?
     ret = move.pbNaturalGiftBaseDamage(user.item_id)
     next (ret == 1) ? 0 : ret
-  }
-}
-Battle::AI::Handlers::MoveEffectScore.add("TypeAndPowerDependOnUserBerry",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if !user.item || !user.item.is_berry? || !user.item_active?
   }
 )
 
@@ -573,6 +634,11 @@ Battle::AI::Handlers::MoveEffectScore.add("TypeAndPowerDependOnUserBerry",
 
 # TypeDependsOnUserDrive
 
+Battle::AI::Handlers::MoveFailureCheck.add("TypeDependsOnUserMorpekoFormRaiseUserSpeed1",
+  proc { |move, user, target, ai, battle|
+    next true if !user.battler.isSpecies?(:MORPEKO) && user.effects[PBEffects::TransformSpecies] != :MORPEKO
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("TypeDependsOnUserMorpekoFormRaiseUserSpeed1",
   proc { |score, move, user, target, ai, battle|
     next score + 20 if user.stages[:SPEED] <= 0
@@ -583,7 +649,7 @@ Battle::AI::Handlers::MoveBasePower.add("TypeAndPowerDependOnWeather",
   proc { |power, move, user, target, ai, battle|
     next move.pbBaseDamage(power, user.battler, target.battler)
   }
-}
+)
 
 Battle::AI::Handlers::MoveBasePower.copy("TypeAndPowerDependOnWeather",
                                          "TypeAndPowerDependOnTerrain")

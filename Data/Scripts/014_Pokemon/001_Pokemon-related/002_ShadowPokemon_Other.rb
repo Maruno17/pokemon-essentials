@@ -399,6 +399,21 @@ end
 # (Shadow Shed)
 #===============================================================================
 class Battle::Move::RemoveAllScreens < Battle::Move
+  def pbMoveFailed?(user, targets)
+    will_fail = true
+    @battle.sides.each do |side|
+      will_fail = false if side.effects[PBEffects::AuroraVeil] > 0 ||
+                           side.effects[PBEffects::Reflect] > 0 ||
+                           side.effects[PBEffects::LightScreen] > 0 ||
+                           side.effects[PBEffects::Safeguard] > 0
+    end
+    if will_fail
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+
   def pbEffectGeneral(user)
     @battle.sides.each do |i|
       i.effects[PBEffects::AuroraVeil]  = 0

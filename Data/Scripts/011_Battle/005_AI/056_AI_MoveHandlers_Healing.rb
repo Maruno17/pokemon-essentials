@@ -1,10 +1,15 @@
 #===============================================================================
 #
 #===============================================================================
+Battle::AI::Handlers::MoveFailureCheck.add("HealUserFullyAndFallAsleep",
+  proc { |move, user, target, ai, battle|
+    next true if !user.battler.canHeal?
+    next true if user.battler.asleep?
+    next true if !user.battler.pbCanSleep?(user.battler, false, move.move, true)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("HealUserFullyAndFallAsleep",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.hp == user.totalhp ||
-              !user.battler.pbCanSleep?(user.battler, false, nil, true)
     score += 70
     score -= user.hp * 140 / user.totalhp
     score += 30 if user.status != :NONE
@@ -12,20 +17,23 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserFullyAndFallAsleep",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("HealUserHalfOfTotalHP",
+  proc { |move, user, target, ai, battle|
+    next true if !user.battler.canHeal?
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.hp == user.totalhp ||
-              (ai.trainer.medium_skill? && !user.battler.canHeal?)
     score += 50
     score -= user.hp * 100 / user.totalhp
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
+                                            "HealUserDependingOnWeather")
 Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnWeather",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.hp == user.totalhp ||
-              (ai.trainer.medium_skill? && !user.battler.canHeal?)
     case user.battler.effectiveWeather
     when :Sun, :HarshSun
       score += 30
@@ -39,10 +47,10 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnWeather",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
+                                            "HealUserDependingOnSandstorm")
 Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnSandstorm",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.hp == user.totalhp ||
-              (ai.trainer.medium_skill? && !user.battler.canHeal?)
     score += 50
     score -= user.hp * 100 / user.totalhp
     score += 30 if user.battler.effectiveWeather == :Sandstorm
@@ -50,53 +58,58 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnSandstorm",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
+                                            "HealUserHalfOfTotalHPLoseFlyingTypeThisTurn")
 Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHPLoseFlyingTypeThisTurn",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.hp == user.totalhp ||
-              (ai.trainer.medium_skill? && !user.battler.canHeal?)
     score += 50
     score -= user.hp * 100 / user.totalhp
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("CureTargetStatusHealUserHalfOfTotalHP",
+  proc { |move, user, target, ai, battle|
+    next true if !user.battler.canHeal?
+    next true if target.status == :NONE
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("CureTargetStatusHealUserHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    if target.status == :NONE
-      score -= 90
-    elsif user.hp == user.totalhp && target.opposes?(user)
-      score -= 90
-    else
-      score += (user.totalhp - user.hp) * 50 / user.totalhp
-      score -= 30 if target.opposes?(user)
-    end
+    score += (user.totalhp - user.hp) * 50 / user.totalhp
+    score -= 30 if target.opposes?(user)
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("HealUserByTargetAttackLowerTargetAttack1",
+  proc { |move, user, target, ai, battle|
+    if target.has_active_ability?(:CONTRARY)
+      next true if target.statStageAtMax?(:ATTACK)
+    else
+      next true if target.statStageAtMin?(:ATTACK)
+    end
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("HealUserByTargetAttackLowerTargetAttack1",
   proc { |score, move, user, target, ai, battle|
-    if target.statStageAtMin?(:ATTACK)
-      score -= 90
-    else
-      if target.battler.pbCanLowerStatStage?(:ATTACK, user.battler)
-        score += target.stages[:ATTACK] * 20
-        if ai.trainer.medium_skill?
-          hasPhysicalAttack = false
-          target.battler.eachMove do |m|
-            next if !m.physicalMove?(m.type)
-            hasPhysicalAttack = true
-            break
-          end
-          if hasPhysicalAttack
-            score += 20
-          elsif ai.trainer.high_skill?
-            score -= 90
-          end
+    if target.battler.pbCanLowerStatStage?(:ATTACK, user.battler)
+      score += target.stages[:ATTACK] * 20
+      if ai.trainer.medium_skill?
+        hasPhysicalAttack = false
+        target.battler.eachMove do |m|
+          next if !m.physicalMove?(m.type)
+          hasPhysicalAttack = true
+          break
+        end
+        if hasPhysicalAttack
+          score += 20
+        elsif ai.trainer.high_skill?
+          score -= 90
         end
       end
-      score += (user.totalhp - user.hp) * 50 / user.totalhp
     end
+    score += (user.totalhp - user.hp) * 50 / user.totalhp
     next score
   }
 )
@@ -112,9 +125,13 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDone",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("HealUserByHalfOfDamageDoneIfTargetAsleep",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.asleep?
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDoneIfTargetAsleep",
   proc { |score, move, user, target, ai, battle|
-    next 0 if !target.battler.asleep?
     if target.has_active_ability?(:LIQUIDOOZE)
       score -= 70
     elsif user.hp <= user.totalhp / 2
@@ -135,6 +152,11 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByThreeQuartersOfDamageDone",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("HealUserAndAlliesQuarterOfTotalHP",
+  proc { |move, user, target, ai, battle|
+    next true if battle.allSameSideBattlers(user.battler).none? { |b| b.canHeal? }
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHP",
   proc { |score, move, user, target, ai, battle|
     ally_amt = 30
@@ -149,6 +171,11 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHP",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("HealUserAndAlliesQuarterOfTotalHPCureStatus",
+  proc { |move, user, target, ai, battle|
+    next true if battle.allSameSideBattlers(user.battler).none? { |b| b.canHeal? || b.status != :NONE }
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHPCureStatus",
   proc { |score, move, user, target, ai, battle|
     ally_amt = 80 / battle.pbSideSize(user.index)
@@ -164,6 +191,11 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHPCure
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("HealTargetHalfOfTotalHP",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.canHeal?
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("HealTargetHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
     next 0 if user.opposes?(target)
@@ -174,6 +206,8 @@ Battle::AI::Handlers::MoveEffectScore.add("HealTargetHalfOfTotalHP",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("HealTargetHalfOfTotalHP",
+                                            "HealTargetDependingOnGrassyTerrain")
 Battle::AI::Handlers::MoveEffectScore.add("HealTargetDependingOnGrassyTerrain",
   proc { |score, move, user, target, ai, battle|
     next 0 if user.hp == user.totalhp ||
@@ -187,30 +221,32 @@ Battle::AI::Handlers::MoveEffectScore.add("HealTargetDependingOnGrassyTerrain",
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("HealUserPositionNextTurn",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if battle.positions[user.index].effects[PBEffects::Wish] > 0
+Battle::AI::Handlers::MoveFailureCheck.add("HealUserPositionNextTurn",
+  proc { |move, user, target, ai, battle|
+    next true if battle.positions[user.index].effects[PBEffects::Wish] > 0
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("StartHealUserEachTurn",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.effects[PBEffects::AquaRing]
+Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurn",
+  proc { |move, user, target, ai, battle|
+    next true if user.effects[PBEffects::AquaRing]
   }
 )
 
-Battle::AI::Handlers::MoveEffectScore.add("StartHealUserEachTurnTrapUserInBattle",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.effects[PBEffects::Ingrain]
+Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurnTrapUserInBattle",
+  proc { |move, user, target, ai, battle|
+    next true if user.effects[PBEffects::Ingrain]
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("StartDamageTargetEachTurnIfTargetAsleep",
+  proc { |move, user, target, ai, battle|
+    next true if !target.battler.asleep? || target.effects[PBEffects::Nightmare]
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("StartDamageTargetEachTurnIfTargetAsleep",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::Nightmare] ||
-       target.effects[PBEffects::Substitute] > 0
-      score -= 90
-    elsif !target.battler.asleep?
+    if target.effects[PBEffects::Substitute] > 0
       score -= 90
     else
       score -= 90 if target.statusCount <= 1
@@ -220,6 +256,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartDamageTargetEachTurnIfTargetAsle
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("StartLeechSeedTarget",
+  proc { |move, user, target, ai, battle|
+    next true if target.effects[PBEffects::LeechSeed] >= 0
+    next true if target.has_type?(:GRASS)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("StartLeechSeedTarget",
   proc { |score, move, user, target, ai, battle|
     if target.effects[PBEffects::LeechSeed] >= 0
@@ -239,14 +281,17 @@ Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHP",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("UserLosesHalfOfTotalHPExplosive",
+  proc { |move, user, target, ai, battle|
+    next true if battle.pbCheckGlobalAbility(:DAMP)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHPExplosive",
   proc { |score, move, user, target, ai, battle|
     reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
     foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
-    if battle.pbCheckGlobalAbility(:DAMP)
-      score -= 100
-    elsif ai.trainer.medium_skill? && reserves == 0 && foes > 0
-      score -= 100   # don't want to lose
+    if ai.trainer.medium_skill? && reserves == 0 && foes > 0
+      score -= 60   # don't want to lose
     elsif ai.trainer.high_skill? && reserves == 0 && foes == 0
       score += 80   # want to draw
     else
@@ -256,14 +301,14 @@ Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHPExplosive",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("UserLosesHalfOfTotalHPExplosive",
+                                            "UserFaintsExplosive")
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsExplosive",
   proc { |score, move, user, target, ai, battle|
     reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
     foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
-    if battle.pbCheckGlobalAbility(:DAMP)
-      score -= 100
-    elsif ai.trainer.medium_skill? && reserves == 0 && foes > 0
-      score -= 100   # don't want to lose
+    if ai.trainer.medium_skill? && reserves == 0 && foes > 0
+      score -= 60   # don't want to lose
     elsif ai.trainer.high_skill? && reserves == 0 && foes == 0
       score += 80   # want to draw
     else
@@ -273,25 +318,23 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsExplosive",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("UserLosesHalfOfTotalHPExplosive",
+                                            "UserFaintsPowersUpInMistyTerrainExplosive")
 Battle::AI::Handlers::MoveBasePower.add("UserFaintsPowersUpInMistyTerrainExplosive",
   proc { |power, move, user, target, ai, battle|
     next power * 3 / 2 if battle.field.terrain == :Misty
   }
-}
+)
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsPowersUpInMistyTerrainExplosive",
   proc { |score, move, user, target, ai, battle|
     reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
     foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
-    if battle.pbCheckGlobalAbility(:DAMP)
-      score -= 100
-    elsif ai.trainer.medium_skill? && reserves == 0 && foes > 0
-      score -= 100   # don't want to lose
+    if ai.trainer.medium_skill? && reserves == 0 && foes > 0
+      score -= 60   # don't want to lose
     elsif ai.trainer.high_skill? && reserves == 0 && foes == 0
       score += 40   # want to draw
-      score += 40 if battle.field.terrain == :Misty
     else
       score -= user.hp * 100 / user.totalhp
-      score += 20 if battle.field.terrain == :Misty
     end
     next score
   }
@@ -301,15 +344,15 @@ Battle::AI::Handlers::MoveBasePower.add("UserFaintsFixedDamageUserHP",
   proc { |power, move, user, target, ai, battle|
     next user.hp
   }
-}
+)
 
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsLowerTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|
     if !target.battler.pbCanLowerStatStage?(:ATTACK, user.battler) &&
        !target.battler.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler)
-      score -= 100
+      score -= 60
     elsif battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
-      score -= 100
+      score -= 60
     else
       score += target.stages[:ATTACK] * 10
       score += target.stages[:SPECIAL_ATTACK] * 10
@@ -319,26 +362,41 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsLowerTargetAtkSpAtk2",
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("UserFaintsHealAndCureReplacement",
+  proc { |move, user, target, ai, battle|
+    next true if !battle.pbCanChooseNonActive?(user.index)
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsHealAndCureReplacement",
   proc { |score, move, user, target, ai, battle|
     next score - 70
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.copy("UserFaintsHealAndCureReplacement",
+                                            "UserFaintsHealAndCureReplacementRestorePP")
 Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsHealAndCureReplacement",
                                            "UserFaintsHealAndCureReplacementRestorePP")
 
+Battle::AI::Handlers::MoveFailureCheck.add("StartPerishCountsForAllBattlers",
+  proc { |move, user, target, ai, battle|
+    next target.effects[PBEffects::PerishSong] > 0
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("StartPerishCountsForAllBattlers",
   proc { |score, move, user, target, ai, battle|
     if battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
-      score -= 90
-    elsif target.effects[PBEffects::PerishSong] > 0
-      score -= 90
+      score -= 60
     end
     next score
   }
 )
 
+Battle::AI::Handlers::MoveFailureCheck.add("AttackerFaintsIfUserFaints",
+  proc { |move, user, target, ai, battle|
+    next Settings::MECHANICS_GENERATION >= 7 && user.effects[PBEffects::DestinyBondPrevious]
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("AttackerFaintsIfUserFaints",
   proc { |score, move, user, target, ai, battle|
     score += 50
