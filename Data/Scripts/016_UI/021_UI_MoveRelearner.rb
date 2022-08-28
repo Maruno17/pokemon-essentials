@@ -173,8 +173,10 @@ class MoveRelearnerScreen
     return moves | []   # remove duplicates
   end
 
-  def pbStartScreen(pkmn)
-    moves = pbGetRelearnableMoves(pkmn)
+  def pbStartScreen(pkmn,moves=nil)
+    if moves == nil
+      moves = pbGetRelearnableMoves(pkmn)
+    end
     @scene.pbStartScene(pkmn, moves)
     loop do
       move = @scene.pbChooseMove
