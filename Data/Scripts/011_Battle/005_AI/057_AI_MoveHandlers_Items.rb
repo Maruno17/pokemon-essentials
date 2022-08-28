@@ -99,8 +99,8 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveTargetItem",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DestroyTargetBerryOrGem",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::Substitute] == 0
-      if ai.trainer.high_skill? && target.item && target.item.is_berry?
+    if ai.trainer.high_skill?
+      if target.item && target.item.is_berry? && target.effects[PBEffects::Substitute] == 0
         score += 30
       end
     end
@@ -108,6 +108,9 @@ Battle::AI::Handlers::MoveEffectScore.add("DestroyTargetBerryOrGem",
   }
 )
 
+#===============================================================================
+#
+#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CorrodeTargetItem",
   proc { |move, user, target, ai, battle|
     next true if !target.item || target.unlosableItem?(target.item) ||
@@ -118,10 +121,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("CorrodeTargetItem",
 )
 Battle::AI::Handlers::MoveEffectScore.add("CorrodeTargetItem",
   proc { |score, move, user, target, ai, battle|
-    if !target.item_active?
-      score -= 60
+    if target.item_active?
+      score += 30
     else
-      score += 50
+      score -= 50
     end
     next score
   }
@@ -142,7 +145,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartTargetCannotUseItem",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("StartNegateHeldItems",
   proc { |score, move, user, target, ai, battle|
@@ -185,7 +188,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserConsumeBerryRaiseDefense2",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AllBattlersConsumeBerry",
   proc { |move, user, target, ai, battle|

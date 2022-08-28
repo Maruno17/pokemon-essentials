@@ -5,7 +5,7 @@ class Battle::AI
   #=============================================================================
   def apply_effect_chance_to_score(score)
     if @move.damagingMove?
-      # TODO: Doesn't return the correct value for "014" (Chatter).
+      # TODO: Doesn't return the correct value for "ConfuseTarget" (Chatter).
       effect_chance = @move.addlEffect
       if effect_chance > 0
         effect_chance *= 2 if @user.hasActiveAbility?(:SERENEGRACE) ||
@@ -22,10 +22,10 @@ class Battle::AI
   #=============================================================================
   # TODO: These function codes need to have an attr_reader :statUp and for them
   #       to be set when the move is initialised.
-  #       035 Shell Smash
-  #       037 Acupressure
-  #       137 Magnetic Flux
-  #       15C Gear Up
+  #       LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2 Shell Smash
+  #       RaiseTargetRandomStat2 Acupressure
+  #       RaisePlusMinusUserAndAlliesDefSpDef1 Magnetic Flux
+  #       RaisePlusMinusUserAndAlliesAtkSpAtk1 Gear Up
   def calc_user_stat_raise_mini_score
     mini_score = 1.0
     # Determine whether the move boosts Attack, Special Attack or Speed (Bulk Up
@@ -36,7 +36,7 @@ class Battle::AI
       next if idx.odd?
       next if ![:ATTACK, :SPATK, :SPEED].include?(stat)
       sweeping_stat = true
-      next if @move.function == "024"   # Bulk Up (+Atk +Def)
+      next if @move.function == "RaiseUserAtkDef1"   # Bulk Up (+Atk +Def)
       offensive_stat = true
       break
     end
@@ -79,12 +79,12 @@ class Battle::AI
     end
 
     # Prefer if target has a status problem
-    if @target.status != PBStatuses::NONE
+    if @target.status != :NONE
       mini_score *= (sweeping_stat) ? 1.2 : 1.1
       case @target.status
-      when PBStatuses::SLEEP, PBStatuses::FROZEN
+      when :SLEEP, :FROZEN
         mini_score *= 1.3
-      when PBStatuses::BURN
+      when :BURN
         # TODO: Prefer if the move boosts Sp Def.
         mini_score *= 1.1 if !offensive_stat
       end
@@ -101,7 +101,7 @@ class Battle::AI
     if @target.effects[PBEffects::Encore] > 0 &&
        GameData::Move.get(@target.effects[PBEffects::EncoreMove]).category == 2   # Status move
       # TODO: Why should this check greatly prefer raising both the user's defences?
-      if sweeping_stat || @move.function == "02A"   # +Def +SpDef
+      if sweeping_stat || @move.function == "RaiseUserDefSpDef1"   # +Def +SpDef
         mini_score *= 1.5
       else
         mini_score *= 1.3
@@ -144,7 +144,7 @@ class Battle::AI
     when :ATTACK
       has_physical_move = false
       @user.eachMove do |m|
-        next if !m.physicalMove?(m.type) || m.function == "121"   # Foul Play
+        next if !m.physicalMove?(m.type) || m.function == "UseTargetAttackInsteadOfUserAttack"   # Foul Play
         has_physical_move = true
         break
       end
@@ -165,17 +165,17 @@ class Battle::AI
       # it won't be hurt by weather
       if @user.hp == @user.totalhp &&
          (@user.hasActiveItem?(:FOCUSSASH) || @user.hasActiveAbility?(:STURDY))
-        if !(@battle.pbWeather == PBWeather::Sandstorm && @user.takesSandstormDamage?) &&
-           !(@battle.pbWeather == PBWeather::Hail && @user.takesHailDamage?) &&
-           !(@battle.pbWeather == PBWeather::ShadowSky && @user.takesShadowSkyDamage?)
+        if !(@battle.pbWeather == :Sandstorm && @user.takesSandstormDamage?) &&
+           !(@battle.pbWeather == :Hail && @user.takesHailDamage?) &&
+           !(@battle.pbWeather == :ShadowSky && @user.takesShadowSkyDamage?)
           mini_score *= 1.4
         end
       end
       # Prefer if user has the Sweeper role
-      # TODO: Is 1.1x for 025 Coil (+Atk, +Def, +acc).
+      # TODO: Is 1.1x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
       mini_score *= 1.3 if check_battler_role(@user, BattleRole::SWEEPER)
       # Don't prefer if user is burned or paralysed
-      mini_score *= 0.5 if @user.status == PBStatuses::BURN || @user.status == PBStatuses::PARALYSIS
+      mini_score *= 0.5 if @user.status == :BURN || @user.status == :PARALYSIS
       # Don't prefer if user's Speed stat is lowered
       sum_stages = @user.stages[:SPEED]
       mini_score *= 1 + sum_stages * 0.05 if sum_stages < 0
@@ -191,23 +191,23 @@ class Battle::AI
       mini_score *= 0.6 if @target.hasActiveAbility?(:SPEEDBOOST)
       # TODO: Don't prefer if target has previously used a move that benefits
       #       from user's Attack being boosted.
-      mini_score *= 0.3 if check_for_move(@target) { |move| move.function == "121" }   # Foul Play
+      mini_score *= 0.3 if check_for_move(@target) { |move| move.function == "UseTargetAttackInsteadOfUserAttack" }   # Foul Play
       # TODO: Don't prefer if the target has previously used a priority move.
 
     when :DEFENSE
       # Prefer if user has a healing item
-      # TODO: Is 1.1x for 025 Coil (+Atk, +Def, +acc).
+      # TODO: Is 1.1x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
       mini_score *= 1.2 if @user.hasActiveItem?(:LEFTOVERS) ||
                            (@user.hasActiveItem?(:BLACKSLUDGE) && @user.pbHasType?(:POISON))
       # Prefer if user knows any healing moves
-      # TODO: Is 1.2x for 025 Coil (+Atk, +Def, +acc).
+      # TODO: Is 1.2x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
       mini_score *= 1.3 if check_for_move(@user) { |move| move.healingMove? }
       # Prefer if user knows Pain Split or Leech Seed
-      # TODO: Leech Seed is 1.2x for 025 Coil (+Atk, +Def, +acc).
-      mini_score *= 1.2 if @user.pbHasMoveFunction?("05A")   # Pain Split
-      mini_score *= 1.3 if @user.pbHasMoveFunction?("0DC")   # Leech Seed
+      # TODO: Leech Seed is 1.2x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
+      mini_score *= 1.2 if @user.pbHasMoveFunction?("UserTargetAverageHP")   # Pain Split
+      mini_score *= 1.3 if @user.pbHasMoveFunction?("StartLeechSeedTarget")   # Leech Seed
       # Prefer if user has certain roles
-      # TODO: Is 1.1x for 025 Coil (+Atk, +Def, +acc).
+      # TODO: Is 1.1x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
       mini_score *= 1.3 if check_battler_role(@user, BattleRole::PHYSICALWALL, BattleRole::SPECIALWALL)
       # Don't prefer if user is badly poisoned
       mini_score *= 0.2 if @user.effects[PBEffects::Toxic] > 0
@@ -227,9 +227,9 @@ class Battle::AI
       # it won't be hurt by weather
       if @user.hp == @user.totalhp &&
          (@user.hasActiveItem?(:FOCUSSASH) || @user.hasActiveAbility?(:STURDY))
-        if !(@battle.pbWeather == PBWeather::Sandstorm && @user.takesSandstormDamage?) &&
-           !(@battle.pbWeather == PBWeather::Hail && @user.takesHailDamage?) &&
-           !(@battle.pbWeather == PBWeather::ShadowSky && @user.takesShadowSkyDamage?)
+        if !(@battle.pbWeather == :Sandstorm && @user.takesSandstormDamage?) &&
+           !(@battle.pbWeather == :Hail && @user.takesHailDamage?) &&
+           !(@battle.pbWeather == :ShadowSky && @user.takesShadowSkyDamage?)
           mini_score *= 1.4
         end
       end
@@ -243,7 +243,7 @@ class Battle::AI
         mini_score *= 1 - sum_stages * 0.05 if sum_stages < 0
       end
       # Prefer if user has lowered Speed
-      # TODO: Is a flat 1.3x for 026 Dragon Dance (+Atk, +Spd).
+      # TODO: Is a flat 1.3x for RaiseUserAtkSpd1 Dragon Dance (+Atk, +Spd).
       sum_stages = @user.stages[:SPEED]
       mini_score *= 1 - sum_stages * 0.05 if sum_stages < 0
       # Prefer if user has Moxie
@@ -251,7 +251,7 @@ class Battle::AI
       # Prefer if user has the Sweeper role
       mini_score *= 1.3 if check_battler_role(@user, BattleRole::SWEEPER)
       # Don't prefer if user is burned or paralysed
-      mini_score *= 0.2 if @user.status == PBStatuses::PARALYSIS
+      mini_score *= 0.2 if @user.status == :PARALYSIS
       # Don't prefer if user has Speed Boost
       mini_score *= 0.6 if @user.hasActiveAbility?(:SPEEDBOOST)
 
@@ -275,9 +275,9 @@ class Battle::AI
       # it won't be hurt by weather
       if @user.hp == @user.totalhp &&
          (@user.hasActiveItem?(:FOCUSSASH) || @user.hasActiveAbility?(:STURDY))
-        if !(@battle.pbWeather == PBWeather::Sandstorm && @user.takesSandstormDamage?) &&
-           !(@battle.pbWeather == PBWeather::Hail && @user.takesHailDamage?) &&
-           !(@battle.pbWeather == PBWeather::ShadowSky && @user.takesShadowSkyDamage?)
+        if !(@battle.pbWeather == :Sandstorm && @user.takesSandstormDamage?) &&
+           !(@battle.pbWeather == :Hail && @user.takesHailDamage?) &&
+           !(@battle.pbWeather == :ShadowSky && @user.takesShadowSkyDamage?)
           mini_score *= 1.4
         end
       end
@@ -305,8 +305,8 @@ class Battle::AI
       # Prefer if user knows any healing moves
       mini_score *= 1.3 if check_for_move(@user) { |move| move.healingMove? }
       # Prefer if user knows Pain Split or Leech Seed
-      mini_score *= 1.2 if @user.pbHasMoveFunction?("05A")   # Pain Split
-      mini_score *= 1.3 if @user.pbHasMoveFunction?("0DC")   # Leech Seed
+      mini_score *= 1.2 if @user.pbHasMoveFunction?("UserTargetAverageHP")   # Pain Split
+      mini_score *= 1.3 if @user.pbHasMoveFunction?("StartLeechSeedTarget")   # Leech Seed
       # Prefer if user has certain roles
       mini_score *= 1.3 if check_battler_role(@user, BattleRole::PHYSICALWALL, BattleRole::SPECIALWALL)
       # Don't prefer if user's Defense stat is raised
@@ -330,8 +330,8 @@ class Battle::AI
       mini_score *= 1.1 if @target.hasActiveItem?([:BRIGHTPOWDER, :LAXINCENSE])
       # Prefer if target has an ability that lowers foes' accuracy
       # TODO: Tangled Feet while user is confused?
-      if (@battle.pbWeather == PBWeather::Sandstorm && @target.hasActiveAbility?(:SANDVEIL)) ||
-         (@battle.pbWeather == PBWeather::Hail && @target.hasActiveAbility?(:SNOWCLOAK))
+      if (@battle.pbWeather == :Sandstorm && @target.hasActiveAbility?(:SANDVEIL)) ||
+         (@battle.pbWeather == :Hail && @target.hasActiveAbility?(:SNOWCLOAK))
         mini_score *= 1.1
       end
 
@@ -343,15 +343,15 @@ class Battle::AI
       mini_score *= 1.3 if @user.hasActiveItem?([:BRIGHTPOWDER, :LAXINCENSE])
       # Prefer if user has an ability that lowers foes' accuracy
       # TODO: Tangled Feet while user is confused?
-      if (@battle.pbWeather == PBWeather::Sandstorm && @user.hasActiveAbility?(:SANDVEIL)) ||
-         (@battle.pbWeather == PBWeather::Hail && @user.hasActiveAbility?(:SNOWCLOAK))
+      if (@battle.pbWeather == :Sandstorm && @user.hasActiveAbility?(:SANDVEIL)) ||
+         (@battle.pbWeather == :Hail && @user.hasActiveAbility?(:SNOWCLOAK))
         mini_score *= 1.3
       end
       # Prefer if user knows any healing moves
       mini_score *= 1.3 if check_for_move(@user) { |move| move.healingMove? }
       # Prefer if user knows Pain Split or Leech Seed
-      mini_score *= 1.2 if @user.pbHasMoveFunction?("05A")   # Pain Split
-      mini_score *= 1.3 if @user.pbHasMoveFunction?("0DC")   # Leech Seed
+      mini_score *= 1.2 if @user.pbHasMoveFunction?("UserTargetAverageHP")   # Pain Split
+      mini_score *= 1.3 if @user.pbHasMoveFunction?("StartLeechSeedTarget")   # Leech Seed
       # Prefer if user has certain roles
       mini_score *= 1.3 if check_battler_role(@user, BattleRole::PHYSICALWALL, BattleRole::SPECIALWALL)
       # TODO: Don't prefer if user's evasion stat is raised
@@ -367,15 +367,17 @@ class Battle::AI
     # TODO: Don't prefer if target has Unaware? Reborn resets mini_score to 1.
     #       This check needs more consideration. Note that @target is user for
     #       status moves, so that part is wrong.
-    # TODO: Is 0x for 025, 026, 026 (all moves that raise multiple stats)
+    # TODO: Is 0x for RaiseUserAtkDefAcc1, RaiseUserAtkSpd1 (all moves that raise multiple stats)
     mini_score *= 0.5 if @move.statusMove? && @target.hasActiveAbility?(:UNAWARE)
 
     # TODO: Don't prefer if any foe has previously used a stat stage-clearing
-    #       move (050, 051 Clear Smog/Haze).
-    mini_score *= 0.3 if check_for_move(@target) { |move| ["050", "051"].include?(move.function) }   # Clear Smog, Haze
+    #       move (Clear Smog/Haze).
+    mini_score *= 0.3 if check_for_move(@target) { |move|
+      ["ResetTargetStatStages", "ResetAllBattlersStatStages"].include?(move.function)
+    }   # Clear Smog, Haze
 
     # TODO: Prefer if user is faster than the target.
-    # TODO: Is 1.3x for 025 Coil (+Atk, +Def, +acc).
+    # TODO: Is 1.3x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
     mini_score *= 1.5 if @user_faster
     # TODO: Don't prefer if target is a higher level than the user
     if @target.level > @user.level + 5

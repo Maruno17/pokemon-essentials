@@ -353,7 +353,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHPExplosive",
     if ai.trainer.medium_skill? && reserves == 0 && foes > 0
       score -= 60   # don't want to lose
     elsif ai.trainer.high_skill? && reserves == 0 && foes == 0
-      score += 80   # want to draw
+      score += 40   # want to draw
     else
       score -= (user.totalhp - user.hp) * 75 / user.totalhp
     end
@@ -373,7 +373,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsExplosive",
     if ai.trainer.medium_skill? && reserves == 0 && foes > 0
       score -= 60   # don't want to lose
     elsif ai.trainer.high_skill? && reserves == 0 && foes == 0
-      score += 80   # want to draw
+      score += 40   # want to draw
     else
       score -= user.hp * 100 / user.totalhp
     end
@@ -457,7 +457,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsHealAndCureReplacement",
                                            "UserFaintsHealAndCureReplacementRestorePP")
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartPerishCountsForAllBattlers",
   proc { |move, user, target, ai, battle|

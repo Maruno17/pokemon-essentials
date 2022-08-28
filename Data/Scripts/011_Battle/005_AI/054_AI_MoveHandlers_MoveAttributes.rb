@@ -422,15 +422,6 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.pbOwnSide.effects[PBEffects::LuckyChant] > 0
-  }
-)
-
-#===============================================================================
-#
-#===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartPreventCriticalHitsAgainstUserSide",
   proc { |move, user, target, ai, battle|
     next true if user.pbOwnSide.effects[PBEffects::LuckyChant] > 0
@@ -458,7 +449,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CannotMakeTargetFaint",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserEnduresFaintingThisTurn",
   proc { |score, move, user, target, ai, battle|
@@ -555,7 +546,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveScreens",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
   proc { |score, move, user, target, ai, battle|
@@ -574,7 +565,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
   proc { |score, move, user, target, ai, battle|
@@ -594,7 +585,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShield",
   proc { |score, move, user, target, ai, battle|
@@ -613,7 +604,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesObstruct",
   proc { |score, move, user, target, ai, battle|
@@ -632,7 +623,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesObstruct"
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromTargetingMovesSpikyShield",
   proc { |score, move, user, target, ai, battle|
@@ -674,12 +665,12 @@ Battle::AI::Handlers::MoveFailureCheck.add("ProtectUserSideFromStatusMoves",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 # ProtectUserSideFromPriorityMoves
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 # ProtectUserSideFromMultiTargetDamagingMoves
 
@@ -949,6 +940,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetMovesBecomeElectric",
 )
 
 #===============================================================================
-#
+# TODO: This code can be called with or without a target. Make sure it doesn't
+#       assume that there is a target.
 #===============================================================================
 # NormalMovesBecomeElectric

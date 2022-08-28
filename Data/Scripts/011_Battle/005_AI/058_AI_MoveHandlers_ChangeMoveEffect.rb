@@ -166,7 +166,7 @@ Battle::AI::Handlers::MoveEffectScore.add("PowerUpAllyMove",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterPhysicalDamage",
   proc { |power, move, user, target, ai, battle|
@@ -192,7 +192,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterSpecialDamage",
   proc { |power, move, user, target, ai, battle|
@@ -218,7 +218,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterDamagePlusHalf",
   proc { |power, move, user, target, ai, battle|
@@ -246,7 +246,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
     avg -= user.stages[:SPECIAL_DEFENSE] * 10
     score += avg / 2
     if user.battler.pbHasMoveFunction?("PowerDependsOnUserStockpile",
-                                          "HealUserDependingOnUserStockpile")   # Spit Up, Swallow
+                                       "HealUserDependingOnUserStockpile")   # Spit Up, Swallow
       score += 20   # More preferable if user also has Spit Up/Swallow
     end
     next score
@@ -338,7 +338,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UseLastMoveUsedByTarget",
 # UseMoveDependingOnEnvironment
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 # UseRandomMove
 
@@ -386,12 +386,12 @@ Battle::AI::Handlers::MoveEffectScore.add("UseRandomUserMoveIfAsleep",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 # BounceBackProblemCausingStatusMoves
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 # StealAndUseBeneficialStatusMove
 

@@ -3,20 +3,22 @@
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SleepTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.pbCanSleep?(user.battler, false, move.move)
+    next true if move.statusMove? && !target.battler.pbCanSleep?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("SleepTarget",
   proc { |score, move, user, target, ai, battle|
-    score += 30
-    if ai.trainer.medium_skill?
-      score -= 30 if target.effects[PBEffects::Yawn] > 0
-    end
-    score -= 30 if target.has_active_ability?(:MARVELSCALE)
-    if ai.trainer.best_skill?
-      if target.battler.pbHasMoveFunction?("FlinchTargetFailsIfUserNotAsleep",
-                                           "UseRandomUserMoveIfAsleep")   # Snore, Sleep Talk
-        score -= 50
+    if target.battler.pbCanSleep?(user.battler, false, move.move)
+      score += 30
+      if ai.trainer.medium_skill?
+        score -= 30 if target.effects[PBEffects::Yawn] > 0
+      end
+      score -= 30 if target.has_active_ability?(:MARVELSCALE)
+      if ai.trainer.best_skill?
+        if target.battler.pbHasMoveFunction?("FlinchTargetFailsIfUserNotAsleep",
+                                             "UseRandomUserMoveIfAsleep")   # Snore, Sleep Talk
+          score -= 50
+        end
       end
     end
     next score
@@ -29,7 +31,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SleepTarget",
 Battle::AI::Handlers::MoveFailureCheck.add("SleepTargetIfUserDarkrai",
   proc { |move, user, target, ai, battle|
     next true if !user.battler.isSpecies?(:DARKRAI) && user.effects[PBEffects::TransformSpecies] != :DARKRAI
-    next true if move.statusMove? && !target.pbCanSleep?(user.battler, false, move.move)
+    next true if move.statusMove? && !target.battler.pbCanSleep?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.copy("SleepTarget",
@@ -47,17 +49,19 @@ Battle::AI::Handlers::MoveEffectScore.copy("SleepTarget",
 Battle::AI::Handlers::MoveFailureCheck.add("SleepTargetNextTurn",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Yawn] > 0
-    next true if !target.pbCanSleep?(user.battler, false, move.move)
+    next true if !target.battler.pbCanSleep?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("SleepTargetNextTurn",
   proc { |score, move, user, target, ai, battle|
-    score += 30
-    score -= 30 if target.has_active_ability?(:MARVELSCALE)
-    if ai.trainer.best_skill?
-      if target.battler.pbHasMoveFunction?("FlinchTargetFailsIfUserNotAsleep",
-                                           "UseRandomUserMoveIfAsleep")   # Snore, Sleep Talk
-        score -= 50
+    if target.battler.pbCanSleep?(user.battler, false, move.move)
+      score += 30
+      score -= 30 if target.has_active_ability?(:MARVELSCALE)
+      if ai.trainer.best_skill?
+        if target.battler.pbHasMoveFunction?("FlinchTargetFailsIfUserNotAsleep",
+                                             "UseRandomUserMoveIfAsleep")   # Snore, Sleep Talk
+          score -= 50
+        end
       end
     end
     next score
@@ -69,22 +73,24 @@ Battle::AI::Handlers::MoveEffectScore.add("SleepTargetNextTurn",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PoisonTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.pbCanPoison?(user.battler, false, move.move)
+    next true if move.statusMove? && !target.battler.pbCanPoison?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("PoisonTarget",
   proc { |score, move, user, target, ai, battle|
-    score += 30
-    if ai.trainer.medium_skill?
-      score += 30 if target.hp <= target.totalhp / 4
-      score += 50 if target.hp <= target.totalhp / 8
-      score -= 40 if target.effects[PBEffects::Yawn] > 0
+    if target.battler.pbCanPoison?(user.battler, false, move.move)
+      score += 30
+      if ai.trainer.medium_skill?
+        score += 30 if target.hp <= target.totalhp / 4
+        score += 50 if target.hp <= target.totalhp / 8
+        score -= 40 if target.effects[PBEffects::Yawn] > 0
+      end
+      if ai.trainer.high_skill?
+        score += 10 if target.rough_stat(:DEFENSE) > 100
+        score += 10 if target.rough_stat(:SPECIAL_DEFENSE) > 100
+      end
+      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :TOXICBOOST])
     end
-    if ai.trainer.high_skill?
-      score += 10 if target.rough_stat(:DEFENSE) > 100
-      score += 10 if target.rough_stat(:SPECIAL_DEFENSE) > 100
-    end
-    score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :TOXICBOOST])
     next score
   }
 )
@@ -94,7 +100,7 @@ Battle::AI::Handlers::MoveEffectScore.add("PoisonTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PoisonTargetLowerTargetSpeed1",
   proc { |move, user, target, ai, battle|
-    next true if !target.pbCanPoison?(user.battler, false, move.move) &&
+    next true if !target.battler.pbCanPoison?(user.battler, false, move.move) &&
                  !target.battler.pbCanLowerStatStage?(:SPEED, user.battler, move.move)
   }
 )
@@ -132,17 +138,19 @@ Battle::AI::Handlers::MoveFailureCheck.copy("PoisonTarget",
                                             "BadPoisonTarget")
 Battle::AI::Handlers::MoveEffectScore.add("BadPoisonTarget",
   proc { |score, move, user, target, ai, battle|
-    score += 30
-    if ai.trainer.medium_skill?
-      score += 30 if target.hp <= target.totalhp / 4
-      score += 50 if target.hp <= target.totalhp / 8
-      score -= 40 if target.effects[PBEffects::Yawn] > 0
+    if target.battler.pbCanPoison?(user.battler, false)
+      score += 30
+      if ai.trainer.medium_skill?
+        score += 30 if target.hp <= target.totalhp / 4
+        score += 50 if target.hp <= target.totalhp / 8
+        score -= 40 if target.effects[PBEffects::Yawn] > 0
+      end
+      if ai.trainer.high_skill?
+        score += 10 if target.rough_stat(:DEFENSE) > 100
+        score += 10 if target.rough_stat(:SPECIAL_DEFENSE) > 100
+      end
+      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :TOXICBOOST])
     end
-    if ai.trainer.high_skill?
-      score += 10 if target.rough_stat(:DEFENSE) > 100
-      score += 10 if target.rough_stat(:SPECIAL_DEFENSE) > 100
-    end
-    score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :TOXICBOOST])
     next score
   }
 )
@@ -152,22 +160,24 @@ Battle::AI::Handlers::MoveEffectScore.add("BadPoisonTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ParalyzeTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.pbCanParalyze?(user.battler, false, move.move)
+    next true if move.statusMove? && !target.battler.pbCanParalyze?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("ParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
-    score += 30
-    if ai.trainer.medium_skill?
-      aspeed = user.rough_stat(:SPEED)
-      ospeed = target.rough_stat(:SPEED)
-      if aspeed < ospeed
-        score += 30
-      elsif aspeed > ospeed
-        score -= 40
+    if target.battler.pbCanParalyze?(user.battler, false, move.move)
+      score += 30
+      if ai.trainer.medium_skill?
+        aspeed = user.rough_stat(:SPEED)
+        ospeed = target.rough_stat(:SPEED)
+        if aspeed < ospeed
+          score += 30
+        elsif aspeed > ospeed
+          score -= 40
+        end
       end
+      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
     end
-    score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
     next score
   }
 )
@@ -179,7 +189,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("ParalyzeTargetIfNotTypeImmune",
   proc { |move, user, target, ai, battle|
     eff = target.effectiveness_of_type_against_battler(move.rough_type, user)
     next true if Effectiveness.ineffective?(eff)
-    next true if move.statusMove? && !target.pbCanParalyze?(user.battler, false, move.move)
+    next true if move.statusMove? && !target.battler.pbCanParalyze?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.copy("ParalyzeTarget",
@@ -197,13 +207,15 @@ Battle::AI::Handlers::MoveEffectScore.copy("ParalyzeTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("BurnTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.pbCanBurn?(user.battler, false, move.move)
+    next true if move.statusMove? && !target.battler.pbCanBurn?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("BurnTarget",
   proc { |score, move, user, target, ai, battle|
-    score += 30
-    score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :FLAREBOOST])
+    if target.battler.pbCanBurn?(user.battler, false, move.move)
+      score += 30
+      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :FLAREBOOST])
+    end
     next score
   }
 )
@@ -225,23 +237,12 @@ Battle::AI::Handlers::MoveEffectScore.copy("BurnTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FreezeTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.pbCanFreeze?(user.battler, false, move.move)
+    next true if move.statusMove? && !target.battler.pbCanFreeze?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("FreezeTarget",
   proc { |score, move, user, target, ai, battle|
-    score += 30
-    score -= 20 if target.has_active_ability?(:MARVELSCALE)
-    next score
-  }
-)
-
-#===============================================================================
-#
-#===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("FreezeTargetSuperEffectiveAgainstWater",
-  proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanFreeze?(user.battler, false)
+    if target.battler.pbCanFreeze?(user.battler, false, move.move)
       score += 30
       score -= 20 if target.has_active_ability?(:MARVELSCALE)
     end
@@ -252,22 +253,19 @@ Battle::AI::Handlers::MoveEffectScore.add("FreezeTargetSuperEffectiveAgainstWate
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("FreezeTargetAlwaysHitsInHail",
-  proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanFreeze?(user.battler, false)
-      score += 30
-      score -= 20 if target.has_active_ability?(:MARVELSCALE)
-    else
-      score -= 90 if move.statusMove?
-    end
-    next score
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("FreezeTarget",
+                                           "FreezeTargetSuperEffectiveAgainstWater")
 
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.copy("FreezeTargetAlwaysHitsInHail",
+Battle::AI::Handlers::MoveEffectScore.copy("FreezeTarget",
+                                           "FreezeTargetAlwaysHitsInHail")
+
+#===============================================================================
+#
+#===============================================================================
+Battle::AI::Handlers::MoveEffectScore.copy("FreezeTarget",
                                            "FreezeFlinchTarget")
 
 #===============================================================================
@@ -350,10 +348,12 @@ Battle::AI::Handlers::MoveEffectScore.add("CureUserPartyStatus",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("CureTargetBurn",
   proc { |score, move, user, target, ai, battle|
-    if target.opposes?(user)
-      score -= 40 if target.status == :BURN
-    elsif target.status == :BURN
-      score += 40
+    if target.status == :BURN
+      if target.opposes?(user)
+        score -= 40
+      else
+        score += 40
+      end
     end
     next score
   }
@@ -430,9 +430,8 @@ Battle::AI::Handlers::MoveBasePower.add("FlinchTargetDoublePowerIfTargetInSky",
 )
 Battle::AI::Handlers::MoveEffectScore.add("FlinchTargetDoublePowerIfTargetInSky",
   proc { |score, move, user, target, ai, battle|
-    score += 30 if !target.has_active_ability?(:INNERFOCUS) &&
-                   target.effects[PBEffects::Substitute] == 0
-    next score
+    next score + 30 if !target.has_active_ability?(:INNERFOCUS) &&
+                       target.effects[PBEffects::Substitute] == 0
   }
 )
 
@@ -446,7 +445,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("ConfuseTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
-    next score + 30
+    next score + 30 if target.battler.pbCanConfuse?(user.battler, false, move.move)
   }
 )
 
@@ -466,10 +465,12 @@ Battle::AI::Handlers::MoveFailureCheck.add("AttractTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("AttractTarget",
   proc { |score, move, user, target, ai, battle|
-    score += 30
-    if target.has_active_item?(:DESTINYKNOT) &&
-       user.battler.pbCanAttract?(target.battler, false)
-      score -= 30
+    if target.battler.pbCanAttract?(user.battler, false)
+      score += 30
+      if target.has_active_item?(:DESTINYKNOT) &&
+         user.battler.pbCanAttract?(target.battler, false)
+        score -= 30
+      end
     end
     next score
   }
@@ -775,20 +776,20 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartTargetAirborneAndAlwaysHitByMov
 Battle::AI::Handlers::MoveEffectScore.add("HitsTargetInSkyGroundsTarget",
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.medium_skill?
-      score += 20 if target.effects[PBEffects::MagnetRise] > 0
-      score += 20 if target.effects[PBEffects::Telekinesis] > 0
-      score += 20 if target.battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+      score += 20 if target.effects[PBEffects::MagnetRise] > 0 ||
+                     target.effects[PBEffects::Telekinesis] > 0 ||
+                     target.has_type?(:FLYING) ||
+                     target.has_active_ability?(:LEVITATE) ||
+                     target.has_active_item?(:AIRBALLOON) ||
+                     target.battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
                                                      "TwoTurnAttackInvulnerableInSkyParalyzeTarget")
-      score += 20 if target.has_type?(:FLYING)
-      score += 20 if target.has_active_ability?(:LEVITATE)
-      score += 20 if target.has_active_item?(:AIRBALLOON)
     end
     next score
   }
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartGravity",
   proc { |move, user, target, ai, battle|

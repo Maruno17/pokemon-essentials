@@ -386,7 +386,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed1",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed1",
                                             "RaiseUserSpeed2")
@@ -409,7 +409,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed2",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed2",
                                             "RaiseUserSpeed2LowerUserWeight")
@@ -417,7 +417,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserSpeed2",
                                            "RaiseUserSpeed2LowerUserWeight")
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed2",
                                             "RaiseUserSpeed3")
@@ -610,9 +610,6 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpAtk1",
         score -= 90
       end
     end
-    if move.function == "RaiseUserAtkSpAtk1Or2InSun"   # Growth
-      score += 20 if [:Sun, :HarshSun].include?(user.battler.effectiveWeather)
-    end
     next score
   }
 )
@@ -622,8 +619,27 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpAtk1",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserAtkSpAtk1Or2InSun")
-Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAtkSpAtk1",
-                                           "RaiseUserAtkSpAtk1Or2InSun")
+Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpAtk1Or2InSun",
+  proc { |score, move, user, target, ai, battle|
+    score -= user.stages[:ATTACK] * 10
+    score -= user.stages[:SPECIAL_ATTACK] * 10
+    if ai.trainer.medium_skill?
+      hasDamagingAttack = false
+      user.battler.eachMove do |m|
+        next if !m.damagingMove?
+        hasDamagingAttack = true
+        break
+      end
+      if hasDamagingAttack
+        score += 20
+      elsif ai.trainer.high_skill?
+        score -= 90
+      end
+    end
+    score += 20 if [:Sun, :HarshSun].include?(user.battler.effectiveWeather)
+    next score
+  }
+)
 
 #===============================================================================
 #
@@ -665,7 +681,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDef1RaiseUserAtkSpAtkSp
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserAtkSpd1")
@@ -697,7 +713,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpd1",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserAtk1Spd2")
@@ -794,7 +810,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtkSpDef1",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserSpAtkSpDefSpd1")
@@ -1025,7 +1041,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDefSpd1",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAttack1",
   proc { |move, user, target, ai, battle|
@@ -2151,6 +2167,6 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideDoubleSpeed",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 # StartSwapAllBattlersBaseDefensiveStats

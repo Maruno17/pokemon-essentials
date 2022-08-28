@@ -13,12 +13,8 @@ class Battle::AI
     #       be fiddly since damages should be calculated for each target but
     #       they're all related.
     battler.eachMoveWithIndex do |_m, i|
-      next if !@battle.pbCanChooseMove?(battler.index, i, false)
-      if @user.wild?
-        pbRegisterMoveWild(i, choices)
-      else
-        pbRegisterMoveTrainer(i, choices)
-      end
+      next if !@battle.pbCanChooseMove?(battler.index, i, false)   # Unchoosable moves aren't considered
+      pbAddMoveWithScoreToChoices(i, choices)
     end
     # Log the available choices
     if $INTERNAL
@@ -37,30 +33,37 @@ class Battle::AI
   # Get scores for the given move against each possible target
   #=============================================================================
   # Wild Pokémon choose their moves randomly.
-  def pbRegisterMoveWild(idxMove, choices)
-    battler = @user.battler
-    score = 100
-    choices.push([idxMove, score, -1])   # Move index, score, target
-    # Doubly prefer one of the user's moves (the choice is random but consistent
-    # and does not correlate to any other property of the user)
-    choices.push([idxMove, score, -1]) if battler.pokemon.personalID % battler.moves.length == idxMove
-  end
-
   # Trainer Pokémon calculate how much they want to use each of their moves.
-  def pbRegisterMoveTrainer(idxMove, choices)
+  def pbAddMoveWithScoreToChoices(idxMove, choices)
     battler = @user.battler
+    # TODO: Better incorporate this with the below code in future. This is here
+    #       for now because of the num_targets > 1 code below, which would
+    #       produce a score of 100 * the number of targets for a multi-target
+    #       move, making it ridiculously over-preferred.
+    if @user.wild?
+      score = 100
+      choices.push([idxMove, score, -1])   # Move index, score, target
+      # Doubly prefer one of the user's moves (the choice is random but consistent
+      # and does not correlate to any other property of the user)
+      choices.push([idxMove, score, -1]) if battler.pokemon.personalID % battler.moves.length == idxMove
+      return
+    end
     move = battler.moves[idxMove]
     target_data = move.pbTarget(battler)
     # TODO: Alter target_data if user has Protean and move is Curse.
     if [:UserAndAllies, :AllAllies, :AllBattlers].include?(target_data.id) ||
        target_data.num_targets == 0
+      # Also includes: BothSides, FoeSide, None, User, UserSide
       # If move has no targets, affects the user, a side or the whole field, or
       # specially affects multiple Pokémon and the AI calculates an overall
       # score at once instead of per target
       score = pbGetMoveScore(move)
       choices.push([idxMove, score, -1]) if score > 0
     elsif target_data.num_targets > 1
+      # Includes: AllFoes, AllNearFoes, AllNearOthers
+      # Would also include UserAndAllies, AllAllies, AllBattlers, but they're above
       # If move affects multiple battlers and you don't choose a particular one
+      # TODO: Should the scores from each target be averaged instead of summed?
       totalScore = 0
       @battle.allBattlers.each do |b|
         next if !@battle.pbMoveCanTarget?(battler.index, b.index, target_data)
@@ -69,9 +72,17 @@ class Battle::AI
       end
       choices.push([idxMove, totalScore, -1]) if totalScore > 0
     else
+      # Includes: Foe, NearAlly, NearFoe, NearOther, Other, RandomNearFoe, UserOrNearAlly
       # If move affects one battler and you have to choose which one
       @battle.allBattlers.each do |b|
         next if !@battle.pbMoveCanTarget?(battler.index, b.index, target_data)
+        # TODO: This should consider targeting an ally if possible. Scores will
+        #       need to distinguish between harmful and beneficial to target -
+        #       maybe make the score "150 - score" if target is an ally (but
+        #       only if the score is > 10 which is the "will fail" value)?
+        #       Noticeably affects a few moves like Heal Pulse, as well as moves
+        #       that the target can be immune to by an ability (you may want to
+        #       attack the ally anyway so it gains the effect of that ability).
         next if target_data.targets_foe && !battler.opposes?(b)
         score = pbGetMoveScore(move, b)
         choices.push([idxMove, score, b.index]) if score > 0
@@ -84,6 +95,7 @@ class Battle::AI
   #=============================================================================
   def set_up_move_check(move, target)
     @move.set_up(move, @user)
+    # TODO: Set @target to nil if there isn't one?
     @target = (target) ? @battlers[target.index] : @user
     @target&.refresh_battler
     # Determine whether user or target is faster, and store that result so it
@@ -94,10 +106,10 @@ class Battle::AI
   #=============================================================================
   # Returns whether the move will definitely fail (assuming no battle conditions
   # change between now and using the move)
+  # TODO: Add skill checks in here for particular calculations?
   #=============================================================================
   def pbPredictMoveFailure
     return false if !@trainer.has_skill_flag?("PredictMoveFailure")
-    # TODO: Something involving pbCanChooseMove? (see Assault Vest).
     # TODO: Something involving user.usingMultiTurnAttack? (perhaps earlier than
     #       this?).
     # User is asleep and will not wake up
@@ -348,6 +360,8 @@ class Battle::AI
   #=============================================================================
   # Calculate how much damage a move is likely to do to a given target (as a
   # percentage of the target's current HP)
+  # TODO: How much is this going to be used? Should the predicted percentage of
+  #       damage be used as the initial score for damaging moves?
   #=============================================================================
   def pbGetDamagingMoveBaseScore
     # Don't prefer moves that are ineffective because of abilities or effects
@@ -391,7 +405,8 @@ class Battle::AI
   end
 
   #=============================================================================
-  #
+  # TODO: Remove this method. If we're keeping any score changes inherent to a
+  #       move's effect, they will go in MoveEffectScore handlers instead.
   #=============================================================================
   def pbGetStatusMoveBaseScore
     # TODO: Call @target.immune_to_move? here too, not just for damaging moves

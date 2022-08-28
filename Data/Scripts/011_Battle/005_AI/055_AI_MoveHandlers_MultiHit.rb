@@ -214,7 +214,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
 )
 
 #===============================================================================
-#
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2",
   proc { |move, user, target, ai, battle|
