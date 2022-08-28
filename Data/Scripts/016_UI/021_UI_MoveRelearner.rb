@@ -16,6 +16,10 @@ class MoveRelearner_Scene
     pbUpdateSpriteHash(@sprites)
   end
 
+  def set_moves(moves_list)
+    @moves = moves_list
+  end
+
   def pbStartScene(pokemon,moves)
     @pokemon=pokemon
     @moves=moves

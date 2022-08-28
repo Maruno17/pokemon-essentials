@@ -196,7 +196,7 @@ def isFusionForced?
 end
 
 def isFusedEncounter
-  return false if !SWITCH_FUSED_WILD_POKEMON[35]
+  #return false if !$game_switches[SWITCH_FUSED_WILD_POKEMON]
   return false if $game_switches[SWITCH_RANDOM_WILD_TO_FUSION]
   return true if isFusionForced?()
   chance = pbGet(VAR_WILD_FUSION_RATE) == 0 ? 5 : pbGet(VAR_WILD_FUSION_RATE)

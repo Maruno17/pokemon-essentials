@@ -74,8 +74,8 @@ def Kernel.pbShuffleDex(range = 50, type = 0)
   #type 0: BST
   #type 1: full random
   range = 1 if range == 0
-  only_customs = $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS]
   should_include_fusions = $game_switches[SWITCH_RANDOM_WILD_TO_FUSION]
+  only_customs = $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] && should_include_fusions
 
   # create hash
   pokemon_list = only_customs ? getCustomSpeciesList() : get_pokemon_list(should_include_fusions)

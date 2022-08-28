@@ -629,7 +629,7 @@ class PokemonFusionScene
   end
 
   #unused. was meant for super splicers, but too broken
-  def setHighestFusionIvs()«
+  def setHighestFusionIvs()
     @pokemon1.iv[:HP] = pickHighestOfTwoValues(@pokemon1.iv[:HP], @pokemon2.iv[:HP])
     @pokemon1.iv[:ATTACK] = pickHighestOfTwoValues(@pokemon1.iv[:ATTACK], @pokemon2.iv[:ATTACK])
     @pokemon1.iv[:DEFENSE] = pickHighestOfTwoValues(@pokemon1.iv[:DEFENSE], @pokemon2.iv[:DEFENSE])
