@@ -25,6 +25,7 @@ class Battle::AI
       end
       PBDebug.log(logMsg)
     end
+    @battle.moldBreaker = false
     return choices
   end
 
@@ -100,6 +101,7 @@ class Battle::AI
     # TODO: Set @target to nil if there isn't one?
     @target = (target) ? @battlers[target.index] : @user
     @target&.refresh_battler
+    @battle.moldBreaker = @user.has_mold_breaker?
     # Determine whether user or target is faster, and store that result so it
     # doesn't need recalculating
     @user_faster = @user.faster_than?(@target)
@@ -141,13 +143,7 @@ class Battle::AI
     return true if @move.damagingMove? && calc_type == :GROUND &&
                    @target.battler.airborne? && !@move.move.hitsFlyingTargets?
     # Immunity to powder-based moves
-    if @move.move.powderMove?
-      return true if @target.has_type?(:GRASS) && Settings::MORE_TYPE_EFFECTS
-      if Settings::MECHANICS_GENERATION >= 6
-        return true if @target.has_active_ability?(:OVERCOAT) ||
-                       @target.has_active_item?(:SAFETYGOGGLES)
-      end
-    end
+    return true if @move.move.powderMove? && !@target.battler.affectedByPowder?
     # Substitute
     return true if @target.effects[PBEffects::Substitute] > 0 && @move.statusMove? &&
                    !@move.move.ignoresSubstitute?(@user.battler) && @user.index != @target.index

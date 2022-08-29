@@ -207,7 +207,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
   proc { |score, move, user, target, ai, battle|
     score += 20 if user.effects[PBEffects::FocusEnergy] > 0
-    score += 20 if !target.has_active_ability?(:INNERFOCUS) &&
+    score += 20 if (battle.moldBreaker || !target.has_active_ability?(:INNERFOCUS)) &&
                    target.effects[PBEffects::Substitute] == 0
     next score
   }

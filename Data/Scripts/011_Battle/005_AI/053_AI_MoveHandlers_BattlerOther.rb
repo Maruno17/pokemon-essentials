@@ -383,7 +383,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToInflictedStatu
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("FlinchTarget",
   proc { |score, move, user, target, ai, battle|
-    next score + 30 if !target.has_active_ability?(:INNERFOCUS) &&
+    next score + 30 if (battle.moldBreaker || !target.has_active_ability?(:INNERFOCUS)) &&
                        target.effects[PBEffects::Substitute] == 0
   }
 )
@@ -399,7 +399,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FlinchTargetFailsIfUserNotAsleep",
 Battle::AI::Handlers::MoveEffectScore.add("FlinchTargetFailsIfUserNotAsleep",
   proc { |score, move, user, target, ai, battle|
     score += 100   # Because it can only be used while asleep
-    score += 30 if !target.has_active_ability?(:INNERFOCUS) &&
+    score += 30 if (battle.moldBreaker || !target.has_active_ability?(:INNERFOCUS)) &&
                    target.effects[PBEffects::Substitute] == 0
     next score
   }
@@ -415,7 +415,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FlinchTargetFailsIfNotUserFirstTurn"
 )
 Battle::AI::Handlers::MoveEffectScore.add("FlinchTargetFailsIfNotUserFirstTurn",
   proc { |score, move, user, target, ai, battle|
-    next score + 30 if !target.has_active_ability?(:INNERFOCUS) &&
+    next score + 30 if (battle.moldBreaker || !target.has_active_ability?(:INNERFOCUS)) &&
                        target.effects[PBEffects::Substitute] == 0
   }
 )
@@ -430,7 +430,7 @@ Battle::AI::Handlers::MoveBasePower.add("FlinchTargetDoublePowerIfTargetInSky",
 )
 Battle::AI::Handlers::MoveEffectScore.add("FlinchTargetDoublePowerIfTargetInSky",
   proc { |score, move, user, target, ai, battle|
-    next score + 30 if !target.has_active_ability?(:INNERFOCUS) &&
+    next score + 30 if (battle.moldBreaker || !target.has_active_ability?(:INNERFOCUS)) &&
                        target.effects[PBEffects::Substitute] == 0
   }
 )
@@ -779,7 +779,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HitsTargetInSkyGroundsTarget",
       score += 20 if target.effects[PBEffects::MagnetRise] > 0 ||
                      target.effects[PBEffects::Telekinesis] > 0 ||
                      target.has_type?(:FLYING) ||
-                     target.has_active_ability?(:LEVITATE) ||
+                     (!battle.moldBreaker && target.has_active_ability?(:LEVITATE)) ||
                      target.has_active_item?(:AIRBALLOON) ||
                      target.battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
                                                      "TwoTurnAttackInvulnerableInSkyParalyzeTarget")

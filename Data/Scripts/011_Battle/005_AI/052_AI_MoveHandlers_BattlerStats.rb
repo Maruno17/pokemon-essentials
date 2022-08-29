@@ -886,7 +886,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1LoseThirdOfTotalH
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1LoseThirdOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.has_active_ability?(:CONTRARY)
+    next 0 if !battle.moldBreaker && user.has_active_ability?(:CONTRARY)
     score += 30 if ai.trainer.high_skill? && user.hp >= user.totalhp * 0.75
     GameData::Stat.each_main_battle { |s| score += 10 if user.stages[s.id] <= 0 }
     if ai.trainer.medium_skill?
@@ -914,7 +914,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1TrapUserInBattle"
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1TrapUserInBattle",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.has_active_ability?(:CONTRARY)
+    next 0 if !battle.moldBreaker && user.has_active_ability?(:CONTRARY)
     if ai.trainer.high_skill?
       score -= 50 if user.hp <= user.totalhp / 2
       score += 30 if user.battler.trappedInBattle?
@@ -1138,10 +1138,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAtkSpAtk2",
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|
-    next 0 if target.opposes?(user)
-    next score - 90 if target.has_active_ability?(:CONTRARY)
-    score -= target.stages[:ATTACK] * 20
-    score -= target.stages[:SPECIAL_ATTACK] * 20
+    next score - 50 if target.opposes?(user)
+    next score - 40 if !battle.moldBreaker && target.has_active_ability?(:CONTRARY)
+    score -= target.stages[:ATTACK] * 10
+    score -= target.stages[:SPECIAL_ATTACK] * 10
     next score
   }
 )
@@ -1383,7 +1383,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetSpAtk2IfCanAttract",
     next true if move.statusMove? &&
                  !target.battler.pbCanLowerStatStage?(move.move.statDown[0], user.battler, move.move)
     next true if user.gender == 2 || target.gender == 2 || user.gender == target.gender
-    next true if target.has_active_ability?(:OBLIVIOUS)
+    next true if !battle.moldBreaker && target.has_active_ability?(:OBLIVIOUS)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk2IfCanAttract",
@@ -1759,12 +1759,12 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseAlliesAtkDef1",
 Battle::AI::Handlers::MoveEffectScore.add("RaiseAlliesAtkDef1",
   proc { |score, move, user, target, ai, battle|
     user.battler.allAllies.each do |b|
-      if b.hasActiveAbility?(:CONTRARY)
-        score -= 90
+      if !battle.moldBreaker && b.hasActiveAbility?(:CONTRARY)
+        score -= 40
       else
-        score += 40
-        score -= b.stages[:ATTACK] * 20
-        score -= b.stages[:SPECIAL_ATTACK] * 20
+        score += 10
+        score -= b.stages[:ATTACK] * 10
+        score -= b.stages[:SPECIAL_ATTACK] * 10
       end
     end
     next score

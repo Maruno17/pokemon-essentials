@@ -241,7 +241,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:move_accuracy,
 Battle::AI::Handlers::GeneralMoveScore.add(:flinching_effects,
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.medium_skill? && target
-      if !target.has_active_ability?([:INNERFOCUS, :SHIELDDUST]) &&
+      if (battle.moldBreaker || !target.has_active_ability?([:INNERFOCUS, :SHIELDDUST])) &&
          target.effects[PBEffects::Substitute] == 0
         if move.move.flinchingMove? ||
            (move.damagingMove? &&

@@ -50,7 +50,7 @@ class Battle::AI
       mini_score *= (sweeping_stat) ? 1.2 : 1.1
     end
     # Prefer if user has the ability Simple
-    mini_score *= 2 if @user.hasActiveAbility?(:SIMPLE)
+    mini_score *= 2 if !@battle.moldBreaker && @user.hasActiveAbility?(:SIMPLE)
     # TODO: Prefer if user's moves won't do much damage.
     # Prefer if user has something that will limit damage taken
     mini_score *= 1.3 if @user.effects[PBEffects::Substitute] > 0 ||
@@ -164,7 +164,7 @@ class Battle::AI
       # Prefer if user can definitely survive a hit no matter how powerful, and
       # it won't be hurt by weather
       if @user.hp == @user.totalhp &&
-         (@user.hasActiveItem?(:FOCUSSASH) || @user.hasActiveAbility?(:STURDY))
+         (@user.hasActiveItem?(:FOCUSSASH) || (!@battle.moldBreaker && @user.hasActiveAbility?(:STURDY)))
         if !(@battle.pbWeather == :Sandstorm && @user.takesSandstormDamage?) &&
            !(@battle.pbWeather == :Hail && @user.takesHailDamage?) &&
            !(@battle.pbWeather == :ShadowSky && @user.takesShadowSkyDamage?)
@@ -226,7 +226,7 @@ class Battle::AI
       # Prefer if user can definitely survive a hit no matter how powerful, and
       # it won't be hurt by weather
       if @user.hp == @user.totalhp &&
-         (@user.hasActiveItem?(:FOCUSSASH) || @user.hasActiveAbility?(:STURDY))
+         (@user.hasActiveItem?(:FOCUSSASH) || (!@battle.moldBreaker && @user.hasActiveAbility?(:STURDY)))
         if !(@battle.pbWeather == :Sandstorm && @user.takesSandstormDamage?) &&
            !(@battle.pbWeather == :Hail && @user.takesHailDamage?) &&
            !(@battle.pbWeather == :ShadowSky && @user.takesShadowSkyDamage?)
@@ -274,7 +274,7 @@ class Battle::AI
       # Prefer if user can definitely survive a hit no matter how powerful, and
       # it won't be hurt by weather
       if @user.hp == @user.totalhp &&
-         (@user.hasActiveItem?(:FOCUSSASH) || @user.hasActiveAbility?(:STURDY))
+         (@user.hasActiveItem?(:FOCUSSASH) || (!@battle.moldBreaker && @user.hasActiveAbility?(:STURDY)))
         if !(@battle.pbWeather == :Sandstorm && @user.takesSandstormDamage?) &&
            !(@battle.pbWeather == :Hail && @user.takesHailDamage?) &&
            !(@battle.pbWeather == :ShadowSky && @user.takesShadowSkyDamage?)
@@ -363,12 +363,12 @@ class Battle::AI
     end
 
     # Don't prefer if user has Contrary
-    mini_score *= 0.5 if @user.hasActiveAbility?(:CONTRARY)
+    mini_score *= 0.5 if !@battle.moldBreaker && @user.hasActiveAbility?(:CONTRARY)
     # TODO: Don't prefer if target has Unaware? Reborn resets mini_score to 1.
     #       This check needs more consideration. Note that @target is user for
     #       status moves, so that part is wrong.
     # TODO: Is 0x for RaiseUserAtkDefAcc1, RaiseUserAtkSpd1 (all moves that raise multiple stats)
-    mini_score *= 0.5 if @move.statusMove? && @target.hasActiveAbility?(:UNAWARE)
+    mini_score *= 0.5 if @move.statusMove? && !@battle.moldBreaker && @target.hasActiveAbility?(:UNAWARE)
 
     # TODO: Don't prefer if any foe has previously used a stat stage-clearing
     #       move (Clear Smog/Haze).
@@ -395,7 +395,7 @@ class Battle::AI
   #=============================================================================
   def get_score_for_user_stat_raise(score)
     # Discard status move if user has Contrary
-    return 0 if @move.statusMove? && @user.hasActiveAbility?(:CONTRARY)
+    return 0 if @move.statusMove? && !@battle.moldBreaker && @user.hasActiveAbility?(:CONTRARY)
 
     # Discard move if it can't raise any stats
     can_change_any_stat = false

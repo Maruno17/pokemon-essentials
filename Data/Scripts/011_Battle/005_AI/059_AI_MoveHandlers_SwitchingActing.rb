@@ -117,7 +117,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutTargetStatusMove",
   proc { |move, user, target, ai, battle|
-    next true if target.has_active_ability?(:SUCTIONCUPS) ||
+    next true if (!battle.moldBreaker && target.has_active_ability?(:SUCTIONCUPS)) ||
                  target.effects[PBEffects::Ingrain]
     next true if !battle.canRun
     next true if battle.wildBattle? && target.level > user.level
@@ -146,8 +146,8 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetStatusMove",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutTargetDamagingMove",
   proc { |score, move, user, target, ai, battle|
-    if !target.effects[PBEffects::Ingrain] &&
-       !target.has_active_ability?(:SUCTIONCUPS)
+    if (battle.moldBreaker || !target.has_active_ability?(:SUCTIONCUPS)) &&
+       !target.effects[PBEffects::Ingrain]
       score += 20 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
       score += 20 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
       score += 20 if target.pbOwnSide.effects[PBEffects::StealthRock]
@@ -427,7 +427,8 @@ Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetStatusMoves",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Taunt] > 0
     next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
-    next true if Settings::MECHANICS_GENERATION >= 6 && target.has_active_ability?(:OBLIVIOUS)
+    next true if Settings::MECHANICS_GENERATION >= 6 &&
+                 !battle.moldBreaker && target.has_active_ability?(:OBLIVIOUS)
   }
 )
 

@@ -102,7 +102,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CureTargetStatusHealUserHalfOfTotalHP
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserByTargetAttackLowerTargetAttack1",
   proc { |move, user, target, ai, battle|
-    if target.has_active_ability?(:CONTRARY)
+    if !battle.moldBreaker && target.has_active_ability?(:CONTRARY)
       next true if target.statStageAtMax?(:ATTACK)
     else
       next true if target.statStageAtMin?(:ATTACK)
@@ -343,7 +343,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHP",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserLosesHalfOfTotalHPExplosive",
   proc { |move, user, target, ai, battle|
-    next true if battle.pbCheckGlobalAbility(:DAMP)
+    next true if !battle.moldBreaker && battle.pbCheckGlobalAbility(:DAMP)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHPExplosive",

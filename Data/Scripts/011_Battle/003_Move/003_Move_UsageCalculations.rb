@@ -319,10 +319,14 @@ class Battle::Move
         Battle::AbilityEffects.triggerDamageCalcFromTarget(
           target.ability, user, target, self, multipliers, baseDmg, type
         )
-        Battle::AbilityEffects.triggerDamageCalcFromTargetNonIgnorable(
-          target.ability, user, target, self, multipliers, baseDmg, type
-        )
       end
+    end
+    if target.abilityActive?
+      Battle::AbilityEffects.triggerDamageCalcFromTargetNonIgnorable(
+        target.ability, user, target, self, multipliers, baseDmg, type
+      )
+    end
+    if !@battle.moldBreaker
       target.allAllies.each do |b|
         next if !b.abilityActive?
         Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(

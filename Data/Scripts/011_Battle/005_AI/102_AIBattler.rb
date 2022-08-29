@@ -115,14 +115,18 @@ class Battle::AI::AIBattler
 
   def ability_active?
     # Only a high skill AI knows what an opponent's ability is
-    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
+#    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
     return @battler.abilityActive?
   end
 
-  def has_active_ability?(ability)
+  def has_active_ability?(ability, check_mold_breaker = false)
     # Only a high skill AI knows what an opponent's ability is
-    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
+#    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
     return @battler.hasActiveAbility?(ability)
+  end
+
+  def has_mold_breaker?
+    return @ai.move.function == "IgnoreTargetAbility" || @battler.hasMoldBreaker?
   end
 
   #=============================================================================
@@ -132,13 +136,13 @@ class Battle::AI::AIBattler
 
   def item_active?
     # Only a high skill AI knows what an opponent's held item is
-    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
+#    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
     return @battler.itemActive?
   end
 
   def has_active_item?(item)
     # Only a high skill AI knows what an opponent's held item is
-    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
+#    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
     return @battler.hasActiveItem?(item)
   end
 
@@ -183,13 +187,14 @@ class Battle::AI::AIBattler
                      has_active_ability?(:WONDERGUARD)
       return true if move.damagingMove? && user.index != @index && !opposes?(user) &&
                      has_active_ability?(:TELEPATHY)
-      return true if move.statusMove? && move.move.canMagicCoat? && has_active_ability?(:MAGICBOUNCE) &&
+      return true if move.statusMove? && move.move.canMagicCoat? &&
+                     !@ai.battle.moldBreaker && has_active_ability?(:MAGICBOUNCE) &&
                      opposes?(user)
-      return true if move.move.soundMove? && has_active_ability?(:SOUNDPROOF)
+      return true if move.move.soundMove? && !@ai.battle.moldBreaker && has_active_ability?(:SOUNDPROOF)
       return true if move.move.bombMove? && has_active_ability?(:BULLETPROOF)
       if move.move.powderMove?
         return true if has_type?(:GRASS)
-        return true if has_active_ability?(:OVERCOAT)
+        return true if !@ai.battle.moldBreaker && has_active_ability?(:OVERCOAT)
         return true if has_active_ability?(:SAFETYGOGGLES)
       end
       return true if move.move.statusMove? && @battler.effects[PBEffects::Substitute] > 0 &&

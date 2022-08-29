@@ -46,7 +46,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserTargetSwapItems",
     next true if !user.item && !target.item
     next true if user.battler.unlosableItem?(user.item) || user.battler.unlosableItem?(target.item)
     next true if target.battler.unlosableItem?(target.item) || target.battler.unlosableItem?(user.item)
-    next true if target.has_active_ability?(:STICKYHOLD)
+    next true if !battle.moldBreaker && target.has_active_ability?(:STICKYHOLD)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapItems",

@@ -132,9 +132,18 @@ class Battle::AI::AIMove
       :defense_multiplier      => 1.0,
       :final_damage_multiplier => 1.0
     }
-    # Ability effects that alter damage
-    moldBreaker = @ai.trainer.high_skill? && target_battler.hasMoldBreaker?
+    # Global abilities
+    if @ai.trainer.medium_skill? &&
+       ((@ai.battle.pbCheckGlobalAbility(:DARKAURA) && calc_type == :DARK) ||
+        (@ai.battle.pbCheckGlobalAbility(:FAIRYAURA) && calc_type == :FAIRY))
+      if @ai.battle.pbCheckGlobalAbility(:AURABREAK)
+        multipliers[:base_damage_multiplier] *= 2 / 3.0
+      else
+        multipliers[:base_damage_multiplier] *= 4 / 3.0
+      end
+    end
 
+    # Ability effects that alter damage
     if user.ability_active?
       # NOTE: These abilities aren't suitable for checking at the start of the
       #       round.
@@ -146,27 +155,30 @@ class Battle::AI::AIMove
       end
     end
 
-    if @ai.trainer.medium_skill? && !moldBreaker
+    if !@ai.battle.moldBreaker
       user_battler.allAllies.each do |b|
         next if !b.abilityActive?
         Battle::AbilityEffects.triggerDamageCalcFromAlly(
           b.ability, user_battler, target_battler, @move, multipliers, power, calc_type
         )
       end
-    end
-
-    if !moldBreaker && target.ability_active?
-      # NOTE: These abilities aren't suitable for checking at the start of the
-      #       round.
-      abilityBlacklist = [:FILTER, :SOLIDROCK]
-      if !abilityBlacklist.include?(target.ability_id)
-        Battle::AbilityEffects.triggerDamageCalcFromTarget(
-          target.ability, user_battler, target_battler, @move, multipliers, power, calc_type
-        )
+      if target.ability_active?
+        # NOTE: These abilities aren't suitable for checking at the start of the
+        #       round.
+        abilityBlacklist = [:FILTER, :SOLIDROCK]
+        if !abilityBlacklist.include?(target.ability_id)
+          Battle::AbilityEffects.triggerDamageCalcFromTarget(
+            target.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+          )
+        end
       end
     end
-
-    if @ai.trainer.high_skill? && !moldBreaker
+    if target.ability_active?
+      Battle::AbilityEffects.triggerDamageCalcFromTargetNonIgnorable(
+        target.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+      )
+    end
+    if !@ai.battle.moldBreaker
       target_battler.allAllies.each do |b|
         next if !b.abilityActive?
         Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(
@@ -190,27 +202,15 @@ class Battle::AI::AIMove
       end
       # TODO: Prefer (1.5x?) if item will be consumed and user has Unburden.
     end
-
     if target.item_active? && target.item && !target.item.is_berry?
       Battle::ItemEffects.triggerDamageCalcFromTarget(
         target.item, user_battler, target_battler, @move, multipliers, power, calc_type
       )
     end
 
-    # Global abilities
-    if @ai.trainer.medium_skill? &&
-       ((@ai.battle.pbCheckGlobalAbility(:DARKAURA) && calc_type == :DARK) ||
-        (@ai.battle.pbCheckGlobalAbility(:FAIRYAURA) && calc_type == :FAIRY))
-      if @ai.battle.pbCheckGlobalAbility(:AURABREAK)
-        multipliers[:base_damage_multiplier] *= 2 / 3.0
-      else
-        multipliers[:base_damage_multiplier] *= 4 / 3.0
-      end
-    end
-
     # Parental Bond
     if user.has_active_ability?(:PARENTALBOND)
-      multipliers[:base_damage_multiplier] *= 1.25
+      multipliers[:base_damage_multiplier] *= (Settings::MECHANICS_GENERATION >= 7) ? 1.25 : 1.5
     end
 
     # Me First
@@ -245,13 +245,14 @@ class Battle::AI::AIMove
 
     # Terrain moves
     if @ai.trainer.medium_skill?
+      terrain_multiplier = (Settings::MECHANICS_GENERATION >= 8) ? 1.3 : 1.5
       case @ai.battle.field.terrain
       when :Electric
-        multipliers[:base_damage_multiplier] *= 1.5 if calc_type == :ELECTRIC && user_battler.affectedByTerrain?
+        multipliers[:base_damage_multiplier] *= terrain_multiplier if calc_type == :ELECTRIC && user_battler.affectedByTerrain?
       when :Grassy
-        multipliers[:base_damage_multiplier] *= 1.5 if calc_type == :GRASS && user_battler.affectedByTerrain?
+        multipliers[:base_damage_multiplier] *= terrain_multiplier if calc_type == :GRASS && user_battler.affectedByTerrain?
       when :Psychic
-        multipliers[:base_damage_multiplier] *= 1.5 if calc_type == :PSYCHIC && user_battler.affectedByTerrain?
+        multipliers[:base_damage_multiplier] *= terrain_multiplier if calc_type == :PSYCHIC && user_battler.affectedByTerrain?
       when :Misty
         multipliers[:base_damage_multiplier] /= 2 if calc_type == :DRAGON && target_battler.affectedByTerrain?
       end
@@ -316,10 +317,8 @@ class Battle::AI::AIMove
     multipliers[:final_damage_multiplier] *= typemod.to_f / Effectiveness::NORMAL_EFFECTIVE
 
     # Burn
-    if @ai.trainer.high_skill? && physicalMove?(calc_type) &&
-       user.status == :BURN && !user.has_active_ability?(:GUTS) &&
-       !(Settings::MECHANICS_GENERATION >= 6 &&
-         function == "DoublePowerIfUserPoisonedBurnedParalyzed")   # Facade
+    if @ai.trainer.high_skill? && user.status == :BURN && physicalMove?(calc_type) &&
+       @move.damageReducedByBurn? && !user.has_active_ability?(:GUTS)
       multipliers[:final_damage_multiplier] /= 2
     end
 
@@ -373,6 +372,12 @@ class Battle::AI::AIMove
   end
 
   def rough_accuracy
+    # "Always hit" effects and "always hit" accuracy
+    if @ai.trainer.medium_skill?
+      return 100 if target.effects[PBEffects::Telekinesis] > 0
+      return 100 if target.effects[PBEffects::Minimize] && @move.tramplesMinimize? &&
+                    Settings::MECHANICS_GENERATION >= 6
+    end
     baseAcc = self.accuracy
     return 100 if baseAcc == 0
     # Determine user and target
@@ -385,19 +390,13 @@ class Battle::AI::AIMove
       baseAcc = @move.pbBaseAccuracy(user_battler, target_battler)
       return 100 if baseAcc == 0
     end
-    # "Always hit" effects and "always hit" accuracy
-    if @ai.trainer.medium_skill?
-      return 100 if target_battler.effects[PBEffects::Minimize] && @move.tramplesMinimize? &&
-                    Settings::MECHANICS_GENERATION >= 6
-      return 100 if target_battler.effects[PBEffects::Telekinesis] > 0
-    end
     # Get the move's type
     type = rough_type
     # Calculate all modifier effects
     modifiers = {}
     modifiers[:base_accuracy]  = baseAcc
-    modifiers[:accuracy_stage] = user_battler.stages[:ACCURACY]
-    modifiers[:evasion_stage]  = target_battler.stages[:EVASION]
+    modifiers[:accuracy_stage] = user.stages[:ACCURACY]
+    modifiers[:evasion_stage]  = target.stages[:EVASION]
     modifiers[:accuracy_multiplier] = 1.0
     modifiers[:evasion_multiplier]  = 1.0
     apply_rough_accuracy_modifiers(user, target, type, modifiers)
@@ -417,25 +416,24 @@ class Battle::AI::AIMove
     return modifiers[:base_accuracy] * accuracy / evasion
   end
 
-  def apply_rough_accuracy_modifiers(user, target, type, modifiers)
+  def apply_rough_accuracy_modifiers(user, target, calc_type, modifiers)
     user_battler = user.battler
     target_battler = target.battler
-    mold_breaker = (@ai.trainer.medium_skill? && target_battler.hasMoldBreaker?)
     # Ability effects that alter accuracy calculation
     if user.ability_active?
       Battle::AbilityEffects.triggerAccuracyCalcFromUser(
-        user_battler.ability, modifiers, user_battler, target_battler, @move, type
+        user.ability, modifiers, user_battler, target_battler, @move, calc_type
       )
     end
     user_battler.allAllies.each do |b|
       next if !b.abilityActive?
       Battle::AbilityEffects.triggerAccuracyCalcFromAlly(
-        b.ability, modifiers, user_battler, target_battler, @move, type
+        b.ability, modifiers, user_battler, target_battler, @move, calc_type
       )
     end
-    if !mold_breaker && target.ability_active?
+    if !@ai.battle.moldBreaker && target.ability_active?
       Battle::AbilityEffects.triggerAccuracyCalcFromTarget(
-        target_battler.ability, modifiers, user_battler, target_battler, @move, type
+        target.ability, modifiers, user_battler, target_battler, @move, calc_type
       )
     end
     # Item effects that alter accuracy calculation
@@ -443,12 +441,12 @@ class Battle::AI::AIMove
       # TODO: Zoom Lens needs to be checked differently (compare speeds of
       #       user and target).
       Battle::ItemEffects.triggerAccuracyCalcFromUser(
-        user_battler.item, modifiers, user_battler, target_battler, @move, type
+        user.item, modifiers, user_battler, target_battler, @move, calc_type
       )
     end
     if target.item_active?
       Battle::ItemEffects.triggerAccuracyCalcFromTarget(
-        target_battler.item, modifiers, user_battler, target_battler, @move, type
+        target.item, modifiers, user_battler, target_battler, @move, calc_type
       )
     end
     # Other effects, inc. ones that set accuracy_multiplier or evasion_stage to specific values
@@ -456,27 +454,32 @@ class Battle::AI::AIMove
       modifiers[:accuracy_multiplier] *= 5 / 3.0
     end
     if @ai.trainer.medium_skill?
-      if user_battler.effects[PBEffects::MicleBerry]
+      if user.effects[PBEffects::MicleBerry]
         modifiers[:accuracy_multiplier] *= 1.2
       end
-      modifiers[:evasion_stage] = 0 if target_battler.effects[PBEffects::Foresight] && modifiers[:evasion_stage] > 0
-      modifiers[:evasion_stage] = 0 if target_battler.effects[PBEffects::MiracleEye] && modifiers[:evasion_stage] > 0
+      modifiers[:evasion_stage] = 0 if target.effects[PBEffects::Foresight] && modifiers[:evasion_stage] > 0
+      modifiers[:evasion_stage] = 0 if target.effects[PBEffects::MiracleEye] && modifiers[:evasion_stage] > 0
     end
     # "AI-specific calculations below"
-    modifiers[:evasion_stage] = 0 if @move.function == "IgnoreTargetDefSpDefEvaStatStages"   # Chip Away
+    modifiers[:evasion_stage] = 0 if function == "IgnoreTargetDefSpDefEvaStatStages"   # Chip Away
     if @ai.trainer.medium_skill?
-      modifiers[:base_accuracy] = 0 if user_battler.effects[PBEffects::LockOn] > 0 &&
-                                       user_battler.effects[PBEffects::LockOnPos] == target_battler.index
+      modifiers[:base_accuracy] = 0 if user.effects[PBEffects::LockOn] > 0 &&
+                                       user.effects[PBEffects::LockOnPos] == target.index
     end
     if @ai.trainer.medium_skill?
-      case @move.function
+      case function
       when "BadPoisonTarget"
         modifiers[:base_accuracy] = 0 if Settings::MORE_TYPE_EFFECTS &&
                                          @move.statusMove? && @user.has_type?(:POISON)
-      when "OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"
-        modifiers[:base_accuracy] = self.accuracy + user_battler.level - target_battler.level
-        modifiers[:accuracy_multiplier] = 0 if target_battler.level > user_battler.level
-        modifiers[:accuracy_multiplier] = 0 if target.has_active_ability?(:STURDY)
+      when "OHKO", "OHKOHitsUndergroundTarget"
+        modifiers[:base_accuracy] = self.accuracy + user.level - target.level
+        modifiers[:accuracy_multiplier] = 0 if target.level > user.level
+        modifiers[:accuracy_multiplier] = 0 if !@ai.battle.moldBreaker && target.has_active_ability?(:STURDY)
+      when "OHKOIce"
+        modifiers[:base_accuracy] = self.accuracy + user.level - target.level
+        modifiers[:base_accuracy] -= 10 if !user.has_type?(:ICE)
+        modifiers[:accuracy_multiplier] = 0 if target.level > user.level
+        modifiers[:accuracy_multiplier] = 0 if !@ai.battle.moldBreaker && target.has_active_ability?(:STURDY)
       end
     end
   end
@@ -489,7 +492,6 @@ class Battle::AI::AIMove
     target = @ai.target
     target_battler = target.battler
     return -1 if target_battler.pbOwnSide.effects[PBEffects::LuckyChant] > 0
-    mold_breaker = (@ai.trainer.medium_skill? && user_battler.hasMoldBreaker?)
     crit_stage = 0
     # Ability effects that alter critical hit rate
     if user.ability_active?
@@ -497,7 +499,7 @@ class Battle::AI::AIMove
          user_battler, target_battler, crit_stage)
       return -1 if crit_stage < 0
     end
-    if !mold_breaker && target.ability_active?
+    if !@ai.battle.moldBreaker && target.ability_active?
       crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target_battler.ability,
          user_battler, target_battler, crit_stage)
       return -1 if crit_stage < 0

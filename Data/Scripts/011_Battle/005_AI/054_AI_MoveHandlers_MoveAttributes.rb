@@ -99,7 +99,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetHPToUserHP",
 Battle::AI::Handlers::MoveFailureCheck.add("OHKO",
   proc { |move, user, target, ai, battle|
     next true if target.level > user.level
-    next true if target.has_active_ability?(:STURDY)
+    next true if !battle.moldBreaker && target.has_active_ability?(:STURDY)
   }
 )
 Battle::AI::Handlers::MoveBasePower.add("OHKO",
@@ -114,7 +114,7 @@ Battle::AI::Handlers::MoveBasePower.add("OHKO",
 Battle::AI::Handlers::MoveFailureCheck.add("OHKOIce",
   proc { |move, user, target, ai, battle|
     next true if target.level > user.level
-    next true if target.has_active_ability?(:STURDY)
+    next true if !battle.moldBreaker && target.has_active_ability?(:STURDY)
     next true if target.has_type?(:ICE)
   }
 )
