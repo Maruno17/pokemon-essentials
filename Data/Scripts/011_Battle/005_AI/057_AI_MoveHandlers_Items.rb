@@ -1,5 +1,5 @@
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserTakesTargetItem",
   proc { |score, move, user, target, ai, battle|
@@ -17,7 +17,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTakesTargetItem",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TargetTakesUserItem",
   proc { |move, user, target, ai, battle|
@@ -38,7 +38,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetTakesUserItem",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserTargetSwapItems",
   proc { |move, user, target, ai, battle|
@@ -63,7 +63,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapItems",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RestoreUserConsumedItem",
   proc { |move, user, target, ai, battle|
@@ -78,7 +78,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RestoreUserConsumedItem",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("RemoveTargetItem",
   proc { |power, move, user, target, ai, battle|
@@ -95,7 +95,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveTargetItem",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DestroyTargetBerryOrGem",
   proc { |score, move, user, target, ai, battle|
@@ -109,7 +109,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DestroyTargetBerryOrGem",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CorrodeTargetItem",
   proc { |move, user, target, ai, battle|
@@ -131,7 +131,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CorrodeTargetItem",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartTargetCannotUseItem",
   proc { |move, user, target, ai, battle|
@@ -145,6 +145,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartTargetCannotUseItem",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("StartNegateHeldItems",
@@ -155,7 +156,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartNegateHeldItems",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserConsumeBerryRaiseDefense2",
   proc { |move, user, target, ai, battle|
@@ -188,6 +189,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserConsumeBerryRaiseDefense2",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AllBattlersConsumeBerry",
@@ -232,7 +234,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersConsumeBerry",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserConsumeTargetBerry",
   proc { |score, move, user, target, ai, battle|
@@ -246,7 +248,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserConsumeTargetBerry",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ThrowUserItemAtTarget",
   proc { |move, user, target, ai, battle|

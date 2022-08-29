@@ -1,5 +1,5 @@
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserFullyAndFallAsleep",
   proc { |move, user, target, ai, battle|
@@ -18,7 +18,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserFullyAndFallAsleep",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -34,7 +34,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHP",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
                                             "HealUserDependingOnWeather")
@@ -54,7 +54,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnWeather",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
                                             "HealUserDependingOnSandstorm")
@@ -68,7 +68,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnSandstorm",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
                                             "HealUserHalfOfTotalHPLoseFlyingTypeThisTurn")
@@ -81,7 +81,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHPLoseFlyingTypeTh
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CureTargetStatusHealUserHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -98,7 +98,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CureTargetStatusHealUserHalfOfTotalHP
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserByTargetAttackLowerTargetAttack1",
   proc { |move, user, target, ai, battle|
@@ -133,7 +133,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByTargetAttackLowerTargetAtta
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDone",
   proc { |score, move, user, target, ai, battle|
@@ -147,7 +147,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDone",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserByHalfOfDamageDoneIfTargetAsleep",
   proc { |move, user, target, ai, battle|
@@ -166,7 +166,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDoneIfTargetAsl
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("HealUserByThreeQuartersOfDamageDone",
   proc { |score, move, user, target, ai, battle|
@@ -180,7 +180,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByThreeQuartersOfDamageDone",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserAndAlliesQuarterOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -202,7 +202,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHP",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserAndAlliesQuarterOfTotalHPCureStatus",
   proc { |move, user, target, ai, battle|
@@ -225,7 +225,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHPCure
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealTargetHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -243,7 +243,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealTargetHalfOfTotalHP",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealTargetHalfOfTotalHP",
                                             "HealTargetDependingOnGrassyTerrain")
@@ -261,7 +261,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealTargetDependingOnGrassyTerrain",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserPositionNextTurn",
   proc { |move, user, target, ai, battle|
@@ -270,7 +270,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("HealUserPositionNextTurn",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurn",
   proc { |move, user, target, ai, battle|
@@ -279,7 +279,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurn",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurnTrapUserInBattle",
   proc { |move, user, target, ai, battle|
@@ -288,7 +288,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurnTrapUserInBattl
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartDamageTargetEachTurnIfTargetAsleep",
   proc { |move, user, target, ai, battle|
@@ -308,7 +308,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartDamageTargetEachTurnIfTargetAsle
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartLeechSeedTarget",
   proc { |move, user, target, ai, battle|
@@ -330,7 +330,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartLeechSeedTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
@@ -339,7 +339,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHP",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserLosesHalfOfTotalHPExplosive",
   proc { |move, user, target, ai, battle|
@@ -362,7 +362,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHPExplosive",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("UserLosesHalfOfTotalHPExplosive",
                                             "UserFaintsExplosive")
@@ -382,7 +382,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsExplosive",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("UserLosesHalfOfTotalHPExplosive",
                                             "UserFaintsPowersUpInMistyTerrainExplosive")
@@ -407,7 +407,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsPowersUpInMistyTerrainExplo
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("UserFaintsFixedDamageUserHP",
   proc { |power, move, user, target, ai, battle|
@@ -416,7 +416,7 @@ Battle::AI::Handlers::MoveBasePower.add("UserFaintsFixedDamageUserHP",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsLowerTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|
@@ -435,7 +435,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsLowerTargetAtkSpAtk2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserFaintsHealAndCureReplacement",
   proc { |move, user, target, ai, battle|
@@ -449,7 +449,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserFaintsHealAndCureReplacement",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("UserFaintsHealAndCureReplacement",
                                             "UserFaintsHealAndCureReplacementRestorePP")
@@ -457,6 +457,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsHealAndCureReplacement",
                                            "UserFaintsHealAndCureReplacementRestorePP")
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartPerishCountsForAllBattlers",
@@ -474,7 +475,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPerishCountsForAllBattlers",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AttackerFaintsIfUserFaints",
   proc { |move, user, target, ai, battle|
@@ -491,7 +492,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AttackerFaintsIfUserFaints",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("SetAttackerMovePPTo0IfUserFaints",
   proc { |score, move, user, target, ai, battle|

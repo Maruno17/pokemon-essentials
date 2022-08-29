@@ -1,5 +1,5 @@
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoTimes",
   proc { |power, move, user, target, ai, battle|
@@ -8,7 +8,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoTimes",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
                                          "HitTwoTimesPoisonTarget")
@@ -31,7 +31,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
                                          "HitTwoTimesFlinchTarget")
@@ -42,7 +42,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesFlinchTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoTimesTargetThenTargetAlly",
   proc { |power, move, user, target, ai, battle|
@@ -51,7 +51,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoTimesTargetThenTargetAlly",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesPowersUpWithEachHit",
   proc { |power, move, user, target, ai, battle|
@@ -60,7 +60,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesPowersUpWithEachHit",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesAlwaysCriticalHit",
   proc { |power, move, user, target, ai, battle|
@@ -77,7 +77,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HitThreeTimesAlwaysCriticalHit",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimes",
   proc { |power, move, user, target, ai, battle|
@@ -87,7 +87,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimes",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesOrThreeForAshGreninja",
   proc { |power, move, user, target, ai, battle|
@@ -100,7 +100,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesOrThreeForAshGreninja"
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1",
   proc { |power, move, user, target, ai, battle|
@@ -123,7 +123,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoToFiveTimesRaiseUserSpd1LowerUs
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HitOncePerUserTeamMember",
   proc { |move, user, target, ai, battle|
@@ -147,17 +147,17 @@ Battle::AI::Handlers::MoveBasePower.add("HitOncePerUserTeamMember",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # AttackAndSkipNextTurn
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # TwoTurnAttack
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("TwoTurnAttackOneTurnInSun",
   proc { |power, move, user, target, ai, battle|
@@ -166,7 +166,7 @@ Battle::AI::Handlers::MoveBasePower.add("TwoTurnAttackOneTurnInSun",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
@@ -190,7 +190,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
   proc { |score, move, user, target, ai, battle|
@@ -202,7 +202,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
   proc { |score, move, user, target, ai, battle|
@@ -214,6 +214,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2",
@@ -257,7 +258,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2"
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserDefense1",
   proc { |score, move, user, target, ai, battle|
@@ -275,7 +276,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserDefense1"
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
   proc { |score, move, user, target, ai, battle|
@@ -292,27 +293,27 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # TwoTurnAttackInvulnerableUnderground
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # TwoTurnAttackInvulnerableUnderwater
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # TwoTurnAttackInvulnerableInSky
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # TwoTurnAttackInvulnerableInSkyParalyzeTarget
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackInvulnerableInSkyTargetCannotAct",
   proc { |move, user, target, ai, battle|
@@ -324,22 +325,22 @@ Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackInvulnerableInSkyTarget
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # TwoTurnAttackInvulnerableRemoveProtections
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # MultiTurnAttackPreventSleeping
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # MultiTurnAttackConfuseUserAtEnd
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackPowersUpEachTurn",
   proc { |power, move, user, target, ai, battle|
@@ -348,7 +349,7 @@ Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackPowersUpEachTurn",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackBideThenReturnDoubleDamage",
   proc { |power, move, user, target, ai, battle|

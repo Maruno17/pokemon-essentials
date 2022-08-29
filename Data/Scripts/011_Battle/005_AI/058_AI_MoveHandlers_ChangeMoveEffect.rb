@@ -1,5 +1,5 @@
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
   proc { |score, move, user, target, ai, battle|
@@ -8,7 +8,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToTarget",
   proc { |score, move, user, target, ai, battle|
@@ -17,7 +17,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("CannotBeRedirected",
   proc { |score, move, user, target, ai, battle|
@@ -39,7 +39,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CannotBeRedirected",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("RandomlyDamageOrHealTarget",
   proc { |power, move, user, target, ai, battle|
@@ -48,7 +48,7 @@ Battle::AI::Handlers::MoveBasePower.add("RandomlyDamageOrHealTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealAllyOrDamageFoe",
   proc { |move, user, target, ai, battle|
@@ -66,7 +66,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealAllyOrDamageFoe",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |move, user, target, ai, battle|
@@ -101,12 +101,12 @@ Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAt
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # EffectDependsOnEnvironment
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitsAllFoesAndPowersUpInPsychicTerrain",
   proc { |power, move, user, target, ai, battle|
@@ -120,7 +120,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HitsAllFoesAndPowersUpInPsychicTerrai
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TargetNextFireMoveDamagesTarget",
   proc { |move, user, target, ai, battle|
@@ -141,17 +141,17 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetNextFireMoveDamagesTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # DoublePowerAfterFusionFlare
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # DoublePowerAfterFusionBolt
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PowerUpAllyMove",
   proc { |move, user, target, ai, battle|
@@ -166,6 +166,7 @@ Battle::AI::Handlers::MoveEffectScore.add("PowerUpAllyMove",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterPhysicalDamage",
@@ -192,6 +193,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterSpecialDamage",
@@ -218,6 +220,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterDamagePlusHalf",
@@ -232,7 +235,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserAddStockpileRaiseDefSpDef1",
   proc { |move, user, target, ai, battle|
@@ -254,7 +257,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PowerDependsOnUserStockpile",
   proc { |move, user, target, ai, battle|
@@ -268,7 +271,7 @@ Battle::AI::Handlers::MoveBasePower.add("PowerDependsOnUserStockpile",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserDependingOnUserStockpile",
   proc { |move, user, target, ai, battle|
@@ -288,22 +291,22 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnUserStockpile",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # GrassPledge
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # FirePledge
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # WaterPledge
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
   proc { |move, user, target, ai, battle|
@@ -313,7 +316,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsedByTarget",
   proc { |move, user, target, ai, battle|
@@ -328,22 +331,23 @@ Battle::AI::Handlers::MoveEffectScore.add("UseLastMoveUsedByTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # UseMoveTargetIsAboutToUse
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # UseMoveDependingOnEnvironment
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 # UseRandomMove
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseRandomMoveFromUserParty",
   proc { |move, user, target, ai, battle|
@@ -364,7 +368,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseRandomMoveFromUserParty",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseRandomUserMoveIfAsleep",
   proc { |move, user, target, ai, battle|
@@ -386,17 +390,19 @@ Battle::AI::Handlers::MoveEffectScore.add("UseRandomUserMoveIfAsleep",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 # BounceBackProblemCausingStatusMoves
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 # StealAndUseBeneficialStatusMove
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|
@@ -410,7 +416,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveThisBattleWithTargetLastM
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveWithTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|

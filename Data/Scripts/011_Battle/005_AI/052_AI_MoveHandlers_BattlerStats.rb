@@ -1,5 +1,5 @@
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserAttack1",
   proc { |move, user, target, ai, battle|
@@ -41,7 +41,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAttack1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack1",
                                             "RaiseUserAttack2")
@@ -82,13 +82,13 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAttack2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAttack2",
                                            "RaiseUserAttack2IfTargetFaints")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack2",
                                             "RaiseUserAttack3")
@@ -96,13 +96,13 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAttack2",
                                            "RaiseUserAttack3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAttack2IfTargetFaints",
                                            "RaiseUserAttack3IfTargetFaints")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("MaxUserAttackLoseHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -131,7 +131,7 @@ Battle::AI::Handlers::MoveEffectScore.add("MaxUserAttackLoseHalfOfTotalHP",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack1",
                                             "RaiseUserDefense1")
@@ -146,7 +146,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
                                             "RaiseUserDefense1CurlUpUser")
@@ -154,7 +154,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserDefense1",
                                            "RaiseUserDefense1CurlUpUser")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
                                             "RaiseUserDefense2")
@@ -172,7 +172,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
                                             "RaiseUserDefense3")
@@ -190,7 +190,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense3",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack1",
                                             "RaiseUserSpAtk1")
@@ -228,7 +228,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtk1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpAtk1",
                                             "RaiseUserSpAtk2")
@@ -268,7 +268,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtk2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpAtk1",
                                             "RaiseUserSpAtk3")
@@ -308,7 +308,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtk3",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
                                             "RaiseUserSpDef1")
@@ -326,7 +326,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
                                             "RaiseUserSpDef1PowerUpElectricMove")
@@ -349,7 +349,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1PowerUpElectricMove",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
                                             "RaiseUserSpDef2")
@@ -357,7 +357,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserSpDef1",
                                            "RaiseUserSpDef2")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
                                             "RaiseUserSpDef3")
@@ -365,7 +365,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserSpDef1",
                                            "RaiseUserSpDef3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
                                             "RaiseUserSpeed1")
@@ -386,6 +386,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed1",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed1",
@@ -409,6 +410,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed2",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed2",
@@ -417,6 +419,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserSpeed2",
                                            "RaiseUserSpeed2LowerUserWeight")
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed2",
@@ -425,7 +428,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserSpeed2",
                                            "RaiseUserSpeed3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed1",
                                             "RaiseUserAccuracy1")
@@ -443,7 +446,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAccuracy1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAccuracy1",
                                             "RaiseUserAccuracy2")
@@ -451,7 +454,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAccuracy1",
                                            "RaiseUserAccuracy2")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAccuracy1",
                                             "RaiseUserAccuracy3")
@@ -459,7 +462,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAccuracy1",
                                            "RaiseUserAccuracy3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAccuracy1",
                                             "RaiseUserEvasion1")
@@ -475,7 +478,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserEvasion1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserEvasion1",
                                             "RaiseUserEvasion2")
@@ -493,7 +496,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserEvasion2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserEvasion2",
                                             "RaiseUserEvasion2MinimizeUser")
@@ -501,7 +504,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserEvasion2",
                                            "RaiseUserEvasion2MinimizeUser")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserEvasion2",
                                             "RaiseUserEvasion3")
@@ -509,7 +512,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserEvasion2",
                                            "RaiseUserEvasion3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserCriticalHitRate2",
   proc { |move, user, target, ai, battle|
@@ -525,7 +528,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserCriticalHitRate2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserAtkDef1",
   proc { |move, user, target, ai, battle|
@@ -562,7 +565,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkDef1",
                                             "RaiseUserAtkDefAcc1")
@@ -589,7 +592,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkDefAcc1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkDef1",
                                             "RaiseUserAtkSpAtk1")
@@ -615,7 +618,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpAtk1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserAtkSpAtk1Or2InSun")
@@ -642,7 +645,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpAtk1Or2InSun",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2",
   proc { |move, user, target, ai, battle|
@@ -681,6 +684,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDef1RaiseUserAtkSpAtkSp
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
@@ -713,6 +717,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpd1",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
@@ -744,7 +749,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtk1Spd2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserAtkAcc1")
@@ -770,7 +775,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkAcc1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserDefSpDef1")
@@ -783,7 +788,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefSpDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserSpAtkSpDef1")
@@ -810,6 +815,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtkSpDef1",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
@@ -843,7 +849,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpAtkSpDefSpd1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserMainStats1")
@@ -864,7 +870,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1LoseThirdOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -892,7 +898,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1LoseThirdOfTotalHP
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1TrapUserInBattle",
   proc { |move, user, target, ai, battle|
@@ -923,7 +929,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1TrapUserInBattle",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("StartRaiseUserAtk1WhenDamaged",
   proc { |score, move, user, target, ai, battle|
@@ -932,7 +938,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRaiseUserAtk1WhenDamaged",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserAttack1",
   proc { |score, move, user, target, ai, battle|
@@ -941,13 +947,13 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserAttack1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserAttack1",
                                            "LowerUserAttack2")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefense1",
   proc { |score, move, user, target, ai, battle|
@@ -956,13 +962,13 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefense1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserDefense1",
                                            "LowerUserDefense2")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserSpAtk1",
   proc { |score, move, user, target, ai, battle|
@@ -971,13 +977,13 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserSpAtk1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserSpAtk1",
                                            "LowerUserSpAtk2")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserSpDef1",
   proc { |score, move, user, target, ai, battle|
@@ -986,13 +992,13 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserSpDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserSpDef1",
                                            "LowerUserSpDef2")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserSpeed1",
   proc { |score, move, user, target, ai, battle|
@@ -1001,13 +1007,13 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserSpeed1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserSpeed1",
                                            "LowerUserSpeed2")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserAtkDef1",
   proc { |score, move, user, target, ai, battle|
@@ -1018,7 +1024,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserAtkDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDef1",
   proc { |score, move, user, target, ai, battle|
@@ -1029,7 +1035,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDefSpd1",
   proc { |score, move, user, target, ai, battle|
@@ -1041,6 +1047,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDefSpd1",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAttack1",
@@ -1051,7 +1058,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAttack1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAttack2ConfuseTarget",
   proc { |move, user, target, ai, battle|
@@ -1067,7 +1074,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetAttack2ConfuseTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetSpAtk1ConfuseTarget",
   proc { |move, user, target, ai, battle|
@@ -1083,7 +1090,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetSpAtk1ConfuseTarget",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetSpDef1",
   proc { |move, user, target, ai, battle|
@@ -1097,7 +1104,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetSpDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetRandomStat2",
   proc { |move, user, target, ai, battle|
@@ -1121,7 +1128,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetRandomStat2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAtkSpAtk2",
   proc { |move, user, target, ai, battle|
@@ -1140,7 +1147,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetAtkSpAtk2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetAttack1",
   proc { |move, user, target, ai, battle|
@@ -1182,7 +1189,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAttack1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack1",
                                             "LowerTargetAttack1BypassSubstitute")
@@ -1207,7 +1214,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAttack1BypassSubstitute",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack1",
                                             "LowerTargetAttack2")
@@ -1247,7 +1254,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAttack2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack2",
                                             "LowerTargetAttack3")
@@ -1255,7 +1262,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetAttack2",
                                            "LowerTargetAttack3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack1",
                                             "LowerTargetDefense1")
@@ -1271,7 +1278,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetDefense1",
                                             "LowerTargetDefense1PowersUpInGravity")
@@ -1292,7 +1299,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense1PowersUpInGravity"
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetDefense1",
                                             "LowerTargetDefense2")
@@ -1310,7 +1317,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetDefense2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetDefense2",
                                             "LowerTargetDefense3")
@@ -1318,7 +1325,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetDefense2",
                                            "LowerTargetDefense3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAttack1",
                                             "LowerTargetSpAtk1")
@@ -1356,7 +1363,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpAtk1",
                                             "LowerTargetSpAtk2")
@@ -1369,7 +1376,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetSpAtk2IfCanAttract",
   proc { |move, user, target, ai, battle|
@@ -1415,7 +1422,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk2IfCanAttract",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpAtk1",
                                             "LowerTargetSpAtk3")
@@ -1428,7 +1435,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpAtk3",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetDefense1",
                                             "LowerTargetSpDef1")
@@ -1444,7 +1451,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpDef1",
                                             "LowerTargetSpDef2")
@@ -1462,7 +1469,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpDef2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpDef2",
                                             "LowerTargetSpDef3")
@@ -1470,7 +1477,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetSpDef2",
                                            "LowerTargetSpDef3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpDef1",
                                             "LowerTargetSpeed1")
@@ -1491,7 +1498,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpeed1",
                                             "LowerTargetSpeed1WeakerInGrassyTerrain")
@@ -1504,7 +1511,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetSpeed1",
                                            "LowerTargetSpeed1WeakerInGrassyTerrain")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetSpeed1MakeTargetWeakerToFire",
   proc { |move, user, target, ai, battle|
@@ -1527,7 +1534,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed1MakeTargetWeakerToFi
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpeed1",
                                             "LowerTargetSpeed2")
@@ -1550,7 +1557,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetSpeed2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpeed2",
                                             "LowerTargetSpeed3")
@@ -1558,7 +1565,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetSpeed2",
                                            "LowerTargetSpeed3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetSpeed1",
                                             "LowerTargetAccuracy1")
@@ -1574,7 +1581,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAccuracy1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAccuracy1",
                                             "LowerTargetAccuracy2")
@@ -1582,7 +1589,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetAccuracy1",
                                            "LowerTargetAccuracy2")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAccuracy1",
                                             "LowerTargetAccuracy3")
@@ -1590,7 +1597,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetAccuracy1",
                                            "LowerTargetAccuracy3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAccuracy1",
                                             "LowerTargetEvasion1")
@@ -1606,7 +1613,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetEvasion1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetEvasion1RemoveSideEffects",
   proc { |move, user, target, ai, battle|
@@ -1651,7 +1658,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetEvasion1RemoveSideEffects"
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetEvasion1",
                                             "LowerTargetEvasion2")
@@ -1667,7 +1674,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetEvasion2",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetEvasion2",
                                             "LowerTargetEvasion3")
@@ -1675,7 +1682,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("LowerTargetEvasion2",
                                            "LowerTargetEvasion3")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetAtkDef1",
   proc { |move, user, target, ai, battle|
@@ -1697,7 +1704,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("LowerTargetAtkDef1",
                                             "LowerTargetAtkSpAtk1")
@@ -1710,7 +1717,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerTargetAtkSpAtk1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerPoisonedTargetAtkSpAtkSpd1",
   proc { |move, user, target, ai, battle|
@@ -1734,7 +1741,7 @@ Battle::AI::Handlers::MoveEffectScore.add("LowerPoisonedTargetAtkSpAtkSpd1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseAlliesAtkDef1",
   proc { |move, user, target, ai, battle|
@@ -1765,7 +1772,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseAlliesAtkDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
   proc { |move, user, target, ai, battle|
@@ -1794,7 +1801,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaisePlusMinusUserAndAlliesAtkSpAtk1"
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
   proc { |move, user, target, ai, battle|
@@ -1823,7 +1830,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaisePlusMinusUserAndAlliesDefSpDef1"
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseGroundedGrassBattlersAtkSpAtk1",
   proc { |move, user, target, ai, battle|
@@ -1853,7 +1860,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseGroundedGrassBattlersAtkSpAtk1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseGrassBattlersDef1",
   proc { |move, user, target, ai, battle|
@@ -1881,7 +1888,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseGrassBattlersDef1",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapAtkSpAtkStages",
   proc { |score, move, user, target, ai, battle|
@@ -1904,7 +1911,8 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapAtkSpAtkStages",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapDefSpDefStages",
   proc { |score, move, user, target, ai, battle|
@@ -1927,7 +1935,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapDefSpDefStages",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapStatStages",
   proc { |score, move, user, target, ai, battle|
@@ -1947,7 +1955,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapStatStages",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserCopyTargetStatStages",
   proc { |score, move, user, target, ai, battle|
@@ -1967,6 +1975,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserCopyTargetStatStages",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: Account for stat theft before damage calculation.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserStealTargetPositiveStatStages",
@@ -1981,7 +1990,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserStealTargetPositiveStatStages",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("InvertTargetStatStages",
   proc { |move, user, target, ai, battle|
@@ -2002,7 +2011,7 @@ Battle::AI::Handlers::MoveEffectScore.add("InvertTargetStatStages",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ResetTargetStatStages",
   proc { |score, move, user, target, ai, battle|
@@ -2020,7 +2029,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ResetTargetStatStages",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ResetAllBattlersStatStages",
   proc { |move, user, target, ai, battle|
@@ -2046,7 +2055,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ResetAllBattlersStatStages",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideImmunityToStatStageLowering",
   proc { |move, user, target, ai, battle|
@@ -2055,7 +2064,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideImmunityToStatStageLowe
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserSwapBaseAtkDef",
   proc { |score, move, user, target, ai, battle|
@@ -2078,7 +2087,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserSwapBaseAtkDef",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapBaseSpeed",
   proc { |score, move, user, target, ai, battle|
@@ -2094,7 +2103,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapBaseSpeed",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserTargetAverageBaseAtkSpAtk",
   proc { |score, move, user, target, ai, battle|
@@ -2118,7 +2127,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetAverageBaseAtkSpAtk",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserTargetAverageBaseDefSpDef",
   proc { |score, move, user, target, ai, battle|
@@ -2142,7 +2151,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetAverageBaseDefSpDef",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserTargetAverageHP",
   proc { |score, move, user, target, ai, battle|
@@ -2158,7 +2167,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetAverageHP",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideDoubleSpeed",
   proc { |move, user, target, ai, battle|
@@ -2167,6 +2176,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideDoubleSpeed",
 )
 
 #===============================================================================
+# TODO: Review score modifiers.
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 # StartSwapAllBattlersBaseDefensiveStats

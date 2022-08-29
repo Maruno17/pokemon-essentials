@@ -66,6 +66,7 @@ module Battle::AI::Handlers
   MoveEffectScore  = HandlerHash.new
   MoveBasePower    = HandlerHash.new
   MoveFailureCheck = HandlerHash.new
+  GeneralMoveScore = HandlerHash.new
   # Move type
   # Move accuracy
   # Move target
@@ -85,5 +86,13 @@ module Battle::AI::Handlers
   def self.get_base_power(function_code, power, *args)
     ret = MoveBasePower.trigger(function_code, power, *args)
     return (ret.nil?) ? power : ret
+  end
+
+  def self.apply_general_move_score_modifiers(score, *args)
+    GeneralMoveScore.each do |id, score_proc|
+      new_score = score_proc.call(score, *args)
+      score = new_score if new_score
+    end
+    return score
   end
 end

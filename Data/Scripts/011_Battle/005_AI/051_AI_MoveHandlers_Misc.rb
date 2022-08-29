@@ -1,15 +1,15 @@
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # Struggle
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # None
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DoesNothingCongratulations",
   proc { |score, move, user, target, ai, battle|
@@ -19,7 +19,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DoesNothingCongratulations",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DoesNothingFailsIfNoAlly",
   proc { |move, user, target, ai, battle|
@@ -30,24 +30,24 @@ Battle::AI::Handlers::MoveEffectScore.copy("DoesNothingCongratulations",
                                            "DoesNothingFailsIfNoAlly")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("DoesNothingCongratulations",
                                            "DoesNothingUnusableInGravity")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("DoesNothingCongratulations",
                                            "DoubleMoneyGainedFromBattle")
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # AddMoneyGainedFromBattle
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfNotUserFirstTurn",
   proc { |move, user, target, ai, battle|
@@ -56,7 +56,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsIfNotUserFirstTurn",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserHasUnusedMove",
   proc { |move, user, target, ai, battle|
@@ -74,7 +74,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserHasUnusedMove",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserNotConsumedBerry",
   proc { |move, user, target, ai, battle|
@@ -83,7 +83,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserNotConsumedBerry",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfTargetHasNoItem",
   proc { |move, user, target, ai, battle|
@@ -97,7 +97,7 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfTargetHasNoItem",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsUnlessTargetSharesTypeWithUser",
   proc { |move, user, target, ai, battle|
@@ -108,7 +108,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsUnlessTargetSharesTypeWithUser"
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserDamagedThisTurn",
   proc { |score, move, user, target, ai, battle|
@@ -120,12 +120,12 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserDamagedThisTurn",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 # FailsIfTargetActed
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("CrashDamageIfFailsUnusableInGravity",
   proc { |score, move, user, target, ai, battle|
@@ -134,7 +134,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CrashDamageIfFailsUnusableInGravity",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartSunWeather",
   proc { |move, user, target, ai, battle|
@@ -158,7 +158,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartRainWeather")
@@ -178,7 +178,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartSandstormWeather")
@@ -192,7 +192,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartHailWeather")
@@ -206,7 +206,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartElectricTerrain",
   proc { |move, user, target, ai, battle|
@@ -215,7 +215,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartElectricTerrain",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartGrassyTerrain",
   proc { |move, user, target, ai, battle|
@@ -224,7 +224,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartGrassyTerrain",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartMistyTerrain",
   proc { |move, user, target, ai, battle|
@@ -233,7 +233,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartMistyTerrain",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartPsychicTerrain",
   proc { |move, user, target, ai, battle|
@@ -242,7 +242,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartPsychicTerrain",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RemoveTerrain",
   proc { |move, user, target, ai, battle|
@@ -251,7 +251,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RemoveTerrain",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AddSpikesToFoeSide",
   proc { |move, user, target, ai, battle|
@@ -271,7 +271,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AddToxicSpikesToFoeSide",
   proc { |move, user, target, ai, battle|
@@ -291,7 +291,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AddStealthRocksToFoeSide",
   proc { |move, user, target, ai, battle|
@@ -309,7 +309,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AddStickyWebToFoeSide",
   proc { |move, user, target, ai, battle|
@@ -318,7 +318,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("AddStickyWebToFoeSide",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SwapSideEffects",
   proc { |move, user, target, ai, battle|
@@ -364,7 +364,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwapSideEffects",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserMakeSubstitute",
   proc { |move, user, target, ai, battle|
@@ -374,7 +374,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserMakeSubstitute",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RemoveUserBindingAndEntryHazards",
   proc { |score, move, user, target, ai, battle|
@@ -390,7 +390,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveUserBindingAndEntryHazards",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AttackTwoTurnsLater",
   proc { |move, user, target, ai, battle|
@@ -407,7 +407,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AttackTwoTurnsLater",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserSwapsPositionsWithAlly",
   proc { |move, user, target, ai, battle|
@@ -423,7 +423,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserSwapsPositionsWithAlly",
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("BurnAttackerBeforeUserActs",
   proc { |score, move, user, target, ai, battle|
