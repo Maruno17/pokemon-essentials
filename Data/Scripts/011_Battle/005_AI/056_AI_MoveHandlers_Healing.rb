@@ -330,112 +330,119 @@ Battle::AI::Handlers::MoveEffectScore.add("StartLeechSeedTarget",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.hp <= user.totalhp / 2
+    score -= 15   # User will lose 50% HP, don't prefer this move
+    if ai.trainer.medium_skill?
+      score += 10 if user.hp >= user.totalhp * 0.75   # User at 75% HP or more
+      score += 10 if user.hp <= user.totalhp * 0.25   # User at 25% HP or less
+    end
+    if ai.trainer.high_skill?
+      reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+      foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+      if reserves == 0   # AI is down to its last Pokémon
+        score += 30      # => Go out with a bang
+      elsif foes == 0    # Foe is down to their last Pokémon, AI has reserves
+        score += 20      # => Go for the kill
+      end
+    end
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserLosesHalfOfTotalHPExplosive",
   proc { |move, user, target, ai, battle|
     next true if !battle.moldBreaker && battle.pbCheckGlobalAbility(:DAMP)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHPExplosive",
-  proc { |score, move, user, target, ai, battle|
-    reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
-    foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
-    if ai.trainer.medium_skill? && reserves == 0 && foes > 0
-      score -= 60   # don't want to lose
-    elsif ai.trainer.high_skill? && reserves == 0 && foes == 0
-      score += 40   # want to draw
-    else
-      score -= (user.totalhp - user.hp) * 75 / user.totalhp
-    end
-    next score
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("UserLosesHalfOfTotalHP",
+                                           "UserLosesHalfOfTotalHPExplosive")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("UserLosesHalfOfTotalHPExplosive",
                                             "UserFaintsExplosive")
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsExplosive",
   proc { |score, move, user, target, ai, battle|
-    reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
-    foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
-    if ai.trainer.medium_skill? && reserves == 0 && foes > 0
-      score -= 60   # don't want to lose
-    elsif ai.trainer.high_skill? && reserves == 0 && foes == 0
-      score += 40   # want to draw
-    else
-      score -= user.hp * 100 / user.totalhp
+    score -= 25   # User will faint, don't prefer this move
+    if ai.trainer.medium_skill?
+      score -= 10 if user.hp >= user.totalhp * 0.5    # User at 50% HP or more
+      score += 10 if user.hp <= user.totalhp * 0.25   # User at 25% HP or less
+    end
+    if ai.trainer.high_skill?
+      reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+      foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+      if reserves == 0   # AI is down to its last Pokémon
+        score += 30      # => Go out with a bang
+      elsif foes == 0    # Foe is down to their last Pokémon, AI has reserves
+        score += 20      # => Go for the kill
+      end
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.copy("UserLosesHalfOfTotalHPExplosive",
+Battle::AI::Handlers::MoveFailureCheck.copy("UserFaintsExplosive",
                                             "UserFaintsPowersUpInMistyTerrainExplosive")
 Battle::AI::Handlers::MoveBasePower.add("UserFaintsPowersUpInMistyTerrainExplosive",
   proc { |power, move, user, target, ai, battle|
     next power * 3 / 2 if battle.field.terrain == :Misty
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("UserFaintsPowersUpInMistyTerrainExplosive",
-  proc { |score, move, user, target, ai, battle|
-    reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
-    foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
-    if ai.trainer.medium_skill? && reserves == 0 && foes > 0
-      score -= 60   # don't want to lose
-    elsif ai.trainer.high_skill? && reserves == 0 && foes == 0
-      score += 40   # want to draw
-    else
-      score -= user.hp * 100 / user.totalhp
-    end
-    next score
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsExplosive",
+                                           "UserFaintsPowersUpInMistyTerrainExplosive")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("UserFaintsFixedDamageUserHP",
   proc { |power, move, user, target, ai, battle|
     next user.hp
   }
 )
+Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsExplosive",
+                                           "UserFaintsFixedDamageUserHP")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsLowerTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|
-    if !target.battler.pbCanLowerStatStage?(:ATTACK, user.battler) &&
-       !target.battler.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler)
-      score -= 60
-    elsif battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
-      score -= 60
-    else
-      score += target.stages[:ATTACK] * 10
-      score += target.stages[:SPECIAL_ATTACK] * 10
-      score -= user.hp * 100 / user.totalhp
+    next score - 40 if !target.battler.pbCanLowerStatStage?(:ATTACK, user.battler) &&
+                       !target.battler.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler)
+    score -= 25   # User will faint, don't prefer this move
+    # Check the impact of lowering the target's stats
+    if target.stages[:ATTACK] < 0 && target.stages[:SPECIAL_ATTACK] < 0
+      score -= 20
+    elsif target.stages[:ATTACK] > 0 || target.stages[:SPECIAL_ATTACK] > 0
+      score += 10
+    end
+    if ai.trainer.medium_skill?
+      score -= 10 if user.hp >= user.totalhp * 0.5    # User at 50% HP or more
+      score += 10 if user.hp <= user.totalhp * 0.25   # User at 25% HP or less
+    end
+    if ai.trainer.high_skill?
+      reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+      foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+      if reserves > 0 && foes == 0    # Foe is down to their last Pokémon, AI has reserves
+        score += 20                   # => Can afford to lose this Pokémon
+      end
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserFaintsHealAndCureReplacement",
   proc { |move, user, target, ai, battle|
@@ -444,12 +451,35 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserFaintsHealAndCureReplacement",
 )
 Battle::AI::Handlers::MoveEffectScore.add("UserFaintsHealAndCureReplacement",
   proc { |score, move, user, target, ai, battle|
-    next score - 70
+    score -= 25   # User will faint, don't prefer this move
+    # Check whether the replacement user needs healing, and don't make the below
+    # calculations if not
+    if ai.trainer.medium_skill?
+      need_healing = false
+      battle.eachInTeamFromBattlerIndex(user.index) do |pkmn, party_index|
+        next if pkmn.hp >= pkmn.totalhp * 0.75 && pkmn.status == :NONE
+        need_healing = true
+        break
+      end
+      next score - 15 if !need_healing
+    end
+    if ai.trainer.medium_skill?
+      score -= 10 if user.hp >= user.totalhp * 0.5    # User at 50% HP or more
+      score += 10 if user.hp <= user.totalhp * 0.25   # User at 25% HP or less
+    end
+    if ai.trainer.high_skill?
+      reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+      foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+      if reserves > 0 && foes == 0    # Foe is down to their last Pokémon, AI has reserves
+        score += 20                   # => Can afford to lose this Pokémon
+      end
+    end
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("UserFaintsHealAndCureReplacement",
                                             "UserFaintsHealAndCureReplacementRestorePP")
@@ -457,25 +487,60 @@ Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsHealAndCureReplacement",
                                            "UserFaintsHealAndCureReplacementRestorePP")
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartPerishCountsForAllBattlers",
   proc { |move, user, target, ai, battle|
-    next target.effects[PBEffects::PerishSong] > 0
+    will_fail = true
+    battle.allBattlers.each do |b|
+      next if b.effects[PBEffects::PerishSong] > 0
+      next if Battle::AbilityEffects.triggerMoveImmunity(b.ability, user.battler, b,
+                                                         move.move, move.rough_type, battle, false)
+      will_fail = false
+      break
+    end
+    next will_fail
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartPerishCountsForAllBattlers",
   proc { |score, move, user, target, ai, battle|
-    if battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
-      score -= 60
+    score -= 15
+    # Check which battlers will be affected by this move
+    if ai.trainer.medium_skill?
+      allies_affected = 0
+      foes_affected = 0
+      foes_with_high_hp = 0
+      battle.allBattlers.each do |b|
+        next if b.effects[PBEffects::PerishSong] > 0
+        next if Battle::AbilityEffects.triggerMoveImmunity(b.ability, user.battler, b,
+                                                           move.move, move.rough_type, battle, false)
+        if b.opposes?(user.index)
+          foes_affected += 1
+          foes_with_high_hp += 1 if b.hp >= b.totalhp * 0.75
+        else
+          allies_affected += 1
+        end
+      end
+      next score - 25 if foes_affected == 0
+      score += 15 if allies_affected == 0   # No downside for user; cancel out inherent negative score
+      score += 15 * (foes_affected - allies_affected)
+      score += 5 * foes_with_high_hp
+    end
+    if ai.trainer.high_skill?
+      reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+      foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+      if foes == 0          # Foe is down to their last Pokémon, can't lose Perish count
+        score += 30         # => Want to auto-win in 3 turns
+      elsif reserves == 0   # AI is down to its last Pokémon, can't lose Perish count
+        score -= 20         # => Don't want to auto-lose in 3 turns
+      end
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AttackerFaintsIfUserFaints",
   proc { |move, user, target, ai, battle|
@@ -484,21 +549,45 @@ Battle::AI::Handlers::MoveFailureCheck.add("AttackerFaintsIfUserFaints",
 )
 Battle::AI::Handlers::MoveEffectScore.add("AttackerFaintsIfUserFaints",
   proc { |score, move, user, target, ai, battle|
-    score += 50
-    score -= user.hp * 100 / user.totalhp
-    score += 30 if user.hp <= user.totalhp / 10
+    score -= 25
+    # Check whether user is faster than its foe(s) and could use this move
+    user_faster_count = 0
+    ai.battlers.each_with_index do |b, i|
+      next if !user.opposes?(b) || b.battler.fainted?
+      user_faster_count += 1 if user.faster_than?(b)
+    end
+    next score if user_faster_count == 0   # Move will almost certainly have no effect
+    score += 5 * user_faster_count
+    # Prefer this move at lower user HP
+    if ai.trainer.medium_skill?
+      score += 20 if user.hp <= user.totalhp * 0.4
+      score += 10 if user.hp <= user.totalhp * 0.25
+      score += 15 if user.hp <= user.totalhp * 0.1
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("SetAttackerMovePPTo0IfUserFaints",
   proc { |score, move, user, target, ai, battle|
-    score += 50
-    score -= user.hp * 100 / user.totalhp
-    score += 30 if user.hp <= user.totalhp / 10
+    score -= 25
+    # Check whether user is faster than its foe(s) and could use this move
+    user_faster_count = 0
+    ai.battlers.each_with_index do |b, i|
+      next if !user.opposes?(b) || b.battler.fainted?
+      user_faster_count += 1 if user.faster_than?(b)
+    end
+    next score if user_faster_count == 0   # Move will almost certainly have no effect
+    score += 5 * user_faster_count
+    # Prefer this move at lower user HP (not as preferred as Destiny Bond, though)
+    if ai.trainer.medium_skill?
+      score += 15 if user.hp <= user.totalhp * 0.4
+      score += 10 if user.hp <= user.totalhp * 0.25
+      score += 10 if user.hp <= user.totalhp * 0.1
+    end
     next score
   }
 )

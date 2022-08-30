@@ -4,6 +4,7 @@
 class Battle::AI
   attr_reader :battle
   attr_reader :trainer
+  attr_reader :battlers
   attr_reader :user, :target, :move
 
   def initialize(battle)

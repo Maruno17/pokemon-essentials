@@ -488,7 +488,7 @@ end
 # User faints, even if the move does nothing else. (Explosion, Self-Destruct)
 #===============================================================================
 class Battle::Move::UserFaintsExplosive < Battle::Move
-  def worksWithNoTargets?;     return true; end
+  def worksWithNoTargets?;      return true; end
   def pbNumHits(user, targets); return 1;    end
 
   def pbMoveFailed?(user, targets)
