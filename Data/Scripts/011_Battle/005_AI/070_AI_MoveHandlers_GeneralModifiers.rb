@@ -258,14 +258,19 @@ Battle::AI::Handlers::GeneralMoveScore.add(:flinching_effects,
 # Adjust score based on how much damage it can deal.
 # TODO: Review score modifier.
 #===============================================================================
-# Battle::AI::Handlers::GeneralMoveScore.add(:add_predicted_damage,
-#   proc { |score, move, user, target, ai, battle|
-#     if move.damagingMove?
-#       dmg = move.rough_damage
-#       next score + [30.0 * dmg / target.hp, 40].min
-#     else   # Status moves
-#       # Don't prefer attacks which don't deal damage
-#       next score - 10
-#     end
-#   }
-# )
+Battle::AI::Handlers::GeneralMoveScore.add(:add_predicted_damage,
+  proc { |score, move, user, target, ai, battle|
+    if move.damagingMove?
+      dmg = move.rough_damage
+      score += [15.0 * dmg / target.hp, 20].min
+      score += 10 if dmg > target.hp * 1.1   # Predicted to KO the target
+      next score
+    end
+  }
+)
+
+#===============================================================================
+# TODO: Review score modifier.
+#===============================================================================
+# TODO: Prefer a damaging move if it's predicted to KO the target. Maybe include
+#       EOR damage in the prediction?

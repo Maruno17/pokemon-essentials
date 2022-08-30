@@ -57,6 +57,18 @@ class Battle::AI::AIBattler
 
   #=============================================================================
 
+  def check_for_move
+    ret = false
+    @battler.eachMove do |move|
+      next unless yield move
+      ret = true
+      break
+    end
+    return ret
+  end
+
+  #=============================================================================
+
   def speed; return @battler.speed; end
 
   # TODO: Cache calculated rough stats? Forget them in def refresh_battler.

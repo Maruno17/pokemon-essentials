@@ -1,5 +1,5 @@
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserFullyAndFallAsleep",
   proc { |move, user, target, ai, battle|
@@ -10,15 +10,28 @@ Battle::AI::Handlers::MoveFailureCheck.add("HealUserFullyAndFallAsleep",
 )
 Battle::AI::Handlers::MoveEffectScore.add("HealUserFullyAndFallAsleep",
   proc { |score, move, user, target, ai, battle|
-    score += 70
-    score -= user.hp * 140 / user.totalhp
-    score += 30 if user.status != :NONE
+    # Consider how much HP will be restored
+    if user.hp >= user.totalhp * 0.5
+      score -= 10
+    else
+      score += 20 * (user.totalhp - user.hp) / user.totalhp
+    end
+    # Check whether an existing status problem will be removed
+    score += 10 if user.status != :NONE
+    # Check if user will be able to act while asleep
+    if ai.trainer.medium_skill?
+      if user.check_for_move { |move| move.usableWhenAsleep? }
+        score += 10
+      else
+        score -= 10
+      end
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -27,61 +40,82 @@ Battle::AI::Handlers::MoveFailureCheck.add("HealUserHalfOfTotalHP",
 )
 Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    score += 50
-    score -= user.hp * 100 / user.totalhp
+    # Consider how much HP will be restored
+    if user.hp >= user.totalhp * 0.5
+      score -= 10
+    else
+      score += 20 * (user.totalhp - user.hp) / user.totalhp
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
                                             "HealUserDependingOnWeather")
 Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnWeather",
   proc { |score, move, user, target, ai, battle|
-    case user.battler.effectiveWeather
-    when :Sun, :HarshSun
-      score += 30
-    when :None
+    # Consider how much HP will be restored
+    if user.hp >= user.totalhp * 0.5
+      score -= 10
     else
-      score -= 30
+      case user.battler.effectiveWeather
+      when :Sun, :HarshSun
+        score += 5
+      when :None, :StrongWinds
+      else
+        score -= 10
+      end
+      score += 20 * (user.totalhp - user.hp) / user.totalhp
     end
-    score += 50
-    score -= user.hp * 100 / user.totalhp
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
                                             "HealUserDependingOnSandstorm")
 Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnSandstorm",
   proc { |score, move, user, target, ai, battle|
-    score += 50
-    score -= user.hp * 100 / user.totalhp
-    score += 30 if user.battler.effectiveWeather == :Sandstorm
+    # Consider how much HP will be restored
+    if user.hp >= user.totalhp * 0.5
+      score -= 10
+    else
+      score += 5 if user.battler.effectiveWeather == :Sandstorm
+      score += 20 * (user.totalhp - user.hp) / user.totalhp
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealUserHalfOfTotalHP",
                                             "HealUserHalfOfTotalHPLoseFlyingTypeThisTurn")
 Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHPLoseFlyingTypeThisTurn",
   proc { |score, move, user, target, ai, battle|
-    score += 50
-    score -= user.hp * 100 / user.totalhp
+    # Consider how much HP will be restored
+    if user.hp >= user.totalhp * 0.5
+      score -= 10
+    else
+      score += 20 * (user.totalhp - user.hp) / user.totalhp
+    end
+    if user.has_type?(:FLYING)
+      # TODO: Decide whether losing the Flying type is good or bad. Look at
+      #       type effectiveness changes against the user, and for foes' Ground
+      #       moves. Anything else?
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CureTargetStatusHealUserHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -91,14 +125,25 @@ Battle::AI::Handlers::MoveFailureCheck.add("CureTargetStatusHealUserHalfOfTotalH
 )
 Battle::AI::Handlers::MoveEffectScore.add("CureTargetStatusHealUserHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    score += (user.totalhp - user.hp) * 50 / user.totalhp
-    score -= 30 if target.opposes?(user)
+    # TODO: Add high level checks for whether the target wants to lose their
+    #       status problem, and change the score accordingly.
+    if target.opposes?(user)
+      score -= 10
+    else
+      score += 15
+    end
+    # Consider how much HP will be restored
+    if user.hp >= user.totalhp * 0.5
+      score -= 10
+    else
+      score += 20 * (user.totalhp - user.hp) / user.totalhp
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserByTargetAttackLowerTargetAttack1",
   proc { |move, user, target, ai, battle|
@@ -111,69 +156,87 @@ Battle::AI::Handlers::MoveFailureCheck.add("HealUserByTargetAttackLowerTargetAtt
 )
 Battle::AI::Handlers::MoveEffectScore.add("HealUserByTargetAttackLowerTargetAttack1",
   proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanLowerStatStage?(:ATTACK, user.battler)
-      score += target.stages[:ATTACK] * 20
-      if ai.trainer.medium_skill?
-        hasPhysicalAttack = false
-        target.battler.eachMove do |m|
-          next if !m.physicalMove?(m.type)
-          hasPhysicalAttack = true
-          break
-        end
-        if hasPhysicalAttack
-          score += 20
-        elsif ai.trainer.high_skill?
-          score -= 90
-        end
+    # Check whether lowering the target's Attack will have any impact
+    if ai.trainer.medium_skill?
+      if target.battler.pbCanLowerStatStage?(:ATTACK, user.battler, move.move) &&
+         target.check_for_move { |move| move.physicalMove?(move.type) }
+        score += target.stages[:ATTACK] * 10
       end
     end
-    score += (user.totalhp - user.hp) * 50 / user.totalhp
+    # Consider how much HP will be restored
+    heal_amt = target.rough_stat(:ATTACK)
+    if heal_amt > user.totalhp * 0.3   # Only modify the score if it'll heal a decent amount
+      # Things that affect healing caused by draining
+      if target.has_active_ability?(:LIQUIDOOZE)
+        score -= 20
+      elsif user.battler.canHeal?
+        if user.hp >= user.totalhp * 0.5
+          score -= 10
+        else
+          heal_amt *= 1.3 if user.has_active_item?(:BIGROOT)
+          heal_fraction = [user.totalhp - user.hp, heal_amt].min.to_f / user.totalhp
+          score += 40 * heal_fraction * (user.totalhp - user.hp) / user.totalhp
+        end
+      end
+    else
+      score -= 10 if target.has_active_ability?(:LIQUIDOOZE)
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDone",
   proc { |score, move, user, target, ai, battle|
-    if target.has_active_ability?(:LIQUIDOOZE)
-      score -= 70
-    elsif user.hp <= user.totalhp / 2
-      score += 20
+    # Consider how much HP will be restored
+    heal_amt = move.rough_damage / 2
+    if heal_amt > user.totalhp * 0.3   # Only modify the score if it'll heal a decent amount
+      # Things that affect healing caused by draining
+      if target.has_active_ability?(:LIQUIDOOZE)
+        score -= 20
+      elsif user.battler.canHeal?
+        heal_amt *= 1.3 if user.has_active_item?(:BIGROOT)
+        heal_fraction = [user.totalhp - user.hp, heal_amt].min.to_f / user.totalhp
+        score += 40 * heal_fraction * (user.totalhp - user.hp) / user.totalhp
+      end
+    else
+      score -= 10 if target.has_active_ability?(:LIQUIDOOZE)
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserByHalfOfDamageDoneIfTargetAsleep",
   proc { |move, user, target, ai, battle|
     next true if !target.battler.asleep?
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("HealUserByHalfOfDamageDoneIfTargetAsleep",
-  proc { |score, move, user, target, ai, battle|
-    if target.has_active_ability?(:LIQUIDOOZE)
-      score -= 70
-    elsif user.hp <= user.totalhp / 2
-      score += 20
-    end
-    next score
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("HealUserByHalfOfDamageDone",
+                                           "HealUserByHalfOfDamageDoneIfTargetAsleep")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("HealUserByThreeQuartersOfDamageDone",
   proc { |score, move, user, target, ai, battle|
-    if target.has_active_ability?(:LIQUIDOOZE)
-      score -= 80
-    elsif user.hp <= user.totalhp / 2
-      score += 40
+    # Consider how much HP will be restored
+    heal_amt = move.rough_damage * 0.75
+    if heal_amt > user.totalhp * 0.3   # Only modify the score if it'll heal a decent amount
+      # Things that affect healing caused by draining
+      if target.has_active_ability?(:LIQUIDOOZE)
+        score -= 20
+      elsif user.battler.canHeal?
+        heal_amt *= 1.3 if user.has_active_item?(:BIGROOT)
+        heal_fraction = [user.totalhp - user.hp, heal_amt].min.to_f / user.totalhp
+        score += 40 * heal_fraction * (user.totalhp - user.hp) / user.totalhp
+      end
+    else
+      score -= 10 if target.has_active_ability?(:LIQUIDOOZE)
     end
     next score
   }
