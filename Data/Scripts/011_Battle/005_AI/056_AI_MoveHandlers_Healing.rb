@@ -243,21 +243,23 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByThreeQuartersOfDamageDone",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserAndAlliesQuarterOfTotalHP",
   proc { |move, user, target, ai, battle|
-    next true if battle.allSameSideBattlers(user.battler).none? { |b| b.canHeal? }
+    valid_targets = battle.allSameSideBattlers(user.battler) { |b| b.canHeal? }
+    next true if valid_targets.empty?
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    ally_amt = 30
     battle.allSameSideBattlers(user.index).each do |b|
-      if b.hp == b.totalhp || (ai.trainer.medium_skill? && !b.canHeal?)
-        score -= ally_amt / 2
-      elsif b.hp < b.totalhp * 3 / 4
-        score += ally_amt
+      next if !b.canHeal?
+      # Consider how much HP will be restored
+      if b.hp >= b.totalhp * 0.75
+        score -= 5
+      else
+        score += 15 * (b.totalhp - b.hp) / b.totalhp
       end
     end
     next score
@@ -265,30 +267,33 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHP",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserAndAlliesQuarterOfTotalHPCureStatus",
   proc { |move, user, target, ai, battle|
-    next true if battle.allSameSideBattlers(user.battler).none? { |b| b.canHeal? || b.status != :NONE }
+    valid_targets = battle.allSameSideBattlers(user.battler) { |b| b.canHeal? || b.status != :NONE }
+    next true if valid_targets.empty?
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("HealUserAndAlliesQuarterOfTotalHPCureStatus",
   proc { |score, move, user, target, ai, battle|
-    ally_amt = 80 / battle.pbSideSize(user.index)
     battle.allSameSideBattlers(user.index).each do |b|
-      if b.hp == b.totalhp || (ai.trainer.medium_skill? && !b.canHeal?)
-        score -= ally_amt
-      elsif b.hp < b.totalhp * 3 / 4
-        score += ally_amt
+      next if !b.canHeal? && b.status == :NONE
+      # Consider how much HP will be restored
+      if b.hp >= b.totalhp * 0.75
+        score -= 5
+      else
+        score += 15 * (b.totalhp - b.hp) / b.totalhp
       end
-      score += ally_amt / 2 if b.pbHasAnyStatus?
+      # Check whether an existing status problem will be removed
+      score += 10 if user.status != :NONE
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealTargetHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -297,61 +302,97 @@ Battle::AI::Handlers::MoveFailureCheck.add("HealTargetHalfOfTotalHP",
 )
 Battle::AI::Handlers::MoveEffectScore.add("HealTargetHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.opposes?(target)
-    if target.hp < target.totalhp / 2 && target.effects[PBEffects::Substitute] == 0
-      score += 20
+    next score - 40 if user.opposes?(target)
+    # Consider how much HP will be restored
+    heal_amt = target.totalhp / 2
+    heal_amt = target.totalhp * 0.75 if move.move.pulseMove? &&
+                                        user.has_active_ability?(:MEGALAUNCHER)
+    if target.hp >= target.totalhp * 0.5
+      score -= 10
+    else
+      heal_fraction = [target.totalhp - target.hp, heal_amt].min.to_f / target.totalhp
+      score += 40 * heal_fraction * (target.totalhp - target.hp) / target.totalhp
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("HealTargetHalfOfTotalHP",
                                             "HealTargetDependingOnGrassyTerrain")
 Battle::AI::Handlers::MoveEffectScore.add("HealTargetDependingOnGrassyTerrain",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.hp == user.totalhp ||
-              (ai.trainer.medium_skill? && !user.battler.canHeal?)
-    score += 50
-    score -= user.hp * 100 / user.totalhp
-    if ai.trainer.medium_skill?
-      score += 30 if battle.field.terrain == :Grassy
+    next score - 40 if user.opposes?(target)
+    # Consider how much HP will be restored
+    heal_amt = target.totalhp / 2
+    heal_amt = (target.totalhp * 2 / 3.0).round if battle.field.terrain == :Grassy
+    if target.hp >= target.totalhp * 0.5
+      score -= 10
+    else
+      heal_fraction = [target.totalhp - target.hp, heal_amt].min.to_f / target.totalhp
+      score += 40 * heal_fraction * (target.totalhp - target.hp) / target.totalhp
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserPositionNextTurn",
   proc { |move, user, target, ai, battle|
     next true if battle.positions[user.index].effects[PBEffects::Wish] > 0
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("HealUserPositionNextTurn",
+  proc { |score, move, user, target, ai, battle|
+    # Consider how much HP will be restored
+    if user.hp >= user.totalhp * 0.5
+      score -= 10
+    else
+      score += 15 * (user.totalhp - user.hp) / user.totalhp
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurn",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::AquaRing]
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("StartHealUserEachTurn",
+  proc { |score, move, user, target, ai, battle|
+    score += 10
+    score += 10 if user.has_active_item?(:BIGROOT)
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartHealUserEachTurnTrapUserInBattle",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Ingrain]
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("StartHealUserEachTurnTrapUserInBattle",
+  proc { |score, move, user, target, ai, battle|
+    score += 5
+    score += 10 if user.turnCount < 2
+    score += 10 if user.has_active_item?(:BIGROOT)
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartDamageTargetEachTurnIfTargetAsleep",
   proc { |move, user, target, ai, battle|
@@ -360,18 +401,13 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartDamageTargetEachTurnIfTargetAsl
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartDamageTargetEachTurnIfTargetAsleep",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::Substitute] > 0
-      score -= 90
-    else
-      score -= 90 if target.statusCount <= 1
-      score += 50 if target.statusCount > 3
-    end
-    next score
+    next score - 40 if target.statusCount <= 1
+    next score + 10 * target.statusCount
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartLeechSeedTarget",
   proc { |move, user, target, ai, battle|
@@ -381,12 +417,20 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartLeechSeedTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartLeechSeedTarget",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::LeechSeed] >= 0
-      score -= 90
-    elsif target.has_type?(:GRASS)
-      score -= 90
-    elsif user.turnCount == 0
-      score += 60
+    score += 10 if user.turnCount < 2
+    if ai.trainer.medium_skill?
+      if !user.check_for_move { |move| move.damagingMove? }
+        score += 20
+      end
+      score -= 20 if target.has_active_ability?([:LIQUIDOOZE]) || !target.takesIndirectDamage?
+    end
+    if ai.trainer.high_skill?
+      if user.check_for_move { |move| move.is_a?(Battle::Move::ProtectMove) }
+        score += 15
+      end
+      if target.check_for_move { |move| move.is_a?(Battle::Move::RemoveUserBindingAndEntryHazards) }
+        score -= 15
+      end
     end
     next score
   }
