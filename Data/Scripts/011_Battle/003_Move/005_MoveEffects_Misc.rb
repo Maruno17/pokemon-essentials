@@ -174,11 +174,11 @@ class Battle::Move::FailsIfUserDamagedThisTurn < Battle::Move
   end
 
   def pbDisplayUseMessage(user)
-    super if !user.effects[PBEffects::FocusPunch] || user.lastHPLost == 0
+    super if !user.effects[PBEffects::FocusPunch] || !user.tookMoveDamageThisRound
   end
 
   def pbMoveFailed?(user, targets)
-    if user.effects[PBEffects::FocusPunch] && user.lastHPLost > 0
+    if user.effects[PBEffects::FocusPunch] && user.tookMoveDamageThisRound
       @battle.pbDisplay(_INTL("{1} lost its focus and couldn't move!", user.pbThis))
       return true
     end
@@ -187,7 +187,7 @@ class Battle::Move::FailsIfUserDamagedThisTurn < Battle::Move
 end
 
 #===============================================================================
-# Fails if the target didn't chose a damaging move to use this round, or has
+# Fails if the target didn't choose a damaging move to use this round, or has
 # already moved. (Sucker Punch)
 #===============================================================================
 class Battle::Move::FailsIfTargetActed < Battle::Move

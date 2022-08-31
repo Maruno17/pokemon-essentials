@@ -383,7 +383,8 @@ class Battle::Move
       target.effects[PBEffects::BideTarget] = user.index
     end
     target.damageState.fainted = true if target.fainted?
-    target.lastHPLost = damage                        # For Focus Punch
+    target.lastHPLost = damage
+    target.tookMoveDamageThisRound = true if damage > 0 && !target.damageState.substitute   # For Focus Punch
     target.tookDamageThisRound = true if damage > 0   # For Assurance
     target.lastAttacker.push(user.index)              # For Revenge
     if target.opposes?(user)

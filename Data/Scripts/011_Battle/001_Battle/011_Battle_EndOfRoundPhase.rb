@@ -747,6 +747,7 @@ class Battle
       battler.lastHPLostFromFoe                    = 0
       battler.droppedBelowHalfHP                   = false
       battler.statsDropped                         = false
+      battler.tookMoveDamageThisRound              = false
       battler.tookDamageThisRound                  = false
       battler.tookPhysicalHit                      = false
       battler.statsRaisedThisRound                 = false

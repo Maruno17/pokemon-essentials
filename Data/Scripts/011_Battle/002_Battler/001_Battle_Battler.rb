@@ -37,6 +37,7 @@ class Battle::Battler
   attr_accessor :currentMove   # ID of multi-turn move currently being used
   attr_accessor :droppedBelowHalfHP   # Used for Emergency Exit/Wimp Out
   attr_accessor :statsDropped   # Used for Eject Pack
+  attr_accessor :tookMoveDamageThisRound   # Boolean for Focus Punch
   attr_accessor :tookDamageThisRound   # Boolean for whether self took damage this round
   attr_accessor :tookPhysicalHit
   attr_accessor :statsRaisedThisRound   # Boolean for whether self's stat(s) raised this round

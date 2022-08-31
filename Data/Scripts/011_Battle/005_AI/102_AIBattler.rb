@@ -91,9 +91,12 @@ class Battle::AI::AIBattler
   #=============================================================================
 
   def types; return @battler.types; end
+  def pbTypes(withType3 = false); return @battler.pbTypes(withType3); end
 
   def has_type?(type)
-    return @battler.pbHasType?(type)
+    return false if !type
+    active_types = pbTypes(true)
+    return active_types.include?(GameData::Type.get(type).id)
   end
 
   def effectiveness_of_type_against_battler(type, user = nil)
@@ -131,10 +134,10 @@ class Battle::AI::AIBattler
     return @battler.abilityActive?
   end
 
-  def has_active_ability?(ability, check_mold_breaker = false)
+  def has_active_ability?(ability, ignore_fainted = false)
     # Only a high skill AI knows what an opponent's ability is
 #    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
-    return @battler.hasActiveAbility?(ability)
+    return @battler.hasActiveAbility?(ability, ignore_fainted)
   end
 
   def has_mold_breaker?

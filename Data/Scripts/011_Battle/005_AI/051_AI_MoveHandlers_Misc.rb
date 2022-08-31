@@ -1,25 +1,24 @@
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # Struggle
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # None
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DoesNothingCongratulations",
   proc { |score, move, user, target, ai, battle|
-    next 0 if ai.trainer.high_skill?
-    next score - 95
+    next score - 60
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DoesNothingFailsIfNoAlly",
   proc { |move, user, target, ai, battle|
@@ -30,33 +29,38 @@ Battle::AI::Handlers::MoveEffectScore.copy("DoesNothingCongratulations",
                                            "DoesNothingFailsIfNoAlly")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("DoesNothingCongratulations",
                                            "DoesNothingUnusableInGravity")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
+#===============================================================================
+# AddMoneyGainedFromBattle
+
+#===============================================================================
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("DoesNothingCongratulations",
                                            "DoubleMoneyGainedFromBattle")
 
 #===============================================================================
-# TODO: Review score modifiers.
-#===============================================================================
-# AddMoneyGainedFromBattle
-
-#===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfNotUserFirstTurn",
   proc { |move, user, target, ai, battle|
     next true if user.turnCount > 0
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("FailsIfNotUserFirstTurn",
+  proc { |score, move, user, target, ai, battle|
+    next score + 25   # Use it or lose it
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserHasUnusedMove",
   proc { |move, user, target, ai, battle|
@@ -74,7 +78,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserHasUnusedMove",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserNotConsumedBerry",
   proc { |move, user, target, ai, battle|
@@ -83,58 +87,92 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserNotConsumedBerry",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfTargetHasNoItem",
   proc { |move, user, target, ai, battle|
     next true if !target.item || !target.item_active?
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("FailsIfTargetHasNoItem",
-  proc { |score, move, user, target, ai, battle|
-    next score + 50 if ai.trainer.medium_skill?
-  }
-)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsUnlessTargetSharesTypeWithUser",
   proc { |move, user, target, ai, battle|
-    user_types = user.battler.pbTypes(true)
-    target_types = target.battler.pbTypes(true)
+    user_types = user.pbTypes(true)
+    target_types = target.pbTypes(true)
     next true if (user_types & target_types).empty?
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserDamagedThisTurn",
   proc { |score, move, user, target, ai, battle|
-    score += 50 if target.effects[PBEffects::HyperBeam] > 0
-    score -= 35 if target.hp <= target.totalhp / 2   # If target is weak, no
-    score -= 70 if target.hp <= target.totalhp / 4   # need to risk this move
+    # Check whether user is faster than its foe(s) and could use this move
+    user_faster_count = 0
+    foe_faster_count = 0
+    ai.battlers.each_with_index do |b, i|
+      next if !user.opposes?(b) || b.battler.fainted?
+      if user.faster_than?(b)
+        user_faster_count += 1
+      else
+        foe_faster_count += 1
+      end
+    end
+    next score - 40 if user_faster_count == 0
+    score += 10 if foe_faster_count == 0
+    # Effects that make the target unlikely to act before the user
+    if ai.trainer.high_skill?
+      if target.effects[PBEffects::HyperBeam] > 0 ||
+         target.effects[PBEffects::Truant] ||
+         (target.battler.asleep? && target.statusCount > 1) ||
+         target.frozen?
+        score += 20
+      elsif target.effects[PBEffects::Confusion] > 1 ||
+            target.effects[PBEffects::Attract] == user.index
+        score += 10
+      elsif target.paralyzed?
+        score += 5
+      end
+    end
+    # Don't risk using this move if target is weak
+    score -= 10 if target.hp <= target.totalhp / 2
+    score -= 10 if target.hp <= target.totalhp / 4
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# FailsIfTargetActed
-
-#===============================================================================
-# TODO: Review score modifiers.
-#===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("CrashDamageIfFailsUnusableInGravity",
+Battle::AI::Handlers::MoveEffectScore.add("FailsIfTargetActed",
   proc { |score, move, user, target, ai, battle|
-    next score + 10 * (user.stages[:ACCURACY] - target.stages[:EVASION])
+    # Check whether user is faster than its foe(s) and could use this move
+    next score - 40 if target.faster_than?(user)
+    score += 10
+    # TODO: Predict the target switching/using an item.
+    # TODO: Predict the target using a damaging move or Me First.
+    # Don't risk using this move if target is weak
+    score -= 10 if target.hp <= target.totalhp / 2
+    score -= 10 if target.hp <= target.totalhp / 4
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
+#===============================================================================
+Battle::AI::Handlers::MoveEffectScore.add("CrashDamageIfFailsUnusableInGravity",
+  proc { |score, move, user, target, ai, battle|
+    next score - (100 - move.rough_accuracy) if user.takesIndirectDamage?
+  }
+)
+
+#===============================================================================
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartSunWeather",
   proc { |move, user, target, ai, battle|
@@ -144,64 +182,166 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartSunWeather",
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
   proc { |score, move, user, target, ai, battle|
-    if battle.pbCheckGlobalAbility(:AIRLOCK) ||
-       battle.pbCheckGlobalAbility(:CLOUDNINE)
-      next score - 50
-    else
-      user.battler.eachMove do |m|
-        next if !m.damagingMove? || m.type != :FIRE
-        score += 20
+    next score - 40 if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                       battle.pbCheckGlobalAbility(:CLOUDNINE)
+    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
+    score += 15 if user.has_active_item?(:HEATROCK)
+    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Check for Fire/Water moves
+    ai.battlers.each do |b|
+      next if !b || b.battler.fainted?
+      if b.check_for_move { |move| move.type == :FIRE && move.damagingMove? }
+        score += (b.opposes?(user)) ? -15 : 15
       end
-      next score
+      if b.check_for_move { |move| move.type == :WATER && move.damagingMove? }
+        score += (b.opposes?(user)) ? 15 : -15
+      end
     end
+    # TODO: Check for freezing moves.
+    # Check for abilities/other moves affected by sun
+    # TODO: Check other battlers for these as well?
+    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
+      if user.has_active_ability?([:CHLOROPHYLL, :FLOWERGIFT, :FORECAST, :HARVEST, :LEAFGUARD, :SOLARPOWER])
+        score += 15
+      elsif user.has_active_ability?(:DRYSKIN)
+        score -= 10
+      end
+      if user.check_for_move { |move| ["HealUserDependingOnWeather",
+                                       "RaiseUserAtkSpAtk1Or2InSun",
+                                       "TwoTurnAttackOneTurnInSun",
+                                       "TypeAndPowerDependOnWeather"].include?(move.function) }
+        score += 10
+      end
+      if user.check_for_move { |move| ["ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
+                                       "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky"].include?(move.function) }
+        score -= 10
+      end
+    end
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartRainWeather")
 Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
   proc { |score, move, user, target, ai, battle|
-    if battle.pbCheckGlobalAbility(:AIRLOCK) ||
-       battle.pbCheckGlobalAbility(:CLOUDNINE)
-      next score - 50
-    else
-      user.battler.eachMove do |m|
-        next if !m.damagingMove? || m.type != :WATER
-        score += 20
+    next score - 40 if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                       battle.pbCheckGlobalAbility(:CLOUDNINE)
+    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
+    score += 15 if user.has_active_item?(:DAMPROCK)
+    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Check for Fire/Water moves
+    ai.battlers.each do |b|
+      next if !b || b.battler.fainted?
+      if b.check_for_move { |move| move.type == :WATER && move.damagingMove? }
+        score += (b.opposes?(user)) ? -15 : 15
       end
-      next score
+      if b.check_for_move { |move| move.type == :FIRE && move.damagingMove? }
+        score += (b.opposes?(user)) ? 15 : -15
+      end
     end
+    # Check for abilities/other moves affected by rain
+    # TODO: Check other battlers for these as well?
+    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
+      if user.has_active_ability?([:DRYSKIN, :FORECAST, :HYDRATION, :RAINDISH, :SWIFTSWIM])
+        score += 15
+      end
+      if user.check_for_move { |move| ["ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
+                                       "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky",
+                                       "TypeAndPowerDependOnWeather"].include?(move.function) }
+        score += 10
+      end
+      if user.check_for_move { |move| ["HealUserDependingOnWeather",
+                                       "TwoTurnAttackOneTurnInSun"].include?(move.function) }
+        score -= 10
+      end
+    end
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartSandstormWeather")
 Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
   proc { |score, move, user, target, ai, battle|
-    if battle.pbCheckGlobalAbility(:AIRLOCK) ||
-       battle.pbCheckGlobalAbility(:CLOUDNINE)
-      next score - 50
+    next score - 40 if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                       battle.pbCheckGlobalAbility(:CLOUDNINE)
+    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
+    score += 15 if user.has_active_item?(:SMOOTHROCK)
+    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Check for battlers affected by sandstorm's effects
+    ai.battlers.each do |b|
+      next if !b || b.battler.fainted?
+      if b.battler.takesSandstormDamage?   # End of round damage
+        score += (b.opposes?(user)) ? 15 : -15
+      end
+      if b.has_type?(:ROCK)   # +SpDef for Rock types
+        score += (b.opposes?(user)) ? -15 : 15
+      end
     end
+    # Check for abilities/moves affected by sandstorm
+    # TODO: Check other battlers for these as well?
+    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
+      if user.has_active_ability?([:SANDFORCE, :SANDRUSH, :SANDVEIL])
+        score += 15
+      end
+      if user.check_for_move { |move| ["HealUserDependingOnSandstorm",
+                                       "TypeAndPowerDependOnWeather"].include?(move.function) }
+        score += 10
+      end
+      if user.check_for_move { |move| ["HealUserDependingOnWeather",
+                                       "TwoTurnAttackOneTurnInSun"].include?(move.function) }
+        score -= 10
+      end
+    end
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartHailWeather")
 Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
   proc { |score, move, user, target, ai, battle|
-    if battle.pbCheckGlobalAbility(:AIRLOCK) ||
-       battle.pbCheckGlobalAbility(:CLOUDNINE)
-      next score - 50
+    next score - 40 if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                       battle.pbCheckGlobalAbility(:CLOUDNINE)
+    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
+    score += 15 if user.has_active_item?(:ICYROCK)
+    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Check for battlers affected by hail's effects
+    ai.battlers.each do |b|
+      next if !b || b.battler.fainted?
+      if b.battler.takesHailDamage?   # End of round damage
+        score += (b.opposes?(user)) ? 15 : -15
+      end
     end
+    # Check for abilities/moves affected by hail
+    # TODO: Check other battlers for these as well?
+    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
+      if user.has_active_ability?([:FORECAST, :ICEBODY, :SLUSHRUSH, :SNOWCLOAK])
+        score += 15
+      elsif user.ability == :ICEFACE
+        score += 15
+      end
+      if user.check_for_move { |move| ["FreezeTargetAlwaysHitsInHail",
+                                       "StartWeakenDamageAgainstUserSideIfHail",
+                                       "TypeAndPowerDependOnWeather"].include?(move.function) }
+        score += 10
+      end
+      if user.check_for_move { |move| ["HealUserDependingOnWeather",
+                                       "TwoTurnAttackOneTurnInSun"].include?(move.function) }
+        score -= 10
+      end
+    end
+    next score
   }
 )
 

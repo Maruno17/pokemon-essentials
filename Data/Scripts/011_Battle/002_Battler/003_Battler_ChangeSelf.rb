@@ -15,6 +15,7 @@ class Battle::Battler
     if amt > 0 && registerDamage
       @droppedBelowHalfHP = true if @hp < @totalhp / 2 && @hp + amt >= @totalhp / 2
       @tookDamageThisRound = true
+      @tookMoveDamageThisRound = true
     end
     return amt
   end
