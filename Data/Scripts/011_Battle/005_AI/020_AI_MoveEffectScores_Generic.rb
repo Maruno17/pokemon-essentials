@@ -430,4 +430,120 @@ class Battle::AI
 
     return score
   end
+
+  #=============================================================================
+  #
+  #=============================================================================
+  def get_score_for_terrain(terrain, move_user)
+    ret = 0
+    # Inherent effects of terrain
+    @battlers.each do |b|
+      next if !b || b.battler.fainted? || !b.battler.affectedByTerrain?
+      case terrain
+      when :Electric
+        # Immunity to sleep
+        # TODO: Check all battlers for sleep-inducing moves and other effects?
+        if b.status == :NONE
+          ret += (b.opposes?(move_user)) ? -5 : 5
+        end
+        if b.effects[PBEffects::Yawn] > 0
+          ret += (b.opposes?(move_user)) ? -10 : 10
+        end
+        # Check for Electric moves
+        if b.check_for_move { |move| move.type == :ELECTRIC && move.damagingMove? }
+          ret += (b.opposes?(move_user)) ? -15 : 15
+        end
+      when :Grassy
+        # End of round healing
+        ret += (b.opposes?(move_user)) ? -10 : 10
+        # Check for Grass moves
+        if b.check_for_move { |move| move.type == :GRASS && move.damagingMove? }
+          ret += (b.opposes?(move_user)) ? -15 : 15
+        end
+      when :Misty
+        # Immunity to status problems/confusion
+        # TODO: Check all battlers for status/confusion-inducing moves and other
+        #       effects?
+        if b.status == :NONE || b.effects[PBEffects::Confusion] == 0
+          ret += (b.opposes?(move_user)) ? -5 : 5
+        end
+        # Check for Dragon moves
+        if b.check_for_move { |move| move.type == :DRAGON && move.damagingMove? }
+          ret += (b.opposes?(move_user)) ? 15 : -15
+        end
+      when :Psychic
+        # Check for priority moves
+        if b.check_for_move { |move| move.priority > 0 && move.pbTarget&.can_target_one_foe? }
+          ret += (b.opposes?(move_user)) ? 10 : -10
+        end
+        # Check for Psychic moves
+        if b.check_for_move { |move| move.type == :PSYCHIC && move.damagingMove? }
+          ret += (b.opposes?(move_user)) ? -15 : 15
+        end
+      end
+    end
+    # Held items relating to terrain
+    seed = {
+      :Electric => :ELECTRICSEED,
+      :Grassy   => :GRASSYSEED,
+      :Misty    => :MISTYSEED,
+      :Psychic  => :PSYCHICSEED
+    }[terrain]
+    ai.battlers.each do |b|
+      next if !b || b.battler.fainted?
+      if b.has_active_item?(:TERRAINEXTENDER)
+        ret += (b.opposes?(move_user)) ? -15 : 15
+      elsif seed && b.has_active_item?(seed)
+        ret += (b.opposes?(move_user)) ? -15 : 15
+      end
+    end
+    # Check for abilities/moves affected by the terrain
+    if ai.trainer.medium_skill?
+      abils = {
+        :Electric => :SURGESURFER,
+        :Grassy   => :GRASSPELT,
+        :Misty    => nil,
+        :Psychic  => nil
+      }[terrain]
+      good_moves = {
+        :Electric => ["DoublePowerInElectricTerrain"],
+        :Grassy   => ["HealTargetDependingOnGrassyTerrain",
+                      "HigherPriorityInGrassyTerrain"],
+        :Misty    => ["UserFaintsPowersUpInMistyTerrainExplosive"],
+        :Psychic  => ["HitsAllFoesAndPowersUpInPsychicTerrain"]
+      }[terrain]
+      bad_moves = {
+        :Electric => nil,
+        :Grassy   => ["DoublePowerIfTargetUnderground",
+                      "LowerTargetSpeed1WeakerInGrassyTerrain",
+                      "RandomPowerDoublePowerIfTargetUnderground"],
+        :Misty    => nil,
+        :Psychic  => nil
+      }[terrain]
+      ai.battlers.each do |b|
+        next if !b || b.battler.fainted? || !b.battler.affectedByTerrain?
+        # Abilities
+        if b.has_active_ability?(:MIMICRY)
+          ret += (b.opposes?(move_user)) ? -5 : 5
+        end
+        if abils && b.has_active_ability?(abils)
+          ret += (b.opposes?(move_user)) ? -15 : 15
+        end
+        # Moves
+        if b.check_for_move { |move| ["EffectDependsOnEnvironment",
+                                      "SetUserTypesBasedOnEnvironment",
+                                      "TypeAndPowerDependOnTerrain",
+                                      "UseMoveDependingOnEnvironment"].include?(move.function) }
+          ret += (b.opposes?(move_user)) ? -10 : 10
+        end
+        if good_moves && b.check_for_move { |move| good_moves.include?(move.function) }
+          ret += (b.opposes?(move_user)) ? -10 : 10
+        end
+        if bad_moves && b.check_for_move { |move| bad_moves.include?(move.function) }
+          ret += (b.opposes?(move_user)) ? 10 : -10
+        end
+      end
+    end
+    return ret
+  end
 end

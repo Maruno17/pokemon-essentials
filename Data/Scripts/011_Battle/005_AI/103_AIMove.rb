@@ -79,6 +79,7 @@ class Battle::AI::AIMove
     return @move.type
   end
 
+  # TODO: Should this exist, or should all type checks go through rough_type?
   def pbCalcType(user); return @move.pbCalcType(user); end
 
   #=============================================================================
