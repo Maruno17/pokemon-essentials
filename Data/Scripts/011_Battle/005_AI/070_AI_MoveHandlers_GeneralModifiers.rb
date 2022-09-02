@@ -115,7 +115,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:damaging_moves_if_last_pokemon,
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveScore.add(:target_semi_invulnerable,
   proc { |score, move, user, target, ai, battle|
-    if move.accuracy > 0 && target && user.faster_than?(target) &&
+    if move.rough_accuracy > 0 && target && user.faster_than?(target) &&
       (target.battler.semiInvulnerable? || target.effects[PBEffects::SkyDrop] >= 0)
       miss = true
       miss = false if user.has_active_ability?(:NOGUARD)

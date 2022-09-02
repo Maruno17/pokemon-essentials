@@ -27,13 +27,13 @@ Battle::AI::Handlers::MoveEffectScore.add("CannotBeRedirected",
       if b.effects[PBEffects::RagePowder] ||
          b.effects[PBEffects::Spotlight] > 0 ||
          b.effects[PBEffects::FollowMe] > 0 ||
-         (b.hasActiveAbility?(:LIGHTNINGROD) && move.pbCalcType == :ELECTRIC) ||
-         (b.hasActiveAbility?(:STORMDRAIN) && move.pbCalcType == :WATER)
+         (b.hasActiveAbility?(:LIGHTNINGROD) && move.rough_type == :ELECTRIC) ||
+         (b.hasActiveAbility?(:STORMDRAIN) && move.rough_type == :WATER)
         redirection = true
         break
       end
     end
-    score += 50 if redirection && ai.trainer.medium_skill?
+    score += 20 if redirection && ai.trainer.medium_skill?
     next score
   }
 )
@@ -115,7 +115,8 @@ Battle::AI::Handlers::MoveBasePower.add("HitsAllFoesAndPowersUpInPsychicTerrain"
 )
 Battle::AI::Handlers::MoveEffectScore.add("HitsAllFoesAndPowersUpInPsychicTerrain",
   proc { |score, move, user, target, ai, battle|
-    next score + 40 if battle.field.terrain == :Psychic && user.battler.affectedByTerrain?
+    next score + 20 if battle.field.terrain == :Psychic && user.battler.affectedByTerrain? &&
+                       battle.allOtherSideBattlers(user.index).length > 1
   }
 )
 
@@ -176,17 +177,14 @@ Battle::AI::Handlers::MoveBasePower.add("CounterPhysicalDamage",
 )
 Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::HyperBeam] > 0
-      score -= 90
-    else
-      attack = user.rough_stat(:ATTACK)
-      spatk  = user.rough_stat(:SPECIAL_ATTACK)
-      if attack * 1.5 < spatk
-        score -= 60
-      elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
-        moveData = GameData::Move.get(target.battler.lastMoveUsed)
-        score += 60 if moveData.physical?
-      end
+    next score - 40 if target.effects[PBEffects::HyperBeam] > 0
+    attack = user.rough_stat(:ATTACK)
+    spatk  = user.rough_stat(:SPECIAL_ATTACK)
+    if attack * 1.5 < spatk
+      score -= 60
+    elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
+      moveData = GameData::Move.get(target.battler.lastMoveUsed)
+      score += 60 if moveData.physical?
     end
     next score
   }
@@ -203,17 +201,14 @@ Battle::AI::Handlers::MoveBasePower.add("CounterSpecialDamage",
 )
 Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::HyperBeam] > 0
-      score -= 90
-    else
-      attack = user.rough_stat(:ATTACK)
-      spatk  = user.rough_stat(:SPECIAL_ATTACK)
-      if attack > spatk * 1.5
-        score -= 60
-      elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
-        moveData = GameData::Move.get(target.battler.lastMoveUsed)
-        score += 60 if moveData.special?
-      end
+    next score - 40 if target.effects[PBEffects::HyperBeam] > 0
+    attack = user.rough_stat(:ATTACK)
+    spatk  = user.rough_stat(:SPECIAL_ATTACK)
+    if attack > spatk * 1.5
+      score -= 60
+    elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
+      moveData = GameData::Move.get(target.battler.lastMoveUsed)
+      score += 60 if moveData.special?
     end
     next score
   }
@@ -230,7 +225,7 @@ Battle::AI::Handlers::MoveBasePower.add("CounterDamagePlusHalf",
 )
 Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if target.effects[PBEffects::HyperBeam] > 0
+    next score - 40 if target.effects[PBEffects::HyperBeam] > 0
   }
 )
 

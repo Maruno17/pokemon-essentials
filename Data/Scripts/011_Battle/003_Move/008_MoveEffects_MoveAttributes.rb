@@ -1361,13 +1361,9 @@ class Battle::Move::TypeAndPowerDependOnUserBerry < Battle::Move
     return false
   end
 
-  # NOTE: The AI calls this method via pbCalcType, and this method returns a
-  #       type assuming user has an item even though it might not. Since the AI
-  #       won't want to use this move if the user has no item, though, perhaps
-  #       this is good enough.
   def pbBaseType(user)
-    item = user.item
     ret = :NORMAL
+    item = user.item
     if item
       item.flags.each do |flag|
         next if !flag[/^NaturalGift_(\w+)_(?:\d+)$/i]
@@ -1431,12 +1427,9 @@ class Battle::Move::TypeDependsOnUserPlate < Battle::Move
 
   def pbBaseType(user)
     ret = :NORMAL
-    if user.itemActive?
-      @itemTypes.each do |item, itemType|
-        next if user.item != item
-        ret = itemType if GameData::Type.exists?(itemType)
-        break
-      end
+    if user.item_id && user.itemActive?
+      typ = @itemTypes[user.item_id]
+      ret = typ if typ && GameData::Type.exists?(typ)
     end
     return ret
   end
@@ -1471,12 +1464,9 @@ class Battle::Move::TypeDependsOnUserMemory < Battle::Move
 
   def pbBaseType(user)
     ret = :NORMAL
-    if user.itemActive?
-      @itemTypes.each do |item, itemType|
-        next if user.item != item
-        ret = itemType if GameData::Type.exists?(itemType)
-        break
-      end
+    if user.item_id && user.itemActive?
+      typ = @itemTypes[user.item_id]
+      ret = typ if typ && GameData::Type.exists?(typ)
     end
     return ret
   end
@@ -1498,12 +1488,9 @@ class Battle::Move::TypeDependsOnUserDrive < Battle::Move
 
   def pbBaseType(user)
     ret = :NORMAL
-    if user.itemActive?
-      @itemTypes.each do |item, itemType|
-        next if user.item != item
-        ret = itemType if GameData::Type.exists?(itemType)
-        break
-      end
+    if user.item_id && user.itemActive?
+      typ = @itemTypes[user.item_id]
+      ret = typ if typ && GameData::Type.exists?(typ)
     end
     return ret
   end

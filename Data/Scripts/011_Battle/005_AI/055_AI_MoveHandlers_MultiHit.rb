@@ -194,9 +194,9 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
   proc { |score, move, user, target, ai, battle|
-    next 0 if !target.battler.pbCanBurn?(user.battler, false)
-    score += 30
-    score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :FLAREBOOST])
+    next score - 40 if move.statusMove? && !target.battler.pbCanBurn?(user.battler, false)
+    score += 10
+    score -= 20 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :FLAREBOOST])
     next score
   }
 )
@@ -226,32 +226,26 @@ Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2
 )
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2",
   proc { |score, move, user, target, ai, battle|
-    if user.statStageAtMax?(:SPECIAL_ATTACK) &&
-       user.statStageAtMax?(:SPECIAL_DEFENSE) &&
-       user.statStageAtMax?(:SPEED)
-      score -= 90
-    else
-      score -= user.stages[:SPECIAL_ATTACK] * 10   # Only *10 instead of *20
-      score -= user.stages[:SPECIAL_DEFENSE] * 10   # because two-turn attack
-      score -= user.stages[:SPEED] * 10
-      if ai.trainer.medium_skill?
-        hasSpecialAttack = false
-        user.battler.eachMove do |m|
-          next if !m.specialMove?(m.type)
-          hasSpecialAttack = true
-          break
-        end
-        if hasSpecialAttack
-          score += 20
-        elsif ai.trainer.high_skill?
-          score -= 90
-        end
+    score -= user.stages[:SPECIAL_ATTACK] * 10   # Only *10 instead of *20
+    score -= user.stages[:SPECIAL_DEFENSE] * 10   # because two-turn attack
+    score -= user.stages[:SPEED] * 10
+    if ai.trainer.medium_skill?
+      hasSpecialAttack = false
+      user.battler.eachMove do |m|
+        next if !m.specialMove?(m.type)
+        hasSpecialAttack = true
+        break
       end
-      if ai.trainer.high_skill?
-        aspeed = user.rough_stat(:SPEED)
-        ospeed = target.rough_stat(:SPEED)
-        score += 30 if aspeed < ospeed && aspeed * 2 > ospeed
+      if hasSpecialAttack
+        score += 20
+      elsif ai.trainer.high_skill?
+        score -= 90
       end
+    end
+    if ai.trainer.high_skill?
+      aspeed = user.rough_stat(:SPEED)
+      ospeed = target.rough_stat(:SPEED)
+      score += 30 if aspeed < ospeed && aspeed * 2 > ospeed
     end
     next score
   }

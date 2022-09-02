@@ -3,7 +3,7 @@
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FleeFromBattle",
   proc { |move, user, target, ai, battle|
-    next true if battle.pbCanRun?(user.index)
+    next true if !battle.pbCanRun?(user.index)
   }
 )
 
@@ -21,6 +21,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserStatusMove",
 )
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
   proc { |score, move, user, target, ai, battle|
+    next score + 10 if user.wild?
     if battle.pbTeamAbleNonActiveCount(user.index) > 1   # Don't switch in ace
       score -= 60
     else
@@ -505,10 +506,10 @@ Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
 Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
   proc { |score, move, user, target, ai, battle|
     score += 20   # Shadow moves are more preferable
-    if battle.pbCheckGlobalAbility(:AIRLOCK) ||
-       battle.pbCheckGlobalAbility(:CLOUDNINE)
-      score -= 50
-    end
+    next score - 40 if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                       battle.pbCheckGlobalAbility(:CLOUDNINE)
+    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
+    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
     next score
   }
 )

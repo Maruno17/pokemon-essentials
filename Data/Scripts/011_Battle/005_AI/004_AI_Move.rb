@@ -133,7 +133,7 @@ class Battle::AI
     #       after all.
     return true if @move.move.pbImmunityByAbility(@user.battler, @target.battler, false)
     # Type immunity
-    calc_type = @move.pbCalcType(@user.battler)
+    calc_type = @move.rough_type(@user.battler)
     typeMod = @move.move.pbCalcTypeMod(calc_type, @user.battler, @target.battler)
     return true if @move.move.pbDamagingMove? && Effectiveness.ineffective?(typeMod)
     # Dark-type immunity to moves made faster by Prankster

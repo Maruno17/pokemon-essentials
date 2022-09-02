@@ -833,6 +833,6 @@ Battle::AI::Handlers::MoveFailureCheck.add("TransformUserIntoTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("TransformUserIntoTarget",
   proc { |score, move, user, target, ai, battle|
-    next score - 40
+    next score - 20
   }
 )

@@ -75,12 +75,9 @@ class Battle::AI::AIMove
   def type; return @move.type; end
 
   def rough_type
-    return @move.pbCalcType(@ai.user.battler) if @ai.trainer.high_skill?
+    return @move.pbCalcType(@ai.user.battler) if @ai.trainer.medium_skill?
     return @move.type
   end
-
-  # TODO: Should this exist, or should all type checks go through rough_type?
-  def pbCalcType(user); return @move.pbCalcType(user); end
 
   #=============================================================================
 
@@ -369,6 +366,7 @@ class Battle::AI::AIMove
   #=============================================================================
 
   def accuracy
+    return @move.pbBaseAccuracy(@ai.user.battler, @ai.target.battler) if @ai.trainer.medium_skill?
     return @move.accuracy
   end
 
@@ -379,18 +377,14 @@ class Battle::AI::AIMove
       return 100 if target.effects[PBEffects::Minimize] && @move.tramplesMinimize? &&
                     Settings::MECHANICS_GENERATION >= 6
     end
-    baseAcc = self.accuracy
-    return 100 if baseAcc == 0
     # Determine user and target
     user = @ai.user
     user_battler = user.battler
     target = @ai.target
     target_battler = target.battler
-    # Get better base accuracy
-    if @ai.trainer.medium_skill?
-      baseAcc = @move.pbBaseAccuracy(user_battler, target_battler)
-      return 100 if baseAcc == 0
-    end
+    # Get base accuracy
+    baseAcc = self.accuracy
+    return 100 if baseAcc == 0
     # Get the move's type
     type = rough_type
     # Calculate all modifier effects
@@ -420,6 +414,27 @@ class Battle::AI::AIMove
   def apply_rough_accuracy_modifiers(user, target, calc_type, modifiers)
     user_battler = user.battler
     target_battler = target.battler
+    # OHKO special calculation
+    if @ai.trainer.medium_skill?
+      case function
+      when "OHKO", "OHKOHitsUndergroundTarget"
+        modifiers[:base_accuracy] = self.accuracy + user.level - target.level
+        modifiers[:base_accuracy] = -1 if target.level > user.level
+        modifiers[:base_accuracy] = -1 if !@ai.battle.moldBreaker && target.has_active_ability?(:STURDY)
+        modifiers[:accuracy_stage] = 6
+        modifiers[:evasion_stage] = 6
+        return
+      when "OHKOIce"
+        modifiers[:base_accuracy] = self.accuracy + user.level - target.level
+        modifiers[:base_accuracy] -= 10 if !user.has_type?(:ICE)
+        modifiers[:base_accuracy] = -1 if modifiers[:base_accuracy] == 0
+        modifiers[:base_accuracy] = -1 if target.level > user.level
+        modifiers[:base_accuracy] = -1 if !@ai.battle.moldBreaker && target.has_active_ability?(:STURDY)
+        modifiers[:accuracy_stage] = 6
+        modifiers[:evasion_stage] = 6
+        return
+      end
+    end
     # Ability effects that alter accuracy calculation
     if user.ability_active?
       Battle::AbilityEffects.triggerAccuracyCalcFromUser(
@@ -472,15 +487,6 @@ class Battle::AI::AIMove
       when "BadPoisonTarget"
         modifiers[:base_accuracy] = 0 if Settings::MORE_TYPE_EFFECTS &&
                                          @move.statusMove? && @user.has_type?(:POISON)
-      when "OHKO", "OHKOHitsUndergroundTarget"
-        modifiers[:base_accuracy] = self.accuracy + user.level - target.level
-        modifiers[:accuracy_multiplier] = 0 if target.level > user.level
-        modifiers[:accuracy_multiplier] = 0 if !@ai.battle.moldBreaker && target.has_active_ability?(:STURDY)
-      when "OHKOIce"
-        modifiers[:base_accuracy] = self.accuracy + user.level - target.level
-        modifiers[:base_accuracy] -= 10 if !user.has_type?(:ICE)
-        modifiers[:accuracy_multiplier] = 0 if target.level > user.level
-        modifiers[:accuracy_multiplier] = 0 if !@ai.battle.moldBreaker && target.has_active_ability?(:STURDY)
       end
     end
   end

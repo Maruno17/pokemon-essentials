@@ -1,81 +1,50 @@
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("FixedDamage20",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("FixedDamage20",
-  proc { |score, move, user, target, ai, battle|
-    if target.hp <= 20
-      score += 80
-    elsif target.level >= 25
-      score -= 60   # Not useful against high-level Pokemon
-    end
-    next score
-  }
-)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("FixedDamage40",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("FixedDamage40",
-  proc { |score, move, user, target, ai, battle|
-    next score + 80 if target.hp <= 40
-  }
-)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("FixedDamageHalfTargetHP",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("FixedDamageHalfTargetHP",
-  proc { |score, move, user, target, ai, battle|
-    score -= 50
-    next score + target.hp * 100 / target.totalhp
-  }
-)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("FixedDamageUserLevel",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("FixedDamageUserLevel",
-  proc { |score, move, user, target, ai, battle|
-    next score + 80 if target.hp <= user.level
-  }
-)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("FixedDamageUserLevelRandom",
   proc { |power, move, user, target, ai, battle|
     next user.level   # Average power
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("FixedDamageUserLevelRandom",
-  proc { |score, move, user, target, ai, battle|
-    next score + 30 if target.hp <= user.level
-  }
-)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetHPToUserHP",
   proc { |move, user, target, ai, battle|
@@ -85,11 +54,6 @@ Battle::AI::Handlers::MoveFailureCheck.add("LowerTargetHPToUserHP",
 Battle::AI::Handlers::MoveBasePower.add("LowerTargetHPToUserHP",
   proc { |power, move, user, target, ai, battle|
     next move.pbFixedDamage(user.battler, target.battler)
-  }
-)
-Battle::AI::Handlers::MoveEffectScore.add("LowerTargetHPToUserHP",
-  proc { |score, move, user, target, ai, battle|
-    next score + 50 if user.hp < target.hp / 2
   }
 )
 
@@ -104,7 +68,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("OHKO",
 )
 Battle::AI::Handlers::MoveBasePower.add("OHKO",
   proc { |power, move, user, target, ai, battle|
-    next 999
+    next target.hp
   }
 )
 
@@ -120,32 +84,31 @@ Battle::AI::Handlers::MoveFailureCheck.add("OHKOIce",
 )
 Battle::AI::Handlers::MoveBasePower.copy("OHKO",
                                          "OHKOIce")
-Battle::AI::Handlers::MoveEffectScore.copy("OHKO",
-                                           "OHKOIce")
 
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
+Battle::AI::Handlers::MoveFailureCheck.copy("OHKO",
+                                            "OHKOHitsUndergroundTarget")
 Battle::AI::Handlers::MoveBasePower.copy("OHKO",
                                          "OHKOHitsUndergroundTarget")
-Battle::AI::Handlers::MoveEffectScore.copy("OHKO",
-                                           "OHKOHitsUndergroundTarget")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DamageTargetAlly",
   proc { |score, move, user, target, ai, battle|
     target.battler.allAllies.each do |b|
-      next if !b.near?(target.battler)
+      next if !b.near?(target.battler) || !b.battler.takesIndirectDamage?
       score += 10
+      score += 15 if b.hp <= b.totalhp / 16
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithUserHP",
   proc { |power, move, user, target, ai, battle|
@@ -154,55 +117,55 @@ Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithUserHP",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
                                          "PowerLowerWithUserHP")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
                                          "PowerHigherWithTargetHP")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
                                          "PowerHigherWithUserHappiness")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
                                          "PowerLowerWithUserHappiness")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
                                          "PowerHigherWithUserPositiveStatStages")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
                                          "PowerHigherWithTargetPositiveStatStages")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
                                          "PowerHigherWithUserFasterThanTarget")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
                                          "PowerHigherWithTargetFasterThanUser")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithLessPP",
   proc { |power, move, user, target, ai, battle|
@@ -214,7 +177,7 @@ Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithLessPP",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithTargetWeight",
   proc { |power, move, user, target, ai, battle|
@@ -223,7 +186,7 @@ Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithTargetWeight",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithTargetWeight",
                                          "PowerHigherWithUserHeavierThanTarget")
@@ -247,7 +210,7 @@ Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithConsecutiveUseOnUserSide
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("RandomPowerDoublePowerIfTargetUnderground",
   proc { |power, move, user, target, ai, battle|
@@ -257,7 +220,7 @@ Battle::AI::Handlers::MoveBasePower.add("RandomPowerDoublePowerIfTargetUndergrou
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetHPLessThanHalf",
   proc { |power, move, user, target, ai, battle|
@@ -266,7 +229,7 @@ Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetHPLessThanHalf",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetHPLessThanHalf",
                                          "DoublePowerIfUserPoisonedBurnedParalyzed")
@@ -284,7 +247,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfTargetAsleepCureTarget",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetPoisoned",
   proc { |power, move, user, target, ai, battle|
@@ -304,7 +267,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfTargetParalyzedCureTarge
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetStatusProblem",
   proc { |power, move, user, target, ai, battle|
@@ -313,7 +276,7 @@ Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetStatusProblem",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfUserHasNoItem",
   proc { |power, move, user, target, ai, battle|
@@ -322,7 +285,7 @@ Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfUserHasNoItem",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetUnderwater",
   proc { |power, move, user, target, ai, battle|
@@ -331,13 +294,13 @@ Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetUnderwater",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetUnderwater",
                                          "DoublePowerIfTargetUnderground")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetInSky",
   proc { |power, move, user, target, ai, battle|
@@ -346,19 +309,19 @@ Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetInSky",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetInSky",
                                          "DoublePowerInElectricTerrain")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetInSky",
                                          "DoublePowerIfUserLastMoveFailed")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetInSky",
                                          "DoublePowerIfAllyFaintedLastTurn")
@@ -368,7 +331,7 @@ Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetInSky",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfUserLostHPThisTurn",
   proc { |score, move, user, target, ai, battle|
-    next score + 30 if target.faster_than?(user)
+    next score + 15 if target.faster_than?(user)
   }
 )
 
@@ -377,7 +340,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfUserLostHPThisTurn",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfTargetLostHPThisTurn",
   proc { |score, move, user, target, ai, battle|
-    next score + 20 if battle.pbOpposingBattlerCount(user.battler) > 1
+    next score + 15 if battle.pbOpposingBattlerCount(user.battler) > 1
   }
 )
 
@@ -391,14 +354,18 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfTargetLostHPThisTurn",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfTargetActed",
   proc { |score, move, user, target, ai, battle|
-    next score + 30 if target.faster_than?(user)
+    next score + 15 if target.faster_than?(user)
   }
 )
 
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-# DoublePowerIfTargetNotActed
+Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfTargetNotActed",
+  proc { |score, move, user, target, ai, battle|
+    next score + 15 if user.faster_than?(target)
+  }
+)
 
 #===============================================================================
 # TODO: Review score modifiers.
@@ -440,9 +407,9 @@ Battle::AI::Handlers::MoveEffectScore.add("CannotMakeTargetFaint",
   proc { |score, move, user, target, ai, battle|
     next 0 if target.hp == 1
     if target.hp <= target.totalhp / 8
-      score -= 60
+      score -= 20
     elsif target.hp <= target.totalhp / 4
-      score -= 30
+      score -= 10
     end
     next score
   }
@@ -454,12 +421,12 @@ Battle::AI::Handlers::MoveEffectScore.add("CannotMakeTargetFaint",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserEnduresFaintingThisTurn",
   proc { |score, move, user, target, ai, battle|
-    score -= 25 if user.hp > user.totalhp / 2
+    score -= 10 if user.hp > user.totalhp / 2
     if ai.trainer.medium_skill?
-      score -= 50 if user.effects[PBEffects::ProtectRate] > 1
-      score -= 50 if target.effects[PBEffects::HyperBeam] > 0
+      score -= 20 if user.effects[PBEffects::ProtectRate] > 1
+      score -= 20 if target.effects[PBEffects::HyperBeam] > 0
     else
-      score -= user.effects[PBEffects::ProtectRate] * 40
+      score -= user.effects[PBEffects::ProtectRate] * 10
     end
     next score
   }
@@ -477,11 +444,6 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenElectricMoves",
     end
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("StartWeakenElectricMoves",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.effects[PBEffects::MudSport]
-  }
-)
 
 #===============================================================================
 # TODO: Review score modifiers.
@@ -493,11 +455,6 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenFireMoves",
     else
       next true if battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
     end
-  }
-)
-Battle::AI::Handlers::MoveEffectScore.add("StartWeakenFireMoves",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.effects[PBEffects::WaterSport]
   }
 )
 
@@ -539,9 +496,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHai
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RemoveScreens",
   proc { |score, move, user, target, ai, battle|
-    score += 20 if user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
-    score += 20 if user.pbOpposingSide.effects[PBEffects::Reflect] > 0
-    score += 20 if user.pbOpposingSide.effects[PBEffects::LightScreen] > 0
+    score += 10 if user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
+    score += 10 if user.pbOpposingSide.effects[PBEffects::Reflect] > 0
+    score += 10 if user.pbOpposingSide.effects[PBEffects::LightScreen] > 0
     next score
   }
 )
@@ -762,21 +719,15 @@ Battle::AI::Handlers::MoveEffectScore.add("RecoilHalfOfDamageDealt",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("EffectivenessIncludesFlyingType",
   proc { |power, move, user, target, ai, battle|
     if GameData::Type.exists?(:FLYING)
-      if ai.trainer.high_skill?
-        targetTypes = target.battler.pbTypes(true)
-        mult = Effectiveness.calculate(
-          :FLYING, targetTypes[0], targetTypes[1], targetTypes[2]
-        )
-      else
-        mult = Effectiveness.calculate(
-          :FLYING, target.types[0], target.types[1], target.effects[PBEffects::Type3]
-        )
-      end
+      targetTypes = target.battler.pbTypes(true)
+      mult = Effectiveness.calculate(
+        :FLYING, targetTypes[0], targetTypes[1], targetTypes[2]
+      )
       next (power.to_f * mult / Effectiveness::NORMAL_EFFECTIVE).round
     end
   }
@@ -858,12 +809,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartNegateTargetEvasionStatStageAndD
 # IgnoreTargetDefSpDefEvaStatStages
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # TypeIsUserFirstType
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("TypeDependsOnUserIVs",
   proc { |power, move, user, target, ai, battle|
@@ -890,17 +841,17 @@ Battle::AI::Handlers::MoveBasePower.add("TypeAndPowerDependOnUserBerry",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # TypeDependsOnUserPlate
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # TypeDependsOnUserMemory
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # TypeDependsOnUserDrive
 
@@ -919,7 +870,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TypeDependsOnUserMorpekoFormRaiseUser
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("TypeAndPowerDependOnWeather",
   proc { |power, move, user, target, ai, battle|
@@ -928,15 +879,10 @@ Battle::AI::Handlers::MoveBasePower.add("TypeAndPowerDependOnWeather",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("TypeAndPowerDependOnWeather",
                                          "TypeAndPowerDependOnTerrain")
-Battle::AI::Handlers::MoveEffectScore.add("TypeAndPowerDependOnTerrain",
-  proc { |score, move, user, target, ai, battle|
-    next score + 40 if battle.field.terrain != :None
-  }
-)
 
 #===============================================================================
 # TODO: Review score modifiers.

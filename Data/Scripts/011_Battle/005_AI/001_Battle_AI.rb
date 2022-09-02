@@ -68,8 +68,8 @@ module Battle::AI::Handlers
   MoveBasePower    = HandlerHash.new
   MoveFailureCheck = HandlerHash.new
   GeneralMoveScore = HandlerHash.new
-  # Move type
-  # Move accuracy
+  # Move type - uses main battle code via rough_type
+  # Move accuracy - uses main battle code via rough_accuracy
   # Move target
   # Move additional effect chance
   # Move unselectable check
