@@ -56,18 +56,22 @@ class MoveRelearner_Scene
   def pbDrawMoveList
     overlay=@sprites["overlay"].bitmap
     overlay.clear
-    type1_number = GameData::Type.get(@pokemon.type1).id_number
-    type2_number = GameData::Type.get(@pokemon.type2).id_number
-    type1rect=Rect.new(0, type1_number * 28, 64, 28)
-    type2rect=Rect.new(0, type2_number * 28, 64, 28)
-    if @pokemon.type1==@pokemon.type2
-      overlay.blt(400,70,@typebitmap.bitmap,type1rect)
-    else
-      overlay.blt(366,70,@typebitmap.bitmap,type1rect)
-      overlay.blt(436,70,@typebitmap.bitmap,type2rect)
+    if @pokemon
+      type1_number = GameData::Type.get(@pokemon.type1).id_number
+      type2_number = GameData::Type.get(@pokemon.type2).id_number
+      type1rect=Rect.new(0, type1_number * 28, 64, 28)
+      type2rect=Rect.new(0, type2_number * 28, 64, 28)
+      if @pokemon.type1==@pokemon.type2
+        overlay.blt(400,70,@typebitmap.bitmap,type1rect)
+      else
+        overlay.blt(366,70,@typebitmap.bitmap,type1rect)
+        overlay.blt(436,70,@typebitmap.bitmap,type2rect)
+      end
     end
+
+    text = @pokemon ? "Teach which move?" : "Moves list"
     textpos=[
-       [_INTL("Teach which move?"),16,2,0,Color.new(88,88,80),Color.new(168,184,184)]
+       [_INTL(text),16,2,0,Color.new(88,88,80),Color.new(168,184,184)]
     ]
     imagepos=[]
     yPos=76
@@ -132,7 +136,7 @@ class MoveRelearner_Scene
         end
         if Input.trigger?(Input::BACK)
           return nil
-        elsif Input.trigger?(Input::USE)
+        elsif Input.trigger?(Input::USE) && @pokemon
           return @moves[@sprites["commands"].index]
         end
       end
@@ -180,6 +184,10 @@ class MoveRelearnerScreen
     @scene.pbStartScene(pkmn, moves)
     loop do
       move = @scene.pbChooseMove
+      if !pkmn
+        @scene.pbEndScene
+        return false
+      end
       if move
         if @scene.pbConfirm(_INTL("Teach {1}?", GameData::Move.get(move).name))
           if pbLearnMove(pkmn, move)
