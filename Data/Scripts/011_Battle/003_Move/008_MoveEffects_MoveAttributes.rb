@@ -1199,6 +1199,7 @@ end
 # user's Attack (and Attack stat stages) to calculate damage. All other effects
 # are applied normally, applying the user's Attack modifiers and not the user's
 # Defence modifiers. (Body Press)
+# TODO: Rename this function code to remove both "Base"s?
 #===============================================================================
 class Battle::Move::UseUserBaseDefenseInsteadOfUserBaseAttack < Battle::Move
   def pbGetAttackStats(user, target)

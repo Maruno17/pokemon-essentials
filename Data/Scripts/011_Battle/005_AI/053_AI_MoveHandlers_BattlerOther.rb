@@ -425,7 +425,7 @@ Battle::AI::Handlers::MoveEffectScore.add("FlinchTargetFailsIfNotUserFirstTurn",
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("FlinchTargetDoublePowerIfTargetInSky",
   proc { |power, move, user, target, ai, battle|
-    next move.pbBaseDamage(power, user.battler, target.battler)
+    next move.move.pbBaseDamage(power, user.battler, target.battler)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("FlinchTargetDoublePowerIfTargetInSky",

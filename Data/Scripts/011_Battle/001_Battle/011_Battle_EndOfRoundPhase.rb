@@ -135,6 +135,8 @@ class Battle
   def pbEORSeaOfFireDamage(priority)
     2.times do |side|
       next if sides[side].effects[PBEffects::SeaOfFire] == 0
+      sides[side].effects[PBEffects::SeaOfFire] -= 1
+      next if sides[side].effects[PBEffects::SeaOfFire] == 0
       pbCommonAnimation("SeaOfFire") if side == 0
       pbCommonAnimation("SeaOfFireOpp") if side == 1
       priority.each do |battler|

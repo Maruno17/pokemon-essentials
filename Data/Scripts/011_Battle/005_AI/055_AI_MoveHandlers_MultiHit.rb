@@ -3,7 +3,7 @@
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoTimes",
   proc { |power, move, user, target, ai, battle|
-    next power * move.pbNumHits(user.battler, [target.battler])
+    next power * move.move.pbNumHits(user.battler, [target.battler])
   }
 )
 
@@ -64,7 +64,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesPowersUpWithEachHit",
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesAlwaysCriticalHit",
   proc { |power, move, user, target, ai, battle|
-    next power * move.pbNumHits(user.battler, [target.battler])
+    next power * move.move.pbNumHits(user.battler, [target.battler])
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("HitThreeTimesAlwaysCriticalHit",
@@ -92,7 +92,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimes",
 Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesOrThreeForAshGreninja",
   proc { |power, move, user, target, ai, battle|
     if user.battler.isSpecies?(:GRENINJA) && user.battler.form == 2
-      next move.pbBaseDamage(power, user.battler, target.battler) * move.pbNumHits(user.battler, [target.battler])
+      next move.move.pbBaseDamage(power, user.battler, target.battler) * move.move.pbNumHits(user.battler, [target.battler])
     end
     next power * 5 if user.has_active_ability?(:SKILLLINK)
     next power * 31 / 10   # Average damage dealt
@@ -161,7 +161,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitOncePerUserTeamMember",
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("TwoTurnAttackOneTurnInSun",
   proc { |power, move, user, target, ai, battle|
-    next move.pbBaseDamageMultiplier(power, user.battler, target.battler)
+    next move.move.pbBaseDamageMultiplier(power, user.battler, target.battler)
   }
 )
 
@@ -338,7 +338,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackInvulnerableInSkyTarget
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackPowersUpEachTurn",
   proc { |power, move, user, target, ai, battle|
-    next power * 2 if user.effects[PBEffects::DefenseCurl]
+    next move.move.pbBaseDamage(power, user.battler, target.battler)
   }
 )
 

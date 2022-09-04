@@ -110,7 +110,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAt
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitsAllFoesAndPowersUpInPsychicTerrain",
   proc { |power, move, user, target, ai, battle|
-    next move.pbBaseDamage(power, user.battler, target.battler)
+    next move.move.pbBaseDamage(power, user.battler, target.battler)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("HitsAllFoesAndPowersUpInPsychicTerrain",
@@ -261,7 +261,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("PowerDependsOnUserStockpile",
 )
 Battle::AI::Handlers::MoveBasePower.add("PowerDependsOnUserStockpile",
   proc { |power, move, user, target, ai, battle|
-    next move.pbBaseDamage(power, user.battler, target.battler)
+    next move.move.pbBaseDamage(power, user.battler, target.battler)
   }
 )
 

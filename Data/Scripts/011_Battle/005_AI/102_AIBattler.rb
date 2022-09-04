@@ -24,7 +24,8 @@ class Battle::AI::AIBattler
 
   def level;       return @battler.level;       end
   def hp;          return @battler.hp;          end
-  def status;      return @Battler.status;      end
+  def fainted?;    return @battler.fainted?;    end
+  def status;      return @battler.status;      end
   def statusCount; return @battler.statusCount; end
   def totalhp;     return @battler.totalhp;     end
   def gender;      return @battler.gender;      end
@@ -57,12 +58,103 @@ class Battle::AI::AIBattler
 
   #=============================================================================
 
-  def check_for_move
-    ret = false
-    @battler.eachMove do |move|
-      next unless yield move
-      ret = true
-      break
+  # Returns how much damage this battler will take at the end of this round.
+  def rough_end_of_round_damage
+    ret = 0
+    # Future Sight/Doom Desire
+    # TODO
+    # Wish
+    if @ai.battle.positions[@index].effects[PBEffects::Wish] == 1 && @battler.canHeal?
+      ret -= @ai.battle.positions[@index].effects[PBEffects::WishAmount]
+    end
+    # Sea of Fire
+    if @ai.battle.sides[@side].effects[PBEffects::SeaOfFire] > 1 &&
+       @battler.takesIndirectDamage? && !has_type?(:FIRE)
+      ret += self.totalhp / 8
+    end
+    # Grassy Terrain (healing)
+    if @ai.battle.field.terrain == :Grassy && @battler.affectedByTerrain? && @battler.canHeal?
+      ret -= [battler.totalhp / 16, 1].max
+    end
+    # Leftovers/Black Sludge
+    if has_active_item?(:BLACKSLUDGE)
+      if has_type?(:POISON)
+        ret -= [battler.totalhp / 16, 1].max if @battler.canHeal?
+      else
+        ret += [battler.totalhp / 8, 1].max if @battler.takesIndirectDamage?
+      end
+    elsif has_active_item?(:LEFTOVERS)
+      ret -= [battler.totalhp / 16, 1].max if @battler.canHeal?
+    end
+    # Aqua Ring
+    if self.effects[PBEffects::AquaRing] && @battler.canHeal?
+      amt = battler.totalhp / 16
+      amt = (amt * 1.3).floor if has_active_item?(:BIGROOT)
+      ret -= [amt, 1].max
+    end
+    # Ingrain
+    if self.effects[PBEffects::Ingrain] && @battler.canHeal?
+      amt = battler.totalhp / 16
+      amt = (amt * 1.3).floor if has_active_item?(:BIGROOT)
+      ret -= [amt, 1].max
+    end
+    # Leech Seed
+    if self.effects[PBEffects::LeechSeed] >= 0
+      if @battler.takesIndirectDamage?
+        ret += [battler.totalhp / 8, 1].max if @battler.takesIndirectDamage?
+      end
+    else
+      @ai.each_battler do |b, i|
+        next if i == @index || b.effects[PBEffects::LeechSeed] != @index
+        amt = [[b.totalhp / 8, b.hp].min, 1].max
+        amt = (amt * 1.3).floor if has_active_item?(:BIGROOT)
+        ret -= [amt, 1].max
+      end
+    end
+    # Hyper Mode (Shadow Pokémon)
+    # TODO
+    # Poison/burn/Nightmare
+    if self.status == :POISON
+      if has_active_ability?(:POISONHEAL)
+        ret -= [battler.totalhp / 8, 1].max if @battler.canHeal?
+      elsif @battler.takesIndirectDamage?
+        mult = 2
+        mult = [self.effects[PBEffects::Toxic] + 1, 16].min if self.statusCount > 0   # Toxic
+        ret += [mult * battler.totalhp / 16, 1].max
+      end
+    elsif self.status == :BURN
+      if @battler.takesIndirectDamage?
+        amt = (Settings::MECHANICS_GENERATION >= 7) ? self.totalhp / 16 : self.totalhp / 8
+        amt = (amt / 2.0).round if has_active_ability?(:HEATPROOF)
+        ret += [amt, 1].max
+      end
+    elsif @battler.asleep? && self.statusCount > 1 && self.effects[PBEffects::Nightmare]
+      ret += [battler.totalhp / 4, 1].max if @battler.takesIndirectDamage?
+    end
+    # Curse
+    if self.effects[PBEffects::Curse]
+      ret += [battler.totalhp / 4, 1].max if @battler.takesIndirectDamage?
+    end
+    # Trapping damage
+    if self.effects[PBEffects::Trapping] > 1 && @battler.takesIndirectDamage?
+      amt = (Settings::MECHANICS_GENERATION >= 6) ? self.totalhp / 8 : self.totalhp / 16
+      if @battlers[self.effects[PBEffects::TrappingUser]].has_active_item?(:BINDINGBAND)
+        amt = (Settings::MECHANICS_GENERATION >= 6) ? self.totalhp / 6 : self.totalhp / 8
+      end
+      ret += [amt, 1].max
+    end
+    # Perish Song
+    # TODO
+    # Bad Dreams
+    if @battler.asleep? && self.statusCount > 1 && @battler.takesIndirectDamage?
+      @ai.each_battler do |b, i|
+        next if i == @index || !b.battler.near?(@battler) || !b.has_active_ability?(:BADDREAMS)
+        ret += [battler.totalhp / 8, 1].max
+      end
+    end
+    # Sticky Barb
+    if has_active_item?(:STICKYBARB) && @battler.takesIndirectDamage?
+      ret += [battler.totalhp / 8, 1].max
     end
     return ret
   end
@@ -163,15 +255,15 @@ class Battle::AI::AIBattler
 
   #=============================================================================
 
-  def can_switch_lax?
-    return false if wild?
-    @ai.battle.eachInTeamFromBattlerIndex(@index) do |pkmn, i|
-      return true if @ai.battle.pbCanSwitchLax?(@index, i)
+  def check_for_move
+    ret = false
+    @battler.eachMove do |move|
+      next unless yield move
+      ret = true
+      break
     end
-    return false
+    return ret
   end
-
-  #=============================================================================
 
   def immune_to_move?
     user = @ai.user
@@ -220,6 +312,16 @@ class Battle::AI::AIBattler
       return true if move.move.priority > 0 && @ai.battle.field.terrain == :Psychic &&
                      @battler.affectedByTerrain? && opposes?(user)
       # TODO: Dazzling/Queenly Majesty go here.
+    end
+    return false
+  end
+
+  #=============================================================================
+
+  def can_switch_lax?
+    return false if wild?
+    @ai.battle.eachInTeamFromBattlerIndex(@index) do |pkmn, i|
+      return true if @ai.battle.pbCanSwitchLax?(@index, i)
     end
     return false
   end

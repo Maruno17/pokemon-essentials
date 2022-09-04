@@ -37,15 +37,33 @@ class Battle::AI
   end
 
   #=============================================================================
-  # Check if battler has a move that meets the criteria in the block provided
+  # Yields certain AIBattler objects
   #=============================================================================
-  def check_for_move(battler)
-    ret = false
-    battler.eachMove do |move|
-      next unless yield move
-      ret = true
-      break
+  def each_battler
+    @battlers.each_with_index do |battler, i|
+      next if !battler || battler.fainted?
+      yield battler, i
     end
-    return ret
+  end
+
+  def each_foe_battler(side)
+    @battlers.each_with_index do |battler, i|
+      next if !battler || battler.fainted?
+      yield battler, i if  i.even? != side.even?
+    end
+  end
+
+  def each_same_side_battler(side)
+    @battlers.each_with_index do |battler, i|
+      next if !battler || battler.fainted?
+      yield battler, i if  i.even? == side.even?
+    end
+  end
+
+  def each_ally(index)
+    @battlers.each_with_index do |battler, i|
+      next if !battler || battler.fainted?
+      yield battler, i if i != index && i.even? == index.even?
+    end
   end
 end
