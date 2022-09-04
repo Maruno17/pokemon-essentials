@@ -141,7 +141,14 @@ class PokeBattle_Battler
   def pbRemoveItem(permanent = true)
     @effects[PBEffects::ChoiceBand] = nil
     @effects[PBEffects::Unburden]   = true if self.item
-    setInitialItem(nil) if permanent && self.item == self.initialItem
+
+    if permanent && self.item == self.initialItem
+      if $PokemonBag.pbQuantity(self.initialItem)>=1
+        $PokemonBag.pbDeleteItem(self.initialItem)
+      else
+        setInitialItem(nil)
+      end
+    end
     self.item = nil
   end
 
