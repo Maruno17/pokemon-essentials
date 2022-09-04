@@ -1,10 +1,10 @@
-def pbSpecialTutor(pokemon)
+def pbSpecialTutor(pokemon,legendaries=false)
   retval = true
   tutorUtil = FusionTutorService.new(pokemon)
   pbFadeOutIn {
     scene = MoveRelearner_Scene.new
     screen = MoveRelearnerScreen.new(scene)
-    moves = tutorUtil.getCompatibleMoves
+    moves = tutorUtil.getCompatibleMoves(legendaries)
     if !moves.empty?
       retval = screen.pbStartScreen(pokemon, moves)
     else
@@ -14,8 +14,7 @@ def pbSpecialTutor(pokemon)
   return retval
 end
 
-
-def pbShowRareTutorFullList(includeLegendaries=false)
+def pbShowRareTutorFullList(includeLegendaries = false)
   tutorUtil = FusionTutorService.new(nil)
   tutorUtil.setShowList(true)
   pbFadeOutIn {
@@ -27,13 +26,12 @@ def pbShowRareTutorFullList(includeLegendaries=false)
   return false
 end
 
-def pbCheckRareTutorCompatibleMoves(pokemon,includeLeshgendaries)
+def pbCheckRareTutorCompatibleMoves(pokemon, includeLeshgendaries)
   tutorUtil = FusionTutorService.new(pokemon)
   return tutorUtil.has_compatible_move(includeLeshgendaries)
 end
 
-
-def showRandomRareMoveConditionExample(legendary=false)
+def showRandomRareMoveConditionExample(legendary = false)
   example = legendary ? getlegendaryConditionExample : getRegularConditionExample
   text = "For example, " + example
   pbMessage(text)
@@ -69,13 +67,13 @@ end
 
 class FusionTutorService
 
-  def has_compatible_move(include_legendaries=false)
+  def has_compatible_move(include_legendaries = false)
     return !getCompatibleMoves(include_legendaries).empty?
   end
 
   def initialize(pokemon)
     @pokemon = pokemon
-    @show_full_list=false
+    @show_full_list = false
   end
 
   def setShowList(value)
@@ -85,55 +83,56 @@ class FusionTutorService
   def getCompatibleMoves(includeLegendaries = false)
     compatibleMoves = []
     #normal moves
-    compatibleMoves << :ATTACKORDER if is_fusion_of([:BEEDRILL])
-    compatibleMoves << :FIRSTIMPRESSION if is_fusion_of([:SCYTHER, :SCIZOR, :PINSIR, :FARFETCHD, :TRAPINCH, :VIBRAVA, :FLYGON, :KABUTOPS, :ARMALDO])
-    compatibleMoves << :POLLENPUFF if is_fusion_of([:BUTTERFREE, :CELEBI, :VILEPLUME, :PARASECT, :BRELOOM])
-    compatibleMoves << :LUNGE if is_fusion_of([:SPINARAK, :ARIADOS, :JOLTIK, :GALVANTULA, :VENOMOTH, :VOLCARONA, :PINSIR, :PARASECT, :LEDIAN, :DODUO, :DODRIO, :STANTLER])
-    compatibleMoves << :DEFENDORDER if is_fusion_of([:BEEDRILL])
-    compatibleMoves << :HEALORDER if is_fusion_of([:BEEDRILL])
-    compatibleMoves << :POWDER if is_fusion_of([:BUTTERFREE, :VENOMOTH, :VOLCARONA, :PARASECT, :BRELOOM])
-    compatibleMoves << :TAILGLOW if is_fusion_of([:MAREEP, :FLAAFFY, :AMPHAROS, :LANTURN, :ZEKROM, :RESHIRAM])
-    compatibleMoves << :DARKESTLARIAT if is_fusion_of([:SNORLAX, :REGIGIGAS, :POLIWRATH, :MACHAMP, :ELECTIVIRE, :DUSKNOIR, :SWAMPERT, :KROOKODILE, :GOLURK])
-    compatibleMoves << :PARTINGSHOT if is_fusion_of([:MEOWTH, :PERSIAN, :SANDILE, :KROKOROK, :KROOKODILE, :UMBREON])
-    compatibleMoves << :TOPSYTURVY if is_fusion_of([:HITMONTOP, :WOBBUFFET])
-    compatibleMoves << :CLANGINGSCALES if is_fusion_of([:EKANS, :ARBOK, :GARCHOMP, :FLYGON, :HAXORUS])
+    if !includeLegendaries
+      compatibleMoves << :ATTACKORDER if is_fusion_of([:BEEDRILL])
+      compatibleMoves << :FIRSTIMPRESSION if is_fusion_of([:SCYTHER, :SCIZOR, :PINSIR, :FARFETCHD, :TRAPINCH, :VIBRAVA, :FLYGON, :KABUTOPS, :ARMALDO])
+      compatibleMoves << :POLLENPUFF if is_fusion_of([:BUTTERFREE, :CELEBI, :VILEPLUME, :PARASECT, :BRELOOM])
+      compatibleMoves << :LUNGE if is_fusion_of([:SPINARAK, :ARIADOS, :JOLTIK, :GALVANTULA, :VENOMOTH, :VOLCARONA, :PINSIR, :PARASECT, :LEDIAN, :DODUO, :DODRIO, :STANTLER])
+      compatibleMoves << :DEFENDORDER if is_fusion_of([:BEEDRILL])
+      compatibleMoves << :HEALORDER if is_fusion_of([:BEEDRILL])
+      compatibleMoves << :POWDER if is_fusion_of([:BUTTERFREE, :VENOMOTH, :VOLCARONA, :PARASECT, :BRELOOM])
+      compatibleMoves << :TAILGLOW if is_fusion_of([:MAREEP, :FLAAFFY, :AMPHAROS, :LANTURN, :ZEKROM, :RESHIRAM])
+      compatibleMoves << :DARKESTLARIAT if is_fusion_of([:SNORLAX, :REGIGIGAS, :POLIWRATH, :MACHAMP, :ELECTIVIRE, :DUSKNOIR, :SWAMPERT, :KROOKODILE, :GOLURK])
+      compatibleMoves << :PARTINGSHOT if is_fusion_of([:MEOWTH, :PERSIAN, :SANDILE, :KROKOROK, :KROOKODILE, :UMBREON])
+      compatibleMoves << :TOPSYTURVY if is_fusion_of([:HITMONTOP, :WOBBUFFET])
+      compatibleMoves << :CLANGINGSCALES if is_fusion_of([:EKANS, :ARBOK, :GARCHOMP, :FLYGON, :HAXORUS])
 
-    compatibleMoves << :ZINGZAP if is_fusion_of([:PICHU, :PIKACHU, :RAICHU, :VOLTORB, :ELECTRODE]) || (is_fusion_of([:SANDSLASH, :GOLEM]) && hasType(:ELECTRIC))
-    compatibleMoves << :PARABOLICCHARGE if is_fusion_of([:PICHU, :PIKACHU, :RAICHU, :MAGNEMITE, :MAGNETON, :MAGNEZONE, :MAREEP, :FLAAFFY, :AMPHAROS, :ELEKID, :ELECTABUZZ, :ELECTIVIRE, :ZAPDOS,
-                                                         :CHINCHOU, :LANTURN, :RAIKOU, :KLINK, :KLANG, :KLINKLANG, :ROTOM, :STUNFISK])
+      compatibleMoves << :ZINGZAP if is_fusion_of([:PICHU, :PIKACHU, :RAICHU, :VOLTORB, :ELECTRODE]) || (is_fusion_of([:SANDSLASH, :GOLEM]) && hasType(:ELECTRIC))
+      compatibleMoves << :PARABOLICCHARGE if is_fusion_of([:PICHU, :PIKACHU, :RAICHU, :MAGNEMITE, :MAGNETON, :MAGNEZONE, :MAREEP, :FLAAFFY, :AMPHAROS, :ELEKID, :ELECTABUZZ, :ELECTIVIRE, :ZAPDOS,
+                                                           :CHINCHOU, :LANTURN, :RAIKOU, :KLINK, :KLANG, :KLINKLANG, :ROTOM, :STUNFISK])
 
-    compatibleMoves << :ELECTRIFY if is_fusion_of([:KLINK, :KLANG, :KLINKLANG]) || hasType(:ELECTRIC)
-    compatibleMoves << :AROMATICMIST if is_fusion_of([:WEEZING, :BULBASAUR, :IVYSAUR, :VENUSAUR, :CHIKORITA, :BAYLEEF, :MEGANIUM, :GLOOM, :VILEPLUME, :BELLOSSOM, :ROSELIA, :ROSERADE])
-    compatibleMoves << :FLORALHEALING if is_fusion_of([:SUNFLORA, :BELLOSSOM, :ROSELIA, :ROSERADE])
-    compatibleMoves << :FLYINGPRESS if is_fusion_of([:TORCHIC, :COMBUSKEN, :BLAZIKEN, :FARFETCHD, :HERACROSS]) || (hasType(:FLYING) && hasType(:FIGHTING))
-    compatibleMoves << :SECRETSWORD if is_fusion_of([:HONEDGE, :DOUBLADE, :AEGISLASH, :GALLADE, :FARFETCHD, :ABSOL, :BISHARP])
-    compatibleMoves << :MATBLOCK if is_fusion_of([:MACHOP, :MACHOKE, :MACHAMP, :TYROGUE, :HITMONLEE, :HITMONCHAN, :HITMONTOP])
-    compatibleMoves << :MINDBLOWN if is_fusion_of([:VOLTORB, :ELECTRODE, :EXEGGUTOR])
-    compatibleMoves << :SHELLTRAP if is_fusion_of([:MAGCARGO, :FORRETRESS])
-    compatibleMoves << :HEATCRASH if is_fusion_of([:BLAZIKEN, :RESHIRAM, :GROUDON, :CHARIZARD, :GOLURK, :REGIGIGAS, :RHYDON, :RHYPERIOR, :SNORLAX])
-    compatibleMoves << :SHADOWBONE if is_fusion_of([:MAROWAK]) && hasType(:GHOST)
-    compatibleMoves << :SPIRITSHACKLE if is_fusion_of([:BANETTE, :SPIRITOMB, :DUSKNOIR, :SHEDINJA, :COFAGRIGUS])
-    compatibleMoves << :TRICKORTREAT if (hasType(:GRASS) && hasType(:GHOST)) || is_fusion_of([:GASTLY, :HAUNTER, :GENGAR, :MIMIKYU, :ZORUA, :ZOROARK])
-    compatibleMoves << :TROPKICK if is_fusion_of([:HITMONLEE, :HITMONTOP, :ROSERADE]) || (hasType(:GRASS) && hasType(:FIGHTING))
-    compatibleMoves << :NEEDLEARM if is_fusion_of([:FERROTHORN])
-    compatibleMoves << :FORESTSCURSE if (hasType(:GRASS) && hasType(:GHOST))
-    compatibleMoves << :SPIKYSHIELD if is_fusion_of([:FERROSEED, :FERROTHORN]) || (is_fusion_of([:SANDSLASH, :JOLTEON, :CLOYSTER]) && hasType(:GRASS))
-    compatibleMoves << :STRENGTHSAP if is_fusion_of([:ODDISH, :GLOOM, :VILEPLUME, :BELLOSSOM, :HOPPIP, :SKIPLOOM, :JUMPLUFF, :BELLSPROUT, :WEEPINBELL, :VICTREEBEL, :PARAS, :PARASECT, :DRIFBLIM, :BRELOOM])
-    compatibleMoves << :SHOREUP if is_fusion_of([:GRIMER, :MUK]) && hasType(:GROUND)
-    compatibleMoves << :ICEHAMMER if (canLearnMove(:CRABHAMMER) || canLearnMove(:GRASSHAMMER)) && hasType(:ICE)
-    compatibleMoves << :MULTIATTACK if is_fusion_of([:ARCEUS, :MEW, :GENESECT])
-    compatibleMoves << :REVELATIONDANCE if is_fusion_of([:KECLEON, :BELLOSSOM, :CLEFAIRY, :CLEFABLE, :CLEFFA])
-    compatibleMoves << :BANEFULBUNKER if is_fusion_of([:TENTACOOL, :TENTACRUEL, :NIDORINA, :NIDORINO, :NIDOQUEEN, :NIDOKING, :GRIMER, :MUK, :QWILFISH])
-    compatibleMoves << :INSTRUCT if is_fusion_of([:CHIMCHAR, :MONFERNO, :INFERNAPE, :KADABRA, :ALAKAZAM, :SLOWKING])
-    compatibleMoves << :PSYCHICTERRAIN if hasType(:PSYCHIC)
-    compatibleMoves << :GRASSYTERRAIN if hasType(:GRASS)
-    compatibleMoves << :MISTYTERRAIN if hasType(:FAIRY)
-    compatibleMoves << :SPEEDSWAP if is_fusion_of([:PIKACHU, :RAICHU, :ABRA, :KADABRA, :ALAKAZAM, :PORYGON, :PORYGON2, :PORYGONZ, :MEWTWO, :MEW, :JOLTIK, :GALVANTULA])
-    compatibleMoves << :ACCELEROCK if is_fusion_of([:AERODACTYL, :KABUTOPS, :ANORITH, :ARMALDO])
-    compatibleMoves << :ANCHORSHOT if (is_fusion_of([:EMPOLEON, :STEELIX, :BELDUM, :METANG, :METAGROSS, :KLINK, :KLINKLANG, :KLANG, :ARON, :LAIRON, :AGGRON]) && hasType(:WATER)) || (is_fusion_of([:LAPRAS, :WAILORD, :KYOGRE]) && hasType(:STEEL))
-    compatibleMoves << :SPARKLINGARIA if (is_fusion_of([:JYNX, :JIGGLYPUFF, :WIGGLYTUFF]) && hasType(:WATER)) || is_fusion_of([:LAPRAS])
-    compatibleMoves << :WATERSHURIKEN if is_fusion_of([:NINJASK, :LUCARIO, :ZOROARK, :BISHARP]) && hasType(:WATER)
-
+      compatibleMoves << :ELECTRIFY if is_fusion_of([:KLINK, :KLANG, :KLINKLANG]) || hasType(:ELECTRIC)
+      compatibleMoves << :AROMATICMIST if is_fusion_of([:WEEZING, :BULBASAUR, :IVYSAUR, :VENUSAUR, :CHIKORITA, :BAYLEEF, :MEGANIUM, :GLOOM, :VILEPLUME, :BELLOSSOM, :ROSELIA, :ROSERADE])
+      compatibleMoves << :FLORALHEALING if is_fusion_of([:SUNFLORA, :BELLOSSOM, :ROSELIA, :ROSERADE])
+      compatibleMoves << :FLYINGPRESS if is_fusion_of([:TORCHIC, :COMBUSKEN, :BLAZIKEN, :FARFETCHD, :HERACROSS]) || (hasType(:FLYING) && hasType(:FIGHTING))
+      compatibleMoves << :SECRETSWORD if is_fusion_of([:HONEDGE, :DOUBLADE, :AEGISLASH, :GALLADE, :FARFETCHD, :ABSOL, :BISHARP])
+      compatibleMoves << :MATBLOCK if is_fusion_of([:MACHOP, :MACHOKE, :MACHAMP, :TYROGUE, :HITMONLEE, :HITMONCHAN, :HITMONTOP])
+      compatibleMoves << :MINDBLOWN if is_fusion_of([:VOLTORB, :ELECTRODE, :EXEGGUTOR])
+      compatibleMoves << :SHELLTRAP if is_fusion_of([:MAGCARGO, :FORRETRESS])
+      compatibleMoves << :HEATCRASH if is_fusion_of([:BLAZIKEN, :RESHIRAM, :GROUDON, :CHARIZARD, :GOLURK, :REGIGIGAS, :RHYDON, :RHYPERIOR, :SNORLAX])
+      compatibleMoves << :SHADOWBONE if is_fusion_of([:MAROWAK]) && hasType(:GHOST)
+      compatibleMoves << :SPIRITSHACKLE if is_fusion_of([:BANETTE, :SPIRITOMB, :DUSKNOIR, :SHEDINJA, :COFAGRIGUS])
+      compatibleMoves << :TRICKORTREAT if (hasType(:GRASS) && hasType(:GHOST)) || is_fusion_of([:GASTLY, :HAUNTER, :GENGAR, :MIMIKYU, :ZORUA, :ZOROARK])
+      compatibleMoves << :TROPKICK if is_fusion_of([:HITMONLEE, :HITMONTOP, :ROSERADE]) || (hasType(:GRASS) && hasType(:FIGHTING))
+      compatibleMoves << :NEEDLEARM if is_fusion_of([:FERROTHORN])
+      compatibleMoves << :FORESTSCURSE if (hasType(:GRASS) && hasType(:GHOST))
+      compatibleMoves << :SPIKYSHIELD if is_fusion_of([:FERROSEED, :FERROTHORN]) || (is_fusion_of([:SANDSLASH, :JOLTEON, :CLOYSTER]) && hasType(:GRASS))
+      compatibleMoves << :STRENGTHSAP if is_fusion_of([:ODDISH, :GLOOM, :VILEPLUME, :BELLOSSOM, :HOPPIP, :SKIPLOOM, :JUMPLUFF, :BELLSPROUT, :WEEPINBELL, :VICTREEBEL, :PARAS, :PARASECT, :DRIFBLIM, :BRELOOM])
+      compatibleMoves << :SHOREUP if is_fusion_of([:GRIMER, :MUK]) && hasType(:GROUND)
+      compatibleMoves << :ICEHAMMER if (canLearnMove(:CRABHAMMER) || canLearnMove(:GRASSHAMMER)) && hasType(:ICE)
+      compatibleMoves << :MULTIATTACK if is_fusion_of([:ARCEUS, :MEW, :GENESECT])
+      compatibleMoves << :REVELATIONDANCE if is_fusion_of([:KECLEON, :BELLOSSOM, :CLEFAIRY, :CLEFABLE, :CLEFFA])
+      compatibleMoves << :BANEFULBUNKER if is_fusion_of([:TENTACOOL, :TENTACRUEL, :NIDORINA, :NIDORINO, :NIDOQUEEN, :NIDOKING, :GRIMER, :MUK, :QWILFISH])
+      compatibleMoves << :INSTRUCT if is_fusion_of([:CHIMCHAR, :MONFERNO, :INFERNAPE, :KADABRA, :ALAKAZAM, :SLOWKING])
+      compatibleMoves << :PSYCHICTERRAIN if hasType(:PSYCHIC)
+      compatibleMoves << :GRASSYTERRAIN if hasType(:GRASS)
+      compatibleMoves << :MISTYTERRAIN if hasType(:FAIRY)
+      compatibleMoves << :SPEEDSWAP if is_fusion_of([:PIKACHU, :RAICHU, :ABRA, :KADABRA, :ALAKAZAM, :PORYGON, :PORYGON2, :PORYGONZ, :MEWTWO, :MEW, :JOLTIK, :GALVANTULA])
+      compatibleMoves << :ACCELEROCK if is_fusion_of([:AERODACTYL, :KABUTOPS, :ANORITH, :ARMALDO])
+      compatibleMoves << :ANCHORSHOT if (is_fusion_of([:EMPOLEON, :STEELIX, :BELDUM, :METANG, :METAGROSS, :KLINK, :KLINKLANG, :KLANG, :ARON, :LAIRON, :AGGRON]) && hasType(:WATER)) || (is_fusion_of([:LAPRAS, :WAILORD, :KYOGRE]) && hasType(:STEEL))
+      compatibleMoves << :SPARKLINGARIA if (is_fusion_of([:JYNX, :JIGGLYPUFF, :WIGGLYTUFF]) && hasType(:WATER)) || is_fusion_of([:LAPRAS])
+      compatibleMoves << :WATERSHURIKEN if is_fusion_of([:NINJASK, :LUCARIO, :ZOROARK, :BISHARP]) && hasType(:WATER)
+    end
     if includeLegendaries
       #legendary moves (only available after a certain trigger, maybe a different npc)
       compatibleMoves << :HYPERSPACEFURY if is_fusion_of([:GIRATINA, :PALKIA, :DIALGA, :ARCEUS])
