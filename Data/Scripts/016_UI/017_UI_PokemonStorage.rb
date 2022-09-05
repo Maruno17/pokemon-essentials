@@ -2155,6 +2155,10 @@ class PokemonStorageScreen
         pbDisplay(_INTL("{1} is already fused!", heldpoke.name))
         return
       end
+      if(selected.egg? || heldpoke.egg?)
+        pbDisplay(_INTL("It's impossible to fuse an egg!"))
+        return
+      end
     end
 
     splicerItem = selectSplicer()

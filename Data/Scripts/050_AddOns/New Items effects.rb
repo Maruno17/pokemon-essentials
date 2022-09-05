@@ -319,7 +319,7 @@ ItemHandlers::UseOnPokemon.add(:RAGECANDYBAR, proc { |item, pokemon, scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:INCUBATOR, proc { |item, pokemon, scene|
-  if pokemon.isEgg?
+  if pokemon.egg?
     if pokemon.eggsteps <= 1
       scene.pbDisplay(_INTL("The egg is already ready to hatch!"))
       next false
@@ -1115,8 +1115,8 @@ ItemHandlers::UseOnPokemon.add(:RAGECANDYBAR, proc { |item, pokemon, scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:INCUBATOR, proc { |item, pokemon, scene|
-  if pokemon.isEgg?
-    if pokemon.eggsteps <= 1
+  if pokemon.egg?
+    if pokemon.steps_to_hatch <= 1
       scene.pbDisplay(_INTL("The egg is already ready to hatch!"))
       next false
     else
@@ -1124,7 +1124,7 @@ ItemHandlers::UseOnPokemon.add(:INCUBATOR, proc { |item, pokemon, scene|
       scene.pbDisplay(_INTL("..."))
       scene.pbDisplay(_INTL("..."))
       scene.pbDisplay(_INTL("Your egg is ready to hatch!"))
-      pokemon.eggsteps = 1
+      pokemon.steps_to_hatch = 1
       next true
     end
   else
@@ -1134,32 +1134,38 @@ ItemHandlers::UseOnPokemon.add(:INCUBATOR, proc { |item, pokemon, scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:INCUBATOR_NORMAL, proc { |item, pokemon, scene|
-  if pokemon.isEgg?
-    steps = pokemon.eggsteps
-    steps -= 2000 / (pokemon.nbIncubatorsUsed + 1).ceil
+  if pokemon.egg?
+    steps = pokemon.steps_to_hatch
+    steps = (steps / 1.5).ceil
+    # steps -= 2000 / (pokemon.nbIncubatorsUsed + 1).ceil
     if steps <= 1
-      pokemon.eggsteps = 1
+      pokemon.steps_to_hatch = 1
     else
-      pokemon.eggsteps = steps
+      pokemon.steps_to_hatch = steps
     end
-    if pokemon.eggsteps <= 1
-      scene.pbDisplay(_INTL("Incubating..."))
-      scene.pbDisplay(_INTL("..."))
-      scene.pbDisplay(_INTL("..."))
-      scene.pbDisplay(_INTL("The egg is ready to hatch!"))
-      next false
-    else
-      scene.pbDisplay(_INTL("Incubating..."))
-      scene.pbDisplay(_INTL("..."))
-      scene.pbDisplay(_INTL("..."))
-      if pokemon.nbIncubatorsUsed >= 10
-        scene.pbDisplay(_INTL("The egg is a bit closer to hatching"))
-      else
-        scene.pbDisplay(_INTL("The egg is closer to hatching"))
-      end
-      pokemon.incrIncubator()
-      next true
-    end
+    scene.pbDisplay(_INTL("Incubating..."))
+    scene.pbDisplay(_INTL("..."))
+    scene.pbDisplay(_INTL("..."))
+    scene.pbDisplay(_INTL("The egg is closer to hatching!"))
+
+    # if pokemon.steps_to_hatch <= 1
+    #   scene.pbDisplay(_INTL("Incubating..."))
+    #   scene.pbDisplay(_INTL("..."))
+    #   scene.pbDisplay(_INTL("..."))
+    #   scene.pbDisplay(_INTL("The egg is ready to hatch!"))
+    #   next false
+    # else
+    #   scene.pbDisplay(_INTL("Incubating..."))
+    #   scene.pbDisplay(_INTL("..."))
+    #   scene.pbDisplay(_INTL("..."))
+    #   if pokemon.nbIncubatorsUsed >= 10
+    #     scene.pbDisplay(_INTL("The egg is a bit closer to hatching"))
+    #   else
+    #     scene.pbDisplay(_INTL("The egg is closer to hatching"))
+    #   end
+    #   pokemon.incrIncubator()
+    #   next true
+    # end
   else
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
@@ -1260,6 +1266,11 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
         poke2 = $Trainer.party[chosen]
         if (poke2.species_data.id_number <= NB_POKEMON) && poke2 != pokemon
           #check if fainted
+
+          if pokemon.egg? || poke2.egg?
+            scene.pbDisplay(_INTL("It's impossible to fuse an egg!"))
+            return false
+          end
           if pokemon.hp == 0 || poke2.hp == 0
             scene.pbDisplay(_INTL("A fainted Pokémon cannot be fused!"))
             return false

@@ -537,7 +537,8 @@ def pbUseItem(bag, item, bagscene = nil)
           break
         end
         pkmn = $Trainer.party[chosen]
-        if pbCheckUseOnPokemon(item, pkmn, screen)
+        if
+        pbCheckUseOnPokemon(item, pkmn, screen)
           ret = ItemHandlers.triggerUseOnPokemon(item, pkmn, screen)
           if ret && useType == 1 # Usable on Pokémon, consumed
             bag.pbDeleteItem(item)
@@ -633,7 +634,7 @@ def pbUseItemMessage(item)
 end
 
 def pbCheckUseOnPokemon(_item, pkmn, _screen)
-  return pkmn && !pkmn.egg?
+  return pkmn #&& !pkmn.egg?
 end
 
 #===============================================================================
