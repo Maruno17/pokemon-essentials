@@ -602,6 +602,12 @@ class PokemonEvolutionScene
     @sprites["msgwindow"].text = ""
     # Check for consumed item and check if Pokémon should be duplicated
     pbEvolutionMethodAfterEvolution
+
+    oldAbility = @pokemon.ability.id
+    newSpecies = GameData::Species.get(@newspecies)
+
+    allNewPossibleAbilities = newSpecies.abilities + newSpecies.hidden_abilities
+
     # Modify Pokémon to make it evolved
     @pokemon.species = @newspecies
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
@@ -609,6 +615,11 @@ class PokemonEvolutionScene
     # See and own evolved species
     $Trainer.pokedex.register(@pokemon)
     $Trainer.pokedex.set_owned(@newspecies)
+
+    if allNewPossibleAbilities.include?(oldAbility)
+      @pokemon.ability=oldAbility
+    end
+
     # Learn moves upon evolution for evolved species
     movelist = @pokemon.getMoveList
     for i in movelist
