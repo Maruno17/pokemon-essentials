@@ -338,6 +338,7 @@ ItemHandlers::UseOnPokemon.add(:INCUBATOR, proc { |item, pokemon, scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:MISTSTONE, proc { |item, pokemon, scene|
+  next false if pokemon.egg?
   if pbForceEvo(pokemon)
     next true
   else
@@ -1173,6 +1174,7 @@ ItemHandlers::UseOnPokemon.add(:INCUBATOR_NORMAL, proc { |item, pokemon, scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:MISTSTONE, proc { |item, pokemon, scene|
+  next false if pokemon.egg?
   if pbForceEvo(pokemon)
     next true
   else
