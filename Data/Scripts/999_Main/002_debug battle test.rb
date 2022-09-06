@@ -100,6 +100,7 @@ MenuHandlers.add(:debug_menu, :test_auto_battle, {
   "name"        => _INTL("Test Auto Battle"),
   "parent"      => :main,
   "description" => _INTL("Runs an AI-controlled battle with no visuals."),
+  "always_show" => false,
   "effect"      => proc {
     debug_test_auto_battle
   }
@@ -109,6 +110,7 @@ MenuHandlers.add(:debug_menu, :test_auto_battle_logging, {
   "name"        => _INTL("Test Auto Battle with Logging"),
   "parent"      => :main,
   "description" => _INTL("Runs an AI-controlled battle with no visuals. Logs messages."),
+  "always_show" => false,
   "effect"      => proc {
     debug_test_auto_battle(true)
   }
