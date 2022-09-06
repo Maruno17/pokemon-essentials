@@ -104,7 +104,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:damaging_moves_if_last_pokemon,
     if ai.trainer.medium_skill? && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0 &&
        !(ai.trainer.high_skill? && target && battle.pbAbleNonActiveCount(target.idxOwnSide) > 0)
       next score * 0.9 if move.statusMove?
-      next score * 1.1 if target_battler.hp <= target_battler.totalhp / 2
+      next score * 1.1 if target && target.battler.hp <= target.battler.totalhp / 2
     end
   }
 )
@@ -213,7 +213,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:thawing_move_against_frozen_target,
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveScore.add(:shiny_target,
   proc { |score, move, user, target, ai, battle|
-    next score - 40 if target&.wild? && target&.battler.shiny?
+    next score - 40 if target && target.wild? && target.battler.shiny?
   }
 )
 
@@ -260,7 +260,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:flinching_effects,
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveScore.add(:add_predicted_damage,
   proc { |score, move, user, target, ai, battle|
-    if move.damagingMove?
+    if move.damagingMove? && target
       dmg = move.rough_damage
       score += [15.0 * dmg / target.hp, 20].min
       score += 10 if dmg > target.hp * 1.1   # Predicted to KO the target

@@ -243,14 +243,14 @@ class Battle
         end
       }
       # Write the priority order to the debug log
-      logMsg = (fullCalc) ? "[Round order] " : "[Round order recalculated] "
-      comma = false
-      @priority.each do |entry|
-        logMsg += ", " if comma
-        logMsg += "#{entry[0].pbThis(comma)} (#{entry[0].index})"
-        comma = true
+      if fullCalc && $INTERNAL
+        logMsg = "[Round order] "
+        @priority.each_with_index do |entry, i|
+          logMsg += ", " if i > 0
+          logMsg += "#{entry[0].pbThis(i > 0)} (#{entry[0].index})"
+        end
+        PBDebug.log(logMsg)
       end
-      PBDebug.log(logMsg)
     end
   end
 

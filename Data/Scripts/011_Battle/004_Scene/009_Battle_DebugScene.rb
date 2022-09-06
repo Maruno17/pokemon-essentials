@@ -1,11 +1,12 @@
 #===============================================================================
 # Used when generating new trainers for battle challenges
 #===============================================================================
-class Battle::DebugSceneNoLogging
-  def initialize
-    @battle   = nil
-    @lastCmd  = [0, 0, 0, 0]
-    @lastMove = [0, 0, 0, 0]
+class Battle::DebugSceneNoVisuals
+  def initialize(log_messages = false)
+    @battle       = nil
+    @lastCmd      = [0, 0, 0, 0]
+    @lastMove     = [0, 0, 0, 0]
+    @log_messages = log_messages
   end
 
   # Called whenever the battle begins.
@@ -42,11 +43,24 @@ class Battle::DebugSceneNoLogging
   def pbRefresh; end
   def pbRefreshOne(idxBattler); end
 
-  def pbDisplayMessage(msg, brief = false); end
+  def pbDisplayMessage(msg, brief = false)
+    PBDebug.log_message(msg) if @log_messages
+  end
   alias pbDisplay pbDisplayMessage
-  def pbDisplayPausedMessage(msg); end
-  def pbDisplayConfirmMessage(msg); return true; end
-  def pbShowCommands(msg, commands, defaultValue); return 0; end
+
+  def pbDisplayPausedMessage(msg)
+    PBDebug.log_message(msg) if @log_messages
+  end
+
+  def pbDisplayConfirmMessage(msg)
+    PBDebug.log_message(msg) if @log_messages
+    return true
+  end
+
+  def pbShowCommands(msg, commands, defaultValue)
+    PBDebug.log_message(msg) if @log_messages
+    return 0
+  end
 
   def pbSendOutBattlers(sendOuts, startBattle = false); end
   def pbRecall(idxBattler); end

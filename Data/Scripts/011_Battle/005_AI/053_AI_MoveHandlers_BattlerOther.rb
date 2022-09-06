@@ -393,7 +393,7 @@ Battle::AI::Handlers::MoveEffectScore.add("FlinchTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FlinchTargetFailsIfUserNotAsleep",
   proc { |move, user, target, ai, battle|
-    next true if !user.asleep?
+    next true if !user.battler.asleep?
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("FlinchTargetFailsIfUserNotAsleep",
@@ -649,7 +649,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("SetTargetAbilityToInsomnia",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SetUserAbilityToTargetAbility",
   proc { |move, user, target, ai, battle|
-    next true if user.battle.unstoppableAbility?
+    next true if user.battler.unstoppableAbility?
     next true if !target.ability || user.ability_id == target.ability_id
     next true if target.battler.ungainableAbility? ||
                  [:POWEROFALCHEMY, :RECEIVER, :TRACE, :WONDERGUARD].include?(target.ability_id)
@@ -673,7 +673,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("SetTargetAbilityToUserAbility",
     next true if !user.ability || user.ability_id == target.ability_id
     next true if user.battler.ungainableAbility? ||
                  [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(user.ability_id)
-    next true if target.battle.unstoppableAbility? || target.ability_id == :TRUANT
+    next true if target.battler.unstoppableAbility? || target.ability_id == :TRUANT
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("SetTargetAbilityToUserAbility",
@@ -693,9 +693,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserTargetSwapAbilities",
   proc { |move, user, target, ai, battle|
     next true if !user.ability || !target.ability
     next true if Settings::MECHANICS_GENERATION <= 5 && user.ability_id == target.ability_id
-    next true if user.battle.unstoppableAbility? || user.battler.ungainableAbility? ||
+    next true if user.battler.unstoppableAbility? || user.battler.ungainableAbility? ||
                  user.ability_id == :WONDERGUARD
-    next true if target.battle.unstoppableAbility? || target.battler.ungainableAbility? ||
+    next true if target.battler.unstoppableAbility? || target.battler.ungainableAbility? ||
                  target.ability_id == :WONDERGUARD
   }
 )
@@ -714,7 +714,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapAbilities",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("NegateTargetAbility",
   proc { |move, user, target, ai, battle|
-    next true if target.unstoppableAbility? ||
+    next true if target.battler.unstoppableAbility? ||
                  target.effects[PBEffects::GastroAcid]
   }
 )

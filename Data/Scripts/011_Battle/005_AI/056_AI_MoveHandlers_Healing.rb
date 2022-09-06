@@ -422,7 +422,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartLeechSeedTarget",
       if !user.check_for_move { |move| move.damagingMove? }
         score += 20
       end
-      score -= 20 if target.has_active_ability?([:LIQUIDOOZE]) || !target.takesIndirectDamage?
+      score -= 20 if target.has_active_ability?([:LIQUIDOOZE]) || !target.battler.takesIndirectDamage?
     end
     if ai.trainer.high_skill?
       if user.check_for_move { |move| move.is_a?(Battle::Move::ProtectMove) }

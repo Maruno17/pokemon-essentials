@@ -138,7 +138,7 @@ class Battle::AI::AIBattler
     # Trapping damage
     if self.effects[PBEffects::Trapping] > 1 && @battler.takesIndirectDamage?
       amt = (Settings::MECHANICS_GENERATION >= 6) ? self.totalhp / 8 : self.totalhp / 16
-      if @battlers[self.effects[PBEffects::TrappingUser]].has_active_item?(:BINDINGBAND)
+      if @ai.battlers[self.effects[PBEffects::TrappingUser]].has_active_item?(:BINDINGBAND)
         amt = (Settings::MECHANICS_GENERATION >= 6) ? self.totalhp / 6 : self.totalhp / 8
       end
       ret += [amt, 1].max

@@ -315,8 +315,8 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsedByTarget",
   proc { |move, user, target, ai, battle|
-    next true if !target.battle.lastRegularMoveUsed
-    next true if GameData::Move.get(target.battle.lastRegularMoveUsed).flags.none? { |f| f[/^CanMirrorMove$/i] }
+    next true if !target.battler.lastRegularMoveUsed
+    next true if GameData::Move.get(target.battler.lastRegularMoveUsed).flags.none? { |f| f[/^CanMirrorMove$/i] }
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("UseLastMoveUsedByTarget",

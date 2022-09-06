@@ -11,16 +11,18 @@ class Battle::AI
     shouldSwitch = forceSwitch
     battler = @user.battler
     batonPass = -1
+    foe = nil
     moveType = nil
     # If Pokémon is within 6 levels of the foe, and foe's last move was
     # super-effective and powerful
     if !shouldSwitch && battler.turnCount > 0 && @trainer.high_skill?
       target = battler.pbDirectOpposing(true)
+      foe = @battlers[target.index]
       if !target.fainted? && target.lastMoveUsed &&
          (target.level - battler.level).abs <= 6
         moveData = GameData::Move.get(target.lastMoveUsed)
         moveType = moveData.type
-        typeMod = battler.effectiveness_of_type_against_battler(moveType, target)
+        typeMod = @user.effectiveness_of_type_against_battler(moveType, foe)
         if Effectiveness.super_effective?(typeMod) && moveData.base_damage > 50
           switchChance = (moveData.base_damage > 70) ? 30 : 20
           shouldSwitch = (pbAIRandom(100) < switchChance)
@@ -106,7 +108,7 @@ class Battle::AI
           end
         end
         # moveType is the type of the target's last used move
-        if moveType && Effectiveness.ineffective?(battler.effectiveness_of_type_against_battler(moveType))
+        if moveType && Effectiveness.ineffective?(@user.effectiveness_of_type_against_battler(moveType, foe))
           weight = 65
           typeMod = pbCalcTypeModPokemon(pkmn, battler.pbDirectOpposing(true))
           if Effectiveness.super_effective?(typeMod)
@@ -114,7 +116,7 @@ class Battle::AI
             weight = 85
           end
           list.unshift(i) if pbAIRandom(100) < weight   # Put this Pokemon first
-        elsif moveType && Effectiveness.resistant?(battler.effectiveness_of_type_against_battler(moveType))
+        elsif moveType && Effectiveness.resistant?(@user.effectiveness_of_type_against_battler(moveType, foe))
           weight = 40
           typeMod = pbCalcTypeModPokemon(pkmn, battler.pbDirectOpposing(true))
           if Effectiveness.super_effective?(typeMod)

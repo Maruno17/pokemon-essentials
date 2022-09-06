@@ -23,10 +23,17 @@ end
 # (Fell Stinger (Gen 6-))
 #===============================================================================
 class Battle::Move::RaiseUserAttack2IfTargetFaints < Battle::Move
+  attr_reader :statUp
+
+  def initialize(battle, move)
+    super
+    @statUp = [:ATTACK, 2]
+  end
+
   def pbEffectAfterAllHits(user, target)
     return if !target.damageState.fainted
-    return if !user.pbCanRaiseStatStage?(:ATTACK, user, self)
-    user.pbRaiseStatStage(:ATTACK, 2, user)
+    return if !user.pbCanRaiseStatStage?(@statUp[0], user, self)
+    user.pbRaiseStatStage(@statUp[0], @statUp[1], user)
   end
 end
 
@@ -45,10 +52,17 @@ end
 # (Fell Stinger (Gen 7+))
 #===============================================================================
 class Battle::Move::RaiseUserAttack3IfTargetFaints < Battle::Move
+  attr_reader :statUp
+
+  def initialize(battle, move)
+    super
+    @statUp = [:ATTACK, 3]
+  end
+
   def pbEffectAfterAllHits(user, target)
     return if !target.damageState.fainted
-    return if !user.pbCanRaiseStatStage?(:ATTACK, user, self)
-    user.pbRaiseStatStage(:ATTACK, 3, user)
+    return if !user.pbCanRaiseStatStage?(@statUp[0], user, self)
+    user.pbRaiseStatStage(@statUp[0], @statUp[1], user)
   end
 end
 

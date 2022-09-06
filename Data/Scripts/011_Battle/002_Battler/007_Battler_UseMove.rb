@@ -47,7 +47,7 @@ class Battle::Battler
       return false
     end
     # Use the move
-    PBDebug.log("[Move usage] #{pbThis} started using #{choice[2].name}")
+    PBDebug.log("[Use move] #{pbThis} (#{@index}) used #{choice[2].name}")
     PBDebug.logonerr {
       pbUseMove(choice, choice[2] == @battle.struggle)
     }
@@ -146,7 +146,7 @@ class Battle::Battler
       choice[2].pp = -1
     end
     choice[3] = target     # Target (-1 means no target yet)
-    PBDebug.log("[Move usage] #{pbThis} started using the called/simple move #{choice[2].name}")
+    PBDebug.log("[Use move] #{pbThis} used the called/simple move #{choice[2].name}")
     pbUseMove(choice, specialUsage)
   end
 

@@ -7,7 +7,9 @@ module PBDebug
     rescue
       PBDebug.log("")
       PBDebug.log("**Exception: #{$!.message}")
-      PBDebug.log($!.backtrace.inspect.to_s)
+      backtrace = ""
+      $!.backtrace.each { |line| backtrace += line + "\r\n" }
+      PBDebug.log(backtrace)
       PBDebug.log("")
       pbPrintException($!)   # if $INTERNAL
       PBDebug.flush
@@ -23,7 +25,15 @@ module PBDebug
 
   def self.log(msg)
     if $DEBUG && $INTERNAL
-      echoln msg
+      echoln msg.gsub("%", "%%")
+      @@log.push(msg + "\r\n")
+      PBDebug.flush   # if @@log.length > 1024
+    end
+  end
+
+  def self.log_header(msg)
+    if $DEBUG && $INTERNAL
+      echoln Console.markup_style(msg.gsub("%", "%%"), text: :light_purple)
       @@log.push(msg + "\r\n")
       PBDebug.flush   # if @@log.length > 1024
     end
@@ -32,7 +42,7 @@ module PBDebug
   def self.log_message(msg)
     if $DEBUG && $INTERNAL
       msg = "\"" + msg + "\""
-      echoln Console.markup_style(msg, text: :dark_gray)
+      echoln Console.markup_style(msg.gsub("%", "%%"), text: :dark_gray)
       @@log.push(msg + "\r\n")
       PBDebug.flush   # if @@log.length > 1024
     end

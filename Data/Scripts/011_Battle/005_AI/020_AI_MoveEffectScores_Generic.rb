@@ -62,22 +62,22 @@ class Battle::AI
     # TODO: Exception if user knows Baton Pass/Stored Power?
     case stat
     when :ATTACK
-      return false if !@user.check_for_move { |move| move.physicalMove?(move.type) &&
-                                                     move.function != "UseUserBaseDefenseInsteadOfUserBaseAttack" &&
-                                                     move.function != "UseTargetAttackInsteadOfUserAttack" }
+      return false if !@user.check_for_move { |m| m.physicalMove?(move.type) &&
+                                                  m.function != "UseUserBaseDefenseInsteadOfUserBaseAttack" &&
+                                                  m.function != "UseTargetAttackInsteadOfUserAttack" }
     when :DEFENSE
       each_foe_battler(@user.side) do |b, i|
-        next if !b.check_for_move { |move| move.physicalMove?(move.type) ||
-                                           move.function == "UseTargetDefenseInsteadOfTargetSpDef" }
+        next if !b.check_for_move { |m| m.physicalMove?(m.type) ||
+                                        m.function == "UseTargetDefenseInsteadOfTargetSpDef" }
         return true
       end
       return false
     when :SPECIAL_ATTACK
-      return false if !@user.check_for_move { |move| move.specialMove?(move.rough_type) }
+      return false if !@user.check_for_move { |m| m.specialMove?(m.type) }
     when :SPECIAL_DEFENSE
       each_foe_battler(@user.side) do |b, i|
-        next if !b.check_for_move { |move| move.specialMove?(move.type) &&
-                                           move.function != "UseTargetDefenseInsteadOfTargetSpDef" }
+        next if !b.check_for_move { |m| m.specialMove?(m.type) &&
+                                        m.function != "UseTargetDefenseInsteadOfTargetSpDef" }
         return true
       end
       return false
@@ -86,7 +86,7 @@ class Battle::AI
         "PowerHigherWithUserFasterThanTarget",
         "PowerHigherWithUserPositiveStatStages"
       ]
-      if !@user.check_for_move { |move| moves_that_prefer_high_speed.include?(move.function) }
+      if !@user.check_for_move { |m| moves_that_prefer_high_speed.include?(m.function) }
         each_foe_battler(@user.side) do |b, i|
           return true if b.faster_than?(@user)
         end
@@ -241,7 +241,7 @@ class Battle::AI
       if @user.stages[stat] >= 3
         score -= 20
       else
-        has_special_moves = @user.check_for_move { |move| move.specialMove?(move.rough_type) }
+        has_special_moves = @user.check_for_move { |m| m.specialMove?(m.type) }
         inc = (has_special_moves) ? 5 : 10
         score += inc * (3 - @user.stages[stat]) * increment   # 5 to 45
         score += 5 * increment if @user.hp == @user.totalhp
@@ -262,9 +262,9 @@ class Battle::AI
       if @user.stages[stat] >= 3
         score -= 20
       else
-        has_physical_moves = @user.check_for_move { |move| move.physicalMove?(move.type) &&
-                                                           move.function != "UseUserBaseDefenseInsteadOfUserBaseAttack" &&
-                                                           move.function != "UseTargetAttackInsteadOfUserAttack" }
+        has_physical_moves = @user.check_for_move { |m| m.physicalMove?(m.type) &&
+                                                        m.function != "UseUserBaseDefenseInsteadOfUserBaseAttack" &&
+                                                        m.function != "UseTargetAttackInsteadOfUserAttack" }
         inc = (has_physical_moves) ? 5 : 10
         score += inc * (3 - @user.stages[stat]) * increment   # 5 to 45
         score += 5 * increment if @user.hp == @user.totalhp
@@ -288,7 +288,7 @@ class Battle::AI
       end
       # Don't prefer if any foe has Gyro Ball
       each_foe_battler(@user.side) do |b, i|
-        next if !b.check_for_move { |move| move.function == "PowerHigherWithTargetFasterThanUser" }
+        next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetFasterThanUser" }
         score -= 10 * increment
       end
       # Don't prefer if user has Speed Boost (will be gaining Speed anyway)
@@ -336,12 +336,12 @@ class Battle::AI
     pos_change = [@user.stages[stat] + increment, increment].min
     if pos_change > 0
       # Prefer if user has Stored Power
-      if @user.check_for_move { |move| move.function == "PowerHigherWithUserPositiveStatStages" }
+      if @user.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
         score += 10 * pos_change
       end
       # Don't prefer if any foe has Punishment
       each_foe_battler(@user.side) do |b, i|
-        next if !b.check_for_move { |move| move.function == "PowerHigherWithTargetPositiveStatStages" }
+        next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetPositiveStatStages" }
         score -= 10 * pos_change
       end
     end
@@ -355,7 +355,7 @@ class Battle::AI
     when :ATTACK
       # TODO: Don't prefer if target has previously used a move that benefits
       #       from user's Attack being boosted.
-#      mini_score *= 0.3 if @target.check_for_move { |move| move.function == "UseTargetAttackInsteadOfUserAttack" }   # Foul Play
+#      mini_score *= 0.3 if @target.check_for_move { |m| m.function == "UseTargetAttackInsteadOfUserAttack" }   # Foul Play
       # Prefer if user can definitely survive a hit no matter how powerful, and
       # it won't be hurt by weather
 #      if @user.hp == @user.totalhp &&
@@ -393,7 +393,7 @@ class Battle::AI
 #                           (@user.hasActiveItem?(:BLACKSLUDGE) && @user.pbHasType?(:POISON))
       # Prefer if user knows any healing moves
 #      # TODO: Is 1.2x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
-#      mini_score *= 1.3 if check_for_move(@user) { |move| move.healingMove? }
+#      mini_score *= 1.3 if check_for_move(@user) { |m| m.healingMove? }
       # Prefer if user knows Pain Split or Leech Seed
 #      # TODO: Leech Seed is 1.2x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
 #      mini_score *= 1.2 if @user.pbHasMoveFunction?("UserTargetAverageHP")   # Pain Split
@@ -483,7 +483,7 @@ class Battle::AI
 #      mini_score *= 1.2 if @user.hasActiveItem?(:LEFTOVERS) ||
 #                           (@user.hasActiveItem?(:BLACKSLUDGE) && @user.pbHasType?(:POISON))
       # Prefer if user knows any healing moves
-#      mini_score *= 1.3 if check_for_move(@user) { |move| move.healingMove? }
+#      mini_score *= 1.3 if check_for_move(@user) { |m| m.healingMove? }
       # Prefer if user knows Pain Split or Leech Seed
 #      mini_score *= 1.2 if @user.pbHasMoveFunction?("UserTargetAverageHP")   # Pain Split
 #      mini_score *= 1.3 if @user.pbHasMoveFunction?("StartLeechSeedTarget")   # Leech Seed
@@ -495,7 +495,7 @@ class Battle::AI
 
     when :ACCURACY
       # Prefer if user knows any weaker moves
-      mini_score *= 1.1 if check_for_move(@user) { |move| move.damagingMove? && move.basedamage < 95 }
+      mini_score *= 1.1 if check_for_move(@user) { |m| m.damagingMove? && m.basedamage < 95 }
       # Prefer if target has a raised evasion
       sum_stages = @target.stages[:EVASION]
       mini_score *= 1 + sum_stages * 0.05 if sum_stages > 0
@@ -521,7 +521,7 @@ class Battle::AI
         mini_score *= 1.3
       end
       # Prefer if user knows any healing moves
-      mini_score *= 1.3 if check_for_move(@user) { |move| move.healingMove? }
+      mini_score *= 1.3 if check_for_move(@user) { |m| move.healingMove? }
       # Prefer if user knows Pain Split or Leech Seed
       mini_score *= 1.2 if @user.pbHasMoveFunction?("UserTargetAverageHP")   # Pain Split
       mini_score *= 1.3 if @user.pbHasMoveFunction?("StartLeechSeedTarget")   # Leech Seed
@@ -537,8 +537,8 @@ class Battle::AI
 
     # TODO: Don't prefer if any foe has previously used a stat stage-clearing
     #       move (Clear Smog/Haze).
-    mini_score *= 0.3 if check_for_move(@target) { |move|
-      ["ResetTargetStatStages", "ResetAllBattlersStatStages"].include?(move.function)
+    mini_score *= 0.3 if check_for_move(@target) { |m|
+      ["ResetTargetStatStages", "ResetAllBattlersStatStages"].include?(m.function)
     }   # Clear Smog, Haze
 
     # TODO: Prefer if user is faster than the target.
@@ -561,8 +561,8 @@ class Battle::AI
   def get_score_for_terrain(terrain, move_user)
     ret = 0
     # Inherent effects of terrain
-    @battlers.each do |b|
-      next if !b || b.battler.fainted? || !b.battler.affectedByTerrain?
+    each_battler do |b, i|
+      next if !b.battler.affectedByTerrain?
       case terrain
       when :Electric
         # Immunity to sleep
@@ -574,14 +574,14 @@ class Battle::AI
           ret += (b.opposes?(move_user)) ? -10 : 10
         end
         # Check for Electric moves
-        if b.check_for_move { |move| move.type == :ELECTRIC && move.damagingMove? }
+        if b.check_for_move { |m| m.type == :ELECTRIC && m.damagingMove? }
           ret += (b.opposes?(move_user)) ? -15 : 15
         end
       when :Grassy
         # End of round healing
         ret += (b.opposes?(move_user)) ? -10 : 10
         # Check for Grass moves
-        if b.check_for_move { |move| move.type == :GRASS && move.damagingMove? }
+        if b.check_for_move { |m| m.type == :GRASS && m.damagingMove? }
           ret += (b.opposes?(move_user)) ? -15 : 15
         end
       when :Misty
@@ -592,16 +592,16 @@ class Battle::AI
           ret += (b.opposes?(move_user)) ? -5 : 5
         end
         # Check for Dragon moves
-        if b.check_for_move { |move| move.type == :DRAGON && move.damagingMove? }
+        if b.check_for_move { |m| m.type == :DRAGON && m.damagingMove? }
           ret += (b.opposes?(move_user)) ? 15 : -15
         end
       when :Psychic
         # Check for priority moves
-        if b.check_for_move { |move| move.priority > 0 && move.pbTarget&.can_target_one_foe? }
+        if b.check_for_move { |m| m.priority > 0 && m.pbTarget&.can_target_one_foe? }
           ret += (b.opposes?(move_user)) ? 10 : -10
         end
         # Check for Psychic moves
-        if b.check_for_move { |move| move.type == :PSYCHIC && move.damagingMove? }
+        if b.check_for_move { |m| m.type == :PSYCHIC && m.damagingMove? }
           ret += (b.opposes?(move_user)) ? -15 : 15
         end
       end
@@ -613,8 +613,7 @@ class Battle::AI
       :Misty    => :MISTYSEED,
       :Psychic  => :PSYCHICSEED
     }[terrain]
-    ai.battlers.each do |b|
-      next if !b || b.battler.fainted?
+    each_battler do |b, i|
       if b.has_active_item?(:TERRAINEXTENDER)
         ret += (b.opposes?(move_user)) ? -15 : 15
       elsif seed && b.has_active_item?(seed)
@@ -622,7 +621,7 @@ class Battle::AI
       end
     end
     # Check for abilities/moves affected by the terrain
-    if ai.trainer.medium_skill?
+    if @trainer.medium_skill?
       abils = {
         :Electric => :SURGESURFER,
         :Grassy   => :GRASSPELT,
@@ -644,8 +643,8 @@ class Battle::AI
         :Misty    => nil,
         :Psychic  => nil
       }[terrain]
-      ai.battlers.each do |b|
-        next if !b || b.battler.fainted? || !b.battler.affectedByTerrain?
+      each_battler do |b, i|
+        next if !b.battler.affectedByTerrain?
         # Abilities
         if b.has_active_ability?(:MIMICRY)
           ret += (b.opposes?(move_user)) ? -5 : 5
@@ -654,16 +653,16 @@ class Battle::AI
           ret += (b.opposes?(move_user)) ? -15 : 15
         end
         # Moves
-        if b.check_for_move { |move| ["EffectDependsOnEnvironment",
-                                      "SetUserTypesBasedOnEnvironment",
-                                      "TypeAndPowerDependOnTerrain",
-                                      "UseMoveDependingOnEnvironment"].include?(move.function) }
+        if b.check_for_move { |m| ["EffectDependsOnEnvironment",
+                                   "SetUserTypesBasedOnEnvironment",
+                                   "TypeAndPowerDependOnTerrain",
+                                   "UseMoveDependingOnEnvironment"].include?(m.function) }
           ret += (b.opposes?(move_user)) ? -10 : 10
         end
-        if good_moves && b.check_for_move { |move| good_moves.include?(move.function) }
+        if good_moves && b.check_for_move { |m| good_moves.include?(m.function) }
           ret += (b.opposes?(move_user)) ? -10 : 10
         end
-        if bad_moves && b.check_for_move { |move| bad_moves.include?(move.function) }
+        if bad_moves && b.check_for_move { |m| bad_moves.include?(m.function) }
           ret += (b.opposes?(move_user)) ? 10 : -10
         end
       end

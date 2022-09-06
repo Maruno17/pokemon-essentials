@@ -11,19 +11,16 @@ class Battle::AI
     #       (which are based on the predicted damages). Multi-target moves could
     #       be fiddly since damages should be calculated for each target but
     #       they're all related.
-    battler.eachMoveWithIndex do |_m, i|
-      next if !@battle.pbCanChooseMove?(battler.index, i, false)   # Unchoosable moves aren't considered
-      pbAddMoveWithScoreToChoices(i, choices)
-    end
-    # Log the available choices
-    if $INTERNAL
-      logMsg = "[AI] Move choices for #{battler.pbThis(true)} (#{battler.index}): "
-      choices.each_with_index do |c, i|
-        logMsg += "#{battler.moves[c[0]].name}=#{c[1]}"
-        logMsg += " (target #{c[2]})" if c[2] >= 0
-        logMsg += ", " if i < choices.length - 1
+    battler.eachMoveWithIndex do |m, i|
+      if !@battle.pbCanChooseMove?(battler.index, i, false)   # Unchoosable moves aren't considered
+        if m.pp == 0 && m.total_pp > 0
+          PBDebug.log("[AI] #{battler.pbThis} (#{battler.index}) cannot use move #{m.name} as it has no PP left")
+        else
+          PBDebug.log("[AI] #{battler.pbThis} (#{battler.index}) cannot choose to use #{m.name}")
+        end
+        next
       end
-      PBDebug.log(logMsg)
+      pbAddMoveWithScoreToChoices(i, choices)
     end
     @battle.moldBreaker = false
     return choices
@@ -159,7 +156,7 @@ class Battle::AI
     target_battler = @target.battler
 
     # Predict whether the move will fail
-    return 50 if pbPredictMoveFailure
+    return 25 if pbPredictMoveFailure
 
     # Get the base score for the move
     if @move.damagingMove?
@@ -188,20 +185,11 @@ class Battle::AI
   def pbChooseMove(choices)
     user_battler = @user.battler
 
-    # If there are no calculated choices, pick one at random
+    # If no moves can be chosen, auto-choose a move or Struggle
     if choices.length == 0
-      # NOTE: Can only get here if no moves can be chosen, i.e. will auto-use a
-      #       move or struggle.
-      user_battler.eachMoveWithIndex do |_m, i|
-        next if !@battle.pbCanChooseMove?(user_battler.index, i, false)
-        choices.push([i, 100, -1])   # Move index, score, target
-      end
-      if choices.length == 0   # No moves are physically possible to use; use Struggle
-        @battle.pbAutoChooseMove(user_battler.index)
-        PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will auto-use a move or Struggle")
-        return
-      end
-      PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) doesn't want to use any moves; picking one at random")
+      @battle.pbAutoChooseMove(user_battler.index)
+      PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will auto-use a move or Struggle")
+      return
     end
 
     # Figure out useful information about the choices
@@ -211,31 +199,45 @@ class Battle::AI
     # Decide whether all choices are bad, and if so, try switching instead
     if @trainer.high_skill? && @user.can_switch_lax?
       badMoves = false
-      if (max_score <= 20 && user_battler.turnCount > 2) ||
-         (max_score <= 40 && user_battler.turnCount > 5)
+      if (max_score <= 25 && user_battler.turnCount > 2) ||
+         (max_score <= 50 && user_battler.turnCount > 5)
         badMoves = true if pbAIRandom(100) < 80
       end
-      if !badMoves && max_score < 60 && user_battler.turnCount > 1
+      if !badMoves && max_score < 50 && user_battler.turnCount >= 1
         badMoves = choices.none? { |c| user_battler.moves[c[0]].damagingMove? }
         badMoves = false if badMoves && pbAIRandom(100) < 10
       end
       if badMoves && pbEnemyShouldWithdrawEx?(true)
-        if $INTERNAL
-          PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will switch due to terrible moves")
-        end
+        PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will switch due to terrible moves")
         return
       end
     end
 
     # Calculate a minimum score threshold and reduce all move scores by it
     threshold = (max_score * 0.85).floor
-    choices.each { |c| c[1] = [c[1] - threshold, 0].max }
-    total_score = choices.sum { |c| c[1] }
+    choices.each { |c| c[3] = [c[1] - threshold, 0].max }
+    total_score = choices.sum { |c| c[3] }
+
+    # Log the available choices
+    if $INTERNAL
+      PBDebug.log("[AI] Move choices for #{user_battler.pbThis(true)} (#{user_battler.index}):")
+      choices.each_with_index do |c, i|
+        chance = "0"
+        chance = sprintf("%.1f", 100.0 * c[3] / total_score) if c[3] > 0
+        while chance.length < 5
+          chance = " " + chance
+        end
+        log_msg = "    * #{chance}% chance: #{user_battler.moves[c[0]].name}"
+        log_msg += " (against target #{c[2]})" if c[2] >= 0
+        log_msg += " = score #{c[1]}"
+        PBDebug.log(log_msg)
+      end
+    end
 
     # Pick a move randomly from choices weighted by their scores
     randNum = pbAIRandom(total_score)
     choices.each do |c|
-      randNum -= c[1]
+      randNum -= c[3]
       next if randNum >= 0
       @battle.pbRegisterMove(user_battler.index, c[0], false)
       @battle.pbRegisterTarget(user_battler.index, c[2]) if c[2] >= 0
@@ -244,7 +246,7 @@ class Battle::AI
 
     # Log the result
     if @battle.choices[user_battler.index][2]
-      PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will use #{@battle.choices[user_battler.index][2].name}")
+      PBDebug.log("    => will use #{@battle.choices[user_battler.index][2].name}")
     end
   end
 end

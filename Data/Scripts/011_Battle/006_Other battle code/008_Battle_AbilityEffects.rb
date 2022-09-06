@@ -1207,7 +1207,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:ANALYTIC,
     #       are being used), so I'm choosing to ignore it. The effect is thus:
     #       "power up the move if all other battlers on the field right now have
     #       already moved".
-    if move.move.pbMoveFailedLastInRound?(user, false)
+    if move.pbMoveFailedLastInRound?(user, false)
       mults[:base_damage_multiplier] *= 1.3
     end
   }
@@ -1528,7 +1528,7 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:FLOWERGIFT,
 Battle::AbilityEffects::DamageCalcFromTarget.add(:FLUFFY,
   proc { |ability, user, target, move, mults, baseDmg, type|
     mults[:final_damage_multiplier] *= 2 if move.calcType == :FIRE
-    mults[:final_damage_multiplier] /= 2 if move.move.pbContactMove?(user)
+    mults[:final_damage_multiplier] /= 2 if move.pbContactMove?(user)
   }
 )
 

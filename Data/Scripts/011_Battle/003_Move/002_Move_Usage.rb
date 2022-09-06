@@ -248,10 +248,9 @@ class Battle::Move
         oldHP = b.hp
         if b.damageState.substitute
           old_sub_hp = b.effects[PBEffects::Substitute] + b.damageState.hpLost
-          PBDebug.log("[Move damage] #{b.pbThis}'s substitute lost #{b.damageState.hpLost} HP (#{old_sub_hp}=>#{b.effects[PBEffects::Substitute]})")
+          PBDebug.log("[Substitute HP change] #{b.pbThis}'s substitute lost #{b.damageState.hpLost} HP (#{old_sub_hp} -> #{b.effects[PBEffects::Substitute]})")
         else
           oldHP += b.damageState.hpLost
-          PBDebug.log("[Move damage] #{b.pbThis} lost #{b.damageState.hpLost} HP (#{oldHP}=>#{b.hp})")
         end
         effectiveness = 0
         if Effectiveness.resistant?(b.damageState.typeMod)

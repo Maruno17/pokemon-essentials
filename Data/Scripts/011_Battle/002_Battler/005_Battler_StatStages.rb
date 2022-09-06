@@ -37,7 +37,7 @@ class Battle::Battler
     if increment > 0
       stat_name = GameData::Stat.get(stat).name
       new = @stages[stat] + increment
-      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name}: #{@stages[stat]} -> #{new} (+#{increment})")
+      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name} changed by +#{increment} (#{@stages[stat]} -> #{new})")
       @stages[stat] += increment
       @statsRaisedThisRound = true
     end
@@ -187,7 +187,7 @@ class Battle::Battler
     if increment > 0
       stat_name = GameData::Stat.get(stat).name
       new = @stages[stat] - increment
-      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name}: #{@stages[stat]} -> #{new} (-#{increment})")
+      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name} changed by -#{increment} (#{@stages[stat]} -> #{new})")
       @stages[stat] -= increment
       @statsLoweredThisRound = true
       @statsDropped = true

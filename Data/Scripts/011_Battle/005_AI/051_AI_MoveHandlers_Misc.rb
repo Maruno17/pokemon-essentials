@@ -129,12 +129,12 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserDamagedThisTurn",
       if target.effects[PBEffects::HyperBeam] > 0 ||
          target.effects[PBEffects::Truant] ||
          (target.battler.asleep? && target.statusCount > 1) ||
-         target.frozen?
+         target.battler.frozen?
         score += 20
       elsif target.effects[PBEffects::Confusion] > 1 ||
             target.effects[PBEffects::Attract] == user.index
         score += 10
-      elsif target.paralyzed?
+      elsif target.battler.paralyzed?
         score += 5
       end
     end
@@ -167,7 +167,7 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfTargetActed",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("CrashDamageIfFailsUnusableInGravity",
   proc { |score, move, user, target, ai, battle|
-    next score - (100 - move.rough_accuracy) if user.takesIndirectDamage?
+    next score - (100 - move.rough_accuracy) if user.battler.takesIndirectDamage?
   }
 )
 
@@ -448,7 +448,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
     inBattleIndices = battle.allSameSideBattlers(user.idxOpposingSide).map { |b| b.pokemonIndex }
     foe_reserves = []
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
-      next if !pkmn || !pkmn.able? || inBattleIndices.include(idxParty)
+      next if !pkmn || !pkmn.able? || inBattleIndices.include?(idxParty)
       if ai.trainer.medium_skill?
         # Check affected by entry hazard
         next if pkmn.hasItem?(:HEAVYDUTYBOOTS)
@@ -484,7 +484,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
     inBattleIndices = battle.allSameSideBattlers(user.idxOpposingSide).map { |b| b.pokemonIndex }
     foe_reserves = []
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
-      next if !pkmn || !pkmn.able? || inBattleIndices.include(idxParty)
+      next if !pkmn || !pkmn.able? || inBattleIndices.include?(idxParty)
       if ai.trainer.medium_skill?
         # Check affected by entry hazard
         next if pkmn.hasItem?(:HEAVYDUTYBOOTS)
@@ -522,7 +522,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
     inBattleIndices = battle.allSameSideBattlers(user.idxOpposingSide).map { |b| b.pokemonIndex }
     foe_reserves = []
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
-      next if !pkmn || !pkmn.able? || inBattleIndices.include(idxParty)
+      next if !pkmn || !pkmn.able? || inBattleIndices.include?(idxParty)
       if ai.trainer.medium_skill?
         # Check affected by entry hazard
         next if pkmn.hasItem?(:HEAVYDUTYBOOTS)
@@ -549,7 +549,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStickyWebToFoeSide",
     inBattleIndices = battle.allSameSideBattlers(user.idxOpposingSide).map { |b| b.pokemonIndex }
     foe_reserves = []
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
-      next if !pkmn || !pkmn.able? || inBattleIndices.include(idxParty)
+      next if !pkmn || !pkmn.able? || inBattleIndices.include?(idxParty)
       if ai.trainer.medium_skill?
         # Check affected by entry hazard
         next if pkmn.hasItem?(:HEAVYDUTYBOOTS)

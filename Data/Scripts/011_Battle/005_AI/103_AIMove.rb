@@ -371,17 +371,17 @@ class Battle::AI::AIMove
   end
 
   def rough_accuracy
+    # Determine user and target
+    user = @ai.user
+    user_battler = user.battler
+    target = @ai.target
+    target_battler = target.battler
     # "Always hit" effects and "always hit" accuracy
     if @ai.trainer.medium_skill?
       return 100 if target.effects[PBEffects::Telekinesis] > 0
       return 100 if target.effects[PBEffects::Minimize] && @move.tramplesMinimize? &&
                     Settings::MECHANICS_GENERATION >= 6
     end
-    # Determine user and target
-    user = @ai.user
-    user_battler = user.battler
-    target = @ai.target
-    target_battler = target.battler
     # Get base accuracy
     baseAcc = self.accuracy
     return 100 if baseAcc == 0
@@ -486,7 +486,7 @@ class Battle::AI::AIMove
       case function
       when "BadPoisonTarget"
         modifiers[:base_accuracy] = 0 if Settings::MORE_TYPE_EFFECTS &&
-                                         @move.statusMove? && @user.has_type?(:POISON)
+                                         @move.statusMove? && user.has_type?(:POISON)
       end
     end
   end

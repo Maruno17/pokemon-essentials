@@ -596,7 +596,7 @@ class Battle
   #=============================================================================
   def pbEndOfRoundPhase
     PBDebug.log("")
-    PBDebug.log("[End of round]")
+    PBDebug.log("[End of round #{@turnCount + 1}]")
     @endOfRound = true
     @scene.pbBeginEndOfRoundPhase
     pbCalculatePriority           # recalculate speeds
