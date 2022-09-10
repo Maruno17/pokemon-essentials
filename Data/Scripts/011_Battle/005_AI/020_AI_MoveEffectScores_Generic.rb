@@ -120,14 +120,14 @@ class Battle::AI
 
     # Prefer if move is a status move and it's the user's first/second turn
     if @user.turnCount < 2 && @move.statusMove?
-      score += total_increment * 5
+      score += total_increment * 4
     end
 
     # Prefer if user is at high HP, don't prefer if user is at low HP
     if @user.hp >= @user.totalhp * 0.7
-      score += 10 * total_increment
+      score += 4 * total_increment
     else
-      score += total_increment * ((100 * @user.hp / @user.totalhp) - 50) / 2   # +10 to -25 per stage
+      score += total_increment * ((100 * @user.hp / @user.totalhp) - 50) / 4   # +5 to -12 per stage
     end
 
     # Don't prefer if user is about to faint due to EOR damage
@@ -234,69 +234,81 @@ class Battle::AI
   # Make score changes based on the raising of a specific stat.
   #=============================================================================
   def get_user_stat_raise_score_one(score, stat, increment)
+    # Figure out how much the stat will actually change by
+    stage_mul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
+    stage_div = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
+    if [:ACCURACY, :EVASION].include?(stat)
+      stage_mul = [3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 8, 9]
+      stage_div = [9, 8, 7, 6, 5, 4, 3, 3, 3, 3, 3, 3, 3]
+    end
+    old_stage = @user.stages[stat]
+    new_stage = old_stage + increment
+    inc_mult = (stage_mul[new_stage].to_f * stage_div[old_stage]) / (stage_div[new_stage] * stage_mul[old_stage])
+    inc_mult -= 1
+    # Stat-based score changes
     case stat
     when :ATTACK
       # Modify score depending on current stat stage
       # More strongly prefer if the user has no special moves
-      if @user.stages[stat] >= 3
+      if old_stage >= 3
         score -= 20
       else
         has_special_moves = @user.check_for_move { |m| m.specialMove?(m.type) }
         inc = (has_special_moves) ? 5 : 10
-        score += inc * (3 - @user.stages[stat]) * increment   # 5 to 45
-        score += 5 * increment if @user.hp == @user.totalhp
+        score += inc * (3 - old_stage) * inc_mult
+        score += 5 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :DEFENSE
       # Modify score depending on current stat stage
-      if @user.stages[stat] >= 3
+      if old_stage >= 3
         score -= 20
       else
-        score += 5 * (3 - @user.stages[stat]) * increment   # 5 to 45
-        score += 5 * increment if @user.hp == @user.totalhp
+        score += 5 * (3 - old_stage) * inc_mult
+        score += 5 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :SPECIAL_ATTACK
       # Modify score depending on current stat stage
       # More strongly prefer if the user has no physical moves
-      if @user.stages[stat] >= 3
+      if old_stage >= 3
         score -= 20
       else
         has_physical_moves = @user.check_for_move { |m| m.physicalMove?(m.type) &&
                                                         m.function != "UseUserBaseDefenseInsteadOfUserBaseAttack" &&
                                                         m.function != "UseTargetAttackInsteadOfUserAttack" }
         inc = (has_physical_moves) ? 5 : 10
-        score += inc * (3 - @user.stages[stat]) * increment   # 5 to 45
-        score += 5 * increment if @user.hp == @user.totalhp
+        score += inc * (3 - old_stage) * inc_mult
+        score += 5 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :SPECIAL_DEFENSE
       # Modify score depending on current stat stage
-      if @user.stages[stat] >= 3
+      if old_stage >= 3
         score -= 20
       else
-        score += 5 * (3 - @user.stages[stat]) * increment   # 5 to 45
-        score += 5 * increment if @user.hp == @user.totalhp
+        score += 5 * (3 - old_stage) * inc_mult
+        score += 5 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :SPEED
       # Prefer if user is slower than a foe
       each_foe_battler(@user.side) do |b, i|
         next if @user.faster_than?(b)
-        score += 15 * increment
+        score += 15 * inc_mult
         break
       end
       # Don't prefer if any foe has Gyro Ball
       each_foe_battler(@user.side) do |b, i|
         next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetFasterThanUser" }
-        score -= 10 * increment
+        score -= 8 * inc_mult
       end
       # Don't prefer if user has Speed Boost (will be gaining Speed anyway)
       score -= 20 if @user.has_active_ability?(:SPEEDBOOST)
 
     when :ACCURACY
       # Modify score depending on current stat stage
-      if @user.stages[stat] >= 3
+      if old_stage >= 3
         score -= 20
       else
         min_accuracy = 100
@@ -304,12 +316,10 @@ class Battle::AI
           next if m.accuracy == 0 || m.is_a?(Battle::Move::OHKO)
           min_accuracy = m.accuracy if m.accuracy < min_accuracy
         end
-        stageMul = [3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 8, 9]
-        stageDiv = [9, 8, 7, 6, 5, 4, 3, 3, 3, 3, 3, 3, 3]
-        min_accuracy *= stageMul[@user.stages[stat]] / stageDiv[@user.stages[stat]]
+        min_accuracy *= stage_mul[old_stage] / stage_div[old_stage]
         if min_accuracy < 90
-          score += 5 * (3 - @user.stages[stat]) * increment   # 5 to 45
-          score += 5 * increment if @user.hp == @user.totalhp
+          score += 5 * (3 - old_stage) * inc_mult
+          score += 5 * inc_mult if @user.hp == @user.totalhp
         end
       end
 
@@ -323,26 +333,26 @@ class Battle::AI
         score += 60 * eor_damage / b.totalhp if eor_damage > 0
       end
       # Modify score depending on current stat stage
-      if @user.stages[stat] >= 3
+      if old_stage >= 3
         score -= 20
       else
-        score += 5 * (3 - @user.stages[stat]) * increment   # 5 to 45
-        score += 5 * increment if @user.hp == @user.totalhp
+        score += 5 * (3 - old_stage) * inc_mult
+        score += 5 * inc_mult if @user.hp == @user.totalhp
       end
 
     end
 
     # Check impact on moves of gaining stat stages
-    pos_change = [@user.stages[stat] + increment, increment].min
+    pos_change = [old_stage + increment, increment].min
     if pos_change > 0
       # Prefer if user has Stored Power
       if @user.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
-        score += 10 * pos_change
+        score += 5 * pos_change
       end
       # Don't prefer if any foe has Punishment
       each_foe_battler(@user.side) do |b, i|
         next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetPositiveStatStages" }
-        score -= 10 * pos_change
+        score -= 5 * pos_change
       end
     end
 
@@ -543,7 +553,7 @@ class Battle::AI
 
     # TODO: Prefer if user is faster than the target.
     # TODO: Is 1.3x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
-    mini_score *= 1.5 if @user_faster
+    mini_score *= 1.5 if  @user.faster_than?(@target)
     # TODO: Don't prefer if target is a higher level than the user
     if @target.level > @user.level + 5
       mini_score *= 0.6

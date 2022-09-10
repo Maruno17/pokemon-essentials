@@ -31,7 +31,7 @@ class Battle::AI
     mod2 = Effectiveness::NORMAL_EFFECTIVE
     if pkmn.types.length > 1
       mod2 = Effectiveness.calculate(pkmn.types[1], target_battler.types[0], target_battler.types[1])
-      mod2 = mod2.to_f / Effectivenesss::NORMAL_EFFECTIVE
+      mod2 = mod2.to_f / Effectiveness::NORMAL_EFFECTIVE
     end
     return mod1 * mod2
   end

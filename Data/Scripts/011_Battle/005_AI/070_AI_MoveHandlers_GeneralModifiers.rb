@@ -56,11 +56,25 @@ Battle::AI::Handlers::GeneralMoveScore.add(:dance_move_against_dancer,
 #       lowered offences (Atk/Def or SpAtk/SpDef, whichever is relevant).
 
 #===============================================================================
+# Don't prefer damaging moves that will knock out the target if they are using
+# Destiny Bond.
 # TODO: Review score modifier.
-#===============================================================================
-# TODO: Don't prefer damaging moves if target is Destiny Bonding.
 # => Also don't prefer damaging moves if user is slower than the target, move
 #    is likely to be lethal, and target has previously used Destiny Bond
+#===============================================================================
+Battle::AI::Handlers::GeneralMoveScore.add(:avoid_knocking_out_destiny_bonder,
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.medium_skill? && move.damagingMove? &&
+       target && target.effects[PBEffects::DestinyBond]
+      dmg = move.rough_damage
+      if dmg > target.hp * 1.05   # Predicted to KO the target
+        score -= 25
+        score -= 20 if battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
+      end
+      next score
+    end
+  }
+)
 
 #===============================================================================
 # TODO: Review score modifier.
@@ -88,24 +102,26 @@ Battle::AI::Handlers::GeneralMoveScore.add(:dance_move_against_dancer,
 #       an effect that's good for the user (Poison Touch/Pickpocket).
 
 #===============================================================================
+# Prefer damaging moves if the foe is down to their last Pokémon (opportunistic).
+# Prefer damaging moves if the AI is down to its last Pokémon but the foe has
+# more (desperate).
 # TODO: Review score modifier.
 #===============================================================================
-# TODO: Don't prefer a status move if user has a damaging move that will KO
-#       the target.
-# => If target has previously used a move that will hurt the user by 30% of
-#    its current HP or more, moreso don't prefer a status move.
-
-#===============================================================================
-# Prefer damaging moves if AI has no more Pokémon or AI is less clever.
-# TODO: Review score modifier.
-#===============================================================================
-Battle::AI::Handlers::GeneralMoveScore.add(:damaging_moves_if_last_pokemon,
+Battle::AI::Handlers::GeneralMoveScore.add(:prefer_damaging_moves_if_last_pokemon,
   proc { |score, move, user, target, ai, battle|
-    if ai.trainer.medium_skill? && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0 &&
-       !(ai.trainer.high_skill? && target && battle.pbAbleNonActiveCount(target.idxOwnSide) > 0)
-      next score * 0.9 if move.statusMove?
-      next score * 1.1 if target && target.battler.hp <= target.battler.totalhp / 2
+    if ai.trainer.medium_skill? && move.damagingMove?
+      reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+      foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+      # Don't mess with scores just because a move is damaging; need to play well
+      next score if ai.trainer.high_skill? && foes > reserves   # AI is outnumbered
+      # Prefer damaging moves depending on remaining Pokémon
+      if foes == 0          # Foe is down to their last Pokémon
+        score *= 1.1        # => Go for the kill
+      elsif reserves == 0   # AI is down to its last Pokémon, foe has reserves
+        score *= 1.05       # => Go out with a bang
+      end
     end
+    next score
   }
 )
 
@@ -256,7 +272,11 @@ Battle::AI::Handlers::GeneralMoveScore.add(:flinching_effects,
 
 #===============================================================================
 # Adjust score based on how much damage it can deal.
+# Prefer the move even more if it's predicted to do enough damage to KO the
+# target.
 # TODO: Review score modifier.
+# => If target has previously used a move that will hurt the user by 30% of
+#    its current HP or more, moreso don't prefer a status move.
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveScore.add(:add_predicted_damage,
   proc { |score, move, user, target, ai, battle|

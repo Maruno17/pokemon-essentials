@@ -48,14 +48,14 @@ def debug_test_auto_battle(logging = false)
   player_trainers, ally_items, player_party, player_party_starts = debug_set_up_trainer
   # Log the combatants
   echo_participant = lambda do |trainer, party, index|
-    trainer_txt = "Trainer #{index}: #{trainer.full_name}"
+    trainer_txt = "[Trainer #{index}] #{trainer.full_name} [skill: #{trainer.skill_level}]"
     ($INTERNAL) ? PBDebug.log_header(trainer_txt) : echoln(trainer_txt)
     party.each do |pkmn|
-      pkmn_txt = "    #{pkmn.name}, Lv.#{pkmn.level}\r\n"
-      pkmn_txt += "        Ability: #{pkmn.ability&.name || "---"}\r\n"
-      pkmn_txt += "        Held item: #{pkmn.item&.name || "---"}"
+      pkmn_txt = "* #{pkmn.name}, Lv.#{pkmn.level}"
+      pkmn_txt += " [Ability: #{pkmn.ability&.name || "---"}]"
+      pkmn_txt += " [Item: #{pkmn.item&.name || "---"}]"
       ($INTERNAL) ? PBDebug.log(pkmn_txt) : echoln(pkmn_txt)
-      moves_msg = "        Moves: "
+      moves_msg = "    Moves: "
       pkmn.moves.each_with_index do |move, i|
         moves_msg += ", " if i > 0
         moves_msg += move.name
@@ -64,6 +64,8 @@ def debug_test_auto_battle(logging = false)
     end
   end
   echo_participant.call(player_trainers[0], player_party, 1)
+  PBDebug.log("")
+  echoln "" if !$INTERNAL
   echo_participant.call(foe_trainers[0], foe_party, 2)
   echoln "" if !$INTERNAL
   # Create the battle scene (the visual side of it)

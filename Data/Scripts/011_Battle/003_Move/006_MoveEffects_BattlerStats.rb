@@ -71,7 +71,14 @@ end
 # (Belly Drum)
 #===============================================================================
 class Battle::Move::MaxUserAttackLoseHalfOfTotalHP < Battle::Move
+  attr_reader :statUp
+
   def canSnatch?; return true; end
+
+  def initialize(battle, move)
+    super
+    @statUp = [:ATTACK, 12]
+  end
 
   def pbMoveFailed?(user, targets)
     hpLoss = [user.totalhp / 2, 1].max
@@ -79,7 +86,7 @@ class Battle::Move::MaxUserAttackLoseHalfOfTotalHP < Battle::Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    return true if !user.pbCanRaiseStatStage?(:ATTACK, user, self, true)
+    return true if !user.pbCanRaiseStatStage?(@statUp[0], user, self, true)
     return false
   end
 
@@ -87,16 +94,18 @@ class Battle::Move::MaxUserAttackLoseHalfOfTotalHP < Battle::Move
     hpLoss = [user.totalhp / 2, 1].max
     user.pbReduceHP(hpLoss, false, false)
     if user.hasActiveAbility?(:CONTRARY)
-      user.stages[:ATTACK] = -6
+      user.stages[@statUp[0]] = -6
       user.statsLoweredThisRound = true
       user.statsDropped = true
       @battle.pbCommonAnimation("StatDown", user)
-      @battle.pbDisplay(_INTL("{1} cut its own HP and minimized its Attack!", user.pbThis))
+      @battle.pbDisplay(_INTL("{1} cut its own HP and minimized its {2}!",
+         user.pbThis, GameData::Stat.get(@statUp[0]).name))
     else
-      user.stages[:ATTACK] = 6
+      user.stages[@statUp[0]] = 6
       user.statsRaisedThisRound = true
       @battle.pbCommonAnimation("StatUp", user)
-      @battle.pbDisplay(_INTL("{1} cut its own HP and maximized its Attack!", user.pbThis))
+      @battle.pbDisplay(_INTL("{1} cut its own HP and maximized its {2}!",
+         user.pbThis, GameData::Stat.get(@statUp[0]).name))
     end
     user.pbItemHPHealCheck
   end

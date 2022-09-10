@@ -99,9 +99,6 @@ class Battle::AI
     @target = (target) ? @battlers[target.index] : @user
     @target&.refresh_battler
     @battle.moldBreaker = @user.has_mold_breaker?
-    # Determine whether user or target is faster, and store that result so it
-    # doesn't need recalculating
-    @user_faster = @user.faster_than?(@target)
   end
 
   #=============================================================================
@@ -110,7 +107,6 @@ class Battle::AI
   # TODO: Add skill checks in here for particular calculations?
   #=============================================================================
   def pbPredictMoveFailure
-    return false if !@trainer.has_skill_flag?("PredictMoveFailure")
     # TODO: Something involving user.usingMultiTurnAttack? (perhaps earlier than
     #       this?).
     # User is asleep and will not wake up
@@ -152,20 +148,22 @@ class Battle::AI
   #=============================================================================
   def pbGetMoveScore(move, target = nil)
     set_up_move_check(move, target)
-    user_battler = @user.battler
-    target_battler = @target.battler
 
     # Predict whether the move will fail
-    return 25 if pbPredictMoveFailure
+    if @trainer.has_skill_flag?("PredictMoveFailure")
+      return 25 if pbPredictMoveFailure
+    end
 
     # Get the base score for the move
-    if @move.damagingMove?
-      # Is also the predicted damage amount as a percentage of target's current HP
-      score = pbGetDamagingMoveBaseScore
-    else   # Status moves
-      # Depends on the move's effect
-      score = pbGetStatusMoveBaseScore
-    end
+    score = 100
+#    if @move.damagingMove?
+#      # Is also the predicted damage amount as a percentage of target's current HP
+#      score = pbGetDamagingMoveBaseScore
+#    else   # Status moves
+#      # Depends on the move's effect
+#      score = pbGetStatusMoveBaseScore
+#    end
+
     # Modify the score according to the move's effect
     score = Battle::AI::Handlers.apply_move_effect_score(@move.function,
        score, @move, @user, @target, self, @battle)
@@ -200,10 +198,10 @@ class Battle::AI
     if @trainer.high_skill? && @user.can_switch_lax?
       badMoves = false
       if (max_score <= 25 && user_battler.turnCount > 2) ||
-         (max_score <= 50 && user_battler.turnCount > 5)
+         (max_score <= 60 && user_battler.turnCount > 4)
         badMoves = true if pbAIRandom(100) < 80
       end
-      if !badMoves && max_score < 50 && user_battler.turnCount >= 1
+      if !badMoves && max_score <= 60 && user_battler.turnCount >= 1
         badMoves = choices.none? { |c| user_battler.moves[c[0]].damagingMove? }
         badMoves = false if badMoves && pbAIRandom(100) < 10
       end
@@ -222,11 +220,7 @@ class Battle::AI
     if $INTERNAL
       PBDebug.log("[AI] Move choices for #{user_battler.pbThis(true)} (#{user_battler.index}):")
       choices.each_with_index do |c, i|
-        chance = "0"
-        chance = sprintf("%.1f", 100.0 * c[3] / total_score) if c[3] > 0
-        while chance.length < 5
-          chance = " " + chance
-        end
+        chance = sprintf("%5.1f", (c[3] > 0) ? 100.0 * c[3] / total_score : 0)
         log_msg = "    * #{chance}% chance: #{user_battler.moves[c[0]].name}"
         log_msg += " (against target #{c[2]})" if c[2] >= 0
         log_msg += " = score #{c[1]}"
