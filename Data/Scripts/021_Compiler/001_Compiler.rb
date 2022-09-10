@@ -778,9 +778,12 @@ module Compiler
   end
 
   def compile_all(mustCompile)
-    return if !mustCompile
+    if !mustCompile
+      Console.echo_h1(_INTL("Game did not compile data"))
+      return
+    end
     FileLineData.clear
-    Console.echo_h1 _INTL("Starting full compile")
+    Console.echo_h1 _INTL("Compiling all data")
     compile_pbs_files
     compile_animations
     compile_trainer_events(mustCompile)
@@ -793,7 +796,7 @@ module Compiler
     System.reload_cache
     Console.echo_done(true)
     echoln ""
-    Console.echo_h2("Successfully fully compiled", text: :green)
+    Console.echo_h2("Successfully compiled all data", text: :green)
   end
 
   def main
