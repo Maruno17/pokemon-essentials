@@ -1,12 +1,13 @@
-# TODO: Choosable icons/marks for each contact?
-# TODO: Allow rearranging contacts.
+# TODO: Choosable icons/marks for each contact? Add a "sort by" option for these.
 #===============================================================================
 # Phone list of contacts
 #===============================================================================
 class Window_PhoneList < Window_CommandPokemon
+  attr_accessor :switching
+
   def drawCursor(index, rect)
-    selarrow = AnimatedBitmap.new("Graphics/UI/Phone/cursor")
     if self.index == index
+      selarrow = AnimatedBitmap.new("Graphics/UI/Phone/cursor")
       pbCopyBitmap(self.contents, selarrow.bitmap, rect.x, rect.y + 2)
     end
     return Rect.new(rect.x + 28, rect.y + 8, rect.width - 16, rect.height)
@@ -14,7 +15,13 @@ class Window_PhoneList < Window_CommandPokemon
 
   def drawItem(index, count, rect)
     return if index >= self.top_row + self.page_item_max
-    super
+    if self.index == index && @switching
+      rect = drawCursor(index, rect)
+      pbDrawShadowText(self.contents, rect.x, rect.y + (self.contents.text_offset_y || 0),
+                       rect.width, rect.height, @commands[index], Color.new(224, 0, 0), Color.new(224, 144, 144))
+    else
+      super
+    end
     drawCursor(index - 1, itemRect(index - 1))
   end
 end
@@ -83,8 +90,8 @@ class PokemonPhone_Scene
     # Set list's commands
     @sprites["list"].commands = commands
     @sprites["list"].index = commands.length - 1 if @sprites["list"].index >= commands.length
-    if @sprites["list"].top_row > @sprites["list"].itemCount - @sprites["list"].page_item_max - 1
-      @sprites["list"].top_row = @sprites["list"].itemCount - @sprites["list"].page_item_max - 1
+    if @sprites["list"].top_row > @sprites["list"].itemCount - @sprites["list"].page_item_max
+      @sprites["list"].top_row = @sprites["list"].itemCount - @sprites["list"].page_item_max
     end
     # Set info text
     infotext = _INTL("Registered<br>")
@@ -95,6 +102,7 @@ class PokemonPhone_Scene
   end
 
   def pbRefreshScreen
+    @sprites["list"].refresh
     # Redraw rematch readiness icons
     if @sprites["rematch_0"]
       @sprites["list"].page_item_max.times do |i|
@@ -132,19 +140,50 @@ class PokemonPhone_Scene
   def pbChooseContact
     pbActivateWindow(@sprites, "list") {
       index = -1
+      switch_index = -1
       loop do
         Graphics.update
         Input.update
         pbUpdateSpriteHash(@sprites)
         # Cursor moved, update display
-        pbRefreshScreen if @sprites["list"].index != index
+        if @sprites["list"].index != index
+          if switch_index >= 0
+            real_contacts = $PokemonGlobal.phone.contacts
+            real_contacts.insert(@sprites["list"].index, real_contacts.delete_at(index))
+            pbRefreshList
+          else
+            pbRefreshScreen
+          end
+        end
         index = @sprites["list"].index
         # Get inputs
-        if Input.trigger?(Input::BACK)
-          pbPlayCloseMenuSE
-          return nil
-        elsif Input.trigger?(Input::USE)
-          return @contacts[index] if index >= 0
+        if switch_index >= 0
+          if Input.trigger?(Input::ACTION) ||
+             Input.trigger?(Input::USE)
+            pbPlayDecisionSE
+            @sprites["list"].switching = false
+            switch_index = -1
+            pbRefreshScreen
+          elsif Input.trigger?(Input::BACK)
+            pbPlayCancelSE
+            real_contacts = $PokemonGlobal.phone.contacts
+            real_contacts.insert(switch_index, real_contacts.delete_at(@sprites["list"].index))
+            @sprites["list"].index = switch_index
+            @sprites["list"].switching = false
+            switch_index = -1
+            pbRefreshList
+          end
+        else
+          if Input.trigger?(Input::ACTION)
+            switch_index = @sprites["list"].index
+            @sprites["list"].switching = true
+            pbRefreshScreen
+          elsif Input.trigger?(Input::BACK)
+            pbPlayCloseMenuSE
+            return nil
+          elsif Input.trigger?(Input::USE)
+            return @contacts[index] if index >= 0
+          end
         end
       end
     }
@@ -181,9 +220,10 @@ class PokemonPhoneScreen
       commands = []
       commands.push(_INTL("Call"))
       commands.push(_INTL("Delete")) if contact.can_hide?
+      commands.push(_INTL("Sort Contacts"))
       commands.push(_INTL("Cancel"))
       cmd = pbShowCommands(nil, commands, -1)
-      cmd -= 1 if cmd >=1 && !contact.can_hide?
+      cmd += 1 if cmd >=1 && !contact.can_hide?
       case cmd
       when 0   # Call
         Phone::Call.make_outgoing(contact)
@@ -191,12 +231,39 @@ class PokemonPhoneScreen
         name = contact.display_name
         if pbConfirmMessage(_INTL("Are you sure you want to delete {1} from your phone?", name))
           contact.visible = false
+          $PokemonGlobal.phone.sort_contacts
           @scene.pbRefreshList
           pbMessage(_INTL("{1} was deleted from your phone contacts.", name))
           if $PokemonGlobal.phone.contacts.none? { |con| con.visible? }
             pbMessage(_INTL("There are no phone numbers stored."))
             break
           end
+        end
+      when 2   # Sort Contacts
+        case pbMessage(_INTL("How do you want to sort the contacts?"),
+                       [_INTL("By name"),
+                        _INTL("By Trainer type"),
+                        _INTL("Special contacts first"),
+                        _INTL("Cancel")], -1, nil, 0)
+        when 0   # By name
+          $PokemonGlobal.phone.contacts.sort! { |a, b| a.name <=> b.name }
+          $PokemonGlobal.phone.sort_contacts
+          @scene.pbRefreshList
+        when 1   # By trainer type
+          $PokemonGlobal.phone.contacts.sort! { |a, b| a.display_name <=> b.display_name }
+          $PokemonGlobal.phone.sort_contacts
+          @scene.pbRefreshList
+        when 2   # Special contacts first
+          new_contacts = []
+          2.times do |i|
+            $PokemonGlobal.phone.contacts.each do |con|
+              next if (i == 0 && con.trainer?) || (i == 1 && !con.trainer?)
+              new_contacts.push(con)
+            end
+          end
+          $PokemonGlobal.phone.contacts = new_contacts
+          $PokemonGlobal.phone.sort_contacts
+          @scene.pbRefreshList
         end
       end
     end

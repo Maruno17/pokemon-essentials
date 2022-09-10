@@ -116,7 +116,21 @@ class Phone
         @contacts.push(contact)
       end
     end
+    sort_contacts
     return true
+  end
+
+  # Rearranges the list of phone contacts to put all visible contacts first,
+  # followed by all invisible contacts.
+  def sort_contacts
+    new_contacts = []
+    2.times do |i|
+      @contacts.each do |con|
+        next if (i == 0 && !con.visible?) || (i == 1 && con.visible?)
+        new_contacts.push(con)
+      end
+    end
+    @contacts = new_contacts
   end
 
   #=============================================================================
