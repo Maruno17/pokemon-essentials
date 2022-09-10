@@ -388,6 +388,17 @@ MenuHandlers.add(:debug_menu, :reset_trainers, {
   }
 })
 
+MenuHandlers.add(:debug_menu, :toggle_rematches_possible, {
+  "name"        => _INTL("Toggle Phone Rematches Possible"),
+  "parent"      => :battle_menu,
+  "description" => _INTL("Toggles whether trainers in the phone can be rebattled."),
+  "effect"      => proc {
+    Phone.rematches_enabled = !Phone.rematches_enabled
+    pbMessage(_INTL("Trainers in the phone can now be rebattled.")) if Phone.rematches_enabled
+    pbMessage(_INTL("Trainers in the phone cannot be rebattled.")) if !Phone.rematches_enabled
+  }
+})
+
 MenuHandlers.add(:debug_menu, :ready_rematches, {
   "name"        => _INTL("Ready All Phone Rematches"),
   "parent"      => :battle_menu,

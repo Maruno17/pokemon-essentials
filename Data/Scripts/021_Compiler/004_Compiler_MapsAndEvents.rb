@@ -519,6 +519,7 @@ module Compiler
     endifswitch    = []
     vanishifswitch = []
     regspeech      = nil
+    common_event   = 0
     commands.each do |command|
       if command[/^Battle\:\s*([\s\S]+)$/i]
         battles.push($~[1])
@@ -557,6 +558,9 @@ module Compiler
         push_comment(firstpage.list, command) if rewriteComments
       elsif command[/^RegSpeech\:\s*([\s\S]+)$/i]
         regspeech = $~[1].gsub(/^\s+/, "").gsub(/\s+$/, "")
+        push_comment(firstpage.list, command) if rewriteComments
+      elsif command[/^CommonEvent\:\s*(\d+)$/i]
+        common_event = $~[1].to_i
         push_comment(firstpage.list, command) if rewriteComments
       end
     end
@@ -600,10 +604,18 @@ module Compiler
       push_text(firstpage.list, regspeech, 2)
       push_choices(firstpage.list, ["Yes", "No"], 2, 2)
       push_choice(firstpage.list, 0, "Yes", 3)
-      if battleid > 0
-        push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d\n)", brieftrcombo, battles.length, battleid), 3)
+      if common_event > 0
+        if battleid > 0
+          push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d, %d\n)", brieftrcombo, battles.length, battleid, common_event), 3)
+        else
+          push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d, nil, %d\n)", brieftrcombo, battles.length, common_event), 3)
+        end
       else
-        push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d\n)", brieftrcombo, battles.length), 3)
+        if battleid > 0
+          push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d\n)", brieftrcombo, battles.length, battleid), 3)
+        else
+          push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d\n)", brieftrcombo, battles.length), 3)
+        end
       end
       push_choice(firstpage.list, 1, "No", 3)
       push_choices_end(firstpage.list, 3)
@@ -679,10 +691,18 @@ module Compiler
       push_text(lastpage.list, regspeech, 1)
       push_choices(lastpage.list, ["Yes", "No"], 2, 1)
       push_choice(lastpage.list, 0, "Yes", 2)
-      if battleid > 0
-        push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d\n)", brieftrcombo, battles.length, battleid), 2)
+      if common_event > 0
+        if battleid > 0
+          push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d, %d\n)", brieftrcombo, battles.length, battleid, common_event), 2)
+        else
+          push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d, nil, %d\n)", brieftrcombo, battles.length, common_event), 2)
+        end
       else
-        push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d\n)", brieftrcombo, battles.length), 2)
+        if battleid > 0
+          push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d\n)", brieftrcombo, battles.length, battleid), 2)
+        else
+          push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d\n)", brieftrcombo, battles.length), 2)
+        end
       end
       push_choice(lastpage.list, 1, "No", 2)
       push_choices_end(lastpage.list, 2)

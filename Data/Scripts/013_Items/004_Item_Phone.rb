@@ -1,10 +1,7 @@
 # TODO: Add an information window with details of the person in a phone call.
 #       Make this work with common event calls (create and dispose the info
 #       window in start_message and end_message).
-# TODO: Rewrite the Phone UI. Have more than one method. Choosable icons/marks
-#       for each contact? Show an icon representing phone signal.
 
-# TODO: Add a trainer comment for giving a trainer a common event ID.
 # TODO: Add calling a contact at a particular time forcing rematch readiness.
 #       Add trainer comments for this.
 # TODO: Allow individual trainers to never arrange a rematch by themself, thus
@@ -70,8 +67,8 @@ class Phone
     return true
   end
 
-  # Event, trainer type, name, versions_count = 1, start_version = 0
-  # Map ID, event ID, trainer type, name, versions_count = 1, start_version = 0
+  # Event, trainer type, name, versions_count = 1, start_version = 0, common event ID = 0
+  # Map ID, event ID, trainer type, name, versions_count = 1, start_version = 0, common event ID = 0
   # Map ID, name, common event ID
   def add(*args)
     if args[0].is_a?(Game_Event)
@@ -82,9 +79,11 @@ class Phone
       contact = get(true, trainer_type, name, args[3] || 0)
       if contact
         contact.visible = true
+        @contacts.delete(contact)
+        @contacts.push(contact)
       else
         contact = Contact.new(true, args[0].map_id, args[0].id,
-                              trainer_type, name, args[3] || 1, args[4] || 0)
+                              trainer_type, name, args[3], args[4], args[5])
         contact.increment_version
         @contacts.push(contact)
       end
@@ -96,9 +95,11 @@ class Phone
       contact = get(true, trainer_type, name, args[4] || 0)
       if contact
         contact.visible = true
+        @contacts.delete(contact)
+        @contacts.push(contact)
       else
         contact = Contact.new(true, args[0], args[1],
-                              trainer_type, name, args[4] || 1, args[5] || 0)
+                              trainer_type, name, args[4], args[5], args[6])
         contact.increment_version
         @contacts.push(contact)
       end
@@ -108,6 +109,8 @@ class Phone
       contact = get(false, name)
       if contact
         contact.visible = true
+        @contacts.delete(contact)
+        @contacts.push(contact)
       else
         contact = Contact.new(false, *args)
         @contacts.push(contact)
@@ -251,7 +254,7 @@ class Phone
         @variant_beaten  = 0
         @time_to_ready   = 0
         @rematch_flag    = 0   # 0=counting down, 1=ready for rematch, 2=ready and told player
-        @common_event_id = 0
+        @common_event_id = args[6] || 0
       else
         # Non-trainer
         @map_id          = args[0]
@@ -278,6 +281,10 @@ class Phone
         $game_self_switches[[@map_id, @event_id, "A"]] = true
         $game_map.need_refresh = true
       end
+    end
+
+    def can_hide?
+      return trainer?
     end
 
     def common_event_call?
@@ -373,7 +380,13 @@ class Phone
     def make_incoming
       return if !can_make?
       contact = get_random_trainer_for_incoming_call
-      if contact
+      return if !contact
+      if contact.common_event_call?
+        if !pbCommonEvent(contact.common_event_id)
+          pbMessage(_INTL("{1}'s messages not defined.\nCouldn't call common event {2}.",
+            contact.display_name, contact.common_event_id))
+        end
+      else
         call = generate_trainer_dialogue(contact)
         play(call, contact)
       end
@@ -403,7 +416,7 @@ class Phone
       end
     end
 
-    def start_message(contact)
+    def start_message(contact = nil)
       pbMessage(_INTL("......\\wt[5] ......\\1"))
     end
 
@@ -434,7 +447,7 @@ class Phone
       end_message(contact)
     end
 
-    def end_message(contact)
+    def end_message(contact = nil)
       pbMessage(_INTL("Click!\\wt[10]\n......\\wt[5] ......\\1"))
     end
 
