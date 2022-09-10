@@ -233,7 +233,7 @@ MenuHandlers.add(:debug_menu, :test_wild_battle_advanced, {
           params.setCancelValue(0)
           level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
                                               GameData::Species.get(species).name), params)
-          pkmn.push(Pokemon.new(species, level)) if level > 0
+          pkmn.push(pbGenerateWildPokemon(species, level)) if level > 0
         end
       else                                   # Edit a Pokémon
         if pbConfirmMessage(_INTL("Change this Pokémon?"))
@@ -336,6 +336,7 @@ MenuHandlers.add(:debug_menu, :test_trainer_battle_advanced, {
         trainerdata = pbListScreen(_INTL("CHOOSE A TRAINER"), TrainerBattleLister.new(0, false))
         if trainerdata
           tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
+          EventHandlers.trigger(:on_trainer_load, tr)
           trainers.push([0, tr])
         end
       else                                         # Edit a trainer
@@ -344,6 +345,7 @@ MenuHandlers.add(:debug_menu, :test_trainer_battle_advanced, {
                                      TrainerBattleLister.new(trainers[trainerCmd][0], false))
           if trainerdata
             tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
+            EventHandlers.trigger(:on_trainer_load, tr)
             trainers[trainerCmd] = [0, tr]
           end
         elsif pbConfirmMessage(_INTL("Delete this trainer?"))

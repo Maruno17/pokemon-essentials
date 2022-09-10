@@ -773,6 +773,11 @@ MenuHandlers.add(:pokemon_debug_menu, :species_and_form, {
         end
         if formcmds[0].length <= 1
           screen.pbDisplay(_INTL("Species {1} only has one form.", pkmn.speciesName))
+          if pkmn.form != 0 && screen.pbConfirm(_INTL("Do you want to reset the form to 0?"))
+            pkmn.form = 0
+            $player.pokedex.register(pkmn) if !settingUpBattle && !pkmn.egg?
+            screen.pbRefreshSingle(pkmnid)
+          end
         else
           cmd2 = screen.pbShowCommands(_INTL("Set the Pokémon's form."), formcmds[1], cmd2)
           next if cmd2 < 0

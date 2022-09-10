@@ -811,6 +811,7 @@ class PokemonParty_Scene
         currentsel = Settings::MAX_PARTY_SIZE
       elsif currentsel == numsprites
         currentsel = 0
+        currentsel = numsprites - 1 if currentsel >= @party.length
       end
     when Input::UP
       if currentsel >= Settings::MAX_PARTY_SIZE
@@ -818,6 +819,7 @@ class PokemonParty_Scene
         while currentsel > 0 && currentsel < Settings::MAX_PARTY_SIZE && !@party[currentsel]
           currentsel -= 1
         end
+        currentsel = numsprites - 1 if currentsel >= @party.length
       else
         loop do
           currentsel -= 2
@@ -839,6 +841,7 @@ class PokemonParty_Scene
         currentsel = Settings::MAX_PARTY_SIZE
       elsif currentsel >= numsprites
         currentsel = 0
+        currentsel = numsprites - 1 if currentsel >= @party.length
       end
     end
     return currentsel
@@ -853,7 +856,7 @@ class PokemonParty_Scene
       @sprites["pokemon#{i}"].dispose
     end
     lastselected = @party.length - 1 if lastselected >= @party.length
-    lastselected = 0 if lastselected < 0
+    lastselected = Settings::MAX_PARTY_SIZE if lastselected < 0
     Settings::MAX_PARTY_SIZE.times do |i|
       if @party[i]
         @sprites["pokemon#{i}"] = PokemonPartyPanel.new(@party[i], i, @viewport)
