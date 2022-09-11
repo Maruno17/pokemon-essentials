@@ -359,7 +359,7 @@ class CallbackWrapper
   def execute(given_block = nil, *args)
     execute_block = given_block || @code_block
     @params.each do |key, value|
-      args.instance_variable_set("@#{key.to_s}", value)
+      args.instance_variable_set("@#{key}", value)
     end
     args.instance_eval(&execute_block)
   end

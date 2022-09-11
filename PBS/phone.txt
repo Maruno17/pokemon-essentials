@@ -28,7 +28,7 @@ Body1 = My \TP is looking more and more like me. It's getting cuter!
 Body2 = And you know? Now we can KO \TE easily.\mI should challenge the Cedolan Gym.
 Body2 = And you know? We just failed to beat \TE by a tiny margin.\mI'm guessing my Pokémon's levels aren't high enough yet...
 BattleRequest = You must be a lot better now, huh?\mHow about showing me your technique in a real battle with me?\mI'll be waiting on \TM.
-BattleReminder = Where are you? Let’s have our battle soon!\mI'll be waiting on \TM.
+BattleReminder = Where are you? Let's have our battle soon!\mI'll be waiting on \TM.
 End = See you later!
 #-------------------------------
 [PICNICKER,Susie]
@@ -41,8 +41,8 @@ IntroAfternoon = Hi, this is \TN! Good afternoon, \PN!
 IntroEvening = This is \TN! Good evening, \PN!
 IntroEvening = Hi, this is \TN! Good evening, \PN!
 Body1 = My \TP and I are getting more in sync with each other.
-Body2 = We battled a wild \TE and managed to beat it in a close match.\mWe’re getting into the groove!
-Body2 = But, you know what? I still haven’t caught \TE.\mIt’s getting beyond frustrating...
+Body2 = We battled a wild \TE and managed to beat it in a close match.\mWe're getting into the groove!
+Body2 = But, you know what? I still haven't caught \TE.\mIt's getting beyond frustrating...
 BattleRequest = Would you be my practice partner again sometime?\mI'll be waiting on \TM...\mCould you take it a little easier on me next time?
 BattleReminder = How soon can I expect to see you?\mDon't forget, \TM!
-End = Bye! Let’s chat again!
+End = Bye! Let's chat again!

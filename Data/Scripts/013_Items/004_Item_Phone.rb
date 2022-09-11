@@ -1,6 +1,16 @@
 # TODO: Add an information window with details of the person in a phone call.
 #       Make this work with common event calls (create and dispose the info
 #       window in start_message and end_message).
+# TODO: Look at the "ready to rematch" timers to see if they can be improved?
+#       Should they be limited to one trainer becoming ready every ~5 minutes?
+# TODO: See if incoming phone calls can be made optional somehow. Maybe just
+#       interrupt as normal with the start of the call and ask if the player
+#       wants to answer? Wait for a couple of seconds before asking to make sure
+#       the player doesn't accidentally skip/answer a call they didn't want to.
+# TODO: Add a Debug way of upgrading old phone script calls to new ones, or at
+#       least to find events using old phone scripts for the dev to update.
+# TODO: More Debug control over contacts (changing their "time to rebattle",
+#       unhiding hidden contacts, etc.) and the phone (time until next call).
 
 # TODO: Add calling a contact at a particular time forcing rematch readiness.
 #       Add trainer comments for this.
@@ -8,10 +18,6 @@
 #       requiring the player to call them at their particular time of day/week.
 # TODO: Be able to put the Phone on silent mode (prevent all phone calls from
 #       trainers, but allow scripted calls as normal).
-
-# TODO: Better messages, more customisation of messages.
-# TODO: Add a Debug way of upgrading old phone script calls to new ones, or at
-#       least to find events using old phone scripts for the dev to update.
 #===============================================================================
 #
 #===============================================================================
@@ -250,7 +256,7 @@ class Phone
     attr_accessor :trainer_type, :start_version, :versions_count, :version
     attr_accessor :time_to_ready, :rematch_flag, :variant_beaten
     attr_accessor :common_event_id
-    attr_accessor :visible
+    attr_reader   :visible
 
     # Map ID, event ID, trainer type, name, versions count = 1, start version = 0
     # Map ID, name, common event ID

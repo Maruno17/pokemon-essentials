@@ -506,7 +506,7 @@ module Compiler
       end
     end
     # Compile the trainer comments
-    rewriteComments = true #false   # You can change this
+    rewriteComments = false   # You can change this
     battles        = []
     trtype         = nil
     trname         = nil

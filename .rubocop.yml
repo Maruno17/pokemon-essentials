@@ -154,7 +154,7 @@ Style/SymbolArray:
 Style/WordArray:
   EnforcedStyle: brackets
 
-# Patentheses around the condition in a ternary operator helps to differentiate
+# Parentheses around the condition in a ternary operator helps to differentiate
 # it from the true/false results.
 Style/TernaryParentheses:
   EnforcedStyle: require_parentheses
