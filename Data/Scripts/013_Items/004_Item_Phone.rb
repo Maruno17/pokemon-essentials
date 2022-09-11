@@ -469,36 +469,59 @@ class Phone
 
     def generate_trainer_dialogue(contact)
       validate contact => Phone::Contact
+      # Get the set of messages to be used by the contact
+      messages = GameData::PhoneMessage.try_get(contact.trainer_type, contact.name, contact.version)
+      messages = GameData::PhoneMessage.try_get(contact.trainer_type, contact.name, contact.start_version) if !messages
+      messages = GameData::PhoneMessage::DATA["default"] if !messages
+      # Create lambda for choosing a random message and translating it
       get_random_message = lambda do |messages|
+        return "" if !messages
         msg = messages.sample
         return "" if !msg
         return pbGetMessageFromHash(MessageTypes::PhoneMessages, msg)
       end
-      phone_data = pbLoadPhoneData
       # Choose random greeting depending on time of day
-      ret = get_random_message.call(phone_data.greetings)
+      ret = get_random_message.call(messages.intro)
       time = pbGetTimeNow
       if PBDayNight.isMorning?(time)
-        modcall = get_random_message.call(phone_data.greetingsMorning)
-        ret = modcall if !nil_or_empty?(modcall)
+        mod_call = get_random_message.call(messages.intro_morning)
+        ret = mod_call if !nil_or_empty?(mod_call)
+      elsif PBDayNight.isAfternoon?(time)
+        mod_call = get_random_message.call(messages.intro_afternoon)
+        ret = mod_call if !nil_or_empty?(mod_call)
       elsif PBDayNight.isEvening?(time)
-        modcall = get_random_message.call(phone_data.greetingsEvening)
-        ret = modcall if !nil_or_empty?(modcall)
+        mod_call = get_random_message.call(messages.intro_evening)
+        ret = mod_call if !nil_or_empty?(mod_call)
       end
       ret += "\\m"
-      if Phone.rematches_enabled && (contact.rematch_flag == 1 ||
-         (contact.rematch_flag == 2 && rand(100) < 50))
-        # If ready for rematch, tell the player (50% chance to remind the player)
-        ret += get_random_message.call(phone_data.battleRequests)
-        contact.rematch_flag = 2   # Ready for rematch and told player
-      elsif rand(100) < 75
-        # Choose random body
-        ret += get_random_message.call(phone_data.bodies1)
-        ret += "\\m"
-        ret += get_random_message.call(phone_data.bodies2)
+      # Choose main message set
+      if Phone.rematches_enabled && contact.rematch_flag > 0
+        # Trainer is ready for a rematch, so tell/remind the player
+        if contact.rematch_flag == 1   # Tell the player
+          ret += get_random_message.call(messages.battle_request)
+          contact.rematch_flag = 2   # Ready for rematch and told player
+        elsif contact.rematch_flag == 2   # Remind the player
+          if messages.battle_remind
+            ret += get_random_message.call(messages.battle_remind)
+          else
+            ret += get_random_message.call(messages.battle_request)
+          end
+        end
       else
-        # Choose random generic
-        ret += get_random_message.call(phone_data.generics)
+        # Standard messages
+        if messages.body1 && messages.body2 && (!messages.body || rand(100) < 75)
+          echoln messages.body2
+          # Choose random pair of body messages
+          ret += get_random_message.call(messages.body1)
+          ret += "\\m"
+          ret += get_random_message.call(messages.body2)
+        else
+          # Choose random full body message
+          ret += get_random_message.call(messages.body)
+        end
+        # Choose end message
+        mod_call = get_random_message.call(messages.end)
+        ret += "\\m" + mod_call if !nil_or_empty?(mod_call)
       end
       return ret
     end

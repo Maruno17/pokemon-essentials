@@ -103,32 +103,26 @@ module Compiler
   # Save phone messages to PBS file
   #=============================================================================
   def write_phone(path = "PBS/phone.txt")
-    data = load_data("Data/phone.dat") rescue nil
-    return if !data
     write_pbs_file_message_start(path)
+    keys = GameData::PhoneMessage::SCHEMA.keys
     File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
-      f.write("\#-------------------------------\r\n")
-      f.write("[<Generics>]\r\n")
-      f.write(data.generics.join("\r\n") + "\r\n")
-      f.write("\#-------------------------------\r\n")
-      f.write("[<BattleRequests>]\r\n")
-      f.write(data.battleRequests.join("\r\n") + "\r\n")
-      f.write("\#-------------------------------\r\n")
-      f.write("[<GreetingsMorning>]\r\n")
-      f.write(data.greetingsMorning.join("\r\n") + "\r\n")
-      f.write("\#-------------------------------\r\n")
-      f.write("[<GreetingsEvening>]\r\n")
-      f.write(data.greetingsEvening.join("\r\n") + "\r\n")
-      f.write("\#-------------------------------\r\n")
-      f.write("[<Greetings>]\r\n")
-      f.write(data.greetings.join("\r\n") + "\r\n")
-      f.write("\#-------------------------------\r\n")
-      f.write("[<Bodies1>]\r\n")
-      f.write(data.bodies1.join("\r\n") + "\r\n")
-      f.write("\#-------------------------------\r\n")
-      f.write("[<Bodies2>]\r\n")
-      f.write(data.bodies2.join("\r\n") + "\r\n")
+      # Write message sets
+      GameData::PhoneMessage.each do |contact|
+        f.write("\#-------------------------------\r\n")
+        if contact.id == "default"
+          f.write("[Default]\r\n")
+        elsif contact.version > 0
+          f.write(sprintf("[%s,%s,%d]\r\n", contact.trainer_type, contact.real_name, contact.version))
+        else
+          f.write(sprintf("[%s,%s]\r\n", contact.trainer_type, contact.real_name))
+        end
+        keys.each do |key|
+          msgs = contact.property_from_string(key)
+          next if !msgs || msgs.length == 0
+          msgs.each { |msg| f.write(key + " = " + msg + "\r\n") }
+        end
+      end
     }
     process_pbs_file_message_end
   end
@@ -886,7 +880,6 @@ module Compiler
     Console.echo_h1 _INTL("Writing all PBS files")
     write_town_map
     write_connections
-    write_phone
     write_types
     write_abilities
     write_moves
@@ -904,6 +897,7 @@ module Compiler
     write_trainer_lists
     write_metadata
     write_map_metadata
+    write_phone
     echoln ""
     Console.echo_h2("Successfully rewrote all PBS files", text: :green)
   end

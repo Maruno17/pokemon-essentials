@@ -102,37 +102,69 @@ module Compiler
   def compile_phone(path = "PBS/phone.txt")
     return if !safeExists?(path)
     compile_pbs_file_message_start(path)
-    database = PhoneDatabase.new
-    sections = []
-    File.open(path, "rb") { |f|
-      pbEachSection(f) { |section, name|
-        case name
-        when "<Generics>"
-          database.generics = section
-          sections.concat(section)
-        when "<BattleRequests>"
-          database.battleRequests = section
-          sections.concat(section)
-        when "<GreetingsMorning>"
-          database.greetingsMorning = section
-          sections.concat(section)
-        when "<GreetingsEvening>"
-          database.greetingsEvening = section
-          sections.concat(section)
-        when "<Greetings>"
-          database.greetings = section
-          sections.concat(section)
-        when "<Bodies1>"
-          database.bodies1 = section
-          sections.concat(section)
-        when "<Bodies2>"
-          database.bodies2 = section
-          sections.concat(section)
+    GameData::PhoneMessage::DATA.clear
+    schema = GameData::PhoneMessage::SCHEMA
+    messages = []
+    contact_hash = nil
+    # Read each line of phone.txt at a time and compile it as a contact property
+    idx = 0
+    pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 50 == 0
+      idx += 1
+      Graphics.update if idx % 250 == 0
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]
+        # New section [trainer_type, name] or [trainer_type, name, version]
+        if contact_hash
+          # Add contact's data to records
+          if contact_hash[:trainer_type] == "default"
+            contact_hash[:id] = contact_hash[:trainer_type]
+          else
+            contact_hash[:id] = [contact_hash[:trainer_type], contact_hash[:name], contact_hash[:version]]
+          end
+          GameData::PhoneMessage.register(contact_hash)
         end
-      }
+        # Construct contact hash
+        header = $~[1]
+        if header.strip.downcase == "default"
+          contact_hash = {
+            :trainer_type => "default"
+          }
+        else
+          line_data = pbGetCsvRecord($~[1], line_no, [0, "esU", :TrainerType])
+          contact_hash = {
+            :trainer_type => line_data[0],
+            :name         => line_data[1],
+            :version      => line_data[2] || 0
+          }
+        end
+      elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
+        # XXX=YYY lines
+        if !contact_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+        end
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+        # Record XXX=YYY setting
+        contact_hash[line_schema[0]] ||= []
+        contact_hash[line_schema[0]].push(property_value)
+        messages.push(property_value)
+      end
     }
-    MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages, sections)
-    save_data(database, "Data/phone.dat")
+    # Add last contact's data to records
+    if contact_hash
+      # Add contact's data to records
+      if contact_hash[:trainer_type] == "default"
+        contact_hash[:id] = contact_hash[:trainer_type]
+      else
+        contact_hash[:id] = [contact_hash[:trainer_type], contact_hash[:name], contact_hash[:version]]
+      end
+      GameData::PhoneMessage.register(contact_hash)
+    end
+    # Save all data
+    GameData::PhoneMessage.save
+    MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages, messages)
     process_pbs_file_message_end
   end
 

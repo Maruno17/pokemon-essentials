@@ -757,7 +757,6 @@ module Compiler
     modify_pbs_file_contents_before_compiling
     compile_town_map
     compile_connections
-    compile_phone
     compile_types
     compile_abilities
     compile_moves             # Depends on Type
@@ -775,6 +774,7 @@ module Compiler
     compile_trainer_lists     # Depends on TrainerType
     compile_metadata          # Depends on TrainerType
     compile_map_metadata
+    compile_phone             # Depends on TrainerType
   end
 
   def compile_all(mustCompile)
