@@ -3546,7 +3546,7 @@ Pokemon = B145H150,45 #Mewdos
 
 [ROCKETBOSS,Giovanni,3]
 Items = FULLHEAL
-Pokemon = BIRDBOSS,60 #
+Pokemon = BIRDBOSS,50 #
 	Moves = TRIATTACK2,DRILLPECK,SKYATTACK,HAZE
 	Ball = MASTERBALL
 	AbilityIndex = 2

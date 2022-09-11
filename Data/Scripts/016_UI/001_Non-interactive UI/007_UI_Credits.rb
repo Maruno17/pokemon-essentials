@@ -81,6 +81,31 @@ ALl of the custom fused Pokémon sprites
 were madeby various members of the sp
 Pokémon Infinite Fusion Discord
 
+Including massive contributions from these users:
+
+Toad 900#1617, Kiwi#4199, Aquatic#7954, 
+Knuckles3&Knuckles#7559, Katten#7455, Blaquaza#1347, 
+Blackboots#7369, Milchik#6233, Gdei#2810, 
+Universez#0767, Scarecrow_924#8531, mammuth use ursaluna#3114, 
+Kulgun#3323, Retrogamer#9934, Scrapi#6319, 
+PinkYoshi#2350, Tomate#6670, Stan#3932, 
+Xiapher#4244, Howls#4468, xoto#0766, 
+xigzagoon#9354, Beespoon#2222, NeoSoup#6526, 
+Sjoba_sheep#1111, Maelmc#9965, Thornsoflight#3245, 
+Xillo#5236, pengu#6874, Mope7#1139, 
+Gorky#1761, All-Seeing#9253, IGot50lbsOfTanneritelnMyAnus#4093, 
+Emisys#4024, JamoJauhis#4971, Cheepoof#8815, 
+Moon_Tah#2688, BButton#8097, Punko#1235, 
+NakaMagic#0774, Tabarnak#2210, M4rcus#0928, 
+Bubba-Rottweiler#7322, Keksgesicht#7133, Teamama#4369, 
+BTT#3408, calicorn#6994, Pain T#3334, 
+Taylor Mai#0134, Underuser#5401, AkumaDelta#2364, 
+Scotsman#6299, GenoRhye#3335, (✿◠‿◠)Kanger#3997, 
+JoshuLips#5010, GREEN#2016, SpiDrone#6590, 
+Bizmythe#4062, Silver#4784, gnose_#6945, 
+D'Octobre#2420, Tenedranox#5660
+
+
 Other custom graphics:
 calicorn, Doctor Miawoo, Frogman, Kiwi,
 Knuckles, magnuzone, ,mammuth89, Miawoo, 

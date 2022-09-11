@@ -45,6 +45,7 @@ def getRegularConditionExample()
     "any Pokémon that is both Ghost and Grass type will be able to learn the move Trick or Treat.",
     "the move Forest's Curse can only be learned by Ghost/Grass typed Pokémon.",
     "a grass-type fusion of a spiky Pokémon such as Jolteon will be able to learn the move Spiky Shield.",
+    "only a ground-type fusion of Grimer or Muk will be able to learn the move Shore Up.",
     "any ice-type fusion that can already learn the move Crabhammer will also be able to learn the move Ice Hammer.",
     "only water-type fusions of a ninja-like Pokémon such as Ninjask or Zoroark will be able to learn the move Water Shuriken.",
   ]
@@ -96,11 +97,8 @@ class FusionTutorService
       compatibleMoves << :PARTINGSHOT if is_fusion_of([:MEOWTH, :PERSIAN, :SANDILE, :KROKOROK, :KROOKODILE, :UMBREON])
       compatibleMoves << :TOPSYTURVY if is_fusion_of([:HITMONTOP, :WOBBUFFET])
       compatibleMoves << :CLANGINGSCALES if is_fusion_of([:EKANS, :ARBOK, :GARCHOMP, :FLYGON, :HAXORUS])
-
       compatibleMoves << :ZINGZAP if is_fusion_of([:PICHU, :PIKACHU, :RAICHU, :VOLTORB, :ELECTRODE]) || (is_fusion_of([:SANDSLASH, :GOLEM]) && hasType(:ELECTRIC))
-      compatibleMoves << :PARABOLICCHARGE if is_fusion_of([:PICHU, :PIKACHU, :RAICHU, :MAGNEMITE, :MAGNETON, :MAGNEZONE, :MAREEP, :FLAAFFY, :AMPHAROS, :ELEKID, :ELECTABUZZ, :ELECTIVIRE, :ZAPDOS,
-                                                           :CHINCHOU, :LANTURN, :RAIKOU, :KLINK, :KLANG, :KLINKLANG, :ROTOM, :STUNFISK])
-
+      compatibleMoves << :PARABOLICCHARGE if is_fusion_of([:PICHU, :PIKACHU, :RAICHU, :MAGNEMITE, :MAGNETON, :MAGNEZONE, :MAREEP, :FLAAFFY, :AMPHAROS, :ELEKID, :ELECTABUZZ, :ELECTIVIRE, :ZAPDOS, :CHINCHOU, :LANTURN, :RAIKOU, :KLINK, :KLANG, :KLINKLANG, :ROTOM, :STUNFISK])
       compatibleMoves << :ELECTRIFY if is_fusion_of([:KLINK, :KLANG, :KLINKLANG]) || hasType(:ELECTRIC)
       compatibleMoves << :AROMATICMIST if is_fusion_of([:WEEZING, :BULBASAUR, :IVYSAUR, :VENUSAUR, :CHIKORITA, :BAYLEEF, :MEGANIUM, :GLOOM, :VILEPLUME, :BELLOSSOM, :ROSELIA, :ROSERADE])
       compatibleMoves << :FLORALHEALING if is_fusion_of([:SUNFLORA, :BELLOSSOM, :ROSELIA, :ROSERADE])

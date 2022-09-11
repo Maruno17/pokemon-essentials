@@ -10,15 +10,22 @@ class FusionSelectOptionsScene < PokemonOption_Scene
     @selectedNature=nil
     @selBaseColor = Color.new(48,96,216)
     @selShadowColor = Color.new(32,32,32)
+    @show_frame=false
   end
 
 
   def initUIElements
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-      _INTL(""), 0, 0, Graphics.width, 64, @viewport)
+      _INTL("Select your Pokémon's ability and nature"), 0, 0, Graphics.width, 64, @viewport)
     @sprites["textbox"] = pbCreateMessageWindow
     @sprites["textbox"].letterbyletter = false
     pbSetSystemFont(@sprites["textbox"].contents)
+    @sprites["title"].opacity=0
+  end
+
+  def pbStartScene(inloadscreen = nil)
+    super
+    @sprites["option"].opacity=0
   end
 
 
