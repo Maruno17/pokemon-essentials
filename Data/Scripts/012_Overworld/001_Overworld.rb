@@ -83,6 +83,7 @@ Events.onStepTaken += proc {
 Events.onStepTakenTransferPossible += proc { |_sender, e|
   handled = e[0]
   next if handled[0]
+  next if $game_switches[SWITCH_GAME_DIFFICULTY_EASY]
   if $PokemonGlobal.stepcount % 4 == 0 && Settings::POISON_IN_FIELD
     flashed = false
     for i in $Trainer.able_party

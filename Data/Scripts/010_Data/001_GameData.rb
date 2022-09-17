@@ -221,8 +221,11 @@ module GameData
     Species.load
     Ribbon.load
     Encounter.load
+    EncounterModern.load
+    EncounterRandom.load
     TrainerType.load
     Trainer.load
+    TrainerModern.load
     Metadata.load
     MapMetadata.load
   end

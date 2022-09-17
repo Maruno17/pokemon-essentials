@@ -1,11 +1,22 @@
 #===============================================================================
 #
 #===============================================================================
+#
+
+def getTrainersDataMode
+  mode = GameData::Trainer
+  if $game_switches && $game_switches[SWITCH_MODERN_MODE]
+    mode = GameData::TrainerModern
+  end
+  return mode
+end
+
+
 def pbLoadTrainer(tr_type, tr_name, tr_version = 0)
   tr_type_data = GameData::TrainerType.try_get(tr_type)
   raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
   tr_type = tr_type_data.id
-  trainer_data = GameData::Trainer.try_get(tr_type, tr_name, tr_version)
+  trainer_data = getTrainersDataMode.try_get(tr_type, tr_name, tr_version)
   return (trainer_data) ? trainer_data.to_trainer : nil
 end
 
@@ -36,7 +47,7 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   trainer = [tr_type, tr_name, [], party, tr_version]
   if save_changes
     trainer_hash = {
-      :id_number    => GameData::Trainer::DATA.keys.length / 2,
+      :id_number    => getTrainersDataMode::DATA.keys.length / 2,
       :trainer_type => tr_type,
       :name         => tr_name,
       :version      => tr_version,
@@ -50,8 +61,8 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
     end
     # Add trainer's data to records
     trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
-    GameData::Trainer.register(trainer_hash)
-    GameData::Trainer.save
+    getTrainersDataMode.register(trainer_hash)
+    getTrainersDataMode.save
     pbConvertTrainerData
     pbMessage(_INTL("The Trainer's data was added to the list of battles and in PBS/trainers.txt."))
   end
@@ -85,7 +96,7 @@ def pbTrainerCheck(tr_type, tr_name, max_battles, tr_version = 0)
   return false if !tr_type_data
   tr_type = tr_type_data.id
   # Check for existence of trainer with given ID number
-  return true if GameData::Trainer.exists?(tr_type, tr_name, tr_version)
+  return true if getTrainersDataMode.exists?(tr_type, tr_name, tr_version)
   # Add new trainer
   if pbConfirmMessage(_INTL("Add new trainer variant {1} (of {2}) for {3} {4}?",
      tr_version, max_battles, tr_type.to_s, tr_name))
@@ -99,7 +110,7 @@ def pbGetFreeTrainerParty(tr_type, tr_name)
   raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
   tr_type = tr_type_data.id
   for i in 0...256
-    return i if !GameData::Trainer.try_get(tr_type, tr_name, i)
+    return i if !getTrainersDataMode.try_get(tr_type, tr_name, i)
   end
   return -1
 end

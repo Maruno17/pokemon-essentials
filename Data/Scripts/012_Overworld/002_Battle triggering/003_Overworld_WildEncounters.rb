@@ -14,11 +14,22 @@ class PokemonEncounters
     @step_count       = 0
     @step_chances     = {}
     @encounter_tables = {}
-    encounter_data = GameData::Encounter.get(map_ID, $PokemonGlobal.encounter_version)
+    encounter_data = getEncounterMode().get(map_ID, $PokemonGlobal.encounter_version)
     if encounter_data
       encounter_data.step_chances.each { |type, value| @step_chances[type] = value }
       @encounter_tables = Marshal.load(Marshal.dump(encounter_data.types))
     end
+  end
+
+  def getEncounterMode()
+    mode = GameData::Encounter
+    if $game_switches && $game_switches[SWITCH_MODERN_MODE]
+      mode = GameData::EncounterModern
+    end
+    if $game_switches && $game_switches[SWITCH_RANDOM_WILD] && $game_switches[SWITCH_RANDOM_WILD_AREA]
+      mode= GameData::EncounterRandom
+    end
+    return mode
   end
 
   def reset_step_count
@@ -41,7 +52,7 @@ class PokemonEncounters
   # contestants.
   def map_has_encounter_type?(map_ID, enc_type)
     return false if !enc_type
-    encounter_data = GameData::Encounter.get(map_ID, $PokemonGlobal.encounter_version)
+    encounter_data = getEncounterMode().get(map_ID, $PokemonGlobal.encounter_version)
     return false if !encounter_data
     return encounter_data.types[enc_type] && encounter_data.types[enc_type].length > 0
   end
@@ -337,7 +348,7 @@ class PokemonEncounters
       raise ArgumentError.new(_INTL("Encounter type {1} does not exist", enc_type))
     end
     # Get the encounter table
-    encounter_data = GameData::Encounter.get(map_ID, $PokemonGlobal.encounter_version)
+    encounter_data = getEncounterMode().get(map_ID, $PokemonGlobal.encounter_version)
     return nil if !encounter_data
     enc_list = encounter_data.types[enc_type]
     return nil if !enc_list || enc_list.length == 0

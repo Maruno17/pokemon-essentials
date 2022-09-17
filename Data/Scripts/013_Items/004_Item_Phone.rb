@@ -267,7 +267,7 @@ end
 def pbTrainerSpecies(phonenum)
   return "" if !phonenum[0]
   partyid = [0, phonenum[5] - 1].max
-  trainer_data = GameData::Trainer.try_get(phonenum[1], phonenum[2], partyid)
+  trainer_data = getTrainersDataMode.try_get(phonenum[1], phonenum[2], partyid)
   return "" if !trainer_data
   if trainer_data.pokemon.length == 1
     pkmn = trainer_data.pokemon[0][:species]
