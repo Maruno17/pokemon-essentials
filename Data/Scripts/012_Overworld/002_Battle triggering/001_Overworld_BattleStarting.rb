@@ -332,6 +332,12 @@ end
 # Used when walking in tall grass, hence the additional code.
 def pbWildBattle(species, level, outcomeVar=1, canRun=true, canLose=false)
   species = GameData::Species.get(species).id
+  dexnum = getDexNumberForSpecies(species)
+  if $game_switches[SWITCH_RANDOM_STATIC_ENCOUNTERS] && dexnum <= NB_POKEMON
+    newSpecies = $PokemonGlobal.psuedoBSTHash[dexnum]
+    species = getSpecies(newSpecies)
+  end
+
   # Potentially call a different pbWildBattle-type method instead (for roaming
   # Pokémon, Safari battles, Bug Contest battles)
   handled = [nil]

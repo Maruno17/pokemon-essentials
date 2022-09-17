@@ -18,67 +18,67 @@ class RandomizerOptionsScene < PokemonOption_Scene
   def pbStartScene(inloadscreen = false)
     super
     @changedColor = true
-    @sprites["title"]=Window_UnformattedTextPokemon.newWithSize(
-        _INTL("Randomizer settings"),0,0,Graphics.width,64,@viewport)
-    @sprites["textbox"].text= getDefaultDescription
+    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
+      _INTL("Randomizer settings"), 0, 0, Graphics.width, 64, @viewport)
+    @sprites["textbox"].text = getDefaultDescription
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
   def pbGetOptions(inloadscreen = false)
     options = [
-        EnumOption.new(_INTL("Starters"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[SWITCH_RANDOM_STARTERS] ? 0 : 1 },
-                       proc { |value|
-                         $game_switches[SWITCH_RANDOM_STARTERS] = value == 0
-                       }, "Randomize the selection of starters to choose from at the start of the game"
-        ),
+      EnumOption.new(_INTL("Starters"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[SWITCH_RANDOM_STARTERS] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[SWITCH_RANDOM_STARTERS] = value == 0
+                     }, "Randomize the selection of starters to choose from at the start of the game"
+      ),
 
-        EnumOption.new(_INTL("Trainers"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[SWITCH_RANDOM_TRAINERS] ? 0 : 1 },
-                       proc { |value|
-                         if !$game_switches[SWITCH_RANDOM_TRAINERS] && value == 0
-                           @openTrainerOptions = true
-                           openTrainerOptionsMenu()
-                         end
-                         $game_switches[SWITCH_RANDOM_TRAINERS] = value == 0
-                       }, "Select the randomizer options for regular trainers"
-        ),
+      EnumOption.new(_INTL("Trainers"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[SWITCH_RANDOM_TRAINERS] ? 0 : 1 },
+                     proc { |value|
+                       if !$game_switches[SWITCH_RANDOM_TRAINERS] && value == 0
+                         @openTrainerOptions = true
+                         openTrainerOptionsMenu()
+                       end
+                       $game_switches[SWITCH_RANDOM_TRAINERS] = value == 0
+                     }, "Select the randomizer options for regular trainers"
+      ),
 
-        EnumOption.new(_INTL("Gym trainers"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] ? 0 : 1 },
-                       proc { |value|
-                         if !$game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] && value == 0
-                           @openGymOptions = true
-                           openGymOptionsMenu()
-                         end
-                         $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] = value == 0
-                       }, "Limit gym trainers to a single type"
-        ),
+      EnumOption.new(_INTL("Gym trainers"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] ? 0 : 1 },
+                     proc { |value|
+                       if !$game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] && value == 0
+                         @openGymOptions = true
+                         openGymOptionsMenu()
+                       end
+                       $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] = value == 0
+                     }, "Limit gym trainers to a single type"
+      ),
 
-        EnumOption.new(_INTL("Wild Pokémon"), [_INTL("On"), _INTL("Off")],
-                       proc {
-                         $game_switches[SWITCH_RANDOM_WILD] ? 0 : 1
-                       },
-                       proc { |value|
-                         if !$game_switches[SWITCH_RANDOM_WILD] && value == 0
-                           @openWildOptions = true
-                           openWildPokemonOptionsMenu()
-                         end
-                         $game_switches[SWITCH_RANDOM_WILD] = value == 0
-                       },"Select the randomizer options for wild Pokémon"
-        ),
-        EnumOption.new(_INTL("Items"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[SWITCH_RANDOM_ITEMS] ? 0 : 1 },
-                       proc { |value|
-                         $game_switches[SWITCH_RANDOM_ITEMS] = value == 0
-                       }, "Randomize the items picked up on the ground"
-        ),
-        EnumOption.new(_INTL("TMs"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[SWITCH_RANDOM_TMS] ? 0 : 1 },
-                       proc { |value|
-                         $game_switches[SWITCH_RANDOM_TMS] = value == 0
-                       },"Randomize the TMs picked up on the ground"
-        ),
+      EnumOption.new(_INTL("Wild Pokémon"), [_INTL("On"), _INTL("Off")],
+                     proc {
+                       $game_switches[SWITCH_RANDOM_WILD] ? 0 : 1
+                     },
+                     proc { |value|
+                       if !$game_switches[SWITCH_RANDOM_WILD] && value == 0
+                         @openWildOptions = true
+                         openWildPokemonOptionsMenu()
+                       end
+                       $game_switches[SWITCH_RANDOM_WILD] = value == 0
+                     }, "Select the randomizer options for wild Pokémon"
+      ),
+      EnumOption.new(_INTL("Items"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[SWITCH_RANDOM_ITEMS] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[SWITCH_RANDOM_ITEMS] = value == 0
+                     }, "Randomize the items picked up on the ground"
+      ),
+      EnumOption.new(_INTL("TMs"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[SWITCH_RANDOM_TMS] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[SWITCH_RANDOM_TMS] = value == 0
+                     }, "Randomize the TMs picked up on the ground"
+      ),
     ]
     return options
   end
@@ -113,9 +113,7 @@ class RandomizerOptionsScene < PokemonOption_Scene
     @openWildOptions = false
   end
 
-
 end
-
 
 class RandomizerTrainerOptionsScene < PokemonOption_Scene
   RANDOM_TEAMS_CUSTOM_SPRITES = 600
@@ -134,10 +132,9 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
     for i in 0...@PokemonOptions.length
       @sprites["option"][i] = (@PokemonOptions[i].get || 0)
     end
-    @sprites["title"]=Window_UnformattedTextPokemon.newWithSize(
-        _INTL("Randomizer settings: Trainers"),0,0,Graphics.width,64,@viewport)
-    @sprites["textbox"].text=_INTL("Set the randomizer settings for trainers")
-
+    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
+      _INTL("Randomizer settings: Trainers"), 0, 0, Graphics.width, 64, @viewport)
+    @sprites["textbox"].text = _INTL("Set the randomizer settings for trainers")
 
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
@@ -149,24 +146,23 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
 
   def pbGetOptions(inloadscreen = false)
     options = [
-        EnumOption.new(_INTL("Custom Sprites only"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[RANDOM_TEAMS_CUSTOM_SPRITES] ? 0 : 1 },
-                       proc { |value|
-                         $game_switches[RANDOM_TEAMS_CUSTOM_SPRITES] = value == 0
-                       },
-                       "Use only Pokémon that have custom sprites in trainer teams"
-        ),
-        EnumOption.new(_INTL("Trainer Held items"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[RANDOM_HELD_ITEMS] ? 0 : 1 },
-                       proc { |value|
-                         $game_switches[RANDOM_HELD_ITEMS] = value == 0
-                       },"Give random held items to all trainers"
-        )
+      EnumOption.new(_INTL("Custom Sprites only"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[RANDOM_TEAMS_CUSTOM_SPRITES] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[RANDOM_TEAMS_CUSTOM_SPRITES] = value == 0
+                     },
+                     "Use only Pokémon that have custom sprites in trainer teams"
+      ),
+      EnumOption.new(_INTL("Trainer Held items"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[RANDOM_HELD_ITEMS] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[RANDOM_HELD_ITEMS] = value == 0
+                     }, "Give random held items to all trainers"
+      )
     ]
     return options
   end
 end
-
 
 class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
   RANDOM_WILD_AREA = 777
@@ -187,9 +183,9 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
     for i in 0...@PokemonOptions.length
       @sprites["option"][i] = (@PokemonOptions[i].get || 0)
     end
-    @sprites["title"]=Window_UnformattedTextPokemon.newWithSize(
-        _INTL("Randomizer settings: Wild Pokémon"),0,0,Graphics.width,64,@viewport)
-    @sprites["textbox"].text=_INTL("Set the randomizer settings for wild Pokémon")
+    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
+      _INTL("Randomizer settings: Wild Pokémon"), 0, 0, Graphics.width, 64, @viewport)
+    @sprites["textbox"].text = _INTL("Set the randomizer settings for wild Pokémon")
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
@@ -200,56 +196,60 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
 
   def pbGetOptions(inloadscreen = false)
     options = [
-        EnumOption.new(_INTL("Type"), [_INTL("Global")],#, _INTL("Area")],
-                       proc {
-                         if $game_switches[RANDOM_WILD_AREA]
-                           1
-                         else
-                           0
-                         end
-                       },
-                       proc { |value|
-                         if value == 0
-                           $game_switches[RANDOM_WILD_GLOBAL] = true
-                           $game_switches[RANDOM_WILD_AREA] = false
-                         else
-                           value == 1
-                           $game_switches[RANDOM_WILD_GLOBAL] = false
-                           $game_switches[RANDOM_WILD_AREA] = true
-                         end
-                       }
-        ),
-        # EnumOption.new(_INTL("Static encounters"), [_INTL("On"), _INTL("Off")],
-        #                proc { $game_switches[RANDOM_STATIC] ? 0 : 1 },
-        #                proc { |value|
-        #                  $game_switches[RANDOM_STATIC] = value == 0
-        #                }
-        # ),
-        
-        EnumOption.new(_INTL("Gift Pokémon"), [_INTL("On"), _INTL("Off")],
-               proc { $game_switches[GIFT_POKEMON] ? 0 : 1 },
-               proc { |value|
-                 $game_switches[GIFT_POKEMON] = value == 0
-               },"Randomize Pokémon that are gifted to the player"
-        ),
-        
-        EnumOption.new(_INTL("Fuse everything"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[REGULAR_TO_FUSIONS] ? 0 : 1 },
-                       proc { |value|
-                         $game_switches[REGULAR_TO_FUSIONS] = value == 0
-                       },"Include fused Pokémon in the randomize pool for wild Pokémon"
-        ),
-        EnumOption.new(_INTL("Custom sprites only"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] ? 0 : 1 },
-                       proc { |value|
-                         $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] = value == 0
-                       }, "(When fuse everything option is on) Randomize only to Pokémon that have a custom sprite."
-        )
+      EnumOption.new(_INTL("Type"), [_INTL("Global"), _INTL("Area")],
+                     proc {
+                       if $game_switches[RANDOM_WILD_AREA]
+                         1
+                       else
+                         0
+                       end
+                     },
+                     proc { |value|
+                       if value == 0
+                         $game_switches[RANDOM_WILD_GLOBAL] = true
+                         $game_switches[RANDOM_WILD_AREA] = false
+                       else
+                         value == 1
+                         $game_switches[RANDOM_WILD_GLOBAL] = false
+                         $game_switches[RANDOM_WILD_AREA] = true
+                       end
+                     },
+                     [
+                       "Randomizes Pokémon using a one-to-one mapping of the Pokedex",
+                       "Randomizes the encounters in each route individually"
+                     ]
+      ),
+      EnumOption.new(_INTL("Static encounters"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[RANDOM_STATIC] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[RANDOM_STATIC] = value == 0
+                     },
+                     "Randomize Pokémon that appear in the overworld (including legendaries)"
+      ),
+
+      EnumOption.new(_INTL("Gift Pokémon"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[GIFT_POKEMON] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[GIFT_POKEMON] = value == 0
+                     }, "Randomize Pokémon that are gifted to the player"
+      ),
+
+      EnumOption.new(_INTL("Fuse everything"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[REGULAR_TO_FUSIONS] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[REGULAR_TO_FUSIONS] = value == 0
+                     }, "Include fused Pokémon in the randomize pool for wild Pokémon"
+      ),
+      EnumOption.new(_INTL("Custom sprites only"), [_INTL("On"), _INTL("Off")],
+                     proc { $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] ? 0 : 1 },
+                     proc { |value|
+                       $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] = value == 0
+                     }, "(With fuse everything option) Randomize only to Pokémon that have a custom sprite."
+      )
     ]
     return options
   end
 end
-
 
 class RandomizerGymOptionsScene < PokemonOption_Scene
   RANDOM_GYM_TYPES = 921
@@ -266,10 +266,9 @@ class RandomizerGymOptionsScene < PokemonOption_Scene
     for i in 0...@PokemonOptions.length
       @sprites["option"][i] = (@PokemonOptions[i].get || 0)
     end
-    @sprites["title"]=Window_UnformattedTextPokemon.newWithSize(
-      _INTL("Randomizer settings: Gyms"),0,0,Graphics.width,64,@viewport)
-    @sprites["textbox"].text=_INTL("Set the randomizer settings for gyms")
-
+    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
+      _INTL("Randomizer settings: Gyms"), 0, 0, Graphics.width, 64, @viewport)
+    @sprites["textbox"].text = _INTL("Set the randomizer settings for gyms")
 
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
@@ -292,7 +291,7 @@ class RandomizerGymOptionsScene < PokemonOption_Scene
                      proc { |value|
                        $game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE] = value == 0
                        $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS] = !$game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE]
-                     },"Gym trainers and leaders have a new team each try instead of keeping the same one"
+                     }, "Gym trainers and leaders have a new team each try instead of keeping the same one"
       ),
       EnumOption.new(_INTL("Custom sprites only"), [_INTL("On"), _INTL("Off")],
                      proc { $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] ? 0 : 1 },

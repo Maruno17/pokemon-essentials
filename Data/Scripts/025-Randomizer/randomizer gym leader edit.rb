@@ -315,6 +315,14 @@ def playShuffleSE(i)
   end
 end
 
+def getTrainersDataMode
+    mode = GameData::Trainer
+    if $game_switches && $game_switches[SWITCH_MODERN_MODE]
+      mode = GameData::TrainerModern
+    end
+    return mode
+end
+
 
 def Kernel.pbShuffleTrainers(bst_range = 50,customsOnly=false,customsList=nil)
   bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
@@ -323,7 +331,7 @@ def Kernel.pbShuffleTrainers(bst_range = 50,customsOnly=false,customsList=nil)
     customsOnly = false
   end
   randomTrainersHash = Hash.new
-  trainers_data = getTrainersDataMode.list_all
+  trainers_data = GameData::Trainer.list_all
   trainers_data.each do |key, value|
     trainer = trainers_data[key]
     i=0

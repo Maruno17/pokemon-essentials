@@ -3,6 +3,7 @@ module GameData
     attr_accessor :id
     attr_accessor :map
     attr_accessor :version
+
     attr_reader :step_chances
     attr_reader :types
 
