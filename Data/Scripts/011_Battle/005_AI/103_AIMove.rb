@@ -94,6 +94,8 @@ class Battle::AI::AIMove
   def rough_damage
     power = base_power
     return power if @move.is_a?(Battle::Move::FixedDamageMove)
+    stage_mul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
+    stage_div = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
     # Get the user and target of this move
     user = @ai.user
     user_battler = user.battler
@@ -103,24 +105,21 @@ class Battle::AI::AIMove
     # Get the move's type
     calc_type = rough_type
 
+    # Decide whether the move will definitely be a critical hit
+    is_critical = rough_critical_hit_stage >= Battle::Move::CRITICAL_HIT_RATIOS.length
+
     ##### Calculate user's attack stat #####
-    atk = user.rough_stat(:ATTACK)
-    if function == "UseTargetAttackInsteadOfUserAttack"   # Foul Play
-      atk = target.rough_stat(:ATTACK)
-    elsif function == "UseUserBaseDefenseInsteadOfUserBaseAttack"   # Body Press
-      atk = user.rough_stat(:DEFENSE)
-    elsif specialMove?(calc_type)
-      if function == "UseTargetAttackInsteadOfUserAttack"   # Foul Play
-        atk = target.rough_stat(:SPECIAL_ATTACK)
-      else
-        atk = user.rough_stat(:SPECIAL_ATTACK)
-      end
+    atk, atk_stage = @move.pbGetAttackStats(user.battler, target.battler)
+    if !target.has_active_ability?(:UNAWARE) || @ai.battle.moldBreaker
+      atk_stage = 6 if is_critical && atk_stage < 6
+      atk = (atk.to_f * stage_mul[atk_stage] / stage_div[atk_stage]).floor
     end
 
     ##### Calculate target's defense stat #####
-    defense = target.rough_stat(:DEFENSE)
-    if specialMove?(calc_type) && function != "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
-      defense = target.rough_stat(:SPECIAL_DEFENSE)
+    defense, def_stage = pbGetDefenseStats(user, target)
+    if !user.has_active_ability?(:UNAWARE) || @ai.battle.moldBreaker
+      def_stage = 6 if is_critical && def_stage > 6
+      defense = (defense.to_f * stage_mul[def_stage] / stage_div[def_stage]).floor
     end
 
     ##### Calculate all multiplier effects #####
@@ -297,7 +296,14 @@ class Battle::AI::AIMove
       end
     end
 
-    # Critical hits - n/a
+    # Critical hits
+    if is_critical
+      if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
+        multipliers[:final_damage_multiplier] *= 1.5
+      else
+        multipliers[:final_damage_multiplier] *= 2
+      end
+    end
 
     # Random variance - n/a
 
@@ -321,7 +327,8 @@ class Battle::AI::AIMove
     end
 
     # Aurora Veil, Reflect, Light Screen
-    if @ai.trainer.medium_skill? && !@move.ignoresReflect? && !user.has_active_ability?(:INFILTRATOR)
+    if @ai.trainer.medium_skill? && !@move.ignoresReflect? && !is_critical &&
+       !user.has_active_ability?(:INFILTRATOR)
       if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
         if @ai.battle.pbSideBattlerCount(target_battler) > 1
           multipliers[:final_damage_multiplier] *= 2 / 3.0

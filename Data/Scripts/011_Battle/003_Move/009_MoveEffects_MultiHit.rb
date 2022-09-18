@@ -291,11 +291,22 @@ end
 # Special Defense and Speed by 2 stages each in the second turn. (Geomancy)
 #===============================================================================
 class Battle::Move::TwoTurnAttackRaiseUserSpAtkSpDefSpd2 < Battle::Move::TwoTurnMove
+  attr_reader :statUp
+
+  def initialize(battle, move)
+    super
+    @statUp = [:SPECIAL_ATTACK, 2, :SPECIAL_DEFENSE, 2, :SPEED, 2]
+  end
+
   def pbMoveFailed?(user, targets)
     return false if user.effects[PBEffects::TwoTurnAttack]   # Charging turn
-    if !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self) &&
-       !user.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user, self) &&
-       !user.pbCanRaiseStatStage?(:SPEED, user, self)
+    failed = true
+    (@statUp.length / 2).times do |i|
+      next if !user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
+      failed = false
+      break
+    end
+    if failed
       @battle.pbDisplay(_INTL("{1}'s stats won't go any higher!", user.pbThis))
       return true
     end
@@ -309,9 +320,9 @@ class Battle::Move::TwoTurnAttackRaiseUserSpAtkSpDefSpd2 < Battle::Move::TwoTurn
   def pbEffectGeneral(user)
     return if !@damagingTurn
     showAnim = true
-    [:SPECIAL_ATTACK, :SPECIAL_DEFENSE, :SPEED].each do |s|
-      next if !user.pbCanRaiseStatStage?(s, user, self)
-      if user.pbRaiseStatStage(s, 2, user, showAnim)
+    (@statUp.length / 2).times do |i|
+      next if !user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
+      if user.pbRaiseStatStage(@statUp[i * 2], @statUp[(i * 2) + 1], user, showAnim)
         showAnim = false
       end
     end

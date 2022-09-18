@@ -693,7 +693,7 @@ class Battle::Move::UseLastMoveUsed < Battle::Move
       "ProtectUser",                                       # Detect, Protect
       "ProtectUserSideFromPriorityMoves",                  # Quick Guard        # Not listed on Bulbapedia
       "ProtectUserSideFromMultiTargetDamagingMoves",       # Wide Guard         # Not listed on Bulbapedia
-      "UserEnduresFaintingThisTurn",   # Endure
+      "UserEnduresFaintingThisTurn",                       # Endure
       "ProtectUserSideFromDamagingMovesIfUserFirstTurn",   # Mat Block
       "ProtectUserSideFromStatusMoves",                    # Crafty Shield      # Not listed on Bulbapedia
       "ProtectUserFromDamagingMovesKingsShield",           # King's Shield
