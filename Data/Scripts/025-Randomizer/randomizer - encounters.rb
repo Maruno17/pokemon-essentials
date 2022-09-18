@@ -19,7 +19,7 @@ def Kernel.randomizeWildPokemonByRoute()
     types_hash = {}
     enc_data.types.each do |key, value|
       pokemonList = value
-      newType = randomizePokemonList(pokemonList,bstRange,maxSpecies,randomizeToFusions,customsList)
+      newType = randomizePokemonList(pokemonList,bstRange,maxSpecies,onlyCustoms,customsList)
       types_hash[key]= newType
     end
     encounters_hash[:types] = types_hash
