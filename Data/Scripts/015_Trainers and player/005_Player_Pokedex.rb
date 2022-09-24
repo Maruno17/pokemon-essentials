@@ -137,6 +137,7 @@ class Player < Trainer
     end
 
     def seen?(species)
+      return false if !species
       num = getDexNumberForSpecies(species)
       if isTripleFusion(num)
         return seen_triple?(species)

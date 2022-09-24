@@ -49,6 +49,7 @@ def pbUsePokeRadar
   $PokemonGlobal.pokeradarBattery = Settings::POKERADAR_BATTERY_STEPS
   unseenPokemon = listPokemonInCurrentRoute($PokemonEncounters.encounter_type, false, true)
   seenPokemon = listPokemonInCurrentRoute($PokemonEncounters.encounter_type, true, false)
+
   rareAllowed = canEncounterRarePokemon(unseenPokemon)
   displayPokeradarBanner(seenPokemon, unseenPokemon, rareAllowed)
   playPokeradarLightAnimation(rareAllowed)
@@ -115,7 +116,8 @@ def listPokemonInCurrentRoute(encounterType, onlySeen = false, onlyUnseen = fals
   seen = []
   unseen = []
   for encounter in $PokemonEncounters.listPossibleEncounters(encounterType)
-    species = $game_switches[SWITCH_RANDOM_WILD] ? getRandomizedTo(encounter[1]) : encounter[1]
+    species = $game_switches[SWITCH_RANDOM_WILD] && !$game_switches[SWITCH_RANDOM_WILD_AREA] ? getRandomizedTo(encounter[1]) : encounter[1]
+
     if !processed.include?(species)
       if $Trainer.seen?(species)
         seen << species
@@ -273,7 +275,7 @@ EncounterModifier.register(proc { |encounter|
     end
   else
     # Encounter triggered by stepping in non-rustling grass
-    pbPokeRadarCancel if encounter && $PokemonGlobal.repel <= 0
+    pbPokeRadarCancel if encounter  && $PokemonGlobal.repel <= 0
   end
   next encounter
 })
