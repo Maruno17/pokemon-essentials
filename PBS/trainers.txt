@@ -1863,6 +1863,8 @@ Pokemon = B110H100,25 #Voltzing,
 
 [ELITEFOUR_Lance,Lance,0]
 Pokemon = DRAGONITE,50 
+Pokemon = AERODACTYL,50 
+Pokemon = GYARADOS,50 
 
 [ELITEFOUR_Lance,Lance,1]
 Pokemon = DRAGONITE,40 
