@@ -1,4 +1,4 @@
-NON_RANDOMIZE_ITEMS = [:CELLBATTERY, :MAGNETSTONE]
+NON_RANDOMIZE_ITEMS = [:CELLBATTERY, :MAGNETSTONE, :TM94]
 HELD_ITEMS = [:AIRBALLOON, :BRIGHTPOWDER, :EVIOLITE, :FLOATSTONE, :DESTINYKNOT, :ROCKYHELMET, :EJECTBUTTON, :REDCARD,
               :SHEDSHELL, :SMOKEBALL, :CHOICEBAND, :CHOICESPECS, :CHOICESCARF, :HEATROCK, :DAMPROCK, :SMOOTHROCK, :ICYROCK,
               :LIGHTCLAY, :GRIPCLAW, :BINDINGBAND, :BIGROOT, :BLACKSLUDGE, :LEFTOVERS, :SHELLBELL, :MENTALHERB, :WHITEHERB,
@@ -25,6 +25,7 @@ RANDOM_ITEM_EXCEPTIONS = [:DNASPLICERS, :POKEBALL]
 
 def getRandomGivenTM(item)
   return item if item == nil
+  return item if RANDOM_TM_EXCEPTIONS.include?(item.id)
   if $game_switches[SWITCH_RANDOM_ITEMS_MAPPED]
     newItem = $PokemonGlobal.randomTMsHash[item.id]
     return GameData::Item.get(newItem) if newItem != nil
@@ -37,6 +38,7 @@ end
 
 def getMappedRandomItem(item)
   if (item.is_TM?)
+    return item if NON_RANDOMIZE_ITEMS.include?(item.id)
     return item if !$game_switches[SWITCH_RANDOM_TMS]
     if $game_switches[SWITCH_RANDOM_TMS]
       newItem = $PokemonGlobal.randomTMsHash[item.id]
