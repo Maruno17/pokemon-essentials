@@ -20,11 +20,40 @@ HELD_ITEMS = [:AIRBALLOON, :BRIGHTPOWDER, :EVIOLITE, :FLOATSTONE, :DESTINYKNOT, 
               :PETAYABERRY, :APICOTBERRY, :LANSATBERRY, :STARFBERRY, :ENIGMABERRY, :MICLEBERRY, :CUSTAPBERRY,
               :JABOCABERRY, :ROWAPBERRY, :FAIRYGEM]
 
-ITEM_EXCEPTIONS= [:COVERFOSSIL, :PLUMEFOSSIL, :ACCURACYUP,:DAMAGEUP,:ANCIENTSTONE,:ODDKEYSTONE_FULL,:TM00 ]
+INVALID_ITEMS = [:COVERFOSSIL, :PLUMEFOSSIL, :ACCURACYUP, :DAMAGEUP, :ANCIENTSTONE, :ODDKEYSTONE_FULL, :TM00]
+RANDOM_ITEM_EXCEPTIONS = [:DNASPLICERS, :POKEBALL]
 
-def pbGetRandomItem(item_id)
-  return nil if item_id == nil
-  item = GameData::Item.get(item_id)
+def getRandomGivenTM(item)
+  return item if item == nil
+  if $game_switches[SWITCH_RANDOM_ITEMS_MAPPED]
+    newItem = $PokemonGlobal.randomTMsHash[item.id]
+    return GameData::Item.get(newItem) if newItem != nil
+  end
+  if $game_switches[SWITCH_RANDOM_ITEMS_DYNAMIC]
+    return pbGetRandomTM
+  end
+  return item
+end
+
+def getMappedRandomItem(item)
+  if (item.is_TM?)
+    return item if !$game_switches[SWITCH_RANDOM_TMS]
+    if $game_switches[SWITCH_RANDOM_TMS]
+      newItem = $PokemonGlobal.randomTMsHash[item.id]
+      return GameData::Item.get(newItem) if newItem != nil
+    end
+    return item
+  else
+    return item if !$game_switches[SWITCH_RANDOM_ITEMS]
+    if $game_switches[SWITCH_RANDOM_ITEMS]
+      newItem = $PokemonGlobal.randomItemsHash[item.id]
+      return GameData::Item.get(newItem) if newItem != nil
+      return item
+    end
+  end
+end
+
+def getDynamicRandomItem(item)
   #keyItem ou HM -> on randomize pas
   return item if item.is_key_item?
   return item if item.is_HM?
@@ -35,7 +64,8 @@ def pbGetRandomItem(item_id)
     return $game_switches[SWITCH_RANDOM_TMS] ? pbGetRandomTM() : item
   end
   #item normal
-  return item if !$game_switches[SWITCH_RANDOM_ITEMS]
+  return item if !$game_switches[SWITCH_RANDOM_ITEMS_DYNAMIC] || !$game_switches[SWITCH_RANDOM_ITEMS]
+
 
   #berries
   return pbGetRandomBerry() if item.is_berry?
@@ -43,11 +73,23 @@ def pbGetRandomItem(item_id)
   items_list = GameData::Item.list_all
   newItem_id = items_list.keys.sample
   newItem = GameData::Item.get(newItem_id)
-  while (newItem.is_machine? || newItem.is_key_item? || ITEM_EXCEPTIONS.include?(newItem))
+  while (newItem.is_machine? || newItem.is_key_item? || INVALID_ITEMS.include?(newItem))
     newItem_id = items_list.keys.sample
     newItem = GameData::Item.get(newItem_id)
   end
   return newItem
+end
+
+def pbGetRandomItem(item_id)
+  return nil if item_id == nil
+  item = GameData::Item.get(item_id)
+  return item if !($game_switches[SWITCH_RANDOM_ITEMS] || $game_switches[SWITCH_RANDOM_TMS])
+  if $game_switches[SWITCH_RANDOM_ITEMS_MAPPED]
+    return getMappedRandomItem(item)
+  elsif $game_switches[SWITCH_RANDOM_ITEMS_DYNAMIC]
+    return getDynamicRandomItem(item)
+  end
+  return item
 end
 
 def pbGetRandomHeldItem()

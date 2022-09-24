@@ -25,6 +25,10 @@ Frogman
 The story and dialogues were based off Pokémon Red and Blue, as well as
 Pokémon Gold and Silver. Both games are made by Game Freak.
 
+
+#################################
+Modern Mode by Tomate & Blaquaza
+
 ###########################################################
 ###	Fusion Sprites										###
 ##########################################################
@@ -147,7 +151,6 @@ Team Haxley#4549, StarlyCactus#3665, Sarcastic barbarian#3562, Sanic#0823, Rough
 QuiteAMess#9717, Professor C-Dawg#5414, Nagareru#9593, luca3370#2920, KyleThePirahna#3191, KOMAIN#7770,
 kakakiamekerasakia#3792, ItsThatSimple#6320, Gelos#9875, GalaxyDJx#0001, FullmetalHeichou#7070, 
 Evil Mailman#0604, elpano2#9588, Cenna#6226, Catdesu#0845, CaseyAether#2205, carni#0124, Buttlu#7240
-
 
 
 Triple fusion sprites

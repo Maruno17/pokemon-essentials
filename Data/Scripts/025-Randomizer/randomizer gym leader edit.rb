@@ -27,13 +27,10 @@
 ###############################################################
 #
 
-
-
 #GYM_TYPES_ARRAY = [0,5,11,13,12,3,14,10,4,1,0,6,2,16,7,15,1,8,15,1,7,16,18,17,7,16]
-GYM_TYPES_CLASSIC = [:NORMAL,:ROCK,:WATER,:ELECTRIC,:GRASS,:POISON,:PSYCHIC,:FIRE,:GROUND,:FIGHTING,:NORMAL,:BUG,:FLYING,:DRAGON,:GHOST,:ICE,:FIGHTING,:STEEL,:ICE,:FIGHTING,:GHOST,:DRAGON,:FAIRY,:DARK,:GHOST,:DRAGON]
-GYM_TYPES_MODERN = [:NORMAL,:STEEL,:ICE,:FIGHTING,:BUG,:DARK,:FAIRY,:PSYCHIC,:NORMAL,:FIGHTING,:FAIRY,:GRASS,:BUG,:DRAGON,:FIRE,:GHOST,:GROUND,:ELECTRIC,:WATER,:ROCK,:POISON,:FLYING,:FAIRY,:DARK,:GHOST,:DRAGON]
+GYM_TYPES_CLASSIC = [:NORMAL, :ROCK, :WATER, :ELECTRIC, :GRASS, :POISON, :PSYCHIC, :FIRE, :GROUND, :FIGHTING, :NORMAL, :BUG, :FLYING, :DRAGON, :GHOST, :ICE, :FIGHTING, :STEEL, :ICE, :FIGHTING, :GHOST, :DRAGON, :FAIRY, :DARK, :GHOST, :DRAGON]
+GYM_TYPES_MODERN = [:NORMAL, :STEEL, :ICE, :FIGHTING, :BUG, :DARK, :FAIRY, :PSYCHIC, :NORMAL, :FIGHTING, :FAIRY, :GRASS, :BUG, :DRAGON, :FIRE, :GHOST, :GROUND, :ELECTRIC, :WATER, :ROCK, :POISON, :FLYING, :FAIRY, :DARK, :GHOST, :DRAGON]
 GYM_TYPES_ARRAY = ($game_switches && $game_switches[SWITCH_MODERN_MODE]) ? GYM_TYPES_MODERN : GYM_TYPES_CLASSIC
-
 
 #$randomTrainersArray = []
 
@@ -44,70 +41,71 @@ def Kernel.initRandomTypeArray()
   $game_variables[VAR_GYM_TYPES_ARRAY] = $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] ? typesArray : GYM_TYPES_ARRAY
 end
 
-
 def setRivalStarter(starter1, starter2, starter3, choice)
-  starters=[starter1,starter2,starter3]
+  starters = [starter1, starter2, starter3]
   starters.delete_at(choice)
   if starters[0] > NB_POKEMON || starters[1] > NB_POKEMON
     rivalStarter = starters[0]
   else
-    rivalStarter = starters[0]*NB_POKEMON+starters[1]
+    rivalStarter = starters[0] * NB_POKEMON + starters[1]
   end
-  pbSet(VAR_RIVAL_STARTER,rivalStarter)
+  pbSet(VAR_RIVAL_STARTER, rivalStarter)
   $game_switches[SWITCH_DEFINED_RIVAL_STARTER] = true
 end
 
 def setRivalStarterSpecific(rivalStarter)
-  pbSet(VAR_RIVAL_STARTER,rivalStarter)
+  pbSet(VAR_RIVAL_STARTER, rivalStarter)
   $game_switches[SWITCH_DEFINED_RIVAL_STARTER] = true
 end
 
-
 class PokeBattle_Battle
-CONST_BST_RANGE = 25  #unused. $game_variables[197] a la place
-def randomize_opponent_party(party)
+  CONST_BST_RANGE = 25 #unused. $game_variables[197] a la place
+  def randomize_opponent_party(party)
     for pokemon in party
-       next if !pokemon
-       newspecies = rand(PBSpecies.maxValue - 1) + 1
-       while  !gymLeaderOk(newspecies) || bstOk(newspecies,pokemon.species,$game_variables[VAR_RANDOMIZER_WILD_POKE_BST])
-          newspecies = rand(PBSpecies.maxValue - 1) + 1
-        end
-       pokemon.species = newspecies
-       pokemon.name = PBSpecies.getName(newspecies)
-       pokemon.resetMoves
-       pokemon.calcStats
-      end  
-
-  return party
-end
-
-def randomizedRivalFirstBattle(party)
-  return party if $game_switches[953] #full random
-  starter1 = $PokemonGlobal.psuedoBSTHash[1]
-  starter2 = $PokemonGlobal.psuedoBSTHash[4]
-  starter3 = $PokemonGlobal.psuedoBSTHash[7]
-  playerChoice = $game_variables[7]
-  
-  for m in party
-    next if !m
-    case playerChoice
-    when 0 then newspecies = starter2*NB_POKEMON+starter3
-    when 1 then newspecies = starter1*NB_POKEMON+starter3
-    when 2 then newspecies = starter1*NB_POKEMON+starter2
-    else
+      next if !pokemon
+      newspecies = rand(PBSpecies.maxValue - 1) + 1
+      while !gymLeaderOk(newspecies) || bstOk(newspecies, pokemon.species, $game_variables[VAR_RANDOMIZER_WILD_POKE_BST])
+        newspecies = rand(PBSpecies.maxValue - 1) + 1
+      end
+      pokemon.species = newspecies
+      pokemon.name = PBSpecies.getName(newspecies)
+      pokemon.resetMoves
+      pokemon.calcStats
     end
-    m.species= newspecies
-    m.name = PBSpecies.getName(newspecies)
-    m.resetMoves
-    m.calcStats  
+
+    return party
   end
-  return party
+
+  def randomizedRivalFirstBattle(party)
+    return party if $game_switches[953] #full random
+    starter1 = $PokemonGlobal.psuedoBSTHash[1]
+    starter2 = $PokemonGlobal.psuedoBSTHash[4]
+    starter3 = $PokemonGlobal.psuedoBSTHash[7]
+    playerChoice = $game_variables[7]
+
+    for m in party
+      next if !m
+      case playerChoice
+      when 0 then
+        newspecies = starter2 * NB_POKEMON + starter3
+      when 1 then
+        newspecies = starter1 * NB_POKEMON + starter3
+      when 2 then
+        newspecies = starter1 * NB_POKEMON + starter2
+      else
+      end
+      m.species = newspecies
+      m.name = PBSpecies.getName(newspecies)
+      m.resetMoves
+      m.calcStats
+    end
+    return party
+  end
 end
-end
+
 #######
 # end of class 
 ######
-
 
 ####methodes utilitaires
 
@@ -121,20 +119,20 @@ end
 #      return basestatsum
 # end
 #
-   
-def bstOk(newspecies,oldPokemonSpecies,bst_range=50)
-       newBST = calcBaseStatsSum(newspecies)
-       originalBST = calcBaseStatsSum(oldPokemonSpecies)
-       return newBST < originalBST-bst_range || newBST > originalBST+bst_range
+
+def bstOk(newspecies, oldPokemonSpecies, bst_range = 50)
+  newBST = calcBaseStatsSum(newspecies)
+  originalBST = calcBaseStatsSum(oldPokemonSpecies)
+  return newBST < originalBST - bst_range || newBST > originalBST + bst_range
 end
 
 def gymLeaderOk(newspecies)
   return true if $game_variables[152] == -1 #not in a gym
-  leaderType=getLeaderType()
+  leaderType = getLeaderType()
   if leaderType == nil
     return true
   else
-    return true if SpeciesHasType?(leaderType,newspecies)
+    return true if SpeciesHasType?(leaderType, newspecies)
   end
   return false
 end
@@ -150,41 +148,34 @@ def getLeaderType()
   return typeIndex
 end
 
-
-
-
 ##Version alternatives de fonctions pour fonctionner avec numero de species
-def SpeciesHasType?(type,species)
-    if type.is_a?(String) || type.is_a?(Symbol)
-      return isConst?(getSpeciesType1(species),PBTypes,type) || isConst?(getSpeciesType2(species),PBTypes,type)
-    else
-      return getSpeciesType1(species)==type || getSpeciesType2(species)==type
-    end
+def SpeciesHasType?(type, species)
+  if type.is_a?(String) || type.is_a?(Symbol)
+    return isConst?(getSpeciesType1(species), PBTypes, type) || isConst?(getSpeciesType2(species), PBTypes, type)
+  else
+    return getSpeciesType1(species) == type || getSpeciesType2(species) == type
+  end
 end
 
 # Returns this Pokémon's first type.
-  def getSpeciesType1(species)
-    return $pkmn_dex[species][3]
-  end
+def getSpeciesType1(species)
+  return $pkmn_dex[species][3]
+end
 
 # Returns this Pokémon's second type.
-  def getSpeciesType2(species)
-    return $pkmn_dex[species][4]
-  end
-  
-  
-  
-  ############
+def getSpeciesType2(species)
+  return $pkmn_dex[species][4]
+end
 
-
+############
 
 #summarize random options
 def Kernel.sumRandomOptions()
   answer = $game_switches[954] ? "On" : "Off"
   stringOptions = "\nStarters: " << answer
-  
+
   answer = $game_switches[778] ? "On" : "Off"
-  stringOptions << "\nWild Pokémon: "  << answer  << " "
+  stringOptions << "\nWild Pokémon: " << answer << " "
   if $game_switches[777]
     stringOptions << "(Area)"
   else
@@ -192,142 +183,130 @@ def Kernel.sumRandomOptions()
   end
 
   answer = $game_switches[987] ? "On" : "Off"
-  stringOptions << "\nTrainers: " << answer 
+  stringOptions << "\nTrainers: " << answer
 
-  answer = $game_switches[955] ? "On" : "Off"  
-  stringOptions << "\nStatic encounters: " << answer 
+  answer = $game_switches[955] ? "On" : "Off"
+  stringOptions << "\nStatic encounters: " << answer
 
-  answer = $game_switches[780] ? "On" : "Off"  
-  stringOptions << "\nGift Pokémon: " << answer 
-  
+  answer = $game_switches[780] ? "On" : "Off"
+  stringOptions << "\nGift Pokémon: " << answer
+
   answer = $game_switches[958] ? "On" : "Off"
-  stringOptions  << "\nItems: " << answer 
+  stringOptions << "\nItems: " << answer
 
   answer = $game_switches[959] ? "On" : "Off"
-  stringOptions << "\nTMs: " << answer 
-  
-  
+  stringOptions << "\nTMs: " << answer
+
   return stringOptions
 end
-
 
 def countVisitedMaps
   count = 0
   for i in 0..$PokemonGlobal.visitedMaps.length
-    count +=1 if $PokemonGlobal.visitedMaps[i]
-  end  
+    count += 1 if $PokemonGlobal.visitedMaps[i]
+  end
   return count
 end
 
 def Kernel.sumGameStats()
   stringStats = ""
-  
 
-  
-  stringStats << "Seen "  << $Trainer.pokedexSeen.to_s  << " Pokémon"
-  stringStats << "\nCaught "  << $Trainer.pokedexOwned.to_s  << " Pokémon"
+  stringStats << "Seen " << $Trainer.pokedexSeen.to_s << " Pokémon"
+  stringStats << "\nCaught " << $Trainer.pokedexOwned.to_s << " Pokémon"
 
-  
   stringStats << "\nBeaten the Elite Four " << $game_variables[174].to_s << " times"
-  stringStats << "\nFused "  << $game_variables[126].to_s  << " Pokémon"
-  
+  stringStats << "\nFused " << $game_variables[126].to_s << " Pokémon"
 
-  stringStats << "\nRematched "  << $game_variables[162].to_s  << " Gym Leaders"
-  stringStats << "\nTook "  << $PokemonGlobal.stepcount.to_s  << " steps"
-  stringStats << "\nVisited "  << countVisitedMaps.to_s  << " different areas"
+  stringStats << "\nRematched " << $game_variables[162].to_s << " Gym Leaders"
+  stringStats << "\nTook " << $PokemonGlobal.stepcount.to_s << " steps"
+  stringStats << "\nVisited " << countVisitedMaps.to_s << " different areas"
 
   if $game_switches[910]
-   stringStats << "\nMade "  << $game_variables[164].to_s  << " Wonder Trades"
+    stringStats << "\nMade " << $game_variables[164].to_s << " Wonder Trades"
   end
-  
-  stringStats << "\nTipped $"  << $game_variables[100].to_s << " to clowns"
-  stringStats << "\nDestroyed "  << $game_variables[163].to_s  << " sandcastles"
 
-  if $game_variables[43] > 0 || $game_variables[44] >0
-    stringStats << "\nWon $"  << $game_variables[43].to_s  << " against gamblers"
-    stringStats << "\nLost $"  << $game_variables[44].to_s  << " against gamblers"
+  stringStats << "\nTipped $" << $game_variables[100].to_s << " to clowns"
+  stringStats << "\nDestroyed " << $game_variables[163].to_s << " sandcastles"
+
+  if $game_variables[43] > 0 || $game_variables[44] > 0
+    stringStats << "\nWon $" << $game_variables[43].to_s << " against gamblers"
+    stringStats << "\nLost $" << $game_variables[44].to_s << " against gamblers"
   end
-  stringStats << "\nSpent $"  << $game_variables[225].to_s  << " at hotels"
+  stringStats << "\nSpent $" << $game_variables[225].to_s << " at hotels"
 
-  
-  
-  stringStats << "\nAccepted "  << $game_variables[96].to_s  << " quests"
-  stringStats << "\nCompleted "  << $game_variables[98].to_s  << " quests"
-  stringStats << "\nDiscovered "  << $game_variables[193].to_s  << " secrets"
-  
+  stringStats << "\nAccepted " << $game_variables[96].to_s << " quests"
+  stringStats << "\nCompleted " << $game_variables[98].to_s << " quests"
+  stringStats << "\nDiscovered " << $game_variables[193].to_s << " secrets"
+
   if $game_switches[912]
-      stringStats << "\nDied "  << $game_variables[191].to_s  << " times in Pikachu's adventure"
-    if $game_variables[193]  >= 1
-      stringStats << "\nCollected "  << $game_variables[194].to_s  << " coins with Pikachu"
+    stringStats << "\nDied " << $game_variables[191].to_s << " times in Pikachu's adventure"
+    if $game_variables[193] >= 1
+      stringStats << "\nCollected " << $game_variables[194].to_s << " coins with Pikachu"
     end
   end
   return stringStats
 end
 
-  
 def Kernel.pbRandomizeTM()
   tmList = []
   for item in $itemData
     #machine=$ItemData[item][ITEMMACHINE]
     #movename=PBMoves.getName(machine)
     #Kernel.pbMessage(_INTL("It contained {1}.\1",item))
-    
+
     tmList << item if pbIsHiddenMachine?(item)
   end
 end
 
-def getNewSpecies(oldSpecies,bst_range=50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue )
+def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue)
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
   newspecies_dex = rand(maxDexNumber - 1) + 1
-  i=0
-  while  bstOk(newspecies_dex,oldSpecies_dex,bst_range)
+  i = 0
+  while bstOk(newspecies_dex, oldSpecies_dex, bst_range)
     newspecies_dex = rand(maxDexNumber - 1) + 1
-    i+=1
-    if i%10 == 0
+    i += 1
+    if i % 10 == 0
       bst_range += 5
     end
   end
   return newspecies_dex
 end
 
-
-def getNewCustomSpecies(oldSpecies,customSpeciesList,bst_range=50, ignoreRivalPlaceholder = false)
+def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRivalPlaceholder = false)
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
   i = rand(customSpeciesList.length - 1) + 1
-  n=0
+  n = 0
   newspecies_dex = customSpeciesList[i]
-  while  bstOk(newspecies_dex,oldSpecies_dex,bst_range)
-    i = rand(customSpeciesList.length - 1)#+1
+  while bstOk(newspecies_dex, oldSpecies_dex, bst_range)
+    i = rand(customSpeciesList.length - 1) #+1
     newspecies_dex = customSpeciesList[i]
-    n+=1
+    n += 1
     if n % 10 == 0
-      bst_range+=5
+      bst_range += 5
     end
   end
   return newspecies_dex
 end
 
-
 def playShuffleSE(i)
   if i % 40 == 0 || i == 0
-    pbSEPlay("Charm",60)
+    pbSEPlay("Charm", 60)
   end
 end
 
 def getTrainersDataMode
-    mode = GameData::Trainer
-    if $game_switches && $game_switches[SWITCH_MODERN_MODE]
-      mode = GameData::TrainerModern
-    end
-    return mode
+  mode = GameData::Trainer
+  if $game_switches && $game_switches[SWITCH_MODERN_MODE]
+    mode = GameData::TrainerModern
+  end
+  return mode
 end
 
-
-def Kernel.pbShuffleTrainers(bst_range = 50,customsOnly=false,customsList=nil)
+def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = nil)
   bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
 
   if customsOnly && customsList == nil
@@ -337,19 +316,19 @@ def Kernel.pbShuffleTrainers(bst_range = 50,customsOnly=false,customsList=nil)
   trainers_data = GameData::Trainer.list_all
   trainers_data.each do |key, value|
     trainer = trainers_data[key]
-    i=0
+    i = 0
     new_party = []
     for poke in trainer.pokemon
       old_poke = GameData::Species.get(poke[:species]).id_number
-      new_poke = customsOnly ? getNewCustomSpecies(old_poke,customsList,bst_range) : getNewSpecies(old_poke,bst_range)
+      new_poke = customsOnly ? getNewCustomSpecies(old_poke, customsList, bst_range) : getNewSpecies(old_poke, bst_range)
       new_party << new_poke
     end
     randomTrainersHash[trainer.id] = new_party
     playShuffleSE(i)
     i += 1
     if i % 2 == 0
-      n = (i.to_f/trainers.length)*100
-      Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
+      n = (i.to_f / trainers.length) * 100
+      Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers...\\n {1}%\\^", sprintf('%.2f', n), PBSpecies.maxValue))
     end
   end
   $PokemonGlobal.randomTrainersHash = randomTrainersHash
@@ -382,21 +361,21 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
 
   Kernel.pbMessage(_INTL("Parsing custom sprites folder"))
   customsList = getCustomSpeciesList()
-  Kernel.pbMessage(_INTL("{1} Pokémon found",customsList.length.to_s))
+  Kernel.pbMessage(_INTL("{1} sprites found", customsList.length.to_s))
 
-  if customsList.length == 0 
-      Kernel.pbMessage(_INTL("To use custom sprites, please place correctly named sprites in the /CustomBattlers folder. See readMe.txt for more information"))
+  if customsList.length == 0
+    Kernel.pbMessage(_INTL("To use custom sprites, please place correctly named sprites in the /CustomBattlers folder. See readMe.txt for more information"))
+    Kernel.pbMessage(_INTL("Trainer Pokémon will include auto-generated sprites."))
+    return Kernel.pbShuffleTrainers(bst_range)
+  elsif customsList.length < 200
+    if Kernel.pbConfirmMessage(_INTL("Too few custom sprites were found. This will result in a very low Pokémon variety for trainers. Continue anyway?"))
+      bst_range = 999
+    else
       Kernel.pbMessage(_INTL("Trainer Pokémon will include auto-generated sprites."))
-      return Kernel.pbShuffleTrainers(bst_range)
-    elsif customsList.length < 200 
-      if Kernel.pbConfirmMessage(_INTL("Too few custom sprites were found. This will result in a very low Pokémon variety for trainers. Continue anyway?"))
-       bst_range=999
-      else
-        Kernel.pbMessage(_INTL("Trainer Pokémon will include auto-generated sprites."))
-       return Kernel.pbShuffleTrainers(bst_range)     ##use regular shuffle if not enough sprites
-      end
+      return Kernel.pbShuffleTrainers(bst_range) ##use regular shuffle if not enough sprites
+    end
   end
-  Kernel.pbShuffleTrainers(bst_range,true ,customsList)
+  Kernel.pbShuffleTrainers(bst_range, true, customsList)
 end
 
 
@@ -417,8 +396,6 @@ end
 # end
 # $PokemonGlobal.randomTrainersHash = randomTrainersHash
 
-
-
 #def getRandomCustomSprite()
 #    filesList = Dir["./Graphics/CustomBattlers/*"]
 #    i = rand(filesList.length-1)
@@ -430,44 +407,41 @@ end
 #    return (body*NB_POKEMON)+head 
 #end
 
-
 def getCustomSpeciesList()
   filesList = Dir["./Graphics/CustomBattlers/*"]
   speciesList = []
   maxDexNumber = (NB_POKEMON * NB_POKEMON) + NB_POKEMON
-  maxVal = filesList.length-1
+  maxVal = filesList.length - 1
   for i in 0..maxVal
     path = filesList[i]
-    file  = File.basename(path, ".*")
-    splitPoke = file.split(".")    
+    file = File.basename(path, ".*")
+    splitPoke = file.split(".")
     head = splitPoke[0].to_i
     body = splitPoke[1].to_i
-    fused = (body*NB_POKEMON)+head
+    fused = (body * NB_POKEMON) + head
     if fused <= maxDexNumber && fused > 0
-         speciesList << fused
+      speciesList << fused
     end
-    
+
   end
-  
+
   return speciesList
 end
 
-
 def Kernel.getBaseStats(species)
-        if $pkmn_dex[species] == nil
-          print species
-        end
-  
-        basestatsum = $pkmn_dex[species][5][0] # HP   
-        basestatsum +=$pkmn_dex[species][5][1] # Attack
-        basestatsum +=$pkmn_dex[species][5][2] # Defense
-        basestatsum +=$pkmn_dex[species][5][3] # Speed
-        basestatsum +=$pkmn_dex[species][5][4] # Special Attack
-        basestatsum +=$pkmn_dex[species][5][5]  # Special Defense
-     return basestatsum
+  if $pkmn_dex[species] == nil
+    print species
   end
-   
-   
+
+  basestatsum = $pkmn_dex[species][5][0] # HP
+  basestatsum += $pkmn_dex[species][5][1] # Attack
+  basestatsum += $pkmn_dex[species][5][2] # Defense
+  basestatsum += $pkmn_dex[species][5][3] # Speed
+  basestatsum += $pkmn_dex[species][5][4] # Special Attack
+  basestatsum += $pkmn_dex[species][5][5] # Special Defense
+  return basestatsum
+end
+
 def Kernel.gymLeaderRematchHint()
   hints = [
     "I heard that Brock has a huge interest in Pokémon fossils. He donated a lot of fossils he excavated to the Pewter City Museum.",
@@ -488,73 +462,71 @@ def Kernel.gymLeaderRematchHint()
     "Jasmine is on vacation in the Sevii Islands. She likes to rise up early to explore around the islands when no one's around."
   ]
   arr = []
-  n=0
+  n = 0
   for i in 426..437
     if !$game_switches[i]
       arr.push(n)
     end
-    n+=1
+    n += 1
   end
-  arr.push(508);  arr.push(509);  arr.push(510);  arr.push(511);
-  n+=4
+  arr.push(508); arr.push(509); arr.push(510); arr.push(511);
+  n += 4
 
   if arr.length > 0
     return hints[arr[rand(arr.length)]]
   end
   return "You got every Gym Leader to come here. This place is more popular than ever!\nNow go and battle them!"
-end   
-   
+end
+
 def getTrainerParty(trainer)
   if $game_switches[47]
     for poke in trainer[3]
-     inverseFusion(poke)
+      inverseFusion(poke)
     end
   end
   return trainer[3]
-end  
+end
 
 def inverseFusion(pokemon)
-  species=pokemon[TPSPECIES]
+  species = pokemon[TPSPECIES]
   return pokemon if species <= CONST_NB_POKE
   return pokemon if species > (CONST_NB_POKE * CONST_NB_POKE) + CONST_NB_POKE
-  body = getBasePokemonID(species,true)
-  head = getBasePokemonID(species,false)
-  newspecies = (head)*CONST_NB_POKE+body
+  body = getBasePokemonID(species, true)
+  head = getBasePokemonID(species, false)
+  newspecies = (head) * CONST_NB_POKE + body
   pokemon[TPSPECIES] = newspecies
   return pokemon
 end
 
-
 def addRandomHeldItems(trainerParty)
-  for poke in trainerParty 
+  for poke in trainerParty
     if poke.item == nil
-      poke.item = PBItems::ORANBERRY#PBItems.sample
+      poke.item = PBItems::ORANBERRY #PBItems.sample
     end
   end
 end
 
-
 def addHealingItem(items)
   if $Trainer.numbadges < 1
     items << PBItems::ORANBERRY
-  elsif $Trainer.numbadges <=2
-      items << PBItems::POTION
-  elsif $Trainer.numbadges <=4
-      items << PBItems::SUPERPOTION
-  elsif $Trainer.numbadges <=6
-       items << PBItems::FULLHEAL
-       items << PBItems::SUPERPOTION
+  elsif $Trainer.numbadges <= 2
+    items << PBItems::POTION
+  elsif $Trainer.numbadges <= 4
+    items << PBItems::SUPERPOTION
+  elsif $Trainer.numbadges <= 6
+    items << PBItems::FULLHEAL
+    items << PBItems::SUPERPOTION
   elsif $Trainer.numbadges <= 8
-       items << PBItems::FULLHEAL
-       items << PBItems::HYPERPOTION
+    items << PBItems::FULLHEAL
+    items << PBItems::HYPERPOTION
   elsif $Trainer.numbadges >= 9
-       items << PBItems::FULLRESTORE
+    items << PBItems::FULLRESTORE
   end
-    
+
   return items
 end
 
-   #####Overload de pbLoadTrainer
+#####Overload de pbLoadTrainer
 #
 #  def pbLoadTrainer(trainerid,trainername,partyid=0)
 #   if trainerid.is_a?(String) || trainerid.is_a?(Symbol)
@@ -664,65 +636,64 @@ end
 # end
 
 def getRematchId(trainername, trainerid)
-      return trainername + trainerid.to_s
+  return trainername + trainerid.to_s
 end
-
 
 def replaceRivalStarterIfNecessary(species)
-    if species == RIVAL_STARTER_PLACEHOLDER_SPECIES
-        if !$game_switches[840] || pbGet(250) == 0#not DEFINED_RIVAL_STARTER
-            fixRivalStarter()
-        end
-        rivalStarter = pbGet(250)
-        if rivalStarter > 0
-          species = pbGet(250)
-        end
+  if species == RIVAL_STARTER_PLACEHOLDER_SPECIES
+    if !$game_switches[840] || pbGet(250) == 0 #not DEFINED_RIVAL_STARTER
+      fixRivalStarter()
     end
-    return species
+    rivalStarter = pbGet(250)
+    if rivalStarter > 0
+      species = pbGet(250)
+    end
+  end
+  return species
 end
-    
+
 def fixRivalStarter()
   #set starter baseform 
   if $PokemonGlobal.psuedoBSTHash == nil
     psuedoHash = Hash.new
     for i in 0..NB_POKEMON
-        psuedoHash[i] = i
+      psuedoHash[i] = i
     end
     $PokemonGlobal.psuedoBSTHash = psuedoHash
   end
   starterChoice = pbGet(7)
-  
+
   s1 = $PokemonGlobal.psuedoBSTHash[1]
   s2 = $PokemonGlobal.psuedoBSTHash[4]
-  s3= $PokemonGlobal.psuedoBSTHash[7]
-  setRivalStarter(s3,s2,s1,starterChoice)  
-  
+  s3 = $PokemonGlobal.psuedoBSTHash[7]
+  setRivalStarter(s3, s2, s1, starterChoice)
+
   #evolve en fct des badges
   rivalStarter = pbGet(250)
 
   if $game_switches[68] #beat blue cerulean
     rivalStarter = evolveBody(rivalStarter)
   end
-  
+
   if $game_switches[89] #beat blue SS Anne
     rivalStarter = evolveHead(rivalStarter)
   end
-  
+
   if $game_switches[228] #beat silph co
     rivalStarter = evolveBody(rivalStarter)
   end
-  
+
   if $game_switches[11] #got badge 8
     rivalStarter = evolveHead(rivalStarter)
   end
-  
+
   if $game_switches[12] #beat league
     rivalStarter = evolveBody(rivalStarter)
     rivalStarter = evolveHead(rivalStarter)
   end
-  
+
   #RIVAL_STARTER_IS_DEFINED
-  pbSet(250,rivalStarter)
+  pbSet(250, rivalStarter)
   $game_switches[840] = true
 end
     

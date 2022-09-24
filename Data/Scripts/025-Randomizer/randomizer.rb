@@ -3,6 +3,9 @@ class PokemonGlobalMetadata
   attr_accessor :psuedoBSTHash
   attr_accessor :randomTrainersHash
   attr_accessor :randomGymTrainersHash
+  attr_accessor :randomItemsHash
+  attr_accessor :randomTMsHash
+
 
   alias random_init initialize
 
@@ -11,6 +14,9 @@ class PokemonGlobalMetadata
     @randomGymTrainersHash = nil
     @psuedoHash = nil
     @psuedoBSTHash = nil
+    @randomItemsHash = nil
+    @randomTMsHash = nil
+
   end
 end
 
@@ -82,7 +88,60 @@ def Kernel.pbShuffleDex(range = 50, type = 0)
   $PokemonGlobal.psuedoBSTHash = get_randomized_bst_hash(pokemon_list,range,should_include_fusions)
 end
 
+def itemCanBeRandomized(item)
+  return false if item.is_machine?
+  return false if item.is_key_item?
+  return false if INVALID_ITEMS.include?(item.id)
+  #return false if RANDOM_ITEM_EXCEPTIONS.include?(item.id)
+  return true
+end
 
+def pbShuffleItems()
+  $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
+  randomItemsHash = Hash.new
+  available_items = []
+  for itemElement in GameData::Item.list_all
+    item=itemElement[1]
+    if itemCanBeRandomized(item)
+      if !available_items.include?(item.id)
+        available_items << item.id
+      end
+    end
+  end
+  remaining_items = available_items.clone
+  for itemId in available_items
+    if itemCanBeRandomized(GameData::Item.get(itemId))
+      chosenItem = remaining_items.sample
+      randomItemsHash[itemId] = chosenItem
+      remaining_items.delete(chosenItem)
+    end
+  end
+  $PokemonGlobal.randomItemsHash = randomItemsHash
+end
+
+
+def pbShuffleTMs()
+  $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
+  randomItemsHash = Hash.new
+  available_items = []
+  for itemElement in GameData::Item.list_all
+    item=itemElement[1]
+    if item.is_TM?
+      if !available_items.include?(item.id)
+        available_items << item.id
+      end
+    end
+  end
+  remaining_items = available_items.clone
+  for itemId in available_items
+    if GameData::Item.get(itemId).is_TM?
+      chosenItem = remaining_items.sample
+      randomItemsHash[itemId] = chosenItem
+      remaining_items.delete(chosenItem)
+    end
+  end
+  $PokemonGlobal.randomTMsHash = randomItemsHash
+end
 
 
 #

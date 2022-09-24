@@ -786,7 +786,8 @@ end
 # Picking up an item found on the ground
 #===============================================================================
 def pbItemBall(item, quantity = 1, item_name = "", canRandom = true)
-  if canRandom
+  canRandom = false if !$game_switches[SWITCH_RANDOM_ITEMS_GENERAL]
+  if canRandom && ($game_switches[SWITCH_RANDOM_FOUND_ITEMS] || $game_switches[SWITCH_RANDOM_FOUND_TMS])
     item = pbGetRandomItem(item) if canRandom #fait rien si pas activé
   else
     item = GameData::Item.get(item)
@@ -833,9 +834,23 @@ end
 #===============================================================================
 
 
-def pbReceiveItem(item, quantity = 1, item_name = "", music = nil)
+def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom=true)
   #item_name -> pour donner un autre nom à l'item. Pas encore réimplémenté et surtout là pour éviter que ça plante quand des events essaient de le faire
-  item = GameData::Item.get(item)
+  canRandom = false if !$game_switches[SWITCH_RANDOM_ITEMS_GENERAL]
+  if canRandom && ($game_switches[SWITCH_RANDOM_GIVEN_ITEMS] || $game_switches[SWITCH_RANDOM_GIVEN_TMS])
+    item = pbGetRandomItem(item) if canRandom #fait rien si pas activé
+  else
+    item = GameData::Item.get(item)
+  end
+  # item = GameData::Item.get(item)
+  # if $game_switches[SWITCH_RANDOM_ITEMS] && $game_switches[SWITCH_RANDOM_GIVEN_ITEMS]
+  #   item = pbGetRandomItem(item.id)
+  # end
+  #
+  # if $game_switches[SWITCH_RANDOM_ITEMS] && $game_switches[SWITCH_RANDOM_GIVEN_TMS]
+  #   item = getRandomGivenTM(item)
+  # end
+
   return false if !item || quantity < 1
   itemname = (quantity > 1) ? item.name_plural : item.name
   pocket = item.pocket

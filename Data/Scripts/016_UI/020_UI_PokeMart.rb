@@ -648,10 +648,30 @@ class PokemonMartScreen
   end
 end
 
+def replaceShopStockWithRandomized(stock)
+  if $PokemonGlobal.randomItemsHash != nil
+    newStock = []
+    for item in stock
+      newItem =$PokemonGlobal.randomItemsHash[item]
+        if newItem != nil && GameData::Item.get(newItem).price >0
+          newStock << newItem
+        else
+          newStock << item
+        end
+    end
+    return newStock
+  end
+  return stock
+end
+
 #===============================================================================
 #
 #===============================================================================
 def pbPokemonMart(stock,speech=nil,cantsell=false)
+  if $game_switches[SWITCH_RANDOM_ITEMS] && $game_switches[SWITCH_RANDOM_SHOP_ITEMS]
+    stock = replaceShopStockWithRandomized(stock)
+  end
+
   for i in 0...stock.length
     stock[i] = GameData::Item.get(stock[i]).id
     stock[i] = nil if GameData::Item.get(stock[i]).is_important? && $PokemonBag.pbHasItem?(stock[i])
