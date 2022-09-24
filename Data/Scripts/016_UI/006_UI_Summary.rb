@@ -421,12 +421,12 @@ class PokemonSummary_Scene
     #     break
     #   end
     # end
-    if dexnum <= 0
-      textpos.push(["???", 435, 74, 2, dexNumBase, dexNumShadow])
-    else
-      dexnum -= 1 if dexnumshift
-      textpos.push([sprintf("%03d", dexnum), 435, 74, 2, dexNumBase, dexNumShadow])
-    end
+    # if dexnum <= 0
+    #   textpos.push(["???", 435, 74, 2, dexNumBase, dexNumShadow])
+    # else
+    #   dexnum -= 1 if dexnumshift
+    #   textpos.push([sprintf("%03d", dexnum), 435, 74, 2, dexNumBase, dexNumShadow])
+    # end
     # Write Original Trainer's name and ID number
     if @pokemon.owner.name.empty?
       textpos.push([_INTL("RENTAL"), 435, 170, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])

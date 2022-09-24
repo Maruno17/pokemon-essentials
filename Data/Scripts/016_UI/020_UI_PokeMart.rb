@@ -668,7 +668,7 @@ end
 #
 #===============================================================================
 def pbPokemonMart(stock,speech=nil,cantsell=false)
-  if $game_switches[SWITCH_RANDOM_ITEMS] && $game_switches[SWITCH_RANDOM_SHOP_ITEMS]
+  if $game_switches[SWITCH_RANDOM_ITEMS_GENERAL] && $game_switches[SWITCH_RANDOM_SHOP_ITEMS]
     stock = replaceShopStockWithRandomized(stock)
   end
 

@@ -1803,7 +1803,7 @@ class PokeBattle_Move_05E < PokeBattle_Move
   def pbEffectGeneral(user)
     newType = @newTypes[@battle.pbRandom(@newTypes.length)]
     user.pbChangeTypes(newType)
-    typeName = GameData::Item.get(newType).name
+    typeName = GameData::Type.get(newType).name
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
   end
 end

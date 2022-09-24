@@ -1660,7 +1660,7 @@ class PokemonStorageScreen
               if pokemon != nil
                 if dexNum(pokemon.species) > NB_POKEMON
                   commands[cmdUnfuse = commands.length] = _INTL("Unfuse")
-                  commands[cmdReverse = commands.length] = _INTL("Reverse") if $PokemonBag.pbQuantity(:DNAREVERSER) > 0
+                  commands[cmdReverse = commands.length] = _INTL("Reverse") if $PokemonBag.pbQuantity(:DNAREVERSER) > 0 || $PokemonBag.pbQuantity(:INFINITEREVERSERS) > 0
                 else
                   commands[cmdFuse = commands.length] = _INTL("Fuse")
                 end
@@ -2285,7 +2285,7 @@ class PokemonStorageScreen
     if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be reversed?", pokemon.name))
       reverseFusion(pokemon)
     end
-    $PokemonBag.pbDeleteItem(:DNAREVERSER)
+    $PokemonBag.pbDeleteItem(:DNAREVERSER) if $PokemonBag.pbQuantity(:INFINITEREVERSERS) <= 0
   end
 
   def pbUnfuseFromPC(selected)
