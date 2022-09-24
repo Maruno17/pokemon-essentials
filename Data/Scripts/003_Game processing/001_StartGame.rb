@@ -69,7 +69,6 @@ module Game
         item_id = bagElement[0]
         item_qt = bagElement[1]
         item = GameData::Item.get(item_id)
-        p item
         if !item.is_key_item? && !item.is_HM?
           new_storage.pbStoreItem(item, 1)
         end

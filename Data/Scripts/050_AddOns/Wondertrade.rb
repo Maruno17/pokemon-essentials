@@ -62,7 +62,11 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
                                (poke.level >= lvl) && !(except.include?(poke.species)) # None under "lvl", no exceptions.
                            })
   poke = $Trainer.party[pbGet(1)]
-  $PokemonBag.pbStoreItem(poke.item, 1) if poke.item != nil
+  if !pbConfirmMessage(_INTL("Trade {1} away?",poke.name))
+    return
+  end
+
+    $PokemonBag.pbStoreItem(poke.item, 1) if poke.item != nil
   myPoke = poke.species
   chosenBST = calcBaseStatsSum(myPoke)
   # The following excecption fields are for hardcoding the blacklisted pokemon
