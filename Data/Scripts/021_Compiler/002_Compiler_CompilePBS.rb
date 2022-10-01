@@ -1849,6 +1849,110 @@ module Compiler
   end
 
   #=============================================================================
+  # Compile dungeon tileset data
+  #=============================================================================
+  def compile_dungeon_tilesets(path = "PBS/dungeon_tilesets.txt")
+    compile_pbs_file_message_start(path)
+    GameData::DungeonTileset::DATA.clear
+    schema = GameData::DungeonTileset::SCHEMA
+    tileset_hash = nil
+    # Read each line of dungeon_tilesets.txt at a time and compile it as a tileset property
+    idx = 0
+    pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 50 == 0
+      idx += 1
+      Graphics.update if idx % 250 == 0
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]
+        # New section
+        # Add tileset's data to records
+        GameData::DungeonTileset.register(tileset_hash) if tileset_hash
+        # Construct tileset hash
+        tileset_hash = {
+          :id       => $~[1].to_i,
+          :tile     => [],
+          :autotile => []
+        }
+      elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
+        # XXX=YYY lines
+        if !tileset_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+        end
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+        # Record XXX=YYY setting
+        case property_name
+        when "Tile", "Autotile"
+          tileset_hash[line_schema[0]].push(property_value)
+        else
+          tileset_hash[line_schema[0]] = property_value
+        end
+      end
+    }
+    # Add last tileset's data to records
+    GameData::DungeonTileset.register(tileset_hash) if tileset_hash
+    # Save all data
+    GameData::DungeonTileset.save
+    process_pbs_file_message_end
+  end
+
+  #=============================================================================
+  # Compile dungeon parameters data
+  #=============================================================================
+  def compile_dungeon_parameters(path = "PBS/dungeon_parameters.txt")
+    compile_pbs_file_message_start(path)
+    GameData::DungeonParameters::DATA.clear
+    schema = GameData::DungeonParameters::SCHEMA
+    # Read from PBS file
+    File.open(path, "rb") { |f|
+      FileLineData.file = path   # For error reporting
+      # Read a whole section's lines at once, then run through this code.
+      # contents is a hash containing all the XXX=YYY lines in that section, where
+      # the keys are the XXX and the values are the YYY (as unprocessed strings).
+      idx = 0
+      pbEachFileSection(f) { |contents, section_name|
+        echo "." if idx % 50 == 0
+        idx += 1
+        Graphics.update if idx % 250 == 0
+        FileLineData.setSection(section_name, "header", nil)   # For error reporting
+        # Split section_name into an area and version number
+        split_section_name = section_name.split(/[-,\s]/)
+        if split_section_name.length == 0 || split_section_name.length > 2
+          raise _INTL("Section name {1} is invalid ({2}). Expected syntax like [XXX] or [XXX,Y] (XXX=area, Y=version).", section_name, path)
+        end
+        area_symbol = split_section_name[0].downcase.to_sym
+        version     = (split_section_name[1]) ? csvPosInt!(split_section_name[1]) : 0
+        # Construct parameters hash
+        area_version = (version > 0) ? sprintf("%s_%d", area_symbol.to_s, version).to_sym : area_symbol
+        parameters_hash = {
+          :id      => area_version,
+          :area    => area_symbol,
+          :version => version
+        }
+        # Go through schema hash of compilable data and compile this section
+        schema.each_key do |key|
+          # Skip empty properties (none are required)
+          if nil_or_empty?(contents[key])
+            contents[key] = nil
+            next
+          end
+          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
+          # Compile value for key
+          value = pbGetCsvRecord(contents[key], key, schema[key])
+          value = nil if value.is_a?(Array) && value.length == 0
+          parameters_hash[schema[key][0]] = value
+        end
+        # Add parameters data to records
+        GameData::DungeonParameters.register(parameters_hash)
+      }
+    }
+    # Save all data
+    GameData::DungeonParameters.save
+    process_pbs_file_message_end
+  end
+
+  #=============================================================================
   # Compile battle animations
   #=============================================================================
   def compile_animations

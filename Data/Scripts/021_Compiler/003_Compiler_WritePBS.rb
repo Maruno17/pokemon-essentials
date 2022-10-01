@@ -874,6 +874,91 @@ module Compiler
   end
 
   #=============================================================================
+  # Save dungeon tileset contents data to PBS file
+  #=============================================================================
+  def write_dungeon_tilesets(path = "PBS/dungeon_tilesets.txt")
+    write_pbs_file_message_start(path)
+    tilesets = load_data("Data/Tilesets.rxdata")
+    schema = GameData::DungeonTileset::SCHEMA
+    keys = schema.keys
+    File.open(path, "wb") { |f|
+      idx = 0
+      add_PBS_header_to_file(f)
+      GameData::DungeonTileset.each do |tileset_data|
+        echo "." if idx % 50 == 0
+        idx += 1
+        Graphics.update if idx % 250 == 0
+        f.write("\#-------------------------------\r\n")
+        tileset_name = (tilesets && tilesets[tileset_data.id]) ? tilesets[tileset_data.id].name : nil
+        if tileset_name
+          f.write(sprintf("[%d]   # %s\r\n", tileset_data.id, tileset_name))
+        else
+          f.write(sprintf("[%d]\r\n", tileset_data.id))
+        end
+        keys.each do |key|
+          if ["Autotile", "Tile"].include?(key)
+            tiles = tileset_data.tile_type_ids
+            tiles.each do |tile_type, tile_ids|
+              tile_ids.each do |tile|
+                next if tile[1]   # Tile was auto-generated from "walls" property
+                if tile[0] < 384
+                  next if key == "Tile"
+                  f.write(sprintf("Autotile = %i,%s", tile[0] / 48, tile_type.to_s))
+                else
+                  next if key == "Autotile"
+                  f.write(sprintf("Tile = %i,%s", tile[0] - 384, tile_type.to_s))
+                end
+                f.write("\r\n")
+              end
+            end
+          else
+            record = tileset_data.property_from_string(key)
+            next if record.nil? || (record.is_a?(Array) && record.empty?)
+            next if record == false || record == 0
+            f.write(sprintf("%s = ", key))
+            pbWriteCsvRecord(record, f, schema[key])
+            f.write("\r\n")
+          end
+        end
+      end
+    }
+    process_pbs_file_message_end
+  end
+
+  #=============================================================================
+  # Save dungeon parameters to PBS file
+  #=============================================================================
+  def write_dungeon_parameters(path = "PBS/dungeon_parameters.txt")
+    write_pbs_file_message_start(path)
+    schema = GameData::DungeonParameters::SCHEMA
+    keys = schema.keys
+    # Write file
+    File.open(path, "wb") { |f|
+      idx = 0
+      add_PBS_header_to_file(f)
+      GameData::DungeonParameters.each do |parameters_data|
+        echo "." if idx % 50 == 0
+        idx += 1
+        Graphics.update if idx % 250 == 0
+        f.write("\#-------------------------------\r\n")
+        if parameters_data.version > 0
+          f.write(sprintf("[%s,%d]\r\n", parameters_data.area, parameters_data.version))
+        else
+          f.write(sprintf("[%s]\r\n", parameters_data.area))
+        end
+        keys.each do |key|
+          value = parameters_data.property_from_string(key)
+          next if !value || (value.is_a?(Array) && value.length == 0)
+          f.write(sprintf("%s = ", key))
+          pbWriteCsvRecord(value, f, schema[key])
+          f.write("\r\n")
+        end
+      end
+    }
+    process_pbs_file_message_end
+  end
+
+  #=============================================================================
   # Save all data to PBS files
   #=============================================================================
   def write_all
@@ -897,6 +982,8 @@ module Compiler
     write_trainer_lists
     write_metadata
     write_map_metadata
+    write_dungeon_tilesets
+    write_dungeon_parameters
     write_phone
     echoln ""
     Console.echo_h2("Successfully rewrote all PBS files", text: :green)

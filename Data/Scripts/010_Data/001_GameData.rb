@@ -240,6 +240,8 @@ module GameData
     Metadata.load
     PlayerMetadata.load
     MapMetadata.load
+    DungeonTileset.load
+    DungeonParameters.load
     PhoneMessage.load
   end
 end

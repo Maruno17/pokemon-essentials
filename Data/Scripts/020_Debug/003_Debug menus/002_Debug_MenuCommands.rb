@@ -1128,6 +1128,8 @@ MenuHandlers.add(:debug_menu, :create_pbs_files, {
       "abilities.txt",
       "battle_facility_lists.txt",
       "berry_plants.txt",
+      "dungeon_parameters.txt",
+      "dungeon_tilesets.txt",
       "encounters.txt",
       "items.txt",
       "map_connections.txt",
@@ -1153,23 +1155,25 @@ MenuHandlers.add(:debug_menu, :create_pbs_files, {
       when 1  then Compiler.write_abilities
       when 2  then Compiler.write_trainer_lists
       when 3  then Compiler.write_berry_plants
-      when 4  then Compiler.write_encounters
-      when 5  then Compiler.write_items
-      when 6  then Compiler.write_connections
-      when 7  then Compiler.write_map_metadata
-      when 8  then Compiler.write_metadata
-      when 9  then Compiler.write_moves
-      when 10 then Compiler.write_phone
-      when 11 then Compiler.write_pokemon
-      when 12 then Compiler.write_pokemon_forms
-      when 13 then Compiler.write_pokemon_metrics
-      when 14 then Compiler.write_regional_dexes
-      when 15 then Compiler.write_ribbons
-      when 16 then Compiler.write_shadow_pokemon
-      when 17 then Compiler.write_town_map
-      when 18 then Compiler.write_trainer_types
-      when 19 then Compiler.write_trainers
-      when 20 then Compiler.write_types
+      when 4  then Compiler.write_dungeon_parameters
+      when 5  then Compiler.write_dungeon_tilesets
+      when 6  then Compiler.write_encounters
+      when 7  then Compiler.write_items
+      when 8  then Compiler.write_connections
+      when 9  then Compiler.write_map_metadata
+      when 10 then Compiler.write_metadata
+      when 11 then Compiler.write_moves
+      when 12 then Compiler.write_phone
+      when 13 then Compiler.write_pokemon
+      when 14 then Compiler.write_pokemon_forms
+      when 15 then Compiler.write_pokemon_metrics
+      when 16 then Compiler.write_regional_dexes
+      when 17 then Compiler.write_ribbons
+      when 18 then Compiler.write_shadow_pokemon
+      when 19 then Compiler.write_town_map
+      when 20 then Compiler.write_trainer_types
+      when 21 then Compiler.write_trainers
+      when 22 then Compiler.write_types
       else break
       end
       pbMessage(_INTL("File written."))

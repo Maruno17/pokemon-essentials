@@ -774,6 +774,8 @@ module Compiler
     compile_trainer_lists     # Depends on TrainerType
     compile_metadata          # Depends on TrainerType
     compile_map_metadata
+    compile_dungeon_tilesets
+    compile_dungeon_parameters
     compile_phone             # Depends on TrainerType
   end
 
@@ -805,6 +807,8 @@ module Compiler
       dataFiles = [
         "abilities.dat",
         "berry_plants.dat",
+        "dungeon_parameters.dat",
+        "dungeon_tilesets.dat",
         "encounters.dat",
         "items.dat",
         "map_connections.dat",
@@ -828,6 +832,8 @@ module Compiler
         "abilities.txt",
         "battle_facility_lists.txt",
         "berry_plants.txt",
+        "dungeon_parameters.txt",
+        "dungeon_tilesets.txt",
         "encounters.txt",
         "items.txt",
         "map_connections.txt",

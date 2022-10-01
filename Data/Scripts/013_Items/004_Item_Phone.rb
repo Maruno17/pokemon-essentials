@@ -516,7 +516,6 @@ class Phone
       else
         # Standard messages
         if messages.body1 && messages.body2 && (!messages.body || rand(100) < 75)
-          echoln messages.body2
           # Choose random pair of body messages
           ret += get_random_message.call(messages.body1)
           ret += "\\m"

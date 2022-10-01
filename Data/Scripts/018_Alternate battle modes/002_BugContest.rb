@@ -79,7 +79,6 @@ class BugContestState
         @contestMaps.push(map)
       end
     end
-    echoln "contest maps: #{@contestMaps}"
   end
 
   # Reception map is handled separately from contest map since the reception map
@@ -94,7 +93,6 @@ class BugContestState
         @reception.push(map)
       end
     end
-    echoln "reception maps: #{@reception}"
   end
 
   def pbOffLimits?(map)
