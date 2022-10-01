@@ -509,8 +509,12 @@ class BattlePointShopAdapter
   #===============================================================================
   def pbBattlePointShop(stock, speech = nil)
     stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
-    pbMessage(_INTL("Welcome to the Exchange Service Corner!"))
-    pbMessage(_INTL("We can exchange your BP for fabulous items."))
+    if (speech == nil)
+      pbMessage(_INTL("Welcome to the Exchange Service Corner!"))
+      pbMessage(_INTL("We can exchange your BP for fabulous items."))
+    else
+      pbMessage(speech)
+    end
     scene = BattlePointShop_Scene.new
     screen = BattlePointShopScreen.new(scene, stock)
     screen.pbBuyScreen

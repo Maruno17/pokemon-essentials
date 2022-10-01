@@ -23,7 +23,7 @@ module GameData
       "Pocket"      => [:pocket,      "v"],
       "Price"       => [:price,       "u"],
       "SellPrice"   => [:sell_price,  "u"],
-      "BPPrice"     => [:bp_price,    "u"],
+      "BPPrice"     => [:bp_price,    "v"],
       "Description" => [:description, "q"],
       "FieldUse"    => [:field_use,   "e", { "OnPokemon" => 1, "Direct" => 2, "TM" => 3,
                                              "HM" => 4, "TR" => 5 }],
