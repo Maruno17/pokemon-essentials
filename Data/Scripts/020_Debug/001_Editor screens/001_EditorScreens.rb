@@ -872,7 +872,7 @@ def pbItemEditor
     [_INTL("Pocket"),      PocketProperty,                     _INTL("Pocket in the Bag where this item is stored.")],
     [_INTL("Price"),       LimitProperty.new(999_999),         _INTL("Purchase price of this item.")],
     [_INTL("SellPrice"),   LimitProperty.new(999_999),         _INTL("Sell price of this item. If blank, is half the purchase price.")],
-    [_INTL("BPPrice"),     LimitProperty.new(999_999),         _INTL("Purchase price of this item, in Exchange Service Corner.")],
+    [_INTL("BPPrice"),     LimitProperty.new(999_999),         _INTL("Purchase price of this item in Battle Points (BP).")],
     [_INTL("Description"), StringProperty,                     _INTL("Description of this item")],
     [_INTL("FieldUse"),    EnumProperty.new(field_use_array),  _INTL("How this item can be used outside of battle.")],
     [_INTL("BattleUse"),   EnumProperty.new(battle_use_array), _INTL("How this item can be used within a battle.")],
