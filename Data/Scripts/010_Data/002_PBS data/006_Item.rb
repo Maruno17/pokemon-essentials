@@ -69,16 +69,16 @@ module GameData
       return nil if !item_data
       name_base = (item_data.is_mail?) ? "mail" : "item"
       # Check for files
-      ret = sprintf("Graphics/Pictures/Party/icon_%s_%s", name_base, item_data.id)
+      ret = sprintf("Graphics/UI/Party/icon_%s_%s", name_base, item_data.id)
       return ret if pbResolveBitmap(ret)
-      return sprintf("Graphics/Pictures/Party/icon_%s", name_base)
+      return sprintf("Graphics/UI/Party/icon_%s", name_base)
     end
 
     def self.mail_filename(item)
       item_data = self.try_get(item)
       return nil if !item_data
       # Check for files
-      ret = sprintf("Graphics/Pictures/Mail/mail_%s", item_data.id)
+      ret = sprintf("Graphics/UI/Mail/mail_%s", item_data.id)
       return pbResolveBitmap(ret) ? ret : nil
     end
 
