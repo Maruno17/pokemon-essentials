@@ -42,15 +42,15 @@ class Battle::Scene::PokemonDataBox < Sprite
     onPlayerSide = @battler.index.even?
     # Get the data box graphic and set whether the HP numbers/Exp bar are shown
     if sideSize == 1   # One Pokémon on side, use the regular dara box BG
-      bgFilename = ["Graphics/Pictures/Battle/databox_normal",
-                    "Graphics/Pictures/Battle/databox_normal_foe"][@battler.index % 2]
+      bgFilename = ["Graphics/UI/Battle/databox_normal",
+                    "Graphics/UI/Battle/databox_normal_foe"][@battler.index % 2]
       if onPlayerSide
         @showHP  = true
         @showExp = true
       end
     else   # Multiple Pokémon on side, use the thin dara box BG
-      bgFilename = ["Graphics/Pictures/Battle/databox_thin",
-                    "Graphics/Pictures/Battle/databox_thin_foe"][@battler.index % 2]
+      bgFilename = ["Graphics/UI/Battle/databox_thin",
+                    "Graphics/UI/Battle/databox_thin_foe"][@battler.index % 2]
     end
     @databoxBitmap&.dispose
     @databoxBitmap = AnimatedBitmap.new(bgFilename)
@@ -76,9 +76,9 @@ class Battle::Scene::PokemonDataBox < Sprite
 
   def initializeOtherGraphics(viewport)
     # Create other bitmaps
-    @numbersBitmap = AnimatedBitmap.new("Graphics/Pictures/Battle/icon_numbers")
-    @hpBarBitmap   = AnimatedBitmap.new("Graphics/Pictures/Battle/overlay_hp")
-    @expBarBitmap  = AnimatedBitmap.new("Graphics/Pictures/Battle/overlay_exp")
+    @numbersBitmap = AnimatedBitmap.new("Graphics/UI/Battle/icon_numbers")
+    @hpBarBitmap   = AnimatedBitmap.new("Graphics/UI/Battle/overlay_hp")
+    @expBarBitmap  = AnimatedBitmap.new("Graphics/UI/Battle/overlay_exp")
     # Create sprite to draw HP numbers on
     @hpNumbers = BitmapSprite.new(124, 16, viewport)
 #    pbSetSmallFont(@hpNumbers.bitmap)
@@ -221,7 +221,7 @@ class Battle::Scene::PokemonDataBox < Sprite
   def draw_level
     # "Lv" graphic
     pbDrawImagePositions(self.bitmap,
-      [["Graphics/Pictures/Battle/overlay_lv", @spriteBaseX + 140, 16]]
+      [["Graphics/UI/Battle/overlay_lv", @spriteBaseX + 140, 16]]
     )
     # Level number
     pbDrawNumber(@battler.level, self.bitmap, @spriteBaseX + 162, 16)
@@ -244,26 +244,26 @@ class Battle::Scene::PokemonDataBox < Sprite
       s = GameData::Status.get(@battler.status).icon_position
     end
     return if s < 0
-    pbDrawImagePositions(self.bitmap, [["Graphics/Pictures/Battle/icon_statuses", @spriteBaseX + 24, 36,
+    pbDrawImagePositions(self.bitmap, [["Graphics/UI/Battle/icon_statuses", @spriteBaseX + 24, 36,
                                         0, s * STATUS_ICON_HEIGHT, -1, STATUS_ICON_HEIGHT]])
   end
 
   def draw_shiny_icon
     return if !@battler.shiny?
     shiny_x = (@battler.opposes?(0)) ? 206 : -6   # Foe's/player's
-    pbDrawImagePositions(self.bitmap, [["Graphics/Pictures/shiny", @spriteBaseX + shiny_x, 36]])
+    pbDrawImagePositions(self.bitmap, [["Graphics/UI/shiny", @spriteBaseX + shiny_x, 36]])
   end
 
   def draw_special_form_icon
     # Mega Evolution/Primal Reversion icon
     if @battler.mega?
-      pbDrawImagePositions(self.bitmap, [["Graphics/Pictures/Battle/icon_mega", @spriteBaseX + 8, 34]])
+      pbDrawImagePositions(self.bitmap, [["Graphics/UI/Battle/icon_mega", @spriteBaseX + 8, 34]])
     elsif @battler.primal?
       filename = nil
       if @battler.isSpecies?(:GROUDON)
-        filename = "Graphics/Pictures/Battle/icon_primal_Groudon"
+        filename = "Graphics/UI/Battle/icon_primal_Groudon"
       elsif @battler.isSpecies?(:KYOGRE)
-        filename = "Graphics/Pictures/Battle/icon_primal_Kyogre"
+        filename = "Graphics/UI/Battle/icon_primal_Kyogre"
       end
       primalX = (@battler.opposes?) ? 208 : -28   # Foe's/player's
       pbDrawImagePositions(self.bitmap, [[filename, @spriteBaseX + primalX, 4]]) if filename
@@ -272,7 +272,7 @@ class Battle::Scene::PokemonDataBox < Sprite
 
   def draw_owned_icon
     return if !@battler.owned? || !@battler.opposes?(0)   # Draw for foe Pokémon only
-    pbDrawImagePositions(self.bitmap, [["Graphics/Pictures/Battle/icon_own", @spriteBaseX + 8, 36]])
+    pbDrawImagePositions(self.bitmap, [["Graphics/UI/Battle/icon_own", @spriteBaseX + 8, 36]])
   end
 
   def refresh
@@ -418,7 +418,7 @@ class Battle::Scene::AbilitySplashBar < Sprite
     @side    = side
     @battler = nil
     # Create sprite wrapper that displays background graphic
-    @bgBitmap = AnimatedBitmap.new("Graphics/Pictures/Battle/ability_bar")
+    @bgBitmap = AnimatedBitmap.new("Graphics/UI/Battle/ability_bar")
     @bgSprite = Sprite.new(viewport)
     @bgSprite.bitmap = @bgBitmap.bitmap
     @bgSprite.src_rect.y      = (side == 0) ? 0 : @bgBitmap.height / 2

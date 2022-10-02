@@ -97,10 +97,10 @@ end
 # Command menu (Fight/Pokémon/Bag/Run)
 #===============================================================================
 class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
-  # If true, displays graphics from Graphics/Pictures/Battle/overlay_command.png
-  #     and Graphics/Pictures/Battle/cursor_command.png.
+  # If true, displays graphics from Graphics/UI/Battle/overlay_command.png
+  #     and Graphics/UI/Battle/cursor_command.png.
   # If false, just displays text and the command window over the graphic
-  #     Graphics/Pictures/Battle/overlay_message.png. You will need to edit def
+  #     Graphics/UI/Battle/overlay_message.png. You will need to edit def
   #     pbShowWindow to make the graphic appear while the command menu is being
   #     displayed.
   USE_GRAPHICS = true
@@ -128,10 +128,10 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
     if USE_GRAPHICS
       # Create background graphic
       background = IconSprite.new(self.x, self.y, viewport)
-      background.setBitmap("Graphics/Pictures/Battle/overlay_command")
+      background.setBitmap("Graphics/UI/Battle/overlay_command")
       addSprite("background", background)
       # Create bitmaps
-      @buttonBitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/cursor_command"))
+      @buttonBitmap = AnimatedBitmap.new(_INTL("Graphics/UI/Battle/cursor_command"))
       # Create action buttons
       @buttons = Array.new(4) do |i|   # 4 command options, therefore 4 buttons
         button = Sprite.new(viewport)
@@ -205,10 +205,10 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
 
   GET_MOVE_TEXT_COLOR_FROM_MOVE_BUTTON = true
 
-  # If true, displays graphics from Graphics/Pictures/Battle/overlay_fight.png
-  #     and Graphics/Pictures/Battle/cursor_fight.png.
+  # If true, displays graphics from Graphics/UI/Battle/overlay_fight.png
+  #     and Graphics/UI/Battle/cursor_fight.png.
   # If false, just displays text and the command window over the graphic
-  #     Graphics/Pictures/Battle/overlay_message.png. You will need to edit def
+  #     Graphics/UI/Battle/overlay_message.png. You will need to edit def
   #     pbShowWindow to make the graphic appear while the command menu is being
   #     displayed.
   USE_GRAPHICS     = true
@@ -231,13 +231,13 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
     #       0=don't show, 1=show unpressed, 2=show pressed
     if USE_GRAPHICS
       # Create bitmaps
-      @buttonBitmap  = AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/cursor_fight"))
-      @typeBitmap    = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
-      @megaEvoBitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/cursor_mega"))
-      @shiftBitmap   = AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/cursor_shift"))
+      @buttonBitmap  = AnimatedBitmap.new(_INTL("Graphics/UI/Battle/cursor_fight"))
+      @typeBitmap    = AnimatedBitmap.new(_INTL("Graphics/UI/types"))
+      @megaEvoBitmap = AnimatedBitmap.new(_INTL("Graphics/UI/Battle/cursor_mega"))
+      @shiftBitmap   = AnimatedBitmap.new(_INTL("Graphics/UI/Battle/cursor_shift"))
       # Create background graphic
       background = IconSprite.new(0, Graphics.height - 96, viewport)
-      background.setBitmap("Graphics/Pictures/Battle/overlay_fight")
+      background.setBitmap("Graphics/UI/Battle/overlay_fight")
       addSprite("background", background)
       # Create move buttons
       @buttons = Array.new(Pokemon::MAX_MOVES) do |i|
@@ -472,7 +472,7 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
     # NOTE: @mode is for which buttons are shown as selected.
     #       0=select 1 button (@index), 1=select all buttons with text
     # Create bitmaps
-    @buttonBitmap = AnimatedBitmap.new("Graphics/Pictures/Battle/cursor_target")
+    @buttonBitmap = AnimatedBitmap.new("Graphics/UI/Battle/cursor_target")
     # Create target buttons
     @buttons = Array.new(maxIndex + 1) do |i|
       numButtons = @sideSizes[i % 2]

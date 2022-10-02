@@ -268,7 +268,7 @@ class PBAnimTiming
     @colorAlpha    = nil
     @duration      = 5
     @flashScope    = 0
-    @flashColor    = Color.new(255, 255, 255, 255)
+    @flashColor    = Color.white
     @flashDuration = 5
   end
 
@@ -722,7 +722,7 @@ class PBAnimationPlayerX
       @animsprites[i].visible = false
     end
     # Create background colour sprite
-    @bgColor = ColoredPlane.new(Color.new(0, 0, 0), @viewport)
+    @bgColor = ColoredPlane.new(Color.black, @viewport)
     @bgColor.z       = 5
     @bgColor.opacity = 0
     @bgColor.refresh
@@ -733,7 +733,7 @@ class PBAnimationPlayerX
     @bgGraphic.opacity = 0
     @bgGraphic.refresh
     # Create foreground colour sprite
-    @foColor = ColoredPlane.new(Color.new(0, 0, 0), @viewport)
+    @foColor = ColoredPlane.new(Color.black, @viewport)
     @foColor.z       = 85
     @foColor.opacity = 0
     @foColor.refresh

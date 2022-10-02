@@ -579,7 +579,7 @@ class Battle
       swaps.each do |pair|
         next if pbSideSize(pair[0]) == 2 && swaps.length > 1
         next if !pbSwapBattlers(pair[0], pair[1])
-        case pbSideSize(side)
+        case pbSideSize(pair[1])
         when 2
           pbDisplay(_INTL("{1} moved across!", @battlers[pair[1]].pbThis))
         when 3

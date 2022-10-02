@@ -17,7 +17,7 @@ class PokemonEggHatch_Scene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     # Create background image
-    addBackgroundOrColoredPlane(@sprites, "background", "hatchbg",
+    addBackgroundOrColoredPlane(@sprites, "background", "hatch_bg",
                                 Color.new(248, 248, 248), @viewport)
     # Create egg sprite/Pokémon sprite
     @sprites["pokemon"] = PokemonSprite.new(@viewport)
@@ -28,9 +28,7 @@ class PokemonEggHatch_Scene
                                          @pokemon.form, @pokemon.shiny?,
                                          false, false, true)   # Egg sprite
     # Load egg cracks bitmap
-    crackfilename = sprintf("Graphics/Pokemon/Eggs/%s_cracks", @pokemon.species)
-    crackfilename = sprintf("Graphics/Pokemon/Eggs/000_cracks") if !pbResolveBitmap(crackfilename)
-    crackfilename = pbResolveBitmap(crackfilename)
+    crackfilename = GameData::Species.egg_cracks_sprite_filename(@pokemon.species, @pokemon.form)
     @hatchSheet = AnimatedBitmap.new(crackfilename)
     # Create egg cracks sprite
     @sprites["hatch"] = Sprite.new(@viewport)
@@ -45,8 +43,7 @@ class PokemonEggHatch_Scene
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["overlay"].z = 200
     @sprites["overlay"].bitmap = Bitmap.new(Graphics.width, Graphics.height)
-    @sprites["overlay"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height,
-                                         Color.new(255, 255, 255))
+    @sprites["overlay"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.white)
     @sprites["overlay"].opacity = 0
     # Start up scene
     pbFadeInAndShow(@sprites)

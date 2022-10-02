@@ -1,6 +1,6 @@
 # NOTE: The order these shapes are registered are the order they are listed in
 #       the Pokédex search screen.
-#       "Graphics/Pictures/Pokedex/icon_shapes.png" contains icons for these
+#       "Graphics/UI/Pokedex/icon_shapes.png" contains icons for these
 #       shapes.
 module GameData
   class BodyShape

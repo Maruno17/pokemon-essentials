@@ -198,6 +198,21 @@ module Compiler
     list.push(RPG::EventCommand.new(412, indent - 1, []))
   end
 
+  # cancel is 1/2/3/4 for the options, 0 for disallow, 5 for branch
+  def push_choices(list, choices, cancel = 0, indent = 0)
+    list.push(RPG::EventCommand.new(102, indent, [choices, cancel, [0, 1, 2, 3]]))
+  end
+
+  def push_choice(list, index, text, indent = 0)
+    list.push(RPG::EventCommand.new(0, indent, [])) if index > 0
+    list.push(RPG::EventCommand.new(402, indent - 1, [index, text]))
+  end
+
+  def push_choices_end(list, indent = 0)
+    list.push(RPG::EventCommand.new(0, indent, []))
+    list.push(RPG::EventCommand.new(404, indent - 1, []))
+  end
+
   def push_self_switch(list, swtch, switchOn, indent = 0)
     list.push(RPG::EventCommand.new(123, indent, [swtch, switchOn ? 0 : 1]))
   end
@@ -498,13 +513,13 @@ module Compiler
     battleid       = 0
     doublebattle   = false
     backdrop       = nil
-    endspeeches    = []
     outcome        = 0
     continue       = false
     endbattles     = []
     endifswitch    = []
     vanishifswitch = []
     regspeech      = nil
+    common_event   = 0
     commands.each do |command|
       if command[/^Battle\:\s*([\s\S]+)$/i]
         battles.push($~[1])
@@ -522,21 +537,9 @@ module Compiler
         value = $~[1].gsub(/^\s+/, "").gsub(/\s+$/, "")
         doublebattle = true if value.upcase == "TRUE" || value.upcase == "YES"
         push_comment(firstpage.list, command) if rewriteComments
-      elsif command[/^Backdrop\:\s*([\s\S]+)$/i]
-        backdrop = $~[1].gsub(/^\s+/, "").gsub(/\s+$/, "")
-        push_comment(firstpage.list, command) if rewriteComments
-      elsif command[/^EndSpeech\:\s*([\s\S]+)$/i]
-        endspeeches.push(command)
-        push_comment(firstpage.list, command) if rewriteComments
-      elsif command[/^Outcome\:\s*(\d+)$/i]
-        outcome = $~[1].to_i
-        push_comment(firstpage.list, command) if rewriteComments
       elsif command[/^Continue\:\s*([\s\S]+)$/i]
         value = $~[1].gsub(/^\s+/, "").gsub(/\s+$/, "")
         continue = true if value.upcase == "TRUE" || value.upcase == "YES"
-        push_comment(firstpage.list, command) if rewriteComments
-      elsif command[/^EndBattle\:\s*([\s\S]+)$/i]
-        endbattles.push($~[1].gsub(/^\s+/, "").gsub(/\s+$/, ""))
         push_comment(firstpage.list, command) if rewriteComments
       elsif command[/^EndIfSwitch\:\s*([\s\S]+)$/i]
         endifswitch.push(($~[1].gsub(/^\s+/, "").gsub(/\s+$/, "")).to_i)
@@ -544,12 +547,25 @@ module Compiler
       elsif command[/^VanishIfSwitch\:\s*([\s\S]+)$/i]
         vanishifswitch.push(($~[1].gsub(/^\s+/, "").gsub(/\s+$/, "")).to_i)
         push_comment(firstpage.list, command) if rewriteComments
+      elsif command[/^Backdrop\:\s*([\s\S]+)$/i]
+        backdrop = $~[1].gsub(/^\s+/, "").gsub(/\s+$/, "")
+        push_comment(firstpage.list, command) if rewriteComments
+      elsif command[/^Outcome\:\s*(\d+)$/i]
+        outcome = $~[1].to_i
+        push_comment(firstpage.list, command) if rewriteComments
+      elsif command[/^EndBattle\:\s*([\s\S]+)$/i]
+        endbattles.push($~[1].gsub(/^\s+/, "").gsub(/\s+$/, ""))
+        push_comment(firstpage.list, command) if rewriteComments
       elsif command[/^RegSpeech\:\s*([\s\S]+)$/i]
         regspeech = $~[1].gsub(/^\s+/, "").gsub(/\s+$/, "")
+        push_comment(firstpage.list, command) if rewriteComments
+      elsif command[/^CommonEvent\:\s*(\d+)$/i]
+        common_event = $~[1].to_i
         push_comment(firstpage.list, command) if rewriteComments
       end
     end
     return nil if battles.length <= 0
+    endbattles.push("...") if endbattles.length == 0
     # Run trainer check now, except in editor
     trainerChecker.pbTrainerBattleCheck(trtype, trname, battleid)
     # Set the event's charset to one depending on the trainer type if the event
@@ -562,32 +578,51 @@ module Compiler
       end
     end
     # Create strings that will be used repeatedly
-    safetrcombo = sprintf(":%s,\"%s\"", trtype, safequote(trname))   # :YOUNGSTER,"Joey"
+    safetrcombo = sprintf(":%s, \"%s\"", trtype, safequote(trname))   # :YOUNGSTER, "Joey"
+    brieftrcombo = safetrcombo
+    safetrcombo = sprintf("%s, %d", safetrcombo, battleid) if battleid > 0   # :YOUNGSTER, "Joey", 1
     introplay   = sprintf("pbTrainerIntro(:%s)", trtype)
     # Write first page
-    push_comment(firstpage.list, endspeeches[0]) if endspeeches[0]   # Just so it isn't lost
     push_script(firstpage.list, introplay)   # pbTrainerIntro
     push_script(firstpage.list, "pbNoticePlayer(get_self)")
     push_text(firstpage.list, battles[0])
     if battles.length > 1   # Has rematches
-      push_script(firstpage.list, sprintf("pbTrainerCheck(%s,%d,%d)", safetrcombo, battles.length, battleid))
+      if battleid > 0
+        push_script(firstpage.list, sprintf("pbTrainerCheck(%s, %d, %d)", brieftrcombo, battles.length, battleid))
+      else
+        push_script(firstpage.list, sprintf("pbTrainerCheck(%s, %d)", brieftrcombo, battles.length))
+      end
     end
     push_script(firstpage.list, "setBattleRule(\"double\")") if doublebattle
-    push_script(firstpage.list, sprintf("setBattleRule(\"backdrop\",\"%s\")", safequote(backdrop))) if backdrop
-    push_script(firstpage.list, sprintf("setBattleRule(\"outcomeVar\",%d)", outcome)) if outcome > 1
+    push_script(firstpage.list, sprintf("setBattleRule(\n  \"backdrop\", \"%s\"\n)", safequote(backdrop))) if backdrop
+    push_script(firstpage.list, sprintf("setBattleRule(\"outcomeVar\", %d)", outcome)) if outcome > 1
     push_script(firstpage.list, "setBattleRule(\"canLose\")") if continue
-    if battleid > 0
-      battleString = sprintf("TrainerBattle.start(%s,%d)", safetrcombo, battleid)
-    else
-      battleString = sprintf("TrainerBattle.start(%s)", safetrcombo)
-    end
+    battleString = sprintf("TrainerBattle.start(%s)", safetrcombo)
     push_branch(firstpage.list, battleString)
     if battles.length > 1   # Has rematches
-      push_script(firstpage.list,
-                  sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
-                          regspeech, safetrcombo, battles.length), 1)
+      push_branch(firstpage.list, sprintf("Phone.can_add?(%s)", safetrcombo), 1)
+      push_text(firstpage.list, regspeech, 2)
+      push_choices(firstpage.list, ["Yes", "No"], 2, 2)
+      push_choice(firstpage.list, 0, "Yes", 3)
+      if common_event > 0
+        if battleid > 0
+          push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d, %d\n)", brieftrcombo, battles.length, battleid, common_event), 3)
+        else
+          push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d, nil, %d\n)", brieftrcombo, battles.length, common_event), 3)
+        end
+      else
+        if battleid > 0
+          push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d\n)", brieftrcombo, battles.length, battleid), 3)
+        else
+          push_script(firstpage.list, sprintf("Phone.add(get_self,\n  %s, %d\n)", brieftrcombo, battles.length), 3)
+        end
+      end
+      push_choice(firstpage.list, 1, "No", 3)
+      push_choices_end(firstpage.list, 3)
+      push_branch_end(firstpage.list, 2)
     end
     push_self_switch(firstpage.list, "A", true, 1)
+    push_self_switch(firstpage.list, "B", true, 1) if battles.length > 1
     push_branch_end(firstpage.list, 1)
     push_script(firstpage.list, "pbTrainerEnd", 0)
     push_end(firstpage.list)
@@ -604,53 +639,74 @@ module Compiler
     rematchpage.condition = lastpage.condition.clone
     rematchpage.condition.self_switch_valid = true
     rematchpage.condition.self_switch_ch    = "B"
-    # Write rematch and last pages
-    (1...battles.length).each do |i|
-      # Run trainer check now, except in editor
-      trainerChecker.pbTrainerBattleCheck(trtype, trname, battleid + i)
-      if i == battles.length - 1
-        push_branch(rematchpage.list, sprintf("pbPhoneBattleCount(%s)>=%d", safetrcombo, i))
-        push_branch(lastpage.list, sprintf("pbPhoneBattleCount(%s)>%d", safetrcombo, i))
-      else
-        push_branch(rematchpage.list, sprintf("pbPhoneBattleCount(%s)==%d", safetrcombo, i))
-        push_branch(lastpage.list, sprintf("pbPhoneBattleCount(%s)==%d", safetrcombo, i))
+    # Write rematch page
+    push_script(rematchpage.list, introplay, 0)   # pbTrainerIntro
+    if battles.length == 2
+      push_text(rematchpage.list, battles[1], 0)
+    else
+      (1...battles.length).each do |i|
+        # Run trainer check now, except in editor
+        trainerChecker.pbTrainerBattleCheck(trtype, trname, battleid + i)
+        if i == 1
+          push_branch(rematchpage.list, sprintf("Phone.variant(%s) <= %d", safetrcombo, i))
+        elsif i == battles.length - 1
+          push_branch(rematchpage.list, sprintf("Phone.variant(%s) >= %d", safetrcombo, i))
+        else
+          push_branch(rematchpage.list, sprintf("Phone.variant(%s) == %d", safetrcombo, i))
+        end
+        push_text(rematchpage.list, battles[i], 1)
+        push_branch_end(rematchpage.list, 1)
       end
-      # Rematch page
-      push_script(rematchpage.list, introplay, 1)   # pbTrainerIntro
-      push_text(rematchpage.list, battles[i], 1)
-      push_script(rematchpage.list, "setBattleRule(\"double\")", 1) if doublebattle
-      push_script(rematchpage.list, sprintf("setBattleRule(\"backdrop\",%s)", safequote(backdrop)), 1) if backdrop
-      push_script(rematchpage.list, sprintf("setBattleRule(\"outcomeVar\",%d)", outcome), 1) if outcome > 1
-      push_script(rematchpage.list, "setBattleRule(\"canLose\")", 1) if continue
-      battleString = sprintf("TrainerBattle.start(%s,%d)", safetrcombo, battleid + i)
-      push_branch(rematchpage.list, battleString, 1)
-      push_script(rematchpage.list, sprintf("pbPhoneIncrement(%s,%d)", safetrcombo, battles.length), 2)
-      push_self_switch(rematchpage.list, "A", true, 2)
-      push_self_switch(rematchpage.list, "B", false, 2)
-      push_script(rematchpage.list, "pbTrainerEnd", 2)
-      push_branch_end(rematchpage.list, 2)
-      push_exit(rematchpage.list, 1)   # Exit Event Processing
-      push_branch_end(rematchpage.list, 1)
-      # Last page
-      if endbattles.length > 0
-        ebattle = (endbattles[i]) ? endbattles[i] : endbattles[endbattles.length - 1]
-        push_text(lastpage.list, ebattle, 1)
-      end
-      push_script(lastpage.list,
-                  sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
-                          regspeech, safetrcombo, battles.length), 1)
-      push_exit(lastpage.list, 1)   # Exit Event Processing
-      push_branch_end(lastpage.list, 1)
     end
-    # Finish writing rematch page
+    push_script(rematchpage.list, "setBattleRule(\"double\")", 1) if doublebattle
+    push_script(rematchpage.list, sprintf("setBattleRule(\n  \"backdrop\", %s\n)", safequote(backdrop)), 1) if backdrop
+    push_script(rematchpage.list, sprintf("setBattleRule(\"outcomeVar\", %d)", outcome), 1) if outcome > 1
+    push_script(rematchpage.list, "setBattleRule(\"canLose\")", 1) if continue
+    battleString = sprintf("Phone.battle(%s)", safetrcombo)
+    push_branch(rematchpage.list, battleString, 0)
+    push_script(rematchpage.list, sprintf("Phone.reset_after_win(\n  %s\n)", safetrcombo), 1)
+    push_self_switch(rematchpage.list, "A", true, 1)
+    push_script(rematchpage.list, "pbTrainerEnd", 1)
+    push_branch_end(rematchpage.list, 1)
     push_end(rematchpage.list)
-    # Finish writing last page
-    ebattle = (endbattles[0]) ? endbattles[0] : "..."
-    push_text(lastpage.list, ebattle)
+    # Write last page
+    if endbattles.length > 0
+      if battles.length == 1
+        push_text(lastpage.list, endbattles[0], 0)
+      else
+        (0...battles.length).each do |i|
+          if i == battles.length - 1
+            push_branch(lastpage.list, sprintf("Phone.variant_beaten(%s) >= %d", safetrcombo, i))
+          else
+            push_branch(lastpage.list, sprintf("Phone.variant_beaten(%s) == %d", safetrcombo, i))
+          end
+          ebattle = (endbattles[i]) ? endbattles[i] : endbattles[endbattles.length - 1]
+          push_text(lastpage.list, ebattle, 1)
+          push_branch_end(lastpage.list, 1)
+        end
+      end
+    end
     if battles.length > 1
-      push_script(lastpage.list,
-                  sprintf("pbPhoneRegisterBattle(_I(\"%s\"),get_self,%s,%d)",
-                          regspeech, safetrcombo, battles.length))
+      push_branch(lastpage.list, sprintf("Phone.can_add?(%s)", safetrcombo), 0)
+      push_text(lastpage.list, regspeech, 1)
+      push_choices(lastpage.list, ["Yes", "No"], 2, 1)
+      push_choice(lastpage.list, 0, "Yes", 2)
+      if common_event > 0
+        if battleid > 0
+          push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d, %d\n)", brieftrcombo, battles.length, battleid, common_event), 2)
+        else
+          push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d, nil, %d\n)", brieftrcombo, battles.length, common_event), 2)
+        end
+      else
+        if battleid > 0
+          push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d, %d\n)", brieftrcombo, battles.length, battleid), 2)
+        else
+          push_script(lastpage.list, sprintf("Phone.add(get_self,\n  %s, %d\n)", brieftrcombo, battles.length), 2)
+        end
+      end
+      push_choice(lastpage.list, 1, "No", 2)
+      push_choices_end(lastpage.list, 2)
+      push_branch_end(lastpage.list, 1)
     end
     push_end(lastpage.list)
     # Add pages to the new event

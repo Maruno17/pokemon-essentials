@@ -27,7 +27,7 @@ end
 #===============================================================================
 def pbDrawGauge(bitmap, rect, color, value, maxValue)
   return if !bitmap
-  bitmap.fill_rect(rect.x, rect.y, rect.width, rect.height, Color.new(0, 0, 0))
+  bitmap.fill_rect(rect.x, rect.y, rect.width, rect.height, Color.black)
   width = (maxValue <= 0) ? 0 : (rect.width - 4) * value / maxValue
   if rect.width >= 4 && rect.height >= 4
     bitmap.fill_rect(rect.x + 2, rect.y + 2, rect.width - 4, rect.height - 4, Color.new(248, 248, 248))
@@ -713,7 +713,7 @@ class DirectFlowDiagram
   def ensurePoint(j)
     if !@points[j] || @points[j].disposed?
       @points[j] = BitmapSprite.new(8, 8, @viewport)
-      @points[j].bitmap.fill_rect(0, 0, 8, 8, Color.new(0, 0, 0))
+      @points[j].bitmap.fill_rect(0, 0, 8, 8, Color.black)
     end
     @points[j].tone = (@strength == 2) ? Tone.new(232, 232, 248) : Tone.new(16, 16, 232)
     @points[j].visible = (@strength != 0)
@@ -787,7 +787,7 @@ class FlowDiagram
   def ensurePoint(j)
     if !@points[j] || @points[j].disposed?
       @points[j] = BitmapSprite.new(8, 8, @viewport)
-      @points[j].bitmap.fill_rect(0, 0, 8, 8, Color.new(0, 0, 0))
+      @points[j].bitmap.fill_rect(0, 0, 8, 8, Color.black)
     end
     @points[j].tone = (@strength == 2) ? Tone.new(232, 232, 248) : Tone.new(16, 16, 232)
     @points[j].visible = (@strength != 0)
@@ -854,7 +854,7 @@ class PurifyChamberSetView < Sprite
     @heldpkmn = nil
     @cursor = -1
     @view = BitmapSprite.new(64, 64, viewport)
-    @view.bitmap.fill_rect(8, 8, 48, 48, Color.new(255, 255, 255))
+    @view.bitmap.fill_rect(8, 8, 48, 48, Color.white)
     @view.bitmap.fill_rect(10, 10, 44, 44, Color.new(255, 255, 255, 128))
     @info = BitmapSprite.new(Graphics.width - 112, 48, viewport)
     @flows = []
@@ -1114,7 +1114,7 @@ class PurifyChamberScene
     @viewport.z = 99999
     @viewportmsg = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewportmsg.z = 99999
-    addBackgroundOrColoredPlane(@sprites, "bg", "purifychamberbg",
+    addBackgroundOrColoredPlane(@sprites, "bg", "purifychamber_bg",
                                 Color.new(64, 48, 96), @viewport)
     @sprites["setwindow"] = Window_PurifyChamberSets.new(
       @chamber, 0, 0, 112, Graphics.height, @viewport

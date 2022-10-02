@@ -1,118 +1,57 @@
 #===============================================================================
 # Text colours
 #===============================================================================
+# TODO: Unused.
 def ctag(color)
-  ret = (color.red.to_i << 24)
-  ret |= ((color.green.to_i) << 16)
-  ret |= ((color.blue.to_i) << 8)
-  ret |= ((color.alpha.to_i))
-  return sprintf("<c=%08X>", ret)
+  return sprintf("<c=%s>", color.to_rgb32(true))
 end
 
 def shadowctag(base, shadow)
-  return sprintf("<c2=%s%s>", colorToRgb16(base), colorToRgb16(shadow))
+  return sprintf("<c2=%s%s>", base.to_rgb15, shadow.to_rgb15)
 end
 
 def shadowc3tag(base, shadow)
-  return sprintf("<c3=%s,%s>", colorToRgb32(base), colorToRgb32(shadow))
+  return sprintf("<c3=%s,%s>", base.to_rgb32, shadow.to_rgb32)
 end
 
+# TODO: Unused.
 def shadowctagFromColor(color)
-  return shadowc3tag(color, getContrastColor(color))
+  return shadowc3tag(color, color.get_contrast_color)
 end
 
+# TODO: Unused.
 def shadowctagFromRgb(param)
-  return shadowctagFromColor(rgbToColor(param))
+  return shadowctagFromColor(Color.new_from_rgb(param))
 end
 
+# @deprecated This method is slated to be removed in v22.
 def colorToRgb32(color)
-  return "" if !color
-  if color.alpha.to_i == 255
-    return sprintf("%02X%02X%02X", color.red.to_i, color.green.to_i, color.blue.to_i)
-  else
-    return sprintf("%02X%02X%02X%02X",
-                   color.red.to_i, color.green.to_i, color.blue.to_i, color.alpha.to_i)
-  end
+  Deprecation.warn_method("colorToRgb32", "v22", "color.to_rgb32")
+  return color.to_rgb32
 end
 
+# @deprecated This method is slated to be removed in v22.
 def colorToRgb16(color)
-  ret = (color.red.to_i >> 3)
-  ret |= ((color.green.to_i >> 3) << 5)
-  ret |= ((color.blue.to_i >> 3) << 10)
-  return sprintf("%04X", ret)
+  Deprecation.warn_method("colorToRgb16", "v22", "color.to_rgb15")
+  return color.to_rgb15
 end
 
+# @deprecated This method is slated to be removed in v22.
 def rgbToColor(param)
-  return Font.default_color if !param
-  baseint = param.to_i(16)
-  case param.length
-  when 8 # 32-bit hex
-    return Color.new(
-      (baseint >> 24) & 0xFF,
-      (baseint >> 16) & 0xFF,
-      (baseint >> 8) & 0xFF,
-      (baseint) & 0xFF
-    )
-  when 6 # 24-bit hex
-    return Color.new(
-      (baseint >> 16) & 0xFF,
-      (baseint >> 8) & 0xFF,
-      (baseint) & 0xFF
-    )
-  when 4 # 16-bit hex
-    return Color.new(
-      ((baseint) & 0x1F) << 3,
-      ((baseint >> 5) & 0x1F) << 3,
-      ((baseint >> 10) & 0x1F) << 3
-    )
-  when 1 # Color number
-    i = param.to_i
-    return Font.default_color if i >= 8
-    return [
-      Color.new(255, 255, 255, 255),
-      Color.new(128, 128, 255, 255),
-      Color.new(255, 128, 128, 255),
-      Color.new(128, 255, 128, 255),
-      Color.new(128, 255, 255, 255),
-      Color.new(255, 128, 255, 255),
-      Color.new(255, 255, 128, 255),
-      Color.new(192, 192, 192, 255)
-    ][i]
-  else
-    return Font.default_color
-  end
+  Deprecation.warn_method("rgbToColor", "v22", "Color.new_from_rgb(param)")
+  return Color.new_from_rgb(param)
 end
 
-def Rgb16ToColor(param)
-  baseint = param.to_i(16)
-  return Color.new(
-    ((baseint) & 0x1F) << 3,
-    ((baseint >> 5) & 0x1F) << 3,
-    ((baseint >> 10) & 0x1F) << 3
-  )
+# @deprecated This method is slated to be removed in v22.
+def rgb15ToColor(param)
+  Deprecation.warn_method("rgb15ToColor", "v22", "Color.new_from_rgb(param)")
+  return Color.new_from_rgb(param)
 end
 
+# @deprecated This method is slated to be removed in v22.
 def getContrastColor(color)
-  raise "No color given" if !color
-  r = color.red
-  g = color.green
-  b = color.blue
-  yuv = [
-    (r * 0.299) + (g * 0.587) + (b * 0.114),
-    (r * -0.1687) + (g * -0.3313) + (b *  0.500) + 0.5,
-    (r * 0.500) + (g * -0.4187) + (b * -0.0813) + 0.5
-  ]
-  if yuv[0] < 127.5
-    yuv[0] += (255 - yuv[0]) / 2
-  else
-    yuv[0] = yuv[0] / 2
-  end
-  return Color.new(
-    yuv[0] + (1.4075 * (yuv[2] - 0.5)),
-    yuv[0] - (0.3455 * (yuv[1] - 0.5)) - (0.7169 * (yuv[2] - 0.5)),
-    yuv[0] + (1.7790 * (yuv[1] - 0.5)),
-    color.alpha
-  )
+  Deprecation.warn_method("getContrastColor", "v22", "color.get_contrast_color")
+  return color.get_contrast_color
 end
 
 
@@ -151,8 +90,8 @@ def itemIconTag(item)
   if item.respond_to?("icon_name")
     return sprintf("<icon=%s>", item.icon_name)
   else
-    ix = item.icon_index % 16 * 24
-    iy = item.icon_index / 16 * 24
+    ix = (item.icon_index % 16) * 24
+    iy = (item.icon_index / 16) * 24
     return sprintf("<img=Graphics/System/Iconset|%d|%d|24|24>", ix, iy)
   end
 end
@@ -481,15 +420,15 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
           if endtag
             colorstack.pop
           else
-            color = rgbToColor(param)
+            color = Color.new_from_rgb(param)
             colorstack.push([color, nil])
           end
         when "c2"
           if endtag
             colorstack.pop
           else
-            base = Rgb16ToColor(param[0, 4])
-            shadow = Rgb16ToColor(param[4, 4])
+            base = Color.new_from_rgb(param[0, 4])
+            shadow = Color.new_from_rgb(param[4, 4])
             colorstack.push([base, shadow])
           end
         when "c3"
@@ -499,8 +438,8 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
             param = param.split(",")
             # get pure colors unaffected by opacity
             oldColors = getLastParam(colorstack, defaultcolors)
-            base = (param[0] && param[0] != "") ? rgbToColor(param[0]) : oldColors[0]
-            shadow = (param[1] && param[1] != "") ? rgbToColor(param[1]) : oldColors[1]
+            base = (param[0] && param[0] != "") ? Color.new_from_rgb(param[0]) : oldColors[0]
+            shadow = (param[1] && param[1] != "") ? Color.new_from_rgb(param[1]) : oldColors[1]
             colorstack.push([base, shadow])
           end
         when "o"
@@ -921,7 +860,7 @@ def getLineBrokenChunks(bitmap, value, width, dims, plain = false)
     end
     textcols = []
     if ccheck[/</] && !plain
-      ccheck.scan(re) { textcols.push(rgbToColor($1)) }
+      ccheck.scan(re) { textcols.push(Color.new_from_rgb($1)) }
       words = ccheck.split(reNoMatch) # must have no matches because split can include match
     else
       words = [ccheck]
@@ -1086,7 +1025,7 @@ end
 def drawFormattedTextEx(bitmap, x, y, width, text, baseColor = nil, shadowColor = nil, lineheight = 32)
   base = baseColor ? baseColor.clone : Color.new(96, 96, 96)
   shadow = shadowColor ? shadowColor.clone : Color.new(208, 208, 200)
-  text = "<c2=" + colorToRgb16(base) + colorToRgb16(shadow) + ">" + text
+  text = shadowctag(base, shadow) + text
   chars = getFormattedText(bitmap, x, y, width, -1, text, lineheight)
   drawFormattedChars(bitmap, chars)
 end

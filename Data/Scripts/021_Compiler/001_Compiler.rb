@@ -757,7 +757,6 @@ module Compiler
     modify_pbs_file_contents_before_compiling
     compile_town_map
     compile_connections
-    compile_phone
     compile_types
     compile_abilities
     compile_moves             # Depends on Type
@@ -775,12 +774,18 @@ module Compiler
     compile_trainer_lists     # Depends on TrainerType
     compile_metadata          # Depends on TrainerType
     compile_map_metadata
+    compile_dungeon_tilesets
+    compile_dungeon_parameters
+    compile_phone             # Depends on TrainerType
   end
 
   def compile_all(mustCompile)
-    return if !mustCompile
+    if !mustCompile
+      Console.echo_h1(_INTL("Game did not compile data"))
+      return
+    end
     FileLineData.clear
-    Console.echo_h1 _INTL("Starting full compile")
+    Console.echo_h1 _INTL("Compiling all data")
     compile_pbs_files
     compile_animations
     compile_trainer_events(mustCompile)
@@ -793,7 +798,7 @@ module Compiler
     System.reload_cache
     Console.echo_done(true)
     echoln ""
-    Console.echo_h2("Successfully fully compiled", text: :green)
+    Console.echo_h2("Successfully compiled all data", text: :green)
   end
 
   def main
@@ -802,6 +807,8 @@ module Compiler
       dataFiles = [
         "abilities.dat",
         "berry_plants.dat",
+        "dungeon_parameters.dat",
+        "dungeon_tilesets.dat",
         "encounters.dat",
         "items.dat",
         "map_connections.dat",
@@ -825,6 +832,8 @@ module Compiler
         "abilities.txt",
         "battle_facility_lists.txt",
         "berry_plants.txt",
+        "dungeon_parameters.txt",
+        "dungeon_tilesets.txt",
         "encounters.txt",
         "items.txt",
         "map_connections.txt",

@@ -1,190 +1,15 @@
 #===============================================================================
 # Code that generates a random dungeon layout, and implements it in a given map.
 #===============================================================================
-module RandomDungeonGenerator
-  #=============================================================================
-  # This class is designed to favor different values more than a uniform
-  # random generator does.
-  #=============================================================================
-  class AntiRandom
-    def initialize(size)
-      @old = []
-      @new = Array.new(size) { |i| i }
-    end
-
-    def get
-      if @new.length == 0   # No new values
-        @new = @old.clone
-        @old.clear
-      end
-      if @old.length > 0 && rand(7) == 0   # Get old value
-        return @old[rand(@old.length)]
-      end
-      if @new.length > 0   # Get new value
-        ret = @new.delete_at(rand(@new.length))
-        @old.push(ret)
-        return ret
-      end
-      return @old[rand(@old.length)]   # Get old value
-    end
-  end
-
-  #=============================================================================
-  # Contains constants that define what types of tiles a random dungeon map can
-  # consist of, and helper methods that translate those tiles into data usable
-  # by a map/printable to the console (for debug purposes).
-  #=============================================================================
-  module DungeonTile
-    VOID     = 0
-    ROOM     = 1
-    WALL     = 2
-    CORRIDOR = 3
-    # Which autotile each type of tile uses (1-7)
-    TILE_IDS = {
-      VOID     => 1,
-      ROOM     => 2,
-      WALL     => 3,
-      CORRIDOR => 2
-    }
-    # Used for debugging when printing out an ASCII image of the dungeon
-    TEXT_SYMBOLS = {
-      VOID     => "#",
-      ROOM     => " ",
-      WALL     => "=",
-      CORRIDOR => "."
-    }
-
-    module_function
-
-    def to_tile_id(value)
-      return TILE_IDS[value] || TILE_IDS[VOID]
-    end
-
-    def to_text(value)
-      return TEXT_SYMBOLS[value] || "\e[30m\e[41m?\e[0m"
-    end
-  end
-
-  #=============================================================================
-  # Helper functions that set tiles in the map to a particular type.
-  #=============================================================================
-  module DungeonMaze
-    CELL_WIDTH      = 13                # Should be at least 7
-    CELL_HEIGHT     = 13                # Should be at least 7
-    ROOM_MIN_WIDTH  = 5
-    ROOM_MAX_WIDTH  = CELL_WIDTH - 2    # Should be at most CELL_WIDTH - 2
-    ROOM_MIN_HEIGHT = 4
-    ROOM_MAX_HEIGHT = CELL_HEIGHT - 3   # Should be at most CELL_HEIGHT - 3
-    CORRIDOR_WIDTH  = 3
-    TURN_NONE  = 0
-    TURN_LEFT  = 1
-    TURN_RIGHT = 2
-    TURN_BACK  = 3
-    @@corridor_layouts = nil
-
-    module_function
-
-    # Generates sets of tiles depicting corridors coming out of a room, for all
-    # combinations of the sides that they can come out of.
-    def generate_corridor_patterns
-      if !@@corridor_layouts
-        tiles = []
-        x_offset = (CELL_WIDTH - CORRIDOR_WIDTH) / 2
-        y_offset = (CELL_HEIGHT - CORRIDOR_WIDTH) / 2
-        16.times do |combo|
-          tiles[combo] = []
-          (CELL_WIDTH * CELL_HEIGHT).times do |i|
-            tiles[combo][i] = DungeonTile::VOID
-          end
-          if (combo & EdgeMasks::NORTH) == 0
-            paint_corridor(tiles[combo], x_offset, 0, CORRIDOR_WIDTH, y_offset + CORRIDOR_WIDTH)
-          end
-          if (combo & EdgeMasks::SOUTH) == 0
-            paint_corridor(tiles[combo], x_offset, y_offset, CORRIDOR_WIDTH, CELL_HEIGHT - y_offset)
-          end
-          if (combo & EdgeMasks::EAST) == 0
-            paint_corridor(tiles[combo], x_offset, y_offset, CELL_WIDTH - x_offset, CORRIDOR_WIDTH)
-          end
-          if (combo & EdgeMasks::WEST) == 0
-            paint_corridor(tiles[combo], 0, y_offset, x_offset + CORRIDOR_WIDTH, CORRIDOR_WIDTH)
-          end
-        end
-        @@corridor_layouts = tiles
-      end
-      return @@corridor_layouts
-    end
-
-    # Makes all tiles in a particular area corridor tiles.
-    def paint_corridor(tile, x, y, width, height)
-      height.times do |j|
-        width.times do |i|
-          tile[((y + j) * CELL_WIDTH) + (x + i)] = DungeonTile::CORRIDOR
-        end
-      end
-    end
-
-    # Used to draw tiles from the given tile_layout and rotation (for corridors).
-    def paint_tile_layout(dungeon, dstX, dstY, tile_layout, rotation)
-      case rotation
-      when TURN_NONE
-        CELL_HEIGHT.times do |y|
-          CELL_WIDTH.times do |x|
-            dungeon[x + dstX, y + dstY] = tile_layout[(y * CELL_WIDTH) + x]
-          end
-        end
-      when TURN_LEFT
-        CELL_HEIGHT.times do |y|
-          CELL_WIDTH.times do |x|
-            dungeon[y + dstX, CELL_WIDTH - 1 - x + dstY] = tile_layout[(y * CELL_WIDTH) + x]
-          end
-        end
-      when TURN_RIGHT
-        CELL_HEIGHT.times do |y|
-          CELL_WIDTH.times do |x|
-            dungeon[CELL_HEIGHT - 1 - y + dstX, x + dstY] = tile_layout[(y * CELL_WIDTH) + x]
-          end
-        end
-      when TURN_BACK
-        CELL_HEIGHT.times do |y|
-          CELL_WIDTH.times do |x|
-            dungeon[CELL_WIDTH - 1 - x + dstX, CELL_HEIGHT - 1 - y + dstY] = tile_layout[(y * CELL_WIDTH) + x]
-          end
-        end
-      end
-    end
-
-    # Draws a cell's contents, which is an underlying pattern based on tile
-    # _layout and a rotation (the corridors), and possibly a room on top of that.
-    def paint_cell_contents(dungeon, xDst, yDst, tile_layout, rotation)
-      return false if !tile_layout
-      # Draw the corridors
-      paint_tile_layout(dungeon, xDst, yDst, tile_layout, rotation)
-      return false if rand(100) < 30
-      # Generate a randomly placed room
-      width = rand(ROOM_MIN_WIDTH..ROOM_MAX_WIDTH)
-      height = rand(ROOM_MIN_HEIGHT..ROOM_MAX_HEIGHT)
-      return false if width <= 0 || height <= 0
-      centerX = (CELL_WIDTH / 2) + rand(5) - 2
-      centerY = (CELL_HEIGHT / 2) + rand(5) - 2
-      x = centerX - (width / 2)
-      y = centerY - (height / 2)
-      rect = [x, y, width, height]
-      rect[0] = rect[0].clamp(1, CELL_WIDTH - 1 - width)
-      rect[1] = rect[1].clamp(2, CELL_HEIGHT - 1 - height)   # 2 because walls are 2 tiles tall
-      dungeon.paint_room(rect, xDst, yDst)
-      return true
-    end
-  end
-
+module RandomDungeon
   #=============================================================================
   # Bitwise values used to keep track of the generation of node connections.
   #=============================================================================
   module EdgeMasks
-    NORTH   = 1
-    WEST    = 2
-    EAST    = 4
-    SOUTH   = 8
-    VISITED = 16
+    NORTH = 1
+    EAST  = 2
+    SOUTH = 4
+    WEST  = 8
   end
 
   #=============================================================================
@@ -193,476 +18,1073 @@ module RandomDungeonGenerator
   #=============================================================================
   class MazeNode
     def initialize
-      @edges = 0
+      @visitable = false
+      @visited   = false
+      @room      = false
+      block_all_edges   # A bit being 1 means its edge is NOT connected to the adjacent node
     end
 
-    def setEdge(e);   @edges |= e;              end
-    def clearEdge(e); @edges &= ~e;             end
-    def clear;        @edges = 0;               end
-    def set;          @edges = 15;              end
-    def getEdge(e);   return (@edges & e) != 0; end
-    def isBlocked?;   return @edges != 0;       end
+    def edge_pattern;       return @edges;            end
+    def block_edge(e);      @edges |= e;              end
+    def connect_edge(e);    @edges &= ~e;             end
+    def block_all_edges;    @edges = 15;              end
+    def connect_all_edges;  @edges = 0;               end
+    def edge_blocked?(e);   return (@edges & e) != 0; end
+    def all_edges_blocked?; return @edges != 0;       end
+    def visitable?;         return @visitable;        end
+    def set_visitable;      @visitable = true;        end
+    def visited?;           return @visited;          end
+    def set_visited;        @visited = true;          end
+    def room?;              return @room;             end
+    def set_room;           @room = true;             end
   end
 
   #=============================================================================
-  # Vector class representing the location of a node.
-  #=============================================================================
-  class NodeListElement
-    attr_accessor :x, :y
-
-    def initialize(x, y)
-      @x = x
-      @y = y
-    end
-  end
-
-  #=============================================================================
-  # Maze generator. Given the number of cells horizontally and vertically in a
-  # map, connects all the cells together.
-  # A node is the boundary between two adjacent cells, which may or may not be a
-  # connection.
+  # Maze generator. Given the number of nodes horizontally and vertically in a
+  # map, connects all the nodes together.
   #=============================================================================
   class Maze
-    attr_accessor :cellWidth, :cellHeight, :nodeWidth, :nodeHeight
+    attr_accessor :node_count_x, :node_count_y
 
     DIRECTIONS = [EdgeMasks::NORTH, EdgeMasks::SOUTH, EdgeMasks::EAST, EdgeMasks::WEST]
 
-    def initialize(cw, ch)
+    def initialize(cw, ch, parameters)
       raise ArgumentError.new if cw == 0 || ch == 0
-      @cellWidth  = cw
-      @cellHeight = ch
-      @nodeWidth  = cw + 1
-      @nodeHeight = ch + 1
-      @cells = []
-      clearAllCells
-      @nodes = Array.new(@nodeWidth * @nodeHeight) { MazeNode.new }
+      @node_count_x  = cw
+      @node_count_y = ch
+      @parameters = parameters
+      @nodes = Array.new(@node_count_x * @node_count_y) { MazeNode.new }
     end
 
-    def randomDir
-      return DIRECTIONS[rand(4)]
+    def valid_node?(x, y)
+      return x >= 0 && x < @node_count_x && y >= 0 && y < @node_count_y
     end
 
-    def getVisited(x, y)
-      return false if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      return (@cells[(y * cellWidth) + x] & EdgeMasks::VISITED) != 0
+    def get_node(x, y)
+      return @nodes[(y * @node_count_x) + x] if valid_node?(x, y)
+      return nil
     end
 
-    def setVisited(x, y)
-      return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      @cells[(y * cellWidth) + x] |= EdgeMasks::VISITED
+    def node_visited?(x, y)
+      return true if !valid_node?(x, y) || !@nodes[(y * @node_count_x) + x].visitable?
+      return @nodes[(y * @node_count_x) + x].visited?
     end
 
-    def clearVisited(x, y)
-      return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-      @cells[(y * cellWidth) + x] &= ~EdgeMasks::VISITED
+    def set_node_visited(x, y)
+      @nodes[(y * @node_count_x) + x].set_visited if valid_node?(x, y)
     end
 
-    def clearAllCells
-      (cellWidth * cellHeight).times do |c|
-        @cells[c] = 0
-      end
+    def node_edge_blocked?(x, y, edge)
+      return false if !valid_node?(x, y)
+      return @nodes[(y * @node_count_x) + x].edge_blocked?(edge)
     end
 
-    def getEdgeNode(x, y, edge)
-      return false if x < 0 || y < 0 || x >= nodeWidth || y >= nodeHeight
-      return @nodes[(y * nodeWidth) + x].getEdge(edge)
+    def connect_node_edges(x, y, edge)
+      return if !valid_node?(x, y)
+      @nodes[(y * @node_count_x) + x].connect_edge(edge)
+      new_x, new_y, new_edge = get_coords_in_direction(x, y, edge, true)
+      raise ArgumentError.new if new_edge == 0
+      @nodes[(new_y * @node_count_x) + new_x].connect_edge(new_edge) if valid_node?(new_x, new_y)
     end
 
-    def setEdgeNode(x, y, edge)
-      return if x < 0 || x >= nodeWidth || y < 0 || y >= nodeHeight
-      @nodes[(y * nodeWidth) + x].setEdge(edge)
-      e = 0
-      nx = x
-      ny = y
-      case edge
+    def room_count
+      ret = 0
+      @nodes.each { |node| ret += 1 if node.room? }
+      return ret
+    end
+
+    def get_coords_in_direction(x, y, dir, include_direction = false)
+      new_x = x
+      new_y = y
+      new_dir = 0
+      case dir
       when EdgeMasks::NORTH
-        e = EdgeMasks::SOUTH
-        ny = y - 1
+        new_dir = EdgeMasks::SOUTH
+        new_y -= 1
       when EdgeMasks::SOUTH
-        e = EdgeMasks::NORTH
-        ny = y + 1
-      when EdgeMasks::EAST
-        e = EdgeMasks::WEST
-        nx = x + 1
+        new_dir = EdgeMasks::NORTH
+        new_y += 1
       when EdgeMasks::WEST
-        e = EdgeMasks::EAST
-        nx = x - 1
-      else
-        return
-      end
-      return if nx < 0 || ny < 0 || nx >= nodeWidth || ny >= nodeHeight
-      @nodes[(ny * nodeWidth) + nx].setEdge(e)
-    end
-
-    def setAllEdges
-      (nodeWidth * nodeHeight).times do |c|
-        @nodes[c].set
-      end
-    end
-
-    def clearEdgeNode(x, y, edge)
-      return if x < 0 || x >= nodeWidth || y < 0 || y >= nodeHeight
-      @nodes[(y * nodeWidth) + x].clearEdge(edge)
-      e = 0
-      nx = x
-      ny = y
-      case edge
-      when EdgeMasks::NORTH
-        e = EdgeMasks::SOUTH
-        ny -= 1
-      when EdgeMasks::SOUTH
-        e = EdgeMasks::NORTH
-        ny += 1
+        new_dir = EdgeMasks::EAST
+        new_x -= 1
       when EdgeMasks::EAST
-        e = EdgeMasks::WEST
-        nx += 1
-      when EdgeMasks::WEST
-        e = EdgeMasks::EAST
-        nx -= 1
-      else
-        raise ArgumentError.new
+        new_dir = EdgeMasks::WEST
+        new_x += 1
       end
-      return if nx < 0 || ny < 0 || nx >= nodeWidth || ny >= nodeHeight
-      @nodes[(ny * nodeWidth) + nx].clearEdge(e)
+      return new_x, new_y, new_dir if include_direction
+      return new_x, new_y
     end
 
-    def clearAllEdges
-      (nodeWidth * nodeHeight).times do |c|
-        @nodes[c].clear
+    #===========================================================================
+
+    def generate_layout
+      # Set visitable nodes
+      visitable_nodes = set_visitable_nodes
+      # Generate connections between all nodes
+      generate_depth_first_maze(visitable_nodes)
+      add_more_connections
+      # Spawn rooms in some nodes
+      spawn_rooms(visitable_nodes)
+    end
+
+    # Returns whether the node at (x, y) is active in the given layout.
+    def check_active_node(x, y, layout)
+      case layout
+      when :no_corners
+        return false if [0, @node_count_x - 1].include?(x) && [0, @node_count_y - 1].include?(y)
+      when :ring
+        return false if x > 0 && x < @node_count_x - 1 && y > 0 && y < @node_count_y - 1
+      when :antiring
+        return false if x == 0 || x == @node_count_x - 1 || y == 0 || y == @node_count_y - 1
+      when :plus
+        return false if x != @node_count_x / 2 && y != @node_count_y / 2
+      when :diagonal_up
+        return false if (x + y - @node_count_y + 1).abs >= 2
+      when :diagonal_down
+        return false if (x - y).abs >= 2
+      when :cross
+        return false if (x - y).abs >= 2 && (x + y - @node_count_y + 1).abs >= 2
+      when :quadrants
+        return false if (x == 0 || x == @node_count_x - 1) && y >= 2 && y < @node_count_y - 2
+        return false if (y == 0 || y == @node_count_y - 1) && x >= 2 && x < @node_count_x - 2
       end
+      return true
     end
 
-    def isBlockedNode?(x, y)
-      return false if x < 0 || y < 0 || x >= nodeWidth || y >= nodeHeight
-      return @nodes[(y * nodeWidth) + x].isBlocked?
-    end
-
-    def getEdgePattern(x, y)
-      pattern = 0
-      pattern |= EdgeMasks::NORTH if getEdgeNode(x, y, EdgeMasks::NORTH)
-      pattern |= EdgeMasks::SOUTH if getEdgeNode(x, y, EdgeMasks::SOUTH)
-      pattern |= EdgeMasks::EAST if getEdgeNode(x, y, EdgeMasks::EAST)
-      pattern |= EdgeMasks::WEST if getEdgeNode(x, y, EdgeMasks::WEST)
-      return pattern
-    end
-
-    def buildMazeWall(x, y, dir, len)
-      return if isBlockedNode?(x, y)
-      wx = x
-      wy = y
-      len.times do
-        ox = wx
-        oy = wy
-        case dir
-        when EdgeMasks::NORTH
-          wy -= 1
-        when EdgeMasks::WEST
-          wx -= 1
-        when EdgeMasks::EAST
-          wx += 1
-        when EdgeMasks::SOUTH
-          wy += 1
-        end
-        if isBlockedNode?(wx, wy)
-          setEdgeNode(ox, oy, dir)
-          return
-        end
-        setEdgeNode(ox, oy, dir)
-      end
-    end
-
-    def buildNodeList
-      list = []
-      nodeWidth.times do |x|
-        nodeHeight.times do |y|
-          list.push(NodeListElement.new(x, y))
+    def set_visitable_nodes
+      visitable_nodes = []
+      @node_count_y.times do |y|
+        @node_count_x.times do |x|
+          next if !check_active_node(x, y, @parameters.node_layout)
+          @nodes[(y * @node_count_x) + x].set_visitable
+          visitable_nodes.push([x, y])
         end
       end
-      list.shuffle!
-      return list
+      return visitable_nodes
     end
 
-    def generateWallGrowthMaze(minWall = 0, maxWall = nil)
-      maxWall = cellWidth if !maxWall
-      nlist = buildNodeList
-      return if nlist.length == 0
-      nlist.length.times do |c|
-        d = randomDir
-        len = rand(maxWall + 1)
-        x = nlist[c].x
-        y = nlist[c].y
-        buildMazeWall(x, y, d, len)
-      end
+    def generate_depth_first_maze(visitable_nodes)
+      # Pick a cell to start in
+      start = visitable_nodes.sample
+      sx = start[0]
+      sy = start[1]
+      # Generate a maze
+      connect_nodes_and_recurse_depth_first(sx, sy, 0)
     end
 
-    def recurseDepthFirst(x, y, depth)
-      setVisited(x, y)
+    def connect_nodes_and_recurse_depth_first(x, y, depth)
+      set_node_visited(x, y)
       dirs = DIRECTIONS.shuffle
       4.times do |c|
-        d = dirs[c]
-        cx = x
-        cy = y
-        case d
-        when EdgeMasks::NORTH
-          cy -= 1
-        when EdgeMasks::SOUTH
-          cy += 1
-        when EdgeMasks::EAST
-          cx += 1
-        when EdgeMasks::WEST
-          cx -= 1
-        end
-        if cx >= 0 && cy >= 0 && cx < cellWidth && cy < cellHeight && !getVisited(cx, cy)
-          clearEdgeNode(x, y, d)
-          recurseDepthFirst(cx, cy, depth + 1)
-        end
+        dir = dirs[c]
+        cx, cy = get_coords_in_direction(x, y, dir)
+        next if node_visited?(cx, cy)
+        connect_node_edges(x, y, dir)
+        connect_nodes_and_recurse_depth_first(cx, cy, depth + 1)
       end
     end
 
-    def generateDepthFirstMaze
-      # Pick a cell to start in
-      sx = rand(cellWidth)
-      sy = rand(cellHeight)
-      # Set up all nodes
-      setAllEdges
-      # Generate a maze
-      recurseDepthFirst(sx, sy, 0)
+    def add_more_connections
+      return if @parameters.extra_connections_count == 0
+      possible_conns = []
+      @node_count_x.times do |x|
+        @node_count_y.times do |y|
+          node = @nodes[(y * @node_count_x) + x]
+          next if !node.visitable?
+          DIRECTIONS.each do |dir|
+            next if !node.edge_blocked?(dir)
+            cx, cy, cdir = get_coords_in_direction(x, y, dir, true)
+            new_node = get_node(cx, cy)
+            next if !new_node || !new_node.visitable? || !new_node.edge_blocked?(cdir)
+            possible_conns.push([x, y, dir])
+          end
+        end
+      end
+      possible_conns.sample(@parameters.extra_connections_count).each do |conn|
+        connect_node_edges(*conn)
+      end
+    end
+
+    def spawn_rooms(visitable_nodes)
+      roomable_nodes = []
+      visitable_nodes.each { |coord| roomable_nodes.push(coord) if check_active_node(*coord, @parameters.room_layout) }
+      room_count = [roomable_nodes.length * @parameters.room_chance / 100, 1].max
+      return if room_count == 0
+      rooms = roomable_nodes.sample(room_count)
+      rooms.each { |coords| @nodes[(coords[1] * @node_count_x) + coords[0]].set_room }
     end
   end
 
   #=============================================================================
-  # Random dungeon generator class. Calls class Maze to generate the abstract
-  # layout of the dungeon, and turns that into usable map data.
+  # Arrays of tile types in the dungeon map.
   #=============================================================================
-  class Dungeon
-    class DungeonTable
-      def initialize(dungeon)
-        @dungeon = dungeon
-      end
-
-      def xsize; @dungeon.width;  end
-      def ysize; @dungeon.height; end
-
-      # Returns which tile in the tileset corresponds to the type of tile is at
-      # the given coordinates
-      def [](x, y)
-        return DungeonTile.to_tile_id(@dungeon[x, y])
-      end
-    end
-
+  class DungeonLayout
     attr_accessor :width, :height
+    alias xsize width
+    alias ysize height
 
-    BUFFER_X = 8
-    BUFFER_Y = 6
+    # Used for debugging when printing out an ASCII image of the dungeon
+    TEXT_SYMBOLS = {
+      :void                   => "#",
+      :room                   => " ",
+      :corridor               => " ",
+      :void_decoration        => "#",
+      :void_decoration_large  => "#",
+      :floor_decoration       => " ",
+      :floor_decoration_large => " ",
+      :floor_patch            => " ",
+      :wall_top               => " ",
+      :wall_1                 => Console.markup_style("=", bg: :brown),
+      :wall_2                 => Console.markup_style("=", bg: :brown),
+      :wall_3                 => Console.markup_style("=", bg: :brown),
+      :wall_4                 => Console.markup_style("=", bg: :brown),
+      :wall_6                 => Console.markup_style("=", bg: :brown),
+      :wall_7                 => Console.markup_style("=", bg: :brown),
+      :wall_8                 => Console.markup_style("=", bg: :brown),
+      :wall_9                 => Console.markup_style("=", bg: :brown),
+      :wall_in_1              => Console.markup_style("=", bg: :brown),
+      :wall_in_3              => Console.markup_style("=", bg: :brown),
+      :wall_in_7              => Console.markup_style("=", bg: :brown),
+      :wall_in_9              => Console.markup_style("=", bg: :brown),
+      :upper_wall_1           => Console.markup_style("~", bg: :gray),
+      :upper_wall_2           => Console.markup_style("~", bg: :gray),
+      :upper_wall_3           => Console.markup_style("~", bg: :gray),
+      :upper_wall_4           => Console.markup_style("~", bg: :gray),
+      :upper_wall_6           => Console.markup_style("~", bg: :gray),
+      :upper_wall_7           => Console.markup_style("~", bg: :gray),
+      :upper_wall_8           => Console.markup_style("~", bg: :gray),
+      :upper_wall_9           => Console.markup_style("~", bg: :gray),
+      :upper_wall_in_1        => Console.markup_style("~", bg: :gray),
+      :upper_wall_in_3        => Console.markup_style("~", bg: :gray),
+      :upper_wall_in_7        => Console.markup_style("~", bg: :gray),
+      :upper_wall_in_9        => Console.markup_style("~", bg: :gray),
+    }
 
     def initialize(width, height)
       @width  = width
       @height = height
-      @array  = []
+      @array  = [[], [], []]
+      clear
+    end
+
+    def [](x, y, layer)
+      return @array[layer][(y * @width) + x]
+    end
+
+    def []=(x, y, layer, value)
+      @array[layer][(y * @width) + x] = value
+    end
+
+    def value(x, y)
+      return :void if x < 0 || x >= @width || y < 0 || y >= @height
+      ret = :void
+      [2, 1, 0].each do |layer|
+        return @array[layer][(y * @width) + x] if @array[layer][(y * @width) + x] != :none
+      end
+      return ret
     end
 
     def clear
-      (width * height).times do |i|
-        @array[i] = DungeonTile::VOID
+      @array.each_with_index do |arr, layer|
+        (@width * @height).times { |i| arr[i] = (layer == 0) ? :void : :none }
       end
+    end
+
+    def set_wall(x, y, value)
+      @array[0][(y * @width) + x] = :room
+      @array[1][(y * @width) + x] = value
+    end
+
+    def set_ground(x, y, value)
+      @array[0][(y * @width) + x] = value
+      @array[1][(y * @width) + x] = :none
     end
 
     def write
       ret = ""
-      i = 0
       @height.times do |y|
         @width.times do |x|
-          ret += DungeonTile.to_text(value(x, y))
-          i += 1
+          ret += TEXT_SYMBOLS[value(x, y)] || "\e[30m\e[41m?\e[0m"
         end
         ret += "\r\n"
       end
       return ret
     end
+  end
 
-    def [](x, y)
-      return @array[(y * @width) + x]
+  #=============================================================================
+  # The main dungeon generator class.
+  #=============================================================================
+  class Dungeon
+    attr_accessor :width, :height
+    alias xsize width
+    alias ysize height
+    attr_accessor :parameters, :rng_seed
+    attr_accessor :tileset
+
+    # 0 is none (index 0 only) or corridor/floor
+    # -1 are tile combinations that need special attention
+    # Other numbers correspond to tile types (see def get_wall_tile_for_coord)
+    FLOOR_NEIGHBOURS_TO_WALL = [
+      0, 2, 1, 2, 4, 11, 4, 11, 7, 9, 4, 11, 4, 11, 4, 11,
+      8, 0, 17, 0, 17, 0, 17, 0, 8, 0, 17, 0, 17, 0, 17, 0,
+      9, 13, -1, 13, 17, 0, 17, 0, 8, 0, 17, 0, 17, 0, 17, 0,
+      8, 0, 17, 0, 17, 0, 17, 0, 8, 0, 17, 0, 17, 0, 17, 0,
+      6, 13, 13, 13, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      19, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      6, 13, 13, 13, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      19, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      3, 2, 2, 2, 11, 11, 11, 11, -1, 11, 11, 11, 11, 11, 11, 11,
+      19, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      6, 13, 13, 13, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      19, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      6, 13, 13, 13, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      19, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      6, 13, 13, 13, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0,
+      19, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0
+    ]
+
+    def initialize(width, height, tileset, parameters = nil)
+      @tileset     = tileset
+      @buffer_x    = ((Graphics.width.to_f / Game_Map::TILE_WIDTH) / 2).ceil
+      @buffer_y    = ((Graphics.height.to_f / Game_Map::TILE_HEIGHT) / 2).ceil
+      if @tileset.snap_to_large_grid
+        @buffer_x += 1 if @buffer_x.odd?
+        @buffer_y += 1 if @buffer_x.odd?
+      end
+      @parameters  = parameters || GameData::DungeonParameters.new({})
+      if @tileset.snap_to_large_grid
+        @parameters.cell_width -= 1 if @parameters.cell_width.odd?
+        @parameters.cell_height -= 1 if @parameters.cell_height.odd?
+        @parameters.corridor_width += (@parameters.corridor_width == 1) ? 1 : -1 if @parameters.corridor_width.odd?
+      end
+      if width >= 20
+        @width = width
+      else
+        @width = (width * @parameters.cell_width) + (2 * @buffer_x)
+        @width += 1 if @tileset.snap_to_large_grid && @width.odd?
+      end
+      if height >= 20
+        @height = height
+      else
+        @height = (height * @parameters.cell_height) + (2 * @buffer_y)
+        @height += 1 if @tileset.snap_to_large_grid && @height.odd?
+      end
+      @usable_width = @width
+      @usable_height = @height
+      if @tileset.snap_to_large_grid
+        @usable_width  -= 1 if @usable_width.odd?
+        @usable_height -= 1 if @usable_height.odd?
+      end
+      @map_data    = DungeonLayout.new(@width, @height)
+      @need_redraw = false
     end
 
-    def []=(x, y, value)
-      @array[(y * @width) + x] = value
+    def [](x, y, layer = nil)
+      return @map_data.value(x, y) if layer.nil?
+      return @map_data[x, y, layer]
     end
 
-    def value(x, y)
-      return DungeonTile::VOID if x < 0 || y < 0 || x >= @width || y >= @height
-      return @array[(y * @width) + x]
+    def []=(x, y, layer, value)
+      @map_data[x, y, layer] = value
     end
 
-    # Unused
-    def get(x, y)
-      return false if x < 0 || y < 0 || x >= @width || y >= @height
-      return @array[(y * @width) + x] != DungeonTile::VOID
+    def write
+      return @map_data.write
     end
 
-    # Unused
-    def intersects?(r1, r2)
-      return !(((r2[0] + r2[2] <= r1[0]) ||
-                (r2[0] >= r1[0] + r1[2]) ||
-                (r2[1] + r2[3] <= r1[1]) ||
-                (r2[1] >= r1[1] + r1[3])) &&
-               ((r1[0] <= r2[0] + r2[2]) ||
-                (r1[0] >= r2[0] + r2[2]) ||
-                (r1[1] + r1[3] <= r2[1]) ||
-                (r1[1] >= r2[1] + r2[3]))
-              )
-    end
+    #===========================================================================
 
-    # Returns whether the given coordinates are a room floor that isn't too close
-    # to a corridor
+    # Returns whether the given coordinates are a room floor that isn't too
+    # close to a corridor. For positioning events/the player upon entering.
     def isRoom?(x, y)
-      if value(x, y) == DungeonTile::ROOM
-        return false if value(x - 1, y - 1) == DungeonTile::CORRIDOR
-        return false if value(    x, y - 1) == DungeonTile::CORRIDOR
-        return false if value(x + 1, y - 1) == DungeonTile::CORRIDOR
-        return false if value(x - 1,     y) == DungeonTile::CORRIDOR
-        return false if value(x + 1,     y) == DungeonTile::CORRIDOR
-        return false if value(x - 1, y + 1) == DungeonTile::CORRIDOR
-        return false if value(    x, y + 1) == DungeonTile::CORRIDOR
-        return false if value(x + 1, y + 1) == DungeonTile::CORRIDOR
-        return true   # No surrounding tiles are corridor floor
-      end
-      return false
-    end
-
-    def isWall?(x, y)
-      if value(x, y) == DungeonTile::VOID
-        v1 = value(x, y + 1)
-        return true if [DungeonTile::ROOM, DungeonTile::CORRIDOR].include?(v1)
-        if v1 == DungeonTile::VOID   # The tile below is void
-          v1 = value(x, y + 2)
-          return true if [DungeonTile::ROOM, DungeonTile::CORRIDOR].include?(v1)
+      return false if @map_data.value(x, y) != :room
+      (-1..1).each do |i|
+        (-1..1).each do |j|
+          next if i == 0 && j == 0
+          return false if @map_data.value(x + i, y + j) == :corridor
         end
       end
-      return false
+      return true   # No surrounding tiles are corridor floor
     end
 
-    def paint_room(rect, offsetX, offsetY)
-      ((rect[1] + offsetY)...(rect[1] + offsetY + rect[3])).each do |y|
-        ((rect[0] + offsetX)...(rect[0] + offsetX + rect[2])).each do |x|
-          self[x, y] = DungeonTile::ROOM
-        end
-      end
+    def tile_is_ground?(value)
+      return [:room, :corridor].include?(value)
     end
+
+    # Lower wall tiles only.
+    def tile_is_wall?(value)
+      return [:wall_1, :wall_2, :wall_3, :wall_4, :wall_6, :wall_7, :wall_8, :wall_9,
+              :wall_in_1, :wall_in_3, :wall_in_7, :wall_in_9].include?(value)
+    end
+
+    def coord_is_ground?(x, y)
+      return tile_is_ground?(@map_data[x, y, 0]) && !tile_is_wall?(@map_data[x, y, 1])
+    end
+
+    #===========================================================================
 
     def generate
-      self.clear
-      maxWidth = @width - (BUFFER_X * 2)
-      maxHeight = @height - (BUFFER_Y * 2)
-      cellWidth = DungeonMaze::CELL_WIDTH
-      cellHeight = DungeonMaze::CELL_HEIGHT
+      @rng_seed = @parameters.rng_seed || Random.new_seed
+      Random.srand(@rng_seed)
+      maxWidth = @usable_width - (@buffer_x * 2)
+      maxHeight = @usable_height - (@buffer_y * 2)
       return if maxWidth < 0 || maxHeight < 0
-      if maxWidth < cellWidth || maxHeight < cellHeight   # Map is too small
-        maxWidth.times do |x|
-          maxHeight.times do |y|
-            self[x + BUFFER_X, y + BUFFER_Y] = DungeonTile::ROOM
-          end
-        end
+      loop do
+        @need_redraw = false
+        @map_data.clear
+        # Generate the basic layout of the map
+        generate_layout(maxWidth, maxHeight)
+        next if @need_redraw
+        # Draw walls
+        generate_walls(maxWidth, maxHeight)
+        next if @need_redraw
+        # Draw decorations
+        paint_decorations(maxWidth, maxHeight)
+        # Draw wall top tiles
+        paint_wall_top_tiles(maxWidth, maxHeight)
+        break #if !@need_redraw
+      end
+    end
+
+    def generate_layout(maxWidth, maxHeight)
+      cellWidth = @parameters.cell_width
+      cellHeight = @parameters.cell_height
+      # Map is too small, make the whole map a room
+      if maxWidth < cellWidth || maxHeight < cellHeight
+        paint_ground_rect(@buffer_x, @buffer_y, maxWidth, maxHeight, :room)
         return
       end
       # Generate connections between cells
-      maze = Maze.new(maxWidth / cellWidth, maxHeight / cellHeight)
-      maze.generateDepthFirstMaze
+      maze = Maze.new(maxWidth / cellWidth, maxHeight / cellHeight, @parameters)
+      maze.generate_layout
+      # If no rooms were generated, make the whole map a room
+      if maze.room_count == 0
+        paint_ground_rect(@buffer_x, @buffer_y, maxWidth, maxHeight, :room)
+        return
+      end
       # Draw each cell's contents in turn (room and corridors)
-      corridor_patterns = DungeonMaze.generate_corridor_patterns
-      roomcount = 0
       (maxHeight / cellHeight).times do |y|
         (maxWidth / cellWidth).times do |x|
-          pattern = maze.getEdgePattern(x, y)
-          next if !DungeonMaze.paint_cell_contents(
-            self, BUFFER_X + (x * cellWidth), BUFFER_Y + (y * cellHeight),
-            corridor_patterns[pattern], DungeonMaze::TURN_NONE
-          )
-          roomcount += 1
+          paint_node_contents(@buffer_x + (x * cellWidth), @buffer_y + (y * cellHeight), maze.get_node(x, y))
         end
       end
-      # If no rooms were generated, make the whole map a room
-      if roomcount == 0
+      check_for_isolated_rooms
+    end
+
+    def generate_walls(maxWidth, maxHeight)
+      # Lower layer
+      errors = []
+      maxHeight.times do |y|
         maxWidth.times do |x|
-          maxHeight.times do |y|
-            self[x + BUFFER_X, y + BUFFER_Y] = DungeonTile::ROOM
+          next if !coord_is_ground?(@buffer_x + x, @buffer_y + y)
+          paint_walls_around_ground(@buffer_x + x, @buffer_y + y, 0, errors)
+        end
+      end
+      # Check for error tiles
+      errors.each do |coord|
+        resolve_wall_error(coord[0], coord[1], 0)
+        break if @need_redraw
+      end
+      return if @need_redraw
+      return if !@tileset.double_walls
+      # Upper layer
+      errors = []
+      (maxHeight + 2).times do |y|
+        (maxWidth + 2).times do |x|
+          next if !tile_is_wall?(@map_data[@buffer_x + x - 1, @buffer_y + y - 1, 1])
+          paint_walls_around_ground(@buffer_x + x - 1, @buffer_y + y - 1, 1, errors)
+        end
+      end
+      # Check for error tiles
+      errors.each do |coord|
+        resolve_wall_error(coord[0], coord[1], 1)
+        break if @need_redraw
+      end
+    end
+
+    #===========================================================================
+
+    # Determines whether all floor tiles are contiguous. Sets @need_redraw if
+    # there are 2+ floor regions that are isolated from each other.
+    def check_for_isolated_rooms
+      # Get a floor tile as a starting position
+      start = nil
+      maxWidth = @usable_width - (@buffer_x * 2)
+      maxHeight = @usable_height - (@buffer_y * 2)
+      for y in 0...maxHeight
+        for x in 0...maxWidth
+          next if !tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
+          start = [x, y]
+          break
+        end
+        break if start
+      end
+      if !start
+        @need_redraw = true
+        return
+      end
+      # Flood fill (https://en.wikipedia.org/wiki/Flood_fill#Span_Filling)
+      to_check = [
+        [start[0], start[0], start[1], 1],
+        [start[0], start[0], start[1] - 1, -1]
+      ]
+      visited = []
+      loop do
+        break if to_check.empty?
+        checking = to_check.shift
+        x1, x2, y, dy = checking
+        x = x1
+        if !visited[y * maxWidth + x] && tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
+          loop do
+            break if visited[y * maxWidth + x - 1] || !tile_is_ground?(@map_data[x - 1 + @buffer_x, y + @buffer_y, 0])
+            visited[y * maxWidth + x - 1] = true
+            x -= 1
+          end
+        end
+        to_check.push([x, x1 - 1, y - dy, -dy]) if x < x1
+        loop do
+          break if x1 > x2
+          loop do
+            break if visited[y * maxWidth + x1] || !tile_is_ground?(@map_data[x1 + @buffer_x, y + @buffer_y, 0])
+            visited[y * maxWidth + x1] = true
+            to_check.push([x, x1, y + dy, dy])
+            to_check.push([x2 + 1, x1, y - dy, -dy]) if x1 > x2
+            x1 += 1
+          end
+          x1 += 1
+          loop do
+            break if x1 >= x2
+            break if !visited[y * maxWidth + x1] && tile_is_ground?(@map_data[x1 + @buffer_x, y + @buffer_y, 0])
+            x1 += 1
+          end
+          x = x1
+        end
+      end
+      # Check for unflooded floor tiles
+      for y in 0...maxHeight
+        for x in 0...maxWidth
+          next if visited[y * maxWidth + x] || !tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
+          @need_redraw = true
+          break
+        end
+        break if @need_redraw
+      end
+    end
+
+    # Fixes (most) situations where it isn't immediately obvious how to draw a
+    # wall around a floor area.
+    def resolve_wall_error(x, y, layer = 0)
+      if layer == 0
+        is_neighbour = lambda { |til| return tile_is_ground?(til) }
+      else
+        is_neighbour = lambda { |til| return tile_is_wall?(til) }
+      end
+      tile = {
+        :wall_1    => (layer == 0) ? :wall_1 : :upper_wall_1,
+        :wall_2    => (layer == 0) ? :wall_2 : :upper_wall_2,
+        :wall_3    => (layer == 0) ? :wall_3 : :upper_wall_3,
+        :wall_4    => (layer == 0) ? :wall_4 : :upper_wall_4,
+        :wall_6    => (layer == 0) ? :wall_6 : :upper_wall_6,
+        :wall_7    => (layer == 0) ? :wall_7 : :upper_wall_7,
+        :wall_8    => (layer == 0) ? :wall_8 : :upper_wall_8,
+        :wall_9    => (layer == 0) ? :wall_9 : :upper_wall_9,
+        :wall_in_1 => (layer == 0) ? :wall_in_1 : :upper_wall_in_1,
+        :wall_in_3 => (layer == 0) ? :wall_in_3 : :upper_wall_in_3,
+        :wall_in_7 => (layer == 0) ? :wall_in_7 : :upper_wall_in_7,
+        :wall_in_9 => (layer == 0) ? :wall_in_9 : :upper_wall_in_9,
+        :corridor  => (layer == 0) ? :corridor : :void
+      }
+      neighbours = 0
+      neighbours |= 0x01 if is_neighbour.call(@map_data.value(x,     y - 1))   # N
+      neighbours |= 0x02 if is_neighbour.call(@map_data.value(x + 1, y - 1))   # NE
+      neighbours |= 0x04 if is_neighbour.call(@map_data.value(x + 1,     y))   # E
+      neighbours |= 0x08 if is_neighbour.call(@map_data.value(x + 1, y + 1))   # SE
+      neighbours |= 0x10 if is_neighbour.call(@map_data.value(x,     y + 1))   # S
+      neighbours |= 0x20 if is_neighbour.call(@map_data.value(x - 1, y + 1))   # SW
+      neighbours |= 0x40 if is_neighbour.call(@map_data.value(x - 1,     y))   # W
+      neighbours |= 0x80 if is_neighbour.call(@map_data.value(x - 1, y - 1))   # NW
+      case neighbours
+      when 34
+        # --f   floor tile (dashes are walls)
+        # -o-   this tile
+        # f--   floor tile
+        if @map_data.value(x - 1, y - 1) == :void
+          @map_data[x, y, 1] = tile[:wall_in_3]
+          @map_data[x - 1, y, 1] = tile[:wall_in_7]
+          @map_data[x, y - 1, 1] = tile[:wall_in_7]
+          @map_data.set_wall(x - 1, y - 1, tile[:wall_7])
+        elsif @map_data.value(x + 1, y + 1) == :void
+          @map_data[x, y, 1] = tile[:wall_in_7]
+          @map_data[x + 1, y, 1] = tile[:wall_in_3]
+          @map_data[x, y + 1, 1] = tile[:wall_in_3]
+          @map_data.set_wall(x + 1, y + 1, tile[:wall_3])
+        elsif @map_data[x, y - 1, 1] == tile[:wall_4] && @map_data[x - 1, y, 1] == tile[:wall_in_9]
+          @map_data[x, y, 1] = tile[:wall_in_3]
+          @map_data[x, y - 1, 1] = tile[:wall_in_7]
+          @map_data.set_ground(x - 1, y, tile[:corridor])
+          @map_data[x - 1, y - 1, 1] = (@map_data[x - 1, y - 1, 1] == tile[:wall_6]) ? tile[:wall_in_9] : tile[:wall_8]
+        elsif @map_data[x, y - 1, 1] == tile[:wall_in_1] && @map_data[x - 1, y, 1] == tile[:wall_8]
+          @map_data[x, y, 1] = tile[:wall_in_3]
+          @map_data.set_ground(x, y - 1, tile[:corridor])
+          @map_data[x - 1, y, 1] = tile[:wall_in_7]
+          @map_data[x - 1, y - 1, 1] = (@map_data[x - 1, y - 1, 1] == tile[:wall_2]) ? tile[:wall_in_1] : tile[:wall_4]
+        elsif @map_data[x, y - 1, 1] == tile[:wall_in_1] && @map_data[x - 1, y, 1] == tile[:wall_in_9]
+          @map_data[x, y, 1] = tile[:wall_in_3]
+          @map_data.set_ground(x, y - 1, tile[:corridor])
+          @map_data.set_ground(x - 1, y, tile[:corridor])
+          if @map_data[x - 1, y - 1, 1] == :error
+            @map_data[x - 1, y - 1, 1] = tile[:wall_in_7]
+          else
+            @map_data.set_ground(x - 1, y - 1, tile[:corridor])
+          end
+        elsif @map_data[x, y + 1, 1] == tile[:wall_6] && @map_data[x + 1, y, 1] == tile[:wall_in_1]
+          @map_data[x, y, 1] = tile[:wall_in_7]
+          @map_data[x, y + 1, 1] = tile[:wall_in_3]
+          @map_data.set_ground(x + 1, y, tile[:corridor])
+          @map_data[x + 1, y + 1, 1] = (@map_data[x + 1, y + 1, 1] == tile[:wall_4]) ? tile[:wall_in_1] : tile[:wall_2]
+        elsif @map_data[x, y + 1, 1] == tile[:wall_in_9] && @map_data[x + 1, y, 1] == tile[:wall_2]
+          @map_data[x, y, 1] = tile[:wall_in_7]
+          @map_data.set_ground(x, y + 1, tile[:corridor])
+          @map_data[x + 1, y, 1] = tile[:wall_in_3]
+          @map_data[x + 1, y + 1, 1] = (@map_data[x + 1, y + 1, 1] == tile[:wall_8]) ? tile[:wall_in_9] : tile[:wall_6]
+        elsif @map_data[x, y + 1, 1] == tile[:wall_in_9] && @map_data[x + 1, y, 1] == tile[:wall_in_1]
+          @map_data[x, y, 1] = tile[:wall_in_7]
+          @map_data.set_ground(x, y + 1, tile[:corridor])
+          @map_data.set_ground(x + 1, y, tile[:corridor])
+          if @map_data[x + 1, y + 1, 1] == :error
+            @map_data[x + 1, y + 1, 1] = tile[:wall_in_3]
+          else
+            @map_data.set_ground(x + 1, y + 1, tile[:corridor])
+          end
+        else
+          # Tile error can't be resolved; will redraw map
+          @need_redraw = true
+        end
+      when 136
+        # f--   floor tile (dashes are walls)
+        # -o-   this tile
+        # --f   floor tile
+        if @map_data.value(x - 1, y + 1) == :void
+          @map_data[x, y, 1] = tile[:wall_in_9]
+          @map_data[x - 1, y, 1] = tile[:wall_in_1]
+          @map_data[x, y + 1, 1] = tile[:wall_in_1]
+          @map_data.set_wall(x - 1, y + 1, tile[:wall_1])
+        elsif @map_data.value(x + 1, y - 1) == :void
+          @map_data[x, y, 1] = tile[:wall_in_1]
+          @map_data[x + 1, y, 1] = tile[:wall_in_9]
+          @map_data[x, y - 1, 1] = tile[:wall_in_9]
+          @map_data.set_wall(x + 1, y - 1, tile[:wall_9])
+        elsif @map_data[x, y - 1, 1] == tile[:wall_6] && @map_data[x + 1, y, 1] == tile[:wall_in_7]
+          @map_data[x, y, 1] = tile[:wall_in_1]
+          @map_data[x, y - 1, 1] = tile[:wall_in_9]
+          @map_data.set_ground(x + 1, y, tile[:corridor])
+          @map_data[x + 1, y - 1, 1] = (@map_data[x + 1, y - 1, 1] == tile[:wall_4]) ? tile[:wall_in_7] : tile[:wall_8]
+        elsif @map_data[x, y - 1, 1] == tile[:wall_in_3] && @map_data[x + 1, y, 1] == tile[:wall_8]
+          @map_data[x, y, 1] = tile[:wall_in_1]
+          @map_data.set_ground(x, y - 1, tile[:corridor])
+          @map_data[x + 1, y, 1] = tile[:wall_in_9]
+          @map_data[x + 1, y - 1, 1] = (@map_data[x + 1, y - 1, 1] == tile[:wall_2]) ? tile[:wall_in_3] : tile[:wall_6]
+        elsif @map_data[x, y - 1, 1] == tile[:wall_in_3] && @map_data[x + 1, y, 1] == tile[:wall_in_7]
+          @map_data[x, y, 1] = tile[:wall_in_1]
+          @map_data.set_ground(x, y - 1, tile[:corridor])
+          @map_data.set_ground(x + 1, y, tile[:corridor])
+          if @map_data[x + 1, y - 1, 1] == :error
+            @map_data[x + 1, y - 1, 1] = tile[:wall_in_9]
+          else
+            @map_data.set_ground(x + 1, y - 1, tile[:corridor])
+          end
+        elsif @map_data[x, y + 1, 1] == tile[:wall_4] && @map_data[x - 1, y, 1] == tile[:wall_in_3]
+          @map_data[x, y, 1] = tile[:wall_in_9]
+          @map_data[x, y + 1, 1] = tile[:wall_in_1]
+          @map_data.set_ground(x - 1, y, tile[:corridor])
+          @map_data[x - 1, y + 1, 1] = (@map_data[x - 1, y + 1, 1] == tile[:wall_6]) ? tile[:wall_in_3] : tile[:wall_2]
+        elsif @map_data[x, y + 1, 1] == tile[:wall_in_7] && @map_data[x - 1, y, 1] == tile[:wall_2]
+          @map_data[x, y, 1] = tile[:wall_in_9]
+          @map_data.set_ground(x, y + 1, tile[:corridor])
+          @map_data[x - 1, y, 1] = tile[:wall_in_1]
+          @map_data[x - 1, y + 1, 1] = (@map_data[x - 1, y + 1, 1] == tile[:wall_8]) ? tile[:wall_in_7] : tile[:wall_4]
+        elsif @map_data[x, y + 1, 1] == tile[:wall_in_7] && @map_data[x - 1, y, 1] == tile[:wall_in_3]
+          @map_data[x, y, 1] = tile[:wall_in_9]
+          @map_data.set_ground(x, y + 1, tile[:corridor])
+          @map_data.set_ground(x - 1, y, tile[:corridor])
+          if @map_data[x - 1, y + 1, 1] == :error
+            @map_data[x - 1, y + 1, 1] = tile[:wall_in_1]
+          else
+            @map_data.set_ground(x - 1, y + 1, tile[:corridor])
+          end
+        else
+          # Tile error can't be resolved; will redraw map
+          @need_redraw = true
+        end
+      else
+        @need_redraw = true
+        raise "can't resolve error"
+      end
+    end
+
+    #===========================================================================
+
+    # Draws a cell's contents, which is an underlying pattern based on
+    # tile_layout (the corridors), and possibly a room on top of that.
+    def paint_node_contents(cell_x, cell_y, node)
+      # Draw corridors connecting this room
+      paint_connections(cell_x, cell_y, node.edge_pattern)
+      # Generate a randomly placed room
+      paint_room(cell_x, cell_y) if node.room?
+    end
+
+    def paint_ground_rect(x, y, width, height, tile)
+      height.times do |j|
+        width.times do |i|
+          @map_data[x + i, y + j, 0] = tile
+        end
+      end
+    end
+
+    # Draws corridors leading from the node at (cell_x, cell_y).
+    def paint_connections(cell_x, cell_y, pattern)
+      x_offset = (@parameters.cell_width - @parameters.corridor_width) / 2
+      y_offset = (@parameters.cell_height - @parameters.corridor_width) / 2
+      if @parameters.random_corridor_shift
+        variance = @parameters.corridor_width
+        variance /= 2 if @tileset.snap_to_large_grid
+        if variance > 1
+          x_shift = rand(variance) - (variance / 2)
+          y_shift = rand(variance) - (variance / 2)
+          if @tileset.snap_to_large_grid
+            x_shift *= 2
+            y_shift *= 2
+          end
+          x_offset += x_shift
+          y_offset += y_shift
+        end
+      end
+      if @tileset.snap_to_large_grid
+        x_offset += 1 if x_offset.odd?
+        y_offset += 1 if y_offset.odd?
+      end
+      if (pattern & RandomDungeon::EdgeMasks::NORTH) == 0
+        paint_ground_rect(cell_x + x_offset, cell_y,
+                          @parameters.corridor_width, y_offset + @parameters.corridor_width,
+                          :corridor)
+      end
+      if (pattern & RandomDungeon::EdgeMasks::SOUTH) == 0
+        paint_ground_rect(cell_x + x_offset, cell_y + y_offset,
+                          @parameters.corridor_width, @parameters.cell_height - y_offset,
+                          :corridor)
+      end
+      if (pattern & RandomDungeon::EdgeMasks::EAST) == 0
+        paint_ground_rect(cell_x + x_offset, cell_y + y_offset,
+                          @parameters.cell_width - x_offset, @parameters.corridor_width,
+                          :corridor)
+      end
+      if (pattern & RandomDungeon::EdgeMasks::WEST) == 0
+        paint_ground_rect(cell_x, cell_y + y_offset,
+                          x_offset + @parameters.corridor_width, @parameters.corridor_width,
+                          :corridor)
+      end
+    end
+
+    # Draws a room at (cell_x, cell_y).
+    def paint_room(cell_x, cell_y)
+      width, height = @parameters.rand_room_size
+      return if width <= 0 || height <= 0
+      if @tileset.snap_to_large_grid
+        width += (width <= @parameters.cell_width / 2) ? 1 : -1 if width.odd?
+        height += (height <= @parameters.cell_height / 2) ? 1 : -1 if height.odd?
+      end
+      center_x, center_y = @parameters.rand_cell_center
+      x = cell_x + center_x - (width / 2)
+      y = cell_y + center_y - (height / 2)
+      if @tileset.snap_to_large_grid
+        x += 1 if x.odd?
+        y += 1 if y.odd?
+      end
+      x = x.clamp(@buffer_x, @usable_width - @buffer_x - width )
+      y = y.clamp(@buffer_y, @usable_height - @buffer_y - height )
+      paint_ground_rect(x, y, width, height, :room)
+    end
+
+    def paint_walls_around_ground(x, y, layer, errors)
+      (-1..1).each do |j|
+        (-1..1).each do |i|
+          next if i == 0 && j == 0
+          next if @map_data[x + i, y + j, 0] != :void
+          tile = get_wall_tile_for_coord(x + i, y + j, layer)
+          if [:void, :corridor].include?(tile)
+            @map_data[x + i, y + j, 0] = tile
+          else
+            @map_data.set_wall(x + i, y + j, tile)
+          end
+          errors.push([x + i, y + j]) if tile == :error
+        end
+      end
+    end
+
+    def get_wall_tile_for_coord(x, y, layer = 0)
+      if layer == 0
+        is_neighbour = lambda { |x, y| return tile_is_ground?(@map_data.value(x, y)) }
+      else
+        is_neighbour = lambda { |x, y| return tile_is_wall?(@map_data[x, y, 1]) }
+      end
+      neighbours = 0
+      neighbours |= 0x01 if is_neighbour.call(x,     y - 1)   # N
+      neighbours |= 0x02 if is_neighbour.call(x + 1, y - 1)   # NE
+      neighbours |= 0x04 if is_neighbour.call(x + 1,     y)   # E
+      neighbours |= 0x08 if is_neighbour.call(x + 1, y + 1)   # SE
+      neighbours |= 0x10 if is_neighbour.call(x,     y + 1)   # S
+      neighbours |= 0x20 if is_neighbour.call(x - 1, y + 1)   # SW
+      neighbours |= 0x40 if is_neighbour.call(x - 1,     y)   # W
+      neighbours |= 0x80 if is_neighbour.call(x - 1, y - 1)   # NW
+      case FLOOR_NEIGHBOURS_TO_WALL[neighbours]
+      when -1 then return :error   # Needs special attention
+      when 1  then return (layer == 0) ? :wall_1 : :upper_wall_1
+      when 2  then return (layer == 0) ? :wall_2 : :upper_wall_2
+      when 3  then return (layer == 0) ? :wall_3 : :upper_wall_3
+      when 4  then return (layer == 0) ? :wall_4 : :upper_wall_4
+      when 6  then return (layer == 0) ? :wall_6 : :upper_wall_6
+      when 7  then return (layer == 0) ? :wall_7 : :upper_wall_7
+      when 8  then return (layer == 0) ? :wall_8 : :upper_wall_8
+      when 9  then return (layer == 0) ? :wall_9 : :upper_wall_9
+      when 11 then return (layer == 0) ? :wall_in_1 : :upper_wall_in_1
+      when 13 then return (layer == 0) ? :wall_in_3 : :upper_wall_in_3
+      when 17 then return (layer == 0) ? :wall_in_7 : :upper_wall_in_7
+      when 19 then return (layer == 0) ? :wall_in_9 : :upper_wall_in_9
+      end
+      return :void if neighbours == 0 || layer == 1
+      return :corridor
+    end
+
+    def paint_decorations(maxWidth, maxHeight)
+      # Large patches (grass/sandy area)
+      if @tileset.has_decoration?(:floor_patch)
+        (maxHeight / @parameters.cell_height).times do |j|
+          (maxWidth / @parameters.cell_width).times do |i|
+            next if rand(100) >= @parameters.floor_patch_chance
+            # Random placing of floor patch tiles
+            mid_x = i * @parameters.cell_width + rand(@parameters.cell_width)
+            mid_y = j * @parameters.cell_height + rand(@parameters.cell_height)
+            ((mid_y - @parameters.floor_patch_radius)..(mid_y + @parameters.floor_patch_radius)).each do |y|
+              ((mid_x - @parameters.floor_patch_radius)..(mid_x + @parameters.floor_patch_radius)).each do |x|
+                if @tileset.floor_patch_under_walls
+                  next if !tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
+                else
+                  next if !tile_is_ground?(@map_data.value(x + @buffer_x, y + @buffer_y))
+                end
+                if (((mid_x - 1)..(mid_x + 1)).include?(x) && ((mid_y - 1)..(mid_y + 1)).include?(y)) ||
+                   rand(100) < @parameters.floor_patch_chance
+                  @map_data[x + @buffer_x, y + @buffer_y, 0] = :floor_patch
+                end
+              end
+            end
+            # Smoothing of placed floor patch tiles
+            ((mid_y - @parameters.floor_patch_radius)..(mid_y + @parameters.floor_patch_radius)).each do |y|
+              ((mid_x - @parameters.floor_patch_radius)..(mid_x + @parameters.floor_patch_radius)).each do |x|
+                if @map_data[x + @buffer_x, y + @buffer_y, 0] == :floor_patch
+                  adj_count = 0
+                  adj_count += 1 if @map_data[x + @buffer_x - 1, y + @buffer_y, 0] == :floor_patch
+                  adj_count += 1 if @map_data[x + @buffer_x, y + @buffer_y - 1, 0] == :floor_patch
+                  adj_count += 1 if @map_data[x + @buffer_x + 1, y + @buffer_y, 0] == :floor_patch
+                  adj_count += 1 if @map_data[x + @buffer_x, y + @buffer_y + 1, 0] == :floor_patch
+                  if adj_count == 0 || (adj_count == 1 && rand(100) < @parameters.floor_patch_smooth_rate * 2)
+                    @map_data[x + @buffer_x, y + @buffer_y, 0] = :corridor
+                  end
+                else
+                  if @tileset.floor_patch_under_walls
+                    next if !tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
+                  else
+                    next if !tile_is_ground?(@map_data.value(x + @buffer_x, y + @buffer_y))
+                  end
+                  adj_count = 0
+                  adj_count += 1 if @map_data[x + @buffer_x - 1, y + @buffer_y, 0] == :floor_patch
+                  adj_count += 1 if @map_data[x + @buffer_x, y + @buffer_y - 1, 0] == :floor_patch
+                  adj_count += 1 if @map_data[x + @buffer_x + 1, y + @buffer_y, 0] == :floor_patch
+                  adj_count += 1 if @map_data[x + @buffer_x, y + @buffer_y + 1, 0] == :floor_patch
+                  if adj_count >= 2 && rand(100) < adj_count * @parameters.floor_patch_smooth_rate
+                    @map_data[x + @buffer_x, y + @buffer_y, 0] = :floor_patch
+                  end
+                end
+              end
+            end
           end
         end
       end
-      # Generate walls
-      @height.times do |y|
-        @width.times do |x|
-          self[x, y] = DungeonTile::WALL if isWall?(x, y)   # Make appropriate tiles wall tiles
+      # 2x2 floor decoration (crater)
+      if @tileset.has_decoration?(:floor_decoration_large)
+        ((maxWidth * maxHeight) / @parameters.floor_decoration_large_density).times do
+          x = rand(maxWidth)
+          y = rand(maxHeight)
+          next if @map_data.value(x + @buffer_x, y + @buffer_y) != :room ||
+                  @map_data.value(x + @buffer_x + 1, y + @buffer_y) != :room ||
+                  @map_data.value(x + @buffer_x, y + @buffer_y + 1) != :room ||
+                  @map_data.value(x + @buffer_x + 1, y + @buffer_y + 1) != :room
+          4.times do |c|
+            cx = x + @buffer_x + (c % 2)
+            cy = y + @buffer_y + (c / 2)
+            @map_data[cx, cy, 0] = (c == 0) ? :floor_decoration_large : :ignore
+          end
+        end
+      end
+      # 1x1 floor decoration
+       if @tileset.has_decoration?(:floor_decoration)
+        ((@usable_width * @usable_height) / @parameters.floor_decoration_density).times do
+          x = rand(@usable_width)
+          y = rand(@usable_height)
+          next if !coord_is_ground?(@buffer_x + x, @buffer_y + y)
+          @map_data[x + @buffer_x, y + @buffer_y, 0] = :floor_decoration
+        end
+      end
+      # 2x2 void decoration (crevice)
+      if @tileset.has_decoration?(:void_decoration_large)
+        ((@width * @height) / @parameters.void_decoration_large_density).times do
+          x = rand(@width - 1)
+          y = rand(@height - 1)
+          next if @map_data.value(x, y) != :void ||
+                  @map_data.value(x + 1, y) != :void ||
+                  @map_data.value(x, y + 1) != :void ||
+                  @map_data.value(x + 1, y + 1) != :void
+          4.times do |c|
+            cx = x + (c % 2)
+            cy = y + (c / 2)
+            @map_data[cx, cy, 0] = (c == 0) ? :void_decoration_large : :ignore
+          end
+        end
+      end
+      # 1x1 void decoration (rock)
+      if @tileset.has_decoration?(:void_decoration)
+        ((@width * @height) / @parameters.void_decoration_density).times do
+          x = rand(@width)
+          y = rand(@height)
+          next if @map_data.value(x, y) != :void
+          @map_data[x, y, 0] = :void_decoration
         end
       end
     end
 
-    # Convert dungeon layout into proper map tiles
+    def paint_wall_top_tiles(maxWidth, maxHeight)
+      return if !@tileset.has_decoration?(:wall_top)
+      maxWidth.times do |x|
+        maxHeight.times do |y|
+          next if ![:wall_2, :wall_in_1, :wall_in_3].include?(@map_data[x + @buffer_x, y + 1 + @buffer_y, 1])
+          @map_data[x + @buffer_x, y + @buffer_y, 2] = :wall_top
+        end
+      end
+    end
+
+    #===========================================================================
+
+    # Convert dungeon layout into proper map tiles from a tileset, and modifies
+    # the given map's data accordingly.
     def generateMapInPlace(map)
-      tbl = DungeonTable.new(self)
       map.width.times do |i|
         map.height.times do |j|
-          nb = TileDrawingHelper.tableNeighbors(tbl, i, j)
-          tile = TileDrawingHelper::NEIGHBORS_TO_AUTOTILE_INDEX[nb]
-          map.data[i, j, 0] = tile + (48 * (tbl[i, j]))
-          map.data[i, j, 1] = 0
-          map.data[i, j, 2] = 0
+          3.times do |layer|
+            tile_type = @map_data[i, j, layer]
+            tile_type = :floor if [:room, :corridor].include?(tile_type)
+            case tile_type
+            when :ignore
+            when :none
+              map.data[i, j, layer] = 0
+            when :void_decoration_large, :floor_decoration_large
+              4.times do |c|
+                tile = @tileset.get_random_tile_of_type(tile_type, self, i, j, layer)
+                tile += (c % 2) + 8 * (c / 2) if tile >= 384   # Regular tile
+                map.data[i + (c % 2), j + (c / 2), layer] = tile
+              end
+            else
+              tile = @tileset.get_random_tile_of_type(tile_type, self, i, j, layer)
+              map.data[i, j, layer] = tile
+            end
+          end
         end
       end
     end
-  end
 
-  #=============================================================================
-  #
-  #=============================================================================
-  # Get a random room tile that isn't too close to a corridor (to avoid blocking
-  # a room's entrance).
-  def self.pbRandomRoomTile(dungeon, tiles)
-    ar1 = AntiRandom.new(dungeon.width)
-    ar2 = AntiRandom.new(dungeon.height)
-    ((tiles.length + 1) * 1000).times do
-      x = ar1.get
-      y = ar2.get
-      next if !dungeon.isRoom?(x, y) ||
-              tiles.any? { |item| (item[0] - x).abs < 2 && (item[1] - y).abs < 2 }
-      ret = [x, y]
-      tiles.push(ret)
-      return ret
+    # Returns a random room tile in the dungeon that isn't too close to a
+    # corridor (to avoid blocking a room's entrance).
+    def get_random_room_tile(occupied_tiles)
+      ar1 = AntiRandom.new(@width)
+      ar2 = AntiRandom.new(@height)
+      ((occupied_tiles.length + 1) * 1000).times do
+        x = ar1.get
+        y = ar2.get
+        next if !isRoom?(x, y)
+        next if occupied_tiles.any? { |item| (item[0] - x).abs < 2 && (item[1] - y).abs < 2 }
+        ret = [x, y]
+        occupied_tiles.push(ret)
+        return ret
+      end
+      return nil
     end
-    return nil
-  end
-
-  # Test method that generates a dungeon map and prints it to the console.
-  # @param x_cells [Integer] the number of cells wide the dungeon will be
-  # @param y_cells [Intenger] the number of cells tall the dungeon will be
-  def self.generate_test_dungeon(x_cells = 4, y_cells = 4)
-    dungeon = Dungeon.new((Dungeon::BUFFER_X * 2) + (DungeonMaze::CELL_WIDTH * x_cells),
-                          (Dungeon::BUFFER_Y * 2) + (DungeonMaze::CELL_HEIGHT * y_cells))
-    dungeon.generate
-    echoln dungeon.write
   end
 end
 
+#===============================================================================
+# Variables that determine which dungeon parameters to use to generate a random
+# dungeon.
+#===============================================================================
+class PokemonGlobalMetadata
+  attr_writer :dungeon_area, :dungeon_version
+
+  def dungeon_area
+    return @dungeon_area || :none
+  end
+
+  def dungeon_version
+    return @dungeon_version || 0
+  end
+end
+
+#===============================================================================
+# Code that generates a random dungeon layout, and implements it in a given map.
+#===============================================================================
 EventHandlers.add(:on_game_map_setup, :random_dungeon,
   proc { |map_id, map, _tileset_data|
     next if !GameData::MapMetadata.try_get(map_id)&.random_dungeon
-    # this map is a randomly generated dungeon
-    dungeon = RandomDungeonGenerator::Dungeon.new(map.width, map.height)
+    # Generate a random dungeon
+    tileset_data = GameData::DungeonTileset.try_get(map.tileset_id)
+    params = GameData::DungeonParameters.try_get($PokemonGlobal.dungeon_area,
+                                                 $PokemonGlobal.dungeon_version)
+    dungeon = RandomDungeon::Dungeon.new(params.cell_count_x, params.cell_count_y,
+                                         tileset_data, params)
     dungeon.generate
+    map.width = dungeon.width
+    map.height = dungeon.height
+    map.data.resize(map.width, map.height, 3)
     dungeon.generateMapInPlace(map)
-    roomtiles = []
+    occupied_tiles = []
+    # Reposition the player
+    tile = dungeon.get_random_room_tile(occupied_tiles)
+    if tile
+      $game_temp.player_new_x = tile[0]
+      $game_temp.player_new_y = tile[1]
+    end
     # Reposition events
     map.events.each_value do |event|
-      tile = RandomDungeonGenerator.pbRandomRoomTile(dungeon, roomtiles)
+      tile = dungeon.get_random_room_tile(occupied_tiles)
       if tile
         event.x = tile[0]
         event.y = tile[1]
       end
     end
-    # Override transfer X and Y
-    tile = RandomDungeonGenerator.pbRandomRoomTile(dungeon, roomtiles)
-    if tile
-      $game_temp.player_new_x = tile[0]
-      $game_temp.player_new_y = tile[1]
-    end
   }
 )
+
+#===============================================================================
+# TODO: Temporary debug function for testing random dungeon generation.
+#===============================================================================
+MenuHandlers.add(:debug_menu, :test_random_dungeon, {
+  "name"        => _INTL("Test Random Dungeon Generation"),
+  "parent"      => :other_menu,
+  "description" => _INTL("Generates a random dungeon and echoes it to the console."),
+  "effect"      => proc {
+    tileset = :cave   # :forest   # :cave
+    tileset_data = GameData::DungeonTileset.try_get((tileset == :forest) ? 23 : 7)
+    params = GameData::DungeonParameters.try_get(tileset)
+    dungeon = RandomDungeon::Dungeon.new(params.cell_count_x, params.cell_count_y, tileset_data, params)
+    dungeon.generate
+    echoln dungeon.rng_seed
+    echoln dungeon.write
+  }
+})

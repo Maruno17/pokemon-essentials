@@ -37,7 +37,7 @@ class VoltorbFlip
     @index = [0, 0]
     # [x,y,points,selected]
     @squares = [0, 0, 0, false]
-    @directory = "Graphics/Pictures/Voltorb Flip/"
+    @directory = "Graphics/UI/Voltorb Flip/"
     squareValues = []
     total = 1
     voltorbs = 0
@@ -152,24 +152,24 @@ class VoltorbFlip
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites["bg"] = Sprite.new(@viewport)
-    @sprites["bg"].bitmap = RPG::Cache.load_bitmap(@directory, "boardbg")
+    @sprites["bg"].bitmap = RPG::Cache.load_bitmap(@directory, "bg")
     @sprites["text"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["text"].bitmap)
     @sprites["level"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["level"].bitmap)
     @sprites["curtain"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["curtain"].z = 99999
-    @sprites["curtain"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
+    @sprites["curtain"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.black)
     @sprites["curtain"].opacity = 0
     @sprites["curtainL"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["curtainL"].z = 99999
     @sprites["curtainL"].x = Graphics.width / 2
     @sprites["curtainL"].angle = -90
-    @sprites["curtainL"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
+    @sprites["curtainL"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.black)
     @sprites["curtainR"] = BitmapSprite.new(Graphics.width, Graphics.height * 2, @viewport)
     @sprites["curtainR"].z = 99999
     @sprites["curtainR"].x = Graphics.width / 2
-    @sprites["curtainR"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height * 2, Color.new(0, 0, 0))
+    @sprites["curtainR"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height * 2, Color.black)
     @sprites["cursor"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["cursor"].z = 99998
     @sprites["icon"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)

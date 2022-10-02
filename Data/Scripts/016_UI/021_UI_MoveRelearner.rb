@@ -25,13 +25,13 @@ class MoveRelearner_Scene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites = {}
-    addBackgroundPlane(@sprites, "bg", "reminderbg", @viewport)
+    addBackgroundPlane(@sprites, "bg", "Move Reminder/bg", @viewport)
     @sprites["pokeicon"] = PokemonIconSprite.new(@pokemon, @viewport)
     @sprites["pokeicon"].setOffset(PictureOrigin::CENTER)
     @sprites["pokeicon"].x = 320
     @sprites["pokeicon"].y = 84
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
-    @sprites["background"].setBitmap("Graphics/Pictures/reminderSel")
+    @sprites["background"].setBitmap("Graphics/UI/Move Reminder/cursor")
     @sprites["background"].y = 78
     @sprites["background"].src_rect = Rect.new(0, 72, 258, 72)
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
@@ -42,7 +42,7 @@ class MoveRelearner_Scene
     @sprites["msgwindow"] = Window_AdvancedTextPokemon.new("")
     @sprites["msgwindow"].visible = false
     @sprites["msgwindow"].viewport = @viewport
-    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/UI/types"))
     pbDrawMoveList
     pbDeactivateWindows(@sprites)
     # Fade in all sprites
@@ -68,8 +68,8 @@ class MoveRelearner_Scene
       if moveobject
         moveData = GameData::Move.get(moveobject)
         type_number = GameData::Type.get(moveData.display_type(@pokemon)).icon_position
-        imagepos.push(["Graphics/Pictures/types", 12, yPos - 4, 0, type_number * 28, 64, 28])
-        textpos.push([moveData.name, 80, yPos, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
+        imagepos.push(["Graphics/UI/types", 12, yPos - 4, 0, type_number * 28, 64, 28])
+        textpos.push([moveData.name, 80, yPos, 0, Color.new(248, 248, 248), Color.black])
         textpos.push([_INTL("PP"), 112, yPos + 32, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)])
         if moveData.total_pp > 0
           textpos.push([_INTL("{1}/{1}", moveData.total_pp), 230, yPos + 32, 1,
@@ -80,27 +80,27 @@ class MoveRelearner_Scene
       end
       yPos += 64
     end
-    imagepos.push(["Graphics/Pictures/reminderSel",
+    imagepos.push(["Graphics/UI/Move Reminder/cursor",
                    0, 78 + ((@sprites["commands"].index - @sprites["commands"].top_item) * 64),
                    0, 0, 258, 72])
     selMoveData = GameData::Move.get(@moves[@sprites["commands"].index])
     basedamage = selMoveData.display_damage(@pokemon)
     category = selMoveData.display_category(@pokemon)
     accuracy = selMoveData.display_accuracy(@pokemon)
-    textpos.push([_INTL("CATEGORY"), 272, 120, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
-    textpos.push([_INTL("POWER"), 272, 152, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
+    textpos.push([_INTL("CATEGORY"), 272, 120, 0, Color.new(248, 248, 248), Color.black])
+    textpos.push([_INTL("POWER"), 272, 152, 0, Color.new(248, 248, 248), Color.black])
     textpos.push([basedamage <= 1 ? basedamage == 1 ? "???" : "---" : sprintf("%d", basedamage),
                   468, 152, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
-    textpos.push([_INTL("ACCURACY"), 272, 184, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
+    textpos.push([_INTL("ACCURACY"), 272, 184, 0, Color.new(248, 248, 248), Color.black])
     textpos.push([accuracy == 0 ? "---" : "#{accuracy}%",
                   468, 184, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
     pbDrawTextPositions(overlay, textpos)
-    imagepos.push(["Graphics/Pictures/category", 436, 116, 0, category * 28, 64, 28])
+    imagepos.push(["Graphics/UI/category", 436, 116, 0, category * 28, 64, 28])
     if @sprites["commands"].index < @moves.length - 1
-      imagepos.push(["Graphics/Pictures/reminderButtons", 48, 350, 0, 0, 76, 32])
+      imagepos.push(["Graphics/UI/Move Reminder/buttons", 48, 350, 0, 0, 76, 32])
     end
     if @sprites["commands"].index > 0
-      imagepos.push(["Graphics/Pictures/reminderButtons", 134, 350, 76, 0, 76, 32])
+      imagepos.push(["Graphics/UI/Move Reminder/buttons", 134, 350, 76, 0, 76, 32])
     end
     pbDrawImagePositions(overlay, imagepos)
     drawTextEx(overlay, 272, 216, 230, 5, selMoveData.description,

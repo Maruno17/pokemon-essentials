@@ -7,11 +7,11 @@ class ControlPointSprite < Sprite
   def initialize(red, viewport = nil)
     super(viewport)
     self.bitmap = Bitmap.new(6, 6)
-    self.bitmap.fill_rect(0, 0, 6, 1, Color.new(0, 0, 0))
-    self.bitmap.fill_rect(0, 0, 1, 6, Color.new(0, 0, 0))
-    self.bitmap.fill_rect(0, 5, 6, 1, Color.new(0, 0, 0))
-    self.bitmap.fill_rect(5, 0, 1, 6, Color.new(0, 0, 0))
-    color = (red) ? Color.new(255, 0, 0) : Color.new(0, 0, 0)
+    self.bitmap.fill_rect(0, 0, 6, 1, Color.black)
+    self.bitmap.fill_rect(0, 0, 1, 6, Color.black)
+    self.bitmap.fill_rect(0, 5, 6, 1, Color.black)
+    self.bitmap.fill_rect(5, 0, 1, 6, Color.black)
+    color = (red) ? Color.new(255, 0, 0) : Color.black
     self.bitmap.fill_rect(2, 2, 2, 2, color)
     self.x = -6
     self.y = -6
@@ -54,7 +54,7 @@ class PointSprite < Sprite
   def initialize(x, y, viewport = nil)
     super(viewport)
     self.bitmap = Bitmap.new(2, 2)
-    self.bitmap.fill_rect(0, 0, 2, 2, Color.new(0, 0, 0))
+    self.bitmap.fill_rect(0, 0, 2, 2, Color.black)
     self.x = x
     self.y = y
   end

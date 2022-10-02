@@ -201,7 +201,7 @@ class SpriteAnimation
       sprite.y = sprite_y + cell_data[i, 2]
       next if quick_update
       sprite.visible = true
-      sprite.src_rect.set(pattern % 5 * 192, pattern / 5 * 192, 192, 192)
+      sprite.src_rect.set((pattern % 5) * 192, (pattern / 5) * 192, 192, 192)
       case @_animation_height
       when 0 then sprite.z = 1
       when 1 then sprite.z = sprite.y + (Game_Map::TILE_HEIGHT * 3 / 2) + 1

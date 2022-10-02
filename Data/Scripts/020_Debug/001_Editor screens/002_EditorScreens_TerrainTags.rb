@@ -111,10 +111,10 @@ class PokemonTilesetScene
     # Draw tile (at 200% size)
     @tilehelper.bltSmallTile(overlay, tile_x, tile_y, TILE_SIZE * 2, TILE_SIZE * 2, tile_id)
     # Draw box around tile image
-    overlay.fill_rect(tile_x - 1,               tile_y - 1,               (TILE_SIZE * 2) + 2, 1, Color.new(255, 255, 255))
-    overlay.fill_rect(tile_x - 1,               tile_y - 1,               1, (TILE_SIZE * 2) + 2, Color.new(255, 255, 255))
-    overlay.fill_rect(tile_x - 1,               tile_y + (TILE_SIZE * 2), (TILE_SIZE * 2) + 2, 1, Color.new(255, 255, 255))
-    overlay.fill_rect(tile_x + (TILE_SIZE * 2), tile_y - 1,               1, (TILE_SIZE * 2) + 2, Color.new(255, 255, 255))
+    overlay.fill_rect(tile_x - 1,               tile_y - 1,               (TILE_SIZE * 2) + 2, 1, Color.white)
+    overlay.fill_rect(tile_x - 1,               tile_y - 1,               1, (TILE_SIZE * 2) + 2, Color.white)
+    overlay.fill_rect(tile_x - 1,               tile_y + (TILE_SIZE * 2), (TILE_SIZE * 2) + 2, 1, Color.white)
+    overlay.fill_rect(tile_x + (TILE_SIZE * 2), tile_y - 1,               1, (TILE_SIZE * 2) + 2, Color.white)
     # Write terrain tag info about selected tile
     terrain_tag = @tileset.terrain_tags[tile_id] || 0
     if GameData::TerrainTag.exists?(terrain_tag)

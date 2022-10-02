@@ -5,9 +5,9 @@ class Window_Pokedex < Window_DrawableCommand
   def initialize(x, y, width, height, viewport)
     @commands = []
     super(x, y, width, height, viewport)
-    @selarrow     = AnimatedBitmap.new("Graphics/Pictures/Pokedex/cursor_list")
-    @pokeballOwn  = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_own")
-    @pokeballSeen = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_seen")
+    @selarrow     = AnimatedBitmap.new("Graphics/UI/Pokedex/cursor_list")
+    @pokeballOwn  = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_own")
+    @pokeballSeen = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_seen")
     self.baseColor   = Color.new(88, 88, 80)
     self.shadowColor = Color.new(168, 184, 184)
     self.windowskin  = nil
@@ -86,7 +86,7 @@ class PokedexSearchSelectionSprite < Sprite
 
   def initialize(viewport = nil)
     super(viewport)
-    @selbitmap = AnimatedBitmap.new("Graphics/Pictures/Pokedex/cursor_search")
+    @selbitmap = AnimatedBitmap.new("Graphics/UI/Pokedex/cursor_search")
     self.bitmap = @selbitmap.bitmap
     self.mode = -1
     @index = 0
@@ -262,12 +262,12 @@ class PokemonPokedex_Scene
   end
 
   def pbStartScene
-    @sliderbitmap       = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_slider")
-    @typebitmap         = AnimatedBitmap.new(_INTL("Graphics/Pictures/Pokedex/icon_types"))
-    @shapebitmap        = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_shapes")
-    @hwbitmap           = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_hw")
-    @selbitmap          = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_searchsel")
-    @searchsliderbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Pokedex/icon_searchslider"))
+    @sliderbitmap       = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_slider")
+    @typebitmap         = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_types"))
+    @shapebitmap        = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_shapes")
+    @hwbitmap           = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_hw")
+    @selbitmap          = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_searchsel")
+    @searchsliderbitmap = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_searchslider"))
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
@@ -405,9 +405,9 @@ class PokemonPokedex_Scene
     @sprites["pokedex"].index    = index
     @sprites["pokedex"].refresh
     if @searchResults
-      @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_listsearch")
+      @sprites["background"].setBitmap("Graphics/UI/Pokedex/bg_listsearch")
     else
-      @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_list")
+      @sprites["background"].setBitmap("Graphics/UI/Pokedex/bg_list")
     end
     pbRefresh
   end
@@ -428,7 +428,7 @@ class PokemonPokedex_Scene
       end
     end
     textpos = [
-      [dexname, Graphics.width / 2, 10, 2, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+      [dexname, Graphics.width / 2, 10, 2, Color.new(248, 248, 248), Color.black]
     ]
     textpos.push([GameData::Species.get(iconspecies).name, 112, 58, 2, base, shadow]) if iconspecies
     if @searchResults
@@ -902,19 +902,19 @@ class PokemonPokedex_Scene
     ret = nil
     # Set background
     case mode
-    when 0    then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_order")
-    when 1    then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_name")
+    when 0    then @sprites["searchbg"].setBitmap("Graphics/UI/Pokedex/bg_search_order")
+    when 1    then @sprites["searchbg"].setBitmap("Graphics/UI/Pokedex/bg_search_name")
     when 2
       count = 0
       GameData::Type.each { |t| count += 1 if !t.pseudo_type && t.id != :SHADOW }
       if count == 18
-        @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_type_18")
+        @sprites["searchbg"].setBitmap("Graphics/UI/Pokedex/bg_search_type_18")
       else
-        @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_type")
+        @sprites["searchbg"].setBitmap("Graphics/UI/Pokedex/bg_search_type")
       end
-    when 3, 4 then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_size")
-    when 5    then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_color")
-    when 6    then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_shape")
+    when 3, 4 then @sprites["searchbg"].setBitmap("Graphics/UI/Pokedex/bg_search_size")
+    when 5    then @sprites["searchbg"].setBitmap("Graphics/UI/Pokedex/bg_search_color")
+    when 6    then @sprites["searchbg"].setBitmap("Graphics/UI/Pokedex/bg_search_shape")
     end
     selindex = selitems.clone
     index     = selindex[0]
@@ -1087,7 +1087,7 @@ class PokemonPokedex_Scene
     end
     Input.update
     # Set background image
-    @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search")
+    @sprites["searchbg"].setBitmap("Graphics/UI/Pokedex/bg_search")
     @sprites["searchcursor"].mode = -1
     @sprites["searchcursor"].index = mainindex
     return ret
@@ -1246,9 +1246,9 @@ class PokemonPokedex_Scene
     end
     pbFadeOutAndHide(@sprites)
     if @searchResults
-      @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_listsearch")
+      @sprites["background"].setBitmap("Graphics/UI/Pokedex/bg_listsearch")
     else
-      @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_list")
+      @sprites["background"].setBitmap("Graphics/UI/Pokedex/bg_list")
     end
     pbRefresh
     pbFadeInAndShow(@sprites, oldsprites)

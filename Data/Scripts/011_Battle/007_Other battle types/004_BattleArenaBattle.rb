@@ -256,9 +256,9 @@ class Battle::Scene
     phase.times do |i|
       y = [48, 80, 112][i]
       x = (ratings1[i] == ratings2[i]) ? 64 : ((ratings1[i] > ratings2[i]) ? 0 : 32)
-      images.push(["Graphics/Pictures/judgment", 64 - 16, y, x, 0, 32, 32])
+      images.push(["Graphics/UI/Battle/judgment", 64 - 16, y, x, 0, 32, 32])
       x = (ratings1[i] == ratings2[i]) ? 64 : ((ratings1[i] < ratings2[i]) ? 0 : 32)
-      images.push(["Graphics/Pictures/judgment", 224 - 16, y, x, 0, 32, 32])
+      images.push(["Graphics/UI/Battle/judgment", 224 - 16, y, x, 0, 32, 32])
     end
     pbDrawImagePositions(window.contents, images)
     window.contents.fill_rect(16, 150, 256, 4, Color.new(80, 80, 80))

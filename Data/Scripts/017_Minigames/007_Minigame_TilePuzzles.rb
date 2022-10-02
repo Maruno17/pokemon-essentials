@@ -35,7 +35,7 @@ class TilePuzzleCursor < BitmapSprite
     @arrows = []
     @selected = false
     @holding = false
-    @cursorbitmap = AnimatedBitmap.new("Graphics/Pictures/Tile Puzzle/cursor")
+    @cursorbitmap = AnimatedBitmap.new("Graphics/UI/Tile Puzzle/cursor")
     update
   end
 
@@ -148,23 +148,23 @@ class TilePuzzleScene
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
-    if pbResolveBitmap("Graphics/Pictures/Tile Puzzle/bg#{@board}")
+    if pbResolveBitmap("Graphics/UI/Tile Puzzle/bg#{@board}")
       addBackgroundPlane(@sprites, "bg", "Tile Puzzle/bg#{@board}", @viewport)
     else
       addBackgroundPlane(@sprites, "bg", "Tile Puzzle/bg", @viewport)
     end
-    @tilebitmap = AnimatedBitmap.new("Graphics/Pictures/Tile Puzzle/tiles#{@board}")
+    @tilebitmap = AnimatedBitmap.new("Graphics/UI/Tile Puzzle/tiles#{@board}")
     @tilebitmap1 = nil
     @tilebitmap2 = nil
     @tilebitmap3 = nil
-    if pbResolveBitmap("Graphics/Pictures/Tile Puzzle/tiles#{@board}_1")
-      @tilebitmap1 = AnimatedBitmap.new("Graphics/Pictures/Tile Puzzle/tiles#{@board}_1")
+    if pbResolveBitmap("Graphics/UI/Tile Puzzle/tiles#{@board}_1")
+      @tilebitmap1 = AnimatedBitmap.new("Graphics/UI/Tile Puzzle/tiles#{@board}_1")
     end
-    if pbResolveBitmap("Graphics/Pictures/Tile Puzzle/tiles#{@board}_2")
-      @tilebitmap2 = AnimatedBitmap.new("Graphics/Pictures/Tile Puzzle/tiles#{@board}_2")
+    if pbResolveBitmap("Graphics/UI/Tile Puzzle/tiles#{@board}_2")
+      @tilebitmap2 = AnimatedBitmap.new("Graphics/UI/Tile Puzzle/tiles#{@board}_2")
     end
-    if pbResolveBitmap("Graphics/Pictures/Tile Puzzle/tiles#{@board}_3")
-      @tilebitmap3 = AnimatedBitmap.new("Graphics/Pictures/Tile Puzzle/tiles#{@board}_3")
+    if pbResolveBitmap("Graphics/UI/Tile Puzzle/tiles#{@board}_3")
+      @tilebitmap3 = AnimatedBitmap.new("Graphics/UI/Tile Puzzle/tiles#{@board}_3")
     end
     @tilewidth = @tilebitmap.width / @boardwidth
     @tileheight = @tilebitmap.height / @boardheight

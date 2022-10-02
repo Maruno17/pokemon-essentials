@@ -162,14 +162,14 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
   def createBall(idxBall, delay, dir)
     # Choose ball's graphic
     idxParty = getPartyIndexFromBallIndex(idxBall)
-    graphicFilename = "Graphics/Pictures/Battle/icon_ball_empty"
+    graphicFilename = "Graphics/UI/Battle/icon_ball_empty"
     if idxParty >= 0 && idxParty < @party.length && @party[idxParty]
       if !@party[idxParty].able?
-        graphicFilename = "Graphics/Pictures/Battle/icon_ball_faint"
+        graphicFilename = "Graphics/UI/Battle/icon_ball_faint"
       elsif @party[idxParty].status != :NONE
-        graphicFilename = "Graphics/Pictures/Battle/icon_ball_status"
+        graphicFilename = "Graphics/UI/Battle/icon_ball_status"
       else
-        graphicFilename = "Graphics/Pictures/Battle/icon_ball"
+        graphicFilename = "Graphics/UI/Battle/icon_ball"
       end
     end
     # Set up ball sprite

@@ -104,9 +104,9 @@ class PokemonRegionMap_Scene
       pbMessage(_INTL("The map data cannot be found."))
       return false
     end
-    addBackgroundOrColoredPlane(@sprites, "background", "mapbg", Color.new(0, 0, 0), @viewport)
+    addBackgroundOrColoredPlane(@sprites, "background", "Town Map/bg", Color.black, @viewport)
     @sprites["map"] = IconSprite.new(0, 0, @viewport)
-    @sprites["map"].setBitmap("Graphics/Pictures/#{@map[1]}")
+    @sprites["map"].setBitmap("Graphics/UI/Town Map/#{@map[1]}")
     @sprites["map"].x += (Graphics.width - @sprites["map"].bitmap.width) / 2
     @sprites["map"].y += (Graphics.height - @sprites["map"].bitmap.height) / 2
     Settings::REGION_MAP_EXTRAS.each do |graphic|
@@ -118,7 +118,7 @@ class PokemonRegionMap_Scene
       end
       pbDrawImagePositions(
         @sprites["map2"].bitmap,
-        [["Graphics/Pictures/#{graphic[4]}", graphic[2] * SQUARE_WIDTH, graphic[3] * SQUARE_HEIGHT]]
+        [["Graphics/UI/Town Map/#{graphic[4]}", graphic[2] * SQUARE_WIDTH, graphic[3] * SQUARE_HEIGHT]]
       )
     end
     @sprites["mapbottom"] = MapBottomSprite.new(@viewport)
@@ -136,7 +136,7 @@ class PokemonRegionMap_Scene
       (TOP..BOTTOM).each do |j|
         healspot = pbGetHealingSpot(i, j)
         next if !healspot || !$PokemonGlobal.visitedMaps[healspot[0]]
-        @sprites["point#{k}"] = AnimatedSprite.create("Graphics/Pictures/mapFly", 2, 16)
+        @sprites["point#{k}"] = AnimatedSprite.create("Graphics/UI/Town Map/icon_fly", 2, 16)
         @sprites["point#{k}"].viewport = @viewport
         @sprites["point#{k}"].x        = point_x_to_screen_x(i)
         @sprites["point#{k}"].y        = point_y_to_screen_y(j)
@@ -145,7 +145,7 @@ class PokemonRegionMap_Scene
         k += 1
       end
     end
-    @sprites["cursor"] = AnimatedSprite.create("Graphics/Pictures/mapCursor", 2, 5)
+    @sprites["cursor"] = AnimatedSprite.create("Graphics/UI/Town Map/cursor", 2, 5)
     @sprites["cursor"].viewport = @viewport
     @sprites["cursor"].x        = point_x_to_screen_x(@map_x)
     @sprites["cursor"].y        = point_y_to_screen_y(@map_y)
@@ -250,7 +250,7 @@ class PokemonRegionMap_Scene
     text = (@mode == 0) ? _INTL("ACTION: Fly") : _INTL("ACTION: Cancel Fly")
     pbDrawTextPositions(
       @sprites["help"].bitmap,
-      [[text, Graphics.width - 16, 4, 1, Color.new(248, 248, 248), Color.new(0, 0, 0)]]
+      [[text, Graphics.width - 16, 4, 1, Color.new(248, 248, 248), Color.black]]
     )
     @sprites.each do |key, sprite|
       next if !key.include?("point")

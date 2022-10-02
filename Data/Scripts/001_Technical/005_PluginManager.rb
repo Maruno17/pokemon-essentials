@@ -627,7 +627,11 @@ module PluginManager
     # get the order of plugins to interpret
     order, plugins = self.getPluginOrder
     # compile if necessary
-    self.compilePlugins(order, plugins) if self.needCompiling?(order, plugins)
+    if self.needCompiling?(order, plugins)
+      self.compilePlugins(order, plugins)
+    else
+      Console.echoln_li "Plugins were not compiled."
+    end
     # load plugins
     scripts = load_data("Data/PluginScripts.rxdata")
     echoed_plugins = []
