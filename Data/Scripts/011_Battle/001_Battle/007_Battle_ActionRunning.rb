@@ -22,6 +22,36 @@ class Battle
   end
 
   # Return values:
+  # -1: Chose not to end the battle via Debug means
+  #  0: Couldn't end the battle via Debug means; carry on trying to run
+  #  1: Ended the battle via Debug means
+  def pbDebugRun
+    return 0 if !$DEBUG || !Input.press?(Input::CTRL)
+    commands = [_INTL("Treat as a win"), _INTL("Treat as a loss"),
+                _INTL("Treat as a draw"), _INTL("Treat as running away/forfeit")]
+    commands.push(_INTL("Treat as a capture")) if wildBattle?
+    commands.push(_INTL("Cancel"))
+    case pbShowCommands(_INTL("Choose the outcome of this battle."), commands)
+    when 0   # Win
+      @decision = 1
+    when 1   # Loss
+      @decision = 2
+    when 2   # Draw
+      @decision = 5
+    when 3   # Run away/forfeit
+      pbSEPlay("Battle flee")
+      pbDisplayPaused(_INTL("You got away safely!"))
+      @decision = 3
+    when 4   # Capture
+      return -1 if trainerBattle?
+      @decision = 4
+    else
+      return -1
+    end
+    return 1
+  end
+
+  # Return values:
   # -1: Failed fleeing
   #  0: Wasn't possible to attempt fleeing, continue choosing action for the round
   #  1: Succeeded at fleeing, battle will end
@@ -36,17 +66,12 @@ class Battle
       @choices[idxBattler][2] = nil
       return -1
     end
-    # Fleeing from trainer battles
+    # Debug ending the battle
+    debug_ret = pbDebugRun
+    return debug_ret if debug_ret != 0
+    # Running from trainer battles
     if trainerBattle?
-      if $DEBUG && Input.press?(Input::CTRL)
-        if pbDisplayConfirm(_INTL("Treat this battle as a win?"))
-          @decision = 1
-          return 1
-        elsif pbDisplayConfirm(_INTL("Treat this battle as a loss?"))
-          @decision = 2
-          return 1
-        end
-      elsif @internalBattle
+      if @internalBattle
         pbDisplayPaused(_INTL("No! There's no running from a Trainer battle!"))
       elsif pbDisplayConfirm(_INTL("Would you like to forfeit the match and quit now?"))
         pbSEPlay("Battle flee")
@@ -55,13 +80,6 @@ class Battle
         return 1
       end
       return 0
-    end
-    # Fleeing from wild battles
-    if $DEBUG && Input.press?(Input::CTRL)
-      pbSEPlay("Battle flee")
-      pbDisplayPaused(_INTL("You got away safely!"))
-      @decision = 3
-      return 1
     end
     if !@canRun
       pbDisplayPaused(_INTL("You can't escape!"))

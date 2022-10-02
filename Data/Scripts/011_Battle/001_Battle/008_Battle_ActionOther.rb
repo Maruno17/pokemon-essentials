@@ -36,6 +36,9 @@ class Battle
   end
 
   def pbCall(idxBattler)
+    # Debug ending the battle
+    return if pbDebugRun != 0
+    # Call the battler
     battler = @battlers[idxBattler]
     trainerName = pbGetOwnerName(idxBattler)
     pbDisplay(_INTL("{1} called {2}!", trainerName, battler.pbThis(true)))

@@ -19,7 +19,6 @@ module Game
   # Loads bootup data from save file (if it exists) or creates bootup data (if
   # it doesn't).
   def self.set_up_system
-    SaveData.move_old_windows_save if System.platform[/Windows/]
     save_data = (SaveData.exists?) ? SaveData.read_from_file(SaveData::FILE_PATH) : {}
     if save_data.empty?
       SaveData.initialize_bootup_values
