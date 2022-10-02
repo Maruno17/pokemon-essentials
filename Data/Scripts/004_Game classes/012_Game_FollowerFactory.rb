@@ -278,14 +278,8 @@ class Game_FollowerFactory
       facing_tile = $map_factory.getFacingTile
       # Assumes player is 1x1 tile in size
       each_follower do |event, follower|
-        if event.at_coordinate?($game_player.x, $game_player.y)   # Underneath player
-          next if !event.over_trigger?
-        elsif facing_tile && event.map.map_id == facing_tile[0] &&
-              event.at_coordinate?(facing_tile[1], facing_tile[2])   # On facing tile
-          next if event.over_trigger?
-        else   # Somewhere else
-          next
-        end
+        next if !facing_tile || event.map.map_id != facing_tile[0] ||
+                !event.at_coordinate?(facing_tile[1], facing_tile[2])   # Not on facing tile
         next if event.jumping?
         follower.interact(event)
       end

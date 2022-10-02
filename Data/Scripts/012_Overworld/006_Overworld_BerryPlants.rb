@@ -259,7 +259,8 @@ class BerryPlantSprite
           when 2 then @event.turn_down    # X sprouted
           when 3 then @event.turn_left    # X taller
           when 4 then @event.turn_right   # X flowering
-          when 5 then @event.turn_up      # X berries
+          else
+            @event.turn_up if berry_plant.growth_stage >= 5   # X berries
           end
         else
           @event.character_name = "Object ball"

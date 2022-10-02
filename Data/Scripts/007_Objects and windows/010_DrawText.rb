@@ -935,58 +935,67 @@ def drawBitmapBuffer(chars)
 end
 
 def drawSingleFormattedChar(bitmap, ch)
-  if ch[5] # If a graphic
+  if ch[5]   # If a graphic
     graphic = Bitmap.new(ch[0])
     graphicRect = ch[15]
     bitmap.blt(ch[1], ch[2], graphic, graphicRect, ch[8].alpha)
     graphic.dispose
+    return
+  end
+  bitmap.font.bold = ch[6] if bitmap.font.bold != ch[6]
+  bitmap.font.italic = ch[7] if bitmap.font.italic != ch[7]
+  bitmap.font.name = ch[12] if bitmap.font.name != ch[12]
+  bitmap.font.size = ch[13] if bitmap.font.size != ch[13]
+  if ch[9]   # shadow
+    if ch[10]   # underline
+      bitmap.fill_rect(ch[1], ch[2] + ch[4] - [(ch[4] - bitmap.font.size) / 2, 0].max - 2,
+      ch[3], 4, ch[9])
+    end
+    if ch[11]   # strikeout
+      bitmap.fill_rect(ch[1], ch[2] + 2 + (ch[4] / 2), ch[3], 4, ch[9])
+    end
+  end
+  if ch[0] == "\n" || ch[0] == "\r" || ch[0] == " " || isWaitChar(ch[0])
+    bitmap.font.color = ch[8] if bitmap.font.color != ch[8]
   else
-    bitmap.font.size = ch[13] if bitmap.font.size != ch[13]
-    if ch[0] != "\n" && ch[0] != "\r" && ch[0] != " " && !isWaitChar(ch[0])
-      bitmap.font.bold = ch[6] if bitmap.font.bold != ch[6]
-      bitmap.font.italic = ch[7] if bitmap.font.italic != ch[7]
-      bitmap.font.name = ch[12] if bitmap.font.name != ch[12]
-      offset = 0
-      if ch[9] # shadow
-        bitmap.font.color = ch[9]
-        if (ch[16] & 1) != 0 # outline
-          offset = 1
-          bitmap.draw_text(ch[1], ch[2], ch[3] + 2, ch[4], ch[0])
-          bitmap.draw_text(ch[1], ch[2] + 1, ch[3] + 2, ch[4], ch[0])
-          bitmap.draw_text(ch[1], ch[2] + 2, ch[3] + 2, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 1, ch[2], ch[3] + 2, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 1, ch[2] + 2, ch[3] + 2, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 2, ch[2], ch[3] + 2, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 2, ch[2] + 1, ch[3] + 2, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 2, ch[2] + 2, ch[3] + 2, ch[4], ch[0])
-        elsif (ch[16] & 2) != 0 # outline 2
-          offset = 2
-          bitmap.draw_text(ch[1], ch[2], ch[3] + 4, ch[4], ch[0])
-          bitmap.draw_text(ch[1], ch[2] + 2, ch[3] + 4, ch[4], ch[0])
-          bitmap.draw_text(ch[1], ch[2] + 4, ch[3] + 4, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 2, ch[2], ch[3] + 4, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 2, ch[2] + 4, ch[3] + 4, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 4, ch[2], ch[3] + 4, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 4, ch[2] + 2, ch[3] + 4, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 4, ch[2] + 4, ch[3] + 4, ch[4], ch[0])
-        else
-          bitmap.draw_text(ch[1] + 2, ch[2], ch[3] + 2, ch[4], ch[0])
-          bitmap.draw_text(ch[1], ch[2] + 2, ch[3] + 2, ch[4], ch[0])
-          bitmap.draw_text(ch[1] + 2, ch[2] + 2, ch[3] + 2, ch[4], ch[0])
-        end
+    offset = 0
+    if ch[9]   # shadow
+      bitmap.font.color = ch[9]
+      if (ch[16] & 1) != 0   # outline
+        offset = 1
+        bitmap.draw_text(ch[1], ch[2], ch[3] + 2, ch[4], ch[0])
+        bitmap.draw_text(ch[1], ch[2] + 1, ch[3] + 2, ch[4], ch[0])
+        bitmap.draw_text(ch[1], ch[2] + 2, ch[3] + 2, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 1, ch[2], ch[3] + 2, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 1, ch[2] + 2, ch[3] + 2, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 2, ch[2], ch[3] + 2, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 2, ch[2] + 1, ch[3] + 2, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 2, ch[2] + 2, ch[3] + 2, ch[4], ch[0])
+      elsif (ch[16] & 2) != 0   # outline 2
+        offset = 2
+        bitmap.draw_text(ch[1], ch[2], ch[3] + 4, ch[4], ch[0])
+        bitmap.draw_text(ch[1], ch[2] + 2, ch[3] + 4, ch[4], ch[0])
+        bitmap.draw_text(ch[1], ch[2] + 4, ch[3] + 4, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 2, ch[2], ch[3] + 4, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 2, ch[2] + 4, ch[3] + 4, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 4, ch[2], ch[3] + 4, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 4, ch[2] + 2, ch[3] + 4, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 4, ch[2] + 4, ch[3] + 4, ch[4], ch[0])
+      else
+        bitmap.draw_text(ch[1] + 2, ch[2], ch[3] + 2, ch[4], ch[0])
+        bitmap.draw_text(ch[1], ch[2] + 2, ch[3] + 2, ch[4], ch[0])
+        bitmap.draw_text(ch[1] + 2, ch[2] + 2, ch[3] + 2, ch[4], ch[0])
       end
-      bitmap.font.color = ch[8] if bitmap.font.color != ch[8]
-      bitmap.draw_text(ch[1] + offset, ch[2] + offset, ch[3], ch[4], ch[0])
-    elsif bitmap.font.color != ch[8]
-      bitmap.font.color = ch[8]
     end
-    if ch[10] # underline
-      bitmap.fill_rect(ch[1], ch[2] + ch[4] - 4 - [(ch[4] - bitmap.font.size) / 2, 0].max - 2,
-                       ch[3] - 2, 2, ch[8])
-    end
-    if ch[11] # strikeout
-      bitmap.fill_rect(ch[1], ch[2] + (ch[4] / 2) - 4, ch[3] - 2, 2, ch[8])
-    end
+    bitmap.font.color = ch[8] if bitmap.font.color != ch[8]
+    bitmap.draw_text(ch[1] + offset, ch[2] + offset, ch[3], ch[4], ch[0])
+  end
+  if ch[10]   # underline
+    bitmap.fill_rect(ch[1], ch[2] + ch[4] - [(ch[4] - bitmap.font.size) / 2, 0].max - 2,
+                     ch[3] - 2, 2, ch[8])
+  end
+  if ch[11]   # strikeout
+    bitmap.fill_rect(ch[1], ch[2] + 2 + (ch[4] / 2), ch[3] - 2, 2, ch[8])
   end
 end
 
