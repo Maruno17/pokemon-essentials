@@ -653,7 +653,7 @@ def replaceShopStockWithRandomized(stock)
     newStock = []
     for item in stock
       newItem =$PokemonGlobal.randomItemsHash[item]
-        if newItem != nil && GameData::Item.get(newItem).price >0
+        if newItem != nil && GameData::Item.get(newItem).price >0 && !Settings::EXCLUDE_FROM_RANDOM_SHOPS.include?(newItem)
           newStock << newItem
         else
           newStock << item

@@ -496,6 +496,13 @@ Environment = Cave
 # Mt. Moon B2F
 Bicycle=true
 Environment = Cave
+[767]
+# Mt. Moon
+Bicycle=true
+DarkMap=true
+MapPosition=0,16,3
+ShowArea=false
+Environment = Cave
 [106]
 # Route 4
 Bicycle=true

@@ -188,6 +188,8 @@ class PokeBattle_Battle
       when "2v1"           then [2, 1]
       when "1v3"           then [1, 3]
       when "1v2"           then [1, 2]
+      when "single"        then [1, 1]
+      when "1v1"           then [1, 1]
       else                      default  # Single, 1v1 (default)
       end
   end

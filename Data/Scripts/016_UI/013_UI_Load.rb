@@ -274,7 +274,23 @@ class PokemonLoadScreen
     end
   end
 
+
+  #todo
+  def copyKeybindings
+    #return
+    keybinding_path = "Data/"
+    keybinding_fileName="keybindings.mkxp1"
+
+    srcPath = keybinding_path+keybinding_fileName
+    destPath = System.data_directory + keybinding_fileName
+    if !File.file?(destPath)
+      File.copy(srcPath,destPath)
+      print("New default controls for controllers were copied. Please re-launch the game to enable them.")
+    end
+  end
+
   def pbStartLoadScreen
+    copyKeybindings()
     commands = []
     cmd_continue     = -1
     cmd_new_game     = -1

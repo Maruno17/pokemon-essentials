@@ -26,11 +26,19 @@ def pbGetBTTrainers(challengeID)
 end
 
 def pbGetBTPokemon(challenge_id)
+  customsOnly = !$game_switches[SWITCH_BATTLE_FACTORY_INCLUDE_ALL]
+  if customsOnly
+    return getCustomSpeciesList()
+  end
   list=[]
   for i in 0..PBSpecies.maxValue
     list << i
   end
   return list
+
+
+
+
   # list=[]
   # while list.length <= target_size
   #   list << generate_random_species(max_bst)
