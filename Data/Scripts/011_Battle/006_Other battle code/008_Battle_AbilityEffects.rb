@@ -496,6 +496,12 @@ Battle::AbilityEffects::StatusImmunityFromAlly.add(:FLOWERVEIL,
   }
 )
 
+Battle::AbilityEffects::StatusImmunityFromAlly.add(:PASTELVEIL,
+  proc { |ability, battler, status|
+    next true if status == :POISON
+  }
+)
+
 Battle::AbilityEffects::StatusImmunityFromAlly.add(:SWEETVEIL,
   proc { |ability, battler, status|
     next true if status == :SLEEP
@@ -560,6 +566,8 @@ Battle::AbilityEffects::StatusCure.add(:IMMUNITY,
     battler.battle.pbHideAbilitySplash(battler)
   }
 )
+
+Battle::AbilityEffects::StatusCure.copy(:IMMUNITY, :PASTELVEIL)
 
 Battle::AbilityEffects::StatusCure.add(:INSOMNIA,
   proc { |ability, battler|

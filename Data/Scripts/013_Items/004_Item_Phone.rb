@@ -3,6 +3,8 @@
 #       window in start_message and end_message).
 # TODO: Look at the "ready to rematch" timers to see if they can be improved?
 #       Should they be limited to one trainer becoming ready every ~5 minutes?
+#       Should a rematch-ready contact become unready again after some time if
+#       they haven't told the player they're ready?
 # TODO: See if incoming phone calls can be made optional somehow. Maybe just
 #       interrupt as normal with the start of the call and ask if the player
 #       wants to answer? Wait for a couple of seconds before asking to make sure
