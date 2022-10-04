@@ -35,6 +35,8 @@ class Battle::AI
     end
     # Discard move if it can't raise any stats
     if stat_changes.length == 0
+      # TODO: Have a parameter that decides whether to reduce the score here
+      #       (for moves where this is just part of the effect).
       return (@move.statusMove?) ? score - 40 : score
     end
 

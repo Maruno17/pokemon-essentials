@@ -20,7 +20,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimes",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
                                          "HitTwoTimesPoisonTarget")
@@ -29,19 +29,9 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
     # Score for hitting multiple times
     score = Battle::AI::Handlers.apply_move_effect_score("HitTwoTimes",
        score, move, user, target, ai, battle)
-    next score if !target.battler.pbCanPoison?(user.battler, false)
-    # Poisoning
-    score += 30
-    if ai.trainer.medium_skill?
-      score += 30 if target.hp <= target.totalhp / 4
-      score += 50 if target.hp <= target.totalhp / 8
-      score -= 40 if target.effects[PBEffects::Yawn] > 0
-    end
-    if ai.trainer.high_skill?
-      score += 10 if target.rough_stat(:DEFENSE) > 100
-      score += 10 if target.rough_stat(:SPECIAL_DEFENSE) > 100
-    end
-    score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :TOXICBOOST])
+    # Score for poisoning
+    score = Battle::AI::Handlers.apply_move_effect_score("PoisonTarget",
+       score, move, user, target, ai, battle)
     next score
   }
 )
@@ -285,42 +275,31 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackOneTurnInSun",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
-    # Paralyze the target
-    if !target.battler.pbCanParalyze?(user.battler, false)
-      score += 10
-      if ai.trainer.medium_skill?
-        score += 10 if !user.faster_than?(target)
-      end
-      score -= 15 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
-    else
-      next 25 if move.statusMove?
-    end
+    # Score for paralysing
+    score = Battle::AI::Handlers.apply_move_effect_score("ParalyzeTarget",
+       score, move, user, target, ai, battle)
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
-    # Burn the target
-    if target.battler.pbCanBurn?(user.battler, false)
-      score += 10
-      score -= 15 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :FLAREBOOST])
-    else
-      next 25 if move.statusMove?
-    end
+    # Score for burning
+    score = Battle::AI::Handlers.apply_move_effect_score("BurnTarget",
+       score, move, user, target, ai, battle)
     next score
   }
 )

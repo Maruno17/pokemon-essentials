@@ -529,17 +529,14 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
   proc { |score, move, user, target, ai, battle|
-    if user.effects[PBEffects::ProtectRate] > 1 ||
-       target.effects[PBEffects::HyperBeam] > 0
-      score -= 50
-    else
-      if ai.trainer.medium_skill?
-        score -= user.effects[PBEffects::ProtectRate] * 40
-      end
-      score += 50 if user.turnCount == 0
-      score += 30 if target.effects[PBEffects::TwoTurnAttack]
-      score += 20   # Because of possible poisoning
+    next score - 40 if user.effects[PBEffects::ProtectRate] > 1 ||
+                       target.effects[PBEffects::HyperBeam] > 0
+    if ai.trainer.medium_skill?
+      score -= user.effects[PBEffects::ProtectRate] * 40
     end
+    score += 10 if user.turnCount == 0
+    score += 15 if target.effects[PBEffects::TwoTurnAttack]
+    score += 15   # Because of possible poisoning
     next score
   }
 )
@@ -668,7 +665,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HoopaRemoveProtectionsBypassSubstitut
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RecoilQuarterOfDamageDealt",
   proc { |score, move, user, target, ai, battle|
-    next score - 25
+    next score - 8
   }
 )
 
@@ -677,20 +674,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RecoilQuarterOfDamageDealt",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RecoilThirdOfDamageDealtParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
-    score -= 30
-    if target.battler.pbCanParalyze?(user.battler, false)
-      score += 30
-      if ai.trainer.medium_skill?
-        aspeed = user.rough_stat(:SPEED)
-        ospeed = target.rough_stat(:SPEED)
-        if aspeed < ospeed
-          score += 30
-        elsif aspeed > ospeed
-          score -= 40
-        end
-      end
-      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
-    end
+    # Score for being a recoil move
+    score -= 10
+    # Score for paralysing
+    score = Battle::AI::Handlers.apply_move_effect_score("ParalyzeTarget",
+       score, move, user, target, ai, battle)
     next score
   }
 )
@@ -700,11 +688,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RecoilThirdOfDamageDealtParalyzeTarge
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RecoilThirdOfDamageDealtBurnTarget",
   proc { |score, move, user, target, ai, battle|
-    score -= 30
-    if target.battler.pbCanBurn?(user.battler, false)
-      score += 30
-      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :FLAREBOOST])
-    end
+    # Score for being a recoil move
+    score -= 10
+    # Score for burning
+    score = Battle::AI::Handlers.apply_move_effect_score("BurnTarget",
+       score, move, user, target, ai, battle)
     next score
   }
 )
@@ -714,7 +702,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RecoilThirdOfDamageDealtBurnTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RecoilHalfOfDamageDealt",
   proc { |score, move, user, target, ai, battle|
-    next score - 40
+    next score - 15
   }
 )
 

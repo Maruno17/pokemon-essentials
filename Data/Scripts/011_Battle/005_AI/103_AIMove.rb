@@ -545,6 +545,7 @@ class Battle::AI::AIMove
 
   #=============================================================================
 
+  # TODO:
   # pbBaseAccuracy(@ai.user.battler, @ai.target.battler) if @ai.trainer.medium_skill?
   # pbCriticalOverride(@ai.user.battler, @ai.target.battler)
 end

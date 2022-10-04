@@ -1,5 +1,5 @@
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SleepTarget",
   proc { |move, user, target, ai, battle|
@@ -8,17 +8,40 @@ Battle::AI::Handlers::MoveFailureCheck.add("SleepTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("SleepTarget",
   proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanSleep?(user.battler, false, move.move)
-      score += 30
-      if ai.trainer.medium_skill?
-        score -= 30 if target.effects[PBEffects::Yawn] > 0
+    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep anyway
+    # No score modifier if the sleep will be removed immediately
+    next score if target.has_active_item?([:CHESTOBERRY, :LUMBERRY])
+    next score if target.faster_than?(user) &&
+                  target.has_active_ability?(:HYDRATION) &&
+                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    if move.statusMove? || target.battler.pbCanSleep?(user.battler, false, move.move)
+      # Inherent preference
+      score += 15
+      # Prefer if the user or an ally has a move/ability that is better if the target is asleep
+      ai.each_same_side_battler(user.side) do |b|
+        score += 5 if b.check_for_move { |m| ["DoublePowerIfTargetAsleepCureTarget",
+                                              "DoublePowerIfTargetStatusProblem",
+                                              "HealUserByHalfOfDamageDoneIfTargetAsleep",
+                                              "StartDamageTargetEachTurnIfTargetAsleep"].include?(m.function) }
+        score += 10 if b.has_active_ability?(:BADDREAMS)
       end
-      score -= 30 if target.has_active_ability?(:MARVELSCALE)
-      if ai.trainer.best_skill?
-        if target.battler.pbHasMoveFunction?("FlinchTargetFailsIfUserNotAsleep",
-                                             "UseRandomUserMoveIfAsleep")   # Snore, Sleep Talk
-          score -= 50
-        end
+      # Don't prefer if target benefits from having the sleep status problem
+      # NOTE: The target's Guts/Quick Feet will benefit from the target being
+      #       asleep, but the target won't (usually) be able to make use of
+      #       them, so they're not worth considering.
+      score -= 10 if target.has_active_ability?(:EARLYBIRD)
+      score -= 5 if target.has_active_ability?(:MARVELSCALE)
+      # Don't prefer if target has a move it can use while asleep
+      score -= 8 if target.check_for_move { |m| m.usableWhenAsleep? }
+      # Don't prefer if the target can heal itself (or be healed by an ally)
+      if target.has_active_ability?(:SHEDSKIN)
+        score -= 5
+      elsif target.has_active_ability?(:HYDRATION) &&
+            [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+        score -= 10
+      end
+      ai.each_same_side_battler(target.side) do |b|
+        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -26,7 +49,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SleepTarget",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SleepTargetIfUserDarkrai",
   proc { |move, user, target, ai, battle|
@@ -38,13 +61,13 @@ Battle::AI::Handlers::MoveEffectScore.copy("SleepTarget",
                                            "SleepTargetIfUserDarkrai")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("SleepTarget",
                                            "SleepTargetChangeUserMeloettaForm")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SleepTargetNextTurn",
   proc { |move, user, target, ai, battle|
@@ -52,24 +75,11 @@ Battle::AI::Handlers::MoveFailureCheck.add("SleepTargetNextTurn",
     next true if !target.battler.pbCanSleep?(user.battler, false, move.move)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("SleepTargetNextTurn",
-  proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanSleep?(user.battler, false, move.move)
-      score += 30
-      score -= 30 if target.has_active_ability?(:MARVELSCALE)
-      if ai.trainer.best_skill?
-        if target.battler.pbHasMoveFunction?("FlinchTargetFailsIfUserNotAsleep",
-                                             "UseRandomUserMoveIfAsleep")   # Snore, Sleep Talk
-          score -= 50
-        end
-      end
-    end
-    next score
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("SleepTarget",
+                                           "SleepTargetNextTurn")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PoisonTarget",
   proc { |move, user, target, ai, battle|
@@ -78,18 +88,46 @@ Battle::AI::Handlers::MoveFailureCheck.add("PoisonTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("PoisonTarget",
   proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanPoison?(user.battler, false, move.move)
-      score += 30
-      if ai.trainer.medium_skill?
-        score += 30 if target.hp <= target.totalhp / 4
-        score += 50 if target.hp <= target.totalhp / 8
-        score -= 40 if target.effects[PBEffects::Yawn] > 0
+    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
+    next score - 40 if move.statusMove? && target.has_active_ability?(:POISONHEAL)
+    # No score modifier if the poisoning will be removed immediately
+    next score if target.has_active_item?([:PECHABERRY, :LUMBERRY])
+    next score if target.faster_than?(user) &&
+                  target.has_active_ability?(:HYDRATION) &&
+                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    if move.statusMove? || target.battler.pbCanPoison?(user.battler, false, move.move)
+      # Inherent preference
+      score += 10
+      # Prefer if the target is at high HP
+      score += 10 * target.hp / target.totalhp
+      # Prefer if the user or an ally has a move/ability that is better if the target is poisoned
+      ai.each_same_side_battler(user.side) do |b|
+        score += 5 if b.check_for_move { |m| ["DoublePowerIfTargetPoisoned",
+                                              "DoublePowerIfTargetStatusProblem"].include?(m.function) }
+        score += 10 if b.has_active_ability?(:MERCILESS)
       end
-      if ai.trainer.high_skill?
-        score += 10 if target.rough_stat(:DEFENSE) > 100
-        score += 10 if target.rough_stat(:SPECIAL_DEFENSE) > 100
+      # Don't prefer if target benefits from having the poison status problem
+      score -= 8 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :TOXICBOOST])
+      score -= 25 if target.has_active_ability?(:POISONHEAL)
+      score -= 15 if target.has_active_ability?(:SYNCHRONIZE) &&
+                     user.battler.pbCanPoisonSynchronize?(target.battler)
+      score -= 5 if target.check_for_move { |m| ["DoublePowerIfUserPoisonedBurnedParalyzed",
+                                                 "CureUserBurnPoisonParalysis"].include?(m.function) }
+      score -= 10 if target.check_for_move { |m|
+        m.function == "GiveUserStatusToTarget" && user.battler.pbCanPoison?(target.battler, false, m)
+      }
+      # Don't prefer if the target won't take damage from the poison
+      score -= 15 if !target.battler.takesIndirectDamage?
+      # Don't prefer if the target can heal itself (or be healed by an ally)
+      if target.has_active_ability?(:SHEDSKIN)
+        score -= 5
+      elsif target.has_active_ability?(:HYDRATION) &&
+            [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+        score -= 10
       end
-      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :TOXICBOOST])
+      ai.each_same_side_battler(target.side) do |b|
+        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
+      end
     end
     next score
   }
@@ -106,57 +144,24 @@ Battle::AI::Handlers::MoveFailureCheck.add("PoisonTargetLowerTargetSpeed1",
 )
 Battle::AI::Handlers::MoveEffectScore.add("PoisonTargetLowerTargetSpeed1",
   proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanPoison?(user.battler, false)
-      score += 30
-      if ai.trainer.medium_skill?
-        score += 30 if target.hp <= target.totalhp / 4
-        score += 50 if target.hp <= target.totalhp / 8
-        score -= 40 if target.effects[PBEffects::Yawn] > 0
-      end
-      if ai.trainer.high_skill?
-        score += 10 if target.rough_stat(:DEFENSE) > 100
-        score += 10 if target.rough_stat(:SPECIAL_DEFENSE) > 100
-      end
-      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :TOXICBOOST])
-    end
-    if target.battler.pbCanLowerStatStage?(:SPEED, user.battler)
-      score += target.stages[:SPEED] * 10
-      if ai.trainer.high_skill?
-        aspeed = user.rough_stat(:SPEED)
-        ospeed = target.rough_stat(:SPEED)
-        score += 30 if aspeed < ospeed && aspeed * 2 > ospeed
-      end
-    end
+    score = Battle::AI::Handlers.apply_move_effect_score("PoisonTarget",
+       score, move, user, target, ai, battle)
+    score = Battle::AI::Handlers.apply_move_effect_score("LowerTargetSpeed1",
+       score, move, user, target, ai, battle)
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("PoisonTarget",
                                             "BadPoisonTarget")
-Battle::AI::Handlers::MoveEffectScore.add("BadPoisonTarget",
-  proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanPoison?(user.battler, false)
-      score += 30
-      if ai.trainer.medium_skill?
-        score += 30 if target.hp <= target.totalhp / 4
-        score += 50 if target.hp <= target.totalhp / 8
-        score -= 40 if target.effects[PBEffects::Yawn] > 0
-      end
-      if ai.trainer.high_skill?
-        score += 10 if target.rough_stat(:DEFENSE) > 100
-        score += 10 if target.rough_stat(:SPECIAL_DEFENSE) > 100
-      end
-      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :TOXICBOOST])
-    end
-    next score
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("PoisonTarget",
+                                           "BadPoisonTarget")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ParalyzeTarget",
   proc { |move, user, target, ai, battle|
@@ -165,25 +170,56 @@ Battle::AI::Handlers::MoveFailureCheck.add("ParalyzeTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("ParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanParalyze?(user.battler, false, move.move)
-      score += 30
-      if ai.trainer.medium_skill?
-        aspeed = user.rough_stat(:SPEED)
-        ospeed = target.rough_stat(:SPEED)
-        if aspeed < ospeed
-          score += 30
-        elsif aspeed > ospeed
-          score -= 40
-        end
+    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
+    # No score modifier if the paralysis will be removed immediately
+    next score if target.has_active_item?([:CHERIBERRY, :LUMBERRY])
+    next score if target.faster_than?(user) &&
+                  target.has_active_ability?(:HYDRATION) &&
+                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    if move.statusMove? || target.battler.pbCanParalyze?(user.battler, false, move.move)
+      # Inherent preference (because of the chance of full paralysis)
+      score += 10
+      # Prefer if the target is faster than the user but will become slower if
+      # paralysed
+      if target.faster_than?(user)
+        user_speed = user.rough_stat(:SPEED)
+        target_speed = target.rough_stat(:SPEED)
+        score += 10 if target_speed < user_speed * ((Settings::MECHANICS_GENERATION >= 7) ? 2 : 4)
       end
-      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
+      # Prefer if the target is confused or infatuated, to compound the turn skipping
+      score += 5 if target.effects[PBEffects::Confusion] > 1
+      score += 5 if target.effects[PBEffects::Attract] >= 0
+      # Prefer if the user or an ally has a move/ability that is better if the target is paralysed
+      ai.each_same_side_battler(user.side) do |b|
+        score += 5 if b.check_for_move { |m| ["DoublePowerIfTargetParalyzedCureTarget",
+                                              "DoublePowerIfTargetStatusProblem"].include?(m.function) }
+      end
+      # Don't prefer if target benefits from having the paralysis status problem
+      score -= 8 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
+      score -= 15 if target.has_active_ability?(:SYNCHRONIZE) &&
+                     user.battler.pbCanParalyzeSynchronize?(target.battler)
+      score -= 5 if target.check_for_move { |m| ["DoublePowerIfUserPoisonedBurnedParalyzed",
+                                                 "CureUserBurnPoisonParalysis"].include?(m.function) }
+      score -= 10 if target.check_for_move { |m|
+        m.function == "GiveUserStatusToTarget" && user.battler.pbCanParalyze?(target.battler, false, m)
+      }
+      # Don't prefer if the target can heal itself (or be healed by an ally)
+      if target.has_active_ability?(:SHEDSKIN)
+        score -= 5
+      elsif target.has_active_ability?(:HYDRATION) &&
+            [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+        score -= 10
+      end
+      ai.each_same_side_battler(target.side) do |b|
+        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
+      end
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ParalyzeTargetIfNotTypeImmune",
   proc { |move, user, target, ai, battle|
@@ -196,14 +232,19 @@ Battle::AI::Handlers::MoveEffectScore.copy("ParalyzeTarget",
                                            "ParalyzeTargetIfNotTypeImmune")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("ParalyzeTarget",
-                                           "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky",
-                                           "ParalyzeFlinchTarget")
+                                           "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky")
 
 #===============================================================================
 # TODO: Review score modifiers.
+#===============================================================================
+Battle::AI::Handlers::MoveEffectScore.copy("ParalyzeTarget",
+                                           "ParalyzeFlinchTarget")
+
+#===============================================================================
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("BurnTarget",
   proc { |move, user, target, ai, battle|
@@ -212,19 +253,55 @@ Battle::AI::Handlers::MoveFailureCheck.add("BurnTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("BurnTarget",
   proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanBurn?(user.battler, false, move.move)
-      score += 30
-      score -= 40 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :FLAREBOOST])
+    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
+    # No score modifier if the burn will be removed immediately
+    next score if target.has_active_item?([:RAWSTBERRY, :LUMBERRY])
+    next score if target.faster_than?(user) &&
+                  target.has_active_ability?(:HYDRATION) &&
+                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    if move.statusMove? || target.battler.pbCanBurn?(user.battler, false, move.move)
+      # Inherent preference
+      score += 10
+      # Prefer if the target knows any physical moves that will be weaked by a burn
+      if !target.has_active_ability?(:GUTS) && target.check_for_move { |m| m.physicalMove? }
+        score += 5
+        score += 8 if !target.check_for_move { |m| m.specialMove? }
+      end
+      # Prefer if the user or an ally has a move/ability that is better if the target is burned
+      ai.each_same_side_battler(user.side) do |b|
+        score += 5 if b.check_for_move { |m| m.function == "DoublePowerIfTargetStatusProblem" }
+      end
+      # Don't prefer if target benefits from having the burn status problem
+      score -= 8 if target.has_active_ability?([:FLAREBOOST, :GUTS, :MARVELSCALE, :QUICKFEET])
+      score -= 5 if target.has_active_ability?(:HEATPROOF)
+      score -= 15 if target.has_active_ability?(:SYNCHRONIZE) &&
+                     user.battler.pbCanBurnSynchronize?(target.battler)
+      score -= 5 if target.check_for_move { |m| ["DoublePowerIfUserPoisonedBurnedParalyzed",
+                                                 "CureUserBurnPoisonParalysis"].include?(m.function) }
+      score -= 10 if target.check_for_move { |m|
+        m.function == "GiveUserStatusToTarget" && user.battler.pbCanBurn?(target.battler, false, m)
+      }
+      # Don't prefer if the target won't take damage from the burn
+      score -= 15 if !target.battler.takesIndirectDamage?
+      # Don't prefer if the target can heal itself (or be healed by an ally)
+      if target.has_active_ability?(:SHEDSKIN)
+        score -= 5
+      elsif target.has_active_ability?(:HYDRATION) &&
+            [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+        score -= 10
+      end
+      ai.each_same_side_battler(target.side) do |b|
+        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
+      end
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.copy("BurnTarget",
-                                           "BurnTargetIfTargetStatsRaisedThisTurn")
+# BurnTargetIfTargetStatsRaisedThisTurn
 
 #===============================================================================
 # TODO: Review score modifiers.
@@ -233,7 +310,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("BurnTarget",
                                            "BurnFlinchTarget")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FreezeTarget",
   proc { |move, user, target, ai, battle|
@@ -242,22 +319,49 @@ Battle::AI::Handlers::MoveFailureCheck.add("FreezeTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("FreezeTarget",
   proc { |score, move, user, target, ai, battle|
-    if target.battler.pbCanFreeze?(user.battler, false, move.move)
-      score += 30
-      score -= 20 if target.has_active_ability?(:MARVELSCALE)
+    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
+    # No score modifier if the freeze will be removed immediately
+    next score if target.has_active_item?([:ASPEARBERRY, :LUMBERRY])
+    next score if target.faster_than?(user) &&
+                  target.has_active_ability?(:HYDRATION) &&
+                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    if move.statusMove? || target.battler.pbCanFreeze?(user.battler, false, move.move)
+      # Inherent preference
+      score += 15
+      # Prefer if the user or an ally has a move/ability that is better if the target is frozen
+      ai.each_same_side_battler(user.side) do |b|
+        score += 5 if b.check_for_move { |m| m.function == "DoublePowerIfTargetStatusProblem" }
+      end
+      # Don't prefer if target benefits from having the frozen status problem
+      # NOTE: The target's Guts/Quick Feet will benefit from the target being
+      #       frozen, but the target won't be able to make use of them, so
+      #       they're not worth considering.
+      score -= 5 if target.has_active_ability?(:MARVELSCALE)
+      # Don't prefer if the target knows a move that can thaw it
+      score -= 15 if target.check_for_move { |m| m.thawsUser? }
+      # Don't prefer if the target can heal itself (or be healed by an ally)
+      if target.has_active_ability?(:SHEDSKIN)
+        score -= 5
+      elsif target.has_active_ability?(:HYDRATION) &&
+            [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+        score -= 10
+      end
+      ai.each_same_side_battler(target.side) do |b|
+        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
+      end
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("FreezeTarget",
                                            "FreezeTargetSuperEffectiveAgainstWater")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("FreezeTarget",
                                            "FreezeTargetAlwaysHitsInHail")
@@ -269,11 +373,24 @@ Battle::AI::Handlers::MoveEffectScore.copy("FreezeTarget",
                                            "FreezeFlinchTarget")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ParalyzeBurnOrFreezeTarget",
   proc { |score, move, user, target, ai, battle|
-    next score + 30 if target.status == :NONE
+    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
+    # No score modifier if the status problem will be removed immediately
+    next score if target.has_active_item?(:LUMBERRY)
+    next score if target.faster_than?(user) &&
+                  target.has_active_ability?(:HYDRATION) &&
+                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    # Scores for the possible effects
+    score += (Battle::AI::Handlers.apply_move_effect_score("ParalyzeTarget",
+       100, move, user, target, ai, battle) - 100) / 3
+    score += (Battle::AI::Handlers.apply_move_effect_score("BurnTarget",
+       100, move, user, target, ai, battle) - 100) / 3
+    score += (Battle::AI::Handlers.apply_move_effect_score("FreezeTarget",
+       100, move, user, target, ai, battle) - 100) / 3
+    next score
   }
 )
 

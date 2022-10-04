@@ -206,6 +206,7 @@ class Battle::AI::AIBattler
       end
     else
       @battler.pbTypes(true).each_with_index do |defend_type, i|
+        # TODO: Need to check the move's pbCalcTypeModSingle.
         type_mults[i] = effectiveness_of_type_against_single_battler_type(type, defend_type, user)
       end
     end
