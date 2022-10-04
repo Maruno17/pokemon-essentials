@@ -1,0 +1,30 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[cave]
+DungeonSize = 5,4
+CellSize = 10,10
+MinRoomSize = 5,5
+MaxRoomSize = 9,9
+CorridorWidth = 2
+ShiftCorridors = true
+NodeLayout = full
+RoomLayout = full
+RoomChance = 70
+ExtraConnections = 2
+FloorPatches = 2,50,25
+FloorDecorations = 50,200
+VoidDecorations = 50,200
+#-------------------------------
+[forest]
+DungeonSize = 5,4
+CellSize = 10,10
+MinRoomSize = 4,4
+MaxRoomSize = 8,8
+CorridorWidth = 2
+NodeLayout = full
+RoomLayout = full
+RoomChance = 70
+ExtraConnections = 2
+FloorPatches = 3,75,25
+FloorDecorations = 50,200
+VoidDecorations = 50,200

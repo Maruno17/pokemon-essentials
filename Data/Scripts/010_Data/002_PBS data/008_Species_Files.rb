@@ -57,6 +57,11 @@ module GameData
       return (ret) ? ret : pbResolveBitmap("Graphics/Pokemon/Eggs/000")
     end
 
+    def self.egg_cracks_sprite_filename(species, form)
+      ret = self.check_egg_graphic_file("Graphics/Pokemon/Eggs/", species, form, "_cracks")
+      return (ret) ? ret : pbResolveBitmap("Graphics/Pokemon/Eggs/000_cracks")
+    end
+
     def self.sprite_filename(species, form = 0, gender = 0, shiny = false, shadow = false, back = false, egg = false)
       return self.egg_sprite_filename(species, form) if egg
       return self.back_sprite_filename(species, form, gender, shiny, shadow) if back

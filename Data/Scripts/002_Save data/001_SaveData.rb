@@ -79,19 +79,4 @@ module SaveData
     end
     return hash
   end
-
-  # Moves a save file from the old Saved Games folder to the new
-  # location specified by {FILE_PATH}. Does nothing if a save file
-  # already exists in {FILE_PATH}.
-  def self.move_old_windows_save
-    return if File.file?(FILE_PATH)
-    game_title = System.game_title.gsub(/[^\w ]/, "_")
-    home = ENV["HOME"] || ENV["HOMEPATH"]
-    return if home.nil?
-    old_location = File.join(home, "Saved Games", game_title)
-    return unless File.directory?(old_location)
-    old_file = File.join(old_location, "Game.rxdata")
-    return unless File.file?(old_file)
-    File.move(old_file, FILE_PATH)
-  end
 end

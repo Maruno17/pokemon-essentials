@@ -32,10 +32,10 @@ EventHandlers.add(:on_wild_pokemon_created, :level_depends_on_party,
 # Note that you can only modify a partner trainer's Pokémon, and not the trainer
 # themselves nor their items this way, as those are generated from scratch
 # before each battle.
-#EventHandlers.add(:on_trainer_load, :put_a_name_here,
-#  proc { |trainer|
-#    if trainer   # An NPCTrainer object containing party/items/lose text, etc.
-#      YOUR CODE HERE
-#    end
-#  }
-#)
+# EventHandlers.add(:on_trainer_load, :put_a_name_here,
+#   proc { |trainer|
+#     if trainer   # An NPCTrainer object containing party/items/lose text, etc.
+#       YOUR CODE HERE
+#     end
+#   }
+# )

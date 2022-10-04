@@ -70,7 +70,32 @@ def toCelsius(fahrenheit)
   return ((fahrenheit - 32) * 5.0 / 9.0).round
 end
 
+#===============================================================================
+# This class is designed to favor different values more than a uniform
+# random generator does.
+#===============================================================================
+class AntiRandom
+  def initialize(size)
+    @old = []
+    @new = Array.new(size) { |i| i }
+  end
 
+  def get
+    if @new.length == 0   # No new values
+      @new = @old.clone
+      @old.clear
+    end
+    if @old.length > 0 && rand(7) == 0   # Get old value
+      return @old[rand(@old.length)]
+    end
+    if @new.length > 0   # Get new value
+      ret = @new.delete_at(rand(@new.length))
+      @old.push(ret)
+      return ret
+    end
+    return @old[rand(@old.length)]   # Get old value
+  end
+end
 
 #===============================================================================
 # Constants utilities
@@ -124,8 +149,6 @@ def getConstantNameOrValue(mod, value)
   end
   return value.inspect
 end
-
-
 
 #===============================================================================
 # Event utilities
@@ -195,8 +218,6 @@ def pbNoticePlayer(event)
   pbTurnTowardEvent($game_player, event)
   pbMoveTowardPlayer(event)
 end
-
-
 
 #===============================================================================
 # Player-related utilities, random name generator
@@ -339,8 +360,6 @@ def getRandomName(maxLength = 100)
   return getRandomNameEx(2, nil, nil, maxLength)
 end
 
-
-
 #===============================================================================
 # Regional and National Pokédexes utilities
 #===============================================================================
@@ -386,8 +405,6 @@ def pbGetRegionalDexLength(region_dex)
   dex_list = pbLoadRegionalDexes[region_dex]
   return (dex_list) ? dex_list.length : 0
 end
-
-
 
 #===============================================================================
 # Other utilities

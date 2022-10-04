@@ -1,20 +1,25 @@
 # TODO: Add an information window with details of the person in a phone call.
 #       Make this work with common event calls (create and dispose the info
 #       window in start_message and end_message).
-# TODO: Rewrite the Phone UI. Have more than one method. Choosable icons/marks
-#       for each contact? Show an icon representing phone signal.
+# TODO: Look at the "ready to rematch" timers to see if they can be improved?
+#       Should they be limited to one trainer becoming ready every ~5 minutes?
+#       Should a rematch-ready contact become unready again after some time if
+#       they haven't told the player they're ready?
+# TODO: See if incoming phone calls can be made optional somehow. Maybe just
+#       interrupt as normal with the start of the call and ask if the player
+#       wants to answer? Wait for a couple of seconds before asking to make sure
+#       the player doesn't accidentally skip/answer a call they didn't want to.
+# TODO: Add a Debug way of upgrading old phone script calls to new ones, or at
+#       least to find events using old phone scripts for the dev to update.
+# TODO: More Debug control over contacts (changing their "time to rebattle",
+#       unhiding hidden contacts, etc.) and the phone (time until next call).
 
-# TODO: Add a trainer comment for giving a trainer a common event ID.
 # TODO: Add calling a contact at a particular time forcing rematch readiness.
 #       Add trainer comments for this.
 # TODO: Allow individual trainers to never arrange a rematch by themself, thus
 #       requiring the player to call them at their particular time of day/week.
 # TODO: Be able to put the Phone on silent mode (prevent all phone calls from
 #       trainers, but allow scripted calls as normal).
-
-# TODO: Better messages, more customisation of messages.
-# TODO: Add a Debug way of upgrading old phone script calls to new ones, or at
-#       least to find events using old phone scripts for the dev to update.
 #===============================================================================
 #
 #===============================================================================
@@ -70,8 +75,8 @@ class Phone
     return true
   end
 
-  # Event, trainer type, name, versions_count = 1, start_version = 0
-  # Map ID, event ID, trainer type, name, versions_count = 1, start_version = 0
+  # Event, trainer type, name, versions_count = 1, start_version = 0, common event ID = 0
+  # Map ID, event ID, trainer type, name, versions_count = 1, start_version = 0, common event ID = 0
   # Map ID, name, common event ID
   def add(*args)
     if args[0].is_a?(Game_Event)
@@ -82,9 +87,11 @@ class Phone
       contact = get(true, trainer_type, name, args[3] || 0)
       if contact
         contact.visible = true
+        @contacts.delete(contact)
+        @contacts.push(contact)
       else
         contact = Contact.new(true, args[0].map_id, args[0].id,
-                              trainer_type, name, args[3] || 1, args[4] || 0)
+                              trainer_type, name, args[3], args[4], args[5])
         contact.increment_version
         @contacts.push(contact)
       end
@@ -96,9 +103,11 @@ class Phone
       contact = get(true, trainer_type, name, args[4] || 0)
       if contact
         contact.visible = true
+        @contacts.delete(contact)
+        @contacts.push(contact)
       else
         contact = Contact.new(true, args[0], args[1],
-                              trainer_type, name, args[4] || 1, args[5] || 0)
+                              trainer_type, name, args[4], args[5], args[6])
         contact.increment_version
         @contacts.push(contact)
       end
@@ -108,12 +117,28 @@ class Phone
       contact = get(false, name)
       if contact
         contact.visible = true
+        @contacts.delete(contact)
+        @contacts.push(contact)
       else
         contact = Contact.new(false, *args)
         @contacts.push(contact)
       end
     end
+    sort_contacts
     return true
+  end
+
+  # Rearranges the list of phone contacts to put all visible contacts first,
+  # followed by all invisible contacts.
+  def sort_contacts
+    new_contacts = []
+    2.times do |i|
+      @contacts.each do |con|
+        next if (i == 0 && !con.visible?) || (i == 1 && con.visible?)
+        new_contacts.push(con)
+      end
+    end
+    @contacts = new_contacts
   end
 
   #=============================================================================
@@ -233,7 +258,7 @@ class Phone
     attr_accessor :trainer_type, :start_version, :versions_count, :version
     attr_accessor :time_to_ready, :rematch_flag, :variant_beaten
     attr_accessor :common_event_id
-    attr_accessor :visible
+    attr_reader   :visible
 
     # Map ID, event ID, trainer type, name, versions count = 1, start version = 0
     # Map ID, name, common event ID
@@ -251,7 +276,7 @@ class Phone
         @variant_beaten  = 0
         @time_to_ready   = 0
         @rematch_flag    = 0   # 0=counting down, 1=ready for rematch, 2=ready and told player
-        @common_event_id = 0
+        @common_event_id = args[6] || 0
       else
         # Non-trainer
         @map_id          = args[0]
@@ -278,6 +303,10 @@ class Phone
         $game_self_switches[[@map_id, @event_id, "A"]] = true
         $game_map.need_refresh = true
       end
+    end
+
+    def can_hide?
+      return trainer?
     end
 
     def common_event_call?
@@ -373,7 +402,13 @@ class Phone
     def make_incoming
       return if !can_make?
       contact = get_random_trainer_for_incoming_call
-      if contact
+      return if !contact
+      if contact.common_event_call?
+        if !pbCommonEvent(contact.common_event_id)
+          pbMessage(_INTL("{1}'s messages not defined.\nCouldn't call common event {2}.",
+            contact.display_name, contact.common_event_id))
+        end
+      else
         call = generate_trainer_dialogue(contact)
         play(call, contact)
       end
@@ -403,7 +438,7 @@ class Phone
       end
     end
 
-    def start_message(contact)
+    def start_message(contact = nil)
       pbMessage(_INTL("......\\wt[5] ......\\1"))
     end
 
@@ -434,7 +469,7 @@ class Phone
       end_message(contact)
     end
 
-    def end_message(contact)
+    def end_message(contact = nil)
       pbMessage(_INTL("Click!\\wt[10]\n......\\wt[5] ......\\1"))
     end
 
@@ -442,36 +477,58 @@ class Phone
 
     def generate_trainer_dialogue(contact)
       validate contact => Phone::Contact
+      # Get the set of messages to be used by the contact
+      messages = GameData::PhoneMessage.try_get(contact.trainer_type, contact.name, contact.version)
+      messages = GameData::PhoneMessage.try_get(contact.trainer_type, contact.name, contact.start_version) if !messages
+      messages = GameData::PhoneMessage::DATA["default"] if !messages
+      # Create lambda for choosing a random message and translating it
       get_random_message = lambda do |messages|
+        return "" if !messages
         msg = messages.sample
         return "" if !msg
         return pbGetMessageFromHash(MessageTypes::PhoneMessages, msg)
       end
-      phone_data = pbLoadPhoneData
       # Choose random greeting depending on time of day
-      ret = get_random_message.call(phone_data.greetings)
+      ret = get_random_message.call(messages.intro)
       time = pbGetTimeNow
       if PBDayNight.isMorning?(time)
-        modcall = get_random_message.call(phone_data.greetingsMorning)
-        ret = modcall if !nil_or_empty?(modcall)
+        mod_call = get_random_message.call(messages.intro_morning)
+        ret = mod_call if !nil_or_empty?(mod_call)
+      elsif PBDayNight.isAfternoon?(time)
+        mod_call = get_random_message.call(messages.intro_afternoon)
+        ret = mod_call if !nil_or_empty?(mod_call)
       elsif PBDayNight.isEvening?(time)
-        modcall = get_random_message.call(phone_data.greetingsEvening)
-        ret = modcall if !nil_or_empty?(modcall)
+        mod_call = get_random_message.call(messages.intro_evening)
+        ret = mod_call if !nil_or_empty?(mod_call)
       end
       ret += "\\m"
-      if Phone.rematches_enabled && (contact.rematch_flag == 1 ||
-         (contact.rematch_flag == 2 && rand(100) < 50))
-        # If ready for rematch, tell the player (50% chance to remind the player)
-        ret += get_random_message.call(phone_data.battleRequests)
-        contact.rematch_flag = 2   # Ready for rematch and told player
-      elsif rand(100) < 75
-        # Choose random body
-        ret += get_random_message.call(phone_data.bodies1)
-        ret += "\\m"
-        ret += get_random_message.call(phone_data.bodies2)
+      # Choose main message set
+      if Phone.rematches_enabled && contact.rematch_flag > 0
+        # Trainer is ready for a rematch, so tell/remind the player
+        if contact.rematch_flag == 1   # Tell the player
+          ret += get_random_message.call(messages.battle_request)
+          contact.rematch_flag = 2   # Ready for rematch and told player
+        elsif contact.rematch_flag == 2   # Remind the player
+          if messages.battle_remind
+            ret += get_random_message.call(messages.battle_remind)
+          else
+            ret += get_random_message.call(messages.battle_request)
+          end
+        end
       else
-        # Choose random generic
-        ret += get_random_message.call(phone_data.generics)
+        # Standard messages
+        if messages.body1 && messages.body2 && (!messages.body || rand(100) < 75)
+          # Choose random pair of body messages
+          ret += get_random_message.call(messages.body1)
+          ret += "\\m"
+          ret += get_random_message.call(messages.body2)
+        else
+          # Choose random full body message
+          ret += get_random_message.call(messages.body)
+        end
+        # Choose end message
+        mod_call = get_random_message.call(messages.end)
+        ret += "\\m" + mod_call if !nil_or_empty?(mod_call)
       end
       return ret
     end

@@ -37,23 +37,38 @@ class TileDrawingHelper
     36, 24, 36, 24, 21,  6, 21,  4, 36, 24, 36, 24, 20,  2, 20,  0
   ]
 
-  def self.tableNeighbors(data, x, y)
+  def self.tableNeighbors(data, x, y, layer = nil)
     return 0 if x < 0 || x >= data.xsize
     return 0 if y < 0 || y >= data.ysize
-    t = data[x, y]
+    if layer.nil?
+      t = data[x, y]
+    else
+      t = data[x, y, layer]
+    end
     xp1 = [x + 1, data.xsize - 1].min
     yp1 = [y + 1, data.ysize - 1].min
     xm1 = [x - 1, 0].max
     ym1 = [y - 1, 0].max
     i = 0
-    i |= 0x01 if data[x, ym1] == t   # N
-    i |= 0x02 if data[xp1, ym1] == t   # NE
-    i |= 0x04 if data[xp1,   y] == t   # E
-    i |= 0x08 if data[xp1, yp1] == t   # SE
-    i |= 0x10 if data[x, yp1] == t   # S
-    i |= 0x20 if data[xm1, yp1] == t   # SW
-    i |= 0x40 if data[xm1,   y] == t   # W
-    i |= 0x80 if data[xm1, ym1] == t   # NW
+    if layer.nil?
+      i |= 0x01 if data[  x, ym1] == t   # N
+      i |= 0x02 if data[xp1, ym1] == t   # NE
+      i |= 0x04 if data[xp1,   y] == t   # E
+      i |= 0x08 if data[xp1, yp1] == t   # SE
+      i |= 0x10 if data[  x, yp1] == t   # S
+      i |= 0x20 if data[xm1, yp1] == t   # SW
+      i |= 0x40 if data[xm1,   y] == t   # W
+      i |= 0x80 if data[xm1, ym1] == t   # NW
+    else
+      i |= 0x01 if data[  x, ym1, layer] == t   # N
+      i |= 0x02 if data[xp1, ym1, layer] == t   # NE
+      i |= 0x04 if data[xp1,   y, layer] == t   # E
+      i |= 0x08 if data[xp1, yp1, layer] == t   # SE
+      i |= 0x10 if data[  x, yp1, layer] == t   # S
+      i |= 0x20 if data[xm1, yp1, layer] == t   # SW
+      i |= 0x40 if data[xm1,   y, layer] == t   # W
+      i |= 0x80 if data[xm1, ym1, layer] == t   # NW
+    end
     return i
   end
 

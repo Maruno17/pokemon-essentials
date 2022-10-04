@@ -474,7 +474,7 @@ class Game_Player < Game_Character
     if !@moved_last_frame || @stopped_last_frame   # Started a new step
       if pbTerrainTag.ice
         set_movement_type(:ice_sliding)
-      else#if !@move_route_forcing
+      else
         faster = can_run?
         if $PokemonGlobal&.diving
           set_movement_type((faster) ? :diving_fast : :diving)

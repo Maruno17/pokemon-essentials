@@ -1,0 +1,28 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[7]   # Dungeon cave
+Autotile = 1,floor_patch
+Tile = 40,void
+Tile = 41,void_decoration
+Tile = 48,void_decoration_large
+Tile = 42,floor
+Tile = 50,floor_decoration_large
+Tile = 0,walls
+DoubleWalls = true
+FloorPatchUnderWalls = true
+#-------------------------------
+[23]   # Dungeon forest
+Autotile = 1,floor_decoration
+Tile = 40,void
+Tile = 42,floor
+Tile = 43,floor
+Tile = 44,floor
+Tile = 45,floor
+Tile = 46,floor
+Tile = 47,floor_patch
+Tile = 8,walls
+Tile = 25,wall_top
+SnapToLargeGrid = true
+LargeVoidTiles = true
+LargeWallTiles = true
+ThinNorthWallOffset = -8

@@ -182,7 +182,11 @@ MenuHandlers.add(:pokegear_menu, :phone, {
   "order"     => 20,
 #  "condition" => proc { next $PokemonGlobal.phone && $PokemonGlobal.phone.contacts.length > 0 },
   "effect"    => proc { |menu|
-    pbFadeOutIn { PokemonPhoneScene.new.start }
+    pbFadeOutIn {
+      scene = PokemonPhone_Scene.new
+      screen = PokemonPhoneScreen.new(scene)
+      screen.pbStartScreen
+    }
     next false
   }
 })

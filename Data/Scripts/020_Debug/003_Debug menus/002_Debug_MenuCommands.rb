@@ -233,7 +233,7 @@ MenuHandlers.add(:debug_menu, :test_wild_battle_advanced, {
           params.setCancelValue(0)
           level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
                                               GameData::Species.get(species).name), params)
-          pkmn.push(Pokemon.new(species, level)) if level > 0
+          pkmn.push(pbGenerateWildPokemon(species, level)) if level > 0
         end
       else                                   # Edit a Pokémon
         if pbConfirmMessage(_INTL("Change this Pokémon?"))
@@ -336,6 +336,7 @@ MenuHandlers.add(:debug_menu, :test_trainer_battle_advanced, {
         trainerdata = pbListScreen(_INTL("CHOOSE A TRAINER"), TrainerBattleLister.new(0, false))
         if trainerdata
           tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
+          EventHandlers.trigger(:on_trainer_load, tr)
           trainers.push([0, tr])
         end
       else                                         # Edit a trainer
@@ -344,6 +345,7 @@ MenuHandlers.add(:debug_menu, :test_trainer_battle_advanced, {
                                      TrainerBattleLister.new(trainers[trainerCmd][0], false))
           if trainerdata
             tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
+            EventHandlers.trigger(:on_trainer_load, tr)
             trainers[trainerCmd] = [0, tr]
           end
         elsif pbConfirmMessage(_INTL("Delete this trainer?"))
@@ -383,6 +385,17 @@ MenuHandlers.add(:debug_menu, :reset_trainers, {
     else
       pbMessage(_INTL("This command can't be used here."))
     end
+  }
+})
+
+MenuHandlers.add(:debug_menu, :toggle_rematches_possible, {
+  "name"        => _INTL("Toggle Phone Rematches Possible"),
+  "parent"      => :battle_menu,
+  "description" => _INTL("Toggles whether trainers in the phone can be rebattled."),
+  "effect"      => proc {
+    Phone.rematches_enabled = !Phone.rematches_enabled
+    pbMessage(_INTL("Trainers in the phone can now be rebattled.")) if Phone.rematches_enabled
+    pbMessage(_INTL("Trainers in the phone cannot be rebattled.")) if !Phone.rematches_enabled
   }
 })
 
@@ -1115,6 +1128,8 @@ MenuHandlers.add(:debug_menu, :create_pbs_files, {
       "abilities.txt",
       "battle_facility_lists.txt",
       "berry_plants.txt",
+      "dungeon_parameters.txt",
+      "dungeon_tilesets.txt",
       "encounters.txt",
       "items.txt",
       "map_connections.txt",
@@ -1140,23 +1155,25 @@ MenuHandlers.add(:debug_menu, :create_pbs_files, {
       when 1  then Compiler.write_abilities
       when 2  then Compiler.write_trainer_lists
       when 3  then Compiler.write_berry_plants
-      when 4  then Compiler.write_encounters
-      when 5  then Compiler.write_items
-      when 6  then Compiler.write_connections
-      when 7  then Compiler.write_map_metadata
-      when 8  then Compiler.write_metadata
-      when 9  then Compiler.write_moves
-      when 10 then Compiler.write_phone
-      when 11 then Compiler.write_pokemon
-      when 12 then Compiler.write_pokemon_forms
-      when 13 then Compiler.write_pokemon_metrics
-      when 14 then Compiler.write_regional_dexes
-      when 15 then Compiler.write_ribbons
-      when 16 then Compiler.write_shadow_pokemon
-      when 17 then Compiler.write_town_map
-      when 18 then Compiler.write_trainer_types
-      when 19 then Compiler.write_trainers
-      when 20 then Compiler.write_types
+      when 4  then Compiler.write_dungeon_parameters
+      when 5  then Compiler.write_dungeon_tilesets
+      when 6  then Compiler.write_encounters
+      when 7  then Compiler.write_items
+      when 8  then Compiler.write_connections
+      when 9  then Compiler.write_map_metadata
+      when 10 then Compiler.write_metadata
+      when 11 then Compiler.write_moves
+      when 12 then Compiler.write_phone
+      when 13 then Compiler.write_pokemon
+      when 14 then Compiler.write_pokemon_forms
+      when 15 then Compiler.write_pokemon_metrics
+      when 16 then Compiler.write_regional_dexes
+      when 17 then Compiler.write_ribbons
+      when 18 then Compiler.write_shadow_pokemon
+      when 19 then Compiler.write_town_map
+      when 20 then Compiler.write_trainer_types
+      when 21 then Compiler.write_trainers
+      when 22 then Compiler.write_types
       else break
       end
       pbMessage(_INTL("File written."))
