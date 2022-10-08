@@ -476,6 +476,7 @@ def reverseFusion(pokemon)
   pokemon.exp_when_fused_body = head_exp
   pokemon.exp_when_fused_head = body_exp
 
+  pokemon.head_shiny,pokemon.body_shiny = pokemon.body_shiny,pokemon.head_shiny
   #play animation
   pbFadeOutInWithMusic(99999) {
     fus = PokemonEvolutionScene.new
@@ -1400,6 +1401,28 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       pokemon.exp_gained_since_fused = 0
       pokemon.exp_when_fused_head = nil
       pokemon.exp_when_fused_body = nil
+
+
+      if pokemon.shiny?
+        pokemon.shiny = false
+        if pokemon.bodyShiny? && pokemon.headShiny?
+          pokemon.shiny = true
+          poke2.shiny = true
+        elsif pokemon.bodyShiny?
+          pokemon.shiny = true
+        elsif pokemon.headShiny?
+          poke2.shiny = true
+        else         #shiny was obtained already fused
+        if rand(2) == 0
+            pokemon.shiny = true
+          else
+            poke2.shiny = true
+          end
+        end
+      end
+      pokemon.body_shiny=false
+      pokemon.head_shiny=false
+
 
       if $Trainer.party.length >= 6
         if (keepInParty == 0)

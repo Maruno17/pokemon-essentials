@@ -31,6 +31,8 @@ class Pokemon
   # This Pokémon's shininess (true, false, nil). Is recalculated if made nil.
   # @param value [Boolean, nil] whether this Pokémon is shiny
   attr_writer :shiny
+  attr_accessor :head_shiny
+  attr_accessor :body_shiny
   # The index of this Pokémon's ability (0, 1 are natural abilities, 2+ are
   # hidden abilities)as defined for its species/form. An ability may not be
   # defined at this index. Is recalculated (as 0 or 1) if made nil.
@@ -162,6 +164,13 @@ class Pokemon
     return headSpecies == checkSpeciesId
   end
 
+  def bodyShiny?
+    return @body_shiny
+  end
+
+  def headShiny?
+    return @head_shiny
+  end
 
   def isFusionOf(check_species)
     return hasBodyOf?(check_species) || hasHeadOf?(check_species)
@@ -443,6 +452,8 @@ class Pokemon
     gender_ratio = species_data.gender_ratio
     return [:AlwaysMale, :AlwaysFemale, :Genderless].include?(gender_ratio)
   end
+
+
 
   #=============================================================================
   # Shininess

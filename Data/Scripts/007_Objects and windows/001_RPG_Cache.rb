@@ -140,7 +140,6 @@ end
 class BitmapWrapper < Bitmap
   attr_reader   :refcount
   attr_accessor :never_dispose
-
   def dispose
     return if self.disposed?
     @refcount -= 1

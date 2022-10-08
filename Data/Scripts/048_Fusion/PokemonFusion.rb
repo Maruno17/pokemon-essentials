@@ -535,10 +535,12 @@ class PokemonFusionScene
     @sprites["rsprite2"] = PokemonSprite.new(@viewport)
     @sprites["rsprite3"] = PokemonSprite.new(@viewport)
 
-    @sprites["rsprite1"].setPokemonBitmapFromId(poke1_number, false)
-    @sprites["rsprite3"].setPokemonBitmapFromId(poke2_number, false)
+    @sprites["rsprite1"].setPokemonBitmapFromId(poke1_number, false,pokemon1.shiny?)
+    @sprites["rsprite3"].setPokemonBitmapFromId(poke2_number, false,pokemon2.shiny?)
 
-    @sprites["rsprite2"].setPokemonBitmapFromId(@newspecies, false)
+
+
+    @sprites["rsprite2"].setPokemonBitmapFromId(@newspecies, false, pokemon1.shiny? || pokemon2.shiny?,pokemon1.shiny?,pokemon2.shiny?)
 
     @sprites["rsprite1"].ox = @sprites["rsprite1"].bitmap.width / 2
     @sprites["rsprite1"].oy = @sprites["rsprite1"].bitmap.height / 2
@@ -707,10 +709,16 @@ class PokemonFusionScene
                               _INTL("\\se[]Congratulations! Your Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
 
       #exp
-      @pokemon1.exp_when_fused_head = @pokemon2.exp #peut-être l'inverse
-      @pokemon1.exp_when_fused_body = @pokemon1.exp #peut-être l'inverse
+      @pokemon1.exp_when_fused_head = @pokemon2.exp
+      @pokemon1.exp_when_fused_body = @pokemon1.exp
       @pokemon1.exp_gained_since_fused = 0
 
+      if @pokemon2.shiny?
+        @pokemon1.head_shiny=true
+      end
+      if @pokemon1.shiny?
+        @pokemon1.body_shiny=true
+      end
       setFusionIVs(superSplicer)
       #add to pokedex 
       if !$Trainer.pokedex.owned?(newSpecies)

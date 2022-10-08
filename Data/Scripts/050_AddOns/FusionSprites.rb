@@ -5,23 +5,35 @@ module GameData
       species = GameData::Species.get(species).id_number # Just to be sure it's a number
       return self.egg_sprite_bitmap(species, pkmn.form) if pkmn.egg?
       if back
-        ret = self.back_sprite_bitmap(species,nil,nil,pkmn.shiny?)
+        ret = self.back_sprite_bitmap(species, nil, nil, pkmn.shiny?,pkmn.bodyShiny?,pkmn.headShiny?)
       else
-        ret = self.front_sprite_bitmap(species,nil,nil,pkmn.shiny?)
+        ret = self.front_sprite_bitmap(species, nil, nil, pkmn.shiny?,pkmn.bodyShiny?,pkmn.headShiny?)
       end
       return ret
     end
 
-    def self.sprite_bitmap_from_pokemon_id(id, back = false)
+    def self.sprite_bitmap_from_pokemon_id(id, back = false, shiny=false, bodyShiny=false,headShiny=false)
       if back
-        ret = self.back_sprite_bitmap(id)
+        ret = self.back_sprite_bitmap(id,nil,nil,shiny,bodyShiny,headShiny)
       else
-        ret = self.front_sprite_bitmap(id)
+        ret = self.front_sprite_bitmap(id,nil,nil,shiny,bodyShiny,headShiny)
       end
       return ret
     end
 
-    def self.front_sprite_bitmap(dex_number, a=0, b = 0, isShiny = false, d = 0)
+    def self.calculateShinyHueOffset(dex_number, isBodyShiny = false, isHeadShiny = false)
+      dex_offset = dex_number
+      if isBodyShiny && isHeadShiny
+        dex_offset = dex_number
+      elsif isHeadShiny
+        dex_offset = getHeadID(dex_number)
+      elsif isBodyShiny
+        dex_offset = getBodyID(dex_number)
+      end
+      return pbGet(VAR_SHINY_HUE_OFFSET) + dex_offset + Settings::SHINY_HUE_OFFSET
+    end
+
+    def self.front_sprite_bitmap(dex_number, a = 0, b = 0, isShiny = false, bodyShiny = false, headShiny = false)
       #la méthode est utilisé ailleurs avec d'autres arguments (gender, form, etc.) mais on les veut pas
       if dex_number.is_a?(Symbol)
         dex_number = GameData::Species.get(dex_number).id_number
@@ -29,16 +41,16 @@ module GameData
       filename = self.sprite_filename(dex_number)
       sprite = (filename) ? AnimatedBitmap.new(filename) : nil
       if isShiny
-        sprite.shiftColors(pbGet(VAR_SHINY_HUE_OFFSET)+dex_number)
+        sprite.shiftColors(self.calculateShinyHueOffset(dex_number, bodyShiny, headShiny))
       end
       return sprite
     end
 
-    def self.back_sprite_bitmap(dex_number, b=0, form = 0, isShiny=false, c = false, shadow = false)
+    def self.back_sprite_bitmap(dex_number, b = 0, form = 0, isShiny = false, bodyShiny = false, headShiny = false)
       filename = self.sprite_filename(dex_number)
       sprite = (filename) ? AnimatedBitmap.new(filename) : nil
       if isShiny
-        sprite.shiftColors(pbGet(VAR_SHINY_HUE_OFFSET)+dex_number)
+        sprite.shiftColors(self.calculateShinyHueOffset(dex_number, bodyShiny, headShiny))
       end
       return sprite
     end

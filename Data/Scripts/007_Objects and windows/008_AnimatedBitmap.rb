@@ -2,6 +2,10 @@
 #
 #===============================================================================
 class AnimatedBitmap
+  attr_reader :path
+  attr_reader :filename
+
+
   def initialize(file, hue = 0)
     raise "Filename is nil (missing graphic)." if file.nil?
     path = file
@@ -11,6 +15,8 @@ class AnimatedBitmap
       filename = split_file.pop
       path = split_file.join('/') + '/'
     end
+    @filename= filename
+    @path= path
     if filename[/^\[\d+(?:,\d+)?\]/] # Starts with 1 or 2 numbers in square brackets
       @bitmap = PngAnimatedBitmap.new(path, filename, hue)
     else
@@ -30,9 +36,13 @@ class AnimatedBitmap
   end
 
   def shiftColors(offset=0)
-    offset/=350 if offset >350
+
+    offset/=360 if offset >360
     offset=30 if offset <30 #this method is only used for shinies. shinies that barely shift are boring
-    @bitmap.bitmap.hue_change(offset)
+
+    @bitmap = GifBitmap.new(@path, @filename, offset)
+
+    #@bitmap.bitmap.hue_change(offset)
   end
 
   def [](index)
@@ -243,14 +253,16 @@ end
 #===============================================================================
 class GifBitmap
   attr_accessor :bitmap
-
+  attr_reader :loaded_from_cache
   # Creates a bitmap from a GIF file. Can also load non-animated bitmaps.
   def initialize(dir, filename, hue = 0)
     @bitmap = nil
     @disposed = false
+    @loaded_from_cache=false
     filename = "" if !filename
     begin
       @bitmap = RPG::Cache.load_bitmap(dir, filename, hue)
+      @loaded_from_cache=true
     rescue
       @bitmap = nil
     end
