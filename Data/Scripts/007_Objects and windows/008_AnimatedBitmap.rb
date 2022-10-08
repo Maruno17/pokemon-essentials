@@ -29,6 +29,12 @@ class AnimatedBitmap
     end
   end
 
+  def shiftColors(offset=0)
+    offset/=350 if offset >350
+    offset=30 if offset <30 #this method is only used for shinies. shinies that barely shift are boring
+    @bitmap.bitmap.hue_change(offset)
+  end
+
   def [](index)
     ; @bitmap[index];
   end

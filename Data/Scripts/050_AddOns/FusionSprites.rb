@@ -5,9 +5,9 @@ module GameData
       species = GameData::Species.get(species).id_number # Just to be sure it's a number
       return self.egg_sprite_bitmap(species, pkmn.form) if pkmn.egg?
       if back
-        ret = self.back_sprite_bitmap(species)
+        ret = self.back_sprite_bitmap(species,pkmn.shiny?)
       else
-        ret = self.front_sprite_bitmap(species)
+        ret = self.front_sprite_bitmap(species,pkmn.shiny?)
       end
       return ret
     end
@@ -21,17 +21,26 @@ module GameData
       return ret
     end
 
-    def self.front_sprite_bitmap(dex_number,a=0,b=0,c=0,d=0)  #la méthode est utilisé ailleurs avec d'autres arguments (gender, form, etc.) mais on les veut pas
+    def self.front_sprite_bitmap(dex_number, isShiny = false, b = 0, c = 0, d = 0)
+      #la méthode est utilisé ailleurs avec d'autres arguments (gender, form, etc.) mais on les veut pas
       if dex_number.is_a?(Symbol)
         dex_number = GameData::Species.get(dex_number).id_number
       end
       filename = self.sprite_filename(dex_number)
-      return (filename) ? AnimatedBitmap.new(filename) : nil
+      sprite = (filename) ? AnimatedBitmap.new(filename) : nil
+      if isShiny
+        sprite.shiftColors(pbGet(VAR_SHINY_HUE_OFFSET)+dex_number)
+      end
+      return sprite
     end
 
-    def self.back_sprite_bitmap(dex_number,species=0, form = 0, gender = 0, shiny = false, shadow = false)
+    def self.back_sprite_bitmap(dex_number, isShiny = false, form = 0, gender = 0, c = false, shadow = false)
       filename = self.sprite_filename(dex_number)
-      return (filename) ? AnimatedBitmap.new(filename) : nil
+      sprite = (filename) ? AnimatedBitmap.new(filename) : nil
+      if isShiny
+        sprite.shiftColors(pbGet(VAR_SHINY_HUE_OFFSET)+dex_number)
+      end
+      return sprite
     end
 
     def self.egg_sprite_bitmap(dex_number, form = 0)
@@ -40,47 +49,47 @@ module GameData
     end
 
     def self.getSpecialSpriteName(dexNum)
-      base_path="Graphics/Battlers/special/"
+      base_path = "Graphics/Battlers/special/"
       case dexNum
-      when Settings::ZAPMOLCUNO_NB..Settings::ZAPMOLCUNO_NB+1
+      when Settings::ZAPMOLCUNO_NB..Settings::ZAPMOLCUNO_NB + 1
         return sprintf(base_path + "144.145.146")
-      when Settings::ZAPMOLCUNO_NB+2
+      when Settings::ZAPMOLCUNO_NB + 2
         return sprintf(base_path + "243.244.245")
-      when Settings::ZAPMOLCUNO_NB+3
+      when Settings::ZAPMOLCUNO_NB + 3
         return sprintf(base_path +"340.341.342")
-      when Settings::ZAPMOLCUNO_NB+4
+      when Settings::ZAPMOLCUNO_NB + 4
         return sprintf(base_path +"343.344.345")
-      when Settings::ZAPMOLCUNO_NB+5
+      when Settings::ZAPMOLCUNO_NB + 5
         return sprintf(base_path +"349.350.351")
-      when Settings::ZAPMOLCUNO_NB+6
+      when Settings::ZAPMOLCUNO_NB + 6
         return sprintf(base_path +"151.251.381")
-      when Settings::ZAPMOLCUNO_NB+11
+      when Settings::ZAPMOLCUNO_NB + 11
         return sprintf(base_path +"150.348.380")
         #starters
-      when Settings::ZAPMOLCUNO_NB+7
+      when Settings::ZAPMOLCUNO_NB + 7
         return sprintf(base_path +"3.6.9")
-      when Settings::ZAPMOLCUNO_NB+8
+      when Settings::ZAPMOLCUNO_NB + 8
         return sprintf(base_path +"154.157.160")
-      when Settings::ZAPMOLCUNO_NB+9
+      when Settings::ZAPMOLCUNO_NB + 9
         return sprintf(base_path +"278.281.284")
-      when Settings::ZAPMOLCUNO_NB+10
+      when Settings::ZAPMOLCUNO_NB + 10
         return sprintf(base_path +"318.321.324")
         #starters prevos
-      when Settings::ZAPMOLCUNO_NB+12
+      when Settings::ZAPMOLCUNO_NB + 12
         return sprintf(base_path +"1.4.7")
-      when Settings::ZAPMOLCUNO_NB+13
+      when Settings::ZAPMOLCUNO_NB + 13
         return sprintf(base_path +"2.5.8")
-      when Settings::ZAPMOLCUNO_NB+14
+      when Settings::ZAPMOLCUNO_NB + 14
         return sprintf(base_path +"152.155.158")
-      when Settings::ZAPMOLCUNO_NB+15
+      when Settings::ZAPMOLCUNO_NB + 15
         return sprintf(base_path +"153.156.159")
-      when Settings::ZAPMOLCUNO_NB+16
+      when Settings::ZAPMOLCUNO_NB + 16
         return sprintf(base_path +"276.279.282")
-      when Settings::ZAPMOLCUNO_NB+17
+      when Settings::ZAPMOLCUNO_NB + 17
         return sprintf(base_path +"277.280.283")
-      when Settings::ZAPMOLCUNO_NB+18
+      when Settings::ZAPMOLCUNO_NB + 18
         return sprintf(base_path +"316.319.322")
-      when Settings::ZAPMOLCUNO_NB+19
+      when Settings::ZAPMOLCUNO_NB + 19
         return sprintf(base_path +"317.320.323")
       else
         return sprintf(base_path + "000")
@@ -93,7 +102,7 @@ module GameData
         folder = dex_number.to_s
         filename = sprintf("%s.png", dex_number)
       else
-        if dex_number >=Settings::ZAPMOLCUNO_NB
+        if dex_number >= Settings::ZAPMOLCUNO_NB
           specialPath = getSpecialSpriteName(dex_number)
           return pbResolveBitmap(specialPath)
         else

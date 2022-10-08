@@ -29,6 +29,7 @@ module Settings
   EGGSPRITE_SCALE = 1
   BACKSPRITE_POSITION_OFFSET = 20
   FRONTSPRITE_POSITION = 200
+  SHINY_HUE_OFFSET = 60
 
   RIVAL_STARTER_PLACEHOLDER_SPECIES = :MEW #(MEW)
   VAR_1_PLACEHOLDER_SPECIES = :DIALGA
@@ -69,7 +70,7 @@ module Settings
   # Number of badges in the game
   NB_BADGES = 16
   # The odds of a newly generated Pokémon being shiny (out of 65536).
-  SHINY_POKEMON_CHANCE = (MECHANICS_GENERATION >= 6) ? 16 : 8
+  SHINY_POKEMON_CHANCE = 16#(MECHANICS_GENERATION >= 6) ? 16 : 8
   # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
   POKERUS_CHANCE = 3
   # Whether a bred baby Pokémon can inherit any TM/HM moves from its father. It

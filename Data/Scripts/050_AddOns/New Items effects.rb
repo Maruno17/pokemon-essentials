@@ -1322,6 +1322,7 @@ def pbFuse(pokemon, poke2, supersplicers = false)
     if hasCustom
       previewwindow.picture.pbSetColor(150, 255, 150, 200)
     else
+      previewwindow.picture.shiftColors(pbGet(1))
       previewwindow.picture.pbSetColor(255, 255, 255, 200)
     end
   end
