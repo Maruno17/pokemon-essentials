@@ -6,7 +6,8 @@ class PokemonGlobalMetadata
   attr_writer   :roamPokemonCaught
 
   def roamPokemonCaught
-    return @roamPokemonCaught || []
+    @roamPokemonCaught = [] if !@roamPokemonCaught
+    return @roamPokemonCaught
   end
 end
 

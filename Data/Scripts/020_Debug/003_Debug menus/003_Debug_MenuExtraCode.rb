@@ -511,7 +511,7 @@ def pbDebugRoamers
           # defeated -> caught
           $PokemonGlobal.roamPokemonCaught[cmdwindow.index] = true
         elsif pkmn[2] > 0
-          # caught -> not roaming (or roaming if Switch ID is 0
+          # caught -> not roaming (or roaming if Switch ID is 0)
           $game_switches[pkmn[2]] = false if pkmn[2] > 0
           $PokemonGlobal.roamPokemon[cmdwindow.index] = nil
           $PokemonGlobal.roamPokemonCaught[cmdwindow.index] = false
