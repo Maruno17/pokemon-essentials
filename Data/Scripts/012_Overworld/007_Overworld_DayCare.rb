@@ -150,9 +150,8 @@ class DayCare
       egg.nature = new_natures.sample
     end
 
-    # If a Pokémon is bred with a Ditto, that Pokémon can pass down its Hidden
-    # Ability (60% chance). If neither Pokémon are Ditto, then the mother can
-    # pass down its ability (60% chance if Hidden, 80% chance if not).
+    # The female parent (or the non-Ditto parent) can pass down its Hidden
+    # Ability (60% chance) or its regular ability (80% chance).
     # NOTE: This is how ability inheritance works in Gen 6+. Gen 5 is more
     #       restrictive, and even works differently between BW and B2W2, and I
     #       don't think that is worth adding in. Gen 4 and lower don't have
@@ -164,12 +163,10 @@ class DayCare
       parent = (mother[1]) ? father[0] : mother[0]   # The female or non-Ditto parent
       if parent.hasHiddenAbility?
         egg.ability_index = parent.ability_index if rand(100) < 60
-      elsif !mother[1] && !father[1]   # If neither parent is a Ditto
-        if rand(100) < 80
-          egg.ability_index = mother[0].ability_index
-        else
-          egg.ability_index = (mother[0].ability_index + 1) % 2
-        end
+      elsif rand(100) < 80
+        egg.ability_index = parent.ability_index
+      else
+        egg.ability_index = (parent.ability_index + 1) % 2
       end
     end
 
