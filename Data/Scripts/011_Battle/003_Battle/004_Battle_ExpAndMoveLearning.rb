@@ -89,6 +89,8 @@ class PokeBattle_Battle
     end
   end
 
+
+
   def pbGainExpOne(idxParty,defeatedBattler,numPartic,expShare,expAll,showMessages=true)
     pkmn = pbParty(0)[idxParty]   # The Pokémon gaining EVs from defeatedBattler
     growth_rate = pkmn.growth_rate
@@ -136,7 +138,8 @@ class PokeBattle_Battle
     end
     # Foreign Pokémon gain more Exp
     isOutsider = (pkmn.owner.id != pbPlayer.id ||
-                 (pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language))
+                 (pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language)) ||
+                  pkmn.isSelfFusion?  #also self fusions
     if isOutsider
       if pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language
         exp = (exp*1.7).floor

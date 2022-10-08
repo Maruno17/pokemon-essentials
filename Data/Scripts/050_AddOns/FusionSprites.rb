@@ -5,9 +5,9 @@ module GameData
       species = GameData::Species.get(species).id_number # Just to be sure it's a number
       return self.egg_sprite_bitmap(species, pkmn.form) if pkmn.egg?
       if back
-        ret = self.back_sprite_bitmap(species,pkmn.shiny?)
+        ret = self.back_sprite_bitmap(species,nil,nil,pkmn.shiny?)
       else
-        ret = self.front_sprite_bitmap(species,pkmn.shiny?)
+        ret = self.front_sprite_bitmap(species,nil,nil,pkmn.shiny?)
       end
       return ret
     end
@@ -21,7 +21,7 @@ module GameData
       return ret
     end
 
-    def self.front_sprite_bitmap(dex_number, isShiny = false, b = 0, c = 0, d = 0)
+    def self.front_sprite_bitmap(dex_number, a=0, b = 0, isShiny = false, d = 0)
       #la méthode est utilisé ailleurs avec d'autres arguments (gender, form, etc.) mais on les veut pas
       if dex_number.is_a?(Symbol)
         dex_number = GameData::Species.get(dex_number).id_number
@@ -34,7 +34,7 @@ module GameData
       return sprite
     end
 
-    def self.back_sprite_bitmap(dex_number, isShiny = false, form = 0, gender = 0, c = false, shadow = false)
+    def self.back_sprite_bitmap(dex_number, b=0, form = 0, isShiny=false, c = false, shadow = false)
       filename = self.sprite_filename(dex_number)
       sprite = (filename) ? AnimatedBitmap.new(filename) : nil
       if isShiny

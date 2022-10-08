@@ -171,6 +171,10 @@ class Pokemon
     return species_data.id_number
   end
 
+  def isSelfFusion?
+    return isFusion? && getHeadID(species) == getBodyID(species)
+  end
+
   def isFusion?
     return species_data.id_number > NB_POKEMON && !self.isTripleFusion?
   end
