@@ -466,6 +466,11 @@ def pbDebugRoamers
     Graphics.update
     Input.update
     pbUpdateSpriteHash(sprites)
+    if cmdwindow.index < cmdwindow.roamerCount
+      pkmn = Settings::ROAMING_SPECIES[cmdwindow.index]
+    else
+      pkmn = nil
+    end
     if Input.trigger?(Input::ACTION) && cmdwindow.index < cmdwindow.roamerCount &&
        (pkmn[2] <= 0 || $game_switches[pkmn[2]]) &&
        $PokemonGlobal.roamPokemon[cmdwindow.index] != true
@@ -494,7 +499,6 @@ def pbDebugRoamers
       if cmdwindow.index < cmdwindow.roamerCount
         pbPlayDecisionSE
         # Toggle through roaming, not roaming, defeated
-        pkmn = Settings::ROAMING_SPECIES[cmdwindow.index]
         if pkmn[2] > 0 && !$game_switches[pkmn[2]]
           # not roaming -> roaming
           $game_switches[pkmn[2]] = true
