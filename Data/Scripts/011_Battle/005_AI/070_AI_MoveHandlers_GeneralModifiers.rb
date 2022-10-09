@@ -134,9 +134,8 @@ Battle::AI::Handlers::GeneralMoveScore.add(:target_semi_invulnerable,
     if move.rough_accuracy > 0 && target && user.faster_than?(target) &&
       (target.battler.semiInvulnerable? || target.effects[PBEffects::SkyDrop] >= 0)
       miss = true
-      miss = false if user.has_active_ability?(:NOGUARD)
-      miss = false if ai.trainer.best_skill? && target.has_active_ability?(:NOGUARD)
-      if ai.trainer.best_skill? && miss
+      miss = false if user.has_active_ability?(:NOGUARD) || target.has_active_ability?(:NOGUARD)
+      if ai.trainer.high_skill? && miss
         # Knows what can get past semi-invulnerability
         if target.effects[PBEffects::SkyDrop] >= 0 ||
            target.battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",

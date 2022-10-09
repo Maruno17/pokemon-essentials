@@ -545,6 +545,21 @@ class Battle::AI::AIMove
 
   #=============================================================================
 
+  # Returns:
+  #   0 = move doesn't have an additional effect
+  #   1 = additional effect will be negated
+  #   2 = additional effect will work
+  #   3 = additional effect has an increased chance to work
+  def additional_effect_usability(user, target)
+    return 0 if @move.addlEffect == 0   # Doesn't have an additional effect
+    return 1 if target.has_active_ability?(:SHIELDDUST) && !battle.moldBreaker
+    return 3 if (Settings::MECHANICS_GENERATION >= 6 || self.function != "EffectDependsOnEnvironment") &&
+                (user.has_active_ability?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
+    return 2
+  end
+
+  #=============================================================================
+
   # TODO:
   # pbBaseAccuracy(@ai.user.battler, @ai.target.battler) if @ai.trainer.medium_skill?
   # pbCriticalOverride(@ai.user.battler, @ai.target.battler)
