@@ -37,7 +37,7 @@ class Battle::AI
     choices.each do |c|
       next if c[1] <= 0
       deviation = c[1].to_f - mean
-      varianceTimesN += deviation ** 2
+      varianceTimesN += deviation**2
     end
     # Using population standard deviation
     # [(n-1) makes it a sample std dev, would be 0 with only 1 sample]
