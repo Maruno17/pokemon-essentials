@@ -203,7 +203,7 @@ module Transitions
     def update_anim
       proportion = @timer / @duration
       @sprites.each_with_index do |sprite, i|
-        sprite.y = @start_y[i] + (Graphics.height * @timings[i] * proportion * proportion)
+        sprite.y = @start_y[i] + (Graphics.height * @timings[i] * proportion**2)
         sprite.opacity = 255 * (1 - proportion)
       end
     end
@@ -731,13 +731,13 @@ module Transitions
           @ball_sprites.each { |s| s.visible = false }
         end
         # Zoom in overworld sprite
-        @overworld_sprite.zoom_x = 1.0 + (proportion * proportion)   # Ends at 2x zoom
+        @overworld_sprite.zoom_x = 1.0 + (proportion**2)   # Ends at 2x zoom
         @overworld_sprite.zoom_y = @overworld_sprite.zoom_x
         # Slide first two black bars across
-        @sprites[0].x = Graphics.width * (1 - (proportion * proportion))
-        @sprites[1].x = Graphics.width * ((proportion * proportion) - 1)
+        @sprites[0].x = Graphics.width * (1 - (proportion**2))
+        @sprites[1].x = Graphics.width * ((proportion**2) - 1)
         # Expand third black bar
-        @sprites[2].zoom_y = 2.0 * proportion * proportion   # Ends at 2x zoom
+        @sprites[2].zoom_y = 2.0 * proportion**2   # Ends at 2x zoom
       end
     end
   end
@@ -823,8 +823,8 @@ module Transitions
         # Split overworld/ball apart, move blackness in following them
         proportion = (@timer - @slide_start) / (@duration - @slide_start)
         @overworld_sprites.each_with_index do |sprite, i|
-          sprite.x = (0.5 + (((i * 2) - 1) * proportion * proportion)) * Graphics.width
-          sprite.zoom_x = 1.0 + (proportion * proportion)   # Ends at 2x zoom
+          sprite.x = (0.5 + (((i * 2) - 1) * proportion**2)) * Graphics.width
+          sprite.zoom_x = 1.0 + (proportion**2)   # Ends at 2x zoom
           sprite.zoom_y = sprite.zoom_x
           @black_sprites[i].x = sprite.x + ((1 - (i * 2)) * Graphics.width / 2)
           @ball_sprites[i].x = sprite.x
@@ -924,7 +924,7 @@ module Transitions
         end
         # Zoom in overworld sprite
         proportion = (@timer - @black_appear_start) / (@duration - @black_appear_start)
-        @overworld_sprite.zoom_x = 1.0 + (proportion * proportion)   # Ends at 2x zoom
+        @overworld_sprite.zoom_x = 1.0 + (proportion**2)   # Ends at 2x zoom
         @overworld_sprite.zoom_y = @overworld_sprite.zoom_x
       end
     end
@@ -980,9 +980,9 @@ module Transitions
       if @timer <= @ball_appear_end
         # Make ball drop down and zoom in
         proportion = @timer / @ball_appear_end
-        @ball_sprite.y = (-@ball_bitmap.height / 2) + ((Graphics.height + (@ball_bitmap.height * 3)) * proportion * proportion)
+        @ball_sprite.y = (-@ball_bitmap.height / 2) + ((Graphics.height + (@ball_bitmap.height * 3)) * proportion**2)
         @ball_sprite.angle = -1.5 * 360 * proportion
-        @ball_sprite.zoom_x = 3 * proportion * proportion
+        @ball_sprite.zoom_x = 3 * proportion**2
         @ball_sprite.zoom_y = @ball_sprite.zoom_x
       else
         @ball_sprite.visible = false
@@ -992,7 +992,7 @@ module Transitions
           sprite.y = -@curve_bitmap.height + ((Graphics.height + @curve_bitmap.height) * proportion)
         end
         # Zoom in overworld sprite
-        @overworld_sprite.zoom_x = 1.0 + (proportion * proportion)   # Ends at 2x zoom
+        @overworld_sprite.zoom_x = 1.0 + (proportion**2)   # Ends at 2x zoom
         @overworld_sprite.zoom_y = @overworld_sprite.zoom_x
       end
     end
@@ -1867,7 +1867,7 @@ module Transitions
         # Slide foe sprite/name off-screen
         proportion = (@timer - @foe_disappear_start) / (@foe_disappear_end - @foe_disappear_start)
         start_x = Graphics.width / 2
-        @foe_sprite.x = start_x - (@foe_bitmap.width + start_x) * proportion * proportion
+        @foe_sprite.x = start_x - (@foe_bitmap.width + start_x) * proportion**2
         @text_sprite.x = @foe_sprite.x - Graphics.width / 2
       elsif @timer >= @flash_end
         @flash_viewport.color.alpha = 0   # Ensure flash has ended

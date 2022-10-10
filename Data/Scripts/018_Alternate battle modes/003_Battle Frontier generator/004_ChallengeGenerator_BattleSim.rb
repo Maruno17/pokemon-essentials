@@ -184,12 +184,12 @@ class PlayerRating
       # https://www.smogon.com/forums/threads/make-sense-of-your-shoddy-battle-rating.55764/
       otherRating = 1500.0
       otherDeviation = 350.0
-      s = Math.sqrt(100_000.0 + (@deviation * @deviation) + (otherDeviation * otherDeviation))
+      s = Math.sqrt(100_000.0 + (@deviation**2) + (otherDeviation**2))
       g = 10.0**((otherRating - @rating) * 0.79 / s)
       @estimatedRating = (1.0 / (1.0 + g)) * 100.0   # Percent chance that I win against opponent
     else
       # GLIXARE method
-      rds = @deviation * @deviation
+      rds = @deviation**2
       sqr = Math.sqrt(15.905694331435 * (rds + 221_781.21786254))
       inner = (1500.0 - @rating) * Math::PI / sqr
       @estimatedRating = ((10_000.0 / (1.0 + (10.0**inner))) + 0.5) / 100.0
@@ -202,7 +202,7 @@ class PlayerRating
     deviation = deviation2
     rating = rating2
     if matches.length == 0
-      setDeviation2(Math.sqrt((deviation * deviation) + (volatility * volatility)))
+      setDeviation2(Math.sqrt((deviation**2) + (volatility**2)))
       return
     end
     g = []
@@ -217,7 +217,7 @@ class PlayerRating
     # Estimated variance
     variance = 0.0
     matches.length.times do |i|
-      variance += g[i] * g[i] * e[i] * (1 - e[i])
+      variance += g[i]**2 * e[i] * (1 - e[i])
     end
     variance = 1.0 / variance
     # Improvement sum
@@ -228,10 +228,10 @@ class PlayerRating
     end
     volatility = getUpdatedVolatility(volatility, deviation, variance, sum, system)
     # Update deviation
-    t = (deviation * deviation) + (volatility * volatility)
+    t = (deviation**2) + (volatility**2)
     deviation = 1.0 / Math.sqrt((1.0 / t) + (1.0 / variance))
     # Update rating
-    rating = rating + (deviation * deviation * sum)
+    rating = rating + (deviation**2 * sum)
     setRating2(rating)
     setDeviation2(deviation)
     setVolatility2(volatility)
@@ -254,7 +254,7 @@ class PlayerRating
   def getGFactor(deviation)
     # deviation is not yet in glicko2
     deviation /= 173.7178
-    return 1.0 / Math.sqrt(1.0 + ((3.0 * deviation * deviation) / (Math::PI * Math::PI)))
+    return 1.0 / Math.sqrt(1.0 + ((3.0 * deviation**2) / (Math::PI**2)))
   end
 
   def getEFactor(rating, opponentRating, g)
@@ -280,18 +280,18 @@ class PlayerRating
 
   def getUpdatedVolatility(volatility, deviation, variance, improvementSum, system)
     improvement = improvementSum * variance
-    a = Math.log(volatility * volatility)
+    a = Math.log(volatility**2)
     squSystem = system * system
-    squDeviation = deviation * deviation
-    squVariance = variance + variance
+    squDeviation = deviation**2
+    squVariance = variance * 2
     squDevplusVar = squDeviation + variance
     x0 = a
     100.times {   # Up to 100 iterations to avoid potentially infinite loops
       e = Math.exp(x0)
       d = squDevplusVar + e
-      squD = d * d
+      squD = d**2
       i = improvement / d
-      h1 = (-(x0 - a) / squSystem) - (0.5 * e * i * i)
+      h1 = (-(x0 - a) / squSystem) - (0.5 * e * i**2)
       h2 = (-1.0 / squSystem) - (0.5 * e * squDevplusVar / squD)
       h2 += 0.5 * squVariance * e * (squDevplusVar - e) / (squD * d)
       x1 = x0

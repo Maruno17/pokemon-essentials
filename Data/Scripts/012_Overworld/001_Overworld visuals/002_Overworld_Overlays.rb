@@ -76,7 +76,7 @@ class DarknessSprite < Sprite
     numfades = 5
     (1..numfades).each do |i|
       (cx - cradius..cx + cradius).each do |j|
-        diff2 = (cradius * cradius) - ((j - cx) * (j - cx))
+        diff2 = (cradius**2) - ((j - cx)**2)
         diff = Math.sqrt(diff2)
         @darkness.fill_rect(j, cy - diff, 1, diff * 2, Color.new(0, 0, 0, 255.0 * (numfades - i) / numfades))
       end

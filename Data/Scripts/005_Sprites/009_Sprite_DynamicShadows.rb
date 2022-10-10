@@ -113,7 +113,7 @@ class Sprite_Shadow < RPG::Sprite
     x = (elemScreenX - objScreenX) * (elemScreenX - objScreenX)
     y = (elemScreenY - objScreenY) * (elemScreenY - objScreenY)
     r = x + y
-    return r <= range * range
+    return r <= range**2
   end
 end
 

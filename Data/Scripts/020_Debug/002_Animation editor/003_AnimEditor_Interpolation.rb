@@ -117,7 +117,7 @@ class PointPath
       len = @points.length
       dx = @points[len - 2][0] - @points[len - 1][0]
       dy = @points[len - 2][1] - @points[len - 1][1]
-      dist = Math.sqrt((dx * dx) + (dy * dy))
+      dist = Math.sqrt((dx**2) + (dy**2))
       @distances.push(dist)
       @totaldist += dist
     end

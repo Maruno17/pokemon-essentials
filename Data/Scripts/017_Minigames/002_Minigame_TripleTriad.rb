@@ -61,8 +61,8 @@ class TriadCard
 
   def price
     maxValue = [@north, @east, @south, @west].max
-    ret = (@north * @north) + (@east * @east) + (@south * @south) + (@west * @west)
-    ret += maxValue * maxValue * 2
+    ret = (@north**2) + (@east**2) + (@south**2) + (@west**2)
+    ret += maxValue** 2 * 2
     ret *= maxValue
     ret *= (@north + @east + @south + @west)
     ret /= 10   # Ranges from 2 to 24,000

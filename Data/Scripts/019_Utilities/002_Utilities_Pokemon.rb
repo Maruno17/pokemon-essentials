@@ -200,7 +200,7 @@ def pbBalancedLevel(party)
   varianceTimesN = 0
   party.each do |pkmn|
     deviation = pkmn.level - average
-    varianceTimesN += deviation * deviation
+    varianceTimesN += deviation**2
   end
   # NOTE: This is the "population" standard deviation calculation, since no
   # sample is being taken.

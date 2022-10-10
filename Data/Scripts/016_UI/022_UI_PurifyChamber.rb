@@ -53,7 +53,7 @@ class PurifyChamberSet
   attr_reader :facing   # Index in list of Pokémon the Shadow Pokémon is facing
 
   def partialSum(x)
-    return ((x * x) + x) / 2   # pattern: 1, 3, 6, 10, 15, 21, 28, ...
+    return ((x**2) + x) / 2   # pattern: 1, 3, 6, 10, 15, 21, 28, ...
   end
 
   def length
@@ -168,7 +168,7 @@ class PurifyChamber
 
   def self.maximumTempo   # Calculates the maximum possible tempo
     x = SETSIZE + 1
-    return (((x * x) + x) / 2) - 1
+    return (((x**2) + x) / 2) - 1
   end
 
   def initialize
