@@ -97,7 +97,6 @@ def itemCanBeRandomized(item)
 end
 
 def pbShuffleItems()
-  $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
   randomItemsHash = Hash.new
   available_items = []
   for itemElement in GameData::Item.list_all
@@ -121,7 +120,6 @@ end
 
 
 def pbShuffleTMs()
-  $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
   randomItemsHash = Hash.new
   available_items = []
   for itemElement in GameData::Item.list_all

@@ -163,7 +163,7 @@ module Settings
   #   e.g. To require the second badge, put false and 1.
   #        To require at least 2 badges, put true and 2.
   BADGE_FOR_CUT = 1
-  BADGE_FOR_FLASH = 2
+  BADGE_FOR_FLASH = 1
   BADGE_FOR_ROCKSMASH = 0
   BADGE_FOR_SURF = 5
   BADGE_FOR_FLY = 3
@@ -374,7 +374,7 @@ module Settings
     [265, 30, :KIRLIA,25,30],           #Rt. 34
     [267, 30, :SUDOWOODO,25,30],        #Rt. 36
     [300, 30, :ROSELIA,30,30],          #National Park
-    [300, 30, :BRELOOM,30,30],          #Ilex Forest
+    [266, 30, :BRELOOM,30,30],          #Ilex Forest
     [670, 30, :WEAVILE,50,50],          #Ice mountains
     [528, 30, :PYUKUMUKU,20,20],        #Treasure Beach
     [690, 30, :OCTILLERY,32,45],        #Deep Ocean

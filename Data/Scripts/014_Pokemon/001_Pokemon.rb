@@ -33,6 +33,7 @@ class Pokemon
   attr_writer :shiny
   attr_accessor :head_shiny
   attr_accessor :body_shiny
+  attr_accessor :debug_shiny
   # The index of this Pokémon's ability (0, 1 are natural abilities, 2+ are
   # hidden abilities)as defined for its species/form. An ability may not be
   # defined at this index. Is recalculated (as 0 or 1) if made nil.
@@ -162,6 +163,10 @@ class Pokemon
     headSpecies = getHeadID(species)
     checkSpeciesId = getID(nil,check_species)
     return headSpecies == checkSpeciesId
+  end
+
+  def debugShiny?
+    return @debug_shiny
   end
 
   def bodyShiny?

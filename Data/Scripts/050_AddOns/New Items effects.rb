@@ -1420,9 +1420,19 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
           end
         end
       end
+      pokemon.debug_shiny=true if pokemon.debug_shiny && pokemon.body_shiny
+      poke2.debug_shiny=true if pokemon.debug_shiny || poke2.head_shiny
+
       pokemon.body_shiny=false
       pokemon.head_shiny=false
 
+
+      if !pokemon.shiny?
+        pokemon.debug_shiny=false
+      end
+      if !poke2.shiny?
+        poke2.debug_shiny=false
+      end
 
       if $Trainer.party.length >= 6
         if (keepInParty == 0)

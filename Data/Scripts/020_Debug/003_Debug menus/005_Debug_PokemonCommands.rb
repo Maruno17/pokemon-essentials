@@ -811,33 +811,33 @@ PokemonDebugMenuCommands.register("speciesform", {
           screen.pbRefreshSingle(pkmnid)
         end
       when 1   # Set form
-        cmd2 = 0
-        formcmds = [[], []]
-        GameData::Species.each do |sp|
-          next if sp.species != pkmn.species
-          form_name = sp.form_name
-          form_name = _INTL("Unnamed form") if !form_name || form_name.empty?
-          form_name = sprintf("%d: %s", sp.form, form_name)
-          formcmds[0].push(sp.form)
-          formcmds[1].push(form_name)
-          cmd2 = sp.form if pkmn.form == sp.form
-        end
-        if formcmds[0].length <= 1
-          screen.pbDisplay(_INTL("Species {1} only has one form.", pkmn.speciesName))
-        else
-          cmd2 = screen.pbShowCommands(_INTL("Set the Pokémon's form."), formcmds[1], cmd2)
-          next if cmd2 < 0
-          f = formcmds[0][cmd2]
-          if f != pkmn.form
-            if MultipleForms.hasFunction?(pkmn, "getForm")
-              next if !screen.pbConfirm(_INTL("This species decides its own form. Override?"))
-              pkmn.forced_form = f
-            end
-            pkmn.form = f
-            $Trainer.pokedex.register(pkmn) if !settingUpBattle
-            screen.pbRefreshSingle(pkmnid)
-          end
-        end
+        # cmd2 = 0
+        # formcmds = [[], []]
+        # GameData::Species.each do |sp|
+        #   next if sp.species != pkmn.species
+        #   form_name = sp.form_name
+        #   form_name = _INTL("Unnamed form") if !form_name || form_name.empty?
+        #   form_name = sprintf("%d: %s", sp.form, form_name)
+        #   formcmds[0].push(sp.form)
+        #   formcmds[1].push(form_name)
+        #   cmd2 = sp.form if pkmn.form == sp.form
+        # end
+        # if formcmds[0].length <= 1
+        #   screen.pbDisplay(_INTL("Species {1} only has one form.", pkmn.speciesName))
+        # else
+        #   cmd2 = screen.pbShowCommands(_INTL("Set the Pokémon's form."), formcmds[1], cmd2)
+        #   next if cmd2 < 0
+        #   f = formcmds[0][cmd2]
+        #   if f != pkmn.form
+        #     if MultipleForms.hasFunction?(pkmn, "getForm")
+        #       next if !screen.pbConfirm(_INTL("This species decides its own form. Override?"))
+        #       pkmn.forced_form = f
+        #     end
+        #     pkmn.form = f
+        #     $Trainer.pokedex.register(pkmn) if !settingUpBattle
+        #     screen.pbRefreshSingle(pkmnid)
+        #   end
+        # end
       when 2   # Remove form override
         pkmn.forced_form = nil
         screen.pbRefreshSingle(pkmnid)
@@ -872,10 +872,13 @@ PokemonDebugMenuCommands.register("setshininess", {
       case cmd
       when 0   # Make shiny
         pkmn.shiny = true
+        pkmn.debug_shiny=true
       when 1   # Make normal
         pkmn.shiny = false
+        pkmn.debug_shiny=false
       when 2   # Reset
         pkmn.shiny = nil
+        pkmn.debug_shiny=nil
       end
       screen.pbRefreshSingle(pkmnid)
     end

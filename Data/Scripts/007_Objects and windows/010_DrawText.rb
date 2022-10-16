@@ -1229,8 +1229,14 @@ def pbDrawImagePositions(bitmap,textpos)
     srcy=i[4] || 0
     width=(i[5] && i[5]>=0) ? i[5] : srcbitmap.width
     height=(i[6] && i[6]>=0) ? i[6] : srcbitmap.height
+    color = i[7] || nil
+    if color
+      srcbitmap.pbSetColorValue(color)
+    end
     srcrect=Rect.new(srcx,srcy,width,height)
     bitmap.blt(x,y,srcbitmap.bitmap,srcrect)
+
+
     srcbitmap.dispose
   end
 end

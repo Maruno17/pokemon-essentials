@@ -10,7 +10,7 @@ class RandomizerOptionsScene < PokemonOption_Scene
     @openWildOptions = false
     @openGymOptions = false
     @openItemOptions = false
-
+    $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
   end
 
   def getDefaultDescription

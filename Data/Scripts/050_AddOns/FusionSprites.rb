@@ -30,7 +30,7 @@ module GameData
       elsif isBodyShiny
         dex_offset = getBodyID(dex_number)
       end
-      return pbGet(VAR_SHINY_HUE_OFFSET) + dex_offset + Settings::SHINY_HUE_OFFSET
+      return dex_offset + Settings::SHINY_HUE_OFFSET
     end
 
     def self.front_sprite_bitmap(dex_number, a = 0, b = 0, isShiny = false, bodyShiny = false, headShiny = false)
@@ -41,7 +41,7 @@ module GameData
       filename = self.sprite_filename(dex_number)
       sprite = (filename) ? AnimatedBitmap.new(filename) : nil
       if isShiny
-        sprite.shiftColors(self.calculateShinyHueOffset(dex_number, bodyShiny, headShiny))
+      sprite.shiftColors(self.calculateShinyHueOffset(dex_number, bodyShiny, headShiny))
       end
       return sprite
     end

@@ -160,6 +160,22 @@ def getRandomCustomFusionForIntro(returnRandomPokemonIfNoneFound = true, customP
 end
 
 
+def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, debugShiny, srcx=nil, srcy=nil, width=nil, height=nil,
+                                 showSecondStarUnder=false, showSecondStarAbove=false)
+  color = debugShiny ? Color.new(0,0,0,255) : nil
+  imageArray.push(["Graphics/Pictures/shiny",xPos,yPos,srcx,srcy,width,height,color])
+  if shinyBody && shinyHead
+    if showSecondStarUnder
+      yPos += 15
+    elsif showSecondStarAbove
+      yPos -= 15
+    else
+      xPos -= 15
+    end
+    imageArray.push(["Graphics/Pictures/shiny",xPos,yPos,srcx,srcy,width,height,color])
+  end
+end
+
 def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3, maxBST=300)
   if customPokeList.length == 0
     customPokeList = getCustomSpeciesList()

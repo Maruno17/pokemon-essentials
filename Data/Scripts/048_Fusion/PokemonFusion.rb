@@ -719,6 +719,8 @@ class PokemonFusionScene
       if @pokemon1.shiny?
         @pokemon1.body_shiny=true
       end
+      @pokemon1.debug_shiny=true if @pokemon1.debug_shiny || @pokemon2.debug_shiny
+
       setFusionIVs(superSplicer)
       #add to pokedex 
       if !$Trainer.pokedex.owned?(newSpecies)

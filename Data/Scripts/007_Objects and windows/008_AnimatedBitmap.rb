@@ -5,7 +5,6 @@ class AnimatedBitmap
   attr_reader :path
   attr_reader :filename
 
-
   def initialize(file, hue = 0)
     raise "Filename is nil (missing graphic)." if file.nil?
     path = file
@@ -15,8 +14,8 @@ class AnimatedBitmap
       filename = split_file.pop
       path = split_file.join('/') + '/'
     end
-    @filename= filename
-    @path= path
+    @filename = filename
+    @path = path
     if filename[/^\[\d+(?:,\d+)?\]/] # Starts with 1 or 2 numbers in square brackets
       @bitmap = PngAnimatedBitmap.new(path, filename, hue)
     else
@@ -25,24 +24,27 @@ class AnimatedBitmap
   end
 
   def pbSetColor(r = 0, g = 0, b = 0, a = 255)
+    color = Color.new(r, g, b, a)
+    pbSetColorValue(color)
+  end
+
+  def pbSetColorValue(color)
     for i in 0..@bitmap.bitmap.width
       for j in 0..@bitmap.bitmap.height
         if @bitmap.bitmap.get_pixel(i, j).alpha != 0
-          color = Color.new(r, g, b, a)
           @bitmap.bitmap.set_pixel(i, j, color)
         end
       end
     end
   end
 
-  def shiftColors(offset=0)
-
-    offset/=360 if offset >360
-    offset=30 if offset <30 #this method is only used for shinies. shinies that barely shift are boring
-
+  MAX_SHIFT_VALUE = 360
+  MINIMUM_OFFSET=40
+  def shiftColors(offset = 0)
+    offset /= MAX_SHIFT_VALUE if offset > NB_POKEMON
+    offset = MINIMUM_OFFSET if offset < MINIMUM_OFFSET || MAX_SHIFT_VALUE - offset < MINIMUM_OFFSET
+    offset += pbGet(VAR_SHINY_HUE_OFFSET) #for testing - always 0 during normal gameplay
     @bitmap = GifBitmap.new(@path, @filename, offset)
-
-    #@bitmap.bitmap.hue_change(offset)
   end
 
   def [](index)
@@ -104,7 +106,7 @@ class AnimatedBitmap
 
     destination_rect = Rect.new(0, 0, new_width, new_height)
     source_rect = Rect.new(0, 0, @bitmap.bitmap.width, @bitmap.bitmap.height)
-    new_bitmap = Bitmap.new(new_width,new_height)
+    new_bitmap = Bitmap.new(new_width, new_height)
     new_bitmap.stretch_blt(
       destination_rect,
       @bitmap.bitmap,
@@ -125,13 +127,9 @@ class AnimatedBitmap
   #   end
   # end
 
-
   def mirror
     @bitmap.bitmap
   end
-
-
-
 
 end
 
@@ -258,11 +256,11 @@ class GifBitmap
   def initialize(dir, filename, hue = 0)
     @bitmap = nil
     @disposed = false
-    @loaded_from_cache=false
+    @loaded_from_cache = false
     filename = "" if !filename
     begin
       @bitmap = RPG::Cache.load_bitmap(dir, filename, hue)
-      @loaded_from_cache=true
+      @loaded_from_cache = true
     rescue
       @bitmap = nil
     end
