@@ -1410,8 +1410,10 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
           poke2.shiny = true
         elsif pokemon.bodyShiny?
           pokemon.shiny = true
+          poke2.shiny = false
         elsif pokemon.headShiny?
           poke2.shiny = true
+          pokemon.shiny = false
         else         #shiny was obtained already fused
         if rand(2) == 0
             pokemon.shiny = true

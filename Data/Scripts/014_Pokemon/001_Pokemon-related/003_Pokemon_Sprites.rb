@@ -304,6 +304,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
   end
 
   def shiny=(value)
+    print "wut"
     @shiny = value
     refresh
   end

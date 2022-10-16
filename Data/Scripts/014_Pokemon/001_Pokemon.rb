@@ -30,7 +30,7 @@ class Pokemon
   attr_accessor :statusCount
   # This Pokémon's shininess (true, false, nil). Is recalculated if made nil.
   # @param value [Boolean, nil] whether this Pokémon is shiny
-  attr_writer :shiny
+  #attr_writer :shiny
   attr_accessor :head_shiny
   attr_accessor :body_shiny
   attr_accessor :debug_shiny
@@ -102,6 +102,8 @@ class Pokemon
   # Maximum number of moves a Pokémon can know at once
   MAX_MOVES = 4
 
+  SHINY_CHANCE = 16
+
   def self.play_cry(species, form = 0, volume = 90, pitch = 100)
     GameData::Species.play_cry_from_species(species, form, volume, pitch)
   end
@@ -163,6 +165,13 @@ class Pokemon
     headSpecies = getHeadID(species)
     checkSpeciesId = getID(nil,check_species)
     return headSpecies == checkSpeciesId
+  end
+
+  def shiny=(value)
+    @shiny=value
+    if value && Settings::SHINY_POKEMON_CHANCE != SHINY_CHANCE
+      @debug_shiny=true
+    end
   end
 
   def debugShiny?
@@ -472,6 +481,9 @@ class Pokemon
       c = (a >> 16) & 0xFFFF
       d = b ^ c
       @shiny = d < Settings::SHINY_POKEMON_CHANCE
+    end
+    if @shiny && Settings::SHINY_POKEMON_CHANCE != SHINY_CHANCE
+      @debug_shiny=true
     end
     return @shiny
   end
