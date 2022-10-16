@@ -173,7 +173,7 @@ class DayCare
     def inherit_IVs(egg, mother, father)
       # Get all stats
       stats = []
-      GameData::Stat.each_main { |s| stats.push(s) }
+      GameData::Stat.each_main { |s| stats.push(s.id) }
       # Get the number of stats to inherit
       inherit_count = 3
       if Settings::MECHANICS_GENERATION >= 6
