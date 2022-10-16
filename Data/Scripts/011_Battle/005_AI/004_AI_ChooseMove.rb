@@ -54,7 +54,8 @@ class Battle::AI
       # If move has no targets, affects the user, a side or the whole field, or
       # specially affects multiple Pokémon and the AI calculates an overall
       # score at once instead of per target
-      score = pbGetMoveScore(move)
+      score = 100
+      PBDebug.logonerr { score = pbGetMoveScore(move) }
       choices.push([idxMove, score, -1])
     elsif target_data.num_targets > 1
       # Includes: AllFoes, AllNearFoes, AllNearOthers
@@ -65,7 +66,8 @@ class Battle::AI
       num_targets = 0
       @battle.allBattlers.each do |b|
         next if !@battle.pbMoveCanTarget?(battler.index, b.index, target_data)
-        score = pbGetMoveScore(move, b)
+        score = 100
+        PBDebug.logonerr { score = pbGetMoveScore(move, b) }
         total_score += ((battler.opposes?(b)) ? score : -score)
         num_targets += 1
       end
@@ -84,7 +86,8 @@ class Battle::AI
         #       that the target can be immune to by an ability (you may want to
         #       attack the ally anyway so it gains the effect of that ability).
         next if target_data.targets_foe && !battler.opposes?(b)
-        score = pbGetMoveScore(move, b)
+        score = 100
+        PBDebug.logonerr { score = pbGetMoveScore(move, b) }
         choices.push([idxMove, score, b.index])
       end
     end

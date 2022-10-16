@@ -3,7 +3,9 @@ class Battle::AI
   # Decide whether the opponent should switch Pokémon
   #=============================================================================
   def pbEnemyShouldWithdraw?
-    return pbEnemyShouldWithdrawEx?(false)
+    ret = false
+    PBDebug.logonerr { ret = pbEnemyShouldWithdrawEx?(false) }
+    return ret
   end
 
   def pbEnemyShouldWithdrawEx?(forceSwitch)

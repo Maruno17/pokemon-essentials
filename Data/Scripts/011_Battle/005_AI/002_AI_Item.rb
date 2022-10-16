@@ -3,7 +3,9 @@ class Battle::AI
   # Decide whether the opponent should use an item on the Pokémon
   #=============================================================================
   def pbEnemyShouldUseItem?
-    item, idxTarget = pbEnemyItemToUse
+    item = nil
+    idxTarget = nil
+    PBDebug.logonerr { item, idxTarget = pbEnemyItemToUse }
     return false if !item
     # Determine target of item (always the Pokémon choosing the action)
     useType = GameData::Item.get(item).battle_use
