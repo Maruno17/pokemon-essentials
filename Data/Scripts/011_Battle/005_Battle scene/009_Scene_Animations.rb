@@ -129,8 +129,10 @@ class PokeBattle_Scene
     sendOutAnims.each { |a| a[0].dispose; a[1].dispose }
     # Play shininess animations for shiny Pokémon
     sendOuts.each do |b|
-      next if !@battle.showAnims || !@battle.battlers[b[0]].shiny?
-      pbCommonAnimation("Shiny",@battle.battlers[b[0]])
+      next if !@battle.showAnims ||
+        if @battle.battlers[b[0]].shiny? || @battle.battlers[b[0]].glitter?
+          pbCommonAnimation("Shiny",@battle.battlers[b[0]])
+        end
     end
   end
 

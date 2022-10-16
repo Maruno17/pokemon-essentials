@@ -31,6 +31,7 @@ class Pokemon
   # This Pokémon's shininess (true, false, nil). Is recalculated if made nil.
   # @param value [Boolean, nil] whether this Pokémon is shiny
   #attr_writer :shiny
+  attr_accessor :glitter
   attr_accessor :head_shiny
   attr_accessor :body_shiny
   attr_accessor :debug_shiny
@@ -1221,7 +1222,7 @@ class Pokemon
     @ivMaxed = {}
     @ev = {}
     @hiddenPowerType = nil
-
+    @glitter=nil
     GameData::Stat.each_main do |s|
       @iv[s.id] = rand(IV_STAT_LIMIT + 1)
       @ev[s.id] = 0

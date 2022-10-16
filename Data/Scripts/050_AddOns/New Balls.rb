@@ -50,7 +50,7 @@ BallHandlers::ModifyCatchRate.add(:SHINYBALL,proc{|ball,catchRate,battle,pokemon
 next catchRate
 })
 BallHandlers::OnCatch.add(:SHINYBALL,proc{|ball,battle,pokemon|
-  pokemon.makeShiny
+  pokemon.glitter=true
 })
 
 #PERFECTBALL 29

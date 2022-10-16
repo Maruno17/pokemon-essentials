@@ -189,6 +189,10 @@ class PokeBattle_Battler
   end
   alias isShiny? shiny?
 
+  def glitter?
+    return @pokemon.glitter
+  end
+
   def owned?
     return false if !@battle.wildBattle?
     return $Trainer.owned?(displaySpecies)
