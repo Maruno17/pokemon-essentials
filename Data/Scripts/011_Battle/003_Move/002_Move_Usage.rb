@@ -272,6 +272,7 @@ class Battle::Move
   # Messages upon being hit
   #=============================================================================
   def pbEffectivenessMessage(user, target, numTargets = 1)
+    return if self.is_a?(Battle::Move::FixedDamageMove)
     return if target.damageState.disguise || target.damageState.iceFace
     if Effectiveness.super_effective?(target.damageState.typeMod)
       if numTargets > 1
