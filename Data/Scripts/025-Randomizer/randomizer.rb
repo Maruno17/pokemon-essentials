@@ -92,7 +92,7 @@ def itemCanBeRandomized(item)
   return false if item.is_machine?
   return false if item.is_key_item?
   return false if INVALID_ITEMS.include?(item.id)
-  #return false if RANDOM_ITEM_EXCEPTIONS.include?(item.id)
+  return false if RANDOM_ITEM_EXCEPTIONS.include?(item.id)
   return true
 end
 
