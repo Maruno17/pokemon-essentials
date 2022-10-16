@@ -413,7 +413,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("FreezeTarget",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("FreezeTarget",
+Battle::AI::Handlers::MoveEffectScore.add("FreezeFlinchTarget",
   proc { |score, move, user, target, ai, battle|
     score = Battle::AI::Handlers.apply_move_effect_score("FreezeTarget",
        score, move, user, target, ai, battle)

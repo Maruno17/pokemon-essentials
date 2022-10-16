@@ -7,6 +7,8 @@ class Battle::AI
   #=============================================================================
   def pbGetDamagingMoveBaseScore
     return 100
+
+=begin
     # Don't prefer moves that are ineffective because of abilities or effects
     return 0 if @target.immune_to_move?
     user_battler = @user.battler
@@ -45,6 +47,7 @@ class Battle::AI
     damage_percentage += 40 if damage_percentage > 100   # Prefer moves likely to be lethal
 
     return damage_percentage.to_i
+=end
   end
 
   #=============================================================================
@@ -53,6 +56,8 @@ class Battle::AI
   #=============================================================================
   def pbGetStatusMoveBaseScore
     return 100
+
+=begin
     # TODO: Call @target.immune_to_move? here too, not just for damaging moves
     #       (only if this status move will be affected).
 
@@ -295,5 +300,6 @@ class Battle::AI
     # "TargetActsLast",
     # "ProtectUserSideFromStatusMoves"
     return 100
+=end
   end
 end

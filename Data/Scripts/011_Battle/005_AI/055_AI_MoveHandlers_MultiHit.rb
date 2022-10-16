@@ -37,24 +37,18 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
                                          "HitTwoTimesFlinchTarget")
 Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesFlinchTarget",
   proc { |score, move, user, target, ai, battle|
-    dmg = move.rough_damage
-    num_hits = move.move.pbNumHits(user.battler, [target.battler])
-    # Prefer if the target has a Substitute and the first hit can break it
-    if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
-      score += 10 if target.effects[PBEffects::Substitute] < dmg / num_hits
-    end
-    # Flinching
-    if user.faster_than?(target) && target.effects[PBEffects::Substitute] < dmg / num_hits &&
-       (battle.moldBreaker || !target.has_active_ability?(:INNERFOCUS))
-      score += 10
-    end
-    # TODO: Consider effects that trigger per hit.
+    # Score for hitting multiple times
+    score = Battle::AI::Handlers.apply_move_effect_score("HitTwoTimes",
+       score, move, user, target, ai, battle)
+    # Score for flinching
+    score = Battle::AI::Handlers.apply_move_effect_score("FlinchTarget",
+       score, move, user, target, ai, battle)
     next score
   }
 )
@@ -244,7 +238,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttack",
             has_protect_move = true
           end
         end
-        if move.rough_priority > 0
+        if move.rough_priority(user) > 0
           if target.check_for_move { |m| m.function == "ProtectUserSideFromPriorityMoves" }
             has_protect_move = true
           end
@@ -305,18 +299,16 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
-    # Flinching
-    if user.faster_than?(target) && target.effects[PBEffects::Substitute] == 0 &&
-       (battle.moldBreaker || !target.has_active_ability?(:INNERFOCUS))
-      score += 10
-    end
+    # Score for flinching
+    score = Battle::AI::Handlers.apply_move_effect_score("FlinchTarget",
+       score, move, user, target, ai, battle)
     next score
   }
 )

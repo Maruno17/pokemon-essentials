@@ -116,7 +116,7 @@ class Battle::AI::AIMove
     end
 
     ##### Calculate target's defense stat #####
-    defense, def_stage = pbGetDefenseStats(user, target)
+    defense, def_stage = @move.pbGetDefenseStats(user.battler, target.battler)
     if !user.has_active_ability?(:UNAWARE) || @ai.battle.moldBreaker
       def_stage = 6 if is_critical && def_stage > 6
       defense = (defense.to_f * stage_mul[def_stage] / stage_div[def_stage]).floor
@@ -552,7 +552,7 @@ class Battle::AI::AIMove
   #   3 = additional effect has an increased chance to work
   def additional_effect_usability(user, target)
     return 0 if @move.addlEffect == 0   # Doesn't have an additional effect
-    return 1 if target.has_active_ability?(:SHIELDDUST) && !battle.moldBreaker
+    return 1 if target.has_active_ability?(:SHIELDDUST) && !@ai.battle.moldBreaker
     return 3 if (Settings::MECHANICS_GENERATION >= 6 || self.function != "EffectDependsOnEnvironment") &&
                 (user.has_active_ability?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
     return 2

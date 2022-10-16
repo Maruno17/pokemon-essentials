@@ -316,8 +316,8 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetUsesItsLastUsedMoveAgain",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("HigherPriorityInGrassyTerrain",
   proc { |score, move, user, target, ai, battle|
-    if ai.trainer.medium_skill? && @battle.field.terrain == :Grassy
-      score += 40 if target.faster_than?(user)
+    if ai.trainer.medium_skill? && battle.field.terrain == :Grassy
+      score += 15 if target.faster_than?(user)
     end
     next score
   }

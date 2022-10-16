@@ -140,7 +140,7 @@ class Battle::AI
     return score
 
 
-
+=begin
     mini_score = 1.0
     # Determine whether the move boosts Attack, Special Attack or Speed (Bulk Up
     # is sometimes not considered a sweeping move)
@@ -230,6 +230,7 @@ class Battle::AI
     end
 
     return mini_score
+=end
   end
 
   #=============================================================================
@@ -361,7 +362,7 @@ class Battle::AI
     return score
 
 
-
+=begin
     mini_score = 1.0
     case stat
     when :ATTACK
@@ -565,6 +566,7 @@ class Battle::AI
     end
 
     return mini_score
+=end
   end
 
   #=============================================================================

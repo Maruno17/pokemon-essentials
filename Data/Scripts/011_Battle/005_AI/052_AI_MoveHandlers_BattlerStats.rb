@@ -59,7 +59,7 @@ Battle::AI::Handlers::MoveEffectScore.add("MaxUserAttackLoseHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
     score = ai.get_score_for_user_stat_raise(score)
     # Don't prefer the lower the user's HP is
-    score -= 80 * (1 - (@user.hp.to_f / @user.totalhp))   # 0 to -40
+    score -= 80 * (1 - (user.hp.to_f / user.totalhp))   # 0 to -40
     next score
   }
 )
