@@ -809,6 +809,9 @@ module GameData
       when "173" then new_code = "StartPsychicTerrain"
       when "174" then new_code = "FailsIfNotUserFirstTurn"
       when "175" then new_code = "HitTwoTimesFlinchTarget"
+      #=========================================================================
+      # NOTE: The below was added in v21.
+      when "UseUserBaseDefenseInsteadOfUserBaseAttack" then new_code = "UseUserDefenseInsteadOfUserAttack"
       end
       data[:function_code] = new_code
       return data

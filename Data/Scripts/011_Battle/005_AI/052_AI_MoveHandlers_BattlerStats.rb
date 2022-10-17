@@ -728,7 +728,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAtkSpAtk2",
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|
-    next score - 50 if target.opposes?(user)
+    next score - 40 if target.opposes?(user)
     next score - 40 if !battle.moldBreaker && target.has_active_ability?(:CONTRARY)
     score -= target.stages[:ATTACK] * 10
     score -= target.stages[:SPECIAL_ATTACK] * 10

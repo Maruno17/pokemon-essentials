@@ -367,7 +367,9 @@ class Battle::AI::AIMove
     defense = [(defense * multipliers[:defense_multiplier]).round, 1].max
     damage  = ((((2.0 * user.level / 5) + 2).floor * power * atk / defense).floor / 50).floor + 2
     damage  = [(damage * multipliers[:final_damage_multiplier]).round, 1].max
-    return damage.floor
+    ret = damage.floor
+    ret = target.hp - 1 if @move.nonLethal?(user_battler, target_battler) && ret >= target.hp
+    return ret
   end
 
   #=============================================================================

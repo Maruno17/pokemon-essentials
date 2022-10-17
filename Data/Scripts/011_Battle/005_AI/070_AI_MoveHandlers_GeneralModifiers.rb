@@ -148,7 +148,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:target_semi_invulnerable,
           miss = false if move.move.hitsDivingTargets?
         end
       end
-      next score - 50 if miss
+      next score - 40 if miss
     end
   }
 )

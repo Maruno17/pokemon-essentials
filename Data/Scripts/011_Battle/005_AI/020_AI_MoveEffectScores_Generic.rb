@@ -65,7 +65,7 @@ class Battle::AI
     case stat
     when :ATTACK
       return false if !@user.check_for_move { |m| m.physicalMove?(move.type) &&
-                                                  m.function != "UseUserBaseDefenseInsteadOfUserBaseAttack" &&
+                                                  m.function != "UseUserDefenseInsteadOfUserAttack" &&
                                                   m.function != "UseTargetAttackInsteadOfUserAttack" }
     when :DEFENSE
       each_foe_battler(@user.side) do |b, i|
@@ -278,7 +278,7 @@ class Battle::AI
         score -= 20
       else
         has_physical_moves = @user.check_for_move { |m| m.physicalMove?(m.type) &&
-                                                        m.function != "UseUserBaseDefenseInsteadOfUserBaseAttack" &&
+                                                        m.function != "UseUserDefenseInsteadOfUserAttack" &&
                                                         m.function != "UseTargetAttackInsteadOfUserAttack" }
         inc = (has_physical_moves) ? 5 : 10
         score += inc * (3 - old_stage) * inc_mult

@@ -301,7 +301,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetUsesItsLastUsedMoveAgain",
   proc { |score, move, user, target, ai, battle|
     # Without lots of code here to determine good/bad moves and relative
     # speeds, using this move is likely to just be a waste of a turn
-    next score - 50
+    next score - 40
   }
 )
 

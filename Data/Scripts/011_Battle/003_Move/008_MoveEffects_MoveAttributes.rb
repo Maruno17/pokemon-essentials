@@ -1199,9 +1199,8 @@ end
 # user's Attack (and Attack stat stages) to calculate damage. All other effects
 # are applied normally, applying the user's Attack modifiers and not the user's
 # Defence modifiers. (Body Press)
-# TODO: Rename this function code to remove both "Base"s?
 #===============================================================================
-class Battle::Move::UseUserBaseDefenseInsteadOfUserBaseAttack < Battle::Move
+class Battle::Move::UseUserDefenseInsteadOfUserAttack < Battle::Move
   def pbGetAttackStats(user, target)
     return user.defense, user.stages[:DEFENSE] + 6
   end
@@ -1275,7 +1274,7 @@ end
 # (Chip Away, Darkest Lariat, Sacred Sword)
 #===============================================================================
 class Battle::Move::IgnoreTargetDefSpDefEvaStatStages < Battle::Move
-  def pbCalcAccuracyMultipliers(user, target, multipliers)
+  def pbCalcAccuracyModifiers(user, target, modifiers)
     super
     modifiers[:evasion_stage] = 0
   end
@@ -1376,18 +1375,13 @@ class Battle::Move::TypeAndPowerDependOnUserBerry < Battle::Move
     return ret
   end
 
-  # This is a separate method so that the AI can use it as well
-  def pbNaturalGiftBaseDamage(heldItem)
-    if heldItem
-      GameData::Item.get(heldItem).flags.each do |flag|
+  def pbBaseDamage(baseDmg, user, target)
+    if user.item.id
+      GameData::Item.get(user.item.id).flags.each do |flag|
         return [$~[1].to_i, 10].max if flag[/^NaturalGift_(?:\w+)_(\d+)$/i]
       end
     end
     return 1
-  end
-
-  def pbBaseDamage(baseDmg, user, target)
-    return pbNaturalGiftBaseDamage(user.item.id)
   end
 
   def pbEndOfMoveUsageEffect(user, targets, numHits, switchedBattlers)

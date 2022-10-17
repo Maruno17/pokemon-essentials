@@ -396,22 +396,11 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartPreventCriticalHitsAgainstUserS
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CannotMakeTargetFaint",
   proc { |move, user, target, ai, battle|
     next true if target.hp == 1
-  }
-)
-Battle::AI::Handlers::MoveEffectScore.add("CannotMakeTargetFaint",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if target.hp == 1
-    if target.hp <= target.totalhp / 8
-      score -= 20
-    elsif target.hp <= target.totalhp / 4
-      score -= 10
-    end
-    next score
   }
 )
 
@@ -661,21 +650,37 @@ Battle::AI::Handlers::MoveEffectScore.add("HoopaRemoveProtectionsBypassSubstitut
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RecoilQuarterOfDamageDealt",
   proc { |score, move, user, target, ai, battle|
-    next score - 8
+    next score if !user.battler.takesIndirectDamage? || user.has_active_ability?(:ROCKHEAD)
+    dmg = move.rough_damage / 4
+    if dmg >= user.hp
+      reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+      foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+      next score - 40 if reserves <= foes
+    end
+    score -= 10 * [dmg, user.hp].min / user.hp
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RecoilThirdOfDamageDealtParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for being a recoil move
-    score -= 10
+    if user.battler.takesIndirectDamage? && !user.has_active_ability?(:ROCKHEAD)
+      dmg = move.rough_damage / 3
+      if dmg >= user.hp
+        reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+        foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+        next score - 40 if reserves <= foes
+      end
+      score -= 10 * [dmg, user.hp].min / user.hp
+    end
     # Score for paralysing
     score = Battle::AI::Handlers.apply_move_effect_score("ParalyzeTarget",
        score, move, user, target, ai, battle)
@@ -684,12 +689,20 @@ Battle::AI::Handlers::MoveEffectScore.add("RecoilThirdOfDamageDealtParalyzeTarge
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RecoilThirdOfDamageDealtBurnTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for being a recoil move
-    score -= 10
+    if user.battler.takesIndirectDamage? && !user.has_active_ability?(:ROCKHEAD)
+      dmg = move.rough_damage / 3
+      if dmg >= user.hp
+        reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+        foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+        next score - 40 if reserves <= foes
+      end
+      score -= 10 * [dmg, user.hp].min / user.hp
+    end
     # Score for burning
     score = Battle::AI::Handlers.apply_move_effect_score("BurnTarget",
        score, move, user, target, ai, battle)
@@ -698,11 +711,19 @@ Battle::AI::Handlers::MoveEffectScore.add("RecoilThirdOfDamageDealtBurnTarget",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RecoilHalfOfDamageDealt",
   proc { |score, move, user, target, ai, battle|
-    next score - 15
+    next score if !user.battler.takesIndirectDamage? || user.has_active_ability?(:ROCKHEAD)
+    dmg = move.rough_damage / 2
+    if dmg >= user.hp
+      reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)
+      foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
+      next score - 40 if reserves <= foes
+    end
+    score -= 10 * [dmg, user.hp].min / user.hp
+    next score
   }
 )
 
@@ -736,63 +757,91 @@ Battle::AI::Handlers::MoveEffectScore.add("CategoryDependsOnHigherDamagePoisonTa
 # CategoryDependsOnHigherDamageIgnoreTargetAbility
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# UseUserBaseDefenseInsteadOfUserBaseAttack
+# UseUserDefenseInsteadOfUserAttack
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # UseTargetAttackInsteadOfUserAttack
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # UseTargetDefenseInsteadOfTargetSpDef
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
+Battle::AI::Handlers::MoveFailureCheck.add("EnsureNextMoveAlwaysHits",
+  proc { |move, user, target, ai, battle|
+    next true if user.effects[PBEffects::LockOn] > 0
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("EnsureNextMoveAlwaysHits",
   proc { |score, move, user, target, ai, battle|
-    next score - 50 if user.effects[PBEffects::LockOn] > 0
+    next score - 40 if user.has_active_ability?(:NOGUARD) || target.has_active_ability?(:NOGUARD)
+    next score - 40 if target.effects[PBEffects::Telekinesis] > 0
+    # Prefer if the user knows moves with low accuracy
+    user.check_for_move do |m|
+      next if target.effects[PBEffects::Minimize] && m.tramplesMinimize? && Settings::MECHANICS_GENERATION >= 6
+      # TODO: There are other effects that make a move certain to hit. Account
+      #       for those as well, or is that too micro-managey?
+      acc = m.accuracy
+      acc = m.pbBaseAccuracy(user.battler, target.battler) if ai.trainer.medium_skill?
+      score += 4 if acc < 90 && acc != 0
+      score += 8 if acc < 50 && acc != 0
+    end
+    # Not worth it if the user or the target is at low HP
+    score -= 10 if user.hp < user.totalhp / 2
+    score -= 8 if target.hp < target.totalhp / 2
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("StartNegateTargetEvasionStatStageAndGhostImmunity",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::Foresight]
-      score -= 90
-    elsif target.has_type?(:GHOST)
-      score += 70
-    elsif target.stages[:EVASION] <= 0
-      score -= 60
+    next score - 40 if target.effects[PBEffects::Foresight] || user.has_active_ability?(:SCRAPPY)
+    # Check if the user knows any moves that would benefit from negating the
+    # target's Ghost type immunity
+    if target.has_type?(:GHOST)
+      user.check_for_move do |m|
+        next if !m.damagingMove?
+        score += 10 if Effectiveness.ineffective_type?(m.pbCalcType(user.battler), :GHOST)
+      end
     end
+    # Prefer if the target has increased evasion
+    score += 10 * target.stages[:EVASION] if target.stages[:EVASION] > 0
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("StartNegateTargetEvasionStatStageAndDarkImmunity",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::MiracleEye]
-      score -= 50
-    elsif target.has_type?(:DARK)
-      score += 70
-    elsif target.stages[:EVASION] <= 0
-      score -= 60
+    next score - 40 if target.effects[PBEffects::MiracleEye]
+    # Check if the user knows any moves that would benefit from negating the
+    # target's Dark type immunity
+    if target.has_type?(:DARK)
+      user.check_for_move do |m|
+        next if !m.damagingMove?
+        score += 10 if Effectiveness.ineffective_type?(m.pbCalcType(user.battler), :DARK)
+      end
     end
+    # Prefer if the target has increased evasion
+    score += 10 * target.stages[:EVASION] if target.stages[:EVASION] > 0
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # IgnoreTargetDefSpDefEvaStatStages
 
@@ -811,7 +860,7 @@ Battle::AI::Handlers::MoveBasePower.add("TypeDependsOnUserIVs",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TypeAndPowerDependOnUserBerry",
   proc { |move, user, target, ai, battle|
@@ -822,8 +871,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("TypeAndPowerDependOnUserBerry",
 )
 Battle::AI::Handlers::MoveBasePower.add("TypeAndPowerDependOnUserBerry",
   proc { |power, move, user, target, ai, battle|
-    # TODO: Can't this just call move.move.pbBaseDamage?
-    ret = move.move.pbNaturalGiftBaseDamage(user.item_id)
+    ret = move.move.pbBaseDamage(1, user.battler, target.battler)
     next (ret == 1) ? 0 : ret
   }
 )
@@ -844,18 +892,15 @@ Battle::AI::Handlers::MoveBasePower.add("TypeAndPowerDependOnUserBerry",
 # TypeDependsOnUserDrive
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TypeDependsOnUserMorpekoFormRaiseUserSpeed1",
   proc { |move, user, target, ai, battle|
     next true if !user.battler.isSpecies?(:MORPEKO) && user.effects[PBEffects::TransformSpecies] != :MORPEKO
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("TypeDependsOnUserMorpekoFormRaiseUserSpeed1",
-  proc { |score, move, user, target, ai, battle|
-    next score + 20 if user.stages[:SPEED] <= 0
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserSpeed1",
+                                           "TypeDependsOnUserMorpekoFormRaiseUserSpeed1")
 
 #===============================================================================
 #
