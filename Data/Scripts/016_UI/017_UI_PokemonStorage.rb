@@ -2147,20 +2147,20 @@ class PokemonStorageScreen
   #
 
   def pbFuseFromPC(selected, heldpoke)
-    box = selected[0]
-    index = selected[1]
-    poke_body = @storage[box, index]
-    poke_head = heldpoke
-    if heldpoke
-      if dexNum(heldpoke.species) > NB_POKEMON
-        pbDisplay(_INTL("{1} is already fused!", heldpoke.name))
-        return
+      box = selected[0]
+      index = selected[1]
+      poke_body = @storage[box, index]
+      poke_head = heldpoke
+      if heldpoke
+        if dexNum(heldpoke.species) > NB_POKEMON
+          pbDisplay(_INTL("{1} is already fused!", heldpoke.name))
+          return
+        end
+        if(selected.egg? || heldpoke.egg?)
+          pbDisplay(_INTL("It's impossible to fuse an egg!"))
+          return
+        end
       end
-      if(selected.egg? || heldpoke.egg?)
-        pbDisplay(_INTL("It's impossible to fuse an egg!"))
-        return
-      end
-    end
 
     splicerItem = selectSplicer()
     if splicerItem == nil

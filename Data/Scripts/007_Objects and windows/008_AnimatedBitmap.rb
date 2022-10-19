@@ -38,12 +38,8 @@ class AnimatedBitmap
     end
   end
 
-  MAX_SHIFT_VALUE = 360
-  MINIMUM_OFFSET=40
+
   def shiftColors(offset = 0)
-    offset /= MAX_SHIFT_VALUE if offset > NB_POKEMON
-    offset = MINIMUM_OFFSET if offset < MINIMUM_OFFSET || MAX_SHIFT_VALUE - offset < MINIMUM_OFFSET
-    offset += pbGet(VAR_SHINY_HUE_OFFSET) #for testing - always 0 during normal gameplay
     @bitmap = GifBitmap.new(@path, @filename, offset)
   end
 

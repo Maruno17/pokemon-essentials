@@ -21,16 +21,28 @@ module GameData
       return ret
     end
 
+    MAX_SHIFT_VALUE = 360
+    MINIMUM_OFFSET=40
+    ADDITIONAL_OFFSET_WHEN_TOO_CLOSE=40
+    MINIMUM_DEX_DIF=20
     def self.calculateShinyHueOffset(dex_number, isBodyShiny = false, isHeadShiny = false)
       dex_offset = dex_number
+      body_number = getBodyID(dex_number)
+      head_number=getHeadID(dex_number,body_number)
+      dex_diff = (body_number-head_number).abs
       if isBodyShiny && isHeadShiny
         dex_offset = dex_number
       elsif isHeadShiny
-        dex_offset = getHeadID(dex_number)
+        dex_offset = head_number
       elsif isBodyShiny
-        dex_offset = getBodyID(dex_number)
+        dex_offset = dex_diff > MINIMUM_DEX_DIF ? body_number : body_number+ADDITIONAL_OFFSET_WHEN_TOO_CLOSE
       end
-      return dex_offset + Settings::SHINY_HUE_OFFSET
+      offset = dex_offset + Settings::SHINY_HUE_OFFSET
+      offset /= MAX_SHIFT_VALUE if offset > NB_POKEMON
+      offset = MINIMUM_OFFSET if offset < MINIMUM_OFFSET
+      offset = MINIMUM_OFFSET if (MAX_SHIFT_VALUE - offset).abs < MINIMUM_OFFSET
+      offset += pbGet(VAR_SHINY_HUE_OFFSET) #for testing - always 0 during normal gameplay
+      return offset
     end
 
     def self.front_sprite_bitmap(dex_number, a = 0, b = 0, isShiny = false, bodyShiny = false, headShiny = false)

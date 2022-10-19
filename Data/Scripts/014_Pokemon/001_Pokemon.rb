@@ -35,6 +35,8 @@ class Pokemon
   attr_accessor :head_shiny
   attr_accessor :body_shiny
   attr_accessor :debug_shiny
+  attr_accessor :natural_shiny
+
   # The index of this Pokémon's ability (0, 1 are natural abilities, 2+ are
   # hidden abilities)as defined for its species/form. An ability may not be
   # defined at this index. Is recalculated (as 0 or 1) if made nil.
@@ -103,7 +105,7 @@ class Pokemon
   # Maximum number of moves a Pokémon can know at once
   MAX_MOVES = 4
 
-  SHINY_CHANCE = 16
+  S_CHANCE_VALIDATOR = 16
 
   def self.play_cry(species, form = 0, volume = 90, pitch = 100)
     GameData::Species.play_cry_from_species(species, form, volume, pitch)
@@ -170,13 +172,13 @@ class Pokemon
 
   def shiny=(value)
     @shiny=value
-    if value && Settings::SHINY_POKEMON_CHANCE != SHINY_CHANCE
+    if value && Settings::SHINY_POKEMON_CHANCE != S_CHANCE_VALIDATOR
       @debug_shiny=true
     end
   end
 
   def debugShiny?
-    return @debug_shiny
+    return !@natural_shiny || @debug_shiny
   end
 
   def bodyShiny?
@@ -481,10 +483,16 @@ class Pokemon
       b = a & 0xFFFF
       c = (a >> 16) & 0xFFFF
       d = b ^ c
-      @shiny = d < Settings::SHINY_POKEMON_CHANCE
+      is_shiny = d < Settings::SHINY_POKEMON_CHANCE
+      if is_shiny
+        @shiny = true
+        @natural_shiny=true
+      end
+
     end
-    if @shiny && Settings::SHINY_POKEMON_CHANCE != SHINY_CHANCE
+    if @shiny && Settings::SHINY_POKEMON_CHANCE != S_CHANCE_VALIDATOR
       @debug_shiny=true
+      @natural_shiny=false
     end
     return @shiny
   end
