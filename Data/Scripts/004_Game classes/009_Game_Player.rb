@@ -529,11 +529,17 @@ class Game_Player < Game_Character
     end
   end
 
-  # Center player on-screen
+  # Track the player on-screen as they move
   def update_screen_position(last_real_x, last_real_y)
     return if self.map.scrolling? || !(@moved_last_frame || @moved_this_frame)
-    self.map.display_x = @real_x - SCREEN_CENTER_X
-    self.map.display_y = @real_y - SCREEN_CENTER_Y
+    if (@real_x < last_real_x && @real_x - $game_map.display_x < SCREEN_CENTER_X) ||
+       (@real_x > last_real_x && @real_x - $game_map.display_x > SCREEN_CENTER_X)
+      self.map.display_x += @real_x - last_real_x
+    end
+    if (@real_y < last_real_y && @real_y - $game_map.display_y < SCREEN_CENTER_Y) ||
+       (@real_y > last_real_y && @real_y - $game_map.display_y > SCREEN_CENTER_Y)
+      self.map.display_y += @real_y - last_real_y
+    end
   end
 
   def update_event_triggering
