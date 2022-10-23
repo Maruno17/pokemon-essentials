@@ -81,7 +81,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense1CurlUpUser",
   proc { |score, move, user, target, ai, battle|
     score = ai.get_score_for_user_stat_raise(score)
     if !user.effects[PBEffects::DefenseCurl] &&
-       user.check_for_move { |move| move.function == "MultiTurnAttackPowersUpEachTurn" }
+       user.check_for_move { |m| m.function == "MultiTurnAttackPowersUpEachTurn" }
       score += 10
     end
     next score
@@ -144,7 +144,7 @@ Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1PowerUpElectricMove",
   proc { |score, move, user, target, ai, battle|
     score = ai.get_score_for_user_stat_raise(score)
-    if user.check_for_move { |move| move.damagingMove? && move.type == :ELECTRIC }
+    if user.check_for_move { |m| m.damagingMove? && m.type == :ELECTRIC }
       score += 10
     end
     next score
@@ -658,7 +658,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetAttack2ConfuseTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetAttack2ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if !target.battler.pbCanConfuse?(user.battler, false)
+    next score - 60 if !target.battler.pbCanConfuse?(user.battler, false)
     next score + 30 if target.stages[:ATTACK] < 0
   }
 )
@@ -674,7 +674,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseTargetSpAtk1ConfuseTarget",
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseTargetSpAtk1ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
-    next score - 90 if !target.battler.pbCanConfuse?(user.battler, false)
+    next score - 60 if !target.battler.pbCanConfuse?(user.battler, false)
     next score + 30 if target.stages[:SPECIAL_ATTACK] < 0
   }
 )

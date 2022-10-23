@@ -9,7 +9,7 @@ class Battle::AI
     end
     # Don't make score changes if foes have Unaware and user can't make use of
     # extra stat stages
-    if !@user.check_for_move { |move| move.function == "PowerHigherWithUserPositiveStatStages" }
+    if !@user.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
       foe_is_aware = false
       each_foe_battler(@user.side) do |b, i|
         foe_is_aware = true if !b.has_active_ability?(:UNAWARE)
@@ -64,7 +64,7 @@ class Battle::AI
     # TODO: Exception if user knows Baton Pass/Stored Power?
     case stat
     when :ATTACK
-      return false if !@user.check_for_move { |m| m.physicalMove?(move.type) &&
+      return false if !@user.check_for_move { |m| m.physicalMove?(m.type) &&
                                                   m.function != "UseUserDefenseInsteadOfUserAttack" &&
                                                   m.function != "UseTargetAttackInsteadOfUserAttack" }
     when :DEFENSE
@@ -680,6 +680,41 @@ class Battle::AI
           ret += (b.opposes?(move_user)) ? 10 : -10
         end
       end
+    end
+    return ret
+  end
+
+  #=============================================================================
+  # Returns a value indicating how beneficial the given item will be to the
+  # given battler if it is holding it.
+  # Return values are typically -2, -1, 0, 1 or 2. 0 is indifferent, positive
+  # values mean the battler benefits, negative values mean the battler suffers.
+  #=============================================================================
+  def battler_wants_item?(battler, item = :NONE)
+    item == :NONE if item.nil?
+    # TODO: Add more items.
+    preferred_items = [
+      :CHOICESCARF,
+      :LEFTOVERS
+    ]
+    preferred_items.push(:BLACKSLUDGE) if battler.has_type?(:POISON)
+    preferred_items.push(:IRONBALL) if battler.check_for_move { |m| m.function = "ThrowUserItemAtTarget" }
+    preferred_items.push(:CHOICEBAND) if battler.check_for_move { |m| m.physicalMove?(m.type) }
+    preferred_items.push(:CHOICESPECS) if battler.check_for_move { |m| m.specialMove?(m.type) }
+    unpreferred_items = [
+      :BLACKSLUDGE,
+      :FLAMEORB,
+      :IRONBALL,
+      :LAGGINGTAIL,
+      :STICKYBARB,
+      :TOXICORB
+    ]
+    ret = 0
+    ret = 2 if preferred_items.include?(item)
+    ret = -2 if unpreferred_items.include?(item)
+    # Don't prefer if the battler knows Acrobatics
+    if battler.check_for_move { |m| m.function == "DoublePowerIfUserHasNoItem" }
+      ret += (item == :NONE) ? 1 : -1
     end
     return ret
   end

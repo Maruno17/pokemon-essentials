@@ -20,7 +20,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserFullyAndFallAsleep",
     score += 10 if user.status != :NONE
     # Check if user will be able to act while asleep
     if ai.trainer.medium_skill?
-      if user.check_for_move { |move| move.usableWhenAsleep? }
+      if user.check_for_move { |m| m.usableWhenAsleep? }
         score += 10
       else
         score -= 10
@@ -159,7 +159,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserByTargetAttackLowerTargetAtta
     # Check whether lowering the target's Attack will have any impact
     if ai.trainer.medium_skill?
       if target.battler.pbCanLowerStatStage?(:ATTACK, user.battler, move.move) &&
-         target.check_for_move { |move| move.physicalMove?(move.type) }
+         target.check_for_move { |m| m.physicalMove?(m.type) }
         score += target.stages[:ATTACK] * 10
       end
     end
@@ -419,16 +419,16 @@ Battle::AI::Handlers::MoveEffectScore.add("StartLeechSeedTarget",
   proc { |score, move, user, target, ai, battle|
     score += 10 if user.turnCount < 2
     if ai.trainer.medium_skill?
-      if !user.check_for_move { |move| move.damagingMove? }
+      if !user.check_for_move { |m| m.damagingMove? }
         score += 20
       end
       score -= 20 if target.has_active_ability?([:LIQUIDOOZE]) || !target.battler.takesIndirectDamage?
     end
     if ai.trainer.high_skill?
-      if user.check_for_move { |move| move.is_a?(Battle::Move::ProtectMove) }
+      if user.check_for_move { |m| m.is_a?(Battle::Move::ProtectMove) }
         score += 15
       end
-      if target.check_for_move { |move| move.is_a?(Battle::Move::RemoveUserBindingAndEntryHazards) }
+      if target.check_for_move { |m| m.is_a?(Battle::Move::RemoveUserBindingAndEntryHazards) }
         score -= 15
       end
     end

@@ -76,6 +76,9 @@ class Battle::AI
     else
       # Includes: Foe, NearAlly, NearFoe, NearOther, Other, RandomNearFoe, UserOrNearAlly
       # If move affects one battler and you have to choose which one
+      # TODO: Figure out first which targets are valid. Includes the call to
+      #       pbMoveCanTarget?, but also includes move-redirecting effects like
+      #       Lightning Rod. Skip any battlers that can't be targeted.
       @battle.allBattlers.each do |b|
         next if !@battle.pbMoveCanTarget?(battler.index, b.index, target_data)
         # TODO: This should consider targeting an ally if possible. Scores will

@@ -196,6 +196,8 @@ class Battle::Move::DestroyTargetBerryOrGem < Battle::Move
     return if target.damageState.substitute || target.damageState.berryWeakened
     return if !target.item || (!target.item.is_berry? &&
               !(Settings::MECHANICS_GENERATION >= 6 && target.item.is_gem?))
+    return if target.unlosableItem?(target.item)
+    return if target.hasActiveAbility?(:STICKYHOLD) && !@battle.moldBreaker
     item_name = target.itemName
     target.pbRemoveItem
     @battle.pbDisplay(_INTL("{1}'s {2} was incinerated!", target.pbThis, item_name))
@@ -379,7 +381,7 @@ class Battle::Move::UserConsumeTargetBerry < Battle::Move
   def pbEffectAfterAllHits(user, target)
     return if user.fainted? || target.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
-    return if !target.item || !target.item.is_berry?
+    return if !target.item || !target.item.is_berry? || target.unlosableItem?(target.item)
     return if target.hasActiveAbility?(:STICKYHOLD) && !@battle.moldBreaker
     item = target.item
     itemName = target.itemName

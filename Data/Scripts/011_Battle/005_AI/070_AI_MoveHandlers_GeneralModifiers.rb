@@ -51,6 +51,14 @@ Battle::AI::Handlers::GeneralMoveScore.add(:dance_move_against_dancer,
 #===============================================================================
 # TODO: Review score modifier.
 #===============================================================================
+# TODO: Don't prefer damaging moves if the target is Biding, unless the move
+#       will deal enough damage to KO the target before it retaliates (assuming
+#       the move is used repeatedly until the target retaliates). Don't worry
+#       about the target's Bide if the user will be immune to it.
+
+#===============================================================================
+# TODO: Review score modifier.
+#===============================================================================
 # TODO: Prefer move if it has a high critical hit rate, critical hits are
 #       possible but not certain, and target has raised defences/user has
 #       lowered offences (Atk/Def or SpAtk/SpDef, whichever is relevant).

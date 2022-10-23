@@ -209,7 +209,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttack",
     # Power Herb makes this a 1 turn move, the same as a move with no effect
     next score if user.has_active_item?(:POWERHERB)
     # Treat as a failure if user has Truant (the charging turn has no effect)
-    next 25 if user.has_active_ability?(:TRUANT)
+    next score - 60 if user.has_active_ability?(:TRUANT)
     # Don't prefer because it uses up two turns
     score -= 15
     # Don't prefer if user is at a low HP (time is better spent on quicker moves)
@@ -330,28 +330,31 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2"
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserDefense1",
   proc { |score, move, user, target, ai, battle|
-    score += 20 if user.stages[:DEFENSE] < 0
+    # Score for being a two turn attack
+    score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
+       score, move, user, target, ai, battle)
+    # Score for raising the user's stat
+    score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserDefense1",
+       score, move, user, target, ai, battle)
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
   proc { |score, move, user, target, ai, battle|
-    aspeed = user.rough_stat(:SPEED)
-    ospeed = target.rough_stat(:SPEED)
-    if (aspeed > ospeed && user.hp > user.totalhp / 3) || user.hp > user.totalhp / 2
-      score += 60
-    else
-      score -= 90
-    end
-    score += user.stages[:SPECIAL_ATTACK] * 20
+    # Score for being a two turn attack
+    score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
+       score, move, user, target, ai, battle)
+    # Score for raising the user's stat
+    score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserSpAtk1",
+       score, move, user, target, ai, battle)
     next score
   }
 )
