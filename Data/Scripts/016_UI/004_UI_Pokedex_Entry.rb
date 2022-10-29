@@ -246,6 +246,7 @@ class PokemonPokedexInfo_Scene
     #if @dexlist[@index][4] > 0
       indexNumber = @dexlist[@index][4]
       indexNumber -= 1 if @dexlist[@index][5]
+    indexNumber = GameData::Species.get(@species).id_number
       indexText = sprintf("%03d", indexNumber)
     # end
     textpos = [
@@ -586,7 +587,7 @@ class PokemonPokedexInfoScreen
     else
       region = $PokemonGlobal.pokedexDex   # National Dex -1, regional Dexes 0, 1, etc.
     end
-    dexnum = pbGetRegionalNumber(region,species)
+    dexnum = GameData::Species.get(species).id_number#pbGetRegionalNumber(region,species)
     dexnumshift = Settings::DEXES_WITH_OFFSETS.include?(region)
     dexlist = [[species,GameData::Species.get(species).name,0,0,dexnum,dexnumshift]]
     @scene.pbStartScene(dexlist,0,region)

@@ -77,7 +77,7 @@ off Pokémon Red and Blue, as well as
 Pokémon Gold and Silver.
 Both games are made by Game Freak.
 
-ALl of the custom fused Pokémon sprites 
+All of the custom fused Pokémon sprites 
 were madeby various members of the sp
 Pokémon Infinite Fusion Discord
 

@@ -432,7 +432,7 @@ module PluginManager
   #-----------------------------------------------------------------------------
   def self.pluginErrorMsg(name, script)
     # begin message formatting
-    message  = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
+    message  = "[Infinite Fusion version #{Settings::GAME_VERSION_NUMBER}]\r\n"
     message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
     message += "Error in Plugin [#{name}]:\r\n"
     message += "#{$!.class} occurred.\r\n"

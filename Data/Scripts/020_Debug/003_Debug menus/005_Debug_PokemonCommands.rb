@@ -806,6 +806,9 @@ PokemonDebugMenuCommands.register("speciesform", {
         species = pbChooseSpeciesList(pkmn.species)
         if species && species != pkmn.species
           pkmn.species = species
+          if pkmn.shiny?
+            pkmn.debug_shiny=true
+          end
           pkmn.calc_stats
           $Trainer.pokedex.register(pkmn) if !settingUpBattle
           screen.pbRefreshSingle(pkmnid)

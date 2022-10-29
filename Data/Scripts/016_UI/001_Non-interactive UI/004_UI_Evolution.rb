@@ -491,6 +491,7 @@ class PokemonEvolutionScene
 
   def pbStartScreen(pokemon,newspecies,reversing=false)
     @pokemon = pokemon
+
     @newspecies = newspecies
     @sprites = {}
     @bgviewport = Viewport.new(0,0,Graphics.width,Graphics.height)

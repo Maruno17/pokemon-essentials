@@ -25,10 +25,36 @@ module GameData
     MINIMUM_OFFSET=40
     ADDITIONAL_OFFSET_WHEN_TOO_CLOSE=40
     MINIMUM_DEX_DIF=20
+
     def self.calculateShinyHueOffset(dex_number, isBodyShiny = false, isHeadShiny = false)
+      if dex_number <= NB_POKEMON
+        if SHINY_COLOR_OFFSETS[dex_number]
+          return SHINY_COLOR_OFFSETS[dex_number]
+        end
+        body_number = dex_number
+        head_number=dex_number
+
+        else
+        body_number = getBodyID(dex_number)
+        head_number=getHeadID(dex_number,body_number)
+      end
+      if isBodyShiny && isHeadShiny && SHINY_COLOR_OFFSETS[body_number]  && SHINY_COLOR_OFFSETS[head_number]
+        offset = SHINY_COLOR_OFFSETS[body_number] + SHINY_COLOR_OFFSETS[head_number]
+      elsif isHeadShiny && SHINY_COLOR_OFFSETS[head_number]
+        offset = SHINY_COLOR_OFFSETS[head_number]
+      elsif isBodyShiny && SHINY_COLOR_OFFSETS[body_number]
+        offset = SHINY_COLOR_OFFSETS[body_number]
+      else
+        offset = calculateShinyHueOffsetDefaultMethod(body_number,head_number,dex_number,isBodyShiny,isHeadShiny)
+      end
+      return offset
+    end
+
+
+    def self.calculateShinyHueOffsetDefaultMethod(body_number,head_number,dex_number, isBodyShiny = false, isHeadShiny = false)
       dex_offset = dex_number
-      body_number = getBodyID(dex_number)
-      head_number=getHeadID(dex_number,body_number)
+      #body_number = getBodyID(dex_number)
+      #head_number=getHeadID(dex_number,body_number)
       dex_diff = (body_number-head_number).abs
       if isBodyShiny && isHeadShiny
         dex_offset = dex_number

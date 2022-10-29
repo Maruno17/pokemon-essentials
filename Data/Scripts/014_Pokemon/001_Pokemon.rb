@@ -222,12 +222,12 @@ class Pokemon
   end
 
   def form=(value)
-    oldForm = @form
-    @form = value
-    @ability = nil
-    MultipleForms.call("onSetForm", self, value, oldForm)
-    calc_stats
-    $Trainer.pokedex.register(self)
+    # oldForm = @form
+    # @form = value
+    # @ability = nil
+    # MultipleForms.call("onSetForm", self, value, oldForm)
+    # calc_stats
+    # $Trainer.pokedex.register(self)
   end
 
   # The same as def form=, but yields to a given block in the middle so that a

@@ -172,7 +172,7 @@ Point=7,16,"Union Cave",,,,,
 Point=6,15,"Route 33",,,,,
 Point=5,15,"Route 33",,,,,
 
-#sevii islands
+#sevii islandsd
 
 Point=22,24,KnotIsland,,526,27,12,
 Point=21,27,"Treasure Beach",,,,,
@@ -187,7 +187,9 @@ Point=23,19,"Kindle Road",,,,,
 Point=23,18,"Kindle Road",,,,,
 
 Point=23,17,"Mt. Ember",,,,,
+Point=23,17,"Mt. Ember",,,,,
 
+Point=23,25,"Battle Factory",,559,46,74,
 
 Point=23,21,"Brine Road",,,,,
 Point=23,22,"Brine Road",,,,,

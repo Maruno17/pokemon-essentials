@@ -37,7 +37,7 @@ class StorageSystemPC
     command = 0
     loop do
       command = pbShowCommandsWithHelp(nil,
-         [_INTL("Organize Boxes"),
+         [_INTL("Organize / Fuse"),
          _INTL("Withdraw Pokémon"),
          _INTL("Deposit Pokémon"),
          _INTL("See ya!")],

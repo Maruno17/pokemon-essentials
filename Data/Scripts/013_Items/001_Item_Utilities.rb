@@ -173,7 +173,7 @@ def pbChangeLevel(pkmn, newlevel, scene)
       pbLearnMove(pkmn, i[1], true) { scene.pbUpdate }
     end
     # Check for evolution
-    newspecies = pkmn.check_evolution_on_level_up
+    newspecies = pkmn.check_evolution_on_level_up(scene)
     if newspecies
       pbFadeOutInWithMusic {
         evo = PokemonEvolutionScene.new

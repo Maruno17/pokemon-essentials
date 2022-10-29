@@ -1055,7 +1055,6 @@ module Compiler
         slots.compact!
         slots.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
       end
-      p encounter_hash
       GameData::Encounter.register(encounter_hash)
     end
     # Save all data

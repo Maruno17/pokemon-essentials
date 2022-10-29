@@ -642,12 +642,12 @@ Events.onEndBattle += proc { |_sender,e|
   end
 }
 
-def pbEvolutionCheck(currentLevels)
+def pbEvolutionCheck(currentLevels,scene=nil)
   for i in 0...currentLevels.length
     pkmn = $Trainer.party[i]
     next if !pkmn || (pkmn.hp==0 && !Settings::CHECK_EVOLUTION_FOR_FAINTED_POKEMON)
     next if currentLevels[i] && pkmn.level==currentLevels[i]
-    newSpecies = pkmn.check_evolution_on_level_up
+    newSpecies = pkmn.check_evolution_on_level_up()
     next if !newSpecies
     evo = PokemonEvolutionScene.new
     evo.pbStartScreen(pkmn,newSpecies)

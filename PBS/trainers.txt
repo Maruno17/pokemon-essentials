@@ -2563,7 +2563,7 @@ Pokemon = B149H269,84 #Togenite,
 
 [CHAMPION,Blue,0]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,59 #Maroeot,
+Pokemon = B18H34,59 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
@@ -2590,7 +2590,7 @@ Pokemon = MEW,64 #Blastizard,
 
 [CHAMPION,Blue,3]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,75 #Maroeot,
+Pokemon = B18H34,75 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
@@ -2617,7 +2617,7 @@ Pokemon = MEW,82 #Blastizard,
 
 [CHAMPION,Blue,6]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,85 #Maroeot,
+Pokemon = B18H34,85 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
@@ -2645,7 +2645,7 @@ Pokemon = MEW,92 #Blastizard,
 
 [CHAMPION,Blue,1]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,59 #Maroeot,
+Pokemon = B18H34,59 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
@@ -2672,7 +2672,7 @@ Pokemon = MEW,64 #Venutoise,
 
 [CHAMPION,Blue,4]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,75 #Maroeot,
+Pokemon = B18H34,75 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
@@ -2699,7 +2699,7 @@ Pokemon = MEW,82 #Venutoise,
 
 [CHAMPION,Blue,7]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,85 #Maroeot,
+Pokemon = B18H34,85 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
@@ -2728,7 +2728,7 @@ Pokemon = MEW,92 #Venutoise,
 
 [CHAMPION,Blue,2]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,59 #Maroeot,
+Pokemon = B18H34,59 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
@@ -2755,7 +2755,7 @@ Pokemon = MEW,64 #Charusaur,
 
 [CHAMPION,Blue,5]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,75 #Maroeot,
+Pokemon = B18H34,75 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
@@ -2782,7 +2782,7 @@ Pokemon = MEW,82 #Charusaur,
 
 [CHAMPION,Blue,8]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,85 #Maroeot,
+Pokemon = B18H34,85 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
@@ -3223,21 +3223,21 @@ Pokemon = MEW,5 #bulbmander,
 #Blue encounter 2 (Viridian)	starter=bulbasaur
 
 [RIVAL1,Blue,3]
-Pokemon = PIDGEY,7 
+Pokemon = B16H32,7 
 Pokemon = MEW,8	 #squirtmander,
 
 
 #Blue encounter 2 (Viridian)	#starter=charmander
 
 [RIVAL1,Blue,4]
-Pokemon = PIDGEY,7 
+Pokemon = B16H32,7 	#pidgey nidoranM
 Pokemon = MEW,8	 #bulbtle,
 
 
 #Blue encounter 2 (Viridian)	#starter=squirtle
 
 [RIVAL1,Blue,5]
-Pokemon = PIDGEY,7 
+Pokemon = B16H32,7 
 Pokemon = MEW,8	 #bulbmander,
 
 ######################
@@ -3245,7 +3245,7 @@ Pokemon = MEW,8	 #bulbmander,
 
 [RIVAL1,Blue,6]
 Items = SUPERPOTION
-Pokemon = PIDGEOTTO,18 
+Pokemon = B17H33,18 
 Pokemon = ABRA,15 
 Pokemon = B19H56,16 
 Pokemon = MEW,19 #squirtmeleon,
@@ -3255,7 +3255,7 @@ Pokemon = MEW,19 #squirtmeleon,
 
 [RIVAL1,Blue,7]
 Items = SUPERPOTION
-Pokemon = PIDGEOTTO,18 
+Pokemon = B17H33,18 
 Pokemon = ABRA,15 
 Pokemon = B19H56,16 
 Pokemon = MEW,19 #bulborttle,
@@ -3266,7 +3266,7 @@ Pokemon = MEW,19 #bulborttle,
 
 [RIVAL1,Blue,8]
 Items = SUPERPOTION
-Pokemon = PIDGEOTTO,18 
+Pokemon = B17H33,18 
 Pokemon = ABRA,15 
 Pokemon = B19H56,16 
 Pokemon = MEW,19 #CHARYSAUR,
@@ -3277,7 +3277,7 @@ Pokemon = MEW,19 #CHARYSAUR,
 
 [RIVAL1,Blue,9]
 Items = SUPERPOTION
-Pokemon = PIDGEOTTO,22 
+Pokemon = B17H33,22 
 Pokemon = B20H56,20 #Manicate,
 Pokemon = B64H120,18 #Starbra,
 Pokemon = MEW,22 #Warmeleon,
@@ -3287,7 +3287,7 @@ Pokemon = MEW,22 #Warmeleon,
 
 [RIVAL1,Blue,10]
 Items = SUPERPOTION
-Pokemon = PIDGEOTTO,22 
+Pokemon = B17H33,22 
 Pokemon = B20H56,20 #Manicate,
 Pokemon = B64H120,18 #Starbra,
 Pokemon = MEW,22 #Ivytortle,
@@ -3297,7 +3297,7 @@ Pokemon = MEW,22 #Ivytortle,
 
 [RIVAL1,Blue,11]
 Items = SUPERPOTION
-Pokemon = PIDGEOTTO,22 
+Pokemon = B17H33,22 
 Pokemon = B20H56,20 #Manicate,
 Pokemon = B64H120,18 #Starbra,
 Pokemon = MEW,22 #Charysaur,
@@ -3308,7 +3308,7 @@ Pokemon = MEW,22 #Charysaur,
 
 [RIVAL1,Blue,12]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = B17H104,25 #Cueotto,
+Pokemon = B17H34,25 #pidgeooto nidoking,
 Pokemon = GYARADOS,23 
 Pokemon = B64H120,22 #Starbra,
 Pokemon = MEW,25 #Warmeleon,
@@ -3317,7 +3317,7 @@ Pokemon = MEW,25 #Warmeleon,
 
 [RIVAL1,Blue,13]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = B17H104,25 #Cueotto,
+Pokemon = B17H34,25 #pidgeooto nidoking,
 Pokemon = GYARADOS,23 
 Pokemon = B64H120,22 #Starbra,
 Pokemon = MEW,25 #Ivytortle,
@@ -3336,7 +3336,7 @@ Pokemon = MEW,25 #Charysaur,
 
 [RIVAL1,Blue,15]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = B18H104,36 #Cueot,
+Pokemon = B18H34,36 #Cueot,
 Pokemon = TAUROS,39 #Taucute,
 Pokemon = B130H125,37 #Electados,
 Pokemon = B65H121,36 #Starkazam,
@@ -3346,7 +3346,7 @@ Pokemon = MEW,41 #Warizard,
 
 [RIVAL1,Blue,16]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = B18H104,36 #Cueot,
+Pokemon = B18H34,36 #Cueot,
 Pokemon = TAUROS,39 #Taucute,
 Pokemon = B130H125,37 #Electados,
 Pokemon = B65H121,36 #Starkazam,
@@ -3356,7 +3356,7 @@ Pokemon = MEW,41 #Warizard,
 
 [RIVAL1,Blue,17]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = B18H104,36 #Cueot,
+Pokemon = B18H34,36 #Cueot,
 Pokemon = TAUROS,39 #Taucute,
 Pokemon = B130H125,37 #Electados,
 Pokemon = B65H121,36 #Starkazam,
@@ -3366,7 +3366,7 @@ Pokemon = MEW,41 #Warizard,
 #starter=bulbasaur
 
 [RIVAL1,Blue,18]
-Pokemon = B18H104,44 #Cueot,
+Pokemon = B18H34,44 #Cueot,
 Pokemon = TAUROS,45 #Taucute,
 Pokemon = B130H125,42 #Electados,
 Pokemon = B64H121,42 #Starkazam,
@@ -3375,7 +3375,7 @@ Pokemon = MEW,45 #Warizard,
 #starter=charmander
 
 [RIVAL1,Blue,19]
-Pokemon = B18H104,44 #Cueot,
+Pokemon = B18H34,44 #Cueot,
 Pokemon = TAUROS,45 #Taucute,
 Pokemon = B130H125,42 #Electados,
 Pokemon = B65H120,42 #Starkazam,
@@ -3385,7 +3385,7 @@ Pokemon = MEW,45 #Ivytoise,
 #starter=squirtle
 
 [RIVAL1,Blue,20]
-Pokemon = B18H104,44 #Cueot,
+Pokemon = B18H34,44 #Cueot,
 Pokemon = TAUROS,45 #Taucute,
 Pokemon = B130H125,42 #Electados,
 Pokemon = B65H120,42 #Starkazam,
@@ -3395,7 +3395,7 @@ Pokemon = MEW,45 #Charusaur,
 #starter=bulbasaur
 
 [RIVAL1,Blue,21]
-Pokemon = B18H105,47 #Maroeot,
+Pokemon = B18H34,47 #Maroeot,
 Pokemon = B102H128,45 #Taucute,
 Pokemon = B111H126,45 #Maghorn,
 Pokemon = B130H125,47 #Electados,
@@ -3405,7 +3405,7 @@ Pokemon = MEW,53 #Blastizard,
 #starter=charmander
 
 [RIVAL1,Blue,22]
-Pokemon = B18H105,47 #Maroeot,
+Pokemon = B18H34,47 #Maroeot,
 Pokemon = B102H128,45 #Taucute,
 Pokemon = B111H126,45 #Maghorn,
 Pokemon = B130H125,47 #Electados,
@@ -3415,7 +3415,7 @@ Pokemon = MEW,53 #Venutoise,
 #starter=squirtle
 
 [RIVAL1,Blue,23]
-Pokemon = B18H105,47 #Maroeot,
+Pokemon = B18H34,47 #Maroeot,
 Pokemon = B102H128,45 #Taucute,
 Pokemon = B111H126,45 #Maghorn,
 Pokemon = B130H125,47 #Electados,
