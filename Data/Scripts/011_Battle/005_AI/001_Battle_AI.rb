@@ -64,10 +64,13 @@ end
 #
 #===============================================================================
 module Battle::AI::Handlers
-  MoveEffectScore  = HandlerHash.new
-  MoveBasePower    = HandlerHash.new
-  MoveFailureCheck = HandlerHash.new
-  GeneralMoveScore = HandlerHash.new
+  MoveFailureCheck              = HandlerHash.new
+  MoveFailureAgainstTargetCheck = HandlerHash.new
+  MoveEffectScore               = HandlerHash.new
+  MoveEffectAgainstTargetScore  = HandlerHash.new
+  MoveBasePower                 = HandlerHash.new
+  GeneralMoveScore              = HandlerHash.new
+  GeneralMoveAgainstTargetScore = HandlerHash.new
   # Move type - uses main battle code via rough_type
   # Move accuracy - uses main battle code via rough_accuracy
   # Move target
@@ -79,8 +82,17 @@ module Battle::AI::Handlers
     return MoveFailureCheck.trigger(function_code, *args) || false
   end
 
+  def self.move_will_fail_against_target?(function_code, *args)
+    return MoveFailureAgainstTargetCheck.trigger(function_code, *args) || false
+  end
+
   def self.apply_move_effect_score(function_code, score, *args)
     ret = MoveEffectScore.trigger(function_code, score, *args)
+    return (ret.nil?) ? score : ret
+  end
+
+  def self.apply_move_effect_against_target_score(function_code, score, *args)
+    ret = MoveEffectAgainstTargetScore.trigger(function_code, score, *args)
     return (ret.nil?) ? score : ret
   end
 
@@ -91,6 +103,14 @@ module Battle::AI::Handlers
 
   def self.apply_general_move_score_modifiers(score, *args)
     GeneralMoveScore.each do |id, score_proc|
+      new_score = score_proc.call(score, *args)
+      score = new_score if new_score
+    end
+    return score
+  end
+
+  def self.apply_general_move_against_target_score_modifiers(score, *args)
+    GeneralMoveAgainstTargetScore.each do |id, score_proc|
       new_score = score_proc.call(score, *args)
       score = new_score if new_score
     end

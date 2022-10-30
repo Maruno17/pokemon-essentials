@@ -2,6 +2,15 @@
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
+  proc { |score, move, user, ai, battle|
+    next 0 if user.battler.allAllies.length == 0
+  }
+)
+
+#===============================================================================
+# TODO: Review score modifiers.
+#===============================================================================
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RedirectAllMovesToTarget",
   proc { |score, move, user, target, ai, battle|
     next 0 if user.battler.allAllies.length == 0
   }
@@ -10,16 +19,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToTarget",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if user.battler.allAllies.length == 0
-  }
-)
-
-#===============================================================================
-# TODO: Review score modifiers.
-#===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("CannotBeRedirected",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CannotBeRedirected",
   proc { |score, move, user, target, ai, battle|
     redirection = false
     user.battler.allOpposing.each do |b|
@@ -50,12 +50,12 @@ Battle::AI::Handlers::MoveBasePower.add("RandomlyDamageOrHealTarget",
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("HealAllyOrDamageFoe",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("HealAllyOrDamageFoe",
   proc { |move, user, target, ai, battle|
     next true if !target.opposes?(user) && target.battler.canHeal?
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("HealAllyOrDamageFoe",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealAllyOrDamageFoe",
   proc { |score, move, user, target, ai, battle|
     if !target.opposes?(user)
       score += 50
@@ -69,32 +69,39 @@ Battle::AI::Handlers::MoveEffectScore.add("HealAllyOrDamageFoe",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
-  proc { |move, user, target, ai, battle|
-    if user.has_type?(:GHOST)
-      next true if target.effects[PBEffects::Curse]
-    else
+  proc { |move, user, ai, battle|
+    if !user.has_type?(:GHOST)
       next true if !user.battler.pbCanLowerStatStage?(:SPEED, user.battler, move.move) &&
                    !user.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
                    !user.battler.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move)
     end
   }
 )
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
+  proc { |move, user, target, ai, battle|
+    next true if user.has_type?(:GHOST) && target.effects[PBEffects::Curse]
+  }
+)
 Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
+  proc { |score, move, user, ai, battle|
+    next score if user.has_type?(:GHOST)
+    avg  = user.stages[:SPEED] * 10
+    avg -= user.stages[:ATTACK] * 10
+    avg -= user.stages[:DEFENSE] * 10
+    score += avg / 3
+    next score
+  }
+)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |score, move, user, target, ai, battle|
-    if user.has_type?(:GHOST)
-      if user.hp <= user.totalhp / 2
-        if battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
-          score -= 90
-        else
-          score -= 50
-          score -= 30 if battle.switchStyle
-        end
+    next score if !user.has_type?(:GHOST)
+    if user.hp <= user.totalhp / 2
+      if battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
+        score -= 90
+      else
+        score -= 50
+        score -= 30 if battle.switchStyle
       end
-    else
-      avg  = user.stages[:SPEED] * 10
-      avg -= user.stages[:ATTACK] * 10
-      avg -= user.stages[:DEFENSE] * 10
-      score += avg / 3
     end
     next score
   }
@@ -114,7 +121,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitsAllFoesAndPowersUpInPsychicTerrain"
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("HitsAllFoesAndPowersUpInPsychicTerrain",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     next score + 20 if battle.field.terrain == :Psychic && user.battler.affectedByTerrain? &&
                        battle.allOtherSideBattlers(user.index).length > 1
   }
@@ -123,12 +130,12 @@ Battle::AI::Handlers::MoveEffectScore.add("HitsAllFoesAndPowersUpInPsychicTerrai
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("TargetNextFireMoveDamagesTarget",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetNextFireMoveDamagesTarget",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Powder]
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("TargetNextFireMoveDamagesTarget",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetNextFireMoveDamagesTarget",
   proc { |score, move, user, target, ai, battle|
     aspeed = user.rough_stat(:SPEED)
     ospeed = target.rough_stat(:SPEED)
@@ -154,14 +161,13 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetNextFireMoveDamagesTarget",
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("PowerUpAllyMove",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PowerUpAllyMove",
   proc { |move, user, target, ai, battle|
     next true if target.fainted? || target.effects[PBEffects::HelpingHand]
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("PowerUpAllyMove",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PowerUpAllyMove",
   proc { |score, move, user, target, ai, battle|
-    next score - 60 if user.battler.allAllies.empty?
     next score + 30
   }
 )
@@ -176,15 +182,15 @@ Battle::AI::Handlers::MoveBasePower.add("CounterPhysicalDamage",
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
-  proc { |score, move, user, target, ai, battle|
-    next score - 40 if target.effects[PBEffects::HyperBeam] > 0
+  proc { |score, move, user, ai, battle|
+#    next Battle::AI::MOVE_USELESS_SCORE if target.effects[PBEffects::HyperBeam] > 0
     attack = user.rough_stat(:ATTACK)
     spatk  = user.rough_stat(:SPECIAL_ATTACK)
     if attack * 1.5 < spatk
       score -= 60
-    elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
-      moveData = GameData::Move.get(target.battler.lastMoveUsed)
-      score += 60 if moveData.physical?
+#    elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
+#      moveData = GameData::Move.get(target.battler.lastMoveUsed)
+#      score += 60 if moveData.physical?
     end
     next score
   }
@@ -200,15 +206,15 @@ Battle::AI::Handlers::MoveBasePower.add("CounterSpecialDamage",
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
-  proc { |score, move, user, target, ai, battle|
-    next score - 40 if target.effects[PBEffects::HyperBeam] > 0
+  proc { |score, move, user, ai, battle|
+#    next Battle::AI::MOVE_USELESS_SCORE if target.effects[PBEffects::HyperBeam] > 0
     attack = user.rough_stat(:ATTACK)
     spatk  = user.rough_stat(:SPECIAL_ATTACK)
     if attack > spatk * 1.5
       score -= 60
-    elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
-      moveData = GameData::Move.get(target.battler.lastMoveUsed)
-      score += 60 if moveData.special?
+#    elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
+#      moveData = GameData::Move.get(target.battler.lastMoveUsed)
+#      score += 60 if moveData.special?
     end
     next score
   }
@@ -224,8 +230,8 @@ Battle::AI::Handlers::MoveBasePower.add("CounterDamagePlusHalf",
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
-  proc { |score, move, user, target, ai, battle|
-    next score - 40 if target.effects[PBEffects::HyperBeam] > 0
+  proc { |score, move, user, ai, battle|
+#    next Battle::AI::MOVE_USELESS_SCORE if target.effects[PBEffects::HyperBeam] > 0
   }
 )
 
@@ -233,12 +239,12 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserAddStockpileRaiseDefSpDef1",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if user.effects[PBEffects::Stockpile] >= 3
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     avg = 0
     avg -= user.stages[:DEFENSE] * 10
     avg -= user.stages[:SPECIAL_DEFENSE] * 10
@@ -255,7 +261,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PowerDependsOnUserStockpile",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if user.effects[PBEffects::Stockpile] == 0
   }
 )
@@ -269,7 +275,7 @@ Battle::AI::Handlers::MoveBasePower.add("PowerDependsOnUserStockpile",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserDependingOnUserStockpile",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if user.effects[PBEffects::Stockpile] == 0
     next true if !user.battler.canHeal? &&
                  user.effects[PBEffects::StockpileDef] == 0 &&
@@ -277,7 +283,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("HealUserDependingOnUserStockpile",
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnUserStockpile",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     mult = [0, 25, 50, 100][user.effects[PBEffects::Stockpile]]
     score += mult
     score -= user.hp * mult * 2 / user.totalhp
@@ -304,7 +310,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnUserStockpile",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if !battle.lastMoveUsed
     next true if move.move.moveBlacklist.include?(GameData::Move.get(battle.lastMoveUsed).function_code)
   }
@@ -313,15 +319,15 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsedByTarget",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UseLastMoveUsedByTarget",
   proc { |move, user, target, ai, battle|
     next true if !target.battler.lastRegularMoveUsed
     next true if GameData::Move.get(target.battler.lastRegularMoveUsed).flags.none? { |f| f[/^CanMirrorMove$/i] }
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("UseLastMoveUsedByTarget",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UseLastMoveUsedByTarget",
   proc { |score, move, user, target, ai, battle|
-    next score - 40
+    next Battle::AI::MOVE_USELESS_SCORE
   }
 )
 
@@ -345,7 +351,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UseLastMoveUsedByTarget",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseRandomMoveFromUserParty",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     will_fail = true
     battle.pbParty(user.index).each_with_index do |pkmn, i|
       next if !pkmn || i == user.party_index
@@ -366,7 +372,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseRandomMoveFromUserParty",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseRandomUserMoveIfAsleep",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if !user.battler.asleep?
     will_fail = true
     user.battler.eachMoveWithIndex do |m, i|
@@ -376,11 +382,6 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseRandomUserMoveIfAsleep",
       break
     end
     next will_fail
-  }
-)
-Battle::AI::Handlers::MoveEffectScore.add("UseRandomUserMoveIfAsleep",
-  proc { |score, move, user, target, ai, battle|
-    next score + 50 if user.battler.asleep?   # Because it can only be used while asleep
   }
 )
 
@@ -399,7 +400,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UseRandomUserMoveIfAsleep",
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Transform] || user.battler.pbHasMove?(move.id)
     last_move_data = GameData::Move.try_get(target.battler.lastRegularMoveUsed)
@@ -413,7 +414,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveThisBattleWithTargetLastM
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveWithTargetLastMoveUsed",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ReplaceMoveWithTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|
     next true if user.effects[PBEffects::Transform] || !user.battler.pbHasMove?(move.id)
     last_move_data = GameData::Move.try_get(target.battler.lastRegularMoveUsed)

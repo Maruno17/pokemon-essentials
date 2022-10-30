@@ -12,19 +12,14 @@
 #
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DoesNothingCongratulations",
-  proc { |score, move, user, target, ai, battle|
-    next score - 60
+  proc { |score, move, user, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE
   }
 )
 
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("DoesNothingFailsIfNoAlly",
-  proc { |move, user, target, ai, battle|
-    next true if user.battler.allAllies.length == 0
-  }
-)
 Battle::AI::Handlers::MoveEffectScore.copy("DoesNothingCongratulations",
                                            "DoesNothingFailsIfNoAlly")
 
@@ -49,12 +44,12 @@ Battle::AI::Handlers::MoveEffectScore.copy("DoesNothingCongratulations",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfNotUserFirstTurn",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if user.turnCount > 0
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("FailsIfNotUserFirstTurn",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     next score + 25   # Use it or lose it
   }
 )
@@ -63,7 +58,7 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfNotUserFirstTurn",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserHasUnusedMove",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     has_another_move = false
     has_unused_move = false
     user.battler.eachMove do |m|
@@ -81,7 +76,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserHasUnusedMove",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserNotConsumedBerry",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if !user.battler.belched?
   }
 )
@@ -89,7 +84,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsIfUserNotConsumedBerry",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("FailsIfTargetHasNoItem",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("FailsIfTargetHasNoItem",
   proc { |move, user, target, ai, battle|
     next true if !target.item || !target.item_active?
   }
@@ -98,7 +93,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsIfTargetHasNoItem",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("FailsUnlessTargetSharesTypeWithUser",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("FailsUnlessTargetSharesTypeWithUser",
   proc { |move, user, target, ai, battle|
     user_types = user.pbTypes(true)
     target_types = target.pbTypes(true)
@@ -107,9 +102,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("FailsUnlessTargetSharesTypeWithUser"
 )
 
 #===============================================================================
-#
+# TODO: Split some of this into a MoveEffectScore?
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserDamagedThisTurn",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfUserDamagedThisTurn",
   proc { |score, move, user, target, ai, battle|
     # Check whether user is faster than its foe(s) and could use this move
     user_faster_count = 0
@@ -122,7 +117,7 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserDamagedThisTurn",
         foe_faster_count += 1
       end
     end
-    next score - 40 if user_faster_count == 0
+    next Battle::AI::MOVE_USELESS_SCORE if user_faster_count == 0
     score += 10 if foe_faster_count == 0
     # Effects that make the target unlikely to act before the user
     if ai.trainer.high_skill?
@@ -148,10 +143,10 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfUserDamagedThisTurn",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("FailsIfTargetActed",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfTargetActed",
   proc { |score, move, user, target, ai, battle|
     # Check whether user is faster than its foe(s) and could use this move
-    next score - 40 if target.faster_than?(user)
+    next Battle::AI::MOVE_USELESS_SCORE if target.faster_than?(user)
     score += 10
     # TODO: Predict the target switching/using an item.
     # TODO: Predict the target using a damaging move or Me First.
@@ -165,7 +160,7 @@ Battle::AI::Handlers::MoveEffectScore.add("FailsIfTargetActed",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("CrashDamageIfFailsUnusableInGravity",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CrashDamageIfFailsUnusableInGravity",
   proc { |score, move, user, target, ai, battle|
     next score - (100 - move.rough_accuracy) if user.battler.takesIndirectDamage?
   }
@@ -175,15 +170,15 @@ Battle::AI::Handlers::MoveEffectScore.add("CrashDamageIfFailsUnusableInGravity",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartSunWeather",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if [:HarshSun, :HeavyRain, :StrongWinds,
                   move.move.weatherType].include?(battle.field.weather)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
-  proc { |score, move, user, target, ai, battle|
-    next score - 40 if battle.pbCheckGlobalAbility(:AIRLOCK) ||
-                       battle.pbCheckGlobalAbility(:CLOUDNINE)
+  proc { |score, move, user, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                                           battle.pbCheckGlobalAbility(:CLOUDNINE)
     score += 10 if battle.field.weather != :None   # Prefer replacing another weather
     score += 15 if user.has_active_item?(:HEATROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
@@ -227,9 +222,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartRainWeather")
 Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
-  proc { |score, move, user, target, ai, battle|
-    next score - 40 if battle.pbCheckGlobalAbility(:AIRLOCK) ||
-                       battle.pbCheckGlobalAbility(:CLOUDNINE)
+  proc { |score, move, user, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                                           battle.pbCheckGlobalAbility(:CLOUDNINE)
     score += 10 if battle.field.weather != :None   # Prefer replacing another weather
     score += 15 if user.has_active_item?(:DAMPROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
@@ -269,9 +264,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartSandstormWeather")
 Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
-  proc { |score, move, user, target, ai, battle|
-    next score - 40 if battle.pbCheckGlobalAbility(:AIRLOCK) ||
-                       battle.pbCheckGlobalAbility(:CLOUDNINE)
+  proc { |score, move, user, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                                           battle.pbCheckGlobalAbility(:CLOUDNINE)
     score += 10 if battle.field.weather != :None   # Prefer replacing another weather
     score += 15 if user.has_active_item?(:SMOOTHROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
@@ -310,9 +305,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartHailWeather")
 Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
-  proc { |score, move, user, target, ai, battle|
-    next score - 40 if battle.pbCheckGlobalAbility(:AIRLOCK) ||
-                       battle.pbCheckGlobalAbility(:CLOUDNINE)
+  proc { |score, move, user, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                                           battle.pbCheckGlobalAbility(:CLOUDNINE)
     score += 10 if battle.field.weather != :None   # Prefer replacing another weather
     score += 15 if user.has_active_item?(:ICYROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
@@ -349,12 +344,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartElectricTerrain",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if battle.field.terrain == :Electric
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartElectricTerrain",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
     if battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
@@ -368,12 +363,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartElectricTerrain",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartGrassyTerrain",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if battle.field.terrain == :Grassy
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartGrassyTerrain",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
     if battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
@@ -387,12 +382,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartGrassyTerrain",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartMistyTerrain",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if battle.field.terrain == :Misty
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartMistyTerrain",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
     if battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
@@ -406,12 +401,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartMistyTerrain",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartPsychicTerrain",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if battle.field.terrain == :Psychic
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartPsychicTerrain",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
     if battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
@@ -425,12 +420,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPsychicTerrain",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RemoveTerrain",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if battle.field.terrain == :None
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("RemoveTerrain",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     next score - ai.get_score_for_terrain(battle.field.terrain, user)
   }
 )
@@ -439,12 +434,12 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveTerrain",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AddSpikesToFoeSide",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if user.pbOpposingSide.effects[PBEffects::Spikes] >= 3
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     inBattleIndices = battle.allSameSideBattlers(user.idxOpposingSide).map { |b| b.pokemonIndex }
     foe_reserves = []
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
@@ -464,7 +459,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
       end
       foe_reserves.push(pkmn)   # pkmn will be affected by Spikes
     end
-    next score - 40 if foe_reserves.empty?
+    next Battle::AI::MOVE_USELESS_SCORE if foe_reserves.empty?
     multiplier = [8, 5, 3][user.pbOpposingSide.effects[PBEffects::Spikes]]
     score += multiplier * foe_reserves.length
     next score
@@ -475,12 +470,12 @@ Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AddToxicSpikesToFoeSide",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if user.pbOpposingSide.effects[PBEffects::ToxicSpikes] >= 2
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     inBattleIndices = battle.allSameSideBattlers(user.idxOpposingSide).map { |b| b.pokemonIndex }
     foe_reserves = []
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
@@ -502,7 +497,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
       end
       foe_reserves.push(pkmn)   # pkmn will be affected by Toxic Spikes
     end
-    next score - 40 if foe_reserves.empty?
+    next Battle::AI::MOVE_USELESS_SCORE if foe_reserves.empty?
     multiplier = [6, 4][user.pbOpposingSide.effects[PBEffects::ToxicSpikes]]
     score += multiplier * foe_reserves.length
     next score
@@ -513,12 +508,12 @@ Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AddStealthRocksToFoeSide",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if user.pbOpposingSide.effects[PBEffects::StealthRock]
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     inBattleIndices = battle.allSameSideBattlers(user.idxOpposingSide).map { |b| b.pokemonIndex }
     foe_reserves = []
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
@@ -531,7 +526,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
       end
       foe_reserves.push(pkmn)   # pkmn will be affected by Stealth Rock
     end
-    next score - 40 if foe_reserves.empty?
+    next Battle::AI::MOVE_USELESS_SCORE if foe_reserves.empty?
     next score + 8 * foe_reserves.length
   }
 )
@@ -540,12 +535,12 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("AddStickyWebToFoeSide",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if user.pbOpposingSide.effects[PBEffects::StickyWeb]
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("AddStickyWebToFoeSide",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     inBattleIndices = battle.allSameSideBattlers(user.idxOpposingSide).map { |b| b.pokemonIndex }
     foe_reserves = []
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
@@ -563,7 +558,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStickyWebToFoeSide",
       end
       foe_reserves.push(pkmn)   # pkmn will be affected by Sticky Web
     end
-    next score - 40 if foe_reserves.empty?
+    next Battle::AI::MOVE_USELESS_SCORE if foe_reserves.empty?
     next score + 7 * foe_reserves.length
   }
 )
@@ -572,7 +567,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStickyWebToFoeSide",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SwapSideEffects",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     has_effect = false
     2.times do |side|
       effects = battle.sides[side].effects
@@ -593,7 +588,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("SwapSideEffects",
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("SwapSideEffects",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     if ai.trainer.medium_skill?
       good_effects = [:AuroraVeil, :LightScreen, :Mist, :Rainbow, :Reflect,
                       :Safeguard, :SeaOfFire, :Swamp, :Tailwind].map! { |e| PBEffects.const_get(e) }
@@ -617,7 +612,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwapSideEffects",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserMakeSubstitute",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if user.effects[PBEffects::Substitute] > 0
     next true if user.hp <= [user.totalhp / 4, 1].max
   }
@@ -627,7 +622,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserMakeSubstitute",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RemoveUserBindingAndEntryHazards",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     score += 10 if user.effects[PBEffects::Trapping] > 0
     score += 15 if user.effects[PBEffects::LeechSeed] >= 0
     if battle.pbAbleNonActiveCount(user.idxOwnSide) > 0
@@ -643,13 +638,13 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveUserBindingAndEntryHazards",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("AttackTwoTurnsLater",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AttackTwoTurnsLater",
   proc { |move, user, target, ai, battle|
     next true if battle.positions[target.index].effects[PBEffects::FutureSightCounter] > 0
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("AttackTwoTurnsLater",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     # Future Sight tends to be wasteful if down to last Pokémon
     next score - 20 if battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
   }
@@ -659,7 +654,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AttackTwoTurnsLater",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserSwapsPositionsWithAlly",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     num_targets = 0
     idxUserOwner = battle.pbGetOwnerIndexFromBattlerIndex(user.index)
     user.battler.allAllies.each do |b|
@@ -671,7 +666,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserSwapsPositionsWithAlly",
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("UserSwapsPositionsWithAlly",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     next score - 30   # Usually no point in using this
   }
 )
@@ -680,7 +675,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserSwapsPositionsWithAlly",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("BurnAttackerBeforeUserActs",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     ai.battlers.each do |b|
       next if !b || !b.opposes?(user)
       next if !b.battler.affectedByContactEffect?

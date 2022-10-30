@@ -11,26 +11,31 @@
 #
 # Skill flags:
 #   PredictMoveFailure
+#   ScoreMoves
+#   PreferMultiTargetMoves
 #===============================================================================
 class Battle::AI::AITrainer
   attr_reader :side, :trainer_index
   attr_reader :skill
 
   def initialize(ai, side, index, trainer)
-    @ai = ai
-    @side = side
+    @ai            = ai
+    @side          = side
     @trainer_index = index
-    @trainer = trainer
-
-    @skill = 0
-    @skill_flags = []
+    @trainer       = trainer
+    @skill         = 0
+    @skill_flags   = []
     set_up_skill
   end
 
   def set_up_skill
     @skill = @trainer.skill_level if @trainer
     # TODO: Add skill flags depending on @skill.
-    @skill_flags.push("PredictMoveFailure") if @skill > 0
+    if @skill > 0
+      @skill_flags.push("PredictMoveFailure")
+      @skill_flags.push("ScoreMoves")
+      @skill_flags.push("PreferMultiTargetMoves")
+    end
   end
 
   def has_skill_flag?(flag)

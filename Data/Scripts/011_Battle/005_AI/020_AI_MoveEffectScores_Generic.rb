@@ -5,7 +5,7 @@ class Battle::AI
   def get_score_for_user_stat_raise(score)
     # Discard status move/don't prefer damaging move if user has Contrary
     if !@battle.moldBreaker && @user.has_active_ability?(:CONTRARY)
-      return (@move.statusMove?) ? score - 40 : score - 20
+      return (@move.statusMove?) ? MOVE_USELESS_SCORE : score - 20
     end
     # Don't make score changes if foes have Unaware and user can't make use of
     # extra stat stages
@@ -37,7 +37,7 @@ class Battle::AI
     if stat_changes.length == 0
       # TODO: Have a parameter that decides whether to reduce the score here
       #       (for moves where this is just part of the effect).
-      return (@move.statusMove?) ? score - 40 : score
+      return (@move.statusMove?) ? MOVE_USELESS_SCORE : score
     end
 
     # Make score changes based on the general concept of raising stats at all

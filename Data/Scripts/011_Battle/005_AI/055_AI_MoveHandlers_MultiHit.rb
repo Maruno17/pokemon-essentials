@@ -6,7 +6,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoTimes",
     next power * move.move.pbNumHits(user.battler, [target.battler])
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimes",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoTimes",
   proc { |score, move, user, target, ai, battle|
     # Prefer if the target has a Substitute and the first hit can break it
     if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
@@ -24,13 +24,13 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimes",
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
                                          "HitTwoTimesPoisonTarget")
-Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoTimesPoisonTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for hitting multiple times
-    score = Battle::AI::Handlers.apply_move_effect_score("HitTwoTimes",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("HitTwoTimes",
        score, move, user, target, ai, battle)
     # Score for poisoning
-    score = Battle::AI::Handlers.apply_move_effect_score("PoisonTarget",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("PoisonTarget",
        score, move, user, target, ai, battle)
     next score
   }
@@ -41,13 +41,13 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesPoisonTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
                                          "HitTwoTimesFlinchTarget")
-Battle::AI::Handlers::MoveEffectScore.add("HitTwoTimesFlinchTarget",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoTimesFlinchTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for hitting multiple times
-    score = Battle::AI::Handlers.apply_move_effect_score("HitTwoTimes",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("HitTwoTimes",
        score, move, user, target, ai, battle)
     # Score for flinching
-    score = Battle::AI::Handlers.apply_move_effect_score("FlinchTarget",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
        score, move, user, target, ai, battle)
     next score
   }
@@ -70,7 +70,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesPowersUpWithEachHit",
     next power * 6   # Hits do x1, x2, x3 ret in turn, for x6 in total
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("HitThreeTimesPowersUpWithEachHit",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitThreeTimesPowersUpWithEachHit",
   proc { |score, move, user, target, ai, battle|
     # Prefer if the target has a Substitute and the first or second hit can break it
     if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
@@ -87,8 +87,8 @@ Battle::AI::Handlers::MoveEffectScore.add("HitThreeTimesPowersUpWithEachHit",
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoTimes",
                                          "HitThreeTimesAlwaysCriticalHit")
-Battle::AI::Handlers::MoveEffectScore.copy("HitTwoTimes",
-                                           "HitThreeTimesAlwaysCriticalHit")
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("HitTwoTimes",
+                                                        "HitThreeTimesAlwaysCriticalHit")
 
 #===============================================================================
 #
@@ -99,7 +99,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimes",
     next power * 31 / 10   # Average damage dealt
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("HitTwoToFiveTimes",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoToFiveTimes",
   proc { |score, move, user, target, ai, battle|
     # Prefer if the target has a Substitute and the first hit(s) can break it
     if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
@@ -124,18 +124,18 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimesOrThreeForAshGreninja"
     next power * 31 / 10   # Average damage dealt
   }
 )
-Battle::AI::Handlers::MoveEffectScore.copy("HitTwoToFiveTimes",
-                                           "HitTwoToFiveTimesOrThreeForAshGreninja")
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("HitTwoToFiveTimes",
+                                                        "HitTwoToFiveTimesOrThreeForAshGreninja")
 
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoToFiveTimes",
                                          "HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1")
-Battle::AI::Handlers::MoveEffectScore.add("HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1",
   proc { |score, move, user, target, ai, battle|
     # Score for being a multi-hit attack
-    score = Battle::AI::Handlers.apply_move_effect_score("HitTwoToFiveTimes",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("HitTwoToFiveTimes",
        score, move, user, target, ai, battle)
     # User's stat changes
     aspeed = user.rough_stat(:SPEED)
@@ -152,7 +152,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HitTwoToFiveTimesRaiseUserSpd1LowerUs
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HitOncePerUserTeamMember",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     will_fail = true
     battle.eachInTeamFromBattlerIndex(user.index) do |pkmn, i|
       next if !pkmn.able? || pkmn.status != :NONE
@@ -171,7 +171,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitOncePerUserTeamMember",
     next ret
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("HitOncePerUserTeamMember",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitOncePerUserTeamMember",
   proc { |score, move, user, target, ai, battle|
     # Prefer if the target has a Substitute and the first hit(s) can break it
     if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
@@ -191,7 +191,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HitOncePerUserTeamMember",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("AttackAndSkipNextTurn",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     # Don't prefer because it uses up two turns
     score -= 10 if !user.has_active_ability?(:TRUANT)
     # Don't prefer if user is at a high HP (treat this move as a last resort)
@@ -204,12 +204,12 @@ Battle::AI::Handlers::MoveEffectScore.add("AttackAndSkipNextTurn",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttack",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttack",
   proc { |score, move, user, target, ai, battle|
     # Power Herb makes this a 1 turn move, the same as a move with no effect
     next score if user.has_active_item?(:POWERHERB)
     # Treat as a failure if user has Truant (the charging turn has no effect)
-    next score - 60 if user.has_active_ability?(:TRUANT)
+    next Battle::AI::MOVE_USELESS_SCORE if user.has_active_ability?(:TRUANT)
     # Don't prefer because it uses up two turns
     score -= 15
     # Don't prefer if user is at a low HP (time is better spent on quicker moves)
@@ -258,12 +258,12 @@ Battle::AI::Handlers::MoveBasePower.add("TwoTurnAttackOneTurnInSun",
     next move.move.pbBaseDamageMultiplier(power, user.battler, target.battler)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackOneTurnInSun",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackOneTurnInSun",
   proc { |score, move, user, target, ai, battle|
     # Sunny weather this a 1 turn move, the same as a move with no effect
     next score if [:Sun, :HarshSun].include?(user.battler.effectiveWeather)
     # Score for being a two turn attack
-    next Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
+    next Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
   }
 )
@@ -271,13 +271,13 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackOneTurnInSun",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for being a two turn attack
-    score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     # Score for paralysing
-    score = Battle::AI::Handlers.apply_move_effect_score("ParalyzeTarget",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
        score, move, user, target, ai, battle)
     next score
   }
@@ -286,13 +286,13 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackParalyzeTarget",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackBurnTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for being a two turn attack
-    score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     # Score for burning
-    score = Battle::AI::Handlers.apply_move_effect_score("BurnTarget",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
        score, move, user, target, ai, battle)
     next score
   }
@@ -301,13 +301,13 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackBurnTarget",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackFlinchTarget",
   proc { |score, move, user, target, ai, battle|
     # Score for being a two turn attack
-    score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     # Score for flinching
-    score = Battle::AI::Handlers.apply_move_effect_score("FlinchTarget",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
        score, move, user, target, ai, battle)
     next score
   }
@@ -318,12 +318,12 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackFlinchTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkDef1",
                                             "TwoTurnAttackRaiseUserSpAtkSpDefSpd2")
-Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2",
   proc { |score, move, user, target, ai, battle|
     # Score for raising user's stats
     score = ai.get_score_for_user_stat_raise(score)
     # Score for being a two turn attack
-    score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     next score
   }
@@ -332,14 +332,14 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2"
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserDefense1",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackChargeRaiseUserDefense1",
   proc { |score, move, user, target, ai, battle|
     # Score for being a two turn attack
-    score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     # Score for raising the user's stat
     score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserDefense1",
-       score, move, user, target, ai, battle)
+       score, move, user, ai, battle)
     next score
   }
 )
@@ -347,14 +347,14 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserDefense1"
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
   proc { |score, move, user, target, ai, battle|
     # Score for being a two turn attack
-    score = Battle::AI::Handlers.apply_move_effect_score("TwoTurnAttack",
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     # Score for raising the user's stat
     score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserSpAtk1",
-       score, move, user, target, ai, battle)
+       score, move, user, ai, battle)
     next score
   }
 )
@@ -382,7 +382,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TwoTurnAttackChargeRaiseUserSpAtk1",
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("TwoTurnAttackInvulnerableInSkyTargetCannotAct",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TwoTurnAttackInvulnerableInSkyTargetCannotAct",
   proc { |move, user, target, ai, battle|
     next true if !target.opposes?(user)
     next true if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
@@ -417,6 +417,7 @@ Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackPowersUpEachTurn",
 
 #===============================================================================
 # TODO: Review score modifiers.
+# TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackBideThenReturnDoubleDamage",
   proc { |power, move, user, target, ai, battle|
@@ -424,7 +425,7 @@ Battle::AI::Handlers::MoveBasePower.add("MultiTurnAttackBideThenReturnDoubleDama
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("MultiTurnAttackBideThenReturnDoubleDamage",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     if user.hp <= user.totalhp / 4
       score -= 90
     elsif user.hp <= user.totalhp / 2

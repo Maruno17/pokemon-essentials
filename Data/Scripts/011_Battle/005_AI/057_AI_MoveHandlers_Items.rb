@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("UserTakesTargetItem",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTakesTargetItem",
   proc { |score, move, user, target, ai, battle|
     next score if user.wild? || user.item
     next score if !target.item || target.battler.unlosableItem?(target.item)
@@ -22,13 +22,13 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTakesTargetItem",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("TargetTakesUserItem",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetTakesUserItem",
   proc { |move, user, target, ai, battle|
     next true if !user.item || user.battler.unlosableItem?(user.item)
     next true if target.item || target.battler.unlosableItem?(user.item)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("TargetTakesUserItem",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetTakesUserItem",
   proc { |score, move, user, target, ai, battle|
     user_item_preference = ai.battler_wants_item?(user, user.item_id)
     user_no_item_preference = ai.battler_wants_item?(user, :NONE)
@@ -43,7 +43,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetTakesUserItem",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("UserTargetSwapItems",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UserTargetSwapItems",
   proc { |move, user, target, ai, battle|
     next true if user.wild?
     next true if !user.item && !target.item
@@ -52,7 +52,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserTargetSwapItems",
     next true if target.has_active_ability?(:STICKYHOLD) && !battle.moldBreaker
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapItems",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapItems",
   proc { |score, move, user, target, ai, battle|
     user_new_item_preference = ai.battler_wants_item?(user, target.item_id)
     user_old_item_preference = ai.battler_wants_item?(user, user.item_id)
@@ -71,12 +71,12 @@ Battle::AI::Handlers::MoveEffectScore.add("UserTargetSwapItems",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RestoreUserConsumedItem",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     next true if !user.battler.recycleItem || user.item
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("RestoreUserConsumedItem",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     user_new_item_preference = ai.battler_wants_item?(user, user.battler.recycleItem)
     user_old_item_preference = ai.battler_wants_item?(user, user.item_id)
     score += (user_new_item_preference - user_old_item_preference) * 8
@@ -92,7 +92,7 @@ Battle::AI::Handlers::MoveBasePower.add("RemoveTargetItem",
     next move.move.pbBaseDamage(power, user.battler, target.battler)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("RemoveTargetItem",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RemoveTargetItem",
   proc { |score, move, user, target, ai, battle|
     next score if user.wild?
     next score if !target.item || target.battler.unlosableItem?(target.item)
@@ -109,7 +109,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveTargetItem",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("DestroyTargetBerryOrGem",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DestroyTargetBerryOrGem",
   proc { |score, move, user, target, ai, battle|
     next score if !target.item || (!target.item.is_berry? &&
                   !(Settings::MECHANICS_GENERATION >= 6 && target.item.is_gem?))
@@ -127,7 +127,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DestroyTargetBerryOrGem",
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("CorrodeTargetItem",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CorrodeTargetItem",
   proc { |move, user, target, ai, battle|
     next true if !target.item || target.unlosableItem?(target.item) ||
                  target.effects[PBEffects::Substitute] > 0
@@ -135,7 +135,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("CorrodeTargetItem",
     next true if battle.corrosiveGas[target.index % 2][target.party_index]
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("CorrodeTargetItem",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CorrodeTargetItem",
   proc { |score, move, user, target, ai, battle|
     if target.item_active?
       score += 30
@@ -149,14 +149,9 @@ Battle::AI::Handlers::MoveEffectScore.add("CorrodeTargetItem",
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("StartTargetCannotUseItem",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartTargetCannotUseItem",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Embargo] > 0
-  }
-)
-Battle::AI::Handlers::MoveEffectScore.add("StartTargetCannotUseItem",
-  proc { |score, move, user, target, ai, battle|
-    next 0 if target.effects[PBEffects::Embargo] > 0
   }
 )
 
@@ -165,9 +160,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartTargetCannotUseItem",
 # TODO: This code shouldn't make use of target.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("StartNegateHeldItems",
-  proc { |score, move, user, target, ai, battle|
-    next score - 40 if battle.field.effects[PBEffects::MagicRoom] > 0
-    next score + 30 if !user.item && target.item
+  proc { |score, move, user, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if battle.field.effects[PBEffects::MagicRoom] > 0
+    next score + 30 if !user.item   # && target.item
   }
 )
 
@@ -175,13 +170,13 @@ Battle::AI::Handlers::MoveEffectScore.add("StartNegateHeldItems",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserConsumeBerryRaiseDefense2",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     item = user.item
     next true if !item || !item.is_berry? || !user.item_active?
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("UserConsumeBerryRaiseDefense2",
-  proc { |score, move, user, target, ai, battle|
+  proc { |score, move, user, ai, battle|
     if ai.trainer.high_skill?
       useful_berries = [
         :ORANBERRY, :SITRUSBERRY, :AGUAVBERRY, :APICOTBERRY, :CHERIBERRY,
@@ -206,14 +201,14 @@ Battle::AI::Handlers::MoveEffectScore.add("UserConsumeBerryRaiseDefense2",
 
 #===============================================================================
 # TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+# TODO: This code should be for a single battler (each is checked in turn).
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("AllBattlersConsumeBerry",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AllBattlersConsumeBerry",
   proc { |move, user, target, ai, battle|
     next true if !target.item || !target.item.is_berry? || target.battler.semiInvulnerable?
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("AllBattlersConsumeBerry",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AllBattlersConsumeBerry",
   proc { |score, move, user, target, ai, battle|
     useful_berries = [
       :ORANBERRY, :SITRUSBERRY, :AGUAVBERRY, :APICOTBERRY, :CHERIBERRY,
@@ -252,7 +247,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersConsumeBerry",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("UserConsumeTargetBerry",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserConsumeTargetBerry",
   proc { |score, move, user, target, ai, battle|
     next score if !target.item || !target.item.is_berry?
     next score if user.battler.unlosableItem?(target.item)
@@ -270,7 +265,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserConsumeTargetBerry",
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ThrowUserItemAtTarget",
-  proc { |move, user, target, ai, battle|
+  proc { |move, user, ai, battle|
     item = user.item
     next true if !item || !user.item_active? || user.battler.unlosableItem?(item)
     next true if item.is_berry? && !user.battler.canConsumeBerry?

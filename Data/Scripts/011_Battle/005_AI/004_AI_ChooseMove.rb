@@ -1,110 +1,95 @@
 class Battle::AI
+  MOVE_FAIL_SCORE    = 25
+  MOVE_USELESS_SCORE = 60   # Move predicted to do nothing or just be detrimental
+  MOVE_BASE_SCORE    = 100
+
   #=============================================================================
   # Get scores for the user's moves (done before any action is assessed).
   #=============================================================================
   def pbGetMoveScores
-    battler = @user.battler
-    # Get scores and targets for each move
     choices = []
-    # TODO: Split this into two, the first part being the calculation of all
-    #       predicted damages and the second part being the score calculations
-    #       (which are based on the predicted damages). Multi-target moves could
-    #       be fiddly since damages should be calculated for each target but
-    #       they're all related.
-    battler.eachMoveWithIndex do |m, i|
-      if !@battle.pbCanChooseMove?(battler.index, i, false)   # Unchoosable moves aren't considered
-        if m.pp == 0 && m.total_pp > 0
-          PBDebug.log("[AI] #{battler.pbThis} (#{battler.index}) cannot use move #{m.name} as it has no PP left")
+    @user.battler.eachMoveWithIndex do |move, idxMove|
+      # Unchoosable moves aren't considered
+      if !@battle.pbCanChooseMove?(@user.index, idxMove, false)
+        if move.pp == 0 && move.total_pp > 0
+          PBDebug.log("[AI] #{@user.battler.pbThis} (#{@user.index}) cannot use move #{move.name} as it has no PP left")
         else
-          PBDebug.log("[AI] #{battler.pbThis} (#{battler.index}) cannot choose to use #{m.name}")
+          PBDebug.log("[AI] #{@user.battler.pbThis} (#{@user.index}) cannot choose to use #{move.name}")
         end
         next
       end
-      pbAddMoveWithScoreToChoices(i, choices)
+      # Set up move in class variables
+      set_up_move_check(move)
+      # Predict whether the move will fail (generally)
+      if @trainer.has_skill_flag?("PredictMoveFailure") && pbPredictMoveFailure
+        add_move_to_choices(choices, idxMove, MOVE_FAIL_SCORE)
+        next
+      end
+      target_data = move.pbTarget(@user.battler)
+      # TODO: Alter target_data if user has Protean and move is Curse.
+      case target_data.num_targets
+      when 0   # No targets, affects the user or a side or the whole field
+        # Includes: BothSides, FoeSide, None, User, UserSide
+        score = MOVE_BASE_SCORE
+        PBDebug.logonerr { score = pbGetMoveScore(move) }
+        add_move_to_choices(choices, idxMove, score)
+      when 1   # One target to be chosen by the trainer
+        # Includes: Foe, NearAlly, NearFoe, NearOther, Other, RandomNearFoe, UserOrNearAlly
+        # TODO: Figure out first which targets are valid. Includes the call to
+        #       pbMoveCanTarget?, but also includes move-redirecting effects like
+        #       Lightning Rod. Skip any battlers that can't be targeted.
+        @battle.allBattlers.each do |b|
+          next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
+          # TODO: This should consider targeting an ally if possible. Scores will
+          #       need to distinguish between harmful and beneficial to target.
+          #       def pbGetMoveScore uses "175 - score" if the target is an ally;
+          #       is this okay?
+          #       Noticeably affects a few moves like Heal Pulse, as well as moves
+          #       that the target can be immune to by an ability (you may want to
+          #       attack the ally anyway so it gains the effect of that ability).
+          next if target_data.targets_foe && !@user.battler.opposes?(b)
+          score = MOVE_BASE_SCORE
+          PBDebug.logonerr { score = pbGetMoveScore(move, [b]) }
+          add_move_to_choices(choices, idxMove, score, b.index)
+        end
+      else   # Multiple targets at once
+        # Includes: AllAllies, AllBattlers, AllFoes, AllNearFoes, AllNearOthers, UserAndAllies
+        targets = []
+        @battle.allBattlers.each do |b|
+          next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
+          targets.push(b)
+        end
+        score = MOVE_BASE_SCORE
+        PBDebug.logonerr { score = pbGetMoveScore(move, targets) }
+        add_move_to_choices(choices, idxMove, score)
+      end
     end
     @battle.moldBreaker = false
     return choices
   end
 
-  #=============================================================================
-  # Get scores for the given move against each possible target.
-  #=============================================================================
-  # Wild Pokémon choose their moves randomly.
-  # Trainer Pokémon calculate how much they want to use each of their moves.
-  def pbAddMoveWithScoreToChoices(idxMove, choices)
-    battler = @user.battler
-    # TODO: Better incorporate this with the below code in future. This is here
-    #       for now because of the num_targets > 1 code below, which would
-    #       produce a score of 100 * the number of targets for a multi-target
-    #       move, making it ridiculously over-preferred.
-    if @user.wild?
-      score = 100
-      choices.push([idxMove, score, -1])   # Move index, score, target
-      # Doubly prefer one of the user's moves (the choice is random but consistent
-      # and does not correlate to any other property of the user)
-      choices.push([idxMove, score, -1]) if battler.pokemon.personalID % battler.moves.length == idxMove
-      return
-    end
-    move = battler.moves[idxMove]
-    target_data = move.pbTarget(battler)
-    # TODO: Alter target_data if user has Protean and move is Curse.
-    if [:UserAndAllies, :AllAllies, :AllBattlers].include?(target_data.id) ||
-       target_data.num_targets == 0
-      # Also includes: BothSides, FoeSide, None, User, UserSide
-      # If move has no targets, affects the user, a side or the whole field, or
-      # specially affects multiple Pokémon and the AI calculates an overall
-      # score at once instead of per target
-      score = 100
-      PBDebug.logonerr { score = pbGetMoveScore(move) }
-      choices.push([idxMove, score, -1])
-    elsif target_data.num_targets > 1
-      # Includes: AllFoes, AllNearFoes, AllNearOthers
-      # Would also include UserAndAllies, AllAllies, AllBattlers, but they're above
-      # If move affects multiple battlers and you don't choose a particular one
-      # TODO: Should the scores from each target be averaged instead of summed?
-      total_score = 0
-      num_targets = 0
-      @battle.allBattlers.each do |b|
-        next if !@battle.pbMoveCanTarget?(battler.index, b.index, target_data)
-        score = 100
-        PBDebug.logonerr { score = pbGetMoveScore(move, b) }
-        total_score += ((battler.opposes?(b)) ? score : -score)
-        num_targets += 1
-      end
-      final_score = (num_targets == 1) ? total_score : 1.5 * total_score / num_targets
-      choices.push([idxMove, final_score, -1])
-    else
-      # Includes: Foe, NearAlly, NearFoe, NearOther, Other, RandomNearFoe, UserOrNearAlly
-      # If move affects one battler and you have to choose which one
-      # TODO: Figure out first which targets are valid. Includes the call to
-      #       pbMoveCanTarget?, but also includes move-redirecting effects like
-      #       Lightning Rod. Skip any battlers that can't be targeted.
-      @battle.allBattlers.each do |b|
-        next if !@battle.pbMoveCanTarget?(battler.index, b.index, target_data)
-        # TODO: This should consider targeting an ally if possible. Scores will
-        #       need to distinguish between harmful and beneficial to target -
-        #       maybe make the score "150 - score" if target is an ally (but
-        #       only if the score is > 10 which is the "will fail" value)?
-        #       Noticeably affects a few moves like Heal Pulse, as well as moves
-        #       that the target can be immune to by an ability (you may want to
-        #       attack the ally anyway so it gains the effect of that ability).
-        next if target_data.targets_foe && !battler.opposes?(b)
-        score = 100
-        PBDebug.logonerr { score = pbGetMoveScore(move, b) }
-        choices.push([idxMove, score, b.index])
-      end
+  def add_move_to_choices(choices, idxMove, score, idxTarget = -1)
+    choices.push([idxMove, score, idxTarget])
+    # If the user is a wild Pokémon, doubly prefer one of its moves (the choice
+    # is random but consistent and does not correlate to any other property of
+    # the user)
+    if @user.wild? && @user.pokemon.personalID % @user.battler.moves.length == idxMove
+      choices.push([idxMove, score, idxTarget])
     end
   end
 
   #=============================================================================
   # Set some extra class variables for the move/target combo being assessed.
   #=============================================================================
-  def set_up_move_check(move, target)
+  def set_up_move_check(move)
     @move.set_up(move, @user)
-    # TODO: Set @target to nil if there isn't one?
-    @target = (target) ? @battlers[target.index] : @user
-    @target&.refresh_battler
     @battle.moldBreaker = @user.has_mold_breaker?
+  end
+
+  def set_up_move_check_target(target)
+    # TODO: Set @target to nil if there isn't one?
+    @target = (target) ? @battlers[target.index] : nil   # @user
+    @target&.refresh_battler
   end
 
   #=============================================================================
@@ -121,7 +106,13 @@ class Battle::AI
     # User will be truanting
     return true if @user.has_active_ability?(:TRUANT) && @user.effects[PBEffects::Truant]
     # Move effect-specific checks
-    return true if Battle::AI::Handlers.move_will_fail?(@move.function, @move, @user, @target, self, @battle)
+    return true if Battle::AI::Handlers.move_will_fail?(@move.function, @move, @user, self, @battle)
+    return false
+  end
+
+  def pbPredictMoveFailureAgainstTarget
+    # Move effect-specific checks
+    return true if Battle::AI::Handlers.move_will_fail_against_target?(@move.function, @move, @user, @target, self, @battle)
     # Immunity to priority moves because of Psychic Terrain
     return true if @battle.field.terrain == :Psychic && @target.battler.affectedByTerrain? &&
                    @target.opposes?(@user) && @move.rough_priority(@user) > 0
@@ -152,31 +143,63 @@ class Battle::AI
   #=============================================================================
   # Get a score for the given move being used against the given target.
   #=============================================================================
-  def pbGetMoveScore(move, target = nil)
-    set_up_move_check(move, target)
-
-    # Predict whether the move will fail
-    if @trainer.has_skill_flag?("PredictMoveFailure")
-      return 25 if pbPredictMoveFailure
-    end
-
+  def pbGetMoveScore(move, targets = nil)
     # Get the base score for the move
-    score = 100
-#    if @move.damagingMove?
-#      # Is also the predicted damage amount as a percentage of target's current HP
-#      score = pbGetDamagingMoveBaseScore
-#    else   # Status moves
-#      # Depends on the move's effect
-#      score = pbGetStatusMoveBaseScore
-#    end
-
-    # Modify the score according to the move's effect
-    score = Battle::AI::Handlers.apply_move_effect_score(@move.function,
-       score, @move, @user, @target, self, @battle)
-    # Modify the score according to various other effects
-    score = Battle::AI::Handlers.apply_general_move_score_modifiers(
-       score, @move, @user, @target, self, @battle)
-
+    score = MOVE_BASE_SCORE
+    # Scores for each target in turn
+    if targets
+      # Reset the base score for the move (each target will add its own score)
+      score = 0
+      # TODO: Distinguish between affected foes and affected allies?
+      affected_targets = 0
+      # Get a score for the move against each target in turn
+      targets.each do |target|
+        set_up_move_check_target(target)
+        # Predict whether the move will fail against the target
+        if @trainer.has_skill_flag?("PredictMoveFailure")
+          next if pbPredictMoveFailureAgainstTarget
+        end
+        affected_targets += 1
+        # Score the move
+        t_score = MOVE_BASE_SCORE
+        if @trainer.has_skill_flag?("ScoreMoves")
+          # Modify the score according to the move's effect against the target
+          t_score = Battle::AI::Handlers.apply_move_effect_against_target_score(@move.function,
+             MOVE_BASE_SCORE, @move, @user, @target, self, @battle)
+          # Modify the score according to various other effects against the target
+          score = Battle::AI::Handlers.apply_general_move_against_target_score_modifiers(
+             score, @move, @user, @target, self, @battle)
+        end
+        score += (@target.opposes?(@user)) ? t_score : 175 - t_score
+      end
+      # Check if any targets were affected
+      if affected_targets == 0
+        if @trainer.has_skill_flag?("PredictMoveFailure")
+          return MOVE_FAIL_SCORE if !@move.move.worksWithNoTargets?
+          score = MOVE_USELESS_SCORE
+        else
+          score = MOVE_BASE_SCORE
+        end
+      else
+        # TODO: Can this accounting for multiple targets be improved somehow?
+        score /= affected_targets   # Average the score against multiple targets
+        # Bonus for affecting multiple targets
+        if @trainer.has_skill_flag?("PreferMultiTargetMoves")
+          score += (affected_targets - 1) * 10
+        end
+      end
+    end
+    # If we're here, the move either has no targets or at least one target will
+    # be affected (or the move is usable even if no targets are affected, e.g.
+    # Self-Destruct)
+    if @trainer.has_skill_flag?("ScoreMoves")
+      # Modify the score according to the move's effect
+      score = Battle::AI::Handlers.apply_move_effect_score(@move.function,
+         score, @move, @user, self, @battle)
+      # Modify the score according to various other effects
+      score = Battle::AI::Handlers.apply_general_move_score_modifiers(
+         score, @move, @user, self, @battle)
+    end
     score = score.to_i
     score = 0 if score < 0
     return score
@@ -188,26 +211,23 @@ class Battle::AI
   #=============================================================================
   def pbChooseMove(choices)
     user_battler = @user.battler
-
     # If no moves can be chosen, auto-choose a move or Struggle
     if choices.length == 0
       @battle.pbAutoChooseMove(user_battler.index)
       PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will auto-use a move or Struggle")
       return
     end
-
     # Figure out useful information about the choices
     max_score = 0
     choices.each { |c| max_score = c[1] if max_score < c[1] }
-
     # Decide whether all choices are bad, and if so, try switching instead
     if @trainer.high_skill? && @user.can_switch_lax?
       badMoves = false
-      if (max_score <= 25 && user_battler.turnCount > 2) ||
-         (max_score <= 60 && user_battler.turnCount > 4)
+      if (max_score <= MOVE_FAIL_SCORE && user_battler.turnCount > 2) ||
+         (max_score <= MOVE_USELESS_SCORE && user_battler.turnCount > 4)
         badMoves = true if pbAIRandom(100) < 80
       end
-      if !badMoves && max_score <= 60 && user_battler.turnCount >= 1
+      if !badMoves && max_score <= MOVE_USELESS_SCORE && user_battler.turnCount >= 1
         badMoves = choices.none? { |c| user_battler.moves[c[0]].damagingMove? }
         badMoves = false if badMoves && pbAIRandom(100) < 10
       end
@@ -216,12 +236,10 @@ class Battle::AI
         return
       end
     end
-
     # Calculate a minimum score threshold and reduce all move scores by it
     threshold = (max_score * 0.85).floor
     choices.each { |c| c[3] = [c[1] - threshold, 0].max }
     total_score = choices.sum { |c| c[3] }
-
     # Log the available choices
     if $INTERNAL
       PBDebug.log("[AI] Move choices for #{user_battler.pbThis(true)} (#{user_battler.index}):")
@@ -233,7 +251,6 @@ class Battle::AI
         PBDebug.log(log_msg)
       end
     end
-
     # Pick a move randomly from choices weighted by their scores
     randNum = pbAIRandom(total_score)
     choices.each do |c|
@@ -243,7 +260,6 @@ class Battle::AI
       @battle.pbRegisterTarget(user_battler.index, c[2]) if c[2] >= 0
       break
     end
-
     # Log the result
     if @battle.choices[user_battler.index][2]
       PBDebug.log("    => will use #{@battle.choices[user_battler.index][2].name}")

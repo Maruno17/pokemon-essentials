@@ -22,6 +22,7 @@ class Battle::AI::AIBattler
     end
   end
 
+  def pokemon;     return @battler.pokemon;     end
   def level;       return @battler.level;       end
   def hp;          return @battler.hp;          end
   def fainted?;    return @battler.fainted?;    end
