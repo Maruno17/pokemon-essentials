@@ -80,6 +80,7 @@ module MapExporter
         for z in 0..2
           tile_id = @@map.data[x, y, z] || 0
           priority = @@map.priorities[tile_id]
+          next if priority == nil
           next if priority != 1
           tag_data = GameData::TerrainTag.try_get(@@map.terrain_tags[tile_id])
           next if !tag_data || tag_data.shows_reflections
@@ -158,6 +159,7 @@ module MapExporter
         for z in 0..2
           tile_id = @@map.data[x, y, z] || 0
           priority = @@map.priorities[tile_id]
+          next if priority == nil
           next if priority >= 1
           tag_data = GameData::TerrainTag.try_get(@@map.terrain_tags[tile_id])
           next if !tag_data || tag_data.shows_reflections
@@ -188,6 +190,7 @@ module MapExporter
         for z in 0..2
           tile_id = @@map.data[x, y, z] || 0
           priority = @@map.priorities[tile_id]
+          next if priority == nil
           next if priority < 2
           tag_data = GameData::TerrainTag.try_get(@@map.terrain_tags[tile_id])
           next if !tag_data || tag_data.shows_reflections

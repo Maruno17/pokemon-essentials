@@ -297,7 +297,7 @@ module GameData
         if isRematch
           nbRematch = getNumberRematch(rematchId)
           level = getRematchLevel(level, nbRematch)
-          species = evolveRematchPokemon(nbRematch, species)
+          species = getSpecies(evolveRematchPokemon(nbRematch, species)).id
         end
         pkmn = Pokemon.new(species, level, trainer, false)
 

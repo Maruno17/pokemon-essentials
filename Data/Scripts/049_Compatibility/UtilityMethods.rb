@@ -86,6 +86,54 @@ def extract_custom_sprites_that_evolve_into_non_customs(includeOnlyNextEvos=true
 end
 
 
+def extract_pokes_with_non_custom_final_evos(includeOnlyNextEvos=true)
+  outfile = "nonCustomFinals.csv"
+  customSpecies = getCustomSpeciesList()
+
+  alreadyWritten = []
+
+  File.open(outfile,"wb") { |f|
+    for dexNum in customSpecies
+      species = GameData::Species.get(dexNum)
+      dex_body = getBodyID(species)
+      dex_head = getHeadID(species,dex_body)
+
+      evolutions = species.get_evolutions
+      nextEvolutions=evolutions
+      if includeOnlyNextEvos
+        nextEvolutions = getNextEvolutions(species,evolutions)
+      end
+
+      next if nextEvolutions.empty?
+      for evolution in nextEvolutions
+        evoSpecies = evolution[0]
+        isFinalEvo = GameData::Species.get(evoSpecies).get_evolutions.empty?
+        if !customSpriteExists(evoSpecies) && !alreadyWritten.include?(evoSpecies) && isFinalEvo
+          body = getBodyID(evoSpecies)
+          head = getHeadID(evoSpecies,body)
+          f.write((evoSpecies.to_s) +";")
+          f.write((head.to_s) +";")
+          f.write(".;")
+          f.write((body.to_s) +";")
+          f.write("evolves from ;")
+          f.write(species.id.to_s) + ";"
+          f.write((dex_head.to_s) +";")
+          f.write(".;")
+          f.write((dex_body.to_s) +";")
+          f.write("\n")
+
+
+          alreadyWritten << evoSpecies
+        end
+      end
+    end
+  }
+
+end
+
+
+
+
 
 def extract_incomplete_evolution_lines
   outfile = "incompleteLines.txt"

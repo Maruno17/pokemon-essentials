@@ -229,7 +229,7 @@ def convertAllPokemon()
       end
     }
     Kernel.initRandomTypeArray()
-    if $game_switches[987] #randomized trainers
+    if $game_switches[SWITCH_RANDOM_TRAINERS] #randomized trainers
       Kernel.pbShuffleTrainers()
     end
     if $game_switches[956] #randomized pokemon
@@ -265,7 +265,7 @@ end
 
 
 def convertTrainers()
-  if ($game_switches[987])
+  if ($game_switches[SWITCH_RANDOM_TRAINERS])
     Kernel.pbShuffleTrainers()
   end
 end
