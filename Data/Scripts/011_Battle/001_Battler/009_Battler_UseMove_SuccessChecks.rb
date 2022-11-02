@@ -512,6 +512,9 @@ class PokeBattle_Battler
         miss = true if !move.hitsFlyingTargets?
       end
     end
+    if user.hasActiveItem?(:MANKEYPAW)
+      miss = true if rand(2)==1
+    end
     if !miss
       # Called by another move
       return true if skipAccuracyCheck

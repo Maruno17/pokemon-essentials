@@ -192,6 +192,7 @@ class PokeBattle_Move
     when -1 then return false
     end
     # Other effects
+    return true if user.hasActiveItem?(:MANKEYPAW)
     return true if c>50   # Merciless
     return true if user.effects[PBEffects::LaserFocus]>0
     c += 1 if highCriticalRate?
