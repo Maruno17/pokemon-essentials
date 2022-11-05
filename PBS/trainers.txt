@@ -2125,7 +2125,7 @@ Pokemon = IVYSAUR,30
 ###################
 
 [LEADER_Koga,Koga]
-Items = HYPERPOTION,HYPERPOTION
+Items = HYPERPOTION
 
 Pokemon = B88H49,35 #Grimer + Venomoth,
 	Moves = SIGNALBEAM,SLUDGEBOMB,FLING,DISABLE
@@ -2661,7 +2661,7 @@ Pokemon = B130H267,61 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = B65H120,58 #Starkazam
+Pokemon = B65H121,58 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
@@ -2688,7 +2688,7 @@ Pokemon = B130H267,75 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = B65H120,76 #Starkazam
+Pokemon = B65H121,76 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
@@ -2715,7 +2715,7 @@ Pokemon = B130H267,85 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = B65H120,86 #Starkazam
+Pokemon = B65H121,86 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
@@ -2744,7 +2744,7 @@ Pokemon = B130H267,61 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = B65H120,58 #Starkazam
+Pokemon = B65H121,58 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
@@ -2771,7 +2771,7 @@ Pokemon = B130H267,75 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = B65H120,76 #Starkazam
+Pokemon = B65H121,76 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
@@ -2798,7 +2798,7 @@ Pokemon = B130H267,85 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = B65H120,86 #Starkazam
+Pokemon = B65H121,86 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
@@ -3339,7 +3339,7 @@ Items = SUPERPOTION,SUPERPOTION
 Pokemon = B18H34,36 #Cueot,
 Pokemon = TAUROS,39 #Taucute,
 Pokemon = B130H125,37 #Electados,
-Pokemon = B65H121,36 #Starkazam,
+Pokemon = B65H120,36 #Starkazam,
 Pokemon = MEW,41 #Warizard,
 
 #starter=charmander
@@ -3349,7 +3349,7 @@ Items = SUPERPOTION,SUPERPOTION
 Pokemon = B18H34,36 #Cueot,
 Pokemon = TAUROS,39 #Taucute,
 Pokemon = B130H125,37 #Electados,
-Pokemon = B65H121,36 #Starkazam,
+Pokemon = B65H120,36 #Starkazam,
 Pokemon = MEW,41 #Warizard,
 
 #starter=squirtle
@@ -3359,7 +3359,7 @@ Items = SUPERPOTION,SUPERPOTION
 Pokemon = B18H34,36 #Cueot,
 Pokemon = TAUROS,39 #Taucute,
 Pokemon = B130H125,37 #Electados,
-Pokemon = B65H121,36 #Starkazam,
+Pokemon = B65H120,36 #Starkazam,
 Pokemon = MEW,41 #Warizard,
 
 ############Encounter 7 - silph co.#######
@@ -3369,7 +3369,7 @@ Pokemon = MEW,41 #Warizard,
 Pokemon = B18H34,44 #Cueot,
 Pokemon = TAUROS,45 #Taucute,
 Pokemon = B130H125,42 #Electados,
-Pokemon = B64H121,42 #Starkazam,
+Pokemon = B64H120,42 #Starkazam,
 Pokemon = MEW,45 #Warizard,
 
 #starter=charmander
@@ -3399,7 +3399,7 @@ Pokemon = B18H34,47 #Maroeot,
 Pokemon = B102H128,45 #Taucute,
 Pokemon = B111H126,45 #Maghorn,
 Pokemon = B130H125,47 #Electados,
-Pokemon = B65H120,50 #Starkazam,
+Pokemon = B65H121,50 #Starkazam,
 Pokemon = MEW,53 #Blastizard,
 
 #starter=charmander
@@ -3409,7 +3409,7 @@ Pokemon = B18H34,47 #Maroeot,
 Pokemon = B102H128,45 #Taucute,
 Pokemon = B111H126,45 #Maghorn,
 Pokemon = B130H125,47 #Electados,
-Pokemon = B65H120,50 #Starkazam,
+Pokemon = B65H121,50 #Starkazam,
 Pokemon = MEW,53 #Venutoise,
 
 #starter=squirtle
@@ -3419,7 +3419,7 @@ Pokemon = B18H34,47 #Maroeot,
 Pokemon = B102H128,45 #Taucute,
 Pokemon = B111H126,45 #Maghorn,
 Pokemon = B130H125,47 #Electados,
-Pokemon = B65H120,50 #Starkazam,
+Pokemon = B65H121,50 #Starkazam,
 Pokemon = MEW,53 #Charusaur,
 
 

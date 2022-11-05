@@ -1330,7 +1330,7 @@ def pbFuse(pokemon, poke2, supersplicers = false)
   previewwindow.y = ((Graphics.height - 96) / 2) - (previewwindow.height / 2)
   previewwindow.z = 1000000
 
-  if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
+   if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
     previewwindow.dispose
     typeWindow.dispose
     fus = PokemonFusionScene.new
