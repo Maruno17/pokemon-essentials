@@ -705,7 +705,7 @@ def pbDebugFixInvalidTiles
   t = Time.now.to_i
   Graphics.update
   total_maps = mapData.mapinfos.keys.length
-  Console.echo_h1 _INTL("Checking {1} maps for invalid tiles", total_maps)
+  Console.echo_h1(_INTL("Checking {1} maps for invalid tiles", total_maps))
   mapData.mapinfos.keys.sort.each do |id|
     if Time.now.to_i - t >= 5
       Graphics.update
@@ -738,7 +738,7 @@ def pbDebugFixInvalidTiles
     end
     next if map_errors == 0
     # Map was changed; save it
-    Console.echoln_li _INTL("{1} error tile(s) found on map {2}: {3}.", map_errors, id, mapData.mapinfos[id].name)
+    Console.echoln_li(_INTL("{1} error tile(s) found on map {2}: {3}.", map_errors, id, mapData.mapinfos[id].name))
     total_errors += map_errors
     num_error_maps += 1
     mapData.saveMap(id)
@@ -749,7 +749,7 @@ def pbDebugFixInvalidTiles
   else
     echoln ""
     Console.echo_h2(_INTL("Done. {1} errors found and fixed.", total_errors), text: :green)
-    Console.echo_warn _INTL("RMXP data was altered. Close RMXP now to ensure changes are applied.")
+    Console.echo_warn(_INTL("RMXP data was altered. Close RMXP now to ensure changes are applied."))
     echoln ""
     pbMessage(_INTL("{1} error(s) were found across {2} map(s) and fixed.", total_errors, num_error_maps))
     pbMessage(_INTL("Close RPG Maker XP to ensure the changes are applied properly."))

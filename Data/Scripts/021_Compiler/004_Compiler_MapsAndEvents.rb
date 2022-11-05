@@ -1681,7 +1681,7 @@ module Compiler
     Graphics.update
     trainerChecker = TrainerChecker.new
     change_record = []
-    Console.echo_li _INTL("Processing {1} maps...", mapData.mapinfos.keys.length)
+    Console.echo_li(_INTL("Processing {1} maps...", mapData.mapinfos.keys.length))
     idx = 0
     mapData.mapinfos.keys.sort.each do |id|
       echo "." if idx % 20 == 0
@@ -1725,11 +1725,11 @@ module Compiler
       end
     end
     Console.echo_done(true)
-    change_record.each { |msg| Console.echo_warn msg }
+    change_record.each { |msg| Console.echo_warn(msg) }
     changed = false
     Graphics.update
     commonEvents = load_data("Data/CommonEvents.rxdata")
-    Console.echo_li _INTL("Processing common events...")
+    Console.echo_li(_INTL("Processing common events..."))
     commonEvents.length.times do |key|
       newevent = fix_event_use(commonEvents[key], 0, mapData)
       if newevent
@@ -1740,7 +1740,7 @@ module Compiler
     save_data(commonEvents, "Data/CommonEvents.rxdata") if changed
     Console.echo_done(true)
     if change_record.length > 0 || changed
-      Console.echo_warn _INTL("RMXP data was altered. Close RMXP now to ensure changes are applied.")
+      Console.echo_warn(_INTL("RMXP data was altered. Close RMXP now to ensure changes are applied."))
     end
   end
 end
