@@ -2191,6 +2191,11 @@ class PokemonStorageScreen
     @heldpkmn = nil
   end
 
+  def deleteSelectedPokemon(heldpoke, selected)
+    pbSwap(selected)
+    deleteHeldPokemon(heldpoke, selected)
+  end
+
   def cancelFusion
     @splicerItem = nil
     @scene.setFusing(false)
@@ -2244,11 +2249,27 @@ class PokemonStorageScreen
         end
         isSuperSplicer = isSuperSplicer?(@fusionItem)
 
-        if pbFuse(pokemon, heldpoke, isSuperSplicer)
+
+        selectedHead =selectFusion(pokemon, heldpoke, isSuperSplicer)
+        if selectedHead == -1
+          return false
+        end
+
+        selectedBase = selectedHead == pokemon ? heldpoke : pokemon
+        firstOptionSelected= selectedBase == pokemon
+
+
+        if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?")))
+          pbFuse(selectedHead, selectedBase, isSuperSplicer)
           if canDeleteItem(@fusionItem)
             $PokemonBag.pbDeleteItem(@fusionItem)
           end
-          deleteHeldPokemon(heldpoke, selected)
+          if firstOptionSelected
+            deleteSelectedPokemon(heldpoke, selected)
+          else
+            deleteHeldPokemon(heldpoke, selected)
+          end
+
           @scene.setFusing(false)
           @fusionMode = false
           @scene.sprites["box"].enableFusions()

@@ -1247,6 +1247,15 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, pokemon, scene|
   next false
 })
 
+def getPokemonPositionInParty(pokemon)
+  for i in 0..$Trainer.party.length
+    if $Trainer.party[i] == pokemon
+      return i
+    end
+  end
+  return -1
+end
+
 def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
   playingBGM = $game_system.getPlayingBGM
   dexNumber = pokemon.species_data.id_number
@@ -1278,12 +1287,30 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
             scene.pbDisplay(_INTL("A fainted Pokémon cannot be fused!"))
             return false
           end
-          if (pbFuse(pokemon, poke2, superSplicer))
+
+          selectedHead =selectFusion(pokemon, poke2, supersplicers)
+          if selectedHead == -1
+            return false
+          end
+          selectedBase = selectedHead == pokemon ? poke2 : pokemon
+
+          firstOptionSelected= selectedHead == pokemon
+          if !firstOptionSelected
+            chosen = getPokemonPositionInParty(pokemon)
+            if chosen == -1
+              scene.pbDisplay(_INTL("There was an error..."))
+              return false
+            end
+          end
+
+          if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?")))
+            pbFuse(selectedHead, selectedBase, superSplicer)
             pbRemovePokemonAt(chosen)
             scene.pbHardRefresh
             pbBGMPlay(playingBGM)
             return true
           end
+
         elsif pokemon == poke2
           scene.pbDisplay(_INTL("{1} can't be fused with itself!", pokemon.name))
           return false
@@ -1300,6 +1327,18 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
     return true if pbUnfuse(pokemon, scene, supersplicers)
   end
 end
+
+
+def selectFusion(pokemon, poke2, supersplicers = false)
+  selectorWindow = FusionPreviewScreen.new(poke2, pokemon, supersplicers)#PictureWindow.new(picturePath)
+  selectedHead = selectorWindow.getSelection
+  selectorWindow.dispose
+  return selectedHead
+end
+  # firstOptionSelected= selectedHead == pokemon
+  # selectedBody = selectedHead == pokemon ? poke2 : pokemon
+  # newid = (selectedBody.species_data.id_number) * NB_POKEMON + selectedHead.species_data.id_number
+
 
 
 # def pbFuse(pokemon, poke2, supersplicers = false)
@@ -1326,35 +1365,34 @@ end
 def pbFuse(pokemon, poke2, supersplicers = false)
   newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
 
-  pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
-  hasCustom = false
-  if (pbResolveBitmap(pathCustom))
-    picturePath = pathCustom
-    hasCustom = true
-  else
-    picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
-  end
+  # pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
+  # hasCustom = false
+  # if (pbResolveBitmap(pathCustom))
+  #   picturePath = pathCustom
+  #   hasCustom = true
+  # else
+  #   picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
+  # end
+  # previewwindow = PictureWindow.new(picturePath)
+  #
+  # new_level = calculateFusedPokemonLevel(pokemon.level, poke2.level, supersplicers)
+  # typeWindow = drawPokemonType(newid)
+  # drawFusionPreviewText(typeWindow, "Lv. " + new_level.to_s, 232, 0,)
+  #
+  # if !$Trainer.seen?(newid)
+  #   if hasCustom
+  #     previewwindow.picture.pbSetColor(150, 255, 150, 200)
+  #   else
+  #     previewwindow.picture.pbSetColor(255, 255, 255, 200)
+  #   end
+  # end
+  # previewwindow.x = (Graphics.width / 2) - (previewwindow.width / 2)
+  # previewwindow.y = ((Graphics.height - 96) / 2) - (previewwindow.height / 2)
+  # previewwindow.z = 1000000
 
-  previewwindow = PictureWindow.new(picturePath)
-
-  new_level = calculateFusedPokemonLevel(pokemon.level, poke2.level, supersplicers)
-  typeWindow = drawPokemonType(newid)
-  drawFusionPreviewText(typeWindow, "Lv. " + new_level.to_s, 232, 0,)
-
-  if !$Trainer.seen?(newid)
-    if hasCustom
-      previewwindow.picture.pbSetColor(150, 255, 150, 200)
-    else
-      previewwindow.picture.pbSetColor(255, 255, 255, 200)
-    end
-  end
-  previewwindow.x = (Graphics.width / 2) - (previewwindow.width / 2)
-  previewwindow.y = ((Graphics.height - 96) / 2) - (previewwindow.height / 2)
-  previewwindow.z = 1000000
-
-   if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
-    previewwindow.dispose
-    typeWindow.dispose
+  #if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
+    # previewwindow.dispose
+    # typeWindow.dispose
     fus = PokemonFusionScene.new
     if (fus.pbStartScreen(pokemon, poke2, newid))
       returnItemsToBag(pokemon, poke2)
@@ -1364,11 +1402,11 @@ def pbFuse(pokemon, poke2, supersplicers = false)
       return true
 
     end
-  else
-    previewwindow.dispose
-    typeWindow.dispose
-    return false
-  end
+  # else
+  #   # previewwindow.dispose
+  #   # typeWindow.dispose
+  #   return false
+  # end
 
 end
 

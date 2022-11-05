@@ -650,7 +650,7 @@ class PokemonFusionScene
 
   # Opens the fusion screen
 
-  def pbFusionScreen(cancancel = false, superSplicer = false)
+  def pbFusionScreen(cancancel = false, superSplicer = false, firstOptionSelected=false)
     metaplayer1 = SpriteMetafilePlayer.new(@metafile1, @sprites["rsprite1"])
     metaplayer2 = SpriteMetafilePlayer.new(@metafile2, @sprites["rsprite2"])
     metaplayer3 = SpriteMetafilePlayer.new(@metafile3, @sprites["rsprite3"])
@@ -739,7 +739,7 @@ class PokemonFusionScene
       #@pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
       pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
 
-      setFusionMoves(@pokemon1, @pokemon2) if !noMoves
+      setFusionMoves(@pokemon1, @pokemon2, firstOptionSelected) if !noMoves
 
       # if superSplicer
       #   @pokemon1.nature = pbChooseNature(@pokemon1.nature, @pokemon2.nature)
@@ -792,7 +792,7 @@ def setAbilityAndNature(abilitiesList, naturesList)
 
 end
 
-def setFusionMoves(fusedPoke, poke2)
+def setFusionMoves(fusedPoke, poke2,selected2ndOption=false)
   #NEW METHOD (not ready)
 
   # clearUIForMoves
@@ -805,12 +805,25 @@ def setFusionMoves(fusedPoke, poke2)
   #
   # fusedPoke.moves=moves
   bodySpecies = getBodyID(fusedPoke)
+  headSpecies = getHeadID(fusedPoke,bodySpecies)
   bodySpeciesName = GameData::Species.get(bodySpecies).real_name
-  choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", bodySpeciesName), _INTL("Keep {1}'s moveset", poke2.name)], 0)
+  headSpeciesName = GameData::Species.get(headSpecies).real_name
+
+
+  choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", bodySpeciesName), _INTL("Keep {1}'s moveset", headSpeciesName)], 0)
   if choice == 1
+    if selected2ndOption
+      fusedPoke.moves = poke2.moves
+    else
+      return
+    end
     return
   elsif choice == 2
-    fusedPoke.moves = poke2.moves
+    if selected2ndOption
+      return
+    else
+      fusedPoke.moves = poke2.moves
+    end
     return
   else
     #Learn moves
