@@ -355,22 +355,20 @@ EventHandlers.add(:on_leave_map, :end_bug_contest,
 #
 #===============================================================================
 EventHandlers.add(:on_calling_wild_battle, :bug_contest_battle,
-  proc { |species, level, handled|
+  proc { |pkmn, handled|
     # handled is an array: [nil]. If [true] or [false], the battle has already
     # been overridden (the boolean is its outcome), so don't do anything that
     # would override it again
     next if !handled[0].nil?
     next if !pbInBugContest?
-    handled[0] = pbBugContestBattle(species, level)
+    handled[0] = pbBugContestBattle(pkmn)
   }
 )
 
-def pbBugContestBattle(species, level)
+def pbBugContestBattle(pkmn)
   # Record information about party Pokémon to be used at the end of battle (e.g.
   # comparing levels for an evolution check)
   EventHandlers.trigger(:on_start_battle)
-  # Generate a wild Pokémon based on the species and level
-  pkmn = pbGenerateWildPokemon(species, level)
   foeParty = [pkmn]
   # Calculate who the trainers and their party are
   playerTrainer     = [$player]
@@ -405,7 +403,7 @@ def pbBugContestBattle(species, level)
   # Save the result of the battle in Game Variable 1
   BattleCreationHelperMethods.set_outcome(decision, 1)
   # Used by the Poké Radar to update/break the chain
-  EventHandlers.trigger(:on_wild_battle_end, species, level, decision)
+  EventHandlers.trigger(:on_wild_battle_end, pkmn.species_data.id, pkmn.level, decision)
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision != 2 && decision != 5)
 end

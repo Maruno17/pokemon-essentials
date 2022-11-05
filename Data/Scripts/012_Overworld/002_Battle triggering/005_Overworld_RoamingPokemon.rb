@@ -186,23 +186,23 @@ EventHandlers.add(:on_wild_species_chosen, :roaming_pokemon,
 )
 
 EventHandlers.add(:on_calling_wild_battle, :roaming_pokemon,
-  proc { |species, level, handled|
+  proc { |pkmn, handled|
     # handled is an array: [nil]. If [true] or [false], the battle has already
     # been overridden (the boolean is its outcome), so don't do anything that
     # would override it again
     next if !handled[0].nil?
     next if !$PokemonGlobal.roamEncounter || $game_temp.roamer_index_for_encounter.nil?
-    handled[0] = pbRoamingPokemonBattle(species, level)
+    handled[0] = pbRoamingPokemonBattle(pkmn)
   }
 )
 
-def pbRoamingPokemonBattle(species, level)
+def pbRoamingPokemonBattle(pkmn)
   # Get the roaming Pokémon to encounter; generate it based on the species and
   # level if it doesn't already exist
   idxRoamer = $game_temp.roamer_index_for_encounter
   if !$PokemonGlobal.roamPokemon[idxRoamer] ||
      !$PokemonGlobal.roamPokemon[idxRoamer].is_a?(Pokemon)
-    $PokemonGlobal.roamPokemon[idxRoamer] = pbGenerateWildPokemon(species, level, true)
+    $PokemonGlobal.roamPokemon[idxRoamer] = pbGenerateWildPokemon(pkmn.species_data.id, pkmn.level, true)
   end
   # Set some battle rules
   setBattleRule("single")
@@ -218,7 +218,7 @@ def pbRoamingPokemonBattle(species, level)
   $PokemonGlobal.roamedAlready = true
   $game_temp.roamer_index_for_encounter = nil
   # Used by the Poké Radar to update/break the chain
-  EventHandlers.trigger(:on_wild_battle_end, species, level, decision)
+  EventHandlers.trigger(:on_wild_battle_end, pkmn.species_data.id, pkmn.level, decision)
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision != 2 && decision != 5)
 end
