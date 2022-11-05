@@ -388,6 +388,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
   def refreshMoveData(move)
     # Write PP and type of the selected move
     if !USE_GRAPHICS
+      return if !move
       moveType = GameData::Type.get(move.display_type(@battler)).name
       if move.total_pp <= 0
         @msgBox.text = _INTL("PP: ---<br>TYPE/{1}", moveType)

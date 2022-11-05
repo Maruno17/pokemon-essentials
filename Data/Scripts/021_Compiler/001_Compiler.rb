@@ -740,12 +740,12 @@ module Compiler
   #=============================================================================
   def compile_pbs_file_message_start(filename)
     # The `` around the file's name turns it cyan
-    Console.echo_li _INTL("Compiling PBS file `{1}`...", filename.split("/").last)
+    Console.echo_li(_INTL("Compiling PBS file `{1}`...", filename.split("/").last))
   end
 
   def write_pbs_file_message_start(filename)
     # The `` around the file's name turns it cyan
-    Console.echo_li _INTL("Writing PBS file `{1}`...", filename.split("/").last)
+    Console.echo_li(_INTL("Writing PBS file `{1}`...", filename.split("/").last))
   end
 
   def process_pbs_file_message_end
@@ -780,25 +780,25 @@ module Compiler
   end
 
   def compile_all(mustCompile)
+    Console.echo_h1(_INTL("Checking game data"))
     if !mustCompile
-      Console.echo_h1(_INTL("Game did not compile data"))
+      Console.echoln_li(_INTL("Game data was not compiled"))
+      echoln ""
       return
     end
     FileLineData.clear
-    Console.echo_h1 _INTL("Compiling all data")
     compile_pbs_files
     compile_animations
     compile_trainer_events(mustCompile)
-    Console.echo_li _INTL("Saving messages...")
+    Console.echo_li(_INTL("Saving messages..."))
     pbSetTextMessages
     MessageTypes.saveMessages
     MessageTypes.loadMessageFile("Data/messages.dat") if safeExists?("Data/messages.dat")
     Console.echo_done(true)
-    Console.echo_li _INTL("Reloading cache...")
+    Console.echo_li(_INTL("Reloading cache..."))
     System.reload_cache
     Console.echo_done(true)
-    echoln ""
-    Console.echo_h2("Successfully compiled all data", text: :green)
+    Console.echoln_li_done(_INTL("Successfully compiled all game data"))
   end
 
   def main

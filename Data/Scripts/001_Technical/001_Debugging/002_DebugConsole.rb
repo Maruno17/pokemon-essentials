@@ -87,6 +87,13 @@ module Console
     echoln ""
   end
 
+  # Same as echoln_li but text is in green
+  def echoln_li_done(msg)
+    self.echo_li(markup_style(msg, text: :green), 0, :green)
+    echoln ""
+    echoln ""
+  end
+
   # paragraph with markup
   def echo_p(msg)
     echoln markup(msg)
@@ -170,7 +177,7 @@ module Console
     options_pool = options.select { |key, val| font_options.key?(key) && val }
     markup_pool  = options_pool.keys.map { |opt| font_options[opt] }.join(";").squeeze
     # return formatted string
-    "\e[#{code_bg};#{markup_pool};#{code_text}m#{string}\e[0m".squeeze(";")
+    return "\e[#{code_bg};#{markup_pool};#{code_text}m#{string}\e[0m".squeeze(";")
   end
 
   #-----------------------------------------------------------------------------

@@ -35,7 +35,7 @@ class Battle::Battler
   end
 
   def pbRecoverHPFromDrain(amt, target, msg = nil)
-    if target.hasActiveAbility?(:LIQUIDOOZE)
+    if target.hasActiveAbility?(:LIQUIDOOZE, true)
       @battle.pbShowAbilitySplash(target)
       pbReduceHP(amt)
       @battle.pbDisplay(_INTL("{1} sucked up the liquid ooze!", pbThis))

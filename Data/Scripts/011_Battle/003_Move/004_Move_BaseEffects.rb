@@ -323,33 +323,41 @@ class Battle::Move::TwoTurnMove < Battle::Move
     return super
   end
 
+  # Does the charging part of this move, for when this move only takes one round
+  # to use.
+  def pbQuickChargingMove(user, targets)
+    return if !@chargingTurn || !@damagingTurn   # Move only takes one turn to use
+    pbChargingTurnMessage(user, targets)
+    pbShowAnimation(@id, user, targets, 1)   # Charging anim
+    targets.each { |b| pbChargingTurnEffect(user, b) }
+    if @powerHerb
+      # Moves that would make the user semi-invulnerable will hide the user
+      # after the charging animation, so the "UseItem" animation shouldn't show
+      # for it
+      if !["TwoTurnAttackInvulnerableInSky",
+           "TwoTurnAttackInvulnerableUnderground",
+           "TwoTurnAttackInvulnerableUnderwater",
+           "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
+           "TwoTurnAttackInvulnerableRemoveProtections",
+           "TwoTurnAttackInvulnerableInSkyTargetCannotAct"].include?(@function)
+        @battle.pbCommonAnimation("UseItem", user)
+      end
+      @battle.pbDisplay(_INTL("{1} became fully charged due to its Power Herb!", user.pbThis))
+      user.pbConsumeItem
+    end
+  end
+
   def pbAccuracyCheck(user, target)
     return true if !@damagingTurn
     return super
   end
 
   def pbInitialEffect(user, targets, hitNum)
-    pbChargingTurnMessage(user, targets) if @chargingTurn
-    if @chargingTurn && @damagingTurn   # Move only takes one turn to use
-      pbShowAnimation(@id, user, targets, 1)   # Charging anim
-      targets.each { |b| pbChargingTurnEffect(user, b) }
-      if @powerHerb
-        # Moves that would make the user semi-invulnerable will hide the user
-        # after the charging animation, so the "UseItem" animation shouldn't show
-        # for it
-        if !["TwoTurnAttackInvulnerableInSky",
-             "TwoTurnAttackInvulnerableUnderground",
-             "TwoTurnAttackInvulnerableUnderwater",
-             "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
-             "TwoTurnAttackInvulnerableRemoveProtections",
-             "TwoTurnAttackInvulnerableInSkyTargetCannotAct"].include?(@function)
-          @battle.pbCommonAnimation("UseItem", user)
-        end
-        @battle.pbDisplay(_INTL("{1} became fully charged due to its Power Herb!", user.pbThis))
-        user.pbConsumeItem
-      end
+    if @damagingTurn
+      pbAttackingTurnMessage(user, targets)
+    elsif @chargingTurn
+      pbChargingTurnMessage(user, targets)
     end
-    pbAttackingTurnMessage(user, targets) if @damagingTurn
   end
 
   def pbChargingTurnMessage(user, targets)
@@ -359,20 +367,20 @@ class Battle::Move::TwoTurnMove < Battle::Move
   def pbAttackingTurnMessage(user, targets)
   end
 
-  def pbChargingTurnEffect(user, target)
-    # Skull Bash/Sky Drop are the only two-turn moves with an effect here, and
-    # the latter just records the target is being Sky Dropped
-  end
-
-  def pbAttackingTurnEffect(user, target)
-  end
-
   def pbEffectAgainstTarget(user, target)
     if @damagingTurn
       pbAttackingTurnEffect(user, target)
     elsif @chargingTurn
       pbChargingTurnEffect(user, target)
     end
+  end
+
+  def pbChargingTurnEffect(user, target)
+    # Skull Bash/Sky Drop are the only two-turn moves with an effect here, and
+    # the latter just records the target is being Sky Dropped
+  end
+
+  def pbAttackingTurnEffect(user, target)
   end
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)

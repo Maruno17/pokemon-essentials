@@ -163,13 +163,13 @@ end
 class HandlerHashSymbol
   def initialize
     @hash    = {}
-    @add_ifs = []
+    @add_ifs = {}
   end
 
   def [](sym)
     sym = sym.id if !sym.is_a?(Symbol) && sym.respond_to?("id")
     return @hash[sym] if sym && @hash[sym]
-    @add_ifs.each do |add_if|
+    @add_ifs.each_value do |add_if|
       return add_if[1] if add_if[0].call(sym)
     end
     return nil
@@ -182,11 +182,11 @@ class HandlerHashSymbol
     @hash[sym] = handler || handlerBlock if sym
   end
 
-  def addIf(conditionProc, handler = nil, &handlerBlock)
+  def addIf(sym, conditionProc, handler = nil, &handlerBlock)
     if ![Proc, Hash].include?(handler.class) && !block_given?
-      raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
+      raise ArgumentError, "addIf call for #{sym} in #{self.class.name} has no valid handler (#{handler.inspect} was given)"
     end
-    @add_ifs.push([conditionProc, handler || handlerBlock])
+    @add_ifs[sym] = [conditionProc, handler || handlerBlock]
   end
 
   def copy(src, *dests)
@@ -269,13 +269,6 @@ class HandlerHashEnum
     @hash[id] = handler || handlerBlock if id
     symbol = toSymbol(sym)
     @hash[symbol] = handler || handlerBlock if symbol
-  end
-
-  def addIf(conditionProc, handler = nil, &handlerBlock)
-    if ![Proc, Hash].include?(handler.class) && !block_given?
-      raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
-    end
-    @addIfs.push([conditionProc, handler || handlerBlock])
   end
 
   def copy(src, *dests)

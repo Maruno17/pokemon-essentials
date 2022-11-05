@@ -25,7 +25,8 @@ ItemHandlers::CanUseInBattle.add(:POKEDOLL, proc { |item, pokemon, battler, move
 
 ItemHandlers::CanUseInBattle.copy(:POKEDOLL, :FLUFFYTAIL, :POKETOY)
 
-ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls
+ItemHandlers::CanUseInBattle.addIf(:poke_balls,
+  proc { |item| GameData::Item.get(item).is_poke_ball? },
   proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
     if battle.pbPlayer.party_full? && $PokemonStorage.full?
       scene.pbDisplay(_INTL("There is no room left in the PC!")) if showMessages
@@ -314,7 +315,8 @@ ItemHandlers::UseInBattle.add(:POKEFLUTE, proc { |item, battler, battle|
   battle.pbDisplay(_INTL("All Pokémon were roused by the tune!"))
 })
 
-ItemHandlers::UseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls
+ItemHandlers::UseInBattle.addIf(:poke_balls,
+  proc { |item| GameData::Item.get(item).is_poke_ball? },
   proc { |item, battler, battle|
     battle.pbThrowPokeBall(battler.index, item)
   }

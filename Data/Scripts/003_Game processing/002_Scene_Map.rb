@@ -59,10 +59,9 @@ class Scene_Map
     return if !playingBGM && !playingBGS
     map = load_data(sprintf("Data/Map%03d.rxdata", mapid))
     if playingBGM && map.autoplay_bgm
-      if (PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + map.bgm.name + "_n") &&
-         playingBGM.name != map.bgm.name + "_n") || playingBGM.name != map.bgm.name
-        pbBGMFade(0.8)
-      end
+      test_filename = map.bgm.name
+      test_filename += "_n" if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + test_filename + "_n")
+      pbBGMFade(0.8) if playingBGM.name != test_filename
     end
     if playingBGS && map.autoplay_bgs && playingBGS.name != map.bgs.name
       pbBGMFade(0.8)

@@ -141,7 +141,7 @@ class Pokemon
     end
   end
 
-  def update_shadow_moves(relearn_all_moves = false)
+  def update_shadow_moves
     return if !@shadow_moves || @shadow_moves.empty?
     # Not a Shadow Pokémon (any more); relearn all its original moves
     if !shadowPokemon?
@@ -159,7 +159,7 @@ class Pokemon
     @shadow_moves.each_with_index { |m, i| new_moves.push(m) if m && i < MAX_MOVES }
     num_shadow_moves = new_moves.length
     # Add some original moves (skipping ones in the same slot as a Shadow Move)
-    num_original_moves = (relearn_all_moves) ? 3 : [3, 3, 2, 1, 1, 0][self.heartStage]
+    num_original_moves = [3, 3, 2, 1, 1, 0][self.heartStage]
     if num_original_moves > 0
       relearned_count = 0
       @shadow_moves.each_with_index do |m, i|
@@ -174,17 +174,16 @@ class Pokemon
   end
 
   def replace_moves(new_moves)
+    # Forget any known moves that aren't in new_moves
+    @moves.each_with_index do |m, i|
+      @moves[i] = nil if !new_moves.include?(m.id)
+    end
+    @moves.compact!
+    # Learn any moves in new_moves that aren't known
     new_moves.each do |move|
       next if !move || !GameData::Move.exists?(move) || hasMove?(move)
-      if numMoves < Pokemon::MAX_MOVES   # Has an empty slot; just learn move
-        learn_move(move)
-        next
-      end
-      @moves.each do |m|
-        next if new_moves.include?(m.id)
-        m.id = GameData::Move.get(move).id
-        break
-      end
+      break if numMoves >= Pokemon::MAX_MOVES
+      learn_move(move)
     end
   end
 

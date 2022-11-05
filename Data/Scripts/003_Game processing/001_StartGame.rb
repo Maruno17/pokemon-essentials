@@ -42,6 +42,8 @@ module Game
     end
     $game_temp.common_event_id = 0 if $game_temp
     $game_temp.begun_new_game = true
+    pbMapInterpreter&.clear
+    pbMapInterpreter&.setup(nil, 0, 0)
     $scene = Scene_Map.new
     SaveData.load_new_game_values
     $stats.play_sessions += 1

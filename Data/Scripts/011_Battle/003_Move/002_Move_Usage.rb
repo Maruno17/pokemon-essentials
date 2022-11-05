@@ -27,8 +27,8 @@ class Battle::Move
   #=============================================================================
   #
   #=============================================================================
-  # Whether the move is currently in the "charging" turn of a two turn attack.
-  # Is false if Power Herb or another effect lets a two turn move charge and
+  # Whether the move is currently in the "charging" turn of a two-turn move.
+  # Is false if Power Herb or another effect lets a two-turn move charge and
   # attack in the same turn.
   # user.effects[PBEffects::TwoTurnAttack] is set to the move's ID during the
   # charging turn, and is nil during the attack turn.
@@ -51,6 +51,9 @@ class Battle::Move
     end
     return 1
   end
+
+  # For two-turn moves when they charge and attack in the same turn.
+  def pbQuickChargingMove(user, targets); end
 
   #=============================================================================
   # Effect methods per hit
@@ -271,6 +274,7 @@ class Battle::Move
   # Messages upon being hit
   #=============================================================================
   def pbEffectivenessMessage(user, target, numTargets = 1)
+    return if self.is_a?(Battle::Move::FixedDamageMove)
     return if target.damageState.disguise || target.damageState.iceFace
     if Effectiveness.super_effective?(target.damageState.typeMod)
       if numTargets > 1
