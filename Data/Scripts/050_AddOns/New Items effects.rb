@@ -1301,6 +1301,28 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
   end
 end
 
+
+# def pbFuse(pokemon, poke2, supersplicers = false)
+#   newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
+#   previewwindow = FusionPreviewScreen.new(pokemon, poke2)#PictureWindow.new(picturePath)
+#
+#   if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
+#     previewwindow.dispose
+#     fus = PokemonFusionScene.new
+#     if (fus.pbStartScreen(pokemon, poke2, newid))
+#       returnItemsToBag(pokemon, poke2)
+#       fus.pbFusionScreen(false, supersplicers)
+#       $game_variables[126] += 1 #fuse counter
+#       fus.pbEndScreen
+#       return true
+#     end
+#   else
+#     previewwindow.dispose
+#     return false
+#   end
+# end
+
+
 def pbFuse(pokemon, poke2, supersplicers = false)
   newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
 
