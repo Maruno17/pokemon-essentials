@@ -196,13 +196,17 @@ EventHandlers.add(:on_calling_wild_battle, :roaming_pokemon,
   }
 )
 
-def pbRoamingPokemonBattle(pkmn)
+def pbRoamingPokemonBattle(pkmn, level = 1)
   # Get the roaming Pokémon to encounter; generate it based on the species and
   # level if it doesn't already exist
   idxRoamer = $game_temp.roamer_index_for_encounter
   if !$PokemonGlobal.roamPokemon[idxRoamer] ||
      !$PokemonGlobal.roamPokemon[idxRoamer].is_a?(Pokemon)
-    $PokemonGlobal.roamPokemon[idxRoamer] = pbGenerateWildPokemon(pkmn.species_data.id, pkmn.level, true)
+    if pkmn.is_a?(Pokemon)
+      $PokemonGlobal.roamPokemon[idxRoamer] = pbGenerateWildPokemon(pkmn.species_data.id, pkmn.level, true)
+    else
+      $PokemonGlobal.roamPokemon[idxRoamer] = pbGenerateWildPokemon(pkmn, level, true)
+    end
   end
   # Set some battle rules
   setBattleRule("single")

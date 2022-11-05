@@ -115,8 +115,9 @@ EventHandlers.add(:on_calling_wild_battle, :safari_battle,
   }
 )
 
-def pbSafariBattle(pkmn)
+def pbSafariBattle(pkmn, level = 1)
   # Generate a wild Pokémon based on the species and level
+  pkmn = pbGenerateWildPokemon(pkmn, level) if !pkmn.is_a?(Pokemon)
   foeParty = [pkmn]
   # Calculate who the trainer is
   playerTrainer = $player

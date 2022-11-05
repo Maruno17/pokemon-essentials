@@ -365,10 +365,12 @@ EventHandlers.add(:on_calling_wild_battle, :bug_contest_battle,
   }
 )
 
-def pbBugContestBattle(pkmn)
+def pbBugContestBattle(pkmn, level = 1)
   # Record information about party Pokémon to be used at the end of battle (e.g.
   # comparing levels for an evolution check)
   EventHandlers.trigger(:on_start_battle)
+  # Generate a wild Pokémon based on the species and level
+  pkmn = pbGenerateWildPokemon(pkmn, level) if !pkmn.is_a?(Pokemon)
   foeParty = [pkmn]
   # Calculate who the trainers and their party are
   playerTrainer     = [$player]
