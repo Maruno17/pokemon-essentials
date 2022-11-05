@@ -174,13 +174,14 @@ class DayCare
       # Get all stats
       stats = []
       GameData::Stat.each_main { |s| stats.push(s.id) }
-      # Get the number of stats to inherit
+      # Get the number of stats to inherit (includes ones inherited via Power items)
       inherit_count = 3
       if Settings::MECHANICS_GENERATION >= 6
         inherit_count = 5 if mother.hasItem?(:DESTINYKNOT) || father.hasItem?(:DESTINYKNOT)
       end
-      # Inherit IV because of Power items (if both parents have a Power item,
-      # then only a random one of them is inherited)
+      # Inherit IV because of Power items (if both parents have the same Power
+      # item, then the parent that passes that Power item's stat down is chosen
+      # randomly)
       power_items = [
         [:POWERWEIGHT, :HP],
         [:POWERBRACER, :ATTACK],
@@ -189,18 +190,20 @@ class DayCare
         [:POWERBAND,   :SPECIAL_DEFENSE],
         [:POWERANKLET, :SPEED]
       ]
-      power_stats = []
+      power_stats = {}
       [mother, father].each do |parent|
         power_items.each do |item|
           next if !parent.hasItem?(item[0])
-          power_stats.push(item[1], parent.iv[item[1]])
+          power_stats[item[1]] ||= []
+          power_stats[item[1]].push(parent.iv[item[1]])
           break
         end
       end
-      if power_stats.length > 0
-        power_stat = power_stats.sample
-        egg.iv[power_stat[0]] = power_stat[1]
-        stats.delete(power_stat[0])   # Don't try to inherit this stat's IV again
+      power_stats.each_pair do |stat, new_stats|
+        next if !new_stats || new_stats.length == 0
+        new_stat = new_stats.sample
+        egg.iv[stat] = new_stat
+        stats.delete(stat)   # Don't try to inherit this stat's IV again
         inherit_count -= 1
       end
       # Inherit the rest of the IVs
