@@ -96,15 +96,11 @@ end
 #===============================================================================
 class HandlerHash
   def initialize
-    @hash    = {}
-    @add_ifs = []
+    @hash = {}
   end
 
   def [](id)
     return @hash[id] if id && @hash[id]
-    @add_ifs.each do |add_if|
-      return add_if[2] if add_if[1].call(id)
-    end
     return nil
   end
 
@@ -115,13 +111,6 @@ class HandlerHash
     @hash[id] = handler || handlerBlock if id && !id.empty?
   end
 
-  def add_if(id, conditionProc, handler = nil, &handlerBlock)
-    if ![Proc, Hash].include?(handler.class) && !block_given?
-      raise ArgumentError, "add_if call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
-    end
-    @add_ifs.push([id, conditionProc, handler || handlerBlock])
-  end
-
   def copy(src, *dests)
     handler = self[src]
     return if !handler
@@ -129,16 +118,11 @@ class HandlerHash
   end
 
   def remove(key)
-    if @hash.keys.include?(key)
-      @hash.delete(key)
-    else
-      @add_ifs.delete_if { |add_if| add_if[0] == key }
-    end
+    @hash.delete(key)
   end
 
   def clear
     @hash.clear
-    @add_ifs.clear
   end
 
   def each
@@ -158,7 +142,8 @@ end
 
 #===============================================================================
 # A stripped-down version of class HandlerHash which only deals with IDs that
-# are symbols.
+# are symbols. Also contains an add_ifs hash for code that applies to multiple
+# IDs (determined by its condition proc).
 #===============================================================================
 class HandlerHashSymbol
   def initialize
@@ -269,6 +254,13 @@ class HandlerHashEnum
     @hash[id] = handler || handlerBlock if id
     symbol = toSymbol(sym)
     @hash[symbol] = handler || handlerBlock if symbol
+  end
+
+  def addIf(conditionProc, handler = nil, &handlerBlock)
+    if ![Proc, Hash].include?(handler.class) && !block_given?
+      raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
+    end
+    @addIfs.push([conditionProc, handler || handlerBlock])
   end
 
   def copy(src, *dests)
