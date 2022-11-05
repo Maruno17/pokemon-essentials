@@ -363,6 +363,8 @@ class Battle::Battler
         targets = pbFindTargets(choice, move, user)
       end
     end
+    # For two-turn moves when they charge and attack in the same turn
+    move.pbQuickChargingMove(user, targets)
     #---------------------------------------------------------------------------
     magicCoater  = -1
     magicBouncer = -1
