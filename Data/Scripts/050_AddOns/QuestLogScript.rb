@@ -167,6 +167,7 @@ def pbAcceptNewQuest(id,bubblePosition=20)
   description = QUESTS[id].desc
   
   pbMEPlay("Voltorb Flip Win")
+
   pbCallBub(1,bubblePosition) 
   Kernel.pbMessage("\\C[6]NEW QUEST: " + title)
   pbCallBub(1,bubblePosition) 
