@@ -59,7 +59,7 @@ class Battle::AI
   #       CategoryDependsOnHigherDamageIgnoreTargetAbility.
   #=============================================================================
   def stat_raise_worthwhile?(stat)
-    return false if !@user.battler.pbCanRaiseStatStage?(stat, @user.battler, @move)
+    return false if !@user.battler.pbCanRaiseStatStage?(stat, @user.battler, @move.move)
     # Check if user won't benefit from the stat being raised
     # TODO: Exception if user knows Baton Pass/Stored Power?
     case stat
@@ -69,18 +69,16 @@ class Battle::AI
                                                   m.function != "UseTargetAttackInsteadOfUserAttack" }
     when :DEFENSE
       each_foe_battler(@user.side) do |b, i|
-        next if !b.check_for_move { |m| m.physicalMove?(m.type) ||
-                                        m.function == "UseTargetDefenseInsteadOfTargetSpDef" }
-        return true
+        return true if b.check_for_move { |m| m.physicalMove?(m.type) ||
+                                              m.function == "UseTargetDefenseInsteadOfTargetSpDef" }
       end
       return false
     when :SPECIAL_ATTACK
       return false if !@user.check_for_move { |m| m.specialMove?(m.type) }
     when :SPECIAL_DEFENSE
       each_foe_battler(@user.side) do |b, i|
-        next if !b.check_for_move { |m| m.specialMove?(m.type) &&
-                                        m.function != "UseTargetDefenseInsteadOfTargetSpDef" }
-        return true
+        return true if b.check_for_move { |m| m.specialMove?(m.type) &&
+                                              m.function != "UseTargetDefenseInsteadOfTargetSpDef" }
       end
       return false
     when :SPEED
@@ -103,12 +101,6 @@ class Battle::AI
   #=============================================================================
   # Make score changes based on the general concept of raising stats at all.
   #=============================================================================
-  # TODO: These function codes need to have an attr_reader :statUp and for them
-  #       to be set when the move is initialised.
-  #       LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2 Shell Smash
-  #       RaiseTargetRandomStat2 Acupressure
-  #       RaisePlusMinusUserAndAlliesDefSpDef1 Magnetic Flux
-  #       RaisePlusMinusUserAndAlliesAtkSpAtk1 Gear Up
   def get_user_stat_raise_score_generic(score, stat_changes)
     total_increment = stat_changes.sum { |change| change[1] }
     # TODO: Just return if foe is predicted to use a phazing move (one that
@@ -154,17 +146,11 @@ class Battle::AI
       break
     end
 
-    # Prefer if user has most of its HP
-    if @user.hp >= @user.totalhp * 3 / 4
-      mini_score *= (sweeping_stat) ? 1.2 : 1.1
-    end
     # TODO: Prefer if user's moves won't do much damage.
     # Prefer if user has something that will limit damage taken
     mini_score *= 1.3 if @user.effects[PBEffects::Substitute] > 0 ||
                          (@user.form == 0 && @user.ability_id == :DISGUISE)
 
-    # Don't prefer if user doesn't have much HP left
-    mini_score *= 0.3 if @user.hp < @user.totalhp / 3
     # Don't prefer if user is badly poisoned
     mini_score *= 0.2 if @user.effects[PBEffects::Toxic] > 0 && !offensive_stat
     # Don't prefer if user is confused
@@ -296,6 +282,8 @@ class Battle::AI
 
     when :SPEED
       # Prefer if user is slower than a foe
+      # TODO: Don't prefer if the user is too much slower than any foe that it
+      #       can't catch up.
       each_foe_battler(@user.side) do |b, i|
         next if @user.faster_than?(b)
         score += 15 * inc_mult
@@ -319,7 +307,7 @@ class Battle::AI
           next if m.accuracy == 0 || m.is_a?(Battle::Move::OHKO)
           min_accuracy = m.accuracy if m.accuracy < min_accuracy
         end
-        min_accuracy *= stage_mul[old_stage] / stage_div[old_stage]
+        min_accuracy = min_accuracy * stage_mul[old_stage] / stage_div[old_stage]
         if min_accuracy < 90
           score += 5 * (3 - old_stage) * inc_mult
           score += 5 * inc_mult if @user.hp == @user.totalhp
@@ -345,18 +333,14 @@ class Battle::AI
 
     end
 
-    # Check impact on moves of gaining stat stages
-    pos_change = [old_stage + increment, increment].min
-    if pos_change > 0
-      # Prefer if user has Stored Power
-      if @user.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
-        score += 5 * pos_change
-      end
-      # Don't prefer if any foe has Punishment
-      each_foe_battler(@user.side) do |b, i|
-        next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetPositiveStatStages" }
-        score -= 5 * pos_change
-      end
+    # Prefer if user has Stored Power
+    if @user.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
+      score += 5 * pos_change
+    end
+    # Don't prefer if any foe has Punishment
+    each_foe_battler(@user.side) do |b, i|
+      next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetPositiveStatStages" }
+      score -= 5 * pos_change
     end
 
     return score
@@ -567,6 +551,247 @@ class Battle::AI
 
     return mini_score
 =end
+  end
+
+  #=============================================================================
+  # Main method for calculating the score for moves that lower the target's
+  # stat(s).
+  # TODO: Revisit this method as parts may need rewriting.
+  #=============================================================================
+  def get_score_for_target_stat_drop(score)
+    # Discard status move/don't prefer damaging move if target has Contrary
+    if !@battle.moldBreaker && @target.has_active_ability?(:CONTRARY)
+      return (@move.statusMove?) ? MOVE_USELESS_SCORE : score - 20
+    end
+    # Don't make score changes if foes have Unaware and user can't make use of
+    # extra stat stages
+    ally_is_aware = false
+    each_foe_battler(@target.side) do |b, i|
+      ally_is_aware = true if !b.has_active_ability?(:UNAWARE)
+    end
+    return score if !ally_is_aware
+
+    # Figure out which stat raises can happen
+    stat_changes = []
+    @move.move.statDown.each_with_index do |stat, idx|
+      next if idx.odd?
+      next if !stat_drop_worthwhile?(stat)
+      # Calculate amount that stat will be raised by
+      decrement = @move.move.statDown[idx + 1]
+      decrement *= 2 if !@battle.moldBreaker && @user.has_active_ability?(:SIMPLE)
+      decrement = [decrement, 6 + @target.stages[stat]].min   # The actual stages lost
+      # Count this as a valid stat drop
+      stat_changes.push([stat, decrement]) if decrement > 0
+    end
+    # Discard move if it can't lower any stats
+    if stat_changes.length == 0
+      # TODO: Have a parameter that decides whether to reduce the score here
+      #       (for moves where this is just part of the effect).
+      return (@move.statusMove?) ? MOVE_USELESS_SCORE : score
+    end
+
+    # Make score changes based on the general concept of lowering stats at all
+    score = get_target_stat_drop_score_generic(score, stat_changes)
+
+    # Make score changes based on the specific changes to each stat that will be
+    # lowered
+    stat_changes.each do |change|
+      score = get_target_stat_drop_score_one(score, change[0], change[1])
+    end
+
+    return score
+  end
+
+  #=============================================================================
+  # Returns whether the target lowering the given stat will have any impact.
+  # TODO: Make sure the move's actual damage category is taken into account,
+  #       i.e. CategoryDependsOnHigherDamagePoisonTarget and
+  #       CategoryDependsOnHigherDamageIgnoreTargetAbility.
+  # TODO: Revisit this method as parts may need rewriting.
+  #=============================================================================
+  def stat_drop_worthwhile?(stat)
+    return false if !@target.battler.pbCanLowerStatStage?(stat, @user.battler, @move.move)
+    # Check if target won't benefit from the stat being lowered
+    case stat
+    when :ATTACK
+      return false if !@target.check_for_move { |m| m.physicalMove?(m.type) &&
+                                                    m.function != "UseUserDefenseInsteadOfUserAttack" &&
+                                                    m.function != "UseTargetAttackInsteadOfUserAttack" }
+    when :DEFENSE
+      each_foe_battler(@target.side) do |b, i|
+        return true if b.check_for_move { |m| m.physicalMove?(m.type) ||
+                                              m.function == "UseTargetDefenseInsteadOfTargetSpDef" }
+      end
+      return false
+    when :SPECIAL_ATTACK
+      return false if !@target.check_for_move { |m| m.specialMove?(m.type) }
+    when :SPECIAL_DEFENSE
+      each_foe_battler(@target.side) do |b, i|
+        return true if b.check_for_move { |m| m.specialMove?(m.type) &&
+                                              m.function != "UseTargetDefenseInsteadOfTargetSpDef" }
+      end
+      return false
+    when :SPEED
+      moves_that_prefer_high_speed = [
+        "PowerHigherWithUserFasterThanTarget",
+        "PowerHigherWithUserPositiveStatStages"
+      ]
+      if !@target.check_for_move { |m| moves_that_prefer_high_speed.include?(m.function) }
+        each_foe_battler(@target.side) do |b, i|
+          return true if !b.faster_than?(@target)
+        end
+        return false
+      end
+    when :ACCURACY
+    when :EVASION
+    end
+    return true
+  end
+
+  #=============================================================================
+  # Make score changes based on the general concept of lowering stats at all.
+  # TODO: Revisit this method as parts may need rewriting.
+  # TODO: All comments in this method may be inaccurate.
+  #=============================================================================
+  def get_target_stat_drop_score_generic(score, stat_changes)
+    total_decrement = stat_changes.sum { |change| change[1] }
+    # TODO: Just return if target is predicted to switch out (except via Baton Pass).
+    # TODO: Don't prefer if target is faster than user and is predicted to deal
+    #       lethal damage.
+    # TODO: Don't prefer if target is slower than user but is predicted to be able
+    #       to 2HKO user.
+    # TODO: Don't prefer if target is semi-invulnerable and user is faster.
+
+    # Prefer if move is a status move and it's the user's first/second turn
+#    if @user.turnCount < 2 && @move.statusMove?
+#      score += total_decrement * 4
+#    end
+
+    # Prefer if user is at high HP, don't prefer if user is at low HP
+#    if @user.hp >= @user.totalhp * 0.7
+#      score += 4 * total_decrement
+#    else
+#      score += total_decrement * ((100 * @user.hp / @user.totalhp) - 50) / 4   # +5 to -12 per stage
+#    end
+
+    # Don't prefer if user is about to faint due to EOR damage
+#    score -= 30 if @user.rough_end_of_round_damage > @user.hp
+
+    # TODO: Look at abilities that trigger upon stat lowering.
+
+    return score
+  end
+
+  #=============================================================================
+  # Make score changes based on the lowering of a specific stat.
+  # TODO: Revisit this method as parts may need rewriting.
+  #=============================================================================
+  def get_target_stat_drop_score_one(score, stat, decrement)
+    # Figure out how much the stat will actually change by
+    stage_mul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
+    stage_div = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
+    if [:ACCURACY, :EVASION].include?(stat)
+      stage_mul = [3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 8, 9]
+      stage_div = [9, 8, 7, 6, 5, 4, 3, 3, 3, 3, 3, 3, 3]
+    end
+    old_stage = @target.stages[stat]
+    new_stage = old_stage - decrement
+    dec_mult = (stage_mul[old_stage].to_f * stage_div[new_stage]) / (stage_div[old_stage] * stage_mul[new_stage])
+    dec_mult -= 1
+    # Stat-based score changes
+    case stat
+    when :ATTACK
+      # Modify score depending on current stat stage
+      # More strongly prefer if the target has no special moves
+      if old_stage <= -3
+        score -= 20
+      else
+        has_special_moves = @target.check_for_move { |m| m.specialMove?(m.type) }
+        dec = (has_special_moves) ? 5 : 10
+        score += dec * (3 + old_stage) * dec_mult
+        score += 5 * dec_mult if @target.hp == @target.totalhp
+      end
+
+    when :DEFENSE
+      # Modify score depending on current stat stage
+      if old_stage <= -3
+        score -= 20
+      else
+        score += 5 * (3 + old_stage) * dec_mult
+        score += 5 * dec_mult if @target.hp == @target.totalhp
+      end
+
+    when :SPECIAL_ATTACK
+      # Modify score depending on current stat stage
+      # More strongly prefer if the target has no physical moves
+      if old_stage <= -3
+        score -= 20
+      else
+        has_physical_moves = @target.check_for_move { |m| m.physicalMove?(m.type) &&
+                                                          m.function != "UseUserDefenseInsteadOfUserAttack" &&
+                                                          m.function != "UseTargetAttackInsteadOfUserAttack" }
+        dec = (has_physical_moves) ? 5 : 10
+        score += dec * (3 + old_stage) * dec_mult
+        score += 5 * dec_mult if @target.hp == @target.totalhp
+      end
+
+    when :SPECIAL_DEFENSE
+      # Modify score depending on current stat stage
+      if old_stage <= -3
+        score -= 20
+      else
+        score += 5 * (3 + old_stage) * dec_mult
+        score += 5 * dec_mult if @target.hp == @target.totalhp
+      end
+
+    when :SPEED
+      # Prefer if target is faster than an ally
+      # TODO: Don't prefer if the target is too much faster than any ally and
+      #       can't be brought slow enough.
+      each_foe_battler(@target.side) do |b, i|
+        next if b.faster_than?(@target)
+        score += 15 * dec_mult
+        break
+      end
+      # Prefer if any ally has Electro Ball
+      each_foe_battler(@target.side) do |b, i|
+        next if !b.check_for_move { |m| m.function == "PowerHigherWithUserFasterThanTarget" }
+        score += 8 * dec_mult
+      end
+      # Don't prefer if target has Speed Boost (will be gaining Speed anyway)
+      score -= 20 if @target.has_active_ability?(:SPEEDBOOST)
+
+    when :ACCURACY
+      # Modify score depending on current stat stage
+      if old_stage <= -3
+        score -= 20
+      else
+        score += 5 * (3 + old_stage) * dec_mult
+        score += 5 * dec_mult if @target.hp == @target.totalhp
+      end
+
+    when :EVASION
+      # Modify score depending on current stat stage
+      if old_stage <= -3
+        score -= 20
+      else
+        score += 5 * (3 + old_stage) * dec_mult
+        score += 5 * dec_mult if @target.hp == @target.totalhp
+      end
+
+    end
+
+    # Prefer if target has Stored Power
+    if @target.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
+      score += 5 * decrement
+    end
+    # Don't prefer if any ally has Punishment
+    each_foe_battler(@target.side) do |b, i|
+      next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetPositiveStatStages" }
+      score -= 5 * decrement
+    end
+
+    return score
   end
 
   #=============================================================================

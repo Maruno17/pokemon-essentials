@@ -1355,6 +1355,8 @@ end
 # stage each. (Venom Drench)
 #===============================================================================
 class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
+  attr_reader :statDown
+
   def canMagicCoat?; return true; end
 
   def initialize(battle, move)
@@ -1367,10 +1369,13 @@ class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
     targets.each do |b|
       next if !b || b.fainted?
       next if !b.poisoned?
-      next if !b.pbCanLowerStatStage?(:ATTACK, user, self) &&
-              !b.pbCanLowerStatStage?(:SPECIAL_ATTACK, user, self) &&
-              !b.pbCanLowerStatStage?(:SPEED, user, self)
-      @validTargets.push(b.index)
+      failed = true
+      (@statDown.length / 2).times do |i|
+        next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
+        failed = false
+        break
+      end
+      @validTargets.push(b.index) if !failed
     end
     if @validTargets.length == 0
       @battle.pbDisplay(_INTL("But it failed!"))

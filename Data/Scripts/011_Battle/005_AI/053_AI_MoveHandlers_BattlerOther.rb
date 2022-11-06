@@ -150,7 +150,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PoisonTargetLowerTargetSpeed1",
   proc { |move, user, target, ai, battle|
