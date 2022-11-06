@@ -535,12 +535,10 @@ class PokemonFusionScene
     @sprites["rsprite2"] = PokemonSprite.new(@viewport)
     @sprites["rsprite3"] = PokemonSprite.new(@viewport)
 
-    @sprites["rsprite1"].setPokemonBitmapFromId(poke1_number, false,pokemon1.shiny?)
-    @sprites["rsprite3"].setPokemonBitmapFromId(poke2_number, false,pokemon2.shiny?)
+    @sprites["rsprite1"].setPokemonBitmapFromId(poke1_number, false, pokemon1.shiny?)
+    @sprites["rsprite3"].setPokemonBitmapFromId(poke2_number, false, pokemon2.shiny?)
 
-
-
-    @sprites["rsprite2"].setPokemonBitmapFromId(@newspecies, false, pokemon1.shiny? || pokemon2.shiny?,pokemon1.shiny?,pokemon2.shiny?)
+    @sprites["rsprite2"].setPokemonBitmapFromId(@newspecies, false, pokemon1.shiny? || pokemon2.shiny?, pokemon1.shiny?, pokemon2.shiny?)
 
     @sprites["rsprite1"].ox = @sprites["rsprite1"].bitmap.width / 2
     @sprites["rsprite1"].oy = @sprites["rsprite1"].bitmap.height / 2
@@ -650,7 +648,7 @@ class PokemonFusionScene
 
   # Opens the fusion screen
 
-  def pbFusionScreen(cancancel = false, superSplicer = false, firstOptionSelected=false)
+  def pbFusionScreen(cancancel = false, superSplicer = false, firstOptionSelected = false)
     metaplayer1 = SpriteMetafilePlayer.new(@metafile1, @sprites["rsprite1"])
     metaplayer2 = SpriteMetafilePlayer.new(@metafile2, @sprites["rsprite2"])
     metaplayer3 = SpriteMetafilePlayer.new(@metafile3, @sprites["rsprite3"])
@@ -714,12 +712,12 @@ class PokemonFusionScene
       @pokemon1.exp_gained_since_fused = 0
 
       if @pokemon2.shiny?
-        @pokemon1.head_shiny=true
+        @pokemon1.head_shiny = true
       end
       if @pokemon1.shiny?
-        @pokemon1.body_shiny=true
+        @pokemon1.body_shiny = true
       end
-      @pokemon1.debug_shiny=true if @pokemon1.debug_shiny || @pokemon2.debug_shiny
+      @pokemon1.debug_shiny = true if @pokemon1.debug_shiny || @pokemon2.debug_shiny
 
       setFusionIVs(superSplicer)
       #add to pokedex 
@@ -780,19 +778,23 @@ def clearUIForMoves
 
 end
 
-def setAbilityAndNature(abilitiesList, naturesList)
+#todo: find a better name for this method...
+def setAbilityAndNatureAndNickname(abilitiesList, naturesList)
   clearUIForMoves
 
-  scene = FusionSelectOptionsScene.new(abilitiesList, naturesList)
+  scene = FusionSelectOptionsScene.new(abilitiesList, naturesList, @pokemon1, @pokemon2)
   screen = PokemonOptionScreen.new(scene)
   screen.pbStartScreen
 
   @pokemon1.ability = scene.selectedAbility
   @pokemon1.nature = scene.selectedNature
+  if scene.hasNickname
+    @pokemon1.name = scene.nickname
+  end
 
 end
 
-def setFusionMoves(fusedPoke, poke2,selected2ndOption=false)
+def setFusionMoves(fusedPoke, poke2, selected2ndOption = false)
   #NEW METHOD (not ready)
 
   # clearUIForMoves
@@ -805,10 +807,9 @@ def setFusionMoves(fusedPoke, poke2,selected2ndOption=false)
   #
   # fusedPoke.moves=moves
   bodySpecies = getBodyID(fusedPoke)
-  headSpecies = getHeadID(fusedPoke,bodySpecies)
+  headSpecies = getHeadID(fusedPoke, bodySpecies)
   bodySpeciesName = GameData::Species.get(bodySpecies).real_name
   headSpeciesName = GameData::Species.get(headSpecies).real_name
-
 
   choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", bodySpeciesName), _INTL("Keep {1}'s moveset", headSpeciesName)], 0)
   if choice == 1
@@ -885,7 +886,7 @@ def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
   availableNatures << @pokemon1.nature
   availableNatures << @pokemon2.nature
 
-  setAbilityAndNature([GameData::Ability.get(abID1), GameData::Ability.get(abID2)], availableNatures)
+  setAbilityAndNatureAndNickname([GameData::Ability.get(abID1), GameData::Ability.get(abID2)], availableNatures)
 
   # if (Kernel.pbMessage("Choose an ability. ???", [_INTL("{1}", ability1_name), _INTL("{1}", ability2_name)], 2)) == 0
   #   return abID1 #hidden1 ? 4 : 0

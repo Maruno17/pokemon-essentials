@@ -377,6 +377,7 @@ RandPokeNick = [
   "password",
   "password123",
   "covid",
+  "McLovin",
   "covfefe",
   "admin",
   "God",

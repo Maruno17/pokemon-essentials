@@ -141,8 +141,8 @@ class DoublePreviewScreen
 
   def drawFusionInformation(fusedDexNum, level, x = 0)
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @typewindows << drawPokemonType(fusedDexNum, viewport, x + 40, 220) if @draw_types
-    drawFusionPreviewText(viewport, "Lv. " + level.to_s, x + 60, 40,) if @draw_level
+    @typewindows << drawPokemonType(fusedDexNum, viewport, x + 55, 220) if @draw_types
+    drawFusionPreviewText(viewport, "Lv. " + level.to_s, x + 80, 40,) if @draw_level
   end
 
 
