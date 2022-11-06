@@ -92,7 +92,7 @@ class PokeRadar_UI
     @sprites[iconId].z = 100
 
     @current_x += ICON_MARGIN_X
-    if @current_x > ICON_LINE_END
+    if @current_x >= ICON_LINE_END
       @current_x = ICON_START_X
       @current_y +=ICON_MARGIN_Y
       @sprites["background"].zoom_y += 1

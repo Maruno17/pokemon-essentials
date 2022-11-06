@@ -1483,7 +1483,7 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
         end
       end
       pokemon.debug_shiny=true if pokemon.debug_shiny && pokemon.body_shiny
-      poke2.debug_shiny=true if pokemon.debug_shiny || poke2.head_shiny
+      poke2.debug_shiny=true if pokemon.debug_shiny && poke2.head_shiny
 
       pokemon.body_shiny=false
       pokemon.head_shiny=false

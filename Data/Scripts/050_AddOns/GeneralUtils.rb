@@ -202,6 +202,9 @@ end
 
 def getBodyID(species)
   dexNum = getDexNumberForSpecies(species)
+  if dexNum % NB_POKEMON ==0
+    return (dexNum/NB_POKEMON)-1
+  end
   return (dexNum / NB_POKEMON).round
 end
 
@@ -209,9 +212,10 @@ def getHeadID(species, bodyId = nil)
   if bodyId == nil
     bodyId = getBodyID(species)
   end
-  head_dexNum = getDexNumberForSpecies(species)
+  fused_dexNum = getDexNumberForSpecies(species)
   body_dexNum = getDexNumberForSpecies(bodyId)
-  calculated_number = (head_dexNum - (body_dexNum * NB_POKEMON)).round
+
+  calculated_number = (fused_dexNum - (body_dexNum * NB_POKEMON)).round
   return calculated_number == 0 ? 420 : calculated_number
 end
 

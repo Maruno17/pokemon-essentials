@@ -145,7 +145,8 @@ QUESTS = [
  Quest.new(42, "Stolen artifact", "Recover a stolen vase from a burglar in the Pokémon Mansion", questBranchHotels, "BW (21)","Cinnabar Island", defaultQuestColor),
  Quest.new(43, "Fallen Meteor", "Investigate a crater near Bond Bridge.", questBranchHotels, "BW009","Kin Island", defaultQuestColor), 
  Quest.new(44, "First Contact", "Find the missing pieces of a fallen alien spaceship", questBranchHotels, "BW (92)","Bond Bridge", questBranchField), 
- Quest.new(45, "First Contact (Part 2)", "Ask the sailor at Cinnabar Island's harbour to take you to the uncharted island where the spaceship might be located", questBranchHotels, "BW (92)","Bond Bridge", questBranchField), 
+ Quest.new(45, "First Contact (Part 2)", "Ask the sailor at Cinnabar Island's harbour to take you to the uncharted island where the spaceship might be located", questBranchHotels, "BW (92)","Bond Bridge", defaultQuestColor),
+ Quest.new(46, "The rarest fish", "A fisherman wants you to show him a Feebas. Apparently they can be fished around the Sevii Islands when it rains.", questBranchField, "BW056","Kin Island", defaultQuestColor),
 
  # attention: c'est un array et non un hash... l'id est en fait l'index, donc il est important de garder l'ordre
   #out of order quests
