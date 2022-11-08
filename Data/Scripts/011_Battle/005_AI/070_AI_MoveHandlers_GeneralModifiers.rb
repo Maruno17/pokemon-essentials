@@ -44,7 +44,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:add_predicted_damage,
     if move.damagingMove?
       dmg = move.rough_damage
       score += [15.0 * dmg / target.hp, 20].min
-      score += 10 if dmg > target.hp * 1.1   # Predicted to KO the target
+      score += 15 if dmg > target.hp * 1.1   # Predicted to KO the target
       next score.to_i
     end
   }

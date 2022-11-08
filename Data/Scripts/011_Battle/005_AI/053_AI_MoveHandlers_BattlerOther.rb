@@ -538,7 +538,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetBurn",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideImmunityToInflictedStatus",
   proc { |move, user, ai, battle|
@@ -547,11 +547,19 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideImmunityToInflictedStat
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToInflictedStatus",
   proc { |score, move, user, ai, battle|
-    if user.status != :NONE
-      score -= 20
-    else
-      score += 10
+    # Not worth it if Misty Terrain is already safeguarding all user side battlers
+    if battle.field.terrain == :Misty &&
+       (battle.field.terrainDuration > 1 || battle.field.terrainDuration < 0)
+      already_immune = true
+      ai.each_same_side_battler(user.side) do |b|
+        already_immune = false if !b.battler.affectedByTerrain?
+      end
+      next Battle::AI::MOVE_USELESS_SCORE if already_immune
     end
+    # Tends to be wasteful if the foe just has one Pokémon left
+    next score - 20 if battle.pbAbleNonActiveCount(user.idxOpposingSide) == 0
+    # Prefer for each user side battler
+    ai.each_same_side_battler(user.side) { |b| score += 10 }
     next score
   }
 )
@@ -705,7 +713,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("SetUserTypesBasedOnEnvironment",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserTypesToResistLastAttack",
   proc { |move, user, target, ai, battle|
@@ -722,9 +730,24 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserTypesToResistLas
     next !has_possible_type
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetUserTypesToResistLastAttack",
+  proc { |score, move, user, target, ai, battle|
+    effectiveness = user.effectiveness_of_type_against_battler(target.battler.lastMoveUsedType, target)
+    if Effectiveness.ineffective?(effectiveness)
+      next Battle::AI::MOVE_USELESS_SCORE
+    elsif Effectiveness.super_effective?(effectiveness)
+      score += 12
+    elsif Effectiveness.normal?(effectiveness)
+      score += 8
+    else   # Not very effective
+      score += 4
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserTypesToTargetTypes",
   proc { |move, user, target, ai, battle|
@@ -736,7 +759,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserTypesToTargetTyp
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SetUserTypesToUserMoveType",
   proc { |move, user, ai, battle|
@@ -752,36 +775,131 @@ Battle::AI::Handlers::MoveFailureCheck.add("SetUserTypesToUserMoveType",
     next !has_possible_type
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetUserTypesToUserMoveType",
+  proc { |score, move, user, target, ai, battle|
+    possible_types = []
+    user.battler.eachMoveWithIndex do |m, i|
+      break if Settings::MECHANICS_GENERATION >= 6 && i > 0
+      next if GameData::Type.get(m.type).pseudo_type
+      next if user.has_type?(m.type)
+      possible_types.push(m.type)
+    end
+    # Check if any user's moves will get STAB because of the type change
+    possible_types.each do |type|
+      if user.check_for_move { |m| m.damagingMove? }
+        score += 10
+        break
+      end
+    end
+    # NOTE: Other things could be considered, like the foes' moves'
+    #       effectivenesses against the current and new user's type(s), and
+    #       whether any of the user's moves will lose STAB because of the type
+    #       change (and if so, which set of STAB is more beneficial). However,
+    #       I'm keeping this simple because, if you know this move, you probably
+    #       want to use it just because.
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetTypesToPsychic",
   proc { |move, user, target, ai, battle|
     next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetTypesToPsychic",
+  proc { |score, move, user, target, ai, battle|
+    # Prefer if user knows damaging moves that are super-effective against
+    # Psychic, and don't prefer if they know damaging moves that are ineffective
+    # against Psychic
+    user.battler.eachMoveWithIndex do |m, i|
+      next if !m.damagingMove?
+      effectiveness = Effectiveness.calculate(m.pbCalcType(user.battler), :PSYCHIC)
+      if Effectiveness.super_effective?(effectiveness)
+        score += 8
+      elsif Effectiveness.ineffective?(effectiveness)
+        score -= 10
+      end
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("SetTargetTypesToPsychic",
                                                          "SetTargetTypesToWater")
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetTypesToWater",
+  proc { |score, move, user, target, ai, battle|
+    # Prefer if user knows damaging moves that are super-effective against
+    # Water, and don't prefer if they know damaging moves that are ineffective
+    # against Water
+    user.battler.eachMoveWithIndex do |m, i|
+      next if !m.damagingMove?
+      effectiveness = Effectiveness.calculate(m.pbCalcType(user.battler), :WATER)
+      if Effectiveness.super_effective?(effectiveness)
+        score += 8
+      elsif Effectiveness.ineffective?(effectiveness)
+        score -= 10
+      end
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("SetTargetTypesToWater",
                                                          "AddGhostTypeToTarget")
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AddGhostTypeToTarget",
+  proc { |score, move, user, target, ai, battle|
+    # Prefer/don't prefer depending on the effectiveness of the user's damaging
+    # moves against the added type
+    user.battler.eachMoveWithIndex do |m, i|
+      next if !m.damagingMove?
+      effectiveness = Effectiveness.calculate(m.pbCalcType(user.battler), :GHOST)
+      if Effectiveness.super_effective?(effectiveness)
+        score += 8
+      elsif Effectiveness.not_very_effective?(effectiveness)
+        score -= 5
+      elsif Effectiveness.ineffective?(effectiveness)
+        score -= 10
+      end
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("AddGhostTypeToTarget",
                                                          "AddGrassTypeToTarget")
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AddGrassTypeToTarget",
+  proc { |score, move, user, target, ai, battle|
+    # Prefer/don't prefer depending on the effectiveness of the user's damaging
+    # moves against the added type
+    user.battler.eachMoveWithIndex do |m, i|
+      next if !m.damagingMove?
+      effectiveness = Effectiveness.calculate(m.pbCalcType(user.battler), :GRASS)
+      if Effectiveness.super_effective?(effectiveness)
+        score += 8
+      elsif Effectiveness.not_very_effective?(effectiveness)
+        score -= 5
+      elsif Effectiveness.ineffective?(effectiveness)
+        score -= 10
+      end
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserLosesFireType",
   proc { |move, user, ai, battle|

@@ -7,6 +7,10 @@ class Battle::AI
     if !@battle.moldBreaker && @user.has_active_ability?(:CONTRARY)
       return (@move.statusMove?) ? MOVE_USELESS_SCORE : score - 20
     end
+    # Don't make score changes if user will faint from EOR damage
+    if @user.rough_end_of_round_damage > @user.hp
+      return (@move.statusMove?) ? MOVE_USELESS_SCORE : score
+    end
     # Don't make score changes if foes have Unaware and user can't make use of
     # extra stat stages
     if !@user.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
@@ -14,7 +18,9 @@ class Battle::AI
       each_foe_battler(@user.side) do |b, i|
         foe_is_aware = true if !b.has_active_ability?(:UNAWARE)
       end
-      return score if !foe_is_aware
+      if !foe_is_aware
+        return (@move.statusMove?) ? MOVE_USELESS_SCORE : score
+      end
     end
 
     # Figure out which stat raises can happen
@@ -123,9 +129,6 @@ class Battle::AI
     else
       score += total_increment * ((100 * @user.hp / @user.totalhp) - 50) / 4   # +5 to -12 per stage
     end
-
-    # Don't prefer if user is about to faint due to EOR damage
-    score -= 30 if @user.rough_end_of_round_damage > @user.hp
 
     # TODO: Look at abilities that trigger upon stat raise. There are none.
 
@@ -239,45 +242,45 @@ class Battle::AI
     when :ATTACK
       # Modify score depending on current stat stage
       # More strongly prefer if the user has no special moves
-      if old_stage >= 3
+      if old_stage >= 2
         score -= 20
       else
         has_special_moves = @user.check_for_move { |m| m.specialMove?(m.type) }
         inc = (has_special_moves) ? 5 : 10
-        score += inc * (3 - old_stage) * inc_mult
-        score += 5 * inc_mult if @user.hp == @user.totalhp
+        score += inc * (2 - old_stage) * inc_mult
+        score += 4 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :DEFENSE
       # Modify score depending on current stat stage
-      if old_stage >= 3
+      if old_stage >= 2
         score -= 20
       else
-        score += 5 * (3 - old_stage) * inc_mult
-        score += 5 * inc_mult if @user.hp == @user.totalhp
+        score += 5 * (2 - old_stage) * inc_mult
+        score += 4 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :SPECIAL_ATTACK
       # Modify score depending on current stat stage
       # More strongly prefer if the user has no physical moves
-      if old_stage >= 3
+      if old_stage >= 2
         score -= 20
       else
         has_physical_moves = @user.check_for_move { |m| m.physicalMove?(m.type) &&
                                                         m.function != "UseUserDefenseInsteadOfUserAttack" &&
                                                         m.function != "UseTargetAttackInsteadOfUserAttack" }
         inc = (has_physical_moves) ? 5 : 10
-        score += inc * (3 - old_stage) * inc_mult
-        score += 5 * inc_mult if @user.hp == @user.totalhp
+        score += inc * (2 - old_stage) * inc_mult
+        score += 4 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :SPECIAL_DEFENSE
       # Modify score depending on current stat stage
-      if old_stage >= 3
+      if old_stage >= 2
         score -= 20
       else
-        score += 5 * (3 - old_stage) * inc_mult
-        score += 5 * inc_mult if @user.hp == @user.totalhp
+        score += 5 * (2 - old_stage) * inc_mult
+        score += 4 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :SPEED
@@ -299,7 +302,7 @@ class Battle::AI
 
     when :ACCURACY
       # Modify score depending on current stat stage
-      if old_stage >= 3
+      if old_stage >= 2
         score -= 20
       else
         min_accuracy = 100
@@ -309,8 +312,8 @@ class Battle::AI
         end
         min_accuracy = min_accuracy * stage_mul[old_stage] / stage_div[old_stage]
         if min_accuracy < 90
-          score += 5 * (3 - old_stage) * inc_mult
-          score += 5 * inc_mult if @user.hp == @user.totalhp
+          score += 5 * (2 - old_stage) * inc_mult
+          score += 4 * inc_mult if @user.hp == @user.totalhp
         end
       end
 
@@ -324,11 +327,11 @@ class Battle::AI
         score += 60 * eor_damage / b.totalhp if eor_damage > 0
       end
       # Modify score depending on current stat stage
-      if old_stage >= 3
+      if old_stage >= 2
         score -= 20
       else
-        score += 5 * (3 - old_stage) * inc_mult
-        score += 5 * inc_mult if @user.hp == @user.totalhp
+        score += 5 * (2 - old_stage) * inc_mult
+        score += 4 * inc_mult if @user.hp == @user.totalhp
       end
 
     end
@@ -563,13 +566,19 @@ class Battle::AI
     if !@battle.moldBreaker && @target.has_active_ability?(:CONTRARY)
       return (@move.statusMove?) ? MOVE_USELESS_SCORE : score - 20
     end
-    # Don't make score changes if foes have Unaware and user can't make use of
-    # extra stat stages
+    # Don't make score changes if target will faint from EOR damage
+    if @target.rough_end_of_round_damage > @target.hp
+      return (@move.statusMove?) ? MOVE_USELESS_SCORE : score
+    end
+    # Don't make score changes if allies have Unaware and can't make use of
+    # target's lowered stat stages
     ally_is_aware = false
     each_foe_battler(@target.side) do |b, i|
       ally_is_aware = true if !b.has_active_ability?(:UNAWARE)
     end
-    return score if !ally_is_aware
+    if !ally_is_aware
+      return (@move.statusMove?) ? MOVE_USELESS_SCORE : score
+    end
 
     # Figure out which stat raises can happen
     stat_changes = []
@@ -663,19 +672,22 @@ class Battle::AI
     # TODO: Don't prefer if target is semi-invulnerable and user is faster.
 
     # Prefer if move is a status move and it's the user's first/second turn
-#    if @user.turnCount < 2 && @move.statusMove?
-#      score += total_decrement * 4
-#    end
+    if @user.turnCount < 2 && @move.statusMove?
+      score += total_decrement * 4
+    end
 
     # Prefer if user is at high HP, don't prefer if user is at low HP
-#    if @user.hp >= @user.totalhp * 0.7
-#      score += 4 * total_decrement
-#    else
-#      score += total_decrement * ((100 * @user.hp / @user.totalhp) - 50) / 4   # +5 to -12 per stage
-#    end
-
-    # Don't prefer if user is about to faint due to EOR damage
-#    score -= 30 if @user.rough_end_of_round_damage > @user.hp
+    if @user.hp >= @user.totalhp * 0.7
+      score += 3 * total_decrement
+    else
+      score += total_decrement * ((100 * @user.hp / @user.totalhp) - 50) / 6   # +3 to -8 per stage
+    end
+    # Prefer if target is at high HP, don't prefer if target is at low HP
+    if @target.hp >= @target.totalhp * 0.7
+      score += 3 * total_decrement
+    else
+      score += total_decrement * ((100 * @target.hp / @target.totalhp) - 50) / 6   # +3 to -8 per stage
+    end
 
     # TODO: Look at abilities that trigger upon stat lowering.
 
@@ -703,45 +715,45 @@ class Battle::AI
     when :ATTACK
       # Modify score depending on current stat stage
       # More strongly prefer if the target has no special moves
-      if old_stage <= -3
+      if old_stage <= -2
         score -= 20
       else
         has_special_moves = @target.check_for_move { |m| m.specialMove?(m.type) }
         dec = (has_special_moves) ? 5 : 10
-        score += dec * (3 + old_stage) * dec_mult
-        score += 5 * dec_mult if @target.hp == @target.totalhp
+        score += dec * (2 + old_stage) * dec_mult
+        score += 4 * dec_mult if @user.hp == @user.totalhp
       end
 
     when :DEFENSE
       # Modify score depending on current stat stage
-      if old_stage <= -3
+      if old_stage <= -2
         score -= 20
       else
-        score += 5 * (3 + old_stage) * dec_mult
-        score += 5 * dec_mult if @target.hp == @target.totalhp
+        score += 5 * (2 + old_stage) * dec_mult
+        score += 4 * dec_mult if @user.hp == @user.totalhp
       end
 
     when :SPECIAL_ATTACK
       # Modify score depending on current stat stage
       # More strongly prefer if the target has no physical moves
-      if old_stage <= -3
+      if old_stage <= -2
         score -= 20
       else
         has_physical_moves = @target.check_for_move { |m| m.physicalMove?(m.type) &&
                                                           m.function != "UseUserDefenseInsteadOfUserAttack" &&
                                                           m.function != "UseTargetAttackInsteadOfUserAttack" }
         dec = (has_physical_moves) ? 5 : 10
-        score += dec * (3 + old_stage) * dec_mult
-        score += 5 * dec_mult if @target.hp == @target.totalhp
+        score += dec * (2 + old_stage) * dec_mult
+        score += 4 * dec_mult if @user.hp == @user.totalhp
       end
 
     when :SPECIAL_DEFENSE
       # Modify score depending on current stat stage
-      if old_stage <= -3
+      if old_stage <= -2
         score -= 20
       else
-        score += 5 * (3 + old_stage) * dec_mult
-        score += 5 * dec_mult if @target.hp == @target.totalhp
+        score += 5 * (2 + old_stage) * dec_mult
+        score += 4 * dec_mult if @user.hp == @user.totalhp
       end
 
     when :SPEED
@@ -763,20 +775,21 @@ class Battle::AI
 
     when :ACCURACY
       # Modify score depending on current stat stage
-      if old_stage <= -3
+      if old_stage <= -2
         score -= 20
       else
-        score += 5 * (3 + old_stage) * dec_mult
-        score += 5 * dec_mult if @target.hp == @target.totalhp
+        score += 5 * (2 + old_stage) * dec_mult
+        score += 4 * dec_mult if @user.hp == @user.totalhp
       end
+      # TODO: Prefer if target is poisoned/toxiced/Leech Seeded/cursed.
 
     when :EVASION
       # Modify score depending on current stat stage
-      if old_stage <= -3
+      if old_stage <= -2
         score -= 20
       else
-        score += 5 * (3 + old_stage) * dec_mult
-        score += 5 * dec_mult if @target.hp == @target.totalhp
+        score += 5 * (2 + old_stage) * dec_mult
+        score += 4 * dec_mult if @user.hp == @user.totalhp
       end
 
     end
