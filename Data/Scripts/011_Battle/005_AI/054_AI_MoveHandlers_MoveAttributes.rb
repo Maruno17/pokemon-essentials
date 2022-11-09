@@ -792,7 +792,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("EnsureNextMoveAlwaysHits
       acc = m.accuracy
       acc = m.pbBaseAccuracy(user.battler, target.battler) if ai.trainer.medium_skill?
       score += 4 if acc < 90 && acc != 0
-      score += 8 if acc < 50 && acc != 0
+      score += 4 if acc <= 50 && acc != 0
     end
     # Not worth it if the user or the target is at low HP
     score -= 10 if user.hp < user.totalhp / 2

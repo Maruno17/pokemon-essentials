@@ -24,7 +24,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SleepTarget",
       # Inherent preference
       score += 15
       # Prefer if the user or an ally has a move/ability that is better if the target is asleep
-      ai.each_same_side_battler(user.side) do |b|
+      ai.each_same_side_battler(user.side) do |b, i|
         score += 5 if b.check_for_move { |m| ["DoublePowerIfTargetAsleepCureTarget",
                                               "DoublePowerIfTargetStatusProblem",
                                               "HealUserByHalfOfDamageDoneIfTargetAsleep",
@@ -46,8 +46,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SleepTarget",
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
         score -= 10
       end
-      ai.each_same_side_battler(target.side) do |b|
-        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
+      ai.each_same_side_battler(target.side) do |b, i|
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -117,7 +117,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
       # Prefer if the target is at high HP
       score += 10 * target.hp / target.totalhp
       # Prefer if the user or an ally has a move/ability that is better if the target is poisoned
-      ai.each_same_side_battler(user.side) do |b|
+      ai.each_same_side_battler(user.side) do |b, i|
         score += 5 if b.check_for_move { |m| ["DoublePowerIfTargetPoisoned",
                                               "DoublePowerIfTargetStatusProblem"].include?(m.function) }
         score += 10 if b.has_active_ability?(:MERCILESS)
@@ -141,8 +141,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
         score -= 10
       end
-      ai.each_same_side_battler(target.side) do |b|
-        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
+      ai.each_same_side_battler(target.side) do |b, i|
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -212,7 +212,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeTarget",
       score += 5 if target.effects[PBEffects::Confusion] > 1
       score += 5 if target.effects[PBEffects::Attract] >= 0
       # Prefer if the user or an ally has a move/ability that is better if the target is paralysed
-      ai.each_same_side_battler(user.side) do |b|
+      ai.each_same_side_battler(user.side) do |b, i|
         score += 5 if b.check_for_move { |m| ["DoublePowerIfTargetParalyzedCureTarget",
                                               "DoublePowerIfTargetStatusProblem"].include?(m.function) }
       end
@@ -232,8 +232,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeTarget",
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
         score -= 10
       end
-      ai.each_same_side_battler(target.side) do |b|
-        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
+      ai.each_same_side_battler(target.side) do |b, i|
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -303,7 +303,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
         score += 8 if !target.check_for_move { |m| m.specialMove? }
       end
       # Prefer if the user or an ally has a move/ability that is better if the target is burned
-      ai.each_same_side_battler(user.side) do |b|
+      ai.each_same_side_battler(user.side) do |b, i|
         score += 5 if b.check_for_move { |m| m.function == "DoublePowerIfTargetStatusProblem" }
       end
       # Don't prefer if target benefits from having the burn status problem
@@ -325,8 +325,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
         score -= 10
       end
-      ai.each_same_side_battler(target.side) do |b|
-        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
+      ai.each_same_side_battler(target.side) do |b, i|
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -377,7 +377,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FreezeTarget",
       # Inherent preference
       score += 15
       # Prefer if the user or an ally has a move/ability that is better if the target is frozen
-      ai.each_same_side_battler(user.side) do |b|
+      ai.each_same_side_battler(user.side) do |b, i|
         score += 5 if b.check_for_move { |m| m.function == "DoublePowerIfTargetStatusProblem" }
       end
       # Don't prefer if target benefits from having the frozen status problem
@@ -394,8 +394,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FreezeTarget",
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
         score -= 10
       end
-      ai.each_same_side_battler(target.side) do |b|
-        score -= 5 if b.index != target.index && b.has_active_ability?(:HEALER)
+      ai.each_same_side_battler(target.side) do |b, i|
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -551,7 +551,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToInflictedStatu
     if battle.field.terrain == :Misty &&
        (battle.field.terrainDuration > 1 || battle.field.terrainDuration < 0)
       already_immune = true
-      ai.each_same_side_battler(user.side) do |b|
+      ai.each_same_side_battler(user.side) do |b, i|
         already_immune = false if !b.battler.affectedByTerrain?
       end
       next Battle::AI::MOVE_USELESS_SCORE if already_immune
@@ -559,7 +559,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToInflictedStatu
     # Tends to be wasteful if the foe just has one Pokémon left
     next score - 20 if battle.pbAbleNonActiveCount(user.idxOpposingSide) == 0
     # Prefer for each user side battler
-    ai.each_same_side_battler(user.side) { |b| score += 10 }
+    ai.each_same_side_battler(user.side) { |b, i| score += 10 }
     next score
   }
 )
@@ -811,18 +811,19 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetTypesToPsychic
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetTypesToPsychic",
   proc { |score, move, user, target, ai, battle|
-    # Prefer if user knows damaging moves that are super-effective against
-    # Psychic, and don't prefer if they know damaging moves that are ineffective
-    # against Psychic
-    user.battler.eachMoveWithIndex do |m, i|
-      next if !m.damagingMove?
-      effectiveness = Effectiveness.calculate(m.pbCalcType(user.battler), :PSYCHIC)
-      if Effectiveness.super_effective?(effectiveness)
-        score += 8
-      elsif Effectiveness.ineffective?(effectiveness)
-        score -= 10
+    # Prefer if target's foes know damaging moves that are super-effective
+    # against Psychic, and don't prefer if they know damaging moves that are
+    # ineffective against Psychic
+    ai.each_foe_battler(target.side) do |b, b|
+      b.battler.eachMove do |m,|
+        next if !m.damagingMove?
+        effectiveness = Effectiveness.calculate(m.pbCalcType(b.battler), :PSYCHIC)
+        if Effectiveness.super_effective?(effectiveness)
+          score += 8
+        elsif Effectiveness.ineffective?(effectiveness)
+          score -= 10
+        end
       end
-    end
     next score
   }
 )
@@ -834,16 +835,18 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("SetTargetTypesToPsychi
                                                          "SetTargetTypesToWater")
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetTypesToWater",
   proc { |score, move, user, target, ai, battle|
-    # Prefer if user knows damaging moves that are super-effective against
-    # Water, and don't prefer if they know damaging moves that are ineffective
-    # against Water
-    user.battler.eachMoveWithIndex do |m, i|
-      next if !m.damagingMove?
-      effectiveness = Effectiveness.calculate(m.pbCalcType(user.battler), :WATER)
-      if Effectiveness.super_effective?(effectiveness)
-        score += 8
-      elsif Effectiveness.ineffective?(effectiveness)
-        score -= 10
+    # Prefer if target's foes know damaging moves that are super-effective
+    # against Water, and don't prefer if they know damaging moves that are
+    # ineffective against Water
+    ai.each_foe_battler(target.side) do |b, i|
+      b.battler.eachMove do |m|
+        next if !m.damagingMove?
+        effectiveness = Effectiveness.calculate(m.pbCalcType(b.battler), :WATER)
+        if Effectiveness.super_effective?(effectiveness)
+          score += 8
+        elsif Effectiveness.ineffective?(effectiveness)
+          score -= 10
+        end
       end
     end
     next score
@@ -857,17 +860,19 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("SetTargetTypesToWater"
                                                          "AddGhostTypeToTarget")
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AddGhostTypeToTarget",
   proc { |score, move, user, target, ai, battle|
-    # Prefer/don't prefer depending on the effectiveness of the user's damaging
-    # moves against the added type
-    user.battler.eachMoveWithIndex do |m, i|
-      next if !m.damagingMove?
-      effectiveness = Effectiveness.calculate(m.pbCalcType(user.battler), :GHOST)
-      if Effectiveness.super_effective?(effectiveness)
-        score += 8
-      elsif Effectiveness.not_very_effective?(effectiveness)
-        score -= 5
-      elsif Effectiveness.ineffective?(effectiveness)
-        score -= 10
+    # Prefer/don't prefer depending on the effectiveness of the target's foes'
+    # damaging moves against the added type
+    ai.each_foe_battler(target.side) do |b, i|
+      b.battler.eachMove do |m|
+        next if !m.damagingMove?
+        effectiveness = Effectiveness.calculate(m.pbCalcType(b.battler), :GHOST)
+        if Effectiveness.super_effective?(effectiveness)
+          score += 8
+        elsif Effectiveness.not_very_effective?(effectiveness)
+          score -= 5
+        elsif Effectiveness.ineffective?(effectiveness)
+          score -= 10
+        end
       end
     end
     next score
@@ -881,17 +886,19 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("AddGhostTypeToTarget",
                                                          "AddGrassTypeToTarget")
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AddGrassTypeToTarget",
   proc { |score, move, user, target, ai, battle|
-    # Prefer/don't prefer depending on the effectiveness of the user's damaging
-    # moves against the added type
-    user.battler.eachMoveWithIndex do |m, i|
-      next if !m.damagingMove?
-      effectiveness = Effectiveness.calculate(m.pbCalcType(user.battler), :GRASS)
-      if Effectiveness.super_effective?(effectiveness)
-        score += 8
-      elsif Effectiveness.not_very_effective?(effectiveness)
-        score -= 5
-      elsif Effectiveness.ineffective?(effectiveness)
-        score -= 10
+    # Prefer/don't prefer depending on the effectiveness of the target's foes'
+    # damaging moves against the added type
+    ai.each_foe_battler(target.side) do |b, i|
+      b.battler.eachMove do |m|
+        next if !m.damagingMove?
+        effectiveness = Effectiveness.calculate(m.pbCalcType(b.battler), :GRASS)
+        if Effectiveness.super_effective?(effectiveness)
+          score += 8
+        elsif Effectiveness.not_very_effective?(effectiveness)
+          score -= 5
+        elsif Effectiveness.ineffective?(effectiveness)
+          score -= 10
+        end
       end
     end
     next score
@@ -913,8 +920,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserLosesFireType",
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToSimple",
   proc { |move, user, target, ai, battle|
     next true if !GameData::Ability.exists?(:SIMPLE)
-    next true if target.battler.unstoppableAbility? ||
-                 [:TRUANT, :SIMPLE].include?(target.ability_id)
+    next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
 
@@ -924,8 +930,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToSimpl
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToInsomnia",
   proc { |move, user, target, ai, battle|
     next true if !GameData::Ability.exists?(:INSOMNIA)
-    next true if target.battler.unstoppableAbility? ||
-                 [:TRUANT, :INSOMNIA].include?(target.ability_id)
+    next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
 
@@ -935,9 +940,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToInsom
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserAbilityToTargetAbility",
   proc { |move, user, target, ai, battle|
     next true if user.battler.unstoppableAbility?
-    next true if !target.ability || user.ability_id == target.ability_id
-    next true if target.battler.ungainableAbility? ||
-                 [:POWEROFALCHEMY, :RECEIVER, :TRACE, :WONDERGUARD].include?(target.ability_id)
+    next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetUserAbilityToTargetAbility",
@@ -958,7 +961,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToUserA
     next true if !user.ability || user.ability_id == target.ability_id
     next true if user.battler.ungainableAbility? ||
                  [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(user.ability_id)
-    next true if target.battler.unstoppableAbility? || target.ability_id == :TRUANT
+    next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetAbilityToUserAbility",
@@ -976,12 +979,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetAbilityToUserAb
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UserTargetSwapAbilities",
   proc { |move, user, target, ai, battle|
-    next true if !user.ability || !target.ability
-    next true if Settings::MECHANICS_GENERATION <= 5 && user.ability_id == target.ability_id
-    next true if user.battler.unstoppableAbility? || user.battler.ungainableAbility? ||
+    next true if !user.ability || user.battler.unstoppableAbility? ||
                  user.ability_id == :WONDERGUARD
-    next true if target.battler.unstoppableAbility? || target.battler.ungainableAbility? ||
-                 target.ability_id == :WONDERGUARD
+    next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapAbilities",
@@ -1008,8 +1008,10 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("NegateTargetAbility",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbilityIfTargetActed",
   proc { |score, move, user, target, ai, battle|
-    score += 15 if target.faster_than?(user)
-    next score
+    next score if target.effects[PBEffects::Substitute] > 0 || target.effects[PBEffects::GastroAcid]
+    next score if target.battler.unstoppableAbility?
+    next score if user.faster_than?(target)
+    next score + 10
   }
 )
 
@@ -1019,22 +1021,76 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbilityIfTar
 # IgnoreTargetAbility
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartUserAirborne",
   proc { |move, user, ai, battle|
+    next true if user.has_active_item?(:IRONBALL)
     next true if user.effects[PBEffects::Ingrain] ||
                  user.effects[PBEffects::SmackDown] ||
                  user.effects[PBEffects::MagnetRise] > 0
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("StartUserAirborne",
+  proc { |score, move, user, ai, battle|
+    # Move is useless if user is already airborne
+    if user.has_type?(:FLYING) ||
+       user.has_active_ability?(:LEVITATE) ||
+       user.has_active_item?(:AIRBALLOON) ||
+       user.effects[PBEffects::Telekinesis] > 0
+      next Battle::AI::MOVE_USELESS_SCORE
+    end
+    # Prefer if any foes have damaging Ground-type moves that do 1x or more
+    # damage to the user
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :GROUND }
+      next if Effectiveness.resistant?(user.effectiveness_of_type_against_battler(:GROUND, b))
+      score += 5
+    end
+    # Don't prefer if terrain exists (which the user will no longer be affected by)
+    if ai.trainer.medium_skill?
+      score -= 8 if battle.field.terrain != :None
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartTargetAirborneAndAlwaysHitByMoves",
   proc { |move, user, target, ai, battle|
+    next true if target.has_active_item?(:IRONBALL)
     next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
+  }
+)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartUserAirborne",
+  proc { |score, move, user, target, ai, battle|
+    # Move is useless if the target is already airborne
+    if target.has_type?(:FLYING) ||
+       target.has_active_ability?(:LEVITATE) ||
+       target.has_active_item?(:AIRBALLOON)
+      next Battle::AI::MOVE_USELESS_SCORE
+    end
+    # Prefer if any allies have moves with accuracy < 90%
+    # Don't prefer if any allies have damaging Ground-type moves that do 1x or
+    # more damage to the target
+    ai.each_foe_battler(target.side) do |b, i|
+      b.battler.eachMove do |m|
+        acc = m.accuracy
+        acc = m.pbBaseAccuracy(b.battler, target.battler) if ai.trainer.medium_skill?
+        score += 4 if acc < 90 && acc != 0
+        score += 4 if acc <= 50 && acc != 0
+      end
+      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :GROUND }
+      next if Effectiveness.resistant?(target.effectiveness_of_type_against_battler(:GROUND, b))
+      score -= 5
+    end
+    # Prefer if terrain exists (which the target will no longer be affected by)
+    if ai.trainer.medium_skill?
+      score += 8 if battle.field.terrain != :None
+    end
+    next score
   }
 )
 
@@ -1044,26 +1100,31 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartTargetAirborneAndA
 # HitsTargetInSky
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitsTargetInSkyGroundsTarget",
   proc { |score, move, user, target, ai, battle|
-    if ai.trainer.medium_skill?
-      score += 20 if target.effects[PBEffects::MagnetRise] > 0 ||
-                     target.effects[PBEffects::Telekinesis] > 0 ||
-                     target.has_type?(:FLYING) ||
-                     (!battle.moldBreaker && target.has_active_ability?(:LEVITATE)) ||
-                     target.has_active_item?(:AIRBALLOON) ||
-                     target.battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+    next score if target.effects[PBEffects::Substitute] > 0
+    if !target.battler.airborne?
+      next score if target.faster_than?(user) ||
+                    !target.battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
                                                      "TwoTurnAttackInvulnerableInSkyParalyzeTarget")
     end
-    next score
+    # Prefer if the target is airborne
+    score += 10
+    # Prefer if any allies have damaging Ground-type moves
+    ai.each_foe_battler(target.side) do |b, i|
+      score += 5 if b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :GROUND }
+    end
+    # Don't prefer if terrain exists (which the target will become affected by)
+    if ai.trainer.medium_skill?
+      score -= 8 if battle.field.terrain != :None
+    end
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartGravity",
   proc { |move, user, ai, battle|
@@ -1072,22 +1133,36 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartGravity",
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartGravity",
   proc { |score, move, user, ai, battle|
-    if ai.trainer.medium_skill?
-      score -= 15 if user.effects[PBEffects::SkyDrop] >= 0 ||
-                     user.effects[PBEffects::MagnetRise] > 0 ||
-                     user.effects[PBEffects::Telekinesis] > 0 ||
-                     user.has_type?(:FLYING) ||
-                     user.has_active_ability?(:LEVITATE) ||
-                     user.has_active_item?(:AIRBALLOON)
-#      score += 15 if target.effects[PBEffects::SkyDrop] >= 0 ||
-#                     target.effects[PBEffects::MagnetRise] > 0 ||
-#                     target.effects[PBEffects::Telekinesis] > 0 ||
-#                     target.has_type?(:FLYING) ||
-#                     target.has_active_ability?(:LEVITATE) ||
-#                     target.has_active_item?(:AIRBALLOON)
-#      score += 5 if target.battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
-#                                                    "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
-#                                                    "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
+    # TODO: Gravity increases accuracy of all moves. Should this be considered?
+    ai.each_battler do |b, i|
+      # Prefer grounding airborne foes, don't prefer grounding airborne allies
+      # Prefer making allies affected by terrain, don't prefer making foes
+      # affected by terrain
+      if b.battler.airborne?
+        score_change = 10
+        score_change -= 8 if battle.field.terrain != :None
+        score += (user.opposes?(b)) ? score_change : -score_change
+        # Prefer if allies have any damaging Ground moves they'll be able to use
+        # on a grounded foe, and vice versa
+        ai.each_foe_battler(b.side) do |b2|
+          if b2.check_for_move { |m| m.damagingMove? && m.pbCalcType(b2.battler) == :GROUND }
+            score += (user.opposes?(b2)) ? -5 : 5
+          end
+        end
+      end
+      # Prefer ending Sky Drop being used on allies, don't prefer ending Sky
+      # Drop being used on foes
+      if b.effects[PBEffects::SkyDrop] >= 0
+        score += (user.opposes?(b)) ? -5 : 5
+      end
+      # Prefer stopping foes' sky-based attacks, don't prefer stopping allies'
+      # sky-based attacks
+      if user.faster_than?(b) &&
+         b.battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+                                    "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
+                                    "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
+        score += (user.opposes?(b)) ? 8 : -8
+      end
     end
     next score
   }

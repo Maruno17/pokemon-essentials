@@ -203,7 +203,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed2LowerUserWeight",
         if user.check_for_move { |m| m.function == "PowerHigherWithUserHeavierThanTarget" }
           score -= 10
         end
-        ai.each_foe_battler(user.side) do |b|
+        ai.each_foe_battler(user.side) do |b, i|
           if b.check_for_move { |m| m.function == "PowerHigherWithUserHeavierThanTarget" }
             score -= 10
           end
@@ -276,7 +276,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserEvasion2MinimizeUser",
   proc { |score, move, user, ai, battle|
     score = ai.get_score_for_user_stat_raise(score)
     if ai.trainer.medium_skill? && !user.effects[PBEffects::Minimize]
-      ai.each_foe_battler(user.side) do |b|
+      ai.each_foe_battler(user.side) do |b, i|
         # Moves that do double damage and (in Gen 6+) have perfect accuracy
         if b.check_for_move { |m| m.tramplesMinimize? }
           score -= (Settings::MECHANICS_GENERATION >= 6) ? 15 : 10
