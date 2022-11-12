@@ -120,7 +120,14 @@ def pbMissingTrainer(tr_type, tr_name, tr_version)
   raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
   tr_type = tr_type_data.id
   if !$DEBUG
-    raise _INTL("Can't find trainer ({1}, {2}, ID {3})", tr_type.to_s, tr_name, tr_version)
+    #raise _INTL("Can't find trainer ({1}, {2}, ID {3})", tr_type.to_s, tr_name, tr_version)
+    message = ""
+    if $game_switches[SWITCH_MODERN_MODE]
+      message << "[MODERN MODE] "
+    end
+    message << "This trainer appears to be missing from the game. Please report this on the game's Discord channel whenever you get a chance."
+    pbMessage(message)
+    return 1
   end
 	message = ""
   if tr_version != 0

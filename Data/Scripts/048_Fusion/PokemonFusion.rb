@@ -734,6 +734,9 @@ class PokemonFusionScene
 
       #change species
       @pokemon1.species = newSpecies
+      if @pokemon2.egg? || @pokemon1.egg?
+        @pokemon1.steps_to_hatch = @pokemon1.species_data.hatch_steps
+      end
       #@pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
       pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
 

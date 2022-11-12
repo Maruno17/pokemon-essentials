@@ -165,7 +165,7 @@ module GameData
       customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER + filename)
       species = getSpecies(dex_number)
       use_custom = customPath && !species.always_use_generated
-      if use_custom
+      if use_custom && dex_number > Settings::NB_POKEMON
         return customPath
       end
       return Settings::BATTLERS_FOLDER + folder + "/" + filename
