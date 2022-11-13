@@ -277,39 +277,6 @@ module GameData
       return @species
     end
 
-    def get_pre_evolutions
-      preEvolutions = []
-      prevoSpecies = get_previous_species
-      prevo = GameData::Species.get(prevoSpecies)
-      preEvolutions << prevo.id if prevo.species != @species
-
-      prevo2 = GameData::Species.get(prevo.get_previous_species)
-      preEvolutions << GameData::Species.get(prevo2).id if prevo2 != @species && !preEvolutions.include?(prevo2.id)
-
-      prevo3 = GameData::Species.get(prevo2.get_previous_species)
-      preEvolutions << GameData::Species.get(prevo3).id if prevo3 != @species  && !preEvolutions.include?(prevo3.id)
-
-      prevo4 = GameData::Species.get(prevo3.get_previous_species)
-      preEvolutions << GameData::Species.get(prevo4).id if prevo4 != @species && !preEvolutions.include?(prevo4.id)
-
-
-      prevo5 = GameData::Species.get(prevo4.get_previous_species)
-      preEvolutions << GameData::Species.get(prevo5).id if prevo5 != @species && !preEvolutions.include?(prevo5.id)
-
-      prevo6 = GameData::Species.get(prevo5.get_previous_species)
-      preEvolutions << GameData::Species.get(prevo6).id if prevo6 != @species && !preEvolutions.include?(prevo6.id)
-
-      echo preEvolutions
-      echo "\n"
-      return preEvolutions
-      # baby = GameData::Species.get(get_baby_species)
-      # familyEvolutions = baby.get_family_evolutions
-      # for evo in familyEvolutions
-      #   preEvolutions << evo[0] if evo[0] != @species
-      # end
-      # return preEvolutions
-    end
-
     def get_baby_species(check_items = false, item1 = nil, item2 = nil)
       ret = @species
       return ret if @evolutions.length == 0

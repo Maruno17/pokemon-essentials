@@ -141,6 +141,12 @@ module GameData
         return sprintf(base_path +"316.319.322")
       when Settings::ZAPMOLCUNO_NB + 19
         return sprintf(base_path +"317.320.323")
+      when Settings::ZAPMOLCUNO_NB + 20 #birdBoss Left
+        return sprintf(base_path +"invisible")
+      when Settings::ZAPMOLCUNO_NB + 21 #birdBoss middle
+        return sprintf(base_path + "144.145.146")
+      when Settings::ZAPMOLCUNO_NB + 22 #birdBoss right
+        return sprintf(base_path +"invisible")
       else
         return sprintf(base_path + "000")
       end
@@ -165,7 +171,7 @@ module GameData
       customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER + filename)
       species = getSpecies(dex_number)
       use_custom = customPath && !species.always_use_generated
-      if use_custom && dex_number > Settings::NB_POKEMON
+      if use_custom
         return customPath
       end
       return Settings::BATTLERS_FOLDER + folder + "/" + filename

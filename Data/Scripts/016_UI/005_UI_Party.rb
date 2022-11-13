@@ -1008,7 +1008,7 @@ class PokemonPartyScreen
   def pbPokemonMultipleEntryScreenEx(ruleset)
     annot = []
     statuses = []
-    ordinals = [_INTL("INELIGIBLE"), _INTL("NOT ENTERED"), _INTL("CANNOT ENTER")]
+    ordinals = [_INTL("INELIGIBLE"), _INTL("NOT ENTERED"), _INTL("BANNED")]
     positions = [_INTL("FIRST"), _INTL("SECOND"), _INTL("THIRD"), _INTL("FOURTH"),
                  _INTL("FIFTH"), _INTL("SIXTH"), _INTL("SEVENTH"), _INTL("EIGHTH"),
                  _INTL("NINTH"), _INTL("TENTH"), _INTL("ELEVENTH"), _INTL("TWELFTH")]

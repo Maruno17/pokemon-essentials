@@ -43,6 +43,7 @@ module Settings
   HARD_MODE_LEVEL_MODIFIER = 1.1
 
   ZAPMOLCUNO_NB = 176821
+  MAPS_WITHOUT_SURF_MUSIC = [762]
 
   # The generation that the battle system follows. Used throughout the battle
   # scripts, and also by some other settings which are used in and out of battle
@@ -169,7 +170,7 @@ module Settings
   BADGE_FOR_FLY = 3
   BADGE_FOR_STRENGTH = 5
   BADGE_FOR_DIVE = 9
-  BADGE_FOR_WATERFALL = 10
+  BADGE_FOR_WATERFALL = 8
   BADGE_FOR_TELEPORT = 3
   BADGE_FOR_BOUNCE = 8
   BADGE_FOR_ROCKCLIMB = 16
@@ -256,6 +257,7 @@ module Settings
   # order as above, except the National Dex is -1). All Dex lists included here
   # will begin their numbering at 0 rather than 1 (e.g. Victini in Unova's Dex).
   DEXES_WITH_OFFSETS = []
+
 
   #=============================================================================
 

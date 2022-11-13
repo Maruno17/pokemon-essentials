@@ -735,7 +735,7 @@ def pbSurf
     pbCancelVehicles
     pbHiddenMoveAnimation(movefinder)
     surfbgm = GameData::Metadata.get.surf_BGM
-    pbCueBGM(surfbgm, 0.5) if surfbgm
+    pbCueBGM(surfbgm, 0.5) if surfbgm && !Settings::MAPS_WITHOUT_SURF_MUSIC.include?($game_map.map_id)
     pbStartSurfing
     return true
   end
