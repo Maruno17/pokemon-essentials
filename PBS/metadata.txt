@@ -1785,3 +1785,7 @@ MapPosition=1,22,6
 Outdoor=true
 ShowArea=true
 Environment = Grass
+[662]
+# Offshore route
+Outdoor=true
+ShowArea=true

@@ -3556,8 +3556,8 @@ Pokemon = BIRDBOSS,50 #
 
 [ROCKETBOSS,Giovanni,5]
 Items = FULLHEAL,FULLHEAL,FULLHEAL
-Pokemon = BIRDBOSS_1,60 #		#Zapdos
-	Moves = LIGHTSCREEN,THUNDERBOLT,DRILLPECK,ROOST
+Pokemon = BIRDBOSS_3,60 #		#Articuno
+	Moves = HAZE,REFLECT,ICEBEAM,ROOST
 	Ball = INVISIBALL
 	AbilityIndex = 0
 	Item = CHARTIBERRY
@@ -3566,8 +3566,8 @@ Pokemon = BIRDBOSS_2,60 #		#Moltres
 	Ball = MASTERBALL
 	AbilityIndex = 0
 	Item = CHARTIBERRY
-Pokemon = BIRDBOSS_3,60 #		#Articuno
-	Moves = HAZE,REFLECT,ICEBEAM,ROOST
+Pokemon = BIRDBOSS_1,60 #		#Zapdos
+	Moves = LIGHTSCREEN,THUNDERBOLT,DRILLPECK,ROOST
 	Ball = INVISIBALL
 	AbilityIndex = 0
 	Item = CHARTIBERRY
