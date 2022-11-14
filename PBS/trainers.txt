@@ -3553,6 +3553,24 @@ Pokemon = BIRDBOSS,50 #
 	Ball = MASTERBALL
 	AbilityIndex = 2
 	Item = ZOOMLENS
+
+[ROCKETBOSS,Giovanni,5]
+Items = FULLHEAL,FULLHEAL,FULLHEAL
+Pokemon = BIRDBOSS_1,60 #		#Zapdos
+	Moves = LIGHTSCREEN,THUNDERBOLT,DRILLPECK,ROOST
+	Ball = INVISIBALL
+	AbilityIndex = 0
+	Item = CHARTIBERRY
+Pokemon = BIRDBOSS_2,60 #		#Moltres
+	Moves = TAILWIND,SAFEGUARD,FLAMETHROWER,ROOST
+	Ball = MASTERBALL
+	AbilityIndex = 0
+	Item = CHARTIBERRY
+Pokemon = BIRDBOSS_3,60 #		#Articuno
+	Moves = HAZE,REFLECT,ICEBEAM,ROOST
+	Ball = INVISIBALL
+	AbilityIndex = 0
+	Item = CHARTIBERRY
 #########################
 
 #####

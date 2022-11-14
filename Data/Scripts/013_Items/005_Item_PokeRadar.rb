@@ -226,7 +226,7 @@ def pbPokeRadarGetEncounter(rarity = 0)
       array.push(enc) if enc[0] == map && GameData::Species.exists?(enc[2])
     end
     # If there are any exclusives, first have a chance of encountering those
-    if array.length > 0
+    if array.length > 0 && listPokemonInCurrentRoute($PokemonEncounters.encounter_type, false, true).length==0
       rnd = rand(100)
       array.each do |enc|
         rnd -= enc[1]

@@ -1,4 +1,5 @@
 class PokeBattle_Animation
+  attr_writer :animDone
   def initialize(sprites,viewport)
     @sprites  = sprites
     @viewport = viewport

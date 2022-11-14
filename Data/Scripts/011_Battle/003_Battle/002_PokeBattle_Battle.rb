@@ -177,7 +177,7 @@ class PokeBattle_Battle
   # For "1v2" names, the first number is for the player's side and the second
   # number is for the opposing side.
   def setBattleMode(mode)
-    default = $game_variables[242].is_a?(Array) ? $game_variables[242] : [1,1]
+    default = $game_variables[VAR_DEFAULT_BATTLE_TYPE].is_a?(Array) ? $game_variables[VAR_DEFAULT_BATTLE_TYPE] : [1,1]
     @sideSizes =
       case mode
       when "triple", "3v3" then [3, 3]

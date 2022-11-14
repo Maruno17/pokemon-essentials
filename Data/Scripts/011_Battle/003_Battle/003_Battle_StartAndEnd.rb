@@ -202,8 +202,13 @@ class PokeBattle_Battle
           msg += _INTL("{1} sent out {2} and {3}!",t.full_name,
              @battlers[sent[0]].name,@battlers[sent[1]].name)
         when 3
-          msg += _INTL("{1} sent out {2}, {3} and {4}!",t.full_name,
-             @battlers[sent[0]].name,@battlers[sent[1]].name,@battlers[sent[2]].name)
+          if $PokemonTemp.battleRules["birdboss"]
+            msg += _INTL("{1} sent out Zapmolticuno!",t.full_name)
+          else
+            msg += _INTL("{1} sent out {2}, {3} and {4}!",t.full_name,
+                         @battlers[sent[0]].name,@battlers[sent[1]].name,@battlers[sent[2]].name)
+          end
+
         end
         toSendOut.concat(sent)
       end

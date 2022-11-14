@@ -30,6 +30,7 @@ class PokemonTemp
     when "single", "1v1", "1v2", "2v1", "1v3", "3v1",
          "double", "2v2", "2v3", "3v2", "triple", "3v3"
       rules["size"] = rule.to_s.downcase
+    when "birdboss"               then rules["birdboss"]        = true
     when "canlose"                then rules["canLose"]        = true
     when "cannotlose"             then rules["canLose"]        = false
     when "canrun"                 then rules["canRun"]         = true
@@ -121,6 +122,8 @@ def pbPrepareBattle(battle)
   battleRules = $PokemonTemp.battleRules
   # The size of the battle, i.e. how many Pokémon on each side (default: "single")
   battle.setBattleMode(battleRules["size"]) if !battleRules["size"].nil? || $game_switches[SWITCH_NEW_GAME_PLUS]
+  battle.setBattleMode("1v3") if !battleRules["birdboss"].nil?
+
   # Whether the game won't black out even if the player loses (default: false)
   battle.canLose = battleRules["canLose"] if !battleRules["canLose"].nil?
   # Whether the player can choose to run from the battle (default: true)
@@ -502,6 +505,8 @@ end
 def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
                     doubleBattle=false, trainerPartyID=0, canLose=false, outcomeVar=1,
                     name_override=nil,trainer_type_overide=nil)
+
+
   #level override applies to every pokemon
 
   # If there is another NPC trainer who spotted the player at the same time, and
@@ -522,7 +527,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
       next if $game_self_switches[[$game_map.map_id,i.id,"A"]]
       otherEvent.push(i)
     end
-    # Load the trainer's data, and call an event which might modify it
+    # Load the trainer's data, and call an event w0hich might modify it
     trainer = pbLoadTrainer(trainerID,trainerName,trainerPartyID)
     pbMissingTrainer(trainerID,trainerName,trainerPartyID) if !trainer
     return false if !trainer

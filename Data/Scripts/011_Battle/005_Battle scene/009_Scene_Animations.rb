@@ -293,13 +293,23 @@ class PokeBattle_Scene
     faintAnim   = BattlerFaintAnimation.new(@sprites,@viewport,battler.index,@battle)
     dataBoxAnim = DataBoxDisappearAnimation.new(@sprites,@viewport,battler.index)
     loop do
-      faintAnim.update
+      if !showFaintingAnimation(battler)
+        faintAnim.animDone = true
+      else
+        faintAnim.update
+      end
       dataBoxAnim.update
       pbUpdate
       break if faintAnim.animDone? && dataBoxAnim.animDone?
     end
-    faintAnim.dispose
+    faintAnim.dispose if !$PokemonTemp.battleRules["birdboss"].nil?
     dataBoxAnim.dispose
+  end
+
+  def showFaintingAnimation(battler)
+    return true if !battler.opposes?
+    return false if $game_switches[SWITCH_BIRDBOSS_BATTLE] && battler.battle.pbAbleCount(1) > 0
+    return true
   end
 
   #=============================================================================
