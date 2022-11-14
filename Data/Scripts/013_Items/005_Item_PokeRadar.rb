@@ -44,7 +44,7 @@ end
 def pbUsePokeRadar
   return false if !pbCanUsePokeRadar?
   $stats.poke_radar_count += 1
-  $game_temp.poke_radar_data = [0, 0, 0, [], false] if !$game_temp.poke_radar_data
+  $game_temp.poke_radar_data = [nil, 0, 0, [], false] if !$game_temp.poke_radar_data
   $game_temp.poke_radar_data[4] = false
   $PokemonGlobal.pokeradarBattery = 50
   pbPokeRadarHighlightGrass

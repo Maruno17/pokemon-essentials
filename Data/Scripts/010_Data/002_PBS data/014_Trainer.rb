@@ -156,7 +156,6 @@ module GameData
         pkmn.name = pkmn_data[:name] if pkmn_data[:name] && !pkmn_data[:name].empty?
         if pkmn_data[:shadowness]
           pkmn.makeShadow
-          pkmn.update_shadow_moves(true)
           pkmn.shiny = false
         end
         pkmn.poke_ball = pkmn_data[:poke_ball] if pkmn_data[:poke_ball]

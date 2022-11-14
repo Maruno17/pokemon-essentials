@@ -141,7 +141,7 @@ class Battle::Move::HealUserByTargetAttackLowerTargetAttack1 < Battle::Move
       target.pbLowerStatStage(:ATTACK, 1, user)
     end
     # Heal user
-    if target.hasActiveAbility?(:LIQUIDOOZE)
+    if target.hasActiveAbility?(:LIQUIDOOZE, true)
       @battle.pbShowAbilitySplash(target)
       user.pbReduceHP(healAmt)
       @battle.pbDisplay(_INTL("{1} sucked up the liquid ooze!", user.pbThis))

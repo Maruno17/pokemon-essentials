@@ -181,13 +181,13 @@ end
 class HandlerHash2
   def initialize
     @hash    = {}
-    @add_ifs = []
+    @add_ifs = {}
   end
 
   def [](sym)
     sym = sym.id if !sym.is_a?(Symbol) && sym.respond_to?("id")
     return @hash[sym] if sym && @hash[sym]
-    @add_ifs.each do |add_if|
+    @add_ifs.each_value do |add_if|
       return add_if[1] if add_if[0].call(sym)
     end
     return nil
@@ -200,11 +200,11 @@ class HandlerHash2
     @hash[sym] = handler || handlerBlock if sym
   end
 
-  def addIf(conditionProc, handler = nil, &handlerBlock)
+  def addIf(sym, conditionProc, handler = nil, &handlerBlock)
     if ![Proc, Hash].include?(handler.class) && !block_given?
-      raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
+      raise ArgumentError, "addIf call for #{sym} in #{self.class.name} has no valid handler (#{handler.inspect} was given)"
     end
-    @add_ifs.push([conditionProc, handler || handlerBlock])
+    @add_ifs[sym] = [conditionProc, handler || handlerBlock]
   end
 
   def copy(src, *dests)
@@ -234,19 +234,12 @@ end
 #===============================================================================
 class HandlerHashBasic
   def initialize
-    @hash   = {}
-    @addIfs = []
+    @hash = {}
   end
 
   def [](entry)
-    ret = nil
-    ret = @hash[entry] if entry && @hash[entry]
-    unless ret
-      @addIfs.each do |addif|
-        return addif[1] if addif[0].call(entry)
-      end
-    end
-    return ret
+    return @hash[entry] if entry && @hash[entry]
+    return nil
   end
 
   def add(entry, handler = nil, &handlerBlock)
@@ -255,13 +248,6 @@ class HandlerHashBasic
     end
     return if !entry || entry.empty?
     @hash[entry] = handler || handlerBlock
-  end
-
-  def addIf(conditionProc, handler = nil, &handlerBlock)
-    if ![Proc, Hash].include?(handler.class) && !block_given?
-      raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
-    end
-    @addIfs.push([conditionProc, handler || handlerBlock])
   end
 
   def copy(src, *dests)

@@ -160,17 +160,19 @@ class Battle::Battler
     # Start using the move
     pbBeginTurn(choice)
     # Force the use of certain moves if they're already being used
-    if usingMultiTurnAttack?
-      choice[2] = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@currentMove))
-      specialUsage = true
-    elsif @effects[PBEffects::Encore] > 0 && choice[1] >= 0 &&
-          @battle.pbCanShowCommands?(@index)
-      idxEncoredMove = pbEncoredMoveIndex
-      if idxEncoredMove >= 0 && choice[1] != idxEncoredMove &&
-         @battle.pbCanChooseMove?(@index, idxEncoredMove, false)   # Change move if battler was Encored mid-round
-        choice[1] = idxEncoredMove
-        choice[2] = @moves[idxEncoredMove]
-        choice[3] = -1   # No target chosen
+    if !@battle.futureSight
+      if usingMultiTurnAttack?
+        choice[2] = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@currentMove))
+        specialUsage = true
+      elsif @effects[PBEffects::Encore] > 0 && choice[1] >= 0 &&
+            @battle.pbCanShowCommands?(@index)
+        idxEncoredMove = pbEncoredMoveIndex
+        if idxEncoredMove >= 0 && choice[1] != idxEncoredMove &&
+           @battle.pbCanChooseMove?(@index, idxEncoredMove, false)   # Change move if battler was Encored mid-round
+          choice[1] = idxEncoredMove
+          choice[2] = @moves[idxEncoredMove]
+          choice[3] = -1   # No target chosen
+        end
       end
     end
     # Labels the move being used as "move"
@@ -361,6 +363,8 @@ class Battle::Battler
         targets = pbFindTargets(choice, move, user)
       end
     end
+    # For two-turn moves when they charge and attack in the same turn
+    move.pbQuickChargingMove(user, targets)
     #---------------------------------------------------------------------------
     magicCoater  = -1
     magicBouncer = -1

@@ -64,7 +64,8 @@ ItemHandlers::UseFromBag.add(:TOWNMAP, proc { |item|
   next ($game_temp.fly_destination) ? 2 : 0
 })
 
-ItemHandlers::UseFromBag.addIf(proc { |item| GameData::Item.get(item).is_machine? },
+ItemHandlers::UseFromBag.addIf(:move_machines,
+  proc { |item| GameData::Item.get(item).is_machine? },
   proc { |item|
     if $player.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
@@ -361,7 +362,8 @@ ItemHandlers::UseInField.add(:EXPALLOFF, proc { |item|
 
 # Applies to all items defined as an evolution stone.
 # No need to add more code for new ones.
-ItemHandlers::UseOnPokemon.addIf(proc { |item| GameData::Item.get(item).is_evolution_stone? },
+ItemHandlers::UseOnPokemon.addIf(:evolution_stones,
+  proc { |item| GameData::Item.get(item).is_evolution_stone? },
   proc { |item, qty, pkmn, scene|
     if pkmn.shadowPokemon?
       scene.pbDisplay(_INTL("It won't have any effect."))

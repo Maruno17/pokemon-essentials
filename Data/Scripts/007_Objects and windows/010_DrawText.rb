@@ -942,14 +942,10 @@ def drawSingleFormattedChar(bitmap, ch)
     graphic.dispose
     return
   end
-  bitmap.font.bold = ch[6] if bitmap.font.bold != ch[6]
-  bitmap.font.italic = ch[7] if bitmap.font.italic != ch[7]
-  bitmap.font.name = ch[12] if bitmap.font.name != ch[12]
   bitmap.font.size = ch[13] if bitmap.font.size != ch[13]
   if ch[9]   # shadow
     if ch[10]   # underline
-      bitmap.fill_rect(ch[1], ch[2] + ch[4] - [(ch[4] - bitmap.font.size) / 2, 0].max - 2,
-      ch[3], 4, ch[9])
+      bitmap.fill_rect(ch[1], ch[2] + ch[4] - [(ch[4] - bitmap.font.size) / 2, 0].max - 2, ch[3], 4, ch[9])
     end
     if ch[11]   # strikeout
       bitmap.fill_rect(ch[1], ch[2] + 2 + (ch[4] / 2), ch[3], 4, ch[9])
@@ -958,6 +954,9 @@ def drawSingleFormattedChar(bitmap, ch)
   if ch[0] == "\n" || ch[0] == "\r" || ch[0] == " " || isWaitChar(ch[0])
     bitmap.font.color = ch[8] if bitmap.font.color != ch[8]
   else
+    bitmap.font.bold = ch[6] if bitmap.font.bold != ch[6]
+    bitmap.font.italic = ch[7] if bitmap.font.italic != ch[7]
+    bitmap.font.name = ch[12] if bitmap.font.name != ch[12]
     offset = 0
     if ch[9]   # shadow
       bitmap.font.color = ch[9]
@@ -991,8 +990,7 @@ def drawSingleFormattedChar(bitmap, ch)
     bitmap.draw_text(ch[1] + offset, ch[2] + offset, ch[3], ch[4], ch[0])
   end
   if ch[10]   # underline
-    bitmap.fill_rect(ch[1], ch[2] + ch[4] - [(ch[4] - bitmap.font.size) / 2, 0].max - 2,
-                     ch[3] - 2, 2, ch[8])
+    bitmap.fill_rect(ch[1], ch[2] + ch[4] - [(ch[4] - bitmap.font.size) / 2, 0].max - 2, ch[3] - 2, 2, ch[8])
   end
   if ch[11]   # strikeout
     bitmap.fill_rect(ch[1], ch[2] + 2 + (ch[4] / 2), ch[3] - 2, 2, ch[8])

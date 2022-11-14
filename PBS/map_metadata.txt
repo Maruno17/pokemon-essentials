@@ -10,7 +10,7 @@ ShowArea = true
 MapPosition = 0,13,12
 BattleBack = field
 #-------------------------------
-[003]   # \PN's house
+[003]   # Player's house
 Name = \PN's house
 HealingSpot = 2,8,8
 MapPosition = 0,13,12

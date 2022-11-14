@@ -9,8 +9,8 @@ module MultipleForms
     @@formSpecies.add(sym, hash)
   end
 
-  def self.registerIf(cond, hash)
-    @@formSpecies.addIf(cond, hash)
+  def self.registerIf(sym, cond, hash)
+    @@formSpecies.addIf(sym, cond, hash)
   end
 
   def self.hasFunction?(pkmn, func)

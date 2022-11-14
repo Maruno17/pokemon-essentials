@@ -963,7 +963,7 @@ module Compiler
   # Save all data to PBS files
   #=============================================================================
   def write_all
-    Console.echo_h1 _INTL("Writing all PBS files")
+    Console.echo_h1(_INTL("Writing all PBS files"))
     write_town_map
     write_connections
     write_types
@@ -987,6 +987,6 @@ module Compiler
     write_dungeon_parameters
     write_phone
     echoln ""
-    Console.echo_h2("Successfully rewrote all PBS files", text: :green)
+    Console.echo_h2(_INTL("Successfully rewrote all PBS files"), text: :green)
   end
 end
