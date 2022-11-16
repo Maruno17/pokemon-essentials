@@ -9,9 +9,10 @@ module GameData
     DATA_FILENAME = "shadow_pokemon.dat"
 
     SCHEMA = {
-      "GaugeSize" => [:gauge_size, "v"],
-      "Moves"     => [:moves,      "*s"],   # Not enumerated when compiled
-      "Flags"     => [:flags,      "*s"]
+      "SectionName" => [:id,         "e", :Species],
+      "GaugeSize"   => [:gauge_size, "v"],
+      "Moves"       => [:moves,      "*m"],   # Not enumerated when compiled
+      "Flags"       => [:flags,      "*s"]
     }
     HEART_GAUGE_SIZE = 4000   # Default gauge size
 
@@ -20,8 +21,8 @@ module GameData
 
     def initialize(hash)
       @id         = hash[:id]
-      @moves      = hash[:moves]      || []
       @gauge_size = hash[:gauge_size] || HEART_GAUGE_SIZE
+      @moves      = hash[:moves]      || []
       @flags      = hash[:flags]      || []
     end
 

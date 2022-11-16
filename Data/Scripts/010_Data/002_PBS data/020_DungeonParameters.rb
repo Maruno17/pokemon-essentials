@@ -30,12 +30,13 @@ module GameData
     DATA_FILENAME = "dungeon_parameters.dat"
 
     SCHEMA = {
+      "SectionName"      => [:id,                      "mV"],
       "DungeonSize"      => [:dungeon_size,            "vv"],
       "CellSize"         => [:cell_size,               "vv"],
       "MinRoomSize"      => [:min_room_size,           "vv"],
       "MaxRoomSize"      => [:max_room_size,           "vv"],
       "CorridorWidth"    => [:corridor_width,          "v"],
-      "ShiftCorridors"   => [:shift_corridors,         "b"],
+      "ShiftCorridors"   => [:random_corridor_shift,   "b"],
       "NodeLayout"       => [:node_layout,             "s"],
       "RoomLayout"       => [:room_layout,             "s"],
       "RoomChance"       => [:room_chance,             "v"],
@@ -76,7 +77,7 @@ module GameData
       @room_max_width                 = (hash[:max_room_size]) ? hash[:max_room_size][0] : @cell_width - 1
       @room_max_height                = (hash[:max_room_size]) ? hash[:max_room_size][1] : @cell_height - 1
       @corridor_width                 = hash[:corridor_width] || 2
-      @random_corridor_shift          = hash[:shift_corridors]
+      @random_corridor_shift          = hash[:random_corridor_shift]
       @node_layout                    = hash[:node_layout]&.downcase&.to_sym || :full
       @room_layout                    = hash[:room_layout]&.downcase&.to_sym || :full
       @room_chance                    = hash[:room_chance] || 70

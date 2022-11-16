@@ -9,15 +9,16 @@ module GameData
     DATA_FILENAME = "player_metadata.dat"
 
     SCHEMA = {
-      "TrainerType"     => [1, "e", :TrainerType],
-      "WalkCharset"     => [2, "s"],
-      "RunCharset"      => [3, "s"],
-      "CycleCharset"    => [4, "s"],
-      "SurfCharset"     => [5, "s"],
-      "DiveCharset"     => [6, "s"],
-      "FishCharset"     => [7, "s"],
-      "SurfFishCharset" => [8, "s"],
-      "Home"            => [9, "vuuu"]
+      "SectionName"     => [:id,                "u"],
+      "TrainerType"     => [:trainer_type,      "e", :TrainerType],
+      "WalkCharset"     => [:walk_charset,      "s"],
+      "RunCharset"      => [:run_charset,       "s"],
+      "CycleCharset"    => [:cycle_charset,     "s"],
+      "SurfCharset"     => [:surf_charset,      "s"],
+      "DiveCharset"     => [:dive_charset,      "s"],
+      "FishCharset"     => [:fish_charset,      "s"],
+      "SurfFishCharset" => [:surf_fish_charset, "s"],
+      "Home"            => [:home,              "vuuu"]
     }
 
     extend ClassMethodsIDNumbers

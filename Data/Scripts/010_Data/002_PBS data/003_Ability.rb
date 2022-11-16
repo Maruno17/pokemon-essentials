@@ -12,16 +12,17 @@ module GameData
     include InstanceMethods
 
     SCHEMA = {
-      "Name"         => [:name,        "s"],
-      "Description"  => [:description, "q"],
-      "Flags"        => [:flags,       "*s"]
+      "SectionName"  => [:id,               "m"],
+      "Name"         => [:real_name,        "s"],
+      "Description"  => [:real_description, "q"],
+      "Flags"        => [:flags,            "*s"]
     }
 
     def initialize(hash)
       @id               = hash[:id]
-      @real_name        = hash[:name]        || "Unnamed"
-      @real_description = hash[:description] || "???"
-      @flags            = hash[:flags]       || []
+      @real_name        = hash[:real_name]        || "Unnamed"
+      @real_description = hash[:real_description] || "???"
+      @flags            = hash[:flags]            || []
     end
 
     # @return [String] the translated name of this ability

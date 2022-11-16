@@ -812,8 +812,7 @@ module Compiler
       f.write("[0]\r\n")
       metadata = GameData::Metadata.get
       schema = GameData::Metadata::SCHEMA
-      keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
-      keys.each do |key|
+      schema.keys.each do |key|
         record = metadata.property_from_string(key)
         next if record.nil? || (record.is_a?(Array) && record.empty?)
         f.write(sprintf("%s = ", key))
@@ -822,11 +821,10 @@ module Compiler
       end
       # Write player metadata
       schema = GameData::PlayerMetadata::SCHEMA
-      keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
       GameData::PlayerMetadata.each do |player_data|
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%d]\r\n", player_data.id))
-        keys.each do |key|
+        schema.keys.each do |key|
           record = player_data.property_from_string(key)
           next if record.nil? || (record.is_a?(Array) && record.empty?)
           f.write(sprintf("%s = ", key))
@@ -845,7 +843,6 @@ module Compiler
     write_pbs_file_message_start(path)
     map_infos = pbLoadMapInfos
     schema = GameData::MapMetadata::SCHEMA
-    keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
     File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
@@ -861,7 +858,7 @@ module Compiler
         else
           f.write(sprintf("[%03d]\r\n", map_data.id))
         end
-        keys.each do |key|
+        schema.keys.each do |key|
           record = map_data.property_from_string(key)
           next if record.nil? || (record.is_a?(Array) && record.empty?)
           f.write(sprintf("%s = ", key))

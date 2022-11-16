@@ -28,28 +28,29 @@ module GameData
     DATA_FILENAME = "map_metadata.dat"
 
     SCHEMA = {
-      "Name"              => [1,  "s"],
-      "Outdoor"           => [2,  "b"],
-      "ShowArea"          => [3,  "b"],
-      "Bicycle"           => [4,  "b"],
-      "BicycleAlways"     => [5,  "b"],
-      "HealingSpot"       => [6,  "vuu"],
-      "Weather"           => [7,  "eu", :Weather],
-      "MapPosition"       => [8,  "uuu"],
-      "DiveMap"           => [9,  "v"],
-      "DarkMap"           => [10,  "b"],
-      "SafariMap"         => [11, "b"],
-      "SnapEdges"         => [12, "b"],
-      "Dungeon"           => [13, "b"],
-      "BattleBack"        => [14, "s"],
-      "WildBattleBGM"     => [15, "s"],
-      "TrainerBattleBGM"  => [16, "s"],
-      "WildVictoryBGM"    => [17, "s"],
-      "TrainerVictoryBGM" => [18, "s"],
-      "WildCaptureME"     => [19, "s"],
-      "MapSize"           => [20, "us"],
-      "Environment"       => [21, "e", :Environment],
-      "Flags"             => [22, "*s"]
+      "SectionName"       => [:id,                   "u"],
+      "Name"              => [:real_name,            "s"],
+      "Outdoor"           => [:outdoor_map,          "b"],
+      "ShowArea"          => [:announce_location,    "b"],
+      "Bicycle"           => [:can_bicycle,          "b"],
+      "BicycleAlways"     => [:always_bicycle,       "b"],
+      "HealingSpot"       => [:teleport_destination, "vuu"],
+      "Weather"           => [:weather,              "eu", :Weather],
+      "MapPosition"       => [:town_map_position,    "uuu"],
+      "DiveMap"           => [:dive_map_id,          "v"],
+      "DarkMap"           => [:dark_map,             "b"],
+      "SafariMap"         => [:safari_map,           "b"],
+      "SnapEdges"         => [:snap_edges,           "b"],
+      "Dungeon"           => [:random_dungeon,       "b"],
+      "BattleBack"        => [:battle_background,    "s"],
+      "WildBattleBGM"     => [:wild_battle_BGM,      "s"],
+      "TrainerBattleBGM"  => [:trainer_battle_BGM,   "s"],
+      "WildVictoryBGM"    => [:wild_victory_BGM,     "s"],
+      "TrainerVictoryBGM" => [:trainer_victory_BGM,  "s"],
+      "WildCaptureME"     => [:wild_capture_ME,      "s"],
+      "MapSize"           => [:town_map_size,        "us"],
+      "Environment"       => [:battle_environment,   "e", :Environment],
+      "Flags"             => [:flags,                "*s"]
     }
 
     extend ClassMethodsIDNumbers
@@ -84,7 +85,7 @@ module GameData
 
     def initialize(hash)
       @id                   = hash[:id]
-      @real_name            = hash[:name]
+      @real_name            = hash[:real_name]
       @outdoor_map          = hash[:outdoor_map]
       @announce_location    = hash[:announce_location]
       @can_bicycle          = hash[:can_bicycle]

@@ -17,17 +17,18 @@ module GameData
     DATA_FILENAME = "metadata.dat"
 
     SCHEMA = {
-      "StartMoney"        => [1,  "u"],
-      "StartItemStorage"  => [2,  "*e", :Item],
-      "Home"              => [3,  "vuuu"],
-      "StorageCreator"    => [4,  "s"],
-      "WildBattleBGM"     => [5,  "s"],
-      "TrainerBattleBGM"  => [6,  "s"],
-      "WildVictoryBGM"    => [7,  "s"],
-      "TrainerVictoryBGM" => [8,  "s"],
-      "WildCaptureME"     => [9,  "s"],
-      "SurfBGM"           => [10, "s"],
-      "BicycleBGM"        => [11, "s"]
+      "SectionName"       => [:id,                   "u"],
+      "StartMoney"        => [:start_money,          "u"],
+      "StartItemStorage"  => [:start_item_storage,   "*e", :Item],
+      "Home"              => [:home,                 "vuuu"],
+      "StorageCreator"    => [:real_storage_creator, "s"],
+      "WildBattleBGM"     => [:wild_battle_BGM,      "s"],
+      "TrainerBattleBGM"  => [:trainer_battle_BGM,   "s"],
+      "WildVictoryBGM"    => [:wild_victory_BGM,     "s"],
+      "TrainerVictoryBGM" => [:trainer_victory_BGM,  "s"],
+      "WildCaptureME"     => [:wild_capture_ME,      "s"],
+      "SurfBGM"           => [:surf_BGM,             "s"],
+      "BicycleBGM"        => [:bicycle_BGM,          "s"]
     }
 
     extend ClassMethodsIDNumbers
@@ -55,10 +56,10 @@ module GameData
 
     def initialize(hash)
       @id                   = hash[:id]
-      @start_money          = hash[:start_money] || 3000
+      @start_money          = hash[:start_money]        || 3000
       @start_item_storage   = hash[:start_item_storage] || []
       @home                 = hash[:home]
-      @real_storage_creator = hash[:storage_creator]
+      @real_storage_creator = hash[:real_storage_creator]
       @wild_battle_BGM      = hash[:wild_battle_BGM]
       @trainer_battle_BGM   = hash[:trainer_battle_BGM]
       @wild_victory_BGM     = hash[:wild_victory_BGM]

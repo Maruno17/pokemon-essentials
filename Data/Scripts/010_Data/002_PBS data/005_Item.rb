@@ -9,27 +9,28 @@ module GameData
     attr_reader :real_description
     attr_reader :field_use
     attr_reader :battle_use
-    attr_reader :consumable
     attr_reader :flags
+    attr_reader :consumable
     attr_reader :move
 
     DATA = {}
     DATA_FILENAME = "items.dat"
 
     SCHEMA = {
-      "Name"        => [:name,        "s"],
-      "NamePlural"  => [:name_plural, "s"],
-      "Pocket"      => [:pocket,      "v"],
-      "Price"       => [:price,       "u"],
-      "SellPrice"   => [:sell_price,  "u"],
-      "Description" => [:description, "q"],
-      "FieldUse"    => [:field_use,   "e", { "OnPokemon" => 1, "Direct" => 2, "TM" => 3,
-                                             "HM" => 4, "TR" => 5 }],
-      "BattleUse"   => [:battle_use,  "e", { "OnPokemon" => 1, "OnMove" => 2, "OnBattler" => 3,
-                                             "OnFoe" => 4, "Direct" => 5 }],
-      "Consumable"  => [:consumable,  "b"],
-      "Flags"       => [:flags,       "*s"],
-      "Move"        => [:move,        "e", :Move]
+      "SectionName" => [:id,               "m"],
+      "Name"        => [:real_name,        "s"],
+      "NamePlural"  => [:real_name_plural, "s"],
+      "Pocket"      => [:pocket,           "v"],
+      "Price"       => [:price,            "u"],
+      "SellPrice"   => [:sell_price,       "u"],
+      "Description" => [:real_description, "q"],
+      "FieldUse"    => [:field_use,        "e", { "OnPokemon" => 1, "Direct" => 2, "TM" => 3,
+                                                  "HM" => 4, "TR" => 5 }],
+      "BattleUse"   => [:battle_use,       "e", { "OnPokemon" => 1, "OnMove" => 2, "OnBattler" => 3,
+                                                  "OnFoe" => 4, "Direct" => 5 }],
+      "Flags"       => [:flags,            "*s"],
+      "Consumable"  => [:consumable,       "b"],
+      "Move"        => [:move,             "e", :Move]
     }
 
     extend ClassMethodsSymbols
@@ -82,15 +83,15 @@ module GameData
 
     def initialize(hash)
       @id               = hash[:id]
-      @real_name        = hash[:name]        || "Unnamed"
-      @real_name_plural = hash[:name_plural] || "Unnamed"
-      @pocket           = hash[:pocket]      || 1
-      @price            = hash[:price]       || 0
-      @sell_price       = hash[:sell_price]  || (@price / 2)
-      @real_description = hash[:description] || "???"
-      @field_use        = hash[:field_use]   || 0
-      @battle_use       = hash[:battle_use]  || 0
-      @flags            = hash[:flags]       || []
+      @real_name        = hash[:real_name]        || "Unnamed"
+      @real_name_plural = hash[:real_name_plural] || "Unnamed"
+      @pocket           = hash[:pocket]           || 1
+      @price            = hash[:price]            || 0
+      @sell_price       = hash[:sell_price]       || (@price / 2)
+      @real_description = hash[:real_description] || "???"
+      @field_use        = hash[:field_use]        || 0
+      @battle_use       = hash[:battle_use]       || 0
+      @flags            = hash[:flags]            || []
       @consumable       = hash[:consumable]
       @consumable       = !is_important? if @consumable.nil?
       @move             = hash[:move]

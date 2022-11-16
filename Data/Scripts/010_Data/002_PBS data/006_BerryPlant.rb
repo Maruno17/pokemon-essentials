@@ -9,6 +9,7 @@ module GameData
     DATA_FILENAME = "berry_plants.dat"
 
     SCHEMA = {
+      "SectionName"   => [:id,              "m"],
       "HoursPerStage" => [:hours_per_stage, "v"],
       "DryingPerHour" => [:drying_per_hour, "u"],
       "Yield"         => [:yield,           "uv"]

@@ -15,8 +15,8 @@ module GameData
     DATA_FILENAME = "dungeon_tilesets.dat"
 
     SCHEMA = {
-      "Autotile"             => [:autotile,                "us"],
-      "Tile"                 => [:tile,                    "us"],
+      "Autotile"             => [:autotile,                "um"],
+      "Tile"                 => [:tile,                    "um"],
       "SnapToLargeGrid"      => [:snap_to_large_grid,      "b"],
       "LargeVoidTiles"       => [:large_void_tiles,        "b"],
       "LargeWallTiles"       => [:large_wall_tiles,        "b"],
@@ -56,7 +56,7 @@ module GameData
       [hash[:autotile], hash[:tile]].each_with_index do |array, i|
         array.each do |tile_info|
           next if !tile_info
-          tile_type = tile_info[1].downcase.to_sym
+          tile_type = tile_info[1]
           if tile_type == :walls
             if @double_walls
               if @large_wall_tiles

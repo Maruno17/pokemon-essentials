@@ -73,70 +73,50 @@ module GameData
 
     def self.schema(compiling_forms = false)
       ret = {
-        "FormName"          => [0, "q"],
-        "Category"          => [0, "s"],
-        "Pokedex"           => [0, "q"],
-        "Types"             => [0, "eE", :Type, :Type],
-        "BaseStats"         => [0, "vvvvvv"],
-        "EVs"               => [0, "*ev", :Stat],
-        "BaseExp"           => [0, "v"],
-        "CatchRate"         => [0, "u"],
-        "Happiness"         => [0, "u"],
-        "Moves"             => [0, "*ue", nil, :Move],
-        "TutorMoves"        => [0, "*e", :Move],
-        "EggMoves"          => [0, "*e", :Move],
-        "Abilities"         => [0, "*e", :Ability],
-        "HiddenAbilities"   => [0, "*e", :Ability],
-        "WildItemCommon"    => [0, "*e", :Item],
-        "WildItemUncommon"  => [0, "*e", :Item],
-        "WildItemRare"      => [0, "*e", :Item],
-        "EggGroups"         => [0, "*e", :EggGroup],
-        "HatchSteps"        => [0, "v"],
-        "Height"            => [0, "f"],
-        "Weight"            => [0, "f"],
-        "Color"             => [0, "e", :BodyColor],
-        "Shape"             => [0, "e", :BodyShape],
-        "Habitat"           => [0, "e", :Habitat],
-        "Generation"        => [0, "i"],
-        "Flags"             => [0, "*s"],
-        "BattlerPlayerX"    => [0, "i"],
-        "BattlerPlayerY"    => [0, "i"],
-        "BattlerEnemyX"     => [0, "i"],
-        "BattlerEnemyY"     => [0, "i"],
-        "BattlerAltitude"   => [0, "i"],
-        "BattlerShadowX"    => [0, "i"],
-        "BattlerShadowSize" => [0, "u"],
-        # All properties below here are old names for some properties above.
-        # They will be removed in v21.
-        "Type1"             => [0, "e", :Type],
-        "Type2"             => [0, "e", :Type],
-        "Rareness"          => [0, "u"],
-        "Compatibility"     => [0, "*e", :EggGroup],
-        "Kind"              => [0, "s"],
-        "BaseEXP"           => [0, "v"],
-        "EffortPoints"      => [0, "*ev", :Stat],
-        "HiddenAbility"     => [0, "*e", :Ability],
-        "StepsToHatch"      => [0, "v"]
+        "FormName"          => [:real_form_name,     "q"],
+        "Category"          => [:real_category,      "s"],
+        "Pokedex"           => [:real_pokedex_entry, "q"],
+        "Types"             => [:types,              "eE", :Type, :Type],
+        "BaseStats"         => [:base_stats,         "vvvvvv"],
+        "EVs"               => [:evs,                "*ev", :Stat],
+        "BaseExp"           => [:base_exp,           "v"],
+        "CatchRate"         => [:catch_rate,         "u"],
+        "Happiness"         => [:happiness,          "u"],
+        "Moves"             => [:moves,              "*ue", nil, :Move],
+        "TutorMoves"        => [:tutor_moves,        "*e", :Move],
+        "EggMoves"          => [:egg_moves,          "*e", :Move],
+        "Abilities"         => [:abilities,          "*e", :Ability],
+        "HiddenAbilities"   => [:hidden_abilities,   "*e", :Ability],
+        "WildItemCommon"    => [:wild_item_common,   "*e", :Item],
+        "WildItemUncommon"  => [:wild_item_uncommon, "*e", :Item],
+        "WildItemRare"      => [:wild_item_rare,     "*e", :Item],
+        "EggGroups"         => [:egg_groups,         "*e", :EggGroup],
+        "HatchSteps"        => [:hatch_steps,        "v"],
+        "Height"            => [:height,             "f"],
+        "Weight"            => [:weight,             "f"],
+        "Color"             => [:color,              "e", :BodyColor],
+        "Shape"             => [:shape,              "e", :BodyShape],
+        "Habitat"           => [:habitat,            "e", :Habitat],
+        "Generation"        => [:generation,         "i"],
+        "Flags"             => [:flags,              "*s"]
       }
       if compiling_forms
-        ret["PokedexForm"]  = [0, "u"]
-        ret["Offspring"]    = [0, "*e", :Species]
-        ret["Evolutions"]   = [0, "*ees", :Species, :Evolution, nil]
-        ret["MegaStone"]    = [0, "e", :Item]
-        ret["MegaMove"]     = [0, "e", :Move]
-        ret["UnmegaForm"]   = [0, "u"]
-        ret["MegaMessage"]  = [0, "u"]
+        ret["SectionName"]  = [:id,           "ev", :Species]
+        ret["PokedexForm"]  = [:pokedex_form, "u"]
+        ret["Offspring"]    = [:offspring,    "*e", :Species]
+        ret["Evolutions"]   = [:evolutions,   "*ees", :Species, :Evolution, nil]
+        ret["MegaStone"]    = [:mega_stone,   "e", :Item]
+        ret["MegaMove"]     = [:mega_move,    "e", :Move]
+        ret["UnmegaForm"]   = [:unmega_form,  "u"]
+        ret["MegaMessage"]  = [:mega_message, "u"]
       else
-        ret["InternalName"] = [0, "n"]
-        ret["Name"]         = [0, "s"]
-        ret["GrowthRate"]   = [0, "e", :GrowthRate]
-        ret["GenderRatio"]  = [0, "e", :GenderRatio]
-        ret["Incense"]      = [0, "e", :Item]
-        ret["Offspring"]    = [0, "*s"]
-        ret["Evolutions"]   = [0, "*ses", nil, :Evolution, nil]
-        # All properties below here are old names for some properties above.
-        # They will be removed in v21.
-        ret["GenderRate"]   = [0, "e", :GenderRatio]
+        ret["SectionName"]  = [:id,           "m"]
+        ret["Name"]         = [:real_name,    "s"]
+        ret["GrowthRate"]   = [:growth_rate,  "e", :GrowthRate]
+        ret["GenderRatio"]  = [:gender_ratio, "e", :GenderRatio]
+        ret["Incense"]      = [:incense,      "e", :Item]
+        ret["Offspring"]    = [:offspring,    "*s"]
+        ret["Evolutions"]   = [:evolutions,   "*ses", nil, :Evolution, nil]
       end
       return ret
     end
@@ -145,10 +125,10 @@ module GameData
       @id                 = hash[:id]
       @species            = hash[:species]            || @id
       @form               = hash[:form]               || 0
-      @real_name          = hash[:name]               || "Unnamed"
-      @real_form_name     = hash[:form_name]
-      @real_category      = hash[:category]           || "???"
-      @real_pokedex_entry = hash[:pokedex_entry]      || "???"
+      @real_name          = hash[:real_name]          || "Unnamed"
+      @real_form_name     = hash[:real_form_name]
+      @real_category      = hash[:real_category]      || "???"
+      @real_pokedex_entry = hash[:real_pokedex_entry] || "???"
       @pokedex_form       = hash[:pokedex_form]       || @form
       @types              = hash[:types]              || [:NORMAL]
       @base_stats         = hash[:base_stats]         || {}

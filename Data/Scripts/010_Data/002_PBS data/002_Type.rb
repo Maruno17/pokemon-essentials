@@ -14,15 +14,15 @@ module GameData
     DATA_FILENAME = "types.dat"
 
     SCHEMA = {
-      "Name"          => [0, "s"],
-      "InternalName"  => [0, "s"],
-      "IsSpecialType" => [0, "b"],
-      "IsPseudoType"  => [0, "b"],
-      "Flags"         => [0, "*s"],
-      "Weaknesses"    => [0, "*s"],
-      "Resistances"   => [0, "*s"],
-      "Immunities"    => [0, "*s"],
-      "IconPosition"  => [0, "u"]
+      "SectionName"   => [:id,            "m"],
+      "Name"          => [:real_name,     "s"],
+      "IsSpecialType" => [:special_type,  "b"],
+      "IsPseudoType"  => [:pseudo_type,   "b"],
+      "Flags"         => [:flags,         "*s"],
+      "Weaknesses"    => [:weaknesses,    "*m"],
+      "Resistances"   => [:resistances,   "*m"],
+      "Immunities"    => [:immunities,    "*m"],
+      "IconPosition"  => [:icon_position, "u"]
     }
 
     extend ClassMethodsSymbols
@@ -30,7 +30,7 @@ module GameData
 
     def initialize(hash)
       @id            = hash[:id]
-      @real_name     = hash[:name]          || "Unnamed"
+      @real_name     = hash[:real_name]     || "Unnamed"
       @special_type  = hash[:special_type]  || false
       @pseudo_type   = hash[:pseudo_type]   || false
       @flags         = hash[:flags]         || []

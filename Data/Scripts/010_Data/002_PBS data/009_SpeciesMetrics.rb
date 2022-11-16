@@ -13,11 +13,12 @@ module GameData
     DATA_FILENAME = "species_metrics.dat"
 
     SCHEMA = {
-      "BackSprite"          => [0, "ii"],
-      "FrontSprite"         => [0, "ii"],
-      "FrontSpriteAltitude" => [0, "i"],
-      "ShadowX"             => [0, "i"],
-      "ShadowSize"          => [0, "u"]
+      "SectionName"         => [:id,                    "eV", :Species],
+      "BackSprite"          => [:back_sprite,           "ii"],
+      "FrontSprite"         => [:front_sprite,          "ii"],
+      "FrontSpriteAltitude" => [:front_sprite_altitude, "i"],
+      "ShadowX"             => [:shadow_x,              "i"],
+      "ShadowSize"          => [:shadow_size,           "u"]
     }
 
     extend ClassMethodsSymbols

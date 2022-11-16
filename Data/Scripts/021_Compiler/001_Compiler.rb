@@ -129,7 +129,10 @@ module Compiler
     yield lastsection, sectionname if havesection
   end
 
-  # Used for types.txt, pokemon.txt, battle_facility_lists.txt and Battle Tower trainers PBS files
+  # Used for types.txt, abilities.txt, moves.txt, items.txt, berry_plants.txt,
+  # pokemon.txt, pokemon_forms.txt, pokemon_metrics.txt, shadow_pokemon.txt,
+  # ribbons.txt, trainer_types.txt, battle_facility_lists.txt, Battle Tower
+  # trainers PBS files and dungeon_parameters.txt
   def pbEachFileSection(f)
     pbEachFileSectionEx(f) { |section, name|
       yield section, name if block_given? && name[/^.+$/]
@@ -143,14 +146,7 @@ module Compiler
     }
   end
 
-  # Used for pokemon_forms.txt
-  def pbEachFileSectionPokemonForms(f)
-    pbEachFileSectionEx(f) { |section, name|
-      yield section, name if block_given? && name[/^\w+[-,\s]{1}\d+$/]
-    }
-  end
-
-  # Used for phone.txt
+  # Unused
   def pbEachSection(f)
     lineno      = 1
     havesection = false
@@ -193,7 +189,7 @@ module Compiler
     }
   end
 
-  # Used for many PBS files
+  # Used for town_map.txt and Battle Tower Pokémon PBS files
   def pbCompilerEachCommentedLine(filename)
     File.open(filename, "rb") { |f|
       FileLineData.file = filename
@@ -226,7 +222,8 @@ module Compiler
     }
   end
 
-  # Used for map_connections.txt, abilities.txt, moves.txt, regional_dexes.txt
+  # Used for map_connections.txt, phone.txt, regional_dexes.txt, encounters.txt,
+  # trainers.txt and dungeon_tilesets.txt
   def pbCompilerEachPreppedLine(filename)
     File.open(filename, "rb") { |f|
       FileLineData.file = filename
@@ -519,6 +516,21 @@ module Compiler
             subrecord.push(rec)
             rec = ""
           end
+        when "m"   # Symbol
+          field = csvfield!(rec)
+          if !field[/^(?![0-9])\w+$/]
+            raise _INTL("Field '{1}' must contain only letters, digits, and\r\nunderscores and can't begin with a number.\r\n{2}", field, FileLineData.linereport)
+          end
+          subrecord.push(field.to_sym)
+        when "M"   # Optional symbol
+          field = csvfield!(rec)
+          if nil_or_empty?(field)
+            subrecord.push(nil)
+          elsif !field[/^(?![0-9])\w+$/]
+            raise _INTL("Field '{1}' must contain only letters, digits, and\r\nunderscores and can't begin with a number.\r\n{2}", field, FileLineData.linereport)
+          else
+            subrecord.push(field.to_sym)
+          end
         when "e"   # Enumerable
           subrecord.push(csvEnumField!(rec, schema[2 + i - start], "", FileLineData.linereport))
         when "E"   # Optional enumerable
@@ -548,7 +560,7 @@ module Compiler
       break if repeat && nil_or_empty?(rec)
       break unless repeat
     end
-    return (schema[1].length == 1) ? record[0] : record
+    return (!repeat && schema[1].length == 1) ? record[0] : record
   end
 
   #=============================================================================

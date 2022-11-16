@@ -14,17 +14,18 @@ module GameData
     DATA_FILENAME = "trainer_types.dat"
 
     SCHEMA = {
-      "Name"       => [:name,        "s"],
-      "Gender"     => [:gender,      "e", { "Male" => 0, "male" => 0, "M" => 0, "m" => 0, "0" => 0,
-                                           "Female" => 1, "female" => 1, "F" => 1, "f" => 1, "1" => 1,
-                                           "Unknown" => 2, "unknown" => 2, "Other" => 2, "other" => 2,
-                                           "Mixed" => 2, "mixed" => 2, "X" => 2, "x" => 2, "2" => 2 }],
-      "BaseMoney"  => [:base_money,  "u"],
-      "SkillLevel" => [:skill_level, "u"],
-      "Flags"      => [:flags,       "*s"],
-      "IntroBGM"   => [:intro_BGM,   "s"],
-      "BattleBGM"  => [:battle_BGM,  "s"],
-      "VictoryBGM" => [:victory_BGM, "s"]
+      "SectionName" => [:id,          "m"],
+      "Name"        => [:real_name,   "s"],
+      "Gender"      => [:gender,      "e", { "Male" => 0, "male" => 0, "M" => 0, "m" => 0, "0" => 0,
+                                             "Female" => 1, "female" => 1, "F" => 1, "f" => 1, "1" => 1,
+                                             "Unknown" => 2, "unknown" => 2, "Other" => 2, "other" => 2,
+                                             "Mixed" => 2, "mixed" => 2, "X" => 2, "x" => 2, "2" => 2 }],
+      "BaseMoney"   => [:base_money,  "u"],
+      "SkillLevel"  => [:skill_level, "u"],
+      "Flags"       => [:flags,       "*s"],
+      "IntroBGM"    => [:intro_BGM,   "s"],
+      "BattleBGM"   => [:battle_BGM,  "s"],
+      "VictoryBGM"  => [:victory_BGM, "s"]
     }
 
     extend ClassMethodsSymbols
@@ -81,7 +82,7 @@ module GameData
 
     def initialize(hash)
       @id          = hash[:id]
-      @real_name   = hash[:name]        || "Unnamed"
+      @real_name   = hash[:real_name]   || "Unnamed"
       @gender      = hash[:gender]      || 2
       @base_money  = hash[:base_money]  || 30
       @skill_level = hash[:skill_level] || @base_money
