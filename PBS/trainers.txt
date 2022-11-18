@@ -1980,21 +1980,21 @@ Pokemon = B67H72,31 #Tentachoke,
 [ROCKETBOSS,Giovanni,0]
 Items = MAXPOTION
 Pokemon = B95H24,32 #Arbix,
-	Ball = ROCKETBALL
+	Ball = ULTRABALL
 Pokemon = B131H111,32 #Rhyras,
-	Ball = ROCKETBALL
+	Ball = ULTRABALL
 Pokemon = B115H93,35 #Hauntkan,
-	Ball = ROCKETBALL
+	Ball = ULTRABALL
 [ROCKETBOSS,Giovanni,4]		#Silph co
 Items = MAXPOTION
 Pokemon = B33H57,45 #nidorino + primeape
-	Ball = ROCKETBALL
+	Ball = ULTRABALL
 Pokemon = B131H112,45 #rhydon + lapras
-	Ball = ROCKETBALL
+	Ball = ULTRABALL
 Pokemon = B115H94,47 #gengar + kangaskhan
-	Ball = ROCKETBALL
+	Ball = ULTRABALL
 Pokemon = B31H28,51 #nidoqueen + Sandslash
-	Ball = ROCKETBALL
+	Ball = ULTRABALL
 
 ##############################
 
@@ -2237,42 +2237,61 @@ Pokemon = B131H265,50 #Rhyras,
 	Moves = SURF,BULLDOZE,SANDSTORM,SING
 	AbilityIndex = 1
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
+
 Pokemon = B51H125,50 #Electatrio,
 	Moves = BULLDOZE,LIGHTSCREEN,THUNDERWAVE,DISCHARGE
 	AbilityIndex = 0
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
+
 Pokemon = B68H76,52 #GOLCHAMP,
 	Moves = EARTHQUAKE,DYNAMICPUNCH,COUNTER,SCARYFACE
 	AbilityIndex = 0
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
+
 Pokemon = B248H273,54 #DNIDOKING,
 	Moves = EARTHQUAKE,THRASH,MEGAHORN,POISONJAB
 	AbilityIndex = 1
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
+
 Pokemon = B143H112,54 #snordon,
 	Moves = EARTHQUAKE,REST,SNORE,HORNDRILL
 	AbilityIndex = 0
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
 
 [LEADER_Giovanni,Giovanni,1]
 Items = FULLRESTORE,FULLRESTORE
 Pokemon = B131H265,72 #Rhyras,
 	Moves = SURF,BULLDOZE,SANDSTORM,SING
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
+
 Pokemon = B51H125,73 #Electatrio,
 	Moves = BULLDOZE,LIGHTSCREEN,THUNDERWAVE,DISCHARGE
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
+
 Pokemon = B68H76,74 #GOLCHAMP,
 	Moves = EARTHQUAKE,DYNAMICPUNCH,COUNTER,SCARYFACE
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
+
 Pokemon = B248H273,72 #DNIDOKING,
 	Moves = EARTHQUAKE,THRASH,MEGAHORN,POISONJAB
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
+
 Pokemon = B143H112,75 #Nidon,
 	Moves = EARTHQUAKE,REST,SNORE,HORNDRILL
 	Item = 	SOFTSAND
+	Ball = ULTRABALL
 Pokemon = B299H248,75 #TYRANCHOMP
 	Item = SOFTSAND
+	Ball = ULTRABALL
 #######################
 #### E4 ###############
 ###################
@@ -3556,17 +3575,17 @@ Pokemon = BIRDBOSS,50 #
 
 [ROCKETBOSS,Giovanni,5]
 Items = FULLHEAL,FULLHEAL,FULLHEAL
-Pokemon = BIRDBOSS_3,60 #		#Articuno
+Pokemon = BIRDBOSS_3,50 #		#Articuno
 	Moves = HAZE,REFLECT,ICEBEAM,ROOST
 	Ball = INVISIBALL
 	AbilityIndex = 0
 	Item = CHARTIBERRY
-Pokemon = BIRDBOSS_2,60 #		#Moltres
+Pokemon = BIRDBOSS_2,50 #		#Moltres
 	Moves = TAILWIND,SAFEGUARD,FLAMETHROWER,ROOST
 	Ball = MASTERBALL
 	AbilityIndex = 0
 	Item = CHARTIBERRY
-Pokemon = BIRDBOSS_1,60 #		#Zapdos
+Pokemon = BIRDBOSS_1,50 #		#Zapdos
 	Moves = LIGHTSCREEN,THUNDERBOLT,DRILLPECK,ROOST
 	Ball = INVISIBALL
 	AbilityIndex = 0

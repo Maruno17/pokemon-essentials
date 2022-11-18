@@ -147,6 +147,12 @@ module GameData
         return sprintf(base_path + "144.145.146")
       when Settings::ZAPMOLCUNO_NB + 22 #birdBoss right
         return sprintf(base_path +"invisible")
+      when Settings::ZAPMOLCUNO_NB + 23 #sinnohboss left
+        return sprintf(base_path +"invisible")
+      when Settings::ZAPMOLCUNO_NB + 24 #sinnohboss middle
+        return sprintf(base_path +"343.344.345")
+      when Settings::ZAPMOLCUNO_NB + 25 #sinnohboss right
+        return sprintf(base_path +"invisible")
       else
         return sprintf(base_path + "000")
       end
