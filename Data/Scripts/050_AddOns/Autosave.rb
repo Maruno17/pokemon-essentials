@@ -19,9 +19,10 @@ def pbSetPokemonCenter
 end
 
 def Kernel.Autosave
+  Game.auto_save
   #showSaveIcon()
-  pbSave(false)
-  #hideSaveIcon()
+  # pbSave(false)
+  # #hideSaveIcon()
 end
 
 
