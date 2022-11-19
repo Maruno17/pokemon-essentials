@@ -219,6 +219,15 @@ module GameData
       end
       return false
     end
+
+    def get_property_for_PBS(key)
+      ret = nil
+      if self.class::SCHEMA.include?(key)
+        ret = self.send(self.class::SCHEMA[key][0])
+        ret = nil if ret == false || (ret.is_a?(Array) && ret.length == 0)
+      end
+      return ret
+    end
   end
 
   #=============================================================================

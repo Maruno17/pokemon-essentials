@@ -37,8 +37,8 @@ module GameData
       "MaxRoomSize"      => [:max_room_size,           "vv"],
       "CorridorWidth"    => [:corridor_width,          "v"],
       "ShiftCorridors"   => [:random_corridor_shift,   "b"],
-      "NodeLayout"       => [:node_layout,             "s"],
-      "RoomLayout"       => [:room_layout,             "s"],
+      "NodeLayout"       => [:node_layout,             "m"],
+      "RoomLayout"       => [:room_layout,             "m"],
       "RoomChance"       => [:room_chance,             "v"],
       "ExtraConnections" => [:extra_connections_count, "u"],
       "FloorPatches"     => [:floor_patches,           "vvu"],
@@ -78,8 +78,8 @@ module GameData
       @room_max_height                = (hash[:max_room_size]) ? hash[:max_room_size][1] : @cell_height - 1
       @corridor_width                 = hash[:corridor_width] || 2
       @random_corridor_shift          = hash[:random_corridor_shift]
-      @node_layout                    = hash[:node_layout]&.downcase&.to_sym || :full
-      @room_layout                    = hash[:room_layout]&.downcase&.to_sym || :full
+      @node_layout                    = hash[:node_layout] || :full
+      @room_layout                    = hash[:room_layout] || :full
       @room_chance                    = hash[:room_chance] || 70
       @extra_connections_count        = hash[:extra_connections_count] || 2
       @floor_patch_radius             = (hash[:floor_patches]) ? hash[:floor_patches][0] : 3
@@ -115,25 +115,19 @@ module GameData
       return width, height
     end
 
-    def property_from_string(str)
-      case str
+    alias __orig__get_property_for_PBS get_property_for_PBS
+    def get_property_for_PBS(key)
+      case key
+      when "SectionName"      then return [@area, (@version > 0) ? @version : nil]
       when "DungeonSize"      then return [@cell_count_x, @cell_count_y]
       when "CellSize"         then return [@cell_width, @cell_height]
       when "MinRoomSize"      then return [@room_min_width, @room_min_height]
       when "MaxRoomSize"      then return [@room_max_width, @room_max_height]
-      when "CorridorWidth"    then return @corridor_width
-      when "ShiftCorridors"   then return @random_corridor_shift
-      when "NodeLayout"       then return @node_layout
-      when "RoomLayout"       then return @room_layout
-      when "RoomChance"       then return @room_chance
-      when "ExtraConnections" then return @extra_connections_count
       when "FloorPatches"     then return [@floor_patch_radius, @floor_patch_chance, @floor_patch_smooth_rate]
       when "FloorDecorations" then return [@floor_decoration_density, @floor_decoration_large_density]
       when "VoidDecorations"  then return [@void_decoration_density, @void_decoration_large_density]
-      when "RNGSeed"          then return @rng_seed
-      when "Flags"            then return @flags
       end
-      return nil
+      return __orig__get_property_for_PBS(key)
     end
   end
 end

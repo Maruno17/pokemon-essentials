@@ -72,51 +72,60 @@ module GameData
     end
 
     def self.schema(compiling_forms = false)
-      ret = {
-        "FormName"          => [:real_form_name,     "q"],
-        "Category"          => [:real_category,      "s"],
-        "Pokedex"           => [:real_pokedex_entry, "q"],
-        "Types"             => [:types,              "eE", :Type, :Type],
-        "BaseStats"         => [:base_stats,         "vvvvvv"],
-        "EVs"               => [:evs,                "*ev", :Stat],
-        "BaseExp"           => [:base_exp,           "v"],
-        "CatchRate"         => [:catch_rate,         "u"],
-        "Happiness"         => [:happiness,          "u"],
-        "Moves"             => [:moves,              "*ue", nil, :Move],
-        "TutorMoves"        => [:tutor_moves,        "*e", :Move],
-        "EggMoves"          => [:egg_moves,          "*e", :Move],
-        "Abilities"         => [:abilities,          "*e", :Ability],
-        "HiddenAbilities"   => [:hidden_abilities,   "*e", :Ability],
-        "WildItemCommon"    => [:wild_item_common,   "*e", :Item],
-        "WildItemUncommon"  => [:wild_item_uncommon, "*e", :Item],
-        "WildItemRare"      => [:wild_item_rare,     "*e", :Item],
-        "EggGroups"         => [:egg_groups,         "*e", :EggGroup],
-        "HatchSteps"        => [:hatch_steps,        "v"],
-        "Height"            => [:height,             "f"],
-        "Weight"            => [:weight,             "f"],
-        "Color"             => [:color,              "e", :BodyColor],
-        "Shape"             => [:shape,              "e", :BodyShape],
-        "Habitat"           => [:habitat,            "e", :Habitat],
-        "Generation"        => [:generation,         "i"],
-        "Flags"             => [:flags,              "*s"]
-      }
+      ret = {}
       if compiling_forms
-        ret["SectionName"]  = [:id,           "ev", :Species]
-        ret["PokedexForm"]  = [:pokedex_form, "u"]
-        ret["Offspring"]    = [:offspring,    "*e", :Species]
-        ret["Evolutions"]   = [:evolutions,   "*ees", :Species, :Evolution, nil]
-        ret["MegaStone"]    = [:mega_stone,   "e", :Item]
-        ret["MegaMove"]     = [:mega_move,    "e", :Move]
-        ret["UnmegaForm"]   = [:unmega_form,  "u"]
-        ret["MegaMessage"]  = [:mega_message, "u"]
+        ret["SectionName"]    = [:id,                 "ev", :Species]
       else
-        ret["SectionName"]  = [:id,           "m"]
-        ret["Name"]         = [:real_name,    "s"]
-        ret["GrowthRate"]   = [:growth_rate,  "e", :GrowthRate]
-        ret["GenderRatio"]  = [:gender_ratio, "e", :GenderRatio]
-        ret["Incense"]      = [:incense,      "e", :Item]
-        ret["Offspring"]    = [:offspring,    "*s"]
-        ret["Evolutions"]   = [:evolutions,   "*ses", nil, :Evolution, nil]
+        ret["SectionName"]    = [:id,                 "m"]
+        ret["Name"]           = [:real_name,          "s"]
+      end
+      ret["FormName"]         = [:real_form_name,     "q"]
+      if compiling_forms
+        ret["PokedexForm"]    = [:pokedex_form,       "u"]
+        ret["MegaStone"]      = [:mega_stone,         "e", :Item]
+        ret["MegaMove"]       = [:mega_move,          "e", :Move]
+        ret["UnmegaForm"]     = [:unmega_form,        "u"]
+        ret["MegaMessage"]    = [:mega_message,       "u"]
+      end
+      ret["Types"]            = [:types,              "eE", :Type, :Type]
+      ret["BaseStats"]        = [:base_stats,         "vvvvvv"]
+      if !compiling_forms
+        ret["GenderRatio"]    = [:gender_ratio,       "e", :GenderRatio]
+        ret["GrowthRate"]     = [:growth_rate,        "e", :GrowthRate]
+      end
+      ret["BaseExp"]          = [:base_exp,           "v"]
+      ret["EVs"]              = [:evs,                "*ev", :Stat]
+      ret["CatchRate"]        = [:catch_rate,         "u"]
+      ret["Happiness"]        = [:happiness,          "u"]
+      ret["Abilities"]        = [:abilities,          "*e", :Ability]
+      ret["HiddenAbilities"]  = [:hidden_abilities,   "*e", :Ability]
+      ret["Moves"]            = [:moves,              "*ue", nil, :Move]
+      ret["TutorMoves"]       = [:tutor_moves,        "*e", :Move]
+      ret["EggMoves"]         = [:egg_moves,          "*e", :Move]
+      ret["EggGroups"]        = [:egg_groups,         "*e", :EggGroup]
+      ret["HatchSteps"]       = [:hatch_steps,        "v"]
+      if compiling_forms
+        ret["Offspring"]      = [:offspring,          "*e", :Species]
+      else
+        ret["Incense"]        = [:incense,            "e", :Item]
+        ret["Offspring"]      = [:offspring,          "*s"]
+      end
+      ret["Height"]           = [:height,             "f"]
+      ret["Weight"]           = [:weight,             "f"]
+      ret["Color"]            = [:color,              "e", :BodyColor]
+      ret["Shape"]            = [:shape,              "e", :BodyShape]
+      ret["Habitat"]          = [:habitat,            "e", :Habitat]
+      ret["Category"]         = [:real_category,      "s"]
+      ret["Pokedex"]          = [:real_pokedex_entry, "q"]
+      ret["Generation"]       = [:generation,         "i"]
+      ret["Flags"]            = [:flags,              "*s"]
+      ret["WildItemCommon"]   = [:wild_item_common,   "*e", :Item]
+      ret["WildItemUncommon"] = [:wild_item_uncommon, "*e", :Item]
+      ret["WildItemRare"]     = [:wild_item_rare,     "*e", :Item]
+      if compiling_forms
+        ret["Evolutions"]     = [:evolutions,         "*ees", :Species, :Evolution, nil]
+      else
+        ret["Evolutions"]     = [:evolutions,         "*ses", nil, :Evolution, nil]
       end
       return ret
     end
@@ -331,6 +340,67 @@ module GameData
         return (min_level == 0) ? evo[2] : min_level + 1
       end
       return 1
+    end
+
+    alias __orig__get_property_for_PBS get_property_for_PBS
+    def get_property_for_PBS(key, writing_form = false)
+      ret = nil
+      if self.class.schema(writing_form).include?(key)
+        ret = self.send(self.class.schema(writing_form)[key][0])
+        ret = nil if ret == false || (ret.is_a?(Array) && ret.length == 0)
+      end
+      case key
+      when "SectionName"
+        ret = [@species, @form] if writing_form
+      when "FormName"
+        ret = nil if nil_or_empty?(ret)
+      when "PokedexForm"
+        ret = nil if ret == @form
+      when "UnmegaForm", "MegaMessage", "Generation"
+        ret = nil if ret == 0
+      when "BaseStats"
+        new_ret = []
+        GameData::Stat.each_main do |s|
+          new_ret[s.pbs_order] = ret[s.id] if s.pbs_order >= 0
+        end
+        ret = new_ret
+      when "EVs"
+        new_ret = []
+        GameData::Stat.each_main do |s|
+          new_ret.push([s.id, ret[s.id]]) if ret[s.id] > 0 && s.pbs_order >= 0
+        end
+        ret = new_ret
+      when "Height", "Weight"
+        ret = ret.to_f / 10
+      when "Habitat"
+        ret = nil if ret == :None
+      when "Evolutions"
+        if ret
+          ret = ret.select { |evo| !evo[3] }   # Remove prevolutions
+          ret.each do |evo|
+            param_type = GameData::Evolution.get(evo[1]).parameter
+            if !param_type.nil?
+              if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
+                evo[2] = getConstantName(param_type, evo[2])
+              else
+                evo[2] = evo[2].to_s
+              end
+            end
+          end
+          ret.each_with_index { |evo, i| ret[i] = evo[0, 3] }
+          ret = nil if ret.length == 0
+        end
+      end
+      if writing_form && !ret.nil?
+        base_form = GameData::Species.get(@species)
+        if !["WildItemCommon", "WildItemUncommon", "WildItemRare"].include?(key) ||
+           (base_form.wild_item_common == @wild_item_common &&
+           base_form.wild_item_uncommon == @wild_item_uncommon &&
+           base_form.wild_item_rare == @wild_item_rare)
+          ret = nil if base_form.get_property_for_PBS(key) == ret
+        end
+      end
+      return ret
     end
   end
 end

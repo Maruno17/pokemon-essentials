@@ -573,12 +573,18 @@ module Compiler
     loop do
       (start...schema[1].length).each do |i|
         index += 1
-        file.write(",") if index > 0
         value = rec[index]
+        if schema[1][i, 1].upcase != schema[1][i, 1] || !value.nil?
+          file.write(",") if index > 0
+        end
         if value.nil?
           # do nothing
         elsif value.is_a?(String)
-          file.write(csvQuote(value))
+          if schema[1][i, 1].downcase == "q"
+            file.write(value)
+          else
+            file.write(csvQuote(value))
+          end
         elsif value.is_a?(Symbol)
           file.write(csvQuote(value.to_s))
         elsif value == true

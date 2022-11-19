@@ -2,13 +2,13 @@ module GameData
   class Type
     attr_reader :id
     attr_reader :real_name
+    attr_reader :icon_position   # Where this type's icon is within types.png
     attr_reader :special_type
     attr_reader :pseudo_type
-    attr_reader :flags
     attr_reader :weaknesses
     attr_reader :resistances
     attr_reader :immunities
-    attr_reader :icon_position   # Where this type's icon is within types.png
+    attr_reader :flags
 
     DATA = {}
     DATA_FILENAME = "types.dat"
@@ -16,13 +16,13 @@ module GameData
     SCHEMA = {
       "SectionName"   => [:id,            "m"],
       "Name"          => [:real_name,     "s"],
+      "IconPosition"  => [:icon_position, "u"],
       "IsSpecialType" => [:special_type,  "b"],
       "IsPseudoType"  => [:pseudo_type,   "b"],
-      "Flags"         => [:flags,         "*s"],
       "Weaknesses"    => [:weaknesses,    "*m"],
       "Resistances"   => [:resistances,   "*m"],
       "Immunities"    => [:immunities,    "*m"],
-      "IconPosition"  => [:icon_position, "u"]
+      "Flags"         => [:flags,         "*s"]
     }
 
     extend ClassMethodsSymbols
@@ -31,16 +31,16 @@ module GameData
     def initialize(hash)
       @id            = hash[:id]
       @real_name     = hash[:real_name]     || "Unnamed"
+      @icon_position = hash[:icon_position] || 0
       @special_type  = hash[:special_type]  || false
       @pseudo_type   = hash[:pseudo_type]   || false
-      @flags         = hash[:flags]         || []
       @weaknesses    = hash[:weaknesses]    || []
       @weaknesses    = [@weaknesses] if !@weaknesses.is_a?(Array)
       @resistances   = hash[:resistances]   || []
       @resistances   = [@resistances] if !@resistances.is_a?(Array)
       @immunities    = hash[:immunities]    || []
       @immunities    = [@immunities] if !@immunities.is_a?(Array)
-      @icon_position = hash[:icon_position] || 0
+      @flags         = hash[:flags]         || []
     end
 
     # @return [String] the translated name of this item

@@ -84,5 +84,17 @@ module GameData
       return true
 #      return @front_sprite_altitude > 0
     end
+
+    alias __orig__get_property_for_PBS get_property_for_PBS
+    def get_property_for_PBS(key)
+      ret = __orig__get_property_for_PBS(key)
+      case key
+      when "SectionName"
+        ret = [@species, (@form > 0) ? @form : nil]
+      when "FrontSpriteAltitude"
+        ret = nil if ret == 0
+      end
+      return ret
+    end
   end
 end

@@ -6,12 +6,12 @@ module GameData
     attr_reader :pocket
     attr_reader :price
     attr_reader :sell_price
-    attr_reader :real_description
     attr_reader :field_use
     attr_reader :battle_use
     attr_reader :flags
     attr_reader :consumable
     attr_reader :move
+    attr_reader :real_description
 
     DATA = {}
     DATA_FILENAME = "items.dat"
@@ -23,14 +23,14 @@ module GameData
       "Pocket"      => [:pocket,           "v"],
       "Price"       => [:price,            "u"],
       "SellPrice"   => [:sell_price,       "u"],
-      "Description" => [:real_description, "q"],
       "FieldUse"    => [:field_use,        "e", { "OnPokemon" => 1, "Direct" => 2, "TM" => 3,
                                                   "HM" => 4, "TR" => 5 }],
       "BattleUse"   => [:battle_use,       "e", { "OnPokemon" => 1, "OnMove" => 2, "OnBattler" => 3,
                                                   "OnFoe" => 4, "Direct" => 5 }],
       "Flags"       => [:flags,            "*s"],
       "Consumable"  => [:consumable,       "b"],
-      "Move"        => [:move,             "e", :Move]
+      "Move"        => [:move,             "e", :Move],
+      "Description" => [:real_description, "q"]
     }
 
     extend ClassMethodsSymbols
@@ -88,13 +88,13 @@ module GameData
       @pocket           = hash[:pocket]           || 1
       @price            = hash[:price]            || 0
       @sell_price       = hash[:sell_price]       || (@price / 2)
-      @real_description = hash[:real_description] || "???"
       @field_use        = hash[:field_use]        || 0
       @battle_use       = hash[:battle_use]       || 0
       @flags            = hash[:flags]            || []
       @consumable       = hash[:consumable]
       @consumable       = !is_important? if @consumable.nil?
       @move             = hash[:move]
+      @real_description = hash[:real_description] || "???"
     end
 
     # @return [String] the translated name of this item
@@ -191,6 +191,21 @@ module GameData
         :ZAMAZENTA => [:RUSTEDSHIELD]
       }
       return combos[species]&.include?(@id)
+    end
+
+    alias __orig__get_property_for_PBS get_property_for_PBS
+    def get_property_for_PBS(key)
+      ret = __orig__get_property_for_PBS(key)
+      case key
+      when "SellPrice"
+        ret = nil if ret == @price / 2
+      when "FieldUse", "BattleUse"
+        ret = nil if ret == 0
+      when "Consumable"
+        ret = @consumable
+        ret = nil if ret || is_important?   # Only return false, only for non-important items
+      end
+      return ret
     end
   end
 end
