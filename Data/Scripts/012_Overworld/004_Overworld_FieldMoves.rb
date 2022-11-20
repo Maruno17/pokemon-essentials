@@ -670,11 +670,11 @@ def pbStrength
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_STRENGTH, false) || (!$DEBUG && !movefinder)
     if  $PokemonBag.pbQuantity(:LEVER)<=0
-      pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside."))
+      pbMessage(_INTL("It looks heavy, but a Pokémon may be able to push it aside."))
       return false
     end
   end
-  pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside.\1"))
+  pbMessage(_INTL("It looks heavy, but a Pokémon may be able to push it aside.\1"))
   if pbConfirmMessage(_INTL("Would you like to use Strength?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))

@@ -286,9 +286,8 @@ KleinStudio 			Water bubble script 	http://kleinstudio.deviantart.com/art/SCRIPT
 carmaniac			Speech Bubbles script	http://www.pokecommunity.com/showthread.php?t=295277
 Wootius				Turbo Speed		https://www.pokecommunity.com/showthread.php?t=306037
 Marin				Better maps script	https://www.pokecommunity.com/showthread.php?t=411299
-barafanatic			Safari Zone improvements
 M3rein				Easy Questing System 
-bo4p5687			Multisave
+http404error 		Multisave		https://reliccastle.com/resources/1059/
 
 
 #### Data sources ###			  

@@ -393,6 +393,7 @@ class Interpreter
     old_y  = event.y
     # Apply strict version of passable, which treats tiles that are passable
     # only from certain directions as fully impassible
+
     return if !event.can_move_in_direction?($game_player.direction, true)
     case $game_player.direction
     when 2 then event.move_down
@@ -400,7 +401,7 @@ class Interpreter
     when 6 then event.move_right
     when 8 then event.move_up
     end
-    $PokemonMap.addMovedEvent(@event_id) if $PokemonMap
+
     if old_x != event.x || old_y != event.y
       $game_player.lock
       loop do
