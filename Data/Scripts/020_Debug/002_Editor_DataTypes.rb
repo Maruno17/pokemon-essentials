@@ -769,15 +769,10 @@ module RegionMapCoordsProperty
       selregion = regions[0][0]
     else
       cmds = []
-      regions.each do |region|
-        cmds.push(region[1])
-      end
+      regions.each { |region| cmds.push(region[1]) }
       selcmd = pbMessage(_INTL("Choose a region map."), cmds, -1)
-      if selcmd >= 0
-        selregion = regions[selcmd][0]
-      else
-        return oldsetting
-      end
+      return oldsetting if selcmd < 0
+      selregion = regions[selcmd][0]
     end
     mappoint = chooseMapPoint(selregion, true)
     return (mappoint) ? [selregion, mappoint[0], mappoint[1]] : oldsetting
@@ -788,12 +783,8 @@ module RegionMapCoordsProperty
   end
 
   def self.getMapNameList
-    mapdata = pbLoadTownMapData
     ret = []
-    mapdata.length.times do |i|
-      next if !mapdata[i]
-      ret.push([i, pbGetMessage(MessageTypes::RegionNames, i)])
-    end
+    GameData::TownMap.each { |town_map| ret.push([town_map.id, town_map.name]) }
     return ret
   end
 end

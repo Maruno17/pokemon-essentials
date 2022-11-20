@@ -48,36 +48,7 @@ module Compiler
   # Save Town Map data to PBS file
   #=============================================================================
   def write_town_map(path = "PBS/town_map.txt")
-    write_pbs_file_message_start(path)
-    schema = {
-      "Name"     => [0, "s"],
-      "Filename" => [1, "s"],
-      "Point"    => [2, "^uussUUUU"]
-    }
-    File.open(path, "wb") { |f|
-      add_PBS_header_to_file(f)
-      # Write each element in turn
-      pbLoadTownMapData.each_with_index do |element, i|
-        f.write("\#-------------------------------\r\n")
-        f.write(sprintf("[%d]\r\n", i))
-        schema.each_key do |key|
-          val = element[schema[key][0]]
-          next if val.nil?
-          if schema[key][1][0] == "^" && val.is_a?(Array)
-            val.each do |sub_val|
-              f.write(sprintf("%s = ", key))
-              pbWriteCsvRecord(sub_val, f, schema[key])
-              f.write("\r\n")
-            end
-          else
-            f.write(sprintf("%s = ", key))
-            pbWriteCsvRecord(val, f, schema[key])
-            f.write("\r\n")
-          end
-        end
-      end
-    }
-    process_pbs_file_message_end
+    write_PBS_file_generic(GameData::TownMap, path)
   end
 
   #=============================================================================
@@ -138,13 +109,6 @@ module Compiler
       end
     }
     process_pbs_file_message_end
-  end
-
-  #=============================================================================
-  # Save phone messages to PBS file
-  #=============================================================================
-  def write_phone(path = "PBS/phone.txt")
-    write_PBS_file_generic(GameData::PhoneMessage, path)
   end
 
   #=============================================================================
@@ -710,6 +674,13 @@ module Compiler
   #=============================================================================
   def write_dungeon_parameters(path = "PBS/dungeon_parameters.txt")
     write_PBS_file_generic(GameData::DungeonParameters, path)
+  end
+
+  #=============================================================================
+  # Save phone messages to PBS file
+  #=============================================================================
+  def write_phone(path = "PBS/phone.txt")
+    write_PBS_file_generic(GameData::PhoneMessage, path)
   end
 
   #=============================================================================

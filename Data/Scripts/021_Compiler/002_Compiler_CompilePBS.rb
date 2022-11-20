@@ -60,80 +60,28 @@ module Compiler
   # Compile Town Map data
   #=============================================================================
   def compile_town_map(path = "PBS/town_map.txt")
-    compile_pbs_file_message_start(path)
-    sections = []
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = {
-        "SectionName" => [:id,        "u"],
-        "Name"        => [:real_name, "s"],
-        "Filename"    => [:filename,  "s"],
-        "Point"       => [:point,     "^uussUUUU"]
-      }
-      idx = 0
-      pbEachFileSection(f, schema) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          if schema[key][1][0] == "^"
-            contents[key].each do |val|
-              value = pbGetCsvRecord(val, key, schema[key])
-              value = nil if value.is_a?(Array) && value.empty?
-              data_hash[schema[key][0]] ||= []
-              data_hash[schema[key][0]].push(value)
-            end
-            data_hash[schema[key][0]].compact!
-          else
-            value = pbGetCsvRecord(contents[key], key, schema[key])
-            value = nil if value.is_a?(Array) && value.empty?
-            data_hash[schema[key][0]] = value
-          end
-        end
-        # Validate and modify the compiled data
-        validate_compiled_town_map(data_hash)
-        if sections[data_hash[:id]]
-          raise _INTL("Region ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add town map messages to records
-        sections[data_hash[:id]] = [data_hash[:real_name], data_hash[:filename], data_hash[:point]]
-      }
-    }
-    validate_all_compiled_town_maps(sections)
-    # Save all data
-    save_data(sections, "Data/town_map.dat")
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::TownMap, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_town_maps : validate_compiled_town_map(hash)
+    end
   end
 
   def validate_compiled_town_map(hash)
   end
 
-  def validate_all_compiled_town_maps(sections)
+  def validate_all_compiled_town_maps
     # Get town map names and descriptions for translating
     region_names = []
     point_names = []
     interest_names = []
-    sections.each_with_index do |region, i|
-      region_names[i] = region[0]
-      region[2].each do |point|
+    GameData::TownMap.each do |town_map|
+      region_names[town_map.id] = town_map.real_name
+      town_map.point.each do |point|
         point_names.push(point[2])
         interest_names.push(point[3])
       end
     end
+    point_names.uniq!
+    interest_names.uniq!
     MessageTypes.setMessages(MessageTypes::RegionNames, region_names)
     MessageTypes.setMessagesAsHash(MessageTypes::PlaceNames, point_names)
     MessageTypes.setMessagesAsHash(MessageTypes::PlaceDescriptions, interest_names)
@@ -180,43 +128,6 @@ module Compiler
     }
     save_data(records, "Data/map_connections.dat")
     process_pbs_file_message_end
-  end
-
-  #=============================================================================
-  # Compile phone messages
-  #=============================================================================
-  def compile_phone(path = "PBS/phone.txt")
-    compile_PBS_file_generic(GameData::PhoneMessage, path) do |final_validate, hash|
-      (final_validate) ? validate_all_compiled_phone_contacts : validate_compiled_phone_contact(hash)
-    end
-  end
-
-  def validate_compiled_phone_contact(hash)
-    # Split trainer type/name/version into their own values, generate compound ID from them
-    if hash[:id].strip.downcase == "default"
-      hash[:id] = "default"
-      hash[:trainer_type] = hash[:id]
-    else
-      line_data = pbGetCsvRecord(hash[:id], -1, [0, "esU", :TrainerType])
-      hash[:trainer_type] = line_data[0]
-      hash[:real_name] = line_data[1]
-      hash[:version] = line_data[2] || 0
-      hash[:id] = [hash[:trainer_type], hash[:real_name], hash[:version]]
-    end
-  end
-
-  def validate_all_compiled_phone_contacts
-    # Get all phone messages for translating
-    messages = []
-    GameData::PhoneMessage.each do |contact|
-      [:intro, :intro_morning, :intro_afternoon, :intro_evening, :body, :body1,
-       :body2, :battle_request, :battle_remind, :end].each do |msg_type|
-        msgs = contact.send(msg_type)
-        next if !msgs || msgs.length == 0
-        msgs.each { |msg| messages.push(msg) }
-      end
-    end
-    MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages, messages)
   end
 
   #=============================================================================
@@ -1218,6 +1129,43 @@ module Compiler
   end
 
   def validate_all_compiled_dungeon_parameters
+  end
+
+  #=============================================================================
+  # Compile phone messages
+  #=============================================================================
+  def compile_phone(path = "PBS/phone.txt")
+    compile_PBS_file_generic(GameData::PhoneMessage, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_phone_contacts : validate_compiled_phone_contact(hash)
+    end
+  end
+
+  def validate_compiled_phone_contact(hash)
+    # Split trainer type/name/version into their own values, generate compound ID from them
+    if hash[:id].strip.downcase == "default"
+      hash[:id] = "default"
+      hash[:trainer_type] = hash[:id]
+    else
+      line_data = pbGetCsvRecord(hash[:id], -1, [0, "esU", :TrainerType])
+      hash[:trainer_type] = line_data[0]
+      hash[:real_name] = line_data[1]
+      hash[:version] = line_data[2] || 0
+      hash[:id] = [hash[:trainer_type], hash[:real_name], hash[:version]]
+    end
+  end
+
+  def validate_all_compiled_phone_contacts
+    # Get all phone messages for translating
+    messages = []
+    GameData::PhoneMessage.each do |contact|
+      [:intro, :intro_morning, :intro_afternoon, :intro_evening, :body, :body1,
+       :body2, :battle_request, :battle_remind, :end].each do |msg_type|
+        msgs = contact.send(msg_type)
+        next if !msgs || msgs.length == 0
+        msgs.each { |msg| messages.push(msg) }
+      end
+    end
+    MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages, messages)
   end
 
   #=============================================================================
