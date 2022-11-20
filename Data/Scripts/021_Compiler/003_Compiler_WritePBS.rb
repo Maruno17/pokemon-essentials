@@ -10,7 +10,7 @@ module Compiler
 
   def write_PBS_file_generic(game_data, path)
     write_pbs_file_message_start(path)
-    schema = game_data::SCHEMA
+    schema = game_data.schema
     File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       # Write each element in turn
@@ -27,9 +27,17 @@ module Compiler
           next if key == "SectionName"
           val = element.get_property_for_PBS(key)
           next if val.nil?
-          f.write(sprintf("%s = ", key))
-          pbWriteCsvRecord(val, f, schema[key])
-          f.write("\r\n")
+          if schema[key][1][0] == "^" && val.is_a?(Array)
+            val.each do |sub_val|
+              f.write(sprintf("%s = ", key))
+              pbWriteCsvRecord(sub_val, f, schema[key])
+              f.write("\r\n")
+            end
+          else
+            f.write(sprintf("%s = ", key))
+            pbWriteCsvRecord(val, f, schema[key])
+            f.write("\r\n")
+          end
         end
       end
     }
@@ -40,27 +48,32 @@ module Compiler
   # Save Town Map data to PBS file
   #=============================================================================
   def write_town_map(path = "PBS/town_map.txt")
-    mapdata = pbLoadTownMapData
-    return if !mapdata
     write_pbs_file_message_start(path)
+    schema = {
+      "Name"     => [0, "s"],
+      "Filename" => [1, "s"],
+      "Point"    => [2, "^uussUUUU"]
+    }
     File.open(path, "wb") { |f|
-      idx = 0
       add_PBS_header_to_file(f)
-      mapdata.length.times do |i|
-        echo "." if idx % 50 == 0
-        idx += 1
-        Graphics.update if idx % 250 == 0
-        map = mapdata[i]
-        next if !map
+      # Write each element in turn
+      pbLoadTownMapData.each_with_index do |element, i|
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%d]\r\n", i))
-        rname = pbGetMessage(MessageTypes::RegionNames, i)
-        f.write(sprintf("Name = %s\r\n", (rname && rname != "") ? rname : _INTL("Unnamed")))
-        f.write(sprintf("Filename = %s\r\n", csvQuote((map[1].is_a?(Array)) ? map[1][0] : map[1])))
-        map[2].each do |loc|
-          f.write("Point = ")
-          pbWriteCsvRecord(loc, f, [nil, "uussUUUU"])
-          f.write("\r\n")
+        schema.each_key do |key|
+          val = element[schema[key][0]]
+          next if val.nil?
+          if schema[key][1][0] == "^" && val.is_a?(Array)
+            val.each do |sub_val|
+              f.write(sprintf("%s = ", key))
+              pbWriteCsvRecord(sub_val, f, schema[key])
+              f.write("\r\n")
+            end
+          else
+            f.write(sprintf("%s = ", key))
+            pbWriteCsvRecord(val, f, schema[key])
+            f.write("\r\n")
+          end
         end
       end
     }
@@ -131,28 +144,7 @@ module Compiler
   # Save phone messages to PBS file
   #=============================================================================
   def write_phone(path = "PBS/phone.txt")
-    write_pbs_file_message_start(path)
-    keys = GameData::PhoneMessage::SCHEMA.keys
-    File.open(path, "wb") { |f|
-      add_PBS_header_to_file(f)
-      # Write message sets
-      GameData::PhoneMessage.each do |contact|
-        f.write("\#-------------------------------\r\n")
-        if contact.id == "default"
-          f.write("[Default]\r\n")
-        elsif contact.version > 0
-          f.write(sprintf("[%s,%s,%d]\r\n", contact.trainer_type, contact.real_name, contact.version))
-        else
-          f.write(sprintf("[%s,%s]\r\n", contact.trainer_type, contact.real_name))
-        end
-        keys.each do |key|
-          msgs = contact.property_from_string(key)
-          next if !msgs || msgs.length == 0
-          msgs.each { |msg| f.write(key + " = " + msg + "\r\n") }
-        end
-      end
-    }
-    process_pbs_file_message_end
+    write_PBS_file_generic(GameData::PhoneMessage, path)
   end
 
   #=============================================================================
@@ -192,6 +184,8 @@ module Compiler
 
   #=============================================================================
   # Save Pokémon data to PBS file
+  # NOTE: Doesn't use write_PBS_file_generic because it needs to ignore defined
+  #       species with a form that isn't 0.
   #=============================================================================
   def write_pokemon(path = "PBS/pokemon.txt")
     write_pbs_file_message_start(path)
@@ -212,9 +206,17 @@ module Compiler
           next if key == "SectionName"
           val = element.get_property_for_PBS(key)
           next if val.nil?
-          f.write(sprintf("%s = ", key))
-          pbWriteCsvRecord(val, f, schema[key])
-          f.write("\r\n")
+          if schema[key][1][0] == "^" && val.is_a?(Array)
+            val.each do |sub_val|
+              f.write(sprintf("%s = ", key))
+              pbWriteCsvRecord(sub_val, f, schema[key])
+              f.write("\r\n")
+            end
+          else
+            f.write(sprintf("%s = ", key))
+            pbWriteCsvRecord(val, f, schema[key])
+            f.write("\r\n")
+          end
         end
       end
     }
@@ -223,6 +225,8 @@ module Compiler
 
   #=============================================================================
   # Save Pokémon forms data to PBS file
+  # NOTE: Doesn't use write_PBS_file_generic because it needs to ignore defined
+  #       species with a form of 0, and needs its own schema.
   #=============================================================================
   def write_pokemon_forms(path = "PBS/pokemon_forms.txt")
     write_pbs_file_message_start(path)
@@ -244,9 +248,17 @@ module Compiler
           next if key == "SectionName"
           val = element.get_property_for_PBS(key, true)
           next if val.nil?
-          f.write(sprintf("%s = ", key))
-          pbWriteCsvRecord(val, f, schema[key])
-          f.write("\r\n")
+          if schema[key][1][0] == "^" && val.is_a?(Array)
+            val.each do |sub_val|
+              f.write(sprintf("%s = ", key))
+              pbWriteCsvRecord(sub_val, f, schema[key])
+              f.write("\r\n")
+            end
+          else
+            f.write(sprintf("%s = ", key))
+            pbWriteCsvRecord(val, f, schema[key])
+            f.write("\r\n")
+          end
         end
       end
     }
@@ -255,10 +267,13 @@ module Compiler
 
   #=============================================================================
   # Write species metrics
+  # NOTE: Doesn't use write_PBS_file_generic because it needs to ignore defined
+  #       metrics for forms of species where the metrics are the same as for the
+  #       base species.
   #=============================================================================
   def write_pokemon_metrics(path = "PBS/pokemon_metrics.txt")
     write_pbs_file_message_start(path)
-    schema = GameData::SpeciesMetrics::SCHEMA
+    schema = GameData::SpeciesMetrics.schema
     File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       # Write each element in turn
@@ -270,10 +285,6 @@ module Compiler
                   element.front_sprite_altitude == base_element.front_sprite_altitude &&
                   element.shadow_x == base_element.shadow_x &&
                   element.shadow_size == base_element.shadow_size
-        else
-          next if element.back_sprite == [0, 0] && element.front_sprite == [0, 0] &&
-                  element.front_sprite_altitude == 0 &&
-                  element.shadow_x == 0 && element.shadow_size == 2
         end
         f.write("\#-------------------------------\r\n")
         if schema["SectionName"]
@@ -287,9 +298,17 @@ module Compiler
           next if key == "SectionName"
           val = element.get_property_for_PBS(key)
           next if val.nil?
-          f.write(sprintf("%s = ", key))
-          pbWriteCsvRecord(val, f, schema[key])
-          f.write("\r\n")
+          if schema[key][1][0] == "^" && val.is_a?(Array)
+            val.each do |sub_val|
+              f.write(sprintf("%s = ", key))
+              pbWriteCsvRecord(sub_val, f, schema[key])
+              f.write("\r\n")
+            end
+          else
+            f.write(sprintf("%s = ", key))
+            pbWriteCsvRecord(val, f, schema[key])
+            f.write("\r\n")
+          end
         end
       end
     }
@@ -556,11 +575,13 @@ module Compiler
 
   #=============================================================================
   # Save metadata data to PBS file
+  # NOTE: Doesn't use write_PBS_file_generic because it contains data for two
+  #       different GameData classes.
   #=============================================================================
   def write_metadata(path = "PBS/metadata.txt")
     write_pbs_file_message_start(path)
-    global_schema = GameData::Metadata::SCHEMA
-    player_schema = GameData::PlayerMetadata::SCHEMA
+    global_schema = GameData::Metadata.schema
+    player_schema = GameData::PlayerMetadata.schema
     File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       # Write each element in turn
@@ -580,9 +601,17 @@ module Compiler
             next if key == "SectionName"
             val = element.get_property_for_PBS(key)
             next if val.nil?
-            f.write(sprintf("%s = ", key))
-            pbWriteCsvRecord(val, f, schema[key])
-            f.write("\r\n")
+            if schema[key][1][0] == "^" && val.is_a?(Array)
+              val.each do |sub_val|
+                f.write(sprintf("%s = ", key))
+                pbWriteCsvRecord(sub_val, f, schema[key])
+                f.write("\r\n")
+              end
+            else
+              f.write(sprintf("%s = ", key))
+              pbWriteCsvRecord(val, f, schema[key])
+              f.write("\r\n")
+            end
           end
         end
       end
@@ -592,11 +621,13 @@ module Compiler
 
   #=============================================================================
   # Save map metadata data to PBS file
+  # NOTE: Doesn't use write_PBS_file_generic because it writes the RMXP map name
+  #       next to the section header for each map.
   #=============================================================================
   def write_map_metadata(path = "PBS/map_metadata.txt")
     write_pbs_file_message_start(path)
     map_infos = pbLoadMapInfos
-    schema = GameData::MapMetadata::SCHEMA
+    schema = GameData::MapMetadata.schema
     File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
@@ -613,9 +644,17 @@ module Compiler
           next if key == "SectionName"
           val = element.get_property_for_PBS(key)
           next if val.nil?
-          f.write(sprintf("%s = ", key))
-          pbWriteCsvRecord(val, f, schema[key])
-          f.write("\r\n")
+          if schema[key][1][0] == "^" && val.is_a?(Array)
+            val.each do |sub_val|
+              f.write(sprintf("%s = ", key))
+              pbWriteCsvRecord(sub_val, f, schema[key])
+              f.write("\r\n")
+            end
+          else
+            f.write(sprintf("%s = ", key))
+            pbWriteCsvRecord(val, f, schema[key])
+            f.write("\r\n")
+          end
         end
       end
     }
@@ -624,48 +663,40 @@ module Compiler
 
   #=============================================================================
   # Save dungeon tileset contents data to PBS file
+  # NOTE: Doesn't use write_PBS_file_generic because it writes the tileset name
+  #       next to the section header for each tileset.
   #=============================================================================
   def write_dungeon_tilesets(path = "PBS/dungeon_tilesets.txt")
     write_pbs_file_message_start(path)
     tilesets = load_data("Data/Tilesets.rxdata")
-    schema = GameData::DungeonTileset::SCHEMA
-    keys = schema.keys
+    schema = GameData::DungeonTileset.schema
     File.open(path, "wb") { |f|
-      idx = 0
       add_PBS_header_to_file(f)
-      GameData::DungeonTileset.each do |tileset_data|
-        echo "." if idx % 50 == 0
-        idx += 1
-        Graphics.update if idx % 250 == 0
+      # Write each element in turn
+      GameData::DungeonTileset.each do |element|
         f.write("\#-------------------------------\r\n")
-        tileset_name = (tilesets && tilesets[tileset_data.id]) ? tilesets[tileset_data.id].name : nil
-        if tileset_name
-          f.write(sprintf("[%d]   # %s\r\n", tileset_data.id, tileset_name))
+        if schema["SectionName"]
+          f.write("[")
+          pbWriteCsvRecord(element.get_property_for_PBS("SectionName"), f, schema["SectionName"])
+          f.write("]")
+          f.write("   # #{tilesets[element.id].name}") if tilesets && tilesets[element.id]
+          f.write("\r\n")
         else
-          f.write(sprintf("[%d]\r\n", tileset_data.id))
+          f.write("[#{element.id}]\r\n")
         end
-        keys.each do |key|
-          if ["Autotile", "Tile"].include?(key)
-            tiles = tileset_data.tile_type_ids
-            tiles.each do |tile_type, tile_ids|
-              tile_ids.each do |tile|
-                next if tile[1]   # Tile was auto-generated from "walls" property
-                if tile[0] < 384
-                  next if key == "Tile"
-                  f.write(sprintf("Autotile = %i,%s", tile[0] / 48, tile_type.to_s))
-                else
-                  next if key == "Autotile"
-                  f.write(sprintf("Tile = %i,%s", tile[0] - 384, tile_type.to_s))
-                end
-                f.write("\r\n")
-              end
+        schema.each_key do |key|
+          next if key == "SectionName"
+          val = element.get_property_for_PBS(key)
+          next if val.nil?
+          if schema[key][1][0] == "^" && val.is_a?(Array)
+            val.each do |sub_val|
+              f.write(sprintf("%s = ", key))
+              pbWriteCsvRecord(sub_val, f, schema[key])
+              f.write("\r\n")
             end
           else
-            record = tileset_data.property_from_string(key)
-            next if record.nil? || (record.is_a?(Array) && record.empty?)
-            next if record == false || record == 0
             f.write(sprintf("%s = ", key))
-            pbWriteCsvRecord(record, f, schema[key])
+            pbWriteCsvRecord(val, f, schema[key])
             f.write("\r\n")
           end
         end

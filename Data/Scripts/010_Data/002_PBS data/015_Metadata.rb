@@ -74,22 +74,5 @@ module GameData
       ret = pbGetMessage(MessageTypes::StorageCreator, 0)
       return nil_or_empty?(ret) ? _INTL("Bill") : ret
     end
-
-    def property_from_string(str)
-      case str
-      when "StartMoney"        then return @start_money
-      when "StartItemStorage"  then return @start_item_storage
-      when "Home"              then return @home
-      when "StorageCreator"    then return @real_storage_creator
-      when "WildBattleBGM"     then return @wild_battle_BGM
-      when "TrainerBattleBGM"  then return @trainer_battle_BGM
-      when "WildVictoryBGM"    then return @wild_victory_BGM
-      when "TrainerVictoryBGM" then return @trainer_victory_BGM
-      when "WildCaptureME"     then return @wild_capture_ME
-      when "SurfBGM"           then return @surf_BGM
-      when "BicycleBGM"        then return @bicycle_BGM
-      end
-      return nil
-    end
   end
 end

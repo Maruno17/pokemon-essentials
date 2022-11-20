@@ -1,56 +1,142 @@
 module Compiler
   module_function
 
+  def compile_PBS_file_generic(game_data, path)
+    compile_pbs_file_message_start(path)
+    game_data::DATA.clear
+    # Read from PBS file
+    File.open(path, "rb") { |f|
+      FileLineData.file = path   # For error reporting
+      # Read a whole section's lines at once, then run through this code.
+      # contents is a hash containing all the XXX=YYY lines in that section, where
+      # the keys are the XXX and the values are the YYY (as unprocessed strings).
+      schema = game_data.schema
+      idx = 0
+      pbEachFileSection(f, schema) { |contents, section_name|
+        echo "." if idx % 50 == 0
+        Graphics.update if idx % 250 == 0
+        idx += 1
+        data_hash = {:id => section_name.to_sym}
+        # Go through schema hash of compilable data and compile this section
+        schema.each_key do |key|
+          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
+          if key == "SectionName"
+            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
+            next
+          end
+          # Skip empty properties
+          next if contents[key].nil?
+          # Compile value for key
+          if schema[key][1][0] == "^"
+            contents[key].each do |val|
+              value = pbGetCsvRecord(val, key, schema[key])
+              value = nil if value.is_a?(Array) && value.empty?
+              data_hash[schema[key][0]] ||= []
+              data_hash[schema[key][0]].push(value)
+            end
+            data_hash[schema[key][0]].compact!
+          else
+            value = pbGetCsvRecord(contents[key], key, schema[key])
+            value = nil if value.is_a?(Array) && value.empty?
+            data_hash[schema[key][0]] = value
+          end
+        end
+        # Validate and modify the compiled data
+        yield false, data_hash if block_given?
+        if game_data.exists?(data_hash[:id])
+          raise _INTL("Section name '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
+        end
+        # Add section's data to records
+        game_data.register(data_hash)
+      }
+    }
+    yield true, nil if block_given?
+    # Save all data
+    game_data.save
+    process_pbs_file_message_end
+  end
+
   #=============================================================================
   # Compile Town Map data
   #=============================================================================
   def compile_town_map(path = "PBS/town_map.txt")
     compile_pbs_file_message_start(path)
-    nonglobaltypes = {
-      "Name"     => [0, "s"],
-      "Filename" => [1, "s"],
-      "Point"    => [2, "uussUUUU"]
-    }
-    currentmap = -1
-    rgnnames   = []
-    placenames = []
-    placedescs = []
-    sections   = []
-    pbCompilerEachCommentedLine(path) { |line, lineno|
-      if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
-        currentmap = $~[1].to_i
-        sections[currentmap] = []
-      else
-        if currentmap < 0
-          raise _INTL("Expected a section at the beginning of the file\r\n{1}", FileLineData.linereport)
-        end
-        if !line[/^\s*(\w+)\s*=\s*(.*)$/]
-          raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\r\n{1}", FileLineData.linereport)
-        end
-        settingname = $~[1]
-        schema = nonglobaltypes[settingname]
-        if schema
-          record = pbGetCsvRecord($~[2], lineno, schema)
-          case settingname
-          when "Name"
-            rgnnames[currentmap] = record
-            sections[currentmap][schema[0]] = record
-          when "Point"
-            placenames.push(record[2])
-            placedescs.push(record[3])
-            sections[currentmap][schema[0]] = [] if !sections[currentmap][schema[0]]
-            sections[currentmap][schema[0]].push(record)
-          else   # Filename
-            sections[currentmap][schema[0]] = record
+    sections = []
+    # Read from PBS file
+    File.open(path, "rb") { |f|
+      FileLineData.file = path   # For error reporting
+      # Read a whole section's lines at once, then run through this code.
+      # contents is a hash containing all the XXX=YYY lines in that section, where
+      # the keys are the XXX and the values are the YYY (as unprocessed strings).
+      schema = {
+        "SectionName" => [:id,        "u"],
+        "Name"        => [:real_name, "s"],
+        "Filename"    => [:filename,  "s"],
+        "Point"       => [:point,     "^uussUUUU"]
+      }
+      idx = 0
+      pbEachFileSection(f, schema) { |contents, section_name|
+        echo "." if idx % 50 == 0
+        Graphics.update if idx % 250 == 0
+        idx += 1
+        data_hash = {:id => section_name.to_sym}
+        # Go through schema hash of compilable data and compile this section
+        schema.each_key do |key|
+          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
+          if key == "SectionName"
+            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
+            next
+          end
+          # Skip empty properties
+          next if contents[key].nil?
+          # Compile value for key
+          if schema[key][1][0] == "^"
+            contents[key].each do |val|
+              value = pbGetCsvRecord(val, key, schema[key])
+              value = nil if value.is_a?(Array) && value.empty?
+              data_hash[schema[key][0]] ||= []
+              data_hash[schema[key][0]].push(value)
+            end
+            data_hash[schema[key][0]].compact!
+          else
+            value = pbGetCsvRecord(contents[key], key, schema[key])
+            value = nil if value.is_a?(Array) && value.empty?
+            data_hash[schema[key][0]] = value
           end
         end
-      end
+        # Validate and modify the compiled data
+        validate_compiled_town_map(data_hash)
+        if sections[data_hash[:id]]
+          raise _INTL("Region ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
+        end
+        # Add town map messages to records
+        sections[data_hash[:id]] = [data_hash[:real_name], data_hash[:filename], data_hash[:point]]
+      }
     }
+    validate_all_compiled_town_maps(sections)
+    # Save all data
     save_data(sections, "Data/town_map.dat")
-    MessageTypes.setMessages(MessageTypes::RegionNames, rgnnames)
-    MessageTypes.setMessagesAsHash(MessageTypes::PlaceNames, placenames)
-    MessageTypes.setMessagesAsHash(MessageTypes::PlaceDescriptions, placedescs)
     process_pbs_file_message_end
+  end
+
+  def validate_compiled_town_map(hash)
+  end
+
+  def validate_all_compiled_town_maps(sections)
+    # Get town map names and descriptions for translating
+    region_names = []
+    point_names = []
+    interest_names = []
+    sections.each_with_index do |region, i|
+      region_names[i] = region[0]
+      region[2].each do |point|
+        point_names.push(point[2])
+        interest_names.push(point[3])
+      end
+    end
+    MessageTypes.setMessages(MessageTypes::RegionNames, region_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::PlaceNames, point_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::PlaceDescriptions, interest_names)
   end
 
   #=============================================================================
@@ -100,120 +186,46 @@ module Compiler
   # Compile phone messages
   #=============================================================================
   def compile_phone(path = "PBS/phone.txt")
-    return if !safeExists?(path)
-    compile_pbs_file_message_start(path)
-    GameData::PhoneMessage::DATA.clear
-    schema = GameData::PhoneMessage::SCHEMA
-    messages = []
-    contact_hash = nil
-    # Read each line of phone.txt at a time and compile it as a contact property
-    idx = 0
-    pbCompilerEachPreppedLine(path) { |line, line_no|
-      echo "." if idx % 50 == 0
-      idx += 1
-      Graphics.update if idx % 250 == 0
-      if line[/^\s*\[\s*(.+)\s*\]\s*$/]
-        # New section [trainer_type, name] or [trainer_type, name, version]
-        if contact_hash
-          # Add contact's data to records
-          if contact_hash[:trainer_type] == "default"
-            contact_hash[:id] = contact_hash[:trainer_type]
-          else
-            contact_hash[:id] = [contact_hash[:trainer_type], contact_hash[:name], contact_hash[:version]]
-          end
-          GameData::PhoneMessage.register(contact_hash)
-        end
-        # Construct contact hash
-        header = $~[1]
-        if header.strip.downcase == "default"
-          contact_hash = {
-            :trainer_type => "default"
-          }
-        else
-          line_data = pbGetCsvRecord($~[1], line_no, [0, "esU", :TrainerType])
-          contact_hash = {
-            :trainer_type => line_data[0],
-            :name         => line_data[1],
-            :version      => line_data[2] || 0
-          }
-        end
-      elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
-        # XXX=YYY lines
-        if !contact_hash
-          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
-        end
-        property_name = $~[1]
-        line_schema = schema[property_name]
-        next if !line_schema
-        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
-        # Record XXX=YYY setting
-        contact_hash[line_schema[0]] ||= []
-        contact_hash[line_schema[0]].push(property_value)
-        messages.push(property_value)
-      end
-    }
-    # Add last contact's data to records
-    if contact_hash
-      # Add contact's data to records
-      if contact_hash[:trainer_type] == "default"
-        contact_hash[:id] = contact_hash[:trainer_type]
-      else
-        contact_hash[:id] = [contact_hash[:trainer_type], contact_hash[:name], contact_hash[:version]]
-      end
-      GameData::PhoneMessage.register(contact_hash)
+    compile_PBS_file_generic(GameData::PhoneMessage, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_phone_contacts : validate_compiled_phone_contact(hash)
     end
-    # Save all data
-    GameData::PhoneMessage.save
+  end
+
+  def validate_compiled_phone_contact(hash)
+    # Split trainer type/name/version into their own values, generate compound ID from them
+    if hash[:id].strip.downcase == "default"
+      hash[:id] = "default"
+      hash[:trainer_type] = hash[:id]
+    else
+      line_data = pbGetCsvRecord(hash[:id], -1, [0, "esU", :TrainerType])
+      hash[:trainer_type] = line_data[0]
+      hash[:real_name] = line_data[1]
+      hash[:version] = line_data[2] || 0
+      hash[:id] = [hash[:trainer_type], hash[:real_name], hash[:version]]
+    end
+  end
+
+  def validate_all_compiled_phone_contacts
+    # Get all phone messages for translating
+    messages = []
+    GameData::PhoneMessage.each do |contact|
+      [:intro, :intro_morning, :intro_afternoon, :intro_evening, :body, :body1,
+       :body2, :battle_request, :battle_remind, :end].each do |msg_type|
+        msgs = contact.send(msg_type)
+        next if !msgs || msgs.length == 0
+        msgs.each { |msg| messages.push(msg) }
+      end
+    end
     MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages, messages)
-    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile type data
   #=============================================================================
   def compile_types(path = "PBS/types.txt")
-    compile_pbs_file_message_start(path)
-    GameData::Type::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::Type::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_type(data_hash)
-        if GameData::Type.exists?(data_hash[:id])
-          raise _INTL("Type ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add type's data to records
-        GameData::Type.register(data_hash)
-      }
-    }
-    validate_all_compiled_types
-    # Save all data
-    GameData::Type.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::Type, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_types : validate_compiled_type(hash)
+    end
   end
 
   def validate_compiled_type(hash)
@@ -249,48 +261,9 @@ module Compiler
   # Compile ability data
   #=============================================================================
   def compile_abilities(path = "PBS/abilities.txt")
-    compile_pbs_file_message_start(path)
-    GameData::Ability::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::Ability::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_ability(data_hash)
-        if GameData::Ability.exists?(data_hash[:id])
-          raise _INTL("Ability ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add ability's data to records
-        GameData::Ability.register(data_hash)
-      }
-    }
-    validate_all_compiled_abilities
-    # Save all data
-    GameData::Ability.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::Ability, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_abilities : validate_compiled_ability(hash)
+    end
   end
 
   def validate_compiled_ability(hash)
@@ -312,48 +285,9 @@ module Compiler
   # Compile move data
   #=============================================================================
   def compile_moves(path = "PBS/moves.txt")
-    compile_pbs_file_message_start(path)
-    GameData::Move::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::Move::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_move(data_hash)
-        if GameData::Move.exists?(data_hash[:id])
-          raise _INTL("Move ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add move's data to records
-        GameData::Move.register(data_hash)
-      }
-    }
-    validate_all_compiled_moves
-    # Save all data
-    GameData::Move.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::Move, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_moves : validate_compiled_move(hash)
+    end
   end
 
   def validate_compiled_move(hash)
@@ -383,48 +317,9 @@ module Compiler
   # Compile item data
   #=============================================================================
   def compile_items(path = "PBS/items.txt")
-    compile_pbs_file_message_start(path)
-    GameData::Item::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::Item::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_item(data_hash)
-        if GameData::Item.exists?(data_hash[:id])
-          raise _INTL("Item ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add item's data to records
-        GameData::Item.register(data_hash)
-      }
-    }
-    validate_all_compiled_items
-    # Save all data
-    GameData::Item.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::Item, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_items : validate_compiled_item(hash)
+    end
   end
 
   def validate_compiled_item(hash)
@@ -449,48 +344,9 @@ module Compiler
   # Compile berry plant data
   #=============================================================================
   def compile_berry_plants(path = "PBS/berry_plants.txt")
-    compile_pbs_file_message_start(path)
-    GameData::BerryPlant::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::BerryPlant::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_berry_plant(data_hash)
-        if GameData::BerryPlant.exists?(data_hash[:id])
-          raise _INTL("Berry plant ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add berry plant's data to records
-        GameData::BerryPlant.register(data_hash)
-      }
-    }
-    validate_all_compiled_berry_plants
-    # Save all data
-    GameData::BerryPlant.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::BerryPlant, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_berry_plants : validate_compiled_berry_plant(hash)
+    end
   end
 
   def validate_compiled_berry_plant(hash)
@@ -503,48 +359,9 @@ module Compiler
   # Compile Pokémon data
   #=============================================================================
   def compile_pokemon(path = "PBS/pokemon.txt")
-    compile_pbs_file_message_start(path)
-    GameData::Species::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::Species.schema
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_pokemon(data_hash)
-        if GameData::Species.exists?(data_hash[:id])
-          raise _INTL("Species ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add species's data to records
-        GameData::Species.register(data_hash)
-      }
-    }
-    validate_all_compiled_pokemon
-    # Save all data
-    GameData::Species.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::Species, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_pokemon : validate_compiled_pokemon(hash)
+    end
   end
 
   # NOTE: This method is also called by def validate_compiled_pokemon_form
@@ -630,6 +447,8 @@ module Compiler
 
   #=============================================================================
   # Compile Pokémon forms data
+  # NOTE: Doesn't use compile_PBS_file_generic because it needs its own schema
+  #       and shouldn't clear GameData::Species at the start.
   #=============================================================================
   def compile_pokemon_forms(path = "PBS/pokemon_forms.txt")
     compile_pbs_file_message_start(path)
@@ -641,7 +460,7 @@ module Compiler
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
       schema = GameData::Species.schema(true)
       idx = 0
-      pbEachFileSection(f) { |contents, section_name|
+      pbEachFileSection(f, schema) { |contents, section_name|
         echo "." if idx % 50 == 0
         Graphics.update if idx % 250 == 0
         idx += 1
@@ -656,16 +475,26 @@ module Compiler
           # Skip empty properties
           next if contents[key].nil?
           # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
+          if schema[key][1][0] == "^"
+            contents[key].each do |val|
+              value = pbGetCsvRecord(val, key, schema[key])
+              value = nil if value.is_a?(Array) && value.empty?
+              data_hash[schema[key][0]] ||= []
+              data_hash[schema[key][0]].push(value)
+            end
+            data_hash[schema[key][0]].compact!
+          else
+            value = pbGetCsvRecord(contents[key], key, schema[key])
+            value = nil if value.is_a?(Array) && value.empty?
+            data_hash[schema[key][0]] = value
+          end
         end
         # Validate and modify the compiled data
         validate_compiled_pokemon_form(data_hash)
         if GameData::Species.exists?(data_hash[:id])
-          raise _INTL("Species ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
+          raise _INTL("Section name '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
         end
-        # Add species's data to records
+        # Add section's data to records
         GameData::Species.register(data_hash)
       }
     }
@@ -752,48 +581,9 @@ module Compiler
   # Compile Pokémon metrics data
   #=============================================================================
   def compile_pokemon_metrics(path = "PBS/pokemon_metrics.txt")
-    compile_pbs_file_message_start(path)
-    GameData::SpeciesMetrics::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::SpeciesMetrics::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_pokemon_metrics(data_hash)
-        if GameData::SpeciesMetrics.exists?(data_hash[:id])
-          raise _INTL("Metrics for species '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add species' metrics to records
-        GameData::SpeciesMetrics.register(data_hash)
-      }
-    }
-    validate_all_compiled_pokemon_metrics
-    # Save all data
-    GameData::SpeciesMetrics.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::SpeciesMetrics, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_pokemon_metrics : validate_compiled_pokemon_metrics(hash)
+    end
   end
 
   def validate_compiled_pokemon_metrics(hash)
@@ -816,48 +606,9 @@ module Compiler
   # Compile Shadow Pokémon data
   #=============================================================================
   def compile_shadow_pokemon(path = "PBS/shadow_pokemon.txt")
-    compile_pbs_file_message_start(path)
-    GameData::ShadowPokemon::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::ShadowPokemon::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_shadow_pokemon(data_hash)
-        if GameData::ShadowPokemon.exists?(data_hash[:id])
-          raise _INTL("Species ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add Shadow Pokémon data to records
-        GameData::ShadowPokemon.register(data_hash)
-      }
-    }
-    validate_all_compiled_shadow_pokemon
-    # Save all data
-    GameData::ShadowPokemon.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::ShadowPokemon, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_shadow_pokemon : validate_compiled_shadow_pokemon(hash)
+    end
   end
 
   def validate_compiled_shadow_pokemon(hash)
@@ -909,48 +660,9 @@ module Compiler
   # Compile ribbon data
   #=============================================================================
   def compile_ribbons(path = "PBS/ribbons.txt")
-    compile_pbs_file_message_start(path)
-    GameData::Ribbon::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::Ribbon::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_ribbon(data_hash)
-        if GameData::Ribbon.exists?(data_hash[:id])
-          raise _INTL("Ribbon ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add ribbon data to records
-        GameData::Ribbon.register(data_hash)
-      }
-    }
-    validate_all_compiled_ribbons
-    # Save all data
-    GameData::Ribbon.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::Ribbon, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_ribbons : validate_compiled_ribbon(hash)
+    end
   end
 
   def validate_compiled_ribbon(hash)
@@ -1081,48 +793,9 @@ module Compiler
   # Compile trainer type data
   #=============================================================================
   def compile_trainer_types(path = "PBS/trainer_types.txt")
-    compile_pbs_file_message_start(path)
-    GameData::TrainerType::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::TrainerType::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name.to_sym}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_trainer_type(data_hash)
-        if GameData::TrainerType.exists?(data_hash[:id])
-          raise _INTL("Trainer type ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add trainer type data to records
-        GameData::TrainerType.register(data_hash)
-      }
-    }
-    validate_all_compiled_trainer_types
-    # Save all data
-    GameData::TrainerType.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::TrainerType, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_trainer_types : validate_compiled_trainer_type(hash)
+    end
   end
 
   def validate_compiled_trainer_type(hash)
@@ -1143,7 +816,7 @@ module Compiler
   def compile_trainers(path = "PBS/trainers.txt")
     compile_pbs_file_message_start(path)
     GameData::Trainer::DATA.clear
-    schema = GameData::Trainer::SCHEMA
+    schema = GameData::Trainer.schema
     max_level = GameData::GrowthRate.max_level
     trainer_names      = []
     trainer_lose_texts = []
@@ -1386,6 +1059,8 @@ module Compiler
 
   #=============================================================================
   # Compile metadata
+  # NOTE: Doesn't use compile_PBS_file_generic because it contains data for two
+  #       different GameData classes.
   #=============================================================================
   def compile_metadata(path = "PBS/metadata.txt")
     compile_pbs_file_message_start(path)
@@ -1397,31 +1072,41 @@ module Compiler
       # Read a whole section's lines at once, then run through this code.
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      global_schema = GameData::Metadata::SCHEMA
-      player_schema = GameData::PlayerMetadata::SCHEMA
+      global_schema = GameData::Metadata.schema
+      player_schema = GameData::PlayerMetadata.schema
       idx = 0
-      pbEachFileSectionNumbered(f) { |contents, section_name|
+      pbEachFileSection(f) { |contents, section_name|
         echo "." if idx % 50 == 0
         Graphics.update if idx % 250 == 0
         idx += 1
-        schema = (section_name == 0) ? global_schema : player_schema
-        data_hash = {:id => section_name}
+        schema = (section_name.to_i == 0) ? global_schema : player_schema
+        data_hash = {:id => section_name.to_sym}
         # Go through schema hash of compilable data and compile this section
         schema.each_key do |key|
-          FileLineData.setSection(section_name.to_s, key, contents[key])   # For error reporting
+          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
           if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name.to_s, key, schema[key])
+            data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
             next
           end
           # Skip empty properties
           next if contents[key].nil?
           # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
+          if schema[key][1][0] == "^"
+            contents[key].each do |val|
+              value = pbGetCsvRecord(val, key, schema[key])
+              value = nil if value.is_a?(Array) && value.empty?
+              data_hash[schema[key][0]] ||= []
+              data_hash[schema[key][0]].push(value)
+            end
+            data_hash[schema[key][0]].compact!
+          else
+            value = pbGetCsvRecord(contents[key], key, schema[key])
+            value = nil if value.is_a?(Array) && value.empty?
+            data_hash[schema[key][0]] = value
+          end
         end
         # Validate and modify the compiled data
-        if section_name == 0
+        if data_hash[:id] == 0
           validate_compiled_global_metadata(data_hash)
           if GameData::Metadata.exists?(data_hash[:id])
             raise _INTL("Global metadata ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
@@ -1432,8 +1117,8 @@ module Compiler
             raise _INTL("Player metadata ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
           end
         end
-        # Add trainer type data to records
-        if section_name == 0
+        # Add section's data to records
+        if data_hash[:id] == 0
           GameData::Metadata.register(data_hash)
         else
           GameData::PlayerMetadata.register(data_hash)
@@ -1456,6 +1141,7 @@ module Compiler
   def validate_compiled_player_metadata(hash)
   end
 
+  # Should be used to check both global metadata and player character metadata.
   def validate_all_compiled_metadata
     # Ensure global metadata is defined
     if !GameData::Metadata.exists?(0)
@@ -1474,48 +1160,9 @@ module Compiler
   # Compile map metadata
   #=============================================================================
   def compile_map_metadata(path = "PBS/map_metadata.txt")
-    compile_pbs_file_message_start(path)
-    GameData::MapMetadata::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::MapMetadata::SCHEMA
-      idx = 0
-      pbEachFileSectionNumbered(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name.to_s, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name.to_s, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_map_metadata(data_hash)
-        if GameData::MapMetadata.exists?(data_hash[:id])
-          raise _INTL("Map metadata for map '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add map metadata to records
-        GameData::MapMetadata.register(data_hash)
-      }
-    }
-    validate_all_compiled_map_metadata
-    # Save all data
-    GameData::MapMetadata.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::MapMetadata, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_map_metadata : validate_compiled_map_metadata(hash)
+    end
   end
 
   def validate_compiled_map_metadata(hash)
@@ -1528,9 +1175,7 @@ module Compiler
   def validate_all_compiled_map_metadata
     # Get map names for translating
     map_names = []
-    GameData::MapMetadata.each do |map|
-      map_names[map.id] = map.real_name
-    end
+    GameData::MapMetadata.each { |map| map_names[map.id] = map.real_name }
     MessageTypes.setMessages(MessageTypes::MapNames, map_names)
   end
 
@@ -1538,97 +1183,24 @@ module Compiler
   # Compile dungeon tileset data
   #=============================================================================
   def compile_dungeon_tilesets(path = "PBS/dungeon_tilesets.txt")
-    compile_pbs_file_message_start(path)
-    GameData::DungeonTileset::DATA.clear
-    schema = GameData::DungeonTileset::SCHEMA
-    tileset_hash = nil
-    # Read each line of dungeon_tilesets.txt at a time and compile it as a tileset property
-    idx = 0
-    pbCompilerEachPreppedLine(path) { |line, line_no|
-      echo "." if idx % 50 == 0
-      idx += 1
-      Graphics.update if idx % 250 == 0
-      if line[/^\s*\[\s*(.+)\s*\]\s*$/]
-        # New section
-        # Add tileset's data to records
-        GameData::DungeonTileset.register(tileset_hash) if tileset_hash
-        # Construct tileset hash
-        tileset_hash = {
-          :id       => $~[1].to_i,
-          :tile     => [],
-          :autotile => []
-        }
-      elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
-        # XXX=YYY lines
-        if !tileset_hash
-          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
-        end
-        property_name = $~[1]
-        line_schema = schema[property_name]
-        next if !line_schema
-        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
-        # Record XXX=YYY setting
-        case property_name
-        when "Tile", "Autotile"
-          tileset_hash[line_schema[0]].push(property_value)
-        else
-          tileset_hash[line_schema[0]] = property_value
-        end
-      end
-    }
-    # Add last tileset's data to records
-    GameData::DungeonTileset.register(tileset_hash) if tileset_hash
-    # Save all data
-    GameData::DungeonTileset.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::DungeonTileset, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_dungeon_tilesets : validate_compiled_dungeon_tileset(hash)
+    end
+  end
+
+  def validate_compiled_dungeon_tileset(hash)
+  end
+
+  def validate_all_compiled_dungeon_tilesets
   end
 
   #=============================================================================
   # Compile dungeon parameters data
   #=============================================================================
   def compile_dungeon_parameters(path = "PBS/dungeon_parameters.txt")
-    compile_pbs_file_message_start(path)
-    GameData::DungeonParameters::DATA.clear
-    # Read from PBS file
-    File.open(path, "rb") { |f|
-      FileLineData.file = path   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      schema = GameData::DungeonParameters::SCHEMA
-      idx = 0
-      pbEachFileSection(f) { |contents, section_name|
-        echo "." if idx % 50 == 0
-        Graphics.update if idx % 250 == 0
-        idx += 1
-        data_hash = {:id => section_name}
-        # Go through schema hash of compilable data and compile this section
-        schema.each_key do |key|
-          FileLineData.setSection(section_name.to_s, key, contents[key])   # For error reporting
-          if key == "SectionName"
-            data_hash[schema[key][0]] = pbGetCsvRecord(section_name.to_s, key, schema[key])
-            next
-          end
-          # Skip empty properties
-          next if contents[key].nil?
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.empty?
-          data_hash[schema[key][0]] = value
-        end
-        # Validate and modify the compiled data
-        validate_compiled_dungeon_parameters(data_hash)
-        if GameData::DungeonParameters.exists?(data_hash[:id])
-          raise _INTL("Dungeon ID '{1}' is used twice.\r\n{2}", data_hash[:id], FileLineData.linereport)
-        end
-        # Add dungeon parameters to records
-        GameData::DungeonParameters.register(data_hash)
-      }
-    }
-    validate_all_compiled_dungeon_parameters
-    # Save all data
-    GameData::DungeonParameters.save
-    process_pbs_file_message_end
+    compile_PBS_file_generic(GameData::DungeonParameters, path) do |final_validate, hash|
+      (final_validate) ? validate_all_compiled_dungeon_parameters : validate_compiled_dungeon_parameters(hash)
+    end
   end
 
   def validate_compiled_dungeon_parameters(hash)

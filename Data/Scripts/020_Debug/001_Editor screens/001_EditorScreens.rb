@@ -345,7 +345,7 @@ end
 #===============================================================================
 def pbTrainerTypeEditor
   gender_array = []
-  GameData::TrainerType::SCHEMA["Gender"][2].each { |key, value| gender_array[value] = key if !gender_array[value] }
+  GameData::TrainerType.schema["Gender"][2].each { |key, value| gender_array[value] = key if !gender_array[value] }
   trainer_type_properties = [
     [_INTL("ID"),         ReadOnlyProperty,               _INTL("ID of this Trainer Type (used as a symbol like :XXX).")],
     [_INTL("Name"),       StringProperty,                 _INTL("Name of this Trainer Type as displayed by the game.")],
@@ -732,23 +732,25 @@ def pbEditMetadata
   metadata = GameData::Metadata.get
   properties = GameData::Metadata.editor_properties
   properties.each do |property|
-    data.push(metadata.property_from_string(property[0]))
+    val = metadata.get_property_for_PBS(property[0])
+    val = property[1].defaultValue if val.nil? && property[1].respond_to?(:defaultValue)
+    data.push(val)
   end
   if pbPropertyList(_INTL("Global Metadata"), data, properties, true)
     # Construct metadata hash
     metadata_hash = {
-      :id                  => 0,
-      :start_money         => data[0],
-      :start_item_storage  => data[1],
-      :home                => data[2],
-      :storage_creator     => data[3],
-      :wild_battle_BGM     => data[4],
-      :trainer_battle_BGM  => data[5],
-      :wild_victory_BGM    => data[6],
-      :trainer_victory_BGM => data[7],
-      :wild_capture_ME     => data[8],
-      :surf_BGM            => data[9],
-      :bicycle_BGM         => data[10]
+      :id                   => 0,
+      :start_money          => data[0],
+      :start_item_storage   => data[1],
+      :home                 => data[2],
+      :real_storage_creator => data[3],
+      :wild_battle_BGM      => data[4],
+      :trainer_battle_BGM   => data[5],
+      :wild_victory_BGM     => data[6],
+      :trainer_victory_BGM  => data[7],
+      :wild_capture_ME      => data[8],
+      :surf_BGM             => data[9],
+      :bicycle_BGM          => data[10]
     }
     # Add metadata's data to records
     GameData::Metadata.register(metadata_hash)
@@ -776,7 +778,9 @@ def pbEditPlayerMetadata(player_id = 1)
   metadata = GameData::PlayerMetadata.try_get(player_id) if metadata.nil?
   properties = GameData::PlayerMetadata.editor_properties
   properties.each do |property|
-    data.push(metadata.property_from_string(property[0]))
+    val = metadata.get_property_for_PBS(property[0])
+    val = property[1].defaultValue if val.nil? && property[1].respond_to?(:defaultValue)
+    data.push(val)
   end
   if pbPropertyList(_INTL("Player {1}", metadata.id), data, properties, true)
     # Construct player metadata hash
@@ -789,7 +793,8 @@ def pbEditPlayerMetadata(player_id = 1)
       :surf_charset      => data[4],
       :dive_charset      => data[5],
       :fish_charset      => data[6],
-      :surf_fish_charset => data[7]
+      :surf_fish_charset => data[7],
+      :home              => data[8]
     }
     # Add player metadata's data to records
     GameData::PlayerMetadata.register(metadata_hash)
@@ -819,13 +824,15 @@ def pbEditMapMetadata(map_id)
   metadata = GameData::MapMetadata.new({ :id => map_id }) if !metadata
   properties = GameData::MapMetadata.editor_properties
   properties.each do |property|
-    data.push(metadata.property_from_string(property[0]))
+    val = metadata.get_property_for_PBS(property[0])
+    val = property[1].defaultValue if val.nil? && property[1].respond_to?(:defaultValue)
+    data.push(val)
   end
   if pbPropertyList(map_name, data, properties, true)
     # Construct map metadata hash
     metadata_hash = {
       :id                   => map_id,
-      :name                 => data[0],
+      :real_name            => data[0],
       :outdoor_map          => data[1],
       :announce_location    => data[2],
       :can_bicycle          => data[3],
@@ -862,9 +869,9 @@ end
 #===============================================================================
 def pbItemEditor
   field_use_array = [_INTL("Can't use in field")]
-  GameData::Item::SCHEMA["FieldUse"][2].each { |key, value| field_use_array[value] = key if !field_use_array[value] }
+  GameData::Item.schema["FieldUse"][2].each { |key, value| field_use_array[value] = key if !field_use_array[value] }
   battle_use_array = [_INTL("Can't use in battle")]
-  GameData::Item::SCHEMA["BattleUse"][2].each { |key, value| battle_use_array[value] = key if !battle_use_array[value] }
+  GameData::Item.schema["BattleUse"][2].each { |key, value| battle_use_array[value] = key if !battle_use_array[value] }
   item_properties = [
     [_INTL("ID"),          ReadOnlyProperty,                   _INTL("ID of this item (used as a symbol like :XXX).")],
     [_INTL("Name"),        ItemNameProperty,                   _INTL("Name of this item as displayed by the game.")],

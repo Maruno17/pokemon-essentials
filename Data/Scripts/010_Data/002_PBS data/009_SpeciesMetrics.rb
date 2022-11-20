@@ -85,7 +85,7 @@ module GameData
 #      return @front_sprite_altitude > 0
     end
 
-    alias __orig__get_property_for_PBS get_property_for_PBS
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
     def get_property_for_PBS(key)
       ret = __orig__get_property_for_PBS(key)
       case key

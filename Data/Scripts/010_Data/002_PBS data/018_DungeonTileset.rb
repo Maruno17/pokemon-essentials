@@ -15,8 +15,9 @@ module GameData
     DATA_FILENAME = "dungeon_tilesets.dat"
 
     SCHEMA = {
-      "Autotile"             => [:autotile,                "um"],
-      "Tile"                 => [:tile,                    "um"],
+      "SectionName"          => [:id,                      "u"],
+      "Autotile"             => [:autotile,                "^um"],
+      "Tile"                 => [:tile,                    "^um"],
       "SnapToLargeGrid"      => [:snap_to_large_grid,      "b"],
       "LargeVoidTiles"       => [:large_void_tiles,        "b"],
       "LargeWallTiles"       => [:large_wall_tiles,        "b"],
@@ -192,18 +193,27 @@ module GameData
       return ret
     end
 
-    def property_from_string(str)
-      case str
-      when "SnapToLargeGrid"      then return @snap_to_large_grid
-      when "LargeVoidTiles"       then return @large_void_tiles
-      when "LargeWallTiles"       then return @large_wall_tiles
-      when "LargeFloorTiles"      then return @large_floor_tiles
-      when "DoubleWalls"          then return @double_walls
-      when "FloorPatchUnderWalls" then return @floor_patch_under_walls
-      when "ThinNorthWallOffset"  then return @thin_north_wall_offset
-      when "Flags"                then return @flags
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key)
+      ret = __orig__get_property_for_PBS(key)
+      case key
+      when "ThinNorthWallOffset"
+        ret = nil if ret == 0
+      when "Tile", "Autotile"
+        ret = []
+        @tile_type_ids.each do |tile_type, tile_ids|
+          tile_ids.each do |tile|
+            case key
+            when "Tile"
+              ret.push([tile[0] - 384, tile_type]) if !tile[1] && tile[0] >= 384
+            when "Autotile"
+              ret.push([tile[0] / 48, tile_type]) if !tile[1] && tile[0] < 384
+            end
+          end
+        end
+        ret = nil if ret.length == 0
       end
-      return nil
+      return ret
     end
   end
 end

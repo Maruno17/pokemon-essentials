@@ -11,29 +11,36 @@ module GameData
     DATA_FILENAME = "phone.dat"
 
     SCHEMA = {
-      "Intro"          => [:intro, "q"],
-      "IntroMorning"   => [:intro_morning, "q"],
-      "IntroAfternoon" => [:intro_afternoon, "q"],
-      "IntroEvening"   => [:intro_evening, "q"],
-      "Body"           => [:body, "q"],
-      "Body1"          => [:body1, "q"],
-      "Body2"          => [:body2, "q"],
-      "BattleRequest"  => [:battle_request, "q"],
-      "BattleRemind"   => [:battle_remind, "q"],
-      "End"            => [:end, "q"]
+      "SectionName"    => [:id,              "q"],
+      "Intro"          => [:intro,           "^q"],
+      "IntroMorning"   => [:intro_morning,   "^q"],
+      "IntroAfternoon" => [:intro_afternoon, "^q"],
+      "IntroEvening"   => [:intro_evening,   "^q"],
+      "Body1"          => [:body1,           "^q"],
+      "Body2"          => [:body2,           "^q"],
+      "Body"           => [:body,            "^q"],
+      "BattleRequest"  => [:battle_request,  "^q"],
+      "BattleRemind"   => [:battle_remind,   "^q"],
+      "End"            => [:end,             "^q"]
     }
 
     extend ClassMethodsSymbols
     include InstanceMethods
 
     # @param tr_type [Symbol, String]
-    # @param tr_name [String]
+    # @param tr_name [String, nil] only nil for the default message set
     # @param tr_version [Integer, nil]
     # @return [Boolean] whether the given other is defined as a self
-    def self.exists?(tr_type, tr_name, tr_version = 0)
+    def self.exists?(tr_type, tr_name = nil, tr_version = 0)
+      if tr_type.is_a?(Array)
+        tr_name = tr_type[1]
+        tr_version = tr_type[2]
+        tr_type = tr_type[0]
+      end
       validate tr_type => [Symbol, String]
-      validate tr_name => [String]
+      validate tr_name => [String, NilClass]
       key = [tr_type.to_sym, tr_name, tr_version]
+      key = key[0] if key[1] == nil
       return !self::DATA[key].nil?
     end
 
@@ -63,7 +70,7 @@ module GameData
     def initialize(hash)
       @id              = hash[:id]
       @trainer_type    = hash[:trainer_type]
-      @real_name       = hash[:name]
+      @real_name       = hash[:real_name]
       @version         = hash[:version] || 0
       @intro           = hash[:intro]
       @intro_morning   = hash[:intro_morning]
@@ -77,20 +84,14 @@ module GameData
       @end             = hash[:end]
     end
 
-    def property_from_string(str)
-      case str
-      when "Intro"          then return @intro
-      when "IntroMorning"   then return @intro_morning
-      when "IntroAfternoon" then return @intro_afternoon
-      when "IntroEvening"   then return @intro_evening
-      when "Body"           then return @body
-      when "Body1"          then return @body1
-      when "Body2"          then return @body2
-      when "BattleRequest"  then return @battle_request
-      when "BattleRemind"   then return @battle_remind
-      when "End"            then return @end
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key)
+      if key == "SectionName"
+        return "Default" if @id == "default"
+        ret = [@trainer_type, @real_name, (@version > 0) ? @version : nil]
+        return ret.compact.join(",")
       end
-      return nil
+      return __orig__get_property_for_PBS(key)
     end
   end
 end

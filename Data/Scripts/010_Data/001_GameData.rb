@@ -6,6 +6,10 @@ module GameData
   # For data that is known by a symbol or an ID number.
   #=============================================================================
   module ClassMethods
+    def schema
+      return self::SCHEMA
+    end
+
     def register(hash)
       self::DATA[hash[:id]] = self::DATA[hash[:id_number]] = self.new(hash)
     end
@@ -72,6 +76,10 @@ module GameData
   # For data that is only known by a symbol.
   #=============================================================================
   module ClassMethodsSymbols
+    def schema
+      return self::SCHEMA
+    end
+
     def register(hash)
       self::DATA[hash[:id]] = self.new(hash)
     end
@@ -143,6 +151,10 @@ module GameData
   # For data that is only known by an ID number.
   #=============================================================================
   module ClassMethodsIDNumbers
+    def schema
+      return self::SCHEMA
+    end
+
     def register(hash)
       self::DATA[hash[:id]] = self.new(hash)
     end
@@ -222,7 +234,7 @@ module GameData
 
     def get_property_for_PBS(key)
       ret = nil
-      if self.class::SCHEMA.include?(key)
+      if self.class::SCHEMA.include?(key) && self.respond_to?(self.class::SCHEMA[key][0])
         ret = self.send(self.class::SCHEMA[key][0])
         ret = nil if ret == false || (ret.is_a?(Array) && ret.length == 0)
       end

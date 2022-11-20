@@ -342,7 +342,7 @@ module GameData
       return 1
     end
 
-    alias __orig__get_property_for_PBS get_property_for_PBS
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
     def get_property_for_PBS(key, writing_form = false)
       ret = nil
       if self.class.schema(writing_form).include?(key)

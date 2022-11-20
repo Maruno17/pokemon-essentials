@@ -82,20 +82,5 @@ module GameData
     def surf_fish_charset
       return @surf_fish_charset || fish_charset
     end
-
-    def property_from_string(str)
-      case str
-      when "TrainerType"     then return @trainer_type
-      when "WalkCharset"     then return @walk_charset
-      when "RunCharset"      then return @run_charset
-      when "CycleCharset"    then return @cycle_charset
-      when "SurfCharset"     then return @surf_charset
-      when "DiveCharset"     then return @dive_charset
-      when "FishCharset"     then return @fish_charset
-      when "SurfFishCharset" then return @surf_fish_charset
-      when "Home"            then return @home
-      end
-      return nil
-    end
   end
 end

@@ -104,7 +104,7 @@ module GameData
       return @flags.any? { |f| f.downcase == flag.downcase }
     end
 
-    alias __orig__get_property_for_PBS get_property_for_PBS
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
     def get_property_for_PBS(key)
       ret = __orig__get_property_for_PBS(key)
       ret = nil if key == "SkillLevel" && ret == @base_money

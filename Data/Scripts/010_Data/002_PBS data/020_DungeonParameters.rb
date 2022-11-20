@@ -115,7 +115,7 @@ module GameData
       return width, height
     end
 
-    alias __orig__get_property_for_PBS get_property_for_PBS
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
     def get_property_for_PBS(key)
       case key
       when "SectionName"      then return [@area, (@version > 0) ? @version : nil]

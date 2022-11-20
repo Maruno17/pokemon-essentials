@@ -92,7 +92,7 @@ module Compiler
   #=============================================================================
   # PBS file readers
   #=============================================================================
-  def pbEachFileSectionEx(f)
+  def pbEachFileSectionEx(f, schema = nil)
     lineno      = 1
     havesection = false
     sectionname = nil
@@ -120,7 +120,12 @@ module Compiler
           end
           r1 = $~[1]
           r2 = $~[2]
-          lastsection[r1] = r2.gsub(/\s+$/, "")
+          if schema && schema[r1] && schema[r1][1][0] == "^"
+            lastsection[r1] ||= []
+            lastsection[r1].push(r2.gsub(/\s+$/, ""))
+          else
+            lastsection[r1] = r2.gsub(/\s+$/, "")
+          end
         end
       end
       lineno += 1
@@ -133,15 +138,15 @@ module Compiler
   # pokemon.txt, pokemon_forms.txt, pokemon_metrics.txt, shadow_pokemon.txt,
   # ribbons.txt, trainer_types.txt, battle_facility_lists.txt, Battle Tower
   # trainers PBS files and dungeon_parameters.txt
-  def pbEachFileSection(f)
-    pbEachFileSectionEx(f) { |section, name|
+  def pbEachFileSection(f, schema = nil)
+    pbEachFileSectionEx(f, schema) { |section, name|
       yield section, name if block_given? && name[/^.+$/]
     }
   end
 
   # Used for metadata.txt and map_metadata.txt
-  def pbEachFileSectionNumbered(f)
-    pbEachFileSectionEx(f) { |section, name|
+  def pbEachFileSectionNumbered(f, schema = nil)
+    pbEachFileSectionEx(f, schema) { |section, name|
       yield section, name.to_i if block_given? && name[/^\d+$/]
     }
   end
@@ -401,10 +406,14 @@ module Compiler
   def pbGetCsvRecord(rec, lineno, schema)
     record = []
     repeat = false
+    schema_length = schema[1].length
     start = 0
     if schema[1][0, 1] == "*"
       repeat = true
       start = 1
+    elsif schema[1][0, 1] == "^"
+      start = 1
+      schema_length -= 1
     end
     subarrays = repeat && schema[1].length > 2
     loop do
@@ -560,7 +569,7 @@ module Compiler
       break if repeat && nil_or_empty?(rec)
       break unless repeat
     end
-    return (!repeat && schema[1].length == 1) ? record[0] : record
+    return (!repeat && schema_length == 1) ? record[0] : record
   end
 
   #=============================================================================
@@ -568,7 +577,7 @@ module Compiler
   #=============================================================================
   def pbWriteCsvRecord(record, file, schema)
     rec = (record.is_a?(Array)) ? record.flatten : [record]
-    start = (schema[1][0, 1] == "*") ? 1 : 0
+    start = (["*", "^"].include?(schema[1][0, 1])) ? 1 : 0
     index = -1
     loop do
       (start...schema[1].length).each do |i|

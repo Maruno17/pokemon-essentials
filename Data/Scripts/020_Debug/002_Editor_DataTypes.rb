@@ -240,7 +240,7 @@ class StringListProperty
   def self.set(_setting_name, old_setting)
     real_cmds = []
     real_cmds.push([_INTL("[ADD VALUE]"), -1])
-    old_setting.length.times do
+    old_setting.length.times do |i|
       real_cmds.push([old_setting[i], 0])
     end
     # Edit list

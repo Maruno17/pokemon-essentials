@@ -109,34 +109,6 @@ module GameData
       @flags                = hash[:flags] || []
     end
 
-    def property_from_string(str)
-      case str
-      when "Name"              then return @real_name
-      when "Outdoor"           then return @outdoor_map
-      when "ShowArea"          then return @announce_location
-      when "Bicycle"           then return @can_bicycle
-      when "BicycleAlways"     then return @always_bicycle
-      when "HealingSpot"       then return @teleport_destination
-      when "Weather"           then return @weather
-      when "MapPosition"       then return @town_map_position
-      when "DiveMap"           then return @dive_map_id
-      when "DarkMap"           then return @dark_map
-      when "SafariMap"         then return @safari_map
-      when "SnapEdges"         then return @snap_edges
-      when "Dungeon"           then return @random_dungeon
-      when "BattleBack"        then return @battle_background
-      when "WildBattleBGM"     then return @wild_battle_BGM
-      when "TrainerBattleBGM"  then return @trainer_battle_BGM
-      when "WildVictoryBGM"    then return @wild_victory_BGM
-      when "TrainerVictoryBGM" then return @trainer_victory_BGM
-      when "WildCaptureME"     then return @wild_capture_ME
-      when "MapSize"           then return @town_map_size
-      when "Environment"       then return @battle_environment
-      when "Flags"             then return @flags
-      end
-      return nil
-    end
-
     # @return [String] the translated name of this map
     def name
       return pbGetMapNameFromId(@id)
