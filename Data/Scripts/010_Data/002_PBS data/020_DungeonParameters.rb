@@ -25,9 +25,11 @@ module GameData
     attr_reader :void_decoration_density, :void_decoration_large_density
     attr_reader :rng_seed
     attr_reader :flags
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "dungeon_parameters.dat"
+    PBS_BASE_FILENAME = "dungeon_parameters"
 
     SCHEMA = {
       "SectionName"      => [:id,                      "mV"],
@@ -67,7 +69,7 @@ module GameData
     def initialize(hash)
       @id                             = hash[:id]
       @area                           = hash[:area]
-      @version                        = hash[:version] || 0
+      @version                        = hash[:version]                 || 0
       @cell_count_x                   = (hash[:dungeon_size]) ? hash[:dungeon_size][0] : 5
       @cell_count_y                   = (hash[:dungeon_size]) ? hash[:dungeon_size][1] : 5
       @cell_width                     = (hash[:cell_size]) ? hash[:cell_size][0] : 10
@@ -76,11 +78,11 @@ module GameData
       @room_min_height                = (hash[:min_room_size]) ? hash[:min_room_size][1] : 5
       @room_max_width                 = (hash[:max_room_size]) ? hash[:max_room_size][0] : @cell_width - 1
       @room_max_height                = (hash[:max_room_size]) ? hash[:max_room_size][1] : @cell_height - 1
-      @corridor_width                 = hash[:corridor_width] || 2
+      @corridor_width                 = hash[:corridor_width]          || 2
       @random_corridor_shift          = hash[:random_corridor_shift]
-      @node_layout                    = hash[:node_layout] || :full
-      @room_layout                    = hash[:room_layout] || :full
-      @room_chance                    = hash[:room_chance] || 70
+      @node_layout                    = hash[:node_layout]             || :full
+      @room_layout                    = hash[:room_layout]             || :full
+      @room_chance                    = hash[:room_chance]             || 70
       @extra_connections_count        = hash[:extra_connections_count] || 2
       @floor_patch_radius             = (hash[:floor_patches]) ? hash[:floor_patches][0] : 3
       @floor_patch_chance             = (hash[:floor_patches]) ? hash[:floor_patches][1] : 75
@@ -90,7 +92,8 @@ module GameData
       @void_decoration_density        = (hash[:void_decorations]) ? hash[:void_decorations][0] : 50
       @void_decoration_large_density  = (hash[:void_decorations]) ? hash[:void_decorations][1] : 200
       @rng_seed                       = hash[:rng_seed]
-      @flags                          = hash[:flags] || []
+      @flags                          = hash[:flags]                   || []
+      @pbs_file_suffix                = hash[:pbs_file_suffix]         || ""
     end
 
     def has_flag?(flag)

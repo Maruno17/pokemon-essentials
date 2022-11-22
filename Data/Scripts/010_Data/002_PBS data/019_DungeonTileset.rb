@@ -10,9 +10,11 @@ module GameData
     attr_reader :floor_patch_under_walls
     attr_reader :thin_north_wall_offset
     attr_reader :flags
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "dungeon_tilesets.dat"
+    PBS_BASE_FILENAME = "dungeon_tilesets"
 
     SCHEMA = {
       "SectionName"          => [:id,                      "u"],
@@ -51,6 +53,7 @@ module GameData
       @flags                   = hash[:flags]                   || []
       @tile_type_ids           = {}
       set_tile_type_ids(hash)
+      @pbs_file_suffix         = hash[:pbs_file_suffix]         || ""
     end
 
     def set_tile_type_ids(hash)

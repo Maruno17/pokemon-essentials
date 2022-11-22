@@ -9,9 +9,11 @@ module GameData
     attr_reader :resistances
     attr_reader :immunities
     attr_reader :flags
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "types.dat"
+    PBS_BASE_FILENAME = "types"
 
     SCHEMA = {
       "SectionName"   => [:id,            "m"],
@@ -29,18 +31,19 @@ module GameData
     include InstanceMethods
 
     def initialize(hash)
-      @id            = hash[:id]
-      @real_name     = hash[:real_name]     || "Unnamed"
-      @icon_position = hash[:icon_position] || 0
-      @special_type  = hash[:special_type]  || false
-      @pseudo_type   = hash[:pseudo_type]   || false
-      @weaknesses    = hash[:weaknesses]    || []
-      @weaknesses    = [@weaknesses] if !@weaknesses.is_a?(Array)
-      @resistances   = hash[:resistances]   || []
-      @resistances   = [@resistances] if !@resistances.is_a?(Array)
-      @immunities    = hash[:immunities]    || []
-      @immunities    = [@immunities] if !@immunities.is_a?(Array)
-      @flags         = hash[:flags]         || []
+      @id              = hash[:id]
+      @real_name       = hash[:real_name]       || "Unnamed"
+      @icon_position   = hash[:icon_position]   || 0
+      @special_type    = hash[:special_type]    || false
+      @pseudo_type     = hash[:pseudo_type]     || false
+      @weaknesses      = hash[:weaknesses]      || []
+      @weaknesses      = [@weaknesses] if !@weaknesses.is_a?(Array)
+      @resistances     = hash[:resistances]     || []
+      @resistances     = [@resistances] if !@resistances.is_a?(Array)
+      @immunities      = hash[:immunities]      || []
+      @immunities      = [@immunities] if !@immunities.is_a?(Array)
+      @flags           = hash[:flags]           || []
+      @pbs_file_suffix = hash[:pbs_file_suffix] || ""
     end
 
     # @return [String] the translated name of this item

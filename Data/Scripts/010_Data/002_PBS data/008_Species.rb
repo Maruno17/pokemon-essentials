@@ -40,9 +40,11 @@ module GameData
     attr_reader :mega_move
     attr_reader :unmega_form
     attr_reader :mega_message
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "species.dat"
+    PBS_BASE_FILENAME = ["pokemon", "pokemon_forms"]
 
     extend ClassMethodsSymbols
     include InstanceMethods
@@ -175,6 +177,7 @@ module GameData
       @mega_move          = hash[:mega_move]
       @unmega_form        = hash[:unmega_form]        || 0
       @mega_message       = hash[:mega_message]       || 0
+      @pbs_file_suffix    = hash[:pbs_file_suffix]    || ""
     end
 
     # @return [String] the translated name of this species

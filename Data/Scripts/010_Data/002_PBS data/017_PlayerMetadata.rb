@@ -4,6 +4,7 @@ module GameData
     attr_reader :trainer_type
     attr_reader :walk_charset
     attr_reader :home
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "player_metadata.dat"
@@ -57,6 +58,7 @@ module GameData
       @fish_charset      = hash[:fish_charset]
       @surf_fish_charset = hash[:surf_fish_charset]
       @home              = hash[:home]
+      @pbs_file_suffix   = hash[:pbs_file_suffix] || ""
     end
 
     def run_charset

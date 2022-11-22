@@ -7,9 +7,11 @@ module GameData
     attr_reader :items
     attr_reader :real_lose_text
     attr_reader :pokemon
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "trainers.dat"
+    PBS_BASE_FILENAME = "trainers"
 
     SCHEMA = {
       "Items"        => [:items,           "*e", :Item],
@@ -71,19 +73,20 @@ module GameData
     end
 
     def initialize(hash)
-      @id             = hash[:id]
-      @trainer_type   = hash[:trainer_type]
-      @real_name      = hash[:name]         || "Unnamed"
-      @version        = hash[:version]      || 0
-      @items          = hash[:items]        || []
-      @real_lose_text = hash[:lose_text]    || "..."
-      @pokemon        = hash[:pokemon]      || []
+      @id              = hash[:id]
+      @trainer_type    = hash[:trainer_type]
+      @real_name       = hash[:name]            || "Unnamed"
+      @version         = hash[:version]         || 0
+      @items           = hash[:items]           || []
+      @real_lose_text  = hash[:lose_text]       || "..."
+      @pokemon         = hash[:pokemon]         || []
       @pokemon.each do |pkmn|
         GameData::Stat.each_main do |s|
           pkmn[:iv][s.id] ||= 0 if pkmn[:iv]
           pkmn[:ev][s.id] ||= 0 if pkmn[:ev]
         end
       end
+      @pbs_file_suffix = hash[:pbs_file_suffix] || ""
     end
 
     # @return [String] the translated name of this trainer

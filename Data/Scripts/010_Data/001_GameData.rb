@@ -246,24 +246,34 @@ module GameData
   # A bulk loader method for all data stored in .dat files in the Data folder.
   #=============================================================================
   def self.load_all
-    TownMap.load
-    Type.load
-    Ability.load
-    Move.load
-    Item.load
-    BerryPlant.load
-    Species.load
-    SpeciesMetrics.load
-    ShadowPokemon.load
-    Ribbon.load
-    Encounter.load
-    TrainerType.load
-    Trainer.load
-    Metadata.load
-    PlayerMetadata.load
-    MapMetadata.load
-    DungeonTileset.load
-    DungeonParameters.load
-    PhoneMessage.load
+    self.constants.each do |c|
+      next if !self.const_get(c).is_a?(Class)
+      self.const_get(c).load if self.const_get(c).const_defined?(:DATA_FILENAME)
+    end
+  end
+
+  def self.get_all_data_filenames
+    ret = []
+    self.constants.each do |c|
+      next if !self.const_get(c).is_a?(Class)
+      ret.push(self.const_get(c)::DATA_FILENAME) if self.const_get(c).const_defined?(:DATA_FILENAME)
+    end
+    return ret
+  end
+
+  def self.get_all_pbs_base_filenames
+    ret = {}
+    self.constants.each do |c|
+      next if !self.const_get(c).is_a?(Class)
+      ret[c] = self.const_get(c)::PBS_BASE_FILENAME if self.const_get(c).const_defined?(:PBS_BASE_FILENAME)
+      if ret[c].is_a?(Array)
+        ret[c].length.times do |i|
+          next if i == 0
+          ret[(c.to_s + i.to_s).to_sym] = ret[c][i]   # :Species1 => "pokemon_forms"
+        end
+        ret[c] = ret[c][0]   # :Species => "pokemon"
+      end
+    end
+    return ret
   end
 end

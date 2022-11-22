@@ -3,11 +3,13 @@ module GameData
     attr_accessor :id
     attr_accessor :map
     attr_accessor :version
-    attr_reader :step_chances
-    attr_reader :types
+    attr_reader   :step_chances
+    attr_reader   :types
+    attr_reader   :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "encounters.dat"
+    PBS_BASE_FILENAME = "encounters"
 
     extend ClassMethodsSymbols
     include InstanceMethods
@@ -58,11 +60,12 @@ module GameData
     end
 
     def initialize(hash)
-      @id           = hash[:id]
-      @map          = hash[:map]
-      @version      = hash[:version]      || 0
-      @step_chances = hash[:step_chances]
-      @types        = hash[:types]        || {}
+      @id              = hash[:id]
+      @map             = hash[:map]
+      @version         = hash[:version]         || 0
+      @step_chances    = hash[:step_chances]
+      @types           = hash[:types]           || {}
+      @pbs_file_suffix = hash[:pbs_file_suffix] || ""
     end
   end
 end

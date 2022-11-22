@@ -12,9 +12,11 @@ module GameData
     attr_reader :wild_capture_ME
     attr_reader :surf_BGM
     attr_reader :bicycle_BGM
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "metadata.dat"
+    PBS_BASE_FILENAME = "metadata"
 
     SCHEMA = {
       "SectionName"       => [:id,                   "u"],
@@ -67,11 +69,12 @@ module GameData
       @wild_capture_ME      = hash[:wild_capture_ME]
       @surf_BGM             = hash[:surf_BGM]
       @bicycle_BGM          = hash[:bicycle_BGM]
+      @pbs_file_suffix      = hash[:pbs_file_suffix]    || ""
     end
 
     # @return [String] the translated name of the Pokémon Storage creator
     def storage_creator
-      ret = pbGetMessage(MessageTypes::StorageCreator, 0)
+      ret = pbGetMessageFromHash(MessageTypes::StorageCreator, @real_storage_creator)
       return nil_or_empty?(ret) ? _INTL("Bill") : ret
     end
   end

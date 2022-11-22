@@ -9,9 +9,11 @@ module GameData
     attr_reader :intro_BGM
     attr_reader :battle_BGM
     attr_reader :victory_BGM
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "trainer_types.dat"
+    PBS_BASE_FILENAME = "trainer_types"
 
     SCHEMA = {
       "SectionName" => [:id,          "m"],
@@ -81,15 +83,16 @@ module GameData
     end
 
     def initialize(hash)
-      @id          = hash[:id]
-      @real_name   = hash[:real_name]   || "Unnamed"
-      @gender      = hash[:gender]      || 2
-      @base_money  = hash[:base_money]  || 30
-      @skill_level = hash[:skill_level] || @base_money
-      @flags       = hash[:flags]       || []
-      @intro_BGM   = hash[:intro_BGM]
-      @battle_BGM  = hash[:battle_BGM]
-      @victory_BGM = hash[:victory_BGM]
+      @id              = hash[:id]
+      @real_name       = hash[:real_name]       || "Unnamed"
+      @gender          = hash[:gender]          || 2
+      @base_money      = hash[:base_money]      || 30
+      @skill_level     = hash[:skill_level]     || @base_money
+      @flags           = hash[:flags]           || []
+      @intro_BGM       = hash[:intro_BGM]
+      @battle_BGM      = hash[:battle_BGM]
+      @victory_BGM     = hash[:victory_BGM]
+      @pbs_file_suffix = hash[:pbs_file_suffix] || ""
     end
 
     # @return [String] the translated name of this trainer type

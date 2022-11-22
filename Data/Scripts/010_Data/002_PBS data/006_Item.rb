@@ -12,9 +12,11 @@ module GameData
     attr_reader :consumable
     attr_reader :move
     attr_reader :real_description
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "items.dat"
+    PBS_BASE_FILENAME = "items"
 
     SCHEMA = {
       "SectionName" => [:id,               "m"],
@@ -95,6 +97,7 @@ module GameData
       @consumable       = !is_important? if @consumable.nil?
       @move             = hash[:move]
       @real_description = hash[:real_description] || "???"
+      @pbs_file_suffix  = hash[:pbs_file_suffix]  || ""
     end
 
     # @return [String] the translated name of this item

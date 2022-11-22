@@ -14,9 +14,11 @@ module GameData
     attr_reader :flags
     attr_reader :effect_chance
     attr_reader :real_description
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "moves.dat"
+    PBS_BASE_FILENAME = "moves"
 
     SCHEMA = {
       "SectionName"  => [:id,               "m"],
@@ -53,6 +55,7 @@ module GameData
       @flags            = [@flags] if !@flags.is_a?(Array)
       @effect_chance    = hash[:effect_chance]    || 0
       @real_description = hash[:real_description] || "???"
+      @pbs_file_suffix  = hash[:pbs_file_suffix]  || ""
     end
 
     # @return [String] the translated name of this move

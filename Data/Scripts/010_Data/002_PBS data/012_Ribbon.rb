@@ -5,9 +5,11 @@ module GameData
     attr_reader :icon_position   # Where this ribbon's graphic is within ribbons.png
     attr_reader :real_description
     attr_reader :flags
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "ribbons.dat"
+    PBS_BASE_FILENAME = "ribbons"
 
     SCHEMA = {
       "SectionName"  => [:id,               "m"],
@@ -26,6 +28,7 @@ module GameData
       @icon_position    = hash[:icon_position]    || 0
       @real_description = hash[:real_description] || "???"
       @flags            = hash[:flags]            || []
+      @pbs_file_suffix  = hash[:pbs_file_suffix]  || ""
     end
 
     # @return [String] the translated name of this ribbon

@@ -6,9 +6,11 @@ module GameData
     attr_reader :body, :body1, :body2
     attr_reader :battle_request, :battle_remind
     attr_reader :end
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "phone.dat"
+    PBS_BASE_FILENAME = "phone"
 
     SCHEMA = {
       "SectionName"    => [:id,              "q"],
@@ -16,9 +18,9 @@ module GameData
       "IntroMorning"   => [:intro_morning,   "^q"],
       "IntroAfternoon" => [:intro_afternoon, "^q"],
       "IntroEvening"   => [:intro_evening,   "^q"],
+      "Body"           => [:body,            "^q"],
       "Body1"          => [:body1,           "^q"],
       "Body2"          => [:body2,           "^q"],
-      "Body"           => [:body,            "^q"],
       "BattleRequest"  => [:battle_request,  "^q"],
       "BattleRemind"   => [:battle_remind,   "^q"],
       "End"            => [:end,             "^q"]
@@ -71,7 +73,7 @@ module GameData
       @id              = hash[:id]
       @trainer_type    = hash[:trainer_type]
       @real_name       = hash[:real_name]
-      @version         = hash[:version] || 0
+      @version         = hash[:version]         || 0
       @intro           = hash[:intro]
       @intro_morning   = hash[:intro_morning]
       @intro_afternoon = hash[:intro_afternoon]
@@ -82,6 +84,7 @@ module GameData
       @battle_request  = hash[:battle_request]
       @battle_remind   = hash[:battle_remind]
       @end             = hash[:end]
+      @pbs_file_suffix = hash[:pbs_file_suffix] || ""
     end
 
     alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)

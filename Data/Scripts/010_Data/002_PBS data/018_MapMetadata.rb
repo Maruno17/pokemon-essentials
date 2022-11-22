@@ -23,9 +23,11 @@ module GameData
     attr_reader :town_map_size
     attr_reader :battle_environment
     attr_reader :flags
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "map_metadata.dat"
+    PBS_BASE_FILENAME = "map_metadata"
 
     SCHEMA = {
       "SectionName"       => [:id,                   "u"],
@@ -106,7 +108,8 @@ module GameData
       @wild_capture_ME      = hash[:wild_capture_ME]
       @town_map_size        = hash[:town_map_size]
       @battle_environment   = hash[:battle_environment]
-      @flags                = hash[:flags] || []
+      @flags                = hash[:flags]           || []
+      @pbs_file_suffix      = hash[:pbs_file_suffix] || ""
     end
 
     # @return [String] the translated name of this map

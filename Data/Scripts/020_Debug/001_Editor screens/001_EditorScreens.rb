@@ -77,11 +77,12 @@ def pbEncountersEditor
               # Construct encounter hash
               key = sprintf("%s_%d", new_map_ID, new_version).to_sym
               encounter_hash = {
-                :id           => key,
-                :map          => new_map_ID,
-                :version      => new_version,
-                :step_chances => {},
-                :types        => {}
+                :id              => key,
+                :map             => new_map_ID,
+                :version         => new_version,
+                :step_chances    => {},
+                :types           => {},
+                :pbs_file_suffix => GameData::Encounter.get(this_set[0], this_set[1]).pbs_file_suffix
               }
               GameData::Encounter.get(this_set[0], this_set[1]).step_chances.each do |type, value|
                 encounter_hash[:step_chances][type] = value
@@ -384,15 +385,16 @@ def pbTrainerTypeEditor
           if pbPropertyList(t_data.id.to_s, data, trainer_type_properties, true)
             # Construct trainer type hash
             type_hash = {
-              :id          => t_data.id,
-              :name        => data[1],
-              :gender      => data[2],
-              :base_money  => data[3],
-              :skill_level => data[4],
-              :flags       => data[5],
-              :intro_BGM   => data[6],
-              :battle_BGM  => data[7],
-              :victory_BGM => data[8]
+              :id              => t_data.id,
+              :name            => data[1],
+              :gender          => data[2],
+              :base_money      => data[3],
+              :skill_level     => data[4],
+              :flags           => data[5],
+              :intro_BGM       => data[6],
+              :battle_BGM      => data[7],
+              :victory_BGM     => data[8],
+              :pbs_file_suffix => t_data.pbs_file_suffix
             }
             # Add trainer type's data to records
             GameData::TrainerType.register(type_hash)
@@ -543,12 +545,13 @@ def pbTrainerBattleEditor
               pbMessage(_INTL("Can't save. The Pokémon list is empty."))
             else
               trainer_hash = {
-                :trainer_type => data[0],
-                :name         => data[1],
-                :version      => data[2],
-                :lose_text    => data[3],
-                :pokemon      => party,
-                :items        => items
+                :trainer_type    => data[0],
+                :name            => data[1],
+                :version         => data[2],
+                :lose_text       => data[3],
+                :pokemon         => party,
+                :items           => items,
+                :pbs_file_suffix => tr_data.pbs_file_suffix
               }
               # Add trainer type's data to records
               trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
@@ -750,7 +753,8 @@ def pbEditMetadata
       :trainer_victory_BGM  => data[7],
       :wild_capture_ME      => data[8],
       :surf_BGM             => data[9],
-      :bicycle_BGM          => data[10]
+      :bicycle_BGM          => data[10],
+      :pbs_file_suffix      => metadata.pbs_file_suffix
     }
     # Add metadata's data to records
     GameData::Metadata.register(metadata_hash)
@@ -794,7 +798,8 @@ def pbEditPlayerMetadata(player_id = 1)
       :dive_charset      => data[5],
       :fish_charset      => data[6],
       :surf_fish_charset => data[7],
-      :home              => data[8]
+      :home              => data[8],
+      :pbs_file_suffix   => metadata.pbs_file_suffix
     }
     # Add player metadata's data to records
     GameData::PlayerMetadata.register(metadata_hash)
@@ -853,7 +858,8 @@ def pbEditMapMetadata(map_id)
       :wild_capture_ME      => data[18],
       :town_map_size        => data[19],
       :battle_environment   => data[20],
-      :flags                => data[21]
+      :flags                => data[21],
+      :pbs_file_suffix      => metadata.pbs_file_suffix
     }
     # Add map metadata's data to records
     GameData::MapMetadata.register(metadata_hash)
@@ -916,18 +922,19 @@ def pbItemEditor
           if pbPropertyList(itm.id.to_s, data, item_properties, true)
             # Construct item hash
             item_hash = {
-              :id          => itm.id,
-              :name        => data[1],
-              :name_plural => data[2],
-              :pocket      => data[3],
-              :price       => data[4],
-              :sell_price  => data[5],
-              :description => data[6],
-              :field_use   => data[7],
-              :battle_use  => data[8],
-              :consumable  => data[9],
-              :flags       => data[10],
-              :move        => data[11]
+              :id              => itm.id,
+              :name            => data[1],
+              :name_plural     => data[2],
+              :pocket          => data[3],
+              :price           => data[4],
+              :sell_price      => data[5],
+              :description     => data[6],
+              :field_use       => data[7],
+              :battle_use      => data[8],
+              :consumable      => data[9],
+              :flags           => data[10],
+              :move            => data[11],
+              :pbs_file_suffix => itm.pbs_file_suffix
             }
             # Add item's data to records
             GameData::Item.register(item_hash)
@@ -1146,7 +1153,8 @@ def pbPokemonEditor
               :shape              => data[35],
               :habitat            => data[36],
               :generation         => data[37],
-              :flags              => data[38]
+              :flags              => data[38],
+              :pbs_file_suffix    => spec.pbs_file_suffix
             }
             # Add species' data to records
             GameData::Species.register(species_hash)

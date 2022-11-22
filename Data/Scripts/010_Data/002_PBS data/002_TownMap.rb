@@ -5,9 +5,11 @@ module GameData
     attr_reader :filename
     attr_reader :point
     attr_reader :flags
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "town_map.dat"
+    PBS_BASE_FILENAME = "town_map"
 
     SCHEMA = {
       "SectionName" => [:id,        "u"],
@@ -21,11 +23,12 @@ module GameData
     include InstanceMethods
 
     def initialize(hash)
-      @id        = hash[:id]
-      @real_name = hash[:real_name] || "???"
-      @filename  = hash[:filename]
-      @point     = hash[:point]     || []
-      @flags     = hash[:flags]     || []
+      @id              = hash[:id]
+      @real_name       = hash[:real_name]       || "???"
+      @filename        = hash[:filename]
+      @point           = hash[:point]           || []
+      @flags           = hash[:flags]           || []
+      @pbs_file_suffix = hash[:pbs_file_suffix] || ""
     end
 
     # @return [String] the translated name of this region

@@ -8,9 +8,11 @@ module GameData
     attr_accessor :front_sprite_altitude
     attr_accessor :shadow_x
     attr_accessor :shadow_size
+    attr_reader   :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "species_metrics.dat"
+    PBS_BASE_FILENAME = "pokemon_metrics"
 
     SCHEMA = {
       "SectionName"         => [:id,                    "eV", :Species],
@@ -63,6 +65,7 @@ module GameData
       @front_sprite_altitude = hash[:front_sprite_altitude] || 0
       @shadow_x              = hash[:shadow_x]              || 0
       @shadow_size           = hash[:shadow_size]           || 2
+      @pbs_file_suffix       = hash[:pbs_file_suffix]       || ""
     end
 
     def apply_metrics_to_sprite(sprite, index, shadow = false)
