@@ -115,7 +115,7 @@ class PokeBattle_Scene
         break if yield cw.index
         needFullRefresh = true
         needRefresh = true
-      elsif Input.trigger?(Input::BACK)   # Cancel fight menu
+      elsif Input.trigger?(Input::ACTION)  # Cancel fight menu
         pbPlayCancelSE
         break if yield -1
         needRefresh = true

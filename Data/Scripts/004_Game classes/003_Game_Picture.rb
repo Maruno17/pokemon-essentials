@@ -10,7 +10,7 @@ class Game_Picture
   # * Public Instance Variables
   #-----------------------------------------------------------------------------
   attr_reader   :number                   # picture number
-  attr_reader   :name                     # file name
+  attr_accessor  :name                     # file name
   attr_reader   :origin                   # starting point
   attr_reader   :x                        # x-coordinate
   attr_reader   :y                        # y-coordinate

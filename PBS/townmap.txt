@@ -190,7 +190,7 @@ Point=23,18,"Kindle Road",,,,,
 Point=23,17,"Mt. Ember",,,,,
 Point=23,17,"Mt. Ember",,,,,
 
-Point=23,25,"Battle Factory",,559,46,74,802
+Point=23,25,"Battle Factory",,734,10,11,802
 
 Point=23,21,"Brine Road",,,,,
 Point=23,22,"Brine Road",,,,,

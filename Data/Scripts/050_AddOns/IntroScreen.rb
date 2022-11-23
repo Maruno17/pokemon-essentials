@@ -15,10 +15,25 @@ class Scene_Intro
 
   alias main_old main
 
+  def playIntroCinematic
+    intro_frames_path = "Graphics\\Pictures\\Intro\\INTRO-%03d"
+    intro_bgm = "INTRO_music_cries"
+    intro_movie = Movie.new(intro_frames_path,intro_bgm,230,true)
+    intro_movie.playInViewPort(@viewport)
+    while(!intro_movie.finished)
+      echo intro_movie.finished
+      echo "\n"
+      wait(8)
+    end
+  end
+
   def main
     Graphics.transition(0)
     # Cycles through the intro pictures
     @skip = false
+
+
+    playIntroCinematic
     # Selects title screen style
     @screen = GenOneStyle.new
     # Plays the title screen intro (is skippable)
