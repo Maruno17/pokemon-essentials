@@ -452,50 +452,51 @@ module Compiler
   #=============================================================================
   def write_trainers
     paths = get_all_PBS_file_paths(GameData::Trainer)
+    schema = GameData::Trainer.schema
+    sub_schema = GameData::Trainer.sub_schema
     idx = 0
     paths.each do |path|
       write_pbs_file_message_start(path[0])
       File.open(path[0], "wb") { |f|
         add_PBS_header_to_file(f)
+        # Write each element in turn
         GameData::Trainer.each do |element|
           next if element.pbs_file_suffix != path[1]
           echo "." if idx % 50 == 0
           Graphics.update if idx % 250 == 0
           idx += 1
           f.write("\#-------------------------------\r\n")
-          if element.version > 0
-            f.write(sprintf("[%s,%s,%d]\r\n", element.trainer_type, element.real_name, element.version))
+          if schema["SectionName"]
+            f.write("[")
+            pbWriteCsvRecord(element.get_property_for_PBS("SectionName"), f, schema["SectionName"])
+            f.write("]\r\n")
           else
-            f.write(sprintf("[%s,%s]\r\n", element.trainer_type, element.real_name))
+            f.write("[#{element.id}]\r\n")
           end
-          f.write(sprintf("Items = %s\r\n", element.items.join(","))) if element.items.length > 0
-          if element.real_lose_text && !element.real_lose_text.empty?
-            f.write(sprintf("LoseText = %s\r\n", element.real_lose_text))
+          # Write each trainer property
+          schema.each_key do |key|
+            next if key == "SectionName" || key == "Pokemon"
+            val = element.get_property_for_PBS(key)
+            next if val.nil?
+            f.write(sprintf("%s = ", key))
+            pbWriteCsvRecord(val, f, schema[key])
+            f.write("\r\n")
           end
-          element.pokemon.each do |pkmn|
-            f.write(sprintf("Pokemon = %s,%d\r\n", pkmn[:species], pkmn[:level]))
-            f.write(sprintf("    Name = %s\r\n", pkmn[:name])) if pkmn[:name] && !pkmn[:name].empty?
-            f.write(sprintf("    Form = %d\r\n", pkmn[:form])) if pkmn[:form] && pkmn[:form] > 0
-            f.write(sprintf("    Gender = %s\r\n", (pkmn[:gender] == 1) ? "female" : "male")) if pkmn[:gender]
-            f.write("    Shiny = yes\r\n") if pkmn[:shininess] && !pkmn[:super_shininess]
-            f.write("    SuperShiny = yes\r\n") if pkmn[:super_shininess]
-            f.write("    Shadow = yes\r\n") if pkmn[:shadowness]
-            f.write(sprintf("    Moves = %s\r\n", pkmn[:moves].join(","))) if pkmn[:moves] && pkmn[:moves].length > 0
-            f.write(sprintf("    Ability = %s\r\n", pkmn[:ability])) if pkmn[:ability]
-            f.write(sprintf("    AbilityIndex = %d\r\n", pkmn[:ability_index])) if pkmn[:ability_index]
-            f.write(sprintf("    Item = %s\r\n", pkmn[:item])) if pkmn[:item]
-            f.write(sprintf("    Nature = %s\r\n", pkmn[:nature])) if pkmn[:nature]
-            ivs_array = []
-            evs_array = []
-            GameData::Stat.each_main do |s|
-              next if s.pbs_order < 0
-              ivs_array[s.pbs_order] = pkmn[:iv][s.id] if pkmn[:iv]
-              evs_array[s.pbs_order] = pkmn[:ev][s.id] if pkmn[:ev]
+          # Write each Pokémon in turn
+          element.pokemon.each_with_index do |pkmn, i|
+            # Write species/level
+            val = element.get_pokemon_property_for_PBS("Pokemon", i)
+            f.write("Pokemon = ")
+            pbWriteCsvRecord(val, f, schema["Pokemon"])
+            f.write("\r\n")
+            # Write other Pokémon properties
+            sub_schema.each_key do |key|
+              val = element.get_pokemon_property_for_PBS(key, i)
+              next if val.nil?
+              f.write(sprintf("    %s = ", key))
+              pbWriteCsvRecord(val, f, sub_schema[key])
+              f.write("\r\n")
             end
-            f.write(sprintf("    IV = %s\r\n", ivs_array.join(","))) if pkmn[:iv]
-            f.write(sprintf("    EV = %s\r\n", evs_array.join(","))) if pkmn[:ev]
-            f.write(sprintf("    Happiness = %d\r\n", pkmn[:happiness])) if pkmn[:happiness]
-            f.write(sprintf("    Ball = %s\r\n", pkmn[:poke_ball])) if pkmn[:poke_ball]
           end
         end
       }
