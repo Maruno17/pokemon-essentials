@@ -49,7 +49,7 @@ def pbSelectAnim(canvas, animwin)
     if Input.trigger?(Input::USE) && animfiles.length > 0
       filename = cmdwin.commands[cmdwin.index]
       bitmap = AnimatedBitmap.new("Graphics/Animations/" + filename, ctlwin.value(0)).deanimate
-      canvas.animation.graphic = File.basename(filename, ".png")
+      canvas.animation.graphic = File.basename(filename, ".*")
       canvas.animation.hue = ctlwin.value(0)
       canvas.animbitmap = bitmap
       animwin.animbitmap = bitmap
@@ -544,11 +544,7 @@ def pbSelectSE(canvas, audio)
       pbSEStop
     end
     if maxsizewindow.changed?(5) # OK
-      filename = File.basename(filename, ".wav")
-#      filename = File.basename(filename,".mp3")
-      filename = File.basename(filename, ".ogg")
-      filename = File.basename(filename, ".wma")
-      audio.name = filename
+      audio.name = File.basename(filename, ".*")
       audio.volume = maxsizewindow.value(1)
       audio.pitch = maxsizewindow.value(2)
       ret = true
@@ -583,6 +579,9 @@ def pbSelectBG(canvas, timing)
 #    animfiles.concat(Dir.glob("*.jpeg"))
 #    animfiles.concat(Dir.glob("*.bmp"))
   }
+  animfiles.map! { |f| File.basename(f, ".*") }
+  animfiles.uniq!
+  animfiles.sort! { |a, b| a.downcase <=> b.downcase }
   cmdwin = pbListWindow(animfiles, 320)
   cmdwin.height = 480
   cmdwin.opacity = 200

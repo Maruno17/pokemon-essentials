@@ -13,12 +13,19 @@ module GameData
     DATA_FILENAME = "trainers.dat"
     PBS_BASE_FILENAME = "trainers"
 
+    # "Pokemon" is specially mentioned in def compile_trainers and def
+    # write_trainers, and acts as a subheading for a particular Pokémon.
     SCHEMA = {
-      "Items"        => [:items,           "*e", :Item],
-      "LoseText"     => [:lose_text,       "q"],
-      "Pokemon"      => [:pokemon,         "ev", :Species],   # Species, level
+      "SectionName" => [:id,             "esU", :TrainerType],
+      "Items"       => [:items,          "*e", :Item],
+      "LoseText"    => [:real_lose_text, "q"],
+      "Pokemon"     => [:pokemon,        "ev", :Species]   # Species, level
+    }
+    # This schema is for definable properties of individual Pokémon (apart from
+    # species and level which are above).
+    SUB_SCHEMA = {
       "Form"         => [:form,            "u"],
-      "Name"         => [:name,            "s"],
+      "Name"         => [:real_name,       "s"],
       "Moves"        => [:moves,           "*e", :Move],
       "Ability"      => [:ability,         "e", :Ability],
       "AbilityIndex" => [:ability_index,   "u"],
@@ -37,6 +44,10 @@ module GameData
 
     extend ClassMethodsSymbols
     include InstanceMethods
+
+    def self.sub_schema
+      return SUB_SCHEMA
+    end
 
     # @param tr_type [Symbol, String]
     # @param tr_name [String]
@@ -75,10 +86,10 @@ module GameData
     def initialize(hash)
       @id              = hash[:id]
       @trainer_type    = hash[:trainer_type]
-      @real_name       = hash[:name]            || "Unnamed"
+      @real_name       = hash[:real_name]       || ""
       @version         = hash[:version]         || 0
       @items           = hash[:items]           || []
-      @real_lose_text  = hash[:lose_text]       || "..."
+      @real_lose_text  = hash[:real_lose_text]  || "..."
       @pokemon         = hash[:pokemon]         || []
       @pokemon.each do |pkmn|
         GameData::Stat.each_main do |s|
@@ -156,7 +167,7 @@ module GameData
           end
         end
         pkmn.happiness = pkmn_data[:happiness] if pkmn_data[:happiness]
-        pkmn.name = pkmn_data[:name] if pkmn_data[:name] && !pkmn_data[:name].empty?
+        pkmn.name = pkmn_data[:real_name] if !nil_or_empty?(pkmn_data[:real_name])
         if pkmn_data[:shadowness]
           pkmn.makeShadow
           pkmn.shiny = false
@@ -165,6 +176,39 @@ module GameData
         pkmn.calc_stats
       end
       return trainer
+    end
+
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key, index = 0)
+      ret = __orig__get_property_for_PBS(key)
+      case key
+      when "SectionName"
+        ret = [@trainer_type, @real_name] if @version == 0
+      when "Pokemon"
+        ret = [@pokemon[index][:species], @pokemon[index][:level]]
+      end
+      return ret
+    end
+
+    def get_pokemon_property_for_PBS(key, index = 0)
+      return [@pokemon[index][:species], @pokemon[index][:level]] if key == "Pokemon"
+      ret = @pokemon[index][SUB_SCHEMA[key][0]]
+      ret = nil if ret == false || (ret.is_a?(Array) && ret.length == 0) || ret == ""
+      case key
+      when "Gender"
+        ret = ["male", "female"][ret] if ret
+      when "IV", "EV"
+        if ret
+          new_ret = []
+          GameData::Stat.each_main do |s|
+            new_ret[s.pbs_order] = ret[s.id] if s.pbs_order >= 0
+          end
+          ret = new_ret
+        end
+      when "Shiny"
+        ret = nil if @pokemon[index][:super_shininess]
+      end
+      return ret
     end
   end
 end

@@ -105,7 +105,7 @@ class PokemonJukeboxScreen
           Dir.glob("*.mid") { |f| files.push(f) }
           Dir.glob("*.midi") { |f| files.push(f) }
         }
-        files.map! { |f| f.chomp(File.extname(f)) }
+        files.map! { |f| File.basename(f, ".*") }
         files.uniq!
         files.sort! { |a, b| a.downcase <=> b.downcase }
         @scene.pbSetCommands(files, 0)

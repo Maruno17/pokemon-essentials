@@ -359,7 +359,7 @@ end
 module BGMProperty
   def self.set(settingname, oldsetting)
     chosenmap = pbListScreen(settingname, MusicFileLister.new(true, oldsetting))
-    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
+    return (chosenmap && chosenmap != "") ? File.basename(chosenmap, ".*") : oldsetting
   end
 
   def self.format(value)
@@ -372,7 +372,7 @@ end
 module MEProperty
   def self.set(settingname, oldsetting)
     chosenmap = pbListScreen(settingname, MusicFileLister.new(false, oldsetting))
-    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
+    return (chosenmap && chosenmap != "") ? File.basename(chosenmap, ".*") : oldsetting
   end
 
   def self.format(value)
@@ -385,7 +385,7 @@ end
 module WindowskinProperty
   def self.set(settingname, oldsetting)
     chosenmap = pbListScreen(settingname, GraphicsLister.new("Graphics/Windowskins/", oldsetting))
-    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
+    return (chosenmap && chosenmap != "") ? File.basename(chosenmap, ".*") : oldsetting
   end
 
   def self.format(value)
@@ -653,7 +653,7 @@ end
 module CharacterProperty
   def self.set(settingname, oldsetting)
     chosenmap = pbListScreen(settingname, GraphicsLister.new("Graphics/Characters/", oldsetting))
-    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
+    return (chosenmap && chosenmap != "") ? File.basename(chosenmap, ".*") : oldsetting
   end
 
   def self.format(value)
