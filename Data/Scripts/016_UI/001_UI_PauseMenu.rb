@@ -143,7 +143,7 @@ class PokemonPauseMenu
     end
     commands[cmdOption = commands.length] = _INTL("Options")
     commands[cmdDebug = commands.length] = _INTL("Debug") if $DEBUG
-    commands[cmdEndGame = commands.length] = _INTL("Quit Game")
+    commands[cmdEndGame = commands.length] = _INTL("Title screen")
     loop do
       command = @scene.pbShowCommands(commands)
       if cmdPokedex >= 0 && command == cmdPokedex

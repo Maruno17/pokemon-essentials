@@ -192,7 +192,7 @@ def pbCut
   move = :CUT
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_CUT, false) || (!$DEBUG && !movefinder)
-    if $PokemonBag.pbQuantity(:MACHETE)<=0
+    if $PokemonBag.pbQuantity(:MACHETE) <= 0
       pbMessage(_INTL("This tree looks like it can be cut down."))
       return false
     end
@@ -232,10 +232,10 @@ def pbSmashEvent(event)
   return if !event
   if event.name[/cuttree/i]
     pbSEPlay("Cut", 80)
-    $scene.spriteset.addUserAnimation(Settings::CUT_TREE_ANIMATION_ID,event.x,event.y,false,1)
+    $scene.spriteset.addUserAnimation(Settings::CUT_TREE_ANIMATION_ID, event.x, event.y, false, 1)
   elsif event.name[/smashrock/i]
     pbSEPlay("Rock Smash", 80)
-    $scene.spriteset.addUserAnimation(Settings::ROCK_SMASH_ANIMATION_ID,event.x,event.y,false,1)
+    $scene.spriteset.addUserAnimation(Settings::ROCK_SMASH_ANIMATION_ID, event.x, event.y, false, 1)
   end
   pbMoveRoute(event, [
     PBMoveRoute::Wait, 2,
@@ -295,6 +295,32 @@ HiddenMoveHandlers::UseMove.add(:DIG, proc { |move, pokemon|
   next false
 })
 
+def pbRockClimb
+  return false if $game_player.pbFacingEvent
+  move = :ROCKCLIMB
+  movefinder = $Trainer.get_pokemon_with_move(move)
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKCLIMB, false) || (!$DEBUG && !movefinder)
+    if $PokemonBag.pbQuantity(:CLIMBINGGEAR) <= 0
+      return false
+    end
+  end
+
+  if pbConfirmMessage(_INTL("It looks like it's possible to climb. Would you like to use Rock Climb?"))
+    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
+    pbHiddenMoveAnimation(movefinder)
+    climbLedge
+  end
+end
+
+def climbLedge
+  if Kernel.pbJumpToward(2, true)
+    $scene.spriteset.addUserAnimation(DUST_ANIMATION_ID, $game_player.x, $game_player.y, true)
+    $game_player.increase_steps
+    $game_player.check_event_trigger_here([1, 2])
+  end
+end
+
 #===============================================================================
 # Dive
 #===============================================================================
@@ -305,7 +331,7 @@ def pbDive
   move = :DIVE
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, false) || (!$DEBUG && !movefinder)
-    if $PokemonBag.pbQuantity(:SCUBAGEAR)<=0
+    if $PokemonBag.pbQuantity(:SCUBAGEAR) <= 0
       pbMessage(_INTL("The sea is deep here. A Pokémon may be able to go underwater."))
       return false
     end
@@ -398,6 +424,7 @@ Events.onAction += proc { |_sender, _e|
     pbDive if $game_player.terrain_tag.can_dive
   end
 }
+
 
 HiddenMoveHandlers::CanUseMove.add(:DIVE, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, showmsg)
@@ -620,7 +647,7 @@ def pbRockSmash
   move = :ROCKSMASH
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKSMASH, false) || (!$DEBUG && !movefinder)
-    if $PokemonBag.pbQuantity(:PICKAXE)<=0
+    if $PokemonBag.pbQuantity(:PICKAXE) <= 0
       pbMessage(_INTL("It's a rugged rock, but a Pokémon may be able to smash it."))
       return false
     end
@@ -630,7 +657,7 @@ def pbRockSmash
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     facingEvent = $game_player.pbFacingEvent(true)
-    $scene.spriteset.addUserAnimation(Settings::ROCK_SMASH_ANIMATION_ID,facingEvent.x,facingEvent.y,false)
+    $scene.spriteset.addUserAnimation(Settings::ROCK_SMASH_ANIMATION_ID, facingEvent.x, facingEvent.y, false)
     return true
   end
   return false
@@ -669,7 +696,7 @@ def pbStrength
   move = :STRENGTH
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_STRENGTH, false) || (!$DEBUG && !movefinder)
-    if  $PokemonBag.pbQuantity(:LEVER)<=0
+    if $PokemonBag.pbQuantity(:LEVER) <= 0
       pbMessage(_INTL("It looks heavy, but a Pokémon may be able to push it aside."))
       return false
     end
@@ -719,7 +746,7 @@ def pbSurf
   move = :SURF
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, false) || (!$DEBUG && !movefinder)
-    if $PokemonBag.pbQuantity(:SURFBOARD)<=0
+    if $PokemonBag.pbQuantity(:SURFBOARD) <= 0
       return false
     end
   end
@@ -970,7 +997,7 @@ def pbWaterfall
   move = :WATERFALL
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL, false) || (!$DEBUG && !movefinder)
-    if $PokemonBag.pbQuantity(:JETPACK)<=0
+    if $PokemonBag.pbQuantity(:JETPACK) <= 0
       pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
       return false
     end
@@ -1010,3 +1037,21 @@ HiddenMoveHandlers::UseMove.add(:WATERFALL, proc { |move, pokemon|
   pbAscendWaterfall
   next true
 })
+
+
+
+HiddenMoveHandlers::CanUseMove.add(:ROCKCLIMB, proc { |move, pkmn, showmsg|
+  next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKCLIMB, showmsg)
+  if !$game_player.pbFacingTerrainTag.ledge
+    pbMessage(_INTL("Can't use that here.")) if showmsg
+    next false
+  end
+  next true
+})
+
+Events.onAction += proc { |_sender, _e|
+  terrain = $game_player.pbFacingTerrainTag
+  if terrain.ledge
+    pbRockClimb
+  end
+}

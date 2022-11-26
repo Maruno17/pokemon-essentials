@@ -421,6 +421,12 @@ def pbTrainerBattleCore(*args)
       foeItems.push(arg.items)
     elsif arg.is_a?(Array)   # [trainer type, trainer name, ID, speech (optional)]
       trainer = pbLoadTrainer(arg[0],arg[1],arg[2])
+      if !trainer && $game_switches[SWITCH_MODERN_MODE] #retry without modern mode
+        $game_switches[SWITCH_MODERN_MODE]=false
+        trainer = pbLoadTrainer(arg[0],arg[1],arg[2])
+        $game_switches[SWITCH_MODERN_MODE]=true
+      end
+
       pbMissingTrainer(arg[0],arg[1],arg[2]) if !trainer
       return 0 if !trainer
 
@@ -529,6 +535,11 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
     end
     # Load the trainer's data, and call an event w0hich might modify it
     trainer = pbLoadTrainer(trainerID,trainerName,trainerPartyID)
+    if !trainer && $game_switches[SWITCH_MODERN_MODE] #retry without modern mode
+      $game_switches[SWITCH_MODERN_MODE]=false
+      trainer = pbLoadTrainer(trainerID,trainerName,trainerPartyID)
+      $game_switches[SWITCH_MODERN_MODE]=true
+    end
     pbMissingTrainer(trainerID,trainerName,trainerPartyID) if !trainer
     return false if !trainer
     Events.onTrainerPartyLoad.trigger(nil,trainer)

@@ -19,7 +19,7 @@ A few thousand custom sprites made by the community are included with the game b
 You can find more custom sprite packs made by members of the community online here:
 https://drive.google.com/drive/folders/0Bx5WTzAX8jMnNmRualNrZ2J4cm8
 
-Your savefile is located in C:\Users\%USERNAME%\AppData\Roaming\infinitefusion\Game.rxdata
+Your savefile is located in C:/Users/%username%/Saved Games/Pokémon Infinite Fusion/Game.rxdata
 If you want to have multiple savefiles, just rename this file to something else and start a new game. 
 
 Useful links:

@@ -1,4 +1,0 @@
-Extendtext.exe by Peter O.
-
-This program is a small tool for extending the size of the Show Text
-and Script dialog boxes in RPG Maker XP.  To use it, just run the program while the Show Text or Script dialog box is displayed.

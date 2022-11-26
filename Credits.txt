@@ -25,10 +25,6 @@ Frogman
 The story and dialogues were based off Pokémon Red and Blue, as well as
 Pokémon Gold and Silver. Both games are made by Game Freak.
 
-
-#################################
-Modern Mode by Tomate & Blaquaza
-
 ###########################################################
 ###	Fusion Sprites										###
 ##########################################################
@@ -151,6 +147,7 @@ Team Haxley#4549, StarlyCactus#3665, Sarcastic barbarian#3562, Sanic#0823, Rough
 QuiteAMess#9717, Professor C-Dawg#5414, Nagareru#9593, luca3370#2920, KyleThePirahna#3191, KOMAIN#7770,
 kakakiamekerasakia#3792, ItsThatSimple#6320, Gelos#9875, GalaxyDJx#0001, FullmetalHeichou#7070, 
 Evil Mailman#0604, elpano2#9588, Cenna#6226, Catdesu#0845, CaseyAether#2205, carni#0124, Buttlu#7240
+
 
 
 Triple fusion sprites
@@ -286,8 +283,9 @@ KleinStudio 			Water bubble script 	http://kleinstudio.deviantart.com/art/SCRIPT
 carmaniac			Speech Bubbles script	http://www.pokecommunity.com/showthread.php?t=295277
 Wootius				Turbo Speed		https://www.pokecommunity.com/showthread.php?t=306037
 Marin				Better maps script	https://www.pokecommunity.com/showthread.php?t=411299
+barafanatic			Safari Zone improvements
 M3rein				Easy Questing System 
-http404error 		Multisave		https://reliccastle.com/resources/1059/
+bo4p5687			Multisave
 
 
 #### Data sources ###			  

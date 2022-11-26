@@ -35,7 +35,7 @@ Events.onMapUpdate += proc { |sender, e|
   next if !$game_switches[AUTOSAVE_STEPS_SWITCH]
   stepsNum = pbGet(AUTOSAVE_STEPS_VAR)
   if stepsNum > 0 && !$PokemonGlobal.sliding
-    return if $PokemonGlobal.stepcount < 100
+    next if $PokemonGlobal.stepcount < 100
     if $PokemonGlobal.stepcount % stepsNum == 0
       $PokemonGlobal.stepcount += 1
       Kernel.tryAutosave()
