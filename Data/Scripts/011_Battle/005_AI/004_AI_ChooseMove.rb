@@ -3,6 +3,12 @@ class Battle::AI
   MOVE_USELESS_SCORE = 60   # Move predicted to do nothing or just be detrimental
   MOVE_BASE_SCORE    = 100
 
+  # Returns a value between 0.0 and 1.0. All move scores are lowered by this
+  # value multiplied by the highest-scoring move's score.
+  def move_score_threshold
+    return 0.6 + 0.35 * (([@trainer.skill, 100].min / 100.0) ** 0.5)   # 0.6 to 0.95
+  end
+
   #=============================================================================
   # Get scores for the user's moves (done before any action is assessed).
   #=============================================================================
@@ -105,6 +111,9 @@ class Battle::AI
                    @user.statusCount > 1 && !@move.move.usableWhenAsleep?
     # User will be truanting
     return true if @user.has_active_ability?(:TRUANT) && @user.effects[PBEffects::Truant]
+    # Primal weather
+    return true if @battle.pbWeather == :HeavyRain && @move.rough_type == :FIRE
+    return true if @battle.pbWeather == :HarshSun && @move.rough_type == :WATER
     # Move effect-specific checks
     return true if Battle::AI::Handlers.move_will_fail?(@move.function, @move, @user, self, @battle)
     return false
@@ -116,12 +125,18 @@ class Battle::AI
     # Immunity to priority moves because of Psychic Terrain
     return true if @battle.field.terrain == :Psychic && @target.battler.affectedByTerrain? &&
                    @target.opposes?(@user) && @move.rough_priority(@user) > 0
-    # Immunity because of ability (intentionally before type immunity check)
+    # Immunity because of ability
     # TODO: Check for target-redirecting abilities that also provide immunity.
     #       If an ally has such an ability, may want to just not prefer the move
     #       instead of predicting its failure, as might want to hit the ally
     #       after all.
     return true if @move.move.pbImmunityByAbility(@user.battler, @target.battler, false)
+    # Immunity because of Dazzling/Queenly Majesty
+    if @move.rough_priority(@user) > 0 && @target.opposes?(@user)
+      each_same_side_battler(@target.side) do |b, i|
+        return true if b.has_active_ability?([:DAZZLING, :QUEENLYMAJESTY])
+      end
+    end
     # Type immunity
     calc_type = @move.rough_type
     typeMod = @move.move.pbCalcTypeMod(calc_type, @user.battler, @target.battler)
@@ -237,7 +252,7 @@ class Battle::AI
       end
     end
     # Calculate a minimum score threshold and reduce all move scores by it
-    threshold = (max_score * 0.85).floor
+    threshold = (max_score * move_score_threshold.to_f).floor
     choices.each { |c| c[3] = [c[1] - threshold, 0].max }
     total_score = choices.sum { |c| c[3] }
     # Log the available choices

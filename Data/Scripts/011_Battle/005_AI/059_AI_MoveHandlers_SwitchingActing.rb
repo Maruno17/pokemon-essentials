@@ -22,7 +22,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserStatusMove",
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
   proc { |score, move, user, ai, battle|
     next score + 10 if user.wild?
-    if battle.pbTeamAbleNonActiveCount(user.index) > 1   # Don't switch in ace
+    if battle.pbTeamAbleNonActiveCount(user.index) == 1   # Don't switch in ace
       score -= 60
     else
       score += 40 if user.effects[PBEffects::Confusion] > 0
@@ -52,7 +52,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserDamagingMove",
   proc { |score, move, user, ai, battle|
     next 0 if !battle.pbCanChooseNonActive?(user.index) ||
-              battle.pbTeamAbleNonActiveCount(user.index) > 1   # Don't switch in ace
+              battle.pbTeamAbleNonActiveCount(user.index) == 1   # Don't switch in ace
   }
 )
 

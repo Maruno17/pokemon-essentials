@@ -192,20 +192,38 @@ Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithTargetWeight",
                                          "PowerHigherWithUserHeavierThanTarget")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithConsecutiveUse",
   proc { |power, move, user, target, ai, battle|
     next power << user.effects[PBEffects::FuryCutter]
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("PowerHigherWithConsecutiveUse",
+  proc { |score, move, user, ai, battle|
+    # Prefer continuing to use this move
+    score += 10 if user.effects[PBEffects::FuryCutter] > 0
+    # Prefer if holding the Metronome
+    score += 5 if user.has_active_item?(:METRONOME)
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithConsecutiveUseOnUserSide",
   proc { |power, move, user, target, ai, battle|
     next power * (user.pbOwnSide.effects[PBEffects::EchoedVoiceCounter] + 1)
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("PowerHigherWithConsecutiveUse",
+  proc { |score, move, user, ai, battle|
+    # Prefer continuing to use this move
+    score += 10 if user.pbOwnSide.effects[PBEffects::EchoedVoiceCounter] > 0
+    # Prefer if holding the Metronome
+    score += 5 if user.has_active_item?(:METRONOME)
+    next score
   }
 )
 
@@ -351,7 +369,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetLostH
 # DoublePowerIfUserStatsLoweredThisTurn
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetActed",
   proc { |score, move, user, target, ai, battle|
@@ -360,7 +378,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetActed
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetNotActed",
   proc { |score, move, user, target, ai, battle|
@@ -369,7 +387,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetNotAc
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # AlwaysCriticalHit
 
@@ -378,12 +396,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetNotAc
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
   proc { |score, move, user, ai, battle|
-    if user.effects[PBEffects::LaserFocus] > 0
-      score -= 90
-    else
-      score += 40
-    end
-    next score
+    next Battle::AI::MOVE_USELESS_SCORE if user.effects[PBEffects::LaserFocus] > 0
+    next score + 10
   }
 )
 
@@ -423,7 +437,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserEnduresFaintingThisTurn",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenElectricMoves",
   proc { |move, user, ai, battle|
@@ -434,9 +448,30 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenElectricMoves",
     end
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("StartWeakenElectricMoves",
+  proc { |score, move, user, ai, battle|
+    # Don't prefer the lower the user's HP is
+    if user.hp < user.totalhp / 2
+      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    end
+    # Prefer if foes have Electric moves
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :ELECTRIC }
+      score += 10
+      score += 5 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :ELECTRIC }
+    end
+    # Don't prefer if any allies have Electric moves
+    ai.each_same_side_battler(user.side) do |b, i|
+      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :ELECTRIC }
+      score -= 8
+      score -= 4 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :ELECTRIC }
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenFireMoves",
   proc { |move, user, ai, battle|
@@ -447,27 +482,82 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenFireMoves",
     end
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("StartWeakenElectricMoves",
+  proc { |score, move, user, ai, battle|
+    # Don't prefer the lower the user's HP is
+    if user.hp < user.totalhp / 2
+      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    end
+    # Prefer if foes have Fire moves
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :FIRE }
+      score += 10
+      score += 5 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :FIRE }
+    end
+    # Don't prefer if any allies have Fire moves
+    ai.each_same_side_battler(user.side) do |b, i|
+      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :FIRE }
+      score -= 8
+      score -= 4 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :FIRE }
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenPhysicalDamageAgainstUserSide",
   proc { |move, user, ai, battle|
     next true if user.pbOwnSide.effects[PBEffects::Reflect] > 0
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("StartWeakenPhysicalDamageAgainstUserSide",
+  proc { |score, move, user, ai, battle|
+    # Doesn't stack with Aurora Veil
+    next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+    # Don't prefer the lower the user's HP is
+    if user.hp < user.totalhp / 2
+      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    end
+    # Prefer if foes have physical moves (moreso if they don't have special moves)
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.check_for_move { |m| m.physicalMove?(m.type) }
+      score += 8
+      score += 5 if !b.check_for_move { |m| m.specialMove?(m.type) }
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenSpecialDamageAgainstUserSide",
   proc { |move, user, ai, battle|
     next true if user.pbOwnSide.effects[PBEffects::LightScreen] > 0
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSide",
+  proc { |score, move, user, ai, battle|
+    # Doesn't stack with Aurora Veil
+    next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+    # Don't prefer the lower the user's HP is
+    if user.hp < user.totalhp / 2
+      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    end
+    # Prefer if foes have special moves (moreso if they don't have physical moves)
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.check_for_move { |m| m.specialMove?(m.type) }
+      score += 8
+      score += 5 if !b.check_for_move { |m| m.physicalMove?(m.type) }
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenDamageAgainstUserSideIfHail",
   proc { |move, user, ai, battle|
@@ -477,18 +567,36 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenDamageAgainstUserSideIfHa
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHail",
   proc { |score, move, user, ai, battle|
-    next score + 40
+    # Doesn't stack with Reflect/Light Screen
+    next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::Reflect] > 0 &&
+                                           user.pbOwnSide.effects[PBEffects::LightScreen] > 0
+    # Don't prefer the lower the user's HP is
+    if user.hp < user.totalhp / 2
+      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    end
+    next score + 15
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RemoveScreens",
   proc { |score, move, user, ai, battle|
-    score += 10 if user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
-    score += 10 if user.pbOpposingSide.effects[PBEffects::Reflect] > 0
-    score += 10 if user.pbOpposingSide.effects[PBEffects::LightScreen] > 0
+    # Prefer if allies have physical moves that are being weakened
+    if user.pbOpposingSide.effects[PBEffects::Reflect] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
+      ai.each_same_side_battler(user.side) do |b, i|
+        score += 10 if b.check_for_move { |m| m.physicalMove?(m.type) }
+      end
+    end
+    # Prefer if allies have special moves that are being weakened
+    if user.pbOpposingSide.effects[PBEffects::LightScreen] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
+      ai.each_same_side_battler(user.side) do |b, i|
+        score += 10 if b.check_for_move { |m| m.specialMove?(m.type) }
+      end
+    end
     next score
   }
 )

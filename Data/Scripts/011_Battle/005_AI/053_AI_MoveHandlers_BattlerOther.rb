@@ -814,8 +814,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetTypesToPsychic"
     # Prefer if target's foes know damaging moves that are super-effective
     # against Psychic, and don't prefer if they know damaging moves that are
     # ineffective against Psychic
-    ai.each_foe_battler(target.side) do |b, b|
-      b.battler.eachMove do |m,|
+    ai.each_foe_battler(target.side) do |b, i|
+      b.battler.eachMove do |m|
         next if !m.damagingMove?
         effectiveness = Effectiveness.calculate(m.pbCalcType(b.battler), :PSYCHIC)
         if Effectiveness.super_effective?(effectiveness)
@@ -824,6 +824,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetTypesToPsychic"
           score -= 10
         end
       end
+    end
     next score
   }
 )
@@ -1144,7 +1145,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartGravity",
         score += (user.opposes?(b)) ? score_change : -score_change
         # Prefer if allies have any damaging Ground moves they'll be able to use
         # on a grounded foe, and vice versa
-        ai.each_foe_battler(b.side) do |b2|
+        ai.each_foe_battler(b.side) do |b2, j|
           if b2.check_for_move { |m| m.damagingMove? && m.pbCalcType(b2.battler) == :GROUND }
             score += (user.opposes?(b2)) ? -5 : 5
           end

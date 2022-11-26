@@ -160,6 +160,14 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:dance_move_against_danc
 #===============================================================================
 # TODO: Review score modifier.
 #===============================================================================
+# TODO: Prefer a higher priority move if the user is slower than the foe(s) and
+#       the user is at risk of being knocked out. Consider whether the foe(s)
+#       have priority moves of their own? Limit this to prefer priority damaging
+#       moves?
+
+#===============================================================================
+# TODO: Review score modifier.
+#===============================================================================
 # TODO: Don't prefer damaging moves if the target is Biding, unless the move
 #       will deal enough damage to KO the target before it retaliates (assuming
 #       the move is used repeatedly until the target retaliates). Don't worry

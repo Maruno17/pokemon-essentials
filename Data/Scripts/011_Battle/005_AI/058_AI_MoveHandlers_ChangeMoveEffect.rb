@@ -3,7 +3,7 @@
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
   proc { |score, move, user, ai, battle|
-    next 0 if user.battler.allAllies.length == 0
+    next Battle::AI::MOVE_USELESS_SCORE if user.battler.allAllies.length == 0
   }
 )
 
@@ -12,7 +12,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RedirectAllMovesToTarget",
   proc { |score, move, user, target, ai, battle|
-    next 0 if user.battler.allAllies.length == 0
+    next Battle::AI::MOVE_USELESS_SCORE if user.battler.allAllies.length == 0
   }
 )
 
@@ -21,6 +21,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RedirectAllMovesToTarget
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CannotBeRedirected",
   proc { |score, move, user, target, ai, battle|
+    next score if target.battler.allAllies.length == 0
     redirection = false
     user.battler.allOpposing.each do |b|
       next if b.index == target.index
@@ -113,22 +114,16 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CurseTargetOrLowerUserSp
 # EffectDependsOnEnvironment
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitsAllFoesAndPowersUpInPsychicTerrain",
   proc { |power, move, user, target, ai, battle|
     next move.move.pbBaseDamage(power, user.battler, target.battler)
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("HitsAllFoesAndPowersUpInPsychicTerrain",
-  proc { |score, move, user, ai, battle|
-    next score + 20 if battle.field.terrain == :Psychic && user.battler.affectedByTerrain? &&
-                       battle.allOtherSideBattlers(user.index).length > 1
-  }
-)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetNextFireMoveDamagesTarget",
   proc { |move, user, target, ai, battle|
@@ -137,12 +132,12 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetNextFireMoveDamag
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetNextFireMoveDamagesTarget",
   proc { |score, move, user, target, ai, battle|
-    aspeed = user.rough_stat(:SPEED)
-    ospeed = target.rough_stat(:SPEED)
-    if aspeed > ospeed
-      score -= 50
-    elsif target.battler.pbHasMoveType?(:FIRE)
-      score += 30
+    # Effect wears off at the end of the round
+    next Battle::AI::MOVE_USELESS_SCORE if target.faster_than?(user)
+    # Prefer if target knows any Fire moves (moreso if that's the only type they know)
+    if target.check_for_move { |m| m.pbCalcType(b.battler) == :FIRE }
+      score += 10
+      score += 10 if !target.check_for_move { |m| m.pbCalcType(b.battler) != :FIRE }
     end
     next score
   }
@@ -168,7 +163,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PowerUpAllyMove",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PowerUpAllyMove",
   proc { |score, move, user, target, ai, battle|
-    next score + 30
+    next score + 15
   }
 )
 
@@ -342,8 +337,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UseLastMoveUsedByTarget"
 # UseMoveDependingOnEnvironment
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
 # UseRandomMove
 
