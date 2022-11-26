@@ -52,6 +52,7 @@ class Game_Player < Game_Character
   end
 
   def update_command
+    self.move_speed = 0.5 if $game_switches[SWITCH_SUPER_SLOW_SPEED]
     if $game_player.pbTerrainTag.ice
       self.move_speed = 4     # Sliding on ice
     elsif !moving? && !@move_route_forcing && $PokemonGlobal

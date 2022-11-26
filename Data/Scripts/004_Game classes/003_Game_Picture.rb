@@ -14,9 +14,9 @@ class Game_Picture
   attr_reader   :origin                   # starting point
   attr_reader   :x                        # x-coordinate
   attr_reader   :y                        # y-coordinate
-  attr_reader   :zoom_x                   # x directional zoom rate
-  attr_reader   :zoom_y                   # y directional zoom rate
-  attr_reader   :opacity                  # opacity level
+  attr_accessor   :zoom_x                   # x directional zoom rate
+  attr_accessor   :zoom_y                   # y directional zoom rate
+  attr_accessor   :opacity                  # opacity level
   attr_reader   :blend_type               # blend method
   attr_reader   :tone                     # color tone
   attr_reader   :angle                    # rotation angle

@@ -21,8 +21,6 @@ class Movie
     pbBGMPlay(@bgm)
     while (@currentFrame <= @maxFrame)# && !(@canStopEarly && Input::ACTION))
       if Input.trigger?(Input::C)
-        echo "bruh"
-        echo "\n"
 
       end
       frame = sprintf(@framesPath, @currentFrame)
