@@ -126,6 +126,10 @@ module PokeBattle_BattleCommon
       pbDisplay(_INTL("Gah! It was so close, too!"))
       BallHandlers.onFailCatch(ball,self,battler)
     when 4
+      if $game_switches[SWITCH_SILVERBOSS_BATTLE]
+        pkmn.species=:PALDIATINA
+        pkmn.name = "Paldiatina"
+      end
       pbDisplayBrief(_INTL("Gotcha! {1} was caught!",pkmn.name))
       @scene.pbThrowSuccess   # Play capture success jingle
       pbRemoveFromParty(battler.index,battler.pokemonIndex)

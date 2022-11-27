@@ -308,7 +308,7 @@ class PokeBattle_Scene
 
   def showFaintingAnimation(battler)
     return true if !battler.opposes?
-    return false if $game_switches[SWITCH_BIRDBOSS_BATTLE] && battler.battle.pbAbleCount(1) > 0
+    return false if $game_switches[SWITCH_TRIPLE_BOSS_BATTLE] && battler.battle.pbAbleCount(1) > 0
     return true
   end
 

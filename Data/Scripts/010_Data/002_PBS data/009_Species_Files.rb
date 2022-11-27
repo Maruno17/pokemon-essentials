@@ -205,7 +205,7 @@ module GameData
     def self.check_cry_file(species, form)
       species_data = self.get_species_form(species, form)
       return nil if species_data.nil?
-      return "Cries/BIRDBOSS_2" if $game_switches[SWITCH_BIRDBOSS_BATTLE]
+      return "Cries/BIRDBOSS_2" if $game_switches[SWITCH_TRIPLE_BOSS_BATTLE] && !$game_switches[SWITCH_SILVERBOSS_BATTLE]
       if species_data.is_fusion
         species_data = GameData::Species.get(getHeadID(species_data))
       end

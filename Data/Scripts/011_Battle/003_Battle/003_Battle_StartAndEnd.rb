@@ -202,8 +202,12 @@ class PokeBattle_Battle
           msg += _INTL("{1} sent out {2} and {3}!",t.full_name,
              @battlers[sent[0]].name,@battlers[sent[1]].name)
         when 3
-          if $game_switches[SWITCH_BIRDBOSS_BATTLE]
-            msg += _INTL("{1} sent out Zapmolcuno!",t.full_name)
+          if $game_switches[SWITCH_TRIPLE_BOSS_BATTLE]
+            if $game_switches[SWITCH_SILVERBOSS_BATTLE]
+              msg += _INTL("A wild Paldiatina appeared!",t.full_name)
+            else
+              msg += _INTL("{1} sent out Zapmolcuno!",t.full_name)
+            end
           else
             msg += _INTL("{1} sent out {2}, {3} and {4}!",t.full_name,
                          @battlers[sent[0]].name,@battlers[sent[1]].name,@battlers[sent[2]].name)

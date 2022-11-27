@@ -1789,3 +1789,55 @@ Environment = Grass
 # Offshore route
 Outdoor=true
 ShowArea=true
+[776]
+# Mt. Silver 1F
+BattleBack=CaveDark
+DarkMap=true
+ShowArea=true
+Environment = Cave
+Outdoor=false
+[778]
+# Mt. Silver 2F
+BattleBack=CaveDark
+DarkMap=true
+ShowArea=false
+Environment = Cave
+Outdoor=false
+[779]
+# Mt. Silver 2F-2
+BattleBack=CaveDark
+DarkMap=true
+ShowArea=false
+Environment = Cave
+Outdoor=false
+[780]
+# Mt. Silver 3F
+BattleBack=CaveDark
+DarkMap=true
+ShowArea=false
+Environment = Cave
+Outdoor=false
+[782]
+# Mt. Silver 4F
+BattleBack=Cave
+DarkMap=false
+ShowArea=false
+Environment = Cave
+Outdoor=false
+[777]
+# Mt. Silver (Mountainside)
+BattleBack=Mountain
+Outdoor=true
+ShowArea=false
+[781]
+# Mt. Silver (Mountainside)
+BattleBack=Snow
+Weather=Snow,100
+Outdoor=true
+ShowArea=false
+Environment = Snow
+[783]
+# Mt. Silver (Summit)
+BattleBack=Peak
+Outdoor=true
+ShowArea=true

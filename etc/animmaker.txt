@@ -1,0 +1,26 @@
+animmaker.exe - Converts sprites to RPG Maker XP format animations
+(C) 2008 Peter O.
+
+Usage: animmaker xmlfile.xml
+('xmlfile.xml' is the path to any XML file, see below)
+
+Example of XML file:
+
+<animations>
+<!--Animation file to create (in this case, animation.png)-->
+<animation name="animation.png">
+ <!--Pattern to add to the animation.  Consists of the image's
+     filename plus the rectangle of the pattern to extract
+     from the image (x, y, width, height) (up to 96x96 in size)
+     Sprites listed here will be doubled in size in the animation-->
+ <pattern filename="pkmnfrlg_effects.png" x="50" y="201" 
+   width="56" height="68" />
+</animation>
+<!--Another animation file, animation2.png)-->
+<animation name="animation2.png">
+ <pattern filename="pkmnfrlg_effects.png" x="50" y="201" 
+   width="56" height="68" />
+ <!-- You can leave out x, y, etc.  to use the whole image-->
+ <pattern filename="effects2.png" />
+</animation>
+</animations>

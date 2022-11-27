@@ -733,6 +733,7 @@ module Compiler
     pbSetWindowText(nil)
   end
 
+
   def main
     return
     return if !$DEBUG

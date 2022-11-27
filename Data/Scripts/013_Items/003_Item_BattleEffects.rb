@@ -48,9 +48,17 @@ ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_pok
     #       them if they are trying to catch a non-Shadow Pokémon.)
     if battle.pbOpposingBattlerCount>1 && !(GameData::Item.get(item).is_snag_ball? && battle.trainerBattle?)
       if battle.pbOpposingBattlerCount==2
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokémon!")) if showMessages
+        if $game_switches[SWITCH_SILVERBOSS_BATTLE]
+          scene.pbDisplay(_INTL("It's no good! It's still too agitated to aim!")) if showMessages
+        else
+          scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokémon!")) if showMessages
+        end
       else
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are more than one Pokémon!")) if showMessages
+        if $game_switches[SWITCH_SILVERBOSS_BATTLE]
+          scene.pbDisplay(_INTL("It's no good! It's still too agitated to aim!")) if showMessages
+        else
+          scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are more than one Pokémon!")) if showMessages
+        end
       end
       next false
     end

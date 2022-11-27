@@ -384,6 +384,19 @@ def pbTripleWildBattle(species1, level1, species2, level2, species3, level3,
   return (decision!=2 && decision!=5)
 end
 
+def pb1v3WildBattle(species1, level1, species2, level2, species3, level3,
+                       outcomeVar=1, canRun=true, canLose=false)
+  # Set some battle rules
+  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("cannotRun") if !canRun
+  setBattleRule("canLose") if canLose
+  setBattleRule("1v3")
+  # Perform the battle
+  decision = pbWildBattleCore(species1, level1, species2, level2, species3, level3)
+  # Return false if the player lost or drew the battle, and true if any other result
+  return (decision!=2 && decision!=5)
+end
+
 #===============================================================================
 # Start a trainer battle
 #===============================================================================

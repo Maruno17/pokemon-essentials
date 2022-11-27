@@ -1,0 +1,155 @@
+5.1
+Many, many bugfixes
+
+## Re-added features ##
+In-game clock
+Speed-up button
+Reverse mode
+Easy and Hard difficulties
+
+#Removals
+Removed Trainer House
+Removed the Convert Pokemon option from the update menu
+Oak no longer gives a Johto starter after beating the league
+Removed Pokedex key item
+
+##New Stuff
+Added Quick Surf option
+Added Kin Island Club
+Replaced Delibird's hidden ability with Snow Warning
+Added overworld sprites for a few important trainers
+Added animations for using Rock Smash and Cut in the overworld
+Traded Pokémon now become owned by player when fused (so they can be unfused)
+Made Oak's Lab look more like the HGSS version
+Added egg move tutor in Battle Factory
+Battle Factory now gives Factory Points instead of Rare Candies
+Updated critical hits to gen 6 mechanics
+Added gen 6 status move immunity from certain types
+Implemented Multitype ability for fusions
+
+
+
+
+
+5.0
+##########################
+The 5.0 update brings Infinite Fusion to a new engine, which makes the game run better and allows
+for a variety of improvements. 
+However, there are also a handful features that were in previous versions of the game which are not 
+compatible with this new version of Pokemon Essentials and that have been removed. Some of them will
+be added back progressively in future updates and others will likely be gone for good.
+
+See the full changelog of Pokémon Essentials 19 and MKXP
+MKXP: https://github.com/Ancurio/mkxp
+Essentials: https://essentialsdocs.fandom.com/wiki/Change_log
+
+#############
+Added Features
+#############
+## Technical###
+- MKXP player is now used to run the game instead of RGSS player
+- Fullscreen & resizable screen
+- Performance improvements
+- Built-in controls binding (F1)
+-- Includes native controller support
+- The game now continues running when it's in the background
+- Savefiles have been moved to the appdata folder (Windows)
+
+
+## UI and menus ##
+- Changed the battle UI's appearance
+- New options in in-game menu:
+	- Default movement
+	- Text entry type
+	- Battle type
+- Added Instant text speed option
+- Menus and controls should be more responsive in general
+- Added visual indicator for selecting fusion order on the title screen
+
+## Gameplay ##
+- Exp. gain when catching Pokémon
+- Now possible to register multiple items at once
+- Adds several new moves from generations 5 to 7
+- Added back double battles
+- Added triple battles lounge in Knot Island
+- Added Battle Factory
+- Changed how levels are calculated when unfusing: 
+	- Level when originally fused + experience obtained while fused
+	- Levels gained via Rare Candies are NOT taken into account
+	-NB: Pokemon that were fused in previous versions still use the old method
+- Updated all movesets to gen 7
+- Added 12 new TMs and 5 new Move tutors
+- Removed the Mt. Silver requirement for making triple fusions
+- Added an option to set the default battle type (single, double, triple) - Only available if beat the game at least once
+- Traded Pokémon now become owned by player when fused
+	
+## Maps ##
+- Changed some tiles in Vermillion City
+- Added Dive section to Kindle Road
+
+## Tweaks / Balance ##
+- Reduced DNA Splicers price to $300
+- Tweaked Sprout Tower to make it a bit easier
+- Moon Stones, Sun Stones, Dawn Stones, Dusk Stones and Shiny Stones are now sold at the Goldenrod Dept. Store instead of Celadon
+- Changed some trainer teams in Lavender tower
+
+## Miscellaneous ##
+- Resort Gorgeous now prioritizes Pokemon with custom sprites
+- Renamed Spring boots to Golbat Boots
+- New debug options
+- Item stack limit increased to 999
+- Added overworld animations for Cut and Rock Smash
+
+#################
+#	Bug fixes	#
+#################
+- Fixed random memory crashes (unconfirmed, but I haven't encountered one so far)
+- Fixed random crash when catching Pokémon
+- Fixed several moves and abilities which were previously broken (Crafty Shield, Fairy Lock, Purify, Gale Wings, Moxie, Innards Out, Magician, Pickpocket, Protean, Disguise)
+- Fixed double battles
+
+#################
+Removed Features
+#################
+
+Removed features that will be coming back eventually
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+- Randomizer
+- Speed up button
+- Pokedex seen/caught
+- Wild fusions	//TODO: pas oublier de init exp_gained_since_fused=0 && exp_when_fused = self.exp
+- Autosave (except in Pokemon centers)
+- Fusing from PC
+- Nicknaming from the party screen - Added temporary name rater in Vermillion City's Pokemon center
+- Modern Mode compatibility
+- Quest log
+- Hidden abilities routes
+- Pokeradar special encounters
+- In-game clock
+- Hard mode, Easy mode
+- Some quests probably don't work
+- Obtaining items from Rock Smash and fishing
+
+Removed features that probably won't be coming back
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+- Elite Battle System (includes EBS and NxtGen UI battle UIs, battle motion, etc.)
+- Autorun button toggle
+- Gen 5 style bag
+- Demice's endgame challenge
+- Bill's battletower mod
+- French pack compatibility
+
+
+
+############ KNOWN ISSUES ##############
+- Some areas might have abnormal lag - please tell me in the discord if you find one that's unreasonably laggy (you will know if you see one)
+- Some side-stairs might act strange
+- The Pokedex is currently all sorts of messed up
+- Long loading time when starting up the game
+- Some of the music and sound effects might not load correctly
+- Some Pokémon appear higher than they should in battles on the player's side
+- Significant stutter in the overworld when playing the game on an AMD CPU
+- Several custom items have not yet been reimplemented
+- Some battle backgrounds might be missing
+- Erika's backsprite uses's May's backsprite from RSE
+- Some NPC trades likely to crash the game

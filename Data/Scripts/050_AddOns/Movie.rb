@@ -62,26 +62,24 @@ class Movie
   end
 
   # not really necessary I think
-  def pbAutoregulador()
-    hora_inicio = $game_variables[VARIABLE_TIME_INITIAL]
-    hora_actual = Time.now
-    diferencia = (hora_actual - hora_inicio) * 20 #20 frames corresponde a 1 seg
-    #Redondeo
-    diferencia_entera = diferencia.to_i
-
-    diferencia_entera = diferencia_entera.to_f
-
-    if diferencia - diferencia_entera >= 0.5
-      diferencia_entera = diferencia_entera + 1
-    end
-
-    $game_variables[VARIABLE_CURRENT_FRAME] = diferencia_entera.to_int
-
-    $game_variables[VARIABLE_TIME_ELAPSED] = Time.now
-
-    return $game_variables[VARIABLE_CURRENT_FRAME]
-  end
+  # def pbAutoregulador()
+  #   hora_inicio = $game_variables[VARIABLE_TIME_INITIAL]
+  #   hora_actual = Time.now
+  #   diferencia = (hora_actual - hora_inicio) * 20 #20 frames corresponde a 1 seg
+  #   #Redondeo
+  #   diferencia_entera = diferencia.to_i
+  #
+  #   diferencia_entera = diferencia_entera.to_f
+  #
+  #   if diferencia - diferencia_entera >= 0.5
+  #     diferencia_entera = diferencia_entera + 1
+  #   end
+  #
+  #   $game_variables[VARIABLE_CURRENT_FRAME] = diferencia_entera.to_int
+  #
+  #   $game_variables[VARIABLE_TIME_ELAPSED] = Time.now
+  #
+  #   return $game_variables[VARIABLE_CURRENT_FRAME]
+  # end
 
 end
-
-def pbPlayMovie(framesPath, bgm, maxFrame = 1000, imageNumber = 12) end
