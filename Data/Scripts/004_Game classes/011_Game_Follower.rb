@@ -112,6 +112,7 @@ class Game_Follower < Game_Event
   end
 
   def follow_leader(leader, instant = false, leaderIsTrueLeader = true)
+    return if @move_route_forcing
     maps_connected = $map_factory.areConnected?(leader.map.map_id, self.map.map_id)
     target = nil
     # Get the target tile that self wants to move to

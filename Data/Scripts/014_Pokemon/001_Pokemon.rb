@@ -707,7 +707,11 @@ class Pokemon
   # @return [Boolean] whether the Pokémon is compatible with the given move
   def compatible_with_move?(move_id)
     move_data = GameData::Move.try_get(move_id)
-    return move_data && species_data.tutor_moves.include?(move_data.id)
+    return false if !move_data
+    return true if species_data.tutor_moves.include?(move_data.id)
+    return true if getMoveList.any? { |m| m[1] == move_data.id }
+    return true if species_data.get_egg_moves.include?(move_data.id)
+    return false
   end
 
   def can_relearn_move?
