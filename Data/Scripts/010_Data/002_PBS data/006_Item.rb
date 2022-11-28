@@ -38,6 +38,27 @@ module GameData
     extend ClassMethodsSymbols
     include InstanceMethods
 
+    def self.editor_properties
+      field_use_array = [_INTL("Can't use in field")]
+      self.schema["FieldUse"][2].each { |key, value| field_use_array[value] = key if !field_use_array[value] }
+      battle_use_array = [_INTL("Can't use in battle")]
+      self.schema["BattleUse"][2].each { |key, value| battle_use_array[value] = key if !battle_use_array[value] }
+      return [
+        ["ID",          ReadOnlyProperty,                        _INTL("ID of this item (used as a symbol like :XXX).")],
+        ["Name",        ItemNameProperty,                        _INTL("Name of this item as displayed by the game.")],
+        ["NamePlural",  ItemNameProperty,                        _INTL("Plural name of this item as displayed by the game.")],
+        ["Pocket",      PocketProperty,                          _INTL("Pocket in the Bag where this item is stored.")],
+        ["Price",       LimitProperty.new(Settings::MAX_MONEY),  _INTL("Purchase price of this item.")],
+        ["SellPrice",   LimitProperty2.new(Settings::MAX_MONEY), _INTL("Sell price of this item. If blank, is half the purchase price.")],
+        ["FieldUse",    EnumProperty.new(field_use_array),       _INTL("How this item can be used outside of battle.")],
+        ["BattleUse",   EnumProperty.new(battle_use_array),      _INTL("How this item can be used within a battle.")],
+        ["Flags",       StringListProperty,                      _INTL("Words/phrases that can be used to group certain kinds of items.")],
+        ["Consumable",  BooleanProperty,                         _INTL("Whether this item is consumed after use.")],
+        ["Move",        MoveProperty,                            _INTL("Move taught by this HM, TM or TR.")],
+        ["Description", StringProperty,                          _INTL("Description of this item.")]
+      ]
+    end
+
     def self.icon_filename(item)
       return "Graphics/Items/back" if item.nil?
       item_data = self.try_get(item)
@@ -198,6 +219,7 @@ module GameData
 
     alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
     def get_property_for_PBS(key)
+      key = "SectionName" if key == "ID"
       ret = __orig__get_property_for_PBS(key)
       case key
       when "SellPrice"

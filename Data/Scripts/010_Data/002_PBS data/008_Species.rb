@@ -49,30 +49,6 @@ module GameData
     extend ClassMethodsSymbols
     include InstanceMethods
 
-    # @param species [Symbol, self, String]
-    # @param form [Integer]
-    # @return [self, nil]
-    def self.get_species_form(species, form)
-      return nil if !species || !form
-      validate species => [Symbol, self, String]
-      validate form => Integer
-      species = species.species if species.is_a?(self)
-      species = species.to_sym if species.is_a?(String)
-      trial = sprintf("%s_%d", species, form).to_sym
-      species_form = (DATA[trial].nil?) ? species : trial
-      return (DATA.has_key?(species_form)) ? DATA[species_form] : nil
-    end
-
-    def self.each_species
-      DATA.each_value { |species| yield species if species.form == 0 }
-    end
-
-    def self.species_count
-      ret = 0
-      self.each_species { |species| ret += 1 }
-      return ret
-    end
-
     def self.schema(compiling_forms = false)
       ret = {}
       if compiling_forms
@@ -129,6 +105,68 @@ module GameData
       else
         ret["Evolutions"]     = [:evolutions,         "*ses", nil, :Evolution, nil]
       end
+      return ret
+    end
+
+    def self.editor_properties
+      return [
+        ["ID",                ReadOnlyProperty,                   _INTL("The ID of the Pokémon.")],
+        ["Name",              LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
+        ["FormName",          StringProperty,                     _INTL("Name of this form of the Pokémon.")],
+        ["Types",             TypesProperty,                      _INTL("The Pokémon's type(s).")],
+        ["BaseStats",         BaseStatsProperty,                  _INTL("Base stats of the Pokémon.")],
+        ["GenderRatio",       GameDataProperty.new(:GenderRatio), _INTL("Proportion of males to females for this species.")],
+        ["GrowthRate",        GameDataProperty.new(:GrowthRate),  _INTL("Pokémon's growth rate.")],
+        ["BaseExp",           LimitProperty.new(9999),            _INTL("Base experience earned when this species is defeated.")],
+        ["EVs",               EffortValuesProperty,               _INTL("Effort Value points earned when this species is defeated.")],
+        ["CatchRate",         LimitProperty.new(255),             _INTL("Catch rate of this species (0-255).")],
+        ["Happiness",         LimitProperty.new(255),             _INTL("Base happiness of this species (0-255).")],
+        ["Abilities",         AbilitiesProperty.new,              _INTL("Abilities which the Pokémon can have (max. 2).")],
+        ["HiddenAbilities",   AbilitiesProperty.new,              _INTL("Secret abilities which the Pokémon can have.")],
+        ["Moves",             LevelUpMovesProperty,               _INTL("Moves which the Pokémon learns while levelling up.")],
+        ["TutorMoves",        EggMovesProperty.new,               _INTL("Moves which the Pokémon can be taught by TM/HM/Move Tutor.")],
+        ["EggMoves",          EggMovesProperty.new,               _INTL("Moves which the Pokémon can learn via breeding.")],
+        ["EggGroups",         EggGroupsProperty.new,              _INTL("Egg groups that the Pokémon belongs to for breeding purposes.")],
+        ["HatchSteps",        LimitProperty.new(99_999),          _INTL("Number of steps until an egg of this species hatches.")],
+        ["Incense",           ItemProperty,                       _INTL("Item needed to be held by a parent to produce an egg of this species.")],
+        ["Offspring",         GameDataPoolProperty.new(:Species), _INTL("All possible species that an egg can be when breeding for an egg of this species (if blank, the egg can only be this species).")],
+        ["Height",            NonzeroLimitProperty.new(999),      _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
+        ["Weight",            NonzeroLimitProperty.new(9999),     _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
+        ["Color",             GameDataProperty.new(:BodyColor),   _INTL("Pokémon's body color.")],
+        ["Shape",             GameDataProperty.new(:BodyShape),   _INTL("Body shape of this species.")],
+        ["Habitat",           GameDataProperty.new(:Habitat),     _INTL("The habitat of this species.")],
+        ["Category",          StringProperty,                     _INTL("Kind of Pokémon species.")],
+        ["Pokedex",           StringProperty,                     _INTL("Description of the Pokémon as displayed in the Pokédex.")],
+        ["Generation",        LimitProperty.new(99_999),          _INTL("The number of the generation the Pokémon debuted in.")],
+        ["Flags",             StringListProperty,                 _INTL("Words/phrases that distinguish this species from others.")],
+        ["WildItemCommon",    GameDataPoolProperty.new(:Item),    _INTL("Item(s) commonly held by wild Pokémon of this species.")],
+        ["WildItemUncommon",  GameDataPoolProperty.new(:Item),    _INTL("Item(s) uncommonly held by wild Pokémon of this species.")],
+        ["WildItemRare",      GameDataPoolProperty.new(:Item),    _INTL("Item(s) rarely held by wild Pokémon of this species.")],
+        ["Evolutions",        EvolutionsProperty.new,             _INTL("Evolution paths of this species.")]
+      ]
+    end
+
+    # @param species [Symbol, self, String]
+    # @param form [Integer]
+    # @return [self, nil]
+    def self.get_species_form(species, form)
+      return nil if !species || !form
+      validate species => [Symbol, self, String]
+      validate form => Integer
+      species = species.species if species.is_a?(self)
+      species = species.to_sym if species.is_a?(String)
+      trial = sprintf("%s_%d", species, form).to_sym
+      species_form = (DATA[trial].nil?) ? species : trial
+      return (DATA.has_key?(species_form)) ? DATA[species_form] : nil
+    end
+
+    def self.each_species
+      DATA.each_value { |species| yield species if species.form == 0 }
+    end
+
+    def self.species_count
+      ret = 0
+      self.each_species { |species| ret += 1 }
       return ret
     end
 
@@ -347,6 +385,7 @@ module GameData
 
     alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
     def get_property_for_PBS(key, writing_form = false)
+      key = "SectionName" if key == "ID"
       ret = nil
       if self.class.schema(writing_form).include?(key)
         ret = self.send(self.class.schema(writing_form)[key][0])

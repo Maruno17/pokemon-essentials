@@ -60,6 +60,7 @@ module GameData
 
     def self.editor_properties
       return [
+        ["ID",                ReadOnlyProperty,        _INTL("ID number of this map.")],
         ["Name",              StringProperty,          _INTL("The name of the map, as seen by the player. Can be different to the map's name as seen in RMXP.")],
         ["Outdoor",           BooleanProperty,         _INTL("If true, this map is an outdoor map and will be tinted according to time of day.")],
         ["ShowArea",          BooleanProperty,         _INTL("If true, the game will display the map's name upon entry.")],
@@ -119,6 +120,12 @@ module GameData
 
     def has_flag?(flag)
       return @flags.any? { |f| f.downcase == flag.downcase }
+    end
+
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key)
+      key = "SectionName" if key == "ID"
+      return __orig__get_property_for_PBS(key)
     end
   end
 end

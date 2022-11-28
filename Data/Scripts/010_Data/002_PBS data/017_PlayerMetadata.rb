@@ -27,6 +27,7 @@ module GameData
 
     def self.editor_properties
       return [
+        ["ID",              ReadOnlyProperty,        _INTL("ID number of this player.")],
         ["TrainerType",     TrainerTypeProperty,     _INTL("Trainer type of this player.")],
         ["WalkCharset",     CharacterProperty,       _INTL("Charset used while the player is still or walking.")],
         ["RunCharset",      CharacterProperty,       _INTL("Charset used while the player is running. Uses WalkCharset if undefined.")],
@@ -83,6 +84,12 @@ module GameData
 
     def surf_fish_charset
       return @surf_fish_charset || fish_charset
+    end
+
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key)
+      key = "SectionName" if key == "ID"
+      return __orig__get_property_for_PBS(key)
     end
   end
 end

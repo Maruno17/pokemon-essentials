@@ -345,19 +345,7 @@ end
 # Trainer type editor
 #===============================================================================
 def pbTrainerTypeEditor
-  gender_array = []
-  GameData::TrainerType.schema["Gender"][2].each { |key, value| gender_array[value] = key if !gender_array[value] }
-  trainer_type_properties = [
-    [_INTL("ID"),         ReadOnlyProperty,               _INTL("ID of this Trainer Type (used as a symbol like :XXX).")],
-    [_INTL("Name"),       StringProperty,                 _INTL("Name of this Trainer Type as displayed by the game.")],
-    [_INTL("Gender"),     EnumProperty.new(gender_array), _INTL("Gender of this Trainer Type.")],
-    [_INTL("BaseMoney"),  LimitProperty.new(9999),        _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
-    [_INTL("SkillLevel"), LimitProperty.new(9999),        _INTL("Skill level of this Trainer Type.")],
-    [_INTL("Flags"),      StringListProperty,             _INTL("Words/phrases that can be used to make trainers of this type behave differently to others.")],
-    [_INTL("IntroBGM"),   BGMProperty,                    _INTL("BGM played before battles against trainers of this type.")],
-    [_INTL("BattleBGM"),  BGMProperty,                    _INTL("BGM played in battles against trainers of this type.")],
-    [_INTL("VictoryBGM"), BGMProperty,                    _INTL("BGM played when player wins battles against trainers of this type.")]
-  ]
+  properties = GameData::TrainerType.editor_properties
   pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
     if tr_type
       case button
@@ -371,31 +359,25 @@ def pbTrainerTypeEditor
       when Input::USE
         if tr_type.is_a?(Symbol)
           t_data = GameData::TrainerType.get(tr_type)
-          data = [
-            t_data.id.to_s,
-            t_data.real_name,
-            t_data.gender,
-            t_data.base_money,
-            t_data.skill_level,
-            t_data.flags,
-            t_data.intro_BGM,
-            t_data.battle_BGM,
-            t_data.victory_BGM
-          ]
-          if pbPropertyList(t_data.id.to_s, data, trainer_type_properties, true)
+          data = []
+          properties.each do |prop|
+            val = t_data.get_property_for_PBS(prop[0])
+            val = prop[1].defaultValue if val.nil? && prop[1].respond_to?(:defaultValue)
+            data.push(val)
+          end
+          if pbPropertyList(t_data.id.to_s, data, properties, true)
             # Construct trainer type hash
-            type_hash = {
-              :id              => t_data.id,
-              :name            => data[1],
-              :gender          => data[2],
-              :base_money      => data[3],
-              :skill_level     => data[4],
-              :flags           => data[5],
-              :intro_BGM       => data[6],
-              :battle_BGM      => data[7],
-              :victory_BGM     => data[8],
-              :pbs_file_suffix => t_data.pbs_file_suffix
-            }
+            schema = GameData::TrainerType.schema
+            type_hash = {}
+            properties.each_with_index do |prop, i|
+              case prop[0]
+              when "ID"
+                type_hash[schema["SectionName"][0]] = data[i]
+              else
+                type_hash[schema[prop[0]][0]] = data[i]
+              end
+            end
+            type_hash[:pbs_file_suffix] = t_data.pbs_file_suffix
             # Add trainer type's data to records
             GameData::TrainerType.register(type_hash)
             GameData::TrainerType.save
@@ -741,21 +723,13 @@ def pbEditMetadata
   end
   if pbPropertyList(_INTL("Global Metadata"), data, properties, true)
     # Construct metadata hash
-    metadata_hash = {
-      :id                   => 0,
-      :start_money          => data[0],
-      :start_item_storage   => data[1],
-      :home                 => data[2],
-      :real_storage_creator => data[3],
-      :wild_battle_BGM      => data[4],
-      :trainer_battle_BGM   => data[5],
-      :wild_victory_BGM     => data[6],
-      :trainer_victory_BGM  => data[7],
-      :wild_capture_ME      => data[8],
-      :surf_BGM             => data[9],
-      :bicycle_BGM          => data[10],
-      :pbs_file_suffix      => metadata.pbs_file_suffix
-    }
+    schema = GameData::Metadata.schema
+    metadata_hash = {}
+    properties.each_with_index do |prop, i|
+      metadata_hash[schema[prop[0]][0]] = data[i]
+    end
+    metadata_hash[:id]              = 0
+    metadata_hash[:pbs_file_suffix] = metadata.pbs_file_suffix
     # Add metadata's data to records
     GameData::Metadata.register(metadata_hash)
     GameData::Metadata.save
@@ -788,19 +762,17 @@ def pbEditPlayerMetadata(player_id = 1)
   end
   if pbPropertyList(_INTL("Player {1}", metadata.id), data, properties, true)
     # Construct player metadata hash
-    metadata_hash = {
-      :id                => player_id,
-      :trainer_type      => data[0],
-      :walk_charset      => data[1],
-      :run_charset       => data[2],
-      :cycle_charset     => data[3],
-      :surf_charset      => data[4],
-      :dive_charset      => data[5],
-      :fish_charset      => data[6],
-      :surf_fish_charset => data[7],
-      :home              => data[8],
-      :pbs_file_suffix   => metadata.pbs_file_suffix
-    }
+    schema = GameData::PlayerMetadata.schema
+    metadata_hash = {}
+    properties.each_with_index do |prop, i|
+      case prop[0]
+      when "ID"
+        metadata_hash[schema["SectionName"][0]] = data[i]
+      else
+        metadata_hash[schema[prop[0]][0]] = data[i]
+      end
+    end
+    metadata_hash[:pbs_file_suffix] = metadata.pbs_file_suffix
     # Add player metadata's data to records
     GameData::PlayerMetadata.register(metadata_hash)
     GameData::PlayerMetadata.save
@@ -835,32 +807,17 @@ def pbEditMapMetadata(map_id)
   end
   if pbPropertyList(map_name, data, properties, true)
     # Construct map metadata hash
-    metadata_hash = {
-      :id                   => map_id,
-      :real_name            => data[0],
-      :outdoor_map          => data[1],
-      :announce_location    => data[2],
-      :can_bicycle          => data[3],
-      :always_bicycle       => data[4],
-      :teleport_destination => data[5],
-      :weather              => data[6],
-      :town_map_position    => data[7],
-      :dive_map_id          => data[8],
-      :dark_map             => data[9],
-      :safari_map           => data[10],
-      :snap_edges           => data[11],
-      :random_dungeon       => data[12],
-      :battle_background    => data[13],
-      :wild_battle_BGM      => data[14],
-      :trainer_battle_BGM   => data[15],
-      :wild_victory_BGM     => data[16],
-      :trainer_victory_BGM  => data[17],
-      :wild_capture_ME      => data[18],
-      :town_map_size        => data[19],
-      :battle_environment   => data[20],
-      :flags                => data[21],
-      :pbs_file_suffix      => metadata.pbs_file_suffix
-    }
+    schema = GameData::MapMetadata.schema
+    metadata_hash = {}
+    properties.each_with_index do |prop, i|
+      case prop[0]
+      when "ID"
+        metadata_hash[schema["SectionName"][0]] = data[i]
+      else
+        metadata_hash[schema[prop[0]][0]] = data[i]
+      end
+    end
+    metadata_hash[:pbs_file_suffix] = metadata.pbs_file_suffix
     # Add map metadata's data to records
     GameData::MapMetadata.register(metadata_hash)
     GameData::MapMetadata.save
@@ -874,24 +831,7 @@ end
 # Item editor
 #===============================================================================
 def pbItemEditor
-  field_use_array = [_INTL("Can't use in field")]
-  GameData::Item.schema["FieldUse"][2].each { |key, value| field_use_array[value] = key if !field_use_array[value] }
-  battle_use_array = [_INTL("Can't use in battle")]
-  GameData::Item.schema["BattleUse"][2].each { |key, value| battle_use_array[value] = key if !battle_use_array[value] }
-  item_properties = [
-    [_INTL("ID"),          ReadOnlyProperty,                   _INTL("ID of this item (used as a symbol like :XXX).")],
-    [_INTL("Name"),        ItemNameProperty,                   _INTL("Name of this item as displayed by the game.")],
-    [_INTL("NamePlural"),  ItemNameProperty,                   _INTL("Plural name of this item as displayed by the game.")],
-    [_INTL("Pocket"),      PocketProperty,                     _INTL("Pocket in the Bag where this item is stored.")],
-    [_INTL("Price"),       LimitProperty.new(999_999),         _INTL("Purchase price of this item.")],
-    [_INTL("SellPrice"),   LimitProperty.new(999_999),         _INTL("Sell price of this item. If blank, is half the purchase price.")],
-    [_INTL("Description"), StringProperty,                     _INTL("Description of this item")],
-    [_INTL("FieldUse"),    EnumProperty.new(field_use_array),  _INTL("How this item can be used outside of battle.")],
-    [_INTL("BattleUse"),   EnumProperty.new(battle_use_array), _INTL("How this item can be used within a battle.")],
-    [_INTL("Consumable"),  BooleanProperty,                    _INTL("Whether this item is consumed after use.")],
-    [_INTL("Flags"),       StringListProperty,                 _INTL("Words/phrases that can be used to group certain kinds of items.")],
-    [_INTL("Move"),        MoveProperty,                       _INTL("Move taught by this HM, TM or TR.")]
-  ]
+  properties = GameData::Item.editor_properties
   pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
     if item
       case button
@@ -905,37 +845,25 @@ def pbItemEditor
       when Input::USE
         if item.is_a?(Symbol)
           itm = GameData::Item.get(item)
-          data = [
-            itm.id.to_s,
-            itm.real_name,
-            itm.real_name_plural,
-            itm.pocket,
-            itm.price,
-            itm.sell_price,
-            itm.real_description,
-            itm.field_use,
-            itm.battle_use,
-            itm.consumable,
-            itm.flags,
-            itm.move
-          ]
-          if pbPropertyList(itm.id.to_s, data, item_properties, true)
+          data = []
+          properties.each do |prop|
+            val = itm.get_property_for_PBS(prop[0])
+            val = prop[1].defaultValue if val.nil? && prop[1].respond_to?(:defaultValue)
+            data.push(val)
+          end
+          if pbPropertyList(itm.id.to_s, data, properties, true)
             # Construct item hash
-            item_hash = {
-              :id              => itm.id,
-              :name            => data[1],
-              :name_plural     => data[2],
-              :pocket          => data[3],
-              :price           => data[4],
-              :sell_price      => data[5],
-              :description     => data[6],
-              :field_use       => data[7],
-              :battle_use      => data[8],
-              :consumable      => data[9],
-              :flags           => data[10],
-              :move            => data[11],
-              :pbs_file_suffix => itm.pbs_file_suffix
-            }
+            schema = GameData::Item.schema
+            item_hash = {}
+            properties.each_with_index do |prop, i|
+              case prop[0]
+              when "ID"
+                item_hash[schema["SectionName"][0]] = data[i]
+              else
+                item_hash[schema[prop[0]][0]] = data[i]
+              end
+            end
+            item_hash[:pbs_file_suffix] = itm.pbs_file_suffix
             # Add item's data to records
             GameData::Item.register(item_hash)
             GameData::Item.save
@@ -1009,47 +937,7 @@ end
 # Pokémon species editor
 #===============================================================================
 def pbPokemonEditor
-  species_properties = [
-    [_INTL("ID"),                ReadOnlyProperty,                   _INTL("The ID of the Pokémon.")],
-    [_INTL("Name"),              LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
-    [_INTL("FormName"),          StringProperty,                     _INTL("Name of this form of the Pokémon.")],
-    [_INTL("Category"),          StringProperty,                     _INTL("Kind of Pokémon species.")],
-    [_INTL("Pokédex"),           StringProperty,                     _INTL("Description of the Pokémon as displayed in the Pokédex.")],
-    [_INTL("Type 1"),            TypeProperty,                       _INTL("Pokémon's type. If same as Type 2, this Pokémon has a single type.")],
-    [_INTL("Type 2"),            TypeProperty,                       _INTL("Pokémon's type. If same as Type 1, this Pokémon has a single type.")],
-    [_INTL("BaseStats"),         BaseStatsProperty,                  _INTL("Base stats of the Pokémon.")],
-    [_INTL("EVs"),               EffortValuesProperty,               _INTL("Effort Value points earned when this species is defeated.")],
-    [_INTL("BaseExp"),           LimitProperty.new(9999),            _INTL("Base experience earned when this species is defeated.")],
-    [_INTL("GrowthRate"),        GameDataProperty.new(:GrowthRate),  _INTL("Pokémon's growth rate.")],
-    [_INTL("GenderRatio"),       GameDataProperty.new(:GenderRatio), _INTL("Proportion of males to females for this species.")],
-    [_INTL("CatchRate"),         LimitProperty.new(255),             _INTL("Catch rate of this species (0-255).")],
-    [_INTL("Happiness"),         LimitProperty.new(255),             _INTL("Base happiness of this species (0-255).")],
-    [_INTL("Moves"),             LevelUpMovesProperty,               _INTL("Moves which the Pokémon learns while levelling up.")],
-    [_INTL("TutorMoves"),        EggMovesProperty.new,               _INTL("Moves which the Pokémon can be taught by TM/HM/Move Tutor.")],
-    [_INTL("EggMoves"),          EggMovesProperty.new,               _INTL("Moves which the Pokémon can learn via breeding.")],
-    [_INTL("Ability 1"),         AbilityProperty,                    _INTL("One ability which the Pokémon can have.")],
-    [_INTL("Ability 2"),         AbilityProperty,                    _INTL("Another ability which the Pokémon can have.")],
-    [_INTL("HiddenAbility 1"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
-    [_INTL("HiddenAbility 2"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
-    [_INTL("HiddenAbility 3"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
-    [_INTL("HiddenAbility 4"),   AbilityProperty,                    _INTL("A secret ability which the Pokémon can have.")],
-    [_INTL("WildItemCommon"),    GameDataPoolProperty.new(:Item),    _INTL("Item(s) commonly held by wild Pokémon of this species.")],
-    [_INTL("WildItemUncommon"),  GameDataPoolProperty.new(:Item),    _INTL("Item(s) uncommonly held by wild Pokémon of this species.")],
-    [_INTL("WildItemRare"),      GameDataPoolProperty.new(:Item),    _INTL("Item(s) rarely held by wild Pokémon of this species.")],
-    [_INTL("EggGroup 1"),        GameDataProperty.new(:EggGroup),    _INTL("Compatibility group (egg group) for breeding purposes.")],
-    [_INTL("EggGroup 2"),        GameDataProperty.new(:EggGroup),    _INTL("Compatibility group (egg group) for breeding purposes.")],
-    [_INTL("HatchSteps"),        LimitProperty.new(99_999),          _INTL("Number of steps until an egg of this species hatches.")],
-    [_INTL("Incense"),           ItemProperty,                       _INTL("Item needed to be held by a parent to produce an egg of this species.")],
-    [_INTL("Offspring"),         GameDataPoolProperty.new(:Species), _INTL("All possible species that an egg can be when breeding for an egg of this species (if blank, the egg can only be this species).")],
-    [_INTL("Evolutions"),        EvolutionsProperty.new,             _INTL("Evolution paths of this species.")],
-    [_INTL("Height"),            NonzeroLimitProperty.new(999),      _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
-    [_INTL("Weight"),            NonzeroLimitProperty.new(9999),     _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
-    [_INTL("Color"),             GameDataProperty.new(:BodyColor),   _INTL("Pokémon's body color.")],
-    [_INTL("Shape"),             GameDataProperty.new(:BodyShape),   _INTL("Body shape of this species.")],
-    [_INTL("Habitat"),           GameDataProperty.new(:Habitat),     _INTL("The habitat of this species.")],
-    [_INTL("Generation"),        LimitProperty.new(99_999),          _INTL("The number of the generation the Pokémon debuted in.")],
-    [_INTL("Flags"),             StringListProperty,                 _INTL("Words/phrases that distinguish this species from others.")]
-  ]
+  properties = GameData::Species.editor_properties
   pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
     if species
       case button
@@ -1063,99 +951,40 @@ def pbPokemonEditor
       when Input::USE
         if species.is_a?(Symbol)
           spec = GameData::Species.get(species)
-          moves = []
-          spec.moves.each_with_index { |m, i| moves.push(m.clone.push(i)) }
-          moves.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=> b[0] }
-          moves.each { |m| m.pop }
-          evolutions = []
-          spec.evolutions.each { |e| evolutions.push(e.clone) if !e[3] }
-          data = [
-            spec.id.to_s,
-            spec.real_name,
-            spec.real_form_name,
-            spec.real_category,
-            spec.real_pokedex_entry,
-            spec.types[0],
-            spec.types[1],
-            spec.base_stats,
-            spec.evs,
-            spec.base_exp,
-            spec.growth_rate,
-            spec.gender_ratio,
-            spec.catch_rate,
-            spec.happiness,
-            moves,
-            spec.tutor_moves.clone,
-            spec.egg_moves.clone,
-            spec.abilities[0],
-            spec.abilities[1],
-            spec.hidden_abilities[0],
-            spec.hidden_abilities[1],
-            spec.hidden_abilities[2],
-            spec.hidden_abilities[3],
-            spec.wild_item_common.clone,
-            spec.wild_item_uncommon.clone,
-            spec.wild_item_rare.clone,
-            spec.egg_groups[0],
-            spec.egg_groups[1],
-            spec.hatch_steps,
-            spec.incense,
-            spec.offspring,
-            evolutions,
-            spec.height,
-            spec.weight,
-            spec.color,
-            spec.shape,
-            spec.habitat,
-            spec.generation,
-            spec.flags.clone
-          ]
+          data = []
+          properties.each do |prop|
+            val = spec.get_property_for_PBS(prop[0])
+            val = prop[1].defaultValue if val.nil? && prop[1].respond_to?(:defaultValue)
+            val = (val * 10).round if ["Height", "Weight"].include?(prop[0])
+            data.push(val)
+          end
           # Edit the properties
-          if pbPropertyList(spec.id.to_s, data, species_properties, true)
-            # Sanitise data
-            types = [data[5], data[6]].uniq.compact          # Types
-            types = nil if types.empty?
-            egg_groups = [data[26], data[27]].uniq.compact   # Egg groups
-            egg_groups = nil if egg_groups.empty?
-            abilities = [data[17], data[18]].uniq.compact    # Abilities
-            hidden_abilities = [data[19], data[20], data[21], data[22]].uniq.compact   # Hidden abilities
+          if pbPropertyList(spec.id.to_s, data, properties, true)
             # Construct species hash
-            species_hash = {
-              :id                 => spec.id,
-              :name               => data[1],
-              :form_name          => data[2],
-              :category           => data[3],
-              :pokedex_entry      => data[4],
-              :types              => types,              # 5, 6
-              :base_stats         => data[7],
-              :evs                => data[8],
-              :base_exp           => data[9],
-              :growth_rate        => data[10],
-              :gender_ratio       => data[11],
-              :catch_rate         => data[12],
-              :happiness          => data[13],
-              :moves              => data[14],
-              :tutor_moves        => data[15],
-              :egg_moves          => data[16],
-              :abilities          => abilities,          # 17, 18
-              :hidden_abilities   => hidden_abilities,   # 19, 20, 21, 22
-              :wild_item_common   => data[23],
-              :wild_item_uncommon => data[24],
-              :wild_item_rare     => data[25],
-              :egg_groups         => egg_groups,         # 26, 27
-              :hatch_steps        => data[28],
-              :incense            => data[29],
-              :offspring          => data[30],
-              :evolutions         => data[31],
-              :height             => data[32],
-              :weight             => data[33],
-              :color              => data[34],
-              :shape              => data[35],
-              :habitat            => data[36],
-              :generation         => data[37],
-              :flags              => data[38],
-              :pbs_file_suffix    => spec.pbs_file_suffix
-            }
+            schema = GameData::Species.schema
+            species_hash = {}
+            properties.each_with_index do |prop, i|
+              data[i] = data[i].to_f / 10 if ["Height", "Weight"].include?(prop[0])
+              case prop[0]
+              when "ID"
+                species_hash[schema["SectionName"][0]] = data[i]
+              else
+                species_hash[schema[prop[0]][0]] = data[i]
+              end
+            end
+            species_hash[:pbs_file_suffix] = spec.pbs_file_suffix
+            # Sanitise data
+            Compiler.validate_compiled_pokemon(species_hash)
+            species_hash[:evolutions].each do |evo|
+              param_type = GameData::Evolution.get(evo[1]).parameter
+              if param_type.nil?
+                evo[2] = nil
+              elsif param_type == Integer
+                evo[2] = Compiler.csvPosInt!(evo[2])
+              elsif param_type != String
+                evo[2] = Compiler.csvEnumField!(evo[2], param_type, "Evolutions", species_hash[:id])
+              end
+            end
             # Add species' data to records
             GameData::Species.register(species_hash)
             GameData::Species.save

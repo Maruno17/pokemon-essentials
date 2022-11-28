@@ -57,7 +57,7 @@ module GameData
     end
 
     def initialize(hash)
-      @id                   = hash[:id]
+      @id                   = hash[:id]                 || 0
       @start_money          = hash[:start_money]        || 3000
       @start_item_storage   = hash[:start_item_storage] || []
       @home                 = hash[:home]
