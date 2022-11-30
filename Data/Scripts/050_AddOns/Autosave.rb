@@ -27,6 +27,7 @@ end
 
 
 def Kernel.tryAutosave()
+  return if  !$Trainer.save_slot
   Kernel.Autosave if $game_switches[AUTOSAVE_ENABLED_SWITCH]
 end
 

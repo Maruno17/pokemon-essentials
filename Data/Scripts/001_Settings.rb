@@ -22,6 +22,7 @@ module Settings
   #Infinite fusion settings
   NB_POKEMON = 420
   CUSTOM_BATTLERS_FOLDER = "Graphics/CustomBattlers/"
+  CUSTOM_BATTLERS_FOLDER_INDEXED = "Graphics/CustomBattlers/indexed"
   BATTLERS_FOLDER = "Graphics/Battlers/"
   FRONTSPRITE_POSITION_OFFSET = 20
   FRONTSPRITE_SCALE = 0.6666666

@@ -23,22 +23,21 @@ def mainFunction
 end
 
 def sortCustomBattlers()
-  customBattlersFolder = 'Graphics/CustomBattlers'
   echo "Sorting CustomBattlers files..."
-  Dir.foreach(customBattlersFolder) do |filename|
+  Dir.foreach(Settings::CUSTOM_BATTLERS_FOLDER) do |filename|
     next if filename == '.' or filename == '..'
     next if !filename.end_with?(".png")
     headNum = filename.split('.')[0]
-    oldPath = customBattlersFolder + "/" + filename
-    newPath = customBattlersFolder + "/" + headNum.to_s + "/" +filename
-    echo "\n"
-    echo "Sorted " + filename + " into " + newPath
+    oldPath = Settings::CUSTOM_BATTLERS_FOLDER + "/" + filename
+    newPath = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + headNum.to_s + "/" +filename
     begin
       File.rename(oldPath, newPath)
+      echo "\nSorted " + filename + " into " + newPath
     rescue
-      echo "Could not sort "+ filename
+      echo "\nCould not sort "+ filename
     end
   end
+  echo "\nFinished sorting"
 end
 
 

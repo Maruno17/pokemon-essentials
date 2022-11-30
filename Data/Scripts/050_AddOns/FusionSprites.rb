@@ -176,7 +176,7 @@ module GameData
           filename = sprintf("%s.%s.png", head_id, body_id)
         end
       end
-      customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER + "/" + head_id.to_s + "/" +filename)
+      customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" +filename)
       species = getSpecies(dex_number)
       use_custom = customPath && !species.always_use_generated
       if use_custom

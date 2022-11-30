@@ -97,20 +97,20 @@ class PokeBattle_Scene
     when 2 then time = "night"
     end
     # Put everything together into backdrop, bases and message bar filenames
-    backdropFilename = @battle.backdrop
-    baseFilename = @battle.backdrop
-    baseFilename = sprintf("%s_%s",baseFilename,@battle.backdropBase) if @battle.backdropBase
-    messageFilename = @battle.backdrop
+    backdropFilename = @battle.backdrop.downcase
+    baseFilename = @battle.backdrop.downcase
+    baseFilename = sprintf("%s_%s",baseFilename,@battle.backdropBase).downcase if @battle.backdropBase
+    messageFilename = @battle.backdrop.downcase
     if time
-      trialName = sprintf("%s_%s",backdropFilename,time)
+      trialName = sprintf("%s_%s",backdropFilename,time).downcase
       if pbResolveBitmap(sprintf("Graphics/Battlebacks/"+trialName+"_bg"))
         backdropFilename = trialName
       end
-      trialName = sprintf("%s_%s",baseFilename,time)
+      trialName = sprintf("%s_%s",baseFilename,time).downcase
       if pbResolveBitmap(sprintf("Graphics/Battlebacks/"+trialName+"_base0"))
         baseFilename = trialName
       end
-      trialName = sprintf("%s_%s",messageFilename,time)
+      trialName = sprintf("%s_%s",messageFilename,time).downcase
       if pbResolveBitmap(sprintf("Graphics/Battlebacks/"+trialName+"_message"))
         messageFilename = trialName
       end
@@ -119,7 +119,7 @@ class PokeBattle_Scene
        @battle.backdropBase
       baseFilename = @battle.backdropBase
       if time
-        trialName = sprintf("%s_%s",baseFilename,time)
+        trialName = sprintf("%s_%s",baseFilename,time).downcase
         if pbResolveBitmap(sprintf("Graphics/Battlebacks/"+trialName+"_base0"))
           baseFilename = trialName
         end
