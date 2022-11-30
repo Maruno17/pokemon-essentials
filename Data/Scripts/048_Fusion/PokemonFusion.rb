@@ -814,7 +814,7 @@ def setFusionMoves(fusedPoke, poke2, selected2ndOption = false)
   bodySpeciesName = GameData::Species.get(bodySpecies).real_name
   headSpeciesName = GameData::Species.get(headSpecies).real_name
 
-  choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Learn moves"), _INTL("Keep {1}'s moveset", bodySpeciesName), _INTL("Keep {1}'s moveset", headSpeciesName)], 0)
+  choice = Kernel.pbMessage("What to do with the moveset?", [_INTL("Combine movesets"), _INTL("Keep {1}'s moveset", bodySpeciesName), _INTL("Keep {1}'s moveset", headSpeciesName)], 0)
   if choice == 1
     if selected2ndOption
       fusedPoke.moves = poke2.moves

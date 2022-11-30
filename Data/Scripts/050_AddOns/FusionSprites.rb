@@ -163,10 +163,12 @@ module GameData
       if dex_number <= Settings::NB_POKEMON
         folder = dex_number.to_s
         filename = sprintf("%s.png", dex_number)
+        head_id=nil
       else
         if dex_number >= Settings::ZAPMOLCUNO_NB
           specialPath = getSpecialSpriteName(dex_number)
           return pbResolveBitmap(specialPath)
+          head_id=nil
         else
           body_id = getBodyID(dex_number)
           head_id = getHeadID(dex_number, body_id)
@@ -174,7 +176,7 @@ module GameData
           filename = sprintf("%s.%s.png", head_id, body_id)
         end
       end
-      customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER + filename)
+      customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER + "/" + head_id.to_s + "/" +filename)
       species = getSpecies(dex_number)
       use_custom = customPath && !species.always_use_generated
       if use_custom

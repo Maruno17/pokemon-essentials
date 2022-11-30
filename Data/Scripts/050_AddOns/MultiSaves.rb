@@ -356,6 +356,7 @@ class PokemonLoadScreen
     when cmd_continue
       @scene.pbEndScene
       Game.load(@save_data)
+      $game_switches[SWITCH_V5_1]=true
       return
     when cmd_new_game
       @scene.pbEndScene

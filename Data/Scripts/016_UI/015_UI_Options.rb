@@ -434,24 +434,30 @@ class PokemonOption_Scene
                                   end
                                 }, "Sets the volume for sound effects"
     )
-
-    if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) #beat the league
-      options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast"), _INTL("Instant")],
-                                proc { $PokemonSystem.textspeed },
-                                proc { |value|
-                                  $PokemonSystem.textspeed = value
-                                  MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
-                                }, "Sets the speed at which the text is displayed"
-      )
-    else
-      options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast")],
-                                proc { $PokemonSystem.textspeed },
-                                proc { |value|
-                                  $PokemonSystem.textspeed = value
-                                  MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
-                                }, "Sets the speed at which the text is displayed"
-      )
-    end
+    options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast")],
+                              proc { $PokemonSystem.textspeed },
+                              proc { |value|
+                                $PokemonSystem.textspeed = value
+                                MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
+                              }, "Sets the speed at which the text is displayed"
+    )
+    # if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) #beat the league
+    #   options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast"), _INTL("Instant")],
+    #                             proc { $PokemonSystem.textspeed },
+    #                             proc { |value|
+    #                               $PokemonSystem.textspeed = value
+    #                               MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
+    #                             }, "Sets the speed at which the text is displayed"
+    #   )
+    # else
+    #   options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast")],
+    #                             proc { $PokemonSystem.textspeed },
+    #                             proc { |value|
+    #                               $PokemonSystem.textspeed = value
+    #                               MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
+    #                             }, "Sets the speed at which the text is displayed"
+    #   )
+    # end
 
     if $game_switches
       options <<

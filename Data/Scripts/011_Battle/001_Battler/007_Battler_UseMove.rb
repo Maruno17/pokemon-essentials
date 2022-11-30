@@ -578,10 +578,13 @@ class PokeBattle_Battler
     if !inSwordForm && attacking
       user.effects[PBEffects::PowerTrick] = true
       user.attack,user.defense = user.defense,user.attack
+      user.spatk,user.spdef = user.spdef,user.spatk
+
       @battle.pbDisplay(_INTL("{1} changed to Sword Mode!",pbThis))
     elsif inSwordForm && !attacking
        user.effects[PBEffects::PowerTrick] = false
        user.attack,user.defense = user.defense,user.attack
+       user.spatk,user.spdef = user.spdef,user.spatk
        @battle.pbDisplay(_INTL("{1} changed to Shield Mode!",pbThis))
     end
   end

@@ -315,7 +315,6 @@ module PBItems
   TM24 = 311
   TM25 = 312
   TM26 = 313
-  TM27 = 314
   TM27 = 315
   TM29 = 316
   TM30 = 317

@@ -20,11 +20,6 @@ class Scene_Intro
     intro_bgm = "INTRO_music_cries"
     intro_movie = Movie.new(intro_frames_path,intro_bgm,230,true)
     intro_movie.playInViewPort(@viewport)
-    while(!intro_movie.finished)
-      echo intro_movie.finished
-      echo "\n"
-      wait(8)
-    end
   end
 
   def main

@@ -299,6 +299,7 @@ module GameData
           level = getRematchLevel(level, nbRematch)
           species = evolveRematchPokemon(nbRematch, species)
         end
+
         pkmn = Pokemon.new(species, level, trainer, false)
 
         trainer.party.push(pkmn)

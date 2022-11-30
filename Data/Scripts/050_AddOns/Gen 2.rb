@@ -106,7 +106,7 @@ BATTLERSPATH = "Battlers"
 def GetSpritePath(poke1, poke2, isFused)
   #Check if custom exists
   spritename = GetSpriteName(poke1, poke2, isFused)
-  pathCustom = sprintf("Graphics/%s/%s.png", DOSSIERCUSTOMSPRITES, spritename)
+  pathCustom = sprintf("Graphics/%s/%s/%s.png", DOSSIERCUSTOMSPRITES,poke2, spritename)
   pathReg = sprintf("Graphics/%s/%s/%s.png", BATTLERSPATH, poke2, spritename)
   path = pbResolveBitmap(pathCustom) && $game_variables[196] == 0 ? pathCustom : pathReg
   return path

@@ -42,13 +42,7 @@ class Movie
 
     pbBGMPlay(@bgm)
     while (@currentFrame <= @maxFrame)# && !(@canStopEarly && Input::ACTION))
-      Input.update
-      if Input.trigger?(Input::C)
-        echo "bruh"
-        echo "\n"
-
-      end
-      break if Input.trigger?(Input::ACTION) && @canStopEarly
+      break if Input.trigger?(Input::C) && @canStopEarly
       frame = sprintf(@framesPath, @currentFrame)
       picture = Sprite.new(viewport)
       picture.bitmap = pbBitmap(frame)
