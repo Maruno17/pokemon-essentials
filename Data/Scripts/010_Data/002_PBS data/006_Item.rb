@@ -6,6 +6,7 @@ module GameData
     attr_reader :pocket
     attr_reader :price
     attr_reader :sell_price
+    attr_reader :bp_price
     attr_reader :field_use
     attr_reader :battle_use
     attr_reader :flags
@@ -25,6 +26,7 @@ module GameData
       "Pocket"      => [:pocket,           "v"],
       "Price"       => [:price,            "u"],
       "SellPrice"   => [:sell_price,       "u"],
+      "BPPrice"     => [:bp_price,         "u"],
       "FieldUse"    => [:field_use,        "e", { "OnPokemon" => 1, "Direct" => 2, "TM" => 3,
                                                   "HM" => 4, "TR" => 5 }],
       "BattleUse"   => [:battle_use,       "e", { "OnPokemon" => 1, "OnMove" => 2, "OnBattler" => 3,
@@ -50,6 +52,7 @@ module GameData
         ["Pocket",      PocketProperty,                          _INTL("Pocket in the Bag where this item is stored.")],
         ["Price",       LimitProperty.new(Settings::MAX_MONEY),  _INTL("Purchase price of this item.")],
         ["SellPrice",   LimitProperty2.new(Settings::MAX_MONEY), _INTL("Sell price of this item. If blank, is half the purchase price.")],
+        ["BPPrice",     LimitProperty.new(Settings::MAX_BATTLE_POINTS), _INTL("Purchase price of this item in Battle Points (BP).")],
         ["FieldUse",    EnumProperty.new(field_use_array),       _INTL("How this item can be used outside of battle.")],
         ["BattleUse",   EnumProperty.new(battle_use_array),      _INTL("How this item can be used within a battle.")],
         ["Flags",       StringListProperty,                      _INTL("Words/phrases that can be used to group certain kinds of items.")],
@@ -111,6 +114,7 @@ module GameData
       @pocket           = hash[:pocket]           || 1
       @price            = hash[:price]            || 0
       @sell_price       = hash[:sell_price]       || (@price / 2)
+      @bp_price         = hash[:bp_price]         || 1
       @field_use        = hash[:field_use]        || 0
       @battle_use       = hash[:battle_use]       || 0
       @flags            = hash[:flags]            || []
@@ -163,7 +167,7 @@ module GameData
       return false
     end
 
-    def can_hold?;           return !is_important?; end
+    def can_hold?; return !is_important?; end
 
     def consumed_after_use?
       return !is_important? && @consumable
@@ -224,6 +228,8 @@ module GameData
       case key
       when "SellPrice"
         ret = nil if ret == @price / 2
+      when "BPPrice"
+        ret = nil if ret == 1
       when "FieldUse", "BattleUse"
         ret = nil if ret == 0
       when "Consumable"
