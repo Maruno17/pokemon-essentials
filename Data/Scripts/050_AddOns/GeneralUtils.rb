@@ -385,7 +385,7 @@ def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
 end
 
 def getCustomSpritePath(body,head)
-  return _INTL("Graphics/CustomBattlers/{1}.{2}.png", head, body)
+  return _INTL("Graphics/CustomBattlers/indexed/{1}/{1}.{2}.png", head, body)
 end
 
 def customSpriteExists(species)

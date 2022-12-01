@@ -130,7 +130,7 @@ class DoublePreviewScreen
 
 
   def getPicturePath(head_pokemon, body_pokemon)
-    pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", head_pokemon, body_pokemon)
+    pathCustom = _INTL("Graphics/CustomBattlers/indexed/{1}/{1}.{2}.png", head_pokemon, body_pokemon)
     if (pbResolveBitmap(pathCustom))
       picturePath = pathCustom
     else

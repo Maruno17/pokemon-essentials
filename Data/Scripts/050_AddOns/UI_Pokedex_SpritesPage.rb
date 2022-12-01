@@ -147,12 +147,12 @@ class PokemonPokedexInfo_Scene
     head_id = getHeadID(@species, body_id)
 
     baseFilename = head_id.to_s + "." + body_id.to_s
-    baseFilePath = Settings::CUSTOM_BATTLERS_FOLDER + "/" + head_id.to_s + "/" + baseFilename + ".png"
+    baseFilePath = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" + baseFilename + ".png"
     if pbResolveBitmap(baseFilePath)
       ret << baseFilePath
     end
     POSSIBLE_ALTS.each { |alt_letter|
-      altFilePath = Settings::CUSTOM_BATTLERS_FOLDER  + "/" + head_id.to_s + "/" + baseFilename + alt_letter + ".png"
+      altFilePath = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED  + "/" + head_id.to_s + "/" + baseFilename + alt_letter + ".png"
       if pbResolveBitmap(altFilePath)
         ret << altFilePath
       end

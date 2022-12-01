@@ -407,26 +407,51 @@ end
 #    return (body*NB_POKEMON)+head 
 #end
 
+
 def getCustomSpeciesList()
-  filesList = Dir["./Graphics/CustomBattlers/*"]
   speciesList = []
-  maxDexNumber = (NB_POKEMON * NB_POKEMON) + NB_POKEMON
-  maxVal = filesList.length - 1
-  for i in 0..maxVal
-    path = filesList[i]
-    file = File.basename(path, ".*")
-    splitPoke = file.split(".")
-    head = splitPoke[0].to_i
-    body = splitPoke[1].to_i
-    fused = (body * NB_POKEMON) + head
-    if fused <= maxDexNumber && fused > 0
-      speciesList << fused
+
+  for num in 1..NB_POKEMON
+    path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + num.to_s + "/*"
+    filesList = Dir[path]
+    echo filesList
+    echo "\n\n"
+
+    maxDexNumber = (NB_POKEMON * NB_POKEMON) + NB_POKEMON
+    maxVal = filesList.length - 1
+    for i in 0..maxVal
+      path = filesList[i]
+      file = File.basename(path, ".*")
+      splitPoke = file.split(".")
+      head = splitPoke[0].to_i
+      body = splitPoke[1].to_i
+      fused = (body * NB_POKEMON) + head
+      if fused <= maxDexNumber && fused > 0
+        speciesList << fused
+      end
+
     end
-
   end
-
   return speciesList
 end
+# def getCustomSpeciesList()
+#   filesList = Dir["./Graphics/CustomBattlers/*"]
+#   maxDexNumber = (NB_POKEMON * NB_POKEMON) + NB_POKEMON
+#   maxVal = filesList.length - 1
+#   for i in 0..maxVal
+#     path = filesList[i]
+#     file = File.basename(path, ".*")
+#     splitPoke = file.split(".")
+#     head = splitPoke[0].to_i
+#     body = splitPoke[1].to_i
+#     fused = (body * NB_POKEMON) + head
+#     if fused <= maxDexNumber && fused > 0
+#       speciesList << fused
+#     end
+#
+#   end
+# end
+
 
 def Kernel.getBaseStats(species)
   if $pkmn_dex[species] == nil
