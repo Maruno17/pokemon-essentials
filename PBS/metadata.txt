@@ -1676,7 +1676,6 @@ ShowArea=true
 ShowArea=true
 [662]
 # 4F
-Outdoor=false
 ShowArea=true
 [663]
 # 5F
@@ -1785,7 +1784,7 @@ MapPosition=1,22,6
 Outdoor=true
 ShowArea=true
 Environment = Grass
-[662]
+[762]
 # Offshore route
 Outdoor=true
 ShowArea=true

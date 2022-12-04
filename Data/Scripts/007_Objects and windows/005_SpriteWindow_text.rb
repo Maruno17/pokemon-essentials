@@ -1059,7 +1059,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     end
     @index = 0
     colors = getDefaultTextColors(self.windowskin)
-    @baseColor   = colors[0]
+    @baseColor   = Color.new(150, 150, 150)#colors[0]
     @shadowColor = colors[1]
     refresh
   end
