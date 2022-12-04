@@ -1,18 +1,32 @@
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
   proc { |score, move, user, ai, battle|
+    # Useless if there is no ally to redirect attacks from
     next Battle::AI::MOVE_USELESS_SCORE if user.battler.allAllies.length == 0
+    # Prefer if ally is at low HP and user is at high HP
+    if user.hp > user.totalhp * 2 / 3
+      ai.each_ally(user.index) do |b, i|
+        score += 10 if b.hp <= b.totalhp / 3
+      end
+    end
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RedirectAllMovesToTarget",
   proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE if user.battler.allAllies.length == 0
+    if target.opposes?(user)
+      # Useless if target is a foe but there is only one foe
+      next Battle::AI::MOVE_USELESS_SCORE if target.battler.allAllies.length == 0
+      # Useless if there is no ally to attack the spotlighted foe
+      next Battle::AI::MOVE_USELESS_SCORE if user.battler.allAllies.length == 0
+    end
+    # Generaly don't prefer this move, as it's a waste of the user's turn
+    next score - 15
   }
 )
 
@@ -49,7 +63,7 @@ Battle::AI::Handlers::MoveBasePower.add("RandomlyDamageOrHealTarget",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("HealAllyOrDamageFoe",
   proc { |move, user, target, ai, battle|
@@ -59,8 +73,12 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("HealAllyOrDamageFoe",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealAllyOrDamageFoe",
   proc { |score, move, user, target, ai, battle|
     if !target.opposes?(user)
-      score += 50
-      score -= target.hp * 100 / target.totalhp
+      # Consider how much HP will be restored
+      if target.hp >= target.totalhp * 0.5
+        score -= 10
+      else
+        score += 20 * (target.totalhp - target.hp) / target.totalhp
+      end
     end
     next score
   }
@@ -72,15 +90,26 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealAllyOrDamageFoe",
 Battle::AI::Handlers::MoveFailureCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |move, user, ai, battle|
     if !user.has_type?(:GHOST)
-      next true if !user.battler.pbCanLowerStatStage?(:SPEED, user.battler, move.move) &&
-                   !user.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
-                   !user.battler.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move)
+      will_fail = true
+      (move.move.statUp.length / 2).times do |i|
+        next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
+        will_fail = false
+        break
+      end
+      (move.move.statDown.length / 2).times do |i|
+        next if !user.battler.pbCanLowerStatStage?(move.move.statDown[i * 2], user.battler, move.move)
+        will_fail = false
+        break
+      end
+      next will_fail
     end
   }
 )
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |move, user, target, ai, battle|
-    next true if user.has_type?(:GHOST) && target.effects[PBEffects::Curse]
+    if user.has_type?(:GHOST)
+      next true if target.effects[PBEffects::Curse] || !target.battler.takesIndirectDamage?
+    end
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
@@ -96,12 +125,20 @@ Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAt
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |score, move, user, target, ai, battle|
     next score if !user.has_type?(:GHOST)
-    if user.hp <= user.totalhp / 2
-      if battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
-        score -= 90
-      else
-        score -= 50
-        score -= 30 if battle.switchStyle
+    # Don't prefer if user will faint because of using this move
+    next Battle::AI::MOVE_USELESS_SCORE if user.hp <= user.totalhp / 2
+    # Prefer early on
+    score += 10 if user.turnCount < 2
+    if ai.trainer.medium_skill?
+      # Prefer if the user has no damaging moves
+      score += 20 if !user.check_for_move { |m| m.damagingMove? }
+      # Prefer if the target can't switch out to remove its curse
+      score += 10 if !battle.pbCanChooseNonActive?(target.index)
+    end
+    if ai.trainer.high_skill?
+      # Prefer if user can stall while damage is dealt
+      if user.check_for_move { |m| m.is_a?(Battle::Move::ProtectMove) }
+        score += 15
       end
     end
     next score
@@ -144,14 +181,30 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetNextFireMoveDamage
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# DoublePowerAfterFusionFlare
+Battle::AI::Handlers::MoveEffectScore.add("DoublePowerAfterFusionFlare",
+  proc { |score, move, user, ai, battle|
+    # Prefer if an ally knows Fusion Flare
+    ai.each_ally(user.index) do |b, i|
+      score += 10 if b.check_for_move { |m| m.function == "DoublePowerAfterFusionBolt" }
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# DoublePowerAfterFusionBolt
+Battle::AI::Handlers::MoveEffectScore.add("DoublePowerAfterFusionBolt",
+  proc { |score, move, user, ai, battle|
+    # Prefer if an ally knows Fusion Bolt
+    ai.each_ally(user.index) do |b, i|
+      score += 10 if b.check_for_move { |m| m.function == "DoublePowerAfterFusionFlare" }
+    end
+    next score
+  }
+)
 
 #===============================================================================
 # TODO: Review score modifiers.
@@ -287,19 +340,43 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnUserStockpile",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# GrassPledge
+Battle::AI::Handlers::MoveEffectScore.add("GrassPledge",
+  proc { |score, move, user, ai, battle|
+    # Prefer if an ally knows a different Pledge move
+    ai.each_ally(user.index) do |b, i|
+      score += 10 if b.check_for_move { |m| ["FirePledge", "WaterPledge"].include?(m.function) }
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# FirePledge
+Battle::AI::Handlers::MoveEffectScore.add("FirePledge",
+  proc { |score, move, user, ai, battle|
+    # Prefer if an ally knows a different Pledge move
+    ai.each_ally(user.index) do |b, i|
+      score += 10 if b.check_for_move { |m| ["GrassPledge", "WaterPledge"].include?(m.function) }
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# WaterPledge
+Battle::AI::Handlers::MoveEffectScore.add("WaterPledge",
+  proc { |score, move, user, ai, battle|
+    # Prefer if an ally knows a different Pledge move
+    ai.each_ally(user.index) do |b, i|
+      score += 10 if b.check_for_move { |m| ["GrassPledge", "FirePledge"].include?(m.function) }
+    end
+    next score
+  }
+)
 
 #===============================================================================
 # TODO: Review score modifiers.
@@ -392,29 +469,36 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseRandomUserMoveIfAsleep",
 # StealAndUseBeneficialStatusMove
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|
-    next true if user.effects[PBEffects::Transform] || user.battler.pbHasMove?(move.id)
-    last_move_data = GameData::Move.try_get(target.battler.lastRegularMoveUsed)
-    next true if !last_move_data ||
-                 user.battler.pbHasMove?(target.battler.lastRegularMoveUsed) ||
-                 move.move.moveBlacklist.include?(last_move_data.function_code) ||
-                 last_move_data.type == :SHADOW
+    next true if user.effects[PBEffects::Transform] || !user.battler.pbHasMove?(move.id)
+    if user.faster_than?(target)
+      last_move_data = GameData::Move.try_get(target.battler.lastRegularMoveUsed)
+      next true if !last_move_data ||
+                   user.battler.pbHasMove?(target.battler.lastRegularMoveUsed) ||
+                   move.move.moveBlacklist.include?(last_move_data.function_code) ||
+                   last_move_data.type == :SHADOW
+    end
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
+  proc { |score, move, user, ai, battle|
+    # Generally don't prefer, as this wastes the user's turn just to gain a move
+    # of unknown utility
+    score -= 8
+    # Slightly prefer if this move will definitely succeed, just for the sake of
+    # getting rid of this move
+    score += 5 if user.faster_than?(target)
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ReplaceMoveWithTargetLastMoveUsed",
-  proc { |move, user, target, ai, battle|
-    next true if user.effects[PBEffects::Transform] || !user.battler.pbHasMove?(move.id)
-    last_move_data = GameData::Move.try_get(target.battler.lastRegularMoveUsed)
-    next true if !last_move_data ||
-                 user.battler.pbHasMove?(target.battler.lastRegularMoveUsed) ||
-                 move.move.moveBlacklist.include?(last_move_data.function_code) ||
-                 last_move_data.type == :SHADOW
-  }
-)
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("ReplaceMoveThisBattleWithTargetLastMoveUsed",
+                                                         "ReplaceMoveWithTargetLastMoveUsed")
+Battle::AI::Handlers::MoveEffectScore.copy("ReplaceMoveThisBattleWithTargetLastMoveUsed",
+                                           "ReplaceMoveWithTargetLastMoveUsed")

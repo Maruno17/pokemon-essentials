@@ -2,7 +2,6 @@
 # TODO: Review score modifier.
 #===============================================================================
 # TODO:
-# => Prefer move if it will KO the target (moreso if user is slower than target)
 # => Don't prefer damaging move if it won't KO, user has Stance Change and
 #    is in shield form, and user is slower than the target
 # => Check memory for past damage dealt by a target's non-high priority move,
@@ -38,6 +37,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:shiny_target,
 # => If target has previously used a move that will hurt the user by 30% of
 #    its current HP or more, moreso don't prefer a status move.
 # => Include EOR damage in this?
+# => Prefer move if it will KO the target (moreso if user is slower than target)
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:add_predicted_damage,
   proc { |score, move, user, target, ai, battle|

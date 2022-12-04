@@ -246,9 +246,9 @@ class Battle::AI
         score -= 20
       else
         has_special_moves = @user.check_for_move { |m| m.specialMove?(m.type) }
-        inc = (has_special_moves) ? 5 : 10
-        score += inc * (2 - old_stage) * inc_mult
-        score += 4 * inc_mult if @user.hp == @user.totalhp
+        inc = (has_special_moves) ? 10 : 20
+        score += inc * inc_mult
+        score += 8 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :DEFENSE
@@ -256,8 +256,8 @@ class Battle::AI
       if old_stage >= 2
         score -= 20
       else
-        score += 5 * (2 - old_stage) * inc_mult
-        score += 4 * inc_mult if @user.hp == @user.totalhp
+        score += 10 * inc_mult
+        score += 8 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :SPECIAL_ATTACK
@@ -269,9 +269,9 @@ class Battle::AI
         has_physical_moves = @user.check_for_move { |m| m.physicalMove?(m.type) &&
                                                         m.function != "UseUserDefenseInsteadOfUserAttack" &&
                                                         m.function != "UseTargetAttackInsteadOfUserAttack" }
-        inc = (has_physical_moves) ? 5 : 10
-        score += inc * (2 - old_stage) * inc_mult
-        score += 4 * inc_mult if @user.hp == @user.totalhp
+        inc = (has_physical_moves) ? 10 : 20
+        score += inc * inc_mult
+        score += 8 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :SPECIAL_DEFENSE
@@ -279,8 +279,8 @@ class Battle::AI
       if old_stage >= 2
         score -= 20
       else
-        score += 5 * (2 - old_stage) * inc_mult
-        score += 4 * inc_mult if @user.hp == @user.totalhp
+        score += 10 * inc_mult
+        score += 8 * inc_mult if @user.hp == @user.totalhp
       end
 
     when :SPEED
@@ -312,8 +312,8 @@ class Battle::AI
         end
         min_accuracy = min_accuracy * stage_mul[old_stage] / stage_div[old_stage]
         if min_accuracy < 90
-          score += 5 * (2 - old_stage) * inc_mult
-          score += 4 * inc_mult if @user.hp == @user.totalhp
+          score += 10 * inc_mult
+          score += 8 * inc_mult if @user.hp == @user.totalhp
         end
       end
 
@@ -330,8 +330,8 @@ class Battle::AI
       if old_stage >= 2
         score -= 20
       else
-        score += 5 * (2 - old_stage) * inc_mult
-        score += 4 * inc_mult if @user.hp == @user.totalhp
+        score += 10 * (2 - old_stage) * inc_mult
+        score += 8 * inc_mult if @user.hp == @user.totalhp
       end
 
     end

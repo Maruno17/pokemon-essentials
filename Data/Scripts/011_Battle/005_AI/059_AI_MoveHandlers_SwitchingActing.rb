@@ -22,8 +22,8 @@ Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserStatusMove",
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
   proc { |score, move, user, ai, battle|
     next score + 10 if user.wild?
-    if battle.pbTeamAbleNonActiveCount(user.index) == 1   # Don't switch in ace
-      score -= 60
+    if ai.trainer.has_skill_flag?("ReserveLastPokemon") && battle.pbTeamAbleNonActiveCount(user.index) == 1
+      score -= 60   # Don't switch in ace
     else
       score += 40 if user.effects[PBEffects::Confusion] > 0
       total = 0
@@ -51,8 +51,8 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserDamagingMove",
   proc { |score, move, user, ai, battle|
-    next 0 if !battle.pbCanChooseNonActive?(user.index) ||
-              battle.pbTeamAbleNonActiveCount(user.index) == 1   # Don't switch in ace
+    next 0 if !battle.pbCanChooseNonActive?(user.index)
+    next 0 if ai.trainer.has_skill_flag?("ReserveLastPokemon") && battle.pbTeamAbleNonActiveCount(user.index) == 1   # Don't switch in ace
   }
 )
 
@@ -326,20 +326,24 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HigherPriorityInGrassyTe
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerPPOfTargetLastMoveBy3",
   proc { |score, move, user, target, ai, battle|
-    last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
-    if last_move && last_move.total_pp > 0 && last_move.pp <= 3
-      score += 50
+    if user.faster_than?(target)
+      last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
+      if last_move && last_move.total_pp > 0
+        next score + 20 if last_move.pp <= 3   # Will fully deplete the move's PP
+        next score + 10 if last_move.pp <= 5
+        next score - 10 if last_move.pp > 9   # Too much PP left to make a difference
+      end
     end
-    next score
+    next score   # Don't know which move it will affect; treat as just a damaging move
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerPPOfTargetLastMoveBy4",
   proc { |move, user, target, ai, battle|
@@ -349,7 +353,13 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerPPOfTargetLastMove
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerPPOfTargetLastMoveBy4",
   proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE
+    if user.faster_than?(target)
+      last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
+      next score + 20 if last_move.pp <= 4   # Will fully deplete the move's PP
+      next score + 10 if last_move.pp <= 6
+      next score - 10 if last_move.pp > 10   # Too much PP left to make a difference
+    end
+    next score - 10   # Don't know which move it will affect; don't prefer
   }
 )
 

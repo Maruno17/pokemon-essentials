@@ -13,6 +13,7 @@
 #   PredictMoveFailure
 #   ScoreMoves
 #   PreferMultiTargetMoves
+#   ReserveLastPokemon (don't switch it in if possible)
 #===============================================================================
 class Battle::AI::AITrainer
   attr_reader :side, :trainer_index
@@ -35,6 +36,10 @@ class Battle::AI::AITrainer
       @skill_flags.push("PredictMoveFailure")
       @skill_flags.push("ScoreMoves")
       @skill_flags.push("PreferMultiTargetMoves")
+    end
+    if @skill >= 100
+      # TODO: Also have flag "DontReserveLastPokemon" which negates this.
+      @skill_flags.push("ReserveLastPokemon")
     end
   end
 

@@ -404,22 +404,27 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartDamageTargetEachTur
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartLeechSeedTarget",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::LeechSeed] >= 0
-    next true if target.has_type?(:GRASS)
+    next true if target.has_type?(:GRASS) || !target.battler.takesIndirectDamage?
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartLeechSeedTarget",
   proc { |score, move, user, target, ai, battle|
+    # Prefer early on
     score += 10 if user.turnCount < 2
     if ai.trainer.medium_skill?
-      if !user.check_for_move { |m| m.damagingMove? }
-        score += 20
-      end
-      score -= 20 if target.has_active_ability?([:LIQUIDOOZE]) || !target.battler.takesIndirectDamage?
+      # Prefer if the user has no damaging moves
+      score += 20 if !user.check_for_move { |m| m.damagingMove? }
+      # Prefer if the target can't switch out to remove its seeding
+      score += 10 if !battle.pbCanChooseNonActive?(target.index)
+      # Don't prefer if the leeched HP will hurt the user
+      score -= 20 if target.has_active_ability?([:LIQUIDOOZE])
     end
     if ai.trainer.high_skill?
+      # Prefer if user can stall while damage is dealt
       if user.check_for_move { |m| m.is_a?(Battle::Move::ProtectMove) }
         score += 15
       end
+      # Don't prefer if target can remove the seed
       if target.check_for_move { |m| m.is_a?(Battle::Move::RemoveUserBindingAndEntryHazards) }
         score -= 15
       end

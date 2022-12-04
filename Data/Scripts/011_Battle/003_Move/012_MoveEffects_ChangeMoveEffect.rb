@@ -138,7 +138,15 @@ end
 # user's Attack and Defense by 1 stage each. (Curse)
 #===============================================================================
 class Battle::Move::CurseTargetOrLowerUserSpd1RaiseUserAtkDef1 < Battle::Move
+  attr_reader :statUp, :statDown
+
   def ignoresSubstitute?(user); return true; end
+
+  def initialize(battle, move)
+    super
+    @statUp   = [:ATTACK, 1, :DEFENSE, 1]
+    @statDown = [:SPEED, 1]
+  end
 
   def pbTarget(user)
     if user.pbHasType?(:GHOST)
@@ -150,9 +158,18 @@ class Battle::Move::CurseTargetOrLowerUserSpd1RaiseUserAtkDef1 < Battle::Move
 
   def pbMoveFailed?(user, targets)
     return false if user.pbHasType?(:GHOST)
-    if !user.pbCanLowerStatStage?(:SPEED, user, self) &&
-       !user.pbCanRaiseStatStage?(:ATTACK, user, self) &&
-       !user.pbCanRaiseStatStage?(:DEFENSE, user, self)
+    failed = true
+    (@statUp.length / 2).times do |i|
+      next if !user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
+      failed = false
+      break
+    end
+    (@statDown.length / 2).times do |i|
+      next if !user.pbCanLowerStatStage?(@statDown[i * 2], user, self)
+      failed = false
+      break
+    end
+    if failed
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -170,15 +187,19 @@ class Battle::Move::CurseTargetOrLowerUserSpd1RaiseUserAtkDef1 < Battle::Move
   def pbEffectGeneral(user)
     return if user.pbHasType?(:GHOST)
     # Non-Ghost effect
-    if user.pbCanLowerStatStage?(:SPEED, user, self)
-      user.pbLowerStatStage(:SPEED, 1, user)
+    showAnim = true
+    (@statDown.length / 2).times do |i|
+      next if !user.pbCanLowerStatStage?(@statDown[i * 2], user, self)
+      if user.pbLowerStatStage(@statDown[i * 2], @statDown[(i * 2) + 1], user, showAnim)
+        showAnim = false
+      end
     end
     showAnim = true
-    if user.pbCanRaiseStatStage?(:ATTACK, user, self)
-      showAnim = false if user.pbRaiseStatStage(:ATTACK, 1, user, showAnim)
-    end
-    if user.pbCanRaiseStatStage?(:DEFENSE, user, self)
-      user.pbRaiseStatStage(:DEFENSE, 1, user, showAnim)
+    (@statUp.length / 2).times do |i|
+      next if !user.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
+      if user.pbRaiseStatStage(@statUp[i * 2], @statUp[(i * 2) + 1], user, showAnim)
+        showAnim = false
+      end
     end
   end
 

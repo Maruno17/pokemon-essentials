@@ -36,6 +36,10 @@ class Battle::AI
        battler.turnCount && battler.turnCount >= 5
       shouldSwitch = true
     end
+    # Pokémon is about to faint because of Perish Song
+    if !shouldSwitch && battler.effects[PBEffects::PerishSong] == 1
+      shouldSwitch = true
+    end
     # Pokémon is Perish Songed and has Baton Pass
     if @trainer.high_skill? && battler.effects[PBEffects::PerishSong] == 1
       battler.eachMoveWithIndex do |m, i|
@@ -87,15 +91,11 @@ class Battle::AI
         shouldSwitch = true
       end
     end
-    # Pokémon is about to faint because of Perish Song
-    if !shouldSwitch && battler.effects[PBEffects::PerishSong] == 1
-      shouldSwitch = true
-    end
     if shouldSwitch
       list = []
       idxPartyStart, idxPartyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(battler.index)
       @battle.pbParty(battler.index).each_with_index do |pkmn, i|
-        next if i == idxPartyEnd - 1   # Don't choose to switch in ace
+        next if @trainer.has_skill_flag?("ReserveLastPokemon") && i == idxPartyEnd - 1   # Don't choose to switch in ace
         next if !@battle.pbCanSwitch?(battler.index, i)
         # If perish count is 1, it may be worth it to switch
         # even with Spikes, since Perish Song's effect will end
@@ -152,7 +152,9 @@ class Battle::AI
     enemies = []
     idxPartyStart, idxPartyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
     party.each_with_index do |_p, i|
-      next if i == idxPartyEnd - 1 && enemies.length > 0   # Ignore ace if possible
+      if @trainer.has_skill_flag?("ReserveLastPokemon")
+        next if i == idxPartyEnd - 1 && enemies.length > 0   # Ignore ace if possible
+      end
       enemies.push(i) if @battle.pbCanSwitchLax?(idxBattler, i)
     end
     return -1 if enemies.length == 0
