@@ -299,6 +299,9 @@ class PokemonLoadScreen
   end
 
   def pbStartLoadScreen
+    if($game_temp.unimportedSprites.size >0)
+      handleReplaceExistingSprites()
+    end
     copyKeybindings()
     save_file_list = SaveData::AUTO_SLOTS + SaveData::MANUAL_SLOTS
     first_time = true

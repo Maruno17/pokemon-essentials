@@ -25,6 +25,7 @@ class Game_Temp
   attr_accessor :fadestate                # for sprite hashes
   attr_accessor :background_bitmap
   attr_accessor :mart_prices
+  attr_accessor :unimportedSprites
   #-----------------------------------------------------------------------------
   # * Object Initialization
   #-----------------------------------------------------------------------------
