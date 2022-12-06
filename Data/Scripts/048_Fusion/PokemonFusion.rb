@@ -756,6 +756,9 @@ class PokemonFusionScene
       removeItem = false
       if @pokemon2.isShiny? || @pokemon1.isShiny?
         @pokemon1.makeShiny
+        if !(@pokemon1.debug_shiny  ||@pokemon2.debug_shiny)
+          @pokemon1.natural_shiny = true if @pokemon2.natural_shiny
+        end
       end
 
       #make it untraded, pour qu'on puisse le unfused après, même si un des 2 était traded

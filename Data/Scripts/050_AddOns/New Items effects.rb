@@ -1411,7 +1411,6 @@ def pbFuse(pokemon, poke2, supersplicers = false)
 end
 
 def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
-
   bodyPoke = getBasePokemonID(pokemon.species_data.id_number, true)
   headPoke = getBasePokemonID(pokemon.species_data.id_number, false)
 
@@ -1468,12 +1467,16 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
         if pokemon.bodyShiny? && pokemon.headShiny?
           pokemon.shiny = true
           poke2.shiny = true
+          pokemon.natural_shiny = true if pokemon.natural_shiny && !pokemon.debug_shiny
+          poke2.natural_shiny = true if pokemon.natural_shiny && !pokemon.debug_shiny
         elsif pokemon.bodyShiny?
           pokemon.shiny = true
           poke2.shiny = false
+          pokemon.natural_shiny = true if pokemon.natural_shiny && !pokemon.debug_shiny
         elsif pokemon.headShiny?
           poke2.shiny = true
           pokemon.shiny = false
+          poke2.natural_shiny = true if pokemon.natural_shiny && !pokemon.debug_shiny
         else         #shiny was obtained already fused
         if rand(2) == 0
             pokemon.shiny = true
@@ -1484,6 +1487,7 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       end
       pokemon.debug_shiny=true if pokemon.debug_shiny && pokemon.body_shiny
       poke2.debug_shiny=true if pokemon.debug_shiny && poke2.head_shiny
+
 
       pokemon.body_shiny=false
       pokemon.head_shiny=false

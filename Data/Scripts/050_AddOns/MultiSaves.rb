@@ -299,9 +299,14 @@ class PokemonLoadScreen
   end
 
   def pbStartLoadScreen
-    if($game_temp.unimportedSprites.size >0)
+    if($game_temp.unimportedSprites && $game_temp.unimportedSprites.size >0)
       handleReplaceExistingSprites()
     end
+    if ($game_temp.nb_imported_sprites && $game_temp.nb_imported_sprites > 0)
+      pbMessage(_INTL("{1} new custom sprites were imported into the game",$game_temp.nb_imported_sprites.to_s))
+    end
+    $game_temp.nb_imported_sprites=nil
+
     copyKeybindings()
     save_file_list = SaveData::AUTO_SLOTS + SaveData::MANUAL_SLOTS
     first_time = true

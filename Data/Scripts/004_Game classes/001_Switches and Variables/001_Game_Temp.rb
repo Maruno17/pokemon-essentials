@@ -26,6 +26,9 @@ class Game_Temp
   attr_accessor :background_bitmap
   attr_accessor :mart_prices
   attr_accessor :unimportedSprites
+  attr_accessor :nb_imported_sprites
+  attr_accessor :loading_screen
+
   #-----------------------------------------------------------------------------
   # * Object Initialization
   #-----------------------------------------------------------------------------

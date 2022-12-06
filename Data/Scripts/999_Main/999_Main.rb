@@ -14,9 +14,9 @@ def handleReplaceExistingSprites()
   return if spritesToReplaceList.size==0
   commands = []
   #commands << "Pick which sprites to use as mains"
+  commands << "Do not import the new sprites"
   commands << "Replace all the old sprites with the new ones"
   #commands << "Import all the new sprites as alts"
-  commands << "Do not import the new sprites"
 
   messageSingular = "While importing custom sprites, the game has detected that {1} new custom sprite already has a version that exist in the game."
   messagePlural = "While importing custom sprites, the game has detected that {1} new custom sprites already have versions that exist in the game."
@@ -27,15 +27,17 @@ def handleReplaceExistingSprites()
 
   command = pbMessage("What to do with the new sprites?",commands,commands.size-1)
   case command
-  when 0 #Replace olds
+  when 0 #Do not import
+    pbMessage("You can manually sort the new sprites in the /indexed folder to choose which ones you want to keep.")
+    pbMessage("You can also delete the ones you don't want to replace the main sprites and restart the game.")
+    return
+  when 1 #Replace olds
     spritesToReplaceList.each do |oldPath, newPath|
       File.rename(oldPath, newPath)
+      $game_temp.nb_imported_sprites+=1
       echo "\nSorted " + oldPath + " into " + newPath
     end
-    #when 1 #Keep olds (rename new as alts)
-  when 1 #Do not import
-    pbMessage("You can manually sort the new sprites in the /indexed folder to choose which ones you want to keep.")
-    return
+    #when 2 #Keep olds (rename new as alts)
   end
 end
 
@@ -56,6 +58,7 @@ end
 
 
 def sortCustomBattlers()
+  $game_temp.nb_imported_sprites=0
   echo "Sorting CustomBattlers files..."
   alreadyExists = {}
   Dir.foreach(Settings::CUSTOM_BATTLERS_FOLDER) do |filename|
@@ -71,6 +74,7 @@ def sortCustomBattlers()
 
       else
         File.rename(oldPath, newPath)
+        $game_temp.nb_imported_sprites+=1
         echo "\nSorted " + filename + " into " + newPath
       end
     rescue
@@ -81,9 +85,48 @@ def sortCustomBattlers()
   $game_temp.unimportedSprites=alreadyExists
 end
 
+# def playInViewPort(viewport)
+#   @finished=false
+#   @currentFrame = 1
+#   @initialTime = Time.now
+#   @timeElapsed = Time.now
+#
+#   pbBGMPlay(@bgm)
+#   while (@currentFrame <= @maxFrame)# && !(@canStopEarly && Input::ACTION))
+#     break if Input.trigger?(Input::C) && @canStopEarly
+#     frame = sprintf(@framesPath, @currentFrame)
+#     picture = Sprite.new(viewport)
+#     picture.bitmap = pbBitmap(frame)
+#     picture.visible=true
+#     pbWait(Graphics.frame_rate / 20)
+#     picture.dispose
+#     @currentFrame += 1
+#   end
+#   @finished=true
+#   pbBGMStop
+# end
+
+
+def showLoadingScreen
+     intro_frames_path = "Graphics\\titles\\loading_screen"
+     picture = Sprite.new(@viewport)
+     picture.bitmap = pbBitmap(intro_frames_path)
+     picture.visible=true
+     pbWait(Graphics.frame_rate / 20)
+     picture.dispose
+end
+
+
+def showLoadMovie
+  path = "Graphics\\Pictures\\introMarill"
+  loading_screen = Sprite.new(@viewport)
+  loading_screen.bitmap = pbBitmap(path)
+  loading_screen.visible=true
+end
 
 def mainFunctionDebug
   begin
+    showLoadingScreen
     MessageTypes.loadMessageFile("Data/messages.dat") if safeExists?("Data/messages.dat")
     PluginManager.runPlugins
     Compiler.main
@@ -92,7 +135,6 @@ def mainFunctionDebug
     Graphics.update
     Graphics.freeze
     sortCustomBattlers()
-
     $scene = pbCallTitle
     $scene.main until $scene.nil?
     Graphics.transition(20)

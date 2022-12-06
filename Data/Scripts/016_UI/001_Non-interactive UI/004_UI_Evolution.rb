@@ -601,7 +601,7 @@ class PokemonEvolutionScene
 
     @sprites["msgwindow"].text = ""
     # Check for consumed item and check if Pokémon should be duplicated
-    pbEvolutionMethodAfterEvolution
+    pbEvolutionMethodAfterEvolution if !reversing
 
     oldAbility = @pokemon.ability.id
     newSpecies = GameData::Species.get(@newspecies)
