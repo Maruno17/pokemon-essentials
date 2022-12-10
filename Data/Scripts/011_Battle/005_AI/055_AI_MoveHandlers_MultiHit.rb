@@ -260,7 +260,7 @@ Battle::AI::Handlers::MoveBasePower.add("TwoTurnAttackOneTurnInSun",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackOneTurnInSun",
   proc { |score, move, user, target, ai, battle|
-    # Sunny weather this a 1 turn move, the same as a move with no effect
+    # In sunny weather this a 1 turn move, the same as a move with no effect
     next score if [:Sun, :HarshSun].include?(user.battler.effectiveWeather)
     # Score for being a two turn attack
     next Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",

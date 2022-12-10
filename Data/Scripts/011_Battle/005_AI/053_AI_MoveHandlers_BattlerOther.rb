@@ -916,7 +916,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserLosesFireType",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToSimple",
   proc { |move, user, target, ai, battle|
@@ -924,9 +924,23 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToSimpl
     next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetAbilityToSimple",
+  proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if !target.ability_active?
+    old_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
+    new_ability_rating = ai.battler_wants_ability?(target, :SIMPLE)
+    side_mult = (target.opposes?(user)) ? 1 : -1
+    if old_ability_rating > new_ability_rating
+      score += 4 * side_mult * [old_ability_rating - new_ability_rating, 3].max
+    elsif old_ability_rating < new_ability_rating
+      score -= 4 * side_mult * [new_ability_rating - old_ability_rating, 3].max
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToInsomnia",
   proc { |move, user, target, ai, battle|
@@ -934,9 +948,23 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToInsom
     next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetAbilityToInsomnia",
+  proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if !target.ability_active?
+    old_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
+    new_ability_rating = ai.battler_wants_ability?(target, :INSOMNIA)
+    side_mult = (target.opposes?(user)) ? 1 : -1
+    if old_ability_rating > new_ability_rating
+      score += 4 * side_mult * [old_ability_rating - new_ability_rating, 3].max
+    elsif old_ability_rating < new_ability_rating
+      score -= 4 * side_mult * [new_ability_rating - old_ability_rating, 3].max
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserAbilityToTargetAbility",
   proc { |move, user, target, ai, battle|
@@ -946,16 +974,20 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserAbilityToTargetA
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetUserAbilityToTargetAbility",
   proc { |score, move, user, target, ai, battle|
-    score -= 40   # don't prefer this move
-    if ai.trainer.medium_skill? && user.opposes?(target)
-      score -= 50 if [:TRUANT, :SLOWSTART].include?(target.ability_id)
+    next Battle::AI::MOVE_USELESS_SCORE if !user.ability_active?
+    old_ability_rating = ai.battler_wants_ability?(user, user.ability_id)
+    new_ability_rating = ai.battler_wants_ability?(user, target.ability_id)
+    if old_ability_rating > new_ability_rating
+      score += 4 * [old_ability_rating - new_ability_rating, 3].max
+    elsif old_ability_rating < new_ability_rating
+      score -= 4 * [new_ability_rating - old_ability_rating, 3].max
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToUserAbility",
   proc { |move, user, target, ai, battle|
@@ -967,52 +999,87 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToUserA
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetAbilityToUserAbility",
   proc { |score, move, user, target, ai, battle|
-    score -= 40   # don't prefer this move
-    if ai.trainer.medium_skill? && user.opposes?(target)
-      score += 90 if [:TRUANT, :SLOWSTART].include?(user.ability_id)
+    next Battle::AI::MOVE_USELESS_SCORE if !target.ability_active?
+    old_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
+    new_ability_rating = ai.battler_wants_ability?(target, user.ability_id)
+    side_mult = (target.opposes?(user)) ? 1 : -1
+    if old_ability_rating > new_ability_rating
+      score += 4 * side_mult * [old_ability_rating - new_ability_rating, 3].max
+    elsif old_ability_rating < new_ability_rating
+      score -= 4 * side_mult * [new_ability_rating - old_ability_rating, 3].max
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UserTargetSwapAbilities",
   proc { |move, user, target, ai, battle|
     next true if !user.ability || user.battler.unstoppableAbility? ||
-                 user.ability_id == :WONDERGUARD
+                 user.battler.ungainableAbility? || user.ability_id == :WONDERGUARD
     next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapAbilities",
   proc { |score, move, user, target, ai, battle|
-    score -= 40   # don't prefer this move
-    if ai.trainer.high_skill? && user.opposes?(target)
-      score -= 90 if [:TRUANT, :SLOWSTART].include?(target.ability_id)
+    next Battle::AI::MOVE_USELESS_SCORE if !user.ability_active? && !target.ability_active?
+    old_user_ability_rating = ai.battler_wants_ability?(user, user.ability_id)
+    new_user_ability_rating = ai.battler_wants_ability?(user, target.ability_id)
+    user_diff = new_user_ability_rating - old_user_ability_rating
+    user_diff = 0 if !user.ability_active?
+    old_target_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
+    new_target_ability_rating = ai.battler_wants_ability?(target, user.ability_id)
+    target_diff = new_target_ability_rating - old_target_ability_rating
+    target_diff = 0 if !target.ability_active?
+    side_mult = (target.opposes?(user)) ? 1 : -1
+    if user_diff > target_diff
+      score += 4 * side_mult * [user_diff - target_diff, 3].max
+    elsif target_diff < user_diff
+      score -= 4 * side_mult * [target_diff - user_diff, 3].max
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("NegateTargetAbility",
   proc { |move, user, target, ai, battle|
     next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbility",
+  proc { |score, move, user, target, ai, battle|
+    target_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
+    side_mult = (target.opposes?(user)) ? 1 : -1
+    if target_ability_rating > 0
+      score += 4 * side_mult * [target_ability_rating, 3].max
+    elsif target_ability_rating < 0
+      score -= 4 * side_mult * [target_ability_rating.abs, 3].max
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbilityIfTargetActed",
   proc { |score, move, user, target, ai, battle|
     next score if target.effects[PBEffects::Substitute] > 0 || target.effects[PBEffects::GastroAcid]
     next score if target.battler.unstoppableAbility?
     next score if user.faster_than?(target)
-    next score + 10
+    target_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
+    side_mult = (target.opposes?(user)) ? 1 : -1
+    if target_ability_rating > 0
+      score += 4 * side_mult * [target_ability_rating, 3].max
+    elsif target_ability_rating < 0
+      score -= 4 * side_mult * [target_ability_rating.abs, 3].max
+    end
+    next score
   }
 )
 
@@ -1134,7 +1201,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartGravity",
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartGravity",
   proc { |score, move, user, ai, battle|
-    # TODO: Gravity increases accuracy of all moves. Should this be considered?
+    # TODO: Gravity increases accuracy of all moves. Prefer if user/ally has low
+    #       accuracy moves, don't prefer if foes have them. Should "low
+    #       accuracy" mean anything below 85%?
     ai.each_battler do |b, i|
       # Prefer grounding airborne foes, don't prefer grounding airborne allies
       # Prefer making allies affected by terrain, don't prefer making foes

@@ -159,27 +159,59 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SwitchOutTargetDamagingM
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BindTarget",
   proc { |score, move, user, target, ai, battle|
-    next score + 40 if target.effects[PBEffects::Trapping] == 0
+    next score if target.effects[PBEffects::Trapping] > 0
+    next score if target.effects[PBEffects::Substitute] > 0
+    # Prefer if the user has a Binding Band or Grip Claw (because why have it if
+    # you don't want to use it?)
+    score += 5 if user.has_active_item?([:BINDINGBAND, :GRIPCLAW])
+    # Target will take damage at the end of each round from the binding
+    score += 8 if target.battler.takesIndirectDamage?
+    # Check whether the target will be trapped in battle by the binding
+    untrappable = Settings::MORE_TYPE_EFFECTS && target.has_type?(:GHOST)
+    if !untrappable && target.ability_active?
+      untrappable = Battle::AbilityEffects.triggerCertainSwitching(target.ability, target.battler, battle)
+    end
+    if !untrappable && target.item_active?
+      untrappable = Battle::ItemEffects.triggerCertainSwitching(target.ability, target.battler, battle)
+    end
+    if !untrappable && !target.battler.trappedInBattle?
+      score += 8   # Prefer if the target will become trapped by this move
+      eor_damage = target.rough_end_of_round_damage
+      if eor_damage > 0
+        # Prefer if the target will take damage at the end of each round on top
+        # of binding damage
+        score += 8
+      elsif eor_damage < 0
+        # Don't prefer if the target will heal itself at the end of each round
+        score -= 8
+      end
+      # Prefer if the target has been Perish Songed
+      score += 10 if target.effects[PBEffects::PerishSong] > 0
+    end
+    # Don't prefer if the target can remove the binding (and the binding has an
+    # effect)
+    if (!untrappable && !target.battler.trappedInBattle?) || target.battler.takesIndirectDamage?
+      if target.check_for_move { |m| m.function == "RemoveUserBindingAndEntryHazards" }
+        score -= 8
+      end
+    end
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("BindTargetDoublePowerIfTargetUnderwater",
   proc { |power, move, user, target, ai, battle|
     next move.move.pbModifyDamage(power, user.battler, target.battler)
   }
 )
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BindTargetDoublePowerIfTargetUnderwater",
-  proc { |score, move, user, target, ai, battle|
-    next score + 40 if target.effects[PBEffects::Trapping] == 0
-  }
-)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("BindTarget",
+                                                        "BindTargetDoublePowerIfTargetUnderwater")
 
 #===============================================================================
 # TODO: Review score modifiers.

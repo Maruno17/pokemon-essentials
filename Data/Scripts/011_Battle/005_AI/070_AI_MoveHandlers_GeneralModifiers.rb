@@ -1,3 +1,6 @@
+# TODO: Check all lingering effects to see if the AI needs to adjust itself
+#       because of them.
+
 #===============================================================================
 # TODO: Review score modifier.
 #===============================================================================

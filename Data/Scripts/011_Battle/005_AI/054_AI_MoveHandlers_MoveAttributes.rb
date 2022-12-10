@@ -58,7 +58,7 @@ Battle::AI::Handlers::MoveBasePower.add("LowerTargetHPToUserHP",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("OHKO",
   proc { |move, user, target, ai, battle|
@@ -71,27 +71,44 @@ Battle::AI::Handlers::MoveBasePower.add("OHKO",
     next target.hp
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("OHKO",
+  proc { |score, move, user, target, ai, battle|
+    # Don't prefer if the target has less HP and user has a non-OHKO damaging move
+    if user.check_for_move { |m| !m.is_a?(Battle::Move::OHKO) && m.damagingMove? }
+      score -= 10 if target.hp <= target.totalhp / 2
+      score -= 10 if target.hp <= target.totalhp / 4
+    end
+    # TODO: Maybe predict dealt damage of all user's other moves, and score this
+    #       move useless if another one can KO the target. Might also need to
+    #       take into account whether those moves will fail. Might need to do
+    #       this specially after all move scores are determined.
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("OHKOIce",
   proc { |move, user, target, ai, battle|
-    next true if target.level > user.level
-    next true if !battle.moldBreaker && target.has_active_ability?(:STURDY)
     next true if target.has_type?(:ICE)
+    next Battle::AI::Handlers.move_will_fail_against_target?("OHKO", move, user, target, ai, battle)
   }
 )
 Battle::AI::Handlers::MoveBasePower.copy("OHKO",
                                          "OHKOIce")
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("OHKO",
+                                                        "OHKOIce")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("OHKO",
                                                          "OHKOHitsUndergroundTarget")
 Battle::AI::Handlers::MoveBasePower.copy("OHKO",
                                          "OHKOHitsUndergroundTarget")
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("OHKO",
+                                                        "OHKOHitsUndergroundTarget")
 
 #===============================================================================
 #
@@ -397,6 +414,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetNotAc
 Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if user.effects[PBEffects::LaserFocus] > 0
+    # TODO: Useless if user will already always critical hit ("AlwaysCriticalHit"
+    #       or Lucky Chant/crit stage is +3/etc.).
     next score + 10
   }
 )
@@ -517,6 +536,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenPhysicalDamageAgainstUserS
     # Doesn't stack with Aurora Veil
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
     # Don't prefer the lower the user's HP is
+    # TODO: Should this HP check exist? The effect can still be set up for
+    #       allies. Maybe just don't prefer if there are no replacement mons
+    #       left.
     if user.hp < user.totalhp / 2
       score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
     end
@@ -543,6 +565,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSi
     # Doesn't stack with Aurora Veil
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
     # Don't prefer the lower the user's HP is
+    # TODO: Should this HP check exist? The effect can still be set up for
+    #       allies. Maybe just don't prefer if there are no replacement mons
+    #       left.
     if user.hp < user.totalhp / 2
       score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
     end
@@ -571,6 +596,9 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHai
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::Reflect] > 0 &&
                                            user.pbOwnSide.effects[PBEffects::LightScreen] > 0
     # Don't prefer the lower the user's HP is
+    # TODO: Should this HP check exist? The effect can still be set up for
+    #       allies. Maybe just don't prefer if there are no replacement mons
+    #       left.
     if user.hp < user.totalhp / 2
       score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
     end
@@ -893,14 +921,18 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("EnsureNextMoveAlwaysHits
     next Battle::AI::MOVE_USELESS_SCORE if user.has_active_ability?(:NOGUARD) || target.has_active_ability?(:NOGUARD)
     next Battle::AI::MOVE_USELESS_SCORE if target.effects[PBEffects::Telekinesis] > 0
     # Prefer if the user knows moves with low accuracy
+    # TODO: This isn't the correct use of check_for_move, since it should just
+    #       loop through them instead.
     user.check_for_move do |m|
       next if target.effects[PBEffects::Minimize] && m.tramplesMinimize? && Settings::MECHANICS_GENERATION >= 6
       # TODO: There are other effects that make a move certain to hit. Account
-      #       for those as well, or is that too micro-managey?
+      #       for those as well. Score this move useless if no moves would
+      #       benefit from locking on.
       acc = m.accuracy
       acc = m.pbBaseAccuracy(user.battler, target.battler) if ai.trainer.medium_skill?
       score += 4 if acc < 90 && acc != 0
       score += 4 if acc <= 50 && acc != 0
+      # TODO: Prefer more if m is a OHKO move.
     end
     # Not worth it if the user or the target is at low HP
     score -= 10 if user.hp < user.totalhp / 2
