@@ -6,10 +6,6 @@
 437,South,0,440,North,11
 # Route 15 (444) - Route 14 (440)
 444,East,0,440,West,6
-# Area 5 (487) - Secret Area (489)
-487,West,0,489,East,0
-# Secret Area (489) - Area 1 (445)
-489,65,85,445,0,0
 # Vermillion City (19) - Route 6 (16)
 19,North,1,16,South,0
 # Vermillion City (19) - Route 11 (155)

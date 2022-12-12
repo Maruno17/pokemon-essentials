@@ -30,6 +30,8 @@ def handleReplaceExistingSprites()
   when 0 #Do not import
     pbMessage("You can manually sort the new sprites in the /indexed folder to choose which ones you want to keep.")
     pbMessage("You can also delete the ones you don't want to replace the main sprites and restart the game.")
+    pbMessage("Keep in mind that the game will take longer to load until these sprites are imported/removed.")
+
     return
   when 1 #Replace olds
     spritesToReplaceList.each do |oldPath, newPath|
