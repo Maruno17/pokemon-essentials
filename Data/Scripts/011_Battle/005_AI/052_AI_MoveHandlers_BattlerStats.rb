@@ -10,7 +10,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserAttack1",
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAttack1",
   proc { |score, move, user, ai, battle|
-    next ai.get_score_for_user_stat_raise(score)
+    next ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
   }
 )
 
@@ -28,7 +28,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAttack1",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseUserAttack2IfTargetFaints",
   proc { |score, move, user, target, ai, battle|
     if move.rough_damage >= target.hp * 0.9
-      next ai.get_score_for_user_stat_raise(score)
+      next ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     end
   }
 )
@@ -58,7 +58,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("MaxUserAttackLoseHalfOfTotalHP",
 )
 Battle::AI::Handlers::MoveEffectScore.add("MaxUserAttackLoseHalfOfTotalHP",
   proc { |score, move, user, ai, battle|
-    score = ai.get_score_for_user_stat_raise(score)
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     # Don't prefer the lower the user's HP is
     score -= 80 * (1 - (user.hp.to_f / user.totalhp))   # 0 to -40
     next score
@@ -81,7 +81,7 @@ Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
                                             "RaiseUserDefense1CurlUpUser")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense1CurlUpUser",
   proc { |score, move, user, ai, battle|
-    score = ai.get_score_for_user_stat_raise(score)
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     if !user.effects[PBEffects::DefenseCurl] &&
        user.check_for_move { |m| m.function == "MultiTurnAttackPowersUpEachTurn" }
       score += 10
@@ -146,7 +146,7 @@ Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
                                             "RaiseUserSpDef1PowerUpElectricMove")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1PowerUpElectricMove",
   proc { |score, move, user, ai, battle|
-    score = ai.get_score_for_user_stat_raise(score)
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     if user.check_for_move { |m| m.damagingMove? && m.type == :ELECTRIC }
       score += 10
     end
@@ -193,7 +193,7 @@ Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpeed2",
                                             "RaiseUserSpeed2LowerUserWeight")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed2LowerUserWeight",
   proc { |score, move, user, ai, battle|
-    score = ai.get_score_for_user_stat_raise(score)
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     if ai.trainer.medium_skill?
       # TODO: Take into account weight-modifying items/abilities? This "> 1"
       #       line can probably ignore them, but these moves' powers will change
@@ -274,7 +274,7 @@ Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserEvasion2",
                                             "RaiseUserEvasion2MinimizeUser")
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserEvasion2MinimizeUser",
   proc { |score, move, user, ai, battle|
-    score = ai.get_score_for_user_stat_raise(score)
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     if ai.trainer.medium_skill? && !user.effects[PBEffects::Minimize]
       ai.each_foe_battler(user.side) do |b, i|
         # Moves that do double damage and (in Gen 6+) have perfect accuracy
@@ -368,7 +368,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAtkSpAtk1",
                                            "RaiseUserAtkSpAtk1Or2InSun")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2",
   proc { |move, user, ai, battle|
@@ -388,21 +388,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("LowerUserDefSpDef1RaiseUserAtkSpAtkS
 )
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2",
   proc { |score, move, user, ai, battle|
-    score -= user.stages[:ATTACK] * 20
-    score -= user.stages[:SPEED] * 20
-    score -= user.stages[:SPECIAL_ATTACK] * 20
-    score += user.stages[:DEFENSE] * 10
-    score += user.stages[:SPECIAL_DEFENSE] * 10
-    if ai.trainer.medium_skill?
-      hasDamagingAttack = false
-      user.battler.eachMove do |m|
-        next if !m.damagingMove?
-        hasDamagingAttack = true
-        break
-      end
-      score += 20 if hasDamagingAttack
-    end
-    next score
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
+    next ai.get_score_for_target_stat_drop(score, user, move.move.statDown, false)
   }
 )
 
@@ -463,7 +451,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAtkSpAtk1",
                                            "RaiseUserMainStats1")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1LoseThirdOfTotalHP",
   proc { |move, user, ai, battle|
@@ -479,12 +467,12 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1LoseThirdOfTotalH
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1LoseThirdOfTotalHP",
   proc { |score, move, user, ai, battle|
-    next 0 if !battle.moldBreaker && user.has_active_ability?(:CONTRARY)
-    score += 30 if ai.trainer.high_skill? && user.hp >= user.totalhp * 0.75
-    GameData::Stat.each_main_battle { |s| score += 10 if user.stages[s.id] <= 0 }
-    if ai.trainer.medium_skill?
-      hasDamagingAttack = user.battler.moves.any? { |m| next m&.damagingMove? }
-      score += 20 if hasDamagingAttack
+    # Score for stat increase
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
+    # Score for losing HP
+    if user.hp <= user.totalhp * 0.75
+      score -= 30 * (user.totalhp - user.hp) / user.totalhp
     end
     next score
   }
@@ -507,15 +495,11 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1TrapUserInBattle"
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1TrapUserInBattle",
   proc { |score, move, user, ai, battle|
-    next 0 if !battle.moldBreaker && user.has_active_ability?(:CONTRARY)
-    if ai.trainer.high_skill?
-      score -= 50 if user.hp <= user.totalhp / 2
-      score += 30 if user.battler.trappedInBattle?
-    end
-    GameData::Stat.each_main_battle { |s| score += 10 if user.stages[s.id] <= 0 }
-    if ai.trainer.medium_skill?
-      hasDamagingAttack = user.battler.moves.any? { |m| next m&.damagingMove? }
-      score += 20 if hasDamagingAttack
+    # Score for stat increase
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
+    # Score for trapping user in battle
+    if ai.trainer.medium_skill? && !user.battler.trappedInBattle?
+      score -= 10 if user.hp <= user.totalhp / 2
     end
     next score
   }
@@ -531,113 +515,85 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRaiseUserAtk1WhenDamaged",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("LowerUserAttack1",
   proc { |score, move, user, ai, battle|
-    next score + user.stages[:ATTACK] * 10
+    next ai.get_score_for_target_stat_drop(score, user, move.move.statDown)
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserAttack1",
                                            "LowerUserAttack2")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefense1",
-  proc { |score, move, user, ai, battle|
-    next score + user.stages[:DEFENSE] * 10
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("LowerUserAttack1",
+                                           "LowerUserDefense1")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserDefense1",
                                            "LowerUserDefense2")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("LowerUserSpAtk1",
-  proc { |score, move, user, ai, battle|
-    next score + user.stages[:SPECIAL_ATTACK] * 10
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("LowerUserAttack1",
+                                           "LowerUserSpAtk1")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserSpAtk1",
                                            "LowerUserSpAtk2")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("LowerUserSpDef1",
-  proc { |score, move, user, ai, battle|
-    next score + user.stages[:SPECIAL_DEFENSE] * 10
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("LowerUserDefense1",
+                                           "LowerUserSpDef1")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserSpDef1",
                                            "LowerUserSpDef2")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("LowerUserSpeed1",
-  proc { |score, move, user, ai, battle|
-    next score + user.stages[:SPECIAL_DEFENSE] * 10
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("LowerUserAttack1",
+                                           "LowerUserSpeed1")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.copy("LowerUserSpeed1",
                                            "LowerUserSpeed2")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("LowerUserAtkDef1",
-  proc { |score, move, user, ai, battle|
-    avg =  user.stages[:ATTACK] * 10
-    avg += user.stages[:DEFENSE] * 10
-    next score + avg / 2
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("LowerUserAttack1",
+                                           "LowerUserAtkDef1")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDef1",
-  proc { |score, move, user, ai, battle|
-    avg =  user.stages[:DEFENSE] * 10
-    avg += user.stages[:SPECIAL_DEFENSE] * 10
-    next score + avg / 2
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("LowerUserAttack1",
+                                           "LowerUserDefSpDef1")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("LowerUserDefSpDefSpd1",
-  proc { |score, move, user, ai, battle|
-    avg =  user.stages[:DEFENSE] * 10
-    avg += user.stages[:SPEED] * 10
-    avg += user.stages[:SPECIAL_DEFENSE] * 10
-    next score + (avg / 3).floor
-  }
-)
+Battle::AI::Handlers::MoveEffectScore.copy("LowerUserAttack1",
+                                           "LowerUserDefSpDefSpd1")
 
 #===============================================================================
 # TODO: Review score modifiers.
@@ -646,6 +602,11 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetAttack1",
   proc { |move, user, target, ai, battle|
     next true if move.statusMove? &&
                  !target.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move)
+  }
+)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetAttack1",
+  proc { |score, move, user, target, ai, battle|
+    next ai.get_score_for_target_stat_raise(score, target, [:ATTACK, 1])
   }
 )
 
@@ -660,8 +621,12 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetAttack2Confu
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetAttack2ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false)
-    next score + 30 if target.stages[:ATTACK] < 0
+    next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false, move.move)
+    # Score for stat raise
+    stat_score = ai.get_score_for_target_stat_raise(score, target, [:ATTACK, 2], false)
+    # Score for confusing the target
+    next Battle::AI::Handlers.apply_move_effect_against_target_score(
+       "ConfuseTarget", score, move, user, target, ai, battle)
   }
 )
 
@@ -676,13 +641,17 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetSpAtk1Confus
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetSpAtk1ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false)
-    next score + 30 if target.stages[:SPECIAL_ATTACK] < 0
+    next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false, move.move)
+    # Score for stat raise
+    stat_score = ai.get_score_for_target_stat_raise(score, target, [:SPECIAL_ATTACK, 1], false)
+    # Score for confusing the target
+    next Battle::AI::Handlers.apply_move_effect_against_target_score(
+       "ConfuseTarget", score, move, user, target, ai, battle)
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetSpDef1",
   proc { |move, user, target, ai, battle|
@@ -691,7 +660,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetSpDef1",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetSpDef1",
   proc { |score, move, user, target, ai, battle|
-    next score - target.stages[:SPECIAL_DEFENSE] * 10
+    next ai.get_score_for_target_stat_raise(score, target, [:SPECIAL_DEFENSE, 1])
   }
 )
 
@@ -720,7 +689,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetRandomStat2",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetAtkSpAtk2",
   proc { |move, user, target, ai, battle|
@@ -731,10 +700,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetAtkSpAtk2",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if target.opposes?(user)
-    next Battle::AI::MOVE_USELESS_SCORE if !battle.moldBreaker && target.has_active_ability?(:CONTRARY)
-    score -= target.stages[:ATTACK] * 10
-    score -= target.stages[:SPECIAL_ATTACK] * 10
-    next score
+    next ai.get_score_for_target_stat_raise(score, target, [:ATTACK, 2, :SPECIAL_ATTACK, 2])
   }
 )
 
@@ -749,7 +715,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerTargetAttack1",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetAttack1",
   proc { |score, move, user, target, ai, battle|
-    next ai.get_score_for_target_stat_drop(score)
+    next ai.get_score_for_target_stat_drop(score, target, move.move.statDown)
   }
 )
 
@@ -911,7 +877,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerTargetSpeed1MakeTa
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetSpeed1MakeTargetWeakerToFire",
   proc { |score, move, user, target, ai, battle|
     # Score for stat drop
-    score = ai.get_score_for_target_stat_drop(score)
+    score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown)
     # Score for adding weakness to Fire
     if !target.effects[PBEffects::TarShot]
       score += 20 if user.battler.moves.any? { |m| m.damagingMove? && m.pbCalcType(user.battler) == :FIRE }
@@ -997,7 +963,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerTargetEvasion1Remo
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetEvasion1RemoveSideEffects",
   proc { |score, move, user, target, ai, battle|
     # Score for stat drop
-    score = ai.get_score_for_target_stat_drop(score)
+    score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown)
     # Score for removing side effects/terrain
     score += 30 if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
                    target.pbOwnSide.effects[PBEffects::Reflect] > 0 ||
@@ -1089,13 +1055,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseAlliesAtkDef1",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseAlliesAtkDef1",
   proc { |score, move, user, target, ai, battle|
     user.battler.allAllies.each do |b|
-      if !battle.moldBreaker && b.hasActiveAbility?(:CONTRARY)
-        score -= 40
-      else
-        score += 10
-        score -= b.stages[:ATTACK] * 10
-        score -= b.stages[:SPECIAL_ATTACK] * 10
-      end
+      score = ai.get_score_for_target_stat_raise(score, b, [:ATTACK, 1, :DEFENSE, 1])
     end
     next score
   }
@@ -1125,13 +1085,10 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaisePlusMinusUserAndAl
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
   proc { |score, move, user, target, ai, battle|
+#    score = ai.get_score_for_target_stat_raise(score, user, [:ATTACK, 1, :SPECIAL_ATTACK, 1], false)
     user.battler.allAllies.each do |b|
-      next if b.statStageAtMax?(:ATTACK) && b.statStageAtMax?(:SPECIAL_ATTACK)
-      score -= b.stages[:ATTACK] * 10
-      score -= b.stages[:SPECIAL_ATTACK] * 10
+      score = ai.get_score_for_target_stat_raise(score, b, [:ATTACK, 1, :SPECIAL_ATTACK, 1], false)
     end
-    score -= user.stages[:ATTACK] * 10
-    score -= user.stages[:SPECIAL_ATTACK] * 10
     next score
   }
 )
@@ -1250,9 +1207,11 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapAtkSpAtkSt
     target_attack = target.stages[:ATTACK]
     target_spatk = target.stages[:SPECIAL_ATTACK]
     next Battle::AI::MOVE_USELESS_SCORE if user_attack >= target_attack && user_spatk >= target_spatk
-    next score - 20 if user_attack + user_spatk <= target_attack + target_spatk
-    score += (target_attack - user_attack) * 10
-    score += (target_spatk - user_spatk) * 10
+    next score - 20 if user_attack + user_spatk >= target_attack + target_spatk
+    # TODO: Check whether the user has physical/special moves that will be
+    #       stronger after the swap, and vice versa for the target?
+    score += (target_attack - user_attack) * 5
+    score += (target_spatk - user_spatk) * 5
     next score
   }
 )
@@ -1270,9 +1229,11 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapDefSpDefSt
     target_def = target.stages[:DEFENSE]
     target_spdef = target.stages[:SPECIAL_DEFENSE]
     next Battle::AI::MOVE_USELESS_SCORE if user_def >= target_def && user_spdef >= target_spdef
-    next score - 20 if user_def + user_spdef <= target_def + target_spdef
-    score += (target_def - user_def) * 10
-    score += (target_spdef - user_spdef) * 10
+    next score - 20 if user_def + user_spdef >= target_def + target_spdef
+    # TODO: Check whether the target has physical/special moves that will be
+    #       more resisted after the swap, and vice versa for the user?
+    score += (target_def - user_def) * 5
+    score += (target_spdef - user_spdef) * 5
     next score
   }
 )
@@ -1493,15 +1454,13 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetAverageBaseDef
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetAverageHP",
   proc { |score, move, user, target, ai, battle|
-    if user.hp >= (user.hp + target.hp) / 2
-      score -= 25
-    else
-      score += 25
-    end
+    next Battle::AI::MOVE_USELESS_SCORE if user.hp >= (user.hp + target.hp) / 2
+    mult = (user.hp + target.hp) / (2.0 * user.hp)
+    score += 10 * mult if mult >= 1.2
     next score
   }
 )

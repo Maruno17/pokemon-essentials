@@ -40,6 +40,10 @@ class Battle::AI::AIMove
 
   #=============================================================================
 
+  def pbTarget(_user)
+    return @move.pbTarget(_user)
+  end
+
   # Returns whether this move targets multiple battlers.
   def targets_multiple_battlers?
     user_battler = @ai_battler.battler

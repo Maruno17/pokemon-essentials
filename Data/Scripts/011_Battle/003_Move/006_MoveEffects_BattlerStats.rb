@@ -907,11 +907,12 @@ class Battle::Move::RaiseTargetAtkSpAtk2 < Battle::Move
   end
 
   def pbEffectAgainstTarget(user, target)
+    showAnim = true
     if target.pbCanRaiseStatStage?(:ATTACK, user, self)
-      target.pbRaiseStatStage(:ATTACK, 2, user)
+      showAnim = false if target.pbRaiseStatStage(:ATTACK, 2, user, showAnim)
     end
     if target.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
-      target.pbRaiseStatStage(:SPECIAL_ATTACK, 2, user)
+      target.pbRaiseStatStage(:SPECIAL_ATTACK, 2, user, showAnim)
     end
   end
 end

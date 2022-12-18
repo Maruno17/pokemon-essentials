@@ -321,7 +321,7 @@ Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkDef1",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2",
   proc { |score, move, user, target, ai, battle|
     # Score for raising user's stats
-    score = ai.get_score_for_user_stat_raise(score)
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)

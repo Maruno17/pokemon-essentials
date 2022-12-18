@@ -591,11 +591,6 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FlinchTarget",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("FlinchTargetFailsIfUserNotAsleep",
-  proc { |move, user, ai, battle|
-    next true if !user.battler.asleep?
-  }
-)
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("FlinchTarget",
                                                         "FlinchTargetFailsIfUserNotAsleep")
 

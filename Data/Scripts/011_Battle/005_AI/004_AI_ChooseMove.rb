@@ -11,6 +11,11 @@ class Battle::AI
 
   #=============================================================================
   # Get scores for the user's moves (done before any action is assessed).
+  # NOTE: For any move with a target type that can target a foe (or which
+  #       includes a foe(s) if it has multiple targets), the score calculated
+  #       for a target ally will be inverted. The MoveHandlers for those moves
+  #       should therefore treat an ally as a foe when calculating a score
+  #       against it.
   #=============================================================================
   def pbGetMoveScores
     choices = []
@@ -37,7 +42,7 @@ class Battle::AI
       when 0   # No targets, affects the user or a side or the whole field
         # Includes: BothSides, FoeSide, None, User, UserSide
         score = MOVE_BASE_SCORE
-        PBDebug.logonerr { score = pbGetMoveScore(move) }
+        PBDebug.logonerr { score = pbGetMoveScore }
         add_move_to_choices(choices, idxMove, score)
       when 1   # One target to be chosen by the trainer
         # Includes: Foe, NearAlly, NearFoe, NearOther, Other, RandomNearFoe, UserOrNearAlly
@@ -46,16 +51,11 @@ class Battle::AI
         #       Lightning Rod. Skip any battlers that can't be targeted.
         @battle.allBattlers.each do |b|
           next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
-          # TODO: This should consider targeting an ally if possible. Scores will
-          #       need to distinguish between harmful and beneficial to target.
-          #       def pbGetMoveScore uses "175 - score" if the target is an ally;
-          #       is this okay?
-          #       Noticeably affects a few moves like Heal Pulse, as well as moves
-          #       that the target can be immune to by an ability (you may want to
-          #       attack the ally anyway so it gains the effect of that ability).
+          # TODO: Should this sometimes consider targeting an ally? See def
+          #       pbGetMoveScoreAgainstTarget for more information.
           next if target_data.targets_foe && !@user.battler.opposes?(b)
           score = MOVE_BASE_SCORE
-          PBDebug.logonerr { score = pbGetMoveScore(move, [b]) }
+          PBDebug.logonerr { score = pbGetMoveScore([b]) }
           add_move_to_choices(choices, idxMove, score, b.index)
         end
       else   # Multiple targets at once
@@ -66,7 +66,7 @@ class Battle::AI
           targets.push(b)
         end
         score = MOVE_BASE_SCORE
-        PBDebug.logonerr { score = pbGetMoveScore(move, targets) }
+        PBDebug.logonerr { score = pbGetMoveScore(targets) }
         add_move_to_choices(choices, idxMove, score)
       end
     end
@@ -93,8 +93,7 @@ class Battle::AI
   end
 
   def set_up_move_check_target(target)
-    # TODO: Set @target to nil if there isn't one?
-    @target = (target) ? @battlers[target.index] : nil   # @user
+    @target = (target) ? @battlers[target.index] : nil
     @target&.refresh_battler
   end
 
@@ -104,11 +103,12 @@ class Battle::AI
   # TODO: Add skill checks in here for particular calculations?
   #=============================================================================
   def pbPredictMoveFailure
-    # TODO: Something involving user.usingMultiTurnAttack? (perhaps earlier than
-    #       this?).
+    # TODO: Something involving user.battler.usingMultiTurnAttack? (perhaps
+    #       earlier than this?).
     # User is asleep and will not wake up
-    return true if @trainer.medium_skill? && @user.battler.asleep? &&
-                   @user.statusCount > 1 && !@move.move.usableWhenAsleep?
+    return true if @user.battler.asleep? && @user.statusCount > 1 && !@move.move.usableWhenAsleep?
+    # User is awake and can't use moves that are only usable when asleep
+    return true if !@user.battler.asleep? && @move.move.usableWhenAsleep?
     # User will be truanting
     return true if @user.has_active_ability?(:TRUANT) && @user.effects[PBEffects::Truant]
     # Primal weather
@@ -142,8 +142,8 @@ class Battle::AI
     typeMod = @move.move.pbCalcTypeMod(calc_type, @user.battler, @target.battler)
     return true if @move.move.pbDamagingMove? && Effectiveness.ineffective?(typeMod)
     # Dark-type immunity to moves made faster by Prankster
-    return true if Settings::MECHANICS_GENERATION >= 7 && @user.has_active_ability?(:PRANKSTER) &&
-                   @target.has_type?(:DARK) && @target.opposes?(@user)
+    return true if Settings::MECHANICS_GENERATION >= 7 && @move.statusMove? &&
+                   @user.has_active_ability?(:PRANKSTER) && @target.has_type?(:DARK) && @target.opposes?(@user)
     # Airborne-based immunity to Ground moves
     return true if @move.damagingMove? && calc_type == :GROUND &&
                    @target.battler.airborne? && !@move.move.hitsFlyingTargets?
@@ -157,8 +157,9 @@ class Battle::AI
 
   #=============================================================================
   # Get a score for the given move being used against the given target.
+  # Assumes def set_up_move_check has previously been called.
   #=============================================================================
-  def pbGetMoveScore(move, targets = nil)
+  def pbGetMoveScore(targets = nil)
     # Get the base score for the move
     score = MOVE_BASE_SCORE
     # Scores for each target in turn
@@ -170,32 +171,17 @@ class Battle::AI
       # Get a score for the move against each target in turn
       targets.each do |target|
         set_up_move_check_target(target)
-        # Predict whether the move will fail against the target
-        if @trainer.has_skill_flag?("PredictMoveFailure")
-          next if pbPredictMoveFailureAgainstTarget
-        end
+        t_score = pbGetMoveScoreAgainstTarget
+        next if t_score < 0
+        score += t_score
         affected_targets += 1
-        # Score the move
-        t_score = MOVE_BASE_SCORE
-        if @trainer.has_skill_flag?("ScoreMoves")
-          # Modify the score according to the move's effect against the target
-          t_score = Battle::AI::Handlers.apply_move_effect_against_target_score(@move.function,
-             MOVE_BASE_SCORE, @move, @user, @target, self, @battle)
-          # Modify the score according to various other effects against the target
-          score = Battle::AI::Handlers.apply_general_move_against_target_score_modifiers(
-             score, @move, @user, @target, self, @battle)
-        end
-        score += (@target.opposes?(@user)) ? t_score : 175 - t_score
       end
       # Check if any targets were affected
-      if affected_targets == 0
-        if @trainer.has_skill_flag?("PredictMoveFailure")
-          return MOVE_FAIL_SCORE if !@move.move.worksWithNoTargets?
-          score = MOVE_USELESS_SCORE
-        else
-          score = MOVE_BASE_SCORE
-        end
+      if affected_targets == 0 && @trainer.has_skill_flag?("PredictMoveFailure")
+        return MOVE_FAIL_SCORE if !@move.move.worksWithNoTargets?
+        score = MOVE_USELESS_SCORE
       else
+        affected_targets = 1 if affected_targets == 0   # To avoid dividing by 0
         # TODO: Can this accounting for multiple targets be improved somehow?
         score /= affected_targets   # Average the score against multiple targets
         # Bonus for affecting multiple targets
@@ -217,6 +203,46 @@ class Battle::AI
     end
     score = score.to_i
     score = 0 if score < 0
+    return score
+  end
+
+  #=============================================================================
+  # Returns the score of @move being used against @target. A return value of -1
+  # means the move will fail or do nothing against the target.
+  # Assumes def set_up_move_check and def set_up_move_check_target have
+  # previously been called.
+  # TODO: Add something in here (I think) to specially score moves used against
+  #       an ally and the ally has an ability that will benefit from being hit
+  #       by the move.
+  # TODO: The above also applies if the move is Heal Pulse or a few other moves
+  #       like that, which CAN target a foe but you'd never do so. Maybe use a
+  #       move flag to determine such moves? The implication is that such moves
+  #       wouldn't apply the "175 - score" bit, which would make their
+  #       MoveHandlers do the opposite calculations to other moves with the same
+  #       targets, but is this desirable?
+  #=============================================================================
+  def pbGetMoveScoreAgainstTarget
+    # Predict whether the move will fail against the target
+    if @trainer.has_skill_flag?("PredictMoveFailure")
+      return -1 if pbPredictMoveFailureAgainstTarget
+    end
+    # Score the move
+    score = MOVE_BASE_SCORE
+    if @trainer.has_skill_flag?("ScoreMoves")
+      # Modify the score according to the move's effect against the target
+      score = Battle::AI::Handlers.apply_move_effect_against_target_score(@move.function,
+         MOVE_BASE_SCORE, @move, @user, @target, self, @battle)
+      # Modify the score according to various other effects against the target
+      score = Battle::AI::Handlers.apply_general_move_against_target_score_modifiers(
+         score, @move, @user, @target, self, @battle)
+    end
+    # Add the score against the target to the overall score
+    target_data = @move.pbTarget(@user.battler)
+    if target_data.targets_foe && !@target.opposes?(@user) && @target.index != @user.index
+      return -1 if score == MOVE_USELESS_SCORE
+      # TODO: Is this reversal of the score okay?
+      score = 175 - score
+    end
     return score
   end
 

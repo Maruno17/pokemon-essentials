@@ -322,7 +322,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetUsesItsLastUsedMo
   proc { |move, user, target, ai, battle|
     next true if !target.battler.lastRegularMoveUsed ||
                  !target.battler.pbHasMove?(target.battler.lastRegularMoveUsed)
-    next true if target.usingMultiTurnAttack?
+    next true if target.battler.usingMultiTurnAttack?
     next true if move.move.moveBlacklist.include?(GameData::Move.get(target.battler.lastRegularMoveUsed).function_code)
     idxMove = -1
     target.battler.eachMoveWithIndex do |m, i|
@@ -522,11 +522,6 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AllBattlersLoseHalfHPUs
     next true if target.hp <= 1
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
-  proc { |score, move, user, ai, battle|
-    next score + 10   # Shadow moves are more preferable
-  }
-)
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
   proc { |score, move, user, target, ai, battle|
     next score + 20 if target.hp >= target.totalhp / 2
@@ -538,9 +533,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AllBattlersLoseHalfHPUse
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfHP",
   proc { |score, move, user, ai, battle|
-    score += 20   # Shadow moves are more preferable
-    score -= 40
-    next score
+    next score - 40
   }
 )
 
@@ -551,7 +544,6 @@ Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartShadowSkyWeather")
 Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
   proc { |score, move, user, ai, battle|
-    score += 20   # Shadow moves are more preferable
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
     score += 10 if battle.field.weather != :None   # Prefer replacing another weather
@@ -577,7 +569,6 @@ Battle::AI::Handlers::MoveFailureCheck.add("RemoveAllScreens",
 )
 Battle::AI::Handlers::MoveEffectScore.add("RemoveAllScreens",
   proc { |score, move, user, ai, battle|
-    score += 20   # Shadow moves are more preferable
     if user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0 ||
        user.pbOpposingSide.effects[PBEffects::Reflect] > 0 ||
        user.pbOpposingSide.effects[PBEffects::LightScreen] > 0 ||

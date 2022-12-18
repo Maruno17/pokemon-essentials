@@ -155,6 +155,8 @@ end
 # Lower multiple of user's stats.
 #===============================================================================
 class Battle::Move::StatDownMove < Battle::Move
+  attr_reader :statDown
+
   def pbEffectWhenDealingDamage(user, target)
     return if @battle.pbAllFainted?(target.idxOwnSide)
     showAnim = true

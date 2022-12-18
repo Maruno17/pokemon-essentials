@@ -440,11 +440,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseRandomMoveFromUserParty",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseRandomUserMoveIfAsleep",
   proc { |move, user, ai, battle|
-    next true if !user.battler.asleep?
     will_fail = true
     user.battler.eachMoveWithIndex do |m, i|
       next if move.move.moveBlacklist.include?(m.function)

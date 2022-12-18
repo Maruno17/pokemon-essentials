@@ -46,8 +46,8 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:add_predicted_damage,
   proc { |score, move, user, target, ai, battle|
     if move.damagingMove?
       dmg = move.rough_damage
-      score += [15.0 * dmg / target.hp, 20].min
-      score += 15 if dmg > target.hp * 1.1   # Predicted to KO the target
+      score += [20.0 * dmg / target.hp, 25].min
+      score += 10 if dmg > target.hp * 1.1   # Predicted to KO the target
       next score.to_i
     end
   }
@@ -92,6 +92,12 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:target_semi_invulnerabl
     end
   }
 )
+
+#===============================================================================
+# TODO: Review score modifier.
+#===============================================================================
+# TODO: Less prefer two-turn moves, as the foe can see it coming and prepare for
+#       it.
 
 #===============================================================================
 # If target is frozen, don't prefer moves that could thaw them.

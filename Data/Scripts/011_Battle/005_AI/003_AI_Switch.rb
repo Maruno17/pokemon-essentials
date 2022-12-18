@@ -65,7 +65,8 @@ class Battle::AI
         scoreSum   = 0
         scoreCount = 0
         battler.allOpposing.each do |b|
-          scoreSum += pbGetMoveScore(battler.moves[idxEncoredMove], [b])
+          set_up_move_check(battler.moves[idxEncoredMove])
+          scoreSum += pbGetMoveScore([b])
           scoreCount += 1
         end
         if scoreCount > 0 && scoreSum / scoreCount <= 20

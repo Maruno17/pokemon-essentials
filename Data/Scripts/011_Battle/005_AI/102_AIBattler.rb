@@ -267,57 +267,6 @@ class Battle::AI::AIBattler
     return ret
   end
 
-  def immune_to_move?
-    user = @ai.user
-    user_battler = user.battler
-    move = @ai.move
-    # TODO: Add consideration of user's Mold Breaker.
-    move_type = move.rough_type
-    typeMod = effectiveness_of_type_against_battler(move_type, user)
-    # Type effectiveness
-    return true if move.damagingMove? && Effectiveness.ineffective?(typeMod)
-    # Immunity due to ability/item/other effects
-    if @ai.trainer.medium_skill?
-      case move_type
-      when :GROUND
-        # TODO: Split target.airborne? into separate parts to allow different
-        #       skill levels to apply to each part.
-        return true if @battler.airborne? && !move.move.hitsFlyingTargets?
-      when :FIRE
-        return true if has_active_ability?(:FLASHFIRE)
-      when :WATER
-        return true if has_active_ability?([:DRYSKIN, :STORMDRAIN, :WATERABSORB])
-      when :GRASS
-        return true if has_active_ability?(:SAPSIPPER)
-      when :ELECTRIC
-        return true if has_active_ability?([:LIGHTNINGROD, :MOTORDRIVE, :VOLTABSORB])
-      end
-      return true if move.damagingMove? && Effectiveness.not_very_effective?(typeMod) &&
-                     has_active_ability?(:WONDERGUARD)
-      return true if move.damagingMove? && user.index != @index && !opposes?(user) &&
-                     has_active_ability?(:TELEPATHY)
-      return true if move.statusMove? && move.move.canMagicCoat? &&
-                     !@ai.battle.moldBreaker && has_active_ability?(:MAGICBOUNCE) &&
-                     opposes?(user)
-      return true if move.move.soundMove? && !@ai.battle.moldBreaker && has_active_ability?(:SOUNDPROOF)
-      return true if move.move.bombMove? && has_active_ability?(:BULLETPROOF)
-      if move.move.powderMove?
-        return true if has_type?(:GRASS)
-        return true if !@ai.battle.moldBreaker && has_active_ability?(:OVERCOAT)
-        return true if has_active_ability?(:SAFETYGOGGLES)
-      end
-      return true if move.move.statusMove? && @battler.effects[PBEffects::Substitute] > 0 &&
-                     !move.move.ignoresSubstitute?(user) && user.index != @index
-      return true if move.move.statusMove? && Settings::MECHANICS_GENERATION >= 7 &&
-                     user.has_active_ability?(:PRANKSTER) && has_type?(:DARK) &&
-                     opposes?(user)
-      return true if move.move.priority > 0 && @ai.battle.field.terrain == :Psychic &&
-                     @battler.affectedByTerrain? && opposes?(user)
-      # TODO: Dazzling/Queenly Majesty go here.
-    end
-    return false
-  end
-
   #=============================================================================
 
   def can_switch_lax?
