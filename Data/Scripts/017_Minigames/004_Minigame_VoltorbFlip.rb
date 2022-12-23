@@ -498,7 +498,7 @@ class VoltorbFlip
     end
     icons[3]=[@directory+"tiles",x,y,tile*64,0,64,64]
     pbDrawImagePositions(@sprites["icon"].bitmap,icons)
-    pbSEPlay("Voltorb Flip tile")
+    pbSEPlay("Voltorb Flip Tile")
   end
 
   def pbShowAndDispose
@@ -509,7 +509,7 @@ class VoltorbFlip
       @sprites[i].bitmap.clear
       @sprites[i].z=99997
     end
-    pbSEPlay("Voltorb Flip tile")
+    pbSEPlay("Voltorb Flip Tile")
     @sprites[5].visible=true
     @sprites["mark"].bitmap.clear
     pbWait(Graphics.frame_rate/10)
@@ -525,7 +525,7 @@ class VoltorbFlip
     # "Dispose" of tiles by column
     for i in 0...5
       icons=[]
-      pbSEPlay("Voltorb Flip tile")
+      pbSEPlay("Voltorb Flip Tile")
       for j in 0...5
         icons[j]=[@directory+"tiles",@squares[i+(j*5)][0],@squares[i+(j*5)][1],448+(@squares[i+(j*5)][2]*64),0,64,64]
       end
