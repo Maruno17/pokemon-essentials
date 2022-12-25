@@ -623,7 +623,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetAttack2Confus
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false, move.move)
     # Score for stat raise
-    stat_score = ai.get_score_for_target_stat_raise(score, target, [:ATTACK, 2], false)
+    score = ai.get_score_for_target_stat_raise(score, target, [:ATTACK, 2], false)
     # Score for confusing the target
     next Battle::AI::Handlers.apply_move_effect_against_target_score(
        "ConfuseTarget", score, move, user, target, ai, battle)
@@ -643,7 +643,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetSpAtk1Confuse
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false, move.move)
     # Score for stat raise
-    stat_score = ai.get_score_for_target_stat_raise(score, target, [:SPECIAL_ATTACK, 1], false)
+    score = ai.get_score_for_target_stat_raise(score, target, [:SPECIAL_ATTACK, 1], false)
     # Score for confusing the target
     next Battle::AI::Handlers.apply_move_effect_against_target_score(
        "ConfuseTarget", score, move, user, target, ai, battle)
@@ -1020,7 +1020,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetAtkDef1",
                                                         "LowerTargetAtkSpAtk1")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerPoisonedTargetAtkSpAtkSpd1",
   proc { |move, user, target, ai, battle|
@@ -1033,164 +1033,124 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetAtkSpAtk1",
                                                         "LowerPoisonedTargetAtkSpAtkSpd1")
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code should be for a single battler (each is checked in turn).
-#       target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseAlliesAtkDef1",
   proc { |move, user, target, ai, battle|
-    will_fail = true
-    battle.allSameSideBattlers(user.battler).each do |b|
-      next if b.index == user.index
-      next if !b.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
-              !b.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move)
-      will_fail = false
-      break
-    end
-    next will_fail
+    next !target.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
+         !target.battler.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseAlliesAtkDef1",
   proc { |score, move, user, target, ai, battle|
-    user.battler.allAllies.each do |b|
-      score = ai.get_score_for_target_stat_raise(score, b, [:ATTACK, 1, :DEFENSE, 1])
-    end
-    next score
+    next ai.get_score_for_target_stat_raise(score, target, [:ATTACK, 1, :DEFENSE, 1])
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code should be for a single battler (each is checked in turn).
-#       target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
-# TODO: Since this also affects the user, this will need a MoveEffectScore and a
-#       MoveFailureCheck.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
-  proc { |move, user, target, ai, battle|
+Battle::AI::Handlers::MoveFailureCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
+  proc { |move, user, ai, battle|
     will_fail = true
-    battle.allSameSideBattlers(user.battler).each do |b|
-      next if !b.hasActiveAbility?([:MINUS, :PLUS])
-      next if !b.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
-              !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
+    ai.each_same_side_battler(user.side) do |b, i|
+      next if !b.has_active_ability?([:MINUS, :PLUS])
+      next if !b.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
+              !b.battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
       will_fail = false
       break
     end
     next will_fail
   }
 )
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
-  proc { |score, move, user, target, ai, battle|
-#    score = ai.get_score_for_target_stat_raise(score, user, [:ATTACK, 1, :SPECIAL_ATTACK, 1], false)
-    user.battler.allAllies.each do |b|
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
+  proc { |move, user, target, ai, battle|
+    next true if !target.hasActiveAbility?([:MINUS, :PLUS])
+    next !target.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
+         !target.battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
+  proc { |score, move, user, ai, battle|
+    next score if move.pbTarget(user.battler) != :UserSide
+    ai.each_same_side_battler(user.side) do |b, i|
       score = ai.get_score_for_target_stat_raise(score, b, [:ATTACK, 1, :SPECIAL_ATTACK, 1], false)
     end
     next score
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
+  proc { |score, move, user, target, ai, battle|
+    next ai.get_score_for_target_stat_raise(score, target, [:ATTACK, 1, :SPECIAL_ATTACK, 1])
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code should be for a single battler (each is checked in turn).
-#       target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
-# TODO: Since this also affects the user, this will need a MoveEffectScore and a
-#       MoveFailureCheck.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
-  proc { |move, user, target, ai, battle|
+Battle::AI::Handlers::MoveFailureCheck.add("RaisePlusMinusUserAndAlliesDefSpDef1",
+  proc { |move, user, ai, battle|
     will_fail = true
-    battle.allSameSideBattlers(user.battler).each do |b|
-      next if !b.hasActiveAbility?([:MINUS, :PLUS])
-      next if !b.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move) &&
-              !b.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
+    ai.each_same_side_battler(user.side) do |b, i|
+      next if !b.has_active_ability?([:MINUS, :PLUS])
+      next if !b.battler.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move) &&
+              !b.battler.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
       will_fail = false
       break
     end
     next will_fail
+  }
+)
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaisePlusMinusUserAndAlliesDefSpDef1",
+  proc { |move, user, target, ai, battle|
+    next true if !target.hasActiveAbility?([:MINUS, :PLUS])
+    next !target.battler.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move) &&
+         !target.battler.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("RaisePlusMinusUserAndAlliesDefSpDef1",
+  proc { |score, move, user, ai, battle|
+    next score if move.pbTarget(user.battler) != :UserSide
+    ai.each_same_side_battler(user.side) do |b, i|
+      score = ai.get_score_for_target_stat_raise(score, b, [:DEFENSE, 1, :SPECIAL_DEFENSE, 1], false)
+    end
+    next score
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaisePlusMinusUserAndAlliesDefSpDef1",
   proc { |score, move, user, target, ai, battle|
-    user.battler.allAllies.each do |b|
-      next if b.statStageAtMax?(:DEFENSE) && b.statStageAtMax?(:SPECIAL_DEFENSE)
-      score -= b.stages[:DEFENSE] * 10
-      score -= b.stages[:SPECIAL_DEFENSE] * 10
-    end
-    score -= user.stages[:DEFENSE] * 10
-    score -= user.stages[:SPECIAL_DEFENSE] * 10
-    next score
+    next ai.get_score_for_target_stat_raise(score, target, [:DEFENSE, 1, :SPECIAL_DEFENSE, 1])
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code should be for a single battler (each is checked in turn).
-#       target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseGroundedGrassBattlersAtkSpAtk1",
   proc { |move, user, target, ai, battle|
-    will_fail = true
-    battle.allBattlers.each do |b|
-      next if !b.pbHasType?(:GRASS) || b.airborne? || b.semiInvulnerable?
-      next if !b.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
-              !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
-      will_fail = false
-      break
-    end
-    next will_fail
+    next true if !b.pbHasType?(:GRASS) || b.airborne? || b.semiInvulnerable?
+    next !target.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
+         !target.battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseGroundedGrassBattlersAtkSpAtk1",
   proc { |score, move, user, target, ai, battle|
-    battle.allBattlers.each do |b|
-      if user.battler.opposes?(b)
-        score -= 20
-      else
-        score -= b.stages[:ATTACK] * 10
-        score -= b.stages[:SPECIAL_ATTACK] * 10
-      end
-    end
-    next score
+    next ai.get_score_for_target_stat_raise(score, target, [:ATTACK, 1, :SPECIAL_ATTACK, 1])
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code should be for a single battler (each is checked in turn).
-#       target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseGrassBattlersDef1",
   proc { |move, user, target, ai, battle|
-    will_fail = true
-    battle.allBattlers.each do |b|
-      next if !b.pbHasType?(:GRASS) || b.semiInvulnerable?
-      next if !b.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move)
-      will_fail = false
-      break
-    end
-    next will_fail
+    next true if !b.pbHasType?(:GRASS) || b.semiInvulnerable?
+    next !target.battler.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseGrassBattlersDef1",
   proc { |score, move, user, target, ai, battle|
-    battle.allBattlers.each do |b|
-      if user.battler.opposes?(b)
-        score -= 20
-      else
-        score -= user.stages[:DEFENSE] * 10
-      end
-    end
-    next score
+    next ai.get_score_for_target_stat_raise(score, target, [:DEFENSE, 1])
   }
 )
 

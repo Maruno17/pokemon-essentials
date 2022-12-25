@@ -429,6 +429,9 @@ class Battle::AI::AIMove
     target_battler = target.battler
     # OHKO special calculation
     if @ai.trainer.medium_skill?
+      # TODO: This is insufficient for OHKO moves, as they should also ignore
+      #       effects like Telekinesis and Minimize but def rough_accuracy
+      #       treats them as applying to OHKO moves.
       case function
       when "OHKO", "OHKOHitsUndergroundTarget"
         modifiers[:base_accuracy] = self.accuracy + user.level - target.level

@@ -176,16 +176,18 @@ class Battle::AI
         score += t_score
         affected_targets += 1
       end
-      # Check if any targets were affected
+      # Set the default score if no targets were affected
+      if affected_targets == 0
+        score = (@trainer.has_skill_flag?("PredictMoveFailure")) ? MOVE_USELESS_SCORE : MOVE_BASE_SCORE
+      end
+      # Score based on how many targets were affected
       if affected_targets == 0 && @trainer.has_skill_flag?("PredictMoveFailure")
         return MOVE_FAIL_SCORE if !@move.move.worksWithNoTargets?
-        score = MOVE_USELESS_SCORE
       else
-        affected_targets = 1 if affected_targets == 0   # To avoid dividing by 0
         # TODO: Can this accounting for multiple targets be improved somehow?
-        score /= affected_targets   # Average the score against multiple targets
+        score /= affected_targets if affected_targets > 1   # Average the score against multiple targets
         # Bonus for affecting multiple targets
-        if @trainer.has_skill_flag?("PreferMultiTargetMoves")
+        if @trainer.has_skill_flag?("PreferMultiTargetMoves") && affected_targets > 1
           score += (affected_targets - 1) * 10
         end
       end

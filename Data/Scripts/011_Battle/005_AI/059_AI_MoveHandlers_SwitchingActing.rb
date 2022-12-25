@@ -73,9 +73,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerTargetAtkSpAtk1Swi
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetAtkSpAtk1SwitchOutUser",
   proc { |score, move, user, target, ai, battle|
-    avg  = target.stages[:ATTACK] * 10
-    avg += target.stages[:SPECIAL_ATTACK] * 10
-    score += avg / 2
+    score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown, false)
     next score
   }
 )

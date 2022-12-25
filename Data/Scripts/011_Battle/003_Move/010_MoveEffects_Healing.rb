@@ -118,10 +118,11 @@ class Battle::Move::HealUserByTargetAttackLowerTargetAttack1 < Battle::Move
     #       has Contrary and is at +6" check too for symmetry. This move still
     #       works even if the stat stage cannot be changed due to an ability or
     #       other effect.
-    if !@battle.moldBreaker && target.hasActiveAbility?(:CONTRARY) &&
-       target.statStageAtMax?(:ATTACK)
-      @battle.pbDisplay(_INTL("But it failed!")) if show_message
-      return true
+    if !@battle.moldBreaker && target.hasActiveAbility?(:CONTRARY)
+      if target.statStageAtMax?(:ATTACK)
+        @battle.pbDisplay(_INTL("But it failed!")) if show_message
+        return true
+      end
     elsif target.statStageAtMin?(:ATTACK)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true

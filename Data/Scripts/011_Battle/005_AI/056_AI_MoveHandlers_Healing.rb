@@ -158,10 +158,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealUserByTargetAttackLo
   proc { |score, move, user, target, ai, battle|
     # Check whether lowering the target's Attack will have any impact
     if ai.trainer.medium_skill?
-      if target.battler.pbCanLowerStatStage?(:ATTACK, user.battler, move.move) &&
-         target.check_for_move { |m| m.physicalMove?(m.type) }
-        score += target.stages[:ATTACK] * 10
-      end
+      score = ai.get_score_for_target_stat_drop(score, target, [:ATTACK, 1])
     end
     # Consider how much HP will be restored
     heal_amt = target.rough_stat(:ATTACK)
@@ -521,15 +518,11 @@ Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsExplosive",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserFaintsLowerTargetAtkSpAtk2",
   proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanLowerStatStage?(:ATTACK, user.battler) &&
-                                           !target.battler.pbCanLowerStatStage?(:SPECIAL_ATTACK, user.battler)
     score -= 25   # User will faint, don't prefer this move
     # Check the impact of lowering the target's stats
-    if target.stages[:ATTACK] < 0 && target.stages[:SPECIAL_ATTACK] < 0
-      score -= 20
-    elsif target.stages[:ATTACK] > 0 || target.stages[:SPECIAL_ATTACK] > 0
-      score += 10
-    end
+    score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
+    # Score for the user fainting
     if ai.trainer.medium_skill?
       score -= 10 if user.hp >= user.totalhp * 0.5    # User at 50% HP or more
       score += 10 if user.hp <= user.totalhp * 0.25   # User at 25% HP or less

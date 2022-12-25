@@ -501,7 +501,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenFireMoves",
     end
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("StartWeakenElectricMoves",
+Battle::AI::Handlers::MoveEffectScore.add("StartWeakenFireMoves",
   proc { |score, move, user, ai, battle|
     # Don't prefer the lower the user's HP is
     if user.hp < user.totalhp / 2
@@ -782,7 +782,8 @@ Battle::AI::Handlers::MoveFailureCheck.add("HoopaRemoveProtectionsBypassSubstitu
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HoopaRemoveProtectionsBypassSubstituteLowerUserDef1",
   proc { |score, move, user, target, ai, battle|
-    next score + 20 if target.stages[:DEFENSE] > 0
+    score = ai.get_score_for_target_stat_drop(score, user, move.move.statDown, false)
+    next score
   }
 )
 

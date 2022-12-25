@@ -128,7 +128,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("HitTwoToFiveTimes",
                                                         "HitTwoToFiveTimesOrThreeForAshGreninja")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("HitTwoToFiveTimes",
                                          "HitTwoToFiveTimesRaiseUserSpd1LowerUserDef1")
@@ -137,13 +137,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoToFiveTimesRaiseUs
     # Score for being a multi-hit attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("HitTwoToFiveTimes",
        score, move, user, target, ai, battle)
-    # User's stat changes
-    aspeed = user.rough_stat(:SPEED)
-    ospeed = target.rough_stat(:SPEED)
-    if aspeed < ospeed && aspeed * 1.5 > ospeed
-      score += 15   # Will become faster than the target
-    end
-    score += user.stages[:DEFENSE] * 10
+    # Score for user's stat changes
+    score = ai.get_score_for_target_stat_raise(score, user, [:SPEED, 1], false)
+    score = ai.get_score_for_target_stat_drop(score, user, [:DEFENSE, 1], false)
     next score
   }
 )

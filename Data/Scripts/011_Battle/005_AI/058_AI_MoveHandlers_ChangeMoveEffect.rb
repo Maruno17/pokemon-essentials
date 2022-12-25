@@ -85,41 +85,38 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealAllyOrDamageFoe",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |move, user, ai, battle|
-    if !user.has_type?(:GHOST)
-      will_fail = true
-      (move.move.statUp.length / 2).times do |i|
-        next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
-        will_fail = false
-        break
-      end
-      (move.move.statDown.length / 2).times do |i|
-        next if !user.battler.pbCanLowerStatStage?(move.move.statDown[i * 2], user.battler, move.move)
-        will_fail = false
-        break
-      end
-      next will_fail
+    next false if user.has_type?(:GHOST)
+    will_fail = true
+    (move.move.statUp.length / 2).times do |i|
+      next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
+      will_fail = false
+      break
     end
+    (move.move.statDown.length / 2).times do |i|
+      next if !user.battler.pbCanLowerStatStage?(move.move.statDown[i * 2], user.battler, move.move)
+      will_fail = false
+      break
+    end
+    next will_fail
   }
 )
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |move, user, target, ai, battle|
-    if user.has_type?(:GHOST)
-      next true if target.effects[PBEffects::Curse] || !target.battler.takesIndirectDamage?
-    end
+    next false if !user.has_type?(:GHOST)
+    next true if target.effects[PBEffects::Curse] || !target.battler.takesIndirectDamage?
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |score, move, user, ai, battle|
     next score if user.has_type?(:GHOST)
-    avg  = user.stages[:SPEED] * 10
-    avg -= user.stages[:ATTACK] * 10
-    avg -= user.stages[:DEFENSE] * 10
-    score += avg / 3
-    next score
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
+    next ai.get_score_for_target_stat_drop(score, user, move.move.statDown, false)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
@@ -138,7 +135,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CurseTargetOrLowerUserSp
     if ai.trainer.high_skill?
       # Prefer if user can stall while damage is dealt
       if user.check_for_move { |m| m.is_a?(Battle::Move::ProtectMove) }
-        score += 15
+        score += 8
       end
     end
     next score
@@ -293,14 +290,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserAddStockpileRaiseDefSpDef1",
 )
 Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
   proc { |score, move, user, ai, battle|
-    avg = 0
-    avg -= user.stages[:DEFENSE] * 10
-    avg -= user.stages[:SPECIAL_DEFENSE] * 10
-    score += avg / 2
-    if user.battler.pbHasMoveFunction?("PowerDependsOnUserStockpile",
-                                       "HealUserDependingOnUserStockpile")   # Spit Up, Swallow
-      score += 20   # More preferable if user also has Spit Up/Swallow
-    end
+    score = ai.get_score_for_target_stat_raise(score, user, [:DEFENSE, 1, :SPECIAL_DEFENSE, 1], false)
+    # More preferable if user also has Spit Up/Swallow
+    score += 20 if user.battler.pbHasMoveFunction?("PowerDependsOnUserStockpile",
+                                                   "HealUserDependingOnUserStockpile")
     next score
   }
 )
