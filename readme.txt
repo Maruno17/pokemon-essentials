@@ -1,6 +1,7 @@
 Thank you for downloading Pokémon Infinite Fusion!
 
-Use Game.exe to play the game.
+Use Pokemon Infinite Fusion.exe to play the game.
+If you are experiencing issues such as long loading times, you can also try the alternate launcher.
 
 ##########################################################################################################################################
 INFINITE FUSION 5.0

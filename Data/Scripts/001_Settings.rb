@@ -6,7 +6,7 @@
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '5.0.0'
-  GAME_VERSION_NUMBER = "5.1.0.1"
+  GAME_VERSION_NUMBER = "5.1.0.3"
 
   POKERADAR_LIGHT_ANIMATION_RED_ID = 17
   POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
@@ -45,6 +45,9 @@ module Settings
 
   ZAPMOLCUNO_NB = 176821
   MAPS_WITHOUT_SURF_MUSIC = [762]
+
+  WONDERTRADE_BASE_URL = "http://localhost:8080"
+  WONDERTRADE_PUBLIC_KEY = "http://localhost:8080"
 
   # The generation that the battle system follows. Used throughout the battle
   # scripts, and also by some other settings which are used in and out of battle
