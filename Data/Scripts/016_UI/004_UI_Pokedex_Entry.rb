@@ -17,13 +17,13 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"].setOffset(PictureOrigin::CENTER)
     @sprites["infosprite"].x = 104
     @sprites["infosprite"].y = 136
-    @mapdata = pbLoadTownMapData
     mappos = $game_map.metadata&.town_map_position
     if @region < 0                                 # Use player's current region
       @region = (mappos) ? mappos[0] : 0                      # Region 0 default
     end
+    @mapdata = GameData::TownMap.get(@region)
     @sprites["areamap"] = IconSprite.new(0, 0, @viewport)
-    @sprites["areamap"].setBitmap("Graphics/UI/Town Map/#{@mapdata[@region][1]}")
+    @sprites["areamap"].setBitmap("Graphics/UI/Town Map/#{@mapdata.filename}")
     @sprites["areamap"].x += (Graphics.width - @sprites["areamap"].bitmap.width) / 2
     @sprites["areamap"].y += (Graphics.height + 32 - @sprites["areamap"].bitmap.height) / 2
     Settings::REGION_MAP_EXTRAS.each do |hidden|
@@ -90,8 +90,15 @@ class PokemonPokedexInfo_Scene
         break
       end
     end
-    @dexlist = [[species, "", 0, 0, dexnum, dexnumshift]]
-    @index   = 0
+    @dexlist = [{
+      :species => species,
+      :name    => "",
+      :height  => 0,
+      :weight  => 0,
+      :number  => dexnum,
+      :shift   => dexnumshift
+    }]
+    @index = 0
     @page = 1
     @brief = true
     @typebitmap = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_types"))
@@ -125,7 +132,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbUpdateDummyPokemon
-    @species = @dexlist[@index][0]
+    @species = @dexlist[@index][:species]
     @gender, @form, _shiny = $player.pokedex.last_form_seen(@species)
     @shiny = false
     metrics_data = GameData::SpeciesMetrics.get_species_form(@species, @form)
@@ -209,9 +216,9 @@ class PokemonPokedexInfo_Scene
     species_data = GameData::Species.get_species_form(@species, @form)
     # Write various bits of text
     indexText = "???"
-    if @dexlist[@index][4] > 0
-      indexNumber = @dexlist[@index][4]
-      indexNumber -= 1 if @dexlist[@index][5]
+    if @dexlist[@index][:number] > 0
+      indexNumber = @dexlist[@index][:number]
+      indexNumber -= 1 if @dexlist[@index][:shift]
       indexText = sprintf("%03d", indexNumber)
     end
     textpos = [
@@ -296,7 +303,7 @@ class PokemonPokedexInfo_Scene
     # defined point in town_map.txt, and which either have no Self Switch
     # controlling their visibility or whose Self Switch is ON)
     visible_points = []
-    @mapdata[@region][2].each do |loc|
+    @mapdata.point.each do |loc|
       next if loc[7] && !$game_switches[loc[7]]   # Point is not visible
       visible_points.push([loc[0], loc[1]])
     end
@@ -375,7 +382,7 @@ class PokemonPokedexInfo_Scene
       )
       textpos.push([_INTL("Area unknown"), Graphics.width / 2, (Graphics.height / 2) + 6, 2, base, shadow])
     end
-    textpos.push([pbGetMessage(MessageTypes::RegionNames, @region), 414, 50, 2, base, shadow])
+    textpos.push([@mapdata.name, 414, 50, 2, base, shadow])
     textpos.push([_INTL("{1}'s area", GameData::Species.get(@species).name),
                   Graphics.width / 2, 358, 2, base, shadow])
     pbDrawTextPositions(overlay, textpos)
@@ -406,7 +413,7 @@ class PokemonPokedexInfo_Scene
     newindex = @index
     while newindex > 0
       newindex -= 1
-      if $player.seen?(@dexlist[newindex][0])
+      if $player.seen?(@dexlist[newindex][:species])
         @index = newindex
         break
       end
@@ -417,7 +424,7 @@ class PokemonPokedexInfo_Scene
     newindex = @index
     while newindex < @dexlist.length - 1
       newindex += 1
-      if $player.seen?(@dexlist[newindex][0])
+      if $player.seen?(@dexlist[newindex][:species])
         @index = newindex
         break
       end
@@ -581,7 +588,14 @@ class PokemonPokedexInfoScreen
     end
     dexnum = pbGetRegionalNumber(region, species)
     dexnumshift = Settings::DEXES_WITH_OFFSETS.include?(region)
-    dexlist = [[species, GameData::Species.get(species).name, 0, 0, dexnum, dexnumshift]]
+    dexlist = [{
+      :species => species,
+      :name    => GameData::Species.get(species).name,
+      :height  => 0,
+      :weight  => 0,
+      :number  => dexnum,
+      :shift   => dexnumshift
+    }]
     @scene.pbStartScene(dexlist, 0, region)
     @scene.pbScene
     @scene.pbEndScene

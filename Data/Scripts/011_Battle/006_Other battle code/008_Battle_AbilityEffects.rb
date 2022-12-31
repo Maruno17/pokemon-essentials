@@ -2607,7 +2607,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:ANTICIPATION,
           if Settings::MECHANICS_GENERATION >= 6 && m.function == "TypeDependsOnUserIVs"   # Hidden Power
             moveType = pbHiddenPower(b.pokemon)[0]
           end
-          eff = Effectiveness.calculate(moveType, types[0], types[1], types[2])
+          eff = Effectiveness.calculate(moveType, types)
           next if Effectiveness.ineffective?(eff)
           next if !Effectiveness.super_effective?(eff) &&
                   !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)

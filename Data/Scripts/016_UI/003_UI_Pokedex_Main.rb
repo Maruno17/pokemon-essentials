@@ -25,7 +25,7 @@ class Window_Pokedex < Window_DrawableCommand
   end
 
   def species
-    return (@commands.length == 0) ? 0 : @commands[self.index][0]
+    return (@commands.length == 0) ? 0 : @commands[self.index][:species]
   end
 
   def itemCount
@@ -35,9 +35,9 @@ class Window_Pokedex < Window_DrawableCommand
   def drawItem(index, _count, rect)
     return if index >= self.top_row + self.page_item_max
     rect = Rect.new(rect.x + 16, rect.y, rect.width - 16, rect.height)
-    species     = @commands[index][0]
-    indexNumber = @commands[index][4]
-    indexNumber -= 1 if @commands[index][5]
+    species     = @commands[index][:species]
+    indexNumber = @commands[index][:number]
+    indexNumber -= 1 if @commands[index][:shift]
     if $player.seen?(species)
       if $player.owned?(species)
         pbCopyBitmap(self.contents, @pokeballOwn.bitmap, rect.x - 6, rect.y + 10)
@@ -45,7 +45,7 @@ class Window_Pokedex < Window_DrawableCommand
         pbCopyBitmap(self.contents, @pokeballSeen.bitmap, rect.x - 6, rect.y + 10)
       end
       num_text = sprintf("%03d", indexNumber)
-      name_text = @commands[index][1]
+      name_text = @commands[index][:name]
     else
       num_text = sprintf("%03d", indexNumber)
       name_text = "----------"
@@ -362,13 +362,17 @@ class PokemonPokedex_Scene
       next if !pbCanAddForModeList?($PokemonGlobal.pokedexMode, species)
       _gender, form, _shiny = $player.pokedex.last_form_seen(species)
       species_data = GameData::Species.get_species_form(species, form)
-      color  = species_data.color
-      type1  = species_data.types[0]
-      type2  = species_data.types[1] || type1
-      shape  = species_data.shape
-      height = species_data.height
-      weight = species_data.weight
-      ret.push([species, species_data.name, height, weight, i + 1, shift, type1, type2, color, shape])
+      ret.push({
+        :species => species,
+        :name    => species_data.name,
+        :height  => species_data.height,
+        :weight  => species_data.weight,
+        :number  => i + 1,
+        :shift   => shift,
+        :types   => species_data.types,
+        :color   => species_data.color,
+        :shape   => species_data.shape
+      })
     end
     return ret
   end
@@ -378,27 +382,27 @@ class PokemonPokedex_Scene
     case $PokemonGlobal.pokedexMode
     when MODENUMERICAL
       # Hide the Dex number 0 species if unseen
-      dexlist[0] = nil if dexlist[0][5] && !$player.seen?(dexlist[0][0])
+      dexlist[0] = nil if dexlist[0][:shift] && !$player.seen?(dexlist[0][:species])
       # Remove unseen species from the end of the list
       i = dexlist.length - 1
       loop do
-        break if i < 0 || !dexlist[i] || $player.seen?(dexlist[i][0])
+        break if i < 0 || !dexlist[i] || $player.seen?(dexlist[i][:species])
         dexlist[i] = nil
         i -= 1
       end
       dexlist.compact!
       # Sort species in ascending order by Regional Dex number
-      dexlist.sort! { |a, b| a[4] <=> b[4] }
+      dexlist.sort! { |a, b| a[:number] <=> b[:number] }
     when MODEATOZ
-      dexlist.sort! { |a, b| (a[1] == b[1]) ? a[4] <=> b[4] : a[1] <=> b[1] }
+      dexlist.sort! { |a, b| (a[:name] == b[:name]) ? a[:number] <=> b[:number] : a[:name] <=> b[:name] }
     when MODEHEAVIEST
-      dexlist.sort! { |a, b| (a[3] == b[3]) ? a[4] <=> b[4] : b[3] <=> a[3] }
+      dexlist.sort! { |a, b| (a[:weight] == b[:weight]) ? a[:number] <=> b[:number] : b[:weight] <=> a[:weight] }
     when MODELIGHTEST
-      dexlist.sort! { |a, b| (a[3] == b[3]) ? a[4] <=> b[4] : a[3] <=> b[3] }
+      dexlist.sort! { |a, b| (a[:weight] == b[:weight]) ? a[:number] <=> b[:number] : a[:weight] <=> b[:weight] }
     when MODETALLEST
-      dexlist.sort! { |a, b| (a[2] == b[2]) ? a[4] <=> b[4] : b[2] <=> a[2] }
+      dexlist.sort! { |a, b| (a[:height] == b[:height]) ? a[:number] <=> b[:number] : b[:height] <=> a[:height] }
     when MODESMALLEST
-      dexlist.sort! { |a, b| (a[2] == b[2]) ? a[4] <=> b[4] : a[2] <=> b[2] }
+      dexlist.sort! { |a, b| (a[:height] == b[:height]) ? a[:number] <=> b[:number] : a[:height] <=> b[:height] }
     end
     @dexlist = dexlist
     @sprites["pokedex"].commands = @dexlist
@@ -774,8 +778,8 @@ class PokemonPokedex_Scene
     if params[1] >= 0
       scanNameCommand = @nameCommands[params[1]].scan(/./)
       dexlist = dexlist.find_all { |item|
-        next false if !$player.seen?(item[0])
-        firstChar = item[1][0, 1]
+        next false if !$player.seen?(item[:species])
+        firstChar = item[:name][0, 1]
         next scanNameCommand.any? { |v| v == firstChar }
       }
     end
@@ -784,18 +788,17 @@ class PokemonPokedex_Scene
       stype1 = (params[2] >= 0) ? @typeCommands[params[2]].id : nil
       stype2 = (params[3] >= 0) ? @typeCommands[params[3]].id : nil
       dexlist = dexlist.find_all { |item|
-        next false if !$player.owned?(item[0])
-        type1 = item[6]
-        type2 = item[7]
+        next false if !$player.owned?(item[:species])
+        types = item[:types]
         if stype1 && stype2
           # Find species that match both types
-          next (type1 == stype1 && type2 == stype2) || (type1 == stype2 && type2 == stype1)
+          next types.include?(stype1) && types.include?(stype2)
         elsif stype1
           # Find species that match first type entered
-          next type1 == stype1 || type2 == stype1
+          next types.include?(stype1)
         elsif stype2
           # Find species that match second type entered
-          next type1 == stype2 || type2 == stype2
+          next types.include?(stype2)
         else
           next false
         end
@@ -806,8 +809,8 @@ class PokemonPokedex_Scene
       minh = (params[4] < 0) ? 0 : (params[4] >= @heightCommands.length) ? 999 : @heightCommands[params[4]]
       maxh = (params[5] < 0) ? 999 : (params[5] >= @heightCommands.length) ? 0 : @heightCommands[params[5]]
       dexlist = dexlist.find_all { |item|
-        next false if !$player.owned?(item[0])
-        height = item[2]
+        next false if !$player.owned?(item[:species])
+        height = item[:height]
         next height >= minh && height <= maxh
       }
     end
@@ -816,8 +819,8 @@ class PokemonPokedex_Scene
       minw = (params[6] < 0) ? 0 : (params[6] >= @weightCommands.length) ? 9999 : @weightCommands[params[6]]
       maxw = (params[7] < 0) ? 9999 : (params[7] >= @weightCommands.length) ? 0 : @weightCommands[params[7]]
       dexlist = dexlist.find_all { |item|
-        next false if !$player.owned?(item[0])
-        weight = item[3]
+        next false if !$player.owned?(item[:species])
+        weight = item[:weight]
         next weight >= minw && weight <= maxw
       }
     end
@@ -825,27 +828,27 @@ class PokemonPokedex_Scene
     if params[8] >= 0
       scolor = @colorCommands[params[8]].id
       dexlist = dexlist.find_all { |item|
-        next false if !$player.seen?(item[0])
-        next item[8] == scolor
+        next false if !$player.seen?(item[:species])
+        next item[:color] == scolor
       }
     end
     # Filter by shape
     if params[9] >= 0
       sshape = @shapeCommands[params[9]].id
       dexlist = dexlist.find_all { |item|
-        next false if !$player.seen?(item[0])
-        next item[9] == sshape
+        next false if !$player.seen?(item[:species])
+        next item[:shape] == sshape
       }
     end
     # Remove all unseen species from the results
-    dexlist = dexlist.find_all { |item| next $player.seen?(item[0]) }
+    dexlist = dexlist.find_all { |item| next $player.seen?(item[:species]) }
     case $PokemonGlobal.pokedexMode
-    when MODENUMERICAL then dexlist.sort! { |a, b| a[4] <=> b[4] }
-    when MODEATOZ      then dexlist.sort! { |a, b| a[1] <=> b[1] }
-    when MODEHEAVIEST  then dexlist.sort! { |a, b| b[3] <=> a[3] }
-    when MODELIGHTEST  then dexlist.sort! { |a, b| a[3] <=> b[3] }
-    when MODETALLEST   then dexlist.sort! { |a, b| b[2] <=> a[2] }
-    when MODESMALLEST  then dexlist.sort! { |a, b| a[2] <=> b[2] }
+    when MODENUMERICAL then dexlist.sort! { |a, b| a[:number] <=> b[:number] }
+    when MODEATOZ      then dexlist.sort! { |a, b| a[:name] <=> b[:name] }
+    when MODEHEAVIEST  then dexlist.sort! { |a, b| b[:weight] <=> a[:weight] }
+    when MODELIGHTEST  then dexlist.sort! { |a, b| a[:weight] <=> b[:weight] }
+    when MODETALLEST   then dexlist.sort! { |a, b| b[:height] <=> a[:height] }
+    when MODESMALLEST  then dexlist.sort! { |a, b| a[:height] <=> b[:height] }
     end
     return dexlist
   end
@@ -858,7 +861,7 @@ class PokemonPokedex_Scene
     @searchParams = [$PokemonGlobal.pokedexMode, -1, -1, -1, -1, -1, -1, -1, -1, -1]
     pbRefreshDexList($PokemonGlobal.pokedexIndex[pbGetSavePositionIndex])
     @dexlist.length.times do |i|
-      next if @dexlist[i][0] != oldspecies
+      next if @dexlist[i][:species] != oldspecies
       @sprites["pokedex"].index = i
       pbRefresh
       break

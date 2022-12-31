@@ -92,7 +92,7 @@ module Compiler
   #=============================================================================
   # PBS file readers
   #=============================================================================
-  def pbEachFileSectionEx(f)
+  def pbEachFileSectionEx(f, schema = nil)
     lineno      = 1
     havesection = false
     sectionname = nil
@@ -120,7 +120,12 @@ module Compiler
           end
           r1 = $~[1]
           r2 = $~[2]
-          lastsection[r1] = r2.gsub(/\s+$/, "")
+          if schema && schema[r1] && schema[r1][1][0] == "^"
+            lastsection[r1] ||= []
+            lastsection[r1].push(r2.gsub(/\s+$/, ""))
+          else
+            lastsection[r1] = r2.gsub(/\s+$/, "")
+          end
         end
       end
       lineno += 1
@@ -129,28 +134,24 @@ module Compiler
     yield lastsection, sectionname if havesection
   end
 
-  # Used for types.txt, pokemon.txt, battle_facility_lists.txt and Battle Tower trainers PBS files
-  def pbEachFileSection(f)
-    pbEachFileSectionEx(f) { |section, name|
+  # Used for types.txt, abilities.txt, moves.txt, items.txt, berry_plants.txt,
+  # pokemon.txt, pokemon_forms.txt, pokemon_metrics.txt, shadow_pokemon.txt,
+  # ribbons.txt, trainer_types.txt, battle_facility_lists.txt, Battle Tower
+  # trainers PBS files and dungeon_parameters.txt
+  def pbEachFileSection(f, schema = nil)
+    pbEachFileSectionEx(f, schema) { |section, name|
       yield section, name if block_given? && name[/^.+$/]
     }
   end
 
   # Used for metadata.txt and map_metadata.txt
-  def pbEachFileSectionNumbered(f)
-    pbEachFileSectionEx(f) { |section, name|
+  def pbEachFileSectionNumbered(f, schema = nil)
+    pbEachFileSectionEx(f, schema) { |section, name|
       yield section, name.to_i if block_given? && name[/^\d+$/]
     }
   end
 
-  # Used for pokemon_forms.txt
-  def pbEachFileSectionPokemonForms(f)
-    pbEachFileSectionEx(f) { |section, name|
-      yield section, name if block_given? && name[/^\w+[-,\s]{1}\d+$/]
-    }
-  end
-
-  # Used for phone.txt
+  # Unused
   def pbEachSection(f)
     lineno      = 1
     havesection = false
@@ -193,7 +194,7 @@ module Compiler
     }
   end
 
-  # Used for many PBS files
+  # Used for town_map.txt and Battle Tower Pokémon PBS files
   def pbCompilerEachCommentedLine(filename)
     File.open(filename, "rb") { |f|
       FileLineData.file = filename
@@ -226,7 +227,8 @@ module Compiler
     }
   end
 
-  # Used for map_connections.txt, abilities.txt, moves.txt, regional_dexes.txt
+  # Used for map_connections.txt, phone.txt, regional_dexes.txt, encounters.txt,
+  # trainers.txt and dungeon_tilesets.txt
   def pbCompilerEachPreppedLine(filename)
     File.open(filename, "rb") { |f|
       FileLineData.file = filename
@@ -404,10 +406,14 @@ module Compiler
   def pbGetCsvRecord(rec, lineno, schema)
     record = []
     repeat = false
+    schema_length = schema[1].length
     start = 0
     if schema[1][0, 1] == "*"
       repeat = true
       start = 1
+    elsif schema[1][0, 1] == "^"
+      start = 1
+      schema_length -= 1
     end
     subarrays = repeat && schema[1].length > 2
     loop do
@@ -519,6 +525,21 @@ module Compiler
             subrecord.push(rec)
             rec = ""
           end
+        when "m"   # Symbol
+          field = csvfield!(rec)
+          if !field[/^(?![0-9])\w+$/]
+            raise _INTL("Field '{1}' must contain only letters, digits, and\r\nunderscores and can't begin with a number.\r\n{2}", field, FileLineData.linereport)
+          end
+          subrecord.push(field.to_sym)
+        when "M"   # Optional symbol
+          field = csvfield!(rec)
+          if nil_or_empty?(field)
+            subrecord.push(nil)
+          elsif !field[/^(?![0-9])\w+$/]
+            raise _INTL("Field '{1}' must contain only letters, digits, and\r\nunderscores and can't begin with a number.\r\n{2}", field, FileLineData.linereport)
+          else
+            subrecord.push(field.to_sym)
+          end
         when "e"   # Enumerable
           subrecord.push(csvEnumField!(rec, schema[2 + i - start], "", FileLineData.linereport))
         when "E"   # Optional enumerable
@@ -548,7 +569,7 @@ module Compiler
       break if repeat && nil_or_empty?(rec)
       break unless repeat
     end
-    return (schema[1].length == 1) ? record[0] : record
+    return (!repeat && schema_length == 1) ? record[0] : record
   end
 
   #=============================================================================
@@ -556,17 +577,23 @@ module Compiler
   #=============================================================================
   def pbWriteCsvRecord(record, file, schema)
     rec = (record.is_a?(Array)) ? record.flatten : [record]
-    start = (schema[1][0, 1] == "*") ? 1 : 0
+    start = (["*", "^"].include?(schema[1][0, 1])) ? 1 : 0
     index = -1
     loop do
       (start...schema[1].length).each do |i|
         index += 1
-        file.write(",") if index > 0
         value = rec[index]
+        if schema[1][i, 1].upcase != schema[1][i, 1] || !value.nil?
+          file.write(",") if index > 0
+        end
         if value.nil?
           # do nothing
         elsif value.is_a?(String)
-          file.write(csvQuote(value))
+          if schema[1][i, 1].downcase == "q"
+            file.write(value)
+          else
+            file.write(csvQuote(value))
+          end
         elsif value.is_a?(Symbol)
           file.write(csvQuote(value.to_s))
         elsif value == true
@@ -753,30 +780,57 @@ module Compiler
     Graphics.update
   end
 
+  def get_all_pbs_files_to_compile
+    # Get the GameData classes and their respective base PBS filenames
+    ret = GameData.get_all_pbs_base_filenames
+    ret.merge!({
+      :BattleFacility => "battle_facility_lists",
+      :Connection     => "map_connections",
+      :RegionalDex    => "regional_dexes"
+    })
+    ret.each { |key, val| ret[key] = [val] }   # [base_filename, ["PBS/file.txt", etc.]]
+    # Look through all PBS files and match them to a GameData class based on
+    # their base filenames
+    text_files_keys = ret.keys.sort! { |a, b| ret[b][0].length <=> ret[a][0].length }
+    Dir.chdir("PBS/") do
+      Dir.glob("*.txt") do |f|
+        base_name = File.basename(f, ".txt")
+        text_files_keys.each do |key|
+          next if base_name != ret[key][0] && !f.start_with?(ret[key][0] + "_")
+          ret[key][1] ||= []
+          ret[key][1].push("PBS/" + f)
+          break
+        end
+      end
+    end
+    return ret
+  end
+
   def compile_pbs_files
+    text_files = get_all_pbs_files_to_compile
     modify_pbs_file_contents_before_compiling
-    compile_town_map
-    compile_connections
-    compile_types
-    compile_abilities
-    compile_moves             # Depends on Type
-    compile_items             # Depends on Move
-    compile_berry_plants      # Depends on Item
-    compile_pokemon           # Depends on Move, Item, Type, Ability
-    compile_pokemon_forms     # Depends on Species, Move, Item, Type, Ability
-    compile_pokemon_metrics   # Depends on Species
-    compile_shadow_pokemon    # Depends on Species
-    compile_regional_dexes    # Depends on Species
-    compile_ribbons
-    compile_encounters        # Depends on Species
-    compile_trainer_types
-    compile_trainers          # Depends on Species, Item, Move
-    compile_trainer_lists     # Depends on TrainerType
-    compile_metadata          # Depends on TrainerType
-    compile_map_metadata
-    compile_dungeon_tilesets
-    compile_dungeon_parameters
-    compile_phone             # Depends on TrainerType
+    compile_town_map(*text_files[:TownMap][1])
+    compile_connections(*text_files[:Connection][1])
+    compile_types(*text_files[:Type][1])
+    compile_abilities(*text_files[:Ability][1])
+    compile_moves(*text_files[:Move][1])                       # Depends on Type
+    compile_items(*text_files[:Item][1])                       # Depends on Move
+    compile_berry_plants(*text_files[:BerryPlant][1])          # Depends on Item
+    compile_pokemon(*text_files[:Species][1])                  # Depends on Move, Item, Type, Ability
+    compile_pokemon_forms(*text_files[:Species1][1])           # Depends on Species, Move, Item, Type, Ability
+    compile_pokemon_metrics(*text_files[:SpeciesMetrics][1])   # Depends on Species
+    compile_shadow_pokemon(*text_files[:ShadowPokemon][1])     # Depends on Species
+    compile_regional_dexes(*text_files[:RegionalDex][1])       # Depends on Species
+    compile_ribbons(*text_files[:Ribbon][1])
+    compile_encounters(*text_files[:Encounter][1])             # Depends on Species
+    compile_trainer_types(*text_files[:TrainerType][1])
+    compile_trainers(*text_files[:Trainer][1])                 # Depends on Species, Item, Move
+    compile_trainer_lists                                      # Depends on TrainerType
+    compile_metadata(*text_files[:Metadata][1])                # Depends on TrainerType
+    compile_map_metadata(*text_files[:MapMetadata][1])
+    compile_dungeon_tilesets(*text_files[:DungeonTileset][1])
+    compile_dungeon_parameters(*text_files[:DungeonParameters][1])
+    compile_phone(*text_files[:PhoneMessage][1])               # Depends on TrainerType
   end
 
   def compile_all(mustCompile)
@@ -804,54 +858,14 @@ module Compiler
   def main
     return if !$DEBUG
     begin
-      dataFiles = [
-        "abilities.dat",
-        "berry_plants.dat",
-        "dungeon_parameters.dat",
-        "dungeon_tilesets.dat",
-        "encounters.dat",
-        "items.dat",
+      # Get all data files and PBS files to be checked for their last modified times
+      data_files = GameData.get_all_data_filenames
+      data_files += [   # Extra .dat files for data that isn't a GameData class
         "map_connections.dat",
-        "map_metadata.dat",
-        "metadata.dat",
-        "moves.dat",
-        "phone.dat",
-        "player_metadata.dat",
         "regional_dexes.dat",
-        "ribbons.dat",
-        "shadow_pokemon.dat",
-        "species.dat",
-        "species_metrics.dat",
-        "town_map.dat",
-        "trainer_lists.dat",
-        "trainer_types.dat",
-        "trainers.dat",
-        "types.dat"
+        "trainer_lists.dat"
       ]
-      textFiles = [
-        "abilities.txt",
-        "battle_facility_lists.txt",
-        "berry_plants.txt",
-        "dungeon_parameters.txt",
-        "dungeon_tilesets.txt",
-        "encounters.txt",
-        "items.txt",
-        "map_connections.txt",
-        "map_metadata.txt",
-        "metadata.txt",
-        "moves.txt",
-        "phone.txt",
-        "pokemon.txt",
-        "pokemon_forms.txt",
-        "pokemon_metrics.txt",
-        "regional_dexes.txt",
-        "ribbons.txt",
-        "shadow_pokemon.txt",
-        "town_map.txt",
-        "trainer_types.txt",
-        "trainers.txt",
-        "types.txt"
-      ]
+      text_files = get_all_pbs_files_to_compile
       latestDataTime = 0
       latestTextTime = 0
       mustCompile = false
@@ -864,9 +878,8 @@ module Compiler
         write_all
         mustCompile = true
       end
-      # Check data files and PBS files, and recompile if any PBS file was edited
-      # more recently than the data files were last created
-      dataFiles.each do |filename|
+      # Check data files for their latest modify time
+      data_files.each do |filename|
         if safeExists?("Data/" + filename)
           begin
             File.open("Data/#{filename}") { |file|
@@ -880,24 +893,26 @@ module Compiler
           break
         end
       end
-      textFiles.each do |filename|
-        next if !safeExists?("PBS/" + filename)
-        begin
-          File.open("PBS/#{filename}") { |file|
-            latestTextTime = [latestTextTime, file.mtime.to_i].max
-          }
-        rescue SystemCallError
+      # Check PBS files for their latest modify time
+      text_files.each do |key, value|
+        next if !value || !value[1].is_a?(Array)
+        value[1].each do |filepath|
+          begin
+            File.open(filepath) { |file| latestTextTime = [latestTextTime, file.mtime.to_i].max }
+          rescue SystemCallError
+          end
         end
       end
+      # Decide to compile if a PBS file was edited more recently than any .dat files
       mustCompile |= (latestTextTime >= latestDataTime)
       # Should recompile if holding Ctrl
       Input.update
       mustCompile = true if Input.press?(Input::CTRL)
       # Delete old data files in preparation for recompiling
       if mustCompile
-        dataFiles.length.times do |i|
+        data_files.length.times do |i|
           begin
-            File.delete("Data/#{dataFiles[i]}") if safeExists?("Data/#{dataFiles[i]}")
+            File.delete("Data/#{data_files[i]}") if safeExists?("Data/#{data_files[i]}")
           rescue SystemCallError
           end
         end
@@ -908,9 +923,9 @@ module Compiler
       e = $!
       raise e if e.class.to_s == "Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)
       pbPrintException(e)
-      dataFiles.length.times do |i|
+      data_files.length.times do |i|
         begin
-          File.delete("Data/#{dataFiles[i]}")
+          File.delete("Data/#{data_files[i]}")
         rescue SystemCallError
         end
       end

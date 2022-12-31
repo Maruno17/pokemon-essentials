@@ -12,22 +12,25 @@ module GameData
     attr_reader :wild_capture_ME
     attr_reader :surf_BGM
     attr_reader :bicycle_BGM
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "metadata.dat"
+    PBS_BASE_FILENAME = "metadata"
 
     SCHEMA = {
-      "StartMoney"        => [1,  "u"],
-      "StartItemStorage"  => [2,  "*e", :Item],
-      "Home"              => [3,  "vuuu"],
-      "StorageCreator"    => [4,  "s"],
-      "WildBattleBGM"     => [5,  "s"],
-      "TrainerBattleBGM"  => [6,  "s"],
-      "WildVictoryBGM"    => [7,  "s"],
-      "TrainerVictoryBGM" => [8,  "s"],
-      "WildCaptureME"     => [9,  "s"],
-      "SurfBGM"           => [10, "s"],
-      "BicycleBGM"        => [11, "s"]
+      "SectionName"       => [:id,                   "u"],
+      "StartMoney"        => [:start_money,          "u"],
+      "StartItemStorage"  => [:start_item_storage,   "*e", :Item],
+      "Home"              => [:home,                 "vuuu"],
+      "StorageCreator"    => [:real_storage_creator, "s"],
+      "WildBattleBGM"     => [:wild_battle_BGM,      "s"],
+      "TrainerBattleBGM"  => [:trainer_battle_BGM,   "s"],
+      "WildVictoryBGM"    => [:wild_victory_BGM,     "s"],
+      "TrainerVictoryBGM" => [:trainer_victory_BGM,  "s"],
+      "WildCaptureME"     => [:wild_capture_ME,      "s"],
+      "SurfBGM"           => [:surf_BGM,             "s"],
+      "BicycleBGM"        => [:bicycle_BGM,          "s"]
     }
 
     extend ClassMethodsIDNumbers
@@ -54,11 +57,11 @@ module GameData
     end
 
     def initialize(hash)
-      @id                   = hash[:id]
-      @start_money          = hash[:start_money] || 3000
+      @id                   = hash[:id]                 || 0
+      @start_money          = hash[:start_money]        || 3000
       @start_item_storage   = hash[:start_item_storage] || []
       @home                 = hash[:home]
-      @real_storage_creator = hash[:storage_creator]
+      @real_storage_creator = hash[:real_storage_creator]
       @wild_battle_BGM      = hash[:wild_battle_BGM]
       @trainer_battle_BGM   = hash[:trainer_battle_BGM]
       @wild_victory_BGM     = hash[:wild_victory_BGM]
@@ -66,29 +69,13 @@ module GameData
       @wild_capture_ME      = hash[:wild_capture_ME]
       @surf_BGM             = hash[:surf_BGM]
       @bicycle_BGM          = hash[:bicycle_BGM]
+      @pbs_file_suffix      = hash[:pbs_file_suffix]    || ""
     end
 
     # @return [String] the translated name of the Pokémon Storage creator
     def storage_creator
-      ret = pbGetMessage(MessageTypes::StorageCreator, 0)
+      ret = pbGetMessageFromHash(MessageTypes::StorageCreator, @real_storage_creator)
       return nil_or_empty?(ret) ? _INTL("Bill") : ret
-    end
-
-    def property_from_string(str)
-      case str
-      when "StartMoney"        then return @start_money
-      when "StartItemStorage"  then return @start_item_storage
-      when "Home"              then return @home
-      when "StorageCreator"    then return @real_storage_creator
-      when "WildBattleBGM"     then return @wild_battle_BGM
-      when "TrainerBattleBGM"  then return @trainer_battle_BGM
-      when "WildVictoryBGM"    then return @wild_victory_BGM
-      when "TrainerVictoryBGM" then return @trainer_victory_BGM
-      when "WildCaptureME"     then return @wild_capture_ME
-      when "SurfBGM"           then return @surf_BGM
-      when "BicycleBGM"        then return @bicycle_BGM
-      end
-      return nil
     end
   end
 end

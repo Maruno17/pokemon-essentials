@@ -23,33 +23,36 @@ module GameData
     attr_reader :town_map_size
     attr_reader :battle_environment
     attr_reader :flags
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "map_metadata.dat"
+    PBS_BASE_FILENAME = "map_metadata"
 
     SCHEMA = {
-      "Name"              => [1,  "s"],
-      "Outdoor"           => [2,  "b"],
-      "ShowArea"          => [3,  "b"],
-      "Bicycle"           => [4,  "b"],
-      "BicycleAlways"     => [5,  "b"],
-      "HealingSpot"       => [6,  "vuu"],
-      "Weather"           => [7,  "eu", :Weather],
-      "MapPosition"       => [8,  "uuu"],
-      "DiveMap"           => [9,  "v"],
-      "DarkMap"           => [10,  "b"],
-      "SafariMap"         => [11, "b"],
-      "SnapEdges"         => [12, "b"],
-      "Dungeon"           => [13, "b"],
-      "BattleBack"        => [14, "s"],
-      "WildBattleBGM"     => [15, "s"],
-      "TrainerBattleBGM"  => [16, "s"],
-      "WildVictoryBGM"    => [17, "s"],
-      "TrainerVictoryBGM" => [18, "s"],
-      "WildCaptureME"     => [19, "s"],
-      "MapSize"           => [20, "us"],
-      "Environment"       => [21, "e", :Environment],
-      "Flags"             => [22, "*s"]
+      "SectionName"       => [:id,                   "u"],
+      "Name"              => [:real_name,            "s"],
+      "Outdoor"           => [:outdoor_map,          "b"],
+      "ShowArea"          => [:announce_location,    "b"],
+      "Bicycle"           => [:can_bicycle,          "b"],
+      "BicycleAlways"     => [:always_bicycle,       "b"],
+      "HealingSpot"       => [:teleport_destination, "vuu"],
+      "Weather"           => [:weather,              "eu", :Weather],
+      "MapPosition"       => [:town_map_position,    "uuu"],
+      "DiveMap"           => [:dive_map_id,          "v"],
+      "DarkMap"           => [:dark_map,             "b"],
+      "SafariMap"         => [:safari_map,           "b"],
+      "SnapEdges"         => [:snap_edges,           "b"],
+      "Dungeon"           => [:random_dungeon,       "b"],
+      "BattleBack"        => [:battle_background,    "s"],
+      "WildBattleBGM"     => [:wild_battle_BGM,      "s"],
+      "TrainerBattleBGM"  => [:trainer_battle_BGM,   "s"],
+      "WildVictoryBGM"    => [:wild_victory_BGM,     "s"],
+      "TrainerVictoryBGM" => [:trainer_victory_BGM,  "s"],
+      "WildCaptureME"     => [:wild_capture_ME,      "s"],
+      "MapSize"           => [:town_map_size,        "us"],
+      "Environment"       => [:battle_environment,   "e", :Environment],
+      "Flags"             => [:flags,                "*s"]
     }
 
     extend ClassMethodsIDNumbers
@@ -57,6 +60,7 @@ module GameData
 
     def self.editor_properties
       return [
+        ["ID",                ReadOnlyProperty,        _INTL("ID number of this map.")],
         ["Name",              StringProperty,          _INTL("The name of the map, as seen by the player. Can be different to the map's name as seen in RMXP.")],
         ["Outdoor",           BooleanProperty,         _INTL("If true, this map is an outdoor map and will be tinted according to time of day.")],
         ["ShowArea",          BooleanProperty,         _INTL("If true, the game will display the map's name upon entry.")],
@@ -84,7 +88,7 @@ module GameData
 
     def initialize(hash)
       @id                   = hash[:id]
-      @real_name            = hash[:name]
+      @real_name            = hash[:real_name]
       @outdoor_map          = hash[:outdoor_map]
       @announce_location    = hash[:announce_location]
       @can_bicycle          = hash[:can_bicycle]
@@ -105,35 +109,8 @@ module GameData
       @wild_capture_ME      = hash[:wild_capture_ME]
       @town_map_size        = hash[:town_map_size]
       @battle_environment   = hash[:battle_environment]
-      @flags                = hash[:flags] || []
-    end
-
-    def property_from_string(str)
-      case str
-      when "Name"              then return @real_name
-      when "Outdoor"           then return @outdoor_map
-      when "ShowArea"          then return @announce_location
-      when "Bicycle"           then return @can_bicycle
-      when "BicycleAlways"     then return @always_bicycle
-      when "HealingSpot"       then return @teleport_destination
-      when "Weather"           then return @weather
-      when "MapPosition"       then return @town_map_position
-      when "DiveMap"           then return @dive_map_id
-      when "DarkMap"           then return @dark_map
-      when "SafariMap"         then return @safari_map
-      when "SnapEdges"         then return @snap_edges
-      when "Dungeon"           then return @random_dungeon
-      when "BattleBack"        then return @battle_background
-      when "WildBattleBGM"     then return @wild_battle_BGM
-      when "TrainerBattleBGM"  then return @trainer_battle_BGM
-      when "WildVictoryBGM"    then return @wild_victory_BGM
-      when "TrainerVictoryBGM" then return @trainer_victory_BGM
-      when "WildCaptureME"     then return @wild_capture_ME
-      when "MapSize"           then return @town_map_size
-      when "Environment"       then return @battle_environment
-      when "Flags"             then return @flags
-      end
-      return nil
+      @flags                = hash[:flags]           || []
+      @pbs_file_suffix      = hash[:pbs_file_suffix] || ""
     end
 
     # @return [String] the translated name of this map
@@ -143,6 +120,12 @@ module GameData
 
     def has_flag?(flag)
       return @flags.any? { |f| f.downcase == flag.downcase }
+    end
+
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key)
+      key = "SectionName" if key == "ID"
+      return __orig__get_property_for_PBS(key)
     end
   end
 end

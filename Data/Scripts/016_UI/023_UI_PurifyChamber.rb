@@ -141,17 +141,17 @@ class PurifyChamberSet
   end
 
   # Purify Chamber treats Normal/Normal matchup as super effective
-  def self.typeAdvantage(p1, p2)
-    return true if p1 == :NORMAL && p2 == :NORMAL
-    return Effectiveness.super_effective_type?(p1, p2)
+  def self.typeAdvantage(type1, type2)
+    return true if type1 == :NORMAL && type2 == :NORMAL
+    return Effectiveness.super_effective_type?(type1, type2)
   end
 
-  def self.isSuperEffective(p1, p2)
-    return true if typeAdvantage(p1.types[0], p2.types[0])
-    return true if p2.types[1] && typeAdvantage(p1.types[0], p2.types[1])
-    return false if p1.types[1].nil?
-    return true if typeAdvantage(p1.types[1], p2.types[0])
-    return true if p2.types[1] && typeAdvantage(p1.types[1], p2.types[1])
+  def self.isSuperEffective(pkmn1, pkmn2)
+    pkmn1.types.each do |type1|
+      pkmn2.types.each do |type2|
+        return true if typeAdvantage(type1, type2)
+      end
+    end
     return false
   end
 end
@@ -952,16 +952,13 @@ class PurifyChamberSetView < Sprite
     pbSetSmallFont(@info.bitmap)
     textpos = []
     if pkmn
-      if pkmn.types.length == 1
-        textpos.push([_INTL("{1}  Lv.{2}  {3}", pkmn.name, pkmn.level,
-                            GameData::Type.get(pkmn.types[0]).name),
-                      2, 6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
-      else
-        textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}", pkmn.name, pkmn.level,
-                            GameData::Type.get(pkmn.types[0]).name,
-                            GameData::Type.get(pkmn.types[1]).name),
-                      2, 6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
+      type_string = ""
+      pkmn.types.each_with_index do |type, i|
+        type_string += "/" if i > 0
+        type_string += GameData::Type.get(type).name
       end
+      textpos.push([_INTL("{1}  Lv.{2}  {3}", pkmn.name, pkmn.level, type_string),
+                   2, 6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       textpos.push([_INTL("FLOW"), 2 + (@info.bitmap.width / 2), 30, 0,
                     Color.new(248, 248, 248), Color.new(128, 128, 128)])
       # draw heart gauge

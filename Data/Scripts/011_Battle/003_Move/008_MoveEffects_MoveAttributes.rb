@@ -1111,8 +1111,7 @@ class Battle::Move::EffectivenessIncludesFlyingType < Battle::Move
   def pbCalcTypeModSingle(moveType, defType, user, target)
     ret = super
     if GameData::Type.exists?(:FLYING)
-      flyingEff = Effectiveness.calculate_one(:FLYING, defType)
-      ret *= flyingEff.to_f / Effectiveness::NORMAL_EFFECTIVE_ONE
+      ret *= Effectiveness.calculate(:FLYING, defType)
     end
     return ret
   end

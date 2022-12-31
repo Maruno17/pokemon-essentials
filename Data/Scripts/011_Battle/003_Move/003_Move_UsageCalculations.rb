@@ -30,58 +30,51 @@ class Battle::Move
   # Type effectiveness calculation
   #=============================================================================
   def pbCalcTypeModSingle(moveType, defType, user, target)
-    ret = Effectiveness.calculate_one(moveType, defType)
+    ret = Effectiveness.calculate(moveType, defType)
     if Effectiveness.ineffective_type?(moveType, defType)
       # Ring Target
       if target.hasActiveItem?(:RINGTARGET)
-        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
       # Foresight
       if (user.hasActiveAbility?(:SCRAPPY) || target.effects[PBEffects::Foresight]) &&
          defType == :GHOST
-        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
       # Miracle Eye
       if target.effects[PBEffects::MiracleEye] && defType == :DARK
-        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
     elsif Effectiveness.super_effective_type?(moveType, defType)
       # Delta Stream's weather
       if target.effectiveWeather == :StrongWinds && defType == :FLYING
-        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
     end
     # Grounded Flying-type Pokémon become susceptible to Ground moves
     if !target.airborne? && defType == :FLYING && moveType == :GROUND
-      ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+      ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
     end
     return ret
   end
 
   def pbCalcTypeMod(moveType, user, target)
-    return Effectiveness::NORMAL_EFFECTIVE if !moveType
-    return Effectiveness::NORMAL_EFFECTIVE if moveType == :GROUND &&
-                                              target.pbHasType?(:FLYING) &&
-                                              target.hasActiveItem?(:IRONBALL)
-    # Determine types
-    tTypes = target.pbTypes(true)
+    ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+    return ret if !moveType
+    return ret if moveType == :GROUND && target.pbHasType?(:FLYING) && target.hasActiveItem?(:IRONBALL)
     # Get effectivenesses
-    typeMods = [Effectiveness::NORMAL_EFFECTIVE_ONE] * 3   # 3 types max
     if moveType == :SHADOW
       if target.shadowPokemon?
-        typeMods[0] = Effectiveness::NOT_VERY_EFFECTIVE_ONE
+        ret = Effectiveness::NOT_VERY_EFFECTIVE_MULTIPLIER
       else
-        typeMods[0] = Effectiveness::SUPER_EFFECTIVE_ONE
+        ret = Effectiveness::SUPER_EFFECTIVE_MULTIPLIER
       end
     else
-      tTypes.each_with_index do |type, i|
-        typeMods[i] = pbCalcTypeModSingle(moveType, type, user, target)
+      target.pbTypes(true).each do |type|
+        ret *= pbCalcTypeModSingle(moveType, type, user, target)
       end
+      ret *= 2 if target.effects[PBEffects::TarShot] && moveType == :FIRE
     end
-    # Multiply all effectivenesses together
-    ret = 1
-    typeMods.each { |m| ret *= m }
-    ret *= 2 if target.effects[PBEffects::TarShot] && moveType == :FIRE
     return ret
   end
 
@@ -453,7 +446,7 @@ class Battle::Move
       end
     end
     # Type effectiveness
-    multipliers[:final_damage_multiplier] *= target.damageState.typeMod.to_f / Effectiveness::NORMAL_EFFECTIVE
+    multipliers[:final_damage_multiplier] *= target.damageState.typeMod
     # Burn
     if user.status == :BURN && physicalMove? && damageReducedByBurn? &&
        !user.hasActiveAbility?(:GUTS)

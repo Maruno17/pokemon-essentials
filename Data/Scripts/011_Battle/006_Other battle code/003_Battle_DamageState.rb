@@ -30,7 +30,7 @@ class Battle::DamageState
   def initialize; reset; end
 
   def reset
-    @typeMod          = Effectiveness::INEFFECTIVE
+    @typeMod          = Effectiveness::INEFFECTIVE_MULTIPLIER
     @unaffected       = false
     @protected        = false
     @missed           = false

@@ -455,7 +455,7 @@ class Battle::Move::TwoTurnAttackInvulnerableInSkyTargetCannotAct < Battle::Move
   end
 
   def pbCalcTypeMod(movetype, user, target)
-    return Effectiveness::INEFFECTIVE if target.pbHasType?(:FLYING)
+    return Effectiveness::INEFFECTIVE_MULTIPLIER if target.pbHasType?(:FLYING)
     return super
   end
 

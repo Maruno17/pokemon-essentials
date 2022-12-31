@@ -6,6 +6,10 @@ module GameData
   # For data that is known by a symbol or an ID number.
   #=============================================================================
   module ClassMethods
+    def schema
+      return self::SCHEMA
+    end
+
     def register(hash)
       self::DATA[hash[:id]] = self::DATA[hash[:id_number]] = self.new(hash)
     end
@@ -72,6 +76,10 @@ module GameData
   # For data that is only known by a symbol.
   #=============================================================================
   module ClassMethodsSymbols
+    def schema
+      return self::SCHEMA
+    end
+
     def register(hash)
       self::DATA[hash[:id]] = self.new(hash)
     end
@@ -143,6 +151,10 @@ module GameData
   # For data that is only known by an ID number.
   #=============================================================================
   module ClassMethodsIDNumbers
+    def schema
+      return self::SCHEMA
+    end
+
     def register(hash)
       self::DATA[hash[:id]] = self.new(hash)
     end
@@ -219,29 +231,49 @@ module GameData
       end
       return false
     end
+
+    def get_property_for_PBS(key)
+      ret = nil
+      if self.class::SCHEMA.include?(key) && self.respond_to?(self.class::SCHEMA[key][0])
+        ret = self.send(self.class::SCHEMA[key][0])
+        ret = nil if ret == false || (ret.is_a?(Array) && ret.length == 0)
+      end
+      return ret
+    end
   end
 
   #=============================================================================
   # A bulk loader method for all data stored in .dat files in the Data folder.
   #=============================================================================
   def self.load_all
-    Type.load
-    Ability.load
-    Move.load
-    Item.load
-    BerryPlant.load
-    Species.load
-    SpeciesMetrics.load
-    ShadowPokemon.load
-    Ribbon.load
-    Encounter.load
-    TrainerType.load
-    Trainer.load
-    Metadata.load
-    PlayerMetadata.load
-    MapMetadata.load
-    DungeonTileset.load
-    DungeonParameters.load
-    PhoneMessage.load
+    self.constants.each do |c|
+      next if !self.const_get(c).is_a?(Class)
+      self.const_get(c).load if self.const_get(c).const_defined?(:DATA_FILENAME)
+    end
+  end
+
+  def self.get_all_data_filenames
+    ret = []
+    self.constants.each do |c|
+      next if !self.const_get(c).is_a?(Class)
+      ret.push(self.const_get(c)::DATA_FILENAME) if self.const_get(c).const_defined?(:DATA_FILENAME)
+    end
+    return ret
+  end
+
+  def self.get_all_pbs_base_filenames
+    ret = {}
+    self.constants.each do |c|
+      next if !self.const_get(c).is_a?(Class)
+      ret[c] = self.const_get(c)::PBS_BASE_FILENAME if self.const_get(c).const_defined?(:PBS_BASE_FILENAME)
+      if ret[c].is_a?(Array)
+        ret[c].length.times do |i|
+          next if i == 0
+          ret[(c.to_s + i.to_s).to_sym] = ret[c][i]   # :Species1 => "pokemon_forms"
+        end
+        ret[c] = ret[c][0]   # :Species => "pokemon"
+      end
+    end
+    return ret
   end
 end

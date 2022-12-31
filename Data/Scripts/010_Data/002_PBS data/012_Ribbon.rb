@@ -5,15 +5,18 @@ module GameData
     attr_reader :icon_position   # Where this ribbon's graphic is within ribbons.png
     attr_reader :real_description
     attr_reader :flags
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "ribbons.dat"
+    PBS_BASE_FILENAME = "ribbons"
 
     SCHEMA = {
-      "Name"         => [:name,          "s"],
-      "IconPosition" => [:icon_position, "u"],
-      "Description"  => [:description,   "q"],
-      "Flags"        => [:flags,         "*s"]
+      "SectionName"  => [:id,               "m"],
+      "Name"         => [:real_name,        "s"],
+      "IconPosition" => [:icon_position,    "u"],
+      "Description"  => [:real_description, "q"],
+      "Flags"        => [:flags,            "*s"]
     }
 
     extend ClassMethodsSymbols
@@ -21,10 +24,11 @@ module GameData
 
     def initialize(hash)
       @id               = hash[:id]
-      @real_name        = hash[:name]          || "Unnamed"
-      @icon_position    = hash[:icon_position] || 0
-      @real_description = hash[:description]   || "???"
-      @flags            = hash[:flags]         || []
+      @real_name        = hash[:real_name]        || "Unnamed"
+      @icon_position    = hash[:icon_position]    || 0
+      @real_description = hash[:real_description] || "???"
+      @flags            = hash[:flags]            || []
+      @pbs_file_suffix  = hash[:pbs_file_suffix]  || ""
     end
 
     # @return [String] the translated name of this ribbon

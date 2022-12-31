@@ -40,12 +40,111 @@ module GameData
     attr_reader :mega_move
     attr_reader :unmega_form
     attr_reader :mega_message
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "species.dat"
+    PBS_BASE_FILENAME = ["pokemon", "pokemon_forms"]
 
     extend ClassMethodsSymbols
     include InstanceMethods
+
+    def self.schema(compiling_forms = false)
+      ret = {}
+      if compiling_forms
+        ret["SectionName"]    = [:id,                 "ev", :Species]
+      else
+        ret["SectionName"]    = [:id,                 "m"]
+        ret["Name"]           = [:real_name,          "s"]
+      end
+      ret["FormName"]         = [:real_form_name,     "q"]
+      if compiling_forms
+        ret["PokedexForm"]    = [:pokedex_form,       "u"]
+        ret["MegaStone"]      = [:mega_stone,         "e", :Item]
+        ret["MegaMove"]       = [:mega_move,          "e", :Move]
+        ret["UnmegaForm"]     = [:unmega_form,        "u"]
+        ret["MegaMessage"]    = [:mega_message,       "u"]
+      end
+      ret["Types"]            = [:types,              "*e", :Type]
+      ret["BaseStats"]        = [:base_stats,         "vvvvvv"]
+      if !compiling_forms
+        ret["GenderRatio"]    = [:gender_ratio,       "e", :GenderRatio]
+        ret["GrowthRate"]     = [:growth_rate,        "e", :GrowthRate]
+      end
+      ret["BaseExp"]          = [:base_exp,           "v"]
+      ret["EVs"]              = [:evs,                "*ev", :Stat]
+      ret["CatchRate"]        = [:catch_rate,         "u"]
+      ret["Happiness"]        = [:happiness,          "u"]
+      ret["Abilities"]        = [:abilities,          "*e", :Ability]
+      ret["HiddenAbilities"]  = [:hidden_abilities,   "*e", :Ability]
+      ret["Moves"]            = [:moves,              "*ue", nil, :Move]
+      ret["TutorMoves"]       = [:tutor_moves,        "*e", :Move]
+      ret["EggMoves"]         = [:egg_moves,          "*e", :Move]
+      ret["EggGroups"]        = [:egg_groups,         "*e", :EggGroup]
+      ret["HatchSteps"]       = [:hatch_steps,        "v"]
+      if compiling_forms
+        ret["Offspring"]      = [:offspring,          "*e", :Species]
+      else
+        ret["Incense"]        = [:incense,            "e", :Item]
+        ret["Offspring"]      = [:offspring,          "*s"]
+      end
+      ret["Height"]           = [:height,             "f"]
+      ret["Weight"]           = [:weight,             "f"]
+      ret["Color"]            = [:color,              "e", :BodyColor]
+      ret["Shape"]            = [:shape,              "e", :BodyShape]
+      ret["Habitat"]          = [:habitat,            "e", :Habitat]
+      ret["Category"]         = [:real_category,      "s"]
+      ret["Pokedex"]          = [:real_pokedex_entry, "q"]
+      ret["Generation"]       = [:generation,         "i"]
+      ret["Flags"]            = [:flags,              "*s"]
+      ret["WildItemCommon"]   = [:wild_item_common,   "*e", :Item]
+      ret["WildItemUncommon"] = [:wild_item_uncommon, "*e", :Item]
+      ret["WildItemRare"]     = [:wild_item_rare,     "*e", :Item]
+      if compiling_forms
+        ret["Evolutions"]     = [:evolutions,         "*ees", :Species, :Evolution, nil]
+      else
+        ret["Evolutions"]     = [:evolutions,         "*ses", nil, :Evolution, nil]
+      end
+      return ret
+    end
+
+    def self.editor_properties
+      return [
+        ["ID",                ReadOnlyProperty,                   _INTL("The ID of the Pokémon.")],
+        ["Name",              LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
+        ["FormName",          StringProperty,                     _INTL("Name of this form of the Pokémon.")],
+        ["Types",             GameDataPoolProperty.new(:Type, false), _INTL("The Pokémon's type(s).")],
+        ["BaseStats",         BaseStatsProperty,                  _INTL("Base stats of the Pokémon.")],
+        ["GenderRatio",       GameDataProperty.new(:GenderRatio), _INTL("Proportion of males to females for this species.")],
+        ["GrowthRate",        GameDataProperty.new(:GrowthRate),  _INTL("Pokémon's growth rate.")],
+        ["BaseExp",           LimitProperty.new(9999),            _INTL("Base experience earned when this species is defeated.")],
+        ["EVs",               EffortValuesProperty,               _INTL("Effort Value points earned when this species is defeated.")],
+        ["CatchRate",         LimitProperty.new(255),             _INTL("Catch rate of this species (0-255).")],
+        ["Happiness",         LimitProperty.new(255),             _INTL("Base happiness of this species (0-255).")],
+        ["Abilities",         AbilitiesProperty.new,              _INTL("Abilities which the Pokémon can have (max. 2).")],
+        ["HiddenAbilities",   AbilitiesProperty.new,              _INTL("Secret abilities which the Pokémon can have.")],
+        ["Moves",             LevelUpMovesProperty,               _INTL("Moves which the Pokémon learns while levelling up.")],
+        ["TutorMoves",        EggMovesProperty.new,               _INTL("Moves which the Pokémon can be taught by TM/HM/Move Tutor.")],
+        ["EggMoves",          EggMovesProperty.new,               _INTL("Moves which the Pokémon can learn via breeding.")],
+        ["EggGroups",         EggGroupsProperty.new,              _INTL("Egg groups that the Pokémon belongs to for breeding purposes.")],
+        ["HatchSteps",        LimitProperty.new(99_999),          _INTL("Number of steps until an egg of this species hatches.")],
+        ["Incense",           ItemProperty,                       _INTL("Item needed to be held by a parent to produce an egg of this species.")],
+        ["Offspring",         GameDataPoolProperty.new(:Species), _INTL("All possible species that an egg can be when breeding for an egg of this species (if blank, the egg can only be this species).")],
+        ["Height",            NonzeroLimitProperty.new(999),      _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
+        ["Weight",            NonzeroLimitProperty.new(9999),     _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
+        ["Color",             GameDataProperty.new(:BodyColor),   _INTL("Pokémon's body color.")],
+        ["Shape",             GameDataProperty.new(:BodyShape),   _INTL("Body shape of this species.")],
+        ["Habitat",           GameDataProperty.new(:Habitat),     _INTL("The habitat of this species.")],
+        ["Category",          StringProperty,                     _INTL("Kind of Pokémon species.")],
+        ["Pokedex",           StringProperty,                     _INTL("Description of the Pokémon as displayed in the Pokédex.")],
+        ["Generation",        LimitProperty.new(99_999),          _INTL("The number of the generation the Pokémon debuted in.")],
+        ["Flags",             StringListProperty,                 _INTL("Words/phrases that distinguish this species from others.")],
+        ["WildItemCommon",    GameDataPoolProperty.new(:Item),    _INTL("Item(s) commonly held by wild Pokémon of this species.")],
+        ["WildItemUncommon",  GameDataPoolProperty.new(:Item),    _INTL("Item(s) uncommonly held by wild Pokémon of this species.")],
+        ["WildItemRare",      GameDataPoolProperty.new(:Item),    _INTL("Item(s) rarely held by wild Pokémon of this species.")],
+        ["Evolutions",        EvolutionsProperty.new,             _INTL("Evolution paths of this species.")]
+      ]
+    end
 
     # @param species [Symbol, self, String]
     # @param form [Integer]
@@ -71,84 +170,14 @@ module GameData
       return ret
     end
 
-    def self.schema(compiling_forms = false)
-      ret = {
-        "FormName"          => [0, "q"],
-        "Category"          => [0, "s"],
-        "Pokedex"           => [0, "q"],
-        "Types"             => [0, "eE", :Type, :Type],
-        "BaseStats"         => [0, "vvvvvv"],
-        "EVs"               => [0, "*ev", :Stat],
-        "BaseExp"           => [0, "v"],
-        "CatchRate"         => [0, "u"],
-        "Happiness"         => [0, "u"],
-        "Moves"             => [0, "*ue", nil, :Move],
-        "TutorMoves"        => [0, "*e", :Move],
-        "EggMoves"          => [0, "*e", :Move],
-        "Abilities"         => [0, "*e", :Ability],
-        "HiddenAbilities"   => [0, "*e", :Ability],
-        "WildItemCommon"    => [0, "*e", :Item],
-        "WildItemUncommon"  => [0, "*e", :Item],
-        "WildItemRare"      => [0, "*e", :Item],
-        "EggGroups"         => [0, "*e", :EggGroup],
-        "HatchSteps"        => [0, "v"],
-        "Height"            => [0, "f"],
-        "Weight"            => [0, "f"],
-        "Color"             => [0, "e", :BodyColor],
-        "Shape"             => [0, "e", :BodyShape],
-        "Habitat"           => [0, "e", :Habitat],
-        "Generation"        => [0, "i"],
-        "Flags"             => [0, "*s"],
-        "BattlerPlayerX"    => [0, "i"],
-        "BattlerPlayerY"    => [0, "i"],
-        "BattlerEnemyX"     => [0, "i"],
-        "BattlerEnemyY"     => [0, "i"],
-        "BattlerAltitude"   => [0, "i"],
-        "BattlerShadowX"    => [0, "i"],
-        "BattlerShadowSize" => [0, "u"],
-        # All properties below here are old names for some properties above.
-        # They will be removed in v21.
-        "Type1"             => [0, "e", :Type],
-        "Type2"             => [0, "e", :Type],
-        "Rareness"          => [0, "u"],
-        "Compatibility"     => [0, "*e", :EggGroup],
-        "Kind"              => [0, "s"],
-        "BaseEXP"           => [0, "v"],
-        "EffortPoints"      => [0, "*ev", :Stat],
-        "HiddenAbility"     => [0, "*e", :Ability],
-        "StepsToHatch"      => [0, "v"]
-      }
-      if compiling_forms
-        ret["PokedexForm"]  = [0, "u"]
-        ret["Offspring"]    = [0, "*e", :Species]
-        ret["Evolutions"]   = [0, "*ees", :Species, :Evolution, nil]
-        ret["MegaStone"]    = [0, "e", :Item]
-        ret["MegaMove"]     = [0, "e", :Move]
-        ret["UnmegaForm"]   = [0, "u"]
-        ret["MegaMessage"]  = [0, "u"]
-      else
-        ret["InternalName"] = [0, "n"]
-        ret["Name"]         = [0, "s"]
-        ret["GrowthRate"]   = [0, "e", :GrowthRate]
-        ret["GenderRatio"]  = [0, "e", :GenderRatio]
-        ret["Incense"]      = [0, "e", :Item]
-        ret["Offspring"]    = [0, "*s"]
-        ret["Evolutions"]   = [0, "*ses", nil, :Evolution, nil]
-        # All properties below here are old names for some properties above.
-        # They will be removed in v21.
-        ret["GenderRate"]   = [0, "e", :GenderRatio]
-      end
-      return ret
-    end
-
     def initialize(hash)
       @id                 = hash[:id]
       @species            = hash[:species]            || @id
       @form               = hash[:form]               || 0
-      @real_name          = hash[:name]               || "Unnamed"
-      @real_form_name     = hash[:form_name]
-      @real_category      = hash[:category]           || "???"
-      @real_pokedex_entry = hash[:pokedex_entry]      || "???"
+      @real_name          = hash[:real_name]          || "Unnamed"
+      @real_form_name     = hash[:real_form_name]
+      @real_category      = hash[:real_category]      || "???"
+      @real_pokedex_entry = hash[:real_pokedex_entry] || "???"
       @pokedex_form       = hash[:pokedex_form]       || @form
       @types              = hash[:types]              || [:NORMAL]
       @base_stats         = hash[:base_stats]         || {}
@@ -186,6 +215,7 @@ module GameData
       @mega_move          = hash[:mega_move]
       @unmega_form        = hash[:unmega_form]        || 0
       @mega_message       = hash[:mega_message]       || 0
+      @pbs_file_suffix    = hash[:pbs_file_suffix]    || ""
     end
 
     # @return [String] the translated name of this species
@@ -351,6 +381,68 @@ module GameData
         return (min_level == 0) ? evo[2] : min_level + 1
       end
       return 1
+    end
+
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key, writing_form = false)
+      key = "SectionName" if key == "ID"
+      ret = nil
+      if self.class.schema(writing_form).include?(key)
+        ret = self.send(self.class.schema(writing_form)[key][0])
+        ret = nil if ret == false || (ret.is_a?(Array) && ret.length == 0)
+      end
+      case key
+      when "SectionName"
+        ret = [@species, @form] if writing_form
+      when "FormName"
+        ret = nil if nil_or_empty?(ret)
+      when "PokedexForm"
+        ret = nil if ret == @form
+      when "UnmegaForm", "MegaMessage", "Generation"
+        ret = nil if ret == 0
+      when "BaseStats"
+        new_ret = []
+        GameData::Stat.each_main do |s|
+          new_ret[s.pbs_order] = ret[s.id] if s.pbs_order >= 0
+        end
+        ret = new_ret
+      when "EVs"
+        new_ret = []
+        GameData::Stat.each_main do |s|
+          new_ret.push([s.id, ret[s.id]]) if ret[s.id] > 0 && s.pbs_order >= 0
+        end
+        ret = new_ret
+      when "Height", "Weight"
+        ret = ret.to_f / 10
+      when "Habitat"
+        ret = nil if ret == :None
+      when "Evolutions"
+        if ret
+          ret = ret.select { |evo| !evo[3] }   # Remove prevolutions
+          ret.each do |evo|
+            param_type = GameData::Evolution.get(evo[1]).parameter
+            if !param_type.nil?
+              if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
+                evo[2] = getConstantName(param_type, evo[2])
+              else
+                evo[2] = evo[2].to_s
+              end
+            end
+          end
+          ret.each_with_index { |evo, i| ret[i] = evo[0, 3] }
+          ret = nil if ret.length == 0
+        end
+      end
+      if writing_form && !ret.nil?
+        base_form = GameData::Species.get(@species)
+        if !["WildItemCommon", "WildItemUncommon", "WildItemRare"].include?(key) ||
+           (base_form.wild_item_common == @wild_item_common &&
+           base_form.wild_item_uncommon == @wild_item_uncommon &&
+           base_form.wild_item_rare == @wild_item_rare)
+          ret = nil if base_form.get_property_for_PBS(key) == ret
+        end
+      end
+      return ret
     end
   end
 end

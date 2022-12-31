@@ -14,26 +14,26 @@ module GameData
     attr_reader :flags
     attr_reader :effect_chance
     attr_reader :real_description
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "moves.dat"
+    PBS_BASE_FILENAME = "moves"
 
     SCHEMA = {
-      "Name"         => [:name,          "s"],
-      "Type"         => [:type,          "e", :Type],
-      "Category"     => [:category,      "e", ["Physical", "Special", "Status"]],
-      "Power"        => [:base_damage,   "u"],
-      "Accuracy"     => [:accuracy,      "u"],
-      "TotalPP"      => [:total_pp,      "u"],
-      "Target"       => [:target,        "e", :Target],
-      "Priority"     => [:priority,      "i"],
-      "FunctionCode" => [:function_code, "s"],
-      "Flags"        => [:flags,         "*s"],
-      "EffectChance" => [:effect_chance, "u"],
-      "Description"  => [:description,   "q"],
-      # All properties below here are old names for some properties above.
-      # They will be removed in v21.
-      "BaseDamage"   => [:base_damage,   "u"]
+      "SectionName"  => [:id,               "m"],
+      "Name"         => [:real_name,        "s"],
+      "Type"         => [:type,             "e", :Type],
+      "Category"     => [:category,         "e", ["Physical", "Special", "Status"]],
+      "Power"        => [:base_damage,      "u"],
+      "Accuracy"     => [:accuracy,         "u"],
+      "TotalPP"      => [:total_pp,         "u"],
+      "Target"       => [:target,           "e", :Target],
+      "Priority"     => [:priority,         "i"],
+      "FunctionCode" => [:function_code,    "s"],
+      "Flags"        => [:flags,            "*s"],
+      "EffectChance" => [:effect_chance,    "u"],
+      "Description"  => [:real_description, "q"]
     }
 
     extend ClassMethodsSymbols
@@ -42,19 +42,20 @@ module GameData
     def initialize(hash)
       convert_move_data(hash)
       @id               = hash[:id]
-      @real_name        = hash[:name]          || "Unnamed"
-      @type             = hash[:type]          || :NONE
-      @category         = hash[:category]      || 2
-      @base_damage      = hash[:base_damage]   || 0
-      @accuracy         = hash[:accuracy]      || 100
-      @total_pp         = hash[:total_pp]      || 5
-      @target           = hash[:target]        || :None
-      @priority         = hash[:priority]      || 0
-      @function_code    = hash[:function_code] || "None"
-      @flags            = hash[:flags]         || []
+      @real_name        = hash[:real_name]        || "Unnamed"
+      @type             = hash[:type]             || :NONE
+      @category         = hash[:category]         || 2
+      @base_damage      = hash[:base_damage]      || 0
+      @accuracy         = hash[:accuracy]         || 100
+      @total_pp         = hash[:total_pp]         || 5
+      @target           = hash[:target]           || :None
+      @priority         = hash[:priority]         || 0
+      @function_code    = hash[:function_code]    || "None"
+      @flags            = hash[:flags]            || []
       @flags            = [@flags] if !@flags.is_a?(Array)
-      @effect_chance    = hash[:effect_chance] || 0
-      @real_description = hash[:description]   || "???"
+      @effect_chance    = hash[:effect_chance]    || 0
+      @real_description = hash[:real_description] || "???"
+      @pbs_file_suffix  = hash[:pbs_file_suffix]  || ""
     end
 
     # @return [String] the translated name of this move
@@ -815,6 +816,13 @@ module GameData
       end
       data[:function_code] = new_code
       return data
+    end
+
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key)
+      ret = __orig__get_property_for_PBS(key)
+      ret = nil if ["Power", "Priority", "EffectChance"].include?(key) && ret == 0
+      return ret
     end
   end
 end

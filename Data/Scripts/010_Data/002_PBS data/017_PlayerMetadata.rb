@@ -4,20 +4,22 @@ module GameData
     attr_reader :trainer_type
     attr_reader :walk_charset
     attr_reader :home
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "player_metadata.dat"
 
     SCHEMA = {
-      "TrainerType"     => [1, "e", :TrainerType],
-      "WalkCharset"     => [2, "s"],
-      "RunCharset"      => [3, "s"],
-      "CycleCharset"    => [4, "s"],
-      "SurfCharset"     => [5, "s"],
-      "DiveCharset"     => [6, "s"],
-      "FishCharset"     => [7, "s"],
-      "SurfFishCharset" => [8, "s"],
-      "Home"            => [9, "vuuu"]
+      "SectionName"     => [:id,                "u"],
+      "TrainerType"     => [:trainer_type,      "e", :TrainerType],
+      "WalkCharset"     => [:walk_charset,      "s"],
+      "RunCharset"      => [:run_charset,       "s"],
+      "CycleCharset"    => [:cycle_charset,     "s"],
+      "SurfCharset"     => [:surf_charset,      "s"],
+      "DiveCharset"     => [:dive_charset,      "s"],
+      "FishCharset"     => [:fish_charset,      "s"],
+      "SurfFishCharset" => [:surf_fish_charset, "s"],
+      "Home"            => [:home,              "vuuu"]
     }
 
     extend ClassMethodsIDNumbers
@@ -25,6 +27,7 @@ module GameData
 
     def self.editor_properties
       return [
+        ["ID",              ReadOnlyProperty,        _INTL("ID number of this player.")],
         ["TrainerType",     TrainerTypeProperty,     _INTL("Trainer type of this player.")],
         ["WalkCharset",     CharacterProperty,       _INTL("Charset used while the player is still or walking.")],
         ["RunCharset",      CharacterProperty,       _INTL("Charset used while the player is running. Uses WalkCharset if undefined.")],
@@ -56,6 +59,7 @@ module GameData
       @fish_charset      = hash[:fish_charset]
       @surf_fish_charset = hash[:surf_fish_charset]
       @home              = hash[:home]
+      @pbs_file_suffix   = hash[:pbs_file_suffix] || ""
     end
 
     def run_charset
@@ -82,19 +86,10 @@ module GameData
       return @surf_fish_charset || fish_charset
     end
 
-    def property_from_string(str)
-      case str
-      when "TrainerType"     then return @trainer_type
-      when "WalkCharset"     then return @walk_charset
-      when "RunCharset"      then return @run_charset
-      when "CycleCharset"    then return @cycle_charset
-      when "SurfCharset"     then return @surf_charset
-      when "DiveCharset"     then return @dive_charset
-      when "FishCharset"     then return @fish_charset
-      when "SurfFishCharset" then return @surf_fish_charset
-      when "Home"            then return @home
-      end
-      return nil
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key)
+      key = "SectionName" if key == "ID"
+      return __orig__get_property_for_PBS(key)
     end
   end
 end

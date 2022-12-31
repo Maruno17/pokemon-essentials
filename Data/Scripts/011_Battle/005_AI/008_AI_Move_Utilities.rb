@@ -24,16 +24,62 @@ class Battle::AI
   #=============================================================================
   # Move's type effectiveness
   #=============================================================================
+  def pbCalcTypeModSingle(moveType, defType, user, target)
+    ret = Effectiveness.calculate(moveType, defType)
+    if Effectiveness.ineffective_type?(moveType, defType)
+      # Ring Target
+      if target.hasActiveItem?(:RINGTARGET)
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+      end
+      # Foresight
+      if (user.hasActiveAbility?(:SCRAPPY) || target.effects[PBEffects::Foresight]) &&
+         defType == :GHOST
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+      end
+      # Miracle Eye
+      if target.effects[PBEffects::MiracleEye] && defType == :DARK
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+      end
+    elsif Effectiveness.super_effective_type?(moveType, defType)
+      # Delta Stream's weather
+      if target.effectiveWeather == :StrongWinds && defType == :FLYING
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+      end
+    end
+    # Grounded Flying-type Pokémon become susceptible to Ground moves
+    if !target.airborne? && defType == :FLYING && moveType == :GROUND
+      ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+    end
+    return ret
+  end
+
+  def pbCalcTypeMod(moveType, user, target)
+    ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+    return ret if !moveType
+    return ret if moveType == :GROUND && target.pbHasType?(:FLYING) && target.hasActiveItem?(:IRONBALL)
+    # Get effectivenesses
+    if moveType == :SHADOW
+      if target.shadowPokemon?
+        ret = Effectiveness::NOT_VERY_EFFECTIVE_MULTIPLIER
+      else
+        ret = Effectiveness::SUPER_EFFECTIVE_MULTIPLIER
+      end
+    else
+      target.pbTypes(true).each do |type|
+        ret *= pbCalcTypeModSingle(moveType, type, user, target)
+      end
+    end
+    return ret
+  end
+
   # For switching. Determines the effectiveness of a potential switch-in against
   # an opposing battler.
   def pbCalcTypeModPokemon(pkmn, target_battler)
-    mod1 = Effectiveness.calculate(pkmn.types[0], target_battler.types[0], target_battler.types[1])
-    mod2 = Effectiveness::NORMAL_EFFECTIVE
-    if pkmn.types.length > 1
-      mod2 = Effectiveness.calculate(pkmn.types[1], target_battler.types[0], target_battler.types[1])
-      mod2 = mod2.to_f / Effectiveness::NORMAL_EFFECTIVE
+    ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+    pkmn.types.each do |thisType|
+      ret *= Effectiveness.calculate(thisType, *target_battler.types)
     end
-    return mod1 * mod2
+    return ret
   end
 
   #=============================================================================

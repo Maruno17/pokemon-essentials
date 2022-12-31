@@ -238,9 +238,10 @@ end
 
 class StringListProperty
   def self.set(_setting_name, old_setting)
+    old_setting = [] if !old_setting
     real_cmds = []
     real_cmds.push([_INTL("[ADD VALUE]"), -1])
-    old_setting.length.times do
+    old_setting.length.times do |i|
       real_cmds.push([old_setting[i], 0])
     end
     # Edit list
@@ -319,7 +320,7 @@ class StringListProperty
   end
 
   def self.format(value)
-    return value.join(",")
+    return (value) ? value.join(",") : ""
   end
 end
 
@@ -359,7 +360,7 @@ end
 module BGMProperty
   def self.set(settingname, oldsetting)
     chosenmap = pbListScreen(settingname, MusicFileLister.new(true, oldsetting))
-    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
+    return (chosenmap && chosenmap != "") ? File.basename(chosenmap, ".*") : oldsetting
   end
 
   def self.format(value)
@@ -372,7 +373,7 @@ end
 module MEProperty
   def self.set(settingname, oldsetting)
     chosenmap = pbListScreen(settingname, MusicFileLister.new(false, oldsetting))
-    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
+    return (chosenmap && chosenmap != "") ? File.basename(chosenmap, ".*") : oldsetting
   end
 
   def self.format(value)
@@ -385,7 +386,7 @@ end
 module WindowskinProperty
   def self.set(settingname, oldsetting)
     chosenmap = pbListScreen(settingname, GraphicsLister.new("Graphics/Windowskins/", oldsetting))
-    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
+    return (chosenmap && chosenmap != "") ? File.basename(chosenmap, ".*") : oldsetting
   end
 
   def self.format(value)
@@ -466,6 +467,37 @@ module TypeProperty
 
   def self.format(value)
     return (value && GameData::Type.exists?(value)) ? GameData::Type.get(value).real_name : "-"
+  end
+end
+
+
+
+module TypesProperty
+  def self.set(_settingname, oldsetting)
+    ret = oldsetting.clone
+    index = 0
+    loop do
+      cmds = []
+      2.times { |i| cmds.push(_INTL("Type {1} : {2}", i, ret[i] || "-")) }
+      index = pbMessage(_INTL("Set the type(s) for this species."), cmds, -1)
+      break if index < 0
+      new_type = pbChooseTypeList(ret[index])
+      ret[index] = new_type if new_type
+      ret.uniq!
+      ret.compact!
+    end
+    return ret if ret != oldsetting.compact && pbConfirmMessage(_INTL("Apply changes?"))
+    return oldsetting
+  end
+
+  def self.defaultValue
+    return [:NORMAL]
+  end
+
+  def self.format(value)
+    types = value.compact
+    types.each_with_index { |type, i| types[i] = GameData::Type.try_get(types[i])&.real_name || "-" }
+    return types.join(",")
   end
 end
 
@@ -653,7 +685,7 @@ end
 module CharacterProperty
   def self.set(settingname, oldsetting)
     chosenmap = pbListScreen(settingname, GraphicsLister.new("Graphics/Characters/", oldsetting))
-    return (chosenmap && chosenmap != "") ? chosenmap : oldsetting
+    return (chosenmap && chosenmap != "") ? File.basename(chosenmap, ".*") : oldsetting
   end
 
   def self.format(value)
@@ -769,15 +801,10 @@ module RegionMapCoordsProperty
       selregion = regions[0][0]
     else
       cmds = []
-      regions.each do |region|
-        cmds.push(region[1])
-      end
+      regions.each { |region| cmds.push(region[1]) }
       selcmd = pbMessage(_INTL("Choose a region map."), cmds, -1)
-      if selcmd >= 0
-        selregion = regions[selcmd][0]
-      else
-        return oldsetting
-      end
+      return oldsetting if selcmd < 0
+      selregion = regions[selcmd][0]
     end
     mappoint = chooseMapPoint(selregion, true)
     return (mappoint) ? [selregion, mappoint[0], mappoint[1]] : oldsetting
@@ -788,12 +815,8 @@ module RegionMapCoordsProperty
   end
 
   def self.getMapNameList
-    mapdata = pbLoadTownMapData
     ret = []
-    mapdata.length.times do |i|
-      next if !mapdata[i]
-      ret.push([i, pbGetMessage(MessageTypes::RegionNames, i)])
-    end
+    GameData::TownMap.each { |town_map| ret.push([town_map.id, town_map.name]) }
     return ret
   end
 end
@@ -834,7 +857,7 @@ module MapProperty
   end
 
   def self.defaultValue
-    return 0
+    return nil
   end
 
   def self.format(value)
@@ -890,30 +913,25 @@ module BaseStatsProperty
       next if s.pbs_order < 0
       properties[s.pbs_order] = [_INTL("Base {1}", s.name), NonzeroLimitProperty.new(255),
                                  _INTL("Base {1} stat of the Pokémon.", s.name)]
-      data[s.pbs_order] = oldsetting[s.id] || 10
+      data[s.pbs_order] = oldsetting[s.pbs_order] || 10
       stat_ids[s.pbs_order] = s.id
     end
     if pbPropertyList(settingname, data, properties, true)
-      ret = {}
-      stat_ids.each_with_index { |s, i| ret[s] = data[i] || 10 }
+      ret = []
+      stat_ids.each_with_index { |s, i| ret[i] = data[i] || 10 }
       oldsetting = ret
     end
     return oldsetting
   end
 
   def self.defaultValue
-    ret = {}
-    GameData::Stat.each_main { |s| ret[s.id] = 10 if s.pbs_order >= 0 }
+    ret = []
+    GameData::Stat.each_main { |s| ret[s.pbs_order] = 10 if s.pbs_order >= 0 }
     return ret
   end
 
   def self.format(value)
-    array = []
-    GameData::Stat.each_main do |s|
-      next if s.pbs_order < 0
-      array[s.pbs_order] = value[s.id] || 0
-    end
-    return array.join(",")
+    return value.join(",")
   end
 end
 
@@ -929,30 +947,33 @@ module EffortValuesProperty
       next if s.pbs_order < 0
       properties[s.pbs_order] = [_INTL("{1} EVs", s.name), LimitProperty.new(255),
                                  _INTL("Number of {1} Effort Value points gained from the Pokémon.", s.name)]
-      data[s.pbs_order] = oldsetting[s.id] || 0
+      data[s.pbs_order] = 0
+      oldsetting.each { |ev| data[s.pbs_order] = ev[1] if ev[0] == s.id }
       stat_ids[s.pbs_order] = s.id
     end
     if pbPropertyList(settingname, data, properties, true)
-      ret = {}
-      stat_ids.each_with_index { |s, i| ret[s] = data[i] || 0 }
+      ret = []
+      stat_ids.each_with_index do |s, i|
+        index = GameData::Stat.get(s).pbs_order
+        ret.push([s, data[index]]) if data[index] > 0
+      end
       oldsetting = ret
     end
     return oldsetting
   end
 
   def self.defaultValue
-    ret = {}
-    GameData::Stat.each_main { |s| ret[s.id] = 0 if s.pbs_order >= 0 }
-    return ret
+    return []
   end
 
   def self.format(value)
-    array = []
-    GameData::Stat.each_main do |s|
-      next if s.pbs_order < 0
-      array[s.pbs_order] = value[s.id] || 0
+    return "" if !value
+    ret = ""
+    value.each_with_index do |val, i|
+      ret += "," if i > 0
+      ret += GameData::Stat.get(val[0]).real_name_brief + "," + val[1].to_s
     end
-    return array.join(",")
+    return ret
   end
 end
 
@@ -1097,6 +1118,22 @@ end
 class EggMovesProperty < GameDataPoolProperty
   def initialize
     super(:Move, false, true)
+  end
+end
+
+
+
+class EggGroupsProperty < GameDataPoolProperty
+  def initialize
+    super(:EggGroup, false, false)
+  end
+end
+
+
+
+class AbilitiesProperty < GameDataPoolProperty
+  def initialize
+    super(:Ability, false, false)
   end
 end
 
@@ -1286,12 +1323,12 @@ class EvolutionsProperty
     else
       params = ChooseNumberParams.new
       params.setRange(0, 65_535)
-      params.setDefaultValue(value) if value
+      params.setDefaultValue(value.to_i) if value
       params.setCancelValue(-1)
       ret = pbMessageChooseNumber(_INTL("Choose a parameter."), params)
       ret = nil if ret < 0
     end
-    return ret
+    return (ret) ? ret.to_s : nil
   end
 
   def set(_settingname, oldsetting)
@@ -1474,21 +1511,13 @@ class EvolutionsProperty
   end
 
   def format(value)
+    return "" if !value
     ret = ""
     value.length.times do |i|
       ret << "," if i > 0
-      param = value[i][2]
-      evo_method_data = GameData::Evolution.get(value[i][1])
-      param_type = evo_method_data.parameter
-      if param_type.nil?
-        param = ""
-      elsif param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
-        param = getConstantName(param_type, param)
-      else
-        param = param.to_s
-      end
-      param = "" if !param
-      ret << sprintf("#{GameData::Species.get(value[i][0]).name},#{evo_method_data.real_name},#{param}")
+      ret << value[i][0].to_s + ","
+      ret << value[i][1].to_s + ","
+      ret << value[i][2].to_s if value[i][2] != nil
     end
     return ret
   end

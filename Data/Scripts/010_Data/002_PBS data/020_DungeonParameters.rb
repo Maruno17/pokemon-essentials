@@ -25,19 +25,22 @@ module GameData
     attr_reader :void_decoration_density, :void_decoration_large_density
     attr_reader :rng_seed
     attr_reader :flags
+    attr_reader :pbs_file_suffix
 
     DATA = {}
     DATA_FILENAME = "dungeon_parameters.dat"
+    PBS_BASE_FILENAME = "dungeon_parameters"
 
     SCHEMA = {
+      "SectionName"      => [:id,                      "mV"],
       "DungeonSize"      => [:dungeon_size,            "vv"],
       "CellSize"         => [:cell_size,               "vv"],
       "MinRoomSize"      => [:min_room_size,           "vv"],
       "MaxRoomSize"      => [:max_room_size,           "vv"],
       "CorridorWidth"    => [:corridor_width,          "v"],
-      "ShiftCorridors"   => [:shift_corridors,         "b"],
-      "NodeLayout"       => [:node_layout,             "s"],
-      "RoomLayout"       => [:room_layout,             "s"],
+      "ShiftCorridors"   => [:random_corridor_shift,   "b"],
+      "NodeLayout"       => [:node_layout,             "m"],
+      "RoomLayout"       => [:room_layout,             "m"],
       "RoomChance"       => [:room_chance,             "v"],
       "ExtraConnections" => [:extra_connections_count, "u"],
       "FloorPatches"     => [:floor_patches,           "vvu"],
@@ -66,7 +69,7 @@ module GameData
     def initialize(hash)
       @id                             = hash[:id]
       @area                           = hash[:area]
-      @version                        = hash[:version] || 0
+      @version                        = hash[:version]                 || 0
       @cell_count_x                   = (hash[:dungeon_size]) ? hash[:dungeon_size][0] : 5
       @cell_count_y                   = (hash[:dungeon_size]) ? hash[:dungeon_size][1] : 5
       @cell_width                     = (hash[:cell_size]) ? hash[:cell_size][0] : 10
@@ -75,11 +78,11 @@ module GameData
       @room_min_height                = (hash[:min_room_size]) ? hash[:min_room_size][1] : 5
       @room_max_width                 = (hash[:max_room_size]) ? hash[:max_room_size][0] : @cell_width - 1
       @room_max_height                = (hash[:max_room_size]) ? hash[:max_room_size][1] : @cell_height - 1
-      @corridor_width                 = hash[:corridor_width] || 2
-      @random_corridor_shift          = hash[:shift_corridors]
-      @node_layout                    = hash[:node_layout]&.downcase&.to_sym || :full
-      @room_layout                    = hash[:room_layout]&.downcase&.to_sym || :full
-      @room_chance                    = hash[:room_chance] || 70
+      @corridor_width                 = hash[:corridor_width]          || 2
+      @random_corridor_shift          = hash[:random_corridor_shift]
+      @node_layout                    = hash[:node_layout]             || :full
+      @room_layout                    = hash[:room_layout]             || :full
+      @room_chance                    = hash[:room_chance]             || 70
       @extra_connections_count        = hash[:extra_connections_count] || 2
       @floor_patch_radius             = (hash[:floor_patches]) ? hash[:floor_patches][0] : 3
       @floor_patch_chance             = (hash[:floor_patches]) ? hash[:floor_patches][1] : 75
@@ -89,7 +92,8 @@ module GameData
       @void_decoration_density        = (hash[:void_decorations]) ? hash[:void_decorations][0] : 50
       @void_decoration_large_density  = (hash[:void_decorations]) ? hash[:void_decorations][1] : 200
       @rng_seed                       = hash[:rng_seed]
-      @flags                          = hash[:flags] || []
+      @flags                          = hash[:flags]                   || []
+      @pbs_file_suffix                = hash[:pbs_file_suffix]         || ""
     end
 
     def has_flag?(flag)
@@ -114,25 +118,19 @@ module GameData
       return width, height
     end
 
-    def property_from_string(str)
-      case str
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key)
+      case key
+      when "SectionName"      then return [@area, (@version > 0) ? @version : nil]
       when "DungeonSize"      then return [@cell_count_x, @cell_count_y]
       when "CellSize"         then return [@cell_width, @cell_height]
       when "MinRoomSize"      then return [@room_min_width, @room_min_height]
       when "MaxRoomSize"      then return [@room_max_width, @room_max_height]
-      when "CorridorWidth"    then return @corridor_width
-      when "ShiftCorridors"   then return @random_corridor_shift
-      when "NodeLayout"       then return @node_layout
-      when "RoomLayout"       then return @room_layout
-      when "RoomChance"       then return @room_chance
-      when "ExtraConnections" then return @extra_connections_count
       when "FloorPatches"     then return [@floor_patch_radius, @floor_patch_chance, @floor_patch_smooth_rate]
       when "FloorDecorations" then return [@floor_decoration_density, @floor_decoration_large_density]
       when "VoidDecorations"  then return [@void_decoration_density, @void_decoration_large_density]
-      when "RNGSeed"          then return @rng_seed
-      when "Flags"            then return @flags
       end
-      return nil
+      return __orig__get_property_for_PBS(key)
     end
   end
 end

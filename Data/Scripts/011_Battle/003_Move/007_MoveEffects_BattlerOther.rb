@@ -280,7 +280,7 @@ end
 #===============================================================================
 class Battle::Move::FreezeTargetSuperEffectiveAgainstWater < Battle::Move::FreezeTarget
   def pbCalcTypeModSingle(moveType, defType, user, target)
-    return Effectiveness::SUPER_EFFECTIVE_ONE if defType == :WATER
+    return Effectiveness::SUPER_EFFECTIVE_MULTIPLIER if defType == :WATER
     return super
   end
 end
@@ -771,7 +771,7 @@ class Battle::Move::SetUserTypesToTargetTypes < Battle::Move
       return true
     end
     if user.pbTypes == target.pbTypes &&
-       user.effects[PBEffects::Type3] == target.effects[PBEffects::Type3]
+       user.effects[PBEffects::ExtraType] == target.effects[PBEffects::ExtraType]
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -880,7 +880,7 @@ class Battle::Move::AddGhostTypeToTarget < Battle::Move
   end
 
   def pbEffectAgainstTarget(user, target)
-    target.effects[PBEffects::Type3] = :GHOST
+    target.effects[PBEffects::ExtraType] = :GHOST
     typeName = GameData::Type.get(:GHOST).name
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!", target.pbThis, typeName))
   end
@@ -901,7 +901,7 @@ class Battle::Move::AddGrassTypeToTarget < Battle::Move
   end
 
   def pbEffectAgainstTarget(user, target)
-    target.effects[PBEffects::Type3] = :GRASS
+    target.effects[PBEffects::ExtraType] = :GRASS
     typeName = GameData::Type.get(:GRASS).name
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!", target.pbThis, typeName))
   end
@@ -1263,7 +1263,7 @@ class Battle::Move::HitsTargetInSkyGroundsTarget < Battle::Move
   def hitsFlyingTargets?; return true; end
 
   def pbCalcTypeModSingle(moveType, defType, user, target)
-    return Effectiveness::NORMAL_EFFECTIVE_ONE if moveType == :GROUND && defType == :FLYING
+    return Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER if moveType == :GROUND && defType == :FLYING
     return super
   end
 

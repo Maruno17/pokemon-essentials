@@ -46,3 +46,9 @@ def pbSetResizeFactor(factor)
     Graphics.center
   end
 end
+
+if System::VERSION != Essentials::MKXPZ_VERSION
+  printf(sprintf("\e[1;33mWARNING: mkxp-z version %s detected, but this version of Pokémon Essentials was designed for mkxp-z version %s.\e[0m\r\n",
+                    System::VERSION, Essentials::MKXPZ_VERSION))
+  printf("\e[1;33mWARNING: Pokémon Essentials may not work properly.\e[0m\r\n")
+end
