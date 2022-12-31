@@ -617,6 +617,15 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserMakeSubstitute",
     next true if user.hp <= [user.totalhp / 4, 1].max
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("UserMakeSubstitute",
+  proc { |score, move, user, ai, battle|
+    # Prefer more the higher the user's HP
+    score += 8.0 * user.hp / user.totalhp
+    # TODO: Predict incoming damage, and prefer if it's greater than
+    #       user.totalhp / 4?
+    next score
+  }
+)
 
 #===============================================================================
 #
@@ -684,6 +693,77 @@ Battle::AI::Handlers::MoveEffectScore.add("BurnAttackerBeforeUserActs",
         next if !b.check_for_move { |m| m.pbContactMove?(b.battler) }
       end
       score += 10   # Possible to burn
+    end
+    next score
+  }
+)
+
+#===============================================================================
+# TODO: Review score modifiers.
+#===============================================================================
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
+  proc { |move, user, target, ai, battle|
+    next true if target.hp <= 1
+  }
+)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
+  proc { |score, move, user, target, ai, battle|
+    next score + 20 if target.hp >= target.totalhp / 2
+  }
+)
+
+#===============================================================================
+# TODO: Review score modifiers.
+#===============================================================================
+Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfHP",
+  proc { |score, move, user, ai, battle|
+    next score - 40
+  }
+)
+
+#===============================================================================
+# TODO: Review score modifiers.
+#===============================================================================
+Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
+                                            "StartShadowSkyWeather")
+Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
+  proc { |score, move, user, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                                           battle.pbCheckGlobalAbility(:CLOUDNINE)
+    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
+    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    next score
+  }
+)
+
+#===============================================================================
+# TODO: Review score modifiers.
+#===============================================================================
+Battle::AI::Handlers::MoveFailureCheck.add("RemoveAllScreens",
+  proc { |move, user, ai, battle|
+    will_fail = true
+    battle.sides.each do |side|
+      will_fail = false if side.effects[PBEffects::AuroraVeil] > 0 ||
+                           side.effects[PBEffects::Reflect] > 0 ||
+                           side.effects[PBEffects::LightScreen] > 0 ||
+                           side.effects[PBEffects::Safeguard] > 0
+    end
+    next will_fail
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("RemoveAllScreens",
+  proc { |score, move, user, ai, battle|
+    if user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::Reflect] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::LightScreen] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::Safeguard] > 0
+      score += 30
+    end
+    if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
+       user.pbOwnSide.effects[PBEffects::Reflect] > 0 ||
+       user.pbOwnSide.effects[PBEffects::LightScreen] > 0 ||
+       user.pbOwnSide.effects[PBEffects::Safeguard] > 0
+      score -= 70
     end
     next score
   }

@@ -31,34 +31,22 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RedirectAllMovesToTarget
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CannotBeRedirected",
-  proc { |score, move, user, target, ai, battle|
-    next score if target.battler.allAllies.length == 0
-    redirection = false
-    user.battler.allOpposing.each do |b|
-      next if b.index == target.index
-      if b.effects[PBEffects::RagePowder] ||
-         b.effects[PBEffects::Spotlight] > 0 ||
-         b.effects[PBEffects::FollowMe] > 0 ||
-         (b.hasActiveAbility?(:LIGHTNINGROD) && move.rough_type == :ELECTRIC) ||
-         (b.hasActiveAbility?(:STORMDRAIN) && move.rough_type == :WATER)
-        redirection = true
-        break
-      end
-    end
-    score += 20 if redirection && ai.trainer.medium_skill?
-    next score
-  }
-)
+# CannotBeRedirected
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("RandomlyDamageOrHealTarget",
   proc { |power, move, user, target, ai, battle|
     next 50   # Average power, ish
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("RandomlyDamageOrHealTarget",
+  proc { |score, move, user, ai, battle|
+    # Generaly don't prefer this move, as it may heal the target instead
+    next score - 8
   }
 )
 

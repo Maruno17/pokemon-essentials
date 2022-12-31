@@ -54,7 +54,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoTimesFlinchTarget"
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("HitTwoTimesTargetThenTargetAlly",
   proc { |power, move, user, target, ai, battle|

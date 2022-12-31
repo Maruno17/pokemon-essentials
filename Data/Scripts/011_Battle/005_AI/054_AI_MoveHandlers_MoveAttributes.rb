@@ -362,26 +362,40 @@ Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetInSky",
                                          "DoublePowerIfAllyFaintedLastTurn")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfUserLostHPThisTurn",
   proc { |score, move, user, ai, battle|
-    # TODO: Remove target from this; consider the speeds of all foes instead.
-#    next score + 15 if target.faster_than?(user)
+    # Prefer if user is slower than its foe(s) and the foe(s) can attack
+    ai.each_foe_battler(user.side) do |b, i|
+      next if user.faster_than?(b) || (b.status == :SLEEP && b.statusCount > 1) ||
+              b.status == :FROZEN || b.effects[PBEffects::HyperBeam] > 0 ||
+              b.effects[PBEffects::Truant] || b.effects[PBEffects::SkyDrop] >= 0
+      score += 4
+    end
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetLostHPThisTurn",
   proc { |score, move, user, target, ai, battle|
-    next score + 15 if battle.pbOpposingBattlerCount(user.battler) > 1
+    # Prefer if a user's ally is faster than the user and that ally can attack
+    ai.each_foe_battler(target.side) do |b, i|
+      next if i == user.index
+      next if user.faster_than?(b) || (b.status == :SLEEP && b.statusCount > 1) ||
+              b.status == :FROZEN || b.effects[PBEffects::HyperBeam] > 0 ||
+              b.effects[PBEffects::Truant] || b.effects[PBEffects::SkyDrop] >= 0
+      score += 4
+    end
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # DoublePowerIfUserStatsLoweredThisTurn
 
@@ -439,18 +453,31 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CannotMakeTargetFaint",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserEnduresFaintingThisTurn",
   proc { |score, move, user, ai, battle|
-    score -= 10 if user.hp > user.totalhp / 2
-    if ai.trainer.medium_skill?
-      score -= 20 if user.effects[PBEffects::ProtectRate] > 1
-#      score -= 20 if target.effects[PBEffects::HyperBeam] > 0
-    else
-      score -= user.effects[PBEffects::ProtectRate] * 10
+    next Battle::AI::MOVE_USELESS_SCORE if user.rough_end_of_round_damage > 0
+    # Prefer for each foe that can attack
+    useless = true
+    ai.each_foe_battler(user.side) do |b, i|
+      next if (b.status == :SLEEP && b.statusCount > 1) ||
+              b.status == :FROZEN || b.effects[PBEffects::HyperBeam] > 0 ||
+              b.effects[PBEffects::Truant] || b.effects[PBEffects::SkyDrop] >= 0
+      useless = false
+      score += 4
     end
+    next Battle::AI::MOVE_USELESS_SCORE if useless
+    # Don't prefer if user has high HP, prefer if user has lower HP
+    if user.hp >= user.totalhp / 2
+      score -= 8
+    elsif user.hp >= user.totalhp / 8
+      score += 4
+    end
+    # Don't prefer if the user used a protection move last turn, making this one
+    # less likely to work
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * 8
+    # TODO: Check for combos with Flail/Endeavor?
     next score
   }
 )
@@ -635,16 +662,21 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveScreens",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
   proc { |score, move, user, ai, battle|
-    if user.effects[PBEffects::ProtectRate] > 1   # ||
-#       target.effects[PBEffects::HyperBeam] > 0
-      score -= 50
-    else
-      if ai.trainer.medium_skill?
-        score -= user.effects[PBEffects::ProtectRate] * 40
-      end
-      score += 50 if user.turnCount == 0
-#      score += 30 if target.effects[PBEffects::TwoTurnAttack]
+    score += 12 if user.turnCount == 0
+    # Prefer for each foe that can attack
+    useless = true
+    ai.each_foe_battler(user.side) do |b, i|
+      next if (b.status == :SLEEP && b.statusCount > 1) ||
+              b.status == :FROZEN || b.effects[PBEffects::HyperBeam] > 0 ||
+              b.effects[PBEffects::Truant] || b.effects[PBEffects::SkyDrop] >= 0
+      useless = false
+      score += 4
+      score += 4 if b.effects[PBEffects::TwoTurnAttack]
     end
+    next Battle::AI::MOVE_USELESS_SCORE if useless
+    # Don't prefer if the user used a protection move last turn, making this one
+    # less likely to work
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * 8
     next score
   }
 )

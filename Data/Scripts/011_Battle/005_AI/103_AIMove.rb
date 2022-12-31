@@ -389,6 +389,12 @@ class Battle::AI::AIMove
     user_battler = user.battler
     target = @ai.target
     target_battler = target.battler
+    # OHKO move accuracy
+    if @move.is_a?(Battle::Move::OHKO)
+      ret = self.accuracy + user.level - target.level
+      ret -= 10 if function == "OHKOIce" && !user.pbHasType?(:ICE)
+      return [ret, 0].max
+    end
     # "Always hit" effects and "always hit" accuracy
     if @ai.trainer.medium_skill?
       return 100 if target.effects[PBEffects::Telekinesis] > 0
@@ -427,30 +433,6 @@ class Battle::AI::AIMove
   def apply_rough_accuracy_modifiers(user, target, calc_type, modifiers)
     user_battler = user.battler
     target_battler = target.battler
-    # OHKO special calculation
-    if @ai.trainer.medium_skill?
-      # TODO: This is insufficient for OHKO moves, as they should also ignore
-      #       effects like Telekinesis and Minimize but def rough_accuracy
-      #       treats them as applying to OHKO moves.
-      case function
-      when "OHKO", "OHKOHitsUndergroundTarget"
-        modifiers[:base_accuracy] = self.accuracy + user.level - target.level
-        modifiers[:base_accuracy] = -1 if target.level > user.level
-        modifiers[:base_accuracy] = -1 if !@ai.battle.moldBreaker && target.has_active_ability?(:STURDY)
-        modifiers[:accuracy_stage] = 6
-        modifiers[:evasion_stage] = 6
-        return
-      when "OHKOIce"
-        modifiers[:base_accuracy] = self.accuracy + user.level - target.level
-        modifiers[:base_accuracy] -= 10 if !user.has_type?(:ICE)
-        modifiers[:base_accuracy] = -1 if modifiers[:base_accuracy] == 0
-        modifiers[:base_accuracy] = -1 if target.level > user.level
-        modifiers[:base_accuracy] = -1 if !@ai.battle.moldBreaker && target.has_active_ability?(:STURDY)
-        modifiers[:accuracy_stage] = 6
-        modifiers[:evasion_stage] = 6
-        return
-      end
-    end
     # Ability effects that alter accuracy calculation
     if user.ability_active?
       Battle::AbilityEffects.triggerAccuracyCalcFromUser(

@@ -47,8 +47,8 @@ class Battle::AI
       when 1   # One target to be chosen by the trainer
         # Includes: Foe, NearAlly, NearFoe, NearOther, Other, RandomNearFoe, UserOrNearAlly
         # TODO: Figure out first which targets are valid. Includes the call to
-        #       pbMoveCanTarget?, but also includes move-redirecting effects like
-        #       Lightning Rod. Skip any battlers that can't be targeted.
+        #       pbMoveCanTarget?, but also includes move-redirecting effects
+        #       like Lightning Rod. Skip any battlers that can't be targeted.
         @battle.allBattlers.each do |b|
           next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
           # TODO: Should this sometimes consider targeting an ally? See def

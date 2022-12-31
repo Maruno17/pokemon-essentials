@@ -688,7 +688,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AttractTarget",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SetUserTypesBasedOnEnvironment",
   proc { |move, user, ai, battle|
@@ -704,6 +704,38 @@ Battle::AI::Handlers::MoveFailureCheck.add("SetUserTypesBasedOnEnvironment",
       new_type = :NORMAL if !GameData::Type.exists?(new_type)
     end
     next true if !GameData::Type.exists?(new_type) || !user.battler.pbHasOtherType?(new_type)
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("SetUserTypesBasedOnEnvironment",
+  proc { |score, move, user, ai, battle|
+    # Determine the new type
+    new_type = nil
+    terr_types = Battle::Move::SetUserTypesBasedOnEnvironment::TERRAIN_TYPES
+    terr_type = terr_types[battle.field.terrain]
+    if terr_type && GameData::Type.exists?(terr_type)
+      new_type = terr_type
+    else
+      env_types = Battle::Move::SetUserTypesBasedOnEnvironment::ENVIRONMENT_TYPES
+      new_type = env_types[battle.environment] || :NORMAL
+      new_type = :NORMAL if !GameData::Type.exists?(new_type)
+    end
+    # Check if any user's moves will get STAB because of the type change
+    if user.check_for_move { |m| m.damagingMove? && m.pbCalcType(user.battler) == new_type }
+      score += 8
+    end
+    # Check if any user's moves will lose STAB because of the type change
+    user.battler.pbTypes(true).each do |type|
+      next if type == new_type
+      if user.check_for_move { |m| m.damagingMove? && m.pbCalcType(user.battler) == type }
+        score -= 8
+      end
+    end
+    # NOTE: Other things could be considered, like the foes' moves'
+    #       effectivenesses against the current and new user's type(s), and
+    #       which set of STAB is more beneficial. However, I'm keeping this
+    #       simple because, if you know this move, you probably want to use it
+    #       just because.
+    next score
   }
 )
 
@@ -781,7 +813,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetUserTypesToUserMoveTy
     end
     # Check if any user's moves will get STAB because of the type change
     possible_types.each do |type|
-      if user.check_for_move { |m| m.damagingMove? }
+      if user.check_for_move { |m| m.damagingMove? && m.pbCalcType(user.battler) == type }
         score += 10
         break
       end
@@ -1234,7 +1266,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartGravity",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TransformUserIntoTarget",
   proc { |move, user, target, ai, battle|
@@ -1245,6 +1277,6 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TransformUserIntoTarget
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TransformUserIntoTarget",
   proc { |score, move, user, target, ai, battle|
-    next score - 10
+    next score - 5
   }
 )
