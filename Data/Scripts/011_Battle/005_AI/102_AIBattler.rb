@@ -193,27 +193,23 @@ class Battle::AI::AIBattler
   end
 
   def effectiveness_of_type_against_battler(type, user = nil)
-    return Effectiveness::NORMAL_EFFECTIVE if !type
-    return Effectiveness::NORMAL_EFFECTIVE if type == :GROUND &&
-                                              has_type?(:FLYING) &&
-                                              has_active_item?(:IRONBALL)
+    ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+    return ret if !type
+    return ret if type == :GROUND && has_type?(:FLYING) && has_active_item?(:IRONBALL)
     # Get effectivenesses
-    type_mults = [Effectiveness::NORMAL_EFFECTIVE_ONE] * 3   # 3 types max
     if type == :SHADOW
       if @battler.shadowPokemon?
-        type_mults[0] = Effectiveness::NOT_VERY_EFFECTIVE_ONE
+        ret = Effectiveness::NOT_VERY_EFFECTIVE_MULTIPLIER
       else
-        type_mults[0] = Effectiveness::SUPER_EFFECTIVE_ONE
+        ret = Effectiveness::SUPER_EFFECTIVE_MULTIPLIER
       end
     else
-      @battler.pbTypes(true).each_with_index do |defend_type, i|
+      @battler.pbTypes(true).each do |defend_type|
         # TODO: Need to check the move's pbCalcTypeModSingle.
-        type_mults[i] = effectiveness_of_type_against_single_battler_type(type, defend_type, user)
+        ret *= effectiveness_of_type_against_single_battler_type(type, defend_type, user)
       end
+      ret *= 2 if target.effects[PBEffects::TarShot] && type == :FIRE
     end
-    # Multiply all effectivenesses together
-    ret = 1
-    type_mults.each { |m| ret *= m }
     return ret
   end
 
@@ -282,30 +278,30 @@ class Battle::AI::AIBattler
   private
 
   def effectiveness_of_type_against_single_battler_type(type, defend_type, user = nil)
-    ret = Effectiveness.calculate_one(type, defend_type)
+    ret = Effectiveness.calculate(type, defend_type)
     if Effectiveness.ineffective_type?(type, defend_type)
       # Ring Target
       if has_active_item?(:RINGTARGET)
-        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
       # Foresight
       if (user&.has_active_ability?(:SCRAPPY) || @battler.effects[PBEffects::Foresight]) &&
          defend_type == :GHOST
-        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
       # Miracle Eye
       if @battler.effects[PBEffects::MiracleEye] && defend_type == :DARK
-        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
     elsif Effectiveness.super_effective_type?(type, defend_type)
       # Delta Stream's weather
       if @battler.effectiveWeather == :StrongWinds && defend_type == :FLYING
-        ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+        ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
     end
     # Grounded Flying-type Pokémon become susceptible to Ground moves
-    if !@battler.airborne? && type == :GROUND && defend_type == :FLYING
-      ret = Effectiveness::NORMAL_EFFECTIVE_ONE
+    if !@battler.airborne? && defend_type == :FLYING && type == :GROUND
+      ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
     end
     return ret
   end

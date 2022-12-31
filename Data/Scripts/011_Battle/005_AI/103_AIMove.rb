@@ -322,7 +322,7 @@ class Battle::AI::AIMove
 
     # Type effectiveness
     typemod = target.effectiveness_of_type_against_battler(calc_type, user)
-    multipliers[:final_damage_multiplier] *= typemod.to_f / Effectiveness::NORMAL_EFFECTIVE
+    multipliers[:final_damage_multiplier] *= typemod
 
     # Burn
     if @ai.trainer.high_skill? && user.status == :BURN && physicalMove?(calc_type) &&

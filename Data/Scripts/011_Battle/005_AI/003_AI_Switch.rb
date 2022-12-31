@@ -173,7 +173,7 @@ class Battle::AI
         next if m.base_damage == 0
         @battle.battlers[idxBattler].allOpposing.each do |b|
           bTypes = b.pbTypes(true)
-          sum += Effectiveness.calculate(m.type, bTypes[0], bTypes[1], bTypes[2])
+          sum += Effectiveness.calculate(m.type, *bTypes)
         end
       end
       if best == -1 || sum > bestSum

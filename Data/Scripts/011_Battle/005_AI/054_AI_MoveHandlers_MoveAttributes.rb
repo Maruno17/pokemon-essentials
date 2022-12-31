@@ -904,11 +904,10 @@ Battle::AI::Handlers::MoveBasePower.add("EffectivenessIncludesFlyingType",
   proc { |power, move, user, target, ai, battle|
     if GameData::Type.exists?(:FLYING)
       targetTypes = target.battler.pbTypes(true)
-      mult = Effectiveness.calculate(
-        :FLYING, targetTypes[0], targetTypes[1], targetTypes[2]
-      )
-      next (power.to_f * mult / Effectiveness::NORMAL_EFFECTIVE).round
+      mult = Effectiveness.calculate(:FLYING, *targetTypes)
+      power = (power * mult).round
     end
+    next power
   }
 )
 
