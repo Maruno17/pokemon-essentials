@@ -171,6 +171,7 @@ class Battle::Battler
     @effects[PBEffects::Encore]              = 0
     @effects[PBEffects::EncoreMove]          = nil
     @effects[PBEffects::Endure]              = false
+    @effects[PBEffects::ExtraType]           = nil
     @effects[PBEffects::FirstPledge]         = nil
     @effects[PBEffects::FlashFire]           = false
     @effects[PBEffects::Flinch]              = false
@@ -270,7 +271,6 @@ class Battle::Battler
     end
     @effects[PBEffects::Truant]              = false
     @effects[PBEffects::TwoTurnAttack]       = nil
-    @effects[PBEffects::Type3]               = nil
     @effects[PBEffects::Unburden]            = false
     @effects[PBEffects::Uproar]              = 0
     @effects[PBEffects::WaterSport]          = false

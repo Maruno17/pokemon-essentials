@@ -300,7 +300,7 @@ class Battle::Battler
 
   # Returns the active types of this Pokémon. The array should not include the
   # same type more than once, and should not include any invalid types.
-  def pbTypes(withType3 = false)
+  def pbTypes(withExtraType = false)
     ret = @types.uniq
     # Burn Up erases the Fire-type.
     ret.delete(:FIRE) if @effects[PBEffects::BurnUp]
@@ -311,8 +311,8 @@ class Battle::Battler
       ret.push(:NORMAL) if ret.length == 0
     end
     # Add the third type specially.
-    if withType3 && @effects[PBEffects::Type3] && !ret.include?(@effects[PBEffects::Type3])
-      ret.push(@effects[PBEffects::Type3])
+    if withExtraType && @effects[PBEffects::ExtraType] && !ret.include?(@effects[PBEffects::ExtraType])
+      ret.push(@effects[PBEffects::ExtraType])
     end
     return ret
   end

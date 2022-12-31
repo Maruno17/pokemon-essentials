@@ -28,6 +28,7 @@ module PBEffects
   Encore              = 23
   EncoreMove          = 24
   Endure              = 25
+  ExtraType           = 111
   FirstPledge         = 26
   FlashFire           = 27
   Flinch              = 28
@@ -113,7 +114,6 @@ module PBEffects
   TrappingUser        = 108
   Truant              = 109
   TwoTurnAttack       = 110
-  Type3               = 111
   Unburden            = 112
   Uproar              = 113
   WaterSport          = 114

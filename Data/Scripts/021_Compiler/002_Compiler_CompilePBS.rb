@@ -312,7 +312,10 @@ module Compiler
       hash[:evolutions].each { |evo| evo[3] = false }
     end
     # Remove duplicate types
-    hash[:types].uniq! if hash[:types].is_a?(Array)
+    if hash[:types].is_a?(Array)
+      hash[:types].uniq!
+      hash[:types].compact!
+    end
   end
 
   def validate_all_compiled_pokemon

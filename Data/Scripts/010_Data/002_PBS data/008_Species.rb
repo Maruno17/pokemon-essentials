@@ -65,7 +65,7 @@ module GameData
         ret["UnmegaForm"]     = [:unmega_form,        "u"]
         ret["MegaMessage"]    = [:mega_message,       "u"]
       end
-      ret["Types"]            = [:types,              "eE", :Type, :Type]
+      ret["Types"]            = [:types,              "*e", :Type]
       ret["BaseStats"]        = [:base_stats,         "vvvvvv"]
       if !compiling_forms
         ret["GenderRatio"]    = [:gender_ratio,       "e", :GenderRatio]
@@ -113,7 +113,7 @@ module GameData
         ["ID",                ReadOnlyProperty,                   _INTL("The ID of the Pokémon.")],
         ["Name",              LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
         ["FormName",          StringProperty,                     _INTL("Name of this form of the Pokémon.")],
-        ["Types",             TypesProperty,                      _INTL("The Pokémon's type(s).")],
+        ["Types",             GameDataPoolProperty.new(:Type, false), _INTL("The Pokémon's type(s).")],
         ["BaseStats",         BaseStatsProperty,                  _INTL("Base stats of the Pokémon.")],
         ["GenderRatio",       GameDataProperty.new(:GenderRatio), _INTL("Proportion of males to females for this species.")],
         ["GrowthRate",        GameDataProperty.new(:GrowthRate),  _INTL("Pokémon's growth rate.")],

@@ -51,10 +51,13 @@ class TriadCard
   end
 
   def bonus(opponent)
-    case Effectiveness.calculate_one(@type, opponent.type)
-    when Effectiveness::INEFFECTIVE            then return -2
-    when Effectiveness::NOT_VERY_EFFECTIVE_ONE then return -1
-    when Effectiveness::SUPER_EFFECTIVE_ONE    then return 1
+    effectiveness = Effectiveness.calculate(@type, opponent.type)
+    if Effectiveness.ineffective?(effectiveness)
+      return -2
+    elsif Effectiveness.not_very_effective?(effectiveness)
+      return -1
+    elsif Effectiveness.super_effective?(effectiveness)
+      return 1
     end
     return 0
   end

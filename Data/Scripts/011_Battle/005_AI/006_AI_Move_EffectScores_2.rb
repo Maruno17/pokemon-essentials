@@ -378,7 +378,7 @@ class Battle::AI
       if !user.canChangeType? || target.pbTypes(true).length == 0
         score -= 90
       elsif user.pbTypes == target.pbTypes &&
-            user.effects[PBEffects::Type3] == target.effects[PBEffects::Type3]
+            user.effects[PBEffects::ExtraType] == target.effects[PBEffects::ExtraType]
         score -= 90
       end
     #---------------------------------------------------------------------------

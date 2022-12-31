@@ -427,9 +427,8 @@ class Battle
     if battler_side.effects[PBEffects::StealthRock] && battler.takesIndirectDamage? &&
        GameData::Type.exists?(:ROCK) && !battler.hasActiveItem?(:HEAVYDUTYBOOTS)
       bTypes = battler.pbTypes(true)
-      eff = Effectiveness.calculate(:ROCK, bTypes[0], bTypes[1], bTypes[2])
+      eff = Effectiveness.calculate(:ROCK, *bTypes)
       if !Effectiveness.ineffective?(eff)
-        eff = eff.to_f / Effectiveness::NORMAL_EFFECTIVE
         battler.pbReduceHP(battler.totalhp * eff / 8, false)
         pbDisplay(_INTL("Pointed stones dug into {1}!", battler.pbThis))
         battler.pbItemHPHealCheck

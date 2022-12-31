@@ -114,7 +114,7 @@ module Battle::DebugVariables
     PBEffects::TrappingUser   => { name: "Battler trapping self (for Binding Band)",        default: -1 },   # Battler index
     PBEffects::Truant         => { name: "Truant will loaf around this round",              default: false },
 #    PBEffects::TwoTurnAttack - only applies to use of specific moves, not suitable for setting via debug
-#    PBEffects::Type3 - set elsewhere
+#    PBEffects::ExtraType - set elsewhere
     PBEffects::Unburden       => { name: "Self lost its item (for Unburden)",               default: false },
     PBEffects::Uproar         => { name: "Uproar number of rounds remaining",               default: 0 },
     PBEffects::WaterSport     => { name: "Used Water Sport (Gen 5 and older)",              default: false },

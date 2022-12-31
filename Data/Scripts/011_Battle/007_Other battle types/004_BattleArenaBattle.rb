@@ -10,7 +10,7 @@ class Battle::SuccessState
   def initialize; clear; end
 
   def clear(full = true)
-    @typeMod   = Effectiveness::NORMAL_EFFECTIVE
+    @typeMod   = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
     @useState  = 0
     @protected = false
     @skill     = 0 if full

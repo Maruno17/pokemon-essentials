@@ -59,11 +59,11 @@ module GameData
     end
 
     def effectiveness(other_type)
-      return Effectiveness::NORMAL_EFFECTIVE_ONE if !other_type
-      return Effectiveness::SUPER_EFFECTIVE_ONE if @weaknesses.include?(other_type)
-      return Effectiveness::NOT_VERY_EFFECTIVE_ONE if @resistances.include?(other_type)
+      return Effectiveness::NORMAL_EFFECTIVE if !other_type
+      return Effectiveness::SUPER_EFFECTIVE if @weaknesses.include?(other_type)
+      return Effectiveness::NOT_VERY_EFFECTIVE if @resistances.include?(other_type)
       return Effectiveness::INEFFECTIVE if @immunities.include?(other_type)
-      return Effectiveness::NORMAL_EFFECTIVE_ONE
+      return Effectiveness::NORMAL_EFFECTIVE
     end
   end
 end
@@ -71,73 +71,71 @@ end
 #===============================================================================
 
 module Effectiveness
-  INEFFECTIVE            = 0
-  NOT_VERY_EFFECTIVE_ONE = 1
-  NORMAL_EFFECTIVE_ONE   = 2
-  SUPER_EFFECTIVE_ONE    = 4
-  NORMAL_EFFECTIVE       = NORMAL_EFFECTIVE_ONE**3
+  INEFFECTIVE                   = 0
+  NOT_VERY_EFFECTIVE            = 1
+  NORMAL_EFFECTIVE              = 2
+  SUPER_EFFECTIVE               = 4
+  INEFFECTIVE_MULTIPLIER        = INEFFECTIVE.to_f / NORMAL_EFFECTIVE
+  NOT_VERY_EFFECTIVE_MULTIPLIER = NOT_VERY_EFFECTIVE.to_f / NORMAL_EFFECTIVE
+  NORMAL_EFFECTIVE_MULTIPLIER   = 1.0
+  SUPER_EFFECTIVE_MULTIPLIER    = SUPER_EFFECTIVE.to_f / NORMAL_EFFECTIVE
 
   module_function
 
   def ineffective?(value)
-    return value == INEFFECTIVE
+    return value == INEFFECTIVE_MULTIPLIER
   end
 
   def not_very_effective?(value)
-    return value > INEFFECTIVE && value < NORMAL_EFFECTIVE
+    return value > INEFFECTIVE_MULTIPLIER && value < NORMAL_EFFECTIVE_MULTIPLIER
   end
 
   def resistant?(value)
-    return value < NORMAL_EFFECTIVE
+    return value < NORMAL_EFFECTIVE_MULTIPLIER
   end
 
   def normal?(value)
-    return value == NORMAL_EFFECTIVE
+    return value == NORMAL_EFFECTIVE_MULTIPLIER
   end
 
   def super_effective?(value)
-    return value > NORMAL_EFFECTIVE
+    return value > NORMAL_EFFECTIVE_MULTIPLIER
   end
 
-  def ineffective_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
+  def ineffective_type?(attack_type, *defend_types)
+    value = calculate(attack_type, *defend_types)
     return ineffective?(value)
   end
 
-  def not_very_effective_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
+  def not_very_effective_type?(attack_type, *defend_types)
+    value = calculate(attack_type, *defend_types)
     return not_very_effective?(value)
   end
 
-  def resistant_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
+  def resistant_type?(attack_type, *defend_types)
+    value = calculate(attack_type, *defend_types)
     return resistant?(value)
   end
 
-  def normal_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
+  def normal_type?(attack_type, *defend_types)
+    value = calculate(attack_type, *defend_types)
     return normal?(value)
   end
 
-  def super_effective_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
+  def super_effective_type?(attack_type, *defend_types)
+    value = calculate(attack_type, *defend_types)
     return super_effective?(value)
   end
 
-  def calculate_one(attack_type, defend_type)
+  def get_type_effectiveness(attack_type, defend_type)
     return GameData::Type.get(defend_type).effectiveness(attack_type)
   end
 
-  def calculate(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    mod1 = (defend_type1) ? calculate_one(attack_type, defend_type1) : NORMAL_EFFECTIVE_ONE
-    mod2 = NORMAL_EFFECTIVE_ONE
-    mod3 = NORMAL_EFFECTIVE_ONE
-    if defend_type2 && defend_type1 != defend_type2
-      mod2 = calculate_one(attack_type, defend_type2)
+  def calculate(attack_type, *defend_types)
+    ret = NORMAL_EFFECTIVE_MULTIPLIER
+    defend_types.each do |type|
+      ret *= get_type_effectiveness(attack_type, type) / NORMAL_EFFECTIVE.to_f
     end
-    if defend_type3 && defend_type1 != defend_type3 && defend_type2 != defend_type3
-      mod3 = calculate_one(attack_type, defend_type3)
-    end
-    return mod1 * mod2 * mod3
+    return ret
   end
 end
