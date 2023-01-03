@@ -3,6 +3,8 @@ module GameData
     attr_reader :id
     attr_reader :real_name
     attr_reader :real_name_plural
+    attr_reader :real_portion_name
+    attr_reader :real_portion_name_plural
     attr_reader :pocket
     attr_reader :price
     attr_reader :sell_price
@@ -20,21 +22,23 @@ module GameData
     PBS_BASE_FILENAME = "items"
 
     SCHEMA = {
-      "SectionName" => [:id,               "m"],
-      "Name"        => [:real_name,        "s"],
-      "NamePlural"  => [:real_name_plural, "s"],
-      "Pocket"      => [:pocket,           "v"],
-      "Price"       => [:price,            "u"],
-      "SellPrice"   => [:sell_price,       "u"],
-      "BPPrice"     => [:bp_price,         "u"],
-      "FieldUse"    => [:field_use,        "e", { "OnPokemon" => 1, "Direct" => 2, "TM" => 3,
-                                                  "HM" => 4, "TR" => 5 }],
-      "BattleUse"   => [:battle_use,       "e", { "OnPokemon" => 1, "OnMove" => 2, "OnBattler" => 3,
-                                                  "OnFoe" => 4, "Direct" => 5 }],
-      "Flags"       => [:flags,            "*s"],
-      "Consumable"  => [:consumable,       "b"],
-      "Move"        => [:move,             "e", :Move],
-      "Description" => [:real_description, "q"]
+      "SectionName"       => [:id,                       "m"],
+      "Name"              => [:real_name,                "s"],
+      "NamePlural"        => [:real_name_plural,         "s"],
+      "PortionName"       => [:real_portion_name,        "s"],
+      "PortionNamePlural" => [:real_portion_name_plural, "s"],
+      "Pocket"            => [:pocket,                   "v"],
+      "Price"             => [:price,                    "u"],
+      "SellPrice"         => [:sell_price,               "u"],
+      "BPPrice"           => [:bp_price,                 "u"],
+      "FieldUse"          => [:field_use,                "e", { "OnPokemon" => 1, "Direct" => 2,
+                                                                "TM" => 3, "HM" => 4, "TR" => 5 }],
+      "BattleUse"         => [:battle_use,               "e", { "OnPokemon" => 1, "OnMove" => 2,
+                                                                "OnBattler" => 3, "OnFoe" => 4, "Direct" => 5 }],
+      "Flags"             => [:flags,                    "*s"],
+      "Consumable"        => [:consumable,               "b"],
+      "Move"              => [:move,                     "e", :Move],
+      "Description"       => [:real_description,         "q"]
     }
 
     extend ClassMethodsSymbols
@@ -108,21 +112,23 @@ module GameData
     end
 
     def initialize(hash)
-      @id               = hash[:id]
-      @real_name        = hash[:real_name]        || "Unnamed"
-      @real_name_plural = hash[:real_name_plural] || "Unnamed"
-      @pocket           = hash[:pocket]           || 1
-      @price            = hash[:price]            || 0
-      @sell_price       = hash[:sell_price]       || (@price / 2)
-      @bp_price         = hash[:bp_price]         || 1
-      @field_use        = hash[:field_use]        || 0
-      @battle_use       = hash[:battle_use]       || 0
-      @flags            = hash[:flags]            || []
-      @consumable       = hash[:consumable]
-      @consumable       = !is_important? if @consumable.nil?
-      @move             = hash[:move]
-      @real_description = hash[:real_description] || "???"
-      @pbs_file_suffix  = hash[:pbs_file_suffix]  || ""
+      @id                       = hash[:id]
+      @real_name                = hash[:real_name]        || "Unnamed"
+      @real_name_plural         = hash[:real_name_plural] || "Unnamed"
+      @real_portion_name        = hash[:real_portion_name]
+      @real_portion_name_plural = hash[:real_portion_name_plural]
+      @pocket                   = hash[:pocket]           || 1
+      @price                    = hash[:price]            || 0
+      @sell_price               = hash[:sell_price]       || (@price / 2)
+      @bp_price                 = hash[:bp_price]         || 1
+      @field_use                = hash[:field_use]        || 0
+      @battle_use               = hash[:battle_use]       || 0
+      @flags                    = hash[:flags]            || []
+      @consumable               = hash[:consumable]
+      @consumable               = !is_important? if @consumable.nil?
+      @move                     = hash[:move]
+      @real_description         = hash[:real_description] || "???"
+      @pbs_file_suffix          = hash[:pbs_file_suffix]  || ""
     end
 
     # @return [String] the translated name of this item
@@ -133,6 +139,18 @@ module GameData
     # @return [String] the translated plural version of the name of this item
     def name_plural
       return pbGetMessageFromHash(MessageTypes::ItemPlurals, @real_name_plural)
+    end
+
+    # @return [String] the translated portion name of this item
+    def portion_name
+      return pbGetMessageFromHash(MessageTypes::ItemPortionNames, @real_portion_name) if @real_portion_name
+      return name
+    end
+
+    # @return [String] the translated plural version of the portion name of this item
+    def portion_name_plural
+      return pbGetMessageFromHash(MessageTypes::ItemPortionNamePlurals, @real_portion_name_plural) if @real_portion_name_plural
+      return name_plural
     end
 
     # @return [String] the translated description of this item

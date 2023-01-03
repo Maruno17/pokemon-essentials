@@ -19,15 +19,15 @@ class PokemonMartAdapter
   end
 
   def getName(item)
-    return GameData::Item.get(item).name
+    return GameData::Item.get(item).portion_name
   end
 
   def getNamePlural(item)
-    return GameData::Item.get(item).name_plural
+    return GameData::Item.get(item).portion_name_plural
   end
 
   def getDisplayName(item)
-    item_name = getName(item)
+    item_name = GameData::Item.get(item).name
     if GameData::Item.get(item).is_machine?
       machine = GameData::Item.get(item).move
       item_name = _INTL("{1} {2}", item_name, GameData::Move.get(machine).name)
@@ -36,7 +36,7 @@ class PokemonMartAdapter
   end
 
   def getDisplayNamePlural(item)
-    item_name_plural = getNamePlural(item)
+    item_name_plural = GameData::Item.get(item).name_plural
     if GameData::Item.get(item).is_machine?
       machine = GameData::Item.get(item).move
       item_name_plural = _INTL("{1} {2}", item_name_plural, GameData::Move.get(machine).name)
@@ -103,10 +103,22 @@ class BuyAdapter
     @adapter = adapter
   end
 
+  # For showing in messages
+  def getName(item)
+    @adapter.getName(item)
+  end
+
+  # For showing in messages
+  def getNamePlural(item)
+    @adapter.getNamePlural(item)
+  end
+
+  # For showing in the list of items
   def getDisplayName(item)
     @adapter.getDisplayName(item)
   end
 
+  # For showing in the list of items
   def getDisplayNamePlural(item)
     @adapter.getDisplayNamePlural(item)
   end
@@ -128,10 +140,22 @@ class SellAdapter
     @adapter = adapter
   end
 
+  # For showing in messages
+  def getName(item)
+    @adapter.getName(item)
+  end
+
+  # For showing in messages
+  def getNamePlural(item)
+    @adapter.getNamePlural(item)
+  end
+
+  # For showing in the list of items
   def getDisplayName(item)
     @adapter.getDisplayName(item)
   end
 
+  # For showing in the list of items
   def getDisplayNamePlural(item)
     @adapter.getDisplayNamePlural(item)
   end
@@ -583,15 +607,15 @@ class PokemonMartScreen
       item = @scene.pbChooseBuyItem
       break if !item
       quantity       = 0
-      itemname       = @adapter.getDisplayName(item)
-      itemnameplural = @adapter.getDisplayNamePlural(item)
+      itemname       = @adapter.getName(item)
+      itemnameplural = @adapter.getNamePlural(item)
       price = @adapter.getPrice(item)
       if @adapter.getMoney < price
         pbDisplayPaused(_INTL("You don't have enough money."))
         next
       end
       if GameData::Item.get(item).is_important?
-        next if !pbConfirm(_INTL("So you want {1}?\nIt'll be ${2}. All right?",
+        next if !pbConfirm(_INTL("So you want the {1}?\nIt'll be ${2}. All right?",
                             itemname, price.to_s_formatted))
         quantity = 1
       else
@@ -632,8 +656,8 @@ class PokemonMartScreen
               break if !@adapter.addItem(:PREMIERBALL)
               premier_balls_added += 1
             end
-            ball_name = GameData::Item.get(:PREMIERBALL).name
-            ball_name = GameData::Item.get(:PREMIERBALL).name_plural if premier_balls_added > 1
+            ball_name = GameData::Item.get(:PREMIERBALL).portion_name
+            ball_name = GameData::Item.get(:PREMIERBALL).portion_name_plural if premier_balls_added > 1
             $stats.premier_balls_earned += premier_balls_added
             pbDisplayPaused(_INTL("And have {1} {2} on the house!", premier_balls_added, ball_name))
           elsif !Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item) == :POKEBALL
@@ -661,8 +685,8 @@ class PokemonMartScreen
     loop do
       item = @scene.pbChooseSellItem
       break if !item
-      itemname       = @adapter.getDisplayName(item)
-      itemnameplural = @adapter.getDisplayNamePlural(item)
+      itemname       = @adapter.getName(item)
+      itemnameplural = @adapter.getNamePlural(item)
       if !@adapter.canSell?(item)
         pbDisplayPaused(_INTL("Oh, no. I can't buy {1}.", itemnameplural))
         next

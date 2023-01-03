@@ -505,7 +505,7 @@ class PokemonBagScreen
         if $player.pokemon_count == 0
           @scene.pbDisplay(_INTL("There is no Pokémon."))
         elsif itm.is_important?
-          @scene.pbDisplay(_INTL("The {1} can't be held.", itemname))
+          @scene.pbDisplay(_INTL("The {1} can't be held.", itm.portion_name))
         else
           pbFadeOutIn {
             sscene = PokemonParty_Scene.new
@@ -517,11 +517,11 @@ class PokemonBagScreen
       elsif cmdToss >= 0 && command == cmdToss   # Toss item
         qty = @bag.quantity(item)
         if qty > 1
-          helptext = _INTL("Toss out how many {1}?", itm.name_plural)
+          helptext = _INTL("Toss out how many {1}?", itm.portion_name_plural)
           qty = @scene.pbChooseNumber(helptext, qty)
         end
         if qty > 0
-          itemname = itm.name_plural if qty > 1
+          itemname = (qty > 1) ? itm.portion_name_plural : itm.portion_name
           if pbConfirm(_INTL("Is it OK to throw away {1} {2}?", qty, itemname))
             pbDisplay(_INTL("Threw away {1} {2}.", qty, itemname))
             qty.times { @bag.remove(item) }
@@ -620,7 +620,7 @@ class PokemonBagScreen
         end
         @scene.pbRefresh
         dispqty = (itm.is_important?) ? 1 : qty
-        itemname = (dispqty > 1) ? itm.name_plural : itm.name
+        itemname = (dispqty > 1) ? itm.portion_name_plural : itm.portion_name
         pbDisplay(_INTL("Withdrew {1} {2}.", dispqty, itemname))
       else
         pbDisplay(_INTL("There's no more room in the Bag."))
@@ -654,7 +654,7 @@ class PokemonBagScreen
           end
           @scene.pbRefresh
           dispqty  = (itm.is_important?) ? 1 : qty
-          itemname = (dispqty > 1) ? itm.name_plural : itm.name
+          itemname = (dispqty > 1) ? itm.portion_name_plural : itm.portion_name
           pbDisplay(_INTL("Deposited {1} {2}.", dispqty, itemname))
         else
           pbDisplay(_INTL("There's no room to store items."))
@@ -680,8 +680,8 @@ class PokemonBagScreen
         next
       end
       qty = storage.quantity(item)
-      itemname       = itm.name
-      itemnameplural = itm.name_plural
+      itemname       = itm.portion_name
+      itemnameplural = itm.portion_name_plural
       if qty > 1
         qty = @scene.pbChooseNumber(_INTL("Toss out how many {1}?", itemnameplural), qty)
       end

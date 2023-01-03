@@ -75,7 +75,7 @@ class Battle
   end
 
   def pbUseItemMessage(item, trainerName)
-    itemName = GameData::Item.get(item).name
+    itemName = GameData::Item.get(item).portion_name
     if itemName.starts_with_vowel?
       pbDisplayBrief(_INTL("{1} used an {2}.", trainerName, itemName))
     else

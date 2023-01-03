@@ -19,15 +19,15 @@ class BattlePointShopAdapter
   end
 
   def getName(item)
-    return GameData::Item.get(item).name
+    return GameData::Item.get(item).portion_name
   end
 
   def getNamePlural(item)
-    return GameData::Item.get(item).name_plural
+    return GameData::Item.get(item).portion_name_plural
   end
 
   def getDisplayName(item)
-    item_name = getName(item)
+    item_name = GameData::Item.get(item).name
     if GameData::Item.get(item).is_machine?
       machine = GameData::Item.get(item).move
       item_name = _INTL("{1} {2}", item_name, GameData::Move.get(machine).name)
@@ -36,7 +36,7 @@ class BattlePointShopAdapter
   end
 
   def getDisplayNamePlural(item)
-    item_name_plural = getNamePlural(item)
+    item_name_plural = GameData::Item.get(item).name_plural
     if GameData::Item.get(item).is_machine?
       machine = GameData::Item.get(item).move
       item_name_plural = _INTL("{1} {2}", item_name_plural, GameData::Move.get(machine).name)
@@ -446,8 +446,8 @@ class BattlePointShopScreen
       item = @scene.pbChooseItem
       break if !item
       quantity       = 0
-      itemname       = @adapter.getDisplayName(item)
-      itemnameplural = @adapter.getDisplayNamePlural(item)
+      itemname       = @adapter.getName(item)
+      itemnameplural = @adapter.getNamePlural(item)
       price = @adapter.getPrice(item)
       if @adapter.getBP < price
         pbDisplayPaused(_INTL("You don't have enough BP."))
@@ -484,8 +484,8 @@ class BattlePointShopScreen
       end
       if added == quantity
         $stats.battle_points_spent += price
-        #Add bpshop_items_bought to $stats?
-        #$stats.bpshop_items_bought += quantity
+        # TODO: Add bpshop_items_bought to $stats?
+#        $stats.bpshop_items_bought += quantity
         @adapter.setBP(@adapter.getBP - price)
         @stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }

@@ -250,14 +250,20 @@ module Compiler
     # Get item names/descriptions for translating
     item_names = []
     item_names_plural = []
+    item_portion_names = []
+    item_portion_names_plural = []
     item_descriptions = []
     GameData::Item.each do |item|
       item_names.push(item.real_name)
       item_names_plural.push(item.real_name_plural)
+      item_portion_names.push(item.real_portion_name)
+      item_portion_names_plural.push(item.real_portion_name_plural)
       item_descriptions.push(item.real_description)
     end
     MessageTypes.setMessagesAsHash(MessageTypes::Items, item_names)
     MessageTypes.setMessagesAsHash(MessageTypes::ItemPlurals, item_names_plural)
+    MessageTypes.setMessagesAsHash(MessageTypes::ItemPortionNames, item_portion_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::ItemPortionNamePlurals, item_portion_names_plural)
     MessageTypes.setMessagesAsHash(MessageTypes::ItemDescriptions, item_descriptions)
   end
 
