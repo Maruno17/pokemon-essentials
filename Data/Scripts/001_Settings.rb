@@ -378,6 +378,7 @@ module Settings
     [261, 50, :BELLOSSOM,45,50],        #Rt. 31
     [262, 50, :BIBAREL,45,50],          #Rt. 30
     [265, 50, :KIRLIA,25,30],           #Rt. 34
+    [254, 50, :SMEARGLE,25,30],         #Rt. 35
     [267, 50, :SUDOWOODO,25,30],        #Rt. 36
     [500, 50, :ROSELIA,30,30],          #National Park
     [266, 50, :BRELOOM,30,30],          #Ilex Forest

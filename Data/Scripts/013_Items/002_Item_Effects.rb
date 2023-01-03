@@ -119,7 +119,7 @@ ItemHandlers::UseInField.add(:MAXREPEL, proc { |item|
 Events.onStepTaken += proc {
   if $PokemonGlobal.repel > 0 && !$game_player.terrain_tag.ice # Shouldn't count down if on ice
     $PokemonGlobal.repel -= 1
-    if $PokemonGlobal.repel <= 0
+    if $PokemonGlobal.repel <= 0 && ! $PokemonGlobal.tempRepel
       isIncense = $game_switches[SWITCH_USED_AN_INCENSE]
       $game_switches[SWITCH_FORCE_ALL_WILD_FUSIONS] = false
       $game_switches[SWITCH_USED_AN_INCENSE] = false
