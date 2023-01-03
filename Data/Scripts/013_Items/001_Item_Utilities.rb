@@ -522,7 +522,8 @@ end
 #===============================================================================
 def pbBikeCheck
   if $PokemonGlobal.surfing || $PokemonGlobal.diving ||
-     (!$PokemonGlobal.bicycle && $game_player.pbTerrainTag.must_walk)
+     (!$PokemonGlobal.bicycle &&
+     ($game_player.pbTerrainTag.must_walk || $game_player.pbTerrainTag.must_walk_or_run))
     pbMessage(_INTL("Can't use that here."))
     return false
   end

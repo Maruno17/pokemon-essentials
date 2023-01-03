@@ -166,7 +166,7 @@ EventHandlers.add(:on_step_taken, :auto_move_player,
     currentTag = $game_player.pbTerrainTag
     if currentTag.waterfall_crest
       pbDescendWaterfall
-    elsif currentTag.ice && !$PokemonGlobal.sliding
+    elsif currentTag.ice || $PokemonGlobal.ice_sliding
       pbSlideOnIce
     end
   }
@@ -573,30 +573,14 @@ def pbLedge(_xOffset, _yOffset)
 end
 
 def pbSlideOnIce
-  return if !$game_player.pbTerrainTag.ice
-  $game_temp.followers.update
-  $PokemonGlobal.sliding = true
-  direction    = $game_player.direction
-  oldwalkanime = $game_player.walk_anime
-  $game_player.straighten
-  $game_player.walk_anime = false
-  first_loop = true
-  loop do
-    break if !$game_player.can_move_in_direction?(direction)
-    break if !$game_player.pbTerrainTag.ice
-    $game_player.move_forward
-    $game_temp.followers.move_followers if first_loop
-    while $game_player.moving?
-      pbUpdateSceneMap
-      Graphics.update
-      Input.update
-    end
-    first_loop = false
+  if $game_player.pbTerrainTag.ice && $game_player.can_move_in_direction?($game_player.direction)
+    $PokemonGlobal.ice_sliding = true
+    $game_player.straighten
+    $game_player.walk_anime = false
+    return
   end
-  $game_player.center($game_player.x, $game_player.y)
-  $game_player.straighten
-  $game_player.walk_anime = oldwalkanime
-  $PokemonGlobal.sliding = false
+  $PokemonGlobal.ice_sliding = false
+  $game_player.walk_anime = true
 end
 
 def pbTurnTowardEvent(event, otherEvent)

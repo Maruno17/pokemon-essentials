@@ -135,7 +135,7 @@ class Game_Player < Game_Character
           else
             $stats.distance_walked += 1
           end
-          $stats.distance_slid_on_ice += 1 if $PokemonGlobal.sliding
+          $stats.distance_slid_on_ice += 1 if $PokemonGlobal.ice_sliding
           increase_steps
         end
       elsif !check_event_trigger_touch(dir)
@@ -423,12 +423,12 @@ class Game_Player < Game_Character
   def update
     last_real_x = @real_x
     last_real_y = @real_y
+    @last_terrain_tag = pbTerrainTag
     super
     update_stop if $game_temp.in_menu && @stopped_last_frame
     update_screen_position(last_real_x, last_real_y)
     # Update dependent events
-    if (!@moved_last_frame || @stopped_last_frame ||
-       (@stopped_this_frame && $PokemonGlobal.sliding)) && (moving? || jumping?)
+    if (!@moved_last_frame || @stopped_last_frame) && (moving? || jumping?)
       $game_temp.followers.move_followers
     end
     $game_temp.followers.update
@@ -445,8 +445,10 @@ class Game_Player < Game_Character
 
   def update_command_new
     dir = Input.dir4
-    unless pbMapInterpreterRunning? || $game_temp.message_window_showing ||
-           $game_temp.in_mini_update || $game_temp.in_menu
+    if $PokemonGlobal.ice_sliding
+      move_forward
+    elsif !pbMapInterpreterRunning? && !$game_temp.message_window_showing &&
+          !$game_temp.in_mini_update && !$game_temp.in_menu
       # Move player in the direction the directional button is being pressed
       if @moved_last_frame ||
          (dir > 0 && dir == @lastdir && Graphics.frame_count - @lastdirframe > Graphics.frame_rate / 20)
@@ -472,7 +474,7 @@ class Game_Player < Game_Character
 
   def update_move
     if !@moved_last_frame || @stopped_last_frame   # Started a new step
-      if pbTerrainTag.ice
+      if $PokemonGlobal.ice_sliding || @last_terrain_tag.ice
         set_movement_type(:ice_sliding)
       else
         faster = can_run?
@@ -543,7 +545,7 @@ class Game_Player < Game_Character
   end
 
   def update_event_triggering
-    return if moving?
+    return if moving? || $PokemonGlobal.ice_sliding
     # Try triggering events upon walking into them/in front of them
     if @moved_this_frame
       $game_temp.followers.turn_followers

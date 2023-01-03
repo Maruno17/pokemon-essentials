@@ -254,7 +254,7 @@ class Game_FollowerFactory
       end
       event.move_speed  = leader.move_speed
       event.transparent = !follower.visible?
-      if $PokemonGlobal.sliding
+      if $PokemonGlobal.ice_sliding
         event.straighten
         event.walk_anime = false
       else

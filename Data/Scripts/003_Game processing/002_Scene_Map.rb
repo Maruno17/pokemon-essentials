@@ -188,7 +188,7 @@ class Scene_Map
       end
     end
     return if $game_temp.message_window_showing
-    if !pbMapInterpreterRunning?
+    if !pbMapInterpreterRunning? && !$PokemonGlobal.ice_sliding
       if Input.trigger?(Input::USE)
         $game_temp.interact_calling = true
       elsif Input.trigger?(Input::ACTION)
