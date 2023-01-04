@@ -457,6 +457,8 @@ Description = A bone that is extremely valuable for Pokémon archaeology. It can
 [RELICCOPPER]
 Name = Relic Copper
 NamePlural = Relic Coppers
+PortionName = Relic Copper coin
+PortionNamePlural = Relic Copper coins
 Pocket = 1
 Price = 0
 Flags = Fling_30
@@ -465,6 +467,8 @@ Description = A copper coin used in a civilization about 3,000 years ago. A mani
 [RELICSILVER]
 Name = Relic Silver
 NamePlural = Relic Silvers
+PortionName = Relic Silver coin
+PortionNamePlural = Relic Silver coins
 Pocket = 1
 Price = 0
 Flags = Fling_30
@@ -473,6 +477,8 @@ Description = A silver coin used in a civilization about 3,000 years ago. A mani
 [RELICGOLD]
 Name = Relic Gold
 NamePlural = Relic Golds
+PortionName = Relic Gold coin
+PortionNamePlural = Relic Gold coins
 Pocket = 1
 Price = 0
 Flags = Fling_30
