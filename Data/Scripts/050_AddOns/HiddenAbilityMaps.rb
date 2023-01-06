@@ -27,7 +27,6 @@ Events.onWildPokemonCreate+=proc {|sender,e|
   if $game_map.map_id== pbGet(226) || isAlwaysHiddenAbilityMap($game_map.map_id)
     pokemon=e[0]
     chosenAbility = pokemon.getAbilityList.sample #format: [[:ABILITY, index],...]
-    p chosenAbility
     pokemon.ability = chosenAbility[0]
     pokemon.ability_index = chosenAbility[1]
   end
