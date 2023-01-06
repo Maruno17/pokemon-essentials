@@ -667,6 +667,7 @@
 659,TM121,TM121,TM121s,4,10000,"The user shoots boiling hot water at its target. It may also leave the target with a burn.",3,0,0,SCALD
 660,LINKINGCORD,Linking Cord,Linking Cords,1,6000,"A cable exuding a mysterious energy. It’s loved by certain Pokémon.",1,0,7,
 661,INVISIBALL,Invisiball,Invisiball,3,200,"A Pokéball that is completely invisble to the human eye. You shouldn't be able to obtain this item",0,4,4,
+662,DREAMMIRROR,Dream Mirror,Dream Mirrors,8,0,"A strange mirror that allows you to peak into the Dream World for a brief instant.",2,0,6,
 
 
 

@@ -64,6 +64,11 @@ class PokeBattle_Battler
     return GameData::Ability.try_get(@ability_id)
   end
 
+  def hasHiddenAbility?
+    return @pokemon.ability_index >= 2
+  end
+
+
   def ability=(value)
     new_ability = GameData::Ability.try_get(value)
     @ability_id = (new_ability) ? new_ability.id : nil

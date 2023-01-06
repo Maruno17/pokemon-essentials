@@ -378,6 +378,24 @@ ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
   end
 })
 
+def useDreamMirror
+  map_name = Kernel.getMapName(pbGet(226)).to_s
+  Kernel.pbMessage(_INTL("You peeked into the Dream Mirror..."))
+  Kernel.pbMessage(_INTL("You can see a faint glimpse of {1} in the reflection.", map_name))
+end
+
+#DREAMMIRROR
+ItemHandlers::UseFromBag.add(:DREAMMIRROR, proc { |item|
+  useDreamMirror
+  next 1
+})
+
+ItemHandlers::UseInField.add(:DREAMMIRROR, proc { |item|
+  useDreamMirror
+  next 1
+})
+
+
 ItemHandlers::UseFromBag.add(:MAGICBOOTS, proc { |item|
   if $DEBUG
     if Kernel.pbConfirmMessageSerious(_INTL("Take off the Magic Boots?"))
@@ -449,6 +467,8 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, pokemon, scene|
   next true if pbDNASplicing(pokemon, scene)
   next false
 })
+
+
 
 ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
   if !pokemon.isFusion?

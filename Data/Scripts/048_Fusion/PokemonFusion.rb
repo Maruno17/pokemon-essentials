@@ -729,8 +729,9 @@ class PokemonFusionScene
         @scene.pbShowPokedex(@newspecies)
       end
       #first check if hidden ability
-      hiddenAbility1 = @pokemon1.ability == @pokemon1.getAbilityList[0][-1]
-      hiddenAbility2 = @pokemon2.ability == @pokemon2.getAbilityList[0][-1]
+      # getAbilityList format: [[:ABILITY, index],...]
+      hiddenAbility1 = @pokemon1.ability == @pokemon1.getAbilityList[-1][0]
+      hiddenAbility2 = @pokemon2.ability == @pokemon2.getAbilityList[-1][0]
 
       #change species
       @pokemon1.species = newSpecies
