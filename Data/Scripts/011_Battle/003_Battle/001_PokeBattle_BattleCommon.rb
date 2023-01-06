@@ -103,6 +103,10 @@ module PokeBattle_BattleCommon
       @scene.pbThrowAndDeflect(ball,1)
       pbDisplay(_INTL("The Trainer blocked your Poké Ball! Don't be a thief!"))
       return
+    elsif $game_switches[SWITCH_CANNOT_CATCH_POKEMON]
+      @scene.pbThrowAndDeflect(ball,1)
+      pbDisplay(_INTL("The Pokémon is impossible to catch!"))
+      return
     end
     # Calculate the number of shakes (4=capture)
     pkmn = battler.pokemon
