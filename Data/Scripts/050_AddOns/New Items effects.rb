@@ -379,8 +379,11 @@ ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
 })
 
 def useDreamMirror
-  map_name = Kernel.getMapName(pbGet(226)).to_s
+  visitedMap = $PokemonGlobal.visitedMaps[pbGet(226)]
+  map_name = visitedMap ? Kernel.getMapName(pbGet(226)).to_s : "an unknown location"
+
   Kernel.pbMessage(_INTL("You peeked into the Dream Mirror..."))
+
   Kernel.pbMessage(_INTL("You can see a faint glimpse of {1} in the reflection.", map_name))
 end
 
@@ -1384,50 +1387,14 @@ end
 
 def pbFuse(pokemon, poke2, supersplicers = false)
   newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
-
-  # pathCustom = _INTL("Graphics/CustomBattlers/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
-  # hasCustom = false
-  # if (pbResolveBitmap(pathCustom))
-  #   picturePath = pathCustom
-  #   hasCustom = true
-  # else
-  #   picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", poke2.species_data.id_number, pokemon.species_data.id_number)
-  # end
-  # previewwindow = PictureWindow.new(picturePath)
-  #
-  # new_level = calculateFusedPokemonLevel(pokemon.level, poke2.level, supersplicers)
-  # typeWindow = drawPokemonType(newid)
-  # drawFusionPreviewText(typeWindow, "Lv. " + new_level.to_s, 232, 0,)
-  #
-  # if !$Trainer.seen?(newid)
-  #   if hasCustom
-  #     previewwindow.picture.pbSetColor(150, 255, 150, 200)
-  #   else
-  #     previewwindow.picture.pbSetColor(255, 255, 255, 200)
-  #   end
-  # end
-  # previewwindow.x = (Graphics.width / 2) - (previewwindow.width / 2)
-  # previewwindow.y = ((Graphics.height - 96) / 2) - (previewwindow.height / 2)
-  # previewwindow.z = 1000000
-
-  #if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
-    # previewwindow.dispose
-    # typeWindow.dispose
     fus = PokemonFusionScene.new
     if (fus.pbStartScreen(pokemon, poke2, newid))
       returnItemsToBag(pokemon, poke2)
       fus.pbFusionScreen(false, supersplicers)
-      $game_variables[126] += 1 #fuse counter
+      $game_variables[VAR_FUSE_COUNTER] += 1 #fuse counter
       fus.pbEndScreen
       return true
-
     end
-  # else
-  #   # previewwindow.dispose
-  #   # typeWindow.dispose
-  #   return false
-  # end
-
 end
 
 def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)

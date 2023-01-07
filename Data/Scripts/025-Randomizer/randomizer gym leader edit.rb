@@ -414,9 +414,6 @@ def getCustomSpeciesList()
   for num in 1..NB_POKEMON
     path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + num.to_s + "/*"
     filesList = Dir[path]
-    echo filesList
-    echo "\n\n"
-
     maxDexNumber = (NB_POKEMON * NB_POKEMON) + NB_POKEMON
     maxVal = filesList.length - 1
     for i in 0..maxVal

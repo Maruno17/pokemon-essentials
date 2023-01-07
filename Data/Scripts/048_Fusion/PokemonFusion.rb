@@ -585,21 +585,6 @@ class PokemonFusionScene
     else
       avgLevel = (2 * level2 + level1) / 3
     end
-
-    ####CAPTURE RATES
-    ####Check success Poke 1
-    # if (fusionCheckSuccess (30, leveldiff, level1,fusionmultiplier)) then
-    #   return 1
-    # else
-    #  return 0
-    #end
-
-    ####Check success Poke 2
-    # if (fusionCheckSuccess (30, leveldiff, level1,fusionmultiplier)) then
-    #   return 1
-    # else
-    #   return 0
-    # end
     return 1
   end
 
