@@ -2252,7 +2252,11 @@ class PokemonStorageScreen
 
 
         selectedHead =selectFusion(pokemon, heldpoke, isSuperSplicer)
-        if selectedHead == -1
+        if selectedHead == nil
+          pbDisplay(_INTL("It won't have any effect."))
+          return false
+        end
+        if selectedHead == -1 #cancelled out
           return false
         end
 

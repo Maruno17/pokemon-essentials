@@ -1312,7 +1312,11 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
           end
 
           selectedHead =selectFusion(pokemon, poke2, supersplicers)
-          if selectedHead == -1
+          if selectedHead == -1 #cancelled
+            return false
+          end
+          if selectedHead == nil  #can't fuse (egg, etc.)
+            scene.pbDisplay(_INTL("It won't have any effect."))
             return false
           end
           selectedBase = selectedHead == pokemon ? poke2 : pokemon
@@ -1353,6 +1357,9 @@ end
 
 
 def selectFusion(pokemon, poke2, supersplicers = false)
+  return nil if !pokemon.is_a?(Pokemon) ||  !poke2.is_a?(Pokemon)
+  return nil if pokemon.egg? ||  poke2.egg?
+
   selectorWindow = FusionPreviewScreen.new(poke2, pokemon, supersplicers)#PictureWindow.new(picturePath)
   selectedHead = selectorWindow.getSelection
   selectorWindow.dispose
