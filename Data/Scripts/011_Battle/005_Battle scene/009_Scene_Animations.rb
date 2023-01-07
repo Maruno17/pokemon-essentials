@@ -46,8 +46,10 @@ class PokeBattle_Scene
         #hidden ability animation
         if @battle.battlers[idxBattler].hasHiddenAbility?
           pbCommonAnimation("StatUp",@battle.battlers[idxBattler])
-          @battle.pbShowAbilitySplash(@battle.battlers[idxBattler],true)
-          @battle.pbHideAbilitySplash(@battle.battlers[idxBattler])
+          if @battle.is_a?(PokeBattle_Battle)
+            @battle.pbShowAbilitySplash(@battle.battlers[idxBattler],true)
+            @battle.pbHideAbilitySplash(@battle.battlers[idxBattler])
+          end
         end
 
         #shiny animation

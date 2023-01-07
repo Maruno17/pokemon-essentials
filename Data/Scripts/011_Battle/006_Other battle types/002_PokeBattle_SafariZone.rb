@@ -46,6 +46,10 @@ class PokeBattle_FakeBattler
     return $Trainer.owned?(pokemon.species)
   end
 
+  def hasHiddenAbility?
+    return @pokemon.hasHiddenAbility?
+  end
+
   def pbThis(lowerCase=false)
     return (lowerCase) ? _INTL("the wild {1}",name) : _INTL("The wild {1}",name)
   end
@@ -350,6 +354,7 @@ class PokeBattle_SafariZone
   def pbSideSize(index)
     return @sideSizes[index%2]
   end
+
 
   #=============================================================================
   # Trainers and owner-related

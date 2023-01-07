@@ -1800,6 +1800,11 @@ class PokemonStorageScreen
     index = selected[1]
     pokemon = @storage[box, index]
 
+    if pokemon.egg?
+      pbDisplay(_INTL("You cannot rename an egg!"))
+      return
+    end
+
     speciesname = PBSpecies.getName(pokemon.species)
     hasNickname = speciesname == pokemon.name
     if hasNickname

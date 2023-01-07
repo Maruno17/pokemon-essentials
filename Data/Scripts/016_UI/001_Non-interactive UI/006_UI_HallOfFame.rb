@@ -343,6 +343,39 @@ class HallOfFame_Scene
     overlay.clear
     pbDrawTextPositions(overlay, [[_INTL("Welcome to the Hall of Fame!"),
                                    Graphics.width / 2, Graphics.height - 80, 2, BASECOLOR, SHADOWCOLOR]])
+
+    writeCurrentDate(overlay, 120 , Graphics.height - 50)
+    writeGameMode(overlay, (Graphics.width / 2) + 100, Graphics.height - 50)
+  end
+
+  def writeCurrentDate(overlay, x, y)
+    currentTime = Time.new
+    timeString = currentTime.year.to_s + "-" + ("%02d" % currentTime.month) + "-" + ("%02d" % currentTime.day)
+    pbDrawTextPositions(overlay, [[_INTL("{1}", timeString), x, y, 2, BASECOLOR, SHADOWCOLOR]])
+  end
+
+  def writeGameMode(overlay, x, y)
+    gameMode = "Classic mode"
+    if $game_switches[SWITCH_MODERN_MODE]
+      gameMode = "Modern mode"
+    end
+    if $game_switches[SWITCH_SINGLE_POKEMON_MODE]
+      pokemon_number = pbGet(VAR_SINGLE_POKEMON_MODE)
+      if pokemon_number.is_a?(Integer) && pokemon_number >0
+        pokemon = GameData::Species.get(pokemon_number)
+        gameMode = pokemon.real_name + " mode"
+      else
+        gameMode = "Debug mode"
+      end
+    end
+    if $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE]
+      gameMode = "Randomized mode"
+    end
+    if $PokemonBag.pbQuantity(:MAGICBOOTS)>=1 || $DEBUG
+      gameMode = "Debug mode"
+    end
+
+    pbDrawTextPositions(overlay, [[_INTL("{1} ({2})", gameMode, getDifficulty), x, y, 2, BASECOLOR, SHADOWCOLOR]])
   end
 
   def pbAnimationLoop
@@ -438,12 +471,11 @@ class HallOfFame_Scene
   end
 
   def waitForInput
-      if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
-        return true
-      end
-      return false
+    if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
+      return true
+    end
+    return false
   end
-
 
   def pbUpdatePC
     # Change the team
