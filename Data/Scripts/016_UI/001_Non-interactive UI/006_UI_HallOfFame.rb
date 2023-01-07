@@ -411,6 +411,11 @@ class HallOfFame_Scene
               Input.update
               pbUpdate
             end
+            while !(waitForInput)
+              Graphics.update
+              Input.update
+              pbUpdate
+            end
             setPokemonSpritesOpacity(-1, OPACITY) if !SINGLEROW
             createTrainerBattler
           end
@@ -431,6 +436,14 @@ class HallOfFame_Scene
       @battlerIndex += 1
     end
   end
+
+  def waitForInput
+      if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
+        return true
+      end
+      return false
+  end
+
 
   def pbUpdatePC
     # Change the team

@@ -283,7 +283,7 @@ class VoltorbFlip
             @squares[i][3]=true
             # If Voltorb (0), display all tiles on the board
             if @squares[i][2]==0
-              pbSEPlay("Voltorb Flip explosion")
+              pbSEPlay("Voltorb Flip Explosion")
               # Play explosion animation
               # Part1
               animation=[]
@@ -302,7 +302,7 @@ class VoltorbFlip
                 @sprites["animation"].bitmap.clear
               end
               # Unskippable text block, parameter 2 = wait time (corresponds to ME length)
-              pbMessage(_INTL("\\me[Voltorb Flip game over]Oh no! You get 0 Coins!\\wtnp[50]"))
+              pbMessage(_INTL("\\me[Voltorb Flip Game Over]Oh no! You get 0 Coins!\\wtnp[50]"))
               pbShowAndDispose
               @sprites["mark"].bitmap.clear
               if @level>1
@@ -343,10 +343,10 @@ class VoltorbFlip
               end
               if @points==0
                 @points+=@squares[i][2]
-                pbSEPlay("Voltorb Flip point")
+                pbSEPlay("Voltorb Flip Point")
               elsif @squares[i][2]>1
                 @points*=@squares[i][2]
-                pbSEPlay("Voltorb Flip point")
+                pbSEPlay("Voltorb Flip Point")
               end
               break
             end
@@ -363,10 +363,10 @@ class VoltorbFlip
       # Game cleared
       if count==0
         @sprites["curtain"].opacity=100
-        pbMessage(_INTL("\\me[Voltorb Flip win]Game clear!\\wtnp[40]"))
+        pbMessage(_INTL("\\me[Voltorb Flip Win]Game clear!\\wtnp[40]"))
 #        pbMessage(_INTL("You've found all of the hidden x2 and x3 cards."))
 #        pbMessage(_INTL("This means you've found all the Coins in this game, so the game is now over."))
-        pbMessage(_INTL("\\se[Voltorb Flip gain coins]{1} received {2} Coins!",$Trainer.name,@points.to_s_formatted))
+        pbMessage(_INTL("\\se[Voltorb Flip Gain Coins]{1} received {2} Coins!",$Trainer.name,@points.to_s_formatted))
         # Update level text
         @sprites["level"].bitmap.clear
         pbDrawShadowText(@sprites["level"].bitmap,8,150,118,28,_INTL("Level {1}",@level.to_s),Color.new(60,60,60),Color.new(150,190,170),1)
@@ -384,12 +384,12 @@ class VoltorbFlip
         @sprites["curtain"].opacity=100
         if @level<8
           @level+=1
-          pbMessage(_INTL("\\se[Voltorb Flip level up]Advanced to Game Lv. {1}!",@level.to_s))
+          pbMessage(_INTL("\\se[Voltorb Flip Level Up]Advanced to Game Lv. {1}!",@level.to_s))
 #          if @firstRound
 #            pbMessage(_INTL("Congratulations!"))
 #            pbMessage(_INTL("You can receive even more Coins in the next game!"))
             @firstRound=false
-#          end
+#
         end
         pbDisposeSpriteHash(@sprites)
         pbNewGame
