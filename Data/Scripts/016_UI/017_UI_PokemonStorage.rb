@@ -1650,6 +1650,7 @@ class PokemonStorageScreen
               cmdRelease = -1
               cmdDebug = -1
               cmdCancel = -1
+              cmdNickname = -1
               if heldpoke
                 helptext = _INTL("{1} is selected.", heldpoke.name)
                 commands[cmdMove = commands.length] = (pokemon) ? _INTL("Shift") : _INTL("Place")
@@ -1666,6 +1667,7 @@ class PokemonStorageScreen
                   commands[cmdFuse = commands.length] = _INTL("Fuse")
                 end
               end
+              commands[cmdNickname = commands.length] = _INTL("Nickname")
               commands[cmdWithdraw = commands.length] = (selected[0] == -1) ? _INTL("Store") : _INTL("Withdraw")
               commands[cmdItem = commands.length] = _INTL("Item")
 
@@ -1681,6 +1683,8 @@ class PokemonStorageScreen
                 end
               elsif cmdSummary >= 0 && command == cmdSummary # Summary
                 pbSummary(selected, @heldpkmn)
+              elsif cmdNickname >= 0 && command == cmdNickname # Summary
+                renamePokemon(selected)
               elsif cmdWithdraw >= 0 && command == cmdWithdraw # Store/Withdraw
                 (selected[0] == -1) ? pbStore(selected, @heldpkmn) : pbWithdraw(selected, @heldpkmn)
               elsif cmdItem >= 0 && command == cmdItem # Item
@@ -1787,6 +1791,35 @@ class PokemonStorageScreen
     elsif command == 3
       @scene.pbStartBox(self, command)
       @scene.pbCloseBox
+    end
+  end
+
+
+  def renamePokemon(selected)
+    box = selected[0]
+    index = selected[1]
+    pokemon = @storage[box, index]
+
+    speciesname = PBSpecies.getName(pokemon.species)
+    hasNickname = speciesname == pokemon.name
+    if hasNickname
+      pbDisplay(_INTL("{1} has no nickname.", speciesname))
+    else
+      pbDisplay(_INTL("{1} has the nickname {2}.", speciesname, pokemon.name))
+    end
+    commands = [
+      _INTL("Rename"),
+      _INTL("Quit")
+    ]
+    command = pbShowCommands(
+      _INTL("What do you want to do?"), commands)
+    case command
+    when 0
+      newname = pbEnterPokemonName(_INTL("{1}'s nickname?", speciesname), 0, Pokemon::MAX_NAME_SIZE, "", pokemon)
+      pokemon.name = (newname == "") ? speciesname : newname
+      pbDisplay(_INTL("{1} is now named {2}!", speciesname, pokemon.name))
+    when 1
+      return
     end
   end
 
