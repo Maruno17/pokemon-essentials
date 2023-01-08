@@ -15,7 +15,7 @@ module GameData
       "SectionName" => [:id,        "u"],
       "Name"        => [:real_name, "s"],
       "Filename"    => [:filename,  "s"],
-      "Point"       => [:point,     "^uussUUUU"],
+      "Point"       => [:point,     "^uusSUUUU"],
       "Flags"       => [:flags,     "*s"]
     }
 
@@ -33,7 +33,7 @@ module GameData
 
     # @return [String] the translated name of this region
     def name
-      return pbGetMessage(MessageTypes::RegionNames, @id)
+      return pbGetMessageFromHash(MessageTypes::Regions, @real_name)
     end
 
     def has_flag?(flag)

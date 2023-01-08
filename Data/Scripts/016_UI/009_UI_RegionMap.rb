@@ -185,7 +185,7 @@ class PokemonRegionMap_Scene
     @map.point.each do |point|
       next if point[0] != x || point[1] != y
       return "" if point[7] && (@wallmap || point[7] <= 0 || !$game_switches[point[7]])
-      name = pbGetMessageFromHash(MessageTypes::PlaceNames, point[2])
+      name = pbGetMessageFromHash(MessageTypes::RegionLocations, point[2])
       return (@editor) ? point[2] : name
     end
     return ""
@@ -213,7 +213,8 @@ class PokemonRegionMap_Scene
     @map.point.each do |point|
       next if point[0] != x || point[1] != y
       return "" if point[7] && (@wallmap || point[7] <= 0 || !$game_switches[point[7]])
-      mapdesc = pbGetMessageFromHash(MessageTypes::PlaceDescriptions, point[3])
+      return "" if !point[3]
+      mapdesc = pbGetMessageFromHash(MessageTypes::RegionDescriptions, point[3])
       return (@editor) ? point[3] : mapdesc
     end
     return ""

@@ -436,7 +436,7 @@ end
 #===============================================================================
 def pbPickBerry(berry, qty = 1)
   berry = GameData::Item.get(berry)
-  berry_name = (qty > 1) ? berry.name_plural : berry.name
+  berry_name = (qty > 1) ? berry.portion_name_plural : berry.portion_name
   if qty > 1
     message = _INTL("There are {1} \\c[1]{2}\\c[0]!\nWant to pick them?", qty, berry_name)
   else

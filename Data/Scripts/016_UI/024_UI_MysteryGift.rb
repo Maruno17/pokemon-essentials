@@ -406,10 +406,8 @@ def pbReceiveMysteryGift(id)
     if $bag.can_add?(item, qty)
       $bag.add(item, qty)
       itm = GameData::Item.get(item)
-      itemname = (qty > 1) ? itm.name_plural : itm.name
-      if item == :LEFTOVERS
-        pbMessage(_INTL("\\me[Item get]You obtained some \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
-      elsif itm.is_machine?   # TM or HM
+      itemname = (qty > 1) ? itm.portion_name_plural : itm.portion_name
+      if itm.is_machine?   # TM or HM
         pbMessage(_INTL("\\me[Item get]You obtained \\c[1]{1} {2}\\c[0]!\\wtnp[30]", itemname,
                         GameData::Move.get(itm.move).name))
       elsif qty > 1

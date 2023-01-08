@@ -1429,6 +1429,7 @@ MenuHandlers.add(:party_menu_item, :move, {
     pkmn = party[party_idx]
     item = pkmn.item
     itemname = item.name
+    portionitemname = item.portion_name
     screen.scene.pbSetHelpText(_INTL("Move {1} to where?", itemname))
     old_party_idx = party_idx
     moved = false
@@ -1446,7 +1447,7 @@ MenuHandlers.add(:party_menu_item, :move, {
         pkmn.item = nil
         screen.scene.pbClearSwitching
         screen.pbRefresh
-        screen.pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, itemname))
+        screen.pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, portionitemname))
         moved = true
         break
       elsif newpkmn.item.is_mail?
@@ -1455,10 +1456,8 @@ MenuHandlers.add(:party_menu_item, :move, {
       end
       # New Pokémon is also holding an item; ask what to do with it
       newitem = newpkmn.item
-      newitemname = newitem.name
-      if newitem == :LEFTOVERS
-        screen.pbDisplay(_INTL("{1} is already holding some {2}.\1", newpkmn.name, newitemname))
-      elsif newitemname.starts_with_vowel?
+      newitemname = newitem.portion_name
+      if newitemname.starts_with_vowel?
         screen.pbDisplay(_INTL("{1} is already holding an {2}.\1", newpkmn.name, newitemname))
       else
         screen.pbDisplay(_INTL("{1} is already holding a {2}.\1", newpkmn.name, newitemname))
@@ -1468,7 +1467,7 @@ MenuHandlers.add(:party_menu_item, :move, {
       pkmn.item = newitem
       screen.scene.pbClearSwitching
       screen.pbRefresh
-      screen.pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, itemname))
+      screen.pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, portionitemname))
       screen.pbDisplay(_INTL("{1} was given the {2} to hold.", pkmn.name, newitemname))
       moved = true
       break

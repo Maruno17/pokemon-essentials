@@ -608,8 +608,10 @@ class PokemonStorageScene
     @markingbitmap = AnimatedBitmap.new("Graphics/UI/Storage/markings")
     @sprites["markingbg"] = IconSprite.new(292, 68, @boxsidesviewport)
     @sprites["markingbg"].setBitmap("Graphics/UI/Storage/overlay_marking")
+    @sprites["markingbg"].z = 10
     @sprites["markingbg"].visible = false
     @sprites["markingoverlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @boxsidesviewport)
+    @sprites["markingoverlay"].z = 11
     @sprites["markingoverlay"].visible = false
     pbSetSystemFont(@sprites["markingoverlay"].bitmap)
     @sprites["arrow"] = PokemonBoxArrow.new(@arrowviewport)
@@ -1894,8 +1896,8 @@ class PokemonStorageScreen
       return
     end
     if pokemon.item
-      itemname = pokemon.item.name
-      if pbConfirm(_INTL("Take this {1}?", itemname))
+      itemname = pokemon.item.portion_name
+      if pbConfirm(_INTL("Take the {1}?", itemname))
         if $bag.add(pokemon.item)
           pbDisplay(_INTL("Took the {1}.", itemname))
           pokemon.item = nil

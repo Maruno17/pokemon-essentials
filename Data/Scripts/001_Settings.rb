@@ -372,12 +372,14 @@ module Settings
 
   #=============================================================================
 
-  # An array of available languages in the game, and their corresponding message
-  # file in the Data folder. Edit only if you have 2 or more languages to choose
-  # from.
+  # An array of available languages in the game, and their corresponding
+  # filename. Text files for a language are extracted to a folder called
+  # "Text_filename_core" or "Text_filename_game", and are recompiled into files
+  # in the Data folder called "messages_filename_core.dat" or
+  # "messages_filename_game.dat".
   LANGUAGES = [
-  #  ["English", "english.dat"],
-  #  ["Deutsch", "deutsch.dat"]
+#    ["English", "english"],
+#    ["Deutsch", "deutsch"]
   ]
 
   #=============================================================================

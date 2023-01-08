@@ -107,7 +107,7 @@ module GameData
 
     # @return [String] the translated in-battle lose message of this trainer
     def lose_text
-      return pbGetMessageFromHash(MessageTypes::TrainerLoseText, @real_lose_text)
+      return pbGetMessageFromHash(MessageTypes::TrainerLoseTexts, @real_lose_text)
     end
 
     # Creates a battle-ready version of a trainer's data.

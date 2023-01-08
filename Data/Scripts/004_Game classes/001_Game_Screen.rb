@@ -4,7 +4,6 @@
 #  This class handles screen maintenance data, such as change in color tone,
 #  flashing, etc. Refer to "$game_screen" for the instance of this class.
 #===============================================================================
-
 class Game_Screen
   #-----------------------------------------------------------------------------
   # * Public Instance Variables

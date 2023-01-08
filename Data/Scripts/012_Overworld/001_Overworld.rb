@@ -166,7 +166,7 @@ EventHandlers.add(:on_step_taken, :auto_move_player,
     currentTag = $game_player.pbTerrainTag
     if currentTag.waterfall_crest
       pbDescendWaterfall
-    elsif currentTag.ice && !$PokemonGlobal.sliding
+    elsif currentTag.ice || $PokemonGlobal.ice_sliding
       pbSlideOnIce
     end
   }
@@ -573,30 +573,14 @@ def pbLedge(_xOffset, _yOffset)
 end
 
 def pbSlideOnIce
-  return if !$game_player.pbTerrainTag.ice
-  $game_temp.followers.update
-  $PokemonGlobal.sliding = true
-  direction    = $game_player.direction
-  oldwalkanime = $game_player.walk_anime
-  $game_player.straighten
-  $game_player.walk_anime = false
-  first_loop = true
-  loop do
-    break if !$game_player.can_move_in_direction?(direction)
-    break if !$game_player.pbTerrainTag.ice
-    $game_player.move_forward
-    $game_temp.followers.move_followers if first_loop
-    while $game_player.moving?
-      pbUpdateSceneMap
-      Graphics.update
-      Input.update
-    end
-    first_loop = false
+  if $game_player.pbTerrainTag.ice && $game_player.can_move_in_direction?($game_player.direction)
+    $PokemonGlobal.ice_sliding = true
+    $game_player.straighten
+    $game_player.walk_anime = false
+    return
   end
-  $game_player.center($game_player.x, $game_player.y)
-  $game_player.straighten
-  $game_player.walk_anime = oldwalkanime
-  $PokemonGlobal.sliding = false
+  $PokemonGlobal.ice_sliding = false
+  $game_player.walk_anime = true
 end
 
 def pbTurnTowardEvent(event, otherEvent)
@@ -734,14 +718,12 @@ end
 def pbItemBall(item, quantity = 1)
   item = GameData::Item.get(item)
   return false if !item || quantity < 1
-  itemname = (quantity > 1) ? item.name_plural : item.name
+  itemname = (quantity > 1) ? item.portion_name_plural : item.portion_name
   pocket = item.pocket
   move = item.move
   if $bag.add(item, quantity)   # If item can be picked up
     meName = (item.is_key_item?) ? "Key item get" : "Item get"
-    if item == :LEFTOVERS
-      pbMessage(_INTL("\\me[{1}]You found some \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
-    elsif item == :DNASPLICERS
+    if item == :DNASPLICERS
       pbMessage(_INTL("\\me[{1}]You found \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
     elsif item.is_machine?   # TM or HM
       pbMessage(_INTL("\\me[{1}]You found \\c[1]{2} {3}\\c[0]!\\wtnp[30]", meName, itemname, GameData::Move.get(move).name))
@@ -757,9 +739,7 @@ def pbItemBall(item, quantity = 1)
     return true
   end
   # Can't add the item
-  if item == :LEFTOVERS
-    pbMessage(_INTL("You found some \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
-  elsif item.is_machine?   # TM or HM
+  if item.is_machine?   # TM or HM
     pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!\\wtnp[30]", itemname, GameData::Move.get(move).name))
   elsif quantity > 1
     pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!\\wtnp[30]", quantity, itemname))
@@ -780,13 +760,11 @@ end
 def pbReceiveItem(item, quantity = 1)
   item = GameData::Item.get(item)
   return false if !item || quantity < 1
-  itemname = (quantity > 1) ? item.name_plural : item.name
+  itemname = (quantity > 1) ? item.portion_name_plural : item.portion_name
   pocket = item.pocket
   move = item.move
   meName = (item.is_key_item?) ? "Key item get" : "Item get"
-  if item == :LEFTOVERS
-    pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
-  elsif item == :DNASPLICERS
+  if item == :DNASPLICERS
     pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
   elsif item.is_machine?   # TM or HM
     pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]", meName, itemname, GameData::Move.get(move).name))
@@ -811,7 +789,7 @@ end
 def pbBuyPrize(item, quantity = 1)
   item = GameData::Item.get(item)
   return false if !item || quantity < 1
-  item_name = (quantity > 1) ? item.name_plural : item.name
+  item_name = (quantity > 1) ? item.portion_name_plural : item.portion_name
   pocket = item.pocket
   return false if !$bag.add(item, quantity)
   pbMessage(_INTL("\\CNYou put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",

@@ -57,6 +57,7 @@ module GameData
       @bridge                 = hash[:bridge]                 || false
       @shows_reflections      = hash[:shows_reflections]      || false
       @must_walk              = hash[:must_walk]              || false
+      @must_walk_or_run       = hash[:must_walk_or_run]       || false
       @ignore_passability     = hash[:ignore_passability]     || false
     end
 
@@ -163,7 +164,7 @@ GameData::TerrainTag.register({
   :id_number              => 12,
   :battle_environment     => :Ice,
   :ice                    => true,
-  :must_walk              => true
+  :must_walk_or_run       => true
 })
 
 GameData::TerrainTag.register({

@@ -50,6 +50,8 @@ Description = A white flute made from blown glass. Its melody makes wild Pokémo
 [HONEY]
 Name = Honey
 NamePlural = Honey
+PortionName = jar of Honey
+PortionNamePlural = jars of Honey
 Pocket = 1
 Price = 300
 FieldUse = Direct
@@ -390,6 +392,8 @@ Description = Very large pearls that sparkle in a pretty silver color. A maniac 
 [STARDUST]
 Name = Stardust
 NamePlural = Stardusts
+PortionName = bag of Stardust
+PortionNamePlural = bags of Stardust
 Pocket = 1
 Price = 3000
 Flags = Fling_30
@@ -453,6 +457,8 @@ Description = A bone that is extremely valuable for Pokémon archaeology. It can
 [RELICCOPPER]
 Name = Relic Copper
 NamePlural = Relic Coppers
+PortionName = Relic Copper coin
+PortionNamePlural = Relic Copper coins
 Pocket = 1
 Price = 0
 Flags = Fling_30
@@ -461,6 +467,8 @@ Description = A copper coin used in a civilization about 3,000 years ago. A mani
 [RELICSILVER]
 Name = Relic Silver
 NamePlural = Relic Silvers
+PortionName = Relic Silver coin
+PortionNamePlural = Relic Silver coins
 Pocket = 1
 Price = 0
 Flags = Fling_30
@@ -469,6 +477,8 @@ Description = A silver coin used in a civilization about 3,000 years ago. A mani
 [RELICGOLD]
 Name = Relic Gold
 NamePlural = Relic Golds
+PortionName = Relic Gold coin
+PortionNamePlural = Relic Gold coins
 Pocket = 1
 Price = 0
 Flags = Fling_30
@@ -509,6 +519,8 @@ Description = A crown made in a civilization about 3,000 years ago. A maniac wil
 [GROWTHMULCH]
 Name = Growth Mulch
 NamePlural = Growth Mulch
+PortionName = bag of Growth Mulch
+PortionNamePlural = bags of Growth Mulch
 Pocket = 1
 Price = 200
 Flags = Mulch,Fling_30
@@ -517,6 +529,8 @@ Description = A fertilizer to be spread on soft soil in regions where Berries ar
 [DAMPMULCH]
 Name = Damp Mulch
 NamePlural = Damp Mulch
+PortionName = bag of Damp Mulch
+PortionNamePlural = bags of Damp Mulch
 Pocket = 1
 Price = 200
 Flags = Mulch,Fling_30
@@ -525,6 +539,8 @@ Description = A fertilizer to be spread on soft soil in regions where Berries ar
 [STABLEMULCH]
 Name = Stable Mulch
 NamePlural = Stable Mulch
+PortionName = bag of Stable Mulch
+PortionNamePlural = bags of Stable Mulch
 Pocket = 1
 Price = 200
 Flags = Mulch,Fling_30
@@ -533,6 +549,8 @@ Description = A fertilizer to be spread on soft soil in regions where Berries ar
 [GOOEYMULCH]
 Name = Gooey Mulch
 NamePlural = Gooey Mulch
+PortionName = bag of Gooey Mulch
+PortionNamePlural = bags of Gooey Mulch
 Pocket = 1
 Price = 200
 Flags = Mulch,Fling_30
@@ -541,6 +559,8 @@ Description = A fertilizer to be spread on soft soil in regions where Berries ar
 [SHOALSALT]
 Name = Shoal Salt
 NamePlural = Shoal Salts
+PortionName = pile of Shoal Salt
+PortionNamePlural = piles of Shoal Salt
 Pocket = 1
 Price = 20
 Flags = Fling_30
@@ -574,6 +594,8 @@ Description = An item to be held by a Pokémon. The holder will float in the air
 [BRIGHTPOWDER]
 Name = Bright Powder
 NamePlural = Bright Powders
+PortionName = bag of Bright Powder
+PortionNamePlural = bags of Bright Powder
 Pocket = 1
 Price = 4000
 BPPrice = 48
@@ -628,6 +650,8 @@ Description = An item to be held by a Pokémon. This offensive vest raises Sp. D
 [SAFETYGOGGLES]
 Name = Safety Goggles
 NamePlural = Safety Goggles
+PortionName = pair of Safety Goggles
+PortionNamePlural = pairs of Safety Goggles
 Pocket = 1
 Price = 4000
 BPPrice = 48
@@ -722,6 +746,8 @@ Description = An item to be held by a Pokémon. This headband ups Attack, but al
 [CHOICESPECS]
 Name = Choice Specs
 NamePlural = Choice Specs
+PortionName = pair of Choice Specs
+PortionNamePlural = pairs of Choice Specs
 Pocket = 1
 Price = 4000
 BPPrice = 48
@@ -776,6 +802,8 @@ Description = A Pokémon held item that extends the duration of the move Hail us
 [LIGHTCLAY]
 Name = Light Clay
 NamePlural = Light Clays
+PortionName = lump of Light Clay
+PortionNamePlural = lumps of Light Clay
 Pocket = 1
 Price = 4000
 BPPrice = 48
@@ -812,6 +840,8 @@ Description = A Pokémon held item that boosts the power of HP-stealing moves to
 [BLACKSLUDGE]
 Name = Black Sludge
 NamePlural = Black Sludges
+PortionName = blob of Black Sludge
+PortionNamePlural = blobs of Black Sludge
 Pocket = 1
 Price = 4000
 BPPrice = 48
@@ -821,6 +851,8 @@ Description = A held item that gradually restores the HP of Poison-type Pokémon
 [LEFTOVERS]
 Name = Leftovers
 NamePlural = Leftovers
+PortionName = serving of Leftovers
+PortionNamePlural = servings of Leftovers
 Pocket = 1
 Price = 4000
 BPPrice = 48
@@ -883,7 +915,9 @@ Description = A consumable battery. If the holder is hit by an Electric-type mov
 #-------------------------------
 [LUMINOUSMOSS]
 Name = Luminous Moss
-NamePlural = Luminous Mosses
+NamePlural = Luminous Moss
+PortionName = clump of Luminous Moss
+PortionNamePlural = clumps of Luminous Moss
 Pocket = 1
 Price = 4000
 BPPrice = 32
@@ -947,6 +981,8 @@ Description = An item to be held by a Pokémon. It is a headband that slightly b
 [WISEGLASSES]
 Name = Wise Glasses
 NamePlural = Wise Glasses
+PortionName = pair of Wise Glasses
+PortionNamePlural = pairs of Wise Glasses
 Pocket = 1
 Price = 4000
 BPPrice = 48
@@ -1154,6 +1190,8 @@ Description = A Pokémon held item that promotes Speed gain on leveling, but red
 [LAXINCENSE]
 Name = Lax Incense
 NamePlural = Lax Incenses
+PortionName = jar of Lax Incense
+PortionNamePlural = jars of Lax Incense
 Pocket = 1
 Price = 5000
 Flags = Fling_10
@@ -1162,6 +1200,8 @@ Description = An item to be held by a Pokémon. The tricky aroma of this incense
 [FULLINCENSE]
 Name = Full Incense
 NamePlural = Full Incenses
+PortionName = jar of Full Incense
+PortionNamePlural = jars of Full Incense
 Pocket = 1
 Price = 5000
 Flags = Fling_10
@@ -1170,6 +1210,8 @@ Description = An item to be held by a Pokémon. This exotic-smelling incense mak
 [LUCKINCENSE]
 Name = Luck Incense
 NamePlural = Luck Incenses
+PortionName = jar of Luck Incense
+PortionNamePlural = jars of Luck Incense
 Pocket = 1
 Price = 11000
 Flags = Fling_10
@@ -1178,6 +1220,8 @@ Description = An item to be held by a Pokémon. It doubles a battle's prize mone
 [PUREINCENSE]
 Name = Pure Incense
 NamePlural = Pure Incenses
+PortionName = jar of Pure Incense
+PortionNamePlural = jars of Pure Incense
 Pocket = 1
 Price = 6000
 Flags = Fling_10
@@ -1186,6 +1230,8 @@ Description = An item to be held by a Pokémon. It helps keep wild Pokémon away
 [SEAINCENSE]
 Name = Sea Incense
 NamePlural = Sea Incenses
+PortionName = jar of Sea Incense
+PortionNamePlural = jars of Sea Incense
 Pocket = 1
 Price = 2000
 Flags = Fling_10
@@ -1194,6 +1240,8 @@ Description = An item to be held by a Pokémon. It has a curious aroma that boos
 [WAVEINCENSE]
 Name = Wave Incense
 NamePlural = Wave Incenses
+PortionName = jar of Wave Incense
+PortionNamePlural = jars of Wave Incense
 Pocket = 1
 Price = 2000
 Flags = Fling_10
@@ -1202,6 +1250,8 @@ Description = An item to be held by a Pokémon. It has a curious aroma that boos
 [ROSEINCENSE]
 Name = Rose Incense
 NamePlural = Rose Incenses
+PortionName = jar of Rose Incense
+PortionNamePlural = jars of Rose Incense
 Pocket = 1
 Price = 2000
 Flags = Fling_10
@@ -1210,6 +1260,8 @@ Description = An item to be held by a Pokémon. This exotic-smelling incense boo
 [ODDINCENSE]
 Name = Odd Incense
 NamePlural = Odd Incenses
+PortionName = jar of Odd Incense
+PortionNamePlural = jars of Odd Incense
 Pocket = 1
 Price = 2000
 Flags = Fling_10
@@ -1218,6 +1270,8 @@ Description = An item to be held by a Pokémon. This exotic-smelling incense boo
 [ROCKINCENSE]
 Name = Rock Incense
 NamePlural = Rock Incenses
+PortionName = jar of Rock Incense
+PortionNamePlural = jars of Rock Incense
 Pocket = 1
 Price = 2000
 Flags = Fling_10
@@ -1226,6 +1280,8 @@ Description = An item to be held by a Pokémon. This exotic-smelling incense boo
 [CHARCOAL]
 Name = Charcoal
 NamePlural = Charcoals
+PortionName = piece of Charcoal
+PortionNamePlural = pieces of Charcoal
 Pocket = 1
 Price = 1000
 Flags = Fling_30
@@ -1258,6 +1314,8 @@ Description = An item to be held by a Pokémon. It is a seed imbued with life th
 [NEVERMELTICE]
 Name = Never-Melt Ice
 NamePlural = Never-Melt Ices
+PortionName = piece of Never-Melt Ice
+PortionNamePlural = pieces of Never-Melt Ice
 Pocket = 1
 Price = 1000
 Flags = Fling_30
@@ -1282,6 +1340,8 @@ Description = An item to be held by a Pokémon. It is a small, poisonous barb th
 [SOFTSAND]
 Name = Soft Sand
 NamePlural = Soft Sand
+PortionName = bag of Soft Sand
+PortionNamePlural = bags of Soft Sand
 Pocket = 1
 Price = 1000
 Flags = Fling_10
@@ -1306,6 +1366,8 @@ Description = An item to be held by a Pokémon. It is a spoon imbued with teleki
 [SILVERPOWDER]
 Name = Silver Powder
 NamePlural = Silver Powders
+PortionName = pile of Silver Powder
+PortionNamePlural = piles of Silver Powder
 Pocket = 1
 Price = 1000
 Flags = Fling_10
@@ -1338,6 +1400,8 @@ Description = An item to be held by a Pokémon. It is a hard and sharp fang that
 [BLACKGLASSES]
 Name = Black Glasses
 NamePlural = Black Glasses
+PortionName = pair of Black Glasses
+PortionNamePlural = pairs of Black Glasses
 Pocket = 1
 Price = 1000
 Flags = Fling_30
@@ -1659,6 +1723,8 @@ Description = An item to be held by Chansey. It is a pair of gloves that boosts 
 [METALPOWDER]
 Name = Metal Powder
 NamePlural = Metal Powders
+PortionName = bag of Metal Powder
+PortionNamePlural = bags of Metal Powder
 Pocket = 1
 Price = 1000
 Flags = Fling_10
@@ -1667,6 +1733,8 @@ Description = An item to be held by Ditto. Extremely fine yet hard, this odd pow
 [QUICKPOWDER]
 Name = Quick Powder
 NamePlural = Quick Powders
+PortionName = bag of Quick Powder
+PortionNamePlural = bags of Quick Powder
 Pocket = 1
 Price = 1000
 Flags = Fling_10
@@ -1836,6 +1904,8 @@ Description = A box packed with a tremendous amount of magma energy. It is loved
 [REAPERCLOTH]
 Name = Reaper Cloth
 NamePlural = Reaper Cloths
+PortionName = scrap of Reaper Cloth
+PortionNamePlural = scraps of Reaper Cloth
 Pocket = 1
 Price = 2000
 BPPrice = 32
@@ -1863,6 +1933,8 @@ Description = A peculiar stone that makes certain species of Pokémon evolve. It
 [WHIPPEDDREAM]
 Name = Whipped Dream
 NamePlural = Whipped Dreams
+PortionName = dollop of Whipped Dream
+PortionNamePlural = dollops of Whipped Dream
 Pocket = 1
 Price = 2000
 BPPrice = 32
@@ -2411,6 +2483,8 @@ Description = A medicine that fully restores the HP and heals any status problem
 [SACREDASH]
 Name = Sacred Ash
 NamePlural = Sacred Ashes
+PortionName = bag of Sacred Ash
+PortionNamePlural = bags of Sacred Ash
 Pocket = 2
 Price = 50000
 FieldUse = Direct
@@ -2561,6 +2635,8 @@ Description = A medicine that revives a fainted Pokémon. It fully restores the 
 [BERRYJUICE]
 Name = Berry Juice
 NamePlural = Berry Juices
+PortionName = cup of Berry Juice
+PortionNamePlural = cups of Berry Juice
 Pocket = 2
 Price = 100
 FieldUse = OnPokemon
@@ -2581,6 +2657,8 @@ Description = Very sweet chocolate. It restores the HP of one Pokémon by only 2
 [FRESHWATER]
 Name = Fresh Water
 NamePlural = Fresh Waters
+PortionName = bottle of Fresh Water
+PortionNamePlural = bottles of Fresh Water
 Pocket = 2
 Price = 200
 FieldUse = OnPokemon
@@ -2591,6 +2669,8 @@ Description = Water with a high mineral content. It restores the HP of one Poké
 [SODAPOP]
 Name = Soda Pop
 NamePlural = Soda Pops
+PortionName = bottle of Soda Pop
+PortionNamePlural = bottles of Soda Pop
 Pocket = 2
 Price = 300
 FieldUse = OnPokemon
@@ -2601,6 +2681,8 @@ Description = A fizzy soda drink. It restores the HP of one Pokémon by 60 point
 [LEMONADE]
 Name = Lemonade
 NamePlural = Lemonades
+PortionName = can of Lemonade
+PortionNamePlural = cans of Lemonade
 Pocket = 2
 Price = 350
 FieldUse = OnPokemon
@@ -2611,6 +2693,8 @@ Description = A very sweet drink. It restores the HP of one Pokémon by 80 point
 [MOOMOOMILK]
 Name = Moomoo Milk
 NamePlural = Moomoo Milks
+PortionName = bottle of Moomoo Milk
+PortionNamePlural = bottles of Moomoo Milk
 Pocket = 2
 Price = 600
 FieldUse = OnPokemon
@@ -2621,6 +2705,8 @@ Description = Milk with a very high nutrition content. It restores the HP of one
 [ENERGYPOWDER]
 Name = Energy Powder
 NamePlural = Energy Powders
+PortionName = dose of Energy Powder
+PortionNamePlural = doses of Energy Powder
 Pocket = 2
 Price = 500
 FieldUse = OnPokemon
@@ -2641,6 +2727,8 @@ Description = A very bitter root. It restores the HP of one Pokémon by 200 poin
 [HEALPOWDER]
 Name = Heal Powder
 NamePlural = Heal Powders
+PortionName = dose of Heal Powder
+PortionNamePlural = doses of Heal Powder
 Pocket = 2
 Price = 300
 FieldUse = OnPokemon
@@ -2702,6 +2790,8 @@ Description = It fully restores the PP of all the moves learned by the targeted 
 [PPUP]
 Name = PP Up
 NamePlural = PP Ups
+PortionName = bottle of PP Up
+PortionNamePlural = bottles of PP Up
 Pocket = 2
 Price = 10000
 BPPrice = 48
@@ -2712,6 +2802,8 @@ Description = It slightly raises the maximum PP of a selected move that has been
 [PPMAX]
 Name = PP Max
 NamePlural = PP Maxes
+PortionName = bottle of PP Max
+PortionNamePlural = bottles of PP Max
 Pocket = 2
 Price = 10000
 FieldUse = OnPokemon
@@ -2721,6 +2813,8 @@ Description = It maximally raises the top PP of a selected move that has been le
 [HPUP]
 Name = HP Up
 NamePlural = HP Ups
+PortionName = bottle of HP Up
+PortionNamePlural = bottles of HP Up
 Pocket = 2
 Price = 10000
 BPPrice = 2
@@ -2731,6 +2825,8 @@ Description = A nutritious drink for Pokémon. It raises the base HP of a single
 [PROTEIN]
 Name = Protein
 NamePlural = Proteins
+PortionName = bottle of Protein
+PortionNamePlural = bottles of Protein
 Pocket = 2
 Price = 10000
 BPPrice = 2
@@ -2741,6 +2837,8 @@ Description = A nutritious drink for Pokémon. It raises the base Attack stat of
 [IRON]
 Name = Iron
 NamePlural = Irons
+PortionName = bottle of Iron
+PortionNamePlural = bottles of Iron
 Pocket = 2
 Price = 10000
 BPPrice = 2
@@ -2751,6 +2849,8 @@ Description = A nutritious drink for Pokémon. It raises the base Defense stat o
 [CALCIUM]
 Name = Calcium
 NamePlural = Calciums
+PortionName = bottle of Calcium
+PortionNamePlural = bottles of Calcium
 Pocket = 2
 Price = 10000
 BPPrice = 2
@@ -2761,6 +2861,8 @@ Description = A nutritious drink for Pokémon. It raises the base Sp. Atk (Speci
 [ZINC]
 Name = Zinc
 NamePlural = Zincs
+PortionName = bottle of Zinc
+PortionNamePlural = bottles of Zinc
 Pocket = 2
 Price = 10000
 BPPrice = 2
@@ -2771,6 +2873,8 @@ Description = A nutritious drink for Pokémon. It raises the base Sp. Def (Speci
 [CARBOS]
 Name = Carbos
 NamePlural = Carbos
+PortionName = bottle of Carbos
+PortionNamePlural = bottles of Carbos
 Pocket = 2
 Price = 10000
 BPPrice = 2
@@ -4694,6 +4798,8 @@ Description = If held by a Pokémon, this Berry will increase the holder's Sp. D
 [GRASSMAIL]
 Name = Grass Mail
 NamePlural = Grass Mail
+PortionName = piece of Grass Mail
+PortionNamePlural = pieces of Grass Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4702,6 +4808,8 @@ Description = Stationery featuring a print of a refreshingly green field. Let a 
 [FLAMEMAIL]
 Name = Flame Mail
 NamePlural = Flame Mail
+PortionName = piece of Flame Mail
+PortionNamePlural = pieces of Flame Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4710,6 +4818,8 @@ Description = Stationery featuring a print of flames in blazing red. Let a Poké
 [BUBBLEMAIL]
 Name = Bubble Mail
 NamePlural = Bubble Mail
+PortionName = piece of Bubble Mail
+PortionNamePlural = pieces of Bubble Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4718,6 +4828,8 @@ Description = Stationery featuring a print of a blue world underwater. Let a Pok
 [BLOOMMAIL]
 Name = Bloom Mail
 NamePlural = Bloom Mail
+PortionName = piece of Bloom Mail
+PortionNamePlural = pieces of Bloom Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4726,6 +4838,8 @@ Description = Stationery featuring a print of pretty floral patterns. Let a Pok�
 [TUNNELMAIL]
 Name = Tunnel Mail
 NamePlural = Tunnel Mail
+PortionName = piece of Tunnel Mail
+PortionNamePlural = pieces of Tunnel Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4734,6 +4848,8 @@ Description = Stationery featuring a print of a dimly lit coal mine. Let a Poké
 [STEELMAIL]
 Name = Steel Mail
 NamePlural = Steel Mail
+PortionName = piece of Steel Mail
+PortionNamePlural = pieces of Steel Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4742,6 +4858,8 @@ Description = Stationery featuring a print of cool mechanical designs. Let a Pok
 [HEARTMAIL]
 Name = Heart Mail
 NamePlural = Heart Mail
+PortionName = piece of Heart Mail
+PortionNamePlural = pieces of Heart Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4750,6 +4868,8 @@ Description = Stationery featuring a print of giant heart patterns. Let a Pokém
 [SNOWMAIL]
 Name = Snow Mail
 NamePlural = Snow Mail
+PortionName = piece of Snow Mail
+PortionNamePlural = pieces of Snow Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4758,6 +4878,8 @@ Description = Stationery featuring a print of a chilly, snow-covered world. Let 
 [SPACEMAIL]
 Name = Space Mail
 NamePlural = Space Mail
+PortionName = piece of Space Mail
+PortionNamePlural = pieces of Space Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4766,6 +4888,8 @@ Description = Stationery featuring a print depicting the huge expanse of space. 
 [AIRMAIL]
 Name = Air Mail
 NamePlural = Air Mail
+PortionName = piece of Air Mail
+PortionNamePlural = pieces of Air Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4774,6 +4898,8 @@ Description = Stationery featuring a print of colorful letter sets. Let a Pokém
 [MOSAICMAIL]
 Name = Mosaic Mail
 NamePlural = Mosaic Mail
+PortionName = piece of Mosaic Mail
+PortionNamePlural = pieces of Mosaic Mail
 Pocket = 6
 Price = 50
 Flags = IconMail
@@ -4782,6 +4908,8 @@ Description = Stationery featuring a print of a vivid rainbow pattern. Let a Pok
 [BRICKMAIL]
 Name = Brick Mail
 NamePlural = Brick Mail
+PortionName = piece of Brick Mail
+PortionNamePlural = pieces of Brick Mail
 Pocket = 6
 Price = 50
 Flags = IconMail

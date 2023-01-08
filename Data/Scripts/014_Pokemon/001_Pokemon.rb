@@ -962,7 +962,7 @@ class Pokemon
       gain += 1 if @poke_ball == :LUXURYBALL
       gain = (gain * 1.5).floor if hasItem?(:SOOTHEBELL)
       if Settings::APPLY_HAPPINESS_SOFT_CAP && method != "evberry"
-        gain = gain.clamp(0, 179 - @happiness)
+        gain = (@happiness >= 179) ? 0 : gain.clamp(0, 179 - @happiness)
       end
     end
     @happiness = (@happiness + gain).clamp(0, 255)

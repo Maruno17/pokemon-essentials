@@ -522,7 +522,8 @@ end
 #===============================================================================
 def pbBikeCheck
   if $PokemonGlobal.surfing || $PokemonGlobal.diving ||
-     (!$PokemonGlobal.bicycle && $game_player.pbTerrainTag.must_walk)
+     (!$PokemonGlobal.bicycle &&
+     ($game_player.pbTerrainTag.must_walk || $game_player.pbTerrainTag.must_walk_or_run))
     pbMessage(_INTL("Can't use that here."))
     return false
   end
@@ -671,7 +672,7 @@ def pbUseItem(bag, item, bagscene = nil)
         max_at_once = [max_at_once, $bag.quantity(item)].min
         if max_at_once > 1
           qty = screen.scene.pbChooseNumber(
-            _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), max_at_once
+            _INTL("How many {1} do you want to use?", GameData::Item.get(item).portion_name_plural), max_at_once
           )
           screen.scene.pbSetHelpText("") if screen.is_a?(PokemonPartyScreen)
         end
@@ -680,7 +681,7 @@ def pbUseItem(bag, item, bagscene = nil)
         next unless ret && itm.consumed_after_use?
         bag.remove(item, qty)
         next if bag.has?(item)
-        pbMessage(_INTL("You used your last {1}.", itm.name)) { screen.pbUpdate }
+        pbMessage(_INTL("You used your last {1}.", itm.portion_name)) { screen.pbUpdate }
         break
       end
       screen.pbEndScene
@@ -714,7 +715,7 @@ def pbUseItemOnPokemon(item, pkmn, scene)
     elsif !pkmn.compatible_with_move?(machine)
       pbMessage(_INTL("{1} can't learn {2}.", pkmn.name, movename)) { scene.pbUpdate }
     else
-      pbMessage(_INTL("\\se[PC access]You booted up {1}.\1", itm.name)) { scene.pbUpdate }
+      pbMessage(_INTL("\\se[PC access]You booted up the {1}.\1", itm.portion_name)) { scene.pbUpdate }
       if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?", movename, pkmn.name)) { scene.pbUpdate }
         if pbLearnMove(pkmn, machine, false, true) { scene.pbUpdate }
           $bag.remove(item) if itm.consumed_after_use?
@@ -730,7 +731,7 @@ def pbUseItemOnPokemon(item, pkmn, scene)
   max_at_once = [max_at_once, $bag.quantity(item)].min
   if max_at_once > 1
     qty = scene.scene.pbChooseNumber(
-      _INTL("How many {1} do you want to use?", itm.name), max_at_once
+      _INTL("How many {1} do you want to use?", itm.portion_name_plural), max_at_once
     )
     scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   end
@@ -741,7 +742,7 @@ def pbUseItemOnPokemon(item, pkmn, scene)
   if ret && itm.consumed_after_use?
     $bag.remove(item, qty)
     if !$bag.has?(item)
-      pbMessage(_INTL("You used your last {1}.", itm.name)) { scene.pbUpdate }
+      pbMessage(_INTL("You used your last {1}.", itm.portion_name)) { scene.pbUpdate }
     end
   end
   return ret
@@ -758,7 +759,7 @@ def pbUseKeyItemInField(item)
 end
 
 def pbUseItemMessage(item)
-  itemname = GameData::Item.get(item).name
+  itemname = GameData::Item.get(item).portion_name
   if itemname.starts_with_vowel?
     pbMessage(_INTL("You used an {1}.", itemname))
   else
@@ -774,7 +775,7 @@ end
 # Give an item to a Pokémon to hold, and take a held item from a Pokémon
 #===============================================================================
 def pbGiveItemToPokemon(item, pkmn, scene, pkmnid = 0)
-  newitemname = GameData::Item.get(item).name
+  newitemname = GameData::Item.get(item).portion_name
   if pkmn.egg?
     scene.pbDisplay(_INTL("Eggs can't hold items."))
     return false
@@ -783,10 +784,8 @@ def pbGiveItemToPokemon(item, pkmn, scene, pkmnid = 0)
     return false if !pbTakeItemFromPokemon(pkmn, scene)
   end
   if pkmn.hasItem?
-    olditemname = pkmn.item.name
-    if pkmn.hasItem?(:LEFTOVERS)
-      scene.pbDisplay(_INTL("{1} is already holding some {2}.\1", pkmn.name, olditemname))
-    elsif newitemname.starts_with_vowel?
+    olditemname = pkmn.item.portion_name
+    if newitemname.starts_with_vowel?
       scene.pbDisplay(_INTL("{1} is already holding an {2}.\1", pkmn.name, olditemname))
     else
       scene.pbDisplay(_INTL("{1} is already holding a {2}.\1", pkmn.name, olditemname))
@@ -836,14 +835,14 @@ def pbTakeItemFromPokemon(pkmn, scene)
       end
     elsif scene.pbConfirm(_INTL("If the mail is removed, its message will be lost. OK?"))
       $bag.add(pkmn.item)
-      scene.pbDisplay(_INTL("Received the {1} from {2}.", pkmn.item.name, pkmn.name))
+      scene.pbDisplay(_INTL("Received the {1} from {2}.", pkmn.item.portion_name, pkmn.name))
       pkmn.item = nil
       pkmn.mail = nil
       ret = true
     end
   else
     $bag.add(pkmn.item)
-    scene.pbDisplay(_INTL("Received the {1} from {2}.", pkmn.item.name, pkmn.name))
+    scene.pbDisplay(_INTL("Received the {1} from {2}.", pkmn.item.portion_name, pkmn.name))
     pkmn.item = nil
     ret = true
   end

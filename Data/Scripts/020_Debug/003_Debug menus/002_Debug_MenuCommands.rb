@@ -1088,20 +1088,58 @@ MenuHandlers.add(:debug_menu, :mystery_gift, {
 })
 
 MenuHandlers.add(:debug_menu, :extract_text, {
-  "name"        => _INTL("Extract Text"),
+  "name"        => _INTL("Extract Text For Translation"),
   "parent"      => :other_menu,
-  "description" => _INTL("Extract all text in the game to a single file for translating."),
+  "description" => _INTL("Extract all text in the game to text files for translating."),
   "effect"      => proc {
-    pbExtractText
+    if Settings::LANGUAGES.length == 0
+      pbMessage(_INTL("No languages are defined in the LANGUAGES array in Settings."))
+      pbMessage(_INTL("You need to add at least one language to LANGUAGES first, to choose which one to extract text for."))
+      next
+    end
+    # Choose a language from Settings to name the extraction folder after
+    cmds = []
+    Settings::LANGUAGES.each { |val| cmds.push(val[0]) }
+    cmds.push(_INTL("Cancel"))
+    language_index = pbMessage(_INTL("Choose a language to extract text for."), cmds, cmds.length)
+    next if language_index == cmds.length - 1
+    language_name = Settings::LANGUAGES[language_index][1]
+    # Choose whether to extract core text or game text
+    text_type = pbMessage(_INTL("Choose a language to extract text for."),
+                          [_INTL("Game-specific text"), _INTL("Core text"), _INTL("Cancel")], 3)
+    next if text_type == 2
+    # If game text, choose whether to extract map texts to map-specific files or
+    # to one big file
+    map_files = 0
+    if text_type == 0
+      map_files = pbMessage(_INTL("How many text files should map event texts be extracted to?"),
+                            [_INTL("One big file"), _INTL("One file per map"), _INTL("Cancel")], 3)
+      next if map_files == 2
+    end
+    # Extract the chosen set of text for the chosen language
+    Translator.extract_text(language_name, text_type == 1, map_files == 1)
   }
 })
 
 MenuHandlers.add(:debug_menu, :compile_text, {
-  "name"        => _INTL("Compile Text"),
+  "name"        => _INTL("Compile Translated Text"),
   "parent"      => :other_menu,
-  "description" => _INTL("Import text and converts it into a language file."),
+  "description" => _INTL("Import text files and convert them into a language file."),
   "effect"      => proc {
-    pbCompileTextUI
+    # Find all folders with a particular naming convention
+    cmds = Dir.glob("Text_*_*")
+    if cmds.length == 0
+      pbMessage(_INTL("No language folders found to compile."))
+      pbMessage(_INTL("Language folders must be named \"Text_SOMETHING_core\" or \"Text_SOMETHING_game\" and be in the root folder."))
+      next
+    end
+    cmds.push(_INTL("Cancel"))
+    # Ask which folder to compile into a .dat file
+    folder_index = pbMessage(_INTL("Choose a language folder to compile."), cmds, cmds.length)
+    next if folder_index == cmds.length - 1
+    # Compile the text files in the chosen folder
+    dat_filename = cmds[folder_index].gsub!(/^Text_/, "")
+    Translator.compile_text(cmds[folder_index], dat_filename)
   }
 })
 
