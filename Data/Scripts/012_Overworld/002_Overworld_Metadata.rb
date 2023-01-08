@@ -7,7 +7,7 @@ class PokemonGlobalMetadata
   attr_accessor :bicycle
   attr_accessor :surfing
   attr_accessor :diving
-  attr_accessor :sliding
+  attr_accessor :ice_sliding
   attr_accessor :fishing
   # Player data
   attr_accessor :startTime
@@ -58,7 +58,7 @@ class PokemonGlobalMetadata
     @bicycle              = false
     @surfing              = false
     @diving               = false
-    @sliding              = false
+    @ice_sliding          = false
     @fishing              = false
     # Player data
     @startTime            = Time.now

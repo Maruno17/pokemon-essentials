@@ -92,7 +92,7 @@ def pbBattleChallengeBeginSpeech
   return "..." if !pbBattleChallenge.pbInProgress?
   bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
   tr = bttrainers[pbBattleChallenge.nextTrainer]
-  return (tr) ? pbGetMessageFromHash(MessageTypes::BeginSpeech, tr[2]) : "..."
+  return (tr) ? pbGetMessageFromHash(MessageTypes::FrontierIntroSpeeches, tr[2]) : "..."
 end
 
 #===============================================================================

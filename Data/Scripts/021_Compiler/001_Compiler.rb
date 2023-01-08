@@ -151,7 +151,7 @@ module Compiler
     }
   end
 
-  # Unused
+  # Used by translated text compiler
   def pbEachSection(f)
     lineno      = 1
     havesection = false
@@ -164,21 +164,21 @@ module Compiler
       line.force_encoding(Encoding::UTF_8)
       if !line[/^\#/] && !line[/^\s*$/]
         if line[/^\s*\[\s*(.+?)\s*\]\s*$/]
-          yield lastsection, sectionname  if havesection
+          yield lastsection, sectionname if havesection
+          lastsection.clear
           sectionname = $~[1]
-          lastsection = []
           havesection = true
         else
           if sectionname.nil?
-            raise _INTL("Expected a section at the beginning of the file (line {1}). Sections begin with '[name of section]'", lineno)
+            raise _INTL("Expected a section at the beginning of the file (line {1}). Sections begin with '[name of section]'.", lineno)
           end
-          lastsection.push(line.gsub(/^\s+/, "").gsub(/\s+$/, ""))
+          lastsection.push(line.strip)
         end
       end
       lineno += 1
       Graphics.update if lineno % 500 == 0
     }
-    yield lastsection, sectionname  if havesection
+    yield lastsection, sectionname if havesection
   end
 
   # Unused
@@ -845,9 +845,9 @@ module Compiler
     compile_animations
     compile_trainer_events(mustCompile)
     Console.echo_li(_INTL("Saving messages..."))
-    pbSetTextMessages
-    MessageTypes.saveMessages
-    MessageTypes.loadMessageFile("Data/messages.dat") if safeExists?("Data/messages.dat")
+    Translator.gather_script_and_event_texts
+    MessageTypes.save_default_messages
+    MessageTypes.load_default_messages if safeExists?("Data/messages_core.dat")
     Console.echo_done(true)
     Console.echo_li(_INTL("Reloading cache..."))
     System.reload_cache

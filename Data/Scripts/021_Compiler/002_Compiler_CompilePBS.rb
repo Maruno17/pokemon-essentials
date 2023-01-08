@@ -90,9 +90,9 @@ module Compiler
     end
     point_names.uniq!
     interest_names.uniq!
-    MessageTypes.setMessages(MessageTypes::RegionNames, region_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::PlaceNames, point_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::PlaceDescriptions, interest_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::Regions, region_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::RegionLocations, point_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::RegionDescriptions, interest_names)
   end
 
   #=============================================================================
@@ -199,7 +199,7 @@ module Compiler
       ability_descriptions.push(ability.real_description)
     end
     MessageTypes.setMessagesAsHash(MessageTypes::Abilities, ability_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::AbilityDescs, ability_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::AbilityDescriptions, ability_descriptions)
   end
 
   #=============================================================================
@@ -262,8 +262,8 @@ module Compiler
     end
     MessageTypes.setMessagesAsHash(MessageTypes::Items, item_names)
     MessageTypes.setMessagesAsHash(MessageTypes::ItemPlurals, item_names_plural)
-    MessageTypes.setMessagesAsHash(MessageTypes::ItemPortionNames, item_portion_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::ItemPortionNamePlurals, item_portion_names_plural)
+    MessageTypes.setMessagesAsHash(MessageTypes::ItemPortions, item_portion_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::ItemPortionPlurals, item_portion_names_plural)
     MessageTypes.setMessagesAsHash(MessageTypes::ItemDescriptions, item_descriptions)
   end
 
@@ -370,9 +370,9 @@ module Compiler
       species_pokedex_entries.push(species.real_pokedex_entry)
     end
     MessageTypes.setMessagesAsHash(MessageTypes::Species, species_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::FormNames, species_form_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::Kinds, species_categories)
-    MessageTypes.setMessagesAsHash(MessageTypes::Entries, species_pokedex_entries)
+    MessageTypes.setMessagesAsHash(MessageTypes::SpeciesForms, species_form_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::SpeciesCategories, species_categories)
+    MessageTypes.setMessagesAsHash(MessageTypes::PokedexEntries, species_pokedex_entries)
   end
 
   #=============================================================================
@@ -508,9 +508,9 @@ module Compiler
       species_categories.push(species.real_category)
       species_pokedex_entries.push(species.real_pokedex_entry)
     end
-    MessageTypes.addMessagesAsHash(MessageTypes::FormNames, species_form_names)
-    MessageTypes.addMessagesAsHash(MessageTypes::Kinds, species_categories)
-    MessageTypes.addMessagesAsHash(MessageTypes::Entries, species_pokedex_entries)
+    MessageTypes.addMessagesAsHash(MessageTypes::SpeciesForms, species_form_names)
+    MessageTypes.addMessagesAsHash(MessageTypes::SpeciesCategories, species_categories)
+    MessageTypes.addMessagesAsHash(MessageTypes::PokedexEntries, species_pokedex_entries)
   end
 
   #=============================================================================
@@ -908,7 +908,7 @@ module Compiler
       lose_texts.push(trainer.real_lose_text)
     end
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames, trainer_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText, lose_texts)
+    MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseTexts, lose_texts)
   end
 
   #=============================================================================
@@ -932,9 +932,9 @@ module Compiler
       }
     end
     sections = []
-    MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, [])
-    MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechWin, [])
-    MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechLose, [])
+    MessageTypes.setMessagesAsHash(MessageTypes::FrontierIntroSpeeches, [])
+    MessageTypes.setMessagesAsHash(MessageTypes::FrontierEndSpeechesWin, [])
+    MessageTypes.setMessagesAsHash(MessageTypes::FrontierEndSpeechesLose, [])
     File.open(path, "rb") { |f|
       FileLineData.file = path
       idx = 0
@@ -1022,9 +1022,9 @@ module Compiler
       }
     end
     MessageTypes.addMessagesAsHash(MessageTypes::TrainerNames, trainernames)
-    MessageTypes.addMessagesAsHash(MessageTypes::BeginSpeech, beginspeech)
-    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechWin, endspeechwin)
-    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechLose, endspeechlose)
+    MessageTypes.addMessagesAsHash(MessageTypes::FrontierIntroSpeeches, beginspeech)
+    MessageTypes.addMessagesAsHash(MessageTypes::FrontierEndSpeechesWin, endspeechwin)
+    MessageTypes.addMessagesAsHash(MessageTypes::FrontierEndSpeechesLose, endspeechlose)
     return sections
   end
 
@@ -1153,7 +1153,7 @@ module Compiler
     # Get map names for translating
     map_names = []
     GameData::MapMetadata.each { |map| map_names[map.id] = map.real_name }
-    MessageTypes.setMessages(MessageTypes::MapNames, map_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::MapNames, map_names)
   end
 
   #=============================================================================

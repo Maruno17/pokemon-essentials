@@ -95,7 +95,7 @@ class PokemonPhone_Scene
     end
     # Set info text
     infotext = _INTL("Registered<br>")
-    infotext += _INTL(" <r>{1}<br>", @sprites["list"].commands.length)
+    infotext += _INTL("<r>{1}<br>", @sprites["list"].commands.length)
     infotext += _INTL("Waiting for a rematch<r>{1}", rematch_count)
     @sprites["info"].text = infotext
     pbRefreshScreen

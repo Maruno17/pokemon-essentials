@@ -143,13 +143,13 @@ module GameData
 
     # @return [String] the translated portion name of this item
     def portion_name
-      return pbGetMessageFromHash(MessageTypes::ItemPortionNames, @real_portion_name) if @real_portion_name
+      return pbGetMessageFromHash(MessageTypes::ItemPortions, @real_portion_name) if @real_portion_name
       return name
     end
 
     # @return [String] the translated plural version of the portion name of this item
     def portion_name_plural
-      return pbGetMessageFromHash(MessageTypes::ItemPortionNamePlurals, @real_portion_name_plural) if @real_portion_name_plural
+      return pbGetMessageFromHash(MessageTypes::ItemPortionPlurals, @real_portion_name_plural) if @real_portion_name_plural
       return name_plural
     end
 

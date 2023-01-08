@@ -325,7 +325,7 @@ class PokemonLoadScreen
       when cmd_language
         @scene.pbEndScene
         $PokemonSystem.language = pbChooseLanguage
-        pbLoadMessages("Data/" + Settings::LANGUAGES[$PokemonSystem.language][1])
+        MessageTypes.load_message_files(Settings::LANGUAGES[$PokemonSystem.language][1])
         if show_continue
           @save_data[:pokemon_system] = $PokemonSystem
           File.open(SaveData::FILE_PATH, "wb") { |file| Marshal.dump(@save_data, file) }

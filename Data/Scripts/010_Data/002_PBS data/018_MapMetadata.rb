@@ -115,7 +115,10 @@ module GameData
 
     # @return [String] the translated name of this map
     def name
-      return pbGetMapNameFromId(@id)
+      ret = pbGetMessageFromHash(MessageTypes::MapNames, @real_name)
+      ret = pbGetBasicMapNameFromId(@id) if nil_or_empty?(ret)
+      ret.gsub!(/\\PN/, $player.name) if $player
+      return ret
     end
 
     def has_flag?(flag)

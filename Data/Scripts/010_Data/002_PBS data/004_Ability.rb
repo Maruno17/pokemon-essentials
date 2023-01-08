@@ -35,7 +35,7 @@ module GameData
 
     # @return [String] the translated description of this ability
     def description
-      return pbGetMessageFromHash(MessageTypes::AbilityDescs, @real_description)
+      return pbGetMessageFromHash(MessageTypes::AbilityDescriptions, @real_description)
     end
 
     def has_flag?(flag)
