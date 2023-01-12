@@ -84,6 +84,7 @@ class Battle
   attr_accessor :poke_ball_failed # Set after first_poke_ball to prevent it being set again
   attr_reader   :switching        # True if during the switching phase of the round
   attr_reader   :futureSight      # True if Future Sight is hitting
+  attr_reader   :command_phase
   attr_reader   :endOfRound       # True during the end of round
   attr_accessor :moldBreaker      # True if Mold Breaker applies
   attr_reader   :struggle         # The Struggle move
@@ -159,6 +160,7 @@ class Battle
     @lastMoveUser      = -1
     @switching         = false
     @futureSight       = false
+    @command_phase     = false
     @endOfRound        = false
     @moldBreaker       = false
     @runCommand        = 0

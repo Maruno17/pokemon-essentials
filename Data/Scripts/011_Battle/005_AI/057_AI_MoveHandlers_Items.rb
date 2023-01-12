@@ -125,7 +125,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DestroyTargetBerryOrGem"
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CorrodeTargetItem",
   proc { |move, user, target, ai, battle|
@@ -137,11 +137,9 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CorrodeTargetItem",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CorrodeTargetItem",
   proc { |score, move, user, target, ai, battle|
-    if target.item_active?
-      score += 30
-    else
-      score -= 50
-    end
+    target_item_preference = ai.battler_wants_item?(target, target.item_id)
+    target_no_item_preference = ai.battler_wants_item?(target, :NONE)
+    score += (target_item_preference - target_no_item_preference) * 8
     next score
   }
 )

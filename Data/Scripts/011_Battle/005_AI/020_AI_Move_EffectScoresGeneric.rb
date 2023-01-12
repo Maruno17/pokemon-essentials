@@ -7,7 +7,7 @@ class Battle::AI
   # could target a foe but is targeting an ally, the score is also inverted, but
   # only because it is inverted again in def pbGetMoveScoreAgainstTarget.
   #=============================================================================
-  def get_score_for_target_stat_raise(score, target, stat_changes, whole_effect = true)
+  def get_score_for_target_stat_raise(score, target, stat_changes, whole_effect = true, fixed_change = false)
     whole_effect = false if @move.damagingMove?
     # Decide whether the target raising its stat(s) is a good thing
     desire_mult = 1
@@ -18,11 +18,11 @@ class Battle::AI
     # Discard status move/don't prefer damaging move if target has Contrary
     # TODO: Maybe this should return get_score_for_target_stat_drop if Contrary
     #       applies and desire_mult < 1.
-    if !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 1
+    if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 1
       return (whole_effect) ? MOVE_USELESS_SCORE : score - 20
     end
     # Don't make score changes if target will faint from EOR damage
-    if target.rough_end_of_round_damage > target.hp
+    if target.rough_end_of_round_damage >= target.hp
       return (whole_effect) ? MOVE_USELESS_SCORE : score
     end
     # Don't make score changes if foes have Unaware and target can't make use of
@@ -41,14 +41,10 @@ class Battle::AI
     real_stat_changes = []
     stat_changes.each_with_index do |stat, idx|
       next if idx.odd?
-      next if !stat_raise_worthwhile?(target, stat)
+      next if !stat_raise_worthwhile?(target, stat, fixed_change)
       # Calculate amount that stat will be raised by
       increment = stat_changes[idx + 1]
-      if @move.function == "RaiseUserAtkSpAtk1Or2InSun"
-        increment = 1
-        increment = 2 if [:Sun, :HarshSun].include?(target.battler.effectiveWeather)
-      end
-      increment *= 2 if !@battle.moldBreaker && target.has_active_ability?(:SIMPLE)
+      increment *= 2 if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:SIMPLE)
       increment = [increment, 6 - target.stages[stat]].min   # The actual stages gained
       # Count this as a valid stat raise
       real_stat_changes.push([stat, increment]) if increment > 0
@@ -76,8 +72,10 @@ class Battle::AI
   #       i.e. CategoryDependsOnHigherDamagePoisonTarget and
   #       CategoryDependsOnHigherDamageIgnoreTargetAbility.
   #=============================================================================
-  def stat_raise_worthwhile?(target, stat)
-    return false if !target.battler.pbCanRaiseStatStage?(stat, @user.battler, @move.move)
+  def stat_raise_worthwhile?(target, stat, fixed_change = false)
+    if !fixed_change
+      return false if !target.battler.pbCanRaiseStatStage?(stat, @user.battler, @move.move)
+    end
     # Check if target won't benefit from the stat being raised
     # TODO: Exception if target knows Baton Pass/Stored Power?
     case stat
@@ -589,8 +587,10 @@ class Battle::AI
   # ally, but only because it is inverted in def pbGetMoveScoreAgainstTarget
   # instead.
   # TODO: Revisit this method as parts may need rewriting.
+  # TODO: fixed_change should make this ignore Mist/Clear Body/other effects
+  #       that prevent increments/decrements to stat stages.
   #=============================================================================
-  def get_score_for_target_stat_drop(score, target, stat_changes, whole_effect = true)
+  def get_score_for_target_stat_drop(score, target, stat_changes, whole_effect = true, fixed_change = false)
     whole_effect = false if @move.damagingMove?
     # Decide whether the target raising its stat(s) is a good thing
     desire_mult = -1
@@ -601,11 +601,11 @@ class Battle::AI
     # Discard status move/don't prefer damaging move if target has Contrary
     # TODO: Maybe this should return get_score_for_target_stat_raise if Contrary
     #       applies and desire_mult < 1.
-    if !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 1
+    if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 1
       return (whole_effect) ? MOVE_USELESS_SCORE : score - 20
     end
     # Don't make score changes if target will faint from EOR damage
-    if target.rough_end_of_round_damage > target.hp
+    if target.rough_end_of_round_damage >= target.hp
       return (whole_effect) ? MOVE_USELESS_SCORE : score
     end
     # Don't make score changes if foes have Unaware and target can't make use of
@@ -622,10 +622,10 @@ class Battle::AI
     real_stat_changes = []
     stat_changes.each_with_index do |stat, idx|
       next if idx.odd?
-      next if !stat_drop_worthwhile?(target, stat)
+      next if !stat_drop_worthwhile?(target, stat, fixed_change)
       # Calculate amount that stat will be raised by
       decrement = stat_changes[idx + 1]
-      decrement *= 2 if !@battle.moldBreaker && @user.has_active_ability?(:SIMPLE)
+      decrement *= 2 if !fixed_change && !@battle.moldBreaker && @user.has_active_ability?(:SIMPLE)
       decrement = [decrement, 6 + target.stages[stat]].min   # The actual stages lost
       # Count this as a valid stat drop
       real_stat_changes.push([stat, decrement]) if decrement > 0
@@ -654,8 +654,10 @@ class Battle::AI
   #       CategoryDependsOnHigherDamageIgnoreTargetAbility.
   # TODO: Revisit this method as parts may need rewriting.
   #=============================================================================
-  def stat_drop_worthwhile?(target, stat)
-    return false if !target.battler.pbCanLowerStatStage?(stat, @user.battler, @move.move)
+  def stat_drop_worthwhile?(target, stat, fixed_change = false)
+    if !fixed_change
+      return false if !target.battler.pbCanLowerStatStage?(stat, @user.battler, @move.move)
+    end
     # Check if target won't benefit from the stat being lowered
     case stat
     when :ATTACK
@@ -983,8 +985,11 @@ class Battle::AI
       :TOXICORB
     ]
     ret = 0
-    ret = 2 if preferred_items.include?(item)
-    ret = -2 if unpreferred_items.include?(item)
+    if preferred_items.include?(item)
+      ret = 2
+    elsif unpreferred_items.include?(item)
+      ret = -2
+    end
     # Don't prefer if the battler knows Acrobatics
     if battler.check_for_move { |m| m.function == "DoublePowerIfUserHasNoItem" }
       ret += (item == :NONE) ? 1 : -1

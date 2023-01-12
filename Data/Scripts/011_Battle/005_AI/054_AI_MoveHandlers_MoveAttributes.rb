@@ -912,16 +912,13 @@ Battle::AI::Handlers::MoveBasePower.add("EffectivenessIncludesFlyingType",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CategoryDependsOnHigherDamagePoisonTarget",
-  proc { |score, move, user, target, ai, battle|
-    next score + 5 if target.battler.pbCanPoison?(user.battler, false)
-  }
-)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("PoisonTarget",
+                                                        "CategoryDependsOnHigherDamagePoisonTarget")
 
 #===============================================================================
-# TODO: Review score modifiers.
+# TODO: Review score modifiers. Category part is already accounted for.
 #===============================================================================
 # CategoryDependsOnHigherDamageIgnoreTargetAbility
 
@@ -1095,7 +1092,7 @@ Battle::AI::Handlers::MoveBasePower.copy("TypeAndPowerDependOnWeather",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetMovesBecomeElectric",
   proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE if user.faster_than?(target)
+    next Battle::AI::MOVE_USELESS_SCORE if !user.faster_than?(target)
   }
 )
 

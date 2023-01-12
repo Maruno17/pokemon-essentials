@@ -172,6 +172,7 @@ class Battle
   # Command phase
   #=============================================================================
   def pbCommandPhase
+    @command_phase = true
     @scene.pbBeginCommandPhase
     # Reset choices if commands can be shown
     @battlers.each_with_index do |b, i|
@@ -186,8 +187,12 @@ class Battle
     end
     # Choose actions for the round (player first, then AI)
     pbCommandPhaseLoop(true)    # Player chooses their actions
-    return if @decision != 0   # Battle ended, stop choosing actions
+    if @decision != 0   # Battle ended, stop choosing actions
+      @command_phase = false
+      return
+    end
     pbCommandPhaseLoop(false)   # AI chooses their actions
+    @command_phase = false
   end
 
   def pbCommandPhaseLoop(isPlayer)

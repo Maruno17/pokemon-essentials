@@ -1152,7 +1152,7 @@ class Battle::Move::CategoryDependsOnHigherDamagePoisonTarget < Battle::Move::Po
     special_damage = real_special_attack.to_f / real_special_defense
     # Determine move's category
     if physical_damage == special_damage
-      @calcCategry = @battle.pbRandom(2)
+      @calcCategory = (@battle.command_phase) ? rand(2) : @battle.pbRandom(2)
     else
       @calcCategory = (physical_damage > special_damage) ? 0 : 1
     end

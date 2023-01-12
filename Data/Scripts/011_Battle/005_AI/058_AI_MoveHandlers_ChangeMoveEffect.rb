@@ -201,7 +201,8 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PowerUpAllyMove",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PowerUpAllyMove",
   proc { |score, move, user, target, ai, battle|
-    next score + 15
+    next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.damagingMove? }
+    next score + 8
   }
 )
 
@@ -269,7 +270,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserAddStockpileRaiseDefSpDef1",
   proc { |move, user, ai, battle|
@@ -280,14 +281,17 @@ Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
   proc { |score, move, user, ai, battle|
     score = ai.get_score_for_target_stat_raise(score, user, [:DEFENSE, 1, :SPECIAL_DEFENSE, 1], false)
     # More preferable if user also has Spit Up/Swallow
-    score += 20 if user.battler.pbHasMoveFunction?("PowerDependsOnUserStockpile",
-                                                   "HealUserDependingOnUserStockpile")
+    if user.battler.pbHasMoveFunction?("PowerDependsOnUserStockpile",
+                                       "HealUserDependingOnUserStockpile")
+      score += [10, 8, 5, 3][user.effects[PBEffects::Stockpile]]
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+# NOTE: Don't worry about the stat drops caused by losing the stockpile, because
+#       if these moves are known, they want to be used.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PowerDependsOnUserStockpile",
   proc { |move, user, ai, battle|
@@ -299,9 +303,17 @@ Battle::AI::Handlers::MoveBasePower.add("PowerDependsOnUserStockpile",
     next move.move.pbBaseDamage(power, user.battler, target.battler)
   }
 )
+Battle::AI::Handlers::MoveEffectScore.add("PowerDependsOnUserStockpile",
+  proc { |score, move, user, ai, battle|
+    # Slightly prefer to hold out for another Stockpile to make this move stronger
+    score -= 5 if user.effects[PBEffects::Stockpile] < 2
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+# NOTE: Don't worry about the stat drops caused by losing the stockpile, because
+#       if these moves are known, they want to be used.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HealUserDependingOnUserStockpile",
   proc { |move, user, ai, battle|
@@ -313,9 +325,15 @@ Battle::AI::Handlers::MoveFailureCheck.add("HealUserDependingOnUserStockpile",
 )
 Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnUserStockpile",
   proc { |score, move, user, ai, battle|
-    mult = [0, 25, 50, 100][user.effects[PBEffects::Stockpile]]
-    score += mult
-    score -= user.hp * mult * 2 / user.totalhp
+    next Battle::AI::MOVE_USELESS_SCORE if !user.battler.canHeal?
+    # Consider how much HP will be restored
+    if user.hp >= user.totalhp * 0.5
+      score -= 10
+    else
+      # Slightly prefer to hold out for another Stockpile to make this move stronger
+      score -= 5 if user.effects[PBEffects::Stockpile] < 2
+      score += 20 * (user.totalhp - user.hp) / user.totalhp
+    end
     next score
   }
 )

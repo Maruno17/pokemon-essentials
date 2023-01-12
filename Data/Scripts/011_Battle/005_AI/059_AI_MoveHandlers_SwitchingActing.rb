@@ -271,19 +271,16 @@ Battle::AI::Handlers::MoveFailureCheck.add("TrapAllBattlersInBattleForOneTurn",
 
 #===============================================================================
 # TODO: Review score modifiers.
-# TODO: Consider all foes rather than just target. Can't use "target".
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UsedAfterUserTakesPhysicalDamage",
   proc { |score, move, user, ai, battle|
-    if ai.trainer.medium_skill?
-      hasPhysicalAttack = false
-#      target.battler.eachMove do |m|
-#        next if !m.physicalMove?(m.type)
-#        hasPhysicalAttack = true
-#        break
-#      end
-      score -= 50 if !hasPhysicalAttack
+    found_physical_move = false
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.check_for_move { |m| m.physicalMove?(m.type) }
+      found_physical_move = true
+      break
     end
+    next Battle::AI::MOVE_USELESS_SCORE if !found_physical_move
     next score
   }
 )
@@ -304,14 +301,62 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+# TODO: Review score modifiers. This could reasonably used on an ally.
 #===============================================================================
-# TargetActsNext
+Battle::AI::Handlers::MoveEffectScore.add("TargetActsNext",
+  proc { |score, move, user, ai, battle|
+    # Useless if the user has no ally
+    has_ally = false
+    ai.each_ally(user.index) { |b, i| has_ally = true }
+    next Battle::AI::MOVE_USELESS_SCORE if !has_ally
+    # Useless if the target is a foe
+    next Battle::AI::MOVE_USELESS_SCORE if target.opposes?(user)
+    # Compare the speeds of all battlers
+    speeds = []
+    ai.each_battler { |b, i| speeds.push([i, rough_stat(:SPEED)]) }
+    if battle.field.effects[PBEffects::TrickRoom] > 0
+      speeds.sort! { |a, b| a[1] <=> b[1] }
+    else
+      speeds.sort! { |a, b| b[1] <=> a[1] }
+    end
+    idx_user = speeds.index { |ele| ele[0] == user.index }
+    idx_target = speeds.index { |ele| ele[0] == target.index }
+    # Useless if the target is faster than the user
+    next Battle::AI::MOVE_USELESS_SCORE if idx_target < idx_user
+    # Useless if the target will move next anyway
+    next Battle::AI::MOVE_USELESS_SCORE if idx_target - idx_user <= 1
+    next score
+  }
+)
 
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
-# TargetActsLast
+Battle::AI::Handlers::MoveEffectScore.add("TargetActsLast",
+  proc { |score, move, user, ai, battle|
+    # Useless if the user has no ally
+    has_ally = false
+    ai.each_ally(user.index) { |b, i| has_ally = true }
+    next Battle::AI::MOVE_USELESS_SCORE if !has_ally
+    # Useless if the target is an ally
+    next Battle::AI::MOVE_USELESS_SCORE if !target.opposes?(user)
+    # Compare the speeds of all battlers
+    speeds = []
+    ai.each_battler { |b, i| speeds.push([i, rough_stat(:SPEED)]) }
+    if battle.field.effects[PBEffects::TrickRoom] > 0
+      speeds.sort! { |a, b| a[1] <=> b[1] }
+    else
+      speeds.sort! { |a, b| b[1] <=> a[1] }
+    end
+    idx_user = speeds.index { |ele| ele[0] == user.index }
+    idx_target = speeds.index { |ele| ele[0] == target.index }
+    # Useless if the target is faster than the user
+    next Battle::AI::MOVE_USELESS_SCORE if idx_target < idx_user
+    # Useless if the target will move last anyway
+    next Battle::AI::MOVE_USELESS_SCORE if idx_target == speeds.length - 1
+    next score
+  }
+)
 
 #===============================================================================
 # TODO: Review score modifiers.
@@ -474,6 +519,12 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetStatusMove
                  !battle.moldBreaker && target.has_active_ability?(:OBLIVIOUS)
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetStatusMoves",
+  proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.statusMove? }
+    next score
+  }
+)
 
 #===============================================================================
 # TODO: Review score modifiers.
@@ -484,20 +535,20 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetHealingMov
     next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetHealingMoves",
+  proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.healingMove? }
+    next score
+  }
+)
 
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetSoundMoves",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::ThroatChop] == 0 && ai.trainer.high_skill?
-      hasSoundMove = false
-      user.battler.eachMove do |m|
-        next if !m.soundMove?
-        hasSoundMove = true
-        break
-      end
-      score += 40 if hasSoundMove
+    if target.effects[PBEffects::ThroatChop] == 0
+      score += 10 if target.check_for_move { |m| m.soundMove? }
     end
     next score
   }

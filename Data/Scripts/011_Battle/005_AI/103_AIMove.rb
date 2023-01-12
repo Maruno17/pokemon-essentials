@@ -113,6 +113,10 @@ class Battle::AI::AIMove
     is_critical = rough_critical_hit_stage >= Battle::Move::CRITICAL_HIT_RATIOS.length
 
     ##### Calculate user's attack stat #####
+    if ["CategoryDependsOnHigherDamagePoisonTarget",
+        "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(function)
+      @move.pbOnStartUse(user.battler, [target.battler])   # Calculate category
+    end
     atk, atk_stage = @move.pbGetAttackStats(user.battler, target.battler)
     if !target.has_active_ability?(:UNAWARE) || @ai.battle.moldBreaker
       atk_stage = 6 if is_critical && atk_stage < 6

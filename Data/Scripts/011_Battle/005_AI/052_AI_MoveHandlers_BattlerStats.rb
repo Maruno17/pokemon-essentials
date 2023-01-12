@@ -364,8 +364,16 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAtkDef1",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkSpAtk1",
                                             "RaiseUserAtkSpAtk1Or2InSun")
-Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAtkSpAtk1",
-                                           "RaiseUserAtkSpAtk1Or2InSun")
+Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpAtk1Or2InSun",
+  proc { |score, move, user, ai, battle|
+    raises = move.move.statUp.clone
+    if [:Sun, :HarshSun].include?(user.battler.effectiveWeather)
+      raises[1] = 2
+      raises[3] = 2
+    end
+    next ai.get_score_for_target_stat_raise(score, user, raises)
+  }
+)
 
 #===============================================================================
 #
@@ -682,7 +690,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetSpDef1",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetRandomStat2",
   proc { |move, user, target, ai, battle|
@@ -696,12 +704,26 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetRandomStat2"
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetRandomStat2",
   proc { |score, move, user, target, ai, battle|
-    avgStat = 0
-    GameData::Stat.each_battle do |s|
-      avgStat -= target.stages[s.id] if !target.statStageAtMax?(s.id)
+    next Battle::AI::MOVE_USELESS_SCORE if !battle.moldBreaker && target.has_active_ability?(:CONTRARY)
+    next Battle::AI::MOVE_USELESS_SCORE if target.rough_end_of_round_damage >= target.hp
+    score -= 5 if target.index != user.index   # Less likely to use on ally
+    score += 5 if target.has_active_ability?(:SIMPLE)
+    # Prefer if target is at high HP, don't prefer if target is at low HP
+    if target.hp >= target.totalhp * 0.7
+      score += 8
+    else
+      score += ((100 * target.hp / target.totalhp) - 50) / 4   # +5 to -12
     end
-    avgStat = avgStat / 2 if avgStat < 0   # More chance of getting even better
-    next + avgStat * 10
+    # Prefer if target has Stored Power
+    if target.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
+      score += 8
+    end
+    # Don't prefer if any foe has Punishment
+    each_foe_battler(target.side) do |b, i|
+      next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetPositiveStatStages" }
+      score -= 5
+    end
+    next score
   }
 )
 
@@ -881,7 +903,7 @@ Battle::AI::Handlers::MoveBasePower.add("LowerTargetSpeed1WeakerInGrassyTerrain"
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerTargetSpeed1MakeTargetWeakerToFire",
   proc { |move, user, target, ai, battle|
@@ -897,7 +919,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetSpeed1MakeTar
     score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown)
     # Score for adding weakness to Fire
     if !target.effects[PBEffects::TarShot]
-      score += 20 if user.battler.moves.any? { |m| m.damagingMove? && m.pbCalcType(user.battler) == :FIRE }
+      eff = target.effectiveness_of_type_against_battler(:FIRE)
+      if !Effectiveness.ineffective?(eff)
+        score += 8 * eff if user.check_for_move { |m| m.damagingMove? && m.pbCalcType(user.battler) == :FIRE }
+      end
     end
     next score
   }
@@ -952,7 +977,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetAccuracy1",
                                                         "LowerTargetEvasion1")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerTargetEvasion1RemoveSideEffects",
   proc { |move, user, target, ai, battle|
@@ -982,14 +1007,26 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetEvasion1Remov
     # Score for stat drop
     score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown)
     # Score for removing side effects/terrain
-    score += 30 if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
-                   target.pbOwnSide.effects[PBEffects::Reflect] > 0 ||
-                   target.pbOwnSide.effects[PBEffects::LightScreen] > 0 ||
-                   target.pbOwnSide.effects[PBEffects::Mist] > 0 ||
-                   target.pbOwnSide.effects[PBEffects::Safeguard] > 0
-    score -= 30 if target.pbOwnSide.effects[PBEffects::Spikes] > 0 ||
-                   target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0 ||
-                   target.pbOwnSide.effects[PBEffects::StealthRock]
+    score += 8 if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 1 ||
+                  target.pbOwnSide.effects[PBEffects::Reflect] > 1 ||
+                  target.pbOwnSide.effects[PBEffects::LightScreen] > 1 ||
+                  target.pbOwnSide.effects[PBEffects::Mist] > 1 ||
+                  target.pbOwnSide.effects[PBEffects::Safeguard] > 1
+    if target.can_switch_lax?
+      score -= 10 if target.pbOwnSide.effects[PBEffects::Spikes] > 0 ||
+                     target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0 ||
+                     target.pbOwnSide.effects[PBEffects::StealthRock] ||
+                     target.pbOwnSide.effects[PBEffects::StickyWeb]
+    end
+    if user.opposes?(target) && user.can_switch_lax? && Settings::MECHANICS_GENERATION >= 6
+      score += 10 if target.pbOpposingSide.effects[PBEffects::Spikes] > 0 ||
+                     target.pbOpposingSide.effects[PBEffects::ToxicSpikes] > 0 ||
+                     target.pbOpposingSide.effects[PBEffects::StealthRock] ||
+                     target.pbOpposingSide.effects[PBEffects::StickyWeb]
+    end
+    if Settings::MECHANICS_GENERATION >= 8 && battle.field.terrain != :None
+      score -= ai.get_score_for_terrain(battle.field.terrain, user)
+    end
     next score
   }
 )
@@ -1176,118 +1213,139 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseGrassBattlersDef1",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapAtkSpAtkStages",
   proc { |score, move, user, target, ai, battle|
-    user_attack = user.stages[:ATTACK]
-    user_spatk = user.stages[:SPECIAL_ATTACK]
-    target_attack = target.stages[:ATTACK]
-    target_spatk = target.stages[:SPECIAL_ATTACK]
-    # Useless if both of the user's stats are already higher than the target's
-    next Battle::AI::MOVE_USELESS_SCORE if user_attack >= target_attack && user_spatk >= target_spatk
-    # Useless if neither the user nor the target make use of these stats
-    useless_attack = !user.check_for_move { |m| m.physicalMove?(m.type) &&
-                                                m.function != "UseUserDefenseInsteadOfUserAttack" &&
-                                                m.function != "UseTargetAttackInsteadOfUserAttack" }
-    useless_attack = false if useless_attack &&
-                              target.check_for_move { |m| m.physicalMove?(m.type) &&
-                                                          m.function != "UseUserDefenseInsteadOfUserAttack" &&
-                                                          m.function != "UseTargetAttackInsteadOfUserAttack" }
-    useless_spatk = !user.check_for_move { |m| m.specialMove?(m.type) }
-    useless_spatk = false if useless_spatk && target.check_for_move { |m| m.specialMove?(m.type) }
-    next Battle::AI::MOVE_USELESS_SCORE if useless_attack && useless_spatk
-    # Apply score modifiers
-    score += (target_attack - user_attack) * 5 if !useless_attack
-    score += (target_spatk - user_spatk) * 5 if !useless_spatk
+    raises = []
+    drops = []
+    [:ATTACK, :SPECIAL_ATTACK].each do |stat|
+      stage_diff = target.stages[stat] - user.stages[stat]
+      if stage_diff > 0
+        raises.push(stat)
+        raises.push(stage_diff)
+      elsif stage_diff < 0
+        drops.push(stat)
+        drops.push(stage_diff)
+      end
+    end
+    next Battle::AI::MOVE_USELESS_SCORE if raises.length == 0   # No stat raises
+    score += ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
+    score += ai.get_score_for_target_stat_drop(score, target, raises, false, true) if raises.length > 0
+    score += ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
+    score += ai.get_score_for_target_stat_raise(score, target, drops, false, true) if drops.length > 0
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapDefSpDefStages",
   proc { |score, move, user, target, ai, battle|
-    user_def = user.stages[:DEFENSE]
-    user_spdef = user.stages[:SPECIAL_DEFENSE]
-    target_def = target.stages[:DEFENSE]
-    target_spdef = target.stages[:SPECIAL_DEFENSE]
-    next Battle::AI::MOVE_USELESS_SCORE if user_def >= target_def && user_spdef >= target_spdef
-    next score - 20 if user_def + user_spdef >= target_def + target_spdef
-    # TODO: Check whether the target has physical/special moves that will be
-    #       more resisted after the swap, and vice versa for the user?
-    score += (target_def - user_def) * 5
-    score += (target_spdef - user_spdef) * 5
+    raises = []
+    drops = []
+    [:DEFENSE, :SPECIAL_DEFENSE].each do |stat|
+      stage_diff = target.stages[stat] - user.stages[stat]
+      if stage_diff > 0
+        raises.push(stat)
+        raises.push(stage_diff)
+      elsif stage_diff < 0
+        drops.push(stat)
+        drops.push(stage_diff)
+      end
+    end
+    next Battle::AI::MOVE_USELESS_SCORE if raises.length == 0   # No stat raises
+    score += ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
+    score += ai.get_score_for_target_stat_drop(score, target, raises, false, true) if raises.length > 0
+    score += ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
+    score += ai.get_score_for_target_stat_raise(score, target, drops, false, true) if drops.length > 0
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapStatStages",
   proc { |score, move, user, target, ai, battle|
-    user_stages = 0
-    target_stages = 0
-    target_stage_better = false
+    raises = []
+    drops = []
     GameData::Stat.each_battle do |s|
-      user_stages   += user.stages[s.id]
-      target_stages += target.stages[s.id]
-      target_stage_better = true if target.stages[s.id] > user.stages[s.id]
+      stage_diff = target.stages[s.id] - user.stages[s.id]
+      if stage_diff > 0
+        raises.push(s.id)
+        raises.push(stage_diff)
+      elsif stage_diff < 0
+        drops.push(s.id)
+        drops.push(stage_diff)
+      end
     end
-    next Battle::AI::MOVE_USELESS_SCORE if !target_stage_better
-    score += (target_stages - user_stages) * 10
+    next Battle::AI::MOVE_USELESS_SCORE if raises.length == 0   # No stat raises
+    score += ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
+    score += ai.get_score_for_target_stat_drop(score, target, raises, false, true) if raises.length > 0
+    score += ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
+    score += ai.get_score_for_target_stat_raise(score, target, drops, false, true) if drops.length > 0
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserCopyTargetStatStages",
   proc { |score, move, user, target, ai, battle|
-    equal = true
+    raises = []
+    drops = []
     GameData::Stat.each_battle do |s|
-      stagediff = target.stages[s.id] - user.stages[s.id]
-      score += stagediff * 10
-      equal = false if stagediff != 0
+      stage_diff = target.stages[s.id] - user.stages[s.id]
+      if stage_diff > 0
+        raises.push(s.id)
+        raises.push(stage_diff)
+      elsif stage_diff < 0
+        drops.push(s.id)
+        drops.push(stage_diff)
+      end
     end
-    next Battle::AI::MOVE_USELESS_SCORE if equal   # No stat changes
+    next Battle::AI::MOVE_USELESS_SCORE if raises.length == 0   # No stat raises
+    score += ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
+    score += ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
+    if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
+      if user.effects[PBEffects::FocusEnergy] > 0 && target.effects[PBEffects::FocusEnergy] == 0
+        score -= 4
+      elsif user.effects[PBEffects::FocusEnergy] == 0 && target.effects[PBEffects::FocusEnergy] > 0
+        score += 4
+      end
+      if user.effects[PBEffects::LaserFocus] > 0 && target.effects[PBEffects::LaserFocus] == 0
+        score -= 3
+      elsif user.effects[PBEffects::LaserFocus] == 0 && target.effects[PBEffects::LaserFocus] > 0
+        score += 3
+      end
+    end
     next score
   }
 )
 
 #===============================================================================
 # TODO: Review score modifiers.
-# TODO: Account for stat theft before damage calculation.
-# TODO: target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+# TODO: Account for stat theft before damage calculation. This would be complex,
+#       involving pbCanRaiseStatStage? and Contrary and Simple; do I want to
+#       account for all that or simplify things?
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserStealTargetPositiveStatStages",
   proc { |score, move, user, target, ai, battle|
-    num_stages = 0
+    raises = []
     GameData::Stat.each_battle do |s|
-      num_stages += target.stages[s.id] if target.stages[s.id] > 0
+      next if target.stages[s.id] <= 0
+      raises.push(s.id)
+      raises.push(target.stages[s.id])
     end
-    if num_stages > 0
-      next Battle::AI::MOVE_USELESS_SCORE if user.has_active_ability?(:CONTRARY)
-      score += num_stages * 5
+    if raises.length > 0
+      score += ai.get_score_for_target_stat_raise(score, user, raises, false)
+      score += ai.get_score_for_target_stat_drop(score, target, raises, false, true)
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("InvertTargetStatStages",
   proc { |move, user, target, ai, battle|
@@ -1296,41 +1354,48 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("InvertTargetStatStages"
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("InvertTargetStatStages",
   proc { |score, move, user, target, ai, battle|
-    pos_stages = 0
-    neg_stages = 0
+    raises = []
+    drops = []
     GameData::Stat.each_battle do |s|
-      pos_stages += target.stages[s.id] if target.stages[s.id] > 0
-      neg_stages += target.stages[s.id] if target.stages[s.id] < 0
+      if target.stages[s.id] > 0
+        drops.push(s.id)
+        drops.push(target.stages[s.id] * 2)
+      elsif target.stages[s.id] < 0
+        raises.push(s.id)
+        raises.push(target.stages[s.id] * 2)
+      end
     end
-    next Battle::AI::MOVE_USELESS_SCORE if pos_stages == 0
-    next score + (pos_stages - neg_stages) * 10
+    next Battle::AI::MOVE_USELESS_SCORE if drops.length == 0   # No stats will drop
+    score += ai.get_score_for_target_stat_raise(score, target, raises, false, true) if raises.length > 0
+    score += ai.get_score_for_target_stat_drop(score, target, drops, false, true) if drops.length > 0
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ResetTargetStatStages",
   proc { |score, move, user, target, ai, battle|
-    avg = 0
-    pos_change = false
-    any_change = false
+    raises = []
+    drops = []
     GameData::Stat.each_battle do |s|
-      next if target.stages[s.id] == 0
-      avg += target.stages[s.id]
-      pos_change = true if target.stages[s.id] > 0
-      any_change = true
+      if target.stages[s.id] > 0
+        drops.push(s.id)
+        drops.push(target.stages[s.id])
+      elsif target.stages[s.id] < 0
+        raises.push(s.id)
+        raises.push(target.stages[s.id])
+      end
     end
-    next Battle::AI::MOVE_USELESS_SCORE if !any_change || !pos_change
-    next score + avg * 5
+    score += ai.get_score_for_target_stat_raise(score, target, raises, false, true) if raises.length > 0
+    score += ai.get_score_for_target_stat_drop(score, target, drops, false, true) if drops.length > 0
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ResetAllBattlersStatStages",
   proc { |move, user, ai, battle|
@@ -1339,17 +1404,22 @@ Battle::AI::Handlers::MoveFailureCheck.add("ResetAllBattlersStatStages",
 )
 Battle::AI::Handlers::MoveEffectScore.add("ResetAllBattlersStatStages",
   proc { |score, move, user, ai, battle|
-    stages = 0
-    battle.allBattlers.each do |b|
-      totalStages = 0
-      GameData::Stat.each_battle { |s| totalStages += b.stages[s.id] }
-      if b.opposes?(user.battler)
-        stages += totalStages
-      else
-        stages -= totalStages
+    ai.each_battler do |b|
+      raises = []
+      drops = []
+      GameData::Stat.each_battle do |s|
+        if b.stages[s.id] > 0
+          drops.push(s.id)
+          drops.push(b.stages[s.id])
+        elsif b.stages[s.id] < 0
+          raises.push(s.id)
+          raises.push(b.stages[s.id])
+        end
       end
+      score += ai.get_score_for_target_stat_raise(score, b, raises, false, true) if raises.length > 0
+      score += ai.get_score_for_target_stat_drop(score, b, drops, false, true) if drops.length > 0
     end
-    next score + stages * 10
+    next score
   }
 )
 
