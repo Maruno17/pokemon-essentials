@@ -222,6 +222,8 @@ end
 # Effect depends on the environment. (Secret Power)
 #===============================================================================
 class Battle::Move::EffectDependsOnEnvironment < Battle::Move
+  attr_reader :secretPower
+
   def flinchingMove?; return [6, 10, 12].include?(@secretPower); end
 
   def pbOnStartUse(user, targets)
@@ -852,6 +854,8 @@ end
 #       Pokémon.
 #===============================================================================
 class Battle::Move::UseMoveDependingOnEnvironment < Battle::Move
+  attr_reader :npMove
+
   def callsAnotherMove?; return true; end
 
   def pbOnStartUse(user, targets)

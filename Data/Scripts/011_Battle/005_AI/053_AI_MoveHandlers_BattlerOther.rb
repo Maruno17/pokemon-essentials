@@ -3,7 +3,7 @@
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SleepTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.battler.pbCanSleep?(user.battler, false, move.move)
+    next move.statusMove? && !target.battler.pbCanSleep?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SleepTarget",
@@ -59,12 +59,12 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SleepTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SleepTargetIfUserDarkrai",
   proc { |move, user, ai, battle|
-    next true if !user.battler.isSpecies?(:DARKRAI) && user.effects[PBEffects::TransformSpecies] != :DARKRAI
+    next !user.battler.isSpecies?(:DARKRAI) && user.effects[PBEffects::TransformSpecies] != :DARKRAI
   }
 )
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SleepTargetIfUserDarkrai",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.battler.pbCanSleep?(user.battler, false, move.move)
+    next move.statusMove? && !target.battler.pbCanSleep?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("SleepTarget",
@@ -83,6 +83,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SleepTargetNextTurn",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Yawn] > 0
     next true if !target.battler.pbCanSleep?(user.battler, false, move.move)
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("SleepTarget",
@@ -93,7 +94,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("SleepTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PoisonTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.battler.pbCanPoison?(user.battler, false, move.move)
+    next move.statusMove? && !target.battler.pbCanPoison?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
@@ -154,8 +155,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PoisonTargetLowerTargetSpeed1",
   proc { |move, user, target, ai, battle|
-    next true if !target.battler.pbCanPoison?(user.battler, false, move.move) &&
-                 !target.battler.pbCanLowerStatStage?(:SPEED, user.battler, move.move)
+    next !target.battler.pbCanPoison?(user.battler, false, move.move) &&
+         !target.battler.pbCanLowerStatStage?(:SPEED, user.battler, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTargetLowerTargetSpeed1",
@@ -181,7 +182,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("PoisonTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ParalyzeTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.battler.pbCanParalyze?(user.battler, false, move.move)
+    next move.statusMove? && !target.battler.pbCanParalyze?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeTarget",
@@ -248,6 +249,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ParalyzeTargetIfNotType
     eff = target.effectiveness_of_type_against_battler(move.rough_type, user)
     next true if Effectiveness.ineffective?(eff)
     next true if move.statusMove? && !target.battler.pbCanParalyze?(user.battler, false, move.move)
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("ParalyzeTarget",
@@ -277,7 +279,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeFlinchTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("BurnTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.battler.pbCanBurn?(user.battler, false, move.move)
+    next move.statusMove? && !target.battler.pbCanBurn?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
@@ -356,7 +358,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnFlinchTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("FreezeTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.battler.pbCanFreeze?(user.battler, false, move.move)
+    next move.statusMove? && !target.battler.pbCanFreeze?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FreezeTarget",
@@ -454,12 +456,12 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeBurnOrFreezeTarg
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("GiveUserStatusToTarget",
   proc { |move, user, ai, battle|
-    next true if user.status == :NONE
+    next user.status == :NONE
   }
 )
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("GiveUserStatusToTarget",
   proc { |move, user, target, ai, battle|
-    next true if !target.battler.pbCanInflictStatus?(user.status, user.battler, false, move.move)
+    next !target.battler.pbCanInflictStatus?(user.status, user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("GiveUserStatusToTarget",
@@ -491,7 +493,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("GiveUserStatusToTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CureUserBurnPoisonParalysis",
   proc { |move, user, ai, battle|
-    next true if ![:BURN, :POISON, :PARALYSIS].include?(user.status)
+    next ![:BURN, :POISON, :PARALYSIS].include?(user.status)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("CureUserBurnPoisonParalysis",
@@ -542,7 +544,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetBurn",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideImmunityToInflictedStatus",
   proc { |move, user, ai, battle|
-    next true if user.pbOwnSide.effects[PBEffects::Safeguard] > 0
+    next user.pbOwnSide.effects[PBEffects::Safeguard] > 0
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToInflictedStatus",
@@ -599,7 +601,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("FlinchTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FlinchTargetFailsIfNotUserFirstTurn",
   proc { |move, user, ai, battle|
-    next true if user.turnCount > 0
+    next user.turnCount > 0
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("FlinchTarget",
@@ -621,7 +623,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("FlinchTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ConfuseTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.battler.pbCanConfuse?(user.battler, false, move.move)
+    next move.statusMove? && !target.battler.pbCanConfuse?(user.battler, false, move.move)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ConfuseTarget",
@@ -660,7 +662,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("ConfuseTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AttractTarget",
   proc { |move, user, target, ai, battle|
-    next true if move.statusMove? && !target.battler.pbCanAttract?(user.battler, false)
+    next move.statusMove? && !target.battler.pbCanAttract?(user.battler, false)
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AttractTarget",
@@ -703,7 +705,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("SetUserTypesBasedOnEnvironment",
       new_type = env_types[battle.environment] || :NORMAL
       new_type = :NORMAL if !GameData::Type.exists?(new_type)
     end
-    next true if !GameData::Type.exists?(new_type) || !user.battler.pbHasOtherType?(new_type)
+    next !GameData::Type.exists?(new_type) || !user.battler.pbHasOtherType?(new_type)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("SetUserTypesBasedOnEnvironment",
@@ -782,6 +784,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserTypesToTargetTyp
     next true if target.battler.pbTypes(true).empty?
     next true if user.battler.pbTypes == target.battler.pbTypes &&
                  user.effects[PBEffects::Type3] == target.effects[PBEffects::Type3]
+    next false
   }
 )
 
@@ -938,7 +941,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AddGrassTypeToTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserLosesFireType",
   proc { |move, user, ai, battle|
-    next true if !user.has_type?(:FIRE)
+    next !user.has_type?(:FIRE)
   }
 )
 
@@ -1124,6 +1127,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartUserAirborne",
     next true if user.effects[PBEffects::Ingrain] ||
                  user.effects[PBEffects::SmackDown] ||
                  user.effects[PBEffects::MagnetRise] > 0
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartUserAirborne",
@@ -1215,6 +1219,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitsTargetInSkyGroundsTa
     if ai.trainer.medium_skill?
       score -= 8 if battle.field.terrain != :None
     end
+    next score
   }
 )
 
@@ -1223,7 +1228,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitsTargetInSkyGroundsTa
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartGravity",
   proc { |move, user, ai, battle|
-    next true if battle.field.effects[PBEffects::Gravity] > 0
+    next battle.field.effects[PBEffects::Gravity] > 0
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartGravity",
@@ -1273,6 +1278,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TransformUserIntoTarget
     next true if user.effects[PBEffects::Transform]
     next true if target.effects[PBEffects::Transform] ||
                  target.effects[PBEffects::Illusion]
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TransformUserIntoTarget",

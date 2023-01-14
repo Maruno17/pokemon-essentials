@@ -3,7 +3,7 @@
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FleeFromBattle",
   proc { |move, user, ai, battle|
-    next true if !battle.pbCanRun?(user.index)
+    next !battle.pbCanRun?(user.index)
   }
 )
 
@@ -12,11 +12,8 @@ Battle::AI::Handlers::MoveFailureCheck.add("FleeFromBattle",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserStatusMove",
   proc { |move, user, ai, battle|
-    if user.wild?
-      next true if !battle.pbCanRun?(user.index)
-    else
-      next true if !battle.pbCanChooseNonActive?(user.index)
-    end
+    next !battle.pbCanRun?(user.index) if user.wild?
+    next !battle.pbCanChooseNonActive?(user.index)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
@@ -53,6 +50,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserDamagingMove",
   proc { |score, move, user, ai, battle|
     next 0 if !battle.pbCanChooseNonActive?(user.index)
     next 0 if ai.trainer.has_skill_flag?("ReserveLastPokemon") && battle.pbTeamAbleNonActiveCount(user.index) == 1   # Don't switch in ace
+    next score
   }
 )
 
@@ -83,7 +81,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetAtkSpAtk1Swit
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserPassOnEffects",
   proc { |move, user, ai, battle|
-    next true if !battle.pbCanChooseNonActive?(user.index)
+    next !battle.pbCanChooseNonActive?(user.index)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
@@ -130,6 +128,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SwitchOutTargetStatusMo
       end
       next will_fail
     end
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SwitchOutTargetStatusMove",
@@ -197,6 +196,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BindTarget",
         score -= 8
       end
     end
+    next score
   }
 )
 
@@ -216,10 +216,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("BindTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattle",
   proc { |move, user, target, ai, battle|
-    if move.statusMove?
-      next true if target.effects[PBEffects::MeanLook] >= 0
-      next true if Settings::MORE_TYPE_EFFECTS && target.has_type?(:GHOST)
-    end
+    next false if move.damagingMove?
+    next true if target.effects[PBEffects::MeanLook] >= 0
+    next true if Settings::MORE_TYPE_EFFECTS && target.has_type?(:GHOST)
+    next false
   }
 )
 
@@ -228,10 +228,10 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattle",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattleLowerTargetDefSpDef1EachTurn",
   proc { |move, user, target, ai, battle|
-    if move.statusMove?
-      next true if target.effects[PBEffects::Octolock] >= 0
-      next true if Settings::MORE_TYPE_EFFECTS && target.has_type?(:GHOST)
-    end
+    next false if move.damagingMove?
+    next true if target.effects[PBEffects::Octolock] >= 0
+    next true if Settings::MORE_TYPE_EFFECTS && target.has_type?(:GHOST)
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapTargetInBattleLowerTargetDefSpDef1EachTurn",
@@ -260,7 +260,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapUserAndTargetInBattl
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("TrapAllBattlersInBattleForOneTurn",
   proc { |move, user, ai, battle|
-    next true if battle.field.effects[PBEffects::FairyLock] > 0
+    next battle.field.effects[PBEffects::FairyLock] > 0
   }
 )
 
@@ -372,6 +372,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetUsesItsLastUsedMo
       idxMove = i if m.id == target.battler.lastRegularMoveUsed
     end
     next true if target.battler.moves[idxMove].pp == 0 && target.battler.moves[idxMove].total_pp > 0
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetUsesItsLastUsedMoveAgain",
@@ -423,7 +424,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerPPOfTargetLastMoveB
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerPPOfTargetLastMoveBy4",
   proc { |move, user, target, ai, battle|
     last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
-    next true if !last_move || last_move.pp == 0 || last_move.total_pp <= 0
+    next !last_move || last_move.pp == 0 || last_move.total_pp <= 0
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerPPOfTargetLastMoveBy4",
@@ -463,11 +464,13 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetUsingSameM
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Torment]
     next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetUsingSameMoveConsecutively",
   proc { |score, move, user, target, ai, battle|
     next 0 if target.effects[PBEffects::Torment]
+    next score
   }
 )
 
@@ -517,6 +520,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetStatusMove
     next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
     next true if Settings::MECHANICS_GENERATION >= 6 &&
                  !battle.moldBreaker && target.has_active_ability?(:OBLIVIOUS)
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetStatusMoves",
@@ -533,6 +537,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetHealingMov
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::HealBlock] > 0
     next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetHealingMoves",
@@ -559,6 +564,6 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetSoundMoves"
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetMovesKnownByUser",
   proc { |move, user, ai, battle|
-    next true if user.effects[PBEffects::Imprison]
+    next user.effects[PBEffects::Imprison]
   }
 )

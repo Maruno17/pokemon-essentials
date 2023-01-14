@@ -11,6 +11,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
         score += 10 if b.hp <= b.totalhp / 3
       end
     end
+    next score
   }
 )
 
@@ -55,7 +56,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RandomlyDamageOrHealTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("HealAllyOrDamageFoe",
   proc { |move, user, target, ai, battle|
-    next true if !target.opposes?(user) && target.battler.canHeal?
+    next !target.opposes?(user) && target.battler.canHeal?
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealAllyOrDamageFoe",
@@ -131,9 +132,42 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CurseTargetOrLowerUserSp
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# EffectDependsOnEnvironment
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("EffectDependsOnEnvironment",
+  proc { |score, move, user, target, ai, battle|
+    # Determine this move's effect
+    move.move.pbOnStartUse(user.battler, [target.battler])
+    function_code = nil
+    case move.move.secretPower
+    when 2
+      function_code = "SleepTarget"
+    when 10
+      function_code = "BurnTarget"
+    when 0, 1
+      function_code = "ParalyzeTarget"
+    when 9
+      function_code = "FreezeTarget"
+    when 5
+      function_code = "LowerTargetAttack1"
+    when 14
+      function_code = "LowerTargetDefense1"
+    when 3
+      function_code = "LowerTargetSpAtk1"
+    when 4, 6, 12
+      function_code = "LowerTargetSpeed1"
+    when 8
+      function_code = "LowerTargetAccuracy1"
+    when 7, 11, 13
+      function_code = "FlinchTarget"
+    end
+    if function_code
+      next Battle::AI::Handlers.apply_move_effect_against_target_score(function_code,
+         score, move, user, target, ai, battle)
+    end
+    next score
+  }
+)
 
 #===============================================================================
 #
@@ -149,7 +183,7 @@ Battle::AI::Handlers::MoveBasePower.add("HitsAllFoesAndPowersUpInPsychicTerrain"
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetNextFireMoveDamagesTarget",
   proc { |move, user, target, ai, battle|
-    next true if target.effects[PBEffects::Powder]
+    next target.effects[PBEffects::Powder]
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetNextFireMoveDamagesTarget",
@@ -192,17 +226,17 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerAfterFusionBolt",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PowerUpAllyMove",
   proc { |move, user, target, ai, battle|
-    next true if target.fainted? || target.effects[PBEffects::HelpingHand]
+    next target.effects[PBEffects::HelpingHand]
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PowerUpAllyMove",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.damagingMove? }
-    next score + 8
+    next score + 4
   }
 )
 
@@ -274,7 +308,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserAddStockpileRaiseDefSpDef1",
   proc { |move, user, ai, battle|
-    next true if user.effects[PBEffects::Stockpile] >= 3
+    next user.effects[PBEffects::Stockpile] >= 3
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
@@ -295,7 +329,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("PowerDependsOnUserStockpile",
   proc { |move, user, ai, battle|
-    next true if user.effects[PBEffects::Stockpile] == 0
+    next user.effects[PBEffects::Stockpile] == 0
   }
 )
 Battle::AI::Handlers::MoveBasePower.add("PowerDependsOnUserStockpile",
@@ -321,6 +355,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("HealUserDependingOnUserStockpile",
     next true if !user.battler.canHeal? &&
                  user.effects[PBEffects::StockpileDef] == 0 &&
                  user.effects[PBEffects::StockpileSpDef] == 0
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnUserStockpile",
@@ -378,27 +413,28 @@ Battle::AI::Handlers::MoveEffectScore.add("WaterPledge",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+# NOTE: The move that this move will become is determined in def
+#       set_up_move_check, and the score for that move is calculated instead. If
+#       this move cannot become another move and will fail, the score for this
+#       move is calculated as normal (and the code below says it fails).
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
   proc { |move, user, ai, battle|
     next true if !battle.lastMoveUsed
-    next true if move.move.moveBlacklist.include?(GameData::Move.get(battle.lastMoveUsed).function_code)
+    next move.move.moveBlacklist.include?(GameData::Move.get(battle.lastMoveUsed).function_code)
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+# NOTE: The move that this move will become is determined in def
+#       set_up_move_check, and the score for that move is calculated instead. If
+#       this move cannot become another move and will fail, the score for this
+#       move is calculated as normal (and the code below says it fails).
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UseLastMoveUsedByTarget",
   proc { |move, user, target, ai, battle|
     next true if !target.battler.lastRegularMoveUsed
-    next true if GameData::Move.get(target.battler.lastRegularMoveUsed).flags.none? { |f| f[/^CanMirrorMove$/i] }
-  }
-)
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UseLastMoveUsedByTarget",
-  proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE
+    next GameData::Move.get(target.battler.lastRegularMoveUsed).flags.none? { |f| f[/^CanMirrorMove$/i] }
   }
 )
 
@@ -408,7 +444,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UseLastMoveUsedByTarget"
 # UseMoveTargetIsAboutToUse
 
 #===============================================================================
-# TODO: Review score modifiers.
+# NOTE: The move that this move will become is determined in def
+#       set_up_move_check, and the score for that move is calculated instead.
 #===============================================================================
 # UseMoveDependingOnEnvironment
 
@@ -479,6 +516,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ReplaceMoveThisBattleWi
                    move.move.moveBlacklist.include?(last_move_data.function_code) ||
                    last_move_data.type == :SHADOW
     end
+    next false
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",

@@ -28,7 +28,8 @@
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:shiny_target,
   proc { |score, move, user, target, ai, battle|
-    next score - 40 if target.wild? && target.battler.shiny?
+    score -= 40 if target.wild? && target.battler.shiny?
+    next score
   }
 )
 
@@ -48,8 +49,8 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:add_predicted_damage,
       dmg = move.rough_damage
       score += [20.0 * dmg / target.hp, 25].min
       score += 10 if dmg > target.hp * 1.1   # Predicted to KO the target
-      next score.to_i
     end
+    next score.to_i
   }
 )
 
@@ -90,6 +91,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:target_semi_invulnerabl
       end
       next Battle::AI::MOVE_USELESS_SCORE if miss
     end
+    next score
   }
 )
 
@@ -107,9 +109,10 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:thawing_move_against_fr
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.medium_skill? && target.status == :FROZEN
       if move.rough_type == :FIRE || (Settings::MECHANICS_GENERATION >= 6 && move.move.thawsUser?)
-        next score - 30
+        score -= 30
       end
     end
+    next score
   }
 )
 
@@ -134,10 +137,11 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:flinching_effects,
            (move.damagingMove? &&
            (user.has_active_item?([:KINGSROCK, :RAZORFANG]) ||
            user.has_active_ability?(:STENCH)))
-          next score + 20
+          score += 20
         end
       end
     end
+    next score
   }
 )
 
@@ -162,7 +166,8 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:flinching_effects,
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:dance_move_against_dancer,
   proc { |score, move, user, target, ai, battle|
-    next score /= 2 if move.move.danceMove? && target.has_active_ability?(:DANCER)
+    score /= 2 if move.move.danceMove? && target.has_active_ability?(:DANCER)
+    next score
   }
 )
 
@@ -197,8 +202,8 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_knocking_out_dest
         score -= 25
         score -= 20 if battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       end
-      next score
     end
+    next score
   }
 )
 
@@ -247,8 +252,8 @@ Battle::AI::Handlers::GeneralMoveScore.add(:thawing_move_when_frozen,
           break
         end
       end
-      next score
     end
+    next score
   }
 )
 
@@ -280,9 +285,9 @@ Battle::AI::Handlers::GeneralMoveScore.add(:good_move_for_choice_item,
         score *= move.accuracy / 100.0 if move.accuracy > 0
         # Don't prefer moves with low PP
         score *= 0.9 if move.move.pp < 6
-        next score
       end
     end
+    next score
   }
 )
 

@@ -36,7 +36,7 @@ class Battle::AI
         add_move_to_choices(choices, idxMove, MOVE_FAIL_SCORE)
         next
       end
-      target_data = move.pbTarget(@user.battler)
+      target_data = @move.pbTarget(@user.battler)
       # TODO: Alter target_data if user has Protean and move is Curse.
       case target_data.num_targets
       when 0   # No targets, affects the user or a side or the whole field
@@ -88,6 +88,21 @@ class Battle::AI
   # Set some extra class variables for the move/target combo being assessed.
   #=============================================================================
   def set_up_move_check(move)
+    case move.function
+    when "UseLastMoveUsed"
+      if @battle.lastMoveUsed &&
+         !move.moveBlacklist.include?(GameData::Move.get(@battle.lastMoveUsed).function_code)
+        move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@battle.lastMoveUsed))
+      end
+    when "UseLastMoveUsedByTarget"
+      if target.battler.lastRegularMoveUsed &&
+         GameData::Move.get(target.battler.lastRegularMoveUsed).flags.any? { |f| f[/^CanMirrorMove$/i] }
+        move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(target.battler.lastRegularMoveUsed))
+      end
+    when "UseMoveDependingOnEnvironment"
+      move.move.pbOnStartUse(@user.battler, [])   # Determine which move is used instead
+      move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(move.npMove))
+    end
     @move.set_up(move, @user)
     @battle.moldBreaker = @user.has_mold_breaker?
   end
