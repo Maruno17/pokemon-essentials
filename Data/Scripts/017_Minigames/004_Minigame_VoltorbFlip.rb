@@ -259,7 +259,7 @@ class VoltorbFlip
       if @cursor[0][3]==64   # If in mark mode
         for i in 0...@squares.length
           if @index[0]*64+128==@squares[i][0] && @index[1]*64==@squares[i][1] && @squares[i][3]==false
-            pbSEPlay("Voltorb Flip mark")
+            pbSEPlay("Voltorb Flip Mark")
           end
         end
         for i in 0...@marks.length+1
