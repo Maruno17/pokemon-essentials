@@ -506,21 +506,24 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseRandomUserMoveIfAsleep",
 #===============================================================================
 #
 #===============================================================================
+Battle::AI::Handlers::MoveFailureCheck.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
+  proc { |move, user, ai, battle|
+    next user.effects[PBEffects::Transform] || !user.battler.pbHasMove?(move.id)
+  }
+)
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|
-    next true if user.effects[PBEffects::Transform] || !user.battler.pbHasMove?(move.id)
-    if user.faster_than?(target)
-      last_move_data = GameData::Move.try_get(target.battler.lastRegularMoveUsed)
-      next true if !last_move_data ||
-                   user.battler.pbHasMove?(target.battler.lastRegularMoveUsed) ||
-                   move.move.moveBlacklist.include?(last_move_data.function_code) ||
-                   last_move_data.type == :SHADOW
-    end
+    next false if !user.faster_than?(target)
+    last_move_data = GameData::Move.try_get(target.battler.lastRegularMoveUsed)
+    next true if !last_move_data ||
+                 user.battler.pbHasMove?(target.battler.lastRegularMoveUsed) ||
+                 move.move.moveBlacklist.include?(last_move_data.function_code) ||
+                 last_move_data.type == :SHADOW
     next false
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
-  proc { |score, move, user, ai, battle|
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ReplaceMoveThisBattleWithTargetLastMoveUsed",
+  proc { |score, move, user, target, ai, battle|
     # Generally don't prefer, as this wastes the user's turn just to gain a move
     # of unknown utility
     score -= 8

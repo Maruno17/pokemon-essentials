@@ -18,12 +18,16 @@ class Battle::AI
     # Discard status move/don't prefer damaging move if target has Contrary
     # TODO: Maybe this should return get_score_for_target_stat_drop if Contrary
     #       applies and desire_mult < 1.
-    if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 1
-      return (whole_effect) ? MOVE_USELESS_SCORE : score - 20
+    if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 0
+      ret = (whole_effect) ? MOVE_USELESS_SCORE : score - 20
+      PBDebug.log_score_change(ret - score, "don't prefer raising target's stats (it has Contrary)")
+      return ret
     end
     # Don't make score changes if target will faint from EOR damage
     if target.rough_end_of_round_damage >= target.hp
-      return (whole_effect) ? MOVE_USELESS_SCORE : score
+      ret = (whole_effect) ? MOVE_USELESS_SCORE : score
+      PBDebug.log("     ignore stat change (target predicted to faint this round)")
+      return ret
     end
     # Don't make score changes if foes have Unaware and target can't make use of
     # extra stat stages
@@ -33,7 +37,9 @@ class Battle::AI
         foe_is_aware = true if !b.has_active_ability?(:UNAWARE)
       end
       if !foe_is_aware
-        return (whole_effect) ? MOVE_USELESS_SCORE : score
+        ret = (whole_effect) ? MOVE_USELESS_SCORE : score
+        PBDebug.log("     ignore stat change (target's foes have Unaware)")
+        return ret
       end
     end
 
@@ -41,7 +47,14 @@ class Battle::AI
     real_stat_changes = []
     stat_changes.each_with_index do |stat, idx|
       next if idx.odd?
-      next if !stat_raise_worthwhile?(target, stat, fixed_change)
+      if !stat_raise_worthwhile?(target, stat, fixed_change)
+        if target.index == @user.index
+          PBDebug.log("     raising the user's #{GameData::Stat.get(stat).name} isn't worthwhile")
+        else
+          PBDebug.log("     raising the target's #{GameData::Stat.get(stat).name} isn't worthwhile")
+        end
+        next
+      end
       # Calculate amount that stat will be raised by
       increment = stat_changes[idx + 1]
       increment *= 2 if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:SIMPLE)
@@ -60,7 +73,13 @@ class Battle::AI
     # Make score changes based on the specific changes to each stat that will be
     # raised
     real_stat_changes.each do |change|
+      old_score = score
       score = get_target_stat_raise_score_one(score, target, change[0], change[1], desire_mult)
+      if target.index == @user.index
+        PBDebug.log_score_change(score - old_score, "raising the user's #{GameData::Stat.get(change[0]).name} by #{change[1]}")
+      else
+        PBDebug.log_score_change(score - old_score, "raising the target's #{GameData::Stat.get(change[0]).name} by #{change[1]}")
+      end
     end
 
     return score
@@ -601,12 +620,16 @@ class Battle::AI
     # Discard status move/don't prefer damaging move if target has Contrary
     # TODO: Maybe this should return get_score_for_target_stat_raise if Contrary
     #       applies and desire_mult < 1.
-    if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 1
-      return (whole_effect) ? MOVE_USELESS_SCORE : score - 20
+    if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 0
+      ret = (whole_effect) ? MOVE_USELESS_SCORE : score - 20
+      PBDebug.log_score_change(ret - score, "don't prefer lowering target's stats (it has Contrary)")
+      return ret
     end
     # Don't make score changes if target will faint from EOR damage
     if target.rough_end_of_round_damage >= target.hp
-      return (whole_effect) ? MOVE_USELESS_SCORE : score
+      ret = (whole_effect) ? MOVE_USELESS_SCORE : score
+      PBDebug.log("     ignore stat change (target predicted to faint this round)")
+      return ret
     end
     # Don't make score changes if foes have Unaware and target can't make use of
     # its lowered stat stages
@@ -615,14 +638,23 @@ class Battle::AI
       foe_is_aware = true if !b.has_active_ability?(:UNAWARE)
     end
     if !foe_is_aware
-      return (whole_effect) ? MOVE_USELESS_SCORE : score
+      ret = (whole_effect) ? MOVE_USELESS_SCORE : score
+      PBDebug.log("     ignore stat change (target's foes have Unaware)")
+      return ret
     end
 
     # Figure out which stat raises can happen
     real_stat_changes = []
     stat_changes.each_with_index do |stat, idx|
       next if idx.odd?
-      next if !stat_drop_worthwhile?(target, stat, fixed_change)
+      if !stat_drop_worthwhile?(target, stat, fixed_change)
+        if target.index == @user.index
+          PBDebug.log("     lowering the user's #{GameData::Stat.get(stat).name} isn't worthwhile")
+        else
+          PBDebug.log("     lowering the target's #{GameData::Stat.get(stat).name} isn't worthwhile")
+        end
+        next
+      end
       # Calculate amount that stat will be raised by
       decrement = stat_changes[idx + 1]
       decrement *= 2 if !fixed_change && !@battle.moldBreaker && @user.has_active_ability?(:SIMPLE)
@@ -641,7 +673,13 @@ class Battle::AI
     # Make score changes based on the specific changes to each stat that will be
     # lowered
     real_stat_changes.each do |change|
+      old_score = score
       score = get_target_stat_drop_score_one(score, target, change[0], change[1], desire_mult)
+      if target.index == @user.index
+        PBDebug.log_score_change(score - old_score, "lowering the user's #{GameData::Stat.get(change[0]).name} by #{change[1]}")
+      else
+        PBDebug.log_score_change(score - old_score, "lowering the target's #{GameData::Stat.get(change[0]).name} by #{change[1]}")
+      end
     end
 
     return score
@@ -886,7 +924,7 @@ class Battle::AI
         end
       when :Psychic
         # Check for priority moves
-        if b.check_for_move { |m| m.priority > 0 && m.pbTarget&.can_target_one_foe? }
+        if b.check_for_move { |m| m.priority > 0 && m.pbTarget(b.battler)&.can_target_one_foe? }
           ret += (b.opposes?(move_user)) ? 10 : -10
         end
         # Check for Psychic moves

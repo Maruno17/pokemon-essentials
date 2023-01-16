@@ -57,6 +57,7 @@ class Battle::AI
     @battle.pbRegisterMegaEvolution(idxBattler) if pbEnemyShouldMegaEvolve?
     choices = pbGetMoveScores
     pbChooseMove(choices)
+    PBDebug.log("")
   end
 end
 

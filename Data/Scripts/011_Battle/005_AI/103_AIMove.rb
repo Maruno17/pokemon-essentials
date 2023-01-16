@@ -396,7 +396,7 @@ class Battle::AI::AIMove
     # OHKO move accuracy
     if @move.is_a?(Battle::Move::OHKO)
       ret = self.accuracy + user.level - target.level
-      ret -= 10 if function == "OHKOIce" && !user.pbHasType?(:ICE)
+      ret -= 10 if function == "OHKOIce" && !user.has_type?(:ICE)
       return [ret, 0].max
     end
     # "Always hit" effects and "always hit" accuracy

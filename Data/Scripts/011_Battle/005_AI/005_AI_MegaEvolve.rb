@@ -6,7 +6,7 @@ class Battle::AI
   #       be.
   def pbEnemyShouldMegaEvolve?
     if @battle.pbCanMegaEvolve?(@user.index)   # Simple "always should if possible"
-      PBDebug.log("[AI] #{@user.pbThis} (#{@user.index}) will Mega Evolve")
+      PBDebug.log_ai("#{@user.name} will Mega Evolve")
       return true
     end
     return false

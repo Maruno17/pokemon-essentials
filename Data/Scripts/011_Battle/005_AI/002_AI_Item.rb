@@ -1,6 +1,8 @@
 class Battle::AI
   #=============================================================================
   # Decide whether the opponent should use an item on the Pokémon
+  # TODO: Maybe don't cure a status problem if the Pokémon has an ability or
+  #       something that makes it benefit from having that problem.
   #=============================================================================
   def pbEnemyShouldUseItem?
     item = nil
@@ -14,7 +16,7 @@ class Battle::AI
     end
     # Register use of item
     @battle.pbRegisterItem(@user.index, item, idxTarget)
-    PBDebug.log("[AI] #{@user.pbThis} (#{@user.index}) will use item #{GameData::Item.get(item).name}")
+    PBDebug.log_ai("#{@user.name} will use item #{GameData::Item.get(item).name}")
     return true
   end
 

@@ -157,7 +157,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealUserByTargetAttackLo
   proc { |score, move, user, target, ai, battle|
     # Check whether lowering the target's Attack will have any impact
     if ai.trainer.medium_skill?
-      score = ai.get_score_for_target_stat_drop(score, target, [:ATTACK, 1])
+      score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown)
     end
     # Consider how much HP will be restored
     heal_amt = target.rough_stat(:ATTACK)

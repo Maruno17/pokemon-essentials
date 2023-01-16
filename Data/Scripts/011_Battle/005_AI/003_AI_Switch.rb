@@ -133,12 +133,11 @@ class Battle::AI
       end
       if list.length > 0
         if batonPass >= 0 && @battle.pbRegisterMove(battler.index, batonPass, false)
-          PBDebug.log("[AI] #{battler.pbThis} (#{battler.index}) will use Baton Pass to avoid Perish Song")
+          PBDebug.log_ai("#{@user.name} will use Baton Pass to avoid Perish Song")
           return true
         end
         if @battle.pbRegisterSwitch(battler.index, list[0])
-          PBDebug.log("[AI] #{battler.pbThis} (#{battler.index}) will switch with " +
-                      @battle.pbParty(battler.index)[list[0]].name)
+          PBDebug.log_ai("#{@user.name} will switch with #{@battle.pbParty(battler.index)[list[0]].name}")
           return true
         end
       end

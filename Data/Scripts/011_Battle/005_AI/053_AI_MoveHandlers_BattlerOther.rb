@@ -783,7 +783,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserTypesToTargetTyp
     next true if !user.battler.canChangeType?
     next true if target.battler.pbTypes(true).empty?
     next true if user.battler.pbTypes == target.battler.pbTypes &&
-                 user.effects[PBEffects::Type3] == target.effects[PBEffects::Type3]
+                 user.effects[PBEffects::ExtraType] == target.effects[PBEffects::ExtraType]
     next false
   }
 )

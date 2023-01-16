@@ -207,7 +207,7 @@ class Battle
       next if !@battlers[idxBattler] || pbOwnedByPlayer?(idxBattler) != isPlayer
       if @choices[idxBattler][0] != :None || !pbCanShowCommands?(idxBattler)
         # Action is forced, can't choose one
-        PBDebug.log("[AI] #{@battlers[idxBattler].pbThis} (#{idxBattler}) is forced into using a multi-turn move")
+        PBDebug.log_ai("#{@battlers[idxBattler].pbThis} (#{idxBattler}) is forced to use a multi-turn move")
         next
       end
       # AI controls this battler

@@ -109,6 +109,13 @@ end
 # it). (Strength Sap)
 #===============================================================================
 class Battle::Move::HealUserByTargetAttackLowerTargetAttack1 < Battle::Move
+  attr_reader :statDown
+
+  def initialize(battle, move)
+    super
+    @statDown = [:ATTACK, 1]
+  end
+
   def healingMove?;  return true; end
   def canMagicCoat?; return true; end
 
@@ -119,11 +126,11 @@ class Battle::Move::HealUserByTargetAttackLowerTargetAttack1 < Battle::Move
     #       works even if the stat stage cannot be changed due to an ability or
     #       other effect.
     if !@battle.moldBreaker && target.hasActiveAbility?(:CONTRARY)
-      if target.statStageAtMax?(:ATTACK)
+      if target.statStageAtMax?(@statDown[0])
         @battle.pbDisplay(_INTL("But it failed!")) if show_message
         return true
       end
-    elsif target.statStageAtMin?(:ATTACK)
+    elsif target.statStageAtMin?(@statDown[0])
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -135,11 +142,11 @@ class Battle::Move::HealUserByTargetAttackLowerTargetAttack1 < Battle::Move
     stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
     stageDiv = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
     atk      = target.attack
-    atkStage = target.stages[:ATTACK] + 6
+    atkStage = target.stages[@statDown[0]] + 6
     healAmt = (atk.to_f * stageMul[atkStage] / stageDiv[atkStage]).floor
     # Reduce target's Attack stat
-    if target.pbCanLowerStatStage?(:ATTACK, user, self)
-      target.pbLowerStatStage(:ATTACK, 1, user)
+    if target.pbCanLowerStatStage?(@statDown[0], user, self)
+      target.pbLowerStatStage(@statDown[0], @statDown[1], user)
     end
     # Heal user
     if target.hasActiveAbility?(:LIQUIDOOZE, true)

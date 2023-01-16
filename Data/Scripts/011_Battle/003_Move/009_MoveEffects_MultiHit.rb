@@ -334,13 +334,20 @@ end
 # (Skull Bash)
 #===============================================================================
 class Battle::Move::TwoTurnAttackChargeRaiseUserDefense1 < Battle::Move::TwoTurnMove
+  attr_reader :statUp
+
+  def initialize(battle, move)
+    super
+    @statUp = [:DEFENSE, 1]
+  end
+
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} tucked in its head!", user.pbThis))
   end
 
   def pbChargingTurnEffect(user, target)
-    if user.pbCanRaiseStatStage?(:DEFENSE, user, self)
-      user.pbRaiseStatStage(:DEFENSE, 1, user)
+    if user.pbCanRaiseStatStage?(@statUp[0], user, self)
+      user.pbRaiseStatStage(@statUp[0], @statUp[1], user)
     end
   end
 end

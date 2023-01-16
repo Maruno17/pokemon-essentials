@@ -100,11 +100,18 @@ end
 # Poisons the target and decreases its Speed by 1 stage. (Toxic Thread)
 #===============================================================================
 class Battle::Move::PoisonTargetLowerTargetSpeed1 < Battle::Move
+  attr_reader :statDown
+
+  def initialize(battle, move)
+    super
+    @statDown = [:SPEED, 1]
+  end
+
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if !target.pbCanPoison?(user, false, self) &&
-       !target.pbCanLowerStatStage?(:SPEED, user, self)
+       !target.pbCanLowerStatStage?(@statDown[0], user, self)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -113,8 +120,8 @@ class Battle::Move::PoisonTargetLowerTargetSpeed1 < Battle::Move
 
   def pbEffectAgainstTarget(user, target)
     target.pbPoison(user) if target.pbCanPoison?(user, false, self)
-    if target.pbCanLowerStatStage?(:SPEED, user, self)
-      target.pbLowerStatStage(:SPEED, 1, user)
+    if target.pbCanLowerStatStage?(@statDown[0], user, self)
+      target.pbLowerStatStage(@statDown[0], @statDown[1], user)
     end
   end
 end

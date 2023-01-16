@@ -719,7 +719,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetRandomStat2",
       score += 8
     end
     # Don't prefer if any foe has Punishment
-    each_foe_battler(target.side) do |b, i|
+    ai.each_foe_battler(target.side) do |b, i|
       next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetPositiveStatStages" }
       score -= 5
     end
@@ -1182,7 +1182,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaisePlusMinusUserAndAll
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseGroundedGrassBattlersAtkSpAtk1",
   proc { |move, user, target, ai, battle|
-    next true if !b.pbHasType?(:GRASS) || b.airborne? || b.semiInvulnerable?
+    next true if !target.has_type?(:GRASS) || target.battler.airborne? || target.battler.semiInvulnerable?
     next !target.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
          !target.battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
   }
@@ -1198,7 +1198,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseGroundedGrassBattle
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseGrassBattlersDef1",
   proc { |move, user, target, ai, battle|
-    next true if !b.pbHasType?(:GRASS) || b.semiInvulnerable?
+    next true if !target.has_type?(:GRASS) || target.battler.semiInvulnerable?
     next !target.battler.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move)
   }
 )
@@ -1226,10 +1226,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapAtkSpAtkSt
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if raises.length == 0   # No stat raises
-    score += ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
-    score += ai.get_score_for_target_stat_drop(score, target, raises, false, true) if raises.length > 0
-    score += ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
-    score += ai.get_score_for_target_stat_raise(score, target, drops, false, true) if drops.length > 0
+    score = ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
+    score = ai.get_score_for_target_stat_drop(score, target, raises, false, true) if raises.length > 0
+    score = ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
+    score = ai.get_score_for_target_stat_raise(score, target, drops, false, true) if drops.length > 0
     next score
   }
 )
@@ -1252,10 +1252,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapDefSpDefSt
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if raises.length == 0   # No stat raises
-    score += ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
-    score += ai.get_score_for_target_stat_drop(score, target, raises, false, true) if raises.length > 0
-    score += ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
-    score += ai.get_score_for_target_stat_raise(score, target, drops, false, true) if drops.length > 0
+    score = ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
+    score = ai.get_score_for_target_stat_drop(score, target, raises, false, true) if raises.length > 0
+    score = ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
+    score = ai.get_score_for_target_stat_raise(score, target, drops, false, true) if drops.length > 0
     next score
   }
 )
@@ -1278,10 +1278,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapStatStages
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if raises.length == 0   # No stat raises
-    score += ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
-    score += ai.get_score_for_target_stat_drop(score, target, raises, false, true) if raises.length > 0
-    score += ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
-    score += ai.get_score_for_target_stat_raise(score, target, drops, false, true) if drops.length > 0
+    score = ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
+    score = ai.get_score_for_target_stat_drop(score, target, raises, false, true) if raises.length > 0
+    score = ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
+    score = ai.get_score_for_target_stat_raise(score, target, drops, false, true) if drops.length > 0
     next score
   }
 )
@@ -1304,8 +1304,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserCopyTargetStatStages
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if raises.length == 0   # No stat raises
-    score += ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
-    score += ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
+    score = ai.get_score_for_target_stat_raise(score, user, raises, false, true) if raises.length > 0
+    score = ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
     if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
       if user.effects[PBEffects::FocusEnergy] > 0 && target.effects[PBEffects::FocusEnergy] == 0
         score -= 4
@@ -1337,8 +1337,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserStealTargetPositiveS
       raises.push(target.stages[s.id])
     end
     if raises.length > 0
-      score += ai.get_score_for_target_stat_raise(score, user, raises, false)
-      score += ai.get_score_for_target_stat_drop(score, target, raises, false, true)
+      score = ai.get_score_for_target_stat_raise(score, user, raises, false)
+      score = ai.get_score_for_target_stat_drop(score, target, raises, false, true)
     end
     next score
   }
@@ -1366,8 +1366,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("InvertTargetStatStages",
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if drops.length == 0   # No stats will drop
-    score += ai.get_score_for_target_stat_raise(score, target, raises, false, true) if raises.length > 0
-    score += ai.get_score_for_target_stat_drop(score, target, drops, false, true) if drops.length > 0
+    score = ai.get_score_for_target_stat_raise(score, target, raises, false, true) if raises.length > 0
+    score = ai.get_score_for_target_stat_drop(score, target, drops, false, true) if drops.length > 0
     next score
   }
 )
@@ -1388,8 +1388,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ResetTargetStatStages",
         raises.push(target.stages[s.id])
       end
     end
-    score += ai.get_score_for_target_stat_raise(score, target, raises, false, true) if raises.length > 0
-    score += ai.get_score_for_target_stat_drop(score, target, drops, false, true) if drops.length > 0
+    score = ai.get_score_for_target_stat_raise(score, target, raises, false, true) if raises.length > 0
+    score = ai.get_score_for_target_stat_drop(score, target, drops, false, true) if drops.length > 0
     next score
   }
 )
@@ -1416,8 +1416,8 @@ Battle::AI::Handlers::MoveEffectScore.add("ResetAllBattlersStatStages",
           raises.push(b.stages[s.id])
         end
       end
-      score += ai.get_score_for_target_stat_raise(score, b, raises, false, true) if raises.length > 0
-      score += ai.get_score_for_target_stat_drop(score, b, drops, false, true) if drops.length > 0
+      score = ai.get_score_for_target_stat_raise(score, b, raises, false, true) if raises.length > 0
+      score = ai.get_score_for_target_stat_drop(score, b, drops, false, true) if drops.length > 0
     end
     next score
   }

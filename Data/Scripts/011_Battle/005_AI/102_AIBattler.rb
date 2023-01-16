@@ -40,6 +40,10 @@ class Battle::AI::AIBattler
     return @ai.battle.wildBattle? && opposes?
   end
 
+  def name
+    return sprintf("%s (%d)", @battler.name, @index)
+  end
+
   def opposes?(other = nil)
     return @side == 1 if other.nil?
     return other.side != @side
@@ -184,7 +188,7 @@ class Battle::AI::AIBattler
   #=============================================================================
 
   def types; return @battler.types; end
-  def pbTypes(withType3 = false); return @battler.pbTypes(withType3); end
+  def pbTypes(withExtraType = false); return @battler.pbTypes(withExtraType); end
 
   def has_type?(type)
     return false if !type
@@ -208,7 +212,7 @@ class Battle::AI::AIBattler
         # TODO: Need to check the move's pbCalcTypeModSingle.
         ret *= effectiveness_of_type_against_single_battler_type(type, defend_type, user)
       end
-      ret *= 2 if target.effects[PBEffects::TarShot] && type == :FIRE
+      ret *= 2 if @battler.effects[PBEffects::TarShot] && type == :FIRE
     end
     return ret
   end

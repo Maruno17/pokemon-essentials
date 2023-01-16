@@ -1,3 +1,11 @@
+# TODO: Better randomisation of moves, including tracking of how many times each
+#       function code has been tested (note that some Pokémon may not be used in
+#       battle, so their moves won't be score).
+# TODO: Add held items.
+
+#===============================================================================
+#
+#===============================================================================
 def debug_set_up_trainer
   # Values to return
   trainer_array = []
@@ -6,7 +14,7 @@ def debug_set_up_trainer
   party_starts  = [0]
 
   # Choose random trainer type and trainer name
-  trainer_type = GameData::TrainerType.keys.sample
+  trainer_type = :CHAMPION   # GameData::TrainerType.keys.sample
   trainer_name = ["Alpha", "Bravo", "Charlie", "Delta", "Echo",
                   "Foxtrot", "Golf", "Hotel", "India", "Juliette",
                   "Kilo", "Lima", "Mike", "November", "Oscar",
@@ -24,8 +32,12 @@ def debug_set_up_trainer
   GameData::Species.each_species { |sp| valid_species.push(sp.species) }
   Settings::MAX_PARTY_SIZE.times do |i|
     this_species = valid_species.sample
-    this_level = rand(1, Settings::MAXIMUM_LEVEL)
-    pkmn = Pokemon.new(this_species, this_level, trainer)
+    this_level = 100   # rand(1, Settings::MAXIMUM_LEVEL)
+    pkmn = Pokemon.new(this_species, this_level, trainer, false)
+    all_moves = pkmn.getMoveList.map { |m| m[1] }
+    all_moves.uniq!
+    moves = all_moves.sample(4)
+    moves.each { |m| pkmn.learn_move(m) }
     trainer.party.push(pkmn)
     pokemon_array.push(pkmn)
   end
@@ -37,7 +49,7 @@ end
 def debug_test_auto_battle(logging = false)
   old_internal = $INTERNAL
   $INTERNAL = logging
-  echoln "Start of testing auto battle."
+  echoln "Start of testing auto-battle."
   echoln "" if !$INTERNAL
   PBDebug.log("")
   PBDebug.log("================================================================")
@@ -51,7 +63,7 @@ def debug_test_auto_battle(logging = false)
     trainer_txt = "[Trainer #{index}] #{trainer.full_name} [skill: #{trainer.skill_level}]"
     ($INTERNAL) ? PBDebug.log_header(trainer_txt) : echoln(trainer_txt)
     party.each do |pkmn|
-      pkmn_txt = "* #{pkmn.name}, Lv.#{pkmn.level}"
+      pkmn_txt = "#{pkmn.name}, Lv.#{pkmn.level}"
       pkmn_txt += " [Ability: #{pkmn.ability&.name || "---"}]"
       pkmn_txt += " [Item: #{pkmn.item&.name || "---"}]"
       ($INTERNAL) ? PBDebug.log(pkmn_txt) : echoln(pkmn_txt)
@@ -85,18 +97,19 @@ def debug_test_auto_battle(logging = false)
   # Perform the battle itself
   outcome = battle.pbStartBattle
   # End
-  echoln ["Undecided",
+  text = ["Undecided",
           "Trainer 1 #{player_trainers[0].name} won",
           "Trainer 2 #{foe_trainers[0].name} won",
           "Ran/forfeited",
           "Wild Pokémon caught",
           "Draw"][outcome]
+  echoln sprintf("%s after %d rounds", text, battle.turnCount + 1)
   echoln ""
   $INTERNAL = old_internal
 end
 
 #===============================================================================
-# Add to Debug menu
+# Add to Debug menu.
 #===============================================================================
 MenuHandlers.add(:debug_menu, :test_auto_battle, {
   "name"        => _INTL("Test Auto Battle"),
@@ -115,5 +128,6 @@ MenuHandlers.add(:debug_menu, :test_auto_battle_logging, {
   "always_show" => false,
   "effect"      => proc {
     debug_test_auto_battle(true)
+    pbMessage(_INTL("Battle transcript was logged in Data/debuglog.txt."))
   }
 })

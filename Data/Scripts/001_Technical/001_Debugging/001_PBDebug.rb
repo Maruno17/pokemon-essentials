@@ -48,6 +48,27 @@ module PBDebug
     end
   end
 
+  def self.log_ai(msg)
+    if $DEBUG && $INTERNAL
+      msg = "[AI] " + msg
+      echoln msg.gsub("%", "%%")
+      @@log.push(msg + "\r\n")
+      PBDebug.flush   # if @@log.length > 1024
+    end
+  end
+
+  def self.log_score_change(amt, msg)
+    return if amt == 0
+    if $DEBUG && $INTERNAL
+      sign = (amt > 0) ? "+" : "-"
+      amt_text = sprintf("%3d", amt.abs)
+      msg = "     #{sign}#{amt_text}: #{msg}"
+      echoln msg.gsub("%", "%%")
+      @@log.push(msg + "\r\n")
+      PBDebug.flush   # if @@log.length > 1024
+    end
+  end
+
   def self.dump(msg)
     if $DEBUG && $INTERNAL
       File.open("Data/dumplog.txt", "a+b") { |f| f.write("#{msg}\r\n") }

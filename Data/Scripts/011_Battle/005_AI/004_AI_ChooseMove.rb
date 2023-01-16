@@ -23,16 +23,18 @@ class Battle::AI
       # Unchoosable moves aren't considered
       if !@battle.pbCanChooseMove?(@user.index, idxMove, false)
         if move.pp == 0 && move.total_pp > 0
-          PBDebug.log("[AI] #{@user.battler.pbThis} (#{@user.index}) cannot use move #{move.name} as it has no PP left")
+          PBDebug.log_ai("#{@user.name} cannot use #{move.name} (no PP left)")
         else
-          PBDebug.log("[AI] #{@user.battler.pbThis} (#{@user.index}) cannot choose to use #{move.name}")
+          PBDebug.log_ai("#{@user.name} cannot choose to use #{move.name}")
         end
         next
       end
+      PBDebug.log_ai("#{@user.name} is considering using #{move.name}...")
       # Set up move in class variables
       set_up_move_check(move)
       # Predict whether the move will fail (generally)
       if @trainer.has_skill_flag?("PredictMoveFailure") && pbPredictMoveFailure
+        PBDebug.log_score_change(MOVE_FAIL_SCORE - MOVE_BASE_SCORE, "move will fail")
         add_move_to_choices(choices, idxMove, MOVE_FAIL_SCORE)
         next
       end
@@ -49,6 +51,7 @@ class Battle::AI
         # TODO: Figure out first which targets are valid. Includes the call to
         #       pbMoveCanTarget?, but also includes move-redirecting effects
         #       like Lightning Rod. Skip any battlers that can't be targeted.
+        num_targets = 0
         @battle.allBattlers.each do |b|
           next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
           # TODO: Should this sometimes consider targeting an ally? See def
@@ -57,7 +60,9 @@ class Battle::AI
           score = MOVE_BASE_SCORE
           PBDebug.logonerr { score = pbGetMoveScore([b]) }
           add_move_to_choices(choices, idxMove, score, b.index)
+          num_targets += 1
         end
+        PBDebug.log("     no valid targets") if num_targets == 0
       else   # Multiple targets at once
         # Includes: AllAllies, AllBattlers, AllFoes, AllNearFoes, AllNearOthers, UserAndAllies
         targets = []
@@ -100,7 +105,7 @@ class Battle::AI
         move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(target.battler.lastRegularMoveUsed))
       end
     when "UseMoveDependingOnEnvironment"
-      move.move.pbOnStartUse(@user.battler, [])   # Determine which move is used instead
+      move.pbOnStartUse(@user.battler, [])   # Determine which move is used instead
       move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(move.npMove))
     end
     @move.set_up(move, @user)
@@ -197,13 +202,18 @@ class Battle::AI
       end
       # Score based on how many targets were affected
       if affected_targets == 0 && @trainer.has_skill_flag?("PredictMoveFailure")
-        return MOVE_FAIL_SCORE if !@move.move.worksWithNoTargets?
+        if !@move.move.worksWithNoTargets?
+          PBDebug.log_score_change(MOVE_FAIL_SCORE - MOVE_BASE_SCORE, "move will fail")
+          return MOVE_FAIL_SCORE
+        end
       else
         # TODO: Can this accounting for multiple targets be improved somehow?
         score /= affected_targets if affected_targets > 1   # Average the score against multiple targets
         # Bonus for affecting multiple targets
         if @trainer.has_skill_flag?("PreferMultiTargetMoves") && affected_targets > 1
+          old_score = score
           score += (affected_targets - 1) * 10
+          PBDebug.log_score_change(score - old_score, "affects multiple battlers")
         end
       end
     end
@@ -212,8 +222,10 @@ class Battle::AI
     # Self-Destruct)
     if @trainer.has_skill_flag?("ScoreMoves")
       # Modify the score according to the move's effect
+      old_score = score
       score = Battle::AI::Handlers.apply_move_effect_score(@move.function,
          score, @move, @user, self, @battle)
+      PBDebug.log_score_change(score - old_score, "function code modifier (generic)")
       # Modify the score according to various other effects
       score = Battle::AI::Handlers.apply_general_move_score_modifiers(
          score, @move, @user, self, @battle)
@@ -240,15 +252,18 @@ class Battle::AI
   #=============================================================================
   def pbGetMoveScoreAgainstTarget
     # Predict whether the move will fail against the target
-    if @trainer.has_skill_flag?("PredictMoveFailure")
-      return -1 if pbPredictMoveFailureAgainstTarget
+    if @trainer.has_skill_flag?("PredictMoveFailure") && pbPredictMoveFailureAgainstTarget
+      PBDebug.log("     move will not affect #{@target.name}")
+      return -1
     end
     # Score the move
     score = MOVE_BASE_SCORE
     if @trainer.has_skill_flag?("ScoreMoves")
       # Modify the score according to the move's effect against the target
+      old_score = score
       score = Battle::AI::Handlers.apply_move_effect_against_target_score(@move.function,
          MOVE_BASE_SCORE, @move, @user, @target, self, @battle)
+      PBDebug.log_score_change(score - old_score, "function code modifier (against target)")
       # Modify the score according to various other effects against the target
       score = Battle::AI::Handlers.apply_general_move_against_target_score_modifiers(
          score, @move, @user, @target, self, @battle)
@@ -256,9 +271,14 @@ class Battle::AI
     # Add the score against the target to the overall score
     target_data = @move.pbTarget(@user.battler)
     if target_data.targets_foe && !@target.opposes?(@user) && @target.index != @user.index
-      return -1 if score == MOVE_USELESS_SCORE
+      if score == MOVE_USELESS_SCORE
+        PBDebug.log("     move is useless against #{@target.name}")
+        return -1
+      end
       # TODO: Is this reversal of the score okay?
+      old_score = score
       score = 175 - score
+      PBDebug.log_score_change(score - old_score, "score inverted (move targets ally but can target foe)")
     end
     return score
   end
@@ -272,7 +292,7 @@ class Battle::AI
     # If no moves can be chosen, auto-choose a move or Struggle
     if choices.length == 0
       @battle.pbAutoChooseMove(user_battler.index)
-      PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will auto-use a move or Struggle")
+      PBDebug.log_ai("#{@user.name} will auto-use a move or Struggle")
       return
     end
     # Figure out useful information about the choices
@@ -289,9 +309,10 @@ class Battle::AI
         badMoves = choices.none? { |c| user_battler.moves[c[0]].damagingMove? }
         badMoves = false if badMoves && pbAIRandom(100) < 10
       end
-      if badMoves && pbEnemyShouldWithdrawEx?(true)
-        PBDebug.log("[AI] #{user_battler.pbThis} (#{user_battler.index}) will switch due to terrible moves")
-        return
+      if badMoves
+        PBDebug.log_ai("#{@user.name} wants to switch due to terrible moves")
+        return if pbEnemyShouldWithdrawEx?(true)
+        PBDebug.log_ai("#{@user.name} won't switch after all")
       end
     end
     # Calculate a minimum score threshold and reduce all move scores by it
@@ -300,12 +321,12 @@ class Battle::AI
     total_score = choices.sum { |c| c[3] }
     # Log the available choices
     if $INTERNAL
-      PBDebug.log("[AI] Move choices for #{user_battler.pbThis(true)} (#{user_battler.index}):")
+      PBDebug.log_ai("Move choices for #{@user.name}:")
       choices.each_with_index do |c, i|
         chance = sprintf("%5.1f", (c[3] > 0) ? 100.0 * c[3] / total_score : 0)
-        log_msg = "    * #{chance}% chance: #{user_battler.moves[c[0]].name}"
-        log_msg += " (against target #{c[2]})" if c[2] >= 0
-        log_msg += " = score #{c[1]}"
+        log_msg = "   * #{chance}% to use #{user_battler.moves[c[0]].name}"
+        log_msg += " (target #{c[2]})" if c[2] >= 0
+        log_msg += ": score #{c[1]}"
         PBDebug.log(log_msg)
       end
     end
@@ -320,7 +341,12 @@ class Battle::AI
     end
     # Log the result
     if @battle.choices[user_battler.index][2]
-      PBDebug.log("    => will use #{@battle.choices[user_battler.index][2].name}")
+      move_name = @battle.choices[user_battler.index][2].name
+      if @battle.choices[user_battler.index][3] >= 0
+        PBDebug.log("   => will use #{move_name} (target #{@battle.choices[user_battler.index][3]})")
+      else
+        PBDebug.log("   => will use #{move_name}")
+      end
     end
   end
 end
