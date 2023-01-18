@@ -33,15 +33,6 @@ module Battle::CatchAndStoreMixin
           next if party_index < 0   # Cancelled
           party_size = pbPlayer.party.length
           # Send chosen Pokémon to storage
-          # NOTE: This doesn't work properly if you catch multiple Pokémon in
-          #       the same battle, because the code below doesn't alter the
-          #       contents of pbParty(0), only pbPlayer.party. This means that
-          #       viewing the party in battle after replacing a party Pokémon
-          #       with a caught one (which is possible if you've caught a second
-          #       Pokémon) will not show the first caught Pokémon in the party
-          #       but will still show the boxed Pokémon in the party. Correcting
-          #       this would take a surprising amount of code, and it's very
-          #       unlikely to be needed anyway, so I'm ignoring it for now.
           send_pkmn = pbPlayer.party[party_index]
           stored_box = @peer.pbStorePokemon(pbPlayer, send_pkmn)
           pbPlayer.party.delete_at(party_index)
