@@ -504,13 +504,13 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenElectricMoves",
     end
     # Prefer if foes have Electric moves
     ai.each_foe_battler(user.side) do |b, i|
-      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :ELECTRIC }
+      next if !b.has_damaging_move_of_type?(:ELECTRIC)
       score += 10
       score += 5 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :ELECTRIC }
     end
     # Don't prefer if any allies have Electric moves
     ai.each_same_side_battler(user.side) do |b, i|
-      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :ELECTRIC }
+      next if !b.has_damaging_move_of_type?(:ELECTRIC)
       score -= 8
       score -= 4 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :ELECTRIC }
     end
@@ -535,13 +535,13 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenFireMoves",
     end
     # Prefer if foes have Fire moves
     ai.each_foe_battler(user.side) do |b, i|
-      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :FIRE }
+      next if !b.has_damaging_move_of_type?(:FIRE)
       score += 10
       score += 5 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :FIRE }
     end
     # Don't prefer if any allies have Fire moves
     ai.each_same_side_battler(user.side) do |b, i|
-      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :FIRE }
+      next if !b.has_damaging_move_of_type?(:FIRE)
       score -= 8
       score -= 4 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :FIRE }
     end
@@ -949,9 +949,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("EnsureNextMoveAlwaysHits
     next Battle::AI::MOVE_USELESS_SCORE if user.has_active_ability?(:NOGUARD) || target.has_active_ability?(:NOGUARD)
     next Battle::AI::MOVE_USELESS_SCORE if target.effects[PBEffects::Telekinesis] > 0
     # Prefer if the user knows moves with low accuracy
-    # TODO: This isn't the correct use of check_for_move, since it should just
-    #       loop through them instead.
-    user.check_for_move do |m|
+    user.battler.eachMove do |m|
       next if target.effects[PBEffects::Minimize] && m.tramplesMinimize? && Settings::MECHANICS_GENERATION >= 6
       # TODO: There are other effects that make a move certain to hit. Account
       #       for those as well. Score this move useless if no moves would
@@ -978,7 +976,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartNegateTargetEvasion
     # Check if the user knows any moves that would benefit from negating the
     # target's Ghost type immunity
     if target.has_type?(:GHOST)
-      user.check_for_move do |m|
+      user.battler.eachMove do |m|
         next if !m.damagingMove?
         score += 10 if Effectiveness.ineffective_type?(m.pbCalcType(user.battler), :GHOST)
       end
@@ -998,7 +996,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartNegateTargetEvasion
     # Check if the user knows any moves that would benefit from negating the
     # target's Dark type immunity
     if target.has_type?(:DARK)
-      user.check_for_move do |m|
+      user.battler.eachMove do |m|
         next if !m.damagingMove?
         score += 10 if Effectiveness.ineffective_type?(m.pbCalcType(user.battler), :DARK)
       end

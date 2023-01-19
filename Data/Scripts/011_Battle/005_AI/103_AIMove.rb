@@ -8,9 +8,9 @@ class Battle::AI::AIMove
     @ai = ai
   end
 
-  def set_up(move, ai_battler)
+  def set_up(move)
     @move = move
-    @ai_battler = ai_battler
+    @move.calcType = rough_type
   end
 
   #=============================================================================
@@ -46,7 +46,7 @@ class Battle::AI::AIMove
 
   # Returns whether this move targets multiple battlers.
   def targets_multiple_battlers?
-    user_battler = @ai_battler.battler
+    user_battler = @ai.user.battler
     target_data = @move.pbTarget(user_battler)
     return false if target_data.num_targets <= 1
     num_targets = 0

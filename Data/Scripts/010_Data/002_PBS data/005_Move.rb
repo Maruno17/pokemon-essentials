@@ -84,6 +84,14 @@ module GameData
       return GameData::Type.get(@type).special?
     end
 
+    def damaging?
+      return @category != 2
+    end
+
+    def status?
+      return @category == 2
+    end
+
     def hidden_move?
       GameData::Item.each do |i|
         return true if i.is_HM? && i.move == @id

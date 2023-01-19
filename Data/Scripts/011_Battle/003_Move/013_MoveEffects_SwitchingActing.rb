@@ -767,26 +767,26 @@ class Battle::Move::DisableTargetUsingDifferentMove < Battle::Move
   def initialize(battle, move)
     super
     @moveBlacklist = [
-      "DisableTargetUsingDifferentMove",   # Encore
+      "DisableTargetUsingDifferentMove",               # Encore
       # Struggle
-      "Struggle",   # Struggle
+      "Struggle",                                      # Struggle
       # Moves that affect the moveset
       "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
-      "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
-      "TransformUserIntoTarget",   # Transform
+      "ReplaceMoveWithTargetLastMoveUsed",             # Sketch
+      "TransformUserIntoTarget",                       # Transform
       # Moves that call other moves (see also below)
-      "UseLastMoveUsedByTarget"   # Mirror Move
+      "UseLastMoveUsedByTarget"                        # Mirror Move
     ]
     if Settings::MECHANICS_GENERATION >= 7
       @moveBlacklist += [
         # Moves that call other moves
-#        "UseLastMoveUsedByTarget",   # Mirror Move                 # See above
-        "UseLastMoveUsed",   # Copycat
-        "UseMoveTargetIsAboutToUse",   # Me First
-        "UseMoveDependingOnEnvironment",   # Nature Power
-        "UseRandomUserMoveIfAsleep",   # Sleep Talk
-        "UseRandomMoveFromUserParty",   # Assist
-        "UseRandomMove"   # Metronome
+#        "UseLastMoveUsedByTarget",                    # Mirror Move   # See above
+        "UseLastMoveUsed",                             # Copycat
+        "UseMoveTargetIsAboutToUse",                   # Me First
+        "UseMoveDependingOnEnvironment",               # Nature Power
+        "UseRandomUserMoveIfAsleep",                   # Sleep Talk
+        "UseRandomMoveFromUserParty",                  # Assist
+        "UseRandomMove"                                # Metronome
       ]
     end
   end

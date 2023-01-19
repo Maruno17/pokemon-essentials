@@ -84,7 +84,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense1CurlUpUser",
   proc { |score, move, user, ai, battle|
     score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     if !user.effects[PBEffects::DefenseCurl] &&
-       user.check_for_move { |m| m.function == "MultiTurnAttackPowersUpEachTurn" }
+       user.has_move_with_function?("MultiTurnAttackPowersUpEachTurn")
       score += 10
     end
     next score
@@ -148,7 +148,7 @@ Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserSpDef1",
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpDef1PowerUpElectricMove",
   proc { |score, move, user, ai, battle|
     score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
-    if user.check_for_move { |m| m.damagingMove? && m.type == :ELECTRIC }
+    if user.has_damaging_move_of_type?(:ELECTRIC)
       score += 10
     end
     next score
@@ -201,14 +201,14 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed2LowerUserWeight",
       #       because of those modifiers, and the score changes may need to be
       #       different accordingly.
       if user.battler.pokemon.weight - user.effects[PBEffects::WeightChange] > 1
-        if user.check_for_move { |m| m.function == "PowerHigherWithUserHeavierThanTarget" }
+        if user.has_move_with_function?("PowerHigherWithUserHeavierThanTarget")
           score -= 10
         end
         ai.each_foe_battler(user.side) do |b, i|
-          if b.check_for_move { |m| m.function == "PowerHigherWithUserHeavierThanTarget" }
+          if b.has_move_with_function?("PowerHigherWithUserHeavierThanTarget")
             score -= 10
           end
-          if b.check_for_move { |m| m.function == "PowerHigherWithTargetWeight" }
+          if b.has_move_with_function?("PowerHigherWithTargetWeight")
             score += 10
           end
           # TODO: Check foes for Sky Drop and whether the user is too heavy for it
@@ -528,7 +528,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRaiseUserAtk1WhenDamaged",
                                  m.function != "UseUserDefenseInsteadOfUserAttack" &&
                                  m.function != "UseTargetAttackInsteadOfUserAttack" }
       score += 8
-    elsif user.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
+    elsif user.has_move_with_function?("PowerHigherWithUserPositiveStatStages")
       score += 4
     end
     next score
@@ -715,12 +715,12 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetRandomStat2",
       score += ((100 * target.hp / target.totalhp) - 50) / 4   # +5 to -12
     end
     # Prefer if target has Stored Power
-    if target.check_for_move { |m| m.function == "PowerHigherWithUserPositiveStatStages" }
+    if target.has_move_with_function?("PowerHigherWithUserPositiveStatStages")
       score += 8
     end
     # Don't prefer if any foe has Punishment
     ai.each_foe_battler(target.side) do |b, i|
-      next if !b.check_for_move { |m| m.function == "PowerHigherWithTargetPositiveStatStages" }
+      next if !b.has_move_with_function?("PowerHigherWithTargetPositiveStatStages")
       score -= 5
     end
     next score
@@ -921,7 +921,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetSpeed1MakeTar
     if !target.effects[PBEffects::TarShot]
       eff = target.effectiveness_of_type_against_battler(:FIRE)
       if !Effectiveness.ineffective?(eff)
-        score += 8 * eff if user.check_for_move { |m| m.damagingMove? && m.pbCalcType(user.battler) == :FIRE }
+        score += 8 * eff if user.has_damaging_move_of_type?(:FIRE)
       end
     end
     next score
@@ -1119,7 +1119,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1
 )
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaisePlusMinusUserAndAlliesAtkSpAtk1",
   proc { |move, user, target, ai, battle|
-    next true if !target.hasActiveAbility?([:MINUS, :PLUS])
+    next true if !target.has_active_ability?([:MINUS, :PLUS])
     next !target.battler.pbCanRaiseStatStage?(:ATTACK, user.battler, move.move) &&
          !target.battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user.battler, move.move)
   }
@@ -1157,7 +1157,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("RaisePlusMinusUserAndAlliesDefSpDef1
 )
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaisePlusMinusUserAndAlliesDefSpDef1",
   proc { |move, user, target, ai, battle|
-    next true if !target.hasActiveAbility?([:MINUS, :PLUS])
+    next true if !target.has_active_ability?([:MINUS, :PLUS])
     next !target.battler.pbCanRaiseStatStage?(:DEFENSE, user.battler, move.move) &&
          !target.battler.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
   }

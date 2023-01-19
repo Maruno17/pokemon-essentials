@@ -215,27 +215,27 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttack",
       has_protect_move = false
       if move.move.pbTarget(user).num_targets > 1 &&
          (Settings::MECHANICS_GENERATION >= 7 || move.damagingMove?)
-        if target.check_for_move { |m| m.function == "ProtectUserSideFromMultiTargetDamagingMoves" }
+        if target.has_move_with_function?("ProtectUserSideFromMultiTargetDamagingMoves")
           has_protect_move = true
         end
       end
       if move.move.canProtectAgainst?
-        if target.check_for_move { |m| ["ProtectUser",
-                                        "ProtectUserFromTargetingMovesSpikyShield",
-                                        "ProtectUserBanefulBunker"].include?(m.function) }
+        if target.has_move_with_function?("ProtectUser",
+                                          "ProtectUserFromTargetingMovesSpikyShield",
+                                          "ProtectUserBanefulBunker")
           has_protect_move = true
         end
         if move.damagingMove?
           # NOTE: Doesn't check for Mat Block because it only works on its
           #       user's first turn in battle, so it can't be used in response
           #       to this move charging up.
-          if target.check_for_move { |m| ["ProtectUserFromDamagingMovesKingsShield",
-                                          "ProtectUserFromDamagingMovesObstruct"].include?(m.function) }
+          if target.has_move_with_function?("ProtectUserFromDamagingMovesKingsShield",
+                                            "ProtectUserFromDamagingMovesObstruct")
             has_protect_move = true
           end
         end
         if move.rough_priority(user) > 0
-          if target.check_for_move { |m| m.function == "ProtectUserSideFromPriorityMoves" }
+          if target.has_move_with_function?("ProtectUserSideFromPriorityMoves")
             has_protect_move = true
           end
         end

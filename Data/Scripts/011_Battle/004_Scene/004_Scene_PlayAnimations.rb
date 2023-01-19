@@ -442,7 +442,7 @@ class Battle::Scene
       moveType = moveData.type
       moveKind = moveData.category
       moveKind += 3 if target_data.num_targets > 1 || target_data.affects_foe_side
-      moveKind += 3 if moveKind == 2 && target_data.num_targets > 0
+      moveKind += 3 if moveData.status? && target_data.num_targets > 0
       # [one target physical, one target special, user status,
       #  multiple targets physical, multiple targets special, non-user status]
       typeDefaultAnim = {

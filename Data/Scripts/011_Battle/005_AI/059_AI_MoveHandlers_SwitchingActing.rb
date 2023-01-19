@@ -30,13 +30,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
       else
         score -= total * 10
         # special case: user has no damaging moves
-        hasDamagingMove = false
-        user.battler.eachMove do |m|
-          next if !m.damagingMove?
-          hasDamagingMove = true
-          break
-        end
-        score += 75 if !hasDamagingMove
+        score += 75 if !user.check_for_move { |m| m.damagingMove? }
       end
     end
     next score
@@ -95,13 +89,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
       else
         score += total * 10
         # special case: user has no damaging moves
-        hasDamagingMove = false
-        user.battler.eachMove do |m|
-          next if !m.damagingMove?
-          hasDamagingMove = true
-          break
-        end
-        score += 75 if !hasDamagingMove
+        score += 75 if !user.check_for_move { |m| m.damagingMove? }
       end
     else
       score -= 100
@@ -192,7 +180,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BindTarget",
     # Don't prefer if the target can remove the binding (and the binding has an
     # effect)
     if (!untrappable && !target.battler.trappedInBattle?) || target.battler.takesIndirectDamage?
-      if target.check_for_move { |m| m.function == "RemoveUserBindingAndEntryHazards" }
+      if target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
         score -= 8
       end
     end
@@ -440,7 +428,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerPPOfTargetLastMoveB
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetLastMoveUsed",
   proc { |move, user, target, ai, battle|
@@ -456,9 +444,25 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetLastMoveUs
     next will_fail
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetUsingSameMoveConsecutively",
+  proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if target.has_active_item?(:MENTALHERB)
+    # Prefer if the target is locked into using a single move, or will be
+    if target.effects[PBEffects::ChoiceBand] ||
+       target.has_active_item?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
+       target.has_active_ability?(:GORILLATACTICS)
+      score += 8
+    end
+    # PRefer disabling a damaging move
+    score += 5 if GameData::Move.try_get(target.battler.lastRegularMoveUsed)&.damaging?
+    # Inherent preference
+    score += 8
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetUsingSameMoveConsecutively",
   proc { |move, user, target, ai, battle|
@@ -469,13 +473,21 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetUsingSameM
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetUsingSameMoveConsecutively",
   proc { |score, move, user, target, ai, battle|
-    next 0 if target.effects[PBEffects::Torment]
+    next Battle::AI::MOVE_USELESS_SCORE if target.has_active_item?(:MENTALHERB)
+    # Prefer if the target is locked into using a single move, or will be
+    if target.effects[PBEffects::ChoiceBand] ||
+       target.has_active_item?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
+       target.has_active_ability?(:GORILLATACTICS)
+      score += 8
+    end
+    # Inherent preference
+    score += 8
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetUsingDifferentMove",
   proc { |move, user, target, ai, battle|
@@ -496,23 +508,44 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetUsingDiffe
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetUsingDifferentMove",
   proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if target.has_active_item?(:MENTALHERB)
     if user.faster_than?(target)
-      moveData = GameData::Move.get(target.battler.lastRegularMoveUsed)
-      if moveData.category == 2 &&   # Status move
-         [:User, :BothSides].include?(moveData.target)
-        score += 60
-      elsif moveData.category != 2 &&   # Damaging move
-            moveData.target == :NearOther &&
-            Effectiveness.ineffective?(user.effectiveness_of_type_against_battler(moveData.type, target))
-        score += 60
+      # We know which move is going to be encored (assuming the target doesn't
+      # use a high priority move)
+      move_data = GameData::Move.get(target.battler.lastRegularMoveUsed)
+      if move_data.status?
+        # Prefer encoring status moves
+        if [:User, :BothSides].include?(move_data.target)
+          # TODO: This target distinction was in the old code. Is it appropriate?
+          score += 10
+        else
+          score += 8
+        end
+      elsif move_data.damaging? && move_data.target == :NearOther
+        # Prefer encoring damaging moves depending on their type effectiveness
+        # against the user
+        eff = user.effectiveness_of_type_against_battler(move_data.type, target)
+        if Effectiveness.ineffective?(eff)
+          score += 15
+        elsif Effectiveness.not_very_effective?(eff)
+          score += 10
+        elsif Effectiveness.super_effective?(eff)
+          score -= 5
+        else
+          score += 5
+        end
       end
+    else
+      # We don't know which move is going to be encored; just prefer limiting
+      # the target's options
+      score += 8
     end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetStatusMoves",
   proc { |move, user, target, ai, battle|
@@ -526,12 +559,45 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetStatusMove
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetStatusMoves",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.statusMove? }
+    # Not worth using on a sleeping target that won't imminently wake up
+    if target.status == :SLEEP && target.statusCount > ((target.faster_than?(user)) ? 2 : 1)
+      if !target.check_for_move { |m| m.statusMove? && m.usableWhenAsleep? && (m.pp > 0 || m.total_pp == 0) }
+        next Battle::AI::MOVE_USELESS_SCORE
+      end
+    end
+    # Move is likely useless if the target will lock themselves into a move,
+    # because they'll likely lock themselves into a damaging move anyway
+    if !target.effects[PBEffects::ChoiceBand]
+      if target.has_active_item?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
+         target.has_active_ability?(:GORILLATACTICS)
+        next Battle::AI::MOVE_USELESS_SCORE
+      end
+    end
+    # Prefer if the target has a protection move
+    protection_moves = [
+      "ProtectUser",                                       # Detect, Protect
+      "ProtectUserSideFromPriorityMoves",                  # Quick Guard
+      "ProtectUserSideFromMultiTargetDamagingMoves",       # Wide Guard
+      "UserEnduresFaintingThisTurn",                       # Endure
+      "ProtectUserSideFromDamagingMovesIfUserFirstTurn",   # Mat Block
+      "ProtectUserSideFromStatusMoves",                    # Crafty Shield
+      "ProtectUserFromDamagingMovesKingsShield",           # King's Shield
+      "ProtectUserFromDamagingMovesObstruct",              # Obstruct
+      "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
+      "ProtectUserBanefulBunker"                           # Baneful Bunker
+    ]
+    if target.check_for_move { |m| m.statusMove? && protection_moves.include?(m.function) &&
+                                   (m.pp > 0 || m.total_pp == 0) }
+      score += 6
+    end
+    # Inherent preference
+    score += 8
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetHealingMoves",
   proc { |move, user, target, ai, battle|
@@ -542,28 +608,57 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetHealingMov
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetHealingMoves",
   proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.healingMove? }
+    # Useless if the foe can't heal themselves with a move or some held items
+    if !target.check_for_move { |m| m.healingMove? && (m.pp > 0 || m.total_pp == 0) }
+      if !target.has_active_item?(:LEFTOVERS) &&
+         !(target.has_active_item?(:BLACKSLUDGE) && target.has_type?(:POISON))
+        next Battle::AI::MOVE_USELESS_SCORE
+      end
+    end
+    # Inherent preference
+    score += 8
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetSoundMoves",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::ThroatChop] == 0
-      score += 10 if target.check_for_move { |m| m.soundMove? }
-    end
+    next score if target.effects[PBEffects::ThroatChop] > 1
+    next score if !target.check_for_move { |m| m.soundMove? && (m.pp > 0 || m.total_pp == 0) }
+    # Inherent preference
+    score += 8
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetMovesKnownByUser",
   proc { |move, user, ai, battle|
     next user.effects[PBEffects::Imprison]
+  }
+)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetMovesKnownByUser",
+  proc { |score, move, user, target, ai, battle|
+    # Useless if the foes have no moves that the user also knows
+    shared_move = false
+    user_moves = user.battler.moves.map { |m| m.id }
+    ai.each_foe_battler(user.side) do |b, i|
+      b.battler.eachMove do |m|
+        next if !user_moves.include?(m.id)
+        next if m.pp == 0 && m.total_pp > 0
+        shared_move = true
+        break
+      end
+      break if shared_move
+    end
+    next Battle::AI::MOVE_USELESS_SCORE if !shared_move
+    # Inherent preference
+    score += 6
+    next score
   }
 )

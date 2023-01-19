@@ -267,6 +267,18 @@ class Battle::AI::AIBattler
     return ret
   end
 
+  def has_damaging_move_of_type?(*types)
+    check_for_move do |m|
+      return true if m.damagingMove? && types.include?(m.pbCalcType(@battler))
+    end
+    return false
+  end
+
+  def has_move_with_function?(*functions)
+    check_for_move { |m| return true if functions.include?(m.function) }
+    return false
+  end
+
   #=============================================================================
 
   def can_switch_lax?

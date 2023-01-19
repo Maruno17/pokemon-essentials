@@ -206,7 +206,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerAfterFusionFlare",
   proc { |score, move, user, ai, battle|
     # Prefer if an ally knows Fusion Flare
     ai.each_ally(user.index) do |b, i|
-      score += 10 if b.check_for_move { |m| m.function == "DoublePowerAfterFusionBolt" }
+      score += 10 if b.has_move_with_function?("DoublePowerAfterFusionBolt")
     end
     next score
   }
@@ -219,7 +219,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerAfterFusionBolt",
   proc { |score, move, user, ai, battle|
     # Prefer if an ally knows Fusion Bolt
     ai.each_ally(user.index) do |b, i|
-      score += 10 if b.check_for_move { |m| m.function == "DoublePowerAfterFusionFlare" }
+      score += 10 if b.has_move_with_function?("DoublePowerAfterFusionFlare")
     end
     next score
   }
@@ -380,7 +380,7 @@ Battle::AI::Handlers::MoveEffectScore.add("GrassPledge",
   proc { |score, move, user, ai, battle|
     # Prefer if an ally knows a different Pledge move
     ai.each_ally(user.index) do |b, i|
-      score += 10 if b.check_for_move { |m| ["FirePledge", "WaterPledge"].include?(m.function) }
+      score += 10 if b.has_move_with_function?("FirePledge", "WaterPledge")
     end
     next score
   }
@@ -393,7 +393,7 @@ Battle::AI::Handlers::MoveEffectScore.add("FirePledge",
   proc { |score, move, user, ai, battle|
     # Prefer if an ally knows a different Pledge move
     ai.each_ally(user.index) do |b, i|
-      score += 10 if b.check_for_move { |m| ["GrassPledge", "WaterPledge"].include?(m.function) }
+      score += 10 if b.has_move_with_function?("GrassPledge", "WaterPledge")
     end
     next score
   }
@@ -406,7 +406,7 @@ Battle::AI::Handlers::MoveEffectScore.add("WaterPledge",
   proc { |score, move, user, ai, battle|
     # Prefer if an ally knows a different Pledge move
     ai.each_ally(user.index) do |b, i|
-      score += 10 if b.check_for_move { |m| ["GrassPledge", "FirePledge"].include?(m.function) }
+      score += 10 if b.has_move_with_function?("GrassPledge", "FirePledge")
     end
     next score
   }

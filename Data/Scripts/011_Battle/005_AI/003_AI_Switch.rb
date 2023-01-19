@@ -107,7 +107,7 @@ class Battle::AI
           if spikes > 0
             spikesDmg = [8, 6, 4][spikes - 1]
             next if pkmn.hp <= pkmn.totalhp / spikesDmg &&
-                    !pkmn.hasType?(:FLYING) && !pkmn.hasActiveAbility?(:LEVITATE)
+                    !pkmn.hasType?(:FLYING) && !pkmn.hasAbility?(:LEVITATE)
           end
         end
         # moveType is the type of the target's last used move

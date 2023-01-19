@@ -29,11 +29,11 @@ class Battle::AI
         end
         next
       end
-      PBDebug.log_ai("#{@user.name} is considering using #{move.name}...")
       # Set up move in class variables
       set_up_move_check(move)
       # Predict whether the move will fail (generally)
       if @trainer.has_skill_flag?("PredictMoveFailure") && pbPredictMoveFailure
+        PBDebug.log_ai("#{@user.name} is considering using #{move.name}...")
         PBDebug.log_score_change(MOVE_FAIL_SCORE - MOVE_BASE_SCORE, "move will fail")
         add_move_to_choices(choices, idxMove, MOVE_FAIL_SCORE)
         next
@@ -43,6 +43,7 @@ class Battle::AI
       case target_data.num_targets
       when 0   # No targets, affects the user or a side or the whole field
         # Includes: BothSides, FoeSide, None, User, UserSide
+        PBDebug.log_ai("#{@user.name} is considering using #{move.name}...")
         score = MOVE_BASE_SCORE
         PBDebug.logonerr { score = pbGetMoveScore }
         add_move_to_choices(choices, idxMove, score)
@@ -57,6 +58,7 @@ class Battle::AI
           # TODO: Should this sometimes consider targeting an ally? See def
           #       pbGetMoveScoreAgainstTarget for more information.
           next if target_data.targets_foe && !@user.battler.opposes?(b)
+          PBDebug.log_ai("#{@user.name} is considering using #{move.name} against #{b.name} (#{b.index})...")
           score = MOVE_BASE_SCORE
           PBDebug.logonerr { score = pbGetMoveScore([b]) }
           add_move_to_choices(choices, idxMove, score, b.index)
@@ -70,6 +72,7 @@ class Battle::AI
           next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
           targets.push(b)
         end
+        PBDebug.log_ai("#{@user.name} is considering using #{move.name}...")
         score = MOVE_BASE_SCORE
         PBDebug.logonerr { score = pbGetMoveScore(targets) }
         add_move_to_choices(choices, idxMove, score)
@@ -108,7 +111,7 @@ class Battle::AI
       move.pbOnStartUse(@user.battler, [])   # Determine which move is used instead
       move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(move.npMove))
     end
-    @move.set_up(move, @user)
+    @move.set_up(move)
     @battle.moldBreaker = @user.has_mold_breaker?
   end
 
@@ -130,7 +133,9 @@ class Battle::AI
     # User is awake and can't use moves that are only usable when asleep
     return true if !@user.battler.asleep? && @move.move.usableWhenAsleep?
     # User will be truanting
-    return true if @user.has_active_ability?(:TRUANT) && @user.effects[PBEffects::Truant]
+    # TODO: Should Truanting treat all moves as failing? If it does, it will
+    #       trigger switching due to terrible moves.
+#    return true if @user.has_active_ability?(:TRUANT) && @user.effects[PBEffects::Truant]
     # Primal weather
     return true if @battle.pbWeather == :HeavyRain && @move.rough_type == :FIRE
     return true if @battle.pbWeather == :HarshSun && @move.rough_type == :WATER
@@ -301,13 +306,10 @@ class Battle::AI
     # Decide whether all choices are bad, and if so, try switching instead
     if @trainer.high_skill? && @user.can_switch_lax?
       badMoves = false
-      if (max_score <= MOVE_FAIL_SCORE && user_battler.turnCount > 2) ||
-         (max_score <= MOVE_USELESS_SCORE && user_battler.turnCount > 4)
+      if max_score <= MOVE_USELESS_SCORE
+        badMoves = true
+      elsif max_score < MOVE_BASE_SCORE * move_score_threshold && user_battler.turnCount > 2
         badMoves = true if pbAIRandom(100) < 80
-      end
-      if !badMoves && max_score <= MOVE_USELESS_SCORE && user_battler.turnCount >= 1
-        badMoves = choices.none? { |c| user_battler.moves[c[0]].damagingMove? }
-        badMoves = false if badMoves && pbAIRandom(100) < 10
       end
       if badMoves
         PBDebug.log_ai("#{@user.name} wants to switch due to terrible moves")

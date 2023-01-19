@@ -25,10 +25,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SleepTarget",
       score += 15
       # Prefer if the user or an ally has a move/ability that is better if the target is asleep
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.check_for_move { |m| ["DoublePowerIfTargetAsleepCureTarget",
-                                              "DoublePowerIfTargetStatusProblem",
-                                              "HealUserByHalfOfDamageDoneIfTargetAsleep",
-                                              "StartDamageTargetEachTurnIfTargetAsleep"].include?(m.function) }
+        score += 5 if b.has_move_with_function?("DoublePowerIfTargetAsleepCureTarget",
+                                                "DoublePowerIfTargetStatusProblem",
+                                                "HealUserByHalfOfDamageDoneIfTargetAsleep",
+                                                "StartDamageTargetEachTurnIfTargetAsleep")
         score += 10 if b.has_active_ability?(:BADDREAMS)
       end
       # Don't prefer if target benefits from having the sleep status problem
@@ -119,8 +119,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
       score += 10 * target.hp / target.totalhp
       # Prefer if the user or an ally has a move/ability that is better if the target is poisoned
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.check_for_move { |m| ["DoublePowerIfTargetPoisoned",
-                                              "DoublePowerIfTargetStatusProblem"].include?(m.function) }
+        score += 5 if b.has_move_with_function?("DoublePowerIfTargetPoisoned",
+                                                "DoublePowerIfTargetStatusProblem")
         score += 10 if b.has_active_ability?(:MERCILESS)
       end
       # Don't prefer if target benefits from having the poison status problem
@@ -128,8 +128,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
       score -= 25 if target.has_active_ability?(:POISONHEAL)
       score -= 15 if target.has_active_ability?(:SYNCHRONIZE) &&
                      user.battler.pbCanPoisonSynchronize?(target.battler)
-      score -= 5 if target.check_for_move { |m| ["DoublePowerIfUserPoisonedBurnedParalyzed",
-                                                 "CureUserBurnPoisonParalysis"].include?(m.function) }
+      score -= 5 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
+                                                   "CureUserBurnPoisonParalysis")
       score -= 10 if target.check_for_move { |m|
         m.function == "GiveUserStatusToTarget" && user.battler.pbCanPoison?(target.battler, false, m)
       }
@@ -214,15 +214,15 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeTarget",
       score += 5 if target.effects[PBEffects::Attract] >= 0
       # Prefer if the user or an ally has a move/ability that is better if the target is paralysed
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.check_for_move { |m| ["DoublePowerIfTargetParalyzedCureTarget",
-                                              "DoublePowerIfTargetStatusProblem"].include?(m.function) }
+        score += 5 if b.has_move_with_function?("DoublePowerIfTargetParalyzedCureTarget",
+                                                "DoublePowerIfTargetStatusProblem")
       end
       # Don't prefer if target benefits from having the paralysis status problem
       score -= 8 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
       score -= 15 if target.has_active_ability?(:SYNCHRONIZE) &&
                      user.battler.pbCanParalyzeSynchronize?(target.battler)
-      score -= 5 if target.check_for_move { |m| ["DoublePowerIfUserPoisonedBurnedParalyzed",
-                                                 "CureUserBurnPoisonParalysis"].include?(m.function) }
+      score -= 5 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
+                                                   "CureUserBurnPoisonParalysis")
       score -= 10 if target.check_for_move { |m|
         m.function == "GiveUserStatusToTarget" && user.battler.pbCanParalyze?(target.battler, false, m)
       }
@@ -306,15 +306,15 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
       end
       # Prefer if the user or an ally has a move/ability that is better if the target is burned
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.check_for_move { |m| m.function == "DoublePowerIfTargetStatusProblem" }
+        score += 5 if b.has_move_with_function?("DoublePowerIfTargetStatusProblem")
       end
       # Don't prefer if target benefits from having the burn status problem
       score -= 8 if target.has_active_ability?([:FLAREBOOST, :GUTS, :MARVELSCALE, :QUICKFEET])
       score -= 5 if target.has_active_ability?(:HEATPROOF)
       score -= 15 if target.has_active_ability?(:SYNCHRONIZE) &&
                      user.battler.pbCanBurnSynchronize?(target.battler)
-      score -= 5 if target.check_for_move { |m| ["DoublePowerIfUserPoisonedBurnedParalyzed",
-                                                 "CureUserBurnPoisonParalysis"].include?(m.function) }
+      score -= 5 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
+                                                   "CureUserBurnPoisonParalysis")
       score -= 10 if target.check_for_move { |m|
         m.function == "GiveUserStatusToTarget" && user.battler.pbCanBurn?(target.battler, false, m)
       }
@@ -380,7 +380,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FreezeTarget",
       score += 15
       # Prefer if the user or an ally has a move/ability that is better if the target is frozen
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.check_for_move { |m| m.function == "DoublePowerIfTargetStatusProblem" }
+        score += 5 if b.has_move_with_function?("DoublePowerIfTargetStatusProblem")
       end
       # Don't prefer if target benefits from having the frozen status problem
       # NOTE: The target's Guts/Quick Feet will benefit from the target being
@@ -722,15 +722,11 @@ Battle::AI::Handlers::MoveEffectScore.add("SetUserTypesBasedOnEnvironment",
       new_type = :NORMAL if !GameData::Type.exists?(new_type)
     end
     # Check if any user's moves will get STAB because of the type change
-    if user.check_for_move { |m| m.damagingMove? && m.pbCalcType(user.battler) == new_type }
-      score += 8
-    end
+    score += 8 if user.has_damaging_move_of_type?(new_type)
     # Check if any user's moves will lose STAB because of the type change
     user.battler.pbTypes(true).each do |type|
       next if type == new_type
-      if user.check_for_move { |m| m.damagingMove? && m.pbCalcType(user.battler) == type }
-        score -= 8
-      end
+      score -= 8 if user.has_damaging_move_of_type?(type)
     end
     # NOTE: Other things could be considered, like the foes' moves'
     #       effectivenesses against the current and new user's type(s), and
@@ -816,10 +812,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetUserTypesToUserMoveTy
     end
     # Check if any user's moves will get STAB because of the type change
     possible_types.each do |type|
-      if user.check_for_move { |m| m.damagingMove? && m.pbCalcType(user.battler) == type }
-        score += 10
-        break
-      end
+      next if !user.has_damaging_move_of_type?(type)
+      score += 10
+      break
     end
     # NOTE: Other things could be considered, like the foes' moves'
     #       effectivenesses against the current and new user's type(s), and
@@ -1142,7 +1137,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserAirborne",
     # Prefer if any foes have damaging Ground-type moves that do 1x or more
     # damage to the user
     ai.each_foe_battler(user.side) do |b, i|
-      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :GROUND }
+      next if !b.has_damaging_move_of_type?(:GROUND)
       next if Effectiveness.resistant?(user.effectiveness_of_type_against_battler(:GROUND, b))
       score += 5
     end
@@ -1181,7 +1176,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartUserAirborne",
         score += 4 if acc < 90 && acc != 0
         score += 4 if acc <= 50 && acc != 0
       end
-      next if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :GROUND }
+      next if !b.has_damaging_move_of_type?(:GROUND)
       next if Effectiveness.resistant?(target.effectiveness_of_type_against_battler(:GROUND, b))
       score -= 5
     end
@@ -1213,7 +1208,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitsTargetInSkyGroundsTa
     score += 10
     # Prefer if any allies have damaging Ground-type moves
     ai.each_foe_battler(target.side) do |b, i|
-      score += 5 if b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) == :GROUND }
+      score += 5 if b.has_damaging_move_of_type?(:GROUND)
     end
     # Don't prefer if terrain exists (which the target will become affected by)
     if ai.trainer.medium_skill?
@@ -1247,7 +1242,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartGravity",
         # Prefer if allies have any damaging Ground moves they'll be able to use
         # on a grounded foe, and vice versa
         ai.each_foe_battler(b.side) do |b2, j|
-          if b2.check_for_move { |m| m.damagingMove? && m.pbCalcType(b2.battler) == :GROUND }
+          if b2.has_damaging_move_of_type?(:GROUND)
             score += (user.opposes?(b2)) ? -5 : 5
           end
         end

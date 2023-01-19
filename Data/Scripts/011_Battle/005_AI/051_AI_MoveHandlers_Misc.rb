@@ -185,10 +185,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
     # Check for Fire/Water moves
     ai.battlers.each do |b|
       next if !b || b.battler.fainted?
-      if b.check_for_move { |m| m.type == :FIRE && m.damagingMove? }
+      if b.has_damaging_move_of_type?(:FIRE)
         score += (b.opposes?(user)) ? -15 : 15
       end
-      if b.check_for_move { |m| m.type == :WATER && m.damagingMove? }
+      if b.has_damaging_move_of_type?(:WATER)
         score += (b.opposes?(user)) ? 15 : -15
       end
     end
@@ -201,14 +201,14 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
       elsif user.has_active_ability?(:DRYSKIN)
         score -= 10
       end
-      if user.check_for_move { |m| ["HealUserDependingOnWeather",
-                                    "RaiseUserAtkSpAtk1Or2InSun",
-                                    "TwoTurnAttackOneTurnInSun",
-                                    "TypeAndPowerDependOnWeather"].include?(m.function) }
+      if user.has_move_with_function?("HealUserDependingOnWeather",
+                                      "RaiseUserAtkSpAtk1Or2InSun",
+                                      "TwoTurnAttackOneTurnInSun",
+                                      "TypeAndPowerDependOnWeather")
         score += 10
       end
-      if user.check_for_move { |m| ["ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
-                                    "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky"].include?(m.function) }
+      if user.has_move_with_function?("ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
+                                      "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky")
         score -= 10
       end
     end
@@ -231,10 +231,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
     # Check for Fire/Water moves
     ai.battlers.each do |b|
       next if !b || b.battler.fainted?
-      if b.check_for_move { |m| m.type == :WATER && m.damagingMove? }
+      if b.has_damaging_move_of_type?(:WATER)
         score += (b.opposes?(user)) ? -15 : 15
       end
-      if b.check_for_move { |m| m.type == :FIRE && m.damagingMove? }
+      if b.has_damaging_move_of_type?(:FIRE)
         score += (b.opposes?(user)) ? 15 : -15
       end
     end
@@ -244,13 +244,13 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
       if user.has_active_ability?([:DRYSKIN, :FORECAST, :HYDRATION, :RAINDISH, :SWIFTSWIM])
         score += 15
       end
-      if user.check_for_move { |m| ["ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
-                                    "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky",
-                                    "TypeAndPowerDependOnWeather"].include?(m.function) }
+      if user.has_move_with_function?("ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
+                                      "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky",
+                                      "TypeAndPowerDependOnWeather")
         score += 10
       end
-      if user.check_for_move { |m| ["HealUserDependingOnWeather",
-                                    "TwoTurnAttackOneTurnInSun"].include?(m.function) }
+      if user.has_move_with_function?("HealUserDependingOnWeather",
+                                      "TwoTurnAttackOneTurnInSun")
         score -= 10
       end
     end
@@ -286,12 +286,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
       if user.has_active_ability?([:SANDFORCE, :SANDRUSH, :SANDVEIL])
         score += 15
       end
-      if user.check_for_move { |m| ["HealUserDependingOnSandstorm",
-                                    "TypeAndPowerDependOnWeather"].include?(m.function) }
+      if user.has_move_with_function?("HealUserDependingOnSandstorm",
+                                      "TypeAndPowerDependOnWeather")
         score += 10
       end
-      if user.check_for_move { |m| ["HealUserDependingOnWeather",
-                                    "TwoTurnAttackOneTurnInSun"].include?(m.function) }
+      if user.has_move_with_function?("HealUserDependingOnWeather",
+                                      "TwoTurnAttackOneTurnInSun")
         score -= 10
       end
     end
@@ -326,13 +326,13 @@ Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
       elsif user.ability == :ICEFACE
         score += 15
       end
-      if user.check_for_move { |m| ["FreezeTargetAlwaysHitsInHail",
-                                    "StartWeakenDamageAgainstUserSideIfHail",
-                                    "TypeAndPowerDependOnWeather"].include?(m.function) }
+      if user.has_move_with_function?("FreezeTargetAlwaysHitsInHail",
+                                      "StartWeakenDamageAgainstUserSideIfHail",
+                                      "TypeAndPowerDependOnWeather")
         score += 10
       end
-      if user.check_for_move { |m| ["HealUserDependingOnWeather",
-                                    "TwoTurnAttackOneTurnInSun"].include?(m.function) }
+      if user.has_move_with_function?("HealUserDependingOnWeather",
+                                      "TwoTurnAttackOneTurnInSun")
         score -= 10
       end
     end
