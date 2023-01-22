@@ -546,6 +546,7 @@ class Battle::AI::AIMove
   #   2 = additional effect will work
   #   3 = additional effect has an increased chance to work
   def additional_effect_usability(user, target)
+    return 3 if self.function == "ThrowUserItemAtTarget"
     return 0 if @move.addlEffect == 0   # Doesn't have an additional effect
     return 1 if target.has_active_ability?(:SHIELDDUST) && !@ai.battle.moldBreaker
     return 3 if (Settings::MECHANICS_GENERATION >= 6 || self.function != "EffectDependsOnEnvironment") &&

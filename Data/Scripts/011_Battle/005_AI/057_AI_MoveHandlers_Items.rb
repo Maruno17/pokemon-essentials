@@ -13,8 +13,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTakesTargetItem",
     user_no_item_preference = ai.battler_wants_item?(user, :NONE)
     target_item_preference = ai.battler_wants_item?(target, target.item_id)
     target_no_item_preference = ai.battler_wants_item?(target, :NONE)
-    score += (user_item_preference - user_no_item_preference) * 5
-    score += (target_item_preference - target_no_item_preference) * 5
+    score += (user_item_preference - user_no_item_preference) * 3
+    score += (target_item_preference - target_no_item_preference) * 3
     next score
   }
 )
@@ -35,8 +35,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetTakesUserItem",
     user_no_item_preference = ai.battler_wants_item?(user, :NONE)
     target_item_preference = ai.battler_wants_item?(target, user.item_id)
     target_no_item_preference = ai.battler_wants_item?(target, :NONE)
-    score -= (user_item_preference - user_no_item_preference) * 5
-    score -= (target_item_preference - target_no_item_preference) * 5
+    score -= (user_item_preference - user_no_item_preference) * 3
+    score -= (target_item_preference - target_no_item_preference) * 3
     next score
   }
 )
@@ -60,8 +60,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapItems",
     user_old_item_preference = ai.battler_wants_item?(user, user.item_id)
     target_new_item_preference = ai.battler_wants_item?(target, user.item_id)
     target_old_item_preference = ai.battler_wants_item?(target, target.item_id)
-    score += (user_new_item_preference - user_old_item_preference) * 5
-    score -= (target_new_item_preference - target_old_item_preference) * 5
+    score += (user_new_item_preference - user_old_item_preference) * 3
+    score -= (target_new_item_preference - target_old_item_preference) * 3
     # Don't prefer if user used this move in the last round
     score -= 15 if user.battler.lastMoveUsed &&
                    GameData::Move.get(user.battler.lastMoveUsed).function_code == "UserTargetSwapItems"
@@ -81,7 +81,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RestoreUserConsumedItem",
   proc { |score, move, user, ai, battle|
     user_new_item_preference = ai.battler_wants_item?(user, user.battler.recycleItem)
     user_old_item_preference = ai.battler_wants_item?(user, user.item_id)
-    score += (user_new_item_preference - user_old_item_preference) * 8
+    score += (user_new_item_preference - user_old_item_preference) * 4
     next score
   }
 )
@@ -103,7 +103,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RemoveTargetItem",
     # User can knock off the target's item; score it
     target_item_preference = ai.battler_wants_item?(target, target.item_id)
     target_no_item_preference = ai.battler_wants_item?(target, :NONE)
-    score += (target_item_preference - target_no_item_preference) * 5
+    score += (target_item_preference - target_no_item_preference) * 4
     next score
   }
 )
@@ -121,7 +121,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DestroyTargetBerryOrGem"
     # User can incinerate the target's item; score it
     target_item_preference = ai.battler_wants_item?(target, target.item_id)
     target_no_item_preference = ai.battler_wants_item?(target, :NONE)
-    score += (target_item_preference - target_no_item_preference) * 8
+    score += (target_item_preference - target_no_item_preference) * 4
     next score
   }
 )
@@ -142,7 +142,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CorrodeTargetItem",
   proc { |score, move, user, target, ai, battle|
     target_item_preference = ai.battler_wants_item?(target, target.item_id)
     target_no_item_preference = ai.battler_wants_item?(target, :NONE)
-    score += (target_item_preference - target_no_item_preference) * 8
+    score += (target_item_preference - target_no_item_preference) * 4
     next score
   }
 )
@@ -258,13 +258,13 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserConsumeTargetBerry",
     # User can consume the target's berry; score it
     target_item_preference = ai.battler_wants_item?(target, target.item_id)
     target_no_item_preference = ai.battler_wants_item?(target, :NONE)
-    score += (target_item_preference - target_no_item_preference) * 8
+    score += (target_item_preference - target_no_item_preference) * 4
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("ThrowUserItemAtTarget",
   proc { |move, user, ai, battle|
@@ -278,5 +278,42 @@ Battle::AI::Handlers::MoveFailureCheck.add("ThrowUserItemAtTarget",
 Battle::AI::Handlers::MoveBasePower.add("ThrowUserItemAtTarget",
   proc { |power, move, user, target, ai, battle|
     next move.move.pbBaseDamage(power, user.battler, target.battler)
+  }
+)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ThrowUserItemAtTarget",
+  proc { |score, move, user, target, ai, battle|
+    case user.item_id
+    when :POISONBARB, :TOXICORB
+      score = Battle::AI::Handlers.apply_move_effect_against_target_score("PoisonTarget",
+         score, move, user, target, ai, battle)
+    when :FLAMEORB
+      score = Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
+         score, move, user, target, ai, battle)
+    when :LIGHTBALL
+      score = Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
+         score, move, user, target, ai, battle)
+    when :KINGSROCK, :RAZORFANG
+      score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
+         score, move, user, target, ai, battle)
+    else
+      # TODO: Berries/Berry Juice/Mental Herb/White Herb also have Fling
+      #       effects. Should they be accounted for individually, or is it okay
+      #       to consider it bad to Fling these in general? Note that they all
+      #       do minimal damage so this move probably won't be used anyway.
+      if Battle::ItemEffects::HPHeal[user.item_id] ||
+         Battle::ItemEffects::StatusCure[user.item_id] ||
+         Battle::ItemEffects::OnEndOfUsingMove[user.item_id] ||
+         Battle::ItemEffects::OnEndOfUsingMoveStatRestore[user.item_id]
+        score -= 8
+      end
+    end
+    # Prefer if the user doesn't want its held item/don't prefer if it wants to
+    # keep its held item
+    user_item_preference = ai.battler_wants_item?(user, user.item_id)
+    user_no_item_preference = ai.battler_wants_item?(user, :NONE)
+    score += (user_item_preference - user_no_item_preference) * 4
+    # Prefer if user will benefit from not having an item
+    score += 5 if user.has_active_ability?(:UNBURDEN)
+    next score
   }
 )

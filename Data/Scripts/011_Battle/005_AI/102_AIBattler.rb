@@ -212,7 +212,7 @@ class Battle::AI::AIBattler
         # TODO: Need to check the move's pbCalcTypeModSingle.
         ret *= effectiveness_of_type_against_single_battler_type(type, defend_type, user)
       end
-      ret *= 2 if @battler.effects[PBEffects::TarShot] && type == :FIRE
+      ret *= 2 if self.effects[PBEffects::TarShot] && type == :FIRE
     end
     return ret
   end
@@ -280,6 +280,18 @@ class Battle::AI::AIBattler
   end
 
   #=============================================================================
+
+  def can_attack?
+    return false if self.effects[PBEffects::SkyDrop] >= 0
+    return false if self.effects[PBEffects::HyperBeam] > 0
+    return false if status == :SLEEP && statusCount > 1
+    return false if status == :FROZEN   # Only 20% chance of unthawing; assune it won't
+    return false if self.effects[PBEffects::Truant]
+    return false if self.effects[PBEffects::Flinch]
+    # NOTE: Confusion/infatuation/paralysis have higher chances of allowing the
+    #       attack, so the battler is treated as able to attack in those cases.
+    return true
+  end
 
   def can_switch_lax?
     return false if wild?

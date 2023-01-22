@@ -839,9 +839,9 @@ class Battle::Move::RemoveScreens < Battle::Move
   end
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
-    if user.pbOpposingSide.effects[PBEffects::LightScreen] > 0 ||
-       user.pbOpposingSide.effects[PBEffects::Reflect] > 0 ||
-       user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
+    if user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::LightScreen] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::Reflect] > 0
       hitNum = 1   # Wall-breaking anim
     end
     super
@@ -1540,6 +1540,8 @@ class Battle::Move::TypeAndPowerDependOnWeather < Battle::Move
       ret = :ROCK if GameData::Type.exists?(:ROCK)
     when :Hail
       ret = :ICE if GameData::Type.exists?(:ICE)
+    when :ShadowSky
+      ret = :NONE
     end
     return ret
   end

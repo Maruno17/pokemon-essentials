@@ -646,8 +646,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AttackerFaintsIfUserFaints",
     score -= 25
     # Check whether user is faster than its foe(s) and could use this move
     user_faster_count = 0
-    ai.battlers.each_with_index do |b, i|
-      next if !user.opposes?(b) || b.battler.fainted?
+    ai.each_foe_battler(user.side) do |b, i|
       user_faster_count += 1 if user.faster_than?(b)
     end
     next score if user_faster_count == 0   # Move will almost certainly have no effect
@@ -670,8 +669,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SetAttackerMovePPTo0IfUserFaints",
     score -= 25
     # Check whether user is faster than its foe(s) and could use this move
     user_faster_count = 0
-    ai.battlers.each_with_index do |b, i|
-      next if !user.opposes?(b) || b.battler.fainted?
+    ai.each_foe_battler(user.side) do |b, i|
       user_faster_count += 1 if user.faster_than?(b)
     end
     next score if user_faster_count == 0   # Move will almost certainly have no effect

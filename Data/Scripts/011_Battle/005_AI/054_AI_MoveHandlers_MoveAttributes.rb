@@ -371,9 +371,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfUserLostHPThisTurn",
   proc { |score, move, user, ai, battle|
     # Prefer if user is slower than its foe(s) and the foe(s) can attack
     ai.each_foe_battler(user.side) do |b, i|
-      next if user.faster_than?(b) || (b.status == :SLEEP && b.statusCount > 1) ||
-              b.status == :FROZEN || b.effects[PBEffects::HyperBeam] > 0 ||
-              b.effects[PBEffects::Truant] || b.effects[PBEffects::SkyDrop] >= 0
+      next if user.faster_than?(b) || !b.can_attack?
       score += 4
     end
     next score
@@ -388,9 +386,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetLostH
     # Prefer if a user's ally is faster than the user and that ally can attack
     ai.each_foe_battler(target.side) do |b, i|
       next if i == user.index
-      next if user.faster_than?(b) || (b.status == :SLEEP && b.statusCount > 1) ||
-              b.status == :FROZEN || b.effects[PBEffects::HyperBeam] > 0 ||
-              b.effects[PBEffects::Truant] || b.effects[PBEffects::SkyDrop] >= 0
+      next if user.faster_than?(b) || !b.can_attack?
       score += 4
     end
     next score
@@ -428,23 +424,83 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetNotAc
 # AlwaysCriticalHit
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if user.effects[PBEffects::LaserFocus] > 0
-    # TODO: Useless if user will already always critical hit ("AlwaysCriticalHit"
-    #       or Lucky Chant/crit stage is +3/etc.).
-    next score + 10
+    # Useless if the user's critical hit stage ensures critical hits already, or
+    # critical hits are impossible (e.g. via Lucky Chant)
+    crit_stage = move.rough_critical_hit_stage
+    if crit_stage < 0 ||
+       crit_stage >= Battle::Move::CRITICAL_HIT_RATIOS.length ||
+       Battle::Move::CRITICAL_HIT_RATIOS[crit_stage] == 1
+      next Battle::AI::MOVE_USELESS_SCORE
+    end
+    # Prefer if user knows a damaging move which won't definitely critical hit
+    if user.check_for_move { |m| m.damagingMove? && m.function != "AlwaysCriticalHit"}
+      # TODO: Change the score depending on how much of an effect a critical hit
+      #       will have? Critical hits ignore the user's offensive stat drops
+      #       and the target's defensive stat raises, and multiply the damage.
+      score += 10
+    end
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("StartPreventCriticalHitsAgainstUserSide",
   proc { |move, user, ai, battle|
     next user.pbOwnSide.effects[PBEffects::LuckyChant] > 0
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("StartPreventCriticalHitsAgainstUserSide",
+  proc { |score, move, user, ai, battle|
+    # Useless if Pokémon on the user's side are immune to critical hits
+    user_side_immune = true
+    ai.each_same_side_battler(user.side) do |b, i|
+      crit_stage = 0
+      if b.ability_active?
+        crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromTarget(b.battler.ability,
+           b.battler, b.battler, crit_stage)
+        next if crit_stage < 0
+      end
+      if b.item_active?
+        crit_stage = Battle::ItemEffects.triggerCriticalCalcFromTarget(b.battler.item,
+           b.battler, b.battler, crit_stage)
+        next if crit_stage < 0
+      end
+      user_side_immune = false
+      break
+    end
+    next Battle::AI::MOVE_USELESS_SCORE if user_side_immune
+    # Prefer if any foe has an increased critical hit rate or moves/effects that
+    # make critical hits more likely
+    ai.each_foe_battler(user.side) do |b, i|
+      crit_stage = 0
+      if b.ability_active?
+        crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(b.battler.ability,
+           b.battler, user.battler, crit_stage)
+        next if crit_stage < 0
+      end
+      if b.item_active?
+        crit_stage = Battle::ItemEffects.triggerCriticalCalcFromUser(b.battler.item,
+           b.battler, user.battler, crit_stage)
+        next if crit_stage < 0
+      end
+      crit_stage += b.effects[PBEffects::FocusEnergy]
+      crit_stage += 1 if m.check_for_move { |m| m.highCriticalRate? }
+      crit_stage = [crit_stage, Battle::Move::CRITICAL_HIT_RATIOS.length - 1].min
+      crit_stage = 3 if crit_stage < 3 && m.check_for_move { |m| m.pbCritialOverride(b.battler, user.battler) > 0 }
+      # TODO: Change the score depending on how much of an effect a critical hit
+      #       will have? Critical hits ignore the user's offensive stat drops
+      #       and the target's defensive stat raises, and multiply the damage.
+      score += 5 * crit_stage if crit_stage > 0
+      score += 10 if b.effects[PBEffects::LaserFocus] > 0
+    end
+    next score
   }
 )
 
@@ -466,9 +522,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserEnduresFaintingThisTurn",
     # Prefer for each foe that can attack
     useless = true
     ai.each_foe_battler(user.side) do |b, i|
-      next if (b.status == :SLEEP && b.statusCount > 1) ||
-              b.status == :FROZEN || b.effects[PBEffects::HyperBeam] > 0 ||
-              b.effects[PBEffects::Truant] || b.effects[PBEffects::SkyDrop] >= 0
+      next if !b.can_attack?
       useless = false
       score += 4
     end
@@ -639,15 +693,15 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHai
 Battle::AI::Handlers::MoveEffectScore.add("RemoveScreens",
   proc { |score, move, user, ai, battle|
     # Prefer if allies have physical moves that are being weakened
-    if user.pbOpposingSide.effects[PBEffects::Reflect] > 0 ||
-       user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
+    if user.pbOpposingSide.effects[PBEffects::Reflect] > 1 ||
+       user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 1
       ai.each_same_side_battler(user.side) do |b, i|
         score += 10 if b.check_for_move { |m| m.physicalMove?(m.type) }
       end
     end
     # Prefer if allies have special moves that are being weakened
-    if user.pbOpposingSide.effects[PBEffects::LightScreen] > 0 ||
-       user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
+    if user.pbOpposingSide.effects[PBEffects::LightScreen] > 1 ||
+       user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 1
       ai.each_same_side_battler(user.side) do |b, i|
         score += 10 if b.check_for_move { |m| m.specialMove?(m.type) }
       end
@@ -666,9 +720,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
     # Prefer for each foe that can attack
     useless = true
     ai.each_foe_battler(user.side) do |b, i|
-      next if (b.status == :SLEEP && b.statusCount > 1) ||
-              b.status == :FROZEN || b.effects[PBEffects::HyperBeam] > 0 ||
-              b.effects[PBEffects::Truant] || b.effects[PBEffects::SkyDrop] >= 0
+      next if !b.can_attack?
       useless = false
       score += 4
       score += 4 if b.effects[PBEffects::TwoTurnAttack]

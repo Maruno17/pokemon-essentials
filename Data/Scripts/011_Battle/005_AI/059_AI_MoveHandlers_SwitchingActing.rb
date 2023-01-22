@@ -289,14 +289,10 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
 )
 
 #===============================================================================
-# TODO: Review score modifiers. This could reasonably used on an ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TargetActsNext",
   proc { |score, move, user, ai, battle|
-    # Useless if the user has no ally
-    has_ally = false
-    ai.each_ally(user.index) { |b, i| has_ally = true }
-    next Battle::AI::MOVE_USELESS_SCORE if !has_ally
     # Useless if the target is a foe
     next Battle::AI::MOVE_USELESS_SCORE if target.opposes?(user)
     # Compare the speeds of all battlers
@@ -313,21 +309,27 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetActsNext",
     next Battle::AI::MOVE_USELESS_SCORE if idx_target < idx_user
     # Useless if the target will move next anyway
     next Battle::AI::MOVE_USELESS_SCORE if idx_target - idx_user <= 1
-    next score
+    # Generally not worth using
+    # NOTE: Because this move can be used against a foe but is being used on an
+    #       ally (since we're here in this code), this move's score will be
+    #       inverted later. A higher score here means this move will be less
+    #       preferred, which is the result we want.
+    next score + 10
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("TargetActsLast",
   proc { |score, move, user, ai, battle|
-    # Useless if the user has no ally
-    has_ally = false
-    ai.each_ally(user.index) { |b, i| has_ally = true }
-    next Battle::AI::MOVE_USELESS_SCORE if !has_ally
     # Useless if the target is an ally
     next Battle::AI::MOVE_USELESS_SCORE if !target.opposes?(user)
+    # Useless if the user has no ally (the point of this move is to let the ally
+    # get in a hit before the foe)
+    has_ally = false
+    ai.each_ally(user.index) { |b, i| has_ally = true if b.can_attack? }
+    next Battle::AI::MOVE_USELESS_SCORE if !has_ally
     # Compare the speeds of all battlers
     speeds = []
     ai.each_battler { |b, i| speeds.push([i, rough_stat(:SPEED)]) }
@@ -338,11 +340,16 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetActsLast",
     end
     idx_user = speeds.index { |ele| ele[0] == user.index }
     idx_target = speeds.index { |ele| ele[0] == target.index }
+    idx_slowest_ally = -1
+    speeds.each_with_index { |ele, i| idx_slowest_ally = i if user.index.even? == ele[0].even? }
     # Useless if the target is faster than the user
     next Battle::AI::MOVE_USELESS_SCORE if idx_target < idx_user
     # Useless if the target will move last anyway
     next Battle::AI::MOVE_USELESS_SCORE if idx_target == speeds.length - 1
-    next score
+    # Useless if the slowest ally is faster than the target
+    next Battle::AI::MOVE_USELESS_SCORE if idx_slowest_ally < idx_target
+    # Generally not worth using
+    next score - 10
   }
 )
 
@@ -378,16 +385,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetUsesItsLastUsedMov
 # StartSlowerBattlersActFirst
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HigherPriorityInGrassyTerrain",
-  proc { |score, move, user, target, ai, battle|
-    if ai.trainer.medium_skill? && battle.field.terrain == :Grassy
-      score += 15 if target.faster_than?(user)
-    end
-    next score
-  }
-)
+# HigherPriorityInGrassyTerrain
 
 #===============================================================================
 #

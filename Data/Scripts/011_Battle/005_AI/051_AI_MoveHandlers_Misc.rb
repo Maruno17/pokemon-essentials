@@ -109,8 +109,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfUserDamagedThisTu
     # Check whether user is faster than its foe(s) and could use this move
     user_faster_count = 0
     foe_faster_count = 0
-    ai.battlers.each_with_index do |b, i|
-      next if !user.opposes?(b) || b.battler.fainted?
+    ai.each_foe_battler(user.side) do |b, i|
       if user.faster_than?(b)
         user_faster_count += 1
       else
@@ -121,10 +120,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfUserDamagedThisTu
     score += 10 if foe_faster_count == 0
     # Effects that make the target unlikely to act before the user
     if ai.trainer.high_skill?
-      if target.effects[PBEffects::HyperBeam] > 0 ||
-         target.effects[PBEffects::Truant] ||
-         (target.battler.asleep? && target.statusCount > 1) ||
-         target.battler.frozen?
+      if !target.can_attack?
         score += 20
       elsif target.effects[PBEffects::Confusion] > 1 ||
             target.effects[PBEffects::Attract] == user.index
@@ -183,8 +179,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
     score += 15 if user.has_active_item?(:HEATROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
     # Check for Fire/Water moves
-    ai.battlers.each do |b|
-      next if !b || b.battler.fainted?
+    ai.each_battler do |b, i|
       if b.has_damaging_move_of_type?(:FIRE)
         score += (b.opposes?(user)) ? -15 : 15
       end
@@ -229,8 +224,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
     score += 15 if user.has_active_item?(:DAMPROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
     # Check for Fire/Water moves
-    ai.battlers.each do |b|
-      next if !b || b.battler.fainted?
+    ai.each_battler do |b, i|
       if b.has_damaging_move_of_type?(:WATER)
         score += (b.opposes?(user)) ? -15 : 15
       end
@@ -271,8 +265,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
     score += 15 if user.has_active_item?(:SMOOTHROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
     # Check for battlers affected by sandstorm's effects
-    ai.battlers.each do |b|
-      next if !b || b.battler.fainted?
+    ai.each_battler do |b, i|
       if b.battler.takesSandstormDamage?   # End of round damage
         score += (b.opposes?(user)) ? 15 : -15
       end
@@ -312,8 +305,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
     score += 15 if user.has_active_item?(:ICYROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
     # Check for battlers affected by hail's effects
-    ai.battlers.each do |b|
-      next if !b || b.battler.fainted?
+    ai.each_battler do |b, i|
       if b.battler.takesHailDamage?   # End of round damage
         score += (b.opposes?(user)) ? 15 : -15
       end
@@ -667,9 +659,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserSwapsPositionsWithAlly",
   proc { |move, user, ai, battle|
     num_targets = 0
     idxUserOwner = battle.pbGetOwnerIndexFromBattlerIndex(user.index)
-    user.battler.allAllies.each do |b|
+    ai.each_ally(user.side) do |b, i|
       next if battle.pbGetOwnerIndexFromBattlerIndex(b.index) != idxUserOwner
-      next if !b.near?(user)
+      next if !b.battler.near?(user.battler)
       num_targets += 1
     end
     next num_targets != 1
@@ -686,8 +678,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserSwapsPositionsWithAlly",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("BurnAttackerBeforeUserActs",
   proc { |score, move, user, ai, battle|
-    ai.battlers.each do |b|
-      next if !b || !b.opposes?(user)
+    ai.each_foe_battler(user.side) do |b|
       next if !b.battler.affectedByContactEffect?
       next if !b.battler.pbCanBurn?(user.battler, false, move.move)
       if ai.trainer.high_skill?
@@ -700,31 +691,43 @@ Battle::AI::Handlers::MoveEffectScore.add("BurnAttackerBeforeUserActs",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
-  proc { |move, user, target, ai, battle|
-    next target.hp <= 1
-  }
-)
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
-  proc { |score, move, user, target, ai, battle|
-    score += 20 if target.hp >= target.totalhp / 2
+Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTurn",
+  proc { |score, move, user, ai, battle|
+    # HP halving
+    foe_hp_lost = 0
+    ally_hp_lost = 0
+    ai.each_battler do |b, i|
+      next if b.hp == 1
+      if b.battler.opposes?(user.battler)
+        foe_hp_lost += b.hp / 2
+      else
+        ally_hp_lost += b.hp / 2
+      end
+    end
+    score += 15 * foe_hp_lost / ally_hp_lost
+    score -= 15 * ally_hp_lost / foe_hp_lost
+    # Recharging
+    score = Battle::AI::Handlers.apply_move_effect_score("AttackAndSkipNextTurn",
+       score, move, user, ai, battle)
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfHP",
   proc { |score, move, user, ai, battle|
-    next score - 40
+    score = Battle::AI::Handlers.apply_move_effect_score("UserLosesHalfOfTotalHP",
+       score, move, user, ai, battle)
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("StartSunWeather",
                                             "StartShadowSkyWeather")
@@ -734,39 +737,64 @@ Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
     score += 10 if battle.field.weather != :None   # Prefer replacing another weather
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Check for battlers affected by Shadow Sky's effects
+    ai.each_battler do |b, i|
+      if b.has_damaging_move_of_type?(:SHADOW)
+        score += (b.opposes?(user)) ? 15 : -15
+      end
+      if b.battler.takesShadowSkyDamage?   # End of round damage
+        score += (b.opposes?(user)) ? 15 : -15
+      end
+    end
+    # Check for moves affected by Shadow Sky
+    # TODO: Check other battlers for these as well?
+    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
+      if user.has_move_with_function?("TypeAndPowerDependOnWeather")
+        score += 10
+      end
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("RemoveAllScreens",
+Battle::AI::Handlers::MoveFailureCheck.add("RemoveAllScreensAndSafeguard",
   proc { |move, user, ai, battle|
     will_fail = true
     battle.sides.each do |side|
       will_fail = false if side.effects[PBEffects::AuroraVeil] > 0 ||
-                           side.effects[PBEffects::Reflect] > 0 ||
                            side.effects[PBEffects::LightScreen] > 0 ||
+                           side.effects[PBEffects::Reflect] > 0 ||
                            side.effects[PBEffects::Safeguard] > 0
     end
     next will_fail
   }
 )
-Battle::AI::Handlers::MoveEffectScore.add("RemoveAllScreens",
+Battle::AI::Handlers::MoveEffectScore.add("RemoveAllScreensAndSafeguard",
   proc { |score, move, user, ai, battle|
-    if user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0 ||
-       user.pbOpposingSide.effects[PBEffects::Reflect] > 0 ||
-       user.pbOpposingSide.effects[PBEffects::LightScreen] > 0 ||
-       user.pbOpposingSide.effects[PBEffects::Safeguard] > 0
-      score += 30
+    foe_side = user.pbOpposingSide
+    # Useless if the foe's side has no screens/Safeguard to remove, or if
+    # they'll end this round anyway
+    if foe_side.effects[PBEffects::AuroraVeil] <= 1 &&
+       foe_side.effects[PBEffects::LightScreen] <= 1 &&
+       foe_side.effects[PBEffects::Reflect] <= 1 &&
+       foe_side.effects[PBEffects::Safeguard] <= 1
+      next Battle::AI::MOVE_USELESS_SCORE
     end
-    if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
-       user.pbOwnSide.effects[PBEffects::Reflect] > 0 ||
-       user.pbOwnSide.effects[PBEffects::LightScreen] > 0 ||
-       user.pbOwnSide.effects[PBEffects::Safeguard] > 0
-      score -= 70
+    # Prefer removing opposing screens
+    score = Battle::AI::Handlers.apply_move_effect_score("RemoveScreens",
+       score, move, user, ai, battle)
+    # Don't prefer removing same side screens
+    ai.each_foe_battler(user.side) do |b, i|
+      score -= Battle::AI::Handlers.apply_move_effect_score("RemoveScreens",
+         0, move, b, ai, battle)
+      break
     end
+    # Safeguard
+    score += 10 if foe_side.effects[PBEffects::Safeguard] > 0
+    score -= 10 if user.pbOwnSide.effects[PBEffects::Safeguard] > 0
     next score
   }
 )

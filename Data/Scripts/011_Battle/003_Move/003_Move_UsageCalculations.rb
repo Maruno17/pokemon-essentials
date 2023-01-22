@@ -423,6 +423,8 @@ class Battle::Move
       if target.pbHasType?(:ROCK) && specialMove? && @function != "UseTargetDefenseInsteadOfTargetSpDef"
         multipliers[:defense_multiplier] *= 1.5
       end
+    when :ShadowSky
+      multipliers[:final_damage_multiplier] *= 1.5 if type == :SHADOW
     end
     # Critical hits
     if target.damageState.critical

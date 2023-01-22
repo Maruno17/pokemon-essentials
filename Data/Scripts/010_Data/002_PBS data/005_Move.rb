@@ -750,7 +750,7 @@ module GameData
       when "12F" then new_code = "TrapTargetInBattle"
       when "130" then new_code = "UserLosesHalfHP"
       when "131" then new_code = "StartShadowSkyWeather"
-      when "132" then new_code = "RemoveAllScreens"
+      when "132" then new_code = "RemoveAllScreensAndSafeguard"
       when "133" then new_code = "DoesNothingFailsIfNoAlly"
       when "134" then new_code = "DoesNothingCongratulations"
       when "135" then new_code = "FreezeTargetSuperEffectiveAgainstWater"
