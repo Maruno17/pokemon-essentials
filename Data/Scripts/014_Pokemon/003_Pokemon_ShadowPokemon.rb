@@ -127,7 +127,7 @@ class Pokemon
     # Record this Pokémon's Shadow moves
     if data
       data.moves.each do |m|
-        @shadow_moves.push(m.to_sym) if GameData::Move.exists?(m.to_sym)
+        @shadow_moves.push(m) if GameData::Move.exists?(m)
         break if @shadow_moves.length >= MAX_MOVES
       end
     end

@@ -542,6 +542,7 @@ module Compiler
   # Compile Shadow Pokémon data
   #=============================================================================
   def compile_shadow_pokemon(*paths)
+    return if !safeExists?("PBS/shadow_pokemon.txt")
     compile_PBS_file_generic(GameData::ShadowPokemon, *paths) do |final_validate, hash|
       (final_validate) ? validate_all_compiled_shadow_pokemon : validate_compiled_shadow_pokemon(hash)
     end

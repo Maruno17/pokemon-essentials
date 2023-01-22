@@ -354,6 +354,7 @@ module Compiler
   # Save Shadow Pokémon data to PBS file
   #=============================================================================
   def write_shadow_pokemon
+    return if GameData::ShadowPokemon::DATA.empty?
     write_PBS_file_generic(GameData::ShadowPokemon)
   end
 
