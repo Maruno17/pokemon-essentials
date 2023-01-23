@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module MessageConfig
   LIGHT_TEXT_MAIN_COLOR   = Color.new(248, 248, 248)
   LIGHT_TEXT_SHADOW_COLOR = Color.new(72, 80, 88)
@@ -162,8 +165,6 @@ module MessageConfig
     return ""
   end
 end
-
-
 
 #===============================================================================
 # Position a window
@@ -759,10 +760,8 @@ def addBackgroundOrColoredPlane(sprites, planename, background, color, viewport 
   end
 end
 
-
-
 #===============================================================================
-# Ensure required method definitions
+# Ensure required method definitions.
 #===============================================================================
 module Graphics
   if !self.respond_to?("width")
@@ -773,8 +772,9 @@ module Graphics
   end
 end
 
-
-
+#===============================================================================
+# Ensure required method definitions.
+#===============================================================================
 if !defined?(_INTL)
   def _INTL(*args)
     string = args[0].clone

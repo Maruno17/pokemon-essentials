@@ -33,8 +33,9 @@ module HiddenMoveHandlers
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbCanUseHiddenMove?(pkmn, move, showmsg = true)
   return HiddenMoveHandlers.triggerCanUseMove(move, pkmn, showmsg)
 end
@@ -61,8 +62,6 @@ def pbCheckHiddenMoveBadge(badge = -1, showmsg = true)
   pbMessage(_INTL("Sorry, a new Badge is required.")) if showmsg
   return false
 end
-
-
 
 #===============================================================================
 # Hidden move animation
@@ -184,8 +183,6 @@ def pbHiddenMoveAnimation(pokemon)
   return true
 end
 
-
-
 #===============================================================================
 # Cut
 #===============================================================================
@@ -247,8 +244,6 @@ def pbSmashEvent(event)
   $PokemonMap&.addErasedEvent(event.id)
 end
 
-
-
 #===============================================================================
 # Dig
 #===============================================================================
@@ -293,8 +288,6 @@ HiddenMoveHandlers::UseMove.add(:DIG, proc { |move, pokemon|
   end
   next false
 })
-
-
 
 #===============================================================================
 # Dive
@@ -460,8 +453,6 @@ HiddenMoveHandlers::UseMove.add(:DIVE, proc { |move, pokemon|
   next true
 })
 
-
-
 #===============================================================================
 # Flash
 #===============================================================================
@@ -496,8 +487,6 @@ HiddenMoveHandlers::UseMove.add(:FLASH, proc { |move, pokemon|
   end
   next true
 })
-
-
 
 #===============================================================================
 # Fly
@@ -559,8 +548,6 @@ HiddenMoveHandlers::UseMove.add(:FLY, proc { |move, pkmn|
   pbFlyToNewLocation(pkmn)
   next true
 })
-
-
 
 #===============================================================================
 # Headbutt
@@ -626,8 +613,6 @@ HiddenMoveHandlers::UseMove.add(:HEADBUTT, proc { |move, pokemon|
   pbHeadbuttEffect(facingEvent)
 })
 
-
-
 #===============================================================================
 # Rock Smash
 #===============================================================================
@@ -677,8 +662,6 @@ HiddenMoveHandlers::UseMove.add(:ROCKSMASH, proc { |move, pokemon|
   end
   next true
 })
-
-
 
 #===============================================================================
 # Strength
@@ -730,8 +713,6 @@ HiddenMoveHandlers::UseMove.add(:STRENGTH, proc { |move, pokemon|
   $PokemonMap.strengthUsed = true
   next true
 })
-
-
 
 #===============================================================================
 # Surf
@@ -845,8 +826,6 @@ HiddenMoveHandlers::UseMove.add(:SURF, proc { |move, pokemon|
   next true
 })
 
-
-
 #===============================================================================
 # Sweet Scent
 #===============================================================================
@@ -895,8 +874,6 @@ HiddenMoveHandlers::UseMove.add(:SWEETSCENT, proc { |move, pokemon|
   pbSweetScent
   next true
 })
-
-
 
 #===============================================================================
 # Teleport
@@ -950,8 +927,6 @@ HiddenMoveHandlers::UseMove.add(:TELEPORT, proc { |move, pokemon|
   pbEraseEscapePoint
   next true
 })
-
-
 
 #===============================================================================
 # Waterfall

@@ -5,11 +5,9 @@
 #  Game_System class and the Game_Event class.
 #===============================================================================
 class Interpreter
-  #-----------------------------------------------------------------------------
-  # * Object Initialization
+  # Object Initialization
   #     depth : nest depth
   #     main  : main flag
-  #-----------------------------------------------------------------------------
   def initialize(depth = 0, main = false)
     @depth = depth
     @main  = main
@@ -39,11 +37,10 @@ class Interpreter
     @renamed_choices    = []
     end_follower_overrides
   end
-  #-----------------------------------------------------------------------------
-  # * Event Setup
+
+  # Event Setup
   #     list     : list of event commands
   #     event_id : event ID
-  #-----------------------------------------------------------------------------
   def setup(list, event_id, map_id = nil)
     clear
     @map_id = map_id || $game_map.map_id
@@ -82,9 +79,7 @@ class Interpreter
   def running?
     return !@list.nil?
   end
-  #-----------------------------------------------------------------------------
-  # * Frame Update
-  #-----------------------------------------------------------------------------
+
   def update
     @loop_count = 0
     loop do
@@ -135,9 +130,7 @@ class Interpreter
       @index += 1
     end
   end
-  #-----------------------------------------------------------------------------
-  # * Execute script
-  #-----------------------------------------------------------------------------
+
   def execute_script(script)
     begin
       result = eval(script)
@@ -182,10 +175,7 @@ class Interpreter
       raise EventScriptError.new(err)
     end
   end
-  #-----------------------------------------------------------------------------
-  # * Get Character
-  #     parameter : parameter
-  #-----------------------------------------------------------------------------
+
   def get_character(parameter = 0)
     case parameter
     when -1   # player
@@ -210,21 +200,18 @@ class Interpreter
   def get_event(parameter)
     return get_character(parameter)
   end
-  #-----------------------------------------------------------------------------
-  # * Freezes all events on the map (for use at the beginning of common events)
-  #-----------------------------------------------------------------------------
+
+  # Freezes all events on the map (for use at the beginning of common events)
   def pbGlobalLock
     $game_map.events.each_value { |event| event.minilock }
   end
-  #-----------------------------------------------------------------------------
-  # * Unfreezes all events on the map (for use at the end of common events)
-  #-----------------------------------------------------------------------------
+
+  # Unfreezes all events on the map (for use at the end of common events)
   def pbGlobalUnlock
     $game_map.events.each_value { |event| event.unlock }
   end
-  #-----------------------------------------------------------------------------
-  # * Gets the next index in the interpreter, ignoring certain commands between messages
-  #-----------------------------------------------------------------------------
+
+  # Gets the next index in the interpreter, ignoring certain commands between messages
   def pbNextIndex(index)
     return -1 if !@list || @list.length == 0
     i = index + 1
@@ -292,9 +279,6 @@ class Interpreter
     @follower_animation_id = nil
   end
 
-  #-----------------------------------------------------------------------------
-  # * Various methods to be used in a script event command.
-  #-----------------------------------------------------------------------------
   # Helper function that shows a picture in a script.
   def pbShowPicture(number, name, origin, x, y, zoomX = 100, zoomY = 100, opacity = 255, blendType = 0)
     number += ($game_temp.in_battle ? 50 : 0)

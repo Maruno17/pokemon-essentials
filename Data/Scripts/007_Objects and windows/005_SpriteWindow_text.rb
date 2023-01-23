@@ -1,8 +1,7 @@
 #===============================================================================
-#
-#===============================================================================
 # Represents a window with no formatting capabilities. Its text color can be set,
 # though, and line breaks are supported, but the text is generally unformatted.
+#===============================================================================
 class Window_UnformattedTextPokemon < SpriteWindow_Base
   attr_reader :text
   attr_reader :baseColor
@@ -105,8 +104,6 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
                @text.gsub(/\r/, ""), @baseColor, @shadowColor)
   end
 end
-
-
 
 #===============================================================================
 #
@@ -602,8 +599,6 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -722,8 +717,6 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     end
   end
 end
-
-
 
 #===============================================================================
 #
@@ -951,8 +944,6 @@ class SpriteWindow_Selectable < SpriteWindow_Base
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -1016,8 +1007,6 @@ module UpDownArrowMixin
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -1029,8 +1018,6 @@ class SpriteWindow_SelectableEx < SpriteWindow_Selectable
     initUpDownArrow
   end
 end
-
-
 
 #===============================================================================
 #
@@ -1137,8 +1124,6 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -1229,14 +1214,11 @@ class Window_CommandPokemon < Window_DrawableCommand
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
 class Window_CommandPokemonEx < Window_CommandPokemon
 end
-
 
 #===============================================================================
 #
@@ -1349,8 +1331,6 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     end
   end
 end
-
-
 
 #===============================================================================
 #

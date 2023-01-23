@@ -25,15 +25,11 @@ def pbPokerus?
   return false
 end
 
-
-
 class Game_Temp
   attr_accessor :warned_low_battery
   attr_accessor :cue_bgm
   attr_accessor :cue_bgm_frame_delay
 end
-
-
 
 def pbBatteryLow?
   pstate = System.power_state
@@ -220,8 +216,6 @@ def pbBattleOnStepTaken(repel_active)
   $game_temp.force_single_battle = false
 end
 
-
-
 #===============================================================================
 # Checks when moving between maps
 #===============================================================================
@@ -331,8 +325,6 @@ EventHandlers.add(:on_map_or_spriteset_change, :show_location_window,
   }
 )
 
-
-
 #===============================================================================
 # Event locations, terrain tags
 #===============================================================================
@@ -416,8 +408,6 @@ def pbFacingEachOther(event1, event2)
   return pbEventFacesPlayer?(event1, event2, 1) && pbEventFacesPlayer?(event2, event1, 1)
 end
 
-
-
 #===============================================================================
 # Audio playing
 #===============================================================================
@@ -454,8 +444,6 @@ def pbAutoplayOnSave
   end
 end
 
-
-
 #===============================================================================
 # Event movement
 #===============================================================================
@@ -473,8 +461,8 @@ module PBMoveRoute
   AwayFromPlayer     = 11
   Forward            = 12
   Backward           = 13
-  Jump               = 14 # xoffset, yoffset
-  Wait               = 15 # frames
+  Jump               = 14   # xoffset, yoffset
+  Wait               = 15   # frames
   TurnDown           = 16
   TurnLeft           = 17
   TurnRight          = 18
@@ -486,10 +474,10 @@ module PBMoveRoute
   TurnRandom         = 24
   TurnTowardPlayer   = 25
   TurnAwayFromPlayer = 26
-  SwitchOn           = 27 # 1 param
-  SwitchOff          = 28 # 1 param
-  ChangeSpeed        = 29 # 1 param
-  ChangeFreq         = 30 # 1 param
+  SwitchOn           = 27   # 1 param
+  SwitchOff          = 28   # 1 param
+  ChangeSpeed        = 29   # 1 param
+  ChangeFreq         = 30   # 1 param
   WalkAnimeOn        = 31
   WalkAnimeOff       = 32
   StepAnimeOn        = 33
@@ -500,15 +488,13 @@ module PBMoveRoute
   ThroughOff         = 38
   AlwaysOnTopOn      = 39
   AlwaysOnTopOff     = 40
-  Graphic            = 41 # Name, hue, direction, pattern
-  Opacity            = 42 # 1 param
-  Blending           = 43 # 1 param
-  PlaySE             = 44 # 1 param
-  Script             = 45 # 1 param
-  ScriptAsync        = 101 # 1 param
+  Graphic            = 41   # Name, hue, direction, pattern
+  Opacity            = 42   # 1 param
+  Blending           = 43   # 1 param
+  PlaySE             = 44   # 1 param
+  Script             = 45   # 1 param
+  ScriptAsync        = 101   # 1 param
 end
-
-
 
 def pbMoveRoute(event, commands, waitComplete = false)
   route = RPG::MoveRoute.new
@@ -554,8 +540,6 @@ def pbWait(numFrames)
     pbUpdateSceneMap
   end
 end
-
-
 
 #===============================================================================
 # Player/event movement in the field
@@ -644,8 +628,6 @@ def pbJumpToward(dist = 1, playSound = false, cancelSurf = false)
   return false
 end
 
-
-
 #===============================================================================
 # Bridges, cave escape points, and setting the heal point
 #===============================================================================
@@ -689,8 +671,6 @@ def pbSetPokemonCenter
   $PokemonGlobal.pokecenterDirection = $game_player.direction
 end
 
-
-
 #===============================================================================
 # Partner trainer
 #===============================================================================
@@ -709,8 +689,6 @@ end
 def pbDeregisterPartner
   $PokemonGlobal.partner = nil
 end
-
-
 
 #===============================================================================
 # Picking up an item found on the ground
@@ -751,8 +729,6 @@ def pbItemBall(item, quantity = 1)
   pbMessage(_INTL("But your Bag is full..."))
   return false
 end
-
-
 
 #===============================================================================
 # Being given an item

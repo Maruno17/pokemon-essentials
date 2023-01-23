@@ -64,8 +64,6 @@ class Window_CharacterEntry < Window_DrawableCommand
   end
 end
 
-
-
 #===============================================================================
 # Text entry screen - free typing.
 #===============================================================================
@@ -256,8 +254,6 @@ class PokemonEntryScene
   end
 end
 
-
-
 #===============================================================================
 # Text entry screen - arrows to select letter.
 #===============================================================================
@@ -371,8 +367,6 @@ class PokemonEntryScene2
       @sprite.dispose
     end
   end
-
-
 
   def pbStartScene(helptext, minlength, maxlength, initialText, subject = 0, pokemon = nil)
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -751,8 +745,6 @@ class PokemonEntryScene2
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -768,8 +760,6 @@ class PokemonEntry
     return ret
   end
 end
-
-
 
 #===============================================================================
 #

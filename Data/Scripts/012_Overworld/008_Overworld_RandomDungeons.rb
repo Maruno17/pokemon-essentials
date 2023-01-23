@@ -50,7 +50,7 @@ module RandomDungeon
 
     def initialize(cw, ch, parameters)
       raise ArgumentError.new if cw == 0 || ch == 0
-      @node_count_x  = cw
+      @node_count_x = cw
       @node_count_y = ch
       @parameters = parameters
       @nodes = Array.new(@node_count_x * @node_count_y) { MazeNode.new }
@@ -257,7 +257,7 @@ module RandomDungeon
       :upper_wall_in_1        => Console.markup_style("~", bg: :gray),
       :upper_wall_in_3        => Console.markup_style("~", bg: :gray),
       :upper_wall_in_7        => Console.markup_style("~", bg: :gray),
-      :upper_wall_in_9        => Console.markup_style("~", bg: :gray),
+      :upper_wall_in_9        => Console.markup_style("~", bg: :gray)
     }
 
     def initialize(width, height)
@@ -352,7 +352,7 @@ module RandomDungeon
         @buffer_x += 1 if @buffer_x.odd?
         @buffer_y += 1 if @buffer_x.odd?
       end
-      @parameters  = parameters || GameData::DungeonParameters.new({})
+      @parameters = parameters || GameData::DungeonParameters.new({})
       if @tileset.snap_to_large_grid
         @parameters.cell_width -= 1 if @parameters.cell_width.odd?
         @parameters.cell_height -= 1 if @parameters.cell_height.odd?
@@ -443,7 +443,7 @@ module RandomDungeon
         paint_decorations(maxWidth, maxHeight)
         # Draw wall top tiles
         paint_wall_top_tiles(maxWidth, maxHeight)
-        break #if !@need_redraw
+        break   # if !@need_redraw
       end
     end
 
@@ -801,8 +801,8 @@ module RandomDungeon
         x += 1 if x.odd?
         y += 1 if y.odd?
       end
-      x = x.clamp(@buffer_x, @usable_width - @buffer_x - width )
-      y = y.clamp(@buffer_y, @usable_height - @buffer_y - height )
+      x = x.clamp(@buffer_x, @usable_width - @buffer_x - width)
+      y = y.clamp(@buffer_y, @usable_height - @buffer_y - height)
       paint_ground_rect(x, y, width, height, :room)
     end
 
@@ -927,7 +927,7 @@ module RandomDungeon
         end
       end
       # 1x1 floor decoration
-       if @tileset.has_decoration?(:floor_decoration)
+      if @tileset.has_decoration?(:floor_decoration)
         ((@usable_width * @usable_height) / @parameters.floor_decoration_density).times do
           x = rand(@usable_width)
           y = rand(@usable_height)

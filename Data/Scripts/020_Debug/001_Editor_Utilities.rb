@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 def pbGetLegalMoves(species)
   species_data = GameData::Species.get(species)
   moves = []
@@ -125,7 +128,6 @@ def pbChooseFromGameDataList(game_data, default = nil)
   return pbChooseList(commands, default, nil, -1)
 end
 
-
 # Displays a list of all Pokémon species, and returns the ID of the species
 # selected (or nil if the selection was canceled). "default", if specified, is
 # the ID of the species to initially select. Pressing Input::ACTION will toggle
@@ -238,8 +240,6 @@ def pbChooseBallList(defaultMoveID = nil)
   cmdwin.dispose
   return (ret >= 0) ? commands[ret][0] : defaultMoveID
 end
-
-
 
 #===============================================================================
 # General list methods

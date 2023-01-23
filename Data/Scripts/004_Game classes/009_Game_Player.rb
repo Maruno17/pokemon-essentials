@@ -267,13 +267,11 @@ class Game_Player < Game_Character
     return $game_map.terrain_tag(facing[1], facing[2])
   end
 
-  #-----------------------------------------------------------------------------
-  # * Passable Determinants
+  # Passable Determinants
   #     x : x-coordinate
   #     y : y-coordinate
-  #     d : direction (0,2,4,6,8)
+  #     d : direction (0, 2, 4, 6, 8)
   #         * 0 = Determines if all directions are impassable (for jumping)
-  #-----------------------------------------------------------------------------
   def passable?(x, y, d, strict = false)
     # Get new coordinates
     new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
@@ -289,28 +287,22 @@ class Game_Player < Game_Character
     return super
   end
 
-  #-----------------------------------------------------------------------------
-  # * Set Map Display Position to Center of Screen
-  #-----------------------------------------------------------------------------
+  # Set Map Display Position to Center of Screen
   def center(x, y)
     self.map.display_x = (x * Game_Map::REAL_RES_X) - SCREEN_CENTER_X
     self.map.display_y = (y * Game_Map::REAL_RES_Y) - SCREEN_CENTER_Y
   end
 
-  #-----------------------------------------------------------------------------
-  # * Move to Designated Position
+  # Move to Designated Position
   #     x : x-coordinate
   #     y : y-coordinate
-  #-----------------------------------------------------------------------------
   def moveto(x, y)
     super
     center(x, y)
     make_encounter_count
   end
 
-  #-----------------------------------------------------------------------------
-  # * Make Encounter Count
-  #-----------------------------------------------------------------------------
+  # Make Encounter Count
   def make_encounter_count
     # Image of two dice rolling
     if $game_map.map_id != 0
@@ -319,18 +311,13 @@ class Game_Player < Game_Character
     end
   end
 
-  #-----------------------------------------------------------------------------
-  # * Refresh
-  #-----------------------------------------------------------------------------
   def refresh
     @opacity    = 255
     @blend_type = 0
   end
 
-  #-----------------------------------------------------------------------------
-  # * Trigger event(s) at the same coordinates as self with the appropriate
-  #   trigger(s) that can be triggered
-  #-----------------------------------------------------------------------------
+  # Trigger event(s) at the same coordinates as self with the appropriate
+  # trigger(s) that can be triggered
   def check_event_trigger_here(triggers)
     result = false
     # If event is running
@@ -348,9 +335,7 @@ class Game_Player < Game_Character
     return result
   end
 
-  #-----------------------------------------------------------------------------
-  # * Front Event Starting Determinant
-  #-----------------------------------------------------------------------------
+  # Front Event Starting Determinant
   def check_event_trigger_there(triggers)
     result = false
     # If event is running
@@ -389,9 +374,7 @@ class Game_Player < Game_Character
     return result
   end
 
-  #-----------------------------------------------------------------------------
-  # * Touch Event Starting Determinant
-  #-----------------------------------------------------------------------------
+  # Touch Event Starting Determinant
   def check_event_trigger_touch(dir)
     result = false
     return result if $game_system.map_interpreter.running?
@@ -417,9 +400,6 @@ class Game_Player < Game_Character
     return result
   end
 
-  #-----------------------------------------------------------------------------
-  # * Frame Update
-  #-----------------------------------------------------------------------------
   def update
     last_real_x = @real_x
     last_real_y = @real_y
@@ -531,7 +511,7 @@ class Game_Player < Game_Character
     end
   end
 
-  # Track the player on-screen as they move
+  # Track the player on-screen as they move.
   def update_screen_position(last_real_x, last_real_y)
     return if self.map.scrolling? || !(@moved_last_frame || @moved_this_frame)
     if (@real_x < last_real_x && @real_x - $game_map.display_x < SCREEN_CENTER_X) ||
@@ -563,8 +543,6 @@ class Game_Player < Game_Character
     end
   end
 end
-
-
 
 #===============================================================================
 #

@@ -958,7 +958,7 @@ class PurifyChamberSetView < Sprite
         type_string += GameData::Type.get(type).name
       end
       textpos.push([_INTL("{1}  Lv.{2}  {3}", pkmn.name, pkmn.level, type_string),
-                   2, 6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
+                    2, 6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       textpos.push([_INTL("FLOW"), 2 + (@info.bitmap.width / 2), 30, 0,
                     Color.new(248, 248, 248), Color.new(128, 128, 128)])
       # draw heart gauge

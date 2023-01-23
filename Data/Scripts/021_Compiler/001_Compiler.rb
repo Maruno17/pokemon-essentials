@@ -888,7 +888,7 @@ module Compiler
           rescue SystemCallError
             mustCompile = true
           end
-        else
+        elsif filename != "shadow_pokemon.dat"
           mustCompile = true
           break
         end

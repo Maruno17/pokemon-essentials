@@ -888,10 +888,7 @@ Battle::AbilityEffects::MoveBlocking.add(:DAZZLING,
     next false if battle.choices[user.index][4] <= 0
     next false if !bearer.opposes?(user)
     ret = false
-    targets.each do |b|
-      next if !b.opposes?(user)
-      ret = true
-    end
+    targets.each { |b| ret = true if b.opposes?(user) }
     next ret
   }
 )

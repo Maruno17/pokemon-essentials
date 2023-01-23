@@ -49,8 +49,6 @@ def pbCurrentEventCommentInput(elements, trigger)
   return pbEventCommentInput(event, elements, trigger)
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -164,8 +162,9 @@ class ChooseNumberParams
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbChooseNumber(msgwindow, params)
   return 0 if !params
   ret = 0
@@ -208,8 +207,6 @@ def pbChooseNumber(msgwindow, params)
   return ret
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -243,8 +240,6 @@ class FaceWindowVX < SpriteWindow_Base
     super
   end
 end
-
-
 
 #===============================================================================
 #
@@ -311,8 +306,6 @@ def pbCsvPosInt!(str)
   return ret.to_i
 end
 
-
-
 #===============================================================================
 # Money and coins windows
 #===============================================================================
@@ -368,8 +361,6 @@ def pbDisplayBattlePointsWindow(msgwindow)
   return pointswindow
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -409,8 +400,6 @@ def pbDisposeMessageWindow(msgwindow)
   $game_temp.message_window_showing = false if $game_temp
   msgwindow.dispose
 end
-
-
 
 #===============================================================================
 # Main message-displaying function
@@ -700,8 +689,6 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   end
   return ret
 end
-
-
 
 #===============================================================================
 # Message-displaying functions

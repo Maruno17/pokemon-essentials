@@ -5,9 +5,6 @@
 #  flashing, etc. Refer to "$game_screen" for the instance of this class.
 #===============================================================================
 class Game_Screen
-  #-----------------------------------------------------------------------------
-  # * Public Instance Variables
-  #-----------------------------------------------------------------------------
   attr_reader   :brightness         # brightness
   attr_reader   :tone               # color tone
   attr_reader   :flash_color        # flash color
@@ -17,9 +14,6 @@ class Game_Screen
   attr_reader   :weather_max        # max number of weather sprites
   attr_accessor :weather_duration   # ticks in which the weather should fade in
 
-  #-----------------------------------------------------------------------------
-  # * Object Initialization
-  #-----------------------------------------------------------------------------
   def initialize
     @brightness       = 255
     @fadeout_duration = 0
@@ -42,11 +36,7 @@ class Game_Screen
     @weather_max      = 0.0
     @weather_duration = 0
   end
-  #-----------------------------------------------------------------------------
-  # * Start Changing Color Tone
-  #     tone : color tone
-  #     duration : time
-  #-----------------------------------------------------------------------------
+
   def start_tone_change(tone, duration)
     @tone_target   = tone.clone
     @tone_duration = duration
@@ -54,40 +44,24 @@ class Game_Screen
       @tone = @tone_target.clone
     end
   end
-  #-----------------------------------------------------------------------------
-  # * Start Flashing
-  #     color : color
-  #     duration : time
-  #-----------------------------------------------------------------------------
+
   def start_flash(color, duration)
     @flash_color    = color.clone
     @flash_duration = duration
   end
-  #-----------------------------------------------------------------------------
-  # * Start Shaking
-  #     power : strength
-  #     speed : speed
-  #     duration : time
-  #-----------------------------------------------------------------------------
+
   def start_shake(power, speed, duration)
     @shake_power    = power
     @shake_speed    = speed
     @shake_duration = duration
   end
-  #-----------------------------------------------------------------------------
-  # * Set Weather
-  #     type : type
-  #     power : strength
-  #     duration : time
-  #-----------------------------------------------------------------------------
+
   def weather(type, power, duration)
     @weather_type     = GameData::Weather.get(type).id
     @weather_max      = (power + 1) * RPG::Weather::MAX_SPRITES / 10
     @weather_duration = duration   # In 1/20ths of a seconds
   end
-  #-----------------------------------------------------------------------------
-  # * Frame Update
-  #-----------------------------------------------------------------------------
+
   def update
     if @fadeout_duration && @fadeout_duration >= 1
       d = @fadeout_duration

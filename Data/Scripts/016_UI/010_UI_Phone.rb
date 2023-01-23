@@ -223,7 +223,7 @@ class PokemonPhoneScreen
       commands.push(_INTL("Sort Contacts"))
       commands.push(_INTL("Cancel"))
       cmd = pbShowCommands(nil, commands, -1)
-      cmd += 1 if cmd >=1 && !contact.can_hide?
+      cmd += 1 if cmd >= 1 && !contact.can_hide?
       case cmd
       when 0   # Call
         Phone::Call.make_outgoing(contact)

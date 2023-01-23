@@ -580,8 +580,9 @@ class VoltorbFlip
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class VoltorbFlipScreen
   def initialize(scene)
     @scene = scene
@@ -594,8 +595,9 @@ class VoltorbFlipScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbVoltorbFlip
   if !$bag.has?(:COINCASE)
     pbMessage(_INTL("You can't play unless you have a Coin Case."))

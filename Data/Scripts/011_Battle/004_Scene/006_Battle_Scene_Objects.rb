@@ -402,8 +402,6 @@ class Battle::Scene::PokemonDataBox < Sprite
   end
 end
 
-
-
 #===============================================================================
 # Splash bar to announce a triggered ability
 #===============================================================================
@@ -495,8 +493,6 @@ class Battle::Scene::AbilitySplashBar < Sprite
     @bgSprite.update
   end
 end
-
-
 
 #===============================================================================
 # Pokémon sprite (used in battle)
@@ -623,8 +619,6 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
     @updating = false
   end
 end
-
-
 
 #===============================================================================
 # Shadow sprite for Pokémon (used in battle)

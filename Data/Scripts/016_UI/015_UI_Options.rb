@@ -298,7 +298,7 @@ class PokemonOption_Scene
     @sprites["option"].viewport = @viewport
     @sprites["option"].visible  = true
     # Get the values of each option
-    @options.length.times { |i|  @sprites["option"].setValueNoRefresh(i, @options[i].get || 0) }
+    @options.length.times { |i| @sprites["option"].setValueNoRefresh(i, @options[i].get || 0) }
     @sprites["option"].refresh
     pbChangeSelection
     pbDeactivateWindows(@sprites)

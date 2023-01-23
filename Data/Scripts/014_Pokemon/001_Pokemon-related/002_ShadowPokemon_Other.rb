@@ -59,8 +59,6 @@ def pbPurify(pkmn, scene)
   end
 end
 
-
-
 #===============================================================================
 # Relic Stone scene.
 #===============================================================================
@@ -105,8 +103,9 @@ class RelicStoneScene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class RelicStoneScreen
   def initialize(scene)
     @scene = scene
@@ -132,8 +131,9 @@ class RelicStoneScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbRelicStoneScreen(pkmn)
   retval = true
   pbFadeOutIn {
@@ -143,8 +143,6 @@ def pbRelicStoneScreen(pkmn)
   }
   return retval
 end
-
-
 
 #===============================================================================
 #
@@ -164,8 +162,6 @@ def pbRelicStone
   end
 end
 
-
-
 #===============================================================================
 # Shadow Pokémon in battle.
 #===============================================================================
@@ -184,8 +180,9 @@ class Battle
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
   alias __shadow__pbInitPokemon pbInitPokemon unless method_defined?(:__shadow__pbInitPokemon)
 
@@ -227,8 +224,6 @@ class Battle::Battler
     return rand(100) < 20
   end
 end
-
-
 
 #===============================================================================
 # Shadow item effects.
@@ -333,8 +328,6 @@ ItemHandlers::BattleUseOnPokemon.add(:VIVIDSCENT, proc { |item, pokemon, battler
   next true
 })
 
-
-
 #===============================================================================
 # Two turn attack. On first turn, halves the HP of all active Pokémon.
 # Skips second turn (if successful). (Shadow Half)
@@ -359,8 +352,6 @@ class Battle::Move::AllBattlersLoseHalfHPUserSkipsNextTurn < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 # User takes recoil damage equal to 1/2 of its current HP. (Shadow End)
 #===============================================================================
@@ -380,8 +371,6 @@ class Battle::Move::UserLosesHalfHP < Battle::Move::RecoilMove
   end
 end
 
-
-
 #===============================================================================
 # Starts shadow weather. (Shadow Sky)
 #===============================================================================
@@ -391,8 +380,6 @@ class Battle::Move::StartShadowSkyWeather < Battle::Move::WeatherMove
     @weatherType = :ShadowSky
   end
 end
-
-
 
 #===============================================================================
 # Ends the effects of Light Screen, Reflect and Safeguard on both sides.
@@ -410,8 +397,6 @@ class Battle::Move::RemoveAllScreens < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -419,8 +404,9 @@ class Game_Temp
   attr_accessor :party_heart_gauges_before_battle
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 # Record current heart gauges of Pokémon in party, to see if they drop to zero
 # during battle and need to say they're ready to be purified afterwards
 EventHandlers.add(:on_start_battle, :record_party_heart_gauges,

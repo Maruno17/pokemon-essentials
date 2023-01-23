@@ -14,10 +14,10 @@ module GameData
     include InstanceMethods
 
     SCHEMA = {
-      "SectionName"  => [:id,               "m"],
-      "Name"         => [:real_name,        "s"],
-      "Description"  => [:real_description, "q"],
-      "Flags"        => [:flags,            "*s"]
+      "SectionName" => [:id,               "m"],
+      "Name"        => [:real_name,        "s"],
+      "Description" => [:real_description, "q"],
+      "Flags"       => [:flags,            "*s"]
     }
 
     def initialize(hash)

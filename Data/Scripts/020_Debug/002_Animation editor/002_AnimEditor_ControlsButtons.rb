@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module ShadowText
   def shadowtext(bitmap, x, y, w, h, t, disabled = false, align = 0)
     width = bitmap.text_size(t).width
@@ -13,8 +16,9 @@ module ShadowText
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class UIControl
   include ShadowText
   attr_accessor :bitmap
@@ -90,8 +94,9 @@ class UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Label < UIControl
   def text=(value)
     self.label = value
@@ -106,8 +111,9 @@ class Label < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Button < UIControl
   attr_accessor :label
 
@@ -155,8 +161,9 @@ class Button < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Checkbox < Button
   attr_reader :checked
 
@@ -210,8 +217,9 @@ class Checkbox < Button
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TextField < UIControl
   attr_accessor :label
   attr_reader :text
@@ -340,8 +348,9 @@ class TextField < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Slider < UIControl
   attr_reader :minvalue
   attr_reader :maxvalue
@@ -453,8 +462,9 @@ class Slider < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class OptionalSlider < Slider
   def initialize(label, minvalue, maxvalue, curvalue)
     @slider = Slider.new(label, minvalue, maxvalue, curvalue)
@@ -543,8 +553,9 @@ class OptionalSlider < Slider
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class ArrayCountSlider < Slider
   def maxvalue
     return @array.length - 1
@@ -556,8 +567,9 @@ class ArrayCountSlider < Slider
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class FrameCountSlider < Slider
   def maxvalue
     return @canvas.animation.length
@@ -569,8 +581,9 @@ class FrameCountSlider < Slider
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class FrameCountButton < Button
   def label
     return _INTL("Total Frames: {1}", @canvas.animation.length)
@@ -582,8 +595,9 @@ class FrameCountButton < Button
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TextSlider < UIControl
   attr_reader :minvalue
   attr_reader :maxvalue
@@ -701,8 +715,9 @@ class TextSlider < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class OptionalTextSlider < TextSlider
   def initialize(label, options, curval)
     @slider = TextSlider.new(label, options, curval)
@@ -791,7 +806,9 @@ class OptionalTextSlider < TextSlider
   end
 end
 
-
+#===============================================================================
+#
+#===============================================================================
 class ControlWindow < SpriteWindow_Base
   attr_reader :controls
 

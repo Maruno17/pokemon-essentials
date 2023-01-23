@@ -113,8 +113,9 @@ module ItemHandlers
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbCanRegisterItem?(item)
   return ItemHandlers.hasUseInFieldHandler(item)
 end
@@ -122,8 +123,6 @@ end
 def pbCanUseOnPokemon?(item)
   return ItemHandlers.hasUseOnPokemon(item) || GameData::Item.get(item).is_machine?
 end
-
-
 
 #===============================================================================
 # Change a Pokémon's level

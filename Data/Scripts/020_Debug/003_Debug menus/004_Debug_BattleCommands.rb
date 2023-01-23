@@ -88,7 +88,7 @@ MenuHandlers.add(:battle_debug_menu, :pokemon_teams, {
       if battle.opponent
         battle.opponent.each_with_index do |trainer, i|
           first_index = foe_party_starts[i]
-          last_index   = (i < foe_party_starts.length - 1) ? foe_party_starts[i + 1] : battle.pbParty(1).length
+          last_index = (i < foe_party_starts.length - 1) ? foe_party_starts[i + 1] : battle.pbParty(1).length
           num_pkmn = last_index - first_index
           commands.push(_INTL("Opponent {1}: {2} ({3} Pokémon)", i + 1, trainer.full_name, num_pkmn))
           team_indices.push([1, i, first_index])
@@ -99,7 +99,7 @@ MenuHandlers.add(:battle_debug_menu, :pokemon_teams, {
       end
       battle.player.each_with_index do |trainer, i|
         first_index = player_party_starts[i]
-        last_index   = (i < player_party_starts.length - 1) ? player_party_starts[i + 1] : battle.pbParty(0).length
+        last_index = (i < player_party_starts.length - 1) ? player_party_starts[i + 1] : battle.pbParty(0).length
         num_pkmn = last_index - first_index
         if i == 0   # Player
           commands.push(_INTL("You: {1} ({2} Pokémon)", trainer.full_name, num_pkmn))

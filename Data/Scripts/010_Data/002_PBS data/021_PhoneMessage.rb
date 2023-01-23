@@ -42,7 +42,7 @@ module GameData
       validate tr_type => [Symbol, String]
       validate tr_name => [String, NilClass]
       key = [tr_type.to_sym, tr_name, tr_version]
-      key = key[0] if key[1] == nil
+      key = key[0] if key[1].nil?
       return !self::DATA[key].nil?
     end
 

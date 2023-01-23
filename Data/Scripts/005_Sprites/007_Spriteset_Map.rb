@@ -1,4 +1,6 @@
-# Unused
+#===============================================================================
+# Unused.
+#===============================================================================
 class ClippableSprite < Sprite_Character
   def initialize(viewport, event, tilemap)
     @tilemap = tilemap
@@ -29,8 +31,9 @@ class ClippableSprite < Sprite_Character
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Spriteset_Map
   attr_reader :map
 

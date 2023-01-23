@@ -46,6 +46,8 @@ class SpriteWindow < Window
   end
 
   attr_reader :compat
+  attr_reader :skinformat
+  attr_reader :skinrect
 
   def compat=(value)
     @compat = value
@@ -324,10 +326,6 @@ class SpriteWindow < Window
     end
   end
 
-  #############
-  attr_reader :skinformat
-  attr_reader :skinrect
-
   def loadSkinFile(_file)
     if (self.windowskin.width == 80 || self.windowskin.width == 96) &&
        self.windowskin.height == 48
@@ -437,7 +435,8 @@ class SpriteWindow < Window
     privRefresh
   end
 
-  #############
+  #===============================================================================
+
   private
 
   def ensureBitmap(bitmap, dwidth, dheight)
@@ -812,8 +811,6 @@ class SpriteWindow < Window
     end
   end
 end
-
-
 
 #===============================================================================
 #

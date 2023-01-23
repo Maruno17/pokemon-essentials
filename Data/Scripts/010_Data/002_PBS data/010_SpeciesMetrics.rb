@@ -38,7 +38,7 @@ module GameData
       if form > 0
         trial = sprintf("%s_%d", species, form).to_sym
         if !DATA.has_key?(trial)
-          self.register({ :id => species }) if !DATA[species]
+          self.register({:id => species}) if !DATA[species]
           self.register({
             :id                    => trial,
             :species               => species,
@@ -52,7 +52,7 @@ module GameData
         end
         return DATA[trial]
       end
-      self.register({ :id => species }) if !DATA[species]
+      self.register({:id => species}) if !DATA[species]
       return DATA[species]
     end
 

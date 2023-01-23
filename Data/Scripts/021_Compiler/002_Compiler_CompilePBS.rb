@@ -99,7 +99,7 @@ module Compiler
   # Compile map connections
   #=============================================================================
   def compile_connections(*paths)
-    records   = []
+    records = []
     paths.each do |path|
       compile_pbs_file_message_start(path)
       pbCompilerEachPreppedLine(path) { |line, lineno|

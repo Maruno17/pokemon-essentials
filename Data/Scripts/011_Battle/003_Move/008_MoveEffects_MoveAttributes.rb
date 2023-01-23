@@ -453,8 +453,6 @@ class Battle::Move::DoublePowerIfTargetPoisoned < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 # Power is doubled if the target is paralyzed. Cures the target of paralysis.
 # (Smelling Salts)

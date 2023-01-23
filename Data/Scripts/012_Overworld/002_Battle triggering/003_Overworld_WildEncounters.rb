@@ -26,7 +26,7 @@ class PokemonEncounters
     @chance_accumulator = 0
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Returns whether encounters for the given encounter type have been defined
   # for the current map.
@@ -84,7 +84,7 @@ class PokemonEncounters
     return false
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Returns whether the player's current location allows wild encounters to
   # trigger upon taking a step.
@@ -262,7 +262,7 @@ class PokemonEncounters
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # For the current map, randomly chooses a species and level from the encounter
   # list for the given encounter type. Returns nil if there are none defined.
@@ -374,8 +374,6 @@ class PokemonEncounters
     return [encounter[1], level]
   end
 end
-
-
 
 #===============================================================================
 #

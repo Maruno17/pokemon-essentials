@@ -5,8 +5,9 @@ def pbGetTimeNow
   return Time.now
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 module PBDayNight
   HOURLY_TONES = [
     Tone.new(-70, -90,  15, 55),   # Night           # Midnight
@@ -109,8 +110,9 @@ module PBDayNight
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbDayNightTint(object)
   return if !$scene.is_a?(Scene_Map)
   if Settings::TIME_SHADING && $game_map.metadata&.outdoor_map
@@ -119,85 +121,6 @@ def pbDayNightTint(object)
   else
     object.tone.set(0, 0, 0, 0)
   end
-end
-
-
-
-#===============================================================================
-# Moon phases and Zodiac
-#===============================================================================
-# Calculates the phase of the moon.
-# 0 - New Moon
-# 1 - Waxing Crescent
-# 2 - First Quarter
-# 3 - Waxing Gibbous
-# 4 - Full Moon
-# 5 - Waning Gibbous
-# 6 - Last Quarter
-# 7 - Waning Crescent
-def moonphase(time = nil) # in UTC
-  time = pbGetTimeNow if !time
-  transitions = [
-    1.8456618033125,
-    5.5369854099375,
-    9.2283090165625,
-    12.9196326231875,
-    16.6109562298125,
-    20.3022798364375,
-    23.9936034430625,
-    27.6849270496875
-  ]
-  yy = time.year - ((12 - time.mon) / 10.0).floor
-  j = (365.25 * (4712 + yy)).floor + ((((time.mon + 9) % 12) * 30.6) + 0.5).floor + time.day + 59
-  j -= (((yy / 100.0) + 49).floor * 0.75).floor - 38 if j > 2_299_160
-  j += (((time.hour * 60) + (time.min * 60)) + time.sec) / 86_400.0
-  v = (j - 2_451_550.1) / 29.530588853
-  v = ((v - v.floor) + (v < 0 ? 1 : 0))
-  ag = v * 29.53
-  transitions.length.times do |i|
-    return i if ag <= transitions[i]
-  end
-  return 0
-end
-
-# Calculates the zodiac sign based on the given month and day:
-# 0 is Aries, 11 is Pisces. Month is 1 if January, and so on.
-def zodiac(month, day)
-  time = [
-    3, 21, 4, 19,   # Aries
-    4, 20, 5, 20,   # Taurus
-    5, 21, 6, 20,   # Gemini
-    6, 21, 7, 20,   # Cancer
-    7, 23, 8, 22,   # Leo
-    8, 23, 9, 22,   # Virgo
-    9, 23, 10, 22,  # Libra
-    10, 23, 11, 21, # Scorpio
-    11, 22, 12, 21, # Sagittarius
-    12, 22, 1, 19,  # Capricorn
-    1, 20, 2, 18,   # Aquarius
-    2, 19, 3, 20    # Pisces
-  ]
-  (time.length / 4).times do |i|
-    return i if month == time[i * 4] && day >= time[(i * 4) + 1]
-    return i if month == time[(i * 4) + 2] && day <= time[(i * 4) + 3]
-  end
-  return 0
-end
-
-# Returns the opposite of the given zodiac sign.
-# 0 is Aries, 11 is Pisces.
-def zodiacOpposite(sign)
-  return (sign + 6) % 12
-end
-
-# 0 is Aries, 11 is Pisces.
-def zodiacPartners(sign)
-  return [(sign + 4) % 12, (sign + 8) % 12]
-end
-
-# 0 is Aries, 11 is Pisces.
-def zodiacComplements(sign)
-  return [(sign + 1) % 12, (sign + 11) % 12]
 end
 
 #===============================================================================
@@ -306,4 +229,81 @@ def pbGetSeasonName(season)
           _INTL("Summer"),
           _INTL("Autumn"),
           _INTL("Winter")][season]
+end
+
+#===============================================================================
+# Moon phases and Zodiac
+#===============================================================================
+# Calculates the phase of the moon.
+# 0 - New Moon
+# 1 - Waxing Crescent
+# 2 - First Quarter
+# 3 - Waxing Gibbous
+# 4 - Full Moon
+# 5 - Waning Gibbous
+# 6 - Last Quarter
+# 7 - Waning Crescent
+def moonphase(time = nil) # in UTC
+  time = pbGetTimeNow if !time
+  transitions = [
+    1.8456618033125,
+    5.5369854099375,
+    9.2283090165625,
+    12.9196326231875,
+    16.6109562298125,
+    20.3022798364375,
+    23.9936034430625,
+    27.6849270496875
+  ]
+  yy = time.year - ((12 - time.mon) / 10.0).floor
+  j = (365.25 * (4712 + yy)).floor + ((((time.mon + 9) % 12) * 30.6) + 0.5).floor + time.day + 59
+  j -= (((yy / 100.0) + 49).floor * 0.75).floor - 38 if j > 2_299_160
+  j += (((time.hour * 60) + (time.min * 60)) + time.sec) / 86_400.0
+  v = (j - 2_451_550.1) / 29.530588853
+  v = ((v - v.floor) + (v < 0 ? 1 : 0))
+  ag = v * 29.53
+  transitions.length.times do |i|
+    return i if ag <= transitions[i]
+  end
+  return 0
+end
+
+# Calculates the zodiac sign based on the given month and day:
+# 0 is Aries, 11 is Pisces. Month is 1 if January, and so on.
+def zodiac(month, day)
+  time = [
+    3, 21, 4, 19,   # Aries
+    4, 20, 5, 20,   # Taurus
+    5, 21, 6, 20,   # Gemini
+    6, 21, 7, 20,   # Cancer
+    7, 23, 8, 22,   # Leo
+    8, 23, 9, 22,   # Virgo
+    9, 23, 10, 22,  # Libra
+    10, 23, 11, 21, # Scorpio
+    11, 22, 12, 21, # Sagittarius
+    12, 22, 1, 19,  # Capricorn
+    1, 20, 2, 18,   # Aquarius
+    2, 19, 3, 20    # Pisces
+  ]
+  (time.length / 4).times do |i|
+    return i if month == time[i * 4] && day >= time[(i * 4) + 1]
+    return i if month == time[(i * 4) + 2] && day <= time[(i * 4) + 3]
+  end
+  return 0
+end
+
+# Returns the opposite of the given zodiac sign.
+# 0 is Aries, 11 is Pisces.
+def zodiacOpposite(sign)
+  return (sign + 6) % 12
+end
+
+# 0 is Aries, 11 is Pisces.
+def zodiacPartners(sign)
+  return [(sign + 4) % 12, (sign + 8) % 12]
+end
+
+# 0 is Aries, 11 is Pisces.
+def zodiacComplements(sign)
+  return [(sign + 1) % 12, (sign + 11) % 12]
 end

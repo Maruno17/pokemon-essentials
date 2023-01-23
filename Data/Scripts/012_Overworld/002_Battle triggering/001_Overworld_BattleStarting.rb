@@ -8,8 +8,9 @@ class PokemonGlobalMetadata
   attr_accessor :nextBattleBack
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Game_Temp
   attr_accessor :encounter_triggered
   attr_accessor :encounter_type
@@ -61,8 +62,9 @@ class Game_Temp
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def setBattleRule(*args)
   r = nil
   args.each do |arg|

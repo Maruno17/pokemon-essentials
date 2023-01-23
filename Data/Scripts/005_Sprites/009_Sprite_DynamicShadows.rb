@@ -117,11 +117,9 @@ class Sprite_Shadow < RPG::Sprite
   end
 end
 
-
-
-#===================================================
+#===============================================================================
 # ? CLASS Sprite_Character edit
-#===================================================
+#===============================================================================
 class Sprite_Character < RPG::Sprite
   alias shadow_initialize initialize unless private_method_defined?(:shadow_initialize)
 
@@ -161,20 +159,16 @@ class Sprite_Character < RPG::Sprite
   end
 end
 
-
-
-#===================================================
+#===============================================================================
 # ? CLASS Game_Event edit
-#===================================================
+#===============================================================================
 class Game_Event
   attr_accessor :id
 end
 
-
-
-#===================================================
+#===============================================================================
 # ? CLASS Spriteset_Map edit
-#===================================================
+#===============================================================================
 class Spriteset_Map
   attr_accessor :shadows
 
@@ -202,9 +196,7 @@ class Spriteset_Map
   end
 end
 
-
-
-#===================================================
+#===============================================================================
 # ? XPML Definition, by Rataime, using ideas from Near Fantastica
 #
 #   Returns nil if the markup wasn't present at all,
@@ -222,7 +214,7 @@ end
 #   p XPML_read("second", event_id) -> [1, "two"]
 #   p XPML_read("third", event_id) -> [3]
 #   p XPML_read("forth", event_id) -> nil
-#===================================================
+#===============================================================================
 def XPML_read(map, markup, event, max_param_number = 0)
   parameter_list = nil
   return nil if !event || event.list.nil?

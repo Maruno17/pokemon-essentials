@@ -54,8 +54,6 @@ def getContrastColor(color)
   return color.get_contrast_color
 end
 
-
-
 #===============================================================================
 # Format text
 #===============================================================================
@@ -248,8 +246,6 @@ def getLastColors(colorstack, opacitystack, defaultcolors)
   return colors
 end
 
-
-
 #===============================================================================
 # Formats a string of text and returns an array containing a list of formatted
 # characters.
@@ -317,7 +313,6 @@ In addition, the syntax supports the following:
 To draw the characters, pass the returned array to the
 _drawFormattedChars_ function.
 =end
-
 def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight = 32,
                      newlineBreaks = true, explicitBreaksOnly = false,
                      collapseAlignments = false)
@@ -774,8 +769,6 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   return characters
 end
 
-
-
 #===============================================================================
 # Draw text and images on a bitmap
 #===============================================================================
@@ -1108,8 +1101,6 @@ def pbDrawTextPositions(bitmap, textpos)
     end
   end
 end
-
-
 
 #===============================================================================
 # Draw images on a bitmap

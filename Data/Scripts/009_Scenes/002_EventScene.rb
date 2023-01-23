@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class PictureSprite < Sprite
   def initialize(viewport, picture)
     super(viewport)
@@ -50,8 +53,6 @@ class PictureSprite < Sprite
   end
 end
 
-
-
 def pbTextBitmap(text, maxwidth = Graphics.width)
   tmp = Bitmap.new(maxwidth, Graphics.height)
   pbSetSystemFont(tmp)
@@ -59,10 +60,8 @@ def pbTextBitmap(text, maxwidth = Graphics.width)
   return tmp
 end
 
-
-
 #===============================================================================
-# EventScene
+#
 #===============================================================================
 class EventScene
   attr_accessor :onCTrigger, :onBTrigger, :onUpdate
@@ -180,8 +179,6 @@ class EventScene
     end
   end
 end
-
-
 
 #===============================================================================
 #

@@ -267,7 +267,10 @@ module Translator
     # existing destination folder
     if Dir.safe?(dir_name)
       has_files = false
-      Dir.all(dir_name).each { |f| has_files = true; break }
+      Dir.all(dir_name).each do |f|
+        has_files = true
+        break
+      end
       if has_files && !pbConfirmMessageSerious(_INTL("Replace all text files in folder '{1}'?", dir_name))
         pbDisposeMessageWindow(msg_window)
         return
@@ -568,14 +571,15 @@ class Translation
   def setMapMessagesAsHash(map_id, array)
     load_default_messages
     @default_game_messages[MessageTypes::EventTexts] ||= []
-    @default_game_messages[MessageTypes::EventTexts][map_id] = priv_add_to_hash(MessageTypes::EventTexts, array, nil, map_id)
+    @default_game_messages[MessageTypes::EventTexts][map_id] = priv_add_to_hash(MessageTypes::EventTexts,
+      array, nil, map_id)
   end
 
   def addMapMessagesAsHash(map_id, array)
     load_default_messages
     @default_game_messages[MessageTypes::EventTexts] ||= []
-    @default_game_messages[MessageTypes::EventTexts][map_id] = priv_add_to_hash(
-       MessageTypes::EventTexts, array, @default_game_messages[MessageTypes::EventTexts][map_id], map_id)
+    @default_game_messages[MessageTypes::EventTexts][map_id] = priv_add_to_hash(MessageTypes::EventTexts,
+      array, @default_game_messages[MessageTypes::EventTexts][map_id], map_id)
   end
 
   def get(type, id)

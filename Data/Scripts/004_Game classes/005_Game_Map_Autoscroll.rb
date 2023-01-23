@@ -69,14 +69,15 @@
 
 =end
 
+#===============================================================================
+#
+#===============================================================================
 class Interpreter
   SCROLL_SPEED_DEFAULT = 4
-  #-----------------------------------------------------------------------------
-  # * Map Autoscroll to Coordinates
+  # Map Autoscroll to Coordinates
   #     x     : x coordinate to scroll to and center on
   #     y     : y coordinate to scroll to and center on
   #     speed : (optional) scroll speed (from 1-6, default being 4)
-  #-----------------------------------------------------------------------------
   def autoscroll(x, y, speed = SCROLL_SPEED_DEFAULT)
     if $game_map.scrolling?
       return false
@@ -130,17 +131,16 @@ class Interpreter
     return !@diag
   end
 
-  #-----------------------------------------------------------------------------
-  # * Map Autoscroll (to Player)
+  # Map Autoscroll (to Player)
   #     speed : (optional) scroll speed (from 1-6, default being 4)
-  #-----------------------------------------------------------------------------
   def autoscroll_player(speed = SCROLL_SPEED_DEFAULT)
     autoscroll($game_player.x, $game_player.y, speed)
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Game_Map
   def scroll_downright(distance)
     @display_x = [@display_x + distance,

@@ -51,8 +51,9 @@ class Battle
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
   unless @__clauses__aliased
     alias __clauses__pbCanSleep? pbCanSleep?
@@ -100,9 +101,10 @@ class Battle::Battler
   end
 end
 
-
-
-class Battle::Move::RaiseUserEvasion1   # Double Team
+#===============================================================================
+# Double Team
+#===============================================================================
+class Battle::Move::RaiseUserEvasion1
   unless method_defined?(:__clauses__pbMoveFailed?)
     alias __clauses__pbMoveFailed? pbMoveFailed?
   end
@@ -116,9 +118,10 @@ class Battle::Move::RaiseUserEvasion1   # Double Team
   end
 end
 
-
-
-class Battle::Move::RaiseUserEvasion2MinimizeUser   # Minimize
+#===============================================================================
+# Minimize
+#===============================================================================
+class Battle::Move::RaiseUserEvasion2MinimizeUser
   unless method_defined?(:__clauses__pbMoveFailed?)
     alias __clauses__pbMoveFailed? pbMoveFailed?
   end
@@ -132,9 +135,10 @@ class Battle::Move::RaiseUserEvasion2MinimizeUser   # Minimize
   end
 end
 
-
-
-class Battle::Move::UserTargetSwapAbilities   # Skill Swap
+#===============================================================================
+# Skill Swap
+#===============================================================================
+class Battle::Move::UserTargetSwapAbilities
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
     alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
   end
@@ -148,9 +152,10 @@ class Battle::Move::UserTargetSwapAbilities   # Skill Swap
   end
 end
 
-
-
-class Battle::Move::FixedDamage20   # Sonic Boom
+#===============================================================================
+# Sonic Boom
+#===============================================================================
+class Battle::Move::FixedDamage20
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
     alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
   end
@@ -164,9 +169,10 @@ class Battle::Move::FixedDamage20   # Sonic Boom
   end
 end
 
-
-
-class Battle::Move::FixedDamage40   # Dragon Rage
+#===============================================================================
+# Dragon Rage
+#===============================================================================
+class Battle::Move::FixedDamage40
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
     alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
   end
@@ -180,8 +186,9 @@ class Battle::Move::FixedDamage40   # Dragon Rage
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Battle::Move::OHKO
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
     alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
@@ -196,8 +203,9 @@ class Battle::Move::OHKO
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Battle::Move::OHKOIce
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
     alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
@@ -212,8 +220,9 @@ class Battle::Move::OHKOIce
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Battle::Move::OHKOHitsUndergroundTarget
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
     alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
@@ -228,9 +237,10 @@ class Battle::Move::OHKOHitsUndergroundTarget
   end
 end
 
-
-
-class Battle::Move::UserFaintsExplosive   # Self-Destruct
+#===============================================================================
+# Self-Destruct
+#===============================================================================
+class Battle::Move::UserFaintsExplosive
   unless method_defined?(:__clauses__pbMoveFailed?)
     alias __clauses__pbMoveFailed? pbMoveFailed?
   end
@@ -259,9 +269,10 @@ class Battle::Move::UserFaintsExplosive   # Self-Destruct
   end
 end
 
-
-
-class Battle::Move::StartPerishCountsForAllBattlers   # Perish Song
+#===============================================================================
+# Perish Song
+#===============================================================================
+class Battle::Move::StartPerishCountsForAllBattlers
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
     alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
   end
@@ -276,9 +287,10 @@ class Battle::Move::StartPerishCountsForAllBattlers   # Perish Song
   end
 end
 
-
-
-class Battle::Move::AttackerFaintsIfUserFaints   # Destiny Bond
+#===============================================================================
+# Destiny Bond
+#===============================================================================
+class Battle::Move::AttackerFaintsIfUserFaints
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
     alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
   end

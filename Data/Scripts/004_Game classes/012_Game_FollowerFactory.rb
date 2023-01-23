@@ -77,7 +77,7 @@ class Game_FollowerFactory
   attr_reader :last_update
 
   def initialize
-    @events      = []
+    @events = []
     $PokemonGlobal.followers.each do |follower|
       @events.push(create_follower_object(follower))
     end
@@ -387,7 +387,6 @@ module Followers
     $game_temp.followers.put_followers_on_player
   end
 end
-
 
 #===============================================================================
 # Deprecated methods

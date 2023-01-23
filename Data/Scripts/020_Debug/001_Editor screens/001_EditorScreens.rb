@@ -339,8 +339,6 @@ def pbEncounterTypeEditor(enc_data, enc_type)
   Input.update
 end
 
-
-
 #===============================================================================
 # Trainer type editor
 #===============================================================================
@@ -444,8 +442,6 @@ def pbTrainerTypeEditorNew(default_name)
   return id.to_sym
 end
 
-
-
 #===============================================================================
 # Individual trainer editor
 #===============================================================================
@@ -476,8 +472,9 @@ module TrainerBattleProperty
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbTrainerBattleEditor
   modified = false
   pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) { |button, trainer_id|
@@ -601,14 +598,12 @@ def pbTrainerBattleEditor
   end
 end
 
-
-
 #===============================================================================
 # Trainer Pokémon editor
 #===============================================================================
 module TrainerPokemonProperty
   def self.set(settingname, initsetting)
-    initsetting = { :species => nil, :level => 10 } if !initsetting
+    initsetting = {:species => nil, :level => 10} if !initsetting
     oldsetting = [
       initsetting[:species],
       initsetting[:level],
@@ -691,8 +686,6 @@ module TrainerPokemonProperty
   end
 end
 
-
-
 #===============================================================================
 # Metadata editor
 #===============================================================================
@@ -747,7 +740,7 @@ def pbEditPlayerMetadata(player_id = 1)
       player_id = i
       break
     end
-    metadata = GameData::PlayerMetadata.new({ :id => player_id })
+    metadata = GameData::PlayerMetadata.new({:id => player_id})
   elsif !GameData::PlayerMetadata.exists?(player_id)
     pbMessage(_INTL("Metadata for player character {1} was not found.", player_id))
     return
@@ -780,8 +773,6 @@ def pbEditPlayerMetadata(player_id = 1)
   end
 end
 
-
-
 #===============================================================================
 # Map metadata editor
 #===============================================================================
@@ -798,7 +789,7 @@ def pbEditMapMetadata(map_id)
   data = []
   map_name = mapinfos[map_id].name
   metadata = GameData::MapMetadata.try_get(map_id)
-  metadata = GameData::MapMetadata.new({ :id => map_id }) if !metadata
+  metadata = GameData::MapMetadata.new({:id => map_id}) if !metadata
   properties = GameData::MapMetadata.editor_properties
   properties.each do |property|
     val = metadata.get_property_for_PBS(property[0])
@@ -824,8 +815,6 @@ def pbEditMapMetadata(map_id)
     Compiler.write_map_metadata
   end
 end
-
-
 
 #===============================================================================
 # Item editor
@@ -931,8 +920,6 @@ def pbItemEditorNew(default_name)
   pbMessage(_INTL("Put the item's graphic ({1}.png) in Graphics/Items, or it will be blank.", id.to_s))
 end
 
-
-
 #===============================================================================
 # Pokémon species editor
 #===============================================================================
@@ -998,8 +985,6 @@ def pbPokemonEditor
     end
   }
 end
-
-
 
 #===============================================================================
 # Regional Dexes editor
@@ -1260,8 +1245,6 @@ def pbEvoFamiliesToStrings
   end
   return ret
 end
-
-
 
 #===============================================================================
 # Battle animations rearranger

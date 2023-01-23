@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module MultipleForms
   @@formSpecies = SpeciesHandlerHash.new
 
@@ -32,8 +35,9 @@ module MultipleForms
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def drawSpot(bitmap, spotpattern, x, y, red, green, blue)
   height = spotpattern.length
   width  = spotpattern[0].length
@@ -722,7 +726,6 @@ MultipleForms.register(:CALYREX, {
     end
   }
 })
-
 
 #===============================================================================
 # Regional forms

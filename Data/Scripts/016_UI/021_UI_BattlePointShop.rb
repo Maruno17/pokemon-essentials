@@ -165,7 +165,7 @@ class BattlePointShop_Scene
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap("Graphics/Pictures/martScreen")
     @sprites["icon"] = ItemIconSprite.new(36, Graphics.height - 50, nil, @viewport)
-    winAdapter = BattlePointShopAdapter.new()
+    winAdapter = BattlePointShopAdapter.new
     @sprites["itemwindow"] = Window_BattlePointShop.new(
       stock, winAdapter, Graphics.width - 316 - 16, 10, 330 + 16, Graphics.height - 124
     )

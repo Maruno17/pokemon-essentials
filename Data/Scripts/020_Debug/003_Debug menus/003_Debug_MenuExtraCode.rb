@@ -38,8 +38,6 @@ def pbWarpToMap
   return nil
 end
 
-
-
 #===============================================================================
 # Debug Variables screen
 #===============================================================================
@@ -95,8 +93,8 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
            (Kernel.const_defined?(code_parts[0]) rescue false)
           val = (eval(code) rescue nil)   # Code starts with a class/method name
         elsif code_parts[0][0].downcase == code_parts[0][0] &&
-           !(Interpreter.method_defined?(code_parts[0].to_sym) rescue false) &&
-           !(Game_Event.method_defined?(code_parts[0].to_sym) rescue false)
+              !(Interpreter.method_defined?(code_parts[0].to_sym) rescue false) &&
+              !(Game_Event.method_defined?(code_parts[0].to_sym) rescue false)
           val = (eval(code) rescue nil)   # Code starts with a method name (that isn't in Interpreter/Game_Event)
         end
       else
@@ -131,8 +129,9 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbDebugSetVariable(id, diff)
   $game_variables[id] = 0 if $game_variables[id].nil?
   if $game_variables[id].is_a?(Numeric)
@@ -371,8 +370,6 @@ def pbDebugDayCare
   cmd_window.dispose
 end
 
-
-
 #===============================================================================
 # Debug roaming Pokémon screen
 #===============================================================================
@@ -453,8 +450,9 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbDebugRoamers
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
@@ -543,8 +541,6 @@ def pbDebugRoamers
   pbDisposeSpriteHash(sprites)
   viewport.dispose
 end
-
-
 
 #===============================================================================
 # Battle animations import/export
@@ -738,8 +734,6 @@ def pbCheckTileValidity(tile_id, map, tilesets, passages)
   end
   return false
 end
-
-
 
 #===============================================================================
 # Pseudo-party screen for editing Pokémon being set up for a wild battle

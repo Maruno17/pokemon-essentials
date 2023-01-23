@@ -355,7 +355,7 @@ class PokemonMapFactory
 
   def updateMaps(scene)
     updateMapsInternal
-    $map_factory.setSceneStarted(scene) if @mapChanged
+    setSceneStarted(scene) if @mapChanged
   end
 
   def updateMapsInternal

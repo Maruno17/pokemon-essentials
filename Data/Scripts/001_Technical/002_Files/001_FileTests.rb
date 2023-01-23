@@ -2,9 +2,7 @@
 #  Reads files of certain format from a directory
 #===============================================================================
 class Dir
-  #-----------------------------------------------------------------------------
-  #  Reads all files in a directory
-  #-----------------------------------------------------------------------------
+  # Reads all files in a directory
   def self.get(dir, filters = "*", full = true)
     files = []
     filters = [filters] if !filters.is_a?(Array)
@@ -15,9 +13,8 @@ class Dir
     end
     return files.sort
   end
-  #-----------------------------------------------------------------------------
-  #  Generates entire file/folder tree from a certain directory
-  #-----------------------------------------------------------------------------
+
+  # Generates entire file/folder tree from a certain directory
   def self.all(dir, filters = "*", full = true)
     # sets variables for starting
     files = []
@@ -33,18 +30,16 @@ class Dir
     # returns all found files
     return files + subfolders
   end
-  #-----------------------------------------------------------------------------
-  #  Checks for existing directory, gets around accents
-  #-----------------------------------------------------------------------------
+
+  # Checks for existing directory, gets around accents
   def self.safe?(dir)
     return false if !FileTest.directory?(dir)
     ret = false
     self.chdir(dir) { ret = true } rescue nil
     return ret
   end
-  #-----------------------------------------------------------------------------
-  #  Creates all the required directories for filename path
-  #-----------------------------------------------------------------------------
+
+  # Creates all the required directories for filename path
   def self.create(path)
     path.gsub!("\\", "/")   # Windows compatibility
     # get path tree
@@ -56,9 +51,8 @@ class Dir
       self.mkdir(full) if !self.safe?(full)
     end
   end
-  #-----------------------------------------------------------------------------
-  #  Generates entire folder tree from a certain directory
-  #-----------------------------------------------------------------------------
+
+  # Generates entire folder tree from a certain directory
   def self.all_dirs(dir)
     # sets variables for starting
     dirs = []
@@ -69,44 +63,34 @@ class Dir
     # returns all found directories
     return dirs.length > 0 ? (dirs + [dir]) : [dir]
   end
-  #-----------------------------------------------------------------------------
-  #  Deletes all the files in a directory and all the sub directories (allows for non-empty dirs)
-  #-----------------------------------------------------------------------------
+
+  # Deletes all the files in a directory and all the sub directories (allows for non-empty dirs)
   def self.delete_all(dir)
     # delete all files in dir
     self.all(dir).each { |f| File.delete(f) }
     # delete all dirs in dir
     self.all_dirs(dir).each { |f| Dir.delete(f) }
   end
-  #-----------------------------------------------------------------------------
 end
 
-
-
 #===============================================================================
-#  extensions for file class
+# Extensions for file class
 #===============================================================================
 class File
-  #-----------------------------------------------------------------------------
-  #  Checks for existing file, gets around accents
-  #-----------------------------------------------------------------------------
+  # Checks for existing file, gets around accents
   def self.safe?(file)
     ret = false
     self.open(file, "rb") { ret = true } rescue nil
     return ret
   end
-  #-----------------------------------------------------------------------------
-  #  Checks for existing .rxdata file
-  #-----------------------------------------------------------------------------
+
+  # Checks for existing .rxdata file
   def self.safeData?(file)
     ret = false
     ret = (load_data(file) ? true : false) rescue false
     return ret
   end
-  #-----------------------------------------------------------------------------
 end
-
-
 
 #===============================================================================
 # Checking for files and directories
@@ -219,8 +203,9 @@ def canonicalize(c)
   return retstr
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 module RTP
   @rtpPaths = nil
 
@@ -255,7 +240,7 @@ module RTP
     return filename
   end
 
- # Gets the absolute RGSS paths for the given file name
+  # Gets the absolute RGSS paths for the given file name
   def self.eachPathFor(filename)
     return if !filename
     if filename[/^[A-Za-z]\:[\/\\]/] || filename[/^[\/\\]/]
@@ -299,8 +284,9 @@ module RTP
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 module FileTest
   IMAGE_EXTENSIONS = [".png", ".gif"]   # ".jpg", ".jpeg", ".bmp",
   AUDIO_EXTENSIONS = [".mid", ".midi", ".ogg", ".wav", ".wma"]   # ".mp3"
@@ -314,27 +300,23 @@ module FileTest
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 # Used to determine whether a data file exists (rather than a graphics or
 # audio file). Doesn't check RTP, but does check encrypted archives.
-
-# NOTE: pbGetFileChar checks anything added in MKXP's RTP setting,
-# and matching mount points added through System.mount
+# NOTE: pbGetFileChar checks anything added in MKXP's RTP setting, and matching
+#       mount points added through System.mount.
 def pbRgssExists?(filename)
-  if safeExists?("./Game.rgssad")
-    return pbGetFileChar(filename) != nil
-  else
-    filename = canonicalize(filename)
-    return safeExists?(filename)
-  end
+  return pbGetFileChar(filename) != nil if safeExists?("./Game.rgssad")
+  filename = canonicalize(filename)
+  return safeExists?(filename)
 end
 
 # Opens an IO, even if the file is in an encrypted archive.
 # Doesn't check RTP for the file.
-
-# NOTE: load_data checks anything added in MKXP's RTP setting,
-# and matching mount points added through System.mount
+# NOTE: load_data checks anything added in MKXP's RTP setting, and matching
+#       mount points added through System.mount.
 def pbRgssOpen(file, mode = nil)
   # File.open("debug.txt","ab") { |fw| fw.write([file,mode,Time.now.to_f].inspect+"\r\n") }
   if !safeExists?("./Game.rgssad")
@@ -385,9 +367,8 @@ end
 
 # Gets the contents of a file. Doesn't check RTP, but does check
 # encrypted archives.
-
-# NOTE: load_data will check anything added in MKXP's RTP setting,
-# and matching mount points added through System.mount
+# NOTE: load_data will check anything added in MKXP's RTP setting, and matching
+#       mount points added through System.mount.
 def pbGetFileString(file)
   file = canonicalize(file)
   if !safeExists?("./Game.rgssad")
@@ -407,13 +388,13 @@ def pbGetFileString(file)
   return str
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
 class StringInput
   include Enumerable
+
+  attr_reader :lineno, :string
 
   class << self
     def new(str)
@@ -437,8 +418,6 @@ class StringInput
     @closed = false
     @lineno = 0
   end
-
-  attr_reader :lineno, :string
 
   def inspect
     return "#<#{self.class}:#{@closed ? 'closed' : 'open'},src=#{@string[0, 30].inspect}>"

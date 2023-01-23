@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class IntroEventScene < EventScene
   # Splash screen images that appear for a few seconds and then disappear.
   SPLASH_IMAGES         = ["splash1", "splash2"]
@@ -114,8 +117,9 @@ class IntroEventScene < EventScene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Scene_Intro
   def main
     Graphics.transition(0)

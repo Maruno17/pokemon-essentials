@@ -57,8 +57,6 @@ class Battle::Scene::Animation::Intro < Battle::Scene::Animation
   end
 end
 
-
-
 #===============================================================================
 # Shows wild Pokémon fading back to their normal color, and triggers their intro
 # animations
@@ -79,8 +77,6 @@ class Battle::Scene::Animation::Intro2 < Battle::Scene::Animation
     end
   end
 end
-
-
 
 #===============================================================================
 # Makes a side's party bar and balls appear
@@ -181,8 +177,6 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
   end
 end
 
-
-
 #===============================================================================
 # Makes a Pokémon's data box appear
 #===============================================================================
@@ -202,8 +196,6 @@ class Battle::Scene::Animation::DataBoxAppear < Battle::Scene::Animation
   end
 end
 
-
-
 #===============================================================================
 # Makes a Pokémon's data box disappear
 #===============================================================================
@@ -221,8 +213,6 @@ class Battle::Scene::Animation::DataBoxDisappear < Battle::Scene::Animation
     box.setVisible(8, false)
   end
 end
-
-
 
 #===============================================================================
 # Makes a Pokémon's ability bar appear
@@ -242,8 +232,6 @@ class Battle::Scene::Animation::AbilitySplashAppear < Battle::Scene::Animation
   end
 end
 
-
-
 #===============================================================================
 # Makes a Pokémon's ability bar disappear
 #===============================================================================
@@ -261,8 +249,6 @@ class Battle::Scene::Animation::AbilitySplashDisappear < Battle::Scene::Animatio
     bar.setVisible(8, false)
   end
 end
-
-
 
 #===============================================================================
 # Make an enemy trainer slide on-screen from the right. Makes the previous
@@ -295,8 +281,6 @@ class Battle::Scene::Animation::TrainerAppear < Battle::Scene::Animation
     end
   end
 end
-
-
 
 #===============================================================================
 # Shows the player (and partner) and the player party lineup sliding off screen.
@@ -350,8 +334,6 @@ class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
   end
 end
 
-
-
 #===============================================================================
 # Shows the enemy trainer(s) and the enemy party lineup sliding off screen.
 # Doesn't show the ball thrown or the Pokémon.
@@ -394,8 +376,6 @@ class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
     end
   end
 end
-
-
 
 #===============================================================================
 # Shows a Pokémon being sent out on the player's side (including by a partner).
@@ -473,8 +453,6 @@ class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
   end
 end
 
-
-
 #===============================================================================
 # Shows a Pokémon being sent out on the opposing side.
 # Includes the Poké Ball being "thrown" (although here the Poké Ball just
@@ -544,8 +522,6 @@ class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animatio
   end
 end
 
-
-
 #===============================================================================
 # Shows a Pokémon being recalled into its Poké Ball
 #===============================================================================
@@ -594,8 +570,6 @@ class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
   end
 end
 
-
-
 #===============================================================================
 # Shows a Pokémon flashing after taking damage
 #===============================================================================
@@ -631,8 +605,6 @@ class Battle::Scene::Animation::BattlerDamage < Battle::Scene::Animation
     shadow.setVisible(delay, shaSprite.visible)
   end
 end
-
-
 
 #===============================================================================
 # Shows a Pokémon fainting
@@ -681,8 +653,6 @@ class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
     battler.setOpacity(delay + duration, 255)
   end
 end
-
-
 
 #===============================================================================
 # Shows the player's Poké Ball being thrown to capture a Pokémon
@@ -835,8 +805,6 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     super
   end
 end
-
-
 
 #===============================================================================
 # Shows the player throwing a Poké Ball and it being deflected

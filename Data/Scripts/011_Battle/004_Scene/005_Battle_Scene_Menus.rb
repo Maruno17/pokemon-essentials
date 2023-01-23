@@ -91,8 +91,6 @@ class Battle::Scene::MenuBase
   end
 end
 
-
-
 #===============================================================================
 # Command menu (Fight/Pokémon/Bag/Run)
 #===============================================================================
@@ -193,8 +191,6 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
     refreshButtons
   end
 end
-
-
 
 #===============================================================================
 # Fight menu (choose a move)
@@ -439,8 +435,6 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
     refreshShiftButton
   end
 end
-
-
 
 #===============================================================================
 # Target menu (choose a move's target)
