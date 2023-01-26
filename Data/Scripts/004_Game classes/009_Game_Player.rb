@@ -116,26 +116,39 @@ class Game_Player < Game_Character
     @bump_se = Graphics.frame_rate / 4
   end
 
+  def add_move_distance_to_stats(distance = 1)
+    if $PokemonGlobal&.diving || $PokemonGlobal&.surfing
+      $stats.distance_surfed += distance
+    elsif $PokemonGlobal&.bicycle
+      $stats.distance_cycled += distance
+    else
+      $stats.distance_walked += distance
+    end
+    $stats.distance_slid_on_ice += distance if $PokemonGlobal.ice_sliding
+  end
+
   def move_generic(dir, turn_enabled = true)
     turn_generic(dir, true) if turn_enabled
     if !$game_temp.encounter_triggered
       if can_move_in_direction?(dir)
         x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
         y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
-        return if pbLedge(x_offset, y_offset)
+        # Jump over ledges
+        if pbFacingTerrainTag.ledge
+          if jumpForward(2)
+            pbSEPlay("Player jump")
+            increase_steps
+          end
+          return
+        end
+        # Jumping out of surfing back onto land
         return if pbEndSurf(x_offset, y_offset)
+        # General movement
         turn_generic(dir, true)
         if !$game_temp.encounter_triggered
           @x += x_offset
           @y += y_offset
-          if $PokemonGlobal&.diving || $PokemonGlobal&.surfing
-            $stats.distance_surfed += 1
-          elsif $PokemonGlobal&.bicycle
-            $stats.distance_cycled += 1
-          else
-            $stats.distance_walked += 1
-          end
-          $stats.distance_slid_on_ice += 1 if $PokemonGlobal.ice_sliding
+          add_move_distance_to_stats(x_offset.abs + y_offset.abs)
           increase_steps
         end
       elsif !check_event_trigger_touch(dir)
@@ -155,36 +168,10 @@ class Game_Player < Game_Character
   end
 
   def jump(x_plus, y_plus)
-    if x_plus != 0 || y_plus != 0
-      if x_plus.abs > y_plus.abs
-        (x_plus < 0) ? turn_left : turn_right
-      else
-        (y_plus < 0) ? turn_up : turn_down
-      end
-      each_occupied_tile { |i, j| return if !passable?(i + x_plus, j + y_plus, 0) }
-    end
-    @x = @x + x_plus
-    @y = @y + y_plus
-    real_distance = Math.sqrt((x_plus * x_plus) + (y_plus * y_plus))
-    distance = [1, real_distance].max
-    @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
-    @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
-    @jump_distance_left = 1   # Just needs to be non-zero
-    if real_distance > 0   # Jumping to somewhere else
-      if $PokemonGlobal&.diving || $PokemonGlobal&.surfing
-        $stats.distance_surfed += x_plus.abs + y_plus.abs
-      elsif $PokemonGlobal&.bicycle
-        $stats.distance_cycled += x_plus.abs + y_plus.abs
-      else
-        $stats.distance_walked += x_plus.abs + y_plus.abs
-      end
-      @jump_count = 0
-    else   # Jumping on the spot
-      @jump_speed_real = nil   # Reset jump speed
-      @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
-    end
-    @stop_count = 0
-    triggerLeaveTile
+    old_x = @x
+    old_y = @y
+    super
+    add_move_distance_to_stats(x_plus.abs + y_plus.abs) if @x != old_x || @y != old_y
   end
 
   def pbTriggeredTrainerEvents(triggers, checkIfRunning = true, trainer_only = false)
@@ -414,12 +401,6 @@ class Game_Player < Game_Character
     $game_temp.followers.update
     # Count down the time between allowed bump sounds
     @bump_se -= 1 if @bump_se && @bump_se > 0
-    # Finish up dismounting from surfing
-    if $game_temp.ending_surf && !moving?
-      pbCancelVehicles
-      $game_temp.surf_base_coords = nil
-      $game_temp.ending_surf = false
-    end
     update_event_triggering
   end
 
@@ -514,18 +495,18 @@ class Game_Player < Game_Character
   # Track the player on-screen as they move.
   def update_screen_position(last_real_x, last_real_y)
     return if self.map.scrolling? || !(@moved_last_frame || @moved_this_frame)
-    if (@real_x < last_real_x && @real_x - $game_map.display_x < SCREEN_CENTER_X) ||
-       (@real_x > last_real_x && @real_x - $game_map.display_x > SCREEN_CENTER_X)
+    if (@real_x < last_real_x && @real_x < $game_map.display_x + SCREEN_CENTER_X) ||
+       (@real_x > last_real_x && @real_x > $game_map.display_x + SCREEN_CENTER_X)
       self.map.display_x += @real_x - last_real_x
     end
-    if (@real_y < last_real_y && @real_y - $game_map.display_y < SCREEN_CENTER_Y) ||
-       (@real_y > last_real_y && @real_y - $game_map.display_y > SCREEN_CENTER_Y)
+    if (@real_y < last_real_y && @real_y < $game_map.display_y + SCREEN_CENTER_Y) ||
+       (@real_y > last_real_y && @real_y > $game_map.display_y + SCREEN_CENTER_Y)
       self.map.display_y += @real_y - last_real_y
     end
   end
 
   def update_event_triggering
-    return if moving? || $PokemonGlobal.ice_sliding
+    return if moving? || jumping? || $PokemonGlobal.ice_sliding
     # Try triggering events upon walking into them/in front of them
     if @moved_this_frame
       $game_temp.followers.turn_followers

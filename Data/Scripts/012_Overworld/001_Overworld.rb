@@ -544,18 +544,6 @@ end
 #===============================================================================
 # Player/event movement in the field
 #===============================================================================
-def pbLedge(_xOffset, _yOffset)
-  if $game_player.pbFacingTerrainTag.ledge
-    if pbJumpToward(2, true)
-      $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID, $game_player.x, $game_player.y, true, 1)
-      $game_player.increase_steps
-      $game_player.check_event_trigger_here([1, 2])
-    end
-    return true
-  end
-  return false
-end
-
 def pbSlideOnIce
   if $game_player.pbTerrainTag.ice && $game_player.can_move_in_direction?($game_player.direction)
     $PokemonGlobal.ice_sliding = true
@@ -603,29 +591,6 @@ def pbMoveTowardPlayer(event)
     end
   end
   $PokemonMap&.addMovedEvent(event.id)
-end
-
-def pbJumpToward(dist = 1, playSound = false, cancelSurf = false)
-  x = $game_player.x
-  y = $game_player.y
-  case $game_player.direction
-  when 2 then $game_player.jump(0, dist)    # down
-  when 4 then $game_player.jump(-dist, 0)   # left
-  when 6 then $game_player.jump(dist, 0)    # right
-  when 8 then $game_player.jump(0, -dist)   # up
-  end
-  if $game_player.x != x || $game_player.y != y
-    pbSEPlay("Player jump") if playSound
-    $PokemonEncounters.reset_step_count if cancelSurf
-    $game_temp.ending_surf = true if cancelSurf
-    while $game_player.jumping?
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
-    end
-    return true
-  end
-  return false
 end
 
 #===============================================================================

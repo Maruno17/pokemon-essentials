@@ -745,24 +745,16 @@ def pbStartSurfing
   $stats.surf_count += 1
   pbUpdateVehicle
   $game_temp.surf_base_coords = $map_factory.getFacingCoords($game_player.x, $game_player.y, $game_player.direction)
-  pbJumpToward
-  $game_temp.surf_base_coords = nil
-  $game_player.check_event_trigger_here([1, 2])
+  $game_player.jumpForward
 end
 
 def pbEndSurf(_xOffset, _yOffset)
   return false if !$PokemonGlobal.surfing
-  x = $game_player.x
-  y = $game_player.y
-  if $game_map.terrain_tag(x, y).can_surf && !$game_player.pbFacingTerrainTag.can_surf
-    $game_temp.surf_base_coords = [x, y]
-    if pbJumpToward(1, false, true)
-      $game_map.autoplayAsCue
-      $game_player.increase_steps
-      result = $game_player.check_event_trigger_here([1, 2])
-      pbOnStepTaken(result)
-    end
-    $game_temp.surf_base_coords = nil
+  return false if $game_player.pbFacingTerrainTag.can_surf
+  base_coords = [$game_player.x, $game_player.y]
+  if $game_player.jumpForward
+    $game_temp.surf_base_coords = base_coords
+    $game_temp.ending_surf = true
     return true
   end
   return false
@@ -789,6 +781,23 @@ EventHandlers.add(:on_player_interact, :start_surfing,
     next if !$game_player.pbFacingTerrainTag.can_surf_freely
     next if !$game_map.passable?($game_player.x, $game_player.y, $game_player.direction, $game_player)
     pbSurf
+  }
+)
+
+# Do things after a jump to start/end surfing.
+EventHandlers.add(:on_step_taken, :surf_jump,
+  proc { |event|
+    next if !$scene.is_a?(Scene_Map) || !event.is_a?(Game_Player)
+    next if !$game_temp.surf_base_coords
+    # Hide the temporary surf base graphic after jumping onto/off it
+    $game_temp.surf_base_coords = nil
+    # Finish up dismounting from surfing
+    if $game_temp.ending_surf
+      pbCancelVehicles
+      $PokemonEncounters.reset_step_count
+      $game_map.autoplayAsCue   # Play regular map BGM
+      $game_temp.ending_surf = false
+    end
   }
 )
 
