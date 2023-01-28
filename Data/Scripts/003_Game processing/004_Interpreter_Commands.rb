@@ -1081,14 +1081,14 @@ class Interpreter
     end
     if $game_actors && $data_actors && $data_actors[@parameters[0]]
       $game_temp.battle_abort = true
-      pbFadeOutIn {
+      pbFadeOutIn do
         sscene = PokemonEntryScene.new
         sscreen = PokemonEntry.new(sscene)
         $game_actors[@parameters[0]].name = sscreen.pbStartScreen(
           _INTL("Enter {1}'s name.", $game_actors[@parameters[0]].name),
           1, @parameters[1], $game_actors[@parameters[0]].name
         )
-      }
+      end
     end
     return true
   end

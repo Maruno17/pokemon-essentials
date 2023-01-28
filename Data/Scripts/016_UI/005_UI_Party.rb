@@ -559,7 +559,7 @@ class PokemonParty_Scene
     @sprites["messagebox"].text    = text
     @sprites["messagebox"].visible = true
     @sprites["helpwindow"].visible = false
-    using(cmdwindow = Window_CommandPokemon.new([_INTL("Yes"), _INTL("No")])) {
+    using(cmdwindow = Window_CommandPokemon.new([_INTL("Yes"), _INTL("No")])) do
       cmdwindow.visible = false
       pbBottomRight(cmdwindow)
       cmdwindow.y -= @sprites["messagebox"].height
@@ -580,7 +580,7 @@ class PokemonParty_Scene
           end
         end
       end
-    }
+    end
     @sprites["messagebox"].visible = false
     @sprites["helpwindow"].visible = true
     return ret
@@ -590,7 +590,7 @@ class PokemonParty_Scene
     ret = -1
     helpwindow = @sprites["helpwindow"]
     helpwindow.visible = true
-    using(cmdwindow = Window_CommandPokemonColor.new(commands)) {
+    using(cmdwindow = Window_CommandPokemonColor.new(commands)) do
       cmdwindow.z     = @viewport.z + 1
       cmdwindow.index = index
       pbBottomRight(cmdwindow)
@@ -612,7 +612,7 @@ class PokemonParty_Scene
           break
         end
       end
-    }
+    end
     return ret
   end
 
@@ -705,18 +705,18 @@ class PokemonParty_Scene
 
   def pbChooseItem(bag)
     ret = nil
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, bag)
       ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).can_hold? })
       yield if block_given?
-    }
+    end
     return ret
   end
 
   def pbUseItem(bag, pokemon)
     ret = nil
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, bag)
       ret = screen.pbChooseItemScreen(proc { |item|
@@ -730,7 +730,7 @@ class PokemonParty_Scene
         next true
       })
       yield if block_given?
-    }
+    end
     return ret
   end
 
@@ -764,12 +764,12 @@ class PokemonParty_Scene
       cancelsprite = Settings::MAX_PARTY_SIZE + ((@multiselect) ? 1 : 0)
       if Input.trigger?(Input::SPECIAL) && @can_access_storage && canswitch != 2
         pbPlayDecisionSE
-        pbFadeOutIn {
+        pbFadeOutIn do
           scene = PokemonStorageScene.new
           screen = PokemonStorageScreen.new(scene, $PokemonStorage)
           screen.pbStartScreen(0)
           pbHardRefresh
-        }
+        end
       elsif Input.trigger?(Input::ACTION) && canswitch == 1 && @activecmd != cancelsprite
         pbPlayDecisionSE
         return [1, @activecmd]
@@ -1121,9 +1121,9 @@ class PokemonPartyScreen
         statuses[pkmnid] = 1
         pbRefreshSingle(pkmnid)
       elsif cmdSummary >= 0 && command == cmdSummary
-        @scene.pbSummary(pkmnid) {
+        @scene.pbSummary(pkmnid) do
           @scene.pbSetHelpText((@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-        }
+        end
       end
     end
     @scene.pbEndScene
@@ -1314,9 +1314,9 @@ MenuHandlers.add(:party_menu, :summary, {
   "name"      => _INTL("Summary"),
   "order"     => 10,
   "effect"    => proc { |screen, party, party_idx|
-    screen.scene.pbSummary(party_idx) {
+    screen.scene.pbSummary(party_idx) do
       screen.scene.pbSetHelpText((party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-    }
+    end
   }
 })
 
@@ -1351,10 +1351,10 @@ MenuHandlers.add(:party_menu, :mail, {
                                           [_INTL("Read"), _INTL("Take"), _INTL("Cancel")])
     case command
     when 0   # Read
-      pbFadeOutIn {
+      pbFadeOutIn do
         pbDisplayMail(pkmn.mail, pkmn)
         screen.scene.pbSetHelpText((party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-      }
+      end
     when 1   # Take
       if pbTakeItemFromPokemon(pkmn, screen)
         screen.pbRefreshSingle(party_idx)
@@ -1388,9 +1388,9 @@ MenuHandlers.add(:party_menu_item, :use, {
   "order"     => 10,
   "effect"    => proc { |screen, party, party_idx|
     pkmn = party[party_idx]
-    item = screen.scene.pbUseItem($bag, pkmn) {
+    item = screen.scene.pbUseItem($bag, pkmn) do
       screen.scene.pbSetHelpText((party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-    }
+    end
     next if !item
     pbUseItemOnPokemon(item, pkmn, screen)
     screen.pbRefreshSingle(party_idx)
@@ -1402,9 +1402,9 @@ MenuHandlers.add(:party_menu_item, :give, {
   "order"     => 20,
   "effect"    => proc { |screen, party, party_idx|
     pkmn = party[party_idx]
-    item = screen.scene.pbChooseItem($bag) {
+    item = screen.scene.pbChooseItem($bag) do
       screen.scene.pbSetHelpText((party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-    }
+    end
     next if !item || !pbGiveItemToPokemon(item, pkmn, screen, party_idx)
     screen.pbRefreshSingle(party_idx)
   }
@@ -1480,11 +1480,11 @@ MenuHandlers.add(:party_menu_item, :move, {
 # Open the party screen
 #===============================================================================
 def pbPokemonScreen
-  pbFadeOutIn {
+  pbFadeOutIn do
     sscene = PokemonParty_Scene.new
     sscreen = PokemonPartyScreen.new(sscene, $player.party)
     sscreen.pbPokemonScreen
-  }
+  end
 end
 
 #===============================================================================
@@ -1495,7 +1495,7 @@ end
 # variable _nameVarNumber_; result is -1 if no Pokémon was chosen
 def pbChoosePokemon(variableNumber, nameVarNumber, ableProc = nil, allowIneligible = false)
   chosen = 0
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene, $player.party)
     if ableProc
@@ -1505,7 +1505,7 @@ def pbChoosePokemon(variableNumber, nameVarNumber, ableProc = nil, allowIneligib
       chosen = screen.pbChoosePokemon
       screen.pbEndScene
     end
-  }
+  end
   pbSet(variableNumber, chosen)
   if chosen >= 0
     pbSet(nameVarNumber, $player.party[chosen].name)
@@ -1525,7 +1525,7 @@ end
 # Same as pbChoosePokemon, but prevents choosing an egg or a Shadow Pokémon.
 def pbChooseTradablePokemon(variableNumber, nameVarNumber, ableProc = nil, allowIneligible = false)
   chosen = 0
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene, $player.party)
     if ableProc
@@ -1535,7 +1535,7 @@ def pbChooseTradablePokemon(variableNumber, nameVarNumber, ableProc = nil, allow
       chosen = screen.pbChoosePokemon
       screen.pbEndScene
     end
-  }
+  end
   pbSet(variableNumber, chosen)
   if chosen >= 0
     pbSet(nameVarNumber, $player.party[chosen].name)

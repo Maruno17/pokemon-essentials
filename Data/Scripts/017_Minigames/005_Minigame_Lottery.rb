@@ -28,7 +28,7 @@ def pbLottery(winnum, nameVar = 2, positionVar = 3, matchedVar = 4)
     winpos = 1    # Party
     winmatched = thismatched
   end
-  pbEachPokemon { |poke, _box|
+  pbEachPokemon do |poke, _box|
     thismatched = 0
     id = poke.owner.public_id
     5.times do |j|
@@ -39,7 +39,7 @@ def pbLottery(winnum, nameVar = 2, positionVar = 3, matchedVar = 4)
     winpoke = poke.name
     winpos = 2    # Storage
     winmatched = thismatched
-  }
+  end
   $game_variables[nameVar] = winpoke
   $game_variables[positionVar] = winpos
   $game_variables[matchedVar] = winmatched

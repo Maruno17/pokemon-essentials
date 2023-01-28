@@ -371,17 +371,13 @@ class Game_Map
   def start_fog_tone_change(tone, duration)
     @fog_tone_target = tone.clone
     @fog_tone_duration = duration
-    if @fog_tone_duration == 0
-      @fog_tone = @fog_tone_target.clone
-    end
+    @fog_tone = @fog_tone_target.clone if @fog_tone_duration == 0
   end
 
   def start_fog_opacity_change(opacity, duration)
     @fog_opacity_target = opacity.to_f
     @fog_opacity_duration = duration
-    if @fog_opacity_duration == 0
-      @fog_opacity = @fog_opacity_target
-    end
+    @fog_opacity = @fog_opacity_target if @fog_opacity_duration == 0
   end
 
   def set_tile(x, y, layer, id = 0)

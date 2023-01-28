@@ -141,9 +141,9 @@ class Battle
         next if battler.opposes?(side)
         next if !battler.takesIndirectDamage? || battler.pbHasType?(:FIRE)
         @scene.pbDamageAnimation(battler)
-        battler.pbTakeEffectDamage(battler.totalhp / 8, false) { |hp_lost|
+        battler.pbTakeEffectDamage(battler.totalhp / 8, false) do |hp_lost|
           pbDisplay(_INTL("{1} is hurt by the sea of fire!", battler.pbThis))
-        }
+        end
       end
     end
   end
@@ -190,11 +190,11 @@ class Battle
       recipient = @battlers[battler.effects[PBEffects::LeechSeed]]
       next if !recipient || recipient.fainted?
       pbCommonAnimation("LeechSeed", recipient, battler)
-      battler.pbTakeEffectDamage(battler.totalhp / 8) { |hp_lost|
+      battler.pbTakeEffectDamage(battler.totalhp / 8) do |hp_lost|
         recipient.pbRecoverHPFromDrain(hp_lost, battler,
                                        _INTL("{1}'s health is sapped by Leech Seed!", battler.pbThis))
         recipient.pbAbilitiesOnDamageTaken
-      }
+      end
       recipient.pbFaint if recipient.fainted?
     end
   end
@@ -257,16 +257,16 @@ class Battle
     priority.each do |battler|
       battler.effects[PBEffects::Nightmare] = false if !battler.asleep?
       next if !battler.effects[PBEffects::Nightmare] || !battler.takesIndirectDamage?
-      battler.pbTakeEffectDamage(battler.totalhp / 4) { |hp_lost|
+      battler.pbTakeEffectDamage(battler.totalhp / 4) do |hp_lost|
         pbDisplay(_INTL("{1} is locked in a nightmare!", battler.pbThis))
-      }
+      end
     end
     # Curse
     priority.each do |battler|
       next if !battler.effects[PBEffects::Curse] || !battler.takesIndirectDamage?
-      battler.pbTakeEffectDamage(battler.totalhp / 4) { |hp_lost|
+      battler.pbTakeEffectDamage(battler.totalhp / 4) do |hp_lost|
         pbDisplay(_INTL("{1} is afflicted by the curse!", battler.pbThis))
-      }
+      end
     end
   end
 
@@ -299,9 +299,9 @@ class Battle
       hpLoss = (Settings::MECHANICS_GENERATION >= 6) ? battler.totalhp / 6 : battler.totalhp / 8
     end
     @scene.pbDamageAnimation(battler)
-    battler.pbTakeEffectDamage(hpLoss, false) { |hp_lost|
+    battler.pbTakeEffectDamage(hpLoss, false) do |hp_lost|
       pbDisplay(_INTL("{1} is hurt by {2}!", battler.pbThis, move_name))
-    }
+    end
   end
 
   #=============================================================================
@@ -317,9 +317,9 @@ class Battle
 
   def pbEOREndBattlerEffects(priority)
     # Taunt
-    pbEORCountDownBattlerEffect(priority, PBEffects::Taunt) { |battler|
+    pbEORCountDownBattlerEffect(priority, PBEffects::Taunt) do |battler|
       pbDisplay(_INTL("{1}'s taunt wore off!", battler.pbThis))
-    }
+    end
     # Encore
     priority.each do |battler|
       next if battler.fainted? || battler.effects[PBEffects::Encore] == 0
@@ -337,34 +337,34 @@ class Battle
       end
     end
     # Disable/Cursed Body
-    pbEORCountDownBattlerEffect(priority, PBEffects::Disable) { |battler|
+    pbEORCountDownBattlerEffect(priority, PBEffects::Disable) do |battler|
       battler.effects[PBEffects::DisableMove] = nil
       pbDisplay(_INTL("{1} is no longer disabled!", battler.pbThis))
-    }
+    end
     # Magnet Rise
-    pbEORCountDownBattlerEffect(priority, PBEffects::MagnetRise) { |battler|
+    pbEORCountDownBattlerEffect(priority, PBEffects::MagnetRise) do |battler|
       pbDisplay(_INTL("{1}'s electromagnetism wore off!", battler.pbThis))
-    }
+    end
     # Telekinesis
-    pbEORCountDownBattlerEffect(priority, PBEffects::Telekinesis) { |battler|
+    pbEORCountDownBattlerEffect(priority, PBEffects::Telekinesis) do |battler|
       pbDisplay(_INTL("{1} was freed from the telekinesis!", battler.pbThis))
-    }
+    end
     # Heal Block
-    pbEORCountDownBattlerEffect(priority, PBEffects::HealBlock) { |battler|
+    pbEORCountDownBattlerEffect(priority, PBEffects::HealBlock) do |battler|
       pbDisplay(_INTL("{1}'s Heal Block wore off!", battler.pbThis))
-    }
+    end
     # Embargo
-    pbEORCountDownBattlerEffect(priority, PBEffects::Embargo) { |battler|
+    pbEORCountDownBattlerEffect(priority, PBEffects::Embargo) do |battler|
       pbDisplay(_INTL("{1} can use items again!", battler.pbThis))
       battler.pbItemTerrainStatBoostCheck
-    }
+    end
     # Yawn
-    pbEORCountDownBattlerEffect(priority, PBEffects::Yawn) { |battler|
+    pbEORCountDownBattlerEffect(priority, PBEffects::Yawn) do |battler|
       if battler.pbCanSleepYawn?
         PBDebug.log("[Lingering effect] #{battler.pbThis} fell asleep because of Yawn")
         battler.pbSleep
       end
-    }
+    end
     # Perish Song
     perishSongUsers = []
     priority.each do |battler|

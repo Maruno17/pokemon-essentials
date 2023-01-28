@@ -42,6 +42,8 @@ class WindowCursorRect < Rect
     @window.width = @window.width
   end
 
+  #-----------------------------------------------------------------------------
+
   private
 
   def needs_update?(x, y, width, height)
@@ -322,6 +324,8 @@ class Window
       i[1].update
     end
   end
+
+  #-----------------------------------------------------------------------------
 
   private
 

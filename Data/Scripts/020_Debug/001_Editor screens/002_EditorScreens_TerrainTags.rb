@@ -227,12 +227,12 @@ end
 #
 #===============================================================================
 def pbTilesetScreen
-  pbFadeOutIn {
+  pbFadeOutIn do
     Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT * 2)
     pbSetResizeFactor(1)
     scene = PokemonTilesetScene.new
     scene.pbStartScene
     Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
     pbSetResizeFactor($PokemonSystem.screensize)
-  }
+  end
 end

@@ -32,9 +32,7 @@ class Window_Menu < Window_CommandPokemon
       rc = Rect.new(0, 32 * (i - toprow), self.contents.width, 32)
       rc.x += self.x + self.leftEdge
       rc.y += self.y + self.topEdge
-      if rc.contains(mousepos[0], mousepos[1])
-        return i
-      end
+      return i if rc.contains(mousepos[0], mousepos[1])
     end
     return -1
   end
@@ -341,8 +339,7 @@ class InvalidatableSprite < Sprite
 
   # Redraws the sprite.  This method should not check whether
   # the sprite is invalid, to allow it to be explicitly called.
-  def refresh
-  end
+  def refresh; end
 end
 
 #===============================================================================
@@ -820,11 +817,11 @@ class AnimationCanvas < Sprite
     currentFrame = getCurrentFrame
     if currentFrame && !@selecting &&
        (Input.triggerex?(:TAB) || Input.repeatex?(:TAB))
-      currentFrame.length.times {
+      currentFrame.length.times do
         @currentcel += 1
         @currentcel = 0 if @currentcel >= currentFrame.length
         break if currentFrame[@currentcel]
-      }
+      end
       invalidate
       return
     end

@@ -258,13 +258,13 @@ class PokemonReadyMenu
         user = $player.party[commands[0][command[1]][3]]
         if move == :FLY
           ret = nil
-          pbFadeOutInWithUpdate(99999, @scene.sprites) {
+          pbFadeOutInWithUpdate(99999, @scene.sprites) do
             pbHideMenu
             scene = PokemonRegionMap_Scene.new(-1, false)
             screen = PokemonRegionMapScreen.new(scene)
             ret = screen.pbStartFlyScreen
             pbShowMenu if !ret
-          }
+          end
           if ret
             $game_temp.fly_destination = ret
             $game_temp.in_menu = false

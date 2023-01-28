@@ -33,12 +33,12 @@ module GameData
 
     # @return [String] the translated name of this ribbon
     def name
-      return pbGetMessageFromHash(MessageTypes::RibbonNames, @real_name)
+      return pbGetMessageFromHash(MessageTypes::RIBBON_NAMES, @real_name)
     end
 
     # @return [String] the translated description of this ribbon
     def description
-      return pbGetMessageFromHash(MessageTypes::RibbonDescriptions, @real_description)
+      return pbGetMessageFromHash(MessageTypes::RIBBON_DESCRIPTIONS, @real_description)
     end
 
     def has_flag?(flag)

@@ -46,12 +46,12 @@ module Compiler
     return false if !$DEBUG
     mapfiles = {}
     # Get IDs of all maps in the Data folder
-    Dir.chdir("Data") {
+    Dir.chdir("Data") do
       mapData = sprintf("Map*.rxdata")
       Dir.glob(mapData).each do |map|
         mapfiles[$1.to_i(10)] = true if map[/map(\d+)\.rxdata/i]
       end
-    }
+    end
     mapinfos = pbLoadMapInfos
     maxOrder = 0
     # Exclude maps found in mapinfos
@@ -93,19 +93,19 @@ module Compiler
     i = 0
     while i < commands.length
       case commands[i]
-      when PBMoveRoute::Wait, PBMoveRoute::SwitchOn, PBMoveRoute::SwitchOff,
-           PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
-           PBMoveRoute::Blending, PBMoveRoute::PlaySE, PBMoveRoute::Script
+      when PBMoveRoute::WAIT, PBMoveRoute::SWITCH_ON, PBMoveRoute::SWITCH_OFF,
+           PBMoveRoute::CHANGE_SPEED, PBMoveRoute::CHANGE_FREQUENCY, PBMoveRoute::OPACITY,
+           PBMoveRoute::BLENDING, PBMoveRoute::PLAY_SE, PBMoveRoute::SCRIPT
         route.list.push(RPG::MoveCommand.new(commands[i], [commands[i + 1]]))
         i += 1
-      when PBMoveRoute::ScriptAsync
-        route.list.push(RPG::MoveCommand.new(PBMoveRoute::Script, [commands[i + 1]]))
-        route.list.push(RPG::MoveCommand.new(PBMoveRoute::Wait, [0]))
+      when PBMoveRoute::SCRIPT_ASYNC
+        route.list.push(RPG::MoveCommand.new(PBMoveRoute::SCRIPT, [commands[i + 1]]))
+        route.list.push(RPG::MoveCommand.new(PBMoveRoute::WAIT, [0]))
         i += 1
-      when PBMoveRoute::Jump
+      when PBMoveRoute::JUMP
         route.list.push(RPG::MoveCommand.new(commands[i], [commands[i + 1], commands[i + 2]]))
         i += 2
-      when PBMoveRoute::Graphic
+      when PBMoveRoute::GRAPHIC
         route.list.push(RPG::MoveCommand.new(commands[i], [commands[i + 1], commands[i + 2], commands[i + 3], commands[i + 4]]))
         i += 4
       else
@@ -241,7 +241,7 @@ module Compiler
     push_event(list, 208, [0], 1)   # Change Transparent Flag
     push_wait(list, 6, 1)          # Wait
     push_event(list, 208, [1], 1)   # Change Transparent Flag
-    push_move_route_and_wait(list, -1, [PBMoveRoute::Down], 1)
+    push_move_route_and_wait(list, -1, [PBMoveRoute::DOWN], 1)
     push_branch_end(list, 1)
     push_script(list, "setTempSwitchOn(\"A\")")
     push_end(list)
@@ -647,9 +647,10 @@ module Compiler
       (1...battles.length).each do |i|
         # Run trainer check now, except in editor
         trainerChecker.pbTrainerBattleCheck(trtype, trname, battleid + i)
-        if i == 1
+        case i
+        when 1
           push_branch(rematchpage.list, sprintf("Phone.variant(%s) <= %d", safetrcombo, i))
-        elsif i == battles.length - 1
+        when battles.length - 1
           push_branch(rematchpage.list, sprintf("Phone.variant(%s) >= %d", safetrcombo, i))
         else
           push_branch(rematchpage.list, sprintf("Phone.variant(%s) == %d", safetrcombo, i))
@@ -837,24 +838,24 @@ module Compiler
           list.clear
           push_move_route_and_wait(   # Move Route for door opening
             list, 0,
-            [PBMoveRoute::PlaySE, RPG::AudioFile.new("Door enter"), PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2]
+            [PBMoveRoute::PLAY_SE, RPG::AudioFile.new("Door enter"), PBMoveRoute::WAIT, 2,
+             PBMoveRoute::TURN_LEFT, PBMoveRoute::WAIT, 2,
+             PBMoveRoute::TURN_RIGHT, PBMoveRoute::WAIT, 2,
+             PBMoveRoute::TURN_UP, PBMoveRoute::WAIT, 2]
           )
           push_move_route_and_wait(   # Move Route for player entering door
             list, -1,
-            [PBMoveRoute::ThroughOn, PBMoveRoute::Up, PBMoveRoute::ThroughOff]
+            [PBMoveRoute::THROUGH_ON, PBMoveRoute::UP, PBMoveRoute::THROUGH_OFF]
           )
           push_event(list, 208, [0])   # Change Transparent Flag (invisible)
           push_script(list, "Followers.follow_into_door")
           push_event(list, 210, [])   # Wait for Move's Completion
           push_move_route_and_wait(   # Move Route for door closing
             list, 0,
-            [PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2]
+            [PBMoveRoute::WAIT, 2,
+             PBMoveRoute::TURN_RIGHT, PBMoveRoute::WAIT, 2,
+             PBMoveRoute::TURN_LEFT, PBMoveRoute::WAIT, 2,
+             PBMoveRoute::TURN_DOWN, PBMoveRoute::WAIT, 2]
           )
           push_event(list, 223, [Tone.new(-255, -255, -255), 6])   # Change Screen Color Tone
           push_wait(list, 8)   # Wait
@@ -870,17 +871,17 @@ module Compiler
           push_script(list, "Followers.hide_followers", 1)
           push_move_route_and_wait(   # Move Route for setting door to open
             list, 0,
-            [PBMoveRoute::TurnLeft, PBMoveRoute::Wait, 6],
+            [PBMoveRoute::TURN_LEFT, PBMoveRoute::WAIT, 6],
             1
           )
           push_event(list, 208, [1], 1)   # Change Transparent Flag (visible)
-          push_move_route_and_wait(list, -1, [PBMoveRoute::Down], 1)   # Move Route for player exiting door
+          push_move_route_and_wait(list, -1, [PBMoveRoute::DOWN], 1)   # Move Route for player exiting door
           push_script(list, "Followers.put_followers_on_player", 1)
           push_move_route_and_wait(   # Move Route for door closing
             list, 0,
-            [PBMoveRoute::TurnUp, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnRight, PBMoveRoute::Wait, 2,
-             PBMoveRoute::TurnDown, PBMoveRoute::Wait, 2],
+            [PBMoveRoute::TURN_UP, PBMoveRoute::WAIT, 2,
+             PBMoveRoute::TURN_RIGHT, PBMoveRoute::WAIT, 2,
+             PBMoveRoute::TURN_DOWN, PBMoveRoute::WAIT, 2],
             1
           )
           push_branch_end(list, 1)
@@ -1163,17 +1164,13 @@ module Compiler
           # Using old method of recovering
           case script
           when "foriin$player.partyi.healend"
-            (i..lastScript).each do |j|
-              list.delete_at(i)
-            end
+            (lastScript - i).times { list.delete_at(i) }
             list.insert(i,
                         RPG::EventCommand.new(314, list[i].indent, [0]))   # Recover All
             changed = true
           when "pbFadeOutIn(99999){foriin$player.partyi.healend}"
             oldIndent = list[i].indent
-            (i..lastScript).each do |j|
-              list.delete_at(i)
-            end
+            (lastScript - i).times { list.delete_at(i) }
             list.insert(
               i,
               RPG::EventCommand.new(223, oldIndent, [Tone.new(-255, -255, -255), 6]),   # Fade to black

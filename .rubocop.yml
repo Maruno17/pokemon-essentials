@@ -63,6 +63,24 @@ Naming/ClassAndModuleCamelCase:
 Naming/FileName:
   Enabled: false
 
+# Disabled for sanity's sake. While this is a cop we want to obey, fixing all
+# this is a gargantuan task that may never be completed, and we don't need
+# rubocop telling us about the 4000+ instances of camelCase method names.
+Naming/MethodName:
+  Enabled: false
+
+# Disabled for sanity's sake. While this is a cop we want to obey, fixing all
+# this is a gargantuan task that may never be completed, and we don't need
+# rubocop telling us about the 1500+ instances of camelCase parameter names.
+Naming/MethodParameterName:
+  Enabled: false
+
+# Disabled for sanity's sake. While this is a cop we want to obey, fixing all
+# this is a gargantuan task that may never be completed, and we don't need
+# rubocop telling us about the 10000+ instances of camelCase variable names.
+Naming/VariableName:
+  Enabled: false
+
 #===============================================================================
 # Security
 #===============================================================================
@@ -85,12 +103,20 @@ Style/AccessorGrouping:
 
 # The assign_to_condition style looks awful, indenting loads of lines and
 # increasing the separation between variable and value being assigned to it.
+# Having said that, using "assign_inside_condition" flags every instance of
+# conditional assignment using a one-line ternary operator, so this cop has been
+# disabled because such assignment is fine.
 Style/ConditionalAssignment:
+  Enabled: false
   EnforcedStyle: assign_inside_condition
 
 # Check with yard instead.
 Style/Documentation:
   Enabled: false
+
+# This is just shorthand that looks bad due to the lack of an "end" to a "def".
+Style/EndlessMethod:
+  EnforcedStyle: disallow
 
 # It's a choice between format and sprintf. We already make use of sprintf and
 # the translatable _ISPRINTF, so...
@@ -109,6 +135,11 @@ Style/GlobalVars:
 # Mixing the styles within a hash just looks silly.
 Style/HashSyntax:
   EnforcedStyle: no_mixed_keys
+
+# Sometimes you want to clearly separate sets of code, one per "paradigm".
+Style/IfInsideElse:
+  Enabled: false
+  AllowIfModifier: true
 
 # The alernative is ->(x) { x } which is less English than "lambda". This style
 # makes lambda definitions require the word "lambda".

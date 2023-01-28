@@ -99,6 +99,8 @@ module SaveData
       return @old_format_get_proc.call(old_format)
     end
 
+    #---------------------------------------------------------------------------
+
     private
 
     # Raises an {InvalidValueError} if the given value is invalid.

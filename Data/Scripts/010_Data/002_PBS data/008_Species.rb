@@ -220,22 +220,22 @@ module GameData
 
     # @return [String] the translated name of this species
     def name
-      return pbGetMessageFromHash(MessageTypes::Species, @real_name)
+      return pbGetMessageFromHash(MessageTypes::SPECIES_NAMES, @real_name)
     end
 
     # @return [String] the translated name of this form of this species
     def form_name
-      return pbGetMessageFromHash(MessageTypes::SpeciesForms, @real_form_name)
+      return pbGetMessageFromHash(MessageTypes::SPECIES_FORM_NAMES, @real_form_name)
     end
 
     # @return [String] the translated Pokédex category of this species
     def category
-      return pbGetMessageFromHash(MessageTypes::SpeciesCategories, @real_category)
+      return pbGetMessageFromHash(MessageTypes::SPECIES_CATEGORIES, @real_category)
     end
 
     # @return [String] the translated Pokédex entry of this species
     def pokedex_entry
-      return pbGetMessageFromHash(MessageTypes::PokedexEntries, @real_pokedex_entry)
+      return pbGetMessageFromHash(MessageTypes::POKEDEX_ENTRIES, @real_pokedex_entry)
     end
 
     def default_form

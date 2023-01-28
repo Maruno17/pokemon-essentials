@@ -40,9 +40,7 @@ class Game_Screen
   def start_tone_change(tone, duration)
     @tone_target   = tone.clone
     @tone_duration = duration
-    if @tone_duration == 0
-      @tone = @tone_target.clone
-    end
+    @tone = @tone_target.clone if @tone_duration == 0
   end
 
   def start_flash(color, duration)

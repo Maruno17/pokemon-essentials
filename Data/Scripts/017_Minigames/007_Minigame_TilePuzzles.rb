@@ -585,10 +585,10 @@ end
 #===============================================================================
 def pbTilePuzzle(game, board, width = 0, height = 0)
   ret = false
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = TilePuzzleScene.new(game, board, width, height)
     screen = TilePuzzle.new(scene)
     ret = screen.pbStartScreen
-  }
+  end
   return ret
 end

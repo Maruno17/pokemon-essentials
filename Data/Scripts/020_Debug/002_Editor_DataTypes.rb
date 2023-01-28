@@ -1558,8 +1558,8 @@ class EvolutionsProperty
     ret = ""
     value.length.times do |i|
       ret << "," if i > 0
-      ret << value[i][0].to_s + ","
-      ret << value[i][1].to_s + ","
+      ret << (value[i][0].to_s + ",")
+      ret << (value[i][1].to_s + ",")
       ret << value[i][2].to_s if value[i][2]
     end
     return ret

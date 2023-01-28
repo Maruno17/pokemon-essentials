@@ -115,9 +115,7 @@ def addMove(moves, move, base)
      [:REFLECT, :LIGHTSCREEN, :SAFEGUARD, :SUBSTITUTE, :FAKEOUT].include?(data.id)
     count = base + 2
   end
-  if data.base_damage >= 80 && data.type == :NORMAL
-    count = base + 3
-  end
+  count = base + 3 if data.base_damage >= 80 && data.type == :NORMAL
   if [:PROTECT, :DETECT, :TOXIC, :AERIALACE, :WILLOWISP, :SPORE, :THUNDERWAVE,
       :HYPNOSIS, :CONFUSERAY, :ENDURE, :SWORDSDANCE].include?(data.id)
     count = base + 3
@@ -345,9 +343,7 @@ def pbRandomPokemonFromRule(rules, trainer)
       types = GameData::Species.get(species).types
       item = :LEFTOVERS if !types.include?(:POISON)
     end
-    if item == :HEATROCK && moves.none? { |m| m == :SUNNYDAY }
-      item = :LEFTOVERS
-    end
+    item = :LEFTOVERS if item == :HEATROCK && moves.none? { |m| m == :SUNNYDAY }
     if item == :DAMPROCK && moves.none? { |m| m == :RAINDANCE }
       item = :LEFTOVERS
     end

@@ -143,13 +143,13 @@ class Interpreter
       message = pbGetExceptionMessage(e)
       backtrace_text = ""
       if e.is_a?(SyntaxError)
-        script.each_line { |line|
+        script.each_line do |line|
           line.gsub!(/\s+$/, "")
           if line[/^\s*\(/]
             message += "\r\n***Line '#{line}' shouldn't begin with '('. Try putting the '('\r\n"
             message += "at the end of the previous line instead, or using 'extendtext.exe'."
           end
-        }
+        end
       else
         backtrace_text += "\r\n"
         backtrace_text += "Backtrace:"

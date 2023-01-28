@@ -272,15 +272,13 @@ class PokemonPokedex_Scene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     addBackgroundPlane(@sprites, "background", "Pokedex/bg_list", @viewport)
-=begin
-    # Suggestion for changing the background depending on region. You can change
-    # the line above with the following:
-    if pbGetPokedexRegion==-1   # Using national Pokédex
-      addBackgroundPlane(@sprites,"background","Pokedex/bg_national",@viewport)
-    elsif pbGetPokedexRegion==0   # Using first regional Pokédex
-      addBackgroundPlane(@sprites,"background","Pokedex/bg_regional",@viewport)
-    end
-=end
+    # Suggestion for changing the background depending on region. You can
+    # comment out the line above and uncomment the following lines:
+#    if pbGetPokedexRegion == -1   # Using national Pokédex
+#      addBackgroundPlane(@sprites, "background", "Pokedex/bg_national", @viewport)
+#    elsif pbGetPokedexRegion == 0   # Using first regional Pokédex
+#      addBackgroundPlane(@sprites, "background", "Pokedex/bg_regional", @viewport)
+#    end
     addBackgroundPlane(@sprites, "searchbg", "Pokedex/bg_search", @viewport)
     @sprites["searchbg"].visible = false
     @sprites["pokedex"] = Window_Pokedex.new(206, 30, 276, 364, @viewport)
@@ -766,9 +764,8 @@ class PokemonPokedex_Scene
   end
 
   def setIconBitmap(species)
-    gender, form, shiny = $player.pokedex.last_form_seen(species)
-    shiny = false
-    @sprites["icon"].setSpeciesBitmap(species, gender, form, shiny)
+    gender, form, _shiny = $player.pokedex.last_form_seen(species)
+    @sprites["icon"].setSpeciesBitmap(species, gender, form, false)
   end
 
   def pbSearchDexList(params)
@@ -777,17 +774,17 @@ class PokemonPokedex_Scene
     # Filter by name
     if params[1] >= 0
       scanNameCommand = @nameCommands[params[1]].scan(/./)
-      dexlist = dexlist.find_all { |item|
+      dexlist = dexlist.find_all do |item|
         next false if !$player.seen?(item[:species])
         firstChar = item[:name][0, 1]
         next scanNameCommand.any? { |v| v == firstChar }
-      }
+      end
     end
     # Filter by type
     if params[2] >= 0 || params[3] >= 0
       stype1 = (params[2] >= 0) ? @typeCommands[params[2]].id : nil
       stype2 = (params[3] >= 0) ? @typeCommands[params[3]].id : nil
-      dexlist = dexlist.find_all { |item|
+      dexlist = dexlist.find_all do |item|
         next false if !$player.owned?(item[:species])
         types = item[:types]
         if stype1 && stype2
@@ -802,43 +799,41 @@ class PokemonPokedex_Scene
         else
           next false
         end
-      }
+      end
     end
     # Filter by height range
     if params[4] >= 0 || params[5] >= 0
       minh = (params[4] < 0) ? 0 : (params[4] >= @heightCommands.length) ? 999 : @heightCommands[params[4]]
       maxh = (params[5] < 0) ? 999 : (params[5] >= @heightCommands.length) ? 0 : @heightCommands[params[5]]
-      dexlist = dexlist.find_all { |item|
+      dexlist = dexlist.find_all do |item|
         next false if !$player.owned?(item[:species])
         height = item[:height]
         next height >= minh && height <= maxh
-      }
+      end
     end
     # Filter by weight range
     if params[6] >= 0 || params[7] >= 0
       minw = (params[6] < 0) ? 0 : (params[6] >= @weightCommands.length) ? 9999 : @weightCommands[params[6]]
       maxw = (params[7] < 0) ? 9999 : (params[7] >= @weightCommands.length) ? 0 : @weightCommands[params[7]]
-      dexlist = dexlist.find_all { |item|
+      dexlist = dexlist.find_all do |item|
         next false if !$player.owned?(item[:species])
         weight = item[:weight]
         next weight >= minw && weight <= maxw
-      }
+      end
     end
     # Filter by color
     if params[8] >= 0
       scolor = @colorCommands[params[8]].id
-      dexlist = dexlist.find_all { |item|
-        next false if !$player.seen?(item[:species])
-        next item[:color] == scolor
-      }
+      dexlist = dexlist.find_all do |item|
+        next $player.seen?(item[:species]) && item[:color] == scolor
+      end
     end
     # Filter by shape
     if params[9] >= 0
       sshape = @shapeCommands[params[9]].id
-      dexlist = dexlist.find_all { |item|
-        next false if !$player.seen?(item[:species])
-        next item[:shape] == sshape
-      }
+      dexlist = dexlist.find_all do |item|
+        next $player.seen?(item[:species]) && item[:shape] == sshape
+      end
     end
     # Remove all unseen species from the results
     dexlist = dexlist.find_all { |item| next $player.seen?(item[:species]) }
@@ -924,9 +919,7 @@ class PokemonPokedex_Scene
     oldindex  = index
     minmax    = 1
     oldminmax = minmax
-    if [3, 4].include?(mode)
-      index = oldindex = selindex[minmax]
-    end
+    index = oldindex = selindex[minmax] if [3, 4].include?(mode)
     @sprites["searchcursor"].mode   = mode
     @sprites["searchcursor"].cmds   = cmds.length
     @sprites["searchcursor"].minmax = minmax
@@ -1260,7 +1253,7 @@ class PokemonPokedex_Scene
   end
 
   def pbPokedex
-    pbActivateWindow(@sprites, "pokedex") {
+    pbActivateWindow(@sprites, "pokedex") do
       loop do
         Graphics.update
         Input.update
@@ -1290,7 +1283,7 @@ class PokemonPokedex_Scene
           end
         end
       end
-    }
+    end
   end
 end
 

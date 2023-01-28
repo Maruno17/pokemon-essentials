@@ -51,7 +51,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     dims = [0, 0]
     cwidth = maxwidth < 0 ? Graphics.width : maxwidth
     getLineBrokenChunks(self.contents, text,
-                        cwidth - self.borderX - SpriteWindow_Base::TEXTPADDING, dims, true)
+                        cwidth - self.borderX - SpriteWindow_Base::TEXT_PADDING, dims, true)
     return dims
   end
 
@@ -62,7 +62,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
 
   def resizeToFit(text, maxwidth = -1)   # maxwidth is maximum acceptable window width
     dims = resizeToFitInternal(text, maxwidth)
-    self.width = dims[0] + self.borderX + SpriteWindow_Base::TEXTPADDING
+    self.width = dims[0] + self.borderX + SpriteWindow_Base::TEXT_PADDING
     self.height = dims[1] + self.borderY
     refresh
   end
@@ -211,7 +211,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     dims = resizeToFitInternal(text, maxwidth)
     oldstarting = @starting
     @starting = true
-    self.width  = dims[0] + self.borderX + SpriteWindow_Base::TEXTPADDING
+    self.width  = dims[0] + self.borderX + SpriteWindow_Base::TEXT_PADDING
     self.height = dims[1] + self.borderY
     @starting = oldstarting
     redrawText
@@ -221,7 +221,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     dims = resizeToFitInternal(text, maxwidth)
     oldstarting = @starting
     @starting = true
-    self.width  = [dims[0] + self.borderX + SpriteWindow_Base::TEXTPADDING, maxwidth].min
+    self.width  = [dims[0] + self.borderX + SpriteWindow_Base::TEXT_PADDING, maxwidth].min
     self.height = [dims[1] + self.borderY, maxheight].min
     @starting = oldstarting
     redrawText
@@ -306,7 +306,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       if @letterbyletter
         @fmtchars = []
         fmt = getFormattedText(self.contents, 0, 0,
-                               self.width - self.borderX - SpriteWindow_Base::TEXTPADDING, -1,
+                               self.width - self.borderX - SpriteWindow_Base::TEXT_PADDING, -1,
                                shadowctag(@baseColor, @shadowColor) + value, 32, true)
         @oldfont = self.contents.font.clone
         fmt.each do |ch|
@@ -333,7 +333,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         fmt.clear
       else
         @fmtchars = getFormattedText(self.contents, 0, 0,
-                                     self.width - self.borderX - SpriteWindow_Base::TEXTPADDING, -1,
+                                     self.width - self.borderX - SpriteWindow_Base::TEXT_PADDING, -1,
                                      shadowctag(@baseColor, @shadowColor) + value, 32, true)
         @oldfont = self.contents.font.clone
         @fmtchars.each do |ch|
@@ -586,6 +586,8 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     @frameskipChanged = false
   end
 
+  #-----------------------------------------------------------------------------
+
   private
 
   def curcharSkip(skip)
@@ -703,6 +705,8 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     end
     @frame = (@frame + 1) % 30
   end
+
+  #-----------------------------------------------------------------------------
 
   private
 
@@ -895,6 +899,8 @@ class SpriteWindow_Selectable < SpriteWindow_Base
     end
   end
 
+  #-----------------------------------------------------------------------------
+
   private
 
   def priv_page_row_max
@@ -1074,7 +1080,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
         width = [width, tmpbitmap.text_size(i).width].max
       end
       # one 16 to allow cursor
-      width += 16 + 16 + SpriteWindow_Base::TEXTPADDING
+      width += 16 + 16 + SpriteWindow_Base::TEXT_PADDING
       tmpbitmap.dispose
     end
     # Store suggested width and height of window
@@ -1229,7 +1235,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
   def textWidth(bitmap, text)
     dims = [nil, 0]
     chars = getFormattedText(bitmap, 0, 0,
-                             Graphics.width - self.borderX - SpriteWindow_Base::TEXTPADDING - 16,
+                             Graphics.width - self.borderX - SpriteWindow_Base::TEXT_PADDING - 16,
                              -1, text, self.rowHeight, true, true)
     chars.each do |ch|
       dims[0] = dims[0] ? [dims[0], ch[1]].min : ch[1]

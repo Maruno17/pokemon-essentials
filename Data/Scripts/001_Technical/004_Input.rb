@@ -16,9 +16,7 @@ module Input
 
   def self.update
     update_KGC_ScreenCapture
-    if trigger?(Input::F8)
-      pbScreenCapture
-    end
+    pbScreenCapture if trigger?(Input::F8)
   end
 end
 

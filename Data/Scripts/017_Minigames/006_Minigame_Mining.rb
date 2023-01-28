@@ -628,9 +628,9 @@ end
 #
 #===============================================================================
 def pbMiningGame
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = MiningGameScene.new
     screen = MiningGame.new(scene)
     screen.pbStartScreen
-  }
+  end
 end

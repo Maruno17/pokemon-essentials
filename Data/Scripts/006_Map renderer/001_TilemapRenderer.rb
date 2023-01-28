@@ -184,9 +184,7 @@ class TilemapRenderer
     end
 
     def current_frame(filename)
-      if !@current_frames[filename]
-        set_current_frame(filename)
-      end
+      set_current_frame(filename) if !@current_frames[filename]
       return @current_frames[filename]
     end
 

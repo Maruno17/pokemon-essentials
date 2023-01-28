@@ -54,13 +54,13 @@ ItemHandlers::UseFromBag.add(:ITEMFINDER, proc { |item|
 ItemHandlers::UseFromBag.copy(:ITEMFINDER, :DOWSINGMCHN, :DOWSINGMACHINE)
 
 ItemHandlers::UseFromBag.add(:TOWNMAP, proc { |item|
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonRegionMap_Scene.new(-1, false)
     screen = PokemonRegionMapScreen.new(scene)
     ret = screen.pbStartScreen
     $game_temp.fly_destination = ret if ret
     next 99999 if ret   # Ugly hack to make Bag scene not reappear if flying
-  }
+  end
   next ($game_temp.fly_destination) ? 2 : 0
 })
 
@@ -148,11 +148,11 @@ EventHandlers.add(:on_player_step_taken, :repel_counter,
     end
     next if !pbConfirmMessage(_INTL("The repellent's effect wore off! Would you like to use another one?"))
     ret = nil
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, $bag)
       ret = screen.pbChooseItemScreen(proc { |item| repels.include?(item) })
-    }
+    end
     pbUseItem($bag, ret) if ret
   }
 )
@@ -190,7 +190,7 @@ ItemHandlers::UseInField.add(:ESCAPEROPE, proc { |item|
     next false
   end
   pbUseItemMessage(item)
-  pbFadeOutIn {
+  pbFadeOutIn do
     $game_temp.player_new_map_id    = escape[0]
     $game_temp.player_new_x         = escape[1]
     $game_temp.player_new_y         = escape[2]
@@ -199,7 +199,7 @@ ItemHandlers::UseInField.add(:ESCAPEROPE, proc { |item|
     $scene.transfer_player
     $game_map.autoplay
     $game_map.refresh
-  }
+  end
   pbEraseEscapePoint
   next true
 })
@@ -220,7 +220,7 @@ ItemHandlers::UseInField.add(:SACREDASH, proc { |item|
     next false
   end
   revived = 0
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene, $player.party)
     screen.pbStartScene(_INTL("Using item..."), false)
@@ -231,11 +231,9 @@ ItemHandlers::UseInField.add(:SACREDASH, proc { |item|
       screen.pbRefreshSingle(i)
       screen.pbDisplay(_INTL("{1}'s HP was restored.", pkmn.name))
     end
-    if revived == 0
-      screen.pbDisplay(_INTL("It won't have any effect."))
-    end
+    screen.pbDisplay(_INTL("It won't have any effect.")) if revived == 0
     screen.pbEndScene
-  }
+  end
   next (revived > 0)
 })
 
@@ -371,7 +369,7 @@ ItemHandlers::UseOnPokemon.addIf(:evolution_stones,
     end
     newspecies = pkmn.check_evolution_on_use_item(item)
     if newspecies
-      pbFadeOutInWithMusic {
+      pbFadeOutInWithMusic do
         evo = PokemonEvolutionScene.new
         evo.pbStartScreen(pkmn, newspecies)
         evo.pbEvolution(false)
@@ -380,7 +378,7 @@ ItemHandlers::UseOnPokemon.addIf(:evolution_stones,
           scene.pbRefreshAnnotations(proc { |p| !p.check_evolution_on_use_item(item).nil? })
           scene.pbRefresh
         end
-      }
+      end
       next true
     end
     scene.pbDisplay(_INTL("It won't have any effect."))
@@ -896,13 +894,13 @@ ItemHandlers::UseOnPokemon.add(:RARECANDY, proc { |item, qty, pkmn, scene|
       next false
     end
     # Check for evolution
-    pbFadeOutInWithMusic {
+    pbFadeOutInWithMusic do
       evo = PokemonEvolutionScene.new
       evo.pbStartScreen(pkmn, new_species)
       evo.pbEvolution
       evo.pbEndScreen
       scene.pbRefresh if scene.is_a?(PokemonPartyScreen)
-    }
+    end
     next true
   end
   # Level up
@@ -1093,10 +1091,10 @@ ItemHandlers::UseOnPokemon.add(:GRACIDEA, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
-  pkmn.setForm(1) {
+  pkmn.setForm(1) do
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   next true
 })
 
@@ -1108,10 +1106,10 @@ ItemHandlers::UseOnPokemon.add(:REDNECTAR, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
-  pkmn.setForm(0) {
+  pkmn.setForm(0) do
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1} changed form!", pkmn.name))
-  }
+  end
   next true
 })
 
@@ -1123,10 +1121,10 @@ ItemHandlers::UseOnPokemon.add(:YELLOWNECTAR, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
-  pkmn.setForm(1) {
+  pkmn.setForm(1) do
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1} changed form!", pkmn.name))
-  }
+  end
   next true
 })
 
@@ -1138,10 +1136,10 @@ ItemHandlers::UseOnPokemon.add(:PINKNECTAR, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
-  pkmn.setForm(2) {
+  pkmn.setForm(2) do
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1} changed form!", pkmn.name))
-  }
+  end
   next true
 })
 
@@ -1153,10 +1151,10 @@ ItemHandlers::UseOnPokemon.add(:PURPLENECTAR, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
-  pkmn.setForm(3) {
+  pkmn.setForm(3) do
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1} changed form!", pkmn.name))
-  }
+  end
   next true
 })
 
@@ -1171,10 +1169,10 @@ ItemHandlers::UseOnPokemon.add(:REVEALGLASS, proc { |item, qty, pkmn, scene|
     next false
   end
   newForm = (pkmn.form == 0) ? 1 : 0
-  pkmn.setForm(newForm) {
+  pkmn.setForm(newForm) do
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   next true
 })
 
@@ -1187,10 +1185,10 @@ ItemHandlers::UseOnPokemon.add(:PRISONBOTTLE, proc { |item, qty, pkmn, scene|
     next false
   end
   newForm = (pkmn.form == 0) ? 1 : 0
-  pkmn.setForm(newForm) {
+  pkmn.setForm(newForm) do
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   next true
 })
 
@@ -1217,10 +1215,10 @@ ItemHandlers::UseOnPokemon.add(:ROTOMCATALOG, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   elsif new_form > 0 && new_form < choices.length - 1
-    pkmn.setForm(new_form) {
+    pkmn.setForm(new_form) do
       scene.pbRefresh
       scene.pbDisplay(_INTL("{1} transformed!", pkmn.name))
-    }
+    end
     next true
   end
   next false
@@ -1238,10 +1236,10 @@ ItemHandlers::UseOnPokemon.add(:ZYGARDECUBE, proc { |item, qty, pkmn, scene|
      [_INTL("Change form"), _INTL("Change Ability"), _INTL("Cancel")])
   when 0   # Change form
     newForm = (pkmn.form == 0) ? 1 : 0
-    pkmn.setForm(newForm) {
+    pkmn.setForm(newForm) do
       scene.pbRefresh
       scene.pbDisplay(_INTL("{1} transformed!", pkmn.name))
-    }
+    end
     next true
   when 1   # Change ability
     new_abil = (pkmn.ability_index + 1) % 2
@@ -1282,12 +1280,12 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, qty, pkmn, scene|
   newForm = 0
   newForm = 1 if other_pkmn.isSpecies?(:RESHIRAM)
   newForm = 2 if other_pkmn.isSpecies?(:ZEKROM)
-  pkmn.setForm(newForm) {
+  pkmn.setForm(newForm) do
     pkmn.fused = other_pkmn
     $player.remove_pokemon_at_index(chosen)
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   $bag.replace_item(:DNASPLICERS, :DNASPLICERSUSED)
   next true
 })
@@ -1304,12 +1302,12 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERSUSED, proc { |item, qty, pkmn, scene|
     next false
   end
   # Unfusing
-  pkmn.setForm(0) {
+  pkmn.setForm(0) do
     $player.party[$player.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   $bag.replace_item(:DNASPLICERSUSED, :DNASPLICERS)
   next true
 })
@@ -1339,12 +1337,12 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
     next false
   end
-  pkmn.setForm(1) {
+  pkmn.setForm(1) do
     pkmn.fused = other_pkmn
     $player.remove_pokemon_at_index(chosen)
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   $bag.replace_item(:NSOLARIZER, :NSOLARIZERUSED)
   next true
 })
@@ -1361,12 +1359,12 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZERUSED, proc { |item, qty, pkmn, scene|
     next false
   end
   # Unfusing
-  pkmn.setForm(0) {
+  pkmn.setForm(0) do
     $player.party[$player.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   $bag.replace_item(:NSOLARIZERUSED, :NSOLARIZER)
   next true
 })
@@ -1396,12 +1394,12 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
     next false
   end
-  pkmn.setForm(2) {
+  pkmn.setForm(2) do
     pkmn.fused = other_pkmn
     $player.remove_pokemon_at_index(chosen)
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   $bag.replace_item(:NLUNARIZER, :NLUNARIZERUSED)
   next true
 })
@@ -1418,12 +1416,12 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZERUSED, proc { |item, qty, pkmn, scene|
     next false
   end
   # Unfusing
-  pkmn.setForm(0) {
+  pkmn.setForm(0) do
     $player.party[$player.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   $bag.replace_item(:NLUNARIZERUSED, :NLUNARIZER)
   next true
 })
@@ -1457,12 +1455,12 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITY, proc { |item, qty, pkmn, scene|
   newForm = 0
   newForm = 1 if other_pkmn.isSpecies?(:GLASTRIER)
   newForm = 2 if other_pkmn.isSpecies?(:SPECTRIER)
-  pkmn.setForm(newForm) {
+  pkmn.setForm(newForm) do
     pkmn.fused = other_pkmn
     $player.remove_pokemon_at_index(chosen)
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   $bag.replace_item(:REINSOFUNITY, :REINSOFUNITYUSED)
   next true
 })
@@ -1479,12 +1477,12 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITYUSED, proc { |item, qty, pkmn, scene
     next false
   end
   # Unfusing
-  pkmn.setForm(0) {
+  pkmn.setForm(0) do
     $player.party[$player.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-  }
+  end
   $bag.replace_item(:REINSOFUNITYUSED, :REINSOFUNITY)
   next true
 })

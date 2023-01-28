@@ -284,9 +284,7 @@ class RegionalStorage
     if @rgnmap < 0
       raise _INTL("The current map has no region set. Please set the MapPosition metadata setting for this map.")
     end
-    if !@storages[@rgnmap]
-      @storages[@rgnmap] = PokemonStorage.new
-    end
+    @storages[@rgnmap] = PokemonStorage.new if !@storages[@rgnmap]
     return @storages[@rgnmap]
   end
 

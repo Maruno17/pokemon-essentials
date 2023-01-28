@@ -150,7 +150,7 @@ class ItemStorage_Scene
     @sprites["helpwindow"].visible = false
     itemwindow = @sprites["itemwindow"]
     itemwindow.refresh
-    pbActivateWindow(@sprites, "itemwindow") {
+    pbActivateWindow(@sprites, "itemwindow") do
       loop do
         Graphics.update
         Input.update
@@ -168,7 +168,7 @@ class ItemStorage_Scene
           end
         end
       end
-    }
+    end
   end
 end
 

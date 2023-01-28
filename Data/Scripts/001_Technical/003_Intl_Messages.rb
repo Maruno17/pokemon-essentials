@@ -45,7 +45,7 @@ module Translator
           end
         end
       end
-      MessageTypes.addMessagesAsHash(MessageTypes::ScriptTexts, texts)
+      MessageTypes.addMessagesAsHash(MessageTypes::SCRIPT_TEXTS, texts)
       # Find all text in common events and add them to messages
       commonevents = load_data("Data/CommonEvents.rxdata")
       items = []
@@ -87,7 +87,7 @@ module Translator
             elsif list.code == 209   # Set Move Route
               route = list.parameters[1]
               route.list.size.times do |k|
-                if route.list[k].code == PBMoveRoute::Script
+                if route.list[k].code == PBMoveRoute::SCRIPT
                   find_translatable_text_from_event_script(items, route.list[k].parameters[0])
                 end
               end
@@ -157,7 +157,7 @@ module Translator
                 elsif list.code == 209   # Set Move Route
                   route = list.parameters[1]
                   route.list.size.times do |k|
-                    if route.list[k].code == PBMoveRoute::Script
+                    if route.list[k].code == PBMoveRoute::SCRIPT
                       find_translatable_text_from_event_script(items, route.list[k].parameters[0])
                     end
                   end
@@ -190,7 +190,7 @@ module Translator
 
   def find_translatable_text_from_RGSS_script(items, script)
     script.force_encoding(Encoding::UTF_8)
-    script.scan(/(?:_INTL|_ISPRINTF)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) { |s|
+    script.scan(/(?:_INTL|_ISPRINTF)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) do |s|
       string = s[0]
       string.gsub!(/\\r/, "\r")
       string.gsub!(/\\n/, "\n")
@@ -198,17 +198,17 @@ module Translator
       string.gsub!(/\\\"/, "\"")
       string.gsub!(/\\\\/, "\\")
       items.push(string)
-    }
+    end
   end
 
   def find_translatable_text_from_event_script(items, script)
     script.force_encoding(Encoding::UTF_8)
-    script.scan(/(?:_I)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) { |s|
+    script.scan(/(?:_I)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) do |s|
       string = s[0]
       string.gsub!(/\\\"/, "\"")
       string.gsub!(/\\\\/, "\\")
       items.push(string)
-    }
+    end
   end
 
   def normalize_value(value)
@@ -239,7 +239,7 @@ module Translator
     return value
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def extract_text(language_name = "default", core_text = false, separate_map_files = false)
     dir_name = sprintf("Text_%s_%s", language_name, (core_text) ? "core" : "game")
@@ -296,18 +296,18 @@ module Translator
     max_section_id.times do |i|
       section_name = getConstantName(MessageTypes, i, false)
       next if !section_name
-      if i == MessageTypes::EventTexts
+      if i == MessageTypes::EVENT_TEXTS
         if separate_map_files
           map_infos = pbLoadMapInfos
           default_messages[i].each_with_index do |map_msgs, map_id|
             next if !map_msgs || map_msgs.length == 0
             filename = sprintf("Map%03d", map_id)
             filename += " " + map_infos[map_id].name if map_infos[map_id]
-            File.open(dir_name + "/" + filename + ".txt", "wb") { |f|
+            File.open(dir_name + "/" + filename + ".txt", "wb") do |f|
               write_header.call(f, true)
               translated_msgs = language_messages[i][map_id] if language_messages && language_messages[i]
               write_section_texts_to_file(f, sprintf("Map%03d", map_id), translated_msgs, map_msgs)
-            }
+            end
           end
         else
           next if !default_messages[i] || default_messages[i].length == 0
@@ -317,7 +317,7 @@ module Translator
             break if !map_msgs
           end
           next if no_difference
-          File.open(dir_name + "/" + section_name + ".txt", "wb") { |f|
+          File.open(dir_name + "/" + section_name + ".txt", "wb") do |f|
             write_header.call(f, false)
             default_messages[i].each_with_index do |map_msgs, map_id|
               next if !map_msgs || map_msgs.length == 0
@@ -325,15 +325,15 @@ module Translator
               translated_msgs = (language_messages && language_messages[i]) ? language_messages[i][map_id] : nil
               write_section_texts_to_file(f, sprintf("Map%03d", map_id), translated_msgs, map_msgs)
             end
-          }
+          end
         end
       else   # MessageTypes sections
         next if !default_messages[i] || default_messages[i].length == 0
-        File.open(dir_name + "/" + section_name + ".txt", "wb") { |f|
+        File.open(dir_name + "/" + section_name + ".txt", "wb") do |f|
           write_header.call(f, true)
           translated_msgs = (language_messages) ? language_messages[i] : nil
           write_section_texts_to_file(f, section_name, translated_msgs, default_messages[i])
-        }
+        end
       end
     end
     msg_window.textspeed = MessageConfig.pbSettingToTextSpeed($PokemonSystem.textspeed)
@@ -371,7 +371,7 @@ module Translator
     end
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def compile_text(dir_name, dat_filename)
     msg_window = pbCreateMessageWindow
@@ -452,16 +452,16 @@ module Translator
           break if i >= contents.length
         end
         # Add ordered list/hash (text_hash) to array of all text (all_text)
-        all_text[MessageTypes::EventTexts] = [] if is_map && !all_text[MessageTypes::EventTexts]
-        target_section = (is_map) ? all_text[MessageTypes::EventTexts][section_id] : all_text[section_id]
+        all_text[MessageTypes::EVENT_TEXTS] = [] if is_map && !all_text[MessageTypes::EVENT_TEXTS]
+        target_section = (is_map) ? all_text[MessageTypes::EVENT_TEXTS][section_id] : all_text[section_id]
         if target_section
           if text_hash.is_a?(Hash)
-            text_hash.keys.each { |key| target_section[key] = text_hash[key] if text_hash[key] }
+            text_hash.each_key { |key| target_section[key] = text_hash[key] if text_hash[key] }
           else   # text_hash is an array
-            text_hash.each_with_index { |line, i| target_section[i] = line if line }
+            text_hash.each_with_index { |line, j| target_section[j] = line if line }
           end
         elsif is_map
-          all_text[MessageTypes::EventTexts][section_id] = text_hash
+          all_text[MessageTypes::EVENT_TEXTS][section_id] = text_hash
         else
           all_text[section_id] = text_hash
         end
@@ -570,16 +570,16 @@ class Translation
 
   def setMapMessagesAsHash(map_id, array)
     load_default_messages
-    @default_game_messages[MessageTypes::EventTexts] ||= []
-    @default_game_messages[MessageTypes::EventTexts][map_id] = priv_add_to_hash(MessageTypes::EventTexts,
+    @default_game_messages[MessageTypes::EVENT_TEXTS] ||= []
+    @default_game_messages[MessageTypes::EVENT_TEXTS][map_id] = priv_add_to_hash(MessageTypes::EVENT_TEXTS,
       array, nil, map_id)
   end
 
   def addMapMessagesAsHash(map_id, array)
     load_default_messages
-    @default_game_messages[MessageTypes::EventTexts] ||= []
-    @default_game_messages[MessageTypes::EventTexts][map_id] = priv_add_to_hash(MessageTypes::EventTexts,
-      array, @default_game_messages[MessageTypes::EventTexts][map_id], map_id)
+    @default_game_messages[MessageTypes::EVENT_TEXTS] ||= []
+    @default_game_messages[MessageTypes::EVENT_TEXTS][map_id] = priv_add_to_hash(MessageTypes::EVENT_TEXTS,
+      array, @default_game_messages[MessageTypes::EVENT_TEXTS][map_id], map_id)
   end
 
   def get(type, id)
@@ -610,22 +610,24 @@ class Translation
     delayed_load_message_files
     key = Translation.stringToKey(text)
     return text if nil_or_empty?(key)
-    if @game_messages && @game_messages[MessageTypes::EventTexts]
-      if @game_messages[MessageTypes::EventTexts][map_id] && @game_messages[MessageTypes::EventTexts][map_id][key]
-        return @game_messages[MessageTypes::EventTexts][map_id][key]
-      elsif @game_messages[MessageTypes::EventTexts][0] && @game_messages[MessageTypes::EventTexts][0][key]
-        return @game_messages[MessageTypes::EventTexts][0][key]
+    if @game_messages && @game_messages[MessageTypes::EVENT_TEXTS]
+      if @game_messages[MessageTypes::EVENT_TEXTS][map_id] && @game_messages[MessageTypes::EVENT_TEXTS][map_id][key]
+        return @game_messages[MessageTypes::EVENT_TEXTS][map_id][key]
+      elsif @game_messages[MessageTypes::EVENT_TEXTS][0] && @game_messages[MessageTypes::EVENT_TEXTS][0][key]
+        return @game_messages[MessageTypes::EVENT_TEXTS][0][key]
       end
     end
-    if @core_messages && @core_messages[MessageTypes::EventTexts]
-      if @core_messages[MessageTypes::EventTexts][map_id] && @core_messages[MessageTypes::EventTexts][map_id][key]
-        return @core_messages[MessageTypes::EventTexts][map_id][key]
-      elsif @core_messages[MessageTypes::EventTexts][0] && @core_messages[MessageTypes::EventTexts][0][key]
-        return @core_messages[MessageTypes::EventTexts][0][key]
+    if @core_messages && @core_messages[MessageTypes::EVENT_TEXTS]
+      if @core_messages[MessageTypes::EVENT_TEXTS][map_id] && @core_messages[MessageTypes::EVENT_TEXTS][map_id][key]
+        return @core_messages[MessageTypes::EVENT_TEXTS][map_id][key]
+      elsif @core_messages[MessageTypes::EVENT_TEXTS][0] && @core_messages[MessageTypes::EVENT_TEXTS][0][key]
+        return @core_messages[MessageTypes::EVENT_TEXTS][0][key]
       end
     end
     return text
   end
+
+  #-----------------------------------------------------------------------------
 
   private
 
@@ -645,7 +647,7 @@ class Translation
   end
 
   def priv_add_to_hash(type, array, ret, map_id = 0)
-    if type == MessageTypes::EventTexts
+    if type == MessageTypes::EVENT_TEXTS
       @default_core_messages[type] ||= []
       @default_core_messages[type][map_id] ||= {}
       default_keys = @default_core_messages[type][map_id].keys
@@ -670,36 +672,36 @@ module MessageTypes
   # NOTE: These constants aren't numbered in any particular order, but these
   #       numbers are retained for backwards compatibility with older extracted
   #       text files.
-  EventTexts              = 0   # Used for text in both common events and map events
-  Species                 = 1
-  SpeciesCategories       = 2
-  PokedexEntries          = 3
-  SpeciesForms            = 4
-  Moves                   = 5
-  MoveDescriptions        = 6
-  Items                   = 7
-  ItemPlurals             = 8
-  ItemDescriptions        = 9
-  Abilities               = 10
-  AbilityDescriptions     = 11
-  Types                   = 12
-  TrainerTypes            = 13
-  TrainerNames            = 14
-  FrontierIntroSpeeches   = 15
-  FrontierEndSpeechesWin  = 16
-  FrontierEndSpeechesLose = 17
-  Regions                 = 18
-  RegionLocations         = 19
-  RegionDescriptions      = 20
-  MapNames                = 21
-  PhoneMessages           = 22
-  TrainerLoseTexts        = 23
-  ScriptTexts             = 24
-  RibbonNames             = 25
-  RibbonDescriptions      = 26
-  StorageCreator          = 27
-  ItemPortions            = 28
-  ItemPortionPlurals      = 29
+  EVENT_TEXTS                  = 0   # Used for text in both common events and map events
+  SPECIES_NAMES                = 1
+  SPECIES_CATEGORIES           = 2
+  POKEDEX_ENTRIES              = 3
+  SPECIES_FORM_NAMES           = 4
+  MOVE_NAMES                   = 5
+  MOVE_DESCRIPTIONS            = 6
+  ITEM_NAMES                   = 7
+  ITEM_NAME_PLURALS            = 8
+  ITEM_DESCRIPTIONS            = 9
+  ABILITY_NAMES                = 10
+  ABILITY_DESCRIPTIONS         = 11
+  TYPE_NAMES                   = 12
+  TRAINER_TYPE_NAMES           = 13
+  TRAINER_NAMES                = 14
+  FRONTIER_INTRO_SPEECHES      = 15
+  FRONTIER_END_SPEECHES_WIN    = 16
+  FRONTIER_END_SPEECHES_LOSE   = 17
+  REGION_NAMES                 = 18
+  REGION_LOCATION_NAMES        = 19
+  REGION_LOCATION_DESCRIPTIONS = 20
+  MAP_NAMES                    = 21
+  PHONE_MESSAGES               = 22
+  TRAINER_SPEECHES_LOSE        = 23
+  SCRIPT_TEXTS                 = 24
+  RIBBON_NAMES                 = 25
+  RIBBON_DESCRIPTIONS          = 26
+  STORAGE_CREATOR_NAME         = 27
+  ITEM_PORTION_NAMES           = 28
+  ITEM_PORTION_NAME_PLURALS    = 29
   @@messages = Translation.new
 
   def self.load_default_messages
@@ -766,7 +768,7 @@ end
 # parameters by replacing {1}, {2}, etc. with those placeholders.
 def _INTL(*arg)
   begin
-    string = MessageTypes.getFromHash(MessageTypes::ScriptTexts, arg[0])
+    string = MessageTypes.getFromHash(MessageTypes::SCRIPT_TEXTS, arg[0])
   rescue
     string = arg[0]
   end
@@ -782,15 +784,13 @@ end
 # This version acts more like sprintf, supports e.g. {1:d} or {2:s}
 def _ISPRINTF(*arg)
   begin
-    string = MessageTypes.getFromHash(MessageTypes::ScriptTexts, arg[0])
+    string = MessageTypes.getFromHash(MessageTypes::SCRIPT_TEXTS, arg[0])
   rescue
     string = arg[0]
   end
   string = string.clone
   (1...arg.length).each do |i|
-    string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m|
-      next sprintf("%" + $1, arg[i])
-    }
+    string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m| next sprintf("%" + $1, arg[i]) }
   end
   return string
 end
@@ -812,9 +812,7 @@ def _MAPISPRINTF(mapid, *arg)
   string = MessageTypes.getFromMapHash(mapid, arg[0])
   string = string.clone
   (1...arg.length).each do |i|
-    string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m|
-      next sprintf("%" + $1, arg[i])
-    }
+    string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m| next sprintf("%" + $1, arg[i]) }
   end
   return string
 end

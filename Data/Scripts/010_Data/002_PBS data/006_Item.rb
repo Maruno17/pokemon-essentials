@@ -133,29 +133,29 @@ module GameData
 
     # @return [String] the translated name of this item
     def name
-      return pbGetMessageFromHash(MessageTypes::Items, @real_name)
+      return pbGetMessageFromHash(MessageTypes::ITEM_NAMES, @real_name)
     end
 
     # @return [String] the translated plural version of the name of this item
     def name_plural
-      return pbGetMessageFromHash(MessageTypes::ItemPlurals, @real_name_plural)
+      return pbGetMessageFromHash(MessageTypes::ITEM_NAME_PLURALS, @real_name_plural)
     end
 
     # @return [String] the translated portion name of this item
     def portion_name
-      return pbGetMessageFromHash(MessageTypes::ItemPortions, @real_portion_name) if @real_portion_name
+      return pbGetMessageFromHash(MessageTypes::ITEM_PORTION_NAMES, @real_portion_name) if @real_portion_name
       return name
     end
 
     # @return [String] the translated plural version of the portion name of this item
     def portion_name_plural
-      return pbGetMessageFromHash(MessageTypes::ItemPortionPlurals, @real_portion_name_plural) if @real_portion_name_plural
+      return pbGetMessageFromHash(MessageTypes::ITEM_PORTION_NAME_PLURALS, @real_portion_name_plural) if @real_portion_name_plural
       return name_plural
     end
 
     # @return [String] the translated description of this item
     def description
-      return pbGetMessageFromHash(MessageTypes::ItemDescriptions, @real_description)
+      return pbGetMessageFromHash(MessageTypes::ITEM_DESCRIPTIONS, @real_description)
     end
 
     def has_flag?(flag)

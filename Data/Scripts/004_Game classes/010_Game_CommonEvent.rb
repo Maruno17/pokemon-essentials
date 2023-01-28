@@ -40,9 +40,7 @@ class Game_CommonEvent
   def refresh
     # Create an interpreter for parallel process if necessary
     if self.trigger == 2 && switchIsOn?(self.switch_id)
-      if @interpreter.nil?
-        @interpreter = Interpreter.new
-      end
+      @interpreter = Interpreter.new if @interpreter.nil?
     else
       @interpreter = nil
     end

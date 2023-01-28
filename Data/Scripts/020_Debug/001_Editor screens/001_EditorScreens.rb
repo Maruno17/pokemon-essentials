@@ -344,7 +344,7 @@ end
 #===============================================================================
 def pbTrainerTypeEditor
   properties = GameData::TrainerType.editor_properties
-  pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
+  pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) do |button, tr_type|
     if tr_type
       case button
       when Input::ACTION
@@ -386,7 +386,7 @@ def pbTrainerTypeEditor
         end
       end
     end
-  }
+  end
 end
 
 def pbTrainerTypeEditorNew(default_name)
@@ -477,7 +477,7 @@ end
 #===============================================================================
 def pbTrainerBattleEditor
   modified = false
-  pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) { |button, trainer_id|
+  pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) do |button, trainer_id|
     if trainer_id
       case button
       when Input::ACTION
@@ -589,7 +589,7 @@ def pbTrainerBattleEditor
         end
       end
     end
-  }
+  end
   if modified && pbConfirmMessage(_INTL("Save changes?"))
     GameData::Trainer.save
     pbConvertTrainerData
@@ -821,7 +821,7 @@ end
 #===============================================================================
 def pbItemEditor
   properties = GameData::Item.editor_properties
-  pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
+  pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) do |button, item|
     if item
       case button
       when Input::ACTION
@@ -863,7 +863,7 @@ def pbItemEditor
         end
       end
     end
-  }
+  end
 end
 
 def pbItemEditorNew(default_name)
@@ -925,7 +925,7 @@ end
 #===============================================================================
 def pbPokemonEditor
   properties = GameData::Species.editor_properties
-  pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
+  pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) do |button, species|
     if species
       case button
       when Input::ACTION
@@ -983,7 +983,7 @@ def pbPokemonEditor
         end
       end
     end
-  }
+  end
 end
 
 #===============================================================================

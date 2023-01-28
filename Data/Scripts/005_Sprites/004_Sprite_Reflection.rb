@@ -48,15 +48,15 @@ class Sprite_Reflection
     # Just-in-time creation of sprite
     @sprite = Sprite.new(@viewport) if !@sprite
     if @sprite
-      x = @rsprite.x - @rsprite.ox * TilemapRenderer::ZOOM_X
-      y = @rsprite.y - @rsprite.oy * TilemapRenderer::ZOOM_Y
+      x = @rsprite.x - (@rsprite.ox * TilemapRenderer::ZOOM_X)
+      y = @rsprite.y - (@rsprite.oy * TilemapRenderer::ZOOM_Y)
       y -= Game_Map::TILE_HEIGHT * TilemapRenderer::ZOOM_Y if @rsprite.character.character_name[/offset/i]
       @height = $PokemonGlobal.bridge if !@fixedheight
       y += @height * TilemapRenderer::ZOOM_Y * Game_Map::TILE_HEIGHT / 2
       width  = @rsprite.src_rect.width
       height = @rsprite.src_rect.height
-      @sprite.x        = x + (width / 2) * TilemapRenderer::ZOOM_X
-      @sprite.y        = y + (height + (height / 2)) * TilemapRenderer::ZOOM_Y
+      @sprite.x        = x + ((width / 2) * TilemapRenderer::ZOOM_X)
+      @sprite.y        = y + ((height + (height / 2)) * TilemapRenderer::ZOOM_Y)
       @sprite.ox       = width / 2
       @sprite.oy       = (height / 2) - 2   # Hard-coded 2 pixel shift up
       @sprite.oy       -= @rsprite.character.bob_height * 2

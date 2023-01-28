@@ -974,49 +974,49 @@ class Pokemon
   # Checks whether this Pokemon can evolve because of levelling up.
   # @return [Symbol, nil] the ID of the species to evolve into
   def check_evolution_on_level_up
-    return check_evolution_internal { |pkmn, new_species, method, parameter|
+    return check_evolution_internal do |pkmn, new_species, method, parameter|
       success = GameData::Evolution.get(method).call_level_up(pkmn, parameter)
       next (success) ? new_species : nil
-    }
+    end
   end
 
   # Checks whether this Pokemon can evolve because of using an item on it.
   # @param item_used [Symbol, GameData::Item, nil] the item being used
   # @return [Symbol, nil] the ID of the species to evolve into
   def check_evolution_on_use_item(item_used)
-    return check_evolution_internal { |pkmn, new_species, method, parameter|
+    return check_evolution_internal do |pkmn, new_species, method, parameter|
       success = GameData::Evolution.get(method).call_use_item(pkmn, parameter, item_used)
       next (success) ? new_species : nil
-    }
+    end
   end
 
   # Checks whether this Pokemon can evolve because of being traded.
   # @param other_pkmn [Pokemon] the other Pokémon involved in the trade
   # @return [Symbol, nil] the ID of the species to evolve into
   def check_evolution_on_trade(other_pkmn)
-    return check_evolution_internal { |pkmn, new_species, method, parameter|
+    return check_evolution_internal do |pkmn, new_species, method, parameter|
       success = GameData::Evolution.get(method).call_on_trade(pkmn, parameter, other_pkmn)
       next (success) ? new_species : nil
-    }
+    end
   end
 
   # Checks whether this Pokemon can evolve after a battle.
   # @return [Symbol, nil] the ID of the species to evolve into
   def check_evolution_after_battle(party_index)
-    return check_evolution_internal { |pkmn, new_species, method, parameter|
+    return check_evolution_internal do |pkmn, new_species, method, parameter|
       success = GameData::Evolution.get(method).call_after_battle(pkmn, party_index, parameter)
       next (success) ? new_species : nil
-    }
+    end
   end
 
   # Checks whether this Pokemon can evolve by a triggered event.
   # @param value [Integer] a value that may be used by the evolution method
   # @return [Symbol, nil] the ID of the species to evolve into
   def check_evolution_by_event(value = 0)
-    return check_evolution_internal { |pkmn, new_species, method, parameter|
+    return check_evolution_internal do |pkmn, new_species, method, parameter|
       success = GameData::Evolution.get(method).call_event(pkmn, parameter, value)
       next (success) ? new_species : nil
-    }
+    end
   end
 
   # Called after this Pokémon evolves, to remove its held item (if the evolution
@@ -1047,12 +1047,12 @@ class Pokemon
   def trigger_event_evolution(number)
     new_species = check_evolution_by_event(number)
     if new_species
-      pbFadeOutInWithMusic {
+      pbFadeOutInWithMusic do
         evo = PokemonEvolutionScene.new
         evo.pbStartScreen(self, new_species)
         evo.pbEvolution
         evo.pbEndScreen
-      }
+      end
       return true
     end
     return false

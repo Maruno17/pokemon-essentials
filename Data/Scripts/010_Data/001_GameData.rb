@@ -266,13 +266,12 @@ module GameData
     self.constants.each do |c|
       next if !self.const_get(c).is_a?(Class)
       ret[c] = self.const_get(c)::PBS_BASE_FILENAME if self.const_get(c).const_defined?(:PBS_BASE_FILENAME)
-      if ret[c].is_a?(Array)
-        ret[c].length.times do |i|
-          next if i == 0
-          ret[(c.to_s + i.to_s).to_sym] = ret[c][i]   # :Species1 => "pokemon_forms"
-        end
-        ret[c] = ret[c][0]   # :Species => "pokemon"
+      next if !ret[c].is_a?(Array)
+      ret[c].length.times do |i|
+        next if i == 0
+        ret[(c.to_s + i.to_s).to_sym] = ret[c][i]   # :Species1 => "pokemon_forms"
       end
+      ret[c] = ret[c][0]   # :Species => "pokemon"
     end
     return ret
   end

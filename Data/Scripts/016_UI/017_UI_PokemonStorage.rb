@@ -452,9 +452,7 @@ class PokemonBoxPartySprite < Sprite
     Settings::MAX_PARTY_SIZE.times do |i|
       @pokemonsprites[i] = nil
       pokemon = @party[i]
-      if pokemon
-        @pokemonsprites[i] = PokemonBoxIcon.new(pokemon, viewport)
-      end
+      @pokemonsprites[i] = PokemonBoxIcon.new(pokemon, viewport) if pokemon
     end
     @contents = BitmapWrapper.new(172, 352)
     self.bitmap = @contents
@@ -895,9 +893,7 @@ class PokemonStorageScene
     return pbSelectBoxInternal(party) if @command == 1   # Withdraw
     ret = nil
     loop do
-      if !@choseFromParty
-        ret = pbSelectBoxInternal(party)
-      end
+      ret = pbSelectBoxInternal(party) if !@choseFromParty
       if @choseFromParty || (ret && ret[0] == -2)   # Party Pokémon
         if !@choseFromParty
           pbShowPartyTab
@@ -1206,9 +1202,7 @@ class PokemonStorageScene
   def pbBoxName(helptext, minchars, maxchars)
     oldsprites = pbFadeOutAndHide(@sprites)
     ret = pbEnterBoxName(helptext, minchars, maxchars)
-    if ret.length > 0
-      @storage[@storage.currentBox].name = ret
-    end
+    @storage[@storage.currentBox].name = ret if ret.length > 0
     @sprites["box"].refreshBox = true
     pbRefresh
     pbFadeInAndShow(@sprites, oldsprites)
@@ -1216,11 +1210,11 @@ class PokemonStorageScene
 
   def pbChooseItem(bag)
     ret = nil
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, bag)
       ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).can_hold? })
-    }
+    end
     return ret
   end
 
@@ -1443,9 +1437,7 @@ class PokemonStorageScene
       else
         textstrings.push([_INTL("No item"), 86, 348, 2, nonbase, nonshadow])
       end
-      if pokemon.shiny?
-        imagepos.push(["Graphics/UI/shiny", 156, 198])
-      end
+      imagepos.push(["Graphics/UI/shiny", 156, 198]) if pokemon.shiny?
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/UI/types"))
       pokemon.types.each_with_index do |type, i|
         type_number = GameData::Type.get(type).icon_position
@@ -1684,9 +1676,7 @@ class PokemonStorageScreen
   def pbWithdraw(selected, heldpoke)
     box = selected[0]
     index = selected[1]
-    if box == -1
-      raise _INTL("Can't withdraw from party...")
-    end
+    raise _INTL("Can't withdraw from party...") if box == -1
     if @storage.party_full?
       pbDisplay(_INTL("Your party's full!"))
       return false
@@ -1705,9 +1695,7 @@ class PokemonStorageScreen
   def pbStore(selected, heldpoke)
     box = selected[0]
     index = selected[1]
-    if box != -1
-      raise _INTL("Can't deposit from box...")
-    end
+    raise _INTL("Can't deposit from box...") if box != -1
     if pbAbleCount <= 1 && pbAble?(@storage[box, index]) && !heldpoke
       pbPlayBuzzerSE
       pbDisplay(_INTL("That's your last Pokémon!"))
@@ -1788,9 +1776,7 @@ class PokemonStorageScreen
     end
     @scene.pbPlace(selected, @heldpkmn)
     @storage[box, index] = @heldpkmn
-    if box == -1
-      @storage.party.compact!
-    end
+    @storage.party.compact! if box == -1
     @scene.pbRefresh
     @heldpkmn = nil
   end
@@ -1929,9 +1915,7 @@ class PokemonStorageScreen
     case command
     when 0
       destbox = @scene.pbChooseBox(_INTL("Jump to which Box?"))
-      if destbox >= 0
-        @scene.pbJumpToBox(destbox)
-      end
+      @scene.pbJumpToBox(destbox) if destbox >= 0
     when 1
       papers = @storage.availableWallpapers
       index = 0
@@ -1942,9 +1926,7 @@ class PokemonStorageScreen
         end
       end
       wpaper = pbShowCommands(_INTL("Pick the wallpaper."), papers[0], index)
-      if wpaper >= 0
-        @scene.pbChangeBackground(papers[1][wpaper])
-      end
+      @scene.pbChangeBackground(papers[1][wpaper]) if wpaper >= 0
     when 2
       @scene.pbBoxName(_INTL("Box name?"), 0, 12)
     end

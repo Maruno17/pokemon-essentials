@@ -102,12 +102,12 @@ module GameData
 
     # @return [String] the translated name of this trainer
     def name
-      return pbGetMessageFromHash(MessageTypes::TrainerNames, @real_name)
+      return pbGetMessageFromHash(MessageTypes::TRAINER_NAMES, @real_name)
     end
 
     # @return [String] the translated in-battle lose message of this trainer
     def lose_text
-      return pbGetMessageFromHash(MessageTypes::TrainerLoseTexts, @real_lose_text)
+      return pbGetMessageFromHash(MessageTypes::TRAINER_SPEECHES_LOSE, @real_lose_text)
     end
 
     # Creates a battle-ready version of a trainer's data.

@@ -6,11 +6,11 @@ module FilenameUpdater
 
   def readDirectoryFiles(directory, formats)
     files = []
-    Dir.chdir(directory) {
+    Dir.chdir(directory) do
       formats.each do |format|
         Dir.glob(format) { |f| files.push(f) }
       end
-    }
+    end
     return files
   end
 

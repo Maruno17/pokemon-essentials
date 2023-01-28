@@ -341,11 +341,11 @@ def pbMysteryGiftDecrypt(gift)
   return [] if nil_or_empty?(gift)
   ret = Marshal.restore(Zlib::Inflate.inflate(gift.unpack("m")[0]))
   if ret
-    ret.each do |gift|
-      if gift[1] == 0   # Pokémon
-        gift[2] = gift[2]
+    ret.each do |gft|
+      if gft[1] == 0   # Pokémon
+        gft[2] = gft[2]
       else   # Item
-        gift[2] = GameData::Item.get(gift[2]).id
+        gft[2] = GameData::Item.get(gft[2]).id
       end
     end
   end
@@ -392,11 +392,11 @@ def pbReceiveMysteryGift(id)
       if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
         pbMessage(_INTL("{1}'s data was added to the Pokédex.", gift[2].name))
         $player.pokedex.register_last_seen(gift[2])
-        pbFadeOutIn {
+        pbFadeOutIn do
           scene = PokemonPokedexInfo_Scene.new
           screen = PokemonPokedexInfoScreen.new(scene)
           screen.pbDexEntry(gift[2].species)
-        }
+        end
       end
       return true
     end

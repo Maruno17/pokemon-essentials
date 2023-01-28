@@ -45,7 +45,7 @@ class Dir
     # get path tree
     dirs = path.split("/")
     full = ""
-    for dir in dirs
+    dirs.each do |dir|
       full += dir + "/"
       # creates directories
       self.mkdir(full) if !self.safe?(full)
@@ -56,7 +56,7 @@ class Dir
   def self.all_dirs(dir)
     # sets variables for starting
     dirs = []
-    for file in self.get(dir, "*", true)
+    self.get(dir, "*", true).each do |file|
       # engages in recursion to read the entire folder tree
       dirs += self.all_dirs(file) if self.safe?(file)
     end
@@ -86,7 +86,6 @@ class File
 
   # Checks for existing .rxdata file
   def self.safeData?(file)
-    ret = false
     ret = (load_data(file) ? true : false) rescue false
     return ret
   end
@@ -121,10 +120,10 @@ def safeGlob(dir, wildcard)
   ret = []
   afterChdir = false
   begin
-    Dir.chdir(dir) {
+    Dir.chdir(dir) do
       afterChdir = true
       Dir.glob(wildcard) { |f| ret.push(dir + "/" + f) }
-    }
+    end
   rescue Errno::ENOENT
     raise if afterChdir
   end
@@ -152,13 +151,13 @@ def pbResolveBitmap(x)
 #    filename = pbTryString(path) if !filename
 #    filename = pbTryString(path + ".gif") if !filename
 #  }
-  RTP.eachPathFor(noext) { |path|
+  RTP.eachPathFor(noext) do |path|
     filename = pbTryString(path + ".png") if !filename
     filename = pbTryString(path + ".gif") if !filename
 #    filename = pbTryString(path + ".jpg") if !filename
 #    filename = pbTryString(path + ".jpeg") if !filename
 #    filename = pbTryString(path + ".bmp") if !filename
-  }
+  end
   return filename
 end
 
@@ -211,12 +210,12 @@ module RTP
 
   def self.exists?(filename, extensions = [])
     return false if nil_or_empty?(filename)
-    eachPathFor(filename) { |path|
+    eachPathFor(filename) do |path|
       return true if safeExists?(path)
       extensions.each do |ext|
         return true if safeExists?(path + ext)
       end
-    }
+    end
     return false
   end
 
@@ -230,13 +229,13 @@ module RTP
 
   def self.getPath(filename, extensions = [])
     return filename if nil_or_empty?(filename)
-    eachPathFor(filename) { |path|
+    eachPathFor(filename) do |path|
       return path if safeExists?(path)
       extensions.each do |ext|
         file = path + ext
         return file if safeExists?(file)
       end
-    }
+    end
     return filename
   end
 
@@ -248,13 +247,13 @@ module RTP
       yield filename
     else
       # relative path
-      RTP.eachPath { |path|
+      RTP.eachPath do |path|
         if path == "./"
           yield filename
         else
           yield path + filename
         end
-      }
+      end
     end
   end
 
@@ -308,7 +307,7 @@ end
 # NOTE: pbGetFileChar checks anything added in MKXP's RTP setting, and matching
 #       mount points added through System.mount.
 def pbRgssExists?(filename)
-  return pbGetFileChar(filename) != nil if safeExists?("./Game.rgssad")
+  return !pbGetFileChar(filename).nil? if safeExists?("./Game.rgssad")
   filename = canonicalize(filename)
   return safeExists?(filename)
 end

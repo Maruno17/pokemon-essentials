@@ -363,8 +363,7 @@ class Battle::Scene
     pbShowWindow(MESSAGE_BOX)
   end
 
-  def pbBeginEndOfRoundPhase
-  end
+  def pbBeginEndOfRoundPhase; end
 
   def pbEndBattle(_result)
     @abortable = false

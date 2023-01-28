@@ -889,9 +889,7 @@ Battle::ItemEffects::DamageCalcFromUser.add(:LIFEORB,
 
 Battle::ItemEffects::DamageCalcFromUser.add(:LIGHTBALL,
   proc { |item, user, target, move, mults, baseDmg, type|
-    if user.isSpecies?(:PIKACHU)
-      mults[:attack_multiplier] *= 2
-    end
+    mults[:attack_multiplier] *= 2 if user.isSpecies?(:PIKACHU)
   }
 )
 
@@ -1844,9 +1842,9 @@ Battle::ItemEffects::EndOfRoundHealing.add(:BLACKSLUDGE,
          battler.pbThis, battler.itemName))
     elsif battler.takesIndirectDamage?
       battle.pbCommonAnimation("UseItem", battler)
-      battler.pbTakeEffectDamage(battler.totalhp / 8) { |hp_lost|
+      battler.pbTakeEffectDamage(battler.totalhp / 8) do |hp_lost|
         battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
-      }
+      end
     end
   }
 )
@@ -1876,9 +1874,9 @@ Battle::ItemEffects::EndOfRoundEffect.add(:STICKYBARB,
   proc { |item, battler, battle|
     next if !battler.takesIndirectDamage?
     battle.scene.pbDamageAnimation(battler)
-    battler.pbTakeEffectDamage(battler.totalhp / 8, false) { |hp_lost|
+    battler.pbTakeEffectDamage(battler.totalhp / 8, false) do |hp_lost|
       battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
-    }
+    end
   }
 )
 

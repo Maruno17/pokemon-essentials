@@ -25,9 +25,7 @@ end
 #===============================================================================
 def pbSelectAnim(canvas, animwin)
   animfiles = []
-  pbRgssChdir(File.join("Graphics", "Animations")) {
-    animfiles.concat(Dir.glob("*.png"))
-  }
+  pbRgssChdir(File.join("Graphics", "Animations")) { animfiles.concat(Dir.glob("*.png")) }
   cmdwin = pbListWindow(animfiles, 320)
   cmdwin.opacity = 200
   cmdwin.height = 512
@@ -507,12 +505,12 @@ def pbSelectSE(canvas, audio)
   displayname = (filename != "") ? filename : _INTL("<user's cry>")
   animfiles = []
   ret = false
-  pbRgssChdir(File.join("Audio", "SE", "Anim")) {
+  pbRgssChdir(File.join("Audio", "SE", "Anim")) do
     animfiles.concat(Dir.glob("*.wav"))
 #    animfiles.concat(Dir.glob("*.mp3"))
     animfiles.concat(Dir.glob("*.ogg"))
     animfiles.concat(Dir.glob("*.wma"))
-  }
+  end
   animfiles.uniq!
   animfiles.sort! { |a, b| a.downcase <=> b.downcase }
   animfiles = [_INTL("[Play user's cry]")] + animfiles
@@ -535,13 +533,11 @@ def pbSelectSE(canvas, audio)
     Input.update
     cmdwin.update
     maxsizewindow.update
-    if maxsizewindow.changed?(3) && animfiles.length > 0 # Play Sound
+    if maxsizewindow.changed?(3) && animfiles.length > 0   # Play Sound
       fname = (cmdwin.index == 0) ? "Cries/001Cry" : "Anim/" + filename
       pbSEPlay(RPG::AudioFile.new(fname, maxsizewindow.value(1), maxsizewindow.value(2)))
     end
-    if maxsizewindow.changed?(4) && animfiles.length > 0 # Stop Sound
-      pbSEStop
-    end
+    pbSEStop if maxsizewindow.changed?(4) && animfiles.length > 0   # Stop Sound
     if maxsizewindow.changed?(5) # OK
       audio.name = File.basename(filename, ".*")
       audio.volume = maxsizewindow.value(1)
@@ -549,9 +545,7 @@ def pbSelectSE(canvas, audio)
       ret = true
       break
     end
-    if maxsizewindow.changed?(6) # Cancel
-      break
-    end
+    break if maxsizewindow.changed?(6)   # Cancel
     if Input.trigger?(Input::USE) && animfiles.length > 0
       filename = (cmdwin.index == 0) ? "" : cmdwin.commands[cmdwin.index]
       displayname = (filename != "") ? filename : _INTL("<user's cry>")
@@ -571,13 +565,13 @@ def pbSelectBG(canvas, timing)
   animfiles = []
   animfiles[cmdErase = animfiles.length] = _INTL("[Erase background graphic]")
   ret = false
-  pbRgssChdir(File.join("Graphics", "Animations")) {
+  pbRgssChdir(File.join("Graphics", "Animations")) do
     animfiles.concat(Dir.glob("*.png"))
     animfiles.concat(Dir.glob("*.gif"))
 #    animfiles.concat(Dir.glob("*.jpg"))
 #    animfiles.concat(Dir.glob("*.jpeg"))
 #    animfiles.concat(Dir.glob("*.bmp"))
-  }
+  end
   animfiles.map! { |f| File.basename(f, ".*") }
   animfiles.uniq!
   animfiles.sort! { |a, b| a.downcase <=> b.downcase }
@@ -615,9 +609,7 @@ def pbSelectBG(canvas, timing)
       ret = true
       break
     end
-    if maxsizewindow.changed?(9) # Cancel
-      break
-    end
+    break if maxsizewindow.changed?(9)   # Cancel
     if Input.trigger?(Input::USE) && animfiles.length > 0
       filename = (cmdwin.index == cmdErase) ? "" : cmdwin.commands[cmdwin.index]
       maxsizewindow.controls[0].text = _INTL("File: \"{1}\"", filename)
@@ -676,9 +668,7 @@ def pbEditBG(canvas, timing)
       end
       break
     end
-    if maxsizewindow.changed?(9) # Cancel
-      break
-    end
+    break if maxsizewindow.changed?(9)   # Cancel
     if Input.trigger?(Input::BACK)
       break
     end
@@ -1001,9 +991,7 @@ def animationEditorMain(animation)
     sidewin.update
     animwin.update
     bottomwindow.update
-    if animwin.changed?
-      canvas.pattern = animwin.selected
-    end
+    canvas.pattern = animwin.selected if animwin.changed?
     if Input.trigger?(Input::BACK)
       if pbConfirmMessage(_INTL("Save changes?"))
         save_data(animation, "Data/PkmnAnimations.rxdata")
@@ -1031,9 +1019,7 @@ def animationEditorMain(animation)
           Clipboard.setData(canvas.animation[canvas.currentframe], "PBAnimFrame")
         end
       when 1 # Paste
-        if canvas.currentframe >= 0
-          canvas.pasteFrame(canvas.currentframe)
-        end
+        canvas.pasteFrame(canvas.currentframe) if canvas.currentframe >= 0
       when 2 # Clear Frame
         canvas.clearFrame(canvas.currentframe)
       when 3 # Insert Frame
@@ -1076,9 +1062,7 @@ def animationEditorMain(animation)
           canvas.deleteCel(canvas.currentcel)
         end
       when 2 # Copy
-        if canvas.currentCel
-          Clipboard.setData(canvas.currentCel, "PBAnimCel")
-        end
+        Clipboard.setData(canvas.currentCel, "PBAnimCel") if canvas.currentCel
       when 3 # Paste
         canvas.pasteCel(mousepos[0], mousepos[1])
       when 4 # Delete
@@ -1087,9 +1071,7 @@ def animationEditorMain(animation)
         if canvas.currentcel && canvas.currentcel >= 2
           cel1 = canvas.currentcel
           cel2 = pbChooseNum(cel1)
-          if cel2 >= 2 && cel1 != cel2
-            canvas.swapCels(cel1, cel2)
-          end
+          canvas.swapCels(cel1, cel2) if cel2 >= 2 && cel1 != cel2
         end
       when 6 # Extrapolate Path
         if canvas.currentCel
@@ -1128,9 +1110,7 @@ def animationEditorMain(animation)
       indexes = [2, 1, 3, 4] # Keeping backwards compatibility
       positions.length.times do |i|
         selected = "[  ]"
-        if animation[animation.selected].position == indexes[i]
-          selected = "[x]"
-        end
+        selected = "[x]" if animation[animation.selected].position == indexes[i]
         positions[i] = sprintf("%s %s", selected, positions[i])
       end
       pos = pbShowCommands(nil, positions, -1)

@@ -134,9 +134,9 @@ class PokemonRuleSet
 
   def hasRegistrableTeam?(list)
     return false if !list || list.length < self.minTeamLength
-    pbEachCombination(list, self.maxTeamLength) { |comb|
+    pbEachCombination(list, self.maxTeamLength) do |comb|
       return true if canRegisterTeam?(comb)
-    }
+    end
     return false
   end
 
@@ -156,7 +156,7 @@ class PokemonRuleSet
       return false if !rule.isValid?(team)
     end
     if @subsetRules.length > 0
-      pbEachCombination(team, teamNumber) { |comb|
+      pbEachCombination(team, teamNumber) do |comb|
         isValid = true
         @subsetRules.each do |rule|
           next if rule.isValid?(comb)
@@ -164,7 +164,7 @@ class PokemonRuleSet
           break
         end
         return true if isValid
-      }
+      end
       return false
     end
     return true

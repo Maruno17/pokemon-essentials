@@ -43,7 +43,7 @@ def pbGenerateBattleTrainer(idxTrainer, rules)
   # Create the trainer
   trainerdata = bttrainers[idxTrainer]
   opponent = NPCTrainer.new(
-    pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
+    pbGetMessageFromHash(MessageTypes::TRAINER_NAMES, trainerdata[1]),
     trainerdata[0]
   )
   # Determine how many IVs the trainer's Pokémon will have

@@ -306,6 +306,8 @@ module Transitions
       end
     end
 
+    #---------------------------------------------------------------------------
+
     private
 
     def rand_sign
@@ -1382,29 +1384,29 @@ module Transitions
         # Foe sprite appears
         proportion = (@timer - @foe_appear_start) / (@foe_appear_end - @foe_appear_start)
         start_x = Graphics.width + (@foe_bitmap.width / 2)
-        @foe_sprite.x = start_x + (FOE_SPRITE_X_LIMIT - start_x) * proportion
+        @foe_sprite.x = start_x + ((FOE_SPRITE_X_LIMIT - start_x) * proportion)
       elsif @timer >= @vs_appear_final
         @vs_1_sprite.visible = false
       elsif @timer >= @vs_appear_start_2
         # Temp VS sprites enlarge and shrink again
         if @vs_2_sprite.visible
-          @vs_2_sprite.zoom_x = 1.6 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
+          @vs_2_sprite.zoom_x = 1.6 - (0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time)
           @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
           if @vs_2_sprite.zoom_x <= 1.2
             @vs_2_sprite.visible = false
             @vs_main_sprite.visible = true
           end
         end
-        @vs_1_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
+        @vs_1_sprite.zoom_x = 2.0 - (0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time)
         @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
       elsif @timer >= @vs_appear_start
         # Temp VS sprites appear and start shrinking
         @vs_2_sprite.visible = true
-        @vs_2_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start) / @vs_shrink_time
+        @vs_2_sprite.zoom_x = 2.0 - (0.8 * (@timer - @vs_appear_start) / @vs_shrink_time)
         @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
         if @vs_1_sprite.visible || @vs_2_sprite.zoom_x <= 1.6   # Halfway between 2.0 and 1.2
           @vs_1_sprite.visible = true
-          @vs_1_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start - (@vs_shrink_time / 2)) / @vs_shrink_time
+          @vs_1_sprite.zoom_x = 2.0 - (0.8 * (@timer - @vs_appear_start - (@vs_shrink_time / 2)) / @vs_shrink_time)
           @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
         end
       elsif @timer >= @bar_appear_end
@@ -1413,7 +1415,7 @@ module Transitions
         start_x = Graphics.width * (1 - (@timer / @bar_appear_end))
         color = Color.new(0, 0, 0, 0)   # Transparent
         (@sprites[0].height / 2).times do |i|
-          x = start_x - BAR_MASK[i % BAR_MASK.length] * 4
+          x = start_x - (BAR_MASK[i % BAR_MASK.length] * 4)
           @bar_mask_sprite.bitmap.fill_rect(x, BAR_Y + (i * 2), @bar_mask_sprite.width - x, 2, color)
         end
       end
@@ -1572,14 +1574,14 @@ module Transitions
         # Bars/trainer sprites slide in
         proportion = (@timer - @bar_appear_start) / (@bar_appear_end - @bar_appear_start)
         sqrt_proportion = Math.sqrt(proportion)
-        @player_bar_sprite.x = @player_bar_start_x + (@player_bar_x + BAR_OVERSHOOT - @player_bar_start_x) * sqrt_proportion
+        @player_bar_sprite.x = @player_bar_start_x + ((@player_bar_x + BAR_OVERSHOOT - @player_bar_start_x) * sqrt_proportion)
         @player_sprite.x = @player_bar_sprite.x + TRAINER_X_OFFSET
-        @foe_bar_sprite.x = @foe_bar_start_x + (@foe_bar_x - BAR_OVERSHOOT - @foe_bar_start_x) * sqrt_proportion
+        @foe_bar_sprite.x = @foe_bar_start_x + ((@foe_bar_x - BAR_OVERSHOOT - @foe_bar_start_x) * sqrt_proportion)
         @foe_sprite.x = @foe_bar_sprite.x + (@bar_bitmap.width / 2) - TRAINER_X_OFFSET
         @text_sprite.x = @foe_bar_sprite.x
       end
       # Animate bars
-      if @timer >= @flash_start + 0.33 * @flash_duration
+      if @timer >= @flash_start + (0.33 * @flash_duration)
         bar_phase = (@timer * 30).to_i % @num_bar_frames
         @player_bar_sprite.src_rect.y = bar_phase * BAR_HEIGHT
         @foe_bar_sprite.src_rect.y = bar_phase * BAR_HEIGHT
@@ -1594,23 +1596,23 @@ module Transitions
       elsif @timer >= @vs_appear_start_2
         # Temp VS sprites enlarge and shrink again
         if @vs_2_sprite.visible
-          @vs_2_sprite.zoom_x = 1.6 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
+          @vs_2_sprite.zoom_x = 1.6 - (0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time)
           @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
           if @vs_2_sprite.zoom_x <= 1.2
             @vs_2_sprite.visible = false
             @vs_main_sprite.visible = true
           end
         end
-        @vs_1_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time
+        @vs_1_sprite.zoom_x = 2.0 - (0.8 * (@timer - @vs_appear_start_2) / @vs_shrink_time)
         @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
       elsif @timer >= @vs_appear_start
         # Temp VS sprites appear and start shrinking
         @vs_2_sprite.visible = true
-        @vs_2_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start) / @vs_shrink_time
+        @vs_2_sprite.zoom_x = 2.0 - (0.8 * (@timer - @vs_appear_start) / @vs_shrink_time)
         @vs_2_sprite.zoom_y = @vs_2_sprite.zoom_x
         if @vs_1_sprite.visible || @vs_2_sprite.zoom_x <= 1.6   # Halfway between 2.0 and 1.2
           @vs_1_sprite.visible = true
-          @vs_1_sprite.zoom_x = 2.0 - 0.8 * (@timer - @vs_appear_start - (@vs_shrink_time / 2)) / @vs_shrink_time
+          @vs_1_sprite.zoom_x = 2.0 - (0.8 * (@timer - @vs_appear_start - (@vs_shrink_time / 2)) / @vs_shrink_time)
           @vs_1_sprite.zoom_y = @vs_1_sprite.zoom_x
         end
       end
@@ -1652,12 +1654,12 @@ module Transitions
         @flash_viewport.color.alpha = 255 * proportion
         # Move bars and trainer sprites off-screen
         dist = BAR_Y_INDENT + BAR_HEIGHT
-        @player_bar_sprite.x = @player_bar_x - dist * proportion
-        @player_bar_sprite.y = @player_bar_y - dist * proportion
+        @player_bar_sprite.x = @player_bar_x - (dist * proportion)
+        @player_bar_sprite.y = @player_bar_y - (dist * proportion)
         @player_sprite.x = @player_bar_sprite.x + TRAINER_X_OFFSET
         @player_sprite.y = @player_bar_sprite.y + BAR_HEIGHT - TRAINER_Y_OFFSET
-        @foe_bar_sprite.x = @foe_bar_x + dist * proportion
-        @foe_bar_sprite.y = @foe_bar_y + dist * proportion
+        @foe_bar_sprite.x = @foe_bar_x + (dist * proportion)
+        @foe_bar_sprite.y = @foe_bar_y + (dist * proportion)
         @foe_sprite.x = @foe_bar_sprite.x + (@bar_bitmap.width / 2) - TRAINER_X_OFFSET
         @foe_sprite.y = @foe_bar_sprite.y + @foe_bitmap.height - TRAINER_Y_OFFSET
       end
@@ -1731,8 +1733,8 @@ module Transitions
           next if proportion < start_time
           single_proportion = (proportion - start_time) / @rocket_appear_time
           sqrt_single_proportion = Math.sqrt(single_proportion)
-          sprite.x = (ROCKET_X[i] + (0.5 - ROCKET_X[i]) * sqrt_single_proportion) * Graphics.width
-          sprite.y = (ROCKET_Y[i] + (0.5 - ROCKET_Y[i]) * sqrt_single_proportion) * Graphics.height
+          sprite.x = (ROCKET_X[i] + ((0.5 - ROCKET_X[i]) * sqrt_single_proportion)) * Graphics.width
+          sprite.y = (ROCKET_Y[i] + ((0.5 - ROCKET_Y[i]) * sqrt_single_proportion)) * Graphics.height
           sprite.zoom_x = 2.5 * (1 - single_proportion)
           sprite.zoom_y = sprite.zoom_x
           sprite.angle = sprite.zoom_x * ROCKET_ANGLE[i] * 360
@@ -1867,8 +1869,8 @@ module Transitions
         # Slide foe sprite/name off-screen
         proportion = (@timer - @foe_disappear_start) / (@foe_disappear_end - @foe_disappear_start)
         start_x = Graphics.width / 2
-        @foe_sprite.x = start_x - (@foe_bitmap.width + start_x) * proportion * proportion
-        @text_sprite.x = @foe_sprite.x - Graphics.width / 2
+        @foe_sprite.x = start_x - ((@foe_bitmap.width + start_x) * proportion * proportion)
+        @text_sprite.x = @foe_sprite.x - (Graphics.width / 2)
       elsif @timer >= @flash_end
         @flash_viewport.color.alpha = 0   # Ensure flash has ended
       elsif @timer >= @bg_2_appear_end
@@ -1884,8 +1886,8 @@ module Transitions
         @bg_2_sprite.opacity = 255 * proportion
         # Foe sprite/name appear
         start_x = Graphics.width + (@foe_bitmap.width / 2)
-        @foe_sprite.x = start_x + ((Graphics.width / 2) - start_x) * Math.sqrt(proportion)
-        @text_sprite.x = @foe_sprite.x - Graphics.width / 2
+        @foe_sprite.x = start_x + (((Graphics.width / 2) - start_x) * Math.sqrt(proportion))
+        @text_sprite.x = @foe_sprite.x - (Graphics.width / 2)
         @text_sprite.visible = true
       elsif @timer >= @bg_1_appear_end
         @bg_1_sprite.oy = Graphics.height / 2

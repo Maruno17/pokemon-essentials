@@ -33,7 +33,7 @@ module GameData
 
     # @return [String] the translated name of this region
     def name
-      return pbGetMessageFromHash(MessageTypes::Regions, @real_name)
+      return pbGetMessageFromHash(MessageTypes::REGION_NAMES, @real_name)
     end
 
     def has_flag?(flag)

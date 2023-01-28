@@ -271,9 +271,7 @@ class MapScreenScene
         while j < ret.length && !connectionsSymmetric?(ret[j], conn)
           j += 1
         end
-        if j == ret.length
-          ret.push(conn)
-        end
+        ret.push(conn) if j == ret.length
       end
     end
     return ret
@@ -567,7 +565,7 @@ end
 #
 #===============================================================================
 def pbConnectionsEditor
-  pbCriticalCode {
+  pbCriticalCode do
     Graphics.resize_screen(Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
     pbSetResizeFactor(1)
     mapscreen = MapScreenScene.new
@@ -576,5 +574,5 @@ def pbConnectionsEditor
     mapscreen.close
     Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
     pbSetResizeFactor($PokemonSystem.screensize)
-  }
+  end
 end

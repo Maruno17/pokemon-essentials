@@ -136,9 +136,7 @@ module PluginManager
         end
         name = value
       when :version   # Plugin version
-        if nil_or_empty?(value)
-          self.error("Plugin version must be a string.")
-        end
+        self.error("Plugin version must be a string.") if nil_or_empty?(value)
         version = value
       when :essentials
         essentials = value
@@ -412,7 +410,7 @@ module PluginManager
     filename = "#{dir}/#{file}"
     meta = {}
     # read file
-    Compiler.pbCompilerEachPreppedLine(filename) { |line, line_no|
+    Compiler.pbCompilerEachPreppedLine(filename) do |line, line_no|
       # split line up into property name and values
       if !line[/^\s*(\w+)\s*=\s*(.*)$/]
         raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\r\n{1}", FileLineData.linereport)
@@ -456,7 +454,7 @@ module PluginManager
       else
         meta[property.downcase.to_sym] = data[0]
       end
-    }
+    end
     # generate a list of all script files to be loaded, in the order they are to
     # be loaded (files listed in the meta file are loaded first)
     meta[:scripts] = [] if !meta[:scripts]

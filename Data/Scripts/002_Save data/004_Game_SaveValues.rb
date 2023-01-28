@@ -4,11 +4,7 @@ SaveData.register(:player) do
   ensure_class :Player
   save_value { $player }
   load_value { |value| $player = $Trainer = value }
-  new_game_value {
-    # Get the first defined trainer type as a placeholder
-    trainer_type = GameData::TrainerType.keys.first
-    Player.new("Unnamed", trainer_type)
-  }
+  new_game_value { Player.new("Unnamed", GameData::TrainerType.keys.first) }
   from_old_format { |old_format| old_format[0] }
 end
 

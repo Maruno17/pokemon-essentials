@@ -40,20 +40,18 @@ end
 #===============================================================================
 #
 #===============================================================================
-=begin
-[3/10]
-0-266 - 0-500
-[106]
-267-372 - 380-500
-[95]
-373-467 - 400-555 (nonlegendary)
-468-563 - 400-555 (nonlegendary)
-564-659 - 400-555 (nonlegendary)
-660-755 - 400-555 (nonlegendary)
-756-799 - 580-600 [legendary] (compat1==15 or compat2==15, genderbyte=255)
-800-849 - 500-
-850-881 - 580-
-=end
+# [3/10]
+# 0-266 - 0-500
+# [106]
+# 267-372 - 380-500
+# [95]
+# 373-467 - 400-555 (nonlegendary)
+# 468-563 - 400-555 (nonlegendary)
+# 564-659 - 400-555 (nonlegendary)
+# 660-755 - 400-555 (nonlegendary)
+# 756-799 - 580-600 [legendary] (compat1==15 or compat2==15, genderbyte=255)
+# 800-849 - 500-
+# 850-881 - 580-
 
 def withRestr(_rule, minbs, maxbs, legendary)
   ret = PokemonChallengeRules.new.addPokemonRule(BaseStatRestriction.new(minbs, maxbs))
@@ -99,11 +97,11 @@ def pbArrangeByTier(pokemonlist, rule)
   # Now for each tier, sort the Pokemon in that tier by their BST (lowest first).
   ret = []
   tiers.length.times do |i|
-    tierPokemon[i].sort! { |a, b|
+    tierPokemon[i].sort! do |a, b|
       bstA = baseStatTotal(a.species)
       bstB = baseStatTotal(b.species)
       (bstA == bstB) ? a.species <=> b.species : bstA <=> bstB
-    }
+    end
     ret.concat(tierPokemon[i])
   end
   return ret
@@ -323,7 +321,7 @@ def pbWriteCup(id, rules)
     return if !pbConfirmMessage(_INTL("This may take a long time. Are you sure?"))
     mw = pbCreateMessageWindow
     t = Time.now
-    pbGenerateChallenge(rules, id) { |message|
+    pbGenerateChallenge(rules, id) do |message|
       if Time.now - t >= 5
         Graphics.update
         t = Time.now
@@ -333,7 +331,7 @@ def pbWriteCup(id, rules)
         Graphics.update
         t = Time.now
       end
-    }
+    end
     pbDisposeMessageWindow(mw)
     pbMessage(_INTL("Team generation complete."))
   end

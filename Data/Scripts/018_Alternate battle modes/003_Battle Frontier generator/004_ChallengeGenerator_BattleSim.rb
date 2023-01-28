@@ -237,6 +237,8 @@ class PlayerRating
     setVolatility2(volatility)
   end
 
+  #-----------------------------------------------------------------------------
+
   private
 
   attr_writer :volatility
@@ -286,7 +288,7 @@ class PlayerRating
     squVariance = variance + variance
     squDevplusVar = squDeviation + variance
     x0 = a
-    100.times {   # Up to 100 iterations to avoid potentially infinite loops
+    100.times do   # Up to 100 iterations to avoid potentially infinite loops
       e = Math.exp(x0)
       d = squDevplusVar + e
       squD = d * d
@@ -297,7 +299,7 @@ class PlayerRating
       x1 = x0
       x0 -= h1 / h2
       break if (x1 - x0).abs < 0.000001
-    }
+    end
     return Math.exp(x0 / 2.0)
   end
 end

@@ -48,7 +48,7 @@ module GameData
 
     # @return [String] the translated name of this item
     def name
-      return pbGetMessageFromHash(MessageTypes::Types, @real_name)
+      return pbGetMessageFromHash(MessageTypes::TYPE_NAMES, @real_name)
     end
 
     def physical?; return !@special_type; end

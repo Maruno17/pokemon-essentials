@@ -138,7 +138,7 @@ class PokemonPhone_Scene
   end
 
   def pbChooseContact
-    pbActivateWindow(@sprites, "list") {
+    pbActivateWindow(@sprites, "list") do
       index = -1
       switch_index = -1
       loop do
@@ -186,7 +186,7 @@ class PokemonPhone_Scene
           end
         end
       end
-    }
+    end
   end
 
   def pbEndScene

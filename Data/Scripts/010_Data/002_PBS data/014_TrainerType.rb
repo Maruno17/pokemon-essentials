@@ -113,7 +113,7 @@ module GameData
 
     # @return [String] the translated name of this trainer type
     def name
-      return pbGetMessageFromHash(MessageTypes::TrainerTypes, @real_name)
+      return pbGetMessageFromHash(MessageTypes::TRAINER_TYPE_NAMES, @real_name)
     end
 
     def male?;   return @gender == 0; end

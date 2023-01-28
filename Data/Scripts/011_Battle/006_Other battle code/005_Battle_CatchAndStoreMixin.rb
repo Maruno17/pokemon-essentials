@@ -26,10 +26,10 @@ module Battle::CatchAndStoreMixin
         when 0   # Add to your party
           pbDisplay(_INTL("Choose a Pokémon in your party to send to your Boxes."))
           party_index = -1
-          @scene.pbPartyScreen(0, (@sendToBoxes != 2), 1) { |idxParty, _partyScene|
+          @scene.pbPartyScreen(0, (@sendToBoxes != 2), 1) do |idxParty, _partyScene|
             party_index = idxParty
             next true
-          }
+          end
           next if party_index < 0   # Cancelled
           party_size = pbPlayer.party.length
           # Send chosen Pokémon to storage
@@ -56,11 +56,11 @@ module Battle::CatchAndStoreMixin
         when 1   # Send to a Box
           break
         when 2   # See X's summary
-          pbFadeOutIn {
+          pbFadeOutIn do
             summary_scene = PokemonSummary_Scene.new
             summary_screen = PokemonSummaryScreen.new(summary_scene, true)
             summary_screen.pbStartScreen([pkmn], 0)
-          }
+          end
         when 3   # Check party
           @scene.pbPartyScreen(0, true, 2)
         end

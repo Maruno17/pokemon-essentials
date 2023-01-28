@@ -436,9 +436,7 @@ MenuHandlers.add(:debug_menu, :encounter_version, {
     params.setInitialValue($PokemonGlobal.encounter_version)
     params.setCancelValue(-1)
     value = pbMessageChooseNumber(_INTL("Set encounters version to which value?"), params)
-    if value >= 0
-      $PokemonGlobal.encounter_version = value
-    end
+    $PokemonGlobal.encounter_version = value if value >= 0
   }
 })
 
@@ -457,7 +455,7 @@ MenuHandlers.add(:debug_menu, :add_item, {
   "parent"      => :items_menu,
   "description" => _INTL("Choose an item and a quantity of it to add to the Bag."),
   "effect"      => proc {
-    pbListScreenBlock(_INTL("ADD ITEM"), ItemLister.new) { |button, item|
+    pbListScreenBlock(_INTL("ADD ITEM"), ItemLister.new) do |button, item|
       if button == Input::USE && item
         params = ChooseNumberParams.new
         params.setRange(1, Settings::BAG_MAX_PER_SLOT)
@@ -470,7 +468,7 @@ MenuHandlers.add(:debug_menu, :add_item, {
           pbMessage(_INTL("Gave {1}x {2}.", qty, GameData::Item.get(item).name))
         end
       end
-    }
+    end
   }
 })
 
@@ -558,17 +556,15 @@ MenuHandlers.add(:debug_menu, :give_demo_party, {
   "effect"      => proc {
     party = []
     species = [:PIKACHU, :PIDGEOTTO, :KADABRA, :GYARADOS, :DIGLETT, :CHANSEY]
-    species.each do |id|
-      party.push(id) if GameData::Species.exists?(id)
-    end
+    species.each { |id| party.push(id) if GameData::Species.exists?(id) }
     $player.party.clear
     # Generate Pokémon of each species at level 20
-    party.each do |species|
-      pkmn = Pokemon.new(species, 20)
+    party.each do |spec|
+      pkmn = Pokemon.new(spec, 20)
       $player.party.push(pkmn)
       $player.pokedex.register(pkmn)
-      $player.pokedex.set_owned(species)
-      case species
+      $player.pokedex.set_owned(spec)
+      case spec
       when :PIDGEOTTO
         pkmn.learn_move(:FLY)
       when :KADABRA
@@ -617,7 +613,7 @@ MenuHandlers.add(:debug_menu, :quick_hatch_party_eggs, {
 MenuHandlers.add(:debug_menu, :fill_boxes, {
   "name"        => _INTL("Fill Storage Boxes"),
   "parent"      => :pokemon_menu,
-  "description" => _INTL("Add one Pokémon of each species (at Level 50) to storage."),
+  "description" => _INTL("Puts one Pokémon of each species (at Level 50) in storage."),
   "effect"      => proc {
     added = 0
     box_qty = $PokemonStorage.maxPokemon(0)
@@ -680,11 +676,11 @@ MenuHandlers.add(:debug_menu, :open_storage, {
   "parent"      => :pokemon_menu,
   "description" => _INTL("Opens the Pokémon storage boxes in Organize Boxes mode."),
   "effect"      => proc {
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonStorageScene.new
       screen = PokemonStorageScreen.new(scene, $PokemonStorage)
       screen.pbStartScreen(0)
-    }
+    end
   }
 })
 
@@ -1010,11 +1006,11 @@ MenuHandlers.add(:debug_menu, :position_sprites, {
   "parent"      => :editors_menu,
   "description" => _INTL("Reposition Pokémon sprites in battle."),
   "effect"      => proc {
-    pbFadeOutIn {
+    pbFadeOutIn do
       sp = SpritePositioner.new
       sps = SpritePositionerScreen.new(sp)
       sps.pbStart
-    }
+    end
   }
 })
 

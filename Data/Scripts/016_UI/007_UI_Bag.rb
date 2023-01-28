@@ -348,7 +348,7 @@ class PokemonBag_Scene
     itemwindow = @sprites["itemlist"]
     thispocket = @bag.pockets[itemwindow.pocket]
     swapinitialpos = -1
-    pbActivateWindow(@sprites, "itemlist") {
+    pbActivateWindow(@sprites, "itemlist") do
       loop do
         oldindex = itemwindow.index
         Graphics.update
@@ -443,7 +443,7 @@ class PokemonBag_Scene
           end
         end
       end
-    }
+    end
   end
 end
 
@@ -492,9 +492,9 @@ class PokemonBagScreen
       itemname = itm.name
       command = @scene.pbShowCommands(_INTL("{1} is selected.", itemname), commands)
       if cmdRead >= 0 && command == cmdRead   # Read mail
-        pbFadeOutIn {
+        pbFadeOutIn do
           pbDisplayMail(Mail.new(item, "", ""))
-        }
+        end
       elsif cmdUse >= 0 && command == cmdUse   # Use item
         ret = pbUseItem(@bag, item, @scene)
         # ret: 0=Item wasn't used; 1=Item used; 2=Close Bag to use in field
@@ -507,12 +507,12 @@ class PokemonBagScreen
         elsif itm.is_important?
           @scene.pbDisplay(_INTL("The {1} can't be held.", itm.portion_name))
         else
-          pbFadeOutIn {
+          pbFadeOutIn do
             sscene = PokemonParty_Scene.new
             sscreen = PokemonPartyScreen.new(sscene, $player.party)
             sscreen.pbPokemonGiveScreen(item)
             @scene.pbRefresh
-          }
+          end
         end
       elsif cmdToss >= 0 && command == cmdToss   # Toss item
         qty = @bag.quantity(item)

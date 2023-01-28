@@ -161,9 +161,9 @@ class PokemonPokedexInfo_Scene
         real_gender = 2 if sp.gender_ratio == :Genderless
         ret.push([sp.form_name, real_gender, sp.form])
       else   # Both male and female
-        2.times do |real_gender|
-          next if !$player.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
-          ret.push([sp.form_name, real_gender, sp.form])
+        2.times do |real_gndr|
+          next if !$player.pokedex.seen_form?(@species, real_gndr, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
+          ret.push([sp.form_name, real_gndr, sp.form])
           break if sp.form_name && !sp.form_name.empty?   # Only show 1 entry for each non-0 form
         end
       end
@@ -210,9 +210,7 @@ class PokemonPokedexInfo_Scene
     base   = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
     imagepos = []
-    if @brief
-      imagepos.push([_INTL("Graphics/UI/Pokedex/overlay_info"), 0, 0])
-    end
+    imagepos.push([_INTL("Graphics/UI/Pokedex/overlay_info"), 0, 0]) if @brief
     species_data = GameData::Species.get_species_form(@species, @form)
     # Write various bits of text
     indexText = "???"
@@ -536,9 +534,7 @@ class PokemonPokedexInfo_Scene
           dorefresh = true
         end
       end
-      if dorefresh
-        drawPage(@page)
-      end
+      drawPage(@page) if dorefresh
     end
     return @index
   end

@@ -64,7 +64,7 @@ class Battle
     return true if pbAutoFightMenu(idxBattler)
     # Regular move selection
     ret = false
-    @scene.pbFightMenu(idxBattler, pbCanMegaEvolve?(idxBattler)) { |cmd|
+    @scene.pbFightMenu(idxBattler, pbCanMegaEvolve?(idxBattler)) do |cmd|
       case cmd
       when -1   # Cancel
       when -2   # Toggle Mega Evolution
@@ -83,7 +83,7 @@ class Battle
         ret = true
       end
       next true
-    }
+    end
     return ret
   end
 
@@ -103,7 +103,7 @@ class Battle
       return false
     end
     ret = false
-    @scene.pbItemMenu(idxBattler, firstAction) { |item, useType, idxPkmn, idxMove, itemScene|
+    @scene.pbItemMenu(idxBattler, firstAction) do |item, useType, idxPkmn, idxMove, itemScene|
       next false if !item
       battler = pkmn = nil
       case useType
@@ -133,7 +133,7 @@ class Battle
       next false if !pbRegisterItem(idxBattler, item, idxPkmn, idxMove)
       ret = true
       next true
-    }
+    end
     return ret
   end
 

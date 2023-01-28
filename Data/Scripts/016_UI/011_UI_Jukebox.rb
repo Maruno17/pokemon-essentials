@@ -99,12 +99,12 @@ class PokemonJukeboxScreen
       elsif cmdCustom >= 0 && cmd == cmdCustom
         pbPlayDecisionSE
         files = []
-        Dir.chdir("Audio/BGM/") {
+        Dir.chdir("Audio/BGM/") do
           Dir.glob("*.ogg") { |f| files.push(f) }
           Dir.glob("*.wav") { |f| files.push(f) }
           Dir.glob("*.mid") { |f| files.push(f) }
           Dir.glob("*.midi") { |f| files.push(f) }
-        }
+        end
         files.map! { |f| File.basename(f, ".*") }
         files.uniq!
         files.sort! { |a, b| a.downcase <=> b.downcase }

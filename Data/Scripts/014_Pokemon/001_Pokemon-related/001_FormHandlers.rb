@@ -264,9 +264,7 @@ MultipleForms.register(:ROTOM, {
 MultipleForms.register(:GIRATINA, {
   "getForm" => proc { |pkmn|
     next 1 if pkmn.hasItem?(:GRISEOUSORB)
-    if $game_map && $game_map.metadata&.has_flag?("DistortionWorld")
-      next 1
-    end
+    next 1 if $game_map&.metadata&.has_flag?("DistortionWorld")
     next 0
   }
 })

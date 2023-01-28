@@ -132,13 +132,9 @@ class PointPath
   end
 
   def smoothPointPath(frames, roundValues = false)
-    if frames < 0
-      raise ArgumentError.new("frames out of range: #{frames}")
-    end
+    raise ArgumentError.new("frames out of range: #{frames}") if frames < 0
     ret = PointPath.new
-    if @points.length == 0
-      return ret
-    end
+    return ret if @points.length == 0
     step = 1.0 / frames
     t = 0.0
     (frames + 2).times do
@@ -160,9 +156,7 @@ class PointPath
     end
     return nil if @points.length == 0
     ret = @points[@points.length - 1].clone
-    if @points.length == 1
-      return ret
-    end
+    return ret if @points.length == 1
     curdist = 0
     distForT = @totaldist * t
     i = 0
@@ -217,9 +211,7 @@ def getCurvePoint(src, t)
 end
 
 def curveToPointPath(curve, numpoints)
-  if numpoints < 2
-    return nil
-  end
+  return nil if numpoints < 2
   path = PointPath.new
   step = 1.0 / (numpoints - 1)
   t = 0.0
@@ -311,9 +303,7 @@ def pbDefinePath(canvas)
         end
         mousepos = Mouse.getMousePos(true)
         newtext = (mousepos) ? sprintf("(%d,%d)", mousepos[0], mousepos[1]) : "(??,??)"
-        if window.text != newtext
-          window.text = newtext
-        end
+        window.text = newtext if window.text != newtext
         if curve[0].visible && curve[3].visible &&
            !curve[0].dragging && !curve[3].dragging
           points.each do |point|
@@ -332,10 +322,10 @@ def pbDefinePath(canvas)
         if showline
           step = 1.0 / (points.length - 1)
           t = 0.0
-          points.length.times do |i|
+          points.length.times do |j|
             point = getCurvePoint(curve, t)
-            points[i].x = point[0]
-            points[i].y = point[1]
+            points[j].x = point[0]
+            points[j].y = point[1]
             t += step
           end
         end
@@ -418,14 +408,14 @@ def pbDefinePath(canvas)
       end
       thiscel = canvas.currentCel
       celnumber = canvas.currentcel
-      (canvas.currentframe...neededsize).each do |i|
-        cel = canvas.animation[i][celnumber]
-        if !canvas.animation[i][celnumber]
+      (canvas.currentframe...neededsize).each do |j|
+        cel = canvas.animation[j][celnumber]
+        if !canvas.animation[j][celnumber]
           cel = pbCreateCel(0, 0, thiscel[AnimFrame::PATTERN], canvas.animation.position)
-          canvas.animation[i][celnumber] = cel
+          canvas.animation[j][celnumber] = cel
         end
-        cel[AnimFrame::X] = path[i - canvas.currentframe][0]
-        cel[AnimFrame::Y] = path[i - canvas.currentframe][1]
+        cel[AnimFrame::X] = path[j - canvas.currentframe][0]
+        cel[AnimFrame::Y] = path[j - canvas.currentframe][1]
       end
       break
     elsif sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)

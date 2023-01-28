@@ -356,8 +356,7 @@ class Battle::Move::TwoTurnMove < Battle::Move
     @battle.pbDisplay(_INTL("{1} began charging up!", user.pbThis))
   end
 
-  def pbAttackingTurnMessage(user, targets)
-  end
+  def pbAttackingTurnMessage(user, targets); end
 
   def pbEffectAgainstTarget(user, target)
     if @damagingTurn
@@ -372,8 +371,7 @@ class Battle::Move::TwoTurnMove < Battle::Move
     # the latter just records the target is being Sky Dropped
   end
 
-  def pbAttackingTurnEffect(user, target)
-  end
+  def pbAttackingTurnEffect(user, target); end
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     hitNum = 1 if @chargingTurn && !@damagingTurn   # Charging anim

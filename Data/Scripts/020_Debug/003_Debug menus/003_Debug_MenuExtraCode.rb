@@ -329,12 +329,12 @@ def pbDebugDayCare
         case pbMessage("\\ts[]" + msg,
                        [_INTL("Summary"), _INTL("Withdraw"), _INTL("Cancel")], 3)
         when 0   # Summary
-          pbFadeOutIn {
+          pbFadeOutIn do
             scene = PokemonSummary_Scene.new
             screen = PokemonSummaryScreen.new(scene, false)
             screen.pbStartScreen([pkmn], 0)
             need_refresh = true
-          }
+          end
         when 1   # Withdraw
           if $player.party_full?
             pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
@@ -557,9 +557,9 @@ def pbExportAllAnimations
         Graphics.update
         safename = anim.name.gsub(/\W/, "_")
         Dir.mkdir("Animations/#{safename}") rescue nil
-        File.open("Animations/#{safename}/#{safename}.anm", "wb") { |f|
+        File.open("Animations/#{safename}/#{safename}.anm", "wb") do |f|
           f.write(dumpBase64Anim(anim))
-        }
+        end
         if anim.graphic && anim.graphic != ""
           graphicname = RTP.getImagePath("Graphics/Animations/" + anim.graphic)
           pbSafeCopyFile(graphicname, "Animations/#{safename}/" + File.basename(graphicname))
@@ -592,12 +592,10 @@ end
 def pbImportAllAnimations
   animationFolders = []
   if safeIsDirectory?("Animations")
-    Dir.foreach("Animations") { |fb|
+    Dir.foreach("Animations") do |fb|
       f = "Animations/" + fb
-      if safeIsDirectory?(f) && fb != "." && fb != ".."
-        animationFolders.push(f)
-      end
-    }
+      animationFolders.push(f) if safeIsDirectory?(f) && fb != "." && fb != ".."
+    end
   end
   if animationFolders.length == 0
     pbMessage(_INTL("There are no animations to import. Put each animation in a folder within the Animations folder."))
@@ -610,24 +608,24 @@ def pbImportAllAnimations
       Graphics.update
       audios = []
       files = Dir.glob(folder + "/*.*")
-      ["wav", "ogg", "mid", "wma"].each { |ext|   # mp3
+      ["wav", "ogg", "mid", "wma"].each do |ext|   # mp3
         upext = ext.upcase
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == ext })
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == upext })
-      }
+      end
       audios.each do |audio|
         pbSafeCopyFile(audio, RTP.getAudioPath("Audio/SE/Anim/" + File.basename(audio)), "Audio/SE/Anim/" + File.basename(audio))
       end
       images = []
-      ["png", "gif"].each { |ext|   # jpg jpeg bmp
+      ["png", "gif"].each do |ext|   # jpg jpeg bmp
         upext = ext.upcase
         images.concat(files.find_all { |f| f[f.length - 3, 3] == ext })
         images.concat(files.find_all { |f| f[f.length - 3, 3] == upext })
-      }
+      end
       images.each do |image|
         pbSafeCopyFile(image, RTP.getImagePath("Graphics/Animations/" + File.basename(image)), "Graphics/Animations/" + File.basename(image))
       end
-      Dir.glob(folder + "/*.anm") { |f|
+      Dir.glob(folder + "/*.anm") do |f|
         textdata = loadBase64Anim(IO.read(f)) rescue nil
         if textdata.is_a?(PBAnimation)
           index = pbAllocateAnimation(animations, textdata.name)
@@ -650,7 +648,7 @@ def pbImportAllAnimations
           end
           animations[index] = textdata
         end
-      }
+      end
     end
     save_data(animations, "Data/PkmnAnimations.rxdata")
     $game_temp.battle_animations_data = nil
@@ -788,7 +786,7 @@ class PokemonDebugPartyScreen
     @messageBox.text    = text
     @messageBox.visible = true
     @helpWindow.visible = false
-    using(cmdwindow = Window_CommandPokemon.new([_INTL("Yes"), _INTL("No")])) {
+    using(cmdwindow = Window_CommandPokemon.new([_INTL("Yes"), _INTL("No")])) do
       cmdwindow.visible = false
       pbBottomRight(cmdwindow)
       cmdwindow.y -= @messageBox.height
@@ -809,7 +807,7 @@ class PokemonDebugPartyScreen
           end
         end
       end
-    }
+    end
     @messageBox.visible = false
     @helpWindow.visible = true
     return ret
@@ -818,7 +816,7 @@ class PokemonDebugPartyScreen
   def pbShowCommands(text, commands, index = 0)
     ret = -1
     @helpWindow.visible = true
-    using(cmdwindow = Window_CommandPokemonColor.new(commands)) {
+    using(cmdwindow = Window_CommandPokemonColor.new(commands)) do
       cmdwindow.z     = @viewport.z + 1
       cmdwindow.index = index
       pbBottomRight(cmdwindow)
@@ -840,7 +838,7 @@ class PokemonDebugPartyScreen
           break
         end
       end
-    }
+    end
     return ret
   end
 

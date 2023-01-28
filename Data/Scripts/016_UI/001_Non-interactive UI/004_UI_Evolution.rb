@@ -617,13 +617,13 @@ class PokemonEvolutionScene
       pbMessageDisplay(@sprites["msgwindow"],
                        _INTL("{1}'s data was added to the Pokédex.", newspeciesname)) { pbUpdate }
       $player.pokedex.register_last_seen(@pokemon)
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonPokedexInfo_Scene.new
         screen = PokemonPokedexInfoScreen.new(scene)
         screen.pbDexEntry(@pokemon.species)
         @sprites["msgwindow"].text = "" if moves_to_learn.length > 0
         pbEndScreen(false) if moves_to_learn.length == 0
-      }
+      end
     end
     # Learn moves upon evolution for evolved species
     moves_to_learn.each do |move|

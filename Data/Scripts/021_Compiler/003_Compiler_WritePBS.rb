@@ -26,7 +26,7 @@ module Compiler
     idx = 0
     paths.each do |path|
       write_pbs_file_message_start(path[0])
-      File.open(path[0], "wb") { |f|
+      File.open(path[0], "wb") do |f|
         add_PBS_header_to_file(f)
         # Write each element in turn
         game_data.each do |element|
@@ -59,7 +59,7 @@ module Compiler
             end
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
   end
@@ -107,7 +107,7 @@ module Compiler
     return if !conndata
     write_pbs_file_message_start(path)
     mapinfos = pbLoadMapInfos
-    File.open(path, "wb") { |f|
+    File.open(path, "wb") do |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       conndata.each do |conn|
@@ -127,7 +127,7 @@ module Compiler
         end
         f.write("\r\n")
       end
-    }
+    end
     process_pbs_file_message_end
   end
 
@@ -184,7 +184,7 @@ module Compiler
     idx = 0
     paths.each do |path|
       write_pbs_file_message_start(path[0])
-      File.open(path[0], "wb") { |f|
+      File.open(path[0], "wb") do |f|
         add_PBS_header_to_file(f)
         # Write each element in turn
         GameData::Species.each_species do |element|
@@ -217,7 +217,7 @@ module Compiler
             end
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
   end
@@ -243,7 +243,7 @@ module Compiler
     idx = 0
     paths.each do |path|
       write_pbs_file_message_start(path[0])
-      File.open(path[0], "wb") { |f|
+      File.open(path[0], "wb") do |f|
         add_PBS_header_to_file(f)
         # Write each element in turn
         GameData::Species.each do |element|
@@ -277,7 +277,7 @@ module Compiler
             end
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
   end
@@ -304,7 +304,7 @@ module Compiler
     idx = 0
     paths.each do |path|
       write_pbs_file_message_start(path[0])
-      File.open(path[0], "wb") { |f|
+      File.open(path[0], "wb") do |f|
         add_PBS_header_to_file(f)
         # Write each element in turn
         GameData::SpeciesMetrics.each do |element|
@@ -345,7 +345,7 @@ module Compiler
             end
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
   end
@@ -364,7 +364,7 @@ module Compiler
   def write_regional_dexes(path = "PBS/regional_dexes.txt")
     write_pbs_file_message_start(path)
     dex_lists = pbLoadRegionalDexes
-    File.open(path, "wb") { |f|
+    File.open(path, "wb") do |f|
       add_PBS_header_to_file(f)
       # Write each Dex list in turn
       dex_lists.each_with_index do |list, index|
@@ -386,7 +386,7 @@ module Compiler
         end
         f.write("\r\n")
       end
-    }
+    end
     process_pbs_file_message_end
   end
 
@@ -406,7 +406,7 @@ module Compiler
     idx = 0
     paths.each do |path|
       write_pbs_file_message_start(path[0])
-      File.open(path[0], "wb") { |f|
+      File.open(path[0], "wb") do |f|
         add_PBS_header_to_file(f)
         GameData::Encounter.each do |element|
           next if element.pbs_file_suffix != path[1]
@@ -436,7 +436,7 @@ module Compiler
             end
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
   end
@@ -458,7 +458,7 @@ module Compiler
     idx = 0
     paths.each do |path|
       write_pbs_file_message_start(path[0])
-      File.open(path[0], "wb") { |f|
+      File.open(path[0], "wb") do |f|
         add_PBS_header_to_file(f)
         # Write each element in turn
         GameData::Trainer.each do |element|
@@ -500,7 +500,7 @@ module Compiler
             end
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
   end
@@ -512,7 +512,7 @@ module Compiler
     trainerlists = load_data("Data/trainer_lists.dat") rescue nil
     return if !trainerlists
     write_pbs_file_message_start(path)
-    File.open(path, "wb") { |f|
+    File.open(path, "wb") do |f|
       add_PBS_header_to_file(f)
       trainerlists.each do |tr|
         echo "."
@@ -524,7 +524,7 @@ module Compiler
         write_battle_tower_trainers(tr[0], "PBS/" + tr[3])
         write_battle_tower_pokemon(tr[1], "PBS/" + tr[4])
       end
-    }
+    end
     process_pbs_file_message_end
   end
 
@@ -541,7 +541,7 @@ module Compiler
       "EndSpeechLose" => [4, "s"],
       "PokemonNos"    => [5, "*u"]
     }
-    File.open(filename, "wb") { |f|
+    File.open(filename, "wb") do |f|
       add_PBS_header_to_file(f)
       bttrainers.length.times do |i|
         next if !bttrainers[i]
@@ -563,7 +563,7 @@ module Compiler
           f.write(sprintf("\r\n"))
         end
       end
-    }
+    end
     Graphics.update
   end
 
@@ -584,7 +584,7 @@ module Compiler
       :SPECIAL_DEFENSE => "SD",
       :SPEED           => "SPD"
     }
-    File.open(filename, "wb") { |f|
+    File.open(filename, "wb") do |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       btpokemon.length.times do |i|
@@ -597,15 +597,15 @@ module Compiler
         end
         c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] : (natures[pkmn.nature] = GameData::Nature.get(pkmn.nature).id.to_s)
         evlist = ""
-        pkmn.ev.each_with_index do |stat, i|
-          evlist += "," if i > 0
+        pkmn.ev.each_with_index do |stat, j|
+          evlist += "," if j > 0
           evlist += evs[stat]
         end
         c4 = c5 = c6 = c7 = ""
-        [pkmn.move1, pkmn.move2, pkmn.move3, pkmn.move4].each_with_index do |move, i|
+        [pkmn.move1, pkmn.move2, pkmn.move3, pkmn.move4].each_with_index do |move, j|
           next if !move
           text = (moves[move]) ? moves[move] : (moves[move] = GameData::Move.get(move).id.to_s)
-          case i
+          case j
           when 0 then c4 = text
           when 1 then c5 = text
           when 2 then c6 = text
@@ -614,7 +614,7 @@ module Compiler
         end
         f.write("#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}\r\n")
       end
-    }
+    end
     Graphics.update
   end
 
@@ -641,7 +641,7 @@ module Compiler
     player_schema = GameData::PlayerMetadata.schema
     paths.each do |path|
       write_pbs_file_message_start(path[0])
-      File.open(path[0], "wb") { |f|
+      File.open(path[0], "wb") do |f|
         add_PBS_header_to_file(f)
         # Write each element in turn
         [GameData::Metadata, GameData::PlayerMetadata].each do |game_data|
@@ -675,7 +675,7 @@ module Compiler
             end
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
   end
@@ -692,7 +692,7 @@ module Compiler
     idx = 0
     paths.each do |path|
       write_pbs_file_message_start(path[0])
-      File.open(path[0], "wb") { |f|
+      File.open(path[0], "wb") do |f|
         add_PBS_header_to_file(f)
         GameData::MapMetadata.each do |element|
           next if element.pbs_file_suffix != path[1]
@@ -721,7 +721,7 @@ module Compiler
             end
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
   end
@@ -737,7 +737,7 @@ module Compiler
     tilesets = load_data("Data/Tilesets.rxdata")
     paths.each do |path|
       write_pbs_file_message_start(path[0])
-      File.open(path[0], "wb") { |f|
+      File.open(path[0], "wb") do |f|
         add_PBS_header_to_file(f)
         # Write each element in turn
         GameData::DungeonTileset.each do |element|
@@ -769,7 +769,7 @@ module Compiler
             end
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
   end

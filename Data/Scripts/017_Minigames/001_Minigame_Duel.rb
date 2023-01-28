@@ -72,11 +72,11 @@ class PokemonDuel
     @oldmovespeed = $game_player.move_speed
     @oldeventspeed = event.move_speed
     pbMoveRoute($game_player,
-                [PBMoveRoute::ChangeSpeed, 2,
-                 PBMoveRoute::DirectionFixOn])
+                [PBMoveRoute::CHANGE_SPEED, 2,
+                 PBMoveRoute::DIRECTION_FIX_ON])
     pbMoveRoute(event,
-                [PBMoveRoute::ChangeSpeed, 2,
-                 PBMoveRoute::DirectionFixOn])
+                [PBMoveRoute::CHANGE_SPEED, 2,
+                 PBMoveRoute::DIRECTION_FIX_ON])
     pbWait(Graphics.frame_rate * 3 / 4)
   end
 
@@ -126,177 +126,177 @@ class PokemonDuel
       @special[0] = true if command == 3
       if action == 0 && command == 0
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ScriptAsync, "moveRight90",
-                     PBMoveRoute::ScriptAsync, "moveLeft90",
-                     PBMoveRoute::ScriptAsync, "moveLeft90",
-                     PBMoveRoute::ScriptAsync, "moveRight90"])
+                    [PBMoveRoute::SCRIPT_ASYNC, "moveRight90",
+                     PBMoveRoute::SCRIPT_ASYNC, "moveLeft90",
+                     PBMoveRoute::SCRIPT_ASYNC, "moveLeft90",
+                     PBMoveRoute::SCRIPT_ASYNC, "moveRight90"])
         pbMoveRoute(event,
-                    [PBMoveRoute::ScriptAsync, "moveLeft90",
-                     PBMoveRoute::ScriptAsync, "moveRight90",
-                     PBMoveRoute::ScriptAsync, "moveRight90",
-                     PBMoveRoute::ScriptAsync, "moveLeft90"])
+                    [PBMoveRoute::SCRIPT_ASYNC, "moveLeft90",
+                     PBMoveRoute::SCRIPT_ASYNC, "moveRight90",
+                     PBMoveRoute::SCRIPT_ASYNC, "moveRight90",
+                     PBMoveRoute::SCRIPT_ASYNC, "moveLeft90"])
         pbWait(Graphics.frame_rate / 2)
         pbMessage(_INTL("You study each other's movements..."))
       elsif action == 0 && command == 1
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::FORWARD])
         pbWait(Graphics.frame_rate * 4 / 10)
         pbShake(9, 9, 8)
         pbFlashScreens(false, true)
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Backward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::BACKWARD])
         @hp[1] -= 1
         pbMessage(_INTL("Your attack was not blocked!"))
       elsif action == 0 && command == 2
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::ScriptAsync, "jumpForward"])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::Backward])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::BACKWARD])
         pbWait(Graphics.frame_rate)
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Backward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::BACKWARD])
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::FORWARD])
         pbMessage(_INTL("Your attack was evaded!"))
       elsif [0, 1, 2].include?(action) && command == 3
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::ScriptAsync, "jumpForward"])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
         pbWait(Graphics.frame_rate * 4 / 10)
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 5,
-                     PBMoveRoute::Backward,
-                     PBMoveRoute::ChangeSpeed, 2])
+                    [PBMoveRoute::CHANGE_SPEED, 5,
+                     PBMoveRoute::BACKWARD,
+                     PBMoveRoute::CHANGE_SPEED, 2])
         pbWait(Graphics.frame_rate / 2)
         pbShake(9, 9, 8)
         pbFlashScreens(false, true)
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Backward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::BACKWARD])
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::FORWARD])
         @hp[1] -= 3
         pbMessage(_INTL("You pierce through the opponent's defenses!"))
       elsif action == 1 && command == 0
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::FORWARD])
         pbWait(Graphics.frame_rate * 4 / 10)
         pbShake(9, 9, 8)
         pbFlashScreens(true, false)
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Backward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::BACKWARD])
         @hp[0] -= 1
         pbMessage(_INTL("You fail to block the opponent's attack!"))
       elsif action == 1 && command == 1
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::FORWARD])
         pbWait(Graphics.frame_rate * 6 / 10)
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Backward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::BACKWARD])
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::FORWARD])
         pbWait(Graphics.frame_rate * 6 / 10)
-        pbMoveRoute(event, [PBMoveRoute::Backward])
-        pbMoveRoute($game_player, [PBMoveRoute::Forward])
+        pbMoveRoute(event, [PBMoveRoute::BACKWARD])
+        pbMoveRoute($game_player, [PBMoveRoute::FORWARD])
         pbWait(Graphics.frame_rate * 6 / 10)
-        pbMoveRoute($game_player, [PBMoveRoute::Backward])
+        pbMoveRoute($game_player, [PBMoveRoute::BACKWARD])
         pbMessage(_INTL("You cross blades with the opponent!"))
       elsif (action == 1 && command == 2) ||
             (action == 2 && command == 1) ||
             (action == 2 && command == 2)
         pbMoveRoute($game_player,
-                    [PBMoveRoute::Backward,
-                     PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::ScriptAsync, "jumpForward"])
+                    [PBMoveRoute::BACKWARD,
+                     PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
         pbWait(Graphics.frame_rate * 8 / 10)
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::FORWARD])
         pbWait(Graphics.frame_rate * 9 / 10)
         pbShake(9, 9, 8)
         pbFlashScreens(true, true)
         pbMoveRoute($game_player,
-                    [PBMoveRoute::Backward,
-                     PBMoveRoute::ChangeSpeed, 2])
+                    [PBMoveRoute::BACKWARD,
+                     PBMoveRoute::CHANGE_SPEED, 2])
         pbMoveRoute(event,
-                    [PBMoveRoute::Backward,
-                     PBMoveRoute::Backward,
-                     PBMoveRoute::ChangeSpeed, 2])
+                    [PBMoveRoute::BACKWARD,
+                     PBMoveRoute::BACKWARD,
+                     PBMoveRoute::CHANGE_SPEED, 2])
         pbWait(Graphics.frame_rate)
-        pbMoveRoute(event, [PBMoveRoute::Forward])
-        pbMoveRoute($game_player, [PBMoveRoute::Forward])
+        pbMoveRoute(event, [PBMoveRoute::FORWARD])
+        pbMoveRoute($game_player, [PBMoveRoute::FORWARD])
         @hp[0] -= action    # Enemy action
         @hp[1] -= command   # Player command
         pbMessage(_INTL("You hit each other!"))
       elsif action == 2 && command == 0
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::FORWARD])
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::ScriptAsync, "jumpBackward"])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::SCRIPT_ASYNC, "jumpBackward"])
         pbWait(Graphics.frame_rate)
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::FORWARD])
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Backward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::BACKWARD])
         pbMessage(_INTL("You evade the opponent's attack!"))
       elsif action == 3 && [0, 1, 2].include?(command)
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::ScriptAsync, "jumpForward"])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
         pbWait(Graphics.frame_rate * 4 / 10)
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 5,
-                     PBMoveRoute::Backward,
-                     PBMoveRoute::ChangeSpeed, 2])
+                    [PBMoveRoute::CHANGE_SPEED, 5,
+                     PBMoveRoute::BACKWARD,
+                     PBMoveRoute::CHANGE_SPEED, 2])
         pbWait(Graphics.frame_rate / 2)
         pbShake(9, 9, 8)
         pbFlashScreens(true, false)
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Forward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::FORWARD])
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 2,
-                     PBMoveRoute::Backward])
+                    [PBMoveRoute::CHANGE_SPEED, 2,
+                     PBMoveRoute::BACKWARD])
         @hp[0] -= 3
         pbMessage(_INTL("The opponent pierces through your defenses!"))
       elsif action == 3 && command == 3
-        pbMoveRoute($game_player, [PBMoveRoute::Backward])
+        pbMoveRoute($game_player, [PBMoveRoute::BACKWARD])
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::ScriptAsync, "jumpForward"])
+                    [PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
         pbMoveRoute(event,
-                    [PBMoveRoute::Wait, 15,
-                     PBMoveRoute::ChangeSpeed, 4,
-                     PBMoveRoute::ScriptAsync, "jumpForward"])
+                    [PBMoveRoute::WAIT, 15,
+                     PBMoveRoute::CHANGE_SPEED, 4,
+                     PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
         pbWait(Graphics.frame_rate)
         pbMoveRoute(event,
-                    [PBMoveRoute::ChangeSpeed, 5,
-                     PBMoveRoute::Backward,
-                     PBMoveRoute::ChangeSpeed, 2])
+                    [PBMoveRoute::CHANGE_SPEED, 5,
+                     PBMoveRoute::BACKWARD,
+                     PBMoveRoute::CHANGE_SPEED, 2])
         pbMoveRoute($game_player,
-                    [PBMoveRoute::ChangeSpeed, 5,
-                     PBMoveRoute::Backward,
-                     PBMoveRoute::ChangeSpeed, 2])
+                    [PBMoveRoute::CHANGE_SPEED, 5,
+                     PBMoveRoute::BACKWARD,
+                     PBMoveRoute::CHANGE_SPEED, 2])
         pbShake(9, 9, 8)
         pbFlash(Color.new(255, 255, 255, 255), 20)
         pbFlashScreens(true, true)
-        pbMoveRoute($game_player, [PBMoveRoute::Forward])
+        pbMoveRoute($game_player, [PBMoveRoute::FORWARD])
         @hp[0] -= 4
         @hp[1] -= 4
         pbMessage(_INTL("Your special attacks collide!"))
@@ -309,11 +309,11 @@ class PokemonDuel
   def pbEndDuel
     pbWait(Graphics.frame_rate * 3 / 4)
     pbMoveRoute($game_player,
-                [PBMoveRoute::DirectionFixOff,
-                 PBMoveRoute::ChangeSpeed, @oldmovespeed])
+                [PBMoveRoute::DIRECTION_FIX_OFF,
+                 PBMoveRoute::CHANGE_SPEED, @oldmovespeed])
     pbMoveRoute(@event,
-                [PBMoveRoute::DirectionFixOff,
-                 PBMoveRoute::ChangeSpeed, @oldeventspeed])
+                [PBMoveRoute::DIRECTION_FIX_OFF,
+                 PBMoveRoute::CHANGE_SPEED, @oldeventspeed])
     fade_time = Graphics.frame_rate * 4 / 10
     alpha_diff = (255.0 / fade_time).ceil
     fade_time.times do
@@ -382,7 +382,7 @@ def pbDuel(trainer_id, trainer_name, event, speeches)
   trainer_id = GameData::TrainerType.get(trainer_id).id
   duel = PokemonDuel.new
   opponent = NPCTrainer.new(
-    pbGetMessageFromHash(MessageTypes::TrainerNames, trainer_name), trainer_id
+    pbGetMessageFromHash(MessageTypes::TRAINER_NAMES, trainer_name), trainer_id
   )
   speech_texts = []
   12.times do |i|

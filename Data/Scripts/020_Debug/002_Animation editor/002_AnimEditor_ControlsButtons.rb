@@ -72,21 +72,19 @@ class UIControl
     return @invalid
   end
 
-  def invalidate # Marks that the control must be redrawn to reflect current logic
+  def invalidate   # Marks that the control must be redrawn to reflect current logic
     @invalid = true
   end
 
-  def update # Updates the logic on the control, invalidating it if necessary
-  end
+  def update; end   # Updates the logic on the control, invalidating it if necessary
 
-  def refresh # Redraws the control
-  end
+  def refresh; end   # Redraws the control
 
-  def validate # Makes the control no longer invalid
+  def validate   # Makes the control no longer invalid
     @invalid = false
   end
 
-  def repaint # Redraws the control only if it is invalid
+  def repaint   # Redraws the control only if it is invalid
     if self.invalid?
       self.refresh
       self.validate
@@ -208,9 +206,7 @@ class Checkbox < Button
     else
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
     end
-    if self.checked
-      shadowtext(bitmap, x, y, 32, 32, "X", @disabled, 1)
-    end
+    shadowtext(bitmap, x, y, 32, 32, "X", @disabled, 1) if self.checked
     size = bitmap.text_size(self.label).width
     shadowtext(bitmap, x + 36, y, size, height, self.label, @disabled)
     return ret
@@ -241,9 +237,7 @@ class TextField < UIControl
     chars = self.text.scan(/./m)
     chars.insert(@cursor, ch)
     @text = ""
-    chars.each do |ch|
-      @text += ch
-    end
+    chars.each { |char| @text += char }
     @cursor += 1
     @frame = 0
     self.changed = true
@@ -254,9 +248,7 @@ class TextField < UIControl
     chars = self.text.scan(/./m)
     chars.delete_at(@cursor - 1)
     @text = ""
-    chars.each do |ch|
-      @text += ch
-    end
+    chars.each { |char| @text += char }
     @cursor -= 1
     @frame = 0
     self.changed = true
@@ -533,6 +525,8 @@ class OptionalSlider < Slider
     @checkbox.refresh
   end
 
+  #-----------------------------------------------------------------------------
+
   private
 
   def updatedefs
@@ -785,6 +779,8 @@ class OptionalTextSlider < TextSlider
     @slider.refresh
     @checkbox.refresh
   end
+
+  #-----------------------------------------------------------------------------
 
   private
 

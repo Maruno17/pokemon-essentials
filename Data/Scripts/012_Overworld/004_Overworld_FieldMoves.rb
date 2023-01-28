@@ -219,9 +219,7 @@ HiddenMoveHandlers::UseMove.add(:CUT, proc { |move, pokemon|
   end
   $stats.cut_count += 1
   facingEvent = $game_player.pbFacingEvent
-  if facingEvent
-    pbSmashEvent(facingEvent)
-  end
+  pbSmashEvent(facingEvent) if facingEvent
   next true
 })
 
@@ -232,13 +230,10 @@ def pbSmashEvent(event)
   elsif event.name[/smashrock/i]
     pbSEPlay("Rock Smash", 80)
   end
-  pbMoveRoute(event, [PBMoveRoute::Wait, 2,
-                      PBMoveRoute::TurnLeft,
-                      PBMoveRoute::Wait, 2,
-                      PBMoveRoute::TurnRight,
-                      PBMoveRoute::Wait, 2,
-                      PBMoveRoute::TurnUp,
-                      PBMoveRoute::Wait, 2])
+  pbMoveRoute(event, [PBMoveRoute::WAIT, 2,
+                      PBMoveRoute::TURN_LEFT, PBMoveRoute::WAIT, 2,
+                      PBMoveRoute::TURN_RIGHT, PBMoveRoute::WAIT, 2,
+                      PBMoveRoute::TURN_UP, PBMoveRoute::WAIT, 2])
   pbWait(Graphics.frame_rate * 4 / 10)
   event.erase
   $PokemonMap&.addErasedEvent(event.id)
@@ -273,7 +268,7 @@ HiddenMoveHandlers::UseMove.add(:DIG, proc { |move, pokemon|
     if !pbHiddenMoveAnimation(pokemon)
       pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
     end
-    pbFadeOutIn {
+    pbFadeOutIn do
       $game_temp.player_new_map_id    = escape[0]
       $game_temp.player_new_x         = escape[1]
       $game_temp.player_new_y         = escape[2]
@@ -282,7 +277,7 @@ HiddenMoveHandlers::UseMove.add(:DIG, proc { |move, pokemon|
       $scene.transfer_player
       $game_map.autoplay
       $game_map.refresh
-    }
+    end
     pbEraseEscapePoint
     next true
   end
@@ -306,7 +301,7 @@ def pbDive
     speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
-    pbFadeOutIn {
+    pbFadeOutIn do
       $game_temp.player_new_map_id    = map_metadata.dive_map_id
       $game_temp.player_new_x         = $game_player.x
       $game_temp.player_new_y         = $game_player.y
@@ -318,7 +313,7 @@ def pbDive
       $scene.transfer_player(false)
       $game_map.autoplay
       $game_map.refresh
-    }
+    end
     return true
   end
   return false
@@ -344,7 +339,7 @@ def pbSurfacing
     speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
-    pbFadeOutIn {
+    pbFadeOutIn do
       $game_temp.player_new_map_id    = surface_map_id
       $game_temp.player_new_x         = $game_player.x
       $game_temp.player_new_y         = $game_player.y
@@ -356,7 +351,7 @@ def pbSurfacing
       surfbgm = GameData::Metadata.get.surf_BGM
       (surfbgm) ? pbBGMPlay(surfbgm) : $game_map.autoplayAsCue
       $game_map.refresh
-    }
+    end
     return true
   end
   return false
@@ -365,7 +360,7 @@ end
 # @deprecated This method is slated to be removed in v21.
 def pbTransferUnderwater(mapid, x, y, direction = $game_player.direction)
   Deprecation.warn_method("pbTransferUnderwater", "v21", '"Transfer Player" event command')
-  pbFadeOutIn {
+  pbFadeOutIn do
     $game_temp.player_new_map_id    = mapid
     $game_temp.player_new_x         = x
     $game_temp.player_new_y         = y
@@ -373,7 +368,7 @@ def pbTransferUnderwater(mapid, x, y, direction = $game_player.direction)
     $scene.transfer_player(false)
     $game_map.autoplay
     $game_map.refresh
-  }
+  end
 end
 
 EventHandlers.add(:on_player_interact, :diving,
@@ -438,7 +433,7 @@ HiddenMoveHandlers::UseMove.add(:DIVE, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  pbFadeOutIn {
+  pbFadeOutIn do
     $game_temp.player_new_map_id    = dive_map_id
     $game_temp.player_new_x         = $game_player.x
     $game_temp.player_new_y         = $game_player.y
@@ -449,7 +444,7 @@ HiddenMoveHandlers::UseMove.add(:DIVE, proc { |move, pokemon|
     $scene.transfer_player(false)
     $game_map.autoplay
     $game_map.refresh
-  }
+  end
   next true
 })
 
@@ -518,7 +513,7 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
     pbMessage(_INTL("{1} used {2}!", name, GameData::Move.get(move).name))
   end
   $stats.fly_count += 1
-  pbFadeOutIn {
+  pbFadeOutIn do
     pbSEPlay("Fly")
     $game_temp.player_new_map_id    = $game_temp.fly_destination[0]
     $game_temp.player_new_x         = $game_temp.fly_destination[1]
@@ -531,7 +526,7 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
     $game_map.refresh
     yield if block_given?
     pbWait(Graphics.frame_rate / 4)
-  }
+  end
   pbEraseEscapePoint
   return true
 end
@@ -763,7 +758,7 @@ end
 # @deprecated This method is slated to be removed in v21.
 def pbTransferSurfing(mapid, xcoord, ycoord, direction = $game_player.direction)
   Deprecation.warn_method("pbTransferSurfing", "v21", '"Transfer Player" event command')
-  pbFadeOutIn {
+  pbFadeOutIn do
     $game_temp.player_new_map_id    = mapid
     $game_temp.player_new_x         = xcoord
     $game_temp.player_new_y         = ycoord
@@ -771,7 +766,7 @@ def pbTransferSurfing(mapid, xcoord, ycoord, direction = $game_player.direction)
     $scene.transfer_player(false)
     $game_map.autoplay
     $game_map.refresh
-  }
+  end
 end
 
 EventHandlers.add(:on_player_interact, :start_surfing,
@@ -923,7 +918,7 @@ HiddenMoveHandlers::UseMove.add(:TELEPORT, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  pbFadeOutIn {
+  pbFadeOutIn do
     $game_temp.player_new_map_id    = healing[0]
     $game_temp.player_new_x         = healing[1]
     $game_temp.player_new_y         = healing[2]
@@ -932,7 +927,7 @@ HiddenMoveHandlers::UseMove.add(:TELEPORT, proc { |move, pokemon|
     $scene.transfer_player
     $game_map.autoplay
     $game_map.refresh
-  }
+  end
   pbEraseEscapePoint
   next true
 })

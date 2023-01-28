@@ -195,12 +195,12 @@ class PokemonTrade_Scene
       pbMessageDisplay(@sprites["msgwindow"],
                        _INTL("{1}'s data was added to the Pokédex.", speciesname2)) { pbUpdate }
       $player.pokedex.register_last_seen(@pokemon2)
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonPokedexInfo_Scene.new
         screen = PokemonPokedexInfoScreen.new(scene)
         screen.pbDexEntry(@pokemon2.species)
         pbEndScreen(false)
-      }
+      end
     end
   end
 end
@@ -227,11 +227,11 @@ def pbStartTrade(pokemonIndex, newpoke, nickname, trainerName, trainerGender = 0
   yourPokemon.obtain_method = 2   # traded
   yourPokemon.reset_moves if resetmoves
   yourPokemon.record_first_moves
-  pbFadeOutInWithMusic {
+  pbFadeOutInWithMusic do
     evo = PokemonTrade_Scene.new
     evo.pbStartScreen(myPokemon, yourPokemon, $player.name, trainerName)
     evo.pbTrade
     evo.pbEndScreen
-  }
+  end
   $player.party[pokemonIndex] = yourPokemon
 end

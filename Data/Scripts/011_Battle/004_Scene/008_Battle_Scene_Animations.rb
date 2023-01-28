@@ -323,10 +323,10 @@ class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
       partyBar.setVisible(delay + 12, false)
       partyBar.setOpacity(delay + 12, 255)
     end
-    Battle::Scene::NUM_BALLS.times do |i|
-      next if !@sprites["partyBall_0_#{i}"] || !@sprites["partyBall_0_#{i}"].visible
-      partyBall = addSprite(@sprites["partyBall_0_#{i}"])
-      partyBall.moveDelta(delay + (2 * i), 16, -Graphics.width, 0) if @fullAnim
+    Battle::Scene::NUM_BALLS.times do |j|
+      next if !@sprites["partyBall_0_#{j}"] || !@sprites["partyBall_0_#{j}"].visible
+      partyBall = addSprite(@sprites["partyBall_0_#{j}"])
+      partyBall.moveDelta(delay + (2 * j), 16, -Graphics.width, 0) if @fullAnim
       partyBall.moveOpacity(delay, 12, 0)
       partyBall.setVisible(delay + 12, false)
       partyBall.setOpacity(delay + 12, 255)
@@ -366,10 +366,10 @@ class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
       partyBar.setVisible(delay + 12, false)
       partyBar.setOpacity(delay + 12, 255)
     end
-    Battle::Scene::NUM_BALLS.times do |i|
-      next if !@sprites["partyBall_1_#{i}"] || !@sprites["partyBall_1_#{i}"].visible
-      partyBall = addSprite(@sprites["partyBall_1_#{i}"])
-      partyBall.moveDelta(delay + (2 * i), 16, Graphics.width, 0) if @fullAnim
+    Battle::Scene::NUM_BALLS.times do |j|
+      next if !@sprites["partyBall_1_#{j}"] || !@sprites["partyBall_1_#{j}"].visible
+      partyBall = addSprite(@sprites["partyBall_1_#{j}"])
+      partyBall.moveDelta(delay + (2 * j), 16, Graphics.width, 0) if @fullAnim
       partyBall.moveOpacity(delay, 12, 0)
       partyBall.setVisible(delay + 12, false)
       partyBall.setOpacity(delay + 12, 255)

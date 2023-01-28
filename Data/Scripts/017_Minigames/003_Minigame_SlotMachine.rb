@@ -404,10 +404,10 @@ def pbSlotMachine(difficulty = 1)
   elsif $player.coins == Settings::MAX_COINS
     pbMessage(_INTL("Your Coin Case is full!"))
   else
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = SlotMachineScene.new
       screen = SlotMachine.new(scene)
       screen.pbStartScreen(difficulty)
-    }
+    end
   end
 end

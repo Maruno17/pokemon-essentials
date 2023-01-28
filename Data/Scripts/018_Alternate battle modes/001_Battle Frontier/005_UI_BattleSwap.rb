@@ -91,7 +91,7 @@ class BattleSwapScene
 
   # Processes the scene
   def pbChoosePokemon(canCancel)
-    pbActivateWindow(@sprites, "list") {
+    pbActivateWindow(@sprites, "list") do
       loop do
         Graphics.update
         Input.update
@@ -109,7 +109,7 @@ class BattleSwapScene
           end
         end
       end
-    }
+    end
   end
 
   def pbUpdateChoices(choices)

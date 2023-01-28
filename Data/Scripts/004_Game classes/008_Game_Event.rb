@@ -237,9 +237,7 @@ class Game_Event < Game_Character
     @trigger              = @page.trigger
     @list                 = @page.list
     @interpreter          = nil
-    if @trigger == 4   # Parallel Process
-      @interpreter        = Interpreter.new
-    end
+    @interpreter          = Interpreter.new if @trigger == 4   # Parallel Process
     check_event_trigger_auto
   end
 
@@ -262,18 +260,14 @@ class Game_Event < Game_Character
     @moveto_happened = false
     last_moving = moving?
     super
-    if !moving? && last_moving
-      $game_player.pbCheckEventTriggerFromDistance([2])
-    end
+    $game_player.pbCheckEventTriggerFromDistance([2]) if !moving? && last_moving
     if @need_refresh
       @need_refresh = false
       refresh
     end
     check_event_trigger_auto
     if @interpreter
-      unless @interpreter.running?
-        @interpreter.setup(@list, @event.id, @map_id)
-      end
+      @interpreter.setup(@list, @event.id, @map_id) if !@interpreter.running?
       @interpreter.update
     end
   end

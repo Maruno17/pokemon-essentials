@@ -461,12 +461,12 @@ class PokemonEntryScene2
     @mode = 0
     @minlength = minlength
     @maxlength = maxlength
-    @maxlength.times { |i|
+    @maxlength.times do |i|
       @sprites["blank#{i}"] = Sprite.new(@viewport)
       @sprites["blank#{i}"].x = 160 + (24 * i)
       @sprites["blank#{i}"].bitmap = @bitmaps[@bitmaps.length - 1]
       @blanks[i] = 0
-    }
+    end
     @sprites["bottomtab"] = Sprite.new(@viewport)   # Current tab
     @sprites["bottomtab"].x = 22
     @sprites["bottomtab"].y = 162
@@ -568,10 +568,10 @@ class PokemonEntryScene2
       cursorpos = @helper.cursor
       cursorpos = @maxlength - 1 if cursorpos >= @maxlength
       cursorpos = 0 if cursorpos < 0
-      @maxlength.times { |i|
+      @maxlength.times do |i|
         @blanks[i] = (i == cursorpos) ? 1 : 0
         @sprites["blank#{i}"].y = [78, 82][@blanks[i]]
-      }
+      end
     end
     pbDoUpdateOverlay
     pbUpdateSpriteHash(@sprites)
@@ -715,9 +715,7 @@ class PokemonEntryScene2
           cursordiv = @cursorpos / ROWS
           charpos = (cursordiv * ROWS) + cursormod
           chset = @@Characters[@mode][0]
-          if @helper.length >= @maxlength
-            @helper.delete
-          end
+          @helper.delete if @helper.length >= @maxlength
           @helper.insert(chset[charpos])
           pbPlayCursorSE
           if @helper.length >= @maxlength
@@ -767,17 +765,17 @@ end
 def pbEnterText(helptext, minlength, maxlength, initialText = "", mode = 0, pokemon = nil, nofadeout = false)
   ret = ""
   if ($PokemonSystem.textinput == 1 rescue false)   # Keyboard
-    pbFadeOutIn(99999, nofadeout) {
+    pbFadeOutIn(99999, nofadeout) do
       sscene = PokemonEntryScene.new
       sscreen = PokemonEntry.new(sscene)
       ret = sscreen.pbStartScreen(helptext, minlength, maxlength, initialText, mode, pokemon)
-    }
+    end
   else   # Cursor
-    pbFadeOutIn(99999, nofadeout) {
+    pbFadeOutIn(99999, nofadeout) do
       sscene = PokemonEntryScene2.new
       sscreen = PokemonEntry.new(sscene)
       ret = sscreen.pbStartScreen(helptext, minlength, maxlength, initialText, mode, pokemon)
-    }
+    end
   end
   return ret
 end

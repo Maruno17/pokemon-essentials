@@ -26,9 +26,9 @@ def pbExportAnim(animations)
   if filename != ""
     begin
       filename += ".anm"
-      File.open(filename, "wb") { |f|
+      File.open(filename, "wb") do |f|
         f.write(dumpBase64Anim(animations[animations.selected]))
-      }
+      end
       failed = false
     rescue
       pbMessage(_INTL("Couldn't save the animation to {1}.", filename))
@@ -43,9 +43,7 @@ end
 
 def pbImportAnim(animations, canvas, animwin)
   animfiles = []
-  pbRgssChdir(".") {
-    animfiles.concat(Dir.glob("*.anm"))
-  }
+  pbRgssChdir(".") { animfiles.concat(Dir.glob("*.anm")) }
   cmdwin = pbListWindow(animfiles, 320)
   cmdwin.opacity = 200
   cmdwin.height = 480
