@@ -1138,18 +1138,82 @@ Battle::AI::Handlers::MoveBasePower.copy("TypeAndPowerDependOnWeather",
                                          "TypeAndPowerDependOnTerrain")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetMovesBecomeElectric",
+  proc { |move, user, target, ai, battle|
+    next !user.faster_than?(target)
+  }
+)
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetMovesBecomeElectric",
   proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE if !user.faster_than?(target)
+    # Get Electric's effectiveness against the user
+    electric_eff = user.effectiveness_of_type_against_battler(:ELECTRIC, target)
+    electric_eff *= 1.5 if target.has_type?(:ELECTRIC)   # STAB
+    electric_eff = 0 if user.has_active_ability?([:LIGHTNINGROD, :MOTORDRIVE, :VOLTABSORB])
+    # For each of target's moves, get its effectiveness against the user and
+    # decide whether it is better or worse than Electric's effectiveness
+    old_type_better = 0
+    electric_type_better = 0
+    target.battler.eachMove do |m|
+      next if !m.damagingMove?
+      m_type = m.pbCalcType(target.battler)
+      next if m_type == :ELECTRIC
+      eff = user.effectiveness_of_type_against_battler(m_type, target)
+      eff *= 1.5 if target.has_type?(m_type)   # STAB
+      case m_type
+      when :FIRE
+        eff = 0 if user.has_active_ability?(:FLASHFIRE)
+      when :GRASS
+        eff = 0 if user.has_active_ability?(:SAPSIPPER)
+      when :WATER
+        eff = 0 if user.has_active_ability?([:STORMDRAIN, :WATERABSORB])
+      end
+      if eff > electric_eff
+        electric_type_better += 1
+      elsif eff < electric_eff
+        old_type_better += 1
+      end
+    end
+    next Battle::AI::MOVE_USELESS_SCORE if electric_type_better == 0
+    next Battle::AI::MOVE_USELESS_SCORE if electric_type_better < old_type_better
+    score += 10 * (electric_type_better - old_type_better)
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code can be called with a single target and with no targets. Make
-#       sure it doesn't assume that there is a target.
+# TODO: This could check all other battlers, not just foes. It could check the
+#       effectivenesses of their Normal and Electric moves on all their foes,
+#       not just on the user. I think this is overkill, particularly as the
+#       effect only lasts for one round.
 #===============================================================================
-# NormalMovesBecomeElectric
+Battle::AI::Handlers::MoveEffectScore.add("NormalMovesBecomeElectric",
+  proc { |score, move, user, ai, battle|
+    # Get Electric's effectiveness against the user
+    electric_eff = user.effectiveness_of_type_against_battler(:ELECTRIC, target)
+    electric_eff *= 1.5 if target.has_type?(:ELECTRIC)   # STAB
+    electric_eff = 0 if user.has_active_ability?([:LIGHTNINGROD, :MOTORDRIVE, :VOLTABSORB])
+    # Check all affected foe battlers for Normal moves, get their effectiveness
+    # against the user and decide whether it is better or worse than Electric's
+    # effectiveness
+    normal_type_better = 0
+    electric_type_better = 0
+    ai.each_foe_battler(user.side) do |b, i|
+      next if move.pbPriority(b.battler) <= 0 && b.faster_than?(user)
+      next if !b.has_damaging_move_of_type?(:NORMAL)
+      eff = user.effectiveness_of_type_against_battler(:NORMAL, b)
+      eff *= 1.5 if b.has_type?(:NORMAL)   # STAB
+      if eff > electric_eff
+        electric_type_better += 1
+      elsif eff < electric_eff
+        normal_type_better += 1
+      end
+    end
+    if electric_type_better == 0 || electric_type_better < normal_type_better
+      next (move.statusMove?) ? Battle::AI::MOVE_USELESS_SCORE : score
+    end
+    score += 10 * (electric_type_better - normal_type_better)
+    next score
+  }
+)

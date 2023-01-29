@@ -168,20 +168,25 @@ class Battle::AI::AIBattler
 
   def speed; return @battler.speed; end
 
+  def base_stat(stat)
+    ret = 0
+    case stat
+    when :ATTACK          then ret = @battler.attack
+    when :DEFENSE         then ret = @battler.defense
+    when :SPECIAL_ATTACK  then ret = @battler.spatk
+    when :SPECIAL_DEFENSE then ret = @battler.spdef
+    when :SPEED           then ret = @battler.speed
+    end
+    return ret
+  end
+
   # TODO: Cache calculated rough stats? Forget them in def refresh_battler.
   def rough_stat(stat)
     return @battler.pbSpeed if stat == :SPEED && @ai.trainer.high_skill?
     stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
     stageDiv = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
     stage = @battler.stages[stat] + 6
-    value = 0
-    case stat
-    when :ATTACK          then value = @battler.attack
-    when :DEFENSE         then value = @battler.defense
-    when :SPECIAL_ATTACK  then value = @battler.spatk
-    when :SPECIAL_DEFENSE then value = @battler.spdef
-    when :SPEED           then value = @battler.speed
-    end
+    value = base_stat(stat)
     return (value.to_f * stageMul[stage] / stageDiv[stage]).floor
   end
 
