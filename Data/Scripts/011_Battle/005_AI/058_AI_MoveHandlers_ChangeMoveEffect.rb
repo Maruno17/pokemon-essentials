@@ -439,9 +439,23 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UseLastMoveUsedByTarget
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# UseMoveTargetIsAboutToUse
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UseMoveTargetIsAboutToUse",
+  proc { |move, user, target, ai, battle|
+    next !target.check_for_move { |m| m.damagingMove? && !move.move.moveBlacklist.include?(m.function_code) }
+  }
+)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UseMoveTargetIsAboutToUse",
+  proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if target.faster_than?(user)
+    # Don't prefer if target knows any moves that can't be copied
+    if target.check_for_move { |m| m.statusMove? || move.move.moveBlacklist.include?(m.function_code) }
+      score -= 8
+    end
+    next score
+  }
+)
 
 #===============================================================================
 # NOTE: The move that this move will become is determined in def
@@ -455,7 +469,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UseLastMoveUsedByTarget
 # UseRandomMove
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseRandomMoveFromUserParty",
   proc { |move, user, ai, battle|
@@ -492,16 +506,47 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseRandomUserMoveIfAsleep",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
-# BounceBackProblemCausingStatusMoves
+Battle::AI::Handlers::MoveEffectScore.add("BounceBackProblemCausingStatusMoves",
+  proc { |score, move, user, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if user.has_active_ability?(:MAGICBOUNCE)
+    useless = true
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.can_attack?
+      next if !b.check_for_move { |m| m.statusMove? && m.canMagicCoat? }
+      score += 4
+      useless = false
+    end
+    next Battle::AI::MOVE_USELESS_SCORE if useless
+    # Don't prefer the lower the user's HP is (better to try something else)
+    if user.hp < user.totalhp / 2
+      score -= 20 * (0.75 - (user.hp.to_f / user.totalhp))   # -5 to -15
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
-# StealAndUseBeneficialStatusMove
+Battle::AI::Handlers::MoveEffectScore.add("StealAndUseBeneficialStatusMove",
+  proc { |score, move, user, ai, battle|
+    useless = true
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.can_attack?
+      next if !b.check_for_move { |m| m.statusMove? && m.canSnatch? }
+      score += 4
+      useless = false
+    end
+    next Battle::AI::MOVE_USELESS_SCORE if useless
+    # Don't prefer the lower the user's HP is (better to try something else)
+    if user.hp < user.totalhp / 2
+      score -= 20 * (0.75 - (user.hp.to_f / user.totalhp))   # -5 to -15
+    end
+    next score
+  }
+)
 
 #===============================================================================
 #

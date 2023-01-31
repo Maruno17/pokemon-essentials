@@ -281,7 +281,8 @@ class Battle::Battler
   # NOTE: A Pokémon using Bug Bite/Pluck, and a Pokémon having an item thrown at
   #       it via Fling, will gain the effect of the item even if the Pokémon is
   #       affected by item-negating effects.
-  # item_to_use is an item ID for Bug Bite/Pluck and Fling, and nil otherwise.
+  # item_to_use is an item ID for Stuff Cheeks, Teatime, Bug Bite/Pluck and
+  # Fling, and nil otherwise.
   # fling is for Fling only.
   def pbHeldItemTriggerCheck(item_to_use = nil, fling = false)
     return if fainted?

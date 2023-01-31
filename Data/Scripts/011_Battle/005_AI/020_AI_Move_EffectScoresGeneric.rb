@@ -1036,6 +1036,92 @@ class Battle::AI
   end
 
   #=============================================================================
+  # Items can be consumed by Stuff Cheeks, Teatime, Bug Bite/Pluck and Fling.
+  #=============================================================================
+  def get_score_change_for_consuming_item(battler, item)
+    ret = 0
+    case item
+    when :ORANBERRY, :BERRYJUICE, :ENIGMABERRY, :SITRUSBERRY
+      # Healing
+      ret += (battler.hp > battler.totalhp * 3 / 4) ? -8 : 8
+      ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && battler.has_active_ability?(:RIPEN)
+    when :AGUAVBERRY, :FIGYBERRY, :IAPAPABERRY, :MAGOBERRY, :WIKIBERRY
+      # Healing with confusion
+      fraction_to_heal = 8   # Gens 6 and lower
+      if Settings::MECHANICS_GENERATION == 7
+        fraction_to_heal = 2
+      elsif Settings::MECHANICS_GENERATION >= 8
+        fraction_to_heal = 3
+      end
+      ret += (battler.hp > battler.totalhp * (1 - (1 / fraction_to_heal))) ? -8 : 8
+      ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && battler.has_active_ability?(:RIPEN)
+      # TODO: Check whether the item will cause confusion?
+    when :ASPEARBERRY, :CHERIBERRY, :CHESTOBERRY, :PECHABERRY, :RAWSTBERRY
+      # Status cure
+      status = {
+        :ASPEAR      => :FROZEN,
+        :CHERIBERRY  => :PARALYSIS,
+        :CHESTOBERRY => :SLEEP,
+        :PECHABERRY  => :POISON,
+        :RAWSTBERRY  => :BURN
+      }[item]
+      ret += (status && battler.status == status) ? 8 : -8
+    when :PERSIMBERRY
+      # Confusion cure
+      ret += (battler.effects[PBEffects::Confusion] > 1) ? 8 : -8
+    when :LUMBERRY
+      # Any status/confusion cure
+      ret += (battler.status != :NONE || battler.effects[PBEffects::Confusion] > 1) ? 8 : -8
+    when :MENTALHERB
+      # Cure mental effects
+      ret += 8 if battler.effects[PBEffects::Attract] >= 0 ||
+                  battler.effects[PBEffects::Taunt] > 1 ||
+                  battler.effects[PBEffects::Encore] > 1 ||
+                  battler.effects[PBEffects::Torment] ||
+                  battler.effects[PBEffects::Disable] > 1 ||
+                  battler.effects[PBEffects::HealBlock] > 1
+    when :APICOTBERRY, :GANLONBERRY, :LIECHIBERRY, :PETAYABERRY, :SALACBERRY,
+         :KEEBERRY, :MARANGABERRY
+      # Stat raise
+      stat = {
+        :APICOTBERRY  => :SPECIAL_DEFENSE,
+        :GANLONBERRY  => :DEFENSE,
+        :LIECHIBERRY  => :ATTACK,
+        :PETAYABERRY  => :SPECIAL_ATTACK,
+        :SALACBERRY   => :SPEED,
+        :KEEBERRY     => :DEFENSE,
+        :MARANGABERRY => :SPECIAL_DEFENSE
+      }[item]
+      ret += 8 if stat && ai.stat_raise_worthwhile?(battler, stat)
+      ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && battler.has_active_ability?(:RIPEN)
+    when :STARFBERRY
+      # Random stat raise
+      ret += 8
+      ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && battler.has_active_ability?(:RIPEN)
+    when :WHITEHERB
+      # Resets lowered stats
+      reduced_stats = false
+      GameData::Stat.each_battle do |s|
+        next if battler.stages[s.id] >= 0
+        reduced_stats = true
+        break
+      end
+      ret += 8 if reduced_stats
+    when :MICLEBERRY
+      # Raises accuracy of next move
+      ret += 8
+    when :LANSATBERRY
+      # Focus energy
+      ret += 8 if battler.effects[PBEffects::FocusEnergy] < 2
+    when :LEPPABERRY
+      # Restore PP
+      ret += 8
+      ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && battler.has_active_ability?(:RIPEN)
+    end
+    return ret
+  end
+
+  #=============================================================================
   # Returns a value indicating how beneficial the given ability will be to the
   # given battler if it has it.
   # Return values are typically between -10 and +10. 0 is indifferent, positive

@@ -1,9 +1,15 @@
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("FleeFromBattle",
   proc { |move, user, ai, battle|
     next !battle.pbCanRun?(user.index)
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("FleeFromBattle",
+  proc { |score, move, user, ai, battle|
+    # Generally don't prefer (don't want to end the battle too easily)
+    next score - 15
   }
 )
 
@@ -258,32 +264,50 @@ Battle::AI::Handlers::MoveFailureCheck.add("TrapAllBattlersInBattleForOneTurn",
 # PursueSwitchingFoe
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("UsedAfterUserTakesPhysicalDamage",
-  proc { |score, move, user, ai, battle|
+Battle::AI::Handlers::MoveFailureCheck.add("UsedAfterUserTakesPhysicalDamage",
+  proc { |move, user, ai, battle|
     found_physical_move = false
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.check_for_move { |m| m.physicalMove?(m.type) }
       found_physical_move = true
       break
     end
-    next Battle::AI::MOVE_USELESS_SCORE if !found_physical_move
-    next score
+    next !found_physical_move
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.add("UsedAfterUserTakesPhysicalDamage",
+  proc { |score, move, user, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if user.effects[PBEffects::Substitute] > 0
+    # Prefer if foes don't know any special moves
+    found_special_move = false
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.check_for_move { |m| m.specialMove?(m.type) }
+      found_special_move = true
+      break
+    end
+    score += 10 if !found_special_move
+    # Generally not worth using
+    next score - 10
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
   proc { |score, move, user, ai, battle|
-    if ai.trainer.medium_skill?
-      user.battler.allAllies.each do |b|
-        next if !b.pbHasMove?(move.id)
-        score += 20
-      end
+    # No score change if no allies know this move
+    ally_has_move = false
+    ai.each_same_side_battler(user.side) do |b, i|
+      next if !b.has_move_with_function?(move.function)
+      ally_has_move = true
+      break
     end
+    next score if !ally_has_move
+    # Prefer for the sake of doubling in power
+    score += 5
     next score
   }
 )
@@ -297,7 +321,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetActsNext",
     next Battle::AI::MOVE_USELESS_SCORE if target.opposes?(user)
     # Compare the speeds of all battlers
     speeds = []
-    ai.each_battler { |b, i| speeds.push([i, rough_stat(:SPEED)]) }
+    ai.each_battler { |b, i| speeds.push([i, b.rough_stat(:SPEED)]) }
     if battle.field.effects[PBEffects::TrickRoom] > 0
       speeds.sort! { |a, b| a[1] <=> b[1] }
     else
@@ -332,7 +356,7 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetActsLast",
     next Battle::AI::MOVE_USELESS_SCORE if !has_ally
     # Compare the speeds of all battlers
     speeds = []
-    ai.each_battler { |b, i| speeds.push([i, rough_stat(:SPEED)]) }
+    ai.each_battler { |b, i| speeds.push([i, b.rough_stat(:SPEED)]) }
     if battle.field.effects[PBEffects::TrickRoom] > 0
       speeds.sort! { |a, b| a[1] <=> b[1] }
     else
@@ -354,35 +378,77 @@ Battle::AI::Handlers::MoveEffectScore.add("TargetActsLast",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetUsesItsLastUsedMoveAgain",
   proc { |move, user, target, ai, battle|
-    next true if !target.battler.lastRegularMoveUsed ||
-                 !target.battler.pbHasMove?(target.battler.lastRegularMoveUsed)
-    next true if target.battler.usingMultiTurnAttack?
-    next true if move.move.moveBlacklist.include?(GameData::Move.get(target.battler.lastRegularMoveUsed).function_code)
-    idxMove = -1
-    target.battler.eachMoveWithIndex do |m, i|
-      idxMove = i if m.id == target.battler.lastRegularMoveUsed
-    end
-    next true if target.battler.moves[idxMove].pp == 0 && target.battler.moves[idxMove].total_pp > 0
-    next false
+    next target.battler.usingMultiTurnAttack?
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetUsesItsLastUsedMoveAgain",
   proc { |score, move, user, target, ai, battle|
-    # Without lots of code here to determine good/bad moves and relative
-    # speeds, using this move is likely to just be a waste of a turn
-    next Battle::AI::MOVE_USELESS_SCORE
+    # We don't ever want to make a foe act again
+    next Battle::AI::MOVE_USELESS_SCORE if target.opposes?(user)
+    # Useless if target will act before the user, as we don't know what move
+    # will be instructed
+    next Battle::AI::MOVE_USELESS_SCORE if target.faster_than?(user)
+    next Battle::AI::MOVE_USELESS_SCORE if !target.battler.lastRegularMoveUsed
+    mov = nil
+    target.battler.eachMove do |m|
+      mov = m if m.id == target.battler.lastRegularMoveUsed
+      break if mov
+    end
+    next Battle::AI::MOVE_USELESS_SCORE if mov.nil? || (mov.pp == 0 && mov.total_pp > 0)
+    next Battle::AI::MOVE_USELESS_SCORE if move.move.moveBlacklist.include?(mov.function)
+    # Without lots of code here to determine good/bad moves, using this move is
+    # likely to just be a waste of a turn
+    # NOTE: Because this move can be used against a foe but is being used on an
+    #       ally (since we're here in this code), this move's score will be
+    #       inverted later. A higher score here means this move will be less
+    #       preferred, which is the result we want.
+    score += 20
+    next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
-# StartSlowerBattlersActFirst
+Battle::AI::Handlers::MoveEffectScore.add("StartSlowerBattlersActFirst",
+  proc { |score, move, user, ai, battle|
+    # Get the speeds of all battlers
+    ally_speeds = []
+    foe_speeds = []
+    ai.each_battler do |b, i|
+      if b.opposes?(user)
+        foe_speeds.push(rough_stat(:SPEED))
+        foe_speeds.last *= 2 if user.pbOpposingSide.effects[PBEffects::Tailwind] > 1
+        foe_speeds.last /= 2 if user.pbOpposingSide.effects[PBEffects::Swamp] > 1
+      else
+        ally_speeds.push(rough_stat(:SPEED))
+        ally_speeds.last *= 2 if user.pbOwnSide.effects[PBEffects::Tailwind] > 1
+        ally_speeds.last /= 2 if user.pbOwnSide.effects[PBEffects::Swamp] > 1
+      end
+    end
+    # Just in case a side has no battlers
+    next Battle::AI::MOVE_USELESS_SCORE if ally_speeds.length == 0 || foe_speeds.length == 0
+    # Invert the speeds if Trick Room applies (and will last longer than this round)
+    if battle.field.effects[PBEffects::TrickRoom] > 1
+      foe_speeds.map! { |val| 100_000 - val }    # 100_000 is higher than speed can
+      ally_speeds.map! { |val| 100_000 - val }   # possibly be; only order matters
+    end
+    # Score based on the relative speeds
+    next Battle::AI::MOVE_USELESS_SCORE if ally_speeds.min > foe_speeds.max
+    if foe_speeds.min > ally_speeds.max
+      score += 20
+    elsif ally_speeds.sum / ally_speeds.length < foe_speeds.sum / foe_speeds.length
+      score += 10
+    else
+      score -= 10
+    end
+    next score
+  }
+)
 
 #===============================================================================
 #

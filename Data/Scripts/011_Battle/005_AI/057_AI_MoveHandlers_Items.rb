@@ -148,11 +148,19 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CorrodeTargetItem",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartTargetCannotUseItem",
   proc { |move, user, target, ai, battle|
     next target.effects[PBEffects::Embargo] > 0
+  }
+)
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartTargetCannotUseItem",
+  proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if !target.item || !target.item_active?
+    item_score = ai.battler_wants_item?(target, target.item_id)
+    score += item_score * 5
+    next score
   }
 )
 
@@ -169,7 +177,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartNegateHeldItems",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserConsumeBerryRaiseDefense2",
   proc { |move, user, ai, battle|
@@ -179,31 +187,28 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserConsumeBerryRaiseDefense2",
 )
 Battle::AI::Handlers::MoveEffectScore.add("UserConsumeBerryRaiseDefense2",
   proc { |score, move, user, ai, battle|
-    if ai.trainer.high_skill?
-      useful_berries = [
-        :ORANBERRY, :SITRUSBERRY, :AGUAVBERRY, :APICOTBERRY, :CHERIBERRY,
-        :CHESTOBERRY, :FIGYBERRY, :GANLONBERRY, :IAPAPABERRY, :KEEBERRY,
-        :LANSATBERRY, :LEPPABERRY, :LIECHIBERRY, :LUMBERRY, :MAGOBERRY,
-        :MARANGABERRY, :PECHABERRY, :PERSIMBERRY, :PETAYABERRY, :RAWSTBERRY,
-        :SALACBERRY, :STARFBERRY, :WIKIBERRY
-      ]
-      score += 30 if useful_berries.include?(user.item_id)
-    end
+    # Score for raising the user's stat
+    score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserDefense2",
+       score, move, user, ai, battle)
+    # Score for the consumed berry's effect
+    score += ai.get_score_change_for_consuming_item(user, user.item_id)
+    # Score for other results of consuming the berry
     if ai.trainer.medium_skill?
-      score += 20 if user.battler.canHeal? && user.hp < user.totalhp / 3 &&
-                     user.has_active_ability?(:CHEEKPOUCH)
-      score += 20 if user.has_active_ability?([:HARVEST, :RIPEN]) ||
-                     user.battler.pbHasMoveFunction?("RestoreUserConsumedItem")   # Recycle
-      score += 20 if !user.battler.canConsumeBerry?
+      # Prefer if user will heal itself with Cheek Pouch
+      score += 5 if user.battler.canHeal? && user.hp < user.totalhp / 2 &&
+                    user.has_active_ability?(:CHEEKPOUCH)
+      # Prefer if target can recover the consumed berry
+      score += 8 if user.has_active_ability?(:HARVEST) ||
+                    user.has_move_with_function?("RestoreUserConsumedItem")
+      # Prefer if user couldn't normally consume the berry
+      score += 4 if !user.battler.canConsumeBerry?
     end
-    score -= user.stages[:DEFENSE] * 20
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code should be for a single battler (each is checked in turn).
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AllBattlersConsumeBerry",
   proc { |move, user, target, ai, battle|
@@ -212,36 +217,20 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AllBattlersConsumeBerry
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AllBattlersConsumeBerry",
   proc { |score, move, user, target, ai, battle|
-    useful_berries = [
-      :ORANBERRY, :SITRUSBERRY, :AGUAVBERRY, :APICOTBERRY, :CHERIBERRY,
-      :CHESTOBERRY, :FIGYBERRY, :GANLONBERRY, :IAPAPABERRY, :KEEBERRY,
-      :LANSATBERRY, :LEPPABERRY, :LIECHIBERRY, :LUMBERRY, :MAGOBERRY,
-      :MARANGABERRY, :PECHABERRY, :PERSIMBERRY, :PETAYABERRY,
-      :RAWSTBERRY, :SALACBERRY, :STARFBERRY, :WIKIBERRY
-    ]
-    battle.allSameSideBattlers(user.index).each do |b|
-      if ai.trainer.high_skill?
-        amt = 30 / battle.pbSideSize(user.index)
-        score += amt if useful_berries.include?(b.item_id)
-      end
-      if ai.trainer.medium_skill?
-        amt = 20 / battle.pbSideSize(user.index)
-        score += amt if b.canHeal? && b.hp < b.totalhp / 3 && b.hasActiveAbility?(:CHEEKPOUCH)
-        score += amt if b.hasActiveAbility?([:HARVEST, :RIPEN]) ||
-                        b.pbHasMoveFunction?("RestoreUserConsumedItem")   # Recycle
-        score += amt if !b.canConsumeBerry?
-      end
+    # Score for the consumed berry's effect
+    score_change = ai.get_score_change_for_consuming_item(target, target.item_id)
+    # Score for other results of consuming the berry
+    if ai.trainer.medium_skill?
+      # Prefer if target will heal itself with Cheek Pouch
+      score_change += 5 if target.battler.canHeal? && target.hp < target.totalhp / 2 &&
+                           target.has_active_ability?(:CHEEKPOUCH)
+      # Prefer if target can recover the consumed berry
+      score_change += 8 if target.has_active_ability?(:HARVEST) ||
+                           target.has_move_with_function?("RestoreUserConsumedItem")
+      # Prefer if target couldn't normally consume the berry
+      score_change += 4 if !target.battler.canConsumeBerry?
     end
-    if ai.trainer.high_skill?
-      battle.allOtherSideBattlers(user.index).each do |b|
-        amt = 10 / battle.pbSideSize(target.index)
-        score -= amt if b.hasActiveItem?(useful_berries)
-        score -= amt if b.canHeal? && b.hp < b.totalhp / 3 && b.hasActiveAbility?(:CHEEKPOUCH)
-        score -= amt if b.hasActiveAbility?([:HARVEST, :RIPEN]) ||
-                        b.pbHasMoveFunction?("RestoreUserConsumedItem")   # Recycle
-        score -= amt if !b.canConsumeBerry?
-      end
-    end
+    score += (target.opposes?(user)) ? -score_change : score_change
     next score
   }
 )
@@ -255,7 +244,15 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserConsumeTargetBerry",
     next score if user.battler.unlosableItem?(target.item)
     next score if target.effects[PBEffects::Substitute] > 0
     next score if target.has_active_ability?(:STICKYHOLD) && !battle.moldBreaker
-    # User can consume the target's berry; score it
+    # Score the user gaining the item's effect
+    score += ai.get_score_change_for_consuming_item(user, target.item_id)
+    # Score for other results of consuming the berry
+    if ai.trainer.medium_skill?
+      # Prefer if user will heal itself with Cheek Pouch
+      score += 5 if user.battler.canHeal? && user.hp < user.totalhp / 2 &&
+                    user.has_active_ability?(:CHEEKPOUCH)
+    end
+    # Score the target no longer having the item
     target_item_preference = ai.battler_wants_item?(target, target.item_id)
     target_no_item_preference = ai.battler_wants_item?(target, :NONE)
     score += (target_item_preference - target_no_item_preference) * 4
@@ -296,16 +293,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ThrowUserItemAtTarget",
       score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
          score, move, user, target, ai, battle)
     else
-      # TODO: Berries/Berry Juice/Mental Herb/White Herb also have Fling
-      #       effects. Should they be accounted for individually, or is it okay
-      #       to consider it bad to Fling these in general? Note that they all
-      #       do minimal damage so this move probably won't be used anyway.
-      if Battle::ItemEffects::HPHeal[user.item_id] ||
-         Battle::ItemEffects::StatusCure[user.item_id] ||
-         Battle::ItemEffects::OnEndOfUsingMove[user.item_id] ||
-         Battle::ItemEffects::OnEndOfUsingMoveStatRestore[user.item_id]
-        score -= 8
-      end
+      score -= ai.get_score_change_for_consuming_item(target, user.item_id)
     end
     # Prefer if the user doesn't want its held item/don't prefer if it wants to
     # keep its held item
