@@ -540,6 +540,7 @@ module PluginManager
   # Get a list of all the plugin directories to inspect
   #-----------------------------------------------------------------------------
   def self.listAll
+    return []
     return [] if !$DEBUG || safeExists?("Game.rgssad")
     # get a list of all directories in the `Plugins/` folder
     dirs = []

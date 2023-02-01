@@ -22,6 +22,7 @@ class DoublePreviewScreen
     @picture2 = nil
     @draw_types = nil
     @draw_level = nil
+    @draw_sprite_info = nil
     @selected = 0
     @last_post=0
     @sprites      = {}
@@ -143,6 +144,7 @@ class DoublePreviewScreen
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @typewindows << drawPokemonType(fusedDexNum, viewport, x + 55, 220) if @draw_types
     drawFusionPreviewText(viewport, "Lv. " + level.to_s, x + 80, 40,) if @draw_level
+    drawSpriteInfoIcons(getPokemon(fusedDexNum),viewport) if @draw_sprite_info
   end
 
 
@@ -177,6 +179,16 @@ class DoublePreviewScreen
     overlay = BitmapSprite.new(Graphics.width, Graphics.height, viewport).bitmap
     textpos = [[text, x, y, 0, label_base_color, label_shadow_color]]
     pbDrawTextPositions(overlay, textpos)
+  end
+
+  #todo
+  # Adds the icons indicating if the fusion has alt sprites and if the final evo has a custom sprite
+  # also add a second icon to indidcate if the final evolution has a custom
+  def drawSpriteInfoIcons(fusedPokemon, viewport)
+    #pokedexUtils = PokedexUtils.new
+    #hasAltSprites = pokedexUtils.pbGetAvailableAlts(fusedPokemon).size>1
+    #pokedexUtils.getFinalEvolution(fusedPokemon).real_name
+    #todo
   end
 
   def dispose

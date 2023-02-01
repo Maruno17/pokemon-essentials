@@ -92,10 +92,9 @@ class PokemonPokedexInfo_Scene
 
   end
 
-  POSSIBLE_ALTS = %w[a b c d e f g h i j k x]
 
   def pbGetAvailableForms
-    return pbGetAvailableAlts
+    return PokedexUtils.new.pbGetAvailableAlts(@species)
   end
 
   def hide_all_selected_windows
@@ -134,32 +133,7 @@ class PokemonPokedexInfo_Scene
     update_selected
   end
 
-  def pbGetAvailableAlts
-    ret = []
-    return ret if !@species
-    dexNum = getDexNumberForSpecies(@species)
-    isFusion = dexNum > NB_POKEMON
-    if !isFusion
-      ret << Settings::BATTLERS_FOLDER + dexNum.to_s + "/" + dexNum.to_s + ".png"
-      return ret
-    end
-    body_id = getBodyID(@species)
-    head_id = getHeadID(@species, body_id)
 
-    baseFilename = head_id.to_s + "." + body_id.to_s
-    baseFilePath = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" + baseFilename + ".png"
-    if pbResolveBitmap(baseFilePath)
-      ret << baseFilePath
-    end
-    POSSIBLE_ALTS.each { |alt_letter|
-      altFilePath = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED  + "/" + head_id.to_s + "/" + baseFilename + alt_letter + ".png"
-      if pbResolveBitmap(altFilePath)
-        ret << altFilePath
-      end
-    }
-    ret << Settings::BATTLERS_FOLDER + head_id.to_s + "/" + baseFilename + ".png"
-    return ret
-  end
 
   def pbChooseForm
     loop do

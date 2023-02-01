@@ -57,7 +57,14 @@ def mainFunction
   return 1
 end
 
-
+def clearTempFolder()
+  folder_path = Settings::DOWNLOADED_SPRITES_FOLDER
+  Dir.foreach(folder_path) do |file|
+    next if file == '.' or file == '..'
+    file_path = File.join(folder_path, file)
+    File.delete(file_path) if File.file?(file_path)
+  end
+end
 
 def sortCustomBattlers()
   $game_temp.nb_imported_sprites=0
@@ -136,6 +143,7 @@ def mainFunctionDebug
     Game.set_up_system
     Graphics.update
     Graphics.freeze
+    clearTempFolder()
     sortCustomBattlers()
     $scene = pbCallTitle
     $scene.main until $scene.nil?

@@ -14,6 +14,7 @@ class FusionPreviewScreen < DoublePreviewScreen
     super(poke1,poke2)
     @draw_types = true
     @draw_level = true
+    @draw_sprite_info=true
 
     #@viewport = viewport
     @poke1 = poke1

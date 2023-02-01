@@ -161,7 +161,7 @@ end
 
 
 def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, debugShiny, srcx=nil, srcy=nil, width=nil, height=nil,
-                                 showSecondStarUnder=false, showSecondStarAbove=false)
+                                 showSecondStarUnder=false, showSecondStarAbove=false )
   color = debugShiny ? Color.new(0,0,0,255) : nil
   imageArray.push(["Graphics/Pictures/shiny",xPos,yPos,srcx,srcy,width,height,color])
   if shinyBody && shinyHead
@@ -174,6 +174,10 @@ def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, d
     end
     imageArray.push(["Graphics/Pictures/shiny",xPos,yPos,srcx,srcy,width,height,color])
   end
+  # if onlyOutline
+  #   imageArray.push(["Graphics/Pictures/shiny_black",xPos,yPos,srcx,srcy,width,height,color])
+  # end
+
 end
 
 def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3, maxBST=300)
@@ -369,8 +373,13 @@ end
 def obtainPokemonSpritePath(id, includeCustoms = true)
   head = getBasePokemonID(param.to_i, false)
   body = getBasePokemonID(param.to_i, true)
+
   return obtainPokemonSpritePath(body, head, includeCustoms)
 end
+
+
+
+
 
 def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
   picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", headId, bodyId)

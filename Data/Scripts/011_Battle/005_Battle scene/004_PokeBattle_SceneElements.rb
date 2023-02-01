@@ -235,7 +235,9 @@ class PokemonDataBox < SpriteWrapper
     # Draw shiny icon
     if @battler.shiny?
       shinyX = (@battler.opposes?(0)) ? 206 : -6   # Foe's/player's
-      addShinyStarsToGraphicsArray(imagePos,@spriteBaseX+shinyX,35, @battler.pokemon.bodyShiny?,@battler.pokemon.headShiny?,@battler.pokemon.debugShiny?)
+
+      pokeRadarShiny= !@battler.pokemon.debugShiny? && !@battler.pokemon.naturalShiny?
+      addShinyStarsToGraphicsArray(imagePos,@spriteBaseX+shinyX,35, @battler.pokemon.bodyShiny?,@battler.pokemon.headShiny?,@battler.pokemon.debugShiny?, pokeRadarShiny)
     end
     # Draw Mega Evolution/Primal Reversion icon
     if @battler.mega?
