@@ -161,9 +161,7 @@ module GameData
     def self.sprite_filename(dex_number)
       return nil if dex_number == nil
       if dex_number <= Settings::NB_POKEMON
-        folder = dex_number.to_s
-        filename = sprintf("%s.png", dex_number)
-        head_id=nil
+        return get_unfused_sprite_path(dex_number)
       else
         if dex_number >= Settings::ZAPMOLCUNO_NB
           specialPath = getSpecialSpriteName(dex_number)
@@ -172,18 +170,53 @@ module GameData
         else
           body_id = getBodyID(dex_number)
           head_id = getHeadID(dex_number, body_id)
-          folder = head_id.to_s
-          filename = sprintf("%s.%s.png", head_id, body_id)
+          return get_fusion_sprite_path(head_id,body_id)
+          # folder = head_id.to_s
+          # filename = sprintf("%s.%s.png", head_id, body_id)
         end
       end
-      customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" +filename)
-      species = getSpecies(dex_number)
-      use_custom = customPath && !species.always_use_generated
-      if use_custom
-        return customPath
-      end
-      return Settings::BATTLERS_FOLDER + folder + "/" + filename
+      # customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" +filename)
+      # customPath = download_custom_sprite(head_id,body_id)
+      #
+      # species = getSpecies(dex_number)
+      # use_custom = customPath && !species.always_use_generated
+      # if use_custom
+      #   return customPath
+      # end
+      # #return Settings::BATTLERS_FOLDER + folder + "/" + filename
+      # return download_autogen_sprite(head_id,body_id)
     end
 
   end
+end
+
+def get_unfused_sprite_path(dex_number)
+  folder = dex_number.to_s
+  filename = sprintf("%s.png", dex_number)
+
+  normal_path = Settings::BATTLERS_FOLDER + folder + "/" + filename
+  lightmode_path = Settings::BATTLERS_FOLDER +  filename
+  return normal_path if pbResolveBitmap(normal_path)
+  return lightmode_path
+end
+
+def get_fusion_sprite_path(head_id,body_id)
+  #Try local custom sprite
+  filename = sprintf("%s.%s.png", head_id, body_id)
+  local_custom_path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" +filename
+  return local_custom_path if pbResolveBitmap(local_custom_path)
+
+  #Try to download custom sprite if none found locally
+  downloaded_custom = download_custom_sprite(head_id,body_id)
+  return downloaded_custom if downloaded_custom
+
+  #Try local generated sprite
+  local_generated_path = Settings::BATTLERS_FOLDER + head_id.to_s + "/" + filename
+  return local_generated_path if pbResolveBitmap(local_generated_path)
+
+  #Download generate sprite if nothing else found
+  autogen_path= download_autogen_sprite(head_id,body_id)
+  return autogen_path if pbResolveBitmap(autogen_path)
+
+  return Settings::DEFAULT_SPRITE_PATH
 end
