@@ -110,7 +110,8 @@ class DoublePreviewScreen
     bitmap = AnimatedBitmap.new(picturePath)
     bitmap.scale_bitmap(Settings::FRONTSPRITE_SCALE)
 
-    hasCustom = picturePath.include?("CustomBattlers")
+    #hasCustom = picturePath.include?("CustomBattlers")
+    hasCustom = customSpriteExistsBase(body_pokemon,head_pokemon)
 
     previewwindow = PictureWindow.new(bitmap)
     previewwindow.x = x
@@ -131,13 +132,7 @@ class DoublePreviewScreen
 
 
   def getPicturePath(head_pokemon, body_pokemon)
-    pathCustom = _INTL("Graphics/CustomBattlers/indexed/{1}/{1}.{2}.png", head_pokemon, body_pokemon)
-    if (pbResolveBitmap(pathCustom))
-      picturePath = pathCustom
-    else
-      picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png",head_pokemon , body_pokemon)
-    end
-    return picturePath
+    return  get_fusion_sprite_path(head_pokemon,body_pokemon)
   end
 
   def drawFusionInformation(fusedDexNum, level, x = 0)

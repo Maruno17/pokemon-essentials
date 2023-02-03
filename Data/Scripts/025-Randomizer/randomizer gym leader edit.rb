@@ -408,7 +408,7 @@ end
 #end
 
 
-def getCustomSpeciesList()
+def getCustomSpeciesList(allowOnline=true)
   speciesList = []
 
   for num in 1..NB_POKEMON
@@ -429,6 +429,16 @@ def getCustomSpeciesList()
 
     end
   end
+
+
+  if speciesList.length <= 200 && allowOnline
+    #try to get list from github
+    print "let's try it online bruh"
+    online_list = list_online_custom_sprites
+    return online_list if online_list !=nil
+  end
+
+
   return speciesList
 end
 # def getCustomSpeciesList()

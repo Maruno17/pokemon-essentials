@@ -132,7 +132,7 @@ end
 
 def getRandomCustomFusionForIntro(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3)
   if customPokeList.length == 0
-    customPokeList = getCustomSpeciesList()
+    customPokeList = getCustomSpeciesList(false )
   end
   randPoke = []
   if customPokeList.length >= 5000
@@ -401,8 +401,17 @@ def customSpriteExists(species)
   head = getBasePokemonID(species, false)
   body = getBasePokemonID(species, true)
   pathCustom = getCustomSpritePath(body,head)
-  return pbResolveBitmap(pathCustom) != nil
+
+  return true if pbResolveBitmap(pathCustom) != nil
+  return download_custom_sprite(head, body) != nil
 end
+
+def customSpriteExistsBase(head,body)
+  pathCustom = getCustomSpritePath(body,head)
+  return true if pbResolveBitmap(pathCustom) != nil
+  return download_custom_sprite(head, body) != nil
+end
+
 
 def getArceusPlateType(heldItem)
   return :NORMAL if heldItem == nil

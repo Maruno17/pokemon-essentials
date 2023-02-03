@@ -44,7 +44,7 @@ def handleReplaceExistingSprites()
 end
 
 def pbCallTitle
-  return Scene_DebugIntro.new if $DEBUG
+  #return Scene_DebugIntro.new if $DEBUG
   return Scene_Intro.new
 end
 
@@ -144,7 +144,11 @@ def mainFunctionDebug
     Graphics.update
     Graphics.freeze
     clearTempFolder()
-    sortCustomBattlers()
+    begin
+      sortCustomBattlers()
+    rescue
+      echo "failed to sort custom battlers"
+    end
     $scene = pbCallTitle
     $scene.main until $scene.nil?
     Graphics.transition(20)

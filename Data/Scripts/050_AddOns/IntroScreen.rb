@@ -70,6 +70,7 @@ class Scene_Intro
     pbBGMStop(1.0)
     # disposes current title screen
     disposeTitle
+    clearTempFolder
     # initializes load screen
     sscene = PokemonLoad_Scene.new
     sscreen = PokemonLoadScreen.new(sscene)
@@ -129,19 +130,18 @@ class GenOneStyle
     Kernel.pbDisplayText("Version " + Settings::GAME_VERSION_NUMBER, 254, 308, 99999)
 
     @maxPoke = 140 #1st gen, pas de legend la premiere fois, graduellement plus de poke
-    @customPokeList = getCustomSpeciesList()
+    @customPokeList = getCustomSpeciesList(false)
     #Get random Pokemon (1st gen orandPokenly, pas de legend la prmeiere fois)
 
     randPoke = getRandomCustomFusionForIntro(true, @customPokeList, @maxPoke)
     randpoke1 = randPoke[0] #rand(@maxPoke)+1
     randpoke2 = randPoke[1] #rand(@maxPoke)+1
 
-    randpoke1s = randpoke1.to_s
     randpoke2s = randpoke2.to_s
 
-    path_s1 = "Graphics/Battlers/" + randpoke1s + "/" + randpoke1s + ".png"
-    path_s2 = "Graphics/Battlers/" + randpoke2s + "/" + randpoke2s + ".png"
-    path_f = getFusedPath(randpoke1, randpoke2)
+    path_s1 = get_unfused_sprite_path(randpoke1)
+    path_s2 = get_unfused_sprite_path(randpoke2)
+    path_f = get_fusion_sprite_path(randpoke1, randpoke2)
 
     @prevPoke1 = randpoke1
     @prevPoke2 = randpoke2
@@ -219,7 +219,7 @@ class GenOneStyle
     @sprites["poke"].tone = Tone.new(0, 0, 0, 255)
     @sprites["poke"].opacity = 0
     @sprites["poke2"] = Sprite.new(@viewport)
-    @sprites["poke2"].bitmap = pbBitmap("Graphics/Battlers/21364")
+    # @sprites["poke2"].bitmap = pbBitmap("Graphics/Battlers/21364")
     @sprites["poke2"].tone = Tone.new(255, 255, 255, 255)
     @sprites["poke2"].src_rect.set(0, Graphics.height, Graphics.width, 48)
     @sprites["poke2"].y = Graphics.height
@@ -372,11 +372,8 @@ class GenOneStyle
       randpoke1 = randPoke[0] #rand(@maxPoke)+1
       randpoke2 = randPoke[1] #rand(@maxPoke)+1
 
-      randpoke1s = randpoke1.to_s
-      randpoke2s = randpoke2.to_s
-
-      path_s1 = "Graphics/Battlers/" + randpoke1s + "/" + randpoke1s + ".png"
-      path_s2 = "Graphics/Battlers/" + randpoke2s + "/" + randpoke2s + ".png"
+      path_s1 = get_unfused_sprite_path(randpoke1)
+      path_s2 = get_unfused_sprite_path(randpoke2)
       path_f = getFusedPath(randpoke1, randpoke2)
 
       path_fMod = getFusedPath(@prevPoke1, @prevPoke2)
@@ -408,11 +405,11 @@ class GenOneStyle
 
   #new version
   def getFusedPath(randpoke1, randpoke2)
-    path = rand(2) == 0 ? GetSpritePathForced(randpoke1, randpoke2, true) : GetSpritePathForced(randpoke2, randpoke1, true)
+    path = rand(2) == 0 ? get_fusion_sprite_path(randpoke1, randpoke2) : get_fusion_sprite_path(randpoke2, randpoke1)
     if Input.press?(Input::RIGHT)
-      path = GetSpritePathForced(randpoke1, randpoke2, true)
+      path = get_fusion_sprite_path(randpoke2, randpoke1)
     elsif Input.press?(Input::LEFT)
-      path = GetSpritePathForced(randpoke2, randpoke1, true)
+      path = get_fusion_sprite_path(randpoke1, randpoke2)
     end
     return path
   end
