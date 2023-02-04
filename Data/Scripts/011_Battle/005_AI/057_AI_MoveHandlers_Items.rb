@@ -202,6 +202,8 @@ Battle::AI::Handlers::MoveEffectScore.add("UserConsumeBerryRaiseDefense2",
                     user.has_move_with_function?("RestoreUserConsumedItem")
       # Prefer if user couldn't normally consume the berry
       score += 4 if !user.battler.canConsumeBerry?
+      #Prefer if user will newly be able to use Belch
+      score += 4 if !user.battler.belched? && user.has_move_with_function?("FailsIfUserNotConsumedBerry")
     end
     next score
   }
@@ -229,6 +231,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AllBattlersConsumeBerry"
                            target.has_move_with_function?("RestoreUserConsumedItem")
       # Prefer if target couldn't normally consume the berry
       score_change += 4 if !target.battler.canConsumeBerry?
+      #Prefer if user or ally will newly be able to use Belch
+      ai.each_same_side_battler(user.side) do |b, i|
+        score += 4 if !b.battler.belched? && b.has_move_with_function?("FailsIfUserNotConsumedBerry")
+      end
     end
     score += (target.opposes?(user)) ? -score_change : score_change
     next score
@@ -251,6 +257,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserConsumeTargetBerry",
       # Prefer if user will heal itself with Cheek Pouch
       score += 5 if user.battler.canHeal? && user.hp < user.totalhp / 2 &&
                     user.has_active_ability?(:CHEEKPOUCH)
+      #Prefer if user will newly be able to use Belch
+      score += 4 if !user.battler.belched? && user.has_move_with_function?("FailsIfUserNotConsumedBerry")
     end
     # Score the target no longer having the item
     target_item_preference = ai.battler_wants_item?(target, target.item_id)
