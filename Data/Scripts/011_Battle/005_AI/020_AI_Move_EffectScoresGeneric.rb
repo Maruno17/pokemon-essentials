@@ -1092,7 +1092,7 @@ class Battle::AI
         :KEEBERRY     => :DEFENSE,
         :MARANGABERRY => :SPECIAL_DEFENSE
       }[item]
-      ret += 8 if stat && ai.stat_raise_worthwhile?(battler, stat)
+      ret += 8 if stat && stat_raise_worthwhile?(battler, stat)
       ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && battler.has_active_ability?(:RIPEN)
     when :STARFBERRY
       # Random stat raise
