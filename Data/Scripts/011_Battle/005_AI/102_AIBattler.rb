@@ -287,11 +287,10 @@ class Battle::AI::AIBattler
   #=============================================================================
 
   def can_attack?
-    return false if self.effects[PBEffects::SkyDrop] >= 0
     return false if self.effects[PBEffects::HyperBeam] > 0
     return false if status == :SLEEP && statusCount > 1
     return false if status == :FROZEN   # Only 20% chance of unthawing; assune it won't
-    return false if self.effects[PBEffects::Truant]
+    return false if self.effects[PBEffects::Truant] && has_active_ability?(:TRUANT)
     return false if self.effects[PBEffects::Flinch]
     # NOTE: Confusion/infatuation/paralysis have higher chances of allowing the
     #       attack, so the battler is treated as able to attack in those cases.
