@@ -419,10 +419,7 @@ def getCustomSpeciesList(allowOnline=true)
     for i in 0..maxVal
       path = filesList[i]
       file = File.basename(path, ".*")
-      splitPoke = file.split(".")
-      head = splitPoke[0].to_i
-      body = splitPoke[1].to_i
-      fused = (body * NB_POKEMON) + head
+      fused = getDexNumFromFilename(file)
       if fused <= maxDexNumber && fused > 0
         speciesList << fused
       end
@@ -435,12 +432,26 @@ def getCustomSpeciesList(allowOnline=true)
     #try to get list from github
     print "let's try it online bruh"
     online_list = list_online_custom_sprites
-    return online_list if online_list !=nil
+    return nil if !online_list
+    species_id_list = []
+    for file in online_list
+      species_id_list << getDexNumFromFilename(file)
+    end
+    return species_id_list
   end
 
 
   return speciesList
 end
+
+#input: ex: 10.10.png
+def getDexNumFromFilename(filename)
+  splitPoke = filename.split(".")
+  head = splitPoke[0].to_i
+  body = splitPoke[1].to_i
+  return (body * NB_POKEMON) + head
+end
+
 # def getCustomSpeciesList()
 #   filesList = Dir["./Graphics/CustomBattlers/*"]
 #   maxDexNumber = (NB_POKEMON * NB_POKEMON) + NB_POKEMON

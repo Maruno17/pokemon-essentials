@@ -45,6 +45,7 @@ def download_custom_sprite(head_id, body_id)
   return nil
 end
 
+#format: [1.1.png, 1.2.png, etc.]
 def list_online_custom_sprites
   repo = "Aegide/custom-fusion-sprites"
   folder = "CustomBattlers"
