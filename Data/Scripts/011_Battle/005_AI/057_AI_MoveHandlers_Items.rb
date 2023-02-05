@@ -204,6 +204,8 @@ Battle::AI::Handlers::MoveEffectScore.add("UserConsumeBerryRaiseDefense2",
       score += 4 if !user.battler.canConsumeBerry?
       # Prefer if user will become able to use Belch
       score += 4 if !user.battler.belched? && user.has_move_with_function?("FailsIfUserNotConsumedBerry")
+      # Prefer if user will benefit from not having an item
+      score += 5 if user.has_active_ability?(:UNBURDEN)
     end
     next score
   }
@@ -232,9 +234,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AllBattlersConsumeBerry"
       # Prefer if target couldn't normally consume the berry
       score_change += 4 if !target.battler.canConsumeBerry?
       # Prefer if target will become able to use Belch
-      ai.each_same_side_battler(user.side) do |b, i|
-        score += 4 if !b.battler.belched? && b.has_move_with_function?("FailsIfUserNotConsumedBerry")
-      end
+      score += 4 if !target.battler.belched? && target.has_move_with_function?("FailsIfUserNotConsumedBerry")
+      # Prefer if target will benefit from not having an item
+      score += 5 if target.has_active_ability?(:UNBURDEN)
     end
     score += (target.opposes?(user)) ? -score_change : score_change
     next score
@@ -257,6 +259,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserConsumeTargetBerry",
       # Prefer if user will heal itself with Cheek Pouch
       score += 5 if user.battler.canHeal? && user.hp < user.totalhp / 2 &&
                     user.has_active_ability?(:CHEEKPOUCH)
+      # Prefer if user will become able to use Belch
+      score += 4 if !user.battler.belched? && user.has_move_with_function?("FailsIfUserNotConsumedBerry")
+      # Don't prefer if target will benefit from not having an item
+      score -= 5 if target.has_active_ability?(:UNBURDEN)
     end
     # Score the target no longer having the item
     target_item_preference = ai.battler_wants_item?(target, target.item_id)
@@ -301,13 +307,19 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ThrowUserItemAtTarget",
     else
       score -= ai.get_score_change_for_consuming_item(target, user.item_id)
     end
+    # Score for other results of consuming the berry
+    if ai.trainer.medium_skill?
+      # Don't prefer if target will become able to use Belch
+      score -= 4 if user.item.is_berry? && !target.battler.belched? &&
+                    target.has_move_with_function?("FailsIfUserNotConsumedBerry")
+      # Prefer if user will benefit from not having an item
+      score += 5 if user.has_active_ability?(:UNBURDEN)
+    end
     # Prefer if the user doesn't want its held item/don't prefer if it wants to
     # keep its held item
     user_item_preference = ai.battler_wants_item?(user, user.item_id)
     user_no_item_preference = ai.battler_wants_item?(user, :NONE)
     score += (user_item_preference - user_no_item_preference) * 4
-    # Prefer if user will benefit from not having an item
-    score += 5 if user.has_active_ability?(:UNBURDEN)
     next score
   }
 )
