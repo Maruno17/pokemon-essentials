@@ -45,8 +45,8 @@ def drawSpot(bitmap, spotpattern, x, y, red, green, blue)
     spot = spotpattern[yy]
     width.times do |xx|
       next if spot[xx] != 1
-      xOrg = (x + xx) << 1
-      yOrg = (y + yy) << 1
+      xOrg = (x + xx) * 2
+      yOrg = (y + yy) * 2
       color = bitmap.get_pixel(xOrg, yOrg)
       r = color.red + red
       g = color.green + green
@@ -63,6 +63,7 @@ def drawSpot(bitmap, spotpattern, x, y, red, green, blue)
 end
 
 def pbSpindaSpots(pkmn, bitmap)
+  # NOTE: These spots are doubled in size when drawing them.
   spot1 = [
     [0, 0, 1, 1, 1, 1, 0, 0],
     [0, 1, 1, 1, 1, 1, 1, 0],
@@ -123,6 +124,8 @@ def pbSpindaSpots(pkmn, bitmap)
   c = (id >> 8) & 15
   b = (id >> 4) & 15
   a = (id) & 15
+  # NOTE: The coordinates below (b + 33, a + 25 and so on) are doubled when
+  #       drawing the spot.
   if pkmn.shiny?
     drawSpot(bitmap, spot1, b + 33, a + 25, -75, -10, -150)
     drawSpot(bitmap, spot2, d + 21, c + 24, -75, -10, -150)
