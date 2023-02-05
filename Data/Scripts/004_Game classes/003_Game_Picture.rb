@@ -4,11 +4,7 @@
 #  This class handles the picture. It's used within the Game_Screen class
 #  ($game_screen).
 #===============================================================================
-
 class Game_Picture
-  #-----------------------------------------------------------------------------
-  # * Public Instance Variables
-  #-----------------------------------------------------------------------------
   attr_reader   :number                   # picture number
   attr_reader   :name                     # file name
   attr_reader   :origin                   # starting point
@@ -21,10 +17,6 @@ class Game_Picture
   attr_reader   :tone                     # color tone
   attr_reader   :angle                    # rotation angle
 
-  #-----------------------------------------------------------------------------
-  # * Object Initialization
-  #     number : picture number
-  #-----------------------------------------------------------------------------
   def initialize(number)
     @number = number
     @name = ""
@@ -47,8 +39,8 @@ class Game_Picture
     @angle = 0
     @rotate_speed = 0
   end
-  #-----------------------------------------------------------------------------
-  # * Show Picture
+
+  # Show Picture
   #     name       : file name
   #     origin     : starting point
   #     x          : x-coordinate
@@ -57,7 +49,6 @@ class Game_Picture
   #     zoom_y     : y directional zoom rate
   #     opacity    : opacity level
   #     blend_type : blend method
-  #-----------------------------------------------------------------------------
   def show(name, origin, x, y, zoom_x, zoom_y, opacity, blend_type)
     @name = name
     @origin = origin
@@ -79,8 +70,8 @@ class Game_Picture
     @angle = 0
     @rotate_speed = 0
   end
-  #-----------------------------------------------------------------------------
-  # * Move Picture
+
+  # Move Picture
   #     duration   : time
   #     origin     : starting point
   #     x          : x-coordinate
@@ -89,7 +80,6 @@ class Game_Picture
   #     zoom_y     : y directional zoom rate
   #     opacity    : opacity level
   #     blend_type : blend method
-  #-----------------------------------------------------------------------------
   def move(duration, origin, x, y, zoom_x, zoom_y, opacity, blend_type)
     @duration       = duration
     @origin         = origin
@@ -100,34 +90,28 @@ class Game_Picture
     @target_opacity = opacity.to_f
     @blend_type     = blend_type || 0
   end
-  #-----------------------------------------------------------------------------
-  # * Change Rotation Speed
+
+  # Change Rotation Speed
   #     speed : rotation speed
-  #-----------------------------------------------------------------------------
   def rotate(speed)
     @rotate_speed = speed
   end
-  #-----------------------------------------------------------------------------
-  # * Start Change of Color Tone
+
+  # Start Change of Color Tone
   #     tone     : color tone
   #     duration : time
-  #-----------------------------------------------------------------------------
   def start_tone_change(tone, duration)
     @tone_target = tone.clone
     @tone_duration = duration
-    if @tone_duration == 0
-      @tone = @tone_target.clone
-    end
+    @tone = @tone_target.clone if @tone_duration == 0
   end
-  #-----------------------------------------------------------------------------
-  # * Erase Picture
-  #-----------------------------------------------------------------------------
+
+  # Erase Picture
   def erase
     @name = ""
   end
-  #-----------------------------------------------------------------------------
-  # * Frame Update
-  #-----------------------------------------------------------------------------
+
+  # Frame Update
   def update
     if @duration >= 1
       d = @duration

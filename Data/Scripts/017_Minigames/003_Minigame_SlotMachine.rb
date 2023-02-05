@@ -1,10 +1,10 @@
-################################################################################
+#===============================================================================
 # "Slot Machine" mini-game
 # By Maruno
 #-------------------------------------------------------------------------------
 # Run with:      pbSlotMachine(1)
 # - The number is either 0 (easy), 1 (default) or 2 (hard).
-################################################################################
+#===============================================================================
 class SlotMachineReel < BitmapSprite
   attr_accessor :reel
   attr_accessor :toppos
@@ -79,8 +79,9 @@ class SlotMachineReel < BitmapSprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SlotMachineScore < BitmapSprite
   attr_reader :score
 
@@ -107,8 +108,9 @@ class SlotMachineScore < BitmapSprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SlotMachineScene
   attr_accessor :gameRunning
   attr_accessor :gameEnd
@@ -376,8 +378,9 @@ class SlotMachineScene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SlotMachine
   def initialize(scene)
     @scene = scene
@@ -390,8 +393,9 @@ class SlotMachine
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbSlotMachine(difficulty = 1)
   if !$bag.has?(:COINCASE)
     pbMessage(_INTL("It's a Slot Machine."))
@@ -400,10 +404,10 @@ def pbSlotMachine(difficulty = 1)
   elsif $player.coins == Settings::MAX_COINS
     pbMessage(_INTL("Your Coin Case is full!"))
   else
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = SlotMachineScene.new
       screen = SlotMachine.new(scene)
       screen.pbStartScreen(difficulty)
-    }
+    end
   end
 end

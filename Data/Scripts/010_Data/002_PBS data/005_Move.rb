@@ -60,12 +60,12 @@ module GameData
 
     # @return [String] the translated name of this move
     def name
-      return pbGetMessageFromHash(MessageTypes::Moves, @real_name)
+      return pbGetMessageFromHash(MessageTypes::MOVE_NAMES, @real_name)
     end
 
     # @return [String] the translated description of this move
     def description
-      return pbGetMessageFromHash(MessageTypes::MoveDescriptions, @real_description)
+      return pbGetMessageFromHash(MessageTypes::MOVE_DESCRIPTIONS, @real_description)
     end
 
     def has_flag?(flag)

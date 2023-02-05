@@ -77,14 +77,14 @@ class Game_FollowerFactory
   attr_reader :last_update
 
   def initialize
-    @events      = []
+    @events = []
     $PokemonGlobal.followers.each do |follower|
       @events.push(create_follower_object(follower))
     end
     @last_update = -1
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def add_follower(event, name = nil, common_event_id = nil)
     return if !event
@@ -150,7 +150,7 @@ class Game_FollowerFactory
     $PokemonGlobal.followers.each_with_index { |follower, i| yield @events[i], follower }
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def turn_followers
     leader = $game_player
@@ -208,11 +208,11 @@ class Game_FollowerFactory
       vector = $map_factory.getRelativePos(event.map.map_id, event.x, event.y,
                                            leader[0], leader[1], leader[2])
       if vector[0] != 0
-        move_route.prepend((vector[0] > 0) ? PBMoveRoute::Right : PBMoveRoute::Left)
+        move_route.prepend((vector[0] > 0) ? PBMoveRoute::RIGHT : PBMoveRoute::LEFT)
       elsif vector[1] != 0
-        move_route.prepend((vector[1] > 0) ? PBMoveRoute::Down : PBMoveRoute::Up)
+        move_route.prepend((vector[1] > 0) ? PBMoveRoute::DOWN : PBMoveRoute::UP)
       end
-      pbMoveRoute(event, move_route + [PBMoveRoute::Opacity, 0])
+      pbMoveRoute(event, move_route + [PBMoveRoute::OPACITY, 0])
     end
   end
 
@@ -237,7 +237,7 @@ class Game_FollowerFactory
     end
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def update
     followers = $PokemonGlobal.followers
@@ -286,7 +286,7 @@ class Game_FollowerFactory
     end
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   private
 
@@ -387,7 +387,6 @@ module Followers
     $game_temp.followers.put_followers_on_player
   end
 end
-
 
 #===============================================================================
 # Deprecated methods

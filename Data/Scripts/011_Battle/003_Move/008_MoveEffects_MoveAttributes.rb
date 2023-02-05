@@ -100,9 +100,7 @@ class Battle::Move::OHKO < Battle::Move::FixedDamageMove
 
   def pbHitEffectivenessMessages(user, target, numTargets = 1)
     super
-    if target.fainted?
-      @battle.pbDisplay(_INTL("It's a one-hit KO!"))
-    end
+    @battle.pbDisplay(_INTL("It's a one-hit KO!")) if target.fainted?
   end
 end
 
@@ -1211,9 +1209,7 @@ end
 #===============================================================================
 class Battle::Move::UseTargetAttackInsteadOfUserAttack < Battle::Move
   def pbGetAttackStats(user, target)
-    if specialMove?
-      return target.spatk, target.stages[:SPECIAL_ATTACK] + 6
-    end
+    return target.spatk, target.stages[:SPECIAL_ATTACK] + 6 if specialMove?
     return target.attack, target.stages[:ATTACK] + 6
   end
 end

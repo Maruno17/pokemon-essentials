@@ -111,7 +111,7 @@ class Battle
   # all instances where the party screen is opened.
   def pbPartyScreen(idxBattler, checkLaxOnly = false, canCancel = false, shouldRegister = false)
     ret = -1
-    @scene.pbPartyScreen(idxBattler, canCancel) { |idxParty, partyScene|
+    @scene.pbPartyScreen(idxBattler, canCancel) do |idxParty, partyScene|
       if checkLaxOnly
         next false if !pbCanSwitchLax?(idxBattler, idxParty, partyScene)
       elsif !pbCanSwitch?(idxBattler, idxParty, partyScene)
@@ -122,7 +122,7 @@ class Battle
       end
       ret = idxParty
       next true
-    }
+    end
     return ret
   end
 

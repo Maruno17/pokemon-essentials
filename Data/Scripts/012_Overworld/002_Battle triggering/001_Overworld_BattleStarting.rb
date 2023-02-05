@@ -8,8 +8,9 @@ class PokemonGlobalMetadata
   attr_accessor :nextBattleBack
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Game_Temp
   attr_accessor :encounter_triggered
   attr_accessor :encounter_type
@@ -61,8 +62,9 @@ class Game_Temp
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def setBattleRule(*args)
   r = nil
   args.each do |arg|
@@ -388,12 +390,10 @@ class WildBattle
     $game_temp.clear_battle_rules
     # Perform the battle itself
     outcome = 0
-    pbBattleAnimation(pbGetWildBattleBGM(foe_party), (foe_party.length == 1) ? 0 : 2, foe_party) {
-      pbSceneStandby {
-        outcome = battle.pbStartBattle
-      }
+    pbBattleAnimation(pbGetWildBattleBGM(foe_party), (foe_party.length == 1) ? 0 : 2, foe_party) do
+      pbSceneStandby { outcome = battle.pbStartBattle }
       BattleCreationHelperMethods.after_battle(outcome, can_lose)
-    }
+    end
     Input.update
     # Save the result of the battle in a Game Variable (1 by default)
     BattleCreationHelperMethods.set_outcome(outcome, outcome_variable)
@@ -510,12 +510,10 @@ class TrainerBattle
     $game_temp.clear_battle_rules
     # Perform the battle itself
     outcome = 0
-    pbBattleAnimation(pbGetTrainerBattleBGM(foe_trainers), (battle.singleBattle?) ? 1 : 3, foe_trainers) {
-      pbSceneStandby {
-        outcome = battle.pbStartBattle
-      }
+    pbBattleAnimation(pbGetTrainerBattleBGM(foe_trainers), (battle.singleBattle?) ? 1 : 3, foe_trainers) do
+      pbSceneStandby { outcome = battle.pbStartBattle }
       BattleCreationHelperMethods.after_battle(outcome, can_lose)
-    }
+    end
     Input.update
     # Save the result of the battle in a Game Variable (1 by default)
     BattleCreationHelperMethods.set_outcome(outcome, outcome_variable, true)

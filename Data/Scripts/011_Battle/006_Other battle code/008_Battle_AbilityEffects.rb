@@ -888,10 +888,7 @@ Battle::AbilityEffects::MoveBlocking.add(:DAZZLING,
     next false if battle.choices[user.index][4] <= 0
     next false if !bearer.opposes?(user)
     ret = false
-    targets.each do |b|
-      next if !b.opposes?(user)
-      ret = true
-    end
+    targets.each { |b| ret = true if b.opposes?(user) }
     next ret
   }
 )
@@ -1243,9 +1240,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:DRAGONSMAW,
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:FLAREBOOST,
   proc { |ability, user, target, move, mults, baseDmg, type|
-    if user.burned? && move.specialMove?
-      mults[:base_damage_multiplier] *= 1.5
-    end
+    mults[:base_damage_multiplier] *= 1.5 if user.burned? && move.specialMove?
   }
 )
 
@@ -1387,9 +1382,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:SOLARPOWER,
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:SNIPER,
   proc { |ability, user, target, move, mults, baseDmg, type|
-    if target.damageState.critical
-      mults[:final_damage_multiplier] *= 1.5
-    end
+    mults[:final_damage_multiplier] *= 1.5 if target.damageState.critical
   }
 )
 
@@ -1549,9 +1542,7 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:FURCOAT,
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:GRASSPELT,
   proc { |ability, user, target, move, mults, baseDmg, type|
-    if user.battle.field.terrain == :Grassy
-      mults[:defense_multiplier] *= 1.5
-    end
+    mults[:defense_multiplier] *= 1.5 if user.battle.field.terrain == :Grassy
   }
 )
 
@@ -1613,9 +1604,7 @@ Battle::AbilityEffects::DamageCalcFromTargetNonIgnorable.add(:PRISMARMOR,
 
 Battle::AbilityEffects::DamageCalcFromTargetNonIgnorable.add(:SHADOWSHIELD,
   proc { |ability, user, target, move, mults, baseDmg, type|
-    if target.hp == target.totalhp
-      mults[:final_damage_multiplier] /= 2
-    end
+    mults[:final_damage_multiplier] /= 2 if target.hp == target.totalhp
   }
 )
 
@@ -2428,7 +2417,7 @@ Battle::AbilityEffects::EndOfRoundEffect.add(:BADDREAMS,
       next if !b.near?(battler) || !b.asleep?
       battle.pbShowAbilitySplash(battler)
       next if !b.takesIndirectDamage?(Battle::Scene::USE_ABILITY_SPLASH)
-      b.pbTakeEffectDamage(b.totalhp / 8) { |hp_lost|
+      b.pbTakeEffectDamage(b.totalhp / 8) do |hp_lost|
         if Battle::Scene::USE_ABILITY_SPLASH
           battle.pbDisplay(_INTL("{1} is tormented!", b.pbThis))
         else
@@ -2436,7 +2425,7 @@ Battle::AbilityEffects::EndOfRoundEffect.add(:BADDREAMS,
              b.pbThis, battler.pbThis(true), battler.abilityName))
         end
         battle.pbHideAbilitySplash(battler)
-      }
+      end
     end
   }
 )

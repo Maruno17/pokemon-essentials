@@ -168,24 +168,26 @@ class Color
 
   # New constructor, accepts RGB values as well as a hex number or string value.
   def initialize(*args)
-  	pbPrintException("Wrong number of arguments! At least 1 is needed!") if args.length < 1
-  	if args.length == 1
-      if args.first.is_a?(Fixnum)
+    pbPrintException("Wrong number of arguments! At least 1 is needed!") if args.length < 1
+    case args.length
+    when 1
+      case args.first
+      when Integer
         hex = args.first.to_s(16)
-      elsif args.first.is_a?(String)
+      when String
         try_rgb_format = args.first.split(",")
-        return init_original(*try_rgb_format.map(&:to_i)) if try_rgb_format.length.between?(3, 4)
+        init_original(*try_rgb_format.map(&:to_i)) if try_rgb_format.length.between?(3, 4)
         hex = args.first.delete("#")
       end
       pbPrintException("Wrong type of argument given!") if !hex
       r = hex[0...2].to_i(16)
       g = hex[2...4].to_i(16)
       b = hex[4...6].to_i(16)
-  	elsif args.length == 3
+    when 3
       r, g, b = *args
-  	end
-  	return init_original(r, g, b) if r && g && b
-  	return init_original(*args)
+    end
+    init_original(r, g, b) if r && g && b
+    init_original(*args)
   end
 
   def self.new_from_rgb(param)
@@ -242,7 +244,9 @@ class Color
 
   # @return [String] this color in the format "RRGGBBAA" (or "RRGGBB" if this color's alpha is 255)
   def to_rgb32(always_include_alpha = false)
-    return sprintf("%02X%02X%02X", self.red.to_i, self.green.to_i, self.blue.to_i) if self.alpha.to_i == 255 && !always_include_alpha
+    if self.alpha.to_i == 255 && !always_include_alpha
+      return sprintf("%02X%02X%02X", self.red.to_i, self.green.to_i, self.blue.to_i)
+    end
     return sprintf("%02X%02X%02X%02X", self.red.to_i, self.green.to_i, self.blue.to_i, self.alpha.to_i)
   end
 
@@ -253,7 +257,7 @@ class Color
 
   # @return [Integer] this color in RGB format converted to an integer
   def to_i
-  	return self.to_rgb24.to_i(16)
+    return self.to_rgb24.to_i(16)
   end
 
   # @return [Color] the contrasting color to this one
@@ -282,11 +286,11 @@ class Color
   # Converts the provided hex string/24-bit integer to RGB values.
   def self.hex_to_rgb(hex)
     hex = hex.delete("#") if hex.is_a?(String)
-  	hex = hex.to_s(16) if hex.is_a?(Numeric)
-  	r = hex[0...2].to_i(16)
-  	g = hex[2...4].to_i(16)
-  	b = hex[4...6].to_i(16)
-  	return r, g, b
+    hex = hex.to_s(16) if hex.is_a?(Numeric)
+    r = hex[0...2].to_i(16)
+    g = hex[2...4].to_i(16)
+    b = hex[4...6].to_i(16)
+    return r, g, b
   end
 
   # Parses the input as a Color and returns a Color object made from it.

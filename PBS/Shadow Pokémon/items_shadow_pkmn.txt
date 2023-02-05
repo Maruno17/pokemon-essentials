@@ -1,0 +1,42 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[JOYSCENT]
+Name = Joy Scent
+NamePlural = Joy Scents
+PortionName = bottle of Joy Scent
+PortionNamePlural = bottles of Joy Scent
+Pocket = 1
+Price = 600
+FieldUse = OnPokemon
+BattleUse = OnPokemon
+Description = A cologne that inspires feelings of joy. It will slightly please a Shadow Pokémon.
+#-------------------------------
+[EXCITESCENT]
+Name = Excite Scent
+NamePlural = Excite Scents
+PortionName = bottle of Excite Scent
+PortionNamePlural = bottles of Excite Scent
+Pocket = 1
+Price = 800
+FieldUse = OnPokemon
+BattleUse = OnPokemon
+Description = A cologne that inspires feelings of excitement. It will please a Shadow Pokémon.
+#-------------------------------
+[VIVIDSCENT]
+Name = Vivid Scent
+NamePlural = Vivid Scents
+PortionName = bottle of Vivid Scent
+PortionNamePlural = bottles of Vivid Scent
+Pocket = 1
+Price = 1200
+FieldUse = OnPokemon
+BattleUse = OnPokemon
+Description = A cologne that inspires vivid feelings. It will greatly please a Shadow Pokémon.
+#-------------------------------
+[TIMEFLUTE]
+Name = Time Flute
+NamePlural = Time Flutes
+Pocket = 1
+Price = 0
+FieldUse = OnPokemon
+Description = A marvellous flute that can summon Celebi to instantly purify a Shadow Pokémon.

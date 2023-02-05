@@ -62,7 +62,7 @@ end
 def pbConvertTrainerData
   tr_type_names = []
   GameData::TrainerType.each { |t| tr_type_names.push(t.real_name) }
-  MessageTypes.setMessagesAsHash(MessageTypes::TrainerTypes, tr_type_names)
+  MessageTypes.setMessagesAsHash(MessageTypes::TRAINER_TYPE_NAMES, tr_type_names)
   Compiler.write_trainer_types
   Compiler.write_trainers
 end

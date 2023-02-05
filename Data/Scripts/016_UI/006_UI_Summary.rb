@@ -233,7 +233,7 @@ class PokemonSummary_Scene
     ret = -1
     @sprites["messagebox"].text    = text
     @sprites["messagebox"].visible = true
-    using(cmdwindow = Window_CommandPokemon.new([_INTL("Yes"), _INTL("No")])) {
+    using(cmdwindow = Window_CommandPokemon.new([_INTL("Yes"), _INTL("No")])) do
       cmdwindow.z       = @viewport.z + 1
       cmdwindow.visible = false
       pbBottomRight(cmdwindow)
@@ -254,14 +254,14 @@ class PokemonSummary_Scene
           end
         end
       end
-    }
+    end
     @sprites["messagebox"].visible = false
     return ret
   end
 
   def pbShowCommands(commands, index = 0)
     ret = -1
-    using(cmdwindow = Window_CommandPokemon.new(commands)) {
+    using(cmdwindow = Window_CommandPokemon.new(commands)) do
       cmdwindow.z = @viewport.z + 1
       cmdwindow.index = index
       pbBottomRight(cmdwindow)
@@ -280,7 +280,7 @@ class PokemonSummary_Scene
           break
         end
       end
-    }
+    end
     return ret
   end
 
@@ -328,9 +328,7 @@ class PokemonSummary_Scene
       imagepos.push([sprintf("Graphics/UI/Summary/icon_pokerus"), 176, 100])
     end
     # Show shininess star
-    if @pokemon.shiny?
-      imagepos.push([sprintf("Graphics/UI/shiny"), 2, 134])
-    end
+    imagepos.push([sprintf("Graphics/UI/shiny"), 2, 134]) if @pokemon.shiny?
     # Draw all images
     pbDrawImagePositions(overlay, imagepos)
     # Write various bits of text
@@ -1193,23 +1191,21 @@ class PokemonSummary_Scene
     command = pbShowCommands(commands)
     if cmdGiveItem >= 0 && command == cmdGiveItem
       item = nil
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonBag_Scene.new
         screen = PokemonBagScreen.new(scene, $bag)
         item = screen.pbChooseItemScreen(proc { |itm| GameData::Item.get(itm).can_hold? })
-      }
-      if item
-        dorefresh = pbGiveItemToPokemon(item, @pokemon, self, @partyindex)
       end
+      dorefresh = pbGiveItemToPokemon(item, @pokemon, self, @partyindex) if item
     elsif cmdTakeItem >= 0 && command == cmdTakeItem
       dorefresh = pbTakeItemFromPokemon(@pokemon, self)
     elsif cmdPokedex >= 0 && command == cmdPokedex
       $player.pokedex.register_last_seen(@pokemon)
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonPokedexInfo_Scene.new
         screen = PokemonPokedexInfoScreen.new(scene)
         screen.pbStartSceneSingle(@pokemon.species)
-      }
+      end
       dorefresh = true
     elsif cmdMark >= 0 && command == cmdMark
       dorefresh = pbMarking(@pokemon)
@@ -1318,9 +1314,7 @@ class PokemonSummary_Scene
           dorefresh = true
         end
       end
-      if dorefresh
-        drawPage(@page)
-      end
+      drawPage(@page) if dorefresh
     end
     return @partyindex
   end
@@ -1375,11 +1369,11 @@ end
 def pbChooseMove(pokemon, variableNumber, nameVarNumber)
   return if !pokemon
   ret = -1
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonSummary_Scene.new
     screen = PokemonSummaryScreen.new(scene)
     ret = screen.pbStartForgetScreen([pokemon], 0, nil)
-  }
+  end
   $game_variables[variableNumber] = ret
   if ret >= 0
     $game_variables[nameVarNumber] = pokemon.moves[ret].name

@@ -21,18 +21,18 @@ def pbPCItemStorage
       if $PokemonGlobal.pcItemStorage.empty?
         pbMessage(_INTL("There are no items."))
       else
-        pbFadeOutIn {
+        pbFadeOutIn do
           scene = WithdrawItemScene.new
           screen = PokemonBagScreen.new(scene, $bag)
           screen.pbWithdrawItemScreen
-        }
+        end
       end
     when 1   # Deposit Item
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonBag_Scene.new
         screen = PokemonBagScreen.new(scene, $bag)
         screen.pbDepositItemScreen
-      }
+      end
     when 2   # Toss Item
       if !$PokemonGlobal.pcItemStorage
         $PokemonGlobal.pcItemStorage = PCItemStorage.new
@@ -40,11 +40,11 @@ def pbPCItemStorage
       if $PokemonGlobal.pcItemStorage.empty?
         pbMessage(_INTL("There are no items."))
       else
-        pbFadeOutIn {
+        pbFadeOutIn do
           scene = TossItemScene.new
           screen = PokemonBagScreen.new(scene, $bag)
           screen.pbTossItemScreen
-        }
+        end
       end
     else
       break
@@ -78,9 +78,9 @@ def pbPCMailbox
         )
         case commandMail
         when 0   # Read
-          pbFadeOutIn {
+          pbFadeOutIn do
             pbDisplayMail($PokemonGlobal.mailbox[mailIndex])
-          }
+          end
         when 1   # Move to Bag
           if pbConfirmMessage(_INTL("The message will be lost. Is that OK?"))
             if $bag.add($PokemonGlobal.mailbox[mailIndex].item)
@@ -91,11 +91,11 @@ def pbPCMailbox
             end
           end
         when 2   # Give
-          pbFadeOutIn {
+          pbFadeOutIn do
             sscene = PokemonParty_Scene.new
             sscreen = PokemonPartyScreen.new(sscene, $player.party)
             sscreen.pbPokemonGiveMailScreen(mailIndex)
-          }
+          end
         end
       else
         break
@@ -181,21 +181,21 @@ MenuHandlers.add(:pc_menu, :pokemon_storage, {
       break if command < 0
       case command
       when 0   # Organize
-        pbFadeOutIn {
+        pbFadeOutIn do
           scene = PokemonStorageScene.new
           screen = PokemonStorageScreen.new(scene, $PokemonStorage)
           screen.pbStartScreen(0)
-        }
+        end
       when 1   # Withdraw
         if $PokemonStorage.party_full?
           pbMessage(_INTL("Your party is full!"))
           next
         end
-        pbFadeOutIn {
+        pbFadeOutIn do
           scene = PokemonStorageScene.new
           screen = PokemonStorageScreen.new(scene, $PokemonStorage)
           screen.pbStartScreen(1)
-        }
+        end
       when 2   # Deposit
         count = 0
         $PokemonStorage.party.each do |p|
@@ -205,11 +205,11 @@ MenuHandlers.add(:pc_menu, :pokemon_storage, {
           pbMessage(_INTL("Can't deposit the last Pokémon!"))
           next
         end
-        pbFadeOutIn {
+        pbFadeOutIn do
           scene = PokemonStorageScene.new
           screen = PokemonStorageScreen.new(scene, $PokemonStorage)
           screen.pbStartScreen(2)
-        }
+        end
       else
         break
       end

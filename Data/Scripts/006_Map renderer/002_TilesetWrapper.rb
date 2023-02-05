@@ -56,6 +56,8 @@ class TilemapRenderer
       return ret
     end
 
+    #---------------------------------------------------------------------------
+
     private
 
     def blitWrappedPixels(destX, destY, dest, src, srcrect)

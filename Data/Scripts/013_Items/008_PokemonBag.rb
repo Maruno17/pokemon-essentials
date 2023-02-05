@@ -16,15 +16,15 @@ class PokemonBag
   end
 
   def initialize
-    @pockets              = []
+    @pockets = []
     (0..PokemonBag.pocket_count).each { |i| @pockets[i] = [] }
     reset_last_selections
-    @registered_items     = []
+    @registered_items = []
     @ready_menu_selection = [0, 0, 1]   # Used by the Ready Menu to remember cursor positions
   end
 
   def reset_last_selections
-    @last_viewed_pocket     = 1
+    @last_viewed_pocket = 1
     @last_pocket_selections ||= []
     (0..PokemonBag.pocket_count).each { |i| @last_pocket_selections[i] = 0 }
   end
@@ -39,7 +39,7 @@ class PokemonBag
     return @pockets
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Gets the index of the current selected item in the pocket
   def last_viewed_index(pocket)
@@ -59,7 +59,7 @@ class PokemonBag
     @last_pocket_selections[pocket] = value if value <= @pockets[pocket].length
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def quantity(item)
     item_data = GameData::Item.try_get(item)
@@ -139,7 +139,7 @@ class PokemonBag
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Returns whether item has been registered for quick access in the Ready Menu.
   def registered?(item)
@@ -161,7 +161,7 @@ class PokemonBag
     @registered_items.delete(item_data.id) if item_data
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   private
 
@@ -192,8 +192,6 @@ class PokemonBag
     @pockets = new_pockets
   end
 end
-
-
 
 #===============================================================================
 # The PC item storage object, which actually contains all the items
@@ -259,8 +257,6 @@ class PCItemStorage
     return ItemStorageHelper.remove(@items, item, qty)
   end
 end
-
-
 
 #===============================================================================
 # Implements methods that act on arrays of items.  Each element in an item
@@ -332,8 +328,6 @@ module ItemStorageHelper
     return ret
   end
 end
-
-
 
 #===============================================================================
 # Deprecated methods

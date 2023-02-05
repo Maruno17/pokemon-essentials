@@ -1,13 +1,17 @@
+#===============================================================================
+#
+#===============================================================================
 class Hangup < Exception; end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 module RPG
   module Cache
     def self.debug
       t = Time.now
       filename = t.strftime("%H %M %S.%L.txt")
-      File.open("cache_" + filename, "wb") { |f|
+      File.open("cache_" + filename, "wb") do |f|
         @cache.each do |key, value|
           if !value
             f.write("#{key} (nil)\r\n")
@@ -17,7 +21,7 @@ module RPG
             f.write("#{key} (#{value.refcount}, #{value.width}x#{value.height})\r\n")
           end
         end
-      }
+      end
     end
 
     def self.setKey(key, obj)
@@ -106,8 +110,9 @@ module RPG
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class BitmapWrapper < Bitmap
   attr_reader   :refcount
   attr_accessor :never_dispose

@@ -113,8 +113,9 @@ module ItemHandlers
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbCanRegisterItem?(item)
   return ItemHandlers.hasUseInFieldHandler(item)
 end
@@ -122,8 +123,6 @@ end
 def pbCanUseOnPokemon?(item)
   return ItemHandlers.hasUseOnPokemon(item) || GameData::Item.get(item).is_machine?
 end
-
-
 
 #===============================================================================
 # Change a Pokémon's level
@@ -191,13 +190,13 @@ def pbChangeLevel(pkmn, new_level, scene)
     # Check for evolution
     new_species = pkmn.check_evolution_on_level_up
     if new_species
-      pbFadeOutInWithMusic {
+      pbFadeOutInWithMusic do
         evo = PokemonEvolutionScene.new
         evo.pbStartScreen(pkmn, new_species)
         evo.pbEvolution
         evo.pbEndScreen
         scene.pbRefresh if scene.is_a?(PokemonPartyScreen)
-      }
+      end
     end
   end
 end
@@ -300,13 +299,13 @@ def pbChangeExp(pkmn, new_exp, scene)
     # Check for evolution
     new_species = pkmn.check_evolution_on_level_up
     if new_species
-      pbFadeOutInWithMusic {
+      pbFadeOutInWithMusic do
         evo = PokemonEvolutionScene.new
         evo.pbStartScreen(pkmn, new_species)
         evo.pbEvolution
         evo.pbEndScreen
         scene.pbRefresh if scene.is_a?(PokemonPartyScreen)
-      }
+      end
     end
   end
 end
@@ -625,11 +624,11 @@ end
 
 def pbForgetMove(pkmn, moveToLearn)
   ret = -1
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonSummary_Scene.new
     screen = PokemonSummaryScreen.new(scene)
     ret = screen.pbStartForgetScreen([pkmn], 0, moveToLearn)
-  }
+  end
   return ret
 end
 
@@ -654,7 +653,7 @@ def pbUseItem(bag, item, bagscene = nil)
         annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
       end
     end
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonParty_Scene.new
       screen = PokemonPartyScreen.new(scene, $player.party)
       screen.pbStartScene(_INTL("Use on which Pokémon?"), false, annot)
@@ -686,7 +685,7 @@ def pbUseItem(bag, item, bagscene = nil)
       end
       screen.pbEndScene
       bagscene&.pbRefresh
-    }
+    end
     return (ret) ? 1 : 0
   elsif useType == 2 || itm.is_machine?   # Item is usable from Bag or teaches a move
     intret = ItemHandlers.triggerUseFromBag(item)
@@ -854,33 +853,33 @@ end
 #===============================================================================
 def pbChooseItem(var = 0, *args)
   ret = nil
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonBag_Scene.new
     screen = PokemonBagScreen.new(scene, $bag)
     ret = screen.pbChooseItemScreen
-  }
+  end
   $game_variables[var] = ret || :NONE if var > 0
   return ret
 end
 
 def pbChooseApricorn(var = 0)
   ret = nil
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonBag_Scene.new
     screen = PokemonBagScreen.new(scene, $bag)
     ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_apricorn? })
-  }
+  end
   $game_variables[var] = ret || :NONE if var > 0
   return ret
 end
 
 def pbChooseFossil(var = 0)
   ret = nil
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonBag_Scene.new
     screen = PokemonBagScreen.new(scene, $bag)
     ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_fossil? })
-  }
+  end
   $game_variables[var] = ret || :NONE if var > 0
   return ret
 end

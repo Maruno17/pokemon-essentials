@@ -162,7 +162,7 @@ MenuHandlers.add(:pokegear_menu, :map, {
   "icon_name" => "map",
   "order"     => 10,
   "effect"    => proc { |menu|
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonRegionMap_Scene.new(-1, false)
       screen = PokemonRegionMapScreen.new(scene)
       ret = screen.pbStartScreen
@@ -171,7 +171,7 @@ MenuHandlers.add(:pokegear_menu, :map, {
         menu.dispose
         next 99999
       end
-    }
+    end
     next $game_temp.fly_destination
   }
 })
@@ -182,11 +182,11 @@ MenuHandlers.add(:pokegear_menu, :phone, {
   "order"     => 20,
 #  "condition" => proc { next $PokemonGlobal.phone && $PokemonGlobal.phone.contacts.length > 0 },
   "effect"    => proc { |menu|
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonPhone_Scene.new
       screen = PokemonPhoneScreen.new(scene)
       screen.pbStartScreen
-    }
+    end
     next false
   }
 })
@@ -196,11 +196,11 @@ MenuHandlers.add(:pokegear_menu, :jukebox, {
   "icon_name" => "jukebox",
   "order"     => 30,
   "effect"    => proc { |menu|
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonJukebox_Scene.new
       screen = PokemonJukeboxScreen.new(scene)
       screen.pbStartScreen
-    }
+    end
     next false
   }
 })

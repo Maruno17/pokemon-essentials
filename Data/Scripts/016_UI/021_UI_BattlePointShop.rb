@@ -165,7 +165,7 @@ class BattlePointShop_Scene
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap("Graphics/Pictures/martScreen")
     @sprites["icon"] = ItemIconSprite.new(36, Graphics.height - 50, nil, @viewport)
-    winAdapter = BattlePointShopAdapter.new()
+    winAdapter = BattlePointShopAdapter.new
     @sprites["itemwindow"] = Window_BattlePointShop.new(
       stock, winAdapter, Graphics.width - 316 - 16, 10, 330 + 16, Graphics.height - 124
     )
@@ -393,7 +393,7 @@ class BattlePointShop_Scene
   def pbChooseItem
     itemwindow = @sprites["itemwindow"]
     @sprites["helpwindow"].visible = false
-    pbActivateWindow(@sprites, "itemwindow") {
+    pbActivateWindow(@sprites, "itemwindow") do
       pbRefresh
       loop do
         Graphics.update
@@ -413,7 +413,7 @@ class BattlePointShop_Scene
           end
         end
       end
-    }
+    end
   end
 end
 
@@ -487,7 +487,7 @@ class BattlePointShopScreen
         # TODO: Add bpshop_items_bought to $stats?
 #        $stats.bpshop_items_bought += quantity
         @adapter.setBP(@adapter.getBP - price)
-        @stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
+        @stock.delete_if { |itm| GameData::Item.get(itm).is_important? && $bag.has?(itm) }
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
       else
         added.times do

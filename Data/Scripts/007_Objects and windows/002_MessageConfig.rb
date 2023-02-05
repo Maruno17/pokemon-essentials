@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module MessageConfig
   LIGHT_TEXT_MAIN_COLOR   = Color.new(248, 248, 248)
   LIGHT_TEXT_SHADOW_COLOR = Color.new(72, 80, 88)
@@ -163,8 +166,6 @@ module MessageConfig
   end
 end
 
-
-
 #===============================================================================
 # Position a window
 #===============================================================================
@@ -207,9 +208,7 @@ def pbPositionNearMsgWindow(cmdwindow, msgwindow, side)
   return if !cmdwindow
   if msgwindow
     height = [cmdwindow.height, Graphics.height - msgwindow.height].min
-    if cmdwindow.height != height
-      cmdwindow.height = height
-    end
+    cmdwindow.height = height if cmdwindow.height != height
     cmdwindow.y = msgwindow.y - cmdwindow.height
     if cmdwindow.y < 0
       cmdwindow.y = msgwindow.y + msgwindow.height
@@ -256,9 +255,7 @@ def pbUpdateMsgWindowPos(msgwindow, event, eventChanged = false)
       msgwindow.resizeToFit2(msgwindow.text, Graphics.width * 2 / 3, msgwindow.height)
     end
     msgwindow.y = event.screen_y - 48 - msgwindow.height
-    if msgwindow.y < 0
-      msgwindow.y = event.screen_y + 24
-    end
+    msgwindow.y = event.screen_y + 24 if msgwindow.y < 0
     msgwindow.x = event.screen_x - (msgwindow.width / 2)
     msgwindow.x = 0 if msgwindow.x < 0
     if msgwindow.x > Graphics.width - msgwindow.width
@@ -622,24 +619,24 @@ def pbFadeOutInWithMusic(zViewport = 99999)
   $game_system.bgm_pause(1.0)
   $game_system.bgs_pause(1.0)
   pos = $game_system.bgm_position
-  pbFadeOutIn(zViewport) {
+  pbFadeOutIn(zViewport) do
     yield
     $game_system.bgm_position = pos
     $game_system.bgm_resume(playingBGM)
     $game_system.bgs_resume(playingBGS)
-  }
+  end
 end
 
 def pbFadeOutAndHide(sprites)
   visiblesprites = {}
   numFrames = (Graphics.frame_rate * 0.4).floor
   alphaDiff = (255.0 / numFrames).ceil
-  pbDeactivateWindows(sprites) {
+  pbDeactivateWindows(sprites) do
     (0..numFrames).each do |j|
       pbSetSpritesToColor(sprites, Color.new(0, 0, 0, j * alphaDiff))
       (block_given?) ? yield : pbUpdateSpriteHash(sprites)
     end
-  }
+  end
   sprites.each do |i|
     next if !i[1]
     next if pbDisposed?(i[1])
@@ -659,12 +656,12 @@ def pbFadeInAndShow(sprites, visiblesprites = nil)
   end
   numFrames = (Graphics.frame_rate * 0.4).floor
   alphaDiff = (255.0 / numFrames).ceil
-  pbDeactivateWindows(sprites) {
+  pbDeactivateWindows(sprites) do
     (0..numFrames).each do |j|
       pbSetSpritesToColor(sprites, Color.new(0, 0, 0, ((numFrames - j) * alphaDiff)))
       (block_given?) ? yield : pbUpdateSpriteHash(sprites)
     end
-  }
+  end
 end
 
 # Restores which windows are active for the given sprite hash.
@@ -730,9 +727,7 @@ def addBackgroundPlane(sprites, planename, background, viewport = nil)
   else
     sprites[planename].setBitmap(bitmapName)
     sprites.each_value do |spr|
-      if spr.is_a?(Window)
-        spr.windowskin = nil
-      end
+      spr.windowskin = nil if spr.is_a?(Window)
     end
   end
 end
@@ -752,35 +747,31 @@ def addBackgroundOrColoredPlane(sprites, planename, background, color, viewport 
     sprites[planename] = AnimatedPlane.new(viewport)
     sprites[planename].setBitmap(bitmapName)
     sprites.each_value do |spr|
-      if spr.is_a?(Window)
-        spr.windowskin = nil
-      end
+      spr.windowskin = nil if spr.is_a?(Window)
     end
   end
 end
 
-
-
 #===============================================================================
-# Ensure required method definitions
+# Ensure required method definitions.
 #===============================================================================
 module Graphics
   if !self.respond_to?("width")
     def self.width; return 640; end
   end
+
   if !self.respond_to?("height")
     def self.height; return 480; end
   end
 end
 
-
-
+#===============================================================================
+# Ensure required method definitions.
+#===============================================================================
 if !defined?(_INTL)
   def _INTL(*args)
     string = args[0].clone
-    (1...args.length).each do |i|
-      string.gsub!(/\{#{i}\}/, args[i].to_s)
-    end
+    (1...args.length).each { |i| string.gsub!(/\{#{i}\}/, args[i].to_s) }
     return string
   end
 end
@@ -789,9 +780,7 @@ if !defined?(_ISPRINTF)
   def _ISPRINTF(*args)
     string = args[0].clone
     (1...args.length).each do |i|
-      string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m|
-        next sprintf("%" + $1, args[i])
-      }
+      string.gsub!(/\{#{i}\:([^\}]+?)\}/) { |m| next sprintf("%" + $1, args[i]) }
     end
     return string
   end
@@ -800,9 +789,7 @@ end
 if !defined?(_MAPINTL)
   def _MAPINTL(*args)
     string = args[1].clone
-    (2...args.length).each do |i|
-      string.gsub!(/\{#{i}\}/, args[i + 1].to_s)
-    end
+    (2...args.length).each { |i| string.gsub!(/\{#{i}\}/, args[i + 1].to_s) }
     return string
   end
 end

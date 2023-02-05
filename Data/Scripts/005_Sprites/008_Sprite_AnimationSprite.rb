@@ -1,9 +1,8 @@
-=begin
-A sprite whose sole purpose is to display an animation.  This sprite
-can be displayed anywhere on the map and is disposed
-automatically when its animation is finished.
-Used for grass rustling and so forth.
-=end
+#===============================================================================
+# A sprite whose sole purpose is to display an animation. This sprite can be
+# displayed anywhere on the map and is disposed automatically when its animation
+# is finished. Used for grass rustling and so forth.
+#===============================================================================
 class AnimationSprite < RPG::Sprite
   def initialize(animID, map, tileX, tileY, viewport = nil, tinting = false, height = 3)
     super(viewport)
@@ -38,8 +37,9 @@ class AnimationSprite < RPG::Sprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Spriteset_Map
   alias _animationSprite_initialize initialize unless private_method_defined?(:_animationSprite_initialize)
   alias _animationSprite_update update unless method_defined?(:_animationSprite_update)

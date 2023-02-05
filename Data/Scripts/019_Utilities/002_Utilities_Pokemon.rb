@@ -63,11 +63,11 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
   if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && see_form && !was_owned && $player.has_pokedex
     pbMessage(_INTL("{1}'s data was added to the Pokédex.", species_name))
     $player.pokedex.register_last_seen(pkmn)
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonPokedexInfo_Scene.new
       screen = PokemonPokedexInfoScreen.new(scene)
       screen.pbDexEntry(pkmn.species)
-    }
+    end
   end
   # Nickname and add the Pokémon
   pbNicknameAndStore(pkmn)
@@ -105,11 +105,11 @@ def pbAddToParty(pkmn, level = 1, see_form = true)
   if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && see_form && !was_owned && $player.has_pokedex
     pbMessage(_INTL("{1}'s data was added to the Pokédex.", species_name))
     $player.pokedex.register_last_seen(pkmn)
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonPokedexInfo_Scene.new
       screen = PokemonPokedexInfoScreen.new(scene)
       screen.pbDexEntry(pkmn.species)
-    }
+    end
   end
   # Nickname and add the Pokémon
   pbNicknameAndStore(pkmn)
@@ -145,11 +145,11 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && see_form && !was_owned && $player.has_pokedex
     pbMessage(_INTL("The Pokémon's data was added to the Pokédex."))
     $player.pokedex.register_last_seen(pkmn)
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonPokedexInfo_Scene.new
       screen = PokemonPokedexInfoScreen.new(scene)
       screen.pbDexEntry(pkmn.species)
-    }
+    end
   end
   # Add the Pokémon
   pbStorePokemon(pkmn)

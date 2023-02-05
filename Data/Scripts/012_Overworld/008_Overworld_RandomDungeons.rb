@@ -50,7 +50,7 @@ module RandomDungeon
 
     def initialize(cw, ch, parameters)
       raise ArgumentError.new if cw == 0 || ch == 0
-      @node_count_x  = cw
+      @node_count_x = cw
       @node_count_y = ch
       @parameters = parameters
       @nodes = Array.new(@node_count_x * @node_count_y) { MazeNode.new }
@@ -257,7 +257,7 @@ module RandomDungeon
       :upper_wall_in_1        => Console.markup_style("~", bg: :gray),
       :upper_wall_in_3        => Console.markup_style("~", bg: :gray),
       :upper_wall_in_7        => Console.markup_style("~", bg: :gray),
-      :upper_wall_in_9        => Console.markup_style("~", bg: :gray),
+      :upper_wall_in_9        => Console.markup_style("~", bg: :gray)
     }
 
     def initialize(width, height)
@@ -352,7 +352,7 @@ module RandomDungeon
         @buffer_x += 1 if @buffer_x.odd?
         @buffer_y += 1 if @buffer_x.odd?
       end
-      @parameters  = parameters || GameData::DungeonParameters.new({})
+      @parameters = parameters || GameData::DungeonParameters.new({})
       if @tileset.snap_to_large_grid
         @parameters.cell_width -= 1 if @parameters.cell_width.odd?
         @parameters.cell_height -= 1 if @parameters.cell_height.odd?
@@ -443,7 +443,7 @@ module RandomDungeon
         paint_decorations(maxWidth, maxHeight)
         # Draw wall top tiles
         paint_wall_top_tiles(maxWidth, maxHeight)
-        break #if !@need_redraw
+        break   # if !@need_redraw
       end
     end
 
@@ -512,8 +512,8 @@ module RandomDungeon
       start = nil
       maxWidth = @usable_width - (@buffer_x * 2)
       maxHeight = @usable_height - (@buffer_y * 2)
-      for y in 0...maxHeight
-        for x in 0...maxWidth
+      maxHeight.times do |y|
+        maxWidth.times do |x|
           next if !tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
           start = [x, y]
           break
@@ -535,10 +535,10 @@ module RandomDungeon
         checking = to_check.shift
         x1, x2, y, dy = checking
         x = x1
-        if !visited[y * maxWidth + x] && tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
+        if !visited[(y * maxWidth) + x] && tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
           loop do
-            break if visited[y * maxWidth + x - 1] || !tile_is_ground?(@map_data[x - 1 + @buffer_x, y + @buffer_y, 0])
-            visited[y * maxWidth + x - 1] = true
+            break if visited[(y * maxWidth) + x - 1] || !tile_is_ground?(@map_data[x - 1 + @buffer_x, y + @buffer_y, 0])
+            visited[(y * maxWidth) + x - 1] = true
             x -= 1
           end
         end
@@ -546,8 +546,8 @@ module RandomDungeon
         loop do
           break if x1 > x2
           loop do
-            break if visited[y * maxWidth + x1] || !tile_is_ground?(@map_data[x1 + @buffer_x, y + @buffer_y, 0])
-            visited[y * maxWidth + x1] = true
+            break if visited[(y * maxWidth) + x1] || !tile_is_ground?(@map_data[x1 + @buffer_x, y + @buffer_y, 0])
+            visited[(y * maxWidth) + x1] = true
             to_check.push([x, x1, y + dy, dy])
             to_check.push([x2 + 1, x1, y - dy, -dy]) if x1 > x2
             x1 += 1
@@ -555,16 +555,16 @@ module RandomDungeon
           x1 += 1
           loop do
             break if x1 >= x2
-            break if !visited[y * maxWidth + x1] && tile_is_ground?(@map_data[x1 + @buffer_x, y + @buffer_y, 0])
+            break if !visited[(y * maxWidth) + x1] && tile_is_ground?(@map_data[x1 + @buffer_x, y + @buffer_y, 0])
             x1 += 1
           end
           x = x1
         end
       end
       # Check for unflooded floor tiles
-      for y in 0...maxHeight
-        for x in 0...maxWidth
-          next if visited[y * maxWidth + x] || !tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
+      maxHeight.times do |y|
+        maxWidth.times do |x|
+          next if visited[(y * maxWidth) + x] || !tile_is_ground?(@map_data[x + @buffer_x, y + @buffer_y, 0])
           @need_redraw = true
           break
         end
@@ -801,8 +801,8 @@ module RandomDungeon
         x += 1 if x.odd?
         y += 1 if y.odd?
       end
-      x = x.clamp(@buffer_x, @usable_width - @buffer_x - width )
-      y = y.clamp(@buffer_y, @usable_height - @buffer_y - height )
+      x = x.clamp(@buffer_x, @usable_width - @buffer_x - width)
+      y = y.clamp(@buffer_y, @usable_height - @buffer_y - height)
       paint_ground_rect(x, y, width, height, :room)
     end
 
@@ -824,9 +824,9 @@ module RandomDungeon
 
     def get_wall_tile_for_coord(x, y, layer = 0)
       if layer == 0
-        is_neighbour = lambda { |x, y| return tile_is_ground?(@map_data.value(x, y)) }
+        is_neighbour = lambda { |x2, y2| return tile_is_ground?(@map_data.value(x2, y2)) }
       else
-        is_neighbour = lambda { |x, y| return tile_is_wall?(@map_data[x, y, 1]) }
+        is_neighbour = lambda { |x2, y2| return tile_is_wall?(@map_data[x2, y2, 1]) }
       end
       neighbours = 0
       neighbours |= 0x01 if is_neighbour.call(x,     y - 1)   # N
@@ -863,8 +863,8 @@ module RandomDungeon
           (maxWidth / @parameters.cell_width).times do |i|
             next if rand(100) >= @parameters.floor_patch_chance
             # Random placing of floor patch tiles
-            mid_x = i * @parameters.cell_width + rand(@parameters.cell_width)
-            mid_y = j * @parameters.cell_height + rand(@parameters.cell_height)
+            mid_x = (i * @parameters.cell_width) + rand(@parameters.cell_width)
+            mid_y = (j * @parameters.cell_height) + rand(@parameters.cell_height)
             ((mid_y - @parameters.floor_patch_radius)..(mid_y + @parameters.floor_patch_radius)).each do |y|
               ((mid_x - @parameters.floor_patch_radius)..(mid_x + @parameters.floor_patch_radius)).each do |x|
                 if @tileset.floor_patch_under_walls
@@ -927,7 +927,7 @@ module RandomDungeon
         end
       end
       # 1x1 floor decoration
-       if @tileset.has_decoration?(:floor_decoration)
+      if @tileset.has_decoration?(:floor_decoration)
         ((@usable_width * @usable_height) / @parameters.floor_decoration_density).times do
           x = rand(@usable_width)
           y = rand(@usable_height)
@@ -989,7 +989,7 @@ module RandomDungeon
             when :void_decoration_large, :floor_decoration_large
               4.times do |c|
                 tile = @tileset.get_random_tile_of_type(tile_type, self, i, j, layer)
-                tile += (c % 2) + 8 * (c / 2) if tile >= 384   # Regular tile
+                tile += (c % 2) + (8 * (c / 2)) if tile >= 384   # Regular tile
                 map.data[i + (c % 2), j + (c / 2), layer] = tile
               end
             else

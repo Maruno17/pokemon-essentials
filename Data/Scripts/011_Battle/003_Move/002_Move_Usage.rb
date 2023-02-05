@@ -104,11 +104,11 @@ class Battle::Move
   def pbFailsAgainstTarget?(user, target, show_message); return false; end
 
   def pbMoveFailedLastInRound?(user, showMessage = true)
-    unmoved = @battle.allBattlers.any? { |b|
+    unmoved = @battle.allBattlers.any? do |b|
       next b.index != user.index &&
            [:UseMove, :Shift].include?(@battle.choices[b.index][0]) &&
            !b.movedThisRound?
-    }
+    end
     if !unmoved
       @battle.pbDisplay(_INTL("But it failed!")) if showMessage
       return true

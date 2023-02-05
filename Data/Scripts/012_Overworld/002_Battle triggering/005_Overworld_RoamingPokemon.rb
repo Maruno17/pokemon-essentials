@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class PokemonGlobalMetadata
   attr_accessor :roamPosition
   attr_accessor :roamedAlready   # Whether a roamer has been encountered on current map
@@ -10,8 +13,6 @@ class PokemonGlobalMetadata
     return @roamPokemonCaught
   end
 end
-
-
 
 #===============================================================================
 # Making roaming Pokémon roam around.
@@ -101,8 +102,6 @@ EventHandlers.add(:on_enter_map, :move_roaming_pokemon,
   }
 )
 
-
-
 #===============================================================================
 # Encountering a roaming Pokémon in a wild battle.
 #===============================================================================
@@ -110,8 +109,9 @@ class Game_Temp
   attr_accessor :roamer_index_for_encounter   # Index of roaming Pokémon to encounter next
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 # Returns whether the given category of encounter contains the actual encounter
 # method that will occur in the player's current position.
 def pbRoamingMethodAllowed(roamer_method)

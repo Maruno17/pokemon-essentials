@@ -298,7 +298,7 @@ class PokemonOption_Scene
     @sprites["option"].viewport = @viewport
     @sprites["option"].visible  = true
     # Get the values of each option
-    @options.length.times { |i|  @sprites["option"].setValueNoRefresh(i, @options[i].get || 0) }
+    @options.length.times { |i| @sprites["option"].setValueNoRefresh(i, @options[i].get || 0) }
     @sprites["option"].refresh
     pbChangeSelection
     pbDeactivateWindows(@sprites)
@@ -325,7 +325,7 @@ class PokemonOption_Scene
   end
 
   def pbOptions
-    pbActivateWindow(@sprites, "option") {
+    pbActivateWindow(@sprites, "option") do
       index = -1
       loop do
         Graphics.update
@@ -342,7 +342,7 @@ class PokemonOption_Scene
           break if @sprites["option"].index == @options.length
         end
       end
-    }
+    end
   end
 
   def pbEndScene

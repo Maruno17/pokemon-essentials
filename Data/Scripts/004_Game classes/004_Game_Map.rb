@@ -106,28 +106,24 @@ class Game_Map
     return GameData::MapMetadata.try_get(@map_id)
   end
 
-  #-----------------------------------------------------------------------------
   # Returns the name of this map's BGM. If it's night time, returns the night
   # version of the BGM (if it exists).
-  #-----------------------------------------------------------------------------
   def bgm_name
     if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + @map.bgm.name + "_n")
       return @map.bgm.name + "_n"
     end
     return @map.bgm.name
   end
-  #-----------------------------------------------------------------------------
-  # * Autoplays background music
-  #   Plays music called "[normal BGM]_n" if it's night time and it exists
-  #-----------------------------------------------------------------------------
+
+  # Autoplays background music
+  # Plays music called "[normal BGM]_n" if it's night time and it exists
   def autoplayAsCue
     pbCueBGM(bgm_name, 1.0, @map.bgm.volume, @map.bgm.pitch) if @map.autoplay_bgm
     pbBGSPlay(@map.bgs) if @map.autoplay_bgs
   end
-  #-----------------------------------------------------------------------------
-  # * Plays background music
-  #   Plays music called "[normal BGM]_n" if it's night time and it exists
-  #-----------------------------------------------------------------------------
+
+  # Plays background music
+  # Plays music called "[normal BGM]_n" if it's night time and it exists
   def autoplay
     pbBGMPlay(bgm_name, @map.bgm.volume, @map.bgm.pitch) if @map.autoplay_bgm
     pbBGSPlay(@map.bgs) if @map.autoplay_bgs
@@ -249,7 +245,7 @@ class Game_Map
   end
 
   # Returns whether the position x,y is fully passable (there is no blocking
-  # event there, and the tile is fully passable in all directions)
+  # event there, and the tile is fully passable in all directions).
   def passableStrict?(x, y, d, self_event = nil)
     return false if !valid?(x, y)
     events.each_value do |event|
@@ -375,17 +371,13 @@ class Game_Map
   def start_fog_tone_change(tone, duration)
     @fog_tone_target = tone.clone
     @fog_tone_duration = duration
-    if @fog_tone_duration == 0
-      @fog_tone = @fog_tone_target.clone
-    end
+    @fog_tone = @fog_tone_target.clone if @fog_tone_duration == 0
   end
 
   def start_fog_opacity_change(opacity, duration)
     @fog_opacity_target = opacity.to_f
     @fog_opacity_duration = duration
-    if @fog_opacity_duration == 0
-      @fog_opacity = @fog_opacity_target
-    end
+    @fog_opacity = @fog_opacity_target if @fog_opacity_duration == 0
   end
 
   def set_tile(x, y, layer, id = 0)

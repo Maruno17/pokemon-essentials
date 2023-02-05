@@ -128,9 +128,7 @@ class BugContestState
       score = pbBugContestScore(pokemon)
       judgearray.push([cont, pokemon.species, score])
     end
-    if judgearray.length < 3
-      raise _INTL("Too few bug catching contestants")
-    end
+    raise _INTL("Too few bug catching contestants") if judgearray.length < 3
     judgearray.sort! { |a, b| b[2] <=> a[2] }   # sort by score in descending order
     @places.push(judgearray[0])
     @places.push(judgearray[1])
@@ -156,7 +154,7 @@ class BugContestState
     @decision = 1
     pbJudge
     if $scene.is_a?(Scene_Map)
-      pbFadeOutIn {
+      pbFadeOutIn do
         $game_temp.player_transferring  = true
         $game_temp.player_new_map_id    = @start[0]
         $game_temp.player_new_x         = @start[1]
@@ -165,7 +163,7 @@ class BugContestState
         pbDismountBike
         $scene.transfer_player
         $game_map.need_refresh = true   # in case player moves to the same map
-      }
+      end
     end
   end
 
@@ -386,7 +384,7 @@ def pbBugContestBattle(pkmn, level = 1)
   BattleCreationHelperMethods.prepare_battle(battle)
   # Perform the battle itself
   decision = 0
-  pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) {
+  pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) do
     decision = battle.pbStartBattle
     BattleCreationHelperMethods.after_battle(decision, true)
     if [2, 5].include?(decision)   # Lost or drew
@@ -394,7 +392,7 @@ def pbBugContestBattle(pkmn, level = 1)
       $game_system.bgs_unpause
       pbBugContestStartOver
     end
-  }
+  end
   Input.update
   # Update Bug Contest game data based on result of battle
   pbBugContestState.ballcount = battle.ballCount

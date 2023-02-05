@@ -40,11 +40,11 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
       bttrainers.push(tr)
     end
     # Sort all the randomly chosen trainers by their base money (smallest first)
-    bttrainers.sort! { |a, b|
+    bttrainers.sort! do |a, b|
       money1 = GameData::TrainerType.get(a[0]).base_money
       money2 = GameData::TrainerType.get(b[0]).base_money
       next (money1 == money2) ? a[0].to_s <=> b[0].to_s : money1 <=> money2
-    }
+    end
   end
   yield(nil) if block_given?
   # Set all Pokémon in pokemonlist to the appropriate level, and determine their
@@ -119,14 +119,14 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
           # anyway (more likely to add it if the trainer has access to more
           # Pokémon of the same type(s) as this Pokémon)
           t = pkmntypes[index]
-          t.each { |typ|
+          t.each do |typ|
             weight = [32, 12, 5, 2, 1, 0, 0, 0][[absDiff, 7].min]
             weight *= types[typ]
             if rand(40) < weight
               numbers.push(index)
               numbersPokemon.push(pokemonlist[index])
             end
-          }
+          end
         end
       end
       numbers |= []   # Remove duplicates

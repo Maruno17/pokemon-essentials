@@ -54,8 +54,6 @@ def getContrastColor(color)
   return color.get_contrast_color
 end
 
-
-
 #===============================================================================
 # Format text
 #===============================================================================
@@ -99,9 +97,7 @@ end
 def getFormattedTextForDims(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight,
                             newlineBreaks = true, explicitBreaksOnly = false)
   text2 = text.gsub(/<(\/?)(c|c2|c3|o|u|s)(\s*\=\s*([^>]*))?>/i, "")
-  if newlineBreaks
-    text2.gsub!(/<(\/?)(br)(\s*\=\s*([^>]*))?>/i, "\n")
-  end
+  text2.gsub!(/<(\/?)(br)(\s*\=\s*([^>]*))?>/i, "\n") if newlineBreaks
   return getFormattedText(bitmap, xDst, yDst, widthDst, heightDst,
                           text2, lineheight, newlineBreaks,
                           explicitBreaksOnly, true)
@@ -248,76 +244,82 @@ def getLastColors(colorstack, opacitystack, defaultcolors)
   return colors
 end
 
-
-
 #===============================================================================
 # Formats a string of text and returns an array containing a list of formatted
 # characters.
+#
+# Parameters:
+#   bitmap:         Source bitmap. Will be used to determine the default font of
+#                   the text.
+#   xDst:           X coordinate of the text's top left corner.
+#   yDst:           Y coordinate of the text's top left corner.
+#   widthDst:       Width of the text. Used to determine line breaks.
+#   heightDst:      Height of the text. If -1, there is no height restriction.
+#                   If 1 or greater, any characters exceeding the height are
+#                   removed from the returned list.
+#   newLineBreaks:  If true, newline characters will be treated as line breaks.
+#                   The default is true.
+#
+# Return Values:
+#   A list of formatted characters. Returns an empty array if _bitmap_ is nil
+#   or disposed, or if _widthDst_ is 0 or less or _heightDst_ is 0.
+#
+# Formatting Specification:
+# This function uses the following syntax when formatting the text.
+#
+#   <b> ... </b>       - Formats the text in bold.
+#   <i> ... </i>       - Formats the text in italics.
+#   <u> ... </u>       - Underlines the text.
+#   <s> ... </s>       - Draws a strikeout line over the text.
+#   <al> ... </al>     - Left-aligns the text. Causes line breaks before and
+#                        after the text.
+#   <r>                - Right-aligns the text until the next line break.
+#   <ar> ... </ar>     - Right-aligns the text. Causes line breaks before and
+#                        after the text.
+#   <ac> ... </ac>     - Centers the text. Causes line breaks before and after
+#                        the text.
+#   <br>               - Causes a line break.
+#   <c=X> ... </c>     - Color specification. A total of four formats are
+#                        supported: RRGGBBAA, RRGGBB, 16-bit RGB, and
+#                        Window_Base color numbers.
+#   <c2=X> ... </c2>   - Color specification where the first half is the base
+#                        color and the second half is the shadow color. 16-bit
+#                        RGB is supported.
+#
+# Added 2009-10-20
+#
+#   <c3=B,S> ... </c3> - Color specification where B is the base color and S is
+#                        the shadow color. B and/or S can be omitted. A total of
+#                        four formats are supported: RRGGBBAA, RRGGBB, 16-bit
+#                        RGB, and Window_Base color numbers.
+#
+# Added 2009-9-12
+#
+#   <o=X>              - Displays the text in the given opacity (0-255)
+#
+# Added 2009-10-19
+#
+#   <outln>            - Displays the text in outline format.
+#
+# Added 2010-05-12
+#
+#   <outln2>           - Displays the text in outline format (outlines more
+#                        exaggerated.
+#   <fn=X> ... </fn>   - Formats the text in the specified font, or Arial if the
+#                        font doesn't exist.
+#   <fs=X> ... </fs>   - Changes the font size to X.
+#   <icon=X>           - Displays the icon X (in Graphics/Icons/).
+#
+# In addition, the syntax supports the following:
+#   &apos; - Converted to "'".
+#   &lt;   - Converted to "<".
+#   &gt;   - Converted to ">".
+#   &amp;  - Converted to "&".
+#   &quot; - Converted to double quotation mark.
+#
+# To draw the characters, pass the returned array to the
+# _drawFormattedChars_ function.
 #===============================================================================
-=begin
-Parameters:
-bitmap:         Source bitmap.  Will be used to determine the default font of
-                the text.
-xDst:           X coordinate of the text's top left corner.
-yDst:           Y coordinate of the text's top left corner.
-widthDst:       Width of the text.  Used to determine line breaks.
-heightDst:      Height of the text.  If -1, there is no height restriction.  If
-                1 or greater, any characters exceeding the height are removed
-                from the returned list.
-newLineBreaks:  If true, newline characters will be treated as line breaks. The
-                default is true.
-
-Return Values:
-A list of formatted characters.  Returns an empty array if _bitmap_ is nil
-or disposed, or if _widthDst_ is 0 or less or _heightDst_ is 0.
-
-Formatting Specification:
-This function uses the following syntax when formatting the text.
-<b> ... </b>       - Formats the text in bold.
-<i> ... </i>       - Formats the text in italics.
-<u> ... </u>       - Underlines the text.
-<s> ... </s>       - Draws a strikeout line over the text.
-<al> ... </al>     - Left-aligns the text.  Causes line breaks before and after
-                     the text.
-<r>                - Right-aligns the text until the next line break.
-<ar> ... </ar>     - Right-aligns the text.  Causes line breaks before and after
-                     the text.
-<ac> ... </ac>     - Centers the text.  Causes line breaks before and after the
-                     text.
-<br>               - Causes a line break.
-<c=X> ... </c>     - Color specification.  A total of four formats are supported:
-                     RRGGBBAA, RRGGBB, 16-bit RGB, and Window_Base color numbers.
-<c2=X> ... </c2>   - Color specification where the first half is the base color
-                     and the second half is the shadow color.  16-bit RGB is
-                     supported.
-Added 2009-10-20
-<c3=B,S> ... </c3> - Color specification where B is the base color and S is the
-                     shadow color.  B and/or S can be omitted.  A total of four
-                     formats are supported:
-                     RRGGBBAA, RRGGBB, 16-bit RGB, and Window_Base color numbers.
-Added 2009-9-12
-<o=X>              - Displays the text in the given opacity (0-255)
-Added 2009-10-19
-<outln>            - Displays the text in outline format.
-Added 2010-05-12
-<outln2>           - Displays the text in outline format (outlines more
-                     exaggerated.
-<fn=X> ... </fn>   - Formats the text in the specified font, or Arial if the
-                     font doesn't exist.
-<fs=X> ... </fs>   - Changes the font size to X.
-<icon=X>           - Displays the icon X (in Graphics/Icons/).
-
-In addition, the syntax supports the following:
-&apos; - Converted to "'".
-&lt;   - Converted to "<".
-&gt;   - Converted to ">".
-&amp;  - Converted to "&".
-&quot; - Converted to double quotation mark.
-
-To draw the characters, pass the returned array to the
-_drawFormattedChars_ function.
-=end
-
 def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight = 32,
                      newlineBreaks = true, explicitBreaksOnly = false,
                      collapseAlignments = false)
@@ -520,9 +522,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
             break
           end
         when "br" # Line break
-          if !endtag
-            nextline += 1
-          end
+          nextline += 1 if !endtag
         when "r" # Right align this line
           if !endtag
             x = 0
@@ -644,49 +644,47 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   end
   # This code looks at whether the text occupies exactly two lines when
   # displayed. If it does, it balances the length of each line.
-=begin
-  # Count total number of lines
-  numlines = (x==0 && y>0) ? y : y+1
-  if numlines==2 && realtext && !realtext[/\n/] && realtext.length>=50
-    # Set half to middle of text (known to contain no formatting)
-    half = realtext.length/2
-    leftSearch  = 0
-    rightSearch = 0
-    # Search left for a space
-    i = half
-    while i>=0
-      break if realtext[i,1][/\s/]||isWaitChar(realtext[i,1])   # found a space
-      leftSearch += 1
-      i -= 1
-    end
-    # Search right for a space
-    i = half
-    while i<realtext.length
-      break if realtext[i,1][/\s/]||isWaitChar(realtext[i,1])   # found a space
-      rightSearch += 1
-      i += 1
-    end
-    # Move half left or right whichever is closer
-    trialHalf = half+((rightSearch<leftSearch) ? rightSearch : -leftSearch)
-    if trialHalf!=0 && trialHalf!=realtext.length
-      # Insert newline and re-call this function (force newlineBreaksOnly)
-      newText = realtext.clone
-      if isWaitChar(newText[trialHalf,1])
-        # insert after wait character
-        newText.insert(trialHalf+1,"\n")
-      else
-        # remove spaces after newline
-        newText.insert(trialHalf,"\n")
-        newText.gsub!(/\n\s+/,"\n")
-      end
-      bitmap.font = oldfont
-      dummybitmap.dispose if dummybitmap
-      return getFormattedText(dummybitmap ? nil : bitmap,xDst,yDst,
-         widthDst,heightDst,realtextStart+newText,
-         lineheight,true,explicitBreaksOnly)
-    end
-  end
-=end
+#  # Count total number of lines
+#  numlines = (x==0 && y>0) ? y : y+1
+#  if numlines==2 && realtext && !realtext[/\n/] && realtext.length>=50
+#    # Set half to middle of text (known to contain no formatting)
+#    half = realtext.length/2
+#    leftSearch  = 0
+#    rightSearch = 0
+#    # Search left for a space
+#    i = half
+#    while i>=0
+#      break if realtext[i,1][/\s/]||isWaitChar(realtext[i,1])   # found a space
+#      leftSearch += 1
+#      i -= 1
+#    end
+#    # Search right for a space
+#    i = half
+#    while i<realtext.length
+#      break if realtext[i,1][/\s/]||isWaitChar(realtext[i,1])   # found a space
+#      rightSearch += 1
+#      i += 1
+#    end
+#    # Move half left or right whichever is closer
+#    trialHalf = half+((rightSearch<leftSearch) ? rightSearch : -leftSearch)
+#    if trialHalf!=0 && trialHalf!=realtext.length
+#      # Insert newline and re-call this function (force newlineBreaksOnly)
+#      newText = realtext.clone
+#      if isWaitChar(newText[trialHalf,1])
+#        # insert after wait character
+#        newText.insert(trialHalf+1,"\n")
+#      else
+#        # remove spaces after newline
+#        newText.insert(trialHalf,"\n")
+#        newText.gsub!(/\n\s+/,"\n")
+#      end
+#      bitmap.font = oldfont
+#      dummybitmap.dispose if dummybitmap
+#      return getFormattedText(dummybitmap ? nil : bitmap,xDst,yDst,
+#         widthDst,heightDst,realtextStart+newText,
+#         lineheight,true,explicitBreaksOnly)
+#    end
+#  end
   if havenl
     # Eliminate spaces before newlines and pause character
     firstspace = -1
@@ -701,9 +699,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
         end
         firstspace = -1
       elsif characters[i][0][/[ \r\t]/]
-        if firstspace < 0
-          firstspace = i
-        end
+        firstspace = i if firstspace < 0
       else
         firstspace = -1
       end
@@ -744,9 +740,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     totalLineWidths = []
     widthblocks.each do |block|
       y = block[4]
-      if !totalLineWidths[y]
-        totalLineWidths[y] = 0
-      end
+      totalLineWidths[y] = 0 if !totalLineWidths[y]
       if totalLineWidths[y] != 0
         # padding in case more than one line has different alignments
         totalLineWidths[y] += 16
@@ -773,8 +767,6 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   dummybitmap&.dispose
   return characters
 end
-
-
 
 #===============================================================================
 # Draw text and images on a bitmap
@@ -881,9 +873,7 @@ def getLineBrokenChunks(bitmap, value, width, dims, plain = false)
         x += textwidth
         dims[0] = x if dims && dims[0] < x
       end
-      if textcols[i]
-        color = textcols[i]
-      end
+      color = textcols[i] if textcols[i]
     end
   end
   dims[1] = y + 32 if dims
@@ -1108,8 +1098,6 @@ def pbDrawTextPositions(bitmap, textpos)
     end
   end
 end
-
-
 
 #===============================================================================
 # Draw images on a bitmap

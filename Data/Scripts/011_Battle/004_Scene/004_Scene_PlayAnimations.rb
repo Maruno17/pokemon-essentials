@@ -137,9 +137,7 @@ class Battle::Scene
         a[2] = true if a[1].animDone?
       end
       pbUpdate
-      if !inPartyAnimation? && sendOutAnims.none? { |a| !a[2] }
-        break
-      end
+      break if !inPartyAnimation? && sendOutAnims.none? { |a| !a[2] }
     end
     fadeAnim.dispose
     sendOutAnims.each do |a|
@@ -498,13 +496,13 @@ class Battle::Scene
     target = (targets.is_a?(Array)) ? targets[0] : targets
     animations = pbLoadBattleAnimations
     return if !animations
-    pbSaveShadows {
+    pbSaveShadows do
       if animID[1]   # On opposing side and using OppMove animation
         pbAnimationCore(animations[anim], target, user, true)
       else           # On player's side, and/or using Move animation
         pbAnimationCore(animations[anim], user, target)
       end
-    }
+    end
   end
 
   # Plays a common animation.

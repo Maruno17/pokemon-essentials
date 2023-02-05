@@ -381,11 +381,11 @@ def pbBerryPlant
                      [_INTL("Fertilize"), _INTL("Plant Berry"), _INTL("Exit")], -1)
       when 0   # Fertilize
         mulch = nil
-        pbFadeOutIn {
+        pbFadeOutIn do
           scene = PokemonBag_Scene.new
           screen = PokemonBagScreen.new(scene, $bag)
           mulch = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_mulch? })
-        }
+        end
         return if !mulch
         mulch_data = GameData::Item.get(mulch)
         if mulch_data.is_mulch?
@@ -408,11 +408,11 @@ def pbBerryPlant
     ask_to_plant = false
   end
   if !ask_to_plant || pbConfirmMessage(_INTL("Want to plant a Berry?"))
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, $bag)
       berry = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_berry? })
-    }
+    end
     if berry
       $stats.berries_planted += 1
       berry_plant.plant(berry)

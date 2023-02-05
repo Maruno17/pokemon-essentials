@@ -1,6 +1,6 @@
-################################################################################
+#===============================================================================
 # Controls
-################################################################################
+#===============================================================================
 class Window_Menu < Window_CommandPokemon
   def initialize(commands, x, y)
     tempbitmap = Bitmap.new(32, 32)
@@ -32,19 +32,15 @@ class Window_Menu < Window_CommandPokemon
       rc = Rect.new(0, 32 * (i - toprow), self.contents.width, 32)
       rc.x += self.x + self.leftEdge
       rc.y += self.y + self.topEdge
-      if rc.contains(mousepos[0], mousepos[1])
-        return i
-      end
+      return i if rc.contains(mousepos[0], mousepos[1])
     end
     return -1
   end
 end
 
-
-
-################################################################################
+#===============================================================================
 # Clipboard
-################################################################################
+#===============================================================================
 module Clipboard
   @data = nil
   @typekey = ""
@@ -64,11 +60,9 @@ module Clipboard
   end
 end
 
-
-
-################################################################################
+#===============================================================================
 # Collision testing
-################################################################################
+#===============================================================================
 class Rect < Object
   def contains(x, y)
     return x >= self.x && x < self.x + self.width &&
@@ -76,8 +70,9 @@ class Rect < Object
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbSpriteHitTest(sprite, x, y, usealpha = true, wholecanvas = false)
   return false if !sprite || sprite.disposed?
   return false if !sprite.bitmap
@@ -158,11 +153,9 @@ def pbTrackPopupMenu(commands)
   return -1
 end
 
-
-
-################################################################################
+#===============================================================================
 # Sprite sheet scrolling bar
-################################################################################
+#===============================================================================
 class AnimationWindow < Sprite
   attr_reader :animbitmap
   attr_reader :start
@@ -298,8 +291,9 @@ class AnimationWindow < Sprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class CanvasAnimationWindow < AnimationWindow
   def animbitmap
     return @canvas.animbitmap
@@ -311,33 +305,31 @@ class CanvasAnimationWindow < AnimationWindow
   end
 end
 
-
-
-################################################################################
+#===============================================================================
 # Cel sprite
-################################################################################
+#===============================================================================
 class InvalidatableSprite < Sprite
   def initialize(viewport = nil)
     super(viewport)
     @invalid = false
   end
 
-# Marks that the control must be redrawn to reflect current logic.
+  # Marks that the control must be redrawn to reflect current logic.
   def invalidate
     @invalid = true
   end
 
-# Determines whether the control is invalid
+  # Determines whether the control is invalid
   def invalid?
     return @invalid
   end
 
-# Marks that the control is valid.  Normally called only by repaint.
+  # Marks that the control is valid.  Normally called only by repaint.
   def validate
     @invalid = false
   end
 
-# Redraws the sprite only if it is invalid, and then revalidates the sprite
+  # Redraws the sprite only if it is invalid, and then revalidates the sprite
   def repaint
     if self.invalid?
       refresh
@@ -345,14 +337,14 @@ class InvalidatableSprite < Sprite
     end
   end
 
- # Redraws the sprite.  This method should not check whether
- # the sprite is invalid, to allow it to be explicitly called.
-  def refresh
-  end
+  # Redraws the sprite.  This method should not check whether
+  # the sprite is invalid, to allow it to be explicitly called.
+  def refresh; end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SpriteFrame < InvalidatableSprite
   attr_reader :id
   attr_reader :locked
@@ -419,11 +411,9 @@ class SpriteFrame < InvalidatableSprite
   end
 end
 
-
-
-################################################################################
+#===============================================================================
 # Canvas
-################################################################################
+#===============================================================================
 class AnimationCanvas < Sprite
   attr_reader :viewport
   attr_reader :sprites
@@ -827,11 +817,11 @@ class AnimationCanvas < Sprite
     currentFrame = getCurrentFrame
     if currentFrame && !@selecting &&
        (Input.triggerex?(:TAB) || Input.repeatex?(:TAB))
-      currentFrame.length.times {
+      currentFrame.length.times do
         @currentcel += 1
         @currentcel = 0 if @currentcel >= currentFrame.length
         break if currentFrame[@currentcel]
-      }
+      end
       invalidate
       return
     end
@@ -947,11 +937,9 @@ class AnimationCanvas < Sprite
   end
 end
 
-
-
-################################################################################
+#===============================================================================
 # Window classes
-################################################################################
+#===============================================================================
 class BitmapDisplayWindow < SpriteWindow_Base
   attr_reader :bitmapname
   attr_reader :hue
@@ -1001,8 +989,9 @@ class BitmapDisplayWindow < SpriteWindow_Base
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class AnimationNameWindow
   def initialize(canvas, x, y, width, height, viewport = nil)
     @canvas = canvas

@@ -295,7 +295,6 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :hidden_values, {
   "effect" => proc { |pkmn, battler, battle|
     cmd = 0
     loop do
-      persid = sprintf("0x%08X", pkmn.personalID)
       cmd = pbMessage("\\ts[]" + _INTL("Choose hidden values to edit."),
                       [_INTL("Set EVs"), _INTL("Set IVs")], -1, nil, cmd)
       break if cmd < 0

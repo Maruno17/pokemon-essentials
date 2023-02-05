@@ -4,10 +4,10 @@
 class BattleChallenge
   attr_reader :currentChallenge
 
-  BattleTowerID   = 0
-  BattlePalaceID  = 1
-  BattleArenaID   = 2
-  BattleFactoryID = 3
+  BATTLE_TOWER_ID   = 0
+  BATTLE_PALACE_ID  = 1
+  BATTLE_ARENA_ID   = 2
+  BATTLE_FACTORY_ID = 3
 
   def initialize
     @bc = BattleChallengeData.new
@@ -20,17 +20,17 @@ class BattleChallenge
     @numRounds = numrounds
     @rules = rules
     register(id, id[/double/], 3,
-             id[/^factory/] ? BattleFactoryID : BattleTowerID,
+             id[/^factory/] ? BATTLE_FACTORY_ID : BATTLE_TOWER_ID,
              id[/open$/] ? 1 : 0)
     pbWriteCup(id, rules)
   end
 
   def register(id, doublebattle, numPokemon, battletype, mode = 1)
     ensureType(id)
-    if battletype == BattleFactoryID
+    if battletype == BATTLE_FACTORY_ID
       @bc.setExtraData(BattleFactoryData.new(@bc))
       numPokemon = 3
-      battletype = BattleTowerID
+      battletype = BATTLE_TOWER_ID
     end
     @rules = modeToRules(doublebattle, numPokemon, battletype, mode) if !@rules
   end
@@ -47,9 +47,9 @@ class BattleChallenge
     rules = PokemonChallengeRules.new
     # Set the battle type
     case battletype
-    when BattlePalaceID
+    when BATTLE_PALACE_ID
       rules.setBattleType(BattlePalace.new)
-    when BattleArenaID
+    when BATTLE_ARENA_ID
       rules.setBattleType(BattleArena.new)
       doublebattle = false
     else   # Factory works the same as Tower
@@ -82,8 +82,7 @@ class BattleChallenge
     @bc.pbStart(t, @numRounds)
   end
 
-  def pbStart(challenge)
-  end
+  def pbStart(challenge); end
 
   def pbEnd
     if @currentChallenge != -1
@@ -98,8 +97,8 @@ class BattleChallenge
     opponent = pbGenerateBattleTrainer(self.nextTrainer, self.rules)
     bttrainers = pbGetBTTrainers(@id)
     trainerdata = bttrainers[self.nextTrainer]
-    opponent.lose_text = pbGetMessageFromHash(MessageTypes::FrontierEndSpeechesLose, trainerdata[4])
-    opponent.win_text = pbGetMessageFromHash(MessageTypes::FrontierEndSpeechesWin, trainerdata[3])
+    opponent.lose_text = pbGetMessageFromHash(MessageTypes::FRONTIER_END_SPEECHES_LOSE, trainerdata[4])
+    opponent.win_text = pbGetMessageFromHash(MessageTypes::FRONTIER_END_SPEECHES_WIN, trainerdata[3])
     ret = pbOrganizedBattleEx(opponent, self.rules)
     return ret
   end
@@ -165,6 +164,8 @@ class BattleChallenge
   def getMaxSwaps(challenge)
     return ensureType(challenge).maxSwaps
   end
+
+  #-----------------------------------------------------------------------------
 
   private
 
@@ -284,6 +285,8 @@ class BattleChallengeData
     return @trainers[@battleNumber - 1]
   end
 
+  #-----------------------------------------------------------------------------
+
   private
 
   def reset
@@ -373,23 +376,23 @@ class BattleFactoryData
     bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
     trainerdata = bttrainers[@trainerid]
     @opponent = NPCTrainer.new(
-      pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
+      pbGetMessageFromHash(MessageTypes::TRAINER_NAMES, trainerdata[1]),
       trainerdata[0]
     )
-    @opponent.lose_text = pbGetMessageFromHash(MessageTypes::FrontierEndSpeechesLose, trainerdata[4])
-    @opponent.win_text = pbGetMessageFromHash(MessageTypes::FrontierEndSpeechesWin, trainerdata[3])
+    @opponent.lose_text = pbGetMessageFromHash(MessageTypes::FRONTIER_END_SPEECHES_LOSE, trainerdata[4])
+    @opponent.win_text = pbGetMessageFromHash(MessageTypes::FRONTIER_END_SPEECHES_WIN, trainerdata[3])
     opponentPkmn = pbBattleFactoryPokemon(pbBattleChallenge.rules, @bcdata.wins, @bcdata.swaps, @rentals)
     @opponent.party = opponentPkmn.sample(3)
   end
 
   def pbChooseRentals
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = BattleSwapScene.new
       screen = BattleSwapScreen.new(scene)
       @rentals = screen.pbStartRent(@rentals)
       @bcdata.pbAddSwap
       @bcdata.setParty(@rentals)
-    }
+    end
   end
 
   def pbPrepareSwaps
@@ -398,11 +401,11 @@ class BattleFactoryData
     bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
     trainerdata = bttrainers[trainerid]
     @opponent = NPCTrainer.new(
-      pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
+      pbGetMessageFromHash(MessageTypes::TRAINER_NAMES, trainerdata[1]),
       trainerdata[0]
     )
-    @opponent.lose_text = pbGetMessageFromHash(MessageTypes::FrontierEndSpeechesLose, trainerdata[4])
-    @opponent.win_text = pbGetMessageFromHash(MessageTypes::FrontierEndSpeechesWin, trainerdata[3])
+    @opponent.lose_text = pbGetMessageFromHash(MessageTypes::FRONTIER_END_SPEECHES_LOSE, trainerdata[4])
+    @opponent.win_text = pbGetMessageFromHash(MessageTypes::FRONTIER_END_SPEECHES_WIN, trainerdata[3])
     opponentPkmn = pbBattleFactoryPokemon(pbBattleChallenge.rules, @bcdata.wins, @bcdata.swaps,
                                           [].concat(@rentals).concat(@oldopponent))
     @opponent.party = opponentPkmn.sample(3)
@@ -410,19 +413,17 @@ class BattleFactoryData
 
   def pbChooseSwaps
     swapMade = true
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = BattleSwapScene.new
       screen = BattleSwapScreen.new(scene)
       swapMade = screen.pbStartSwap(@rentals, @oldopponent)
       @bcdata.pbAddSwap if swapMade
       @bcdata.setParty(@rentals)
-    }
+    end
     return swapMade
   end
 
   def pbBattle(challenge)
-    bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
-    trainerdata = bttrainers[@trainerid]
     return pbOrganizedBattleEx(@opponent, challenge.rules)
   end
 end

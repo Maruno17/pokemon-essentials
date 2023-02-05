@@ -1,0 +1,213 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[SHADOWEND]
+Name = Shadow End
+Type = SHADOW
+Category = Special
+Power = 120
+Accuracy = 60
+TotalPP = 0
+Target = NearOther
+FunctionCode = UserLosesHalfHP
+Flags = Contact,CanProtect
+Description = A shadowy aura ram attack that also rebounds on the user.
+#-------------------------------
+[SHADOWSTORM]
+Name = Shadow Storm
+Type = SHADOW
+Category = Special
+Power = 95
+Accuracy = 100
+TotalPP = 0
+Target = AllFoes
+FunctionCode = DoublePowerIfTargetUnderwater
+Flags = CanProtect
+Description = A shadowy aura is used to whip up a vicious tornado.
+#-------------------------------
+[SHADOWBLAST]
+Name = Shadow Blast
+Type = SHADOW
+Category = Special
+Power = 80
+Accuracy = 100
+TotalPP = 0
+Target = NearOther
+FunctionCode = None
+Flags = CanProtect,HighCriticalHitRate
+Description = A wicked blade of air is formed using a shadowy aura.
+#-------------------------------
+[SHADOWBOLT]
+Name = Shadow Bolt
+Type = SHADOW
+Category = Special
+Power = 75
+Accuracy = 100
+TotalPP = 0
+Target = NearOther
+FunctionCode = ParalyzeTarget
+Flags = CanProtect
+EffectChance = 10
+Description = A shadowy thunder attack that may paralyze.
+#-------------------------------
+[SHADOWBREAK]
+Name = Shadow Break
+Type = SHADOW
+Category = Physical
+Power = 75
+Accuracy = 100
+TotalPP = 0
+Target = NearOther
+FunctionCode = None
+Flags = Contact,CanProtect
+Description = A shattering ram attack with a shadowy aura.
+#-------------------------------
+[SHADOWCHILL]
+Name = Shadow Chill
+Type = SHADOW
+Category = Special
+Power = 75
+Accuracy = 100
+TotalPP = 0
+Target = NearOther
+FunctionCode = FreezeTarget
+Flags = CanProtect
+EffectChance = 10
+Description = A shadowy ice attack that may freeze.
+#-------------------------------
+[SHADOWFIRE]
+Name = Shadow Fire
+Type = SHADOW
+Category = Special
+Power = 75
+Accuracy = 100
+TotalPP = 0
+Target = NearOther
+FunctionCode = BurnTarget
+Flags = CanProtect
+EffectChance = 10
+Description = A shadowy fireball attack that may inflict a burn.
+#-------------------------------
+[SHADOWRAVE]
+Name = Shadow Rave
+Type = SHADOW
+Category = Special
+Power = 70
+Accuracy = 100
+TotalPP = 0
+Target = AllFoes
+FunctionCode = None
+Flags = CanProtect
+Description = A shadowy aura in the ground is used to launch spikes.
+#-------------------------------
+[SHADOWRUSH]
+Name = Shadow Rush
+Type = SHADOW
+Category = Physical
+Power = 55
+Accuracy = 100
+TotalPP = 0
+Target = NearOther
+FunctionCode = None
+Flags = Contact,CanProtect
+Description = A reckless move that also hurts the user.
+#-------------------------------
+[SHADOWWAVE]
+Name = Shadow Wave
+Type = SHADOW
+Category = Special
+Power = 50
+Accuracy = 100
+TotalPP = 0
+Target = AllFoes
+FunctionCode = None
+Flags = CanProtect
+Description = Shadowy aura waves are loosed to inflict damage.
+#-------------------------------
+[SHADOWBLITZ]
+Name = Shadow Blitz
+Type = SHADOW
+Category = Physical
+Power = 40
+Accuracy = 100
+TotalPP = 0
+Target = NearOther
+FunctionCode = None
+Flags = Contact,CanProtect
+Description = A Pokémon throws this tackle while casting a shadowy aura.
+#-------------------------------
+[SHADOWDOWN]
+Name = Shadow Down
+Type = SHADOW
+Category = Status
+Accuracy = 100
+TotalPP = 0
+Target = AllFoes
+FunctionCode = LowerTargetDefense2
+Flags = CanProtect
+Description = A shadowy aura sharply cuts the foe's Defense.
+#-------------------------------
+[SHADOWHALF]
+Name = Shadow Half
+Type = SHADOW
+Category = Status
+Accuracy = 100
+TotalPP = 0
+Target = AllBattlers
+FunctionCode = AllBattlersLoseHalfHPUserSkipsNextTurn
+Flags = CanProtect
+Description = A shadowy aura's energy cuts everyone's HP by half.
+#-------------------------------
+[SHADOWHOLD]
+Name = Shadow Hold
+Type = SHADOW
+Category = Status
+Accuracy = 100
+TotalPP = 0
+Target = AllFoes
+FunctionCode = TrapTargetInBattle
+Flags = CanProtect
+Description = The opponent Pokémon cannot escape.
+#-------------------------------
+[SHADOWMIST]
+Name = Shadow Mist
+Type = SHADOW
+Category = Status
+Accuracy = 100
+TotalPP = 0
+Target = AllFoes
+FunctionCode = LowerTargetEvasion2
+Flags = CanProtect
+Description = A shadowy aura sharply cuts the foe's evasiveness.
+#-------------------------------
+[SHADOWPANIC]
+Name = Shadow Panic
+Type = SHADOW
+Category = Status
+Accuracy = 90
+TotalPP = 0
+Target = AllFoes
+FunctionCode = ConfuseTarget
+Flags = CanProtect,Sound
+Description = A shadowy aura emanates to confuse the foe.
+#-------------------------------
+[SHADOWSHED]
+Name = Shadow Shed
+Type = SHADOW
+Category = Status
+Accuracy = 100
+TotalPP = 0
+Target = BothSides
+FunctionCode = RemoveAllScreens
+Flags = CanProtect
+Description = A shadowy aura eliminates Reflect and similar moves.
+#-------------------------------
+[SHADOWSKY]
+Name = Shadow Sky
+Type = SHADOW
+Category = Status
+Accuracy = 100
+TotalPP = 0
+Target = BothSides
+FunctionCode = StartShadowSkyWeather
+Flags = CanProtect
+Description = Darkness hurts all but Shadow Pokémon for 5 turns.

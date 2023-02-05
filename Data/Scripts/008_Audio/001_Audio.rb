@@ -18,8 +18,8 @@ end
 # Methods that determine the duration of an audio file.
 #===============================================================================
 def getOggPage(file)
-  fgetdw = proc { |file|
-    (file.eof? ? 0 : (file.read(4).unpack("V")[0] || 0))
+  fgetdw = proc { |f|
+    (f.eof? ? 0 : (f.read(4).unpack("V")[0] || 0))
   }
   dw = fgetdw.call(file)
   return nil if dw != 0x5367674F
@@ -35,8 +35,8 @@ end
 
 # internal function
 def oggfiletime(file)
-  fgetdw = proc { |file|
-    (file.eof? ? 0 : (file.read(4).unpack("V")[0] || 0))
+  fgetdw = proc { |f|
+    (f.eof? ? 0 : (f.read(4).unpack("V")[0] || 0))
   }
   pages = []
   page = nil
@@ -51,8 +51,8 @@ def oggfiletime(file)
   i = -1
   pcmlengths = []
   rates = []
-  pages.each do |page|
-    header = page[0]
+  pages.each do |pg|
+    header = pg[0]
     serial = header[10, 4].unpack("V")
     frame = header[2, 8].unpack("C*")
     frameno = frame[7]
@@ -65,7 +65,7 @@ def oggfiletime(file)
     frameno = (frameno << 8) | frame[0]
     if serial != curserial
       curserial = serial
-      file.pos = page[1]
+      file.pos = pg[1]
       packtype = (file.read(1)[0].ord rescue 0)
       string = file.read(6)
       return -1 if string != "vorbis"
@@ -78,7 +78,7 @@ def oggfiletime(file)
     pcmlengths[i] = frameno
   end
   ret = 0.0
-  pcmlengths.each_with_index { |length, i| ret += length.to_f / rates[i] }
+  pcmlengths.each_with_index { |length, j| ret += length.to_f / rates[j] }
   return ret * 256.0
 end
 
@@ -105,7 +105,7 @@ def getPlayTime2(filename)
   fgetw = proc { |file|
     (file.eof? ? 0 : (file.read(2).unpack("v")[0] || 0))
   }
-  File.open(filename, "rb") { |file|
+  File.open(filename, "rb") do |file|
     file.pos = 0
     fdw = fgetdw.call(file)
     case fdw
@@ -165,6 +165,6 @@ def getPlayTime2(filename)
         break
       end
     end
-  }
+  end
   return time
 end

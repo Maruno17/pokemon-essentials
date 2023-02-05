@@ -59,13 +59,13 @@ module Compiler
   def findIndex(a)
     index = -1
     count = 0
-    a.each { |i|
+    a.each do |i|
       if yield i
         index = count
         break
       end
       count += 1
-    }
+    end
     return index
   end
 
@@ -97,7 +97,7 @@ module Compiler
     havesection = false
     sectionname = nil
     lastsection = {}
-    f.each_line { |line|
+    f.each_line do |line|
       if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
         line = line[3, line.length - 3]
       end
@@ -130,7 +130,7 @@ module Compiler
       end
       lineno += 1
       Graphics.update if lineno % 1000 == 0
-    }
+    end
     yield lastsection, sectionname if havesection
   end
 
@@ -139,16 +139,16 @@ module Compiler
   # ribbons.txt, trainer_types.txt, battle_facility_lists.txt, Battle Tower
   # trainers PBS files and dungeon_parameters.txt
   def pbEachFileSection(f, schema = nil)
-    pbEachFileSectionEx(f, schema) { |section, name|
+    pbEachFileSectionEx(f, schema) do |section, name|
       yield section, name if block_given? && name[/^.+$/]
-    }
+    end
   end
 
   # Used for metadata.txt and map_metadata.txt
   def pbEachFileSectionNumbered(f, schema = nil)
-    pbEachFileSectionEx(f, schema) { |section, name|
+    pbEachFileSectionEx(f, schema) do |section, name|
       yield section, name.to_i if block_given? && name[/^\d+$/]
-    }
+    end
   end
 
   # Used by translated text compiler
@@ -157,7 +157,7 @@ module Compiler
     havesection = false
     sectionname = nil
     lastsection = []
-    f.each_line { |line|
+    f.each_line do |line|
       if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
         line = line[3, line.length - 3]
       end
@@ -177,29 +177,29 @@ module Compiler
       end
       lineno += 1
       Graphics.update if lineno % 500 == 0
-    }
+    end
     yield lastsection, sectionname if havesection
   end
 
   # Unused
   def pbEachCommentedLine(f)
     lineno = 1
-    f.each_line { |line|
+    f.each_line do |line|
       if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
         line = line[3, line.length - 3]
       end
       line.force_encoding(Encoding::UTF_8)
       yield line, lineno if !line[/^\#/] && !line[/^\s*$/]
       lineno += 1
-    }
+    end
   end
 
   # Used for town_map.txt and Battle Tower Pokémon PBS files
   def pbCompilerEachCommentedLine(filename)
-    File.open(filename, "rb") { |f|
+    File.open(filename, "rb") do |f|
       FileLineData.file = filename
       lineno = 1
-      f.each_line { |line|
+      f.each_line do |line|
         if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
           line = line[3, line.length - 3]
         end
@@ -209,14 +209,14 @@ module Compiler
           yield line, lineno
         end
         lineno += 1
-      }
-    }
+      end
+    end
   end
 
   # Unused
   def pbEachPreppedLine(f)
     lineno = 1
-    f.each_line { |line|
+    f.each_line do |line|
       if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
         line = line[3, line.length - 3]
       end
@@ -224,16 +224,16 @@ module Compiler
       line = prepline(line)
       yield line, lineno if !line[/^\#/] && !line[/^\s*$/]
       lineno += 1
-    }
+    end
   end
 
   # Used for map_connections.txt, phone.txt, regional_dexes.txt, encounters.txt,
   # trainers.txt and dungeon_tilesets.txt
   def pbCompilerEachPreppedLine(filename)
-    File.open(filename, "rb") { |f|
+    File.open(filename, "rb") do |f|
       FileLineData.file = filename
       lineno = 1
-      f.each_line { |line|
+      f.each_line do |line|
         if lineno == 1 && line[0].ord == 0xEF && line[1].ord == 0xBB && line[2].ord == 0xBF
           line = line[3, line.length - 3]
         end
@@ -244,8 +244,8 @@ module Compiler
           yield line, lineno
         end
         lineno += 1
-      }
-    }
+      end
+    end
   end
 
   #=============================================================================
@@ -408,10 +408,11 @@ module Compiler
     repeat = false
     schema_length = schema[1].length
     start = 0
-    if schema[1][0, 1] == "*"
+    case schema[1][0, 1]
+    when "*"
       repeat = true
       start = 1
-    elsif schema[1][0, 1] == "^"
+    when "^"
       start = 1
       schema_length -= 1
     end
@@ -740,16 +741,16 @@ module Compiler
   def edit_and_rewrite_pbs_file_text(filename)
     return if !block_given?
     lines = []
-    File.open(filename, "rb") { |f|
+    File.open(filename, "rb") do |f|
       f.each_line { |line| lines.push(line) }
-    }
+    end
     changed = false
     lines.each { |line| changed = true if yield line }
     if changed
       Console.markup_style("Changes made to file #{filename}.", text: :yellow)
-      File.open(filename, "wb") { |f|
+      File.open(filename, "wb") do |f|
         lines.each { |line| f.write(line) }
-      }
+      end
     end
   end
 
@@ -882,13 +883,13 @@ module Compiler
       data_files.each do |filename|
         if safeExists?("Data/" + filename)
           begin
-            File.open("Data/#{filename}") { |file|
+            File.open("Data/#{filename}") do |file|
               latestDataTime = [latestDataTime, file.mtime.to_i].max
-            }
+            end
           rescue SystemCallError
             mustCompile = true
           end
-        else
+        elsif filename != "shadow_pokemon.dat"
           mustCompile = true
           break
         end

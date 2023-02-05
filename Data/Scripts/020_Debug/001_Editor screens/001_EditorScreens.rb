@@ -339,14 +339,12 @@ def pbEncounterTypeEditor(enc_data, enc_type)
   Input.update
 end
 
-
-
 #===============================================================================
 # Trainer type editor
 #===============================================================================
 def pbTrainerTypeEditor
   properties = GameData::TrainerType.editor_properties
-  pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
+  pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) do |button, tr_type|
     if tr_type
       case button
       when Input::ACTION
@@ -388,7 +386,7 @@ def pbTrainerTypeEditor
         end
       end
     end
-  }
+  end
 end
 
 def pbTrainerTypeEditorNew(default_name)
@@ -444,8 +442,6 @@ def pbTrainerTypeEditorNew(default_name)
   return id.to_sym
 end
 
-
-
 #===============================================================================
 # Individual trainer editor
 #===============================================================================
@@ -476,11 +472,12 @@ module TrainerBattleProperty
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbTrainerBattleEditor
   modified = false
-  pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) { |button, trainer_id|
+  pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) do |button, trainer_id|
     if trainer_id
       case button
       when Input::ACTION
@@ -592,7 +589,7 @@ def pbTrainerBattleEditor
         end
       end
     end
-  }
+  end
   if modified && pbConfirmMessage(_INTL("Save changes?"))
     GameData::Trainer.save
     pbConvertTrainerData
@@ -601,14 +598,12 @@ def pbTrainerBattleEditor
   end
 end
 
-
-
 #===============================================================================
 # Trainer Pokémon editor
 #===============================================================================
 module TrainerPokemonProperty
   def self.set(settingname, initsetting)
-    initsetting = { :species => nil, :level => 10 } if !initsetting
+    initsetting = {:species => nil, :level => 10} if !initsetting
     oldsetting = [
       initsetting[:species],
       initsetting[:level],
@@ -691,8 +686,6 @@ module TrainerPokemonProperty
   end
 end
 
-
-
 #===============================================================================
 # Metadata editor
 #===============================================================================
@@ -747,7 +740,7 @@ def pbEditPlayerMetadata(player_id = 1)
       player_id = i
       break
     end
-    metadata = GameData::PlayerMetadata.new({ :id => player_id })
+    metadata = GameData::PlayerMetadata.new({:id => player_id})
   elsif !GameData::PlayerMetadata.exists?(player_id)
     pbMessage(_INTL("Metadata for player character {1} was not found.", player_id))
     return
@@ -780,8 +773,6 @@ def pbEditPlayerMetadata(player_id = 1)
   end
 end
 
-
-
 #===============================================================================
 # Map metadata editor
 #===============================================================================
@@ -798,7 +789,7 @@ def pbEditMapMetadata(map_id)
   data = []
   map_name = mapinfos[map_id].name
   metadata = GameData::MapMetadata.try_get(map_id)
-  metadata = GameData::MapMetadata.new({ :id => map_id }) if !metadata
+  metadata = GameData::MapMetadata.new({:id => map_id}) if !metadata
   properties = GameData::MapMetadata.editor_properties
   properties.each do |property|
     val = metadata.get_property_for_PBS(property[0])
@@ -825,14 +816,12 @@ def pbEditMapMetadata(map_id)
   end
 end
 
-
-
 #===============================================================================
 # Item editor
 #===============================================================================
 def pbItemEditor
   properties = GameData::Item.editor_properties
-  pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
+  pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) do |button, item|
     if item
       case button
       when Input::ACTION
@@ -874,7 +863,7 @@ def pbItemEditor
         end
       end
     end
-  }
+  end
 end
 
 def pbItemEditorNew(default_name)
@@ -931,14 +920,12 @@ def pbItemEditorNew(default_name)
   pbMessage(_INTL("Put the item's graphic ({1}.png) in Graphics/Items, or it will be blank.", id.to_s))
 end
 
-
-
 #===============================================================================
 # Pokémon species editor
 #===============================================================================
 def pbPokemonEditor
   properties = GameData::Species.editor_properties
-  pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
+  pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) do |button, species|
     if species
       case button
       when Input::ACTION
@@ -996,10 +983,8 @@ def pbPokemonEditor
         end
       end
     end
-  }
+  end
 end
-
-
 
 #===============================================================================
 # Regional Dexes editor
@@ -1260,8 +1245,6 @@ def pbEvoFamiliesToStrings
   end
   return ret
 end
-
-
 
 #===============================================================================
 # Battle animations rearranger

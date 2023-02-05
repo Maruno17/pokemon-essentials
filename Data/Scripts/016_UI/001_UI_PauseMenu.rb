@@ -137,27 +137,27 @@ MenuHandlers.add(:pause_menu, :pokedex, {
   "effect"    => proc { |menu|
     pbPlayDecisionSE
     if Settings::USE_CURRENT_REGION_DEX
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonPokedex_Scene.new
         screen = PokemonPokedexScreen.new(scene)
         screen.pbStartScreen
         menu.pbRefresh
-      }
+      end
     elsif $player.pokedex.accessible_dexes.length == 1
       $PokemonGlobal.pokedexDex = $player.pokedex.accessible_dexes[0]
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonPokedex_Scene.new
         screen = PokemonPokedexScreen.new(scene)
         screen.pbStartScreen
         menu.pbRefresh
-      }
+      end
     else
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonPokedexMenu_Scene.new
         screen = PokemonPokedexMenuScreen.new(scene)
         screen.pbStartScreen
         menu.pbRefresh
-      }
+      end
     end
     next false
   }
@@ -170,12 +170,12 @@ MenuHandlers.add(:pause_menu, :party, {
   "effect"    => proc { |menu|
     pbPlayDecisionSE
     hidden_move = nil
-    pbFadeOutIn {
+    pbFadeOutIn do
       sscene = PokemonParty_Scene.new
       sscreen = PokemonPartyScreen.new(sscene, $player.party)
       hidden_move = sscreen.pbPokemonScreen
       (hidden_move) ? menu.pbEndScene : menu.pbRefresh
-    }
+    end
     next false if !hidden_move
     $game_temp.in_menu = false
     pbUseHiddenMove(hidden_move[0], hidden_move[1])
@@ -190,12 +190,12 @@ MenuHandlers.add(:pause_menu, :bag, {
   "effect"    => proc { |menu|
     pbPlayDecisionSE
     item = nil
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene, $bag)
       item = screen.pbStartScreen
       (item) ? menu.pbEndScene : menu.pbRefresh
-    }
+    end
     next false if !item
     $game_temp.in_menu = false
     pbUseKeyItemInField(item)
@@ -209,12 +209,12 @@ MenuHandlers.add(:pause_menu, :pokegear, {
   "condition" => proc { next $player.has_pokegear },
   "effect"    => proc { |menu|
     pbPlayDecisionSE
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonPokegear_Scene.new
       screen = PokemonPokegearScreen.new(scene)
       screen.pbStartScreen
       ($game_temp.fly_destination) ? menu.pbEndScene : menu.pbRefresh
-    }
+    end
     next pbFlyToNewLocation
   }
 })
@@ -225,13 +225,13 @@ MenuHandlers.add(:pause_menu, :town_map, {
   "condition" => proc { next !$player.has_pokegear && $bag.has?(:TOWNMAP) },
   "effect"    => proc { |menu|
     pbPlayDecisionSE
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonRegionMap_Scene.new(-1, false)
       screen = PokemonRegionMapScreen.new(scene)
       ret = screen.pbStartScreen
       $game_temp.fly_destination = ret if ret
       ($game_temp.fly_destination) ? menu.pbEndScene : menu.pbRefresh
-    }
+    end
     next pbFlyToNewLocation
   }
 })
@@ -241,12 +241,12 @@ MenuHandlers.add(:pause_menu, :trainer_card, {
   "order"     => 50,
   "effect"    => proc { |menu|
     pbPlayDecisionSE
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonTrainerCard_Scene.new
       screen = PokemonTrainerCardScreen.new(scene)
       screen.pbStartScreen
       menu.pbRefresh
-    }
+    end
     next false
   }
 })
@@ -254,8 +254,9 @@ MenuHandlers.add(:pause_menu, :trainer_card, {
 MenuHandlers.add(:pause_menu, :save, {
   "name"      => _INTL("Save"),
   "order"     => 60,
-  "condition" => proc { next $game_system && !$game_system.save_disabled &&
-                             !pbInSafari? && !pbInBugContest? },
+  "condition" => proc {
+    next $game_system && !$game_system.save_disabled && !pbInSafari? && !pbInBugContest?
+  },
   "effect"    => proc { |menu|
     menu.pbHideMenu
     scene = PokemonSave_Scene.new
@@ -275,13 +276,13 @@ MenuHandlers.add(:pause_menu, :options, {
   "order"     => 70,
   "effect"    => proc { |menu|
     pbPlayDecisionSE
-    pbFadeOutIn {
+    pbFadeOutIn do
       scene = PokemonOption_Scene.new
       screen = PokemonOptionScreen.new(scene)
       screen.pbStartScreen
       pbUpdateSceneMap
       menu.pbRefresh
-    }
+    end
     next false
   }
 })
@@ -292,10 +293,10 @@ MenuHandlers.add(:pause_menu, :debug, {
   "condition" => proc { next $DEBUG },
   "effect"    => proc { |menu|
     pbPlayDecisionSE
-    pbFadeOutIn {
+    pbFadeOutIn do
       pbDebugMenu
       menu.pbRefresh
-    }
+    end
     next false
   }
 })

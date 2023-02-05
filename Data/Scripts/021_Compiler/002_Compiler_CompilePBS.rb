@@ -10,13 +10,13 @@ module Compiler
       base_filename = game_data::PBS_BASE_FILENAME
       base_filename = base_filename[0] if base_filename.is_a?(Array)   # For Species
       file_suffix = File.basename(path, ".txt")[base_filename.length + 1, path.length] || ""
-      File.open(path, "rb") { |f|
+      File.open(path, "rb") do |f|
         FileLineData.file = path   # For error reporting
         # Read a whole section's lines at once, then run through this code.
         # contents is a hash containing all the XXX=YYY lines in that section, where
         # the keys are the XXX and the values are the YYY (as unprocessed strings).
         idx = 0
-        pbEachFileSection(f, schema) { |contents, section_name|
+        pbEachFileSection(f, schema) do |contents, section_name|
           echo "." if idx % 50 == 0
           Graphics.update if idx % 250 == 0
           idx += 1
@@ -55,8 +55,8 @@ module Compiler
           end
           # Add section's data to records
           game_data.register(data_hash)
-        }
-      }
+        end
+      end
       process_pbs_file_message_end
     end
     yield true, nil if block_given?
@@ -90,19 +90,19 @@ module Compiler
     end
     point_names.uniq!
     interest_names.uniq!
-    MessageTypes.setMessagesAsHash(MessageTypes::Regions, region_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::RegionLocations, point_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::RegionDescriptions, interest_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::REGION_NAMES, region_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::REGION_LOCATION_NAMES, point_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::REGION_LOCATION_DESCRIPTIONS, interest_names)
   end
 
   #=============================================================================
   # Compile map connections
   #=============================================================================
   def compile_connections(*paths)
-    records   = []
+    records = []
     paths.each do |path|
       compile_pbs_file_message_start(path)
-      pbCompilerEachPreppedLine(path) { |line, lineno|
+      pbCompilerEachPreppedLine(path) do |line, lineno|
         hashenum = {
           "N" => "N", "North" => "N",
           "E" => "E", "East"  => "E",
@@ -134,7 +134,7 @@ module Compiler
           raise _INTL("West side of first map must connect with east side of second map\r\n{1}", FileLineData.linereport) if record[4] != "E"
         end
         records.push(record)
-      }
+      end
       process_pbs_file_message_end
     end
     save_data(records, "Data/map_connections.dat")
@@ -175,7 +175,7 @@ module Compiler
       # Get type names for translating
       type_names.push(type.real_name)
     end
-    MessageTypes.setMessagesAsHash(MessageTypes::Types, type_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::TYPE_NAMES, type_names)
   end
 
   #=============================================================================
@@ -198,8 +198,8 @@ module Compiler
       ability_names.push(ability.real_name)
       ability_descriptions.push(ability.real_description)
     end
-    MessageTypes.setMessagesAsHash(MessageTypes::Abilities, ability_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::AbilityDescriptions, ability_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::ABILITY_NAMES, ability_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::ABILITY_DESCRIPTIONS, ability_descriptions)
   end
 
   #=============================================================================
@@ -230,8 +230,8 @@ module Compiler
       move_names.push(move.real_name)
       move_descriptions.push(move.real_description)
     end
-    MessageTypes.setMessagesAsHash(MessageTypes::Moves, move_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::MoveDescriptions, move_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::MOVE_NAMES, move_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::MOVE_DESCRIPTIONS, move_descriptions)
   end
 
   #=============================================================================
@@ -260,11 +260,11 @@ module Compiler
       item_portion_names_plural.push(item.real_portion_name_plural)
       item_descriptions.push(item.real_description)
     end
-    MessageTypes.setMessagesAsHash(MessageTypes::Items, item_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::ItemPlurals, item_names_plural)
-    MessageTypes.setMessagesAsHash(MessageTypes::ItemPortions, item_portion_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::ItemPortionPlurals, item_portion_names_plural)
-    MessageTypes.setMessagesAsHash(MessageTypes::ItemDescriptions, item_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::ITEM_NAMES, item_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::ITEM_NAME_PLURALS, item_names_plural)
+    MessageTypes.setMessagesAsHash(MessageTypes::ITEM_PORTION_NAMES, item_portion_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::ITEM_PORTION_NAME_PLURALS, item_portion_names_plural)
+    MessageTypes.setMessagesAsHash(MessageTypes::ITEM_DESCRIPTIONS, item_descriptions)
   end
 
   #=============================================================================
@@ -369,10 +369,10 @@ module Compiler
       species_categories.push(species.real_category)
       species_pokedex_entries.push(species.real_pokedex_entry)
     end
-    MessageTypes.setMessagesAsHash(MessageTypes::Species, species_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::SpeciesForms, species_form_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::SpeciesCategories, species_categories)
-    MessageTypes.setMessagesAsHash(MessageTypes::PokedexEntries, species_pokedex_entries)
+    MessageTypes.setMessagesAsHash(MessageTypes::SPECIES_NAMES, species_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::SPECIES_FORM_NAMES, species_form_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::SPECIES_CATEGORIES, species_categories)
+    MessageTypes.setMessagesAsHash(MessageTypes::POKEDEX_ENTRIES, species_pokedex_entries)
   end
 
   #=============================================================================
@@ -386,13 +386,13 @@ module Compiler
     paths.each do |path|
       compile_pbs_file_message_start(path)
       file_suffix = File.basename(path, ".txt")[GameData::Species::PBS_BASE_FILENAME[1].length + 1, path.length] || ""
-      File.open(path, "rb") { |f|
+      File.open(path, "rb") do |f|
         FileLineData.file = path   # For error reporting
         # Read a whole section's lines at once, then run through this code.
         # contents is a hash containing all the XXX=YYY lines in that section, where
         # the keys are the XXX and the values are the YYY (as unprocessed strings).
         idx = 0
-        pbEachFileSection(f, schema) { |contents, section_name|
+        pbEachFileSection(f, schema) do |contents, section_name|
           echo "." if idx % 50 == 0
           Graphics.update if idx % 250 == 0
           idx += 1
@@ -431,8 +431,8 @@ module Compiler
           end
           # Add section's data to records
           GameData::Species.register(data_hash)
-        }
-      }
+        end
+      end
       process_pbs_file_message_end
     end
     validate_all_compiled_pokemon_forms
@@ -508,9 +508,9 @@ module Compiler
       species_categories.push(species.real_category)
       species_pokedex_entries.push(species.real_pokedex_entry)
     end
-    MessageTypes.addMessagesAsHash(MessageTypes::SpeciesForms, species_form_names)
-    MessageTypes.addMessagesAsHash(MessageTypes::SpeciesCategories, species_categories)
-    MessageTypes.addMessagesAsHash(MessageTypes::PokedexEntries, species_pokedex_entries)
+    MessageTypes.addMessagesAsHash(MessageTypes::SPECIES_FORM_NAMES, species_form_names)
+    MessageTypes.addMessagesAsHash(MessageTypes::SPECIES_CATEGORIES, species_categories)
+    MessageTypes.addMessagesAsHash(MessageTypes::POKEDEX_ENTRIES, species_pokedex_entries)
   end
 
   #=============================================================================
@@ -542,6 +542,7 @@ module Compiler
   # Compile Shadow Pokémon data
   #=============================================================================
   def compile_shadow_pokemon(*paths)
+    return if !safeExists?("PBS/shadow_pokemon.txt")
     compile_PBS_file_generic(GameData::ShadowPokemon, *paths) do |final_validate, hash|
       (final_validate) ? validate_all_compiled_shadow_pokemon : validate_compiled_shadow_pokemon(hash)
     end
@@ -561,7 +562,7 @@ module Compiler
     paths.each do |path|
       compile_pbs_file_message_start(path)
       section = nil
-      pbCompilerEachPreppedLine(path) { |line, line_no|
+      pbCompilerEachPreppedLine(path) do |line, line_no|
         Graphics.update if line_no % 200 == 0
         if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
           section = $~[1].to_i
@@ -578,7 +579,7 @@ module Compiler
             dex_lists[section].push(s)
           end
         end
-      }
+      end
       process_pbs_file_message_end
     end
     # Check for duplicate species in a Regional Dex
@@ -614,8 +615,8 @@ module Compiler
       ribbon_names.push(ribbon.real_name)
       ribbon_descriptions.push(ribbon.real_description)
     end
-    MessageTypes.setMessagesAsHash(MessageTypes::RibbonNames, ribbon_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::RibbonDescriptions, ribbon_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::RIBBON_NAMES, ribbon_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::RIBBON_DESCRIPTIONS, ribbon_descriptions)
   end
 
   #=============================================================================
@@ -631,7 +632,7 @@ module Compiler
       step_chances   = nil
       current_type   = nil
       idx = 0
-      pbCompilerEachPreppedLine(path) { |line, line_no|
+      pbCompilerEachPreppedLine(path) do |line, line_no|
         echo "." if idx % 50 == 0
         idx += 1
         Graphics.update if idx % 250 == 0
@@ -706,7 +707,7 @@ module Compiler
                         line, encounter_hash[:map], FileLineData.linereport)
           end
         end
-      }
+      end
       # Add last map's encounter data to records
       if encounter_hash
         encounter_hash[:types].each_value do |slots|
@@ -749,7 +750,7 @@ module Compiler
     GameData::TrainerType.each do |tr_type|
       trainer_type_names.push(tr_type.real_name)
     end
-    MessageTypes.setMessagesAsHash(MessageTypes::TrainerTypes, trainer_type_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::TRAINER_TYPE_NAMES, trainer_type_names)
   end
 
   #=============================================================================
@@ -769,7 +770,7 @@ module Compiler
       section_name = nil
       section_line = nil
       # Read each line of trainers.txt at a time and compile it as a trainer property
-      pbCompilerEachPreppedLine(path) { |line, line_no|
+      pbCompilerEachPreppedLine(path) do |line, line_no|
         echo "." if idx % 50 == 0
         idx += 1
         Graphics.update if idx % 250 == 0
@@ -814,7 +815,7 @@ module Compiler
             current_pkmn[sub_schema[key][0]] = pbGetCsvRecord($~[2], line_no, sub_schema[key])
           end
         end
-      }
+      end
       # Add last trainer's data to records
       if data_hash
         FileLineData.setSection(section_name, nil, section_line)
@@ -907,8 +908,8 @@ module Compiler
       trainer_names.push(trainer.real_name)
       lose_texts.push(trainer.real_lose_text)
     end
-    MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames, trainer_names)
-    MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseTexts, lose_texts)
+    MessageTypes.setMessagesAsHash(MessageTypes::TRAINER_NAMES, trainer_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::TRAINER_SPEECHES_LOSE, lose_texts)
   end
 
   #=============================================================================
@@ -922,23 +923,23 @@ module Compiler
       "Challenges" => [2, "*s"]
     }
     if !safeExists?(path)
-      File.open(path, "wb") { |f|
+      File.open(path, "wb") do |f|
         f.write(0xEF.chr)
         f.write(0xBB.chr)
         f.write(0xBF.chr)
         f.write("[DefaultTrainerList]\r\n")
         f.write("Trainers = battle_tower_trainers.txt\r\n")
         f.write("Pokemon = battle_tower_pokemon.txt\r\n")
-      }
+      end
     end
     sections = []
-    MessageTypes.setMessagesAsHash(MessageTypes::FrontierIntroSpeeches, [])
-    MessageTypes.setMessagesAsHash(MessageTypes::FrontierEndSpeechesWin, [])
-    MessageTypes.setMessagesAsHash(MessageTypes::FrontierEndSpeechesLose, [])
-    File.open(path, "rb") { |f|
+    MessageTypes.setMessagesAsHash(MessageTypes::FRONTIER_INTRO_SPEECHES, [])
+    MessageTypes.setMessagesAsHash(MessageTypes::FRONTIER_END_SPEECHES_WIN, [])
+    MessageTypes.setMessagesAsHash(MessageTypes::FRONTIER_END_SPEECHES_LOSE, [])
+    File.open(path, "rb") do |f|
       FileLineData.file = path
       idx = 0
-      pbEachFileSection(f) { |section, name|
+      pbEachFileSection(f) do |section, name|
         echo "."
         idx += 1
         Graphics.update
@@ -969,9 +970,9 @@ module Compiler
         if safeExists?("PBS/" + rsection[1])
           filename = "PBS/" + rsection[1]
           rsection[1] = []
-          pbCompilerEachCommentedLine(filename) { |line, _lineno|
+          pbCompilerEachCommentedLine(filename) do |line, _lineno|
             rsection[1].push(PBPokemon.fromInspected(line))
-          }
+          end
         else
           rsection[1] = []
         end
@@ -981,8 +982,8 @@ module Compiler
         end
         rsection[2].compact!
         sections.push(rsection)
-      }
-    }
+      end
+    end
     save_data(sections, "Data/trainer_lists.dat")
     process_pbs_file_message_end
   end
@@ -1002,9 +1003,9 @@ module Compiler
     endspeechwin  = []
     endspeechlose = []
     if safeExists?(filename)
-      File.open(filename, "rb") { |f|
+      File.open(filename, "rb") do |f|
         FileLineData.file = filename
-        pbEachFileSection(f) { |section, name|
+        pbEachFileSection(f) do |section, name|
           rsection = []
           section.each_key do |key|
             FileLineData.setSection(name, key, section[key])
@@ -1018,13 +1019,13 @@ module Compiler
           endspeechwin.push(rsection[3])
           endspeechlose.push(rsection[4])
           sections.push(rsection)
-        }
-      }
+        end
+      end
     end
-    MessageTypes.addMessagesAsHash(MessageTypes::TrainerNames, trainernames)
-    MessageTypes.addMessagesAsHash(MessageTypes::FrontierIntroSpeeches, beginspeech)
-    MessageTypes.addMessagesAsHash(MessageTypes::FrontierEndSpeechesWin, endspeechwin)
-    MessageTypes.addMessagesAsHash(MessageTypes::FrontierEndSpeechesLose, endspeechlose)
+    MessageTypes.addMessagesAsHash(MessageTypes::TRAINER_NAMES, trainernames)
+    MessageTypes.addMessagesAsHash(MessageTypes::FRONTIER_INTRO_SPEECHES, beginspeech)
+    MessageTypes.addMessagesAsHash(MessageTypes::FRONTIER_END_SPEECHES_WIN, endspeechwin)
+    MessageTypes.addMessagesAsHash(MessageTypes::FRONTIER_END_SPEECHES_LOSE, endspeechlose)
     return sections
   end
 
@@ -1042,13 +1043,13 @@ module Compiler
       compile_pbs_file_message_start(path)
       file_suffix = File.basename(path, ".txt")[GameData::Metadata::PBS_BASE_FILENAME.length + 1, path.length] || ""
       # Read from PBS file
-      File.open(path, "rb") { |f|
+      File.open(path, "rb") do |f|
         FileLineData.file = path   # For error reporting
         # Read a whole section's lines at once, then run through this code.
         # contents is a hash containing all the XXX=YYY lines in that section, where
         # the keys are the XXX and the values are the YYY (as unprocessed strings).
         idx = 0
-        pbEachFileSection(f) { |contents, section_name|
+        pbEachFileSection(f) do |contents, section_name|
           echo "." if idx % 50 == 0
           Graphics.update if idx % 250 == 0
           idx += 1
@@ -1099,8 +1100,8 @@ module Compiler
           else
             GameData::PlayerMetadata.register(data_hash)
           end
-        }
-      }
+        end
+      end
       process_pbs_file_message_end
     end
     validate_all_compiled_metadata
@@ -1130,7 +1131,7 @@ module Compiler
     end
     # Get storage creator's name for translating
     storage_creator = [GameData::Metadata.get.real_storage_creator]
-    MessageTypes.setMessagesAsHash(MessageTypes::StorageCreator, storage_creator)
+    MessageTypes.setMessagesAsHash(MessageTypes::STORAGE_CREATOR_NAME, storage_creator)
   end
 
   #=============================================================================
@@ -1153,7 +1154,7 @@ module Compiler
     # Get map names for translating
     map_names = []
     GameData::MapMetadata.each { |map| map_names[map.id] = map.real_name }
-    MessageTypes.setMessagesAsHash(MessageTypes::MapNames, map_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::MAP_NAMES, map_names)
   end
 
   #=============================================================================
@@ -1231,7 +1232,7 @@ module Compiler
         msgs.each { |msg| messages.push(msg) }
       end
     end
-    MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages, messages)
+    MessageTypes.setMessagesAsHash(MessageTypes::PHONE_MESSAGES, messages)
   end
 
   #=============================================================================
@@ -1246,20 +1247,18 @@ module Compiler
     end
     changed = false
     move2anim = [{}, {}]
-=begin
-    anims = load_data("Data/Animations.rxdata")
-    for anim in anims
-      next if !anim || anim.frames.length==1
-      found = false
-      for i in 0...pbanims.length
-        if pbanims[i] && pbanims[i].id==anim.id
-          found = true if pbanims[i].array.length>1
-          break
-        end
-      end
-      pbanims[anim.id] = pbConvertRPGAnimation(anim) if !found
-    end
-=end
+#    anims = load_data("Data/Animations.rxdata")
+#    for anim in anims
+#      next if !anim || anim.frames.length == 1
+#      found = false
+#      for i in 0...pbanims.length
+#        if pbanims[i] && pbanims[i].id == anim.id
+#          found = true if pbanims[i].array.length > 1
+#          break
+#        end
+#      end
+#      pbanims[anim.id] = pbConvertRPGAnimation(anim) if !found
+#    end
     pbanims.length.times do |i|
       next if !pbanims[i]
       if pbanims[i].name[/^OppMove\:\s*(.*)$/]

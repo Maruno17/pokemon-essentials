@@ -29,8 +29,6 @@ class AnimFrame
   FOCUS      = 26
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -166,8 +164,6 @@ def pbConvertRPGAnimation(animation)
   return pbAnim
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -229,8 +225,6 @@ class RPG::Animation
     self.timings.sort! { |a, b| a.frame <=> b.frame }
   end
 end
-
-
 
 #===============================================================================
 #
@@ -310,7 +304,7 @@ class PBAnimTiming
       text = sprintf("[%d] Set FG: \"%s\"", @frame + 1, name)
       text += sprintf(" (color=%s,%s,%s,%s)",
                       @colorRed || "-",
-                      @colorGreen | "-",
+                      @colorGreen || "-",
                       @colorBlue || "-",
                       @colorAlpha || "-")
       text += sprintf(" (opacity=%d)", @opacity)
@@ -332,8 +326,6 @@ class PBAnimTiming
     return ""
   end
 end
-
-
 
 #===============================================================================
 #
@@ -396,8 +388,6 @@ class PBAnimations < Array
     self.selected = len if self.selected >= len
   end
 end
-
-
 
 #===============================================================================
 #
@@ -598,8 +588,6 @@ class PBAnimation < Array
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -677,8 +665,6 @@ def pbSpriteSetAnimFrame(sprite, frame, user = nil, target = nil, inEditor = fal
     end
   end
 end
-
-
 
 #===============================================================================
 # Animation player

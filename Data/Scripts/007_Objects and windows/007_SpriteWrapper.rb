@@ -88,8 +88,6 @@ class SpriteWrapper
   end
 end
 
-
-
 #===============================================================================
 # Sprite class that maintains a bitmap of its own.
 # This bitmap can't be changed to a different one.
@@ -110,8 +108,6 @@ class BitmapSprite < Sprite
     super
   end
 end
-
-
 
 #===============================================================================
 #
@@ -237,8 +233,6 @@ class AnimatedSprite < Sprite
   end
 end
 
-
-
 #===============================================================================
 # Displays an icon bitmap in a sprite. Supports animated images.
 #===============================================================================
@@ -309,8 +303,6 @@ class IconSprite < Sprite
     end
   end
 end
-
-
 
 #===============================================================================
 # Sprite class that stores multiple bitmaps, and displays only one at once.

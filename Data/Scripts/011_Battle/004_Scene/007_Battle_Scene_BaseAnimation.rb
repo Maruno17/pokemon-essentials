@@ -401,8 +401,8 @@ module Battle::Scene::Animation::BallAnimationMixin
       angle = rand(360)
       radian = (angle + 90) * Math::PI / 180
       start_zoom = rand(50...100)
-      ray = addNewSprite(ballX + ray_min_radius * Math.cos(radian),
-                         ballY - ray_min_radius * Math.sin(radian),
+      ray = addNewSprite(ballX + (ray_min_radius * Math.cos(radian)),
+                         ballY - (ray_min_radius * Math.sin(radian)),
                          "Graphics/Battle animations/ballBurst_ray", PictureOrigin::BOTTOM)
       ray.setZ(0, 100)
       ray.setZoomXY(0, 200, start_zoom)
@@ -411,7 +411,7 @@ module Battle::Scene::Animation::BallAnimationMixin
       ray.setVisible(0, false)
       ray.setAngle(0, angle)
       # Animate ray
-      start = delay + i / 2
+      start = delay + (i / 2)
       ray.setVisible(start, true)
       ray.moveZoomXY(start, ray_lifetime, 200, start_zoom * 6)
       ray.moveOpacity(start, 2, 255)   # Quickly fade in
@@ -437,7 +437,7 @@ module Battle::Scene::Animation::BallAnimationMixin
         particle.setVisible(0, false)
       end
       # Animate particles
-      start = delay + i / 4
+      start = delay + (i / 4)
       max_radius = rand(256...384)
       angle = rand(360)
       radian = angle * Math::PI / 180
@@ -596,7 +596,7 @@ module Battle::Scene::Animation::BallAnimationMixin
     else
       glare1.moveZoom(delay, particle_duration, 600)
     end
-    glare1.moveOpacity(delay + particle_duration / 2, particle_duration / 2, 0)
+    glare1.moveOpacity(delay + (particle_duration / 2), particle_duration / 2, 0)
     [glare1, glare2, glare3].each_with_index do |particle, num|
       particle.moveTone(delay, particle_duration, variances[8 - (3 * num)])
     end
@@ -604,13 +604,13 @@ module Battle::Scene::Animation::BallAnimationMixin
       glare2.moveZoom(delay, particle_duration, 350)
       glare3.moveZoom(delay, particle_duration, 500)
       [glare2, glare3].each_with_index do |particle, num|
-        particle.moveOpacity(delay + particle_duration / 2, particle_duration / 2, 0)
+        particle.moveOpacity(delay + (particle_duration / 2), particle_duration / 2, 0)
       end
     else
       glare2.moveZoom(delay, particle_duration, (poke_ball == :MASTERBALL) ? 400 : 250)
-      glare2.moveOpacity(delay + particle_duration / 2, particle_duration / 3, 0)
+      glare2.moveOpacity(delay + (particle_duration / 2), particle_duration / 3, 0)
       glare3.moveZoom(delay, particle_duration, (poke_ball == :MASTERBALL) ? 800 : 500)
-      glare3.moveOpacity(delay + particle_duration / 2, particle_duration / 3, 0)
+      glare3.moveOpacity(delay + (particle_duration / 2), particle_duration / 3, 0)
     end
     [glare1, glare2, glare3].each { |p| p.setVisible(delay + particle_duration, false) }
     # Burst particles
@@ -647,12 +647,12 @@ module Battle::Scene::Animation::BallAnimationMixin
         prop = 2 - prop if index > particle_duration / 2
         radius *= prop
         particle1.moveXY(delay + j, 1,
-                         ballX + p1_x_offset * index * 2 / particle_duration,
-                         ballY - p1_y_offset * index * 2 / particle_duration)
+                         ballX + (p1_x_offset * index * 2 / particle_duration),
+                         ballY - (p1_y_offset * index * 2 / particle_duration))
         [particle2, particle3].each do |particle|
           particle.moveXY(delay + j, 1,
-                          ballX + radius * Math.cos(radian),
-                          ballY - radius * Math.sin(radian))
+                          ballX + (radius * Math.cos(radian)),
+                          ballY - (radius * Math.sin(radian)))
         end
       end
       particle1.moveZoom(delay, particle_duration, 0)
@@ -674,14 +674,14 @@ module Battle::Scene::Animation::BallAnimationMixin
         end
         # Zoom out
         if ["particle", "dazzle", "ring3", "ring4", "diamond"].include?(variances[12 - (3 * num)])
-          particle.moveZoom(delay + particle_duration * 2 / 3, particle_duration / 3, 10)
+          particle.moveZoom(delay + (particle_duration * 2 / 3), particle_duration / 3, 10)
         else
-          particle.moveZoom(delay + particle_duration * 2 / 3, particle_duration / 3, 25)
+          particle.moveZoom(delay + (particle_duration * 2 / 3), particle_duration / 3, 25)
         end
         # Rotate (for Premier Ball)
         particle.moveAngle(delay, particle_duration, -180) if poke_ball == :PREMIERBALL
         # Change tone, fade out
-        particle.moveTone(delay + particle_duration / 3, (particle_duration.to_f / 3).ceil, variances[14 - (3 * num)])
+        particle.moveTone(delay + (particle_duration / 3), (particle_duration.to_f / 3).ceil, variances[14 - (3 * num)])
         particle.moveOpacity(delay + particle_duration - 3, 3, 128)   # Fade out at end
       end
       [particle1, particle2, particle3].each { |p| p.setVisible(delay + particle_duration, false) }
@@ -702,7 +702,7 @@ module Battle::Scene::Animation::BallAnimationMixin
         web.moveZoom(delay + start + (i * 4), 2, 150)
         web.moveZoom(delay + start + (i * 4) + 2, 2, 120)
       end
-      now = start + (web_duration / 4) * 4
+      now = start + ((web_duration / 4) * 4)
       web.moveZoom(delay + now, particle_duration + ring_duration - now, 150)
       web.moveOpacity(delay + particle_duration, ring_duration, 0)
       web.setVisible(delay + particle_duration + ring_duration, false)
@@ -747,10 +747,10 @@ module Battle::Scene::Animation::BallAnimationMixin
         index = j + 1
         x = 72 * index / star_duration
         proportion = index.to_f / star_duration
-        a = (2 * y_pos[2]) - 4 * y_pos[1]
+        a = (2 * y_pos[2]) - (4 * y_pos[1])
         b = y_pos[2] - a
         y = ((a * proportion) + b) * proportion
-        star.moveXY(delay + j, 1, ballX + [-1, 0, 1][i] * x, ballY - y)
+        star.moveXY(delay + j, 1, ballX + ([-1, 0, 1][i] * x), ballY - y)
       end
       star.moveAngle(delay, star_duration, start_angle + [144, 0, 45][i]) if i.even?
       star.moveOpacity(delay, 4, 255)   # Fade in
@@ -789,17 +789,17 @@ module Battle::Scene::Animation::BallAnimationMixin
           prop = j.to_f / (color_duration / 3)
           radius *= 0.75 + (prop / 4)
         elsif j >= burst_duration / 2
-          prop = (j.to_f - burst_duration / 2) / (burst_duration / 2)
+          prop = (j.to_f - (burst_duration / 2)) / (burst_duration / 2)
           radius *= 1 - prop
         end
         if j == 0
-          particle.setXY(delay + j, ballX + radius * Math.cos(radian), ballY - radius * Math.sin(radian))
+          particle.setXY(delay + j, ballX + (radius * Math.cos(radian)), ballY - (radius * Math.sin(radian)))
         else
-          particle.moveXY(delay + j, 1, ballX + radius * Math.cos(radian), ballY - radius * Math.sin(radian))
+          particle.moveXY(delay + j, 1, ballX + (radius * Math.cos(radian)), ballY - (radius * Math.sin(radian)))
         end
       end
       particle.moveZoom(delay, burst_duration, 0)
-      particle.moveTone(delay + color_duration / 2, color_duration / 2, Tone.new(0, 0, -192))   # Yellow
+      particle.moveTone(delay + (color_duration / 2), color_duration / 2, Tone.new(0, 0, -192))   # Yellow
       particle.moveTone(delay + color_duration, shrink_duration, Tone.new(0, -128, -248))   # Dark orange
       particle.moveOpacity(delay + color_duration, shrink_duration, 0)   # Fade out at end
       particle.setVisible(delay + burst_duration, false)

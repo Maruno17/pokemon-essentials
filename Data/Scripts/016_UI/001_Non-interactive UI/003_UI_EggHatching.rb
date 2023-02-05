@@ -109,11 +109,11 @@ class PokemonEggHatch_Scene
     if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
       pbMessage(_INTL("{1}'s data was added to the Pokédex.", @pokemon.name)) { update }
       $player.pokedex.register_last_seen(@pokemon)
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonPokedexInfo_Scene.new
         screen = PokemonPokedexInfoScreen.new(scene)
         screen.pbDexEntry(@pokemon.species)
-      }
+      end
     end
     # Nickname the Pokémon
     if $PokemonSystem.givenicknames == 0 &&
@@ -195,11 +195,11 @@ end
 #===============================================================================
 def pbHatchAnimation(pokemon)
   pbMessage(_INTL("Huh?\1"))
-  pbFadeOutInWithMusic {
+  pbFadeOutInWithMusic do
     scene = PokemonEggHatch_Scene.new
     screen = PokemonEggHatchScreen.new(scene)
     screen.pbStartScreen(pokemon)
-  }
+  end
   return true
 end
 
@@ -226,11 +226,11 @@ def pbHatch(pokemon)
     if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
       pbMessage(_INTL("{1}'s data was added to the Pokédex.", speciesname))
       $player.pokedex.register_last_seen(pokemon)
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonPokedexInfo_Scene.new
         screen = PokemonPokedexInfoScreen.new(scene)
         screen.pbDexEntry(pokemon.species)
-      }
+      end
     end
     # Nickname the Pokémon
     if $PokemonSystem.givenicknames == 0 &&

@@ -1,17 +1,15 @@
-=begin
-All types except Shadow have Shadow as a weakness.
-Shadow has Shadow as a resistance.
-On a side note, the Shadow moves in Colosseum will not be affected by Weaknesses
-or Resistances, while in XD the Shadow-type is Super-Effective against all other
-types.
-2/5 - display nature
-
-XD - Shadow Rush -- 55, 100 - Deals damage.
-Colosseum - Shadow Rush -- 90, 100
-If this attack is successful, user loses half of HP lost by opponent due to this
-attack (recoil). If user is in Hyper Mode, this attack has a good chance for a
-critical hit.
-=end
+# All types except Shadow have Shadow as a weakness.
+# Shadow has Shadow as a resistance.
+# On a side note, the Shadow moves in Colosseum will not be affected by
+# Weaknesses or Resistances, while in XD the Shadow-type is Super-Effective
+# against all other types.
+# 2/5 - display nature
+#
+# XD - Shadow Rush -- 55, 100 - Deals damage.
+# Colosseum - Shadow Rush -- 90, 100
+# If this attack is successful, user loses half of HP lost by opponent due to
+# this attack (recoil). If user is in Hyper Mode, this attack has a good chance
+# for a critical hit.
 
 #===============================================================================
 # Purify a Shadow Pokémon.
@@ -59,14 +57,11 @@ def pbPurify(pkmn, scene)
   end
 end
 
-
-
 #===============================================================================
 # Relic Stone scene.
 #===============================================================================
 class RelicStoneScene
-  def pbPurify
-  end
+  def pbPurify; end
 
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
@@ -105,8 +100,9 @@ class RelicStoneScene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class RelicStoneScreen
   def initialize(scene)
     @scene = scene
@@ -132,19 +128,18 @@ class RelicStoneScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbRelicStoneScreen(pkmn)
   retval = true
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = RelicStoneScene.new
     screen = RelicStoneScreen.new(scene)
     retval = screen.pbStartScreen(pkmn)
-  }
+  end
   return retval
 end
-
-
 
 #===============================================================================
 #
@@ -164,8 +159,6 @@ def pbRelicStone
   end
 end
 
-
-
 #===============================================================================
 # Shadow Pokémon in battle.
 #===============================================================================
@@ -184,15 +177,14 @@ class Battle
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
   alias __shadow__pbInitPokemon pbInitPokemon unless method_defined?(:__shadow__pbInitPokemon)
 
   def pbInitPokemon(*arg)
-    if self.pokemonIndex > 0 && inHyperMode?
-      self.pokemon.hyper_mode = false
-    end
+    self.pokemon.hyper_mode = false if self.pokemonIndex > 0 && inHyperMode?
     __shadow__pbInitPokemon(*arg)
     # Called into battle
     if shadowPokemon?
@@ -227,8 +219,6 @@ class Battle::Battler
     return rand(100) < 20
   end
 end
-
-
 
 #===============================================================================
 # Shadow item effects.
@@ -333,8 +323,6 @@ ItemHandlers::BattleUseOnPokemon.add(:VIVIDSCENT, proc { |item, pokemon, battler
   next true
 })
 
-
-
 #===============================================================================
 # Two turn attack. On first turn, halves the HP of all active Pokémon.
 # Skips second turn (if successful). (Shadow Half)
@@ -359,8 +347,6 @@ class Battle::Move::AllBattlersLoseHalfHPUserSkipsNextTurn < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 # User takes recoil damage equal to 1/2 of its current HP. (Shadow End)
 #===============================================================================
@@ -380,8 +366,6 @@ class Battle::Move::UserLosesHalfHP < Battle::Move::RecoilMove
   end
 end
 
-
-
 #===============================================================================
 # Starts shadow weather. (Shadow Sky)
 #===============================================================================
@@ -391,8 +375,6 @@ class Battle::Move::StartShadowSkyWeather < Battle::Move::WeatherMove
     @weatherType = :ShadowSky
   end
 end
-
-
 
 #===============================================================================
 # Ends the effects of Light Screen, Reflect and Safeguard on both sides.
@@ -425,8 +407,6 @@ class Battle::Move::RemoveAllScreensAndSafeguard < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -434,8 +414,9 @@ class Game_Temp
   attr_accessor :party_heart_gauges_before_battle
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 # Record current heart gauges of Pokémon in party, to see if they drop to zero
 # during battle and need to say they're ready to be purified afterwards
 EventHandlers.add(:on_start_battle, :record_party_heart_gauges,

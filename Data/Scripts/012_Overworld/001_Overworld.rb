@@ -25,15 +25,11 @@ def pbPokerus?
   return false
 end
 
-
-
 class Game_Temp
   attr_accessor :warned_low_battery
   attr_accessor :cue_bgm
   attr_accessor :cue_bgm_frame_delay
 end
-
-
 
 def pbBatteryLow?
   pstate = System.power_state
@@ -220,8 +216,6 @@ def pbBattleOnStepTaken(repel_active)
   $game_temp.force_single_battle = false
 end
 
-
-
 #===============================================================================
 # Checks when moving between maps
 #===============================================================================
@@ -331,8 +325,6 @@ EventHandlers.add(:on_map_or_spriteset_change, :show_location_window,
   }
 )
 
-
-
 #===============================================================================
 # Event locations, terrain tags
 #===============================================================================
@@ -416,8 +408,6 @@ def pbFacingEachOther(event1, event2)
   return pbEventFacesPlayer?(event1, event2, 1) && pbEventFacesPlayer?(event2, event1, 1)
 end
 
-
-
 #===============================================================================
 # Audio playing
 #===============================================================================
@@ -454,84 +444,80 @@ def pbAutoplayOnSave
   end
 end
 
-
-
 #===============================================================================
 # Event movement
 #===============================================================================
 module PBMoveRoute
-  Down               = 1
-  Left               = 2
-  Right              = 3
-  Up                 = 4
-  LowerLeft          = 5
-  LowerRight         = 6
-  UpperLeft          = 7
-  UpperRight         = 8
-  Random             = 9
-  TowardPlayer       = 10
-  AwayFromPlayer     = 11
-  Forward            = 12
-  Backward           = 13
-  Jump               = 14 # xoffset, yoffset
-  Wait               = 15 # frames
-  TurnDown           = 16
-  TurnLeft           = 17
-  TurnRight          = 18
-  TurnUp             = 19
-  TurnRight90        = 20
-  TurnLeft90         = 21
-  Turn180            = 22
-  TurnRightOrLeft90  = 23
-  TurnRandom         = 24
-  TurnTowardPlayer   = 25
-  TurnAwayFromPlayer = 26
-  SwitchOn           = 27 # 1 param
-  SwitchOff          = 28 # 1 param
-  ChangeSpeed        = 29 # 1 param
-  ChangeFreq         = 30 # 1 param
-  WalkAnimeOn        = 31
-  WalkAnimeOff       = 32
-  StepAnimeOn        = 33
-  StepAnimeOff       = 34
-  DirectionFixOn     = 35
-  DirectionFixOff    = 36
-  ThroughOn          = 37
-  ThroughOff         = 38
-  AlwaysOnTopOn      = 39
-  AlwaysOnTopOff     = 40
-  Graphic            = 41 # Name, hue, direction, pattern
-  Opacity            = 42 # 1 param
-  Blending           = 43 # 1 param
-  PlaySE             = 44 # 1 param
-  Script             = 45 # 1 param
-  ScriptAsync        = 101 # 1 param
+  DOWN                  = 1
+  LEFT                  = 2
+  RRIGHT                = 3
+  UP                    = 4
+  LOWER_LEFT            = 5
+  LOWER_RIGHT           = 6
+  UPPER_LEFT            = 7
+  UPPER_RIGHT           = 8
+  RANDOM                = 9
+  TOWARD_PLAYER         = 10
+  AWAY_FROM_PLAYER      = 11
+  FORWARD               = 12
+  BACKWARD              = 13
+  JUMP                  = 14   # xoffset, yoffset
+  WAIT                  = 15   # frames
+  TURN_DOWN             = 16
+  TURN_LEFT             = 17
+  TURN_RIGHT            = 18
+  TURN_UP               = 19
+  TURN_RIGHT90          = 20
+  TURN_LEFT90           = 21
+  TURN180               = 22
+  TURN_RIGHT_OR_LEFT90  = 23
+  TURN_RANDOM           = 24
+  TURN_TOWARD_PLAYER    = 25
+  TURN_AWAY_FROM_PLAYER = 26
+  SWITCH_ON             = 27   # 1 param
+  SWITCH_OFF            = 28   # 1 param
+  CHANGE_SPEED          = 29   # 1 param
+  CHANGE_FREQUENCY      = 30   # 1 param
+  WALK_ANIME_ON         = 31
+  WALK_ANIME_OFF        = 32
+  STEP_ANIME_ON         = 33
+  STEP_ANIME_OFF        = 34
+  DIRECTION_FIX_ON      = 35
+  DIRECTION_FIX_OFF     = 36
+  THROUGH_ON            = 37
+  THROUGH_OFF           = 38
+  ALWAYS_ON_TOP_ON      = 39
+  ALWAYS_ON_TOP_OFF     = 40
+  GRAPHIC               = 41   # Name, hue, direction, pattern
+  OPACITY               = 42   # 1 param
+  BLENDING              = 43   # 1 param
+  PLAY_SE               = 44   # 1 param
+  SCRIPT                = 45   # 1 param
+  SCRIPT_ASYNC          = 101   # 1 param
 end
-
-
 
 def pbMoveRoute(event, commands, waitComplete = false)
   route = RPG::MoveRoute.new
   route.repeat    = false
   route.skippable = true
   route.list.clear
-  route.list.push(RPG::MoveCommand.new(PBMoveRoute::ThroughOn))
+  route.list.push(RPG::MoveCommand.new(PBMoveRoute::THROUGH_ON))
   i = 0
   while i < commands.length
     case commands[i]
-    when PBMoveRoute::Wait, PBMoveRoute::SwitchOn, PBMoveRoute::SwitchOff,
-       PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
-       PBMoveRoute::Blending, PBMoveRoute::PlaySE, PBMoveRoute::Script
+    when PBMoveRoute::WAIT, PBMoveRoute::SWITCH_ON, PBMoveRoute::SWITCH_OFF,
+       PBMoveRoute::CHANGE_SPEED, PBMoveRoute::CHANGE_FREQUENCY, PBMoveRoute::OPACITY,
+       PBMoveRoute::BLENDING, PBMoveRoute::PLAY_SE, PBMoveRoute::SCRIPT
       route.list.push(RPG::MoveCommand.new(commands[i], [commands[i + 1]]))
       i += 1
-    when PBMoveRoute::ScriptAsync
-      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Script, [commands[i + 1]]))
-      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Wait, [0]))
+    when PBMoveRoute::SCRIPT_ASYNC
+      route.list.push(RPG::MoveCommand.new(PBMoveRoute::SCRIPT, [commands[i + 1]]))
+      route.list.push(RPG::MoveCommand.new(PBMoveRoute::WAIT, [0]))
       i += 1
-    when PBMoveRoute::Jump
+    when PBMoveRoute::JUMP
       route.list.push(RPG::MoveCommand.new(commands[i], [commands[i + 1], commands[i + 2]]))
       i += 2
-    when PBMoveRoute::Graphic
+    when PBMoveRoute::GRAPHIC
       route.list.push(RPG::MoveCommand.new(commands[i],
                                            [commands[i + 1], commands[i + 2],
                                             commands[i + 3], commands[i + 4]]))
@@ -541,7 +527,7 @@ def pbMoveRoute(event, commands, waitComplete = false)
     end
     i += 1
   end
-  route.list.push(RPG::MoveCommand.new(PBMoveRoute::ThroughOff))
+  route.list.push(RPG::MoveCommand.new(PBMoveRoute::THROUGH_OFF))
   route.list.push(RPG::MoveCommand.new(0))
   event&.force_move_route(route)
   return route
@@ -555,23 +541,9 @@ def pbWait(numFrames)
   end
 end
 
-
-
 #===============================================================================
 # Player/event movement in the field
 #===============================================================================
-def pbLedge(_xOffset, _yOffset)
-  if $game_player.pbFacingTerrainTag.ledge
-    if pbJumpToward(2, true)
-      $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID, $game_player.x, $game_player.y, true, 1)
-      $game_player.increase_steps
-      $game_player.check_event_trigger_here([1, 2])
-    end
-    return true
-  end
-  return false
-end
-
 def pbSlideOnIce
   if $game_player.pbTerrainTag.ice && $game_player.can_move_in_direction?($game_player.direction)
     $PokemonGlobal.ice_sliding = true
@@ -621,31 +593,6 @@ def pbMoveTowardPlayer(event)
   $PokemonMap&.addMovedEvent(event.id)
 end
 
-def pbJumpToward(dist = 1, playSound = false, cancelSurf = false)
-  x = $game_player.x
-  y = $game_player.y
-  case $game_player.direction
-  when 2 then $game_player.jump(0, dist)    # down
-  when 4 then $game_player.jump(-dist, 0)   # left
-  when 6 then $game_player.jump(dist, 0)    # right
-  when 8 then $game_player.jump(0, -dist)   # up
-  end
-  if $game_player.x != x || $game_player.y != y
-    pbSEPlay("Player jump") if playSound
-    $PokemonEncounters.reset_step_count if cancelSurf
-    $game_temp.ending_surf = true if cancelSurf
-    while $game_player.jumping?
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
-    end
-    return true
-  end
-  return false
-end
-
-
-
 #===============================================================================
 # Bridges, cave escape points, and setting the heal point
 #===============================================================================
@@ -689,8 +636,6 @@ def pbSetPokemonCenter
   $PokemonGlobal.pokecenterDirection = $game_player.direction
 end
 
-
-
 #===============================================================================
 # Partner trainer
 #===============================================================================
@@ -709,8 +654,6 @@ end
 def pbDeregisterPartner
   $PokemonGlobal.partner = nil
 end
-
-
 
 #===============================================================================
 # Picking up an item found on the ground
@@ -751,8 +694,6 @@ def pbItemBall(item, quantity = 1)
   pbMessage(_INTL("But your Bag is full..."))
   return false
 end
-
-
 
 #===============================================================================
 # Being given an item

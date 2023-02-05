@@ -226,16 +226,12 @@ class Battle::Move
   def pbModifyDamage(damageMult, user, target);         return damageMult; end
 
   def pbGetAttackStats(user, target)
-    if specialMove?
-      return user.spatk, user.stages[:SPECIAL_ATTACK] + 6
-    end
+    return user.spatk, user.stages[:SPECIAL_ATTACK] + 6 if specialMove?
     return user.attack, user.stages[:ATTACK] + 6
   end
 
   def pbGetDefenseStats(user, target)
-    if specialMove?
-      return target.spdef, target.stages[:SPECIAL_DEFENSE] + 6
-    end
+    return target.spdef, target.stages[:SPECIAL_DEFENSE] + 6 if specialMove?
     return target.defense, target.stages[:DEFENSE] + 6
   end
 
@@ -400,9 +396,7 @@ class Battle::Move
       end
     end
     # Multi-targeting attacks
-    if numTargets > 1
-      multipliers[:final_damage_multiplier] *= 0.75
-    end
+    multipliers[:final_damage_multiplier] *= 0.75 if numTargets > 1
     # Weather
     case user.effectiveWeather
     when :Sun, :HarshSun

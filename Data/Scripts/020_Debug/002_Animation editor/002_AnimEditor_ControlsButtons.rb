@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module ShadowText
   def shadowtext(bitmap, x, y, w, h, t, disabled = false, align = 0)
     width = bitmap.text_size(t).width
@@ -13,8 +16,9 @@ module ShadowText
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class UIControl
   include ShadowText
   attr_accessor :bitmap
@@ -68,21 +72,19 @@ class UIControl
     return @invalid
   end
 
-  def invalidate # Marks that the control must be redrawn to reflect current logic
+  def invalidate   # Marks that the control must be redrawn to reflect current logic
     @invalid = true
   end
 
-  def update # Updates the logic on the control, invalidating it if necessary
-  end
+  def update; end   # Updates the logic on the control, invalidating it if necessary
 
-  def refresh # Redraws the control
-  end
+  def refresh; end   # Redraws the control
 
-  def validate # Makes the control no longer invalid
+  def validate   # Makes the control no longer invalid
     @invalid = false
   end
 
-  def repaint # Redraws the control only if it is invalid
+  def repaint   # Redraws the control only if it is invalid
     if self.invalid?
       self.refresh
       self.validate
@@ -90,8 +92,9 @@ class UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Label < UIControl
   def text=(value)
     self.label = value
@@ -106,8 +109,9 @@ class Label < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Button < UIControl
   attr_accessor :label
 
@@ -155,8 +159,9 @@ class Button < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Checkbox < Button
   attr_reader :checked
 
@@ -201,17 +206,16 @@ class Checkbox < Button
     else
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
     end
-    if self.checked
-      shadowtext(bitmap, x, y, 32, 32, "X", @disabled, 1)
-    end
+    shadowtext(bitmap, x, y, 32, 32, "X", @disabled, 1) if self.checked
     size = bitmap.text_size(self.label).width
     shadowtext(bitmap, x + 36, y, size, height, self.label, @disabled)
     return ret
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TextField < UIControl
   attr_accessor :label
   attr_reader :text
@@ -233,9 +237,7 @@ class TextField < UIControl
     chars = self.text.scan(/./m)
     chars.insert(@cursor, ch)
     @text = ""
-    chars.each do |ch|
-      @text += ch
-    end
+    chars.each { |char| @text += char }
     @cursor += 1
     @frame = 0
     self.changed = true
@@ -246,9 +248,7 @@ class TextField < UIControl
     chars = self.text.scan(/./m)
     chars.delete_at(@cursor - 1)
     @text = ""
-    chars.each do |ch|
-      @text += ch
-    end
+    chars.each { |char| @text += char }
     @cursor -= 1
     @frame = 0
     self.changed = true
@@ -340,8 +340,9 @@ class TextField < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Slider < UIControl
   attr_reader :minvalue
   attr_reader :maxvalue
@@ -453,8 +454,9 @@ class Slider < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class OptionalSlider < Slider
   def initialize(label, minvalue, maxvalue, curvalue)
     @slider = Slider.new(label, minvalue, maxvalue, curvalue)
@@ -523,6 +525,8 @@ class OptionalSlider < Slider
     @checkbox.refresh
   end
 
+  #-----------------------------------------------------------------------------
+
   private
 
   def updatedefs
@@ -543,8 +547,9 @@ class OptionalSlider < Slider
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class ArrayCountSlider < Slider
   def maxvalue
     return @array.length - 1
@@ -556,8 +561,9 @@ class ArrayCountSlider < Slider
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class FrameCountSlider < Slider
   def maxvalue
     return @canvas.animation.length
@@ -569,8 +575,9 @@ class FrameCountSlider < Slider
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class FrameCountButton < Button
   def label
     return _INTL("Total Frames: {1}", @canvas.animation.length)
@@ -582,8 +589,9 @@ class FrameCountButton < Button
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TextSlider < UIControl
   attr_reader :minvalue
   attr_reader :maxvalue
@@ -701,8 +709,9 @@ class TextSlider < UIControl
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class OptionalTextSlider < TextSlider
   def initialize(label, options, curval)
     @slider = TextSlider.new(label, options, curval)
@@ -771,6 +780,8 @@ class OptionalTextSlider < TextSlider
     @checkbox.refresh
   end
 
+  #-----------------------------------------------------------------------------
+
   private
 
   def updatedefs
@@ -791,7 +802,9 @@ class OptionalTextSlider < TextSlider
   end
 end
 
-
+#===============================================================================
+#
+#===============================================================================
 class ControlWindow < SpriteWindow_Base
   attr_reader :controls
 

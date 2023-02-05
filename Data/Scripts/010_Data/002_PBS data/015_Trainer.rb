@@ -30,8 +30,8 @@ module GameData
       "Ability"      => [:ability,         "e", :Ability],
       "AbilityIndex" => [:ability_index,   "u"],
       "Item"         => [:item,            "e", :Item],
-      "Gender"       => [:gender,          "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
-                                                  "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
+      "Gender"       => [:gender,          "e", {"M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
+                                                 "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1}],
       "Nature"       => [:nature,          "e", :Nature],
       "IV"           => [:iv,              "uUUUUU"],
       "EV"           => [:ev,              "uUUUUU"],
@@ -102,12 +102,12 @@ module GameData
 
     # @return [String] the translated name of this trainer
     def name
-      return pbGetMessageFromHash(MessageTypes::TrainerNames, @real_name)
+      return pbGetMessageFromHash(MessageTypes::TRAINER_NAMES, @real_name)
     end
 
     # @return [String] the translated in-battle lose message of this trainer
     def lose_text
-      return pbGetMessageFromHash(MessageTypes::TrainerLoseTexts, @real_lose_text)
+      return pbGetMessageFromHash(MessageTypes::TRAINER_SPEECHES_LOSE, @real_lose_text)
     end
 
     # Creates a battle-ready version of a trainer's data.

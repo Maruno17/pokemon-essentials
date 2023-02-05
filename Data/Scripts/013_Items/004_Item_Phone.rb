@@ -88,12 +88,10 @@ class Phone
       if contact
         contact.visible = true
         @contacts.delete(contact)
-        @contacts.push(contact)
       else
         contact = Contact.new(true, args[0].map_id, args[0].id,
                               trainer_type, name, args[3], args[4], args[5])
         contact.increment_version
-        @contacts.push(contact)
       end
     elsif args[1].is_a?(Numeric)
       # Trainer
@@ -104,12 +102,10 @@ class Phone
       if contact
         contact.visible = true
         @contacts.delete(contact)
-        @contacts.push(contact)
       else
         contact = Contact.new(true, args[0], args[1],
                               trainer_type, name, args[4], args[5], args[6])
         contact.increment_version
-        @contacts.push(contact)
       end
     else
       # Non-trainer
@@ -118,12 +114,11 @@ class Phone
       if contact
         contact.visible = true
         @contacts.delete(contact)
-        @contacts.push(contact)
       else
         contact = Contact.new(false, *args)
-        @contacts.push(contact)
       end
     end
+    @contacts.push(contact)
     sort_contacts
     return true
   end
@@ -264,9 +259,9 @@ class Phone
     # Map ID, name, common event ID
     def initialize(trainer, *args)
       @trainer = trainer
+      @map_id = args[0]
       if @trainer
         # Trainer
-        @map_id          = args[0]
         @event_id        = args[1]
         @trainer_type    = args[2]
         @name            = args[3]
@@ -279,7 +274,6 @@ class Phone
         @common_event_id = args[6] || 0
       else
         # Non-trainer
-        @map_id          = args[0]
         @name            = args[1]
         @common_event_id = args[2] || 0
       end
@@ -320,7 +314,7 @@ class Phone
     def display_name
       if trainer?
         return sprintf("%s %s", GameData::TrainerType.get(@trainer_type).name,
-                       pbGetMessageFromHash(MessageTypes::TrainerNames, @name))
+                       pbGetMessageFromHash(MessageTypes::TRAINER_NAMES, @name))
       end
       return _INTL(@name)
     end
@@ -482,11 +476,11 @@ class Phone
       messages = GameData::PhoneMessage.try_get(contact.trainer_type, contact.name, contact.start_version) if !messages
       messages = GameData::PhoneMessage::DATA["default"] if !messages
       # Create lambda for choosing a random message and translating it
-      get_random_message = lambda do |messages|
-        return "" if !messages
-        msg = messages.sample
+      get_random_message = lambda do |msgs|
+        return "" if !msgs
+        msg = msgs.sample
         return "" if !msg
-        return pbGetMessageFromHash(MessageTypes::PhoneMessages, msg)
+        return pbGetMessageFromHash(MessageTypes::PHONE_MESSAGES, msg)
       end
       # Choose random greeting depending on time of day
       ret = get_random_message.call(messages.intro)
@@ -505,10 +499,11 @@ class Phone
       # Choose main message set
       if Phone.rematches_enabled && contact.rematch_flag > 0
         # Trainer is ready for a rematch, so tell/remind the player
-        if contact.rematch_flag == 1   # Tell the player
+        case contact.rematch_flag
+        when 1   # Tell the player
           ret += get_random_message.call(messages.battle_request)
           contact.rematch_flag = 2   # Ready for rematch and told player
-        elsif contact.rematch_flag == 2   # Remind the player
+        when 2   # Remind the player
           if messages.battle_remind
             ret += get_random_message.call(messages.battle_remind)
           else
@@ -555,9 +550,7 @@ class Phone
       species = get_species_from_table.call(enc_tables[:Land])
       if !species
         species = get_species_from_table.call(enc_tables[:Cave])
-        if !species
-          species = get_species_from_table.call(enc_tables[:Water])
-        end
+        species = get_species_from_table.call(enc_tables[:Water]) if !species
       end
       return "" if !species
       return GameData::Species.get(species).name

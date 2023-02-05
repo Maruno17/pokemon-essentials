@@ -763,26 +763,33 @@ class Game_Character
       @jump_speed_real = nil   # Reset jump speed
       @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
     end
-    @stop_count = 0
-    triggerLeaveTile
+    increase_steps
   end
 
-  def jumpForward
+  def jumpForward(distance = 1)
+    return false if distance == 0
+    old_x = @x
+    old_y = @y
     case self.direction
-    when 2 then jump(0, 1)    # down
-    when 4 then jump(-1, 0)   # left
-    when 6 then jump(1, 0)    # right
-    when 8 then jump(0, -1)   # up
+    when 2 then jump(0, distance)    # down
+    when 4 then jump(-distance, 0)   # left
+    when 6 then jump(distance, 0)    # right
+    when 8 then jump(0, -distance)   # up
     end
+    return @x != old_x || @y != old_y
   end
 
-  def jumpBackward
+  def jumpBackward(distance = 1)
+    return false if distance == 0
+    old_x = @x
+    old_y = @y
     case self.direction
-    when 2 then jump(0, -1)   # down
-    when 4 then jump(1, 0)    # left
-    when 6 then jump(-1, 0)   # right
-    when 8 then jump(0, 1)    # up
+    when 2 then jump(0, -distance)   # down
+    when 4 then jump(distance, 0)    # left
+    when 6 then jump(-distance, 0)   # right
+    when 8 then jump(0, distance)    # up
     end
+    return @x != old_x || @y != old_y
   end
 
   def turn_generic(dir)
@@ -926,12 +933,16 @@ class Game_Character
       @real_y = dest_y if @real_y < dest_y + 0.1
     end
     # Refresh how far is left to travel in a jump
-    if jumping?
+    was_jumping = jumping?
+    if was_jumping
       @jump_count -= 1 if @jump_count > 0   # For stationary jumps only
       @jump_distance_left = [(dest_x - @real_x).abs, (dest_y - @real_y).abs].max
     end
     # End of a step, so perform events that happen at this time
     if !jumping? && !moving?
+      if was_jumping && !(self.is_a?(Game_Player) && $PokemonGlobal.surfing && !$game_temp.ending_surf)
+        $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID, @x, @y, true, 1)
+      end
       EventHandlers.trigger(:on_step_taken, self)
       calculate_bush_depth
       @stopped_this_frame = true

@@ -115,8 +115,6 @@ class PokemonGlobalMetadata
   end
 end
 
-
-
 #===============================================================================
 # This class keeps track of erased and moved events so their position
 # can remain after a game is saved and loaded.  This class also includes

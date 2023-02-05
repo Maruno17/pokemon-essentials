@@ -75,9 +75,7 @@ module Game
     $game_map = $map_factory.map
     magic_number_matches = ($game_system.magic_number == $data_system.magic_number)
     if !magic_number_matches || $PokemonGlobal.safesave
-      if pbMapInterpreterRunning?
-        pbMapInterpreter.setup(nil, 0)
-      end
+      pbMapInterpreter.setup(nil, 0) if pbMapInterpreterRunning?
       begin
         $map_factory.setup($game_map.map_id)
       rescue Errno::ENOENT

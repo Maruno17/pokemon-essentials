@@ -1,4 +1,4 @@
-################################################################################
+#===============================================================================
 # "Tile Puzzle" mini-games
 # By Maruno
 # Graphics by the__end
@@ -14,7 +14,7 @@
 # board = The name/number of the graphics to be used.
 # width,height = Optional, the number of tiles wide/high the puzzle is (0 for
 #                the default value of 4).
-################################################################################
+#===============================================================================
 class TilePuzzleCursor < BitmapSprite
   attr_accessor :game
   attr_accessor :position
@@ -83,8 +83,9 @@ class TilePuzzleCursor < BitmapSprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TilePuzzleScene
   def initialize(game, board, width, height)
     @game = game
@@ -563,8 +564,9 @@ class TilePuzzleScene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TilePuzzle
   def initialize(scene)
     @scene = scene
@@ -578,14 +580,15 @@ class TilePuzzle
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbTilePuzzle(game, board, width = 0, height = 0)
   ret = false
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = TilePuzzleScene.new(game, board, width, height)
     screen = TilePuzzle.new(scene)
     ret = screen.pbStartScreen
-  }
+  end
   return ret
 end

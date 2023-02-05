@@ -2,10 +2,10 @@
 #
 #===============================================================================
 class LevelAdjustment
-  BothTeams          = 0
-  EnemyTeam          = 1
-  MyTeam             = 2
-  BothTeamsDifferent = 3
+  BOTH_TEAMS           = 0
+  ENEMY_TEAM           = 1
+  MY_TEAM              = 2
+  BOTH_TEAMS_DIFFERENT = 3
 
   def initialize(adjustment)
     @adjustment = adjustment
@@ -48,14 +48,14 @@ class LevelAdjustment
     adj1 = nil
     adj2 = nil
     ret = [getOldExp(team1, team2), getOldExp(team2, team1)]
-    if @adjustment == BothTeams || @adjustment == MyTeam
+    if @adjustment == BOTH_TEAMS || @adjustment == MY_TEAM
       adj1 = getAdjustment(team1, team2)
-    elsif @adjustment == BothTeamsDifferent
+    elsif @adjustment == BOTH_TEAMS_DIFFERENT
       adj1 = getMyAdjustment(team1, team2)
     end
-    if @adjustment == BothTeams || @adjustment == EnemyTeam
+    if @adjustment == BOTH_TEAMS || @adjustment == ENEMY_TEAM
       adj2 = getAdjustment(team2, team1)
-    elsif @adjustment == BothTeamsDifferent
+    elsif @adjustment == BOTH_TEAMS_DIFFERENT
       adj2 = getTheirAdjustment(team2, team1)
     end
     if adj1
@@ -81,7 +81,7 @@ end
 #===============================================================================
 class FixedLevelAdjustment < LevelAdjustment
   def initialize(level)
-    super(LevelAdjustment::BothTeams)
+    super(LevelAdjustment::BOTH_TEAMS)
     @level = level.clamp(1, GameData::GrowthRate.max_level)
   end
 
@@ -97,7 +97,7 @@ end
 #===============================================================================
 class TotalLevelAdjustment < LevelAdjustment
   def initialize(minLevel, maxLevel, totalLevel)
-    super(LevelAdjustment::EnemyTeam)
+    super(LevelAdjustment::ENEMY_TEAM)
     @minLevel = minLevel.clamp(1, GameData::GrowthRate.max_level)
     @maxLevel = maxLevel.clamp(1, GameData::GrowthRate.max_level)
     @totalLevel = totalLevel
@@ -129,7 +129,7 @@ end
 #===============================================================================
 class CombinedLevelAdjustment < LevelAdjustment
   def initialize(my, their)
-    super(LevelAdjustment::BothTeamsDifferent)
+    super(LevelAdjustment::BOTH_TEAMS_DIFFERENT)
     @my    = my
     @their = their
   end
@@ -159,7 +159,7 @@ end
 #===============================================================================
 class CappedLevelAdjustment < LevelAdjustment
   def initialize(level)
-    super(LevelAdjustment::BothTeams)
+    super(LevelAdjustment::BOTH_TEAMS)
     @level = level.clamp(1, GameData::GrowthRate.max_level)
   end
 
@@ -175,7 +175,7 @@ end
 #===============================================================================
 class LevelBalanceAdjustment < LevelAdjustment
   def initialize(minLevel)
-    super(LevelAdjustment::BothTeams)
+    super(LevelAdjustment::BOTH_TEAMS)
     @minLevel = minLevel
   end
 
@@ -193,7 +193,7 @@ end
 #===============================================================================
 class EnemyLevelAdjustment < LevelAdjustment
   def initialize(level)
-    super(LevelAdjustment::EnemyTeam)
+    super(LevelAdjustment::ENEMY_TEAM)
     @level = level.clamp(1, GameData::GrowthRate.max_level)
   end
 
@@ -209,7 +209,7 @@ end
 #===============================================================================
 class OpenLevelAdjustment < LevelAdjustment
   def initialize(minLevel = 1)
-    super(LevelAdjustment::EnemyTeam)
+    super(LevelAdjustment::ENEMY_TEAM)
     @minLevel = minLevel
   end
 

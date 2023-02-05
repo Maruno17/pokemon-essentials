@@ -1,6 +1,8 @@
+#===============================================================================
 # Particle Engine, Peter O., 2007-11-03
 # Based on version 2 by Near Fantastica, 04.01.06
 # In turn based on the Particle Engine designed by PinkMan
+#===============================================================================
 class Particle_Engine
   def initialize(viewport = nil, map = nil)
     @map       = (map) ? map : $game_map
@@ -98,8 +100,9 @@ class Particle_Engine
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class ParticleEffect
   attr_accessor :x, :y, :z
 
@@ -113,8 +116,9 @@ class ParticleEffect
   def dispose; end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class ParticleSprite
   attr_accessor :x, :y, :z, :ox, :oy, :opacity, :blend_type
   attr_reader :bitmap
@@ -171,8 +175,9 @@ class ParticleSprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class ParticleEffect_Event < ParticleEffect
   attr_accessor :event
 
@@ -357,8 +362,9 @@ class ParticleEffect_Event < ParticleEffect
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Fire < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -368,8 +374,9 @@ class Particle_Engine::Fire < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Smoke < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -379,8 +386,9 @@ class Particle_Engine::Smoke < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Teleport < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -394,8 +402,9 @@ class Particle_Engine::Teleport < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Spirit < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -405,8 +414,9 @@ class Particle_Engine::Spirit < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Explosion < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -416,8 +426,9 @@ class Particle_Engine::Explosion < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Aura < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -427,8 +438,9 @@ class Particle_Engine::Aura < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Soot < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -438,8 +450,9 @@ class Particle_Engine::Soot < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::SootSmoke < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -452,8 +465,9 @@ class Particle_Engine::SootSmoke < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Rocket < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -463,8 +477,9 @@ class Particle_Engine::Rocket < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::FixedTeleport < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -478,9 +493,9 @@ class Particle_Engine::FixedTeleport < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
 # By Peter O.
+#===============================================================================
 class Particle_Engine::StarTeleport < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -494,8 +509,9 @@ class Particle_Engine::StarTeleport < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Smokescreen < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -531,8 +547,9 @@ class Particle_Engine::Smokescreen < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Flare < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -542,8 +559,9 @@ class Particle_Engine::Flare < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Particle_Engine::Splash < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -561,8 +579,9 @@ class Particle_Engine::Splash < ParticleEffect_Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Game_Event < Game_Character
   attr_accessor :pe_refresh
 

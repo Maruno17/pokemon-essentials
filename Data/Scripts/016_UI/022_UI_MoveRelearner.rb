@@ -110,7 +110,7 @@ class MoveRelearner_Scene
   # Processes the scene
   def pbChooseMove
     oldcmd = -1
-    pbActivateWindow(@sprites, "commands") {
+    pbActivateWindow(@sprites, "commands") do
       loop do
         oldcmd = @sprites["commands"].index
         Graphics.update
@@ -127,7 +127,7 @@ class MoveRelearner_Scene
           return @moves[@sprites["commands"].index]
         end
       end
-    }
+    end
   end
 
   # End the scene here
@@ -190,10 +190,10 @@ end
 #===============================================================================
 def pbRelearnMoveScreen(pkmn)
   retval = true
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = MoveRelearner_Scene.new
     screen = MoveRelearnerScreen.new(scene)
     retval = screen.pbStartScreen(pkmn)
-  }
+  end
   return retval
 end

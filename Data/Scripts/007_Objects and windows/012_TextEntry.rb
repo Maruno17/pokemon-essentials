@@ -41,9 +41,7 @@ class CharacterEntryHelper
     return false if @maxlength >= 0 && chars.length >= @maxlength
     chars.insert(@cursor, ch)
     @text = ""
-    chars.each do |ch|
-      @text += ch if ch
-    end
+    chars.each { |char| @text += char if char }
     @cursor += 1
     return true
   end
@@ -66,22 +64,20 @@ class CharacterEntryHelper
     return true
   end
 
+  #-----------------------------------------------------------------------------
+
   private
 
   def ensure
     return if @maxlength < 0
     chars = self.text.scan(/./m)
-    if chars.length > @maxlength && @maxlength >= 0
-      chars = chars[0, @maxlength]
-    end
+    chars = chars[0, @maxlength] if chars.length > @maxlength && @maxlength >= 0
     @text = ""
     chars.each do |ch|
       @text += ch if ch
     end
   end
 end
-
-
 
 #===============================================================================
 #
@@ -217,8 +213,6 @@ class Window_TextEntry < SpriteWindow_Base
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -252,8 +246,6 @@ class Window_TextEntry_Keyboard < Window_TextEntry
     Input.gets.each_char { |c| insert(c) }
   end
 end
-
-
 
 #===============================================================================
 #

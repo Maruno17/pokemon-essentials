@@ -71,6 +71,8 @@ module SaveData
       @value_procs[key].call(object) if @value_procs[key].is_a?(Proc)
     end
 
+    #---------------------------------------------------------------------------
+
     private
 
     # @!group Configuration

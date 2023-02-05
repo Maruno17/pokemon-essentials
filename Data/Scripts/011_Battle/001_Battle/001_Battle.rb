@@ -166,11 +166,11 @@ class Battle
     @runCommand        = 0
     @nextPickupUse     = 0
     if GameData::Move.exists?(:STRUGGLE)
-      @struggle = Move.from_pokemon_move(self, Pokemon::Move.new(:STRUGGLE))
+      @struggle        = Move.from_pokemon_move(self, Pokemon::Move.new(:STRUGGLE))
     else
-      @struggle = Move::Struggle.new(self, nil)
+      @struggle        = Move::Struggle.new(self, nil)
     end
-    @mega_rings = []
+    @mega_rings        = []
     GameData::Item.each { |item| @mega_rings.push(item.id) if item.has_flag?("MegaRing") }
     @battleAI          = AI.new(self)
   end

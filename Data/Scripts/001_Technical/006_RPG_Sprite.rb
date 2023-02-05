@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class SpriteAnimation
   @@_animations      = []
   @@_reference_count = {}
@@ -53,9 +56,7 @@ class SpriteAnimation
         sprite.visible = false
         @_animation_sprites.push(sprite)
       end
-      unless @@_animations.include?(animation)
-        @@_animations.push(animation)
-      end
+      @@_animations.push(animation) unless @@_animations.include?(animation)
     end
     update_animation
   end
@@ -94,13 +95,9 @@ class SpriteAnimation
     sprite = @_animation_sprites[0]
     if sprite
       @@_reference_count[sprite.bitmap] -= 1
-      if @@_reference_count[sprite.bitmap] == 0
-        sprite.bitmap.dispose
-      end
+      sprite.bitmap.dispose if @@_reference_count[sprite.bitmap] == 0
     end
-    @_animation_sprites.each do |sprite|
-      sprite.dispose
-    end
+    @_animation_sprites.each { |s| s.dispose }
     @_animation_sprites = nil
     @_animation = nil
   end
@@ -110,13 +107,9 @@ class SpriteAnimation
     sprite = @_loop_animation_sprites[0]
     if sprite
       @@_reference_count[sprite.bitmap] -= 1
-      if @@_reference_count[sprite.bitmap] == 0
-        sprite.bitmap.dispose
-      end
+      sprite.bitmap.dispose if @@_reference_count[sprite.bitmap] == 0
     end
-    @_loop_animation_sprites.each do |sprite|
-      sprite.dispose
-    end
+    @_loop_animation_sprites.each { |s| s.dispose }
     @_loop_animation_sprites = nil
     @_loop_animation = nil
   end
@@ -262,8 +255,9 @@ class SpriteAnimation
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 module RPG
   class Sprite < ::Sprite
     def initialize(viewport = nil)
@@ -465,9 +459,7 @@ module RPG
           @_damage_sprite.y += 4
         end
         @_damage_sprite.opacity = 256 - ((12 - @_damage_duration) * 32)
-        if @_damage_duration == 0
-          dispose_damage
-        end
+        dispose_damage if @_damage_duration == 0
       end
       @animations.each do |a|
         a.update

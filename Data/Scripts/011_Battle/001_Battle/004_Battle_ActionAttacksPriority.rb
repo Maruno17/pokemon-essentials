@@ -227,7 +227,7 @@ class Battle
     end
     # Reorder the priority array
     if needRearranging
-      @priority.sort! { |a, b|
+      @priority.sort! do |a, b|
         if a[5] != b[5]
           # Sort by priority (highest value first)
           b[5] <=> a[5]
@@ -241,7 +241,7 @@ class Battle
           # Sort by speed (highest first), and use tie-breaker if necessary
           (a[1] == b[1]) ? b[6] <=> a[6] : b[1] <=> a[1]
         end
-      }
+      end
       # Write the priority order to the debug log
       if fullCalc && $INTERNAL
         logMsg = "[Round order] "

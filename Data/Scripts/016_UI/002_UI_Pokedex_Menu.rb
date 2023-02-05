@@ -114,11 +114,11 @@ class PokemonPokedexMenuScreen
       cmd = @scene.pbScene
       break if cmd < 0 || cmd >= commands2.length   # Cancel/Exit
       $PokemonGlobal.pokedexDex = $player.pokedex.accessible_dexes[cmd]
-      pbFadeOutIn {
+      pbFadeOutIn do
         scene = PokemonPokedex_Scene.new
         screen = PokemonPokedexScreen.new(scene)
         screen.pbStartScreen
-      }
+      end
     end
     @scene.pbEndScene
   end

@@ -1106,7 +1106,7 @@ Accuracy = 0
 TotalPP = 5
 Target = User
 FunctionCode = RaiseUserMainStats1LoseThirdOfTotalHP
-Flags = Sound,CannotMetronome
+Flags = Sound,CannotMetronome,Dance
 Description = The user raises all its stats by using some of its HP.
 #-------------------------------
 [DRAGONDANCE]

@@ -211,9 +211,7 @@ class Battle
       oldSpAtk   = pkmn.spatk
       oldSpDef   = pkmn.spdef
       oldSpeed   = pkmn.speed
-      if battler&.pokemon
-        battler.pokemon.changeHappiness("levelup")
-      end
+      battler.pokemon.changeHappiness("levelup") if battler&.pokemon
       pkmn.calc_stats
       battler&.pbUpdate(false)
       @scene.pbRefreshOne(battler.index) if battler

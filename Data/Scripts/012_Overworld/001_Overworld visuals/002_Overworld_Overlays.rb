@@ -38,8 +38,6 @@ class LocationWindow
   end
 end
 
-
-
 #===============================================================================
 # Visibility circle in dark maps
 #===============================================================================
@@ -85,8 +83,6 @@ class DarknessSprite < Sprite
   end
 end
 
-
-
 #===============================================================================
 # Light effects
 #===============================================================================
@@ -120,8 +116,9 @@ class LightEffect
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class LightEffect_Lamp < LightEffect
   def initialize(event, viewport = nil, map = nil)
     lamp = AnimatedBitmap.new("Graphics/Pictures/LE")
@@ -138,8 +135,9 @@ class LightEffect_Lamp < LightEffect
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class LightEffect_Basic < LightEffect
   def initialize(event, viewport = nil, map = nil, filename = nil)
     super
@@ -164,8 +162,9 @@ class LightEffect_Basic < LightEffect
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class LightEffect_DayNight < LightEffect
   def initialize(event, viewport = nil, map = nil, filename = nil)
     super
@@ -203,8 +202,9 @@ class LightEffect_DayNight < LightEffect
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 EventHandlers.add(:on_new_spriteset_map, :add_light_effects,
   proc { |spriteset, viewport|
     map = spriteset.map   # Map associated with the spriteset (not necessarily the current map)

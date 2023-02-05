@@ -285,66 +285,77 @@ end
 def getRandomNameEx(type, variable, upper, maxLength = 100)
   return "" if maxLength <= 0
   name = ""
-  50.times {
+  50.times do
     name = ""
     formats = []
     case type
-    when 0 then formats = %w[F5 BvE FE FE5 FEvE]              # Names for males
-    when 1 then formats = %w[vE6 vEvE6 BvE6 B4 v3 vEv3 Bv3]   # Names for females
-    when 2 then formats = %w[WE WEU WEvE BvE BvEU BvEvE]      # Neutral gender names
+    when 0 then formats = ["F5", "BvE", "FE", "FE5", "FEvE"]                    # Names for males
+    when 1 then formats = ["vE6", "vEvE6", "BvE6", "B4", "v3", "vEv3", "Bv3"]   # Names for females
+    when 2 then formats = ["WE", "WEU", "WEvE", "BvE", "BvEU", "BvEvE"]         # Neutral gender names
     else        return ""
     end
-    format = formats[rand(formats.length)]
-    format.scan(/./) { |c|
+    format = formats.sample
+    format.scan(/./) do |c|
       case c
-      when "c" # consonant
-        set = %w[b c d f g h j k l m n p r s t v w x z]
-        name += set[rand(set.length)]
-      when "v" # vowel
-        set = %w[a a a e e e i i i o o o u u u]
-        name += set[rand(set.length)]
-      when "W" # beginning vowel
-        set = %w[a a a e e e i i i o o o u u u au au ay ay ea ea ee ee oo oo ou ou]
-        name += set[rand(set.length)]
-      when "U" # ending vowel
-        set = %w[a a a a a e e e i i i o o o o o u u ay ay ie ie ee ue oo]
-        name += set[rand(set.length)]
-      when "B" # beginning consonant
-        set1 = %w[b c d f g h j k l l m n n p r r s s t t v w y z]
-        set2 = %w[bl br ch cl cr dr fr fl gl gr kh kl kr ph pl pr sc sk sl
-                  sm sn sp st sw th tr tw vl zh]
-        name += (rand(3) > 0) ? set1[rand(set1.length)] : set2[rand(set2.length)]
-      when "E" # ending consonant
-        set1 = %w[b c d f g h j k k l l m n n p r r s s t t v z]
-        set2 = %w[bb bs ch cs ds fs ft gs gg ld ls nd ng nk rn kt ks
-                  ms ns ph pt ps sk sh sp ss st rd rn rp rm rt rk ns th zh]
-        name += (rand(3) > 0) ? set1[rand(set1.length)] : set2[rand(set2.length)]
-      when "f" # consonant and vowel
-        set = %w[iz us or]
-        name += set[rand(set.length)]
-      when "F" # consonant and vowel
-        set = %w[bo ba be bu re ro si mi zho se nya gru gruu glee gra glo ra do zo ri
-                 di ze go ga pree pro po pa ka ki ku de da ma mo le la li]
-        name += set[rand(set.length)]
+      when "c"   # consonant
+        set = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r",
+               "s", "t", "v", "w", "x", "z"]
+        name += set.sample
+      when "v"   # vowel
+        set = ["a", "a", "a", "e", "e", "e", "i", "i", "i", "o", "o", "o", "u", "u", "u"]
+        name += set.sample
+      when "W"   # beginning vowel
+        set = ["a", "a", "a", "e", "e", "e", "i", "i", "i", "o", "o", "o", "u",
+               "u", "u", "au", "au", "ay", "ay", "ea", "ea", "ee", "ee", "oo",
+               "oo", "ou", "ou"]
+        name += set.sample
+      when "U"   # ending vowel
+        set = ["a", "a", "a", "a", "a", "e", "e", "e", "i", "i", "i", "o", "o",
+               "o", "o", "o", "u", "u", "ay", "ay", "ie", "ie", "ee", "ue", "oo"]
+        name += set.sample
+      when "B"   # beginning consonant
+        set1 = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "l", "m", "n", "n",
+                "p", "r", "r", "s", "s", "t", "t", "v", "w", "y", "z"]
+        set2 = ["bl", "br", "ch", "cl", "cr", "dr", "fr", "fl", "gl", "gr", "kh",
+                "kl", "kr", "ph", "pl", "pr", "sc", "sk", "sl", "sm", "sn", "sp",
+                "st", "sw", "th", "tr", "tw", "vl", "zh"]
+        name += (rand(3) > 0) ? set1.sample : set2.sample
+      when "E"   # ending consonant
+        set1 = ["b", "c", "d", "f", "g", "h", "j", "k", "k", "l", "l", "m", "n",
+                "n", "p", "r", "r", "s", "s", "t", "t", "v", "z"]
+        set2 = ["bb", "bs", "ch", "cs", "ds", "fs", "ft", "gs", "gg", "ld", "ls",
+                "nd", "ng", "nk", "rn", "kt", "ks", "ms", "ns", "ph", "pt", "ps",
+                "sk", "sh", "sp", "ss", "st", "rd", "rn", "rp", "rm", "rt", "rk",
+                "ns", "th", "zh"]
+        name += (rand(3) > 0) ? set1.sample : set2.sample
+      when "f"   # consonant and vowel
+        set = ["iz", "us", "or"]
+        name += set.sample
+      when "F"   # consonant and vowel
+        set = ["bo", "ba", "be", "bu", "re", "ro", "si", "mi", "zho", "se", "nya",
+               "gru", "gruu", "glee", "gra", "glo", "ra", "do", "zo", "ri", "di",
+               "ze", "go", "ga", "pree", "pro", "po", "pa", "ka", "ki", "ku",
+               "de", "da", "ma", "mo", "le", "la", "li"]
+        name += set.sample
       when "2"
-        set = %w[c f g k l p r s t]
-        name += set[rand(set.length)]
+        set = ["c", "f", "g", "k", "l", "p", "r", "s", "t"]
+        name += set.sample
       when "3"
-        set = %w[nka nda la li ndra sta cha chie]
-        name += set[rand(set.length)]
+        set = ["nka", "nda", "la", "li", "ndra", "sta", "cha", "chie"]
+        name += set.sample
       when "4"
-        set = %w[una ona ina ita ila ala ana ia iana]
-        name += set[rand(set.length)]
+        set = ["una", "ona", "ina", "ita", "ila", "ala", "ana", "ia", "iana"]
+        name += set.sample
       when "5"
-        set = %w[e e o o ius io u u ito io ius us]
-        name += set[rand(set.length)]
+        set = ["e", "e", "o", "o", "ius", "io", "u", "u", "ito", "io", "ius", "us"]
+        name += set.sample
       when "6"
-        set = %w[a a a elle ine ika ina ita ila ala ana]
-        name += set[rand(set.length)]
+        set = ["a", "a", "a", "elle", "ine", "ika", "ina", "ita", "ila", "ala", "ana"]
+        name += set.sample
       end
-    }
+    end
     break if name.length <= maxLength
-  }
+  end
   name = name[0, maxLength]
   case upper
   when 0 then name = name.upcase
@@ -444,7 +455,7 @@ def pbMoveTutorChoose(move, movelist = nil, bymachine = false, oneusemachine = f
   if movelist.is_a?(Array)
     movelist.map! { |m| GameData::Move.get(m).id }
   end
-  pbFadeOutIn {
+  pbFadeOutIn do
     movename = GameData::Move.get(move).name
     annot = pbMoveTutorAnnotations(move, movelist)
     scene = PokemonParty_Scene.new
@@ -471,7 +482,7 @@ def pbMoveTutorChoose(move, movelist = nil, bymachine = false, oneusemachine = f
       end
     end
     screen.pbEndScene
-  }
+  end
   return ret   # Returns whether the move was learned by a Pokemon
 end
 
@@ -529,36 +540,36 @@ end
 
 def pbHideVisibleObjects
   visibleObjects = []
-  ObjectSpace.each_object(Sprite) { |o|
+  ObjectSpace.each_object(Sprite) do |o|
     if !o.disposed? && o.visible
       visibleObjects.push(o)
       o.visible = false
     end
-  }
-  ObjectSpace.each_object(Viewport) { |o|
+  end
+  ObjectSpace.each_object(Viewport) do |o|
     if !pbDisposed?(o) && o.visible
       visibleObjects.push(o)
       o.visible = false
     end
-  }
-  ObjectSpace.each_object(Plane) { |o|
+  end
+  ObjectSpace.each_object(Plane) do |o|
     if !o.disposed? && o.visible
       visibleObjects.push(o)
       o.visible = false
     end
-  }
-  ObjectSpace.each_object(Tilemap) { |o|
+  end
+  ObjectSpace.each_object(Tilemap) do |o|
     if !o.disposed? && o.visible
       visibleObjects.push(o)
       o.visible = false
     end
-  }
-  ObjectSpace.each_object(Window) { |o|
+  end
+  ObjectSpace.each_object(Window) do |o|
     if !o.disposed? && o.visible
       visibleObjects.push(o)
       o.visible = false
     end
-  }
+  end
   return visibleObjects
 end
 

@@ -351,9 +351,7 @@ class VoltorbFlip
       end
       count = 0
       @squares.length.times do |i|
-        if @squares[i][3] == false && @squares[i][2] > 1
-          count += 1
-        end
+        count += 1 if @squares[i][3] == false && @squares[i][2] > 1
       end
       pbUpdateCoins
       # Game cleared
@@ -561,9 +559,7 @@ class VoltorbFlip
       Graphics.update
       Input.update
       update
-      if @sprites["curtainL"].angle >= -90
-        break
-      end
+      break if @sprites["curtainL"].angle >= -90
     end
     pbFadeOutAndHide(@sprites) { update }
     pbDisposeSpriteHash(@sprites)
@@ -580,8 +576,9 @@ class VoltorbFlip
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class VoltorbFlipScreen
   def initialize(scene)
     @scene = scene
@@ -594,8 +591,9 @@ class VoltorbFlipScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbVoltorbFlip
   if !$bag.has?(:COINCASE)
     pbMessage(_INTL("You can't play unless you have a Coin Case."))

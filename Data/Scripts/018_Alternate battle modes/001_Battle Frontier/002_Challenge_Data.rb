@@ -37,7 +37,7 @@ end
 #===============================================================================
 def pbEntryScreen(*arg)
   retval = false
-  pbFadeOutIn {
+  pbFadeOutIn do
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene, $player.party)
     ret = screen.pbPokemonMultipleEntryScreenEx(pbBattleChallenge.rules.ruleset)
@@ -45,7 +45,7 @@ def pbEntryScreen(*arg)
     pbBattleChallenge.setParty(ret) if ret
     # Continue (return true) if Pokémon were chosen
     retval = (ret && ret.length > 0)
-  }
+  end
   return retval
 end
 
@@ -92,7 +92,7 @@ def pbBattleChallengeBeginSpeech
   return "..." if !pbBattleChallenge.pbInProgress?
   bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
   tr = bttrainers[pbBattleChallenge.nextTrainer]
-  return (tr) ? pbGetMessageFromHash(MessageTypes::FrontierIntroSpeeches, tr[2]) : "..."
+  return (tr) ? pbGetMessageFromHash(MessageTypes::FRONTIER_INTRO_SPEECHES, tr[2]) : "..."
 end
 
 #===============================================================================
@@ -184,16 +184,14 @@ class PBPokemon
     return "#{species},#{item},#{nature},#{move1},#{move2},#{move3},#{move4},#{ev}"
   end
 
-=begin
-  def _dump(depth)
-    return [@species, @item, @nature, @move1, @move2, @move3, @move4, @ev].pack("vvCvvvvC")
-  end
+#  def _dump(depth)
+#    return [@species, @item, @nature, @move1, @move2, @move3, @move4, @ev].pack("vvCvvvvC")
+#  end
 
-  def self._load(str)
-    data = str.unpack("vvCvvvvC")
-    return self.new(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
-  end
-=end
+#  def self._load(str)
+#    data = str.unpack("vvCvvvvC")
+#    return self.new(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
+#  end
 
   def convertMove(move)
     move = :FRUSTRATION if move == :RETURN && GameData::Move.exists?(:FRUSTRATION)

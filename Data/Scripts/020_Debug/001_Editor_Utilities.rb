@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 def pbGetLegalMoves(species)
   species_data = GameData::Species.get(species)
   moves = []
@@ -74,11 +77,11 @@ def pbMapTree
       maplevels.push([i, level, info.parent_id, info.order])
     end
   end
-  maplevels.sort! { |a, b|
+  maplevels.sort! do |a, b|
     next a[1] <=> b[1] if a[1] != b[1] # level
     next a[2] <=> b[2] if a[2] != b[2] # parent ID
     next a[3] <=> b[3] # order
-  }
+  end
   stack = []
   stack.push(0, 0)
   while stack.length > 0
@@ -125,21 +128,20 @@ def pbChooseFromGameDataList(game_data, default = nil)
   return pbChooseList(commands, default, nil, -1)
 end
 
-
 # Displays a list of all Pokémon species, and returns the ID of the species
 # selected (or nil if the selection was canceled). "default", if specified, is
 # the ID of the species to initially select. Pressing Input::ACTION will toggle
 # the list sorting between numerical and alphabetical.
 def pbChooseSpeciesList(default = nil)
-  return pbChooseFromGameDataList(:Species, default) { |data|
+  return pbChooseFromGameDataList(:Species, default) do |data|
     next (data.form > 0) ? nil : data.real_name
-  }
+  end
 end
 
 def pbChooseSpeciesFormList(default = nil)
-  return pbChooseFromGameDataList(:Species, default) { |data|
+  return pbChooseFromGameDataList(:Species, default) do |data|
     next (data.form > 0) ? sprintf("%s_%d", data.real_name, data.form) : data.real_name
-  }
+  end
 end
 
 # Displays a list of all types, and returns the ID of the type selected (or nil
@@ -147,9 +149,9 @@ end
 # to initially select. Pressing Input::ACTION will toggle the list sorting
 # between numerical and alphabetical.
 def pbChooseTypeList(default = nil)
-  return pbChooseFromGameDataList(:Type, default) { |data|
+  return pbChooseFromGameDataList(:Type, default) do |data|
     next (data.pseudo_type) ? nil : data.real_name
-  }
+  end
 end
 
 # Displays a list of all items, and returns the ID of the item selected (or nil
@@ -238,8 +240,6 @@ def pbChooseBallList(defaultMoveID = nil)
   cmdwin.dispose
   return (ret >= 0) ? commands[ret][0] : defaultMoveID
 end
-
-
 
 #===============================================================================
 # General list methods

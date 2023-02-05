@@ -26,7 +26,7 @@ class SafariState
 
   def pbGoToStart
     if $scene.is_a?(Scene_Map)
-      pbFadeOutIn {
+      pbFadeOutIn do
         $game_temp.player_transferring   = true
         $game_temp.transition_processing = true
         $game_temp.player_new_map_id    = @start[0]
@@ -35,7 +35,7 @@ class SafariState
         $game_temp.player_new_direction = 2
         pbDismountBike
         $scene.transfer_player
-      }
+      end
     end
   end
 
@@ -129,11 +129,9 @@ def pbSafariBattle(pkmn, level = 1)
   BattleCreationHelperMethods.prepare_battle(battle)
   # Perform the battle itself
   decision = 0
-  pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) {
-    pbSceneStandby {
-      decision = battle.pbStartBattle
-    }
-  }
+  pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) do
+    pbSceneStandby { decision = battle.pbStartBattle }
+  end
   Input.update
   # Update Safari game data based on result of battle
   pbSafariState.ballcount = battle.ballCount

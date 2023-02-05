@@ -355,7 +355,7 @@ class PokemonMapFactory
 
   def updateMaps(scene)
     updateMapsInternal
-    $map_factory.setSceneStarted(scene) if @mapChanged
+    setSceneStarted(scene) if @mapChanged
   end
 
   def updateMapsInternal
@@ -433,9 +433,9 @@ module MapFactoryHelper
   end
 
   def self.mapsConnected?(id1, id2)
-    MapFactoryHelper.eachConnectionForMap(id1) { |conn|
+    MapFactoryHelper.eachConnectionForMap(id1) do |conn|
       return true if conn[0] == id2 || conn[3] == id2
-    }
+    end
     return false
   end
 

@@ -546,7 +546,7 @@ class PokemonMart_Scene
   def pbChooseBuyItem
     itemwindow = @sprites["itemwindow"]
     @sprites["helpwindow"].visible = false
-    pbActivateWindow(@sprites, "itemwindow") {
+    pbActivateWindow(@sprites, "itemwindow") do
       pbRefresh
       loop do
         Graphics.update
@@ -566,7 +566,7 @@ class PokemonMart_Scene
           end
         end
       end
-    }
+    end
   end
 
   def pbChooseSellItem
@@ -647,7 +647,7 @@ class PokemonMartScreen
         $stats.money_spent_at_marts += price
         $stats.mart_items_bought += quantity
         @adapter.setMoney(@adapter.getMoney - price)
-        @stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
+        @stock.delete_if { |itm| GameData::Item.get(itm).is_important? && $bag.has?(itm) }
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
         if quantity >= 10 && GameData::Item.exists?(:PREMIERBALL)
           if Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item).is_poke_ball?

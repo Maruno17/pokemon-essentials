@@ -145,7 +145,7 @@ class Battle::Battler
 
   def pbResetTypes
     @types = @pokemon.types
-    @effects[PBEffects::ExtraType]  = nil
+    @effects[PBEffects::ExtraType] = nil
     @effects[PBEffects::BurnUp] = false
     @effects[PBEffects::Roost]  = false
   end
