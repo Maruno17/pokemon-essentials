@@ -32,6 +32,7 @@ def download_sprite(base_path, head_id, body_id)
 end
 
 def download_autogen_sprite(head_id, body_id)
+  return nil if !$PokemonSystem.download_sprites
   base_path = "https://raw.githubusercontent.com/Aegide/autogen-fusion-sprites/master/Battlers/{1}/{1}.{2}.png"
   sprite = download_sprite(_INTL(base_path,head_id,body_id),head_id,body_id)
   return sprite if sprite
@@ -39,6 +40,7 @@ def download_autogen_sprite(head_id, body_id)
 end
 
 def download_custom_sprite(head_id, body_id)
+  return nil if !$PokemonSystem.download_sprites
   base_path = "https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/{1}.{2}.png"
   sprite = download_sprite(_INTL(base_path,head_id,body_id),head_id,body_id)
   return sprite if sprite

@@ -1136,6 +1136,11 @@ class Pokemon
     base_stats = self.baseStats
     this_level = self.level
     this_IV = self.calcIV
+
+    if $game_switches[SWITCH_NO_LEVELS_MODE]
+      this_level = Settings::NO_LEVEL_MODE_LEVEL
+    end
+
     # Format stat multipliers due to nature
     nature_mod = {}
     GameData::Stat.each_main { |s| nature_mod[s.id] = 100 }

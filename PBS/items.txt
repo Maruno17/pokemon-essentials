@@ -595,7 +595,7 @@
 587,POISONMUSHROOM,PoisonMushroom,PoisonMushrooms,1,50,A common poisonous mushroom. It can be sold for a small price.,1,1,0,
 588,EXPALLOFF,Exp. All,Exp. Alls,8,0,"An item that can be used to share experience gained with every party member.",2,0,6,
 589,GASMASK,Gas Mask,Gas Masks,8,0,"A mask that lets you breathe in areas filled with poisonous gas.",0,0,6,
-590,MANKEYPAW,Mankey Paw,Mankey Paws,1,19600,"Guarantees Critical-Hits, but halves accuracy.",0,0,0,
+590,MANKEYPAW,Mankey Paw,Mankey Paws,1,19600,"Guarantees Critical-Hits, but makes the user miss half the time.",0,0,0,
 591,ICEPICK,Ice Pick,Ice Picks,8,0,"An Ice Pick that lets you climb vertical walls of ice.",0,0,6,
 592,RACEBIKE,Racing Bicycle,Racing Bicycles,8,0,A folding Bicycle that enables much faster movement than a regular bicycle,2,0,6,
 593,DIAMOND,Diamond,Diamonds,1,20000,A rare gem that is used for making jewelry. It sells for a high price.,0,0,0,
