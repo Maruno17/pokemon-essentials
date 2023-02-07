@@ -15,6 +15,7 @@ class PokemonSystem
   attr_accessor :textinput
   attr_accessor :quicksurf
   attr_accessor :battle_type
+  attr_accessor :download_sprites
 
   def initialize
     @textspeed = 1 # Text speed (0=slow, 1=normal, 2=fast)
@@ -30,6 +31,8 @@ class PokemonSystem
     @textinput = 1 # Text input mode (0=cursor, 1=keyboard)
     @quicksurf = 0
     @battle_type = 0
+    @download_sprites = 0
+
   end
 end
 
@@ -458,6 +461,13 @@ class PokemonOption_Scene
     #                             }, "Sets the speed at which the text is displayed"
     #   )
     # end
+    options <<
+      EnumOption.new(_INTL("Download sprites"), [_INTL("On"), _INTL("Off")],
+                     proc { $PokemonSystem.download_sprites ? 0 : 1 },
+                     proc { |value|
+                       $PokemonSystem.download_sprites = value },
+                     "Automatically download custom sprites from the internet"
+      )
 
     if $game_switches
       options <<
