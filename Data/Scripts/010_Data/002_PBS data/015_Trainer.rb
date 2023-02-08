@@ -167,7 +167,9 @@ module GameData
           end
         end
         pkmn.happiness = pkmn_data[:happiness] if pkmn_data[:happiness]
-        pkmn.name = pkmn_data[:real_name] if !nil_or_empty?(pkmn_data[:real_name])
+        if !nil_or_empty?(pkmn_data[:real_name])
+          pkmn.name = pbGetMessageFromHash(MessageTypes::POKEMON_NICKNAMES, pkmn_data[:real_name])
+        end
         if pkmn_data[:shadowness]
           pkmn.makeShadow
           pkmn.shiny = false

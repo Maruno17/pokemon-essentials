@@ -256,7 +256,11 @@ module GameData
     ret = []
     self.constants.each do |c|
       next if !self.const_get(c).is_a?(Class)
-      ret.push(self.const_get(c)::DATA_FILENAME) if self.const_get(c).const_defined?(:DATA_FILENAME)
+      next if !self.const_get(c).const_defined?(:DATA_FILENAME)
+      if self.const_get(c).const_defined?(:OPTIONAL) && self.const_get(c)::OPTIONAL
+        next if !safeExists?(self.const_get(c)::DATA_FILENAME)
+      end
+      ret.push(self.const_get(c)::DATA_FILENAME)
     end
     return ret
   end

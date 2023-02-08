@@ -525,7 +525,7 @@ def pbTrainerBattleEditor
             else
               trainer_hash = {
                 :trainer_type    => data[0],
-                :name            => data[1],
+                :real_name       => data[1],
                 :version         => data[2],
                 :lose_text       => data[3],
                 :pokemon         => party,
@@ -533,7 +533,7 @@ def pbTrainerBattleEditor
                 :pbs_file_suffix => tr_data.pbs_file_suffix
               }
               # Add trainer type's data to records
-              trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+              trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:real_name], trainer_hash[:version]]
               GameData::Trainer.register(trainer_hash)
               if data[0] != old_type || data[1] != old_name || data[2] != old_version
                 GameData::Trainer::DATA.delete([old_type, old_name, old_version])
@@ -568,7 +568,7 @@ def pbTrainerBattleEditor
           if t
             trainer_hash = {
               :trainer_type => tr_type,
-              :name         => tr_name,
+              :real_name    => tr_name,
               :version      => tr_version,
               :pokemon      => []
             }
@@ -581,7 +581,7 @@ def pbTrainerBattleEditor
               )
             end
             # Add trainer's data to records
-            trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+            trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:real_name], trainer_hash[:version]]
             GameData::Trainer.register(trainer_hash)
             pbMessage(_INTL("The Trainer battle was added."))
             modified = true
@@ -607,7 +607,7 @@ module TrainerPokemonProperty
     oldsetting = [
       initsetting[:species],
       initsetting[:level],
-      initsetting[:name],
+      initsetting[:real_name],
       initsetting[:form],
       initsetting[:gender],
       initsetting[:shininess],
@@ -629,7 +629,7 @@ module TrainerPokemonProperty
     pkmn_properties = [
       [_INTL("Species"),       SpeciesProperty,                         _INTL("Species of the Pokémon.")],
       [_INTL("Level"),         NonzeroLimitProperty.new(max_level),     _INTL("Level of the Pokémon (1-{1}).", max_level)],
-      [_INTL("Name"),          StringProperty,                          _INTL("Name of the Pokémon.")],
+      [_INTL("Name"),          StringProperty,                          _INTL("Nickname of the Pokémon.")],
       [_INTL("Form"),          LimitProperty2.new(999),                 _INTL("Form of the Pokémon.")],
       [_INTL("Gender"),        GenderProperty,                          _INTL("Gender of the Pokémon.")],
       [_INTL("Shiny"),         BooleanProperty2,                        _INTL("If set to true, the Pokémon is a different-colored Pokémon.")],
@@ -655,7 +655,7 @@ module TrainerPokemonProperty
     ret = {
       :species         => oldsetting[0],
       :level           => oldsetting[1],
-      :name            => oldsetting[2],
+      :real_name       => oldsetting[2],
       :form            => oldsetting[3],
       :gender          => oldsetting[4],
       :shininess       => oldsetting[5],
