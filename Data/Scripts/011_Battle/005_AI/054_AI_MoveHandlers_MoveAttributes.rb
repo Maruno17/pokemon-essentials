@@ -1138,17 +1138,28 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromMultiTargetDamagin
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# RemoveProtections
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RemoveProtections",
+  proc { |score, move, user, target, ai, battle|
+    if target.check_for_move { |m| (m.is_a?(Battle::Move::ProtectMove) ||
+                                    m.is_a?(Battle::Move::ProtectUserSideFromStatusMoves) ||
+                                    m.is_a?(Battle::Move::ProtectUserSideFromDamagingMovesIfUserFirstTurn)) &&
+                                   !m.is_a?(Battle::Move::UserEnduresFaintingThisTurn) }
+      score += 5
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
-# RemoveProtectionsBypassSubstitute
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("RemoveProtectionsBypassSubstitute",
+                                                        "RemoveProtections")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("HoopaRemoveProtectionsBypassSubstituteLowerUserDef1",
   proc { |move, user, ai, battle|
@@ -1157,6 +1168,8 @@ Battle::AI::Handlers::MoveFailureCheck.add("HoopaRemoveProtectionsBypassSubstitu
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HoopaRemoveProtectionsBypassSubstituteLowerUserDef1",
   proc { |score, move, user, target, ai, battle|
+    score = Battle::AI::Handlers.apply_move_effect_against_target_score("RemoveProtections",
+       score, move, user, target, ai, battle)
     next ai.get_score_for_target_stat_drop(score, user, move.move.statDown, false)
   }
 )

@@ -241,8 +241,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PowerUpAllyMove",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterPhysicalDamage",
   proc { |power, move, user, target, ai, battle|
@@ -251,22 +250,30 @@ Battle::AI::Handlers::MoveBasePower.add("CounterPhysicalDamage",
 )
 Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
   proc { |score, move, user, ai, battle|
-#    next Battle::AI::MOVE_USELESS_SCORE if target.effects[PBEffects::HyperBeam] > 0
-    attack = user.rough_stat(:ATTACK)
-    spatk  = user.rough_stat(:SPECIAL_ATTACK)
-    if attack * 1.5 < spatk
-      score -= 60
-#    elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
-#      moveData = GameData::Move.get(target.battler.lastMoveUsed)
-#      score += 60 if moveData.physical?
+    has_physical_move = false
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.can_attack?
+      next if !b.check_for_move { |m| m.physicalMove?(m.type) &&
+                                      (user.effects[PBEffects::Substitute] == 0 ||
+                                       m.ignoresSubstitute?(b.battler)) }
+      has_physical_move = true
+      # Prefer if foe has a higher Attack than Special Attack
+      score += 5 if b.rough_stat(:ATTACK) > b.rough_stat(:SPECIAL_ATTACK)
+      # Prefer if the last move the foe used was physical
+      if ai.trainer.medium_skill? && b.battler.lastMoveUsed
+        score += 5 if GameData::Move.get(b.battler.lastMoveUsed).physical?
+      end
+      # Prefer if the foe is taunted into using a damaging move
+      score += 4 if b.effects[PBEffects::Taunt] > 0
     end
+    # Useless if no foes have a physical move to counter
+    next Battle::AI::MOVE_USELESS_SCORE if !has_physical_move
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterSpecialDamage",
   proc { |power, move, user, target, ai, battle|
@@ -275,22 +282,30 @@ Battle::AI::Handlers::MoveBasePower.add("CounterSpecialDamage",
 )
 Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
   proc { |score, move, user, ai, battle|
-#    next Battle::AI::MOVE_USELESS_SCORE if target.effects[PBEffects::HyperBeam] > 0
-    attack = user.rough_stat(:ATTACK)
-    spatk  = user.rough_stat(:SPECIAL_ATTACK)
-    if attack > spatk * 1.5
-      score -= 60
-#    elsif ai.trainer.medium_skill? && target.battler.lastMoveUsed
-#      moveData = GameData::Move.get(target.battler.lastMoveUsed)
-#      score += 60 if moveData.special?
+    has_special_move = false
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.can_attack?
+      next if !b.check_for_move { |m| m.specialMove?(m.type) &&
+                                      (user.effects[PBEffects::Substitute] == 0 ||
+                                       m.ignoresSubstitute?(b.battler)) }
+      has_special_move = true
+      # Prefer if foe has a higher Special Attack than Attack
+      score += 5 if b.rough_stat(:SPECIAL_ATTACK) > b.rough_stat(:ATTACK)
+      # Prefer if the last move the foe used was special
+      if ai.trainer.medium_skill? && b.battler.lastMoveUsed
+        score += 5 if GameData::Move.get(b.battler.lastMoveUsed).special?
+      end
+      # Prefer if the foe is taunted into using a damaging move
+      score += 4 if b.effects[PBEffects::Taunt] > 0
     end
+    # Useless if no foes have a special move to counter
+    next Battle::AI::MOVE_USELESS_SCORE if !has_special_move
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.add("CounterDamagePlusHalf",
   proc { |power, move, user, target, ai, battle|
@@ -299,7 +314,23 @@ Battle::AI::Handlers::MoveBasePower.add("CounterDamagePlusHalf",
 )
 Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
   proc { |score, move, user, ai, battle|
-#    next Battle::AI::MOVE_USELESS_SCORE if target.effects[PBEffects::HyperBeam] > 0
+    has_damaging_move = false
+    ai.each_foe_battler(user.side) do |b, i|
+      next if !b.can_attack? || user.faster_than?(b)
+      next if !b.check_for_move { |m| m.damagingMove? &&
+                                      (user.effects[PBEffects::Substitute] == 0 ||
+                                       m.ignoresSubstitute?(b.battler)) }
+      has_damaging_move = true
+      # Prefer if the last move the foe used was damaging
+      if ai.trainer.medium_skill? && b.battler.lastMoveUsed
+        score += 5 if GameData::Move.get(b.battler.lastMoveUsed).damaging?
+      end
+      # Prefer if the foe is taunted into using a damaging move
+      score += 6 if b.effects[PBEffects::Taunt] > 0
+    end
+    # Useless if no foes have a damaging move to counter
+    next Battle::AI::MOVE_USELESS_SCORE if !has_damaging_move
+    next score
   }
 )
 

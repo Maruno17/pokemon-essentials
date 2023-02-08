@@ -374,12 +374,14 @@ class Battle::Move
     #       code.
     moveType = nil
     moveType = :NORMAL if @function == "TypeDependsOnUserIVs"   # Hidden Power
-    if physicalMove?(moveType)
-      target.effects[PBEffects::Counter]       = damage
-      target.effects[PBEffects::CounterTarget] = user.index
-    elsif specialMove?(moveType)
-      target.effects[PBEffects::MirrorCoat]       = damage
-      target.effects[PBEffects::MirrorCoatTarget] = user.index
+    if !target.damageState.substitute
+      if physicalMove?(moveType)
+        target.effects[PBEffects::Counter]       = damage
+        target.effects[PBEffects::CounterTarget] = user.index
+      elsif specialMove?(moveType)
+        target.effects[PBEffects::MirrorCoat]       = damage
+        target.effects[PBEffects::MirrorCoatTarget] = user.index
+      end
     end
     if target.effects[PBEffects::Bide] > 0
       target.effects[PBEffects::BideDamage] += damage

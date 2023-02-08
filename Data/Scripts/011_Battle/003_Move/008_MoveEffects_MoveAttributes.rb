@@ -991,20 +991,8 @@ end
 #===============================================================================
 # Ends target's protections immediately. (Hyperspace Hole)
 #===============================================================================
-class Battle::Move::RemoveProtectionsBypassSubstitute < Battle::Move
+class Battle::Move::RemoveProtectionsBypassSubstitute < Battle::Move::RemoveProtections
   def ignoresSubstitute?(user); return true; end
-
-  def pbEffectAgainstTarget(user, target)
-    target.effects[PBEffects::BanefulBunker]          = false
-    target.effects[PBEffects::KingsShield]            = false
-    target.effects[PBEffects::Obstruct]               = false
-    target.effects[PBEffects::Protect]                = false
-    target.effects[PBEffects::SpikyShield]            = false
-    target.pbOwnSide.effects[PBEffects::CraftyShield] = false
-    target.pbOwnSide.effects[PBEffects::MatBlock]     = false
-    target.pbOwnSide.effects[PBEffects::QuickGuard]   = false
-    target.pbOwnSide.effects[PBEffects::WideGuard]    = false
-  end
 end
 
 #===============================================================================

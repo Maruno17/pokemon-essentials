@@ -601,7 +601,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SwapSideEffects",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserMakeSubstitute",
   proc { |move, user, ai, battle|
@@ -612,7 +612,11 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserMakeSubstitute",
 Battle::AI::Handlers::MoveEffectScore.add("UserMakeSubstitute",
   proc { |score, move, user, ai, battle|
     # Prefer more the higher the user's HP
-    score += 8.0 * user.hp / user.totalhp
+    score += (8 * user.hp.to_f / user.totalhp).round
+    # Prefer if foes don't know any moves that can bypass a substitute
+    ai.each_battler do |b, i|
+      score += 4 if !b.check_for_move { |m| m.ignoresSubstitute?(b.battler) }
+    end
     # TODO: Predict incoming damage, and prefer if it's greater than
     #       user.totalhp / 4?
     next score
