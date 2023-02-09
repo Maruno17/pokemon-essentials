@@ -424,7 +424,7 @@ class Battle
           @scene.pbShowOpponent(i)
           msg = trainer.lose_text
           msg = "..." if !msg || msg.empty?
-          pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
+          pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name).gsub(/\\[Nn]/, "\n"))
         end
       end
       # Gain money from winning a trainer battle, and from Pay Day
@@ -459,7 +459,7 @@ class Battle
             @scene.pbShowOpponent(i)
             msg = trainer.win_text
             msg = "..." if !msg || msg.empty?
-            pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
+            pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name).gsub(/\\[Nn]/, "\n"))
           end
         end
       end
