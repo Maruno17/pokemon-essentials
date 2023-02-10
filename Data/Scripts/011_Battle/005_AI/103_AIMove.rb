@@ -88,7 +88,7 @@ class Battle::AI::AIMove
   # Returns this move's base power, taking into account various effects that
   # modify it.
   def base_power
-    ret = @move.baseDamage
+    ret = @move.power
     ret = 60 if ret == 1
     return ret if !@ai.trainer.medium_skill?
     return Battle::AI::Handlers.get_base_power(function,
@@ -96,8 +96,8 @@ class Battle::AI::AIMove
   end
 
   def rough_damage
-    power = base_power
-    return power if @move.is_a?(Battle::Move::FixedDamageMove)
+    base_dmg = base_power
+    return base_dmg if @move.is_a?(Battle::Move::FixedDamageMove)
     stage_mul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
     stage_div = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
     # Get the user and target of this move
@@ -132,7 +132,7 @@ class Battle::AI::AIMove
 
     ##### Calculate all multiplier effects #####
     multipliers = {
-      :base_damage_multiplier  => 1.0,
+      :power_multiplier        => 1.0,
       :attack_multiplier       => 1.0,
       :defense_multiplier      => 1.0,
       :final_damage_multiplier => 1.0
@@ -142,9 +142,9 @@ class Battle::AI::AIMove
        ((@ai.battle.pbCheckGlobalAbility(:DARKAURA) && calc_type == :DARK) ||
         (@ai.battle.pbCheckGlobalAbility(:FAIRYAURA) && calc_type == :FAIRY))
       if @ai.battle.pbCheckGlobalAbility(:AURABREAK)
-        multipliers[:base_damage_multiplier] *= 2 / 3.0
+        multipliers[:power_multiplier] *= 2 / 3.0
       else
-        multipliers[:base_damage_multiplier] *= 4 / 3.0
+        multipliers[:power_multiplier] *= 4 / 3.0
       end
     end
 
@@ -155,7 +155,7 @@ class Battle::AI::AIMove
       abilityBlacklist = [:ANALYTIC, :SNIPER, :TINTEDLENS, :AERILATE, :PIXILATE, :REFRIGERATE]
       if !abilityBlacklist.include?(user.ability_id)
         Battle::AbilityEffects.triggerDamageCalcFromUser(
-          user.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+          user.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
         )
       end
     end
@@ -164,7 +164,7 @@ class Battle::AI::AIMove
       user_battler.allAllies.each do |b|
         next if !b.abilityActive?
         Battle::AbilityEffects.triggerDamageCalcFromAlly(
-          b.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+          b.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
         )
       end
       if target.ability_active?
@@ -173,21 +173,21 @@ class Battle::AI::AIMove
         abilityBlacklist = [:FILTER, :SOLIDROCK]
         if !abilityBlacklist.include?(target.ability_id)
           Battle::AbilityEffects.triggerDamageCalcFromTarget(
-            target.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+            target.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
           )
         end
       end
     end
     if target.ability_active?
       Battle::AbilityEffects.triggerDamageCalcFromTargetNonIgnorable(
-        target.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+        target.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
       )
     end
     if !@ai.battle.moldBreaker
       target_battler.allAllies.each do |b|
         next if !b.abilityActive?
         Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(
-          b.ability, user_battler, target_battler, @move, multipliers, power, calc_type
+          b.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
         )
       end
     end
@@ -201,7 +201,7 @@ class Battle::AI::AIMove
       itemBlacklist = [:EXPERTBELT, :LIFEORB]
       if !itemBlacklist.include?(user.item_id)
         Battle::ItemEffects.triggerDamageCalcFromUser(
-          user.item, user_battler, target_battler, @move, multipliers, power, calc_type
+          user.item, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
         )
         user.effects[PBEffects::GemConsumed] = nil   # Untrigger consuming of Gems
       end
@@ -209,13 +209,13 @@ class Battle::AI::AIMove
     end
     if target.item_active? && target.item && !target.item.is_berry?
       Battle::ItemEffects.triggerDamageCalcFromTarget(
-        target.item, user_battler, target_battler, @move, multipliers, power, calc_type
+        target.item, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
       )
     end
 
     # Parental Bond
     if user.has_active_ability?(:PARENTALBOND)
-      multipliers[:base_damage_multiplier] *= (Settings::MECHANICS_GENERATION >= 7) ? 1.25 : 1.5
+      multipliers[:power_multiplier] *= (Settings::MECHANICS_GENERATION >= 7) ? 1.25 : 1.5
     end
 
     # Me First
@@ -226,24 +226,24 @@ class Battle::AI::AIMove
     # Charge
     if @ai.trainer.medium_skill? &&
        user.effects[PBEffects::Charge] > 0 && calc_type == :ELECTRIC
-      multipliers[:base_damage_multiplier] *= 2
+      multipliers[:power_multiplier] *= 2
     end
 
     # Mud Sport and Water Sport
     if @ai.trainer.medium_skill?
       if calc_type == :ELECTRIC
         if @ai.battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
-          multipliers[:base_damage_multiplier] /= 3
+          multipliers[:power_multiplier] /= 3
         end
         if @ai.battle.field.effects[PBEffects::MudSportField] > 0
-          multipliers[:base_damage_multiplier] /= 3
+          multipliers[:power_multiplier] /= 3
         end
       elsif calc_type == :FIRE
         if @ai.battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
-          multipliers[:base_damage_multiplier] /= 3
+          multipliers[:power_multiplier] /= 3
         end
         if @ai.battle.field.effects[PBEffects::WaterSportField] > 0
-          multipliers[:base_damage_multiplier] /= 3
+          multipliers[:power_multiplier] /= 3
         end
       end
     end
@@ -253,13 +253,13 @@ class Battle::AI::AIMove
       terrain_multiplier = (Settings::MECHANICS_GENERATION >= 8) ? 1.3 : 1.5
       case @ai.battle.field.terrain
       when :Electric
-        multipliers[:base_damage_multiplier] *= terrain_multiplier if calc_type == :ELECTRIC && user_battler.affectedByTerrain?
+        multipliers[:power_multiplier] *= terrain_multiplier if calc_type == :ELECTRIC && user_battler.affectedByTerrain?
       when :Grassy
-        multipliers[:base_damage_multiplier] *= terrain_multiplier if calc_type == :GRASS && user_battler.affectedByTerrain?
+        multipliers[:power_multiplier] *= terrain_multiplier if calc_type == :GRASS && user_battler.affectedByTerrain?
       when :Psychic
-        multipliers[:base_damage_multiplier] *= terrain_multiplier if calc_type == :PSYCHIC && user_battler.affectedByTerrain?
+        multipliers[:power_multiplier] *= terrain_multiplier if calc_type == :PSYCHIC && user_battler.affectedByTerrain?
       when :Misty
-        multipliers[:base_damage_multiplier] /= 2 if calc_type == :DRAGON && target_battler.affectedByTerrain?
+        multipliers[:power_multiplier] /= 2 if calc_type == :DRAGON && target_battler.affectedByTerrain?
       end
     end
 
@@ -370,11 +370,11 @@ class Battle::AI::AIMove
     # TODO
 
     ##### Main damage calculation #####
-    power   = [(power   * multipliers[:base_damage_multiplier]).round, 1].max
-    atk     = [(atk     * multipliers[:attack_multiplier]).round, 1].max
-    defense = [(defense * multipliers[:defense_multiplier]).round, 1].max
-    damage  = ((((2.0 * user.level / 5) + 2).floor * power * atk / defense).floor / 50).floor + 2
-    damage  = [(damage * multipliers[:final_damage_multiplier]).round, 1].max
+    base_dmg = [(base_dmg * multipliers[:power_multiplier]).round, 1].max
+    atk      = [(atk      * multipliers[:attack_multiplier]).round, 1].max
+    defense  = [(defense  * multipliers[:defense_multiplier]).round, 1].max
+    damage   = ((((2.0 * user.level / 5) + 2).floor * base_dmg * atk / defense).floor / 50).floor + 2
+    damage   = [(damage * multipliers[:final_damage_multiplier]).round, 1].max
     ret = damage.floor
     ret = target.hp - 1 if @move.nonLethal?(user_battler, target_battler) && ret >= target.hp
     return ret

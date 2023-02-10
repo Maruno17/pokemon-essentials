@@ -11,8 +11,8 @@ class Battle::AI
     @battle = battle
 
     # TODO: Move this elsewhere?
-    @roles   = [Array.new(@battle.pbParty(0).length) { |i| determine_roles(0, i) },
-                Array.new(@battle.pbParty(1).length) { |i| determine_roles(1, i) }]
+    @roles = [Array.new(@battle.pbParty(0).length) { |i| determine_roles(0, i) },
+              Array.new(@battle.pbParty(1).length) { |i| determine_roles(1, i) }]
   end
 
   def create_ai_objects

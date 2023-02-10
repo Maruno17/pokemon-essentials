@@ -25,8 +25,8 @@ class Battle::AI
         moveData = GameData::Move.get(target.lastMoveUsed)
         moveType = moveData.type
         typeMod = @user.effectiveness_of_type_against_battler(moveType, foe)
-        if Effectiveness.super_effective?(typeMod) && moveData.base_damage > 50
-          switchChance = (moveData.base_damage > 70) ? 30 : 20
+        if Effectiveness.super_effective?(typeMod) && moveData.power > 50
+          switchChance = (moveData.power > 70) ? 30 : 20
           shouldSwitch = (pbAIRandom(100) < switchChance)
         end
       end
@@ -169,7 +169,7 @@ class Battle::AI
       pkmn = party[i]
       sum  = 0
       pkmn.moves.each do |m|
-        next if m.base_damage == 0
+        next if m.power == 0
         @battle.battlers[idxBattler].allOpposing.each do |b|
           bTypes = b.pbTypes(true)
           sum += Effectiveness.calculate(m.type, *bTypes)

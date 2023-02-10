@@ -952,8 +952,8 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToSimpl
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetAbilityToSimple",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.ability_active?
-    old_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
-    new_ability_rating = ai.battler_wants_ability?(target, :SIMPLE)
+    old_ability_rating = target.wants_ability?(target.ability_id)
+    new_ability_rating = target.wants_ability?(:SIMPLE)
     side_mult = (target.opposes?(user)) ? 1 : -1
     if old_ability_rating > new_ability_rating
       score += 4 * side_mult * [old_ability_rating - new_ability_rating, 3].max
@@ -976,8 +976,8 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToInsom
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetAbilityToInsomnia",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.ability_active?
-    old_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
-    new_ability_rating = ai.battler_wants_ability?(target, :INSOMNIA)
+    old_ability_rating = target.wants_ability?(target.ability_id)
+    new_ability_rating = target.wants_ability?(:INSOMNIA)
     side_mult = (target.opposes?(user)) ? 1 : -1
     if old_ability_rating > new_ability_rating
       score += 4 * side_mult * [old_ability_rating - new_ability_rating, 3].max
@@ -1000,8 +1000,8 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserAbilityToTargetA
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetUserAbilityToTargetAbility",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !user.ability_active?
-    old_ability_rating = ai.battler_wants_ability?(user, user.ability_id)
-    new_ability_rating = ai.battler_wants_ability?(user, target.ability_id)
+    old_ability_rating = user.wants_ability?(user.ability_id)
+    new_ability_rating = user.wants_ability?(target.ability_id)
     if old_ability_rating > new_ability_rating
       score += 4 * [old_ability_rating - new_ability_rating, 3].max
     elsif old_ability_rating < new_ability_rating
@@ -1025,8 +1025,8 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetTargetAbilityToUserA
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetTargetAbilityToUserAbility",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.ability_active?
-    old_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
-    new_ability_rating = ai.battler_wants_ability?(target, user.ability_id)
+    old_ability_rating = target.wants_ability?(target.ability_id)
+    new_ability_rating = target.wants_ability?(user.ability_id)
     side_mult = (target.opposes?(user)) ? 1 : -1
     if old_ability_rating > new_ability_rating
       score += 4 * side_mult * [old_ability_rating - new_ability_rating, 3].max
@@ -1050,12 +1050,12 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UserTargetSwapAbilities
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapAbilities",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !user.ability_active? && !target.ability_active?
-    old_user_ability_rating = ai.battler_wants_ability?(user, user.ability_id)
-    new_user_ability_rating = ai.battler_wants_ability?(user, target.ability_id)
+    old_user_ability_rating = user.wants_ability?(user.ability_id)
+    new_user_ability_rating = user.wants_ability?(target.ability_id)
     user_diff = new_user_ability_rating - old_user_ability_rating
     user_diff = 0 if !user.ability_active?
-    old_target_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
-    new_target_ability_rating = ai.battler_wants_ability?(target, user.ability_id)
+    old_target_ability_rating = target.wants_ability?(target.ability_id)
+    new_target_ability_rating = target.wants_ability?(user.ability_id)
     target_diff = new_target_ability_rating - old_target_ability_rating
     target_diff = 0 if !target.ability_active?
     side_mult = (target.opposes?(user)) ? 1 : -1
@@ -1078,7 +1078,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("NegateTargetAbility",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbility",
   proc { |score, move, user, target, ai, battle|
-    target_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
+    target_ability_rating = target.wants_ability?(target.ability_id)
     side_mult = (target.opposes?(user)) ? 1 : -1
     if target_ability_rating > 0
       score += 4 * side_mult * [target_ability_rating, 3].max
@@ -1097,7 +1097,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbilityIfTar
     next score if target.effects[PBEffects::Substitute] > 0 || target.effects[PBEffects::GastroAcid]
     next score if target.battler.unstoppableAbility?
     next score if user.faster_than?(target)
-    target_ability_rating = ai.battler_wants_ability?(target, target.ability_id)
+    target_ability_rating = target.wants_ability?(target.ability_id)
     side_mult = (target.opposes?(user)) ? 1 : -1
     if target_ability_rating > 0
       score += 4 * side_mult * [target_ability_rating, 3].max
