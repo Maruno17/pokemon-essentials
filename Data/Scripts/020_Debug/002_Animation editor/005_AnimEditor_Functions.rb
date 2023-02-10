@@ -534,7 +534,7 @@ def pbSelectSE(canvas, audio)
     cmdwin.update
     maxsizewindow.update
     if maxsizewindow.changed?(3) && animfiles.length > 0   # Play Sound
-      fname = (cmdwin.index == 0) ? "Cries/001Cry" : "Anim/" + filename
+      fname = (cmdwin.index == 0) ? "Cries/000" : "Anim/" + filename
       pbSEPlay(RPG::AudioFile.new(fname, maxsizewindow.value(1), maxsizewindow.value(2)))
     end
     pbSEStop if maxsizewindow.changed?(4) && animfiles.length > 0   # Stop Sound
@@ -572,7 +572,6 @@ def pbSelectBG(canvas, timing)
 #    animfiles.concat(Dir.glob("*.jpeg"))
 #    animfiles.concat(Dir.glob("*.bmp"))
   end
-  animfiles.map! { |f| File.basename(f, ".*") }
   animfiles.uniq!
   animfiles.sort! { |a, b| a.downcase <=> b.downcase }
   cmdwin = pbListWindow(animfiles, 320)
@@ -598,7 +597,7 @@ def pbSelectBG(canvas, timing)
     cmdwin.update
     maxsizewindow.update
     if maxsizewindow.changed?(8) # OK
-      timing.name = filename
+      timing.name = File.basename(filename, ".*")
       timing.bgX = maxsizewindow.value(1)
       timing.bgY = maxsizewindow.value(2)
       timing.opacity = maxsizewindow.value(3)

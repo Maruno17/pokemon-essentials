@@ -49,7 +49,7 @@ end
 # Permanently stores data of follower events (i.e. in save files).
 #===============================================================================
 class PokemonGlobalMetadata
-  attr_accessor :dependentEvents   # Deprecated
+  attr_accessor :dependentEvents   # Deprecated - to be removed in v22
   attr_writer   :followers
 
   def followers
@@ -386,43 +386,4 @@ module Followers
   def put_followers_on_player
     $game_temp.followers.put_followers_on_player
   end
-end
-
-#===============================================================================
-# Deprecated methods
-#===============================================================================
-# @deprecated This method is slated to be removed in v21.
-def pbAddDependency2(event_id, name, common_event_id)
-  Deprecation.warn_method("pbAddDependency2", "v21", "Followers.add(event_id, name, common_event_id)")
-  Followers.add(event_id, name, common_event_id)
-end
-
-# @deprecated This method is slated to be removed in v21.
-def pbAddDependency(event)
-  Deprecation.warn_method("pbAddDependency", "v21", "Followers.add_event(event)")
-  Followers.add_event(event)
-end
-
-# @deprecated This method is slated to be removed in v21.
-def pbRemoveDependency2(name)
-  Deprecation.warn_method("pbRemoveDependency2", "v21", "Followers.remove(name)")
-  Followers.remove(name)
-end
-
-# @deprecated This method is slated to be removed in v21.
-def pbRemoveDependency(event)
-  Deprecation.warn_method("pbRemoveDependency", "v21", "Followers.remove_event(event)")
-  Followers.remove_event(event)
-end
-
-# @deprecated This method is slated to be removed in v21.
-def pbRemoveDependencies
-  Deprecation.warn_method("pbRemoveDependencies", "v21", "Followers.clear")
-  Followers.clear
-end
-
-# @deprecated This method is slated to be removed in v21.
-def pbGetDependency(name)
-  Deprecation.warn_method("pbGetDependency", "v21", "Followers.get(name)")
-  Followers.get(name)
 end

@@ -76,12 +76,12 @@ def pbGetLegalMoves2(species, maxlevel)
       # If we have a move that always hits, remove all other moves with no
       # effect of the same type and <= base power
       if md.accuracy == 0 && move2[1].function_code == "None" &&
-         md.type == move2[1].type && md.base_damage >= move2[1].base_damage
+         md.type == move2[1].type && md.power >= move2[1].power
         deleteAll.call(moves, move2[0])
       # If we have two status moves that have the same function code, delete the
       # one with lower accuracy (Supersonic vs. Confuse Ray, etc.)
-      elsif md.function_code == move2[1].function_code && md.base_damage == 0 &&
-            move2[1].base_damage == 0 && md.accuracy > move2[1].accuracy
+      elsif md.function_code == move2[1].function_code && md.power == 0 &&
+            move2[1].power == 0 && md.accuracy > move2[1].accuracy
         deleteAll.call(moves, move2[0])
       # Delete poison-causing moves if we have a move that causes toxic
       elsif md.function_code == "BadPoisonTarget" && move2[1].function_code == "PoisonTarget"
@@ -90,11 +90,11 @@ def pbGetLegalMoves2(species, maxlevel)
       # them is damaging and has 10/15/the same PP as the other move and EITHER
       # does more damage than the other move OR does the same damage but is more
       # accurate, delete the other move (Surf, Flamethrower, Thunderbolt, etc.)
-      elsif md.function_code == move2[1].function_code && md.base_damage != 0 &&
+      elsif md.function_code == move2[1].function_code && md.power != 0 &&
             md.type == move2[1].type &&
             (md.total_pp == 15 || md.total_pp == 10 || md.total_pp == move2[1].total_pp) &&
-            (md.base_damage > move2[1].base_damage ||
-            (md.base_damage == move2[1].base_damage && md.accuracy > move2[1].accuracy))
+            (md.power > move2[1].power ||
+            (md.power == move2[1].power && md.accuracy > move2[1].accuracy))
         deleteAll.call(moves, move2[0])
       end
     end
@@ -107,15 +107,15 @@ def addMove(moves, move, base)
   return if moves.include?(data.id)
   return if [:BUBBLE, :BUBBLEBEAM].include?(data.id)   # Never add these moves
   count = base + 1   # Number of times to add move to moves
-  count = base if data.function_code == "None" && data.base_damage <= 40
-  if data.base_damage <= 30 || [:GROWL, :TAILWHIP, :LEER].include?(data.id)
+  count = base if data.function_code == "None" && data.power <= 40
+  if data.power <= 30 || [:GROWL, :TAILWHIP, :LEER].include?(data.id)
     count = base
   end
-  if data.base_damage >= 60 ||
+  if data.power >= 60 ||
      [:REFLECT, :LIGHTSCREEN, :SAFEGUARD, :SUBSTITUTE, :FAKEOUT].include?(data.id)
     count = base + 2
   end
-  count = base + 3 if data.base_damage >= 80 && data.type == :NORMAL
+  count = base + 3 if data.power >= 80 && data.type == :NORMAL
   if [:PROTECT, :DETECT, :TOXIC, :AERIALACE, :WILLOWISP, :SPORE, :THUNDERWAVE,
       :HYPNOSIS, :CONFUSERAY, :ENDURE, :SWORDSDANCE].include?(data.id)
     count = base + 3
@@ -127,11 +127,11 @@ end
 # with a higher base damage than it.
 def hasMorePowerfulMove(moves, thismove)
   thisdata = GameData::Move.get(thismove)
-  return false if thisdata.base_damage == 0
+  return false if thisdata.power == 0
   moves.each do |move|
     next if !move
     moveData = GameData::Move.get(move)
-    if moveData.type == thisdata.type && moveData.base_damage > thisdata.base_damage
+    if moveData.type == thisdata.type && moveData.power > thisdata.power
       return true
     end
   end
@@ -297,14 +297,14 @@ def pbRandomPokemonFromRule(rules, trainer)
            !((sketch || !moves.include?(rest)) && rand(100) < 20)
           next
         end
-        totalbasedamage = 0
+        total_power = 0
         hasPhysical = false
         hasSpecial = false
         hasNormal = false
         newmoves.each do |move|
           d = GameData::Move.get(move)
-          next if d.base_damage == 0
-          totalbasedamage += d.base_damage
+          next if d.power == 0
+          total_power += d.power
           hasNormal = true if d.type == :NORMAL
           hasPhysical = true if d.category == 0
           hasSpecial = true if d.category == 1
@@ -318,9 +318,9 @@ def pbRandomPokemonFromRule(rules, trainer)
           next
         end
         r = rand(10)
-        next if r > 6 && totalbasedamage > 180
-        next if r > 8 && totalbasedamage > 140
-        next if totalbasedamage == 0 && rand(100) < 95
+        next if r > 6 && total_power > 180
+        next if r > 8 && total_power > 140
+        next if total_power == 0 && rand(100) < 95
         ############
         # Moves accepted
         if hasPhysical && !hasSpecial

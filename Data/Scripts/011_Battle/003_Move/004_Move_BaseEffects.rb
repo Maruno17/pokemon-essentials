@@ -27,7 +27,7 @@ class Battle::Move::Confusion < Battle::Move
     @id         = :CONFUSEDAMAGE
     @name       = ""
     @function   = "None"
-    @baseDamage = 40
+    @power      = 40
     @type       = nil
     @category   = 0
     @accuracy   = 100
@@ -56,7 +56,7 @@ class Battle::Move::Struggle < Battle::Move
     @id         = (move) ? move.id : :STRUGGLE
     @name       = (move) ? move.name : _INTL("Struggle")
     @function   = "Struggle"
-    @baseDamage = 50
+    @power      = 50
     @type       = nil
     @category   = 0
     @accuracy   = 0

@@ -258,9 +258,10 @@ module GameData
       next if !self.const_get(c).is_a?(Class)
       next if !self.const_get(c).const_defined?(:DATA_FILENAME)
       if self.const_get(c).const_defined?(:OPTIONAL) && self.const_get(c)::OPTIONAL
-        next if !safeExists?(self.const_get(c)::DATA_FILENAME)
+        ret.push([self.const_get(c)::DATA_FILENAME, false])
+      else
+        ret.push([self.const_get(c)::DATA_FILENAME, true])
       end
-      ret.push(self.const_get(c)::DATA_FILENAME)
     end
     return ret
   end

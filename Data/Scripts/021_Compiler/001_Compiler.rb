@@ -862,9 +862,9 @@ module Compiler
       # Get all data files and PBS files to be checked for their last modified times
       data_files = GameData.get_all_data_filenames
       data_files += [   # Extra .dat files for data that isn't a GameData class
-        "map_connections.dat",
-        "regional_dexes.dat",
-        "trainer_lists.dat"
+        ["map_connections.dat", true],
+        ["regional_dexes.dat", true],
+        ["trainer_lists.dat", true]
       ]
       text_files = get_all_pbs_files_to_compile
       latestDataTime = 0
@@ -880,16 +880,16 @@ module Compiler
         mustCompile = true
       end
       # Check data files for their latest modify time
-      data_files.each do |filename|
-        if safeExists?("Data/" + filename)
+      data_files.each do |filename|   # filename = [string, boolean (whether mandatory)]
+        if safeExists?("Data/" + filename[0])
           begin
-            File.open("Data/#{filename}") do |file|
+            File.open("Data/#{filename[0]}") do |file|
               latestDataTime = [latestDataTime, file.mtime.to_i].max
             end
           rescue SystemCallError
             mustCompile = true
           end
-        else
+        elsif filename[1]
           mustCompile = true
           break
         end
@@ -911,9 +911,9 @@ module Compiler
       mustCompile = true if Input.press?(Input::CTRL)
       # Delete old data files in preparation for recompiling
       if mustCompile
-        data_files.length.times do |i|
+        data_files.each do |filename|
           begin
-            File.delete("Data/#{data_files[i]}") if safeExists?("Data/#{data_files[i]}")
+            File.delete("Data/#{filename[0]}") if safeExists?("Data/#{filename[0]}")
           rescue SystemCallError
           end
         end
@@ -924,9 +924,9 @@ module Compiler
       e = $!
       raise e if e.class.to_s == "Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)
       pbPrintException(e)
-      data_files.length.times do |i|
+      data_files.each do |filename|
         begin
-          File.delete("Data/#{data_files[i]}")
+          File.delete("Data/#{filename[0]}") if safeExists?("Data/#{filename[0]}")
         rescue SystemCallError
         end
       end

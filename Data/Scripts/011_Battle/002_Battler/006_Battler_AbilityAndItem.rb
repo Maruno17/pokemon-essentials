@@ -460,9 +460,9 @@ class Battle::Battler
     return if move_type != gem_type
     @effects[PBEffects::GemConsumed] = @item_id
     if Settings::MECHANICS_GENERATION >= 6
-      mults[:base_damage_multiplier] *= 1.3
+      mults[:power_multiplier] *= 1.3
     else
-      mults[:base_damage_multiplier] *= 1.5
+      mults[:power_multiplier] *= 1.5
     end
   end
 end

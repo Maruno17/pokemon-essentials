@@ -3,7 +3,7 @@
 SaveData.register(:player) do
   ensure_class :Player
   save_value { $player }
-  load_value { |value| $player = $Trainer = value }
+  load_value { |value| $player = value }
   new_game_value { Player.new("Unnamed", GameData::TrainerType.keys.first) }
   from_old_format { |old_format| old_format[0] }
 end
@@ -69,7 +69,7 @@ end
 SaveData.register(:map_factory) do
   ensure_class :PokemonMapFactory
   save_value { $map_factory }
-  load_value { |value| $map_factory = $MapFactory = value }
+  load_value { |value| $map_factory = value }
   from_old_format { |old_format| old_format[9] }
 end
 
@@ -100,7 +100,7 @@ end
 SaveData.register(:bag) do
   ensure_class :PokemonBag
   save_value { $bag }
-  load_value { |value| $bag = $PokemonBag = value }
+  load_value { |value| $bag = value }
   new_game_value { PokemonBag.new }
   from_old_format { |old_format| old_format[13] }
 end

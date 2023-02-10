@@ -357,20 +357,6 @@ def pbSurfacing
   return false
 end
 
-# @deprecated This method is slated to be removed in v21.
-def pbTransferUnderwater(mapid, x, y, direction = $game_player.direction)
-  Deprecation.warn_method("pbTransferUnderwater", "v21", '"Transfer Player" event command')
-  pbFadeOutIn do
-    $game_temp.player_new_map_id    = mapid
-    $game_temp.player_new_x         = x
-    $game_temp.player_new_y         = y
-    $game_temp.player_new_direction = direction
-    $scene.transfer_player(false)
-    $game_map.autoplay
-    $game_map.refresh
-  end
-end
-
 EventHandlers.add(:on_player_interact, :diving,
   proc {
     if $PokemonGlobal.diving
@@ -753,20 +739,6 @@ def pbEndSurf(_xOffset, _yOffset)
     return true
   end
   return false
-end
-
-# @deprecated This method is slated to be removed in v21.
-def pbTransferSurfing(mapid, xcoord, ycoord, direction = $game_player.direction)
-  Deprecation.warn_method("pbTransferSurfing", "v21", '"Transfer Player" event command')
-  pbFadeOutIn do
-    $game_temp.player_new_map_id    = mapid
-    $game_temp.player_new_x         = xcoord
-    $game_temp.player_new_y         = ycoord
-    $game_temp.player_new_direction = direction
-    $scene.transfer_player(false)
-    $game_map.autoplay
-    $game_map.refresh
-  end
 end
 
 EventHandlers.add(:on_player_interact, :start_surfing,

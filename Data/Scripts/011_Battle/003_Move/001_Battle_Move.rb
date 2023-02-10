@@ -4,7 +4,7 @@ class Battle::Move
   attr_accessor :id
   attr_reader   :name
   attr_reader   :function
-  attr_reader   :baseDamage
+  attr_reader   :power
   attr_reader   :type
   attr_reader   :category
   attr_reader   :accuracy
@@ -22,6 +22,12 @@ class Battle::Move
 
   def to_int; return @id; end
 
+  # @deprecated This method is slated to be removed in v22.
+  def baseDamage
+    Deprecation.warn_method("baseDamage", "v22", "power")
+    return @power
+  end
+
   #=============================================================================
   # Creating a move
   #=============================================================================
@@ -32,7 +38,7 @@ class Battle::Move
     @name       = move.name   # Get the move's name
     # Get data on the move
     @function   = move.function_code
-    @baseDamage = move.base_damage
+    @power      = move.power
     @type       = move.type
     @category   = move.category
     @accuracy   = move.accuracy
@@ -173,7 +179,7 @@ class Battle::Move
          "PowerHigherWithUserHP", "PowerLowerWithUserHP",
          "PowerHigherWithUserHappiness", "PowerLowerWithUserHappiness",
          "PowerHigherWithUserPositiveStatStages", "PowerDependsOnUserStockpile"
-      return pbBaseType(@baseDamage, battler, nil)
+      return pbBaseType(@power, battler, nil)
     end
 =end
     return @realMove.display_damage(battler.pokemon)

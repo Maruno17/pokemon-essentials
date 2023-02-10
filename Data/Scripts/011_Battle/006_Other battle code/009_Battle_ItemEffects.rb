@@ -109,12 +109,12 @@ module Battle::ItemEffects
 
   #=============================================================================
 
-  def self.triggerDamageCalcFromUser(item, user, target, move, mults, base_damage, type)
-    DamageCalcFromUser.trigger(item, user, target, move, mults, base_damage, type)
+  def self.triggerDamageCalcFromUser(item, user, target, move, mults, power, type)
+    DamageCalcFromUser.trigger(item, user, target, move, mults, power, type)
   end
 
-  def self.triggerDamageCalcFromTarget(item, user, target, move, mults, base_damage, type)
-    DamageCalcFromTarget.trigger(item, user, target, move, mults, base_damage, type)
+  def self.triggerDamageCalcFromTarget(item, user, target, move, mults, power, type)
+    DamageCalcFromTarget.trigger(item, user, target, move, mults, power, type)
   end
 
   def self.triggerCriticalCalcFromUser(item, user, target, crit_stage)
@@ -724,63 +724,63 @@ Battle::ItemEffects::AccuracyCalcFromTarget.copy(:BRIGHTPOWDER, :LAXINCENSE)
 #===============================================================================
 
 Battle::ItemEffects::DamageCalcFromUser.add(:ADAMANTORB,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     if user.isSpecies?(:DIALGA) && [:DRAGON, :STEEL].include?(type)
-      mults[:base_damage_multiplier] *= 1.2
+      mults[:power_multiplier] *= 1.2
     end
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:BLACKBELT,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :FIGHTING
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :FIGHTING
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:BLACKBELT, :FISTPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:BLACKGLASSES,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :DARK
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :DARK
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:BLACKGLASSES, :DREADPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:BUGGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:BUG, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:CHARCOAL,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :FIRE
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :FIRE
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:CHARCOAL, :FLAMEPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:CHOICEBAND,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.5 if move.physicalMove?
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.5 if move.physicalMove?
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:CHOICESPECS,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.5 if move.specialMove?
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.5 if move.specialMove?
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:DARKGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:DARK, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:DEEPSEATOOTH,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     if user.isSpecies?(:CLAMPERL) && move.specialMove?
       mults[:attack_multiplier] *= 2
     end
@@ -788,27 +788,27 @@ Battle::ItemEffects::DamageCalcFromUser.add(:DEEPSEATOOTH,
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:DRAGONFANG,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :DRAGON
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :DRAGON
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:DRAGONFANG, :DRACOPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:DRAGONGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:DRAGON, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:ELECTRICGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:ELECTRIC, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:EXPERTBELT,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     if Effectiveness.super_effective?(target.damageState.typeMod)
       mults[:final_damage_multiplier] *= 1.2
     end
@@ -816,71 +816,71 @@ Battle::ItemEffects::DamageCalcFromUser.add(:EXPERTBELT,
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:FAIRYGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:FAIRY, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:FIGHTINGGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:FIGHTING, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:FIREGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:FIRE, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:FLYINGGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:FLYING, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:GHOSTGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:GHOST, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:GRASSGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:GRASS, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:GRISEOUSORB,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     if user.isSpecies?(:GIRATINA) && [:DRAGON, :GHOST].include?(type)
-      mults[:base_damage_multiplier] *= 1.2
+      mults[:power_multiplier] *= 1.2
     end
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:GROUNDGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:GROUND, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:HARDSTONE,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :ROCK
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :ROCK
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:HARDSTONE, :STONEPLATE, :ROCKINCENSE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:ICEGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:ICE, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:LIFEORB,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     if !move.is_a?(Battle::Move::Confusion)
       mults[:final_damage_multiplier] *= 1.3
     end
@@ -888,142 +888,142 @@ Battle::ItemEffects::DamageCalcFromUser.add(:LIFEORB,
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:LIGHTBALL,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 2 if user.isSpecies?(:PIKACHU)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:LUSTROUSORB,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     if user.isSpecies?(:PALKIA) && [:DRAGON, :WATER].include?(type)
-      mults[:base_damage_multiplier] *= 1.2
+      mults[:power_multiplier] *= 1.2
     end
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:MAGNET,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :ELECTRIC
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :ELECTRIC
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:MAGNET, :ZAPPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:METALCOAT,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :STEEL
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :STEEL
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:METALCOAT, :IRONPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:METRONOME,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     met = 1 + (0.2 * [user.effects[PBEffects::Metronome], 5].min)
     mults[:final_damage_multiplier] *= met
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:MIRACLESEED,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :GRASS
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :GRASS
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:MIRACLESEED, :MEADOWPLATE, :ROSEINCENSE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:MUSCLEBAND,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.1 if move.physicalMove?
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.1 if move.physicalMove?
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:MYSTICWATER,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :WATER
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :WATER
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:MYSTICWATER, :SPLASHPLATE, :SEAINCENSE, :WAVEINCENSE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:NEVERMELTICE,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :ICE
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :ICE
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:NEVERMELTICE, :ICICLEPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:NORMALGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:NORMAL, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:PIXIEPLATE,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :FAIRY
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :FAIRY
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:POISONBARB,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :POISON
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :POISON
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:POISONBARB, :TOXICPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:POISONGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:POISON, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:PSYCHICGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:PSYCHIC, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:ROCKGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:ROCK, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:SHARPBEAK,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :FLYING
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :FLYING
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:SHARPBEAK, :SKYPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:SILKSCARF,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :NORMAL
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :NORMAL
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:SILVERPOWDER,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :BUG
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :BUG
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:SILVERPOWDER, :INSECTPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:SOFTSAND,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :GROUND
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :GROUND
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:SOFTSAND, :EARTHPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:SOULDEW,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     next if !user.isSpecies?(:LATIAS) && !user.isSpecies?(:LATIOS)
     if Settings::SOUL_DEW_POWERS_UP_TYPES
       mults[:final_damage_multiplier] *= 1.2 if [:DRAGON, :PSYCHIC].include?(type)
@@ -1034,21 +1034,21 @@ Battle::ItemEffects::DamageCalcFromUser.add(:SOULDEW,
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:SPELLTAG,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :GHOST
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :GHOST
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:SPELLTAG, :SPOOKYPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:STEELGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:STEEL, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:THICKCLUB,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     if (user.isSpecies?(:CUBONE) || user.isSpecies?(:MAROWAK)) && move.physicalMove?
       mults[:attack_multiplier] *= 2
     end
@@ -1056,22 +1056,22 @@ Battle::ItemEffects::DamageCalcFromUser.add(:THICKCLUB,
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:TWISTEDSPOON,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if type == :PSYCHIC
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if type == :PSYCHIC
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.copy(:TWISTEDSPOON, :MINDPLATE, :ODDINCENSE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:WATERGEM,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:WATER, move, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromUser.add(:WISEGLASSES,
-  proc { |item, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.1 if move.specialMove?
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.1 if move.specialMove?
   }
 )
 
@@ -1083,49 +1083,49 @@ Battle::ItemEffects::DamageCalcFromUser.add(:WISEGLASSES,
 #===============================================================================
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:ASSAULTVEST,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     mults[:defense_multiplier] *= 1.5 if move.specialMove?
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:BABIRIBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:STEEL, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:CHARTIBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:ROCK, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:CHILANBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:NORMAL, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:CHOPLEBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:FIGHTING, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:COBABERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:FLYING, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:COLBURBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:DARK, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:DEEPSEASCALE,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     if target.isSpecies?(:CLAMPERL) && move.specialMove?
       mults[:defense_multiplier] *= 2
     end
@@ -1133,7 +1133,7 @@ Battle::ItemEffects::DamageCalcFromTarget.add(:DEEPSEASCALE,
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:EVIOLITE,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     # NOTE: Eviolite cares about whether the Pokémon itself can evolve, which
     #       means it also cares about the Pokémon's form. Some forms cannot
     #       evolve even if the species generally can, and such forms are not
@@ -1145,25 +1145,25 @@ Battle::ItemEffects::DamageCalcFromTarget.add(:EVIOLITE,
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:HABANBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:DRAGON, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:KASIBBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:GHOST, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:KEBIABERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:POISON, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:METALPOWDER,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     if target.isSpecies?(:DITTO) && !target.effects[PBEffects::Transform]
       mults[:defense_multiplier] *= 1.5
     end
@@ -1171,43 +1171,43 @@ Battle::ItemEffects::DamageCalcFromTarget.add(:METALPOWDER,
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:OCCABERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:FIRE, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:PASSHOBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:WATER, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:PAYAPABERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:PSYCHIC, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:RINDOBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:GRASS, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:ROSELIBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:FAIRY, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:SHUCABERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:GROUND, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:SOULDEW,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     next if Settings::SOUL_DEW_POWERS_UP_TYPES
     next if !target.isSpecies?(:LATIAS) && !target.isSpecies?(:LATIOS)
     if move.specialMove? && !user.battle.rules["souldewclause"]
@@ -1217,19 +1217,19 @@ Battle::ItemEffects::DamageCalcFromTarget.add(:SOULDEW,
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:TANGABERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:BUG, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:WACANBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:ELECTRIC, type, mults)
   }
 )
 
 Battle::ItemEffects::DamageCalcFromTarget.add(:YACHEBERRY,
-  proc { |item, user, target, move, mults, baseDmg, type|
+  proc { |item, user, target, move, mults, power, type|
     target.pbMoveTypeWeakeningBerry(:ICE, type, mults)
   }
 )

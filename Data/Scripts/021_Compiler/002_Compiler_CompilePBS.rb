@@ -215,10 +215,10 @@ module Compiler
   end
 
   def validate_compiled_move(hash)
-    if (hash[:category] || 2) == 2 && (hash[:base_damage] || 0) != 0
+    if (hash[:category] || 2) == 2 && (hash[:power] || 0) != 0
       raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}",
                   hash[:real_name], FileLineData.linereport)
-    elsif (hash[:category] || 2) != 2 && (hash[:base_damage] || 0) == 0
+    elsif (hash[:category] || 2) != 2 && (hash[:power] || 0) == 0
       print _INTL("Warning: Move {1} is defined as Physical or Special but has a base damage of 0. Changing it to a Status move.\r\n{2}",
                   hash[:real_name], FileLineData.linereport)
       hash[:category] = 2
