@@ -702,6 +702,7 @@ module MessageTypes
   STORAGE_CREATOR_NAME         = 27
   ITEM_PORTION_NAMES           = 28
   ITEM_PORTION_NAME_PLURALS    = 29
+  POKEMON_NICKNAMES            = 30
   @@messages = Translation.new
 
   def self.load_default_messages

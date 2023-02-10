@@ -587,7 +587,8 @@ EventHandlers.add(:on_frame_update, :phone_call_counter,
 #===============================================================================
 # Deprecated.
 #===============================================================================
-# Called by events.
+# Called by events. Make your event look like this instead:
+#
 # @>Conditional Branch: Phone.can_add?(trainer_type, name, start_version)
 #   @>Text: Let me register you.
 #   @>Show Choices: Yes, No
@@ -602,6 +603,7 @@ EventHandlers.add(:on_frame_update, :phone_call_counter,
 #    : Branch End
 #  : Branch End
 # @>
+#
 # @deprecated This method is slated to be removed in v22.
 def pbPhoneRegisterBattle(message, event, trainer_type, name, versions_count)
   Deprecation.warn_method("pbPhoneRegisterBattle", "v22", "several scripts and event commands; see def pbPhoneRegisterBattle")

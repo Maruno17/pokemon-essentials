@@ -2,6 +2,9 @@ module Compiler
   module_function
 
   def compile_PBS_file_generic(game_data, *paths)
+    if game_data.const_defined?(:OPTIONAL) && game_data::OPTIONAL
+      return if paths.none? { |p| safeExists?(p) }
+    end
     game_data::DATA.clear
     schema = game_data.schema
     # Read from PBS file(s)
@@ -212,12 +215,12 @@ module Compiler
   end
 
   def validate_compiled_move(hash)
-    if (hash[:category] || 2) == 2 && (hash[:base_damage] || 0) != 0
+    if (hash[:category] || 2) == 2 && (hash[:power] || 0) != 0
       raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}",
-                  hash[:name], FileLineData.linereport)
-    elsif (hash[:category] || 2) != 2 && (hash[:base_damage] || 0) == 0
+                  hash[:real_name], FileLineData.linereport)
+    elsif (hash[:category] || 2) != 2 && (hash[:power] || 0) == 0
       print _INTL("Warning: Move {1} is defined as Physical or Special but has a base damage of 0. Changing it to a Status move.\r\n{2}",
-                  hash[:name], FileLineData.linereport)
+                  hash[:real_name], FileLineData.linereport)
       hash[:category] = 2
     end
   end
@@ -542,7 +545,6 @@ module Compiler
   # Compile Shadow Pokémon data
   #=============================================================================
   def compile_shadow_pokemon(*paths)
-    return if !safeExists?("PBS/shadow_pokemon.txt")
     compile_PBS_file_generic(GameData::ShadowPokemon, *paths) do |final_validate, hash|
       (final_validate) ? validate_all_compiled_shadow_pokemon : validate_compiled_shadow_pokemon(hash)
     end
@@ -847,9 +849,9 @@ module Compiler
                     pkmn[:level], max_level, FileLineData.linereport)
       end
       # Ensure valid name length
-      if pkmn[:name] && pkmn[:name].length > Pokemon::MAX_NAME_SIZE
+      if pkmn[:real_name] && pkmn[:real_name].length > Pokemon::MAX_NAME_SIZE
         raise _INTL("Invalid Pokémon nickname: {1} (must be 1-{2} characters).\r\n{3}",
-                    pkmn[:name], Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
+                    pkmn[:real_name], Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
       end
       # Ensure no duplicate moves
       pkmn[:moves].uniq! if pkmn[:moves]
@@ -904,12 +906,17 @@ module Compiler
     # Get trainer names and lose texts for translating
     trainer_names = []
     lose_texts = []
+    pokemon_nicknames = []
     GameData::Trainer.each do |trainer|
       trainer_names.push(trainer.real_name)
       lose_texts.push(trainer.real_lose_text)
+      trainer.pokemon.each do |pkmn|
+        pokemon_nicknames.push(pkmn[:real_name]) if !nil_or_empty?(pkmn[:real_name])
+      end
     end
     MessageTypes.setMessagesAsHash(MessageTypes::TRAINER_NAMES, trainer_names)
     MessageTypes.setMessagesAsHash(MessageTypes::TRAINER_SPEECHES_LOSE, lose_texts)
+    MessageTypes.setMessagesAsHash(MessageTypes::POKEMON_NICKNAMES, pokemon_nicknames)
   end
 
   #=============================================================================

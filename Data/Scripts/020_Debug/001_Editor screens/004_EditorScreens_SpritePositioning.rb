@@ -213,6 +213,7 @@ class SpritePositioner
         break
       elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
+        @metricsChanged = true if metrics_data.shadow_size != oldval
         break
       end
     end

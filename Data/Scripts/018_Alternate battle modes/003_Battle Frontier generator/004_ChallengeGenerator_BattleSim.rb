@@ -309,7 +309,7 @@ end
 #===============================================================================
 def pbDecideWinnerEffectiveness(move, otype1, otype2, ability, scores)
   data = GameData::Move.get(move)
-  return 0 if data.base_damage == 0
+  return 0 if data.power == 0
   atype = data.type
   typemod = 1.0
   if ability != :LEVITATE || data.type != :GROUND

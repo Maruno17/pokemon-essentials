@@ -185,24 +185,24 @@ module Battle::AbilityEffects
 
   #=============================================================================
 
-  def self.triggerDamageCalcFromUser(ability, user, target, move, mults, base_damage, type)
-    DamageCalcFromUser.trigger(ability, user, target, move, mults, base_damage, type)
+  def self.triggerDamageCalcFromUser(ability, user, target, move, mults, power, type)
+    DamageCalcFromUser.trigger(ability, user, target, move, mults, power, type)
   end
 
-  def self.triggerDamageCalcFromAlly(ability, user, target, move, mults, base_damage, type)
-    DamageCalcFromAlly.trigger(ability, user, target, move, mults, base_damage, type)
+  def self.triggerDamageCalcFromAlly(ability, user, target, move, mults, power, type)
+    DamageCalcFromAlly.trigger(ability, user, target, move, mults, power, type)
   end
 
-  def self.triggerDamageCalcFromTarget(ability, user, target, move, mults, base_damage, type)
-    DamageCalcFromTarget.trigger(ability, user, target, move, mults, base_damage, type)
+  def self.triggerDamageCalcFromTarget(ability, user, target, move, mults, power, type)
+    DamageCalcFromTarget.trigger(ability, user, target, move, mults, power, type)
   end
 
-  def self.triggerDamageCalcFromTargetNonIgnorable(ability, user, target, move, mults, base_damage, type)
-    DamageCalcFromTargetNonIgnorable.trigger(ability, user, target, move, mults, base_damage, type)
+  def self.triggerDamageCalcFromTargetNonIgnorable(ability, user, target, move, mults, power, type)
+    DamageCalcFromTargetNonIgnorable.trigger(ability, user, target, move, mults, power, type)
   end
 
-  def self.triggerDamageCalcFromTargetAlly(ability, user, target, move, mults, base_damage, type)
-    DamageCalcFromTargetAlly.trigger(ability, user, target, move, mults, base_damage, type)
+  def self.triggerDamageCalcFromTargetAlly(ability, user, target, move, mults, power, type)
+    DamageCalcFromTargetAlly.trigger(ability, user, target, move, mults, power, type)
   end
 
   def self.triggerCriticalCalcFromUser(ability, user, target, crit_stage)
@@ -1195,15 +1195,15 @@ Battle::AbilityEffects::AccuracyCalcFromTarget.add(:WONDERSKIN,
 #===============================================================================
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:AERILATE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if move.powerBoost
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if move.powerBoost
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.copy(:AERILATE, :PIXILATE, :REFRIGERATE, :GALVANIZE, :NORMALIZE)
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:ANALYTIC,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     # NOTE: In the official games, if another battler faints earlier in the
     #       round but it would have moved after the user, then Analytic does not
     #       power up the move. However, this makes the determination so much
@@ -1213,13 +1213,13 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:ANALYTIC,
     #       "power up the move if all other battlers on the field right now have
     #       already moved".
     if move.pbMoveFailedLastInRound?(user, false)
-      mults[:base_damage_multiplier] *= 1.3
+      mults[:power_multiplier] *= 1.3
     end
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:BLAZE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.hp <= user.totalhp / 3 && type == :FIRE
       mults[:attack_multiplier] *= 1.5
     end
@@ -1227,25 +1227,25 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:BLAZE,
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:DEFEATIST,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] /= 2 if user.hp <= user.totalhp / 2
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:DRAGONSMAW,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 1.5 if type == :DRAGON
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:FLAREBOOST,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.5 if user.burned? && move.specialMove?
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.5 if user.burned? && move.specialMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:FLASHFIRE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.effects[PBEffects::FlashFire] && type == :FIRE
       mults[:attack_multiplier] *= 1.5
     end
@@ -1253,7 +1253,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:FLASHFIRE,
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:FLOWERGIFT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if move.physicalMove? && [:Sun, :HarshSun].include?(user.effectiveWeather)
       mults[:attack_multiplier] *= 1.5
     end
@@ -1261,13 +1261,13 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:FLOWERGIFT,
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:GORILLATACTICS,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 1.5 if move.physicalMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:GUTS,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.pbHasAnyStatus? && move.physicalMove?
       mults[:attack_multiplier] *= 1.5
     end
@@ -1275,7 +1275,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:GUTS,
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:HUGEPOWER,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 2 if move.physicalMove?
   }
 )
@@ -1283,25 +1283,25 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:HUGEPOWER,
 Battle::AbilityEffects::DamageCalcFromUser.copy(:HUGEPOWER, :PUREPOWER)
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:HUSTLE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 1.5 if move.physicalMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:IRONFIST,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if move.punchingMove?
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if move.punchingMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:MEGALAUNCHER,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.5 if move.pulseMove?
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.5 if move.pulseMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:MINUS,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     next if !move.specialMove?
     if user.allAllies.any? { |b| b.hasActiveAbility?([:MINUS, :PLUS]) }
       mults[:attack_multiplier] *= 1.5
@@ -1312,7 +1312,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:MINUS,
 Battle::AbilityEffects::DamageCalcFromUser.copy(:MINUS, :PLUS)
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:NEUROFORCE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if Effectiveness.super_effective?(target.damageState.typeMod)
       mults[:final_damage_multiplier] *= 1.25
     end
@@ -1320,7 +1320,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:NEUROFORCE,
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:OVERGROW,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.hp <= user.totalhp / 3 && type == :GRASS
       mults[:attack_multiplier] *= 1.5
     end
@@ -1328,52 +1328,52 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:OVERGROW,
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:PUNKROCK,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 1.3 if move.soundMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:RECKLESS,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.2 if move.recoilMove?
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if move.recoilMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:RIVALRY,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.gender != 2 && target.gender != 2
       if user.gender == target.gender
-        mults[:base_damage_multiplier] *= 1.25
+        mults[:power_multiplier] *= 1.25
       else
-        mults[:base_damage_multiplier] *= 0.75
+        mults[:power_multiplier] *= 0.75
       end
     end
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:SANDFORCE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.effectiveWeather == :Sandstorm &&
        [:ROCK, :GROUND, :STEEL].include?(type)
-      mults[:base_damage_multiplier] *= 1.3
+      mults[:power_multiplier] *= 1.3
     end
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:SHEERFORCE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.3 if move.addlEffect > 0
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.3 if move.addlEffect > 0
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:SLOWSTART,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] /= 2 if user.effects[PBEffects::SlowStart] > 0 && move.physicalMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:SOLARPOWER,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if move.specialMove? && [:Sun, :HarshSun].include?(user.effectiveWeather)
       mults[:attack_multiplier] *= 1.5
     end
@@ -1381,37 +1381,37 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:SOLARPOWER,
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:SNIPER,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] *= 1.5 if target.damageState.critical
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:STAKEOUT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 2 if target.battle.choices[target.index][0] == :SwitchOut
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:STEELWORKER,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 1.5 if type == :STEEL
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:STEELYSPIRIT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] *= 1.5 if type == :STEEL
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:STRONGJAW,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.5 if move.bitingMove?
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.5 if move.bitingMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:SWARM,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.hp <= user.totalhp / 3 && type == :BUG
       mults[:attack_multiplier] *= 1.5
     end
@@ -1419,22 +1419,22 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:SWARM,
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:TECHNICIAN,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.index != target.index && move && move.id != :STRUGGLE &&
-       baseDmg * mults[:base_damage_multiplier] <= 60
-      mults[:base_damage_multiplier] *= 1.5
+       power * mults[:power_multiplier] <= 60
+      mults[:power_multiplier] *= 1.5
     end
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:TINTEDLENS,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] *= 2 if Effectiveness.resistant?(target.damageState.typeMod)
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:TORRENT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.hp <= user.totalhp / 3 && type == :WATER
       mults[:attack_multiplier] *= 1.5
     end
@@ -1442,27 +1442,27 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:TORRENT,
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:TOUGHCLAWS,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 4 / 3.0 if move.contactMove?
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 4 / 3.0 if move.contactMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:TOXICBOOST,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if user.poisoned? && move.physicalMove?
-      mults[:base_damage_multiplier] *= 1.5
+      mults[:power_multiplier] *= 1.5
     end
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:TRANSISTOR,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 1.5 if type == :ELECTRIC
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:WATERBUBBLE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 2 if type == :WATER
   }
 )
@@ -1472,14 +1472,14 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:WATERBUBBLE,
 #===============================================================================
 
 Battle::AbilityEffects::DamageCalcFromAlly.add(:BATTERY,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     next if !move.specialMove?
     mults[:final_damage_multiplier] *= 1.3
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromAlly.add(:FLOWERGIFT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if move.physicalMove? && [:Sun, :HarshSun].include?(user.effectiveWeather)
       mults[:attack_multiplier] *= 1.5
     end
@@ -1487,13 +1487,13 @@ Battle::AbilityEffects::DamageCalcFromAlly.add(:FLOWERGIFT,
 )
 
 Battle::AbilityEffects::DamageCalcFromAlly.add(:POWERSPOT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] *= 1.3
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromAlly.add(:STEELYSPIRIT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] *= 1.5 if type == :STEEL
   }
 )
@@ -1503,13 +1503,13 @@ Battle::AbilityEffects::DamageCalcFromAlly.add(:STEELYSPIRIT,
 #===============================================================================
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:DRYSKIN,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] *= 1.25 if type == :FIRE
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.25 if type == :FIRE
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:FILTER,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if Effectiveness.super_effective?(target.damageState.typeMod)
       mults[:final_damage_multiplier] *= 0.75
     end
@@ -1519,7 +1519,7 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:FILTER,
 Battle::AbilityEffects::DamageCalcFromTarget.copy(:FILTER, :SOLIDROCK)
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:FLOWERGIFT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if move.specialMove? && [:Sun, :HarshSun].include?(target.effectiveWeather)
       mults[:defense_multiplier] *= 1.5
     end
@@ -1527,39 +1527,39 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:FLOWERGIFT,
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:FLUFFY,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] *= 2 if move.calcType == :FIRE
     mults[:final_damage_multiplier] /= 2 if move.pbContactMove?(user)
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:FURCOAT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:defense_multiplier] *= 2 if move.physicalMove? ||
                                        move.function == "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:GRASSPELT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:defense_multiplier] *= 1.5 if user.battle.field.terrain == :Grassy
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:HEATPROOF,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] /= 2 if type == :FIRE
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] /= 2 if type == :FIRE
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:ICESCALES,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] /= 2 if move.specialMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:MARVELSCALE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if target.pbHasAnyStatus? && move.physicalMove?
       mults[:defense_multiplier] *= 1.5
     end
@@ -1567,25 +1567,25 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:MARVELSCALE,
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:MULTISCALE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] /= 2 if target.hp == target.totalhp
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:PUNKROCK,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] /= 2 if move.soundMove?
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:THICKFAT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
-    mults[:base_damage_multiplier] /= 2 if [:FIRE, :ICE].include?(type)
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] /= 2 if [:FIRE, :ICE].include?(type)
   }
 )
 
 Battle::AbilityEffects::DamageCalcFromTarget.add(:WATERBUBBLE,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] /= 2 if type == :FIRE
   }
 )
@@ -1595,7 +1595,7 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:WATERBUBBLE,
 #===============================================================================
 
 Battle::AbilityEffects::DamageCalcFromTargetNonIgnorable.add(:PRISMARMOR,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if Effectiveness.super_effective?(target.damageState.typeMod)
       mults[:final_damage_multiplier] *= 0.75
     end
@@ -1603,7 +1603,7 @@ Battle::AbilityEffects::DamageCalcFromTargetNonIgnorable.add(:PRISMARMOR,
 )
 
 Battle::AbilityEffects::DamageCalcFromTargetNonIgnorable.add(:SHADOWSHIELD,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] /= 2 if target.hp == target.totalhp
   }
 )
@@ -1613,7 +1613,7 @@ Battle::AbilityEffects::DamageCalcFromTargetNonIgnorable.add(:SHADOWSHIELD,
 #===============================================================================
 
 Battle::AbilityEffects::DamageCalcFromTargetAlly.add(:FLOWERGIFT,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     if move.specialMove? && [:Sun, :HarshSun].include?(target.effectiveWeather)
       mults[:defense_multiplier] *= 1.5
     end
@@ -1621,7 +1621,7 @@ Battle::AbilityEffects::DamageCalcFromTargetAlly.add(:FLOWERGIFT,
 )
 
 Battle::AbilityEffects::DamageCalcFromTargetAlly.add(:FRIENDGUARD,
-  proc { |ability, user, target, move, mults, baseDmg, type|
+  proc { |ability, user, target, move, mults, power, type|
     mults[:final_damage_multiplier] *= 0.75
   }
 )
@@ -2739,7 +2739,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:FOREWARN,
     forewarnMoves = []
     battle.allOtherSideBattlers(battler.index).each do |b|
       b.eachMove do |m|
-        power = m.baseDamage
+        power = m.power
         power = 160 if ["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
         power = 150 if ["PowerHigherWithUserHP"].include?(m.function)    # Eruption
         # Counter, Mirror Coat, Metal Burst

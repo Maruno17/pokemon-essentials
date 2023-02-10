@@ -9,6 +9,7 @@ module GameData
     DATA = {}
     DATA_FILENAME = "shadow_pokemon.dat"
     PBS_BASE_FILENAME = "shadow_pokemon"
+    OPTIONAL = true
 
     SCHEMA = {
       "SectionName" => [:id,         "e", :Species],
@@ -21,7 +22,7 @@ module GameData
     extend ClassMethodsSymbols
     include InstanceMethods
 
-    alias __orig__load load unless private_method_defined?(:__orig__load)
+    singleton_class.alias_method(:__orig__load, :load) unless singleton_class.method_defined?(:__orig__load)
     def self.load
       __orig__load if safeExists?("Data/#{self::DATA_FILENAME}")
     end

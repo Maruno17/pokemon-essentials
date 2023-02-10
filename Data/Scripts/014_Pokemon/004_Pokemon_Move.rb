@@ -48,7 +48,7 @@ class Pokemon
     alias totalpp total_pp
 
     def function_code; return GameData::Move.get(@id).function_code; end
-    def base_damage;   return GameData::Move.get(@id).base_damage;   end
+    def power;         return GameData::Move.get(@id).power;         end
     def type;          return GameData::Move.get(@id).type;          end
     def category;      return GameData::Move.get(@id).category;      end
     def accuracy;      return GameData::Move.get(@id).accuracy;      end
@@ -59,6 +59,12 @@ class Pokemon
     def name;          return GameData::Move.get(@id).name;          end
     def description;   return GameData::Move.get(@id).description;   end
     def hidden_move?;  return GameData::Move.get(@id).hidden_move?;  end
+
+    # @deprecated This method is slated to be removed in v22.
+    def base_damage
+      Deprecation.warn_method("base_damage", "v22", "power")
+      return @power
+    end
 
     def display_type(pkmn);     return GameData::Move.get(@id).display_type(pkmn, self);     end
     def display_category(pkmn); return GameData::Move.get(@id).display_category(pkmn, self); end

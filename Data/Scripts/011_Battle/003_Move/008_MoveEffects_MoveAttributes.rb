@@ -331,7 +331,7 @@ class Battle::Move::PowerHigherWithConsecutiveUse < Battle::Move
     oldVal = user.effects[PBEffects::FuryCutter]
     super
     maxMult = 1
-    while (@baseDamage << (maxMult - 1)) < 160
+    while (@power << (maxMult - 1)) < 160
       maxMult += 1   # 1-4 for base damage of 20, 1-3 for base damage of 40
     end
     user.effects[PBEffects::FuryCutter] = (oldVal >= maxMult) ? maxMult : oldVal + 1

@@ -248,7 +248,7 @@ class Battle::Move
     # Calculate whether this hit deals critical damage
     target.damageState.critical = pbIsCritical?(user, target)
     # Calcuate base power of move
-    baseDmg = pbBaseDamage(@baseDamage, user, target)
+    baseDmg = pbBaseDamage(@power, user, target)
     # Calculate user's attack stat
     atk, atkStage = pbGetAttackStats(user, target)
     if !target.hasActiveAbility?(:UNAWARE) || @battle.moldBreaker
@@ -263,14 +263,14 @@ class Battle::Move
     end
     # Calculate all multiplier effects
     multipliers = {
-      :base_damage_multiplier  => 1.0,
+      :power_multiplier        => 1.0,
       :attack_multiplier       => 1.0,
       :defense_multiplier      => 1.0,
       :final_damage_multiplier => 1.0
     }
     pbCalcDamageMultipliers(user, target, numTargets, type, baseDmg, multipliers)
     # Main damage calculation
-    baseDmg = [(baseDmg * multipliers[:base_damage_multiplier]).round, 1].max
+    baseDmg = [(baseDmg * multipliers[:power_multiplier]).round, 1].max
     atk     = [(atk     * multipliers[:attack_multiplier]).round, 1].max
     defense = [(defense * multipliers[:defense_multiplier]).round, 1].max
     damage  = ((((2.0 * user.level / 5) + 2).floor * baseDmg * atk / defense).floor / 50).floor + 2
@@ -283,9 +283,9 @@ class Battle::Move
     if (@battle.pbCheckGlobalAbility(:DARKAURA) && type == :DARK) ||
        (@battle.pbCheckGlobalAbility(:FAIRYAURA) && type == :FAIRY)
       if @battle.pbCheckGlobalAbility(:AURABREAK)
-        multipliers[:base_damage_multiplier] *= 2 / 3.0
+        multipliers[:power_multiplier] *= 2 / 3.0
       else
-        multipliers[:base_damage_multiplier] *= 4 / 3.0
+        multipliers[:power_multiplier] *= 4 / 3.0
       end
     end
     # Ability effects that alter damage
@@ -336,47 +336,47 @@ class Battle::Move
     end
     # Parental Bond's second attack
     if user.effects[PBEffects::ParentalBond] == 1
-      multipliers[:base_damage_multiplier] /= (Settings::MECHANICS_GENERATION >= 7) ? 4 : 2
+      multipliers[:power_multiplier] /= (Settings::MECHANICS_GENERATION >= 7) ? 4 : 2
     end
     # Other
     if user.effects[PBEffects::MeFirst]
-      multipliers[:base_damage_multiplier] *= 1.5
+      multipliers[:power_multiplier] *= 1.5
     end
     if user.effects[PBEffects::HelpingHand] && !self.is_a?(Battle::Move::Confusion)
-      multipliers[:base_damage_multiplier] *= 1.5
+      multipliers[:power_multiplier] *= 1.5
     end
     if user.effects[PBEffects::Charge] > 0 && type == :ELECTRIC
-      multipliers[:base_damage_multiplier] *= 2
+      multipliers[:power_multiplier] *= 2
     end
     # Mud Sport
     if type == :ELECTRIC
       if @battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
-        multipliers[:base_damage_multiplier] /= 3
+        multipliers[:power_multiplier] /= 3
       end
       if @battle.field.effects[PBEffects::MudSportField] > 0
-        multipliers[:base_damage_multiplier] /= 3
+        multipliers[:power_multiplier] /= 3
       end
     end
     # Water Sport
     if type == :FIRE
       if @battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
-        multipliers[:base_damage_multiplier] /= 3
+        multipliers[:power_multiplier] /= 3
       end
       if @battle.field.effects[PBEffects::WaterSportField] > 0
-        multipliers[:base_damage_multiplier] /= 3
+        multipliers[:power_multiplier] /= 3
       end
     end
     # Terrain moves
     terrain_multiplier = (Settings::MECHANICS_GENERATION >= 8) ? 1.3 : 1.5
     case @battle.field.terrain
     when :Electric
-      multipliers[:base_damage_multiplier] *= terrain_multiplier if type == :ELECTRIC && user.affectedByTerrain?
+      multipliers[:power_multiplier] *= terrain_multiplier if type == :ELECTRIC && user.affectedByTerrain?
     when :Grassy
-      multipliers[:base_damage_multiplier] *= terrain_multiplier if type == :GRASS && user.affectedByTerrain?
+      multipliers[:power_multiplier] *= terrain_multiplier if type == :GRASS && user.affectedByTerrain?
     when :Psychic
-      multipliers[:base_damage_multiplier] *= terrain_multiplier if type == :PSYCHIC && user.affectedByTerrain?
+      multipliers[:power_multiplier] *= terrain_multiplier if type == :PSYCHIC && user.affectedByTerrain?
     when :Misty
-      multipliers[:base_damage_multiplier] /= 2 if type == :DRAGON && target.affectedByTerrain?
+      multipliers[:power_multiplier] /= 2 if type == :DRAGON && target.affectedByTerrain?
     end
     # Badge multipliers
     if @battle.internalBattle
@@ -476,7 +476,7 @@ class Battle::Move
       multipliers[:final_damage_multiplier] *= 2
     end
     # Move-specific base damage modifiers
-    multipliers[:base_damage_multiplier] = pbBaseDamageMultiplier(multipliers[:base_damage_multiplier], user, target)
+    multipliers[:power_multiplier] = pbBaseDamageMultiplier(multipliers[:power_multiplier], user, target)
     # Move-specific final damage modifiers
     multipliers[:final_damage_multiplier] = pbModifyDamage(multipliers[:final_damage_multiplier], user, target)
   end

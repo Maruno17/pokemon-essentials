@@ -147,7 +147,8 @@ SaveData.register_conversion(:v20_refactor_follower_data) do
   display_title "Updating follower data format"
   to_value :global_metadata do |global|
     # NOTE: dependentEvents is still defined in class PokemonGlobalMetadata just
-    #       for the sake of this conversion. It will be removed in future.
+    #       for the sake of this conversion. It is deprecated and will be
+    #       removed in v22.
     if global.dependentEvents && global.dependentEvents.length > 0
       global.followers = []
       global.dependentEvents.each do |follower|
