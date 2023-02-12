@@ -784,7 +784,7 @@ def pbEndSurf(_xOffset, _yOffset)
   return false if !$PokemonGlobal.surfing
   x = $game_player.x
   y = $game_player.y
-  if $game_map.terrain_tag(x, y).can_surf && !$game_player.pbFacingTerrainTag.can_surf
+  if $game_map.terrain_tag(x, y).can_surf && !$game_player.pbFacingTerrainTag.can_surf || !$game_map.terrain_tag(x, y).can_surf
     $PokemonTemp.surfJump = [x, y]
     if pbJumpToward(1, false, true)
       $game_map.autoplayAsCue
