@@ -173,7 +173,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:flinching_effects,
 #===============================================================================
 # TODO: Don't prefer contact move if making contact with the target could
 #       trigger an effect that's bad for the user (Static, etc.).
-# => Also check if target has previously used Spiky Shield.King's Shield/
+# => Also check if target has previously used Spiky Shield/King's Shield/
 #    Baneful Bunker, and don't prefer move if so
 
 #===============================================================================

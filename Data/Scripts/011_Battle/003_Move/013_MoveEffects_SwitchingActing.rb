@@ -182,7 +182,7 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
     if @battle.trainerBattle?
       canSwitch = false
       @battle.eachInTeamFromBattlerIndex(target.index) do |_pkmn, i|
-        next if !@battle.pbCanSwitchLax?(target.index, i)
+        next if !@battle.pbCanSwitchIn?(target.index, i)
         canSwitch = true
         break
       end

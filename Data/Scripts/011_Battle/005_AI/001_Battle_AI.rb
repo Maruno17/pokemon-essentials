@@ -51,13 +51,32 @@ class Battle::AI
   # Choose an action.
   def pbDefaultChooseEnemyCommand(idxBattler)
     set_up(idxBattler)
-    return if pbEnemyShouldWithdraw?
-    return if pbEnemyShouldUseItem?
-    return if @battle.pbAutoFightMenu(idxBattler)
+    ret = false
+    PBDebug.logonerr { ret = pbChooseToSwitchOut }
+    if ret
+      PBDebug.log("")
+      return
+    end
+    if pbEnemyShouldUseItem?
+      PBDebug.log("")
+      return
+    end
+    if @battle.pbAutoFightMenu(idxBattler)
+      PBDebug.log("")
+      return
+    end
     @battle.pbRegisterMegaEvolution(idxBattler) if pbEnemyShouldMegaEvolve?
     choices = pbGetMoveScores
     pbChooseMove(choices)
     PBDebug.log("")
+  end
+
+  # Choose a replacement Pokémon (called directly from @battle, not part of
+  # action choosing). Must return the party index of a replacement Pokémon if
+  # possible.
+  def pbDefaultChooseNewEnemy(idxBattler)
+    set_up(idxBattler)
+    return choose_best_replacement_pokemon(idxBattler, true)
   end
 end
 
@@ -72,12 +91,14 @@ module Battle::AI::Handlers
   MoveBasePower                 = HandlerHash.new
   GeneralMoveScore              = HandlerHash.new
   GeneralMoveAgainstTargetScore = HandlerHash.new
-  # Move type - uses main battle code via rough_type
-  # Move accuracy - uses main battle code via rough_accuracy
-  # Move target
-  # Move additional effect chance
-  # Move unselectable check
-  # Move failure check
+  # TODO: Make HandlerHashes for these?
+  #       Move type - uses main battle code via rough_type
+  #       Move accuracy - uses main battle code via rough_accuracy
+  #       Move target
+  #       Move additional effect chance
+  #       Move unselectable check
+  #       Move failure check
+  ShouldSwitch                  = HandlerHash.new
 
   def self.move_will_fail?(function_code, *args)
     return MoveFailureCheck.trigger(function_code, *args) || false
@@ -116,5 +137,14 @@ module Battle::AI::Handlers
       score = new_score if new_score
     end
     return score
+  end
+
+  def self.should_switch?(*args)
+    ret = false
+    ShouldSwitch.each do |id, switch_proc|
+      ret ||= switch_proc.call(*args)
+      break if ret
+    end
+    return ret
   end
 end

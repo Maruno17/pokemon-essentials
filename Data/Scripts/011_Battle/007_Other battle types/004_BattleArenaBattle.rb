@@ -50,7 +50,7 @@ class BattleArenaBattle < Battle
     @battleAI.battleArena = true
   end
 
-  def pbCanSwitchLax?(idxBattler, _idxParty, partyScene = nil)
+  def pbCanSwitchIn?(idxBattler, _idxParty, partyScene = nil)
     partyScene&.pbDisplay(_INTL("{1} can't be switched out!", @battlers[idxBattler].pbThis))
     return false
   end
@@ -207,12 +207,12 @@ end
 class Battle::AI
   attr_accessor :battleArena
 
-  unless method_defined?(:_battleArena_pbEnemyShouldWithdraw?)
-    alias _battleArena_pbEnemyShouldWithdraw? pbEnemyShouldWithdraw?
+  unless method_defined?(:_battleArena_pbChooseToSwitchOut)
+    alias _battleArena_pbChooseToSwitchOut pbChooseToSwitchOut
   end
 
-  def pbEnemyShouldWithdraw?
-    return _battleArena_pbEnemyShouldWithdraw? if !@battleArena
+  def pbChooseToSwitchOut(force_switch = false)
+    return _battleArena_pbChooseToSwitchOut(force_switch) if !@battleArena
     return false
   end
 end

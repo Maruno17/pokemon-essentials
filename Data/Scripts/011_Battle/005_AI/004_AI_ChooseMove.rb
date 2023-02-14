@@ -313,7 +313,7 @@ class Battle::AI
       end
       if badMoves
         PBDebug.log_ai("#{@user.name} wants to switch due to terrible moves")
-        return if pbEnemyShouldWithdrawEx?(true)
+        return if pbChooseToSwitchOut(true)
         PBDebug.log_ai("#{@user.name} won't switch after all")
       end
     end

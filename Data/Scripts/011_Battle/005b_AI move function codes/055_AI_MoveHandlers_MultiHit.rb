@@ -366,7 +366,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     # Score for being semi-invulnerable underground
-    user.each_foe_battler(user.side) do |b, i|
+    ai.each_foe_battler(user.side) do |b, i|
       if b.check_for_move { |m| m.hitsDiggingTargets? }
         score -= 8
       else
@@ -386,7 +386,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     # Score for being semi-invulnerable underwater
-    user.each_foe_battler(user.side) do |b, i|
+    ai.each_foe_battler(user.side) do |b, i|
       if b.check_for_move { |m| m.hitsDivingTargets? }
         score -= 8
       else
@@ -406,7 +406,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     # Score for being semi-invulnerable in the sky
-    user.each_foe_battler(user.side) do |b, i|
+    ai.each_foe_battler(user.side) do |b, i|
       if b.check_for_move { |m| m.hitsFlyingTargets? }
         score -= 8
       else

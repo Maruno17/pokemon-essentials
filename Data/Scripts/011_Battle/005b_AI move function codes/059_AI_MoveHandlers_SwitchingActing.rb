@@ -116,7 +116,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SwitchOutTargetStatusMo
     if battle.trainerBattle?
       will_fail = true
       battle.eachInTeamFromBattlerIndex(target.index) do |_pkmn, i|
-        next if !battle.pbCanSwitchLax?(target.index, i)
+        next if !battle.pbCanSwitchIn?(target.index, i)
         will_fail = false
         break
       end
@@ -315,8 +315,8 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("TargetActsNext",
-  proc { |score, move, user, ai, battle|
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetActsNext",
+  proc { |score, move, user, target, ai, battle|
     # Useless if the target is a foe
     next Battle::AI::MOVE_USELESS_SCORE if target.opposes?(user)
     # Compare the speeds of all battlers

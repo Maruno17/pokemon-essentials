@@ -14,6 +14,7 @@
 #   ScoreMoves
 #   PreferMultiTargetMoves
 #   ReserveLastPokemon (don't switch it in if possible)
+#   UsePokemonInOrder (uses earliest-listed Pokémon possible)
 #===============================================================================
 class Battle::AI::AITrainer
   attr_reader :side, :trainer_index
@@ -37,7 +38,9 @@ class Battle::AI::AITrainer
       @skill_flags.push("ScoreMoves")
       @skill_flags.push("PreferMultiTargetMoves")
     end
-    if @skill >= 100
+    if !medium_skill?
+      @skill_flags.push("UsePokemonInOrder")
+    elsif best_skill?
       # TODO: Also have flag "DontReserveLastPokemon" which negates this.
       @skill_flags.push("ReserveLastPokemon")
     end
@@ -47,17 +50,14 @@ class Battle::AI::AITrainer
     return @skill_flags.include?(flag)
   end
 
-  # TODO: This will eventually be replaced by something else, maybe skill flags.
   def medium_skill?
     return @skill >= 32
   end
 
-  # TODO: This will eventually be replaced by something else, maybe skill flags.
   def high_skill?
     return @skill >= 48
   end
 
-  # TODO: This will eventually be replaced by something else, maybe skill flags.
   def best_skill?
     return @skill >= 100
   end

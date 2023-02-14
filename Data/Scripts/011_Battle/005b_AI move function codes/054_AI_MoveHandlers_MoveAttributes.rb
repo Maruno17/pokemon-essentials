@@ -431,6 +431,8 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
     next Battle::AI::MOVE_USELESS_SCORE if user.effects[PBEffects::LaserFocus] > 0
     # Useless if the user's critical hit stage ensures critical hits already, or
     # critical hits are impossible (e.g. via Lucky Chant)
+    # TODO: Critical hit rate is calculated using a target, but this move
+    #       doesn't have a target. An error is shown when trying it.
     crit_stage = move.rough_critical_hit_stage
     if crit_stage < 0 ||
        crit_stage >= Battle::Move::CRITICAL_HIT_RATIOS.length ||
@@ -491,7 +493,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPreventCriticalHitsAgainstUserSi
         next if crit_stage < 0
       end
       crit_stage += b.effects[PBEffects::FocusEnergy]
-      crit_stage += 1 if m.check_for_move { |m| m.highCriticalRate? }
+      crit_stage += 1 if b.check_for_move { |m| m.highCriticalRate? }
       crit_stage = [crit_stage, Battle::Move::CRITICAL_HIT_RATIOS.length - 1].min
       crit_stage = 3 if crit_stage < 3 && m.check_for_move { |m| m.pbCritialOverride(b.battler, user.battler) > 0 }
       # TODO: Change the score depending on how much of an effect a critical hit
@@ -750,7 +752,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * (Settings::MECHANICS_GENERATION >= 6) ? 12 : 8
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
     next score
   }
 )
@@ -801,7 +803,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * (Settings::MECHANICS_GENERATION >= 6) ? 12 : 8
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
     next score
   }
 )
@@ -852,7 +854,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * (Settings::MECHANICS_GENERATION >= 6) ? 12 : 8
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
     next score
   }
 )
@@ -902,7 +904,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesObstruct"
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * (Settings::MECHANICS_GENERATION >= 6) ? 12 : 8
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
     next score
   }
 )
@@ -951,7 +953,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromTargetingMovesSpikyShi
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * (Settings::MECHANICS_GENERATION >= 6) ? 12 : 8
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
     next score
   }
 )
@@ -1086,7 +1088,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromPriorityMoves",
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * (Settings::MECHANICS_GENERATION >= 6) ? 12 : 8
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
     next score
   }
 )
@@ -1105,7 +1107,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromMultiTargetDamagin
     next Battle::AI::MOVE_USELESS_SCORE if user.effects[PBEffects::ProtectRate] >= 4
     # Score changes for each foe
     useless = true
-    ai.each_battler(user.side) do |b, i|
+    ai.each_battler do |b, i|
       next if b.index == user.index || !b.can_attack?
       next if !b.check_for_move { |m| (Settings::MECHANICS_GENERATION >= 7 || move.damagingMove?) &&
                                       m.pbTarget(b.battler).num_targets > 1 }
@@ -1132,7 +1134,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromMultiTargetDamagin
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * (Settings::MECHANICS_GENERATION >= 6) ? 12 : 8
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
     next score
   }
 )

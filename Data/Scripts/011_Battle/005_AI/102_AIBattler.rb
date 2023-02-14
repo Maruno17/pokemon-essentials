@@ -35,6 +35,7 @@ class Battle::AI::AIBattler
   def stages;      return @battler.stages;      end
   def statStageAtMax?(stat); return @battler.statStageAtMax?(stat); end
   def statStageAtMin?(stat); return @battler.statStageAtMin?(stat); end
+  def moves;       return @battler.moves;       end
 
   def wild?
     return @ai.battle.wildBattle? && opposes?
@@ -300,7 +301,7 @@ class Battle::AI::AIBattler
   def can_switch_lax?
     return false if wild?
     @ai.battle.eachInTeamFromBattlerIndex(@index) do |pkmn, i|
-      return true if @ai.battle.pbCanSwitchLax?(@index, i)
+      return true if @ai.battle.pbCanSwitchIn?(@index, i)
     end
     return false
   end

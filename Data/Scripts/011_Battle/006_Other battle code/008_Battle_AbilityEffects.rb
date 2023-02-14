@@ -381,7 +381,7 @@ Battle::AbilityEffects::OnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
     end
     # In trainer battles
     next false if battle.pbAllFainted?(battler.idxOpposingSide)
-    next false if !battle.pbCanSwitch?(battler.index)   # Battler can't switch out
+    next false if !battle.pbCanSwitchOut?(battler.index)   # Battler can't switch out
     next false if !battle.pbCanChooseNonActive?(battler.index)   # No Pokémon can switch in
     battle.pbShowAbilitySplash(battler, true)
     battle.pbHideAbilitySplash(battler)
