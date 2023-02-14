@@ -463,11 +463,15 @@ class PokemonOption_Scene
     # end
     options <<
       EnumOption.new(_INTL("Download sprites"), [_INTL("On"), _INTL("Off")],
-                     proc { $PokemonSystem.download_sprites ? 0 : 1 },
+                     proc { $PokemonSystem.download_sprites},
                      proc { |value|
-                       $PokemonSystem.download_sprites = value },
+                       $PokemonSystem.download_sprites = value
+                     },
                      "Automatically download custom sprites from the internet"
       )
+
+
+
 
     if $game_switches
       options <<
