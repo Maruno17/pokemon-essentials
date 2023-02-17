@@ -2,7 +2,7 @@
 #       because of them.
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
 # TODO:
 # => Don't prefer damaging move if it won't KO, user has Stance Change and
@@ -24,13 +24,13 @@
 
 #===============================================================================
 # Don't prefer hitting a wild shiny Pokémon.
-# TODO: Review score modifier.
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:shiny_target,
   proc { |score, move, user, target, ai, battle|
     if target.wild? && target.battler.shiny?
-      PBDebug.log_score_change(-40, "avoid attacking a shiny wild Pokémon")
-      score -= 40
+      old_score = score
+      score -= 15
+      PBDebug.log_score_change(score - old_score, "avoid attacking a shiny wild Pokémon")
     end
     next score
   }
@@ -51,7 +51,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:add_predicted_damage,
     if move.damagingMove?
       dmg = move.rough_damage
       old_score = score
-      score += ([30.0 * dmg / target.hp, 35].min).to_i
+      score += ([25.0 * dmg / target.hp, 30].min).to_i
       PBDebug.log_score_change(score - old_score, "damaging move (predicted damage #{dmg} = #{100 * dmg / target.hp}% of target's HP)")
       if dmg > target.hp * 1.1   # Predicted to KO the target
         old_score = score
@@ -115,14 +115,13 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:target_semi_invulnerabl
 )
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
 # TODO: Less prefer two-turn moves, as the foe can see it coming and prepare for
 #       it.
 
 #===============================================================================
 # If target is frozen, don't prefer moves that could thaw them.
-# TODO: Review score modifier.
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:thawing_move_against_frozen_target,
   proc { |score, move, user, target, ai, battle|
@@ -138,7 +137,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:thawing_move_against_fr
 )
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
 # TODO: Prefer move if it has a high critical hit rate, critical hits are
 #       possible but not certain, and target has raised defences/user has
@@ -169,7 +168,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:flinching_effects,
 )
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
 # TODO: Don't prefer contact move if making contact with the target could
 #       trigger an effect that's bad for the user (Static, etc.).
@@ -177,29 +176,13 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:flinching_effects,
 #    Baneful Bunker, and don't prefer move if so
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
 # TODO: Prefer a contact move if making contact with the target could trigger
 #       an effect that's good for the user (Poison Touch/Pickpocket).
 
 #===============================================================================
-# Don't prefer a dancing move if the target has the Dancer ability.
-# TODO: Review score modifier.
-# TODO: Check all battlers, not just the target.
-#===============================================================================
-Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:dance_move_against_dancer,
-  proc { |score, move, user, target, ai, battle|
-    if move.move.danceMove? && target.has_active_ability?(:DANCER)
-      old_score = score
-      score -= 12
-      PBDebug.log_score_change(score - old_score, "don't want to use a dance move on a target with Dancer")
-    end
-    next score
-  }
-)
-
-#===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
 # TODO: Prefer a higher priority move if the user is slower than the foe(s) and
 #       the user is at risk of being knocked out. Consider whether the foe(s)
@@ -207,12 +190,32 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:dance_move_against_danc
 #       moves?
 
 #===============================================================================
-# TODO: Review score modifier.
+# Don't prefer damaging moves if the target is Biding, unless the move will deal
+# enough damage to KO the target before it retaliates (assuming the move is used
+# repeatedly until the target retaliates). Doesn't do a score change if the user
+# will be immune to Bide's damage.
 #===============================================================================
-# TODO: Don't prefer damaging moves if the target is Biding, unless the move
-#       will deal enough damage to KO the target before it retaliates (assuming
-#       the move is used repeatedly until the target retaliates). Don't worry
-#       about the target's Bide if the user will be immune to it.
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_damaging_a_biding_target,
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.medium_skill? && target.effects[PBEffects::Bide] > 0 && move.damagingMove?
+      eff = user.effectiveness_of_type_against_battler(:NORMAL, target)   # Bide is Normal type
+      if !Effectiveness.ineffective?(eff)
+        dmg = move.rough_damage
+        eor_dmg = target.rough_end_of_round_damage
+        hits_possible = target.effects[PBEffects::Bide] - 1
+        eor_dmg *= hits_possible
+        hits_possible += 1 if user.faster_than?(target)
+        if dmg * hits_possible + eor_dmg < target.hp * 1.05
+          old_score = score
+          score -= 15
+          PBDebug.log_score_change(score - old_score, "don't want to damage the Biding target")
+        end
+      end
+    end
+    next score
+  }
+)
+
 
 #===============================================================================
 # Don't prefer damaging moves that will knock out the target if they are using
@@ -237,22 +240,53 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_knocking_out_dest
 )
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
-# TODO: Don't prefer Fire-type moves if target has previously used Powder.
+# TODO: Don't prefer Fire-type moves if target has previously used Powder and is
+#       faster than the user.
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
 # TODO: Check memory for whether target has previously used Ion Deluge, and
 #       don't prefer move if it's Normal-type and target is immune because
 #       of its ability (Lightning Rod, etc.).
 
 #===============================================================================
-# TODO: Review score modifier.
+# Don't prefer a move that can be Magic Coated if the target (or any foe if the
+# move doesn't have a target) has Magic Bounce.
 #===============================================================================
-# TODO: Don't prefer a move that can be Magic Coated if the target (or any foe
-#       if the move doesn't have a target) has Magic Bounce.
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_targeting_bouncable_move_against_Magic_Bouncer,
+  proc { |score, move, user, target, ai, battle|
+    if move.statusMove? && move.canMagicCoat? &&
+       !battle.moldBreaker && target.has_active_ability?(:MAGICBOUNCE)
+      old_score = score
+      score = Battle::AI::MOVE_USELESS_SCORE
+      PBDebug.log_score_change(score - old_score, "useless because target will Magic Bounce it")
+    end
+    next score
+  }
+)
+
+Battle::AI::Handlers::GeneralMoveScore.add(:avoid_bouncable_move_with_foe_Magic_Bouncer,
+  proc { |score, move, user, ai, battle|
+    if move.statusMove? && move.canMagicCoat? &&
+       move.pbTarget(user.battler).num_targets == 0 && !battle.moldBreaker
+      has_magic_bounce = false
+      ai.each_foe_battler(user.side) do |b, i|
+        next if !b.has_active_ability?(:MAGICBOUNCE)
+        has_magic_bounce = true
+        break
+      end
+      if has_magic_bounce
+        old_score = score
+        score = Battle::AI::MOVE_USELESS_SCORE
+        PBDebug.log_score_change(score - old_score, "useless because a foe will Magic Bounce it")
+      end
+    end
+    next score
+  }
+)
 
 #===============================================================================
 #===============================================================================
@@ -261,13 +295,12 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_knocking_out_dest
 #===============================================================================
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
-# TODO: Prefer Shadow moves.
+# TODO: Prefer Shadow moves (for flavour).
 
 #===============================================================================
 # If user is frozen, prefer a move that can thaw the user.
-# TODO: Review score modifier.
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveScore.add(:thawing_move_when_frozen,
   proc { |score, move, user, ai, battle|
@@ -286,6 +319,22 @@ Battle::AI::Handlers::GeneralMoveScore.add(:thawing_move_when_frozen,
 )
 
 #===============================================================================
+# Don't prefer a dancing move if the target has the Dancer ability.
+#===============================================================================
+Battle::AI::Handlers::GeneralMoveScore.add(:dance_move_against_dancer,
+  proc { |score, move, user, ai, battle|
+    if move.move.danceMove?
+      old_score = score
+      ai.each_foe_battler(user.side) do |b, i|
+        score -= 12 if b.has_active_ability?(:DANCER)
+      end
+      PBDebug.log_score_change(score - old_score, "don't want to use a dance move because a foe has Dancer")
+    end
+    next score
+  }
+)
+
+#===============================================================================
 # Pick a good move for the Choice items.
 # TODO: Review score modifier.
 #===============================================================================
@@ -298,26 +347,18 @@ Battle::AI::Handlers::GeneralMoveScore.add(:good_move_for_choice_item,
         if move.statusMove? && move.function != "UserTargetSwapItems"
           old_score = score
           score -= 25
-          PBDebug.log_score_change(score - old_score, "move is not suitable to be Choiced into")
+          PBDebug.log_score_change(score - old_score, "don't want to be Choiced into a status move")
+          next score
         end
-        # Don't prefer moves of certain types
+        # Don't prefer moves which are 0x against at least one type
         move_type = move.rough_type
-        # Most unpreferred types are 0x effective against another type, except
-        # Fire/Water/Grass
-        # TODO: Actually check through the types for 0x instead of hardcoding
-        #       them.
-        # TODO: Reborn separately doesn't prefer Fire/Water/Grass/Electric, also
-        #       with a 0.95x score, meaning Electric can be 0.95x twice. Why are
-        #       these four types not preferred? Maybe because they're all not
-        #       very effective against Dragon.
-        unpreferred_types = [:NORMAL, :FIGHTING, :POISON, :GROUND, :GHOST,
-                             :FIRE, :WATER, :GRASS, :ELECTRIC, :PSYCHIC, :DRAGON]
-        old_score = score
-        score -= 5 if unpreferred_types.include?(move_type)
+        GameData::Type.each do |type_data|
+          score -= 5 if type_data.immunities.include?(move_type)
+        end
         # Don't prefer moves with lower accuracy
         score = score * move.accuracy / 100 if move.accuracy > 0
         # Don't prefer moves with low PP
-        score -= 10 if move.move.pp < 6
+        score -= 10 if move.move.pp <= 5
         PBDebug.log_score_change(score - old_score, "move is less suitable to be Choiced into")
       end
     end
@@ -353,13 +394,13 @@ Battle::AI::Handlers::GeneralMoveScore.add(:prefer_damaging_moves_if_last_pokemo
 )
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
 # TODO: Don't prefer a move that is stopped by Wide Guard if any foe has
 #       previously used Wide Guard.
 
 #===============================================================================
-# TODO: Review score modifier.
+#
 #===============================================================================
 # TODO: Don't prefer sound move if user hasn't been Throat Chopped but a foe has
 #       previously used Throat Chop.

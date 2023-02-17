@@ -102,7 +102,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("FailsUnlessTargetShares
 )
 
 #===============================================================================
-# TODO: Split some of this into a MoveEffectScore?
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfUserDamagedThisTurn",
   proc { |score, move, user, target, ai, battle|
@@ -475,10 +475,16 @@ Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
       if ai.trainer.medium_skill?
         # Check affected by entry hazard
         next if pkmn.hasItem?(:HEAVYDUTYBOOTS)
-        # TODO: Check pkmn's immunity to being poisoned.
+        # Check pkmn's immunity to being poisoned
         next if battle.field.terrain == :Misty
         next if pkmn.hasType?(:POISON)
         next if pkmn.hasType?(:STEEL)
+        next if pkmn.hasAbility?(:IMMUNITY)
+        next if pkmn.hasAbility?(:PASTELVEIL)
+        next if pkmn.hasAbility?(:FLOWERVEIL) && pkmn.hasType?(:GRASS)
+        next if pkmn.hasAbility?(:LEAFGUARD) && [:Sun, :HarshSun].include?(battle.pbWeather)
+        next if pkmn.hasAbility?(:COMATOSE) && pkmn.isSpecies?(:KOMALA)
+        next if pkmn.hasAbility?(:SHIELDSDOWN) && pkmn.isSpecies?(:MINIOR) && pkmn.form < 7
         # Check airborne
         if !pkmn.hasItem?(:IRONBALL) &&
            battle.field.effects[PBEffects::Gravity] == 0

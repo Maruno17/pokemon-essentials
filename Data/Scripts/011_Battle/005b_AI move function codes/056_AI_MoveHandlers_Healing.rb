@@ -116,7 +116,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHPLoseFlyingTypeTh
 )
 
 #===============================================================================
-#
+# TODO: Review score modifiers.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CureTargetStatusHealUserHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -585,8 +585,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsHealAndCureReplacement",
                                            "UserFaintsHealAndCureReplacementRestorePP")
 
 #===============================================================================
-# TODO: This code should be for a single battler (each is checked in turn).
-#       Should have a MoveEffectAgainstTargetScore instead.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartPerishCountsForAllBattlers",
   proc { |move, user, target, ai, battle|
@@ -604,11 +603,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPerishCountsForAllBattlers",
       allies_affected = 0
       foes_affected = 0
       foes_with_high_hp = 0
-      battle.allBattlers.each do |b|
-        next if b.effects[PBEffects::PerishSong] > 0
-        next if Battle::AbilityEffects.triggerMoveImmunity(b.ability, user.battler, b,
-                                                           move.move, move.rough_type, battle, false)
-        if b.opposes?(user.index)
+      ai.each_battler do |b|
+        next if Battle::AI::Handlers.move_will_fail_against_target?("StartPerishCountsForAllBattlers",
+                                                                    move, user, b, ai, battle)
+        if b.opposes?(user)
           foes_affected += 1
           foes_with_high_hp += 1 if b.hp >= b.totalhp * 0.75
         else

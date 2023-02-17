@@ -78,7 +78,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealAllyOrDamageFoe",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |move, user, ai, battle|
-    next false if user.has_type?(:GHOST)
+    next false if user.has_type?(:GHOST) ||
+                  (move.rough_type == :GHOST && user.has_active_ability?([:LIBERO, :PROTEAN]))
     will_fail = true
     (move.move.statUp.length / 2).times do |i|
       next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
@@ -95,14 +96,16 @@ Battle::AI::Handlers::MoveFailureCheck.add("CurseTargetOrLowerUserSpd1RaiseUserA
 )
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |move, user, target, ai, battle|
-    next false if !user.has_type?(:GHOST)
+    next false if !user.has_type?(:GHOST) &&
+                  !(move.rough_type == :GHOST && user.has_active_ability?([:LIBERO, :PROTEAN]))
     next true if target.effects[PBEffects::Curse] || !target.battler.takesIndirectDamage?
     next false
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |score, move, user, ai, battle|
-    next score if user.has_type?(:GHOST)
+    next score if user.has_type?(:GHOST) ||
+                  (move.rough_type == :GHOST && user.has_active_ability?([:LIBERO, :PROTEAN]))
     score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     next score if score == Battle::AI::MOVE_USELESS_SCORE
     next ai.get_score_for_target_stat_drop(score, user, move.move.statDown, false)
@@ -110,7 +113,8 @@ Battle::AI::Handlers::MoveEffectScore.add("CurseTargetOrLowerUserSpd1RaiseUserAt
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CurseTargetOrLowerUserSpd1RaiseUserAtkDef1",
   proc { |score, move, user, target, ai, battle|
-    next score if !user.has_type?(:GHOST)
+    next score if !user.has_type?(:GHOST) &&
+                  !(move.rough_type == :GHOST && user.has_active_ability?([:LIBERO, :PROTEAN]))
     # Don't prefer if user will faint because of using this move
     next Battle::AI::MOVE_USELESS_SCORE if user.hp <= user.totalhp / 2
     # Prefer early on

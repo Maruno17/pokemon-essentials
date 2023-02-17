@@ -1,6 +1,5 @@
 #===============================================================================
-# TODO: This code can be called with a single target and with no targets. Make
-#       sure it doesn't assume that there is a target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserAttack1",
   proc { |move, user, ai, battle|
@@ -67,8 +66,7 @@ Battle::AI::Handlers::MoveEffectScore.add("MaxUserAttackLoseHalfOfTotalHP",
 )
 
 #===============================================================================
-# TODO: This code can be called with a single target and with no targets. Make
-#       sure it doesn't assume that there is a target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack1",
                                             "RaiseUserDefense1")
@@ -92,8 +90,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserDefense1CurlUpUser",
 )
 
 #===============================================================================
-# TODO: This code can be called with multiple targets and with no targets. Make
-#       sure it doesn't assume that there is a target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserDefense1",
                                             "RaiseUserDefense2")
@@ -196,23 +193,17 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed2LowerUserWeight",
   proc { |score, move, user, ai, battle|
     score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     if ai.trainer.medium_skill?
-      # TODO: Take into account weight-modifying items/abilities? This "> 1"
-      #       line can probably ignore them, but these moves' powers will change
-      #       because of those modifiers, and the score changes may need to be
-      #       different accordingly.
-      if user.battler.pokemon.weight - user.effects[PBEffects::WeightChange] > 1
-        if user.has_move_with_function?("PowerHigherWithUserHeavierThanTarget")
-          score -= 10
-        end
+      current_weight = user.battler.pbWeight
+      if current_weight > 1
+        score -= 5 if user.has_move_with_function?("PowerHigherWithUserHeavierThanTarget")
         ai.each_foe_battler(user.side) do |b, i|
-          if b.has_move_with_function?("PowerHigherWithUserHeavierThanTarget")
-            score -= 10
+          score -= 5 if b.has_move_with_function?("PowerHigherWithUserHeavierThanTarget")
+          score += 5 if b.has_move_with_function?("PowerHigherWithTargetWeight")
+          # User will become susceptible to Sky Drop
+          if b.has_move_with_function?("TwoTurnAttackInvulnerableInSkyTargetCannotAct") &&
+             Settings::MECHANICS_GENERATION >= 6
+            score -= 7 if current_weight >= 2000 && current_weight < 3000
           end
-          if b.has_move_with_function?("PowerHigherWithTargetWeight")
-            score += 10
-          end
-          # TODO: Check foes for Sky Drop and whether the user is too heavy for it
-          #       but the weight reduction will make it susceptible.
         end
       end
     end
@@ -1323,9 +1314,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserCopyTargetStatStages
 )
 
 #===============================================================================
-# TODO: Account for stat theft before damage calculation. This would be complex,
-#       involving pbCanRaiseStatStage? and Contrary and Simple; do I want to
-#       account for all that or simplify things?
+# NOTE: Accounting for the stat theft before damage calculation, to calculate a
+#       more accurate predicted damage, would be complex, involving
+#       pbCanRaiseStatStage? and Contrary and Simple; I'm not bothering with
+#       that.
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserStealTargetPositiveStatStages",
   proc { |score, move, user, target, ai, battle|

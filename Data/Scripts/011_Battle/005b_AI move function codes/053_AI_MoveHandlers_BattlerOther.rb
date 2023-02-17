@@ -530,9 +530,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetBurn",
   proc { |score, move, user, target, ai, battle|
     if target.status == :BURN
       if target.opposes?(user)
-        score -= 40
+        score -= 10
       else
-        score += 40
+        score += 10
       end
     end
     next score
@@ -1228,9 +1228,6 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartGravity",
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartGravity",
   proc { |score, move, user, ai, battle|
-    # TODO: Gravity increases accuracy of all moves. Prefer if user/ally has low
-    #       accuracy moves, don't prefer if foes have them. Should "low
-    #       accuracy" mean anything below 85%?
     ai.each_battler do |b, i|
       # Prefer grounding airborne foes, don't prefer grounding airborne allies
       # Prefer making allies affected by terrain, don't prefer making foes
@@ -1250,6 +1247,11 @@ Battle::AI::Handlers::MoveEffectScore.add("StartGravity",
       # Prefer ending Sky Drop being used on allies, don't prefer ending Sky
       # Drop being used on foes
       if b.effects[PBEffects::SkyDrop] >= 0
+        score += (user.opposes?(b)) ? -5 : 5
+      end
+      # Gravity raises accuracy of all moves; prefer if the user/ally has low
+      # accuracy moves, don't prefer if foes have any
+      if b.check_for_move { |m| m.accuracy < 85 }
         score += (user.opposes?(b)) ? -5 : 5
       end
       # Prefer stopping foes' sky-based attacks, don't prefer stopping allies'

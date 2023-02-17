@@ -33,32 +33,35 @@ class Battle::AI
       set_up_move_check(move)
       # Predict whether the move will fail (generally)
       if @trainer.has_skill_flag?("PredictMoveFailure") && pbPredictMoveFailure
-        PBDebug.log_ai("#{@user.name} is considering using #{move.name}...")
+        PBDebug.log_ai("#{@user.name} is considering using #{@move.name}...")
         PBDebug.log_score_change(MOVE_FAIL_SCORE - MOVE_BASE_SCORE, "move will fail")
         add_move_to_choices(choices, idxMove, MOVE_FAIL_SCORE)
         next
       end
+      # Get the move's target type
       target_data = @move.pbTarget(@user.battler)
-      # TODO: Alter target_data if user has Protean and move is Curse.
+      if @move.function == "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" &&
+         @move.rough_type == :GHOST && @user.has_active_ability?([:LIBERO, :PROTEAN])
+        target_data = GameData::Target.get((Settings::MECHANICS_GENERATION >= 8) ? :RandomNearFoe : :NearFoe)
+      end
       case target_data.num_targets
       when 0   # No targets, affects the user or a side or the whole field
         # Includes: BothSides, FoeSide, None, User, UserSide
-        PBDebug.log_ai("#{@user.name} is considering using #{move.name}...")
+        PBDebug.log_ai("#{@user.name} is considering using #{@move.name}...")
         score = MOVE_BASE_SCORE
         PBDebug.logonerr { score = pbGetMoveScore }
         add_move_to_choices(choices, idxMove, score)
       when 1   # One target to be chosen by the trainer
         # Includes: Foe, NearAlly, NearFoe, NearOther, Other, RandomNearFoe, UserOrNearAlly
-        # TODO: Figure out first which targets are valid. Includes the call to
-        #       pbMoveCanTarget?, but also includes move-redirecting effects
-        #       like Lightning Rod. Skip any battlers that can't be targeted.
+        redirected_target = get_redirected_target(target_data)
         num_targets = 0
         @battle.allBattlers.each do |b|
+          next if redirected_target && b.index != redirected_target
           next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
           # TODO: Should this sometimes consider targeting an ally? See def
           #       pbGetMoveScoreAgainstTarget for more information.
           next if target_data.targets_foe && !@user.battler.opposes?(b)
-          PBDebug.log_ai("#{@user.name} is considering using #{move.name} against #{b.name} (#{b.index})...")
+          PBDebug.log_ai("#{@user.name} is considering using #{@move.name} against #{b.name} (#{b.index})...")
           score = MOVE_BASE_SCORE
           PBDebug.logonerr { score = pbGetMoveScore([b]) }
           add_move_to_choices(choices, idxMove, score, b.index)
@@ -72,7 +75,7 @@ class Battle::AI
           next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
           targets.push(b)
         end
-        PBDebug.log_ai("#{@user.name} is considering using #{move.name}...")
+        PBDebug.log_ai("#{@user.name} is considering using #{@move.name}...")
         score = MOVE_BASE_SCORE
         PBDebug.logonerr { score = pbGetMoveScore(targets) }
         add_move_to_choices(choices, idxMove, score)
@@ -80,6 +83,44 @@ class Battle::AI
     end
     @battle.moldBreaker = false
     return choices
+  end
+
+  def get_redirected_target(target_data)
+    return nil if @move.move.cannotRedirect?
+    return nil if !target_data.can_target_one_foe? || target_data.num_targets != 1
+    return nil if @user.has_active_ability?([:PROPELLERTAIL, :STALWART])
+    priority = @battle.pbPriority(true)
+    near_only = !target_data.can_choose_distant_target?
+    # Spotlight, Follow Me/Rage Powder
+    new_target = -1
+    strength = 100   # Lower strength takes priority
+    priority.each do |b|
+      next if b.fainted? || b.effects[PBEffects::SkyDrop] >= 0
+      next if !b.opposes?(@user.battler)
+      next if near_only && !b.near?(@user.battler)
+      if b.effects[PBEffects::Spotlight] > 0 && b.effects[PBEffects::Spotlight] - 50 < strength
+        new_target = b.index
+        strength = b.effects[PBEffects::Spotlight] - 50   # Spotlight takes priority
+      elsif (b.effects[PBEffects::RagePowder] && @user.battler.affectedByPowder?) ||
+            (b.effects[PBEffects::FollowMe] > 0 && b.effects[PBEffects::FollowMe] < strength)
+        new_target = b.index
+        strength = b.effects[PBEffects::FollowMe]
+      end
+    end
+    return new_target if new_target
+    calc_type = @move.rough_type
+    priority.each do |b|
+      next if b.index == @user.index
+      next if near_only && !b.near?(@user.battler)
+      case calc_type
+      when :ELECTRIC
+        new_target = b.index if b.hasActiveAbility?(:LIGHTNINGROD)
+      when :WATER
+        new_target = b.index if b.hasActiveAbility?(:STORMDRAIN)
+      end
+      break if new_target >= 0
+    end
+    return new_target
   end
 
   def add_move_to_choices(choices, idxMove, score, idxTarget = -1)
@@ -123,19 +164,16 @@ class Battle::AI
   #=============================================================================
   # Returns whether the move will definitely fail (assuming no battle conditions
   # change between now and using the move).
-  # TODO: Add skill checks in here for particular calculations?
   #=============================================================================
   def pbPredictMoveFailure
-    # TODO: Something involving user.battler.usingMultiTurnAttack? (perhaps
-    #       earlier than this?).
     # User is asleep and will not wake up
     return true if @user.battler.asleep? && @user.statusCount > 1 && !@move.move.usableWhenAsleep?
     # User is awake and can't use moves that are only usable when asleep
     return true if !@user.battler.asleep? && @move.move.usableWhenAsleep?
-    # User will be truanting
-    # TODO: Should Truanting treat all moves as failing? If it does, it will
-    #       trigger switching due to terrible moves.
-#    return true if @user.has_active_ability?(:TRUANT) && @user.effects[PBEffects::Truant]
+    # NOTE: Truanting is not considered, because if it is, a Pokémon with Truant
+    #       will want to switch due to terrible moves every other round (because
+    #       all of its moves will fail), and this is disruptive and shouldn't be
+    #       how such Pokémon behave.
     # Primal weather
     return true if @battle.pbWeather == :HeavyRain && @move.rough_type == :FIRE
     return true if @battle.pbWeather == :HarshSun && @move.rough_type == :WATER
@@ -151,8 +189,7 @@ class Battle::AI
     return true if @battle.field.terrain == :Psychic && @target.battler.affectedByTerrain? &&
                    @target.opposes?(@user) && @move.rough_priority(@user) > 0
     # Immunity because of ability
-    # TODO: Check for target-redirecting abilities that also provide immunity.
-    #       If an ally has such an ability, may want to just not prefer the move
+    # TODO: If an ally has such an ability, may want to just not prefer the move
     #       instead of predicting its failure, as might want to hit the ally
     #       after all.
     return true if @move.move.pbImmunityByAbility(@user.battler, @target.battler, false)
@@ -212,7 +249,6 @@ class Battle::AI
           return MOVE_FAIL_SCORE
         end
       else
-        # TODO: Can this accounting for multiple targets be improved somehow?
         score /= affected_targets if affected_targets > 1   # Average the score against multiple targets
         # Bonus for affecting multiple targets
         if @trainer.has_skill_flag?("PreferMultiTargetMoves") && affected_targets > 1

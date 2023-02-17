@@ -192,7 +192,6 @@ Battle::AI::Handlers::MoveEffectScore.add("AttackAndSkipNextTurn",
     score -= 10 if !user.has_active_ability?(:TRUANT)
     # Don't prefer if user is at a high HP (treat this move as a last resort)
     score -= 10 if user.hp >= user.totalhp / 2
-    # TODO: Don't prefer if another of the user's moves could KO the target.
     next score
   }
 )
@@ -215,7 +214,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttack",
     # Don't prefer if target has a protecting move
     if ai.trainer.high_skill? && !(user.has_active_ability?(:UNSEENFIST) && move.move.contactMove?)
       has_protect_move = false
-      if move.move.pbTarget(user).num_targets > 1 &&
+      if move.pbTarget(user).num_targets > 1 &&
          (Settings::MECHANICS_GENERATION >= 7 || move.damagingMove?)
         if target.has_move_with_function?("ProtectUserSideFromMultiTargetDamagingMoves")
           has_protect_move = true

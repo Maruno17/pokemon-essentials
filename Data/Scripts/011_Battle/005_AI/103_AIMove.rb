@@ -40,14 +40,14 @@ class Battle::AI::AIMove
 
   #=============================================================================
 
-  def pbTarget(_user)
-    return @move.pbTarget(_user)
+  def pbTarget(user)
+    return @move.pbTarget((user.is_a?(Battle::AI::AIBattler)) ? user.battler : user)
   end
 
   # Returns whether this move targets multiple battlers.
   def targets_multiple_battlers?
     user_battler = @ai.user.battler
-    target_data = @move.pbTarget(user_battler)
+    target_data = pbTarget(user_battler)
     return false if target_data.num_targets <= 1
     num_targets = 0
     case target_data.id
@@ -70,8 +70,12 @@ class Battle::AI::AIMove
   #=============================================================================
 
   def rough_priority(user)
-    # TODO: More calculations here.
-    return @move.priority
+    ret = @move.pbPriority(user.battler)
+    if user.ability_active?
+      ret = Battle::AbilityEffects.triggerPriorityChange(user.ability, user.battler, @move, ret)
+      user.battler.effects[PBEffects::Prankster] = false   # Untrigger this
+    end
+    return ret
   end
 
   #=============================================================================
@@ -205,7 +209,6 @@ class Battle::AI::AIMove
         )
         user.effects[PBEffects::GemConsumed] = nil   # Untrigger consuming of Gems
       end
-      # TODO: Prefer (1.5x?) if item will be consumed and user has Unburden.
     end
     if target.item_active? && target.item && !target.item.is_berry?
       Battle::ItemEffects.triggerDamageCalcFromTarget(
@@ -456,11 +459,13 @@ class Battle::AI::AIMove
     end
     # Item effects that alter accuracy calculation
     if user.item_active?
-      # TODO: Zoom Lens needs to be checked differently (compare speeds of
-      #       user and target).
-      Battle::ItemEffects.triggerAccuracyCalcFromUser(
-        user.item, modifiers, user_battler, target_battler, @move, calc_type
-      )
+      if user.item == :ZOOMLENS
+        mods[:accuracy_multiplier] *= 1.2 if target.faster_than?(user)
+      else
+        Battle::ItemEffects.triggerAccuracyCalcFromUser(
+          user.item, modifiers, user_battler, target_battler, @move, calc_type
+        )
+      end
     end
     if target.item_active?
       Battle::ItemEffects.triggerAccuracyCalcFromTarget(
@@ -553,10 +558,4 @@ class Battle::AI::AIMove
                 (user.has_active_ability?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
     return 2
   end
-
-  #=============================================================================
-
-  # TODO:
-  # pbBaseAccuracy(@ai.user.battler, @ai.target.battler) if @ai.trainer.medium_skill?
-  # pbCriticalOverride(@ai.user.battler, @ai.target.battler)
 end

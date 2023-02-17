@@ -477,8 +477,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerPPOfTargetLastMoveB
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerPPOfTargetLastMoveBy4",
   proc { |move, user, target, ai, battle|
-    last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
-    next !last_move || last_move.pp == 0 || last_move.total_pp <= 0
+    next !target.check_for_move { |m| m.id == target.battler.lastRegularMoveUsed }
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerPPOfTargetLastMoveBy4",
@@ -500,14 +499,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetLastMoveUs
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Disable] > 0 || !target.battler.lastRegularMoveUsed
     next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
-    will_fail = true
-    target.battler.eachMove do |m|
-      next if m.id != target.battler.lastRegularMoveUsed
-      next if m.pp == 0 && m.total_pp > 0
-      will_fail = false
-      break
-    end
-    next will_fail
+    next !target.check_for_move { |m| m.id == target.battler.lastRegularMoveUsed }
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetUsingSameMoveConsecutively",
@@ -563,13 +555,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetUsingDiffe
     next true if target.effects[PBEffects::ShellTrap]
     next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
     will_fail = true
-    target.battler.eachMove do |m|
-      next if m.id != target.battler.lastRegularMoveUsed
-      next if m.pp == 0 && m.total_pp > 0
-      will_fail = false
-      break
-    end
-    next will_fail
+    next !target.check_for_move { |m| m.id == target.battler.lastRegularMoveUsed }
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetUsingDifferentMove",
@@ -627,7 +613,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetStatusMoves
     next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.statusMove? }
     # Not worth using on a sleeping target that won't imminently wake up
     if target.status == :SLEEP && target.statusCount > ((target.faster_than?(user)) ? 2 : 1)
-      if !target.check_for_move { |m| m.statusMove? && m.usableWhenAsleep? && (m.pp > 0 || m.total_pp == 0) }
+      if !target.check_for_move { |m| m.statusMove? && m.usableWhenAsleep? }
         next Battle::AI::MOVE_USELESS_SCORE
       end
     end
@@ -652,8 +638,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetStatusMoves
       "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
       "ProtectUserBanefulBunker"                           # Baneful Bunker
     ]
-    if target.check_for_move { |m| m.statusMove? && protection_moves.include?(m.function) &&
-                                   (m.pp > 0 || m.total_pp == 0) }
+    if target.check_for_move { |m| m.statusMove? && protection_moves.include?(m.function) }
       score += 6
     end
     # Inherent preference
@@ -675,7 +660,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetHealingMov
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetHealingMoves",
   proc { |score, move, user, target, ai, battle|
     # Useless if the foe can't heal themselves with a move or some held items
-    if !target.check_for_move { |m| m.healingMove? && (m.pp > 0 || m.total_pp == 0) }
+    if !target.check_for_move { |m| m.healingMove? }
       if !target.has_active_item?(:LEFTOVERS) &&
          !(target.has_active_item?(:BLACKSLUDGE) && target.has_type?(:POISON))
         next Battle::AI::MOVE_USELESS_SCORE
@@ -693,7 +678,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetHealingMove
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetSoundMoves",
   proc { |score, move, user, target, ai, battle|
     next score if target.effects[PBEffects::ThroatChop] > 1
-    next score if !target.check_for_move { |m| m.soundMove? && (m.pp > 0 || m.total_pp == 0) }
+    next score if !target.check_for_move { |m| m.soundMove? }
     # Inherent preference
     score += 8
     next score
@@ -714,13 +699,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetMovesKnownB
     shared_move = false
     user_moves = user.battler.moves.map { |m| m.id }
     ai.each_foe_battler(user.side) do |b, i|
-      b.battler.eachMove do |m|
-        next if !user_moves.include?(m.id)
-        next if m.pp == 0 && m.total_pp > 0
-        shared_move = true
-        break
-      end
-      break if shared_move
+      next if !b.check_for_move { |m| user_moves.include?(m.id) }
+      shared_move = true
+      break
     end
     next Battle::AI::MOVE_USELESS_SCORE if !shared_move
     # Inherent preference

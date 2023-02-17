@@ -431,9 +431,20 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
     next Battle::AI::MOVE_USELESS_SCORE if user.effects[PBEffects::LaserFocus] > 0
     # Useless if the user's critical hit stage ensures critical hits already, or
     # critical hits are impossible (e.g. via Lucky Chant)
-    # TODO: Critical hit rate is calculated using a target, but this move
-    #       doesn't have a target. An error is shown when trying it.
-    crit_stage = move.rough_critical_hit_stage
+    crit_stage = 0
+    crit_stage = -1 if user.battler.pbOwnSide.effects[PBEffects::LuckyChant] > 0
+    if crit_stage >= 0 && user.ability_active? && ![:MERCILESS].include?(user.ability)
+      crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(user.battler.ability,
+         user.battler, user.battler, crit_stage)
+    end
+    if crit_stage >= 0 && user.item_active?
+      crit_stage = Battle::ItemEffects.triggerCriticalCalcFromUser(user.battler.item,
+         user.battler, user.battler, crit_stage)
+    end
+    if crit_stage >= 0 && crit_stage < 50
+      crit_stage += user.effects[PBEffects::FocusEnergy]
+      crit_stage = [crit_stage, Battle::Move::CRITICAL_HIT_RATIOS.length - 1].min
+    end
     if crit_stage < 0 ||
        crit_stage >= Battle::Move::CRITICAL_HIT_RATIOS.length ||
        Battle::Move::CRITICAL_HIT_RATIOS[crit_stage] == 1
@@ -482,20 +493,22 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPreventCriticalHitsAgainstUserSi
     # make critical hits more likely
     ai.each_foe_battler(user.side) do |b, i|
       crit_stage = 0
-      if b.ability_active?
+      if crit_stage >= 0 && b.ability_active?
         crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(b.battler.ability,
            b.battler, user.battler, crit_stage)
         next if crit_stage < 0
       end
-      if b.item_active?
+      if crit_stage >= 0 && b.item_active?
         crit_stage = Battle::ItemEffects.triggerCriticalCalcFromUser(b.battler.item,
            b.battler, user.battler, crit_stage)
         next if crit_stage < 0
       end
-      crit_stage += b.effects[PBEffects::FocusEnergy]
-      crit_stage += 1 if b.check_for_move { |m| m.highCriticalRate? }
-      crit_stage = [crit_stage, Battle::Move::CRITICAL_HIT_RATIOS.length - 1].min
-      crit_stage = 3 if crit_stage < 3 && m.check_for_move { |m| m.pbCritialOverride(b.battler, user.battler) > 0 }
+      if crit_stage >= 0 && crit_stage < 50
+        crit_stage += b.effects[PBEffects::FocusEnergy]
+        crit_stage += 1 if b.check_for_move { |m| m.highCriticalRate? }
+        crit_stage = 99 if m.check_for_move { |m| m.pbCritialOverride(b.battler, user.battler) > 0 }
+        crit_stage = [crit_stage, Battle::Move::CRITICAL_HIT_RATIOS.length - 1].min
+      end
       # TODO: Change the score depending on how much of an effect a critical hit
       #       will have? Critical hits ignore the user's offensive stat drops
       #       and the target's defensive stat raises, and multiply the damage.
@@ -1064,7 +1077,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromPriorityMoves",
       next if !b.can_attack?
       # TODO: There are more calculations that could be done to get a more
       #       accurate priority number.
-      next if !b.check_for_move { |m| m.priority > 0 && m.canProtectAgainst? }
+      next if !b.check_for_move { |m| m.pbPriority(b.battler) > 0 && m.canProtectAgainst? }
       useless = false
       # General preference
       score += 4

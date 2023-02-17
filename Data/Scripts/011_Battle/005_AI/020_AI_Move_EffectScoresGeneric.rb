@@ -7,7 +7,8 @@ class Battle::AI
   # could target a foe but is targeting an ally, the score is also inverted, but
   # only because it is inverted again in def pbGetMoveScoreAgainstTarget.
   #=============================================================================
-  def get_score_for_target_stat_raise(score, target, stat_changes, whole_effect = true, fixed_change = false)
+  def get_score_for_target_stat_raise(score, target, stat_changes, whole_effect = true,
+                                      fixed_change = false, ignore_contrary = false)
     whole_effect = false if @move.damagingMove?
     # Decide whether the target raising its stat(s) is a good thing
     desire_mult = 1
@@ -15,13 +16,13 @@ class Battle::AI
        (@move.pbTarget(@user.battler).targets_foe && target.index != @user.index)
       desire_mult = -1
     end
-    # Discard status move/don't prefer damaging move if target has Contrary
-    # TODO: Maybe this should return get_score_for_target_stat_drop if Contrary
-    #       applies and desire_mult < 1.
-    if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 0
-      ret = (whole_effect) ? MOVE_USELESS_SCORE : score - 20
-      PBDebug.log_score_change(ret - score, "don't prefer raising target's stats (it has Contrary)")
-      return ret
+    # If target has Contrary, use different calculations to score the stat change
+    if !ignore_contrary && !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY)
+      if desire_mult > 0 && whole_effect
+        PBDebug.log_score_change(MOVE_USELESS_SCORE - score, "don't prefer raising target's stats (it has Contrary)")
+        return MOVE_USELESS_SCORE
+      end
+      return get_score_for_target_stat_drop(score, target, stat_changes, whole_effect, fixed_change, true)
     end
     # Don't make score changes if target will faint from EOR damage
     if target.rough_end_of_round_damage >= target.hp
@@ -42,7 +43,6 @@ class Battle::AI
         return ret
       end
     end
-
     # Figure out which stat raises can happen
     real_stat_changes = []
     stat_changes.each_with_index do |stat, idx|
@@ -66,10 +66,8 @@ class Battle::AI
     if real_stat_changes.length == 0
       return (whole_effect) ? MOVE_USELESS_SCORE : score
     end
-
     # Make score changes based on the general concept of raising stats at all
     score = get_target_stat_raise_score_generic(score, target, real_stat_changes, desire_mult)
-
     # Make score changes based on the specific changes to each stat that will be
     # raised
     real_stat_changes.each do |change|
@@ -81,7 +79,6 @@ class Battle::AI
         PBDebug.log_score_change(score - old_score, "raising the target's #{GameData::Stat.get(change[0]).name} by #{change[1]}")
       end
     end
-
     return score
   end
 
@@ -146,12 +143,10 @@ class Battle::AI
     #       able to 2HKO the target.
     # TODO: Prefer if foe is semi-invulnerable and target is faster (can't hit
     #       the foe anyway).
-
     # Prefer if move is a status move and it's the user's first/second turn
     if @user.turnCount < 2 && @move.statusMove?
       score += total_increment * desire_mult * 4
     end
-
     # Prefer if user is at high HP, don't prefer if user is at low HP
     if target.index != @user.index
       if @user.hp >= @user.totalhp * 0.7
@@ -166,97 +161,8 @@ class Battle::AI
     else
       score += total_increment * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 4   # +5 to -12 per stage
     end
-
     # TODO: Look at abilities that trigger upon stat raise. There are none.
-
     return score
-
-
-=begin
-    mini_score = 1.0
-    # Determine whether the move boosts Attack, Special Attack or Speed (Bulk Up
-    # is sometimes not considered a sweeping move)
-    sweeping_stat = false
-    offensive_stat = false
-    stat_changes.each do |change|
-      next if ![:ATTACK, :SPECIAL_ATTACK, :SPEED].include?(change[0])
-      sweeping_stat = true
-      next if @move.function == "RaiseUserAtkDef1"   # Bulk Up (+Atk +Def)
-      offensive_stat = true
-      break
-    end
-
-    # TODO: Prefer if user's moves won't do much damage.
-    # Prefer if user has something that will limit damage taken
-    mini_score *= 1.3 if @user.effects[PBEffects::Substitute] > 0 ||
-                         (@user.form == 0 && @user.ability_id == :DISGUISE)
-
-    # Don't prefer if user is badly poisoned
-    mini_score *= 0.2 if @user.effects[PBEffects::Toxic] > 0 && !offensive_stat
-    # Don't prefer if user is confused
-    if @user.effects[PBEffects::Confusion] > 0
-      # TODO: Especially don't prefer if the move raises Atk. Even more so if
-      #       the move raises the stat by 2+. Not quite so much if the move also
-      #       raises Def.
-      mini_score *= 0.5
-    end
-    # Don't prefer if user is infatuated or Leech Seeded
-    if @user.effects[PBEffects::Attract] >= 0 || @user.effects[PBEffects::LeechSeed] >= 0
-      mini_score *= (offensive_stat) ? 0.6 : 0.3
-    end
-    # Don't prefer if user has an ability or item that will force it to switch
-    # out
-    if @user.hp < @user.totalhp * 3 / 4
-      mini_score *= 0.3 if @user.hasActiveAbility?([:EMERGENCYEXIT, :WIMPOUT])
-      mini_score *= 0.3 if @user.hasActiveItem?(:EJECTBUTTON)
-    end
-
-    # Prefer if target has a status problem
-    if @target.status != :NONE
-      mini_score *= (sweeping_stat) ? 1.2 : 1.1
-      case @target.status
-      when :SLEEP, :FROZEN
-        mini_score *= 1.3
-      when :BURN
-        # TODO: Prefer if the move boosts Sp Def.
-        mini_score *= 1.1 if !offensive_stat
-      end
-    end
-    # Prefer if target is yawning
-    if @target.effects[PBEffects::Yawn] > 0
-      mini_score *= (sweeping_stat) ? 1.7 : 1.3
-    end
-    # Prefer if target is recovering after Hyper Beam
-    if @target.effects[PBEffects::HyperBeam] > 0
-      mini_score *= (sweeping_stat) ? 1.3 : 1.2
-    end
-    # Prefer if target is Encored into a status move
-    if @target.effects[PBEffects::Encore] > 0 &&
-       GameData::Move.get(@target.effects[PBEffects::EncoreMove]).category == 2   # Status move
-      # TODO: Why should this check greatly prefer raising both the user's defences?
-      if sweeping_stat || @move.function == "RaiseUserDefSpDef1"   # +Def +SpDef
-        mini_score *= 1.5
-      else
-        mini_score *= 1.3
-      end
-    end
-    # TODO: Don't prefer if target has previously used a move that would force
-    #       the user to switch (or Yawn/Perish Song which encourage it). Prefer
-    #       instead if the move raises evasion. Note this comes after the
-    #       dissociation of Bulk Up from sweeping_stat.
-
-    if @trainer.medium_skill?
-      # TODO: Prefer if the maximum damage the target has dealt wouldn't hurt
-      #       the user much.
-    end
-
-    # Don't prefer if it's not a single battle
-    if !@battle.singleBattle?
-      mini_score *= (offensive_stat) ? 0.25 : 0.5
-    end
-
-    return mini_score
-=end
   end
 
   #=============================================================================
@@ -287,7 +193,6 @@ class Battle::AI
         inc = (has_special_moves) ? 10 : 20
         score += inc * inc_mult
       end
-
     when :DEFENSE
       # Modify score depending on current stat stage
       if old_stage >= 2 && increment == 1
@@ -295,7 +200,6 @@ class Battle::AI
       else
         score += 10 * inc_mult
       end
-
     when :SPECIAL_ATTACK
       # Modify score depending on current stat stage
       # More strongly prefer if the target has no physical moves
@@ -308,7 +212,6 @@ class Battle::AI
         inc = (has_physical_moves) ? 10 : 20
         score += inc * inc_mult
       end
-
     when :SPECIAL_DEFENSE
       # Modify score depending on current stat stage
       if old_stage >= 2 && increment == 1
@@ -316,7 +219,6 @@ class Battle::AI
       else
         score += 10 * inc_mult
       end
-
     when :SPEED
       # Prefer if target is slower than a foe
       # TODO: Don't prefer if the target is too much slower than any foe that it
@@ -345,7 +247,6 @@ class Battle::AI
       if target.has_active_ability?(:SPEEDBOOST)
         score -= 20 * ((target.opposes?(@user)) ? 1 : desire_mult)
       end
-
     when :ACCURACY
       # Modify score depending on current stat stage
       if old_stage >= 2 && increment == 1
@@ -361,15 +262,11 @@ class Battle::AI
           score += 10 * inc_mult
         end
       end
-
     when :EVASION
-      # Prefer if a foe will (probably) take damage at the end of the round
-      # TODO: Should this take into account EOR healing, one-off damage and
-      #       damage-causing effects that wear off naturally (like Sea of Fire)?
-      # TODO: Emerald AI also prefers if target is rooted via Ingrain.
+      # Prefer if a foe of the target will take damage at the end of the round
       each_foe_battler(target.side) do |b, i|
         eor_damage = b.rough_end_of_round_damage
-        next if eor_damage <= 0
+        score += 4 * inc_mult if eor_damage > 0
       end
       # Modify score depending on current stat stage
       if old_stage >= 2 && increment == 1
@@ -377,9 +274,7 @@ class Battle::AI
       else
         score += 10 * inc_mult
       end
-
     end
-
     # Prefer if target has Stored Power
     if target.has_move_with_function?("PowerHigherWithUserPositiveStatStages")
       score += 5 * increment * desire_mult
@@ -389,212 +284,7 @@ class Battle::AI
       next if !b.has_move_with_function?("PowerHigherWithTargetPositiveStatStages")
       score -= 5 * increment * desire_mult
     end
-
     return score
-
-
-=begin
-    mini_score = 1.0
-    case stat
-    when :ATTACK
-      # Prefer if user can definitely survive a hit no matter how powerful, and
-      # it won't be hurt by weather
-#      if @user.hp == @user.totalhp &&
-#         (@user.hasActiveItem?(:FOCUSSASH) || (!@battle.moldBreaker && @user.hasActiveAbility?(:STURDY)))
-#        if !(@battle.pbWeather == :Sandstorm && @user.takesSandstormDamage?) &&
-#           !(@battle.pbWeather == :Hail && @user.takesHailDamage?) &&
-#           !(@battle.pbWeather == :ShadowSky && @user.takesShadowSkyDamage?)
-#          mini_score *= 1.4
-#        end
-#      end
-      # Prefer if user has the Sweeper role
-      # TODO: Is 1.1x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
-#      mini_score *= 1.3 if check_battler_role(@user, BattleRole::SWEEPER)
-
-#      # Don't prefer if user is burned or paralysed
-#      mini_score *= 0.5 if @user.status == :BURN || @user.status == :PARALYSIS
-#      # Don't prefer if user's Speed stat is lowered
-#      sum_stages = @user.stages[:SPEED]
-#      mini_score *= 1 + sum_stages * 0.05 if sum_stages < 0
-#      # TODO: Prefer if target has previously used a HP-restoring move.
-#      # TODO: Don't prefer if some of foes' stats are raised.
-#      sum_stages = 0
-#      [:ATTACK, :SPECIAL_ATTACK, :SPEED].each do |s|
-#        sum_stages += @target.stages[s]
-#      end
-#      mini_score *= 1 - sum_stages * 0.05 if sum_stages > 0
-#      # TODO: Don't prefer if target has Speed Boost (+Spd at end of each round).
-#      mini_score *= 0.6 if @target.hasActiveAbility?(:SPEEDBOOST)
-#      # TODO: Don't prefer if the target has previously used a priority move.
-
-    when :DEFENSE
-      # Prefer if user has a healing item
-      # TODO: Is 1.1x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
-#      mini_score *= 1.2 if @user.hasActiveItem?(:LEFTOVERS) ||
-#                           (@user.hasActiveItem?(:BLACKSLUDGE) && @user.pbHasType?(:POISON))
-      # Prefer if user knows any healing moves
-#      # TODO: Is 1.2x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
-#      mini_score *= 1.3 if check_for_move(@user) { |m| m.healingMove? }
-      # Prefer if user knows Pain Split or Leech Seed
-#      # TODO: Leech Seed is 1.2x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
-#      mini_score *= 1.2 if @user.pbHasMoveFunction?("UserTargetAverageHP")   # Pain Split
-#      mini_score *= 1.3 if @user.pbHasMoveFunction?("StartLeechSeedTarget")   # Leech Seed
-      # Prefer if user has certain roles
-#      # TODO: Is 1.1x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
-#      mini_score *= 1.3 if check_battler_role(@user, BattleRole::PHYSICALWALL, BattleRole::SPECIALWALL)
-      # Don't prefer if user is badly poisoned
-      mini_score *= 0.2 if @user.effects[PBEffects::Toxic] > 0
-#      # TODO: Prefer if foes have higher Attack than Special Attack, and user
-#      #       doesn't have a wall role, user is faster and user has at least 75%
-#      #       HP. Don't prefer instead if user is slower (ignore HP).
-      # TODO: Don't prefer if previous damage done by foes wouldn't hurt the
-      #       user much.
-
-    when :SPEED
-      # Don't prefer if user has Speed Boost
-#      mini_score *= 0.6 if @user.hasActiveAbility?(:SPEEDBOOST)
-      # Prefer if user can definitely survive a hit no matter how powerful, and
-      # it won't be hurt by weather
-#      if @user.hp == @user.totalhp &&
-#         (@user.hasActiveItem?(:FOCUSSASH) || (!@battle.moldBreaker && @user.hasActiveAbility?(:STURDY)))
-#        if !(@battle.pbWeather == :Sandstorm && @user.takesSandstormDamage?) &&
-#           !(@battle.pbWeather == :Hail && @user.takesHailDamage?) &&
-#           !(@battle.pbWeather == :ShadowSky && @user.takesShadowSkyDamage?)
-#          mini_score *= 1.4
-#        end
-#      end
-       # Prefer if user has the Sweeper role
-#       mini_score *= 1.3 if check_battler_role(@user, BattleRole::SWEEPER)
-       # TODO: Don't prefer if Trick Room applies or any foe has previously used
-       #       Trick Room.
-#      mini_score *= 0.2 if @battle.field.effects[PBEffects::TrickRoom] > 0
-
-#      # Prefer if user's Attack/SpAtk stat (whichever is higher) is lowered
-#      # TODO: Why?
-#      if @user.attack > @user.spatk
-#        sum_stages = @user.stages[:ATTACK]
-#        mini_score *= 1 - sum_stages * 0.05 if sum_stages < 0
-#      else
-#        sum_stages = @user.stages[:SPATK]
-#        mini_score *= 1 - sum_stages * 0.05 if sum_stages < 0
-#      end
-#      # Prefer if user has Moxie
-#      mini_score *= 1.3 if @user.hasActiveAbility?(:MOXIE)
-#      # Don't prefer if user is burned or paralysed
-#      mini_score *= 0.2 if @user.status == :PARALYSIS
-#      # TODO: Don't prefer if target has raised defenses.
-#      sum_stages = 0
-#      [:DEFENSE, :SPECIAL_DEFENSE].each { |s| sum_stages += @target.stages[s] }
-#      mini_score *= 1 - sum_stages * 0.05 if sum_stages > 0
-#      # TODO: Don't prefer if the target has previously used a priority move.
-#      # TODO: Don't prefer if user is already faster than the target and there's
-#      #       only 1 unfainted foe (this check is done by Agility/Autotomize
-#      #       (both +2 Spd) only in Reborn.)
-
-    when :SPECIAL_ATTACK
-      # Prefer if user can definitely survive a hit no matter how powerful, and
-      # it won't be hurt by weather
-#      if @user.hp == @user.totalhp &&
-#         (@user.hasActiveItem?(:FOCUSSASH) || (!@battle.moldBreaker && @user.hasActiveAbility?(:STURDY)))
-#        if !(@battle.pbWeather == :Sandstorm && @user.takesSandstormDamage?) &&
-#           !(@battle.pbWeather == :Hail && @user.takesHailDamage?) &&
-#           !(@battle.pbWeather == :ShadowSky && @user.takesShadowSkyDamage?)
-#          mini_score *= 1.4
-#        end
-#      end
-      # Prefer if user has the Sweeper role
-#      mini_score *= 1.3 if check_battler_role(@user, BattleRole::SWEEPER)
-
-#      # Don't prefer if user's Speed stat is lowered
-#      sum_stages = @user.stages[:SPEED]
-#      mini_score *= 1 + sum_stages * 0.05 if sum_stages < 0
-#      # TODO: Prefer if target has previously used a HP-restoring move.
-#      # TODO: Don't prefer if some of foes' stats are raised
-#      sum_stages = 0
-#      [:ATTACK, :SPECIAL_ATTACK, :SPEED].each do |s|
-#        sum_stages += @target.stages[s]
-#      end
-#      mini_score *= 1 - sum_stages * 0.05 if sum_stages > 0
-#      # TODO: Don't prefer if target has Speed Boost (+Spd at end of each round)
-#      mini_score *= 0.6 if @target.hasActiveAbility?(:SPEEDBOOST)
-#      # TODO: Don't prefer if the target has previously used a priority move.
-
-    when :SPECIAL_DEFENSE
-      # Prefer if user has a healing item
-#      mini_score *= 1.2 if @user.hasActiveItem?(:LEFTOVERS) ||
-#                           (@user.hasActiveItem?(:BLACKSLUDGE) && @user.pbHasType?(:POISON))
-      # Prefer if user knows any healing moves
-#      mini_score *= 1.3 if check_for_move(@user) { |m| m.healingMove? }
-      # Prefer if user knows Pain Split or Leech Seed
-#      mini_score *= 1.2 if @user.pbHasMoveFunction?("UserTargetAverageHP")   # Pain Split
-#      mini_score *= 1.3 if @user.pbHasMoveFunction?("StartLeechSeedTarget")   # Leech Seed
-      # Prefer if user has certain roles
-#      mini_score *= 1.3 if check_battler_role(@user, BattleRole::PHYSICALWALL, BattleRole::SPECIALWALL)
-#      # TODO: Prefer if foes have higher Special Attack than Attack.
-      # TODO: Don't prefer if previous damage done by foes wouldn't hurt the
-      #       user much.
-
-    when :ACCURACY
-      # Prefer if user knows any weaker moves
-      mini_score *= 1.1 if check_for_move(@user) { |m| m.damagingMove? && m.power < 95 }
-      # Prefer if target has a raised evasion
-      sum_stages = @target.stages[:EVASION]
-      mini_score *= 1 + sum_stages * 0.05 if sum_stages > 0
-      # Prefer if target has an item that lowers foes' accuracy
-      mini_score *= 1.1 if @target.hasActiveItem?([:BRIGHTPOWDER, :LAXINCENSE])
-      # Prefer if target has an ability that lowers foes' accuracy
-      # TODO: Tangled Feet while user is confused?
-      if (@battle.pbWeather == :Sandstorm && @target.hasActiveAbility?(:SANDVEIL)) ||
-         (@battle.pbWeather == :Hail && @target.hasActiveAbility?(:SNOWCLOAK))
-        mini_score *= 1.1
-      end
-
-    when :EVASION
-      # Prefer if user has a healing item
-      mini_score *= 1.2 if @user.hasActiveItem?(:LEFTOVERS) ||
-                           (@user.hasActiveItem?(:BLACKSLUDGE) && @user.pbHasType?(:POISON))
-      # Prefer if user has an item that lowers foes' accuracy
-      mini_score *= 1.3 if @user.hasActiveItem?([:BRIGHTPOWDER, :LAXINCENSE])
-      # Prefer if user has an ability that lowers foes' accuracy
-      # TODO: Tangled Feet while user is confused?
-      if (@battle.pbWeather == :Sandstorm && @user.hasActiveAbility?(:SANDVEIL)) ||
-         (@battle.pbWeather == :Hail && @user.hasActiveAbility?(:SNOWCLOAK))
-        mini_score *= 1.3
-      end
-      # Prefer if user knows any healing moves
-      mini_score *= 1.3 if check_for_move(@user) { |m| move.healingMove? }
-      # Prefer if user knows Pain Split or Leech Seed
-      mini_score *= 1.2 if @user.pbHasMoveFunction?("UserTargetAverageHP")   # Pain Split
-      mini_score *= 1.3 if @user.pbHasMoveFunction?("StartLeechSeedTarget")   # Leech Seed
-      # Prefer if user has certain roles
-      mini_score *= 1.3 if check_battler_role(@user, BattleRole::PHYSICALWALL, BattleRole::SPECIALWALL)
-      # TODO: Don't prefer if user's evasion stat is raised
-      # TODO: Don't prefer if target has No Guard.
-      mini_score *= 0.2 if @target.hasActiveAbility?(:NOGUARD)
-      # TODO: Don't prefer if target has previously used any moves that never miss.
-
-    end
-
-
-    # TODO: Don't prefer if any foe has previously used a stat stage-clearing
-    #       move (Clear Smog/Haze).
-    mini_score *= 0.3 if check_for_move(@target) { |m|
-      ["ResetTargetStatStages", "ResetAllBattlersStatStages"].include?(m.function)
-    }   # Clear Smog, Haze
-
-    # TODO: Prefer if user is faster than the target.
-    # TODO: Is 1.3x for RaiseUserAtkDefAcc1 Coil (+Atk, +Def, +acc).
-    mini_score *= 1.5 if  @user.faster_than?(@target)
-    # TODO: Don't prefer if target is a higher level than the user
-    if @target.level > @user.level + 5
-      mini_score *= 0.6
-      if @target.level > @user.level + 10
-        mini_score *= 0.2
-      end
-    end
-
-    return mini_score
-=end
   end
 
   #=============================================================================
@@ -606,10 +296,9 @@ class Battle::AI
   # ally, but only because it is inverted in def pbGetMoveScoreAgainstTarget
   # instead.
   # TODO: Revisit this method as parts may need rewriting.
-  # TODO: fixed_change should make this ignore Mist/Clear Body/other effects
-  #       that prevent increments/decrements to stat stages.
   #=============================================================================
-  def get_score_for_target_stat_drop(score, target, stat_changes, whole_effect = true, fixed_change = false)
+  def get_score_for_target_stat_drop(score, target, stat_changes, whole_effect = true,
+                                     fixed_change = false, ignore_contrary = false)
     whole_effect = false if @move.damagingMove?
     # Decide whether the target lowering its stat(s) is a good thing
     desire_mult = -1
@@ -617,13 +306,13 @@ class Battle::AI
        (@move.pbTarget(@user.battler).targets_foe && target.index != @user.index)
       desire_mult = 1
     end
-    # Discard status move/don't prefer damaging move if target has Contrary
-    # TODO: Maybe this should return get_score_for_target_stat_raise if Contrary
-    #       applies and desire_mult < 0.
-    if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY) && desire_mult > 0
-      ret = (whole_effect) ? MOVE_USELESS_SCORE : score - 20
-      PBDebug.log_score_change(ret - score, "don't prefer lowering target's stats (it has Contrary)")
-      return ret
+    # If target has Contrary, use different calculations to score the stat change
+    if !ignore_contrary && !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY)
+      if desire_mult > 0 && whole_effect
+        PBDebug.log_score_change(MOVE_USELESS_SCORE - score, "don't prefer lowering target's stats (it has Contrary)")
+        return MOVE_USELESS_SCORE
+      end
+      return get_score_for_target_stat_raise(score, target, stat_changes, whole_effect, fixed_change, true)
     end
     # Don't make score changes if target will faint from EOR damage
     if target.rough_end_of_round_damage >= target.hp
@@ -642,7 +331,6 @@ class Battle::AI
       PBDebug.log("     ignore stat change (target's foes have Unaware)")
       return ret
     end
-
     # Figure out which stat drops can happen
     real_stat_changes = []
     stat_changes.each_with_index do |stat, idx|
@@ -666,10 +354,8 @@ class Battle::AI
     if real_stat_changes.length == 0
       return (whole_effect) ? MOVE_USELESS_SCORE : score
     end
-
     # Make score changes based on the general concept of lowering stats at all
     score = get_target_stat_drop_score_generic(score, target, real_stat_changes, desire_mult)
-
     # Make score changes based on the specific changes to each stat that will be
     # lowered
     real_stat_changes.each do |change|
@@ -681,7 +367,6 @@ class Battle::AI
         PBDebug.log_score_change(score - old_score, "lowering the target's #{GameData::Stat.get(change[0]).name} by #{change[1]}")
       end
     end
-
     return score
   end
 
@@ -746,12 +431,10 @@ class Battle::AI
     # TODO: Don't prefer if target is slower than user but is predicted to be able
     #       to 2HKO user.
     # TODO: Don't prefer if target is semi-invulnerable and user is faster.
-
     # Prefer if move is a status move and it's the user's first/second turn
     if @user.turnCount < 2 && @move.statusMove?
       score += total_decrement * desire_mult * 4
     end
-
     # Prefer if user is at high HP, don't prefer if user is at low HP
     if target.index != @user.index
       if @user.hp >= @user.totalhp * 0.7
@@ -766,9 +449,7 @@ class Battle::AI
     else
       score += total_decrement * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 6   # +3 to -8 per stage
     end
-
     # TODO: Look at abilities that trigger upon stat lowering.
-
     return score
   end
 
@@ -801,7 +482,6 @@ class Battle::AI
         dec = (has_special_moves) ? 5 : 10
         score += dec * dec_mult
       end
-
     when :DEFENSE
       # Modify score depending on current stat stage
       if old_stage <= -2 && decrement == 1
@@ -809,7 +489,6 @@ class Battle::AI
       else
         score += 5 * dec_mult
       end
-
     when :SPECIAL_ATTACK
       # Modify score depending on current stat stage
       # More strongly prefer if the target has no physical moves
@@ -822,7 +501,6 @@ class Battle::AI
         dec = (has_physical_moves) ? 5 : 10
         score += dec * dec_mult
       end
-
     when :SPECIAL_DEFENSE
       # Modify score depending on current stat stage
       if old_stage <= -2 && decrement == 1
@@ -830,7 +508,6 @@ class Battle::AI
       else
         score += 5 * dec_mult
       end
-
     when :SPEED
       # Prefer if target is faster than an ally
       # TODO: Don't prefer if the target is too much faster than any ally and
@@ -849,7 +526,6 @@ class Battle::AI
       if target.has_active_ability?(:SPEEDBOOST)
         score -= 20 * ((target.opposes?(@user)) ? 1 : desire_mult)
       end
-
     when :ACCURACY
       # Modify score depending on current stat stage
       if old_stage <= -2 && decrement == 1
@@ -858,7 +534,6 @@ class Battle::AI
         score += 5 * dec_mult
       end
       # TODO: Prefer if target is poisoned/toxiced/Leech Seeded/cursed.
-
     when :EVASION
       # Modify score depending on current stat stage
       if old_stage <= -2 && decrement == 1
@@ -866,9 +541,7 @@ class Battle::AI
       else
         score += 5 * dec_mult
       end
-
     end
-
     # Prefer if target has Stored Power
     if target.has_move_with_function?("PowerHigherWithUserPositiveStatStages")
       score += 5 * decrement * desire_mult
@@ -878,7 +551,6 @@ class Battle::AI
       next if !b.has_move_with_function?("PowerHigherWithTargetPositiveStatStages")
       score -= 5 * decrement * desire_mult
     end
-
     return score
   end
 

@@ -181,7 +181,6 @@ class Battle::AI::AIBattler
     return ret
   end
 
-  # TODO: Cache calculated rough stats? Forget them in def refresh_battler.
   def rough_stat(stat)
     return @battler.pbSpeed if stat == :SPEED && @ai.trainer.high_skill?
     stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
@@ -215,7 +214,8 @@ class Battle::AI::AIBattler
       end
     else
       @battler.pbTypes(true).each do |defend_type|
-        # TODO: Need to check the move's pbCalcTypeModSingle.
+        # TODO: Need to check the move's pbCalcTypeModSingle because particular
+        #       moves can modify that method to give different effectivenesses.
         ret *= effectiveness_of_type_against_single_battler_type(type, defend_type, user)
       end
       ret *= 2 if self.effects[PBEffects::TarShot] && type == :FIRE
@@ -229,14 +229,10 @@ class Battle::AI::AIBattler
   def ability;    return @battler.ability;    end
 
   def ability_active?
-    # Only a high skill AI knows what an opponent's ability is
-#    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
     return @battler.abilityActive?
   end
 
   def has_active_ability?(ability, ignore_fainted = false)
-    # Only a high skill AI knows what an opponent's ability is
-#    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
     return @battler.hasActiveAbility?(ability, ignore_fainted)
   end
 
@@ -250,14 +246,10 @@ class Battle::AI::AIBattler
   def item;    return @battler.item;    end
 
   def item_active?
-    # Only a high skill AI knows what an opponent's held item is
-#    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
     return @battler.itemActive?
   end
 
   def has_active_item?(item)
-    # Only a high skill AI knows what an opponent's held item is
-#    return false if @ai.trainer.side != @side && !@ai.trainer.high_skill?
     return @battler.hasActiveItem?(item)
   end
 
@@ -266,6 +258,7 @@ class Battle::AI::AIBattler
   def check_for_move
     ret = false
     @battler.eachMove do |move|
+      next if move.pp == 0 && move.total_pp > 0
       next unless yield move
       ret = true
       break
@@ -708,10 +701,9 @@ class Battle::AI::AIBattler
   # battler if it has it.
   # Return values are typically between -10 and +10. 0 is indifferent, positive
   # values mean this battler benefits, negative values mean this battler suffers.
-  # TODO: This method assumes the ability isn't being negated. Should it return
-  #       0 if it is? The calculations that call this method separately check
-  #       for it being negated, because they need to do something special in
-  #       that case, so I think it's okay for this method to ignore negation.
+  # NOTE: This method assumes the ability isn't being negated. The calculations
+  #       that call this method separately check for it being negated, because
+  #       they need to do something special in that case.
   def wants_ability?(ability = :NONE)
     ability = ability.id if !ability.is_a?(Symbol) && ability.respond_to?("id")
     # TODO: Ideally replace the above list of ratings with context-sensitive
@@ -729,9 +721,7 @@ class Battle::AI::AIBattler
     when :GALEWINGS
       return 0 if !check_for_move { |m| m.type == :FLYING }
     when :HUGEPOWER, :PUREPOWER
-      return 0 if !check_for_move { |m| m.physicalMove?(m.type) &&
-                                        m.function != "UseUserDefenseInsteadOfUserAttack" &&
-                                        m.function != "UseTargetAttackInsteadOfUserAttack" }
+      return 0 if !ai.stat_raise_worthwhile?(self, :ATTACK, true)
     when :IRONFIST
       return 0 if !check_for_move { |m| m.punchingMove? }
     when :LIQUIDVOICE

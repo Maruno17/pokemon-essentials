@@ -91,13 +91,6 @@ module Battle::AI::Handlers
   MoveBasePower                 = HandlerHash.new
   GeneralMoveScore              = HandlerHash.new
   GeneralMoveAgainstTargetScore = HandlerHash.new
-  # TODO: Make HandlerHashes for these?
-  #       Move type - uses main battle code via rough_type
-  #       Move accuracy - uses main battle code via rough_accuracy
-  #       Move target
-  #       Move additional effect chance
-  #       Move unselectable check
-  #       Move failure check
   ShouldSwitch                  = HandlerHash.new
 
   def self.move_will_fail?(function_code, *args)
