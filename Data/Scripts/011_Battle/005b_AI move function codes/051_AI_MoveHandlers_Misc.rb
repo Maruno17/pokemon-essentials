@@ -175,38 +175,11 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
-    score += 15 if user.has_active_item?(:HEATROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
-    # Check for Fire/Water moves
-    ai.each_battler do |b, i|
-      if b.has_damaging_move_of_type?(:FIRE)
-        score += (b.opposes?(user)) ? -15 : 15
-      end
-      if b.has_damaging_move_of_type?(:WATER)
-        score += (b.opposes?(user)) ? 15 : -15
-      end
+    if ai.trainer.high_skill? && battle.field.weather != :None
+      score -= ai.get_score_for_weather(battle.field.weather, user)
     end
-    # TODO: Check for freezing moves.
-    # Check for abilities/other moves affected by sun
-    # TODO: Check other battlers for these as well?
-    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
-      if user.has_active_ability?([:CHLOROPHYLL, :FLOWERGIFT, :FORECAST, :HARVEST, :LEAFGUARD, :SOLARPOWER])
-        score += 15
-      elsif user.has_active_ability?(:DRYSKIN)
-        score -= 10
-      end
-      if user.has_move_with_function?("HealUserDependingOnWeather",
-                                      "RaiseUserAtkSpAtk1Or2InSun",
-                                      "TwoTurnAttackOneTurnInSun",
-                                      "TypeAndPowerDependOnWeather")
-        score += 10
-      end
-      if user.has_move_with_function?("ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
-                                      "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky")
-        score -= 10
-      end
-    end
+    score += ai.get_score_for_weather(:Sun, user, true)
     next score
   }
 )
@@ -220,34 +193,11 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
-    score += 15 if user.has_active_item?(:DAMPROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
-    # Check for Fire/Water moves
-    ai.each_battler do |b, i|
-      if b.has_damaging_move_of_type?(:WATER)
-        score += (b.opposes?(user)) ? -15 : 15
-      end
-      if b.has_damaging_move_of_type?(:FIRE)
-        score += (b.opposes?(user)) ? 15 : -15
-      end
+    if ai.trainer.high_skill? && battle.field.weather != :None
+      score -= ai.get_score_for_weather(battle.field.weather, user)
     end
-    # Check for abilities/other moves affected by rain
-    # TODO: Check other battlers for these as well?
-    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
-      if user.has_active_ability?([:DRYSKIN, :FORECAST, :HYDRATION, :RAINDISH, :SWIFTSWIM])
-        score += 15
-      end
-      if user.has_move_with_function?("ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
-                                      "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky",
-                                      "TypeAndPowerDependOnWeather")
-        score += 10
-      end
-      if user.has_move_with_function?("HealUserDependingOnWeather",
-                                      "TwoTurnAttackOneTurnInSun")
-        score -= 10
-      end
-    end
+    score += ai.get_score_for_weather(:Rain, user, true)
     next score
   }
 )
@@ -261,33 +211,11 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
-    score += 15 if user.has_active_item?(:SMOOTHROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
-    # Check for battlers affected by sandstorm's effects
-    ai.each_battler do |b, i|
-      if b.battler.takesSandstormDamage?   # End of round damage
-        score += (b.opposes?(user)) ? 15 : -15
-      end
-      if b.has_type?(:ROCK)   # +SpDef for Rock types
-        score += (b.opposes?(user)) ? -15 : 15
-      end
+    if ai.trainer.high_skill? && battle.field.weather != :None
+      score -= ai.get_score_for_weather(battle.field.weather, user)
     end
-    # Check for abilities/moves affected by sandstorm
-    # TODO: Check other battlers for these as well?
-    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
-      if user.has_active_ability?([:SANDFORCE, :SANDRUSH, :SANDVEIL])
-        score += 15
-      end
-      if user.has_move_with_function?("HealUserDependingOnSandstorm",
-                                      "TypeAndPowerDependOnWeather")
-        score += 10
-      end
-      if user.has_move_with_function?("HealUserDependingOnWeather",
-                                      "TwoTurnAttackOneTurnInSun")
-        score -= 10
-      end
-    end
+    score += ai.get_score_for_weather(:Sandstorm, user, true)
     next score
   }
 )
@@ -301,33 +229,11 @@ Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
-    score += 15 if user.has_active_item?(:ICYROCK)
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
-    # Check for battlers affected by hail's effects
-    ai.each_battler do |b, i|
-      if b.battler.takesHailDamage?   # End of round damage
-        score += (b.opposes?(user)) ? 15 : -15
-      end
+    if ai.trainer.high_skill? && battle.field.weather != :None
+      score -= ai.get_score_for_weather(battle.field.weather, user)
     end
-    # Check for abilities/moves affected by hail
-    # TODO: Check other battlers for these as well?
-    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
-      if user.has_active_ability?([:FORECAST, :ICEBODY, :SLUSHRUSH, :SNOWCLOAK])
-        score += 15
-      elsif user.ability == :ICEFACE
-        score += 15
-      end
-      if user.has_move_with_function?("FreezeTargetAlwaysHitsInHail",
-                                      "StartWeakenDamageAgainstUserSideIfHail",
-                                      "TypeAndPowerDependOnWeather")
-        score += 10
-      end
-      if user.has_move_with_function?("HealUserDependingOnWeather",
-                                      "TwoTurnAttackOneTurnInSun")
-        score -= 10
-      end
-    end
+    score += ai.get_score_for_weather(:Hail, user, true)
     next score
   }
 )
@@ -343,10 +249,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartElectricTerrain",
 Battle::AI::Handlers::MoveEffectScore.add("StartElectricTerrain",
   proc { |score, move, user, ai, battle|
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
-    if battle.field.terrain != :None
+    if ai.trainer.high_skill? && battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
     end
-    score += ai.get_score_for_terrain(:Electric, user)
+    score += ai.get_score_for_terrain(:Electric, user, true)
     next score
   }
 )
@@ -362,10 +268,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartGrassyTerrain",
 Battle::AI::Handlers::MoveEffectScore.add("StartGrassyTerrain",
   proc { |score, move, user, ai, battle|
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
-    if battle.field.terrain != :None
+    if ai.trainer.high_skill? && battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
     end
-    score += ai.get_score_for_terrain(:Grassy, user)
+    score += ai.get_score_for_terrain(:Grassy, user, true)
     next score
   }
 )
@@ -381,10 +287,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartMistyTerrain",
 Battle::AI::Handlers::MoveEffectScore.add("StartMistyTerrain",
   proc { |score, move, user, ai, battle|
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
-    if battle.field.terrain != :None
+    if ai.trainer.high_skill? && battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
     end
-    score += ai.get_score_for_terrain(:Misty, user)
+    score += ai.get_score_for_terrain(:Misty, user, true)
     next score
   }
 )
@@ -400,10 +306,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartPsychicTerrain",
 Battle::AI::Handlers::MoveEffectScore.add("StartPsychicTerrain",
   proc { |score, move, user, ai, battle|
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
-    if battle.field.terrain != :None
+    if ai.trainer.high_skill? && battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
     end
-    score += ai.get_score_for_terrain(:Psychic, user)
+    score += ai.get_score_for_terrain(:Psychic, user, true)
     next score
   }
 )
@@ -745,24 +651,11 @@ Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score += 10 if battle.field.weather != :None   # Prefer replacing another weather
     score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
-    # Check for battlers affected by Shadow Sky's effects
-    ai.each_battler do |b, i|
-      if b.has_damaging_move_of_type?(:SHADOW)
-        score += (b.opposes?(user)) ? 15 : -15
-      end
-      if b.battler.takesShadowSkyDamage?   # End of round damage
-        score += (b.opposes?(user)) ? 15 : -15
-      end
+    if ai.trainer.high_skill? && battle.field.weather != :None
+      score -= ai.get_score_for_weather(battle.field.weather, user)
     end
-    # Check for moves affected by Shadow Sky
-    # TODO: Check other battlers for these as well?
-    if ai.trainer.medium_skill? && !user.has_active_item?(:UTILITYUMBRELLA)
-      if user.has_move_with_function?("TypeAndPowerDependOnWeather")
-        score += 10
-      end
-    end
+    score += ai.get_score_for_weather(:ShadowSky, user, true)
     next score
   }
 )

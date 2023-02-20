@@ -19,21 +19,21 @@ class Battle::AI
   #=============================================================================
   def pbGetMoveScores
     choices = []
-    @user.battler.eachMoveWithIndex do |move, idxMove|
+    @user.battler.eachMoveWithIndex do |orig_move, idxMove|
       # Unchoosable moves aren't considered
       if !@battle.pbCanChooseMove?(@user.index, idxMove, false)
-        if move.pp == 0 && move.total_pp > 0
-          PBDebug.log_ai("#{@user.name} cannot use #{move.name} (no PP left)")
+        if orig_move.pp == 0 && orig_move.total_pp > 0
+          PBDebug.log_ai("#{@user.name} cannot use #{orig_move.name} (no PP left)")
         else
-          PBDebug.log_ai("#{@user.name} cannot choose to use #{move.name}")
+          PBDebug.log_ai("#{@user.name} cannot choose to use #{orig_move.name}")
         end
         next
       end
       # Set up move in class variables
-      set_up_move_check(move)
+      set_up_move_check(orig_move)
       # Predict whether the move will fail (generally)
       if @trainer.has_skill_flag?("PredictMoveFailure") && pbPredictMoveFailure
-        PBDebug.log_ai("#{@user.name} is considering using #{@move.name}...")
+        PBDebug.log_ai("#{@user.name} is considering using #{orig_move.name}...")
         PBDebug.log_score_change(MOVE_FAIL_SCORE - MOVE_BASE_SCORE, "move will fail")
         add_move_to_choices(choices, idxMove, MOVE_FAIL_SCORE)
         next
@@ -47,7 +47,7 @@ class Battle::AI
       case target_data.num_targets
       when 0   # No targets, affects the user or a side or the whole field
         # Includes: BothSides, FoeSide, None, User, UserSide
-        PBDebug.log_ai("#{@user.name} is considering using #{@move.name}...")
+        PBDebug.log_ai("#{@user.name} is considering using #{orig_move.name}...")
         score = MOVE_BASE_SCORE
         PBDebug.logonerr { score = pbGetMoveScore }
         add_move_to_choices(choices, idxMove, score)
@@ -61,7 +61,7 @@ class Battle::AI
           # TODO: Should this sometimes consider targeting an ally? See def
           #       pbGetMoveScoreAgainstTarget for more information.
           next if target_data.targets_foe && !@user.battler.opposes?(b)
-          PBDebug.log_ai("#{@user.name} is considering using #{@move.name} against #{b.name} (#{b.index})...")
+          PBDebug.log_ai("#{@user.name} is considering using #{orig_move.name} against #{b.name} (#{b.index})...")
           score = MOVE_BASE_SCORE
           PBDebug.logonerr { score = pbGetMoveScore([b]) }
           add_move_to_choices(choices, idxMove, score, b.index)
@@ -75,7 +75,7 @@ class Battle::AI
           next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
           targets.push(b)
         end
-        PBDebug.log_ai("#{@user.name} is considering using #{@move.name}...")
+        PBDebug.log_ai("#{@user.name} is considering using #{orig_move.name}...")
         score = MOVE_BASE_SCORE
         PBDebug.logonerr { score = pbGetMoveScore(targets) }
         add_move_to_choices(choices, idxMove, score)
@@ -143,11 +143,6 @@ class Battle::AI
          !move.moveBlacklist.include?(GameData::Move.get(@battle.lastMoveUsed).function_code)
         move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@battle.lastMoveUsed))
       end
-    when "UseLastMoveUsedByTarget"
-      if target.battler.lastRegularMoveUsed &&
-         GameData::Move.get(target.battler.lastRegularMoveUsed).flags.any? { |f| f[/^CanMirrorMove$/i] }
-        move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(target.battler.lastRegularMoveUsed))
-      end
     when "UseMoveDependingOnEnvironment"
       move.pbOnStartUse(@user.battler, [])   # Determine which move is used instead
       move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(move.npMove))
@@ -159,6 +154,13 @@ class Battle::AI
   def set_up_move_check_target(target)
     @target = (target) ? @battlers[target.index] : nil
     @target&.refresh_battler
+    if @target && @move.function == "UseLastMoveUsedByTarget"
+      if @target.battler.lastRegularMoveUsed &&
+         GameData::Move.get(@target.battler.lastRegularMoveUsed).has_flag?("CanMirrorMove")
+        mov = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@target.battler.lastRegularMoveUsed))
+        @move.set_up(mov)
+      end
+    end
   end
 
   #=============================================================================
@@ -231,7 +233,9 @@ class Battle::AI
       # TODO: Distinguish between affected foes and affected allies?
       affected_targets = 0
       # Get a score for the move against each target in turn
+      orig_move = @move.move   # In case move is Mirror Move and changes depending on the target
       targets.each do |target|
+        set_up_move_check(orig_move)
         set_up_move_check_target(target)
         t_score = pbGetMoveScoreAgainstTarget
         next if t_score < 0

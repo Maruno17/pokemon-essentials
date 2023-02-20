@@ -76,13 +76,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("OHKO",
   proc { |score, move, user, target, ai, battle|
     # Don't prefer if the target has less HP and user has a non-OHKO damaging move
     if user.check_for_move { |m| !m.is_a?(Battle::Move::OHKO) && m.damagingMove? }
-      score -= 10 if target.hp <= target.totalhp / 2
-      score -= 10 if target.hp <= target.totalhp / 4
+      score -= 8 if target.hp <= target.totalhp / 2
+      score -= 8 if target.hp <= target.totalhp / 4
     end
-    # TODO: Maybe predict dealt damage of all user's other moves, and score this
-    #       move useless if another one can KO the target. Might also need to
-    #       take into account whether those moves will fail. Might need to do
-    #       this specially after all move scores are determined.
     next score
   }
 )
@@ -506,7 +502,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPreventCriticalHitsAgainstUserSi
       if crit_stage >= 0 && crit_stage < 50
         crit_stage += b.effects[PBEffects::FocusEnergy]
         crit_stage += 1 if b.check_for_move { |m| m.highCriticalRate? }
-        crit_stage = 99 if m.check_for_move { |m| m.pbCritialOverride(b.battler, user.battler) > 0 }
+        crit_stage = 99 if b.check_for_move { |m| m.pbCritialOverride(b.battler, user.battler) > 0 }
         crit_stage = [crit_stage, Battle::Move::CRITICAL_HIT_RATIOS.length - 1].min
       end
       # TODO: Change the score depending on how much of an effect a critical hit
@@ -1509,10 +1505,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetMovesBecomeElectri
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("NormalMovesBecomeElectric",
   proc { |score, move, user, ai, battle|
-    # Get Electric's effectiveness against the user
-    electric_eff = user.effectiveness_of_type_against_battler(:ELECTRIC, target)
-    electric_eff *= 1.5 if target.has_type?(:ELECTRIC)   # STAB
-    electric_eff = 0 if user.has_active_ability?([:LIGHTNINGROD, :MOTORDRIVE, :VOLTABSORB])
+    base_electric_eff = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
+    base_electric_eff = 0 if user.has_active_ability?([:LIGHTNINGROD, :MOTORDRIVE, :VOLTABSORB])
     # Check all affected foe battlers for Normal moves, get their effectiveness
     # against the user and decide whether it is better or worse than Electric's
     # effectiveness
@@ -1521,11 +1515,17 @@ Battle::AI::Handlers::MoveEffectScore.add("NormalMovesBecomeElectric",
     ai.each_foe_battler(user.side) do |b, i|
       next if move.pbPriority(b.battler) <= 0 && b.faster_than?(user)
       next if !b.has_damaging_move_of_type?(:NORMAL)
+      # Normal's effectiveness
       eff = user.effectiveness_of_type_against_battler(:NORMAL, b)
       eff *= 1.5 if b.has_type?(:NORMAL)   # STAB
-      if eff > electric_eff
+      # Electric's effectiveness
+      elec_eff = user.effectiveness_of_type_against_battler(:ELECTRIC, b)
+      elec_eff *= 1.5 if b.has_type?(:ELECTRIC)   # STAB
+      elec_eff *= base_electric_eff
+      # Compare the two
+      if eff > elec_eff
         electric_type_better += 1
-      elsif eff < electric_eff
+      elsif eff < elec_eff
         normal_type_better += 1
       end
     end

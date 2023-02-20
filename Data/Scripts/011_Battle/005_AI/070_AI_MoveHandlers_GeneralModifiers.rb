@@ -258,7 +258,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_knocking_out_dest
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_targeting_bouncable_move_against_Magic_Bouncer,
   proc { |score, move, user, target, ai, battle|
-    if move.statusMove? && move.canMagicCoat? &&
+    if move.statusMove? && move.move.canMagicCoat? &&
        !battle.moldBreaker && target.has_active_ability?(:MAGICBOUNCE)
       old_score = score
       score = Battle::AI::MOVE_USELESS_SCORE
@@ -270,7 +270,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_targeting_bouncab
 
 Battle::AI::Handlers::GeneralMoveScore.add(:avoid_bouncable_move_with_foe_Magic_Bouncer,
   proc { |score, move, user, ai, battle|
-    if move.statusMove? && move.canMagicCoat? &&
+    if move.statusMove? && move.move.canMagicCoat? &&
        move.pbTarget(user.battler).num_targets == 0 && !battle.moldBreaker
       has_magic_bounce = false
       ai.each_foe_battler(user.side) do |b, i|

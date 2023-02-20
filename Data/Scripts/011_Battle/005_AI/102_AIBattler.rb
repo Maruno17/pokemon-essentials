@@ -201,6 +201,8 @@ class Battle::AI::AIBattler
     return active_types.include?(GameData::Type.get(type).id)
   end
 
+  # TODO: Also make a def effectiveness_of_move_against_battler which calls
+  #       pbCalcTypeModSingle instead of effectiveness_of_type_against_single_battler_type.
   def effectiveness_of_type_against_battler(type, user = nil)
     ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
     return ret if !type
@@ -214,8 +216,6 @@ class Battle::AI::AIBattler
       end
     else
       @battler.pbTypes(true).each do |defend_type|
-        # TODO: Need to check the move's pbCalcTypeModSingle because particular
-        #       moves can modify that method to give different effectivenesses.
         ret *= effectiveness_of_type_against_single_battler_type(type, defend_type, user)
       end
       ret *= 2 if self.effects[PBEffects::TarShot] && type == :FIRE

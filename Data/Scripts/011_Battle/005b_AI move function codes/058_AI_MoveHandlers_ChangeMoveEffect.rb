@@ -469,7 +469,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UseLastMoveUsedByTarget",
   proc { |move, user, target, ai, battle|
     next true if !target.battler.lastRegularMoveUsed
-    next GameData::Move.get(target.battler.lastRegularMoveUsed).flags.none? { |f| f[/^CanMirrorMove$/i] }
+    next !GameData::Move.get(target.battler.lastRegularMoveUsed).has_flag?("CanMirrorMove")
   }
 )
 

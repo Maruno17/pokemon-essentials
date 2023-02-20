@@ -20,7 +20,7 @@ class Trainer
   end
 
   def skill_level
-    return GameData::TrainerType.try_get(:trainer_type)&.skill_level || 0
+    return GameData::TrainerType.try_get(self.trainer_type)&.skill_level || 0
   end
 
   #=============================================================================

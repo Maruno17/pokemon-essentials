@@ -557,8 +557,127 @@ class Battle::AI
   #=============================================================================
   #
   #=============================================================================
-  def get_score_for_terrain(terrain, move_user)
+  def get_score_for_weather(weather, move_user, starting = false)
+    return 0 if @battle.pbCheckGlobalAbility(:AIRLOCK) ||
+                @battle.pbCheckGlobalAbility(:CLOUDNINE)
     ret = 0
+    if starting
+      weather_extender = {
+        :Sun       => :HEATROCK,
+        :Rain      => :DAMPROCK,
+        :Sandstorm => :SMOOTHROCK,
+        :Hail      => :ICYROCK
+      }[weather]
+      ret += 4 if weather_extender && move_user.has_active_item?(weather_extender)
+    end
+    each_battler do |b, i|
+      # Check each battler for weather-specific effects
+      case weather
+      when :Sun
+        # Check for Fire/Water moves
+        if b.has_damaging_move_of_type?(:FIRE)
+          ret += (b.opposes?(move_user)) ? -8 : 8
+        end
+        if b.has_damaging_move_of_type?(:WATER)
+          ret += (b.opposes?(move_user)) ? 8 : -8
+        end
+        # TODO: Check for freezing moves.
+      when :Rain
+        # Check for Fire/Water moves
+        if b.has_damaging_move_of_type?(:WATER)
+          ret += (b.opposes?(move_user)) ? -8 : 8
+        end
+        if b.has_damaging_move_of_type?(:FIRE)
+          ret += (b.opposes?(move_user)) ? 8 : -8
+        end
+      when :Sandstorm
+        # Check for battlers affected by sandstorm's effects
+        if b.battler.takesSandstormDamage?   # End of round damage
+          ret += (b.opposes?(move_user)) ? 8 : -8
+        end
+        if b.has_type?(:ROCK)   # +SpDef for Rock types
+          ret += (b.opposes?(move_user)) ? -8 : 8
+        end
+      when :Hail
+        # Check for battlers affected by hail's effects
+        if b.battler.takesHailDamage?   # End of round damage
+          ret += (b.opposes?(move_user)) ? 8 : -8
+        end
+      when :ShadowSky
+        # Check for battlers affected by Shadow Sky's effects
+        if b.has_damaging_move_of_type?(:SHADOW)
+          ret += (b.opposes?(move_user)) ? 8 : -8
+        end
+        if b.battler.takesShadowSkyDamage?   # End of round damage
+          ret += (b.opposes?(move_user)) ? 8 : -8
+        end
+      end
+      # Check each battler's abilities/other moves affected by the new weather
+      if @trainer.medium_skill? && !b.has_active_item?(:UTILITYUMBRELLA)
+        beneficial_abilities = {
+          :Sun       => [:CHLOROPHYLL, :FLOWERGIFT, :FORECAST, :HARVEST, :LEAFGUARD, :SOLARPOWER],
+          :Rain      => [:DRYSKIN, :FORECAST, :HYDRATION, :RAINDISH, :SWIFTSWIM],
+          :Sandstorm => [:SANDFORCE, :SANDRUSH, :SANDVEIL],
+          :Hail      => [:FORECAST, :ICEBODY, :SLUSHRUSH, :SNOWCLOAK]
+        }[weather]
+        if beneficial_abilities && beneficial_abilities.length > 0 &&
+           b.has_active_ability?(beneficial_abilities)
+          ret += (b.opposes?(move_user)) ? -5 : 5
+        end
+        if weather == :Hail && b.ability == :ICEFACE
+          ret += (b.opposes?(move_user)) ? -5 : 5
+        end
+        negative_abilities = {
+          :Sun => [:DRYSKIN]
+        }[weather]
+        if negative_abilities && negative_abilities.length > 0 &&
+           b.has_active_ability?(negative_abilities)
+          ret += (b.opposes?(move_user)) ? 5 : -5
+        end
+        beneficial_moves = {
+          :Sun       => ["HealUserDependingOnWeather",
+                         "RaiseUserAtkSpAtk1Or2InSun",
+                         "TwoTurnAttackOneTurnInSun",
+                         "TypeAndPowerDependOnWeather"],
+          :Rain      => ["ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
+                         "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky",
+                         "TypeAndPowerDependOnWeather"],
+          :Sandstorm => ["HealUserDependingOnSandstorm",
+                         "TypeAndPowerDependOnWeather"],
+          :Hail      => ["FreezeTargetAlwaysHitsInHail",
+                         "StartWeakenDamageAgainstUserSideIfHail",
+                         "TypeAndPowerDependOnWeather"],
+          :ShadowSky => ["TypeAndPowerDependOnWeather"]
+        }[weather]
+        if beneficial_moves && beneficial_moves.length > 0 &&
+           b.has_move_with_function?(*beneficial_moves)
+          ret += (b.opposes?(move_user)) ? -5 : 5
+        end
+        negative_moves = {
+          :Sun       => ["ConfuseTargetAlwaysHitsInRainHitsTargetInSky",
+                         "ParalyzeTargetAlwaysHitsInRainHitsTargetInSky"],
+          :Rain      => ["HealUserDependingOnWeather",
+                         "TwoTurnAttackOneTurnInSun"],
+          :Sandstorm => ["HealUserDependingOnWeather",
+                         "TwoTurnAttackOneTurnInSun"],
+          :Hail      => ["HealUserDependingOnWeather",
+                         "TwoTurnAttackOneTurnInSun"]
+        }[weather]
+        if negative_moves && negative_moves.length > 0 &&
+           b.has_move_with_function?(*negative_moves)
+          ret += (b.opposes?(move_user)) ? 5 : -5
+        end
+      end
+    end
+    return ret
+  end
+
+  #=============================================================================
+  #
+  #=============================================================================
+  def get_score_for_terrain(terrain, move_user, starting = false)
+    ret = 0
+    ret += 4 if starting && terrain != :None && move_user.has_active_item?(:TERRAINEXTENDER)
     # Inherent effects of terrain
     each_battler do |b, i|
       next if !b.battler.affectedByTerrain?
@@ -613,9 +732,7 @@ class Battle::AI
       :Psychic  => :PSYCHICSEED
     }[terrain]
     each_battler do |b, i|
-      if b.has_active_item?(:TERRAINEXTENDER)
-        ret += (b.opposes?(move_user)) ? -15 : 15
-      elsif seed && b.has_active_item?(seed)
+      if seed && b.has_active_item?(seed)
         ret += (b.opposes?(move_user)) ? -15 : 15
       end
     end
@@ -623,9 +740,7 @@ class Battle::AI
     if @trainer.medium_skill?
       abils = {
         :Electric => :SURGESURFER,
-        :Grassy   => :GRASSPELT,
-        :Misty    => nil,
-        :Psychic  => nil
+        :Grassy   => :GRASSPELT
       }[terrain]
       good_moves = {
         :Electric => ["DoublePowerInElectricTerrain"],
@@ -635,12 +750,9 @@ class Battle::AI
         :Psychic  => ["HitsAllFoesAndPowersUpInPsychicTerrain"]
       }[terrain]
       bad_moves = {
-        :Electric => nil,
-        :Grassy   => ["DoublePowerIfTargetUnderground",
-                      "LowerTargetSpeed1WeakerInGrassyTerrain",
-                      "RandomPowerDoublePowerIfTargetUnderground"],
-        :Misty    => nil,
-        :Psychic  => nil
+        :Grassy => ["DoublePowerIfTargetUnderground",
+                    "LowerTargetSpeed1WeakerInGrassyTerrain",
+                    "RandomPowerDoublePowerIfTargetUnderground"]
       }[terrain]
       each_battler do |b, i|
         next if !b.battler.affectedByTerrain?

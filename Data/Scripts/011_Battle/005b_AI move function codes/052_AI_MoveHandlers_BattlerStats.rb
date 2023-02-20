@@ -515,13 +515,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRaiseUserAtk1WhenDamaged",
     # TODO: Check whether any foe has damaging moves that will trigger the stat
     #       raise?
     # Prefer if user benefits from a raised Attack stat
-    if user.check_for_move { |m| m.physicalMove?(m.type) &&
-                                 m.function != "UseUserDefenseInsteadOfUserAttack" &&
-                                 m.function != "UseTargetAttackInsteadOfUserAttack" }
-      score += 8
-    elsif user.has_move_with_function?("PowerHigherWithUserPositiveStatStages")
-      score += 4
-    end
+    score += 8 if ai.stat_raise_worthwhile?(user, :ATTACK)
+    score += 4 if user.has_move_with_function?("PowerHigherWithUserPositiveStatStages")
     next score
   }
 )

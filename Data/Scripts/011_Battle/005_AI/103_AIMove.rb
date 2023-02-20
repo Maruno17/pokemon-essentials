@@ -32,6 +32,7 @@ class Battle::AI::AIMove
   # ignoresReflect?
 
   def id;            return @move.id;            end
+  def name;          return @move.name;          end
   def physicalMove?(thisType = nil); return @move.physicalMove?(thisType); end
   def specialMove?(thisType = nil);  return @move.specialMove?(thisType);  end
   def damagingMove?; return @move.damagingMove?; end

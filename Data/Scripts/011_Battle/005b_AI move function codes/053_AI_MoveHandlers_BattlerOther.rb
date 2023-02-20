@@ -581,8 +581,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FlinchTarget",
     end
     # Inherent preference
     score += 10
-    # Prefer if the target is paralysed, confused or infatuated, to compound the turn skipping
-    # TODO: Also prefer if the target is trapped in battle or can't switch out?
+    # Prefer if the target is paralysed, confused or infatuated, to compound the
+    # turn skipping
     score += 5 if target.status == :PARALYSIS ||
                   target.effects[PBEffects::Confusion] > 1 ||
                   target.effects[PBEffects::Attract] >= 0

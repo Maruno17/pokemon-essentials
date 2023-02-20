@@ -28,10 +28,27 @@ class Battle::AI::AITrainer
     @skill         = 0
     @skill_flags   = []
     set_up_skill
+    set_up_skill_flags
+    sanitize_skill_flags
   end
 
   def set_up_skill
-    @skill = @trainer.skill_level if @trainer
+    if @trainer
+      @skill = @trainer.skill_level
+    elsif Settings::SMARTER_WILD_LEGENDARY_POKEMON
+      # Give wild legendary/mythical Pokémon a higher skill
+      wild_battler = @ai.battle.battlers[@side]
+      sp_data = wild_battler.pokemon.species_data
+      if sp_data.has_flag?("Legendary") || sp_data.has_flag?("Mythical")
+        @skill = 32   # Medium skill
+      end
+    end
+  end
+
+  def set_up_skill_flags
+    if @trainer
+      @trainer.flags.each { |flag| @skill_flags.push(flag) }
+    end
     # TODO: Add skill flags depending on @skill.
     if @skill > 0
       @skill_flags.push("PredictMoveFailure")
@@ -41,9 +58,15 @@ class Battle::AI::AITrainer
     if !medium_skill?
       @skill_flags.push("UsePokemonInOrder")
     elsif best_skill?
-      # TODO: Also have flag "DontReserveLastPokemon" which negates this.
       @skill_flags.push("ReserveLastPokemon")
     end
+  end
+
+  def sanitize_skill_flags
+    # NOTE: Any skill flag which is shorthand for multiple other skill flags
+    #       should be "unpacked" here.
+    # TODO: Have a bunch of "AntiX" flags that negate the corresponding "X" flags.
+    # TODO: Have flag "DontReserveLastPokemon" which negates "ReserveLastPokemon".
   end
 
   def has_skill_flag?(flag)

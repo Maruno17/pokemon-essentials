@@ -105,7 +105,7 @@ class Battle::AI
     end
     # Spikes
     if battler_side.effects[PBEffects::Spikes] > 0 && !pkmn.hasAbility?(:MAGICGUARD) &&
-       !battler.airborne? && !pkmn.hasItem?(:HEAVYDUTYBOOTS)
+       !pkmn.hasItem?(:HEAVYDUTYBOOTS)
       if @battle.field.effects[PBEffects::Gravity] > 0 || pkmn.hasItem?(:IRONBALL) ||
          !(pkmn.hasType?(:FLYING) || pkmn.hasItem?(:LEVITATE) || pkmn.hasItem?(:AIRBALLOON))
         spikes_div = [8, 6, 4][battler_side.effects[PBEffects::Spikes] - 1]
