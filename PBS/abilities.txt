@@ -1070,3 +1070,15 @@ Description = Combines Unnerve and Chilling Neigh Abilities.
 [ASONEGRIMNEIGH]
 Name = As One
 Description = Combines Unnerve and Grim Neigh Abilities.
+#-------------------------------
+[SHARPNESS]
+Name = Sharpness
+Description = Powers up slicing moves.
+#-------------------------------
+[ANGERSHELL]
+Name = Anger Shell
+Description = Lowers Def, Sp. Def and ups Atk, Sp. Atk, Speed if its HP is at half or less.
+#-------------------------------
+[ROCKPAYLOAD]
+Name = Rock Payload
+Description = Powers up Rock-type moves.

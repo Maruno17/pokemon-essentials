@@ -1467,6 +1467,18 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:WATERBUBBLE,
   }
 )
 
+Battle::AbilityEffects::DamageCalcFromUser.add(:SHARPNESS,
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.5 if move.slicingMove?
+  }
+)
+
+Battle::AbilityEffects::DamageCalcFromUser.add(:ROCKPAYLOAD,
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:attack_multiplier] *= 1.5 if type == :ROCK
+  }
+)
+
 #===============================================================================
 # DamageCalcFromAlly handlers
 #===============================================================================
@@ -2240,6 +2252,18 @@ Battle::AbilityEffects::AfterMoveUseFromTarget.add(:PICKPOCKET,
        user.pbThis(true), target.itemName))
     battle.pbHideAbilitySplash(target)
     target.pbHeldItemTriggerCheck
+  }
+)
+
+Battle::AbilityEffects::AfterMoveUseFromTarget.add(:ANGERSHELL,
+  proc { |ability, target, user, move, switched_battlers, battle|
+    next if !move.damagingMove?
+    next if !target.droppedBelowHalfHP
+    target.pbRaiseStatStageByAbility(:ATTACK, 1, target)
+    target.pbRaiseStatStageByAbility(:SPECIAL_ATTACK, 1, target)
+    target.pbRaiseStatStageByAbility(:SPEED, 1, target)
+    target.pbLowerStatStageByAbility(:DEFENSE, 1, target)
+    target.pbLowerStatStageByAbility(:SPECIAL_DEFENSE, 1, target)
   }
 )
 
