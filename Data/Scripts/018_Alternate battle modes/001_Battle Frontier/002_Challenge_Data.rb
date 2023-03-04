@@ -36,7 +36,8 @@ end
 def pbGetBTPokemon(challenge_id)
   customsOnly = !$game_switches[SWITCH_BATTLE_FACTORY_INCLUDE_ALL]
   if customsOnly
-    return getCustomSpeciesList()
+    customsList = getCustomSpeciesList()
+    return customsList if customsList
   end
   return listAllPokemon
 

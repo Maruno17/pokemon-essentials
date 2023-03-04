@@ -406,7 +406,7 @@ def customSpriteExists(species)
   return download_custom_sprite(head, body) != nil
 end
 
-def customSpriteExistsBase(head,body)
+def customSpriteExistsBase(body,head)
   pathCustom = getCustomSpritePath(body,head)
   return true if pbResolveBitmap(pathCustom) != nil
   return download_custom_sprite(head, body) != nil
