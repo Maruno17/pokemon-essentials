@@ -53,8 +53,11 @@ end
 #   repo = "Aegide/custom-fusion-sprites"
 #   folder = "CustomBattlers"
 def list_online_custom_sprites
-  repo = "infinitefusion/sprites"
-  folder = "CustomBattlers"
+  # repo = "infinitefusion/sprites"
+  # folder = "CustomBattlers"
+
+    repo = "Aegide/custom-fusion-sprites"
+    folder = "CustomBattlers"
   api_url = "https://api.github.com/repos/#{repo}/contents/#{folder}"
   response = HTTPLite.get(api_url)
   return HTTPLite::JSON.parse(response[:body]).map { |file| file['name'] }

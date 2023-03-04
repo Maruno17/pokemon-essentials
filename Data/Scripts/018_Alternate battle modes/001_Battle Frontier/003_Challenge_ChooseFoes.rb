@@ -61,20 +61,22 @@ def pbGenerateBattleTrainer(idxTrainer, rules)
   if pokemonnumbers.length <= rules.ruleset.suggestedNumber
     for n in pokemonnumbers
       rndpoke = btpokemon[n]
-      pkmn = rndpoke.createPokemon(level, indvalues, opponent)
+      pkmn = rndpoke.createPokemon(rndpoke,level, indvalues, opponent)
       opponent.party.push(pkmn)
     end
     return opponent
   end
   # There are more possible Pokémon than there are spaces available in the
   # trainer's party; randomly choose Pokémon
+  #
+  minBst = pbGet(VAR_BATTLE_TOWER_MIN_BST)
+  maxBst = pbGet(VAR_BATTLE_TOWER_MAX_BST)
   loop do
     opponent.party.clear
     while opponent.party.length < rules.ruleset.suggestedNumber
-      rnd = pokemonnumbers[rand(pokemonnumbers.length)]
-      rndpoke = btpokemon[rnd]
-      pkmn = rndpoke.createPokemon(level, indvalues, opponent)
-      opponent.party.push(pkmn)
+      rndpoke = getRandomPokemonSpecies(btpokemon,minBst,maxBst)
+
+      opponent.party.push(createPokemon(rndpoke,level, indvalues, nil))
     end
     break if rules.ruleset.isValid?(opponent.party)
   end
@@ -170,3 +172,17 @@ def createPokemon(species, level, iv, trainer)
   pkmn.calc_stats
   return pkmn
 end
+
+#list is a list of dex numbers of possible choices
+def getRandomPokemonSpecies(list=[],minBST=0,maxBST=1000)
+  if list == []
+    list = listAllPokemon
+  end
+  bst=-1
+  while (bst < minBST || bst > maxBST)
+    chosenPokemon = list.sample
+    bst = calcBaseStatsSum(chosenPokemon)
+  end
+  return chosenPokemon
+end
+

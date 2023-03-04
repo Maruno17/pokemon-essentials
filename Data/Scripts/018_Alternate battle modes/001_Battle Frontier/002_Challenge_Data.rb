@@ -25,16 +25,20 @@ def pbGetBTTrainers(challengeID)
   return []
 end
 
-def pbGetBTPokemon(challenge_id)
-  customsOnly = !$game_switches[SWITCH_BATTLE_FACTORY_INCLUDE_ALL]
-  if customsOnly
-    return getCustomSpeciesList()
-  end
+def listAllPokemon
   list=[]
   for i in 0..PBSpecies.maxValue
     list << i
   end
   return list
+end
+
+def pbGetBTPokemon(challenge_id)
+  customsOnly = !$game_switches[SWITCH_BATTLE_FACTORY_INCLUDE_ALL]
+  if customsOnly
+    return getCustomSpeciesList()
+  end
+  return listAllPokemon
 
 
 
@@ -106,12 +110,12 @@ def pbBattleChallengeGraphic(event)
   bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
   filename = GameData::TrainerType.charset_filename_brief((bttrainers[nextTrainer][0] rescue nil))
   begin
-    filename = "NPC 01" if nil_or_empty?(filename)
+    filename = "NPCpbAddForeignPokemon 01" if nil_or_empty?(filename)
     bitmap = AnimatedBitmap.new("Graphics/Characters/" + filename)
     bitmap.dispose
     event.character_name = filename
   rescue
-    event.character_name = "NPC 01"
+    event.character_name = "BWClerk"
   end
 end
 

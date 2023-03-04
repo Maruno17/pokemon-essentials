@@ -32,6 +32,11 @@ class Pokemon
       return new(trainer.id, trainer.name, trainer.gender, trainer.language)
     end
 
+    def self.new_from_trainer_data(trainer)
+      validate trainer => [GameData::Trainer]
+      return new(trainer.id, trainer.name, 2, 2)
+    end
+
     # Returns an Owner object with a foreign ID.
     # @param name [String] owner name
     # @param gender [Integer] owner gender

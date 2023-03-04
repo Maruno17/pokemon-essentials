@@ -59,6 +59,10 @@ module GameData
       return self::DATA[key]
     end
 
+    def list_all
+      return self::DATA
+    end
+
     # @param tr_type [Symbol, String]
     # @param tr_name [String]
     # @param tr_version [Integer, nil]

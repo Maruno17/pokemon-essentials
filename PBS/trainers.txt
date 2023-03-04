@@ -1223,7 +1223,7 @@ Pokemon = B95H43,17
 #------------------
 
 [YOUNGSTER,Joey]
-Pokemon = B19H20,17 
+Pokemon = B19H19,17 
 #----------------
 
 [YOUNGSTER,Dan]

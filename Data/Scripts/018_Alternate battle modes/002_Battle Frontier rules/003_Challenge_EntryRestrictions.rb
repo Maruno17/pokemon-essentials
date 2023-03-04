@@ -9,9 +9,14 @@ class StandardRestriction
       return true if [:TRUANT, :SLOWSTART].include?(a)
     end
     # Certain named species are not banned
-    return true if [:DRAGONITE, :SALAMENCE, :TYRANITAR].include?(pkmn.species)
+    return true if pkmn.isFusionOf(:DRAGONITE)
+    return true if pkmn.isFusionOf(:SALAMENCE)
+    return true if pkmn.isFusionOf(:TYRANITAR)
+
     # Certain named species are banned
-    return false if [:WYNAUT, :WOBBUFFET].include?(pkmn.species)
+    return false if pkmn.isFusionOf(:WYNAUT)
+    return false if pkmn.isFusionOf(:WOBBUFFET)
+
     # Species with total base stat 600 or more are banned
     bst = 0
     pkmn.baseStats.each_value { |s| bst += s }

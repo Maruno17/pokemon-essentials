@@ -430,7 +430,6 @@ def getCustomSpeciesList(allowOnline=true)
 
   if speciesList.length <= 200 && allowOnline
     #try to get list from github
-    print "let's try it online bruh"
     online_list = list_online_custom_sprites
     return nil if !online_list
     species_id_list = []

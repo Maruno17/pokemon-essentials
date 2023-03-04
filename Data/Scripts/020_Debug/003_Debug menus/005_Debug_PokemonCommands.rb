@@ -1006,7 +1006,7 @@ PokemonDebugMenuCommands.register("ownership", {
       when 0   # Make player's
         pkmn.owner = Pokemon::Owner.new_from_trainer($Trainer)
       when 1   # Set OT's name
-        pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, Settings::MAX_PLAYER_NAME_SIZE)
+        pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, Settings::MAX_PLAYER_NAME_SIZE+10)
       when 2   # Set OT's gender
         cmd2 = screen.pbShowCommands(_INTL("Set OT's gender."),
            [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
