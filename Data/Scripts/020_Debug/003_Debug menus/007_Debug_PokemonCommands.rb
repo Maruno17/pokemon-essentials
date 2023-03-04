@@ -769,7 +769,7 @@ MenuHandlers.add(:pokemon_debug_menu, :species_and_form, {
           form_name = sprintf("%d: %s", sp.form, form_name)
           formcmds[0].push(sp.form)
           formcmds[1].push(form_name)
-          cmd2 = sp.form if pkmn.form == sp.form
+          cmd2 = formcmds[0].length - 1 if pkmn.form == sp.form
         end
         if formcmds[0].length <= 1
           screen.pbDisplay(_INTL("Species {1} only has one form.", pkmn.speciesName))

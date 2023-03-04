@@ -275,13 +275,21 @@ class HallOfFame_Scene
   end
 
   def writeTrainerData
-    totalsec = Graphics.frame_count / Graphics.frame_rate
+    if $PokemonGlobal.hallOfFameLastNumber == 1
+      totalsec = $stats.time_to_enter_hall_of_fame.to_i
+    else
+      totalsec = $stats.play_time.to_i
+    end
     hour = totalsec / 60 / 60
     min = totalsec / 60 % 60
     pubid = sprintf("%05d", $player.public_ID)
     lefttext = _INTL("Name<r>{1}<br>", $player.name)
-    lefttext += _INTL("IDNo.<r>{1}<br>", pubid)
-    lefttext += _ISPRINTF("Time<r>{1:02d}:{2:02d}<br>", hour, min)
+    lefttext += _INTL("ID No.<r>{1}<br>", pubid)
+    if hour > 0
+      lefttext += _INTL("Time<r>{1}h {2}m<br>", hour, min)
+    else
+      lefttext += _INTL("Time<r>{1}m<br>", min)
+    end
     lefttext += _INTL("Pokédex<r>{1}/{2}<br>",
                       $player.pokedex.owned_count, $player.pokedex.seen_count)
     @sprites["messagebox"] = Window_AdvancedTextPokemon.new(lefttext)
@@ -315,7 +323,7 @@ class HallOfFame_Scene
       [pokename, Graphics.width - 192, Graphics.height - 74, 2, BASECOLOR, SHADOWCOLOR],
       [_INTL("Lv. {1}", pokemon.egg? ? "?" : pokemon.level),
        64, Graphics.height - 42, 0, BASECOLOR, SHADOWCOLOR],
-      [_INTL("IDNo.{1}", pokemon.egg? ? "?????" : idno),
+      [_INTL("ID No. {1}", pokemon.egg? ? "?????" : idno),
        Graphics.width - 192, Graphics.height - 42, 2, BASECOLOR, SHADOWCOLOR]
     ]
     if hallNumber > -1
