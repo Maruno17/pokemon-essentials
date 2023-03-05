@@ -145,16 +145,23 @@ class Button < UIControl
     y = self.y
     width = self.width
     height = self.height
-    color = Color.new(120, 120, 120)
-    bitmap.fill_rect(x + 1, y + 1, width - 2, height - 2, color)
-    ret = Rect.new(x + 1, y + 1, width - 2, height - 2)
+    # Draw background
     if @captured
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(120, 120, 120, 80))
     else
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
     end
+    # Draw text
     size = bitmap.text_size(self.label).width
     shadowtext(bitmap, x + 4, y, size, height, self.label, @disabled)
+    # Draw outline
+    color = Color.new(120, 120, 120)
+    bitmap.fill_rect(x + 1, y + 1, width - 2, 1, color)
+    bitmap.fill_rect(x + 1, y + 1, 1, height - 2, color)
+    bitmap.fill_rect(x + 1, y + height - 2, width - 2, 1, color)
+    bitmap.fill_rect(x + width - 2, y + 1, 1, height - 2, color)
+    # Return the control's clickable area
+    ret = Rect.new(x + 1, y + 1, width - 2, height - 2)
     return ret
   end
 end
@@ -197,18 +204,26 @@ class Checkbox < Button
     y = self.y
     width = [self.width, 32].min
     height = [self.height, 32].min
-    color = Color.new(120, 120, 120)
+    # Draw background
     bitmap.fill_rect(x + 2, y + 2, self.width - 4, self.height - 4, Color.new(0, 0, 0, 0))
-    bitmap.fill_rect(x + 1, y + 1, width - 2, height - 2, color)
-    ret = Rect.new(x + 1, y + 1, width - 2, height - 2)
     if @captured
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(120, 120, 120, 80))
     else
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
     end
+    # Draw text
     shadowtext(bitmap, x, y, 32, 32, "X", @disabled, 1) if self.checked
     size = bitmap.text_size(self.label).width
     shadowtext(bitmap, x + 36, y, size, height, self.label, @disabled)
+    # Draw outline
+    color = Color.new(120, 120, 120)
+    bitmap.fill_rect(x + 1, y + 1, width - 2, height - 2, color)
+    bitmap.fill_rect(x + 1, y + 1, width - 2, 1, color)
+    bitmap.fill_rect(x + 1, y + 1, 1, height - 2, color)
+    bitmap.fill_rect(x + 1, y + height - 2, width - 2, 1, color)
+    bitmap.fill_rect(x + width - 2, y + 1, 1, height - 2, color)
+    # Return the control's clickable area
+    ret = Rect.new(x + 1, y + 1, width - 2, height - 2)
     return ret
   end
 end
@@ -300,13 +315,15 @@ class TextField < UIControl
     shadowtext(bitmap, x, y, size, height, self.label)
     x += size
     width -= size
-    bitmap.fill_rect(x + 1, y + 1, width - 2, height - 2, color)
-    ret = Rect.new(x + 1, y + 1, width - 2, height - 2)
+    outline_x = x
+    outline_y = y
+    # Draw background
     if @captured
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(120, 120, 120, 80))
     else
       bitmap.fill_rect(x + 2, y + 2, width - 4, height - 4, Color.new(0, 0, 0, 0))
     end
+    # Draw text
     x += 4
     textscan = self.text.scan(/./m)
     scanlength = textscan.length
@@ -336,6 +353,13 @@ class TextField < UIControl
     if ((@frame / 10) & 1) == 0 && textscan.length == @cursor
       bitmap.fill_rect(x, y + 4, 2, 24, Color.new(120, 120, 120))
     end
+    # Draw outline
+    bitmap.fill_rect(outline_x + 1, outline_y + 1, width - 2, 1, color)
+    bitmap.fill_rect(outline_x + 1, outline_y + 1, 1, height - 2, color)
+    bitmap.fill_rect(outline_x + 1, outline_y + height - 2, width - 2, 1, color)
+    bitmap.fill_rect(outline_x + width - 2, outline_y + 1, 1, height - 2, color)
+    # Return the control's clickable area
+    ret = Rect.new(x + 1, y + 1, width - 2, height - 2)
     return ret
   end
 end
@@ -398,9 +422,9 @@ class Slider < UIControl
     repeattime = Input.time?(Input::MOUSELEFT) / 1000
     # Left arrow
     if left.contains(mousepos[0], mousepos[1])
-      if repeattime > 2500
+      if repeattime > 3000
         self.curvalue -= 10
-      elsif repeattime > 1250
+      elsif repeattime > 1500
         self.curvalue -= 5
       else
         self.curvalue -= 1
@@ -411,9 +435,9 @@ class Slider < UIControl
     end
     # Right arrow
     if right.contains(mousepos[0], mousepos[1])
-      if repeattime > 2500
+      if repeattime > 3000
         self.curvalue += 10
-      elsif repeattime > 1250
+      elsif repeattime > 1500
         self.curvalue += 5
       else
         self.curvalue += 1
@@ -433,13 +457,13 @@ class Slider < UIControl
     color = Color.new(120, 120, 120)
     bitmap.fill_rect(x, y, width, height, Color.new(0, 0, 0, 0))
     size = bitmap.text_size(self.label).width
-    leftarrows = bitmap.text_size(_INTL("<<"))
+    leftarrows = bitmap.text_size(" <<")
     numbers = bitmap.text_size(" XXXX ").width
-    rightarrows = bitmap.text_size(_INTL(">>"))
+    rightarrows = bitmap.text_size(">> ")
     bitmap.font.color = color
     shadowtext(bitmap, x, y, size, height, self.label)
     x += size
-    shadowtext(bitmap, x, y, leftarrows.width, height, _INTL("<<"),
+    shadowtext(bitmap, x, y, leftarrows.width, height, " <<",
                self.disabled || self.curvalue == self.minvalue)
     @leftarrow = Rect.new(x, y, leftarrows.width, height)
     x += leftarrows.width
@@ -448,7 +472,7 @@ class Slider < UIControl
       shadowtext(bitmap, x, y, numbers, height, " #{self.curvalue} ", false, 1)
     end
     x += numbers
-    shadowtext(bitmap, x, y, rightarrows.width, height, _INTL(">>"),
+    shadowtext(bitmap, x, y, rightarrows.width, height, ">> ",
                self.disabled || self.curvalue == self.maxvalue)
     @rightarrow = Rect.new(x, y, rightarrows.width, height)
   end
@@ -650,9 +674,9 @@ class TextSlider < UIControl
     repeattime = Input.time?(Input::MOUSELEFT) / 1000
     # Left arrow
     if left.contains(mousepos[0], mousepos[1])
-      if repeattime > 2500
+      if repeattime > 3000
         self.curvalue -= 10
-      elsif repeattime > 1250
+      elsif repeattime > 1500
         self.curvalue -= 5
       else
         self.curvalue -= 1
@@ -662,9 +686,9 @@ class TextSlider < UIControl
     end
     # Right arrow
     if right.contains(mousepos[0], mousepos[1])
-      if repeattime > 2500
+      if repeattime > 3000
         self.curvalue += 10
-      elsif repeattime > 1250
+      elsif repeattime > 1500
         self.curvalue += 5
       else
         self.curvalue += 1
@@ -689,12 +713,12 @@ class TextSlider < UIControl
     color = Color.new(120, 120, 120)
     bitmap.fill_rect(x, y, width, height, Color.new(0, 0, 0, 0))
     size = bitmap.text_size(self.label).width
-    leftarrows = bitmap.text_size(_INTL("<<"))
-    rightarrows = bitmap.text_size(_INTL(">>"))
+    leftarrows = bitmap.text_size(" <<")
+    rightarrows = bitmap.text_size(">> ")
     bitmap.font.color = color
     shadowtext(bitmap, x, y, size, height, self.label)
     x += size
-    shadowtext(bitmap, x, y, leftarrows.width, height, _INTL("<<"),
+    shadowtext(bitmap, x, y, leftarrows.width, height, " <<",
                self.disabled || self.curvalue == self.minvalue)
     @leftarrow = Rect.new(x, y, leftarrows.width, height)
     x += leftarrows.width
@@ -703,7 +727,7 @@ class TextSlider < UIControl
       shadowtext(bitmap, x, y, @maxoptionwidth, height, " #{@options[self.curvalue]} ", false, 1)
     end
     x += @maxoptionwidth
-    shadowtext(bitmap, x, y, rightarrows.width, height, _INTL(">>"),
+    shadowtext(bitmap, x, y, rightarrows.width, height, ">> ",
                self.disabled || self.curvalue == self.maxvalue)
     @rightarrow = Rect.new(x, y, rightarrows.width, height)
   end

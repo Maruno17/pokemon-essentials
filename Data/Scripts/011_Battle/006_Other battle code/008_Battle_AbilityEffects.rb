@@ -1708,10 +1708,10 @@ Battle::AbilityEffects::OnBeingHit.add(:ANGERPOINT,
 
 Battle::AbilityEffects::OnBeingHit.add(:COTTONDOWN,
   proc { |ability, user, target, move, battle|
-    next if battle.allBattlers.none? { |b| b.pbCanLowerStatStage?(:DEFENSE, target) }
+    next if battle.allBattlers.none? { |b| b.index != target.index && b.pbCanLowerStatStage?(:SPEED, target) }
     battle.pbShowAbilitySplash(target)
     battle.allBattlers.each do |b|
-      b.pbLowerStatStageByAbility(:SPEED, 1, target, false)
+      b.pbLowerStatStageByAbility(:SPEED, 1, target, false) if b.index != target.index
     end
     battle.pbHideAbilitySplash(target)
   }
