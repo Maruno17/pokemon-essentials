@@ -177,6 +177,10 @@ class Pokemon
     end
   end
 
+  def naturalShiny?
+    return @natural_shiny
+  end
+
   def debugShiny?
     return !@natural_shiny || @debug_shiny
   end
