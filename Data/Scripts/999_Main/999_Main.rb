@@ -143,7 +143,7 @@ def mainFunctionDebug
     Game.set_up_system
     Graphics.update
     Graphics.freeze
-    clearTempFolder()
+    #clearTempFolder()
     begin
       sortCustomBattlers()
     rescue

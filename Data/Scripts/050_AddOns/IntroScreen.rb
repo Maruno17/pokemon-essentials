@@ -70,7 +70,7 @@ class Scene_Intro
     pbBGMStop(1.0)
     # disposes current title screen
     disposeTitle
-    clearTempFolder
+    #clearTempFolder
     # initializes load screen
     sscene = PokemonLoad_Scene.new
     sscreen = PokemonLoadScreen.new(sscene)
