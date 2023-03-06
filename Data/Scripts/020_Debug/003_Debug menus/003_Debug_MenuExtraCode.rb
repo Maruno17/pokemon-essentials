@@ -558,7 +558,7 @@ def pbExportAllAnimations
         safename = anim.name.gsub(/\W/, "_")
         Dir.mkdir("Animations/#{safename}") rescue nil
         File.open("Animations/#{safename}/#{safename}.anm", "wb") do |f|
-          f.write(dumpBase64Anim(anim))
+          f.write(BattleAnimationEditor.dumpBase64Anim(anim))
         end
         if anim.graphic && anim.graphic != ""
           graphicname = RTP.getImagePath("Graphics/Animations/" + anim.graphic)
@@ -626,13 +626,13 @@ def pbImportAllAnimations
         pbSafeCopyFile(image, RTP.getImagePath("Graphics/Animations/" + File.basename(image)), "Graphics/Animations/" + File.basename(image))
       end
       Dir.glob(folder + "/*.anm") do |f|
-        textdata = loadBase64Anim(IO.read(f)) rescue nil
+        textdata = BattleAnimationEditor.loadBase64Anim(IO.read(f)) rescue nil
         if textdata.is_a?(PBAnimation)
           index = pbAllocateAnimation(animations, textdata.name)
           missingFiles = []
           textdata.name = File.basename(folder) if textdata.name == ""
           textdata.id = -1   # This is not an RPG Maker XP animation
-          pbConvertAnimToNewFormat(textdata)
+          BattleAnimationEditor.pbConvertAnimToNewFormat(textdata)
           if textdata.graphic && textdata.graphic != "" &&
              !safeExists?(folder + "/" + textdata.graphic) &&
              !FileTest.image_exist?("Graphics/Animations/" + textdata.graphic)
