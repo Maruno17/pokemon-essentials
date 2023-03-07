@@ -30,7 +30,7 @@ class Phone
 
   def initialize
     @contacts = []
-    @rematch_variant = 0   # Original variant is 0, first rematch variant is 1, etc.
+    @rematch_variant = 0   # Original battle is 0, first rematch is 1, etc.
     @rematches_enabled = Settings::PHONE_REMATCHES_POSSIBLE_FROM_BEGINNING
     @time_to_next_call = 0.0
     @last_refresh_time = 0
@@ -91,7 +91,6 @@ class Phone
       else
         contact = Contact.new(true, args[0].map_id, args[0].id,
                               trainer_type, name, args[3], args[4], args[5])
-        contact.increment_version
       end
     elsif args[1].is_a?(Numeric)
       # Trainer
@@ -105,7 +104,6 @@ class Phone
       else
         contact = Contact.new(true, args[0], args[1],
                               trainer_type, name, args[4], args[5], args[6])
-        contact.increment_version
       end
     else
       # Non-trainer
@@ -162,10 +160,9 @@ class Phone
     trainer_type = GameData::TrainerType.get(trainer_type).id
     contact = get(true, trainer_type, name, start_version)
     return if !contact
-    contact.variant_beaten = contact.version - contact.start_version
     contact.increment_version
     contact.rematch_flag = 0
-    contact.time_to_ready = 0.0
+    contact.time_to_ready = 0
   end
 
   #=============================================================================
@@ -213,33 +210,24 @@ class Phone
     return $PokemonGlobal.phone.add(*args)
   end
 
+  def self.variant(trainer_type, name, start_version = 0)
+    contact = $PokemonGlobal.phone.get(trainer_type, name, start_version)
+    return (contact) ? contact.variant : 0
+  end
+
   def self.increment_version(trainer_type, name, start_version = 0)
     contact = $PokemonGlobal.phone.get(trainer_type, name, start_version)
     contact.increment_version if contact
   end
 
-  # TODO: Rename this.
-  def self.variant(trainer_type, name, start_version = 0)
-    contact = $PokemonGlobal.phone.get(trainer_type, name, start_version)
-    return contact.version - contact.start_version if contact
-    return start_version
-  end
-
   def self.battle(trainer_type, name, start_version = 0)
     contact = $PokemonGlobal.phone.get(true, trainer_type, name, start_version)
     return false if !contact
-    contact.increment_version if contact.version == contact.start_version + contact.variant_beaten
-    return TrainerBattle.start(trainer_type, name, contact.version)
+    return TrainerBattle.start(trainer_type, name, contact.next_version)
   end
 
   def self.reset_after_win(trainer_type, name, start_version = 0)
     $PokemonGlobal.phone.reset_after_win(trainer_type, name, start_version)
-  end
-
-  def self.variant_beaten(trainer_type, name, start_version = 0)
-    contact = $PokemonGlobal.phone.get(true, trainer_type, name, start_version)
-    return 0 if !contact
-    return contact.variant_beaten
   end
 end
 
@@ -250,8 +238,9 @@ class Phone
   class Contact
     attr_accessor :map_id, :event_id
     attr_accessor :name
-    attr_accessor :trainer_type, :start_version, :versions_count, :version
-    attr_accessor :time_to_ready, :rematch_flag, :variant_beaten
+    attr_accessor :trainer_type
+    attr_accessor :start_version, :versions_count, :version   # :version is the last trainer version that was beaten
+    attr_accessor :time_to_ready, :rematch_flag
     attr_accessor :common_event_id
     attr_reader   :visible
 
@@ -268,7 +257,6 @@ class Phone
         @versions_count  = [args[4] || 1, 1].max   # Includes the original version
         @start_version   = args[5] || 0
         @version         = @start_version
-        @variant_beaten  = 0
         @time_to_ready   = 0
         @rematch_flag    = 0   # 0=counting down, 1=ready for rematch, 2=ready and told player
         @common_event_id = args[6] || 0
@@ -319,13 +307,22 @@ class Phone
       return _INTL(@name)
     end
 
+    # Original battle is 0, first rematch is 1, etc.
+    def variant
+      return 0 if !trainer?
+      return @version - @start_version
+    end
+
+    # Returns the version of this trainer to be battled next.
+    def next_version
+      var = variant + 1
+      var = [var, $PokemonGlobal.phone.rematch_variant, @versions_count - 1].min
+      return @start_version + var
+    end
+
     def increment_version
       return if !trainer?
-      max_variant = [$PokemonGlobal.phone.rematch_variant, @versions_count - 1].min
-      return if @version - @start_version >= max_variant
-      @version += 1
-      @time_to_ready = 0
-      @rematch_flag = 0
+      @version = next_version
     end
 
     def set_trainer_event_ready_for_rematch
@@ -530,7 +527,7 @@ class Phone
 
     def get_random_contact_pokemon_species(contact)
       return "" if !contact.trainer?
-      version = [contact.version - 1, contact.start_version].max
+      version = [contact.version, contact.start_version].max
       trainer_data = GameData::Trainer.try_get(contact.trainer_type, contact.name, version)
       return "" if !trainer_data
       pkmn = trainer_data.pokemon.sample[:species]
