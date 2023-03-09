@@ -165,7 +165,7 @@ class GameStats
   end
 
   def set_time_to_hall_of_fame
-    @time_to_enter_hall_of_fame = @play_time
+    @time_to_enter_hall_of_fame = @play_time if @time_to_enter_hall_of_fame == 0
   end
 
   def play_time_per_session

@@ -53,7 +53,7 @@ module GameData
     extend ClassMethodsSymbols
     include InstanceMethods
 
-    # @param other [Symbol, String, self]
+    # @param area [Symbol, String, self]
     # @param version [Integer]
     # @return [self]
     def self.try_get(area, version = 0)

@@ -692,7 +692,10 @@ class Battle::Battler
       end
       # HP-healing held items (checks all battlers rather than just targets
       # because Flame Burst's splash damage affects non-targets)
-      @battle.pbPriority(true).each { |b| b.pbItemHPHealCheck }
+      @battle.pbPriority(true).each do |b|
+        next if move.preventsBattlerConsumingHealingBerry?(b, targets)
+        b.pbItemHPHealCheck
+      end
       # Animate battlers fainting (checks all battlers rather than just targets
       # because Flame Burst's splash damage affects non-targets)
       @battle.pbPriority(true).each { |b| b.pbFaint if b&.fainted? }

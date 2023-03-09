@@ -677,9 +677,9 @@ module Compiler
       else
         (0...battles.length).each do |i|
           if i == battles.length - 1
-            push_branch(lastpage.list, sprintf("Phone.variant_beaten(%s) >= %d", safetrcombo, i))
+            push_branch(lastpage.list, sprintf("Phone.variant(%s) >= %d", safetrcombo, i))
           else
-            push_branch(lastpage.list, sprintf("Phone.variant_beaten(%s) == %d", safetrcombo, i))
+            push_branch(lastpage.list, sprintf("Phone.variant(%s) == %d", safetrcombo, i))
           end
           ebattle = (endbattles[i]) ? endbattles[i] : endbattles[endbattles.length - 1]
           push_text(lastpage.list, ebattle, 1)

@@ -378,6 +378,11 @@ end
 # User consumes target's berry and gains its effect. (Bug Bite, Pluck)
 #===============================================================================
 class Battle::Move::UserConsumeTargetBerry < Battle::Move
+  def preventsBattlerConsumingHealingBerry?(battler, targets)
+    return targets.any? { |b| b.index == battler.index } &&
+           battler.item&.is_berry? && Battle::ItemEffects::HPHeal[battler.item]
+  end
+
   def pbEffectAfterAllHits(user, target)
     return if user.fainted? || target.fainted?
     return if target.damageState.unaffected || target.damageState.substitute

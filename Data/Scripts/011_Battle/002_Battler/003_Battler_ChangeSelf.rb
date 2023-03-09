@@ -256,8 +256,6 @@ class Battle::Battler
           @battle.pbShowAbilitySplash(self, true)
           @battle.pbHideAbilitySplash(self)
           pbChangeForm(newForm, _INTL("{1} deactivated!", abilityName))
-        elsif !endOfRound
-          @battle.pbDisplay(_INTL("{1} deactivated!", abilityName))
         end
       elsif @form < 7   # Turn into Core form
         @battle.pbShowAbilitySplash(self, true)
