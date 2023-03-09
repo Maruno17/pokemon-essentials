@@ -455,7 +455,6 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = TrapUserAndTargetInBattle
 Flags = Contact,CanProtect,CanMirrorMove
-EffectChance = 100
 Description = This move prevents the user and the target from switching out until either of them faints.
 #-------------------------------
 [THROATCHOP]
@@ -4077,7 +4076,7 @@ Power = 90
 Accuracy = 100
 TotalPP = 10
 Target = AllNearFoes
-FunctionCode = TrapTargetInBattle
+FunctionCode = TrapTargetInBattleMainEffect
 Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks with a wave that crawls along the ground. Those it hits can't flee from battle.
 #-------------------------------
@@ -7134,6 +7133,7 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = LowerPPOfTargetLastMoveBy3
 Flags = CanProtect,CanMirrorMove,Sound
+EffectChance = 100
 Description = The user attacks with tremendous psychic power. This also removes 3 PP from the target's last move.
 #-------------------------------
 [EXPANDINGFORCE]

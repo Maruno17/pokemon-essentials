@@ -306,7 +306,8 @@ end
 
 #===============================================================================
 # Target can no longer switch out or flee, as long as the user remains active.
-# (Anchor Shot, Block, Mean Look, Spider Web, Spirit Shackle, Thousand Waves)
+# Trapping is considered an additional effect for damaging moves.
+# (Anchor Shot, Block, Mean Look, Spider Web, Spirit Shackle)
 #===============================================================================
 class Battle::Move::TrapTargetInBattle < Battle::Move
   def canMagicCoat?; return true; end
@@ -331,6 +332,22 @@ class Battle::Move::TrapTargetInBattle < Battle::Move
   end
 
   def pbAdditionalEffect(user, target)
+    return if target.fainted? || target.damageState.substitute
+    return if target.effects[PBEffects::MeanLook] >= 0
+    return if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
+    target.effects[PBEffects::MeanLook] = user.index
+    @battle.pbDisplay(_INTL("{1} can no longer escape!", target.pbThis))
+  end
+end
+
+#===============================================================================
+# Target can no longer switch out or flee, as long as the user remains active.
+# Trapping is not considered an additional effect. (Thousand Waves)
+#===============================================================================
+class Battle::Move::TrapTargetInBattleMainEffect < Battle::Move
+  def canMagicCoat?; return true; end
+
+  def pbEffectAgainstTarget(user, target)
     return if target.fainted? || target.damageState.substitute
     return if target.effects[PBEffects::MeanLook] >= 0
     return if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
@@ -370,7 +387,7 @@ end
 # fleeing. (Jaw Lock)
 #===============================================================================
 class Battle::Move::TrapUserAndTargetInBattle < Battle::Move
-  def pbAdditionalEffect(user, target)
+  def pbEffectAgainstTarget(user, target)
     return if user.fainted? || target.fainted? || target.damageState.substitute
     return if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
     return if user.trappedInBattle? || target.trappedInBattle?
@@ -660,8 +677,8 @@ end
 # Target's last move used loses 3 PP. Damaging move. (Eerie Spell)
 #===============================================================================
 class Battle::Move::LowerPPOfTargetLastMoveBy3 < Battle::Move
-  def pbEffectAgainstTarget(user, target)
-    return if target.fainted?
+  def pbAdditionalEffect(user, target)
+    return if target.fainted? || target.damageState.substitute
     last_move = target.pbGetMoveWithID(target.lastRegularMoveUsed)
     return if !last_move || last_move.pp == 0 || last_move.total_pp <= 0
     reduction = [3, last_move.pp].min

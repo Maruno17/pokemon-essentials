@@ -107,8 +107,8 @@ module Settings
 
   #=============================================================================
 
-  # Whether wild Pokémon with the "Legendary" or "Mythical" flag (as defined in
-  # pokemon.txt) have a smarter AI. Their skill level is set to 32, which is a
-  # medium skill level.
+  # Whether wild Pokémon with the "Legendary", "Mythical" or "UltraBeast" flag
+  # (as defined in pokemon.txt) have a smarter AI. Their skill level is set to
+  # 32, which is a medium skill level.
   SMARTER_WILD_LEGENDARY_POKEMON = true
 end

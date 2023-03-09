@@ -3580,7 +3580,7 @@ Power = 90
 Accuracy = 100
 TotalPP = 10
 Target = AllNearFoes
-FunctionCode = TrapTargetInBattle
+FunctionCode = TrapTargetInBattleMainEffect
 Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks with a wave that crawls along the ground. Those it hits can't flee from battle.
 #-------------------------------

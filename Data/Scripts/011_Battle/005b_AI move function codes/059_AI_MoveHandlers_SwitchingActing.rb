@@ -220,6 +220,12 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattle",
 #===============================================================================
 # TODO: Review score modifiers.
 #===============================================================================
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("TrapTargetInBattle",
+                                                         "TrapTargetInBattleMainEffect")
+
+#===============================================================================
+# TODO: Review score modifiers.
+#===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattleLowerTargetDefSpDef1EachTurn",
   proc { |move, user, target, ai, battle|
     next false if move.damagingMove?
