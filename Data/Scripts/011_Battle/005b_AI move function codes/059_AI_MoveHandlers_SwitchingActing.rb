@@ -207,6 +207,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("BindTarget",
 
 #===============================================================================
 # TODO: Review score modifiers.
+# TODO: Include get_score_change_for_additional_effect usage.
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattle",
   proc { |move, user, target, ai, battle|
@@ -466,9 +467,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSlowerBattlersActFirst",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerPPOfTargetLastMoveBy3",
   proc { |score, move, user, target, ai, battle|
+    add_effect = move.get_score_change_for_additional_effect(user, target)
+    next score if add_effect == -999   # Additional effect will be negated
     if user.faster_than?(target)
       last_move = target.battler.pbGetMoveWithID(target.battler.lastRegularMoveUsed)
       if last_move && last_move.total_pp > 0
+        score += add_effect
         next score + 20 if last_move.pp <= 3   # Will fully deplete the move's PP
         next score + 10 if last_move.pp <= 5
         next score - 10 if last_move.pp > 9   # Too much PP left to make a difference
@@ -685,6 +689,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetSoundMoves"
   proc { |score, move, user, target, ai, battle|
     next score if target.effects[PBEffects::ThroatChop] > 1
     next score if !target.check_for_move { |m| m.soundMove? }
+    # Check additional effect chance
+    add_effect = move.get_score_change_for_additional_effect(user, target)
+    next score if add_effect == -999   # Additional effect will be negated
+    score += add_effect
     # Inherent preference
     score += 8
     next score

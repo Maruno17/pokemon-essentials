@@ -24,6 +24,10 @@ class Battle::AI
       end
       return get_score_for_target_stat_drop(score, target, stat_changes, whole_effect, fixed_change, true)
     end
+    # Don't make score changes if the move is a damaging move and its additional
+    # effect (the stat raise(s)) will be negated
+    add_effect = @move.get_score_change_for_additional_effect(@user, target)
+    return score if add_effect == -999   # Additional effect will be negated
     # Don't make score changes if target will faint from EOR damage
     if target.rough_end_of_round_damage >= target.hp
       ret = (whole_effect) ? MOVE_USELESS_SCORE : score
@@ -66,6 +70,8 @@ class Battle::AI
     if real_stat_changes.length == 0
       return (whole_effect) ? MOVE_USELESS_SCORE : score
     end
+    # Make score change based on the additional effect chance
+    score += add_effect
     # Make score changes based on the general concept of raising stats at all
     score = get_target_stat_raise_score_generic(score, target, real_stat_changes, desire_mult)
     # Make score changes based on the specific changes to each stat that will be
@@ -314,6 +320,10 @@ class Battle::AI
       end
       return get_score_for_target_stat_raise(score, target, stat_changes, whole_effect, fixed_change, true)
     end
+    # Don't make score changes if the move is a damaging move and its additional
+    # effect (the stat drop(s)) will be negated
+    add_effect = @move.get_score_change_for_additional_effect(@user, target)
+    return score if add_effect == -999   # Additional effect will be negated
     # Don't make score changes if target will faint from EOR damage
     if target.rough_end_of_round_damage >= target.hp
       ret = (whole_effect) ? MOVE_USELESS_SCORE : score
@@ -354,6 +364,8 @@ class Battle::AI
     if real_stat_changes.length == 0
       return (whole_effect) ? MOVE_USELESS_SCORE : score
     end
+    # Make score change based on the additional effect chance
+    score += add_effect
     # Make score changes based on the general concept of lowering stats at all
     score = get_target_stat_drop_score_generic(score, target, real_stat_changes, desire_mult)
     # Make score changes based on the specific changes to each stat that will be

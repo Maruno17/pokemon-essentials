@@ -148,15 +148,13 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:thawing_move_against_fr
 # flinching are dealt with in the function code part of score calculation).
 # TODO: Review score modifier.
 #===============================================================================
-Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:flinching_effects,
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:external_flinching_effects,
   proc { |score, move, user, target, ai, battle|
-    if ai.trainer.medium_skill?
+    if ai.trainer.medium_skill? && move.damagingMove? && !move.move.flinchingMove?
       if (battle.moldBreaker || !target.has_active_ability?([:INNERFOCUS, :SHIELDDUST])) &&
          target.effects[PBEffects::Substitute] == 0
-        if move.move.flinchingMove? ||
-           (move.damagingMove? &&
-           (user.has_active_item?([:KINGSROCK, :RAZORFANG]) ||
-           user.has_active_ability?(:STENCH)))
+        if user.has_active_item?([:KINGSROCK, :RAZORFANG]) ||
+           user.has_active_ability?(:STENCH)
           old_score = score
           score += 8
           PBDebug.log_score_change(score - old_score, "flinching")
@@ -195,7 +193,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:flinching_effects,
 # repeatedly until the target retaliates). Doesn't do a score change if the user
 # will be immune to Bide's damage.
 #===============================================================================
-Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_damaging_a_biding_target,
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:damaging_a_biding_target,
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.medium_skill? && target.effects[PBEffects::Bide] > 0 && move.damagingMove?
       eff = user.effectiveness_of_type_against_battler(:NORMAL, target)   # Bide is Normal type
@@ -216,7 +214,6 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_damaging_a_biding
   }
 )
 
-
 #===============================================================================
 # Don't prefer damaging moves that will knock out the target if they are using
 # Destiny Bond.
@@ -224,7 +221,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_damaging_a_biding
 # => Also don't prefer damaging moves if user is slower than the target, move
 #    is likely to be lethal, and target has previously used Destiny Bond
 #===============================================================================
-Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_knocking_out_destiny_bonder,
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:knocking_out_a_destiny_bonder,
   proc { |score, move, user, target, ai, battle|
     if ai.trainer.medium_skill? && move.damagingMove? && target.effects[PBEffects::DestinyBond]
       dmg = move.rough_damage
@@ -254,34 +251,65 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_knocking_out_dest
 
 #===============================================================================
 # Don't prefer a move that can be Magic Coated if the target (or any foe if the
-# move doesn't have a target) has Magic Bounce.
+# move doesn't have a target) knows Magic Coat/has Magic Bounce.
 #===============================================================================
-Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:avoid_targeting_bouncable_move_against_Magic_Bouncer,
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:target_can_Magic_Coat_or_Bounce_move,
   proc { |score, move, user, target, ai, battle|
+    # TODO: Modify the semiInvulnerable? check to only apply if the target will
+    #       still be invulnerable when the user acts, i.e. compare speeds?
     if move.statusMove? && move.move.canMagicCoat? &&
-       !battle.moldBreaker && target.has_active_ability?(:MAGICBOUNCE)
+       target.opposes?(user) && !target.battler.semiInvulnerable?
       old_score = score
-      score = Battle::AI::MOVE_USELESS_SCORE
-      PBDebug.log_score_change(score - old_score, "useless because target will Magic Bounce it")
+      if !battle.moldBreaker && target.has_active_ability?(:MAGICBOUNCE)
+        score = Battle::AI::MOVE_USELESS_SCORE
+        PBDebug.log_score_change(score - old_score, "useless because target will Magic Bounce it")
+      elsif target.has_move_with_function?("BounceBackProblemCausingStatusMoves")
+        score -= 8
+        PBDebug.log_score_change(score - old_score, "target knows Magic Coat and could bounce it")
+      end
     end
     next score
   }
 )
 
-Battle::AI::Handlers::GeneralMoveScore.add(:avoid_bouncable_move_with_foe_Magic_Bouncer,
+Battle::AI::Handlers::GeneralMoveScore.add(:any_foe_can_Magic_Coat_or_Bounce_move,
   proc { |score, move, user, ai, battle|
-    if move.statusMove? && move.move.canMagicCoat? &&
-       move.pbTarget(user.battler).num_targets == 0 && !battle.moldBreaker
-      has_magic_bounce = false
+    if move.statusMove? && move.move.canMagicCoat? && move.pbTarget(user.battler).num_targets == 0
+      old_score = score
       ai.each_foe_battler(user.side) do |b, i|
-        next if !b.has_active_ability?(:MAGICBOUNCE)
-        has_magic_bounce = true
-        break
+        # TODO: Modify the semiInvulnerable? check to only apply if the target
+        #       will still be invulnerable when the user acts, i.e. compare
+        #       speeds?
+        next if b.battler.semiInvulnerable?
+        if b.has_active_ability?(:MAGICBOUNCE) && !battle.moldBreaker
+          score = Battle::AI::MOVE_USELESS_SCORE
+          PBDebug.log_score_change(score - old_score, "useless because a foe will Magic Bounce it")
+          break
+        elsif b.has_move_with_function?("BounceBackProblemCausingStatusMoves")
+          score -= 8
+          PBDebug.log_score_change(score - old_score, "a foe knows Magic Coat and could bounce it")
+          break
+        end
       end
-      if has_magic_bounce
+    end
+    next score
+  }
+)
+
+#===============================================================================
+# Don't prefer a move that can be Snatched if any other battler knows Snatch.
+#===============================================================================
+Battle::AI::Handlers::GeneralMoveScore.add(:any_battler_can_Snatch_move,
+  proc { |score, move, user, ai, battle|
+    if move.statusMove? && move.move.canSnatch?
+      ai.each_battler do |b, i|
+        next if b.index == user.index
+        next if b.effects[PBEffects::SkyDrop] >= 0
+        next if !b.has_move_with_function?("StealAndUseBeneficialStatusMove")
         old_score = score
-        score = Battle::AI::MOVE_USELESS_SCORE
-        PBDebug.log_score_change(score - old_score, "useless because a foe will Magic Bounce it")
+        score -= 8
+        PBDebug.log_score_change(score - old_score, "another battler could Snatch it")
+        break
       end
     end
     next score
@@ -372,7 +400,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:good_move_for_choice_item,
 # more (desperate).
 # TODO: Review score modifier.
 #===============================================================================
-Battle::AI::Handlers::GeneralMoveScore.add(:prefer_damaging_moves_if_last_pokemon,
+Battle::AI::Handlers::GeneralMoveScore.add(:either_side_down_to_last_pokemon,
   proc { |score, move, user, ai, battle|
     if ai.trainer.medium_skill? && move.damagingMove?
       reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)

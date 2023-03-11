@@ -301,34 +301,174 @@ class Battle::AI::AIBattler
 
   #=============================================================================
 
+  # TODO: Add more items.
+  BASE_ITEM_RATINGS = {
+    :ADAMANTORB   => 3,
+    :BLACKBELT    => 2,
+    :BLACKGLASSES => 2,
+    :BLACKSLUDGE  => -4,
+    :CHARCOAL     => 2,
+    :CHOICEBAND   => 4,
+    :CHOICESCARF  => 4,
+    :CHOICESPECS  => 4,
+    :DEEPSEATOOTH => 4,
+    :DRACOPLATE   => 2,
+    :DRAGONFANG   => 2,
+    :DREADPLATE   => 2,
+    :EARTHPLATE   => 2,
+    :FISTPLATE    => 2,
+    :FLAMEORB     => -4,
+    :FLAMEPLATE   => 2,
+    :GRISEOUSORB  => 3,
+    :HARDSTONE    => 2,
+    :ICICLEPLATE  => 2,
+    :INSECTPLATE  => 2,
+    :IRONBALL     => -4,
+    :IRONPLATE    => 2,
+    :LAGGINGTAIL  => -2,
+    :LEFTOVERS    => 4,
+    :LIFEORB      => 3,
+    :LIGHTBALL    => 4,
+    :LUSTROUSORB  => 3,
+    :MAGNET       => 2,
+    :MEADOWPLATE  => 2,
+    :METALCOAT    => 2,
+    :METRONOME    => 1,
+    :MINDPLATE    => 2,
+    :MIRACLESEED  => 2,
+    :MUSCLEBAND   => 2,
+    :MYSTICWATER  => 2,
+    :NEVERMELTICE => 2,
+    :ODDINCENSE   => 2,
+    :PIXIEPLATE   => 2,
+    :POISONBARB   => 2,
+    :ROCKINCENSE  => 2,
+    :ROSEINCENSE  => 2,
+    :SEAINCENSE   => 2,
+    :SHARPBEAK    => 2,
+    :SILKSCARF    => 2,
+    :SILVERPOWDER => 2,
+    :SKYPLATE     => 2,
+    :SOFTSAND     => 2,
+    :SOULDEW      => 3,
+    :SPELLTAG     => 2,
+    :SPLASHPLATE  => 2,
+    :SPOOKYPLATE  => 2,
+    :STICKYBARB   => -2,
+    :STONEPLATE   => 2,
+    :THICKCLUB    => 4,
+    :TOXICORB     => -4,
+    :TOXICPLATE   => 2,
+    :TWISTEDSPOON => 2,
+    :WAVEINCENSE  => 2,
+    :WISEGLASSES  => 2,
+    :ZAPPLATE     => 2
+  }
+
   # Returns a value indicating how beneficial the given item will be to this
   # battler if it is holding it.
-  # Return values are typically -2, -1, 0, 1 or 2. 0 is indifferent, positive
+  # Return values are typically between -10 and +10. 0 is indifferent, positive
   # values mean this battler benefits, negative values mean this battler suffers.
-  def wants_item?(item = :NONE)
-    item == :NONE if item.nil?
-    # TODO: Add more items.
-    preferred_items = [
-      :CHOICESCARF,
-      :LEFTOVERS
-    ]
-    preferred_items.push(:BLACKSLUDGE) if has_type?(:POISON)
-    preferred_items.push(:IRONBALL) if has_move_with_function?("ThrowUserItemAtTarget")
-    preferred_items.push(:CHOICEBAND) if check_for_move { |m| m.physicalMove?(m.type) }
-    preferred_items.push(:CHOICESPECS) if check_for_move { |m| m.specialMove?(m.type) }
-    unpreferred_items = [
-      :BLACKSLUDGE,
-      :FLAMEORB,
-      :IRONBALL,
-      :LAGGINGTAIL,
-      :STICKYBARB,
-      :TOXICORB
-    ]
-    ret = 0
-    if preferred_items.include?(item)
-      ret = 2
-    elsif unpreferred_items.include?(item)
-      ret = -2
+  def wants_item?(item)
+    item = item.id if !item.is_a?(Symbol) && item.respond_to?("id")
+    return 0 if has_active_ability?(:KLUTZ)
+    # TODO: Unnerve, other item-negating effects.
+    ret = BASE_ITEM_RATINGS[item] || 0
+    case item
+    when :ADAMANTORB
+      ret = 0 if !@battler.isSpecies?(:DIALGA) || !has_damaging_move_of_type?(:DRAGON, :STEEL)
+    when :BLACKBELT, :BLACKGLASSES, :CHARCOAL, :DRAGONFANG, :HARDSTONE, :MAGNET,
+         :METALCOAT, :MIRACLESEED, :MYSTICWATER, :NEVERMELTICE, :POISONBARB,
+         :SHARPBEAK, :SILKSCARF, :SILVERPOWDER, :SOFTSAND, :SPELLTAG,
+         :TWISTEDSPOON,
+         :DRACOPLATE, :DREADPLATE, :EARTHPLATE, :FISTPLATE, :FLAMEPLATE,
+         :ICICLEPLATE, :INSECTPLATE, :IRONPLATE, :MEADOWPLATE, :MINDPLATE,
+         :PIXIEPLATE, :SKYPLATE, :SPLASHPLATE, :SPOOKYPLATE, :STONEPLATE,
+         :TOXICPLATE, :ZAPPLATE,
+         :ODDINCENSE, :ROCKINCENSE, :ROSEINCENSE, :SEAINCENSE, :WAVEINCENSE
+      boosted_type = {
+        :BLACKBELT    => :FIGHTING,
+        :BLACKGLASSES => :DARK,
+        :CHARCOAL     => :FIRE,
+        :DRAGONFANG   => :DRAGON,
+        :HARDSTONE    => :ROCK,
+        :MAGNET       => :ELECTRIC,
+        :METALCOAT    => :STEEL,
+        :MIRACLESEED  => :GRASS,
+        :MYSTICWATER  => :WATER,
+        :NEVERMELTICE => :ICE,
+        :POISONBARB   => :POISON,
+        :SHARPBEAK    => :FLYING,
+        :SILKSCARF    => :NORMAL,
+        :SILVERPOWDER => :BUG,
+        :SOFTSAND     => :GROUND,
+        :SPELLTAG     => :GHOST,
+        :TWISTEDSPOON => :PSYCHIC,
+        :DRACOPLATE   => :DRAGON,
+        :DREADPLATE   => :DARK,
+        :EARTHPLATE   => :GROUND,
+        :FISTPLATE    => :FIGHTING,
+        :FLAMEPLATE   => :FIRE,
+        :ICICLEPLATE  => :ICE,
+        :INSECTPLATE  => :BUG,
+        :IRONPLATE    => :STEEL,
+        :MEADOWPLATE  => :GRASS,
+        :MINDPLATE    => :PSYCHIC,
+        :PIXIEPLATE   => :FAIRY,
+        :SKYPLATE     => :FLYING,
+        :SPLASHPLATE  => :WATER,
+        :SPOOKYPLATE  => :GHOST,
+        :STONEPLATE   => :ROCK,
+        :TOXICPLATE   => :POISON,
+        :ZAPPLATE     => :ELECTRIC,
+        :ODDINCENSE   => :PSYCHIC,
+        :ROCKINCENSE  => :ROCK,
+        :ROSEINCENSE  => :GRASS,
+        :SEAINCENSE   => :WATER,
+        :WAVEINCENSE  => :WATER
+      }[item]
+      ret = 0 if !has_damaging_move_of_type?(boosted_type)
+    when :BLACKSLUDGE
+      ret = 4 if has_type?(:POISON)
+    when :CHOICEBAND, :MUSCLEBAND
+      ret = 0 if !check_for_move { |m| m.physicalMove?(m.type) }
+    when :CHOICESPECS, :WISEGLASSES
+      ret = 0 if !check_for_move { |m| m.specialMove?(m.type) }
+    when :DEEPSEATOOTH
+      ret = 0 if !@battler.isSpecies?(:CLAMPERL) || !check_for_move { |m| m.specialMove?(m.type) }
+    when :GRISEOUSORB
+      ret = 0 if !@battler.isSpecies?(:GIRATINA) || !has_damaging_move_of_type?(:DRAGON, :GHOST)
+    when :IRONBALL
+      ret = 0 if has_move_with_function?("ThrowUserItemAtTarget")
+    when :LIGHTBALL
+      ret = 0 if !@battler.isSpecies?(:PIKACHU) || !check_for_move { |m| m.damagingMove? }
+    when :LUSTROUSORB
+      ret = 0 if !@battler.isSpecies?(:PALKIA) || !has_damaging_move_of_type?(:DRAGON, :WATER)
+    when :SOULDEW
+      if !@battler.isSpecies?(:LATIAS) && !@battler.isSpecies?(:LATIOS)
+        ret = 0
+      elsif Settings::SOUL_DEW_POWERS_UP_TYPES
+        ret = 0 if !has_damaging_move_of_type?(:PSYCHIC, :DRAGON)
+      else
+        ret -= 2 if !check_for_move { |m| m.specialMove?(m.type) }   # Also boosts SpDef
+      end
+    when :THICKCLUB
+      ret = 0 if (!@battler.isSpecies?(:CUBONE) && !@battler.isSpecies?(:MAROWAK)) ||
+                 !check_for_move { |m| m.physicalMove?(m.type) }
+    end
+    # Prefer if this battler knows Fling and it will do a lot of damage/have an
+    # additional (negative) effect when flung
+    if has_move_with_function?("ThrowUserItemAtTarget")
+      GameData::Item.get(item).flags.each do |flag|
+        next if !flag[/^Fling_(\d+)$/i]
+        amt = $~[1].to_i
+        ret += 1 if amt >= 80
+        ret += 1 if amt >= 100
+        break
+      end
+      if [:FLAMEORB, :KINGSROCK, :LIGHTBALL, :POISONBARB, :RAZORFANG, :TOXICORB].include?(item)
+        ret += 1
+      end
     end
     # Don't prefer if this battler knows Acrobatics
     if has_move_with_function?("DoublePowerIfUserHasNoItem")

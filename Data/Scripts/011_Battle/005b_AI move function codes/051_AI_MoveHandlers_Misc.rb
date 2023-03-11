@@ -540,6 +540,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UserMakeSubstitute",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RemoveUserBindingAndEntryHazards",
   proc { |score, move, user, ai, battle|
+    add_effect = move.get_score_change_for_additional_effect(user, target)
+    next score if add_effect == -999   # Additional effect will be negated
+    score += add_effect
     score += 10 if user.effects[PBEffects::Trapping] > 0
     score += 15 if user.effects[PBEffects::LeechSeed] >= 0
     if battle.pbAbleNonActiveCount(user.idxOwnSide) > 0

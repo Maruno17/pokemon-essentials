@@ -546,17 +546,22 @@ class Battle::AI::AIMove
 
   #=============================================================================
 
-  # Returns:
-  #   0 = move doesn't have an additional effect
-  #   1 = additional effect will be negated
-  #   2 = additional effect will work
-  #   3 = additional effect has an increased chance to work
-  def additional_effect_usability(user, target)
-    return 3 if self.function == "ThrowUserItemAtTarget"
-    return 0 if @move.addlEffect == 0   # Doesn't have an additional effect
-    return 1 if target.has_active_ability?(:SHIELDDUST) && !@ai.battle.moldBreaker
-    return 3 if (Settings::MECHANICS_GENERATION >= 6 || self.function != "EffectDependsOnEnvironment") &&
+  # Return values:
+  #   0: Regular additional effect chance or isn't an additional effect
+  #   -999: Additional effect will be negated
+  #   Other: Amount to add to a move's score
+  def get_score_change_for_additional_effect(user, target)
+    # Doesn't have an additional effect
+    return 0 if @move.addlEffect == 0
+    # Additional effect will be negated
+    return -999 if user.has_active_ability?(:SHEERFORCE)
+    return -999 if user.index != target.index &&
+                   target.has_active_ability?(:SHIELDDUST) && !@ai.battle.moldBreaker
+    # Prefer if the additional effect will have an increased chance of working
+    return 5 if @move.addlEffect < 100 &&
+                (Settings::MECHANICS_GENERATION >= 6 || self.function != "EffectDependsOnEnvironment") &&
                 (user.has_active_ability?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
-    return 2
+    # No change to score
+    return 0
   end
 end

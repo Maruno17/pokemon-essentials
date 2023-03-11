@@ -273,6 +273,7 @@ class Battle::Move::EffectDependsOnEnvironment < Battle::Move
   def pbEffectAfterAllHits(user, target)
     return if target.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
+    return if user.hasActiveAbility?(:SHEERFORCE)
     chance = pbAdditionalEffectChance(user, target)
     return if @battle.pbRandom(100) >= chance
     case @secretPower
@@ -1194,8 +1195,8 @@ class Battle::Move::UseRandomUserMoveIfAsleep < Battle::Move
 end
 
 #===============================================================================
-# This round, reflects all moves with the "C" flag targeting the user back at
-# their origin. (Magic Coat)
+# This round, reflects all moves that can be Magic Coated which target the user
+# or which have no target back at their origin. (Magic Coat)
 #===============================================================================
 class Battle::Move::BounceBackProblemCausingStatusMoves < Battle::Move
   def pbEffectGeneral(user)
@@ -1205,7 +1206,7 @@ class Battle::Move::BounceBackProblemCausingStatusMoves < Battle::Move
 end
 
 #===============================================================================
-# This round, snatches all used moves with the "D" flag. (Snatch)
+# This round, snatches all used moves that can be Snatched. (Snatch)
 #===============================================================================
 class Battle::Move::StealAndUseBeneficialStatusMove < Battle::Move
   def pbEffectGeneral(user)

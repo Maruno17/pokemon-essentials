@@ -36,9 +36,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseUserAttack2IfTarget
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack2",
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAttack1",
                                             "RaiseUserAttack3")
-Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAttack2",
+Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAttack1",
                                            "RaiseUserAttack3")
 
 #===============================================================================
@@ -282,9 +282,9 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserEvasion2MinimizeUser",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserEvasion2",
+Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserEvasion1",
                                             "RaiseUserEvasion3")
-Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserEvasion2",
+Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserEvasion1",
                                            "RaiseUserEvasion3")
 
 #===============================================================================
@@ -763,9 +763,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetAttack1",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetAttack2",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetAttack1",
                                                          "LowerTargetAttack3")
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetAttack2",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetAttack1",
                                                         "LowerTargetAttack3")
 
 #===============================================================================
@@ -800,9 +800,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetDefense1",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetDefense2",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetDefense1",
                                                          "LowerTargetDefense3")
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetDefense2",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetDefense1",
                                                         "LowerTargetDefense3")
 
 #===============================================================================
@@ -839,9 +839,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetSpAtk2",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetSpAtk2",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetSpAtk1",
                                                          "LowerTargetSpAtk3")
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetSpAtk2",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetSpAtk1",
                                                         "LowerTargetSpAtk3")
 
 #===============================================================================
@@ -863,9 +863,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetSpDef1",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetSpDef2",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetSpDef1",
                                                          "LowerTargetSpDef3")
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetSpDef2",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetSpDef1",
                                                         "LowerTargetSpDef3")
 
 #===============================================================================
@@ -925,9 +925,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetSpeed1",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetSpeed2",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetSpeed1",
                                                          "LowerTargetSpeed3")
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetSpeed2",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetSpeed1",
                                                         "LowerTargetSpeed3")
 
 #===============================================================================
@@ -949,9 +949,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetAccuracy1",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetAccuracy2",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetAccuracy1",
                                                          "LowerTargetAccuracy3")
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetAccuracy2",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetAccuracy1",
                                                         "LowerTargetAccuracy3")
 
 #===============================================================================
@@ -1028,9 +1028,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetEvasion1",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetEvasion2",
+Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("LowerTargetEvasion1",
                                                          "LowerTargetEvasion3")
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetEvasion2",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("LowerTargetEvasion1",
                                                         "LowerTargetEvasion3")
 
 #===============================================================================

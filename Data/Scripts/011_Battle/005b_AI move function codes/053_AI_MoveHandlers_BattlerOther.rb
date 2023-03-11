@@ -15,12 +15,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SleepTarget",
                   target.has_active_ability?(:HYDRATION) &&
                   [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanSleep?(user.battler, false, move.move)
-      case move.additional_effect_usability(user, target)
-      when 1   # Additional effect will be negated
-        next score
-      when 3   # Additional effect has an increased chance to work
-        score += 5
-      end
+      add_effect = move.get_score_change_for_additional_effect(user, target)
+      next score if add_effect == -999   # Additional effect will be negated
+      score += add_effect
       # Inherent preference
       score += 15
       # Prefer if the user or an ally has a move/ability that is better if the target is asleep
@@ -107,12 +104,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
                   target.has_active_ability?(:HYDRATION) &&
                   [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanPoison?(user.battler, false, move.move)
-      case move.additional_effect_usability(user, target)
-      when 1   # Additional effect will be negated
-        next score
-      when 3   # Additional effect has an increased chance to work
-        score += 5
-      end
+      add_effect = move.get_score_change_for_additional_effect(user, target)
+      next score if add_effect == -999   # Additional effect will be negated
+      score += add_effect
       # Inherent preference
       score += 10
       # Prefer if the target is at high HP
@@ -194,12 +188,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeTarget",
                   target.has_active_ability?(:HYDRATION) &&
                   [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanParalyze?(user.battler, false, move.move)
-      case move.additional_effect_usability(user, target)
-      when 1   # Additional effect will be negated
-        next score
-      when 3   # Additional effect has an increased chance to work
-        score += 5
-      end
+      add_effect = move.get_score_change_for_additional_effect(user, target)
+      next score if add_effect == -999   # Additional effect will be negated
+      score += add_effect
       # Inherent preference (because of the chance of full paralysis)
       score += 10
       # Prefer if the target is faster than the user but will become slower if
@@ -291,12 +282,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
                   target.has_active_ability?(:HYDRATION) &&
                   [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanBurn?(user.battler, false, move.move)
-      case move.additional_effect_usability(user, target)
-      when 1   # Additional effect will be negated
-        next score
-      when 3   # Additional effect has an increased chance to work
-        score += 5
-      end
+      add_effect = move.get_score_change_for_additional_effect(user, target)
+      next score if add_effect == -999   # Additional effect will be negated
+      score += add_effect
       # Inherent preference
       score += 10
       # Prefer if the target knows any physical moves that will be weaked by a burn
@@ -370,12 +358,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FreezeTarget",
                   target.has_active_ability?(:HYDRATION) &&
                   [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanFreeze?(user.battler, false, move.move)
-      case move.additional_effect_usability(user, target)
-      when 1   # Additional effect will be negated
-        next score
-      when 3   # Additional effect has an increased chance to work
-        score += 5
-      end
+      add_effect = move.get_score_change_for_additional_effect(user, target)
+      next score if add_effect == -999   # Additional effect will be negated
+      score += add_effect
       # Inherent preference
       score += 15
       # Prefer if the user or an ally has a move/ability that is better if the target is frozen
@@ -528,10 +513,14 @@ Battle::AI::Handlers::MoveEffectScore.add("CureUserPartyStatus",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetBurn",
   proc { |score, move, user, target, ai, battle|
+    add_effect = move.get_score_change_for_additional_effect(user, target)
+    next score if add_effect == -999   # Additional effect will be negated
     if target.status == :BURN
       if target.opposes?(user)
+        score -= add_effect
         score -= 10
       else
+        score += add_effect
         score += 10
       end
     end
@@ -573,12 +562,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FlinchTarget",
   proc { |score, move, user, target, ai, battle|
     next score if target.faster_than?(user) || target.effects[PBEffects::Substitute] > 0
     next score if target.has_active_ability?(:INNERFOCUS) && !battle.moldBreaker
-    case move.additional_effect_usability(user, target)
-    when 1   # Additional effect will be negated
-      next score
-    when 3   # Additional effect has an increased chance to work
-      score += 5
-    end
+    add_effect = move.get_score_change_for_additional_effect(user, target)
+    next score if add_effect == -999   # Additional effect will be negated
+    score += add_effect
     # Inherent preference
     score += 10
     # Prefer if the target is paralysed, confused or infatuated, to compound the
@@ -631,12 +617,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ConfuseTarget",
     # No score modifier if the status problem will be removed immediately
     next score if target.has_active_item?(:PERSIMBERRY)
     if target.battler.pbCanConfuse?(user.battler, false, move.move)
-      case move.additional_effect_usability(user, target)
-      when 1   # Additional effect will be negated
-        next score
-      when 3   # Additional effect has an increased chance to work
-        score += 5
-      end
+      add_effect = move.get_score_change_for_additional_effect(user, target)
+      next score if add_effect == -999   # Additional effect will be negated
+      score += add_effect
       # Inherent preference
       score += 5
       # Prefer if the target is at high HP
@@ -668,12 +651,9 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AttractTarget",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AttractTarget",
   proc { |score, move, user, target, ai, battle|
     if target.battler.pbCanAttract?(user.battler, false)
-      case move.additional_effect_usability(user, target)
-      when 1   # Additional effect will be negated
-        next score
-      when 3   # Additional effect has an increased chance to work
-        score += 5
-      end
+      add_effect = move.get_score_change_for_additional_effect(user, target)
+      next score if add_effect == -999   # Additional effect will be negated
+      score += add_effect
       # Inherent preference
       score += 10
       # Prefer if the target is paralysed or confused, to compound the turn skipping

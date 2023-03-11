@@ -159,7 +159,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartTargetCannotUseItem
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.item || !target.item_active?
     item_score = target.wants_item?(target.item_id)
-    score += item_score * 5
+    score += item_score * 3
     next score
   }
 )
