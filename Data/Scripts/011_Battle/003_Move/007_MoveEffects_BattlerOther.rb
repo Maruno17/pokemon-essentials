@@ -844,7 +844,7 @@ class Battle::Move::SetTargetTypesToPsychic < Battle::Move
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if !target.canChangeType? || !GameData::Type.exists?(:PSYCHIC) ||
-       !target.pbHasOtherType?(:PSYCHIC) || !target.affectedByPowder?
+       !target.pbHasOtherType?(:PSYCHIC)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
