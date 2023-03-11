@@ -796,7 +796,7 @@ class PokemonParty_Scene
     when Input::LEFT
       loop do
         currentsel -= 1
-        break unless currentsel > 0 && currentsel < @party.length && !@party[currentsel]
+        break unless currentsel > 0 && currentsel < Settings::MAX_PARTY_SIZE && !@party[currentsel]
       end
       if currentsel >= @party.length && currentsel < Settings::MAX_PARTY_SIZE
         currentsel = @party.length - 1
@@ -805,13 +805,10 @@ class PokemonParty_Scene
     when Input::RIGHT
       loop do
         currentsel += 1
-        break unless currentsel < @party.length && !@party[currentsel]
+        break unless currentsel < Settings::MAX_PARTY_SIZE && !@party[currentsel]
       end
-      if currentsel == @party.length
-        currentsel = Settings::MAX_PARTY_SIZE
-      elsif currentsel == numsprites
-        currentsel = 0
-        currentsel = numsprites - 1 if currentsel >= 0 && @party.length==0
+      if currentsel == numsprites
+        currentsel = (@party.length == 0) ? Settings::MAX_PARTY_SIZE : 0
       end
     when Input::UP
       if currentsel >= Settings::MAX_PARTY_SIZE
@@ -819,7 +816,7 @@ class PokemonParty_Scene
         while currentsel > 0 && currentsel < Settings::MAX_PARTY_SIZE && !@party[currentsel]
           currentsel -= 1
         end
-        currentsel = numsprites - 1 if currentsel >= 0 && @party.length==0
+        currentsel = numsprites - 1 if currentsel < Settings::MAX_PARTY_SIZE && currentsel >= @party.length
       else
         loop do
           currentsel -= 2
@@ -840,8 +837,7 @@ class PokemonParty_Scene
       if currentsel >= @party.length && currentsel < Settings::MAX_PARTY_SIZE
         currentsel = Settings::MAX_PARTY_SIZE
       elsif currentsel >= numsprites
-        currentsel = 0
-        currentsel = numsprites - 1 if currentsel >= 0 && @party.length==0
+        currentsel = (@party.length == 0) ? Settings::MAX_PARTY_SIZE : 0
       end
     end
     return currentsel
