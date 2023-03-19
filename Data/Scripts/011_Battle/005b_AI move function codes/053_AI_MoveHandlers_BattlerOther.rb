@@ -506,23 +506,16 @@ Battle::AI::Handlers::MoveEffectScore.add("CureUserPartyStatus",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: target should probably be treated as an enemy when deciding the score,
-#       since the score will be inverted elsewhere due to the target being an
-#       ally.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetBurn",
   proc { |score, move, user, target, ai, battle|
     add_effect = move.get_score_change_for_additional_effect(user, target)
     next score if add_effect == -999   # Additional effect will be negated
     if target.status == :BURN
-      if target.opposes?(user)
-        score -= add_effect
-        score -= 10
-      else
-        score += add_effect
-        score += 10
-      end
+      score -= add_effect
+      score -= 10
+      score += 15 if target.wants_status_problem?(:BURN)
     end
     next score
   }
@@ -1089,7 +1082,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbilityIfTar
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 # IgnoreTargetAbility
 

@@ -267,13 +267,16 @@ Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetHPLessThanHalf",
                                          "DoublePowerIfUserPoisonedBurnedParalyzed")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetHPLessThanHalf",
                                          "DoublePowerIfTargetAsleepCureTarget")
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetAsleepCureTarget",
   proc { |score, move, user, target, ai, battle|
-    score -= 20 if target.status == :SLEEP && target.statusCount > 1   # Will cure status
+    if target.status == :SLEEP && target.statusCount > 1   # Will cure status
+      score -= 10
+      score += 15 if target.wants_status_problem?(:SLEEP)
+    end
     next score
   }
 )
@@ -288,13 +291,16 @@ Battle::AI::Handlers::MoveBasePower.add("DoublePowerIfTargetPoisoned",
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetPoisoned",
                                          "DoublePowerIfTargetParalyzedCureTarget")
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetParalyzedCureTarget",
   proc { |score, move, user, target, ai, battle|
-    score -= 20 if target.status == :PARALYSIS   # Will cure status
+    if target.status == :PARALYSIS   # Will cure status
+      score -= 10
+      score += 15 if target.wants_status_problem?(:PARALYSIS)
+    end
     next score
   }
 )
@@ -1284,7 +1290,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("PoisonTarget",
                                                         "CategoryDependsOnHigherDamagePoisonTarget")
 
 #===============================================================================
-# TODO: Review score modifiers. Category part is already accounted for.
+#
 #===============================================================================
 # CategoryDependsOnHigherDamageIgnoreTargetAbility
 

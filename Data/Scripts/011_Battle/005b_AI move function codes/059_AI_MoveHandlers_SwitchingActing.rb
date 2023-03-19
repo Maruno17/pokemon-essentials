@@ -9,7 +9,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("FleeFromBattle",
 Battle::AI::Handlers::MoveEffectScore.add("FleeFromBattle",
   proc { |score, move, user, ai, battle|
     # Generally don't prefer (don't want to end the battle too easily)
-    next score - 15
+    next score - 20
   }
 )
 
@@ -24,21 +24,19 @@ Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserStatusMove",
 )
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
   proc { |score, move, user, ai, battle|
-    next score + 10 if user.wild?
+    # Wild Pokémon run from battle
+    next score - 20 if user.wild?
+    # Trainer-owned Pokémon switch out
     if ai.trainer.has_skill_flag?("ReserveLastPokemon") && battle.pbTeamAbleNonActiveCount(user.index) == 1
-      score -= 60   # Don't switch in ace
-    else
-      score += 40 if user.effects[PBEffects::Confusion] > 0
-      total = 0
-      GameData::Stat.each_battle { |s| total += user.stages[s.id] }
-      if total <= 0 || user.turnCount == 0
-        score += 60
-      else
-        score -= total * 10
-        # special case: user has no damaging moves
-        score += 75 if !user.check_for_move { |m| m.damagingMove? }
-      end
+      next Battle::AI::MOVE_USELESS_SCORE   # Don't switch in ace
     end
+    # Prefer if the user switching out will lose a negative effect
+    score += 10 if user.effects[PBEffects::Confusion] > 1
+    # Prefer if the user doesn't have any damaging moves
+    # TODO: Check effectiveness of moves.
+    score += 15 if !user.check_for_move { |m| m.damagingMove? }
+    # Don't prefer the more stat raises the user has
+    GameData::Stat.each_battle { |s| score -= user.stages[s.id] * 5 }
     next score
   }
 )
@@ -48,8 +46,14 @@ Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserStatusMove",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserDamagingMove",
   proc { |score, move, user, ai, battle|
-    next 0 if !battle.pbCanChooseNonActive?(user.index)
-    next 0 if ai.trainer.has_skill_flag?("ReserveLastPokemon") && battle.pbTeamAbleNonActiveCount(user.index) == 1   # Don't switch in ace
+    next score if !battle.pbCanChooseNonActive?(user.index)
+    # Don't want to switch in ace
+    score -= 20 if ai.trainer.has_skill_flag?("ReserveLastPokemon") &&
+                   battle.pbTeamAbleNonActiveCount(user.index) == 1
+    # Prefer if the user switching out will lose a negative effect
+    score += 10 if user.effects[PBEffects::Confusion] > 1
+    # Don't prefer the more stat raises the user has
+    GameData::Stat.each_battle { |s| score -= user.stages[s.id] * 5 }
     next score
   }
 )
@@ -72,6 +76,18 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerTargetAtkSpAtk1Swi
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetAtkSpAtk1SwitchOutUser",
   proc { |score, move, user, target, ai, battle|
     score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown, false)
+    if battle.pbCanChooseNonActive?(user.index)
+      # Don't want to switch in ace
+      score -= 20 if ai.trainer.has_skill_flag?("ReserveLastPokemon") &&
+                     battle.pbTeamAbleNonActiveCount(user.index) == 1
+      # Prefer if the user switching out will lose a negative effect
+      score += 10 if user.effects[PBEffects::Confusion] > 1
+      # Prefer if the user doesn't have any damaging moves
+      # TODO: Check effectiveness of moves.
+      score += 15 if !user.check_for_move { |m| m.damagingMove? }
+      # Don't prefer the more stat raises the user has
+      GameData::Stat.each_battle { |s| score -= user.stages[s.id] * 5 }
+    end
     next score
   }
 )
@@ -86,20 +102,16 @@ Battle::AI::Handlers::MoveFailureCheck.add("SwitchOutUserPassOnEffects",
 )
 Battle::AI::Handlers::MoveEffectScore.add("SwitchOutUserPassOnEffects",
   proc { |score, move, user, ai, battle|
-    if battle.pbCanChooseNonActive?(user.index)
-      score -= 40 if user.effects[PBEffects::Confusion] > 0
-      total = 0
-      GameData::Stat.each_battle { |s| total += user.stages[s.id] }
-      if total <= 0 || user.turnCount == 0
-        score -= 60
-      else
-        score += total * 10
-        # special case: user has no damaging moves
-        score += 75 if !user.check_for_move { |m| m.damagingMove? }
-      end
-    else
-      score -= 100
-    end
+    # Don't want to switch in ace
+    score -= 20 if ai.trainer.has_skill_flag?("ReserveLastPokemon") &&
+                   battle.pbTeamAbleNonActiveCount(user.index) == 1
+    # Don't prefer if the user will pass on a negative effect
+    score -= 10 if user.effects[PBEffects::Confusion] > 1
+    # Prefer if the user doesn't have any damaging moves
+    # TODO: Check effectiveness of moves.
+    score += 15 if !user.check_for_move { |m| m.damagingMove? }
+    # Prefer if the user will pass on good stat stages
+    GameData::Stat.each_battle { |s| score += user.stages[s.id] * 5 }
     next score
   }
 )
@@ -162,14 +174,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BindTarget",
     # Target will take damage at the end of each round from the binding
     score += 8 if target.battler.takesIndirectDamage?
     # Check whether the target will be trapped in battle by the binding
-    untrappable = Settings::MORE_TYPE_EFFECTS && target.has_type?(:GHOST)
-    if !untrappable && target.ability_active?
-      untrappable = Battle::AbilityEffects.triggerCertainSwitching(target.ability, target.battler, battle)
-    end
-    if !untrappable && target.item_active?
-      untrappable = Battle::ItemEffects.triggerCertainSwitching(target.ability, target.battler, battle)
-    end
-    if !untrappable && !target.battler.trappedInBattle?
+    if target.can_become_trapped?
       score += 8   # Prefer if the target will become trapped by this move
       eor_damage = target.rough_end_of_round_damage
       if eor_damage > 0
@@ -185,8 +190,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BindTarget",
     end
     # Don't prefer if the target can remove the binding (and the binding has an
     # effect)
-    if (!untrappable && !target.battler.trappedInBattle?) || target.battler.takesIndirectDamage?
-      if target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
+    if target.can_become_trapped? || target.battler.takesIndirectDamage?
+      if ai.trainer.medium_skill? &&
+         target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
         score -= 8
       end
     end
@@ -206,8 +212,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("BindTarget",
                                                         "BindTargetDoublePowerIfTargetUnderwater")
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: Include get_score_change_for_additional_effect usage.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattle",
   proc { |move, user, target, ai, battle|
@@ -217,15 +222,56 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattle",
     next false
   }
 )
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapTargetInBattle",
+  proc { |score, move, user, target, ai, battle|
+    if !target.can_become_trapped? || !battle.pbCanChooseNonActive?(target.index)
+      next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
+    end
+    # Not worth trapping if target will faint this round anyway
+    eor_damage = target.rough_end_of_round_damage
+    if eor_damage >= target.hp
+      next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
+    end
+    # Score for EOR damage (intentionally before Rapid Spin check)
+    hp_fraction = (Settings::MECHANICS_GENERATION >= 6) ? 8 : 16
+    if user.has_active_item?(:BINDINGBAND)
+      hp_fraction = (Settings::MECHANICS_GENERATION >= 6) ? 6 : 8
+    end
+    rounds_to_deplete_hp = (hp_fraction.to_f * target.hp / target.totalhp).ceil
+    score += 30 / rounds_to_deplete_hp
+    # Not worth trapping if target can remove the binding
+    if ai.trainer.medium_skill? &&
+       target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
+      next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
+    end
+    # Score for being an additional effect
+    add_effect = move.get_score_change_for_additional_effect(user, target)
+    next score if add_effect == -999   # Additional effect will be negated
+    score += add_effect
+    # Score for target becoming trapped in battle
+    # TODO: These checks are related to desire to switch, and there can be a lot
+    #       more things to consider, e.g. effectiveness of the target's moves
+    #       against its foes. Also applies to other code that calls
+    #       can_become_trapped?
+    if target.effects[PBEffects::PerishSong] > 0 ||
+       target.effects[PBEffects::Attract] >= 0 ||
+       eor_damage > 0
+      score += 12
+    end
+    next score
+  }
+)
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.copy("TrapTargetInBattle",
                                                          "TrapTargetInBattleMainEffect")
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("TrapTargetInBattle",
+                                                        "TrapTargetInBattleMainEffect")
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattleLowerTargetDefSpDef1EachTurn",
   proc { |move, user, target, ai, battle|
@@ -237,20 +283,63 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattleLower
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapTargetInBattleLowerTargetDefSpDef1EachTurn",
   proc { |score, move, user, target, ai, battle|
-    score += 30 if !target.battler.trappedInBattle?
-    score -= 50 if !target.battler.pbCanLowerStatStage?(:DEFENSE, user.battler, move.move) &&
-                   !target.battler.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user.battler, move.move)
+    # Score for stat drop
+    score = ai.get_score_for_target_stat_drop(score, target, [:DEFENSE, 1, :SPECIAL_DEFENSE], false)
+    # Score for target becoming trapped in battle
+    if target.can_become_trapped? && battle.pbCanChooseNonActive?(target.index)
+      # Not worth trapping if target will faint this round anyway
+      eor_damage = target.rough_end_of_round_damage
+      if eor_damage >= target.hp
+        next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
+      end
+      # Not worth trapping if target can remove the binding
+      if target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
+        next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
+      end
+      # Score for target becoming trapped in battle
+      # TODO: These checks are related to desire to switch, and there can be a lot
+      #       more things to consider, e.g. effectiveness of the target's moves
+      #       against its foes. Also applies to other code that calls
+      #       can_become_trapped?
+      if target.effects[PBEffects::PerishSong] > 0 ||
+         target.effects[PBEffects::Attract] >= 0 ||
+         eor_damage > 0
+        score += 12
+      end
+    end
     next score
   }
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapUserAndTargetInBattle",
   proc { |score, move, user, target, ai, battle|
-    if target.effects[PBEffects::JawLock] < 0
-      score += 40 if !user.battler.trappedInBattle? && !target.battler.trappedInBattle?
+    # NOTE: Don't worry about scoring for the user also becoming trapped in
+    #       battle, because it knows this move and accepts what it's getting
+    #       itself into.
+    if target.can_become_trapped? && battle.pbCanChooseNonActive?(target.index)
+      # Not worth trapping if target will faint this round anyway
+      eor_damage = target.rough_end_of_round_damage
+      if eor_damage >= target.hp
+        next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
+      end
+      # Not worth trapping if target can remove the binding
+      if ai.trainer.medium_skill? &&
+         target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
+        next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
+      end
+      # Score for target becoming trapped in battle
+      # TODO: These checks are related to desire to switch, and there can be a lot
+      #       more things to consider, e.g. effectiveness of the target's moves
+      #       against its foes. Also applies to other code that calls
+      #       can_become_trapped?
+      if target.effects[PBEffects::PerishSong] > 0 ||
+         target.effects[PBEffects::Attract] >= 0 ||
+         eor_damage > 0
+        score += 12
+      end
     end
     next score
   }

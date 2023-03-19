@@ -6,7 +6,7 @@ class Battle::AI
   # Returns a value between 0.0 and 1.0. All move scores are lowered by this
   # value multiplied by the highest-scoring move's score.
   def move_score_threshold
-    return 0.6 + 0.35 * (([@trainer.skill, 100].min / 100.0) ** 0.5)   # 0.6 to 0.95
+    return 0.6 + 0.3 * (([@trainer.skill, 100].min / 100.0) ** 0.5)   # 0.6 to 0.9
   end
 
   #=============================================================================
@@ -147,8 +147,8 @@ class Battle::AI
       move.pbOnStartUse(@user.battler, [])   # Determine which move is used instead
       move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(move.npMove))
     end
-    @move.set_up(move)
     @battle.moldBreaker = @user.has_mold_breaker?
+    @move.set_up(move)
   end
 
   def set_up_move_check_target(target)
@@ -158,6 +158,7 @@ class Battle::AI
       if @target.battler.lastRegularMoveUsed &&
          GameData::Move.get(@target.battler.lastRegularMoveUsed).has_flag?("CanMirrorMove")
         mov = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@target.battler.lastRegularMoveUsed))
+        @battle.moldBreaker = @user.has_mold_breaker?
         @move.set_up(mov)
       end
     end
@@ -291,7 +292,7 @@ class Battle::AI
   # TODO: The above also applies if the move is Heal Pulse or a few other moves
   #       like that, which CAN target a foe but you'd never do so. Maybe use a
   #       move flag to determine such moves? The implication is that such moves
-  #       wouldn't apply the "175 - score" bit, which would make their
+  #       wouldn't apply the "185 - score" bit, which would make their
   #       MoveHandlers do the opposite calculations to other moves with the same
   #       targets, but is this desirable?
   #=============================================================================
@@ -322,7 +323,7 @@ class Battle::AI
       end
       # TODO: Is this reversal of the score okay?
       old_score = score
-      score = 175 - score
+      score = 185 - score
       PBDebug.log_score_change(score - old_score, "score inverted (move targets ally but can target foe)")
     end
     return score

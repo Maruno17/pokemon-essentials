@@ -11,6 +11,8 @@ class Battle::AI::AIMove
   def set_up(move)
     @move = move
     @move.calcType = rough_type
+    @ai.battle.moldBreaker ||= ["IgnoreTargetAbility",
+                                "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(function)
   end
 
   #=============================================================================

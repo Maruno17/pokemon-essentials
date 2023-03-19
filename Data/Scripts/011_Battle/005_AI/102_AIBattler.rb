@@ -299,6 +299,59 @@ class Battle::AI::AIBattler
     return false
   end
 
+  # NOTE: This specifically means "is not currently trapped but can become
+  #       trapped by an effect". Similar to def pbCanSwitchOut? but this returns
+  #       false if any certain switching OR certain trapping applies.
+  def can_become_trapped?
+    return false if fainted?
+    # Ability/item effects that allow switching no matter what
+    if ability_active? && Battle::AbilityEffects.triggerCertainSwitching(ability, @battler, @ai.battle)
+      return false
+    end
+    if item_active? && Battle::ItemEffects.triggerCertainSwitching(item, @battler, @ai.battle)
+      return false
+    end
+    # Other certain switching effects
+    return false if Settings::MORE_TYPE_EFFECTS && has_type?(:GHOST)
+    # Other certain trapping effects
+    return false if @battler.trappedInBattle?
+    # Trapping abilities/items
+    ai.each_foe_battler(side) do |b, i|
+      if b.ability_active? &&
+         Battle::AbilityEffects.triggerTrappingByTarget(b.ability, @battler, b.battler, @ai.battle)
+        return false
+      end
+      if b.item_active? &&
+         Battle::ItemEffects.triggerTrappingByTarget(b.item, @battler, b.battler, @ai.battle)
+        return false
+      end
+    end
+    return true
+  end
+
+  #=============================================================================
+
+  def wants_status_problem?(new_status)
+    return true if new_status == :NONE
+    if ability_active?
+      case ability_id
+      when :GUTS
+        return true if stat_raise_worthwhile?(self, :ATTACK, true)
+      when :MARVELSCALE
+        return true if stat_raise_worthwhile?(self, :DEFENSE, true)
+      when :QUICKFEET
+        return true if stat_raise_worthwhile?(self, :SPEED, true)
+      when :FLAREBOOST
+        return true if new_status == :BURN && stat_raise_worthwhile?(self, :SPECIAL_ATTACK, true)
+      end
+    end
+    return true if new_status == :SLEEP && check_for_move { |m| m.usableWhenAsleep? }
+    if has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed")
+      return true if [:POISON, :BURN, :PARALYSIS].include?(new_status)
+    end
+    return false
+  end
+
   #=============================================================================
 
   # TODO: Add more items.

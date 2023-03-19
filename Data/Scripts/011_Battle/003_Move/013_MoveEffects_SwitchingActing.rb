@@ -59,7 +59,7 @@ end
 
 #===============================================================================
 # After inflicting damage, user switches out. Ignores trapping moves.
-# (U-turn, Volt Switch)
+# (Flip Turn, U-turn, Volt Switch)
 #===============================================================================
 class Battle::Move::SwitchOutUserDamagingMove < Battle::Move
   def pbEndOfMoveUsageEffect(user, targets, numHits, switchedBattlers)

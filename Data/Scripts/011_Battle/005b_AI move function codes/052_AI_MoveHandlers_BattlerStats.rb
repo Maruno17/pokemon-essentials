@@ -455,13 +455,7 @@ Battle::AI::Handlers::MoveEffectScore.copy("RaiseUserAtkSpAtk1",
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1LoseThirdOfTotalHP",
   proc { |move, user, ai, battle|
     next true if user.hp <= [user.totalhp / 3, 1].max
-    will_fail = true
-    (move.move.statUp.length / 2).times do |i|
-      next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
-      will_fail = false
-      break
-    end
-    next will_fail
+    next Battle::AI::Handlers.move_will_fail?("RaiseUserAtkDef1", move, user, ai, battle)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1LoseThirdOfTotalHP",
@@ -478,27 +472,35 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1LoseThirdOfTotalHP
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("RaiseUserMainStats1TrapUserInBattle",
   proc { |move, user, ai, battle|
     next true if user.effects[PBEffects::NoRetreat]
-    will_fail = true
-    (move.move.statUp.length / 2).times do |i|
-      next if !user.battler.pbCanRaiseStatStage?(move.move.statUp[i * 2], user.battler, move.move)
-      will_fail = false
-      break
-    end
-    next will_fail
+    next Battle::AI::Handlers.move_will_fail?("RaiseUserAtkDef1", move, user, ai, battle)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1TrapUserInBattle",
   proc { |score, move, user, ai, battle|
     # Score for stat increase
     score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
-    # Score for trapping user in battle
-    if ai.trainer.medium_skill? && !user.battler.trappedInBattle?
-      score -= 10 if user.hp <= user.totalhp / 2
+    # Score for user becoming trapped in battle
+    if user.can_become_trapped? && battle.pbCanChooseNonActive?(user.index)
+      # Not worth trapping if user will faint this round anyway
+      eor_damage = user.rough_end_of_round_damage
+      if eor_damage >= user.hp
+        next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
+      end
+      # Score for user becoming trapped in battle
+      # TODO: These checks are related to desire to switch, and there can be a lot
+      #       more things to consider, e.g. effectiveness of the target's moves
+      #       against its foes. Also applies to other code that calls
+      #       can_become_trapped?
+      if user.effects[PBEffects::PerishSong] > 0 ||
+         user.effects[PBEffects::Attract] >= 0 ||
+         eor_damage > 0
+        score -= 12
+      end
     end
     next score
   }

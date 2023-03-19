@@ -165,13 +165,40 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartTargetCannotUseItem
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
-# TODO: This code shouldn't make use of target.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("StartNegateHeldItems",
   proc { |score, move, user, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE if battle.field.effects[PBEffects::MagicRoom] > 0
-    score += 30 if !user.item   # && target.item
+    next if battle.field.effects[PBEffects::MagicRoom] == 1   # About to expire anyway
+    any_held_items = false
+    total_want = 0   # Positive means foes want their items more than allies do
+    ai.each_battler do |b, i|
+      next if !b.item
+      # Skip b if its item is disabled
+      if ai.trainer.medium_skill?
+        if battle.field.effects[PBEffects::MagicRoom] > 0
+          # NOTE: Same as b.item_active? but ignoring the Magic Room part.
+          next if b.effects[PBEffects::Embargo] > 0
+          next if battle.corrosiveGas[b.index % 2][b.party_index]
+          next if b.has_active_ability?(:KLUTZ)
+        else
+          next if !b.item_active?
+        end
+      end
+      # Rate b's held item and add it to total_want
+      any_held_items = true
+      want = b.wants_item?(b.item_id)
+      total_want += (b.opposes?(user)) ? want : -want
+    end
+    # Alter score
+    next Battle::AI::MOVE_USELESS_SCORE if !any_held_items
+    if battle.field.effects[PBEffects::MagicRoom] > 0
+      next Battle::AI::MOVE_USELESS_SCORE if total_want >= 0
+      score -= [total_want, -5].max * 5   # Will enable items, prefer if allies affected more
+    else
+      next Battle::AI::MOVE_USELESS_SCORE if total_want <= 0
+      score += [total_want, 5].min * 5   # Will disable items, prefer if foes affected more
+    end
     next score
   }
 )

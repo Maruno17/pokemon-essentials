@@ -116,7 +116,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHPLoseFlyingTypeTh
 )
 
 #===============================================================================
-# TODO: Review score modifiers.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CureTargetStatusHealUserHalfOfTotalHP",
   proc { |move, user, target, ai, battle|
@@ -125,13 +125,9 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CureTargetStatusHealUse
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetStatusHealUserHalfOfTotalHP",
   proc { |score, move, user, target, ai, battle|
-    # TODO: Add high level checks for whether the target wants to lose their
-    #       status problem, and change the score accordingly.
-    if target.opposes?(user)
-      score -= 10
-    else
-      score += 15
-    end
+    # Will cure status
+    score -= 10
+    score += 15 if target.wants_status_problem?(target.status)
     # Consider how much HP will be restored
     if user.hp >= user.totalhp * 0.5
       score -= 10
@@ -422,7 +418,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartLeechSeedTarget",
         score += 15
       end
       # Don't prefer if target can remove the seed
-      if target.check_for_move { |m| m.is_a?(Battle::Move::RemoveUserBindingAndEntryHazards) }
+      if target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
         score -= 15
       end
     end
