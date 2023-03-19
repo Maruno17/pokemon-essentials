@@ -104,7 +104,7 @@ class PokeBattle_Battle
 end
 
 #######
-# end of class 
+# end of class
 ######
 
 ####methodes utilitaires
@@ -401,10 +401,10 @@ end
 #    i = rand(filesList.length-1)
 #    path = filesList[i]
 #    file  = File.basename(path, ".*")
-#    splitPoke = file.split(".")    
+#    splitPoke = file.split(".")
 #    head = splitPoke[0].to_i
 #    body = splitPoke[1].to_i
-#    return (body*NB_POKEMON)+head 
+#    return (body*NB_POKEMON)+head
 #end
 
 
@@ -412,7 +412,7 @@ def getCustomSpeciesList(allowOnline=true)
   speciesList = []
 
   for num in 1..NB_POKEMON
-    path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + num.to_s + "/*"
+    path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + num.to_s + "/*"
     filesList = Dir[path]
     maxDexNumber = (NB_POKEMON * NB_POKEMON) + NB_POKEMON
     maxVal = filesList.length - 1
@@ -695,7 +695,7 @@ def replaceRivalStarterIfNecessary(species)
 end
 
 def fixRivalStarter()
-  #set starter baseform 
+  #set starter baseform
   if $PokemonGlobal.psuedoBSTHash == nil
     psuedoHash = Hash.new
     for i in 0..NB_POKEMON
@@ -738,4 +738,3 @@ def fixRivalStarter()
   pbSet(250, rivalStarter)
   $game_switches[840] = true
 end
-    

@@ -74,8 +74,8 @@ def sortCustomBattlers()
     next if filename == '.' or filename == '..'
     next if !filename.end_with?(".png")
     headNum = filename.split('.')[0]
-    oldPath = Settings::CUSTOM_BATTLERS_FOLDER + "/" + filename
-    newPath = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + headNum.to_s + "/" +filename
+    oldPath = Settings::CUSTOM_BATTLERS_FOLDER + filename
+    newPath = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + headNum.to_s + "/" + filename
     begin
       if File.file?(newPath)
         alreadyExists[oldPath] = newPath

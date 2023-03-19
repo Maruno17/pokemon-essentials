@@ -34,7 +34,7 @@ end
 def download_autogen_sprite(head_id, body_id)
   return nil if $PokemonSystem.download_sprites != 0
   url = "https://raw.githubusercontent.com/Aegide/autogen-fusion-sprites/master/Battlers/{1}/{1}.{2}.png"
-  destPath = _INTL("{1}/{2}",Settings::BATTLERS_FOLDER,head_id)
+  destPath = _INTL("{1}{2}",Settings::BATTLERS_FOLDER,head_id)
   sprite = download_sprite(_INTL(url,head_id,body_id),head_id,body_id,destPath)
   return sprite if sprite
   return nil
@@ -44,7 +44,7 @@ def download_custom_sprite(head_id, body_id)
   return nil if $PokemonSystem.download_sprites != 0
   #base_path = "https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/{1}.{2}.png"
   url = "https://raw.githubusercontent.com/infinitefusion/sprites/main/CustomBattlers/{1}.{2}.png"
-  destPath= _INTL("{1}/{2}",Settings::CUSTOM_BATTLERS_FOLDER_INDEXED,head_id)
+  destPath= _INTL("{1}{2}",Settings::CUSTOM_BATTLERS_FOLDER_INDEXED,head_id)
   sprite = download_sprite(_INTL(url,head_id,body_id),head_id,body_id,destPath)
   return sprite if sprite
   return nil
