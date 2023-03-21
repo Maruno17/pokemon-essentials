@@ -54,8 +54,8 @@ class Battle::Battler
       if target.effects[PBEffects::BeakBlast]
         PBDebug.log("[Lingering effect] #{target.pbThis}'s Beak Blast")
         if move.pbContactMove?(user) && user.affectedByContactEffect? &&
-           target.pbCanBurn?(user, false, self)
-          target.pbBurn(user)
+           user.pbCanBurn?(target, false, self)
+          user.pbBurn(target)
         end
       end
       # Shell Trap (make the trapper move next if the trap was triggered)

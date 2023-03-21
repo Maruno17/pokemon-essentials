@@ -1086,15 +1086,15 @@ MenuHandlers.add(:debug_menu, :fix_invalid_tiles, {
 #===============================================================================
 # Other options
 #===============================================================================
-MenuHandlers.add(:debug_menu, :other_menu, {
-  "name"        => _INTL("File Management Options..."),
+MenuHandlers.add(:debug_menu, :files_menu, {
+  "name"        => _INTL("Files Options..."),
   "parent"      => :main,
   "description" => _INTL("Compile, generate PBS files, translations, Mystery Gifts, etc.")
 })
 
 MenuHandlers.add(:debug_menu, :compile_data, {
   "name"        => _INTL("Compile Data"),
-  "parent"      => :other_menu,
+  "parent"      => :files_menu,
   "description" => _INTL("Fully compile all data."),
   "effect"      => proc {
     msgwindow = pbCreateMessageWindow
@@ -1106,7 +1106,7 @@ MenuHandlers.add(:debug_menu, :compile_data, {
 
 MenuHandlers.add(:debug_menu, :create_pbs_files, {
   "name"        => _INTL("Create PBS File(s)"),
-  "parent"      => :other_menu,
+  "parent"      => :files_menu,
   "description" => _INTL("Choose one or all PBS files and create it."),
   "effect"      => proc {
     cmd = 0
@@ -1170,7 +1170,7 @@ MenuHandlers.add(:debug_menu, :create_pbs_files, {
 
 MenuHandlers.add(:debug_menu, :rename_files, {
   "name"        => _INTL("Rename Outdated Files"),
-  "parent"      => :other_menu,
+  "parent"      => :files_menu,
   "description" => _INTL("Check for files with outdated names and rename/move them. Can alter map data."),
   "effect"      => proc {
     if pbConfirmMessage(_INTL("Are you sure you want to automatically rename outdated files?"))
@@ -1182,7 +1182,7 @@ MenuHandlers.add(:debug_menu, :rename_files, {
 
 MenuHandlers.add(:debug_menu, :extract_text, {
   "name"        => _INTL("Extract Text For Translation"),
-  "parent"      => :other_menu,
+  "parent"      => :files_menu,
   "description" => _INTL("Extract all text in the game to text files for translating."),
   "effect"      => proc {
     if Settings::LANGUAGES.length == 0
@@ -1216,7 +1216,7 @@ MenuHandlers.add(:debug_menu, :extract_text, {
 
 MenuHandlers.add(:debug_menu, :compile_text, {
   "name"        => _INTL("Compile Translated Text"),
-  "parent"      => :other_menu,
+  "parent"      => :files_menu,
   "description" => _INTL("Import text files and convert them into a language file."),
   "effect"      => proc {
     # Find all folders with a particular naming convention
@@ -1238,7 +1238,7 @@ MenuHandlers.add(:debug_menu, :compile_text, {
 
 MenuHandlers.add(:debug_menu, :mystery_gift, {
   "name"        => _INTL("Manage Mystery Gifts"),
-  "parent"      => :other_menu,
+  "parent"      => :files_menu,
   "description" => _INTL("Edit and enable/disable Mystery Gifts."),
   "effect"      => proc {
     pbManageMysteryGifts
@@ -1247,7 +1247,7 @@ MenuHandlers.add(:debug_menu, :mystery_gift, {
 
 MenuHandlers.add(:debug_menu, :reload_system_cache, {
   "name"        => _INTL("Reload System Cache"),
-  "parent"      => :other_menu,
+  "parent"      => :files_menu,
   "description" => _INTL("Refreshes the system's file cache. Use if you change a file while playing."),
   "effect"      => proc {
     System.reload_cache
