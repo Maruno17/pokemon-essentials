@@ -30,9 +30,7 @@ class Pokemon
   end
 
   def shadow_data
-    ret = GameData::ShadowPokemon.try_get(species_data.id)
-    ret = GameData::ShadowPokemon.try_get(@species) if !ret
-    return ret
+    return GameData::ShadowPokemon.get_species_form(@species, form_simple)
   end
 
   def max_gauge_size

@@ -551,6 +551,16 @@ module Compiler
   end
 
   def validate_compiled_shadow_pokemon(hash)
+    # Split species and form into their own values, generate compound ID from them
+    if hash[:id].is_a?(Array)
+      hash[:species] = hash[:id][0]
+      hash[:form] = hash[:id][1] || 0
+      if hash[:form] == 0
+        hash[:id] = hash[:species]
+      else
+        hash[:id] = sprintf("%s_%d", hash[:species].to_s, hash[:form]).to_sym
+      end
+    end
   end
 
   def validate_all_compiled_shadow_pokemon
