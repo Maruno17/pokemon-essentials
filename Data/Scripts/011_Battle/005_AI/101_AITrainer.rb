@@ -13,6 +13,7 @@
 #   PredictMoveFailure
 #   ScoreMoves
 #   PreferMultiTargetMoves
+#   ConsiderSwitching (can choose to switch out Pokémon)
 #   ReserveLastPokemon (don't switch it in if possible)
 #   UsePokemonInOrder (uses earliest-listed Pokémon possible)
 #===============================================================================
@@ -57,6 +58,7 @@ class Battle::AI::AITrainer
       @skill_flags.push("ScoreMoves")
       @skill_flags.push("PreferMultiTargetMoves")
     end
+    @skill_flags.push("ConsiderSwitching") if medium_skill?
     if !medium_skill?
       @skill_flags.push("UsePokemonInOrder")
     elsif best_skill?

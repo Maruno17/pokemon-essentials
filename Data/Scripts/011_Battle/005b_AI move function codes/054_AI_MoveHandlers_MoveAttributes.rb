@@ -1275,7 +1275,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RecoilHalfOfDamageDealt"
 Battle::AI::Handlers::MoveBasePower.add("EffectivenessIncludesFlyingType",
   proc { |power, move, user, target, ai, battle|
     if GameData::Type.exists?(:FLYING)
-      targetTypes = target.battler.pbTypes(true)
+      targetTypes = target.pbTypes(true)
       mult = Effectiveness.calculate(:FLYING, *targetTypes)
       power = (power * mult).round
     end

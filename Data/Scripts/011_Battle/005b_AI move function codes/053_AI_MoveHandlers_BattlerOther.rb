@@ -697,7 +697,7 @@ Battle::AI::Handlers::MoveEffectScore.add("SetUserTypesBasedOnEnvironment",
     # Check if any user's moves will get STAB because of the type change
     score += 8 if user.has_damaging_move_of_type?(new_type)
     # Check if any user's moves will lose STAB because of the type change
-    user.battler.pbTypes(true).each do |type|
+    user.pbTypes(true).each do |type|
       next if type == new_type
       score -= 8 if user.has_damaging_move_of_type?(type)
     end
@@ -750,8 +750,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SetUserTypesToResistLast
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserTypesToTargetTypes",
   proc { |move, user, target, ai, battle|
     next true if !user.battler.canChangeType?
-    next true if target.battler.pbTypes(true).empty?
-    next true if user.battler.pbTypes == target.battler.pbTypes &&
+    next true if target.pbTypes(true).empty?
+    next true if user.pbTypes == target.pbTypes &&
                  user.effects[PBEffects::ExtraType] == target.effects[PBEffects::ExtraType]
     next false
   }

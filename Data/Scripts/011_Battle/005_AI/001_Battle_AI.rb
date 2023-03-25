@@ -92,6 +92,7 @@ module Battle::AI::Handlers
   GeneralMoveScore              = HandlerHash.new
   GeneralMoveAgainstTargetScore = HandlerHash.new
   ShouldSwitch                  = HandlerHash.new
+  ShouldNotSwitch               = HandlerHash.new
 
   def self.move_will_fail?(function_code, *args)
     return MoveFailureCheck.trigger(function_code, *args) || false
@@ -135,6 +136,15 @@ module Battle::AI::Handlers
   def self.should_switch?(*args)
     ret = false
     ShouldSwitch.each do |id, switch_proc|
+      ret ||= switch_proc.call(*args)
+      break if ret
+    end
+    return ret
+  end
+
+  def self.should_not_switch?(*args)
+    ret = false
+    ShouldNotSwitch.each do |id, switch_proc|
       ret ||= switch_proc.call(*args)
       break if ret
     end
