@@ -22,7 +22,7 @@ module Settings
   #Infinite fusion settings
   NB_POKEMON = 420
   CUSTOM_BATTLERS_FOLDER = "Graphics/CustomBattlers/"
-  CUSTOM_BATTLERS_FOLDER_INDEXED = "Graphics/CustomBattlers/indexed"
+  CUSTOM_BATTLERS_FOLDER_INDEXED = "Graphics/CustomBattlers/indexed/"
   BATTLERS_FOLDER = "Graphics/Battlers/"
   DOWNLOADED_SPRITES_FOLDER = "Graphics/temp/"
   DEFAULT_SPRITE_PATH = "Graphics/Battlers/Special/000.png"

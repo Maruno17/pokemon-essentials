@@ -195,7 +195,7 @@ def get_unfused_sprite_path(dex_number)
   filename = sprintf("%s.png", dex_number)
 
   normal_path = Settings::BATTLERS_FOLDER + folder + "/" + filename
-  lightmode_path = Settings::BATTLERS_FOLDER +  filename
+  lightmode_path = Settings::BATTLERS_FOLDER + filename
   return normal_path if pbResolveBitmap(normal_path)
   return lightmode_path
 end
@@ -203,7 +203,7 @@ end
 def get_fusion_sprite_path(head_id,body_id)
   #Try local custom sprite
   filename = sprintf("%s.%s.png", head_id, body_id)
-  local_custom_path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" +filename
+  local_custom_path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + head_id.to_s + "/" +filename
   return local_custom_path if pbResolveBitmap(local_custom_path)
 
   #Try to download custom sprite if none found locally
