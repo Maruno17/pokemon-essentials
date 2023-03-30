@@ -341,6 +341,12 @@ class Battle::AI::AIBattler
         return true if stat_raise_worthwhile?(self, :SPEED, true)
       when :FLAREBOOST
         return true if new_status == :BURN && stat_raise_worthwhile?(self, :SPECIAL_ATTACK, true)
+      when :TOXICBOOST
+        return true if new_status == :POISON && stat_raise_worthwhile?(self, :ATTACK, true)
+      when :POISONHEAL
+        return true if new_status == :POISON
+      when :MAGICGUARD   # Want a harmless status problem to prevent getting a harmful one
+        return true if new_status == :POISON || (new_status == :BURN && !stat_raise_worthwhile?(self, :ATTACK, true))
       end
     end
     return true if new_status == :SLEEP && check_for_move { |m| m.usableWhenAsleep? }
