@@ -333,6 +333,7 @@ class Battle::AI::AIBattler
 
   def wants_status_problem?(new_status)
     return true if new_status == :NONE
+    return false if new_status == :FREEZE		#This shouldn't ever come up, but Freeze is always bad.
     if ability_active?
       case ability_id
       when :GUTS
@@ -343,6 +344,12 @@ class Battle::AI::AIBattler
         return true if stat_raise_worthwhile?(self, :SPEED, true)
       when :FLAREBOOST
         return true if new_status == :BURN && stat_raise_worthwhile?(self, :SPECIAL_ATTACK, true)
+      when :TOXICBOOST
+        return true if new_status == :POISON && stat_raise_worthwhile?(self, :ATTACK, true)
+      when :POISONHEAL
+        return true if new_status == :POISON
+      when :MAGICGUARD		#Magic Guard Pokemon want to be burned or poisoned so that they can't be paralyzed, frozen, or put to sleep.
+        return true if [:BURN, :POISON].include?(new_status)
       end
     end
     return true if new_status == :SLEEP && check_for_move { |m| m.usableWhenAsleep? }
