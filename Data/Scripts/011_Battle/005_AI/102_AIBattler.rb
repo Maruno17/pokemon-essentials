@@ -349,7 +349,7 @@ class Battle::AI::AIBattler
       when :POISONHEAL
         return true if new_status == :POISON
       when :MAGICGUARD		#Magic Guard Pokemon want to be burned or poisoned so that they can't be paralyzed, frozen, or put to sleep.
-        return true if [:BURN, :POISON].include?(new_status)
+        return true if new_status == :POISON || (new_status == :BURN && !stat_raise_worthwhile?(self, :ATTACK, true) )
       end
     end
     return true if new_status == :SLEEP && check_for_move { |m| m.usableWhenAsleep? }
