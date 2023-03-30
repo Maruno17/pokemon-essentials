@@ -6,7 +6,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RedirectAllMovesToUser",
     # Useless if there is no ally to redirect attacks from
     next Battle::AI::MOVE_USELESS_SCORE if user.battler.allAllies.length == 0
     # Prefer if ally is at low HP and user is at high HP
-    if user.hp > user.totalhp * 2 / 3
+    if ai.trainer.has_skill_flag?("HPAware") && user.hp > user.totalhp * 2 / 3
       ai.each_ally(user.index) do |b, i|
         score += 10 if b.hp <= b.totalhp / 3
       end
@@ -27,7 +27,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RedirectAllMovesToTarget
       next Battle::AI::MOVE_USELESS_SCORE if user.battler.allAllies.length == 0
     end
     # Generaly don't prefer this move, as it's a waste of the user's turn
-    next score - 15
+    next score - 20
   }
 )
 
@@ -47,7 +47,7 @@ Battle::AI::Handlers::MoveBasePower.add("RandomlyDamageOrHealTarget",
 Battle::AI::Handlers::MoveEffectScore.add("RandomlyDamageOrHealTarget",
   proc { |score, move, user, ai, battle|
     # Generaly don't prefer this move, as it may heal the target instead
-    next score - 8
+    next score - 10
   }
 )
 
@@ -56,17 +56,18 @@ Battle::AI::Handlers::MoveEffectScore.add("RandomlyDamageOrHealTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("HealAllyOrDamageFoe",
   proc { |move, user, target, ai, battle|
-    next !target.opposes?(user) && target.battler.canHeal?
+    next !target.opposes?(user) && !target.battler.canHeal?
   }
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealAllyOrDamageFoe",
   proc { |score, move, user, target, ai, battle|
-    if !target.opposes?(user)
-      # Consider how much HP will be restored
+    next score if target.opposes?(user)
+    # Consider how much HP will be restored
+    if ai.trainer.has_skill_flag?("HPAware")
       if target.hp >= target.totalhp * 0.5
         score -= 10
       else
-        score += 20 * (target.totalhp - target.hp) / target.totalhp
+        score += 20 * (target.totalhp - target.hp) / target.totalhp   # +10 to +20
       end
     end
     next score
@@ -116,19 +117,21 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CurseTargetOrLowerUserSp
     next score if !user.has_type?(:GHOST) &&
                   !(move.rough_type == :GHOST && user.has_active_ability?([:LIBERO, :PROTEAN]))
     # Don't prefer if user will faint because of using this move
-    next Battle::AI::MOVE_USELESS_SCORE if user.hp <= user.totalhp / 2
+    if ai.trainer.has_skill_flag?("HPAware")
+      next Battle::AI::MOVE_USELESS_SCORE if user.hp <= user.totalhp / 2
+    end
     # Prefer early on
     score += 10 if user.turnCount < 2
     if ai.trainer.medium_skill?
       # Prefer if the user has no damaging moves
-      score += 20 if !user.check_for_move { |m| m.damagingMove? }
+      score += 15 if !user.check_for_move { |m| m.damagingMove? }
       # Prefer if the target can't switch out to remove its curse
       score += 10 if !battle.pbCanChooseNonActive?(target.index)
     end
     if ai.trainer.high_skill?
       # Prefer if user can stall while damage is dealt
       if user.check_for_move { |m| m.is_a?(Battle::Move::ProtectMove) }
-        score += 8
+        score += 5
       end
     end
     next score
@@ -192,13 +195,10 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TargetNextFireMoveDamag
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetNextFireMoveDamagesTarget",
   proc { |score, move, user, target, ai, battle|
-    # Effect wears off at the end of the round
-    next Battle::AI::MOVE_USELESS_SCORE if target.faster_than?(user)
     # Prefer if target knows any Fire moves (moreso if that's the only type they know)
-    if target.check_for_move { |m| m.pbCalcType(b.battler) == :FIRE }
-      score += 10
-      score += 10 if !target.check_for_move { |m| m.pbCalcType(b.battler) != :FIRE }
-    end
+    next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.pbCalcType(target.battler) == :FIRE }
+    score += 10
+    score += 10 if !target.check_for_move { |m| m.pbCalcType(target.battler) != :FIRE }
     next score
   }
 )
@@ -240,7 +240,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PowerUpAllyMove",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PowerUpAllyMove",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.damagingMove? }
-    next score + 4
+    next score + 5
   }
 )
 
@@ -265,10 +265,10 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
       score += 5 if b.rough_stat(:ATTACK) > b.rough_stat(:SPECIAL_ATTACK)
       # Prefer if the last move the foe used was physical
       if ai.trainer.medium_skill? && b.battler.lastMoveUsed
-        score += 5 if GameData::Move.get(b.battler.lastMoveUsed).physical?
+        score += 8 if GameData::Move.get(b.battler.lastMoveUsed).physical?
       end
       # Prefer if the foe is taunted into using a damaging move
-      score += 4 if b.effects[PBEffects::Taunt] > 0
+      score += 5 if b.effects[PBEffects::Taunt] > 0
     end
     # Useless if no foes have a physical move to counter
     next Battle::AI::MOVE_USELESS_SCORE if !has_physical_move
@@ -297,10 +297,10 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
       score += 5 if b.rough_stat(:SPECIAL_ATTACK) > b.rough_stat(:ATTACK)
       # Prefer if the last move the foe used was special
       if ai.trainer.medium_skill? && b.battler.lastMoveUsed
-        score += 5 if GameData::Move.get(b.battler.lastMoveUsed).special?
+        score += 8 if GameData::Move.get(b.battler.lastMoveUsed).special?
       end
       # Prefer if the foe is taunted into using a damaging move
-      score += 4 if b.effects[PBEffects::Taunt] > 0
+      score += 5 if b.effects[PBEffects::Taunt] > 0
     end
     # Useless if no foes have a special move to counter
     next Battle::AI::MOVE_USELESS_SCORE if !has_special_move
@@ -327,10 +327,10 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
       has_damaging_move = true
       # Prefer if the last move the foe used was damaging
       if ai.trainer.medium_skill? && b.battler.lastMoveUsed
-        score += 5 if GameData::Move.get(b.battler.lastMoveUsed).damaging?
+        score += 8 if GameData::Move.get(b.battler.lastMoveUsed).damaging?
       end
       # Prefer if the foe is taunted into using a damaging move
-      score += 6 if b.effects[PBEffects::Taunt] > 0
+      score += 5 if b.effects[PBEffects::Taunt] > 0
     end
     # Useless if no foes have a damaging move to counter
     next Battle::AI::MOVE_USELESS_SCORE if !has_damaging_move
@@ -352,7 +352,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserAddStockpileRaiseDefSpDef1",
     # More preferable if user also has Spit Up/Swallow
     if user.battler.pbHasMoveFunction?("PowerDependsOnUserStockpile",
                                        "HealUserDependingOnUserStockpile")
-      score += [10, 8, 5, 3][user.effects[PBEffects::Stockpile]]
+      score += [10, 10, 8, 5][user.effects[PBEffects::Stockpile]]
     end
     next score
   }
@@ -397,13 +397,12 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnUserStockpile",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !user.battler.canHeal?
     # Consider how much HP will be restored
-    if user.hp >= user.totalhp * 0.5
-      score -= 10
-    else
-      # Slightly prefer to hold out for another Stockpile to make this move stronger
-      score -= 5 if user.effects[PBEffects::Stockpile] < 2
-      score += 20 * (user.totalhp - user.hp) / user.totalhp
+    if ai.trainer.has_skill_flag?("HPAware")
+      next score - 10 if user.hp >= user.totalhp * 0.5
+      score += 20 * (user.totalhp - user.hp) / user.totalhp   # +10 to +20
     end
+    # Slightly prefer to hold out for another Stockpile to make this move stronger
+    score -= 5 if user.effects[PBEffects::Stockpile] < 2
     next score
   }
 )
@@ -550,13 +549,13 @@ Battle::AI::Handlers::MoveEffectScore.add("BounceBackProblemCausingStatusMoves",
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.statusMove? && m.canMagicCoat? }
-      score += 4
+      score += 5
       useless = false
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
     # Don't prefer the lower the user's HP is (better to try something else)
-    if user.hp < user.totalhp / 2
-      score -= 20 * (0.75 - (user.hp.to_f / user.totalhp))   # -5 to -15
+    if ai.trainer.has_skill_flag?("HPAware") && user.hp < user.totalhp / 2
+      score -= (20 * (1.0 - (user.hp.to_f / user.totalhp))).to_i   # -10 to -20
     end
     next score
   }
@@ -571,13 +570,13 @@ Battle::AI::Handlers::MoveEffectScore.add("StealAndUseBeneficialStatusMove",
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.statusMove? && m.canSnatch? }
-      score += 4
+      score += 5
       useless = false
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
     # Don't prefer the lower the user's HP is (better to try something else)
-    if user.hp < user.totalhp / 2
-      score -= 20 * (0.75 - (user.hp.to_f / user.totalhp))   # -5 to -15
+    if ai.trainer.has_skill_flag?("HPAware") && user.hp < user.totalhp / 2
+      score -= (20 * (1.0 - (user.hp.to_f / user.totalhp))).to_i   # -10 to -20
     end
     next score
   }
@@ -606,7 +605,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ReplaceMoveThisBattleWit
   proc { |score, move, user, target, ai, battle|
     # Generally don't prefer, as this wastes the user's turn just to gain a move
     # of unknown utility
-    score -= 8
+    score -= 10
     # Slightly prefer if this move will definitely succeed, just for the sake of
     # getting rid of this move
     score += 5 if user.faster_than?(target)

@@ -1,12 +1,12 @@
 class Battle::AI
-  MOVE_FAIL_SCORE    = 25
+  MOVE_FAIL_SCORE    = 20
   MOVE_USELESS_SCORE = 60   # Move predicted to do nothing or just be detrimental
   MOVE_BASE_SCORE    = 100
 
   # Returns a value between 0.0 and 1.0. All move scores are lowered by this
   # value multiplied by the highest-scoring move's score.
   def move_score_threshold
-    return 0.6 + 0.3 * (([@trainer.skill, 100].min / 100.0) ** 0.5)   # 0.6 to 0.9
+    return 0.6 + 0.35 * (([@trainer.skill, 100].min / 100.0) ** 0.5)   # 0.635 to 0.95
   end
 
   #=============================================================================

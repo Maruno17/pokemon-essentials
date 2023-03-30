@@ -75,9 +75,11 @@ Battle::AI::Handlers::MoveBasePower.add("OHKO",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("OHKO",
   proc { |score, move, user, target, ai, battle|
     # Don't prefer if the target has less HP and user has a non-OHKO damaging move
-    if user.check_for_move { |m| !m.is_a?(Battle::Move::OHKO) && m.damagingMove? }
-      score -= 8 if target.hp <= target.totalhp / 2
-      score -= 8 if target.hp <= target.totalhp / 4
+    if ai.trainer.has_skill_flag?("HPAware")
+      if user.check_for_move { |m| m.damagingMove? && !m.is_a?(Battle::Move::OHKO) }
+        score -= 12 if target.hp <= target.totalhp / 2
+        score -= 8 if target.hp <= target.totalhp / 4
+      end
     end
     next score
   }
@@ -115,7 +117,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DamageTargetAlly",
     target.battler.allAllies.each do |b|
       next if !b.near?(target.battler) || !b.battler.takesIndirectDamage?
       score += 10
-      score += 15 if b.hp <= b.totalhp / 16
+      if ai.trainer.has_skill_flag?("HPAware")
+        score += 10 if b.hp <= b.totalhp / 16
+      end
     end
     next score
   }
@@ -218,7 +222,7 @@ Battle::AI::Handlers::MoveEffectScore.add("PowerHigherWithConsecutiveUse",
     # Prefer continuing to use this move
     score += 10 if user.effects[PBEffects::FuryCutter] > 0
     # Prefer if holding the Metronome
-    score += 5 if user.has_active_item?(:METRONOME)
+    score += 7 if user.has_active_item?(:METRONOME)
     next score
   }
 )
@@ -236,7 +240,7 @@ Battle::AI::Handlers::MoveEffectScore.add("PowerHigherWithConsecutiveUse",
     # Prefer continuing to use this move
     score += 10 if user.pbOwnSide.effects[PBEffects::EchoedVoiceCounter] > 0
     # Prefer if holding the Metronome
-    score += 5 if user.has_active_item?(:METRONOME)
+    score += 7 if user.has_active_item?(:METRONOME)
     next score
   }
 )
@@ -274,8 +278,11 @@ Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetHPLessThanHalf",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetAsleepCureTarget",
   proc { |score, move, user, target, ai, battle|
     if target.status == :SLEEP && target.statusCount > 1   # Will cure status
-      score -= 10
-      score += 15 if target.wants_status_problem?(:SLEEP)
+      if target.wants_status_problem?(:SLEEP)
+        score += 15
+      else
+        score -= 10
+      end
     end
     next score
   }
@@ -298,8 +305,11 @@ Battle::AI::Handlers::MoveBasePower.copy("DoublePowerIfTargetPoisoned",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetParalyzedCureTarget",
   proc { |score, move, user, target, ai, battle|
     if target.status == :PARALYSIS   # Will cure status
-      score -= 10
-      score += 15 if target.wants_status_problem?(:PARALYSIS)
+      if target.wants_status_problem?(:PARALYSIS)
+        score += 15
+      else
+        score -= 10
+      end
     end
     next score
   }
@@ -374,7 +384,7 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerIfUserLostHPThisTurn",
     # Prefer if user is slower than its foe(s) and the foe(s) can attack
     ai.each_foe_battler(user.side) do |b, i|
       next if user.faster_than?(b) || !b.can_attack?
-      score += 4
+      score += 8
     end
     next score
   }
@@ -389,7 +399,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetLostH
     ai.each_foe_battler(target.side) do |b, i|
       next if i == user.index
       next if user.faster_than?(b) || !b.can_attack?
-      score += 4
+      score += 8
     end
     next score
   }
@@ -405,7 +415,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetLostH
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetActed",
   proc { |score, move, user, target, ai, battle|
-    score += 15 if target.faster_than?(user)
+    score += 10 if target.faster_than?(user)
     next score
   }
 )
@@ -415,7 +425,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetActed
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DoublePowerIfTargetNotActed",
   proc { |score, move, user, target, ai, battle|
-    score += 15 if user.faster_than?(target)
+    score += 10 if user.faster_than?(target)
     next score
   }
 )
@@ -457,7 +467,7 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
       # TODO: Change the score depending on how much of an effect a critical hit
       #       will have? Critical hits ignore the user's offensive stat drops
       #       and the target's defensive stat raises, and multiply the damage.
-      score += 10
+      score += 15
     end
     next score
   }
@@ -514,7 +524,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPreventCriticalHitsAgainstUserSi
       # TODO: Change the score depending on how much of an effect a critical hit
       #       will have? Critical hits ignore the user's offensive stat drops
       #       and the target's defensive stat raises, and multiply the damage.
-      score += 5 * crit_stage if crit_stage > 0
+      score += 8 * crit_stage if crit_stage > 0
       score += 10 if b.effects[PBEffects::LaserFocus] > 0
     end
     next score
@@ -540,15 +550,17 @@ Battle::AI::Handlers::MoveEffectScore.add("UserEnduresFaintingThisTurn",
     useless = true
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
+      score += 5
       useless = false
-      score += 4
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
     # Don't prefer if user has high HP, prefer if user has lower HP
-    if user.hp >= user.totalhp / 2
-      score -= 8
-    elsif user.hp >= user.totalhp / 8
-      score += 4
+    if ai.trainer.has_skill_flag?("HPAware")
+      if user.hp >= user.totalhp / 2
+        score -= 15
+      elsif user.hp <= user.totalhp / 4
+        score += 8
+      end
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
@@ -570,20 +582,25 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenElectricMoves",
 Battle::AI::Handlers::MoveEffectScore.add("StartWeakenElectricMoves",
   proc { |score, move, user, ai, battle|
     # Don't prefer the lower the user's HP is
-    if user.hp < user.totalhp / 2
-      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    if ai.trainer.has_skill_flag?("HPAware")
+      if user.hp <= user.totalhp / 2
+        score -= (20 * (0.75 - (user.hp.to_f / user.totalhp))).to_i   # -5 to -15
+      end
     end
     # Prefer if foes have Electric moves
+    any_foe_electric_moves = false
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.has_damaging_move_of_type?(:ELECTRIC)
-      score += 10
-      score += 5 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :ELECTRIC }
+      score += 15
+      score += 7 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :ELECTRIC }
+      any_foe_electric_moves = true
     end
+    next Battle::AI::MOVE_USELESS_SCORE if !any_foe_electric_moves
     # Don't prefer if any allies have Electric moves
     ai.each_same_side_battler(user.side) do |b, i|
       next if !b.has_damaging_move_of_type?(:ELECTRIC)
-      score -= 8
-      score -= 4 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :ELECTRIC }
+      score -= 10
+      score -= 5 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :ELECTRIC }
     end
     next score
   }
@@ -601,20 +618,25 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenFireMoves",
 Battle::AI::Handlers::MoveEffectScore.add("StartWeakenFireMoves",
   proc { |score, move, user, ai, battle|
     # Don't prefer the lower the user's HP is
-    if user.hp < user.totalhp / 2
-      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    if ai.trainer.has_skill_flag?("HPAware")
+      if user.hp <= user.totalhp / 2
+        score -= (20 * (0.75 - (user.hp.to_f / user.totalhp))).to_i   # -5 to -15
+      end
     end
     # Prefer if foes have Fire moves
+    any_foe_fire_moves = false
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.has_damaging_move_of_type?(:FIRE)
-      score += 10
-      score += 5 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :FIRE }
+      score += 15
+      score += 7 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :FIRE }
+      any_foe_fire_moves = true
     end
+    next Battle::AI::MOVE_USELESS_SCORE if !any_foe_fire_moves
     # Don't prefer if any allies have Fire moves
     ai.each_same_side_battler(user.side) do |b, i|
       next if !b.has_damaging_move_of_type?(:FIRE)
-      score -= 8
-      score -= 4 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :FIRE }
+      score -= 10
+      score -= 5 if !b.check_for_move { |m| m.damagingMove? && m.pbCalcType(b.battler) != :FIRE }
     end
     next score
   }
@@ -636,14 +658,16 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenPhysicalDamageAgainstUserS
     # TODO: Should this HP check exist? The effect can still be set up for
     #       allies. Maybe just don't prefer if there are no replacement mons
     #       left.
-    if user.hp < user.totalhp / 2
-      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    if ai.trainer.has_skill_flag?("HPAware")
+      if user.hp <= user.totalhp / 2
+        score -= (20 * (0.75 - (user.hp.to_f / user.totalhp))).to_i   # -5 to -15
+      end
     end
     # Prefer if foes have physical moves (moreso if they don't have special moves)
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.check_for_move { |m| m.physicalMove?(m.type) }
-      score += 8
-      score += 5 if !b.check_for_move { |m| m.specialMove?(m.type) }
+      score += 10
+      score += 8 if !b.check_for_move { |m| m.specialMove?(m.type) }
     end
     next score
   }
@@ -665,14 +689,16 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSi
     # TODO: Should this HP check exist? The effect can still be set up for
     #       allies. Maybe just don't prefer if there are no replacement mons
     #       left.
-    if user.hp < user.totalhp / 2
-      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    if ai.trainer.has_skill_flag?("HPAware")
+      if user.hp <= user.totalhp / 2
+        score -= (20 * (0.75 - (user.hp.to_f / user.totalhp))).to_i   # -5 to -15
+      end
     end
     # Prefer if foes have special moves (moreso if they don't have physical moves)
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.check_for_move { |m| m.specialMove?(m.type) }
-      score += 8
-      score += 5 if !b.check_for_move { |m| m.physicalMove?(m.type) }
+      score += 10
+      score += 8 if !b.check_for_move { |m| m.physicalMove?(m.type) }
     end
     next score
   }
@@ -697,8 +723,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHai
     # TODO: Should this HP check exist? The effect can still be set up for
     #       allies. Maybe just don't prefer if there are no replacement mons
     #       left.
-    if user.hp < user.totalhp / 2
-      score -= 40 * (0.75 - (user.hp.to_f / user.totalhp))   # -10 to -30
+    if ai.trainer.has_skill_flag?("HPAware")
+      if user.hp <= user.totalhp / 2
+        score -= (20 * (0.75 - (user.hp.to_f / user.totalhp))).to_i   # -5 to -15
+      end
     end
     next score + 15
   }
@@ -743,16 +771,16 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
       #       be using, so we don't know if Unseen Fist will apply.
       useless = false
       # General preference
-      score += 4
+      score += 7
       # Prefer if the foe is in the middle of using a two turn attack
-      score += 8 if b.effects[PBEffects::TwoTurnAttack] &&
-                    GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
+      score += 15 if b.effects[PBEffects::TwoTurnAttack] &&
+                     GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
       # Prefer if foe takes EOR damage, don't prefer if they have EOR healing
       b_eor_damage = b.rough_end_of_round_damage
       if b_eor_damage > 0
-        score += 5
+        score += 8
       elsif b_eor_damage < 0
-        score -= 5
+        score -= 8
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
@@ -761,13 +789,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
     if user_eor_damage >= user.hp
       next Battle::AI::MOVE_USELESS_SCORE
     elsif user_eor_damage > 0
-      score -= 5
+      score -= 8
     elsif user_eor_damage < 0
-      score += 5
+      score += 8
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 15 : 10)
     next score
   }
 )
@@ -788,7 +816,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
       #       be using, so we don't know if Unseen Fist will apply.
       useless = false
       # General preference
-      score += 4
+      score += 7
       # Prefer if the foe is likely to be poisoned by this move
       if b.check_for_move { |m| m.contactMove? }
         poison_score = Battle::AI::Handlers.apply_move_effect_against_target_score("PoisonTarget",
@@ -796,14 +824,14 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
         score += poison_score / 2   # Halved because we don't know what move b will use
       end
       # Prefer if the foe is in the middle of using a two turn attack
-      score += 8 if b.effects[PBEffects::TwoTurnAttack] &&
-                    GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
+      score += 15 if b.effects[PBEffects::TwoTurnAttack] &&
+                     GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
       # Prefer if foe takes EOR damage, don't prefer if they have EOR healing
       b_eor_damage = b.rough_end_of_round_damage
       if b_eor_damage > 0
-        score += 5
+        score += 8
       elsif b_eor_damage < 0
-        score -= 5
+        score -= 8
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
@@ -812,13 +840,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
     if user_eor_damage >= user.hp
       next Battle::AI::MOVE_USELESS_SCORE
     elsif user_eor_damage > 0
-      score -= 5
+      score -= 8
     elsif user_eor_damage < 0
-      score += 5
+      score += 8
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 15 : 10)
     next score
   }
 )
@@ -839,7 +867,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
       #       be using, so we don't know if Unseen Fist will apply.
       useless = false
       # General preference
-      score += 4
+      score += 7
       # Prefer if the foe's Attack can be lowered by this move
       if b.battler.affectedByContactEffect? && b.check_for_move { |m| m.contactMove? }
         drop_score = ai.get_score_for_target_stat_drop(
@@ -847,14 +875,14 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
         score += drop_score / 2   # Halved because we don't know what move b will use
       end
       # Prefer if the foe is in the middle of using a two turn attack
-      score += 8 if b.effects[PBEffects::TwoTurnAttack] &&
-                    GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
+      score += 15 if b.effects[PBEffects::TwoTurnAttack] &&
+                     GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
       # Prefer if foe takes EOR damage, don't prefer if they have EOR healing
       b_eor_damage = b.rough_end_of_round_damage
       if b_eor_damage > 0
-        score += 5
+        score += 8
       elsif b_eor_damage < 0
-        score -= 5
+        score -= 8
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
@@ -863,13 +891,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
     if user_eor_damage >= user.hp
       next Battle::AI::MOVE_USELESS_SCORE
     elsif user_eor_damage > 0
-      score -= 5
+      score -= 8
     elsif user_eor_damage < 0
-      score += 5
+      score += 8
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 15 : 10)
     next score
   }
 )
@@ -890,21 +918,21 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesObstruct"
       #       be using, so we don't know if Unseen Fist will apply.
       useless = false
       # General preference
-      score += 4
+      score += 7
       # Prefer if the foe's Attack can be lowered by this move
       if b.battler.affectedByContactEffect? && b.check_for_move { |m| m.contactMove? }
         drop_score = ai.get_score_for_target_stat_drop(0, b, [:DEFENSE, 2], false)
         score += drop_score / 2   # Halved because we don't know what move b will use
       end
       # Prefer if the foe is in the middle of using a two turn attack
-      score += 8 if b.effects[PBEffects::TwoTurnAttack] &&
-                    GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
+      score += 15 if b.effects[PBEffects::TwoTurnAttack] &&
+                     GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
       # Prefer if foe takes EOR damage, don't prefer if they have EOR healing
       b_eor_damage = b.rough_end_of_round_damage
       if b_eor_damage > 0
-        score += 5
+        score += 8
       elsif b_eor_damage < 0
-        score -= 5
+        score -= 8
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
@@ -913,13 +941,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesObstruct"
     if user_eor_damage >= user.hp
       next Battle::AI::MOVE_USELESS_SCORE
     elsif user_eor_damage > 0
-      score -= 5
+      score -= 8
     elsif user_eor_damage < 0
-      score += 5
+      score += 8
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 15 : 10)
     next score
   }
 )
@@ -940,20 +968,20 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromTargetingMovesSpikyShi
       #       be using, so we don't know if Unseen Fist will apply.
       useless = false
       # General preference
-      score += 4
+      score += 7
       # Prefer if this move will deal damage
       if b.battler.affectedByContactEffect? && b.check_for_move { |m| m.contactMove? }
         score += 5
       end
       # Prefer if the foe is in the middle of using a two turn attack
-      score += 8 if b.effects[PBEffects::TwoTurnAttack] &&
-                    GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
+      score += 15 if b.effects[PBEffects::TwoTurnAttack] &&
+                     GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
       # Prefer if foe takes EOR damage, don't prefer if they have EOR healing
       b_eor_damage = b.rough_end_of_round_damage
       if b_eor_damage > 0
-        score += 5
+        score += 8
       elsif b_eor_damage < 0
-        score -= 5
+        score -= 8
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
@@ -962,13 +990,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromTargetingMovesSpikyShi
     if user_eor_damage >= user.hp
       next Battle::AI::MOVE_USELESS_SCORE
     elsif user_eor_damage > 0
-      score -= 5
+      score -= 8
     elsif user_eor_damage < 0
-      score += 5
+      score += 8
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 15 : 10)
     next score
   }
 )
@@ -992,16 +1020,16 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromDamagingMovesIfUse
       #       be using, so we don't know if Unseen Fist will apply.
       useless = false
       # General preference
-      score += 4
+      score += 7
       # Prefer if the foe is in the middle of using a two turn attack
-      score += 8 if b.effects[PBEffects::TwoTurnAttack] &&
-                    GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
+      score += 15 if b.effects[PBEffects::TwoTurnAttack] &&
+                     GameData::Move.get(b.effects[PBEffects::TwoTurnAttack]).flags.any? { |f| f[/^CanProtect$/i] }
       # Prefer if foe takes EOR damage, don't prefer if they have EOR healing
       b_eor_damage = b.rough_end_of_round_damage
       if b_eor_damage > 0
-        score += 5
+        score += 8
       elsif b_eor_damage < 0
-        score -= 5
+        score -= 8
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
@@ -1010,12 +1038,12 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromDamagingMovesIfUse
     if user_eor_damage >= user.hp
       next Battle::AI::MOVE_USELESS_SCORE
     elsif user_eor_damage > 0
-      score -= 5
+      score -= 8
     elsif user_eor_damage < 0
-      score += 5
+      score += 8
     end
     # Use it or lose it
-    score += 10
+    score += 25
     next score
   }
 )
@@ -1038,13 +1066,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromStatusMoves",
                                       !m.pbTarget(b.battler).targets_all }
       useless = false
       # General preference
-      score += 4
+      score += 5
       # Prefer if foe takes EOR damage, don't prefer if they have EOR healing
       b_eor_damage = b.rough_end_of_round_damage
       if b_eor_damage > 0
-        score += 5
+        score += 8
       elsif b_eor_damage < 0
-        score -= 5
+        score -= 8
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
@@ -1053,9 +1081,9 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromStatusMoves",
     if user_eor_damage >= user.hp
       next Battle::AI::MOVE_USELESS_SCORE
     elsif user_eor_damage > 0
-      score -= 5
+      score -= 8
     elsif user_eor_damage < 0
-      score += 5
+      score += 8
     end
     next score
   }
@@ -1082,13 +1110,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromPriorityMoves",
       next if !b.check_for_move { |m| m.pbPriority(b.battler) > 0 && m.canProtectAgainst? }
       useless = false
       # General preference
-      score += 4
+      score += 7
       # Prefer if foe takes EOR damage, don't prefer if they have EOR healing
       b_eor_damage = b.rough_end_of_round_damage
       if b_eor_damage > 0
-        score += 5
+        score += 8
       elsif b_eor_damage < 0
-        score -= 5
+        score -= 8
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
@@ -1097,13 +1125,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromPriorityMoves",
     if user_eor_damage >= user.hp
       next Battle::AI::MOVE_USELESS_SCORE
     elsif user_eor_damage > 0
-      score -= 5
+      score -= 8
     elsif user_eor_damage < 0
-      score += 5
+      score += 8
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 15 : 10)
     next score
   }
 )
@@ -1128,13 +1156,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromMultiTargetDamagin
                                       m.pbTarget(b.battler).num_targets > 1 }
       useless = false
       # General preference
-      score += 4
+      score += 7
       # Prefer if foe takes EOR damage, don't prefer if they have EOR healing
       b_eor_damage = b.rough_end_of_round_damage
       if b_eor_damage > 0
-        score += (b.opposes?(user)) ? 5 : -5
+        score += (b.opposes?(user)) ? 8 : -8
       elsif b_eor_damage < 0
-        score -= (b.opposes?(user)) ? 5 : -5
+        score -= (b.opposes?(user)) ? 8 : -8
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if useless
@@ -1143,13 +1171,13 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromMultiTargetDamagin
     if user_eor_damage >= user.hp
       next Battle::AI::MOVE_USELESS_SCORE
     elsif user_eor_damage > 0
-      score -= 5
+      score -= 8
     elsif user_eor_damage < 0
-      score += 5
+      score += 8
     end
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
-    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 12 : 8)
+    score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 15 : 10)
     next score
   }
 )
@@ -1163,7 +1191,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RemoveProtections",
                                     m.is_a?(Battle::Move::ProtectUserSideFromStatusMoves) ||
                                     m.is_a?(Battle::Move::ProtectUserSideFromDamagingMovesIfUserFirstTurn)) &&
                                    !m.is_a?(Battle::Move::UserEnduresFaintingThisTurn) }
-      score += 5
+      score += 7
     end
     next score
   }
@@ -1203,7 +1231,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RecoilQuarterOfDamageDea
       foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
       next Battle::AI::MOVE_USELESS_SCORE if reserves <= foes
     end
-    score -= 10 * [dmg, user.hp].min / user.hp
+    score -= 25 * [dmg, user.hp].min / user.hp
     next score
   }
 )
@@ -1221,7 +1249,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RecoilThirdOfDamageDealt
         foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
         next Battle::AI::MOVE_USELESS_SCORE if reserves <= foes
       end
-      score -= 10 * [dmg, user.hp].min / user.hp
+      score -= 25 * [dmg, user.hp].min / user.hp
     end
     # Score for paralysing
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
@@ -1243,7 +1271,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RecoilThirdOfDamageDealt
         foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
         next Battle::AI::MOVE_USELESS_SCORE if reserves <= foes
       end
-      score -= 10 * [dmg, user.hp].min / user.hp
+      score -= 25 * [dmg, user.hp].min / user.hp
     end
     # Score for burning
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
@@ -1264,7 +1292,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RecoilHalfOfDamageDealt"
       foes     = battle.pbAbleNonActiveCount(user.idxOpposingSide)
       next Battle::AI::MOVE_USELESS_SCORE if reserves <= foes
     end
-    score -= 10 * [dmg, user.hp].min / user.hp
+    score -= 25 * [dmg, user.hp].min / user.hp
     next score
   }
 )
@@ -1329,13 +1357,16 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("EnsureNextMoveAlwaysHits
       #       benefit from locking on.
       acc = m.accuracy
       acc = m.pbBaseAccuracy(user.battler, target.battler) if ai.trainer.medium_skill?
-      score += 4 if acc < 90 && acc != 0
-      score += 4 if acc <= 50 && acc != 0
+      score += 5 if acc < 90 && acc != 0
+      score += 8 if acc <= 50 && acc != 0
       # TODO: Prefer more if m is a OHKO move.
     end
+    # TODO: Prefer if target has increased evasion.
     # Not worth it if the user or the target is at low HP
-    score -= 10 if user.hp < user.totalhp / 2
-    score -= 8 if target.hp < target.totalhp / 2
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+      score -= 8 if target.hp < target.totalhp / 2
+    end
     next score
   }
 )

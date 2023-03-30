@@ -55,13 +55,6 @@ class Battle::AI::AIBattler
   def idxOpposingSide; return @battler.idxOpposingSide; end
   def pbOpposingSide;  return @battler.pbOpposingSide;  end
 
-  def faster_than?(other)
-    return false if other.nil?
-    this_speed  = rough_stat(:SPEED)
-    other_speed = other.rough_stat(:SPEED)
-    return (this_speed > other_speed) ^ (@ai.battle.field.effects[PBEffects::TrickRoom] > 0)
-  end
-
   #=============================================================================
 
   # Returns how much damage this battler will take at the end of this round.
@@ -167,8 +160,6 @@ class Battle::AI::AIBattler
 
   #=============================================================================
 
-  def speed; return @battler.speed; end
-
   def base_stat(stat)
     ret = 0
     case stat
@@ -188,6 +179,13 @@ class Battle::AI::AIBattler
     stage = @battler.stages[stat] + 6
     value = base_stat(stat)
     return (value.to_f * stageMul[stage] / stageDiv[stage]).floor
+  end
+
+  def faster_than?(other)
+    return false if other.nil?
+    this_speed  = rough_stat(:SPEED)
+    other_speed = other.rough_stat(:SPEED)
+    return (this_speed > other_speed) ^ (@ai.battle.field.effects[PBEffects::TrickRoom] > 0)
   end
 
   #=============================================================================
@@ -423,6 +421,7 @@ class Battle::AI::AIBattler
   # Return values are typically between -10 and +10. 0 is indifferent, positive
   # values mean this battler benefits, negative values mean this battler suffers.
   def wants_item?(item)
+    item = :NONE if !item
     item = item.id if !item.is_a?(Symbol) && item.respond_to?("id")
     return 0 if has_active_ability?(:KLUTZ)
     # TODO: Unnerve, other item-negating effects.
@@ -511,7 +510,7 @@ class Battle::AI::AIBattler
     end
     # Prefer if this battler knows Fling and it will do a lot of damage/have an
     # additional (negative) effect when flung
-    if has_move_with_function?("ThrowUserItemAtTarget")
+    if item != :NONE && has_move_with_function?("ThrowUserItemAtTarget")
       GameData::Item.get(item).flags.each do |flag|
         next if !flag[/^Fling_(\d+)$/i]
         amt = $~[1].to_i
@@ -533,12 +532,12 @@ class Battle::AI::AIBattler
   #=============================================================================
 
   # Items can be consumed by Stuff Cheeks, Teatime, Bug Bite/Pluck and Fling.
-  def get_score_change_for_consuming_item(item)
+  def get_score_change_for_consuming_item(item, try_preserving_item = false)
     ret = 0
     case item
     when :ORANBERRY, :BERRYJUICE, :ENIGMABERRY, :SITRUSBERRY
       # Healing
-      ret += (hp > totalhp * 3 / 4) ? -8 : 8
+      ret += (hp > totalhp * 0.75) ? -6 : 6
       ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && has_active_ability?(:RIPEN)
     when :AGUAVBERRY, :FIGYBERRY, :IAPAPABERRY, :MAGOBERRY, :WIKIBERRY
       # Healing with confusion
@@ -548,7 +547,7 @@ class Battle::AI::AIBattler
       elsif Settings::MECHANICS_GENERATION >= 8
         fraction_to_heal = 3
       end
-      ret += (hp > totalhp * (1 - (1 / fraction_to_heal))) ? -8 : 8
+      ret += (hp > totalhp * (1 - (1.0 / fraction_to_heal))) ? -6 : 6
       ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && has_active_ability?(:RIPEN)
       # TODO: Check whether the item will cause confusion?
     when :ASPEARBERRY, :CHERIBERRY, :CHESTOBERRY, :PECHABERRY, :RAWSTBERRY
@@ -560,21 +559,25 @@ class Battle::AI::AIBattler
         :PECHABERRY  => :POISON,
         :RAWSTBERRY  => :BURN
       }[item]
-      ret += (cured_status && status == cured_status) ? 8 : -8
+      ret += (cured_status && status == cured_status) ? 6 : -6
     when :PERSIMBERRY
       # Confusion cure
-      ret += (effects[PBEffects::Confusion] > 1) ? 8 : -8
+      ret += (effects[PBEffects::Confusion] > 1) ? 6 : -6
     when :LUMBERRY
       # Any status/confusion cure
-      ret += (status != :NONE || effects[PBEffects::Confusion] > 1) ? 8 : -8
+      ret += (status != :NONE || effects[PBEffects::Confusion] > 1) ? 6 : -6
     when :MENTALHERB
       # Cure mental effects
-      ret += 8 if effects[PBEffects::Attract] >= 0 ||
-                  effects[PBEffects::Taunt] > 1 ||
-                  effects[PBEffects::Encore] > 1 ||
-                  effects[PBEffects::Torment] ||
-                  effects[PBEffects::Disable] > 1 ||
-                  effects[PBEffects::HealBlock] > 1
+      if effects[PBEffects::Attract] >= 0 ||
+         effects[PBEffects::Taunt] > 1 ||
+         effects[PBEffects::Encore] > 1 ||
+         effects[PBEffects::Torment] ||
+         effects[PBEffects::Disable] > 1 ||
+         effects[PBEffects::HealBlock] > 1
+        ret += 6
+      else
+        ret -= 6
+      end
     when :APICOTBERRY, :GANLONBERRY, :LIECHIBERRY, :PETAYABERRY, :SALACBERRY,
          :KEEBERRY, :MARANGABERRY
       # Stat raise
@@ -587,7 +590,7 @@ class Battle::AI::AIBattler
         :KEEBERRY     => :DEFENSE,
         :MARANGABERRY => :SPECIAL_DEFENSE
       }[item]
-      ret += 8 if stat && @ai.stat_raise_worthwhile?(self, stat)
+      ret += (stat && @ai.stat_raise_worthwhile?(self, stat)) ? 8 : -8
       ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && has_active_ability?(:RIPEN)
     when :STARFBERRY
       # Random stat raise
@@ -595,24 +598,19 @@ class Battle::AI::AIBattler
       ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && has_active_ability?(:RIPEN)
     when :WHITEHERB
       # Resets lowered stats
-      reduced_stats = false
-      GameData::Stat.each_battle do |s|
-        next if stages[s.id] >= 0
-        reduced_stats = true
-        break
-      end
-      ret += 8 if reduced_stats
+      ret += (@battler.hasLoweredStatStages?) ? 8 : -8
     when :MICLEBERRY
       # Raises accuracy of next move
-      ret += 8
+      ret += (@ai.stat_raise_worthwhile?(self, :ACCURACY, true)) ? 6 : -6
     when :LANSATBERRY
       # Focus energy
-      ret += 8 if effects[PBEffects::FocusEnergy] < 2
+      ret += (effects[PBEffects::FocusEnergy] < 2) ? 6 : -6
     when :LEPPABERRY
       # Restore PP
-      ret += 8
+      ret += 6
       ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && has_active_ability?(:RIPEN)
     end
+    ret = 0 if ret < 0 && !try_preserving_item
     return ret
   end
 

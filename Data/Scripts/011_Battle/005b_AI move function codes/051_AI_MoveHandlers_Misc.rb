@@ -117,11 +117,11 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfUserDamagedThisTu
       end
     end
     next Battle::AI::MOVE_USELESS_SCORE if user_faster_count == 0
-    score += 10 if foe_faster_count == 0
+    score += 15 if foe_faster_count == 0
     # Effects that make the target unlikely to act before the user
     if ai.trainer.high_skill?
       if !target.can_attack?
-        score += 20
+        score += 15
       elsif target.effects[PBEffects::Confusion] > 1 ||
             target.effects[PBEffects::Attract] == user.index
         score += 10
@@ -130,8 +130,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfUserDamagedThisTu
       end
     end
     # Don't risk using this move if target is weak
-    score -= 10 if target.hp <= target.totalhp / 2
-    score -= 10 if target.hp <= target.totalhp / 4
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if target.hp <= target.totalhp / 2
+      score -= 10 if target.hp <= target.totalhp / 4
+    end
     next score
   }
 )
@@ -143,12 +145,13 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfTargetActed",
   proc { |score, move, user, target, ai, battle|
     # Check whether user is faster than its foe(s) and could use this move
     next Battle::AI::MOVE_USELESS_SCORE if target.faster_than?(user)
-    score += 10
     # TODO: Predict the target switching/using an item.
     # TODO: Predict the target using a damaging move or Me First.
     # Don't risk using this move if target is weak
-    score -= 10 if target.hp <= target.totalhp / 2
-    score -= 10 if target.hp <= target.totalhp / 4
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if target.hp <= target.totalhp / 2
+      score -= 10 if target.hp <= target.totalhp / 4
+    end
     next score
   }
 )
@@ -158,7 +161,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfTargetActed",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CrashDamageIfFailsUnusableInGravity",
   proc { |score, move, user, target, ai, battle|
-    score -= (100 - move.rough_accuracy) if user.battler.takesIndirectDamage?
+    if user.battler.takesIndirectDamage?
+      score -= (0.4 * (100 - move.rough_accuracy)).to_i   # -0 (100%) to -40 (1%)
+    end
     next score
   }
 )
@@ -175,7 +180,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSunWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Not worth it at lower HP
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+    end
     if ai.trainer.high_skill? && battle.field.weather != :None
       score -= ai.get_score_for_weather(battle.field.weather, user)
     end
@@ -193,7 +201,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRainWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Not worth it at lower HP
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+    end
     if ai.trainer.high_skill? && battle.field.weather != :None
       score -= ai.get_score_for_weather(battle.field.weather, user)
     end
@@ -211,7 +222,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartSandstormWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Not worth it at lower HP
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+    end
     if ai.trainer.high_skill? && battle.field.weather != :None
       score -= ai.get_score_for_weather(battle.field.weather, user)
     end
@@ -229,7 +243,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Not worth it at lower HP
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+    end
     if ai.trainer.high_skill? && battle.field.weather != :None
       score -= ai.get_score_for_weather(battle.field.weather, user)
     end
@@ -248,7 +265,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartElectricTerrain",
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartElectricTerrain",
   proc { |score, move, user, ai, battle|
-    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Not worth it at lower HP
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+    end
     if ai.trainer.high_skill? && battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
     end
@@ -267,7 +287,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartGrassyTerrain",
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartGrassyTerrain",
   proc { |score, move, user, ai, battle|
-    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Not worth it at lower HP
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+    end
     if ai.trainer.high_skill? && battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
     end
@@ -286,7 +309,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartMistyTerrain",
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartMistyTerrain",
   proc { |score, move, user, ai, battle|
-    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Not worth it at lower HP
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+    end
     if ai.trainer.high_skill? && battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
     end
@@ -305,7 +331,10 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartPsychicTerrain",
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartPsychicTerrain",
   proc { |score, move, user, ai, battle|
-    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Not worth it at lower HP
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+    end
     if ai.trainer.high_skill? && battle.field.terrain != :None
       score -= ai.get_score_for_terrain(battle.field.terrain, user)
     end
@@ -358,8 +387,8 @@ Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
       foe_reserves.push(pkmn)   # pkmn will be affected by Spikes
     end
     next Battle::AI::MOVE_USELESS_SCORE if foe_reserves.empty?
-    multiplier = [8, 5, 3][user.pbOpposingSide.effects[PBEffects::Spikes]]
-    score += multiplier * foe_reserves.length
+    multiplier = [10, 7, 5][user.pbOpposingSide.effects[PBEffects::Spikes]]
+    score += [multiplier * foe_reserves.length, 30].min
     next score
   }
 )
@@ -402,8 +431,8 @@ Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
       foe_reserves.push(pkmn)   # pkmn will be affected by Toxic Spikes
     end
     next Battle::AI::MOVE_USELESS_SCORE if foe_reserves.empty?
-    multiplier = [6, 4][user.pbOpposingSide.effects[PBEffects::ToxicSpikes]]
-    score += multiplier * foe_reserves.length
+    multiplier = [8, 5][user.pbOpposingSide.effects[PBEffects::ToxicSpikes]]
+    score += [multiplier * foe_reserves.length, 30].min
     next score
   }
 )
@@ -431,7 +460,8 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
       foe_reserves.push(pkmn)   # pkmn will be affected by Stealth Rock
     end
     next Battle::AI::MOVE_USELESS_SCORE if foe_reserves.empty?
-    next score + 8 * foe_reserves.length
+    score += [10 * foe_reserves.length, 30].min
+    next score
   }
 )
 
@@ -463,7 +493,8 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStickyWebToFoeSide",
       foe_reserves.push(pkmn)   # pkmn will be affected by Sticky Web
     end
     next Battle::AI::MOVE_USELESS_SCORE if foe_reserves.empty?
-    next score + 7 * foe_reserves.length
+    score += [8 * foe_reserves.length, 30].min
+    next score
   }
 )
 
@@ -524,10 +555,12 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserMakeSubstitute",
 Battle::AI::Handlers::MoveEffectScore.add("UserMakeSubstitute",
   proc { |score, move, user, ai, battle|
     # Prefer more the higher the user's HP
-    score += (8 * user.hp.to_f / user.totalhp).round
+    if ai.trainer.has_skill_flag?("HPAware")
+      score += (10 * user.hp.to_f / user.totalhp).round
+    end
     # Prefer if foes don't know any moves that can bypass a substitute
-    ai.each_battler do |b, i|
-      score += 4 if !b.check_for_move { |m| m.ignoresSubstitute?(b.battler) }
+    ai.each_foe_battler(user.side) do |b, i|
+      score += 5 if !b.check_for_move { |m| m.ignoresSubstitute?(b.battler) }
     end
     # TODO: Predict incoming damage, and prefer if it's greater than
     #       user.totalhp / 4?
@@ -625,8 +658,8 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTur
         ally_hp_lost += b.hp / 2
       end
     end
-    score += 15 * foe_hp_lost / ally_hp_lost
-    score -= 15 * ally_hp_lost / foe_hp_lost
+    score += 20 * foe_hp_lost / ally_hp_lost
+    score -= 20 * ally_hp_lost / foe_hp_lost
     # Recharging
     score = Battle::AI::Handlers.apply_move_effect_score("AttackAndSkipNextTurn",
        score, move, user, ai, battle)
@@ -654,7 +687,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartShadowSkyWeather",
   proc { |score, move, user, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if battle.pbCheckGlobalAbility(:AIRLOCK) ||
                                            battle.pbCheckGlobalAbility(:CLOUDNINE)
-    score -= 10 if user.hp < user.totalhp / 2   # Not worth it at lower HP
+    # Not worth it at lower HP
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 15 if user.hp < user.totalhp / 2
+    end
     if ai.trainer.high_skill? && battle.field.weather != :None
       score -= ai.get_score_for_weather(battle.field.weather, user)
     end

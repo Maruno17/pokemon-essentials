@@ -194,6 +194,7 @@ class Battle::Battler
     if @effects[PBEffects::HyperBeam] > 0   # Intentionally before Truant
       PBDebug.log("[Move failed] #{pbThis} is recharging after using #{move.name}")
       @battle.pbDisplay(_INTL("{1} must recharge!", pbThis))
+      @effects[PBEffects::Truant] = !@effects[PBEffects::Truant] if hasActiveAbility?(:TRUANT)
       return false
     end
     if choice[1] == -2   # Battle Palace

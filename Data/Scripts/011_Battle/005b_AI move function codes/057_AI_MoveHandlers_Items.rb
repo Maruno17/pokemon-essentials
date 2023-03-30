@@ -13,8 +13,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTakesTargetItem",
     user_no_item_preference = user.wants_item?(:NONE)
     target_item_preference = target.wants_item?(target.item_id)
     target_no_item_preference = target.wants_item?(:NONE)
-    score += (user_item_preference - user_no_item_preference) * 3
-    score += (target_item_preference - target_no_item_preference) * 3
+    score += user_item_preference - user_no_item_preference
+    score += target_item_preference - target_no_item_preference
     next score
   }
 )
@@ -35,8 +35,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetTakesUserItem",
     user_no_item_preference = user.wants_item?(:NONE)
     target_item_preference = target.wants_item?(user.item_id)
     target_no_item_preference = target.wants_item?(:NONE)
-    score -= (user_item_preference - user_no_item_preference) * 3
-    score -= (target_item_preference - target_no_item_preference) * 3
+    score += user_no_item_preference - user_item_preference
+    score += target_no_item_preference - target_item_preference
     next score
   }
 )
@@ -60,11 +60,11 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapItems",
     user_old_item_preference = user.wants_item?(user.item_id)
     target_new_item_preference = target.wants_item?(user.item_id)
     target_old_item_preference = target.wants_item?(target.item_id)
-    score += (user_new_item_preference - user_old_item_preference) * 3
-    score -= (target_new_item_preference - target_old_item_preference) * 3
+    score += user_new_item_preference - user_old_item_preference
+    score += target_old_item_preference - target_new_item_preference
     # Don't prefer if user used this move in the last round
     score -= 15 if user.battler.lastMoveUsed &&
-                   GameData::Move.get(user.battler.lastMoveUsed).function_code == "UserTargetSwapItems"
+                   GameData::Move.get(user.battler.lastMoveUsed).function_code == move.function
     next score
   }
 )
@@ -80,8 +80,8 @@ Battle::AI::Handlers::MoveFailureCheck.add("RestoreUserConsumedItem",
 Battle::AI::Handlers::MoveEffectScore.add("RestoreUserConsumedItem",
   proc { |score, move, user, ai, battle|
     user_new_item_preference = user.wants_item?(user.battler.recycleItem)
-    user_old_item_preference = user.wants_item?(user.item_id)
-    score += (user_new_item_preference - user_old_item_preference) * 4
+    user_old_item_preference = user.wants_item?(:NONE)
+    score += (user_new_item_preference - user_old_item_preference) * 2
     next score
   }
 )
@@ -103,7 +103,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RemoveTargetItem",
     # User can knock off the target's item; score it
     target_item_preference = target.wants_item?(target.item_id)
     target_no_item_preference = target.wants_item?(:NONE)
-    score += (target_item_preference - target_no_item_preference) * 4
+    score += (target_item_preference - target_no_item_preference) * 2
     next score
   }
 )
@@ -121,7 +121,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DestroyTargetBerryOrGem"
     # User can incinerate the target's item; score it
     target_item_preference = target.wants_item?(target.item_id)
     target_no_item_preference = target.wants_item?(:NONE)
-    score += (target_item_preference - target_no_item_preference) * 4
+    score += (target_item_preference - target_no_item_preference) * 2
     next score
   }
 )
@@ -142,7 +142,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CorrodeTargetItem",
   proc { |score, move, user, target, ai, battle|
     target_item_preference = target.wants_item?(target.item_id)
     target_no_item_preference = target.wants_item?(:NONE)
-    score += (target_item_preference - target_no_item_preference) * 4
+    score += (target_item_preference - target_no_item_preference) * 2
     next score
   }
 )
@@ -158,8 +158,9 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartTargetCannotUseIte
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartTargetCannotUseItem",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.item || !target.item_active?
+    # TODO: Useless if target's item cannot be negated or it has no effect.
     item_score = target.wants_item?(target.item_id)
-    score += item_score * 3
+    score += item_score * 2
     next score
   }
 )
@@ -176,6 +177,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartNegateHeldItems",
       next if !b.item
       # Skip b if its item is disabled
       if ai.trainer.medium_skill?
+        # TODO: Skip b if its item cannot be negated or it has no effect.
         if battle.field.effects[PBEffects::MagicRoom] > 0
           # NOTE: Same as b.item_active? but ignoring the Magic Room part.
           next if b.effects[PBEffects::Embargo] > 0
@@ -194,10 +196,10 @@ Battle::AI::Handlers::MoveEffectScore.add("StartNegateHeldItems",
     next Battle::AI::MOVE_USELESS_SCORE if !any_held_items
     if battle.field.effects[PBEffects::MagicRoom] > 0
       next Battle::AI::MOVE_USELESS_SCORE if total_want >= 0
-      score -= [total_want, -5].max * 5   # Will enable items, prefer if allies affected more
+      score -= [total_want, -5].max * 4   # Will enable items, prefer if allies affected more
     else
       next Battle::AI::MOVE_USELESS_SCORE if total_want <= 0
-      score += [total_want, 5].min * 5   # Will disable items, prefer if foes affected more
+      score += [total_want, 5].min * 4   # Will disable items, prefer if foes affected more
     end
     next score
   }
@@ -218,19 +220,19 @@ Battle::AI::Handlers::MoveEffectScore.add("UserConsumeBerryRaiseDefense2",
     score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserDefense2",
        score, move, user, ai, battle)
     # Score for the consumed berry's effect
-    score += ai.get_score_change_for_consuming_item(user, user.item_id)
+    score += user.get_score_change_for_consuming_item(user.item_id, true)
     # Score for other results of consuming the berry
     if ai.trainer.medium_skill?
       # Prefer if user will heal itself with Cheek Pouch
-      score += 5 if user.battler.canHeal? && user.hp < user.totalhp / 2 &&
+      score += 8 if user.battler.canHeal? && user.hp < user.totalhp / 2 &&
                     user.has_active_ability?(:CHEEKPOUCH)
       # Prefer if target can recover the consumed berry
       score += 8 if user.has_active_ability?(:HARVEST) ||
                     user.has_move_with_function?("RestoreUserConsumedItem")
       # Prefer if user couldn't normally consume the berry
-      score += 4 if !user.battler.canConsumeBerry?
+      score += 5 if !user.battler.canConsumeBerry?
       # Prefer if user will become able to use Belch
-      score += 4 if !user.battler.belched? && user.has_move_with_function?("FailsIfUserNotConsumedBerry")
+      score += 5 if !user.battler.belched? && user.has_move_with_function?("FailsIfUserNotConsumedBerry")
       # Prefer if user will benefit from not having an item
       score += 5 if user.has_active_ability?(:UNBURDEN)
     end
@@ -249,21 +251,21 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("AllBattlersConsumeBerry
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AllBattlersConsumeBerry",
   proc { |score, move, user, target, ai, battle|
     # Score for the consumed berry's effect
-    score_change = ai.get_score_change_for_consuming_item(target, target.item_id)
+    score_change = target.get_score_change_for_consuming_item(target.item_id, !target.opposes?(user))
     # Score for other results of consuming the berry
     if ai.trainer.medium_skill?
       # Prefer if target will heal itself with Cheek Pouch
-      score_change += 5 if target.battler.canHeal? && target.hp < target.totalhp / 2 &&
+      score_change += 8 if target.battler.canHeal? && target.hp < target.totalhp / 2 &&
                            target.has_active_ability?(:CHEEKPOUCH)
       # Prefer if target can recover the consumed berry
       score_change += 8 if target.has_active_ability?(:HARVEST) ||
                            target.has_move_with_function?("RestoreUserConsumedItem")
       # Prefer if target couldn't normally consume the berry
-      score_change += 4 if !target.battler.canConsumeBerry?
+      score_change += 5 if !target.battler.canConsumeBerry?
       # Prefer if target will become able to use Belch
-      score += 4 if !target.battler.belched? && target.has_move_with_function?("FailsIfUserNotConsumedBerry")
+      score_change += 5 if !target.battler.belched? && target.has_move_with_function?("FailsIfUserNotConsumedBerry")
       # Prefer if target will benefit from not having an item
-      score += 5 if target.has_active_ability?(:UNBURDEN)
+      score_change += 5 if target.has_active_ability?(:UNBURDEN)
     end
     score += (target.opposes?(user)) ? -score_change : score_change
     next score
@@ -280,21 +282,21 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserConsumeTargetBerry",
     next score if target.effects[PBEffects::Substitute] > 0
     next score if target.has_active_ability?(:STICKYHOLD) && !battle.moldBreaker
     # Score the user gaining the item's effect
-    score += ai.get_score_change_for_consuming_item(user, target.item_id)
+    score += user.get_score_change_for_consuming_item(target.item_id)
     # Score for other results of consuming the berry
     if ai.trainer.medium_skill?
       # Prefer if user will heal itself with Cheek Pouch
-      score += 5 if user.battler.canHeal? && user.hp < user.totalhp / 2 &&
+      score += 8 if user.battler.canHeal? && user.hp < user.totalhp / 2 &&
                     user.has_active_ability?(:CHEEKPOUCH)
       # Prefer if user will become able to use Belch
-      score += 4 if !user.battler.belched? && user.has_move_with_function?("FailsIfUserNotConsumedBerry")
+      score += 5 if !user.battler.belched? && user.has_move_with_function?("FailsIfUserNotConsumedBerry")
       # Don't prefer if target will benefit from not having an item
       score -= 5 if target.has_active_ability?(:UNBURDEN)
     end
     # Score the target no longer having the item
     target_item_preference = target.wants_item?(target.item_id)
     target_no_item_preference = target.wants_item?(:NONE)
-    score += (target_item_preference - target_no_item_preference) * 4
+    score += (target_item_preference - target_no_item_preference) * 2
     next score
   }
 )
@@ -332,12 +334,12 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ThrowUserItemAtTarget",
       score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
          score, move, user, target, ai, battle)
     else
-      score -= ai.get_score_change_for_consuming_item(target, user.item_id)
+      score -= target.get_score_change_for_consuming_item(user.item_id)
     end
     # Score for other results of consuming the berry
     if ai.trainer.medium_skill?
       # Don't prefer if target will become able to use Belch
-      score -= 4 if user.item.is_berry? && !target.battler.belched? &&
+      score -= 5 if user.item.is_berry? && !target.battler.belched? &&
                     target.has_move_with_function?("FailsIfUserNotConsumedBerry")
       # Prefer if user will benefit from not having an item
       score += 5 if user.has_active_ability?(:UNBURDEN)
@@ -346,7 +348,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ThrowUserItemAtTarget",
     # keep its held item
     user_item_preference = user.wants_item?(user.item_id)
     user_no_item_preference = user.wants_item?(:NONE)
-    score += (user_item_preference - user_no_item_preference) * 4
+    score += (user_item_preference - user_no_item_preference) * 2
     next score
   }
 )

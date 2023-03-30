@@ -8,7 +8,8 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoTimes",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoTimes",
   proc { |score, move, user, target, ai, battle|
-    # Prefer if the target has a Substitute and the first hit can break it
+    # Prefer if the target has a Substitute and this move can break it before
+    # the last hit
     if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
       dmg = move.rough_damage
       num_hits = move.move.pbNumHits(user.battler, [target.battler])
@@ -72,7 +73,8 @@ Battle::AI::Handlers::MoveBasePower.add("HitThreeTimesPowersUpWithEachHit",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitThreeTimesPowersUpWithEachHit",
   proc { |score, move, user, target, ai, battle|
-    # Prefer if the target has a Substitute and the first or second hit can break it
+    # Prefer if the target has a Substitute and this move can break it before
+    # the last hit
     if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
       dmg = move.rough_damage
       score += 10 if target.effects[PBEffects::Substitute] < dmg / 2
@@ -101,7 +103,8 @@ Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimes",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoToFiveTimes",
   proc { |score, move, user, target, ai, battle|
-    # Prefer if the target has a Substitute and the first hit(s) can break it
+    # Prefer if the target has a Substitute and this move can break it before
+    # the last/third hit
     if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
       dmg = move.rough_damage
       num_hits = (user.has_active_ability?(:SKILLLINK)) ? 5 : 3   # 3 is about average
@@ -169,7 +172,8 @@ Battle::AI::Handlers::MoveBasePower.add("HitOncePerUserTeamMember",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitOncePerUserTeamMember",
   proc { |score, move, user, target, ai, battle|
-    # Prefer if the target has a Substitute and the first hit(s) can break it
+    # Prefer if the target has a Substitute and this move can break it before
+    # the last hit
     if target.effects[PBEffects::Substitute] > 0 && !move.move.ignoresSubstitute?(user.battler)
       dmg = move.rough_damage
       num_hits = 0
@@ -188,10 +192,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitOncePerUserTeamMember
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("AttackAndSkipNextTurn",
   proc { |score, move, user, ai, battle|
-    # Don't prefer because it uses up two turns
-    score -= 10 if !user.has_active_ability?(:TRUANT)
     # Don't prefer if user is at a high HP (treat this move as a last resort)
-    score -= 10 if user.hp >= user.totalhp / 2
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp >= user.totalhp / 2
+    end
     next score
   }
 )
@@ -210,7 +214,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttack",
     # Don't prefer because it uses up two turns
     score -= 10
     # Don't prefer if user is at a low HP (time is better spent on quicker moves)
-    score -= 8 if user.hp < user.totalhp / 2
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 10 if user.hp < user.totalhp / 2
+    end
     # Don't prefer if target has a protecting move
     if ai.trainer.high_skill? && !(user.has_active_ability?(:UNSEENFIST) && move.move.contactMove?)
       has_protect_move = false
@@ -241,7 +247,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttack",
           end
         end
       end
-      score -= 15 if has_protect_move
+      score -= 20 if has_protect_move
     end
     next score
   }
@@ -367,9 +373,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     # Score for being semi-invulnerable underground
     ai.each_foe_battler(user.side) do |b, i|
       if b.check_for_move { |m| m.hitsDiggingTargets? }
-        score -= 8
+        score -= 10
       else
-        score += 5
+        score += 8
       end
     end
     next score
@@ -387,9 +393,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     # Score for being semi-invulnerable underwater
     ai.each_foe_battler(user.side) do |b, i|
       if b.check_for_move { |m| m.hitsDivingTargets? }
-        score -= 8
+        score -= 10
       else
-        score += 5
+        score += 8
       end
     end
     next score
@@ -407,9 +413,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     # Score for being semi-invulnerable in the sky
     ai.each_foe_battler(user.side) do |b, i|
       if b.check_for_move { |m| m.hitsFlyingTargets? }
-        score -= 8
+        score -= 10
       else
-        score += 5
+        score += 8
       end
     end
     next score
@@ -455,7 +461,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
     # Score for being invulnerable
-    score += 5
+    score += 8
     # Score for removing protections
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("RemoveProtections",
        score, move, user, target, ai, battle)
@@ -506,9 +512,11 @@ Battle::AI::Handlers::MoveEffectScore.add("MultiTurnAttackBideThenReturnDoubleDa
     end
     next Battle::AI::MOVE_USELESS_SCORE if !has_damaging_move
     # Don't prefer if the user isn't at high HP
-    next Battle::AI::MOVE_USELESS_SCORE if user.hp <= user.totalhp / 4
-    score -= 15 if user.hp <= user.totalhp / 2
-    score -= 8 if user.hp <= user.totalhp * 3 / 4
+    if ai.trainer.has_skill_flag?("HPAware")
+      next Battle::AI::MOVE_USELESS_SCORE if user.hp <= user.totalhp / 4
+      score -= 15 if user.hp <= user.totalhp / 2
+      score -= 8 if user.hp <= user.totalhp * 3 / 4
+    end
     next score
   }
 )

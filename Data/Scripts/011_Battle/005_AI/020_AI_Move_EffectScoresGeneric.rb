@@ -125,12 +125,17 @@ class Battle::AI
         "PowerHigherWithUserPositiveStatStages"
       ]
       if !target.has_move_with_function?(*moves_that_prefer_high_speed)
+        # TODO: Not worth it if the target is too much slower than its foe(s)
+        #       and can't be made fast enough.
         each_foe_battler(target.side) do |b, i|
           return true if b.faster_than?(target)
         end
         return false
       end
     when :ACCURACY
+      # TODO: Yes if any of target's moves have lower accuracy, or target is
+      #       affected by accuracy-lowering effects, or if target's foe(s) have
+      #       increased evasion.
     when :EVASION
     end
     return true
@@ -151,22 +156,14 @@ class Battle::AI
     #       the foe anyway).
     # Prefer if move is a status move and it's the user's first/second turn
     if @user.turnCount < 2 && @move.statusMove?
-      score += total_increment * desire_mult * 4
+      score += total_increment * desire_mult * 5
     end
     # Prefer if user is at high HP, don't prefer if user is at low HP
     if target.index != @user.index
-      if @user.hp >= @user.totalhp * 0.7
-        score += total_increment * desire_mult * 3
-      else
-        score += total_increment * desire_mult * ((100 * @user.hp / @user.totalhp) - 50) / 6   # +3 to -8 per stage
-      end
+      score += total_increment * desire_mult * ((100 * @user.hp / @user.totalhp) - 50) / 8   # +6 to -6 per stage
     end
     # Prefer if target is at high HP, don't prefer if target is at low HP
-    if target.hp >= target.totalhp * 0.7
-      score += total_increment * desire_mult * 4
-    else
-      score += total_increment * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 4   # +5 to -12 per stage
-    end
+    score += total_increment * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 8   # +6 to -6 per stage
     # TODO: Look at abilities that trigger upon stat raise. There are none.
     return score
   end
@@ -193,16 +190,16 @@ class Battle::AI
       # Modify score depending on current stat stage
       # More strongly prefer if the target has no special moves
       if old_stage >= 2 && increment == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         has_special_moves = target.check_for_move { |m| m.specialMove?(m.type) }
-        inc = (has_special_moves) ? 10 : 20
+        inc = (has_special_moves) ? 8 : 12
         score += inc * inc_mult
       end
     when :DEFENSE
       # Modify score depending on current stat stage
       if old_stage >= 2 && increment == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         score += 10 * inc_mult
       end
@@ -210,29 +207,35 @@ class Battle::AI
       # Modify score depending on current stat stage
       # More strongly prefer if the target has no physical moves
       if old_stage >= 2 && increment == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         has_physical_moves = target.check_for_move { |m| m.physicalMove?(m.type) &&
                                                          m.function != "UseUserDefenseInsteadOfUserAttack" &&
                                                          m.function != "UseTargetAttackInsteadOfUserAttack" }
-        inc = (has_physical_moves) ? 10 : 20
+        inc = (has_physical_moves) ? 8 : 12
         score += inc * inc_mult
       end
     when :SPECIAL_DEFENSE
       # Modify score depending on current stat stage
       if old_stage >= 2 && increment == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         score += 10 * inc_mult
       end
     when :SPEED
       # Prefer if target is slower than a foe
-      # TODO: Don't prefer if the target is too much slower than any foe that it
-      #       can't catch up.
+      target_speed = target.rough_stat(:SPEED)
       each_foe_battler(target.side) do |b, i|
-        next if target.faster_than?(b)
-        score += 15 * inc_mult
-        break
+        b_speed = b.rough_stat(:SPEED)
+        next if b_speed > target_speed * 2.5   # Much too slow to reasonably catch up
+        if b_speed > target_speed
+          if b_speed < target_speed * (increment + 2) / 2
+            score += 15 * inc_mult   # Target will become faster than b
+          else
+            score += 8 * inc_mult
+          end
+          break
+        end
       end
       # TODO: Prefer if the target is able to cause flinching (moves that
       #       flinch, or has King's Rock/Stench).
@@ -242,21 +245,21 @@ class Battle::AI
         "PowerHigherWithUserPositiveStatStages"
       ]
       if target.has_move_with_function?(*moves_that_prefer_high_speed)
-        score += 8 * inc_mult
+        score += 5 * inc_mult
       end
       # Don't prefer if any foe has Gyro Ball
       each_foe_battler(target.side) do |b, i|
         next if !b.has_move_with_function?("PowerHigherWithTargetFasterThanUser")
-        score -= 8 * inc_mult
+        score -= 5 * inc_mult
       end
       # Don't prefer if target has Speed Boost (will be gaining Speed anyway)
       if target.has_active_ability?(:SPEEDBOOST)
-        score -= 20 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
       end
     when :ACCURACY
       # Modify score depending on current stat stage
       if old_stage >= 2 && increment == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         min_accuracy = 100
         target.battler.moves.each do |m|
@@ -272,11 +275,11 @@ class Battle::AI
       # Prefer if a foe of the target will take damage at the end of the round
       each_foe_battler(target.side) do |b, i|
         eor_damage = b.rough_end_of_round_damage
-        score += 4 * inc_mult if eor_damage > 0
+        score += 5 * inc_mult if eor_damage > 0
       end
       # Modify score depending on current stat stage
       if old_stage >= 2 && increment == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         score += 10 * inc_mult
       end
@@ -419,6 +422,8 @@ class Battle::AI
         "PowerHigherWithUserPositiveStatStages"
       ]
       if !target.has_move_with_function?(*moves_that_prefer_high_speed)
+        # TODO: Not worth it if the target is too much faster than its foe(s)
+        #       and can't be brought slow enough.
         each_foe_battler(target.side) do |b, i|
           return true if !b.faster_than?(target)
         end
@@ -445,22 +450,14 @@ class Battle::AI
     # TODO: Don't prefer if target is semi-invulnerable and user is faster.
     # Prefer if move is a status move and it's the user's first/second turn
     if @user.turnCount < 2 && @move.statusMove?
-      score += total_decrement * desire_mult * 4
+      score += total_decrement * desire_mult * 5
     end
     # Prefer if user is at high HP, don't prefer if user is at low HP
     if target.index != @user.index
-      if @user.hp >= @user.totalhp * 0.7
-        score += total_decrement * desire_mult * 3
-      else
-        score += total_decrement * desire_mult * ((100 * @user.hp / @user.totalhp) - 50) / 6   # +3 to -8 per stage
-      end
+      score += total_decrement * desire_mult * ((100 * @user.hp / @user.totalhp) - 50) / 8   # +6 to -6 per stage
     end
     # Prefer if target is at high HP, don't prefer if target is at low HP
-    if target.hp >= target.totalhp * 0.7
-      score += total_decrement * desire_mult * 3
-    else
-      score += total_decrement * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 6   # +3 to -8 per stage
-    end
+    score += total_decrement * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 8   # +6 to -6 per stage
     # TODO: Look at abilities that trigger upon stat lowering.
     return score
   end
@@ -488,70 +485,76 @@ class Battle::AI
       # Modify score depending on current stat stage
       # More strongly prefer if the target has no special moves
       if old_stage <= -2 && decrement == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         has_special_moves = target.check_for_move { |m| m.specialMove?(m.type) }
-        dec = (has_special_moves) ? 5 : 10
+        dec = (has_special_moves) ? 8 : 12
         score += dec * dec_mult
       end
     when :DEFENSE
       # Modify score depending on current stat stage
       if old_stage <= -2 && decrement == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
-        score += 5 * dec_mult
+        score += 10 * dec_mult
       end
     when :SPECIAL_ATTACK
       # Modify score depending on current stat stage
       # More strongly prefer if the target has no physical moves
       if old_stage <= -2 && decrement == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         has_physical_moves = target.check_for_move { |m| m.physicalMove?(m.type) &&
                                                          m.function != "UseUserDefenseInsteadOfUserAttack" &&
                                                          m.function != "UseTargetAttackInsteadOfUserAttack" }
-        dec = (has_physical_moves) ? 5 : 10
+        dec = (has_physical_moves) ? 8 : 12
         score += dec * dec_mult
       end
     when :SPECIAL_DEFENSE
       # Modify score depending on current stat stage
       if old_stage <= -2 && decrement == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
-        score += 5 * dec_mult
+        score += 10 * dec_mult
       end
     when :SPEED
       # Prefer if target is faster than an ally
-      # TODO: Don't prefer if the target is too much faster than any ally and
-      #       can't be brought slow enough.
+      target_speed = target.rough_stat(:SPEED)
       each_foe_battler(target.side) do |b, i|
-        next if b.faster_than?(target)
-        score += 15 * dec_mult
-        break
+        b_speed = b.rough_stat(:SPEED)
+        next if target_speed > b_speed * 2.5   # Much too fast to reasonably be overtaken
+        if target_speed > b_speed
+          if target_speed < b_speed * 2 / (decrement + 2)
+            score += 15 * inc_mult   # Target will become slower than b
+          else
+            score += 8 * inc_mult
+          end
+          break
+        end
       end
       # Prefer if any ally has Electro Ball
       each_foe_battler(target.side) do |b, i|
         next if !b.has_move_with_function?("PowerHigherWithUserFasterThanTarget")
-        score += 8 * dec_mult
+        score += 5 * dec_mult
       end
       # Don't prefer if target has Speed Boost (will be gaining Speed anyway)
       if target.has_active_ability?(:SPEEDBOOST)
-        score -= 20 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
       end
     when :ACCURACY
       # Modify score depending on current stat stage
       if old_stage <= -2 && decrement == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
-        score += 5 * dec_mult
+        score += 10 * dec_mult
       end
       # TODO: Prefer if target is poisoned/toxiced/Leech Seeded/cursed.
     when :EVASION
       # Modify score depending on current stat stage
       if old_stage <= -2 && decrement == 1
-        score -= 15 * ((target.opposes?(@user)) ? 1 : desire_mult)
+        score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
-        score += 5 * dec_mult
+        score += 10 * dec_mult
       end
     end
     # Prefer if target has Stored Power
@@ -588,40 +591,40 @@ class Battle::AI
       when :Sun
         # Check for Fire/Water moves
         if b.has_damaging_move_of_type?(:FIRE)
-          ret += (b.opposes?(move_user)) ? -8 : 8
+          ret += (b.opposes?(move_user)) ? -10 : 10
         end
         if b.has_damaging_move_of_type?(:WATER)
-          ret += (b.opposes?(move_user)) ? 8 : -8
+          ret += (b.opposes?(move_user)) ? 10 : -10
         end
         # TODO: Check for freezing moves.
       when :Rain
         # Check for Fire/Water moves
         if b.has_damaging_move_of_type?(:WATER)
-          ret += (b.opposes?(move_user)) ? -8 : 8
+          ret += (b.opposes?(move_user)) ? -10 : 10
         end
         if b.has_damaging_move_of_type?(:FIRE)
-          ret += (b.opposes?(move_user)) ? 8 : -8
+          ret += (b.opposes?(move_user)) ? 10 : -10
         end
       when :Sandstorm
         # Check for battlers affected by sandstorm's effects
         if b.battler.takesSandstormDamage?   # End of round damage
-          ret += (b.opposes?(move_user)) ? 8 : -8
+          ret += (b.opposes?(move_user)) ? 10 : -10
         end
         if b.has_type?(:ROCK)   # +SpDef for Rock types
-          ret += (b.opposes?(move_user)) ? -8 : 8
+          ret += (b.opposes?(move_user)) ? -10 : 10
         end
       when :Hail
         # Check for battlers affected by hail's effects
         if b.battler.takesHailDamage?   # End of round damage
-          ret += (b.opposes?(move_user)) ? 8 : -8
+          ret += (b.opposes?(move_user)) ? 10 : -10
         end
       when :ShadowSky
         # Check for battlers affected by Shadow Sky's effects
         if b.has_damaging_move_of_type?(:SHADOW)
-          ret += (b.opposes?(move_user)) ? 8 : -8
+          ret += (b.opposes?(move_user)) ? 10 : -10
         end
         if b.battler.takesShadowSkyDamage?   # End of round damage
-          ret += (b.opposes?(move_user)) ? 8 : -8
+          ret += (b.opposes?(move_user)) ? 10 : -10
         end
       end
       # Check each battler's abilities/other moves affected by the new weather
@@ -698,32 +701,32 @@ class Battle::AI
         # Immunity to sleep
         # TODO: Check all battlers for sleep-inducing moves and other effects?
         if b.status == :NONE
-          ret += (b.opposes?(move_user)) ? -5 : 5
+          ret += (b.opposes?(move_user)) ? -8 : 8
         end
         if b.effects[PBEffects::Yawn] > 0
           ret += (b.opposes?(move_user)) ? -10 : 10
         end
         # Check for Electric moves
         if b.has_damaging_move_of_type?(:ELECTRIC)
-          ret += (b.opposes?(move_user)) ? -15 : 15
+          ret += (b.opposes?(move_user)) ? -10 : 10
         end
       when :Grassy
         # End of round healing
-        ret += (b.opposes?(move_user)) ? -10 : 10
+        ret += (b.opposes?(move_user)) ? -8 : 8
         # Check for Grass moves
         if b.has_damaging_move_of_type?(:GRASS)
-          ret += (b.opposes?(move_user)) ? -15 : 15
+          ret += (b.opposes?(move_user)) ? -10 : 10
         end
       when :Misty
         # Immunity to status problems/confusion
         # TODO: Check all battlers for status/confusion-inducing moves and other
         #       effects?
         if b.status == :NONE || b.effects[PBEffects::Confusion] == 0
-          ret += (b.opposes?(move_user)) ? -5 : 5
+          ret += (b.opposes?(move_user)) ? -8 : 8
         end
         # Check for Dragon moves
         if b.has_damaging_move_of_type?(:DRAGON)
-          ret += (b.opposes?(move_user)) ? 15 : -15
+          ret += (b.opposes?(move_user)) ? 10 : -10
         end
       when :Psychic
         # Check for priority moves
@@ -732,7 +735,7 @@ class Battle::AI
         end
         # Check for Psychic moves
         if b.has_damaging_move_of_type?(:PSYCHIC)
-          ret += (b.opposes?(move_user)) ? -15 : 15
+          ret += (b.opposes?(move_user)) ? -10 : 10
         end
       end
     end
@@ -745,7 +748,7 @@ class Battle::AI
     }[terrain]
     each_battler do |b, i|
       if seed && b.has_active_item?(seed)
-        ret += (b.opposes?(move_user)) ? -15 : 15
+        ret += (b.opposes?(move_user)) ? -8 : 8
       end
     end
     # Check for abilities/moves affected by the terrain
@@ -773,20 +776,20 @@ class Battle::AI
           ret += (b.opposes?(move_user)) ? -5 : 5
         end
         if abils && b.has_active_ability?(abils)
-          ret += (b.opposes?(move_user)) ? -15 : 15
+          ret += (b.opposes?(move_user)) ? -8 : 8
         end
         # Moves
         if b.has_move_with_function?("EffectDependsOnEnvironment",
                                      "SetUserTypesBasedOnEnvironment",
                                      "TypeAndPowerDependOnTerrain",
                                      "UseMoveDependingOnEnvironment")
-          ret += (b.opposes?(move_user)) ? -10 : 10
+          ret += (b.opposes?(move_user)) ? -5 : 5
         end
         if good_moves && b.has_move_with_function?(*good_moves)
-          ret += (b.opposes?(move_user)) ? -10 : 10
+          ret += (b.opposes?(move_user)) ? -5 : 5
         end
         if bad_moves && b.has_move_with_function?(*bad_moves)
-          ret += (b.opposes?(move_user)) ? 10 : -10
+          ret += (b.opposes?(move_user)) ? 5 : -5
         end
       end
     end

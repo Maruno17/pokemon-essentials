@@ -29,7 +29,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:shiny_target,
   proc { |score, move, user, target, ai, battle|
     if target.wild? && target.battler.shiny?
       old_score = score
-      score -= 15
+      score -= 20
       PBDebug.log_score_change(score - old_score, "avoid attacking a shiny wild Pokémon")
     end
     next score
@@ -46,7 +46,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:shiny_target,
 # => Include EOR damage in this?
 # => Prefer move if it will KO the target (moreso if user is slower than target)
 #===============================================================================
-Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:add_predicted_damage,
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:predicted_damage,
   proc { |score, move, user, target, ai, battle|
     if move.damagingMove?
       dmg = move.rough_damage
@@ -128,7 +128,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:thawing_move_against_fr
     if ai.trainer.medium_skill? && target.status == :FROZEN
       if move.rough_type == :FIRE || (Settings::MECHANICS_GENERATION >= 6 && move.move.thawsUser?)
         old_score = score
-        score -= 15
+        score -= 20
         PBDebug.log_score_change(score - old_score, "thaws the target")
       end
     end
@@ -205,7 +205,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:damaging_a_biding_targe
         hits_possible += 1 if user.faster_than?(target)
         if dmg * hits_possible + eor_dmg < target.hp * 1.05
           old_score = score
-          score -= 15
+          score -= 20
           PBDebug.log_score_change(score - old_score, "don't want to damage the Biding target")
         end
       end
@@ -227,7 +227,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:knocking_out_a_destiny_
       dmg = move.rough_damage
       if dmg > target.hp * 1.05   # Predicted to KO the target
         old_score = score
-        score -= 15
+        score -= 20
         score -= 10 if battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
         PBDebug.log_score_change(score - old_score, "don't want to KO the Destiny Bonding target")
       end
@@ -264,7 +264,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:target_can_Magic_Coat_o
         score = Battle::AI::MOVE_USELESS_SCORE
         PBDebug.log_score_change(score - old_score, "useless because target will Magic Bounce it")
       elsif target.has_move_with_function?("BounceBackProblemCausingStatusMoves")
-        score -= 8
+        score -= 7
         PBDebug.log_score_change(score - old_score, "target knows Magic Coat and could bounce it")
       end
     end
@@ -286,7 +286,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:any_foe_can_Magic_Coat_or_Bounce_mov
           PBDebug.log_score_change(score - old_score, "useless because a foe will Magic Bounce it")
           break
         elsif b.has_move_with_function?("BounceBackProblemCausingStatusMoves")
-          score -= 8
+          score -= 7
           PBDebug.log_score_change(score - old_score, "a foe knows Magic Coat and could bounce it")
           break
         end
@@ -307,7 +307,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:any_battler_can_Snatch_move,
         next if b.effects[PBEffects::SkyDrop] >= 0
         next if !b.has_move_with_function?("StealAndUseBeneficialStatusMove")
         old_score = score
-        score -= 8
+        score -= 7
         PBDebug.log_score_change(score - old_score, "another battler could Snatch it")
         break
       end
@@ -335,10 +335,10 @@ Battle::AI::Handlers::GeneralMoveScore.add(:thawing_move_when_frozen,
     if ai.trainer.medium_skill? && user.status == :FROZEN
       old_score = score
       if move.move.thawsUser?
-        score += 30
+        score += 20
         PBDebug.log_score_change(score - old_score, "move will thaw the user")
       elsif user.check_for_move { |m| m.thawsUser? }
-        score -= 30   # Don't prefer this move if user knows another move that thaws
+        score -= 20   # Don't prefer this move if user knows another move that thaws
         PBDebug.log_score_change(score - old_score, "user knows another move will thaw it")
       end
     end
@@ -354,7 +354,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:dance_move_against_dancer,
     if move.move.danceMove?
       old_score = score
       ai.each_foe_battler(user.side) do |b, i|
-        score -= 12 if b.has_active_ability?(:DANCER)
+        score -= 10 if b.has_active_ability?(:DANCER)
       end
       PBDebug.log_score_change(score - old_score, "don't want to use a dance move because a foe has Dancer")
     end
@@ -381,10 +381,12 @@ Battle::AI::Handlers::GeneralMoveScore.add(:good_move_for_choice_item,
         # Don't prefer moves which are 0x against at least one type
         move_type = move.rough_type
         GameData::Type.each do |type_data|
-          score -= 5 if type_data.immunities.include?(move_type)
+          score -= 8 if type_data.immunities.include?(move_type)
         end
         # Don't prefer moves with lower accuracy
-        score = score * move.accuracy / 100 if move.accuracy > 0
+        if move.accuracy > 0
+          score -= (0.4 * (100 - move.accuracy)).to_i   # -0 (100%) to -39 (1%)
+        end
         # Don't prefer moves with low PP
         score -= 10 if move.move.pp <= 5
         PBDebug.log_score_change(score - old_score, "move is less suitable to be Choiced into")
@@ -400,7 +402,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:good_move_for_choice_item,
 # more (desperate).
 # TODO: Review score modifier.
 #===============================================================================
-Battle::AI::Handlers::GeneralMoveScore.add(:either_side_down_to_last_pokemon,
+Battle::AI::Handlers::GeneralMoveScore.add(:damaging_move_and_either_side_no_reserves,
   proc { |score, move, user, ai, battle|
     if ai.trainer.medium_skill? && move.damagingMove?
       reserves = battle.pbAbleNonActiveCount(user.idxOwnSide)

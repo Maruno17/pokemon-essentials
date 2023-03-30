@@ -139,9 +139,9 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SwitchOutTargetStatusMo
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SwitchOutTargetStatusMove",
   proc { |score, move, user, target, ai, battle|
-    score += 20 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
-    score += 20 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
-    score += 20 if target.pbOwnSide.effects[PBEffects::StealthRock]
+    score += 15 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
+    score += 15 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
+    score += 15 if target.pbOwnSide.effects[PBEffects::StealthRock]
     next score
   }
 )
@@ -153,9 +153,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SwitchOutTargetDamagingM
   proc { |score, move, user, target, ai, battle|
     if (battle.moldBreaker || !target.has_active_ability?(:SUCTIONCUPS)) &&
        !target.effects[PBEffects::Ingrain]
-      score += 20 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
-      score += 20 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
-      score += 20 if target.pbOwnSide.effects[PBEffects::StealthRock]
+      score += 15 if target.pbOwnSide.effects[PBEffects::Spikes] > 0
+      score += 15 if target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
+      score += 15 if target.pbOwnSide.effects[PBEffects::StealthRock]
     end
     next score
   }
@@ -172,7 +172,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BindTarget",
     # you don't want to use it?)
     score += 5 if user.has_active_item?([:BINDINGBAND, :GRIPCLAW])
     # Target will take damage at the end of each round from the binding
-    score += 8 if target.battler.takesIndirectDamage?
+    score += 10 if target.battler.takesIndirectDamage?
     # Check whether the target will be trapped in battle by the binding
     if target.can_become_trapped?
       score += 8   # Prefer if the target will become trapped by this move
@@ -180,20 +180,20 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BindTarget",
       if eor_damage > 0
         # Prefer if the target will take damage at the end of each round on top
         # of binding damage
-        score += 8
+        score += 10
       elsif eor_damage < 0
         # Don't prefer if the target will heal itself at the end of each round
-        score -= 8
+        score -= 10
       end
       # Prefer if the target has been Perish Songed
-      score += 10 if target.effects[PBEffects::PerishSong] > 0
+      score += 15 if target.effects[PBEffects::PerishSong] > 0
     end
     # Don't prefer if the target can remove the binding (and the binding has an
     # effect)
     if target.can_become_trapped? || target.battler.takesIndirectDamage?
       if ai.trainer.medium_skill? &&
          target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
-        score -= 8
+        score -= 10
       end
     end
     next score
@@ -232,13 +232,6 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapTargetInBattle",
     if eor_damage >= target.hp
       next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
     end
-    # Score for EOR damage (intentionally before Rapid Spin check)
-    hp_fraction = (Settings::MECHANICS_GENERATION >= 6) ? 8 : 16
-    if user.has_active_item?(:BINDINGBAND)
-      hp_fraction = (Settings::MECHANICS_GENERATION >= 6) ? 6 : 8
-    end
-    rounds_to_deplete_hp = (hp_fraction.to_f * target.hp / target.totalhp).ceil
-    score += 30 / rounds_to_deplete_hp
     # Not worth trapping if target can remove the binding
     if ai.trainer.medium_skill? &&
        target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
@@ -256,7 +249,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapTargetInBattle",
     if target.effects[PBEffects::PerishSong] > 0 ||
        target.effects[PBEffects::Attract] >= 0 ||
        eor_damage > 0
-      score += 12
+      score += 15
     end
     next score
   }
@@ -284,7 +277,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("TrapTargetInBattleLower
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapTargetInBattleLowerTargetDefSpDef1EachTurn",
   proc { |score, move, user, target, ai, battle|
     # Score for stat drop
-    score = ai.get_score_for_target_stat_drop(score, target, [:DEFENSE, 1, :SPECIAL_DEFENSE], false)
+    score = ai.get_score_for_target_stat_drop(score, target, [:DEFENSE, 1, :SPECIAL_DEFENSE, 1], false)
     # Score for target becoming trapped in battle
     if target.can_become_trapped? && battle.pbCanChooseNonActive?(target.index)
       # Not worth trapping if target will faint this round anyway
@@ -304,7 +297,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapTargetInBattleLowerT
       if target.effects[PBEffects::PerishSong] > 0 ||
          target.effects[PBEffects::Attract] >= 0 ||
          eor_damage > 0
-        score += 12
+        score += 15
       end
     end
     next score
@@ -338,7 +331,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TrapUserAndTargetInBattl
       if target.effects[PBEffects::PerishSong] > 0 ||
          target.effects[PBEffects::Attract] >= 0 ||
          eor_damage > 0
-        score += 12
+        score += 15
       end
     end
     next score
@@ -403,7 +396,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
     end
     next score if !ally_has_move
     # Prefer for the sake of doubling in power
-    score += 5
+    score += 10
     next score
   }
 )
@@ -502,7 +495,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetUsesItsLastUsedMov
     #       ally (since we're here in this code), this move's score will be
     #       inverted later. A higher score here means this move will be less
     #       preferred, which is the result we want.
-    score += 20
+    score += 10
     next score
   }
 )
@@ -601,19 +594,19 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetLastMoveUs
     next !target.check_for_move { |m| m.id == target.battler.lastRegularMoveUsed }
   }
 )
-Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetUsingSameMoveConsecutively",
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetLastMoveUsed",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if target.has_active_item?(:MENTALHERB)
+    # Inherent preference
+    score += 5
     # Prefer if the target is locked into using a single move, or will be
     if target.effects[PBEffects::ChoiceBand] ||
        target.has_active_item?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
        target.has_active_ability?(:GORILLATACTICS)
-      score += 8
+      score += 10
     end
-    # PRefer disabling a damaging move
-    score += 5 if GameData::Move.try_get(target.battler.lastRegularMoveUsed)&.damaging?
-    # Inherent preference
-    score += 8
+    # Prefer disabling a damaging move
+    score += 8 if GameData::Move.try_get(target.battler.lastRegularMoveUsed)&.damaging?
     next score
   }
 )
@@ -631,14 +624,14 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetUsingSameM
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetUsingSameMoveConsecutively",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if target.has_active_item?(:MENTALHERB)
+    # Inherent preference
+    score += 10
     # Prefer if the target is locked into using a single move, or will be
     if target.effects[PBEffects::ChoiceBand] ||
        target.has_active_item?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
        target.has_active_ability?(:GORILLATACTICS)
-      score += 8
+      score += 10
     end
-    # Inherent preference
-    score += 8
     next score
   }
 )
@@ -672,24 +665,24 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetUsingDiffer
         else
           score += 8
         end
-      elsif move_data.damaging? && move_data.target == :NearOther
+      elsif move_data.damaging? && [:NearOther, :Other].include?(move_data.target)
         # Prefer encoring damaging moves depending on their type effectiveness
         # against the user
         eff = user.effectiveness_of_type_against_battler(move_data.type, target)
         if Effectiveness.ineffective?(eff)
-          score += 15
+          score += 20
         elsif Effectiveness.not_very_effective?(eff)
-          score += 10
+          score += 15
         elsif Effectiveness.super_effective?(eff)
-          score -= 5
+          score -= 8
         else
-          score += 5
+          score += 8
         end
       end
     else
       # We don't know which move is going to be encored; just prefer limiting
       # the target's options
-      score += 8
+      score += 10
     end
     next score
   }
@@ -717,12 +710,16 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetStatusMoves
       end
     end
     # Move is likely useless if the target will lock themselves into a move,
-    # because they'll likely lock themselves into a damaging move anyway
+    # because they'll likely lock themselves into a damaging move
     if !target.effects[PBEffects::ChoiceBand]
       if target.has_active_item?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
          target.has_active_ability?(:GORILLATACTICS)
         next Battle::AI::MOVE_USELESS_SCORE
       end
+    end
+    # Prefer based on how many status moves the target knows
+    target.battler.eachMove do |m|
+      score += 5 if m.statusMove? && (m.pp > 0 || m.total_pp == 0)
     end
     # Prefer if the target has a protection move
     protection_moves = [
@@ -738,10 +735,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetStatusMoves
       "ProtectUserBanefulBunker"                           # Baneful Bunker
     ]
     if target.check_for_move { |m| m.statusMove? && protection_moves.include?(m.function) }
-      score += 6
+      score += 10
     end
-    # Inherent preference
-    score += 8
     next score
   }
 )
@@ -766,7 +761,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetHealingMove
       end
     end
     # Inherent preference
-    score += 8
+    score += 10
     next score
   }
 )
@@ -799,16 +794,16 @@ Battle::AI::Handlers::MoveFailureCheck.add("DisableTargetMovesKnownByUser",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetMovesKnownByUser",
   proc { |score, move, user, target, ai, battle|
     # Useless if the foes have no moves that the user also knows
-    shared_move = false
+    affected_foe_count = 0
     user_moves = user.battler.moves.map { |m| m.id }
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.check_for_move { |m| user_moves.include?(m.id) }
-      shared_move = true
+      affected_foe_count += 1
       break
     end
-    next Battle::AI::MOVE_USELESS_SCORE if !shared_move
+    next Battle::AI::MOVE_USELESS_SCORE if affected_foe_count == 0
     # Inherent preference
-    score += 6
+    score += 8 * affected_foe_count
     next score
   }
 )

@@ -60,7 +60,9 @@ Battle::AI::Handlers::MoveEffectScore.add("MaxUserAttackLoseHalfOfTotalHP",
   proc { |score, move, user, ai, battle|
     score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     # Don't prefer the lower the user's HP is
-    score -= 80 * (1 - (user.hp.to_f / user.totalhp))   # 0 to -40
+    if ai.trainer.has_skill_flag?("HPAware")
+      score -= 60 * (1 - (user.hp.to_f / user.totalhp))   # -0 to -30
+    end
     next score
   }
 )
@@ -202,7 +204,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserSpeed2LowerUserWeight",
           # User will become susceptible to Sky Drop
           if b.has_move_with_function?("TwoTurnAttackInvulnerableInSkyTargetCannotAct") &&
              Settings::MECHANICS_GENERATION >= 6
-            score -= 7 if current_weight >= 2000 && current_weight < 3000
+            score -= 10 if current_weight >= 2000 && current_weight < 3000
           end
         end
       end
@@ -464,8 +466,8 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1LoseThirdOfTotalHP
     score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for losing HP
-    if user.hp <= user.totalhp * 0.75
-      score -= 30 * (user.totalhp - user.hp) / user.totalhp
+    if ai.trainer.has_skill_flag?("HPAware") && user.hp <= user.totalhp * 0.75
+      score -= 45 * (user.totalhp - user.hp) / user.totalhp   # -0 to -30
     end
     next score
   }
@@ -499,7 +501,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1TrapUserInBattle",
       if user.effects[PBEffects::PerishSong] > 0 ||
          user.effects[PBEffects::Attract] >= 0 ||
          eor_damage > 0
-        score -= 12
+        score -= 15
       end
     end
     next score
@@ -513,12 +515,14 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRaiseUserAtk1WhenDamaged",
   proc { |score, move, user, ai, battle|
     # Ignore the stat-raising effect if user is at a low HP and likely won't
     # benefit from it
-    next score if user.hp < user.totalhp / 3
+    if ai.trainer.has_skill_flag?("HPAware")
+      next score if user.hp <= user.totalhp / 3
+    end
     # TODO: Check whether any foe has damaging moves that will trigger the stat
     #       raise?
     # Prefer if user benefits from a raised Attack stat
-    score += 8 if ai.stat_raise_worthwhile?(user, :ATTACK)
-    score += 4 if user.has_move_with_function?("PowerHigherWithUserPositiveStatStages")
+    score += 10 if ai.stat_raise_worthwhile?(user, :ATTACK)
+    score += 7 if user.has_move_with_function?("PowerHigherWithUserPositiveStatStages")
     next score
   }
 )
@@ -694,22 +698,24 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetRandomStat2",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !battle.moldBreaker && target.has_active_ability?(:CONTRARY)
     next Battle::AI::MOVE_USELESS_SCORE if target.rough_end_of_round_damage >= target.hp
-    score -= 5 if target.index != user.index   # Less likely to use on ally
-    score += 5 if target.has_active_ability?(:SIMPLE)
+    score -= 7 if target.index != user.index   # Less likely to use on ally
+    score += 10 if target.has_active_ability?(:SIMPLE)
     # Prefer if target is at high HP, don't prefer if target is at low HP
-    if target.hp >= target.totalhp * 0.7
-      score += 8
-    else
-      score += ((100 * target.hp / target.totalhp) - 50) / 4   # +5 to -12
+    if ai.trainer.has_skill_flag?("HPAware")
+      if target.hp >= target.totalhp * 0.7
+        score += 10
+      else
+        score += (50 * ((target.hp.to_f / target.totalhp) - 0.6)).to_i   # +5 to -30
+      end
     end
     # Prefer if target has Stored Power
     if target.has_move_with_function?("PowerHigherWithUserPositiveStatStages")
-      score += 8
+      score += 10
     end
     # Don't prefer if any foe has Punishment
     ai.each_foe_battler(target.side) do |b, i|
       next if !b.has_move_with_function?("PowerHigherWithTargetPositiveStatStages")
-      score -= 5
+      score -= 8
     end
     next score
   }
@@ -909,7 +915,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetSpeed1MakeTar
     if !target.effects[PBEffects::TarShot]
       eff = target.effectiveness_of_type_against_battler(:FIRE)
       if !Effectiveness.ineffective?(eff)
-        score += 8 * eff if user.has_damaging_move_of_type?(:FIRE)
+        score += 10 * eff if user.has_damaging_move_of_type?(:FIRE)
       end
     end
     next score
@@ -992,22 +998,23 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerTargetEvasion1Remo
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetEvasion1RemoveSideEffects",
   proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if !target.opposes?(user)
     # Score for stat drop
     score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown)
     # Score for removing side effects/terrain
-    score += 8 if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 1 ||
-                  target.pbOwnSide.effects[PBEffects::Reflect] > 1 ||
-                  target.pbOwnSide.effects[PBEffects::LightScreen] > 1 ||
-                  target.pbOwnSide.effects[PBEffects::Mist] > 1 ||
-                  target.pbOwnSide.effects[PBEffects::Safeguard] > 1
+    score += 10 if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 1 ||
+                   target.pbOwnSide.effects[PBEffects::Reflect] > 1 ||
+                   target.pbOwnSide.effects[PBEffects::LightScreen] > 1 ||
+                   target.pbOwnSide.effects[PBEffects::Mist] > 1 ||
+                   target.pbOwnSide.effects[PBEffects::Safeguard] > 1
     if target.can_switch_lax?
-      score -= 10 if target.pbOwnSide.effects[PBEffects::Spikes] > 0 ||
+      score -= 15 if target.pbOwnSide.effects[PBEffects::Spikes] > 0 ||
                      target.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0 ||
                      target.pbOwnSide.effects[PBEffects::StealthRock] ||
                      target.pbOwnSide.effects[PBEffects::StickyWeb]
     end
-    if user.opposes?(target) && user.can_switch_lax? && Settings::MECHANICS_GENERATION >= 6
-      score += 10 if target.pbOpposingSide.effects[PBEffects::Spikes] > 0 ||
+    if user.can_switch_lax? && Settings::MECHANICS_GENERATION >= 6
+      score += 15 if target.pbOpposingSide.effects[PBEffects::Spikes] > 0 ||
                      target.pbOpposingSide.effects[PBEffects::ToxicSpikes] > 0 ||
                      target.pbOpposingSide.effects[PBEffects::StealthRock] ||
                      target.pbOpposingSide.effects[PBEffects::StickyWeb]
@@ -1296,14 +1303,14 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserCopyTargetStatStages
     score = ai.get_score_for_target_stat_drop(score, user, drops, false, true) if drops.length > 0
     if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
       if user.effects[PBEffects::FocusEnergy] > 0 && target.effects[PBEffects::FocusEnergy] == 0
-        score -= 4
+        score -= 5
       elsif user.effects[PBEffects::FocusEnergy] == 0 && target.effects[PBEffects::FocusEnergy] > 0
-        score += 4
+        score += 5
       end
       if user.effects[PBEffects::LaserFocus] > 0 && target.effects[PBEffects::LaserFocus] == 0
-        score -= 3
+        score -= 5
       elsif user.effects[PBEffects::LaserFocus] == 0 && target.effects[PBEffects::LaserFocus] > 0
-        score += 3
+        score += 5
       end
     end
     next score
@@ -1428,7 +1435,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToStatStageLower
                                 ["LowerPoisonedTargetAtkSpAtkSpd1",
                                  "PoisonTargetLowerTargetSpeed1",
                                  "HealUserByTargetAttackLowerTargetAttack1"].include?(m.function) }
-        score += 10
+        score += 15
         has_move = true
       end
     end
@@ -1498,49 +1505,33 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetAverageBaseAtk
     change_matters = false
     # Score based on changes to Attack
     if target_atk > user_atk
-      # User's Attack will be raised
-      if ai.stat_raise_worthwhile?(user, :ATTACK, true)
-        score += (20 * ((target_atk.to_f / user_atk) - 1)).to_i
-        change_matters = true
-      end
-      # Target's Attack will be lowered
-      if ai.stat_drop_worthwhile?(target, :ATTACK, true)
-        score += (20 * ((target_atk.to_f / user_atk) - 1)).to_i
+      # User's Attack will be raised, target's Attack will be lowered
+      if ai.stat_raise_worthwhile?(user, :ATTACK, true) ||
+         ai.stat_drop_worthwhile?(target, :ATTACK, true)
+        score += (40 * ((target_atk.to_f / user_atk) - 1)).to_i
         change_matters = true
       end
     elsif target_atk < user_atk
-      # User's Attack will be lowered
-      if ai.stat_drop_worthwhile?(user, :ATTACK, true)
-        score -= (20 * ((user_atk.to_f / target_atk) - 1)).to_i
-        change_matters = true
-      end
-      # Target's Attack will be raised
-      if ai.stat_raise_worthwhile?(target, :ATTACK, true)
-        score -= (20 * ((user_atk.to_f / target_atk) - 1)).to_i
+      # User's Attack will be lowered, target's Attack will be raised
+      if ai.stat_drop_worthwhile?(user, :ATTACK, true) ||
+         ai.stat_raise_worthwhile?(target, :ATTACK, true)
+        score -= (40 * ((user_atk.to_f / target_atk) - 1)).to_i
         change_matters = true
       end
     end
     # Score based on changes to Special Attack
     if target_spatk > user_spatk
-      # User's Special Attack will be raised
-      if ai.stat_raise_worthwhile?(user, :SPECIAL_ATTACK, true)
-        score += (20 * ((target_spatk.to_f / user_spatk) - 1)).to_i
-        change_matters = true
-      end
-      # Target's Special Attack will be lowered
-      if ai.stat_drop_worthwhile?(target, :SPECIAL_ATTACK, true)
-        score += (20 * ((target_spatk.to_f / user_spatk) - 1)).to_i
+      # User's Special Attack will be raised, target's Special Attack will be lowered
+      if ai.stat_raise_worthwhile?(user, :SPECIAL_ATTACK, true) ||
+         ai.stat_drop_worthwhile?(target, :SPECIAL_ATTACK, true)
+        score += (40 * ((target_spatk.to_f / user_spatk) - 1)).to_i
         change_matters = true
       end
     elsif target_spatk < user_spatk
-      # User's Special Attack will be lowered
-      if ai.stat_drop_worthwhile?(user, :SPECIAL_ATTACK, true)
-        score -= (20 * ((user_spatk.to_f / target_spatk) - 1)).to_i
-        change_matters = true
-      end
-      # Target's Special Attack will be raised
-      if ai.stat_raise_worthwhile?(target, :SPECIAL_ATTACK, true)
-        score -= (20 * ((user_spatk.to_f / target_spatk) - 1)).to_i
+      # User's Special Attack will be lowered, target's Special Attack will be raised
+      if ai.stat_drop_worthwhile?(user, :SPECIAL_ATTACK, true) ||
+         ai.stat_raise_worthwhile?(target, :SPECIAL_ATTACK, true)
+        score -= (40 * ((user_spatk.to_f / target_spatk) - 1)).to_i
         change_matters = true
       end
     end
@@ -1562,49 +1553,33 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetAverageBaseDef
     change_matters = false
     # Score based on changes to Defense
     if target_def > user_def
-      # User's Defense will be raised
-      if ai.stat_raise_worthwhile?(user, :DEFENSE, true)
-        score += (20 * ((target_def.to_f / user_def) - 1)).to_i
-        change_matters = true
-      end
-      # Target's Defense will be lowered
-      if ai.stat_drop_worthwhile?(target, :DEFENSE, true)
-        score += (20 * ((target_def.to_f / user_def) - 1)).to_i
+      # User's Defense will be raised, target's Defense will be lowered
+      if ai.stat_raise_worthwhile?(user, :DEFENSE, true) ||
+         ai.stat_drop_worthwhile?(target, :DEFENSE, true)
+        score += (40 * ((target_def.to_f / user_def) - 1)).to_i
         change_matters = true
       end
     elsif target_def < user_def
-      # User's Defense will be lowered
-      if ai.stat_drop_worthwhile?(user, :DEFENSE, true)
-        score -= (20 * ((user_def.to_f / target_def) - 1)).to_i
-        change_matters = true
-      end
-      # Target's Defense will be raised
-      if ai.stat_raise_worthwhile?(target, :DEFENSE, true)
-        score -= (20 * ((user_def.to_f / target_def) - 1)).to_i
+      # User's Defense will be lowered, target's Defense will be raised
+      if ai.stat_drop_worthwhile?(user, :DEFENSE, true) ||
+         ai.stat_raise_worthwhile?(target, :DEFENSE, true)
+        score -= (40 * ((user_def.to_f / target_def) - 1)).to_i
         change_matters = true
       end
     end
     # Score based on changes to Special Defense
     if target_spdef > user_spdef
-      # User's Special Defense will be raised
-      if ai.stat_raise_worthwhile?(user, :SPECIAL_DEFENSE, true)
-        score += (20 * ((target_spdef.to_f / user_spdef) - 1)).to_i
-        change_matters = true
-      end
-      # Target's Special Defense will be lowered
-      if ai.stat_drop_worthwhile?(target, :SPECIAL_DEFENSE, true)
-        score += (20 * ((target_spdef.to_f / user_spdef) - 1)).to_i
+      # User's Special Defense will be raised, target's Special Defense will be lowered
+      if ai.stat_raise_worthwhile?(user, :SPECIAL_DEFENSE, true) ||
+         ai.stat_drop_worthwhile?(target, :SPECIAL_DEFENSE, true)
+        score += (40 * ((target_spdef.to_f / user_spdef) - 1)).to_i
         change_matters = true
       end
     elsif target_spdef < user_spdef
-      # User's Special Defense will be lowered
-      if ai.stat_drop_worthwhile?(user, :SPECIAL_DEFENSE, true)
-        score -= (20 * ((user_spdef.to_f / target_spdef) - 1)).to_i
-        change_matters = true
-      end
-      # Target's Special Defense will be raised
-      if ai.stat_raise_worthwhile?(target, :SPECIAL_DEFENSE, true)
-        score -= (20 * ((user_spdef.to_f / target_spdef) - 1)).to_i
+      # User's Special Defense will be lowered, target's Special Defense will be raised
+      if ai.stat_drop_worthwhile?(user, :SPECIAL_DEFENSE, true) ||
+         ai.stat_raise_worthwhile?(target, :SPECIAL_DEFENSE, true)
+        score -= (40 * ((user_spdef.to_f / target_spdef) - 1)).to_i
         change_matters = true
       end
     end
@@ -1636,7 +1611,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("StartUserSideDoubleSpeed",
 Battle::AI::Handlers::MoveEffectScore.add("StartUserSideDoubleSpeed",
   proc { |score, move, user, ai, battle|
     # Don't want to make allies faster if Trick Room will make them act later
-    next Battle::AI::MOVE_USELESS_SCORE if battle.field.effects[PBEffects::TrickRoom] > 1
+    if ai.trainer.medium_skill?
+      next Battle::AI::MOVE_USELESS_SCORE if battle.field.effects[PBEffects::TrickRoom] > 1
+    end
     # Get the speeds of all battlers
     ally_speeds = []
     foe_speeds = []
@@ -1654,7 +1631,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideDoubleSpeed",
     end
     next Battle::AI::MOVE_USELESS_SCORE if outspeeds == 0
     # This move will achieve something
-    next score + 10 * outspeeds + 5
+    next score + 8 + (10 * outspeeds)
   }
 )
 
@@ -1663,38 +1640,38 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideDoubleSpeed",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("StartSwapAllBattlersBaseDefensiveStats",
   proc { |score, move, user, ai, battle|
-    any_change_matters = false
+    change_matters = false
     ai.each_battler do |b, i|
       b_def = b.base_stat(:DEFENSE)
       b_spdef = b.base_stat(:SPECIAL_DEFENSE)
       next if b_def == b_spdef
       score_change = 0
       if b_def > b_spdef
-        # Battler's Defense will be lowered
+        # Battler's Defense will be lowered, battler's Special Defense will be raised
         if ai.stat_drop_worthwhile?(b, :DEFENSE, true)
           score_change -= (20 * ((b_def.to_f / b_spdef) - 1)).to_i
-          any_change_matters = true
+          change_matters = true
         end
         # Battler's Special Defense will be raised
         if ai.stat_raise_worthwhile?(b, :SPECIAL_DEFENSE, true)
           score_change += (20 * ((b_def.to_f / b_spdef) - 1)).to_i
-          any_change_matters = true
+          change_matters = true
         end
       else
         # Battler's Special Defense will be lowered
         if ai.stat_drop_worthwhile?(b, :SPECIAL_DEFENSE, true)
           score_change -= (20 * ((b_spdef.to_f / b_def) - 1)).to_i
-          any_change_matters = true
+          change_matters = true
         end
         # Battler's Defense will be raised
         if ai.stat_raise_worthwhile?(b, :DEFENSE, true)
           score_change += (20 * ((b_spdef.to_f / b_def) - 1)).to_i
-          any_change_matters = true
+          change_matters = true
         end
       end
       score += (b.opposes?(user)) ? -score_change : score_change
     end
-    next Battle::AI::MOVE_USELESS_SCORE if !any_change_matters
+    next Battle::AI::MOVE_USELESS_SCORE if !change_matters
     next Battle::AI::MOVE_USELESS_SCORE if score <= Battle::AI::MOVE_BASE_SCORE
     next score
   }
