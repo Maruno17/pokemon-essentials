@@ -262,7 +262,7 @@ class PokemonBag_Scene
     # Set the bag sprite
     fbagexists = pbResolveBitmap(sprintf("Graphics/UI/Bag/bag_%d_f", @bag.last_viewed_pocket))
     if $player.female? && fbagexists
-      @sprites["bagsprite"].setBitmap(sprintf("Graphics/UI/Bag/bag_%d_f", @bag.last_viewed_pocket"))
+      @sprites["bagsprite"].setBitmap(sprintf("Graphics/UI/Bag/bag_%d_f", @bag.last_viewed_pocket))
     else
       @sprites["bagsprite"].setBitmap(sprintf("Graphics/UI/Bag/bag_%d", @bag.last_viewed_pocket))
     end
