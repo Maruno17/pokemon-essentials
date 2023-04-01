@@ -202,7 +202,7 @@ module Settings
   NUM_STORAGE_BOXES   = 40
   # Whether putting a Pokémon into Pokémon storage will heal it. IF false, they
   # are healed by the Recover All: Entire Party event command (at Poké Centers).
-  HEAL_STORED_POKEMON = (MECHANICS_GENERATION >= 8)
+  HEAL_STORED_POKEMON = (MECHANICS_GENERATION <= 7)
 
   #=============================================================================
 
