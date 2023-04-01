@@ -206,8 +206,8 @@ MenuHandlers.add(:battle_debug_menu, :mega_evolution, {
           next if !trainers[i]
           text = (side == 0) ? "Your side:" : "Foe side:"
           text += sprintf(" %d: %s", i, trainers[i].name)
-          text += sprintf(" [ABLE]") if value == -1
-          text += sprintf(" [UNABLE]") if value == -2
+          text += " [ABLE]" if value == -1
+          text += " [UNABLE]" if value == -2
           commands.push(text)
           cmds.push([side, i])
         end

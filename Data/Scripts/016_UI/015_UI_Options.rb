@@ -230,7 +230,7 @@ class Window_PokemonOption < Window_DrawableCommand
         rect.y - 8 + (rect.height / 2),
         8, 16, SEL_VALUE_BASE_COLOR
       )
-      value = sprintf("%d", @options[index].lowest_value + self[index])
+      value = (@options[index].lowest_value + self[index]).to_s
       xpos += (rect.width - rect.x - optionwidth) - self.contents.text_size(value).width
       pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
                        SEL_VALUE_BASE_COLOR, SEL_VALUE_SHADOW_COLOR)

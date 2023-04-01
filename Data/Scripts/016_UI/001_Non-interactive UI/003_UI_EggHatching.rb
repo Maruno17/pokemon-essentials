@@ -99,7 +99,7 @@ class PokemonEggHatch_Scene
     pbBGMStop
     pbMEPlay("Evolution success")
     @pokemon.name = nil
-    pbMessage(_INTL("\\se[]{1} hatched from the Egg!\\wt[80]", @pokemon.name)) { update }
+    pbMessage("\\se[]" + _INTL("{1} hatched from the Egg!\\wt[80]", @pokemon.name)) { update }
     # Record the Pokémon's species as owned in the Pokédex
     was_owned = $player.owned?(@pokemon.species)
     $player.pokedex.register(@pokemon)

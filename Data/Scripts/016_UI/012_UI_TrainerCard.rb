@@ -10,13 +10,13 @@ class PokemonTrainerCard_Scene
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites = {}
-    background = pbResolveBitmap(sprintf("Graphics/UI/Trainer Card/bg_f"))
+    background = pbResolveBitmap("Graphics/UI/Trainer Card/bg_f")
     if $player.female? && background
       addBackgroundPlane(@sprites, "bg", "Trainer Card/bg_f", @viewport)
     else
       addBackgroundPlane(@sprites, "bg", "Trainer Card/bg", @viewport)
     end
-    cardexists = pbResolveBitmap(sprintf("Graphics/UI/Trainer Card/card_f"))
+    cardexists = pbResolveBitmap("Graphics/UI/Trainer Card/card_f")
     @sprites["card"] = IconSprite.new(0, 0, @viewport)
     if $player.female? && cardexists
       @sprites["card"].setBitmap("Graphics/UI/Trainer Card/card_f")

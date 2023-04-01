@@ -560,7 +560,7 @@ module Compiler
           else
             pbWriteCsvRecord(record, f, schema)
           end
-          f.write(sprintf("\r\n"))
+          f.write("\r\n")
         end
       end
     end

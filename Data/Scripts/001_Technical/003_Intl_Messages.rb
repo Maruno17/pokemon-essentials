@@ -284,8 +284,8 @@ module Translator
       f.write(0xEF.chr)
       f.write(0xBB.chr)
       f.write(0xBF.chr)
-      f.write("# To localize this text for a particular language, please\r\n")
-      f.write("# translate every second line of this file.\r\n")
+      f.write("# To localize this text for a particular language, please" + "\r\n")
+      f.write("# translate every second line of this file." + "\r\n")
       f.write("\#-------------------------------\r\n") if with_line
     end
     # Extract the text

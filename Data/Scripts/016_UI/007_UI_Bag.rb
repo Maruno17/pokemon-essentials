@@ -258,13 +258,13 @@ class PokemonBag_Scene
 
   def pbRefresh
     # Set the background image
-    @sprites["background"].setBitmap(sprintf("Graphics/UI/Bag/bg_#{@bag.last_viewed_pocket}"))
+    @sprites["background"].setBitmap(sprintf("Graphics/UI/Bag/bg_%d", @bag.last_viewed_pocket))
     # Set the bag sprite
-    fbagexists = pbResolveBitmap(sprintf("Graphics/UI/Bag/bag_#{@bag.last_viewed_pocket}_f"))
+    fbagexists = pbResolveBitmap(sprintf("Graphics/UI/Bag/bag_%d_f", @bag.last_viewed_pocket))
     if $player.female? && fbagexists
-      @sprites["bagsprite"].setBitmap("Graphics/UI/Bag/bag_#{@bag.last_viewed_pocket}_f")
+      @sprites["bagsprite"].setBitmap(sprintf("Graphics/UI/Bag/bag_%d_f", @bag.last_viewed_pocket"))
     else
-      @sprites["bagsprite"].setBitmap("Graphics/UI/Bag/bag_#{@bag.last_viewed_pocket}")
+      @sprites["bagsprite"].setBitmap(sprintf("Graphics/UI/Bag/bag_%d", @bag.last_viewed_pocket))
     end
     # Draw the pocket icons
     @sprites["pocketicon"].bitmap.clear

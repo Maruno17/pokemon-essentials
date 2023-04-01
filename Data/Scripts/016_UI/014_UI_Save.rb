@@ -15,9 +15,10 @@ def pbEmergencySave
     end
   end
   if Game.save
-    pbMessage(_INTL("\\se[]The game was saved.\\me[GUI save game] The previous save file has been backed up.\\wtnp[30]"))
+    pbMessage("\\se[]" +
+              _INTL("The game was saved.\\me[GUI save game] The previous save file has been backed up.\\wtnp[30]"))
   else
-    pbMessage(_INTL("\\se[]Save failed.\\wtnp[30]"))
+    pbMessage("\\se[]" + _INTL("Save failed.\\wtnp[30]"))
   end
   $scene = oldscene
 end
@@ -98,10 +99,10 @@ class PokemonSaveScreen
       $game_temp.begun_new_game = false
       pbSEPlay("GUI save choice")
       if Game.save
-        pbMessage(_INTL("\\se[]{1} saved the game.\\me[GUI save game]\\wtnp[30]", $player.name))
+        pbMessage("\\se[]" +_INTL("{1} saved the game.\\me[GUI save game]\\wtnp[30]", $player.name))
         ret = true
       else
-        pbMessage(_INTL("\\se[]Save failed.\\wtnp[30]"))
+        pbMessage("\\se[]" +_INTL("Save failed.\\wtnp[30]"))
         ret = false
       end
     else

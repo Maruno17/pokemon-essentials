@@ -325,10 +325,10 @@ class PokemonSummary_Scene
     end
     # Show Pokérus cured icon
     if @pokemon.pokerusStage == 2
-      imagepos.push([sprintf("Graphics/UI/Summary/icon_pokerus"), 176, 100])
+      imagepos.push(["Graphics/UI/Summary/icon_pokerus", 176, 100])
     end
     # Show shininess star
-    imagepos.push([sprintf("Graphics/UI/shiny"), 2, 134]) if @pokemon.shiny?
+    imagepos.push(["Graphics/UI/shiny", 2, 134]) if @pokemon.shiny?
     # Draw all images
     pbDrawImagePositions(overlay, imagepos)
     # Write various bits of text
@@ -640,15 +640,15 @@ class PokemonSummary_Scene
       [_INTL("HP"), 292, 82, 2, base, statshadows[:HP]],
       [sprintf("%d/%d", @pokemon.hp, @pokemon.totalhp), 462, 82, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
       [_INTL("Attack"), 248, 126, 0, base, statshadows[:ATTACK]],
-      [sprintf("%d", @pokemon.attack), 456, 126, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [@pokemon.attack.to_s, 456, 126, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
       [_INTL("Defense"), 248, 158, 0, base, statshadows[:DEFENSE]],
-      [sprintf("%d", @pokemon.defense), 456, 158, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [@pokemon.defense.to_s, 456, 158, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
       [_INTL("Sp. Atk"), 248, 190, 0, base, statshadows[:SPECIAL_ATTACK]],
-      [sprintf("%d", @pokemon.spatk), 456, 190, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [@pokemon.spatk.to_s, 456, 190, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
       [_INTL("Sp. Def"), 248, 222, 0, base, statshadows[:SPECIAL_DEFENSE]],
-      [sprintf("%d", @pokemon.spdef), 456, 222, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [@pokemon.spdef.to_s, 456, 222, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
       [_INTL("Speed"), 248, 254, 0, base, statshadows[:SPEED]],
-      [sprintf("%d", @pokemon.speed), 456, 254, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [@pokemon.speed.to_s, 456, 254, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
       [_INTL("Ability"), 224, 290, 0, base, shadow]
     ]
     # Draw ability name and description

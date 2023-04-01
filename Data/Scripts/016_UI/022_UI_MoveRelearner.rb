@@ -89,7 +89,7 @@ class MoveRelearner_Scene
     accuracy = selMoveData.display_accuracy(@pokemon)
     textpos.push([_INTL("CATEGORY"), 272, 120, 0, Color.new(248, 248, 248), Color.black])
     textpos.push([_INTL("POWER"), 272, 152, 0, Color.new(248, 248, 248), Color.black])
-    textpos.push([power <= 1 ? power == 1 ? "???" : "---" : sprintf("%d", power),
+    textpos.push([power <= 1 ? power == 1 ? "???" : "---" : power.to_s,
                   468, 152, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
     textpos.push([_INTL("ACCURACY"), 272, 184, 0, Color.new(248, 248, 248), Color.black])
     textpos.push([accuracy == 0 ? "---" : "#{accuracy}%",

@@ -380,9 +380,7 @@ module BattleAnimationEditor
     cmdEditBG = -1
     cmdNewFO = -1
     cmdEditFO = -1
-    canvas.animation.timing.each do |i|
-      commands.push(sprintf("%s", i))
-    end
+    canvas.animation.timing.each { |i| commands.push(i.to_s) }
     commands[cmdNewSound = commands.length] = _INTL("Add: Play Sound...")
     commands[cmdNewBG = commands.length] = _INTL("Add: Set Background Graphic...")
     commands[cmdEditBG = commands.length] = _INTL("Add: Edit Background Color/Location...")
@@ -413,7 +411,7 @@ module BattleAnimationEditor
          cmdwin.index != cmdEditFO
         if framewindow.changed?(1) # Set Frame
           canvas.animation.timing[cmdwin.index].frame = framewindow.value(0) - 1
-          cmdwin.commands[cmdwin.index] = sprintf("%s", canvas.animation.timing[cmdwin.index])
+          cmdwin.commands[cmdwin.index] = canvas.animation.timing[cmdwin.index].to_s
           cmdwin.refresh
           next
         end
@@ -476,7 +474,7 @@ module BattleAnimationEditor
           when 2, 4
             pbEditBG(canvas, canvas.animation.timing[cmdwin.index])
           end
-          cmdwin.commands[cmdwin.index] = sprintf("%s", canvas.animation.timing[cmdwin.index])
+          cmdwin.commands[cmdwin.index] = canvas.animation.timing[cmdwin.index].to_s
           cmdwin.refresh
         end
         if redrawcmds
@@ -486,7 +484,7 @@ module BattleAnimationEditor
           cmdwin.commands[cmdNewFO] = nil if cmdNewFO >= 0
           cmdwin.commands[cmdEditFO] = nil if cmdEditFO >= 0
           cmdwin.commands.compact!
-          cmdwin.commands.push(sprintf("%s", canvas.animation.timing[canvas.animation.timing.length - 1]))
+          cmdwin.commands.push(canvas.animation.timing[canvas.animation.timing.length - 1].to_s)
           cmdwin.commands[cmdNewSound = cmdwin.commands.length] = _INTL("Add: Play Sound...")
           cmdwin.commands[cmdNewBG = cmdwin.commands.length] = _INTL("Add: Set Background Graphic...")
           cmdwin.commands[cmdEditBG = cmdwin.commands.length] = _INTL("Add: Edit Background Color/Location...")

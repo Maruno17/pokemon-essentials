@@ -350,12 +350,12 @@ class MapScreenScene
   end
 
   def helpWindow
-    helptext = _INTL("A: Add map to canvas\r\n")
-    helptext += _INTL("DEL: Delete map from canvas\r\n")
-    helptext += _INTL("S: Go to another map\r\n")
-    helptext += _INTL("Click to select a map\r\n")
-    helptext += _INTL("Double-click: Edit map's metadata\r\n")
-    helptext += _INTL("Drag map to move it\r\n")
+    helptext = _INTL("A: Add map to canvas") + "\r\n"
+    helptext += _INTL("DEL: Delete map from canvas") + "\r\n"
+    helptext += _INTL("S: Go to another map") + "\r\n"
+    helptext += _INTL("Click to select a map") + "\r\n"
+    helptext += _INTL("Double-click: Edit map's metadata") + "\r\n"
+    helptext += _INTL("Drag map to move it") + "\r\n"
     helptext += _INTL("Arrow keys/drag canvas: Move around canvas")
     title = Window_UnformattedTextPokemon.newWithSize(
       helptext, 0, 0, Graphics.width * 8 / 10, Graphics.height, @viewport

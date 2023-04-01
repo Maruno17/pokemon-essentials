@@ -212,7 +212,7 @@ class PokemonTilesetScene
           cmds.push("#{tag.id_number}: #{tag.real_name}")
           ids.push(tag.id_number)
         end
-        val = pbMessage(_INTL("\\l[1]\\ts[]Set the terrain tag."), cmds, -1, nil, old_idx)
+        val = pbMessage("\\l[1]\\ts[]" + _INTL("Set the terrain tag."), cmds, -1, nil, old_idx)
         if val >= 0 && val != old_tag
           set_terrain_tag_for_tile_ID(selected, ids[val])
           draw_overlay

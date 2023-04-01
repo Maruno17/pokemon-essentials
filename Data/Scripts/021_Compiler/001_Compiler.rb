@@ -40,12 +40,12 @@ module FileLineData
   def self.linereport
     if @section
       if @key.nil?
-        return _INTL("File {1}, section {2}\r\n{3}\r\n\r\n", @file, @section, @value)
+        return _INTL("File {1}, section {2}\r\n{3}", @file, @section, @value) + "\r\n\r\n"
       else
-        return _INTL("File {1}, section {2}, key {3}\r\n{4}\r\n\r\n", @file, @section, @key, @value)
+        return _INTL("File {1}, section {2}, key {3}\r\n{4}", @file, @section, @key, @value) + "\r\n\r\n"
       end
     else
-      return _INTL("File {1}, line {2}\r\n{3}\r\n\r\n", @file, @lineno, @linedata)
+      return _INTL("File {1}, line {2}\r\n{3}", @file, @lineno, @linedata) + "\r\n\r\n"
     end
   end
 end

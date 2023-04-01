@@ -376,7 +376,7 @@ class PokemonPokedexInfo_Scene
     if points.length == 0
       pbDrawImagePositions(
         overlay,
-        [[sprintf("Graphics/UI/Pokedex/overlay_areanone"), 108, 188]]
+        [["Graphics/UI/Pokedex/overlay_areanone", 108, 188]]
       )
       textpos.push([_INTL("Area unknown"), Graphics.width / 2, (Graphics.height / 2) + 6, 2, base, shadow])
     end

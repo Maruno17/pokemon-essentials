@@ -376,7 +376,7 @@ class PokemonEntryScene2
     # Create bitmaps
     @bitmaps = []
     @@Characters.length.times do |i|
-      @bitmaps[i] = AnimatedBitmap.new(sprintf("Graphics/UI/Naming/overlay_tab_#{i + 1}"))
+      @bitmaps[i] = AnimatedBitmap.new(sprintf("Graphics/UI/Naming/overlay_tab_%d", i + 1))
       b = @bitmaps[i].bitmap.clone
       pbSetSystemFont(b)
       textPos = []

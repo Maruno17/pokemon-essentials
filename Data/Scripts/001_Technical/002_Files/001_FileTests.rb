@@ -317,7 +317,7 @@ end
 # NOTE: load_data checks anything added in MKXP's RTP setting, and matching
 #       mount points added through System.mount.
 def pbRgssOpen(file, mode = nil)
-  # File.open("debug.txt","ab") { |fw| fw.write([file,mode,Time.now.to_f].inspect+"\r\n") }
+  # File.open("debug.txt", "ab") { |fw| fw.write([file, mode, Time.now.to_f].inspect + "\r\n") }
   if !safeExists?("./Game.rgssad")
     if block_given?
       File.open(file, mode) { |f| yield f }

@@ -1049,7 +1049,7 @@ def pbRegionalDexEditor(dex)
       end
     when 0
       if cmd[1] >= 0   # Edit entry
-        case pbMessage(_INTL("\\ts[]Do what with this entry?"),
+        case pbMessage("\\ts[]" + _INTL("Do what with this entry?"),
                        [_INTL("Change species"), _INTL("Clear"),
                         _INTL("Insert entry"), _INTL("Delete entry"),
                         _INTL("Cancel")], 5)
@@ -1166,7 +1166,7 @@ def pbRegionalDexEditorMain
           refresh_list = true
         end
       elsif cmd[1] > 0   # Edit a Dex
-        case pbMessage(_INTL("\\ts[]Do what with this Dex?"),
+        case pbMessage("\\ts[]" + _INTL("Do what with this Dex?"),
                        [_INTL("Edit"), _INTL("Copy"), _INTL("Delete"), _INTL("Cancel")], 4)
         when 0   # Edit
           dex_lists[cmd[1] - 1] = pbRegionalDexEditor(dex_lists[cmd[1] - 1])
