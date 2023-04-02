@@ -807,34 +807,42 @@ module Compiler
     return ret
   end
 
-  def compile_pbs_files
-    text_files = get_all_pbs_files_to_compile
-    modify_pbs_file_contents_before_compiling
-    compile_town_map(*text_files[:TownMap][1])
-    compile_connections(*text_files[:Connection][1])
-    compile_types(*text_files[:Type][1])
-    compile_abilities(*text_files[:Ability][1])
-    compile_moves(*text_files[:Move][1])                       # Depends on Type
-    compile_items(*text_files[:Item][1])                       # Depends on Move
-    compile_berry_plants(*text_files[:BerryPlant][1])          # Depends on Item
-    compile_pokemon(*text_files[:Species][1])                  # Depends on Move, Item, Type, Ability
-    compile_pokemon_forms(*text_files[:Species1][1])           # Depends on Species, Move, Item, Type, Ability
-    compile_pokemon_metrics(*text_files[:SpeciesMetrics][1])   # Depends on Species
-    compile_shadow_pokemon(*text_files[:ShadowPokemon][1])     # Depends on Species
-    compile_regional_dexes(*text_files[:RegionalDex][1])       # Depends on Species
-    compile_ribbons(*text_files[:Ribbon][1])
-    compile_encounters(*text_files[:Encounter][1])             # Depends on Species
-    compile_trainer_types(*text_files[:TrainerType][1])
-    compile_trainers(*text_files[:Trainer][1])                 # Depends on Species, Item, Move
-    compile_trainer_lists                                      # Depends on TrainerType
-    compile_metadata(*text_files[:Metadata][1])                # Depends on TrainerType
-    compile_map_metadata(*text_files[:MapMetadata][1])
-    compile_dungeon_tilesets(*text_files[:DungeonTileset][1])
-    compile_dungeon_parameters(*text_files[:DungeonParameters][1])
-    compile_phone(*text_files[:PhoneMessage][1])               # Depends on TrainerType
+  def load_partial_data(compile_list)
+    GameData.constants.each do |c|
+      next if !GameData.const_get(c).is_a?(Class)
+      next if compile_list.include?(c)
+      GameData.const_get(c).load if GameData.const_get(c).const_defined?(:DATA_FILENAME)
+    end
   end
 
-  def compile_all(mustCompile)
+  def compile_pbs_files(compile_list)
+    text_files = get_all_pbs_files_to_compile
+    modify_pbs_file_contents_before_compiling
+    compile_town_map(*text_files[:TownMap][1]) if compile_list.include?(:TownMap)
+    compile_connections(*text_files[:Connection][1]) if compile_list.include?(:Connection)
+    compile_types(*text_files[:Type][1]) if compile_list.include?(:Type)
+    compile_abilities(*text_files[:Ability][1]) if compile_list.include?(:Ability)
+    compile_moves(*text_files[:Move][1]) if compile_list.include?(:Move)                                # Depends on Type
+    compile_items(*text_files[:Item][1]) if compile_list.include?(:Item)                                # Depends on Move
+    compile_berry_plants(*text_files[:BerryPlant][1]) if compile_list.include?(:BerryPlant)             # Depends on Item
+    compile_pokemon(*text_files[:Species][1]) if compile_list.include?(:Species)                        # Depends on Move, Item, Type, Ability
+    compile_pokemon_forms(*text_files[:Species1][1]) if compile_list.include?(:Species1)                # Depends on Species, Move, Item, Type, Ability
+    compile_pokemon_metrics(*text_files[:SpeciesMetrics][1]) if compile_list.include?(:SpeciesMetrics)  # Depends on Species
+    compile_shadow_pokemon(*text_files[:ShadowPokemon][1]) if compile_list.include?(:ShadowPokemon)     # Depends on Species
+    compile_regional_dexes(*text_files[:RegionalDex][1]) if compile_list.include?(:RegionalDex)         # Depends on Species
+    compile_ribbons(*text_files[:Ribbon][1]) if compile_list.include?(:Ribbon) 
+    compile_encounters(*text_files[:Encounter][1]) if compile_list.include?(:Encounter)                 # Depends on Species
+    compile_trainer_types(*text_files[:TrainerType][1]) if compile_list.include?(:TrainerType) 
+    compile_trainers(*text_files[:Trainer][1]) if compile_list.include?(:Trainer)                       # Depends on Species, Item, Move
+    compile_trainer_lists if compile_list.include?(:BattleFacility)                                     # Depends on TrainerType
+    compile_metadata(*text_files[:Metadata][1]) if compile_list.include?(:Metadata)                     # Depends on TrainerType
+    compile_map_metadata(*text_files[:MapMetadata][1]) if compile_list.include?(:MapMetadata)
+    compile_dungeon_tilesets(*text_files[:DungeonTileset][1]) if compile_list.include?(:DungeonTileset)
+    compile_dungeon_parameters(*text_files[:DungeonParameters][1]) if compile_list.include?(:DungeonParameters)
+    compile_phone(*text_files[:PhoneMessage][1]) if compile_list.include?(:PhoneMessage)                # Depends on TrainerType
+  end
+
+  def compile_all(mustCompile, compile_list)
     Console.echo_h1(_INTL("Checking game data"))
     if !mustCompile
       Console.echoln_li(_INTL("Game data was not compiled"))
@@ -842,7 +850,8 @@ module Compiler
       return
     end
     FileLineData.clear
-    compile_pbs_files
+    load_partial_data(compile_list)
+    compile_pbs_files(compile_list)
     compile_animations
     compile_trainer_events(mustCompile)
     Console.echo_li(_INTL("Saving messages..."))
@@ -856,6 +865,66 @@ module Compiler
     Console.echoln_li_done(_INTL("Successfully compiled all game data"))
   end
 
+  def get_data_file_by_pbs(base_name)
+    # Metadata has 2 dat files, but, since they are generated together, only 
+    # one is checked
+    ret = {
+      "battle_facility_lists" => "trainer_lists",
+      "pokemon" => "species",
+      "pokemon_forms" => "species",
+      "pokemon_metrics" => "species_metrics",
+    }.fetch(base_name, base_name)
+    ret+= ".dat"
+    return ret
+  end
+
+  def add_to_compile_list(new_class, compile_list)
+    compile_list.push(new_class)
+    add_dependencies(new_class, compile_list)
+  end
+
+  def add_dependencies(new_class, compile_list)
+    dependent_list = {
+      # Type is used in Move, Species and Species1, so recompile these and it dependencies
+      :Type => [:Move, :Species, :Species1],
+      :Move => [:Item, :Species, :Species1, :Trainer],
+      :Item => [:BerryPlant, :Species, :Species1, :Trainer],
+      :Ability => [:Species, :Species1],
+      :Species => [:Species1, :SpeciesMetrics, :ShadowPokemon, :RegionalDex, :Encounter, :Trainer],
+      :Species1 => [:Species], # Since they are loaded together
+      :TrainerType => [:Trainer, :BattleFacility, :Metadata, :PhoneMessage],
+    }.fetch(new_class, [])
+    for dependent in dependent_list
+      next if compile_list.include?(dependent)
+      compile_list.push(dependent)
+      add_dependencies(dependent, compile_list)
+    end
+  end
+
+  # Checks the update time and returns true if need update
+  def check_battle_facility_files_update_time(latest_data_time)
+    trlists = (load_data("Data/trainer_lists.dat") rescue nil)
+    list = []
+    latest_text_time = 0
+    return true if !trlists
+    trlists.length.times do |i|
+      tr = trlists[i]
+      list.push(tr[3])
+      list.push(tr[4])
+    end
+    list.each do |filename|
+      begin
+        File.open("PBS/"+filename) do |file|
+          latest_text_time = file.mtime.to_i
+        end
+        return true if latest_text_time >= latest_data_time
+      rescue SystemCallError
+        return true
+      end
+    end
+    return false
+  end
+
   def main
     return if !$DEBUG
     begin
@@ -867,8 +936,7 @@ module Compiler
         ["trainer_lists.dat", true]
       ]
       text_files = get_all_pbs_files_to_compile
-      latestDataTime = 0
-      latestTextTime = 0
+      compile_list = []
       mustCompile = false
       # Should recompile if new maps were imported
       mustCompile |= import_new_maps
@@ -879,51 +947,63 @@ module Compiler
         write_all
         mustCompile = true
       end
-      # Check data files for their latest modify time
-      data_files.each do |filename|   # filename = [string, boolean (whether mandatory)]
-        if safeExists?("Data/" + filename[0])
-          begin
-            File.open("Data/#{filename[0]}") do |file|
-              latestDataTime = [latestDataTime, file.mtime.to_i].max
-            end
-          rescue SystemCallError
-            mustCompile = true
-          end
-        elsif filename[1]
-          mustCompile = true
-          break
-        end
-      end
-      # Check PBS files for their latest modify time
-      text_files.each do |key, value|
-        next if !value || !value[1].is_a?(Array)
-        value[1].each do |filepath|
-          begin
-            File.open(filepath) { |file| latestTextTime = [latestTextTime, file.mtime.to_i].max }
-          rescue SystemCallError
-          end
-        end
-      end
-      # Decide to compile if a PBS file was edited more recently than any .dat files
-      mustCompile |= (latestTextTime >= latestDataTime)
       # Should recompile if holding Ctrl
       Input.update
       mustCompile = true if Input.press?(Input::CTRL)
-      # Delete old data files in preparation for recompiling
-      if mustCompile
-        data_files.each do |filename|
+      # Check every PBS/Data to list the outdated PBSs
+      text_files.each do |key, value| 
+        break if mustCompile
+        next if !value || !value[1].is_a?(Array)
+        next if compile_list.include?(key)
+        latest_data_time = 0
+        latest_text_time = 0
+        data_filename = get_data_file_by_pbs(value[0])
+        if safeExists?("Data/" + data_filename)
           begin
-            File.delete("Data/#{filename[0]}") if safeExists?("Data/#{filename[0]}")
+            File.open("Data/#{data_filename}") do |file|
+              latest_data_time = file.mtime.to_i
+            end
           rescue SystemCallError
+            mustCompile = true
+            break
+          end
+        end 
+        mandatory = data_files.find{|f| f[0]==data_filename}[1]
+        value[1].each do |filepath|
+          next if !mandatory && !safeExists?(filepath)
+          begin
+            File.open(filepath) do |file|
+              latest_text_time = file.mtime.to_i
+            end
+          rescue SystemCallError
+            mustCompile = true
+            break
+          end
+        end
+        if !mustCompile
+          if latest_text_time >= latest_data_time
+            add_to_compile_list(key, compile_list)
+          elsif key == :BattleFacility 
+            if check_battle_facility_files_update_time(latest_data_time)
+              add_to_compile_list(key, compile_list)
+            end
           end
         end
       end
+      # Compile all if mustCompile is triggered
+      compile_list.clear if mustCompile 
+      # Decide to compile if a PBS file was edited more recently than any .dat files
+      mustCompile |= !compile_list.empty?
+      compile_list = text_files.keys if compile_list.empty?
       # Recompile all data
-      compile_all(mustCompile)
+      compile_all(mustCompile, compile_list)
     rescue Exception
       e = $!
       raise e if e.class.to_s == "Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)
       pbPrintException(e)
+      # Get the current compile list, if it is a partial compile
+      data_files = compile_list.map{|k| [get_data_file_by_pbs(text_files[k][0]),nil] } if !compile_list.empty?
+      # Delete just the current compiling files
       data_files.each do |filename|
         begin
           File.delete("Data/#{filename[0]}") if safeExists?("Data/#{filename[0]}")
