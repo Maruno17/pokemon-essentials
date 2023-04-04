@@ -338,22 +338,22 @@ class PokemonSummary_Scene
                 _INTL("MOVES"),
                 _INTL("RIBBONS")][page - 1]
     textpos = [
-      [pagename, 26, 22, 0, base, shadow],
-      [@pokemon.name, 46, 68, 0, base, shadow],
-      [@pokemon.level.to_s, 46, 98, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Item"), 66, 324, 0, base, shadow]
+      [pagename, 26, 22, :left, base, shadow],
+      [@pokemon.name, 46, 68, :left, base, shadow],
+      [@pokemon.level.to_s, 46, 98, :left, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [_INTL("Item"), 66, 324, :left, base, shadow]
     ]
     # Write the held item's name
     if @pokemon.hasItem?
-      textpos.push([@pokemon.item.name, 16, 358, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+      textpos.push([@pokemon.item.name, 16, 358, :left, Color.new(64, 64, 64), Color.new(176, 176, 176)])
     else
-      textpos.push([_INTL("None"), 16, 358, 0, Color.new(192, 200, 208), Color.new(208, 216, 224)])
+      textpos.push([_INTL("None"), 16, 358, :left, Color.new(192, 200, 208), Color.new(208, 216, 224)])
     end
     # Write the gender symbol
     if @pokemon.male?
-      textpos.push([_INTL("♂"), 178, 68, 0, Color.new(24, 112, 216), Color.new(136, 168, 208)])
+      textpos.push([_INTL("♂"), 178, 68, :left, Color.new(24, 112, 216), Color.new(136, 168, 208)])
     elsif @pokemon.female?
-      textpos.push([_INTL("♀"), 178, 68, 0, Color.new(248, 56, 32), Color.new(224, 152, 144)])
+      textpos.push([_INTL("♀"), 178, 68, :left, Color.new(248, 56, 32), Color.new(224, 152, 144)])
     end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -386,12 +386,12 @@ class PokemonSummary_Scene
     end
     # Write various bits of text
     textpos = [
-      [_INTL("Dex No."), 238, 86, 0, base, shadow],
-      [_INTL("Species"), 238, 118, 0, base, shadow],
-      [@pokemon.speciesName, 435, 118, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Type"), 238, 150, 0, base, shadow],
-      [_INTL("OT"), 238, 182, 0, base, shadow],
-      [_INTL("ID No."), 238, 214, 0, base, shadow]
+      [_INTL("Dex No."), 238, 86, :left, base, shadow],
+      [_INTL("Species"), 238, 118, :left, base, shadow],
+      [@pokemon.speciesName, 435, 118, :center, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [_INTL("Type"), 238, 150, :left, base, shadow],
+      [_INTL("OT"), 238, 182, :left, base, shadow],
+      [_INTL("ID No."), 238, 214, :left, base, shadow]
     ]
     # Write the Regional/National Dex number
     dexnum = 0
@@ -410,15 +410,15 @@ class PokemonSummary_Scene
       end
     end
     if dexnum <= 0
-      textpos.push(["???", 435, 86, 2, dexNumBase, dexNumShadow])
+      textpos.push(["???", 435, 86, :center, dexNumBase, dexNumShadow])
     else
       dexnum -= 1 if dexnumshift
-      textpos.push([sprintf("%03d", dexnum), 435, 86, 2, dexNumBase, dexNumShadow])
+      textpos.push([sprintf("%03d", dexnum), 435, 86, :center, dexNumBase, dexNumShadow])
     end
     # Write Original Trainer's name and ID number
     if @pokemon.owner.name.empty?
-      textpos.push([_INTL("RENTAL"), 435, 182, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
-      textpos.push(["?????", 435, 214, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+      textpos.push([_INTL("RENTAL"), 435, 182, :center, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+      textpos.push(["?????", 435, 214, :center, Color.new(64, 64, 64), Color.new(176, 176, 176)])
     else
       ownerbase   = Color.new(64, 64, 64)
       ownershadow = Color.new(176, 176, 176)
@@ -430,13 +430,13 @@ class PokemonSummary_Scene
         ownerbase = Color.new(248, 56, 32)
         ownershadow = Color.new(224, 152, 144)
       end
-      textpos.push([@pokemon.owner.name, 435, 182, 2, ownerbase, ownershadow])
-      textpos.push([sprintf("%05d", @pokemon.owner.public_id), 435, 214, 2,
+      textpos.push([@pokemon.owner.name, 435, 182, :center, ownerbase, ownershadow])
+      textpos.push([sprintf("%05d", @pokemon.owner.public_id), 435, 214, :center,
                     Color.new(64, 64, 64), Color.new(176, 176, 176)])
     end
     # Write Exp text OR heart gauge message (if a Shadow Pokémon)
     if @pokemon.shadowPokemon?
-      textpos.push([_INTL("Heart Gauge"), 238, 246, 0, base, shadow])
+      textpos.push([_INTL("Heart Gauge"), 238, 246, :left, base, shadow])
       heartmessage = [_INTL("The door to its heart is open! Undo the final lock!"),
                       _INTL("The door to its heart is almost fully open."),
                       _INTL("The door to its heart is nearly open."),
@@ -447,10 +447,10 @@ class PokemonSummary_Scene
       drawFormattedTextEx(overlay, 234, 308, 264, memo)
     else
       endexp = @pokemon.growth_rate.minimum_exp_for_level(@pokemon.level + 1)
-      textpos.push([_INTL("Exp. Points"), 238, 246, 0, base, shadow])
-      textpos.push([@pokemon.exp.to_s_formatted, 488, 278, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)])
-      textpos.push([_INTL("To Next Lv."), 238, 310, 0, base, shadow])
-      textpos.push([(endexp - @pokemon.exp).to_s_formatted, 488, 342, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+      textpos.push([_INTL("Exp. Points"), 238, 246, :left, base, shadow])
+      textpos.push([@pokemon.exp.to_s_formatted, 488, 278, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+      textpos.push([_INTL("To Next Lv."), 238, 310, :left, base, shadow])
+      textpos.push([(endexp - @pokemon.exp).to_s_formatted, 488, 342, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)])
     end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -486,15 +486,15 @@ class PokemonSummary_Scene
     pbDrawImagePositions(overlay, imagepos)
     # Write various bits of text
     textpos = [
-      [_INTL("TRAINER MEMO"), 26, 22, 0, base, shadow],
-      [@pokemon.name, 46, 68, 0, base, shadow],
-      [_INTL("Item"), 66, 324, 0, base, shadow]
+      [_INTL("TRAINER MEMO"), 26, 22, :left, base, shadow],
+      [@pokemon.name, 46, 68, :left, base, shadow],
+      [_INTL("Item"), 66, 324, :left, base, shadow]
     ]
     # Write the held item's name
     if @pokemon.hasItem?
-      textpos.push([@pokemon.item.name, 16, 358, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+      textpos.push([@pokemon.item.name, 16, 358, :left, Color.new(64, 64, 64), Color.new(176, 176, 176)])
     else
-      textpos.push([_INTL("None"), 16, 358, 0, Color.new(192, 200, 208), Color.new(208, 216, 224)])
+      textpos.push([_INTL("None"), 16, 358, :left, Color.new(192, 200, 208), Color.new(208, 216, 224)])
     end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -637,24 +637,24 @@ class PokemonSummary_Scene
     end
     # Write various bits of text
     textpos = [
-      [_INTL("HP"), 292, 82, 2, base, statshadows[:HP]],
-      [sprintf("%d/%d", @pokemon.hp, @pokemon.totalhp), 462, 82, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Attack"), 248, 126, 0, base, statshadows[:ATTACK]],
-      [@pokemon.attack.to_s, 456, 126, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Defense"), 248, 158, 0, base, statshadows[:DEFENSE]],
-      [@pokemon.defense.to_s, 456, 158, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Sp. Atk"), 248, 190, 0, base, statshadows[:SPECIAL_ATTACK]],
-      [@pokemon.spatk.to_s, 456, 190, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Sp. Def"), 248, 222, 0, base, statshadows[:SPECIAL_DEFENSE]],
-      [@pokemon.spdef.to_s, 456, 222, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Speed"), 248, 254, 0, base, statshadows[:SPEED]],
-      [@pokemon.speed.to_s, 456, 254, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Ability"), 224, 290, 0, base, shadow]
+      [_INTL("HP"), 292, 82, :center, base, statshadows[:HP]],
+      [sprintf("%d/%d", @pokemon.hp, @pokemon.totalhp), 462, 82, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [_INTL("Attack"), 248, 126, :left, base, statshadows[:ATTACK]],
+      [@pokemon.attack.to_s, 456, 126, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [_INTL("Defense"), 248, 158, :left, base, statshadows[:DEFENSE]],
+      [@pokemon.defense.to_s, 456, 158, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [_INTL("Sp. Atk"), 248, 190, :left, base, statshadows[:SPECIAL_ATTACK]],
+      [@pokemon.spatk.to_s, 456, 190, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [_INTL("Sp. Def"), 248, 222, :left, base, statshadows[:SPECIAL_DEFENSE]],
+      [@pokemon.spdef.to_s, 456, 222, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [_INTL("Speed"), 248, 254, :left, base, statshadows[:SPEED]],
+      [@pokemon.speed.to_s, 456, 254, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [_INTL("Ability"), 224, 290, :left, base, shadow]
     ]
     # Draw ability name and description
     ability = @pokemon.ability
     if ability
-      textpos.push([ability.name, 362, 290, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+      textpos.push([ability.name, 362, 290, :left, Color.new(64, 64, 64), Color.new(176, 176, 176)])
       drawTextEx(overlay, 224, 322, 282, 2, ability.description, Color.new(64, 64, 64), Color.new(176, 176, 176))
     end
     # Draw all text
@@ -698,9 +698,9 @@ class PokemonSummary_Scene
       if move
         type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/UI/types", 248, yPos - 4, 0, type_number * 28, 64, 28])
-        textpos.push([move.name, 316, yPos, 0, moveBase, moveShadow])
+        textpos.push([move.name, 316, yPos, :left, moveBase, moveShadow])
         if move.total_pp > 0
-          textpos.push([_INTL("PP"), 342, yPos + 32, 0, moveBase, moveShadow])
+          textpos.push([_INTL("PP"), 342, yPos + 32, :left, moveBase, moveShadow])
           ppfraction = 0
           if move.pp == 0
             ppfraction = 3
@@ -709,11 +709,11 @@ class PokemonSummary_Scene
           elsif move.pp * 2 <= move.total_pp
             ppfraction = 1
           end
-          textpos.push([sprintf("%d/%d", move.pp, move.total_pp), 460, yPos + 32, 1, ppBase[ppfraction], ppShadow[ppfraction]])
+          textpos.push([sprintf("%d/%d", move.pp, move.total_pp), 460, yPos + 32, :right, ppBase[ppfraction], ppShadow[ppfraction]])
         end
       else
-        textpos.push(["-", 316, yPos, 0, moveBase, moveShadow])
-        textpos.push(["--", 442, yPos + 32, 1, moveBase, moveShadow])
+        textpos.push(["-", 316, yPos, :left, moveBase, moveShadow])
+        textpos.push(["--", 442, yPos + 32, :right, moveBase, moveShadow])
       end
       yPos += 64
     end
@@ -745,10 +745,10 @@ class PokemonSummary_Scene
     end
     # Write various bits of text
     textpos = [
-      [_INTL("MOVES"), 26, 22, 0, base, shadow],
-      [_INTL("CATEGORY"), 20, 128, 0, base, shadow],
-      [_INTL("POWER"), 20, 160, 0, base, shadow],
-      [_INTL("ACCURACY"), 20, 192, 0, base, shadow]
+      [_INTL("MOVES"), 26, 22, :left, base, shadow],
+      [_INTL("CATEGORY"), 20, 128, :left, base, shadow],
+      [_INTL("POWER"), 20, 160, :left, base, shadow],
+      [_INTL("ACCURACY"), 20, 192, :left, base, shadow]
     ]
     imagepos = []
     # Write move names, types and PP amounts for each known move
@@ -764,9 +764,9 @@ class PokemonSummary_Scene
       if move
         type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/UI/types", 248, yPos - 4, 0, type_number * 28, 64, 28])
-        textpos.push([move.name, 316, yPos, 0, moveBase, moveShadow])
+        textpos.push([move.name, 316, yPos, :left, moveBase, moveShadow])
         if move.total_pp > 0
-          textpos.push([_INTL("PP"), 342, yPos + 32, 0, moveBase, moveShadow])
+          textpos.push([_INTL("PP"), 342, yPos + 32, :left, moveBase, moveShadow])
           ppfraction = 0
           if move.pp == 0
             ppfraction = 3
@@ -775,11 +775,12 @@ class PokemonSummary_Scene
           elsif move.pp * 2 <= move.total_pp
             ppfraction = 1
           end
-          textpos.push([sprintf("%d/%d", move.pp, move.total_pp), 460, yPos + 32, 1, ppBase[ppfraction], ppShadow[ppfraction]])
+          textpos.push([sprintf("%d/%d", move.pp, move.total_pp), 460, yPos + 32, :right,
+                        ppBase[ppfraction], ppShadow[ppfraction]])
         end
       else
-        textpos.push(["-", 316, yPos, 0, moveBase, moveShadow])
-        textpos.push(["--", 442, yPos + 32, 1, moveBase, moveShadow])
+        textpos.push(["-", 316, yPos, :left, moveBase, moveShadow])
+        textpos.push(["--", 442, yPos + 32, :right, moveBase, moveShadow])
       end
       yPos += 64
     end
@@ -809,14 +810,14 @@ class PokemonSummary_Scene
     textpos = []
     # Write power and accuracy values for selected move
     case selected_move.display_damage(@pokemon)
-    when 0 then textpos.push(["---", 216, 160, 1, base, shadow])   # Status move
-    when 1 then textpos.push(["???", 216, 160, 1, base, shadow])   # Variable power move
-    else        textpos.push([selected_move.display_damage(@pokemon).to_s, 216, 160, 1, base, shadow])
+    when 0 then textpos.push(["---", 216, 160, :right, base, shadow])   # Status move
+    when 1 then textpos.push(["???", 216, 160, :right, base, shadow])   # Variable power move
+    else        textpos.push([selected_move.display_damage(@pokemon).to_s, 216, 160, :right, base, shadow])
     end
     if selected_move.display_accuracy(@pokemon) == 0
-      textpos.push(["---", 216, 192, 1, base, shadow])
+      textpos.push(["---", 216, 192, :right, base, shadow])
     else
-      textpos.push(["#{selected_move.display_accuracy(@pokemon)}%", 216 + overlay.text_size("%").width, 192, 1, base, shadow])
+      textpos.push(["#{selected_move.display_accuracy(@pokemon)}%", 216 + overlay.text_size("%").width, 192, :right, base, shadow])
     end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -833,8 +834,8 @@ class PokemonSummary_Scene
     @sprites["downarrow"].visible = false
     # Write various bits of text
     textpos = [
-      [_INTL("No. of Ribbons:"), 234, 338, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [@pokemon.numRibbons.to_s, 450, 338, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)]
+      [_INTL("No. of Ribbons:"), 234, 338, :left, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+      [@pokemon.numRibbons.to_s, 450, 338, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -873,7 +874,7 @@ class PokemonSummary_Scene
     pbDrawImagePositions(overlay, imagepos)
     # Draw name of selected ribbon
     textpos = [
-      [name, 18, 292, 0, nameBase, nameShadow]
+      [name, 18, 292, :left, nameBase, nameShadow]
     ]
     pbDrawTextPositions(overlay, textpos)
     # Draw selected ribbon's description
@@ -1082,9 +1083,9 @@ class PokemonSummary_Scene
                                                 @markingbitmap.bitmap, markrect)
         end
         textpos = [
-          [_INTL("Mark {1}", pokemon.name), 366, 102, 2, base, shadow],
-          [_INTL("OK"), 366, 254, 2, base, shadow],
-          [_INTL("Cancel"), 366, 304, 2, base, shadow]
+          [_INTL("Mark {1}", pokemon.name), 366, 102, :center, base, shadow],
+          [_INTL("OK"), 366, 254, :center, base, shadow],
+          [_INTL("Cancel"), 366, 304, :center, base, shadow]
         ]
         pbDrawTextPositions(@sprites["markingoverlay"].bitmap, textpos)
         redraw = false

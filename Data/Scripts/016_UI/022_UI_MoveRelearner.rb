@@ -59,7 +59,7 @@ class MoveRelearner_Scene
       overlay.blt(type_x, 70, @typebitmap.bitmap, type_rect)
     end
     textpos = [
-      [_INTL("Teach which move?"), 16, 14, 0, Color.new(88, 88, 80), Color.new(168, 184, 184)]
+      [_INTL("Teach which move?"), 16, 14, :left, Color.new(88, 88, 80), Color.new(168, 184, 184)]
     ]
     imagepos = []
     yPos = 88
@@ -69,13 +69,13 @@ class MoveRelearner_Scene
         moveData = GameData::Move.get(moveobject)
         type_number = GameData::Type.get(moveData.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/UI/types", 12, yPos - 4, 0, type_number * 28, 64, 28])
-        textpos.push([moveData.name, 80, yPos, 0, Color.new(248, 248, 248), Color.black])
-        textpos.push([_INTL("PP"), 112, yPos + 32, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+        textpos.push([moveData.name, 80, yPos, :left, Color.new(248, 248, 248), Color.black])
+        textpos.push([_INTL("PP"), 112, yPos + 32, :left, Color.new(64, 64, 64), Color.new(176, 176, 176)])
         if moveData.total_pp > 0
-          textpos.push([_INTL("{1}/{1}", moveData.total_pp), 230, yPos + 32, 1,
+          textpos.push([_INTL("{1}/{1}", moveData.total_pp), 230, yPos + 32, :right,
                         Color.new(64, 64, 64), Color.new(176, 176, 176)])
         else
-          textpos.push(["--", 230, yPos + 32, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+          textpos.push(["--", 230, yPos + 32, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)])
         end
       end
       yPos += 64
@@ -87,13 +87,13 @@ class MoveRelearner_Scene
     power = selMoveData.display_damage(@pokemon)
     category = selMoveData.display_category(@pokemon)
     accuracy = selMoveData.display_accuracy(@pokemon)
-    textpos.push([_INTL("CATEGORY"), 272, 120, 0, Color.new(248, 248, 248), Color.black])
-    textpos.push([_INTL("POWER"), 272, 152, 0, Color.new(248, 248, 248), Color.black])
-    textpos.push([power <= 1 ? power == 1 ? "???" : "---" : power.to_s,
-                  468, 152, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
-    textpos.push([_INTL("ACCURACY"), 272, 184, 0, Color.new(248, 248, 248), Color.black])
-    textpos.push([accuracy == 0 ? "---" : "#{accuracy}%",
-                  468, 184, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
+    textpos.push([_INTL("CATEGORY"), 272, 120, :left, Color.new(248, 248, 248), Color.black])
+    textpos.push([_INTL("POWER"), 272, 152, :left, Color.new(248, 248, 248), Color.black])
+    textpos.push([power <= 1 ? power == 1 ? "???" : "---" : power.to_s, 468, 152, :center,
+                  Color.new(64, 64, 64), Color.new(176, 176, 176)])
+    textpos.push([_INTL("ACCURACY"), 272, 184, :left, Color.new(248, 248, 248), Color.black])
+    textpos.push([accuracy == 0 ? "---" : "#{accuracy}%", 468, 184, :center,
+                  Color.new(64, 64, 64), Color.new(176, 176, 176)])
     pbDrawTextPositions(overlay, textpos)
     imagepos.push(["Graphics/UI/category", 436, 116, 0, category * 28, 64, 28])
     if @sprites["commands"].index < @moves.length - 1

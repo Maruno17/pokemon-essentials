@@ -529,7 +529,7 @@ class PokemonBoxPartySprite < Sprite
     @contents.blt(0, 0, @boxbitmap.bitmap, Rect.new(0, 0, 172, 352))
     pbDrawTextPositions(
       self.bitmap,
-      [[_INTL("Back"), 86, 248, 2, Color.new(248, 248, 248), Color.new(80, 80, 80), 1]]
+      [[_INTL("Back"), 86, 248, :center, Color.new(248, 248, 248), Color.new(80, 80, 80), :outline]]
     )
     xvalues = []   # [18, 90, 18, 90, 18, 90]
     yvalues = []   # [2, 18, 66, 82, 130, 146]
@@ -1322,8 +1322,8 @@ class PokemonStorageScene
                                                 @markingbitmap.bitmap, markrect)
         end
         textpos = [
-          [_INTL("OK"), 402, 216, 2, base, shadow, 1],
-          [_INTL("Cancel"), 402, 280, 2, base, shadow, 1]
+          [_INTL("OK"), 402, 216, :center, base, shadow, :outline],
+          [_INTL("Cancel"), 402, 280, :center, base, shadow, :outline]
         ]
         pbDrawTextPositions(@sprites["markingoverlay"].bitmap, textpos)
         pbMarkingSetArrow(@sprites["arrow"], index)
@@ -1396,8 +1396,8 @@ class PokemonStorageScene
     buttonshadow = Color.new(80, 80, 80)
     pbDrawTextPositions(
       overlay,
-      [[_INTL("Party: {1}", (@storage.party.length rescue 0)), 270, 334, 2, buttonbase, buttonshadow, 1],
-       [_INTL("Exit"), 446, 334, 2, buttonbase, buttonshadow, 1]]
+      [[_INTL("Party: {1}", (@storage.party.length rescue 0)), 270, 334, :center, buttonbase, buttonshadow, :outline],
+       [_INTL("Exit"), 446, 334, :center, buttonbase, buttonshadow, :outline]]
     )
     pokemon = nil
     if @screen.pbHeldPokemon
@@ -1416,26 +1416,26 @@ class PokemonStorageScene
     nonshadow = Color.new(224, 224, 224)
     pokename = pokemon.name
     textstrings = [
-      [pokename, 10, 14, false, base, shadow]
+      [pokename, 10, 14, :left, base, shadow]
     ]
     if !pokemon.egg?
       imagepos = []
       if pokemon.male?
-        textstrings.push([_INTL("♂"), 148, 14, false, Color.new(24, 112, 216), Color.new(136, 168, 208)])
+        textstrings.push([_INTL("♂"), 148, 14, :left, Color.new(24, 112, 216), Color.new(136, 168, 208)])
       elsif pokemon.female?
-        textstrings.push([_INTL("♀"), 148, 14, false, Color.new(248, 56, 32), Color.new(224, 152, 144)])
+        textstrings.push([_INTL("♀"), 148, 14, :left, Color.new(248, 56, 32), Color.new(224, 152, 144)])
       end
       imagepos.push(["Graphics/UI/Storage/overlay_lv", 6, 246])
-      textstrings.push([pokemon.level.to_s, 28, 240, false, base, shadow])
+      textstrings.push([pokemon.level.to_s, 28, 240, :left, base, shadow])
       if pokemon.ability
-        textstrings.push([pokemon.ability.name, 86, 312, 2, base, shadow])
+        textstrings.push([pokemon.ability.name, 86, 312, :center, base, shadow])
       else
-        textstrings.push([_INTL("No ability"), 86, 312, 2, nonbase, nonshadow])
+        textstrings.push([_INTL("No ability"), 86, 312, :center, nonbase, nonshadow])
       end
       if pokemon.item
-        textstrings.push([pokemon.item.name, 86, 348, 2, base, shadow])
+        textstrings.push([pokemon.item.name, 86, 348, :center, base, shadow])
       else
-        textstrings.push([_INTL("No item"), 86, 348, 2, nonbase, nonshadow])
+        textstrings.push([_INTL("No item"), 86, 348, :center, nonbase, nonshadow])
       end
       imagepos.push(["Graphics/UI/shiny", 156, 198]) if pokemon.shiny?
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/UI/types"))

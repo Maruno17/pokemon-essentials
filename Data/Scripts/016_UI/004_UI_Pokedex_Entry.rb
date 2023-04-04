@@ -221,18 +221,18 @@ class PokemonPokedexInfo_Scene
     end
     textpos = [
       [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
-       246, 48, 0, Color.new(248, 248, 248), Color.black]
+       246, 48, :left, Color.new(248, 248, 248), Color.black]
     ]
     if @show_battled_count
-      textpos.push([_INTL("Number Battled"), 314, 164, 0, base, shadow])
-      textpos.push([$player.pokedex.battled_count(@species).to_s, 452, 196, 1, base, shadow])
+      textpos.push([_INTL("Number Battled"), 314, 164, :left, base, shadow])
+      textpos.push([$player.pokedex.battled_count(@species).to_s, 452, 196, :right, base, shadow])
     else
-      textpos.push([_INTL("Height"), 314, 164, 0, base, shadow])
-      textpos.push([_INTL("Weight"), 314, 196, 0, base, shadow])
+      textpos.push([_INTL("Height"), 314, 164, :left, base, shadow])
+      textpos.push([_INTL("Weight"), 314, 196, :left, base, shadow])
     end
     if $player.owned?(@species)
       # Write the category
-      textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 80, 0, base, shadow])
+      textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 80, :left, base, shadow])
       # Write the height and weight
       if !@show_battled_count
         height = species_data.height
@@ -240,11 +240,11 @@ class PokemonPokedexInfo_Scene
         if System.user_language[3..4] == "US"   # If the user is in the United States
           inches = (height / 0.254).round
           pounds = (weight / 0.45359).round
-          textpos.push([_ISPRINTF("{1:d}'{2:02d}\"", inches / 12, inches % 12), 460, 164, 1, base, shadow])
-          textpos.push([_ISPRINTF("{1:4.1f} lbs.", pounds / 10.0), 494, 196, 1, base, shadow])
+          textpos.push([_ISPRINTF("{1:d}'{2:02d}\"", inches / 12, inches % 12), 460, 164, :right, base, shadow])
+          textpos.push([_ISPRINTF("{1:4.1f} lbs.", pounds / 10.0), 494, 196, :right, base, shadow])
         else
-          textpos.push([_ISPRINTF("{1:.1f} m", height / 10.0), 470, 164, 1, base, shadow])
-          textpos.push([_ISPRINTF("{1:.1f} kg", weight / 10.0), 482, 196, 1, base, shadow])
+          textpos.push([_ISPRINTF("{1:.1f} m", height / 10.0), 470, 164, :right, base, shadow])
+          textpos.push([_ISPRINTF("{1:.1f} kg", weight / 10.0), 482, 196, :right, base, shadow])
         end
       end
       # Draw the Pokédex entry text
@@ -267,15 +267,15 @@ class PokemonPokedexInfo_Scene
       end
     else
       # Write the category
-      textpos.push([_INTL("????? Pokémon"), 246, 80, 0, base, shadow])
+      textpos.push([_INTL("????? Pokémon"), 246, 80, :left, base, shadow])
       # Write the height and weight
       if !@show_battled_count
         if System.user_language[3..4] == "US"   # If the user is in the United States
-          textpos.push([_INTL("???'??\""), 460, 164, 1, base, shadow])
-          textpos.push([_INTL("????.? lbs."), 494, 196, 1, base, shadow])
+          textpos.push([_INTL("???'??\""), 460, 164, :right, base, shadow])
+          textpos.push([_INTL("????.? lbs."), 494, 196, :right, base, shadow])
         else
-          textpos.push([_INTL("????.? m"), 470, 164, 1, base, shadow])
-          textpos.push([_INTL("????.? kg"), 482, 196, 1, base, shadow])
+          textpos.push([_INTL("????.? m"), 470, 164, :right, base, shadow])
+          textpos.push([_INTL("????.? kg"), 482, 196, :right, base, shadow])
         end
       end
     end
@@ -378,11 +378,11 @@ class PokemonPokedexInfo_Scene
         overlay,
         [["Graphics/UI/Pokedex/overlay_areanone", 108, 188]]
       )
-      textpos.push([_INTL("Area unknown"), Graphics.width / 2, (Graphics.height / 2) + 6, 2, base, shadow])
+      textpos.push([_INTL("Area unknown"), Graphics.width / 2, (Graphics.height / 2) + 6, :center, base, shadow])
     end
-    textpos.push([@mapdata.name, 414, 50, 2, base, shadow])
+    textpos.push([@mapdata.name, 414, 50, :center, base, shadow])
     textpos.push([_INTL("{1}'s area", GameData::Species.get(@species).name),
-                  Graphics.width / 2, 358, 2, base, shadow])
+                  Graphics.width / 2, 358, :center, base, shadow])
     pbDrawTextPositions(overlay, textpos)
   end
 
@@ -400,8 +400,8 @@ class PokemonPokedexInfo_Scene
       end
     end
     textpos = [
-      [GameData::Species.get(@species).name, Graphics.width / 2, Graphics.height - 82, 2, base, shadow],
-      [formname, Graphics.width / 2, Graphics.height - 50, 2, base, shadow]
+      [GameData::Species.get(@species).name, Graphics.width / 2, Graphics.height - 82, :center, base, shadow],
+      [formname, Graphics.width / 2, Graphics.height - 50, :center, base, shadow]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)

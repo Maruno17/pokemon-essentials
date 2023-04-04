@@ -1,5 +1,5 @@
 #===============================================================================
-# Text colours
+# Text colors
 #===============================================================================
 # TODO: Unused.
 def ctag(color)
@@ -1033,6 +1033,16 @@ def pbDrawShadow(bitmap, x, y, width, height, string)
   pbDrawShadowText(bitmap, x, y, width, height, string, nil, bitmap.font.color)
 end
 
+def pbDrawPlainText(bitmap, x, y, width, height, string, baseColor, align = 0)
+  return if !bitmap || !string
+  width = (width < 0) ? bitmap.text_size(string).width + 1 : width
+  height = (height < 0) ? bitmap.text_size(string).height + 1 : height
+  if baseColor && baseColor.alpha > 0
+    bitmap.font.color = baseColor
+    bitmap.draw_text(x, y, width, height, string, align)
+  end
+end
+
 def pbDrawShadowText(bitmap, x, y, width, height, string, baseColor, shadowColor = nil, align = 0)
   return if !bitmap || !string
   width = (width < 0) ? bitmap.text_size(string).width + 1 : width
@@ -1075,24 +1085,29 @@ end
 #  0 - Text to draw
 #  1 - X coordinate
 #  2 - Y coordinate
-#  3 - If true or 1, the text is right aligned. If 2, the text is centered.
-#      Otherwise, the text is left aligned.
+#  3 - Text alignment. Is one of :left (or false or 0), :right (or true or 1) or
+#      :center (or 2). If anything else, the text is left aligned.
 #  4 - Base color
-#  5 - Shadow color
-#  6 - If true or 1, the text has an outline. Otherwise, the text has a shadow.
+#  5 - Shadow color. If nil, there is no shadow.
+#  6 - If :outline (or true or 1), the text has a full outline. If :none (or the
+#      shadow color is nil), there is no shadow. Otherwise, the text has a shadow.
 def pbDrawTextPositions(bitmap, textpos)
   textpos.each do |i|
     textsize = bitmap.text_size(i[0])
     x = i[1]
     y = i[2]
     case i[3]
-    when true, 1   # right align
+    when :right, true, 1   # right align
       x -= textsize.width
-    when 2 # centered
+    when :center, 2   # centered
       x -= (textsize.width / 2)
     end
-    if i[6] == true || i[6] == 1   # outline text
+    i[6] = :none if !i[5]   # No shadow color given, draw plain text
+    case i[6]
+    when :outline, true, 1   # outline text
       pbDrawOutlineText(bitmap, x, y, textsize.width, textsize.height, i[0], i[4], i[5])
+    when :none
+      pbDrawPlainText(bitmap, x, y, textsize.width, textsize.height, i[0], i[4])
     else
       pbDrawShadowText(bitmap, x, y, textsize.width, textsize.height, i[0], i[4], i[5])
     end

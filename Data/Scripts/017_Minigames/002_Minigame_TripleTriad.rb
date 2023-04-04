@@ -200,8 +200,8 @@ class TriadScene
     pbSetSystemFont(@sprites["overlay"].bitmap)
     pbDrawTextPositions(
       @sprites["overlay"].bitmap,
-      [[@battle.opponentName, 52, 10, 2, Color.new(248, 248, 248), Color.new(96, 96, 96)],
-       [@battle.playerName, Graphics.width - 52, 10, 2, Color.new(248, 248, 248), Color.new(96, 96, 96)]]
+      [[@battle.opponentName, 52, 10, :center, Color.new(248, 248, 248), Color.new(96, 96, 96)],
+       [@battle.playerName, Graphics.width - 52, 10, :center, Color.new(248, 248, 248), Color.new(96, 96, 96)]]
     )
     @sprites["score"] = Sprite.new(@viewport)
     @sprites["score"].bitmap = BitmapWrapper.new(Graphics.width, Graphics.height)
@@ -578,7 +578,7 @@ class TriadScene
     end
     pbDrawTextPositions(
       bitmap,
-      [[_INTL("{1}-{2}", oppscore, playerscore), Graphics.width / 2, 10, 2, Color.new(248, 248, 248), Color.new(96, 96, 96)]]
+      [[_INTL("{1}-{2}", oppscore, playerscore), Graphics.width / 2, 10, :center, Color.new(248, 248, 248), Color.new(96, 96, 96)]]
     )
   end
 

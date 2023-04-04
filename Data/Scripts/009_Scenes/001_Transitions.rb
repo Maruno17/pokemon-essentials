@@ -1302,7 +1302,7 @@ module Transitions
       @text_sprite.visible = false
       pbSetSystemFont(@text_sprite.bitmap)
       pbDrawTextPositions(@text_sprite.bitmap,
-                          [[$game_temp.transition_animation_data[1], 244, 86, 0,
+                          [[$game_temp.transition_animation_data[1], 244, 86, :left,
                             Color.new(248, 248, 248), Color.new(72, 80, 80)]])
       # Foreground black
       @black_sprite = new_sprite(0, 0, @black_bitmap)
@@ -1497,7 +1497,7 @@ module Transitions
       @text_sprite.z = 8
       pbSetSystemFont(@text_sprite.bitmap)
       pbDrawTextPositions(@text_sprite.bitmap,
-                          [[$game_temp.transition_animation_data[1], 160, 86, 0,
+                          [[$game_temp.transition_animation_data[1], 160, 86, :left,
                             Color.new(248, 248, 248), Color.new(72, 80, 80)]])
       # VS logo
       @vs_main_sprite = new_sprite(Graphics.width / 2, Graphics.height / 2, @vs_1_bitmap,
@@ -1804,7 +1804,7 @@ module Transitions
       @text_sprite.visible = false
       pbSetSystemFont(@text_sprite.bitmap)
       pbDrawTextPositions(@text_sprite.bitmap,
-                          [[$game_temp.transition_animation_data[1], 272, 8, 0,
+                          [[$game_temp.transition_animation_data[1], 272, 8, :left,
                             Color.new(248, 248, 248), Color.new(72, 80, 80)]])
       # Foreground black
       @black_sprite = new_sprite(0, 0, @black_bitmap)
