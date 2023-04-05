@@ -967,9 +967,9 @@ def pbPokemonEditor
               if param_type.nil?
                 evo[2] = nil
               elsif param_type == Integer
-                evo[2] = Compiler.csvPosInt!(evo[2])
+                evo[2] = Compiler.cast_csv_value(evo[2], "u")
               elsif param_type != String
-                evo[2] = Compiler.csvEnumField!(evo[2], param_type, "Evolutions", species_hash[:id])
+                evo[2] = Compiler.cast_csv_value(evo[2], "e", param_type)
               end
             end
             # Add species' data to records

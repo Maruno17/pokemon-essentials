@@ -31,7 +31,7 @@ module Compiler
           schema.each_key do |key|
             FileLineData.setSection(section_name, key, contents[key])   # For error reporting
             if key == "SectionName"
-              data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
+              data_hash[schema[key][0]] = get_csv_record(section_name, schema[key])
               next
             end
             # Skip empty properties
@@ -39,14 +39,14 @@ module Compiler
             # Compile value for key
             if schema[key][1][0] == "^"
               contents[key].each do |val|
-                value = pbGetCsvRecord(val, key, schema[key])
+                value = get_csv_record(val, schema[key])
                 value = nil if value.is_a?(Array) && value.empty?
                 data_hash[schema[key][0]] ||= []
                 data_hash[schema[key][0]].push(value)
               end
               data_hash[schema[key][0]].compact!
             else
-              value = pbGetCsvRecord(contents[key], key, schema[key])
+              value = get_csv_record(contents[key], schema[key])
               value = nil if value.is_a?(Array) && value.empty?
               data_hash[schema[key][0]] = value
             end
@@ -102,28 +102,22 @@ module Compiler
   # Compile map connections
   #=============================================================================
   def compile_connections(*paths)
+    hashenum = {
+      "N" => "N", "North" => "N",
+      "E" => "E", "East"  => "E",
+      "S" => "S", "South" => "S",
+      "W" => "W", "West"  => "W"
+    }
+    schema = [nil, "iyiiyi", nil, hashenum, nil, nil, hashenum]
     records = []
     paths.each do |path|
       compile_pbs_file_message_start(path)
       pbCompilerEachPreppedLine(path) do |line, lineno|
-        hashenum = {
-          "N" => "N", "North" => "N",
-          "E" => "E", "East"  => "E",
-          "S" => "S", "South" => "S",
-          "W" => "W", "West"  => "W"
-        }
-        record = []
-        thisline = line.dup
-        record.push(csvInt!(thisline, lineno))
-        record.push(csvEnumFieldOrInt!(thisline, hashenum, "", sprintf("(line %d)", lineno)))
-        record.push(csvInt!(thisline, lineno))
-        record.push(csvInt!(thisline, lineno))
-        record.push(csvEnumFieldOrInt!(thisline, hashenum, "", sprintf("(line %d)", lineno)))
-        record.push(csvInt!(thisline, lineno))
+        FileLineData.setLine(line, lineno)
+        record = get_csv_record(line, schema)
         if !pbRgssExists?(sprintf("Data/Map%03d.rxdata", record[0]))
           print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}", record[0], FileLineData.linereport)
-        end
-        if !pbRgssExists?(sprintf("Data/Map%03d.rxdata", record[3]))
+        elsif !pbRgssExists?(sprintf("Data/Map%03d.rxdata", record[3]))
           print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}", record[3], FileLineData.linereport)
         end
         case record[1]
@@ -333,21 +327,21 @@ module Compiler
       FileLineData.setSection(species.id.to_s, "Offspring", nil)   # For error reporting
       offspring = species.offspring
       offspring.each_with_index do |sp, i|
-        offspring[i] = csvEnumField!(sp, :Species, "Offspring", species.id)
+        offspring[i] = cast_csv_value(sp, "e", :Species)
       end
     end
     # Enumerate all evolution species and parameters (this couldn't be done earlier)
     GameData::Species.each do |species|
       FileLineData.setSection(species.id.to_s, "Evolutions", nil)   # For error reporting
       species.evolutions.each do |evo|
-        evo[0] = csvEnumField!(evo[0], :Species, "Evolutions", species.id)
+        evo[0] = cast_csv_value(evo[0], "e", :Species)
         param_type = GameData::Evolution.get(evo[1]).parameter
         if param_type.nil?
           evo[2] = nil
         elsif param_type == Integer
-          evo[2] = csvPosInt!(evo[2])
+          evo[2] = cast_csv_value(evo[2], "u")
         elsif param_type != String
-          evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", species.id)
+          evo[2] = cast_csv_value(evo[2], "e", param_type)
         end
       end
     end
@@ -407,7 +401,7 @@ module Compiler
           schema.each_key do |key|
             FileLineData.setSection(section_name, key, contents[key])   # For error reporting
             if key == "SectionName"
-              data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
+              data_hash[schema[key][0]] = get_csv_record(section_name, schema[key])
               next
             end
             # Skip empty properties
@@ -415,14 +409,14 @@ module Compiler
             # Compile value for key
             if schema[key][1][0] == "^"
               contents[key].each do |val|
-                value = pbGetCsvRecord(val, key, schema[key])
+                value = get_csv_record(val, schema[key])
                 value = nil if value.is_a?(Array) && value.empty?
                 data_hash[schema[key][0]] ||= []
                 data_hash[schema[key][0]].push(value)
               end
               data_hash[schema[key][0]].compact!
             else
-              value = pbGetCsvRecord(contents[key], key, schema[key])
+              value = get_csv_record(contents[key], schema[key])
               value = nil if value.is_a?(Array) && value.empty?
               data_hash[schema[key][0]] = value
             end
@@ -655,7 +649,7 @@ module Compiler
             raise _INTL("Expected a species entry line for encounter type {1} for map '{2}', got \"{3}\" instead.\r\n{4}",
                         GameData::EncounterType.get(current_type).real_name, encounter_hash[:map], line, FileLineData.linereport)
           end
-          values = pbGetCsvRecord(line, line_no, [0, "vevV", nil, :Species])
+          values = get_csv_record(line, [nil, "vevV", nil, :Species])
           values[3] = values[2] if !values[3]
           if values[2] > max_level
             raise _INTL("Level number {1} is not valid (max. {2}).\r\n{3}", values[2], max_level, FileLineData.linereport)
@@ -800,7 +794,7 @@ module Compiler
           data_hash = {
             :pbs_file_suffix => file_suffix
           }
-          data_hash[schema["SectionName"][0]] = pbGetCsvRecord(section_name.clone, line_no, schema["SectionName"])
+          data_hash[schema["SectionName"][0]] = get_csv_record(section_name.clone, schema["SectionName"])
           data_hash[schema["Pokemon"][0]] = []
           current_pkmn = nil
         elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
@@ -810,7 +804,7 @@ module Compiler
           end
           key = $~[1]
           if schema[key]   # Property of the trainer
-            property_value = pbGetCsvRecord($~[2], line_no, schema[key])
+            property_value = get_csv_record($~[2], schema[key])
             if key == "Pokemon"
               current_pkmn = {
                 :species => property_value[0],
@@ -824,7 +818,7 @@ module Compiler
             if !current_pkmn
               raise _INTL("Pokémon hasn't been defined yet!\r\n{1}", FileLineData.linereport)
             end
-            current_pkmn[sub_schema[key][0]] = pbGetCsvRecord($~[2], line_no, sub_schema[key])
+            current_pkmn[sub_schema[key][0]] = get_csv_record($~[2], sub_schema[key])
           end
         end
       end
@@ -967,7 +961,7 @@ module Compiler
           schema = btTrainersRequiredTypes[key]
           next if key == "Challenges" && name == "DefaultTrainerList"
           next if !schema
-          record = pbGetCsvRecord(section[key], 0, schema)
+          record = get_csv_record(section[key], schema)
           rsection[schema[0]] = record
         end
         if !rsection[0]
@@ -1028,7 +1022,7 @@ module Compiler
             FileLineData.setSection(name, key, section[key])
             schema = requiredtypes[key]
             next if !schema
-            record = pbGetCsvRecord(section[key], 0, schema)
+            record = get_csv_record(section[key], schema)
             rsection[schema[0]] = record
           end
           trainernames.push(rsection[1])
@@ -1079,7 +1073,7 @@ module Compiler
           schema.each_key do |key|
             FileLineData.setSection(section_name, key, contents[key])   # For error reporting
             if key == "SectionName"
-              data_hash[schema[key][0]] = pbGetCsvRecord(section_name, key, schema[key])
+              data_hash[schema[key][0]] = get_csv_record(section_name, schema[key])
               next
             end
             # Skip empty properties
@@ -1087,14 +1081,14 @@ module Compiler
             # Compile value for key
             if schema[key][1][0] == "^"
               contents[key].each do |val|
-                value = pbGetCsvRecord(val, key, schema[key])
+                value = get_csv_record(val, schema[key])
                 value = nil if value.is_a?(Array) && value.empty?
                 data_hash[schema[key][0]] ||= []
                 data_hash[schema[key][0]].push(value)
               end
               data_hash[schema[key][0]].compact!
             else
-              value = pbGetCsvRecord(contents[key], key, schema[key])
+              value = get_csv_record(contents[key], schema[key])
               value = nil if value.is_a?(Array) && value.empty?
               data_hash[schema[key][0]] = value
             end
@@ -1230,7 +1224,7 @@ module Compiler
       hash[:id] = "default"
       hash[:trainer_type] = hash[:id]
     else
-      line_data = pbGetCsvRecord(hash[:id], -1, [0, "esU", :TrainerType])
+      line_data = get_csv_record(hash[:id], [nil, "esU", :TrainerType])
       hash[:trainer_type] = line_data[0]
       hash[:real_name] = line_data[1]
       hash[:version] = line_data[2] || 0
