@@ -31,8 +31,8 @@ module Compiler
         # Write each element in turn
         game_data.each do |element|
           next if element.pbs_file_suffix != path[1]
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           f.write("\#-------------------------------\r\n")
           if schema["SectionName"]
@@ -189,8 +189,8 @@ module Compiler
         # Write each element in turn
         GameData::Species.each_species do |element|
           next if element.pbs_file_suffix != path[1]
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           f.write("\#-------------------------------\r\n")
           if schema["SectionName"]
@@ -249,8 +249,8 @@ module Compiler
         GameData::Species.each do |element|
           next if element.form == 0
           next if element.pbs_file_suffix != path[1]
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           f.write("\#-------------------------------\r\n")
           if schema["SectionName"]
@@ -317,8 +317,8 @@ module Compiler
                     element.shadow_x == base_element.shadow_x &&
                     element.shadow_size == base_element.shadow_size
           end
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           f.write("\#-------------------------------\r\n")
           if schema["SectionName"]
@@ -410,8 +410,8 @@ module Compiler
         add_PBS_header_to_file(f)
         GameData::Encounter.each do |element|
           next if element.pbs_file_suffix != path[1]
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           f.write("\#-------------------------------\r\n")
           map_name = (map_infos[element.map]) ? " # #{map_infos[element.map].name}" : ""
@@ -463,8 +463,8 @@ module Compiler
         # Write each element in turn
         GameData::Trainer.each do |element|
           next if element.pbs_file_suffix != path[1]
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           f.write("\#-------------------------------\r\n")
           if schema["SectionName"]
@@ -696,8 +696,8 @@ module Compiler
         add_PBS_header_to_file(f)
         GameData::MapMetadata.each do |element|
           next if element.pbs_file_suffix != path[1]
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           f.write("\#-------------------------------\r\n")
           map_name = (map_infos && map_infos[element.id]) ? map_infos[element.id].name : nil

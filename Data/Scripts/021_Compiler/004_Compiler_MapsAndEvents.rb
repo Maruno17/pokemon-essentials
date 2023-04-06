@@ -1681,9 +1681,9 @@ module Compiler
     Console.echo_li(_INTL("Processing {1} maps...", mapData.mapinfos.keys.length))
     idx = 0
     mapData.mapinfos.keys.sort.each do |id|
-      echo "." if idx % 20 == 0
+      echo "." if idx % 100 == 0
       idx += 1
-      Graphics.update if idx % 250 == 0
+      Graphics.update if idx % 500 == 0
       changed = false
       map = mapData.getMap(id)
       next if !map || !mapData.mapinfos[id]

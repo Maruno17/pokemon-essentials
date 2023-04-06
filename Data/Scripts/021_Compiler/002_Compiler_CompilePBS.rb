@@ -20,8 +20,8 @@ module Compiler
         # the keys are the XXX and the values are the YYY (as unprocessed strings).
         idx = 0
         pbEachFileSection(f, schema) do |contents, section_name|
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           data_hash = {
             :id              => section_name.to_sym,
@@ -390,8 +390,8 @@ module Compiler
         # the keys are the XXX and the values are the YYY (as unprocessed strings).
         idx = 0
         pbEachFileSection(f, schema) do |contents, section_name|
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           data_hash = {
             :id              => section_name.to_sym,
@@ -639,9 +639,9 @@ module Compiler
       current_type   = nil
       idx = 0
       pbCompilerEachPreppedLine(path) do |line, line_no|
-        echo "." if idx % 50 == 0
+        echo "." if idx % 100 == 0
         idx += 1
-        Graphics.update if idx % 250 == 0
+        Graphics.update if idx % 500 == 0
         next if line.length == 0
         if current_type && line[/^\d+,/]   # Species line
           values = line.split(",").collect! { |v| v.strip }
@@ -777,9 +777,9 @@ module Compiler
       section_line = nil
       # Read each line of trainers.txt at a time and compile it as a trainer property
       pbCompilerEachPreppedLine(path) do |line, line_no|
-        echo "." if idx % 50 == 0
+        echo "." if idx % 100 == 0
         idx += 1
-        Graphics.update if idx % 250 == 0
+        Graphics.update if idx % 500 == 0
         FileLineData.setSection(section_name, nil, section_line)
         if line[/^\s*\[\s*(.+)\s*\]\s*$/]
           # New section [trainer_type, name] or [trainer_type, name, version]
@@ -1061,8 +1061,8 @@ module Compiler
         # the keys are the XXX and the values are the YYY (as unprocessed strings).
         idx = 0
         pbEachFileSection(f) do |contents, section_name|
-          echo "." if idx % 50 == 0
-          Graphics.update if idx % 250 == 0
+          echo "." if idx % 100 == 0
+          Graphics.update if idx % 500 == 0
           idx += 1
           schema = (section_name.to_i == 0) ? global_schema : player_schema
           data_hash = {
@@ -1270,7 +1270,11 @@ module Compiler
 #      end
 #      pbanims[anim.id] = pbConvertRPGAnimation(anim) if !found
 #    end
+    idx = 0
     pbanims.length.times do |i|
+      echo "." if idx % 100 == 0
+      Graphics.update if idx % 500 == 0
+      idx += 1
       next if !pbanims[i]
       if pbanims[i].name[/^OppMove\:\s*(.*)$/]
         if GameData::Move.exists?($~[1])
