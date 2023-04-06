@@ -1180,10 +1180,10 @@ MenuHandlers.add(:debug_menu, :rename_files, {
   }
 })
 
-MenuHandlers.add(:debug_menu, :rename_files, {
+MenuHandlers.add(:debug_menu, :collate_script_and_event_text, {
   "name"        => _INTL("Collate Script/Event Texts For Translation"),
   "parent"      => :files_menu,
-  "description" => _INTL("Get translatable text from scripts/map events. Do this before extracting text."),
+  "description" => _INTL("Find translatable text in scripts/map events. Do this before extracting text."),
   "effect"      => proc {
     Translator.gather_script_and_event_texts
     MessageTypes.save_default_messages
