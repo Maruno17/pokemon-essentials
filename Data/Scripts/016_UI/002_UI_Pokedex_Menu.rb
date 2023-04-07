@@ -36,6 +36,9 @@ end
 #
 #===============================================================================
 class PokemonPokedexMenu_Scene
+  SEEN_OBTAINED_TEXT_BASE   = Color.new(248, 248, 248)
+  SEEN_OBTAINED_TEXT_SHADOW = Color.new(192, 32, 40)
+
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
   end
@@ -47,8 +50,9 @@ class PokemonPokedexMenu_Scene
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap(_INTL("Graphics/UI/Pokedex/bg_menu"))
+    text_tag = shadowc3tag(SEEN_OBTAINED_TEXT_BASE, SEEN_OBTAINED_TEXT_SHADOW)
     @sprites["headings"] = Window_AdvancedTextPokemon.newWithSize(
-      _INTL("<c3=F8F8F8,C02028>SEEN<r>OBTAINED</c3>"), 286, 136, 208, 64, @viewport
+      text_tag + _INTL("SEEN") + "<r>" + _INTL("OBTAINED") + "</c3>", 286, 136, 208, 64, @viewport
     )
     @sprites["headings"].windowskin = nil
     @sprites["commands"] = Window_DexesList.new(commands, commands2, Graphics.width - 84)

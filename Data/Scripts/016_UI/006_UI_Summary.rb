@@ -104,6 +104,11 @@ end
 class PokemonSummary_Scene
   MARK_WIDTH  = 16
   MARK_HEIGHT = 16
+  # Colors used for messages in this scene
+  RED_TEXT_BASE     = Color.new(248, 56, 32)
+  RED_TEXT_SHADOW   = Color.new(224, 152, 144)
+  BLACK_TEXT_BASE   = Color.new(64, 64, 64)
+  BLACK_TEXT_SHADOW = Color.new(176, 176, 176)
 
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
@@ -437,13 +442,14 @@ class PokemonSummary_Scene
     # Write Exp text OR heart gauge message (if a Shadow Pokémon)
     if @pokemon.shadowPokemon?
       textpos.push([_INTL("Heart Gauge"), 238, 246, :left, base, shadow])
+      black_text_tag = shadowc3tag(BLACK_TEXT_BASE, BLACK_TEXT_SHADOW)
       heartmessage = [_INTL("The door to its heart is open! Undo the final lock!"),
                       _INTL("The door to its heart is almost fully open."),
                       _INTL("The door to its heart is nearly open."),
                       _INTL("The door to its heart is opening wider."),
                       _INTL("The door to its heart is opening up."),
                       _INTL("The door to its heart is tightly shut.")][@pokemon.heartStage]
-      memo = sprintf("<c3=404040,B0B0B0>%s\n", heartmessage)
+      memo = black_text_tag + heartmessage
       drawFormattedTextEx(overlay, 234, 308, 264, memo)
     else
       endexp = @pokemon.growth_rate.minimum_exp_for_level(@pokemon.level + 1)
@@ -498,30 +504,33 @@ class PokemonSummary_Scene
     end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
+    red_text_tag = shadowc3tag(RED_TEXT_BASE, RED_TEXT_SHADOW)
+    black_text_tag = shadowc3tag(BLACK_TEXT_BASE, BLACK_TEXT_SHADOW)
     memo = ""
     # Write date received
     if @pokemon.timeReceived
       date  = @pokemon.timeReceived.day
       month = pbGetMonthName(@pokemon.timeReceived.mon)
       year  = @pokemon.timeReceived.year
-      memo += _INTL("<c3=404040,B0B0B0>{1} {2}, {3}\n", date, month, year)
+      memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
     end
     # Write map name egg was received on
     mapname = pbGetMapNameFromId(@pokemon.obtain_map)
     mapname = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
     if mapname && mapname != ""
-      memo += _INTL("<c3=404040,B0B0B0>A mysterious Pokémon Egg received from <c3=F83820,E09890>{1}<c3=404040,B0B0B0>.\n", mapname)
+      mapname = red_text_tag + mapname + black_text_tag
+      memo += black_text_tag + _INTL("A mysterious Pokémon Egg received from {1}.", mapname) + "\n"
     else
-      memo += _INTL("<c3=404040,B0B0B0>A mysterious Pokémon Egg.\n", mapname)
+      memo += black_text_tag + _INTL("A mysterious Pokémon Egg.") + "\n"
     end
-    memo += "\n" # Empty line
+    memo += "\n"   # Empty line
     # Write Egg Watch blurb
-    memo += _INTL("<c3=404040,B0B0B0>\"The Egg Watch\"\n")
+    memo += black_text_tag + _INTL("\"The Egg Watch\"") + "\n"
     eggstate = _INTL("It looks like this Egg will take a long time to hatch.")
     eggstate = _INTL("What will hatch from this? It doesn't seem close to hatching.") if @pokemon.steps_to_hatch < 10_200
     eggstate = _INTL("It appears to move occasionally. It may be close to hatching.") if @pokemon.steps_to_hatch < 2550
     eggstate = _INTL("Sounds can be heard coming from inside! It will hatch soon!") if @pokemon.steps_to_hatch < 1275
-    memo += sprintf("<c3=404040,B0B0B0>%s\n", eggstate)
+    memo += black_text_tag + eggstate
     # Draw all text
     drawFormattedTextEx(overlay, 232, 86, 268, memo)
     # Draw the Pokémon's markings
@@ -530,44 +539,48 @@ class PokemonSummary_Scene
 
   def drawPageTwo
     overlay = @sprites["overlay"].bitmap
+    red_text_tag = shadowc3tag(RED_TEXT_BASE, RED_TEXT_SHADOW)
+    black_text_tag = shadowc3tag(BLACK_TEXT_BASE, BLACK_TEXT_SHADOW)
     memo = ""
     # Write nature
     showNature = !@pokemon.shadowPokemon? || @pokemon.heartStage <= 3
     if showNature
-      natureName = @pokemon.nature.name
-      memo += _INTL("<c3=F83820,E09890>{1}<c3=404040,B0B0B0> nature.\n", natureName)
+      nature_name = red_text_tag + @pokemon.nature.name + black_text_tag
+      memo += _INTL("{1} nature.", @pokemon.nature.name) + "\n"
     end
     # Write date received
     if @pokemon.timeReceived
       date  = @pokemon.timeReceived.day
       month = pbGetMonthName(@pokemon.timeReceived.mon)
       year  = @pokemon.timeReceived.year
-      memo += _INTL("<c3=404040,B0B0B0>{1} {2}, {3}\n", date, month, year)
+      memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
     end
     # Write map name Pokémon was received on
     mapname = pbGetMapNameFromId(@pokemon.obtain_map)
     mapname = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
     mapname = _INTL("Faraway place") if nil_or_empty?(mapname)
-    memo += sprintf("<c3=F83820,E09890>%s\n", mapname)
+    memo += red_text_tag + mapname + "\n"
     # Write how Pokémon was obtained
-    mettext = [_INTL("Met at Lv. {1}.", @pokemon.obtain_level),
-               _INTL("Egg received."),
-               _INTL("Traded at Lv. {1}.", @pokemon.obtain_level),
-               "",
-               _INTL("Had a fateful encounter at Lv. {1}.", @pokemon.obtain_level)][@pokemon.obtain_method]
-    memo += sprintf("<c3=404040,B0B0B0>%s\n", mettext) if mettext && mettext != ""
+    mettext = [
+      _INTL("Met at Lv. {1}.", @pokemon.obtain_level),
+      _INTL("Egg received."),
+      _INTL("Traded at Lv. {1}.", @pokemon.obtain_level),
+      "",
+      _INTL("Had a fateful encounter at Lv. {1}.", @pokemon.obtain_level)
+    ][@pokemon.obtain_method]
+    memo += black_text_tag + mettext + "\n" if mettext && mettext != ""
     # If Pokémon was hatched, write when and where it hatched
     if @pokemon.obtain_method == 1
       if @pokemon.timeEggHatched
         date  = @pokemon.timeEggHatched.day
         month = pbGetMonthName(@pokemon.timeEggHatched.mon)
         year  = @pokemon.timeEggHatched.year
-        memo += _INTL("<c3=404040,B0B0B0>{1} {2}, {3}\n", date, month, year)
+        memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
       end
       mapname = pbGetMapNameFromId(@pokemon.hatched_map)
       mapname = _INTL("Faraway place") if nil_or_empty?(mapname)
-      memo += sprintf("<c3=F83820,E09890>%s\n", mapname)
-      memo += _INTL("<c3=404040,B0B0B0>Egg hatched.\n")
+      memo += red_text_tag + mapname + "\n"
+      memo += black_text_tag + _INTL("Egg hatched.") + "\n"
     else
       memo += "\n"   # Empty line
     end
@@ -616,7 +629,7 @@ class PokemonSummary_Scene
                              _INTL("Somewhat of a clown."),
                              _INTL("Quick to flee.")]
       }
-      memo += sprintf("<c3=404040,B0B0B0>%s\n", characteristics[best_stat][best_iv % 5])
+      memo += black_text_tag + characteristics[best_stat][best_iv % 5] + "\n"
     end
     # Write all text
     drawFormattedTextEx(overlay, 232, 86, 268, memo)

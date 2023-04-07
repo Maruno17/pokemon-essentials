@@ -329,30 +329,6 @@ class Color
   def self.orange;  return Color.new(255, 155,   0); end
   def self.purple;  return Color.new(155,   0, 255); end
   def self.brown;   return Color.new(112,  72,  32); end
-
-  # TODO: These are from def getSkinColor. It isn't appropriate to make Color
-  #       objects of these, though, as they're just converted straight back into
-  #       hex strings.
-#  def self.text_blue;          return Color.new(  0, 112, 248); end
-#  def self.text_blue_light;    return Color.new(120, 184, 232); end
-#  def self.text_red;           return Color.new(232,  32,  16); end
-#  def self.text_red_light;     return Color.new(248, 168, 184); end
-#  def self.text_green;         return Color.new( 96, 176,  72); end
-#  def self.text_green_light;   return Color.new(174, 208, 144); end
-#  def self.text_cyan;          return Color.new( 72, 216, 216); end
-#  def self.text_cyan_light;    return Color.new(168, 224, 224); end
-#  def self.text_magenta;       return Color.new(208,  56, 184); end
-#  def self.text_magenta_light; return Color.new(232, 160, 224); end
-#  def self.text_yellow;        return Color.new(232, 208,  32); end
-#  def self.text_yellow_light;  return Color.new(248, 232, 136); end
-#  def self.text_gray;          return Color.new(160, 160, 168); end
-#  def self.text_gray_light;    return Color.new(208, 208, 216); end
-#  def self.text_white;         return Color.new(240, 240, 248); end
-#  def self.text_white_light;   return Color.new(200, 200, 208); end   # Intentionally darker than text_white
-#  def self.text_purple;        return Color.new(114,  64, 232); end
-#  def self.text_purple_light;  return Color.new(184, 168, 224); end
-#  def self.text_orange;        return Color.new(248, 152,  24); end
-#  def self.text_orange_light;  return Color.new(248, 200, 152); end
 end
 
 #===============================================================================

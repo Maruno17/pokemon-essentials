@@ -1,25 +1,40 @@
 #===============================================================================
 # Text colors
 #===============================================================================
-# TODO: Unused.
+# Unused
 def ctag(color)
   return sprintf("<c=%s>", color.to_rgb32(true))
 end
 
+# Unused
 def shadowctag(base, shadow)
   return sprintf("<c2=%s%s>", base.to_rgb15, shadow.to_rgb15)
 end
 
+# base and shadow are either instances of class Color, or are arrays containing
+# 3 or 4 integers which are RGB(A) values.
 def shadowc3tag(base, shadow)
-  return sprintf("<c3=%s,%s>", base.to_rgb32, shadow.to_rgb32)
+  if base.is_a?(Color)
+    base_text = base.to_rgb32
+  else
+    base_text = sprintf("%02X%02X%02X", base[0], base[1], base[2])
+    base_text += sprintf("02X", base[3]) if base[3]
+  end
+  if shadow.is_a?(Color)
+    shadow_text = shadow.to_rgb32
+  else
+    shadow_text = sprintf("%02X%02X%02X", shadow[0], shadow[1], shadow[2])
+    shadow_text += sprintf("02X", shadow[3]) if shadow[3]
+  end
+  return sprintf("<c3=%s,%s>", base_text, shadow_text)
 end
 
-# TODO: Unused.
+# Unused
 def shadowctagFromColor(color)
   return shadowc3tag(color, color.get_contrast_color)
 end
 
-# TODO: Unused.
+# Unused
 def shadowctagFromRgb(param)
   return shadowctagFromColor(Color.new_from_rgb(param))
 end
@@ -1022,7 +1037,7 @@ end
 def drawFormattedTextEx(bitmap, x, y, width, text, baseColor = nil, shadowColor = nil, lineheight = 32)
   base = baseColor ? baseColor.clone : Color.new(96, 96, 96)
   shadow = shadowColor ? shadowColor.clone : Color.new(208, 208, 200)
-  text = shadowctag(base, shadow) + text
+  text = shadowc3tag(base, shadow) + text
   chars = getFormattedText(bitmap, x, y, width, -1, text, lineheight)
   drawFormattedChars(bitmap, chars)
 end

@@ -307,7 +307,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         @fmtchars = []
         fmt = getFormattedText(self.contents, 0, 0,
                                self.width - self.borderX - SpriteWindow_Base::TEXT_PADDING, -1,
-                               shadowctag(@baseColor, @shadowColor) + value, 32, true)
+                               shadowc3tag(@baseColor, @shadowColor) + value, 32, true)
         @oldfont = self.contents.font.clone
         fmt.each do |ch|
           chx = ch[1] + ch[3]
@@ -334,7 +334,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       else
         @fmtchars = getFormattedText(self.contents, 0, 0,
                                      self.width - self.borderX - SpriteWindow_Base::TEXT_PADDING, -1,
-                                     shadowctag(@baseColor, @shadowColor) + value, 32, true)
+                                     shadowc3tag(@baseColor, @shadowColor) + value, 32, true)
         @oldfont = self.contents.font.clone
         @fmtchars.each do |ch|
           chx = ch[1] + ch[3]

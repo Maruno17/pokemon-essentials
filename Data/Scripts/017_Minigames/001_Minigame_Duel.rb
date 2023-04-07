@@ -7,6 +7,13 @@ class DuelWindow < Window_AdvancedTextPokemon
   attr_reader :name
   attr_reader :is_enemy
 
+  PLAYER_TEXT_BASE   = Color.new(48, 80, 200)   # Blue
+  PLAYER_TEXT_SHADOW = Color.new(160, 192, 240)
+  ENEMY_TEXT_BASE    = Color.new(224, 8, 8)   # Red
+  ENEMY_TEXT_SHADOW  = Color.new(248, 184, 112)
+  HP_TEXT_BASE       = Color.new(32, 152, 8)   # Green
+  HP_TEXT_SHADOW     = Color.new(144, 240, 144)
+
   def initialize(name, is_enemy)
     @hp       = 10
     @name     = name
@@ -33,9 +40,13 @@ class DuelWindow < Window_AdvancedTextPokemon
   end
 
   def duel_refresh
-    name_color = @is_enemy ? "<ar><c3=E00808,F8B870>" : "<c3=3050C8,A0C0F0>"
-    hp_color   = "<c3=209808,90F090>"
-    self.text = _INTL("{1}{2}\r\n{3}HP: {4}", name_color, fmtescape(@name), hp_color, @hp)
+    if @is_enemy
+      name_tag = shadowc3tag(ENEMY_TEXT_BASE, ENEMY_TEXT_SHADOW)
+    else
+      name_tag = shadowc3tag(PLAYER_TEXT_BASE, PLAYER_TEXT_SHADOW)
+    end
+    hp_tag = shadowc3tag(HP_TEXT_BASE, HP_TEXT_SHADOW)
+    self.text = name_tag + fmtescape(@name) + "\r\n" + hp_tag + _INTL("HP: {1}", @hp)
   end
 end
 
