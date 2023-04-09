@@ -40,12 +40,12 @@ module FileLineData
   def self.linereport
     if @section
       if @key.nil?
-        return _INTL("File {1}, section {2}\r\n{3}\r\n\r\n", @file, @section, @value)
+        return _INTL("File {1}, section {2}\r\n{3}", @file, @section, @value) + "\r\n\r\n"
       else
-        return _INTL("File {1}, section {2}, key {3}\r\n{4}\r\n\r\n", @file, @section, @key, @value)
+        return _INTL("File {1}, section {2}, key {3}\r\n{4}", @file, @section, @key, @value) + "\r\n\r\n"
       end
     else
-      return _INTL("File {1}, line {2}\r\n{3}\r\n\r\n", @file, @lineno, @linedata)
+      return _INTL("File {1}, line {2}\r\n{3}", @file, @lineno, @linedata) + "\r\n\r\n"
     end
   end
 end
@@ -249,8 +249,54 @@ module Compiler
   end
 
   #=============================================================================
+  # Splits a string containing comma-separated values into an array of those
+  # values.
+  #=============================================================================
+  def split_csv_line(string)
+    # Split the string into an array of values, using a comma as the separator
+    values = string.split(",")
+    # Check for quote marks in each value, as we may need to recombine some values
+    # to make proper results
+    (0...values.length).each do |i|
+      value = values[i]
+      next if !value || value.empty?
+      quote_count = value.count('"')  #scan(/(?:^|\G|[^\\])(\\)*"/).length
+      if !quote_count.zero?
+        # Quote marks found in value
+        (i...(values.length - 1)).each do |j|
+          quote_count = values[i].count('"')
+          if quote_count == 2 && value.start_with?('\\"') && values[i].end_with?('\\"')
+            # Two quote marks around the whole value; remove them
+            values[i] = values[i][2..-3]
+            break
+          elsif quote_count.even?
+            break
+          end
+          # Odd number of quote marks in value; concatenate the next value to it and
+          # see if that's any better
+          values[i] += "," + values[j + 1]
+          values[j + 1] = nil
+        end
+        # Recheck for enclosing quote marks to remove
+        if quote_count != 2
+          if value.count('"') == 2 && value.start_with?('\\"') && value.end_with?('\\"')
+            values[i] = values[i][2..-3]
+          end
+        end
+      end
+      # Remove leading and trailing whitespace from value
+      values[i].strip!
+    end
+    # Remove nil values caused by concatenating values above
+    values.compact!
+    return values
+  end
+
+  #=============================================================================
   # Convert a string to certain kinds of values
   #=============================================================================
+  # Unused
+  # NOTE: This method is about 10 times slower than split_csv_line.
   def csvfield!(str)
     ret = ""
     str.sub!(/^\s*/, "")
@@ -286,16 +332,15 @@ module Compiler
     return ret
   end
 
+  # Unused
   def csvBoolean!(str, _line = -1)
     field = csvfield!(str)
-    if field[/^1|[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Yy]$/]
-      return true
-    elsif field[/^0|[Ff][Aa][Ll][Ss][Ee]|[Nn][Oo]|[Nn]$/]
-      return false
-    end
+    return true if field[/^(?:1|TRUE|YES|Y)$/i]
+    return false if field[/^(?:0|FALSE|NO|N)$/i]
     raise _INTL("Field {1} is not a Boolean value (true, false, 1, 0)\r\n{2}", field, FileLineData.linereport)
   end
 
+  # Unused
   def csvInt!(str, _line = -1)
     ret = csvfield!(str)
     if !ret[/^\-?\d+$/]
@@ -304,6 +349,7 @@ module Compiler
     return ret.to_i
   end
 
+  # Unused
   def csvPosInt!(str, _line = -1)
     ret = csvfield!(str)
     if !ret[/^\d+$/]
@@ -312,20 +358,81 @@ module Compiler
     return ret.to_i
   end
 
+  # Unused
   def csvFloat!(str, _line = -1)
     ret = csvfield!(str)
     return Float(ret) rescue raise _INTL("Field {1} is not a number\r\n{2}", ret, FileLineData.linereport)
   end
 
+  # Unused
   def csvEnumField!(value, enumer, _key, _section)
     ret = csvfield!(value)
     return checkEnumField(ret, enumer)
   end
 
+  # Unused
   def csvEnumFieldOrInt!(value, enumer, _key, _section)
     ret = csvfield!(value)
     return ret.to_i if ret[/\-?\d+/]
     return checkEnumField(ret, enumer)
+  end
+
+  # Turns a value (a string) into another data type as determined by the given
+  # schema.
+  # @param value [String]
+  # @param schema [String]
+  def cast_csv_value(value, schema, enumer = nil)
+    case schema.downcase
+    when "i"   # Integer
+      if !value[/^\-?\d+$/]
+        raise _INTL("Field {1} is not an integer\r\n{2}", value, FileLineData.linereport)
+      end
+      return value.to_i
+    when "u"   # Positive integer or zero
+      if !value[/^\d+$/]
+        raise _INTL("Field {1} is not a positive integer or 0\r\n{2}", value, FileLineData.linereport)
+      end
+      return value.to_i
+    when "v"   # Positive integer
+      if !value[/^\d+$/]
+        raise _INTL("Field {1} is not a positive integer\r\n{2}", value, FileLineData.linereport)
+      end
+      if value.to_i == 0
+        raise _INTL("Field '{1}' must be greater than 0\r\n{2}", value, FileLineData.linereport)
+      end
+      return value.to_i
+    when "x"   # Hexadecimal number
+      if !value[/^[A-F0-9]+$/i]
+        raise _INTL("Field '{1}' is not a hexadecimal number\r\n{2}", value, FileLineData.linereport)
+      end
+      return value.hex
+    when "f"   # Floating point number
+      if !value[/^\-?^\d*\.?\d*$/]
+        raise _INTL("Field {1} is not a number\r\n{2}", value, FileLineData.linereport)
+      end
+      return value.to_f
+    when "b"   # Boolean
+      return true if value[/^(?:1|TRUE|YES|Y)$/i]
+      return false if value[/^(?:0|FALSE|NO|N)$/i]
+      raise _INTL("Field {1} is not a Boolean value (true, false, 1, 0)\r\n{2}", value, FileLineData.linereport)
+    when "n"   # Name
+      if !value[/^(?![0-9])\w+$/]
+        raise _INTL("Field '{1}' must contain only letters, digits, and\r\nunderscores and can't begin with a number.\r\n{2}", value, FileLineData.linereport)
+      end
+    when "s"   # String
+    when "q"   # Unformatted text
+    when "m"   # Symbol
+      if !value[/^(?![0-9])\w+$/]
+        raise _INTL("Field '{1}' must contain only letters, digits, and\r\nunderscores and can't begin with a number.\r\n{2}", value, FileLineData.linereport)
+      end
+      return value.to_sym
+    when "e"   # Enumerable
+      return checkEnumField(value, enumer)
+    when "y"   # Enumerable or integer
+      return value.to_i if value[/^\-?\d+$/]
+      return checkEnumField(value, enumer)
+    end
+    return value
   end
 
   def checkEnumField(ret, enumer)
@@ -376,6 +483,7 @@ module Compiler
     raise _INTL("Enumeration not defined\r\n{1}", FileLineData.linereport)
   end
 
+  # Unused
   def checkEnumFieldOrNil(ret, enumer)
     case enumer
     when Module
@@ -403,7 +511,10 @@ module Compiler
   #=============================================================================
   # Convert a string to values using a schema
   #=============================================================================
+  # Unused
+  # @deprecated This method is slated to be removed in v22.
   def pbGetCsvRecord(rec, lineno, schema)
+    Deprecation.warn_method("pbGetCsvRecord", "v22", "get_csv_record")
     record = []
     repeat = false
     schema_length = schema[1].length
@@ -574,6 +685,58 @@ module Compiler
   end
 
   #=============================================================================
+  # Convert a string to values using a schema
+  #=============================================================================
+  def get_csv_record(rec, schema)
+    ret = []
+    repeat = false
+    start = 0
+    schema_length = schema[1].length
+    case schema[1][0, 1]   # First character in schema
+    when "*"
+      repeat = true
+      start = 1
+    when "^"
+      start = 1
+      schema_length -= 1
+    end
+    subarrays = repeat && schema[1].length - start > 1   # Whether ret is an array of arrays
+    # Split the string on commas into an array of values to apply the schema to
+    values = split_csv_line(rec)
+    # Apply the schema to each value in the line
+    idx = -1   # Index of value to look at in values
+    loop do
+      record = []
+      (start...schema[1].length).each do |i|
+        idx += 1
+        sche = schema[1][i, 1]
+        if sche[/[A-Z]/]   # Upper case = optional
+          if nil_or_empty?(values[idx])
+            record.push(nil)
+            next
+          end
+        end
+        if sche.downcase == "q"   # Unformatted text
+          record.push(rec)
+          idx = values.length
+          break
+        else
+          record.push(cast_csv_value(values[idx], sche, schema[2 + i - start]))
+        end
+      end
+      if !record.empty?
+        if subarrays
+          ret.push(record)
+        else
+          ret.concat(record)
+        end
+      end
+      break if !repeat || idx >= values.length - 1
+    end
+    return (!repeat && schema_length == 1) ? ret[0] : ret
+  end
+
+  #=============================================================================
   # Write values to a file using a schema
   #=============================================================================
   def pbWriteCsvRecord(record, file, schema)
@@ -584,9 +747,16 @@ module Compiler
       (start...schema[1].length).each do |i|
         index += 1
         value = rec[index]
-        if schema[1][i, 1].upcase != schema[1][i, 1] || !value.nil?
-          file.write(",") if index > 0
+        if schema[1][i, 1][/[A-Z]/]   # Optional
+          # Check the rest of the values for non-nil things
+          later_value_found = false
+          (index...rec.length).each do |j|
+            later_value_found = true if !rec[j].nil?
+            break if later_value_found
+          end
+          break if !later_value_found
         end
+        file.write(",") if index > 0
         if value.nil?
           # do nothing
         elsif value.is_a?(String)
@@ -845,14 +1015,6 @@ module Compiler
     compile_pbs_files
     compile_animations
     compile_trainer_events(mustCompile)
-    Console.echo_li(_INTL("Saving messages..."))
-    Translator.gather_script_and_event_texts
-    MessageTypes.save_default_messages
-    MessageTypes.load_default_messages if safeExists?("Data/messages_core.dat")
-    Console.echo_done(true)
-    Console.echo_li(_INTL("Reloading cache..."))
-    System.reload_cache
-    Console.echo_done(true)
     Console.echoln_li_done(_INTL("Successfully compiled all game data"))
   end
 

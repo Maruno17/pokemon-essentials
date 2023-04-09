@@ -2,6 +2,9 @@
 #
 #===============================================================================
 class BattleSwapScene
+  RED_TEXT_BASE   = Color.new(232, 32, 16)
+  RED_TEXT_SHADOW = Color.new(248, 168, 184)
+
   def pbStartRentScene(rentals)
     @rentals = rentals
     @mode = 0   # rental (pick 3 out of 6 initial Pokémon)
@@ -78,12 +81,13 @@ class BattleSwapScene
   end
 
   def pbGetCommands(list, choices)
+    red_text_tag = shadowc3tag(RED_TEXT_BASE, RED_TEXT_SHADOW)
     commands = []
     list.length.times do |i|
       pkmn = list[i]
       category = pkmn.species_data.category
       cmd = _INTL("{1} - {2} Pokémon", pkmn.speciesName, category)
-      cmd = "<c3=E82010,F8A8B8>" + cmd if choices.include?(i)   # Red text
+      cmd = red_text_tag + cmd if choices.include?(i)   # Red text
       commands.push(cmd)
     end
     return commands

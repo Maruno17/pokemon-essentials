@@ -32,17 +32,17 @@ class Window_PokemonItemStorage < Window_DrawableCommand
     rect = drawCursor(index, rect)
     textpos = []
     if index == @bag.length
-      textpos.push([_INTL("CANCEL"), rect.x, rect.y, false, self.baseColor, self.shadowColor])
+      textpos.push([_INTL("CANCEL"), rect.x, rect.y, :left, self.baseColor, self.shadowColor])
     else
       item     = @bag[index][0]
       itemname = @adapter.getDisplayName(item)
       baseColor = (index == @sortIndex) ? Color.new(248, 24, 24) : self.baseColor
-      textpos.push([itemname, rect.x, rect.y, false, self.baseColor, self.shadowColor])
+      textpos.push([itemname, rect.x, rect.y, :left, self.baseColor, self.shadowColor])
       if !GameData::Item.get(item).is_important?   # Not a Key item/HM/TM
         qty     = _ISPRINTF("x{1: 2d}", @bag[index][1])
         sizeQty = self.contents.text_size(qty).width
         xQty = rect.x + rect.width - sizeQty - 2
-        textpos.push([qty, xQty, rect.y, false, baseColor, self.shadowColor])
+        textpos.push([qty, xQty, rect.y, :left, baseColor, self.shadowColor])
       end
     end
     pbDrawTextPositions(self.contents, textpos)

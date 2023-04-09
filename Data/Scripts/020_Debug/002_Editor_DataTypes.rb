@@ -287,7 +287,7 @@ class StringListProperty
             do_refresh = true
           end
         else   # Edit value
-          case pbMessage(_INTL("\\ts[]Do what with this value?"),
+          case pbMessage("\\ts[]" + _INTL("Do what with this value?"),
                          [_INTL("Edit"), _INTL("Delete"), _INTL("Cancel")], 3)
           when 0   # Edit
             new_value = pbMessageFreeText(_INTL("Enter the new value."),
@@ -1096,7 +1096,7 @@ class GameDataPoolProperty
               need_refresh = true
             end
           else   # Edit existing value
-            case pbMessage(_INTL("\\ts[]Do what with this value?"),
+            case pbMessage("\\ts[]" + _INTL("Do what with this value?"),
                            [_INTL("Change value"), _INTL("Delete"), _INTL("Cancel")], 3)
             when 0   # Change value
               new_value = pbChooseFromGameDataList(@game_data, entry[0])
@@ -1250,7 +1250,7 @@ module LevelUpMovesProperty
               end
             end
           else   # Edit existing move
-            case pbMessage(_INTL("\\ts[]Do what with this move?"),
+            case pbMessage("\\ts[]" + _INTL("Do what with this move?"),
                            [_INTL("Change level"), _INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 4)
             when 0   # Change level
               params = ChooseNumberParams.new
@@ -1457,7 +1457,7 @@ class EvolutionsProperty
               end
             end
           else   # Edit evolution
-            case pbMessage(_INTL("\\ts[]Do what with this evolution?"),
+            case pbMessage("\\ts[]" + _INTL("Do what with this evolution?"),
                            [_INTL("Change species"), _INTL("Change method"),
                             _INTL("Change parameter"), _INTL("Delete"), _INTL("Cancel")], 5)
             when 0   # Change species

@@ -104,24 +104,24 @@ class Battle::Scene
     messageFilename = @battle.backdrop
     if time
       trialName = sprintf("%s_%s", backdropFilename, time)
-      if pbResolveBitmap(sprintf("Graphics/Battlebacks/" + trialName + "_bg"))
+      if pbResolveBitmap(sprintf("Graphics/Battlebacks/%s_bg", trialName))
         backdropFilename = trialName
       end
       trialName = sprintf("%s_%s", baseFilename, time)
-      if pbResolveBitmap(sprintf("Graphics/Battlebacks/" + trialName + "_base0"))
+      if pbResolveBitmap(sprintf("Graphics/Battlebacks/%s_base0", trialName))
         baseFilename = trialName
       end
       trialName = sprintf("%s_%s", messageFilename, time)
-      if pbResolveBitmap(sprintf("Graphics/Battlebacks/" + trialName + "_message"))
+      if pbResolveBitmap(sprintf("Graphics/Battlebacks/%s_message", trialName))
         messageFilename = trialName
       end
     end
-    if !pbResolveBitmap(sprintf("Graphics/Battlebacks/" + baseFilename + "_base0")) &&
+    if !pbResolveBitmap(sprintf("Graphics/Battlebacks/%s_base0", baseFilename)) &&
        @battle.backdropBase
       baseFilename = @battle.backdropBase
       if time
         trialName = sprintf("%s_%s", baseFilename, time)
-        if pbResolveBitmap(sprintf("Graphics/Battlebacks/" + trialName + "_base0"))
+        if pbResolveBitmap(sprintf("Graphics/Battlebacks/%s_base0", trialName))
           baseFilename = trialName
         end
       end

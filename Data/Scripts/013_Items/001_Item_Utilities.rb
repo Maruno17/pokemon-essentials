@@ -591,7 +591,7 @@ def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, &block)
     return false
   elsif pkmn.numMoves < Pokemon::MAX_MOVES
     pkmn.learn_move(move)
-    pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]", pkmn_name, move_name), &block)
+    pbMessage("\\se[]" + _INTL("{1} learned {2}!\\se[Pkmn move learnt]", pkmn_name, move_name), &block)
     return true
   end
   pbMessage(_INTL("{1} wants to learn {2}, but it already knows {3} moves.\1",
@@ -608,7 +608,7 @@ def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, &block)
         end
         pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ...\\wt[16] Ta-da!\\se[Battle ball drop]\1"), &block)
         pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1", pkmn_name, old_move_name), &block)
-        pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]", pkmn_name, move_name), &block)
+        pbMessage("\\se[]" + _INTL("{1} learned {2}!\\se[Pkmn move learnt]", pkmn_name, move_name), &block)
         pkmn.changeHappiness("machine") if by_machine
         return true
       elsif pbConfirmMessage(_INTL("Give up on learning {1}?", move_name), &block)

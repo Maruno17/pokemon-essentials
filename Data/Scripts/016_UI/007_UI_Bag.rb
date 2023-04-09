@@ -66,7 +66,7 @@ class Window_PokemonBag < Window_DrawableCommand
     rect = Rect.new(rect.x + 16, rect.y + 16, rect.width - 16, rect.height)
     thispocket = @bag.pockets[@pocket]
     if index == self.itemCount - 1
-      textpos.push([_INTL("CLOSE BAG"), rect.x, rect.y + 2, false, self.baseColor, self.shadowColor])
+      textpos.push([_INTL("CLOSE BAG"), rect.x, rect.y + 2, :left, self.baseColor, self.shadowColor])
     else
       item = (@filterlist) ? thispocket[@filterlist[@pocket][index]][0] : thispocket[index][0]
       baseColor   = self.baseColor
@@ -76,7 +76,7 @@ class Window_PokemonBag < Window_DrawableCommand
         shadowColor = Color.new(248, 144, 144)
       end
       textpos.push(
-        [@adapter.getDisplayName(item), rect.x, rect.y + 2, false, baseColor, shadowColor]
+        [@adapter.getDisplayName(item), rect.x, rect.y + 2, :left, baseColor, shadowColor]
       )
       if GameData::Item.get(item).is_important?
         if @bag.registered?(item)
@@ -94,7 +94,7 @@ class Window_PokemonBag < Window_DrawableCommand
         qty = (@filterlist) ? thispocket[@filterlist[@pocket][index]][1] : thispocket[index][1]
         qtytext = _ISPRINTF("x{1: 3d}", qty)
         xQty    = rect.x + rect.width - self.contents.text_size(qtytext).width - 16
-        textpos.push([qtytext, xQty, rect.y + 2, false, baseColor, shadowColor])
+        textpos.push([qtytext, xQty, rect.y + 2, :left, baseColor, shadowColor])
       end
     end
     pbDrawTextPositions(self.contents, textpos)
@@ -258,13 +258,13 @@ class PokemonBag_Scene
 
   def pbRefresh
     # Set the background image
-    @sprites["background"].setBitmap(sprintf("Graphics/UI/Bag/bg_#{@bag.last_viewed_pocket}"))
+    @sprites["background"].setBitmap(sprintf("Graphics/UI/Bag/bg_%d", @bag.last_viewed_pocket))
     # Set the bag sprite
-    fbagexists = pbResolveBitmap(sprintf("Graphics/UI/Bag/bag_#{@bag.last_viewed_pocket}_f"))
+    fbagexists = pbResolveBitmap(sprintf("Graphics/UI/Bag/bag_%d_f", @bag.last_viewed_pocket))
     if $player.female? && fbagexists
-      @sprites["bagsprite"].setBitmap("Graphics/UI/Bag/bag_#{@bag.last_viewed_pocket}_f")
+      @sprites["bagsprite"].setBitmap(sprintf("Graphics/UI/Bag/bag_%d_f", @bag.last_viewed_pocket))
     else
-      @sprites["bagsprite"].setBitmap("Graphics/UI/Bag/bag_#{@bag.last_viewed_pocket}")
+      @sprites["bagsprite"].setBitmap(sprintf("Graphics/UI/Bag/bag_%d", @bag.last_viewed_pocket))
     end
     # Draw the pocket icons
     @sprites["pocketicon"].bitmap.clear
@@ -293,7 +293,7 @@ class PokemonBag_Scene
     # Draw the pocket name
     pbDrawTextPositions(
       overlay,
-      [[PokemonBag.pocket_names[@bag.last_viewed_pocket - 1], 94, 186, 2, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]]
+      [[PokemonBag.pocket_names[@bag.last_viewed_pocket - 1], 94, 186, :center, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]]
     )
     # Draw slider arrows
     showslider = false

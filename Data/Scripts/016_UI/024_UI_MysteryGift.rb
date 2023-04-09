@@ -154,7 +154,7 @@ def pbManageMysteryGifts
   command = 0
   loop do
     commands = pbRefreshMGCommands(master, online)
-    command = pbMessage(_INTL("\\ts[]Manage Mystery Gifts (X=online)."), commands, -1, nil, command)
+    command = pbMessage("\\ts[]" + _INTL("Manage Mystery Gifts (X=online)."), commands, -1, nil, command)
     # Gift chosen
     if command == -1 || command == commands.length - 1   # Cancel
       break

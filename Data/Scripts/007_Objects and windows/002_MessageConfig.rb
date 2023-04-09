@@ -2,26 +2,30 @@
 #
 #===============================================================================
 module MessageConfig
-  LIGHT_TEXT_MAIN_COLOR   = Color.new(248, 248, 248)
-  LIGHT_TEXT_SHADOW_COLOR = Color.new(72, 80, 88)
-  DARK_TEXT_MAIN_COLOR    = Color.new(80, 80, 88)
-  DARK_TEXT_SHADOW_COLOR  = Color.new(160, 160, 168)
-  FONT_NAME               = "Power Green"
-  FONT_SIZE               = 27
-  FONT_Y_OFFSET           = 8
-  SMALL_FONT_NAME         = "Power Green Small"
-  SMALL_FONT_SIZE         = 21
-  SMALL_FONT_Y_OFFSET     = 8
-  NARROW_FONT_NAME        = "Power Green Narrow"
-  NARROW_FONT_SIZE        = 27
-  NARROW_FONT_Y_OFFSET    = 8
+  LIGHT_TEXT_MAIN_COLOR    = Color.new(248, 248, 248)
+  LIGHT_TEXT_SHADOW_COLOR  = Color.new(72, 80, 88)
+  DARK_TEXT_MAIN_COLOR     = Color.new(80, 80, 88)
+  DARK_TEXT_SHADOW_COLOR   = Color.new(160, 160, 168)
+  MALE_TEXT_MAIN_COLOR     = Color.new(48, 80, 200)   # Used by message tag "\b"
+  MALE_TEXT_SHADOW_COLOR   = Color.new(208, 208, 200)
+  FEMALE_TEXT_MAIN_COLOR   = Color.new(224, 8, 8)   # Used by message tag "\r"
+  FEMALE_TEXT_SHADOW_COLOR = Color.new(208, 208, 200)
+  FONT_NAME                = "Power Green"
+  FONT_SIZE                = 27
+  FONT_Y_OFFSET            = 8
+  SMALL_FONT_NAME          = "Power Green Small"
+  SMALL_FONT_SIZE          = 21
+  SMALL_FONT_Y_OFFSET      = 8
+  NARROW_FONT_NAME         = "Power Green Narrow"
+  NARROW_FONT_SIZE         = 27
+  NARROW_FONT_Y_OFFSET     = 8
   # 0 = Pause cursor is displayed at end of text
   # 1 = Pause cursor is displayed at bottom right
   # 2 = Pause cursor is displayed at lower middle side
-  CURSOR_POSITION         = 1
-  WINDOW_OPACITY          = 255
-  TEXT_SPEED              = nil   # can be positive to wait frames or negative to
-                                  # show multiple characters in a single frame
+  CURSOR_POSITION          = 1
+  WINDOW_OPACITY           = 255
+  TEXT_SPEED               = nil   # can be positive to wait frames, or negative
+                                   # to show multiple characters in a single frame
   @@systemFrame     = nil
   @@defaultTextSkin = nil
   @@textSpeed       = nil
@@ -328,21 +332,22 @@ def getSkinColor(windowskin, color, isDarkSkin)
   if !windowskin || windowskin.disposed? ||
      windowskin.width != 128 || windowskin.height != 128
     # Base color, shadow color (these are reversed on dark windowskins)
+    # Values in arrays are RGB numbers
     textcolors = [
-      "0070F8", "78B8E8",   # 1  Blue
-      "E82010", "F8A8B8",   # 2  Red
-      "60B048", "B0D090",   # 3  Green
-      "48D8D8", "A8E0E0",   # 4  Cyan
-      "D038B8", "E8A0E0",   # 5  Magenta
-      "E8D020", "F8E888",   # 6  Yellow
-      "A0A0A8", "D0D0D8",   # 7  Grey
-      "F0F0F8", "C8C8D0",   # 8  White
-      "9040E8", "B8A8E0",   # 9  Purple
-      "F89818", "F8C898",   # 10 Orange
-      MessageConfig::DARK_TEXT_MAIN_COLOR.to_rgb24,
-      MessageConfig::DARK_TEXT_SHADOW_COLOR.to_rgb24,   # 11 Dark default
-      MessageConfig::LIGHT_TEXT_MAIN_COLOR.to_rgb24,
-      MessageConfig::LIGHT_TEXT_SHADOW_COLOR.to_rgb24   # 12 Light default
+      [  0, 112, 248], [120, 184, 232],   # 1  Blue
+      [232,  32,  16], [248, 168, 184],   # 2  Red
+      [ 96, 176,  72], [174, 208, 144],   # 3  Green
+      [ 72, 216, 216], [168, 224, 224],   # 4  Cyan
+      [208,  56, 184], [232, 160, 224],   # 5  Magenta
+      [232, 208,  32], [248, 232, 136],   # 6  Yellow
+      [160, 160, 168], [208, 208, 216],   # 7  Gray
+      [240, 240, 248], [200, 200, 208],   # 8  White
+      [114,  64, 232], [184, 168, 224],   # 9  Purple
+      [248, 152,  24], [248, 200, 152],   # 10 Orange
+      MessageConfig::DARK_TEXT_MAIN_COLOR,
+      MessageConfig::DARK_TEXT_SHADOW_COLOR,   # 11 Dark default
+      MessageConfig::LIGHT_TEXT_MAIN_COLOR,
+      MessageConfig::LIGHT_TEXT_SHADOW_COLOR   # 12 Light default
     ]
     if color == 0 || color > textcolors.length / 2   # No special colour, use default
       if isDarkSkin   # Dark background, light text
@@ -353,10 +358,10 @@ def getSkinColor(windowskin, color, isDarkSkin)
     end
     # Special colour as listed above
     if isDarkSkin && color != 12   # Dark background, light text
-      return sprintf("<c3=%s,%s>", textcolors[(2 * (color - 1)) + 1], textcolors[2 * (color - 1)])
+      return shadowc3tag(textcolors[(2 * (color - 1)) + 1], textcolors[2 * (color - 1)])
     end
     # Light background, dark text
-    return sprintf("<c3=%s,%s>", textcolors[2 * (color - 1)], textcolors[(2 * (color - 1)) + 1])
+    return shadowc3tag(textcolors[2 * (color - 1)], textcolors[(2 * (color - 1)) + 1])
   else   # VX windowskin
     color = 0 if color >= 32
     x = 64 + ((color % 8) * 8)

@@ -358,7 +358,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
         #       code to ensure the font is an appropriate color.
         moveNameBase = button.bitmap.get_pixel(10, button.src_rect.y + 34)
       end
-      textPos.push([moves[i].name, x, y, 2, moveNameBase, TEXT_SHADOW_COLOR])
+      textPos.push([moves[i].name, x, y, :center, moveNameBase, TEXT_SHADOW_COLOR])
     end
     pbDrawTextPositions(@overlay.bitmap, textPos)
   end
@@ -408,7 +408,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
       ppFraction = [(4.0 * move.pp / move.total_pp).ceil, 3].min
       textPos = []
       textPos.push([_INTL("PP: {1}/{2}", move.pp, move.total_pp),
-                    448, 56, 2, PP_COLORS[ppFraction * 2], PP_COLORS[(ppFraction * 2) + 1]])
+                    448, 56, :center, PP_COLORS[ppFraction * 2], PP_COLORS[(ppFraction * 2) + 1]])
       pbDrawTextPositions(@infoOverlay.bitmap, textPos)
     end
   end
@@ -540,7 +540,7 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
       next if !button || nil_or_empty?(@texts[i])
       x = button.x - self.x + (button.src_rect.width / 2)
       y = button.y - self.y + 14
-      textpos.push([@texts[i], x, y, 2, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR])
+      textpos.push([@texts[i], x, y, :center, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR])
     end
     pbDrawTextPositions(@overlay.bitmap, textpos)
   end

@@ -235,15 +235,15 @@ class Battle::Scene
     window.contents.clear
     pbSetSystemFont(window.contents)
     textpos = [
-      [battler1.name, 64, 6, 2, Color.new(248, 0, 0), Color.new(208, 208, 200)],
-      [_INTL("VS"), 144, 6, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
-      [battler2.name, 224, 6, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
-      [_INTL("Mind"), 144, 54, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
-      [_INTL("Skill"), 144, 86, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
-      [_INTL("Body"), 144, 118, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
-      [sprintf("%d", total1), 64, 166, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
-      [_INTL("Judgment"), 144, 166, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)],
-      [sprintf("%d", total2), 224, 166, 2, Color.new(72, 72, 72), Color.new(208, 208, 200)]
+      [battler1.name, 64, 6, :center, Color.new(248, 0, 0), Color.new(208, 208, 200)],
+      [_INTL("VS"), 144, 6, :center, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+      [battler2.name, 224, 6, :center, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+      [_INTL("Mind"), 144, 54, :center, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+      [_INTL("Skill"), 144, 86, :center, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+      [_INTL("Body"), 144, 118, :center, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+      [total1.to_s, 64, 166, :center, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+      [_INTL("Judgment"), 144, 166, :center, Color.new(72, 72, 72), Color.new(208, 208, 200)],
+      [total2.to_s, 224, 166, :center, Color.new(72, 72, 72), Color.new(208, 208, 200)]
     ]
     pbDrawTextPositions(window.contents, textpos)
     images = []

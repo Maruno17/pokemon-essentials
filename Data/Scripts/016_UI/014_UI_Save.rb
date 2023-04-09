@@ -15,9 +15,10 @@ def pbEmergencySave
     end
   end
   if Game.save
-    pbMessage(_INTL("\\se[]The game was saved.\\me[GUI save game] The previous save file has been backed up.\\wtnp[30]"))
+    pbMessage("\\se[]" +
+              _INTL("The game was saved.\\me[GUI save game] The previous save file has been backed up.\\wtnp[30]"))
   else
-    pbMessage(_INTL("\\se[]Save failed.\\wtnp[30]"))
+    pbMessage("\\se[]" + _INTL("Save failed.\\wtnp[30]"))
   end
   $scene = oldscene
 end
@@ -26,6 +27,15 @@ end
 #
 #===============================================================================
 class PokemonSave_Scene
+  LOCATION_TEXT_BASE   = Color.new(32, 152, 8)   # Green
+  LOCATION_TEXT_SHADOW = Color.new(144, 240, 144)
+  MALE_TEXT_BASE       = Color.new(0, 112, 248)   # Blue
+  MALE_TEXT_SHADOW     = Color.new(120, 184, 232)
+  FEMALE_TEXT_BASE     = Color.new(232, 32, 16)   # Red
+  FEMALE_TEXT_SHADOW   = Color.new(248, 168, 184)
+  OTHER_TEXT_BASE      = Color.new(0, 112, 248)   # Blue
+  OTHER_TEXT_SHADOW    = Color.new(120, 184, 232)
+
   def pbStartScreen
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
@@ -34,18 +44,24 @@ class PokemonSave_Scene
     hour = totalsec / 60 / 60
     min = totalsec / 60 % 60
     mapname = $game_map.name
-    textColor = ["0070F8,78B8E8", "E82010,F8A8B8", "0070F8,78B8E8"][$player.gender]
-    locationColor = "209808,90F090"   # green
-    loctext = _INTL("<ac><c3={1}>{2}</c3></ac>", locationColor, mapname)
-    loctext += _INTL("Player<r><c3={1}>{2}</c3><br>", textColor, $player.name)
-    if hour > 0
-      loctext += _INTL("Time<r><c3={1}>{2}h {3}m</c3><br>", textColor, hour, min)
+    if $player.male?
+      text_tag = shadowc3tag(MALE_TEXT_BASE, MALE_TEXT_SHADOW)
+    elsif $player.female?
+      text_tag = shadowc3tag(FEMALE_TEXT_BASE, FEMALE_TEXT_SHADOW)
     else
-      loctext += _INTL("Time<r><c3={1}>{2}m</c3><br>", textColor, min)
+      text_tag = shadowc3tag(OTHER_TEXT_BASE, OTHER_TEXT_SHADOW)
     end
-    loctext += _INTL("Badges<r><c3={1}>{2}</c3><br>", textColor, $player.badge_count)
+    location_tag = shadowc3tag(LOCATION_TEXT_BASE, LOCATION_TEXT_SHADOW)
+    loctext = location_tag + "<ac>" + mapname + "</ac></c3>"
+    loctext += _INTL("Player") + "<r>" + text_tag + $player.name + "</c3><br>"
+    if hour > 0
+      loctext += _INTL("Time") + "<r>" + text_tag + _INTL("{1}h {2}m", hour, min) + "</c3><br>"
+    else
+      loctext += _INTL("Time") + "<r>" + text_tag + _INTL("{1}m", min) + "</c3><br>"
+    end
+    loctext += _INTL("Badges") + "<r>" + text_tag + $player.badge_count.to_s + "</c3><br>"
     if $player.has_pokedex
-      loctext += _INTL("Pokédex<r><c3={1}>{2}/{3}</c3>", textColor, $player.pokedex.owned_count, $player.pokedex.seen_count)
+      loctext += _INTL("Pokédex") + "<r>" + text_tag + $player.pokedex.owned_count.to_s + "/" + $player.pokedex.seen_count.to_s + "</c3>"
     end
     @sprites["locwindow"] = Window_AdvancedTextPokemon.new(loctext)
     @sprites["locwindow"].viewport = @viewport
@@ -98,10 +114,10 @@ class PokemonSaveScreen
       $game_temp.begun_new_game = false
       pbSEPlay("GUI save choice")
       if Game.save
-        pbMessage(_INTL("\\se[]{1} saved the game.\\me[GUI save game]\\wtnp[30]", $player.name))
+        pbMessage("\\se[]" +_INTL("{1} saved the game.\\me[GUI save game]\\wtnp[30]", $player.name))
         ret = true
       else
-        pbMessage(_INTL("\\se[]Save failed.\\wtnp[30]"))
+        pbMessage("\\se[]" +_INTL("Save failed.\\wtnp[30]"))
         ret = false
       end
     else

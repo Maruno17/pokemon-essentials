@@ -250,7 +250,7 @@ class MiningGameScene
     @sprites["crack"] = MiningGameCounter.new(0, 4)
     @sprites["cursor"] = MiningGameCursor.new(58, 0)   # central position, pick
     @sprites["tool"] = IconSprite.new(434, 254, @viewport)
-    @sprites["tool"].setBitmap(sprintf("Graphics/UI/Mining/toolicons"))
+    @sprites["tool"].setBitmap("Graphics/UI/Mining/toolicons")
     @sprites["tool"].src_rect.set(0, 0, 68, 100)
     update
     pbFadeInAndShow(@sprites)

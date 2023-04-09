@@ -27,13 +27,13 @@ class Battle
     weather_data = GameData::BattleWeather.try_get(@field.weather)
     pbCommonAnimation(weather_data.animation) if weather_data
     case @field.weather
-#    when :Sun         then pbDisplay(_INTL("The sunlight is strong."))
-#    when :Rain        then pbDisplay(_INTL("Rain continues to fall."))
+    when :Sun         then pbDisplay(_INTL("The sunlight is strong."))
+    when :Rain        then pbDisplay(_INTL("Rain continues to fall."))
     when :Sandstorm   then pbDisplay(_INTL("The sandstorm is raging."))
     when :Hail        then pbDisplay(_INTL("The hail is crashing down."))
-#    when :HarshSun    then pbDisplay(_INTL("The sunlight is extremely harsh."))
-#    when :HeavyRain   then pbDisplay(_INTL("It is raining heavily."))
-#    when :StrongWinds then pbDisplay(_INTL("The wind is strong."))
+    when :HarshSun    then pbDisplay(_INTL("The sunlight is extremely harsh."))
+    when :HeavyRain   then pbDisplay(_INTL("It is raining heavily."))
+    when :StrongWinds then pbDisplay(_INTL("The wind is strong."))
     when :ShadowSky   then pbDisplay(_INTL("The shadow sky continues."))
     end
     # Effects due to weather
