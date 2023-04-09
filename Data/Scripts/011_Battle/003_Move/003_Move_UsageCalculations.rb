@@ -101,10 +101,11 @@ class Battle::Move
     # Check if move can't miss
     return true if modifiers[:base_accuracy] == 0
     # Calculation
-    accStage = [[modifiers[:accuracy_stage], -6].max, 6].min + 6
-    evaStage = [[modifiers[:evasion_stage], -6].max, 6].min + 6
-    stageMul = [3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 8, 9]
-    stageDiv = [9, 8, 7, 6, 5, 4, 3, 3, 3, 3, 3, 3, 3]
+    max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
+    accStage = [[modifiers[:accuracy_stage], -max_stage].max, max_stage].min + max_stage
+    evaStage = [[modifiers[:evasion_stage], -max_stage].max, max_stage].min + max_stage
+    stageMul = Battle::Battler::ACC_EVA_STAGE_MULTIPLIERS
+    stageDiv = Battle::Battler::ACC_EVA_STAGE_DIVISORS
     accuracy = 100.0 * stageMul[accStage] / stageDiv[accStage]
     evasion  = 100.0 * stageMul[evaStage] / stageDiv[evaStage]
     accuracy = (accuracy * modifiers[:accuracy_multiplier]).round
@@ -226,13 +227,13 @@ class Battle::Move
   def pbModifyDamage(damageMult, user, target);         return damageMult; end
 
   def pbGetAttackStats(user, target)
-    return user.spatk, user.stages[:SPECIAL_ATTACK] + 6 if specialMove?
-    return user.attack, user.stages[:ATTACK] + 6
+    return user.spatk, user.stages[:SPECIAL_ATTACK] + Battle::Battler::STAT_STAGE_MAXIMUM if specialMove?
+    return user.attack, user.stages[:ATTACK] + Battle::Battler::STAT_STAGE_MAXIMUM
   end
 
   def pbGetDefenseStats(user, target)
-    return target.spdef, target.stages[:SPECIAL_DEFENSE] + 6 if specialMove?
-    return target.defense, target.stages[:DEFENSE] + 6
+    return target.spdef, target.stages[:SPECIAL_DEFENSE] + Battle::Battler::STAT_STAGE_MAXIMUM if specialMove?
+    return target.defense, target.stages[:DEFENSE] + Battle::Battler::STAT_STAGE_MAXIMUM
   end
 
   def pbCalcDamage(user, target, numTargets = 1)
@@ -241,8 +242,9 @@ class Battle::Move
       target.damageState.calcDamage = 1
       return
     end
-    stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
-    stageDiv = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
+    max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
+    stageMul = Battle::Battler::STAT_STAGE_MULTIPLIERS
+    stageDiv = Battle::Battler::STAT_STAGE_DIVISORS
     # Get the move's type
     type = @calcType   # nil is treated as physical
     # Calculate whether this hit deals critical damage
@@ -252,13 +254,13 @@ class Battle::Move
     # Calculate user's attack stat
     atk, atkStage = pbGetAttackStats(user, target)
     if !target.hasActiveAbility?(:UNAWARE) || @battle.moldBreaker
-      atkStage = 6 if target.damageState.critical && atkStage < 6
+      atkStage = max_stage if target.damageState.critical && atkStage < max_stage
       atk = (atk.to_f * stageMul[atkStage] / stageDiv[atkStage]).floor
     end
     # Calculate target's defense stat
     defense, defStage = pbGetDefenseStats(user, target)
     if !user.hasActiveAbility?(:UNAWARE)
-      defStage = 6 if target.damageState.critical && defStage > 6
+      defStage = max_stage if target.damageState.critical && defStage > max_stage
       defense = (defense.to_f * stageMul[defStage] / stageDiv[defStage]).floor
     end
     # Calculate all multiplier effects

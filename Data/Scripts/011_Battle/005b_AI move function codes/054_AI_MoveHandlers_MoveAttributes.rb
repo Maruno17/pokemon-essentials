@@ -464,9 +464,6 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
     end
     # Prefer if user knows a damaging move which won't definitely critical hit
     if user.check_for_move { |m| m.damagingMove? && m.function != "AlwaysCriticalHit"}
-      # TODO: Change the score depending on how much of an effect a critical hit
-      #       will have? Critical hits ignore the user's offensive stat drops
-      #       and the target's defensive stat raises, and multiply the damage.
       score += 15
     end
     next score
@@ -521,9 +518,6 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPreventCriticalHitsAgainstUserSi
         crit_stage = 99 if b.check_for_move { |m| m.pbCritialOverride(b.battler, user.battler) > 0 }
         crit_stage = [crit_stage, Battle::Move::CRITICAL_HIT_RATIOS.length - 1].min
       end
-      # TODO: Change the score depending on how much of an effect a critical hit
-      #       will have? Critical hits ignore the user's offensive stat drops
-      #       and the target's defensive stat raises, and multiply the damage.
       score += 8 * crit_stage if crit_stage > 0
       score += 10 if b.effects[PBEffects::LaserFocus] > 0
     end
@@ -655,10 +649,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenPhysicalDamageAgainstUserS
     # Doesn't stack with Aurora Veil
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
     # Don't prefer the lower the user's HP is
-    # TODO: Should this HP check exist? The effect can still be set up for
-    #       allies. Maybe just don't prefer if there are no replacement mons
-    #       left.
-    if ai.trainer.has_skill_flag?("HPAware")
+    if ai.trainer.has_skill_flag?("HPAware") && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       if user.hp <= user.totalhp / 2
         score -= (20 * (0.75 - (user.hp.to_f / user.totalhp))).to_i   # -5 to -15
       end
@@ -686,10 +677,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSi
     # Doesn't stack with Aurora Veil
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
     # Don't prefer the lower the user's HP is
-    # TODO: Should this HP check exist? The effect can still be set up for
-    #       allies. Maybe just don't prefer if there are no replacement mons
-    #       left.
-    if ai.trainer.has_skill_flag?("HPAware")
+    if ai.trainer.has_skill_flag?("HPAware") && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       if user.hp <= user.totalhp / 2
         score -= (20 * (0.75 - (user.hp.to_f / user.totalhp))).to_i   # -5 to -15
       end
@@ -720,10 +708,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHai
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::Reflect] > 0 &&
                                            user.pbOwnSide.effects[PBEffects::LightScreen] > 0
     # Don't prefer the lower the user's HP is
-    # TODO: Should this HP check exist? The effect can still be set up for
-    #       allies. Maybe just don't prefer if there are no replacement mons
-    #       left.
-    if ai.trainer.has_skill_flag?("HPAware")
+    if ai.trainer.has_skill_flag?("HPAware") && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       if user.hp <= user.totalhp / 2
         score -= (20 * (0.75 - (user.hp.to_f / user.totalhp))).to_i   # -5 to -15
       end
@@ -767,8 +752,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.canProtectAgainst? }
-      # TODO: Include b's Unseen Fist somehow? We don't know which move b will
-      #       be using, so we don't know if Unseen Fist will apply.
+      next if b.has_active_ability?(:UNSEENFIST) && b.check_for_move { |m| m.contactMove? }
       useless = false
       # General preference
       score += 7
@@ -812,8 +796,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.canProtectAgainst? }
-      # TODO: Include b's Unseen Fist somehow? We don't know which move b will
-      #       be using, so we don't know if Unseen Fist will apply.
+      next if b.has_active_ability?(:UNSEENFIST) && b.check_for_move { |m| m.contactMove? }
       useless = false
       # General preference
       score += 7
@@ -821,7 +804,9 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
       if b.check_for_move { |m| m.contactMove? }
         poison_score = Battle::AI::Handlers.apply_move_effect_against_target_score("PoisonTarget",
            0, move, user, b, ai, battle)
-        score += poison_score / 2   # Halved because we don't know what move b will use
+        if poison_score != Battle::AI::MOVE_USELESS_SCORE
+          score += poison_score / 2   # Halved because we don't know what move b will use
+        end
       end
       # Prefer if the foe is in the middle of using a two turn attack
       score += 15 if b.effects[PBEffects::TwoTurnAttack] &&
@@ -852,7 +837,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
 )
 
 #===============================================================================
-# TODO: Special scoring for Aegislash.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShield",
   proc { |score, move, user, ai, battle|
@@ -863,8 +848,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.damagingMove? && m.canProtectAgainst? }
-      # TODO: Include b's Unseen Fist somehow? We don't know which move b will
-      #       be using, so we don't know if Unseen Fist will apply.
+      next if b.has_active_ability?(:UNSEENFIST) && b.check_for_move { |m| m.contactMove? }
       useless = false
       # General preference
       score += 7
@@ -898,6 +882,9 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
     score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 15 : 10)
+    # Aegislash
+    score += 10 if user.battler.isSpecies?(:AEGISLASH) && user.form == 1 &&
+                   user.ability == :STANCECHANGE
     next score
   }
 )
@@ -914,8 +901,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesObstruct"
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.damagingMove? && m.canProtectAgainst? }
-      # TODO: Include b's Unseen Fist somehow? We don't know which move b will
-      #       be using, so we don't know if Unseen Fist will apply.
+      next if b.has_active_ability?(:UNSEENFIST) && b.check_for_move { |m| m.contactMove? }
       useless = false
       # General preference
       score += 7
@@ -964,8 +950,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromTargetingMovesSpikyShi
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.canProtectAgainst? }
-      # TODO: Include b's Unseen Fist somehow? We don't know which move b will
-      #       be using, so we don't know if Unseen Fist will apply.
+      next if b.has_active_ability?(:UNSEENFIST) && b.check_for_move { |m| m.contactMove? }
       useless = false
       # General preference
       score += 7
@@ -1016,8 +1001,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromDamagingMovesIfUse
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.damagingMove? && m.canProtectAgainst? }
-      # TODO: Include b's Unseen Fist somehow? We don't know which move b will
-      #       be using, so we don't know if Unseen Fist will apply.
+      next if b.has_active_ability?(:UNSEENFIST) && b.check_for_move { |m| m.contactMove? }
       useless = false
       # General preference
       score += 7
@@ -1252,8 +1236,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RecoilThirdOfDamageDealt
       score -= 25 * [dmg, user.hp].min / user.hp
     end
     # Score for paralysing
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
-       score, move, user, target, ai, battle)
+    paralyze_score = Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
+       0, move, user, target, ai, battle)
+    score += paralyze_score if paralyze_score != Battle::AI::MOVE_USELESS_SCORE
     next score
   }
 )
@@ -1274,8 +1259,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RecoilThirdOfDamageDealt
       score -= 25 * [dmg, user.hp].min / user.hp
     end
     # Score for burning
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
-       score, move, user, target, ai, battle)
+    burn_score = Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
+       0, move, user, target, ai, battle)
+    score += burn_score if burn_score != Battle::AI::MOVE_USELESS_SCORE
     next score
   }
 )
@@ -1359,7 +1345,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("EnsureNextMoveAlwaysHits
       acc = m.pbBaseAccuracy(user.battler, target.battler) if ai.trainer.medium_skill?
       score += 5 if acc < 90 && acc != 0
       score += 8 if acc <= 50 && acc != 0
-      # TODO: Prefer more if m is a OHKO move.
+      score += 8 if m.is_a?(Battle::Move::OHKO)
     end
     # TODO: Prefer if target has increased evasion.
     # Not worth it if the user or the target is at low HP
@@ -1535,10 +1521,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetMovesBecomeElectri
 )
 
 #===============================================================================
-# TODO: This could check all other battlers, not just foes. It could check the
-#       effectivenesses of their Normal and Electric moves on all their foes,
-#       not just on the user. I think this is overkill, particularly as the
-#       effect only lasts for one round.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("NormalMovesBecomeElectric",
   proc { |score, move, user, ai, battle|

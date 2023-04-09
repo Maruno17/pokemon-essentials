@@ -518,8 +518,6 @@ Battle::AI::Handlers::MoveEffectScore.add("StartRaiseUserAtk1WhenDamaged",
     if ai.trainer.has_skill_flag?("HPAware")
       next score if user.hp <= user.totalhp / 3
     end
-    # TODO: Check whether any foe has damaging moves that will trigger the stat
-    #       raise?
     # Prefer if user benefits from a raised Attack stat
     score += 10 if ai.stat_raise_worthwhile?(user, :ATTACK)
     score += 7 if user.has_move_with_function?("PowerHigherWithUserPositiveStatStages")

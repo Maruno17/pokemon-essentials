@@ -15,34 +15,34 @@ class Battle::AI::AIBattler
   def refresh_battler
     old_party_index = @party_index
     @battler = @ai.battle.battlers[@index]
-    @party_index = @battler.pokemonIndex
+    @party_index = battler.pokemonIndex
     if @party_index != old_party_index
       # TODO: Start of battle or Pokémon switched/shifted; recalculate roles,
       #       etc.
     end
   end
 
-  def pokemon;     return @battler.pokemon;     end
-  def level;       return @battler.level;       end
-  def hp;          return @battler.hp;          end
-  def totalhp;     return @battler.totalhp;     end
-  def fainted?;    return @battler.fainted?;    end
-  def status;      return @battler.status;      end
-  def statusCount; return @battler.statusCount; end
-  def gender;      return @battler.gender;      end
-  def turnCount;   return @battler.turnCount;   end
-  def effects;     return @battler.effects;     end
-  def stages;      return @battler.stages;      end
-  def statStageAtMax?(stat); return @battler.statStageAtMax?(stat); end
-  def statStageAtMin?(stat); return @battler.statStageAtMin?(stat); end
-  def moves;       return @battler.moves;       end
+  def pokemon;     return battler.pokemon;     end
+  def level;       return battler.level;       end
+  def hp;          return battler.hp;          end
+  def totalhp;     return battler.totalhp;     end
+  def fainted?;    return battler.fainted?;    end
+  def status;      return battler.status;      end
+  def statusCount; return battler.statusCount; end
+  def gender;      return battler.gender;      end
+  def turnCount;   return battler.turnCount;   end
+  def effects;     return battler.effects;     end
+  def stages;      return battler.stages;      end
+  def statStageAtMax?(stat); return battler.statStageAtMax?(stat); end
+  def statStageAtMin?(stat); return battler.statStageAtMin?(stat); end
+  def moves;       return battler.moves;       end
 
   def wild?
     return @ai.battle.wildBattle? && opposes?
   end
 
   def name
-    return sprintf("%s (%d)", @battler.name, @index)
+    return sprintf("%s (%d)", battler.name, @index)
   end
 
   def opposes?(other = nil)
@@ -50,10 +50,10 @@ class Battle::AI::AIBattler
     return other.side != @side
   end
 
-  def idxOwnSide;      return @battler.idxOwnSide;      end
-  def pbOwnSide;       return @battler.pbOwnSide;       end
-  def idxOpposingSide; return @battler.idxOpposingSide; end
-  def pbOpposingSide;  return @battler.pbOpposingSide;  end
+  def idxOwnSide;      return battler.idxOwnSide;      end
+  def pbOwnSide;       return battler.pbOwnSide;       end
+  def idxOpposingSide; return battler.idxOpposingSide; end
+  def pbOpposingSide;  return battler.pbOpposingSide;  end
 
   #=============================================================================
 
@@ -63,44 +63,44 @@ class Battle::AI::AIBattler
     # Future Sight/Doom Desire
     # TODO
     # Wish
-    if @ai.battle.positions[@index].effects[PBEffects::Wish] == 1 && @battler.canHeal?
+    if @ai.battle.positions[@index].effects[PBEffects::Wish] == 1 && battler.canHeal?
       ret -= @ai.battle.positions[@index].effects[PBEffects::WishAmount]
     end
     # Sea of Fire
     if @ai.battle.sides[@side].effects[PBEffects::SeaOfFire] > 1 &&
-       @battler.takesIndirectDamage? && !has_type?(:FIRE)
+       battler.takesIndirectDamage? && !has_type?(:FIRE)
       ret += self.totalhp / 8
     end
     # Grassy Terrain (healing)
-    if @ai.battle.field.terrain == :Grassy && @battler.affectedByTerrain? && @battler.canHeal?
+    if @ai.battle.field.terrain == :Grassy && battler.affectedByTerrain? && battler.canHeal?
       ret -= [battler.totalhp / 16, 1].max
     end
     # Leftovers/Black Sludge
     if has_active_item?(:BLACKSLUDGE)
       if has_type?(:POISON)
-        ret -= [battler.totalhp / 16, 1].max if @battler.canHeal?
+        ret -= [battler.totalhp / 16, 1].max if battler.canHeal?
       else
-        ret += [battler.totalhp / 8, 1].max if @battler.takesIndirectDamage?
+        ret += [battler.totalhp / 8, 1].max if battler.takesIndirectDamage?
       end
     elsif has_active_item?(:LEFTOVERS)
-      ret -= [battler.totalhp / 16, 1].max if @battler.canHeal?
+      ret -= [battler.totalhp / 16, 1].max if battler.canHeal?
     end
     # Aqua Ring
-    if self.effects[PBEffects::AquaRing] && @battler.canHeal?
+    if self.effects[PBEffects::AquaRing] && battler.canHeal?
       amt = battler.totalhp / 16
       amt = (amt * 1.3).floor if has_active_item?(:BIGROOT)
       ret -= [amt, 1].max
     end
     # Ingrain
-    if self.effects[PBEffects::Ingrain] && @battler.canHeal?
+    if self.effects[PBEffects::Ingrain] && battler.canHeal?
       amt = battler.totalhp / 16
       amt = (amt * 1.3).floor if has_active_item?(:BIGROOT)
       ret -= [amt, 1].max
     end
     # Leech Seed
     if self.effects[PBEffects::LeechSeed] >= 0
-      if @battler.takesIndirectDamage?
-        ret += [battler.totalhp / 8, 1].max if @battler.takesIndirectDamage?
+      if battler.takesIndirectDamage?
+        ret += [battler.totalhp / 8, 1].max if battler.takesIndirectDamage?
       end
     else
       @ai.each_battler do |b, i|
@@ -111,31 +111,33 @@ class Battle::AI::AIBattler
       end
     end
     # Hyper Mode (Shadow Pokémon)
-    # TODO
+    if battler.inHyperMode?
+      ret += [battler.totalhp / 24, 1].max
+    end
     # Poison/burn/Nightmare
     if self.status == :POISON
       if has_active_ability?(:POISONHEAL)
-        ret -= [battler.totalhp / 8, 1].max if @battler.canHeal?
-      elsif @battler.takesIndirectDamage?
+        ret -= [battler.totalhp / 8, 1].max if battler.canHeal?
+      elsif battler.takesIndirectDamage?
         mult = 2
         mult = [self.effects[PBEffects::Toxic] + 1, 16].min if self.statusCount > 0   # Toxic
         ret += [mult * battler.totalhp / 16, 1].max
       end
     elsif self.status == :BURN
-      if @battler.takesIndirectDamage?
+      if battler.takesIndirectDamage?
         amt = (Settings::MECHANICS_GENERATION >= 7) ? self.totalhp / 16 : self.totalhp / 8
         amt = (amt / 2.0).round if has_active_ability?(:HEATPROOF)
         ret += [amt, 1].max
       end
-    elsif @battler.asleep? && self.statusCount > 1 && self.effects[PBEffects::Nightmare]
-      ret += [battler.totalhp / 4, 1].max if @battler.takesIndirectDamage?
+    elsif battler.asleep? && self.statusCount > 1 && self.effects[PBEffects::Nightmare]
+      ret += [battler.totalhp / 4, 1].max if battler.takesIndirectDamage?
     end
     # Curse
     if self.effects[PBEffects::Curse]
-      ret += [battler.totalhp / 4, 1].max if @battler.takesIndirectDamage?
+      ret += [battler.totalhp / 4, 1].max if battler.takesIndirectDamage?
     end
     # Trapping damage
-    if self.effects[PBEffects::Trapping] > 1 && @battler.takesIndirectDamage?
+    if self.effects[PBEffects::Trapping] > 1 && battler.takesIndirectDamage?
       amt = (Settings::MECHANICS_GENERATION >= 6) ? self.totalhp / 8 : self.totalhp / 16
       if @ai.battlers[self.effects[PBEffects::TrappingUser]].has_active_item?(:BINDINGBAND)
         amt = (Settings::MECHANICS_GENERATION >= 6) ? self.totalhp / 6 : self.totalhp / 8
@@ -143,16 +145,16 @@ class Battle::AI::AIBattler
       ret += [amt, 1].max
     end
     # Perish Song
-    # TODO
+    return 999_999 if self.effects[PBEffects::PerishSong] == 1
     # Bad Dreams
-    if @battler.asleep? && self.statusCount > 1 && @battler.takesIndirectDamage?
+    if battler.asleep? && self.statusCount > 1 && battler.takesIndirectDamage?
       @ai.each_battler do |b, i|
-        next if i == @index || !b.battler.near?(@battler) || !b.has_active_ability?(:BADDREAMS)
+        next if i == @index || !b.battler.near?(battler) || !b.has_active_ability?(:BADDREAMS)
         ret += [battler.totalhp / 8, 1].max
       end
     end
     # Sticky Barb
-    if has_active_item?(:STICKYBARB) && @battler.takesIndirectDamage?
+    if has_active_item?(:STICKYBARB) && battler.takesIndirectDamage?
       ret += [battler.totalhp / 8, 1].max
     end
     return ret
@@ -163,22 +165,26 @@ class Battle::AI::AIBattler
   def base_stat(stat)
     ret = 0
     case stat
-    when :ATTACK          then ret = @battler.attack
-    when :DEFENSE         then ret = @battler.defense
-    when :SPECIAL_ATTACK  then ret = @battler.spatk
-    when :SPECIAL_DEFENSE then ret = @battler.spdef
-    when :SPEED           then ret = @battler.speed
+    when :ATTACK          then ret = battler.attack
+    when :DEFENSE         then ret = battler.defense
+    when :SPECIAL_ATTACK  then ret = battler.spatk
+    when :SPECIAL_DEFENSE then ret = battler.spdef
+    when :SPEED           then ret = battler.speed
     end
     return ret
   end
 
   def rough_stat(stat)
-    return @battler.pbSpeed if stat == :SPEED && @ai.trainer.high_skill?
-    stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
-    stageDiv = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
-    stage = @battler.stages[stat] + 6
+    return battler.pbSpeed if stat == :SPEED && @ai.trainer.high_skill?
+    stage_mul = Battle::Battler::STAT_STAGE_MULTIPLIERS
+    stage_div = Battle::Battler::STAT_STAGE_DIVISORS
+    if [:ACCURACY, :EVASION].include?(stat)
+      stage_mul = Battle::Battler::ACC_EVA_STAGE_MULTIPLIERS
+      stage_div = Battle::Battler::ACC_EVA_STAGE_DIVISORS
+    end
+    stage = battler.stages[stat] + Battle::Battler::STAT_STAGE_MAXIMUM
     value = base_stat(stat)
-    return (value.to_f * stageMul[stage] / stageDiv[stage]).floor
+    return (value.to_f * stage_mul[stage] / stage_div[stage]).floor
   end
 
   def faster_than?(other)
@@ -190,8 +196,8 @@ class Battle::AI::AIBattler
 
   #=============================================================================
 
-  def types; return @battler.types; end
-  def pbTypes(withExtraType = false); return @battler.pbTypes(withExtraType); end
+  def types; return battler.types; end
+  def pbTypes(withExtraType = false); return battler.pbTypes(withExtraType); end
 
   def has_type?(type)
     return false if !type
@@ -201,19 +207,20 @@ class Battle::AI::AIBattler
 
   # TODO: Also make a def effectiveness_of_move_against_battler which calls
   #       pbCalcTypeModSingle instead of effectiveness_of_type_against_single_battler_type.
+  #       Why?
   def effectiveness_of_type_against_battler(type, user = nil)
     ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
     return ret if !type
     return ret if type == :GROUND && has_type?(:FLYING) && has_active_item?(:IRONBALL)
     # Get effectivenesses
     if type == :SHADOW
-      if @battler.shadowPokemon?
+      if battler.shadowPokemon?
         ret = Effectiveness::NOT_VERY_EFFECTIVE_MULTIPLIER
       else
         ret = Effectiveness::SUPER_EFFECTIVE_MULTIPLIER
       end
     else
-      @battler.pbTypes(true).each do |defend_type|
+      battler.pbTypes(true).each do |defend_type|
         ret *= effectiveness_of_type_against_single_battler_type(type, defend_type, user)
       end
       ret *= 2 if self.effects[PBEffects::TarShot] && type == :FIRE
@@ -223,39 +230,39 @@ class Battle::AI::AIBattler
 
   #=============================================================================
 
-  def ability_id; return @battler.ability_id; end
-  def ability;    return @battler.ability;    end
+  def ability_id; return battler.ability_id; end
+  def ability;    return battler.ability;    end
 
   def ability_active?
-    return @battler.abilityActive?
+    return battler.abilityActive?
   end
 
   def has_active_ability?(ability, ignore_fainted = false)
-    return @battler.hasActiveAbility?(ability, ignore_fainted)
+    return battler.hasActiveAbility?(ability, ignore_fainted)
   end
 
   def has_mold_breaker?
-    return @ai.move.function == "IgnoreTargetAbility" || @battler.hasMoldBreaker?
+    return @ai.move.function == "IgnoreTargetAbility" || battler.hasMoldBreaker?
   end
 
   #=============================================================================
 
-  def item_id; return @battler.item_id; end
-  def item;    return @battler.item;    end
+  def item_id; return battler.item_id; end
+  def item;    return battler.item;    end
 
   def item_active?
-    return @battler.itemActive?
+    return battler.itemActive?
   end
 
   def has_active_item?(item)
-    return @battler.hasActiveItem?(item)
+    return battler.hasActiveItem?(item)
   end
 
   #=============================================================================
 
   def check_for_move
     ret = false
-    @battler.eachMove do |move|
+    battler.eachMove do |move|
       next if move.pp == 0 && move.total_pp > 0
       next unless yield move
       ret = true
@@ -266,7 +273,7 @@ class Battle::AI::AIBattler
 
   def has_damaging_move_of_type?(*types)
     check_for_move do |m|
-      return true if m.damagingMove? && types.include?(m.pbCalcType(@battler))
+      return true if m.damagingMove? && types.include?(m.pbCalcType(battler))
     end
     return false
   end
@@ -303,24 +310,24 @@ class Battle::AI::AIBattler
   def can_become_trapped?
     return false if fainted?
     # Ability/item effects that allow switching no matter what
-    if ability_active? && Battle::AbilityEffects.triggerCertainSwitching(ability, @battler, @ai.battle)
+    if ability_active? && Battle::AbilityEffects.triggerCertainSwitching(ability, battler, @ai.battle)
       return false
     end
-    if item_active? && Battle::ItemEffects.triggerCertainSwitching(item, @battler, @ai.battle)
+    if item_active? && Battle::ItemEffects.triggerCertainSwitching(item, battler, @ai.battle)
       return false
     end
     # Other certain switching effects
     return false if Settings::MORE_TYPE_EFFECTS && has_type?(:GHOST)
     # Other certain trapping effects
-    return false if @battler.trappedInBattle?
+    return false if battler.trappedInBattle?
     # Trapping abilities/items
     ai.each_foe_battler(side) do |b, i|
       if b.ability_active? &&
-         Battle::AbilityEffects.triggerTrappingByTarget(b.ability, @battler, b.battler, @ai.battle)
+         Battle::AbilityEffects.triggerTrappingByTarget(b.ability, battler, b.battler, @ai.battle)
         return false
       end
       if b.item_active? &&
-         Battle::ItemEffects.triggerTrappingByTarget(b.item, @battler, b.battler, @ai.battle)
+         Battle::ItemEffects.triggerTrappingByTarget(b.item, battler, b.battler, @ai.battle)
         return false
       end
     end
@@ -432,9 +439,11 @@ class Battle::AI::AIBattler
     return 0 if has_active_ability?(:KLUTZ)
     # TODO: Unnerve, other item-negating effects.
     ret = BASE_ITEM_RATINGS[item] || 0
+    # TODO: Add more context-sensitive modifications to the ratings from above.
+    #       Should they be moved into a handler?
     case item
     when :ADAMANTORB
-      ret = 0 if !@battler.isSpecies?(:DIALGA) || !has_damaging_move_of_type?(:DRAGON, :STEEL)
+      ret = 0 if !battler.isSpecies?(:DIALGA) || !has_damaging_move_of_type?(:DRAGON, :STEEL)
     when :BLACKBELT, :BLACKGLASSES, :CHARCOAL, :DRAGONFANG, :HARDSTONE, :MAGNET,
          :METALCOAT, :MIRACLESEED, :MYSTICWATER, :NEVERMELTICE, :POISONBARB,
          :SHARPBEAK, :SILKSCARF, :SILVERPOWDER, :SOFTSAND, :SPELLTAG,
@@ -493,17 +502,17 @@ class Battle::AI::AIBattler
     when :CHOICESPECS, :WISEGLASSES
       ret = 0 if !check_for_move { |m| m.specialMove?(m.type) }
     when :DEEPSEATOOTH
-      ret = 0 if !@battler.isSpecies?(:CLAMPERL) || !check_for_move { |m| m.specialMove?(m.type) }
+      ret = 0 if !battler.isSpecies?(:CLAMPERL) || !check_for_move { |m| m.specialMove?(m.type) }
     when :GRISEOUSORB
-      ret = 0 if !@battler.isSpecies?(:GIRATINA) || !has_damaging_move_of_type?(:DRAGON, :GHOST)
+      ret = 0 if !battler.isSpecies?(:GIRATINA) || !has_damaging_move_of_type?(:DRAGON, :GHOST)
     when :IRONBALL
       ret = 0 if has_move_with_function?("ThrowUserItemAtTarget")
     when :LIGHTBALL
-      ret = 0 if !@battler.isSpecies?(:PIKACHU) || !check_for_move { |m| m.damagingMove? }
+      ret = 0 if !battler.isSpecies?(:PIKACHU) || !check_for_move { |m| m.damagingMove? }
     when :LUSTROUSORB
-      ret = 0 if !@battler.isSpecies?(:PALKIA) || !has_damaging_move_of_type?(:DRAGON, :WATER)
+      ret = 0 if !battler.isSpecies?(:PALKIA) || !has_damaging_move_of_type?(:DRAGON, :WATER)
     when :SOULDEW
-      if !@battler.isSpecies?(:LATIAS) && !@battler.isSpecies?(:LATIOS)
+      if !battler.isSpecies?(:LATIAS) && !battler.isSpecies?(:LATIOS)
         ret = 0
       elsif Settings::SOUL_DEW_POWERS_UP_TYPES
         ret = 0 if !has_damaging_move_of_type?(:PSYCHIC, :DRAGON)
@@ -511,7 +520,7 @@ class Battle::AI::AIBattler
         ret -= 2 if !check_for_move { |m| m.specialMove?(m.type) }   # Also boosts SpDef
       end
     when :THICKCLUB
-      ret = 0 if (!@battler.isSpecies?(:CUBONE) && !@battler.isSpecies?(:MAROWAK)) ||
+      ret = 0 if (!battler.isSpecies?(:CUBONE) && !battler.isSpecies?(:MAROWAK)) ||
                  !check_for_move { |m| m.physicalMove?(m.type) }
     end
     # Prefer if this battler knows Fling and it will do a lot of damage/have an
@@ -568,18 +577,18 @@ class Battle::AI::AIBattler
       ret += (cured_status && status == cured_status) ? 6 : -6
     when :PERSIMBERRY
       # Confusion cure
-      ret += (effects[PBEffects::Confusion] > 1) ? 6 : -6
+      ret += (self.effects[PBEffects::Confusion] > 1) ? 6 : -6
     when :LUMBERRY
       # Any status/confusion cure
-      ret += (status != :NONE || effects[PBEffects::Confusion] > 1) ? 6 : -6
+      ret += (status != :NONE || self.effects[PBEffects::Confusion] > 1) ? 6 : -6
     when :MENTALHERB
       # Cure mental effects
-      if effects[PBEffects::Attract] >= 0 ||
-         effects[PBEffects::Taunt] > 1 ||
-         effects[PBEffects::Encore] > 1 ||
-         effects[PBEffects::Torment] ||
-         effects[PBEffects::Disable] > 1 ||
-         effects[PBEffects::HealBlock] > 1
+      if self.effects[PBEffects::Attract] >= 0 ||
+         self.effects[PBEffects::Taunt] > 1 ||
+         self.effects[PBEffects::Encore] > 1 ||
+         self.effects[PBEffects::Torment] ||
+         self.effects[PBEffects::Disable] > 1 ||
+         self.effects[PBEffects::HealBlock] > 1
         ret += 6
       else
         ret -= 6
@@ -604,13 +613,13 @@ class Battle::AI::AIBattler
       ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && has_active_ability?(:RIPEN)
     when :WHITEHERB
       # Resets lowered stats
-      ret += (@battler.hasLoweredStatStages?) ? 8 : -8
+      ret += (battler.hasLoweredStatStages?) ? 8 : -8
     when :MICLEBERRY
       # Raises accuracy of next move
       ret += (@ai.stat_raise_worthwhile?(self, :ACCURACY, true)) ? 6 : -6
     when :LANSATBERRY
       # Focus energy
-      ret += (effects[PBEffects::FocusEnergy] < 2) ? 6 : -6
+      ret += (self.effects[PBEffects::FocusEnergy] < 2) ? 6 : -6
     when :LEPPABERRY
       # Restore PP
       ret += 6
@@ -903,54 +912,53 @@ class Battle::AI::AIBattler
   #       they need to do something special in that case.
   def wants_ability?(ability = :NONE)
     ability = ability.id if !ability.is_a?(Symbol) && ability.respond_to?("id")
-    # TODO: Ideally replace the above list of ratings with context-sensitive
-    #       calculations. Should they all go in this method, or should there be
-    #       more handlers for each ability?
+    ret = BASE_ABILITY_RATINGS[ability] || 0
+    # TODO: Add more context-sensitive modifications to the ratings from above.
+    #       Should they be moved into a handler?
     case ability
     when :BLAZE
-      return 0 if !has_damaging_move_of_type?(:FIRE)
+      ret = 0 if !has_damaging_move_of_type?(:FIRE)
     when :CUTECHARM, :RIVALRY
-      return 0 if gender == 2
+      ret = 0 if gender == 2
     when :FRIENDGUARD, :HEALER, :SYMBOISIS, :TELEPATHY
       has_ally = false
       each_ally(@side) { |b, i| has_ally = true }
-      return 0 if !has_ally
+      ret = 0 if !has_ally
     when :GALEWINGS
-      return 0 if !check_for_move { |m| m.type == :FLYING }
+      ret = 0 if !check_for_move { |m| m.type == :FLYING }
     when :HUGEPOWER, :PUREPOWER
-      return 0 if !ai.stat_raise_worthwhile?(self, :ATTACK, true)
+      ret = 0 if !ai.stat_raise_worthwhile?(self, :ATTACK, true)
     when :IRONFIST
-      return 0 if !check_for_move { |m| m.punchingMove? }
+      ret = 0 if !check_for_move { |m| m.punchingMove? }
     when :LIQUIDVOICE
-      return 0 if !check_for_move { |m| m.soundMove? }
+      ret = 0 if !check_for_move { |m| m.soundMove? }
     when :MEGALAUNCHER
-      return 0 if !check_for_move { |m| m.pulseMove? }
+      ret = 0 if !check_for_move { |m| m.pulseMove? }
     when :OVERGROW
-      return 0 if !has_damaging_move_of_type?(:GRASS)
+      ret = 0 if !has_damaging_move_of_type?(:GRASS)
     when :PRANKSTER
-      return 0 if !check_for_move { |m| m.statusMove? }
+      ret = 0 if !check_for_move { |m| m.statusMove? }
     when :PUNKROCK
-      return 1 if !check_for_move { |m| m.damagingMove? && m.soundMove? }
+      ret = 1 if !check_for_move { |m| m.damagingMove? && m.soundMove? }
     when :RECKLESS
-      return 0 if !check_for_move { |m| m.recoilMove? }
+      ret = 0 if !check_for_move { |m| m.recoilMove? }
     when :ROCKHEAD
-      return 0 if !check_for_move { |m| m.recoilMove? && !m.is_a?(Battle::Move::CrashDamageIfFailsUnusableInGravity) }
+      ret = 0 if !check_for_move { |m| m.recoilMove? && !m.is_a?(Battle::Move::CrashDamageIfFailsUnusableInGravity) }
     when :RUNAWAY
-      return 0 if wild?
+      ret = 0 if wild?
     when :SANDFORCE
-      return 2 if !has_damaging_move_of_type?(:GROUND, :ROCK, :STEEL)
+      ret = 2 if !has_damaging_move_of_type?(:GROUND, :ROCK, :STEEL)
     when :SKILLLINK
-      return 0 if !check_for_move { |m| m.is_a?(Battle::Move::HitTwoToFiveTimes) }
+      ret = 0 if !check_for_move { |m| m.is_a?(Battle::Move::HitTwoToFiveTimes) }
     when :STEELWORKER
-      return 0 if !has_damaging_move_of_type?(:GRASS)
+      ret = 0 if !has_damaging_move_of_type?(:GRASS)
     when :SWARM
-      return 0 if !has_damaging_move_of_type?(:BUG)
+      ret = 0 if !has_damaging_move_of_type?(:BUG)
     when :TORRENT
-      return 0 if !has_damaging_move_of_type?(:WATER)
+      ret = 0 if !has_damaging_move_of_type?(:WATER)
     when :TRIAGE
-      return 0 if !check_for_move { |m| m.healingMove? }
+      ret = 0 if !check_for_move { |m| m.healingMove? }
     end
-    ret = BASE_ABILITY_RATINGS[ability] || 0
     return ret
   end
 
@@ -966,22 +974,22 @@ class Battle::AI::AIBattler
         ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
       # Foresight
-      if (user&.has_active_ability?(:SCRAPPY) || @battler.effects[PBEffects::Foresight]) &&
+      if (user&.has_active_ability?(:SCRAPPY) || self.effects[PBEffects::Foresight]) &&
          defend_type == :GHOST
         ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
       # Miracle Eye
-      if @battler.effects[PBEffects::MiracleEye] && defend_type == :DARK
+      if self.effects[PBEffects::MiracleEye] && defend_type == :DARK
         ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
     elsif Effectiveness.super_effective_type?(type, defend_type)
       # Delta Stream's weather
-      if @battler.effectiveWeather == :StrongWinds && defend_type == :FLYING
+      if battler.effectiveWeather == :StrongWinds && defend_type == :FLYING
         ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
     end
     # Grounded Flying-type Pokémon become susceptible to Ground moves
-    if !@battler.airborne? && defend_type == :FLYING && type == :GROUND
+    if !battler.airborne? && defend_type == :FLYING && type == :GROUND
       ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
     end
     return ret

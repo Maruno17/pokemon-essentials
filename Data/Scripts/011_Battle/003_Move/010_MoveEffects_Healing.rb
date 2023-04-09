@@ -139,10 +139,11 @@ class Battle::Move::HealUserByTargetAttackLowerTargetAttack1 < Battle::Move
 
   def pbEffectAgainstTarget(user, target)
     # Calculate target's effective attack value
-    stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
-    stageDiv = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
+    max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
+    stageMul = Battle::Battler::STAT_STAGE_MULTIPLIERS
+    stageDiv = Battle::Battler::STAT_STAGE_DIVISORS
     atk      = target.attack
-    atkStage = target.stages[@statDown[0]] + 6
+    atkStage = target.stages[@statDown[0]] + max_stage
     healAmt = (atk.to_f * stageMul[atkStage] / stageDiv[atkStage]).floor
     # Reduce target's Attack stat
     if target.pbCanLowerStatStage?(@statDown[0], user, self)

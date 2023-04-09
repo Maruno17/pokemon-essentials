@@ -217,8 +217,9 @@ Battle::AI::Handlers::MoveFailureCheck.add("UserConsumeBerryRaiseDefense2",
 Battle::AI::Handlers::MoveEffectScore.add("UserConsumeBerryRaiseDefense2",
   proc { |score, move, user, ai, battle|
     # Score for raising the user's stat
-    score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserDefense2",
-       score, move, user, ai, battle)
+    stat_raise_score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserDefense2",
+       0, move, user, ai, battle)
+    score += stat_raise_score if stat_raise_score != Battle::AI::MOVE_USELESS_SCORE
     # Score for the consumed berry's effect
     score += user.get_score_change_for_consuming_item(user.item_id, true)
     # Score for other results of consuming the berry

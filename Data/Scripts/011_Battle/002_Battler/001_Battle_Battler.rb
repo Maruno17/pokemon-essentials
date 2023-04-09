@@ -45,6 +45,13 @@ class Battle::Battler
   attr_accessor :canRestoreIceFace   # Whether Hail started in the round
   attr_accessor :damageState
 
+  # These arrays should all have the same number of values in them
+  STAT_STAGE_MULTIPLIERS    = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
+  STAT_STAGE_DIVISORS       = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
+  ACC_EVA_STAGE_MULTIPLIERS = [3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 8, 9]
+  ACC_EVA_STAGE_DIVISORS    = [9, 8, 7, 6, 5, 4, 3, 3, 3, 3, 3, 3, 3]
+  STAT_STAGE_MAXIMUM        = 6   # Is also the minimum (-6)
+
   #=============================================================================
   # Complex accessors
   #=============================================================================
@@ -240,10 +247,8 @@ class Battle::Battler
   #=============================================================================
   def pbSpeed
     return 1 if fainted?
-    stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
-    stageDiv = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
-    stage = @stages[:SPEED] + 6
-    speed = @speed * stageMul[stage] / stageDiv[stage]
+    stage = @stages[:SPEED] + STAT_STAGE_MAXIMUM
+    speed = @speed * STAT_STAGE_MULTIPLIERS[stage] / STAT_STAGE_DIVISORS[stage]
     speedMult = 1.0
     # Ability effects that alter calculated Speed
     if abilityActive?

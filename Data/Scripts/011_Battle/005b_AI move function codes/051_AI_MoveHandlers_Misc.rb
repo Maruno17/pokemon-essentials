@@ -562,8 +562,9 @@ Battle::AI::Handlers::MoveEffectScore.add("UserMakeSubstitute",
     ai.each_foe_battler(user.side) do |b, i|
       score += 5 if !b.check_for_move { |m| m.ignoresSubstitute?(b.battler) }
     end
-    # TODO: Predict incoming damage, and prefer if it's greater than
-    #       user.totalhp / 4?
+    # Prefer if the user lost more than a Substitute's worth of HP from the last
+    # attack against it
+    score += 7 if user.battler.lastHPLost >= user.totalhp / 4
     next score
   }
 )

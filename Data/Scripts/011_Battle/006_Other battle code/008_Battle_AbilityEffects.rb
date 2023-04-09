@@ -1693,7 +1693,7 @@ Battle::AbilityEffects::OnBeingHit.add(:ANGERPOINT,
     next if !target.damageState.critical
     next if !target.pbCanRaiseStatStage?(:ATTACK, target)
     battle.pbShowAbilitySplash(target)
-    target.stages[:ATTACK] = 6
+    target.stages[:ATTACK] = Battle::Battler::STAT_STAGE_MAXIMUM
     target.statsRaisedThisRound = true
     battle.pbCommonAnimation("StatUp", target)
     if Battle::Scene::USE_ABILITY_SPLASH

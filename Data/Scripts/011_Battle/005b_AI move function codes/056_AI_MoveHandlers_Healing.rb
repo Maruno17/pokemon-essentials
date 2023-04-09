@@ -97,11 +97,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHPLoseFlyingTypeTh
     score = Battle::AI::Handlers.apply_move_effect_score("HealUserHalfOfTotalHP",
        score, move, user, ai, battle)
     # User loses the Flying type this round
-    if user.has_type?(:FLYING)
-      # TODO: Decide whether losing the Flying type is good or bad. Look at
-      #       type effectiveness changes against the user, and for foes' Ground
-      #       moves (foe foes slower than the user). Anything else?
-    end
+    # NOTE: Not worth considering and scoring for.
     next score
   }
 )
@@ -118,7 +114,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetStatusHealUser
   proc { |score, move, user, target, ai, battle|
     # Consider how much HP will be restored
     score = Battle::AI::Handlers.apply_move_effect_score("HealUserHalfOfTotalHP",
-      score, move, user, ai, battle)
+       score, move, user, ai, battle)
     # Will cure target's status
     score += (target.wants_status_problem?(target.status)) ? 10 : -8
     next score

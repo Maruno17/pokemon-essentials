@@ -231,7 +231,6 @@ class Battle::AI
     if targets
       # Reset the base score for the move (each target will add its own score)
       score = 0
-      # TODO: Distinguish between affected foes and affected allies?
       affected_targets = 0
       # Get a score for the move against each target in turn
       orig_move = @move.move   # In case move is Mirror Move and changes depending on the target

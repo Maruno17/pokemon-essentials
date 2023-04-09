@@ -62,7 +62,7 @@ class Battle::AI
       # Calculate amount that stat will be raised by
       increment = stat_changes[idx + 1]
       increment *= 2 if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:SIMPLE)
-      increment = [increment, 6 - target.stages[stat]].min   # The actual stages gained
+      increment = [increment, Battle::Battler::STAT_STAGE_MAXIMUM - target.stages[stat]].min   # The actual stages gained
       # Count this as a valid stat raise
       real_stat_changes.push([stat, increment]) if increment > 0
     end
@@ -98,8 +98,10 @@ class Battle::AI
     if !fixed_change
       return false if !target.battler.pbCanRaiseStatStage?(stat, @user.battler, @move.move)
     end
+    # TODO: Not worth it if target is predicted to switch out (except via Baton Pass).
     # Check if target won't benefit from the stat being raised
-    # TODO: Exception if target knows Baton Pass/Stored Power?
+    return true if target.has_move_with_function?("SwitchOutUserPassOnEffects",
+                                                  "PowerHigherWithUserPositiveStatStages")
     case stat
     when :ATTACK
       return false if !target.check_for_move { |m| m.physicalMove?(m.type) &&
@@ -146,24 +148,18 @@ class Battle::AI
   #=============================================================================
   def get_target_stat_raise_score_generic(score, target, stat_changes, desire_mult = 1)
     total_increment = stat_changes.sum { |change| change[1] }
-    # TODO: Just return if the target's foe is predicted to use a phazing move
-    #       (one that switches the target out).
-    # TODO: Don't prefer if foe is faster than target and is predicted to deal
-    #       lethal damage.
-    # TODO: Don't prefer if foe is slower than target but is predicted to be
-    #       able to 2HKO the target.
-    # TODO: Prefer if foe is semi-invulnerable and target is faster (can't hit
-    #       the foe anyway).
     # Prefer if move is a status move and it's the user's first/second turn
     if @user.turnCount < 2 && @move.statusMove?
       score += total_increment * desire_mult * 5
     end
-    # Prefer if user is at high HP, don't prefer if user is at low HP
-    if target.index != @user.index
-      score += total_increment * desire_mult * ((100 * @user.hp / @user.totalhp) - 50) / 8   # +6 to -6 per stage
+    if @trainer.has_skill_flag?("HPAware")
+      # Prefer if user is at high HP, don't prefer if user is at low HP
+      if target.index != @user.index
+        score += total_increment * desire_mult * ((100 * @user.hp / @user.totalhp) - 50) / 8   # +6 to -6 per stage
+      end
+      # Prefer if target is at high HP, don't prefer if target is at low HP
+      score += total_increment * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 8   # +6 to -6 per stage
     end
-    # Prefer if target is at high HP, don't prefer if target is at low HP
-    score += total_increment * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 8   # +6 to -6 per stage
     # TODO: Look at abilities that trigger upon stat raise. There are none.
     return score
   end
@@ -173,15 +169,16 @@ class Battle::AI
   #=============================================================================
   def get_target_stat_raise_score_one(score, target, stat, increment, desire_mult = 1)
     # Figure out how much the stat will actually change by
-    stage_mul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
-    stage_div = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
+    max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
+    stage_mul = Battle::Battler::STAT_STAGE_MULTIPLIERS
+    stage_div = Battle::Battler::STAT_STAGE_DIVISORS
     if [:ACCURACY, :EVASION].include?(stat)
-      stage_mul = [3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 8, 9]
-      stage_div = [9, 8, 7, 6, 5, 4, 3, 3, 3, 3, 3, 3, 3]
+      stage_mul = Battle::Battler::ACC_EVA_STAGE_MULTIPLIERS
+      stage_div = Battle::Battler::ACC_EVA_STAGE_DIVISORS
     end
     old_stage = target.stages[stat]
     new_stage = old_stage + increment
-    inc_mult = (stage_mul[new_stage + 6].to_f * stage_div[old_stage + 6]) / (stage_div[new_stage + 6] * stage_mul[old_stage + 6])
+    inc_mult = (stage_mul[new_stage + max_stage].to_f * stage_div[old_stage + max_stage]) / (stage_div[new_stage + max_stage] * stage_mul[old_stage + max_stage])
     inc_mult -= 1
     inc_mult *= desire_mult
     # Stat-based score changes
@@ -304,7 +301,6 @@ class Battle::AI
   # inversion does not happen if the move could target a foe but is targeting an
   # ally, but only because it is inverted in def pbGetMoveScoreAgainstTarget
   # instead.
-  # TODO: Revisit this method as parts may need rewriting.
   #=============================================================================
   def get_score_for_target_stat_drop(score, target, stat_changes, whole_effect = true,
                                      fixed_change = false, ignore_contrary = false)
@@ -358,8 +354,8 @@ class Battle::AI
       end
       # Calculate amount that stat will be lowered by
       decrement = stat_changes[idx + 1]
-      decrement *= 2 if !fixed_change && !@battle.moldBreaker && @user.has_active_ability?(:SIMPLE)
-      decrement = [decrement, 6 + target.stages[stat]].min   # The actual stages lost
+      decrement *= 2 if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:SIMPLE)
+      decrement = [decrement, Battle::Battler::STAT_STAGE_MAXIMUM + target.stages[stat]].min   # The actual stages lost
       # Count this as a valid stat drop
       real_stat_changes.push([stat, decrement]) if decrement > 0
     end
@@ -390,12 +386,12 @@ class Battle::AI
   # TODO: Make sure the move's actual damage category is taken into account,
   #       i.e. CategoryDependsOnHigherDamagePoisonTarget and
   #       CategoryDependsOnHigherDamageIgnoreTargetAbility.
-  # TODO: Revisit this method as parts may need rewriting.
   #=============================================================================
   def stat_drop_worthwhile?(target, stat, fixed_change = false)
     if !fixed_change
       return false if !target.battler.pbCanLowerStatStage?(stat, @user.battler, @move.move)
     end
+    # TODO: Not worth it if target is predicted to switch out (except via Baton Pass).
     # Check if target won't benefit from the stat being lowered
     case stat
     when :ATTACK
@@ -437,46 +433,40 @@ class Battle::AI
 
   #=============================================================================
   # Make score changes based on the general concept of lowering stats at all.
-  # TODO: Revisit this method as parts may need rewriting.
-  # TODO: All comments in this method may be inaccurate.
   #=============================================================================
   def get_target_stat_drop_score_generic(score, target, stat_changes, desire_mult = 1)
     total_decrement = stat_changes.sum { |change| change[1] }
-    # TODO: Just return if target is predicted to switch out (except via Baton Pass).
-    # TODO: Don't prefer if target is faster than user and is predicted to deal
-    #       lethal damage.
-    # TODO: Don't prefer if target is slower than user but is predicted to be able
-    #       to 2HKO user.
-    # TODO: Don't prefer if target is semi-invulnerable and user is faster.
     # Prefer if move is a status move and it's the user's first/second turn
     if @user.turnCount < 2 && @move.statusMove?
       score += total_decrement * desire_mult * 5
     end
-    # Prefer if user is at high HP, don't prefer if user is at low HP
-    if target.index != @user.index
-      score += total_decrement * desire_mult * ((100 * @user.hp / @user.totalhp) - 50) / 8   # +6 to -6 per stage
+    if @trainer.has_skill_flag?("HPAware")
+      # Prefer if user is at high HP, don't prefer if user is at low HP
+      if target.index != @user.index
+        score += total_decrement * desire_mult * ((100 * @user.hp / @user.totalhp) - 50) / 8   # +6 to -6 per stage
+      end
+      # Prefer if target is at high HP, don't prefer if target is at low HP
+      score += total_decrement * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 8   # +6 to -6 per stage
     end
-    # Prefer if target is at high HP, don't prefer if target is at low HP
-    score += total_decrement * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 8   # +6 to -6 per stage
     # TODO: Look at abilities that trigger upon stat lowering.
     return score
   end
 
   #=============================================================================
   # Make score changes based on the lowering of a specific stat.
-  # TODO: Revisit this method as parts may need rewriting.
   #=============================================================================
   def get_target_stat_drop_score_one(score, target, stat, decrement, desire_mult = 1)
     # Figure out how much the stat will actually change by
-    stage_mul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
-    stage_div = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
+    max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
+    stage_mul = Battle::Battler::STAT_STAGE_MULTIPLIERS
+    stage_div = Battle::Battler::STAT_STAGE_DIVISORS
     if [:ACCURACY, :EVASION].include?(stat)
-      stage_mul = [3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 8, 9]
-      stage_div = [9, 8, 7, 6, 5, 4, 3, 3, 3, 3, 3, 3, 3]
+      stage_mul = Battle::Battler::ACC_EVA_STAGE_MULTIPLIERS
+      stage_div = Battle::Battler::ACC_EVA_STAGE_DIVISORS
     end
     old_stage = target.stages[stat]
     new_stage = old_stage - decrement
-    dec_mult = (stage_mul[old_stage + 6].to_f * stage_div[new_stage + 6]) / (stage_div[old_stage + 6] * stage_mul[new_stage + 6])
+    dec_mult = (stage_mul[old_stage + max_stage].to_f * stage_div[new_stage + max_stage]) / (stage_div[old_stage + max_stage] * stage_mul[new_stage + max_stage])
     dec_mult -= 1
     dec_mult *= desire_mult
     # Stat-based score changes

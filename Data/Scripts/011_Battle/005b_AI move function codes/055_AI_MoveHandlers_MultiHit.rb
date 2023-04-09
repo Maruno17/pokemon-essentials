@@ -31,8 +31,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HitTwoTimesPoisonTarget"
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("HitTwoTimes",
        score, move, user, target, ai, battle)
     # Score for poisoning
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("PoisonTarget",
-       score, move, user, target, ai, battle)
+    poison_score = Battle::AI::Handlers.apply_move_effect_against_target_score("PoisonTarget",
+       0, move, user, target, ai, battle)
+    score += poison_score if poison_score != Battle::AI::MOVE_USELESS_SCORE
     next score
   }
 )
@@ -279,6 +280,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackParalyzeTar
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for paralysing
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
        score, move, user, target, ai, battle)
@@ -294,6 +296,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackBurnTarget"
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for burning
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
        score, move, user, target, ai, battle)
@@ -309,6 +312,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackFlinchTarge
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for flinching
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
        score, move, user, target, ai, battle)
@@ -323,11 +327,12 @@ Battle::AI::Handlers::MoveFailureCheck.copy("RaiseUserAtkDef1",
                                             "TwoTurnAttackRaiseUserSpAtkSpDefSpd2")
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackRaiseUserSpAtkSpDefSpd2",
   proc { |score, move, user, target, ai, battle|
-    # Score for raising user's stats
-    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
+    # Score for raising user's stats
+    score = ai.get_score_for_target_stat_raise(score, user, move.move.statUp)
     next score
   }
 )
@@ -340,6 +345,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackChargeRaise
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for raising the user's stat
     score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserDefense1",
        score, move, user, ai, battle)
@@ -355,6 +361,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackChargeRaise
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for raising the user's stat
     score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserSpAtk1",
        score, move, user, ai, battle)
@@ -370,6 +377,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for being semi-invulnerable underground
     ai.each_foe_battler(user.side) do |b, i|
       if b.check_for_move { |m| m.hitsDiggingTargets? }
@@ -390,6 +398,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for being semi-invulnerable underwater
     ai.each_foe_battler(user.side) do |b, i|
       if b.check_for_move { |m| m.hitsDivingTargets? }
@@ -410,6 +419,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for being semi-invulnerable in the sky
     ai.each_foe_battler(user.side) do |b, i|
       if b.check_for_move { |m| m.hitsFlyingTargets? }
@@ -430,6 +440,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     # Score for being a two turn attack and semi-invulnerable in the sky
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttackInvulnerableInSky",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for paralyzing the target
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
        score, move, user, target, ai, battle)
@@ -460,6 +471,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackInvulnerabl
     # Score for being a two turn attack
     score = Battle::AI::Handlers.apply_move_effect_against_target_score("TwoTurnAttack",
        score, move, user, target, ai, battle)
+    next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for being invulnerable
     score += 8
     # Score for removing protections

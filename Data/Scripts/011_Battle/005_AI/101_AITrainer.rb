@@ -17,6 +17,8 @@
 #   ConsiderSwitching (can choose to switch out Pokémon)
 #   ReserveLastPokemon (don't switch it in if possible)
 #   UsePokemonInOrder (uses earliest-listed Pokémon possible)
+#
+# TODO: Add more skill flags.
 #===============================================================================
 class Battle::AI::AITrainer
   attr_reader :side, :trainer_index
@@ -53,7 +55,6 @@ class Battle::AI::AITrainer
     if @trainer
       @trainer.flags.each { |flag| @skill_flags.push(flag) }
     end
-    # TODO: Add skill flags depending on @skill.
     if @skill > 0
       @skill_flags.push("PredictMoveFailure")
       @skill_flags.push("ScoreMoves")
@@ -74,7 +75,6 @@ class Battle::AI::AITrainer
     # NOTE: Any skill flag which is shorthand for multiple other skill flags
     #       should be "unpacked" here.
     # TODO: Have a bunch of "AntiX" flags that negate the corresponding "X" flags.
-    # TODO: Have flag "DontReserveLastPokemon" which negates "ReserveLastPokemon".
   end
 
   def has_skill_flag?(flag)

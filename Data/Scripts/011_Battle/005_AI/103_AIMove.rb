@@ -105,20 +105,21 @@ class Battle::AI::AIMove
   def rough_damage
     base_dmg = base_power
     return base_dmg if @move.is_a?(Battle::Move::FixedDamageMove)
-    stage_mul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
-    stage_div = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
+    max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
+    stage_mul = Battle::Battler::STAT_STAGE_MULTIPLIERS
+    stage_div = Battle::Battler::STAT_STAGE_DIVISORS
     # Get the user and target of this move
     user = @ai.user
     user_battler = user.battler
     target = @ai.target
     target_battler = target.battler
-
     # Get the move's type
     calc_type = rough_type
-
-    # Decide whether the move will definitely be a critical hit
-    is_critical = rough_critical_hit_stage >= Battle::Move::CRITICAL_HIT_RATIOS.length
-
+    # Decide whether the move has 50% chance of higher of being a critical hit
+    # TODO: Make this a gradient/probability rather than all-or-nothing?
+    crit_stage = rough_critical_hit_stage
+    is_critical = crit_stage >= Battle::Move::CRITICAL_HIT_RATIOS.length ||
+                  Battle::Move::CRITICAL_HIT_RATIOS[crit_stage] <= 2
     ##### Calculate user's attack stat #####
     if ["CategoryDependsOnHigherDamagePoisonTarget",
         "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(function)
@@ -126,17 +127,15 @@ class Battle::AI::AIMove
     end
     atk, atk_stage = @move.pbGetAttackStats(user.battler, target.battler)
     if !target.has_active_ability?(:UNAWARE) || @ai.battle.moldBreaker
-      atk_stage = 6 if is_critical && atk_stage < 6
+      atk_stage = max_stage if is_critical && atk_stage < max_stage
       atk = (atk.to_f * stage_mul[atk_stage] / stage_div[atk_stage]).floor
     end
-
     ##### Calculate target's defense stat #####
     defense, def_stage = @move.pbGetDefenseStats(user.battler, target.battler)
     if !user.has_active_ability?(:UNAWARE) || @ai.battle.moldBreaker
-      def_stage = 6 if is_critical && def_stage > 6
+      def_stage = max_stage if is_critical && def_stage > max_stage
       defense = (defense.to_f * stage_mul[def_stage] / stage_div[def_stage]).floor
     end
-
     ##### Calculate all multiplier effects #####
     multipliers = {
       :power_multiplier        => 1.0,
@@ -154,7 +153,6 @@ class Battle::AI::AIMove
         multipliers[:power_multiplier] *= 4 / 3.0
       end
     end
-
     # Ability effects that alter damage
     if user.ability_active?
       # NOTE: These abilities aren't suitable for checking at the start of the
@@ -166,7 +164,6 @@ class Battle::AI::AIMove
         )
       end
     end
-
     if !@ai.battle.moldBreaker
       user_battler.allAllies.each do |b|
         next if !b.abilityActive?
@@ -198,7 +195,6 @@ class Battle::AI::AIMove
         )
       end
     end
-
     # Item effects that alter damage
     # NOTE: Type-boosting gems aren't suitable for checking at the start of the
     #       round.
@@ -218,23 +214,18 @@ class Battle::AI::AIMove
         target.item, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
       )
     end
-
     # Parental Bond
     if user.has_active_ability?(:PARENTALBOND)
       multipliers[:power_multiplier] *= (Settings::MECHANICS_GENERATION >= 7) ? 1.25 : 1.5
     end
-
     # Me First
     # TODO
-
     # Helping Hand - n/a
-
     # Charge
     if @ai.trainer.medium_skill? &&
        user.effects[PBEffects::Charge] > 0 && calc_type == :ELECTRIC
       multipliers[:power_multiplier] *= 2
     end
-
     # Mud Sport and Water Sport
     if @ai.trainer.medium_skill?
       if calc_type == :ELECTRIC
@@ -253,7 +244,6 @@ class Battle::AI::AIMove
         end
       end
     end
-
     # Terrain moves
     if @ai.trainer.medium_skill?
       terrain_multiplier = (Settings::MECHANICS_GENERATION >= 8) ? 1.3 : 1.5
@@ -268,7 +258,6 @@ class Battle::AI::AIMove
         multipliers[:power_multiplier] /= 2 if calc_type == :DRAGON && target_battler.affectedByTerrain?
       end
     end
-
     # Badge multipliers
     if @ai.trainer.high_skill? && @ai.battle.internalBattle && target_battler.pbOwnedByPlayer?
       # Don't need to check the Atk/Sp Atk-boosting badges because the AI
@@ -279,12 +268,10 @@ class Battle::AI::AIMove
         multipliers[:defense_multiplier] *= 1.1
       end
     end
-
     # Multi-targeting attacks
     if @ai.trainer.high_skill? && targets_multiple_battlers?
       multipliers[:final_damage_multiplier] *= 0.75
     end
-
     # Weather
     if @ai.trainer.medium_skill?
       case user_battler.effectiveWeather
@@ -309,7 +296,6 @@ class Battle::AI::AIMove
         end
       end
     end
-
     # Critical hits
     if is_critical
       if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
@@ -318,9 +304,7 @@ class Battle::AI::AIMove
         multipliers[:final_damage_multiplier] *= 2
       end
     end
-
     # Random variance - n/a
-
     # STAB
     if calc_type && user.has_type?(calc_type)
       if user.has_active_ability?(:ADAPTABILITY)
@@ -329,17 +313,14 @@ class Battle::AI::AIMove
         multipliers[:final_damage_multiplier] *= 1.5
       end
     end
-
     # Type effectiveness
     typemod = target.effectiveness_of_type_against_battler(calc_type, user)
     multipliers[:final_damage_multiplier] *= typemod
-
     # Burn
     if @ai.trainer.high_skill? && user.status == :BURN && physicalMove?(calc_type) &&
        @move.damageReducedByBurn? && !user.has_active_ability?(:GUTS)
       multipliers[:final_damage_multiplier] /= 2
     end
-
     # Aurora Veil, Reflect, Light Screen
     if @ai.trainer.medium_skill? && !@move.ignoresReflect? && !is_critical &&
        !user.has_active_ability?(:INFILTRATOR)
@@ -363,18 +344,14 @@ class Battle::AI::AIMove
         end
       end
     end
-
     # Minimize
     if @ai.trainer.medium_skill? && target.effects[PBEffects::Minimize] && @move.tramplesMinimize?
       multipliers[:final_damage_multiplier] *= 2
     end
-
     # Move-specific base damage modifiers
     # TODO
-
     # Move-specific final damage modifiers
     # TODO
-
     ##### Main damage calculation #####
     base_dmg = [(base_dmg * multipliers[:power_multiplier]).round, 1].max
     atk      = [(atk      * multipliers[:attack_multiplier]).round, 1].max
@@ -428,10 +405,11 @@ class Battle::AI::AIMove
     return 0 if modifiers[:base_accuracy] < 0
     return 100 if modifiers[:base_accuracy] == 0
     # Calculation
-    accStage = [[modifiers[:accuracy_stage], -6].max, 6].min + 6
-    evaStage = [[modifiers[:evasion_stage], -6].max, 6].min + 6
-    stageMul = [3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 8, 9]
-    stageDiv = [9, 8, 7, 6, 5, 4, 3, 3, 3, 3, 3, 3, 3]
+    max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
+    accStage = [[modifiers[:accuracy_stage], -max_stage].max, max_stage].min + max_stage
+    evaStage = [[modifiers[:evasion_stage], -max_stage].max, max_stage].min + max_stage
+    stageMul = Battle::Battler::ACC_EVA_STAGE_MULTIPLIERS
+    stageDiv = Battle::Battler::ACC_EVA_STAGE_DIVISORS
     accuracy = 100.0 * stageMul[accStage] / stageDiv[accStage]
     evasion  = 100.0 * stageMul[evaStage] / stageDiv[evaStage]
     accuracy = (accuracy * modifiers[:accuracy_multiplier]).round

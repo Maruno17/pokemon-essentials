@@ -1,6 +1,5 @@
 #===============================================================================
-# TODO: Should there be all the "next score" for status moves? Remember that
-#       other function codes can call this code as part of their scoring.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SleepTarget",
   proc { |move, user, target, ai, battle|
@@ -9,15 +8,16 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SleepTarget",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SleepTarget",
   proc { |score, move, user, target, ai, battle|
-    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep anyway
+    useless_score = (move.statusMove?) ? Battle::AI::MOVE_USELESS_SCORE : score
+    next useless_score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep anyway
     # No score modifier if the sleep will be removed immediately
-    next score if target.has_active_item?([:CHESTOBERRY, :LUMBERRY])
-    next score if target.faster_than?(user) &&
-                  target.has_active_ability?(:HYDRATION) &&
-                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    next useless_score if target.has_active_item?([:CHESTOBERRY, :LUMBERRY])
+    next useless_score if target.faster_than?(user) &&
+                          target.has_active_ability?(:HYDRATION) &&
+                          [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanSleep?(user.battler, false, move.move)
       add_effect = move.get_score_change_for_additional_effect(user, target)
-      next score if add_effect == -999   # Additional effect will be negated
+      next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
       score += 15
@@ -88,8 +88,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("SleepTarget",
                                                         "SleepTargetNextTurn")
 
 #===============================================================================
-# TODO: Should there be all the "next score" for status moves? Remember that
-#       other function codes can call this code as part of their scoring.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PoisonTarget",
   proc { |move, user, target, ai, battle|
@@ -98,16 +97,16 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PoisonTarget",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
   proc { |score, move, user, target, ai, battle|
-    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
-    next Battle::AI::MOVE_USELESS_SCORE if move.statusMove? && target.has_active_ability?(:POISONHEAL)
+    useless_score = (move.statusMove?) ? Battle::AI::MOVE_USELESS_SCORE : score
+    next useless_score if target.has_active_ability?(:POISONHEAL)
     # No score modifier if the poisoning will be removed immediately
-    next score if target.has_active_item?([:PECHABERRY, :LUMBERRY])
-    next score if target.faster_than?(user) &&
-                  target.has_active_ability?(:HYDRATION) &&
-                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    next useless_score if target.has_active_item?([:PECHABERRY, :LUMBERRY])
+    next useless_score if target.faster_than?(user) &&
+                          target.has_active_ability?(:HYDRATION) &&
+                          [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanPoison?(user.battler, false, move.move)
       add_effect = move.get_score_change_for_additional_effect(user, target)
-      next score if add_effect == -999   # Additional effect will be negated
+      next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
       score += 15
@@ -159,10 +158,10 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PoisonTargetLowerTarget
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTargetLowerTargetSpeed1",
   proc { |score, move, user, target, ai, battle|
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("PoisonTarget",
-       score, move, user, target, ai, battle)
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("LowerTargetSpeed1",
-       score, move, user, target, ai, battle)
+    poison_score = Battle::AI::Handlers.apply_move_effect_against_target_score("PoisonTarget",
+       0, move, user, target, ai, battle)
+    score += poison_score if poison_score != Battle::AI::MOVE_USELESS_SCORE
+    score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown, false)
     next score
   }
 )
@@ -176,8 +175,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("PoisonTarget",
                                                         "BadPoisonTarget")
 
 #===============================================================================
-# TODO: Should there be all the "next score" for status moves? Remember that
-#       other function codes can call this code as part of their scoring.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ParalyzeTarget",
   proc { |move, user, target, ai, battle|
@@ -186,15 +184,15 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("ParalyzeTarget",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeTarget",
   proc { |score, move, user, target, ai, battle|
-    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
+    useless_score = (move.statusMove?) ? Battle::AI::MOVE_USELESS_SCORE : score
     # No score modifier if the paralysis will be removed immediately
-    next score if target.has_active_item?([:CHERIBERRY, :LUMBERRY])
-    next score if target.faster_than?(user) &&
-                  target.has_active_ability?(:HYDRATION) &&
-                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    next useless_score if target.has_active_item?([:CHERIBERRY, :LUMBERRY])
+    next useless_score if target.faster_than?(user) &&
+                          target.has_active_ability?(:HYDRATION) &&
+                          [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanParalyze?(user.battler, false, move.move)
       add_effect = move.get_score_change_for_additional_effect(user, target)
-      next score if add_effect == -999   # Additional effect will be negated
+      next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference (because of the chance of full paralysis)
       score += 10
@@ -262,17 +260,22 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("ParalyzeTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeFlinchTarget",
   proc { |score, move, user, target, ai, battle|
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
-       score, move, user, target, ai, battle)
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
-       score, move, user, target, ai, battle)
+    paralyze_score = Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
+       0, move, user, target, ai, battle)
+    flinch_score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
+       0, move, user, target, ai, battle)
+    if paralyze_score == Battle::AI::MOVE_USELESS_SCORE &&
+       flinch_score == Battle::AI::MOVE_USELESS_SCORE
+      next Battle::AI::MOVE_USELESS_SCORE
+    end
+    score += paralyze_score if paralyze_score != Battle::AI::MOVE_USELESS_SCORE
+    score += flinch_score if flinch_score != Battle::AI::MOVE_USELESS_SCORE
     next score
   }
 )
 
 #===============================================================================
-# TODO: Should there be all the "next score" for status moves? Remember that
-#       other function codes can call this code as part of their scoring.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("BurnTarget",
   proc { |move, user, target, ai, battle|
@@ -281,15 +284,15 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("BurnTarget",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
   proc { |score, move, user, target, ai, battle|
-    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
+    useless_score = (move.statusMove?) ? Battle::AI::MOVE_USELESS_SCORE : score
     # No score modifier if the burn will be removed immediately
-    next score if target.has_active_item?([:RAWSTBERRY, :LUMBERRY])
-    next score if target.faster_than?(user) &&
-                  target.has_active_ability?(:HYDRATION) &&
-                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    next useless_score if target.has_active_item?([:RAWSTBERRY, :LUMBERRY])
+    next useless_score if target.faster_than?(user) &&
+                          target.has_active_ability?(:HYDRATION) &&
+                          [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanBurn?(user.battler, false, move.move)
       add_effect = move.get_score_change_for_additional_effect(user, target)
-      next score if add_effect == -999   # Additional effect will be negated
+      next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
       score += 15
@@ -339,17 +342,22 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnFlinchTarget",
   proc { |score, move, user, target, ai, battle|
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
-       score, move, user, target, ai, battle)
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
-       score, move, user, target, ai, battle)
+    burn_score = Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
+       0, move, user, target, ai, battle)
+    flinch_score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
+       0, move, user, target, ai, battle)
+    if burn_score == Battle::AI::MOVE_USELESS_SCORE &&
+       flinch_score == Battle::AI::MOVE_USELESS_SCORE
+      next Battle::AI::MOVE_USELESS_SCORE
+    end
+    score += burn_score if burn_score != Battle::AI::MOVE_USELESS_SCORE
+    score += flinch_score if flinch_score != Battle::AI::MOVE_USELESS_SCORE
     next score
   }
 )
 
 #===============================================================================
-# TODO: Should there be all the "next score" for status moves? Remember that
-#       other function codes can call this code as part of their scoring.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("FreezeTarget",
   proc { |move, user, target, ai, battle|
@@ -358,15 +366,15 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("FreezeTarget",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FreezeTarget",
   proc { |score, move, user, target, ai, battle|
-    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
+    useless_score = (move.statusMove?) ? Battle::AI::MOVE_USELESS_SCORE : score
     # No score modifier if the freeze will be removed immediately
-    next score if target.has_active_item?([:ASPEARBERRY, :LUMBERRY])
-    next score if target.faster_than?(user) &&
-                  target.has_active_ability?(:HYDRATION) &&
-                  [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
+    next useless_score if target.has_active_item?([:ASPEARBERRY, :LUMBERRY])
+    next useless_score if target.faster_than?(user) &&
+                          target.has_active_ability?(:HYDRATION) &&
+                          [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     if target.battler.pbCanFreeze?(user.battler, false, move.move)
       add_effect = move.get_score_change_for_additional_effect(user, target)
-      next score if add_effect == -999   # Additional effect will be negated
+      next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
       score += 15
@@ -413,10 +421,16 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("FreezeTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FreezeFlinchTarget",
   proc { |score, move, user, target, ai, battle|
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("FreezeTarget",
-       score, move, user, target, ai, battle)
-    score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
-       score, move, user, target, ai, battle)
+    freeze_score = Battle::AI::Handlers.apply_move_effect_against_target_score("FreezeTarget",
+       0, move, user, target, ai, battle)
+    flinch_score = Battle::AI::Handlers.apply_move_effect_against_target_score("FlinchTarget",
+       0, move, user, target, ai, battle)
+    if freeze_score == Battle::AI::MOVE_USELESS_SCORE &&
+       flinch_score == Battle::AI::MOVE_USELESS_SCORE
+      next Battle::AI::MOVE_USELESS_SCORE
+    end
+    score += freeze_score if freeze_score != Battle::AI::MOVE_USELESS_SCORE
+    score += flinch_score if flinch_score != Battle::AI::MOVE_USELESS_SCORE
     next score
   }
 )
@@ -426,19 +440,17 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FreezeFlinchTarget",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeBurnOrFreezeTarget",
   proc { |score, move, user, target, ai, battle|
-    next score if target.effects[PBEffects::Yawn] > 0   # Target is going to fall asleep
     # No score modifier if the status problem will be removed immediately
     next score if target.has_active_item?(:LUMBERRY)
     next score if target.faster_than?(user) &&
                   target.has_active_ability?(:HYDRATION) &&
                   [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
     # Scores for the possible effects
-    score += (Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
-       Battle::AI::MOVE_BASE_SCORE, move, user, target, ai, battle) - Battle::AI::MOVE_BASE_SCORE) / 3
-    score += (Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
-       Battle::AI::MOVE_BASE_SCORE, move, user, target, ai, battle) - Battle::AI::MOVE_BASE_SCORE) / 3
-    score += (Battle::AI::Handlers.apply_move_effect_against_target_score("FreezeTarget",
-       Battle::AI::MOVE_BASE_SCORE, move, user, target, ai, battle) - Battle::AI::MOVE_BASE_SCORE) / 3
+    ["ParalyzeTarget", "BurnTarget", "FreezeTarget"].each do |function_code|
+      effect_score = Battle::AI::Handlers.apply_move_effect_against_target_score(function_code,
+         0, move, user, target, ai, battle)
+      score += effect_score / 3 if effect_score != Battle::AI::MOVE_USELESS_SCORE
+    end
     next score
   }
 )
@@ -461,22 +473,17 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("GiveUserStatusToTarget",
     # Curing the user's status problem
     score += 15 if !user.wants_status_problem?(user.status)
     # Giving the target a status problem
-    case user.status
-    when :SLEEP
-      next Battle::AI::Handlers.apply_move_effect_against_target_score("SleepTarget",
+    function_code = {
+      :SLEEP     => "SleepTarget",
+      :PARALYSIS => "ParalyzeTarget",
+      :POISON    => "PoisonTarget",
+      :BURN      => "BurnTarget",
+      :FROZEN    => "FreezeTarget"
+    }[user.status]
+    if function_code
+      new_score = Battle::AI::Handlers.apply_move_effect_against_target_score(function_code,
          score, move, user, target, ai, battle)
-    when :PARALYSIS
-      next Battle::AI::Handlers.apply_move_effect_against_target_score("ParalyzeTarget",
-         score, move, user, target, ai, battle)
-    when :POISON
-      next Battle::AI::Handlers.apply_move_effect_against_target_score("PoisonTarget",
-         score, move, user, target, ai, battle)
-    when :BURN
-      next Battle::AI::Handlers.apply_move_effect_against_target_score("BurnTarget",
-         score, move, user, target, ai, battle)
-    when :FROZEN
-      next Battle::AI::Handlers.apply_move_effect_against_target_score("FreezeTarget",
-         score, move, user, target, ai, battle)
+      next new_score if new_score != Battle::AI::MOVE_USELESS_SCORE
     end
     next score
   }
@@ -633,7 +640,6 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ConfuseTarget",
         score += 20 * target.hp / target.totalhp
       end
       # Prefer if the target is paralysed or infatuated, to compound the turn skipping
-      # TODO: Also prefer if the target is trapped in battle or can't switch out?
       score += 8 if target.status == :PARALYSIS || target.effects[PBEffects::Attract] >= 0
       # Don't prefer if target benefits from being confused
       score -= 15 if target.has_active_ability?(:TANGLEDFEET)
@@ -665,7 +671,6 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AttractTarget",
       # Inherent preference
       score += 15
       # Prefer if the target is paralysed or confused, to compound the turn skipping
-      # TODO: Also prefer if the target is trapped in battle or can't switch out?
       score += 8 if target.status == :PARALYSIS || target.effects[PBEffects::Confusion] > 1
       # Don't prefer if the target can infatuate the user because of this move
       score -= 15 if target.has_active_item?(:DESTINYKNOT) &&
