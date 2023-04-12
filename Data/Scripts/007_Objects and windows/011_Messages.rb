@@ -551,7 +551,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   elsif signWaitCount == 0 && letterbyletter
     pbPlayDecisionSE
   end
-  ########## Position message window  ##############
+  # Position message window
   pbRepositionMessageWindow(msgwindow, linecount)
   if facewindow
     pbPositionNearMsgWindow(facewindow, msgwindow, :left)
@@ -559,7 +559,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     facewindow.z        = msgwindow.z
   end
   atTop = (msgwindow.y == 0)
-  ########## Show text #############################
+  # Show text
   msgwindow.text = text
   Graphics.frame_reset if Graphics.frame_rate > 40
   loop do

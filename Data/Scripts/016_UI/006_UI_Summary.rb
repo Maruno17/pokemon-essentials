@@ -546,7 +546,7 @@ class PokemonSummary_Scene
     showNature = !@pokemon.shadowPokemon? || @pokemon.heartStage <= 3
     if showNature
       nature_name = red_text_tag + @pokemon.nature.name + black_text_tag
-      memo += _INTL("{1} nature.", @pokemon.nature.name) + "\n"
+      memo += _INTL("{1} nature.", nature_name) + "\n"
     end
     # Write date received
     if @pokemon.timeReceived

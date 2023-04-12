@@ -506,8 +506,9 @@ ItemHandlers::UseOnPokemon.add(:FULLHEAL, proc { |item, qty, pkmn, scene|
 })
 
 ItemHandlers::UseOnPokemon.copy(:FULLHEAL,
-   :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE, :LUMIOSEGALETTE, :SHALOURSABLE,
-   :BIGMALASADA, :PEWTERCRUNCHIES, :LUMBERRY)
+                                :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE,
+                                :LUMIOSEGALETTE, :SHALOURSABLE, :BIGMALASADA,
+                                :PEWTERCRUNCHIES, :LUMBERRY)
 ItemHandlers::UseOnPokemon.copy(:FULLHEAL, :RAGECANDYBAR) if Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::UseOnPokemon.add(:FULLRESTORE, proc { |item, qty, pkmn, scene|
@@ -1075,8 +1076,7 @@ ItemHandlers::UseOnPokemon.add(:ABILITYPATCH, proc { |item, qty, pkmn, scene|
     pkmn.ability_index = 2
     pkmn.ability = nil
     scene.pbRefresh
-    scene.pbDisplay(_INTL("{1}'s Ability changed! Its Ability is now {2}!",
-       pkmn.name, new_ability_name))
+    scene.pbDisplay(_INTL("{1}'s Ability changed! Its Ability is now {2}!", pkmn.name, new_ability_name))
     next true
   end
   next false
@@ -1209,8 +1209,7 @@ ItemHandlers::UseOnPokemon.add(:ROTOMCATALOG, proc { |item, qty, pkmn, scene|
     _INTL("Lawn mower"),
     _INTL("Cancel")
   ]
-  new_form = scene.pbShowCommands(_INTL("Which appliance would you like to order?"),
-     choices, pkmn.form)
+  new_form = scene.pbShowCommands(_INTL("Which appliance would you like to order?"), choices, pkmn.form)
   if new_form == pkmn.form
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
@@ -1233,7 +1232,7 @@ ItemHandlers::UseOnPokemon.add(:ZYGARDECUBE, proc { |item, qty, pkmn, scene|
     next false
   end
   case scene.pbShowCommands(_INTL("What will you do with {1}?", pkmn.name),
-     [_INTL("Change form"), _INTL("Change Ability"), _INTL("Cancel")])
+                            [_INTL("Change form"), _INTL("Change Ability"), _INTL("Cancel")])
   when 0   # Change form
     newForm = (pkmn.form == 0) ? 1 : 0
     pkmn.setForm(newForm) do

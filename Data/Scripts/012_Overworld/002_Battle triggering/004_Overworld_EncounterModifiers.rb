@@ -1,9 +1,9 @@
-################################################################################
+#===============================================================================
 # This section was created solely for you to put various bits of code that
 # modify various wild Pokémon and trainers immediately prior to battling them.
 # Be sure that any code you use here ONLY applies to the Pokémon/trainers you
 # want it to apply to!
-################################################################################
+#===============================================================================
 
 # Make all wild Pokémon shiny while a certain Switch is ON (see Settings).
 EventHandlers.add(:on_wild_pokemon_created, :make_shiny_switch,

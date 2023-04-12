@@ -1,10 +1,10 @@
-#==============================================================================
+#===============================================================================
 # ** Game_System
 #------------------------------------------------------------------------------
 #  This class handles data surrounding the system. Backround music, etc.
 #  is managed here as well. Refer to "$game_system" for the instance of
 #  this class.
-#==============================================================================
+#===============================================================================
 class Game_System
   attr_reader   :map_interpreter          # map event interpreter
   attr_reader   :battle_interpreter       # battle event interpreter
@@ -39,7 +39,7 @@ class Game_System
     @bgs_position       = 0
   end
 
-################################################################################
+  #-----------------------------------------------------------------------------
 
   def bgm_play(bgm)
     old_pos = @bgm_position
@@ -140,7 +140,7 @@ class Game_System
     end
   end
 
-################################################################################
+  #-----------------------------------------------------------------------------
 
   def me_play(me)
     me = RPG::AudioFile.new(me) if me.is_a?(String)
@@ -157,7 +157,7 @@ class Game_System
     Graphics.frame_reset
   end
 
-################################################################################
+  #-----------------------------------------------------------------------------
 
   def bgs_play(bgs)
     @playing_bgs = (bgs.nil?) ? nil : bgs.clone
@@ -224,7 +224,7 @@ class Game_System
     return (@playing_bgs) ? @playing_bgs.clone : nil
   end
 
-################################################################################
+  #-----------------------------------------------------------------------------
 
   def se_play(se)
     se = RPG::AudioFile.new(se) if se.is_a?(String)
@@ -240,7 +240,7 @@ class Game_System
     Audio.se_stop
   end
 
-################################################################################
+  #-----------------------------------------------------------------------------
 
   def battle_bgm
     return (@battle_bgm) ? @battle_bgm : $data_system.battle_bgm
@@ -254,7 +254,7 @@ class Game_System
 
   attr_writer :battle_end_me
 
-################################################################################
+  #-----------------------------------------------------------------------------
 
   def windowskin_name
     if @windowskin_name.nil?

@@ -45,59 +45,59 @@ class Scene_Credits
 
   # This next piece of code is the credits.
   # Start Editing
-  CREDIT = <<_END_
+  CREDIT = <<~_END_
 
-Your credits go here.
+    Your credits go here.
 
-Your credits go here.
+    Your credits go here.
 
-Your credits go here.
+    Your credits go here.
 
-Your credits go here.
+    Your credits go here.
 
-Your credits go here.
+    Your credits go here.
 
-{INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}
+    {INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}
 
-"Pokémon Essentials" was created by:
-Flameguru
-Poccil (Peter O.)
-Maruno
+    "Pokémon Essentials" was created by:
+    Poccil (Peter O.)
+    Maruno
+    Inspired by work by Flameguru
 
-With contributions from:
-AvatarMonkeyKirby<s>Marin
-Boushy<s>MiDas Mike
-Brother1440<s>Near Fantastica
-FL.<s>PinkMan
-Genzai Kawakami<s>Popper
-Golisopod User<s>Rataime
-help-14<s>Savordez
-IceGod64<s>SoundSpawn
-Jacob O. Wobbrock<s>the__end
-KitsuneKouta<s>Venom12
-Lisa Anthony<s>Wachunga
-Luka S.J.<s>
-and everyone else who helped out
+    With contributions from:
+    AvatarMonkeyKirby<s>Marin
+    Boushy<s>MiDas Mike
+    Brother1440<s>Near Fantastica
+    FL.<s>PinkMan
+    Genzai Kawakami<s>Popper
+    Golisopod User<s>Rataime
+    help-14<s>Savordez
+    IceGod64<s>SoundSpawn
+    Jacob O. Wobbrock<s>the__end
+    KitsuneKouta<s>Venom12
+    Lisa Anthony<s>Wachunga
+    Luka S.J.<s>
+    and everyone else who helped out
 
-"mkxp-z" by:
-Roza
-Based on "mkxp" by Ancurio et al.
+    "mkxp-z" by:
+    Roza
+    Based on "mkxp" by Ancurio et al.
 
-"RPG Maker XP" by:
-Enterbrain
+    "RPG Maker XP" by:
+    Enterbrain
 
-Pokémon is owned by:
-The Pokémon Company
-Nintendo
-Affiliated with Game Freak
+    Pokémon is owned by:
+    The Pokémon Company
+    Nintendo
+    Affiliated with Game Freak
 
 
 
-This is a non-profit fan-made game.
-No copyright infringements intended.
-Please support the official games!
+    This is a non-profit fan-made game.
+    No copyright infringements intended.
+    Please support the official games!
 
-_END_
+  _END_
 # Stop Editing
 
   def main
@@ -150,29 +150,31 @@ _END_
       lines_per_bitmap.times do |j|
         line = credit_lines[(i * lines_per_bitmap) + j]
         next if !line
+        line += " " if line.end_with?("<s>")
         line = line.split("<s>")
         xpos = 0
         align = 1   # Centre align
         linewidth = Graphics.width
         line.length.times do |k|
+          text = line[k].strip
           if line.length > 1
             xpos = (k == 0) ? 0 : 20 + (Graphics.width / 2)
             align = (k == 0) ? 2 : 0   # Right align : left align
             linewidth = (Graphics.width / 2) - 20
           end
           credit_bitmap.font.color = TEXT_SHADOW_COLOR
-          credit_bitmap.draw_text(xpos, (j * 32) + 12, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos, (j * 32) + 12, linewidth, 32, text, align)
           credit_bitmap.font.color = TEXT_OUTLINE_COLOR
-          credit_bitmap.draw_text(xpos + 2, (j * 32) + 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos,     (j * 32) + 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, (j * 32) + 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos + 2, (j * 32) + 4, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, (j * 32) + 4, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos + 2, (j * 32) + 6, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos,     (j * 32) + 6, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, (j * 32) + 6, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos + 2, (j * 32) + 2, linewidth, 32, text, align)
+          credit_bitmap.draw_text(xpos,     (j * 32) + 2, linewidth, 32, text, align)
+          credit_bitmap.draw_text(xpos - 2, (j * 32) + 2, linewidth, 32, text, align)
+          credit_bitmap.draw_text(xpos + 2, (j * 32) + 4, linewidth, 32, text, align)
+          credit_bitmap.draw_text(xpos - 2, (j * 32) + 4, linewidth, 32, text, align)
+          credit_bitmap.draw_text(xpos + 2, (j * 32) + 6, linewidth, 32, text, align)
+          credit_bitmap.draw_text(xpos,     (j * 32) + 6, linewidth, 32, text, align)
+          credit_bitmap.draw_text(xpos - 2, (j * 32) + 6, linewidth, 32, text, align)
           credit_bitmap.font.color = TEXT_BASE_COLOR
-          credit_bitmap.draw_text(xpos, (j * 32) + 4, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos, (j * 32) + 4, linewidth, 32, text, align)
         end
       end
       credit_sprite = Sprite.new(text_viewport)

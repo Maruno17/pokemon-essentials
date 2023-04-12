@@ -406,7 +406,7 @@ end
 # Recoil move.
 #===============================================================================
 class Battle::Move::RecoilMove < Battle::Move
-  def recoilMove?;                 return true; end
+  def recoilMove?;                  return true; end
   def pbRecoilDamage(user, target); return 1;    end
 
   def pbEffectAfterAllHits(user, target)

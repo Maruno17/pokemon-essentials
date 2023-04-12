@@ -15,6 +15,11 @@ Layout/ExtraSpacing:
   AllowForAlignment: true
   AllowBeforeTrailingComments: true
 
+# Looks better than having hash elements shifted way to the right just to line
+# up with the hash's opening bracket.
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
 # In a hash with multiple values (one per line), prefer the => to be lined up
 # and text to otherwise be left-aligned.
 Layout/HashAlignment:
@@ -207,3 +212,8 @@ Style/SymbolProc:
 # it from the true/false results.
 Style/TernaryParentheses:
   EnforcedStyle: require_parentheses
+
+# This prefers "x += 1 while x < 10" and "x += 1 until x == 10". This hides
+# loops, which is not good.
+Style/WhileUntilModifier:
+  Enabled: false

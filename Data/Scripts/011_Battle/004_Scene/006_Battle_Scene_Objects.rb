@@ -213,16 +213,14 @@ class Battle::Scene::PokemonDataBox < Sprite
     nameWidth = self.bitmap.text_size(@battler.name).width
     nameOffset = 0
     nameOffset = nameWidth - 116 if nameWidth > 116
-    pbDrawTextPositions(self.bitmap,
-      [[@battler.name, @spriteBaseX + 8 - nameOffset, 12, :left, NAME_BASE_COLOR, NAME_SHADOW_COLOR]]
+    pbDrawTextPositions(self.bitmap, [[@battler.name, @spriteBaseX + 8 - nameOffset, 12, :left,
+                                       NAME_BASE_COLOR, NAME_SHADOW_COLOR]]
     )
   end
 
   def draw_level
     # "Lv" graphic
-    pbDrawImagePositions(self.bitmap,
-      [["Graphics/UI/Battle/overlay_lv", @spriteBaseX + 140, 16]]
-    )
+    pbDrawImagePositions(self.bitmap, [["Graphics/UI/Battle/overlay_lv", @spriteBaseX + 140, 16]])
     # Level number
     pbDrawNumber(@battler.level, self.bitmap, @spriteBaseX + 162, 16)
   end

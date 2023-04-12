@@ -397,7 +397,7 @@ class Phone
       if contact.common_event_call?
         if !pbCommonEvent(contact.common_event_id)
           pbMessage(_INTL("{1}'s messages not defined.\nCouldn't call common event {2}.",
-            contact.display_name, contact.common_event_id))
+                          contact.display_name, contact.common_event_id))
         end
       else
         call = generate_trainer_dialogue(contact)
@@ -421,7 +421,7 @@ class Phone
       if contact.common_event_call?
         if !pbCommonEvent(contact.common_event_id)
           pbMessage(_INTL("{1}'s messages not defined.\nCouldn't call common event {2}.",
-            contact.display_name, contact.common_event_id))
+                          contact.display_name, contact.common_event_id))
         end
       else
         call = generate_trainer_dialogue(contact)

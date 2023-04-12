@@ -592,7 +592,7 @@ class PokemonEvolutionScene
     newspeciesname = GameData::Species.get(@newspecies).name
     pbMessageDisplay(@sprites["msgwindow"],
                      "\\se[]" + _INTL("Congratulations! Your {1} evolved into {2}!\\wt[80]",
-                           @pokemon.name, newspeciesname)) { pbUpdate }
+                                      @pokemon.name, newspeciesname)) { pbUpdate }
     @sprites["msgwindow"].text = ""
     # Check for consumed item and check if Pokémon should be duplicated
     pbEvolutionMethodAfterEvolution

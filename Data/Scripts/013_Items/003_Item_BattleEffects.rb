@@ -72,9 +72,10 @@ ItemHandlers::CanUseInBattle.add(:POTION, proc { |item, pokemon, battler, move, 
 })
 
 ItemHandlers::CanUseInBattle.copy(:POTION,
-   :SUPERPOTION, :HYPERPOTION, :MAXPOTION, :BERRYJUICE, :SWEETHEART, :FRESHWATER,
-   :SODAPOP, :LEMONADE, :MOOMOOMILK, :ORANBERRY, :SITRUSBERRY, :ENERGYPOWDER,
-   :ENERGYROOT)
+                                  :SUPERPOTION, :HYPERPOTION, :MAXPOTION,
+                                  :BERRYJUICE, :SWEETHEART, :FRESHWATER, :SODAPOP,
+                                  :LEMONADE, :MOOMOOMILK, :ORANBERRY, :SITRUSBERRY,
+                                  :ENERGYPOWDER, :ENERGYROOT)
 ItemHandlers::CanUseInBattle.copy(:POTION, :RAGECANDYBAR) if !Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::CanUseInBattle.add(:AWAKENING, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
@@ -126,8 +127,9 @@ ItemHandlers::CanUseInBattle.add(:FULLHEAL, proc { |item, pokemon, battler, move
 })
 
 ItemHandlers::CanUseInBattle.copy(:FULLHEAL,
-   :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE, :LUMIOSEGALETTE, :SHALOURSABLE,
-   :BIGMALASADA, :PEWTERCRUNCHIES, :LUMBERRY, :HEALPOWDER)
+                                  :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE,
+                                  :LUMIOSEGALETTE, :SHALOURSABLE, :BIGMALASADA,
+                                  :PEWTERCRUNCHIES, :LUMBERRY, :HEALPOWDER)
 ItemHandlers::CanUseInBattle.copy(:FULLHEAL, :RAGECANDYBAR) if Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::CanUseInBattle.add(:FULLRESTORE, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
@@ -220,14 +222,16 @@ ItemHandlers::CanUseInBattle.add(:XDEFENSE, proc { |item, pokemon, battler, move
 })
 
 ItemHandlers::CanUseInBattle.copy(:XDEFENSE,
-   :XDEFENSE2, :XDEFENSE3, :XDEFENSE6, :XDEFEND, :XDEFEND2, :XDEFEND3, :XDEFEND6)
+                                  :XDEFENSE2, :XDEFENSE3, :XDEFENSE6,
+                                  :XDEFEND, :XDEFEND2, :XDEFEND3, :XDEFEND6)
 
 ItemHandlers::CanUseInBattle.add(:XSPATK, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
   next pbBattleItemCanRaiseStat?(:SPECIAL_ATTACK, battler, scene, showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:XSPATK,
-   :XSPATK2, :XSPATK3, :XSPATK6, :XSPECIAL, :XSPECIAL2, :XSPECIAL3, :XSPECIAL6)
+                                  :XSPATK2, :XSPATK3, :XSPATK6,
+                                  :XSPECIAL, :XSPECIAL2, :XSPECIAL3, :XSPECIAL6)
 
 ItemHandlers::CanUseInBattle.add(:XSPDEF, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
   next pbBattleItemCanRaiseStat?(:SPECIAL_DEFENSE, battler, scene, showMessages)
@@ -429,8 +433,9 @@ ItemHandlers::BattleUseOnPokemon.add(:FULLHEAL, proc { |item, pokemon, battler, 
 })
 
 ItemHandlers::BattleUseOnPokemon.copy(:FULLHEAL,
-   :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE, :LUMIOSEGALETTE, :SHALOURSABLE,
-   :BIGMALASADA, :PEWTERCRUNCHIES, :LUMBERRY)
+                                      :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE,
+                                      :LUMIOSEGALETTE, :SHALOURSABLE, :BIGMALASADA,
+                                      :PEWTERCRUNCHIES, :LUMBERRY)
 ItemHandlers::BattleUseOnPokemon.copy(:FULLHEAL, :RAGECANDYBAR) if Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::BattleUseOnPokemon.add(:FULLRESTORE, proc { |item, pokemon, battler, choices, scene|

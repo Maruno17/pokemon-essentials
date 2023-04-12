@@ -165,12 +165,12 @@ class Sprite_Character < RPG::Sprite
     end
     this_x = @character.screen_x
     this_x = ((this_x - (Graphics.width / 2)) * TilemapRenderer::ZOOM_X) + (Graphics.width / 2) if TilemapRenderer::ZOOM_X != 1
-    self.x          = this_x
+    self.x = this_x
     this_y = @character.screen_y
     this_y = ((this_y - (Graphics.height / 2)) * TilemapRenderer::ZOOM_Y) + (Graphics.height / 2) if TilemapRenderer::ZOOM_Y != 1
-    self.y          = this_y
-    self.z          = @character.screen_z(@ch)
-    self.opacity    = @character.opacity
+    self.y = this_y
+    self.z = @character.screen_z(@ch)
+    self.opacity = @character.opacity
     self.blend_type = @character.blend_type
     if @character.animation_id != 0
       animation = $data_animations[@character.animation_id]

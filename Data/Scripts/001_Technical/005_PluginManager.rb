@@ -277,13 +277,13 @@ module PluginManager
     end
     # Add plugin to class variable
     @@Plugins[name] = {
-      :name => name,
-      :version => version,
-      :essentials => essentials,
-      :link => link,
-      :dependencies => dependencies,
+      :name              => name,
+      :version           => version,
+      :essentials        => essentials,
+      :link              => link,
+      :dependencies      => dependencies,
       :incompatibilities => incompats,
-      :credits => credits
+      :credits           => credits
     }
   end
 
