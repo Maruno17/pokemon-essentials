@@ -15,8 +15,10 @@
     //     - Enables/disables the extra console window on Windows. It appears by
     //       default whenever mkxp-z is started in debug mode.
     // "MKXPZ_MACOS_METAL"
-    //     - Setting this to 0 will force the usage of OpenGL over Metal.
-    //       Probably not a good idea unless you have some kind of issue.
+    //     - Setting this will influence the rendering backend used.
+    //       Probably not a good idea to mess with it unless you have some kind of issue.
+    //       OpenGL is default on x86, and Metal is the default on Apple Silicon.
+    //       This takes priority over the config option if it's set.
     // "MKXPZ_FOLDER_SELECT"
     //     - Allows the manual selection of the game's folder at startup.
     //       Only works on macOS at the moment.
@@ -129,6 +131,23 @@
     // "solidFonts": false,
 
 
+    // Prefer the use of Metal over OpenGL on macOS.
+    // This defaults to false under Intel machines,
+    // and true under ARM/Apple Silicon ones (which
+    // merely emulate OpenGL anyway)
+    //
+    // Try changing this if you have graphics problems.
+    // Metal is far better, but ANGLE may not initialize correctly
+    // on some Intel machines.
+    //
+    // On Apple Silicon it's probably better to not touch it.
+    // Emulated OpenGL is buggy, and it will also break things like
+    // the Steam overlay.
+    // (default: true if Apple Silicon, false if Intel)
+    //
+    // "preferMetalRenderer": true,
+    
+    
     // Work around buggy graphics drivers which don't
     // properly synchronize texture access, most
     // apparent when text doesn't show up or the map
@@ -143,9 +162,9 @@
     // implementations of this functionality, so
     // disabling it can be used as a workaround.
     // Does nothing on macOS.
-    // (default: enabled)
+    // (default: disabled)
     //
-    "enableBlitting": false,
+    // "enableBlitting": false,
 
 
     // Limit the maximum size (width, height) of
@@ -159,6 +178,30 @@
     // "maxTextureSize": 0,
 
 
+    // Scale up the game screen by an integer amount,
+    // as large as the current window size allows, before
+    // doing any last additional scalings to fill part or
+    // all of the remaining window space (or none at all
+    // if lastMileScaling is disabled).
+    // If fixedAspectRatio is disabled, the integer scale
+    // factors in horizontal and vertical direction can differ
+    // depending on how much space is available, otherwise
+    // they are forced to the smaller of the two.
+    // (default: disabled)
+    //
+    // "integerScalingActive": false,
+
+
+    // When integer scaling is enabled, this option controls
+    // whether the scaled game screen is further scaled
+    // (with linear interpolation when smoothScaling is enabled)
+    // to fill the rest of the game window.
+    // Note that this option still respects fixedAspectRatio.
+    // (default: enabled)
+    //
+    // "integerScalingLastMile": true,
+    
+    
     // Set the base path of the game to '/path/to/game'
     // (default: executable directory)
     //
@@ -178,6 +221,12 @@
     // "enableReset": true,
 
 
+    // Enable F1/keybinding menu
+    // (default: enabled)
+    //
+    // "enableSettings": true,
+
+
     // Allow symlinks for game assets to be followed
     // (default: disabled)
     //
@@ -187,10 +236,9 @@
     // Organisation / company and application / game
     // name to build the directory path where mkxp
     // will store game specific data (eg. key bindings).
-    // If not specified, mkxp will save to a common
-    // directory shared by all games. Note that these
-    // are TWO individual config entries, and both need
-    // to be defined for this to take effect.
+    // If not specified, mkxp-z will use a folder based
+    // on the name of the game, if possible, defaulting
+    // to "." for Org and "mkxp-z" for App otherwise.
     // (default: none)
     //
     // "dataPathOrg": "mycompany",
