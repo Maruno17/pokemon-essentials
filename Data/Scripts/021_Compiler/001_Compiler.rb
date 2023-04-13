@@ -260,7 +260,7 @@ module Compiler
     (0...values.length).each do |i|
       value = values[i]
       next if !value || value.empty?
-      quote_count = value.count('"')  #scan(/(?:^|\G|[^\\])(\\)*"/).length
+      quote_count = value.count('"')
       if !quote_count.zero?
         # Quote marks found in value
         (i...(values.length - 1)).each do |j|

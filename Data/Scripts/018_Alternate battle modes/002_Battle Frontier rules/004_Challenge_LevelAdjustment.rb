@@ -48,14 +48,16 @@ class LevelAdjustment
     adj1 = nil
     adj2 = nil
     ret = [getOldExp(team1, team2), getOldExp(team2, team1)]
-    if @adjustment == BOTH_TEAMS || @adjustment == MY_TEAM
+    case @adjustment
+    when BOTH_TEAMS
       adj1 = getAdjustment(team1, team2)
-    elsif @adjustment == BOTH_TEAMS_DIFFERENT
-      adj1 = getMyAdjustment(team1, team2)
-    end
-    if @adjustment == BOTH_TEAMS || @adjustment == ENEMY_TEAM
       adj2 = getAdjustment(team2, team1)
-    elsif @adjustment == BOTH_TEAMS_DIFFERENT
+    when MY_TEAM
+      adj1 = getAdjustment(team1, team2)
+    when ENEMY_TEAM
+      adj2 = getAdjustment(team2, team1)
+    when BOTH_TEAMS_DIFFERENT
+      adj1 = getMyAdjustment(team1, team2)
       adj2 = getTheirAdjustment(team2, team1)
     end
     if adj1

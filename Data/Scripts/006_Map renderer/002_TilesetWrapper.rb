@@ -1,13 +1,13 @@
-#=======================================================================
-# This module is a little fix that works around PC hardware limitations.
-# Since Essentials isn't working with software rendering anymore, it now
-# has to deal with the limits of the GPU. For the most part this is no
-# big deal, but people do have some really big tilesets.
+#===============================================================================
+# This module is a little fix that works around PC hardware limitations. Since
+# Essentials isn't working with software rendering anymore, it now has to deal
+# with the limits of the GPU. For the most part this is no big deal, but people
+# do have some really big tilesets.
 #
-# The fix is simple enough: If your tileset is too big, a new
-# bitmap will be constructed with all the excess pixels sent to the
-# image's right side. This basically means that you now have a limit
-# far higher than you should ever actually need.
+# The fix is simple enough: If your tileset is too big, a new bitmap will be
+# constructed with all the excess pixels sent to the image's right side. This
+# basically means that you now have a limit far higher than you should ever
+# actually need.
 #
 # Hardware limit   -> max tileset length:
 # 1024px           -> 4096px
@@ -15,9 +15,9 @@
 # 4096px           -> 65536px   (enough to load pretty much any tileset)
 # 8192px           -> 262144px
 # 16384px          -> 1048576px (what most people have at this point)
-
+#
 #                             ~Roza/Zoroark
-#=======================================================================
+#===============================================================================
 class TilemapRenderer
   module TilesetWrapper
     TILESET_WIDTH        = SOURCE_TILE_WIDTH * TILESET_TILES_PER_ROW
@@ -37,6 +37,7 @@ class TilemapRenderer
         end
         bmp = Bitmap.new(TILESET_WIDTH * columns, MAX_TEX_SIZE)
         remainder = height % MAX_TEX_SIZE
+        remainder = MAX_TEX_SIZE if remainder == 0
         columns.times do |col|
           srcrect = Rect.new(0, col * MAX_TEX_SIZE, width, (col + 1 == columns) ? remainder : MAX_TEX_SIZE)
           bmp.blt(col * TILESET_WIDTH, 0, originalbmp, srcrect)

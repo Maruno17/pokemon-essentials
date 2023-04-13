@@ -38,7 +38,7 @@ def pbResolveAudioFile(str, volume = nil, pitch = nil)
   return str
 end
 
-################################################################################
+#===============================================================================
 
 # Plays a BGM file.
 # param -- Either a string showing the filename
@@ -88,7 +88,7 @@ def pbBGMStop(timeInSeconds = 0.0)
   (timeInSeconds > 0.0) ? Audio.bgm_fade((timeInSeconds * 1000).floor) : Audio.bgm_stop
 end
 
-################################################################################
+#===============================================================================
 
 # Plays an ME file.
 # param -- Either a string showing the filename
@@ -138,7 +138,7 @@ def pbMEStop(timeInSeconds = 0.0)
   (timeInSeconds > 0.0) ? Audio.me_fade((timeInSeconds * 1000).floor) : Audio.me_stop
 end
 
-################################################################################
+#===============================================================================
 
 # Plays a BGS file.
 # param -- Either a string showing the filename
@@ -188,7 +188,7 @@ def pbBGSStop(timeInSeconds = 0.0)
   (timeInSeconds > 0.0) ? Audio.bgs_fade((timeInSeconds * 1000).floor) : Audio.bgs_stop
 end
 
-################################################################################
+#===============================================================================
 
 # Plays an SE file.
 # param -- Either a string showing the filename
@@ -232,7 +232,7 @@ def pbSEStop(_timeInSeconds = 0.0)
   end
 end
 
-################################################################################
+#===============================================================================
 
 # Plays a sound effect that plays when the player moves the cursor.
 def pbPlayCursorSE

@@ -418,7 +418,7 @@ module GameData
         ret = nil if ret == :None
       when "Evolutions"
         if ret
-          ret = ret.select { |evo| !evo[3] }   # Remove prevolutions
+          ret = ret.reject { |evo| evo[3] }   # Remove prevolutions
           ret.each do |evo|
             param_type = GameData::Evolution.get(evo[1]).parameter
             if !param_type.nil?

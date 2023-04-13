@@ -681,7 +681,7 @@ class DirectFlowDiagram
     @distance = 96
   end
 
-# 0=none, 1=weak, 2=strong
+  # 0=none, 1=weak, 2=strong
   def setFlowStrength(strength)
     @strength = strength
   end
@@ -755,7 +755,7 @@ class FlowDiagram
     @distance = 96
   end
 
-# 0=none, 1=weak, 2=strong
+  # 0=none, 1=weak, 2=strong
   def setFlowStrength(strength)
     @strength = strength
   end

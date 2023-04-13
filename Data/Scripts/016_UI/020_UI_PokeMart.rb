@@ -616,7 +616,7 @@ class PokemonMartScreen
       end
       if GameData::Item.get(item).is_important?
         next if !pbConfirm(_INTL("So you want the {1}?\nIt'll be ${2}. All right?",
-                            itemname, price.to_s_formatted))
+                                 itemname, price.to_s_formatted))
         quantity = 1
       else
         maxafford = (price <= 0) ? Settings::BAG_MAX_PER_SLOT : @adapter.getMoney / price

@@ -169,8 +169,8 @@ class Battle::Move::RemoveTargetItem < Battle::Move
   def pbBaseDamage(baseDmg, user, target)
     if Settings::MECHANICS_GENERATION >= 6 &&
        target.item && !target.unlosableItem?(target.item)
-       # NOTE: Damage is still boosted even if target has Sticky Hold or a
-       #       substitute.
+      # NOTE: Damage is still boosted even if target has Sticky Hold or a
+      #       substitute.
       baseDmg = (baseDmg * 1.5).round
     end
     return baseDmg

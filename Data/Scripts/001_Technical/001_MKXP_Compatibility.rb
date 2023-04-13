@@ -1,5 +1,6 @@
-# Using mkxp-z v2.3.1 - https://gitlab.com/mkxp-z/mkxp-z/-/releases/v2.3.1
+# Using mkxp-z v2.4.0 - https://gitlab.com/mkxp-z/mkxp-z/-/releases/v2.4.0
 $VERBOSE = nil
+begin; require 'zlib'; rescue; nil; end
 Font.default_shadow = false if Font.respond_to?(:default_shadow)
 Graphics.frame_rate = 40
 Encoding.default_internal = Encoding::UTF_8
@@ -49,6 +50,6 @@ end
 
 if System::VERSION != Essentials::MKXPZ_VERSION
   printf(sprintf("\e[1;33mWARNING: mkxp-z version %s detected, but this version of Pokémon Essentials was designed for mkxp-z version %s.\e[0m\r\n",
-                    System::VERSION, Essentials::MKXPZ_VERSION))
+                 System::VERSION, Essentials::MKXPZ_VERSION))
   printf("\e[1;33mWARNING: Pokémon Essentials may not work properly.\e[0m\r\n")
 end

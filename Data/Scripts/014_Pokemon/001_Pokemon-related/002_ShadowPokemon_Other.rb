@@ -297,7 +297,7 @@ ItemHandlers::BattleUseOnPokemon.add(:JOYSCENT, proc { |item, pokemon, battler, 
   if pokemon.hyper_mode
     pokemon.hyper_mode = false
     scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",
-       battler&.pbThis || pokemon.name, GameData::Item.get(item).name))
+                          battler&.pbThis || pokemon.name, GameData::Item.get(item).name))
   end
   pbRaiseHappinessAndReduceHeart(pokemon, scene, 1, false)
   next true
@@ -307,7 +307,7 @@ ItemHandlers::BattleUseOnPokemon.add(:EXCITESCENT, proc { |item, pokemon, battle
   if pokemon.hyper_mode
     pokemon.hyper_mode = false
     scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",
-       battler&.pbThis || pokemon.name, GameData::Item.get(item).name))
+                          battler&.pbThis || pokemon.name, GameData::Item.get(item).name))
   end
   pbRaiseHappinessAndReduceHeart(pokemon, scene, 2, false)
   next true
@@ -317,7 +317,7 @@ ItemHandlers::BattleUseOnPokemon.add(:VIVIDSCENT, proc { |item, pokemon, battler
   if pokemon.hyper_mode
     pokemon.hyper_mode = false
     scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",
-       battler&.pbThis || pokemon.name, GameData::Item.get(item).name))
+                          battler&.pbThis || pokemon.name, GameData::Item.get(item).name))
   end
   pbRaiseHappinessAndReduceHeart(pokemon, scene, 3, false)
   next true

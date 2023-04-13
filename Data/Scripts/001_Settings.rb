@@ -446,5 +446,5 @@ end
 module Essentials
   VERSION = "20.1.dev"
   ERROR_TEXT = ""
-  MKXPZ_VERSION = "2.3.1"
+  MKXPZ_VERSION = "2.4"
 end

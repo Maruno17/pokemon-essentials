@@ -446,7 +446,7 @@ module Battle::Scene::Animation::BallAnimationMixin
         particle.moveDelta(start, particle_lifetime, max_radius * Math.cos(radian), max_radius * Math.sin(radian))
         particle.moveZoom(start, particle_lifetime, 10)
         particle.moveTone(start + particle_lifetime - particle_fade_duration,
-                           particle_fade_duration / 2, variances[7 - (3 * num)])
+                          particle_fade_duration / 2, variances[7 - (3 * num)])
         particle.moveOpacity(start + particle_lifetime - particle_fade_duration,
                              particle_fade_duration,
                              0)   # Fade out at end

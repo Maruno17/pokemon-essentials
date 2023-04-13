@@ -18,13 +18,13 @@ def shadowc3tag(base, shadow)
     base_text = base.to_rgb32
   else
     base_text = sprintf("%02X%02X%02X", base[0], base[1], base[2])
-    base_text += sprintf("02X", base[3]) if base[3]
+    base_text += sprintf("%02X", base[3]) if base[3]
   end
   if shadow.is_a?(Color)
     shadow_text = shadow.to_rgb32
   else
     shadow_text = sprintf("%02X%02X%02X", shadow[0], shadow[1], shadow[2])
-    shadow_text += sprintf("02X", shadow[3]) if shadow[3]
+    shadow_text += sprintf("%02X", shadow[3]) if shadow[3]
   end
   return sprintf("<c3=%s,%s>", base_text, shadow_text)
 end
@@ -428,125 +428,124 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     graphicHeight = nil
     graphicRect = nil
     controls.length.times do |i|
-      if controls[i] && controls[i][2] == position
-        control = controls[i][0]
-        param = controls[i][1]
-        endtag = controls[i][3]
-        case control
-        when "c"
-          if endtag
-            colorstack.pop
-          else
-            color = Color.new_from_rgb(param)
-            colorstack.push([color, nil])
-          end
-        when "c2"
-          if endtag
-            colorstack.pop
-          else
-            base = Color.new_from_rgb(param[0, 4])
-            shadow = Color.new_from_rgb(param[4, 4])
-            colorstack.push([base, shadow])
-          end
-        when "c3"
-          if endtag
-            colorstack.pop
-          else
-            param = param.split(",")
-            # get pure colors unaffected by opacity
-            oldColors = getLastParam(colorstack, defaultcolors)
-            base = (param[0] && param[0] != "") ? Color.new_from_rgb(param[0]) : oldColors[0]
-            shadow = (param[1] && param[1] != "") ? Color.new_from_rgb(param[1]) : oldColors[1]
-            colorstack.push([base, shadow])
-          end
-        when "o"
-          if endtag
-            opacitystack.pop
-          else
-            opacitystack.push(param.sub(/\s+$/, "").to_i)
-          end
-        when "b"
-          boldcount += (endtag ? -1 : 1)
-        when "i"
-          italiccount += (endtag ? -1 : 1)
-        when "u"
-          underlinecount += (endtag ? -1 : 1)
-        when "s"
-          strikecount += (endtag ? -1 : 1)
-        when "outln"
-          outlinecount += (endtag ? -1 : 1)
-        when "outln2"
-          outline2count += (endtag ? -1 : 1)
-        when "fs" # Font size
-          if endtag
-            fontsizestack.pop
-          else
-            fontsizestack.push(param.sub(/\s+$/, "").to_i)
-          end
-          fontsize = getLastParam(fontsizestack, defaultfontsize)
-          bitmap.font.size = fontsize
-        when "fn" # Font name
-          if endtag
-            fontnamestack.pop
-          else
-            fontname = param.sub(/\s+$/, "")
-            fontnamestack.push(Font.exist?(fontname) ? fontname : "Arial")
-          end
-          fontname = getLastParam(fontnamestack, defaultfontname)
-          bitmap.font.name = fontname
-        when "ar" # Right align
-          if endtag
-            alignstack.pop
-          else
-            alignstack.push(1)
-          end
-          nextline = 1 if x > 0 && nextline == 0
-        when "al" # Left align
-          if endtag
-            alignstack.pop
-          else
-            alignstack.push(0)
-          end
-          nextline = 1 if x > 0 && nextline == 0
-        when "ac" # Center align
-          if endtag
-            alignstack.pop
-          else
-            alignstack.push(2)
-          end
-          nextline = 1 if x > 0 && nextline == 0
-        when "icon" # Icon
-          if !endtag
-            param = param.sub(/\s+$/, "")
-            graphic = "Graphics/Icons/#{param}"
-            controls[i] = nil
-            break
-          end
-        when "img" # Icon
-          if !endtag
-            param = param.sub(/\s+$/, "")
-            param = param.split("|")
-            graphic = param[0]
-            if param.length > 1
-              graphicX = param[1].to_i
-              graphicY = param[2].to_i
-              graphicWidth = param[3].to_i
-              graphicHeight = param[4].to_i
-            end
-            controls[i] = nil
-            break
-          end
-        when "br" # Line break
-          nextline += 1 if !endtag
-        when "r" # Right align this line
-          if !endtag
-            x = 0
-            rightalign = 1
-            lastword = [characters.length, x]
-          end
+      next if !controls[i] || controls[i][2] != position
+      control = controls[i][0]
+      param = controls[i][1]
+      endtag = controls[i][3]
+      case control
+      when "c"
+        if endtag
+          colorstack.pop
+        else
+          color = Color.new_from_rgb(param)
+          colorstack.push([color, nil])
         end
-        controls[i] = nil
+      when "c2"
+        if endtag
+          colorstack.pop
+        else
+          base = Color.new_from_rgb(param[0, 4])
+          shadow = Color.new_from_rgb(param[4, 4])
+          colorstack.push([base, shadow])
+        end
+      when "c3"
+        if endtag
+          colorstack.pop
+        else
+          param = param.split(",")
+          # get pure colors unaffected by opacity
+          oldColors = getLastParam(colorstack, defaultcolors)
+          base = (param[0] && param[0] != "") ? Color.new_from_rgb(param[0]) : oldColors[0]
+          shadow = (param[1] && param[1] != "") ? Color.new_from_rgb(param[1]) : oldColors[1]
+          colorstack.push([base, shadow])
+        end
+      when "o"
+        if endtag
+          opacitystack.pop
+        else
+          opacitystack.push(param.sub(/\s+$/, "").to_i)
+        end
+      when "b"
+        boldcount += (endtag ? -1 : 1)
+      when "i"
+        italiccount += (endtag ? -1 : 1)
+      when "u"
+        underlinecount += (endtag ? -1 : 1)
+      when "s"
+        strikecount += (endtag ? -1 : 1)
+      when "outln"
+        outlinecount += (endtag ? -1 : 1)
+      when "outln2"
+        outline2count += (endtag ? -1 : 1)
+      when "fs"   # Font size
+        if endtag
+          fontsizestack.pop
+        else
+          fontsizestack.push(param.sub(/\s+$/, "").to_i)
+        end
+        fontsize = getLastParam(fontsizestack, defaultfontsize)
+        bitmap.font.size = fontsize
+      when "fn"   # Font name
+        if endtag
+          fontnamestack.pop
+        else
+          fontname = param.sub(/\s+$/, "")
+          fontnamestack.push(Font.exist?(fontname) ? fontname : "Arial")
+        end
+        fontname = getLastParam(fontnamestack, defaultfontname)
+        bitmap.font.name = fontname
+      when "ar"   # Right align
+        if endtag
+          alignstack.pop
+        else
+          alignstack.push(1)
+        end
+        nextline = 1 if x > 0 && nextline == 0
+      when "al"   # Left align
+        if endtag
+          alignstack.pop
+        else
+          alignstack.push(0)
+        end
+        nextline = 1 if x > 0 && nextline == 0
+      when "ac"   # Center align
+        if endtag
+          alignstack.pop
+        else
+          alignstack.push(2)
+        end
+        nextline = 1 if x > 0 && nextline == 0
+      when "icon"   # Icon
+        if !endtag
+          param = param.sub(/\s+$/, "")
+          graphic = "Graphics/Icons/#{param}"
+          controls[i] = nil
+          break
+        end
+      when "img"   # Icon
+        if !endtag
+          param = param.sub(/\s+$/, "")
+          param = param.split("|")
+          graphic = param[0]
+          if param.length > 1
+            graphicX = param[1].to_i
+            graphicY = param[2].to_i
+            graphicWidth = param[3].to_i
+            graphicHeight = param[4].to_i
+          end
+          controls[i] = nil
+          break
+        end
+      when "br"   # Line break
+        nextline += 1 if !endtag
+      when "r"   # Right align this line
+        if !endtag
+          x = 0
+          rightalign = 1
+          lastword = [characters.length, x]
+        end
       end
+      controls[i] = nil
     end
     bitmap.font.bold = (boldcount > 0)
     bitmap.font.italic = (italiccount > 0)

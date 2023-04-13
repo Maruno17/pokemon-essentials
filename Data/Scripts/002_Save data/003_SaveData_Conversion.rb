@@ -15,7 +15,7 @@ module SaveData
   # Populated during runtime by SaveData.register_conversion calls.
   @conversions = {
     essentials: {},
-    game: {}
+    game:       {}
   }
 
   #=============================================================================
@@ -171,7 +171,7 @@ module SaveData
     conversions_to_run = []
     versions = {
       essentials: save_data[:essentials_version] || "18.1",
-      game: save_data[:game_version] || "0.0.0"
+      game:       save_data[:game_version] || "0.0.0"
     }
     [:essentials, :game].each do |trigger_type|
       # Ensure the versions are sorted from lowest to highest

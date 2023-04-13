@@ -571,15 +571,17 @@ class Translation
   def setMapMessagesAsHash(map_id, array)
     load_default_messages
     @default_game_messages[MessageTypes::EVENT_TEXTS] ||= []
-    @default_game_messages[MessageTypes::EVENT_TEXTS][map_id] = priv_add_to_hash(MessageTypes::EVENT_TEXTS,
-      array, nil, map_id)
+    @default_game_messages[MessageTypes::EVENT_TEXTS][map_id] = priv_add_to_hash(
+      MessageTypes::EVENT_TEXTS, array, nil, map_id
+    )
   end
 
   def addMapMessagesAsHash(map_id, array)
     load_default_messages
     @default_game_messages[MessageTypes::EVENT_TEXTS] ||= []
-    @default_game_messages[MessageTypes::EVENT_TEXTS][map_id] = priv_add_to_hash(MessageTypes::EVENT_TEXTS,
-      array, @default_game_messages[MessageTypes::EVENT_TEXTS][map_id], map_id)
+    @default_game_messages[MessageTypes::EVENT_TEXTS][map_id] = priv_add_to_hash(
+      MessageTypes::EVENT_TEXTS, array, @default_game_messages[MessageTypes::EVENT_TEXTS][map_id], map_id
+    )
   end
 
   def get(type, id)
