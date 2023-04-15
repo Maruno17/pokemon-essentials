@@ -360,7 +360,7 @@ def pbBerryPlant
       break if !pbConfirmMessage(_INTL("Want to sprinkle some water with the {1}?",
                                        GameData::Item.get(item).name))
       berry_plant.water
-      pbMessage(_INTL("{1} watered the plant.\\wtnp[40]", $player.name))
+      pbMessage(_INTL("{1} watered the plant.", $player.name) + "\\wtnp[40]")
       if Settings::NEW_BERRY_PLANTS
         pbMessage(_INTL("There! All happy!"))
       else
@@ -375,7 +375,7 @@ def pbBerryPlant
   if Settings::NEW_BERRY_PLANTS
     # New mechanics
     if berry_plant.mulch_id
-      pbMessage(_INTL("{1} has been laid down.\1", GameData::Item.get(berry_plant.mulch_id).name))
+      pbMessage(_INTL("{1} has been laid down.", GameData::Item.get(berry_plant.mulch_id).name))
     else
       case pbMessage(_INTL("It's soft, earthy soil."),
                      [_INTL("Fertilize"), _INTL("Plant Berry"), _INTL("Exit")], -1)
@@ -391,7 +391,7 @@ def pbBerryPlant
         if mulch_data.is_mulch?
           berry_plant.mulch_id = mulch
           $bag.remove(mulch)
-          pbMessage(_INTL("The {1} was scattered on the soil.\1", mulch_data.name))
+          pbMessage(_INTL("The {1} was scattered on the soil.", mulch_data.name))
         else
           pbMessage(_INTL("That won't fertilize the soil!"))
           return
@@ -404,7 +404,7 @@ def pbBerryPlant
     end
   else
     # Old mechanics
-    return if !pbConfirmMessage(_INTL("It's soft, loamy soil.\nPlant a berry?"))
+    return if !pbConfirmMessage(_INTL("It's soft, loamy soil. Want to plant a berry?"))
     ask_to_plant = false
   end
   if !ask_to_plant || pbConfirmMessage(_INTL("Want to plant a Berry?"))
@@ -453,13 +453,13 @@ def pbPickBerry(berry, qty = 1)
   end
   $bag.add(berry, qty)
   if qty > 1
-    pbMessage(_INTL("\\me[Berry get]You picked the {1} \\c[1]{2}\\c[0].\\wtnp[30]", qty, berry_name))
+    pbMessage("\\me[Berry get]" + _INTL("You picked the {1} \\c[1]{2}\\c[0].", qty, berry_name) + "\\wtnp[30]")
   else
-    pbMessage(_INTL("\\me[Berry get]You picked the \\c[1]{1}\\c[0].\\wtnp[30]", berry_name))
+    pbMessage("\\me[Berry get]" + _INTL("You picked the \\c[1]{1}\\c[0].", berry_name) + "\\wtnp[30]")
   end
   pocket = berry.pocket
-  pbMessage(_INTL("{1} put the \\c[1]{2}\\c[0] in the <icon=bagPocket{3}>\\c[1]{4}\\c[0] Pocket.\1",
-                  $player.name, berry_name, pocket, PokemonBag.pocket_names[pocket - 1]))
+  pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+                  berry_name, pocket, PokemonBag.pocket_names[pocket - 1]) + "\1")
   if Settings::NEW_BERRY_PLANTS
     pbMessage(_INTL("The soil returned to its soft and earthy state."))
   else

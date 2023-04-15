@@ -1126,7 +1126,7 @@ def pbBuyTriads
       $PokemonGlobal.triads.add(item, quantity)
       $player.money -= price
       goldwindow.text = _INTL("Money:\r\n{1}", pbGetGoldString)
-      pbMessage(_INTL("Here you are! Thank you!\\se[Mart buy item]"))
+      pbMessage(_INTL("Here you are! Thank you!") + "\\se[Mart buy item]")
     end
   end
   cmdwindow.dispose
@@ -1220,7 +1220,7 @@ def pbSellTriads
             $player.money += price
             goldwindow.text = _INTL("Money:\r\n{1}", pbGetGoldString)
             $PokemonGlobal.triads.remove(item, quantity)
-            pbMessage(_INTL("Turned over the {1} card and received ${2}.\\se[Mart buy item]", itemname, price.to_s_formatted))
+            pbMessage(_INTL("Turned over the {1} card and received ${2}.", itemname, price.to_s_formatted) + "\\se[Mart buy item]")
             commands = []
             $PokemonGlobal.triads.length.times do |i|
               item = $PokemonGlobal.triads[i]

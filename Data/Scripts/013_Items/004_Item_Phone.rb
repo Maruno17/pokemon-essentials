@@ -430,7 +430,7 @@ class Phone
     end
 
     def start_message(contact = nil)
-      pbMessage(_INTL("......\\wt[5] ......\\1"))
+      pbMessage(_INTL("......\\wt[5] ......") + "\1")
     end
 
     def play(dialogue, contact)
@@ -454,14 +454,14 @@ class Phone
         message.gsub!(/\\TP/, contact_pokemon_species)
         message.gsub!(/\\TE/, random_encounter_species)
         message.gsub!(/\\TM/, contact_map_name)
-        message += "\\1" if i < messages.length - 1
+        message += "\1" if i < messages.length - 1
         pbMessage(gender_colour_text + message)
       end
       end_message(contact)
     end
 
     def end_message(contact = nil)
-      pbMessage(_INTL("Click!\\wt[10]\n......\\wt[5] ......\\1"))
+      pbMessage(_INTL("Click!\\wt[10]\n......\\wt[5] ......") + "\1")
     end
 
     #===========================================================================

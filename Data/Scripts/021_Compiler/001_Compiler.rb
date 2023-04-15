@@ -1015,6 +1015,11 @@ module Compiler
     compile_pbs_files
     compile_animations
     compile_trainer_events(mustCompile)
+    Console.echo_li(_INTL("Saving messages..."))
+    Translator.gather_script_and_event_texts
+    MessageTypes.save_default_messages
+    MessageTypes.load_default_messages if safeExists?("Data/messages_core.dat")
+    Console.echo_done(true)
     Console.echoln_li_done(_INTL("Successfully compiled all game data"))
   end
 

@@ -111,8 +111,8 @@ class VoltorbFlip
       pbMessage(_INTL("You've gathered {1} Coins. You cannot gather any more.", Settings::MAX_COINS.to_s_formatted))
       $player.coins = Settings::MAX_COINS   # As a precaution
       @quit = true
-#    elsif !pbConfirmMessage(_INTL("Play Voltorb Flip Lv. {1}?",@level)) && $player.coins<Settings::MAX_COINS
-#      @quit=true
+#    elsif !pbConfirmMessage(_INTL("Play Voltorb Flip Lv. {1}?", @level)) && $player.coins < Settings::MAX_COINS
+#      @quit = true
     else
       @sprites["curtain"].opacity = 0
       # Erase 0s to prepare to replace with values

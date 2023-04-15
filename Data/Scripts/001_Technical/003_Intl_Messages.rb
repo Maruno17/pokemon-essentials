@@ -338,11 +338,11 @@ module Translator
     end
     msg_window.textspeed = MessageConfig.pbSettingToTextSpeed($PokemonSystem.textspeed)
     if core_text
-      pbMessageDisplay(msg_window, _INTL("All core text was extracted to files in the folder \"{1}\".\1", dir_name))
+      pbMessageDisplay(msg_window, _INTL("All core text was extracted to files in the folder \"{1}\".", dir_name) + "\1")
     else
-      pbMessageDisplay(msg_window, _INTL("All game text was extracted to files in the folder \"{1}\".\1", dir_name))
+      pbMessageDisplay(msg_window, _INTL("All game text was extracted to files in the folder \"{1}\".", dir_name) + "\1")
     end
-    pbMessageDisplay(msg_window, _INTL("To localize this text, translate every second line in those files.\1"))
+    pbMessageDisplay(msg_window, _INTL("To localize this text, translate every second line in those files.") + "\1")
     pbMessageDisplay(msg_window, _INTL("After translating, choose \"Compile Translated Text\" in the Debug menu."))
     pbDisposeMessageWindow(msg_window)
   end

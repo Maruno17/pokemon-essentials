@@ -99,7 +99,7 @@ class PokemonEggHatch_Scene
     pbBGMStop
     pbMEPlay("Evolution success")
     @pokemon.name = nil
-    pbMessage("\\se[]" + _INTL("{1} hatched from the Egg!\\wt[80]", @pokemon.name)) { update }
+    pbMessage("\\se[]" + _INTL("{1} hatched from the Egg!", @pokemon.name) + "\\wt[80]") { update }
     # Record the Pokémon's species as owned in the Pokédex
     was_owned = $player.owned?(@pokemon.species)
     $player.pokedex.register(@pokemon)
@@ -194,7 +194,7 @@ end
 #
 #===============================================================================
 def pbHatchAnimation(pokemon)
-  pbMessage(_INTL("Huh?\1"))
+  pbMessage(_INTL("Huh?") + "\1")
   pbFadeOutInWithMusic do
     scene = PokemonEggHatch_Scene.new
     screen = PokemonEggHatchScreen.new(scene)
@@ -214,9 +214,9 @@ def pbHatch(pokemon)
   pokemon.hatched_map    = $game_map.map_id
   pokemon.record_first_moves
   if !pbHatchAnimation(pokemon)
-    pbMessage(_INTL("Huh?\1"))
-    pbMessage(_INTL("...\1"))
-    pbMessage(_INTL("... .... .....\1"))
+    pbMessage(_INTL("Huh?") + "\1")
+    pbMessage(_INTL("...") + "\1")
+    pbMessage(_INTL("... .... .....") + "\1")
     pbMessage(_INTL("{1} hatched from the Egg!", speciesname))
     was_owned = $player.owned?(pokemon.species)
     $player.pokedex.register(pokemon)

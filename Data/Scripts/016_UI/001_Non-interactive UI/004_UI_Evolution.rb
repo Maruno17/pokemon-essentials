@@ -535,7 +535,7 @@ class PokemonEvolutionScene
     metaplayer1.play
     metaplayer2.play
     pbBGMStop
-    pbMessageDisplay(@sprites["msgwindow"], "\\se[]" + _INTL("What?") + "\\1") { pbUpdate }
+    pbMessageDisplay(@sprites["msgwindow"], "\\se[]" + _INTL("What?") + "\1") { pbUpdate }
     pbPlayDecisionSE
     @pokemon.play_cry
     @sprites["msgwindow"].text = _INTL("{1} is evolving!", @pokemon.name)
@@ -591,8 +591,8 @@ class PokemonEvolutionScene
     pbMEPlay("Evolution success")
     newspeciesname = GameData::Species.get(@newspecies).name
     pbMessageDisplay(@sprites["msgwindow"],
-                     "\\se[]" + _INTL("Congratulations! Your {1} evolved into {2}!\\wt[80]",
-                                      @pokemon.name, newspeciesname)) { pbUpdate }
+                     "\\se[]" + _INTL("Congratulations! Your {1} evolved into {2}!",
+                                      @pokemon.name, newspeciesname) + "\\wt[80]") { pbUpdate }
     @sprites["msgwindow"].text = ""
     # Check for consumed item and check if Pokémon should be duplicated
     pbEvolutionMethodAfterEvolution

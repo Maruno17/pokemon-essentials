@@ -16,7 +16,7 @@ end
 
 def pbStorePokemon(pkmn)
   if pbBoxesFull?
-    pbMessage(_INTL("There's no more room for Pokémon!\1"))
+    pbMessage(_INTL("There's no more room for Pokémon!") + "\1")
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
     return
   end
@@ -32,7 +32,7 @@ end
 
 def pbNicknameAndStore(pkmn)
   if pbBoxesFull?
-    pbMessage(_INTL("There's no more room for Pokémon!\1"))
+    pbMessage(_INTL("There's no more room for Pokémon!") + "\1")
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
     return
   end
@@ -48,13 +48,13 @@ end
 def pbAddPokemon(pkmn, level = 1, see_form = true)
   return false if !pkmn
   if pbBoxesFull?
-    pbMessage(_INTL("There's no more room for Pokémon!\1"))
+    pbMessage(_INTL("There's no more room for Pokémon!") + "\1")
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
     return false
   end
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
-  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
+  pbMessage(_INTL("{1} obtained {2}!", $player.name, species_name) + "\\me[Pkmn get]\\wtnp[80]")
   was_owned = $player.owned?(pkmn.species)
   $player.pokedex.set_seen(pkmn.species)
   $player.pokedex.set_owned(pkmn.species)
@@ -96,7 +96,7 @@ def pbAddToParty(pkmn, level = 1, see_form = true)
   return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
-  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
+  pbMessage(_INTL("{1} obtained {2}!", $player.name, species_name) + "\\me[Pkmn get]\\wtnp[80]")
   was_owned = $player.owned?(pkmn.species)
   $player.pokedex.set_seen(pkmn.species)
   $player.pokedex.set_owned(pkmn.species)
@@ -133,9 +133,9 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE] if !nil_or_empty?(nickname)
   pkmn.calc_stats
   if owner_name
-    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon from {2}.\1", $player.name, owner_name))
+    pbMessage(_INTL("{1} received a Pokémon from {2}.", $player.name, owner_name) + "\\me[Pkmn get]\\wtnp[80]")
   else
-    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $player.name))
+    pbMessage(_INTL("{1} received a Pokémon.", $player.name) + "\\me[Pkmn get]\\wtnp[80]")
   end
   was_owned = $player.owned?(pkmn.species)
   $player.pokedex.set_seen(pkmn.species)

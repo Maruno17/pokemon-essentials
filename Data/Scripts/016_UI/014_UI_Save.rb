@@ -15,8 +15,8 @@ def pbEmergencySave
     end
   end
   if Game.save
-    pbMessage("\\se[]" +
-              _INTL("The game was saved.\\me[GUI save game] The previous save file has been backed up.\\wtnp[30]"))
+    pbMessage("\\se[]" + _INTL("The game was saved.") + "\\me[GUI save game]\\wtnp[30]")
+    pbMessage("\\se[]" + _INTL("The previous save file has been backed up.") + "\\wtnp[30]")
   else
     pbMessage("\\se[]" + _INTL("Save failed.\\wtnp[30]"))
   end
@@ -102,9 +102,9 @@ class PokemonSaveScreen
     @scene.pbStartScreen
     if pbConfirmMessage(_INTL("Would you like to save the game?"))
       if SaveData.exists? && $game_temp.begun_new_game
-        pbMessage(_INTL("WARNING!"))
-        pbMessage(_INTL("There is a different game file that is already saved."))
-        pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokémon, will be entirely lost."))
+        pbMessage(_INTL("WARNING!") + "\1")
+        pbMessage(_INTL("There is a different game file that is already saved.") + "\1")
+        pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokémon, will be entirely lost.") + "\1")
         if !pbConfirmMessageSerious(_INTL("Are you sure you want to save now and overwrite the other save file?"))
           pbSEPlay("GUI save choice")
           @scene.pbEndScreen
@@ -114,10 +114,10 @@ class PokemonSaveScreen
       $game_temp.begun_new_game = false
       pbSEPlay("GUI save choice")
       if Game.save
-        pbMessage("\\se[]" + _INTL("{1} saved the game.\\me[GUI save game]\\wtnp[30]", $player.name))
+        pbMessage("\\se[]" + _INTL("{1} saved the game.", $player.name) + "\\me[GUI save game]\\wtnp[30]")
         ret = true
       else
-        pbMessage("\\se[]" + _INTL("Save failed.\\wtnp[30]"))
+        pbMessage("\\se[]" + _INTL("Save failed.") + "\\wtnp[30]")
         ret = false
       end
     else

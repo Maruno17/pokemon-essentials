@@ -93,7 +93,7 @@ EventHandlers.add(:on_player_step_taken_can_transfer, :safari_game_counter,
     next if Settings::SAFARI_STEPS == 0 || !pbInSafari? || pbSafariState.decision != 0
     pbSafariState.steps -= 1
     next if pbSafariState.steps > 0
-    pbMessage(_INTL("PA: Ding-dong!\1"))
+    pbMessage(_INTL("PA: Ding-dong!") + "\1")
     pbMessage(_INTL("PA: Your safari game is over!"))
     pbSafariState.decision = 1
     pbSafariState.pbGoToStart

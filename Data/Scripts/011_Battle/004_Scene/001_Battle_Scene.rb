@@ -234,7 +234,7 @@ class Battle::Scene
     pbWaitMessage
     pbShowWindow(MESSAGE_BOX)
     cw = @sprites["messageWindow"]
-    cw.text = _INTL("{1}\1", msg)
+    cw.text = msg + "\1"
     PBDebug.log(msg)
     yielded = false
     timer = 0.0

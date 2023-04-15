@@ -1454,16 +1454,16 @@ MenuHandlers.add(:party_menu_item, :move, {
       newitem = newpkmn.item
       newitemname = newitem.portion_name
       if newitemname.starts_with_vowel?
-        screen.pbDisplay(_INTL("{1} is already holding an {2}.\1", newpkmn.name, newitemname))
+        screen.pbDisplay(_INTL("{1} is already holding an {2}.", newpkmn.name, newitemname) + "\1")
       else
-        screen.pbDisplay(_INTL("{1} is already holding a {2}.\1", newpkmn.name, newitemname))
+        screen.pbDisplay(_INTL("{1} is already holding a {2}.", newpkmn.name, newitemname) + "\1")
       end
       next if !screen.pbConfirm(_INTL("Would you like to switch the two items?"))
       newpkmn.item = item
       pkmn.item = newitem
       screen.scene.pbClearSwitching
       screen.pbRefresh
-      screen.pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, portionitemname))
+      screen.pbDisplay(_INTL("{1} was given the {2} to hold.", newpkmn.name, portionitemname) + "\1")
       screen.pbDisplay(_INTL("{1} was given the {2} to hold.", pkmn.name, newitemname))
       moved = true
       break
