@@ -26,10 +26,10 @@ class Battle::AI
     SECOND         = 17
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Determine the roles filled by a Pokémon on a given side at a given party
   # index.
-  #=============================================================================
   def determine_roles(side, index)
     pkmn = @battle.pbParty(side)[index]
     ret = []

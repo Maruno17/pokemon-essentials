@@ -15,7 +15,7 @@ class Battle::AI::AIMove
                                 "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(function)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # pp
   # totalpp
@@ -41,7 +41,16 @@ class Battle::AI::AIMove
   def statusMove?;   return @move.statusMove?;   end
   def function;      return @move.function;      end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
+  def type; return @move.type; end
+
+  def rough_type
+    return @move.pbCalcType(@ai.user.battler) if @ai.trainer.medium_skill?
+    return @move.type
+  end
+
+  #-----------------------------------------------------------------------------
 
   def pbTarget(user)
     return @move.pbTarget((user.is_a?(Battle::AI::AIBattler)) ? user.battler : user)
@@ -70,7 +79,7 @@ class Battle::AI::AIMove
     return num_targets > 1
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def rough_priority(user)
     ret = @move.pbPriority(user.battler)
@@ -81,16 +90,7 @@ class Battle::AI::AIMove
     return ret
   end
 
-  #=============================================================================
-
-  def type; return @move.type; end
-
-  def rough_type
-    return @move.pbCalcType(@ai.user.battler) if @ai.trainer.medium_skill?
-    return @move.type
-  end
-
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Returns this move's base power, taking into account various effects that
   # modify it.
@@ -102,6 +102,7 @@ class Battle::AI::AIMove
        ret, self, @ai.user, @ai.target, @ai, @ai.battle)
   end
 
+  # Full damage calculation.
   def rough_damage
     base_dmg = base_power
     return base_dmg if @move.is_a?(Battle::Move::FixedDamageMove)
@@ -363,13 +364,14 @@ class Battle::AI::AIMove
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def accuracy
     return @move.pbBaseAccuracy(@ai.user.battler, @ai.target.battler) if @ai.trainer.medium_skill?
     return @move.accuracy
   end
 
+  # Full accuracy calculation.
   def rough_accuracy
     # Determine user and target
     user = @ai.user
@@ -479,8 +481,10 @@ class Battle::AI::AIMove
     end
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
+  # Full critical hit chance calculation (returns the determined critical hit
+  # stage).
   def rough_critical_hit_stage
     user = @ai.user
     user_battler = user.battler
@@ -524,7 +528,7 @@ class Battle::AI::AIMove
     return crit_stage
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Return values:
   #   0: Regular additional effect chance or isn't an additional effect

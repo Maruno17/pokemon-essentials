@@ -1,12 +1,10 @@
 class Battle::AI
-  #=============================================================================
   # Main method for calculating the score for moves that raise a battler's
   # stat(s).
   # By default, assumes that a stat raise is a good thing. However, this score
   # is inverted (by desire_mult) if the target opposes the user. If the move
   # could target a foe but is targeting an ally, the score is also inverted, but
   # only because it is inverted again in def pbGetMoveScoreAgainstTarget.
-  #=============================================================================
   def get_score_for_target_stat_raise(score, target, stat_changes, whole_effect = true,
                                       fixed_change = false, ignore_contrary = false)
     whole_effect = false if @move.damagingMove?
@@ -88,12 +86,12 @@ class Battle::AI
     return score
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Returns whether the target raising the given stat will have any impact.
   # TODO: Make sure the move's actual damage category is taken into account,
   #       i.e. CategoryDependsOnHigherDamagePoisonTarget and
   #       CategoryDependsOnHigherDamageIgnoreTargetAbility.
-  #=============================================================================
   def stat_raise_worthwhile?(target, stat, fixed_change = false)
     if !fixed_change
       return false if !target.battler.pbCanRaiseStatStage?(stat, @user.battler, @move.move)
@@ -143,9 +141,9 @@ class Battle::AI
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Make score changes based on the general concept of raising stats at all.
-  #=============================================================================
   def get_target_stat_raise_score_generic(score, target, stat_changes, desire_mult = 1)
     total_increment = stat_changes.sum { |change| change[1] }
     # Prefer if move is a status move and it's the user's first/second turn
@@ -164,9 +162,7 @@ class Battle::AI
     return score
   end
 
-  #=============================================================================
   # Make score changes based on the raising of a specific stat.
-  #=============================================================================
   def get_target_stat_raise_score_one(score, target, stat, increment, desire_mult = 1)
     # Figure out how much the stat will actually change by
     max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
@@ -293,7 +289,8 @@ class Battle::AI
     return score
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Main method for calculating the score for moves that lower a battler's
   # stat(s).
   # By default, assumes that a stat drop is a good thing. However, this score
@@ -301,7 +298,6 @@ class Battle::AI
   # inversion does not happen if the move could target a foe but is targeting an
   # ally, but only because it is inverted in def pbGetMoveScoreAgainstTarget
   # instead.
-  #=============================================================================
   def get_score_for_target_stat_drop(score, target, stat_changes, whole_effect = true,
                                      fixed_change = false, ignore_contrary = false)
     whole_effect = false if @move.damagingMove?
@@ -381,12 +377,12 @@ class Battle::AI
     return score
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Returns whether the target lowering the given stat will have any impact.
   # TODO: Make sure the move's actual damage category is taken into account,
   #       i.e. CategoryDependsOnHigherDamagePoisonTarget and
   #       CategoryDependsOnHigherDamageIgnoreTargetAbility.
-  #=============================================================================
   def stat_drop_worthwhile?(target, stat, fixed_change = false)
     if !fixed_change
       return false if !target.battler.pbCanLowerStatStage?(stat, @user.battler, @move.move)
@@ -431,9 +427,9 @@ class Battle::AI
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Make score changes based on the general concept of lowering stats at all.
-  #=============================================================================
   def get_target_stat_drop_score_generic(score, target, stat_changes, desire_mult = 1)
     total_decrement = stat_changes.sum { |change| change[1] }
     # Prefer if move is a status move and it's the user's first/second turn
@@ -452,9 +448,7 @@ class Battle::AI
     return score
   end
 
-  #=============================================================================
   # Make score changes based on the lowering of a specific stat.
-  #=============================================================================
   def get_target_stat_drop_score_one(score, target, stat, decrement, desire_mult = 1)
     # Figure out how much the stat will actually change by
     max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
@@ -559,9 +553,8 @@ class Battle::AI
     return score
   end
 
-  #=============================================================================
-  #
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def get_score_for_weather(weather, move_user, starting = false)
     return 0 if @battle.pbCheckGlobalAbility(:AIRLOCK) ||
                 @battle.pbCheckGlobalAbility(:CLOUDNINE)
@@ -677,9 +670,8 @@ class Battle::AI
     return ret
   end
 
-  #=============================================================================
-  #
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def get_score_for_terrain(terrain, move_user, starting = false)
     ret = 0
     ret += 4 if starting && terrain != :None && move_user.has_active_item?(:TERRAINEXTENDER)

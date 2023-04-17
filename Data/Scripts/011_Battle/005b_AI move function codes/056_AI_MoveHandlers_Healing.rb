@@ -589,9 +589,9 @@ Battle::AI::Handlers::MoveEffectScore.copy("UserFaintsHealAndCureReplacement",
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartPerishCountsForAllBattlers",
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::PerishSong] > 0
-    next true if Battle::AbilityEffects.triggerMoveImmunity(target.ability, user.battler, target.battler,
-                                                            move.move, move.rough_type, battle, false)
-    next false
+    next false if !target.ability_active?
+    next Battle::AbilityEffects.triggerMoveImmunity(target.ability, user.battler, target.battler,
+                                                    move.move, move.rough_type, battle, false)
   }
 )
 Battle::AI::Handlers::MoveEffectScore.add("StartPerishCountsForAllBattlers",

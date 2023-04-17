@@ -55,7 +55,7 @@ class Battle::AI::AIBattler
   def idxOpposingSide; return battler.idxOpposingSide; end
   def pbOpposingSide;  return battler.pbOpposingSide;  end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Returns how much damage this battler will take at the end of this round.
   def rough_end_of_round_damage
@@ -160,7 +160,7 @@ class Battle::AI::AIBattler
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def base_stat(stat)
     ret = 0
@@ -194,7 +194,7 @@ class Battle::AI::AIBattler
     return (this_speed > other_speed) ^ (@ai.battle.field.effects[PBEffects::TrickRoom] > 0)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def types; return battler.types; end
   def pbTypes(withExtraType = false); return battler.pbTypes(withExtraType); end
@@ -228,7 +228,7 @@ class Battle::AI::AIBattler
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def ability_id; return battler.ability_id; end
   def ability;    return battler.ability;    end
@@ -245,7 +245,7 @@ class Battle::AI::AIBattler
     return @ai.move.function == "IgnoreTargetAbility" || battler.hasMoldBreaker?
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def item_id; return battler.item_id; end
   def item;    return battler.item;    end
@@ -258,7 +258,7 @@ class Battle::AI::AIBattler
     return battler.hasActiveItem?(item)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def check_for_move
     ret = false
@@ -283,7 +283,7 @@ class Battle::AI::AIBattler
     return false
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def can_attack?
     return false if self.effects[PBEffects::HyperBeam] > 0
@@ -334,18 +334,20 @@ class Battle::AI::AIBattler
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def wants_status_problem?(new_status)
     return true if new_status == :NONE
     if ability_active?
       case ability_id
       when :GUTS
-        return true if stat_raise_worthwhile?(self, :ATTACK, true)
+        return true if ![:SLEEP, :FROZEN].include?(new_status) &&
+                       stat_raise_worthwhile?(self, :ATTACK, true)
       when :MARVELSCALE
         return true if stat_raise_worthwhile?(self, :DEFENSE, true)
       when :QUICKFEET
-        return true if stat_raise_worthwhile?(self, :SPEED, true)
+        return true if ![:SLEEP, :FROZEN].include?(new_status) &&
+                       stat_raise_worthwhile?(self, :SPEED, true)
       when :FLAREBOOST
         return true if new_status == :BURN && stat_raise_worthwhile?(self, :SPECIAL_ATTACK, true)
       when :TOXICBOOST
@@ -363,7 +365,7 @@ class Battle::AI::AIBattler
     return false
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # TODO: Add more items.
   BASE_ITEM_RATINGS = {
@@ -544,7 +546,7 @@ class Battle::AI::AIBattler
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Items can be consumed by Stuff Cheeks, Teatime, Bug Bite/Pluck and Fling.
   def get_score_change_for_consuming_item(item, try_preserving_item = false)
@@ -629,7 +631,7 @@ class Battle::AI::AIBattler
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # These values are taken from the Complete-Fire-Red-Upgrade decomp here:
   # https://github.com/Skeli789/Complete-Fire-Red-Upgrade/blob/f7f35becbd111c7e936b126f6328fc52d9af68c8/src/ability_battle_effects.c#L41
@@ -962,7 +964,7 @@ class Battle::AI::AIBattler
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   private
 

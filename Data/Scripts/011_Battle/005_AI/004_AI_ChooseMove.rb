@@ -9,14 +9,14 @@ class Battle::AI
     return 0.6 + 0.35 * (([@trainer.skill, 100].min / 100.0) ** 0.5)   # 0.635 to 0.95
   end
 
-  #=============================================================================
-  # Get scores for the user's moves (done before any action is assessed).
+  #-----------------------------------------------------------------------------
+
+  # Get scores for the user's moves.
   # NOTE: For any move with a target type that can target a foe (or which
   #       includes a foe(s) if it has multiple targets), the score calculated
   #       for a target ally will be inverted. The MoveHandlers for those moves
   #       should therefore treat an ally as a foe when calculating a score
   #       against it.
-  #=============================================================================
   def pbGetMoveScores
     choices = []
     @user.battler.eachMoveWithIndex do |orig_move, idxMove|
@@ -85,6 +85,8 @@ class Battle::AI
     return choices
   end
 
+  # If the target of a move can be changed by an external effect, this method
+  # returns the battler index of the new target.
   def get_redirected_target(target_data)
     return nil if @move.move.cannotRedirect?
     return nil if !target_data.can_target_one_foe? || target_data.num_targets != 1
@@ -133,9 +135,9 @@ class Battle::AI
     end
   end
 
-  #=============================================================================
-  # Set some extra class variables for the move/target combo being assessed.
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
+  # Set some extra class variables for the move being assessed.
   def set_up_move_check(move)
     case move.function
     when "UseLastMoveUsed"
@@ -151,6 +153,7 @@ class Battle::AI
     @move.set_up(move)
   end
 
+  # Set some extra class variables for the target being assessed.
   def set_up_move_check_target(target)
     @target = (target) ? @battlers[target.index] : nil
     @target&.refresh_battler
@@ -164,10 +167,10 @@ class Battle::AI
     end
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Returns whether the move will definitely fail (assuming no battle conditions
   # change between now and using the move).
-  #=============================================================================
   def pbPredictMoveFailure
     # User is asleep and will not wake up
     return true if @user.battler.asleep? && @user.statusCount > 1 && !@move.move.usableWhenAsleep?
@@ -185,6 +188,8 @@ class Battle::AI
     return false
   end
 
+  # Returns whether the move will definitely fail against the target (assuming
+  # no battle conditions change between now and using the move).
   def pbPredictMoveFailureAgainstTarget
     # Move effect-specific checks
     return true if Battle::AI::Handlers.move_will_fail_against_target?(@move.function, @move, @user, @target, self, @battle)
@@ -220,10 +225,10 @@ class Battle::AI
     return false
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Get a score for the given move being used against the given target.
   # Assumes def set_up_move_check has previously been called.
-  #=============================================================================
   def pbGetMoveScore(targets = nil)
     # Get the base score for the move
     score = MOVE_BASE_SCORE
@@ -280,7 +285,8 @@ class Battle::AI
     return score
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Returns the score of @move being used against @target. A return value of -1
   # means the move will fail or do nothing against the target.
   # Assumes def set_up_move_check and def set_up_move_check_target have
@@ -294,7 +300,6 @@ class Battle::AI
   #       wouldn't apply the "185 - score" bit, which would make their
   #       MoveHandlers do the opposite calculations to other moves with the same
   #       targets, but is this desirable?
-  #=============================================================================
   def pbGetMoveScoreAgainstTarget
     # Predict whether the move will fail against the target
     if @trainer.has_skill_flag?("PredictMoveFailure") && pbPredictMoveFailureAgainstTarget
@@ -328,10 +333,10 @@ class Battle::AI
     return score
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Make the final choice of which move to use depending on the calculated
   # scores for each move. Moves with higher scores are more likely to be chosen.
-  #=============================================================================
   def pbChooseMove(choices)
     user_battler = @user.battler
     # If no moves can be chosen, auto-choose a move or Struggle

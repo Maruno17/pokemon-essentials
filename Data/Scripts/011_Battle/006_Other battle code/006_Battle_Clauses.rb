@@ -248,7 +248,7 @@ class Battle::Move::UserFaintsExplosive
   def pbMoveFailed?(user, targets)
     if @battle.rules["selfkoclause"]
       # Check whether no unfainted Pokemon remain in either party
-      count  = @battle.pbAbleNonActiveCount(user.idxOwnSide)
+      count = @battle.pbAbleNonActiveCount(user.idxOwnSide)
       count += @battle.pbAbleNonActiveCount(user.idxOpposingSide)
       if count == 0
         @battle.pbDisplay("But it failed!")
@@ -257,7 +257,7 @@ class Battle::Move::UserFaintsExplosive
     end
     if @battle.rules["selfdestructclause"]
       # Check whether no unfainted Pokemon remain in either party
-      count  = @battle.pbAbleNonActiveCount(user.idxOwnSide)
+      count = @battle.pbAbleNonActiveCount(user.idxOwnSide)
       count += @battle.pbAbleNonActiveCount(user.idxOpposingSide)
       if count == 0
         @battle.pbDisplay(_INTL("{1}'s team was disqualified!", user.pbThis))

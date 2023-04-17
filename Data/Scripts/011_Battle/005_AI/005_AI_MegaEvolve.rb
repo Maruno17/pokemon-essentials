@@ -1,7 +1,5 @@
 class Battle::AI
-  #=============================================================================
   # Decide whether the opponent should Mega Evolve.
-  #=============================================================================
   # TODO: Where relevant, pretend the user is Mega Evolved if it isn't but can
   #       be.
   def pbEnemyShouldMegaEvolve?
