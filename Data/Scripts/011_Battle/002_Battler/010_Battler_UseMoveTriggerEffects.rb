@@ -26,7 +26,7 @@ class Battle::Battler
         when 1   # Gulping Form
           user.pbLowerStatStageByAbility(:DEFENSE, 1, target, false)
         when 2   # Gorging Form
-          target.pbParalyze(user) if target.pbCanParalyze?(user, false)
+          user.pbParalyze(target) if user.pbCanParalyze?(target, false)
         end
         @battle.pbHideAbilitySplash(target)
         user.pbItemHPHealCheck if user.hp < oldHP

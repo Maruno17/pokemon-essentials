@@ -2251,12 +2251,14 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:DRYSKIN,
   proc { |ability, weather, battler, battle|
     case weather
     when :Sun, :HarshSun
-      battle.pbShowAbilitySplash(battler)
-      battle.scene.pbDamageAnimation(battler)
-      battler.pbReduceHP(battler.totalhp / 8, false)
-      battle.pbDisplay(_INTL("{1} was hurt by the sunlight!", battler.pbThis))
-      battle.pbHideAbilitySplash(battler)
-      battler.pbItemHPHealCheck
+      if battler.takesIndirectDamage?
+        battle.pbShowAbilitySplash(battler)
+        battle.scene.pbDamageAnimation(battler)
+        battler.pbReduceHP(battler.totalhp / 8, false)
+        battle.pbDisplay(_INTL("{1} was hurt by the sunlight!", battler.pbThis))
+        battle.pbHideAbilitySplash(battler)
+        battler.pbItemHPHealCheck
+      end
     when :Rain, :HeavyRain
       next if !battler.canHeal?
       battle.pbShowAbilitySplash(battler)
@@ -2301,7 +2303,7 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:ICEFACE,
 
 Battle::AbilityEffects::EndOfRoundWeather.add(:RAINDISH,
   proc { |ability, weather, battler, battle|
-    next unless [:Rain, :HeavyRain].include?(weather)
+    next if ![:Rain, :HeavyRain].include?(weather)
     next if !battler.canHeal?
     battle.pbShowAbilitySplash(battler)
     battler.pbRecoverHP(battler.totalhp / 16)
@@ -2316,7 +2318,8 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:RAINDISH,
 
 Battle::AbilityEffects::EndOfRoundWeather.add(:SOLARPOWER,
   proc { |ability, weather, battler, battle|
-    next unless [:Sun, :HarshSun].include?(weather)
+    next if ![:Sun, :HarshSun].include?(weather)
+    next if !battler.takesIndirectDamage?
     battle.pbShowAbilitySplash(battler)
     battle.scene.pbDamageAnimation(battler)
     battler.pbReduceHP(battler.totalhp / 8, false)
@@ -2332,7 +2335,7 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:SOLARPOWER,
 
 Battle::AbilityEffects::EndOfRoundHealing.add(:HEALER,
   proc { |ability, battler, battle|
-    next unless battle.pbRandom(100) < 30
+    next if battle.pbRandom(100) >= 30
     battler.allAllies.each do |b|
       next if b.status == :NONE
       battle.pbShowAbilitySplash(battler)
@@ -2920,9 +2923,9 @@ Battle::AbilityEffects::OnSwitchIn.add(:NEUTRALIZINGGAS,
     end
     # Trigger items upon Unnerve being negated
     battler.ability_id = nil   # Allows checking if Unnerve was active before
-    had_unnerve = battle.pbCheckGlobalAbility(:UNNERVE)
+    had_unnerve = battle.pbCheckGlobalAbility([:UNNERVE, :ASONECHILLINGNEIGH, :ASONEGRIMNEIGH])
     battler.ability_id = :NEUTRALIZINGGAS
-    if had_unnerve && !battle.pbCheckGlobalAbility(:UNNERVE)
+    if had_unnerve && !battle.pbCheckGlobalAbility([:UNNERVE, :ASONECHILLINGNEIGH, :ASONEGRIMNEIGH])
       battle.allBattlers.each { |b| b.pbItemsOnUnnerveEnding }
     end
   }

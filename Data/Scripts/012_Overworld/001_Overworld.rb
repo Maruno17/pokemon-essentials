@@ -669,7 +669,13 @@ def pbItemBall(item, quantity = 1)
     if item == :DNASPLICERS
       pbMessage("\\me[#{meName}]" + _INTL("You found \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
     elsif item.is_machine?   # TM or HM
-      pbMessage("\\me[#{meName}]" + _INTL("You found \\c[1]{1} {2}\\c[0]!", itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+      if quantity > 1
+        pbMessage("\\me[#{meName}]" + _INTL("You found {1} \\c[1]{2} {3}\\c[0]!",
+                                            quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+      else
+        pbMessage("\\me[#{meName}]" + _INTL("You found \\c[1]{1} {2}\\c[0]!",
+                                            itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+      end
     elsif quantity > 1
       pbMessage("\\me[#{meName}]" + _INTL("You found {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[30]")
     elsif itemname.starts_with_vowel?
@@ -683,7 +689,11 @@ def pbItemBall(item, quantity = 1)
   end
   # Can't add the item
   if item.is_machine?   # TM or HM
-    pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!", itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    if quantity > 1
+      pbMessage(_INTL("You found {1} \\c[1]{2} {3}\\c[0]!", quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    else
+      pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!", itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    end
   elsif quantity > 1
     pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[30]")
   elsif itemname.starts_with_vowel?
@@ -708,7 +718,13 @@ def pbReceiveItem(item, quantity = 1)
   if item == :DNASPLICERS
     pbMessage("\\me[#{meName}]" + _INTL("You obtained \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
   elsif item.is_machine?   # TM or HM
-    pbMessage("\\me[#{meName}]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!", itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    if quantity > 1
+      pbMessage("\\me[#{meName}]" + _INTL("You obtained {1} \\c[1]{2} {3}\\c[0]!",
+                                          quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    else
+      pbMessage("\\me[#{meName}]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!",
+                                          itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    end
   elsif quantity > 1
     pbMessage("\\me[#{meName}]" + _INTL("You obtained {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[30]")
   elsif itemname.starts_with_vowel?

@@ -13,7 +13,7 @@ class Battle::Battler
     @fainted = true
     # Check for end of Neutralizing Gas/Unnerve
     pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
-    pbItemsOnUnnerveEnding if hasActiveAbility?(:UNNERVE, true)
+    pbItemsOnUnnerveEnding if hasActiveAbility?([:UNNERVE, :ASONECHILLINGNEIGH, :ASONEGRIMNEIGH], true)
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
   end
@@ -29,7 +29,7 @@ class Battle::Battler
       Battle::AbilityEffects.triggerOnBattlerFainting(b.ability, b, self, @battle)
     end
     pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
-    pbItemsOnUnnerveEnding if hasActiveAbility?(:UNNERVE, true)
+    pbItemsOnUnnerveEnding if hasActiveAbility?([:UNNERVE, :ASONECHILLINGNEIGH, :ASONEGRIMNEIGH], true)
   end
 
   # Used for Emergency Exit/Wimp Out. Returns whether self has switched out.
@@ -162,7 +162,8 @@ class Battle::Battler
   def pbOnLosingAbility(oldAbil, suppressed = false)
     if oldAbil == :NEUTRALIZINGGAS && (suppressed || !@effects[PBEffects::GastroAcid])
       pbAbilitiesOnNeutralizingGasEnding
-    elsif oldAbil == :UNNERVE && (suppressed || !@effects[PBEffects::GastroAcid])
+    elsif [:UNNERVE, :ASONECHILLINGNEIGH, :ASONEGRIMNEIGH].include?(oldAbil) &&
+          (suppressed || !@effects[PBEffects::GastroAcid])
       pbItemsOnUnnerveEnding
     elsif oldAbil == :ILLUSION && @effects[PBEffects::Illusion]
       @effects[PBEffects::Illusion] = nil
@@ -200,7 +201,7 @@ class Battle::Battler
   # Held item consuming/removing
   #=============================================================================
   def canConsumeBerry?
-    return false if @battle.pbCheckOpposingAbility(:UNNERVE, @index)
+    return false if @battle.pbCheckOpposingAbility([:UNNERVE, :ASONECHILLINGNEIGH, :ASONEGRIMNEIGH], @index)
     return true
   end
 
