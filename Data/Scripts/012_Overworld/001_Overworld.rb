@@ -97,7 +97,7 @@ EventHandlers.add(:on_player_step_taken_can_transfer, :poison_party,
       pkmn.hp -= 1 if pkmn.hp > 1 || Settings::POISON_FAINT_IN_FIELD
       if pkmn.hp == 1 && !Settings::POISON_FAINT_IN_FIELD
         pkmn.status = :NONE
-        pbMessage(_INTL("{1} survived the poisoning.\\nThe poison faded away!\1", pkmn.name))
+        pbMessage(_INTL("{1} survived the poisoning.\\nThe poison faded away!", pkmn.name))
         next
       elsif pkmn.hp == 0
         pkmn.changeHappiness("faint")
@@ -114,7 +114,7 @@ EventHandlers.add(:on_player_step_taken_can_transfer, :poison_party,
 
 def pbCheckAllFainted
   if $player.able_pokemon_count == 0
-    pbMessage(_INTL("You have no more Pokémon that can fight!\1"))
+    pbMessage(_INTL("You have no more Pokémon that can fight!") + "\1")
     pbMessage(_INTL("You blacked out!"))
     pbBGMFade(1.0)
     pbBGSFade(1.0)
@@ -450,7 +450,7 @@ end
 module PBMoveRoute
   DOWN                  = 1
   LEFT                  = 2
-  RRIGHT                = 3
+  RIGHT                 = 3
   UP                    = 4
   LOWER_LEFT            = 5
   LOWER_RIGHT           = 6
@@ -667,15 +667,21 @@ def pbItemBall(item, quantity = 1)
   if $bag.add(item, quantity)   # If item can be picked up
     meName = (item.is_key_item?) ? "Key item get" : "Item get"
     if item == :DNASPLICERS
-      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
+      pbMessage("\\me[#{meName}]" + _INTL("You found \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
     elsif item.is_machine?   # TM or HM
-      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2} {3}\\c[0]!\\wtnp[30]", meName, itemname, GameData::Move.get(move).name))
+      if quantity > 1
+        pbMessage("\\me[#{meName}]" + _INTL("You found {1} \\c[1]{2} {3}\\c[0]!",
+                                            quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+      else
+        pbMessage("\\me[#{meName}]" + _INTL("You found \\c[1]{1} {2}\\c[0]!",
+                                            itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+      end
     elsif quantity > 1
-      pbMessage(_INTL("\\me[{1}]You found {2} \\c[1]{3}\\c[0]!\\wtnp[30]", meName, quantity, itemname))
+      pbMessage("\\me[#{meName}]" + _INTL("You found {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[30]")
     elsif itemname.starts_with_vowel?
-      pbMessage(_INTL("\\me[{1}]You found an \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
+      pbMessage("\\me[#{meName}]" + _INTL("You found an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
     else
-      pbMessage(_INTL("\\me[{1}]You found a \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
+      pbMessage("\\me[#{meName}]" + _INTL("You found a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
     end
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                     itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
@@ -683,13 +689,17 @@ def pbItemBall(item, quantity = 1)
   end
   # Can't add the item
   if item.is_machine?   # TM or HM
-    pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!\\wtnp[30]", itemname, GameData::Move.get(move).name))
+    if quantity > 1
+      pbMessage(_INTL("You found {1} \\c[1]{2} {3}\\c[0]!", quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    else
+      pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!", itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    end
   elsif quantity > 1
-    pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!\\wtnp[30]", quantity, itemname))
+    pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[30]")
   elsif itemname.starts_with_vowel?
-    pbMessage(_INTL("You found an \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
+    pbMessage(_INTL("You found an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
   else
-    pbMessage(_INTL("You found a \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
+    pbMessage(_INTL("You found a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
   end
   pbMessage(_INTL("But your Bag is full..."))
   return false
@@ -706,15 +716,21 @@ def pbReceiveItem(item, quantity = 1)
   move = item.move
   meName = (item.is_key_item?) ? "Key item get" : "Item get"
   if item == :DNASPLICERS
-    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
+    pbMessage("\\me[#{meName}]" + _INTL("You obtained \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
   elsif item.is_machine?   # TM or HM
-    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]", meName, itemname, GameData::Move.get(move).name))
+    if quantity > 1
+      pbMessage("\\me[#{meName}]" + _INTL("You obtained {1} \\c[1]{2} {3}\\c[0]!",
+                                          quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    else
+      pbMessage("\\me[#{meName}]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!",
+                                          itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+    end
   elsif quantity > 1
-    pbMessage(_INTL("\\me[{1}]You obtained {2} \\c[1]{3}\\c[0]!\\wtnp[30]", meName, quantity, itemname))
+    pbMessage("\\me[#{meName}]" + _INTL("You obtained {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[30]")
   elsif itemname.starts_with_vowel?
-    pbMessage(_INTL("\\me[{1}]You obtained an \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
+    pbMessage("\\me[#{meName}]" + _INTL("You obtained an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
   else
-    pbMessage(_INTL("\\me[{1}]You obtained a \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
+    pbMessage("\\me[#{meName}]" + _INTL("You obtained a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
   end
   if $bag.add(item, quantity)   # If item can be added
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
@@ -733,7 +749,7 @@ def pbBuyPrize(item, quantity = 1)
   item_name = (quantity > 1) ? item.portion_name_plural : item.portion_name
   pocket = item.pocket
   return false if !$bag.add(item, quantity)
-  pbMessage(_INTL("\\CNYou put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
-                  item_name, pocket, PokemonBag.pocket_names[pocket - 1]))
+  pbMessage("\\CN" + _INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+                           item_name, pocket, PokemonBag.pocket_names[pocket - 1]))
   return true
 end

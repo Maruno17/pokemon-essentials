@@ -108,7 +108,7 @@ end
 #
 #===============================================================================
 def pbTrainerPC
-  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $player.name))
+  pbMessage("\\se[PC open]" + _INTL("{1} booted up the PC.", $player.name))
   pbTrainerPCMenu
   pbSEPlay("PC close")
 end
@@ -132,7 +132,7 @@ end
 #
 #===============================================================================
 def pbPokeCenterPC
-  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $player.name))
+  pbMessage("\\se[PC open]" + _INTL("{1} booted up the PC.", $player.name))
   # Get all commands
   command_list = []
   commands = []
@@ -166,7 +166,7 @@ MenuHandlers.add(:pc_menu, :pokemon_storage, {
   },
   "order"     => 10,
   "effect"    => proc { |menu|
-    pbMessage(_INTL("\\se[PC access]The Pokémon Storage System was opened."))
+    pbMessage("\\se[PC access]" + _INTL("The Pokémon Storage System was opened."))
     command = 0
     loop do
       command = pbShowCommandsWithHelp(nil,
@@ -222,7 +222,7 @@ MenuHandlers.add(:pc_menu, :player_pc, {
   "name"      => proc { next _INTL("{1}'s PC", $player.name) },
   "order"     => 20,
   "effect"    => proc { |menu|
-    pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.", $player.name))
+    pbMessage("\\se[PC access]" + _INTL("Accessed {1}'s PC.", $player.name))
     pbTrainerPCMenu
     next false
   }

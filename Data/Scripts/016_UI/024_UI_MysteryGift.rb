@@ -245,7 +245,7 @@ def pbDownloadMysteryGift(trainer)
   addBackgroundPlane(sprites, "background", "mysterygift_bg", viewport)
   pbFadeInAndShow(sprites)
   sprites["msgwindow"] = pbCreateMessageWindow
-  pbMessageDisplay(sprites["msgwindow"], _INTL("Searching for a gift.\nPlease wait...\\wtnp[0]"))
+  pbMessageDisplay(sprites["msgwindow"], _INTL("Searching for a gift.\nPlease wait...") + "\\wtnp[0]")
   string = pbDownloadToString(MysteryGift::URL)
   if nil_or_empty?(string)
     pbMessageDisplay(sprites["msgwindow"], _INTL("No new gifts are available."))
@@ -268,7 +268,7 @@ def pbDownloadMysteryGift(trainer)
           commands.push(gift[3])
         end
         commands.push(_INTL("Cancel"))
-        pbMessageDisplay(sprites["msgwindow"], _INTL("Choose the gift you want to receive.\\wtnp[0]"))
+        pbMessageDisplay(sprites["msgwindow"], _INTL("Choose the gift you want to receive.") + "\\wtnp[0]")
         command = pbShowCommands(sprites["msgwindow"], commands, -1)
         if command == -1 || command == commands.length - 1
           break
@@ -302,7 +302,7 @@ def pbDownloadMysteryGift(trainer)
             pbUpdateSceneMap
           end
           sprites["msgwindow"].visible = true
-          pbMessageDisplay(sprites["msgwindow"], _INTL("The gift has been received!")) { sprite.update }
+          pbMessageDisplay(sprites["msgwindow"], _INTL("The gift has been received!") + "\1") { sprite.update }
           pbMessageDisplay(sprites["msgwindow"], _INTL("Please pick up your gift from the deliveryman in any Poké Mart.")) { sprite.update }
           trainer.mystery_gifts.push(gift)
           pending.delete_at(command)
@@ -408,14 +408,14 @@ def pbReceiveMysteryGift(id)
       itm = GameData::Item.get(item)
       itemname = (qty > 1) ? itm.portion_name_plural : itm.portion_name
       if itm.is_machine?   # TM or HM
-        pbMessage(_INTL("\\me[Item get]You obtained \\c[1]{1} {2}\\c[0]!\\wtnp[30]", itemname,
-                        GameData::Move.get(itm.move).name))
+        pbMessage("\\me[Item get]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!", itemname,
+                                           GameData::Move.get(itm.move).name) + "\\wtnp[30]")
       elsif qty > 1
-        pbMessage(_INTL("\\me[Item get]You obtained {1} \\c[1]{2}\\c[0]!\\wtnp[30]", qty, itemname))
+        pbMessage("\\me[Item get]" + _INTL("You obtained {1} \\c[1]{2}\\c[0]!", qty, itemname) + "\\wtnp[30]")
       elsif itemname.starts_with_vowel?
-        pbMessage(_INTL("\\me[Item get]You obtained an \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
+        pbMessage("\\me[Item get]" + _INTL("You obtained an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
       else
-        pbMessage(_INTL("\\me[Item get]You obtained a \\c[1]{1}\\c[0]!\\wtnp[30]", itemname))
+        pbMessage("\\me[Item get]" + _INTL("You obtained a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
       end
       $player.mystery_gifts[index] = [id]
       return true

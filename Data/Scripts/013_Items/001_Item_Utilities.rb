@@ -591,11 +591,11 @@ def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, &block)
     return false
   elsif pkmn.numMoves < Pokemon::MAX_MOVES
     pkmn.learn_move(move)
-    pbMessage("\\se[]" + _INTL("{1} learned {2}!\\se[Pkmn move learnt]", pkmn_name, move_name), &block)
+    pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn_name, move_name) + "\\se[Pkmn move learnt]", &block)
     return true
   end
-  pbMessage(_INTL("{1} wants to learn {2}, but it already knows {3} moves.\1",
-                  pkmn_name, move_name, pkmn.numMoves.to_word), &block)
+  pbMessage(_INTL("{1} wants to learn {2}, but it already knows {3} moves.",
+                  pkmn_name, move_name, pkmn.numMoves.to_word) + "\1", &block)
   if pbConfirmMessage(_INTL("Should {1} forget a move to learn {2}?", pkmn_name, move_name), &block)
     loop do
       move_index = pbForgetMove(pkmn, move)
@@ -606,9 +606,9 @@ def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, &block)
         if by_machine && Settings::TAUGHT_MACHINES_KEEP_OLD_PP
           pkmn.moves[move_index].pp = [oldmovepp, pkmn.moves[move_index].total_pp].min
         end
-        pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ...\\wt[16] Ta-da!\\se[Battle ball drop]\1"), &block)
-        pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1", pkmn_name, old_move_name), &block)
-        pbMessage("\\se[]" + _INTL("{1} learned {2}!\\se[Pkmn move learnt]", pkmn_name, move_name), &block)
+        pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ...\\wt[16] Ta-da!") + "\\se[Battle ball drop]\1", &block)
+        pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd..." + "\1", pkmn_name, old_move_name), &block)
+        pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn_name, move_name) + "\\se[Pkmn move learnt]", &block)
         pkmn.changeHappiness("machine") if by_machine
         return true
       elsif pbConfirmMessage(_INTL("Give up on learning {1}?", move_name), &block)
@@ -714,7 +714,7 @@ def pbUseItemOnPokemon(item, pkmn, scene)
     elsif !pkmn.compatible_with_move?(machine)
       pbMessage(_INTL("{1} can't learn {2}.", pkmn.name, movename)) { scene.pbUpdate }
     else
-      pbMessage(_INTL("\\se[PC access]You booted up the {1}.\1", itm.portion_name)) { scene.pbUpdate }
+      pbMessage("\\se[PC access]" + _INTL("You booted up the {1}.", itm.portion_name) + "\1") { scene.pbUpdate }
       if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?", movename, pkmn.name)) { scene.pbUpdate }
         if pbLearnMove(pkmn, machine, false, true) { scene.pbUpdate }
           $bag.remove(item) if itm.consumed_after_use?
@@ -785,9 +785,9 @@ def pbGiveItemToPokemon(item, pkmn, scene, pkmnid = 0)
   if pkmn.hasItem?
     olditemname = pkmn.item.portion_name
     if newitemname.starts_with_vowel?
-      scene.pbDisplay(_INTL("{1} is already holding an {2}.\1", pkmn.name, olditemname))
+      scene.pbDisplay(_INTL("{1} is already holding an {2}.", pkmn.name, olditemname) + "\1")
     else
-      scene.pbDisplay(_INTL("{1} is already holding a {2}.\1", pkmn.name, olditemname))
+      scene.pbDisplay(_INTL("{1} is already holding a {2}.", pkmn.name, olditemname) + "\1")
     end
     if scene.pbConfirm(_INTL("Would you like to switch the two items?"))
       $bag.remove(item)

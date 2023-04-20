@@ -531,7 +531,7 @@ class PurifyChamberScreen
       end
     end
     if pbCheckPurify
-      @scene.pbDisplay(_INTL("There is a Pokémon that is ready to open its heart!\1"))
+      @scene.pbDisplay(_INTL("There is a Pokémon that is ready to open its heart!") + "\1")
       @scene.pbCloseSetDetail
       pbDoPurify
       return false
@@ -579,7 +579,7 @@ class PurifyChamberScreen
       pbStorePokemon(@chamber[set].shadow)
       @chamber.setShadow(set, nil) # Remove shadow Pokemon from set
       if (i + 1) != purifiables.length
-        @scene.pbDisplay(_INTL("There is another Pokémon that is ready to open its heart!"))
+        @scene.pbDisplay(_INTL("There is another Pokémon that is ready to open its heart!") + "\1")
         if !@scene.pbConfirm(_INTL("Would you like to switch sets?"))
           @scene.pbCloseSet
           break

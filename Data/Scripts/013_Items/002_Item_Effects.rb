@@ -74,7 +74,7 @@ ItemHandlers::UseFromBag.addIf(:move_machines,
     item_data = GameData::Item.get(item)
     move = item_data.move
     next 0 if !move
-    pbMessage(_INTL("\\se[PC access]You booted up {1}.\1", item_data.name))
+    pbMessage("\\se[PC access]" + _INTL("You booted up the {1}.", item_data.name) + "\1")
     next 0 if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",
                                       GameData::Move.get(move).name))
     next 1 if pbMoveTutorChoose(move, nil, true, item_data.is_TR?)
@@ -320,11 +320,11 @@ ItemHandlers::UseInField.add(:ITEMFINDER, proc { |item|
       when 8 then $game_player.turn_up
       end
       pbWait(Graphics.frame_rate * 3 / 10)
-      pbMessage(_INTL("Huh? The {1}'s responding!\1", GameData::Item.get(item).name))
+      pbMessage(_INTL("Huh? The {1}'s responding!", GameData::Item.get(item).name) + "\1")
       pbMessage(_INTL("There's an item buried around here!"))
     end
   else
-    pbMessage(_INTL("... \\wt[10]... \\wt[10]... \\wt[10]...\\wt[10]Nope! There's no response."))
+    pbMessage(_INTL("... \\wt[10]... \\wt[10]... \\wt[10]... \\wt[10]Nope! There's no response."))
   end
   next true
 })

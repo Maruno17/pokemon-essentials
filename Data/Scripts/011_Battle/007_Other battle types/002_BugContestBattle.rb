@@ -59,7 +59,7 @@ class BugContestBattle < Battle
     if pbBugContestState.lastPokemon
       lastPokemon = pbBugContestState.lastPokemon
       pbDisplayPaused(_INTL("You already caught a {1}.", lastPokemon.name))
-      helptext = _INTL("STOCK POKéMON:\n {1} Lv.{2} MaxHP: {3}\nTHIS POKéMON:\n {4} Lv.{5} MaxHP: {6}",
+      helptext = _INTL("Stock Pokémon:\n{1} Lv.{2} Max HP: {3}\nThis Pokémon:\n{4} Lv.{5} Max HP: {6}",
                        lastPokemon.name, lastPokemon.level, lastPokemon.totalhp,
                        pkmn.name, pkmn.level, pkmn.totalhp)
       @scene.pbShowHelp(helptext)

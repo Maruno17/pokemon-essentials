@@ -283,21 +283,21 @@ class HallOfFame_Scene
     hour = totalsec / 60 / 60
     min = totalsec / 60 % 60
     pubid = sprintf("%05d", $player.public_ID)
-    lefttext = _INTL("Name<r>{1}<br>", $player.name)
-    lefttext += _INTL("ID No.<r>{1}<br>", pubid)
+    lefttext = _INTL("Name<r>{1}", $player.name) + "<br>"
+    lefttext += _INTL("ID No.<r>{1}", pubid) + "<br>"
     if hour > 0
-      lefttext += _INTL("Time<r>{1}h {2}m<br>", hour, min)
+      lefttext += _INTL("Time<r>{1}h {2}m", hour, min) + "<br>"
     else
-      lefttext += _INTL("Time<r>{1}m<br>", min)
+      lefttext += _INTL("Time<r>{1}m", min) + "<br>"
     end
-    lefttext += _INTL("Pokédex<r>{1}/{2}<br>",
-                      $player.pokedex.owned_count, $player.pokedex.seen_count)
+    lefttext += _INTL("Pokédex<r>{1}/{2}",
+                      $player.pokedex.owned_count, $player.pokedex.seen_count) + "<br>"
     @sprites["messagebox"] = Window_AdvancedTextPokemon.new(lefttext)
     @sprites["messagebox"].viewport = @viewport
     @sprites["messagebox"].width = 192 if @sprites["messagebox"].width < 192
     @sprites["msgwindow"] = pbCreateMessageWindow(@viewport)
     pbMessageDisplay(@sprites["msgwindow"],
-                     _INTL("League champion!\nCongratulations!\\^"))
+                     _INTL("League champion!\nCongratulations!") + "\\^")
   end
 
   def writePokemonData(pokemon, hallNumber = -1)

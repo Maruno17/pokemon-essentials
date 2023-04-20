@@ -467,14 +467,14 @@ MenuHandlers.add(:battle_debug_menu, :position_effects, {
       if battler && !battler.fainted?
         text = "[#{i}] #{battler.name}"
       else
-        text = _INTL("[#{i}] (empty)", i)
+        text = "[#{i}] " + _INTL("(empty)")
       end
       if battler.pbOwnedByPlayer?
-        text += " (yours)"
+        text += " " + _INTL("(yours)")
       elsif battle.opposes?(i)
-        text += " (opposing)"
+        text += " " + _INTL("(opposing)")
       else
-        text += " (ally's)"
+        text += " " + _INTL("(ally's)")
       end
       cmds.push(text)
     end

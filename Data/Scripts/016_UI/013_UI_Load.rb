@@ -240,7 +240,7 @@ class PokemonLoadScreen
   # Called if all save data is invalid.
   # Prompts the player to delete the save files.
   def prompt_save_deletion
-    pbMessage(_INTL("The save file is corrupt, or is incompatible with this game."))
+    pbMessage(_INTL("The save file is corrupt, or is incompatible with this game.") + "\1")
     exit unless pbConfirmMessageSerious(
       _INTL("Do you want to delete the save file and start anew?")
     )
@@ -254,9 +254,9 @@ class PokemonLoadScreen
     @scene.pbStartScene2
     if SaveData.exists?
       if pbConfirmMessageSerious(_INTL("Delete all saved data?"))
-        pbMessage(_INTL("Once data has been deleted, there is no way to recover it.\1"))
+        pbMessage(_INTL("Once data has been deleted, there is no way to recover it.") + "\1")
         if pbConfirmMessageSerious(_INTL("Delete the saved data anyway?"))
-          pbMessage(_INTL("Deleting all data. Don't turn off the power.\\wtnp[0]"))
+          pbMessage(_INTL("Deleting all data. Don't turn off the power.") + "\\wtnp[0]")
           self.delete_save_data
         end
       end

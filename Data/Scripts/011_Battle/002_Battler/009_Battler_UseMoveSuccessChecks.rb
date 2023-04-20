@@ -383,7 +383,7 @@ class Battle::Battler
           end
           target.damageState.protected = true
           @battle.successStates[user.index].protected = true
-          if move.pbContactMove?(user) && user.affectedByContactEffect?
+          if move.pbContactMove?(user) && user.affectedByContactEffect? && user.takesIndirectDamage?
             @battle.scene.pbDamageAnimation(user)
             user.pbReduceHP(user.totalhp / 8, false)
             @battle.pbDisplay(_INTL("{1} was hurt!", user.pbThis))

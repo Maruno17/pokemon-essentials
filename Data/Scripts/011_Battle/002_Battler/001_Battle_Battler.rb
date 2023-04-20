@@ -553,7 +553,7 @@ class Battle::Battler
   end
 
   def takesShadowSkyDamage?
-    return false if fainted?
+    return false if !takesIndirectDamage?
     return false if shadowPokemon?
     return true
   end

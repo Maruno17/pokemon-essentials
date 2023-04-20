@@ -18,6 +18,7 @@ module GameData
     attr_reader :bridge
     attr_reader :shows_reflections
     attr_reader :must_walk
+    attr_reader :must_walk_or_run
     attr_reader :ignore_passability
 
     DATA = {}
