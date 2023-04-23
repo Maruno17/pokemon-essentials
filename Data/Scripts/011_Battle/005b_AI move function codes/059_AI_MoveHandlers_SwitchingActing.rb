@@ -434,8 +434,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetActsNext",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveEffectScore.add("TargetActsLast",
-  proc { |score, move, user, ai, battle|
+Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetActsLast",
+  proc { |score, move, user, target, ai, battle|
     # Useless if the target is an ally
     next Battle::AI::MOVE_USELESS_SCORE if !target.opposes?(user)
     # Useless if the user has no ally (the point of this move is to let the ally
@@ -643,6 +643,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetUsingDiffe
   proc { |move, user, target, ai, battle|
     next true if target.effects[PBEffects::Encore] > 0
     next true if !target.battler.lastRegularMoveUsed ||
+                 !GameData::Move.exists?(target.battler.lastRegularMoveUsed) ||
                  move.move.moveBlacklist.include?(GameData::Move.get(target.battler.lastRegularMoveUsed).function_code)
     next true if target.effects[PBEffects::ShellTrap]
     next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)

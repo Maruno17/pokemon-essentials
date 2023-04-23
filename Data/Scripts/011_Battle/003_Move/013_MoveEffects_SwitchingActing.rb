@@ -606,7 +606,8 @@ class Battle::Move::TargetUsesItsLastUsedMoveAgain < Battle::Move
   end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if !target.lastRegularMoveUsed || !target.pbHasMove?(target.lastRegularMoveUsed)
+    if !target.lastRegularMoveUsed || !target.pbHasMove?(target.lastRegularMoveUsed) ||
+       !GameData::Move.exists?(target.lastRegularMoveUsed)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -814,6 +815,7 @@ class Battle::Move::DisableTargetUsingDifferentMove < Battle::Move
       return true
     end
     if !target.lastRegularMoveUsed ||
+       !GameData::Move.exists?(target.lastRegularMoveUsed) ||
        @moveBlacklist.include?(GameData::Move.get(target.lastRegularMoveUsed).function_code)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true

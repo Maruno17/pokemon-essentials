@@ -149,17 +149,40 @@ class Battle::AI::AIMove
        ((@ai.battle.pbCheckGlobalAbility(:DARKAURA) && calc_type == :DARK) ||
         (@ai.battle.pbCheckGlobalAbility(:FAIRYAURA) && calc_type == :FAIRY))
       if @ai.battle.pbCheckGlobalAbility(:AURABREAK)
-        multipliers[:power_multiplier] *= 2 / 3.0
+        multipliers[:power_multiplier] *= 3 / 4.0
       else
         multipliers[:power_multiplier] *= 4 / 3.0
       end
     end
     # Ability effects that alter damage
     if user.ability_active?
-      # NOTE: These abilities aren't suitable for checking at the start of the
-      #       round.
-      abilityBlacklist = [:ANALYTIC, :SNIPER, :TINTEDLENS, :AERILATE, :PIXILATE, :REFRIGERATE]
-      if !abilityBlacklist.include?(user.ability_id)
+      case user.ability_id
+      when :AERILATE, :GALVANIZE, :PIXILATE, :REFRIGERATE
+        multipliers[:power_multiplier] *= 1.2 if type == :NORMAL   # NOTE: Not calc_type.
+      when :ANALYTIC
+        if rough_priority(user) <= 0
+          user_faster = false
+          @ai.each_battler do |b, i|
+            user_faster = (i != user.index && user.faster_than?(b))
+            break if user_faster
+          end
+          multipliers[:power_multiplier] *= 1.3 if !user_faster
+        end
+      when :NEUROFORCE
+        if Effectiveness.super_effective_type?(calc_type, *target.pbTypes(true))
+          multipliers[:final_damage_multiplier] *= 1.25
+        end
+      when :NORMALIZE
+        multipliers[:power_multiplier] *= 1.2 if Settings::MECHANICS_GENERATION >= 7
+      when :SNIPER
+        multipliers[:final_damage_multiplier] *= 1.5 if is_critical
+      when :STAKEOUT
+        # TODO: multipliers[:attack_multiplier] *= 2 if target switches out
+      when :TINTEDLENS
+        if Effectiveness.resistant_type?(calc_type, *target.pbTypes(true))
+          multipliers[:final_damage_multiplier] *= 2
+        end
+      else
         Battle::AbilityEffects.triggerDamageCalcFromUser(
           user.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
         )
@@ -173,10 +196,12 @@ class Battle::AI::AIMove
         )
       end
       if target.ability_active?
-        # NOTE: These abilities aren't suitable for checking at the start of the
-        #       round.
-        abilityBlacklist = [:FILTER, :SOLIDROCK]
-        if !abilityBlacklist.include?(target.ability_id)
+        case target.ability_id
+        when :FILTER, :SOLIDROCK
+          if Effectiveness.super_effective_type?(calc_type, *target.pbTypes(true))
+            multipliers[:final_damage_multiplier] *= 0.75
+          end
+        else
           Battle::AbilityEffects.triggerDamageCalcFromTarget(
             target.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
           )
@@ -197,13 +222,15 @@ class Battle::AI::AIMove
       end
     end
     # Item effects that alter damage
-    # NOTE: Type-boosting gems aren't suitable for checking at the start of the
-    #       round.
     if user.item_active?
-      # NOTE: These items aren't suitable for checking at the start of the
-      #       round.
-      itemBlacklist = [:EXPERTBELT, :LIFEORB]
-      if !itemBlacklist.include?(user.item_id)
+      case user.item_id
+      when :EXPERTBELT
+        if Effectiveness.super_effective_type?(calc_type, *target.pbTypes(true))
+          multipliers[:final_damage_multiplier] *= 1.2
+        end
+      when :LIFEORB
+        multipliers[:final_damage_multiplier] *= 1.3
+      else
         Battle::ItemEffects.triggerDamageCalcFromUser(
           user.item, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
         )
@@ -443,7 +470,9 @@ class Battle::AI::AIMove
     # Item effects that alter accuracy calculation
     if user.item_active?
       if user.item == :ZOOMLENS
-        mods[:accuracy_multiplier] *= 1.2 if target.faster_than?(user)
+        if rough_priority(user) <= 0
+          mods[:accuracy_multiplier] *= 1.2 if target.faster_than?(user)
+        end
       else
         Battle::ItemEffects.triggerAccuracyCalcFromUser(
           user.item, modifiers, user_battler, target_battler, @move, calc_type
@@ -534,12 +563,12 @@ class Battle::AI::AIMove
   #   0: Regular additional effect chance or isn't an additional effect
   #   -999: Additional effect will be negated
   #   Other: Amount to add to a move's score
-  def get_score_change_for_additional_effect(user, target)
+  def get_score_change_for_additional_effect(user, target = nil)
     # Doesn't have an additional effect
     return 0 if @move.addlEffect == 0
     # Additional effect will be negated
     return -999 if user.has_active_ability?(:SHEERFORCE)
-    return -999 if user.index != target.index &&
+    return -999 if target && user.index != target.index &&
                    target.has_active_ability?(:SHIELDDUST) && !@ai.battle.moldBreaker
     # Prefer if the additional effect will have an increased chance of working
     return 5 if @move.addlEffect < 100 &&

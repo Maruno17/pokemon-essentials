@@ -265,7 +265,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterPhysicalDamage",
       score += 5 if b.rough_stat(:ATTACK) > b.rough_stat(:SPECIAL_ATTACK)
       # Prefer if the last move the foe used was physical
       if ai.trainer.medium_skill? && b.battler.lastMoveUsed
-        score += 8 if GameData::Move.get(b.battler.lastMoveUsed).physical?
+        score += 8 if GameData::Move.try_get(b.battler.lastMoveUsed)&.physical?
       end
       # Prefer if the foe is taunted into using a damaging move
       score += 5 if b.effects[PBEffects::Taunt] > 0
@@ -297,7 +297,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterSpecialDamage",
       score += 5 if b.rough_stat(:SPECIAL_ATTACK) > b.rough_stat(:ATTACK)
       # Prefer if the last move the foe used was special
       if ai.trainer.medium_skill? && b.battler.lastMoveUsed
-        score += 8 if GameData::Move.get(b.battler.lastMoveUsed).special?
+        score += 8 if GameData::Move.try_get(b.battler.lastMoveUsed)&.special?
       end
       # Prefer if the foe is taunted into using a damaging move
       score += 5 if b.effects[PBEffects::Taunt] > 0
@@ -327,7 +327,7 @@ Battle::AI::Handlers::MoveEffectScore.add("CounterDamagePlusHalf",
       has_damaging_move = true
       # Prefer if the last move the foe used was damaging
       if ai.trainer.medium_skill? && b.battler.lastMoveUsed
-        score += 8 if GameData::Move.get(b.battler.lastMoveUsed).damaging?
+        score += 8 if GameData::Move.try_get(b.battler.lastMoveUsed)&.damaging?
       end
       # Prefer if the foe is taunted into using a damaging move
       score += 5 if b.effects[PBEffects::Taunt] > 0
@@ -454,7 +454,7 @@ Battle::AI::Handlers::MoveEffectScore.add("WaterPledge",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
   proc { |move, user, ai, battle|
-    next true if !battle.lastMoveUsed
+    next true if !battle.lastMoveUsed || !GameData::Move.exists?(battle.lastMoveUsed)
     next move.move.moveBlacklist.include?(GameData::Move.get(battle.lastMoveUsed).function_code)
   }
 )
@@ -468,6 +468,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseLastMoveUsed",
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UseLastMoveUsedByTarget",
   proc { |move, user, target, ai, battle|
     next true if !target.battler.lastRegularMoveUsed
+    next true if !GameData::Move.exists?(target.battler.lastRegularMoveUsed)
     next !GameData::Move.get(target.battler.lastRegularMoveUsed).has_flag?("CanMirrorMove")
   }
 )

@@ -6,24 +6,24 @@ class Battle::AI
   #       opponent (only when deciding whether to switch mon in) - this
   #       comparison should be calculated when needed instead of being a role.
   module BattleRole
-    PHAZER         = 0
-    CLERIC         = 1
-    STALLBREAKER   = 2
-    STATUSABSORBER = 3
-    BATONPASSER    = 4
-    SPINNER        = 5
-    FIELDSETTER    = 6
-    WEATHERSETTER  = 7
-    SWEEPER        = 8
-    PIVOT          = 9
-    PHYSICALWALL   = 10
-    SPECIALWALL    = 11
-    TANK           = 12
-    TRAPPER        = 13
-    SCREENER       = 14
-    ACE            = 15
-    LEAD           = 16
-    SECOND         = 17
+    PHAZER          = 0
+    CLERIC          = 1
+    STALL_BREAKER   = 2
+    STATUS_ABSORBER = 3
+    BATON_PASSER    = 4
+    SPINNER         = 5
+    FIELD_SETTER    = 6
+    WEATHER_SETTER  = 7
+    SWEEPER         = 8
+    PIVOT           = 9
+    PHYSICAL_WALL   = 10
+    SPECIAL_WALL    = 11
+    TANK            = 12
+    TRAPPER         = 13
+    SCREENER        = 14
+    ACE             = 15
+    LEAD            = 16
+    SECOND          = 17
   end
 
   #-----------------------------------------------------------------------------
@@ -51,22 +51,22 @@ class Battle::AI
       when "CureUserPartyStatus"   # Aromatherapy/Heal Bell
         ret.push(BattleRole::CLERIC)
       when "DisableTargetStatusMoves"   # Taunt
-        ret.push(BattleRole::STALLBREAKER)
+        ret.push(BattleRole::STALL_BREAKER)
       when "HealUserPositionNextTurn"   # Wish
         ret.push(BattleRole::CLERIC) if pkmn.ev[:HP] == Pokemon::EV_STAT_LIMIT
       when "HealUserFullyAndFallAsleep"   # Rest
-        ret.push(BattleRole::STATUSABSORBER)
+        ret.push(BattleRole::STATUS_ABSORBER)
       when "SwitchOutUserPassOnEffects"   # Baton Pass
-        ret.push(BattleRole::BATONPASSER)
+        ret.push(BattleRole::BATON_PASSER)
       when "SwitchOutUserStatusMove", "SwitchOutUserDamagingMove"   # Teleport (Gen 8+), U-turn
         hasPivotMove = true
       when "RemoveUserBindingAndEntryHazards"   # Rapid Spin
         ret.push(BattleRole::SPINNER)
       when "StartElectricTerrain", "StartGrassyTerrain",
            "StartMistyTerrain", "StartPsychicTerrain"   # Terrain moves
-        ret.push(BattleRole::FIELDSETTER)
+        ret.push(BattleRole::FIELD_SETTER)
       else
-        ret.push(BattleRole::WEATHERSETTER) if move.is_a?(Battle::Move::WeatherMove)
+        ret.push(BattleRole::WEATHER_SETTER) if move.is_a?(Battle::Move::WeatherMove)
       end
     end
 
@@ -81,10 +81,10 @@ class Battle::AI
       ret.push(BattleRole::PIVOT) if hasPivotMove
       if pkmn.nature.stat_changes.any? { |change| change[0] == :DEFENSE && change[1] > 0 } &&
          !pkmn.nature.stat_changes.any? { |change| change[0] == :DEFENSE && change[1] < 0 }
-        ret.push(BattleRole::PHYSICALWALL) if pkmn.ev[:DEFENSE] == Pokemon::EV_STAT_LIMIT
+        ret.push(BattleRole::PHYSICAL_WALL) if pkmn.ev[:DEFENSE] == Pokemon::EV_STAT_LIMIT
       elsif pkmn.nature.stat_changes.any? { |change| change[0] == :SPECIAL_DEFENSE && change[1] > 0 } &&
             !pkmn.nature.stat_changes.any? { |change| change[0] == :SPECIAL_DEFENSE && change[1] < 0 }
-        ret.push(BattleRole::SPECIALWALL) if pkmn.ev[:SPECIAL_DEFENSE] == Pokemon::EV_STAT_LIMIT
+        ret.push(BattleRole::SPECIAL_WALL) if pkmn.ev[:SPECIAL_DEFENSE] == Pokemon::EV_STAT_LIMIT
       end
     else
       ret.push(BattleRole::TANK) if pkmn.ev[:HP] == Pokemon::EV_STAT_LIMIT
@@ -96,14 +96,14 @@ class Battle::AI
       ret.push(BattleRole::PIVOT)
     when :GUTS, :QUICKFEET, :FLAREBOOST, :TOXICBOOST, :NATURALCURE, :MAGICGUARD,
          :MAGICBOUNCE, :HYDRATION
-      ret.push(BattleRole::STATUSABSORBER)
+      ret.push(BattleRole::STATUS_ABSORBER)
     when :SHADOWTAG, :ARENATRAP, :MAGNETPULL
       ret.push(BattleRole::TRAPPER)
     when :DROUGHT, :DRIZZLE, :SANDSTREAM, :SNOWWARNING, :PRIMORDIALSEA,
          :DESOLATELAND, :DELTASTREAM
-      ret.push(BattleRole::WEATHERSETTER)
+      ret.push(BattleRole::WEATHER_SETTER)
     when :GRASSYSURGE, :ELECTRICSURGE, :MISTYSURGE, :PSYCHICSURGE
-      ret.push(BattleRole::FIELDSETTER)
+      ret.push(BattleRole::FIELD_SETTER)
     end
 
     # Check for items indicative of particular roles
@@ -113,14 +113,14 @@ class Battle::AI
     when :ASSAULTVEST
       ret.push(BattleRole::TANK)
     when :CHOICEBAND, :CHOICESPECS
-      ret.push(BattleRole::STALLBREAKER)
+      ret.push(BattleRole::STALL_BREAKER)
       ret.push(BattleRole::SWEEPER) if pkmn.ev[:SPEED] == Pokemon::EV_STAT_LIMIT
     when :CHOICESCARF
       ret.push(BattleRole::SWEEPER) if pkmn.ev[:SPEED] == Pokemon::EV_STAT_LIMIT
     when :TOXICORB, :FLAMEORB
-      ret.push(BattleRole::STATUSABSORBER)
+      ret.push(BattleRole::STATUS_ABSORBER)
     when :TERRAINEXTENDER
-      ret.push(BattleRole::FIELDSETTER)
+      ret.push(BattleRole::FIELD_SETTER)
     end
 
     # Check for position in team, level relative to other levels in team

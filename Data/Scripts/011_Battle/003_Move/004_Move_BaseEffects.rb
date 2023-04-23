@@ -36,7 +36,6 @@ class Battle::Move::Confusion < Battle::Move
     @priority   = 0
     @flags      = []
     @addlEffect = 0
-    @calcType   = nil
     @powerBoost = false
     @snatched   = false
   end
@@ -53,19 +52,18 @@ class Battle::Move::Struggle < Battle::Move
   def initialize(battle, move)
     @battle     = battle
     @realMove   = nil                     # Not associated with a move
-    @id         = (move) ? move.id : :STRUGGLE
-    @name       = (move) ? move.name : _INTL("Struggle")
+    @id         = :STRUGGLE
+    @name       = _INTL("Struggle")
     @function   = "Struggle"
     @power      = 50
     @type       = nil
     @category   = 0
     @accuracy   = 0
     @pp         = -1
-    @target     = :NearOther
+    @target     = :RandomNearFoe
     @priority   = 0
     @flags      = ["Contact", "CanProtect"]
     @addlEffect = 0
-    @calcType   = nil
     @powerBoost = false
     @snatched   = false
   end

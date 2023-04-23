@@ -5200,18 +5200,6 @@ Flags = CanProtect,CanMirrorMove,Sound
 EffectChance = 30
 Description = An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch.
 #-------------------------------
-[STRUGGLE]
-Name = Struggle
-Type = NORMAL
-Category = Physical
-Power = 50
-Accuracy = 0
-TotalPP = 1
-Target = RandomNearFoe
-FunctionCode = Struggle
-Flags = Contact,CanProtect
-Description = An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.
-#-------------------------------
 [TERRAINPULSE]
 Name = Terrain Pulse
 Type = NORMAL

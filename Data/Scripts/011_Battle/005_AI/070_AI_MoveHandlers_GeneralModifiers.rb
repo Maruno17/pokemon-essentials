@@ -15,8 +15,8 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:shiny_target,
 #===============================================================================
 # Prefer Shadow moves (for flavour).
 #===============================================================================
-Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:shadow_moves,
-  proc { |score, move, user, target, ai, battle|
+Battle::AI::Handlers::GeneralMoveScore.add(:shadow_moves,
+  proc { |score, move, user, ai, battle|
     if move.rough_type == :SHADOW
       old_score = score
       score += 10
@@ -51,8 +51,8 @@ Battle::AI::Handlers::GeneralMoveScore.add(:thawing_move_when_frozen,
 # - the target is predicted to be knocked out by the move.
 # TODO: Less prefer a priority move if any foe knows Quick Guard?
 #===============================================================================
-Battle::AI::Handlers::GeneralMoveScore.add(:priority_move_against_faster_target,
-  proc { |score, move, user, ai, battle|
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:priority_move_against_faster_target,
+  proc { |score, move, user, target, ai, battle|
     if ai.trainer.high_skill? && target.faster_than?(user) && move.rough_priority(user) > 0
       # User is at risk of being knocked out
       if ai.trainer.has_skill_flag?("HPAware") && user.hp < user.totalhp / 3
@@ -61,7 +61,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:priority_move_against_faster_target,
         PBDebug.log_score_change(score - old_score, "user at low HP and move has priority over faster target")
       end
       # Target is predicted to be knocked out by the move
-      if move.damaging_move? && move.rough_damage >= target.hp
+      if move.damagingMove? && move.rough_damage >= target.hp
         old_score = score
         score += 8
         PBDebug.log_score_change(score - old_score, "target at low HP and move has priority over faster target")
@@ -221,7 +221,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:target_semi_invulnerabl
     if ai.trainer.medium_skill? && move.rough_accuracy > 0 &&
        (target.battler.semiInvulnerable? || target.effects[PBEffects::SkyDrop] >= 0)
       next score if user.has_active_ability?(:NOGUARD) || target.has_active_ability?(:NOGUARD)
-      priority = move.rough_priority
+      priority = move.rough_priority(user)
       if priority > 0 || (priority == 0 && user.faster_than?(target))   # User goes first
         miss = true
         if ai.trainer.high_skill?
@@ -331,6 +331,13 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:thawing_move_against_fr
 #===============================================================================
 #
 #===============================================================================
+# TODO: Check all effects that trigger upon using a move, including per-hit
+#       stuff in def pbEffectsOnMakingHit and end-of-move stuff in def
+#       pbEffectsAfterMove.
+
+#===============================================================================
+#
+#===============================================================================
 # TODO: Prefer a contact move if making contact with the target could trigger
 #       an effect that's good for the user (Poison Touch/Pickpocket).
 
@@ -350,7 +357,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:knocking_out_a_destiny_
   proc { |score, move, user, target, ai, battle|
     if (ai.trainer.has_skill_flag?("HPAware") || ai.trainer.high_skill?) && move.damagingMove? &&
        (target.effects[PBEffects::DestinyBond] || target.effects[PBEffects::Grudge])
-      priority = move.rough_priority
+      priority = move.rough_priority(user)
       if priority > 0 || (priority == 0 && user.faster_than?(target))   # User goes first
         if move.rough_damage > target.hp * 1.1   # Predicted to KO the target
           old_score = score

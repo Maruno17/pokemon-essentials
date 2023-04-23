@@ -60,6 +60,32 @@ class Battle::AI::AIBattler
   # Returns how much damage this battler will take at the end of this round.
   def rough_end_of_round_damage
     ret = 0
+    # Weather
+    weather = battler.effectiveWeather
+    if @ai.battle.field.weatherDuration == 1
+      weather = @ai.battle.field.defaultWeather
+      weather = :None if @ai.battle.allBattlers.any? { |b| b.hasActiveAbility?([:CLOUDNINE, :AIRLOCK]) }
+      weather = :None if [:Sun, :Rain, :HarshSun, :HeavyRain].include?(weather) && has_active_item?(:UTILITYUMBRELLA)
+    end
+    case weather
+    when :Sandstorm
+      ret += [self.totalhp / 16, 1].max if battler.takesSandstormDamage?
+    when :Hail
+      ret += [self.totalhp / 16, 1].max if battler.takesHailDamage?
+    when :ShadowSky
+      ret += [self.totalhp / 16, 1].max if battler.takesShadowSkyDamage?
+    end
+    case ability_id
+    when :DRYSKIN
+      ret += [self.totalhp / 8, 1].max if [:Sun, :HarshSun].include?(weather) && battler.takesIndirectDamage?
+      ret -= [self.totalhp / 8, 1].max if [:Rain, :HeavyRain].include?(weather) && battler.canHeal?
+    when :ICEBODY
+      ret -= [self.totalhp / 16, 1].max if weather == :Hail && battler.canHeal?
+    when :RAINDISH
+      ret -= [self.totalhp / 16, 1].max if [:Rain, :HeavyRain].include?(weather) && battler.canHeal?
+    when :SOLARPOWER
+      ret += [self.totalhp / 8, 1].max if [:Sun, :HarshSun].include?(weather) && battler.takesIndirectDamage?
+    end
     # Future Sight/Doom Desire
     # TODO
     # Wish
@@ -69,38 +95,38 @@ class Battle::AI::AIBattler
     # Sea of Fire
     if @ai.battle.sides[@side].effects[PBEffects::SeaOfFire] > 1 &&
        battler.takesIndirectDamage? && !has_type?(:FIRE)
-      ret += self.totalhp / 8
+      ret += [self.totalhp / 8, 1].max
     end
     # Grassy Terrain (healing)
     if @ai.battle.field.terrain == :Grassy && battler.affectedByTerrain? && battler.canHeal?
-      ret -= [battler.totalhp / 16, 1].max
+      ret -= [self.totalhp / 16, 1].max
     end
     # Leftovers/Black Sludge
     if has_active_item?(:BLACKSLUDGE)
       if has_type?(:POISON)
-        ret -= [battler.totalhp / 16, 1].max if battler.canHeal?
+        ret -= [self.totalhp / 16, 1].max if battler.canHeal?
       else
-        ret += [battler.totalhp / 8, 1].max if battler.takesIndirectDamage?
+        ret += [self.totalhp / 8, 1].max if battler.takesIndirectDamage?
       end
     elsif has_active_item?(:LEFTOVERS)
-      ret -= [battler.totalhp / 16, 1].max if battler.canHeal?
+      ret -= [self.totalhp / 16, 1].max if battler.canHeal?
     end
     # Aqua Ring
     if self.effects[PBEffects::AquaRing] && battler.canHeal?
-      amt = battler.totalhp / 16
+      amt = self.totalhp / 16
       amt = (amt * 1.3).floor if has_active_item?(:BIGROOT)
       ret -= [amt, 1].max
     end
     # Ingrain
     if self.effects[PBEffects::Ingrain] && battler.canHeal?
-      amt = battler.totalhp / 16
+      amt = self.totalhp / 16
       amt = (amt * 1.3).floor if has_active_item?(:BIGROOT)
       ret -= [amt, 1].max
     end
     # Leech Seed
     if self.effects[PBEffects::LeechSeed] >= 0
       if battler.takesIndirectDamage?
-        ret += [battler.totalhp / 8, 1].max if battler.takesIndirectDamage?
+        ret += [self.totalhp / 8, 1].max if battler.takesIndirectDamage?
       end
     else
       @ai.each_battler do |b, i|
@@ -112,16 +138,16 @@ class Battle::AI::AIBattler
     end
     # Hyper Mode (Shadow Pokémon)
     if battler.inHyperMode?
-      ret += [battler.totalhp / 24, 1].max
+      ret += [self.totalhp / 24, 1].max
     end
     # Poison/burn/Nightmare
     if self.status == :POISON
       if has_active_ability?(:POISONHEAL)
-        ret -= [battler.totalhp / 8, 1].max if battler.canHeal?
+        ret -= [self.totalhp / 8, 1].max if battler.canHeal?
       elsif battler.takesIndirectDamage?
         mult = 2
         mult = [self.effects[PBEffects::Toxic] + 1, 16].min if self.statusCount > 0   # Toxic
-        ret += [mult * battler.totalhp / 16, 1].max
+        ret += [mult * self.totalhp / 16, 1].max
       end
     elsif self.status == :BURN
       if battler.takesIndirectDamage?
@@ -130,11 +156,11 @@ class Battle::AI::AIBattler
         ret += [amt, 1].max
       end
     elsif battler.asleep? && self.statusCount > 1 && self.effects[PBEffects::Nightmare]
-      ret += [battler.totalhp / 4, 1].max if battler.takesIndirectDamage?
+      ret += [self.totalhp / 4, 1].max if battler.takesIndirectDamage?
     end
     # Curse
     if self.effects[PBEffects::Curse]
-      ret += [battler.totalhp / 4, 1].max if battler.takesIndirectDamage?
+      ret += [self.totalhp / 4, 1].max if battler.takesIndirectDamage?
     end
     # Trapping damage
     if self.effects[PBEffects::Trapping] > 1 && battler.takesIndirectDamage?
@@ -150,12 +176,12 @@ class Battle::AI::AIBattler
     if battler.asleep? && self.statusCount > 1 && battler.takesIndirectDamage?
       @ai.each_battler do |b, i|
         next if i == @index || !b.battler.near?(battler) || !b.has_active_ability?(:BADDREAMS)
-        ret += [battler.totalhp / 8, 1].max
+        ret += [self.totalhp / 8, 1].max
       end
     end
     # Sticky Barb
     if has_active_item?(:STICKYBARB) && battler.takesIndirectDamage?
-      ret += [battler.totalhp / 8, 1].max
+      ret += [self.totalhp / 8, 1].max
     end
     return ret
   end
@@ -242,7 +268,7 @@ class Battle::AI::AIBattler
   end
 
   def has_mold_breaker?
-    return @ai.move.function == "IgnoreTargetAbility" || battler.hasMoldBreaker?
+    return battler.hasMoldBreaker?
   end
 
   #-----------------------------------------------------------------------------
@@ -321,7 +347,7 @@ class Battle::AI::AIBattler
     # Other certain trapping effects
     return false if battler.trappedInBattle?
     # Trapping abilities/items
-    ai.each_foe_battler(side) do |b, i|
+    @ai.each_foe_battler(side) do |b, i|
       if b.ability_active? &&
          Battle::AbilityEffects.triggerTrappingByTarget(b.ability, battler, b.battler, @ai.battle)
         return false
@@ -342,20 +368,21 @@ class Battle::AI::AIBattler
       case ability_id
       when :GUTS
         return true if ![:SLEEP, :FROZEN].include?(new_status) &&
-                       stat_raise_worthwhile?(self, :ATTACK, true)
+                       @ai.stat_raise_worthwhile?(self, :ATTACK, true)
       when :MARVELSCALE
-        return true if stat_raise_worthwhile?(self, :DEFENSE, true)
+        return true if @ai.stat_raise_worthwhile?(self, :DEFENSE, true)
       when :QUICKFEET
         return true if ![:SLEEP, :FROZEN].include?(new_status) &&
-                       stat_raise_worthwhile?(self, :SPEED, true)
+                       @ai.stat_raise_worthwhile?(self, :SPEED, true)
       when :FLAREBOOST
-        return true if new_status == :BURN && stat_raise_worthwhile?(self, :SPECIAL_ATTACK, true)
+        return true if new_status == :BURN && @ai.stat_raise_worthwhile?(self, :SPECIAL_ATTACK, true)
       when :TOXICBOOST
-        return true if new_status == :POISON && stat_raise_worthwhile?(self, :ATTACK, true)
+        return true if new_status == :POISON && @ai.stat_raise_worthwhile?(self, :ATTACK, true)
       when :POISONHEAL
         return true if new_status == :POISON
       when :MAGICGUARD   # Want a harmless status problem to prevent getting a harmful one
-        return true if new_status == :POISON || (new_status == :BURN && !stat_raise_worthwhile?(self, :ATTACK, true))
+        return true if new_status == :POISON ||
+                       (new_status == :BURN && !@ai.stat_raise_worthwhile?(self, :ATTACK, true))
       end
     end
     return true if new_status == :SLEEP && check_for_move { |m| m.usableWhenAsleep? }
@@ -924,12 +951,12 @@ class Battle::AI::AIBattler
       ret = 0 if gender == 2
     when :FRIENDGUARD, :HEALER, :SYMBOISIS, :TELEPATHY
       has_ally = false
-      each_ally(@side) { |b, i| has_ally = true }
+      @ai.each_ally(@side) { |b, i| has_ally = true }
       ret = 0 if !has_ally
     when :GALEWINGS
       ret = 0 if !check_for_move { |m| m.type == :FLYING }
     when :HUGEPOWER, :PUREPOWER
-      ret = 0 if !ai.stat_raise_worthwhile?(self, :ATTACK, true)
+      ret = 0 if !@ai.stat_raise_worthwhile?(self, :ATTACK, true)
     when :IRONFIST
       ret = 0 if !check_for_move { |m| m.punchingMove? }
     when :LIQUIDVOICE
@@ -953,7 +980,7 @@ class Battle::AI::AIBattler
     when :SKILLLINK
       ret = 0 if !check_for_move { |m| m.is_a?(Battle::Move::HitTwoToFiveTimes) }
     when :STEELWORKER
-      ret = 0 if !has_damaging_move_of_type?(:GRASS)
+      ret = 0 if !has_damaging_move_of_type?(:STEEL)
     when :SWARM
       ret = 0 if !has_damaging_move_of_type?(:BUG)
     when :TORRENT

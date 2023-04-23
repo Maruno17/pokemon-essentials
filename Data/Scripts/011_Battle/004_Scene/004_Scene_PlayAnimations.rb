@@ -410,7 +410,7 @@ class Battle::Scene
   # Returns the animation ID to use for a given move/user. Returns nil if that
   # move has no animations defined for it.
   def pbFindMoveAnimDetails(move2anim, moveID, idxUser, hitNum = 0)
-    real_move_id = GameData::Move.get(moveID).id
+    real_move_id = GameData::Move.try_get(moveID)&.id || moveID
     noFlip = false
     if (idxUser & 1) == 0   # On player's side
       anim = move2anim[0][real_move_id]

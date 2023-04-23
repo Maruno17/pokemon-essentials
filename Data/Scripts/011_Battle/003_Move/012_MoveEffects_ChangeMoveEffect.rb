@@ -768,6 +768,7 @@ class Battle::Move::UseLastMoveUsed < Battle::Move
 
   def pbMoveFailed?(user, targets)
     if !@copied_move ||
+       !GameData::Move.exists?(@copied_move) ||
        @moveBlacklist.include?(GameData::Move.get(@copied_move).function_code)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -789,6 +790,7 @@ class Battle::Move::UseLastMoveUsedByTarget < Battle::Move
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if !target.lastRegularMoveUsed ||
+       !GameData::Move.exists?(target.lastRegularMoveUsed) ||
        !GameData::Move.get(target.lastRegularMoveUsed).has_flag?("CanMirrorMove")
       @battle.pbDisplay(_INTL("The mirror move failed!")) if show_message
       return true

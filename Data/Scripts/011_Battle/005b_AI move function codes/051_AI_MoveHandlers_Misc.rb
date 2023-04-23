@@ -1,11 +1,6 @@
 #===============================================================================
 #
 #===============================================================================
-# Struggle
-
-#===============================================================================
-#
-#===============================================================================
 # None
 
 #===============================================================================
@@ -574,9 +569,12 @@ Battle::AI::Handlers::MoveEffectScore.add("UserMakeSubstitute",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectScore.add("RemoveUserBindingAndEntryHazards",
   proc { |score, move, user, ai, battle|
-    add_effect = move.get_score_change_for_additional_effect(user, target)
-    next score if add_effect == -999   # Additional effect will be negated
-    score += add_effect
+    # Score for raising user's Speed
+    if Settings::MECHANICS_GENERATION >= 8
+      score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserSpeed1",
+         score, move, user, ai, battle)
+    end
+    # Score for removing various effects
     score += 10 if user.effects[PBEffects::Trapping] > 0
     score += 15 if user.effects[PBEffects::LeechSeed] >= 0
     if battle.pbAbleNonActiveCount(user.idxOwnSide) > 0

@@ -509,9 +509,9 @@ class Battle::AI
         next if target_speed > b_speed * 2.5   # Much too fast to reasonably be overtaken
         if target_speed > b_speed
           if target_speed < b_speed * 2 / (decrement + 2)
-            score += 15 * inc_mult   # Target will become slower than b
+            score += 15 * dec_mult   # Target will become slower than b
           else
-            score += 8 * inc_mult
+            score += 8 * dec_mult
           end
           break
         end

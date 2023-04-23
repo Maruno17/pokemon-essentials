@@ -42,7 +42,7 @@ def pbRandomMove
   loop do
     move_id = keys.sample
     move = GameData::Move.get(move_id)
-    next if move.id == :SKETCH || move.id == :STRUGGLE
+    next if ["Struggle", "ReplaceMoveWithTargetLastMoveUsed"].include?(move.function_code)
     return move.id
   end
 end

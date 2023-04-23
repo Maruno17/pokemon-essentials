@@ -9,7 +9,7 @@
 def debug_set_up_trainer
   # Values to return
   trainer_array = []
-  foe_items     = []   # Intentionally left blank (for now)
+  foe_items     = []   # Items can't be used except in internal battles
   pokemon_array = []
   party_starts  = [0]
 
@@ -25,6 +25,10 @@ def debug_set_up_trainer
   trainer = NPCTrainer.new(trainer_name, trainer_type)
   trainer.id        = $player.make_foreign_ID
   trainer.lose_text = "I lost."
+  # [:MAXPOTION, :FULLHEAL, :MAXREVIVE, :REVIVE].each do |item|
+  #   trainer.items.push(item)
+  # end
+  # foe_items.push(trainer.items)
   trainer_array.push(trainer)
 
   # Generate party
@@ -46,11 +50,13 @@ def debug_set_up_trainer
   return trainer_array, foe_items, pokemon_array, party_starts
 end
 
-def debug_test_auto_battle(logging = false)
+def debug_test_auto_battle(logging = false, console_messages = true)
   old_internal = $INTERNAL
   $INTERNAL = logging
-  echoln "Start of testing auto-battle."
-  echoln "" if !$INTERNAL
+  if console_messages
+    echoln "Start of testing auto-battle."
+    echoln "" if !$INTERNAL
+  end
   PBDebug.log("")
   PBDebug.log("================================================================")
   PBDebug.log("")
@@ -75,11 +81,13 @@ def debug_test_auto_battle(logging = false)
       ($INTERNAL) ? PBDebug.log(moves_msg) : echoln(moves_msg)
     end
   end
-  echo_participant.call(player_trainers[0], player_party, 1)
+  echo_participant.call(player_trainers[0], player_party, 1) if console_messages
   PBDebug.log("")
-  echoln "" if !$INTERNAL
-  echo_participant.call(foe_trainers[0], foe_party, 2)
-  echoln "" if !$INTERNAL
+  if console_messages
+    echoln "" if !$INTERNAL
+    echo_participant.call(foe_trainers[0], foe_party, 2)
+    echoln "" if !$INTERNAL
+  end
   # Create the battle scene (the visual side of it)
   scene = Battle::DebugSceneNoVisuals.new(logging)
   # Create the battle class (the mechanics side of it)
@@ -97,14 +105,16 @@ def debug_test_auto_battle(logging = false)
   # Perform the battle itself
   outcome = battle.pbStartBattle
   # End
-  text = ["Undecided",
-          "Trainer 1 #{player_trainers[0].name} won",
-          "Trainer 2 #{foe_trainers[0].name} won",
-          "Ran/forfeited",
-          "Wild Pokémon caught",
-          "Draw"][outcome]
-  echoln sprintf("%s after %d rounds", text, battle.turnCount + 1)
-  echoln ""
+  if console_messages
+    text = ["Undecided",
+            "Trainer 1 #{player_trainers[0].name} won",
+            "Trainer 2 #{foe_trainers[0].name} won",
+            "Ran/forfeited",
+            "Wild Pokémon caught",
+            "Draw"][outcome]
+    echoln sprintf("%s after %d rounds", text, battle.turnCount + 1)
+    echoln ""
+  end
   $INTERNAL = old_internal
 end
 
@@ -112,9 +122,9 @@ end
 # Add to Debug menu.
 #===============================================================================
 MenuHandlers.add(:debug_menu, :test_auto_battle, {
-  "name"        => _INTL("Test Auto Battle"),
+  "name"        => "Test Auto Battle",
   "parent"      => :main,
-  "description" => _INTL("Runs an AI-controlled battle with no visuals."),
+  "description" => "Runs an AI-controlled battle with no visuals.",
   "always_show" => false,
   "effect"      => proc {
     debug_test_auto_battle
@@ -122,12 +132,27 @@ MenuHandlers.add(:debug_menu, :test_auto_battle, {
 })
 
 MenuHandlers.add(:debug_menu, :test_auto_battle_logging, {
-  "name"        => _INTL("Test Auto Battle with Logging"),
+  "name"        => "Test Auto Battle with Logging",
   "parent"      => :main,
-  "description" => _INTL("Runs an AI-controlled battle with no visuals. Logs messages."),
+  "description" => "Runs an AI-controlled battle with no visuals. Logs messages.",
   "always_show" => false,
   "effect"      => proc {
     debug_test_auto_battle(true)
-    pbMessage(_INTL("Battle transcript was logged in Data/debuglog.txt."))
+    pbMessage("Battle transcript was logged in Data/debuglog.txt.")
+  }
+})
+
+MenuHandlers.add(:debug_menu, :bulk_test_auto_battle, {
+  "name"        => "Bulk Test Auto Battle",
+  "parent"      => :main,
+  "description" => "Runs 50 AI-controlled battles with no visuals.",
+  "always_show" => false,
+  "effect"      => proc {
+    echoln "Running 50 battles.."
+    50.times do |i|
+      echoln "#{i + 1}..."
+      debug_test_auto_battle(false, false)
+    end
+    echoln "Done!"
   }
 })

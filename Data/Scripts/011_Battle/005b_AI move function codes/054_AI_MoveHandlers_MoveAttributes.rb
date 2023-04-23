@@ -445,7 +445,7 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
     # critical hits are impossible (e.g. via Lucky Chant)
     crit_stage = 0
     crit_stage = -1 if user.battler.pbOwnSide.effects[PBEffects::LuckyChant] > 0
-    if crit_stage >= 0 && user.ability_active? && ![:MERCILESS].include?(user.ability)
+    if crit_stage >= 0 && user.ability_active? && ![:MERCILESS].include?(user.ability_id)
       crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(user.battler.ability,
          user.battler, user.battler, crit_stage)
     end
@@ -660,6 +660,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenPhysicalDamageAgainstUserS
       score += 10
       score += 8 if !b.check_for_move { |m| m.specialMove?(m.type) }
     end
+    # Prefer if user has Light Clay
+    score += 5 if user.has_active_item?(:LIGHTCLAY)
     next score
   }
 )
@@ -688,6 +690,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSi
       score += 10
       score += 8 if !b.check_for_move { |m| m.physicalMove?(m.type) }
     end
+    # Prefer if user has Light Clay
+    score += 5 if user.has_active_item?(:LIGHTCLAY)
     next score
   }
 )
@@ -713,6 +717,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHai
         score -= (20 * (0.75 - (user.hp.to_f / user.totalhp))).to_i   # -5 to -15
       end
     end
+    # Prefer if user has Light Clay
+    score += 5 if user.has_active_item?(:LIGHTCLAY)
     next score + 15
   }
 )
@@ -883,7 +889,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
     # less likely to work
     score -= (user.effects[PBEffects::ProtectRate] - 1) * ((Settings::MECHANICS_GENERATION >= 6) ? 15 : 10)
     # Aegislash
-    score += 10 if user.battler.isSpecies?(:AEGISLASH) && user.form == 1 &&
+    score += 10 if user.battler.isSpecies?(:AEGISLASH) && user.battler.form == 1 &&
                    user.ability == :STANCECHANGE
     next score
   }
@@ -1533,7 +1539,7 @@ Battle::AI::Handlers::MoveEffectScore.add("NormalMovesBecomeElectric",
     normal_type_better = 0
     electric_type_better = 0
     ai.each_foe_battler(user.side) do |b, i|
-      next if move.pbPriority(b.battler) <= 0 && b.faster_than?(user)
+      next if move.rough_priority(b) <= 0 && b.faster_than?(user)
       next if !b.has_damaging_move_of_type?(:NORMAL)
       # Normal's effectiveness
       eff = user.effectiveness_of_type_against_battler(:NORMAL, b)

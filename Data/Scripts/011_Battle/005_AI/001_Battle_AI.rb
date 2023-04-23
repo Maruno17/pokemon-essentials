@@ -5,12 +5,11 @@ class Battle::AI
   attr_reader :battle
   attr_reader :trainer
   attr_reader :battlers
+  attr_reader :roles
   attr_reader :user, :target, :move
 
   def initialize(battle)
     @battle = battle
-
-    # TODO: Move this elsewhere?
     @roles = [Array.new(@battle.pbParty(0).length) { |i| determine_roles(0, i) },
               Array.new(@battle.pbParty(1).length) { |i| determine_roles(1, i) }]
   end
@@ -57,7 +56,9 @@ class Battle::AI
       PBDebug.log("")
       return
     end
-    if pbEnemyShouldUseItem?
+    ret = false
+    PBDebug.logonerr { ret = pbChooseToUseItem }
+    if ret
       PBDebug.log("")
       return
     end

@@ -43,19 +43,21 @@ class Battle::Battler
     # Choice Band/Gorilla Tactics
     @effects[PBEffects::ChoiceBand] = nil if !pbHasMove?(@effects[PBEffects::ChoiceBand])
     if @effects[PBEffects::ChoiceBand] && move.id != @effects[PBEffects::ChoiceBand]
-      choiced_move_name = GameData::Move.get(@effects[PBEffects::ChoiceBand]).name
-      if hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
-        if showMessages
-          msg = _INTL("The {1} only allows the use of {2}!", itemName, choiced_move_name)
-          (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
+      choiced_move = GameData::Move.try_get(@effects[PBEffects::ChoiceBand])
+      if choiced_move
+        if hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
+          if showMessages
+            msg = _INTL("The {1} only allows the use of {2}!", itemName, choiced_move.name)
+            (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
+          end
+          return false
+        elsif hasActiveAbility?(:GORILLATACTICS)
+          if showMessages
+            msg = _INTL("{1} can only use {2}!", pbThis, choiced_move.name)
+            (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
+          end
+          return false
         end
-        return false
-      elsif hasActiveAbility?(:GORILLATACTICS)
-        if showMessages
-          msg = _INTL("{1} can only use {2}!", pbThis, choiced_move_name)
-          (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
-        end
-        return false
       end
     end
     # Taunt
@@ -85,7 +87,7 @@ class Battle::Battler
     end
     # Assault Vest (prevents choosing status moves but doesn't prevent
     # executing them)
-    if hasActiveItem?(:ASSAULTVEST) && move.statusMove? && move.id != :MEFIRST && commandPhase
+    if hasActiveItem?(:ASSAULTVEST) && move.statusMove? && move.function != "UseMoveTargetIsAboutToUse" && commandPhase
       if showMessages
         msg = _INTL("The effects of the {1} prevent status moves from being used!", itemName)
         (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)

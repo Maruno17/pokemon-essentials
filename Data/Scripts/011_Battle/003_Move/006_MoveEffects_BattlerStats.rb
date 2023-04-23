@@ -1372,7 +1372,7 @@ class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
       next if !b.poisoned?
       failed = true
       (@statDown.length / 2).times do |i|
-        next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
+        next if !b.pbCanLowerStatStage?(@statDown[i * 2], user, self)
         failed = false
         break
       end

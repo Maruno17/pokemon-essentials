@@ -109,7 +109,7 @@ class Battle::AI
         strength = b.effects[PBEffects::FollowMe]
       end
     end
-    return new_target if new_target
+    return new_target if new_target >= 0
     calc_type = @move.rough_type
     priority.each do |b|
       next if b.index == @user.index
@@ -122,7 +122,7 @@ class Battle::AI
       end
       break if new_target >= 0
     end
-    return new_target
+    return (new_target >= 0) ? new_target : nil
   end
 
   def add_move_to_choices(choices, idxMove, score, idxTarget = -1)
@@ -142,6 +142,7 @@ class Battle::AI
     case move.function
     when "UseLastMoveUsed"
       if @battle.lastMoveUsed &&
+         GameData::Move.exists?(@battle.lastMoveUsed) &&
          !move.moveBlacklist.include?(GameData::Move.get(@battle.lastMoveUsed).function_code)
         move = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@battle.lastMoveUsed))
       end
@@ -159,9 +160,10 @@ class Battle::AI
     @target&.refresh_battler
     if @target && @move.function == "UseLastMoveUsedByTarget"
       if @target.battler.lastRegularMoveUsed &&
+        GameData::Move.exists?(@target.battler.lastRegularMoveUsed) &&
          GameData::Move.get(@target.battler.lastRegularMoveUsed).has_flag?("CanMirrorMove")
-        mov = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@target.battler.lastRegularMoveUsed))
         @battle.moldBreaker = @user.has_mold_breaker?
+        mov = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@target.battler.lastRegularMoveUsed))
         @move.set_up(mov)
       end
     end

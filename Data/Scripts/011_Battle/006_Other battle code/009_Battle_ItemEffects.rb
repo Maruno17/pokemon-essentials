@@ -224,6 +224,12 @@ Battle::ItemEffects::SpeedCalc.add(:CHOICESCARF,
   }
 )
 
+Battle::ItemEffects::SpeedCalc.add(:IRONBALL,
+  proc { |item, battler, mult|
+    next mult / 2
+  }
+)
+
 Battle::ItemEffects::SpeedCalc.add(:MACHOBRACE,
   proc { |item, battler, mult|
     next mult / 2
@@ -238,12 +244,6 @@ Battle::ItemEffects::SpeedCalc.add(:QUICKPOWDER,
   proc { |item, battler, mult|
     next mult * 2 if battler.isSpecies?(:DITTO) &&
                    !battler.effects[PBEffects::Transform]
-  }
-)
-
-Battle::ItemEffects::SpeedCalc.add(:IRONBALL,
-  proc { |item, battler, mult|
-    next mult / 2
   }
 )
 
