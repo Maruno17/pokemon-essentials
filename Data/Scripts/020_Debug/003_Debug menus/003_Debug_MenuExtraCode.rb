@@ -89,13 +89,18 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
         code_parts[0].strip!
         code_parts[0].gsub!(/^\s*!/, "")
         val = nil
-        if code_parts[0][0].upcase == code_parts[0][0] &&
-           (Kernel.const_defined?(code_parts[0]) rescue false)
-          val = (eval(code) rescue nil)   # Code starts with a class/method name
-        elsif code_parts[0][0].downcase == code_parts[0][0] &&
-              !(Interpreter.method_defined?(code_parts[0].to_sym) rescue false) &&
-              !(Game_Event.method_defined?(code_parts[0].to_sym) rescue false)
-          val = (eval(code) rescue nil)   # Code starts with a method name (that isn't in Interpreter/Game_Event)
+        if code_parts[0][0][/[a-z]/i]
+          if code_parts[0][0].upcase == code_parts[0][0] &&
+             (Kernel.const_defined?(code_parts[0]) rescue false)
+            val = (eval(code) rescue nil)   # Code starts with a class/method name
+          elsif code_parts[0][0].downcase == code_parts[0][0] &&
+                !(Interpreter.method_defined?(code_parts[0].to_sym) rescue false) &&
+                !(Game_Event.method_defined?(code_parts[0].to_sym) rescue false)
+            val = (eval(code) rescue nil)   # Code starts with a method name (that isn't in Interpreter/Game_Event)
+          end
+        else
+          # Code doesn't start with a letter, probably $, just evaluate it
+          val = (eval(code) rescue nil)
         end
       else
         val = $game_switches[index + 1]

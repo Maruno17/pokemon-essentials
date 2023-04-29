@@ -94,8 +94,7 @@ GameData::GrowthRate.register({
 # Erratic (600000):
 #   For levels 0-50:   n**3 * (100 - n) / 50
 #   For levels 51-68:  n**3 * (150 - n) / 100
-#   For levels 69-98:  n**3 * 1.274 - (n / 150) - p(n mod 3)
-#                      where p(x) = array(0.000, 0.008, 0.014)[x]
+#   For levels 69-98:  n**3 * ((1911 - (10 * level)) / 3).floor / 500
 #   For levels 99-100: n**3 * (160 - n) / 100
 GameData::GrowthRate.register({
   :id          => :Erratic,
@@ -111,7 +110,7 @@ GameData::GrowthRate.register({
                    286328, 296358, 305767, 316074, 326531, 336255, 346965, 357812, 367807, 378880,
                    390077, 400293, 411686, 423190, 433572, 445239, 457001, 467489, 479378, 491346,
                    501878, 513934, 526049, 536557, 548720, 560922, 571333, 583539, 591882, 600000],
-  :exp_formula => proc { |level| next (level**4) * 3 / 500 }
+  :exp_formula => proc { |level| next ((level**4) + ((level**3) * 2000)) / 3500 }
 })
 
 # Fluctuating (1640000):
@@ -133,8 +132,7 @@ GameData::GrowthRate.register({
                    765275,  804997,  834809,  877201,  908905,  954084,  987754,  1035837, 1071552, 1122660,
                    1160499, 1214753, 1254796, 1312322, 1354652, 1415577, 1460276, 1524731, 1571884, 1640000],
   :exp_formula => proc { |level|
-    rate = [82 - ((level - 100) / 2.0), 40].max
-    next (level**4) * rate / 5000
+    next ((level**3) + ((level / 2) + 32)) * 4 / (100 + level)
   }
 })
 

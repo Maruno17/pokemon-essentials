@@ -940,9 +940,6 @@ class Game_Character
     end
     # End of a step, so perform events that happen at this time
     if !jumping? && !moving?
-      if was_jumping && !(self.is_a?(Game_Player) && $PokemonGlobal.surfing && !$game_temp.ending_surf)
-        $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID, @x, @y, true, 1)
-      end
       EventHandlers.trigger(:on_step_taken, self)
       calculate_bush_depth
       @stopped_this_frame = true

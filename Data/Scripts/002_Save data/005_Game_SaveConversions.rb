@@ -364,12 +364,9 @@ SaveData.register_conversion(:v21_replace_phone_data) do
           @phoneNumbers.each do |contact|
             if contact.length > 4
               # Trainer
-              # TODO: Is there any way to ensure the versions count (contact[5]
-              #       is the next version to be battled) is accurate?
               Phone.add_silent(contact[6], contact[7], contact[1], contact[2], contact[5], 0)
               new_contact = Phone.get(contact[1], contact[2], 0)
               new_contact.visible = contact[0]
-              new_contact.version = [contact[5] - 1, 0].max
               new_contact.rematch_flag = [contact[4] - 1, 0].max
             else
               # Non-trainer

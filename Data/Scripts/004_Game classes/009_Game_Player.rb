@@ -461,7 +461,14 @@ class Game_Player < Game_Character
         end
       end
     end
+    was_jumping = jumping?
     super
+    if was_jumping && !jumping? && !@transparent && (@tile_id > 0 || @character_name != "")
+      if !$PokemonGlobal.surfing || $game_temp.ending_surf
+        spriteset = $scene.spriteset(map_id)
+        spriteset&.addUserAnimation(Settings::DUST_ANIMATION_ID, self.x, self.y, true, 1)
+      end
+    end
   end
 
   def update_stop
