@@ -19,7 +19,7 @@ class PokegearButton < Sprite
     else
       @button = AnimatedBitmap.new("Graphics/UI/Pokegear/icon_button")
     end
-    @contents = BitmapWrapper.new(@button.width, @button.height)
+    @contents = Bitmap.new(@button.width, @button.height)
     self.bitmap = @contents
     self.x = x - (@button.width / 2)
     self.y = y

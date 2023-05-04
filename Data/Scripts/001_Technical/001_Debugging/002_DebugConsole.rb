@@ -41,7 +41,7 @@ module Kernel
 
   def echoln(string)
     echo string
-    echo "\r\n"
+    echo "\n"
   end
 end
 

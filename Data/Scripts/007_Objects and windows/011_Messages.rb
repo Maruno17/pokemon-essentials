@@ -221,7 +221,7 @@ class FaceWindowVX < SpriteWindow_Base
     self.contents&.dispose
     @faceIndex = faceinfo[1].to_i
     @facebitmaptmp = AnimatedBitmap.new(facefile)
-    @facebitmap = BitmapWrapper.new(96, 96)
+    @facebitmap = Bitmap.new(96, 96)
     @facebitmap.blt(0, 0, @facebitmaptmp.bitmap,
                     Rect.new((@faceIndex % 4) * 96, (@faceIndex / 4) * 96, 96, 96))
     self.contents = @facebitmap

@@ -1074,7 +1074,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     windowheight += self.borderY
     if !width || width < 0
       width = 0
-      tmpbitmap = BitmapWrapper.new(1, 1)
+      tmpbitmap = Bitmap.new(1, 1)
       pbSetSystemFont(tmpbitmap)
       commands.each do |i|
         width = [width, tmpbitmap.text_size(i).width].max

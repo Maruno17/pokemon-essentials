@@ -114,8 +114,11 @@ Battle::PokeBallEffects::ModifyCatchRate.add(:LEVELBALL, proc { |ball, catchRate
 })
 
 Battle::PokeBallEffects::ModifyCatchRate.add(:LUREBALL, proc { |ball, catchRate, battle, battler|
-  multiplier = (Settings::NEW_POKE_BALL_CATCH_RATES) ? 5 : 3
-  catchRate *= multiplier if GameData::EncounterType.get($game_temp.encounter_type).type == :fishing
+  if $game_temp.encounter_type &&
+     GameData::EncounterType.get($game_temp.encounter_type).type == :fishing
+    multiplier = (Settings::NEW_POKE_BALL_CATCH_RATES) ? 5 : 3
+    catchRate *= multiplier
+  end
   next [catchRate, 255].min
 })
 

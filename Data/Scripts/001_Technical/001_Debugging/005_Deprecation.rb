@@ -10,10 +10,10 @@ module Deprecation
   def warn_method(method_name, removal_version = nil, alternative = nil)
     text = _INTL('Usage of deprecated method "{1}" or its alias.', method_name)
     unless removal_version.nil?
-      text += "\r\n" + _INTL("The method is slated to be removed in Essentials {1}.", removal_version)
+      text += "\n" + _INTL("The method is slated to be removed in Essentials {1}.", removal_version)
     end
     unless alternative.nil?
-      text += "\r\n" + _INTL("Use \"{1}\" instead.", alternative)
+      text += "\n" + _INTL("Use \"{1}\" instead.", alternative)
     end
     Console.echo_warn text
   end

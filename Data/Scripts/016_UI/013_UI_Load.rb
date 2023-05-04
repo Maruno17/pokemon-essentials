@@ -49,7 +49,7 @@ class PokemonLoadPanel < Sprite
     return if disposed?
     @refreshing = true
     if !self.bitmap || self.bitmap.disposed?
-      self.bitmap = BitmapWrapper.new(@bgbitmap.width, 222)
+      self.bitmap = Bitmap.new(@bgbitmap.width, 222)
       pbSetSystemFont(self.bitmap)
     end
     if @refreshBitmap

@@ -252,10 +252,10 @@ MenuHandlers.add(:battle_debug_menu, :weather, {
       msg = _INTL("Current weather: {1}", weather_data.name || _INTL("Unknown"))
       if weather_data.id != :None
         if battle.field.weatherDuration > 0
-          msg += "\r\n"
+          msg += "\n"
           msg += _INTL("Duration : {1} more round(s)", battle.field.weatherDuration)
         elsif battle.field.weatherDuration < 0
-          msg += "\r\n"
+          msg += "\n"
           msg += _INTL("Duration : Infinite")
         end
       end
@@ -314,10 +314,10 @@ MenuHandlers.add(:battle_debug_menu, :terrain, {
       msg = _INTL("Current terrain: {1}", terrain_data.name || _INTL("Unknown"))
       if terrain_data.id != :None
         if battle.field.terrainDuration > 0
-          msg += "\r\n"
+          msg += "\n"
           msg += _INTL("Duration : {1} more round(s)", battle.field.terrainDuration)
         elsif battle.field.terrainDuration < 0
-          msg += "\r\n"
+          msg += "\n"
           msg += _INTL("Duration : Infinite")
         end
       end
@@ -373,7 +373,7 @@ MenuHandlers.add(:battle_debug_menu, :environment_time, {
     loop do
       environment_data = GameData::Environment.try_get(battle.environment)
       msg = _INTL("Environment: {1}", environment_data.name || _INTL("Unknown"))
-      msg += "\r\n"
+      msg += "\n"
       msg += _INTL("Time of day: {1}", [_INTL("Day"), _INTL("Evening"), _INTL("Night")][battle.time])
       cmd = pbMessage("\\ts[]" + msg, [_INTL("Change environment"),
                                        _INTL("Change time of day")], -1, nil, cmd)

@@ -202,7 +202,7 @@ class Battle
       # Opposing trainers and partner trainers's messages about sending out Pokémon
       trainers.each_with_index do |t, i|
         next if side == 0 && i == 0   # The player's message is shown last
-        msg += "\r\n" if msg.length > 0
+        msg += "\n" if msg.length > 0
         sent = sendOuts[side][i]
         case sent.length
         when 1
@@ -218,7 +218,7 @@ class Battle
       end
       # The player's message about sending out Pokémon
       if side == 0
-        msg += "\r\n" if msg.length > 0
+        msg += "\n" if msg.length > 0
         sent = sendOuts[side][0]
         case sent.length
         when 1

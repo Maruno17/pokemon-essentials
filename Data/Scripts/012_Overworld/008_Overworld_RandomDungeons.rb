@@ -306,7 +306,7 @@ module RandomDungeon
         @width.times do |x|
           ret += TEXT_SYMBOLS[value(x, y)] || "\e[30m\e[41m?\e[0m"
         end
-        ret += "\r\n"
+        ret += "\n"
       end
       return ret
     end
@@ -1076,7 +1076,7 @@ EventHandlers.add(:on_game_map_setup, :random_dungeon,
 #===============================================================================
 MenuHandlers.add(:debug_menu, :test_random_dungeon, {
   "name"        => _INTL("Test Random Dungeon Generation"),
-  "parent"      => :other_menu,
+  "parent"      => :main,
   "description" => _INTL("Generates a random dungeon and echoes it to the console."),
   "effect"      => proc {
     tileset = :cave   # :forest   # :cave

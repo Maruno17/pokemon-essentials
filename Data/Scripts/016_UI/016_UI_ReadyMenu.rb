@@ -17,7 +17,7 @@ class ReadyMenuButton < Sprite
     else
       @button = AnimatedBitmap.new("Graphics/UI/Ready Menu/icon_itembutton")
     end
-    @contents = BitmapWrapper.new(@button.width, @button.height / 2)
+    @contents = Bitmap.new(@button.width, @button.height / 2)
     self.bitmap = @contents
     pbSetSystemFont(self.bitmap)
     if @command[2]

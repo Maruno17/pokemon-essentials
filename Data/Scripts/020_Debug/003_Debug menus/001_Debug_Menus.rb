@@ -262,21 +262,21 @@ module Battle::DebugMixin
     return ret if battler.nil?
     # Battler index, name
     ret += sprintf("[%d] %s", battler.index, battler.pbThis)
-    ret += "\r\n"
+    ret += "\n"
     # Species
     ret += _INTL("Species: {1}", GameData::Species.get(battler.species).name)
-    ret += "\r\n"
+    ret += "\n"
     # Form number
     ret += _INTL("Form: {1}", battler.form)
-    ret += "\r\n"
+    ret += "\n"
     # Level, gender, shininess
     ret += _INTL("Level {1}, {2}", battler.level,
                  (battler.pokemon.male?) ? "♂" : (battler.pokemon.female?) ? "♀" : _INTL("genderless"))
     ret += ", " + _INTL("shiny") if battler.pokemon.shiny?
-    ret += "\r\n"
+    ret += "\n"
     # HP
     ret += _INTL("HP: {1}/{2} ({3}%)", battler.hp, battler.totalhp, (100.0 * battler.hp / battler.totalhp).to_i)
-    ret += "\r\n"
+    ret += "\n"
     # Status
     ret += _INTL("Status: {1}", GameData::Status.get(battler.status).name)
     case battler.status
@@ -287,7 +287,7 @@ module Battle::DebugMixin
         ret += " " + _INTL("(toxic, {1}/16)", battler.effects[PBEffects::Toxic])
       end
     end
-    ret += "\r\n"
+    ret += "\n"
     # Stat stages
     stages = []
     GameData::Stat.each_battle do |stat|
@@ -299,10 +299,10 @@ module Battle::DebugMixin
       stages.push(stage_text)
     end
     ret += _INTL("Stat stages: {1}", (stages.empty?) ? "-" : stages.join(", "))
-    ret += "\r\n"
+    ret += "\n"
     # Ability
     ret += _INTL("Ability: {1}", (battler.ability) ? battler.abilityName : "-")
-    ret += "\r\n"
+    ret += "\n"
     # Held item
     ret += _INTL("Item: {1}", (battler.item) ? battler.itemName : "-")
     return ret
@@ -314,18 +314,18 @@ module Battle::DebugMixin
     sp_data = pkmn.species_data
     # Name, species
     ret += sprintf("%s (%s)", pkmn.name, sp_data.name)
-    ret += "\r\n"
+    ret += "\n"
     # Form number
     ret += _INTL("Form: {1}", sp_data.form)
-    ret += "\r\n"
+    ret += "\n"
     # Level, gender, shininess
     ret += _INTL("Level {1}, {2}", pkmn.level,
                  (pkmn.male?) ? "♂" : (pkmn.female?) ? "♀" : _INTL("genderless"))
     ret += ", " + _INTL("shiny") if pkmn.shiny?
-    ret += "\r\n"
+    ret += "\n"
     # HP
     ret += _INTL("HP: {1}/{2} ({3}%)", pkmn.hp, pkmn.totalhp, (100.0 * pkmn.hp / pkmn.totalhp).to_i)
-    ret += "\r\n"
+    ret += "\n"
     # Status
     ret += _INTL("Status: {1}", GameData::Status.get(pkmn.status).name)
     case pkmn.status
@@ -334,10 +334,10 @@ module Battle::DebugMixin
     when :POISON
       ret += " " + _INTL("(toxic)") if pkmn.statusCount > 0
     end
-    ret += "\r\n"
+    ret += "\n"
     # Ability
     ret += _INTL("Ability: {1}", pkmn.ability&.name || "-")
-    ret += "\r\n"
+    ret += "\n"
     # Held item
     ret += _INTL("Item: {1}", pkmn.item&.name || "-")
     return ret

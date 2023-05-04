@@ -2,14 +2,16 @@
 # Edits the terrain tags of tiles in tilesets.
 #===============================================================================
 class PokemonTilesetScene
-  TILE_SIZE          = 32   # in pixels
-  TILES_PER_ROW      = 8
-  TILESET_WIDTH      = TILES_PER_ROW * TILE_SIZE
-  TILES_PER_AUTOTILE = 48
-  TILESET_START_ID   = TILES_PER_ROW * TILES_PER_AUTOTILE
-  CURSOR_COLOR       = Color.new(255, 0, 0)
-  TEXT_COLOR         = Color.new(80, 80, 80)
-  TEXT_SHADOW_COLOR  = Color.new(192, 192, 192)
+  TILE_SIZE            = 32   # in pixels
+  TILES_PER_ROW        = 8
+  TILESET_WIDTH        = TILES_PER_ROW * TILE_SIZE
+  TILES_PER_AUTOTILE   = 48
+  TILESET_START_ID     = TILES_PER_ROW * TILES_PER_AUTOTILE
+  TILE_BACKGROUND      = Color.magenta
+  CURSOR_COLOR         = Color.new(255, 0, 0)   # Red
+  CURSOR_OUTLINE_COLOR = Color.white
+  TEXT_COLOR           = Color.white
+  TEXT_SHADOW_COLOR    = Color.black
 
   def initialize
     @tilesets_data = load_data("Data/Tilesets.rxdata")
@@ -17,11 +19,14 @@ class PokemonTilesetScene
     @viewport.z = 99999
     @sprites = {}
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-      _INTL("Tileset Editor\r\nA/S: SCROLL\r\nZ: MENU"),
+      _INTL("Tileset Editor\nA/S: SCROLL\nZ: MENU"),
       TILESET_WIDTH, 0, Graphics.width - TILESET_WIDTH, 128, @viewport
     )
+    @sprites["background"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["tileset"] = BitmapSprite.new(TILESET_WIDTH, Graphics.height, @viewport)
+    @sprites["tileset"].z = 10
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
+    @sprites["overlay"].z = 20
     pbSetSystemFont(@sprites["overlay"].bitmap)
     @visible_height = @sprites["tileset"].bitmap.height / TILE_SIZE
     load_tileset(1)
@@ -68,11 +73,14 @@ class PokemonTilesetScene
   end
 
   def draw_tiles
+    @sprites["background"].bitmap.clear
     @sprites["tileset"].bitmap.clear
     @visible_height.times do |yy|
       autotile_row = (@top_y == 0 && yy == 0)   # Autotiles
       id_y_offset = (autotile_row) ? 0 : TILESET_START_ID + ((@top_y + yy - 1) * TILES_PER_ROW)
+      break if @top_y + yy >= @height
       TILES_PER_ROW.times do |xx|
+        @sprites["background"].bitmap.fill_rect(xx * TILE_SIZE, yy * TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_BACKGROUND)
         id_x_offset = (autotile_row) ? xx * TILES_PER_AUTOTILE : xx
         @tilehelper.bltTile(@sprites["tileset"].bitmap, xx * TILE_SIZE, yy * TILE_SIZE,
                             id_y_offset + id_x_offset)
@@ -88,33 +96,48 @@ class PokemonTilesetScene
       TILES_PER_ROW.times do |xx|
         tile_id = tile_ID_from_coordinates(xx, @top_y + yy)
         terr = @tileset.terrain_tags[tile_id]
-        textpos.push([terr.to_s, (xx * TILE_SIZE) + (TILE_SIZE / 2), (yy * TILE_SIZE) + 6, :center, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        next if terr == 0
+        textpos.push([terr.to_s, (xx * TILE_SIZE) + (TILE_SIZE / 2), (yy * TILE_SIZE) + 6,
+                      :center, TEXT_COLOR, TEXT_SHADOW_COLOR, :outline])
       end
     end
     pbDrawTextPositions(@sprites["overlay"].bitmap, textpos)
     # Draw cursor
-    cursor_x = @x * TILE_SIZE
-    cursor_y = (@y - @top_y) * TILE_SIZE
-    @sprites["overlay"].bitmap.fill_rect(cursor_x,                 cursor_y,                 TILE_SIZE, 4, CURSOR_COLOR)
-    @sprites["overlay"].bitmap.fill_rect(cursor_x,                 cursor_y,                 4, TILE_SIZE, CURSOR_COLOR)
-    @sprites["overlay"].bitmap.fill_rect(cursor_x,                 cursor_y + TILE_SIZE - 4, TILE_SIZE, 4, CURSOR_COLOR)
-    @sprites["overlay"].bitmap.fill_rect(cursor_x + TILE_SIZE - 4, cursor_y,                 4, TILE_SIZE, CURSOR_COLOR)
+    draw_cursor
     # Draw information about selected tile on right side
     draw_tile_details
   end
 
+  def draw_cursor
+    cursor_x = @x * TILE_SIZE
+    cursor_y = (@y - @top_y) * TILE_SIZE
+    cursor_width = TILE_SIZE
+    cursor_height = TILE_SIZE
+    bitmap = @sprites["overlay"].bitmap
+    bitmap.fill_rect(cursor_x - 2,                cursor_y - 2,                 cursor_width + 4, 8,  CURSOR_OUTLINE_COLOR)
+    bitmap.fill_rect(cursor_x - 2,                cursor_y - 2,                 8, cursor_height + 4, CURSOR_OUTLINE_COLOR)
+    bitmap.fill_rect(cursor_x - 2,                cursor_y + cursor_height - 6, cursor_width + 4, 8,  CURSOR_OUTLINE_COLOR)
+    bitmap.fill_rect(cursor_x + cursor_width - 6, cursor_y - 2,                 8, cursor_height + 4, CURSOR_OUTLINE_COLOR)
+    bitmap.fill_rect(cursor_x,                    cursor_y,                     cursor_width, 4,      CURSOR_COLOR)
+    bitmap.fill_rect(cursor_x,                    cursor_y,                     4, cursor_height,     CURSOR_COLOR)
+    bitmap.fill_rect(cursor_x,                    cursor_y + cursor_height - 4, cursor_width, 4,      CURSOR_COLOR)
+    bitmap.fill_rect(cursor_x + cursor_width - 4, cursor_y,                     4, cursor_height,     CURSOR_COLOR)
+  end
+
   def draw_tile_details
     overlay = @sprites["overlay"].bitmap
-    tile_x = (Graphics.width * 3 / 4) - TILE_SIZE
-    tile_y = (Graphics.height / 2) - TILE_SIZE
+    tile_size = 4   # Size multiplier
+    tile_x = (Graphics.width * 3 / 4) - (TILE_SIZE * tile_size / 2)
+    tile_y = (Graphics.height / 2) - (TILE_SIZE * tile_size / 2)
     tile_id = tile_ID_from_coordinates(@x, @y) || 0
-    # Draw tile (at 200% size)
-    @tilehelper.bltSmallTile(overlay, tile_x, tile_y, TILE_SIZE * 2, TILE_SIZE * 2, tile_id)
+    # Draw tile (at 400% size)
+    @sprites["background"].bitmap.fill_rect(tile_x, tile_y, TILE_SIZE * tile_size, TILE_SIZE * tile_size, TILE_BACKGROUND)
+    @tilehelper.bltSmallTile(overlay, tile_x, tile_y, TILE_SIZE * tile_size, TILE_SIZE * tile_size, tile_id)
     # Draw box around tile image
-    overlay.fill_rect(tile_x - 1,               tile_y - 1,               (TILE_SIZE * 2) + 2, 1, Color.white)
-    overlay.fill_rect(tile_x - 1,               tile_y - 1,               1, (TILE_SIZE * 2) + 2, Color.white)
-    overlay.fill_rect(tile_x - 1,               tile_y + (TILE_SIZE * 2), (TILE_SIZE * 2) + 2, 1, Color.white)
-    overlay.fill_rect(tile_x + (TILE_SIZE * 2), tile_y - 1,               1, (TILE_SIZE * 2) + 2, Color.white)
+    overlay.fill_rect(tile_x - 1,                       tile_y - 1,                       (TILE_SIZE * tile_size) + 2, 1, Color.white)
+    overlay.fill_rect(tile_x - 1,                       tile_y - 1,                       1, (TILE_SIZE * tile_size) + 2, Color.white)
+    overlay.fill_rect(tile_x - 1,                       tile_y + (TILE_SIZE * tile_size), (TILE_SIZE * tile_size) + 2, 1, Color.white)
+    overlay.fill_rect(tile_x + (TILE_SIZE * tile_size), tile_y - 1,                       1, (TILE_SIZE * tile_size) + 2, Color.white)
     # Write terrain tag info about selected tile
     terrain_tag = @tileset.terrain_tags[tile_id] || 0
     if GameData::TerrainTag.exists?(terrain_tag)
@@ -123,8 +146,10 @@ class PokemonTilesetScene
       terrain_tag_name = terrain_tag.to_s
     end
     textpos = [
-      [_INTL("Terrain Tag:"), tile_x + TILE_SIZE, tile_y + (TILE_SIZE * 2) + 22, :center, Color.new(248, 248, 248), Color.new(40, 40, 40)],
-      [terrain_tag_name, tile_x + TILE_SIZE, tile_y + (TILE_SIZE * 2) + 54, :center, Color.new(248, 248, 248), Color.new(40, 40, 40)]
+      [_INTL("Terrain Tag:"), Graphics.width * 3 / 4, tile_y + (TILE_SIZE * tile_size) + 22,
+       :center, Color.new(248, 248, 248), Color.new(40, 40, 40)],
+      [terrain_tag_name, Graphics.width * 3 / 4, tile_y + (TILE_SIZE * tile_size) + 54,
+       :center, Color.new(248, 248, 248), Color.new(40, 40, 40)]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -176,9 +201,9 @@ class PokemonTilesetScene
       elsif Input.repeat?(Input::RIGHT)
         update_cursor_position(1, 0)
       elsif Input.repeat?(Input::JUMPUP)
-        update_cursor_position(0, -@visible_height)
+        update_cursor_position(0, -@visible_height / 2)
       elsif Input.repeat?(Input::JUMPDOWN)
-        update_cursor_position(0, @visible_height)
+        update_cursor_position(0, @visible_height / 2)
       elsif Input.trigger?(Input::ACTION)
         commands = [
           _INTL("Go to bottom"),

@@ -431,7 +431,7 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_types, {
       commands.push(_INTL("Extra type: {1}", extra_type_name))
       types.push(extra_type)
       msg = _INTL("Effective types: {1}", battler.pbTypes(true).map { |t| GameData::Type.get(t).name }.join("/"))
-      msg += "\r\n" + _INTL("(Change a type to itself to remove it.)")
+      msg += "\n" + _INTL("(Change a type to itself to remove it.)")
       cmd = pbMessage("\\ts[]" + msg, commands, -1, nil, cmd)
       break if cmd < 0
       old_type = types[cmd]

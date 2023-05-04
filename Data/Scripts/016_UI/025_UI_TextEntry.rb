@@ -390,7 +390,7 @@ class PokemonEntryScene2
       pbDrawTextPositions(b, textPos)
       @bitmaps[@@Characters.length + i] = b
     end
-    underline_bitmap = BitmapWrapper.new(24, 6)
+    underline_bitmap = Bitmap.new(24, 6)
     underline_bitmap.fill_rect(2, 2, 22, 4, Color.new(168, 184, 184))
     underline_bitmap.fill_rect(0, 0, 22, 4, Color.new(16, 24, 32))
     @bitmaps.push(underline_bitmap)

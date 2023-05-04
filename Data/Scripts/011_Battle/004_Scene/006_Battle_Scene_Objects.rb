@@ -93,7 +93,7 @@ class Battle::Scene::PokemonDataBox < Sprite
     @expBar.bitmap = @expBarBitmap.bitmap
     @sprites["expBar"] = @expBar
     # Create sprite wrapper that displays everything except the above
-    @contents = BitmapWrapper.new(@databoxBitmap.width, @databoxBitmap.height)
+    @contents = Bitmap.new(@databoxBitmap.width, @databoxBitmap.height)
     self.bitmap  = @contents
     self.visible = false
     self.z       = 150 + ((@battler.index / 2) * 5)
@@ -420,7 +420,7 @@ class Battle::Scene::AbilitySplashBar < Sprite
     @bgSprite.src_rect.y      = (side == 0) ? 0 : @bgBitmap.height / 2
     @bgSprite.src_rect.height = @bgBitmap.height / 2
     # Create bitmap that displays the text
-    @contents = BitmapWrapper.new(@bgBitmap.width, @bgBitmap.height / 2)
+    @contents = Bitmap.new(@bgBitmap.width, @bgBitmap.height / 2)
     self.bitmap = @contents
     pbSetSystemFont(self.bitmap)
     # Position the bar

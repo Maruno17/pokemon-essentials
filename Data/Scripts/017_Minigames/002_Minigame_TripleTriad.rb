@@ -85,7 +85,7 @@ class TriadCard
   end
 
   def self.createBack(type = nil, noback = false)
-    bitmap = BitmapWrapper.new(80, 96)
+    bitmap = Bitmap.new(80, 96)
     if !noback
       cardbitmap = AnimatedBitmap.new("Graphics/UI/Triple Triad/card_opponent")
       bitmap.blt(0, 0, cardbitmap.bitmap, Rect.new(0, 0, cardbitmap.width, cardbitmap.height))
@@ -103,7 +103,7 @@ class TriadCard
 
   def createBitmap(owner)
     return TriadCard.createBack if owner == 0
-    bitmap = BitmapWrapper.new(80, 96)
+    bitmap = Bitmap.new(80, 96)
     if owner == 2   # Opponent
       cardbitmap = AnimatedBitmap.new("Graphics/UI/Triple Triad/card_opponent")
     else            # Player
@@ -196,7 +196,7 @@ class TriadScene
       @cardIndexes.push(i)
     end
     @sprites["overlay"] = Sprite.new(@viewport)
-    @sprites["overlay"].bitmap = BitmapWrapper.new(Graphics.width, Graphics.height)
+    @sprites["overlay"].bitmap = Bitmap.new(Graphics.width, Graphics.height)
     pbSetSystemFont(@sprites["overlay"].bitmap)
     pbDrawTextPositions(
       @sprites["overlay"].bitmap,
@@ -204,7 +204,7 @@ class TriadScene
        [@battle.playerName, Graphics.width - 52, 10, :center, Color.new(248, 248, 248), Color.new(96, 96, 96)]]
     )
     @sprites["score"] = Sprite.new(@viewport)
-    @sprites["score"].bitmap = BitmapWrapper.new(Graphics.width, Graphics.height)
+    @sprites["score"].bitmap = Bitmap.new(Graphics.width, Graphics.height)
     pbSetSystemFont(@sprites["score"].bitmap)
     pbBGMPlay("Triple Triad")
     # Fade in all sprites
@@ -1067,7 +1067,7 @@ def pbBuyTriads
   cmdwindow = Window_CommandPokemonEx.newWithSize(realcommands, 0, 0, Graphics.width / 2, Graphics.height)
   cmdwindow.z = 99999
   goldwindow = Window_UnformattedTextPokemon.newWithSize(
-    _INTL("Money:\r\n{1}", pbGetGoldString), 0, 0, 32, 32
+    _INTL("Money:\n{1}", pbGetGoldString), 0, 0, 32, 32
   )
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
   goldwindow.x = Graphics.width - goldwindow.width
@@ -1125,7 +1125,7 @@ def pbBuyTriads
       end
       $PokemonGlobal.triads.add(item, quantity)
       $player.money -= price
-      goldwindow.text = _INTL("Money:\r\n{1}", pbGetGoldString)
+      goldwindow.text = _INTL("Money:\n{1}", pbGetGoldString)
       pbMessage(_INTL("Here you are! Thank you!") + "\\se[Mart buy item]")
     end
   end
@@ -1157,7 +1157,7 @@ def pbSellTriads
   cmdwindow = Window_CommandPokemonEx.newWithSize(commands, 0, 0, Graphics.width / 2, Graphics.height)
   cmdwindow.z = 99999
   goldwindow = Window_UnformattedTextPokemon.newWithSize(
-    _INTL("Money:\r\n{1}", pbGetGoldString), 0, 0, 32, 32
+    _INTL("Money:\n{1}", pbGetGoldString), 0, 0, 32, 32
   )
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
   goldwindow.x = Graphics.width - goldwindow.width
@@ -1218,7 +1218,7 @@ def pbSellTriads
           price *= quantity
           if pbConfirmMessage(_INTL("I can pay ${1}. Would that be OK?", price.to_s_formatted))
             $player.money += price
-            goldwindow.text = _INTL("Money:\r\n{1}", pbGetGoldString)
+            goldwindow.text = _INTL("Money:\n{1}", pbGetGoldString)
             $PokemonGlobal.triads.remove(item, quantity)
             pbMessage(_INTL("Turned over the {1} card and received ${2}.", itemname, price.to_s_formatted) + "\\se[Mart buy item]")
             commands = []

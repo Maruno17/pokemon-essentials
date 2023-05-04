@@ -163,8 +163,8 @@ end
 #===============================================================================
 def createMinimap(mapid)
   map = load_data(sprintf("Data/Map%03d.rxdata", mapid)) rescue nil
-  return BitmapWrapper.new(32, 32) if !map
-  bitmap = BitmapWrapper.new(map.width * 4, map.height * 4)
+  return Bitmap.new(32, 32) if !map
+  bitmap = Bitmap.new(map.width * 4, map.height * 4)
   black = Color.black
   tilesets = $data_tilesets
   tileset = tilesets[map.tileset_id]

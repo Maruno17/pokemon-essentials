@@ -304,7 +304,7 @@ class PokemonBoxSprite < Sprite
       pokemon = @storage[boxnumber, i]
       @pokemonsprites[i] = PokemonBoxIcon.new(pokemon, viewport)
     end
-    @contents = BitmapWrapper.new(324, 296)
+    @contents = Bitmap.new(324, 296)
     self.bitmap = @contents
     self.x = 184
     self.y = 18
@@ -454,7 +454,7 @@ class PokemonBoxPartySprite < Sprite
       pokemon = @party[i]
       @pokemonsprites[i] = PokemonBoxIcon.new(pokemon, viewport) if pokemon
     end
-    @contents = BitmapWrapper.new(172, 352)
+    @contents = Bitmap.new(172, 352)
     self.bitmap = @contents
     self.x = 182
     self.y = Graphics.height - 352

@@ -72,7 +72,7 @@
     // Sync screen redraws to the monitor refresh rate
     // (default: disabled)
     //
-    // "vsync": false,
+    "vsync": true,
 
 
     // Specify the window width on startup. If set to 0,

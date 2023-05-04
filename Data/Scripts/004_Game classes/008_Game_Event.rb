@@ -243,6 +243,7 @@ class Game_Event < Game_Character
 
   def should_update?(recalc = false)
     return @to_update if !recalc
+    return true if @updated_last_frame
     return true if @trigger && (@trigger == 3 || @trigger == 4)
     return true if @move_route_forcing || @moveto_happened
     return true if @event.name[/update/i]
@@ -256,7 +257,9 @@ class Game_Event < Game_Character
 
   def update
     @to_update = should_update?(true)
+    @updated_last_frame = false
     return if !@to_update
+    @updated_last_frame = true
     @moveto_happened = false
     last_moving = moving?
     super

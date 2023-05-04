@@ -12,7 +12,7 @@ class MapBottomSprite < Sprite
     @mapname     = ""
     @maplocation = ""
     @mapdetails  = ""
-    self.bitmap = BitmapWrapper.new(Graphics.width, Graphics.height)
+    self.bitmap = Bitmap.new(Graphics.width, Graphics.height)
     pbSetSystemFont(self.bitmap)
     refresh
   end
