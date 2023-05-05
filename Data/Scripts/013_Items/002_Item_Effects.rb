@@ -159,17 +159,29 @@ EventHandlers.add(:on_player_step_taken, :repel_counter,
 
 ItemHandlers::UseInField.add(:BLACKFLUTE, proc { |item|
   pbUseItemMessage(item)
-  pbMessage(_INTL("Wild Pokémon will be repelled."))
-  $PokemonMap.blackFluteUsed = true
-  $PokemonMap.whiteFluteUsed = false
+  if Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
+    pbMessage(_INTL("Now you're more likely to encounter high-level Pokémon!"))
+    $PokemonMap.higher_level_wild_pokemon = true
+    $PokemonMap.lower_level_wild_pokemon = false
+  else
+    pbMessage(_INTL("The likelihood of encountering Pokémon decreased!"))
+    $PokemonMap.lower_encounter_rate = true
+    $PokemonMap.higher_encounter_rate = false
+  end
   next true
 })
 
 ItemHandlers::UseInField.add(:WHITEFLUTE, proc { |item|
   pbUseItemMessage(item)
-  pbMessage(_INTL("Wild Pokémon will be lured."))
-  $PokemonMap.blackFluteUsed = false
-  $PokemonMap.whiteFluteUsed = true
+  if Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
+    pbMessage(_INTL("Now you're more likely to encounter low-level Pokémon!"))
+    $PokemonMap.lower_level_wild_pokemon = true
+    $PokemonMap.higher_level_wild_pokemon = false
+  else
+    pbMessage(_INTL("The likelihood of encountering Pokémon increased!"))
+    $PokemonMap.higher_encounter_rate = true
+    $PokemonMap.lower_encounter_rate = false
+  end
   next true
 })
 

@@ -65,6 +65,61 @@ MenuHandlers.add(:debug_menu, :variables, {
   }
 })
 
+MenuHandlers.add(:debug_menu, :edit_field_effects, {
+  "name"        => _INTL("Change Field Effects"),
+  "parent"      => :field_menu,
+  "description" => _INTL("Edit Repel steps, Strength and Flash usage, and Black/White Flute effects."),
+  "effect"      => proc {
+    cmd = 0
+    loop do
+      cmds = []
+      cmds.push(_INTL("Repel steps: {1}", $PokemonGlobal.repel))
+      cmds.push(($PokemonMap.strengthUsed ? "[Y]" : "[  ]") + " " + _INTL("Strength used"))
+      cmds.push(($PokemonGlobal.flashUsed ? "[Y]" : "[  ]") + " " + _INTL("Flash used"))
+      cmds.push(($PokemonMap.lower_encounter_rate ? "[Y]" : "[  ]") + " " + _INTL("Lower encounter rate"))
+      cmds.push(($PokemonMap.higher_encounter_rate ? "[Y]" : "[  ]") + " " + _INTL("Higher encounter rate"))
+      cmds.push(($PokemonMap.lower_level_wild_pokemon ? "[Y]" : "[  ]") + " " + _INTL("Lower level wild Pokémon"))
+      cmds.push(($PokemonMap.higher_level_wild_pokemon ? "[Y]" : "[  ]") + " " + _INTL("Higher level wild Pokémon"))
+      cmd = pbShowCommands(nil, cmds, -1, cmd)
+      break if cmd < 0
+      case cmd
+      when 0   # Repel steps
+        params = ChooseNumberParams.new
+        params.setRange(0, 99999)
+        params.setDefaultValue($PokemonGlobal.repel)
+        $PokemonGlobal.repel = pbMessageChooseNumber(_INTL("Set the Pokémon's level."), params)
+      when 1   # Strength used
+        $PokemonMap.strengthUsed = !$PokemonMap.strengthUsed
+      when 2   # Flash used
+        if $game_map.metadata&.dark_map && $scene.is_a?(Scene_Map)
+          $PokemonGlobal.flashUsed = !$PokemonGlobal.flashUsed
+          darkness = $game_temp.darkness_sprite
+          darkness.dispose if darkness && !darkness.disposed?
+          $game_temp.darkness_sprite = DarknessSprite.new
+          $scene.spriteset&.addUserSprite($game_temp.darkness_sprite)
+          if $PokemonGlobal.flashUsed
+            $game_temp.darkness_sprite.radius = $game_temp.darkness_sprite.radiusMax
+          end
+        else
+          pbMessage(_INTL("You're not in a dark map!"))
+        end
+      when 3   # Lower encounter rate
+        $PokemonMap.lower_encounter_rate ||= false
+        $PokemonMap.lower_encounter_rate = !$PokemonMap.lower_encounter_rate
+      when 4   # Higher encounter rate
+        $PokemonMap.higher_encounter_rate ||= false
+        $PokemonMap.higher_encounter_rate = !$PokemonMap.higher_encounter_rate
+      when 5   # Lower level wild Pokémon
+        $PokemonMap.lower_level_wild_pokemon ||= false
+        $PokemonMap.lower_level_wild_pokemon = !$PokemonMap.lower_level_wild_pokemon
+      when 6   # Higher level wild Pokémon
+        $PokemonMap.higher_level_wild_pokemon ||= false
+        $PokemonMap.higher_level_wild_pokemon = !$PokemonMap.higher_level_wild_pokemon
+      end
+    end
+  }
+})
+
 MenuHandlers.add(:debug_menu, :refresh_map, {
   "name"        => _INTL("Refresh Map"),
   "parent"      => :field_menu,
@@ -118,7 +173,7 @@ MenuHandlers.add(:debug_menu, :storage_wallpapers, {
         paperscmds.push(_INTL("Unlock all"))
         paperscmds.push(_INTL("Lock all"))
         (PokemonStorage::BASICWALLPAPERQTY...w.length).each do |i|
-          paperscmds.push(_INTL("{1} {2}", unlockarray[i] ? "[Y]" : "[  ]", w[i]))
+          paperscmds.push((unlockarray[i] ? "[Y]" : "[  ]") + " " + w[i])
         end
         paperscmd = pbShowCommands(nil, paperscmds, -1, paperscmd)
         break if paperscmd < 0
@@ -755,7 +810,7 @@ MenuHandlers.add(:debug_menu, :set_badges, {
       badgecmds.push(_INTL("Give all"))
       badgecmds.push(_INTL("Remove all"))
       24.times do |i|
-        badgecmds.push(_INTL("{1} Badge {2}", $player.badges[i] ? "[Y]" : "[  ]", i + 1))
+        badgecmds.push(($player.badges[i] ? "[Y]" : "[  ]") + " " + _INTL("Badge {1}", i + 1))
       end
       badgecmd = pbShowCommands(nil, badgecmds, -1, badgecmd)
       break if badgecmd < 0
@@ -795,7 +850,7 @@ MenuHandlers.add(:debug_menu, :toggle_pokedex, {
       dex_names.length.times do |i|
         name = (dex_names[i].is_a?(Array)) ? dex_names[i][0] : dex_names[i]
         unlocked = $player.pokedex.unlocked?(i)
-        dexescmds.push(_INTL("{1} {2}", unlocked ? "[Y]" : "[  ]", name))
+        dexescmds.push((unlocked ? "[Y]" : "[  ]") + " " + name)
       end
       dexescmd = pbShowCommands(nil, dexescmds, -1, dexescmd)
       break if dexescmd < 0

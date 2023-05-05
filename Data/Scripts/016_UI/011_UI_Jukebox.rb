@@ -84,18 +84,24 @@ class PokemonJukeboxScreen
       elsif cmdMarch >= 0 && cmd == cmdMarch
         pbPlayDecisionSE
         pbBGMPlay("Radio - March", 100, 100)
-        $PokemonMap.whiteFluteUsed = true if $PokemonMap
-        $PokemonMap.blackFluteUsed = false if $PokemonMap
+        if $PokemonMap
+          $PokemonMap.lower_encounter_rate = false
+          $PokemonMap.higher_encounter_rate = true
+        end
       elsif cmdLullaby >= 0 && cmd == cmdLullaby
         pbPlayDecisionSE
         pbBGMPlay("Radio - Lullaby", 100, 100)
-        $PokemonMap.blackFluteUsed = true if $PokemonMap
-        $PokemonMap.whiteFluteUsed = false if $PokemonMap
+        if $PokemonMap
+          $PokemonMap.lower_encounter_rate = true
+          $PokemonMap.higher_encounter_rate = false
+        end
       elsif cmdOak >= 0 && cmd == cmdOak
         pbPlayDecisionSE
         pbBGMPlay("Radio - Oak", 100, 100)
-        $PokemonMap.whiteFluteUsed = false if $PokemonMap
-        $PokemonMap.blackFluteUsed = false if $PokemonMap
+        if $PokemonMap
+          $PokemonMap.lower_encounter_rate = false
+          $PokemonMap.higher_encounter_rate = false
+        end
       elsif cmdCustom >= 0 && cmd == cmdCustom
         pbPlayDecisionSE
         files = []
@@ -117,16 +123,20 @@ class PokemonJukeboxScreen
           end
           pbPlayDecisionSE
           $game_system.setDefaultBGM(files[cmd2])
-          $PokemonMap.whiteFluteUsed = false if $PokemonMap
-          $PokemonMap.blackFluteUsed = false if $PokemonMap
+          if $PokemonMap
+            $PokemonMap.lower_encounter_rate = false
+            $PokemonMap.higher_encounter_rate = false
+          end
         end
         @scene.pbSetCommands(nil, cmdCustom)
       elsif cmdTurnOff >= 0 && cmd == cmdTurnOff
         pbPlayDecisionSE
         $game_system.setDefaultBGM(nil)
         pbBGMPlay(pbResolveAudioFile($game_map.bgm_name, $game_map.bgm.volume, $game_map.bgm.pitch))
-        $PokemonMap.whiteFluteUsed = false if $PokemonMap
-        $PokemonMap.blackFluteUsed = false if $PokemonMap
+        if $PokemonMap
+          $PokemonMap.lower_encounter_rate = false
+          $PokemonMap.higher_encounter_rate = false
+        end
       else   # Exit
         pbPlayCloseMenuSE
         break

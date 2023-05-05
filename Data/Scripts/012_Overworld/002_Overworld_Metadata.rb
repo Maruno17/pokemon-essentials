@@ -121,22 +121,26 @@ end
 # variables that should remain valid only for the current map.
 #===============================================================================
 class PokemonMapMetadata
-  attr_reader :erasedEvents
-  attr_reader :movedEvents
+  attr_reader   :erasedEvents
+  attr_reader   :movedEvents
   attr_accessor :strengthUsed
-  attr_accessor :blackFluteUsed
-  attr_accessor :whiteFluteUsed
+  attr_accessor :lower_encounter_rate    # Black Flute's old effect
+  attr_accessor :higher_encounter_rate   # White Flute's old effect
+  attr_accessor :lower_level_wild_pokemon    # White Flute's new effect
+  attr_accessor :higher_level_wild_pokemon   # Black Flute's new effect
 
   def initialize
     clear
   end
 
   def clear
-    @erasedEvents   = {}
-    @movedEvents    = {}
-    @strengthUsed   = false
-    @blackFluteUsed = false
-    @whiteFluteUsed = false
+    @erasedEvents              = {}
+    @movedEvents               = {}
+    @strengthUsed              = false
+    @lower_encounter_rate      = false   # Takes priority over @higher_encounter_rate
+    @higher_encounter_rate     = false
+    @lower_level_wild_pokemon  = false   # Takes priority over @higher_level_wild_pokemon
+    @higher_level_wild_pokemon = false
   end
 
   def addErasedEvent(eventID)
@@ -145,8 +149,8 @@ class PokemonMapMetadata
   end
 
   def addMovedEvent(eventID)
-    key               = [$game_map.map_id, eventID]
-    event             = $game_map.events[eventID] if eventID.is_a?(Integer)
+    key = [$game_map.map_id, eventID]
+    event = $game_map.events[eventID] if eventID.is_a?(Integer)
     @movedEvents[key] = [event.x, event.y, event.direction, event.through] if event
   end
 

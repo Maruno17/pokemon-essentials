@@ -379,3 +379,28 @@ SaveData.register_conversion(:v21_replace_phone_data) do
     end
   end
 end
+
+SaveData.register_conversion(:v21_replace_flute_booleans) do
+  essentials_version 21
+  display_title "Updating Black/White Flute variables"
+  to_value :map_metadata do |metadata|
+    metadata.instance_eval do
+      if !@blackFluteUsed.nil?
+        if Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
+          @higher_level_wild_pokemon = @blackFluteUsed
+        else
+          @lower_encounter_rate = @blackFluteUsed
+        end
+        @blackFluteUsed = nil
+      end
+      if !@whiteFluteUsed.nil?
+        if Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
+          @lower_level_wild_pokemon = @whiteFluteUsed
+        else
+          @higher_encounter_rate = @whiteFluteUsed
+        end
+        @whiteFluteUsed = nil
+      end
+    end
+  end
+end
