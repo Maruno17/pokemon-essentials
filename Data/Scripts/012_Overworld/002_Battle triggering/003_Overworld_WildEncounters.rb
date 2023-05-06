@@ -36,7 +36,7 @@ class PokemonEncounters
   end
 
   # Returns whether encounters for the given encounter type have been defined
-  # for the given map. Only called by Bug Catching Contest to see if it can use
+  # for the given map. Only called by Bug-Catching Contest to see if it can use
   # the map's BugContest encounter type to generate caught Pokémon for the other
   # contestants.
   def map_has_encounter_type?(map_ID, enc_type)
@@ -57,7 +57,7 @@ class PokemonEncounters
   end
 
   # Returns whether land-like encounters have been defined for the current map
-  # (ignoring the Bug Catching Contest one).
+  # (ignoring the Bug-Catching Contest one).
   # Applies only to encounters triggered by moving around.
   def has_normal_land_encounters?
     GameData::EncounterType.each do |enc_type|
@@ -345,7 +345,7 @@ class PokemonEncounters
 
   # For the given map, randomly chooses a species and level from the encounter
   # list for the given encounter type. Returns nil if there are none defined.
-  # Used by the Bug Catching Contest to choose what the other participants
+  # Used by the Bug-Catching Contest to choose what the other participants
   # caught.
   def choose_wild_pokemon_for_map(map_ID, enc_type)
     if !enc_type || !GameData::EncounterType.exists?(enc_type)

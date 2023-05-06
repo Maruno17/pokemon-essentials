@@ -305,6 +305,8 @@ class PokemonSummary_Scene
       drawPageOneEgg
       return
     end
+    @sprites["pokemon"].setPokemonBitmap(@pokemon)
+    @sprites["pokeicon"].pokemon = @pokemon
     @sprites["itemicon"].item = @pokemon.item_id
     overlay = @sprites["overlay"].bitmap
     overlay.clear

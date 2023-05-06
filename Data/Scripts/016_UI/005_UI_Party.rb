@@ -700,6 +700,7 @@ class PokemonParty_Scene
     screen = PokemonSummaryScreen.new(scene, inbattle)
     screen.pbStartScreen(@party, pkmnid)
     yield if block_given?
+    pbRefresh
     pbFadeInAndShow(@sprites, oldsprites)
   end
 

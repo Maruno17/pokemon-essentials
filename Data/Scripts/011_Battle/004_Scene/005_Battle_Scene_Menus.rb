@@ -108,7 +108,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
     [0, 2, 1, 9],   # 1 = Regular battle with "Cancel" instead of "Run"
     [0, 2, 1, 4],   # 2 = Regular battle with "Call" instead of "Run"
     [5, 7, 6, 3],   # 3 = Safari Zone
-    [0, 8, 1, 3]    # 4 = Bug Catching Contest
+    [0, 8, 1, 3]    # 4 = Bug-Catching Contest
   ]
 
   def initialize(viewport, z)
@@ -450,7 +450,7 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
     [0, 2, 1, 9],   # 1 = Regular battle with "Cancel" instead of "Run"
     [0, 2, 1, 4],   # 2 = Regular battle with "Call" instead of "Run"
     [5, 7, 6, 3],   # 3 = Safari Zone
-    [0, 8, 1, 3]    # 4 = Bug Catching Contest
+    [0, 8, 1, 3]    # 4 = Bug-Catching Contest
   ]
   CMD_BUTTON_WIDTH_SMALL = 170
   TEXT_BASE_COLOR   = Color.new(240, 248, 224)

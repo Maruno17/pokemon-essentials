@@ -22,7 +22,7 @@ class Battle::Scene
   #       1 = regular battle with "Cancel"
   #       2 = regular battle with "Call" (for Shadow Pokémon battles)
   #       3 = Safari Zone
-  #       4 = Bug Catching Contest
+  #       4 = Bug-Catching Contest
   def pbCommandMenuEx(idxBattler, texts, mode = 0)
     pbShowWindow(COMMAND_BOX)
     cw = @sprites["commandWindow"]

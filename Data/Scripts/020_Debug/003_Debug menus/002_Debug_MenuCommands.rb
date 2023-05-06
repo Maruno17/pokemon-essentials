@@ -65,6 +65,84 @@ MenuHandlers.add(:debug_menu, :variables, {
   }
 })
 
+MenuHandlers.add(:debug_menu, :safari_zone_and_bug_contest, {
+  "name"        => _INTL("Safari Zone and Bug-Catching Contest"),
+  "parent"      => :field_menu,
+  "description" => _INTL("Edit steps/time remaining and number of usable Poké Balls."),
+  "effect"      => proc {
+    if pbInSafari?
+      safari = pbSafariState
+      cmd = 0
+      loop do
+        cmds = [_INTL("Steps remaining: {1}", (Settings::SAFARI_STEPS > 0) ? safari.steps : _INTL("infinite")),
+                GameData::Item.get(:SAFARIBALL).name_plural + ": " + safari.ballcount.to_s]
+        cmd = pbShowCommands(nil, cmds, -1, cmd)
+        break if cmd < 0
+        case cmd
+        when 0   # Steps remaining
+          if Settings::SAFARI_STEPS > 0
+            params = ChooseNumberParams.new
+            params.setRange(0, 99999)
+            params.setDefaultValue(safari.steps)
+            safari.steps = pbMessageChooseNumber(_INTL("Set the steps remaining in this Safari game."), params)
+          end
+        when 1   # Safari Balls
+          params = ChooseNumberParams.new
+          params.setRange(0, 99999)
+          params.setDefaultValue(safari.ballcount)
+          safari.ballcount = pbMessageChooseNumber(
+            _INTL("Set the quantity of {1}.", GameData::Item.get(:SAFARIBALL).name_plural), params)
+        end
+      end
+    elsif pbInBugContest?
+      contest = pbBugContestState
+      cmd = 0
+      loop do
+        cmds = []
+        if Settings::BUG_CONTEST_TIME > 0
+          curtime = [(contest.timer + Settings::BUG_CONTEST_TIME * Graphics.frame_rate) - Graphics.frame_count, 0].max
+          curtime /= Graphics.frame_rate
+          min = curtime / 60
+          sec = curtime % 60
+          time_string = _ISPRINTF("{1:02d}m {2:02d}s", min, sec)
+        else
+          time_string = _INTL("infinite")
+        end
+        cmds.push(_INTL("Time remaining: {1}", time_string))
+        cmds.push(GameData::Item.get(:SPORTBALL).name_plural + ": " + contest.ballcount.to_s)
+        cmd = pbShowCommands(nil, cmds, -1, cmd)
+        break if cmd < 0
+        case cmd
+        when 0   # Steps remaining
+          if Settings::BUG_CONTEST_TIME > 0
+            params = ChooseNumberParams.new
+            params.setRange(0, 99999)
+            params.setDefaultValue(min)
+            new_time = pbMessageChooseNumber(_INTL("Set the time remaining (in minutes) in this Bug-Catching Contest."), params)
+            echoln contest.timer
+            echoln new_time
+            contest.timer += (new_time - min) * 60 * Graphics.frame_rate
+            echoln contest.timer
+            $scene.spriteset.usersprites.each do |sprite|
+              next if !sprite.is_a?(TimerDisplay)
+              sprite.start = contest.timer
+              break
+            end
+          end
+        when 1   # Safari Balls
+          params = ChooseNumberParams.new
+          params.setRange(0, 99999)
+          params.setDefaultValue(contest.ballcount)
+          contest.ballcount = pbMessageChooseNumber(
+            _INTL("Set the quantity of {1}.", GameData::Item.get(:SPORTBALL).name_plural), params)
+        end
+      end
+    else
+      pbMessage(_INTL("You aren't in the Safari Zone or a Bug-Catching Contest!"))
+    end
+  }
+})
+
 MenuHandlers.add(:debug_menu, :edit_field_effects, {
   "name"        => _INTL("Change Field Effects"),
   "parent"      => :field_menu,
@@ -136,24 +214,6 @@ MenuHandlers.add(:debug_menu, :day_care, {
   "description" => _INTL("View Pokémon in the Day Care and edit them."),
   "effect"      => proc {
     pbDebugDayCare
-  }
-})
-
-MenuHandlers.add(:debug_menu, :relic_stone, {
-  "name"        => _INTL("Use Relic Stone"),
-  "parent"      => :field_menu,
-  "description" => _INTL("Shadow Pokémon. Choose a Pokémon to show to the Relic Stone for purification."),
-  "effect"      => proc {
-    pbRelicStone
-  }
-})
-
-MenuHandlers.add(:debug_menu, :purify_chamber, {
-  "name"        => _INTL("Use Purify Chamber"),
-  "parent"      => :field_menu,
-  "description" => _INTL("Shadow Pokémon. Open the Purify Chamber for purification."),
-  "effect"      => proc {
-    pbPurifyChamber
   }
 })
 
@@ -763,39 +823,34 @@ MenuHandlers.add(:debug_menu, :player_menu, {
 MenuHandlers.add(:debug_menu, :set_money, {
   "name"        => _INTL("Set Money"),
   "parent"      => :player_menu,
-  "description" => _INTL("Edit how much money you have."),
+  "description" => _INTL("Edit how much money, Game Corner Coins and Battle Points you have."),
   "effect"      => proc {
-    params = ChooseNumberParams.new
-    params.setRange(0, Settings::MAX_MONEY)
-    params.setDefaultValue($player.money)
-    $player.money = pbMessageChooseNumber(_INTL("Set the player's money."), params)
-    pbMessage(_INTL("You now have ${1}.", $player.money.to_s_formatted))
-  }
-})
+    cmd = 0
+    loop do
+      cmds = [_INTL("Money: ${1}", $player.money.to_s_formatted),
+              _INTL("Coins: {1}", $player.coins.to_s_formatted),
+              _INTL("Battle Points: {1}", $player.battle_points.to_s_formatted)]
+      cmd = pbShowCommands(nil, cmds, -1, cmd)
+      break if cmd < 0
+      case cmd
+      when 0   # Money
+        params = ChooseNumberParams.new
+        params.setRange(0, Settings::MAX_MONEY)
+        params.setDefaultValue($player.money)
+        $player.money = pbMessageChooseNumber("\\ts[]" + _INTL("Set the player's money."), params)
+      when 1   # Coins
+        params = ChooseNumberParams.new
+        params.setRange(0, Settings::MAX_COINS)
+        params.setDefaultValue($player.coins)
+        $player.coins = pbMessageChooseNumber("\\ts[]" + _INTL("Set the player's Coin amount."), params)
+      when 2   # Battle Points
+        params = ChooseNumberParams.new
+        params.setRange(0, Settings::MAX_BATTLE_POINTS)
+        params.setDefaultValue($player.battle_points)
+        $player.battle_points = pbMessageChooseNumber("\\ts[]" + _INTL("Set the player's BP amount."), params)
+      end
 
-MenuHandlers.add(:debug_menu, :set_coins, {
-  "name"        => _INTL("Set Coins"),
-  "parent"      => :player_menu,
-  "description" => _INTL("Edit how many Game Corner Coins you have."),
-  "effect"      => proc {
-    params = ChooseNumberParams.new
-    params.setRange(0, Settings::MAX_COINS)
-    params.setDefaultValue($player.coins)
-    $player.coins = pbMessageChooseNumber(_INTL("Set the player's Coin amount."), params)
-    pbMessage(_INTL("You now have {1} Coins.", $player.coins.to_s_formatted))
-  }
-})
-
-MenuHandlers.add(:debug_menu, :set_bp, {
-  "name"        => _INTL("Set Battle Points"),
-  "parent"      => :player_menu,
-  "description" => _INTL("Edit how many Battle Points you have."),
-  "effect"      => proc {
-    params = ChooseNumberParams.new
-    params.setRange(0, Settings::MAX_BATTLE_POINTS)
-    params.setDefaultValue($player.battle_points)
-    $player.battle_points = pbMessageChooseNumber(_INTL("Set the player's BP amount."), params)
-    pbMessage(_INTL("You now have {1} BP.", $player.battle_points.to_s_formatted))
+    end
   }
 })
 
@@ -878,13 +933,13 @@ MenuHandlers.add(:debug_menu, :toggle_pokegear, {
 })
 
 MenuHandlers.add(:debug_menu, :toggle_box_link, {
-  "name"        => _INTL("Toggle Pokémon Box Link's Effect"),
+  "name"        => _INTL("Toggle Party Screen Access To Storage"),
   "parent"      => :player_menu,
   "description" => _INTL("Toggle Box Link's effect of accessing Pokémon storage via the party screen."),
   "effect"      => proc {
     $player.has_box_link = !$player.has_box_link
-    pbMessage(_INTL("Enabled Pokémon Box Link's effect.")) if $player.has_box_link
-    pbMessage(_INTL("Disabled Pokémon Box Link's effect.")) if !$player.has_box_link
+    pbMessage(_INTL("Enabled access to storage from the party screen.")) if $player.has_box_link
+    pbMessage(_INTL("Disabled access to storage from the party screen.")) if !$player.has_box_link
   }
 })
 
@@ -954,6 +1009,45 @@ MenuHandlers.add(:debug_menu, :random_id, {
   "effect"      => proc {
     $player.id = rand(2**16) | (rand(2**16) << 16)
     pbMessage(_INTL("The player's ID was changed to {1} (full ID: {2}).", $player.public_ID, $player.id))
+  }
+})
+
+#===============================================================================
+# Shadow Pokémon options
+#===============================================================================
+MenuHandlers.add(:debug_menu, :shadow_pokemon_menu, {
+  "name"        => _INTL("Shadow Pokémon Options..."),
+  "parent"      => :main,
+  "description" => _INTL("Snag Machine and purification."),
+  "always_show" => false
+})
+
+MenuHandlers.add(:debug_menu, :toggle_snag_machine, {
+  "name"        => _INTL("Toggle Snag Machine"),
+  "parent"      => :shadow_pokemon_menu,
+  "description" => _INTL("Toggle all Poké Balls being able to catch Shadow Pokémon."),
+  "effect"      => proc {
+    $player.has_snag_machine = !$player.has_snag_machine
+    pbMessage(_INTL("Gave the Snag Machine.")) if $player.has_snag_machine
+    pbMessage(_INTL("Lost the Snag Machine.")) if !$player.has_snag_machine
+  }
+})
+
+MenuHandlers.add(:debug_menu, :relic_stone, {
+  "name"        => _INTL("Use Relic Stone"),
+  "parent"      => :shadow_pokemon_menu,
+  "description" => _INTL("Choose a Shadow Pokémon to show to the Relic Stone for purification."),
+  "effect"      => proc {
+    pbRelicStone
+  }
+})
+
+MenuHandlers.add(:debug_menu, :purify_chamber, {
+  "name"        => _INTL("Use Purify Chamber"),
+  "parent"      => :shadow_pokemon_menu,
+  "description" => _INTL("Open the Purify Chamber for Shadow Pokémon purification."),
+  "effect"      => proc {
+    pbPurifyChamber
   }
 })
 

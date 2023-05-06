@@ -5,7 +5,7 @@ class BugContestState
   attr_accessor :ballcount
   attr_accessor :decision
   attr_accessor :lastPokemon
-  attr_reader   :timer
+  attr_accessor :timer
 
   CONTESTANT_NAMES = [
     _INTL("Bug Catcher Ed"),
@@ -128,7 +128,7 @@ class BugContestState
       score = pbBugContestScore(pokemon)
       judgearray.push([cont, pokemon.species, score])
     end
-    raise _INTL("Too few bug catching contestants") if judgearray.length < 3
+    raise _INTL("Too few bug-catching contestants") if judgearray.length < 3
     judgearray.sort! { |a, b| b[2] <=> a[2] }   # sort by score in descending order
     @places.push(judgearray[0])
     @places.push(judgearray[1])
@@ -232,6 +232,8 @@ end
 #
 #===============================================================================
 class TimerDisplay # :nodoc:
+  attr_accessor :start
+
   def initialize(start, maxtime)
     @timer = Window_AdvancedTextPokemon.newWithSize("", Graphics.width - 120, 0, 120, 64)
     @timer.z = 99999
@@ -265,7 +267,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-# Returns a score for this Pokemon in the Bug Catching Contest.
+# Returns a score for this Pokemon in the Bug-Catching Contest.
 # Not exactly the HGSS calculation, but it should be decent enough.
 def pbBugContestScore(pkmn)
   levelscore = pkmn.level * 4
@@ -287,17 +289,17 @@ def pbBugContestState
   return $PokemonGlobal.bugContestState
 end
 
-# Returns true if the Bug Catching Contest in progress
+# Returns true if the Bug-Catching Contest in progress
 def pbInBugContest?
   return pbBugContestState.inProgress?
 end
 
-# Returns true if the Bug Catching Contest in progress and has not yet been judged
+# Returns true if the Bug-Catching Contest in progress and has not yet been judged
 def pbBugContestUndecided?
   return pbBugContestState.undecided?
 end
 
-# Returns true if the Bug Catching Contest in progress and is being judged
+# Returns true if the Bug-Catching Contest in progress and is being judged
 def pbBugContestDecided?
   return pbBugContestState.decided?
 end

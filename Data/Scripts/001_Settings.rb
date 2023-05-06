@@ -84,7 +84,7 @@ module Settings
   MORE_BONUS_PREMIER_BALLS                   = (MECHANICS_GENERATION >= 8)
   # The number of steps allowed before a Safari Zone game is over (0=infinite).
   SAFARI_STEPS                               = 600
-  # The number of seconds a Bug Catching Contest lasts for (0=infinite).
+  # The number of seconds a Bug-Catching Contest lasts for (0=infinite).
   BUG_CONTEST_TIME                           = 20 * 60   # 20 minutes
 
   #=============================================================================
