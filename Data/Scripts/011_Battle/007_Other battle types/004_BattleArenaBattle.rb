@@ -260,7 +260,7 @@ class Battle::Scene
 
   def pbBattleArenaBattlers(battler1, battler2)
     pbMessage(_INTL("REFEREE: {1} VS {2}!\nCommence battling!",
-                    battler1.name, battler2.name) + "\\wtnp[20]") { pbBattleArenaUpdate }
+                    battler1.name, battler2.name) + "\\wtnp[10]") { pbBattleArenaUpdate }
   end
 
   def pbBattleArenaJudgment(battler1, battler2, ratings1, ratings2)
@@ -271,7 +271,7 @@ class Battle::Scene
       msgwindow = pbCreateMessageWindow
       dimmingvp = Viewport.new(0, 0, Graphics.width, Graphics.height - msgwindow.height)
       pbMessageDisplay(msgwindow,
-                       _INTL("REFEREE: That's it! We will now go to judging to determine the winner!") + "\\wtnp[20]") do
+                       _INTL("REFEREE: That's it! We will now go to judging to determine the winner!") + "\\wtnp[10]") do
         pbBattleArenaUpdate
         dimmingvp.update
       end
@@ -299,21 +299,21 @@ class Battle::Scene
       end
       updateJudgment(infowindow, 1, battler1, battler2, ratings1, ratings2)
       pbMessageDisplay(msgwindow,
-                       _INTL("REFEREE: Judging category 1, Mind!\nThe Pokémon showing the most guts!") + "\\wtnp[40]") do
+                       _INTL("REFEREE: Judging category 1, Mind!\nThe Pokémon showing the most guts!") + "\\wtnp[20]") do
         pbBattleArenaUpdate
         dimmingvp.update
         infowindow.update
       end
       updateJudgment(infowindow, 2, battler1, battler2, ratings1, ratings2)
       pbMessageDisplay(msgwindow,
-                       _INTL("REFEREE: Judging category 2, Skill!\nThe Pokémon using moves the best!") + "\\wtnp[40]") do
+                       _INTL("REFEREE: Judging category 2, Skill!\nThe Pokémon using moves the best!") + "\\wtnp[20]") do
         pbBattleArenaUpdate
         dimmingvp.update
         infowindow.update
       end
       updateJudgment(infowindow, 3, battler1, battler2, ratings1, ratings2)
       pbMessageDisplay(msgwindow,
-                       _INTL("REFEREE: Judging category 3, Body!\nThe Pokémon with the most vitality!") + "\\wtnp[40]") do
+                       _INTL("REFEREE: Judging category 3, Body!\nThe Pokémon with the most vitality!") + "\\wtnp[20]") do
         pbBattleArenaUpdate
         dimmingvp.update
         infowindow.update
@@ -326,7 +326,7 @@ class Battle::Scene
       end
       if total1 == total2
         pbMessageDisplay(msgwindow,
-                         _INTL("REFEREE: Judgment: {1} to {2}!\nWe have a draw!", total1, total2) + "\\wtnp[40]") do
+                         _INTL("REFEREE: Judgment: {1} to {2}!\nWe have a draw!", total1, total2) + "\\wtnp[20]") do
           pbBattleArenaUpdate
           dimmingvp.update
           infowindow.update
@@ -334,7 +334,7 @@ class Battle::Scene
       elsif total1 > total2
         pbMessageDisplay(msgwindow,
                          _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}'s {4}!",
-                               total1, total2, @battle.pbGetOwnerName(battler1.index), battler1.name) + "\\wtnp[40]") do
+                               total1, total2, @battle.pbGetOwnerName(battler1.index), battler1.name) + "\\wtnp[20]") do
           pbBattleArenaUpdate
           dimmingvp.update
           infowindow.update
@@ -342,7 +342,7 @@ class Battle::Scene
       else
         pbMessageDisplay(msgwindow,
                          _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}!",
-                               total1, total2, battler2.name) + "\\wtnp[40]") do
+                               total1, total2, battler2.name) + "\\wtnp[20]") do
           pbBattleArenaUpdate
           dimmingvp.update
           infowindow.update
