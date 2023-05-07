@@ -18,7 +18,8 @@
 #   ReserveLastPokemon (don't switch it in if possible)
 #   UsePokemonInOrder (uses earliest-listed Pokémon possible)
 #
-# TODO: Add more skill flags.
+# Anti-skill flags are skill flags with "Anti" at the beginning. An "AntiXYZ"
+# flag will negate the corresponding "XYZ" flag.
 #===============================================================================
 class Battle::AI::AITrainer
   attr_reader :side, :trainer_index
@@ -74,7 +75,11 @@ class Battle::AI::AITrainer
   def sanitize_skill_flags
     # NOTE: Any skill flag which is shorthand for multiple other skill flags
     #       should be "unpacked" here.
-    # TODO: Have a bunch of "AntiX" flags that negate the corresponding "X" flags.
+    # Remove any skill flag "XYZ" if there is also an "AntiXYZ" skill flag
+    @skill_flags.each_with_index do |flag, i|
+      @skill_flags[i] = nil if @skill_flags.include?("Anti" + flag)
+    end
+    @skill_flags.compact!
   end
 
   def has_skill_flag?(flag)

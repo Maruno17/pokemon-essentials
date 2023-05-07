@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::AI
   HP_HEAL_ITEMS = {
     :POTION       => 20,
@@ -74,13 +77,6 @@ class Battle::AI
     :REVIVALHERB => 7,
     :MAXHONEY    => 7
   }
-  # TODO: Add more items for the AI to use from their Bag:
-  #           Confusion healing (Yellow Flute, Persim Berry)
-  #           Infatuation healing (Red Flute)
-  #           PP (Either, Max Ether, Leppa Berry, Elixir, Max Elixir)
-  #           Dire Hit (and 2 and 3)
-  #           Guard Spec.
-  #           Poké Flute (awakens all battlers)
 
   #-----------------------------------------------------------------------------
 
@@ -175,7 +171,7 @@ class Battle::AI
         want_to_cure_status = @battlers[battler.index].wants_status_problem?(pkmn.status)
         want_to_cure_status = false if pkmn.status == :SLEEP && pkmn.statusCount <= 2
       end
-      want_to_cure_status ||= (battler.effects[PBEffects::Confusion] > 0)
+      want_to_cure_status ||= (battler.effects[PBEffects::Confusion] > 1)
     end
     if HP_HEAL_ITEMS.include?(item)
       if pkmn.hp < pkmn.totalhp

@@ -516,7 +516,9 @@ Battle::AI::Handlers::MoveEffectScore.add("CureUserPartyStatus",
   proc { |score, move, user, ai, battle|
     score = Battle::AI::MOVE_BASE_SCORE   # Ignore the scores for each targeted battler calculated earlier
     battle.pbParty(user.index).each do |pkmn|
-      score += 12 if pkmn && pkmn.status != :NONE
+      next if !pkmn || pkmn.status == :NONE
+      next if pkmn.status == :SLEEP && pkmn.statusCount == 1   # About to wake up
+      score += 12
     end
     next score
   }
@@ -1071,6 +1073,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("NegateTargetAbility",
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbility",
   proc { |score, move, user, target, ai, battle|
+    next Battle::AI::MOVE_USELESS_SCORE if !target.ability_active?
     target_ability_rating = target.wants_ability?(target.ability_id)
     side_mult = (target.opposes?(user)) ? 1 : -1
     if target_ability_rating > 0
@@ -1087,8 +1090,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbility",
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("NegateTargetAbilityIfTargetActed",
   proc { |score, move, user, target, ai, battle|
-    next score if target.effects[PBEffects::Substitute] > 0 || target.effects[PBEffects::GastroAcid]
-    next score if target.battler.unstoppableAbility?
+    next score if target.effects[PBEffects::Substitute] > 0
+    next score if target.battler.unstoppableAbility? || !target.ability_active?
     next score if user.faster_than?(target)
     target_ability_rating = target.wants_ability?(target.ability_id)
     side_mult = (target.opposes?(user)) ? 1 : -1

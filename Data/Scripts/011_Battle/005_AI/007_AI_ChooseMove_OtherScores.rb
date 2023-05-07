@@ -49,7 +49,6 @@ Battle::AI::Handlers::GeneralMoveScore.add(:thawing_move_when_frozen,
 # Prefer using a priority move if the user is slower than the target and...
 # - the user is at low HP, or
 # - the target is predicted to be knocked out by the move.
-# TODO: Less prefer a priority move if any foe knows Quick Guard?
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:priority_move_against_faster_target,
   proc { |score, move, user, target, ai, battle|
@@ -65,6 +64,16 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:priority_move_against_f
         old_score = score
         score += 8
         PBDebug.log_score_change(score - old_score, "target at low HP and move has priority over faster target")
+      end
+      # Any foe knows Quick Guard and can protect against priority moves
+      old_score = score
+      ai.each_foe_battler(user.side) do |b, i|
+        next if !b.has_move_with_function?("ProtectUserSideFromPriorityMoves")
+        next if Settings::MECHANICS_GENERATION <= 5 && b.effects[PBEffects::ProtectRate] > 1
+        score -= 5
+      end
+      if score != old_score
+        PBDebug.log_score_change(score - old_score, "a foe knows Quick Guard and may protect against priority moves")
       end
     end
     next score
@@ -332,8 +341,8 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:thawing_move_against_fr
 #
 #===============================================================================
 # TODO: Check all effects that trigger upon using a move, including per-hit
-#       stuff in def pbEffectsOnMakingHit and end-of-move stuff in def
-#       pbEffectsAfterMove.
+#       stuff in def pbEffectsOnMakingHit (worse if the move is a multi-hit one)
+#       and end-of-move stuff in def pbEffectsAfterMove.
 
 #===============================================================================
 #

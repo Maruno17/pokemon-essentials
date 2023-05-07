@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::AI
   # Main method for calculating the score for moves that raise a battler's
   # stat(s).
@@ -89,14 +92,10 @@ class Battle::AI
   #-----------------------------------------------------------------------------
 
   # Returns whether the target raising the given stat will have any impact.
-  # TODO: Make sure the move's actual damage category is taken into account,
-  #       i.e. CategoryDependsOnHigherDamagePoisonTarget and
-  #       CategoryDependsOnHigherDamageIgnoreTargetAbility.
   def stat_raise_worthwhile?(target, stat, fixed_change = false)
     if !fixed_change
       return false if !target.battler.pbCanRaiseStatStage?(stat, @user.battler, @move.move)
     end
-    # TODO: Not worth it if target is predicted to switch out (except via Baton Pass).
     # Check if target won't benefit from the stat being raised
     return true if target.has_move_with_function?("SwitchOutUserPassOnEffects",
                                                   "PowerHigherWithUserPositiveStatStages")
@@ -125,17 +124,29 @@ class Battle::AI
         "PowerHigherWithUserPositiveStatStages"
       ]
       if !target.has_move_with_function?(*moves_that_prefer_high_speed)
-        # TODO: Not worth it if the target is too much slower than its foe(s)
-        #       and can't be made fast enough.
+        meaningful = false
+        target_speed = target.rough_stat(:SPEED)
         each_foe_battler(target.side) do |b, i|
-          return true if b.faster_than?(target)
+          b_speed = b.rough_stat(:SPEED)
+          meaningful = true if target_speed < b_speed && target_speed * 2.5 > b_speed
+          break if meaningful
         end
-        return false
+        return false if !meaningful
       end
     when :ACCURACY
-      # TODO: Yes if any of target's moves have lower accuracy, or target is
-      #       affected by accuracy-lowering effects, or if target's foe(s) have
-      #       increased evasion.
+      min_accuracy = 100
+      target.battler.moves.each do |m|
+        next if m.accuracy == 0 || m.is_a?(Battle::Move::OHKO)
+        min_accuracy = m.accuracy if m.accuracy < min_accuracy
+      end
+      if min_accuracy >= 90 && target.stages[:ACCURACY] >= 0
+        meaningful = false
+        each_foe_battler(target.side) do |b, i|
+          meaningful = true if b.stages[:EVASION] > 0
+          break if meaningful
+        end
+        return false if !meaningful
+      end
     when :EVASION
     end
     return true
@@ -158,7 +169,8 @@ class Battle::AI
       # Prefer if target is at high HP, don't prefer if target is at low HP
       score += total_increment * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 8   # +6 to -6 per stage
     end
-    # TODO: Look at abilities that trigger upon stat raise. There are none.
+    # NOTE: There are no abilities that trigger upon stat raise, but this is
+    #       where they would be accounted for if they existed.
     return score
   end
 
@@ -230,8 +242,6 @@ class Battle::AI
           break
         end
       end
-      # TODO: Prefer if the target is able to cause flinching (moves that
-      #       flinch, or has King's Rock/Stench).
       # Prefer if the target has Electro Ball or Power Trip/Stored Power
       moves_that_prefer_high_speed = [
         "PowerHigherWithUserFasterThanTarget",
@@ -380,14 +390,10 @@ class Battle::AI
   #-----------------------------------------------------------------------------
 
   # Returns whether the target lowering the given stat will have any impact.
-  # TODO: Make sure the move's actual damage category is taken into account,
-  #       i.e. CategoryDependsOnHigherDamagePoisonTarget and
-  #       CategoryDependsOnHigherDamageIgnoreTargetAbility.
   def stat_drop_worthwhile?(target, stat, fixed_change = false)
     if !fixed_change
       return false if !target.battler.pbCanLowerStatStage?(stat, @user.battler, @move.move)
     end
-    # TODO: Not worth it if target is predicted to switch out (except via Baton Pass).
     # Check if target won't benefit from the stat being lowered
     case stat
     when :ATTACK
@@ -414,14 +420,22 @@ class Battle::AI
         "PowerHigherWithUserPositiveStatStages"
       ]
       if !target.has_move_with_function?(*moves_that_prefer_high_speed)
-        # TODO: Not worth it if the target is too much faster than its foe(s)
-        #       and can't be brought slow enough.
+        meaningful = false
+        target_speed = target.rough_stat(:SPEED)
         each_foe_battler(target.side) do |b, i|
-          return true if !b.faster_than?(target)
+          b_speed = b.rough_stat(:SPEED)
+          meaningful = true if target_speed > b_speed && target_speed < b_speed * 2.5
+          break if meaningful
         end
-        return false
+        return false if !meaningful
       end
     when :ACCURACY
+      meaningful = false
+      target.battler.moves.each do |m|
+        meaningful = true if m.accuracy > 0 && !m.is_a?(Battle::Move::OHKO)
+        break if meaningful
+      end
+      return false if !meaningful
     when :EVASION
     end
     return true
@@ -444,7 +458,11 @@ class Battle::AI
       # Prefer if target is at high HP, don't prefer if target is at low HP
       score += total_decrement * desire_mult * ((100 * target.hp / target.totalhp) - 50) / 8   # +6 to -6 per stage
     end
-    # TODO: Look at abilities that trigger upon stat lowering.
+    # Don't prefer if target has an ability that triggers upon stat loss
+    # (Competitive, Defiant)
+    if target.opposes?(@user) && Battle::AbilityEffects::OnStatLoss[target.ability]
+      score -= 10
+    end
     return score
   end
 
@@ -532,7 +550,6 @@ class Battle::AI
       else
         score += 10 * dec_mult
       end
-      # TODO: Prefer if target is poisoned/toxiced/Leech Seeded/cursed.
     when :EVASION
       # Modify score depending on current stat stage
       if old_stage <= -2 && decrement == 1
@@ -579,7 +596,12 @@ class Battle::AI
         if b.has_damaging_move_of_type?(:WATER)
           ret += (b.opposes?(move_user)) ? 10 : -10
         end
-        # TODO: Check for freezing moves.
+        # Check for moves that freeze
+        if b.has_move_with_function?("FreezeTarget", "FreezeFlinchTarget") ||
+           (b.has_move_with_function?("EffectDependsOnEnvironment") &&
+           [:Snow, :Ice].include?(@battle.environment))
+          ret += (b.opposes?(move_user)) ? 5 : -5
+        end
       when :Rain
         # Check for Fire/Water moves
         if b.has_damaging_move_of_type?(:WATER)
@@ -681,7 +703,6 @@ class Battle::AI
       case terrain
       when :Electric
         # Immunity to sleep
-        # TODO: Check all battlers for sleep-inducing moves and other effects?
         if b.status == :NONE
           ret += (b.opposes?(move_user)) ? -8 : 8
         end
@@ -701,8 +722,6 @@ class Battle::AI
         end
       when :Misty
         # Immunity to status problems/confusion
-        # TODO: Check all battlers for status/confusion-inducing moves and other
-        #       effects?
         if b.status == :NONE || b.effects[PBEffects::Confusion] == 0
           ret += (b.opposes?(move_user)) ? -8 : 8
         end

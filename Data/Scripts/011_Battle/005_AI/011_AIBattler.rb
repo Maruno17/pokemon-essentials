@@ -18,7 +18,7 @@ class Battle::AI::AIBattler
     @party_index = battler.pokemonIndex
     if @party_index != old_party_index
       # TODO: Start of battle or Pokémon switched/shifted; recalculate roles,
-      #       etc.
+      #       etc. What is etc.?
     end
   end
 
@@ -87,7 +87,7 @@ class Battle::AI::AIBattler
       ret += [self.totalhp / 8, 1].max if [:Sun, :HarshSun].include?(weather) && battler.takesIndirectDamage?
     end
     # Future Sight/Doom Desire
-    # TODO
+    # NOTE: Not worth estimating the damage from this.
     # Wish
     if @ai.battle.positions[@index].effects[PBEffects::Wish] == 1 && battler.canHeal?
       ret -= @ai.battle.positions[@index].effects[PBEffects::WishAmount]
@@ -230,10 +230,13 @@ class Battle::AI::AIBattler
     active_types = pbTypes(true)
     return active_types.include?(GameData::Type.get(type).id)
   end
+  alias pbHasType? has_type?
 
   # TODO: Also make a def effectiveness_of_move_against_battler which calls
-  #       pbCalcTypeModSingle instead of effectiveness_of_type_against_single_battler_type.
-  #       Why?
+  #       pbCalcTypeModSingle instead of effectiveness_of_type_against_single_battler_type,
+  #       for moves with custom def pbCalcTypeMod, e.g. Freeze-Dry. When would
+  #       that be used instead? Or rather, when would THIS method be used if
+  #       that existed?
   def effectiveness_of_type_against_battler(type, user = nil)
     ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
     return ret if !type
@@ -394,164 +397,49 @@ class Battle::AI::AIBattler
 
   #-----------------------------------------------------------------------------
 
-  # TODO: Add more items.
-  BASE_ITEM_RATINGS = {
-    :ADAMANTORB   => 3,
-    :BLACKBELT    => 2,
-    :BLACKGLASSES => 2,
-    :BLACKSLUDGE  => -4,
-    :CHARCOAL     => 2,
-    :CHOICEBAND   => 4,
-    :CHOICESCARF  => 4,
-    :CHOICESPECS  => 4,
-    :DEEPSEATOOTH => 4,
-    :DRACOPLATE   => 2,
-    :DRAGONFANG   => 2,
-    :DREADPLATE   => 2,
-    :EARTHPLATE   => 2,
-    :FISTPLATE    => 2,
-    :FLAMEORB     => -4,
-    :FLAMEPLATE   => 2,
-    :GRISEOUSORB  => 3,
-    :HARDSTONE    => 2,
-    :ICICLEPLATE  => 2,
-    :INSECTPLATE  => 2,
-    :IRONBALL     => -4,
-    :IRONPLATE    => 2,
-    :LAGGINGTAIL  => -2,
-    :LEFTOVERS    => 4,
-    :LIFEORB      => 3,
-    :LIGHTBALL    => 4,
-    :LUSTROUSORB  => 3,
-    :MAGNET       => 2,
-    :MEADOWPLATE  => 2,
-    :METALCOAT    => 2,
-    :METRONOME    => 1,
-    :MINDPLATE    => 2,
-    :MIRACLESEED  => 2,
-    :MUSCLEBAND   => 2,
-    :MYSTICWATER  => 2,
-    :NEVERMELTICE => 2,
-    :ODDINCENSE   => 2,
-    :PIXIEPLATE   => 2,
-    :POISONBARB   => 2,
-    :ROCKINCENSE  => 2,
-    :ROSEINCENSE  => 2,
-    :SEAINCENSE   => 2,
-    :SHARPBEAK    => 2,
-    :SILKSCARF    => 2,
-    :SILVERPOWDER => 2,
-    :SKYPLATE     => 2,
-    :SOFTSAND     => 2,
-    :SOULDEW      => 3,
-    :SPELLTAG     => 2,
-    :SPLASHPLATE  => 2,
-    :SPOOKYPLATE  => 2,
-    :STICKYBARB   => -2,
-    :STONEPLATE   => 2,
-    :THICKCLUB    => 4,
-    :TOXICORB     => -4,
-    :TOXICPLATE   => 2,
-    :TWISTEDSPOON => 2,
-    :WAVEINCENSE  => 2,
-    :WISEGLASSES  => 2,
-    :ZAPPLATE     => 2
-  }
+  # Returns a value indicating how beneficial the given ability will be to this
+  # battler if it has it.
+  # Return values are typically between -10 and +10. 0 is indifferent, positive
+  # values mean this battler benefits, negative values mean this battler suffers.
+  # NOTE: This method assumes the ability isn't being negated. The calculations
+  #       that call this method separately check for it being negated, because
+  #       they need to do something special in that case.
+  def wants_ability?(ability = :NONE)
+    ability = ability.id if !ability.is_a?(Symbol) && ability.respond_to?("id")
+    # Get the base ability rating
+    ret = 0
+    Battle::AI::BASE_ABILITY_RATINGS.each_pair do |val, abilities|
+      next if !abilities.include?(ability)
+      ret = val
+      break
+    end
+    # Modify the rating based on ability-specific contexts
+    ret = Battle::AI::Handlers.modify_ability_ranking(ability, ret, self, @ai)
+    return ret
+  end
+
+  #-----------------------------------------------------------------------------
 
   # Returns a value indicating how beneficial the given item will be to this
   # battler if it is holding it.
   # Return values are typically between -10 and +10. 0 is indifferent, positive
   # values mean this battler benefits, negative values mean this battler suffers.
+  # TODO: This method shouldn't check for item effect negation, to work the same
+  #       as def wants_ability?.
   def wants_item?(item)
     item = :NONE if !item
     item = item.id if !item.is_a?(Symbol) && item.respond_to?("id")
     return 0 if has_active_ability?(:KLUTZ)
     # TODO: Unnerve, other item-negating effects.
-    ret = BASE_ITEM_RATINGS[item] || 0
-    # TODO: Add more context-sensitive modifications to the ratings from above.
-    #       Should they be moved into a handler?
-    case item
-    when :ADAMANTORB
-      ret = 0 if !battler.isSpecies?(:DIALGA) || !has_damaging_move_of_type?(:DRAGON, :STEEL)
-    when :BLACKBELT, :BLACKGLASSES, :CHARCOAL, :DRAGONFANG, :HARDSTONE, :MAGNET,
-         :METALCOAT, :MIRACLESEED, :MYSTICWATER, :NEVERMELTICE, :POISONBARB,
-         :SHARPBEAK, :SILKSCARF, :SILVERPOWDER, :SOFTSAND, :SPELLTAG,
-         :TWISTEDSPOON,
-         :DRACOPLATE, :DREADPLATE, :EARTHPLATE, :FISTPLATE, :FLAMEPLATE,
-         :ICICLEPLATE, :INSECTPLATE, :IRONPLATE, :MEADOWPLATE, :MINDPLATE,
-         :PIXIEPLATE, :SKYPLATE, :SPLASHPLATE, :SPOOKYPLATE, :STONEPLATE,
-         :TOXICPLATE, :ZAPPLATE,
-         :ODDINCENSE, :ROCKINCENSE, :ROSEINCENSE, :SEAINCENSE, :WAVEINCENSE
-      boosted_type = {
-        :BLACKBELT    => :FIGHTING,
-        :BLACKGLASSES => :DARK,
-        :CHARCOAL     => :FIRE,
-        :DRAGONFANG   => :DRAGON,
-        :HARDSTONE    => :ROCK,
-        :MAGNET       => :ELECTRIC,
-        :METALCOAT    => :STEEL,
-        :MIRACLESEED  => :GRASS,
-        :MYSTICWATER  => :WATER,
-        :NEVERMELTICE => :ICE,
-        :POISONBARB   => :POISON,
-        :SHARPBEAK    => :FLYING,
-        :SILKSCARF    => :NORMAL,
-        :SILVERPOWDER => :BUG,
-        :SOFTSAND     => :GROUND,
-        :SPELLTAG     => :GHOST,
-        :TWISTEDSPOON => :PSYCHIC,
-        :DRACOPLATE   => :DRAGON,
-        :DREADPLATE   => :DARK,
-        :EARTHPLATE   => :GROUND,
-        :FISTPLATE    => :FIGHTING,
-        :FLAMEPLATE   => :FIRE,
-        :ICICLEPLATE  => :ICE,
-        :INSECTPLATE  => :BUG,
-        :IRONPLATE    => :STEEL,
-        :MEADOWPLATE  => :GRASS,
-        :MINDPLATE    => :PSYCHIC,
-        :PIXIEPLATE   => :FAIRY,
-        :SKYPLATE     => :FLYING,
-        :SPLASHPLATE  => :WATER,
-        :SPOOKYPLATE  => :GHOST,
-        :STONEPLATE   => :ROCK,
-        :TOXICPLATE   => :POISON,
-        :ZAPPLATE     => :ELECTRIC,
-        :ODDINCENSE   => :PSYCHIC,
-        :ROCKINCENSE  => :ROCK,
-        :ROSEINCENSE  => :GRASS,
-        :SEAINCENSE   => :WATER,
-        :WAVEINCENSE  => :WATER
-      }[item]
-      ret = 0 if !has_damaging_move_of_type?(boosted_type)
-    when :BLACKSLUDGE
-      ret = 4 if has_type?(:POISON)
-    when :CHOICEBAND, :MUSCLEBAND
-      ret = 0 if !check_for_move { |m| m.physicalMove?(m.type) }
-    when :CHOICESPECS, :WISEGLASSES
-      ret = 0 if !check_for_move { |m| m.specialMove?(m.type) }
-    when :DEEPSEATOOTH
-      ret = 0 if !battler.isSpecies?(:CLAMPERL) || !check_for_move { |m| m.specialMove?(m.type) }
-    when :GRISEOUSORB
-      ret = 0 if !battler.isSpecies?(:GIRATINA) || !has_damaging_move_of_type?(:DRAGON, :GHOST)
-    when :IRONBALL
-      ret = 0 if has_move_with_function?("ThrowUserItemAtTarget")
-    when :LIGHTBALL
-      ret = 0 if !battler.isSpecies?(:PIKACHU) || !check_for_move { |m| m.damagingMove? }
-    when :LUSTROUSORB
-      ret = 0 if !battler.isSpecies?(:PALKIA) || !has_damaging_move_of_type?(:DRAGON, :WATER)
-    when :SOULDEW
-      if !battler.isSpecies?(:LATIAS) && !battler.isSpecies?(:LATIOS)
-        ret = 0
-      elsif Settings::SOUL_DEW_POWERS_UP_TYPES
-        ret = 0 if !has_damaging_move_of_type?(:PSYCHIC, :DRAGON)
-      else
-        ret -= 2 if !check_for_move { |m| m.specialMove?(m.type) }   # Also boosts SpDef
-      end
-    when :THICKCLUB
-      ret = 0 if (!battler.isSpecies?(:CUBONE) && !battler.isSpecies?(:MAROWAK)) ||
-                 !check_for_move { |m| m.physicalMove?(m.type) }
+    # Get the base item rating
+    ret = 0
+    Battle::AI::BASE_ITEM_RATINGS.each_pair do |val, items|
+      next if !items.include?(item)
+      ret = val
+      break
     end
+    # Modify the rating based on item-specific contexts
+    ret = Battle::AI::Handlers.modify_item_ranking(item, ret, self, @ai)
     # Prefer if this battler knows Fling and it will do a lot of damage/have an
     # additional (negative) effect when flung
     if item != :NONE && has_move_with_function?("ThrowUserItemAtTarget")
@@ -655,339 +543,6 @@ class Battle::AI::AIBattler
       ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && has_active_ability?(:RIPEN)
     end
     ret = 0 if ret < 0 && !try_preserving_item
-    return ret
-  end
-
-  #-----------------------------------------------------------------------------
-
-  # These values are taken from the Complete-Fire-Red-Upgrade decomp here:
-  # https://github.com/Skeli789/Complete-Fire-Red-Upgrade/blob/f7f35becbd111c7e936b126f6328fc52d9af68c8/src/ability_battle_effects.c#L41
-  BASE_ABILITY_RATINGS = {
-    :ADAPTABILITY       => 8,
-    :AERILATE           => 8,
-    :AFTERMATH          => 5,
-    :AIRLOCK            => 5,
-    :ANALYTIC           => 5,
-    :ANGERPOINT         => 4,
-    :ANTICIPATION       => 0,
-    :ARENATRAP          => 9,
-    :AROMAVEIL          => 3,
-#    :ASONECHILLINGNEIGH => 0,
-#    :ASONEGRIMNEIGH     => 0,
-    :AURABREAK          => 3,
-    :BADDREAMS          => 4,
-#    :BALLFETCH          => 0,
-#    :BATTERY            => 0,
-    :BATTLEARMOR        => 2,
-    :BATTLEBOND         => 6,
-    :BEASTBOOST         => 7,
-    :BERSERK            => 5,
-    :BIGPECKS           => 1,
-    :BLAZE              => 5,
-    :BULLETPROOF        => 7,
-    :CHEEKPOUCH         => 4,
-#    :CHILLINGNEIGH      => 0,
-    :CHLOROPHYLL        => 6,
-    :CLEARBODY          => 4,
-    :CLOUDNINE          => 5,
-    :COLORCHANGE        => 2,
-    :COMATOSE           => 6,
-    :COMPETITIVE        => 5,
-    :COMPOUNDEYES       => 7,
-    :CONTRARY           => 8,
-    :CORROSION          => 5,
-    :COTTONDOWN         => 3,
-#    :CURIOUSMEDICINE    => 0,
-    :CURSEDBODY         => 4,
-    :CUTECHARM          => 2,
-    :DAMP               => 2,
-    :DANCER             => 5,
-    :DARKAURA           => 6,
-    :DAUNTLESSSHIELD    => 3,
-    :DAZZLING           => 5,
-    :DEFEATIST          => -1,
-    :DEFIANT            => 5,
-    :DELTASTREAM        => 10,
-    :DESOLATELAND       => 10,
-    :DISGUISE           => 8,
-    :DOWNLOAD           => 7,
-    :DRAGONSMAW         => 8,
-    :DRIZZLE            => 9,
-    :DROUGHT            => 9,
-    :DRYSKIN            => 6,
-    :EARLYBIRD          => 4,
-    :EFFECTSPORE        => 4,
-    :ELECTRICSURGE      => 8,
-    :EMERGENCYEXIT      => 3,
-    :FAIRYAURA          => 6,
-    :FILTER             => 6,
-    :FLAMEBODY          => 4,
-    :FLAREBOOST         => 5,
-    :FLASHFIRE          => 6,
-    :FLOWERGIFT         => 4,
-#    :FLOWERVEIL         => 0,
-    :FLUFFY             => 5,
-    :FORECAST           => 6,
-    :FOREWARN           => 0,
-#    :FRIENDGUARD        => 0,
-    :FRISK              => 0,
-    :FULLMETALBODY      => 4,
-    :FURCOAT            => 7,
-    :GALEWINGS          => 6,
-    :GALVANIZE          => 8,
-    :GLUTTONY           => 3,
-    :GOOEY              => 5,
-    :GORILLATACTICS     => 4,
-    :GRASSPELT          => 2,
-    :GRASSYSURGE        => 8,
-#    :GRIMNEIGH          => 0,
-    :GULPMISSLE         => 3,
-    :GUTS               => 6,
-    :HARVEST            => 5,
-#    :HEALER             => 0,
-    :HEATPROOF          => 5,
-    :HEAVYMETAL         => -1,
-#    :HONEYGATHER        => 0,
-    :HUGEPOWER          => 10,
-    :HUNGERSWITCH       => 2,
-    :HUSTLE             => 7,
-    :HYDRATION          => 4,
-    :HYPERCUTTER        => 3,
-    :ICEBODY            => 3,
-    :ICEFACE            => 4,
-    :ICESCALES          => 7,
-#    :ILLUMINATE         => 0,
-    :ILLUSION           => 8,
-    :IMMUNITY           => 4,
-    :IMPOSTER           => 9,
-    :INFILTRATOR        => 6,
-    :INNARDSOUT         => 5,
-    :INNERFOCUS         => 2,
-    :INSOMNIA           => 4,
-    :INTIMIDATE         => 7,
-    :INTREPIDSWORD      => 3,
-    :IRONBARBS          => 6,
-    :IRONFIST           => 6,
-    :JUSTIFIED          => 4,
-    :KEENEYE            => 1,
-    :KLUTZ              => -1,
-    :LEAFGUARD          => 2,
-    :LEVITATE           => 7,
-    :LIBERO             => 8,
-    :LIGHTMETAL         => 2,
-    :LIGHTNINGROD       => 7,
-    :LIMBER             => 3,
-    :LIQUIDOOZE         => 3,
-    :LIQUIDVOICE        => 5,
-    :LONGREACH          => 3,
-    :MAGICBOUNCE        => 9,
-    :MAGICGUARD         => 9,
-    :MAGICIAN           => 3,
-    :MAGMAARMOR         => 1,
-    :MAGNETPULL         => 9,
-    :MARVELSCALE        => 5,
-    :MEGALAUNCHER       => 7,
-    :MERCILESS          => 4,
-    :MIMICRY            => 2,
-#    :MINUS              => 0,
-    :MIRRORARMOR        => 6,
-    :MISTYSURGE         => 8,
-    :MOLDBREAKER        => 7,
-    :MOODY              => 10,
-    :MOTORDRIVE         => 6,
-    :MOXIE              => 7,
-    :MULTISCALE         => 8,
-    :MULTITYPE          => 8,
-    :MUMMY              => 5,
-    :NATURALCURE        => 7,
-    :NEUROFORCE         => 6,
-    :NEUTRALIZINGGAS    => 5,
-    :NOGUARD            => 8,
-    :NORMALIZE          => -1,
-    :OBLIVIOUS          => 2,
-    :OVERCOAT           => 5,
-    :OVERGROW           => 5,
-    :OWNTEMPO           => 3,
-    :PARENTALBOND       => 10,
-    :PASTELVEIL         => 4,
-    :PERISHBODY         => -1,
-    :PICKPOCKET         => 3,
-    :PICKUP             => 1,
-    :PIXILATE           => 8,
-#    :PLUS               => 0,
-    :POISONHEAL         => 8,
-    :POISONPOINT        => 4,
-    :POISONTOUCH        => 4,
-    :POWERCONSTRUCT     => 10,
-#    :POWEROFALCHEMY     => 0,
-    :POWERSPOT          => 2,
-    :PRANKSTER          => 8,
-    :PRESSURE           => 5,
-    :PRIMORDIALSEA      => 10,
-    :PRISMARMOR         => 6,
-    :PROPELLORTAIL      => 2,
-    :PROTEAN            => 8,
-    :PSYCHICSURGE       => 8,
-    :PUNKROCK           => 2,
-    :PUREPOWER          => 10,
-    :QUEENLYMAJESTY     => 6,
-#    :QUICKDRAW          => 0,
-    :QUICKFEET          => 5,
-    :RAINDISH           => 3,
-    :RATTLED            => 3,
-#    :RECEIVER           => 0,
-    :RECKLESS           => 6,
-    :REFRIGERATE        => 8,
-    :REGENERATOR        => 8,
-    :RIPEN              => 4,
-    :RIVALRY            => 1,
-    :RKSSYSTEM          => 8,
-    :ROCKHEAD           => 5,
-    :ROUGHSKIN          => 6,
-#    :RUNAWAY            => 0,
-    :SANDFORCE          => 4,
-    :SANDRUSH           => 6,
-    :SANDSPIT           => 5,
-    :SANDSTREAM         => 9,
-    :SANDVEIL           => 3,
-    :SAPSIPPER          => 7,
-    :SCHOOLING          => 6,
-    :SCRAPPY            => 6,
-    :SCREENCLEANER      => 3,
-    :SERENEGRACE        => 8,
-    :SHADOWSHIELD       => 8,
-    :SHADOWTAG          => 10,
-    :SHEDSKIN           => 7,
-    :SHEERFORCE         => 8,
-    :SHELLARMOR         => 2,
-    :SHIELDDUST         => 5,
-    :SHIELDSDOWN        => 6,
-    :SIMPLE             => 8,
-    :SKILLLINK          => 7,
-    :SLOWSTART          => -2,
-    :SLUSHRUSH          => 5,
-    :SNIPER             => 3,
-    :SNOWCLOAK          => 3,
-    :SNOWWARNING        => 8,
-    :SOLARPOWER         => 3,
-    :SOLIDROCK          => 6,
-    :SOULHEART          => 7,
-    :SOUNDPROOF         => 4,
-    :SPEEDBOOST         => 9,
-    :STAKEOUT           => 6,
-    :STALL              => -1,
-    :STALWART           => 2,
-    :STAMINA            => 6,
-    :STANCECHANGE       => 10,
-    :STATIC             => 4,
-    :STEADFAST          => 2,
-    :STEAMENGINE        => 3,
-    :STEELWORKER        => 6,
-    :STEELYSPIRIT       => 2,
-    :STENCH             => 1,
-    :STICKYHOLD         => 3,
-    :STORMDRAIN         => 7,
-    :STRONGJAW          => 6,
-    :STURDY             => 6,
-    :SUCTIONCUPS        => 2,
-    :SUPERLUCK          => 3,
-    :SURGESURFER        => 4,
-    :SWARM              => 5,
-    :SWEETVEIL          => 4,
-    :SWIFTSWIM          => 6,
-#    :SYMBIOSIS          => 0,
-    :SYNCHRONIZE        => 4,
-    :TANGLEDFEET        => 2,
-    :TANGLINGHAIR       => 5,
-    :TECHNICIAN         => 8,
-#    :TELEPATHY          => 0,
-    :TERAVOLT           => 7,
-    :THICKFAT           => 7,
-    :TINTEDLENS         => 7,
-    :TORRENT            => 5,
-    :TOUGHCLAWS         => 7,
-    :TOXICBOOST         => 6,
-    :TRACE              => 6,
-    :TRANSISTOR         => 8,
-    :TRIAGE             => 7,
-    :TRUANT             => -2,
-    :TURBOBLAZE         => 7,
-    :UNAWARE            => 6,
-    :UNBURDEN           => 7,
-    :UNNERVE            => 3,
-#    :UNSEENFIST         => 0,
-    :VICTORYSTAR        => 6,
-    :VITALSPIRIT        => 4,
-    :VOLTABSORB         => 7,
-    :WANDERINGSPIRIT    => 2,
-    :WATERABSORB        => 7,
-    :WATERBUBBLE        => 8,
-    :WATERCOMPACTION    => 4,
-    :WATERVEIL          => 4,
-    :WEAKARMOR          => 2,
-    :WHITESMOKE         => 4,
-    :WIMPOUT            => 3,
-    :WONDERGUARD        => 10,
-    :WONDERSKIN         => 4,
-    :ZENMODE            => -1
-  }
-
-  # Returns a value indicating how beneficial the given ability will be to this
-  # battler if it has it.
-  # Return values are typically between -10 and +10. 0 is indifferent, positive
-  # values mean this battler benefits, negative values mean this battler suffers.
-  # NOTE: This method assumes the ability isn't being negated. The calculations
-  #       that call this method separately check for it being negated, because
-  #       they need to do something special in that case.
-  def wants_ability?(ability = :NONE)
-    ability = ability.id if !ability.is_a?(Symbol) && ability.respond_to?("id")
-    ret = BASE_ABILITY_RATINGS[ability] || 0
-    # TODO: Add more context-sensitive modifications to the ratings from above.
-    #       Should they be moved into a handler?
-    case ability
-    when :BLAZE
-      ret = 0 if !has_damaging_move_of_type?(:FIRE)
-    when :CUTECHARM, :RIVALRY
-      ret = 0 if gender == 2
-    when :FRIENDGUARD, :HEALER, :SYMBOISIS, :TELEPATHY
-      has_ally = false
-      @ai.each_ally(@side) { |b, i| has_ally = true }
-      ret = 0 if !has_ally
-    when :GALEWINGS
-      ret = 0 if !check_for_move { |m| m.type == :FLYING }
-    when :HUGEPOWER, :PUREPOWER
-      ret = 0 if !@ai.stat_raise_worthwhile?(self, :ATTACK, true)
-    when :IRONFIST
-      ret = 0 if !check_for_move { |m| m.punchingMove? }
-    when :LIQUIDVOICE
-      ret = 0 if !check_for_move { |m| m.soundMove? }
-    when :MEGALAUNCHER
-      ret = 0 if !check_for_move { |m| m.pulseMove? }
-    when :OVERGROW
-      ret = 0 if !has_damaging_move_of_type?(:GRASS)
-    when :PRANKSTER
-      ret = 0 if !check_for_move { |m| m.statusMove? }
-    when :PUNKROCK
-      ret = 1 if !check_for_move { |m| m.damagingMove? && m.soundMove? }
-    when :RECKLESS
-      ret = 0 if !check_for_move { |m| m.recoilMove? }
-    when :ROCKHEAD
-      ret = 0 if !check_for_move { |m| m.recoilMove? && !m.is_a?(Battle::Move::CrashDamageIfFailsUnusableInGravity) }
-    when :RUNAWAY
-      ret = 0 if wild?
-    when :SANDFORCE
-      ret = 2 if !has_damaging_move_of_type?(:GROUND, :ROCK, :STEEL)
-    when :SKILLLINK
-      ret = 0 if !check_for_move { |m| m.is_a?(Battle::Move::HitTwoToFiveTimes) }
-    when :STEELWORKER
-      ret = 0 if !has_damaging_move_of_type?(:STEEL)
-    when :SWARM
-      ret = 0 if !has_damaging_move_of_type?(:BUG)
-    when :TORRENT
-      ret = 0 if !has_damaging_move_of_type?(:WATER)
-    when :TRIAGE
-      ret = 0 if !check_for_move { |m| m.healingMove? }
-    end
     return ret
   end
 

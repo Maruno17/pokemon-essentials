@@ -159,8 +159,9 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartTargetCannotUseIte
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartTargetCannotUseItem",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.item || !target.item_active?
-    # TODO: Useless if target's item cannot be negated or it has no effect.
+    # TODO: Useless if target's item cannot be negated.
     item_score = target.wants_item?(target.item_id)
+    next Battle::AI::MOVE_USELESS_SCORE if item_score <= 0   # Item has no effect or is bad
     score += item_score * 2
     next score
   }

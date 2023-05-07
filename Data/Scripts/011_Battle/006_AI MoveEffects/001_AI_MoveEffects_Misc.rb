@@ -138,10 +138,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfUserDamagedThisTu
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfTargetActed",
   proc { |score, move, user, target, ai, battle|
-    # Check whether user is faster than its foe(s) and could use this move
+    # Check whether user is faster than the target and could use this move
     next Battle::AI::MOVE_USELESS_SCORE if target.faster_than?(user)
-    # TODO: Predict the target switching/using an item.
-    # TODO: Predict the target using a damaging move or Me First.
+    # Check whether the target has any damaging moves it could use
+    next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.damagingMove? }
     # Don't risk using this move if target is weak
     if ai.trainer.has_skill_flag?("HPAware")
       score -= 10 if target.hp <= target.totalhp / 2
@@ -157,7 +157,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FailsIfTargetActed",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CrashDamageIfFailsUnusableInGravity",
   proc { |score, move, user, target, ai, battle|
     if user.battler.takesIndirectDamage?
-      score -= (0.4 * (100 - move.rough_accuracy)).to_i   # -0 (100%) to -40 (1%)
+      score -= (0.6 * (100 - move.rough_accuracy)).to_i   # -0 (100%) to -60 (1%)
     end
     next score
   }
@@ -367,17 +367,9 @@ Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
       next if !pkmn || !pkmn.able? || inBattleIndices.include?(idxParty)
       if ai.trainer.medium_skill?
-        # Check affected by entry hazard
         next if pkmn.hasItem?(:HEAVYDUTYBOOTS)
-        # Check can take indirect damage
+        next if ai.pokemon_airborne?(pkmn)
         next if pkmn.hasAbility?(:MAGICGUARD)
-        # Check airborne
-        if !pkmn.hasItem?(:IRONBALL) &&
-           battle.field.effects[PBEffects::Gravity] == 0
-          next if pkmn.hasType?(:FLYING)
-          next if pkmn.hasAbility?(:LEVITATE)
-          next if pkmn.hasItem?(:AIRBALLOON)
-        end
       end
       foe_reserves.push(pkmn)   # pkmn will be affected by Spikes
     end
@@ -403,25 +395,9 @@ Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
       next if !pkmn || !pkmn.able? || inBattleIndices.include?(idxParty)
       if ai.trainer.medium_skill?
-        # Check affected by entry hazard
         next if pkmn.hasItem?(:HEAVYDUTYBOOTS)
-        # Check pkmn's immunity to being poisoned
-        next if battle.field.terrain == :Misty
-        next if pkmn.hasType?(:POISON)
-        next if pkmn.hasType?(:STEEL)
-        next if pkmn.hasAbility?(:IMMUNITY)
-        next if pkmn.hasAbility?(:PASTELVEIL)
-        next if pkmn.hasAbility?(:FLOWERVEIL) && pkmn.hasType?(:GRASS)
-        next if pkmn.hasAbility?(:LEAFGUARD) && [:Sun, :HarshSun].include?(battle.pbWeather)
-        next if pkmn.hasAbility?(:COMATOSE) && pkmn.isSpecies?(:KOMALA)
-        next if pkmn.hasAbility?(:SHIELDSDOWN) && pkmn.isSpecies?(:MINIOR) && pkmn.form < 7
-        # Check airborne
-        if !pkmn.hasItem?(:IRONBALL) &&
-           battle.field.effects[PBEffects::Gravity] == 0
-          next if pkmn.hasType?(:FLYING)
-          next if pkmn.hasAbility?(:LEVITATE)
-          next if pkmn.hasItem?(:AIRBALLOON)
-        end
+        next if ai.pokemon_airborne?(pkmn)
+        next if !ai.pokemon_can_be_poisoned?(pkmn)
       end
       foe_reserves.push(pkmn)   # pkmn will be affected by Toxic Spikes
     end
@@ -447,9 +423,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
       next if !pkmn || !pkmn.able? || inBattleIndices.include?(idxParty)
       if ai.trainer.medium_skill?
-        # Check affected by entry hazard
         next if pkmn.hasItem?(:HEAVYDUTYBOOTS)
-        # Check can take indirect damage
         next if pkmn.hasAbility?(:MAGICGUARD)
       end
       foe_reserves.push(pkmn)   # pkmn will be affected by Stealth Rock
@@ -475,15 +449,8 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStickyWebToFoeSide",
     battle.pbParty(user.idxOpposingSide).each_with_index do |pkmn, idxParty|
       next if !pkmn || !pkmn.able? || inBattleIndices.include?(idxParty)
       if ai.trainer.medium_skill?
-        # Check affected by entry hazard
         next if pkmn.hasItem?(:HEAVYDUTYBOOTS)
-        # Check airborne
-        if !pkmn.hasItem?(:IRONBALL) &&
-           battle.field.effects[PBEffects::Gravity] == 0
-          next if pkmn.hasType?(:FLYING)
-          next if pkmn.hasAbility?(:LEVITATE)
-          next if pkmn.hasItem?(:AIRBALLOON)
-        end
+        next if ai.pokemon_airborne?(pkmn)
       end
       foe_reserves.push(pkmn)   # pkmn will be affected by Sticky Web
     end

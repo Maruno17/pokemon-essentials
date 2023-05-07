@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::AI
   MOVE_FAIL_SCORE    = 20
   MOVE_USELESS_SCORE = 60   # Move predicted to do nothing or just be detrimental
@@ -58,8 +61,6 @@ class Battle::AI
         @battle.allBattlers.each do |b|
           next if redirected_target && b.index != redirected_target
           next if !@battle.pbMoveCanTarget?(@user.battler.index, b.index, target_data)
-          # TODO: Should this sometimes consider targeting an ally? See def
-          #       pbGetMoveScoreAgainstTarget for more information.
           next if target_data.targets_foe && !@user.battler.opposes?(b)
           PBDebug.log_ai("#{@user.name} is considering using #{orig_move.name} against #{b.name} (#{b.index})...")
           score = MOVE_BASE_SCORE
@@ -199,9 +200,6 @@ class Battle::AI
     return true if @battle.field.terrain == :Psychic && @target.battler.affectedByTerrain? &&
                    @target.opposes?(@user) && @move.rough_priority(@user) > 0
     # Immunity because of ability
-    # TODO: If an ally has such an ability, may want to just not prefer the move
-    #       instead of predicting its failure, as might want to hit the ally
-    #       after all.
     return true if @move.move.pbImmunityByAbility(@user.battler, @target.battler, false)
     # Immunity because of Dazzling/Queenly Majesty
     if @move.rough_priority(@user) > 0 && @target.opposes?(@user)
@@ -293,15 +291,6 @@ class Battle::AI
   # means the move will fail or do nothing against the target.
   # Assumes def set_up_move_check and def set_up_move_check_target have
   # previously been called.
-  # TODO: Add something in here (I think) to specially score moves used against
-  #       an ally and the ally has an ability that will benefit from being hit
-  #       by the move.
-  # TODO: The above also applies if the move is Heal Pulse or a few other moves
-  #       like that, which CAN target a foe but you'd never do so. Maybe use a
-  #       move flag to determine such moves? The implication is that such moves
-  #       wouldn't apply the "185 - score" bit, which would make their
-  #       MoveHandlers do the opposite calculations to other moves with the same
-  #       targets, but is this desirable?
   def pbGetMoveScoreAgainstTarget
     # Predict whether the move will fail against the target
     if @trainer.has_skill_flag?("PredictMoveFailure") && pbPredictMoveFailureAgainstTarget
@@ -327,9 +316,8 @@ class Battle::AI
         PBDebug.log("     move is useless against #{@target.name}")
         return -1
       end
-      # TODO: Is this reversal of the score okay?
       old_score = score
-      score = 185 - score
+      score = ((1.85 * MOVE_BASE_SCORE) - score).to_i
       PBDebug.log_score_change(score - old_score, "score inverted (move targets ally but can target foe)")
     end
     return score

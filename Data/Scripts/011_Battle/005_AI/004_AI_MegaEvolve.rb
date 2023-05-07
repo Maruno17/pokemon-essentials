@@ -1,7 +1,8 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::AI
   # Decide whether the opponent should Mega Evolve.
-  # TODO: Where relevant, pretend the user is Mega Evolved if it isn't but can
-  #       be.
   def pbEnemyShouldMegaEvolve?
     if @battle.pbCanMegaEvolve?(@user.index)   # Simple "always should if possible"
       PBDebug.log_ai("#{@user.name} will Mega Evolve")

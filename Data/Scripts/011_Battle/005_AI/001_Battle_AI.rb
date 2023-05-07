@@ -94,6 +94,8 @@ module Battle::AI::Handlers
   GeneralMoveAgainstTargetScore = HandlerHash.new
   ShouldSwitch                  = HandlerHash.new
   ShouldNotSwitch               = HandlerHash.new
+  AbilityRanking                = AbilityHandlerHash.new
+  ItemRanking                   = ItemHandlerHash.new
 
   def self.move_will_fail?(function_code, *args)
     return MoveFailureCheck.trigger(function_code, *args) || false
@@ -150,5 +152,15 @@ module Battle::AI::Handlers
       break if ret
     end
     return ret
+  end
+
+  def self.modify_ability_ranking(ability, score, *args)
+    ret = AbilityRanking.trigger(ability, score, *args)
+    return (ret.nil?) ? score : ret
+  end
+
+  def self.modify_item_ranking(item, score, *args)
+    ret = ItemRanking.trigger(item, score, *args)
+    return (ret.nil?) ? score : ret
   end
 end

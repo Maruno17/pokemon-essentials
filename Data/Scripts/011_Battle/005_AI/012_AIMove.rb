@@ -17,29 +17,13 @@ class Battle::AI::AIMove
 
   #-----------------------------------------------------------------------------
 
-  # pp
-  # totalpp
-  # priority
-  # usableWhenAsleep?
-  # thawsUser?
-  # flinchingMove?
-  # tramplesMinimize?
-  # hitsFlyingTargets?
-  # canMagicCoat?
-  # soundMove?
-  # bombMove?
-  # powderMove?
-  # ignoresSubstitute?
-  # highCriticalRate?
-  # ignoresReflect?
-
-  def id;            return @move.id;            end
-  def name;          return @move.name;          end
+  def id;                            return @move.id;                      end
+  def name;                          return @move.name;                    end
   def physicalMove?(thisType = nil); return @move.physicalMove?(thisType); end
   def specialMove?(thisType = nil);  return @move.specialMove?(thisType);  end
-  def damagingMove?; return @move.damagingMove?; end
-  def statusMove?;   return @move.statusMove?;   end
-  def function;      return @move.function;      end
+  def damagingMove?;                 return @move.damagingMove?;           end
+  def statusMove?;                   return @move.statusMove?;             end
+  def function;                      return @move.function;                end
 
   #-----------------------------------------------------------------------------
 
@@ -177,7 +161,7 @@ class Battle::AI::AIMove
       when :SNIPER
         multipliers[:final_damage_multiplier] *= 1.5 if is_critical
       when :STAKEOUT
-        # TODO: multipliers[:attack_multiplier] *= 2 if target switches out
+        # NOTE: Can't predict whether the target will switch out this round.
       when :TINTEDLENS
         if Effectiveness.resistant_type?(calc_type, *target.pbTypes(true))
           multipliers[:final_damage_multiplier] *= 2
@@ -246,8 +230,7 @@ class Battle::AI::AIMove
     if user.has_active_ability?(:PARENTALBOND)
       multipliers[:power_multiplier] *= (Settings::MECHANICS_GENERATION >= 7) ? 1.25 : 1.5
     end
-    # Me First
-    # TODO
+    # Me First - n/a because can't predict the move Me First will use
     # Helping Hand - n/a
     # Charge
     if @ai.trainer.medium_skill? &&
@@ -376,10 +359,10 @@ class Battle::AI::AIMove
     if @ai.trainer.medium_skill? && target.effects[PBEffects::Minimize] && @move.tramplesMinimize?
       multipliers[:final_damage_multiplier] *= 2
     end
-    # Move-specific base damage modifiers
-    # TODO
-    # Move-specific final damage modifiers
-    # TODO
+    # NOTE: No need to check pbBaseDamageMultiplier, as it's already accounted
+    #       for in an AI's MoveBasePower handler or can't be checked now anyway.
+    # NOTE: No need to check pbModifyDamage, as it's already accounted for in an
+    #       AI's MoveBasePower handler.
     ##### Main damage calculation #####
     base_dmg = [(base_dmg * multipliers[:power_multiplier]).round, 1].max
     atk      = [(atk      * multipliers[:attack_multiplier]).round, 1].max

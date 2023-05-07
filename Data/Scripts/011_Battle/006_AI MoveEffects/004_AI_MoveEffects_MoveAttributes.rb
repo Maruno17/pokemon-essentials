@@ -559,7 +559,6 @@ Battle::AI::Handlers::MoveEffectScore.add("UserEnduresFaintingThisTurn",
     # Don't prefer if the user used a protection move last turn, making this one
     # less likely to work
     score -= (user.effects[PBEffects::ProtectRate] - 1) * 8
-    # TODO: Check for combos with Flail/Endeavor?
     next score
   }
 )
@@ -1353,7 +1352,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("EnsureNextMoveAlwaysHits
       score += 8 if acc <= 50 && acc != 0
       score += 8 if m.is_a?(Battle::Move::OHKO)
     end
-    # TODO: Prefer if target has increased evasion.
+    # Prefer if the target has increased evasion
+    score += 5 * target.stages[:EVASION] if target.stages[:EVASION] > 0
     # Not worth it if the user or the target is at low HP
     if ai.trainer.has_skill_flag?("HPAware")
       score -= 10 if user.hp < user.totalhp / 2
