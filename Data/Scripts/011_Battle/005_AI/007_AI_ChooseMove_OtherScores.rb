@@ -146,34 +146,31 @@ Battle::AI::Handlers::GeneralMoveScore.add(:any_battler_can_Snatch_move,
 
 #===============================================================================
 # Pick a good move for the Choice items.
-# TODO: Review score modifier.
 #===============================================================================
 Battle::AI::Handlers::GeneralMoveScore.add(:good_move_for_choice_item,
   proc { |score, move, user, ai, battle|
-    if ai.trainer.medium_skill?
-      if user.has_active_item?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
-         user.has_active_ability?(:GORILLATACTICS)
-        old_score = score
-        # Really don't prefer status moves (except Trick)
-        if move.statusMove? && move.function != "UserTargetSwapItems"
-          score -= 25
-          PBDebug.log_score_change(score - old_score, "don't want to be Choiced into a status move")
-          next score
-        end
-        # Don't prefer moves which are 0x against at least one type
-        move_type = move.rough_type
-        GameData::Type.each do |type_data|
-          score -= 8 if type_data.immunities.include?(move_type)
-        end
-        # Don't prefer moves with lower accuracy
-        if move.accuracy > 0
-          score -= (0.4 * (100 - move.accuracy)).to_i   # -0 (100%) to -39 (1%)
-        end
-        # Don't prefer moves with low PP
-        score -= 10 if move.move.pp <= 5
-        PBDebug.log_score_change(score - old_score, "move is less suitable to be Choiced into")
-      end
+    next score if !ai.trainer.medium_skill?
+    next score if !user.has_active_item?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) &&
+                  !user.has_active_ability?(:GORILLATACTICS)
+    old_score = score
+    # Really don't prefer status moves (except Trick)
+    if move.statusMove? && move.function != "UserTargetSwapItems"
+      score -= 25
+      PBDebug.log_score_change(score - old_score, "don't want to be Choiced into a status move")
+      next score
     end
+    # Don't prefer moves which are 0x against at least one type
+    move_type = move.rough_type
+    GameData::Type.each do |type_data|
+      score -= 8 if type_data.immunities.include?(move_type)
+    end
+    # Don't prefer moves with lower accuracy
+    if move.accuracy > 0
+      score -= (0.4 * (100 - move.accuracy)).to_i   # -0 (100%) to -39 (1%)
+    end
+    # Don't prefer moves with low PP
+    score -= 10 if move.move.pp <= 5
+    PBDebug.log_score_change(score - old_score, "move is less suitable to be Choiced into")
     next score
   }
 )
@@ -205,22 +202,42 @@ Battle::AI::Handlers::GeneralMoveScore.add(:damaging_move_and_either_side_no_res
 )
 
 #===============================================================================
-#
+# Don't prefer Fire-type moves if target knows Powder and is faster than the
+# user.
 #===============================================================================
-# TODO: Don't prefer Fire-type moves if target has previously used Powder and is
-#       faster than the user.
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:target_can_powder_fire_moves,
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.high_skill? && move.rough_type == :FIRE &&
+       target.has_move_with_function?("TargetNextFireMoveDamagesTarget") &&
+       target.faster_than?(user)
+      old_score = score
+      score -= 5   # Only 5 because we're not sure target will use Powder
+      PBDebug.log_score_change(score - old_score, "target knows Powder and could negate Fire moves")
+    end
+    next score
+  }
+)
 
 #===============================================================================
-#
+# Don't prefer moves if target knows a move that can make them Electric-type,
+# and if target is unaffected by Electric moves.
 #===============================================================================
-# TODO: Don't prefer Normal-type moves if target has previously used Ion Deluge
-#       and is immune to Electric moves.
-
-#===============================================================================
-#
-#===============================================================================
-# TODO: Don't prefer a move that is stopped by Wide Guard if any foe has
-#       previously used Wide Guard.
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:target_can_make_moves_Electric_and_be_immune,
+  proc { |score, move, user, target, ai, battle|
+    next score if !ai.trainer.high_skill?
+    next score if !target.has_move_with_function?("TargetMovesBecomeElectric") &&
+                  !(move.rough_type == :NORMAL && target.has_move_with_function?("NormalMovesBecomeElectric"))
+    next score if !ai.pokemon_can_absorb_move?(target, move, :ELECTRIC) &&
+                  !Effectiveness.ineffective?(target.effectiveness_of_type_against_battler(:ELECTRIC, user))
+    priority = move.rough_priority(user)
+    if priority > 0 || (priority == 0 && target.faster_than?(user))   # Target goes first
+      old_score = score
+      score -= 5   # Only 5 because we're not sure target will use Electrify/Ion Deluge
+      PBDebug.log_score_change(score - old_score, "target knows Electrify/Ion Deluge and is immune to Electric moves")
+    end
+    next score
+  }
+)
 
 #===============================================================================
 # Don't prefer attacking the target if they'd be semi-invulnerable.
@@ -293,6 +310,12 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:predicted_damage,
           old_score = score
           score += 10
           PBDebug.log_score_change(score - old_score, "predicted to KO the target")
+          if move.move.multiHitMove? && target.hp == target.totalhp &&
+             (target.has_active_ability?(:STURDY) || target.has_active_item?(:FOCUSSASH))
+            old_score = score
+            score += 8
+            PBDebug.log_score_change(score - old_score, "predicted to overcome the target's Sturdy/Focus Sash")
+          end
         end
       end
     end
@@ -313,6 +336,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:external_flinching_effe
         if battle.moldBreaker || !target.has_active_ability?([:INNERFOCUS, :SHIELDDUST])
           old_score = score
           score += 8
+          score += 5 if move.move.multiHitMove?
           PBDebug.log_score_change(score - old_score, "added chance to cause flinching")
         end
       end
@@ -338,25 +362,67 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:thawing_move_against_fr
 )
 
 #===============================================================================
-#
+# Don't prefer a damaging move if it will trigger the target's ability or held
+# item when used, e.g. Effect Spore/Rough Skin, Pickpocket, Rocky Helmet, Red
+# Card.
+# NOTE: These abilities/items may not be triggerable after all (e.g. they
+#       require the move to make contact but it doesn't), or may have a negative
+#       effect for the target (e.g. Air Balloon popping), but it's too much
+#       effort to go into detail deciding all this.
 #===============================================================================
-# TODO: Check all effects that trigger upon using a move, including per-hit
-#       stuff in def pbEffectsOnMakingHit (worse if the move is a multi-hit one)
-#       and end-of-move stuff in def pbEffectsAfterMove.
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:trigger_target_ability_or_item_upon_hit,
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.high_skill? && move.damagingMove? && target.effects[PBEffects::Substitute] == 0
+      if target.ability_active?
+        if Battle::AbilityEffects::OnBeingHit[target.ability] ||
+           (Battle::AbilityEffects::AfterMoveUseFromTarget[target.ability] &&
+           (!user.has_active_ability?(:SHEERFORCE) || move.move.addlEffect == 0))
+          old_score = score
+          score += 8
+          PBDebug.log_score_change(score - old_score, "can trigger the target's ability")
+        end
+      end
+      if target.battler.isSpecies?(:CRAMORANT) && target.ability == :GULPMISSILE &&
+         target.battler.form > 0 && !target.effects[PBEffects::Transform]
+        old_score = score
+        score += 8
+        PBDebug.log_score_change(score - old_score, "can trigger the target's ability")
+      end
+      if target.item_active?
+        if Battle::ItemEffects::OnBeingHit[target.item] ||
+           (Battle::ItemEffects::AfterMoveUseFromTarget[target.item] &&
+           (!user.has_active_ability?(:SHEERFORCE) || move.move.addlEffect == 0))
+          old_score = score
+          score += 8
+          PBDebug.log_score_change(score - old_score, "can trigger the target's item")
+        end
+      end
+    end
+    next score
+  }
+)
 
 #===============================================================================
-#
+# Prefer a damaging move if it will trigger the user's ability when used, e.g.
+# Poison Touch, Magician.
 #===============================================================================
-# TODO: Prefer a contact move if making contact with the target could trigger
-#       an effect that's good for the user (Poison Touch/Pickpocket).
-
-#===============================================================================
-#
-#===============================================================================
-# TODO: Don't prefer contact move if making contact with the target could
-#       trigger an effect that's bad for the user (Static, etc.).
-# => Also check if target has previously used Spiky Shield/King's Shield/
-#    Baneful Bunker, and don't prefer move if so
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:trigger_user_ability_upon_hit,
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.high_skill? && user.ability_active? && move.damagingMove? &&
+       target.effects[PBEffects::Substitute] == 0
+      # NOTE: The only ability with an OnDealingHit effect also requires the
+      #       move to make contact. The only abilities with an OnEndOfUsingMove
+      #       effect revolve around damaging moves.
+      if (Battle::AbilityEffects::OnDealingHit[user.ability] && move.move.contactMove?) ||
+         Battle::AbilityEffects::OnEndOfUsingMove[user.ability]
+        old_score = score
+        score += 8
+        PBDebug.log_score_change(score - old_score, "can trigger the user's ability")
+      end
+    end
+    next score
+  }
+)
 
 #===============================================================================
 # Don't prefer damaging moves that will knock out the target if they are using
@@ -387,10 +453,23 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:knocking_out_a_destiny_
 )
 
 #===============================================================================
-#
+# Don't prefer damaging moves if the target is using Rage, unless the move will
+# deal enough damage to KO the target within two rounds.
 #===============================================================================
-# TODO: Don't prefer damaging moves if the target is using Rage and they benefit
-#       from the raised Attack.
+Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:damaging_a_raging_target,
+  proc { |score, move, user, target, ai, battle|
+    if ai.trainer.medium_skill? && target.effects[PBEffects::Rage] && move.damagingMove?
+      # Worth damaging the target if it can be knocked out within two rounds
+      if ai.trainer.has_skill_flag?("HPAware")
+        next score if (move.rough_damage + target.rough_end_of_round_damage) * 2 > target.hp * 1.1
+      end
+      old_score = score
+      score -= 10
+      PBDebug.log_score_change(score - old_score, "don't want to damage a Raging target")
+    end
+    next score
+  }
+)
 
 #===============================================================================
 # Don't prefer damaging moves if the target is Biding, unless the move will deal

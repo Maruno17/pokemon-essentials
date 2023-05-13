@@ -97,9 +97,7 @@ class Battle::AI
     reserves.sort! { |a, b| b[1] <=> a[1] }   # Sort from highest to lowest rated
     # Don't bother choosing to switch if all replacements are poorly rated
     if @trainer.high_skill? && !mandatory
-      # TODO: Should the current battler be rated as well, to provide a
-      #       threshold instead of using a threshold of 100?
-      return -1 if reserves[0][1] < 100   # Best replacement rated at <100, don't switch
+      return -1 if reserves[0][1] < 100   # If best replacement rated at <100, don't switch
     end
     # Return the party index of the best rated replacement Pokémon
     return reserves[0][0]
@@ -136,9 +134,8 @@ class Battle::AI
     pkmn.moves.each do |m|
       next if m.power == 0 || (m.pp == 0 && m.total_pp > 0)
       @battle.battlers[idxBattler].allOpposing.each do |b|
+        next if pokemon_can_absorb_move?(b.pokemon, m, m.type)
         bTypes = b.pbTypes(true)
-        # TODO: Consider Wonder Guard, Volt Absorb et al. Consider pkmn's
-        #       ability if it changes the user's types or powers up their moves?
         score += m.power * Effectiveness.calculate(m.type, *bTypes) / 10
       end
     end
@@ -175,7 +172,6 @@ end
 
 #===============================================================================
 # Pokémon is about to faint because of Perish Song.
-# TODO: Also switch to remove other negative effects like Disable, Yawn.
 #===============================================================================
 Battle::AI::Handlers::ShouldSwitch.add(:perish_song,
   proc { |battler, reserves, ai, battle|
@@ -443,65 +439,60 @@ Battle::AI::Handlers::ShouldSwitch.add(:battler_is_useless,
 )
 
 #===============================================================================
-# Pokémon can't do anything to a Wonder Guard foe.
-# TODO: Check other abilities that provide immunities?
+# Pokémon can't do anything to any foe because its ability absorbs all damage
+# the Pokémon can deal out.
 #===============================================================================
-Battle::AI::Handlers::ShouldSwitch.add(:foe_has_wonder_guard,
+Battle::AI::Handlers::ShouldSwitch.add(:foe_absorbs_all_moves_with_its_ability,
   proc { |battler, reserves, ai, battle|
+    next false if battler.battler.turnCount < 2   # Don't switch out too quickly
     next false if battler.battler.hasMoldBreaker?
-    non_wonder_guard_foe_exists = false
-    has_super_effective_move = false
-    foe_types = battler.pbTypes(true)
-    next false if foe_types.length == 0
+    # Check if battler can damage any of its foes
+    can_damage_foe = false
     ai.each_foe_battler(battler.side) do |b, i|
-      if !b.has_active_ability?(:WONDERGUARD)
-        non_wonder_guard_foe_exists = true
-        break
-      end
       if ai.trainer.high_skill? && b.rough_end_of_round_damage > 0
-        non_wonder_guard_foe_exists = true   # Wonder Guard is being overcome already
+        can_damage_foe = true   # Foe is being damaged already
         break
       end
-      # Check for super-effective damaging moves
+      # Check for battler's moves that can damage the foe (b)
       battler.battler.eachMove do |move|
         next if move.statusMove?
         if ["IgnoreTargetAbility",
             "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(move.function)
-          has_super_effective_move = true
+          can_damage_foe = true
           break
         end
-        eff = Effectiveness.calculate(move.pbCalcType(battler.battler), *foe_types)
-        if Effectiveness.super_effective?(eff)
-          has_super_effective_move = true
+        if !ai.pokemon_can_absorb_move?(b, move, move.pbCalcType(battler.battler))
+          can_damage_foe = true
           break
         end
       end
-      break if has_super_effective_move
+      break if can_damage_foe
     end
-    if !non_wonder_guard_foe_exists && !has_super_effective_move
-      # Check reserves for super-effective moves; only switch if there are any
-      reserve_has_super_effective_move = false
-      reserves.each do |pkmn|
+    next false if can_damage_foe
+    # Check if a reserve could damage any foe; only switch if one could
+    reserve_can_damage_foe = false
+    reserves.each do |pkmn|
+      ai.each_foe_battler(battler.side) do |b, i|
+        # Check for reserve's moves that can damage the foe (b)
         pkmn.moves.each do |move|
           next if move.status_move?
           if ["IgnoreTargetAbility",
               "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(move.function_code)
-            reserve_has_super_effective_move = true
+            reserve_can_damage_foe = true
             break
           end
-          eff = Effectiveness.calculate(move.type, *foe_types)
-          if Effectiveness.super_effective?(eff)
-            reserve_has_super_effective_move = true
+          if !ai.pokemon_can_absorb_move?(b, move, move.type)
+            reserve_can_damage_foe = true
             break
           end
         end
-        break if reserve_has_super_effective_move
+        break if reserve_can_damage_foe
       end
-      next false if !reserve_has_super_effective_move
-      PBDebug.log_ai("#{battler.name} wants to switch because it can't do anything against Wonder Guard")
-      next true
+      break if reserve_can_damage_foe
     end
-    next false
+    next false if !reserve_can_damage_foe
+    PBDebug.log_ai("#{battler.name} wants to switch because it can't damage the foe(s)")
+    next true
   }
 )
 
@@ -576,7 +567,6 @@ Battle::AI::Handlers::ShouldSwitch.add(:sudden_death,
 #===============================================================================
 # Pokémon is within 5 levels of the foe, and foe's last move was super-effective
 # and powerful.
-# TODO: Review switch deciding.
 #===============================================================================
 Battle::AI::Handlers::ShouldSwitch.add(:high_damage_from_foe,
   proc { |battler, reserves, ai, battle|
@@ -653,7 +643,7 @@ Battle::AI::Handlers::ShouldNotSwitch.add(:battler_has_super_effective_move,
         # NOTE: Ideally this would ignore foes that move cannot target, but that
         #       is complicated enough to implement that I'm not bothering. It's
         #       also rare that it would matter.
-        eff = b.effectiveness_of_type_against_battler(move_type, battler)
+        eff = b.effectiveness_of_type_against_battler(move_type, battler, move)
         has_super_effective_move = Effectiveness.super_effective?(eff)
         break if has_super_effective_move
       end
@@ -670,8 +660,6 @@ Battle::AI::Handlers::ShouldNotSwitch.add(:battler_has_super_effective_move,
 #===============================================================================
 # Don't bother switching if the battler has 4 or more positive stat stages.
 # Negative stat stages are ignored.
-# TODO: Ignore this if deciding whether to use Baton Pass (assuming move-scoring
-#       uses this code).
 #===============================================================================
 Battle::AI::Handlers::ShouldNotSwitch.add(:battler_has_very_raised_stats,
   proc { |battler, reserves, ai, battle|

@@ -101,7 +101,6 @@ class Battle::AI::AIMove
     # Get the move's type
     calc_type = rough_type
     # Decide whether the move has 50% chance of higher of being a critical hit
-    # TODO: Make this a gradient/probability rather than all-or-nothing?
     crit_stage = rough_critical_hit_stage
     is_critical = crit_stage >= Battle::Move::CRITICAL_HIT_RATIOS.length ||
                   Battle::Move::CRITICAL_HIT_RATIOS[crit_stage] <= 2
@@ -325,7 +324,7 @@ class Battle::AI::AIMove
       end
     end
     # Type effectiveness
-    typemod = target.effectiveness_of_type_against_battler(calc_type, user)
+    typemod = target.effectiveness_of_type_against_battler(calc_type, user, @move)
     multipliers[:final_damage_multiplier] *= typemod
     # Burn
     if @ai.trainer.high_skill? && user.status == :BURN && physicalMove?(calc_type) &&

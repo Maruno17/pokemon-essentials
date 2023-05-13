@@ -242,8 +242,7 @@ Battle::ItemEffects::SpeedCalc.copy(:MACHOBRACE, :POWERANKLET, :POWERBAND,
 
 Battle::ItemEffects::SpeedCalc.add(:QUICKPOWDER,
   proc { |item, battler, mult|
-    next mult * 2 if battler.isSpecies?(:DITTO) &&
-                   !battler.effects[PBEffects::Transform]
+    next mult * 2 if battler.isSpecies?(:DITTO) && !battler.effects[PBEffects::Transform]
   }
 )
 
@@ -263,7 +262,7 @@ Battle::ItemEffects::WeightCalc.add(:FLOATSTONE,
 
 Battle::ItemEffects::HPHeal.add(:AGUAVBERRY,
   proc { |item, battler, battle, forced|
-    next battler.pbConfusionBerry(item, forced, 4,
+    next battler.pbConfusionBerry(item, forced, :SPECIAL_DEFENSE,
        _INTL("For {1}, the {2} was too bitter!", battler.pbThis(true), GameData::Item.get(item).name)
     )
   }
@@ -294,7 +293,7 @@ Battle::ItemEffects::HPHeal.add(:BERRYJUICE,
 
 Battle::ItemEffects::HPHeal.add(:FIGYBERRY,
   proc { |item, battler, battle, forced|
-    next battler.pbConfusionBerry(item, forced, 0,
+    next battler.pbConfusionBerry(item, forced, :ATTACK,
        _INTL("For {1}, the {2} was too spicy!", battler.pbThis(true), GameData::Item.get(item).name)
     )
   }
@@ -308,7 +307,7 @@ Battle::ItemEffects::HPHeal.add(:GANLONBERRY,
 
 Battle::ItemEffects::HPHeal.add(:IAPAPABERRY,
   proc { |item, battler, battle, forced|
-    next battler.pbConfusionBerry(item, forced, 1,
+    next battler.pbConfusionBerry(item, forced, :DEFENSE,
        _INTL("For {1}, the {2} was too sour!", battler.pbThis(true), GameData::Item.get(item).name)
     )
   }
@@ -338,7 +337,7 @@ Battle::ItemEffects::HPHeal.add(:LIECHIBERRY,
 
 Battle::ItemEffects::HPHeal.add(:MAGOBERRY,
   proc { |item, battler, battle, forced|
-    next battler.pbConfusionBerry(item, forced, 2,
+    next battler.pbConfusionBerry(item, forced, :SPEED,
        _INTL("For {1}, the {2} was too sweet!", battler.pbThis(true), GameData::Item.get(item).name)
     )
   }
@@ -436,7 +435,7 @@ Battle::ItemEffects::HPHeal.add(:STARFBERRY,
 
 Battle::ItemEffects::HPHeal.add(:WIKIBERRY,
   proc { |item, battler, battle, forced|
-    next battler.pbConfusionBerry(item, forced, 3,
+    next battler.pbConfusionBerry(item, forced, :SPECIAL_ATTACK,
        _INTL("For {1}, the {2} was too dry!", battler.pbThis(true), GameData::Item.get(item).name)
     )
   }

@@ -5,13 +5,10 @@ class Battle::AI
   attr_reader :battle
   attr_reader :trainer
   attr_reader :battlers
-  attr_reader :roles
   attr_reader :user, :target, :move
 
   def initialize(battle)
     @battle = battle
-    @roles = [Array.new(@battle.pbParty(0).length) { |i| determine_roles(0, i) },
-              Array.new(@battle.pbParty(1).length) { |i| determine_roles(1, i) }]
   end
 
   def create_ai_objects

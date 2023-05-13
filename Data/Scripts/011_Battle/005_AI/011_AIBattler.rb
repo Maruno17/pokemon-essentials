@@ -16,10 +16,6 @@ class Battle::AI::AIBattler
     old_party_index = @party_index
     @battler = @ai.battle.battlers[@index]
     @party_index = battler.pokemonIndex
-    if @party_index != old_party_index
-      # TODO: Start of battle or Pokémon switched/shifted; recalculate roles,
-      #       etc. What is etc.?
-    end
   end
 
   def pokemon;     return battler.pokemon;     end
@@ -232,12 +228,7 @@ class Battle::AI::AIBattler
   end
   alias pbHasType? has_type?
 
-  # TODO: Also make a def effectiveness_of_move_against_battler which calls
-  #       pbCalcTypeModSingle instead of effectiveness_of_type_against_single_battler_type,
-  #       for moves with custom def pbCalcTypeMod, e.g. Freeze-Dry. When would
-  #       that be used instead? Or rather, when would THIS method be used if
-  #       that existed?
-  def effectiveness_of_type_against_battler(type, user = nil)
+  def effectiveness_of_type_against_battler(type, user = nil, move = nil)
     ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
     return ret if !type
     return ret if type == :GROUND && has_type?(:FLYING) && has_active_item?(:IRONBALL)
@@ -250,7 +241,16 @@ class Battle::AI::AIBattler
       end
     else
       battler.pbTypes(true).each do |defend_type|
-        ret *= effectiveness_of_type_against_single_battler_type(type, defend_type, user)
+        mult = effectiveness_of_type_against_single_battler_type(type, defend_type, user)
+        if move
+          case move.function
+          when "HitsTargetInSkyGroundsTarget"
+            mult = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER if type == :GROUND && defend_type == :FLYING
+          when "FreezeTargetSuperEffectiveAgainstWater"
+            mult = Effectiveness::SUPER_EFFECTIVE_MULTIPLIER if defend_type == :WATER
+          end
+        end
+        ret *= mult
       end
       ret *= 2 if self.effects[PBEffects::TarShot] && type == :FIRE
     end
@@ -414,7 +414,9 @@ class Battle::AI::AIBattler
       break
     end
     # Modify the rating based on ability-specific contexts
-    ret = Battle::AI::Handlers.modify_ability_ranking(ability, ret, self, @ai)
+    if @ai.trainer.medium_skill?
+      ret = Battle::AI::Handlers.modify_ability_ranking(ability, ret, self, @ai)
+    end
     return ret
   end
 
@@ -424,13 +426,12 @@ class Battle::AI::AIBattler
   # battler if it is holding it.
   # Return values are typically between -10 and +10. 0 is indifferent, positive
   # values mean this battler benefits, negative values mean this battler suffers.
-  # TODO: This method shouldn't check for item effect negation, to work the same
-  #       as def wants_ability?.
+  # NOTE: This method assumes the item isn't being negated. The calculations
+  #       that call this method separately check for it being negated, because
+  #       they need to do something special in that case.
   def wants_item?(item)
     item = :NONE if !item
     item = item.id if !item.is_a?(Symbol) && item.respond_to?("id")
-    return 0 if has_active_ability?(:KLUTZ)
-    # TODO: Unnerve, other item-negating effects.
     # Get the base item rating
     ret = 0
     Battle::AI::BASE_ITEM_RATINGS.each_pair do |val, items|
@@ -439,7 +440,9 @@ class Battle::AI::AIBattler
       break
     end
     # Modify the rating based on item-specific contexts
-    ret = Battle::AI::Handlers.modify_item_ranking(item, ret, self, @ai)
+    if @ai.trainer.medium_skill?
+      ret = Battle::AI::Handlers.modify_item_ranking(item, ret, self, @ai)
+    end
     # Prefer if this battler knows Fling and it will do a lot of damage/have an
     # additional (negative) effect when flung
     if item != :NONE && has_move_with_function?("ThrowUserItemAtTarget")
@@ -481,7 +484,18 @@ class Battle::AI::AIBattler
       end
       ret += (hp > totalhp * (1 - (1.0 / fraction_to_heal))) ? -6 : 6
       ret = ret * 3 / 2 if GameData::Item.get(item).is_berry? && has_active_ability?(:RIPEN)
-      # TODO: Check whether the item will cause confusion?
+      if @ai.trainer.high_skill?
+        flavor_stat = {
+          :AGUAVBERRY  => :SPECIAL_DEFENSE,
+          :FIGYBERRY   => :ATTACK,
+          :IAPAPABERRY => :DEFENSE,
+          :MAGOBERRY   => :SPEED,
+          :WIKIBERRY   => :SPECIAL_ATTACK
+        }[item]
+        if @battler.nature.stat_changes.any? { |val| val[0] == flavor_stat && val[1] < 0 }
+          ret -= 3 if @battler.pbCanConfuseSelf?(false)
+        end
+      end
     when :ASPEARBERRY, :CHERIBERRY, :CHESTOBERRY, :PECHABERRY, :RAWSTBERRY
       # Status cure
       cured_status = {

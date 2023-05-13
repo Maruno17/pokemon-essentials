@@ -1094,8 +1094,6 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromPriorityMoves",
     useless = true
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
-      # TODO: There are more calculations that could be done to get a more
-      #       accurate priority number.
       next if !b.check_for_move { |m| m.pbPriority(b.battler) > 0 && m.canProtectAgainst? }
       useless = false
       # General preference
@@ -1343,9 +1341,6 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("EnsureNextMoveAlwaysHits
     # Prefer if the user knows moves with low accuracy
     user.battler.eachMove do |m|
       next if target.effects[PBEffects::Minimize] && m.tramplesMinimize? && Settings::MECHANICS_GENERATION >= 6
-      # TODO: There are other effects that make a move certain to hit. Account
-      #       for those as well. Score this move useless if no moves would
-      #       benefit from locking on.
       acc = m.accuracy
       acc = m.pbBaseAccuracy(user.battler, target.battler) if ai.trainer.medium_skill?
       score += 5 if acc < 90 && acc != 0
@@ -1503,7 +1498,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetMovesBecomeElectri
       next if !m.damagingMove?
       m_type = m.pbCalcType(target.battler)
       next if m_type == :ELECTRIC
-      eff = user.effectiveness_of_type_against_battler(m_type, target)
+      eff = user.effectiveness_of_type_against_battler(m_type, target, m)
       eff *= 1.5 if target.has_type?(m_type)   # STAB
       case m_type
       when :FIRE

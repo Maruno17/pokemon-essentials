@@ -494,10 +494,6 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserMainStats1TrapUserInBattle",
         next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
       end
       # Score for user becoming trapped in battle
-      # TODO: These checks are related to desire to switch, and there can be a lot
-      #       more things to consider, e.g. effectiveness of the target's moves
-      #       against its foes. Also applies to other code that calls
-      #       can_become_trapped?
       if user.effects[PBEffects::PerishSong] > 0 ||
          user.effects[PBEffects::Attract] >= 0 ||
          eor_damage > 0
@@ -632,7 +628,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetAttack2Confu
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetAttack2ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
-    if !target.has_active_ability?(:CONTRARY) || @battle.moldBreaker
+    if !target.has_active_ability?(:CONTRARY) || battle.moldBreaker
       next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false, move.move)
     end
     # Score for stat raise
@@ -654,7 +650,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetSpAtk1Confus
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetSpAtk1ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
-    if !target.has_active_ability?(:CONTRARY) || @battle.moldBreaker
+    if !target.has_active_ability?(:CONTRARY) || battle.moldBreaker
       next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false, move.move)
     end
     # Score for stat raise

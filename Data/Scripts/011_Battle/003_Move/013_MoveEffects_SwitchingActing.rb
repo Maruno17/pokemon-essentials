@@ -3,7 +3,7 @@
 #===============================================================================
 class Battle::Move::FleeFromBattle < Battle::Move
   def pbMoveFailed?(user, targets)
-    if !@battle.pbCanRun?(user.index)
+    if !@battle.pbCanRun?(user.index) || (user.wild? && user.allAllies.length > 0)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -23,7 +23,7 @@ end
 class Battle::Move::SwitchOutUserStatusMove < Battle::Move
   def pbMoveFailed?(user, targets)
     if user.wild?
-      if !@battle.pbCanRun?(user.index)
+      if !@battle.pbCanRun?(user.index) || user.allAllies.length > 0
         @battle.pbDisplay(_INTL("But it failed!"))
         return true
       end
@@ -145,9 +145,9 @@ class Battle::Move::SwitchOutUserPassOnEffects < Battle::Move
 end
 
 #===============================================================================
-# In wild battles, makes target flee. Fails if target is a higher level than the
-# user.
-# In trainer battles, target switches out.
+# When used against a sole wild Pokémon, makes target flee and ends the battle;
+# fails if target is a higher level than the user.
+# When used against a trainer's Pokémon, target switches out.
 # For status moves. (Roar, Whirlwind)
 #===============================================================================
 class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
@@ -171,38 +171,40 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
       @battle.pbDisplay(_INTL("{1} anchored itself with its roots!", target.pbThis)) if show_message
       return true
     end
-    if !@battle.canRun
-      @battle.pbDisplay(_INTL("But it failed!")) if show_message
-      return true
-    end
-    if @battle.wildBattle? && target.level > user.level
-      @battle.pbDisplay(_INTL("But it failed!")) if show_message
-      return true
-    end
-    if @battle.trainerBattle?
+    if target.wild? && target.allAllies.length == 0 && @battle.canRun
+      # End the battle
+      if target.level > user.level
+        @battle.pbDisplay(_INTL("But it failed!")) if show_message
+        return true
+      end
+    elsif !target.wild?
+      # Switch target out
       canSwitch = false
       @battle.eachInTeamFromBattlerIndex(target.index) do |_pkmn, i|
-        next if !@battle.pbCanSwitchIn?(target.index, i)
-        canSwitch = true
-        break
+        canSwitch = @battle.pbCanSwitchIn?(target.index, i)
+        break if canSwitch
       end
       if !canSwitch
         @battle.pbDisplay(_INTL("But it failed!")) if show_message
         return true
       end
+    else
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
+      return true
     end
     return false
   end
 
-  def pbEffectGeneral(user)
-    @battle.decision = 3 if @battle.wildBattle?   # Escaped from battle
+  def pbEffectAgainstTarget(user, target)
+    @battle.decision = 3 if target.wild?   # Escaped from battle
   end
 
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
-    return if @battle.wildBattle? || !switched_battlers.empty?
+    return if !switched_battlers.empty?
     return if user.fainted? || numHits == 0
     targets.each do |b|
       next if b.fainted? || b.damageState.unaffected
+      next if b.wild?
       next if b.effects[PBEffects::Ingrain]
       next if b.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index, true)   # Random
@@ -218,24 +220,26 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
 end
 
 #===============================================================================
-# In wild battles, makes target flee. Fails if target is a higher level than the
-# user.
-# In trainer battles, target switches out.
+# When used against a sole wild Pokémon, makes target flee and ends the battle;
+# fails if target is a higher level than the user.
+# When used against a trainer's Pokémon, target switches out.
 # For damaging moves. (Circle Throw, Dragon Tail)
 #===============================================================================
 class Battle::Move::SwitchOutTargetDamagingMove < Battle::Move
   def pbEffectAgainstTarget(user, target)
-    if @battle.wildBattle? && target.level <= user.level && @battle.canRun &&
+    if target.wild? && target.allAllies.length == 0 && @battle.canRun &&
+       target.level <= user.level &&
        (target.effects[PBEffects::Substitute] == 0 || ignoresSubstitute?(user))
-      @battle.decision = 3
+      @battle.decision = 3   # Escaped from battle
     end
   end
 
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
-    return if @battle.wildBattle? || !switched_battlers.empty?
+    return if !switched_battlers.empty?
     return if user.fainted? || numHits == 0
     targets.each do |b|
       next if b.fainted? || b.damageState.unaffected || b.damageState.substitute
+      next if b.wild?
       next if b.effects[PBEffects::Ingrain]
       next if b.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index, true)   # Random
