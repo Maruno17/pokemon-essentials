@@ -23,10 +23,17 @@ end
 # (Fell Stinger (Gen 6-))
 #===============================================================================
 class Battle::Move::RaiseUserAttack2IfTargetFaints < Battle::Move
+  attr_reader :statUp
+
+  def initialize(battle, move)
+    super
+    @statUp = [:ATTACK, 2]
+  end
+
   def pbEffectAfterAllHits(user, target)
     return if !target.damageState.fainted
-    return if !user.pbCanRaiseStatStage?(:ATTACK, user, self)
-    user.pbRaiseStatStage(:ATTACK, 2, user)
+    return if !user.pbCanRaiseStatStage?(@statUp[0], user, self)
+    user.pbRaiseStatStage(@statUp[0], @statUp[1], user)
   end
 end
 
@@ -45,10 +52,17 @@ end
 # (Fell Stinger (Gen 7+))
 #===============================================================================
 class Battle::Move::RaiseUserAttack3IfTargetFaints < Battle::Move
+  attr_reader :statUp
+
+  def initialize(battle, move)
+    super
+    @statUp = [:ATTACK, 3]
+  end
+
   def pbEffectAfterAllHits(user, target)
     return if !target.damageState.fainted
-    return if !user.pbCanRaiseStatStage?(:ATTACK, user, self)
-    user.pbRaiseStatStage(:ATTACK, 3, user)
+    return if !user.pbCanRaiseStatStage?(@statUp[0], user, self)
+    user.pbRaiseStatStage(@statUp[0], @statUp[1], user)
   end
 end
 
@@ -57,7 +71,14 @@ end
 # (Belly Drum)
 #===============================================================================
 class Battle::Move::MaxUserAttackLoseHalfOfTotalHP < Battle::Move
+  attr_reader :statUp
+
   def canSnatch?; return true; end
+
+  def initialize(battle, move)
+    super
+    @statUp = [:ATTACK, 12]
+  end
 
   def pbMoveFailed?(user, targets)
     hpLoss = [user.totalhp / 2, 1].max
@@ -65,7 +86,7 @@ class Battle::Move::MaxUserAttackLoseHalfOfTotalHP < Battle::Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    return true if !user.pbCanRaiseStatStage?(:ATTACK, user, self, true)
+    return true if !user.pbCanRaiseStatStage?(@statUp[0], user, self, true)
     return false
   end
 
@@ -73,16 +94,18 @@ class Battle::Move::MaxUserAttackLoseHalfOfTotalHP < Battle::Move
     hpLoss = [user.totalhp / 2, 1].max
     user.pbReduceHP(hpLoss, false, false)
     if user.hasActiveAbility?(:CONTRARY)
-      user.stages[:ATTACK] = -6
+      user.stages[@statUp[0]] = -Battle::Battler::STAT_STAGE_MAXIMUM
       user.statsLoweredThisRound = true
       user.statsDropped = true
       @battle.pbCommonAnimation("StatDown", user)
-      @battle.pbDisplay(_INTL("{1} cut its own HP and minimized its Attack!", user.pbThis))
+      @battle.pbDisplay(_INTL("{1} cut its own HP and minimized its {2}!",
+         user.pbThis, GameData::Stat.get(@statUp[0]).name))
     else
-      user.stages[:ATTACK] = 6
+      user.stages[@statUp[0]] = Battle::Battler::STAT_STAGE_MAXIMUM
       user.statsRaisedThisRound = true
       @battle.pbCommonAnimation("StatUp", user)
-      @battle.pbDisplay(_INTL("{1} cut its own HP and maximized its Attack!", user.pbThis))
+      @battle.pbDisplay(_INTL("{1} cut its own HP and maximized its {2}!",
+         user.pbThis, GameData::Stat.get(@statUp[0]).name))
     end
     user.pbItemHPHealCheck
   end
@@ -407,6 +430,8 @@ end
 # (Shell Smash)
 #===============================================================================
 class Battle::Move::LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2 < Battle::Move
+  attr_reader :statUp, :statDown
+
   def canSnatch?; return true; end
 
   def initialize(battle, move)
@@ -882,11 +907,12 @@ class Battle::Move::RaiseTargetAtkSpAtk2 < Battle::Move
   end
 
   def pbEffectAgainstTarget(user, target)
+    showAnim = true
     if target.pbCanRaiseStatStage?(:ATTACK, user, self)
-      target.pbRaiseStatStage(:ATTACK, 2, user)
+      showAnim = false if target.pbRaiseStatStage(:ATTACK, 2, user, showAnim)
     end
     if target.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
-      target.pbRaiseStatStage(:SPECIAL_ATTACK, 2, user)
+      target.pbRaiseStatStage(:SPECIAL_ATTACK, 2, user, showAnim)
     end
   end
 end
@@ -1330,6 +1356,8 @@ end
 # stage each. (Venom Drench)
 #===============================================================================
 class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
+  attr_reader :statDown
+
   def canMagicCoat?; return true; end
 
   def initialize(battle, move)
@@ -1342,10 +1370,13 @@ class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
     targets.each do |b|
       next if !b || b.fainted?
       next if !b.poisoned?
-      next if !b.pbCanLowerStatStage?(:ATTACK, user, self) &&
-              !b.pbCanLowerStatStage?(:SPECIAL_ATTACK, user, self) &&
-              !b.pbCanLowerStatStage?(:SPEED, user, self)
-      @validTargets.push(b.index)
+      failed = true
+      (@statDown.length / 2).times do |i|
+        next if !b.pbCanLowerStatStage?(@statDown[i * 2], user, self)
+        failed = false
+        break
+      end
+      @validTargets.push(b.index) if !failed
     end
     if @validTargets.length == 0
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1397,7 +1428,7 @@ end
 # Raises the Attack and Defense of all user's allies by 1 stage each. Bypasses
 # protections, including Crafty Shield. Fails if there is no ally. (Coaching)
 #===============================================================================
-class Battle::Move::RaiseUserAndAlliesAtkDef1 < Battle::Move
+class Battle::Move::RaiseAlliesAtkDef1 < Battle::Move
   def ignoresSubstitute?(user); return true; end
   def canSnatch?; return true; end
 

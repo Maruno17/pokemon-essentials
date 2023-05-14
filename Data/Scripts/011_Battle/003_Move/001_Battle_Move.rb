@@ -43,11 +43,10 @@ class Battle::Move
     @category   = move.category
     @accuracy   = move.accuracy
     @pp         = move.pp   # Can be changed with Mimic/Transform
-    @addlEffect = move.effect_chance
     @target     = move.target
     @priority   = move.priority
     @flags      = move.flags.clone
-    @calcType   = nil
+    @addlEffect = move.effect_chance
     @powerBoost = false   # For Aerilate, Pixilate, Refrigerate, Galvanize
     @snatched   = false
   end

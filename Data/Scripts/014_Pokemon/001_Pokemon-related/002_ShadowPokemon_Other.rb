@@ -352,7 +352,7 @@ end
 #===============================================================================
 class Battle::Move::UserLosesHalfHP < Battle::Move::RecoilMove
   def pbRecoilDamage(user, target)
-    return (target.damageState.totalHPLost / 2.0).round
+    return (user.hp / 2.0).round
   end
 
   def pbEffectAfterAllHits(user, target)
@@ -380,12 +380,27 @@ end
 # Ends the effects of Light Screen, Reflect and Safeguard on both sides.
 # (Shadow Shed)
 #===============================================================================
-class Battle::Move::RemoveAllScreens < Battle::Move
+class Battle::Move::RemoveAllScreensAndSafeguard < Battle::Move
+  def pbMoveFailed?(user, targets)
+    will_fail = true
+    @battle.sides.each do |side|
+      will_fail = false if side.effects[PBEffects::AuroraVeil] > 0 ||
+                           side.effects[PBEffects::LightScreen] > 0 ||
+                           side.effects[PBEffects::Reflect] > 0 ||
+                           side.effects[PBEffects::Safeguard] > 0
+    end
+    if will_fail
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+
   def pbEffectGeneral(user)
     @battle.sides.each do |i|
       i.effects[PBEffects::AuroraVeil]  = 0
-      i.effects[PBEffects::Reflect]     = 0
       i.effects[PBEffects::LightScreen] = 0
+      i.effects[PBEffects::Reflect]     = 0
       i.effects[PBEffects::Safeguard]   = 0
     end
     @battle.pbDisplay(_INTL("It broke all barriers!"))

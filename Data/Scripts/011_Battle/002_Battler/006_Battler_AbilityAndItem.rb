@@ -282,7 +282,8 @@ class Battle::Battler
   # NOTE: A Pokémon using Bug Bite/Pluck, and a Pokémon having an item thrown at
   #       it via Fling, will gain the effect of the item even if the Pokémon is
   #       affected by item-negating effects.
-  # item_to_use is an item ID for Bug Bite/Pluck and Fling, and nil otherwise.
+  # item_to_use is an item ID for Stuff Cheeks, Teatime, Bug Bite/Pluck and
+  # Fling, and nil otherwise.
   # fling is for Fling only.
   def pbHeldItemTriggerCheck(item_to_use = nil, fling = false)
     return if fainted?
@@ -386,7 +387,7 @@ class Battle::Battler
   #=============================================================================
   # Item effects
   #=============================================================================
-  def pbConfusionBerry(item_to_use, forced, flavor, confuse_msg)
+  def pbConfusionBerry(item_to_use, forced, confuse_stat, confuse_msg)
     return false if !forced && !canHeal?
     return false if !forced && !canConsumePinchBerry?(Settings::MECHANICS_GENERATION >= 7)
     used_item_name = GameData::Item.get(item_to_use).name
@@ -414,12 +415,9 @@ class Battle::Battler
         @battle.pbDisplay(_INTL("{1} restored its health using its {2}!", pbThis, used_item_name))
       end
     end
-    flavor_stat = [:ATTACK, :DEFENSE, :SPEED, :SPECIAL_ATTACK, :SPECIAL_DEFENSE][flavor]
-    self.nature.stat_changes.each do |change|
-      next if change[1] > 0 || change[0] != flavor_stat
+    if self.nature.stat_changes.any? { |val| val[0] == confuse_stat && val[1] < 0 }
       @battle.pbDisplay(confuse_msg)
       pbConfuse if pbCanConfuseSelf?(false)
-      break
     end
     return true
   end

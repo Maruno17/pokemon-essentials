@@ -43,19 +43,21 @@ class Battle::Battler
     # Choice Band/Gorilla Tactics
     @effects[PBEffects::ChoiceBand] = nil if !pbHasMove?(@effects[PBEffects::ChoiceBand])
     if @effects[PBEffects::ChoiceBand] && move.id != @effects[PBEffects::ChoiceBand]
-      choiced_move_name = GameData::Move.get(@effects[PBEffects::ChoiceBand]).name
-      if hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
-        if showMessages
-          msg = _INTL("The {1} only allows the use of {2}!", itemName, choiced_move_name)
-          (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
+      choiced_move = GameData::Move.try_get(@effects[PBEffects::ChoiceBand])
+      if choiced_move
+        if hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
+          if showMessages
+            msg = _INTL("The {1} only allows the use of {2}!", itemName, choiced_move.name)
+            (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
+          end
+          return false
+        elsif hasActiveAbility?(:GORILLATACTICS)
+          if showMessages
+            msg = _INTL("{1} can only use {2}!", pbThis, choiced_move.name)
+            (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
+          end
+          return false
         end
-        return false
-      elsif hasActiveAbility?(:GORILLATACTICS)
-        if showMessages
-          msg = _INTL("{1} can only use {2}!", pbThis, choiced_move_name)
-          (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
-        end
-        return false
       end
     end
     # Taunt
@@ -85,7 +87,7 @@ class Battle::Battler
     end
     # Assault Vest (prevents choosing status moves but doesn't prevent
     # executing them)
-    if hasActiveItem?(:ASSAULTVEST) && move.statusMove? && move.id != :MEFIRST && commandPhase
+    if hasActiveItem?(:ASSAULTVEST) && move.statusMove? && move.function != "UseMoveTargetIsAboutToUse" && commandPhase
       if showMessages
         msg = _INTL("The effects of the {1} prevent status moves from being used!", itemName)
         (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
@@ -192,10 +194,13 @@ class Battle::Battler
       return false
     end
     if @effects[PBEffects::HyperBeam] > 0   # Intentionally before Truant
+      PBDebug.log("[Move failed] #{pbThis} is recharging after using #{move.name}")
       @battle.pbDisplay(_INTL("{1} must recharge!", pbThis))
+      @effects[PBEffects::Truant] = !@effects[PBEffects::Truant] if hasActiveAbility?(:TRUANT)
       return false
     end
     if choice[1] == -2   # Battle Palace
+      PBDebug.log("[Move failed] #{pbThis} can't act in the Battle Palace somehow")
       @battle.pbDisplay(_INTL("{1} appears incapable of using its power!", pbThis))
       return false
     end
@@ -210,6 +215,7 @@ class Battle::Battler
       else
         pbContinueStatus
         if !move.usableWhenAsleep?   # Snore/Sleep Talk
+          PBDebug.log("[Move failed] #{pbThis} is asleep")
           @lastMoveFailed = true
           return false
         end
@@ -220,6 +226,7 @@ class Battle::Battler
           pbCureStatus
         else
           pbContinueStatus
+          PBDebug.log("[Move failed] #{pbThis} is frozen")
           @lastMoveFailed = true
           return false
         end
@@ -235,12 +242,14 @@ class Battle::Battler
         @battle.pbDisplay(_INTL("{1} is loafing around!", pbThis))
         @lastMoveFailed = true
         @battle.pbHideAbilitySplash(self)
+        PBDebug.log("[Move failed] #{pbThis} can't act because of #{abilityName}")
         return false
       end
     end
     # Flinching
     if @effects[PBEffects::Flinch]
       @battle.pbDisplay(_INTL("{1} flinched and couldn't move!", pbThis))
+      PBDebug.log("[Move failed] #{pbThis} flinched")
       if abilityActive?
         Battle::AbilityEffects.triggerOnFlinch(self.ability, self, @battle)
       end
@@ -259,6 +268,7 @@ class Battle::Battler
         threshold = (Settings::MECHANICS_GENERATION >= 7) ? 33 : 50   # % chance
         if @battle.pbRandom(100) < threshold
           pbConfusionDamage(_INTL("It hurt itself in its confusion!"))
+          PBDebug.log("[Move failed] #{pbThis} hurt itself in its confusion")
           @lastMoveFailed = true
           return false
         end
@@ -267,6 +277,7 @@ class Battle::Battler
     # Paralysis
     if @status == :PARALYSIS && @battle.pbRandom(100) < 25
       pbContinueStatus
+      PBDebug.log("[Move failed] #{pbThis} is paralyzed")
       @lastMoveFailed = true
       return false
     end
@@ -277,6 +288,7 @@ class Battle::Battler
                               @battle.battlers[@effects[PBEffects::Attract]].pbThis(true)))
       if @battle.pbRandom(100) < 50
         @battle.pbDisplay(_INTL("{1} is immobilized by love!", pbThis))
+        PBDebug.log("[Move failed] #{pbThis} is immobilized by love")
         @lastMoveFailed = true
         return false
       end
@@ -295,7 +307,10 @@ class Battle::Battler
     # Two-turn attacks can't fail here in the charging turn
     return true if user.effects[PBEffects::TwoTurnAttack]
     # Move-specific failures
-    return false if move.pbFailsAgainstTarget?(user, target, show_message)
+    if move.pbFailsAgainstTarget?(user, target, show_message)
+      PBDebug.log(sprintf("[Move failed] In function code %s's def pbFailsAgainstTarget?", move.function))
+      return false
+    end
     # Immunity to priority moves because of Psychic Terrain
     if @battle.field.terrain == :Psychic && target.affectedByTerrain? && target.opposes?(user) &&
        @battle.choices[user.index][4] > 0   # Move priority saved from pbCalculatePriority
@@ -551,15 +566,17 @@ class Battle::Battler
         miss = true
       end
     end
-    target.damageState.invulnerable = true if miss
-    if !miss
+    if miss
+      target.damageState.invulnerable = true
+      PBDebug.log("[Move failed] Target is semi-invulnerable")
+    else
       # Called by another move
       return true if skipAccuracyCheck
       # Accuracy check
       return true if move.pbAccuracyCheck(user, target)   # Includes Counter/Mirror Coat
+      PBDebug.log("[Move failed] Failed pbAccuracyCheck")
     end
     # Missed
-    PBDebug.log("[Move failed] Failed pbAccuracyCheck or target is semi-invulnerable")
     return false
   end
 

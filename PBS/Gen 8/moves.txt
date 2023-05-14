@@ -455,7 +455,6 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = TrapUserAndTargetInBattle
 Flags = Contact,CanProtect,CanMirrorMove
-EffectChance = 100
 Description = This move prevents the user and the target from switching out until either of them faints.
 #-------------------------------
 [THROATCHOP]
@@ -757,7 +756,7 @@ Description = The user stimulates its brain by thinking bad thoughts. It sharply
 Name = Obstruct
 Type = DARK
 Category = Status
-Accuracy = 100
+Accuracy = 0
 TotalPP = 10
 Target = User
 Priority = 4
@@ -1102,7 +1101,7 @@ Description = This attack hits the target with a shock wave of pure rage. This a
 Name = Clangorous Soul
 Type = DRAGON
 Category = Status
-Accuracy = 100
+Accuracy = 0
 TotalPP = 5
 Target = User
 FunctionCode = RaiseUserMainStats1LoseThirdOfTotalHP
@@ -2011,7 +2010,7 @@ Power = 80
 Accuracy = 100
 TotalPP = 10
 Target = NearOther
-FunctionCode = UseUserBaseDefenseInsteadOfUserBaseAttack
+FunctionCode = UseUserDefenseInsteadOfUserAttack
 Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks by slamming its body into the target. Power increases the higher the user's Defense is.
 #-------------------------------
@@ -2331,7 +2330,7 @@ Category = Status
 Accuracy = 0
 TotalPP = 10
 Target = AllAllies
-FunctionCode = RaiseUserAndAlliesAtkDef1
+FunctionCode = RaiseAlliesAtkDef1
 Flags = CanMirrorMove
 Description = The user properly coaches its ally Pokémon, boosting their Attack and Defense stats.
 #-------------------------------
@@ -4077,7 +4076,7 @@ Power = 90
 Accuracy = 100
 TotalPP = 10
 Target = AllNearFoes
-FunctionCode = TrapTargetInBattle
+FunctionCode = TrapTargetInBattleMainEffect
 Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = The user attacks with a wave that crawls along the ground. Those it hits can't flee from battle.
 #-------------------------------
@@ -5201,18 +5200,6 @@ Flags = CanProtect,CanMirrorMove,Sound
 EffectChance = 30
 Description = An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch.
 #-------------------------------
-[STRUGGLE]
-Name = Struggle
-Type = NORMAL
-Category = Physical
-Power = 50
-Accuracy = 0
-TotalPP = 1
-Target = RandomNearFoe
-FunctionCode = Struggle
-Flags = Contact,CanProtect
-Description = An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.
-#-------------------------------
 [TERRAINPULSE]
 Name = Terrain Pulse
 Type = NORMAL
@@ -5846,7 +5833,7 @@ Description = The user mimics the move used immediately before it. The move fail
 Name = Court Change
 Type = NORMAL
 Category = Status
-Accuracy = 100
+Accuracy = 0
 TotalPP = 10
 Target = BothSides
 FunctionCode = SwapSideEffects
@@ -7134,6 +7121,7 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = LowerPPOfTargetLastMoveBy3
 Flags = CanProtect,CanMirrorMove,Sound
+EffectChance = 100
 Description = The user attacks with tremendous psychic power. This also removes 3 PP from the target's last move.
 #-------------------------------
 [EXPANDINGFORCE]

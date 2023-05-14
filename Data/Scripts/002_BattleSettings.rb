@@ -104,4 +104,11 @@ module Settings
   CHECK_EVOLUTION_AFTER_ALL_BATTLES   = (MECHANICS_GENERATION >= 6)
   # Whether fainted Pokémon can try to evolve after a battle.
   CHECK_EVOLUTION_FOR_FAINTED_POKEMON = true
+
+  #=============================================================================
+
+  # Whether wild Pokémon with the "Legendary", "Mythical" or "UltraBeast" flag
+  # (as defined in pokemon.txt) have a smarter AI. Their skill level is set to
+  # 32, which is a medium skill level.
+  SMARTER_WILD_LEGENDARY_POKEMON = true
 end

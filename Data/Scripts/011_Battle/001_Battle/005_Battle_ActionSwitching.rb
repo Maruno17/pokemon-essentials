@@ -6,7 +6,7 @@ class Battle
   # battle.
   # NOTE: Messages are only shown while in the party screen when choosing a
   #       command for the next round.
-  def pbCanSwitchLax?(idxBattler, idxParty, partyScene = nil)
+  def pbCanSwitchIn?(idxBattler, idxParty, partyScene = nil)
     return true if idxParty < 0
     party = pbParty(idxBattler)
     return false if idxParty >= party.length
@@ -18,8 +18,7 @@ class Battle
     if !pbIsOwner?(idxBattler, idxParty)
       if partyScene
         owner = pbGetOwnerFromPartyIndex(idxBattler, idxParty)
-        partyScene.pbDisplay(_INTL("You can't switch {1}'s Pokémon with one of yours!",
-                                   owner.name))
+        partyScene.pbDisplay(_INTL("You can't switch {1}'s Pokémon with one of yours!", owner.name))
       end
       return false
     end
@@ -35,30 +34,15 @@ class Battle
   end
 
   # Check whether the currently active Pokémon (at battler index idxBattler) can
-  # switch out (and that its replacement at party index idxParty can switch in).
-  # NOTE: Messages are only shown while in the party screen when choosing a
-  #       command for the next round.
-  def pbCanSwitch?(idxBattler, idxParty = -1, partyScene = nil)
-    # Check whether party Pokémon can switch in
-    return false if !pbCanSwitchLax?(idxBattler, idxParty, partyScene)
-    # Make sure another battler isn't already choosing to switch to the party
-    # Pokémon
-    allSameSideBattlers(idxBattler).each do |b|
-      next if choices[b.index][0] != :SwitchOut || choices[b.index][1] != idxParty
-      partyScene&.pbDisplay(_INTL("{1} has already been selected.",
-                                  pbParty(idxBattler)[idxParty].name))
-      return false
-    end
-    # Check whether battler can switch out
+  # switch out.
+  def pbCanSwitchOut?(idxBattler, partyScene = nil)
     battler = @battlers[idxBattler]
     return true if battler.fainted?
     # Ability/item effects that allow switching no matter what
-    if battler.abilityActive? &&
-       Battle::AbilityEffects.triggerCertainSwitching(battler.ability, battler, self)
+    if battler.abilityActive? && Battle::AbilityEffects.triggerCertainSwitching(battler.ability, battler, self)
       return true
     end
-    if battler.itemActive? &&
-       Battle::ItemEffects.triggerCertainSwitching(battler.item, battler, self)
+    if battler.itemActive? && Battle::ItemEffects.triggerCertainSwitching(battler.item, battler, self)
       return true
     end
     # Other certain switching effects
@@ -72,25 +56,42 @@ class Battle
     allOtherSideBattlers(idxBattler).each do |b|
       next if !b.abilityActive?
       if Battle::AbilityEffects.triggerTrappingByTarget(b.ability, battler, b, self)
-        partyScene&.pbDisplay(_INTL("{1}'s {2} prevents switching!",
-                                    b.pbThis, b.abilityName))
+        partyScene&.pbDisplay(_INTL("{1}'s {2} prevents switching!", b.pbThis, b.abilityName))
         return false
       end
     end
     allOtherSideBattlers(idxBattler).each do |b|
       next if !b.itemActive?
       if Battle::ItemEffects.triggerTrappingByTarget(b.item, battler, b, self)
-        partyScene&.pbDisplay(_INTL("{1}'s {2} prevents switching!",
-                                    b.pbThis, b.itemName))
+        partyScene&.pbDisplay(_INTL("{1}'s {2} prevents switching!", b.pbThis, b.itemName))
         return false
       end
     end
     return true
   end
 
+  # Check whether the currently active Pokémon (at battler index idxBattler) can
+  # switch out (and that its replacement at party index idxParty can switch in).
+  # NOTE: Messages are only shown while in the party screen when choosing a
+  #       command for the next round.
+  def pbCanSwitch?(idxBattler, idxParty = -1, partyScene = nil)
+    # Check whether party Pokémon can switch in
+    return false if !pbCanSwitchIn?(idxBattler, idxParty, partyScene)
+    # Make sure another battler isn't already choosing to switch to the party
+    # Pokémon
+    allSameSideBattlers(idxBattler).each do |b|
+      next if choices[b.index][0] != :SwitchOut || choices[b.index][1] != idxParty
+      partyScene&.pbDisplay(_INTL("{1} has already been selected.",
+                                  pbParty(idxBattler)[idxParty].name))
+      return false
+    end
+    # Check whether battler can switch out
+    return pbCanSwitchOut?(idxBattler, partyScene)
+  end
+
   def pbCanChooseNonActive?(idxBattler)
     pbParty(idxBattler).each_with_index do |_pkmn, i|
-      return true if pbCanSwitchLax?(idxBattler, i)
+      return true if pbCanSwitchIn?(idxBattler, i)
     end
     return false
   end
@@ -113,7 +114,7 @@ class Battle
     ret = -1
     @scene.pbPartyScreen(idxBattler, canCancel) do |idxParty, partyScene|
       if checkLaxOnly
-        next false if !pbCanSwitchLax?(idxBattler, idxParty, partyScene)
+        next false if !pbCanSwitchIn?(idxBattler, idxParty, partyScene)
       elsif !pbCanSwitch?(idxBattler, idxParty, partyScene)
         next false
       end
@@ -129,8 +130,8 @@ class Battle
   # For choosing a replacement Pokémon when prompted in the middle of other
   # things happening (U-turn, Baton Pass, in def pbEORSwitch).
   def pbSwitchInBetween(idxBattler, checkLaxOnly = false, canCancel = false)
-    return pbPartyScreen(idxBattler, checkLaxOnly, canCancel) if pbOwnedByPlayer?(idxBattler)
-    return @battleAI.pbDefaultChooseNewEnemy(idxBattler, pbParty(idxBattler))
+    return pbPartyScreen(idxBattler, checkLaxOnly, canCancel) if !@controlPlayer && pbOwnedByPlayer?(idxBattler)
+    return @battleAI.pbDefaultChooseNewEnemy(idxBattler)
   end
 
   #=============================================================================
@@ -206,7 +207,7 @@ class Battle
     if random
       choices = []   # Find all Pokémon that can switch in
       eachInTeamFromBattlerIndex(idxBattler) do |_pkmn, i|
-        choices.push(i) if pbCanSwitchLax?(idxBattler, i)
+        choices.push(i) if pbCanSwitchIn?(idxBattler, i)
       end
       return -1 if choices.length == 0
       return choices[pbRandom(choices.length)]

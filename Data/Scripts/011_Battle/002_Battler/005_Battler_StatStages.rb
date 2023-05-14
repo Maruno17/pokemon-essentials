@@ -3,7 +3,7 @@ class Battle::Battler
   # Increase stat stages
   #=============================================================================
   def statStageAtMax?(stat)
-    return @stages[stat] >= 6
+    return @stages[stat] >= STAT_STAGE_MAXIMUM
   end
 
   def pbCanRaiseStatStage?(stat, user = nil, move = nil, showFailMsg = false, ignoreContrary = false)
@@ -33,11 +33,11 @@ class Battle::Battler
       increment *= 2 if hasActiveAbility?(:SIMPLE)
     end
     # Change the stat stage
-    increment = [increment, 6 - @stages[stat]].min
+    increment = [increment, STAT_STAGE_MAXIMUM - @stages[stat]].min
     if increment > 0
       stat_name = GameData::Stat.get(stat).name
       new = @stages[stat] + increment
-      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name}: #{@stages[stat]} -> #{new} (+#{increment})")
+      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name} changed by +#{increment} (#{@stages[stat]} -> #{new})")
       @stages[stat] += increment
       @statsRaisedThisRound = true
     end
@@ -117,7 +117,7 @@ class Battle::Battler
   # Decrease stat stages
   #=============================================================================
   def statStageAtMin?(stat)
-    return @stages[stat] <= -6
+    return @stages[stat] <= -STAT_STAGE_MAXIMUM
   end
 
   def pbCanLowerStatStage?(stat, user = nil, move = nil, showFailMsg = false,
@@ -183,11 +183,11 @@ class Battle::Battler
       increment *= 2 if hasActiveAbility?(:SIMPLE)
     end
     # Change the stat stage
-    increment = [increment, 6 + @stages[stat]].min
+    increment = [increment, STAT_STAGE_MAXIMUM + @stages[stat]].min
     if increment > 0
       stat_name = GameData::Stat.get(stat).name
       new = @stages[stat] - increment
-      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name}: #{@stages[stat]} -> #{new} (-#{increment})")
+      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name} changed by -#{increment} (#{@stages[stat]} -> #{new})")
       @stages[stat] -= increment
       @statsLoweredThisRound = true
       @statsDropped = true

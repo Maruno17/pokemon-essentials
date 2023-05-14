@@ -3634,18 +3634,6 @@ FunctionCode = None
 Flags = Contact,CanProtect,CanMirrorMove
 Description = The target is cut with a scythe or a claw. It can also be used to cut down thin trees.
 #-------------------------------
-[STRUGGLE]
-Name = Struggle
-Type = NORMAL
-Category = Physical
-Power = 50
-Accuracy = 0
-TotalPP = 1
-Target = RandomNearFoe
-FunctionCode = Struggle
-Flags = Contact,CanProtect
-Description = An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.
-#-------------------------------
 [TACKLE]
 Name = Tackle
 Type = NORMAL

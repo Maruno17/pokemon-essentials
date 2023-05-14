@@ -19,6 +19,10 @@ class Trainer
     return _INTL("{1} {2}", trainer_type_name, @name)
   end
 
+  def skill_level
+    return GameData::TrainerType.try_get(self.trainer_type)&.skill_level || 0
+  end
+
   #=============================================================================
 
   # Portion of the ID which is visible on the Trainer Card

@@ -246,7 +246,8 @@ class Battle
   #=============================================================================
   def pbStartBattle
     PBDebug.log("")
-    PBDebug.log("******************************************")
+    PBDebug.log("================================================================")
+    PBDebug.log("")
     logMsg = "[Started battle] "
     if @sideSizes[0] == 1 && @sideSizes[1] == 1
       logMsg += "Single "
@@ -278,6 +279,7 @@ class Battle
   def pbStartBattleCore
     # Set up the battlers on each side
     sendOuts = pbSetUpSides
+    @battleAI.create_ai_objects
     # Create all the sprites and play the battle intro animation
     @scene.pbStartBattle(self)
     # Show trainers on both sides sending out Pokémon
@@ -321,7 +323,7 @@ class Battle
     @turnCount = 0
     loop do   # Now begin the battle loop
       PBDebug.log("")
-      PBDebug.log("***Round #{@turnCount + 1}***")
+      PBDebug.log_header("===== Round #{@turnCount + 1} =====")
       if @debug && @turnCount >= 100
         @decision = pbDecisionOnTime
         PBDebug.log("")
@@ -407,7 +409,8 @@ class Battle
     ##### WIN #####
     when 1
       PBDebug.log("")
-      PBDebug.log("***Player won***")
+      PBDebug.log_header("===== Player won =====")
+      PBDebug.log("")
       if trainerBattle?
         @scene.pbTrainerBattleSuccess
         case @opponent.length
@@ -426,6 +429,7 @@ class Battle
           msg = "..." if !msg || msg.empty?
           pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
         end
+        PBDebug.log("")
       end
       # Gain money from winning a trainer battle, and from Pay Day
       pbGainMoney if @decision != 4
@@ -434,8 +438,9 @@ class Battle
     ##### LOSE, DRAW #####
     when 2, 5
       PBDebug.log("")
-      PBDebug.log("***Player lost***") if @decision == 2
-      PBDebug.log("***Player drew with opponent***") if @decision == 5
+      PBDebug.log_header("===== Player lost =====") if @decision == 2
+      PBDebug.log_header("===== Player drew with opponent =====") if @decision == 5
+      PBDebug.log("")
       if @internalBattle
         pbDisplayPaused(_INTL("You have no more Pokémon that can fight!"))
         if trainerBattle?
@@ -461,10 +466,14 @@ class Battle
             msg = "..." if !msg || msg.empty?
             pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
           end
+          PBDebug.log("")
         end
       end
     ##### CAUGHT WILD POKÉMON #####
     when 4
+      PBDebug.log("")
+      PBDebug.log_header("===== Pokémon caught =====")
+      PBDebug.log("")
       @scene.pbWildBattleSuccess if !Settings::GAIN_EXP_FOR_CAPTURE
     end
     # Register captured Pokémon in the Pokédex, and store them

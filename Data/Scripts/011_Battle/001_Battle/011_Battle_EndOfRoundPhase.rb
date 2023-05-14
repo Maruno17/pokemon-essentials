@@ -135,6 +135,8 @@ class Battle
   def pbEORSeaOfFireDamage(priority)
     2.times do |side|
       next if sides[side].effects[PBEffects::SeaOfFire] == 0
+      sides[side].effects[PBEffects::SeaOfFire] -= 1
+      next if sides[side].effects[PBEffects::SeaOfFire] == 0
       pbCommonAnimation("SeaOfFire") if side == 0
       pbCommonAnimation("SeaOfFireOpp") if side == 1
       priority.each do |battler|
@@ -594,7 +596,7 @@ class Battle
   #=============================================================================
   def pbEndOfRoundPhase
     PBDebug.log("")
-    PBDebug.log("[End of round]")
+    PBDebug.log("[End of round #{@turnCount + 1}]")
     @endOfRound = true
     @scene.pbBeginEndOfRoundPhase
     pbCalculatePriority           # recalculate speeds
@@ -747,6 +749,7 @@ class Battle
       battler.lastHPLostFromFoe                    = 0
       battler.droppedBelowHalfHP                   = false
       battler.statsDropped                         = false
+      battler.tookMoveDamageThisRound              = false
       battler.tookDamageThisRound                  = false
       battler.tookPhysicalHit                      = false
       battler.statsRaisedThisRound                 = false

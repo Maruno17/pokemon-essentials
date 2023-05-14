@@ -251,10 +251,9 @@ class Battle::Move
         oldHP = b.hp
         if b.damageState.substitute
           old_sub_hp = b.effects[PBEffects::Substitute] + b.damageState.hpLost
-          PBDebug.log("[Move damage] #{b.pbThis}'s substitute lost #{b.damageState.hpLost} HP (#{old_sub_hp}=>#{b.effects[PBEffects::Substitute]})")
+          PBDebug.log("[Substitute HP change] #{b.pbThis}'s substitute lost #{b.damageState.hpLost} HP (#{old_sub_hp} -> #{b.effects[PBEffects::Substitute]})")
         else
           oldHP += b.damageState.hpLost
-          PBDebug.log("[Move damage] #{b.pbThis} lost #{b.damageState.hpLost} HP (#{oldHP}=>#{b.hp})")
         end
         effectiveness = 0
         if Effectiveness.resistant?(b.damageState.typeMod)
@@ -375,19 +374,22 @@ class Battle::Move
     #       code.
     moveType = nil
     moveType = :NORMAL if @function == "TypeDependsOnUserIVs"   # Hidden Power
-    if physicalMove?(moveType)
-      target.effects[PBEffects::Counter]       = damage
-      target.effects[PBEffects::CounterTarget] = user.index
-    elsif specialMove?(moveType)
-      target.effects[PBEffects::MirrorCoat]       = damage
-      target.effects[PBEffects::MirrorCoatTarget] = user.index
+    if !target.damageState.substitute
+      if physicalMove?(moveType)
+        target.effects[PBEffects::Counter]       = damage
+        target.effects[PBEffects::CounterTarget] = user.index
+      elsif specialMove?(moveType)
+        target.effects[PBEffects::MirrorCoat]       = damage
+        target.effects[PBEffects::MirrorCoatTarget] = user.index
+      end
     end
     if target.effects[PBEffects::Bide] > 0
       target.effects[PBEffects::BideDamage] += damage
       target.effects[PBEffects::BideTarget] = user.index
     end
     target.damageState.fainted = true if target.fainted?
-    target.lastHPLost = damage                        # For Focus Punch
+    target.lastHPLost = damage
+    target.tookMoveDamageThisRound = true if damage > 0 && !target.damageState.substitute   # For Focus Punch
     target.tookDamageThisRound = true if damage > 0   # For Assurance
     target.lastAttacker.push(user.index)              # For Revenge
     if target.opposes?(user)

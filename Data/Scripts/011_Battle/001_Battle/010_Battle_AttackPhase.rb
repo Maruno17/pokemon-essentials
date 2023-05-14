@@ -186,9 +186,9 @@ class Battle
       end
       b.effects[PBEffects::Rage] = false if !pbChoseMoveFunctionCode?(i, "StartRaiseUserAtk1WhenDamaged")
     end
-    PBDebug.log("")
     # Calculate move order for this round
     pbCalculatePriority(true)
+    PBDebug.log("")
     # Perform actions
     pbAttackPhasePriorityChangeMessages
     pbAttackPhaseCall

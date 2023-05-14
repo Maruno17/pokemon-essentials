@@ -81,7 +81,7 @@ module MenuHandlers
   @@handlers = {}
 
   def self.add(menu, option, hash)
-    @@handlers[menu] = HandlerHashBasic.new if !@@handlers.has_key?(menu)
+    @@handlers[menu] = HandlerHash.new if !@@handlers.has_key?(menu)
     @@handlers[menu].add(option, hash)
   end
 

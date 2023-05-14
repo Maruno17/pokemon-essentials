@@ -162,7 +162,7 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_stat_stages, {
       break if cmd < 0
       if cmd < stat_ids.length   # Set a stat
         params = ChooseNumberParams.new
-        params.setRange(-6, 6)
+        params.setRange(-Battle::Battler::STAT_STAGE_MAXIMUM, Battle::Battler::STAT_STAGE_MAXIMUM)
         params.setNegativesAllowed(true)
         params.setDefaultValue(battler.stages[stat_ids[cmd]])
         value = pbMessageChooseNumber(

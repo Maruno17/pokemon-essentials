@@ -171,7 +171,7 @@ class Battle::Battler
     return true
   end
 
-  def pbCanSynchronizeStatus?(newStatus, target)
+  def pbCanSynchronizeStatus?(newStatus, user)
     return false if fainted?
     # Trying to replace a status problem with another one
     return false if self.status != :NONE
@@ -181,8 +181,8 @@ class Battle::Battler
     hasImmuneType = false
     case newStatus
     when :POISON
-      # NOTE: target will have Synchronize, so it can't have Corrosion.
-      if !(target && target.hasActiveAbility?(:CORROSION))
+      # NOTE: user will have Synchronize, so it can't have Corrosion.
+      if !(user && user.hasActiveAbility?(:CORROSION))
         hasImmuneType |= pbHasType?(:POISON)
         hasImmuneType |= pbHasType?(:STEEL)
       end
@@ -205,6 +205,7 @@ class Battle::Battler
       return false
     end
     # Safeguard immunity
+    # NOTE: user will have Synchronize, so it can't have Infiltrator.
     if pbOwnSide.effects[PBEffects::Safeguard] > 0 &&
        !(user && user.hasActiveAbility?(:INFILTRATOR))
       return false

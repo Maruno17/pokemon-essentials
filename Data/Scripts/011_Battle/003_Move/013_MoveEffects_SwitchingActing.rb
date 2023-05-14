@@ -3,7 +3,7 @@
 #===============================================================================
 class Battle::Move::FleeFromBattle < Battle::Move
   def pbMoveFailed?(user, targets)
-    if !@battle.pbCanRun?(user.index)
+    if !@battle.pbCanRun?(user.index) || (user.wild? && user.allAllies.length > 0)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -23,7 +23,7 @@ end
 class Battle::Move::SwitchOutUserStatusMove < Battle::Move
   def pbMoveFailed?(user, targets)
     if user.wild?
-      if !@battle.pbCanRun?(user.index)
+      if !@battle.pbCanRun?(user.index) || user.allAllies.length > 0
         @battle.pbDisplay(_INTL("But it failed!"))
         return true
       end
@@ -59,7 +59,7 @@ end
 
 #===============================================================================
 # After inflicting damage, user switches out. Ignores trapping moves.
-# (U-turn, Volt Switch)
+# (Flip Turn, U-turn, Volt Switch)
 #===============================================================================
 class Battle::Move::SwitchOutUserDamagingMove < Battle::Move
   def pbEndOfMoveUsageEffect(user, targets, numHits, switchedBattlers)
@@ -145,9 +145,9 @@ class Battle::Move::SwitchOutUserPassOnEffects < Battle::Move
 end
 
 #===============================================================================
-# In wild battles, makes target flee. Fails if target is a higher level than the
-# user.
-# In trainer battles, target switches out.
+# When used against a sole wild Pokémon, makes target flee and ends the battle;
+# fails if target is a higher level than the user.
+# When used against a trainer's Pokémon, target switches out.
 # For status moves. (Roar, Whirlwind)
 #===============================================================================
 class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
@@ -171,38 +171,40 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
       @battle.pbDisplay(_INTL("{1} anchored itself with its roots!", target.pbThis)) if show_message
       return true
     end
-    if !@battle.canRun
-      @battle.pbDisplay(_INTL("But it failed!")) if show_message
-      return true
-    end
-    if @battle.wildBattle? && target.level > user.level
-      @battle.pbDisplay(_INTL("But it failed!")) if show_message
-      return true
-    end
-    if @battle.trainerBattle?
+    if target.wild? && target.allAllies.length == 0 && @battle.canRun
+      # End the battle
+      if target.level > user.level
+        @battle.pbDisplay(_INTL("But it failed!")) if show_message
+        return true
+      end
+    elsif !target.wild?
+      # Switch target out
       canSwitch = false
       @battle.eachInTeamFromBattlerIndex(target.index) do |_pkmn, i|
-        next if !@battle.pbCanSwitchLax?(target.index, i)
-        canSwitch = true
-        break
+        canSwitch = @battle.pbCanSwitchIn?(target.index, i)
+        break if canSwitch
       end
       if !canSwitch
         @battle.pbDisplay(_INTL("But it failed!")) if show_message
         return true
       end
+    else
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
+      return true
     end
     return false
   end
 
-  def pbEffectGeneral(user)
-    @battle.decision = 3 if @battle.wildBattle?   # Escaped from battle
+  def pbEffectAgainstTarget(user, target)
+    @battle.decision = 3 if target.wild?   # Escaped from battle
   end
 
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
-    return if @battle.wildBattle? || !switched_battlers.empty?
+    return if !switched_battlers.empty?
     return if user.fainted? || numHits == 0
     targets.each do |b|
       next if b.fainted? || b.damageState.unaffected
+      next if b.wild?
       next if b.effects[PBEffects::Ingrain]
       next if b.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index, true)   # Random
@@ -218,24 +220,26 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
 end
 
 #===============================================================================
-# In wild battles, makes target flee. Fails if target is a higher level than the
-# user.
-# In trainer battles, target switches out.
+# When used against a sole wild Pokémon, makes target flee and ends the battle;
+# fails if target is a higher level than the user.
+# When used against a trainer's Pokémon, target switches out.
 # For damaging moves. (Circle Throw, Dragon Tail)
 #===============================================================================
 class Battle::Move::SwitchOutTargetDamagingMove < Battle::Move
   def pbEffectAgainstTarget(user, target)
-    if @battle.wildBattle? && target.level <= user.level && @battle.canRun &&
+    if target.wild? && target.allAllies.length == 0 && @battle.canRun &&
+       target.level <= user.level &&
        (target.effects[PBEffects::Substitute] == 0 || ignoresSubstitute?(user))
-      @battle.decision = 3
+      @battle.decision = 3   # Escaped from battle
     end
   end
 
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
-    return if @battle.wildBattle? || !switched_battlers.empty?
+    return if !switched_battlers.empty?
     return if user.fainted? || numHits == 0
     targets.each do |b|
       next if b.fainted? || b.damageState.unaffected || b.damageState.substitute
+      next if b.wild?
       next if b.effects[PBEffects::Ingrain]
       next if b.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index, true)   # Random
@@ -306,7 +310,8 @@ end
 
 #===============================================================================
 # Target can no longer switch out or flee, as long as the user remains active.
-# (Anchor Shot, Block, Mean Look, Spider Web, Spirit Shackle, Thousand Waves)
+# Trapping is considered an additional effect for damaging moves.
+# (Anchor Shot, Block, Mean Look, Spider Web, Spirit Shackle)
 #===============================================================================
 class Battle::Move::TrapTargetInBattle < Battle::Move
   def canMagicCoat?; return true; end
@@ -331,6 +336,22 @@ class Battle::Move::TrapTargetInBattle < Battle::Move
   end
 
   def pbAdditionalEffect(user, target)
+    return if target.fainted? || target.damageState.substitute
+    return if target.effects[PBEffects::MeanLook] >= 0
+    return if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
+    target.effects[PBEffects::MeanLook] = user.index
+    @battle.pbDisplay(_INTL("{1} can no longer escape!", target.pbThis))
+  end
+end
+
+#===============================================================================
+# Target can no longer switch out or flee, as long as the user remains active.
+# Trapping is not considered an additional effect. (Thousand Waves)
+#===============================================================================
+class Battle::Move::TrapTargetInBattleMainEffect < Battle::Move
+  def canMagicCoat?; return true; end
+
+  def pbEffectAgainstTarget(user, target)
     return if target.fainted? || target.damageState.substitute
     return if target.effects[PBEffects::MeanLook] >= 0
     return if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
@@ -370,7 +391,7 @@ end
 # fleeing. (Jaw Lock)
 #===============================================================================
 class Battle::Move::TrapUserAndTargetInBattle < Battle::Move
-  def pbAdditionalEffect(user, target)
+  def pbEffectAgainstTarget(user, target)
     return if user.fainted? || target.fainted? || target.damageState.substitute
     return if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
     return if user.trappedInBattle? || target.trappedInBattle?
@@ -540,6 +561,8 @@ end
 # The target uses its most recent move again. (Instruct)
 #===============================================================================
 class Battle::Move::TargetUsesItsLastUsedMoveAgain < Battle::Move
+  attr_reader :moveBlacklist
+
   def ignoresSubstitute?(user); return true; end
 
   def initialize(battle, move)
@@ -587,7 +610,8 @@ class Battle::Move::TargetUsesItsLastUsedMoveAgain < Battle::Move
   end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if !target.lastRegularMoveUsed || !target.pbHasMove?(target.lastRegularMoveUsed)
+    if !target.lastRegularMoveUsed || !target.pbHasMove?(target.lastRegularMoveUsed) ||
+       !GameData::Move.exists?(target.lastRegularMoveUsed)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -658,8 +682,8 @@ end
 # Target's last move used loses 3 PP. Damaging move. (Eerie Spell)
 #===============================================================================
 class Battle::Move::LowerPPOfTargetLastMoveBy3 < Battle::Move
-  def pbEffectAgainstTarget(user, target)
-    return if target.fainted?
+  def pbAdditionalEffect(user, target)
+    return if target.fainted? || target.damageState.substitute
     last_move = target.pbGetMoveWithID(target.lastRegularMoveUsed)
     return if !last_move || last_move.pp == 0 || last_move.total_pp <= 0
     reduction = [3, last_move.pp].min
@@ -757,32 +781,34 @@ end
 # For 4 rounds, the target must use the same move each round. (Encore)
 #===============================================================================
 class Battle::Move::DisableTargetUsingDifferentMove < Battle::Move
+  attr_reader :moveBlacklist
+
   def ignoresSubstitute?(user); return true; end
   def canMagicCoat?;            return true; end
 
   def initialize(battle, move)
     super
     @moveBlacklist = [
-      "DisableTargetUsingDifferentMove",   # Encore
+      "DisableTargetUsingDifferentMove",               # Encore
       # Struggle
-      "Struggle",   # Struggle
+      "Struggle",                                      # Struggle
       # Moves that affect the moveset
       "ReplaceMoveThisBattleWithTargetLastMoveUsed",   # Mimic
-      "ReplaceMoveWithTargetLastMoveUsed",   # Sketch
-      "TransformUserIntoTarget",   # Transform
+      "ReplaceMoveWithTargetLastMoveUsed",             # Sketch
+      "TransformUserIntoTarget",                       # Transform
       # Moves that call other moves (see also below)
-      "UseLastMoveUsedByTarget"   # Mirror Move
+      "UseLastMoveUsedByTarget"                        # Mirror Move
     ]
     if Settings::MECHANICS_GENERATION >= 7
       @moveBlacklist += [
         # Moves that call other moves
-#        "UseLastMoveUsedByTarget",   # Mirror Move                 # See above
-        "UseLastMoveUsed",   # Copycat
-        "UseMoveTargetIsAboutToUse",   # Me First
-        "UseMoveDependingOnEnvironment",   # Nature Power
-        "UseRandomUserMoveIfAsleep",   # Sleep Talk
-        "UseRandomMoveFromUserParty",   # Assist
-        "UseRandomMove"   # Metronome
+#        "UseLastMoveUsedByTarget",                    # Mirror Move   # See above
+        "UseLastMoveUsed",                             # Copycat
+        "UseMoveTargetIsAboutToUse",                   # Me First
+        "UseMoveDependingOnEnvironment",               # Nature Power
+        "UseRandomUserMoveIfAsleep",                   # Sleep Talk
+        "UseRandomMoveFromUserParty",                  # Assist
+        "UseRandomMove"                                # Metronome
       ]
     end
   end
@@ -793,6 +819,7 @@ class Battle::Move::DisableTargetUsingDifferentMove < Battle::Move
       return true
     end
     if !target.lastRegularMoveUsed ||
+       !GameData::Move.exists?(target.lastRegularMoveUsed) ||
        @moveBlacklist.include?(GameData::Move.get(target.lastRegularMoveUsed).function_code)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true

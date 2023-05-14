@@ -143,7 +143,7 @@ ItemHandlers::CanUseInBattle.add(:FULLRESTORE, proc { |item, pokemon, battler, m
 })
 
 ItemHandlers::CanUseInBattle.add(:REVIVE, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
-  if pokemon.able? || pokemon.egg?
+  if !pokemon.fainted?
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
   end

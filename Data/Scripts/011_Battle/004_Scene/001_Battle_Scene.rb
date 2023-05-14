@@ -189,7 +189,7 @@ class Battle::Scene
     pbShowWindow(MESSAGE_BOX)
     cw = @sprites["messageWindow"]
     cw.setText(msg)
-    PBDebug.log(msg)
+    PBDebug.log_message(msg)
     yielded = false
     timer = 0.0
     loop do
@@ -235,7 +235,7 @@ class Battle::Scene
     pbShowWindow(MESSAGE_BOX)
     cw = @sprites["messageWindow"]
     cw.text = msg + "\1"
-    PBDebug.log(msg)
+    PBDebug.log_message(msg)
     yielded = false
     timer = 0.0
     loop do
@@ -283,7 +283,7 @@ class Battle::Scene
     cw.z        = dw.z + 1
     cw.index    = 0
     cw.viewport = @viewport
-    PBDebug.log(msg)
+    PBDebug.log_message(msg)
     loop do
       cw.visible = (!dw.busy?)
       pbUpdate(cw)

@@ -540,7 +540,7 @@ class Pokemon
   # @return [Boolean] whether this Pokémon has a particular nature or a nature
   #   at all
   def hasNature?(check_nature = nil)
-    return !@nature_id.nil? if check_nature.nil?
+    return !@nature.nil? if check_nature.nil?
     return self.nature == check_nature
   end
 

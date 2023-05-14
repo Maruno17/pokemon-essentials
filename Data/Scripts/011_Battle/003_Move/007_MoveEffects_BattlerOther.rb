@@ -100,11 +100,18 @@ end
 # Poisons the target and decreases its Speed by 1 stage. (Toxic Thread)
 #===============================================================================
 class Battle::Move::PoisonTargetLowerTargetSpeed1 < Battle::Move
+  attr_reader :statDown
+
+  def initialize(battle, move)
+    super
+    @statDown = [:SPEED, 1]
+  end
+
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
     if !target.pbCanPoison?(user, false, self) &&
-       !target.pbCanLowerStatStage?(:SPEED, user, self)
+       !target.pbCanLowerStatStage?(@statDown[0], user, self)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -113,8 +120,8 @@ class Battle::Move::PoisonTargetLowerTargetSpeed1 < Battle::Move
 
   def pbEffectAgainstTarget(user, target)
     target.pbPoison(user) if target.pbCanPoison?(user, false, self)
-    if target.pbCanLowerStatStage?(:SPEED, user, self)
-      target.pbLowerStatStage(:SPEED, 1, user)
+    if target.pbCanLowerStatStage?(@statDown[0], user, self)
+      target.pbLowerStatStage(@statDown[0], @statDown[1], user)
     end
   end
 end
@@ -651,6 +658,34 @@ end
 # Changes user's type depending on the environment. (Camouflage)
 #===============================================================================
 class Battle::Move::SetUserTypesBasedOnEnvironment < Battle::Move
+  TERRAIN_TYPES = {
+    :Electric => :ELECTRIC,
+    :Grassy   => :GRASS,
+    :Misty    => :FAIRY,
+    :Psychic  => :PSYCHIC
+  }
+  ENVIRONMENT_TYPES = {
+    :None        => :NORMAL,
+    :Grass       => :GRASS,
+    :TallGrass   => :GRASS,
+    :MovingWater => :WATER,
+    :StillWater  => :WATER,
+    :Puddle      => :WATER,
+    :Underwater  => :WATER,
+    :Cave        => :ROCK,
+    :Rock        => :GROUND,
+    :Sand        => :GROUND,
+    :Forest      => :BUG,
+    :ForestGrass => :BUG,
+    :Snow        => :ICE,
+    :Ice         => :ICE,
+    :Volcano     => :FIRE,
+    :Graveyard   => :GHOST,
+    :Sky         => :FLYING,
+    :Space       => :DRAGON,
+    :UltraSpace  => :PSYCHIC
+  }
+
   def canSnatch?; return true; end
 
   def pbMoveFailed?(user, targets)
@@ -659,56 +694,13 @@ class Battle::Move::SetUserTypesBasedOnEnvironment < Battle::Move
       return true
     end
     @newType = :NORMAL
-    checkedTerrain = false
-    case @battle.field.terrain
-    when :Electric
-      if GameData::Type.exists?(:ELECTRIC)
-        @newType = :ELECTRIC
-        checkedTerrain = true
-      end
-    when :Grassy
-      if GameData::Type.exists?(:GRASS)
-        @newType = :GRASS
-        checkedTerrain = true
-      end
-    when :Misty
-      if GameData::Type.exists?(:FAIRY)
-        @newType = :FAIRY
-        checkedTerrain = true
-      end
-    when :Psychic
-      if GameData::Type.exists?(:PSYCHIC)
-        @newType = :PSYCHIC
-        checkedTerrain = true
-      end
+    terr_type = TERRAIN_TYPES[@battle.field.terrain]
+    if terr_type && GameData::Type.exists?(terr_type)
+      @newType = terr_type
+    else
+      @newType = ENVIRONMENT_TYPES[@battle.environment] || :NORMAL
+      @newType = :NORMAL if !GameData::Type.exists?(@newType)
     end
-    if !checkedTerrain
-      case @battle.environment
-      when :Grass, :TallGrass
-        @newType = :GRASS
-      when :MovingWater, :StillWater, :Puddle, :Underwater
-        @newType = :WATER
-      when :Cave
-        @newType = :ROCK
-      when :Rock, :Sand
-        @newType = :GROUND
-      when :Forest, :ForestGrass
-        @newType = :BUG
-      when :Snow, :Ice
-        @newType = :ICE
-      when :Volcano
-        @newType = :FIRE
-      when :Graveyard
-        @newType = :GHOST
-      when :Sky
-        @newType = :FLYING
-      when :Space
-        @newType = :DRAGON
-      when :UltraSpace
-        @newType = :PSYCHIC
-      end
-    end
-    @newType = :NORMAL if !GameData::Type.exists?(@newType)
     if !GameData::Type.exists?(@newType) || !user.pbHasOtherType?(@newType)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -887,7 +879,7 @@ class Battle::Move::AddGhostTypeToTarget < Battle::Move
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if !GameData::Type.exists?(:GHOST) || target.pbHasType?(:GHOST) || !target.canChangeType?
+    if !target.canChangeType? || !GameData::Type.exists?(:GHOST) || target.pbHasType?(:GHOST)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -908,7 +900,7 @@ class Battle::Move::AddGrassTypeToTarget < Battle::Move
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if !GameData::Type.exists?(:GRASS) || target.pbHasType?(:GRASS) || !target.canChangeType?
+    if !target.canChangeType? || !GameData::Type.exists?(:GRASS) || target.pbHasType?(:GRASS)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -957,7 +949,7 @@ class Battle::Move::SetTargetAbilityToSimple < Battle::Move
   end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.unstoppableAbility? || [:TRUANT, :SIMPLE].include?(target.ability)
+    if target.unstoppableAbility? || [:TRUANT, :SIMPLE].include?(target.ability_id)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -1165,7 +1157,7 @@ class Battle::Move::NegateTargetAbility < Battle::Move
   def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.unstoppableAbility?
+    if target.unstoppableAbility? || target.effects[PBEffects::GastroAcid]
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end

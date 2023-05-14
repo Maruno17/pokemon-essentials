@@ -140,7 +140,7 @@ class Battle
   def pbPartyMenu(idxBattler)
     ret = -1
     if @debug
-      ret = @battleAI.pbDefaultChooseNewEnemy(idxBattler, pbParty(idxBattler))
+      ret = @battleAI.pbDefaultChooseNewEnemy(idxBattler)
     else
       ret = pbPartyScreen(idxBattler, false, true, true)
     end
@@ -172,6 +172,7 @@ class Battle
   # Command phase
   #=============================================================================
   def pbCommandPhase
+    @command_phase = true
     @scene.pbBeginCommandPhase
     # Reset choices if commands can be shown
     @battlers.each_with_index do |b, i|
@@ -186,8 +187,12 @@ class Battle
     end
     # Choose actions for the round (player first, then AI)
     pbCommandPhaseLoop(true)    # Player chooses their actions
-    return if @decision != 0   # Battle ended, stop choosing actions
+    if @decision != 0   # Battle ended, stop choosing actions
+      @command_phase = false
+      return
+    end
     pbCommandPhaseLoop(false)   # AI chooses their actions
+    @command_phase = false
   end
 
   def pbCommandPhaseLoop(isPlayer)
@@ -200,8 +205,11 @@ class Battle
       idxBattler += 1
       break if idxBattler >= @battlers.length
       next if !@battlers[idxBattler] || pbOwnedByPlayer?(idxBattler) != isPlayer
-      next if @choices[idxBattler][0] != :None    # Action is forced, can't choose one
-      next if !pbCanShowCommands?(idxBattler)   # Action is forced, can't choose one
+      if @choices[idxBattler][0] != :None || !pbCanShowCommands?(idxBattler)
+        # Action is forced, can't choose one
+        PBDebug.log_ai("#{@battlers[idxBattler].pbThis} (#{idxBattler}) is forced to use a multi-turn move")
+        next
+      end
       # AI controls this battler
       if @controlPlayer || !pbOwnedByPlayer?(idxBattler)
         @battleAI.pbDefaultChooseEnemyCommand(idxBattler)
