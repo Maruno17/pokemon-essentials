@@ -233,6 +233,7 @@ class Scene_Map
     if $game_temp.title_screen_calling
       pbMapInterpreter.command_end if pbMapInterpreterRunning?
       $game_temp.title_screen_calling = false
+      pbBGMFade(1.0)
       Graphics.transition
       Graphics.freeze
     end

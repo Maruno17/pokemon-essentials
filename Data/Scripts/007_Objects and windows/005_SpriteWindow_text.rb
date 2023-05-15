@@ -47,7 +47,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     return ret
   end
 
-  def resizeToFitInternal(text, maxwidth) # maxwidth is maximum acceptable window width
+  def resizeToFitInternal(text, maxwidth)   # maxwidth is maximum acceptable window width
     dims = [0, 0]
     cwidth = maxwidth < 0 ? Graphics.width : maxwidth
     getLineBrokenChunks(self.contents, text,
@@ -173,7 +173,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     moveCursor
   end
 
-  def lineHeight(value)
+  def lineHeight=(value)
     @lineHeight = value
     self.text = self.text
   end
@@ -296,7 +296,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     width  = 1
     height = 1
     numlines = 0
-    visiblelines = (self.height - self.borderY) / 32
+    visiblelines = (self.height - self.borderY) / @lineHeight
     if value.length == 0
       @fmtchars     = []
       @bitmapwidth  = width
@@ -307,7 +307,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         @fmtchars = []
         fmt = getFormattedText(self.contents, 0, 0,
                                self.width - self.borderX - SpriteWindow_Base::TEXT_PADDING, -1,
-                               shadowc3tag(@baseColor, @shadowColor) + value, 32, true)
+                               shadowc3tag(@baseColor, @shadowColor) + value, @lineHeight, true)
         @oldfont = self.contents.font.clone
         fmt.each do |ch|
           chx = ch[1] + ch[3]
@@ -334,7 +334,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       else
         @fmtchars = getFormattedText(self.contents, 0, 0,
                                      self.width - self.borderX - SpriteWindow_Base::TEXT_PADDING, -1,
-                                     shadowc3tag(@baseColor, @shadowColor) + value, 32, true)
+                                     shadowc3tag(@baseColor, @shadowColor) + value, @lineHeight, true)
         @oldfont = self.contents.font.clone
         @fmtchars.each do |ch|
           chx = ch[1] + ch[3]

@@ -536,6 +536,8 @@ end
 # Power is also doubled if user has curled up. (Ice Ball, Rollout)
 #===============================================================================
 class Battle::Move::MultiTurnAttackPowersUpEachTurn < Battle::Move
+  def pbNumHits(user, targets); return 1; end
+
   def pbBaseDamage(baseDmg, user, target)
     shift = (5 - user.effects[PBEffects::Rollout])   # 0-4, where 0 is most powerful
     shift = 0 if user.effects[PBEffects::Rollout] == 0   # For first turn

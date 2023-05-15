@@ -61,7 +61,7 @@ class Battle::Battler
       end
     end
     # Taunt
-    if @effects[PBEffects::Taunt] > 0 && move.statusMove?
+    if @effects[PBEffects::Taunt] > 0 && move.statusMove? && !specialUsage
       if showMessages
         msg = _INTL("{1} can't use {2} after the taunt!", pbThis, move.name)
         (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
@@ -69,7 +69,7 @@ class Battle::Battler
       return false
     end
     # Torment
-    if @effects[PBEffects::Torment] && !@effects[PBEffects::Instructed] &&
+    if @effects[PBEffects::Torment] && !@effects[PBEffects::Instructed] && !specialUsage &&
        @lastMoveUsed && move.id == @lastMoveUsed && move.id != @battle.struggle.id
       if showMessages
         msg = _INTL("{1} can't use the same move twice in a row due to the torment!", pbThis)
