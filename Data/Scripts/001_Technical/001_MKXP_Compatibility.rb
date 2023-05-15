@@ -1,6 +1,5 @@
-# Using mkxp-z v2.4.0 - https://gitlab.com/mkxp-z/mkxp-z/-/releases/v2.4.0
+# Using mkxp-z v2.4.2 - https://github.com/mkxp-z/mkxp-z/releases/tag/v2.4.2
 $VERBOSE = nil
-begin; require 'zlib'; rescue; nil; end
 Font.default_shadow = false if Font.respond_to?(:default_shadow)
 Graphics.frame_rate = 40
 Encoding.default_internal = Encoding::UTF_8
@@ -30,7 +29,7 @@ end
 
 module Graphics
   def self.delta_s
-    return self.delta.to_f / 1_000_000
+    return self.delta
   end
 end
 
