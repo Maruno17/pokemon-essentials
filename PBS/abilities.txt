@@ -158,8 +158,8 @@ Description = The Pokémon is protected from flinching.
 #-------------------------------
 [MAGMAARMOR]
 Name = Magma Armor
-Description = Prevents the Pokémon from becoming frozen.
 Flags = FasterEggHatching
+Description = Prevents the Pokémon from becoming frozen.
 #-------------------------------
 [WATERVEIL]
 Name = Water Veil
@@ -195,8 +195,8 @@ Description = The Pokémon awakens quickly from sleep.
 #-------------------------------
 [FLAMEBODY]
 Name = Flame Body
-Description = Contact with the Pokémon may burn the attacker.
 Flags = FasterEggHatching
+Description = Contact with the Pokémon may burn the attacker.
 #-------------------------------
 [RUNAWAY]
 Name = Run Away
@@ -972,8 +972,8 @@ Description = This Pokémon's moves cannot be redirected.
 #-------------------------------
 [STEAMENGINE]
 Name = Steam Engine
-Description = Boosts Speed drastically if hit by a Fire or Water move.
 Flags = FasterEggHatching
+Description = Boosts Speed drastically if hit by a Fire or Water move.
 #-------------------------------
 [PUNKROCK]
 Name = Punk Rock
@@ -1070,3 +1070,127 @@ Description = Combines Unnerve and Chilling Neigh Abilities.
 [ASONEGRIMNEIGH]
 Name = As One
 Description = Combines Unnerve and Grim Neigh Abilities.
+#-------------------------------
+[LINGERINGAROMA]
+Name = Lingering Aroma
+Description = Contact with this Pokémon spreads this Ability.
+#-------------------------------
+[SEEDSOWER]
+Name = Seed Sower
+Description = Turns the ground into Grassy Terrain upon taking damage.
+#-------------------------------
+[THERMALEXCHANGE]
+Name = Thermal Exchange
+Description = Boosts Attack when hit by a Fire-type move.
+#-------------------------------
+[ANGERSHELL]
+Name = Anger Shell
+Description = Gets a powerful boost if a hit makes its HP half or less.
+#-------------------------------
+[PURIFYINGSALT]
+Name = Purifying Salt
+Description = Gains protection from status effects and Ghost-type moves.
+#-------------------------------
+[WELLBAKEDBODY]
+Name = Well-Baked Body
+Description = Fire-type moves deal no damage and sharply boost Defense.
+#-------------------------------
+[WINDRIDER]
+Name = Wind Rider
+Description = Boosts Attack in Tailwind or when attacked by wind moves.
+#-------------------------------
+[GUARDDOG]
+Name = Guard Dog
+Description = Boosts Atk if intimidated and immune to being forced out.
+#-------------------------------
+[ROCKYPAYLOAD]
+Name = Rocky Payload
+Description = Powers up Rock-type moves.
+#-------------------------------
+[WINDPOWER]
+Name = Wind Power
+Description = The Pokémon becomes charged from taking wind damage.
+#-------------------------------
+[ZEROTOHERO]
+Name = Zero to Hero
+Description = Transforms into its Hero Form when it switches out.
+#-------------------------------
+[COMMANDER]
+Name = Commander
+Description = Pairs up and commands with an active Dondozo.
+#-------------------------------
+[ELECTROMORPHOSIS]
+Name = Electromorphosis
+Description = The Pokémon becomes charged upon taking damage.
+#-------------------------------
+[PROTOSYNTHESIS]
+Name = Protosynthesis
+Description = Boosts its best stat in harsh sunlight.
+#-------------------------------
+[QUARKDRIVE]
+Name = Quark Drive
+Description = Boosts its best stat in Electric Terrain.
+#-------------------------------
+[GOODASGOLD]
+Name = Good as Gold
+Description = The Pokémon becomes immune to status moves.
+#-------------------------------
+[VESSELOFRUIN]
+Name = Vessel of Ruin
+Description = Lowers the Sp. Atk of all Pokémon except the user.
+#-------------------------------
+[SWORDOFRUIN]
+Name = Sword of Ruin
+Description = Lowers the Defense of all Pokémon except the user.
+#-------------------------------
+[TABLETSOFRUIN]
+Name = Tablets of Ruin
+Description = Lowers the Attack of all Pokémon except the user.
+#-------------------------------
+[BEADSOFRUIN]
+Name = Beads of Ruin
+Description = Lowers the Sp. Def of all Pokémon except the user.
+#-------------------------------
+[ORICHALCUMPULSE]
+Name = Orichalcum Pulse
+Description = Turns the sunlight harsh while boosing Attack.
+#-------------------------------
+[HADRONENGINE]
+Name = Hadron Engine
+Description = Turns the ground into Electric Terrain and boosts Sp. Atk.
+#-------------------------------
+[OPPORTUNIST]
+Name = Opportunist
+Description = Copies an opponent's stat boosts during a turn.
+#-------------------------------
+[CUDCHEW]
+Name = Cud Chew
+Description = Reuses an eaten Berry at the end of the next turn.
+#-------------------------------
+[SHARPNESS]
+Name = Sharpness
+Description = Powers up slicing moves.
+#-------------------------------
+[SUPREMEOVERLORD]
+Name = Supreme Overlord
+Description = Boosts the power of its moves with every fainted ally.
+#-------------------------------
+[COSTAR]
+Name = Costar
+Description = Copies an ally's stat changes upon entry to battle.
+#-------------------------------
+[TOXICDEBRIS]
+Name = Toxic Debris
+Description = Scatters Toxic Spikes when hit by physical moves.
+#-------------------------------
+[ARMORTAILl]
+Name = Armor Tail
+Description = Prevents opposing Pokémon from using priority moves.
+#-------------------------------
+[EARTHEATER]
+Name = Earth Eater
+Description = Restores HP if hit by a Ground-type move.
+#-------------------------------
+[MYCELIUMMIGHT]
+Name = Mycelium Might
+Description = Status moves are unimpeded by Abilities but slower to use.
