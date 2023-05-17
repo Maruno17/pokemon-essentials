@@ -221,13 +221,12 @@ class TriadScene
 
   def pbDisplay(text)
     @sprites["helpwindow"].text = text
-    timer = 0.0
+    timer_start = System.uptime
     loop do
       Graphics.update
       Input.update
       pbUpdate
-      timer += Graphics.delta_s
-      break if timer >= 1.5
+      break if System.uptime - timer_start >= 1.5
     end
   end
 

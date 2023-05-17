@@ -33,7 +33,7 @@ class IntroEventScene < EventScene
     # fade to opacity 255 in FADE_TICKS ticks after waiting 0 frames
     @pic.moveOpacity(0, FADE_TICKS, 255)
     pictureWait
-    @timer = 0.0                            # reset the timer
+    @timer = System.uptime                  # reset the timer
     onUpdate.set(method(:splash_update))    # called every frame
     onCTrigger.set(method(:close_splash))   # called when C key is pressed
   end
@@ -52,8 +52,7 @@ class IntroEventScene < EventScene
   end
 
   def splash_update(scene, args)
-    @timer += Graphics.delta_s
-    close_splash(scene, args) if @timer > SECONDS_PER_SPLASH
+    close_splash(scene, args) if System.uptime - @timer >= SECONDS_PER_SPLASH
   end
 
   def open_title_screen(_scene, *args)

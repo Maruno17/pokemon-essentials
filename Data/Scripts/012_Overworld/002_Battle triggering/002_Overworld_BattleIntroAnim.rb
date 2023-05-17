@@ -139,13 +139,12 @@ def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
   $PokemonEncounters.reset_step_count
   # Fade back to the overworld in 0.4 seconds
   viewport.color = Color.black
-  timer = 0.0
+  timer_start = System.uptime
   loop do
     Graphics.update
     Input.update
     pbUpdateSceneMap
-    timer += Graphics.delta_s
-    viewport.color.alpha = 255 * (1 - (timer / 0.4))
+    viewport.color.alpha = 255 * (1 - ((System.uptime - timer_start) / 0.4))
     break if viewport.color.alpha <= 0
   end
   viewport.dispose
@@ -159,17 +158,16 @@ def pbBattleAnimationCore(anim, viewport, location, num_flashes = 2)
     viewport.color = Color.new(c, c, c)   # Fade to black/white a few times
     half_flash_time = 0.2   # seconds
     num_flashes.times do   # 2 flashes
-      timer = 0.0
+      timer_start = System.uptime
       loop do
-        if timer < half_flash_time
-          viewport.color.alpha = 255 * timer / half_flash_time
+        if System.uptime - timer_start < half_flash_time
+          viewport.color.alpha = 255 * (System.uptime - timer_start) / half_flash_time
         else
-          viewport.color.alpha = 255 * (2 - (timer / half_flash_time))
+          viewport.color.alpha = 255 * (2 - ((System.uptime - timer_start) / half_flash_time))
         end
-        timer += Graphics.delta_s
         Graphics.update
         pbUpdateSceneMap
-        break if timer >= half_flash_time * 2
+        break if System.uptime - timer_start >= half_flash_time * 2
       end
     end
     viewport.color.alpha = 0

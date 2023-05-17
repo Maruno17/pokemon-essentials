@@ -101,10 +101,11 @@ class Scene_Credits
 # Stop Editing
 
   def main
+    @quit = false
     #-------------------------------
     # Animated Background Setup
     #-------------------------------
-    @counter = 0.0   # Counts time elapsed since the background image changed
+    @timer_start = System.uptime   # Time when the credits started
     @bg_index = 0
     @bitmap_height = Graphics.height   # For a single credits text bitmap
     @trim = Graphics.height / 10
@@ -198,55 +199,46 @@ class Scene_Credits
       Graphics.update
       Input.update
       update
-      break if $scene != self
+      break if @quit
     end
-    pbBGMFade(2.0)
     $game_temp.background_bitmap = Graphics.snap_to_bitmap
+    pbBGMFade(2.0)
     Graphics.freeze
     viewport.color = Color.black   # Ensure screen is black
+    text_viewport.color = Color.black   # Ensure screen is black
     Graphics.transition(8, "fadetoblack")
     $game_temp.background_bitmap.dispose
     @background_sprite.dispose
     @credit_sprites.each { |s| s&.dispose }
-    text_viewport.dispose
     viewport.dispose
+    text_viewport.dispose
     $PokemonGlobal.creditsPlayed = true
     pbBGMPlay(previousBGM)
+    $scene = ($game_map) ? Scene_Map.new : nil
   end
 
   # Check if the credits should be cancelled
   def cancel?
-    if Input.trigger?(Input::USE) && $PokemonGlobal.creditsPlayed
-      $scene = Scene_Map.new
-      pbBGMFade(1.0)
-      return true
-    end
-    return false
+    @quit = true if Input.trigger?(Input::USE) && $PokemonGlobal.creditsPlayed
+    return @quit
   end
 
   # Checks if credits bitmap has reached its ending point
   def last?
-    if @realOY > @total_height + @trim
-      $scene = ($game_map) ? Scene_Map.new : nil
-      pbBGMFade(2.0)
-      return true
-    end
-    return false
+    @quit = true if @realOY > @total_height + @trim
+    return @quit
   end
 
   def update
-    delta = Graphics.delta_s
-    @counter += delta
     # Go to next slide
-    if @counter >= SECONDS_PER_BACKGROUND
-      @counter -= SECONDS_PER_BACKGROUND
-      @bg_index += 1
-      @bg_index = 0 if @bg_index >= BACKGROUNDS_LIST.length
+    new_bg_index = ((System.uptime - @timer_start) / SECONDS_PER_BACKGROUND) % BACKGROUNDS_LIST.length
+    if @bg_index != new_bg_index
+      @bg_index = new_bg_index
       @background_sprite.setBitmap("Graphics/Titles/" + BACKGROUNDS_LIST[@bg_index])
     end
     return if cancel?
     return if last?
-    @realOY += SCROLL_SPEED * delta
+    @realOY = SCROLL_SPEED * (System.uptime - @timer_start) - Graphics.height + @trim
     @credit_sprites.each_with_index { |s, i| s.oy = @realOY - (@bitmap_height * i) }
   end
 end

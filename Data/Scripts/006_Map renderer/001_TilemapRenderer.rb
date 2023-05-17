@@ -127,7 +127,7 @@ class TilemapRenderer
       @frame_counts    = {}   # Number of frames in each autotile
       @frame_durations = {}   # How long each frame lasts per autotile
       @current_frames  = {}   # Which frame each autotile is currently showing
-      @timer           = 0.0
+      @timer_start     = System.uptime
     end
 
     def []=(filename, value)
@@ -193,7 +193,7 @@ class TilemapRenderer
       if frames < 2
         @current_frames[filename] = 0
       else
-        @current_frames[filename] = (@timer / @frame_durations[filename]).floor % frames
+        @current_frames[filename] = ((System.uptime - @timer_start) / @frame_durations[filename]).floor % frames
       end
     end
 
@@ -219,7 +219,6 @@ class TilemapRenderer
 
     def update
       super
-      @timer += Graphics.delta_s
       # Update the current frame for each autotile
       @bitmaps.each_key do |filename|
         next if !@bitmaps[filename] || @bitmaps[filename].disposed?

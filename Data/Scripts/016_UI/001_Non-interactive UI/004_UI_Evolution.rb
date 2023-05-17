@@ -539,13 +539,12 @@ class PokemonEvolutionScene
     pbPlayDecisionSE
     @pokemon.play_cry
     @sprites["msgwindow"].text = _INTL("{1} is evolving!", @pokemon.name)
-    timer = 0.0
+    timer_start = System.uptime
     loop do
       Graphics.update
       Input.update
       pbUpdate
-      timer += Graphics.delta_s
-      break if timer >= 1.0
+      break if System.uptime - timer_start >= 1
     end
     oldstate  = pbSaveSpriteState(@sprites["rsprite1"])
     oldstate2 = pbSaveSpriteState(@sprites["rsprite2"])

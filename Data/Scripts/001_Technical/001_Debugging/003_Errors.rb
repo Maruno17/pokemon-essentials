@@ -64,8 +64,8 @@ def pbPrintException(e)
   # output message
   print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl when closing this message to copy it to the clipboard.")
   # Give a ~500ms coyote time to start holding Control
-  t = System.delta
-  until (System.delta - t) >= 500_000
+  t = System.uptime
+  until System.uptime - t >= 0.5
     Input.update
     if Input.press?(Input::CTRL)
       Input.clipboard = message

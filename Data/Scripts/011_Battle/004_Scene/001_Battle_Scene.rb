@@ -172,10 +172,9 @@ class Battle::Scene
     return if !@briefMessage
     pbShowWindow(MESSAGE_BOX)
     cw = @sprites["messageWindow"]
-    timer = 0.0
-    while timer < MESSAGE_PAUSE_TIME
+    timer_start = System.uptime
+    while System.uptime - timer_start < MESSAGE_PAUSE_TIME
       pbUpdate(cw)
-      timer += Graphics.delta_s
     end
     cw.text    = ""
     cw.visible = false
@@ -191,7 +190,7 @@ class Battle::Scene
     cw.setText(msg)
     PBDebug.log_message(msg)
     yielded = false
-    timer = 0.0
+    timer_start = System.uptime
     loop do
       pbUpdate(cw)
       if !cw.busy?
@@ -205,12 +204,11 @@ class Battle::Scene
           @briefMessage = true
           break
         end
-        if timer >= MESSAGE_PAUSE_TIME   # Autoclose after 1 second
+        if System.uptime - timer_start >= MESSAGE_PAUSE_TIME   # Autoclose after 1 second
           cw.text = ""
           cw.visible = false
           break
         end
-        timer += Graphics.delta_s
       end
       if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE) || @abortable
         if cw.busy?
@@ -237,7 +235,7 @@ class Battle::Scene
     cw.text = msg + "\1"
     PBDebug.log_message(msg)
     yielded = false
-    timer = 0.0
+    timer_start = System.uptime
     loop do
       pbUpdate(cw)
       if !cw.busy?
@@ -246,12 +244,11 @@ class Battle::Scene
           yielded = true
         end
         if !@battleEnd
-          if timer >= MESSAGE_PAUSE_TIME * 3   # Autoclose after 3 seconds
+          if System.uptime - timer_start >= MESSAGE_PAUSE_TIME * 3   # Autoclose after 3 seconds
             cw.text = ""
             cw.visible = false
             break
           end
-          timer += Graphics.delta_s
         end
       end
       if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE) || @abortable

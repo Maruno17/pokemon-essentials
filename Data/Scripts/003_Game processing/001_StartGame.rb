@@ -46,6 +46,7 @@ module Game
     pbMapInterpreter&.setup(nil, 0, 0)
     $scene = Scene_Map.new
     SaveData.load_new_game_values
+    $game_temp.last_uptime_refreshed_play_time = System.uptime
     $stats.play_sessions += 1
     $map_factory = PokemonMapFactory.new($data_system.start_map_id)
     $game_player.moveto($data_system.start_x, $data_system.start_y)
@@ -62,6 +63,7 @@ module Game
   def self.load(save_data)
     validate save_data => Hash
     SaveData.load_all_values(save_data)
+    $game_temp.last_uptime_refreshed_play_time = System.uptime
     $stats.play_sessions += 1
     self.load_map
     pbAutoplayOnSave

@@ -345,11 +345,10 @@ class Battle::Scene
     return if @battle.opponent
     @briefMessage = false
     pbMEPlay(pbGetWildCaptureME)
-    timer = 0.0
+    timer_start = System.uptime
     loop do
       pbUpdate
-      timer += Graphics.delta_s
-      break if timer >= 3.5
+      break if System.uptime - timer_start >= 3.5
     end
     pbMEStop
   end

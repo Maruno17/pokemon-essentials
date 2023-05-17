@@ -232,6 +232,7 @@ class Scene_Map
     dispose
     if $game_temp.title_screen_calling
       pbMapInterpreter.command_end if pbMapInterpreterRunning?
+      $game_temp.last_uptime_refreshed_play_time = nil
       $game_temp.title_screen_calling = false
       pbBGMFade(1.0)
       Graphics.transition

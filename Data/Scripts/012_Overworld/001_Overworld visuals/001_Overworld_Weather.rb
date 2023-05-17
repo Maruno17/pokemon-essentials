@@ -271,7 +271,7 @@ module RPG
 
     def update_sprite_position(sprite, index, is_new_sprite = false)
       return if !sprite || !sprite.bitmap || !sprite.visible
-      delta_t = Graphics.delta_s
+      delta_t = Graphics.delta
       lifetimes = (is_new_sprite) ? @new_sprite_lifetimes : @sprite_lifetimes
       if lifetimes[index] >= 0
         lifetimes[index] -= delta_t
@@ -310,7 +310,7 @@ module RPG
     end
 
     def recalculate_tile_positions
-      delta_t = Graphics.delta_s
+      delta_t = Graphics.delta
       weather_type = @type
       if @fading && @fade_time >= [FADE_OLD_TONE_END - @time_shift, 0].max
         weather_type = @target_type
@@ -411,7 +411,7 @@ module RPG
         @sun_magnitude = weather_max if @sun_magnitude != weather_max && @sun_magnitude != -weather_max
         @sun_magnitude *= -1 if (@sun_magnitude > 0 && @sun_strength > @sun_magnitude) ||
                                 (@sun_magnitude < 0 && @sun_strength < 0)
-        @sun_strength += @sun_magnitude.to_f * Graphics.delta_s / 0.4   # 0.4 seconds per half flash
+        @sun_strength += @sun_magnitude.to_f * Graphics.delta / 0.4   # 0.4 seconds per half flash
         tone_red += @sun_strength
         tone_green += @sun_strength
         tone_blue += @sun_strength / 2
@@ -424,7 +424,7 @@ module RPG
     def update_fading
       return if !@fading
       old_fade_time = @fade_time
-      @fade_time += Graphics.delta_s
+      @fade_time += Graphics.delta
       # Change tile bitmaps
       if @type != @target_type
         tile_change_threshold = [FADE_OLD_TONE_END - @time_shift, 0].max
@@ -483,7 +483,7 @@ module RPG
       # Storm flashes
       if @type == :Storm && !@fading
         if @time_until_flash > 0
-          @time_until_flash -= Graphics.delta_s
+          @time_until_flash -= Graphics.delta
           if @time_until_flash <= 0
             @viewport.flash(Color.new(255, 255, 255, 230), rand(2..4) * 20)
           end
