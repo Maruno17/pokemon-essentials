@@ -27,8 +27,7 @@ class BugContestState
   # Returns whether the last contest ended less than 24 hours ago.
   def pbContestHeld?
     return false if !@lastContest
-    timenow = pbGetTimeNow
-    return timenow.to_i - @lastContest < 24 * 60 * 60   # 24 hours
+    return pbGetTimeNow.to_i - @lastContest < 24 * 60 * 60   # 24 hours
   end
 
   def expired?
@@ -222,8 +221,7 @@ class BugContestState
     @otherparty = []
     @contestMaps = []
     @reception = []
-    timenow = pbGetTimeNow
-    @lastContest = timenow.to_i
+    @lastContest = pbGetTimeNow.to_i
     $game_map.need_refresh = true
   end
 end

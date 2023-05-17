@@ -12,10 +12,10 @@ def findBottom(bitmap)
 end
 
 def pbAutoPositionAll
-  t = Time.now.to_i
+  t = System.uptime
   GameData::Species.each do |sp|
-    if Time.now.to_i - t >= 5
-      t = Time.now.to_i
+    if System.uptime - t >= 5
+      t += 5
       Graphics.update
     end
     metrics = GameData::SpeciesMetrics.get_species_form(sp.species, sp.form)

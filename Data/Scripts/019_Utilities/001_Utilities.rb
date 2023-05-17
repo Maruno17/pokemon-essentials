@@ -609,7 +609,7 @@ def pbChooseLanguage
 end
 
 def pbScreenCapture
-  t = pbGetTimeNow
+  t = Time.now
   filestart = t.strftime("[%Y-%m-%d] %H_%M_%S.%L")
   capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
   Graphics.screenshot(capturefile)

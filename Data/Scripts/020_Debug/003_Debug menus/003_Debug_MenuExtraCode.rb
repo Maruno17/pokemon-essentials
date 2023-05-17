@@ -670,14 +670,14 @@ def pbDebugFixInvalidTiles
   num_error_maps = 0
   tilesets = $data_tilesets
   mapData = Compiler::MapData.new
-  t = Time.now.to_i
+  t = System.uptime
   Graphics.update
   total_maps = mapData.mapinfos.keys.length
   Console.echo_h1(_INTL("Checking {1} maps for invalid tiles", total_maps))
   mapData.mapinfos.keys.sort.each do |id|
-    if Time.now.to_i - t >= 5
+    if System.uptime - t >= 5
+      t += 5
       Graphics.update
-      t = Time.now.to_i
     end
     map_errors = 0
     map = mapData.getMap(id)

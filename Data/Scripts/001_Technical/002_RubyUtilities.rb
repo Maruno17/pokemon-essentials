@@ -144,14 +144,14 @@ class File
   # Copies the source file to the destination path.
   def self.copy(source, destination)
     data = ""
-    t = Time.now
+    t = System.uptime
     File.open(source, "rb") do |f|
       loop do
         r = f.read(4096)
         break if !r
-        if Time.now - t > 1
+        if System.uptime - t >= 5
+          t += 5
           Graphics.update
-          t = Time.now
         end
         data += r
       end

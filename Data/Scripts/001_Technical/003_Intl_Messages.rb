@@ -7,12 +7,12 @@ module Translator
   def gather_script_and_event_texts
     Graphics.update
     begin
-      t = Time.now.to_i
+      t = System.uptime
       texts = []
       # Get script texts from Scripts.rxdata
       $RGSS_SCRIPTS.each do |script|
-        if Time.now.to_i - t >= 5
-          t = Time.now.to_i
+        if System.uptime - t >= 5
+          t += 5
           Graphics.update
         end
         scr = Zlib::Inflate.inflate(script[2])
@@ -22,8 +22,8 @@ module Translator
       # script texts from .rb files in Data/Scripts
       if $RGSS_SCRIPTS.length == 1
         Dir.all("Data/Scripts").each do |script_file|
-          if Time.now.to_i - t >= 5
-            t = Time.now.to_i
+          if System.uptime - t >= 5
+            t += 5
             Graphics.update
           end
           File.open(script_file, "rb") do |f|
@@ -36,8 +36,8 @@ module Translator
         plugin_scripts = load_data("Data/PluginScripts.rxdata")
         plugin_scripts.each do |plugin|
           plugin[2].each do |script|
-            if Time.now.to_i - t >= 5
-              t = Time.now.to_i
+            if System.uptime - t >= 5
+              t += 5
               Graphics.update
             end
             scr = Zlib::Inflate.inflate(script[1]).force_encoding(Encoding::UTF_8)
@@ -51,8 +51,8 @@ module Translator
       items = []
       choices = []
       commonevents.compact.each do |event|
-        if Time.now.to_i - t >= 5
-          t = Time.now.to_i
+        if System.uptime - t >= 5
+          t += 5
           Graphics.update
         end
         begin
@@ -99,8 +99,8 @@ module Translator
           end
         end
       end
-      if Time.now.to_i - t >= 5
-        t = Time.now.to_i
+      if System.uptime - t >= 5
+        t += 5
         Graphics.update
       end
       items |= []
@@ -110,8 +110,8 @@ module Translator
       # Find all text in map events and add them to messages
       mapinfos = pbLoadMapInfos
       mapinfos.each_key do |id|
-        if Time.now.to_i - t >= 5
-          t = Time.now.to_i
+        if System.uptime - t >= 5
+          t += 5
           Graphics.update
         end
         filename = sprintf("Data/Map%03d.rxdata", id)
@@ -120,8 +120,8 @@ module Translator
         items = []
         choices = []
         map.events.each_value do |event|
-          if Time.now.to_i - t >= 5
-            t = Time.now.to_i
+          if System.uptime - t >= 5
+            t += 5
             Graphics.update
           end
           begin
@@ -170,16 +170,16 @@ module Translator
             end
           end
         end
-        if Time.now.to_i - t >= 5
-          t = Time.now.to_i
+        if System.uptime - t >= 5
+          t += 5
           Graphics.update
         end
         items |= []
         choices |= []
         items.concat(choices)
         MessageTypes.setMapMessagesAsHash(id, items) if items.length > 0
-        if Time.now.to_i - t >= 5
-          t = Time.now.to_i
+        if System.uptime - t >= 5
+          t += 5
           Graphics.update
         end
       end

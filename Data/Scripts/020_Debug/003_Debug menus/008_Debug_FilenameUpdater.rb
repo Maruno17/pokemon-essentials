@@ -36,7 +36,7 @@ module FilenameUpdater
   def update_berry_tree_event_charsets
     ret = []
     mapData = Compiler::MapData.new
-    t = Time.now.to_i
+    t = System.uptime
     Graphics.update
     Console.echo_li(_INTL("Checking {1} maps for used berry tree charsets...", mapData.mapinfos.keys.length))
     idx = 0
@@ -48,9 +48,9 @@ module FilenameUpdater
       next if !map || !mapData.mapinfos[id]
       changed = false
       map.events.each_key do |key|
-        if Time.now.to_i - t >= 5
+        if System.uptime - t >= 5
+          t += 5
           Graphics.update
-          t = Time.now.to_i
         end
         map.events[key].pages.each do |page|
           next if nil_or_empty?(page.graphic.character_name)

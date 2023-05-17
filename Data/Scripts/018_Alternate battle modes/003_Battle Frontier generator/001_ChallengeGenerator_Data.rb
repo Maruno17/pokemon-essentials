@@ -320,16 +320,16 @@ def pbWriteCup(id, rules)
   when 2   # Yes, use new
     return if !pbConfirmMessage(_INTL("This may take a long time. Are you sure?"))
     mw = pbCreateMessageWindow
-    t = Time.now
+    t = System.uptime
     pbGenerateChallenge(rules, id) do |message|
-      if Time.now - t >= 5
+      if System.uptime - t >= 5
+        t += 5
         Graphics.update
-        t = Time.now
       end
       if message
         pbMessageDisplay(mw, message, false)
+        t = System.uptime
         Graphics.update
-        t = Time.now
       end
     end
     pbDisposeMessageWindow(mw)

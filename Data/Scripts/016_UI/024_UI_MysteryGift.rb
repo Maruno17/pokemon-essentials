@@ -378,8 +378,7 @@ def pbReceiveMysteryGift(id)
   if gift[1] == 0   # Pokémon
     gift[2].personalID = rand(2**16) | (rand(2**16) << 16)
     gift[2].calc_stats
-    time = pbGetTimeNow
-    gift[2].timeReceived = time.getgm.to_i
+    gift[2].timeReceived = Time.now.to_i
     gift[2].obtain_method = 4   # Fateful encounter
     gift[2].record_first_moves
     gift[2].obtain_level = gift[2].level

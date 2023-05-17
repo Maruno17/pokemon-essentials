@@ -1682,7 +1682,7 @@ module Compiler
   #=============================================================================
   def compile_trainer_events(_mustcompile)
     mapData = MapData.new
-    t = Time.now.to_i
+    t = System.uptime
     Graphics.update
     trainerChecker = TrainerChecker.new
     change_record = []
@@ -1696,9 +1696,9 @@ module Compiler
       map = mapData.getMap(id)
       next if !map || !mapData.mapinfos[id]
       map.events.each_key do |key|
-        if Time.now.to_i - t >= 5
+        if System.uptime - t >= 5
+          t += 5
           Graphics.update
-          t = Time.now.to_i
         end
         newevent = convert_to_trainer_event(map.events[key], trainerChecker)
         if newevent
@@ -1718,9 +1718,9 @@ module Compiler
           changed = true
         end
       end
-      if Time.now.to_i - t >= 5
+      if System.uptime - t >= 5
+        t += 5
         Graphics.update
-        t = Time.now.to_i
       end
       changed = true if check_counters(map, id, mapData)
       if changed

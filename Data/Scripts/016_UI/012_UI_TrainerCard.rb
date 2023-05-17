@@ -43,7 +43,7 @@ class PokemonTrainerCard_Scene
     hour = totalsec / 60 / 60
     min = totalsec / 60 % 60
     time = (hour > 0) ? _INTL("{1}h {2}m", hour, min) : _INTL("{1}m", min)
-    $PokemonGlobal.startTime = pbGetTimeNow if !$PokemonGlobal.startTime
+    $PokemonGlobal.startTime = Time.now if !$PokemonGlobal.startTime
     starttime = _INTL("{1} {2}, {3}",
                       pbGetAbbrevMonthName($PokemonGlobal.startTime.mon),
                       $PokemonGlobal.startTime.day,
