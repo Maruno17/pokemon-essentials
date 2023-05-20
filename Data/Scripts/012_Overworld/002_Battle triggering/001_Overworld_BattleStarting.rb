@@ -314,7 +314,10 @@ module BattleCreationHelperMethods
     end
     if [2, 5].include?(outcome) && can_lose   # if loss or draw
       $player.party.each { |pkmn| pkmn.heal }
-      (Graphics.frame_rate / 4).times { Graphics.update }
+      timer_start = System.uptime
+      until System.uptime - timer_start >= 0.25
+        Graphics.update
+      end
     end
     EventHandlers.trigger(:on_end_battle, outcome, can_lose)
     $game_player.straighten

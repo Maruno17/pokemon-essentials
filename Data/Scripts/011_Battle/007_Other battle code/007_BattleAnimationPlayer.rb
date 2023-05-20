@@ -683,8 +683,9 @@ class PBAnimationPlayerX
     @inEditor      = inEditor
     @looping       = false
     @animbitmap    = nil   # Animation sheet graphic
+    @old_frame     = -1
     @frame         = -1
-    @framesPerTick = [Graphics.frame_rate / 20, 1].max   # 20 ticks per second
+    @timer_start   = nil
     @srcLine       = nil
     @dstLine       = nil
     @userOrig      = getSpriteCenter(@usersprite)
@@ -730,9 +731,7 @@ class PBAnimationPlayerX
 
   def dispose
     @animbitmap&.dispose
-    (2...MAX_SPRITES).each do |i|
-      @animsprites[i]&.dispose
-    end
+    (2...MAX_SPRITES).each { |i| @animsprites[i]&.dispose }
     @bgGraphic.dispose
     @bgColor.dispose
     @foGraphic.dispose
@@ -752,6 +751,7 @@ class PBAnimationPlayerX
 
   def start
     @frame = 0
+    @timer_start = System.uptime
   end
 
   def animDone?
@@ -765,18 +765,20 @@ class PBAnimationPlayerX
 
   def update
     return if @frame < 0
-    animFrame = @frame / @framesPerTick
-
+    @frame = ((System.uptime - @timer_start) * 20).to_i
     # Loop or end the animation if the animation has reached the end
-    if animFrame >= @animation.length
-      @frame = (@looping) ? 0 : -1
-      if @frame < 0
+    if @frame >= @animation.length
+      if @looping
+        @frame %= @animation.length
+        @timer_start += @animation.length / 20.0
+      else
+        @frame = -1
         @animbitmap&.dispose
         @animbitmap = nil
         return
       end
     end
-    # Load the animation's spritesheet and assign it to all the sprites.
+    # Load the animation's spritesheet and assign it to all the sprites
     if !@animbitmap || @animbitmap.disposed?
       @animbitmap = AnimatedBitmap.new("Graphics/Animations/" + @animation.graphic,
                                        @animation.hue).deanimate
@@ -789,57 +791,53 @@ class PBAnimationPlayerX
     @bgColor.update
     @foGraphic.update
     @foColor.update
-
     # Update all the sprites to depict the animation's next frame
-    if @framesPerTick == 1 || (@frame % @framesPerTick) == 0
-      thisframe = @animation[animFrame]
-      # Make all cel sprites invisible
-      MAX_SPRITES.times do |i|
-        @animsprites[i].visible = false if @animsprites[i]
+    return if @frame == @old_frame
+    @old_frame = @frame
+    thisframe = @animation[@frame]
+    # Make all cel sprites invisible
+    MAX_SPRITES.times { |i| @animsprites[i].visible = false if @animsprites[i] }
+    # Set each cel sprite acoordingly
+    thisframe.length.times do |i|
+      cel = thisframe[i]
+      next if !cel
+      sprite = @animsprites[i]
+      next if !sprite
+      # Set cel sprite's graphic
+      case cel[AnimFrame::PATTERN]
+      when -1
+        sprite.bitmap = @userbitmap
+      when -2
+        sprite.bitmap = @targetbitmap
+      else
+        sprite.bitmap = @animbitmap
       end
-      # Set each cel sprite acoordingly
-      thisframe.length.times do |i|
-        cel = thisframe[i]
-        next if !cel
-        sprite = @animsprites[i]
-        next if !sprite
-        # Set cel sprite's graphic
-        case cel[AnimFrame::PATTERN]
-        when -1
-          sprite.bitmap = @userbitmap
-        when -2
-          sprite.bitmap = @targetbitmap
-        else
-          sprite.bitmap = @animbitmap
+      # Apply settings to the cel sprite
+      pbSpriteSetAnimFrame(sprite, cel, @usersprite, @targetsprite)
+      case cel[AnimFrame::FOCUS]
+      when 1   # Focused on target
+        sprite.x = cel[AnimFrame::X] + @targetOrig[0] - Battle::Scene::FOCUSTARGET_X
+        sprite.y = cel[AnimFrame::Y] + @targetOrig[1] - Battle::Scene::FOCUSTARGET_Y
+      when 2   # Focused on user
+        sprite.x = cel[AnimFrame::X] + @userOrig[0] - Battle::Scene::FOCUSUSER_X
+        sprite.y = cel[AnimFrame::Y] + @userOrig[1] - Battle::Scene::FOCUSUSER_Y
+      when 3   # Focused on user and target
+        next if !@srcLine || !@dstLine
+        point = transformPoint(@srcLine[0], @srcLine[1], @srcLine[2], @srcLine[3],
+                               @dstLine[0], @dstLine[1], @dstLine[2], @dstLine[3],
+                               sprite.x, sprite.y)
+        sprite.x = point[0]
+        sprite.y = point[1]
+        if isReversed(@srcLine[0], @srcLine[2], @dstLine[0], @dstLine[2]) &&
+           cel[AnimFrame::PATTERN] >= 0
+          # Reverse direction
+          sprite.mirror = !sprite.mirror
         end
-        # Apply settings to the cel sprite
-        pbSpriteSetAnimFrame(sprite, cel, @usersprite, @targetsprite)
-        case cel[AnimFrame::FOCUS]
-        when 1   # Focused on target
-          sprite.x = cel[AnimFrame::X] + @targetOrig[0] - Battle::Scene::FOCUSTARGET_X
-          sprite.y = cel[AnimFrame::Y] + @targetOrig[1] - Battle::Scene::FOCUSTARGET_Y
-        when 2   # Focused on user
-          sprite.x = cel[AnimFrame::X] + @userOrig[0] - Battle::Scene::FOCUSUSER_X
-          sprite.y = cel[AnimFrame::Y] + @userOrig[1] - Battle::Scene::FOCUSUSER_Y
-        when 3   # Focused on user and target
-          next if !@srcLine || !@dstLine
-          point = transformPoint(@srcLine[0], @srcLine[1], @srcLine[2], @srcLine[3],
-                                 @dstLine[0], @dstLine[1], @dstLine[2], @dstLine[3],
-                                 sprite.x, sprite.y)
-          sprite.x = point[0]
-          sprite.y = point[1]
-          if isReversed(@srcLine[0], @srcLine[2], @dstLine[0], @dstLine[2]) &&
-             cel[AnimFrame::PATTERN] >= 0
-            # Reverse direction
-            sprite.mirror = !sprite.mirror
-          end
-        end
-        sprite.x += 64 if @inEditor
-        sprite.y += 64 if @inEditor
       end
-      # Play timings
-      @animation.playTiming(animFrame, @bgGraphic, @bgColor, @foGraphic, @foColor, @oldbg, @oldfo, @user)
+      sprite.x += 64 if @inEditor
+      sprite.y += 64 if @inEditor
     end
-    @frame += 1
+    # Play timings
+    @animation.playTiming(@frame, @bgGraphic, @bgColor, @foGraphic, @foColor, @oldbg, @oldfo, @user)
   end
 end

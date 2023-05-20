@@ -313,14 +313,10 @@ class PokemonMart_Scene
     @adapter = adapter
     @viewport2 = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport2.z = 99999
-    numFrames = Graphics.frame_rate * 4 / 10
-    alphaDiff = (255.0 / numFrames).ceil
-    (0..numFrames).each do |j|
-      col = Color.new(0, 0, 0, j * alphaDiff)
-      @viewport2.color = col
-      Graphics.update
-      Input.update
+    pbWait(0.4) do |delta_t|
+      @viewport2.color.alpha = lerp(0, 255, 0.4, delta_t)
     end
+    @viewport2.color.alpha = 255
     @subscene.pbStartScene(bag)
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
@@ -357,13 +353,8 @@ class PokemonMart_Scene
     @subscene&.pbEndScene
     pbDisposeSpriteHash(@sprites)
     if @viewport2
-      numFrames = Graphics.frame_rate * 4 / 10
-      alphaDiff = (255.0 / numFrames).ceil
-      (0..numFrames).each do |j|
-        col = Color.new(0, 0, 0, (numFrames - j) * alphaDiff)
-        @viewport2.color = col
-        Graphics.update
-        Input.update
+      pbWait(0.4) do |delta_t|
+        @viewport2.color.alpha = lerp(255, 0, 0.4, delta_t)
       end
       @viewport2.dispose
     end
@@ -402,21 +393,25 @@ class PokemonMart_Scene
     cw.text = msg
     pbBottomLeftLines(cw, 2)
     cw.visible = true
-    i = 0
     pbPlayDecisionSE
+    refreshed_after_busy = false
+    timer_start = System.uptime
     loop do
       Graphics.update
       Input.update
       self.update
       if !cw.busy?
         return if brief
-        pbRefresh if i == 0
+        if !refreshed_after_busy
+          pbRefresh
+          timer_start = System.uptime
+          refreshed_after_busy = true
+        end
       end
       if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
         cw.resume if cw.busy?
       end
-      return if i >= Graphics.frame_rate * 3 / 2
-      i += 1 if !cw.busy?
+      return if refreshed_after_busy && System.uptime - timer_start >= 1.5
     end
   end
 

@@ -265,7 +265,7 @@ class VoltorbFlip
           end
         end
         pbDrawImagePositions(@sprites["mark"].bitmap, @marks)
-        pbWait(Graphics.frame_rate / 20)
+        pbWait(0.05)
       else
         # Display the tile for the selected spot
         icons = []
@@ -283,7 +283,7 @@ class VoltorbFlip
                 animation[0] = icons[0] = [@directory + "tiles", (@index[0] * 64) + 128, @index[1] * 64,
                                            704 + (64 * j), 0, 64, 64]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
-                pbWait(Graphics.frame_rate / 20)
+                pbWait(0.05)
                 @sprites["animation"].bitmap.clear
               end
               # Part2
@@ -292,7 +292,7 @@ class VoltorbFlip
                 animation[0] = [@directory + "explosion", (@index[0] * 64) - 32 + 128, (@index[1] * 64) - 32,
                                 j * 128, 0, 128, 128]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
-                pbWait(Graphics.frame_rate / 10)
+                pbWait(0.1)
                 @sprites["animation"].bitmap.clear
               end
               # Unskippable text block, parameter 2 = wait time (corresponds to ME length)
@@ -334,7 +334,7 @@ class VoltorbFlip
                 animation[0] = [@directory + "flipAnimation", (@index[0] * 64) - 14 + 128, (@index[1] * 64) - 16,
                                 j * 92, 0, 92, 96]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
-                pbWait(Graphics.frame_rate / 20)
+                pbWait(0.05)
                 @sprites["animation"].bitmap.clear
               end
               if @points == 0
@@ -474,7 +474,7 @@ class VoltorbFlip
       points = tile if i == 2
       icons[i] = [@directory + "tiles", x, y, 320 + (i * 64) + (points * 64), 0, 64, 64]
       pbDrawImagePositions(@sprites["icon"].bitmap, icons)
-      pbWait(Graphics.frame_rate / 20)
+      pbWait(0.05)
     end
     icons[3] = [@directory + "tiles", x, y, tile * 64, 0, 64, 64]
     pbDrawImagePositions(@sprites["icon"].bitmap, icons)
@@ -485,14 +485,14 @@ class VoltorbFlip
     # Make pre-rendered sprites visible (this approach reduces lag)
     5.times do |i|
       @sprites[i].visible = true
-      pbWait(Graphics.frame_rate / 20) if i < 3
+      pbWait(0.05) if i < 3
       @sprites[i].bitmap.clear
       @sprites[i].z = 99997
     end
     pbSEPlay("Voltorb Flip tile")
     @sprites[5].visible = true
     @sprites["mark"].bitmap.clear
-    pbWait(Graphics.frame_rate / 10)
+    pbWait(0.1)
     # Wait for user input to continue
     loop do
       Graphics.update
@@ -511,22 +511,22 @@ class VoltorbFlip
                     448 + (@squares[i + (j * 5)][2] * 64), 0, 64, 64]
       end
       pbDrawImagePositions(@sprites[i].bitmap, icons)
-      pbWait(Graphics.frame_rate / 20)
+      pbWait(0.05)
       5.times do |j|
         icons[j] = [@directory + "tiles", @squares[i + (j * 5)][0], @squares[i + (j * 5)][1], 384, 0, 64, 64]
       end
       pbDrawImagePositions(@sprites[i].bitmap, icons)
-      pbWait(Graphics.frame_rate / 20)
+      pbWait(0.05)
       5.times do |j|
         icons[j] = [@directory + "tiles", @squares[i + (j * 5)][0], @squares[i + (j * 5)][1], 320, 0, 64, 64]
       end
       pbDrawImagePositions(@sprites[i].bitmap, icons)
-      pbWait(Graphics.frame_rate / 20)
+      pbWait(0.05)
       5.times do |j|
         icons[j] = [@directory + "tiles", @squares[i + (j * 5)][0], @squares[i + (j * 5)][1], 896, 0, 64, 64]
       end
       pbDrawImagePositions(@sprites[i].bitmap, icons)
-      pbWait(Graphics.frame_rate / 20)
+      pbWait(0.05)
     end
     @sprites["icon"].bitmap.clear
     6.times do |i|
@@ -538,9 +538,7 @@ class VoltorbFlip
 #  def pbWaitText(msg,frames)
 #    msgwindow=pbCreateMessageWindow
 #    pbMessageDisplay(msgwindow,msg)
-#    frames.times do
-#      pbWait(1)
-#    end
+#    pbWait(frames / 20.0)
 #    pbDisposeMessageWindow(msgwindow)
 #  end
 

@@ -6,24 +6,22 @@ def pbCaveEntranceEx(exiting)
   sprite = BitmapSprite.new(Graphics.width, Graphics.height)
   sprite.z = 100000
   # Define values used for the animation
-  totalFrames = (Graphics.frame_rate * 0.4).floor
-  increment = (255.0 / totalFrames).ceil
+  duration = 0.4
   totalBands = 15
   bandheight = ((Graphics.height / 2.0) - 10) / totalBands
   bandwidth  = ((Graphics.width / 2.0) - 12) / totalBands
+  start_gray = (exiting) ? 0 : 255
+  end_gray = (exiting) ? 255 : 0
   # Create initial array of band colors (black if exiting, white if entering)
-  grays = Array.new(totalBands) { |i| (exiting) ? 0 : 255 }
+  grays = Array.new(totalBands) { |i| start_gray }
   # Animate bands changing color
-  totalFrames.times do |j|
+  timer_start = System.uptime
+  until System.uptime - timer_start >= duration
     x = 0
     y = 0
     # Calculate color of each band
     totalBands.times do |k|
-      next if k >= totalBands * j / totalFrames
-      inc = increment
-      inc *= -1 if exiting
-      grays[k] -= inc
-      grays[k] = 0 if grays[k] < 0
+      grays[k] = lerp(start_gray, end_gray, duration, timer_start + k * duration / totalBands, System.uptime)
     end
     # Draw gray rectangles
     rectwidth  = Graphics.width
@@ -47,19 +45,19 @@ def pbCaveEntranceEx(exiting)
     pbToneChangeAll(Tone.new(-255, -255, -255), 0)
   end
   # Animate fade to white (if exiting) or black (if entering)
-  totalFrames.times do |j|
-    if exiting
-      sprite.color = Color.new(255, 255, 255, j * increment)
-    else
-      sprite.color = Color.new(0, 0, 0, j * increment)
-    end
+  timer_start = System.uptime
+  loop do
+    sprite.color = Color.new(end_gray, end_gray, end_gray,
+                             lerp(0, 255, duration, timer_start, System.uptime))
     Graphics.update
     Input.update
+    break if sprite.color.alpha >= 255
   end
   # Set the tone at end of fading animation
   pbToneChangeAll(Tone.new(0, 0, 0), 8)
   # Pause briefly
-  (Graphics.frame_rate / 10).times do
+  timer_start = System.uptime
+  until System.uptime - timer_start >= 0.1
     Graphics.update
     Input.update
   end

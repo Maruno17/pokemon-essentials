@@ -555,16 +555,17 @@ end
 # Fades out the screen before a block is run and fades it back in after the
 # block exits.  z indicates the z-coordinate of the viewport used for this effect
 def pbFadeOutIn(z = 99999, nofadeout = false)
+  duration = 0.4   # In seconds
   col = Color.new(0, 0, 0, 0)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = z
-  numFrames = (Graphics.frame_rate * 0.4).floor
-  alphaDiff = (255.0 / numFrames).ceil
-  (0..numFrames).each do |j|
-    col.set(0, 0, 0, j * alphaDiff)
+  timer_start = System.uptime
+  loop do
+    col.set(0, 0, 0, lerp(0, 255, duration, timer_start, System.uptime))
     viewport.color = col
     Graphics.update
     Input.update
+    break if col.alpha == 255
   end
   pbPushFade
   begin
@@ -574,11 +575,13 @@ def pbFadeOutIn(z = 99999, nofadeout = false)
   ensure
     pbPopFade
     if !nofadeout
-      (0..numFrames).each do |j|
-        col.set(0, 0, 0, (numFrames - j) * alphaDiff)
+      timer_start = System.uptime
+      loop do
+        col.set(0, 0, 0, lerp(255, 0, duration, timer_start, System.uptime))
         viewport.color = col
         Graphics.update
         Input.update
+        break if col.alpha == 0
       end
     end
     viewport.dispose
@@ -586,17 +589,18 @@ def pbFadeOutIn(z = 99999, nofadeout = false)
 end
 
 def pbFadeOutInWithUpdate(z, sprites, nofadeout = false)
+  duration = 0.4   # In seconds
   col = Color.new(0, 0, 0, 0)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = z
-  numFrames = (Graphics.frame_rate * 0.4).floor
-  alphaDiff = (255.0 / numFrames).ceil
-  (0..numFrames).each do |j|
-    col.set(0, 0, 0, j * alphaDiff)
+  timer_start = System.uptime
+  loop do
+    col.set(0, 0, 0, lerp(0, 255, duration, timer_start, System.uptime))
     viewport.color = col
     pbUpdateSpriteHash(sprites)
     Graphics.update
     Input.update
+    break if col.alpha == 255
   end
   pbPushFade
   begin
@@ -604,12 +608,14 @@ def pbFadeOutInWithUpdate(z, sprites, nofadeout = false)
   ensure
     pbPopFade
     if !nofadeout
-      (0..numFrames).each do |j|
-        col.set(0, 0, 0, (numFrames - j) * alphaDiff)
+      timer_start = System.uptime
+      loop do
+        col.set(0, 0, 0, lerp(255, 0, duration, timer_start, System.uptime))
         viewport.color = col
         pbUpdateSpriteHash(sprites)
         Graphics.update
         Input.update
+        break if col.alpha == 0
       end
     end
     viewport.dispose
@@ -633,13 +639,16 @@ def pbFadeOutInWithMusic(zViewport = 99999)
 end
 
 def pbFadeOutAndHide(sprites)
+  duration = 0.4   # In seconds
+  col = Color.new(0, 0, 0, 0)
   visiblesprites = {}
-  numFrames = (Graphics.frame_rate * 0.4).floor
-  alphaDiff = (255.0 / numFrames).ceil
   pbDeactivateWindows(sprites) do
-    (0..numFrames).each do |j|
-      pbSetSpritesToColor(sprites, Color.new(0, 0, 0, j * alphaDiff))
+    timer_start = System.uptime
+    loop do
+      col.alpha = lerp(0, 255, duration, timer_start, System.uptime)
+      pbSetSpritesToColor(sprites, col)
       (block_given?) ? yield : pbUpdateSpriteHash(sprites)
+      break if col.alpha == 255
     end
   end
   sprites.each do |i|
@@ -652,6 +661,8 @@ def pbFadeOutAndHide(sprites)
 end
 
 def pbFadeInAndShow(sprites, visiblesprites = nil)
+  duration = 0.4   # In seconds
+  col = Color.new(0, 0, 0, 0)
   if visiblesprites
     visiblesprites.each do |i|
       if i[1] && sprites[i[0]] && !pbDisposed?(sprites[i[0]])
@@ -659,12 +670,13 @@ def pbFadeInAndShow(sprites, visiblesprites = nil)
       end
     end
   end
-  numFrames = (Graphics.frame_rate * 0.4).floor
-  alphaDiff = (255.0 / numFrames).ceil
   pbDeactivateWindows(sprites) do
-    (0..numFrames).each do |j|
-      pbSetSpritesToColor(sprites, Color.new(0, 0, 0, ((numFrames - j) * alphaDiff)))
+    timer_start = System.uptime
+    loop do
+      col.alpha = lerp(255, 0, duration, timer_start, System.uptime)
+      pbSetSpritesToColor(sprites, col)
       (block_given?) ? yield : pbUpdateSpriteHash(sprites)
+      break if col.alpha == 0
     end
   end
 end

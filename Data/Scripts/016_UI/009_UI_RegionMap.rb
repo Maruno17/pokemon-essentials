@@ -250,17 +250,21 @@ class PokemonRegionMap_Scene
     y_offset = 0
     new_x    = 0
     new_y    = 0
-    dist_per_frame = 8 * 20 / Graphics.frame_rate
+    timer_start = System.uptime
     loop do
       Graphics.update
       Input.update
       pbUpdate
       if x_offset != 0 || y_offset != 0
-        x_offset += (x_offset > 0) ? -dist_per_frame : (x_offset < 0) ? dist_per_frame : 0
-        y_offset += (y_offset > 0) ? -dist_per_frame : (y_offset < 0) ? dist_per_frame : 0
-        @sprites["cursor"].x = new_x - x_offset
-        @sprites["cursor"].y = new_y - y_offset
-        next
+        if x_offset != 0
+          @sprites["cursor"].x = lerp(new_x - x_offset, new_x, 0.1, timer_start, System.uptime)
+          x_offset = 0 if @sprites["cursor"].x == new_x
+        end
+        if y_offset != 0
+          @sprites["cursor"].y = lerp(new_y - y_offset, new_y, 0.1, timer_start, System.uptime)
+          y_offset = 0 if @sprites["cursor"].y == new_y
+        end
+        next if x_offset != 0 || y_offset != 0
       end
       ox = 0
       oy = 0
@@ -283,6 +287,7 @@ class PokemonRegionMap_Scene
         y_offset = oy * SQUARE_HEIGHT
         new_x = @sprites["cursor"].x + x_offset
         new_y = @sprites["cursor"].y + y_offset
+        timer_start = System.uptime
       end
       @sprites["mapbottom"].maplocation = pbGetMapLocation(@map_x, @map_y)
       @sprites["mapbottom"].mapdetails  = pbGetMapDetails(@map_x, @map_y)

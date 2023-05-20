@@ -109,6 +109,7 @@ class PictureEx
     @zoom_y        = 100.0
     @angle         = 0
     @rotate_speed  = 0
+    @auto_angle    = 0   # Cumulative angle change caused by @rotate_speed
     @tone          = Tone.new(0, 0, 0, 0)
     @tone_duration = 0
     @color         = Color.new(0, 0, 0, 0)
@@ -136,7 +137,7 @@ class PictureEx
 
   def setCallback(delay, cb = nil)
     delay = ensureDelayAndDuration(delay)
-    @processes.push([nil, delay, 0, 0, cb])
+    @processes.push([nil, delay, 0, false, cb])
   end
 
   def running?
@@ -149,18 +150,13 @@ class PictureEx
       dur = process[1] + process[2]
       ret = dur if dur > ret
     end
-    ret *= 20.0 / Graphics.frame_rate
-    return ret.to_i
+    return ret
   end
 
   def ensureDelayAndDuration(delay, duration = nil)
     delay = self.totalDuration if delay < 0
-    delay *= Graphics.frame_rate / 20.0
-    if !duration.nil?
-      duration *= Graphics.frame_rate / 20.0
-      return delay.to_i, duration.to_i
-    end
-    return delay.to_i
+    return delay, duration if !duration.nil?
+    return delay
   end
 
   def ensureDelay(delay)
@@ -173,11 +169,7 @@ class PictureEx
   #       point. If you make a sprite auto-rotate, you should not try to alter
   #       the angle another way too.
   def rotate(speed)
-    @rotate_speed = speed * 20.0 / Graphics.frame_rate
-    while @rotate_speed < 0
-      @rotate_speed += 360
-    end
-    @rotate_speed %= 360
+    @rotate_speed = speed * 20.0
   end
 
   def erase
@@ -207,7 +199,7 @@ class PictureEx
 
   def moveXY(delay, duration, x, y, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
-    @processes.push([Processes::XY, delay, duration, 0, cb, @x, @y, x, y])
+    @processes.push([Processes::XY, delay, duration, false, cb, @x, @y, x, y])
   end
 
   def setXY(delay, x, y, cb = nil)
@@ -216,12 +208,12 @@ class PictureEx
 
   def moveCurve(delay, duration, x1, y1, x2, y2, x3, y3, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
-    @processes.push([Processes::CURVE, delay, duration, 0, cb, [@x, @y, x1, y1, x2, y2, x3, y3]])
+    @processes.push([Processes::CURVE, delay, duration, false, cb, [@x, @y, x1, y1, x2, y2, x3, y3]])
   end
 
   def moveDelta(delay, duration, x, y, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
-    @processes.push([Processes::DELTA_XY, delay, duration, 0, cb, @x, @y, x, y])
+    @processes.push([Processes::DELTA_XY, delay, duration, false, cb, @x, @y, x, y])
   end
 
   def setDelta(delay, x, y, cb = nil)
@@ -230,7 +222,7 @@ class PictureEx
 
   def moveZ(delay, duration, z, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
-    @processes.push([Processes::Z, delay, duration, 0, cb, @z, z])
+    @processes.push([Processes::Z, delay, duration, false, cb, @z, z])
   end
 
   def setZ(delay, z, cb = nil)
@@ -239,7 +231,7 @@ class PictureEx
 
   def moveZoomXY(delay, duration, zoom_x, zoom_y, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
-    @processes.push([Processes::ZOOM, delay, duration, 0, cb, @zoom_x, @zoom_y, zoom_x, zoom_y])
+    @processes.push([Processes::ZOOM, delay, duration, false, cb, @zoom_x, @zoom_y, zoom_x, zoom_y])
   end
 
   def setZoomXY(delay, zoom_x, zoom_y, cb = nil)
@@ -256,7 +248,7 @@ class PictureEx
 
   def moveAngle(delay, duration, angle, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
-    @processes.push([Processes::ANGLE, delay, duration, 0, cb, @angle, angle])
+    @processes.push([Processes::ANGLE, delay, duration, false, cb, @angle, angle])
   end
 
   def setAngle(delay, angle, cb = nil)
@@ -266,7 +258,7 @@ class PictureEx
   def moveTone(delay, duration, tone, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
     target = (tone) ? tone.clone : Tone.new(0, 0, 0, 0)
-    @processes.push([Processes::TONE, delay, duration, 0, cb, @tone.clone, target])
+    @processes.push([Processes::TONE, delay, duration, false, cb, @tone.clone, target])
   end
 
   def setTone(delay, tone, cb = nil)
@@ -276,7 +268,7 @@ class PictureEx
   def moveColor(delay, duration, color, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
     target = (color) ? color.clone : Color.new(0, 0, 0, 0)
-    @processes.push([Processes::COLOR, delay, duration, 0, cb, @color.clone, target])
+    @processes.push([Processes::COLOR, delay, duration, false, cb, @color.clone, target])
   end
 
   def setColor(delay, color, cb = nil)
@@ -286,7 +278,7 @@ class PictureEx
   # Hue changes don't actually work.
   def moveHue(delay, duration, hue, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
-    @processes.push([Processes::HUE, delay, duration, 0, cb, @hue, hue])
+    @processes.push([Processes::HUE, delay, duration, false, cb, @hue, hue])
   end
 
   # Hue changes don't actually work.
@@ -296,7 +288,7 @@ class PictureEx
 
   def moveOpacity(delay, duration, opacity, cb = nil)
     delay, duration = ensureDelayAndDuration(delay, duration)
-    @processes.push([Processes::OPACITY, delay, duration, 0, cb, @opacity, opacity])
+    @processes.push([Processes::OPACITY, delay, duration, false, cb, @opacity, opacity])
   end
 
   def setOpacity(delay, opacity, cb = nil)
@@ -305,119 +297,117 @@ class PictureEx
 
   def setVisible(delay, visible, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::VISIBLE, delay, 0, 0, cb, visible])
+    @processes.push([Processes::VISIBLE, delay, 0, false, cb, visible])
   end
 
   # Only values of 0 (normal), 1 (additive) and 2 (subtractive) are allowed.
   def setBlendType(delay, blend, cb = nil)
     delay = ensureDelayAndDuration(delay)
-    @processes.push([Processes::BLEND_TYPE, delay, 0, 0, cb, blend])
+    @processes.push([Processes::BLEND_TYPE, delay, 0, false, cb, blend])
   end
 
   def setSE(delay, seFile, volume = nil, pitch = nil, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::SE, delay, 0, 0, cb, seFile, volume, pitch])
+    @processes.push([Processes::SE, delay, 0, false, cb, seFile, volume, pitch])
   end
 
   def setName(delay, name, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::NAME, delay, 0, 0, cb, name])
+    @processes.push([Processes::NAME, delay, 0, false, cb, name])
   end
 
   def setOrigin(delay, origin, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::ORIGIN, delay, 0, 0, cb, origin])
+    @processes.push([Processes::ORIGIN, delay, 0, false, cb, origin])
   end
 
   def setSrc(delay, srcX, srcY, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::SRC, delay, 0, 0, cb, srcX, srcY])
+    @processes.push([Processes::SRC, delay, 0, false, cb, srcX, srcY])
   end
 
   def setSrcSize(delay, srcWidth, srcHeight, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::SRC_SIZE, delay, 0, 0, cb, srcWidth, srcHeight])
+    @processes.push([Processes::SRC_SIZE, delay, 0, false, cb, srcWidth, srcHeight])
   end
 
   # Used to cut Pokémon sprites off when they faint and sink into the ground.
   def setCropBottom(delay, y, cb = nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::CROP_BOTTOM, delay, 0, 0, cb, y])
+    @processes.push([Processes::CROP_BOTTOM, delay, 0, false, cb, y])
   end
 
   def update
+    @timer_start = System.uptime if !@timer_start
+    this_frame = ((System.uptime - @timer_start) * 20).to_i   # 20 frames per second
     procEnded = false
     @frameUpdates.clear
     @processes.each_with_index do |process, i|
-      # Decrease delay of processes that are scheduled to start later
-      if process[1] >= 0
-        # Set initial values if the process will start this frame
-        if process[1] == 0
-          case process[0]
-          when Processes::XY
-            process[5] = @x
-            process[6] = @y
-          when Processes::DELTA_XY
-            process[5] = @x
-            process[6] = @y
-            process[7] += @x
-            process[8] += @y
-          when Processes::CURVE
-            process[5][0] = @x
-            process[5][1] = @y
-          when Processes::Z
-            process[5] = @z
-          when Processes::ZOOM
-            process[5] = @zoom_x
-            process[6] = @zoom_y
-          when Processes::ANGLE
-            process[5] = @angle
-          when Processes::TONE
-            process[5] = @tone.clone
-          when Processes::COLOR
-            process[5] = @color.clone
-          when Processes::HUE
-            process[5] = @hue
-          when Processes::OPACITY
-            process[5] = @opacity
-          end
+      # Skip processes that aren't due to start yet
+      next if process[1] > this_frame
+      # Set initial values if the process has just started
+      if !process[3]   # Not started yet
+        process[3] = true   # Running
+        case process[0]
+        when Processes::XY
+          process[5] = @x
+          process[6] = @y
+        when Processes::DELTA_XY
+          process[5] = @x
+          process[6] = @y
+          process[7] += @x
+          process[8] += @y
+        when Processes::CURVE
+          process[5][0] = @x
+          process[5][1] = @y
+        when Processes::Z
+          process[5] = @z
+        when Processes::ZOOM
+          process[5] = @zoom_x
+          process[6] = @zoom_y
+        when Processes::ANGLE
+          process[5] = @angle
+        when Processes::TONE
+          process[5] = @tone.clone
+        when Processes::COLOR
+          process[5] = @color.clone
+        when Processes::HUE
+          process[5] = @hue
+        when Processes::OPACITY
+          process[5] = @opacity
         end
-        # Decrease delay counter
-        process[1] -= 1
-        # Process hasn't started yet, skip to the next one
-        next if process[1] >= 0
       end
       # Update process
       @frameUpdates.push(process[0]) if !@frameUpdates.include?(process[0])
-      fra = (process[2] == 0) ? 1 : process[3]   # Frame counter
-      dur = (process[2] == 0) ? 1 : process[2]   # Total duration of process
+      start_time = @timer_start + process[1] / 20.0
+      duration = process[2] / 20.0
       case process[0]
       when Processes::XY, Processes::DELTA_XY
-        @x = process[5] + (fra * (process[7] - process[5]) / dur)
-        @y = process[6] + (fra * (process[8] - process[6]) / dur)
+        @x = lerp(process[5], process[7], duration, start_time, System.uptime)
+        @y = lerp(process[6], process[8], duration, start_time, System.uptime)
       when Processes::CURVE
-        @x, @y = getCubicPoint2(process[5], fra.to_f / dur)
+        @x, @y = getCubicPoint2(process[5], (System.uptime - start_time) / duration)
       when Processes::Z
-        @z = process[5] + (fra * (process[6] - process[5]) / dur)
+        @z = lerp(process[5], process[6], duration, start_time, System.uptime)
       when Processes::ZOOM
-        @zoom_x = process[5] + (fra * (process[7] - process[5]) / dur)
-        @zoom_y = process[6] + (fra * (process[8] - process[6]) / dur)
+        @zoom_x = lerp(process[5], process[7], duration, start_time, System.uptime)
+        @zoom_y = lerp(process[6], process[8], duration, start_time, System.uptime)
       when Processes::ANGLE
-        @angle = process[5] + (fra * (process[6] - process[5]) / dur)
+        @angle = lerp(process[5], process[6], duration, start_time, System.uptime)
       when Processes::TONE
-        @tone.red   = process[5].red + (fra * (process[6].red - process[5].red) / dur)
-        @tone.green = process[5].green + (fra * (process[6].green - process[5].green) / dur)
-        @tone.blue  = process[5].blue + (fra * (process[6].blue - process[5].blue) / dur)
-        @tone.gray  = process[5].gray + (fra * (process[6].gray - process[5].gray) / dur)
+        @tone.red = lerp(process[5].red, process[6].red, duration, start_time, System.uptime)
+        @tone.green = lerp(process[5].green, process[6].green, duration, start_time, System.uptime)
+        @tone.blue = lerp(process[5].blue, process[6].blue, duration, start_time, System.uptime)
+        @tone.gray = lerp(process[5].gray, process[6].gray, duration, start_time, System.uptime)
       when Processes::COLOR
-        @color.red   = process[5].red + (fra * (process[6].red - process[5].red) / dur)
-        @color.green = process[5].green + (fra * (process[6].green - process[5].green) / dur)
-        @color.blue  = process[5].blue + (fra * (process[6].blue - process[5].blue) / dur)
-        @color.alpha = process[5].alpha + (fra * (process[6].alpha - process[5].alpha) / dur)
+        @color.red = lerp(process[5].red, process[6].red, duration, start_time, System.uptime)
+        @color.green = lerp(process[5].green, process[6].green, duration, start_time, System.uptime)
+        @color.blue = lerp(process[5].blue, process[6].blue, duration, start_time, System.uptime)
+        @color.alpha = lerp(process[5].alpha, process[6].alpha, duration, start_time, System.uptime)
       when Processes::HUE
-        @hue = (process[6] - process[5]).to_f / dur
+        @hue = lerp(process[5], process[6], duration, start_time, System.uptime)
       when Processes::OPACITY
-        @opacity = process[5] + (fra * (process[6] - process[5]) / dur)
+        @opacity = lerp(process[5], process[6], duration, start_time, System.uptime)
       when Processes::VISIBLE
         @visible = process[5]
       when Processes::BLEND_TYPE
@@ -437,19 +427,23 @@ class PictureEx
       when Processes::CROP_BOTTOM
         @cropBottom = process[5]
       end
-      # Increase frame counter
-      process[3] += 1
-      next if process[3] <= process[2]
-      # Process has ended, erase it
-      callback(process[4]) if process[4]
-      @processes[i] = nil
-      procEnded = true
+      # Erase process if its duration has elapsed
+      if process[1] + process[2] <= this_frame
+        callback(process[4]) if process[4]
+        @processes[i] = nil
+        procEnded = true
+      end
     end
     # Clear out empty spaces in @processes array caused by finished processes
     @processes.compact! if procEnded
     # Add the constant rotation speed
     if @rotate_speed != 0
       @frameUpdates.push(Processes::ANGLE) if !@frameUpdates.include?(Processes::ANGLE)
+      @auto_angle = @rotate_speed * (System.uptime - @timer_start)
+      while @auto_angle < 0
+        @auto_angle += 360
+      end
+      @auto_angle %= 360
       @angle += @rotate_speed
       while @angle < 0
         @angle += 360

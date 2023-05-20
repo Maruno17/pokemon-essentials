@@ -26,12 +26,13 @@ class Interpreter
 
   def clear
     @map_id             = 0       # map ID when starting up
-    @event_id           = 0       # event ID
+    @event_id           = 0
     @message_waiting    = false   # waiting for message to end
     @move_route_waiting = false   # waiting for move completion
-    @wait_count         = 0       # wait count
-    @child_interpreter  = nil     # child interpreter
-    @branch             = {}      # branch data
+    @wait_count         = 0
+    @wait_start         = nil
+    @child_interpreter  = nil
+    @branch             = {}
     @buttonInput        = false
     @hidden_choices     = []
     @renamed_choices    = []
@@ -114,8 +115,9 @@ class Interpreter
       end
       # Do nothing while waiting
       if @wait_count > 0
-        @wait_count -= 1
-        return
+        return if System.uptime - @wait_start < @wait_count
+        @wait_count = 0
+        @wait_start = nil
       end
       # Do nothing if the pause menu is going to open
       return if $game_temp.menu_calling

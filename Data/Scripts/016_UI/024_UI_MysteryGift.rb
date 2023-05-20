@@ -286,32 +286,28 @@ def pbDownloadMysteryGift(trainer)
             sprite.x = Graphics.width / 2
             sprite.y = -sprite.height / 2
           end
-          distanceDiff = 8 * 20 / Graphics.frame_rate
+          timer_start = System.uptime
+          start_y = sprite.y
           loop do
+            sprite.y = lerp(start_y, Graphics.height / 2, 1.5, timer_start, System.uptime)
             Graphics.update
             Input.update
             sprite.update
-            sprite.y += distanceDiff
             break if sprite.y >= Graphics.height / 2
           end
           pbMEPlay("Battle capture success")
-          (Graphics.frame_rate * 3).times do
-            Graphics.update
-            Input.update
-            sprite.update
-            pbUpdateSceneMap
-          end
+          pbWait(3.0) { sprite.update }
           sprites["msgwindow"].visible = true
           pbMessageDisplay(sprites["msgwindow"], _INTL("The gift has been received!") + "\1") { sprite.update }
           pbMessageDisplay(sprites["msgwindow"], _INTL("Please pick up your gift from the deliveryman in any Poké Mart.")) { sprite.update }
           trainer.mystery_gifts.push(gift)
           pending.delete_at(command)
-          opacityDiff = 16 * 20 / Graphics.frame_rate
+          timer_start = System.uptime
           loop do
+            sprite.opacity = lerp(255, 0, 1.5, timer_start, System.uptime)
             Graphics.update
             Input.update
             sprite.update
-            sprite.opacity -= opacityDiff
             break if sprite.opacity <= 0
           end
           sprite.dispose

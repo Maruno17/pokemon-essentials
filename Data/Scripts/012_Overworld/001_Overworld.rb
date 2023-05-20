@@ -28,7 +28,8 @@ end
 class Game_Temp
   attr_accessor :warned_low_battery
   attr_accessor :cue_bgm
-  attr_accessor :cue_bgm_frame_delay
+  attr_accessor :cue_bgm_timer_start
+  attr_accessor :cue_bgm_delay
 end
 
 def pbBatteryLow?
@@ -56,10 +57,9 @@ EventHandlers.add(:on_frame_update, :low_battery_warning,
 
 EventHandlers.add(:on_frame_update, :cue_bgm_after_delay,
   proc {
-    next if $game_temp.cue_bgm_frame_delay.nil?
-    $game_temp.cue_bgm_frame_delay -= 1
-    next if $game_temp.cue_bgm_frame_delay > 0
-    $game_temp.cue_bgm_frame_delay = nil
+    next if $game_temp.cue_bgm_delay.nil?
+    next if System.uptime - $game_temp.cue_bgm_timer_start < $game_temp.cue_bgm_delay
+    $game_temp.cue_bgm_delay = nil
     pbBGMPlay($game_temp.cue_bgm) if $game_system.getPlayingBGM.nil?
   }
 )
@@ -413,14 +413,15 @@ end
 #===============================================================================
 def pbCueBGM(bgm, seconds, volume = nil, pitch = nil)
   return if !bgm
-  bgm        = pbResolveAudioFile(bgm, volume, pitch)
+  bgm = pbResolveAudioFile(bgm, volume, pitch)
   playingBGM = $game_system.playing_bgm
   if !playingBGM || playingBGM.name != bgm.name || playingBGM.pitch != bgm.pitch
     pbBGMFade(seconds)
-    if !$game_temp.cue_bgm_frame_delay
-      $game_temp.cue_bgm_frame_delay = (seconds * Graphics.frame_rate) * 3 / 5
-    end
     $game_temp.cue_bgm = bgm
+    if !$game_temp.cue_bgm_delay
+      $game_temp.cue_bgm_delay = seconds * 0.6
+      $game_temp.cue_bgm_timer_start = System.uptime
+    end
   elsif playingBGM
     pbBGMPlay(bgm)
   end
@@ -533,8 +534,11 @@ def pbMoveRoute(event, commands, waitComplete = false)
   return route
 end
 
-def pbWait(numFrames)
-  numFrames.times do
+# duration is in seconds
+def pbWait(duration)
+  timer_start = System.uptime
+  until System.uptime - timer_start >= duration
+    yield System.uptime - timer_start if block_given?
     Graphics.update
     Input.update
     pbUpdateSceneMap

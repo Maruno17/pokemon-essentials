@@ -4,20 +4,20 @@
 class PokemonLoadPanel < Sprite
   attr_reader :selected
 
-  TEXTCOLOR             = Color.new(232, 232, 232)
-  TEXTSHADOWCOLOR       = Color.new(136, 136, 136)
-  MALETEXTCOLOR         = Color.new(56, 160, 248)
-  MALETEXTSHADOWCOLOR   = Color.new(56, 104, 168)
-  FEMALETEXTCOLOR       = Color.new(240, 72, 88)
-  FEMALETEXTSHADOWCOLOR = Color.new(160, 64, 64)
+  TEXT_COLOR               = Color.new(232, 232, 232)
+  TEXT_SHADOW_COLOR        = Color.new(136, 136, 136)
+  MALE_TEXT_COLOR          = Color.new(56, 160, 248)
+  MALE_TEXT_SHADOW_COLOR   = Color.new(56, 104, 168)
+  FEMALE_TEXT_COLOR        = Color.new(240, 72, 88)
+  FEMALE_TEXT_SHADOW_COLOR = Color.new(160, 64, 64)
 
-  def initialize(index, title, isContinue, trainer, framecount, stats, mapid, viewport = nil)
+  def initialize(index, title, isContinue, trainer, stats, mapid, viewport = nil)
     super(viewport)
     @index = index
     @title = title
     @isContinue = isContinue
     @trainer = trainer
-    @totalsec = (stats) ? stats.play_time.to_i : ((framecount || 0) / Graphics.frame_rate)
+    @totalsec = stats.play_time.to_i
     @mapid = mapid
     @selected = (index == 0)
     @bgbitmap = AnimatedBitmap.new("Graphics/UI/Load/panels")
@@ -62,31 +62,31 @@ class PokemonLoadPanel < Sprite
       end
       textpos = []
       if @isContinue
-        textpos.push([@title, 32, 16, :left, TEXTCOLOR, TEXTSHADOWCOLOR])
-        textpos.push([_INTL("Badges:"), 32, 118, :left, TEXTCOLOR, TEXTSHADOWCOLOR])
-        textpos.push([@trainer.badge_count.to_s, 206, 118, :right, TEXTCOLOR, TEXTSHADOWCOLOR])
-        textpos.push([_INTL("Pokédex:"), 32, 150, :left, TEXTCOLOR, TEXTSHADOWCOLOR])
-        textpos.push([@trainer.pokedex.seen_count.to_s, 206, 150, :right, TEXTCOLOR, TEXTSHADOWCOLOR])
-        textpos.push([_INTL("Time:"), 32, 182, :left, TEXTCOLOR, TEXTSHADOWCOLOR])
+        textpos.push([@title, 32, 16, :left, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        textpos.push([_INTL("Badges:"), 32, 118, :left, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        textpos.push([@trainer.badge_count.to_s, 206, 118, :right, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        textpos.push([_INTL("Pokédex:"), 32, 150, :left, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        textpos.push([@trainer.pokedex.seen_count.to_s, 206, 150, :right, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        textpos.push([_INTL("Time:"), 32, 182, :left, TEXT_COLOR, TEXT_SHADOW_COLOR])
         hour = @totalsec / 60 / 60
         min  = @totalsec / 60 % 60
         if hour > 0
-          textpos.push([_INTL("{1}h {2}m", hour, min), 206, 182, :right, TEXTCOLOR, TEXTSHADOWCOLOR])
+          textpos.push([_INTL("{1}h {2}m", hour, min), 206, 182, :right, TEXT_COLOR, TEXT_SHADOW_COLOR])
         else
-          textpos.push([_INTL("{1}m", min), 206, 182, :right, TEXTCOLOR, TEXTSHADOWCOLOR])
+          textpos.push([_INTL("{1}m", min), 206, 182, :right, TEXT_COLOR, TEXT_SHADOW_COLOR])
         end
         if @trainer.male?
-          textpos.push([@trainer.name, 112, 70, :left, MALETEXTCOLOR, MALETEXTSHADOWCOLOR])
+          textpos.push([@trainer.name, 112, 70, :left, MALE_TEXT_COLOR, MALE_TEXT_SHADOW_COLOR])
         elsif @trainer.female?
-          textpos.push([@trainer.name, 112, 70, :left, FEMALETEXTCOLOR, FEMALETEXTSHADOWCOLOR])
+          textpos.push([@trainer.name, 112, 70, :left, FEMALE_TEXT_COLOR, FEMALE_TEXT_SHADOW_COLOR])
         else
-          textpos.push([@trainer.name, 112, 70, :left, TEXTCOLOR, TEXTSHADOWCOLOR])
+          textpos.push([@trainer.name, 112, 70, :left, TEXT_COLOR, TEXT_SHADOW_COLOR])
         end
         mapname = pbGetMapNameFromId(@mapid)
         mapname.gsub!(/\\PN/, @trainer.name)
-        textpos.push([mapname, 386, 16, :right, TEXTCOLOR, TEXTSHADOWCOLOR])
+        textpos.push([mapname, 386, 16, :right, TEXT_COLOR, TEXT_SHADOW_COLOR])
       else
-        textpos.push([@title, 32, 14, :left, TEXTCOLOR, TEXTSHADOWCOLOR])
+        textpos.push([@title, 32, 14, :left, TEXT_COLOR, TEXT_SHADOW_COLOR])
       end
       pbDrawTextPositions(self.bitmap, textpos)
     end
@@ -98,7 +98,7 @@ end
 #
 #===============================================================================
 class PokemonLoad_Scene
-  def pbStartScene(commands, show_continue, trainer, frame_count, stats, map_id)
+  def pbStartScene(commands, show_continue, trainer, stats, map_id)
     @commands = commands
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -107,8 +107,7 @@ class PokemonLoad_Scene
     y = 32
     commands.length.times do |i|
       @sprites["panel#{i}"] = PokemonLoadPanel.new(
-        i, commands[i], (show_continue) ? (i == 0) : false, trainer,
-        frame_count, stats, map_id, @viewport
+        i, commands[i], (show_continue) ? (i == 0) : false, trainer, stats, map_id, @viewport
       )
       @sprites["panel#{i}"].x = 48
       @sprites["panel#{i}"].y = y
@@ -298,8 +297,7 @@ class PokemonLoadScreen
     commands[cmd_debug = commands.length]     = _INTL("Debug") if $DEBUG
     commands[cmd_quit = commands.length]      = _INTL("Quit Game")
     map_id = show_continue ? @save_data[:map_factory].map.map_id : 0
-    @scene.pbStartScene(commands, show_continue, @save_data[:player],
-                        @save_data[:frame_count] || 0, @save_data[:stats], map_id)
+    @scene.pbStartScene(commands, show_continue, @save_data[:player], @save_data[:stats], map_id)
     @scene.pbSetParty(@save_data[:player]) if show_continue
     @scene.pbStartScene2
     loop do

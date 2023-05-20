@@ -812,14 +812,15 @@ end
 def pbMessageWaitForInput(msgwindow, frames, showPause = false)
   return if !frames || frames <= 0
   msgwindow.startPause if msgwindow && showPause
-  frames = frames * Graphics.frame_rate / 20
-  frames.times do
+  timer_start = System.uptime
+  loop do
     Graphics.update
     Input.update
     msgwindow&.update
     pbUpdateSceneMap
-    break if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
     yield if block_given?
+    break if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
+    break if System.uptime - timer_start >= frames / 20.0
   end
   msgwindow.stopPause if msgwindow && showPause
 end

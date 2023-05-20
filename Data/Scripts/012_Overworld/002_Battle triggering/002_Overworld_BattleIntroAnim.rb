@@ -158,19 +158,23 @@ def pbBattleAnimationCore(anim, viewport, location, num_flashes = 2)
     viewport.color = Color.new(c, c, c)   # Fade to black/white a few times
     half_flash_time = 0.2   # seconds
     num_flashes.times do   # 2 flashes
+      fade_out = false
       timer_start = System.uptime
       loop do
-        if System.uptime - timer_start < half_flash_time
-          viewport.color.alpha = 255 * (System.uptime - timer_start) / half_flash_time
+        if fade_out
+          viewport.color.alpha = lerp(255, 0, half_flash_time, timer_start, System.uptime)
         else
-          viewport.color.alpha = 255 * (2 - ((System.uptime - timer_start) / half_flash_time))
+          viewport.color.alpha = lerp(0, 255, half_flash_time, timer_start, System.uptime)
         end
         Graphics.update
         pbUpdateSceneMap
-        break if System.uptime - timer_start >= half_flash_time * 2
+        break if fade_out && viewport.color.alpha <= 0
+        if !fade_out && viewport.color.alpha >= 255
+          fade_out = true
+          timer_start = System.uptime
+        end
       end
     end
-    viewport.color.alpha = 0
   end
   # Take screenshot of game, for use in some animations
   $game_temp.background_bitmap&.dispose
@@ -180,7 +184,7 @@ def pbBattleAnimationCore(anim, viewport, location, num_flashes = 2)
   viewport.color = Color.black   # Ensure screen is black
   Graphics.transition(25, "Graphics/Transitions/" + anim)
   # Slight pause after animation before starting up the battle scene
-  pbWait(Graphics.frame_rate / 10)
+  pbWait(0.1)
 end
 
 #===============================================================================
@@ -314,22 +318,22 @@ SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # 
     bar2 = Sprite.new(viewopp)
     bar2.bitmap = RPG::Cache.transition(trainer_bar_graphic)
     bar2.x      = xoffset
+    vs_x = Graphics.width / 2
+    vs_y = Graphics.height / 1.5
     vs = Sprite.new(viewvs)
     vs.bitmap  = RPG::Cache.transition("vs")
     vs.ox      = vs.bitmap.width / 2
     vs.oy      = vs.bitmap.height / 2
-    vs.x       = Graphics.width / 2
-    vs.y       = Graphics.height / 1.5
+    vs.x       = vs_x
+    vs.y       = vs_y
     vs.visible = false
     flash = Sprite.new(viewvs)
     flash.bitmap  = RPG::Cache.transition("vsFlash")
     flash.opacity = 0
     # Animate bars sliding in from either side
-    slideInTime = (Graphics.frame_rate * 0.25).floor
-    slideInTime.times do |i|
-      bar1.x = xoffset * (i + 1 - slideInTime) / slideInTime
-      bar2.x = xoffset * (slideInTime - i - 1) / slideInTime
-      pbWait(1)
+    pbWait(0.25) do |delta_t|
+      bar1.x = lerp(-xoffset, 0, 0.25, delta_t)
+      bar2.x = lerp(xoffset, 0, 0.25, delta_t)
     end
     bar1.dispose
     bar2.dispose
@@ -350,16 +354,12 @@ SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # 
     trainer.x      = xoffset
     trainer.tone   = Tone.new(-255, -255, -255)
     # Dim the flash and make the trainer sprites appear, while animating bars
-    animTime = (Graphics.frame_rate * 1.2).floor
-    animTime.times do |i|
-      flash.opacity -= 52 * 20 / Graphics.frame_rate if flash.opacity > 0
-      bar1.ox -= 32 * 20 / Graphics.frame_rate
-      bar2.ox += 32 * 20 / Graphics.frame_rate
-      if i >= animTime / 2 && i < slideInTime + (animTime / 2)
-        player.x = xoffset * (i + 1 - slideInTime - (animTime / 2)) / slideInTime
-        trainer.x = xoffset * (slideInTime - i - 1 + (animTime / 2)) / slideInTime
-      end
-      pbWait(1)
+    pbWait(1.2) do |delta_t|
+      flash.opacity = lerp(255, 0, 0.25, delta_t)
+      bar1.ox = lerp(0, -bar1.bitmap.width * 3, 1.2, delta_t)
+      bar2.ox = lerp(0, bar2.bitmap.width * 3, 1.2, delta_t)
+      player.x = lerp(-xoffset, 0, 0.25, delta_t - 0.6)
+      trainer.x = lerp(xoffset, 0, 0.25, delta_t - 0.6)
     end
     player.x = 0
     trainer.x = 0
@@ -378,34 +378,27 @@ SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # 
     ]
     pbDrawTextPositions(overlay.bitmap, textpos)
     # Fade out flash, shudder Vs logo and expand it, and then fade to black
-    animTime = (Graphics.frame_rate * 2.75).floor
-    shudderTime = (Graphics.frame_rate * 1.75).floor
-    zoomTime = (Graphics.frame_rate * 2.5).floor
-    shudderDelta = [4 * 20 / Graphics.frame_rate, 1].max
-    animTime.times do |i|
-      if i < shudderTime   # Fade out the white flash
-        flash.opacity -= 52 * 20 / Graphics.frame_rate if flash.opacity > 0
-      elsif i == shudderTime   # Make the flash black
-        flash.tone = Tone.new(-255, -255, -255)
-      elsif i >= zoomTime   # Fade to black
-        flash.opacity += 52 * 20 / Graphics.frame_rate if flash.opacity < 255
+    shudder_time = 1.75
+    zoom_time = 2.5
+    pbWait(2.8) do |delta_t|
+      if delta_t <= shudder_time
+        flash.opacity = lerp(255, 0, 0.25, delta_t)   # Fade out the white flash
+      elsif delta_t >= zoom_time
+        flash.tone = Tone.new(-255, -255, -255)   # Make the flash black
+        flash.opacity = lerp(0, 255, 0.25, delta_t - zoom_time)   # Fade to black
       end
-      bar1.ox -= 32 * 20 / Graphics.frame_rate
-      bar2.ox += 32 * 20 / Graphics.frame_rate
-      if i < shudderTime
-        j = i % (2 * Graphics.frame_rate / 20)
-        if j >= 0.5 * Graphics.frame_rate / 20 && j < 1.5 * Graphics.frame_rate / 20
-          vs.x += shudderDelta
-          vs.y -= shudderDelta
-        else
-          vs.x -= shudderDelta
-          vs.y += shudderDelta
-        end
-      elsif i < zoomTime
-        vs.zoom_x += 0.4 * 20 / Graphics.frame_rate
-        vs.zoom_y += 0.4 * 20 / Graphics.frame_rate
+      bar1.ox = lerp(0, -bar1.bitmap.width * 7, 2.8, delta_t)
+      bar2.ox = lerp(0, bar2.bitmap.width * 7, 2.8, delta_t)
+      if delta_t <= shudder_time
+        # +2, -2, -2, +2, repeat
+        period = (delta_t / 0.025).to_i % 4
+        shudder_delta = [2, 0 , -2, 0][period]
+        vs.x = vs_x + shudder_delta
+        vs.y = vs_y - shudder_delta
+      elsif delta_t <= zoom_time
+        vs.zoom_x = lerp(1.0, 7.0, zoom_time - shudder_time, delta_t - shudder_time)
+        vs.zoom_y = vs.zoom_x
       end
-      pbWait(1)
     end
     # End of animation
     player.dispose

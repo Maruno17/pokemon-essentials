@@ -106,7 +106,7 @@ def pbPokeRadarHighlightGrass(showmessage = true)
       end
     end
     $game_temp.poke_radar_data[3] = grasses if $game_temp.poke_radar_data
-    pbWait(Graphics.frame_rate / 2)
+    pbWait(0.5)
   end
 end
 

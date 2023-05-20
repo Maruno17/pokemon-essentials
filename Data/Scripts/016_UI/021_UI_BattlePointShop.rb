@@ -248,21 +248,25 @@ class BattlePointShop_Scene
     cw.text = msg
     pbBottomLeftLines(cw, 2)
     cw.visible = true
-    i = 0
     pbPlayDecisionSE
+    refreshed_after_busy = false
+    timer_start = System.uptime
     loop do
       Graphics.update
       Input.update
       self.update
       if !cw.busy?
         return if brief
-        pbRefresh if i == 0
+        if !refreshed_after_busy
+          pbRefresh
+          timer_start = System.uptime
+          refreshed_after_busy = true
+        end
       end
       if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
         cw.resume if cw.busy?
       end
-      return if i >= Graphics.frame_rate * 3 / 2
-      i += 1 if !cw.busy?
+      return if refreshed_after_busy && System.uptime - timer_start >= 1.5
     end
   end
 

@@ -530,12 +530,12 @@ class MiningGameScene
         collapseviewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
         collapseviewport.z = 99999
         @sprites["collapse"] = BitmapSprite.new(Graphics.width, Graphics.height, collapseviewport)
-        collapseTime = Graphics.frame_rate * 8 / 10
-        collapseFraction = (Graphics.height.to_f / collapseTime).ceil
-        (1..collapseTime).each do |i|
-          @sprites["collapse"].bitmap.fill_rect(0, collapseFraction * (i - 1),
-                                                Graphics.width, collapseFraction * i, Color.black)
+        timer_start = System.uptime
+        loop do
+          collapse_height = lerp(0, Graphics.height, 0.8, timer_start, System.uptime)
+          @sprites["collapse"].bitmap.fill_rect(0, 0, Graphics.width, collapse_height, Color.black)
           Graphics.update
+          break if collapse_height == Graphics.height
         end
         pbMessage(_INTL("The wall collapsed!"))
         break
@@ -547,7 +547,7 @@ class MiningGameScene
       end
       if foundall
         @sprites["cursor"].visible = false
-        pbWait(Graphics.frame_rate * 3 / 4)
+        pbWait(0.75)
         pbSEPlay("Mining found all")
         pbMessage(_INTL("Everything was dug up!"))
         break

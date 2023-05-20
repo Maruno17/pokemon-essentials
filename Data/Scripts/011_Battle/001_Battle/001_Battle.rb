@@ -845,7 +845,10 @@ class Battle
     return if !Scene::USE_ABILITY_SPLASH
     @scene.pbShowAbilitySplash(battler)
     if delay
-      Graphics.frame_rate.times { @scene.pbUpdate }   # 1 second
+      timer_start = System.uptime
+      until System.uptime - timer_start >= 1   # 1 second
+        @scene.pbUpdate
+      end
     end
   end
 

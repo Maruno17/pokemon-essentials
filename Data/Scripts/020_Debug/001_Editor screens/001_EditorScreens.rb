@@ -1298,11 +1298,11 @@ def pbAnimationsOrganiser
       list.delete_at(cmd[1])
       cmd[1] = [cmd[1], list.length - 1].min
       refreshlist = true
-      pbWait(Graphics.frame_rate * 2 / 10)
+      pbWait(0.2)
     when 4   # Insert spot
       list.insert(cmd[1], PBAnimation.new)
       refreshlist = true
-      pbWait(Graphics.frame_rate * 2 / 10)
+      pbWait(0.2)
     when 0
       cmd2 = pbMessage(_INTL("Save changes?"),
                        [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)

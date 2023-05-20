@@ -35,6 +35,7 @@ module PBDayNight
     Tone.new(-70, -90,  15, 55),   # Night
     Tone.new(-70, -90,  15, 55)    # Night
   ]
+  CACHED_TONE_LIFETIME = 30   # In seconds; recalculates overworld tone once per this time
   @cachedTone = nil
   @dayNightToneLastUpdate = nil
   @oneOverSixty = 1 / 60.0
@@ -81,10 +82,9 @@ module PBDayNight
   def self.getTone
     @cachedTone = Tone.new(0, 0, 0) if !@cachedTone
     return @cachedTone if !Settings::TIME_SHADING
-    if !@dayNightToneLastUpdate ||
-       Graphics.frame_count - @dayNightToneLastUpdate >= Graphics.frame_rate * 30
+    if !@dayNightToneLastUpdate || (System.uptime - @dayNightToneLastUpdate >= CACHED_TONE_LIFETIME)
       getToneInternal
-      @dayNightToneLastUpdate = Graphics.frame_count
+      @dayNightToneLastUpdate = System.uptime
     end
     return @cachedTone
   end

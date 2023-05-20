@@ -59,7 +59,7 @@ class PokemonDuel
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites = {}
-    @sprites["player"] = IconSprite.new(-128 - 32, 96, @viewport)
+    @sprites["player"] = IconSprite.new(-160, 96, @viewport)
     @sprites["player"].setBitmap(GameData::TrainerType.front_sprite_filename($player.trainer_type))
     @sprites["opponent"] = IconSprite.new(Graphics.width + 32, 96, @viewport)
     @sprites["opponent"].setBitmap(GameData::TrainerType.front_sprite_filename(opponent.trainer_type))
@@ -69,17 +69,17 @@ class PokemonDuel
     @sprites["opponentwindow"] = DuelWindow.new(opponent.name, true)
     @sprites["opponentwindow"].x        = Graphics.width
     @sprites["opponentwindow"].viewport = @viewport
-    pbWait(Graphics.frame_rate / 2)
-    distance_per_frame = 8 * 20 / Graphics.frame_rate
-    while @sprites["player"].x < 0
-      @sprites["player"].x         += distance_per_frame
-      @sprites["playerwindow"].x   += distance_per_frame
-      @sprites["opponent"].x       -= distance_per_frame
-      @sprites["opponentwindow"].x -= distance_per_frame
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
+    pbWait(0.5)
+    pbWait(0.5) do |delta_t|
+      @sprites["player"].x = lerp(-160, 0, 0.4, delta_t)
+      @sprites["playerwindow"].x = lerp(-@sprites["playerwindow"].width, 160 - @sprites["playerwindow"].width, 0.4, delta_t)
+      @sprites["opponent"].x = lerp(Graphics.width + 32, Graphics.width - 128, 0.4, delta_t)
+      @sprites["opponentwindow"].x = lerp(Graphics.width, Graphics.width - 160, 0.4, delta_t)
     end
+    @sprites["player"].x = 0
+    @sprites["playerwindow"].x = 160 - @sprites["playerwindow"].width
+    @sprites["opponent"].x = Graphics.width - 128
+    @sprites["opponentwindow"].x = Graphics.width - 160
     @oldmovespeed = $game_player.move_speed
     @oldeventspeed = event.move_speed
     pbMoveRoute($game_player,
@@ -88,7 +88,7 @@ class PokemonDuel
     pbMoveRoute(event,
                 [PBMoveRoute::CHANGE_SPEED, 2,
                  PBMoveRoute::DIRECTION_FIX_ON])
-    pbWait(Graphics.frame_rate * 3 / 4)
+    pbWait(0.75)
   end
 
   def pbDuel(opponent, event, speeches)
@@ -146,13 +146,13 @@ class PokemonDuel
                      PBMoveRoute::SCRIPT_ASYNC, "moveRight90",
                      PBMoveRoute::SCRIPT_ASYNC, "moveRight90",
                      PBMoveRoute::SCRIPT_ASYNC, "moveLeft90"])
-        pbWait(Graphics.frame_rate / 2)
+        pbWait(0.5)
         pbMessage(_INTL("You study each other's movements..."))
       elsif action == 0 && command == 1
         pbMoveRoute($game_player,
                     [PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::FORWARD])
-        pbWait(Graphics.frame_rate * 4 / 10)
+        pbWait(0.4)
         pbShake(9, 9, 8)
         pbFlashScreens(false, true)
         pbMoveRoute($game_player,
@@ -167,7 +167,7 @@ class PokemonDuel
         pbMoveRoute(event,
                     [PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::BACKWARD])
-        pbWait(Graphics.frame_rate)
+        pbWait(1.0)
         pbMoveRoute($game_player,
                     [PBMoveRoute::CHANGE_SPEED, 2,
                      PBMoveRoute::BACKWARD])
@@ -179,12 +179,12 @@ class PokemonDuel
         pbMoveRoute($game_player,
                     [PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
-        pbWait(Graphics.frame_rate * 4 / 10)
+        pbWait(0.4)
         pbMoveRoute(event,
                     [PBMoveRoute::CHANGE_SPEED, 5,
                      PBMoveRoute::BACKWARD,
                      PBMoveRoute::CHANGE_SPEED, 2])
-        pbWait(Graphics.frame_rate / 2)
+        pbWait(0.5)
         pbShake(9, 9, 8)
         pbFlashScreens(false, true)
         pbMoveRoute($game_player,
@@ -199,7 +199,7 @@ class PokemonDuel
         pbMoveRoute(event,
                     [PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::FORWARD])
-        pbWait(Graphics.frame_rate * 4 / 10)
+        pbWait(0.4)
         pbShake(9, 9, 8)
         pbFlashScreens(true, false)
         pbMoveRoute(event,
@@ -211,17 +211,17 @@ class PokemonDuel
         pbMoveRoute($game_player,
                     [PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::FORWARD])
-        pbWait(Graphics.frame_rate * 6 / 10)
+        pbWait(0.6)
         pbMoveRoute($game_player,
                     [PBMoveRoute::CHANGE_SPEED, 2,
                      PBMoveRoute::BACKWARD])
         pbMoveRoute(event,
                     [PBMoveRoute::CHANGE_SPEED, 2,
                      PBMoveRoute::FORWARD])
-        pbWait(Graphics.frame_rate * 6 / 10)
+        pbWait(0.6)
         pbMoveRoute(event, [PBMoveRoute::BACKWARD])
         pbMoveRoute($game_player, [PBMoveRoute::FORWARD])
-        pbWait(Graphics.frame_rate * 6 / 10)
+        pbWait(0.6)
         pbMoveRoute($game_player, [PBMoveRoute::BACKWARD])
         pbMessage(_INTL("You cross blades with the opponent!"))
       elsif (action == 1 && command == 2) ||
@@ -231,11 +231,11 @@ class PokemonDuel
                     [PBMoveRoute::BACKWARD,
                      PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
-        pbWait(Graphics.frame_rate * 8 / 10)
+        pbWait(0.8)
         pbMoveRoute(event,
                     [PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::FORWARD])
-        pbWait(Graphics.frame_rate * 9 / 10)
+        pbWait(0.9)
         pbShake(9, 9, 8)
         pbFlashScreens(true, true)
         pbMoveRoute($game_player,
@@ -245,7 +245,7 @@ class PokemonDuel
                     [PBMoveRoute::BACKWARD,
                      PBMoveRoute::BACKWARD,
                      PBMoveRoute::CHANGE_SPEED, 2])
-        pbWait(Graphics.frame_rate)
+        pbWait(1.0)
         pbMoveRoute(event, [PBMoveRoute::FORWARD])
         pbMoveRoute($game_player, [PBMoveRoute::FORWARD])
         @hp[0] -= action    # Enemy action
@@ -258,7 +258,7 @@ class PokemonDuel
         pbMoveRoute($game_player,
                     [PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::SCRIPT_ASYNC, "jumpBackward"])
-        pbWait(Graphics.frame_rate)
+        pbWait(1.0)
         pbMoveRoute($game_player,
                     [PBMoveRoute::CHANGE_SPEED, 2,
                      PBMoveRoute::FORWARD])
@@ -270,12 +270,12 @@ class PokemonDuel
         pbMoveRoute(event,
                     [PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
-        pbWait(Graphics.frame_rate * 4 / 10)
+        pbWait(0.4)
         pbMoveRoute($game_player,
                     [PBMoveRoute::CHANGE_SPEED, 5,
                      PBMoveRoute::BACKWARD,
                      PBMoveRoute::CHANGE_SPEED, 2])
-        pbWait(Graphics.frame_rate / 2)
+        pbWait(0.5)
         pbShake(9, 9, 8)
         pbFlashScreens(true, false)
         pbMoveRoute($game_player,
@@ -295,7 +295,7 @@ class PokemonDuel
                     [PBMoveRoute::WAIT, 15,
                      PBMoveRoute::CHANGE_SPEED, 4,
                      PBMoveRoute::SCRIPT_ASYNC, "jumpForward"])
-        pbWait(Graphics.frame_rate)
+        pbWait(1.0)
         pbMoveRoute(event,
                     [PBMoveRoute::CHANGE_SPEED, 5,
                      PBMoveRoute::BACKWARD,
@@ -318,69 +318,60 @@ class PokemonDuel
   end
 
   def pbEndDuel
-    pbWait(Graphics.frame_rate * 3 / 4)
+    pbWait(0.75)
     pbMoveRoute($game_player,
                 [PBMoveRoute::DIRECTION_FIX_OFF,
                  PBMoveRoute::CHANGE_SPEED, @oldmovespeed])
     pbMoveRoute(@event,
                 [PBMoveRoute::DIRECTION_FIX_OFF,
                  PBMoveRoute::CHANGE_SPEED, @oldeventspeed])
-    fade_time = Graphics.frame_rate * 4 / 10
-    alpha_diff = (255.0 / fade_time).ceil
-    fade_time.times do
-      @sprites["player"].opacity                  -= alpha_diff
-      @sprites["opponent"].opacity                -= alpha_diff
-      @sprites["playerwindow"].contents_opacity   -= alpha_diff
-      @sprites["opponentwindow"].contents_opacity -= alpha_diff
-      @sprites["playerwindow"].opacity            -= alpha_diff
-      @sprites["opponentwindow"].opacity          -= alpha_diff
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
+    pbWait(0.4) do |delta_t|
+      new_opacity = lerp(255, 0, 0.4, delta_t)
+      @sprites["player"].opacity = new_opacity
+      @sprites["opponent"].opacity = new_opacity
+      @sprites["playerwindow"].contents_opacity = new_opacity
+      @sprites["opponentwindow"].contents_opacity = new_opacity
+      @sprites["playerwindow"].opacity = new_opacity
+      @sprites["opponentwindow"].opacity = new_opacity
     end
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
   end
 
   def pbFlashScreens(player, opponent)
-    i = 0
-    flash_time = Graphics.frame_rate * 2 / 10
-    alpha_diff = (2 * 255.0 / flash_time).ceil
-    flash_time.times do
-      i += 1
+    pbWait(0.2) do |delta_t|
+      new_alpha = lerp(0, 255, 0.2, delta_t)
       if player
-        @sprites["player"].color       = Color.new(255, 255, 255, i * alpha_diff)
-        @sprites["playerwindow"].color = Color.new(255, 255, 255, i * alpha_diff)
+        @sprites["player"].color = Color.new(255, 255, 255, new_alpha)
+        @sprites["playerwindow"].color = Color.new(255, 255, 255, new_alpha)
       end
       if opponent
-        @sprites["opponent"].color       = Color.new(255, 255, 255, i * alpha_diff)
-        @sprites["opponentwindow"].color = Color.new(255, 255, 255, i * alpha_diff)
+        @sprites["opponent"].color = Color.new(255, 255, 255, new_alpha)
+        @sprites["opponentwindow"].color = Color.new(255, 255, 255, new_alpha)
       end
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
     end
-    flash_time.times do
-      i -= 1
+    pbWait(0.2) do |delta_t|
+      new_alpha = lerp(255, 0, 0.2, delta_t)
       if player
-        @sprites["player"].color       = Color.new(255, 255, 255, i * alpha_diff)
-        @sprites["playerwindow"].color = Color.new(255, 255, 255, i * alpha_diff)
+        @sprites["player"].color = Color.new(255, 255, 255, new_alpha)
+        @sprites["playerwindow"].color = Color.new(255, 255, 255, new_alpha)
       end
       if opponent
-        @sprites["opponent"].color       = Color.new(255, 255, 255, i * alpha_diff)
-        @sprites["opponentwindow"].color = Color.new(255, 255, 255, i * alpha_diff)
+        @sprites["opponent"].color = Color.new(255, 255, 255, new_alpha)
+        @sprites["opponentwindow"].color = Color.new(255, 255, 255, new_alpha)
       end
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
     end
-    pbWait(Graphics.frame_rate * 4 / 10) if !player || !opponent
+    @sprites["player"].color.alpha = 0
+    @sprites["playerwindow"].color.alpha = 0
+    @sprites["opponent"].color.alpha = 0
+    @sprites["opponentwindow"].color.alpha = 0
+    pbWait(0.4) if !player || !opponent
   end
 
   def pbRefresh
     @sprites["playerwindow"].hp   = @hp[0]
     @sprites["opponentwindow"].hp = @hp[1]
-    pbWait(Graphics.frame_rate / 4)
+    pbWait(0.25)
   end
 end
 

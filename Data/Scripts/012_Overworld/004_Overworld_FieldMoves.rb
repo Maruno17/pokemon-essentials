@@ -174,9 +174,7 @@ def pbHiddenMoveAnimation(pokemon)
     break if phase == 6
   end
   sprite.dispose
-  strobes.each do |strobe|
-    strobe.dispose
-  end
+  strobes.each { |strobe| strobe.dispose }
   strobes.clear
   bg.dispose
   viewport.dispose
@@ -234,7 +232,7 @@ def pbSmashEvent(event)
                       PBMoveRoute::TURN_LEFT, PBMoveRoute::WAIT, 2,
                       PBMoveRoute::TURN_RIGHT, PBMoveRoute::WAIT, 2,
                       PBMoveRoute::TURN_UP, PBMoveRoute::WAIT, 2])
-  pbWait(Graphics.frame_rate * 4 / 10)
+  pbWait(0.4)
   event.erase
   $PokemonMap&.addErasedEvent(event.id)
 end
@@ -458,14 +456,11 @@ HiddenMoveHandlers::UseMove.add(:FLASH, proc { |move, pokemon|
   end
   $PokemonGlobal.flashUsed = true
   $stats.flash_count += 1
-  radiusDiff = 8 * 20 / Graphics.frame_rate
-  while darkness.radius < darkness.radiusMax
-    Graphics.update
-    Input.update
-    pbUpdateSceneMap
-    darkness.radius += radiusDiff
-    darkness.radius = darkness.radiusMax if darkness.radius > darkness.radiusMax
+  duration = 0.7
+  pbWait(duration) do |delta_t|
+    darkness.radius = lerp(darkness.radiusMin, darkness.radiusMax, duration, delta_t)
   end
+  darkness.radius = darkness.radiusMax
   next true
 })
 
@@ -511,7 +506,7 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
     $game_map.autoplay
     $game_map.refresh
     yield if block_given?
-    pbWait(Graphics.frame_rate / 4)
+    pbWait(0.25)
   end
   pbEraseEscapePoint
   return true
@@ -812,24 +807,19 @@ def pbSweetScent
   end
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
-  count = 0
   viewport.color.red   = 255
-  viewport.color.green = 0
-  viewport.color.blue  = 0
+  viewport.color.green = 32
+  viewport.color.blue  = 32
   viewport.color.alpha -= 10
-  alphaDiff = 12 * 20 / Graphics.frame_rate
-  loop do
-    if count == 0 && viewport.color.alpha < 128
-      viewport.color.alpha += alphaDiff
-    elsif count > Graphics.frame_rate / 4
-      viewport.color.alpha -= alphaDiff
+  start_alpha = viewport.color.alpha
+  duration = 1.1
+  fade_time = 0.4
+  pbWait(duration) do |delta_t|
+    if delta_t < duration / 2
+      viewport.color.alpha = lerp(start_alpha, start_alpha + 128, fade_time, delta_t)
     else
-      count += 1
+      viewport.color.alpha = lerp(start_alpha + 128, start_alpha, fade_time, delta_t - duration + fade_time)
     end
-    Graphics.update
-    Input.update
-    pbUpdateSceneMap
-    break if viewport.color.alpha <= 0
   end
   viewport.dispose
   enctype = $PokemonEncounters.encounter_type

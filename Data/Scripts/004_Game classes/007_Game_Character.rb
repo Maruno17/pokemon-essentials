@@ -76,6 +76,7 @@ class Game_Character
     @jump_count                = 0   # Frames left in a stationary jump
     @bob_height                = 0
     @wait_count                = 0
+    @wait_start                = nil
     @moved_this_frame          = false
     @moveto_happened           = false
     @locked                    = false
@@ -379,6 +380,7 @@ class Game_Character
     @move_route_forcing = true
     @prelock_direction  = 0
     @wait_count         = 0
+    @wait_start         = nil
     move_type_custom
   end
 
@@ -472,7 +474,8 @@ class Game_Character
         return
       end
       if command.code == 15   # Wait
-        @wait_count = (command.parameters[0] * Graphics.frame_rate / 20) - 1
+        @wait_count = command.parameters[0] / 20.0
+        @wait_start = System.uptime
         @move_route_index += 1
         return
       end
@@ -887,8 +890,11 @@ class Game_Character
 
   def update_command
     if @wait_count > 0
-      @wait_count -= 1
-    elsif @move_route_forcing
+      return if System.uptime - @wait_start < @wait_count
+      @wait_count = 0
+      @wait_start = nil
+    end
+    if @move_route_forcing
       move_type_custom
     elsif !@starting && !lock? && !moving? && !jumping?
       update_command_new

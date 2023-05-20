@@ -8,11 +8,7 @@ def pbFishingBegin
     $game_player.lock_pattern = true
     4.times do |pattern|
       $game_player.pattern = 3 - pattern
-      (Graphics.frame_rate / 20).times do
-        Graphics.update
-        Input.update
-        pbUpdateSceneMap
-      end
+      pbWait(0.05)
     end
   end
 end
@@ -21,11 +17,7 @@ def pbFishingEnd
   if !pbCommonEvent(Settings::FISHING_END_COMMON_EVENT)
     4.times do |pattern|
       $game_player.pattern = pattern
-      (Graphics.frame_rate / 20).times do
-        Graphics.update
-        Input.update
-        pbUpdateSceneMap
-      end
+      pbWait(0.05)
     end
   end
   yield if block_given?
@@ -55,8 +47,8 @@ def pbFishing(hasEncounter, rodType = 1)
     end
     if hasEncounter && rand(100) < biteChance
       $scene.spriteset.addUserAnimation(Settings::EXCLAMATION_ANIMATION_ID, $game_player.x, $game_player.y, true, 3)
-      frames = Graphics.frame_rate - rand(Graphics.frame_rate / 2)   # 0.5-1 second
-      if !pbWaitForInput(msgWindow, message + "\n" + _INTL("Oh! A bite!"), frames)
+      duration = rand(5..10) / 10.0   # 0.5-1 seconds
+      if !pbWaitForInput(msgWindow, message + "\n" + _INTL("Oh! A bite!"), duration)
         pbFishingEnd { pbMessageDisplay(msgWindow, _INTL("The Pokémon got away...")) }
         break
       end
@@ -81,35 +73,28 @@ end
 # Show waiting dots before a Pokémon bites
 def pbWaitMessage(msgWindow, time)
   message = ""
-  periodTime = Graphics.frame_rate * 4 / 10   # 0.4 seconds, 16 frames per dot
   (time + 1).times do |i|
     message += ".   " if i > 0
     pbMessageDisplay(msgWindow, message, false)
-    periodTime.times do
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
-      if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
-        return true
-      end
+    pbWait(0.4) do |delta_t|
+      return true if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
     end
   end
   return false
 end
 
 # A Pokémon is biting, reflex test to reel it in
-def pbWaitForInput(msgWindow, message, frames)
+def pbWaitForInput(msgWindow, message, duration)
   pbMessageDisplay(msgWindow, message, false)
-  numFrame = 0
-  twitchFrame = 0
-  twitchFrameTime = Graphics.frame_rate * 2 / 10   # 0.2 seconds, 8 frames
+  twitch_frame_duration = 0.2   # 0.2 seconds
+  timer_start = System.uptime
   loop do
     Graphics.update
     Input.update
     pbUpdateSceneMap
     # Twitch cycle: 1,0,1,0,0,0,0,0
-    twitchFrame = (twitchFrame + 1) % (twitchFrameTime * 8)
-    case twitchFrame % twitchFrameTime
+    twitch_frame = ((System.uptime - timer_start) / twitch_frame_duration).to_i % 8
+    case twitch_frame
     when 0, 2
       $game_player.pattern = 1
     else
@@ -119,8 +104,7 @@ def pbWaitForInput(msgWindow, message, frames)
       $game_player.pattern = 0
       return true
     end
-    break if !Settings::FISHING_AUTO_HOOK && numFrame > frames
-    numFrame += 1
+    break if !Settings::FISHING_AUTO_HOOK && System.uptime - timer_start > duration
   end
   return false
 end

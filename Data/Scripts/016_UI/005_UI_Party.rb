@@ -654,14 +654,18 @@ class PokemonParty_Scene
     pbSEPlay("GUI party switch")
     oldsprite = @sprites["pokemon#{oldid}"]
     newsprite = @sprites["pokemon#{newid}"]
-    timeTaken = Graphics.frame_rate * 4 / 10
-    distancePerFrame = (Graphics.width / (2.0 * timeTaken)).ceil
-    timeTaken.times do
-      oldsprite.x += (oldid & 1) == 0 ? -distancePerFrame : distancePerFrame
-      newsprite.x += (newid & 1) == 0 ? -distancePerFrame : distancePerFrame
+    old_start_x = oldsprite.x
+    new_start_x = newsprite.x
+    old_mult = oldid.even? ? -1 : 1
+    new_mult = newid.even? ? -1 : 1
+    timer_start = System.uptime
+    loop do
+      oldsprite.x = lerp(old_start_x, old_start_x + old_mult * Graphics.width / 2, 0.4, timer_start, System.uptime)
+      newsprite.x = lerp(new_start_x, new_start_x + new_mult * Graphics.width / 2, 0.4, timer_start, System.uptime)
       Graphics.update
       Input.update
       self.update
+      break if oldsprite.x == old_start_x + old_mult * Graphics.width / 2
     end
   end
 
@@ -671,14 +675,18 @@ class PokemonParty_Scene
     newsprite = @sprites["pokemon#{newid}"]
     oldsprite.pokemon = @party[oldid]
     newsprite.pokemon = @party[newid]
-    timeTaken = Graphics.frame_rate * 4 / 10
-    distancePerFrame = (Graphics.width / (2.0 * timeTaken)).ceil
-    timeTaken.times do
-      oldsprite.x -= (oldid & 1) == 0 ? -distancePerFrame : distancePerFrame
-      newsprite.x -= (newid & 1) == 0 ? -distancePerFrame : distancePerFrame
+    old_start_x = oldsprite.x
+    new_start_x = newsprite.x
+    old_mult = oldid.even? ? -1 : 1
+    new_mult = newid.even? ? -1 : 1
+    timer_start = System.uptime
+    loop do
+      oldsprite.x = lerp(old_start_x, old_start_x - old_mult * Graphics.width / 2, 0.4, timer_start, System.uptime)
+      newsprite.x = lerp(new_start_x, new_start_x - new_mult * Graphics.width / 2, 0.4, timer_start, System.uptime)
       Graphics.update
       Input.update
       self.update
+      break if oldsprite.x == old_start_x - old_mult * Graphics.width / 2
     end
     Settings::MAX_PARTY_SIZE.times do |i|
       @sprites["pokemon#{i}"].preselected = false

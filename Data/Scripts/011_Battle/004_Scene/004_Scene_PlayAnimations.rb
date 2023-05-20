@@ -360,9 +360,10 @@ class Battle::Scene
     return if !ball
     # Data box disappear animation
     dataBoxAnim = Animation::DataBoxDisappear.new(@sprites, @viewport, idxBattler)
+    timer_start = System.uptime
     loop do
       dataBoxAnim.update
-      ball.opacity -= 12 * 20 / Graphics.frame_rate if ball.opacity > 0
+      ball.opacity = lerp(255, 0, 1.0, timer_start, System.uptime)
       pbUpdate
       break if dataBoxAnim.animDone? && ball.opacity <= 0
     end

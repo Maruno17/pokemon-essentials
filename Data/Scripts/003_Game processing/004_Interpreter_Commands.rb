@@ -349,21 +349,16 @@ class Interpreter
   #-----------------------------------------------------------------------------
   def pbButtonInputProcessing(variable_number = 0, timeout_frames = 0)
     ret = 0
-    timer = timeout_frames * Graphics.frame_rate / 20
+    timer_start = System.uptime
     loop do
       Graphics.update
       Input.update
       pbUpdateSceneMap
       # Check for input and break if there is one
-      (1..18).each do |i|
-        ret = i if Input.trigger?(i)
-      end
+      (1..18).each { |i| ret = i if Input.trigger?(i) }
       break if ret != 0
-      # Count down the timer and break if it runs out
-      if timeout_frames > 0
-        timer -= 1
-        break if timer <= 0
-      end
+      # Break if the timer runs out
+      break if timeout_frames > 0 && System.uptime - timer_start >= timeout_frames / 20.0
     end
     Input.update
     if variable_number && variable_number > 0
@@ -386,7 +381,8 @@ class Interpreter
   # * Wait
   #-----------------------------------------------------------------------------
   def command_106
-    @wait_count = @parameters[0] * Graphics.frame_rate / 20
+    @wait_count = @parameters[0] / 20.0
+    @wait_start = System.uptime
     return true
   end
 

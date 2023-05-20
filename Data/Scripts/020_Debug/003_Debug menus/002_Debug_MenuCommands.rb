@@ -100,10 +100,10 @@ MenuHandlers.add(:debug_menu, :safari_zone_and_bug_contest, {
       loop do
         cmds = []
         if Settings::BUG_CONTEST_TIME > 0
-          curtime = [(contest.timer + Settings::BUG_CONTEST_TIME * Graphics.frame_rate) - Graphics.frame_count, 0].max
-          curtime /= Graphics.frame_rate
-          min = curtime / 60
-          sec = curtime % 60
+          time_left = Settings::BUG_CONTEST_TIME - (System.uptime - contest.timer_start).to_i
+          time_left = 0 if time_left < 0
+          min = time_left / 60
+          sec = time_left % 60
           time_string = _ISPRINTF("{1:02d}m {2:02d}s", min, sec)
         else
           time_string = _INTL("infinite")
@@ -119,13 +119,10 @@ MenuHandlers.add(:debug_menu, :safari_zone_and_bug_contest, {
             params.setRange(0, 99999)
             params.setDefaultValue(min)
             new_time = pbMessageChooseNumber(_INTL("Set the time remaining (in minutes) in this Bug-Catching Contest."), params)
-            echoln contest.timer
-            echoln new_time
-            contest.timer += (new_time - min) * 60 * Graphics.frame_rate
-            echoln contest.timer
+            contest.timer_start += (new_time - min) * 60
             $scene.spriteset.usersprites.each do |sprite|
               next if !sprite.is_a?(TimerDisplay)
-              sprite.start = contest.timer
+              sprite.start_time = contest.timer_start
               break
             end
           end

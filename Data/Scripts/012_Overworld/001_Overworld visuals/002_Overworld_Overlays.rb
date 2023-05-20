@@ -2,6 +2,9 @@
 # Location signpost
 #===============================================================================
 class LocationWindow
+  APPEAR_TIME = 0.4   # In seconds; is also the disappear time
+  LINGER_TIME = 1.6   # In seconds; time during which self is fully visible
+
   def initialize(name)
     @window = Window_AdvancedTextPokemon.new(name)
     @window.resizeToFit(name, Graphics.width)
@@ -10,11 +13,11 @@ class LocationWindow
     @window.viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @window.viewport.z = 99999
     @currentmap = $game_map.map_id
-    @frames = 0
+    @timer_start = System.uptime
   end
 
   def disposed?
-    @window.disposed?
+    return @window.disposed?
   end
 
   def dispose
@@ -28,12 +31,11 @@ class LocationWindow
       @window.dispose
       return
     end
-    if @frames > Graphics.frame_rate * 2
-      @window.y -= 4
-      @window.dispose if @window.y + @window.height < 0
+    if System.uptime - @timer_start >= APPEAR_TIME + LINGER_TIME
+      @window.y = lerp(0, -@window.height, APPEAR_TIME, @timer_start + APPEAR_TIME + LINGER_TIME, System.uptime)
+      @window.dispose if @window.y + @window.height <= 0
     else
-      @window.y += 4 if @window.y < 0
-      @frames += 1
+      @window.y = lerp(-@window.height, 0, APPEAR_TIME, @timer_start, System.uptime)
     end
   end
 end
@@ -62,7 +64,7 @@ class DarknessSprite < Sprite
   def radiusMax; return 176; end   # After using Flash
 
   def radius=(value)
-    @radius = value
+    @radius = value.round
     refresh
   end
 

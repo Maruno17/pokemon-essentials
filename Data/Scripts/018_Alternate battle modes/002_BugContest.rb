@@ -5,7 +5,7 @@ class BugContestState
   attr_accessor :ballcount
   attr_accessor :decision
   attr_accessor :lastPokemon
-  attr_accessor :timer
+  attr_accessor :timer_start
 
   CONTESTANT_NAMES = [
     _INTL("Bug Catcher Ed"),
@@ -17,7 +17,7 @@ class BugContestState
     _INTL("Picnicker Cindy"),
     _INTL("Youngster Samuel")
   ]
-  TIME_ALLOWED = Settings::BUG_CONTEST_TIME
+  TIME_ALLOWED = Settings::BUG_CONTEST_TIME   # In seconds
 
   def initialize
     clear
@@ -33,9 +33,7 @@ class BugContestState
   def expired?
     return false if !undecided?
     return false if TIME_ALLOWED <= 0
-    curtime = @timer + (TIME_ALLOWED * Graphics.frame_rate)
-    curtime = [curtime - Graphics.frame_count, 0].max
-    return (curtime <= 0)
+    return System.uptime - timer_start >= TIME_ALLOWED
   end
 
   def clear
@@ -176,7 +174,7 @@ class BugContestState
     @otherparty = []
     @lastPokemon = nil
     @lastContest = nil
-    @timer = Graphics.frame_count
+    @timer_start = System.uptime
     @places = []
     chosenpkmn = $player.party[@chosenPokemon]
     $player.party.length.times do |i|
@@ -230,14 +228,14 @@ end
 #
 #===============================================================================
 class TimerDisplay # :nodoc:
-  attr_accessor :start
+  attr_accessor :start_time
 
-  def initialize(start, maxtime)
+  def initialize(start_time, max_time)
     @timer = Window_AdvancedTextPokemon.newWithSize("", Graphics.width - 120, 0, 120, 64)
     @timer.z = 99999
-    @total_sec = nil
-    @start = start
-    @maxtime = maxtime
+    @start_time = start_time
+    @max_time = max_time
+    @display_time = nil
   end
 
   def dispose
@@ -249,14 +247,12 @@ class TimerDisplay # :nodoc:
   end
 
   def update
-    curtime = [(@start + @maxtime) - Graphics.frame_count, 0].max
-    curtime /= Graphics.frame_rate
-    if curtime != @total_sec
-      # Calculate total number of seconds
-      @total_sec = curtime
-      # Make a string for displaying the timer
-      min = @total_sec / 60
-      sec = @total_sec % 60
+    time_left = @max_time - (System.uptime - @start_time).to_i
+    time_left = 0 if time_left < 0
+    if @display_time != time_left
+      @display_time = time_left
+      min = @display_time / 60
+      sec = @display_time % 60
       @timer.text = _ISPRINTF("<ac>{1:02d}:{2:02d}", min, sec)
     end
   end
@@ -318,8 +314,7 @@ EventHandlers.add(:on_map_or_spriteset_change, :show_bug_contest_timer,
   proc { |scene, _map_changed|
     next if !pbInBugContest? || pbBugContestState.decision != 0 || BugContestState::TIME_ALLOWED == 0
     scene.spriteset.addUserSprite(
-      TimerDisplay.new(pbBugContestState.timer,
-                       BugContestState::TIME_ALLOWED * Graphics.frame_rate)
+      TimerDisplay.new(pbBugContestState.timer_start, BugContestState::TIME_ALLOWED)
     )
   }
 )

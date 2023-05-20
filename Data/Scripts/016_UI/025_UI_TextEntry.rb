@@ -524,17 +524,10 @@ class PokemonEntryScene2
     @sprites["toptab"].bitmap = @bitmaps[(newtab % @@Characters.length) + @@Characters.length]
     # Move bottom (old) tab down off the screen, and move top (new) tab right
     # onto the screen
-    deltaX = 48 * 20 / Graphics.frame_rate
-    deltaY = 24 * 20 / Graphics.frame_rate
+    timer_start = System.uptime
     loop do
-      if @sprites["bottomtab"].y < 414
-        @sprites["bottomtab"].y += deltaY
-        @sprites["bottomtab"].y = 414 if @sprites["bottomtab"].y > 414
-      end
-      if @sprites["toptab"].x < 22
-        @sprites["toptab"].x += deltaX
-        @sprites["toptab"].x = 22 if @sprites["toptab"].x > 22
-      end
+      @sprites["bottomtab"].y = lerp(162, 414, 0.5, timer_start, System.uptime)
+      @sprites["toptab"].x = lerp(22 - 504, 22, 0.5, timer_start, System.uptime)
       Graphics.update
       Input.update
       pbUpdate

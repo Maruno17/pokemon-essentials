@@ -52,50 +52,52 @@ class PokemonEggHatch_Scene
   def pbMain
     pbBGMPlay("Evolution")
     # Egg animation
-    updateScene(Graphics.frame_rate * 15 / 10)
+    updateScene(1.5)
     pbPositionHatchMask(0)
     pbSEPlay("Battle ball shake")
     swingEgg(4)
-    updateScene(Graphics.frame_rate * 2 / 10)
+    updateScene(0.2)
     pbPositionHatchMask(1)
     pbSEPlay("Battle ball shake")
     swingEgg(4)
-    updateScene(Graphics.frame_rate * 4 / 10)
+    updateScene(0.4)
     pbPositionHatchMask(2)
     pbSEPlay("Battle ball shake")
     swingEgg(8, 2)
-    updateScene(Graphics.frame_rate * 4 / 10)
+    updateScene(0.4)
     pbPositionHatchMask(3)
     pbSEPlay("Battle ball shake")
     swingEgg(16, 4)
-    updateScene(Graphics.frame_rate * 2 / 10)
+    updateScene(0.2)
     pbPositionHatchMask(4)
     pbSEPlay("Battle recall")
     # Fade and change the sprite
-    fadeTime = Graphics.frame_rate * 4 / 10
-    toneDiff = (255.0 / fadeTime).ceil
-    (1..fadeTime).each do |i|
-      @sprites["pokemon"].tone = Tone.new(i * toneDiff, i * toneDiff, i * toneDiff)
-      @sprites["overlay"].opacity = i * toneDiff
+    timer_start = System.uptime
+    loop do
+      tone_val = lerp(0, 255, 0.4, timer_start, System.uptime)
+      @sprites["pokemon"].tone = Tone.new(tone_val, tone_val, tone_val)
+      @sprites["overlay"].opacity = tone_val
       updateScene
+      break if tone_val >= 255
     end
-    updateScene(Graphics.frame_rate * 3 / 4)
+    updateScene(0.75)
     @sprites["pokemon"].setPokemonBitmap(@pokemon) # Pokémon sprite
     @sprites["pokemon"].x = Graphics.width / 2
     @sprites["pokemon"].y = 264
     @pokemon.species_data.apply_metrics_to_sprite(@sprites["pokemon"], 1)
     @sprites["hatch"].visible = false
-    (1..fadeTime).each do |i|
-      @sprites["pokemon"].tone = Tone.new(255 - (i * toneDiff), 255 - (i * toneDiff), 255 - (i * toneDiff))
-      @sprites["overlay"].opacity = 255 - (i * toneDiff)
+    timer_start = System.uptime
+    loop do
+      tone_val = lerp(255, 0, 0.4, timer_start, System.uptime)
+      @sprites["pokemon"].tone = Tone.new(tone_val, tone_val, tone_val)
+      @sprites["overlay"].opacity = tone_val
       updateScene
+      break if tone_val <= 0
     end
-    @sprites["pokemon"].tone = Tone.new(0, 0, 0)
-    @sprites["overlay"].opacity = 0
     # Finish scene
-    frames = (GameData::Species.cry_length(@pokemon) * Graphics.frame_rate).ceil
+    cry_duration = GameData::Species.cry_length(@pokemon)
     @pokemon.play_cry
-    updateScene(frames + 4)
+    updateScene(cry_duration + 0.1)
     pbBGMStop
     pbMEPlay("Evolution success")
     @pokemon.name = nil
@@ -140,8 +142,8 @@ class PokemonEggHatch_Scene
 
   def swingEgg(speed, swingTimes = 1)
     @sprites["hatch"].visible = true
-    speed = speed.to_f * 20 / Graphics.frame_rate
     amplitude = 8
+    duration = 0.05 * amplitude / speed
     targets = []
     swingTimes.times do
       targets.push(@sprites["pokemon"].x + amplitude)
@@ -149,21 +151,23 @@ class PokemonEggHatch_Scene
     end
     targets.push(@sprites["pokemon"].x)
     targets.each_with_index do |target, i|
+      timer_start = System.uptime
+      start_x = @sprites["pokemon"].x
       loop do
         break if i.even? && @sprites["pokemon"].x >= target
         break if i.odd? && @sprites["pokemon"].x <= target
-        @sprites["pokemon"].x += speed
-        @sprites["hatch"].x    = @sprites["pokemon"].x
+        @sprites["pokemon"].x = lerp(start_x, target, duration, timer_start, System.uptime)
+        @sprites["hatch"].x = @sprites["pokemon"].x
         updateScene
       end
-      speed *= -1
     end
     @sprites["pokemon"].x = targets[targets.length - 1]
     @sprites["hatch"].x   = @sprites["pokemon"].x
   end
 
-  def updateScene(frames = 1)   # Can be used for "wait" effect
-    frames.times do
+  def updateScene(duration = 0.01)   # Can be used for "wait" effect
+    timer_start = System.uptime
+    while System.uptime - timer_start < duration
       Graphics.update
       Input.update
       self.update

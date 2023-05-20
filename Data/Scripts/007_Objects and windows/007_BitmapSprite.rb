@@ -29,11 +29,10 @@ class AnimatedSprite < Sprite
   attr_reader :framecount
   attr_reader :animname
 
+  # frameskip is in 1/20ths of a second, and is the time between frame changes.
   def initializeLong(animname, framecount, framewidth, frameheight, frameskip)
     @animname = pbBitmapName(animname)
-    @realframes = 0
-    @frameskip = [1, frameskip].max
-    @frameskip *= Graphics.frame_rate / 20
+    @time_per_frame = [1, frameskip].max / 20.0
     raise _INTL("Frame width is 0") if framewidth == 0
     raise _INTL("Frame height is 0") if frameheight == 0
     begin
@@ -60,13 +59,12 @@ class AnimatedSprite < Sprite
     self.frame = 0
   end
 
-  # Shorter version of AnimationSprite.  All frames are placed on a single row
-  # of the bitmap, so that the width and height need not be defined beforehand
+  # Shorter version of AnimationSprite. All frames are placed on a single row
+  # of the bitmap, so that the width and height need not be defined beforehand.
+  # frameskip is in 1/20ths of a second, and is the time between frame changes.
   def initializeShort(animname, framecount, frameskip)
     @animname = pbBitmapName(animname)
-    @realframes = 0
-    @frameskip = [1, frameskip].max
-    @frameskip *= Graphics.frame_rate / 20
+    @time_per_frame = [1, frameskip].max / 20.0
     begin
       @animbitmap = AnimatedBitmap.new(animname).deanimate
     rescue
@@ -114,31 +112,27 @@ class AnimatedSprite < Sprite
 
   def frame=(value)
     @frame = value
-    @realframes = 0
     self.src_rect.x = @frame % @framesperrow * @framewidth
     self.src_rect.y = @frame / @framesperrow * @frameheight
   end
 
   def start
     @playing = true
-    @realframes = 0
+    @start_time = System.uptime
   end
 
   alias play start
 
   def stop
     @playing = false
+    @start_time = nil
   end
 
   def update
     super
-    if @playing
-      @realframes += 1
-      if @realframes == @frameskip
-        @realframes = 0
-        self.frame += 1
-        self.frame %= self.framecount
-      end
+    if @playing && System.uptime - @start_time >= @time_per_frame
+      self.frame = (@frame + 1) % self.framecount
+      @start_time += @time_per_frame
     end
   end
 end
