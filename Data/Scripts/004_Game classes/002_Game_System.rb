@@ -41,39 +41,43 @@ class Game_System
 
   #-----------------------------------------------------------------------------
 
-  def bgm_play(bgm)
+  def bgm_play(bgm, track = nil)
     old_pos = @bgm_position
     @bgm_position = 0
-    bgm_play_internal(bgm, 0)
+    bgm_play_internal(bgm, 0, track)
     @bgm_position = old_pos
   end
 
-  def bgm_play_internal2(name, volume, pitch, position) # :nodoc:
+  def bgm_play_internal2(name, volume, pitch, position, track = nil) # :nodoc:
     vol = volume
     vol *= $PokemonSystem.bgmvolume / 100.0
     vol = vol.to_i
     begin
-      Audio.bgm_play(name, vol, pitch, position)
+      Audio.bgm_play(name, vol, pitch, position, track)
     rescue ArgumentError
-      Audio.bgm_play(name, vol, pitch)
+      Audio.bgm_play(name, vol, pitch, 0, track)
     end
   end
 
-  def bgm_play_internal(bgm, position) # :nodoc:
-    @bgm_position = position if !@bgm_paused
-    @playing_bgm = bgm&.clone
+  def bgm_play_internal(bgm, position, track = nil) # :nodoc:
+    if !track || track == 0
+      @bgm_position = position if !@bgm_paused
+      @playing_bgm = bgm&.clone
+    end
     if bgm && bgm.name != ""
       if !@defaultBGM && FileTest.audio_exist?("Audio/BGM/" + bgm.name)
-        bgm_play_internal2("Audio/BGM/" + bgm.name, bgm.volume, bgm.pitch, @bgm_position)
+        bgm_play_internal2("Audio/BGM/" + bgm.name, bgm.volume, bgm.pitch, @bgm_position, track)
       end
     else
-      @bgm_position = position if !@bgm_paused
-      @playing_bgm = nil
-      Audio.bgm_stop if !@defaultBGM
+      if !track || track == 0
+        @bgm_position = position if !@bgm_paused
+        @playing_bgm = nil
+      end
+      Audio.bgm_stop(track) if !@defaultBGM
     end
     if @defaultBGM
       bgm_play_internal2("Audio/BGM/" + @defaultBGM.name,
-                         @defaultBGM.volume, @defaultBGM.pitch, @bgm_position)
+                         @defaultBGM.volume, @defaultBGM.pitch, @bgm_position, track)
     end
     Graphics.frame_reset
   end
@@ -98,16 +102,20 @@ class Game_System
     end
   end
 
-  def bgm_stop # :nodoc:
-    @bgm_position = 0 if !@bgm_paused
-    @playing_bgm  = nil
-    Audio.bgm_stop if !@defaultBGM
+  def bgm_stop(track = nil) # :nodoc:
+    if !track || track == 0
+      @bgm_position = 0 if !@bgm_paused
+      @playing_bgm  = nil
+    end
+    Audio.bgm_stop(track) if !@defaultBGM
   end
 
-  def bgm_fade(time) # :nodoc:
-    @bgm_position = 0 if !@bgm_paused
-    @playing_bgm = nil
-    Audio.bgm_fade((time * 1000).floor) if !@defaultBGM
+  def bgm_fade(time, track = nil) # :nodoc:
+    if !track || track == 0
+      @bgm_position = 0 if !@bgm_paused
+      @playing_bgm = nil
+    end
+    Audio.bgm_fade((time * 1000).floor, track) if !@defaultBGM
   end
 
   def playing_bgm
