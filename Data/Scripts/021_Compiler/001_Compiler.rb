@@ -1018,7 +1018,7 @@ module Compiler
     Console.echo_li(_INTL("Saving messages..."))
     Translator.gather_script_and_event_texts
     MessageTypes.save_default_messages
-    MessageTypes.load_default_messages if safeExists?("Data/messages_core.dat")
+    MessageTypes.load_default_messages if FileTest.exist?("Data/messages_core.dat")
     Console.echo_done(true)
     Console.echoln_li_done(_INTL("Successfully compiled all game data"))
   end
@@ -1026,6 +1026,14 @@ module Compiler
   def main
     return if !$DEBUG
     begin
+      mustCompile = false
+      # If no PBS file, create one and fill it, then recompile
+      if !FileTest.directory?("PBS")
+        Dir.mkdir("PBS") rescue nil
+        GameData.load_all
+        write_all
+        mustCompile = true
+      end
       # Get all data files and PBS files to be checked for their last modified times
       data_files = GameData.get_all_data_filenames
       data_files += [   # Extra .dat files for data that isn't a GameData class
@@ -1036,19 +1044,11 @@ module Compiler
       text_files = get_all_pbs_files_to_compile
       latestDataTime = 0
       latestTextTime = 0
-      mustCompile = false
       # Should recompile if new maps were imported
       mustCompile |= import_new_maps
-      # If no PBS file, create one and fill it, then recompile
-      if !safeIsDirectory?("PBS")
-        Dir.mkdir("PBS") rescue nil
-        GameData.load_all
-        write_all
-        mustCompile = true
-      end
       # Check data files for their latest modify time
       data_files.each do |filename|   # filename = [string, boolean (whether mandatory)]
-        if safeExists?("Data/" + filename[0])
+        if FileTest.exist?("Data/" + filename[0])
           begin
             File.open("Data/#{filename[0]}") do |file|
               latestDataTime = [latestDataTime, file.mtime.to_i].max
@@ -1080,7 +1080,7 @@ module Compiler
       if mustCompile
         data_files.each do |filename|
           begin
-            File.delete("Data/#{filename[0]}") if safeExists?("Data/#{filename[0]}")
+            File.delete("Data/#{filename[0]}") if FileTest.exist?("Data/#{filename[0]}")
           rescue SystemCallError
           end
         end
@@ -1093,7 +1093,7 @@ module Compiler
       pbPrintException(e)
       data_files.each do |filename|
         begin
-          File.delete("Data/#{filename[0]}") if safeExists?("Data/#{filename[0]}")
+          File.delete("Data/#{filename[0]}") if FileTest.exist?("Data/#{filename[0]}")
         rescue SystemCallError
         end
       end

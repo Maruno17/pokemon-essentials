@@ -185,7 +185,7 @@ RockSmash,50
     90,NOSEPASS,13,14
     10,GEODUDE,12,15
 #-------------------------------
-[049] # Rock Cave
+[049] # Rock Cave 1F
 Cave,5
     20,MAGNETON,14,16
     20,MAGNETON,14,17
@@ -194,7 +194,7 @@ Cave,5
     10,GEODUDE,13,15
     10,MAWILE,14,16
 #-------------------------------
-[050] # Rock Cave
+[050] # Rock Cave B1F
 Cave,5
     20,MAGNETON,14,16
     20,MAGNETON,14,17
@@ -212,7 +212,7 @@ Cave,5
     10,RIOLU,1
     10,TYROGUE,1
 #-------------------------------
-[066] # Safari Zone
+[066] # Safari Zone outside
 Land,21
     20,ABRA,12,15
     20,DODUO,13,15
@@ -282,7 +282,7 @@ SuperRod
     15,CORSOLA,15,18
     5,STARYU,15,17
 #-------------------------------
-[070] # Underwater
+[070] # Route 8 underwater
 Land,21
     20,CHINCHOU,17,21
     20,CLAMPERL,18,20

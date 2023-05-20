@@ -26,7 +26,7 @@ module GameData
 
     singleton_class.alias_method(:__orig__load, :load) unless singleton_class.method_defined?(:__orig__load)
     def self.load
-      __orig__load if safeExists?("Data/#{self::DATA_FILENAME}")
+      __orig__load if FileTest.exist?("Data/#{self::DATA_FILENAME}")
     end
 
     # @param species [Symbol, self, String]

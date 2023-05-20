@@ -83,20 +83,20 @@ end
 
 # Gets the length of an audio file in seconds. Supports WAV, MP3, and OGG files.
 def getPlayTime(filename)
-  if safeExists?(filename)
+  if FileTest.exist?(filename)
     return [getPlayTime2(filename), 0].max
-  elsif safeExists?(filename + ".wav")
+  elsif FileTest.exist?(filename + ".wav")
     return [getPlayTime2(filename + ".wav"), 0].max
-  elsif safeExists?(filename + ".mp3")
+  elsif FileTest.exist?(filename + ".mp3")
     return [getPlayTime2(filename + ".mp3"), 0].max
-  elsif safeExists?(filename + ".ogg")
+  elsif FileTest.exist?(filename + ".ogg")
     return [getPlayTime2(filename + ".ogg"), 0].max
   end
   return 0
 end
 
 def getPlayTime2(filename)
-  return -1 if !safeExists?(filename)
+  return -1 if !FileTest.exist?(filename)
   time = -1
   fgetdw = proc { |file|
     (file.eof? ? 0 : (file.read(4).unpack("V")[0] || 0))

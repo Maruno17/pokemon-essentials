@@ -59,7 +59,7 @@ def pbEditMysteryGift(type, item, id = 0, giftname = "")
     if id == 0
       master = []
       idlist = []
-      if safeExists?("MysteryGiftMaster.txt")
+      if FileTest.exist?("MysteryGiftMaster.txt")
         master = IO.read("MysteryGiftMaster.txt")
         master = pbMysteryGiftDecrypt(master)
       end
@@ -101,7 +101,7 @@ def pbCreateMysteryGift(type, item)
   gift = pbEditMysteryGift(type, item)
   if gift
     begin
-      if safeExists?("MysteryGiftMaster.txt")
+      if FileTest.exist?("MysteryGiftMaster.txt")
         master = IO.read("MysteryGiftMaster.txt")
         master = pbMysteryGiftDecrypt(master)
         master.push(gift)
@@ -124,7 +124,7 @@ end
 # file to be uploaded.
 #===============================================================================
 def pbManageMysteryGifts
-  if !safeExists?("MysteryGiftMaster.txt")
+  if !FileTest.exist?("MysteryGiftMaster.txt")
     pbMessage(_INTL("There are no Mystery Gifts defined."))
     return
   end

@@ -3,7 +3,7 @@ module Compiler
 
   def compile_PBS_file_generic(game_data, *paths)
     if game_data.const_defined?(:OPTIONAL) && game_data::OPTIONAL
-      return if paths.none? { |p| safeExists?(p) }
+      return if paths.none? { |p| FileTest.exist?(p) }
     end
     game_data::DATA.clear
     schema = game_data.schema
@@ -947,7 +947,7 @@ module Compiler
       "Pokemon"    => [1, "s"],
       "Challenges" => [2, "*s"]
     }
-    if !safeExists?(path)
+    if !FileTest.exist?(path)
       File.open(path, "wb") do |f|
         f.write(0xEF.chr)
         f.write(0xBB.chr)
@@ -987,12 +987,12 @@ module Compiler
         rsection[3] = rsection[0]
         rsection[4] = rsection[1]
         rsection[5] = (name == "DefaultTrainerList")
-        if safeExists?("PBS/" + rsection[0])
+        if FileTest.exist?("PBS/" + rsection[0])
           rsection[0] = compile_battle_tower_trainers("PBS/" + rsection[0])
         else
           rsection[0] = []
         end
-        if safeExists?("PBS/" + rsection[1])
+        if FileTest.exist?("PBS/" + rsection[1])
           filename = "PBS/" + rsection[1]
           rsection[1] = []
           pbCompilerEachCommentedLine(filename) do |line, _lineno|
@@ -1027,7 +1027,7 @@ module Compiler
     beginspeech   = []
     endspeechwin  = []
     endspeechlose = []
-    if safeExists?(filename)
+    if FileTest.exist?(filename)
       File.open(filename, "rb") do |f|
         FileLineData.file = filename
         pbEachFileSection(f) do |section, name|

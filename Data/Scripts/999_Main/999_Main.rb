@@ -24,7 +24,7 @@ end
 
 def mainFunctionDebug
   begin
-    MessageTypes.load_default_messages if safeExists?("Data/messages_core.dat")
+    MessageTypes.load_default_messages if FileTest.exist?("Data/messages_core.dat")
     PluginManager.runPlugins
     Compiler.main
     Game.initialize

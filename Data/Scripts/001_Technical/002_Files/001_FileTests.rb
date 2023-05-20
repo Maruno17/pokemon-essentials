@@ -31,12 +31,9 @@ class Dir
     return files + subfolders
   end
 
-  # Checks for existing directory, gets around accents
+  # Checks for existing directory
   def self.safe?(dir)
-    return false if !FileTest.directory?(dir)
-    ret = false
-    self.chdir(dir) { ret = true } rescue nil
-    return ret
+    return FileTest.directory?(dir)
   end
 
   # Creates all the required directories for filename path
@@ -74,43 +71,19 @@ class Dir
 end
 
 #===============================================================================
-# Extensions for file class
-#===============================================================================
-class File
-  # Checks for existing file, gets around accents
-  def self.safe?(file)
-    ret = false
-    self.open(file, "rb") { ret = true } rescue nil
-    return ret
-  end
-
-  # Checks for existing .rxdata file
-  def self.safeData?(file)
-    ret = (load_data(file) ? true : false) rescue false
-    return ret
-  end
-end
-
-#===============================================================================
 # Checking for files and directories
 #===============================================================================
 # Works around a problem with FileTest.directory if directory contains accent marks
+# @deprecated This method is slated to be removed in v22.
 def safeIsDirectory?(f)
-  ret = false
-  Dir.chdir(f) { ret = true } rescue nil
-  return ret
+  Deprecation.warn_method("safeIsDirectory?(f)", "v22", "FileTest.directory?(f)")
+  return FileTest.directory?(f)
 end
 
-# Works around a problem with FileTest.exist if path contains accent marks
+# @deprecated This method is slated to be removed in v22.
 def safeExists?(f)
-  return FileTest.exist?(f) if f[/\A[\x20-\x7E]*\z/]
-  ret = false
-  begin
-    File.open(f, "rb") { ret = true }
-  rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES
-    ret = false
-  end
-  return ret
+  Deprecation.warn_method("safeExists?(f)", "v22", "FileTest.exist?(f)")
+  return FileTest.exist?(f)
 end
 
 # Similar to "Dir.glob", but designed to work around a problem with accessing
@@ -211,9 +184,9 @@ module RTP
   def self.exists?(filename, extensions = [])
     return false if nil_or_empty?(filename)
     eachPathFor(filename) do |path|
-      return true if safeExists?(path)
+      return true if FileTest.exist?(path)
       extensions.each do |ext|
-        return true if safeExists?(path + ext)
+        return true if FileTest.exist?(path + ext)
       end
     end
     return false
@@ -230,10 +203,10 @@ module RTP
   def self.getPath(filename, extensions = [])
     return filename if nil_or_empty?(filename)
     eachPathFor(filename) do |path|
-      return path if safeExists?(path)
+      return path if FileTest.exist?(path)
       extensions.each do |ext|
         file = path + ext
-        return file if safeExists?(file)
+        return file if FileTest.exist?(file)
       end
     end
     return filename
@@ -307,9 +280,9 @@ end
 # NOTE: pbGetFileChar checks anything added in MKXP's RTP setting, and matching
 #       mount points added through System.mount.
 def pbRgssExists?(filename)
-  return !pbGetFileChar(filename).nil? if safeExists?("./Game.rgssad")
+  return !pbGetFileChar(filename).nil? if FileTest.exist?("./Game.rgssad")
   filename = canonicalize(filename)
-  return safeExists?(filename)
+  return FileTest.exist?(filename)
 end
 
 # Opens an IO, even if the file is in an encrypted archive.
@@ -318,7 +291,7 @@ end
 #       mount points added through System.mount.
 def pbRgssOpen(file, mode = nil)
   # File.open("debug.txt", "ab") { |fw| fw.write([file, mode, Time.now.to_f].inspect + "\r\n") }
-  if !safeExists?("./Game.rgssad")
+  if !FileTest.exist?("./Game.rgssad")
     if block_given?
       File.open(file, mode) { |f| yield f }
       return nil
@@ -341,8 +314,8 @@ end
 # encrypted archives.
 def pbGetFileChar(file)
   canon_file = canonicalize(file)
-  if !safeExists?("./Game.rgssad")
-    return nil if !safeExists?(canon_file)
+  if !FileTest.exist?("./Game.rgssad")
+    return nil if !FileTest.exist?(canon_file)
     return nil if file.last == "/"   # Is a directory
     begin
       File.open(canon_file, "rb") { |f| return f.read(1) }   # read one byte
@@ -370,8 +343,8 @@ end
 #       mount points added through System.mount.
 def pbGetFileString(file)
   file = canonicalize(file)
-  if !safeExists?("./Game.rgssad")
-    return nil if !safeExists?(file)
+  if !FileTest.exist?("./Game.rgssad")
+    return nil if !FileTest.exist?(file)
     begin
       File.open(file, "rb") { |f| return f.read }   # read all data
     rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES

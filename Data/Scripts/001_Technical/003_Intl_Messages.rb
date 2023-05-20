@@ -32,7 +32,7 @@ module Translator
         end
       end
       # Get script texts from plugin script files
-      if safeExists?("Data/PluginScripts.rxdata")
+      if FileTest.exist?("Data/PluginScripts.rxdata")
         plugin_scripts = load_data("Data/PluginScripts.rxdata")
         plugin_scripts.each do |plugin|
           plugin[2].each do |script|
@@ -511,12 +511,12 @@ class Translation
   def load_message_files(filename)
     begin
       core_filename = sprintf("Data/messages_%s_core.dat", filename)
-      if safeExists?(core_filename)
+      if FileTest.exist?(core_filename)
         pbRgssOpen(core_filename, "rb") { |f| @core_messages = Marshal.load(f) }
       end
       @core_messages = nil if !@core_messages.is_a?(Array)
       game_filename = sprintf("Data/messages_%s_game.dat", filename)
-      if safeExists?(game_filename)
+      if FileTest.exist?(game_filename)
         pbRgssOpen(game_filename, "rb") { |f| @game_messages = Marshal.load(f) }
       end
       @game_messages = nil if !@game_messages.is_a?(Array)
@@ -529,11 +529,11 @@ class Translation
   def load_default_messages
     return if @default_core_messages
     begin
-      if safeExists?("Data/messages_core.dat")
+      if FileTest.exist?("Data/messages_core.dat")
         pbRgssOpen("Data/messages_core.dat", "rb") { |f| @default_core_messages = Marshal.load(f) }
       end
       @default_core_messages = [] if !@default_core_messages.is_a?(Array)
-      if safeExists?("Data/messages_game.dat")
+      if FileTest.exist?("Data/messages_game.dat")
         pbRgssOpen("Data/messages_game.dat", "rb") { |f| @default_game_messages = Marshal.load(f) }
       end
       @default_game_messages = [] if !@default_game_messages.is_a?(Array)

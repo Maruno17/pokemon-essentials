@@ -17,7 +17,6 @@ MapPosition = 0,13,12
 #-------------------------------
 [004]   # Pokémon Lab
 Name = Pokémon Lab
-ShowArea = false
 MapPosition = 0,13,12
 #-------------------------------
 [005]   # Route 1

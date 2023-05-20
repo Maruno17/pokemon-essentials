@@ -14,10 +14,10 @@ def pbGetLegalMoves(species)
 end
 
 def pbSafeCopyFile(x, y, z = nil)
-  if safeExists?(x)
+  if FileTest.exist?(x)
     safetocopy = true
     filedata = nil
-    if safeExists?(y)
+    if FileTest.exist?(y)
       different = false
       if FileTest.size(x) == FileTest.size(y)
         filedata2 = ""
