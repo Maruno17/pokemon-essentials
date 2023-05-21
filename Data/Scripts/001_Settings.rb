@@ -40,6 +40,8 @@ module Settings
   SUPER_SHINY          = (MECHANICS_GENERATION >= 8)
   # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
   POKERUS_CHANCE       = 3
+  # The divisor to divide prices by when selling items.
+  SELL_PRICE_DIVISOR   = 2
 
   #=============================================================================
 
