@@ -94,10 +94,11 @@ class VoltorbFlip
     pbUpdateCoins
     # Draw curtain effect
     if @firstRound
-      angleDiff = 10 * 20 / Graphics.frame_rate
+      curtain_duration = 0.5
+      timer_start = System.uptime
       loop do
-        @sprites["curtainL"].angle -= angleDiff
-        @sprites["curtainR"].angle += angleDiff
+        @sprites["curtainL"].angle = lerp(-90, -180, curtain_duration, timer_start, System.uptime)
+        @sprites["curtainR"].angle = lerp(0, 90, curtain_duration, timer_start, System.uptime)
         Graphics.update
         Input.update
         update
@@ -535,9 +536,9 @@ class VoltorbFlip
     @sprites["cursor"].bitmap.clear
   end
 
-#  def pbWaitText(msg,frames)
-#    msgwindow=pbCreateMessageWindow
-#    pbMessageDisplay(msgwindow,msg)
+#  def pbWaitText(msg, frames)
+#    msgwindow = pbCreateMessageWindow
+#    pbMessageDisplay(msgwindow, msg)
 #    pbWait(frames / 20.0)
 #    pbDisposeMessageWindow(msgwindow)
 #  end
@@ -548,12 +549,11 @@ class VoltorbFlip
     # Draw curtain effect
     @sprites["curtainL"].visible = true
     @sprites["curtainR"].visible = true
-    angleDiff = 18 * 20 / Graphics.frame_rate
+    curtain_duration = 0.25
+    timer_start = System.uptime
     loop do
-      @sprites["curtainL"].angle += angleDiff
-      @sprites["curtainR"].angle -= angleDiff
-      # Fixes a minor graphical bug
-      @sprites["curtainL"].y -= 2 if @sprites["curtainL"].angle >= -90
+      @sprites["curtainL"].angle = lerp(-180, -90, curtain_duration, timer_start, System.uptime)
+      @sprites["curtainR"].angle = lerp(90, 0, curtain_duration, timer_start, System.uptime)
       Graphics.update
       Input.update
       update

@@ -98,8 +98,6 @@ class Battle::Scene
     # Update other graphics
     @sprites["battle_bg"].update if @sprites["battle_bg"].respond_to?("update")
     Graphics.update
-    @frameCounter += 1
-    @frameCounter = @frameCounter % (Graphics.frame_rate * 12 / 20)
   end
 
   def pbInputUpdate
@@ -114,9 +112,9 @@ class Battle::Scene
     cw&.update
     @battle.battlers.each_with_index do |b, i|
       next if !b
-      @sprites["dataBox_#{i}"]&.update(@frameCounter)
-      @sprites["pokemon_#{i}"]&.update(@frameCounter)
-      @sprites["shadow_#{i}"]&.update(@frameCounter)
+      @sprites["dataBox_#{i}"]&.update
+      @sprites["pokemon_#{i}"]&.update
+      @sprites["shadow_#{i}"]&.update
     end
   end
 

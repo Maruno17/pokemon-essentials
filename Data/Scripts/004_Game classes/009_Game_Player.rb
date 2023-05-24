@@ -48,6 +48,8 @@ class Game_Player < Game_Character
     return $PokemonGlobal.followers.length == 0
   end
 
+  #-----------------------------------------------------------------------------
+
   def can_run?
     return @move_speed > 3 if @move_route_forcing
     return false if $game_temp.in_menu || $game_temp.in_battle ||
@@ -110,6 +112,8 @@ class Game_Player < Game_Character
     @character_name = new_charset if new_charset
   end
 
+  #-----------------------------------------------------------------------------
+
   def bump_into_object
     return if @bump_se && @bump_se > 0
     pbSEPlay("Player bump") if !@move_route_forcing
@@ -146,8 +150,11 @@ class Game_Player < Game_Character
         # General movement
         turn_generic(dir, true)
         if !$game_temp.encounter_triggered
+          @move_initial_x = @x
+          @move_initial_y = @y
           @x += x_offset
           @y += y_offset
+          @move_timer = 0.0
           add_move_distance_to_stats(x_offset.abs + y_offset.abs)
           increase_steps
         end
@@ -174,49 +181,7 @@ class Game_Player < Game_Character
     add_move_distance_to_stats(x_plus.abs + y_plus.abs) if @x != old_x || @y != old_y
   end
 
-  def pbTriggeredTrainerEvents(triggers, checkIfRunning = true, trainer_only = false)
-    result = []
-    # If event is running
-    return result if checkIfRunning && $game_system.map_interpreter.running?
-    # All event loops
-    $game_map.events.each_value do |event|
-      next if !triggers.include?(event.trigger)
-      next if !event.name[/trainer\((\d+)\)/i] && (trainer_only || !event.name[/sight\((\d+)\)/i])
-      distance = $~[1].to_i
-      next if !pbEventCanReachPlayer?(event, self, distance)
-      next if event.jumping? || event.over_trigger?
-      result.push(event)
-    end
-    return result
-  end
-
-  def pbTriggeredCounterEvents(triggers, checkIfRunning = true)
-    result = []
-    # If event is running
-    return result if checkIfRunning && $game_system.map_interpreter.running?
-    # All event loops
-    $game_map.events.each_value do |event|
-      next if !triggers.include?(event.trigger)
-      next if !event.name[/counter\((\d+)\)/i]
-      distance = $~[1].to_i
-      next if !pbEventFacesPlayer?(event, self, distance)
-      next if event.jumping? || event.over_trigger?
-      result.push(event)
-    end
-    return result
-  end
-
-  def pbCheckEventTriggerAfterTurning; end
-
-  def pbCheckEventTriggerFromDistance(triggers)
-    ret = pbTriggeredTrainerEvents(triggers)
-    ret.concat(pbTriggeredCounterEvents(triggers))
-    return false if ret.length == 0
-    ret.each do |event|
-      event.start
-    end
-    return true
-  end
+  #-----------------------------------------------------------------------------
 
   def pbTerrainTag(countBridge = false)
     return $map_factory.getTerrainTagFromCoords(self.map.map_id, @x, @y, countBridge) if $map_factory
@@ -303,6 +268,52 @@ class Game_Player < Game_Character
     @blend_type = 0
   end
 
+  #-----------------------------------------------------------------------------
+
+  def pbTriggeredTrainerEvents(triggers, checkIfRunning = true, trainer_only = false)
+    result = []
+    # If event is running
+    return result if checkIfRunning && $game_system.map_interpreter.running?
+    # All event loops
+    $game_map.events.each_value do |event|
+      next if !triggers.include?(event.trigger)
+      next if !event.name[/trainer\((\d+)\)/i] && (trainer_only || !event.name[/sight\((\d+)\)/i])
+      distance = $~[1].to_i
+      next if !pbEventCanReachPlayer?(event, self, distance)
+      next if event.jumping? || event.over_trigger?
+      result.push(event)
+    end
+    return result
+  end
+
+  def pbTriggeredCounterEvents(triggers, checkIfRunning = true)
+    result = []
+    # If event is running
+    return result if checkIfRunning && $game_system.map_interpreter.running?
+    # All event loops
+    $game_map.events.each_value do |event|
+      next if !triggers.include?(event.trigger)
+      next if !event.name[/counter\((\d+)\)/i]
+      distance = $~[1].to_i
+      next if !pbEventFacesPlayer?(event, self, distance)
+      next if event.jumping? || event.over_trigger?
+      result.push(event)
+    end
+    return result
+  end
+
+  def pbCheckEventTriggerAfterTurning; end
+
+  def pbCheckEventTriggerFromDistance(triggers)
+    ret = pbTriggeredTrainerEvents(triggers)
+    ret.concat(pbTriggeredCounterEvents(triggers))
+    return false if ret.length == 0
+    ret.each do |event|
+      event.start
+    end
+    return true
+  end
+
   # Trigger event(s) at the same coordinates as self with the appropriate
   # trigger(s) that can be triggered
   def check_event_trigger_here(triggers)
@@ -386,6 +397,8 @@ class Game_Player < Game_Character
     end
     return result
   end
+
+  #-----------------------------------------------------------------------------
 
   def update
     last_real_x = @real_x

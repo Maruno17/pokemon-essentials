@@ -489,23 +489,26 @@ class MiningGameScene
   def pbFlashItems(revealed)
     return if revealed.length <= 0
     revealeditems = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-    halfFlashTime = Graphics.frame_rate / 8
-    alphaDiff = (255.0 / halfFlashTime).ceil
-    (1..halfFlashTime * 2).each do |i|
-      revealed.each do |index|
-        burieditem = @items[index]
-        revealeditems.bitmap.blt(32 * burieditem[1], 64 + (32 * burieditem[2]),
-                                 @itembitmap.bitmap,
-                                 Rect.new(32 * ITEMS[burieditem[0]][2], 32 * ITEMS[burieditem[0]][3],
-                                          32 * ITEMS[burieditem[0]][4], 32 * ITEMS[burieditem[0]][5]))
-        if i > halfFlashTime
-          revealeditems.color = Color.new(255, 255, 255, ((halfFlashTime * 2) - i) * alphaDiff)
-        else
-          revealeditems.color = Color.new(255, 255, 255, i * alphaDiff)
+    revealeditems.color = Color.new(255, 255, 255, 0)
+    flash_duration = 0.25
+    2.times do |i|
+      alpha_start = (i == 0) ? 0 : 255
+      alpha_end = (i == 0) ? 255 : 0
+      timer_start = System.uptime
+      loop do
+        revealed.each do |index|
+          burieditem = @items[index]
+          revealeditems.bitmap.blt(32 * burieditem[1], 64 + (32 * burieditem[2]),
+                                   @itembitmap.bitmap,
+                                   Rect.new(32 * ITEMS[burieditem[0]][2], 32 * ITEMS[burieditem[0]][3],
+                                            32 * ITEMS[burieditem[0]][4], 32 * ITEMS[burieditem[0]][5]))
         end
+        flash_alpha = lerp(alpha_start, alpha_end, flash_duration / 2, timer_start, System.uptime)
+        revealeditems.color.alpha = flash_alpha
+        update
+        Graphics.update
+        break if flash_alpha == alpha_end
       end
-      update
-      Graphics.update
     end
     revealeditems.dispose
     revealed.each do |index|

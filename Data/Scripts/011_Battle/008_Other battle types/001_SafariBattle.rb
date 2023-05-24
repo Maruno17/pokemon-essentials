@@ -85,10 +85,6 @@ class Battle::Scene::SafariDataBox < Sprite
     textpos.push([_INTL("Left: {1}", @battle.ballCount), 30, 44, :left, base, shadow])
     pbDrawTextPositions(self.bitmap, textpos)
   end
-
-  def update(frameCounter = 0)
-    super()
-  end
 end
 
 #===============================================================================

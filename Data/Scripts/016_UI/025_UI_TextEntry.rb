@@ -168,7 +168,7 @@ class PokemonEntryScene
     when 4   # Storage box
       @sprites["subject"] = TrainerWalkingCharSprite.new(nil, @viewport)
       @sprites["subject"].altcharset = "Graphics/UI/Naming/icon_storage"
-      @sprites["subject"].animspeed = 4
+      @sprites["subject"].anim_duration = 0.4
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
       @sprites["subject"].x = 88 - (charwidth / 8)
@@ -449,7 +449,7 @@ class PokemonEntryScene2
     when 4   # Storage box
       @sprites["subject"] = TrainerWalkingCharSprite.new(nil, @viewport)
       @sprites["subject"].altcharset = "Graphics/UI/Naming/icon_storage"
-      @sprites["subject"].animspeed = 4
+      @sprites["subject"].anim_duration = 0.4
       charwidth = @sprites["subject"].bitmap.width
       charheight = @sprites["subject"].bitmap.height
       @sprites["subject"].x = 88 - (charwidth / 8)

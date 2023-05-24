@@ -8,8 +8,8 @@
 class Game_System
   attr_reader   :map_interpreter          # map event interpreter
   attr_reader   :battle_interpreter       # battle event interpreter
-  attr_accessor :timer                    # timer
-  attr_accessor :timer_working            # timer working flag
+  attr_accessor :timer_start              # $stats.play_time when timer was started, or nil
+  attr_accessor :timer_duration           # Time (in seconds) the timer is initially set to
   attr_accessor :save_disabled            # save forbidden
   attr_accessor :menu_disabled            # menu forbidden
   attr_accessor :encounter_disabled       # encounter forbidden
@@ -24,8 +24,8 @@ class Game_System
   def initialize
     @map_interpreter    = Interpreter.new(0, true)
     @battle_interpreter = Interpreter.new(0, false)
-    @timer              = 0
-    @timer_working      = false
+    @timer_start        = nil
+    @timer_duration     = 0
     @save_disabled      = false
     @menu_disabled      = false
     @encounter_disabled = false
@@ -265,17 +265,18 @@ class Game_System
   #-----------------------------------------------------------------------------
 
   def windowskin_name
-    if @windowskin_name.nil?
-      return $data_system.windowskin_name
-    else
-      return @windowskin_name
-    end
+    return $data_system.windowskin_name if @windowskin_name.nil?
+    return @windowskin_name
   end
 
   attr_writer :windowskin_name
 
+  def timer
+    return 0 if !@timer_start || !$stats
+    return @timer_duration - $stats.play_time + @timer_start
+  end
+
   def update
-    @timer -= 1 if @timer_working && @timer > 0
     if Input.trigger?(Input::SPECIAL) && pbCurrentEventCommentInput(1, "Cut Scene")
       event = @map_interpreter.get_self
       @map_interpreter.pbSetSelfSwitch(event.id, "A", true)

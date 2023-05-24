@@ -47,28 +47,30 @@ class Game_Map
     @map = load_data(sprintf("Data/Map%03d.rxdata", map_id))
     tileset = $data_tilesets[@map.tileset_id]
     updateTileset
-    @fog_ox               = 0
-    @fog_oy               = 0
-    @fog_tone             = Tone.new(0, 0, 0, 0)
-    @fog_tone_target      = Tone.new(0, 0, 0, 0)
-    @fog_tone_duration    = 0
-    @fog_opacity_duration = 0
-    @fog_opacity_target   = 0
-    self.display_x        = 0
-    self.display_y        = 0
-    @need_refresh         = false
+    @fog_ox                  = 0
+    @fog_oy                  = 0
+    @fog_tone                = Tone.new(0, 0, 0, 0)
+    @fog_tone_target         = Tone.new(0, 0, 0, 0)
+    @fog_tone_duration       = 0
+    @fog_tone_timer_start    = nil
+    @fog_opacity_duration    = 0
+    @fog_opacity_target      = 0
+    @fog_opacity_timer_start = nil
+    self.display_x           = 0
+    self.display_y           = 0
+    @need_refresh            = false
     EventHandlers.trigger(:on_game_map_setup, map_id, @map, tileset)
-    @events               = {}
+    @events                  = {}
     @map.events.each_key do |i|
-      @events[i]          = Game_Event.new(@map_id, @map.events[i], self)
+      @events[i]             = Game_Event.new(@map_id, @map.events[i], self)
     end
-    @common_events        = {}
+    @common_events           = {}
     (1...$data_common_events.size).each do |i|
-      @common_events[i]   = Game_CommonEvent.new(i)
+      @common_events[i]      = Game_CommonEvent.new(i)
     end
-    @scroll_direction     = 2
-    @scroll_rest          = 0
-    @scroll_speed         = 4
+    @scroll_direction        = 2
+    @scroll_rest             = 0
+    @scroll_speed            = 4
   end
 
   def updateTileset
@@ -368,16 +370,28 @@ class Game_Map
     return @scroll_rest > 0
   end
 
+  # duration is time in 1/20ths of a second.
   def start_fog_tone_change(tone, duration)
+    if duration == 0
+      @fog_tone = tone.clone
+      return
+    end
+    @fog_tone_initial = @fog_tone.clone
     @fog_tone_target = tone.clone
-    @fog_tone_duration = duration
-    @fog_tone = @fog_tone_target.clone if @fog_tone_duration == 0
+    @fog_tone_duration = duration / 20.0
+    @fog_tone_timer_start = $stats.play_time
   end
 
+  # duration is time in 1/20ths of a second.
   def start_fog_opacity_change(opacity, duration)
+    if duration == 0
+      @fog_opacity = opacity.to_f
+      return
+    end
+    @fog_opacity_initial = @fog_opacity
     @fog_opacity_target = opacity.to_f
-    @fog_opacity_duration = duration
-    @fog_opacity = @fog_opacity_target if @fog_opacity_duration == 0
+    @fog_opacity_duration = duration / 20.0
+    @fog_opacity_timer_start = $stats.play_time
   end
 
   def set_tile(x, y, layer, id = 0)
@@ -399,11 +413,9 @@ class Game_Map
   end
 
   def update
-    # refresh maps if necessary
+    # Refresh maps if necessary
     if $map_factory
-      $map_factory.maps.each do |i|
-        i.refresh if i.need_refresh
-      end
+      $map_factory.maps.each { |i| i.refresh if i.need_refresh }
       $map_factory.setCurrentMap
     end
     # If scrolling
@@ -419,29 +431,31 @@ class Game_Map
       @scroll_rest -= distance
     end
     # Only update events that are on-screen
-    @events.each_value do |event|
-      event.update
+    if !$game_temp.in_menu
+      @events.each_value { |event| event.update }
     end
     # Update common events
-    @common_events.each_value do |common_event|
-      common_event.update
-    end
+    @common_events.each_value { |common_event| common_event.update }
     # Update fog
+    now = $stats.play_time
     @fog_ox -= @fog_sx / 8.0
     @fog_oy -= @fog_sy / 8.0
-    if @fog_tone_duration >= 1
-      d = @fog_tone_duration
-      target = @fog_tone_target
-      @fog_tone.red   = ((@fog_tone.red * (d - 1)) + target.red) / d
-      @fog_tone.green = ((@fog_tone.green * (d - 1)) + target.green) / d
-      @fog_tone.blue  = ((@fog_tone.blue * (d - 1)) + target.blue) / d
-      @fog_tone.gray  = ((@fog_tone.gray * (d - 1)) + target.gray) / d
-      @fog_tone_duration -= 1
+    if @fog_tone_timer_start
+      @fog_tone.red = lerp(@fog_tone_initial.red, @fog_tone_target.red, @fog_tone_duration, @fog_tone_timer_start, now)
+      @fog_tone.green = lerp(@fog_tone_initial.green, @fog_tone_target.green, @fog_tone_duration, @fog_tone_timer_start, now)
+      @fog_tone.blue = lerp(@fog_tone_initial.blue, @fog_tone_target.blue, @fog_tone_duration, @fog_tone_timer_start, now)
+      @fog_tone.gray = lerp(@fog_tone_initial.gray, @fog_tone_target.gray, @fog_tone_duration, @fog_tone_timer_start, now)
+      if now - @fog_tone_timer_start >= @fog_tone_duration
+        @fog_tone_initial = nil
+        @fog_tone_timer_start = nil
+      end
     end
-    if @fog_opacity_duration >= 1
-      d = @fog_opacity_duration
-      @fog_opacity = ((@fog_opacity * (d - 1)) + @fog_opacity_target) / d
-      @fog_opacity_duration -= 1
+    if @fog_opacity_timer_start
+      @fog_opacity = lerp(@fog_opacity_initial, @fog_opacity_target, @fog_opacity_duration, @fog_opacity_timer_start, now)
+      if now - @fog_opacity_timer_start >= @fog_opacity_duration
+        @fog_opacity_initial = nil
+        @fog_opacity_timer_start = nil
+      end
     end
   end
 end

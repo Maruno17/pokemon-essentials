@@ -225,8 +225,8 @@ class Battle::Scene
     elsif battler.hp < oldHP
       pbCommonAnimation("HealthDown", battler) if showAnim && @battle.showAnims
     end
-    @sprites["dataBox_#{battler.index}"].animateHP(oldHP, battler.hp, battler.totalhp)
-    while @sprites["dataBox_#{battler.index}"].animatingHP
+    @sprites["dataBox_#{battler.index}"].animate_hp(oldHP, battler.hp)
+    while @sprites["dataBox_#{battler.index}"].animating_hp?
       pbUpdate
     end
   end
@@ -253,7 +253,7 @@ class Battle::Scene
     targets.each do |t|
       anim = Animation::BattlerDamage.new(@sprites, @viewport, t[0].index, t[2])
       damageAnims.push(anim)
-      @sprites["dataBox_#{t[0].index}"].animateHP(t[1], t[0].hp, t[0].totalhp)
+      @sprites["dataBox_#{t[0].index}"].animate_hp(t[1], t[0].hp)
     end
     # Update loop
     loop do
@@ -261,7 +261,7 @@ class Battle::Scene
       pbUpdate
       allDone = true
       targets.each do |t|
-        next if !@sprites["dataBox_#{t[0].index}"].animatingHP
+        next if !@sprites["dataBox_#{t[0].index}"].animating_hp?
         allDone = false
         break
       end
@@ -286,8 +286,8 @@ class Battle::Scene
     endExpLevel   = tempExp2 - startExp
     expRange      = endExp - startExp
     dataBox = @sprites["dataBox_#{battler.index}"]
-    dataBox.animateExp(startExpLevel, endExpLevel, expRange)
-    while dataBox.animatingExp
+    dataBox.animate_exp(startExpLevel, endExpLevel, expRange)
+    while dataBox.animating_exp?
       pbUpdate
     end
   end

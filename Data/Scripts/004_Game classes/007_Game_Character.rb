@@ -25,6 +25,7 @@ class Game_Character
   attr_accessor :animation_id
   attr_accessor :transparent
   attr_reader   :move_speed
+  attr_accessor :jump_speed
   attr_accessor :walk_anime
   attr_writer   :bob_height
 
@@ -60,6 +61,7 @@ class Game_Character
     @move_type                 = 0
     self.move_speed            = 3
     self.move_frequency        = 6
+    self.jump_speed            = 3
     @move_route                = nil
     @move_route_index          = 0
     @original_move_route       = nil
@@ -68,12 +70,12 @@ class Game_Character
     @step_anime                = false   # Whether character should animate while still
     @direction_fix             = false
     @always_on_top             = false
-    @anime_count               = 0
-    @stop_count                = 0
+    @anime_count               = 0   # Time since pattern was last changed
+    @stop_count                = 0   # Time since character last finished moving
     @jump_peak                 = 0   # Max height while jumping
     @jump_distance             = 0   # Total distance of jump
-    @jump_distance_left        = 0   # Distance left to travel
-    @jump_count                = 0   # Frames left in a stationary jump
+    @jump_fraction             = 0   # How far through a jump we currently are (0-1)
+    @jumping_on_spot           = false
     @bob_height                = 0
     @wait_count                = 0
     @wait_start                = nil
@@ -105,62 +107,45 @@ class Game_Character
   end
 
   def move_speed=(val)
-    return if val == @move_speed
     @move_speed = val
-    # @move_speed_real is the number of quarter-pixels to move each frame. There
-    # are 128 quarter-pixels per tile. By default, it is calculated from
-    # @move_speed and has these values (assuming 40 fps):
-    # 1 => 3.2    # 40 frames per tile
-    # 2 => 6.4    # 20 frames per tile
-    # 3 => 12.8   # 10 frames per tile - walking speed
-    # 4 => 25.6   # 5 frames per tile - running speed (2x walking speed)
-    # 5 => 32     # 4 frames per tile - cycling speed (1.25x running speed)
-    # 6 => 64     # 2 frames per tile
-    self.move_speed_real = (val == 6) ? 64 : (val == 5) ? 32 : (2**(val + 1)) * 0.8
+    # Time taken to traverse one tile (in seconds) for each speed:
+    #   1 => 1.0
+    #   2 => 0.5
+    #   3 => 0.25    # Walking speed
+    #   4 => 0.125   # Running speed (2x walking speed)
+    #   5 => 0.1     # Cycling speed (1.25x running speed)
+    #   6 => 0.05
+    @move_time = (val == 6) ? 0.05 : (val == 5) ? 0.1 : 2.0 / (2**val)
   end
 
-  def move_speed_real
-    self.move_speed = @move_speed if !@move_speed_real
-    return @move_speed_real
+  # Takes the same values as move_speed above.
+  def jump_speed=(val)
+    @jump_speed = val
+    @jump_time = (val == 6) ? 0.05 : (val == 5) ? 0.1 : 2.0 / (2**val)
   end
 
-  def move_speed_real=(val)
-    @move_speed_real = val * 40.0 / Graphics.frame_rate
-  end
-
-  def jump_speed_real
-    self.jump_speed_real = (2**(3 + 1)) * 0.8 if !@jump_speed_real   # 3 is walking speed
-    return @jump_speed_real
-  end
-
-  def jump_speed_real=(val)
-    @jump_speed_real = val * 40.0 / Graphics.frame_rate
+  # Returns time in seconds for one full cycle (4 frames) of an animating
+  # charset to show. Two frames are shown per movement across one tile.
+  def pattern_update_speed
+    return @jump_time * 2 if jumping?
+    ret = @move_time * 2
+    ret *= 2 if @move_speed >= 5   # Cycling speed or faster; slower animation
+    return ret
   end
 
   def move_frequency=(val)
     return if val == @move_frequency
     @move_frequency = val
-    # @move_frequency_real is the number of frames to wait between each action
-    # in a move route (not forced). Specifically, this is the number of frames
-    # to wait after the character stops moving because of the previous action.
-    # By default, it is calculated from @move_frequency and has these values
-    # (assuming 40 fps):
-    # 1 => 190   # 4.75 seconds
-    # 2 => 144   # 3.6 seconds
-    # 3 => 102   # 2.55 seconds
-    # 4 => 64    # 1.6 seconds
-    # 5 => 30    # 0.75 seconds
-    # 6 => 0     # 0 seconds, i.e. continuous movement
-    self.move_frequency_real = (40 - (val * 2)) * (6 - val)
-  end
-
-  def move_frequency_real
-    self.move_frequency = @move_frequency if !@move_frequency_real
-    return @move_frequency_real
-  end
-
-  def move_frequency_real=(val)
-    @move_frequency_real = val * Graphics.frame_rate / 40.0
+    # Time in seconds to wait between each action in a move route (not forced).
+    # Specifically, this is the time to wait after the character stops moving
+    # because of the previous action.
+    #   1 => 4.75 seconds
+    #   2 => 3.6 seconds
+    #   3 => 2.55 seconds
+    #   4 => 1.6 seconds
+    #   5 => 0.75 seconds
+    #   6 => 0 seconds, i.e. continuous movement
+    @command_delay = (40 - (val * 2)) * (6 - val) / 40.0
   end
 
   def bob_height
@@ -327,12 +312,8 @@ class Game_Character
   def screen_y
     ret = screen_y_ground
     if jumping?
-      if @jump_count > 0
-        jump_fraction = ((@jump_count * jump_speed_real / Game_Map::REAL_RES_X) - 0.5).abs   # 0.5 to 0 to 0.5
-      else
-        jump_fraction = ((@jump_distance_left / @jump_distance) - 0.5).abs   # 0.5 to 0 to 0.5
-      end
-      ret += @jump_peak * ((4 * (jump_fraction**2)) - 1)
+      jump_progress = (@jump_fraction - 0.5).abs   # 0.5 to 0 to 0.5
+      ret += @jump_peak * ((4 * (jump_progress**2)) - 1)
     end
     ret += self.y_offset
     return ret
@@ -361,7 +342,7 @@ class Game_Character
   end
 
   def jumping?
-    return (@jump_distance_left || 0) > 0 || @jump_count > 0
+    return !@jump_timer.nil?
   end
 
   def straighten
@@ -437,11 +418,17 @@ class Game_Character
 
   def move_type_custom
     return if jumping? || moving?
+    return if @move_route.list.size <= 1   # Empty move route
+    start_index = @move_route_index
+    done_one_command = false
     while @move_route_index < @move_route.list.size
+      return if @move_route_index == start_index && done_one_command
+      done_one_command = true
       command = @move_route.list[@move_route_index]
       if command.code == 0
         if @move_route.repeat
           @move_route_index = 0
+          command = @move_route.list[@move_route_index]
         else
           if @move_route_forcing
             @move_route_forcing = false
@@ -450,9 +437,11 @@ class Game_Character
             @original_move_route = nil
           end
           @stop_count = 0
+          return
         end
-        return
       end
+      # The below move route commands wait for a frame (i.e. return) after
+      # executing them
       if command.code <= 14
         case command.code
         when 1  then move_down
@@ -473,14 +462,13 @@ class Game_Character
         @move_route_index += 1 if @move_route.skippable || moving? || jumping?
         return
       end
-      if command.code == 15   # Wait
-        @wait_count = command.parameters[0] / 20.0
-        @wait_start = System.uptime
-        @move_route_index += 1
-        return
-      end
-      if command.code >= 16 && command.code <= 26
+      # The below move route commands wait for a frame (i.e. return) after
+      # executing them
+      if command.code >= 15 && command.code <= 26
         case command.code
+        when 15   # Wait
+          @wait_count = command.parameters[0] / 20.0
+          @wait_start = System.uptime
         when 16 then turn_down
         when 17 then turn_left
         when 18 then turn_right
@@ -496,6 +484,8 @@ class Game_Character
         @move_route_index += 1
         return
       end
+      # The below move route commands don't wait for a frame (i.e. return) after
+      # executing them
       if command.code >= 27
         case command.code
         when 27
@@ -551,8 +541,11 @@ class Game_Character
     turn_generic(dir) if turn_enabled
     if can_move_in_direction?(dir)
       turn_generic(dir)
+      @move_initial_x = @x
+      @move_initial_y = @y
       @x += (dir == 4) ? -1 : (dir == 6) ? 1 : 0
       @y += (dir == 8) ? -1 : (dir == 2) ? 1 : 0
+      @move_timer = 0.0
       increase_steps
     else
       check_event_trigger_touch(dir)
@@ -580,8 +573,11 @@ class Game_Character
       @direction = (@direction == 6 ? 4 : @direction == 2 ? 8 : @direction)
     end
     if can_move_in_direction?(7)
+      @move_initial_x = @x
+      @move_initial_y = @y
       @x -= 1
       @y -= 1
+      @move_timer = 0.0
       increase_steps
     end
   end
@@ -591,8 +587,11 @@ class Game_Character
       @direction = (@direction == 4 ? 6 : @direction == 2 ? 8 : @direction)
     end
     if can_move_in_direction?(9)
+      @move_initial_x = @x
+      @move_initial_y = @y
       @x += 1
       @y -= 1
+      @move_timer = 0.0
       increase_steps
     end
   end
@@ -602,8 +601,11 @@ class Game_Character
       @direction = (@direction == 6 ? 4 : @direction == 8 ? 2 : @direction)
     end
     if can_move_in_direction?(1)
+      @move_initial_x = @x
+      @move_initial_y = @y
       @x -= 1
       @y += 1
+      @move_timer = 0.0
       increase_steps
     end
   end
@@ -613,8 +615,11 @@ class Game_Character
       @direction = (@direction == 4 ? 6 : @direction == 8 ? 2 : @direction)
     end
     if can_move_in_direction?(3)
+      @move_initial_x = @x
+      @move_initial_y = @y
       @x += 1
       @y += 1
+      @move_timer = 0.0
       increase_steps
     end
   end
@@ -753,19 +758,16 @@ class Game_Character
       end
       each_occupied_tile { |i, j| return if !passable?(i + x_plus, j + y_plus, 0) }
     end
+    @jump_initial_x = @x
+    @jump_initial_y = @y
     @x = @x + x_plus
     @y = @y + y_plus
-    real_distance = Math.sqrt((x_plus * x_plus) + (y_plus * y_plus))
+    @jump_timer = 0.0
+    real_distance = Math.sqrt(x_plus**2 + y_plus**2)
     distance = [1, real_distance].max
     @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
     @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
-    @jump_distance_left = 1   # Just needs to be non-zero
-    if real_distance > 0   # Jumping to somewhere else
-      @jump_count = 0
-    else   # Jumping on the spot
-      @jump_speed_real = nil   # Reset jump speed
-      @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
-    end
+    @jumping_on_spot = (real_distance == 0)
     increase_steps
   end
 
@@ -874,16 +876,20 @@ class Game_Character
   # Updating
   #=============================================================================
   def update
+    return if $game_temp.in_menu
+    time_now = System.uptime
+    @last_update_time = time_now if !@last_update_time || @last_update_time > time_now
+    @delta_t = time_now - @last_update_time
+    @last_update_time = time_now
+    return if @delta_t > 0.25   # Was in a menu; delay movement
     @moved_last_frame = @moved_this_frame
     @stopped_last_frame = @stopped_this_frame
     @moved_this_frame = false
     @stopped_this_frame = false
-    if !$game_temp.in_menu
-      # Update command
-      update_command
-      # Update movement
-      (moving? || jumping?) ? update_move : update_stop
-    end
+    # Update command
+    update_command
+    # Update movement
+    (moving? || jumping?) ? update_move : update_stop
     # Update animation
     update_pattern
   end
@@ -902,15 +908,7 @@ class Game_Character
   end
 
   def update_command_new
-    # @stop_count is the number of frames since the last movement finished.
-    # @move_frequency has these values:
-    # 1 => @stop_count > 190   # 4.75 seconds
-    # 2 => @stop_count > 144   # 3.6 seconds
-    # 3 => @stop_count > 102   # 2.55 seconds
-    # 4 => @stop_count > 64    # 1.6 seconds
-    # 5 => @stop_count > 30    # 0.75 seconds
-    # 6 => @stop_count > 0     # 0 seconds
-    if @stop_count >= self.move_frequency_real
+    if @stop_count >= @command_delay
       case @move_type
       when 1 then move_type_random
       when 2 then move_type_toward_player
@@ -920,29 +918,48 @@ class Game_Character
   end
 
   def update_move
-    # Move the character (the 0.1 catches rounding errors)
-    distance = (jumping?) ? jump_speed_real : move_speed_real
-    dest_x = @x * Game_Map::REAL_RES_X
-    dest_y = @y * Game_Map::REAL_RES_Y
-    if @real_x < dest_x
-      @real_x += distance
-      @real_x = dest_x if @real_x > dest_x - 0.1
-    else
-      @real_x -= distance
-      @real_x = dest_x if @real_x < dest_x + 0.1
+    if @move_timer
+      @move_timer += @delta_t
+      # Move horizontally
+      if @x != @move_initial_x
+        dist = (@move_initial_x - @x).abs
+        @real_x = lerp(@move_initial_x, @x, @move_time * dist, @move_timer) * Game_Map::REAL_RES_X
+      end
+      # Move vertically
+      if @y != @move_initial_y
+        dist = (@move_initial_y - @y).abs
+        @real_y = lerp(@move_initial_y, @y, @move_time * dist, @move_timer) * Game_Map::REAL_RES_Y
+      end
+    elsif @jump_timer
+      self.jump_speed = 3 if !@jump_time
+      @jump_timer += @delta_t
+      dist = [(@x - @jump_initial_x).abs, (@y - @jump_initial_y).abs].max
+      dist = 1 if dist == 0   # Jumping on spot
+      # Move horizontally
+      if @x != @jump_initial_x
+        @real_x = lerp(@jump_initial_x, @x, @jump_time * dist, @jump_timer) * Game_Map::REAL_RES_X
+      end
+      # Move vertically
+      if @y != @jump_initial_y
+        @real_y = lerp(@jump_initial_y, @y, @jump_time * dist, @jump_timer) * Game_Map::REAL_RES_Y
+      end
+      # Calculate how far through the jump we are (from 0 to 1)
+      @jump_fraction = @jump_timer / (@jump_time * dist)
     end
-    if @real_y < dest_y
-      @real_y += distance
-      @real_y = dest_y if @real_y > dest_y - 0.1
-    else
-      @real_y -= distance
-      @real_y = dest_y if @real_y < dest_y + 0.1
+    # Snap to end position if close enough
+    @real_x = @x * Game_Map::REAL_RES_X if (@real_x - (@x * Game_Map::REAL_RES_X)).abs < Game_Map::X_SUBPIXELS / 2
+    @real_y = @y * Game_Map::REAL_RES_Y if (@real_y - (@y * Game_Map::REAL_RES_Y)).abs < Game_Map::Y_SUBPIXELS / 2
+    # End of move
+    if !moving?
+      @move_timer = nil
     end
-    # Refresh how far is left to travel in a jump
-    was_jumping = jumping?
-    if was_jumping
-      @jump_count -= 1 if @jump_count > 0   # For stationary jumps only
-      @jump_distance_left = [(dest_x - @real_x).abs, (dest_y - @real_y).abs].max
+    # End of jump
+    if jumping? && @jump_fraction >= 1
+      @jump_timer = nil
+      @jump_peak = 0
+      @jump_distance = 0
+      @jump_fraction = 0
+      @jumping_on_spot = false
     end
     # End of a step, so perform events that happen at this time
     if !jumping? && !moving?
@@ -953,18 +970,18 @@ class Game_Character
       calculate_bush_depth
     end
     # Increment animation counter
-    @anime_count += 1 if @walk_anime || @step_anime
+    @anime_count += @delta_t if @walk_anime || @step_anime
     @moved_this_frame = true
   end
 
   def update_stop
-    @anime_count += 1 if @step_anime
-    @stop_count  += 1 if !@starting && !lock?
+    @anime_count += @delta_t if @step_anime
+    @stop_count += @delta_t if !@starting && !lock?
   end
 
   def update_pattern
     return if @lock_pattern
-#    return if @jump_count > 0   # Don't animate if jumping on the spot
+#    return if @jumping_on_spot   # Don't animate if jumping on the spot
     # Character has stopped moving, return to original pattern
     if @moved_last_frame && !@moved_this_frame && !@step_anime
       @pattern = @original_pattern
@@ -980,12 +997,10 @@ class Game_Character
     # Calculate how many frames each pattern should display for, i.e. the time
     # it takes to move half a tile (or a whole tile if cycling). We assume the
     # game uses square tiles.
-    real_speed = (jumping?) ? jump_speed_real : move_speed_real
-    frames_per_pattern = Game_Map::REAL_RES_X / (real_speed * 2.0)
-    frames_per_pattern *= 2 if move_speed >= 5   # Cycling speed or faster
-    return if @anime_count < frames_per_pattern
+    pattern_time = pattern_update_speed / 4   # 4 frames per cycle in a charset
+    return if @anime_count < pattern_time
     # Advance to the next animation frame
     @pattern = (@pattern + 1) % 4
-    @anime_count -= frames_per_pattern
+    @anime_count -= pattern_time
   end
 end

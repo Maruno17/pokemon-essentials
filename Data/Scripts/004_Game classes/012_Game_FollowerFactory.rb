@@ -240,6 +240,7 @@ class Game_FollowerFactory
   #-----------------------------------------------------------------------------
 
   def update
+    return if $game_temp.in_menu
     followers = $PokemonGlobal.followers
     return if followers.length == 0
     # Update all followers

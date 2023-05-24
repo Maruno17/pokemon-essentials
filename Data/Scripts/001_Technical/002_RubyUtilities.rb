@@ -389,14 +389,3 @@ end
 def nil_or_empty?(string)
   return string.nil? || !string.is_a?(String) || string.size == 0
 end
-
-# Linear interpolation between two values, given the duration of the change and
-# either:
-#   - the time passed since the start of the change (delta), or
-#   - the start time of the change (delta) and the current time (now)
-def lerp(start_val, end_val, duration, delta, now = nil)
-  delta = now - delta if now
-  return start_val if delta <= 0
-  return end_val if delta >= duration
-  return start_val + (end_val - start_val) * delta / duration
-end

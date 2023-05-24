@@ -17,7 +17,7 @@ class PokemonLoadPanel < Sprite
     @title = title
     @isContinue = isContinue
     @trainer = trainer
-    @totalsec = stats.play_time.to_i
+    @totalsec = stats&.play_time.to_i || 0
     @mapid = mapid
     @selected = (index == 0)
     @bgbitmap = AnimatedBitmap.new("Graphics/UI/Load/panels")

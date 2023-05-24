@@ -68,11 +68,12 @@ class Game_Follower < Game_Event
       # Can't walk over the middle tile, but can walk over the end tile; jump over
       if location_passable?(self.x, self.y, direction)
         if leader.jumping?
-          @jump_speed_real = leader.jump_speed_real
+          self.jump_speed = leader.jump_speed || 3
         else
-          # This is doubled because self has to jump 2 tiles in the time it
-          # takes the leader to move one tile.
-          @jump_speed_real = leader.move_speed_real * 2
+          self.jump_speed = leader.move_speed || 3
+          # This is halved because self has to jump 2 tiles in the time it takes
+          # the leader to move one tile
+          @jump_time /= 2
         end
         jump(delta_x, delta_y)
       else
@@ -105,6 +106,21 @@ class Game_Follower < Game_Event
     end
   end
 
+  # Ceases all movement immediately. Used when the leader wants to move another
+  # tile but self hasn't quite finished its previous movement yet.
+  def end_movement
+    @x = x % self.map.width
+    @y = y % self.map.height
+    @real_x = @x * Game_Map::REAL_RES_X
+    @real_y = @y * Game_Map::REAL_RES_Y
+    @move_timer = nil
+    @jump_timer = nil
+    @jump_peak = 0
+    @jump_distance = 0
+    @jump_fraction = 0
+    @jumping_on_spot = false
+  end
+
   #-----------------------------------------------------------------------------
 
   def turn_towards_leader(leader)
@@ -113,6 +129,7 @@ class Game_Follower < Game_Event
 
   def follow_leader(leader, instant = false, leaderIsTrueLeader = true)
     return if @move_route_forcing
+    end_movement
     maps_connected = $map_factory.areConnected?(leader.map.map_id, self.map.map_id)
     target = nil
     # Get the target tile that self wants to move to

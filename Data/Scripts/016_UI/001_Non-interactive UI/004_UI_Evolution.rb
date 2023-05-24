@@ -23,14 +23,6 @@ class SpriteMetafile
   FLASHDURATION = 18
   BITMAP        = 19
 
-  def length
-    return @metafile.length
-  end
-
-  def [](i)
-    return @metafile[i]
-  end
-
   def initialize(viewport = nil)
     @metafile = []
     @values = [
@@ -44,11 +36,19 @@ class SpriteMetafile
     ]
   end
 
+  def dispose; end
+
   def disposed?
     return false
   end
 
-  def dispose; end
+  def [](i)
+    return @metafile[i]
+  end
+
+  def length
+    return @metafile.length
+  end
 
   def flash(color, duration)
     if duration > 0
@@ -252,35 +252,34 @@ class SpriteMetafilePlayer
   end
 
   def update
-    if @playing
-      (@index...@metafile.length).each do |j|
-        @index = j + 1
-        break if @metafile[j][0] < 0
-        code = @metafile[j][0]
-        value = @metafile[j][1]
-        @sprites.each do |sprite|
-          case code
-          when SpriteMetafile::X          then sprite.x = value
-          when SpriteMetafile::Y          then sprite.y = value
-          when SpriteMetafile::OX         then sprite.ox = value
-          when SpriteMetafile::OY         then sprite.oy = value
-          when SpriteMetafile::ZOOM_X     then sprite.zoom_x = value
-          when SpriteMetafile::ZOOM_Y     then sprite.zoom_y = value
-          when SpriteMetafile::SRC_RECT   then sprite.src_rect = value
-          when SpriteMetafile::VISIBLE    then sprite.visible = value
-          when SpriteMetafile::Z          then sprite.z = value   # prevent crashes
-          when SpriteMetafile::ANGLE      then sprite.angle = (value == 180) ? 179.9 : value
-          when SpriteMetafile::MIRROR     then sprite.mirror = value
-          when SpriteMetafile::BUSH_DEPTH then sprite.bush_depth = value
-          when SpriteMetafile::OPACITY    then sprite.opacity = value
-          when SpriteMetafile::BLEND_TYPE then sprite.blend_type = value
-          when SpriteMetafile::COLOR      then sprite.color = value
-          when SpriteMetafile::TONE       then sprite.tone = value
-          end
+    return if !@playing
+    (@index...@metafile.length).each do |j|
+      @index = j + 1
+      break if @metafile[j][0] < 0
+      code = @metafile[j][0]
+      value = @metafile[j][1]
+      @sprites.each do |sprite|
+        case code
+        when SpriteMetafile::X          then sprite.x = value
+        when SpriteMetafile::Y          then sprite.y = value
+        when SpriteMetafile::OX         then sprite.ox = value
+        when SpriteMetafile::OY         then sprite.oy = value
+        when SpriteMetafile::ZOOM_X     then sprite.zoom_x = value
+        when SpriteMetafile::ZOOM_Y     then sprite.zoom_y = value
+        when SpriteMetafile::SRC_RECT   then sprite.src_rect = value
+        when SpriteMetafile::VISIBLE    then sprite.visible = value
+        when SpriteMetafile::Z          then sprite.z = value   # prevent crashes
+        when SpriteMetafile::ANGLE      then sprite.angle = (value == 180) ? 179.9 : value
+        when SpriteMetafile::MIRROR     then sprite.mirror = value
+        when SpriteMetafile::BUSH_DEPTH then sprite.bush_depth = value
+        when SpriteMetafile::OPACITY    then sprite.opacity = value
+        when SpriteMetafile::BLEND_TYPE then sprite.blend_type = value
+        when SpriteMetafile::COLOR      then sprite.color = value
+        when SpriteMetafile::TONE       then sprite.tone = value
         end
       end
-      @playing = false if @index == @metafile.length
     end
+    @playing = false if @index == @metafile.length
   end
 end
 
@@ -420,36 +419,29 @@ class PokemonEvolutionScene
     end
   end
 
-  def pbUpdateNarrowScreen
-    halfResizeDiff = 8 * 20 / Graphics.frame_rate
-    if @bgviewport.rect.y < 80
-      @bgviewport.rect.height -= halfResizeDiff * 2
-      if @bgviewport.rect.height < Graphics.height - 64
-        @bgviewport.rect.y += halfResizeDiff
-        @sprites["background"].oy = @bgviewport.rect.y
-      end
-    end
+  def pbUpdateNarrowScreen(timer_start)
+    return if @bgviewport.rect.y >= 80
+    buffer = 80
+    @bgviewport.rect.height = Graphics.height - lerp(0, 64 + (buffer * 2), 0.7, timer_start, System.uptime).to_i
+    @bgviewport.rect.y = lerp(0, buffer, 0.5, timer_start + 0.2, System.uptime).to_i
+    @sprites["background"].oy = @bgviewport.rect.y
   end
 
-  def pbUpdateExpandScreen
-    halfResizeDiff = 8 * 20 / Graphics.frame_rate
-    if @bgviewport.rect.y > 0
-      @bgviewport.rect.y -= halfResizeDiff
-      @sprites["background"].oy = @bgviewport.rect.y
-    end
-    if @bgviewport.rect.height < Graphics.height
-      @bgviewport.rect.height += halfResizeDiff * 2
-    end
+  def pbUpdateExpandScreen(timer_start)
+    return if @bgviewport.rect.height >= Graphics.height
+    buffer = 80
+    @bgviewport.rect.height = Graphics.height - lerp(64 + (buffer * 2), 0, 0.7, timer_start, System.uptime).to_i
+    @bgviewport.rect.y = lerp(buffer, 0, 0.5, timer_start, System.uptime).to_i
+    @sprites["background"].oy = @bgviewport.rect.y
   end
 
   def pbFlashInOut(canceled, oldstate, oldstate2)
-    tone = 0
-    toneDiff = 20 * 20 / Graphics.frame_rate
+    timer_start = System.uptime
     loop do
       Graphics.update
       pbUpdate(true)
-      pbUpdateExpandScreen
-      tone += toneDiff
+      pbUpdateExpandScreen(timer_start)
+      tone = lerp(0, 255, 0.7, timer_start, System.uptime)
       @viewport.tone.set(tone, tone, tone, 0)
       break if tone >= 255
     end
@@ -471,16 +463,18 @@ class PokemonEvolutionScene
       @sprites["rsprite2"].zoom_y      = 1.0
       @sprites["rsprite2"].color.alpha = 0
     end
-    (Graphics.frame_rate / 4).times do
+    timer_start = System.uptime
+    loop do
       Graphics.update
       pbUpdate(true)
+      break if System.uptime - timer_start >= 0.25
     end
-    tone = 255
-    toneDiff = 40 * 20 / Graphics.frame_rate
+    timer_start = System.uptime
     loop do
       Graphics.update
       pbUpdate
-      tone -= toneDiff
+      pbUpdateExpandScreen(timer_start)
+      tone = lerp(255, 0, 0.4, timer_start, System.uptime)
       @viewport.tone.set(tone, tone, tone, 0)
       break if tone <= 0
     end
@@ -551,8 +545,9 @@ class PokemonEvolutionScene
     pbMEPlay("Evolution start")
     pbBGMPlay("Evolution")
     canceled = false
+    timer_start = System.uptime
     loop do
-      pbUpdateNarrowScreen
+      pbUpdateNarrowScreen(timer_start)
       metaplayer1.update
       metaplayer2.update
       Graphics.update
@@ -579,11 +574,13 @@ class PokemonEvolutionScene
   def pbEvolutionSuccess
     $stats.evolution_count += 1
     # Play cry of evolved species
-    frames = (GameData::Species.cry_length(@newspecies, @pokemon.form) * Graphics.frame_rate).ceil
+    cry_time = GameData::Species.cry_length(@newspecies, @pokemon.form)
     Pokemon.play_cry(@newspecies, @pokemon.form)
-    (frames + 4).times do
+    timer_start = System.uptime
+    loop do
       Graphics.update
       pbUpdate
+      break if System.uptime - timer_start >= cry_time
     end
     pbBGMStop
     # Success jingle/message

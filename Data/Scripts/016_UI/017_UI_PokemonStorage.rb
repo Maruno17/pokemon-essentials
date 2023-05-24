@@ -5,7 +5,7 @@ class PokemonBoxIcon < IconSprite
   def initialize(pokemon, viewport = nil)
     super(0, 0, viewport)
     @pokemon = pokemon
-    @release = Interpolator.new
+    @release = SpriteInterpolator.new
     @startRelease = false
     refresh
   end
@@ -20,9 +20,9 @@ class PokemonBoxIcon < IconSprite
     self.x += self.src_rect.width / 2   # 32
     self.y += self.src_rect.height / 2   # 32
     @release.tween(self,
-                   [[Interpolator::ZOOM_X, 0],
-                    [Interpolator::ZOOM_Y, 0],
-                    [Interpolator::OPACITY, 0]],
+                   [[SpriteInterpolator::ZOOM_X, 0],
+                    [SpriteInterpolator::ZOOM_Y, 0],
+                    [SpriteInterpolator::OPACITY, 0]],
                    100)
     @startRelease = true
   end
@@ -969,34 +969,32 @@ class PokemonStorageScene
   end
 
   def pbChangeBackground(wp)
+    duration = 0.2   # Time in seconds to fade out or fade in
     @sprites["box"].refreshSprites = false
-    alpha = 0
     Graphics.update
     self.update
-    timeTaken = Graphics.frame_rate * 4 / 10
-    alphaDiff = (255.0 / timeTaken).ceil
-    timeTaken.times do
-      alpha += alphaDiff
-      Graphics.update
-      Input.update
+    # Fade old background to white
+    timer_start = System.uptime
+    loop do
+      alpha = lerp(0, 255, duration, timer_start, System.uptime)
       @sprites["box"].color = Color.new(248, 248, 248, alpha)
+      Graphics.update
       self.update
+      break if alpha >= 255
     end
+    # Fade in new background from white
     @sprites["box"].refreshBox = true
     @storage[@storage.currentBox].background = wp
-    (Graphics.frame_rate / 10).times do
-      Graphics.update
-      Input.update
-      self.update
-    end
-    timeTaken.times do
-      alpha -= alphaDiff
-      Graphics.update
-      Input.update
+    timer_start = System.uptime
+    loop do
+      alpha = lerp(255, 0, duration, timer_start, System.uptime)
       @sprites["box"].color = Color.new(248, 248, 248, alpha)
+      Graphics.update
       self.update
+      break if alpha <= 0
     end
     @sprites["box"].refreshSprites = true
+    Input.update
   end
 
   def pbSwitchBoxToRight(newbox)

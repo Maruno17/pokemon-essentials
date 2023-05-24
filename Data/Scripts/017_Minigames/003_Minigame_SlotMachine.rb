@@ -169,7 +169,6 @@ class SlotMachineScene
       end
     end
     @sprites["payout"].score = payout
-    frame = 0
     if payout > 0 || @replay
       if bonus > 0
         pbMEPlay("Slots big win")
@@ -177,30 +176,31 @@ class SlotMachineScene
         pbMEPlay("Slots win")
       end
       # Show winning animation
-      timePerFrame = Graphics.frame_rate / 8
-      until frame == Graphics.frame_rate * 3
-        Graphics.update
-        Input.update
-        update
+      timer_start = System.uptime
+      loop do
+        frame = ((System.uptime - timer_start) / 0.125).to_i
         @sprites["window2"].bitmap&.clear
         @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/win")
-        @sprites["window1"].src_rect.set(152 * ((frame / timePerFrame) % 4), 0, 152, 208)
+        @sprites["window1"].src_rect.set(152 * (frame % 4), 0, 152, 208)
         if bonus > 0
           @sprites["window2"].setBitmap("Graphics/UI/Slot Machine/bonus")
           @sprites["window2"].src_rect.set(152 * (bonus - 1), 0, 152, 208)
         end
         @sprites["light1"].visible = true
-        @sprites["light1"].src_rect.set(0, 26 * ((frame / timePerFrame) % 4), 96, 26)
+        @sprites["light1"].src_rect.set(0, 26 * (frame % 4), 96, 26)
         @sprites["light2"].visible = true
-        @sprites["light2"].src_rect.set(0, 26 * ((frame / timePerFrame) % 4), 96, 26)
+        @sprites["light2"].src_rect.set(0, 26 * (frame % 4), 96, 26)
         (1..5).each do |i|
           if wonRow[i - 1]
-            @sprites["row#{i}"].visible = (frame / timePerFrame).even?
+            @sprites["row#{i}"].visible = frame.even?
           else
             @sprites["row#{i}"].visible = false
           end
         end
-        frame += 1
+        Graphics.update
+        Input.update
+        update
+        break if System.uptime - timer_start >= 3.0
       end
       @sprites["light1"].visible = false
       @sprites["light2"].visible = false
@@ -218,22 +218,25 @@ class SlotMachineScene
           @sprites["payout"].score = 0
         end
       end
-      (Graphics.frame_rate / 2).times do
+      timer_start = System.uptime
+      loop do
         Graphics.update
         Input.update
         update
+        break if System.uptime - timer_start >= 0.5
       end
     else
       # Show losing animation
-      timePerFrame = Graphics.frame_rate / 4
-      until frame == Graphics.frame_rate * 2
+      timer_start = System.uptime
+      loop do
+        frame = ((System.uptime - timer_start) / 0.25).to_i
+        @sprites["window2"].bitmap&.clear
+        @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/lose")
+        @sprites["window1"].src_rect.set(152 * (frame % 2), 0, 152, 208)
         Graphics.update
         Input.update
         update
-        @sprites["window2"].bitmap&.clear
-        @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/lose")
-        @sprites["window1"].src_rect.set(152 * ((frame / timePerFrame) % 2), 0, 152, 208)
-        frame += 1
+        break if System.uptime - timer_start >= 2.0
       end
     end
     @wager = 0
@@ -278,9 +281,6 @@ class SlotMachineScene
   end
 
   def pbMain
-    frame = 0
-    spinFrameTime   = Graphics.frame_rate / 4
-    insertFrameTime = Graphics.frame_rate * 4 / 10
     loop do
       Graphics.update
       Input.update
@@ -295,23 +295,31 @@ class SlotMachineScene
         break
       elsif @gameRunning   # Reels are spinning
         @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/stop")
-        @sprites["window1"].src_rect.set(152 * ((frame / spinFrameTime) % 4), 0, 152, 208)
-        if Input.trigger?(Input::USE)
-          pbSEPlay("Slots stop")
-          if @sprites["reel1"].spinning
-            @sprites["reel1"].stopSpinning(@replay)
-            @sprites["button1"].visible = true
-          elsif @sprites["reel2"].spinning
-            @sprites["reel2"].stopSpinning(@replay)
-            @sprites["button2"].visible = true
-          elsif @sprites["reel3"].spinning
-            @sprites["reel3"].stopSpinning(@replay)
-            @sprites["button3"].visible = true
+        timer_start = System.uptime
+        loop do
+          frame = ((System.uptime - timer_start) / 0.25).to_i
+          @sprites["window1"].src_rect.set(152 * (frame % 4), 0, 152, 208)
+          Graphics.update
+          Input.update
+          update
+          if Input.trigger?(Input::USE)
+            pbSEPlay("Slots stop")
+            if @sprites["reel1"].spinning
+              @sprites["reel1"].stopSpinning(@replay)
+              @sprites["button1"].visible = true
+            elsif @sprites["reel2"].spinning
+              @sprites["reel2"].stopSpinning(@replay)
+              @sprites["button2"].visible = true
+            elsif @sprites["reel3"].spinning
+              @sprites["reel3"].stopSpinning(@replay)
+              @sprites["button3"].visible = true
+            end
           end
-        end
-        if !@sprites["reel3"].spinning
-          @gameEnd = true
-          @gameRunning = false
+          if !@sprites["reel3"].spinning
+            @gameEnd = true
+            @gameRunning = false
+          end
+          break if !@gameRunning
         end
       elsif @gameEnd   # Reels have been stopped
         pbPayout
@@ -325,42 +333,47 @@ class SlotMachineScene
         @gameEnd = false
       else   # Awaiting coins for the next spin
         @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/insert")
-        @sprites["window1"].src_rect.set(152 * ((frame / insertFrameTime) % 2), 0, 152, 208)
-        if @wager > 0
-          @sprites["window2"].setBitmap("Graphics/UI/Slot Machine/press")
-          @sprites["window2"].src_rect.set(152 * ((frame / insertFrameTime) % 2), 0, 152, 208)
-        end
-        if Input.trigger?(Input::DOWN) && @wager < 3 && @sprites["credit"].score > 0
-          pbSEPlay("Slots coin")
-          @wager += 1
-          @sprites["credit"].score -= 1
-          if @wager >= 3
-            @sprites["row5"].visible = true
-            @sprites["row4"].visible = true
-          elsif @wager >= 2
-            @sprites["row3"].visible = true
-            @sprites["row2"].visible = true
-          elsif @wager >= 1
-            @sprites["row1"].visible = true
+        timer_start = System.uptime
+        loop do
+          frame = ((System.uptime - timer_start) / 0.4).to_i
+          @sprites["window1"].src_rect.set(152 * (frame % 2), 0, 152, 208)
+          if @wager > 0
+            @sprites["window2"].setBitmap("Graphics/UI/Slot Machine/press")
+            @sprites["window2"].src_rect.set(152 * (frame % 2), 0, 152, 208)
           end
-        elsif @wager >= 3 || (@wager > 0 && @sprites["credit"].score == 0) ||
-              (Input.trigger?(Input::USE) && @wager > 0) || @replay
-          if @replay
-            @wager = 3
-            (1..5).each do |i|
-              @sprites["row#{i}"].visible = true
+          Graphics.update
+          Input.update
+          update
+          if Input.trigger?(Input::DOWN) && @wager < 3 && @sprites["credit"].score > 0
+            pbSEPlay("Slots coin")
+            @wager += 1
+            @sprites["credit"].score -= 1
+            if @wager >= 3
+              @sprites["row5"].visible = true
+              @sprites["row4"].visible = true
+            elsif @wager >= 2
+              @sprites["row3"].visible = true
+              @sprites["row2"].visible = true
+            elsif @wager >= 1
+              @sprites["row1"].visible = true
             end
+          elsif @wager >= 3 || (@wager > 0 && @sprites["credit"].score == 0) ||
+                (Input.trigger?(Input::USE) && @wager > 0) || @replay
+            if @replay
+              @wager = 3
+              (1..5).each { |i| @sprites["row#{i}"].visible = true }
+            end
+            @sprites["reel1"].startSpinning
+            @sprites["reel2"].startSpinning
+            @sprites["reel3"].startSpinning
+            @gameRunning = true
+          elsif Input.trigger?(Input::BACK) && @wager == 0
+            break
           end
-          @sprites["reel1"].startSpinning
-          @sprites["reel2"].startSpinning
-          @sprites["reel3"].startSpinning
-          frame = 0
-          @gameRunning = true
-        elsif Input.trigger?(Input::BACK) && @wager == 0
-          break
+          break if @gameRunning
         end
+        break if !@gameRunning
       end
-      frame = (frame + 1) % (Graphics.frame_rate * 4)
     end
     old_coins = $player.coins
     $player.coins = @sprites["credit"].score
