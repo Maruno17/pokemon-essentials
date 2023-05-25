@@ -420,8 +420,7 @@ class Game_Character
     return if jumping? || moving?
     return if @move_route.list.size <= 1   # Empty move route
     start_index = @move_route_index
-    done_one_command = false
-    while @move_route_index < @move_route.list.size
+    (@move_route.list.size - 1).times do
       command = @move_route.list[@move_route_index]
       if command.code == 0
         if @move_route.repeat
@@ -438,7 +437,6 @@ class Game_Character
           return
         end
       end
-      return if @move_route_index == start_index && done_one_command
       done_one_command = true
       # The below move route commands wait for a frame (i.e. return) after
       # executing them
@@ -530,7 +528,14 @@ class Game_Character
         when 42 then @opacity = command.parameters[0]
         when 43 then @blend_type = command.parameters[0]
         when 44 then pbSEPlay(command.parameters[0])
-        when 45 then eval(command.parameters[0])
+        when 45
+          eval(command.parameters[0])
+          if command.parameters[0][/^move_random_range/] ||
+             command.parameters[0][/^move_random_UD/] ||
+             command.parameters[0][/^move_random_LR/]
+            @move_route_index += 1
+            return
+          end
         end
         @move_route_index += 1
       end
