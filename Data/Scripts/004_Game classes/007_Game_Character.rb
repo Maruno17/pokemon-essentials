@@ -422,8 +422,6 @@ class Game_Character
     start_index = @move_route_index
     done_one_command = false
     while @move_route_index < @move_route.list.size
-      return if @move_route_index == start_index && done_one_command
-      done_one_command = true
       command = @move_route.list[@move_route_index]
       if command.code == 0
         if @move_route.repeat
@@ -440,6 +438,8 @@ class Game_Character
           return
         end
       end
+      return if @move_route_index == start_index && done_one_command
+      done_one_command = true
       # The below move route commands wait for a frame (i.e. return) after
       # executing them
       if command.code <= 14
