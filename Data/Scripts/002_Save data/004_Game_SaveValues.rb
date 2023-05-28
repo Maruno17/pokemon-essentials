@@ -5,15 +5,15 @@ SaveData.register(:player) do
   save_value { $player }
   load_value { |value| $player = value }
   new_game_value { Player.new("Unnamed", GameData::TrainerType.keys.first) }
-  from_old_format { |old_format| old_format[0] }
 end
 
+# @deprecated This save data is slated to be removed in v22, as its use is
+# replaced by $stats.play_time.
 SaveData.register(:frame_count) do
   ensure_class :Integer
   save_value { Graphics.frame_count }
   load_value { |value| Graphics.frame_count = value }
   new_game_value { 0 }
-  from_old_format { |old_format| old_format[1] }
 end
 
 SaveData.register(:game_system) do
@@ -22,7 +22,6 @@ SaveData.register(:game_system) do
   save_value { $game_system }
   load_value { |value| $game_system = value }
   new_game_value { Game_System.new }
-  from_old_format { |old_format| old_format[2] }
 end
 
 SaveData.register(:pokemon_system) do
@@ -31,7 +30,6 @@ SaveData.register(:pokemon_system) do
   save_value { $PokemonSystem }
   load_value { |value| $PokemonSystem = value }
   new_game_value { PokemonSystem.new }
-  from_old_format { |old_format| old_format[3] }
 end
 
 SaveData.register(:switches) do
@@ -39,7 +37,6 @@ SaveData.register(:switches) do
   save_value { $game_switches }
   load_value { |value| $game_switches = value }
   new_game_value { Game_Switches.new }
-  from_old_format { |old_format| old_format[5] }
 end
 
 SaveData.register(:variables) do
@@ -47,7 +44,6 @@ SaveData.register(:variables) do
   save_value { $game_variables }
   load_value { |value| $game_variables = value }
   new_game_value { Game_Variables.new }
-  from_old_format { |old_format| old_format[6] }
 end
 
 SaveData.register(:self_switches) do
@@ -55,7 +51,6 @@ SaveData.register(:self_switches) do
   save_value { $game_self_switches }
   load_value { |value| $game_self_switches = value }
   new_game_value { Game_SelfSwitches.new }
-  from_old_format { |old_format| old_format[7] }
 end
 
 SaveData.register(:game_screen) do
@@ -63,14 +58,12 @@ SaveData.register(:game_screen) do
   save_value { $game_screen }
   load_value { |value| $game_screen = value }
   new_game_value { Game_Screen.new }
-  from_old_format { |old_format| old_format[8] }
 end
 
 SaveData.register(:map_factory) do
   ensure_class :PokemonMapFactory
   save_value { $map_factory }
   load_value { |value| $map_factory = value }
-  from_old_format { |old_format| old_format[9] }
 end
 
 SaveData.register(:game_player) do
@@ -78,7 +71,6 @@ SaveData.register(:game_player) do
   save_value { $game_player }
   load_value { |value| $game_player = value }
   new_game_value { Game_Player.new }
-  from_old_format { |old_format| old_format[10] }
 end
 
 SaveData.register(:global_metadata) do
@@ -86,7 +78,6 @@ SaveData.register(:global_metadata) do
   save_value { $PokemonGlobal }
   load_value { |value| $PokemonGlobal = value }
   new_game_value { PokemonGlobalMetadata.new }
-  from_old_format { |old_format| old_format[11] }
 end
 
 SaveData.register(:map_metadata) do
@@ -94,7 +85,6 @@ SaveData.register(:map_metadata) do
   save_value { $PokemonMap }
   load_value { |value| $PokemonMap = value }
   new_game_value { PokemonMapMetadata.new }
-  from_old_format { |old_format| old_format[12] }
 end
 
 SaveData.register(:bag) do
@@ -102,7 +92,6 @@ SaveData.register(:bag) do
   save_value { $bag }
   load_value { |value| $bag = value }
   new_game_value { PokemonBag.new }
-  from_old_format { |old_format| old_format[13] }
 end
 
 SaveData.register(:storage_system) do
@@ -110,7 +99,6 @@ SaveData.register(:storage_system) do
   save_value { $PokemonStorage }
   load_value { |value| $PokemonStorage = value }
   new_game_value { PokemonStorage.new }
-  from_old_format { |old_format| old_format[14] }
 end
 
 SaveData.register(:essentials_version) do
@@ -119,7 +107,6 @@ SaveData.register(:essentials_version) do
   save_value { Essentials::VERSION }
   load_value { |value| $save_engine_version = value }
   new_game_value { Essentials::VERSION }
-  from_old_format { |old_format| old_format[15] }
 end
 
 SaveData.register(:game_version) do

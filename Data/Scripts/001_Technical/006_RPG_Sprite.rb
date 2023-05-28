@@ -35,11 +35,13 @@ class SpriteAnimation
     @_animation_hit      = hit
     @_animation_height   = height
     @_animation_duration = @_animation.frame_max
+    @_animation_index    = 0
     fr = 20
     if @_animation.name[/\[\s*(\d+?)\s*\]\s*$/]
       fr = $~[1].to_i
     end
-    @_animation_frame_skip = Graphics.frame_rate / fr
+    @_animation_time_per_frame = 1.0 / fr
+    @_animation_timer_start = System.uptime
     animation_name = @_animation.animation_name
     animation_hue  = @_animation.animation_hue
     bitmap = pbGetAnimation(animation_name, animation_hue)
@@ -66,12 +68,14 @@ class SpriteAnimation
     dispose_loop_animation
     @_loop_animation = animation
     return if @_loop_animation.nil?
+    @_loop_animation_duration = @_animation.frame_max
     @_loop_animation_index = 0
     fr = 20
     if @_animation.name[/\[\s*(\d+?)\s*\]\s*$/]
       fr = $~[1].to_i
     end
-    @_loop_animation_frame_skip = Graphics.frame_rate / fr
+    @_loop_animation_time_per_frame = 1.0 / fr
+    @_loop_animation_timer_start = System.uptime
     animation_name = @_loop_animation.animation_name
     animation_hue  = @_loop_animation.animation_hue
     bitmap = pbGetAnimation(animation_name, animation_hue)
@@ -100,6 +104,7 @@ class SpriteAnimation
     @_animation_sprites.each { |s| s.dispose }
     @_animation_sprites = nil
     @_animation = nil
+    @_animation_duration = 0
   end
 
   def dispose_loop_animation
@@ -123,30 +128,19 @@ class SpriteAnimation
   end
 
   def update
-    if @_animation
-      quick_update = true
-      if Graphics.frame_count % @_animation_frame_skip == 0
-        @_animation_duration -= 1
-        quick_update = false
-      end
-      update_animation(quick_update)
-    end
-    if @_loop_animation
-      quick_update = (Graphics.frame_count % @_loop_animation_frame_skip != 0)
-      update_loop_animation(quick_update)
-      if !quick_update
-        @_loop_animation_index += 1
-        @_loop_animation_index %= @_loop_animation.frame_max
-      end
-    end
+    update_animation if @_animation
+    update_loop_animation if @_loop_animation
   end
 
-  def update_animation(quick_update = false)
-    if @_animation_duration <= 0
+  def update_animation
+    new_index = ((System.uptime - @_animation_timer_start) / @_animation_time_per_frame).to_i
+    if new_index >= @_animation_duration
       dispose_animation
       return
     end
-    frame_index = @_animation.frame_max - @_animation_duration
+    quick_update = (@_animation_index == new_index)
+    @_animation_index = new_index
+    frame_index = @_animation_index
     cell_data   = @_animation.frames[frame_index].cell_data
     position    = @_animation.position
     animation_set_sprites(@_animation_sprites, cell_data, position, quick_update)
@@ -158,6 +152,10 @@ class SpriteAnimation
   end
 
   def update_loop_animation(quick_update = false)
+    new_index = ((System.uptime - @_loop_animation_timer_start) / @_loop_animation_time_per_frame).to_i
+    new_index %= @_loop_animation_duration
+    quick_update = (@_loop_animation_index == new_index)
+    @_loop_animation_index = new_index
     frame_index = @_loop_animation_index
     cell_data   = @_loop_animation.frames[frame_index].cell_data
     position    = @_loop_animation.position
@@ -268,6 +266,7 @@ module RPG
       @_collapse_duration  = 0
       @_damage_duration    = 0
       @_animation_duration = 0
+      @_animation_frame    = 0
       @_blink              = false
       @animations     = []
       @loopAnimations = []
@@ -387,16 +386,12 @@ module RPG
     end
 
     def dispose_animation
-      @animations.each do |a|
-        a&.dispose_animation
-      end
+      @animations.each { |a| a&.dispose_animation }
       @animations.clear
     end
 
     def dispose_loop_animation
-      @loopAnimations.each do |a|
-        a&.dispose_loop_animation
-      end
+      @loopAnimations.each { |a| a&.dispose_loop_animation }
       @loopAnimations.clear
     end
 
@@ -422,9 +417,7 @@ module RPG
       return true if @_escape_duration > 0
       return true if @_collapse_duration > 0
       return true if @_damage_duration > 0
-      @animations.each do |a|
-        return true if a.effect?
-      end
+      @animations.each { |a| return true if a.effect? }
       return false
     end
 
@@ -461,12 +454,8 @@ module RPG
         @_damage_sprite.opacity = 256 - ((12 - @_damage_duration) * 32)
         dispose_damage if @_damage_duration == 0
       end
-      @animations.each do |a|
-        a.update
-      end
-      @loopAnimations.each do |a|
-        a.update
-      end
+      @animations.each { |a| a.update }
+      @loopAnimations.each { |a| a.update }
       if @_blink
         @_blink_count = (@_blink_count + 1) % 32
         if @_blink_count < 16
@@ -480,34 +469,22 @@ module RPG
     end
 
     def update_animation
-      @animations.each do |a|
-        a.update_animation if a&.active?
-      end
+      @animations.each { |a| a.update_animation if a&.active? }
     end
 
     def update_loop_animation
-      @loopAnimations.each do |a|
-        a.update_loop_animation if a&.active?
-      end
+      @loopAnimations.each { |a| a.update_loop_animation if a&.active? }
     end
 
     def x=(x)
-      @animations.each do |a|
-        a.x = x if a
-      end
-      @loopAnimations.each do |a|
-        a.x = x if a
-      end
+      @animations.each { |a| a.x = x if a }
+      @loopAnimations.each { |a| a.x = x if a }
       super
     end
 
     def y=(y)
-      @animations.each do |a|
-        a.y = y if a
-      end
-      @loopAnimations.each do |a|
-        a.y = y if a
-      end
+      @animations.each { |a| a.y = y if a }
+      @loopAnimations.each { |a| a.y = y if a }
       super
     end
   end

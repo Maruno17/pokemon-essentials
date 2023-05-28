@@ -68,17 +68,22 @@ end
 #===============================================================================
 def pbHiddenMoveAnimation(pokemon)
   return false if !pokemon
-  viewport = Viewport.new(0, 0, 0, 0)
+  viewport = Viewport.new(0, 0, Graphics.width, 0)
   viewport.z = 99999
+  # Set up sprites
   bg = Sprite.new(viewport)
   bg.bitmap = RPG::Cache.ui("Field move/bg")
   sprite = PokemonSprite.new(viewport)
   sprite.setOffset(PictureOrigin::CENTER)
   sprite.setPokemonBitmap(pokemon)
+  sprite.x = Graphics.width + (sprite.bitmap.width / 2)
+  sprite.y = bg.bitmap.height / 2
   sprite.z = 1
   sprite.visible = false
   strobebitmap = AnimatedBitmap.new("Graphics/UI/Field move/strobes")
   strobes = []
+  strobes_start_x = []
+  strobes_timers = []
   15.times do |i|
     strobe = BitmapSprite.new(52, 16, viewport)
     strobe.bitmap.blt(0, 0, strobebitmap.bitmap, Rect.new(0, (i % 2) * 16, 52, 16))
@@ -87,74 +92,54 @@ def pbHiddenMoveAnimation(pokemon)
     strobes.push(strobe)
   end
   strobebitmap.dispose
-  interp = RectInterpolator.new(
-    Rect.new(0, Graphics.height / 2, Graphics.width, 0),
-    Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
-    Graphics.frame_rate / 4
-  )
-  ptinterp = nil
+  # Do the animation
   phase = 1
-  frames = 0
-  strobeSpeed = 64 * 20 / Graphics.frame_rate
+  timer_start = System.uptime
   loop do
     Graphics.update
     Input.update
     sprite.update
     case phase
     when 1   # Expand viewport height from zero to full
-      interp.update
-      interp.set(viewport.rect)
+      viewport.rect.y = lerp(Graphics.height / 2, (Graphics.height - bg.bitmap.height) / 2,
+                             0.25, timer_start, System.uptime)
+      viewport.rect.height = Graphics.height - viewport.rect.y * 2
       bg.oy = (bg.bitmap.height - viewport.rect.height) / 2
-      if interp.done?
+      if viewport.rect.y == (Graphics.height - bg.bitmap.height) / 2
         phase = 2
-        ptinterp = PointInterpolator.new(
-          Graphics.width + (sprite.bitmap.width / 2), bg.bitmap.height / 2,
-          Graphics.width / 2, bg.bitmap.height / 2,
-          Graphics.frame_rate * 4 / 10
-        )
+        sprite.visible = true
+        timer_start = System.uptime
       end
     when 2   # Slide Pokémon sprite in from right to centre
-      ptinterp.update
-      sprite.x = ptinterp.x
-      sprite.y = ptinterp.y
-      sprite.visible = true
-      if ptinterp.done?
+      sprite.x = lerp(Graphics.width + (sprite.bitmap.width / 2), Graphics.width / 2,
+                      0.4, timer_start, System.uptime)
+      if sprite.x == Graphics.width / 2
         phase = 3
         pokemon.play_cry
-        frames = 0
+        timer_start = System.uptime
       end
     when 3   # Wait
-      frames += 1
-      if frames > Graphics.frame_rate * 3 / 4
+      if System.uptime - timer_start >= 0.75
         phase = 4
-        ptinterp = PointInterpolator.new(
-          Graphics.width / 2, bg.bitmap.height / 2,
-          -(sprite.bitmap.width / 2), bg.bitmap.height / 2,
-          Graphics.frame_rate * 4 / 10
-        )
-        frames = 0
+        timer_start = System.uptime
       end
     when 4   # Slide Pokémon sprite off from centre to left
-      ptinterp.update
-      sprite.x = ptinterp.x
-      sprite.y = ptinterp.y
-      if ptinterp.done?
+      sprite.x = lerp(Graphics.width / 2, -(sprite.bitmap.width / 2),
+                      0.4, timer_start, System.uptime)
+      if sprite.x == -(sprite.bitmap.width / 2)
         phase = 5
         sprite.visible = false
-        interp = RectInterpolator.new(
-          Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
-          Rect.new(0, Graphics.height / 2, Graphics.width, 0),
-          Graphics.frame_rate / 4
-        )
+        timer_start = System.uptime
       end
     when 5   # Shrink viewport height from full to zero
-      interp.update
-      interp.set(viewport.rect)
+      viewport.rect.y = lerp((Graphics.height - bg.bitmap.height) / 2, Graphics.height / 2,
+                             0.25, timer_start, System.uptime)
+      viewport.rect.height = Graphics.height - viewport.rect.y * 2
       bg.oy = (bg.bitmap.height - viewport.rect.height) / 2
-      phase = 6 if interp.done?
+      phase = 6 if viewport.rect.y == Graphics.height / 2
     end
     # Constantly stream the strobes across the screen
-    strobes.each do |strobe|
+    strobes.each_with_index do |strobe, i|
       strobe.ox = strobe.viewport.rect.x
       strobe.oy = strobe.viewport.rect.y
       if !strobe.visible   # Initial placement of strobes
@@ -162,12 +147,16 @@ def pbHiddenMoveAnimation(pokemon)
         strobe.y = randomY + ((Graphics.height - bg.bitmap.height) / 2)
         strobe.x = rand(Graphics.width)
         strobe.visible = true
+        strobes_start_x[i] = strobe.x
+        strobes_timers[i] = System.uptime
       elsif strobe.x < Graphics.width   # Move strobe right
-        strobe.x += strobeSpeed
+        strobe.x = strobes_start_x[i] + lerp(0, Graphics.width * 2, 0.8, strobes_timers[i], System.uptime)
       else   # Strobe is off the screen, reposition it to the left of the screen
         randomY = 16 * (1 + rand((bg.bitmap.height / 16) - 2))
         strobe.y = randomY + ((Graphics.height - bg.bitmap.height) / 2)
         strobe.x = -strobe.bitmap.width - rand(Graphics.width / 4)
+        strobes_start_x[i] = strobe.x
+        strobes_timers[i] = System.uptime
       end
     end
     pbUpdateSceneMap

@@ -124,8 +124,12 @@ class PokemonPokedexInfo_Scene
 
   def pbUpdate
     if @page == 2
-      intensity = (Graphics.frame_count % 40) * 12
-      intensity = 480 - intensity if intensity > 240
+      intensity_time = System.uptime % 1.0   # 1 second per glow
+      if intensity_time >= 0.5
+        intensity = lerp(64, 256 + 64, 0.5, intensity_time - 0.5)
+      else
+        intensity = lerp(256 + 64, 64, 0.5, intensity_time)
+      end
       @sprites["areahighlight"].opacity = intensity
     end
     pbUpdateSpriteHash(@sprites)

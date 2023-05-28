@@ -479,7 +479,6 @@ class PokemonEntryScene2
     @sprites["controls"].x = 16
     @sprites["controls"].y = 96
     @sprites["controls"].setBitmap(_INTL("Graphics/UI/Naming/overlay_controls"))
-    @init = true
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbDoUpdateOverlay2
     @sprites["cursor"] = NameEntryCursor.new(@viewport)
@@ -556,15 +555,12 @@ class PokemonEntryScene2
     @@Characters.length.times do |i|
       @bitmaps[i].update
     end
-    if @init || Graphics.frame_count % 5 == 0
-      @init = false
-      cursorpos = @helper.cursor
-      cursorpos = @maxlength - 1 if cursorpos >= @maxlength
-      cursorpos = 0 if cursorpos < 0
-      @maxlength.times do |i|
-        @blanks[i] = (i == cursorpos) ? 1 : 0
-        @sprites["blank#{i}"].y = [78, 82][@blanks[i]]
-      end
+    # Update which inputted text's character's underline is lowered to indicate
+    # which character is selected
+    cursorpos = @helper.cursor.clamp(0, @maxlength - 1)
+    @maxlength.times do |i|
+      @blanks[i] = (i == cursorpos) ? 1 : 0
+      @sprites["blank#{i}"].y = [78, 82][@blanks[i]]
     end
     pbDoUpdateOverlay
     pbUpdateSpriteHash(@sprites)

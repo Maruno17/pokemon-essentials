@@ -1,483 +1,22 @@
 #===============================================================================
-# Evolution animation metafiles and related methods
-#===============================================================================
-class SpriteMetafile
-  VIEWPORT      = 0
-  TONE          = 1
-  SRC_RECT      = 2
-  VISIBLE       = 3
-  X             = 4
-  Y             = 5
-  Z             = 6
-  OX            = 7
-  OY            = 8
-  ZOOM_X        = 9
-  ZOOM_Y        = 10
-  ANGLE         = 11
-  MIRROR        = 12
-  BUSH_DEPTH    = 13
-  OPACITY       = 14
-  BLEND_TYPE    = 15
-  COLOR         = 16
-  FLASHCOLOR    = 17
-  FLASHDURATION = 18
-  BITMAP        = 19
-
-  def initialize(viewport = nil)
-    @metafile = []
-    @values = [
-      viewport,
-      Tone.new(0, 0, 0, 0), Rect.new(0, 0, 0, 0),
-      true,
-      0, 0, 0, 0, 0, 100, 100,
-      0, false, 0, 255, 0,
-      Color.new(0, 0, 0, 0), Color.new(0, 0, 0, 0),
-      0
-    ]
-  end
-
-  def dispose; end
-
-  def disposed?
-    return false
-  end
-
-  def [](i)
-    return @metafile[i]
-  end
-
-  def length
-    return @metafile.length
-  end
-
-  def flash(color, duration)
-    if duration > 0
-      @values[FLASHCOLOR] = color.clone
-      @values[FLASHDURATION] = duration
-      @metafile.push([FLASHCOLOR, color])
-      @metafile.push([FLASHDURATION, duration])
-    end
-  end
-
-  def x
-    return @values[X]
-  end
-
-  def x=(value)
-    @values[X] = value
-    @metafile.push([X, value])
-  end
-
-  def y
-    return @values[Y]
-  end
-
-  def y=(value)
-    @values[Y] = value
-    @metafile.push([Y, value])
-  end
-
-  def bitmap
-    return nil
-  end
-
-  def bitmap=(value)
-    if value && !value.disposed?
-      @values[SRC_RECT].set(0, 0, value.width, value.height)
-      @metafile.push([SRC_RECT, @values[SRC_RECT].clone])
-    end
-  end
-
-  def src_rect
-    return @values[SRC_RECT]
-  end
-
-  def src_rect=(value)
-    @values[SRC_RECT] = value
-    @metafile.push([SRC_RECT, value])
-  end
-
-  def visible
-    return @values[VISIBLE]
-  end
-
-  def visible=(value)
-    @values[VISIBLE] = value
-    @metafile.push([VISIBLE, value])
-  end
-
-  def z
-    return @values[Z]
-  end
-
-  def z=(value)
-    @values[Z] = value
-    @metafile.push([Z, value])
-  end
-
-  def ox
-    return @values[OX]
-  end
-
-  def ox=(value)
-    @values[OX] = value
-    @metafile.push([OX, value])
-  end
-
-  def oy
-    return @values[OY]
-  end
-
-  def oy=(value)
-    @values[OY] = value
-    @metafile.push([OY, value])
-  end
-
-  def zoom_x
-    return @values[ZOOM_X]
-  end
-
-  def zoom_x=(value)
-    @values[ZOOM_X] = value
-    @metafile.push([ZOOM_X, value])
-  end
-
-  def zoom_y
-    return @values[ZOOM_Y]
-  end
-
-  def zoom_y=(value)
-    @values[ZOOM_Y] = value
-    @metafile.push([ZOOM_Y, value])
-  end
-
-  def zoom=(value)
-    @values[ZOOM_X] = value
-    @metafile.push([ZOOM_X, value])
-    @values[ZOOM_Y] = value
-    @metafile.push([ZOOM_Y, value])
-  end
-
-  def angle
-    return @values[ANGLE]
-  end
-
-  def angle=(value)
-    @values[ANGLE] = value
-    @metafile.push([ANGLE, value])
-  end
-
-  def mirror
-    return @values[MIRROR]
-  end
-
-  def mirror=(value)
-    @values[MIRROR] = value
-    @metafile.push([MIRROR, value])
-  end
-
-  def bush_depth
-    return @values[BUSH_DEPTH]
-  end
-
-  def bush_depth=(value)
-    @values[BUSH_DEPTH] = value
-    @metafile.push([BUSH_DEPTH, value])
-  end
-
-  def opacity
-    return @values[OPACITY]
-  end
-
-  def opacity=(value)
-    @values[OPACITY] = value
-    @metafile.push([OPACITY, value])
-  end
-
-  def blend_type
-    return @values[BLEND_TYPE]
-  end
-
-  def blend_type=(value)
-    @values[BLEND_TYPE] = value
-    @metafile.push([BLEND_TYPE, value])
-  end
-
-  def color
-    return @values[COLOR]
-  end
-
-  def color=(value)
-    @values[COLOR] = value.clone
-    @metafile.push([COLOR, @values[COLOR]])
-  end
-
-  def tone
-    return @values[TONE]
-  end
-
-  def tone=(value)
-    @values[TONE] = value.clone
-    @metafile.push([TONE, @values[TONE]])
-  end
-
-  def update
-    @metafile.push([-1, nil])
-  end
-end
-
-#===============================================================================
-#
-#===============================================================================
-class SpriteMetafilePlayer
-  def initialize(metafile, sprite = nil)
-    @metafile = metafile
-    @sprites = []
-    @playing = false
-    @index = 0
-    @sprites.push(sprite) if sprite
-  end
-
-  def add(sprite)
-    @sprites.push(sprite)
-  end
-
-  def playing?
-    return @playing
-  end
-
-  def play
-    @playing = true
-    @index = 0
-  end
-
-  def update
-    return if !@playing
-    (@index...@metafile.length).each do |j|
-      @index = j + 1
-      break if @metafile[j][0] < 0
-      code = @metafile[j][0]
-      value = @metafile[j][1]
-      @sprites.each do |sprite|
-        case code
-        when SpriteMetafile::X          then sprite.x = value
-        when SpriteMetafile::Y          then sprite.y = value
-        when SpriteMetafile::OX         then sprite.ox = value
-        when SpriteMetafile::OY         then sprite.oy = value
-        when SpriteMetafile::ZOOM_X     then sprite.zoom_x = value
-        when SpriteMetafile::ZOOM_Y     then sprite.zoom_y = value
-        when SpriteMetafile::SRC_RECT   then sprite.src_rect = value
-        when SpriteMetafile::VISIBLE    then sprite.visible = value
-        when SpriteMetafile::Z          then sprite.z = value   # prevent crashes
-        when SpriteMetafile::ANGLE      then sprite.angle = (value == 180) ? 179.9 : value
-        when SpriteMetafile::MIRROR     then sprite.mirror = value
-        when SpriteMetafile::BUSH_DEPTH then sprite.bush_depth = value
-        when SpriteMetafile::OPACITY    then sprite.opacity = value
-        when SpriteMetafile::BLEND_TYPE then sprite.blend_type = value
-        when SpriteMetafile::COLOR      then sprite.color = value
-        when SpriteMetafile::TONE       then sprite.tone = value
-        end
-      end
-    end
-    @playing = false if @index == @metafile.length
-  end
-end
-
-#===============================================================================
-#
-#===============================================================================
-def pbSaveSpriteState(sprite)
-  state = []
-  return state if !sprite || sprite.disposed?
-  state[SpriteMetafile::BITMAP]     = sprite.x
-  state[SpriteMetafile::X]          = sprite.x
-  state[SpriteMetafile::Y]          = sprite.y
-  state[SpriteMetafile::SRC_RECT]   = sprite.src_rect.clone
-  state[SpriteMetafile::VISIBLE]    = sprite.visible
-  state[SpriteMetafile::Z]          = sprite.z
-  state[SpriteMetafile::OX]         = sprite.ox
-  state[SpriteMetafile::OY]         = sprite.oy
-  state[SpriteMetafile::ZOOM_X]     = sprite.zoom_x
-  state[SpriteMetafile::ZOOM_Y]     = sprite.zoom_y
-  state[SpriteMetafile::ANGLE]      = sprite.angle
-  state[SpriteMetafile::MIRROR]     = sprite.mirror
-  state[SpriteMetafile::BUSH_DEPTH] = sprite.bush_depth
-  state[SpriteMetafile::OPACITY]    = sprite.opacity
-  state[SpriteMetafile::BLEND_TYPE] = sprite.blend_type
-  state[SpriteMetafile::COLOR]      = sprite.color.clone
-  state[SpriteMetafile::TONE]       = sprite.tone.clone
-  return state
-end
-
-def pbRestoreSpriteState(sprite, state)
-  return if !state || !sprite || sprite.disposed?
-  sprite.x          = state[SpriteMetafile::X]
-  sprite.y          = state[SpriteMetafile::Y]
-  sprite.src_rect   = state[SpriteMetafile::SRC_RECT]
-  sprite.visible    = state[SpriteMetafile::VISIBLE]
-  sprite.z          = state[SpriteMetafile::Z]
-  sprite.ox         = state[SpriteMetafile::OX]
-  sprite.oy         = state[SpriteMetafile::OY]
-  sprite.zoom_x     = state[SpriteMetafile::ZOOM_X]
-  sprite.zoom_y     = state[SpriteMetafile::ZOOM_Y]
-  sprite.angle      = state[SpriteMetafile::ANGLE]
-  sprite.mirror     = state[SpriteMetafile::MIRROR]
-  sprite.bush_depth = state[SpriteMetafile::BUSH_DEPTH]
-  sprite.opacity    = state[SpriteMetafile::OPACITY]
-  sprite.blend_type = state[SpriteMetafile::BLEND_TYPE]
-  sprite.color      = state[SpriteMetafile::COLOR]
-  sprite.tone       = state[SpriteMetafile::TONE]
-end
-
-def pbSaveSpriteStateAndBitmap(sprite)
-  return [] if !sprite || sprite.disposed?
-  state = pbSaveSpriteState(sprite)
-  state[SpriteMetafile::BITMAP] = sprite.bitmap
-  return state
-end
-
-def pbRestoreSpriteStateAndBitmap(sprite, state)
-  return if !state || !sprite || sprite.disposed?
-  sprite.bitmap = state[SpriteMetafile::BITMAP]
-  pbRestoreSpriteState(sprite, state)
-  return state
-end
-
-#===============================================================================
 # Evolution screen
 #===============================================================================
 class PokemonEvolutionScene
-  private
-
-  def pbGenerateMetafiles(s1x, s1y, s2x, s2y)
-    sprite = SpriteMetafile.new
-    sprite.ox      = s1x
-    sprite.oy      = s1y
-    sprite.opacity = 255
-    sprite2 = SpriteMetafile.new
-    sprite2.ox      = s2x
-    sprite2.oy      = s2y
-    sprite2.zoom    = 0.0
-    sprite2.opacity = 255
-    alpha = 0
-    alphaDiff = 10 * 20 / Graphics.frame_rate
-    loop do
-      sprite.color.red   = 255
-      sprite.color.green = 255
-      sprite.color.blue  = 255
-      sprite.color.alpha = alpha
-      sprite.color  = sprite.color
-      sprite2.color = sprite.color
-      sprite2.color.alpha = 255
-      sprite.update
-      sprite2.update
-      break if alpha >= 255
-      alpha += alphaDiff
-    end
-    totaltempo   = 0
-    currenttempo = 25
-    maxtempo = 7 * Graphics.frame_rate
-    while totaltempo < maxtempo
-      currenttempo.times do |j|
-        if alpha < 255
-          sprite.color.red   = 255
-          sprite.color.green = 255
-          sprite.color.blue  = 255
-          sprite.color.alpha = alpha
-          sprite.color = sprite.color
-          alpha += 10
-        end
-        sprite.zoom  = [1.1 * (currenttempo - j - 1) / currenttempo, 1.0].min
-        sprite2.zoom = [1.1 * (j + 1) / currenttempo, 1.0].min
-        sprite.update
-        sprite2.update
-      end
-      totaltempo += currenttempo
-      if totaltempo + currenttempo < maxtempo
-        currenttempo.times do |j|
-          sprite.zoom  = [1.1 * (j + 1) / currenttempo, 1.0].min
-          sprite2.zoom = [1.1 * (currenttempo - j - 1) / currenttempo, 1.0].min
-          sprite.update
-          sprite2.update
-        end
-      end
-      totaltempo += currenttempo
-      currenttempo = [(currenttempo / 1.5).floor, 5].max
-    end
-    @metafile1 = sprite
-    @metafile2 = sprite2
-  end
-
-  public
-
-  def pbUpdate(animating = false)
-    if animating      # Pokémon shouldn't animate during the evolution animation
-      @sprites["background"].update
-      @sprites["msgwindow"].update
-    else
-      pbUpdateSpriteHash(@sprites)
-    end
-  end
-
-  def pbUpdateNarrowScreen(timer_start)
-    return if @bgviewport.rect.y >= 80
-    buffer = 80
-    @bgviewport.rect.height = Graphics.height - lerp(0, 64 + (buffer * 2), 0.7, timer_start, System.uptime).to_i
-    @bgviewport.rect.y = lerp(0, buffer, 0.5, timer_start + 0.2, System.uptime).to_i
-    @sprites["background"].oy = @bgviewport.rect.y
-  end
-
-  def pbUpdateExpandScreen(timer_start)
-    return if @bgviewport.rect.height >= Graphics.height
-    buffer = 80
-    @bgviewport.rect.height = Graphics.height - lerp(64 + (buffer * 2), 0, 0.7, timer_start, System.uptime).to_i
-    @bgviewport.rect.y = lerp(buffer, 0, 0.5, timer_start, System.uptime).to_i
-    @sprites["background"].oy = @bgviewport.rect.y
-  end
-
-  def pbFlashInOut(canceled, oldstate, oldstate2)
-    timer_start = System.uptime
-    loop do
-      Graphics.update
-      pbUpdate(true)
-      pbUpdateExpandScreen(timer_start)
-      tone = lerp(0, 255, 0.7, timer_start, System.uptime)
-      @viewport.tone.set(tone, tone, tone, 0)
-      break if tone >= 255
-    end
-    @bgviewport.rect.y      = 0
-    @bgviewport.rect.height = Graphics.height
-    @sprites["background"].oy = 0
-    if canceled
-      pbRestoreSpriteState(@sprites["rsprite1"], oldstate)
-      pbRestoreSpriteState(@sprites["rsprite2"], oldstate2)
-      @sprites["rsprite1"].zoom_x      = 1.0
-      @sprites["rsprite1"].zoom_y      = 1.0
-      @sprites["rsprite1"].color.alpha = 0
-      @sprites["rsprite1"].visible     = true
-      @sprites["rsprite2"].visible     = false
-    else
-      @sprites["rsprite1"].visible     = false
-      @sprites["rsprite2"].visible     = true
-      @sprites["rsprite2"].zoom_x      = 1.0
-      @sprites["rsprite2"].zoom_y      = 1.0
-      @sprites["rsprite2"].color.alpha = 0
-    end
-    timer_start = System.uptime
-    loop do
-      Graphics.update
-      pbUpdate(true)
-      break if System.uptime - timer_start >= 0.25
-    end
-    timer_start = System.uptime
-    loop do
-      Graphics.update
-      pbUpdate
-      pbUpdateExpandScreen(timer_start)
-      tone = lerp(255, 0, 0.4, timer_start, System.uptime)
-      @viewport.tone.set(tone, tone, tone, 0)
-      break if tone <= 0
-    end
+  def self.pbDuplicatePokemon(pkmn, new_species)
+    new_pkmn = pkmn.clone
+    new_pkmn.species   = new_species
+    new_pkmn.name      = nil
+    new_pkmn.markings  = []
+    new_pkmn.poke_ball = :POKEBALL
+    new_pkmn.item      = nil
+    new_pkmn.clearAllRibbons
+    new_pkmn.calc_stats
+    new_pkmn.heal
+    # Add duplicate Pokémon to party
+    $player.party.push(new_pkmn)
+    # See and own duplicate Pokémon
+    $player.pokedex.register(new_pkmn)
+    $player.pokedex.set_owned(new_species)
   end
 
   def pbStartScreen(pokemon, newspecies)
@@ -502,32 +41,47 @@ class PokemonEvolutionScene
     rsprite2.setPokemonBitmapSpecies(@pokemon, @newspecies, false)
     rsprite2.x       = rsprite1.x
     rsprite2.y       = rsprite1.y
-    rsprite2.opacity = 0
+    rsprite2.visible = false
     @sprites["rsprite1"] = rsprite1
     @sprites["rsprite2"] = rsprite2
-    pbGenerateMetafiles(rsprite1.ox, rsprite1.oy, rsprite2.ox, rsprite2.oy)
     @sprites["msgwindow"] = pbCreateMessageWindow(@msgviewport)
+    set_up_animation
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
-  # Closes the evolution screen.
-  def pbEndScreen(need_fade_out = true)
-    pbDisposeMessageWindow(@sprites["msgwindow"]) if @sprites["msgwindow"]
-    if need_fade_out
-      pbFadeOutAndHide(@sprites) { pbUpdate }
+  def set_up_animation
+    sprite = PictureEx.new(0)
+    sprite.setVisible(0, true)
+    sprite.setColor(0, Color.new(255, 255, 255, 0))
+    sprite2 = PictureEx.new(0)
+    sprite2.setVisible(0, true)
+    sprite2.setZoom(0, 0.0)
+    sprite2.setColor(0, Color.new(255, 255, 255, 255))
+    # Make sprite turn white
+    sprite.moveColor(0, 25, Color.new(255, 255, 255, 255))
+    total_duration = 9 * 20   # 9 seconds
+    duration = 25 + 15
+    zoom_duration = 12
+    loop do
+      # Shrink prevo sprite, enlarge evo sprite
+      sprite.moveZoom(duration, zoom_duration, 0)
+      sprite2.moveZoom(duration, zoom_duration, 110)
+      duration += zoom_duration
+      # If animation has played for long enough, end it now while the evo sprite is large
+      break if duration >= total_duration
+      # Enlarge prevo sprite, shrink evo sprite
+      sprite.moveZoom(duration, zoom_duration, 110)
+      sprite2.moveZoom(duration, zoom_duration, 0)
+      duration += zoom_duration
+      # Shorten the duration of zoom changes for the next cycle
+      zoom_duration = [(zoom_duration / 1.2).round, 2].max
     end
-    pbDisposeSpriteHash(@sprites)
-    @viewport.dispose
-    @bgviewport.dispose
-    @msgviewport.dispose
+    @picture1 = sprite
+    @picture2 = sprite2
   end
 
   # Opens the evolution screen
   def pbEvolution(cancancel = true)
-    metaplayer1 = SpriteMetafilePlayer.new(@metafile1, @sprites["rsprite1"])
-    metaplayer2 = SpriteMetafilePlayer.new(@metafile2, @sprites["rsprite2"])
-    metaplayer1.play
-    metaplayer2.play
     pbBGMStop
     pbMessageDisplay(@sprites["msgwindow"], "\\se[]" + _INTL("What?") + "\1") { pbUpdate }
     pbPlayDecisionSE
@@ -540,16 +94,24 @@ class PokemonEvolutionScene
       pbUpdate
       break if System.uptime - timer_start >= 1
     end
-    oldstate  = pbSaveSpriteState(@sprites["rsprite1"])
-    oldstate2 = pbSaveSpriteState(@sprites["rsprite2"])
     pbMEPlay("Evolution start")
     pbBGMPlay("Evolution")
     canceled = false
     timer_start = System.uptime
     loop do
       pbUpdateNarrowScreen(timer_start)
-      metaplayer1.update
-      metaplayer2.update
+      @picture1.update
+      setPictureSprite(@sprites["rsprite1"], @picture1)
+      if @sprites["rsprite1"].zoom_x > 1.0
+        @sprites["rsprite1"].zoom_x = 1.0
+        @sprites["rsprite1"].zoom_y = 1.0
+      end
+      @picture2.update
+      setPictureSprite(@sprites["rsprite2"], @picture2)
+      if @sprites["rsprite2"].zoom_x > 1.0
+        @sprites["rsprite2"].zoom_x = 1.0
+        @sprites["rsprite2"].zoom_y = 1.0
+      end
       Graphics.update
       Input.update
       pbUpdate(true)
@@ -559,15 +121,74 @@ class PokemonEvolutionScene
         canceled = true
         break
       end
-      break unless metaplayer1.playing? && metaplayer2.playing?
+      break if !@picture1.running? && !@picture2.running?
     end
-    pbFlashInOut(canceled, oldstate, oldstate2)
+    pbFlashInOut(canceled)
     if canceled
       $stats.evolutions_cancelled += 1
       pbMessageDisplay(@sprites["msgwindow"],
                        _INTL("Huh? {1} stopped evolving!", @pokemon.name)) { pbUpdate }
     else
       pbEvolutionSuccess
+    end
+  end
+
+  def pbUpdateNarrowScreen(timer_start)
+    return if @bgviewport.rect.y >= 80
+    buffer = 80
+    @bgviewport.rect.height = Graphics.height - lerp(0, 64 + (buffer * 2), 0.7, timer_start, System.uptime).to_i
+    @bgviewport.rect.y = lerp(0, buffer, 0.5, timer_start + 0.2, System.uptime).to_i
+    @sprites["background"].oy = @bgviewport.rect.y
+  end
+
+  def pbUpdateExpandScreen(timer_start)
+    return if @bgviewport.rect.height >= Graphics.height
+    buffer = 80
+    @bgviewport.rect.height = Graphics.height - lerp(64 + (buffer * 2), 0, 0.7, timer_start, System.uptime).to_i
+    @bgviewport.rect.y = lerp(buffer, 0, 0.5, timer_start, System.uptime).to_i
+    @sprites["background"].oy = @bgviewport.rect.y
+  end
+
+  def pbFlashInOut(canceled)
+    timer_start = System.uptime
+    loop do
+      Graphics.update
+      pbUpdate(true)
+      pbUpdateExpandScreen(timer_start)
+      tone = lerp(0, 255, 0.7, timer_start, System.uptime)
+      @viewport.tone.set(tone, tone, tone, 0)
+      break if tone >= 255
+    end
+    @bgviewport.rect.y      = 0
+    @bgviewport.rect.height = Graphics.height
+    @sprites["background"].oy = 0
+    if canceled
+      @sprites["rsprite1"].visible     = true
+      @sprites["rsprite1"].zoom_x      = 1.0
+      @sprites["rsprite1"].zoom_y      = 1.0
+      @sprites["rsprite1"].color.alpha = 0
+      @sprites["rsprite2"].visible     = false
+    else
+      @sprites["rsprite1"].visible     = false
+      @sprites["rsprite2"].visible     = true
+      @sprites["rsprite2"].zoom_x      = 1.0
+      @sprites["rsprite2"].zoom_y      = 1.0
+      @sprites["rsprite2"].color.alpha = 0
+    end
+    timer_start = System.uptime
+    loop do
+      Graphics.update
+      pbUpdate(true)
+      break if System.uptime - timer_start >= 0.25
+    end
+    timer_start = System.uptime
+    loop do
+      Graphics.update
+      pbUpdate
+      pbUpdateExpandScreen(timer_start)
+      tone = lerp(255, 0, 0.4, timer_start, System.uptime)
+      @viewport.tone.set(tone, tone, tone, 0)
+      break if tone <= 0
     end
   end
 
@@ -631,20 +252,24 @@ class PokemonEvolutionScene
     @pokemon.action_after_evolution(@newspecies)
   end
 
-  def self.pbDuplicatePokemon(pkmn, new_species)
-    new_pkmn = pkmn.clone
-    new_pkmn.species   = new_species
-    new_pkmn.name      = nil
-    new_pkmn.markings  = []
-    new_pkmn.poke_ball = :POKEBALL
-    new_pkmn.item      = nil
-    new_pkmn.clearAllRibbons
-    new_pkmn.calc_stats
-    new_pkmn.heal
-    # Add duplicate Pokémon to party
-    $player.party.push(new_pkmn)
-    # See and own duplicate Pokémon
-    $player.pokedex.register(new_pkmn)
-    $player.pokedex.set_owned(new_species)
+  def pbUpdate(animating = false)
+    if animating      # Pokémon shouldn't animate during the evolution animation
+      @sprites["background"].update
+      @sprites["msgwindow"].update
+    else
+      pbUpdateSpriteHash(@sprites)
+    end
+  end
+
+  # Closes the evolution screen.
+  def pbEndScreen(need_fade_out = true)
+    pbDisposeMessageWindow(@sprites["msgwindow"]) if @sprites["msgwindow"]
+    if need_fade_out
+      pbFadeOutAndHide(@sprites) { pbUpdate }
+    end
+    pbDisposeSpriteHash(@sprites)
+    @viewport.dispose
+    @bgviewport.dispose
+    @msgviewport.dispose
   end
 end

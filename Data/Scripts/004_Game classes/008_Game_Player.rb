@@ -6,20 +6,19 @@
 #  instance of this class.
 #===============================================================================
 class Game_Player < Game_Character
-  attr_accessor :bump_se
   attr_accessor :charsetData
   attr_accessor :encounter_count
 
   SCREEN_CENTER_X = ((Settings::SCREEN_WIDTH / 2) - (Game_Map::TILE_WIDTH / 2)) * Game_Map::X_SUBPIXELS
   SCREEN_CENTER_Y = ((Settings::SCREEN_HEIGHT / 2) - (Game_Map::TILE_HEIGHT / 2)) * Game_Map::Y_SUBPIXELS
-
-  @@bobFrameSpeed = 1.0 / 15
+  # Time in seconds for one cycle of bobbing (playing 4 charset frames) while
+  # surfing or diving.
+  SURF_BOB_DURATION = 1.5
 
   def initialize(*arg)
     super(*arg)
     @lastdir = 0
     @lastdirframe = 0
-    @bump_se = 0
   end
 
   def map
@@ -52,6 +51,7 @@ class Game_Player < Game_Character
 
   def can_run?
     return @move_speed > 3 if @move_route_forcing
+    return false if @bumping
     return false if $game_temp.in_menu || $game_temp.in_battle ||
                     $game_temp.message_window_showing || pbMapInterpreterRunning?
     return false if !$player.has_running_shoes && !$PokemonGlobal.diving &&
@@ -92,6 +92,7 @@ class Game_Player < Game_Character
       self.move_speed = 3 if !@move_route_forcing
       new_charset = pbGetPlayerCharset(meta.walk_charset)
     end
+    self.move_speed = 3 if @bumping
     @character_name = new_charset if new_charset
   end
 
@@ -115,9 +116,12 @@ class Game_Player < Game_Character
   #-----------------------------------------------------------------------------
 
   def bump_into_object
-    return if @bump_se && @bump_se > 0
     pbSEPlay("Player bump") if !@move_route_forcing
-    @bump_se = Graphics.frame_rate / 4
+    $stats.bump_count += 1
+    @move_initial_x = @x
+    @move_initial_y = @y
+    @move_timer = 0.0
+    @bumping = true
   end
 
   def add_move_distance_to_stats(distance = 1)
@@ -412,8 +416,6 @@ class Game_Player < Game_Character
       $game_temp.followers.move_followers
     end
     $game_temp.followers.update
-    # Count down the time between allowed bump sounds
-    @bump_se -= 1 if @bump_se && @bump_se > 0
     update_event_triggering
   end
 
@@ -425,7 +427,7 @@ class Game_Player < Game_Character
           !$game_temp.in_mini_update && !$game_temp.in_menu
       # Move player in the direction the directional button is being pressed
       if @moved_last_frame ||
-         (dir > 0 && dir == @lastdir && Graphics.frame_count - @lastdirframe > Graphics.frame_rate / 20)
+         (dir > 0 && dir == @lastdir && System.uptime - @lastdirframe >= 0.075)
         case dir
         when 2 then move_down
         when 4 then move_left
@@ -440,10 +442,10 @@ class Game_Player < Game_Character
         when 8 then turn_up
         end
       end
+      # Record last direction input
+      @lastdirframe = System.uptime if dir != @lastdir
+      @lastdir = dir
     end
-    # Record last direction input
-    @lastdirframe = Graphics.frame_count if dir != @lastdir
-    @lastdir      = dir
   end
 
   def update_move
@@ -501,10 +503,10 @@ class Game_Player < Game_Character
 
   def update_pattern
     if $PokemonGlobal&.surfing || $PokemonGlobal&.diving
-      p = ((Graphics.frame_count % 60) * @@bobFrameSpeed).floor
-      @pattern = p if !@lock_pattern
-      @pattern_surf = p
-      @bob_height = (p >= 2) ? 2 : 0
+      bob_pattern = (4 * System.uptime / SURF_BOB_DURATION).to_i % 4
+      @pattern = bob_pattern if !@lock_pattern
+      @pattern_surf = bob_pattern
+      @bob_height = (bob_pattern >= 2) ? 2 : 0
       @anime_count = 0
     else
       @bob_height = 0

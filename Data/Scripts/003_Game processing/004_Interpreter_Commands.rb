@@ -913,7 +913,7 @@ class Interpreter
   # * Screen Shake
   #-----------------------------------------------------------------------------
   def command_225
-    $game_screen.start_shake(@parameters[0], @parameters[1], @parameters[2] * Graphics.frame_rate / 20)
+    $game_screen.start_shake(@parameters[0], @parameters[1], @parameters[2])
     return true
   end
 

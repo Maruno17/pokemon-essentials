@@ -5,6 +5,7 @@ class GameStats
   # Travel
   attr_accessor :distance_walked, :distance_cycled, :distance_surfed   # surfed includes diving
   attr_accessor :distance_slid_on_ice   # Also counted in distance_walked
+  attr_accessor :bump_count   # Times the player walked into something
   attr_accessor :cycle_count, :surf_count, :dive_count
   # Field actions
   attr_accessor :fly_count, :cut_count, :flash_count
@@ -45,7 +46,7 @@ class GameStats
   attr_accessor :mart_items_bought, :premier_balls_earned
   attr_accessor :drinks_bought, :drinks_won   # From vending machines
   attr_accessor :coins_won, :coins_lost   # Not bought, not spent
-  attr_accessor :battle_points_won, :battle_points_spent   # Currently unused
+  attr_accessor :battle_points_won, :battle_points_spent
   attr_accessor :soot_collected
   # Special stats
   attr_accessor :gym_leader_attempts   # An array of integers
@@ -66,6 +67,7 @@ class GameStats
     @distance_cycled               = 0
     @distance_surfed               = 0
     @distance_slid_on_ice          = 0
+    @bump_count                    = 0
     @cycle_count                   = 0
     @surf_count                    = 0
     @dive_count                    = 0
@@ -170,8 +172,9 @@ class GameStats
 
   def play_time
     if $game_temp&.last_uptime_refreshed_play_time
-      @play_time += System.uptime - $game_temp.last_uptime_refreshed_play_time
-      $game_temp.last_uptime_refreshed_play_time = System.uptime
+      now = System.uptime
+      @play_time += now - $game_temp.last_uptime_refreshed_play_time
+      $game_temp.last_uptime_refreshed_play_time = now
     end
     return @play_time
   end

@@ -28,7 +28,6 @@ class Game_Screen
     @shake_power       = 0
     @shake_speed       = 0
     @shake_duration    = 0
-    @shake_direction   = 1
     @shake             = 0
     @pictures          = [nil]
     (1..100).each { |i| @pictures.push(Game_Picture.new(i)) }
@@ -43,9 +42,9 @@ class Game_Screen
       @tone = tone.clone
       return
     end
-    @tone_initial = @tone.clone
-    @tone_target = tone.clone
-    @tone_duration = duration / 20.0
+    @tone_initial     = @tone.clone
+    @tone_target      = tone.clone
+    @tone_duration    = duration / 20.0
     @tone_timer_start = $stats.play_time
   end
 
@@ -57,16 +56,19 @@ class Game_Screen
     @flash_timer_start   = $stats.play_time
   end
 
+  # duration is time in 1/20ths of a second.
   def start_shake(power, speed, duration)
-    @shake_power    = power
-    @shake_speed    = speed
-    @shake_duration = duration
+    @shake_power       = power
+    @shake_speed       = speed
+    @shake_duration    = duration / 20.0
+    @shake_timer_start = $stats.play_time
   end
 
+  # duration is time in 1/20ths of a second.
   def weather(type, power, duration)
     @weather_type     = GameData::Weather.get(type).id
     @weather_max      = (power + 1) * RPG::Weather::MAX_SPRITES / 10
-    @weather_duration = duration   # In 1/20ths of a seconds
+    @weather_duration = duration
   end
 
   def update
@@ -98,16 +100,25 @@ class Game_Screen
         @flash_timer_start = nil
       end
     end
-    if @shake_duration >= 1 || @shake != 0
-      delta = (@shake_power * @shake_speed * @shake_direction) / 10.0
-      if @shake_duration <= 1 && @shake * (@shake + delta) < 0
-        @shake = 0
+    if @shake_timer_start
+      delta_t = now - @shake_timer_start
+      movement_per_second = @shake_power * @shake_speed * 4
+      limit = @shake_power * 2.5   # Maximum pixel displacement
+      phase = (delta_t * movement_per_second / limit).to_i % 4
+      if phase == 0 || phase == 2
+        @shake = (movement_per_second * delta_t) % limit
+        @shake *= -1 if phase == 2
       else
-        @shake += delta
+        @shake = limit - ((movement_per_second * delta_t) % limit)
+        @shake *= -1 if phase == 3
       end
-      @shake_direction = -1 if @shake > @shake_power * 2
-      @shake_direction = 1 if @shake < -@shake_power * 2
-      @shake_duration -= 1 if @shake_duration >= 1
+      if delta_t >= @shake_duration
+        @shake_phase = phase if !@shake_phase || phase == 1 || phase == 3
+        if phase != @shake_phase || @shake < 2
+          @shake_timer_start = nil
+          @shake = 0
+        end
+      end
     end
     if $game_temp.in_battle
       (51..100).each { |i| @pictures[i].update }
@@ -130,5 +141,5 @@ def pbFlash(color, frames)
 end
 
 def pbShake(power, speed, frames)
-  $game_screen.start_shake(power, speed, frames * Graphics.frame_rate / 20)
+  $game_screen.start_shake(power, speed, frames)
 end

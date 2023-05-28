@@ -72,6 +72,7 @@ class Game_Character
     @always_on_top             = false
     @anime_count               = 0   # Time since pattern was last changed
     @stop_count                = 0   # Time since character last finished moving
+    @bumping                   = false   # Used by the player only when walking into something
     @jump_peak                 = 0   # Max height while jumping
     @jump_distance             = 0   # Total distance of jump
     @jump_fraction             = 0   # How far through a jump we currently are (0-1)
@@ -337,8 +338,7 @@ class Game_Character
   # Movement
   #=============================================================================
   def moving?
-    return @real_x != @x * Game_Map::REAL_RES_X ||
-           @real_y != @y * Game_Map::REAL_RES_Y
+    return !@move_timer.nil?
   end
 
   def jumping?
@@ -955,8 +955,10 @@ class Game_Character
     @real_x = @x * Game_Map::REAL_RES_X if (@real_x - (@x * Game_Map::REAL_RES_X)).abs < Game_Map::X_SUBPIXELS / 2
     @real_y = @y * Game_Map::REAL_RES_Y if (@real_y - (@y * Game_Map::REAL_RES_Y)).abs < Game_Map::Y_SUBPIXELS / 2
     # End of move
-    if !moving?
+    if moving? && @move_timer >= @move_time &&
+       @real_x == @x * Game_Map::REAL_RES_X && @real_y == @y * Game_Map::REAL_RES_Y
       @move_timer = nil
+      @bumping = false
     end
     # End of jump
     if jumping? && @jump_fraction >= 1

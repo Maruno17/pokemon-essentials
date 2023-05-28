@@ -164,6 +164,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
 
   def waitcount=(value)
     @waitcount = (value <= 0) ? 0 : value
+    @wait_timer_start = System.uptime if !@wait_timer_start && value > 0
   end
 
   attr_reader :cursorMode
@@ -282,24 +283,25 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   end
 
   def setText(value)
-    @waitcount     = 0
-    @curchar       = 0
-    @drawncurchar  = -1
+    @waitcount = 0
+    @wait_timer_start = nil
+    @curchar = 0
+    @drawncurchar = -1
     @lastDrawnChar = -1
-    @text          = value
-    @textlength    = unformattedTextLength(value)
-    @scrollstate   = 0
-    @scrollY       = 0
-    @linesdrawn    = 0
-    @realframes    = 0
-    @textchars     = []
-    width  = 1
+    @text = value
+    @textlength = unformattedTextLength(value)
+    @scrollstate = 0
+    @scrollY = 0
+    @linesdrawn = 0
+    @realframes = 0
+    @textchars = []
+    width = 1
     height = 1
     numlines = 0
     visiblelines = (self.height - self.borderY) / @lineHeight
     if value.length == 0
-      @fmtchars     = []
-      @bitmapwidth  = width
+      @fmtchars = []
+      @bitmapwidth = width
       @bitmapheight = height
       @numtextchars = 0
     else
@@ -339,19 +341,19 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         @fmtchars.each do |ch|
           chx = ch[1] + ch[3]
           chy = ch[2] + ch[4]
-          width  = chx if width < chx
+          width = chx if width < chx
           height = chy if height < chy
           @textchars.push(ch[5] ? "" : ch[0])
         end
       end
-      @bitmapwidth  = width
+      @bitmapwidth = width
       @bitmapheight = height
       @numtextchars = @textchars.length
     end
     stopPause
     @displaying = @letterbyletter
-    @needclear  = true
-    @nodraw     = @letterbyletter
+    @needclear = true
+    @nodraw = @letterbyletter
     refresh
   end
 
@@ -573,9 +575,12 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   def update
     super
     @pausesprite.update if @pausesprite&.visible
-    if @waitcount > 0
-      @waitcount -= 1
-      return
+    if @wait_timer_start
+      if System.uptime - @wait_timer_start >= @waitcount
+        @wait_timer_start = nil
+        @waitcount = 0
+      end
+      return if @wait_timer_start
     end
     if busy?
       refresh if !@frameskipChanged

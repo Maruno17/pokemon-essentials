@@ -312,7 +312,7 @@ class SpriteWindow < Window
     if @pause
       oldpauseframe = @pauseframe
       oldpauseopacity = @pauseopacity
-      @pauseframe = (Graphics.frame_count / 8) % 4
+      @pauseframe = (System.uptime * 5) % 4   # 4 frames, 5 frames per second
       @pauseopacity = [@pauseopacity + 64, 255].min
       mustchange = @pauseframe != oldpauseframe || @pauseopacity != oldpauseopacity
     end

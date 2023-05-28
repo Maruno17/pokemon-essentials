@@ -289,7 +289,7 @@ SaveData.register_conversion(:v20_add_stats) do
   to_all do |save_data|
     unless save_data.has_key?(:stats)
       save_data[:stats] = GameStats.new
-      save_data[:stats].play_time = save_data[:frame_count].to_f / Graphics.frame_rate
+      save_data[:stats].play_time = (save_data[:frame_count] || 0).to_f / Graphics.frame_rate
       save_data[:stats].play_sessions = 1
       save_data[:stats].time_last_saved = save_data[:stats].play_time
     end
@@ -401,6 +401,16 @@ SaveData.register_conversion(:v21_replace_flute_booleans) do
         end
         @whiteFluteUsed = nil
       end
+    end
+  end
+end
+
+SaveData.register_conversion(:v21_add_bump_stat) do
+  essentials_version 21
+  display_title "Adding a bump stat"
+  to_value :stats do |stats|
+    stats.instance_eval do
+      @bump_count = 0 if !@bump_count
     end
   end
 end

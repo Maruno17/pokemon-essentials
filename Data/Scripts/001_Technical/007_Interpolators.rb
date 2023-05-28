@@ -8,7 +8,7 @@ def lerp(start_val, end_val, duration, delta, now = nil)
   delta = now - delta if now
   return start_val if delta <= 0
   return end_val if delta >= duration
-  return start_val + (end_val - start_val) * delta / duration
+  return start_val + (end_val - start_val) * delta / duration.to_f
 end
 
 #===============================================================================
