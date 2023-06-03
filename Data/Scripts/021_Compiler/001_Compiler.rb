@@ -1098,9 +1098,7 @@ module Compiler
         end
       end
       raise Reset.new if e.is_a?(Hangup)
-      loop do
-        Graphics.update
-      end
+      raise "Unknown exception when compiling."
     end
   end
 end

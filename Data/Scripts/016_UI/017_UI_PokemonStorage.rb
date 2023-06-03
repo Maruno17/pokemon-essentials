@@ -5,26 +5,20 @@ class PokemonBoxIcon < IconSprite
   def initialize(pokemon, viewport = nil)
     super(0, 0, viewport)
     @pokemon = pokemon
-    @release = SpriteInterpolator.new
-    @startRelease = false
+    @release_timer_start = nil
     refresh
   end
 
   def releasing?
-    return @release.tweening?
+    return !@release_timer_start.nil?
   end
 
   def release
-    self.ox = self.src_rect.width / 2   # 32
+    self.ox = self.src_rect.width / 2    # 32
     self.oy = self.src_rect.height / 2   # 32
-    self.x += self.src_rect.width / 2   # 32
+    self.x += self.src_rect.width / 2    # 32
     self.y += self.src_rect.height / 2   # 32
-    @release.tween(self,
-                   [[SpriteInterpolator::ZOOM_X, 0],
-                    [SpriteInterpolator::ZOOM_Y, 0],
-                    [SpriteInterpolator::OPACITY, 0]],
-                   100)
-    @startRelease = true
+    @release_timer_start = System.uptime
   end
 
   def refresh
@@ -35,9 +29,17 @@ class PokemonBoxIcon < IconSprite
 
   def update
     super
-    @release.update
-    self.color = Color.new(0, 0, 0, 0)
-    dispose if @startRelease && !releasing?
+    if releasing?
+      time_now = System.uptime
+      self.zoom_x = lerp(1.0, 0.0, 1.5, @release_timer_start, System.uptime)
+      self.zoom_y = self.zoom_x
+      self.opacity = lerp(255, 0, 1.5, @release_timer_start, System.uptime)
+      self.color = Color.new(0, 0, 0, 0)
+      if self.opacity == 0
+        @release_timer_start = nil
+        dispose
+      end
+    end
   end
 end
 

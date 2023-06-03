@@ -116,33 +116,34 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   attr_reader   :waitcount
 
   def initialize(text = "")
-    @cursorMode       = MessageConfig::CURSOR_POSITION
-    @endOfText        = nil
-    @scrollstate      = 0
-    @realframes       = 0
-    @scrollY          = 0
-    @nodraw           = false
-    @lineHeight       = 32
-    @linesdrawn       = 0
-    @bufferbitmap     = nil
-    @letterbyletter   = false
-    @starting         = true
-    @displaying       = false
-    @lastDrawnChar    = -1
-    @fmtchars         = []
-    @frameskipChanged = false
-    @frameskip        = MessageConfig.pbGetTextSpeed
+    @cursorMode         = MessageConfig::CURSOR_POSITION
+    @endOfText          = nil
+    @scrollstate        = 0
+    @scrollY            = 0
+    @scroll_timer_start = nil
+    @realframes         = 0
+    @nodraw             = false
+    @lineHeight         = 32
+    @linesdrawn         = 0
+    @bufferbitmap       = nil
+    @letterbyletter     = false
+    @starting           = true
+    @displaying         = false
+    @lastDrawnChar      = -1
+    @fmtchars           = []
+    @text_delay_changed = false
+    @text_delay         = MessageConfig.pbGetTextSpeed
     super(0, 0, 33, 33)
-    @pausesprite      = nil
-    @text             = ""
+    @pausesprite        = nil
+    @text               = ""
     self.contents = Bitmap.new(1, 1)
     pbSetSystemFont(self.contents)
     self.resizeToFit(text, Graphics.width)
     colors = getDefaultTextColors(self.windowskin)
-    @baseColor        = colors[0]
-    @shadowColor      = colors[1]
-    self.text         = text
-    @starting         = false
+    @baseColor          = colors[0]
+    @shadowColor        = colors[1]
+    self.text           = text
+    @starting           = false
   end
 
   def self.newWithSize(text, x, y, width, height, viewport = nil)
@@ -189,13 +190,14 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     refresh
   end
 
+  # Delay in seconds between two adjacent characters appearing.
   def textspeed
-    @frameskip
+    return @text_delay
   end
 
   def textspeed=(value)
-    @frameskipChanged = true if @frameskip != value
-    @frameskip = value
+    @text_delay_changed = true if @text_delay != value
+    @text_delay = value
   end
 
   def width=(value)
@@ -285,6 +287,8 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   def setText(value)
     @waitcount = 0
     @wait_timer_start = nil
+    @display_timer = 0.0
+    @display_last_updated = System.uptime
     @curchar = 0
     @drawncurchar = -1
     @lastDrawnChar = -1
@@ -292,6 +296,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     @textlength = unformattedTextLength(value)
     @scrollstate = 0
     @scrollY = 0
+    @scroll_timer_start = nil
     @linesdrawn = 0
     @realframes = 0
     @textchars = []
@@ -400,7 +405,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     resume
     visiblelines = (self.height - self.borderY) / @lineHeight
     loop do
-      curcharSkip(999)
+      curcharSkip(true)
       break if @curchar >= @fmtchars.length    # End of message
       if @textchars[@curchar] == "\1"          # Pause message
         @pausing = true if @curchar < @numtextchars - 1
@@ -462,7 +467,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     self.oy       = @scrollY
     numchars = @numtextchars
     numchars = [@curchar, @numtextchars].min if self.letterbyletter
-    return if busy? && @drawncurchar == @curchar && @scrollstate == 0
+    return if busy? && @drawncurchar == @curchar && !@scroll_timer_start
     if !self.letterbyletter || !oldcontents.equal?(self.contents)
       @drawncurchar = -1
       @needclear    = true
@@ -508,7 +513,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   def redrawText
     if @letterbyletter
       oldPosition = self.position
-      self.text = self.text
+      self.text = self.text   # Clears the text already drawn
       oldPosition = @numtextchars if oldPosition > @numtextchars
       while self.position != oldPosition
         refresh
@@ -520,55 +525,56 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   end
 
   def updateInternal
-    curcharskip = @frameskip < 0 ? @frameskip.abs : 1
+    time_now = System.uptime
+    @display_last_updated = time_now if !@display_last_updated
+    delta_t = time_now - @display_last_updated
+    @display_last_updated = time_now
     visiblelines = (self.height - self.borderY) / @lineHeight
-    if @textchars[@curchar] == "\1"
-      if !@pausing
-        @realframes += 1
-        if @realframes >= @frameskip || @frameskip < 0
-          curcharSkip(curcharskip)
-          @realframes = 0
-        end
-      end
-    elsif @textchars[@curchar] == "\n"
-      if @linesdrawn >= visiblelines - 1
-        if @scrollstate < @lineHeight
-          @scrollstate += [(@lineHeight / 4), 1].max
-          @scrollY     += [(@lineHeight / 4), 1].max
-        end
-        if @scrollstate >= @lineHeight
-          @realframes += 1
-          if @realframes >= @frameskip || @frameskip < 0
-            curcharSkip(curcharskip)
-            @linesdrawn += 1
-            @realframes  = 0
+    show_more_characters = false
+    # Pauses and new lines
+    if @textchars[@curchar] == "\1"   # Waiting
+      show_more_characters = true if !@pausing
+    elsif @textchars[@curchar] == "\n"   # Move to new line
+      if @linesdrawn >= visiblelines - 1   # Need to scroll text to show new line
+        if @scroll_timer_start
+          old_y = @scrollstate
+          new_y = lerp(0, @lineHeight, 0.1, @scroll_timer_start, time_now)
+          @scrollstate = new_y
+          @scrollY += new_y - old_y
+          if @scrollstate >= @lineHeight
             @scrollstate = 0
+            @scroll_timer_start = nil
+            @linesdrawn += 1
+            show_more_characters = true
           end
+        else
+          show_more_characters = true
         end
-      else
-        @realframes += 1
-        if @realframes >= @frameskip || @frameskip < 0
-          curcharSkip(curcharskip)
-          @linesdrawn += 1
-          @realframes = 0
-        end
+      else   # New line but the next line can be shown without scrolling to it
+        @linesdrawn += 1
+        show_more_characters = true
       end
-    elsif @curchar <= @numtextchars
-      @realframes += 1
-      if @realframes >= @frameskip || @frameskip < 0
-        curcharSkip(curcharskip)
-        @realframes = 0
-      end
-      if @textchars[@curchar] == "\1"
-        @pausing = true if @curchar < @numtextchars - 1
-        self.startPause
-        refresh
-      end
+    elsif @curchar <= @numtextchars   # Displaying more text
+      show_more_characters = true
     else
-      @displaying  = false
+      @displaying = false
       @scrollstate = 0
-      @scrollY     = 0
-      @linesdrawn  = 0
+      @scrollY = 0
+      @scroll_timer_start = nil
+      @linesdrawn = 0
+    end
+    # Keep displaying more text
+    if show_more_characters
+      @display_timer += delta_t
+      if curcharSkip
+        if @textchars[@curchar] == "\n" && @linesdrawn >= visiblelines - 1
+          @scroll_timer_start = time_now
+        elsif @textchars[@curchar] == "\1"
+          @pausing = true if @curchar < @numtextchars - 1
+          self.startPause
+          refresh
+        end
+      end
     end
   end
 
@@ -583,26 +589,33 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       return if @wait_timer_start
     end
     if busy?
-      refresh if !@frameskipChanged
+      refresh if !@text_delay_changed
       updateInternal
-      # following line needed to allow "textspeed=-999" to work seamlessly
-      refresh if @frameskipChanged
+      # following line needed to allow "textspeed=0" to work seamlessly
+      # TODO: I don't think this is needed any more, but I don't know where to
+      #       look to confirm it'd work properly without this line.
+      refresh if @text_delay_changed
     end
-    @frameskipChanged = false
+    @text_delay_changed = false
   end
 
   #-----------------------------------------------------------------------------
 
   private
 
-  def curcharSkip(skip)
-    skip.times do
+  def curcharSkip(instant = false)
+    ret = false
+    loop do
+      break if @display_timer < @text_delay && !instant
+      @display_timer -= @text_delay if !instant
+      ret = true
       @curchar += 1
       break if @textchars[@curchar] == "\n" ||   # newline
                @textchars[@curchar] == "\1" ||   # pause
                @textchars[@curchar] == "\2" ||   # letter-by-letter break
                @textchars[@curchar].nil?
     end
+    return ret
   end
 end
 
@@ -615,7 +628,8 @@ class Window_InputNumberPokemon < SpriteWindow_Base
   def initialize(digits_max)
     @digits_max = digits_max
     @number = 0
-    @frame = 0
+    @cursor_timer_start = System.uptime
+    @cursor_shown = true
     @sign = false
     @negative = false
     super(0, 0, 32, 32)
@@ -674,7 +688,11 @@ class Window_InputNumberPokemon < SpriteWindow_Base
   def update
     super
     digits = @digits_max + (@sign ? 1 : 0)
-    refresh if @frame % 15 == 0
+    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i % 2 == 0
+    if cursor_to_show != @cursor_shown
+      @cursor_shown = cursor_to_show
+      refresh
+    end
     if self.active
       if Input.repeat?(Input::UP) || Input.repeat?(Input::DOWN)
         pbPlayCursorSE
@@ -696,19 +714,20 @@ class Window_InputNumberPokemon < SpriteWindow_Base
         if digits >= 2
           pbPlayCursorSE
           @index = (@index + 1) % digits
-          @frame = 0
+          @cursor_timer_start = System.uptime
+          @cursor_shown = true
           refresh
         end
       elsif Input.repeat?(Input::LEFT)
         if digits >= 2
           pbPlayCursorSE
           @index = (@index + digits - 1) % digits
-          @frame = 0
+          @cursor_timer_start = System.uptime
+          @cursor_shown = true
           refresh
         end
       end
     end
-    @frame = (@frame + 1) % 30
   end
 
   #-----------------------------------------------------------------------------
@@ -721,8 +740,10 @@ class Window_InputNumberPokemon < SpriteWindow_Base
                      x + (12 - (textwidth / 2)),
                      y - 2 + (self.contents.text_offset_y || 0),   # TEXT OFFSET (the - 2)
                      textwidth + 4, 32, text, @baseColor, @shadowColor)
-    if @index == i && @active && @frame / 15 == 0
-      self.contents.fill_rect(x + (12 - (textwidth / 2)), y + 30, textwidth, 2, @baseColor)
+    # Draw cursor
+    if @index == i && @active && @cursor_shown
+      self.contents.fill_rect(x + (12 - (textwidth / 2)), y + 28, textwidth, 4, @shadowColor)
+      self.contents.fill_rect(x + (12 - (textwidth / 2)), y + 28, textwidth - 2, 2, @baseColor)
     end
   end
 end

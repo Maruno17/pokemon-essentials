@@ -241,7 +241,7 @@ module BattleAnimationEditor
       Graphics.update
       Input.update
       sliderwin2.update
-      if sliderwin2.changed?(0) # Number of frames
+      if sliderwin2.changed?(0)   # Number of frames
         if path
           path = path.smoothPointPath(sliderwin2.value(0), false)
           i = 0
@@ -341,7 +341,7 @@ module BattleAnimationEditor
         points.clear
         if showline
           path = curveToPointPath(curve, sliderwin2.value(0))
-  #       File.open("pointpath.txt","wb") { |f| f.write(path.inspect) }
+#          File.open("pointpath.txt", "wb") { |f| f.write(path.inspect) }
           path.each do |point|
             points.push(PointSprite.new(point[0], point[1], canvas.viewport))
           end
@@ -400,11 +400,11 @@ module BattleAnimationEditor
         path.each do |point|
           points.push(PointSprite.new(point[0], point[1], canvas.viewport))
         end
-  #     File.open("pointpath.txt","wb") { |f| f.write(path.inspect) }
+#        File.open("pointpath.txt", "wb") { |f| f.write(path.inspect) }
         sliderwin2.visible = true
         next
       elsif sliderwin2.changed?(okbutton) && path
-  #     File.open("pointpath.txt","wb") { |f| f.write(path.inspect) }
+#        File.open("pointpath.txt", "wb") { |f| f.write(path.inspect) }
         neededsize = canvas.currentframe + sliderwin2.value(0)
         if neededsize > canvas.animation.length
           canvas.animation.resize(neededsize)

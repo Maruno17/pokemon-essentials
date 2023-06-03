@@ -216,19 +216,19 @@ class PokemonEntryScene
             pbPlayDecisionSE
             break
           end
-        elsif index == -1 # Insert a space
+        elsif index == -1   # Insert a space
           if @sprites["entry"].insert(" ")
             pbPlayDecisionSE
           else
             pbPlayBuzzerSE
           end
-        elsif index == -2 # Change character set
+        elsif index == -2   # Change character set
           pbPlayDecisionSE
           @symtype += 1
           @symtype = 0 if @symtype >= @@Characters.length
           @sprites["entry2"].setCharset(@@Characters[@symtype][0])
           @sprites["entry2"].setOtherCharset(@@Characters[@symtype][1])
-        else # Insert given character
+        else   # Insert given character
           if @sprites["entry"].insert(@sprites["entry2"].character)
             pbPlayDecisionSE
           else

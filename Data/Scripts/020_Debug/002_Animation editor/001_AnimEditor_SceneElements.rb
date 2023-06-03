@@ -77,7 +77,7 @@ module BattleAnimationEditor
       menuwindow.update
       hit = menuwindow.hittest
       menuwindow.index = hit if hit >= 0
-      if Input.trigger?(Input::MOUSELEFT) || Input.trigger?(Input::MOUSERIGHT) # Left or right button
+      if Input.trigger?(Input::MOUSELEFT) || Input.trigger?(Input::MOUSERIGHT)   # Left or right button
         menuwindow.dispose
         return hit
       end
@@ -86,7 +86,7 @@ module BattleAnimationEditor
         menuwindow.dispose
         return hit
       end
-      if Input.trigger?(Input::BACK) # Escape
+      if Input.trigger?(Input::BACK)   # Escape
         break
       end
     end
@@ -198,7 +198,7 @@ module BattleAnimationEditor
       right.x += self.x
       right.y += self.y
       swatchrects = []
-      repeattime = Input.time?(Input::MOUSELEFT) / 1000
+      repeattime = Input.time?(Input::MOUSELEFT)
       NUMFRAMES.times do |i|
         swatchrects.push(Rect.new(arrowwidth + (i * 96) + self.x, self.y, 96, 96))
       end
@@ -211,7 +211,7 @@ module BattleAnimationEditor
       end
       # Left arrow
       if left.contains?(mousepos[0], mousepos[1])
-        if repeattime > 750
+        if repeattime > 0.75
           @start -= 3
         else
           @start -= 1
@@ -221,7 +221,7 @@ module BattleAnimationEditor
       end
       # Right arrow
       if right.contains?(mousepos[0], mousepos[1])
-        if repeattime > 750
+        if repeattime > 0.75
           @start += 3
         else
           @start += 1
@@ -903,7 +903,7 @@ module BattleAnimationEditor
       end
       updateInput
   #    @testscreen.update
-  #    self.bitmap=@testscreen.bitmap
+  #    self.bitmap = @testscreen.bitmap
       if @currentframe < @animation.length
         PBAnimation::MAX_SPRITES.times do |i|
           next if !@dirty[i]

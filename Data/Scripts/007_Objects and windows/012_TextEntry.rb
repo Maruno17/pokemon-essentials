@@ -94,8 +94,9 @@ class Window_TextEntry < SpriteWindow_Base
     end
     @helper = CharacterEntryHelper.new(text)
     @heading = heading
+    @cursor_timer_start = System.uptime
+    @cursor_shown = true
     self.active = true
-    @frame = 0
     refresh
   end
 
@@ -128,7 +129,8 @@ class Window_TextEntry < SpriteWindow_Base
 
   def insert(ch)
     if @helper.insert(ch)
-      @frame = 0
+      @cursor_timer_start = System.uptime
+      @cursor_shown = true
       self.refresh
       return true
     end
@@ -137,7 +139,8 @@ class Window_TextEntry < SpriteWindow_Base
 
   def delete
     if @helper.delete
-      @frame = 0
+      @cursor_timer_start = System.uptime
+      @cursor_shown = true
       self.refresh
       return true
     end
@@ -145,21 +148,25 @@ class Window_TextEntry < SpriteWindow_Base
   end
 
   def update
-    @frame += 1
-    @frame %= 20
-    self.refresh if (@frame % 10) == 0
+    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i % 2 == 0
+    if cursor_to_show != @cursor_shown
+      @cursor_shown = cursor_to_show
+      refresh
+    end
     return if !self.active
     # Moving cursor
     if Input.repeat?(Input::LEFT) && Input.press?(Input::ACTION)
       if @helper.cursor > 0
         @helper.cursor -= 1
-        @frame = 0
+        @cursor_timer_start = System.uptime
+        @cursor_shown = true
         self.refresh
       end
     elsif Input.repeat?(Input::RIGHT) && Input.press?(Input::ACTION)
       if @helper.cursor < self.text.scan(/./m).length
         @helper.cursor += 1
-        @frame = 0
+        @cursor_timer_start = System.uptime
+        @cursor_shown = true
         self.refresh
       end
     elsif Input.repeat?(Input::BACK)   # Backspace
@@ -201,13 +208,13 @@ class Window_TextEntry < SpriteWindow_Base
       # Draw text
       pbDrawShadowText(bitmap, x, y, textwidth + 4, 32, c, @baseColor, @shadowColor)
       # Draw cursor if necessary
-      if ((@frame / 10) & 1) == 0 && i == @helper.cursor
+      if i == @helper.cursor && @cursor_shown
         bitmap.fill_rect(x, y + 4, 2, 24, cursorcolor)
       end
       # Add x to drawn text width
       x += textwidth
     end
-    if ((@frame / 10) & 1) == 0 && textscan.length == @helper.cursor
+    if textscan.length == @helper.cursor && @cursor_shown
       bitmap.fill_rect(x, y + 4, 2, 24, cursorcolor)
     end
   end
@@ -218,22 +225,26 @@ end
 #===============================================================================
 class Window_TextEntry_Keyboard < Window_TextEntry
   def update
-    @frame += 1
-    @frame %= 20
-    self.refresh if (@frame % 10) == 0
+    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i % 2 == 0
+    if cursor_to_show != @cursor_shown
+      @cursor_shown = cursor_to_show
+      refresh
+    end
     return if !self.active
     # Moving cursor
     if Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
       if @helper.cursor > 0
         @helper.cursor -= 1
-        @frame = 0
+        @cursor_timer_start = System.uptime
+        @cursor_shown = true
         self.refresh
       end
       return
     elsif Input.triggerex?(:RIGHT) || Input.repeatex?(:RIGHT)
       if @helper.cursor < self.text.scan(/./m).length
         @helper.cursor += 1
-        @frame = 0
+        @cursor_timer_start = System.uptime
+        @cursor_shown = true
         self.refresh
       end
       return
@@ -260,7 +271,8 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     @firstline = 0
     @cursorLine = 0
     @cursorColumn = 0
-    @frame = 0
+    @cursor_timer_start = System.uptime
+    @cursor_shown = true
     self.active = true
     refresh
   end
@@ -301,7 +313,8 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   def insert(ch)
     @helper.cursor = getPosFromLineAndColumn(@cursorLine, @cursorColumn)
     if @helper.insert(ch)
-      @frame = 0
+      @cursor_timer_start = System.uptime
+      @cursor_shown = true
       @textchars = nil
       moveCursor(0, 1)
       self.refresh
@@ -313,7 +326,8 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   def delete
     @helper.cursor = getPosFromLineAndColumn(@cursorLine, @cursorColumn)
     if @helper.delete
-      @frame = 0
+      @cursor_timer_start = System.uptime
+      @cursor_shown = true
       moveCursor(0, -1) # use old textchars
       @textchars = nil
       self.refresh
@@ -407,7 +421,8 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     # Calculate new cursor position
     @helper.cursor = getPosFromLineAndColumn(@cursorLine, @cursorColumn)
     if doRefresh
-      @frame = 0
+      @cursor_timer_start = System.uptime
+      @cursor_shown = true
       self.refresh
     end
     @firstline = @cursorLine if @cursorLine < @firstline
@@ -450,9 +465,11 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   end
 
   def update
-    @frame += 1
-    @frame %= 20
-    self.refresh if (@frame % 10) == 0
+    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i % 2 == 0
+    if cursor_to_show != @cursor_shown
+      @cursor_shown = cursor_to_show
+      refresh
+    end
     return if !self.active
     # Moving cursor
     if Input.triggerex?(:UP) || Input.repeatex?(:UP)
@@ -519,7 +536,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
       pbDrawShadowText(bitmap, text[1], textY, textwidth, textheight, c, @baseColor, @shadowColor)
     end
     # Draw cursor
-    if ((@frame / 10) & 1) == 0
+    if @cursor_shown
       textheight = bitmap.text_size("X").height
       cursorY = (textheight * @cursorLine) - startY
       cursorX = 0

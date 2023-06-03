@@ -260,100 +260,38 @@ module RPG
   class Sprite < ::Sprite
     def initialize(viewport = nil)
       super(viewport)
-      @_whiten_duration    = 0
-      @_appear_duration    = 0
-      @_escape_duration    = 0
-      @_collapse_duration  = 0
-      @_damage_duration    = 0
       @_animation_duration = 0
-      @_animation_frame    = 0
-      @_blink              = false
-      @animations     = []
+      @_animation_frame = 0
+      @animations = []
       @loopAnimations = []
     end
 
     def dispose
-      dispose_damage
       dispose_animation
       dispose_loop_animation
       super
     end
 
-    def whiten
-      self.blend_type = 0
-      self.color.set(255, 255, 255, 128)
-      self.opacity = 255
-      @_whiten_duration   = 16
-      @_appear_duration   = 0
-      @_escape_duration   = 0
-      @_collapse_duration = 0
+    def dispose_animation
+      @animations.each { |a| a&.dispose_animation }
+      @animations.clear
     end
 
-    def appear
-      self.blend_type     = 0
-      self.color.set(0, 0, 0, 0)
-      self.opacity        = 0
-      @_appear_duration   = 16
-      @_whiten_duration   = 0
-      @_escape_duration   = 0
-      @_collapse_duration = 0
+    def dispose_loop_animation
+      @loopAnimations.each { |a| a&.dispose_loop_animation }
+      @loopAnimations.clear
     end
 
-    def escape
-      self.blend_type     = 0
-      self.color.set(0, 0, 0, 0)
-      self.opacity        = 255
-      @_escape_duration   = 32
-      @_whiten_duration   = 0
-      @_appear_duration   = 0
-      @_collapse_duration = 0
+    def x=(x)
+      @animations.each { |a| a.x = x if a }
+      @loopAnimations.each { |a| a.x = x if a }
+      super
     end
 
-    def collapse
-      self.blend_type     = 1
-      self.color.set(255, 64, 64, 255)
-      self.opacity        = 255
-      @_collapse_duration = 48
-      @_whiten_duration   = 0
-      @_appear_duration   = 0
-      @_escape_duration   = 0
-    end
-
-    def damage(value, critical)
-      dispose_damage
-      damage_string = (value.is_a?(Numeric)) ? value.abs.to_s : value.to_s
-      bitmap = Bitmap.new(160, 48)
-      bitmap.font.name = "Arial Black"
-      bitmap.font.size = 32
-      bitmap.font.color.set(0, 0, 0)
-      bitmap.draw_text(-1, 12 - 1, 160, 36, damage_string, 1)
-      bitmap.draw_text(+1, 12 - 1, 160, 36, damage_string, 1)
-      bitmap.draw_text(-1, 12 + 1, 160, 36, damage_string, 1)
-      bitmap.draw_text(+1, 12 + 1, 160, 36, damage_string, 1)
-      if value.is_a?(Numeric) && value < 0
-        bitmap.font.color.set(176, 255, 144)
-      else
-        bitmap.font.color.set(255, 255, 255)
-      end
-      bitmap.draw_text(0, 12, 160, 36, damage_string, 1)
-      if critical
-        bitmap.font.size = 20
-        bitmap.font.color.set(0, 0, 0)
-        bitmap.draw_text(-1, -1, 160, 20, "CRITICAL", 1)
-        bitmap.draw_text(+1, -1, 160, 20, "CRITICAL", 1)
-        bitmap.draw_text(-1, +1, 160, 20, "CRITICAL", 1)
-        bitmap.draw_text(+1, +1, 160, 20, "CRITICAL", 1)
-        bitmap.font.color.set(255, 255, 255)
-        bitmap.draw_text(0, 0, 160, 20, "CRITICAL", 1)
-      end
-      @_damage_sprite = ::Sprite.new(self.viewport)
-      @_damage_sprite.bitmap = bitmap
-      @_damage_sprite.ox     = 80
-      @_damage_sprite.oy     = 20
-      @_damage_sprite.x      = self.x
-      @_damage_sprite.y      = self.y - (self.oy / 2)
-      @_damage_sprite.z      = 3000
-      @_damage_duration      = 40
+    def y=(y)
+      @animations.each { |a| a.y = y if a }
+      @loopAnimations.each { |a| a.y = y if a }
+      super
     end
 
     def pushAnimation(array, anim)
@@ -377,95 +315,9 @@ module RPG
       pushAnimation(@loopAnimations, anim)
     end
 
-    def dispose_damage
-      return if @_damage_sprite.nil?
-      @_damage_sprite.bitmap.dispose
-      @_damage_sprite.dispose
-      @_damage_sprite   = nil
-      @_damage_duration = 0
-    end
-
-    def dispose_animation
-      @animations.each { |a| a&.dispose_animation }
-      @animations.clear
-    end
-
-    def dispose_loop_animation
-      @loopAnimations.each { |a| a&.dispose_loop_animation }
-      @loopAnimations.clear
-    end
-
-    def blink_on
-      return if @_blink
-      @_blink = true
-      @_blink_count = 0
-    end
-
-    def blink_off
-      return unless @_blink
-      @_blink = false
-      self.color.set(0, 0, 0, 0)
-    end
-
-    def blink?
-      return @_blink
-    end
-
     def effect?
-      return true if @_whiten_duration > 0
-      return true if @_appear_duration > 0
-      return true if @_escape_duration > 0
-      return true if @_collapse_duration > 0
-      return true if @_damage_duration > 0
       @animations.each { |a| return true if a.effect? }
       return false
-    end
-
-    def update
-      super
-      if @_whiten_duration > 0
-        @_whiten_duration -= 1
-        self.color.alpha = 128 - ((16 - @_whiten_duration) * 10)
-      end
-      if @_appear_duration > 0
-        @_appear_duration -= 1
-        self.opacity = (16 - @_appear_duration) * 16
-      end
-      if @_escape_duration > 0
-        @_escape_duration -= 1
-        self.opacity = 256 - ((32 - @_escape_duration) * 10)
-      end
-      if @_collapse_duration > 0
-        @_collapse_duration -= 1
-        self.opacity = 256 - ((48 - @_collapse_duration) * 6)
-      end
-      if @_damage_duration > 0
-        @_damage_duration -= 1
-        case @_damage_duration
-        when 38..39
-          @_damage_sprite.y -= 4
-        when 36..37
-          @_damage_sprite.y -= 2
-        when 34..35
-          @_damage_sprite.y += 2
-        when 28..33
-          @_damage_sprite.y += 4
-        end
-        @_damage_sprite.opacity = 256 - ((12 - @_damage_duration) * 32)
-        dispose_damage if @_damage_duration == 0
-      end
-      @animations.each { |a| a.update }
-      @loopAnimations.each { |a| a.update }
-      if @_blink
-        @_blink_count = (@_blink_count + 1) % 32
-        if @_blink_count < 16
-          alpha = (16 - @_blink_count) * 6
-        else
-          alpha = (@_blink_count - 16) * 6
-        end
-        self.color.set(255, 255, 255, alpha)
-      end
-      SpriteAnimation.clear
     end
 
     def update_animation
@@ -476,16 +328,11 @@ module RPG
       @loopAnimations.each { |a| a.update_loop_animation if a&.active? }
     end
 
-    def x=(x)
-      @animations.each { |a| a.x = x if a }
-      @loopAnimations.each { |a| a.x = x if a }
+    def update
       super
-    end
-
-    def y=(y)
-      @animations.each { |a| a.y = y if a }
-      @loopAnimations.each { |a| a.y = y if a }
-      super
+      @animations.each { |a| a.update }
+      @loopAnimations.each { |a| a.update }
+      SpriteAnimation.clear
     end
   end
 end

@@ -157,15 +157,15 @@ module BattleAnimationEditor
                                _INTL("Rename"),
                                _INTL("Delete")], -1)
         case cmd2
-        when 0 # Load Animation
+        when 0   # Load Animation
           canvas.loadAnimation(animations[cmdwin.index])
           animwin.animbitmap = canvas.animbitmap
           animations.selected = cmdwin.index
           break
-        when 1 # Rename
+        when 1   # Rename
           pbAnimName(animations[cmdwin.index], cmdwin)
           cmdwin.refresh
-        when 2 # Delete
+        when 2   # Delete
           if pbConfirmMessage(_INTL("Are you sure you want to delete this animation?"))
             animations[cmdwin.index] = PBAnimation.new
             cmdwin.commands[cmdwin.index] = _INTL("{1} {2}", cmdwin.index, animations[cmdwin.index].name)
@@ -409,13 +409,13 @@ module BattleAnimationEditor
          cmdwin.index != cmdEditBG &&
          cmdwin.index != cmdNewFO &&
          cmdwin.index != cmdEditFO
-        if framewindow.changed?(1) # Set Frame
+        if framewindow.changed?(1)   # Set Frame
           canvas.animation.timing[cmdwin.index].frame = framewindow.value(0) - 1
           cmdwin.commands[cmdwin.index] = canvas.animation.timing[cmdwin.index].to_s
           cmdwin.refresh
           next
         end
-        if framewindow.changed?(2) # Delete Timing
+        if framewindow.changed?(2)   # Delete Timing
           canvas.animation.timing.delete_at(cmdwin.index)
           cmdwin.commands.delete_at(cmdwin.index)
           cmdNewSound -= 1 if cmdNewSound >= 0
@@ -429,35 +429,35 @@ module BattleAnimationEditor
       end
       if Input.trigger?(Input::USE)
         redrawcmds = false
-        if cmdwin.index == cmdNewSound # Add new sound
+        if cmdwin.index == cmdNewSound   # Add new sound
           newaudio = PBAnimTiming.new(0)
           if pbSelectSE(canvas, newaudio)
             newaudio.frame = framewindow.value(0) - 1
             canvas.animation.timing.push(newaudio)
             redrawcmds = true
           end
-        elsif cmdwin.index == cmdNewBG # Add new background graphic set
+        elsif cmdwin.index == cmdNewBG   # Add new background graphic set
           newtiming = PBAnimTiming.new(1)
           if pbSelectBG(canvas, newtiming)
             newtiming.frame = framewindow.value(0) - 1
             canvas.animation.timing.push(newtiming)
             redrawcmds = true
           end
-        elsif cmdwin.index == cmdEditBG # Add new background edit
+        elsif cmdwin.index == cmdEditBG   # Add new background edit
           newtiming = PBAnimTiming.new(2)
           if pbEditBG(canvas, newtiming)
             newtiming.frame = framewindow.value(0) - 1
             canvas.animation.timing.push(newtiming)
             redrawcmds = true
           end
-        elsif cmdwin.index == cmdNewFO # Add new foreground graphic set
+        elsif cmdwin.index == cmdNewFO   # Add new foreground graphic set
           newtiming = PBAnimTiming.new(3)
           if pbSelectBG(canvas, newtiming)
             newtiming.frame = framewindow.value(0) - 1
             canvas.animation.timing.push(newtiming)
             redrawcmds = true
           end
-        elsif cmdwin.index == cmdEditFO # Add new foreground edit
+        elsif cmdwin.index == cmdEditFO   # Add new foreground edit
           newtiming = PBAnimTiming.new(4)
           if pbEditBG(canvas, newtiming)
             newtiming.frame = framewindow.value(0) - 1
@@ -596,7 +596,7 @@ module BattleAnimationEditor
       Input.update
       cmdwin.update
       maxsizewindow.update
-      if maxsizewindow.changed?(8) # OK
+      if maxsizewindow.changed?(8)   # OK
         timing.name = File.basename(filename, ".*")
         timing.bgX = maxsizewindow.value(1)
         timing.bgY = maxsizewindow.value(2)
@@ -647,7 +647,7 @@ module BattleAnimationEditor
       Graphics.update
       Input.update
       maxsizewindow.update
-      if maxsizewindow.changed?(8) # OK
+      if maxsizewindow.changed?(8)   # OK
         if maxsizewindow.controls[1].checked ||
            maxsizewindow.controls[2].checked ||
            maxsizewindow.controls[3].checked ||
@@ -694,7 +694,7 @@ module BattleAnimationEditor
         endvalue = sliderwin2.value(1) - 1
         dstvalue = sliderwin2.value(2) - 1
         length = (endvalue - startvalue) + 1
-        if length > 0 # Ensure correct overlap handling
+        if length > 0   # Ensure correct overlap handling
           if startvalue < dstvalue
             startvalue += length
             dstvalue += length
@@ -1037,7 +1037,7 @@ module BattleAnimationEditor
           sliderwin.invalidate
         end
         next
-      elsif Input.trigger?(Input::MOUSERIGHT)  # Right mouse button
+      elsif Input.trigger?(Input::MOUSERIGHT)   # Right mouse button
         mousepos = Mouse.getMousePos
         mousepos = [0, 0] if !mousepos
         commands = [
@@ -1051,29 +1051,29 @@ module BattleAnimationEditor
         ]
         hit = pbTrackPopupMenu(commands)
         case hit
-        when 0 # Properties
+        when 0   # Properties
           if canvas.currentCel
             pbCellProperties(canvas)
             canvas.invalidateCel(canvas.currentcel)
           end
-        when 1 # Cut
+        when 1   # Cut
           if canvas.currentCel
             Clipboard.setData(canvas.currentCel, "PBAnimCel")
             canvas.deleteCel(canvas.currentcel)
           end
-        when 2 # Copy
+        when 2   # Copy
           Clipboard.setData(canvas.currentCel, "PBAnimCel") if canvas.currentCel
-        when 3 # Paste
+        when 3   # Paste
           canvas.pasteCel(mousepos[0], mousepos[1])
-        when 4 # Delete
+        when 4   # Delete
           canvas.deleteCel(canvas.currentcel)
-        when 5 # Renumber
+        when 5   # Renumber
           if canvas.currentcel && canvas.currentcel >= 2
             cel1 = canvas.currentcel
             cel2 = pbChooseNum(cel1)
             canvas.swapCels(cel1, cel2) if cel2 >= 2 && cel1 != cel2
           end
-        when 6 # Extrapolate Path
+        when 6   # Extrapolate Path
           if canvas.currentCel
             pbDefinePath(canvas)
             sliderwin.invalidate
@@ -1081,10 +1081,10 @@ module BattleAnimationEditor
         end
         next
       end
-      if sliderwin.changed?(0) # Current frame changed
+      if sliderwin.changed?(0)   # Current frame changed
         canvas.currentframe = sliderwin.value(0) - 1
       end
-      if sliderwin.changed?(1) # Change frame count
+      if sliderwin.changed?(1)   # Change frame count
         pbChangeMaximum(canvas)
         if canvas.currentframe >= canvas.animation.length
           canvas.currentframe = canvas.animation.length - 1
@@ -1092,12 +1092,12 @@ module BattleAnimationEditor
         end
         sliderwin.refresh
       end
-      if sliderwin.changed?(2) # Set Animation Sheet
+      if sliderwin.changed?(2)   # Set Animation Sheet
         pbSelectAnim(canvas, animwin)
         animwin.refresh
         sliderwin.refresh
       end
-      if sliderwin.changed?(3) # List of Animations
+      if sliderwin.changed?(3)   # List of Animations
         pbAnimList(animation, canvas, animwin)
         sliderwin.controls[0].curvalue = canvas.currentframe + 1
         bottomwindow.refresh
@@ -1107,7 +1107,7 @@ module BattleAnimationEditor
       pbTimingList(canvas) if sidewin.changed?(0)
       if sidewin.changed?(1)
         positions = [_INTL("User"), _INTL("Target"), _INTL("User and target"), _INTL("Screen")]
-        indexes = [2, 1, 3, 4] # Keeping backwards compatibility
+        indexes = [2, 1, 3, 4]   # Keeping backwards compatibility
         positions.length.times do |i|
           selected = "[  ]"
           selected = "[X]" if animation[animation.selected].position == indexes[i]

@@ -1030,12 +1030,14 @@ MenuHandlers.add(:debug_menu, :toggle_snag_machine, {
   }
 })
 
-MenuHandlers.add(:debug_menu, :relic_stone, {
-  "name"        => _INTL("Use Relic Stone"),
+MenuHandlers.add(:debug_menu, :toggle_purify_chamber_access, {
+  "name"        => _INTL("Toggle Purify Chamber Access"),
   "parent"      => :shadow_pokemon_menu,
-  "description" => _INTL("Choose a Shadow Pokémon to show to the Relic Stone for purification."),
+  "description" => _INTL("Toggle access to the Purify Chamber via the PC."),
   "effect"      => proc {
-    pbRelicStone
+    $player.seen_purify_chamber = !$player.seen_purify_chamber
+    pbMessage(_INTL("The Purify Chamber is accessible.")) if $player.seen_purify_chamber
+    pbMessage(_INTL("The Purify Chamber is not accessible.")) if !$player.seen_purify_chamber
   }
 })
 
@@ -1045,6 +1047,15 @@ MenuHandlers.add(:debug_menu, :purify_chamber, {
   "description" => _INTL("Open the Purify Chamber for Shadow Pokémon purification."),
   "effect"      => proc {
     pbPurifyChamber
+  }
+})
+
+MenuHandlers.add(:debug_menu, :relic_stone, {
+  "name"        => _INTL("Use Relic Stone"),
+  "parent"      => :shadow_pokemon_menu,
+  "description" => _INTL("Choose a Shadow Pokémon to show to the Relic Stone for purification."),
+  "effect"      => proc {
+    pbRelicStone
   }
 })
 

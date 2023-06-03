@@ -613,7 +613,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
           msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
         end
       when "ts"     # Change text speed
-        msgwindow.textspeed = (param == "") ? -999 : param.to_i
+        msgwindow.textspeed = (param == "") ? 0 : param.to_i / 80.0
       when "."      # Wait 0.25 seconds
         msgwindow.waitcount += 0.25
       when "|"      # Wait 1 second

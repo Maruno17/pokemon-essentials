@@ -538,7 +538,7 @@ class TilemapRenderer
     if @old_color != @color
       @tiles.each do |col|
         col.each do |coord|
-          coord.each { |tile| tile.color = @tone }
+          coord.each { |tile| tile.color = @color }
         end
       end
       @old_color = @color.clone

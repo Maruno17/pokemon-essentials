@@ -75,11 +75,10 @@ end
 #
 #===============================================================================
 class MiningGameCursor < BitmapSprite
-  attr_accessor :mode
   attr_accessor :position
-  attr_accessor :hit
-  attr_accessor :counter
+  attr_accessor :mode
 
+  HIT_FRAME_DURATION = 0.05   # In seconds
   TOOL_POSITIONS = [[1, 0], [1, 1], [1, 1], [0, 0], [0, 0],
                     [0, 2], [0, 2], [0, 0], [0, 0], [0, 2], [0, 2]]   # Graphic, position
 
@@ -90,51 +89,53 @@ class MiningGameCursor < BitmapSprite
     @position = position
     @mode     = mode
     @hit      = 0   # 0=regular, 1=hit item, 2=hit iron
-    @counter  = 0
     @cursorbitmap = AnimatedBitmap.new("Graphics/UI/Mining/cursor")
     @toolbitmap   = AnimatedBitmap.new("Graphics/UI/Mining/tools")
     @hitsbitmap   = AnimatedBitmap.new("Graphics/UI/Mining/hits")
     update
   end
 
-  def isAnimating?
-    return @counter > 0
+  def animate(hit)
+    @hit = hit
+    @hit_timer_start = System.uptime
   end
 
-  def animate(hit)
-    @counter = 22
-    @hit     = hit
+  def isAnimating?
+    return !@hit_timer_start.nil?
   end
 
   def update
     self.bitmap.clear
     x = 32 * (@position % MiningGameScene::BOARD_WIDTH)
     y = 32 * (@position / MiningGameScene::BOARD_WIDTH)
-    if @counter > 0
-      @counter -= 1
-      toolx = x
-      tooly = y
-      i = 10 - (@counter / 2).floor
-      case TOOL_POSITIONS[i][1]
-      when 1
-        toolx -= 8
-        tooly += 8
-      when 2
-        toolx += 6
-      end
-      self.bitmap.blt(toolx, tooly, @toolbitmap.bitmap,
-                      Rect.new(96 * TOOL_POSITIONS[i][0], 96 * @mode, 96, 96))
-      if i < 5 && i.even?
-        if @hit == 2
-          self.bitmap.blt(x - 64, y, @hitsbitmap.bitmap, Rect.new(160 * 2, 0, 160, 160))
-        else
-          self.bitmap.blt(x - 64, y, @hitsbitmap.bitmap, Rect.new(160 * @mode, 0, 160, 160))
+    if @hit_timer_start
+      hit_frame = ((System.uptime - @hit_timer_start) / HIT_FRAME_DURATION).to_i
+      @hit_timer_start = nil if hit_frame >= TOOL_POSITIONS.length
+      if @hit_timer_start
+        toolx = x
+        tooly = y
+        case TOOL_POSITIONS[hit_frame][1]
+        when 1
+          toolx -= 8
+          tooly += 8
+        when 2
+          toolx += 6
+        end
+        self.bitmap.blt(toolx, tooly, @toolbitmap.bitmap,
+                        Rect.new(96 * TOOL_POSITIONS[hit_frame][0], 96 * @mode, 96, 96))
+        if hit_frame < 5 && hit_frame.even?
+          if @hit == 2
+            self.bitmap.blt(x - 64, y, @hitsbitmap.bitmap, Rect.new(160 * 2, 0, 160, 160))
+          else
+            self.bitmap.blt(x - 64, y, @hitsbitmap.bitmap, Rect.new(160 * @mode, 0, 160, 160))
+          end
+        end
+        if @hit == 1 && hit_frame < 3
+          self.bitmap.blt(x - 64, y, @hitsbitmap.bitmap, Rect.new(160 * hit_frame, 160, 160, 160))
         end
       end
-      if @hit == 1 && i < 3
-        self.bitmap.blt(x - 64, y, @hitsbitmap.bitmap, Rect.new(160 * i, 160, 160, 160))
-      end
-    else
+    end
+    if !@hit_timer_start
       self.bitmap.blt(x, y + 64, @cursorbitmap.bitmap, Rect.new(32 * @mode, 0, 32, 32))
     end
   end

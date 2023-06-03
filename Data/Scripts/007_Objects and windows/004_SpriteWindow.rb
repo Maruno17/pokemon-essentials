@@ -99,11 +99,10 @@ class SpriteWindow < Window
     @contents_blend_type = 0
     @contents_opacity = 255
     @cursor_rect = WindowCursorRect.new(self)
-    @cursorblink = 0
     @cursoropacity = 255
     @pause = false
     @pauseframe = 0
-    @flash = 0
+    @flash_duration = 0
     @pauseopacity = 0
     @skinformat = 0
     @skinrect = Rect.new(0, 0, 0, 0)
@@ -286,11 +285,13 @@ class SpriteWindow < Window
     privRefresh if @visible
   end
 
+  # duration is in 1/20ths of a second
   def flash(color, duration)
     return if disposed?
-    @flash = duration + 1
+    @flash_duration = duration / 20.0
+    @flash_timer_start = System.uptime
     @sprites.each do |i|
-      i[1].flash(color, duration)
+      i[1].flash(color, (@flash_duration * Graphics.frame_rate).to_i)   # Must be in frames
     end
   end
 
@@ -298,12 +299,11 @@ class SpriteWindow < Window
     return if disposed?
     mustchange = false
     if @active
-      if @cursorblink == 0
-        @cursoropacity -= 8
-        @cursorblink = 1 if @cursoropacity <= 128
+      cursor_time = System.uptime / 0.4
+      if cursor_time.to_i % 2 == 0
+        @cursoropacity = lerp(255, 128, 0.4, cursor_time % 2)
       else
-        @cursoropacity += 8
-        @cursorblink = 0 if @cursoropacity >= 255
+        @cursoropacity = lerp(128, 255, 0.4, (cursor_time - 1) % 2)
       end
     else
       @cursoropacity = 128
@@ -312,16 +312,14 @@ class SpriteWindow < Window
     if @pause
       oldpauseframe = @pauseframe
       oldpauseopacity = @pauseopacity
-      @pauseframe = (System.uptime * 5) % 4   # 4 frames, 5 frames per second
+      @pauseframe = (System.uptime * 5).to_i % 4   # 4 frames, 5 frames per second
       @pauseopacity = [@pauseopacity + 64, 255].min
       mustchange = @pauseframe != oldpauseframe || @pauseopacity != oldpauseopacity
     end
     privRefresh if mustchange
-    if @flash > 0
-      @sprites.each_value do |i|
-        i.update
-      end
-      @flash -= 1
+    if @flash_timer_start
+      @sprites.each_value { |i| i.update }
+      @flash_timer_start = nil if System.uptime - @flash_timer_start >= @flash_duration
     end
   end
 

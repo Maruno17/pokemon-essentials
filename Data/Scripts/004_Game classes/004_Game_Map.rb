@@ -437,6 +437,8 @@ class Game_Map
   end
 
   def update
+    uptime_now = System.uptime
+    play_now = $stats.play_time
     # Refresh maps if necessary
     if $map_factory
       $map_factory.maps.each { |i| i.refresh if i.need_refresh }
@@ -445,13 +447,13 @@ class Game_Map
     # If scrolling
     if (@scroll_distance_x || 0) != 0
       duration = @scroll_distance_x.abs * TILE_WIDTH.to_f / (10 * (2**@scroll_speed))
-      scroll_offset = lerp(0, @scroll_distance_x, duration, @scroll_timer_start, System.uptime)
+      scroll_offset = lerp(0, @scroll_distance_x, duration, @scroll_timer_start, uptime_now)
       self.display_x = @scroll_start_x + scroll_offset * REAL_RES_X
       @scroll_distance_x = 0 if scroll_offset == @scroll_distance_x
     end
     if (@scroll_distance_y || 0) != 0
       duration = @scroll_distance_y.abs * TILE_HEIGHT.to_f / (10 * (2**@scroll_speed))
-      scroll_offset = lerp(0, @scroll_distance_y, duration, @scroll_timer_start, System.uptime)
+      scroll_offset = lerp(0, @scroll_distance_y, duration, @scroll_timer_start, uptime_now)
       self.display_y = @scroll_start_y + scroll_offset * REAL_RES_Y
       @scroll_distance_y = 0 if scroll_offset == @scroll_distance_y
     end
@@ -462,22 +464,24 @@ class Game_Map
     # Update common events
     @common_events.each_value { |common_event| common_event.update }
     # Update fog
-    now = $stats.play_time
-    @fog_ox -= @fog_sx / 8.0
-    @fog_oy -= @fog_sy / 8.0
+    @fog_scroll_last_update_timer = uptime_now if !@fog_scroll_last_update_timer
+    scroll_mult = (uptime_now - @fog_scroll_last_update_timer) * 5
+    @fog_ox -= @fog_sx * scroll_mult
+    @fog_oy -= @fog_sy * scroll_mult
+    @fog_scroll_last_update_timer = uptime_now
     if @fog_tone_timer_start
-      @fog_tone.red = lerp(@fog_tone_initial.red, @fog_tone_target.red, @fog_tone_duration, @fog_tone_timer_start, now)
-      @fog_tone.green = lerp(@fog_tone_initial.green, @fog_tone_target.green, @fog_tone_duration, @fog_tone_timer_start, now)
-      @fog_tone.blue = lerp(@fog_tone_initial.blue, @fog_tone_target.blue, @fog_tone_duration, @fog_tone_timer_start, now)
-      @fog_tone.gray = lerp(@fog_tone_initial.gray, @fog_tone_target.gray, @fog_tone_duration, @fog_tone_timer_start, now)
-      if now - @fog_tone_timer_start >= @fog_tone_duration
+      @fog_tone.red = lerp(@fog_tone_initial.red, @fog_tone_target.red, @fog_tone_duration, @fog_tone_timer_start, play_now)
+      @fog_tone.green = lerp(@fog_tone_initial.green, @fog_tone_target.green, @fog_tone_duration, @fog_tone_timer_start, play_now)
+      @fog_tone.blue = lerp(@fog_tone_initial.blue, @fog_tone_target.blue, @fog_tone_duration, @fog_tone_timer_start, play_now)
+      @fog_tone.gray = lerp(@fog_tone_initial.gray, @fog_tone_target.gray, @fog_tone_duration, @fog_tone_timer_start, play_now)
+      if play_now - @fog_tone_timer_start >= @fog_tone_duration
         @fog_tone_initial = nil
         @fog_tone_timer_start = nil
       end
     end
     if @fog_opacity_timer_start
-      @fog_opacity = lerp(@fog_opacity_initial, @fog_opacity_target, @fog_opacity_duration, @fog_opacity_timer_start, now)
-      if now - @fog_opacity_timer_start >= @fog_opacity_duration
+      @fog_opacity = lerp(@fog_opacity_initial, @fog_opacity_target, @fog_opacity_duration, @fog_opacity_timer_start, play_now)
+      if play_now - @fog_opacity_timer_start >= @fog_opacity_duration
         @fog_opacity_initial = nil
         @fog_opacity_timer_start = nil
       end

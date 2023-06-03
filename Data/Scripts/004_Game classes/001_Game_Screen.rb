@@ -16,8 +16,6 @@ class Game_Screen
 
   def initialize
     @brightness        = 255
-    @fadeout_duration  = 0
-    @fadein_duration   = 0
     @tone              = Tone.new(0, 0, 0, 0)
     @tone_target       = Tone.new(0, 0, 0, 0)
     @tone_duration     = 0
@@ -72,16 +70,6 @@ class Game_Screen
   end
 
   def update
-    if @fadeout_duration && @fadeout_duration >= 1
-      d = @fadeout_duration
-      @brightness = (@brightness * (d - 1)) / d
-      @fadeout_duration -= 1
-    end
-    if @fadein_duration && @fadein_duration >= 1
-      d = @fadein_duration
-      @brightness = ((@brightness * (d - 1)) + 255) / d
-      @fadein_duration -= 1
-    end
     now = $stats.play_time
     if @tone_timer_start
       @tone.red = lerp(@tone_initial.red, @tone_target.red, @tone_duration, @tone_timer_start, now)

@@ -17,7 +17,7 @@ class PokemonSystem
   attr_accessor :textinput
 
   def initialize
-    @textspeed     = 1     # Text speed (0=slow, 1=normal, 2=fast)
+    @textspeed     = 1     # Text speed (0=slow, 1=medium, 2=fast, 3=instant)
     @battlescene   = 0     # Battle effects (animations) (0=on, 1=off)
     @battlestyle   = 0     # Battle style (0=switch, 1=set)
     @sendtoboxes   = 0     # Send to Boxes (0=manual, 1=automatic)
@@ -422,7 +422,7 @@ MenuHandlers.add(:options_menu, :text_speed, {
   "name"        => _INTL("Text Speed"),
   "order"       => 30,
   "type"        => EnumOption,
-  "parameters"  => [_INTL("Slow"), _INTL("Normal"), _INTL("Fast")],
+  "parameters"  => [_INTL("Slow"), _INTL("Mid"), _INTL("Fast"), _INTL("Inst")],
   "description" => _INTL("Choose the speed at which text appears."),
   "on_select"   => proc { |scene| scene.sprites["textbox"].letterbyletter = true },
   "get_proc"    => proc { next $PokemonSystem.textspeed },

@@ -99,6 +99,27 @@ class PictureEx
   attr_reader   :cropBottom     # crops sprite to above this y-coordinate
   attr_reader   :frameUpdates   # Array of processes updated in a frame
 
+  def move_processes
+    ret = []
+    @processes.each do |p|
+      next if ![Processes::XY, Processes::DELTA_XY].include?(p[0])
+      pro = []
+      pro.push(p[0] == Processes::XY ? "XY" : "DELTA")
+      if p[1] == 0 && p[2] == 0
+        pro.push("start " + p[7].to_i.to_s + ", " + p[8].to_i.to_s)
+      else
+        pro.push("for " + p[2].to_s) if p[2] > 0
+        if p[0] == Processes::XY
+          pro.push("go to " + p[7].to_i.to_s + ", " + p[8].to_i.to_s)
+        else
+          pro.push("move by " + p[7].to_i.to_s + ", " + p[8].to_i.to_s)
+        end
+      end
+      ret.push(pro)
+    end
+    return ret
+  end
+
   def initialize(z)
     # process: [type, delay, total_duration, frame_counter, cb, etc.]
     @processes     = []
@@ -338,8 +359,9 @@ class PictureEx
   end
 
   def update
-    @timer_start = System.uptime if !@timer_start
-    this_frame = ((System.uptime - @timer_start) * 20).to_i   # 20 frames per second
+    time_now = System.uptime
+    @timer_start = time_now if !@timer_start
+    this_frame = ((time_now - @timer_start) * 20).to_i   # 20 frames per second
     procEnded = false
     @frameUpdates.clear
     @processes.each_with_index do |process, i|
@@ -379,35 +401,35 @@ class PictureEx
       end
       # Update process
       @frameUpdates.push(process[0]) if !@frameUpdates.include?(process[0])
-      start_time = @timer_start + process[1] / 20.0
+      start_time = @timer_start + (process[1] / 20.0)
       duration = process[2] / 20.0
       case process[0]
       when Processes::XY, Processes::DELTA_XY
-        @x = lerp(process[5], process[7], duration, start_time, System.uptime)
-        @y = lerp(process[6], process[8], duration, start_time, System.uptime)
+        @x = lerp(process[5], process[7], duration, start_time, time_now)
+        @y = lerp(process[6], process[8], duration, start_time, time_now)
       when Processes::CURVE
-        @x, @y = getCubicPoint2(process[5], (System.uptime - start_time) / duration)
+        @x, @y = getCubicPoint2(process[5], (time_now - start_time) / duration)
       when Processes::Z
-        @z = lerp(process[5], process[6], duration, start_time, System.uptime)
+        @z = lerp(process[5], process[6], duration, start_time, time_now)
       when Processes::ZOOM
-        @zoom_x = lerp(process[5], process[7], duration, start_time, System.uptime)
-        @zoom_y = lerp(process[6], process[8], duration, start_time, System.uptime)
+        @zoom_x = lerp(process[5], process[7], duration, start_time, time_now)
+        @zoom_y = lerp(process[6], process[8], duration, start_time, time_now)
       when Processes::ANGLE
-        @angle = lerp(process[5], process[6], duration, start_time, System.uptime)
+        @angle = lerp(process[5], process[6], duration, start_time, time_now)
       when Processes::TONE
-        @tone.red = lerp(process[5].red, process[6].red, duration, start_time, System.uptime)
-        @tone.green = lerp(process[5].green, process[6].green, duration, start_time, System.uptime)
-        @tone.blue = lerp(process[5].blue, process[6].blue, duration, start_time, System.uptime)
-        @tone.gray = lerp(process[5].gray, process[6].gray, duration, start_time, System.uptime)
+        @tone.red = lerp(process[5].red, process[6].red, duration, start_time, time_now)
+        @tone.green = lerp(process[5].green, process[6].green, duration, start_time, time_now)
+        @tone.blue = lerp(process[5].blue, process[6].blue, duration, start_time, time_now)
+        @tone.gray = lerp(process[5].gray, process[6].gray, duration, start_time, time_now)
       when Processes::COLOR
-        @color.red = lerp(process[5].red, process[6].red, duration, start_time, System.uptime)
-        @color.green = lerp(process[5].green, process[6].green, duration, start_time, System.uptime)
-        @color.blue = lerp(process[5].blue, process[6].blue, duration, start_time, System.uptime)
-        @color.alpha = lerp(process[5].alpha, process[6].alpha, duration, start_time, System.uptime)
+        @color.red = lerp(process[5].red, process[6].red, duration, start_time, time_now)
+        @color.green = lerp(process[5].green, process[6].green, duration, start_time, time_now)
+        @color.blue = lerp(process[5].blue, process[6].blue, duration, start_time, time_now)
+        @color.alpha = lerp(process[5].alpha, process[6].alpha, duration, start_time, time_now)
       when Processes::HUE
-        @hue = lerp(process[5], process[6], duration, start_time, System.uptime)
+        @hue = lerp(process[5], process[6], duration, start_time, time_now)
       when Processes::OPACITY
-        @opacity = lerp(process[5], process[6], duration, start_time, System.uptime)
+        @opacity = lerp(process[5], process[6], duration, start_time, time_now)
       when Processes::VISIBLE
         @visible = process[5]
       when Processes::BLEND_TYPE
@@ -439,7 +461,7 @@ class PictureEx
     # Add the constant rotation speed
     if @rotate_speed != 0
       @frameUpdates.push(Processes::ANGLE) if !@frameUpdates.include?(Processes::ANGLE)
-      @auto_angle = @rotate_speed * (System.uptime - @timer_start)
+      @auto_angle = @rotate_speed * (time_now - @timer_start)
       while @auto_angle < 0
         @auto_angle += 360
       end

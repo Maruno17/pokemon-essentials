@@ -131,18 +131,25 @@ class EventScene
     return @pictures[num]
   end
 
-  def wait(frames)
-    frames.times { update }
+  # ticks is in 1/20ths of a second.
+  def wait(ticks)
+    return if ticks <= 0
+    timer_start = System.uptime
+    loop do
+      update
+      break if System.uptime - timer_start >= ticks / 20.0
+    end
   end
 
-  def pictureWait(extraframes = 0)
+  # extra_ticks is in 1/20ths of a second.
+  def pictureWait(extra_ticks = 0)
     loop do
       hasRunning = false
       @pictures.each { |pic| hasRunning = true if pic.running? }
       break if !hasRunning
       update
     end
-    extraframes.times { update }
+    wait(extra_ticks)
   end
 
   def update
@@ -164,8 +171,9 @@ class EventScene
   end
 
   def main
-    until disposed?
+    loop do
       update
+      break if disposed?
     end
   end
 end
