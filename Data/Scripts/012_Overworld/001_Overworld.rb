@@ -159,8 +159,9 @@ EventHandlers.add(:on_step_taken, :auto_move_player,
     next if !$scene.is_a?(Scene_Map)
     next if event != $game_player
     currentTag = $game_player.pbTerrainTag
-    if currentTag.waterfall_crest
-      pbDescendWaterfall
+    if currentTag.waterfall_crest || currentTag.waterfall ||
+       $PokemonGlobal.descending_waterfall || $PokemonGlobal.ascending_waterfall
+      pbTraverseWaterfall
     elsif currentTag.ice || $PokemonGlobal.ice_sliding
       pbSlideOnIce
     end

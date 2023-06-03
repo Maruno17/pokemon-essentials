@@ -77,6 +77,9 @@ class Game_Player < Game_Character
         self.move_speed = (type == :surfing_jumping) ? 3 : 4
       end
       new_charset = pbGetPlayerCharset(meta.surf_charset)
+    when :descending_waterfall, :ascending_waterfall
+      self.move_speed = 2 if !@move_route_forcing
+      new_charset = pbGetPlayerCharset(meta.surf_charset)
     when :cycling, :cycling_fast, :cycling_jumping, :cycling_stopped
       if !@move_route_forcing
         self.move_speed = (type == :cycling_jumping) ? 3 : 5
@@ -148,6 +151,10 @@ class Game_Player < Game_Character
             increase_steps
           end
           return
+        elsif pbFacingTerrainTag.waterfall_crest && dir == 2
+          $PokemonGlobal.descending_waterfall = true
+          $game_player.through = true
+          $stats.waterfalls_descended += 1
         end
         # Jumping out of surfing back onto land
         return if pbEndSurf(x_offset, y_offset)
@@ -421,7 +428,7 @@ class Game_Player < Game_Character
 
   def update_command_new
     dir = Input.dir4
-    if $PokemonGlobal.ice_sliding
+    if $PokemonGlobal.forced_movement?
       move_forward
     elsif !pbMapInterpreterRunning? && !$game_temp.message_window_showing &&
           !$game_temp.in_mini_update && !$game_temp.in_menu
@@ -452,6 +459,10 @@ class Game_Player < Game_Character
     if !@moved_last_frame || @stopped_last_frame   # Started a new step
       if $PokemonGlobal.ice_sliding || @last_terrain_tag.ice
         set_movement_type(:ice_sliding)
+      elsif $PokemonGlobal.descending_waterfall
+        set_movement_type(:descending_waterfall)
+      elsif $PokemonGlobal.ascending_waterfall
+        set_movement_type(:ascending_waterfall)
       else
         faster = can_run?
         if $PokemonGlobal&.diving
@@ -528,7 +539,7 @@ class Game_Player < Game_Character
   end
 
   def update_event_triggering
-    return if moving? || jumping? || $PokemonGlobal.ice_sliding
+    return if moving? || jumping? || $PokemonGlobal.forced_movement?
     # Try triggering events upon walking into them/in front of them
     if @moved_this_frame
       $game_temp.followers.turn_followers

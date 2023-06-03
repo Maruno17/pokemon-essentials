@@ -886,40 +886,38 @@ HiddenMoveHandlers::UseMove.add(:TELEPORT, proc { |move, pokemon|
 #===============================================================================
 # Waterfall
 #===============================================================================
+# Starts the ascending of a waterfall.
 def pbAscendWaterfall
   return if $game_player.direction != 8   # Can't ascend if not facing up
   terrain = $game_player.pbFacingTerrainTag
   return if !terrain.waterfall && !terrain.waterfall_crest
   $stats.waterfall_count += 1
-  oldthrough   = $game_player.through
-  oldmovespeed = $game_player.move_speed
-  $game_player.through    = true
-  $game_player.move_speed = 2
-  loop do
-    $game_player.move_up
-    terrain = $game_player.pbTerrainTag
-    break if !terrain.waterfall && !terrain.waterfall_crest
-  end
-  $game_player.through    = oldthrough
-  $game_player.move_speed = oldmovespeed
+  $PokemonGlobal.ascending_waterfall = true
+  $game_player.through = true
 end
 
-def pbDescendWaterfall
-  return if $game_player.direction != 2   # Can't descend if not facing down
-  terrain = $game_player.pbFacingTerrainTag
-  return if !terrain.waterfall && !terrain.waterfall_crest
-  $stats.waterfalls_descended += 1
-  oldthrough   = $game_player.through
-  oldmovespeed = $game_player.move_speed
-  $game_player.through    = true
-  $game_player.move_speed = 2
-  loop do
-    $game_player.move_down
+# Triggers after finishing each step while ascending/descending a waterfall.
+def pbTraverseWaterfall
+  if $game_player.direction == 2   # Facing down; descending
     terrain = $game_player.pbTerrainTag
-    break if !terrain.waterfall && !terrain.waterfall_crest
+    if !terrain.waterfall && !terrain.waterfall_crest
+      $PokemonGlobal.descending_waterfall = false
+      $game_player.through = false
+      return
+    end
+    $stats.waterfalls_descended += 1 if !$PokemonGlobal.descending_waterfall
+    $PokemonGlobal.descending_waterfall = true
+    $game_player.through = true
+  elsif $PokemonGlobal.ascending_waterfall
+    terrain = $game_player.pbTerrainTag
+    if !terrain.waterfall && !terrain.waterfall_crest
+      $PokemonGlobal.ascending_waterfall = false
+      $game_player.through = false
+      return
+    end
+    $PokemonGlobal.ascending_waterfall = true
+    $game_player.through = true
   end
-  $game_player.through    = oldthrough
-  $game_player.move_speed = oldmovespeed
 end
 
 def pbWaterfall

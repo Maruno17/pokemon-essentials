@@ -137,7 +137,7 @@
     // This option may be force-disabled at build time.
     // (default: disabled)
     //
-    // "syncToRefreshrate": false,
+    "syncToRefreshrate": true,
 
 
     // A list of fonts to render without alpha blending.

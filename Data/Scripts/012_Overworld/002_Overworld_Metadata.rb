@@ -8,6 +8,8 @@ class PokemonGlobalMetadata
   attr_accessor :surfing
   attr_accessor :diving
   attr_accessor :ice_sliding
+  attr_accessor :descending_waterfall
+  attr_accessor :ascending_waterfall
   attr_accessor :fishing
   # Player data
   attr_accessor :startTime
@@ -59,6 +61,8 @@ class PokemonGlobalMetadata
     @surfing              = false
     @diving               = false
     @ice_sliding          = false
+    @descending_waterfall = false
+    @ascending_waterfall  = false
     @fishing              = false
     # Player data
     @startTime            = Time.now
@@ -112,6 +116,10 @@ class PokemonGlobalMetadata
     return if @encounter_version == value
     @encounter_version = value
     $PokemonEncounters.setup($game_map.map_id) if $PokemonEncounters && $game_map
+  end
+
+  def forced_movement?
+    return @ice_sliding || @descending_waterfall || @ascending_waterfall
   end
 end
 
