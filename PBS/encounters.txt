@@ -32,6 +32,8 @@ LandNight,21
     9,HOOTHOOT,10,14
     1,HOOTHOOT,14
     1,RATTATA,15
+PokeRadar,20
+    100,STARLY,12,15
 #-------------------------------
 [005,1] # Route 1
 Land,21
@@ -77,6 +79,8 @@ HeadbuttHigh
     50,PINECO,11,13
     30,WURMPLE,6,8
     20,SPINARAK,9,12
+PokeRadar,10
+    100,STANTLER,14
 #-------------------------------
 [028] # Natural Park
 Land,21
@@ -110,6 +114,9 @@ BugContest,21
     5,BUTTERFREE,12,15
     5,PINSIR,13,14
     5,SCYTHER,13,14
+PokeRadar,40
+    50,BUTTERFREE,15,18
+    50,BEEDRILL,15,18
 #-------------------------------
 [031] # Route 3
 Land,21

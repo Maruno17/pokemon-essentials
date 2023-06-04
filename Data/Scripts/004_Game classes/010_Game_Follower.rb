@@ -27,6 +27,10 @@ class Game_Follower < Game_Event
     end
   end
 
+  def map_id
+    return @map.map_id
+  end
+
   #-----------------------------------------------------------------------------
 
   def move_through(direction)

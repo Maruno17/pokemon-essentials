@@ -900,7 +900,8 @@ end
 def pbTraverseWaterfall
   if $game_player.direction == 2   # Facing down; descending
     terrain = $game_player.pbTerrainTag
-    if !terrain.waterfall && !terrain.waterfall_crest
+    if ($DEBUG && Input.press?(Input::CTRL)) ||
+       (!terrain.waterfall && !terrain.waterfall_crest)
       $PokemonGlobal.descending_waterfall = false
       $game_player.through = false
       return
@@ -910,7 +911,8 @@ def pbTraverseWaterfall
     $game_player.through = true
   elsif $PokemonGlobal.ascending_waterfall
     terrain = $game_player.pbTerrainTag
-    if !terrain.waterfall && !terrain.waterfall_crest
+    if ($DEBUG && Input.press?(Input::CTRL)) ||
+       (!terrain.waterfall && !terrain.waterfall_crest)
       $PokemonGlobal.ascending_waterfall = false
       $game_player.through = false
       return

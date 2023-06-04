@@ -549,11 +549,13 @@ end
 # Player/event movement in the field
 #===============================================================================
 def pbSlideOnIce
-  if $game_player.pbTerrainTag.ice && $game_player.can_move_in_direction?($game_player.direction)
-    $PokemonGlobal.ice_sliding = true
-    $game_player.straighten
-    $game_player.walk_anime = false
-    return
+  if !$DEBUG || !Input.press?(Input::CTRL)
+    if $game_player.pbTerrainTag.ice && $game_player.can_move_in_direction?($game_player.direction)
+      $PokemonGlobal.ice_sliding = true
+      $game_player.straighten
+      $game_player.walk_anime = false
+      return
+    end
   end
   $PokemonGlobal.ice_sliding = false
   $game_player.walk_anime = true

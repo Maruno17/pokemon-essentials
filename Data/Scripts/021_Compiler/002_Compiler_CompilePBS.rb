@@ -495,16 +495,21 @@ module Compiler
     all_evos = {}
     GameData::Species.each do |species|   # Build a hash of prevolutions for each species
       species.evolutions.each do |evo|
-        all_evos[evo[0]] = [species.species, evo[1], evo[2], true] if !evo[3] && !all_evos[evo[0]]
+        next if evo[3]
+        all_evos[evo[0]] = [species.species, evo[1], evo[2], true] if !all_evos[evo[0]]
+        if species.form > 0
+          all_evos[[evo[0], species.form]] = [species.species, evo[1], evo[2], true] if !all_evos[[evo[0], species.form]]
+        end
       end
     end
     GameData::Species.each do |species|   # Distribute prevolutions
-      next if species.evolutions.any? { |evo| evo[3] }   # Already has prevo listed
-      next if !all_evos[species.species]
+      prevo_data = all_evos[[species.species, species.base_form]] || all_evos[species.species]
+      next if !prevo_data
       # Record what species evolves from
-      species.evolutions.push(all_evos[species.species].clone)
+      species.evolutions.delete_if { |evo| evo[3] }
+      species.evolutions.push(prevo_data.clone)
       # Record that the prevolution can evolve into species
-      prevo = GameData::Species.get(all_evos[species.species][0])
+      prevo = GameData::Species.get(prevo_data[0])
       if prevo.evolutions.none? { |evo| !evo[3] && evo[0] == species.species }
         prevo.evolutions.push([species.species, :None, nil])
       end

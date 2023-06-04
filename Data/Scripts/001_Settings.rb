@@ -45,6 +45,8 @@ module Settings
 
   # Whether outdoor maps should be shaded according to the time of day.
   TIME_SHADING                               = true
+  # Whether the reflections of the player/events will ripple horizontally.
+  ANIMATE_REFLECTIONS                        = true
   # Whether poisoned Pokémon will lose HP while walking around in the field.
   POISON_IN_FIELD                            = (MECHANICS_GENERATION <= 4)
   # Whether poisoned Pokémon will faint while walking around in the field
@@ -302,23 +304,6 @@ module Settings
       69 => [   21, 31    ]
     }],
     [:ENTEI, 40, 55, 1]
-  ]
-
-  #=============================================================================
-
-  # A set of arrays, each containing the details of a wild encounter that can
-  # only occur via using the Poké Radar. The information within each array is as
-  # follows:
-  #   * Map ID on which this encounter can occur.
-  #   * Probability that this encounter will occur (as a percentage).
-  #   * Species.
-  #   * Minimum possible level.
-  #   * Maximum possible level (optional).
-  POKE_RADAR_ENCOUNTERS = [
-    [5,  20, :STARLY,     12, 15],
-    [21, 10, :STANTLER,   14],
-    [28, 20, :BUTTERFREE, 15, 18],
-    [28, 20, :BEEDRILL,   15, 18]
   ]
 
   #=============================================================================

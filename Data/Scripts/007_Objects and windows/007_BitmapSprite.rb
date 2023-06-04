@@ -118,21 +118,19 @@ class AnimatedSprite < Sprite
 
   def start
     @playing = true
-    @start_time = System.uptime
   end
 
   alias play start
 
   def stop
     @playing = false
-    @start_time = nil
   end
 
   def update
     super
-    if @playing && System.uptime - @start_time >= @time_per_frame
-      self.frame = (@frame + 1) % self.framecount
-      @start_time += @time_per_frame
+    if @playing
+      new_frame = (System.uptime / @time_per_frame).to_i % self.framecount
+      self.frame = new_frame if self.frame != new_frame
     end
   end
 end

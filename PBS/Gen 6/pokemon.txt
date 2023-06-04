@@ -9212,7 +9212,7 @@ Habitat = WatersEdge
 Category = Fish
 Pokedex = Feebas live in ponds that are heavily infested with weeds. Because of its hopelessly shabby appearance, it seems as if few trainers raise it.
 Generation = 3
-Evolutions = MILOTIC,Beauty,170,MILOTIC,TradeItem,PRISMSCALE
+Evolutions = MILOTIC,TradeItem,PRISMSCALE,MILOTIC,Beauty,170
 #-------------------------------
 [MILOTIC]
 Name = Milotic

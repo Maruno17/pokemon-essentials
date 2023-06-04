@@ -153,6 +153,7 @@ class PokemonPokedexInfo_Scene
   def pbGetAvailableForms
     ret = []
     multiple_forms = false
+    gender_differences = (GameData::Species.front_sprite_filename(@species, 0) == GameData::Species.front_sprite_filename(@species, 0, 1))
     # Find all genders/forms of @species that have been seen
     GameData::Species.each do |sp|
       next if sp.species != @species
@@ -164,6 +165,12 @@ class PokemonPokedexInfo_Scene
         next if !$player.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
         real_gender = 2 if sp.gender_ratio == :Genderless
         ret.push([sp.form_name, real_gender, sp.form])
+      elsif sp.form == 0 &&   # Form 0 and no gender differences
+        2.times do |real_gndr|
+          next if !$player.pokedex.seen_form?(@species, real_gndr, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
+          ret.push([sp.form_name || _INTL("One Form"), 0, sp.form])
+          break
+        end
       else   # Both male and female
         2.times do |real_gndr|
           next if !$player.pokedex.seen_form?(@species, real_gndr, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
@@ -176,7 +183,9 @@ class PokemonPokedexInfo_Scene
     ret.sort! { |a, b| (a[2] == b[2]) ? a[1] <=> b[1] : a[2] <=> b[2] }
     # Create form names for entries if they don't already exist
     ret.each do |entry|
-      if !entry[0] || entry[0].empty?   # Necessarily applies only to form 0
+      if entry[0]   # Alternate forms, and form 0 if no gender differences
+        entry[0] = "" if !multiple_forms && !gender_differences
+      else   # Necessarily applies only to form 0
         case entry[1]
         when 0 then entry[0] = _INTL("Male")
         when 1 then entry[0] = _INTL("Female")

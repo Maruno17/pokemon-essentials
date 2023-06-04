@@ -7,9 +7,10 @@
 class MiningGameCounter < BitmapSprite
   attr_accessor :hits
 
-  def initialize(x, y)
-    @viewport = Viewport.new(x, y, 416, 60)
-    @viewport.z = 99999
+  def initialize(x, y, viewport)
+    @viewport = viewport
+    @x = x
+    @y = y
     super(416, 60, @viewport)
     @hits = 0
     @image = AnimatedBitmap.new("Graphics/UI/Mining/cracks")
@@ -38,9 +39,8 @@ end
 class MiningGameTile < BitmapSprite
   attr_reader :layer
 
-  def initialize(x, y)
-    @viewport = Viewport.new(x, y, 32, 32)
-    @viewport.z = 99999
+  def initialize(viewport)
+    @viewport = viewport
     super(32, 32, @viewport)
     r = rand(100)
     if r < 10
@@ -82,9 +82,8 @@ class MiningGameCursor < BitmapSprite
   TOOL_POSITIONS = [[1, 0], [1, 1], [1, 1], [0, 0], [0, 0],
                     [0, 2], [0, 2], [0, 0], [0, 0], [0, 2], [0, 2]]   # Graphic, position
 
-  def initialize(position = 0, mode = 0)   # mode: 0=pick, 1=hammer
-    @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+  def initialize(position, mode, viewport)   # mode: 0=pick, 1=hammer
+    @viewport = viewport
     super(Graphics.width, Graphics.height, @viewport)
     @position = position
     @mode     = mode
@@ -236,6 +235,7 @@ class MiningGameScene
     @viewport.z = 99999
     addBackgroundPlane(@sprites, "bg", "Mining/bg", @viewport)
     @sprites["itemlayer"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
+    @sprites["itemlayer"].z = 10
     @itembitmap = AnimatedBitmap.new("Graphics/UI/Mining/items")
     @ironbitmap = AnimatedBitmap.new("Graphics/UI/Mining/irons")
     @items = []
@@ -245,14 +245,19 @@ class MiningGameScene
     pbDistributeIron
     BOARD_HEIGHT.times do |i|
       BOARD_WIDTH.times do |j|
-        @sprites["tile#{j + (i * BOARD_WIDTH)}"] = MiningGameTile.new(32 * j, 64 + (32 * i))
+        @sprites["tile#{j + (i * BOARD_WIDTH)}"] = MiningGameTile.new(@viewport)
+        @sprites["tile#{j + (i * BOARD_WIDTH)}"].x = 32 * j
+        @sprites["tile#{j + (i * BOARD_WIDTH)}"].y = 64 + (32 * i)
+        @sprites["tile#{j + (i * BOARD_WIDTH)}"].z = 20
       end
     end
-    @sprites["crack"] = MiningGameCounter.new(0, 4)
-    @sprites["cursor"] = MiningGameCursor.new(58, 0)   # central position, pick
+    @sprites["crack"] = MiningGameCounter.new(0, 4, @viewport)
+    @sprites["cursor"] = MiningGameCursor.new(58, 0, @viewport)   # central position, pick
+    @sprites["cursor"].z = 50
     @sprites["tool"] = IconSprite.new(434, 254, @viewport)
     @sprites["tool"].setBitmap("Graphics/UI/Mining/toolicons")
     @sprites["tool"].src_rect.set(0, 0, 68, 100)
+    @sprites["tool"].z = 100
     update
     pbFadeInAndShow(@sprites)
   end
@@ -490,6 +495,7 @@ class MiningGameScene
   def pbFlashItems(revealed)
     return if revealed.length <= 0
     revealeditems = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
+    revealeditems.z = 15
     revealeditems.color = Color.new(255, 255, 255, 0)
     flash_duration = 0.25
     2.times do |i|
@@ -531,9 +537,8 @@ class MiningGameScene
       if @sprites["crack"].hits >= 49
         @sprites["cursor"].visible = false
         pbSEPlay("Mining collapse")
-        collapseviewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-        collapseviewport.z = 99999
-        @sprites["collapse"] = BitmapSprite.new(Graphics.width, Graphics.height, collapseviewport)
+        @sprites["collapse"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
+        @sprites["collapse"].z = 999
         timer_start = System.uptime
         loop do
           collapse_height = lerp(0, Graphics.height, 0.8, timer_start, System.uptime)

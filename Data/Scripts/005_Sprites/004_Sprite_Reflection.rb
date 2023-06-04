@@ -66,7 +66,9 @@ class Sprite_Reflection
       @sprite.z        = -50   # Still water is -100, map is 0 and above
       @sprite.z        += 1 if event == $game_player
       @sprite.zoom_x   = @parent_sprite.zoom_x
-      @sprite.zoom_x   += 0.05 * @sprite.zoom_x * Math.sin(2 * Math::PI * System.uptime)
+      if Settings::ANIMATE_REFLECTIONS && !GameData::MapMetadata.get(event.map_id).still_reflections
+        @sprite.zoom_x   += 0.05 * @sprite.zoom_x * Math.sin(2 * Math::PI * System.uptime)
+      end
       @sprite.zoom_y   = @parent_sprite.zoom_y
       @sprite.angle    = 180.0
       @sprite.mirror   = true
