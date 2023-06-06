@@ -365,7 +365,7 @@ class Game_Map
   #   6: moves 1 tile in 0.05 seconds
   def start_scroll(direction, distance, speed = 4)
     return if direction <= 0 || direction == 5 || direction >= 10
-    if [1, 3, 4, 6, 7, 9].include(direction)   # horizontal
+    if [1, 3, 4, 6, 7, 9].include?(direction)   # horizontal
       @scroll_distance_x = distance
       @scroll_distance_x *= -1 if [1, 4, 7].include?(direction)
     end
