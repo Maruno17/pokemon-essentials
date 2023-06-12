@@ -125,7 +125,7 @@ class Scene_Map
       updateMaps
       $game_system.update
       $game_screen.update
-      break unless $game_temp.player_transferring
+      break if !$game_temp.player_transferring
       transfer_player(false)
       break if $game_temp.transition_processing
     end
@@ -169,7 +169,7 @@ class Scene_Map
       updateMaps
       $game_system.update
       $game_screen.update
-      break unless $game_temp.player_transferring
+      break if !$game_temp.player_transferring
       transfer_player(false)
       break if $game_temp.transition_processing
     end
@@ -192,7 +192,7 @@ class Scene_Map
       if Input.trigger?(Input::USE)
         $game_temp.interact_calling = true
       elsif Input.trigger?(Input::ACTION)
-        unless $game_system.menu_disabled || $game_player.moving?
+        if !$game_system.menu_disabled && !$game_player.moving?
           $game_temp.menu_calling = true
           $game_temp.menu_beep = true
         end
@@ -202,7 +202,7 @@ class Scene_Map
         $game_temp.debug_calling = true if $DEBUG
       end
     end
-    unless $game_player.moving?
+    if !$game_player.moving?
       if $game_temp.menu_calling
         call_menu
       elsif $game_temp.debug_calling
@@ -213,8 +213,18 @@ class Scene_Map
         pbUseKeyItem
       elsif $game_temp.interact_calling
         $game_temp.interact_calling = false
-        $game_player.straighten
-        EventHandlers.trigger(:on_player_interact)
+        triggered = false
+        # Try to trigger an event the player is standing on, and one in front of
+        # the player
+        if !$game_temp.in_mini_update
+          triggered ||= $game_player.check_event_trigger_here([0])
+          triggered ||= $game_player.check_event_trigger_there([0, 2]) if !triggered
+        end
+        # Try to trigger an interaction with a tile
+        if !triggered
+          $game_player.straighten
+          EventHandlers.trigger(:on_player_interact)
+        end
       end
     end
   end

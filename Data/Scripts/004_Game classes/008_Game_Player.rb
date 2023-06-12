@@ -549,12 +549,6 @@ class Game_Player < Game_Character
       # No events triggered, try other event triggers upon finishing a step
       pbOnStepTaken(result)
     end
-    # Try to manually interact with events
-    if Input.trigger?(Input::USE) && !$game_temp.in_mini_update
-      # Same position and front event determinant
-      check_event_trigger_here([0])
-      check_event_trigger_there([0, 2])
-    end
   end
 end
 

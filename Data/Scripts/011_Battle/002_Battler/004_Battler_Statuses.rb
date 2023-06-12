@@ -532,15 +532,15 @@ class Battle::Battler
         allAllies.each do |b|
           next if !b.hasActiveAbility?(:AROMAVEIL)
           if showMessages
-            @battle.pbShowAbilitySplash(self)
+            @battle.pbShowAbilitySplash(b)
             if Battle::Scene::USE_ABILITY_SPLASH
               @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
             else
               @battle.pbDisplay(_INTL("{1}'s {2} prevents romance!", b.pbThis, b.abilityName))
             end
-            @battle.pbHideAbilitySplash(self)
+            @battle.pbHideAbilitySplash(b)
           end
-          return true
+          return false
         end
       end
     end

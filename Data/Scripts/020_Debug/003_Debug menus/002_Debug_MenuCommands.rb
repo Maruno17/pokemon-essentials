@@ -345,7 +345,10 @@ MenuHandlers.add(:debug_menu, :test_wild_battle_advanced, {
           params.setCancelValue(0)
           level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
                                               GameData::Species.get(species).name), params)
-          pkmn.push(pbGenerateWildPokemon(species, level)) if level > 0
+          if level > 0
+            pkmn.push(pbGenerateWildPokemon(species, level))
+            size0 = pkmn.length
+          end
         end
       else                                   # Edit a Pokémon
         if pbConfirmMessage(_INTL("Change this Pokémon?"))
@@ -354,6 +357,7 @@ MenuHandlers.add(:debug_menu, :test_wild_battle_advanced, {
           scr.pbEndScreen
         elsif pbConfirmMessage(_INTL("Delete this Pokémon?"))
           pkmn.delete_at(pkmnCmd)
+          size0 = [pkmn.length, 1].max
         end
       end
     end
@@ -450,6 +454,8 @@ MenuHandlers.add(:debug_menu, :test_trainer_battle_advanced, {
           tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
           EventHandlers.trigger(:on_trainer_load, tr)
           trainers.push([0, tr])
+          size0 = trainers.length
+          size1 = trainers.length
         end
       else                                         # Edit a trainer
         if pbConfirmMessage(_INTL("Change this trainer?"))
@@ -462,6 +468,8 @@ MenuHandlers.add(:debug_menu, :test_trainer_battle_advanced, {
           end
         elsif pbConfirmMessage(_INTL("Delete this trainer?"))
           trainers.delete_at(trainerCmd)
+          size0 = [trainers.length, 1].max
+          size1 = [trainers.length, 1].max
         end
       end
     end

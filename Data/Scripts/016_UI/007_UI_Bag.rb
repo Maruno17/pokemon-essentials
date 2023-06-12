@@ -78,19 +78,24 @@ class Window_PokemonBag < Window_DrawableCommand
       textpos.push(
         [@adapter.getDisplayName(item), rect.x, rect.y + 2, :left, baseColor, shadowColor]
       )
-      if GameData::Item.get(item).is_important?
+      item_data = GameData::Item.get(item)
+      showing_register_icon = false
+      if item_data.is_important?
         if @bag.registered?(item)
           pbDrawImagePositions(
             self.contents,
             [["Graphics/UI/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 0, -1, 24]]
           )
+          showing_register_icon = true
         elsif pbCanRegisterItem?(item)
           pbDrawImagePositions(
             self.contents,
             [["Graphics/UI/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 24, -1, 24]]
           )
+          showing_register_icon = true
         end
-      else
+      end
+      if item_data.show_quantity? && !showing_register_icon
         qty = (@filterlist) ? thispocket[@filterlist[@pocket][index]][1] : thispocket[index][1]
         qtytext = _ISPRINTF("x{1: 3d}", qty)
         xQty    = rect.x + rect.width - self.contents.text_size(qtytext).width - 16

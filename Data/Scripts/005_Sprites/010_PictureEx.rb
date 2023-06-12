@@ -199,6 +199,7 @@ class PictureEx
 
   def clearProcesses
     @processes = []
+    @timer_start = nil
   end
 
   def adjustPosition(xOffset, yOffset)
@@ -458,6 +459,7 @@ class PictureEx
     end
     # Clear out empty spaces in @processes array caused by finished processes
     @processes.compact! if procEnded
+    @timer_start = nil if @processes.empty? && @rotate_speed == 0
     # Add the constant rotation speed
     if @rotate_speed != 0
       @frameUpdates.push(Processes::ANGLE) if !@frameUpdates.include?(Processes::ANGLE)

@@ -425,7 +425,8 @@ module RandomDungeon
     #===========================================================================
 
     def generate
-      @rng_seed = @parameters.rng_seed || Random.new_seed
+      @rng_seed = @parameters.rng_seed || $PokemonGlobal.dungeon_rng_seed || Random.new_seed
+      $PokemonGlobal.dungeon_rng_seed = nil
       Random.srand(@rng_seed)
       maxWidth = @usable_width - (@buffer_x * 2)
       maxHeight = @usable_height - (@buffer_y * 2)
@@ -1025,7 +1026,8 @@ end
 # dungeon.
 #===============================================================================
 class PokemonGlobalMetadata
-  attr_writer :dungeon_area, :dungeon_version
+  attr_writer   :dungeon_area, :dungeon_version
+  attr_accessor :dungeon_rng_seed
 
   def dungeon_area
     return @dungeon_area || :none
@@ -1070,21 +1072,3 @@ EventHandlers.add(:on_game_map_setup, :random_dungeon,
     end
   }
 )
-
-#===============================================================================
-# TODO: Temporary debug function for testing random dungeon generation.
-#===============================================================================
-MenuHandlers.add(:debug_menu, :test_random_dungeon, {
-  "name"        => _INTL("Test Random Dungeon Generation"),
-  "parent"      => :main,
-  "description" => _INTL("Generates a random dungeon and echoes it to the console."),
-  "effect"      => proc {
-    tileset = :cave   # :forest   # :cave
-    tileset_data = GameData::DungeonTileset.try_get((tileset == :forest) ? 23 : 7)
-    params = GameData::DungeonParameters.try_get(tileset)
-    dungeon = RandomDungeon::Dungeon.new(params.cell_count_x, params.cell_count_y, tileset_data, params)
-    dungeon.generate
-    echoln dungeon.rng_seed
-    echoln dungeon.write
-  }
-})

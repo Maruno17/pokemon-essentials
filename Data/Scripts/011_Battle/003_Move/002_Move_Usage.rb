@@ -143,14 +143,14 @@ class Battle::Move
     target.allAllies.each do |b|
       next if !b.hasActiveAbility?(:AROMAVEIL)
       if showMessage
-        @battle.pbShowAbilitySplash(target)
+        @battle.pbShowAbilitySplash(b)
         if Battle::Scene::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
         else
           @battle.pbDisplay(_INTL("{1} is unaffected because of {2}'s {3}!",
                                   target.pbThis, b.pbThis(true), b.abilityName))
         end
-        @battle.pbHideAbilitySplash(target)
+        @battle.pbHideAbilitySplash(b)
       end
       return true
     end

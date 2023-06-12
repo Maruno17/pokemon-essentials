@@ -7,6 +7,14 @@ ItemHandlers::UseText.add(:BICYCLE, proc { |item|
 
 ItemHandlers::UseText.copy(:BICYCLE, :MACHBIKE, :ACROBIKE)
 
+ItemHandlers::UseText.add(:EXPALLOFF, proc { |item|
+  next _INTL("Turn on")
+})
+
+ItemHandlers::UseText.add(:EXPALL, proc { |item|
+  next _INTL("Turn off")
+})
+
 #===============================================================================
 # UseFromBag handlers
 # Return values: 0 = not used

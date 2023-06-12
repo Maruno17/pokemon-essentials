@@ -168,11 +168,14 @@ class PokemonLoad_Scene
     if meta
       filename = pbGetPlayerCharset(meta.walk_charset, trainer, true)
       @sprites["player"] = TrainerWalkingCharSprite.new(filename, @viewport)
+      if !@sprites["player"].bitmap
+        raise _INTL("Player character {1}'s walking charset was not found (filename: \"{2}\").", trainer.character_ID, filename)
+      end
       charwidth  = @sprites["player"].bitmap.width
       charheight = @sprites["player"].bitmap.height
-      @sprites["player"].x        = 112 - (charwidth / 8)
-      @sprites["player"].y        = 112 - (charheight / 8)
-      @sprites["player"].src_rect = Rect.new(0, 0, charwidth / 4, charheight / 4)
+      @sprites["player"].x = 112 - (charwidth / 8)
+      @sprites["player"].y = 112 - (charheight / 8)
+      @sprites["player"].z = 99999
     end
     trainer.party.each_with_index do |pkmn, i|
       @sprites["party#{i}"] = PokemonIconSprite.new(pkmn, @viewport)

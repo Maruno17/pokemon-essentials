@@ -639,7 +639,6 @@ class Battle::Move::AttractTarget < Battle::Move
   def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
     return true if !target.pbCanAttract?(user, show_message)
-    return true if pbMoveFailedAromaVeil?(user, target, show_message)
     return false
   end
 

@@ -199,12 +199,19 @@ class Battle
           entry[5] = pri
           choice[4] = pri
         end
-        # Recalculate sub-priority change caused by ability (but not by item)
-        if entry[0].abilityActive?
-          subPri = Battle::AbilityEffects.triggerPriorityBracketChange(entry[0].ability, entry[0], self)
-          needRearranging = true if subPri != entry[2]
-          entry[2] = subPri
-        end
+        # NOTE: If the battler's ability at the start of this round was one with
+        #       a PriorityBracketChange handler (i.e. Quick Draw), but it Mega
+        #       Evolved and now doesn't have that ability, that old ability's
+        #       priority bracket modifier will still apply. Similarly, if its
+        #       old ability did not have a PriorityBracketChange handler but it
+        #       Mega Evolved and now does have it, it will not apply this round.
+        #       This is because the message saying that it had an effect appears
+        #       before Mega Evolution happens, and recalculating it now would
+        #       make that message inaccurate because Quick Draw only has a
+        #       chance of triggering. However, since Quick Draw is exclusive to
+        #       a species that doesn't Mega Evolve, these circumstances should
+        #       never arise and no one will notice that the priority bracket
+        #       change isn't recalculated when technically it should be.
       end
     end
     # Calculate each battler's overall sub-priority, and whether its ability or

@@ -275,7 +275,6 @@ HiddenMoveHandlers::UseMove.add(:DIG, proc { |move, pokemon|
 # Dive
 #===============================================================================
 def pbDive
-  return false if $game_player.pbFacingEvent
   map_metadata = $game_map.metadata
   return false if !map_metadata || !map_metadata.dive_map_id
   move = :DIVE
@@ -308,7 +307,6 @@ end
 
 def pbSurfacing
   return if !$PokemonGlobal.diving
-  return false if $game_player.pbFacingEvent
   surface_map_id = nil
   GameData::MapMetadata.each do |map_data|
     next if !map_data.dive_map_id || map_data.dive_map_id != $game_map.map_id
@@ -683,7 +681,6 @@ HiddenMoveHandlers::UseMove.add(:STRENGTH, proc { |move, pokemon|
 # Surf
 #===============================================================================
 def pbSurf
-  return false if $game_player.pbFacingEvent
   return false if !$game_player.can_ride_vehicle_with_follower?
   move = :SURF
   movefinder = $player.get_pokemon_with_move(move)
