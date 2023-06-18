@@ -477,7 +477,7 @@ class Battle::Battler
   def pbHasMoveFunction?(*arg)
     return false if !arg
     eachMove do |m|
-      arg.each { |code| return true if m.function == code }
+      arg.each { |code| return true if m.function_code == code }
     end
     return false
   end

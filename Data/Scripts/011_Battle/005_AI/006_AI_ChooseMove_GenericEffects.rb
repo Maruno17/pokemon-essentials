@@ -102,12 +102,12 @@ class Battle::AI
     case stat
     when :ATTACK
       return false if !target.check_for_move { |m| m.physicalMove?(m.type) &&
-                                                   m.function != "UseUserDefenseInsteadOfUserAttack" &&
-                                                   m.function != "UseTargetAttackInsteadOfUserAttack" }
+                                                   m.function_code != "UseUserDefenseInsteadOfUserAttack" &&
+                                                   m.function_code != "UseTargetAttackInsteadOfUserAttack" }
     when :DEFENSE
       each_foe_battler(target.side) do |b, i|
         return true if b.check_for_move { |m| m.physicalMove?(m.type) ||
-                                              m.function == "UseTargetDefenseInsteadOfTargetSpDef" }
+                                              m.function_code == "UseTargetDefenseInsteadOfTargetSpDef" }
       end
       return false
     when :SPECIAL_ATTACK
@@ -115,7 +115,7 @@ class Battle::AI
     when :SPECIAL_DEFENSE
       each_foe_battler(target.side) do |b, i|
         return true if b.check_for_move { |m| m.specialMove?(m.type) &&
-                                              m.function != "UseTargetDefenseInsteadOfTargetSpDef" }
+                                              m.function_code != "UseTargetDefenseInsteadOfTargetSpDef" }
       end
       return false
     when :SPEED
@@ -215,8 +215,8 @@ class Battle::AI
         score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         has_physical_moves = target.check_for_move { |m| m.physicalMove?(m.type) &&
-                                                         m.function != "UseUserDefenseInsteadOfUserAttack" &&
-                                                         m.function != "UseTargetAttackInsteadOfUserAttack" }
+                                                         m.function_code != "UseUserDefenseInsteadOfUserAttack" &&
+                                                         m.function_code != "UseTargetAttackInsteadOfUserAttack" }
         inc = (has_physical_moves) ? 8 : 12
         score += inc * inc_mult
       end
@@ -398,12 +398,12 @@ class Battle::AI
     case stat
     when :ATTACK
       return false if !target.check_for_move { |m| m.physicalMove?(m.type) &&
-                                                   m.function != "UseUserDefenseInsteadOfUserAttack" &&
-                                                   m.function != "UseTargetAttackInsteadOfUserAttack" }
+                                                   m.function_code != "UseUserDefenseInsteadOfUserAttack" &&
+                                                   m.function_code != "UseTargetAttackInsteadOfUserAttack" }
     when :DEFENSE
       each_foe_battler(target.side) do |b, i|
         return true if b.check_for_move { |m| m.physicalMove?(m.type) ||
-                                              m.function == "UseTargetDefenseInsteadOfTargetSpDef" }
+                                              m.function_code == "UseTargetDefenseInsteadOfTargetSpDef" }
       end
       return false
     when :SPECIAL_ATTACK
@@ -411,7 +411,7 @@ class Battle::AI
     when :SPECIAL_DEFENSE
       each_foe_battler(target.side) do |b, i|
         return true if b.check_for_move { |m| m.specialMove?(m.type) &&
-                                              m.function != "UseTargetDefenseInsteadOfTargetSpDef" }
+                                              m.function_code != "UseTargetDefenseInsteadOfTargetSpDef" }
       end
       return false
     when :SPEED
@@ -507,8 +507,8 @@ class Battle::AI
         score -= 10 * ((target.opposes?(@user)) ? 1 : desire_mult)
       else
         has_physical_moves = target.check_for_move { |m| m.physicalMove?(m.type) &&
-                                                         m.function != "UseUserDefenseInsteadOfUserAttack" &&
-                                                         m.function != "UseTargetAttackInsteadOfUserAttack" }
+                                                         m.function_code != "UseUserDefenseInsteadOfUserAttack" &&
+                                                         m.function_code != "UseTargetAttackInsteadOfUserAttack" }
         dec = (has_physical_moves) ? 8 : 12
         score += dec * dec_mult
       end

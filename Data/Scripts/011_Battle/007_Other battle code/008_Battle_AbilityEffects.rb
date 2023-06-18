@@ -1420,7 +1420,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:SWARM,
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:TECHNICIAN,
   proc { |ability, user, target, move, mults, power, type|
-    if user.index != target.index && move && move.function != "Struggle" &&
+    if user.index != target.index && move && move.function_code != "Struggle" &&
        power * mults[:power_multiplier] <= 60
       mults[:power_multiplier] *= 1.5
     end
@@ -1536,7 +1536,7 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:FLUFFY,
 Battle::AbilityEffects::DamageCalcFromTarget.add(:FURCOAT,
   proc { |ability, user, target, move, mults, power, type|
     mults[:defense_multiplier] *= 2 if move.physicalMove? ||
-                                       move.function == "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
+                                       move.function_code == "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
   }
 )
 
@@ -2596,14 +2596,14 @@ Battle::AbilityEffects::OnSwitchIn.add(:ANTICIPATION,
         next if m.statusMove?
         if types.length > 0
           moveType = m.type
-          if Settings::MECHANICS_GENERATION >= 6 && m.function == "TypeDependsOnUserIVs"   # Hidden Power
+          if Settings::MECHANICS_GENERATION >= 6 && m.function_code == "TypeDependsOnUserIVs"   # Hidden Power
             moveType = pbHiddenPower(b.pokemon)[0]
           end
           eff = Effectiveness.calculate(moveType, *types)
           next if Effectiveness.ineffective?(eff)
           next if !Effectiveness.super_effective?(eff) &&
-                  !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
-        elsif !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
+                  !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function_code)
+        elsif !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function_code)
           next
         end
         found = true
@@ -2743,12 +2743,12 @@ Battle::AbilityEffects::OnSwitchIn.add(:FOREWARN,
     battle.allOtherSideBattlers(battler.index).each do |b|
       b.eachMove do |m|
         power = m.power
-        power = 160 if ["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
-        power = 150 if ["PowerHigherWithUserHP"].include?(m.function)    # Eruption
+        power = 160 if ["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function_code)
+        power = 150 if ["PowerHigherWithUserHP"].include?(m.function_code)    # Eruption
         # Counter, Mirror Coat, Metal Burst
         power = 120 if ["CounterPhysicalDamage",
                         "CounterSpecialDamage",
-                        "CounterDamagePlusHalf"].include?(m.function)
+                        "CounterDamagePlusHalf"].include?(m.function_code)
         # Sonic Boom, Dragon Rage, Night Shade, Endeavor, Psywave,
         # Return, Frustration, Crush Grip, Gyro Ball, Hidden Power,
         # Natural Gift, Trump Card, Flail, Grass Knot
@@ -2764,8 +2764,8 @@ Battle::AbilityEffects::OnSwitchIn.add(:FOREWARN,
                        "TypeAndPowerDependOnUserBerry",
                        "PowerHigherWithLessPP",
                        "PowerLowerWithUserHP",
-                       "PowerHigherWithTargetWeight"].include?(m.function)
-        power = 80 if Settings::MECHANICS_GENERATION <= 5 && m.function == "TypeDependsOnUserIVs"
+                       "PowerHigherWithTargetWeight"].include?(m.function_code)
+        power = 80 if Settings::MECHANICS_GENERATION <= 5 && m.function_code == "TypeDependsOnUserIVs"
         next if power < highestPower
         forewarnMoves = [] if power > highestPower
         forewarnMoves.push(m.name)

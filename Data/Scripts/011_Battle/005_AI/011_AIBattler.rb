@@ -243,7 +243,7 @@ class Battle::AI::AIBattler
       battler.pbTypes(true).each do |defend_type|
         mult = effectiveness_of_type_against_single_battler_type(type, defend_type, user)
         if move
-          case move.function
+          case move.function_code
           when "HitsTargetInSkyGroundsTarget"
             mult = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER if type == :GROUND && defend_type == :FLYING
           when "FreezeTargetSuperEffectiveAgainstWater"
@@ -308,7 +308,7 @@ class Battle::AI::AIBattler
   end
 
   def has_move_with_function?(*functions)
-    check_for_move { |m| return true if functions.include?(m.function) }
+    check_for_move { |m| return true if functions.include?(m.function_code) }
     return false
   end
 

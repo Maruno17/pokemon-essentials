@@ -346,7 +346,7 @@ class Battle::Scene
       when :BothSides
         showName = true
       else
-        showName = @battle.pbMoveCanTarget?(i, idxBattler, target_data)
+        showName = @battle.pbMoveCanTarget?(idxBattler, i, target_data)
       end
       next nil if !showName
       next (@battle.battlers[i].fainted?) ? "" : @battle.battlers[i].name

@@ -189,7 +189,7 @@ Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithLessPP",
   proc { |power, move, user, target, ai, battle|
     next 0 if move.move.pp == 0 && move.move.totalpp > 0
     dmgs = [200, 80, 60, 50, 40]
-    ppLeft = [move.pp - 1, dmgs.length - 1].min
+    ppLeft = [move.move.pp - 1, dmgs.length - 1].min
     next dmgs[ppLeft]
   }
 )
@@ -463,7 +463,7 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
       next Battle::AI::MOVE_USELESS_SCORE
     end
     # Prefer if user knows a damaging move which won't definitely critical hit
-    if user.check_for_move { |m| m.damagingMove? && m.function != "AlwaysCriticalHit"}
+    if user.check_for_move { |m| m.damagingMove? && m.function_code != "AlwaysCriticalHit"}
       score += 15
     end
     next score

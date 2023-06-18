@@ -1428,7 +1428,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToStatStageLower
                                 m.is_a?(Battle::Move::TargetMultiStatDownMove) ||
                                 ["LowerPoisonedTargetAtkSpAtkSpd1",
                                  "PoisonTargetLowerTargetSpeed1",
-                                 "HealUserByTargetAttackLowerTargetAttack1"].include?(m.function) }
+                                 "HealUserByTargetAttackLowerTargetAttack1"].include?(m.function_code) }
         score += 15
         has_move = true
       end

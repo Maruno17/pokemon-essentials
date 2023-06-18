@@ -65,10 +65,10 @@ class BattlePalaceBattle < Battle
   end
 
   def pbMoveCategory(move)
-    if move.target == :User || move.function == "MultiTurnAttackBideThenReturnDoubleDamage"
+    if move.target == :User || move.function_code == "MultiTurnAttackBideThenReturnDoubleDamage"
       return 1
     elsif move.statusMove? ||
-          move.function == "CounterPhysicalDamage" || move.function == "CounterSpecialDamage"
+          move.function_code == "CounterPhysicalDamage" || move.function_code == "CounterSpecialDamage"
       return 2
     else
       return 0

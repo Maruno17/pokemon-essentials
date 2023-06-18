@@ -128,7 +128,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
       score -= 5 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
                                                    "CureUserBurnPoisonParalysis")
       score -= 15 if target.check_for_move { |m|
-        m.function == "GiveUserStatusToTarget" && user.battler.pbCanPoison?(target.battler, false, m)
+        m.function_code == "GiveUserStatusToTarget" && user.battler.pbCanPoison?(target.battler, false, m)
       }
       # Don't prefer if the target won't take damage from the poison
       score -= 20 if !target.battler.takesIndirectDamage?
@@ -218,7 +218,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeTarget",
       score -= 5 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
                                                    "CureUserBurnPoisonParalysis")
       score -= 15 if target.check_for_move { |m|
-        m.function == "GiveUserStatusToTarget" && user.battler.pbCanParalyze?(target.battler, false, m)
+        m.function_code == "GiveUserStatusToTarget" && user.battler.pbCanParalyze?(target.battler, false, m)
       }
       # Don't prefer if the target can heal itself (or be healed by an ally)
       if target.has_active_ability?(:SHEDSKIN)
@@ -313,7 +313,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
       score -= 5 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
                                                    "CureUserBurnPoisonParalysis")
       score -= 15 if target.check_for_move { |m|
-        m.function == "GiveUserStatusToTarget" && user.battler.pbCanBurn?(target.battler, false, m)
+        m.function_code == "GiveUserStatusToTarget" && user.battler.pbCanBurn?(target.battler, false, m)
       }
       # Don't prefer if the target won't take damage from the burn
       score -= 20 if !target.battler.takesIndirectDamage?

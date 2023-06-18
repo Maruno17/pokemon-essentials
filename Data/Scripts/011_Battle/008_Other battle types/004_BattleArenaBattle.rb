@@ -94,14 +94,14 @@ class BattleArenaBattle < Battle
   end
 
   def pbMindScore(move)
-    if move.function == "ProtectUser" ||   # Detect/Protect
-       move.function == "UserEnduresFaintingThisTurn" ||   # Endure
-       move.function == "FlinchTargetFailsIfNotUserFirstTurn"   # Fake Out
+    if move.function_code == "ProtectUser" ||   # Detect/Protect
+       move.function_code == "UserEnduresFaintingThisTurn" ||   # Endure
+       move.function_code == "FlinchTargetFailsIfNotUserFirstTurn"   # Fake Out
       return -1
     end
-    if move.function == "CounterPhysicalDamage" ||   # Counter
-       move.function == "CounterSpecialDamage" ||   # Mirror Coat
-       move.function == "MultiTurnAttackBideThenReturnDoubleDamage"   # Bide
+    if move.function_code == "CounterPhysicalDamage" ||   # Counter
+       move.function_code == "CounterSpecialDamage" ||   # Mirror Coat
+       move.function_code == "MultiTurnAttackBideThenReturnDoubleDamage"   # Bide
       return 0
     end
     return 0 if move.statusMove?

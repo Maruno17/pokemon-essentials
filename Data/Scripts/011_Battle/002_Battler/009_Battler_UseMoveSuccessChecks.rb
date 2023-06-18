@@ -87,7 +87,7 @@ class Battle::Battler
     end
     # Assault Vest (prevents choosing status moves but doesn't prevent
     # executing them)
-    if hasActiveItem?(:ASSAULTVEST) && move.statusMove? && move.function != "UseMoveTargetIsAboutToUse" && commandPhase
+    if hasActiveItem?(:ASSAULTVEST) && move.statusMove? && move.function_code != "UseMoveTargetIsAboutToUse" && commandPhase
       if showMessages
         msg = _INTL("The effects of the {1} prevent status moves from being used!", itemName)
         (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
@@ -308,7 +308,7 @@ class Battle::Battler
     return true if user.effects[PBEffects::TwoTurnAttack]
     # Move-specific failures
     if move.pbFailsAgainstTarget?(user, target, show_message)
-      PBDebug.log(sprintf("[Move failed] In function code %s's def pbFailsAgainstTarget?", move.function))
+      PBDebug.log(sprintf("[Move failed] In function code %s's def pbFailsAgainstTarget?", move.function_code))
       return false
     end
     # Immunity to priority moves because of Psychic Terrain
@@ -545,7 +545,7 @@ class Battle::Battler
     # Future Sight
     hitsInvul = true if @battle.futureSight
     # Helping Hand
-    hitsInvul = true if move.function == "PowerUpAllyMove"
+    hitsInvul = true if move.function_code == "PowerUpAllyMove"
     if !hitsInvul
       # Semi-invulnerable moves
       if target.effects[PBEffects::TwoTurnAttack]

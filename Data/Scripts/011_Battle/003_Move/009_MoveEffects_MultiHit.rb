@@ -343,13 +343,20 @@ end
 # stage. On the second turn, does damage. (Meteor Beam)
 #===============================================================================
 class Battle::Move::TwoTurnAttackChargeRaiseUserSpAtk1 < Battle::Move::TwoTurnMove
+  attr_reader :statUp
+
+  def initialize(battle, move)
+    super
+    @statUp = [:SPECIAL_ATTACK, 1]
+  end
+
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} is overflowing with space power!", user.pbThis))
   end
 
   def pbChargingTurnEffect(user, target)
-    if user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
-      user.pbRaiseStatStage(:SPECIAL_ATTACK, 1, user)
+    if user.pbCanRaiseStatStage?(@statUp[0], user, self)
+      user.pbRaiseStatStage(@statUp[0], @statUp[1], user)
     end
   end
 end

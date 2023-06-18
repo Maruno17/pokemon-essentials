@@ -588,13 +588,13 @@ class Interpreter
       end
     when 7   # other
       case @parameters[4]
-      when 0 then value = $game_map.map_id               # map ID
-      when 1 then value = $player.pokemon_party.length   # party members
-      when 2 then value = $player.money                  # gold
-      when 3 then value = $stats.distance_moved          # steps
-      when 4 then value = $stats.play_time               # play time
-      when 5 then value = $game_system.timer             # timer
-      when 6 then value = $game_system.save_count        # save count
+      when 0 then value = $game_map.map_id          # map ID
+      when 1 then value = $player.pokemon_count     # party members
+      when 2 then value = $player.money             # gold
+      when 3 then value = $stats.distance_moved     # steps
+      when 4 then value = $stats.play_time          # play time
+      when 5 then value = $game_system.timer        # timer
+      when 6 then value = $game_system.save_count   # save count
       end
     end
     # Apply value and operation to all specified game variables

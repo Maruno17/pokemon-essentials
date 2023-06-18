@@ -12,7 +12,7 @@ class Battle::AI::AIMove
     @move = move
     @move.calcType = rough_type
     @ai.battle.moldBreaker ||= ["IgnoreTargetAbility",
-                                "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(function)
+                                "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(function_code)
   end
 
   #-----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ class Battle::AI::AIMove
   def specialMove?(thisType = nil);  return @move.specialMove?(thisType);  end
   def damagingMove?;                 return @move.damagingMove?;           end
   def statusMove?;                   return @move.statusMove?;             end
-  def function;                      return @move.function;                end
+  def function_code;                 return @move.function_code;           end
 
   #-----------------------------------------------------------------------------
 
@@ -82,7 +82,7 @@ class Battle::AI::AIMove
     ret = @move.power
     ret = 60 if ret == 1
     return ret if !@ai.trainer.medium_skill?
-    return Battle::AI::Handlers.get_base_power(function,
+    return Battle::AI::Handlers.get_base_power(function_code,
        ret, self, @ai.user, @ai.target, @ai, @ai.battle)
   end
 
@@ -106,7 +106,7 @@ class Battle::AI::AIMove
                   Battle::Move::CRITICAL_HIT_RATIOS[crit_stage] <= 2
     ##### Calculate user's attack stat #####
     if ["CategoryDependsOnHigherDamagePoisonTarget",
-        "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(function)
+        "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(function_code)
       @move.pbOnStartUse(user.battler, [target.battler])   # Calculate category
     end
     atk, atk_stage = @move.pbGetAttackStats(user.battler, target.battler)
@@ -301,7 +301,7 @@ class Battle::AI::AIMove
         end
       when :Sandstorm
         if target.has_type?(:ROCK) && specialMove?(calc_type) &&
-           function != "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
+           function_code != "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
           multipliers[:defense_multiplier] *= 1.5
         end
       end
@@ -390,7 +390,7 @@ class Battle::AI::AIMove
     # OHKO move accuracy
     if @move.is_a?(Battle::Move::OHKO)
       ret = self.accuracy + user.level - target.level
-      ret -= 10 if function == "OHKOIce" && !user.has_type?(:ICE)
+      ret -= 10 if function_code == "OHKOIce" && !user.has_type?(:ICE)
       return [ret, 0].max
     end
     # "Always hit" effects and "always hit" accuracy
@@ -478,13 +478,13 @@ class Battle::AI::AIMove
       modifiers[:evasion_stage] = 0 if target.effects[PBEffects::MiracleEye] && modifiers[:evasion_stage] > 0
     end
     # "AI-specific calculations below"
-    modifiers[:evasion_stage] = 0 if function == "IgnoreTargetDefSpDefEvaStatStages"   # Chip Away
+    modifiers[:evasion_stage] = 0 if function_code == "IgnoreTargetDefSpDefEvaStatStages"   # Chip Away
     if @ai.trainer.medium_skill?
       modifiers[:base_accuracy] = 0 if user.effects[PBEffects::LockOn] > 0 &&
                                        user.effects[PBEffects::LockOnPos] == target.index
     end
     if @ai.trainer.medium_skill?
-      case function
+      case function_code
       when "BadPoisonTarget"
         modifiers[:base_accuracy] = 0 if Settings::MORE_TYPE_EFFECTS &&
                                          @move.statusMove? && user.has_type?(:POISON)
@@ -554,7 +554,7 @@ class Battle::AI::AIMove
                    target.has_active_ability?(:SHIELDDUST) && !@ai.battle.moldBreaker
     # Prefer if the additional effect will have an increased chance of working
     return 5 if @move.addlEffect < 100 &&
-                (Settings::MECHANICS_GENERATION >= 6 || self.function != "EffectDependsOnEnvironment") &&
+                (Settings::MECHANICS_GENERATION >= 6 || function_code != "EffectDependsOnEnvironment") &&
                 (user.has_active_ability?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
     # No change to score
     return 0

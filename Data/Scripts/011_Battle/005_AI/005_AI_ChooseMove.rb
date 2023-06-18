@@ -23,6 +23,13 @@ class Battle::AI
   def pbGetMoveScores
     choices = []
     @user.battler.eachMoveWithIndex do |orig_move, idxMove|
+
+      # TODO: Delete this after testing AI.
+      if $tested_moves
+        $tested_moves[orig_move.id] ||= 0
+        $tested_moves[orig_move.id] += 1
+      end
+
       # Unchoosable moves aren't considered
       if !@battle.pbCanChooseMove?(@user.index, idxMove, false)
         if orig_move.pp == 0 && orig_move.total_pp > 0
@@ -43,7 +50,7 @@ class Battle::AI
       end
       # Get the move's target type
       target_data = @move.pbTarget(@user.battler)
-      if @move.function == "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" &&
+      if @move.function_code == "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" &&
          @move.rough_type == :GHOST && @user.has_active_ability?([:LIBERO, :PROTEAN])
         target_data = GameData::Target.get((Settings::MECHANICS_GENERATION >= 8) ? :RandomNearFoe : :NearFoe)
       end
@@ -140,7 +147,7 @@ class Battle::AI
 
   # Set some extra class variables for the move being assessed.
   def set_up_move_check(move)
-    case move.function
+    case move.function_code
     when "UseLastMoveUsed"
       if @battle.lastMoveUsed &&
          GameData::Move.exists?(@battle.lastMoveUsed) &&
@@ -159,7 +166,7 @@ class Battle::AI
   def set_up_move_check_target(target)
     @target = (target) ? @battlers[target.index] : nil
     @target&.refresh_battler
-    if @target && @move.function == "UseLastMoveUsedByTarget"
+    if @target && @move.function_code == "UseLastMoveUsedByTarget"
       if @target.battler.lastRegularMoveUsed &&
         GameData::Move.exists?(@target.battler.lastRegularMoveUsed) &&
          GameData::Move.get(@target.battler.lastRegularMoveUsed).has_flag?("CanMirrorMove")
@@ -187,7 +194,7 @@ class Battle::AI
     return true if @battle.pbWeather == :HeavyRain && @move.rough_type == :FIRE
     return true if @battle.pbWeather == :HarshSun && @move.rough_type == :WATER
     # Move effect-specific checks
-    return true if Battle::AI::Handlers.move_will_fail?(@move.function, @move, @user, self, @battle)
+    return true if Battle::AI::Handlers.move_will_fail?(@move.function_code, @move, @user, self, @battle)
     return false
   end
 
@@ -195,7 +202,7 @@ class Battle::AI
   # no battle conditions change between now and using the move).
   def pbPredictMoveFailureAgainstTarget
     # Move effect-specific checks
-    return true if Battle::AI::Handlers.move_will_fail_against_target?(@move.function, @move, @user, @target, self, @battle)
+    return true if Battle::AI::Handlers.move_will_fail_against_target?(@move.function_code, @move, @user, @target, self, @battle)
     # Immunity to priority moves because of Psychic Terrain
     return true if @battle.field.terrain == :Psychic && @target.battler.affectedByTerrain? &&
                    @target.opposes?(@user) && @move.rough_priority(@user) > 0
@@ -273,7 +280,7 @@ class Battle::AI
     if @trainer.has_skill_flag?("ScoreMoves")
       # Modify the score according to the move's effect
       old_score = score
-      score = Battle::AI::Handlers.apply_move_effect_score(@move.function,
+      score = Battle::AI::Handlers.apply_move_effect_score(@move.function_code,
          score, @move, @user, self, @battle)
       PBDebug.log_score_change(score - old_score, "function code modifier (generic)")
       # Modify the score according to various other effects
@@ -302,7 +309,7 @@ class Battle::AI
     if @trainer.has_skill_flag?("ScoreMoves")
       # Modify the score according to the move's effect against the target
       old_score = score
-      score = Battle::AI::Handlers.apply_move_effect_against_target_score(@move.function,
+      score = Battle::AI::Handlers.apply_move_effect_against_target_score(@move.function_code,
          MOVE_BASE_SCORE, @move, @user, @target, self, @battle)
       PBDebug.log_score_change(score - old_score, "function code modifier (against target)")
       # Modify the score according to various other effects against the target

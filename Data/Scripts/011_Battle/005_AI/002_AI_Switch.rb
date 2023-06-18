@@ -41,7 +41,7 @@ class Battle::AI
     # Prefer using Baton Pass instead of switching
     baton_pass = -1
     @user.battler.eachMoveWithIndex do |m, i|
-      next if m.function != "SwitchOutUserPassOnEffects"   # Baton Pass
+      next if m.function_code != "SwitchOutUserPassOnEffects"   # Baton Pass
       next if !@battle.pbCanChooseMove?(@user.index, i, false)
       baton_pass = i
       break
@@ -379,7 +379,7 @@ Battle::AI::Handlers::ShouldSwitch.add(:asleep,
     # Doesn't benefit from being asleep
     next false if battler.has_active_ability?(:MARVELSCALE)
     # Doesn't know Rest (if it does, sleep is expected, so don't apply this check)
-    next false if battler.check_for_move { |m| m.function == "HealUserFullyAndFallAsleep" }
+    next false if battler.check_for_move { |m| m.function_code == "HealUserFullyAndFallAsleep" }
     # Not trapping another battler in battle
     if ai.trainer.high_skill?
       next false if ai.battlers.any? do |b|
@@ -457,7 +457,7 @@ Battle::AI::Handlers::ShouldSwitch.add(:foe_absorbs_all_moves_with_its_ability,
       battler.battler.eachMove do |move|
         next if move.statusMove?
         if ["IgnoreTargetAbility",
-            "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(move.function)
+            "CategoryDependsOnHigherDamageIgnoreTargetAbility"].include?(move.function_code)
           can_damage_foe = true
           break
         end

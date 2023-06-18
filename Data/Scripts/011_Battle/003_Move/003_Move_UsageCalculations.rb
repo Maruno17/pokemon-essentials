@@ -416,7 +416,7 @@ class Battle::Move
         multipliers[:final_damage_multiplier] *= 1.5
       end
     when :Sandstorm
-      if target.pbHasType?(:ROCK) && specialMove? && @function != "UseTargetDefenseInsteadOfTargetSpDef"
+      if target.pbHasType?(:ROCK) && specialMove? && @function_code != "UseTargetDefenseInsteadOfTargetSpDef"
         multipliers[:defense_multiplier] *= 1.5
       end
     when :ShadowSky
@@ -489,7 +489,7 @@ class Battle::Move
   def pbAdditionalEffectChance(user, target, effectChance = 0)
     return 0 if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
     ret = (effectChance > 0) ? effectChance : @addlEffect
-    if (Settings::MECHANICS_GENERATION >= 6 || @function != "EffectDependsOnEnvironment") &&
+    if (Settings::MECHANICS_GENERATION >= 6 || @function_code != "EffectDependsOnEnvironment") &&
        (user.hasActiveAbility?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
       ret *= 2
     end

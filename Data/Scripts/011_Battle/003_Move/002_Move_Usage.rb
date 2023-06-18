@@ -373,7 +373,7 @@ class Battle::Move
     #       regardless of its calculated type. Hence the following two lines of
     #       code.
     moveType = nil
-    moveType = :NORMAL if @function == "TypeDependsOnUserIVs"   # Hidden Power
+    moveType = :NORMAL if @function_code == "TypeDependsOnUserIVs"   # Hidden Power
     if !target.damageState.substitute
       if physicalMove?(moveType)
         target.effects[PBEffects::Counter]       = damage

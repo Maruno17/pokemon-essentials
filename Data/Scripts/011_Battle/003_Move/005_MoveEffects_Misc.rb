@@ -198,7 +198,7 @@ class Battle::Move::FailsIfTargetActed < Battle::Move
     end
     oppMove = @battle.choices[target.index][2]
     if !oppMove ||
-       (oppMove.function != "UseMoveTargetIsAboutToUse" &&
+       (oppMove.function_code != "UseMoveTargetIsAboutToUse" &&
        (target.movedThisRound? || oppMove.statusMove?))
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true

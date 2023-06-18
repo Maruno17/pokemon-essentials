@@ -46,8 +46,8 @@ module Settings
   AFFECTION_EFFECTS        = false
   # Whether a Pokémon's happiness is limited to 179, and can only be increased
   # further with friendship-raising berries. Related to AFFECTION_EFFECTS by
-  # default as affection effects only start applying above a happiness of 179.
-  # Also lowers the happiness evolution threshold to 160.
+  # default because affection effects only start applying above a happiness of
+  # 179. Also lowers the happiness evolution threshold to 160.
   APPLY_HAPPINESS_SOFT_CAP = AFFECTION_EFFECTS
 
   #=============================================================================

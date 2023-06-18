@@ -89,7 +89,7 @@ class Battle
   def pbChoseMoveFunctionCode?(idxBattler, code)
     return false if @battlers[idxBattler].fainted?
     if @choices[idxBattler][0] == :UseMove && @choices[idxBattler][1]
-      return @choices[idxBattler][2].function == code
+      return @choices[idxBattler][2].function_code == code
     end
     return false
   end

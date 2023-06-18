@@ -77,7 +77,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapItems",
     # Don't prefer if user used this move in the last round
     score -= 15 if user.battler.lastMoveUsed &&
                    GameData::Move.exists?(user.battler.lastMoveUsed) &&
-                   GameData::Move.get(user.battler.lastMoveUsed).function_code == move.function
+                   GameData::Move.get(user.battler.lastMoveUsed).function_code == move.function_code
     next score
   }
 )

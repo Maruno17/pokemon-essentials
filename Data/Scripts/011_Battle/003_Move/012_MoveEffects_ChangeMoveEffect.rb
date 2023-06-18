@@ -812,6 +812,8 @@ end
 # (Me First)
 #===============================================================================
 class Battle::Move::UseMoveTargetIsAboutToUse < Battle::Move
+  attr_reader :moveBlacklist
+
   def ignoresSubstitute?(user); return true; end
   def callsAnotherMove?; return true; end
 
@@ -836,7 +838,7 @@ class Battle::Move::UseMoveTargetIsAboutToUse < Battle::Move
   def pbFailsAgainstTarget?(user, target, show_message)
     return true if pbMoveFailedTargetAlreadyMoved?(target, show_message)
     oppMove = @battle.choices[target.index][2]
-    if !oppMove || oppMove.statusMove? || @moveBlacklist.include?(oppMove.function)
+    if !oppMove || oppMove.statusMove? || @moveBlacklist.include?(oppMove.function_code)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -919,6 +921,8 @@ end
 # Uses a random move that exists. (Metronome)
 #===============================================================================
 class Battle::Move::UseRandomMove < Battle::Move
+  attr_reader :moveBlacklist
+
   def callsAnotherMove?; return true; end
 
   def initialize(battle, move)
@@ -1179,7 +1183,7 @@ class Battle::Move::UseRandomUserMoveIfAsleep < Battle::Move
   def pbMoveFailed?(user, targets)
     @sleepTalkMoves = []
     user.eachMoveWithIndex do |m, i|
-      next if @moveBlacklist.include?(m.function)
+      next if @moveBlacklist.include?(m.function_code)
       next if !@battle.pbCanChooseMove?(user.index, i, false, true)
       @sleepTalkMoves.push(i)
     end

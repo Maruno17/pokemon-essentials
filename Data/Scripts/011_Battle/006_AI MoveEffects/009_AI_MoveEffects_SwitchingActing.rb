@@ -458,7 +458,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UsedAfterAllyRoundWithDoublePower",
     # No score change if no allies know this move
     ally_has_move = false
     ai.each_same_side_battler(user.side) do |b, i|
-      next if !b.has_move_with_function?(move.function)
+      next if !b.has_move_with_function?(move.function_code)
       ally_has_move = true
       break
     end
@@ -556,7 +556,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TargetUsesItsLastUsedMov
       break if mov
     end
     next Battle::AI::MOVE_USELESS_SCORE if mov.nil? || (mov.pp == 0 && mov.total_pp > 0)
-    next Battle::AI::MOVE_USELESS_SCORE if move.move.moveBlacklist.include?(mov.function)
+    next Battle::AI::MOVE_USELESS_SCORE if move.move.moveBlacklist.include?(mov.function_code)
     # Without lots of code here to determine good/bad moves, using this move is
     # likely to just be a waste of a turn
     # NOTE: Because this move can be used against a foe but is being used on an
@@ -802,7 +802,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetStatusMoves
       "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
       "ProtectUserBanefulBunker"                           # Baneful Bunker
     ]
-    if target.check_for_move { |m| m.statusMove? && protection_moves.include?(m.function) }
+    if target.check_for_move { |m| m.statusMove? && protection_moves.include?(m.function_code) }
       score += 10
     end
     next score

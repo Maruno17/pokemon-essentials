@@ -393,7 +393,8 @@ class Battle::Scene
     shadowSprite.visible = pkmn.species_data.shows_shadow? if shadowSprite && !back
   end
 
-  def pbResetMoveIndex(idxBattler)
+  def pbResetCommandsIndex(idxBattler)
+    @lastCmd[idxBattler] = 0
     @lastMove[idxBattler] = 0
   end
 

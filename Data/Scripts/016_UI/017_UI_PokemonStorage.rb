@@ -29,12 +29,12 @@ class PokemonBoxIcon < IconSprite
 
   def update
     super
+    self.color = Color.new(0, 0, 0, 0)
     if releasing?
       time_now = System.uptime
       self.zoom_x = lerp(1.0, 0.0, 1.5, @release_timer_start, System.uptime)
       self.zoom_y = self.zoom_x
       self.opacity = lerp(255, 0, 1.5, @release_timer_start, System.uptime)
-      self.color = Color.new(0, 0, 0, 0)
       if self.opacity == 0
         @release_timer_start = nil
         dispose

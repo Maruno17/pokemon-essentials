@@ -754,7 +754,10 @@ module Compiler
             later_value_found = true if !rec[j].nil?
             break if later_value_found
           end
-          break if !later_value_found
+          if !later_value_found
+            start = -1
+            break
+          end
         end
         file.write(",") if index > 0
         if value.nil?

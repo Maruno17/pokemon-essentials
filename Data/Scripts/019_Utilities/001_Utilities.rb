@@ -181,8 +181,8 @@ def pbTimeEventValid(variableNumber)
   value = $game_variables[variableNumber]
   if value.is_a?(Array)
     timenow = pbGetTimeNow
-    ret = (timenow.to_f - value[0] > value[1]) # value[1] is age in seconds
-    ret = false if value[1] <= 0 # zero age
+    ret = (timenow.to_f - value[0] > value[1])   # value[1] is age in seconds
+    ret = false if value[1] <= 0   # zero age
   end
   if !ret
     $game_variables[variableNumber] = 0
@@ -212,8 +212,8 @@ def pbExclaim(event, id = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
   end
 end
 
-def pbNoticePlayer(event)
-  if !pbFacingEachOther(event, $game_player)
+def pbNoticePlayer(event, always_show_exclaim = false)
+  if always_show_exclaim || !pbFacingEachOther(event, $game_player)
     pbExclaim(event)
   end
   pbTurnTowardEvent($game_player, event)

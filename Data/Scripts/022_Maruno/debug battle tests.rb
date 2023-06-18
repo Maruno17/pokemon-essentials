@@ -3,6 +3,8 @@
 #       battle, so their moves won't be score).
 # TODO: Add held items.
 
+AI_MOVE_TESTING_THRESHOLD = 100
+
 #===============================================================================
 #
 #===============================================================================
@@ -40,6 +42,16 @@ def debug_set_up_trainer
     pkmn = Pokemon.new(this_species, this_level, trainer, false)
     all_moves = pkmn.getMoveList.map { |m| m[1] }
     all_moves.uniq!
+    all_moves.reject! { |m| $tested_moves[m] && $tested_moves[m] > AI_MOVE_TESTING_THRESHOLD }
+    if all_moves.length == 0
+      all_moves = GameData::Move.keys
+      all_moves.reject! { |m| $tested_moves[m] && $tested_moves[m] > AI_MOVE_TESTING_THRESHOLD }
+    end
+    if all_moves.length == 0
+      echoln "All moves have been tested at least #{AI_MOVE_TESTING_THRESHOLD} times!"
+    end
+    all_moves = pkmn.getMoveList.map { |m| m[1] }
+    all_moves.uniq!
     moves = all_moves.sample(4)
     moves.each { |m| pkmn.learn_move(m) }
     trainer.party.push(pkmn)
@@ -51,6 +63,8 @@ def debug_set_up_trainer
 end
 
 def debug_test_auto_battle(logging = false, console_messages = true)
+  mar_load_tested_moves_record
+
   old_internal = $INTERNAL
   $INTERNAL = logging
   if console_messages
@@ -116,6 +130,17 @@ def debug_test_auto_battle(logging = false, console_messages = true)
     echoln ""
   end
   $INTERNAL = old_internal
+
+  mar_save_tested_moves_record
+end
+
+def mar_load_tested_moves_record
+  return if $tested_moves
+  pbRgssOpen("tested_moves.dat", "rb") { |f| $tested_moves = Marshal.load(f) }
+end
+
+def mar_save_tested_moves_record
+  File.open("tested_moves.dat", "wb") { |f| Marshal.dump($tested_moves || {}, f) }
 end
 
 #===============================================================================
@@ -154,5 +179,61 @@ MenuHandlers.add(:debug_menu, :bulk_test_auto_battle, {
       debug_test_auto_battle(false, false)
     end
     echoln "Done!"
+  }
+})
+
+MenuHandlers.add(:debug_menu, :load_tested_moves, {
+  "name"        => "Load tested moves",
+  "parent"      => :main,
+  "description" => "Load tested moves",
+  "always_show" => false,
+  "effect"      => proc {
+    mar_load_tested_moves_record
+  }
+})
+
+MenuHandlers.add(:debug_menu, :review_tested_moves, {
+  "name"        => "Review tested moves",
+  "parent"      => :main,
+  "description" => "List all tested moves and how much they have been tested.",
+  "always_show" => false,
+  "effect"      => proc {
+    mar_save_tested_moves_record
+    thresholded_moves = []
+    ($tested_moves || {}).each_pair do |move, count|
+      next if !count || count < AI_MOVE_TESTING_THRESHOLD
+      thresholded_moves.push([move, count])
+    end
+    thresholded_moves.sort! { |a, b| a[0].to_s <=> b[0].to_s }
+    remaining_moves = GameData::Move.keys.clone
+    thresholded_moves.each { |m| remaining_moves.delete(m[0]) }
+    remaining_moves.sort! { |a, b| a.to_s <=> b.to_s }
+
+    File.open("tested moves summary.txt", "wb") do |f|
+      f.write(0xEF.chr)
+      f.write(0xBB.chr)
+      f.write(0xBF.chr)
+      f.write("================================================\r\n")
+      f.write("Met threshold of #{AI_MOVE_TESTING_THRESHOLD}: #{thresholded_moves.length}\r\n")
+      f.write("================================================\r\n")
+      thresholded_moves.each do |m|
+        f.write("#{m[0]} = #{m[1]}\r\n")
+      end
+      f.write("\r\n")
+      f.write("\r\n")
+      f.write("\r\n")
+      f.write("================================================\r\n")
+      f.write("Remaining moves: #{remaining_moves.length}\r\n")
+      f.write("================================================\r\n")
+      remaining_moves.each do |m|
+        if $tested_moves && $tested_moves[m]
+          f.write("#{m} = #{$tested_moves[m]}\r\n")
+        else
+          f.write("#{m}\r\n")
+        end
+      end
+    end
+
+    echoln "Done."
   }
 })

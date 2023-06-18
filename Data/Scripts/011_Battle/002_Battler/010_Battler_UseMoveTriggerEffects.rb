@@ -135,7 +135,7 @@ class Battle::Battler
       end
     end
     # Room Service
-    if move.function == "StartSlowerBattlersActFirst" && @battle.field.effects[PBEffects::TrickRoom] > 0
+    if move.function_code == "StartSlowerBattlersActFirst" && @battle.field.effects[PBEffects::TrickRoom] > 0
       @battle.allBattlers.each do |b|
         next if !b.hasActiveItem?(:ROOMSERVICE)
         next if !b.pbCanLowerStatStage?(:SPEED)

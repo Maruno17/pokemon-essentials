@@ -170,7 +170,7 @@ class SpriteAnimation
   def animation_set_sprites(sprites, cell_data, position, quick_update = false)
     sprite_x = 320
     sprite_y = 240
-    if position == 3
+    if position == 3   # Screen
       if self.viewport
         sprite_x = self.viewport.rect.width / 2
         sprite_y = self.viewport.rect.height - 160
@@ -178,8 +178,10 @@ class SpriteAnimation
     else
       sprite_x = self.x - self.ox + (self.src_rect.width / 2)
       sprite_y = self.y - self.oy
-      sprite_y += self.src_rect.height / 2 if position == 1
-      sprite_y += self.src_rect.height if position == 2
+      if self.src_rect.height > 1
+        sprite_y += self.src_rect.height / 2 if position == 1   # Middle
+        sprite_y += self.src_rect.height if position == 2   # Bottom
+      end
     end
     16.times do |i|
       sprite = sprites[i]
