@@ -22,6 +22,17 @@ class Battle::AI
   #       against it.
   def pbGetMoveScores
     choices = []
+
+    # TODO: Delete this after testing AI.
+    if $tested_abilities && @user.ability_id
+      $tested_abilities[@user.ability_id] ||= 0
+      $tested_abilities[@user.ability_id] += 1
+    end
+    if $tested_items && @user.item_id
+      $tested_items[@user.item_id] ||= 0
+      $tested_items[@user.item_id] += 1
+    end
+
     @user.battler.eachMoveWithIndex do |orig_move, idxMove|
 
       # TODO: Delete this after testing AI.

@@ -453,7 +453,7 @@ class Battle::AI::AIMove
     if user.item_active?
       if user.item == :ZOOMLENS
         if rough_priority(user) <= 0
-          mods[:accuracy_multiplier] *= 1.2 if target.faster_than?(user)
+          modifiers[:accuracy_multiplier] *= 1.2 if target.faster_than?(user)
         end
       else
         Battle::ItemEffects.triggerAccuracyCalcFromUser(

@@ -456,7 +456,7 @@ Battle::AI::Handlers::ItemRanking.add(:BLACKSLUDGE,
 Battle::AI::Handlers::ItemRanking.add(:CHESTOBERRY,
   proc { |item, score, battler, ai|
     if ai.trainer.high_skill?
-      score += 1 if battler.has_move_with_function("HealUserFullyAndFallAsleep")
+      score += 1 if battler.has_move_with_function?("HealUserFullyAndFallAsleep")
     end
     next score
   }
@@ -784,7 +784,7 @@ Battle::AI::Handlers::ItemRanking.add(:TOXICORB,
 Battle::AI::Handlers::ItemRanking.add(:WHITEHERB,
   proc { |item, score, battler, ai|
     if ai.trainer.high_skill?
-      score += 1 if battler.has_move_with_function("LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2")
+      score += 1 if battler.has_move_with_function?("LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2")
     end
     next score
   }

@@ -147,7 +147,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DestroyTargetBerryOrGem"
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CorrodeTargetItem",
   proc { |move, user, target, ai, battle|
-    next true if !target.item || target.unlosableItem?(target.item) ||
+    next true if !target.item || target.battler.unlosableItem?(target.item) ||
                  target.effects[PBEffects::Substitute] > 0
     next true if target.has_active_ability?(:STICKYHOLD)
     next true if battle.corrosiveGas[target.index % 2][target.party_index]
