@@ -89,7 +89,7 @@ class Battle::Battler
     @effects[PBEffects::Outrage]       = 0
     @effects[PBEffects::Uproar]        = 0
     @effects[PBEffects::Bide]          = 0
-    @currentMove = nil
+    @currentMove = nil if @effects[PBEffects::HyperBeam] == 0
     # Reset counters for moves which increase them when used in succession
     @effects[PBEffects::FuryCutter] = 0
   end
@@ -314,7 +314,7 @@ class Battle::Battler
       user.lastMoveFailed = true
       if ![:Rain, :HeavyRain].include?(user.effectiveWeather) && user.takesIndirectDamage?
         user.pbTakeEffectDamage((user.totalhp / 4.0).round, false) do |hp_lost|
-          @battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
+          @battle.pbDisplay(_INTL("{1} is hurt by Powder!", user.pbThis))
         end
         @battle.pbGainExp   # In case user is KO'd by this
       end

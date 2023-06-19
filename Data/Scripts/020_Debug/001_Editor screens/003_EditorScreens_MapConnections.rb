@@ -491,7 +491,6 @@ class MapScreenScene
         end
       end
     end
-    # TODO: FPS. Scroll speed with arrow keys. Can probably leave this alone.
     if Input.press?(Input::UP)
       @mapsprites.each do |i|
         i[1].y += 4 if i

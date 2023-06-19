@@ -1,13 +1,10 @@
 # TODO: Be much more relevant with the choosing of held items. For example,
 #       only give a weather-boosting item to a Pokémon that can create the
 #       corresponding weather.
-# TODO: Add alternate forms, which will give access to more abilities. Note that
-#       some alternate forms require fusion or specific held items or other
-#       things.
 
-AI_MOVE_TESTING_THRESHOLD    = 500
-AI_ABILITY_TESTING_THRESHOLD = 100
-AI_ITEM_TESTING_THRESHOLD    = 100
+AI_MOVE_TESTING_THRESHOLD    = 1500
+AI_ABILITY_TESTING_THRESHOLD = 500
+AI_ITEM_TESTING_THRESHOLD    = 500
 
 #===============================================================================
 #
@@ -92,6 +89,31 @@ MEGA_STONES = [
 #===============================================================================
 #
 #===============================================================================
+class Battle::AI
+  alias _ai_testing__pbGetMoveScores pbGetMoveScores
+
+  def pbGetMoveScores
+    if $tested_abilities && @user.ability_id
+      $tested_abilities[@user.ability_id] ||= 0
+      $tested_abilities[@user.ability_id] += 1
+    end
+    if $tested_items && @user.item_id
+      $tested_items[@user.item_id] ||= 0
+      $tested_items[@user.item_id] += 1
+    end
+    @user.battler.eachMoveWithIndex do |orig_move, idxMove|
+      if $tested_moves
+        $tested_moves[orig_move.id] ||= 0
+        $tested_moves[orig_move.id] += 1
+      end
+    end
+    return _ai_testing__pbGetMoveScores
+  end
+end
+
+#===============================================================================
+#
+#===============================================================================
 def debug_set_up_trainer
   # Values to return
   trainer_array = []
@@ -125,22 +147,36 @@ def debug_set_up_trainer
     this_species = valid_species.sample
     this_level = 100   # rand(1, Settings::MAXIMUM_LEVEL)
     pkmn = Pokemon.new(this_species, this_level, trainer, false)
+    # Set form for certain species
+    case pkmn.species
+    when :GRENINJA, :SLOWKING, :GEODUDE, :GRAVELER, :GOLEM, :PONYTA, :RAPIDASH,
+         :GRIMER, :MUK, :SLOWBRO, :RAICHU, :DIGLETT, :DUGTRIO, :STUNFISK
+      pkmn.form_simple = 1
+    when :DARMANITAN
+      pkmn.form_simple = 2
+    when :CALYREX
+      pkmn.form_simple = [1, 2].sample   # So we test both versions of As One
+    when :NECROZMA
+      pkmn.form_simple = 3   # Ultra form
+    end
     # Generate moveset for pkmn (from level-up moves first, then from tutor
     # moves + egg moves, then from all moves)
     all_moves = pkmn.getMoveList.map { |m| m[1] }
     all_moves.uniq!
-    all_moves.reject! { |m| $tested_moves[m] && $tested_moves[m] > AI_MOVE_TESTING_THRESHOLD }
-    if all_moves.length == 0
-      all_moves = pkmn.species_data.tutor_moves.clone + pkmn.species_data.get_egg_moves.clone
+    if !$shown_all_moves_tested_message
       all_moves.reject! { |m| $tested_moves[m] && $tested_moves[m] > AI_MOVE_TESTING_THRESHOLD }
       if all_moves.length == 0
-        all_moves = GameData::Move.keys.clone
+        all_moves = pkmn.species_data.tutor_moves.clone + pkmn.species_data.get_egg_moves.clone
         all_moves.reject! { |m| $tested_moves[m] && $tested_moves[m] > AI_MOVE_TESTING_THRESHOLD }
+        if all_moves.length == 0
+          all_moves = GameData::Move.keys.clone
+          all_moves.reject! { |m| $tested_moves[m] && $tested_moves[m] > AI_MOVE_TESTING_THRESHOLD }
+        end
       end
-    end
-    if all_moves.length == 0 && !$shown_all_moves_tested_message
-      echoln "All moves have been tested at least #{AI_MOVE_TESTING_THRESHOLD} times!"
-      $shown_all_moves_tested_message = true
+      if all_moves.length == 0 && !$shown_all_moves_tested_message
+        echoln "All moves have been tested at least #{AI_MOVE_TESTING_THRESHOLD} times!"
+        $shown_all_moves_tested_message = true
+      end
     end
     moves = all_moves.sample(4)
     moves.each { |m| pkmn.learn_move(m) }
@@ -174,7 +210,11 @@ def debug_set_up_trainer
     if $tested_abilities[abil] && $tested_abilities[abil] > AI_ABILITY_TESTING_THRESHOLD
       abils = pkmn.getAbilityList
       abils.reject! { |a| $tested_abilities[a[0]] && $tested_abilities[a[0]] > AI_ABILITY_TESTING_THRESHOLD }
-      pkmn.ability_index = abils.sample[1] if abils.length > 0
+      if abils.length > 0
+        pkmn.ability_index = abils.sample[1]
+      else
+        pkmn.ability = GameData::Ability.keys.sample
+      end
     end
     trainer.party.push(pkmn)
     pokemon_array.push(pkmn)

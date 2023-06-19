@@ -574,7 +574,6 @@ EventHandlers.add(:on_frame_update, :phone_call_counter,
     if $PokemonGlobal.phone.time_to_next_call <= 0
       $PokemonGlobal.phone.time_to_next_call = rand(20...40) * 60.0   # 20-40 minutes
     end
-    # TODO: FPS. Can probably leave this alone.
     $PokemonGlobal.phone.time_to_next_call -= Graphics.delta
     next if $PokemonGlobal.phone.time_to_next_call > 0
     # Time for a random phone call; generate one

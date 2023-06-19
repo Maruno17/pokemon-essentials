@@ -22,25 +22,7 @@ class Battle::AI
   #       against it.
   def pbGetMoveScores
     choices = []
-
-    # TODO: Delete this after testing AI.
-    if $tested_abilities && @user.ability_id
-      $tested_abilities[@user.ability_id] ||= 0
-      $tested_abilities[@user.ability_id] += 1
-    end
-    if $tested_items && @user.item_id
-      $tested_items[@user.item_id] ||= 0
-      $tested_items[@user.item_id] += 1
-    end
-
     @user.battler.eachMoveWithIndex do |orig_move, idxMove|
-
-      # TODO: Delete this after testing AI.
-      if $tested_moves
-        $tested_moves[orig_move.id] ||= 0
-        $tested_moves[orig_move.id] += 1
-      end
-
       # Unchoosable moves aren't considered
       if !@battle.pbCanChooseMove?(@user.index, idxMove, false)
         if orig_move.pp == 0 && orig_move.total_pp > 0
@@ -366,7 +348,10 @@ class Battle::AI
       end
       if badMoves
         PBDebug.log_ai("#{@user.name} wants to switch due to terrible moves")
-        return if pbChooseToSwitchOut(true)
+        if pbChooseToSwitchOut(true)
+          @battle.pbUnregisterMegaEvolution(@user.index)
+          return
+        end
         PBDebug.log_ai("#{@user.name} won't switch after all")
       end
     end

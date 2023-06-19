@@ -345,16 +345,16 @@ Battle::AI::Handlers::ShouldSwitch.add(:yawning,
       end
       trapping = false
       ai.each_foe_battler(battler.side) do |b, i|
-        next if b.ability_active? && Battle::AbilityEffects.triggerCertainSwitching(b.ability, b, battle)
-        next if b.item_active? && Battle::ItemEffects.triggerCertainSwitching(b.item, b, battle)
+        next if b.ability_active? && Battle::AbilityEffects.triggerCertainSwitching(b.ability, b.battler, battle)
+        next if b.item_active? && Battle::ItemEffects.triggerCertainSwitching(b.item, b.battler, battle)
         next if Settings::MORE_TYPE_EFFECTS && b.has_type?(:GHOST)
         next if b.battler.trappedInBattle?   # Relevant trapping effects are checked above
         if battler.ability_active?
-          trapping = Battle::AbilityEffects.triggerTrappingByTarget(battler.ability, b, battler.battler, battle)
+          trapping = Battle::AbilityEffects.triggerTrappingByTarget(battler.ability, b.battler, battler.battler, battle)
           break if trapping
         end
         if battler.item_active?
-          trapping = Battle::ItemEffects.triggerTrappingByTarget(battler.item, b, battler.battler, battle)
+          trapping = Battle::ItemEffects.triggerTrappingByTarget(battler.item, b.battler, battler.battler, battle)
           break if trapping
         end
       end
@@ -390,16 +390,16 @@ Battle::AI::Handlers::ShouldSwitch.add(:asleep,
       end
       trapping = false
       ai.each_foe_battler(battler.side) do |b, i|
-        next if b.ability_active? && Battle::AbilityEffects.triggerCertainSwitching(b.ability, b, battle)
-        next if b.item_active? && Battle::ItemEffects.triggerCertainSwitching(b.item, b, battle)
+        next if b.ability_active? && Battle::AbilityEffects.triggerCertainSwitching(b.ability, b.battler, battle)
+        next if b.item_active? && Battle::ItemEffects.triggerCertainSwitching(b.item, b.battler, battle)
         next if Settings::MORE_TYPE_EFFECTS && b.has_type?(:GHOST)
         next if b.battler.trappedInBattle?   # Relevant trapping effects are checked above
         if battler.ability_active?
-          trapping = Battle::AbilityEffects.triggerTrappingByTarget(battler.ability, b, battler.battler, battle)
+          trapping = Battle::AbilityEffects.triggerTrappingByTarget(battler.ability, b.battler, battler.battler, battle)
           break if trapping
         end
         if battler.item_active?
-          trapping = Battle::ItemEffects.triggerTrappingByTarget(battler.item, b, battler.battler, battle)
+          trapping = Battle::ItemEffects.triggerTrappingByTarget(battler.item, b.battler, battler.battler, battle)
           break if trapping
         end
       end
