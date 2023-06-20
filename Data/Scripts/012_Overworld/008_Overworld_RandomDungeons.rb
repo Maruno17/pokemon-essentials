@@ -376,6 +376,7 @@ module RandomDungeon
         @usable_width  -= 1 if @usable_width.odd?
         @usable_height -= 1 if @usable_height.odd?
       end
+      @room_rects = []
       @map_data    = DungeonLayout.new(@width, @height)
       @need_redraw = false
     end
@@ -804,6 +805,7 @@ module RandomDungeon
       end
       x = x.clamp(@buffer_x, @usable_width - @buffer_x - width)
       y = y.clamp(@buffer_y, @usable_height - @buffer_y - height)
+      @room_rects.push([x, y, width, height])
       paint_ground_rect(x, y, width, height, :room)
     end
 
@@ -1002,19 +1004,36 @@ module RandomDungeon
       end
     end
 
-    # Returns a random room tile in the dungeon that isn't too close to a
-    # corridor (to avoid blocking a room's entrance).
-    def get_random_room_tile(occupied_tiles)
-      ar1 = AntiRandom.new(@width)
-      ar2 = AntiRandom.new(@height)
-      ((occupied_tiles.length + 1) * 1000).times do
-        x = ar1.get
-        y = ar2.get
-        next if !isRoom?(x, y)
-        next if occupied_tiles.any? { |item| (item[0] - x).abs < 2 && (item[1] - y).abs < 2 }
-        ret = [x, y]
-        occupied_tiles.push(ret)
-        return ret
+    # Returns a random room tile a random room where an event of the given size
+    # can be placed. Events cannot be placed adjacent to or overlapping each
+    # other, and can't be placed right next to the wall of a room (to prevent
+    # them blocking a corridor).
+    def get_random_room_tile(occupied_tiles, event_width = 1, event_height = 1)
+      valid_rooms = @room_rects.clone
+      valid_rooms.delete_if { |rect| rect[2] <= event_width + 1 || rect[3] <= event_height + 1 }
+      return nil if valid_rooms.empty?
+      1000.times do
+        room = valid_rooms.sample
+        x = 1 + rand(room[2] - event_width - 1)
+        y = 1 + rand(room[3] - event_height - 1)
+        valid_placement = true
+        event_width.times do |i|
+          event_height.times do |j|
+            if occupied_tiles.any? { |item| (item[0] - (room[0] + x + i)).abs < 2 && (item[1] - (room[1] + y + j)).abs < 2 }
+              valid_placement = false
+            end
+            break if !valid_placement
+          end
+          break if !valid_placement
+        end
+        next if !valid_placement
+        # Found valid placement; use it
+        event_width.times do |i|
+          event_height.times do |j|
+            occupied_tiles.push([room[0] + x + i, room[1] + y + j])
+          end
+        end
+        return [room[0] + x, room[1] + y + event_height - 1]
       end
       return nil
     end
@@ -1055,20 +1074,34 @@ EventHandlers.add(:on_game_map_setup, :random_dungeon,
     map.height = dungeon.height
     map.data.resize(map.width, map.height, 3)
     dungeon.generateMapInPlace(map)
-    occupied_tiles = []
-    # Reposition the player
-    tile = dungeon.get_random_room_tile(occupied_tiles)
-    if tile
-      $game_temp.player_new_x = tile[0]
-      $game_temp.player_new_y = tile[1]
-    end
-    # Reposition events
-    map.events.each_value do |event|
-      tile = dungeon.get_random_room_tile(occupied_tiles)
-      if tile
+    failed = false
+    100.times do |i|
+      failed = false
+      occupied_tiles = []
+      # Reposition events
+      map.events.each_value do |event|
+        event_width = 1
+        event_height = 1
+        if event.name[/size\((\d+),(\d+)\)/i]
+          event_width = $~[1].to_i
+          event_height = $~[2].to_i
+        end
+        tile = dungeon.get_random_room_tile(occupied_tiles, event_width, event_height)
+        failed = true if !tile
+        break if failed
         event.x = tile[0]
         event.y = tile[1]
       end
+      next if failed
+      # Reposition the player
+      tile = dungeon.get_random_room_tile(occupied_tiles)
+      next if !tile
+      $game_temp.player_new_x = tile[0]
+      $game_temp.player_new_y = tile[1]
+      break
+    end
+    if failed
+      raise _INTL("Couldn't place all events and the player in rooms.")
     end
   }
 )
