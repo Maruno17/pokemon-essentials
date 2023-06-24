@@ -182,12 +182,14 @@ end
 # Trainer class for NPC trainers
 #===============================================================================
 class NPCTrainer < Trainer
+  attr_accessor :version
   attr_accessor :items
   attr_accessor :lose_text
   attr_accessor :win_text
 
-  def initialize(name, trainer_type)
+  def initialize(name, trainer_type, version = 0)
     super
+    @version   = version
     @items     = []
     @lose_text = nil
     @win_text  = nil

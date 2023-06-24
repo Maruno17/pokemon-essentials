@@ -500,35 +500,6 @@ MenuHandlers.add(:debug_menu, :roamers, {
   }
 })
 
-MenuHandlers.add(:debug_menu, :toggle_rematches_possible, {
-  "name"        => _INTL("Toggle Phone Rematches Possible"),
-  "parent"      => :battle_menu,
-  "description" => _INTL("Toggles whether trainers in the phone can be rebattled."),
-  "effect"      => proc {
-    Phone.rematches_enabled = !Phone.rematches_enabled
-    pbMessage(_INTL("Trainers in the phone can now be rebattled.")) if Phone.rematches_enabled
-    pbMessage(_INTL("Trainers in the phone cannot be rebattled.")) if !Phone.rematches_enabled
-  }
-})
-
-MenuHandlers.add(:debug_menu, :ready_rematches, {
-  "name"        => _INTL("Ready All Phone Rematches"),
-  "parent"      => :battle_menu,
-  "description" => _INTL("Make all trainers in the phone ready for rematches."),
-  "effect"      => proc {
-    if !$PokemonGlobal.phone || $PokemonGlobal.phone.contacts.length == 0
-      pbMessage(_INTL("There are no trainers in the Phone."))
-    else
-      $PokemonGlobal.phone.contacts.each do |contact|
-        next if !contact.trainer?
-        contact.rematch_flag = 1
-        contact.set_trainer_event_ready_for_rematch
-      end
-      pbMessage(_INTL("All trainers in the Phone are now ready to rebattle."))
-    end
-  }
-})
-
 MenuHandlers.add(:debug_menu, :reset_trainers, {
   "name"        => _INTL("Reset Map's Trainers"),
   "parent"      => :battle_menu,
@@ -745,6 +716,56 @@ MenuHandlers.add(:debug_menu, :open_storage, {
 })
 
 #===============================================================================
+# Shadow Pokémon options
+#===============================================================================
+MenuHandlers.add(:debug_menu, :shadow_pokemon_menu, {
+  "name"        => _INTL("Shadow Pokémon Options..."),
+  "parent"      => :pokemon_menu,
+  "description" => _INTL("Snag Machine and purification."),
+  "always_show" => false
+})
+
+MenuHandlers.add(:debug_menu, :toggle_snag_machine, {
+  "name"        => _INTL("Toggle Snag Machine"),
+  "parent"      => :shadow_pokemon_menu,
+  "description" => _INTL("Toggle all Poké Balls being able to catch Shadow Pokémon."),
+  "effect"      => proc {
+    $player.has_snag_machine = !$player.has_snag_machine
+    pbMessage(_INTL("Gave the Snag Machine.")) if $player.has_snag_machine
+    pbMessage(_INTL("Lost the Snag Machine.")) if !$player.has_snag_machine
+  }
+})
+
+MenuHandlers.add(:debug_menu, :toggle_purify_chamber_access, {
+  "name"        => _INTL("Toggle Purify Chamber Access"),
+  "parent"      => :shadow_pokemon_menu,
+  "description" => _INTL("Toggle access to the Purify Chamber via the PC."),
+  "effect"      => proc {
+    $player.seen_purify_chamber = !$player.seen_purify_chamber
+    pbMessage(_INTL("The Purify Chamber is accessible.")) if $player.seen_purify_chamber
+    pbMessage(_INTL("The Purify Chamber is not accessible.")) if !$player.seen_purify_chamber
+  }
+})
+
+MenuHandlers.add(:debug_menu, :purify_chamber, {
+  "name"        => _INTL("Use Purify Chamber"),
+  "parent"      => :shadow_pokemon_menu,
+  "description" => _INTL("Open the Purify Chamber for Shadow Pokémon purification."),
+  "effect"      => proc {
+    pbPurifyChamber
+  }
+})
+
+MenuHandlers.add(:debug_menu, :relic_stone, {
+  "name"        => _INTL("Use Relic Stone"),
+  "parent"      => :shadow_pokemon_menu,
+  "description" => _INTL("Choose a Shadow Pokémon to show to the Relic Stone for purification."),
+  "effect"      => proc {
+    pbRelicStone
+  }
+})
+
+#===============================================================================
 # Item options
 #===============================================================================
 MenuHandlers.add(:debug_menu, :items_menu, {
@@ -937,6 +958,111 @@ MenuHandlers.add(:debug_menu, :toggle_pokegear, {
   }
 })
 
+MenuHandlers.add(:debug_menu, :edit_phone_contacts, {
+  "name"        => _INTL("Edit Phone And Contacts"),
+  "parent"      => :player_menu,
+  "description" => _INTL("Edit properties of the phone and of contacts registered in it."),
+  "effect"      => proc {
+    if !$PokemonGlobal.phone
+      pbMessage(_INTL("The phone is not defined."))
+      next
+    end
+    cmd = 0
+    loop do
+      cmds = []
+      time = $PokemonGlobal.phone.time_to_next_call.to_i   # time is in seconds
+      min = time / 60
+      sec = time % 60
+      cmds.push(_INTL("Time until next call: {1}m {2}s", min, sec))
+      cmds.push((Phone.rematches_enabled ? "[Y]" : "[  ]") + " " + _INTL("Rematches possible"))
+      cmds.push(_INTL("Maximum rematch version : {1}", Phone.rematch_variant))
+      if $PokemonGlobal.phone.contacts.length > 0
+        cmds.push(_INTL("Make all contacts ready for a rematch"))
+        cmds.push(_INTL("Edit individual contacts: {1}", $PokemonGlobal.phone.contacts.length))
+      end
+      cmd = pbShowCommands(nil, cmds, -1, cmd)
+      break if cmd < 0
+      case cmd
+      when 0   # Time until next call
+        params = ChooseNumberParams.new
+        params.setRange(0, 99999)
+        params.setDefaultValue(min)
+        params.setCancelValue(-1)
+        new_time = pbMessageChooseNumber(_INTL("Set the time (in minutes) until the next phone call."), params)
+        $PokemonGlobal.phone.time_to_next_call = new_time * 60 if new_time >= 0
+      when 1   # Rematches possible
+        Phone.rematches_enabled = !Phone.rematches_enabled
+      when 2   # Maximum rematch version
+        params = ChooseNumberParams.new
+        params.setRange(0, 99)
+        params.setDefaultValue(Phone.rematch_variant)
+        new_version = pbMessageChooseNumber(_INTL("Set the maximum version number a trainer contact can reach."), params)
+        Phone.rematch_variant = new_version
+      when 3   # Make all contacts ready for a rematch
+        $PokemonGlobal.phone.contacts.each do |contact|
+          next if !contact.trainer?
+          contact.rematch_flag = 1
+          contact.set_trainer_event_ready_for_rematch
+        end
+        pbMessage(_INTL("All trainers in the phone are now ready to rebattle."))
+      when 4   # Edit individual contacts
+        contact_cmd = 0
+        loop do
+          contact_cmds = []
+          $PokemonGlobal.phone.contacts.each do |contact|
+            visible_string = (contact.visible?) ? "[Y]" : "[  ]"
+            if contact.trainer?
+              battle_string = (contact.can_rematch?) ? "(can battle)" : ""
+              contact_cmds.push(sprintf("%s %s (%i) %s", visible_string, contact.display_name, contact.variant, battle_string))
+            else
+              contact_cmds.push(sprintf("%s %s", visible_string, contact.display_name))
+            end
+          end
+          contact_cmd = pbShowCommands(nil, contact_cmds, -1, contact_cmd)
+          break if contact_cmd < 0
+          contact = $PokemonGlobal.phone.contacts[contact_cmd]
+          edit_cmd = 0
+          loop do
+            edit_cmds = []
+            edit_cmds.push((contact.visible? ? "[Y]" : "[  ]") + " " + _INTL("Contact visible")) if contact.can_hide?
+            if contact.trainer?
+              edit_cmds.push((contact.can_rematch? ? "[Y]" : "[  ]") + " " + _INTL("Can battle"))
+              ready_time = contact.time_to_ready   # time is in seconds
+              ready_min = ready_time / 60
+              ready_sec = ready_time % 60
+              edit_cmds.push(_INTL("Time until ready to battle: {1}m {2}s", ready_min, ready_sec))
+              edit_cmds.push(_INTL("Last defeated version: {1}", contact.variant))
+            end
+            break if edit_cmds.length == 0
+            edit_cmd = pbShowCommands(nil, edit_cmds, -1, edit_cmd)
+            break if edit_cmd < 0
+            case edit_cmd
+            when 0   # Visibility
+              contact.visible = !contact.visible
+            when 1   # Can battle
+              contact.rematch_flag = (contact.can_rematch?) ? 0 : 1
+              contact.time_to_ready = 0 if contact.can_rematch?
+            when 2   # Time until ready to battle
+              params = ChooseNumberParams.new
+              params.setRange(0, 99999)
+              params.setDefaultValue(ready_min)
+              params.setCancelValue(-1)
+              new_time = pbMessageChooseNumber(_INTL("Set the time (in minutes) until this trainer is ready to battle."), params)
+              contact.time_to_ready = new_time * 60 if new_time >= 0
+            when 3   # Last defeated version
+              params = ChooseNumberParams.new
+              params.setRange(0, 99)
+              params.setDefaultValue(contact.variant)
+              new_version = pbMessageChooseNumber(_INTL("Set the last defeated version number of this trainer."), params)
+              contact.version = contact.start_version + new_version
+            end
+          end
+        end
+      end
+    end
+  }
+})
+
 MenuHandlers.add(:debug_menu, :toggle_box_link, {
   "name"        => _INTL("Toggle Party Screen Access To Storage"),
   "parent"      => :player_menu,
@@ -1014,56 +1140,6 @@ MenuHandlers.add(:debug_menu, :random_id, {
   "effect"      => proc {
     $player.id = rand(2**16) | (rand(2**16) << 16)
     pbMessage(_INTL("The player's ID was changed to {1} (full ID: {2}).", $player.public_ID, $player.id))
-  }
-})
-
-#===============================================================================
-# Shadow Pokémon options
-#===============================================================================
-MenuHandlers.add(:debug_menu, :shadow_pokemon_menu, {
-  "name"        => _INTL("Shadow Pokémon Options..."),
-  "parent"      => :main,
-  "description" => _INTL("Snag Machine and purification."),
-  "always_show" => false
-})
-
-MenuHandlers.add(:debug_menu, :toggle_snag_machine, {
-  "name"        => _INTL("Toggle Snag Machine"),
-  "parent"      => :shadow_pokemon_menu,
-  "description" => _INTL("Toggle all Poké Balls being able to catch Shadow Pokémon."),
-  "effect"      => proc {
-    $player.has_snag_machine = !$player.has_snag_machine
-    pbMessage(_INTL("Gave the Snag Machine.")) if $player.has_snag_machine
-    pbMessage(_INTL("Lost the Snag Machine.")) if !$player.has_snag_machine
-  }
-})
-
-MenuHandlers.add(:debug_menu, :toggle_purify_chamber_access, {
-  "name"        => _INTL("Toggle Purify Chamber Access"),
-  "parent"      => :shadow_pokemon_menu,
-  "description" => _INTL("Toggle access to the Purify Chamber via the PC."),
-  "effect"      => proc {
-    $player.seen_purify_chamber = !$player.seen_purify_chamber
-    pbMessage(_INTL("The Purify Chamber is accessible.")) if $player.seen_purify_chamber
-    pbMessage(_INTL("The Purify Chamber is not accessible.")) if !$player.seen_purify_chamber
-  }
-})
-
-MenuHandlers.add(:debug_menu, :purify_chamber, {
-  "name"        => _INTL("Use Purify Chamber"),
-  "parent"      => :shadow_pokemon_menu,
-  "description" => _INTL("Open the Purify Chamber for Shadow Pokémon purification."),
-  "effect"      => proc {
-    pbPurifyChamber
-  }
-})
-
-MenuHandlers.add(:debug_menu, :relic_stone, {
-  "name"        => _INTL("Use Relic Stone"),
-  "parent"      => :shadow_pokemon_menu,
-  "description" => _INTL("Choose a Shadow Pokémon to show to the Relic Stone for purification."),
-  "effect"      => proc {
-    pbRelicStone
   }
 })
 

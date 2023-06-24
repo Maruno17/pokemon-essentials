@@ -357,11 +357,11 @@ module Settings
 
   #=============================================================================
 
-  # An array of available languages in the game, and their corresponding
-  # filename. Text files for a language are extracted to a folder called
-  # "Text_filename_core" or "Text_filename_game", and are recompiled into files
-  # in the Data folder called "messages_filename_core.dat" or
-  # "messages_filename_game.dat".
+  # An array of available languages in the game. Each one is an array containing
+  # the display name of the language in-game, and that language's filename
+  # fragment. A language will use the language data files from the Data folder
+  # called messages_FRAGMENT_core.dat and messages_FRAGMENT_game.dat (if they
+  # exist).
   LANGUAGES = [
 #    ["English", "english"],
 #    ["Deutsch", "deutsch"]

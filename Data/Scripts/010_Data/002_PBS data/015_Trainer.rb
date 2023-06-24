@@ -121,7 +121,7 @@ module GameData
         break
       end
       # Create trainer object
-      trainer = NPCTrainer.new(tr_name, @trainer_type)
+      trainer = NPCTrainer.new(tr_name, @trainer_type, @version)
       trainer.id        = $player.make_foreign_ID
       trainer.items     = @items.clone
       trainer.lose_text = self.lose_text

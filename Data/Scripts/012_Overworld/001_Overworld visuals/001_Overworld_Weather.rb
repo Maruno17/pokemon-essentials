@@ -411,7 +411,7 @@ module RPG
         @sun_magnitude = weather_max if @sun_magnitude != weather_max && @sun_magnitude != -weather_max
         @sun_magnitude *= -1 if (@sun_magnitude > 0 && @sun_strength > @sun_magnitude) ||
                                 (@sun_magnitude < 0 && @sun_strength < 0)
-        @sun_strength += @sun_magnitude.to_f * Graphics.delta / 0.4   # 0.4 seconds per half flash
+        @sun_strength += @sun_magnitude.to_f * Graphics.delta / 0.8   # 0.8 seconds per half flash
         tone_red += @sun_strength
         tone_green += @sun_strength
         tone_blue += @sun_strength / 2
