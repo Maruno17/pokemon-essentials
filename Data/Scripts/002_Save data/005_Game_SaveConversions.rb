@@ -380,6 +380,8 @@ SaveData.register_conversion(:v21_replace_phone_data) do
   end
 end
 
+#===============================================================================
+
 SaveData.register_conversion(:v21_replace_flute_booleans) do
   essentials_version 21
   display_title "Updating Black/White Flute variables"
@@ -404,6 +406,8 @@ SaveData.register_conversion(:v21_replace_flute_booleans) do
     end
   end
 end
+
+#===============================================================================
 
 SaveData.register_conversion(:v21_add_bump_stat) do
   essentials_version 21

@@ -759,7 +759,7 @@ module BattleAnimationEditor
         return false
       end
       if usealpha
-        # TODO: This should account for sprite.angle as well
+        # TODO: This should account for sprite.angle as well.
         bitmapX = sprite.src_rect.x
         bitmapY = sprite.src_rect.y
         bitmapX += sprite.ox

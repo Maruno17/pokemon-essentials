@@ -188,7 +188,7 @@ class NPCTrainer < Trainer
   attr_accessor :win_text
 
   def initialize(name, trainer_type, version = 0)
-    super
+    super(name, trainer_type)
     @version   = version
     @items     = []
     @lose_text = nil

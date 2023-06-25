@@ -1,4 +1,3 @@
-# TODO: Choosable icons/marks for each contact? Add a "sort by" option for these.
 #===============================================================================
 # Phone list of contacts
 #===============================================================================

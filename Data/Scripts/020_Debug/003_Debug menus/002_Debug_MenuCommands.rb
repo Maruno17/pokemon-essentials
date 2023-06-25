@@ -1024,7 +1024,7 @@ MenuHandlers.add(:debug_menu, :edit_phone_contacts, {
           edit_cmd = 0
           loop do
             edit_cmds = []
-            edit_cmds.push((contact.visible? ? "[Y]" : "[  ]") + " " + _INTL("Contact visible")) if contact.can_hide?
+            edit_cmds.push((contact.visible? ? "[Y]" : "[  ]") + " " + _INTL("Contact visible"))
             if contact.trainer?
               edit_cmds.push((contact.can_rematch? ? "[Y]" : "[  ]") + " " + _INTL("Can battle"))
               ready_time = contact.time_to_ready   # time is in seconds
@@ -1038,7 +1038,7 @@ MenuHandlers.add(:debug_menu, :edit_phone_contacts, {
             break if edit_cmd < 0
             case edit_cmd
             when 0   # Visibility
-              contact.visible = !contact.visible
+              contact.visible = !contact.visible if contact.can_hide?
             when 1   # Can battle
               contact.rematch_flag = (contact.can_rematch?) ? 0 : 1
               contact.time_to_ready = 0 if contact.can_rematch?

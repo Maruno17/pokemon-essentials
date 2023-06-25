@@ -1,4 +1,3 @@
-# TODO: Add tileset number in here?
 module GameData
   class DungeonParameters
     attr_reader :id, :area, :version

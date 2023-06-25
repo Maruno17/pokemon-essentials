@@ -117,7 +117,6 @@ class BattleArenaBattle < Battle
     super
     return if @decision != 0
     # Update mind rating (asserting that a move was chosen)
-    # TODO: Actually done at Pokémon's turn
     2.times do |side|
       if @choices[side][2] && @choices[side][0] == :UseMove
         @mind[side] += pbMindScore(@choices[side][2])

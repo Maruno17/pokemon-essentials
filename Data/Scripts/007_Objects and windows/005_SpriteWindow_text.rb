@@ -591,10 +591,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     if busy?
       refresh if !@text_delay_changed
       updateInternal
-      # following line needed to allow "textspeed=0" to work seamlessly
-      # TODO: I don't think this is needed any more, but I don't know where to
-      #       look to confirm it'd work properly without this line.
-      refresh if @text_delay_changed
+      refresh if @text_delay_changed   # Needed to allow "textspeed=0" to work seamlessly
     end
     @text_delay_changed = false
   end

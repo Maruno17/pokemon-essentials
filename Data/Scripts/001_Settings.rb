@@ -1,6 +1,6 @@
 #==============================================================================#
 #                              Pokémon Essentials                              #
-#                               Version 20.1.dev                               #
+#                                  Version 21                                  #
 #                https://github.com/Maruno17/pokemon-essentials                #
 #==============================================================================#
 
@@ -452,7 +452,7 @@ end
 
 # DO NOT EDIT THESE!
 module Essentials
-  VERSION = "20.1.dev"
+  VERSION = "21"
   ERROR_TEXT = ""
   MKXPZ_VERSION = "2.4.2/ee8dc7e"
 end
