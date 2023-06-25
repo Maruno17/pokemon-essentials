@@ -3,10 +3,11 @@ Audio/
 Graphics/
 Plugins/
 
-# Data folder, but not Data/Scripts folder
+# Data folder, but not Data/Scripts folder or messages_core.dat
 Data/*
 !Data/Scripts.rxdata
 !Data/Scripts/
+!Data/messages_core.dat
 
 # Files in the main project folder
 Game.ini

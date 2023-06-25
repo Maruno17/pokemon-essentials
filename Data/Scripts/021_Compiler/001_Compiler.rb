@@ -25,7 +25,7 @@ module FileLineData
     @section = section
     @key     = key
     if value && value.length > 200
-      @value = _INTL("{1}...", value[0, 200])
+      @value = value[0, 200].to_s + "..."
     else
       @value = (value) ? value.clone : ""
     end

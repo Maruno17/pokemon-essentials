@@ -18,7 +18,7 @@ def pbEmergencySave
     pbMessage("\\se[]" + _INTL("The game was saved.") + "\\me[GUI save game]\\wtnp[30]")
     pbMessage("\\se[]" + _INTL("The previous save file has been backed up.") + "\\wtnp[30]")
   else
-    pbMessage("\\se[]" + _INTL("Save failed.\\wtnp[30]"))
+    pbMessage("\\se[]" + _INTL("Save failed.") + "\\wtnp[30]")
   end
   $scene = oldscene
 end

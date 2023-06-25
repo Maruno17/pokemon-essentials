@@ -425,6 +425,29 @@ module Settings
     "choice 27",
     "choice 28"
   ]
+
+  #=============================================================================
+
+  # Your game's credits, in an array. You can allow certain lines to be
+  # translated by wrapping them in _INTL() as shown. Blank lines are just "".
+  # To split a line into two columns, put "<s>" in it. Plugin credits and
+  # Essentials engine credits are added to the end of these credits
+  # automatically.
+  def self.game_credits
+    return [
+      _INTL("My Game by:"),
+      "Maruno",
+      "",
+      _INTL("Also involved were:"),
+      "Anon<s>Ecksam Pell",
+      "Jane Doe<s>Nameless",
+      "Sue Donnim<s>Unknown",
+      "Untitled<s>",
+      "",
+      _INTL("Special thanks to:"),
+      "Pizza"
+    ]
+  end
 end
 
 # DO NOT EDIT THESE!

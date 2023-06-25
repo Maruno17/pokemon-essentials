@@ -94,9 +94,9 @@ class PokemonPhone_Scene
       @sprites["list"].top_row = @sprites["list"].itemCount - @sprites["list"].page_item_max
     end
     # Set info text
-    infotext = _INTL("Registered<br>")
-    infotext += _INTL("<r>{1}<br>", @sprites["list"].commands.length)
-    infotext += _INTL("Waiting for a rematch<r>{1}", rematch_count)
+    infotext = _INTL("Registered") + "<br>"
+    infotext += "<r>" + @sprites["list"].commands.length.to_s + "<br>"
+    infotext += _INTL("Waiting for a rematch") + "<r>" + rematch_count.to_s
     @sprites["info"].text = infotext
     pbRefreshScreen
   end

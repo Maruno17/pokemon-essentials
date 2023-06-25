@@ -1,0 +1,144 @@
+﻿# To localize this text for a particular language, please
+# translate every second line of this file.
+#-------------------------------
+[RIBBON_NAMES]
+Cool Ribbon
+Cool Ribbon
+Cool Ribbon Super
+Cool Ribbon Super
+Cool Ribbon Hyper
+Cool Ribbon Hyper
+Cool Ribbon Master
+Cool Ribbon Master
+Beauty Ribbon
+Beauty Ribbon
+Beauty Ribbon Super
+Beauty Ribbon Super
+Beauty Ribbon Hyper
+Beauty Ribbon Hyper
+Beauty Ribbon Master
+Beauty Ribbon Master
+Cute Ribbon
+Cute Ribbon
+Cute Ribbon Super
+Cute Ribbon Super
+Cute Ribbon Hyper
+Cute Ribbon Hyper
+Cute Ribbon Master
+Cute Ribbon Master
+Smart Ribbon
+Smart Ribbon
+Smart Ribbon Super
+Smart Ribbon Super
+Smart Ribbon Hyper
+Smart Ribbon Hyper
+Smart Ribbon Master
+Smart Ribbon Master
+Tough Ribbon
+Tough Ribbon
+Tough Ribbon Super
+Tough Ribbon Super
+Tough Ribbon Hyper
+Tough Ribbon Hyper
+Tough Ribbon Master
+Tough Ribbon Master
+Cool Ribbon Great
+Cool Ribbon Great
+Cool Ribbon Ultra
+Cool Ribbon Ultra
+Beauty Ribbon Great
+Beauty Ribbon Great
+Beauty Ribbon Ultra
+Beauty Ribbon Ultra
+Cute Ribbon Great
+Cute Ribbon Great
+Cute Ribbon Ultra
+Cute Ribbon Ultra
+Smart Ribbon Great
+Smart Ribbon Great
+Smart Ribbon Ultra
+Smart Ribbon Ultra
+Tough Ribbon Great
+Tough Ribbon Great
+Tough Ribbon Ultra
+Tough Ribbon Ultra
+Winning Ribbon
+Winning Ribbon
+Victory Ribbon
+Victory Ribbon
+Ability Ribbon
+Ability Ribbon
+Great Ability Ribbon
+Great Ability Ribbon
+Double Ability Ribbon
+Double Ability Ribbon
+Multi Ability Ribbon
+Multi Ability Ribbon
+Pair Ability Ribbon
+Pair Ability Ribbon
+World Ability Ribbon
+World Ability Ribbon
+Champion Ribbon
+Champion Ribbon
+Sinnoh Champ Ribbon
+Sinnoh Champ Ribbon
+Record Ribbon
+Record Ribbon
+Event Ribbon
+Event Ribbon
+Legend Ribbon
+Legend Ribbon
+Gorgeous Ribbon
+Gorgeous Ribbon
+Royal Ribbon
+Royal Ribbon
+Gorgeous Royal Ribbon
+Gorgeous Royal Ribbon
+Alert Ribbon
+Alert Ribbon
+Shock Ribbon
+Shock Ribbon
+Downcast Ribbon
+Downcast Ribbon
+Careless Ribbon
+Careless Ribbon
+Relax Ribbon
+Relax Ribbon
+Snooze Ribbon
+Snooze Ribbon
+Smile Ribbon
+Smile Ribbon
+Footprint Ribbon
+Footprint Ribbon
+Artist Ribbon
+Artist Ribbon
+Effort Ribbon
+Effort Ribbon
+Birthday Ribbon
+Birthday Ribbon
+Special Ribbon
+Special Ribbon
+Classic Ribbon
+Classic Ribbon
+Premier Ribbon
+Premier Ribbon
+Souvenir Ribbon
+Souvenir Ribbon
+Wishing Ribbon
+Wishing Ribbon
+National Ribbon
+National Ribbon
+Country Ribbon
+Country Ribbon
+Battle Champion Ribbon
+Battle Champion Ribbon
+Regional Champion Ribbon
+Regional Champion Ribbon
+Earth Ribbon
+Earth Ribbon
+World Ribbon
+World Ribbon
+National Champion Ribbon
+National Champion Ribbon
+World Champion Ribbon
+World Champion Ribbon

@@ -72,7 +72,7 @@ class MoveRelearner_Scene
         textpos.push([moveData.name, 80, yPos, :left, Color.new(248, 248, 248), Color.black])
         textpos.push([_INTL("PP"), 112, yPos + 32, :left, Color.new(64, 64, 64), Color.new(176, 176, 176)])
         if moveData.total_pp > 0
-          textpos.push([_INTL("{1}/{1}", moveData.total_pp), 230, yPos + 32, :right,
+          textpos.push([moveData.total_pp.to_s + "/" + moveData.total_pp.to_s, 230, yPos + 32, :right,
                         Color.new(64, 64, 64), Color.new(176, 176, 176)])
         else
           textpos.push(["--", 230, yPos + 32, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)])

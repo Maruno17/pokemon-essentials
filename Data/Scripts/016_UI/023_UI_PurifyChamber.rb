@@ -1297,7 +1297,7 @@ MenuHandlers.add(:pc_menu, :purify_chamber, {
   "order"     => 30,
   "condition" => proc { next $player.seen_purify_chamber },
   "effect"    => proc { |menu|
-    pbMessage(_INTL("\\se[PC access]Accessed the Purify Chamber."))
+    pbMessage("\\se[PC access]" + _INTL("Accessed the Purify Chamber."))
     pbPurifyChamber
     next false
   }

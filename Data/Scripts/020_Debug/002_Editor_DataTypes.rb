@@ -63,7 +63,7 @@ class LimitProperty
     params = ChooseNumberParams.new
     params.setRange(0, @maxvalue)
     params.setDefaultValue(oldsetting)
-    return pbMessageChooseNumber(_INTL("Set the value for {1} (0-#{@maxvalue}).", settingname), params)
+    return pbMessageChooseNumber(_INTL("Set the value for {1} (0-{2}).", settingname, @maxvalue), params)
   end
 
   def defaultValue
@@ -89,7 +89,7 @@ class LimitProperty2
     params.setRange(0, @maxvalue)
     params.setDefaultValue(oldsetting)
     params.setCancelValue(-1)
-    ret = pbMessageChooseNumber(_INTL("Set the value for {1} (0-#{@maxvalue}).", settingname), params)
+    ret = pbMessageChooseNumber(_INTL("Set the value for {1} (0-{2}).", settingname, @maxvalue), params)
     return (ret >= 0) ? ret : nil
   end
 
@@ -575,7 +575,7 @@ module GenderProperty
   end
 
   def self.format(value)
-    return _INTL("-") if !value
+    return "-" if !value
     return (value == 0) ? _INTL("Male") : (value == 1) ? _INTL("Female") : "-"
   end
 end

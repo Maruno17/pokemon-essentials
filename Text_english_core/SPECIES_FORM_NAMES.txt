@@ -1,0 +1,540 @@
+﻿# To localize this text for a particular language, please
+# translate every second line of this file.
+#-------------------------------
+[SPECIES_FORM_NAMES]
+A
+A
+Normal Form
+Normal Form
+Normal Forme
+Normal Forme
+Plant Cloak
+Plant Cloak
+Overcast Form
+Overcast Form
+West Sea
+West Sea
+Rotom
+Rotom
+Altered Forme
+Altered Forme
+Land Forme
+Land Forme
+Normal Type
+Normal Type
+Red-Striped
+Red-Striped
+Standard Mode
+Standard Mode
+Spring Form
+Spring Form
+Incarnate Forme
+Incarnate Forme
+Ordinary Form
+Ordinary Form
+Aria Forme
+Aria Forme
+Normal
+Normal
+Archipelago Pattern
+Archipelago Pattern
+Red Flower
+Red Flower
+Natural Form
+Natural Form
+Male
+Male
+Shield Forme
+Shield Forme
+Small Size
+Small Size
+Neutral Mode
+Neutral Mode
+50% Forme
+50% Forme
+Hoopa Confined
+Hoopa Confined
+Baile Style
+Baile Style
+Midday Form
+Midday Form
+Solo Form
+Solo Form
+Type: Normal
+Type: Normal
+Meteor Form
+Meteor Form
+Disguised Form
+Disguised Form
+Amped Form
+Amped Form
+Phony Form
+Phony Form
+Vanilla Cream
+Vanilla Cream
+Ice Face
+Ice Face
+Full Belly Mode
+Full Belly Mode
+Hero of Many Battles
+Hero of Many Battles
+Single Strike Style
+Single Strike Style
+Mega Venusaur
+Mega Venusaur
+Mega Charizard X
+Mega Charizard X
+Mega Charizard Y
+Mega Charizard Y
+Mega Blastoise
+Mega Blastoise
+Mega Beedrill
+Mega Beedrill
+Mega Pidgeot
+Mega Pidgeot
+Alolan
+Alolan
+Galarian
+Galarian
+Mega Alakazam
+Mega Alakazam
+Mega Slowbro
+Mega Slowbro
+Mega Gengar
+Mega Gengar
+Mega Kangaskhan
+Mega Kangaskhan
+Mega Pinsir
+Mega Pinsir
+Mega Gyarados
+Mega Gyarados
+Mega Aerodactyl
+Mega Aerodactyl
+Mega Mewtwo X
+Mega Mewtwo X
+Mega Mewtwo Y
+Mega Mewtwo Y
+Spiky-Eared
+Spiky-Eared
+Mega Ampharos
+Mega Ampharos
+B
+B
+C
+C
+D
+D
+E
+E
+F
+F
+G
+G
+H
+H
+I
+I
+J
+J
+K
+K
+L
+L
+M
+M
+N
+N
+O
+O
+P
+P
+Q
+Q
+R
+R
+S
+S
+T
+T
+U
+U
+V
+V
+W
+W
+X
+X
+Y
+Y
+Z
+Z
+?
+?
+!
+!
+Mega Steelix
+Mega Steelix
+Mega Scizor
+Mega Scizor
+Mega Heracross
+Mega Heracross
+Mega Houndoom
+Mega Houndoom
+Mega Tyranitar
+Mega Tyranitar
+Mega Sceptile
+Mega Sceptile
+Mega Blaziken
+Mega Blaziken
+Mega Swampert
+Mega Swampert
+Mega Gardevoir
+Mega Gardevoir
+Mega Sableye
+Mega Sableye
+Mega Mawile
+Mega Mawile
+Mega Aggron
+Mega Aggron
+Mega Medicham
+Mega Medicham
+Mega Manectric
+Mega Manectric
+Mega Sharpedo
+Mega Sharpedo
+Mega Camerupt
+Mega Camerupt
+Mega Altaria
+Mega Altaria
+Sunny Form
+Sunny Form
+Rainy Form
+Rainy Form
+Snowy Form
+Snowy Form
+Mega Banette
+Mega Banette
+Mega Absol
+Mega Absol
+Mega Glalie
+Mega Glalie
+Mega Salamence
+Mega Salamence
+Mega Metagross
+Mega Metagross
+Mega Latias
+Mega Latias
+Mega Latios
+Mega Latios
+Primal Kyogre
+Primal Kyogre
+Primal Groudon
+Primal Groudon
+Mega Rayquaza
+Mega Rayquaza
+Attack Forme
+Attack Forme
+Defense Forme
+Defense Forme
+Speed Forme
+Speed Forme
+Sandy Cloak
+Sandy Cloak
+Trash Cloak
+Trash Cloak
+Sunshine Form
+Sunshine Form
+East Sea
+East Sea
+Mega Lopunny
+Mega Lopunny
+Mega Garchomp
+Mega Garchomp
+Mega Lucario
+Mega Lucario
+Mega Abomasnow
+Mega Abomasnow
+Mega Gallade
+Mega Gallade
+Heat Rotom
+Heat Rotom
+Wash Rotom
+Wash Rotom
+Frost Rotom
+Frost Rotom
+Fan Rotom
+Fan Rotom
+Mow Rotom
+Mow Rotom
+Origin Forme
+Origin Forme
+Sky Forme
+Sky Forme
+Fighting Type
+Fighting Type
+Flying Type
+Flying Type
+Poison Type
+Poison Type
+Ground Type
+Ground Type
+Rock Type
+Rock Type
+Bug Type
+Bug Type
+Ghost Type
+Ghost Type
+Steel Type
+Steel Type
+Unknown Type
+Unknown Type
+Fire Type
+Fire Type
+Water Type
+Water Type
+Grass Type
+Grass Type
+Electric Type
+Electric Type
+Psychic Type
+Psychic Type
+Ice Type
+Ice Type
+Dragon Type
+Dragon Type
+Dark Type
+Dark Type
+Fairy Type
+Fairy Type
+Mega Audino
+Mega Audino
+Blue-Striped
+Blue-Striped
+Zen Mode
+Zen Mode
+Galarian Standard Mode
+Galarian Standard Mode
+Galarian Zen Mode
+Galarian Zen Mode
+Summer Form
+Summer Form
+Autumn Form
+Autumn Form
+Winter Form
+Winter Form
+Therian Forme
+Therian Forme
+White Kyurem
+White Kyurem
+Black Kyurem
+Black Kyurem
+Resolute Form
+Resolute Form
+Pirouette Forme
+Pirouette Forme
+Shock Drive
+Shock Drive
+Burn Drive
+Burn Drive
+Chill Drive
+Chill Drive
+Douse Drive
+Douse Drive
+Ash-Greninja
+Ash-Greninja
+Continental Pattern
+Continental Pattern
+Elegant Pattern
+Elegant Pattern
+Garden Pattern
+Garden Pattern
+High Plains Pattern
+High Plains Pattern
+Icy Snow Pattern
+Icy Snow Pattern
+Jungle Pattern
+Jungle Pattern
+Marine Pattern
+Marine Pattern
+Meadow Pattern
+Meadow Pattern
+Modern Pattern
+Modern Pattern
+Monsoon Pattern
+Monsoon Pattern
+Ocean Pattern
+Ocean Pattern
+Polar Pattern
+Polar Pattern
+River Pattern
+River Pattern
+Sandstorm Pattern
+Sandstorm Pattern
+Savanna Pattern
+Savanna Pattern
+Sun Pattern
+Sun Pattern
+Tundra Pattern
+Tundra Pattern
+Fancy Pattern
+Fancy Pattern
+Poké Ball Pattern
+Poké Ball Pattern
+Yellow Flower
+Yellow Flower
+Orange Flower
+Orange Flower
+Blue Flower
+Blue Flower
+White Flower
+White Flower
+Eternal Flower
+Eternal Flower
+Heart Trim
+Heart Trim
+Star Trim
+Star Trim
+Diamond Trim
+Diamond Trim
+Debutante Trim
+Debutante Trim
+Matron Trim
+Matron Trim
+Dandy Trim
+Dandy Trim
+La Reine Trim
+La Reine Trim
+Kabuki Trim
+Kabuki Trim
+Pharaoh Trim
+Pharaoh Trim
+Female
+Female
+Blade Forme
+Blade Forme
+Average Size
+Average Size
+Large Size
+Large Size
+Super Size
+Super Size
+Active Mode
+Active Mode
+10% Forme
+10% Forme
+Complete Forme
+Complete Forme
+Mega Diancie
+Mega Diancie
+Hoopa Unbound
+Hoopa Unbound
+Pom-Pom Style
+Pom-Pom Style
+Pa'u Style
+Pa'u Style
+Sensu Style
+Sensu Style
+Midnight Form
+Midnight Form
+Dusk Form
+Dusk Form
+School Form
+School Form
+Type: Fighting
+Type: Fighting
+Type: Flying
+Type: Flying
+Type: Poison
+Type: Poison
+Type: Ground
+Type: Ground
+Type: Rock
+Type: Rock
+Type: Bug
+Type: Bug
+Type: Ghost
+Type: Ghost
+Type: Steel
+Type: Steel
+Type: Unknown
+Type: Unknown
+Type: Fire
+Type: Fire
+Type: Water
+Type: Water
+Type: Grass
+Type: Grass
+Type: Electric
+Type: Electric
+Type: Psychic
+Type: Psychic
+Type: Ice
+Type: Ice
+Type: Dragon
+Type: Dragon
+Type: Dark
+Type: Dark
+Type: Fairy
+Type: Fairy
+Red Core
+Red Core
+Orange Core
+Orange Core
+Yellow Core
+Yellow Core
+Green Core
+Green Core
+Blue Core
+Blue Core
+Indigo Core
+Indigo Core
+Violet Core
+Violet Core
+Busted Form
+Busted Form
+Dusk Mane
+Dusk Mane
+Dawn Wings
+Dawn Wings
+Ultra Necrozma
+Ultra Necrozma
+Original Color
+Original Color
+Gulping Form
+Gulping Form
+Gorging Form
+Gorging Form
+Low Key Form
+Low Key Form
+Antique Form
+Antique Form
+Ruby Cream
+Ruby Cream
+Matcha Cream
+Matcha Cream
+Mint Cream
+Mint Cream
+Lemon Cream
+Lemon Cream
+Salted Cream
+Salted Cream
+Ruby Swirl
+Ruby Swirl
+Caramel Swirl
+Caramel Swirl
+Rainbow Swirl
+Rainbow Swirl
+Noice Face
+Noice Face
+Hangry Mode
+Hangry Mode
+Crowned Sword
+Crowned Sword
+Crowned Shield
+Crowned Shield
+Rapid Strike Style
+Rapid Strike Style
+Ice Rider
+Ice Rider
+Shadow Rider
+Shadow Rider

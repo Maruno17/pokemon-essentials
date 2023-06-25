@@ -601,8 +601,7 @@ class MiningGameScene
     if @itemswon.length > 0
       @itemswon.each do |i|
         if $bag.add(i)
-          pbMessage(_INTL("One {1} was obtained.\\se[Mining item get]\\wtnp[30]",
-                          GameData::Item.get(i).name))
+          pbMessage(_INTL("One {1} was obtained.", GameData::Item.get(i).name) + "\\se[Mining item get]\\wtnp[30]")
         else
           pbMessage(_INTL("One {1} was found, but you have no room for it.",
                           GameData::Item.get(i).name))

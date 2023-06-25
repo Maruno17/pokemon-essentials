@@ -454,7 +454,7 @@ MenuHandlers.add(:pc_menu, :hall_of_fame, {
   "order"     => 40,
   "condition" => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
   "effect"    => proc { |menu|
-    pbMessage(_INTL("\\se[PC access]Accessed the Hall of Fame."))
+    pbMessage("\\se[PC access]" + _INTL("Accessed the Hall of Fame."))
     pbHallOfFamePC
     next false
   }

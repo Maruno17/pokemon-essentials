@@ -73,9 +73,9 @@ end
 # Add to Debug menu
 #===============================================================================
 MenuHandlers.add(:debug_menu, :print_move_target_functions, {
-  "name"        => _INTL("Print Out Move Targets"),
+  "name"        => "Print Out Move Targets",
   "parent"      => :main,
-  "description" => _INTL("Print all blah blah blah."),
+  "description" => "Print all blah blah blah.",
   "effect"      => proc {
     marListMoveTargetFunctionCodes
   }

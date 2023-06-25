@@ -1,0 +1,100 @@
+﻿# To localize this text for a particular language, please
+# translate every second line of this file.
+#-------------------------------
+[TRAINER_TYPE_NAMES]
+Pokémon Trainer
+Pokémon Trainer
+Rival
+Rival
+Aroma Lady
+Aroma Lady
+Beauty
+Beauty
+Biker
+Biker
+Bird Keeper
+Bird Keeper
+Bug Catcher
+Bug Catcher
+Burglar
+Burglar
+Channeler
+Channeler
+Cue Ball
+Cue Ball
+Engineer
+Engineer
+Fisherman
+Fisherman
+Gambler
+Gambler
+Gentleman
+Gentleman
+Hiker
+Hiker
+Juggler
+Juggler
+Lady
+Lady
+Painter
+Painter
+Poké Maniac
+Poké Maniac
+Pokémon Breeder
+Pokémon Breeder
+Professor
+Professor
+Rocker
+Rocker
+Ruin Maniac
+Ruin Maniac
+Sailor
+Sailor
+Scientist
+Scientist
+Super Nerd
+Super Nerd
+Tamer
+Tamer
+Black Belt
+Black Belt
+Crush Girl
+Crush Girl
+Camper
+Camper
+Picnicker
+Picnicker
+Cool Trainer
+Cool Trainer
+Youngster
+Youngster
+Lass
+Lass
+Pokémon Ranger
+Pokémon Ranger
+Psychic
+Psychic
+Swimmer
+Swimmer
+Tuber
+Tuber
+Cool Couple
+Cool Couple
+Crush Kin
+Crush Kin
+Sis and Bro
+Sis and Bro
+Twins
+Twins
+Young Couple
+Young Couple
+Team Rocket
+Team Rocket
+Rocket Boss
+Rocket Boss
+Gym Leader
+Gym Leader
+Elite Four
+Elite Four
+Champion
+Champion
