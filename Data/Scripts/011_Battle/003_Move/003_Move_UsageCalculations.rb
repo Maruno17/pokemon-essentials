@@ -489,6 +489,7 @@ class Battle::Move
   def pbAdditionalEffectChance(user, target, effectChance = 0)
     return 0 if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
     ret = (effectChance > 0) ? effectChance : @addlEffect
+    return ret if ret > 100
     if (Settings::MECHANICS_GENERATION >= 6 || @function_code != "EffectDependsOnEnvironment") &&
        (user.hasActiveAbility?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
       ret *= 2

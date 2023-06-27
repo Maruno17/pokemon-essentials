@@ -1367,7 +1367,7 @@ TotalPP = 15
 Target = NearOther
 FunctionCode = ParalyzeFlinchTarget
 Flags = Contact,CanProtect,CanMirrorMove,Biting
-EffectChance = 100
+EffectChance = 101
 Description = The user bites with electrified fangs. It may also make the target flinch or leave it with paralysis.
 #-------------------------------
 [SHOCKWAVE]
@@ -2738,7 +2738,7 @@ TotalPP = 15
 Target = NearOther
 FunctionCode = BurnFlinchTarget
 Flags = Contact,CanProtect,CanMirrorMove,Biting
-EffectChance = 100
+EffectChance = 101
 Description = The user bites with flame-cloaked fangs. It may also make the target flinch or leave it burned.
 #-------------------------------
 [FLAMEWHEEL]
@@ -4456,7 +4456,7 @@ TotalPP = 15
 Target = NearOther
 FunctionCode = FreezeFlinchTarget
 Flags = Contact,CanProtect,CanMirrorMove,Biting
-EffectChance = 100
+EffectChance = 101
 Description = The user bites with cold-infused fangs. It may also make the target flinch or leave it frozen.
 #-------------------------------
 [AVALANCHE]

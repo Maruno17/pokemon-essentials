@@ -43,69 +43,66 @@ class Scene_Credits
   TEXT_BASE_COLOR        = Color.new(255, 255, 255, 255)
   TEXT_SHADOW_COLOR      = Color.new(0, 0, 0, 100)
 
-  def convert_names_to_credits_text(names, with_final_new_line = true)
-    ret = ""
+  def add_names_to_credits(credits, names, with_final_new_line = true)
     if names.length >= 5
       i = 0
       loop do
-        ret += names[i] + "<s>" + (names[i + 1] || "") + "\n"
+        credits.push(names[i] + "<s>" + (names[i + 1] || ""))
         i += 2
         break if i >= names.length
       end
     else
-      names.each { |name| ret += name + "\n" }
+      names.each { |name| credits.push(name) }
     end
-    ret += "\n" if with_final_new_line
-    return ret
+    credits.push("") if with_final_new_line
   end
 
   def get_text
-    ret = ""
-    Settings.game_credits.each { |line| ret += line + "\n" }
+    ret = Settings.game_credits || []
     # Add plugin credits
     if PluginManager.plugins.length > 0
-      ret += "\n\n\n"
+      ret.push("", "", "")
       PluginManager.plugins.each do |plugin|
         pcred = PluginManager.credits(plugin)
-        ret += _INTL("\"{1}\" v.{2} by:", plugin, PluginManager.version(plugin)) + "\n"
-        ret += convert_names_to_credits_text(pcred)
+        ret.push(_INTL("\"{1}\" v.{2} by:", plugin, PluginManager.version(plugin)))
+        add_names_to_credits(ret, pcred)
       end
     end
     # Add Essentials credits
-    ret += "\n\n\n"
-    ret += _INTL("\"Pokémon Essentials\" was created by:") + "\n"
-    ret += convert_names_to_credits_text([
+    ret.push("", "", "")
+    ret.push(_INTL("\"Pokémon Essentials\" was created by:"))
+    add_names_to_credits(ret, [
       "Poccil (Peter O.)",
       "Maruno",
       _INTL("Inspired by work by Flameguru")
     ])
-    ret += _INTL("With contributions from:") + "\n"
-    ret += convert_names_to_credits_text([
+    ret.push(_INTL("With contributions from:"))
+    add_names_to_credits(ret, [
       "AvatarMonkeyKirby", "Boushy", "Brother1440", "FL.", "Genzai Kawakami",
       "Golisopod User", "help-14", "IceGod64", "Jacob O. Wobbrock", "KitsuneKouta",
       "Lisa Anthony", "Luka S.J.", "Marin", "MiDas Mike", "Near Fantastica",
       "PinkMan", "Popper", "Rataime", "Savordez", "SoundSpawn",
       "the__end", "Venom12", "Wachunga"
     ], false)
-    ret += _INTL("and everyone else who helped out") + "\n"
-    ret += "\n"
-    ret += _INTL("\"mkxp-z\" by:") + "\n"
-    ret += convert_names_to_credits_text([
+    ret.push(_INTL("and everyone else who helped out"))
+    ret.push("")
+    ret.push(_INTL("\"mkxp-z\" by:"))
+    add_names_to_credits(ret, [
       "Roza",
       _INTL("Based on \"mkxp\" by Ancurio et al.")
     ])
-    ret += _INTL("\"RPG Maker XP\" by:") + "\n"
-    ret += convert_names_to_credits_text(["Enterbrain"])
-    ret += _INTL("Pokémon is owned by:") + "\n"
-    ret += convert_names_to_credits_text([
+    ret.push(_INTL("\"RPG Maker XP\" by:"))
+    add_names_to_credits(ret, ["Enterbrain"])
+    ret.push(_INTL("Pokémon is owned by:"))
+    add_names_to_credits(ret, [
       "The Pokémon Company",
       "Nintendo",
       _INTL("Affiliated with Game Freak")
     ])
-    ret += "\n\n"
-    ret += _INTL("This is a non-profit fan-made game.") + "\n"
-    ret += _INTL("No copyright infringements intended.") + "\n"
-    ret += _INTL("Please support the official games!")
+    ret.push("", "")
+    ret.push(_INTL("This is a non-profit fan-made game."),
+             _INTL("No copyright infringements intended."),
+             _INTL("Please support the official games!"))
     return ret
   end
 
@@ -123,7 +120,7 @@ class Scene_Credits
     #-------------------------------
     # Credits text Setup
     #-------------------------------
-    credit_lines = get_text.split(/\n/)
+    credit_lines = get_text
     #-------------------------------
     # Make background and text sprites
     #-------------------------------
