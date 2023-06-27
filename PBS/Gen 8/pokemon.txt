@@ -2170,7 +2170,7 @@ Category = Magnet
 Pokedex = It is actually three Magnemite linked by magnetism. It generates powerful radio waves that raise temperatures by 3.6 degrees F within a 3,300-foot radius.
 Generation = 1
 WildItemUncommon = METALCOAT
-Evolutions = MAGNEZONE,LocationFlag,Magnetic,MAGNEZONE,Item,THUNDERSTONE
+Evolutions = MAGNEZONE,Item,THUNDERSTONE,MAGNEZONE,LocationFlag,Magnetic
 #-------------------------------
 [FARFETCHD]
 Name = Farfetch'd
@@ -3525,7 +3525,7 @@ Habitat = Urban
 Category = Evolution
 Pokedex = An Eevee has an unstable genetic makeup that suddenly mutates due to its environment. Radiation from various stones causes this Pokémon to evolve.
 Generation = 1
-Evolutions = VAPOREON,Item,WATERSTONE,JOLTEON,Item,THUNDERSTONE,FLAREON,Item,FIRESTONE,LEAFEON,LocationFlag,MossRock,LEAFEON,Item,LEAFSTONE,GLACEON,LocationFlag,IceRock,GLACEON,Item,ICESTONE,SYLVEON,HappinessMoveType,FAIRY,ESPEON,HappinessDay,,UMBREON,HappinessNight,
+Evolutions = VAPOREON,Item,WATERSTONE,JOLTEON,Item,THUNDERSTONE,FLAREON,Item,FIRESTONE,LEAFEON,Item,LEAFSTONE,LEAFEON,LocationFlag,MossRock,GLACEON,Item,ICESTONE,GLACEON,LocationFlag,IceRock,SYLVEON,HappinessMoveType,FAIRY,ESPEON,HappinessDay,,UMBREON,HappinessNight,
 #-------------------------------
 [VAPOREON]
 Name = Vaporeon
@@ -9220,7 +9220,7 @@ Habitat = WatersEdge
 Category = Fish
 Pokedex = Feebas live in ponds that are heavily infested with weeds. Because of its hopelessly shabby appearance, it seems as if few trainers raise it.
 Generation = 3
-Evolutions = MILOTIC,Beauty,170,MILOTIC,TradeItem,PRISMSCALE
+Evolutions = MILOTIC,TradeItem,PRISMSCALE,MILOTIC,Beauty,170
 #-------------------------------
 [MILOTIC]
 Name = Milotic
@@ -19038,7 +19038,7 @@ Category = Battery
 Pokedex = It buries itself in fallen leaves and barely moves, munching away on humus. If you accidentally step on one, you'll get a shock!
 Generation = 7
 WildItemUncommon = CELLBATTERY
-Evolutions = VIKAVOLT,LocationFlag,Magnetic,VIKAVOLT,Item,THUNDERSTONE
+Evolutions = VIKAVOLT,Item,THUNDERSTONE,VIKAVOLT,LocationFlag,Magnetic
 #-------------------------------
 [VIKAVOLT]
 Name = Vikavolt

@@ -33,8 +33,8 @@ NamePlural = Black Flutes
 Pocket = 1
 Price = 400
 FieldUse = Direct
-Consumable = false
 Flags = Fling_30
+Consumable = false
 Description = A black flute made from blown glass. Its melody makes wild Pokémon less likely to appear.
 #-------------------------------
 [WHITEFLUTE]
@@ -43,8 +43,8 @@ NamePlural = White Flutes
 Pocket = 1
 Price = 500
 FieldUse = Direct
-Consumable = false
 Flags = Fling_30
+Consumable = false
 Description = A white flute made from blown glass. Its melody makes wild Pokémon more likely to appear.
 #-------------------------------
 [HONEY]
@@ -56,7 +56,7 @@ Pocket = 1
 Price = 300
 FieldUse = Direct
 Flags = Fling_30
-Description = A sweet honey with an aroma that attracts wild Pokémon when used in grass, caves or on special trees.
+Description = A sweet honey with an aroma that attracts wild Pokémon when used in tall grass, in caves, or elsewhere.
 #-------------------------------
 [ESCAPEROPE]
 Name = Escape Rope
@@ -5373,8 +5373,8 @@ Pocket = 7
 Price = 100
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Consumable = false
 Flags = Fling_30
+Consumable = false
 Description = A blue flute made from blown glass. Its melody awakens a single Pokémon from sleep.
 #-------------------------------
 [YELLOWFLUTE]
@@ -5383,8 +5383,8 @@ NamePlural = Yellow Flutes
 Pocket = 7
 Price = 300
 BattleUse = OnBattler
-Consumable = false
 Flags = Fling_30
+Consumable = false
 Description = A yellow flute made from blown glass. Its melody snaps a single Pokémon out of confusion.
 #-------------------------------
 [REDFLUTE]
@@ -5393,8 +5393,8 @@ NamePlural = Red Flutes
 Pocket = 7
 Price = 200
 BattleUse = OnBattler
-Consumable = false
 Flags = Fling_30
+Consumable = false
 Description = A red flute made from blown glass. Its melody snaps a single Pokémon out of infatuation.
 #-------------------------------
 [POKEDOLL]

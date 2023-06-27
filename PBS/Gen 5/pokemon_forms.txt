@@ -6,79 +6,79 @@ Generation = 4
 Evolutions = PIKACHU,None,
 #-------------------------------
 [UNOWN,1]
-FormName = Bear
+FormName = B
 #-------------------------------
 [UNOWN,2]
-FormName = Chase
+FormName = C
 #-------------------------------
 [UNOWN,3]
-FormName = Direct
+FormName = D
 #-------------------------------
 [UNOWN,4]
-FormName = Engage
+FormName = E
 #-------------------------------
 [UNOWN,5]
-FormName = Find
+FormName = F
 #-------------------------------
 [UNOWN,6]
-FormName = Give
+FormName = G
 #-------------------------------
 [UNOWN,7]
-FormName = Help
+FormName = H
 #-------------------------------
 [UNOWN,8]
-FormName = Increase
+FormName = I
 #-------------------------------
 [UNOWN,9]
-FormName = Join
+FormName = J
 #-------------------------------
 [UNOWN,10]
-FormName = Keep
+FormName = K
 #-------------------------------
 [UNOWN,11]
-FormName = Laugh
+FormName = L
 #-------------------------------
 [UNOWN,12]
-FormName = Make
+FormName = M
 #-------------------------------
 [UNOWN,13]
-FormName = Nuzzle
+FormName = N
 #-------------------------------
 [UNOWN,14]
-FormName = Observe
+FormName = O
 #-------------------------------
 [UNOWN,15]
-FormName = Perform
+FormName = P
 #-------------------------------
 [UNOWN,16]
-FormName = Quicken
+FormName = Q
 #-------------------------------
 [UNOWN,17]
-FormName = Reassure
+FormName = R
 #-------------------------------
 [UNOWN,18]
-FormName = Search
+FormName = S
 #-------------------------------
 [UNOWN,19]
-FormName = Tell
+FormName = T
 #-------------------------------
 [UNOWN,20]
-FormName = Undo
+FormName = U
 #-------------------------------
 [UNOWN,21]
-FormName = Vanish
+FormName = V
 #-------------------------------
 [UNOWN,22]
-FormName = Want
+FormName = W
 #-------------------------------
 [UNOWN,23]
-FormName = XXXXX
+FormName = X
 #-------------------------------
 [UNOWN,24]
-FormName = Yield
+FormName = Y
 #-------------------------------
 [UNOWN,25]
-FormName = Zoom
+FormName = Z
 #-------------------------------
 [UNOWN,26]
 FormName = ?
