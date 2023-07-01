@@ -44,15 +44,15 @@ class Battle::Scene::PokemonDataBox < Sprite
     onPlayerSide = @battler.index.even?
     # Get the data box graphic and set whether the HP numbers/Exp bar are shown
     if sideSize == 1   # One Pokémon on side, use the regular dara box BG
-      bgFilename = ["Graphics/UI/Battle/databox_normal",
-                    "Graphics/UI/Battle/databox_normal_foe"][@battler.index % 2]
+      bgFilename = [_INTL("Graphics/UI/Battle/databox_normal"),
+                    _INTL("Graphics/UI/Battle/databox_normal_foe")][@battler.index % 2]
       if onPlayerSide
         @show_hp_numbers = true
         @show_exp_bar    = true
       end
     else   # Multiple Pokémon on side, use the thin dara box BG
-      bgFilename = ["Graphics/UI/Battle/databox_thin",
-                    "Graphics/UI/Battle/databox_thin_foe"][@battler.index % 2]
+      bgFilename = [_INTL("Graphics/UI/Battle/databox_thin"),
+                    _INTL("Graphics/UI/Battle/databox_thin_foe")][@battler.index % 2]
     end
     @databoxBitmap&.dispose
     @databoxBitmap = AnimatedBitmap.new(bgFilename)
@@ -230,7 +230,7 @@ class Battle::Scene::PokemonDataBox < Sprite
 
   def draw_level
     # "Lv" graphic
-    pbDrawImagePositions(self.bitmap, [["Graphics/UI/Battle/overlay_lv", @spriteBaseX + 140, 16]])
+    pbDrawImagePositions(self.bitmap, [[_INTL("Graphics/UI/Battle/overlay_lv"), @spriteBaseX + 140, 16]])
     # Level number
     pbDrawNumber(@battler.level, self.bitmap, @spriteBaseX + 162, 16)
   end
@@ -252,7 +252,7 @@ class Battle::Scene::PokemonDataBox < Sprite
       s = GameData::Status.get(@battler.status).icon_position
     end
     return if s < 0
-    pbDrawImagePositions(self.bitmap, [["Graphics/UI/Battle/icon_statuses", @spriteBaseX + 24, 36,
+    pbDrawImagePositions(self.bitmap, [[_INTL("Graphics/UI/Battle/icon_statuses"), @spriteBaseX + 24, 36,
                                         0, s * STATUS_ICON_HEIGHT, -1, STATUS_ICON_HEIGHT]])
   end
 

@@ -153,7 +153,7 @@ class VoltorbFlip
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites["bg"] = Sprite.new(@viewport)
-    @sprites["bg"].bitmap = RPG::Cache.load_bitmap(@directory, "bg")
+    @sprites["bg"].bitmap = RPG::Cache.load_bitmap(@directory, _INTL("Voltorb Flip bg"))
     @sprites["text"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["text"].bitmap)
     @sprites["level"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
@@ -177,7 +177,7 @@ class VoltorbFlip
     @sprites["icon"].z = 99997
     @sprites["mark"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["memo"] = Sprite.new(@viewport)
-    @sprites["memo"].bitmap = RPG::Cache.load_bitmap(@directory, "memo")
+    @sprites["memo"].bitmap = RPG::Cache.load_bitmap(@directory, _INTL("memo"))
     @sprites["memo"].x = 10
     @sprites["memo"].y = 244
     @sprites["memo"].visible = false

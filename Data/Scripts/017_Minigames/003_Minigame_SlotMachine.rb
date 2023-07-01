@@ -202,10 +202,10 @@ class SlotMachineScene
       loop do
         frame = ((System.uptime - timer_start) / 0.125).to_i
         @sprites["window2"].bitmap&.clear
-        @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/win")
+        @sprites["window1"].setBitmap(_INTL("Graphics/UI/Slot Machine/win"))
         @sprites["window1"].src_rect.set(152 * (frame % 4), 0, 152, 208)
         if bonus > 0
-          @sprites["window2"].setBitmap("Graphics/UI/Slot Machine/bonus")
+          @sprites["window2"].setBitmap(_INTL("Graphics/UI/Slot Machine/bonus"))
           @sprites["window2"].src_rect.set(152 * (bonus - 1), 0, 152, 208)
         end
         @sprites["light1"].visible = true
@@ -260,7 +260,7 @@ class SlotMachineScene
       loop do
         frame = ((System.uptime - timer_start) / 0.25).to_i
         @sprites["window2"].bitmap&.clear
-        @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/lose")
+        @sprites["window1"].setBitmap(_INTL("Graphics/UI/Slot Machine/lose"))
         @sprites["window1"].src_rect.set(152 * (frame % 2), 0, 152, 208)
         Graphics.update
         Input.update
@@ -299,7 +299,7 @@ class SlotMachineScene
     @sprites["light2"].mirror = true
     @sprites["light2"].visible = false
     @sprites["window1"] = IconSprite.new(358, 96, @viewport)
-    @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/insert")
+    @sprites["window1"].setBitmap(_INTL("Graphics/UI/Slot Machine/insert"))
     @sprites["window1"].src_rect.set(0, 0, 152, 208)
     @sprites["window2"] = IconSprite.new(358, 96, @viewport)
     @sprites["credit"] = SlotMachineScore.new(360, 66, $player.coins)
@@ -323,7 +323,7 @@ class SlotMachineScene
         pbMessage(_INTL("You've run out of Coins.\nGame over!"))
         break
       elsif @gameRunning   # Reels are spinning
-        @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/stop")
+        @sprites["window1"].setBitmap(_INTL("Graphics/UI/Slot Machine/stop"))
         timer_start = System.uptime
         loop do
           frame = ((System.uptime - timer_start) / 0.25).to_i
@@ -361,13 +361,13 @@ class SlotMachineScene
         end
         @gameEnd = false
       else   # Awaiting coins for the next spin
-        @sprites["window1"].setBitmap("Graphics/UI/Slot Machine/insert")
+        @sprites["window1"].setBitmap(_INTL("Graphics/UI/Slot Machine/insert"))
         timer_start = System.uptime
         loop do
           frame = ((System.uptime - timer_start) / 0.4).to_i
           @sprites["window1"].src_rect.set(152 * (frame % 2), 0, 152, 208)
           if @wager > 0
-            @sprites["window2"].setBitmap("Graphics/UI/Slot Machine/press")
+            @sprites["window2"].setBitmap(_INTL("Graphics/UI/Slot Machine/press"))
             @sprites["window2"].src_rect.set(152 * (frame % 2), 0, 152, 208)
           end
           Graphics.update

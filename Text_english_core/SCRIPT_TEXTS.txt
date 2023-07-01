@@ -1948,10 +1948,22 @@ PP: {1: 2d}/{2: 2d}<br>TYPE/{3:s}
 PP: {1: 2d}/{2: 2d}<br>TYPE/{3:s}
 PP: {1}/{2}
 PP: {1}/{2}
+Graphics/UI/Battle/databox_normal
+Graphics/UI/Battle/databox_normal
+Graphics/UI/Battle/databox_normal_foe
+Graphics/UI/Battle/databox_normal_foe
+Graphics/UI/Battle/databox_thin
+Graphics/UI/Battle/databox_thin
+Graphics/UI/Battle/databox_thin_foe
+Graphics/UI/Battle/databox_thin_foe
+Graphics/UI/Battle/overlay_lv
+Graphics/UI/Battle/overlay_lv
 ♂
 ♂
 ♀
 ♀
+Graphics/UI/Battle/icon_statuses
+Graphics/UI/Battle/icon_statuses
 {1}'s
 {1}'s
 Can't catch any more...
@@ -2216,6 +2228,8 @@ The {1} was used up...
 {1} was badly poisoned by the {2}!
 {1} floats in the air with its {2}!
 {1} floats in the air with its {2}!
+Graphics/UI/Battle/databox_safari
+Graphics/UI/Battle/databox_safari
 Safari Balls
 Safari Balls
 Left: {1}
@@ -3026,6 +3040,8 @@ OBTAINED
 OBTAINED
 Graphics/UI/Pokedex/icon_types
 Graphics/UI/Pokedex/icon_types
+Graphics/UI/Pokedex/icon_hw
+Graphics/UI/Pokedex/icon_hw
 Graphics/UI/Pokedex/icon_searchslider
 Graphics/UI/Pokedex/icon_searchslider
 Search results
@@ -3166,8 +3182,16 @@ Graphics/UI/Pokedex/bg_forms
 Graphics/UI/Pokedex/bg_forms
 CONFIRM
 CONFIRM
+Graphics/UI/Party/overlay_hp_back
+Graphics/UI/Party/overlay_hp_back
+Graphics/UI/Party/overlay_hp_back_faint
+Graphics/UI/Party/overlay_hp_back_faint
+Graphics/UI/Party/overlay_hp_back_swap
+Graphics/UI/Party/overlay_hp_back_swap
 Graphics/UI/statuses
 Graphics/UI/statuses
+Graphics/UI/Party/overlay_lv
+Graphics/UI/Party/overlay_lv
 <<[>>Special<<]>>: To Boxes
 <<[>>Special<<]>>: To Boxes
 Give to which Pokémon?
@@ -3414,6 +3438,8 @@ You must choose a move!
 You must choose a move!
 CLOSE BAG
 CLOSE BAG
+Graphics/UI/Bag/icon_register
+Graphics/UI/Bag/icon_register
 x{1: 3d}
 x{1: 3d}
 Close bag.
@@ -3494,6 +3520,8 @@ By Trainer type
 By Trainer type
 Special contacts first
 Special contacts first
+Graphics/UI/jukebox_bg
+Graphics/UI/jukebox_bg
 Play: Pokémon March
 Play: Pokémon March
 Play: Pokémon Lullaby
@@ -3504,6 +3532,10 @@ Play: Custom...
 Play: Custom...
 Stop
 Stop
+Graphics/UI/Trainer Card/card_f
+Graphics/UI/Trainer Card/card_f
+Graphics/UI/Trainer Card/card
+Graphics/UI/Trainer Card/card
 {1}h {2}m
 {1}h {2}m
 {1}m
@@ -3668,6 +3700,8 @@ Mark your Pokémon.
 Mark your Pokémon.
 Party: {1}
 Party: {1}
+Graphics/UI/Storage/overlay_lv
+Graphics/UI/Storage/overlay_lv
 No ability
 No ability
 No item
@@ -4042,16 +4076,30 @@ Graphics/UI/Naming/overlay_controls
 Graphics/UI/Naming/overlay_controls
 Graphics/UI/Naming/icon_mode
 Graphics/UI/Naming/icon_mode
+Graphics/UI/Controls help/help_f1
+Graphics/UI/Controls help/help_f1
+Graphics/UI/Controls help/help_f8
+Graphics/UI/Controls help/help_f8
 Opens the Key Bindings window, where you can choose which keyboard keys to use for each control.
 Opens the Key Bindings window, where you can choose which keyboard keys to use for each control.
 Take a screenshot. It is put in the same folder as the save file.
 Take a screenshot. It is put in the same folder as the save file.
+Graphics/UI/Controls help/help_arrows
+Graphics/UI/Controls help/help_arrows
 Use the Arrow keys to move the main character.<<n>>You can also use the Arrow keys to select entries and navigate menus.
 Use the Arrow keys to move the main character.<<n>><<n>>You can also use the Arrow keys to select entries and navigate menus.
+Graphics/UI/Controls help/help_usekey
+Graphics/UI/Controls help/help_usekey
+Graphics/UI/Controls help/help_backkey
+Graphics/UI/Controls help/help_backkey
 Used to confirm a choice, interact with people and things, and move through text. (Default: C)
 Used to confirm a choice, interact with people and things, and move through text. (Default: C)
 Used to exit, cancel a choice, and cancel a mode. While moving around, hold to move at a different speed. (Default: X)
 Used to exit, cancel a choice, and cancel a mode. While moving around, hold to move at a different speed. (Default: X)
+Graphics/UI/Controls help/help_actionkey
+Graphics/UI/Controls help/help_actionkey
+Graphics/UI/Controls help/help_specialkey
+Graphics/UI/Controls help/help_specialkey
 Used to open the Pause Menu. Also has various functions depending on context. (Default: Z)
 Used to open the Pause Menu. Also has various functions depending on context. (Default: Z)
 Press to open the Ready Menu, where registered items and available field moves can be used. (Default: D)
@@ -4244,10 +4292,22 @@ Turned over the {1} card and received ${2}.
 Turned over the {1} card and received ${2}.
 Graphics/UI/Slot Machine/images
 Graphics/UI/Slot Machine/images
+Graphics/UI/Slot Machine/win
+Graphics/UI/Slot Machine/win
+Graphics/UI/Slot Machine/bonus
+Graphics/UI/Slot Machine/bonus
+Graphics/UI/Slot Machine/lose
+Graphics/UI/Slot Machine/lose
+Graphics/UI/Slot Machine/insert
+Graphics/UI/Slot Machine/insert
 You've got {1} Coins.
 You've got {1} Coins.
 You've run out of Coins.<<n>>Game over!
 You've run out of Coins.<<n>>Game over!
+Graphics/UI/Slot Machine/stop
+Graphics/UI/Slot Machine/stop
+Graphics/UI/Slot Machine/press
+Graphics/UI/Slot Machine/press
 It's a Slot Machine.
 It's a Slot Machine.
 You don't have any Coins to play!
@@ -4264,6 +4324,10 @@ You've gathered {1} Coins. You cannot gather any more.
 You've gathered {1} Coins. You cannot gather any more.
 Play Voltorb Flip Lv. {1}?
 Play Voltorb Flip Lv. {1}?
+Voltorb Flip bg
+Voltorb Flip bg
+memo
+memo
 Oh no! You get 0 Coins!
 Oh no! You get 0 Coins!
 Dropped to Game Lv. {1}!

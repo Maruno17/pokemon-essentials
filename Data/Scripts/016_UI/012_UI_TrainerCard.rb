@@ -16,12 +16,12 @@ class PokemonTrainerCard_Scene
     else
       addBackgroundPlane(@sprites, "bg", "Trainer Card/bg", @viewport)
     end
-    cardexists = pbResolveBitmap("Graphics/UI/Trainer Card/card_f")
+    cardexists = pbResolveBitmap(_INTL("Graphics/UI/Trainer Card/card_f"))
     @sprites["card"] = IconSprite.new(0, 0, @viewport)
     if $player.female? && cardexists
-      @sprites["card"].setBitmap("Graphics/UI/Trainer Card/card_f")
+      @sprites["card"].setBitmap(_INTL("Graphics/UI/Trainer Card/card_f"))
     else
-      @sprites["card"].setBitmap("Graphics/UI/Trainer Card/card")
+      @sprites["card"].setBitmap(_INTL("Graphics/UI/Trainer Card/card"))
     end
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)

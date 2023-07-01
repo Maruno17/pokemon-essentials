@@ -204,9 +204,9 @@ class PokemonPartyPanel < Sprite
     end
     @hpbgsprite = ChangelingSprite.new(0, 0, viewport)
     @hpbgsprite.z = self.z + 1
-    @hpbgsprite.addBitmap("able", "Graphics/UI/Party/overlay_hp_back")
-    @hpbgsprite.addBitmap("fainted", "Graphics/UI/Party/overlay_hp_back_faint")
-    @hpbgsprite.addBitmap("swap", "Graphics/UI/Party/overlay_hp_back_swap")
+    @hpbgsprite.addBitmap("able", _INTL("Graphics/UI/Party/overlay_hp_back"))
+    @hpbgsprite.addBitmap("fainted", _INTL("Graphics/UI/Party/overlay_hp_back_faint"))
+    @hpbgsprite.addBitmap("swap", _INTL("Graphics/UI/Party/overlay_hp_back_swap"))
     @ballsprite = ChangelingSprite.new(0, 0, viewport)
     @ballsprite.z = self.z + 1
     @ballsprite.addBitmap("desel", "Graphics/UI/Party/icon_ball")
@@ -380,7 +380,7 @@ class PokemonPartyPanel < Sprite
     return if @pokemon.egg?
     # "Lv" graphic
     pbDrawImagePositions(@overlaysprite.bitmap,
-                         [["Graphics/UI/Party/overlay_lv", 20, 70, 0, 0, 22, 14]])
+                         [[_INTL("Graphics/UI/Party/overlay_lv"), 20, 70, 0, 0, 22, 14]])
     # Level number
     pbSetSmallFont(@overlaysprite.bitmap)
     pbDrawTextPositions(@overlaysprite.bitmap,

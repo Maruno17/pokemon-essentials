@@ -84,13 +84,13 @@ class Window_PokemonBag < Window_DrawableCommand
         if @bag.registered?(item)
           pbDrawImagePositions(
             self.contents,
-            [["Graphics/UI/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 0, -1, 24]]
+            [[_INTL("Graphics/UI/Bag/icon_register"), rect.x + rect.width - 72, rect.y + 8, 0, 0, -1, 24]]
           )
           showing_register_icon = true
         elsif pbCanRegisterItem?(item)
           pbDrawImagePositions(
             self.contents,
-            [["Graphics/UI/Bag/icon_register", rect.x + rect.width - 72, rect.y + 8, 0, 24, -1, 24]]
+            [[_INTL("Graphics/UI/Bag/icon_register"), rect.x + rect.width - 72, rect.y + 8, 0, 24, -1, 24]]
           )
           showing_register_icon = true
         end

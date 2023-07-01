@@ -265,7 +265,7 @@ class PokemonPokedex_Scene
     @sliderbitmap       = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_slider")
     @typebitmap         = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_types"))
     @shapebitmap        = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_shapes")
-    @hwbitmap           = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_hw")
+    @hwbitmap           = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_hw"))
     @selbitmap          = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_searchsel")
     @searchsliderbitmap = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_searchslider"))
     @sprites = {}
