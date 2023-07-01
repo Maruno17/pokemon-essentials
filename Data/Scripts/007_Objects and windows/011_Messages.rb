@@ -257,7 +257,7 @@ def pbGetBasicMapNameFromId(id)
 end
 
 def pbGetMapNameFromId(id)
-  name = GameData::MapMetadata.get(id)&.name
+  name = GameData::MapMetadata.try_get(id)&.name
   if nil_or_empty?(name)
     name = pbGetBasicMapNameFromId(id)
     name.gsub!(/\\PN/, $player.name) if $player

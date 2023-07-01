@@ -1,424 +1,43 @@
+//==============================================================================
+// Since this is a JSON file, comments are written with // instead of a #. Any
+// backslashes in file paths written in here need to be escaped (i.e. a single
+// backslash becomes a double backslash). If that's too much hassle, you can use
+// a single forward slash instead (even on Windows).
+//==============================================================================
 {
-    // Lines starting with '//' are comments.
+    //==========================================================================
+    // Things you may want to/should change.
+    //==========================================================================
+
+    // The name shown in the game window's title. Is the game's display name.
+    // Note that the "Game Title" defined in RPG Maker XP should not have
+    // accented characters in it, which is why this property is useful.
     //
-    // About filesystem paths specified in this config:
-    // The "gameFolder" path is resolved either relative
-    // to the directory containing the mkxp executable
-    // (the default behavior), or relative to the current
-    // working directory (when compiled with
-    // -DWORKDIR_CURRENT). All other paths are resolved
-    // relative to gameFolder and ignoring both RTPs and
-    // encrypted archives. Since this is JSON, any
-    // backslashes in paths need to be escaped (i.e. a
-    // single backslash becomes a double backslash). If
-    // that's too much hassle, you can use a single forward
-    // slash instead (even on Windows).
-    //
-    // Some influential environment variables, set them to either "1" or "0":
-    // "MKXPZ_WINDOWS_CONSOLE"
-    //     - Enables/disables the extra console window on Windows. It appears by
-    //       default whenever mkxp-z is started in debug mode.
-    // "MKXPZ_MACOS_METAL"
-    //     - Setting this will influence the rendering backend used.
-    //       Probably not a good idea to mess with it unless you have some kind of issue.
-    //       OpenGL is default on x86, and Metal is the default on Apple Silicon.
-    //       This takes priority over the config option if it's set.
-    // "MKXPZ_FOLDER_SELECT"
-    //     - Allows the manual selection of the game's folder at startup.
-    //       Only works on macOS at the moment.
-    // "MTL_HUD_ENABLED"
-    //     - On macOS 13 (Ventura) and over, provided the Metal backend is used,
-    //       this will enable a full performance HUD containing more details than
-    //       the built-in framerate display.
+    "windowTitle": "Pokémon Essentials v21",
 
-
-    // Specify the RGSS version to run under.
-    // Possible values are 0, 1, 2, 3. If set to 0,
-    // mkxp will try to guess the required version
-    // based on the game files found in gameFolder.
-    // If this fails, the version defaults to 1.
-    // (default: 0)
-    //
-    // "rgssVersion": 1,
-
-
-    // Continuously print average FPS to console.
-    // This setting does not affect the window title
-    // FPS display toggled via F2
-    // (default: disabled)
-    //
-    // "printFPS": false,
-
-
-    // Game window is resizable
-    // (default: enabled)
-    //
-    // "winResizable": true,
-
-
-    // Start game in fullscreen (this can
-    // always be toggled with Alt-Enter at runtime)
-    // (default: disabled)
-    //
-    // "fullscreen": false,
-
-
-    // Preserve game screen aspect ratio,
-    // as opposed to stretch-to-fill
-    // (default: enabled)
-    //
-    // "fixedAspectRatio": true,
-
-
-    // Apply linear interpolation when game screen
-    // is upscaled
-    // (default: disabled)
-    //
-    // "smoothScaling": false,
-
-
-    // Apply Lanczos3 interpolation when game screen
-    // is upscaled (typically higher quality than linear)
-    // (default: disabled)
-    //
-    // "lanczos3Scaling": false,
-
-
-    // Sync screen redraws to the monitor refresh rate
-    // (default: disabled)
-    //
-    "vsync": true,
-
-
-    // Specify the window width on startup. If set to 0,
-    // it will default to the default resolution width
-    // specific to  the RGSS version (640 in RGSS1, 544
-    // in RGSS2 or higher).
-    // (default: 0)
+    // The game window's width and height, in pixels.
     //
     "defScreenW": 512,
-
-
-    // Specify the window height on startup. If set to 0,
-    // it will default to the default resolution height
-    // specific to the RGSS version (480 in RGSS1, 416
-    // in RGSS2 or higher).
-    // (default: 0)
-    //
     "defScreenH": 384,
 
-
-    // Override the game window title
-    // (default: none)
+    // The game's frame rate.
     //
-    // "windowTitle": "Custom Title",
+    "fixedFramerate": 61,
 
-
-    // Enforce a static frame rate
-    // (0 = disabled)
-    //
-    // "fixedFramerate": 0,
-
-
-    // Skip (don't draw) frames when behind.
-    // Can be changed at runtime, but this is the
-    // default value when the game starts.
-    // (default: disabled)
-    //
-    // "frameSkip": false,
-
-
-    // Use a fixed framerate that is approx. equal to the
-    // native screen refresh rate. This is different from
-    // "fixedFramerate" because the actual frame rate is
-    // reported back to the game, ensuring correct timers.
-    // If the screen refresh rate cannot be determined,
-    // this option is force-disabled.
-    // This option may be force-disabled at build time.
-    // (default: disabled)
-    //
-    "syncToRefreshrate": true,
-
-
-    // A list of fonts to render without alpha blending.
-    // (default: none)
-    //
-    // "solidFonts": ["Arial", "Times New Roman"]
-
-
-    // Prefer the use of Metal over OpenGL on macOS.
-    // This defaults to false under Intel machines,
-    // and true under ARM/Apple Silicon ones (which
-    // merely emulate OpenGL anyway)
-    //
-    // Try changing this if you have graphics problems.
-    // Metal is far better, but ANGLE may not initialize correctly
-    // on some Intel machines.
-    //
-    // On Apple Silicon it's probably better to not touch it.
-    // Emulated OpenGL is buggy, and it will also break things like
-    // the Steam overlay.
-    // (default: true if Apple Silicon, false if Intel)
-    //
-    // "preferMetalRenderer": true,
-
-
-    // Work around buggy graphics drivers which don't
-    // properly synchronize texture access, most
-    // apparent when text doesn't show up or the map
-    // tileset doesn't render at all
-    // (default: disabled)
-    //
-    "subImageFix": true,
-
-
-    // Enable framebuffer blitting if the driver is
-    // capable of it. Some drivers carry buggy
-    // implementations of this functionality, so
-    // disabling it can be used as a workaround.
-    // Does nothing on macOS.
-    // (default: disabled)
-    //
-    // "enableBlitting": false,
-
-
-    // Limit the maximum size (width, height) of
-    // most textures mkxp will create (exceptions are
-    // rendering backbuffers and similar).
-    // If set to 0, the hardware maximum is used.
-    // This is useful for recording traces that can
-    // be played back on machines with lower specs.
-    // (default: 0)
-    //
-    // "maxTextureSize": 0,
-
-
-    // Scale up the game screen by an integer amount,
-    // as large as the current window size allows, before
-    // doing any last additional scalings to fill part or
-    // all of the remaining window space (or none at all
-    // if lastMileScaling is disabled).
-    // If fixedAspectRatio is disabled, the integer scale
-    // factors in horizontal and vertical direction can differ
-    // depending on how much space is available, otherwise
-    // they are forced to the smaller of the two.
-    // (default: disabled)
-    //
-    // "integerScalingActive": false,
-
-
-    // When integer scaling is enabled, this option controls
-    // whether the scaled game screen is further scaled
-    // (with linear interpolation when smoothScaling is enabled)
-    // to fill the rest of the game window.
-    // Note that this option still respects fixedAspectRatio.
-    // (default: enabled)
-    //
-    // "integerScalingLastMile": true,
-
-
-    // Set the base path of the game to '/path/to/game'
-    // (default: executable directory)
-    //
-    // "gameFolder": ".",
-
-
-    // Use either right or left Alt + Enter to toggle
-    // fullscreen
-    // (default: disabled)
-    //
-    // "anyAltToggleFS": false,
-
-
-    // Enable F12 game reset
-    // (default: enabled)
-    //
-    // "enableReset": true,
-
-
-    // Enable F1/keybinding menu
-    // (default: enabled)
-    //
-    // "enableSettings": true,
-
-
-    // Allow symlinks for game assets to be followed
-    // (default: disabled)
-    //
-    // "allowSymlinks": false,
-
-
-    // Organisation / company and application / game
-    // name to build the directory path where mkxp
-    // will store game specific data (eg. key bindings).
-    // If not specified, mkxp-z will use a folder based
-    // on the name of the game, if possible, defaulting
-    // to "." for Org and "mkxp-z" for App otherwise.
-    // (default: none)
-    //
-    // "dataPathOrg": "mycompany",
-    // "dataPathApp": "mygame",
-
-
-    // Set the game window icon to 'path/to/icon.png'
-    // Only functions on Linux.
-    // (default: none)
+    // The path to the game window's icon. For Linux only. (Default: none)
     //
     // "iconPath": "/path/to/icon.png",
 
-
-    // Instead of playing an RPG Maker game,
-    // execute a single plain text script instead
-    // (default: none)
+    // Enable F12 to make the game soft reset.
     //
-    // "customScript": "/path/to/script.rb",
+    // "enableReset": true,
 
-
-    // Define raw scripts to be executed before the
-    // actual Scripts.rxdata execution starts
-    // (default: none)
+    // Enable F1 to open the keybinding menu.
     //
-    // "preloadScript": ["my_win32_wrapper.rb",
-    //                   "ruby18_fixes.rb"],
+    // "enableSettings": true,
 
-
-    // Index all accesible assets via their lower case path
-    // (emulates windows case insensitivity)
-    // (default: enabled)
-    //
-    // "pathCache": true,
-
-
-    // Add 'rtp1', 'rtp2.zip' and 'game.rgssad' to the
-    // asset search path (multiple allowed)
-    // (default: none)
-    //
-    // "RTP": ["/path/to/rtp1",
-    //         "/path/to/rtp2.zip",
-    //         "/path/to/game.rgssad"],
-
-
-    // Use the script's name as filename in warnings and error messages
-    // (default: enabled)
-    //
-    // "useScriptNames": true,
-
-
-    // Font substitutions allow drop-in replacements of fonts
-    // to be used without changing the RGSS scripts,
-    // eg. providing 'Open Sans' when the game thinkgs it's
-    // using 'Arial'. Font family to be substituted and
-    // replacement family are separated by one sole '>'.
-    // Be careful not to include any spaces.
-    // This is not connected to the built-in font, which is
-    // always used when a non-existing font family is
-    // requested by RGSS.
-    // (default: none)
-    //
-    // "fontSub": ["Arial>Open Sans",
-    //             "Times New Roman>Liberation Serif"]
-
-
-    // Because mkxp is usually distributed as a stand alone
-    // build, no predefined load paths are initialized
-    // ($:, $LOAD_PATH) in the MRI backend. With this option,
-    // they can be specified manually (eg. when using a system
-    // libruby.so). It is however recommended to statically
-    // link all required gems into libruby.so.
-    // (default: none)
-    //
-    // "rubyLoadpath": ["/usr/lib64/ruby/",
-    //                  "/usr/local/share/ruby/site_ruby"],
-
-
-    // Determines whether MJIT is enabled. This probably
-    // won't work unless you also have the header file
-    // that it needs. Only works with Ruby 2.6 or higher.
-    // This Ruby feature is experimental.
-    // (default: false)
-    //
-    // "JITEnable": false,
-
-
-    // Determines what level of verbosity to use when
-    // logging MJIT events. Starts at 0, which is next
-    // to nothing. Set it higher to see more.
-    // (default: 0)
-    //
-    // "JITVerboseLevel": 0,
-
-
-    // Determines how many compiled methods that Ruby
-    // will keep in its MJIT cache.
-    // (default: 100)
-    //
-    // "JITMaxCache": 100,
-
-
-    // Determines how many times a function has to be
-    // called before it is compiled by MJIT.
-    // (default: 10000)
-    //
-    // "JITMinCalls": 10000,
-
-
-    // Determines whether YJIT is enabled.
-    // Only works with Ruby 3.1 or higher.
-    // This Ruby feature is experimental.
-    // (default: false)
-    //
-    // "YJITEnable": false,
-
-
-    // SoundFont to use for midi playback (via fluidsynth)
-    // (default: none)
-    //
-    "midiSoundFont": "soundfont.sf2",
-
-
-    // Activate "chorus" effect for midi playback
-    //
-    // "midiChorus": false,
-
-
-    // Activate "reverb" effect for midi playback
-    //
-    // "midiReverb": false,
-
-
-    // Number of OpenAL sources to allocate for SE playback.
-    // If there are a lot of sounds playing at the same time
-    // and audibly cutting each other off, try increasing
-    // this number. Maximum: 64.
-    //
-    // "SESourceCount": 6
-
-
-    // Number of streams to open for BGM tracks. If the game
-    // needs multitrack audio, this should be set to as many
-    // available tracks as the game needs. Maximum: 16.
-    //
-    // "BGMTrackCount": 1
-
-
-    // The Windows game executable name minus ".exe". By default
-    // this is "Game", but some developers manually rename it.
-    // mkxp needs this name because both the .ini (game
-    // configuration) and .rgssad (encrypted data archive) must
-    // carry the same name minus their extension, and we cannot
-    // guess the executable's name.
-    // You could just as well rename them both to "Game.ini" and
-    // "Game.rgssad", but specifying the executable name here
-    // is a tiny bit less intrusive.
-    //
-    // "execName": "Game"
-
-
-    // You can define alternate terminology for the different
-    // inputs recognized by RPG Maker. A, B, C, X, Y, Z, L, and R
-    // can all be set using this dictionary, and will be displayed
-    // on the F1 menu. This is only a cosmetic effect, so it will
-    // have no effect on the game's scripts.
+    // The names of each input, as seen in the F1 keybinding menu. The names
+    // have no other use.
     //
     "bindingNames": {
       "c": "Use",
@@ -429,6 +48,112 @@
       "z": "Special",
       "l": "(unused)",
       "r": "(unused)"
-    }
+    },
 
+    // The name of this game's save folder. If undefined, the save folder's name
+    // will be the "Game Title" as defined in RPG Maker XP. It should not
+    // contain any accented characters.
+    //
+    // "dataPathApp": "Pokemon Essentials v21",
+
+    // If defined, the game's save folder goes into a folder with this name (in
+    // C:\Users\USERNAME\AppData\Roaming). If undefined, the game's save folder
+    // goes directly into C:\Users\USERNAME\AppData\Roaming. It should not
+    // contain any accented characters.
+    // This acts as a company/creator name, and this folder could contain save
+    // folders for multiple games made by the same company/creator.
+    //
+    // "dataPathOrg": "PKMN Essentials",
+
+    // SoundFont to use for midi playback (via fluidsynth).
+    //
+    "midiSoundFont": "soundfont.sf2",
+
+    // Number of streams to open for BGM tracks. If the game needs multi-track
+    // audio, this should be set to as many available tracks as the game needs.
+    // Maximum: 16.
+    //
+    // "BGMTrackCount": 1,
+
+    // Number of OpenAL sources to allocate for SE playback. If there are a lot
+    // of sounds playing at the same time and audibly cutting each other off,
+    // try increasing this number. Maximum: 64.
+    //
+    // "SESourceCount": 6,
+
+    // Index all accessible assets via their lower case path (emulates Windows
+    // case insensitivity).
+    //
+    // "pathCache": true,
+
+    //==========================================================================
+    // Window size, scaling, rendering and frame rate.
+    // You shouldn't need to change any of these.
+    //==========================================================================
+
+    // Whether the game starts in full-screen mode (this can always be toggled
+    // with Alt-Enter during runtime).
+    //
+    // "fullscreen": false,
+
+    // Whether you can toggle full-screen mode by pressing Alt + Enter with
+    // either the left or right Alt key.
+    //
+    // "anyAltToggleFS": false,
+
+    // Whether the game window is freely resizable.
+    //
+    // "winResizable": true,
+
+    // Whether the game screen's aspect ratio is preserved when resizing the
+    // window. If false, the game screen will stretch and distort to fill the
+    // entire window.
+    //
+    // "fixedAspectRatio": true,
+
+    // When resizing the game screen to fit the window, whether to scale up the
+    // game screen by an integer amount (as large as the current window size
+    // allows) before doing any last additional scalings to fill part/all of the
+    // remaining window space (or none at all if integerScalingLastMile is
+    // disabled).
+    // If fixedAspectRatio is disabled, the integer scale factors in horizontal
+    // and vertical direction can differ depending on how much space is
+    // available; otherwise they are forced to the smaller of the two.
+    //
+    // "integerScalingActive": false,
+
+    // When integerScalingActive is enabled, this option controls whether the
+    // scaled game screen is further scaled (with linear interpolation when
+    // smoothScaling is enabled) to fill the rest of the game window.
+    // Note that this option still respects fixedAspectRatio.
+    //
+    // "integerScalingLastMile": true,
+
+    // Whether to apply linear interpolation when the game screen is upscaled.
+    //
+    // "smoothScaling": false,
+
+    // Whether to apply Lanczos3 interpolation when the game screen is upscaled
+    // (typically higher quality than the linear smoothScaling).
+    //
+    // "lanczos3Scaling": false,
+
+    // Workaround for buggy graphics drivers that don't properly synchronize
+    // texture access. This is most apparent when text doesn't show up or the
+    // map tileset doesn't render at all.
+    //
+    "subImageFix": true,
+
+    // Sync screen redraws to the monitor refresh rate, to reduce screen
+    // tearing.
+    //
+    "vsync": true,
+
+    // Use a fixed framerate that is approx. equal to the native screen refresh
+    // rate. This is different from "fixedFramerate" because the actual frame
+    // rate is reported back to the game, ensuring correct timers. If the screen
+    // refresh rate cannot be determined, this option is force-disabled. This
+    // option may be force-disabled at build time.
+    //
+    // "syncToRefreshrate": false,
 }

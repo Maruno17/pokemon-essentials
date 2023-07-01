@@ -1351,11 +1351,11 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     rect = drawCursor(index, rect)
     if toUnformattedText(@commands[index]).gsub(/\n/, "") == @commands[index]
       # Use faster alternative for unformatted text without line breaks
-      pbDrawShadowText(self.contents, rect.x, rect.y, rect.width, rect.height,
-                       @commands[index], self.baseColor, self.shadowColor)
+      pbDrawShadowText(self.contents, rect.x, rect.y + (self.contents.text_offset_y || 0),
+                       rect.width, rect.height, @commands[index], self.baseColor, self.shadowColor)
     else
-      chars = getFormattedText(self.contents, rect.x, rect.y + 4, rect.width, rect.height,
-                               @commands[index], rect.height, true, true)
+      chars = getFormattedText(self.contents, rect.x, rect.y + (self.contents.text_offset_y || 0),
+                               rect.width, rect.height, @commands[index], rect.height, true, true)
       drawFormattedChars(self.contents, chars)
     end
   end

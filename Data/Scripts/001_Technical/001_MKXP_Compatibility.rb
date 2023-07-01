@@ -2,7 +2,6 @@
 # https://github.com/mkxp-z/mkxp-z/actions/runs/5107184579
 $VERBOSE = nil
 Font.default_shadow = false if Font.respond_to?(:default_shadow)
-Graphics.frame_rate = 40
 Encoding.default_internal = Encoding::UTF_8
 Encoding.default_external = Encoding::UTF_8
 
