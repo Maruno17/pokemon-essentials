@@ -230,7 +230,8 @@ class PokemonEvolutionScene
       moves_to_learn.push(i[1])
     end
     # Show Pokédex entry for new species if it hasn't been owned before
-    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned &&
+       $player.has_pokedex && $player.pokedex.species_in_unlocked_dex?(@pokemon.species)
       pbMessageDisplay(@sprites["msgwindow"],
                        _INTL("{1}'s data was added to the Pokédex.", newspeciesname)) { pbUpdate }
       $player.pokedex.register_last_seen(@pokemon)

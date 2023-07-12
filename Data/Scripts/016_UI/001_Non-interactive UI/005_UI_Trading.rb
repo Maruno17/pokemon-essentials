@@ -191,7 +191,8 @@ class PokemonTrade_Scene
     pbMessageDisplay(@sprites["msgwindow"],
                      _INTL("Take good care of {1}.", speciesname2)) { pbUpdate }
     # Show Pokédex entry for new species if it hasn't been owned before
-    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned &&
+       $player.has_pokedex && $player.pokedex.species_in_unlocked_dex?(@pokemon2.species)
       pbMessageDisplay(@sprites["msgwindow"],
                        _INTL("{1}'s data was added to the Pokédex.", speciesname2)) { pbUpdate }
       $player.pokedex.register_last_seen(@pokemon2)

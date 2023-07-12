@@ -384,7 +384,8 @@ def pbReceiveMysteryGift(id)
       pbMessage("\\me[Pkmn get]" + _INTL("{1} received {2}!", $player.name, gift[2].name))
       $player.mystery_gifts[index] = [id]
       # Show Pokédex entry for new species if it hasn't been owned before
-      if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+      if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned &&
+         $player.has_pokedex && $player.pokedex.species_in_unlocked_dex?(gift[2].species)
         pbMessage(_INTL("{1}'s data was added to the Pokédex.", gift[2].name))
         $player.pokedex.register_last_seen(gift[2])
         pbFadeOutIn do
