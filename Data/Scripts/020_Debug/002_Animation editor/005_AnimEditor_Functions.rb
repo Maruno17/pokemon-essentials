@@ -949,7 +949,6 @@ module BattleAnimationEditor
   # Main
   #=============================================================================
   def animationEditorMain(animation)
-    echoln animation.selected
     viewport = Viewport.new(0, 0, Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
     viewport.z = 99999
     # Canvas

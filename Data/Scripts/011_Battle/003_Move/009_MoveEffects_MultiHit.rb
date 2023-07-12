@@ -471,8 +471,8 @@ class Battle::Move::TwoTurnAttackInvulnerableInSkyTargetCannotAct < Battle::Move
     target.effects[PBEffects::SkyDrop] = user.index
   end
 
-  def pbAttackingTurnEffect(user, target)
-    target.effects[PBEffects::SkyDrop] = -1
+  def pbEffectAfterAllHits(user, target)
+    target.effects[PBEffects::SkyDrop] = -1 if @damagingTurn
   end
 end
 

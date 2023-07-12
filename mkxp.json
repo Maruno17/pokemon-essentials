@@ -20,10 +20,6 @@
     "defScreenW": 512,
     "defScreenH": 384,
 
-    // The game's frame rate.
-    //
-    "fixedFramerate": 61,
-
     // The path to the game window's icon. For Linux only. (Default: none)
     //
     // "iconPath": "/path/to/icon.png",
@@ -148,6 +144,10 @@
     // tearing.
     //
     "vsync": true,
+
+    // The game's frame rate.
+    //
+    "fixedFramerate": 61,
 
     // Use a fixed framerate that is approx. equal to the native screen refresh
     // rate. This is different from "fixedFramerate" because the actual frame

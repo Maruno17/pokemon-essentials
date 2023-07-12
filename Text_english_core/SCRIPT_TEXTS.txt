@@ -5210,12 +5210,12 @@ Item: {1}
 Item: {1}
 (toxic)
 (toxic)
-Field Options...
-Field Options...
+Field options...
+Field options...
 Warp to maps, edit switches/variables, use the PC, edit Day Care, etc.
 Warp to maps, edit switches/variables, use the PC, edit Day Care, etc.
-Warp to Map
-Warp to Map
+Warp to map
+Warp to map
 Instantly warp to another map of your choice.
 Instantly warp to another map of your choice.
 Use PC
@@ -5250,8 +5250,8 @@ Set the time remaining (in minutes) in this Bug-Catching Contest.
 Set the time remaining (in minutes) in this Bug-Catching Contest.
 You aren't in the Safari Zone or a Bug-Catching Contest!
 You aren't in the Safari Zone or a Bug-Catching Contest!
-Change Field Effects
-Change Field Effects
+Change field effects
+Change field effects
 Edit Repel steps, Strength and Flash usage, and Black/White Flute effects.
 Edit Repel steps, Strength and Flash usage, and Black/White Flute effects.
 Repel steps: {1}
@@ -5272,8 +5272,8 @@ Set the Pokémon's level.
 Set the Pokémon's level.
 You're not in a dark map!
 You're not in a dark map!
-Refresh Map
-Refresh Map
+Refresh map
+Refresh map
 Make all events on this map, and common events, refresh themselves.
 Make all events on this map, and common events, refresh themselves.
 The map will refresh.
@@ -5282,8 +5282,8 @@ Day Care
 Day Care
 View Pokémon in the Day Care and edit them.
 View Pokémon in the Day Care and edit them.
-Toggle Storage Wallpapers
-Toggle Storage Wallpapers
+Toggle storage wallpapers
+Toggle storage wallpapers
 Unlock and lock special wallpapers used in Pokémon storage.
 Unlock and lock special wallpapers used in Pokémon storage.
 There are no special wallpapers defined.
@@ -5292,26 +5292,26 @@ Unlock all
 Unlock all
 Lock all
 Lock all
-Skip Credits
-Skip Credits
+Skip credits
+Skip credits
 Toggle whether credits can be ended early by pressing the Use input.
 Toggle whether credits can be ended early by pressing the Use input.
 Credits can be skipped when played in future.
 Credits can be skipped when played in future.
 Credits cannot be skipped when next played.
 Credits cannot be skipped when next played.
-Battle Options...
-Battle Options...
+Battle options...
+Battle options...
 Start battles, reset this map's trainers, ready rematches, edit roamers, etc.
 Start battles, reset this map's trainers, ready rematches, edit roamers, etc.
-Test Wild Battle
-Test Wild Battle
+Test wild battle
+Test wild battle
 Start a single battle against a wild Pokémon. You choose the species/level.
 Start a single battle against a wild Pokémon. You choose the species/level.
 Set the wild {1}'s level.
 Set the wild {1}'s level.
-Test Wild Battle Advanced
-Test Wild Battle Advanced
+Test wild battle advanced
+Test wild battle advanced
 Start a battle against 1 or more wild Pokémon. Battle size is your choice.
 Start a battle against 1 or more wild Pokémon. Battle size is your choice.
 <<[>>Add Pokémon<<]>>
@@ -5330,14 +5330,14 @@ Change this Pokémon?
 Change this Pokémon?
 Delete this Pokémon?
 Delete this Pokémon?
-Test Trainer Battle
-Test Trainer Battle
+Test trainer battle
+Test trainer battle
 Start a single battle against a trainer of your choice.
 Start a single battle against a trainer of your choice.
 SINGLE TRAINER
 SINGLE TRAINER
-Test Trainer Battle Advanced
-Test Trainer Battle Advanced
+Test trainer battle advanced
+Test trainer battle advanced
 Start a battle against 1 or more trainers with a battle size of your choice.
 Start a battle against 1 or more trainers with a battle size of your choice.
 <<[>>Add trainer<<]>>
@@ -5360,8 +5360,8 @@ Change this trainer?
 Change this trainer?
 Delete this trainer?
 Delete this trainer?
-Set Encounters Version
-Set Encounters Version
+Set wild encounters version
+Set wild encounters version
 Choose which version of wild encounters should be used.
 Choose which version of wild encounters should be used.
 Set encounters version to which value?
@@ -5370,36 +5370,36 @@ Roaming Pokémon
 Roaming Pokémon
 Toggle and edit all roaming Pokémon.
 Toggle and edit all roaming Pokémon.
-Reset Map's Trainers
-Reset Map's Trainers
+Reset map's trainers
+Reset map's trainers
 Turn off Self Switches A and B for all events with "Trainer" in their name.
 Turn off Self Switches A and B for all events with "Trainer" in their name.
 All Trainers on this map were reset.
 All Trainers on this map were reset.
 This command can't be used here.
 This command can't be used here.
-Toggle Exp. All's Effect
-Toggle Exp. All's Effect
+Toggle Exp. All's effect
+Toggle Exp. All's effect
 Toggle Exp. All's effect of giving Exp. to non-participants.
 Toggle Exp. All's effect of giving Exp. to non-participants.
 Enabled Exp. All's effect.
 Enabled Exp. All's effect.
 Disabled Exp. All's effect.
 Disabled Exp. All's effect.
-Toggle Battle Logging
-Toggle Battle Logging
+Toggle logging of battle messages
+Toggle logging of battle messages
 Record debug logs for battles in Data/debuglog.txt.
 Record debug logs for battles in Data/debuglog.txt.
 Debug logs for battles will be made in the Data folder.
 Debug logs for battles will be made in the Data folder.
 Debug logs for battles will not be made.
 Debug logs for battles will not be made.
-Pokémon Options...
-Pokémon Options...
+Pokémon options...
+Pokémon options...
 Heal the party, give Pokémon, fill/empty PC storage, etc.
 Heal the party, give Pokémon, fill/empty PC storage, etc.
-Heal Party
-Heal Party
+Heal party
+Heal party
 Fully heal the HP/status/PP of all Pokémon in the party.
 Fully heal the HP/status/PP of all Pokémon in the party.
 Your Pokémon were fully healed.
@@ -5414,38 +5414,38 @@ Added {1} to Pokémon storage.
 Added {1} to Pokémon storage.
 Couldn't add Pokémon because party and storage are full.
 Couldn't add Pokémon because party and storage are full.
-Fill Storage Boxes
-Fill Storage Boxes
+Fill storage boxes
+Fill storage boxes
 Puts one Pokémon of each species (at Level 50) in storage.
 Puts one Pokémon of each species (at Level 50) in storage.
 Storage boxes were filled with one Pokémon of each species.
 Storage boxes were filled with one Pokémon of each species.
 Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.
 Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.
-Clear Storage Boxes
-Clear Storage Boxes
+Clear storage boxes
+Clear storage boxes
 Remove all Pokémon in storage.
 Remove all Pokémon in storage.
 The storage boxes were cleared.
 The storage boxes were cleared.
-Give Demo Party
-Give Demo Party
+Give demo party
+Give demo party
 Give yourself 6 preset Pokémon. They overwrite the current party.
 Give yourself 6 preset Pokémon. They overwrite the current party.
 Filled party with demo Pokémon.
 Filled party with demo Pokémon.
-Quick Hatch
-Quick Hatch
+Quick hatch all party eggs
+Quick hatch all party eggs
 Make all eggs in the party require just one more step to hatch.
 Make all eggs in the party require just one more step to hatch.
 All eggs in your party now require one step to hatch.
 All eggs in your party now require one step to hatch.
-Access Pokémon Storage
-Access Pokémon Storage
+Access Pokémon storage
+Access Pokémon storage
 Opens the Pokémon storage boxes in Organize Boxes mode.
 Opens the Pokémon storage boxes in Organize Boxes mode.
-Shadow Pokémon Options...
-Shadow Pokémon Options...
+Shadow Pokémon options...
+Shadow Pokémon options...
 Snag Machine and purification.
 Snag Machine and purification.
 Toggle Snag Machine
@@ -5456,8 +5456,8 @@ Gave the Snag Machine.
 Gave the Snag Machine.
 Lost the Snag Machine.
 Lost the Snag Machine.
-Toggle Purify Chamber Access
-Toggle Purify Chamber Access
+Toggle Purify Chamber access
+Toggle Purify Chamber access
 Toggle access to the Purify Chamber via the PC.
 Toggle access to the Purify Chamber via the PC.
 The Purify Chamber is accessible.
@@ -5472,12 +5472,12 @@ Use Relic Stone
 Use Relic Stone
 Choose a Shadow Pokémon to show to the Relic Stone for purification.
 Choose a Shadow Pokémon to show to the Relic Stone for purification.
-Item Options...
-Item Options...
+Item options...
+Item options...
 Give and take items.
 Give and take items.
-Add Item
-Add Item
+Add item
+Add item
 Choose an item and a quantity of it to add to the Bag.
 Choose an item and a quantity of it to add to the Bag.
 ADD ITEM
@@ -5500,12 +5500,12 @@ Remove all items from the Bag.
 Remove all items from the Bag.
 The Bag was cleared.
 The Bag was cleared.
-Player Options...
-Player Options...
+Player options...
+Player options...
 Set money, badges, Pokédexes, player's appearance and name, etc.
 Set money, badges, Pokédexes, player's appearance and name, etc.
-Set Money
-Set Money
+Set money
+Set money
 Edit how much money, Game Corner Coins and Battle Points you have.
 Edit how much money, Game Corner Coins and Battle Points you have.
 Money: ${1}
@@ -5518,8 +5518,8 @@ Set the player's Coin amount.
 Set the player's Coin amount.
 Set the player's BP amount.
 Set the player's BP amount.
-Set Badges
-Set Badges
+Set Gym Badges
+Set Gym Badges
 Toggle possession of each Gym Badge.
 Toggle possession of each Gym Badge.
 Give all
@@ -5528,16 +5528,16 @@ Remove all
 Remove all
 Badge {1}
 Badge {1}
-Toggle Running Shoes
-Toggle Running Shoes
+Toggle running shoes
+Toggle running shoes
 Toggle possession of running shoes.
 Toggle possession of running shoes.
 Gave Running Shoes.
 Gave Running Shoes.
 Lost Running Shoes.
 Lost Running Shoes.
-Toggle Pokédex and Dexes
-Toggle Pokédex and Dexes
+Toggle Pokédex and Regional Dexes
+Toggle Pokédex and Regional Dexes
 Toggle possession of the Pokédex, and edit Regional Dex accessibility.
 Toggle possession of the Pokédex, and edit Regional Dex accessibility.
 Have Pokédex: {1}
@@ -5550,8 +5550,8 @@ Gave Pokégear.
 Gave Pokégear.
 Lost Pokégear.
 Lost Pokégear.
-Edit Phone And Contacts
-Edit Phone And Contacts
+Edit phone and contacts
+Edit phone and contacts
 Edit properties of the phone and of contacts registered in it.
 Edit properties of the phone and of contacts registered in it.
 The phone is not defined.
@@ -5584,32 +5584,32 @@ Set the time (in minutes) until this trainer is ready to battle.
 Set the time (in minutes) until this trainer is ready to battle.
 Set the last defeated version number of this trainer.
 Set the last defeated version number of this trainer.
-Toggle Party Screen Access To Storage
-Toggle Party Screen Access To Storage
+Toggle access to storage from party screen
+Toggle access to storage from party screen
 Toggle Box Link's effect of accessing Pokémon storage via the party screen.
 Toggle Box Link's effect of accessing Pokémon storage via the party screen.
 Enabled access to storage from the party screen.
 Enabled access to storage from the party screen.
 Disabled access to storage from the party screen.
 Disabled access to storage from the party screen.
-Set Player Character
-Set Player Character
+Set player character
+Set player character
 Edit the player's character, as defined in "metadata.txt".
 Edit the player's character, as defined in "metadata.txt".
 There is only one player character defined.
 There is only one player character defined.
 The player character was changed.
 The player character was changed.
-Set Player Outfit
-Set Player Outfit
+Set player outfit
+Set player outfit
 Edit the player's outfit number.
 Edit the player's outfit number.
 Set the player's outfit.
 Set the player's outfit.
 Player's outfit was changed.
 Player's outfit was changed.
-Set Player Name
-Set Player Name
+Set player name
+Set player name
 Rename the player.
 Rename the player.
 Give yourself a default name?
@@ -5618,14 +5618,14 @@ The player's name remained {1}.
 The player's name remained {1}.
 The player's name was changed to {1}.
 The player's name was changed to {1}.
-Randomize Player ID
-Randomize Player ID
+Randomize player ID
+Randomize player ID
 Generate a random new ID for the player.
 Generate a random new ID for the player.
 The player's ID was changed to {1} (full ID: {2}).
 The player's ID was changed to {1} (full ID: {2}).
-PBS File Editors...
-PBS File Editors...
+PBS file editors...
+PBS file editors...
 Edit information in the PBS files.
 Edit information in the PBS files.
 Edit map_connections.txt
@@ -5664,8 +5664,8 @@ Edit pokemon_metrics.txt
 Edit pokemon_metrics.txt
 Reposition Pokémon sprites in battle.
 Reposition Pokémon sprites in battle.
-Auto-Set pokemon_metrics.txts
-Auto-Set pokemon_metrics.txts
+Auto-set pokemon_metrics.txts
+Auto-set pokemon_metrics.txts
 Automatically reposition all Pokémon sprites in battle. Don't use lightly.
 Automatically reposition all Pokémon sprites in battle. Don't use lightly.
 Are you sure you want to reposition all sprites?
@@ -5676,62 +5676,62 @@ Edit regional_dexes.txt
 Edit regional_dexes.txt
 Create, rearrange and delete Regional Pokédex lists.
 Create, rearrange and delete Regional Pokédex lists.
-Other Editors...
-Other Editors...
+Other editors...
+Other editors...
 Edit battle animations, terrain tags, map data, etc.
 Edit battle animations, terrain tags, map data, etc.
-Battle Animation Editor
-Battle Animation Editor
+Battle animation editor
+Battle animation editor
 Edit the battle animations.
 Edit the battle animations.
-Battle Animation Organiser
-Battle Animation Organiser
+Battle animation organiser
+Battle animation organiser
 Rearrange/add/delete battle animations.
 Rearrange/add/delete battle animations.
-Import All Battle Animations
-Import All Battle Animations
+Import all battle animations
+Import all battle animations
 Import all battle animations from the "Animations" folder.
 Import all battle animations from the "Animations" folder.
-Export All Battle Animations
-Export All Battle Animations
+Export all battle animations
+Export all battle animations
 Export all battle animations individually to the "Animations" folder.
 Export all battle animations individually to the "Animations" folder.
-Edit Terrain Tags
-Edit Terrain Tags
+Edit terrain tags
+Edit terrain tags
 Edit the terrain tags of tiles in tilesets. Required for tags 8+.
 Edit the terrain tags of tiles in tilesets. Required for tags 8+.
-Fix Invalid Tiles
-Fix Invalid Tiles
+Fix invalid tiles
+Fix invalid tiles
 Scans all maps and erases non-existent tiles.
 Scans all maps and erases non-existent tiles.
-Files Options...
-Files Options...
+Files options...
+Files options...
 Compile, generate PBS files, translations, Mystery Gifts, etc.
 Compile, generate PBS files, translations, Mystery Gifts, etc.
-Compile Data
-Compile Data
+Compile data
+Compile data
 Fully compile all data.
 Fully compile all data.
 All game data was compiled.
 All game data was compiled.
-Create PBS File(s)
-Create PBS File(s)
+Create PBS file(s)
+Create PBS file(s)
 Choose one or all PBS files and create it.
 Choose one or all PBS files and create it.
 <<[>>Create all<<]>>
 <<[>>Create all<<]>>
 File written.
 File written.
-Rename Outdated Files
-Rename Outdated Files
+Rename outdated files
+Rename outdated files
 Check for files with outdated names and rename/move them. Can alter map data.
 Check for files with outdated names and rename/move them. Can alter map data.
 Are you sure you want to automatically rename outdated files?
 Are you sure you want to automatically rename outdated files?
 Done.
 Done.
-Extract Text For Translation
-Extract Text For Translation
+Extract text for translation
+Extract text for translation
 Extract all text in the game to text files for translating.
 Extract all text in the game to text files for translating.
 No languages are defined in the LANGUAGES array in Settings.
@@ -5750,8 +5750,8 @@ One big file
 One big file
 One file per map
 One file per map
-Compile Translated Text
-Compile Translated Text
+Compile translated text
+Compile translated text
 Import text files and convert them into a language file.
 Import text files and convert them into a language file.
 No language folders found to compile.
@@ -5764,8 +5764,8 @@ Manage Mystery Gifts
 Manage Mystery Gifts
 Edit and enable/disable Mystery Gifts.
 Edit and enable/disable Mystery Gifts.
-Reload System Cache
-Reload System Cache
+Reload system cache
+Reload system cache
 Refreshes the system's file cache. Use if you change a file while playing.
 Refreshes the system's file cache. Use if you change a file while playing.
 WARP TO MAP
@@ -5860,22 +5860,22 @@ Battlers...
 Battlers...
 Look at Pokémon in battle and change their properties.
 Look at Pokémon in battle and change their properties.
-Player-Side Battlers
-Player-Side Battlers
+Player-side battlers
+Player-side battlers
 Edit Pokémon on the player's side of battle.
 Edit Pokémon on the player's side of battle.
-Foe-Side Battlers
-Foe-Side Battlers
+Foe-side battlers
+Foe-side battlers
 Edit Pokémon on the opposing side of battle.
 Edit Pokémon on the opposing side of battle.
-Battler Speed Order
-Battler Speed Order
+View battler speed order
+View battler speed order
 Show all battlers in order from fastest to slowest.
 Show all battlers in order from fastest to slowest.
 Battlers are listed from fastest to slowest. Speeds include modifiers.
 Battlers are listed from fastest to slowest. Speeds include modifiers.
-Pokémon Teams
-Pokémon Teams
+Pokémon teams
+Pokémon teams
 Look at and edit all Pokémon in each team.
 Look at and edit all Pokémon in each team.
 Opponent {1}: {2} ({3} Pokémon)
@@ -5888,12 +5888,12 @@ Ally {1}: {2} ({3} Pokémon)
 Ally {1}: {2} ({3} Pokémon)
 Choose a team.
 Choose a team.
-Trainer Options...
-Trainer Options...
+Trainer options...
+Trainer options...
 Variables that apply to trainers.
 Variables that apply to trainers.
-NPC Trainer Items
-NPC Trainer Items
+NPC trainer items
+NPC trainer items
 View and change the items each NPC trainer has access to.
 View and change the items each NPC trainer has access to.
 Opponent {1}: {2} ({3} items)
@@ -5910,8 +5910,8 @@ Whether each trainer is allowed to Mega Evolve.
 Whether each trainer is allowed to Mega Evolve.
 Choose trainer to toggle whether they can Mega Evolve.
 Choose trainer to toggle whether they can Mega Evolve.
-Field Effects...
-Field Effects...
+Field effects...
+Field effects...
 Effects that apply to the whole battlefield.
 Effects that apply to the whole battlefield.
 Weather
@@ -5950,8 +5950,8 @@ There is no terrain.
 There is no terrain.
 Choose the new terrain duration (0=infinite).
 Choose the new terrain duration (0=infinite).
-Environment/Time
-Environment/Time
+Environment/time
+Environment/time
 Set the battle's environment and time of day.
 Set the battle's environment and time of day.
 Environment: {1}
@@ -5972,8 +5972,8 @@ Choose the new environment.
 Choose the new environment.
 Choose the new time.
 Choose the new time.
-Backdrop Names
-Backdrop Names
+Backdrop names
+Backdrop names
 Set the names of the backdrop and base graphics.
 Set the names of the backdrop and base graphics.
 Set which backdrop name?
@@ -5986,20 +5986,20 @@ Set the backdrop's name.
 Set the backdrop's name.
 Set the base modifier text.
 Set the base modifier text.
-Other Field Effects...
-Other Field Effects...
+Other field effects...
+Other field effects...
 View/set other effects that apply to the whole battlefield.
 View/set other effects that apply to the whole battlefield.
-Player's Side Effects...
-Player's Side Effects...
+Player's side effects...
+Player's side effects...
 Effects that apply to the side the player is on.
 Effects that apply to the side the player is on.
-Foe's Side Effects...
-Foe's Side Effects...
+Foe's side effects...
+Foe's side effects...
 Effects that apply to the opposing side.
 Effects that apply to the opposing side.
-Battler Position Effects...
-Battler Position Effects...
+Battler position effects...
+Battler position effects...
 Effects that apply to individual battler positions.
 Effects that apply to individual battler positions.
 (empty)
@@ -6012,8 +6012,8 @@ Effects that apply to individual battler positions.
 (ally's)
 Choose a battler position.
 Choose a battler position.
-HP/Status...
-HP/Status...
+HP/status...
+HP/status...
 Set HP
 Set HP
 {1} is an egg.
@@ -6264,8 +6264,8 @@ Clear Pokérus
 Clear Pokérus
 Level/stats...
 Level/stats...
-EV/IV/pID...
-EV/IV/pID...
+EV/IV/personal ID...
+EV/IV/personal ID...
 Personal ID is {1}.
 Personal ID is {1}.
 Randomise pID
