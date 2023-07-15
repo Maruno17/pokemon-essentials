@@ -35,7 +35,7 @@ class SpriteAnimation
     @_animation_hit      = hit
     @_animation_height   = height
     @_animation_duration = @_animation.frame_max
-    @_animation_index    = 0
+    @_animation_index    = -1
     fr = 20
     if @_animation.name[/\[\s*(\d+?)\s*\]\s*$/]
       fr = $~[1].to_i
@@ -69,7 +69,7 @@ class SpriteAnimation
     @_loop_animation = animation
     return if @_loop_animation.nil?
     @_loop_animation_duration = @_animation.frame_max
-    @_loop_animation_index = 0
+    @_loop_animation_index = -1
     fr = 20
     if @_animation.name[/\[\s*(\d+?)\s*\]\s*$/]
       fr = $~[1].to_i
