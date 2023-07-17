@@ -46,7 +46,7 @@ class DuelWindow < Window_AdvancedTextPokemon
       name_tag = shadowc3tag(PLAYER_TEXT_BASE, PLAYER_TEXT_SHADOW)
     end
     hp_tag = shadowc3tag(HP_TEXT_BASE, HP_TEXT_SHADOW)
-    self.text = name_tag + fmtescape(@name) + "\n" + hp_tag + _INTL("HP: {1}", @hp)
+    self.text = name_tag + fmtEscape(@name) + "\n" + hp_tag + _INTL("HP: {1}", @hp)
   end
 end
 

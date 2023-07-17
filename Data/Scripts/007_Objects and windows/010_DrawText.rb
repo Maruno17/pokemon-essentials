@@ -74,7 +74,7 @@ end
 #===============================================================================
 FORMATREGEXP = /<(\/?)(c|c2|c3|o|fn|br|fs|i|b|r|pg|pog|u|s|icon|img|ac|ar|al|outln|outln2)(\s*\=\s*([^>]*))?>/i
 
-def fmtescape(text)
+def fmtEscape(text)
   if text[/[&<>]/]
     text2 = text.gsub(/&/, "&amp;")
     text2.gsub!(/</, "&lt;")
@@ -84,13 +84,20 @@ def fmtescape(text)
   return text
 end
 
+# Modifies text; does not return a modified copy of it.
+def fmtReplaceEscapes(text)
+  text.gsub!(/&lt;/, "<")
+  text.gsub!(/&gt;/, ">")
+  text.gsub!(/&apos;/, "'")
+  text.gsub!(/&quot;/, "\"")
+  text.gsub!(/&amp;/, "&")
+  text.gsub!(/&m;/, "♂")
+  text.gsub!(/&f;/, "♀")
+end
+
 def toUnformattedText(text)
   text2 = text.gsub(FORMATREGEXP, "")
-  text2.gsub!(/&lt;/, "<")
-  text2.gsub!(/&gt;/, ">")
-  text2.gsub!(/&apos;/, "'")
-  text2.gsub!(/&quot;/, "\"")
-  text2.gsub!(/&amp;/, "&")
+  fmtReplaceEscapes(text2)
   return text2
 end
 
@@ -376,13 +383,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
 #    realtextStart = oldtext[0, oldtext.length - realtext.length]
 #  end
   textchunks.push(text)
-  textchunks.each do |chunk|
-    chunk.gsub!(/&lt;/, "<")
-    chunk.gsub!(/&gt;/, ">")
-    chunk.gsub!(/&apos;/, "'")
-    chunk.gsub!(/&quot;/, "\"")
-    chunk.gsub!(/&amp;/, "&")
-  end
+  textchunks.each { |chunk| fmtReplaceEscapes(chunk) }
   textlen = 0
   controls.each_with_index do |control, i|
     textlen += textchunks[i].scan(/./m).length

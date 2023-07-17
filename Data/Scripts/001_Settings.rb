@@ -40,6 +40,10 @@ module Settings
   SUPER_SHINY          = (MECHANICS_GENERATION >= 8)
   # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
   POKERUS_CHANCE       = 3
+  # Whether IVs and EVs are treated as 0 when calculating a Pokémon's stats.
+  # IVs and EVs still exist, and are used by Hidden Power and some cosmetic
+  # things as normal.
+  DISABLE_IVS_AND_EVS  = false
 
   #=============================================================================
 
