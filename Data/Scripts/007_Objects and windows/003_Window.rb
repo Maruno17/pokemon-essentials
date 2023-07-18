@@ -302,7 +302,7 @@ class Window
     mustchange = false
     if @active
       cursor_time = System.uptime / 0.4
-      if cursor_time.to_i % 2 == 0
+      if cursor_time.to_i.even?
         @cursoropacity = lerp(255, 128, 0.4, cursor_time % 2)
       else
         @cursoropacity = lerp(128, 255, 0.4, (cursor_time - 1) % 2)

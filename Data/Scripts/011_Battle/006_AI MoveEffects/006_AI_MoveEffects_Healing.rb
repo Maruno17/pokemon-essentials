@@ -387,7 +387,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartDamageTargetEachTu
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartDamageTargetEachTurnIfTargetAsleep",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if target.statusCount <= 1
-    next score + 8 * target.statusCount
+    next score + (8 * target.statusCount)
   }
 )
 

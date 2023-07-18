@@ -202,8 +202,8 @@ class HallOfFame_Scene
         distance = (y_direction > 0) ? end_y : Graphics.height - end_y
         distance += @sprites["pokemon#{i}"].bitmap.height / 2
       end
-      start_x = end_x - x_direction * distance
-      start_y = end_y - y_direction * distance
+      start_x = end_x - (x_direction * distance)
+      start_y = end_y - (y_direction * distance)
       @sprites["pokemon#{i}"].x = start_x
       @sprites["pokemon#{i}"].y = start_y
       @movements[i] = [start_x, end_x, start_y, end_y]

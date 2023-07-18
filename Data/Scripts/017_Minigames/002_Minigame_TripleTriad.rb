@@ -614,7 +614,7 @@ class TriadScreen
     if numcards.odd?
       numcards = (numcards / 2) + 1
     else
-      numcards = numcards / 2
+      numcards /= 2
     end
     return numcards
   end

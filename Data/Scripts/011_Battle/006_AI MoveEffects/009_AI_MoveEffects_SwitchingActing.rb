@@ -835,7 +835,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetHealingMove
 )
 
 #===============================================================================
-#.
+#
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetSoundMoves",
   proc { |score, move, user, target, ai, battle|

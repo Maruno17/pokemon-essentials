@@ -604,7 +604,8 @@ end
 class Battle::Move::AttackTwoTurnsLater < Battle::Move
   def targetsPosition?; return true; end
 
-  def pbDamagingMove?   # Stops damage being dealt in the setting-up turn
+  # Stops damage being dealt in the setting-up turn.
+  def pbDamagingMove?
     return false if !@battle.futureSight
     return super
   end

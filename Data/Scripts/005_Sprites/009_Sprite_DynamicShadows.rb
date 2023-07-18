@@ -105,7 +105,8 @@ class Sprite_Shadow < RPG::Sprite
     end
   end
 
-  def in_range?(element, object, range)   # From Near's Anti Lag Script, edited
+  # From Near's Anti Lag Script, edited.
+  def in_range?(element, object, range)
     elemScreenX = ScreenPosHelper.pbScreenX(element)
     elemScreenY = ScreenPosHelper.pbScreenY(element)
     objScreenX  = ScreenPosHelper.pbScreenX(object)

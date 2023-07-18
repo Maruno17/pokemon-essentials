@@ -185,7 +185,8 @@ class RPG::Animation
     self.timings.push(timing)
   end
 
-  def addAnimation(otherAnim, frame, x, y)   # frame is zero-based
+  # frame is zero-based.
+  def addAnimation(otherAnim, frame, x, y)
     if frame + otherAnim.frames.length >= self.frames.length
       totalframes = frame + otherAnim.frames.length + 1
       (totalframes - self.frames.length).times do

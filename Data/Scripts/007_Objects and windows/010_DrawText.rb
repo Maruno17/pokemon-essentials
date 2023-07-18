@@ -819,23 +819,22 @@ def getLineBrokenText(bitmap, value, width, dims)
     words = [ccheck]
     words.length.times do |i|
       word = words[i]
-      if word && word != ""
-        textSize = bitmap.text_size(word)
-        textwidth = textSize.width
-        if x > 0 && x + textwidth >= width - 2
-          # Zero-length word break
-          ret.push(["", x, y, 0, textheight, line, position, column, 0])
-          x = 0
-          column = 0
-          y += (textheight == 0) ? bitmap.text_size("X").height : textheight
-          line += 1
-          textheight = 0
-        end
-        textheight = [textheight, textSize.height].max
-        ret.push([word, x, y, textwidth, textheight, line, position, column, length])
-        x += textwidth
-        dims[0] = x if dims && dims[0] < x
+      next if nil_or_empty?(word)
+      textSize = bitmap.text_size(word)
+      textwidth = textSize.width
+      if x > 0 && x + textwidth >= width - 2
+        # Zero-length word break
+        ret.push(["", x, y, 0, textheight, line, position, column, 0])
+        x = 0
+        column = 0
+        y += (textheight == 0) ? bitmap.text_size("X").height : textheight
+        line += 1
+        textheight = 0
       end
+      textheight = [textheight, textSize.height].max
+      ret.push([word, x, y, textwidth, textheight, line, position, column, length])
+      x += textwidth
+      dims[0] = x if dims && dims[0] < x
     end
     position += length
     column += length
@@ -912,16 +911,15 @@ def renderLineBrokenChunksWithShadow(bitmap, xDst, yDst, normtext, maxheight, ba
     width = text[3]
     textx = text[1] + xDst
     texty = text[2] + yDst
-    if maxheight == 0 || text[2] < maxheight
-      height = text[4]
-      text = text[0]
-      bitmap.font.color = shadowColor
-      bitmap.draw_text(textx + 2, texty, width + 2, height, text)
-      bitmap.draw_text(textx, texty + 2, width + 2, height, text)
-      bitmap.draw_text(textx + 2, texty + 2, width + 2, height, text)
-      bitmap.font.color = baseColor
-      bitmap.draw_text(textx, texty, width + 2, height, text)
-    end
+    next if maxheight != 0 && text[2] >= maxheight
+    height = text[4]
+    text = text[0]
+    bitmap.font.color = shadowColor
+    bitmap.draw_text(textx + 2, texty, width + 2, height, text)
+    bitmap.draw_text(textx, texty + 2, width + 2, height, text)
+    bitmap.draw_text(textx + 2, texty + 2, width + 2, height, text)
+    bitmap.font.color = baseColor
+    bitmap.draw_text(textx, texty, width + 2, height, text)
   end
 end
 

@@ -53,8 +53,8 @@ def getCubicPoint2(src, t)
   y1  = src[7]
 
   x1 = cx1 + ((x1 - cx1) * t)
-  x0 = x0 + ((cx0 - x0) * t)
-  cx0 = cx0 + ((cx1 - cx0) * t)
+  x0 += ((cx0 - x0) * t)
+  cx0 += ((cx1 - cx0) * t)
   cx1 = cx0 + ((x1 - cx0) * t)
   cx0 = x0 + ((cx0 - x0) * t)
   cx = cx0 + ((cx1 - cx0) * t)
@@ -64,8 +64,8 @@ def getCubicPoint2(src, t)
   # d = x0
   # cx = a*t*t*t + b*t*t + c*t + d
   y1 = cy1 + ((y1 - cy1) * t)
-  y0 = y0 + ((cy0 - y0) * t)
-  cy0 = cy0 + ((cy1 - cy0) * t)
+  y0 += ((cy0 - y0) * t)
+  cy0 += ((cy1 - cy0) * t)
   cy1 = cy0 + ((y1 - cy0) * t)
   cy0 = y0 + ((cy0 - y0) * t)
   cy = cy0 + ((cy1 - cy0) * t)

@@ -376,7 +376,8 @@ def pbUnlockWallpaper(index)
   $PokemonStorage.unlockedWallpapers[index] = true
 end
 
-def pbLockWallpaper(index)   # Don't know why you'd want to do this
+# NOTE: I don't know why you'd want to do this, but here you go.
+def pbLockWallpaper(index)
   $PokemonStorage.unlockedWallpapers[index] = false
 end
 

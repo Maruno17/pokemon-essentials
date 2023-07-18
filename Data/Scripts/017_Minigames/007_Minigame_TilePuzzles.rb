@@ -385,7 +385,7 @@ class TilePuzzleScene
         pbUpdateSpriteHash(@sprites)
         Graphics.update
         Input.update
-        break if @sprites["tile#{@tiles[movetile]}"].y == start_sprite_pos + @tileheight * dist
+        break if @sprites["tile#{@tiles[movetile]}"].y == start_sprite_pos + (@tileheight * dist)
       end
     else   # Swap horizontally
       start_sprite_pos = @sprites["tile#{@tiles[movetile]}"].x
@@ -398,7 +398,7 @@ class TilePuzzleScene
         pbUpdateSpriteHash(@sprites)
         Graphics.update
         Input.update
-        break if @sprites["tile#{@tiles[movetile]}"].x == start_sprite_pos - @tilewidth * dist
+        break if @sprites["tile#{@tiles[movetile]}"].x == start_sprite_pos - (@tilewidth * dist)
       end
     end
     @tiles[cursor], @tiles[movetile] = @tiles[movetile], @tiles[cursor]
@@ -446,29 +446,28 @@ class TilePuzzleScene
       end
       duration = 0.3
       timer_start = System.uptime
+      start_pos = []
       if [2, 8].include?(dir)
-        start_pos = []
         tiles.each { |i| start_pos.push(@sprites["tile#{@tiles[i]}"].y) }
         loop do
           tiles.each_with_index do |idx, i|
-            @sprites["tile#{@tiles[idx]}"].y = lerp(start_pos[i], start_pos[i] - @tileheight * dist, duration, timer_start, System.uptime)
+            @sprites["tile#{@tiles[idx]}"].y = lerp(start_pos[i], start_pos[i] - (@tileheight * dist), duration, timer_start, System.uptime)
           end
           pbUpdateSpriteHash(@sprites)
           Graphics.update
           Input.update
-          break if @sprites["tile#{@tiles[tiles[0]]}"].y == start_pos[0] - @tileheight * dist
+          break if @sprites["tile#{@tiles[tiles[0]]}"].y == start_pos[0] - (@tileheight * dist)
         end
       else
-        start_pos = []
         tiles.each { |i| start_pos.push(@sprites["tile#{@tiles[i]}"].x) }
         loop do
           tiles.each_with_index do |idx, i|
-            @sprites["tile#{@tiles[idx]}"].x = lerp(start_pos[i], start_pos[i] + @tilewidth * dist, duration, timer_start, System.uptime)
+            @sprites["tile#{@tiles[idx]}"].x = lerp(start_pos[i], start_pos[i] + (@tilewidth * dist), duration, timer_start, System.uptime)
           end
           pbUpdateSpriteHash(@sprites)
           Graphics.update
           Input.update
-          break if @sprites["tile#{@tiles[tiles[0]]}"].x == start_pos[0] + @tilewidth * dist
+          break if @sprites["tile#{@tiles[tiles[0]]}"].x == start_pos[0] + (@tilewidth * dist)
         end
       end
     end

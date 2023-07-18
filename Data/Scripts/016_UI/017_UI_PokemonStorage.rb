@@ -1658,15 +1658,18 @@ class PokemonStorageScreen
     $game_temp.in_storage = false
   end
 
-  def pbUpdate   # For debug
+  # For debug purposes.
+  def pbUpdate
     @scene.update
   end
 
-  def pbHardRefresh   # For debug
+  # For debug purposes.
+  def pbHardRefresh
     @scene.pbHardRefresh
   end
 
-  def pbRefreshSingle(i)   # For debug
+  # For debug purposes.
+  def pbRefreshSingle(i)
     @scene.pbUpdateOverlay(i[1], (i[0] == -1) ? @storage.party : nil)
     @scene.pbHardRefresh
   end

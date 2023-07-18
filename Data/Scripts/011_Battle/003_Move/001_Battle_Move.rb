@@ -145,7 +145,8 @@ class Battle::Move
   def nonLethal?(_user, _target); return false; end   # For False Swipe
   def preventsBattlerConsumingHealingBerry?(battler, targets); return false; end   # For Bug Bite/Pluck
 
-  def ignoresSubstitute?(user)   # user is the Pokémon using this move
+  # user is the Pokémon using this move.
+  def ignoresSubstitute?(user)
     if Settings::MECHANICS_GENERATION >= 6
       return true if soundMove?
       return true if user&.hasActiveAbility?(:INFILTRATOR)

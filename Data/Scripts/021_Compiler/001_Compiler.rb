@@ -261,7 +261,7 @@ module Compiler
       value = values[i]
       next if !value || value.empty?
       quote_count = value.count('"')
-      if !quote_count.zero?
+      if quote_count != 0
         # Quote marks found in value
         (i...(values.length - 1)).each do |j|
           quote_count = values[i].count('"')

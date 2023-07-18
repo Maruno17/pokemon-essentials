@@ -318,7 +318,8 @@ class Battle::Move::TwoTurnMove < Battle::Move
     return !@damagingTurn   # Deliberately not "return @chargingTurn"
   end
 
-  def pbDamagingMove?   # Stops damage being dealt in the first (charging) turn
+  # Stops damage being dealt in the first (charging) turn.
+  def pbDamagingMove?
     return false if !@damagingTurn
     return super
   end

@@ -35,7 +35,8 @@ def pbDrawGauge(bitmap, rect, color, value, maxValue)
   end
 end
 
-def calcPoint(x, y, distance, angle)   # angle in degrees
+# angle is in degrees.
+def calcPoint(x, y, distance, angle)
   angle -= (angle / 360.0).floor * 360   # normalize
   angle = (angle / 360.0) * (2 * Math::PI)   # convert to radians
   angle = -angle % (2 * Math::PI)   # normalize radians
@@ -162,7 +163,8 @@ class PurifyChamber
   NUMSETS = 9
   SETSIZE = 4
 
-  def self.maximumTempo   # Calculates the maximum possible tempo
+  # Calculates the maximum possible tempo.
+  def self.maximumTempo
     x = SETSIZE + 1
     return (((x * x) + x) / 2) - 1
   end
@@ -187,7 +189,8 @@ class PurifyChamber
     return @sets[set].list
   end
 
-  def chamberFlow(chamber)   # for speeding up purification
+  # For speeding up purification.
+  def chamberFlow(chamber)
     return 0 if chamber < 0 || chamber >= NUMSETS
     return @sets[chamber].flow
   end
@@ -197,7 +200,8 @@ class PurifyChamber
     return @sets[chamber].shadow
   end
 
-  def setShadow(chamber, value)   # allow only "shadow" Pokemon
+  # Allow only Shadow Pokemon.
+  def setShadow(chamber, value)
     return if chamber < 0 || chamber >= NUMSETS
     @sets[chamber].shadow = value
   end

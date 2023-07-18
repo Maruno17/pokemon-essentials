@@ -154,7 +154,8 @@ module BooleanProperty2
   end
 
   def self.format(value)
-    return (value) ? _INTL("True") : (!value.nil?) ? _INTL("False") : "-"
+    return _INTL("True") if value
+    return (value.nil?) ? "-" : _INTL("False")
   end
 end
 
@@ -576,7 +577,9 @@ module GenderProperty
 
   def self.format(value)
     return "-" if !value
-    return (value == 0) ? _INTL("Male") : (value == 1) ? _INTL("Female") : "-"
+    return _INTL("Male") if value == 0
+    return _INTL("Female") if value == 1
+    return "-"
   end
 end
 

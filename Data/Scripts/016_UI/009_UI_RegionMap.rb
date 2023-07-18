@@ -208,7 +208,7 @@ class PokemonRegionMap_Scene
     end
   end
 
-  def pbGetMapDetails(x, y)   # From Wichu, with my help
+  def pbGetMapDetails(x, y)
     return "" if !@map.point
     @map.point.each do |point|
       next if point[0] != x || point[1] != y

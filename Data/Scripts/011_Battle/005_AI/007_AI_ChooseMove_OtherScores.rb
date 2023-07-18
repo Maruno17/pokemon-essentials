@@ -489,7 +489,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:damaging_a_biding_targe
           hits_possible = target.effects[PBEffects::Bide] - 1
           eor_dmg *= hits_possible
           hits_possible += 1 if user.faster_than?(target)
-          next score if dmg * hits_possible + eor_dmg > target.hp * 1.1
+          next score if (dmg * hits_possible) + eor_dmg > target.hp * 1.1
         end
         old_score = score
         score -= 20

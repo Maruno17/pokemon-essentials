@@ -148,7 +148,7 @@ class Window_TextEntry < SpriteWindow_Base
   end
 
   def update
-    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i % 2 == 0
+    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i.even?
     if cursor_to_show != @cursor_shown
       @cursor_shown = cursor_to_show
       refresh
@@ -225,7 +225,7 @@ end
 #===============================================================================
 class Window_TextEntry_Keyboard < Window_TextEntry
   def update
-    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i % 2 == 0
+    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i.even?
     if cursor_to_show != @cursor_shown
       @cursor_shown = cursor_to_show
       refresh
@@ -394,19 +394,11 @@ class Window_MultilineTextEntry < SpriteWindow_Base
       thispos = text[6]
       thiscolumn = text[7]
       thislength = text[8]
-      if thisline == line
-        endpos = thispos + thislength
-#        echoln [endpos,thispos+(column-thiscolumn),textchars[i]]
-        if column >= thiscolumn && column <= thiscolumn + thislength && thislength > 0
-          return thispos + (column - thiscolumn)
-        end
-      end
+      next if thisline != line
+      endpos = thispos + thislength
+      next if column < thiscolumn || column > thiscolumn + thislength || thislength == 0
+      return thispos + column - thiscolumn
     end
-#    if endpos==0
-#      echoln [totallines,line,column]
-#      echoln textchars
-#    end
-#    echoln "endpos=#{endpos}"
     return endpos
   end
 
@@ -465,7 +457,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   end
 
   def update
-    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i % 2 == 0
+    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i.even?
     if cursor_to_show != @cursor_shown
       @cursor_shown = cursor_to_show
       refresh
@@ -544,18 +536,17 @@ class Window_MultilineTextEntry < SpriteWindow_Base
         thisline = text[5]
         thiscolumn = text[7]
         thislength = text[8]
-        if thisline == @cursorLine && @cursorColumn >= thiscolumn &&
-           @cursorColumn <= thiscolumn + thislength
-          cursorY = text[2] - startY
-          cursorX = text[1]
-          textheight = text[4]
-          posToCursor = @cursorColumn - thiscolumn
-          if posToCursor >= 0
-            partialString = text[0].scan(/./m)[0, posToCursor].join
-            cursorX += bitmap.text_size(partialString).width
-          end
-          break
+        next if thisline != @cursorLine || @cursorColumn < thiscolumn ||
+                @cursorColumn > thiscolumn + thislength
+        cursorY = text[2] - startY
+        cursorX = text[1]
+        textheight = text[4]
+        posToCursor = @cursorColumn - thiscolumn
+        if posToCursor >= 0
+          partialString = text[0].scan(/./m)[0, posToCursor].join
+          cursorX += bitmap.text_size(partialString).width
         end
+        break
       end
       cursorY += 4
       cursorHeight = [4, textheight - 4, bitmap.text_size("X").height - 4].max

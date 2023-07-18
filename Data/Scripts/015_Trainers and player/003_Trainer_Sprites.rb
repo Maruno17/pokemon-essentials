@@ -35,7 +35,8 @@ class TrainerWalkingCharSprite < Sprite
     end
   end
 
-  def altcharset=(value)   # Used for box icon in the naming screen
+  # Used for the box icon in the naming screen.
+  def altcharset=(value)
     @animbitmap&.dispose
     @animbitmap = nil
     @charset = pbResolveBitmap(value)

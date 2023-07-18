@@ -361,7 +361,8 @@ class SpeciesLister
     return @index
   end
 
-  def commands   # Sorted alphabetically
+  # Sorted alphabetically.
+  def commands
     @commands.clear
     @ids.clear
     cmds = []
@@ -420,7 +421,8 @@ class ItemLister
     return @index
   end
 
-  def commands   # Sorted alphabetically
+  # Sorted alphabetically.
+  def commands
     @commands.clear
     @ids.clear
     cmds = []

@@ -9,7 +9,7 @@ class Battle::AI
   # Returns a value between 0.0 and 1.0. All move scores are lowered by this
   # value multiplied by the highest-scoring move's score.
   def move_score_threshold
-    return 0.6 + 0.35 * (([@trainer.skill, 100].min / 100.0) ** 0.5)   # 0.635 to 0.95
+    return 0.6 + (0.35 * (([@trainer.skill, 100].min / 100.0)**0.5))   # 0.635 to 0.95
   end
 
   #-----------------------------------------------------------------------------
@@ -161,7 +161,7 @@ class Battle::AI
     @target&.refresh_battler
     if @target && @move.function_code == "UseLastMoveUsedByTarget"
       if @target.battler.lastRegularMoveUsed &&
-        GameData::Move.exists?(@target.battler.lastRegularMoveUsed) &&
+         GameData::Move.exists?(@target.battler.lastRegularMoveUsed) &&
          GameData::Move.get(@target.battler.lastRegularMoveUsed).has_flag?("CanMirrorMove")
         @battle.moldBreaker = @user.has_mold_breaker?
         mov = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@target.battler.lastRegularMoveUsed))
@@ -278,7 +278,7 @@ class Battle::AI
       PBDebug.log_score_change(score - old_score, "function code modifier (generic)")
       # Modify the score according to various other effects
       score = Battle::AI::Handlers.apply_general_move_score_modifiers(
-         score, @move, @user, self, @battle)
+        score, @move, @user, self, @battle)
     end
     score = score.to_i
     score = 0 if score < 0
@@ -307,7 +307,7 @@ class Battle::AI
       PBDebug.log_score_change(score - old_score, "function code modifier (against target)")
       # Modify the score according to various other effects against the target
       score = Battle::AI::Handlers.apply_general_move_against_target_score_modifiers(
-         score, @move, @user, @target, self, @battle)
+        score, @move, @user, @target, self, @battle)
     end
     # Add the score against the target to the overall score
     target_data = @move.pbTarget(@user.battler)

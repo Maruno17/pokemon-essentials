@@ -300,7 +300,7 @@ class SpriteWindow < Window
     mustchange = false
     if @active
       cursor_time = System.uptime / 0.4
-      if cursor_time.to_i % 2 == 0
+      if cursor_time.to_i.even?
         @cursoropacity = lerp(255, 128, 0.4, cursor_time % 2)
       else
         @cursoropacity = lerp(128, 255, 0.4, (cursor_time - 1) % 2)
@@ -852,7 +852,8 @@ class SpriteWindow_Base < SpriteWindow
     end
   end
 
-  def setSkin(skin)   # Filename of windowskin to apply. Supports XP, VX, and animated skins.
+  # Filename of windowskin to apply. Supports XP, VX, and animated skins.
+  def setSkin(skin)
     @customskin&.dispose
     @customskin = nil
     resolvedName = pbResolveBitmap(skin)

@@ -6,7 +6,7 @@ class Battle::Scene::PokemonDataBox < Sprite
   attr_accessor :selected
 
   # Time in seconds to fully fill the Exp bar (from empty).
-  EXP_BAR_FILL_TIME  = 1.75
+  EXP_BAR_FILL_TIME = 1.75
   # Time in seconds for this data box to flash when the Exp fully fills.
   EXP_FULL_FLASH_DURATION = 0.2
   # Maximum time in seconds to make a change to the HP bar.

@@ -248,8 +248,7 @@ module PluginManager
         incompats = [incompats] if !incompats.is_a?(Array)
         incompats.each do |incompat|
           if self.installed?(incompat)
-            self.error("Plugin '#{name}' is incompatible with '#{incompat}'. " +
-                       "They cannot both be used at the same time.")
+            self.error("Plugin '#{name}' is incompatible with '#{incompat}'. They cannot both be used at the same time.")
           end
         end
       when :credits # Plugin credits
@@ -271,8 +270,7 @@ module PluginManager
     end
     @@Plugins.each_value do |plugin|
       if plugin[:incompatibilities]&.include?(name)
-        self.error("Plugin '#{plugin[:name]}' is incompatible with '#{name}'. " +
-                   "They cannot both be used at the same time.")
+        self.error("Plugin '#{plugin[:name]}' is incompatible with '#{name}'. They cannot both be used at the same time.")
       end
     end
     # Add plugin to class variable

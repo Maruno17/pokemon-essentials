@@ -46,10 +46,11 @@ class SlotMachineReel < BitmapSprite
   def stopSpinning(noslipping = false)
     @stopping = true
     @slipping = SLIPPING.sample
-    if @difficulty == 0   # Easy
+    case @difficulty
+    when 0   # Easy
       second_slipping = SLIPPING.sample
       @slipping = [@slipping, second_slipping].min
-    elsif @difficulty == 2   # Hard
+    when 2   # Hard
       second_slipping = SLIPPING.sample
       @slipping = [@slipping, second_slipping].max
     end

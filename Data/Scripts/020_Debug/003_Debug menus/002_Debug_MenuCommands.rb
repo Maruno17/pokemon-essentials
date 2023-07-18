@@ -875,7 +875,6 @@ MenuHandlers.add(:debug_menu, :set_money, {
         params.setDefaultValue($player.battle_points)
         $player.battle_points = pbMessageChooseNumber("\\ts[]" + _INTL("Set the player's BP amount."), params)
       end
-
     end
   }
 })

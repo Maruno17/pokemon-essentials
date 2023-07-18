@@ -166,7 +166,8 @@ class PokemonEggHatch_Scene
     @sprites["hatch"].x   = @sprites["pokemon"].x
   end
 
-  def updateScene(duration = 0.01)   # Can be used for "wait" effect
+  # Can be used for "wait" effect.
+  def updateScene(duration = 0.01)
     timer_start = System.uptime
     while System.uptime - timer_start < duration
       Graphics.update

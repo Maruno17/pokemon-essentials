@@ -4,7 +4,7 @@
 # Pokérus check
 EventHandlers.add(:on_frame_update, :pokerus_counter,
   proc {
-    next if !$player&.party.any? { |pkmn| pkmn.pokerusStage == 1 }
+    next if !$player || $player.party.none? { |pkmn| pkmn.pokerusStage == 1 }
     last = $PokemonGlobal.pokerusTime
     next if !last
     now = pbGetTimeNow

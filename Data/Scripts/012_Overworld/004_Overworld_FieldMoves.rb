@@ -103,7 +103,7 @@ def pbHiddenMoveAnimation(pokemon)
     when 1   # Expand viewport height from zero to full
       viewport.rect.y = lerp(Graphics.height / 2, (Graphics.height - bg.bitmap.height) / 2,
                              0.25, timer_start, System.uptime)
-      viewport.rect.height = Graphics.height - viewport.rect.y * 2
+      viewport.rect.height = Graphics.height - (viewport.rect.y * 2)
       bg.oy = (bg.bitmap.height - viewport.rect.height) / 2
       if viewport.rect.y == (Graphics.height - bg.bitmap.height) / 2
         phase = 2
@@ -134,7 +134,7 @@ def pbHiddenMoveAnimation(pokemon)
     when 5   # Shrink viewport height from full to zero
       viewport.rect.y = lerp((Graphics.height - bg.bitmap.height) / 2, Graphics.height / 2,
                              0.25, timer_start, System.uptime)
-      viewport.rect.height = Graphics.height - viewport.rect.y * 2
+      viewport.rect.height = Graphics.height - (viewport.rect.y * 2)
       bg.oy = (bg.bitmap.height - viewport.rect.height) / 2
       phase = 6 if viewport.rect.y == Graphics.height / 2
     end

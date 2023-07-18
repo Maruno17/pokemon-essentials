@@ -93,7 +93,8 @@ class Game_Screen
       movement_per_second = @shake_power * @shake_speed * 4
       limit = @shake_power * 2.5   # Maximum pixel displacement
       phase = (delta_t * movement_per_second / limit).to_i % 4
-      if phase == 0 || phase == 2
+      case phase
+      when 0, 2
         @shake = (movement_per_second * delta_t) % limit
         @shake *= -1 if phase == 2
       else

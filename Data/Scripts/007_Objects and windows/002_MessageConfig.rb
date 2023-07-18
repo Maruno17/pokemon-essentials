@@ -108,7 +108,7 @@ module MessageConfig
     when 2 then return 1 / 80.0   # Fast
     when 3 then return 0          # Instant
     end
-    return TEXT_SPEED || 2 / 80.0   # Normal
+    return TEXT_SPEED || (2 / 80.0)   # Normal
   end
 
   #-----------------------------------------------------------------------------

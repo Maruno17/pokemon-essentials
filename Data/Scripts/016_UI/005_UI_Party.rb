@@ -660,12 +660,12 @@ class PokemonParty_Scene
     new_mult = newid.even? ? -1 : 1
     timer_start = System.uptime
     loop do
-      oldsprite.x = lerp(old_start_x, old_start_x + old_mult * Graphics.width / 2, 0.4, timer_start, System.uptime)
-      newsprite.x = lerp(new_start_x, new_start_x + new_mult * Graphics.width / 2, 0.4, timer_start, System.uptime)
+      oldsprite.x = lerp(old_start_x, old_start_x + (old_mult * Graphics.width / 2), 0.4, timer_start, System.uptime)
+      newsprite.x = lerp(new_start_x, new_start_x + (new_mult * Graphics.width / 2), 0.4, timer_start, System.uptime)
       Graphics.update
       Input.update
       self.update
-      break if oldsprite.x == old_start_x + old_mult * Graphics.width / 2
+      break if oldsprite.x == old_start_x + (old_mult * Graphics.width / 2)
     end
   end
 
@@ -681,12 +681,12 @@ class PokemonParty_Scene
     new_mult = newid.even? ? -1 : 1
     timer_start = System.uptime
     loop do
-      oldsprite.x = lerp(old_start_x, old_start_x - old_mult * Graphics.width / 2, 0.4, timer_start, System.uptime)
-      newsprite.x = lerp(new_start_x, new_start_x - new_mult * Graphics.width / 2, 0.4, timer_start, System.uptime)
+      oldsprite.x = lerp(old_start_x, old_start_x - (old_mult * Graphics.width / 2), 0.4, timer_start, System.uptime)
+      newsprite.x = lerp(new_start_x, new_start_x - (new_mult * Graphics.width / 2), 0.4, timer_start, System.uptime)
       Graphics.update
       Input.update
       self.update
-      break if oldsprite.x == old_start_x - old_mult * Graphics.width / 2
+      break if oldsprite.x == old_start_x - (old_mult * Graphics.width / 2)
     end
     Settings::MAX_PARTY_SIZE.times do |i|
       @sprites["pokemon#{i}"].preselected = false
@@ -987,8 +987,9 @@ class PokemonPartyScreen
     return @scene.pbShowCommands(helptext, commands, index)
   end
 
-  # Checks for identical species
-  def pbCheckSpecies(array)   # Unused
+  # Checks for identical species.
+  # Unused.
+  def pbCheckSpecies(array)
     array.length.times do |i|
       (i + 1...array.length).each do |j|
         return false if array[i].species == array[j].species
@@ -997,8 +998,9 @@ class PokemonPartyScreen
     return true
   end
 
-  # Checks for identical held items
-  def pbCheckItems(array)   # Unused
+  # Checks for identical held items.
+  # Unused.
+  def pbCheckItems(array)
     array.length.times do |i|
       next if !array[i].hasItem?
       (i + 1...array.length).each do |j|
@@ -1031,7 +1033,8 @@ class PokemonPartyScreen
     return @scene.pbShowCommands(helptext, movenames, index)
   end
 
-  def pbRefreshAnnotations(ableProc)   # For after using an evolution stone
+  # For after using an evolution stone.
+  def pbRefreshAnnotations(ableProc)
     return if !@scene.pbHasAnnotations?
     annot = []
     @party.each do |pkmn|

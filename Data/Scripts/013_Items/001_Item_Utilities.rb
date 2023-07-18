@@ -17,11 +17,13 @@ module ItemHandlers
     return !UseText[item].nil?
   end
 
-  def self.hasOutHandler(item)                       # Shows "Use" option in Bag
+  # Shows "Use" option in Bag.
+  def self.hasOutHandler(item)
     return !UseFromBag[item].nil? || !UseInField[item].nil? || !UseOnPokemon[item].nil?
   end
 
-  def self.hasUseInFieldHandler(item)           # Shows "Register" option in Bag
+  # Shows "Register" option in Bag.
+  def self.hasUseInFieldHandler(item)
     return !UseInField[item].nil?
   end
 

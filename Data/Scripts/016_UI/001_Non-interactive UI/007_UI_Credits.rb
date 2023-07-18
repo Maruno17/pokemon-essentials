@@ -227,7 +227,7 @@ class Scene_Credits
     end
     return if cancel?
     return if last?
-    @realOY = SCROLL_SPEED * (System.uptime - @timer_start) - Graphics.height + @trim
+    @realOY = (SCROLL_SPEED * (System.uptime - @timer_start)) - Graphics.height + @trim
     @credit_sprites.each_with_index { |s, i| s.oy = @realOY - (@bitmap_height * i) }
   end
 end

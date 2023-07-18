@@ -606,7 +606,8 @@ class Battle::Move::MultiTurnAttackBideThenReturnDoubleDamage < Battle::Move::Fi
     end
   end
 
-  def pbDamagingMove?   # Stops damage being dealt in the charging turns
+  # Stops damage being dealt in the charging turns.
+  def pbDamagingMove?
     return false if !@damagingTurn
     return super
   end

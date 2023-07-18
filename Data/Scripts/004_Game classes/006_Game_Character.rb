@@ -25,7 +25,7 @@ class Game_Character
   attr_accessor :animation_id
   attr_accessor :transparent
   attr_reader   :move_speed
-  attr_accessor :jump_speed
+  attr_reader   :jump_speed
   attr_accessor :walk_anime
   attr_writer   :bob_height
 
@@ -116,13 +116,21 @@ class Game_Character
     #   4 => 0.125   # Running speed (2x walking speed)
     #   5 => 0.1     # Cycling speed (1.25x running speed)
     #   6 => 0.05
-    @move_time = (val == 6) ? 0.05 : (val == 5) ? 0.1 : 2.0 / (2**val)
+    case val
+    when 6 then @move_time = 0.05
+    when 5 then @move_time = 0.1
+    else        @move_time = 2.0 / (2**val)
+    end
   end
 
   # Takes the same values as move_speed above.
   def jump_speed=(val)
     @jump_speed = val
-    @jump_time = (val == 6) ? 0.05 : (val == 5) ? 0.1 : 2.0 / (2**val)
+    case val
+    when 6 then @jump_time = 0.05
+    when 5 then @jump_time = 0.1
+    else        @jump_time = 2.0 / (2**val)
+    end
   end
 
   # Returns time in seconds for one full cycle (4 frames) of an animating
@@ -629,7 +637,8 @@ class Game_Character
     end
   end
 
-  def moveLeft90   # anticlockwise
+  # Anticlockwise.
+  def moveLeft90
     case self.direction
     when 2 then move_right   # down
     when 4 then move_down    # left
@@ -638,7 +647,8 @@ class Game_Character
     end
   end
 
-  def moveRight90   # clockwise
+  # Clockwise.
+  def moveRight90
     case self.direction
     when 2 then move_left    # down
     when 4 then move_up      # left
@@ -765,10 +775,10 @@ class Game_Character
     end
     @jump_initial_x = @x
     @jump_initial_y = @y
-    @x = @x + x_plus
-    @y = @y + y_plus
+    @x += x_plus
+    @y += y_plus
     @jump_timer = 0.0
-    real_distance = Math.sqrt(x_plus**2 + y_plus**2)
+    real_distance = Math.sqrt((x_plus**2) + (y_plus**2))
     distance = [1, real_distance].max
     @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
     @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max

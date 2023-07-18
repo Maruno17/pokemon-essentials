@@ -104,7 +104,7 @@ class ChooseNumberParams
   end
 
   def initialNumber
-    return clamp(@initialNumber, self.minNumber, self.maxNumber)
+    return @initialNumber.clamp(self.minNumber, self.maxNumber)
   end
 
   def cancelNumber
@@ -148,10 +148,6 @@ class ChooseNumberParams
   #-----------------------------------------------------------------------------
 
   private
-
-  def clamp(v, mn, mx)
-    return v < mn ? mn : (v > mx ? mx : v)
-  end
 
   def numDigits(number)
     ans = 1

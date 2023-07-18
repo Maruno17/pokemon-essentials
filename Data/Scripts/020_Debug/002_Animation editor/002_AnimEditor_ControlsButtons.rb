@@ -73,23 +73,27 @@ module BattleAnimationEditor
       return @invalid
     end
 
-    def invalidate   # Marks that the control must be redrawn to reflect current logic
+    # Marks that the control must be redrawn to reflect current logic.
+    def invalidate
       @invalid = true
     end
 
-    def update; end   # Updates the logic on the control, invalidating it if necessary
+    # Updates the logic on the control, invalidating it if necessary.
+    def update; end
 
-    def refresh; end   # Redraws the control
+    # Redraws the control.
+    def refresh; end
 
-    def validate   # Makes the control no longer invalid
+    # Makes the control no longer invalid.
+    def validate
       @invalid = false
     end
 
-    def repaint   # Redraws the control only if it is invalid
-      if self.invalid?
-        self.refresh
-        self.validate
-      end
+    # Redraws the control only if it is invalid.
+    def repaint
+      return if !self.invalid?
+      self.refresh
+      self.validate
     end
   end
 
@@ -275,7 +279,7 @@ module BattleAnimationEditor
     end
 
     def update
-      cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i % 2 == 0
+      cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i.even?
       self.changed = false
       if cursor_to_show != @cursor_shown
         @cursor_shown = cursor_to_show

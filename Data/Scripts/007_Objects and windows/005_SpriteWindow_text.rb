@@ -47,7 +47,8 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     return ret
   end
 
-  def resizeToFitInternal(text, maxwidth)   # maxwidth is maximum acceptable window width
+  # maxwidth is maximum acceptable window width.
+  def resizeToFitInternal(text, maxwidth)
     dims = [0, 0]
     cwidth = maxwidth < 0 ? Graphics.width : maxwidth
     getLineBrokenChunks(self.contents, text,
@@ -60,14 +61,16 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     self.text = text
   end
 
-  def resizeToFit(text, maxwidth = -1)   # maxwidth is maximum acceptable window width
+  # maxwidth is maximum acceptable window width.
+  def resizeToFit(text, maxwidth = -1)
     dims = resizeToFitInternal(text, maxwidth)
     self.width = dims[0] + self.borderX + SpriteWindow_Base::TEXT_PADDING
     self.height = dims[1] + self.borderY
     refresh
   end
 
-  def resizeHeightToFit(text, width = -1)   # width is current window width
+  # width is current window width.
+  def resizeHeightToFit(text, width = -1)
     dims = resizeToFitInternal(text, width)
     self.width  = (width < 0) ? Graphics.width : width
     self.height = dims[1] + self.borderY
@@ -685,7 +688,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
   def update
     super
     digits = @digits_max + (@sign ? 1 : 0)
-    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i % 2 == 0
+    cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i.even?
     if cursor_to_show != @cursor_shown
       @cursor_shown = cursor_to_show
       refresh
@@ -1128,11 +1131,13 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     return Rect.new(rect.x + 16, rect.y, rect.width - 16, rect.height)
   end
 
-  def itemCount   # to be implemented by derived classes
+  # To be implemented by derived classes.
+  def itemCount
     return 0
   end
 
-  def drawItem(index, count, rect); end   # to be implemented by derived classes
+  # To be implemented by derived classes.
+  def drawItem(index, count, rect); end
 
   def refresh
     @item_max = itemCount

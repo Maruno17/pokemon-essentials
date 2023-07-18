@@ -392,7 +392,7 @@ SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # 
       if delta_t <= shudder_time
         # +2, -2, -2, +2, repeat
         period = (delta_t / 0.025).to_i % 4
-        shudder_delta = [2, 0 , -2, 0][period]
+        shudder_delta = [2, 0, -2, 0][period]
         vs.x = vs_x + shudder_delta
         vs.y = vs_y - shudder_delta
       elsif delta_t <= zoom_time

@@ -232,15 +232,14 @@ class Battle::AI
       target_speed = target.rough_stat(:SPEED)
       each_foe_battler(target.side) do |b, i|
         b_speed = b.rough_stat(:SPEED)
+        next if b_speed <= target_speed   # Target already outspeeds the foe b
         next if b_speed > target_speed * 2.5   # Much too slow to reasonably catch up
-        if b_speed > target_speed
-          if b_speed < target_speed * (increment + 2) / 2
-            score += 15 * inc_mult   # Target will become faster than b
-          else
-            score += 8 * inc_mult
-          end
-          break
+        if b_speed < target_speed * (increment + 2) / 2
+          score += 15 * inc_mult   # Target will become faster than the foe b
+        else
+          score += 8 * inc_mult
         end
+        break
       end
       # Prefer if the target has Electro Ball or Power Trip/Stored Power
       moves_that_prefer_high_speed = [
@@ -524,15 +523,14 @@ class Battle::AI
       target_speed = target.rough_stat(:SPEED)
       each_foe_battler(target.side) do |b, i|
         b_speed = b.rough_stat(:SPEED)
+        next if target_speed < b_speed   # Target is already slower than foe b
         next if target_speed > b_speed * 2.5   # Much too fast to reasonably be overtaken
-        if target_speed > b_speed
-          if target_speed < b_speed * 2 / (decrement + 2)
-            score += 15 * dec_mult   # Target will become slower than b
-          else
-            score += 8 * dec_mult
-          end
-          break
+        if target_speed < b_speed * 2 / (decrement + 2)
+          score += 15 * dec_mult   # Target will become slower than foe b
+        else
+          score += 8 * dec_mult
         end
+        break
       end
       # Prefer if any ally has Electro Ball
       each_foe_battler(target.side) do |b, i|

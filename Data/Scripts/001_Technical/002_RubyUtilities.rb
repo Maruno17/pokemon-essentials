@@ -81,7 +81,8 @@ end
 # class Array
 #===============================================================================
 class Array
-  def ^(other)   # xor of two arrays
+  # xor of two arrays
+  def ^(other)
     return (self | other) - (self & other)
   end
 
@@ -401,5 +402,5 @@ def lerp(start_val, end_val, duration, delta, now = nil)
   delta = now - delta if now
   return start_val if delta <= 0
   return end_val if delta >= duration
-  return start_val + (end_val - start_val) * delta / duration.to_f
+  return start_val + ((end_val - start_val) * delta / duration.to_f)
 end
