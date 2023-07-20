@@ -28,8 +28,8 @@ module Game
     # Set resize factor
     pbSetResizeFactor([$PokemonSystem.screensize, 4].min)
     # Set language (and choose language if there is no save file)
-    if Settings::LANGUAGES.length >= 2
-      $PokemonSystem.language = pbChooseLanguage if save_data.empty?
+    if !Settings::LANGUAGES.empty?
+      $PokemonSystem.language = pbChooseLanguage if save_data.empty? && Settings::LANGUAGES.length >= 2
       MessageTypes.load_message_files(Settings::LANGUAGES[$PokemonSystem.language][1])
     end
   end

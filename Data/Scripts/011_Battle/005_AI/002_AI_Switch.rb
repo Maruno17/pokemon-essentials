@@ -3,9 +3,10 @@
 #===============================================================================
 class Battle::AI
   # Called by the AI's def pbDefaultChooseEnemyCommand, and by def pbChooseMove
-  # if the only moves known are bad ones (the latter forces a switch). Also
-  # aliased by the Battle Palace and Battle Arena.
-  def pbChooseToSwitchOut(force_switch = false)
+  # if the only moves known are bad ones (the latter forces a switch if
+  # possible). Also aliased by the Battle Palace and Battle Arena.
+  def pbChooseToSwitchOut(terrible_moves = false)
+    return false if !@battle.canSwitch   # Battle rule
     return false if @user.wild?
     return false if !@battle.pbCanSwitchOut?(@user.index)
     # Don't switch if all foes are unable to do anything, e.g. resting after
@@ -20,7 +21,7 @@ class Battle::AI
       return false if !foe_can_act
     end
     # Various calculations to decide whether to switch
-    if force_switch
+    if terrible_moves
       PBDebug.log_ai("#{@user.name} is being forced to switch out")
     else
       return false if !@trainer.has_skill_flag?("ConsiderSwitching")
@@ -33,7 +34,7 @@ class Battle::AI
       return false if !should_switch
     end
     # Want to switch; find the best replacement Pokémon
-    idxParty = choose_best_replacement_pokemon(@user.index, force_switch)
+    idxParty = choose_best_replacement_pokemon(@user.index, terrible_moves)
     if idxParty < 0   # No good replacement Pokémon found
       PBDebug.log("   => no good replacement Pokémon, will not switch after all")
       return false
@@ -66,14 +67,14 @@ class Battle::AI
 
   #-----------------------------------------------------------------------------
 
-  def choose_best_replacement_pokemon(idxBattler, mandatory = false)
+  def choose_best_replacement_pokemon(idxBattler, terrible_moves = false)
     # Get all possible replacement Pokémon
     party = @battle.pbParty(idxBattler)
     idxPartyStart, idxPartyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
     reserves = []
     party.each_with_index do |_pkmn, i|
       next if !@battle.pbCanSwitchIn?(idxBattler, i)
-      if !mandatory   # Not mandatory means choosing an action for the round
+      if !terrible_moves   # Not terrible_moves means choosing an action for the round
         ally_will_switch_with_i = false
         @battle.allSameSideBattlers(idxBattler).each do |b|
           next if @battle.choices[b.index][0] != :SwitchOut || @battle.choices[b.index][1] != i
@@ -84,7 +85,7 @@ class Battle::AI
       end
       # Ignore ace if possible
       if @trainer.has_skill_flag?("ReserveLastPokemon") && i == idxPartyEnd - 1
-        next if !mandatory || reserves.length > 0
+        next if !terrible_moves || reserves.length > 0
       end
       reserves.push([i, 100])
       break if @trainer.has_skill_flag?("UsePokemonInOrder") && reserves.length > 0
@@ -96,7 +97,7 @@ class Battle::AI
     end
     reserves.sort! { |a, b| b[1] <=> a[1] }   # Sort from highest to lowest rated
     # Don't bother choosing to switch if all replacements are poorly rated
-    if @trainer.high_skill? && !mandatory
+    if @trainer.high_skill? && !terrible_moves
       return -1 if reserves[0][1] < 100   # If best replacement rated at <100, don't switch
     end
     # Return the party index of the best rated replacement Pokémon

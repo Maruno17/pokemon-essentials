@@ -588,6 +588,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       if System.uptime - @wait_timer_start >= @waitcount
         @wait_timer_start = nil
         @waitcount = 0
+        @display_last_updated = nil
       end
       return if @wait_timer_start
     end

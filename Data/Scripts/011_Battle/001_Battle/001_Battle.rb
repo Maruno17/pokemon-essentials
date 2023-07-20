@@ -61,6 +61,7 @@ class Battle
   attr_accessor :debug            # Debug flag
   attr_accessor :canRun           # True if player can run from battle
   attr_accessor :canLose          # True if player won't black out if they lose
+  attr_accessor :canSwitch        # True if player is allowed to switch Pokémon
   attr_accessor :switchStyle      # Switch/Set "battle style" option
   attr_accessor :showAnims        # "Battle Effects" option
   attr_accessor :controlPlayer    # Whether player's Pokémon are AI controlled
@@ -131,6 +132,7 @@ class Battle
     @debug             = false
     @canRun            = true
     @canLose           = false
+    @canSwitch         = true
     @switchStyle       = true
     @showAnims         = true
     @controlPlayer     = false
