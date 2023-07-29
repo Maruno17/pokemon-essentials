@@ -1,5 +1,5 @@
-# Using mkxp-z v2.4.2/ee8dc7e - built 2023-05-28
-# https://github.com/mkxp-z/mkxp-z/actions/runs/5107184579
+# Using mkxp-z v2.4.2/c9378cf - built 2023-07-07
+# https://github.com/mkxp-z/mkxp-z/actions/runs/5482601942
 $VERBOSE = nil
 Font.default_shadow = false if Font.respond_to?(:default_shadow)
 Encoding.default_internal = Encoding::UTF_8
