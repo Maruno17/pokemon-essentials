@@ -145,15 +145,15 @@
     //
     "vsync": true,
 
-    // The game's frame rate.
-    //
-    "fixedFramerate": 61,
-
     // Use a fixed framerate that is approx. equal to the native screen refresh
     // rate. This is different from "fixedFramerate" because the actual frame
     // rate is reported back to the game, ensuring correct timers. If the screen
     // refresh rate cannot be determined, this option is force-disabled. This
     // option may be force-disabled at build time.
     //
-    // "syncToRefreshrate": false,
+    "syncToRefreshrate": true,
+
+    // The game's frame rate, if "syncToRefreshrate" is false.
+    //
+    // "fixedFramerate": 60,
 }
