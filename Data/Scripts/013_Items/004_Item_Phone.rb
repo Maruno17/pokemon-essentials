@@ -179,7 +179,7 @@ class Phone
       else
         contact = $PokemonGlobal.phone.get(false, args[1])
       end
-      pbMessage(_INTL("\\me[Register phone]Registered {1} in the Pokégear!", contact.display_name))
+      pbMessage(_INTL("\\me[Register phone]Registered {1} in the Pokégear!", contact.display_name) + "\\wtnp[60]")
     end
     return ret
   end

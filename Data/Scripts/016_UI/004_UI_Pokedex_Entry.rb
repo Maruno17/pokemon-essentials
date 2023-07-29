@@ -498,6 +498,7 @@ class PokemonPokedexInfo_Scene
       elsif Input.trigger?(Input::USE)
         case @page
         when 1   # Info
+          pbPlayDecisionSE
           @show_battled_count = !@show_battled_count
           dorefresh = true
         when 2   # Area
@@ -562,11 +563,8 @@ class PokemonPokedexInfo_Scene
       if Input.trigger?(Input::ACTION)
         pbSEStop
         Pokemon.play_cry(@species, @form)
-      elsif Input.trigger?(Input::BACK)
+      elsif Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
         pbPlayCloseMenuSE
-        break
-      elsif Input.trigger?(Input::USE)
-        pbPlayDecisionSE
         break
       end
     end

@@ -297,7 +297,7 @@ class VoltorbFlip
                 @sprites["animation"].bitmap.clear
               end
               # Unskippable text block, parameter 2 = wait time (corresponds to ME length)
-              pbMessage("\\me[Voltorb Flip game over]" + _INTL("Oh no! You get 0 Coins!") + "\\wtnp[50]")
+              pbMessage("\\me[Voltorb Flip game over]" + _INTL("Oh no! You get 0 Coins!") + "\\wtnp[80]")
               pbShowAndDispose
               @sprites["mark"].bitmap.clear
               if @level > 1

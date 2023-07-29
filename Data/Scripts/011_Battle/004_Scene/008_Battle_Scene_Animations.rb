@@ -227,6 +227,7 @@ class Battle::Scene::Animation::AbilitySplashAppear < Battle::Scene::Animation
     return if !@sprites["abilityBar_#{@side}"]
     bar = addSprite(@sprites["abilityBar_#{@side}"])
     bar.setVisible(0, true)
+    bar.setSE(0, "Battle ability")
     dir = (@side == 0) ? 1 : -1
     bar.moveDelta(0, 8, dir * Graphics.width / 2, 0)
   end
@@ -700,7 +701,11 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     end
     delay = ball.totalDuration   # 0 or 7
     # Poké Ball arc animation
-    ball.setSE(delay, "Battle throw")
+    if @critCapture
+      ball.setSE(delay, "Battle critical catch throw")
+    else
+      ball.setSE(delay, "Battle throw")
+    end
     createBallTrajectory(ball, delay, 16,
                          ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     ball.setZ(9, batSprite.z + 1)

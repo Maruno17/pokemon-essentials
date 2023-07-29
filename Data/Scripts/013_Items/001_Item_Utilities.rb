@@ -317,6 +317,7 @@ def pbGainExpFromExpCandy(pkmn, base_amt, qty, scene)
     scene.pbDisplay(_INTL("It won't have any effect."))
     return false
   end
+  pbSEPlay("Pkmn level up")
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   if qty > 1
     (qty - 1).times { pkmn.changeHappiness("vitamin") }
@@ -342,6 +343,7 @@ def pbHPItem(pkmn, restoreHP, scene)
     scene.pbDisplay(_INTL("It won't have any effect."))
     return false
   end
+  pbSEPlay("Use item in party")
   hpGain = pbItemRestoreHP(pkmn, restoreHP)
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1}'s HP was restored by {2} points.", pkmn.name, hpGain))
@@ -434,6 +436,7 @@ def pbUseEVRaisingItem(stat, amt_per_use, qty, pkmn, happiness_type, scene, no_e
     scene.pbDisplay(_INTL("It won't have any effect."))
     return false
   end
+  pbSEPlay("Use item in party")
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1}'s {2} increased.", pkmn.name, GameData::Stat.get(stat).name))
   return true

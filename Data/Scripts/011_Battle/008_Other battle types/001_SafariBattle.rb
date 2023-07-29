@@ -472,6 +472,7 @@ class SafariBattle
         # End of round
         if @decision == 0
           if @ballCount <= 0
+            pbSEPlay("Safari Zone end")
             pbDisplay(_INTL("PA: You have no Safari Balls left! Game over!"))
             @decision = 2
           elsif pbRandom(100) < 5 * escapeFactor

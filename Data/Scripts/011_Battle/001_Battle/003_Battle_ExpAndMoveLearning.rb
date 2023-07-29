@@ -214,7 +214,7 @@ class Battle
       pkmn.calc_stats
       battler&.pbUpdate(false)
       @scene.pbRefreshOne(battler.index) if battler
-      pbDisplayPaused(_INTL("{1} grew to Lv. {2}!", pkmn.name, curLevel))
+      pbDisplayPaused(_INTL("{1} grew to Lv. {2}!", pkmn.name, curLevel)) { pbSEPlay("Pkmn level up") }
       @scene.pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
                        oldSpAtk, oldSpDef, oldSpeed)
       # Learn all moves learned at this level

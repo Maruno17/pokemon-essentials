@@ -381,7 +381,7 @@ class Interpreter
   end
 
   # Used in boulder events. Allows an event to be pushed.
-  def pbPushThisEvent
+  def pbPushThisEvent(strength = false)
     event = get_self
     old_x  = event.x
     old_y  = event.y
@@ -397,6 +397,7 @@ class Interpreter
     end
     $PokemonMap&.addMovedEvent(@event_id)
     if old_x != event.x || old_y != event.y
+      pbSEPlay("Strength push") if strength
       $game_player.lock
       loop do
         Graphics.update
@@ -409,7 +410,7 @@ class Interpreter
   end
 
   def pbPushThisBoulder
-    pbPushThisEvent if $PokemonMap.strengthUsed
+    pbPushThisEvent(true) if $PokemonMap.strengthUsed
     return true
   end
 

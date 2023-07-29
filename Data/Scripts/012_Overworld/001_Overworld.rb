@@ -90,6 +90,7 @@ EventHandlers.add(:on_player_step_taken_can_transfer, :poison_party,
     $player.able_party.each do |pkmn|
       next if pkmn.status != :POISON || pkmn.hasAbility?(:IMMUNITY)
       if !flashed
+        pbSEPlay("Poison step")
         pbFlash(Color.new(255, 0, 0, 128), 8)
         flashed = true
       end
@@ -673,21 +674,21 @@ def pbItemBall(item, quantity = 1)
   if $bag.add(item, quantity)   # If item can be picked up
     meName = (item.is_key_item?) ? "Key item get" : "Item get"
     if item == :DNASPLICERS
-      pbMessage("\\me[#{meName}]" + _INTL("You found \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
+      pbMessage("\\me[#{meName}]" + _INTL("You found \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
     elsif item.is_machine?   # TM or HM
       if quantity > 1
-        pbMessage("\\me[#{meName}]" + _INTL("You found {1} \\c[1]{2} {3}\\c[0]!",
-                                            quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+        pbMessage("\\me[Machine get]" + _INTL("You found {1} \\c[1]{2} {3}\\c[0]!",
+                                              quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
       else
-        pbMessage("\\me[#{meName}]" + _INTL("You found \\c[1]{1} {2}\\c[0]!",
-                                            itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+        pbMessage("\\me[Machine get]" + _INTL("You found \\c[1]{1} {2}\\c[0]!",
+                                              itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
       end
     elsif quantity > 1
-      pbMessage("\\me[#{meName}]" + _INTL("You found {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[30]")
+      pbMessage("\\me[#{meName}]" + _INTL("You found {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[40]")
     elsif itemname.starts_with_vowel?
-      pbMessage("\\me[#{meName}]" + _INTL("You found an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
+      pbMessage("\\me[#{meName}]" + _INTL("You found an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
     else
-      pbMessage("\\me[#{meName}]" + _INTL("You found a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
+      pbMessage("\\me[#{meName}]" + _INTL("You found a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
     end
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                     itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
@@ -696,16 +697,16 @@ def pbItemBall(item, quantity = 1)
   # Can't add the item
   if item.is_machine?   # TM or HM
     if quantity > 1
-      pbMessage(_INTL("You found {1} \\c[1]{2} {3}\\c[0]!", quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+      pbMessage(_INTL("You found {1} \\c[1]{2} {3}\\c[0]!", quantity, itemname, GameData::Move.get(move).name))
     else
-      pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!", itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+      pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!", itemname, GameData::Move.get(move).name))
     end
   elsif quantity > 1
-    pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[30]")
+    pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!", quantity, itemname))
   elsif itemname.starts_with_vowel?
-    pbMessage(_INTL("You found an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
+    pbMessage(_INTL("You found an \\c[1]{1}\\c[0]!", itemname))
   else
-    pbMessage(_INTL("You found a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
+    pbMessage(_INTL("You found a \\c[1]{1}\\c[0]!", itemname))
   end
   pbMessage(_INTL("But your Bag is full..."))
   return false
@@ -722,21 +723,21 @@ def pbReceiveItem(item, quantity = 1)
   move = item.move
   meName = (item.is_key_item?) ? "Key item get" : "Item get"
   if item == :DNASPLICERS
-    pbMessage("\\me[#{meName}]" + _INTL("You obtained \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
+    pbMessage("\\me[#{meName}]" + _INTL("You obtained \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
   elsif item.is_machine?   # TM or HM
     if quantity > 1
-      pbMessage("\\me[#{meName}]" + _INTL("You obtained {1} \\c[1]{2} {3}\\c[0]!",
-                                          quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+      pbMessage("\\me[Machine get]" + _INTL("You obtained {1} \\c[1]{2} {3}\\c[0]!",
+                                            quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
     else
-      pbMessage("\\me[#{meName}]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!",
-                                          itemname, GameData::Move.get(move).name) + "\\wtnp[30]")
+      pbMessage("\\me[Machine get]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!",
+                                            itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
     end
   elsif quantity > 1
-    pbMessage("\\me[#{meName}]" + _INTL("You obtained {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[30]")
+    pbMessage("\\me[#{meName}]" + _INTL("You obtained {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[40]")
   elsif itemname.starts_with_vowel?
-    pbMessage("\\me[#{meName}]" + _INTL("You obtained an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
+    pbMessage("\\me[#{meName}]" + _INTL("You obtained an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
   else
-    pbMessage("\\me[#{meName}]" + _INTL("You obtained a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[30]")
+    pbMessage("\\me[#{meName}]" + _INTL("You obtained a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
   end
   if $bag.add(item, quantity)   # If item can be added
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",

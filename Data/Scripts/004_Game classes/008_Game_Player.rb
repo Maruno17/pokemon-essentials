@@ -601,7 +601,8 @@ def pbMountBike
   $stats.cycle_count += 1
   pbUpdateVehicle
   bike_bgm = GameData::Metadata.get.bicycle_BGM
-  pbCueBGM(bike_bgm, 0.5) if bike_bgm
+  pbCueBGM(bike_bgm, 0.4) if bike_bgm
+  pbSEPlay("Bicycle")
   pbPokeRadarCancel
 end
 
