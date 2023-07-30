@@ -220,24 +220,7 @@ end
 #===============================================================================
 # Checks when moving between maps
 #===============================================================================
-# Clears the weather of the old map, if the old map has defined weather and the
-# new map either has the same name as the old map or doesn't have defined
-# weather.
-EventHandlers.add(:on_leave_map, :end_weather,
-  proc { |new_map_id, new_map|
-    next if new_map_id == 0
-    old_map_metadata = $game_map.metadata
-    next if !old_map_metadata || !old_map_metadata.weather
-    map_infos = pbLoadMapInfos
-    if $game_map.name == map_infos[new_map_id].name
-      new_map_metadata = GameData::MapMetadata.try_get(new_map_id)
-      next if new_map_metadata&.weather
-    end
-    $game_screen.weather(:None, 0, 0)
-  }
-)
-
-# Set up various data related to the new map
+# Set up various data related to the new map.
 EventHandlers.add(:on_enter_map, :setup_new_map,
   proc { |old_map_id|   # previous map ID, is 0 if no map ID
     # Record new Teleport destination
@@ -251,16 +234,21 @@ EventHandlers.add(:on_enter_map, :setup_new_map,
     $PokemonEncounters&.setup($game_map.map_id)
     # Record the new map as having been visited
     $PokemonGlobal.visitedMaps[$game_map.map_id] = true
-    # Set weather if new map has weather
+  }
+)
+
+# Changes the overworld weather.
+EventHandlers.add(:on_enter_map, :set_weather,
+  proc { |old_map_id|   # previous map ID, is 0 if no map ID
     next if old_map_id == 0 || old_map_id == $game_map.map_id
-    next if !new_map_metadata || !new_map_metadata.weather
-    map_infos = pbLoadMapInfos
-    if $game_map.name == map_infos[old_map_id].name
-      old_map_metadata = GameData::MapMetadata.try_get(old_map_id)
-      next if old_map_metadata&.weather
+    old_weather = $game_screen.weather_type
+    new_weather = :None
+    new_map_metadata = $game_map.metadata
+    if new_map_metadata&.weather
+      new_weather = new_map_metadata.weather[0] if rand(100) < new_map_metadata.weather[1]
     end
-    new_weather = new_map_metadata.weather
-    $game_screen.weather(new_weather[0], 9, 0) if rand(100) < new_weather[1]
+    next if old_weather == new_weather
+    $game_screen.weather(new_weather, 9, 0)
   }
 )
 

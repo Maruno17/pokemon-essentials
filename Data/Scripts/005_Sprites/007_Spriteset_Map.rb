@@ -62,7 +62,6 @@ class Spriteset_Map
       sprite = Sprite_Character.new(@@viewport1, @map.events[i])
       @character_sprites.push(sprite)
     end
-    @weather = RPG::Weather.new(@@viewport1)
     EventHandlers.trigger(:on_new_spriteset_map, self, @@viewport1)
     update
   end
@@ -76,11 +75,9 @@ class Spriteset_Map
     @panorama.dispose
     @fog.dispose
     @character_sprites.each { |sprite| sprite.dispose }
-    @weather.dispose
     @panorama = nil
     @fog = nil
     @character_sprites.clear
-    @weather = nil
   end
 
   def getAnimations
@@ -126,14 +123,6 @@ class Spriteset_Map
     @character_sprites.each do |sprite|
       sprite.update
     end
-    if self.map == $game_map
-      @weather.fade_in($game_screen.weather_type, $game_screen.weather_max, $game_screen.weather_duration)
-    else
-      @weather.fade_in(:None, 0, 20)
-    end
-    @weather.ox   = tmox
-    @weather.oy   = tmoy
-    @weather.update
     @@viewport1.tone = $game_screen.tone
     @@viewport3.color = $game_screen.flash_color
     @@viewport1.update
