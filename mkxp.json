@@ -13,7 +13,7 @@
     // Note that the "Game Title" defined in RPG Maker XP should not have
     // accented characters in it, which is why this property is useful.
     //
-    "windowTitle": "Pokémon Essentials v21",
+    "windowTitle": "Pokémon Essentials v21.1",
 
     // The game window's width and height, in pixels.
     //

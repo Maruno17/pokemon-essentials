@@ -1,14 +1,14 @@
 ﻿# Pokémon Essentials
 
-Based on Essentials v21.
+Based on Essentials v21.1.
 
 You can build your fangame on top of a fork of this repository. Doing so will let you update your fangame with improvements made to this repo as soon as they are made.
 
 ## Usage
 
 1. Fork this repo.
-2. Get a copy of Essentials v21 (a download link cannot be provided here).
-3. Clone your forked repo into the Essentials v21 folder, replacing the existing files with the ones from the repo.
+2. Get a copy of Essentials v21.1 (a download link cannot be provided here).
+3. Clone your forked repo into the Essentials v21.1 folder, replacing the existing files with the ones from the repo.
 
 From here, you can edit this project to turn it into your fangame/develop mods. When this repo is updated, you can pull the changes to update your fork and get the updates into your fangame/modding environment.
 

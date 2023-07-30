@@ -2720,14 +2720,14 @@ The likelihood of encountering Pokémon increased!
 The likelihood of encountering Pokémon increased!
 Using item...
 Using item...
+... \wt[10]... \wt[10]... \wt[10]... \wt[10]Nope! There's no response.
+... \wt[10]... \wt[10]... \wt[10]... \wt[10]Nope! There's no response.
 The {1}'s indicating something right underfoot!
 The {1}'s indicating something right underfoot!
 Huh? The {1}'s responding!
 Huh? The {1}'s responding!
 There's an item buried around here!
 There's an item buried around here!
-... \wt[10]... \wt[10]... \wt[10]... \wt[10]Nope! There's no response.
-... \wt[10]... \wt[10]... \wt[10]... \wt[10]Nope! There's no response.
 Coins: {1}
 Coins: {1}
 The Exp Share was turned off.
