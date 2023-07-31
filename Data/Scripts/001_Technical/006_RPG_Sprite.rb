@@ -340,32 +340,20 @@ module RPG
 end
 
 #===============================================================================
-# A modification to class Sprite that allows its coordinates to be floats rather
-# than integers.
+# A version of class Sprite that allows its coordinates to be floats rather than
+# integers.
 #===============================================================================
-class Sprite
-  attr_accessor :float
-
-  alias :__float__x :x
-  alias :__float__y :y
-  alias :__float__x_equals :x=
-  alias :__float__y_equals :y=
-
-  def x
-    return (@float) ? @real_x : __float__x
-  end
-
-  def y
-    return (@float) ? @real_y : __float__y
-  end
+class FloatSprite < Sprite
+  def x; return @float_x; end
+  def y; return @float_y; end
 
   def x=(value)
-    @real_x = value if @float
-    __float__x_equals(value)
+    @float_x = value
+    super
   end
 
   def y=(value)
-    @real_y = value if @float
-    __float__y_equals(value)
+    @float_y = value
+    super
   end
 end
