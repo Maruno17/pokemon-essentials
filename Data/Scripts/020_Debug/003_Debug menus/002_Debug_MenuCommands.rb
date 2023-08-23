@@ -126,7 +126,7 @@ MenuHandlers.add(:debug_menu, :safari_zone_and_bug_contest, {
               break
             end
           end
-        when 1   # Safari Balls
+        when 1   # Sport Balls
           params = ChooseNumberParams.new
           params.setRange(0, 99999)
           params.setDefaultValue(contest.ballcount)
@@ -162,7 +162,7 @@ MenuHandlers.add(:debug_menu, :edit_field_effects, {
         params = ChooseNumberParams.new
         params.setRange(0, 99999)
         params.setDefaultValue($PokemonGlobal.repel)
-        $PokemonGlobal.repel = pbMessageChooseNumber(_INTL("Set the Pokémon's level."), params)
+        $PokemonGlobal.repel = pbMessageChooseNumber(_INTL("Set the number of steps remaining."), params)
       when 1   # Strength used
         $PokemonMap.strengthUsed = !$PokemonMap.strengthUsed
       when 2   # Flash used

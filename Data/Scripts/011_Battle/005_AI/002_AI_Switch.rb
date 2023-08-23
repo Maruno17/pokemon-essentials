@@ -408,8 +408,10 @@ Battle::AI::Handlers::ShouldSwitch.add(:asleep,
     end
     # Doesn't have sufficiently raised stats that would be lost by switching
     next false if battler.stages.any? { |key, val| val >= 2 }
-    # 50% chance to not bother
-    next false if ai.pbAIRandom(100) < 50
+    # A reserve Pokémon is awake and not frozen
+    next false if reserves.none? { |pkmn| ![:SLEEP, :FROZEN].include?(pkmn.status) }
+    # 60% chance to not bother
+    next false if ai.pbAIRandom(100) < 60
     PBDebug.log_ai("#{battler.name} wants to switch because it is asleep and can't do anything")
     next true
   }
