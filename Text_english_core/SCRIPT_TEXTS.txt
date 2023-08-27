@@ -4168,8 +4168,8 @@ With contributions from:
 With contributions from:
 and everyone else who helped out
 and everyone else who helped out
-"mkxp-z" by:
-"mkxp-z" by:
+"mkxp-z"
+"mkxp-z"
 Based on "mkxp" by Ancurio et al.
 Based on "mkxp" by Ancurio et al.
 "RPG Maker XP" by:

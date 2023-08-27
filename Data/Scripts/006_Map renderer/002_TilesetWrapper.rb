@@ -15,8 +15,6 @@
 # 4096px           -> 65536px   (enough to load pretty much any tileset)
 # 8192px           -> 262144px
 # 16384px          -> 1048576px (what most people have at this point)
-#
-#                             ~Roza/Zoroark
 #===============================================================================
 class TilemapRenderer
   module TilesetWrapper

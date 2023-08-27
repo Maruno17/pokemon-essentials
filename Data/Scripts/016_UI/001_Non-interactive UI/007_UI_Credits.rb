@@ -86,11 +86,8 @@ class Scene_Credits
     ], false)
     ret.push(_INTL("and everyone else who helped out"))
     ret.push("")
-    ret.push(_INTL("\"mkxp-z\" by:"))
-    add_names_to_credits(ret, [
-      "Roza",
-      _INTL("Based on \"mkxp\" by Ancurio et al.")
-    ])
+    ret.push(_INTL("\"mkxp-z\""))
+    ret.push(_INTL("Based on \"mkxp\" by Ancurio et al."))
     ret.push(_INTL("\"RPG Maker XP\" by:"))
     add_names_to_credits(ret, ["Enterbrain"])
     ret.push(_INTL("Pokémon is owned by:"))
