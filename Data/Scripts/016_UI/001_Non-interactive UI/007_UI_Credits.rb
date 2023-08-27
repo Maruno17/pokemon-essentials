@@ -86,7 +86,7 @@ class Scene_Credits
     ], false)
     ret.push(_INTL("and everyone else who helped out"))
     ret.push("")
-    ret.push(_INTL("\"mkxp-z\""))
+    ret.push("mkxp-z")
     ret.push(_INTL("Based on \"mkxp\" by Ancurio et al."))
     ret.push("")
     ret.push(_INTL("\"RPG Maker XP\" by:"))
