@@ -85,6 +85,11 @@ class UIControls::BaseControl < BitmapSprite
     this_bitmap.draw_text(text_x, text_y, text_size.width, text_size.height, this_text, 0)
   end
 
+  def draw_text_centered(this_bitmap, text_x, text_y, wid, this_text)
+    text_size = this_bitmap.text_size(this_text)
+    this_bitmap.draw_text(text_x, text_y, wid, text_size.height, this_text, 1)
+  end
+
   # Redraws the control only if it is invalid.
   def repaint
     return if !invalid?

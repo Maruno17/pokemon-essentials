@@ -15,7 +15,9 @@ class UIControls::Slider < UIControls::BaseControl
   VALUE_X       = PLUS_X + PLUS_MINUS_SIZE + 5
   TEXT_OFFSET_Y = 7
 
-  SLIDER_KNOB_COLOR = Color.red
+  # TODO: Is there a better knob design than a big black rectangle? I'd rather
+  #       it not be a different colour.
+  SLIDER_KNOB_COLOR = Color.black
 
   def initialize(width, height, viewport, min_value, max_value, value)
     super(width, height, viewport)

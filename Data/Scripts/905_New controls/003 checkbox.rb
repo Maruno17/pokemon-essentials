@@ -2,10 +2,10 @@
 # NOTE: Strictly speaking, this is a toggle switch and not a checkbox.
 #===============================================================================
 class UIControls::Checkbox < UIControls::BaseControl
-  CHECKBOX_X         = 0
+  CHECKBOX_X         = 2
   CHECKBOX_WIDTH     = 40
   CHECKBOX_HEIGHT    = 24
-  CHECKBOX_FILL_SIZE = CHECKBOX_HEIGHT - 8
+  CHECKBOX_FILL_SIZE = CHECKBOX_HEIGHT - 4
 
   UNCHECKED_COLOR = Color.gray
   CHECKED_COLOR   = Color.new(64, 255, 64)   # Green
@@ -34,19 +34,19 @@ class UIControls::Checkbox < UIControls::BaseControl
   def refresh
     super
     # Draw checkbox outline
-    self.bitmap.outline_rect(@checkbox_rect.x + 2, @checkbox_rect.y + 2,
-                             @checkbox_rect.width - 4, @checkbox_rect.height - 4,
+    self.bitmap.outline_rect(@checkbox_rect.x, @checkbox_rect.y,
+                             @checkbox_rect.width, @checkbox_rect.height,
                              self.bitmap.font.color)
     # Draw checkbox fill
     if @value   # If checked
-      self.bitmap.fill_rect(@checkbox_rect.x + @checkbox_rect.width - CHECKBOX_FILL_SIZE - 4, @checkbox_rect.y + 4,
+      self.bitmap.fill_rect(@checkbox_rect.x + @checkbox_rect.width - CHECKBOX_FILL_SIZE - 2, @checkbox_rect.y + 2,
                             CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, CHECKED_COLOR)
-      self.bitmap.outline_rect(@checkbox_rect.x + @checkbox_rect.width - CHECKBOX_FILL_SIZE - 4, @checkbox_rect.y + 4,
+      self.bitmap.outline_rect(@checkbox_rect.x + @checkbox_rect.width - CHECKBOX_FILL_SIZE - 2, @checkbox_rect.y + 2,
                                CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, self.bitmap.font.color)
     else
-      self.bitmap.fill_rect(@checkbox_rect.x + 4, @checkbox_rect.y + 4,
+      self.bitmap.fill_rect(@checkbox_rect.x + 2, @checkbox_rect.y + 2,
                             CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, UNCHECKED_COLOR)
-      self.bitmap.outline_rect(@checkbox_rect.x + 4, @checkbox_rect.y + 4,
+      self.bitmap.outline_rect(@checkbox_rect.x + 2, @checkbox_rect.y + 2,
                                CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, self.bitmap.font.color)
     end
   end

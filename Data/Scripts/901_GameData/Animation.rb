@@ -19,8 +19,8 @@ module GameData
     extend ClassMethodsIDNumbers
     include InstanceMethods
 
-    def register(hash)
-      DATA[DATA.keys.length] = self.new(hash)
+    def register(hash, id = -1)
+      DATA[(id >= 0) ? id : DATA.keys.length] = self.new(hash)
     end
 
     # TODO: Rewrite this to query animations from other criteria. Remember that
@@ -59,5 +59,9 @@ module GameData
     def move_animation?
       return !@move.nil?
     end
+
+    # TODO: Create a def to_hash or something, which returns a hash copy version
+    #       of this Animation object which can be edited. This hash should be
+    #       able to be passed into def register (with an ID number).
   end
 end

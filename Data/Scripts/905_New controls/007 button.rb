@@ -2,20 +2,28 @@
 #
 #===============================================================================
 class UIControls::Button < UIControls::BaseControl
-  BUTTON_X       = 2
-  BUTTON_PADDING = 10
-  BUTTON_HEIGHT  = 28
-  TEXT_OFFSET_Y  = 7
+  BUTTON_X           = 2
+  BUTTON_Y           = 2
+  BUTTON_PADDING     = 10
+  BUTTON_HEIGHT      = 28
+  # TODO: This will also depend on the font size.
+  TEXT_BASE_OFFSET_Y = 18   # Text is centred vertically in the button
 
   def initialize(width, height, viewport, text = "")
     super(width, height, viewport)
     @text = text
+    @fixed_size = false
+  end
+
+  def set_fixed_size
+    @fixed_size = true
   end
 
   def set_interactive_rects
-    text_width = self.bitmap.text_size(@text).width
-    @button_rect = Rect.new(BUTTON_X, (height - BUTTON_HEIGHT) / 2,
-                            text_width + (BUTTON_PADDING * 2), BUTTON_HEIGHT)
+    button_width = (@fixed_size) ? width - (BUTTON_X * 2) : self.bitmap.text_size(@text).width + (BUTTON_PADDING * 2)
+    button_height = (@fixed_size) ? height - (2 * BUTTON_Y) : BUTTON_HEIGHT
+    button_height = [button_height, height - (2 * BUTTON_Y)].min
+    @button_rect = Rect.new(BUTTON_X, (height - button_height) / 2, button_width, button_height)
     @interactions = {
       :button => @button_rect
     }
@@ -23,15 +31,22 @@ class UIControls::Button < UIControls::BaseControl
 
   #-----------------------------------------------------------------------------
 
-  # TODO: Make buttons look more different to text boxes?
   def refresh
     super
     # Draw button outline
     self.bitmap.outline_rect(@button_rect.x, @button_rect.y,
                              @button_rect.width, @button_rect.height,
                              self.bitmap.font.color)
+    # TODO: Make buttons look more different to text boxes?
+    # shade = self.bitmap.font.color.clone
+    # shade.alpha = 96
+    # self.bitmap.outline_rect(@button_rect.x + 1, @button_rect.y + 1,
+    #                          @button_rect.width - 2, @button_rect.height - 2,
+    #                          shade, 3)
     # Draw button text
-    draw_text(self.bitmap, BUTTON_X + BUTTON_PADDING, TEXT_OFFSET_Y, @text)
+    draw_text_centered(self.bitmap, @button_rect.x,
+                       @button_rect.y + (@button_rect.height - TEXT_BASE_OFFSET_Y) / 2,
+                       @button_rect.width, @text)
   end
 
   #-----------------------------------------------------------------------------
