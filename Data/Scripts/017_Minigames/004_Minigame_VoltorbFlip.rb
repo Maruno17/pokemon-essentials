@@ -5,15 +5,113 @@
 # Run with:      pbVoltorbFlip
 #===============================================================================
 class VoltorbFlip
-  # Ranges of total coins available in each level.
-  LEVEL_RANGES = [[20, 50],
-                  [50, 100],
-                  [100, 200],
-                  [200, 350],
-                  [350, 600],
-                  [600, 1000],
-                  [1000, 2000],
-                  [2000, 3500]]
+  GRAPHICS_DIRECTORY = "Graphics/UI/Voltorb Flip/"
+  NUM_ROWS           = 5
+  NUM_COLUMNS        = 5
+  NUM_TILES          = NUM_ROWS * NUM_COLUMNS
+  TILE_DISTRIBUTIONS = [   # Voltorbs, Twos, Threes, MaxFreePerRowOrCol, MaxFreeTotal
+    # NOTE: The MaxFree values are not inclusive. The board will only be valid
+    #       if the corresponding counts are strictly less than these values.
+    # Level 1
+    [
+      [6, 3, 1, 3, 3],
+      [6, 0, 3, 2, 2],
+      [6, 5, 0, 3, 4],
+      [6, 2, 2, 3, 3],
+      [6, 4, 1, 3, 4]
+    ],
+    # Level 2
+    [
+      [7, 1, 3, 2, 3],
+      [7, 6, 0, 3, 4],
+      [7, 3, 2, 2, 3],
+      [7, 0, 4, 2, 3],
+      [7, 5, 1, 3, 4],
+      [7, 1, 3, 2, 2],
+      [7, 6, 0, 3, 3],
+      [7, 3, 2, 2, 2],
+      [7, 0, 4, 2, 2],
+      [7, 5, 1, 3, 3]
+    ],
+    # Level 3
+    [
+      [8, 2, 3, 2, 3],
+      [8, 7, 0, 3, 4],
+      [8, 4, 2, 3, 4],
+      [8, 1, 4, 2, 3],
+      [8, 6, 1, 4, 3],
+      [8, 2, 3, 2, 2],
+      [8, 7, 0, 3, 3],
+      [8, 4, 2, 3, 3],
+      [8, 1, 4, 2, 2],
+      [8, 6, 1, 3, 3]
+    ],
+    # Level 4
+    [
+      [8, 3, 3, 4, 3],
+      [8, 0, 5, 2, 3],
+      [10, 8, 0, 4, 5],
+      [10, 5, 2, 3, 4],
+      [10, 2, 4, 3, 4],
+      [8, 3, 3, 3, 3],
+      [8, 0, 5, 2, 2],
+      [10, 8, 0, 4, 4],
+      [10, 5, 2, 3, 3],
+      [10, 2, 4, 3, 3]
+    ],
+    # Level 5
+    [
+      [10, 7, 1, 4, 5],
+      [10, 4, 3, 3, 4],
+      [10, 1, 5, 3, 4],
+      [10, 9, 0, 4, 5],
+      [10, 6, 2, 4, 5],
+      [10, 7, 1, 4, 4],
+      [10, 4, 3, 3, 3],
+      [10, 1, 5, 3, 3],
+      [10, 9, 0, 4, 4],
+      [10, 6, 2, 4, 4]
+    ],
+    # Level 6
+    [
+      [10, 3, 4, 3, 4],
+      [10, 0, 6, 3, 4],
+      [10, 8, 1, 4, 5],
+      [10, 5, 3, 4, 5],
+      [10, 2, 5, 3, 4],
+      [10, 3, 4, 3, 3],
+      [10, 0, 6, 3, 3],
+      [10, 8, 1, 4, 4],
+      [10, 5, 3, 4, 4],
+      [10, 2, 5, 3, 3]
+    ],
+    # Level 7
+    [
+      [10, 7, 2, 4, 5],
+      [10, 4, 4, 4, 5],
+      [13, 1, 6, 3, 4],
+      [13, 9, 1, 5, 6],
+      [10, 6, 3, 4, 5],
+      [10, 7, 2, 4, 4],
+      [10, 4, 4, 4, 4],
+      [13, 1, 6, 3, 3],
+      [13, 9, 1, 5, 5],
+      [10, 6, 3, 4, 4]
+    ],
+    # Level 8
+    [
+      [10, 0, 7, 3, 4],
+      [10, 8, 2, 5, 6],
+      [10, 5, 4, 4, 5],
+      [10, 2, 6, 4, 5],
+      [10, 7, 3, 5, 6],
+      [10, 0, 7, 3, 3],
+      [10, 8, 2, 5, 5],
+      [10, 5, 4, 4, 4],
+      [10, 2, 6, 4, 4],
+      [10, 7, 3, 5, 5]
+    ]
+  ]
 
   def update
     pbUpdateSpriteHash(@sprites)
@@ -23,6 +121,50 @@ class VoltorbFlip
     @level = 1
     @firstRound = true
     pbNewGame
+  end
+
+  def generate_board
+    ret = []
+    1000.times do |attempt|
+      board_distro = TILE_DISTRIBUTIONS[@level - 1].sample
+      # Randomly distribute tiles
+      ret = [1] * NUM_TILES
+      index = 0
+      [0, 2, 3].each do |value|
+        qty = board_distro[[value - 1, 0].max]
+        qty.times do |i|
+          ret[index] = value
+          index += 1
+        end
+      end
+      ret.shuffle!
+      # Find how many Voltorbs are in each row/column
+      row_voltorbs = [0] * NUM_ROWS
+      col_voltorbs = [0] * NUM_COLUMNS
+      ret.each_with_index do |val, i|
+        next if val != 0
+        row_voltorbs[i / NUM_COLUMNS] += 1
+        col_voltorbs[i % NUM_COLUMNS] += 1
+      end
+      # Count the number of x2 and x3 tiles are free (i.e. no Voltorbs in its row/column)
+      free_multipliers = 0
+      free_row = [0] * NUM_ROWS
+      free_col = [0] * NUM_COLUMNS
+      ret.each_with_index do |val, i|
+        next if val <= 1
+        next if row_voltorbs[i / NUM_COLUMNS] > 0 && col_voltorbs[i % NUM_COLUMNS] > 0
+        free_multipliers += 1
+        free_row[i / NUM_COLUMNS] += 1
+        free_col[i % NUM_COLUMNS] += 1
+      end
+      # Regnerate board if there are too many free multiplier tiles
+      next if free_multipliers >= board_distro[4]
+      next if free_row.any? { |i| i >= board_distro[3] }
+      next if free_col.any? { |i| i >= board_distro[3] }
+      # Board is valid; use it
+      break
+    end
+    return ret
   end
 
   def pbNewGame
@@ -35,54 +177,17 @@ class VoltorbFlip
     @voltorbNumbers = []
     @points = 0
     @index = [0, 0]
-    # [x,y,points,selected]
-    @squares = [0, 0, 0, false]
-    @directory = "Graphics/UI/Voltorb Flip/"
-    squareValues = []
-    total = 1
-    voltorbs = 0
-    25.times do |i|
-      # Sets the value to 1 by default
-      squareValues[i] = 1
-      # Sets the value to 0 (a voltorb) if # for that level hasn't been reached
-      if voltorbs < 5 + @level
-        squareValues[i] = 0
-        voltorbs += 1
-      # Sets the value randomly to a 2 or 3 if the total is less than the max
-      elsif total < LEVEL_RANGES[@level - 1][1]
-        squareValues[i] = rand(2..3)
-        total *= squareValues[i]
-      end
-      next if total <= LEVEL_RANGES[@level - 1][1]
-      # Lowers value of square to 1 if over max
-      total /= squareValues[i]
-      squareValues[i] = 1
-    end
-    # Randomize the values a little
-    25.times do |i|
-      temp = squareValues[i]
-      if squareValues[i] > 1 && rand(10) == 0
-        total /= squareValues[i]
-        squareValues[i] -= 1
-        total *= squareValues[i]
-      end
-      next if total >= LEVEL_RANGES[@level - 1][0] || squareValues[i] <= 0
-      total /= squareValues[i]
-      squareValues[i] = temp
-      total *= squareValues[i]
-    end
-    # Populate @squares array
-    25.times do |i|
-      r = rand(squareValues.length)
-      @squares[i] = [((i % 5) * 64) + 128, (i / 5).abs * 64, squareValues[r], false]
-      squareValues.delete_at(r)
+    @squares = []   # Each square is [x, y, points, revealed]
+    # Generate a board
+    squareValues = generate_board
+    # Apply the generated board
+    squareValues.each_with_index do |val, i|
+      @squares[i] = [((i % NUM_COLUMNS) * 64) + 128, (i / NUM_COLUMNS).abs * 64, val, false]
     end
     pbCreateSprites
     # Display numbers (all zeroes, as no values have been calculated yet)
-    5.times do |i|
-      pbUpdateRowNumbers(0, 0, i)
-      pbUpdateColumnNumbers(0, 0, i)
-    end
+    NUM_ROWS.times { |i| pbUpdateRowNumbers(0, 0, i) }
+    NUM_COLUMNS.times { |i| pbUpdateColumnNumbers(0, 0, i) }
     pbDrawShadowText(@sprites["text"].bitmap, 8, 22, 118, 26,
                      _INTL("Your coins"), Color.new(60, 60, 60), Color.new(150, 190, 170), 1)
     pbDrawShadowText(@sprites["text"].bitmap, 8, 88, 118, 26,
@@ -122,27 +227,27 @@ class VoltorbFlip
       @voltorbNumbers = []
       @numbers = []
       # Draw numbers for each row (precautionary)
-      @squares.length.times do |i|
-        next if (i % 5) != 0
+      NUM_ROWS.times do |j|
         num = 0
         voltorbs = 0
-        j = i + 5
-        (i...j).each do |k|
-          num += @squares[k][2]
-          voltorbs += 1 if @squares[k][2] == 0
+        NUM_COLUMNS.times do |i|
+          val = @squares[i + (j * NUM_COLUMNS)][2]
+          num += val
+          voltorbs += 1 if val == 0
         end
-        pbUpdateRowNumbers(num, voltorbs, i / 5)
+        pbUpdateRowNumbers(num, voltorbs, j)
       end
       # Reset arrays to empty
       @voltorbNumbers = []
       @numbers = []
       # Draw numbers for each column
-      5.times do |i|
+      NUM_COLUMNS.times do |i|
         num = 0
         voltorbs = 0
-        5.times do |j|
-          num += @squares[i + (j * 5)][2]
-          voltorbs += 1 if @squares[i + (j * 5)][2] == 0
+        NUM_ROWS.times do |j|
+          val = @squares[i + (j * NUM_COLUMNS)][2]
+          num += val
+          voltorbs += 1 if val == 0
         end
         pbUpdateColumnNumbers(num, voltorbs, i)
       end
@@ -153,7 +258,7 @@ class VoltorbFlip
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites["bg"] = Sprite.new(@viewport)
-    @sprites["bg"].bitmap = RPG::Cache.load_bitmap(@directory, _INTL("Voltorb Flip bg"))
+    @sprites["bg"].bitmap = RPG::Cache.load_bitmap(GRAPHICS_DIRECTORY, _INTL("Voltorb Flip bg"))
     @sprites["text"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["text"].bitmap)
     @sprites["level"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
@@ -177,7 +282,7 @@ class VoltorbFlip
     @sprites["icon"].z = 99997
     @sprites["mark"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["memo"] = Sprite.new(@viewport)
-    @sprites["memo"].bitmap = RPG::Cache.load_bitmap(@directory, _INTL("memo"))
+    @sprites["memo"].bitmap = RPG::Cache.load_bitmap(GRAPHICS_DIRECTORY, _INTL("memo"))
     @sprites["memo"].x = 10
     @sprites["memo"].y = 244
     @sprites["memo"].visible = false
@@ -195,20 +300,20 @@ class VoltorbFlip
     icons = []
     points = 0
     3.times do |i|
-      25.times do |j|
+      NUM_TILES.times do |j|
         points = @squares[j][2] if i == 2
-        icons[j] = [@directory + "tiles", @squares[j][0], @squares[j][1], 320 + (i * 64) + (points * 64), 0, 64, 64]
+        icons[j] = [GRAPHICS_DIRECTORY + "tiles", @squares[j][0], @squares[j][1], 320 + (i * 64) + (points * 64), 0, 64, 64]
       end
       icons.compact!
       pbDrawImagePositions(@sprites[i].bitmap, icons)
     end
     icons = []
-    25.times do |i|
-      icons[i] = [@directory + "tiles", @squares[i][0], @squares[i][1], @squares[i][2] * 64, 0, 64, 64]
+    NUM_TILES.times do |i|
+      icons[i] = [GRAPHICS_DIRECTORY + "tiles", @squares[i][0], @squares[i][1], @squares[i][2] * 64, 0, 64, 64]
     end
     pbDrawImagePositions(@sprites[5].bitmap, icons)
     # Default cursor image
-    @cursor[0] = [@directory + "cursor", 0 + 128, 0, 0, 0, 64, 64]
+    @cursor[0] = [GRAPHICS_DIRECTORY + "cursor", 0 + 128, 0, 0, 0, 64, 64]
   end
 
   def getInput
@@ -257,7 +362,7 @@ class VoltorbFlip
         end
         (@marks.length + 1).times do |i|
           if @marks[i].nil?
-            @marks[i] = [@directory + "tiles", (@index[0] * 64) + 128, @index[1] * 64, 256, 0, 64, 64]
+            @marks[i] = [GRAPHICS_DIRECTORY + "tiles", (@index[0] * 64) + 128, @index[1] * 64, 256, 0, 64, 64]
           elsif @marks[i][1] == (@index[0] * 64) + 128 && @marks[i][2] == @index[1] * 64
             @marks.delete_at(i)
             @marks.compact!
@@ -281,7 +386,7 @@ class VoltorbFlip
               # Part1
               animation = []
               3.times do |j|
-                animation[0] = icons[0] = [@directory + "tiles", (@index[0] * 64) + 128, @index[1] * 64,
+                animation[0] = icons[0] = [GRAPHICS_DIRECTORY + "tiles", (@index[0] * 64) + 128, @index[1] * 64,
                                            704 + (64 * j), 0, 64, 64]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
                 pbWait(0.05)
@@ -290,7 +395,7 @@ class VoltorbFlip
               # Part2
               animation = []
               6.times do |j|
-                animation[0] = [@directory + "explosion", (@index[0] * 64) - 32 + 128, (@index[1] * 64) - 32,
+                animation[0] = [GRAPHICS_DIRECTORY + "explosion", (@index[0] * 64) - 32 + 128, (@index[1] * 64) - 32,
                                 j * 128, 0, 128, 128]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
                 pbWait(0.1)
@@ -302,14 +407,10 @@ class VoltorbFlip
               @sprites["mark"].bitmap.clear
               if @level > 1
                 # Determine how many levels to reduce by
-                newLevel = 0
-                @squares.length.times do |j|
-                  newLevel += 1 if @squares[j][3] == true && @squares[j][2] > 1
-                end
-                newLevel = @level if newLevel > @level
-                if @level > newLevel
+                newLevel = @squares.count { |tile| tile[3] && tile[2] > 0 }
+                newLevel = newLevel.clamp(@level, 1)
+                if newLevel < @level
                   @level = newLevel
-                  @level = 1 if @level < 1
                   pbMessage("\\se[Voltorb Flip level down]" + _INTL("Dropped to Game Lv. {1}!", @level.to_s))
                 end
               end
@@ -321,10 +422,8 @@ class VoltorbFlip
               pbUpdateCoins
               # Revert numbers to 0s
               @sprites["numbers"].bitmap.clear
-              5.times do |j|
-                pbUpdateRowNumbers(0, 0, j)
-                pbUpdateColumnNumbers(0, 0, j)
-              end
+              NUM_ROWS.times { |j| pbUpdateRowNumbers(0, 0, j) }
+              NUM_COLUMNS.times { |j| pbUpdateColumnNumbers(0, 0, j) }
               pbDisposeSpriteHash(@sprites)
               @firstRound = false
               pbNewGame
@@ -332,7 +431,7 @@ class VoltorbFlip
               # Play tile animation
               animation = []
               4.times do |j|
-                animation[0] = [@directory + "flipAnimation", (@index[0] * 64) - 14 + 128, (@index[1] * 64) - 16,
+                animation[0] = [GRAPHICS_DIRECTORY + "flipAnimation", (@index[0] * 64) - 14 + 128, (@index[1] * 64) - 16,
                                 j * 92, 0, 92, 96]
                 pbDrawImagePositions(@sprites["animation"].bitmap, animation)
                 pbWait(0.05)
@@ -375,10 +474,8 @@ class VoltorbFlip
         pbShowAndDispose
         # Revert numbers to 0s
         @sprites["numbers"].bitmap.clear
-        5.times do |i|
-          pbUpdateRowNumbers(0, 0, i)
-          pbUpdateColumnNumbers(0, 0, i)
-        end
+        NUM_ROWS.times { |i| pbUpdateRowNumbers(0, 0, i) }
+        NUM_COLUMNS.times { |i| pbUpdateColumnNumbers(0, 0, i) }
         @sprites["curtain"].opacity = 100
         if @level < 8
           @level += 1
@@ -395,11 +492,11 @@ class VoltorbFlip
     elsif Input.trigger?(Input::ACTION)
       pbPlayDecisionSE
       @sprites["cursor"].bitmap.clear
-      if @cursor[0][3] == 0 # If in normal mode
-        @cursor[0] = [@directory + "cursor", 128, 0, 64, 0, 64, 64]
+      if @cursor[0][3] == 0   # If in normal mode
+        @cursor[0] = [GRAPHICS_DIRECTORY + "cursor", 128, 0, 64, 0, 64, 64]
         @sprites["memo"].visible = true
-      else # Mark mode
-        @cursor[0] = [@directory + "cursor", 128, 0, 0, 0, 64, 64]
+      else   # Mark mode
+        @cursor[0] = [GRAPHICS_DIRECTORY + "cursor", 128, 0, 0, 0, 64, 64]
         @sprites["memo"].visible = false
       end
     elsif Input.trigger?(Input::BACK)
@@ -431,9 +528,9 @@ class VoltorbFlip
   def pbUpdateRowNumbers(num, voltorbs, i)
     numText = sprintf("%02d", num)
     numText.chars.each_with_index do |digit, j|
-      @numbers[j] = [@directory + "numbersSmall", 472 + (j * 16), 8 + (i * 64), digit.to_i * 16, 0, 16, 16]
+      @numbers[j] = [GRAPHICS_DIRECTORY + "numbersSmall", 472 + (j * 16), 8 + (i * 64), digit.to_i * 16, 0, 16, 16]
     end
-    @voltorbNumbers[i] = [@directory + "numbersSmall", 488, 34 + (i * 64), voltorbs * 16, 0, 16, 16]
+    @voltorbNumbers[i] = [GRAPHICS_DIRECTORY + "numbersSmall", 488, 34 + (i * 64), voltorbs * 16, 0, 16, 16]
     # Display the numbers
     pbDrawImagePositions(@sprites["numbers"].bitmap, @numbers)
     pbDrawImagePositions(@sprites["numbers"].bitmap, @voltorbNumbers)
@@ -442,9 +539,9 @@ class VoltorbFlip
   def pbUpdateColumnNumbers(num, voltorbs, i)
     numText = sprintf("%02d", num)
     numText.chars.each_with_index do |digit, j|
-      @numbers[j] = [@directory + "numbersSmall", 152 + (i * 64) + (j * 16), 328, digit.to_i * 16, 0, 16, 16]
+      @numbers[j] = [GRAPHICS_DIRECTORY + "numbersSmall", 152 + (i * 64) + (j * 16), 328, digit.to_i * 16, 0, 16, 16]
     end
-    @voltorbNumbers[i] = [@directory + "numbersSmall", 168 + (i * 64), 354, voltorbs * 16, 0, 16, 16]
+    @voltorbNumbers[i] = [GRAPHICS_DIRECTORY + "numbersSmall", 168 + (i * 64), 354, voltorbs * 16, 0, 16, 16]
     # Display the numbers
     pbDrawImagePositions(@sprites["numbers"].bitmap, @numbers)
     pbDrawImagePositions(@sprites["numbers"].bitmap, @voltorbNumbers)
@@ -453,7 +550,7 @@ class VoltorbFlip
   def pbCreateCoins(source, y)
     coinText = sprintf("%05d", source)
     coinText.chars.each_with_index do |digit, i|
-      @coins[i] = [@directory + "numbersScore", 6 + (i * 24), y, digit.to_i * 24, 0, 24, 38]
+      @coins[i] = [GRAPHICS_DIRECTORY + "numbersScore", 6 + (i * 24), y, digit.to_i * 24, 0, 24, 38]
     end
   end
 
@@ -473,11 +570,11 @@ class VoltorbFlip
     points = 0
     3.times do |i|
       points = tile if i == 2
-      icons[i] = [@directory + "tiles", x, y, 320 + (i * 64) + (points * 64), 0, 64, 64]
+      icons[i] = [GRAPHICS_DIRECTORY + "tiles", x, y, 320 + (i * 64) + (points * 64), 0, 64, 64]
       pbDrawImagePositions(@sprites["icon"].bitmap, icons)
       pbWait(0.05)
     end
-    icons[3] = [@directory + "tiles", x, y, tile * 64, 0, 64, 64]
+    icons[3] = [GRAPHICS_DIRECTORY + "tiles", x, y, tile * 64, 0, 64, 64]
     pbDrawImagePositions(@sprites["icon"].bitmap, icons)
     pbSEPlay("Voltorb Flip tile")
   end
@@ -504,27 +601,30 @@ class VoltorbFlip
       end
     end
     # "Dispose" of tiles by column
-    5.times do |i|
+    NUM_COLUMNS.times do |i|
       icons = []
       pbSEPlay("Voltorb Flip tile")
-      5.times do |j|
-        icons[j] = [@directory + "tiles", @squares[i + (j * 5)][0], @squares[i + (j * 5)][1],
-                    448 + (@squares[i + (j * 5)][2] * 64), 0, 64, 64]
+      NUM_ROWS.times do |j|
+        icons[j] = [GRAPHICS_DIRECTORY + "tiles", @squares[i + (j * NUM_COLUMNS)][0], @squares[i + (j * NUM_COLUMNS)][1],
+                    448 + (@squares[i + (j * NUM_COLUMNS)][2] * 64), 0, 64, 64]
       end
       pbDrawImagePositions(@sprites[i].bitmap, icons)
       pbWait(0.05)
-      5.times do |j|
-        icons[j] = [@directory + "tiles", @squares[i + (j * 5)][0], @squares[i + (j * 5)][1], 384, 0, 64, 64]
+      NUM_ROWS.times do |j|
+        icons[j] = [GRAPHICS_DIRECTORY + "tiles", @squares[i + (j * NUM_COLUMNS)][0], @squares[i + (j * NUM_COLUMNS)][1],
+                    384, 0, 64, 64]
       end
       pbDrawImagePositions(@sprites[i].bitmap, icons)
       pbWait(0.05)
-      5.times do |j|
-        icons[j] = [@directory + "tiles", @squares[i + (j * 5)][0], @squares[i + (j * 5)][1], 320, 0, 64, 64]
+      NUM_ROWS.times do |j|
+        icons[j] = [GRAPHICS_DIRECTORY + "tiles", @squares[i + (j * NUM_COLUMNS)][0], @squares[i + (j * NUM_COLUMNS)][1],
+                    320, 0, 64, 64]
       end
       pbDrawImagePositions(@sprites[i].bitmap, icons)
       pbWait(0.05)
-      5.times do |j|
-        icons[j] = [@directory + "tiles", @squares[i + (j * 5)][0], @squares[i + (j * 5)][1], 896, 0, 64, 64]
+      NUM_ROWS.times do |j|
+        icons[j] = [GRAPHICS_DIRECTORY + "tiles", @squares[i + (j * NUM_COLUMNS)][0], @squares[i + (j * NUM_COLUMNS)][1],
+                    896, 0, 64, 64]
       end
       pbDrawImagePositions(@sprites[i].bitmap, icons)
       pbWait(0.05)
