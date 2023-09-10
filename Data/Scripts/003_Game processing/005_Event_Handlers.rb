@@ -70,7 +70,7 @@ class NamedEvent
 
   # Adds an event handler procedure from the event.
   def add(key, proc)
-    @callbacks[key] = proc if !@callbacks.has_key?(key)
+    @callbacks[key] = proc
   end
 
   # Removes an event handler procedure from the event.

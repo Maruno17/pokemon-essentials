@@ -159,15 +159,15 @@ module Compiler
       # Ensure all weaknesses/resistances/immunities are valid types
       type.weaknesses.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Weaknesses).", other_type.to_s, path, type.id)
+        raise _INTL("'{1}' is not a defined type (type {2}, Weaknesses).", other_type.to_s, type.id)
       end
       type.resistances.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Resistances).", other_type.to_s, path, type.id)
+        raise _INTL("'{1}' is not a defined type (type {2}, Resistances).", other_type.to_s, type.id)
       end
       type.immunities.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Immunities).", other_type.to_s, path, type.id)
+        raise _INTL("'{1}' is not a defined type (type {2}, Immunities).", other_type.to_s, type.id)
       end
       # Get type names for translating
       type_names.push(type.real_name)
