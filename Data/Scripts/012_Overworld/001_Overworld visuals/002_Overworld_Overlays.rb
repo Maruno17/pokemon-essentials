@@ -9,7 +9,7 @@ class LocationWindow
     @window = Window_AdvancedTextPokemon.new(name)
     @window.resizeToFit(name, Graphics.width)
     @window.x        = 0
-    @window.y        = -@window.height
+    @window.y        = -@window.height - 4
     @window.viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @window.viewport.z = 99999
     @currentmap = $game_map.map_id
