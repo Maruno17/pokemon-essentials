@@ -197,7 +197,8 @@ module Settings
   end
   # The maximum number of slots per pocket (-1 means infinite number).
   BAG_MAX_POCKET_SIZE  = [-1, -1, -1, -1, -1, -1, -1, -1]
-  # Whether each pocket in turn auto-sorts itself by item ID number.
+  # Whether each pocket in turn auto-sorts itself by the order items are defined
+  # in the PBS file items.txt.
   BAG_POCKET_AUTO_SORT = [false, false, false, true, true, false, false, false]
   # The maximum number of items each slot in the Bag can hold.
   BAG_MAX_PER_SLOT     = 999
@@ -206,7 +207,7 @@ module Settings
 
   # The number of boxes in Pokémon storage.
   NUM_STORAGE_BOXES   = 40
-  # Whether putting a Pokémon into Pokémon storage will heal it. IF false, they
+  # Whether putting a Pokémon into Pokémon storage will heal it. If false, they
   # are healed by the Recover All: Entire Party event command (at Poké Centers).
   HEAL_STORED_POKEMON = (MECHANICS_GENERATION <= 7)
 

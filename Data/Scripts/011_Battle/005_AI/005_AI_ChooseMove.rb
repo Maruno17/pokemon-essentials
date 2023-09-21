@@ -342,7 +342,7 @@ class Battle::AI
     if @trainer.high_skill? && @user.can_switch_lax?
       badMoves = false
       if max_score <= MOVE_USELESS_SCORE
-        badMoves = user_battler.can_attack?
+        badMoves = user.can_attack?
         badMoves = true if !badMoves && pbAIRandom(100) < 25
       elsif max_score < MOVE_BASE_SCORE * move_score_threshold && user_battler.turnCount > 2
         badMoves = true if pbAIRandom(100) < 80
