@@ -259,7 +259,6 @@ module Settings
     [0, 51, 16, 15, "hidden_Berth", false],
     [0, 52, 20, 14, "hidden_Faraday", false]
   ]
-
   # Whether the player can use Fly while looking at the Town Map. This is only
   # allowed if the player can use Fly normally.
   CAN_FLY_FROM_TOWN_MAP = true
@@ -296,7 +295,7 @@ module Settings
   #   * Level.
   #   * Game Switch; the Pokémon roams while this is ON.
   #   * Encounter type (0=any, 1=grass/walking in cave, 2=surfing, 3=fishing,
-  #     4=surfing/fishing). See the bottom of PField_RoamingPokemon for lists.
+  #     4=surfing/fishing). See the bottom of Overworld_RoamingPokemon for lists.
   #   * Name of BGM to play for that encounter (optional).
   #   * Roaming areas specifically for this Pokémon (optional).
   ROAMING_SPECIES = [

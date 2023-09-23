@@ -406,19 +406,15 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     return if !busy?
     return if @textchars[@curchar] == "\n"
     resume
-    visiblelines = (self.height - self.borderY) / @lineHeight
-    loop do
-      curcharSkip(true)
-      break if @curchar >= @fmtchars.length    # End of message
-      if @textchars[@curchar] == "\1"          # Pause message
+    if curcharSkip(true)
+      visiblelines = (self.height - self.borderY) / @lineHeight
+      if @textchars[@curchar] == "\n" && @linesdrawn >= visiblelines - 1
+        @scroll_timer_start = System.uptime
+      elsif @textchars[@curchar] == "\1"
         @pausing = true if @curchar < @numtextchars - 1
         self.startPause
         refresh
-        break
       end
-      break if @textchars[@curchar] != "\n"    # Skip past newlines only
-      break if @linesdrawn >= visiblelines - 1   # No more empty lines to continue to
-      @linesdrawn += 1
     end
   end
 
