@@ -4,6 +4,11 @@
 # TODO: Need a way to recognise when text is being input into something
 #       (Input.text_input) and disable all keyboard shortcuts if so. If only
 #       this class has keyboard shortcuts in it, then it should be okay already.
+# TODO: When creating a new particle, blacklist the names "User", "Target" and
+#       "SE". Make particles with those names undeletable.
+# TODO: Remove the particle named "Target" if the animation's focus is changed
+#       to one that doesn't include a target, and vice versa. Do the same for
+#       "User".
 #===============================================================================
 class AnimationEditor
   WINDOW_WIDTH  = AnimationEditorLoadScreen::WINDOW_WIDTH
