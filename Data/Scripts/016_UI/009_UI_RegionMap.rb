@@ -308,7 +308,8 @@ class PokemonRegionMap_Scene
         end
       elsif Input.trigger?(Input::USE) && @editor   # Intentionally after other USE input check
         pbChangeMapLocation(@map_x, @map_y)
-      elsif Input.trigger?(Input::ACTION) && !@wallmap && !@fly_map && pbCanFly?
+      elsif Input.trigger?(Input::ACTION) && Settings::CAN_FLY_FROM_TOWN_MAP &&
+            !@wallmap && !@fly_map && pbCanFly?
         pbPlayDecisionSE
         @mode = (@mode == 1) ? 0 : 1
         refresh_fly_screen

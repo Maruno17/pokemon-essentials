@@ -294,8 +294,12 @@ module Settings
   #   * Species.
   #   * Level.
   #   * Game Switch; the Pokémon roams while this is ON.
-  #   * Encounter type (0=any, 1=grass/walking in cave, 2=surfing, 3=fishing,
-  #     4=surfing/fishing). See the bottom of Overworld_RoamingPokemon for lists.
+  #   * Encounter type (see def pbRoamingMethodAllowed for their use):
+  #       0 = grass, walking in cave, surfing
+  #       1 = grass, walking in cave
+  #       2 = surfing
+  #       3 = fishing
+  #       4 = surfing, fishing
   #   * Name of BGM to play for that encounter (optional).
   #   * Roaming areas specifically for this Pokémon (optional).
   ROAMING_SPECIES = [
