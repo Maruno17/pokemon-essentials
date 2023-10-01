@@ -555,6 +555,7 @@ module PluginManager
   def self.needCompiling?(order, plugins)
     # fixed actions
     return false if !$DEBUG || FileTest.exist?("Game.rgssad")
+    return true if $full_compile
     return true if !FileTest.exist?("Data/PluginScripts.rxdata")
     Input.update
     return true if Input.press?(Input::SHIFT) || Input.press?(Input::CTRL)

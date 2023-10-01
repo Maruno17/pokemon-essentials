@@ -1078,7 +1078,7 @@ module Compiler
       mustCompile |= (latestTextTime >= latestDataTime)
       # Should recompile if holding Ctrl
       Input.update
-      mustCompile = true if Input.press?(Input::CTRL)
+      mustCompile = true if $full_compile || Input.press?(Input::CTRL)
       # Delete old data files in preparation for recompiling
       if mustCompile
         data_files.each do |filename|
