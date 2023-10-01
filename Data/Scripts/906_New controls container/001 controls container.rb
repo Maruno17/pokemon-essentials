@@ -16,6 +16,8 @@
 class UIControls::ControlsContainer
   attr_reader :x, :y
   attr_reader :controls
+  attr_reader :values
+  attr_reader :visible
 
   LINE_SPACING = 32
   OFFSET_FROM_LABEL_X = 80
@@ -32,12 +34,27 @@ class UIControls::ControlsContainer
     @control_rects = []
     @row_count = 0
     @captured = nil
+    @visible = true
   end
 
   def dispose
     @controls.each { |c| c[1]&.dispose }
     @controls.clear
     @viewport.dispose
+  end
+
+  def changed?
+    return !@values.nil?
+  end
+
+  def clear_changed
+    @values = nil
+  end
+
+  def visible=(value)
+    @visible = value
+    @controls.each { |c| c[1].visible = value }
+    repaint if @visible
   end
 
   #-----------------------------------------------------------------------------
@@ -110,6 +127,7 @@ class UIControls::ControlsContainer
   #-----------------------------------------------------------------------------
 
   def update
+    return if !@visible
     # Update controls
     if @captured
       # TODO: Ideally all controls will be updated here, if only to redraw
@@ -128,8 +146,8 @@ class UIControls::ControlsContainer
     # Check for updated controls
     @controls.each do |ctrl|
       next if !ctrl[1].changed?
-      # TODO: Get the new value from ctrl and put it in a hash for the main
-      #       editor class to notice and use.
+      @values ||= {}
+      @values[ctrl[0]] = ctrl[1].value
       ctrl[1].clear_changed
     end
     # Redraw controls if needed

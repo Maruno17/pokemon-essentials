@@ -134,7 +134,6 @@ class UIControls::BaseControl < BitmapSprite
     end
   end
 
-  # Returns whether this control has been properly decaptured.
   def on_mouse_release
     @captured_area = nil
     invalidate
@@ -167,6 +166,7 @@ class UIControls::BaseControl < BitmapSprite
 
   # Updates the logic on the control, invalidating it if necessary.
   def update
+    return if !self.visible
     # TODO: Disabled control stuff.
 #    return if self.disabled
 

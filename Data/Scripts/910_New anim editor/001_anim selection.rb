@@ -29,14 +29,22 @@ class AnimationEditorLoadScreen
     @viewport.dispose
   end
 
+  # TODO: Make separate arrays for move and common animations. Group animations
+  #       for the same move/common animation together somehow to be listed in
+  #       the main list - individual animations are shown in the secondary list.
+  #       The display names will need improving accordingly. Usage of
+  #       @animations in this class will need redoing.
   def generate_list
     @animations = []
-    # TODO: Look through GameData to populate @animations; below is temporary.
-    #       There will be separate arrays for move animations, common animations
-    #       and overworld animations. The move animations one will primarily be
-    #       a list of moves that have any animations, with the actual GameData
-    #       animations being in a sub-array for each move.
-    67.times { |i| @animations.push([i, "Animation #{i + 1}"]) }
+    GameData::Animation.keys.each do |id|
+      anim = GameData::Animation.get(id)
+      if anim.version > 0
+        name = "#{anim.type}: #{anim.move} (#{anim.version}) - #{anim.name}"
+      else
+        name = "#{anim.type}: #{anim.move} - #{anim.name}"
+      end
+      @animations.push([id, name])
+    end
   end
 
   def draw_editor_background
@@ -53,7 +61,8 @@ class AnimationEditorLoadScreen
       @screen_bitmap.bitmap.outline_rect(area[0] - 2, area[1] - 2, area[2] + 4, area[3] + 4, Color.black)
       @screen_bitmap.bitmap.outline_rect(area[0] - 1, area[1] - 1, area[2] + 2, area[3] + 2, Color.white)
       # Fill the area with white
-#      @screen_bitmap.bitmap.fill_rect(area[0], area[1], area[2], area[3], Color.white)
+      # TODO: This line was quoted out previously, and I'm not sure why.
+      @screen_bitmap.bitmap.fill_rect(area[0], area[1], area[2], area[3], Color.white)
     end
   end
 
@@ -74,7 +83,7 @@ class AnimationEditorLoadScreen
     #       change to the text box's value. Perhaps it should only do so after
     #       0.5 seconds of non-typing. What exactly should the filter be applied
     #       to? Animation's name, move's name (if there is one), what else?
-    # TODO: Filter dropdown list to pick a type? Other filter options?
+    # TODO: Filter dropdown list to pick a move type? Other filter options?
     # "Load animation" button
     @load_button = UIControls::Button.new(LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT, @viewport, "Load animation")
     @load_button.x = LOAD_BUTTON_X
@@ -118,21 +127,22 @@ class AnimationEditorLoadScreen
       Graphics.update
       Input.update
       update
+      # Open editor with animation
       if @load_animation_id
-        # Open editor with animation
-        # TODO: Add animation to be edited as an argument. This will be
-        #       GameData::Animation.get(@load_animation_id).to_hash.
-        echoln "Anim number #{@load_animation_id}: #{@animations[@load_animation_id][1]}"
-        screen = AnimationEditor.new
+        screen = AnimationEditor.new(@load_animation_id, GameData::Animation.get(@load_animation_id).clone_as_hash)
         screen.run
         @load_animation_id = nil
-        # TODO: Regenerate @animations in case the edited animation changed its
-        #       name/move/version. Reapply @animations to @list and the sublist
-        #       (this should invalidate them).
+        # Refresh list of animations, in case the edited one changed its type,
+        # move, version or name
+        generate_list
+        @list.values = @animations
         repaint
-      elsif !inputting_text
-        break if Input.trigger?(Input::BACK)
+        next
       end
+      # Typing text into a text box; don't want key presses to trigger anything
+      next if inputting_text
+      # Inputs
+      break if Input.trigger?(Input::BACK)
     end
     dispose
   end

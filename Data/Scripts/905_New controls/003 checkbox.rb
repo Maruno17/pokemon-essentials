@@ -15,9 +15,9 @@ class UIControls::Checkbox < UIControls::BaseControl
     @value = value
   end
 
-  def value=(val)
-    return if @value == val
-    @value = val
+  def value=(new_value)
+    return if @value == new_value
+    @value = new_value
     invalidate
   end
 

@@ -33,6 +33,7 @@ class UIControls::List < UIControls::BaseControl
     else
       self.top_row = 0
     end
+    self.selected = -1 if @selected >= @values.length
     invalidate
   end
 
@@ -202,6 +203,7 @@ class UIControls::List < UIControls::BaseControl
   end
 
   def update
+    return if !self.visible
     super
     # TODO: Disabled control stuff.
 #    return if self.disabled

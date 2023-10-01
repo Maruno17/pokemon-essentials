@@ -122,6 +122,7 @@ class UIControls::ValueBox < UIControls::TextBox
   end
 
   def update
+    return if !self.visible
     super
     case @captured_area
     when :minus

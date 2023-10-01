@@ -29,6 +29,16 @@ class UIControls::Button < UIControls::BaseControl
     }
   end
 
+  def set_changed
+    @value = true
+    super
+  end
+
+  def clear_changed
+    @value = false
+    super
+  end
+
   #-----------------------------------------------------------------------------
 
   def refresh

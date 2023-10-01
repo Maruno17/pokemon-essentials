@@ -96,34 +96,22 @@ module Compiler
     hash[:type] = hash[:id][0]
     hash[:move] = hash[:id][1]
     hash[:version] = hash[:id][2] || 0
+    # TODO: raise if "Target" particle exists but animation's target doesn't
+    #       involve a target battler.
+    # Create "User" and "SE" particles if they don't exist
+    if hash[:particles].none? { |particle| particle[:name] == "User" }
+      hash[:particles].push({:name => "User"})
+    end
+    if hash[:particles].none? { |particle| particle[:name] == "SE" }
+      hash[:particles].push({:name => "SE"})
+    end
+    # TODO: Create "Target" particle if it doesn't exist and animation's target
+    #       involves a target battler.
     # Go through each particle in turn
     hash[:particles].each do |particle|
-      # Convert all "SetXYZ" particle commands to "MoveXYZ" by giving them a
-      # duration of 0
-      [:frame, :x, :y, :zoom_x, :zoom_y, :angle, :opacity].each do |prop|
-        next if !particle[prop]
-        particle[prop].each do |cmd|
-          cmd.insert(1, 0) if cmd.length == 2
-        end
-      end
-      # Sort each particle's commands by their keyframe and duration
-      particle.keys.each do |key|
-        next if !particle[key].is_a?(Array)
-        particle[key].sort! { |a, b| a[0] == b[0] ? a[1] == b[1] ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
-        # TODO: Find any overlapping particle commands and raise an error.
-      end
-      # Ensure valid values for "SetBlending" commands
-      if particle[:blending]
-        particle[:blending].each do |blend|
-          next if blend[1] <= 2
-          raise _INTL("Invalid blend value: {1} (must be 0, 1 or 2).\n{2}",
-                      blend[1], FileLineData.linereport)
-        end
-      end
       # TODO: Ensure "Play", "PlayUserCry", "PlayTargetCry" are exclusively used
       #       by the particle "SE", and that the "SE" particle can only use
       #       those commands. Raise if problems found.
-
       # Ensure all particles have a default focus if not given
       if !particle[:focus]
         if particle[:name] == "User"
@@ -134,10 +122,47 @@ module Compiler
           particle[:focus] = :screen
         end
       end
-
       # TODO: Depending on hash[:target], ensure all particles have an
       #       appropriate focus (i.e. can't be :user_and_target if hash[:target]
       #       doesn't include a target). Raise if problems found.
+
+      # Convert all "SetXYZ" particle commands to "MoveXYZ" by giving them a
+      # duration of 0 (even ones that can't have a "MoveXYZ" command)
+      GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.keys.each do |prop|
+        next if !particle[prop]
+        particle[prop].each do |cmd|
+          cmd.insert(1, 0) if cmd.length == 2
+        end
+      end
+      # Sort each particle's commands by their keyframe and duration
+      particle.keys.each do |key|
+        next if !particle[key].is_a?(Array)
+        particle[key].sort! { |a, b| a[0] == b[0] ? a[1] == b[1] ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
+        # Check for any overlapping particle commands
+        last_frame = -1
+        last_set_frame = -1
+        particle[key].each do |cmd|
+          if last_frame > cmd[0]
+            raise _INTL("Animation has overlapping commands for the {1} property.\n{2}",
+                        key.to_s.capitalize, FileLineData.linereport)
+          end
+          if particle[:name] != "SE" && cmd[1] == 0 && last_set_frame >= cmd[0]
+            raise _INTL("Animation has multiple \"Set\" commands in the same keyframe for the {1} property.\n{2}",
+                        key.to_s.capitalize, FileLineData.linereport)
+          end
+          last_frame = cmd[0] + cmd[1]
+          last_set_frame = cmd[0] if cmd[1] == 0
+        end
+      end
+      # Ensure valid values for "SetBlending" commands
+      if particle[:blending]
+        particle[:blending].each do |blend|
+          next if blend[2] <= 2
+          raise _INTL("Invalid blend value: {1} (must be 0, 1 or 2).\n{2}",
+                      blend[2], FileLineData.linereport)
+        end
+      end
+
     end
   end
 

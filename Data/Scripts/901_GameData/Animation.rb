@@ -19,7 +19,7 @@ module GameData
                                             "Common" => :common, "OppCommon" => :opp_common}],
       "Name"        => [:name,      "s"],
       # TODO: Target (Screen, User, UserAndTarget, etc. Determines which focuses
-      #       a particle can be given).
+      #       a particle can be given and whether "Target" particle exists).
       # TODO: DamageFrame (keyframe at which the battle continues, i.e. damage
       #       animations start playing).
       "Flags"       => [:flags,     "*s"],
@@ -56,6 +56,13 @@ module GameData
       "MoveZoomY"   => [:zoom_y,   "^uuu"],
       "SetAngle"    => [:angle,    "^ui"],
       "MoveAngle"   => [:angle,    "^uui"],
+      # TODO: Remember that :visible defaults to false at the beginning for a
+      #       particle, and becomes true automatically when the first command
+      #       happens for that particle. For "User" and "Target", it defaults to
+      #       true at the beginning instead. This affects the display of the
+      #       particle's timeline and canvas sprite in the editor, as well as
+      #       the animation player.
+      "SetVisible"  => [:visible,  "^ub"],
       "SetOpacity"  => [:opacity,  "^uu"],
       "MoveOpacity" => [:opacity,  "^uuu"]
       # TODO: SetPriority should be an enum. There should also be a property
@@ -68,6 +75,23 @@ module GameData
       # TODO: ScreenShake? Not sure how to work this yet. Edit def
       #       validate_compiled_animation like the "SE" particle does with the
       #       "Play"-type commands.
+    }
+    PARTICLE_DEFAULT_VALUES = {
+#      :name  => "",
+      :focus => :screen
+    }
+    PARTICLE_KEYFRAME_DEFAULT_VALUES = {
+      :graphic  => nil,
+      :frame    => 0,
+      :blending => 0,
+      :flip     => false,
+      :x        => 0,
+      :y        => 0,
+      :zoom_x   => 100,
+      :zoom_y   => 100,
+      :angle    => 0,
+      :visible  => false,
+      :opacity  => 255
     }
 
     @@cmd_to_pbs_name = nil   # USed for writing animation PBS files
@@ -133,15 +157,17 @@ module GameData
         new_p = {}
         particle.each_pair do |key, val|
           if val.is_a?(Array)
-            new_p[val] = []
-            val.each { |cmd| new_p[val].push(cmd.clone) }
+            new_p[key] = []
+            val.each { |cmd| new_p[key].push(cmd.clone) }
           else
             new_p[key] = val
           end
         end
+        ret[:particles].push(new_p)
       end
       ret[:flags] = @flags.clone
       ret[:pbs_path] = @pbs_path
+      return ret
     end
 
     def move_animation?
@@ -197,7 +223,6 @@ module GameData
           next if !val.is_a?(Array)
           val.each do |cmd|
             new_cmd = cmd.clone
-            new_cmd.insert(1, 0) if @@cmd_to_pbs_name[key].length == 1   # "SetXYZ" only
             if new_cmd[1] > 0
               ret.push([@@cmd_to_pbs_name[key][1]] + new_cmd)   # ["MoveXYZ", keyframe, duration, value]
             else
