@@ -509,17 +509,19 @@ class Translation
   end
 
   def load_message_files(filename)
+    @core_messages = nil
+    @game_messages = nil
     begin
       core_filename = sprintf("Data/messages_%s_core.dat", filename)
       if FileTest.exist?(core_filename)
-        pbRgssOpen(core_filename, "rb") { |f| @core_messages = Marshal.load(f) }
+        @core_messages = load_data(core_filename)
+        @core_messages = nil if !@core_messages.is_a?(Array)
       end
-      @core_messages = nil if !@core_messages.is_a?(Array)
       game_filename = sprintf("Data/messages_%s_game.dat", filename)
       if FileTest.exist?(game_filename)
-        pbRgssOpen(game_filename, "rb") { |f| @game_messages = Marshal.load(f) }
+        @game_messages = load_data(game_filename)
+        @game_messages = nil if !@game_messages.is_a?(Array)
       end
-      @game_messages = nil if !@game_messages.is_a?(Array)
     rescue
       @core_messages = nil
       @game_messages = nil
