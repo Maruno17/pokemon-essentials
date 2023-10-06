@@ -45,6 +45,10 @@ class AnimationEditorLoadScreen
       end
       @animations.push([id, name])
     end
+    # TODO: For slider testing purposes.
+    rand(400).times do |i|
+      @animations.push([42 + i, "Extra animation #{i + 1}"])
+    end
   end
 
   def draw_editor_background
