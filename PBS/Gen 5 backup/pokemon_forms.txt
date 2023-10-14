@@ -3,7 +3,7 @@
 [PICHU,2]
 FormName = Spiky-Eared
 Generation = 4
-Evolutions = PIKACHU,None,
+Evolution = PIKACHU,None
 #-------------------------------
 [UNOWN,1]
 FormName = B

@@ -308,6 +308,16 @@ module Compiler
     # Convert height and weight to integer values of tenths of a unit
     hash[:height] = [(hash[:height] * 10).round, 1].max if hash[:height]
     hash[:weight] = [(hash[:weight] * 10).round, 1].max if hash[:weight]
+    # Ensure evolutions have a parameter if they need one (don't need to ensure
+    # the parameter makes sense; that happens below)
+    if hash[:evolutions]
+      hash[:evolutions].each do |evo|
+        FileLineData.setSection(hash[:id].to_s, "Evolution", "Evolution = #{evo[0]},#{evo[1]}")   # For error reporting
+        param_type = GameData::Evolution.get(evo[1]).parameter
+        next if evo[2] || param_type.nil?
+        raise _INTL("Evolution method {1} requires a parameter, but none was given.", evo[1]) + "\n" + FileLineData.linereport
+      end
+    end
     # Record all evolutions as not being prevolutions
     if hash[:evolutions].is_a?(Array)
       hash[:evolutions].each { |evo| evo[3] = false }

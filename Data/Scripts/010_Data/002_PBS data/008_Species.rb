@@ -101,9 +101,11 @@ module GameData
       ret["WildItemUncommon"] = [:wild_item_uncommon, "*e", :Item]
       ret["WildItemRare"]     = [:wild_item_rare,     "*e", :Item]
       if compiling_forms
-        ret["Evolutions"]     = [:evolutions,         "*ees", :Species, :Evolution, nil]
+        ret["Evolutions"]     = [:evolutions,         "*ees", :Species, :Evolution]
+        ret["Evolution"]      = [:evolutions,         "^eeS", :Species, :Evolution]
       else
-        ret["Evolutions"]     = [:evolutions,         "*ses", nil, :Evolution, nil]
+        ret["Evolutions"]     = [:evolutions,         "*ses", nil, :Evolution]
+        ret["Evolution"]      = [:evolutions,         "^seS", nil, :Evolution]
       end
       return ret
     end
@@ -420,6 +422,8 @@ module GameData
       when "Habitat"
         ret = nil if ret == :None
       when "Evolutions"
+        ret = nil   # Want to use "Evolution" instead
+      when "Evolution"
         if ret
           ret = ret.reject { |evo| evo[3] }   # Remove prevolutions
           ret.each do |evo|

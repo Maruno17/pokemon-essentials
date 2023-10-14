@@ -168,7 +168,7 @@ Generation = 6
 [PICHU,2]
 FormName = Spiky-Eared
 Generation = 4
-Evolutions = PIKACHU,None,
+Evolution = PIKACHU,None
 #-------------------------------
 [AMPHAROS,1]
 FormName = Mega Ampharos
@@ -1003,7 +1003,7 @@ BaseExp = 243
 Moves = 1,TACKLE,1,VINEWHIP,6,FAIRYWIND,10,LUCKYCHANT,15,RAZORLEAF,20,WISH,25,MAGICALLEAF,27,GRASSYTERRAIN,33,PETALBLIZZARD,38,AROMATHERAPY,43,MISTYTERRAIN,46,MOONBLAST,50,LIGHTOFRUIN,51,PETALDANCE,58,SOLARBEAM
 EggGroups = Undiscovered
 Pokedex = The flower it's holding can no longer be found blooming anywhere. It's also thought to contain terrifying power.
-Evolutions = FLORGES,None,
+Evolution = FLORGES,None
 #-------------------------------
 [FLORGES,1]
 FormName = Yellow Flower

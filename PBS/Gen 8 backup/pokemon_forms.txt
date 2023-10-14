@@ -84,7 +84,7 @@ Pokedex = With its incisors, it gnaws through doors and infiltrates people's hom
 Generation = 7
 Flags = InheritFormWithEverStone
 WildItemUncommon = PECHABERRY
-Evolutions = RATICATE,LevelNight,20
+Evolution = RATICATE,LevelNight,20
 #-------------------------------
 [RATICATE,1]
 FormName = Alolan
@@ -129,7 +129,7 @@ Color = White
 Pokedex = The skin on its back is as hard as steel. Predators go after its soft belly, so it clings to the ground desperately.
 Generation = 7
 Flags = InheritFormWithEverStone
-Evolutions = SANDSLASH,Item,ICESTONE
+Evolution = SANDSLASH,Item,ICESTONE
 #-------------------------------
 [SANDSLASH,1]
 FormName = Alolan
@@ -159,7 +159,7 @@ Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and 
 Generation = 7
 Flags = InheritFormWithEverStone
 WildItemUncommon = SNOWBALL
-Evolutions = NINETALES,Item,ICESTONE
+Evolution = NINETALES,Item,ICESTONE
 #-------------------------------
 [NINETALES,1]
 FormName = Alolan
@@ -214,7 +214,7 @@ Color = Blue
 Pokedex = It's impulsive, selfish, and fickle. It's very popular with some Trainers who like giving it the attention it needs.
 Generation = 7
 Flags = InheritFormWithEverStone
-Evolutions = PERSIAN,Happiness,
+Evolution = PERSIAN,Happiness
 #-------------------------------
 [MEOWTH,2]
 FormName = Galarian
@@ -230,7 +230,7 @@ Shape = BipedalTail
 Pokedex = Living with a savage, seafaring people has toughened this Pokémon's body so much that parts of it have turned to iron.
 Generation = 8
 Flags = InheritFormWithEverStone
-Evolutions = PERRSERKER,Level,28
+Evolution = PERRSERKER,Level,28
 #-------------------------------
 [PERSIAN,1]
 FormName = Alolan
@@ -340,7 +340,8 @@ TutorMoves = AMNESIA,ATTRACT,BLIZZARD,BODYSLAM,BRINE,BULLDOZE,CALMMIND,CAPTIVATE
 Pokedex = Although this Pokémon is normally zoned out, its expression abruptly sharpens on occasion. The cause for this seems to lie in Slowpoke's diet.
 Generation = 8
 Flags = InheritFormWithEverStone
-Evolutions = SLOWBRO,Item,GALARICACUFF,SLOWKING,Item,GALARICAWREATH
+Evolution = SLOWBRO,Item,GALARICACUFF
+Evolution = SLOWKING,Item,GALARICAWREATH
 #-------------------------------
 [SLOWBRO,1]
 FormName = Galarian
@@ -381,7 +382,7 @@ Pokedex = The stalks of leeks are thicker and longer in the Galar region. Farfet
 Generation = 8
 Flags = InheritFormWithEverStone
 WildItemCommon = LEEK
-Evolutions = SIRFETCHD,BattleDealCriticalHit,3
+Evolution = SIRFETCHD,BattleDealCriticalHit,3
 #-------------------------------
 [GRIMER,1]
 FormName = Alolan
@@ -437,7 +438,7 @@ Generation = 7
 #-------------------------------
 [CUBONE,1]
 Generation = 7
-Evolutions = MAROWAK,LevelNight,28
+Evolution = MAROWAK,LevelNight,28
 #-------------------------------
 [MAROWAK,1]
 FormName = Alolan
@@ -491,7 +492,7 @@ Category = Dancing
 Pokedex = Its talent is tap-dancing. It can also manipulate temperatures to create a floor of ice, which this Pokémon can kick up to use as a barrier.
 Generation = 8
 Flags = InheritFormWithEverStone
-Evolutions = MRRIME,Level,42
+Evolution = MRRIME,Level,42
 #-------------------------------
 [PINSIR,1]
 FormName = Mega Pinsir
@@ -603,7 +604,7 @@ Generation = 6
 [PICHU,2]
 FormName = Spiky-Eared
 Generation = 4
-Evolutions = PIKACHU,None,
+Evolution = PIKACHU,None
 #-------------------------------
 [AMPHAROS,1]
 FormName = Mega Ampharos
@@ -761,7 +762,7 @@ Color = White
 Pokedex = Sudden climate change wiped out this ancient kind of Corsola. This Pokémon absorbs others' life-force through its branches.
 Generation = 8
 Flags = InheritFormWithEverStone
-Evolutions = CURSOLA,Level,38
+Evolution = CURSOLA,Level,38
 #-------------------------------
 [HOUNDOOM,1]
 FormName = Mega Houndoom
@@ -836,7 +837,7 @@ TutorMoves = ASSURANCE,ATTRACT,BLIZZARD,BODYPRESS,BODYSLAM,CAPTIVATE,CONFIDE,DIG
 Pokedex = It uses its long tongue to taunt opponents. Once the opposition is enraged, this Pokémon hurls itself at the opponent, tackling them forcefully.
 Generation = 8
 Flags = InheritFormWithEverStone
-Evolutions = OBSTAGOON,LevelNight,35
+Evolution = OBSTAGOON,LevelNight,35
 #-------------------------------
 [GARDEVOIR,1]
 FormName = Mega Gardevoir
@@ -1340,7 +1341,7 @@ Color = White
 Pokedex = The colder they get, the more energetic they are. They freeze their breath to make snowballs, using them as ammo for playful snowball fights.
 Generation = 8
 Flags = InheritFormWithEverStone
-Evolutions = DARMANITAN,Item,ICESTONE
+Evolution = DARMANITAN,Item,ICESTONE
 #-------------------------------
 [DARMANITAN,1]
 FormName = Zen Mode
@@ -1391,7 +1392,7 @@ TutorMoves = ALLYSWITCH,ATTRACT,BRUTALSWING,CALMMIND,CAPTIVATE,CONFIDE,DARKPULSE
 Pokedex = A clay slab with cursed engravings took possession of a Yamask. The slab is said to be absorbing the Yamask's dark power.
 Generation = 8
 Flags = InheritFormWithEverStone
-Evolutions = RUNERIGUS,EventAfterDamageTaken,2
+Evolution = RUNERIGUS,EventAfterDamageTaken,2
 #-------------------------------
 [DEERLING,1]
 FormName = Summer Form
@@ -1617,7 +1618,7 @@ BaseExp = 243
 Moves = 1,TACKLE,1,VINEWHIP,1,FAIRYWIND,6,FAIRYWIND,10,LUCKYCHANT,15,RAZORLEAF,20,WISH,25,MAGICALLEAF,27,GRASSYTERRAIN,33,PETALBLIZZARD,38,AROMATHERAPY,43,MISTYTERRAIN,46,MOONBLAST,50,LIGHTOFRUIN,51,PETALDANCE,58,SOLARBEAM
 EggGroups = Undiscovered
 Pokedex = The flower it's holding can no longer be found blooming anywhere. It's also thought to contain terrifying power.
-Evolutions = FLORGES,None,
+Evolution = FLORGES,None
 #-------------------------------
 [FLORGES,1]
 FormName = Yellow Flower
@@ -1803,7 +1804,7 @@ Pokedex = It summons the dead with its dreamy dancing. From their malice, it dra
 Abilities = OWNTEMPO
 HiddenAbilities = OWNTEMPO
 Flags = InheritFormFromMother
-Evolutions = LYCANROC,LevelEvening,25
+Evolution = LYCANROC,LevelEvening,25
 #-------------------------------
 [LYCANROC,1]
 FormName = Midnight Form
@@ -2049,7 +2050,7 @@ Pokedex = Capable of generating 15,000 volts of electricity, this Pokémon looks
 [SINISTEA,1]
 FormName = Antique Form
 Pokedex = The swirl pattern in this Pokémon's body is its weakness. If it gets stirred, the swirl loses its shape, and Sinistea gets dizzy.
-Evolutions = POLTEAGEIST,Item,CHIPPEDPOT
+Evolution = POLTEAGEIST,Item,CHIPPEDPOT
 #-------------------------------
 [POLTEAGEIST,1]
 FormName = Antique Form

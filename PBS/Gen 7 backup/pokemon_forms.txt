@@ -84,7 +84,7 @@ Pokedex = With its incisors, it gnaws through doors and infiltrates people's hom
 Generation = 7
 Flags = InheritFormWithEverStone
 WildItemUncommon = PECHABERRY
-Evolutions = RATICATE,LevelNight,20
+Evolution = RATICATE,LevelNight,20
 #-------------------------------
 [RATICATE,1]
 FormName = Alolan
@@ -129,7 +129,7 @@ Color = White
 Pokedex = The skin on its back is as hard as steel. Predators go after its soft belly, so it clings to the ground desperately.
 Generation = 7
 Flags = InheritFormWithEverStone
-Evolutions = SANDSLASH,Item,ICESTONE
+Evolution = SANDSLASH,Item,ICESTONE
 #-------------------------------
 [SANDSLASH,1]
 FormName = Alolan
@@ -159,7 +159,7 @@ Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and 
 Generation = 7
 Flags = InheritFormWithEverStone
 WildItemUncommon = SNOWBALL
-Evolutions = NINETALES,Item,ICESTONE
+Evolution = NINETALES,Item,ICESTONE
 #-------------------------------
 [NINETALES,1]
 FormName = Alolan
@@ -214,7 +214,7 @@ Color = Blue
 Pokedex = It's impulsive, selfish, and fickle. It's very popular with some Trainers who like giving it the attention it needs.
 Generation = 7
 Flags = InheritFormWithEverStone
-Evolutions = PERSIAN,Happiness,
+Evolution = PERSIAN,Happiness
 #-------------------------------
 [PERSIAN,1]
 FormName = Alolan
@@ -353,7 +353,7 @@ Generation = 7
 #-------------------------------
 [CUBONE,1]
 Generation = 7
-Evolutions = MAROWAK,LevelNight,28
+Evolution = MAROWAK,LevelNight,28
 #-------------------------------
 [MAROWAK,1]
 FormName = Alolan
@@ -444,7 +444,7 @@ Generation = 6
 [PICHU,2]
 FormName = Spiky-Eared
 Generation = 4
-Evolutions = PIKACHU,None,
+Evolution = PIKACHU,None
 #-------------------------------
 [AMPHAROS,1]
 FormName = Mega Ampharos
@@ -1337,7 +1337,7 @@ BaseExp = 243
 Moves = 1,TACKLE,1,VINEWHIP,1,FAIRYWIND,6,FAIRYWIND,10,LUCKYCHANT,15,RAZORLEAF,20,WISH,25,MAGICALLEAF,27,GRASSYTERRAIN,33,PETALBLIZZARD,38,AROMATHERAPY,43,MISTYTERRAIN,46,MOONBLAST,50,LIGHTOFRUIN,51,PETALDANCE,58,SOLARBEAM
 EggGroups = Undiscovered
 Pokedex = The flower it's holding can no longer be found blooming anywhere. It's also thought to contain terrifying power.
-Evolutions = FLORGES,None,
+Evolution = FLORGES,None
 #-------------------------------
 [FLORGES,1]
 FormName = Yellow Flower
@@ -1515,7 +1515,7 @@ Pokedex = It summons the dead with its dreamy dancing. From their malice, it dra
 Abilities = OWNTEMPO
 HiddenAbilities = OWNTEMPO
 Flags = InheritFormFromMother
-Evolutions = LYCANROC,LevelEvening,25
+Evolution = LYCANROC,LevelEvening,25
 #-------------------------------
 [LYCANROC,1]
 FormName = Midnight Form
