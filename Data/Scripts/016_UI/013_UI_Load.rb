@@ -279,6 +279,14 @@ class PokemonLoadScreen
   end
 
   def pbStartLoadScreen
+    if $DEBUG && !FileTest.exist?("Game.rgssad") && Settings::SKIP_CONTINUE_SCREEN
+      if @save_data.empty?
+        Game.start_new
+      else
+        Game.load(@save_data)
+      end
+      return
+    end
     commands = []
     cmd_continue     = -1
     cmd_new_game     = -1

@@ -529,6 +529,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     delta_t = time_now - @display_last_updated
     @display_last_updated = time_now
     visiblelines = (self.height - self.borderY) / @lineHeight
+    @lastchar = -1 if !@lastchar
     show_more_characters = false
     # Pauses and new lines
     if @textchars[@curchar] == "\1"   # Waiting
@@ -550,7 +551,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
           show_more_characters = true
         end
       else   # New line but the next line can be shown without scrolling to it
-        @linesdrawn += 1
+        @linesdrawn += 1 if @lastchar < @curchar
         show_more_characters = true
       end
     elsif @curchar <= @numtextchars   # Displaying more text
@@ -562,6 +563,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       @scroll_timer_start = nil
       @linesdrawn = 0
     end
+    @lastchar = @curchar
     # Keep displaying more text
     if show_more_characters
       @display_timer += delta_t

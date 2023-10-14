@@ -2,6 +2,7 @@
 # The Bag object, which actually contains all the items.
 #===============================================================================
 class PokemonBag
+  attr_reader   :pockets
   attr_accessor :last_viewed_pocket
   attr_accessor :last_pocket_selections
   attr_reader   :registered_items
@@ -34,11 +35,6 @@ class PokemonBag
     (PokemonBag.pocket_count + 1).times { |i| @last_pocket_selections[i] = 0 }
   end
 
-  def pockets
-    rearrange
-    return @pockets
-  end
-
   #-----------------------------------------------------------------------------
 
   # Gets the index of the current selected item in the pocket
@@ -46,7 +42,6 @@ class PokemonBag
     if pocket <= 0 || pocket > PokemonBag.pocket_count
       raise ArgumentError.new(_INTL("Invalid pocket: {1}", pocket.inspect))
     end
-    rearrange
     return [@last_pocket_selections[pocket], @pockets[pocket].length].min || 0
   end
 
@@ -55,7 +50,6 @@ class PokemonBag
     if pocket <= 0 || pocket > PokemonBag.pocket_count
       raise ArgumentError.new(_INTL("Invalid pocket: {1}", pocket.inspect))
     end
-    rearrange
     @last_pocket_selections[pocket] = value if value <= @pockets[pocket].length
   end
 
@@ -167,29 +161,6 @@ class PokemonBag
 
   def max_pocket_size(pocket)
     return Settings::BAG_MAX_POCKET_SIZE[pocket - 1] || -1
-  end
-
-  def rearrange
-    return if @pockets.length == PokemonBag.pocket_count + 1
-    @last_viewed_pocket = 1
-    new_pockets = []
-    @last_pocket_selections = []
-    (PokemonBag.pocket_count + 1).times do |i|
-      new_pockets[i] = []
-      @last_pocket_selections[i] = 0
-    end
-    @pockets.each do |pocket|
-      next if !pocket
-      pocket.each do |item|
-        item_pocket = GameData::Item.get(item[0]).pocket
-        new_pockets[item_pocket].push(item)
-      end
-    end
-    new_pockets.each_with_index do |pocket, i|
-      next if i == 0 || !Settings::BAG_POCKET_AUTO_SORT[i - 1]
-      pocket.sort! { |a, b| GameData::Item.keys.index(a[0]) <=> GameData::Item.keys.index(b[0]) }
-    end
-    @pockets = new_pockets
   end
 end
 
