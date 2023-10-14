@@ -508,8 +508,8 @@ module BattleAnimationEditor
     ret = false
     pbRgssChdir(File.join("Audio", "SE", "Anim")) do
       animfiles.concat(Dir.glob("*.wav"))
-  #    animfiles.concat(Dir.glob("*.mp3"))
       animfiles.concat(Dir.glob("*.ogg"))
+      animfiles.concat(Dir.glob("*.mp3"))
       animfiles.concat(Dir.glob("*.wma"))
     end
     animfiles.uniq!

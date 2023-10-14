@@ -1,49 +1,80 @@
 <body>
-<div id="map">
-  <img name="map" src="Graphics/Pictures/mapRegion0.png" alt="" width="480" height="320"/>
+<div>
+  <u>Town Map Generator</u>
 </div>
 <form name="mf" action="javascript:void(null)">
-  <div>
-    Map Filename (in Graphics/Pictures/): <input type="text" name="filename" value="mapRegion0.png"/>&nbsp;
-    <input type="button" name="btnChange" value="Change"/><br/ >
-    Square width: <input type="text" name="sqwidth" size="4" min="1" max="16" value="16"/>&nbsp;
-    Square height: <input type="text" name="sqheight" size="4" min="1" max="16" value="16"/>&nbsp;
-    <input type="button" name="btnRefresh" value="Refresh"/><br/ >
-    Region Name: <input type="text" name="name" value="Sample Region"/>&nbsp;
-    <input type="button" name="btnChange2" value="Change"/>
-  </div>
-</form>
-<hr/>
-<form name="f" action="javascript:void(null)">
   <table>
     <tr>
-      <td>Current Position:</td>
-	  <td><input type="text" name="curpos" readonly="readonly"/></td>
+      <td>Filename:</td>
+	  <td><input type="text" name="filename" value="mapRegion0.png"/></td>
+      <td><input type="button" name="btnChange" value="Change"/></td>
+      <td>Name of the region graphic (in Graphics/UI/Town Map/)</td>
 	</tr>
     <tr>
       <td>Name:</td>
-	  <td><input type="text" name="locname"/><td>
+	  <td><input type="text" name="name" value="Sample Region"/></td>
+      <td><input type="button" name="btnChange2" value="Change"/></td>
+      <td>Name of the region</td>
 	</tr>
     <tr>
-      <td>Point of Interest:</td>
-	  <td><input type="text" name="poi"/><td>
+      <td>Square width:</td>
+	  <td><input type="text" name="sqwidth" size="4" min="1" max="16" value="16"/></td>
+      <td><input type="button" name="btnRefreshWidth" value="Refresh"/></td>
+      <td>Width of each point in the Town Map (in pixels)</td>
 	</tr>
     <tr>
-      <td>Fly Destination:</td>
-	  <td><input type="text" name="healing"/><td>
+      <td>Square height:</td>
+	  <td><input type="text" name="sqheight" size="4" min="1" max="16" value="16"/></td>
+      <td><input type="button" name="btnRefreshHeight" value="Refresh"/></td>
+      <td>Height of each point in the Town Map (in pixels)</td>
+	</tr>
+  </table>
+</form>
+<hr/>
+<div>
+  <u>Edit point properties</u><br />
+  Click on a point in the Town Map to edit its properties.
+</div>
+<div id="map">
+  <img name="map" src="Graphics/UI/Town Map/mapRegion0.png" alt="" width="480" height="320"/>
+</div>
+<form name="f" action="javascript:void(null)">
+  <table>
+    <tr>
+      <td>Co-ordinates:</td>
+	  <td><input type="text" name="curpos" readonly="readonly"/></td>
+      <td>X and Y co-ordinates of this point in the Town Map (click in the map above)</td>
+	</tr>
+    <tr>
+      <td>Name:</td>
+	  <td><input type="text" name="locname"/></td>
+      <td>Name of this location</td>
+	</tr>
+    <tr>
+      <td>Landmark:</td>
+	  <td><input type="text" name="poi"/></td>
+      <td>Name of a landmark found in this location</td>
+	</tr>
+    <tr>
+      <td>Fly destination:</td>
+	  <td><input type="text" name="healing"/></td>
+      <td>Map ID, X and Y tile co-ordinates the player will appear at when Flying to this location</td>
 	</tr>
     <tr>
       <td>Switch:</td>
-	  <td><input type="text" name="swtch"/><td>
+	  <td><input type="text" name="swtch"/></td>
+      <td>Number of a Game Switch that needs to be ON to see this point's name/landmark and to Fly to this location</td>
 	</tr>
   </table>
   <div>
     <input type="button" name="btnSave" value="Save" disabled="disabled"/> 
     <input type="button" name="btnCancel" value="Cancel"/><br/ >
-    Single section from townmap.txt (without section heading):<br/ >
+    <hr/>
+    <u>PBS file "town_map.txt" text for this region</u><br />
     <textarea name="data" rows="10" cols="70"></textarea><br/ >
-    <input type="button" name="btnLoad" value="Load"/> (To load data into the editor)<br/ >
-    Copy the data above into townmap.txt when you're done.
+    <input type="button" name="btnLoad" value="Load into map"/>&nbsp;
+    Apply the data in this box to the map above<br/ >
+    When you're done, copy this text into "town_map.txt". Remember that it needs a section line (a number in square brackets).
   </div>
 </form>
 <script type="text/javascript">
@@ -188,13 +219,18 @@
     for(var i=0;i<lines.length;i++){
       lines[i]=lines[i].replace(/\s+$/,"")
       if(!/^\#/.test(lines[i])&&!/^\s*$/.test(lines[i])){
+        esec=/^\s*\[\s*\d+\s*\]\s*$/.exec(lines[i])
+        if(esec){
+          continue;
+        }
         e=/^\s*(\w+)\s*=\s*(.*)$/.exec(lines[i])
         if(!e){
           alert("Bad line syntax in line "+(i+1))
         }
         if(e[1]=="Filename"){
           o=document.getElementById("map")
-          o.innerHTML='<img name="map" src="Graphics/Pictures/'+e[2]+'" alt="" width="480" height="320"/'+'>' 
+          o.innerHTML='<img name="map" src="Graphics/UI/Town Map/'+e[2]+'" alt="" width="480" height="320"/'+'>' 
+          document.mf.filename.value=e[2]
         } else if(e[1]=="Name"){
           document.mf.name.value=e[2]
         } else if(e[1]=="Point"){
@@ -356,7 +392,7 @@
       showMapPoints()
     })
     attachEvent(document.mf.btnChange,"click",function(e){
-      document.images.map.src="Graphics/Pictures/"+document.mf.filename.value
+      document.images.map.src="Graphics/UI/Town Map/"+document.mf.filename.value
       genMapPoints()
       showMapPoints()
     })
@@ -364,7 +400,12 @@
       genMapPoints()
       showMapPoints()
     })
-    attachEvent(document.mf.btnRefresh,"click",function(e){
+    attachEvent(document.mf.btnRefreshWidth,"click",function(e){
+      choiceX=choiceY=-1
+      document.f.curpos.value=""
+      showMapPoints()
+    })
+    attachEvent(document.mf.btnRefreshHeight,"click",function(e){
       choiceX=choiceY=-1
       document.f.curpos.value=""
       showMapPoints()

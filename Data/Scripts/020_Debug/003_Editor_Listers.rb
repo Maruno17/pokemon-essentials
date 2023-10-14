@@ -213,11 +213,12 @@ class MusicFileLister
     folder = (@bgm) ? "Audio/BGM/" : "Audio/ME/"
     @commands.clear
     Dir.chdir(folder) do
-#      Dir.glob("*.mp3") { |f| @commands.push(f) }
-      Dir.glob("*.ogg") { |f| @commands.push(f) }
       Dir.glob("*.wav") { |f| @commands.push(f) }
-      Dir.glob("*.mid") { |f| @commands.push(f) }
+      Dir.glob("*.ogg") { |f| @commands.push(f) }
+      Dir.glob("*.mp3") { |f| @commands.push(f) }
       Dir.glob("*.midi") { |f| @commands.push(f) }
+      Dir.glob("*.mid") { |f| @commands.push(f) }
+      Dir.glob("*.wma") { |f| @commands.push(f) }
     end
     @commands.uniq!
     @commands.sort! { |a, b| a.downcase <=> b.downcase }
