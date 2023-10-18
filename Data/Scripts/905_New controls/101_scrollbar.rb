@@ -23,8 +23,8 @@ class UIControls::Scrollbar < UIControls::BaseControl
     @slider_size    = size
     @range          = size   # Total distance of the area this scrollbar is for
     @slider_top     = 0      # Top pixel within @size of the scrollbar
-    @visible        = @always_visible
     @always_visible = always_visible
+    self.visible    = @always_visible
   end
 
   def position

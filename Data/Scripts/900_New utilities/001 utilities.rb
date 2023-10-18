@@ -5,6 +5,45 @@ class Bitmap
     fill_rect(x, y + height - thickness, width, thickness, color)
     fill_rect(x + width - thickness, y, thickness, height, color)
   end
+
+  def fill_diamond(x, y, radius, color)
+    ((radius * 2) + 1).times do |i|
+      height = (i <= radius) ? (i * 2) + 1 : (((radius * 2) - i) * 2) + 1
+      fill_rect(x - radius + i, y - ((height - 1) / 2), 1, height, color)
+    end
+  end
+
+  # TODO: Add more curve types once it's decided which ones they are.
+  def draw_interpolation_line(x, y, width, height, gradient, type, color)
+    case type
+    when :linear
+      # NOTE: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+      start_x = x
+      end_x = x + width - 1
+      start_y = (gradient) ? y + height - 1 : y
+      end_y = (gradient) ? y : y + height - 1
+      dx = end_x - start_x
+      dy = -((end_y - start_y).abs)
+      error = dx + dy
+      draw_x = start_x
+      draw_y = start_y
+      loop do
+        fill_rect(draw_x, draw_y, 1, 1, color)
+        break if draw_x == end_x && draw_y == end_y
+        e2 = 2 * error
+        if e2 >= dy
+          break if draw_x == end_x
+          error += dy
+          draw_x += 1
+        end
+        if e2 <= dx
+          break if draw_y == end_y
+          error += dx
+          draw_y += (gradient) ? -1 : 1
+        end
+      end
+    end
+  end
 end
 
 #===============================================================================

@@ -19,7 +19,8 @@ module GameData
                                             "Common" => :common, "OppCommon" => :opp_common}],
       "Name"        => [:name,      "s"],
       # TODO: Target (Screen, User, UserAndTarget, etc. Determines which focuses
-      #       a particle can be given and whether "Target" particle exists).
+      #       a particle can be given and whether "Target" particle exists). Or
+      #       InvolvesTarget boolean (user and screen will always exist).
       # TODO: DamageFrame (keyframe at which the battle continues, i.e. damage
       #       animations start playing).
       "Flags"       => [:flags,     "*s"],
@@ -28,6 +29,7 @@ module GameData
     # For individual particles. All actions should have "^" in them.
     # TODO: If more "SetXYZ"/"MoveXYZ" properties are added, ensure the "SetXYZ"
     #       ones are given a duration of 0 in def validate_compiled_animation.
+    #       Also add display names to def property_display_name.
     SUB_SCHEMA = {
       # These properties cannot be changed partway through the animation.
       # TODO: "Name" isn't actually used; the name comes from the subsection
@@ -59,9 +61,7 @@ module GameData
       # TODO: Remember that :visible defaults to false at the beginning for a
       #       particle, and becomes true automatically when the first command
       #       happens for that particle. For "User" and "Target", it defaults to
-      #       true at the beginning instead. This affects the display of the
-      #       particle's timeline and canvas sprite in the editor, as well as
-      #       the animation player.
+      #       true at the beginning instead.
       "SetVisible"  => [:visible,  "^ub"],
       "SetOpacity"  => [:opacity,  "^uu"],
       "MoveOpacity" => [:opacity,  "^uuu"]

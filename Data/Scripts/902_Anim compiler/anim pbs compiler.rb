@@ -7,8 +7,8 @@ module Compiler
     sub_schema = GameData::Animation.sub_schema
     idx = 0
     # Read from PBS file(s)
+    Console.echo_li(_INTL("Compiling animation PBS files..."))
     paths.each do |path|
-      compile_pbs_file_message_start(path)
       file_name = path.gsub(/^PBS\/Animations\//, "").gsub(/.txt$/, "")
       data_hash = nil
       current_particle = nil
@@ -84,9 +84,9 @@ module Compiler
         validate_compiled_animation(data_hash)
         GameData::Animation.register(data_hash)
       end
-      process_pbs_file_message_end
     end
     validate_all_compiled_animations
+    process_pbs_file_message_end
     # Save all data
     GameData::Animation.save
   end

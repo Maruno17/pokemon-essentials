@@ -132,6 +132,7 @@ class AnimationEditorLoadScreen
       Input.update
       update
       # Open editor with animation
+      @load_animation_id = 2   # TODO: For quickstart testing purposes.
       if @load_animation_id
         screen = AnimationEditor.new(@load_animation_id, GameData::Animation.get(@load_animation_id).clone_as_hash)
         screen.run

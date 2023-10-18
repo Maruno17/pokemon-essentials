@@ -11,7 +11,7 @@
 #       this would require manually telling all other controls in this container
 #       that something else is captured and they shouldn't show a hover
 #       highlight when updated (perhaps as a parameter in def update), which I
-#       don't think is ideal. Mark self as "busy" while a control is captured.
+#       don't think is ideal.
 #===============================================================================
 class UIControls::ControlsContainer
   attr_reader :x, :y
@@ -41,6 +41,10 @@ class UIControls::ControlsContainer
     @controls.each { |c| c[1]&.dispose }
     @controls.clear
     @viewport.dispose
+  end
+
+  def busy?
+    return !@captured.nil?
   end
 
   def changed?
