@@ -1,7 +1,7 @@
 #===============================================================================
 # TODO
 #===============================================================================
-class UIControls::AnimationPlayControls < UIControls::BaseControl
+class AnimationEditor::PlayControls < UIControls::BaseControl
   TEXT_OFFSET_Y = 5
 
   def initialize(x, y, width, height, viewport)

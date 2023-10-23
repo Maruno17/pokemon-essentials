@@ -1,13 +1,11 @@
-# TODO: Come up with a better name for this class. I'm not sure I want to merge
-#       this class with the editor class.
-class AnimationEditorLoadScreen
-  WINDOW_WIDTH  = Settings::SCREEN_WIDTH + (32 * 10)
-  WINDOW_HEIGHT = Settings::SCREEN_HEIGHT + (32 * 10)
-
+#===============================================================================
+#
+#===============================================================================
+class AnimationEditor::AnimationSelector
   ANIMATIONS_LIST_X      = 4
   ANIMATIONS_LIST_Y      = 4
   ANIMATIONS_LIST_WIDTH  = 300
-  ANIMATIONS_LIST_HEIGHT = WINDOW_HEIGHT - (ANIMATIONS_LIST_Y * 2)
+  ANIMATIONS_LIST_HEIGHT = AnimationEditor::WINDOW_HEIGHT - (ANIMATIONS_LIST_Y * 2)
 
   LOAD_BUTTON_WIDTH  = 200
   LOAD_BUTTON_HEIGHT = 48
@@ -16,9 +14,9 @@ class AnimationEditorLoadScreen
 
   def initialize
     generate_list
-    @viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+    @viewport = Viewport.new(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
     @viewport.z = 99999
-    @screen_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
+    @screen_bitmap = BitmapSprite.new(AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, @viewport)
     draw_editor_background
     @load_animation_id = nil
     create_controls
@@ -45,7 +43,7 @@ class AnimationEditorLoadScreen
       end
       @animations.push([id, name])
     end
-    # TODO: For slider testing purposes.
+    # TODO: For scrollbar testing purposes.
     rand(400).times do |i|
       @animations.push([42 + i, "Extra animation #{i + 1}"])
     end
@@ -53,7 +51,7 @@ class AnimationEditorLoadScreen
 
   def draw_editor_background
     # Fill the whole screen with white
-    @screen_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.black)
+    @screen_bitmap.bitmap.fill_rect(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, Color.black)
     # Outline around animations list
     areas = [
       [ANIMATIONS_LIST_X, ANIMATIONS_LIST_Y, ANIMATIONS_LIST_WIDTH, ANIMATIONS_LIST_HEIGHT],
@@ -138,6 +136,7 @@ class AnimationEditorLoadScreen
         screen = AnimationEditor.new(@load_animation_id, GameData::Animation.get(@load_animation_id).clone_as_hash)
         screen.run
         @load_animation_id = nil
+        break   # TODO: For quickstart testing purposes.
         # Refresh list of animations, in case the edited one changed its type,
         # move, version or name
         generate_list
@@ -155,26 +154,19 @@ class AnimationEditorLoadScreen
 end
 
 #===============================================================================
-# Start
-#===============================================================================
-def test_anim_editor
-  Graphics.resize_screen(AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
-  pbSetResizeFactor(1)
-  screen = AnimationEditorLoadScreen.new
-  screen.run
-  Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
-  pbSetResizeFactor($PokemonSystem.screensize)
-  $game_map&.autoplay
-end
-
-#===============================================================================
-# Add to Debug menu
+# Add to Debug menu.
 #===============================================================================
 MenuHandlers.add(:debug_menu, :use_pc, {
-  "name"        => "Test new animation editor",
+  "name"        => _INTL("New Animation Editor"),
   "parent"      => :main,
-  "description" => "Test new animation editor",
+  "description" => _INTL("Open the new animation editor."),
   "effect"      => proc {
-    test_anim_editor
+    Graphics.resize_screen(AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
+    pbSetResizeFactor(1)
+    screen = AnimationEditor::AnimationSelector.new
+    screen.run
+    Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
+    pbSetResizeFactor($PokemonSystem.screensize)
+    $game_map&.autoplay
   }
 })

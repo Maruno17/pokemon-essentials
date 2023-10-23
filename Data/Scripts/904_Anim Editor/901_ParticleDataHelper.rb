@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module AnimationEditor::ParticleDataHelper
   module_function
 
@@ -97,7 +100,7 @@ module AnimationEditor::ParticleDataHelper
   #-----------------------------------------------------------------------------
 
   # Returns an array indicating where command diamonds and duration lines should
-  # be drawn in the AnimationParticleList.
+  # be drawn in the AnimationEditor::ParticleList.
   def get_particle_commands_timeline(particle)
     ret = []
     durations = []

@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-class UIControls::Slider < UIControls::BaseControl
+class UIControls::NumberSlider < UIControls::BaseControl
   attr_reader :min_value
   attr_reader :max_value
 

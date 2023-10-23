@@ -17,10 +17,10 @@ class UIControls::List < UIControls::BaseControl
 
   def initialize(width, height, viewport, values = [])
     super(width, height, viewport)
-    @slider = UIControls::Scrollbar.new(LIST_X + width - UIControls::Scrollbar::SLIDER_WIDTH, LIST_Y, height, viewport)
-    @slider.set_interactive_rects
-    @slider.range = ROW_HEIGHT
-    @slider.z = self.z + 1
+    @scrollbar = UIControls::Scrollbar.new(LIST_X + width - UIControls::Scrollbar::SLIDER_WIDTH, LIST_Y, height, viewport)
+    @scrollbar.set_interactive_rects
+    @scrollbar.range = ROW_HEIGHT
+    @scrollbar.z = self.z + 1
     @rows_count = (height / ROW_HEIGHT).floor   # Number of rows visible at once
     @top_row  = 0
     @selected = -1
@@ -28,28 +28,28 @@ class UIControls::List < UIControls::BaseControl
   end
 
   def dispose
-    @slider.dispose
-    @slider = nil
+    @scrollbar.dispose
+    @scrollbar = nil
     super
   end
 
   def x=(new_val)
     super(new_val)
-    @slider.x = new_val + LIST_X + width - UIControls::Scrollbar::SLIDER_WIDTH
+    @scrollbar.x = new_val + LIST_X + width - UIControls::Scrollbar::SLIDER_WIDTH
   end
 
   def y=(new_val)
     super(new_val)
-    @slider.y = new_val + LIST_Y
+    @scrollbar.y = new_val + LIST_Y
   end
 
   # Each value in @values is an array: [id, text].
   def values=(new_vals)
     @values = new_vals
     set_interactive_rects
-    @slider.range = @values.length * ROW_HEIGHT
-    if @slider.visible
-      self.top_row = (@slider.position.to_f / ROW_HEIGHT).round
+    @scrollbar.range = @values.length * ROW_HEIGHT
+    if @scrollbar.visible
+      self.top_row = (@scrollbar.position.to_f / ROW_HEIGHT).round
     else
       self.top_row = 0
     end
@@ -60,7 +60,7 @@ class UIControls::List < UIControls::BaseControl
   def top_row=(val)
     old_val = @top_row
     @top_row = val
-    if @slider.visible
+    if @scrollbar.visible
       @top_row = @top_row.clamp(0, @values.length - @rows_count)
     else
       @top_row = 0
@@ -110,7 +110,7 @@ class UIControls::List < UIControls::BaseControl
   end
 
   def repaint
-    @slider.repaint if @slider.invalid?
+    @scrollbar.repaint if @scrollbar.invalid?
     super if invalid?
   end
 
@@ -140,7 +140,7 @@ class UIControls::List < UIControls::BaseControl
     @captured_area = nil
     mouse_x, mouse_y = mouse_pos
     return if !mouse_x || !mouse_y
-    return if @slider.visible && (@slider.busy? || mouse_x >= @slider.x - self.x)
+    return if @scrollbar.visible && (@scrollbar.busy? || mouse_x >= @scrollbar.x - self.x)
     # Check for mouse presses on rows
     mouse_y += @top_row * ROW_HEIGHT
     @interactions.each_pair do |area, rect|
@@ -168,7 +168,7 @@ class UIControls::List < UIControls::BaseControl
       return
     end
     # Don't update the highlight if the mouse is using the scrollbar
-    if @slider.visible && (@slider.busy? || mouse_x >= @slider.x - self.x)
+    if @scrollbar.visible && (@scrollbar.busy? || mouse_x >= @scrollbar.x - self.x)
       invalidate if @hover_area
       @hover_area = nil
       return
@@ -193,12 +193,12 @@ class UIControls::List < UIControls::BaseControl
 
   def update
     return if !self.visible
-    @slider.update
+    @scrollbar.update
     super
     # TODO: Disabled control stuff.
 #    return if self.disabled
-    # Refresh the list's position if changed by moving the slider
-    self.top_row = (@slider.position.to_f / ROW_HEIGHT).round
+    # Refresh the list's position if changed by moving the scrollbar
+    self.top_row = (@scrollbar.position.to_f / ROW_HEIGHT).round
     # Set the selected row to the row the mouse is over, if clicked on
     if @captured_area
       @selected = @hover_area if @hover_area.is_a?(Integer)

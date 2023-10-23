@@ -22,8 +22,8 @@
 #       while it's playing.
 #===============================================================================
 class AnimationEditor
-  WINDOW_WIDTH  = AnimationEditorLoadScreen::WINDOW_WIDTH
-  WINDOW_HEIGHT = AnimationEditorLoadScreen::WINDOW_HEIGHT
+  WINDOW_WIDTH  = Settings::SCREEN_WIDTH + (32 * 10)
+  WINDOW_HEIGHT = Settings::SCREEN_HEIGHT + (32 * 10)
 
   TOP_BAR_HEIGHT = 30
 
@@ -51,42 +51,39 @@ class AnimationEditor
   def initialize(anim_id, anim)
     @anim_id = anim_id
     @anim = anim
+    # Viewports
     @viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
     @viewport.z = 99999
+    @canvas_viewport = Viewport.new(CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT)
+    @canvas_viewport.z = @viewport.z
+    # Background sprite
     @screen_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
     draw_editor_background
     # Canvas
-    @canvas = Sprite.new(@viewport)
-    @canvas.x = CANVAS_X
-    @canvas.y = CANVAS_Y
-    @canvas.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", "field_bg")
+    @canvas = AnimationEditor::Canvas.new(@canvas_viewport)
+    # Play controls
+    @play_controls = AnimationEditor::PlayControls.new(
+      PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT, @viewport
+    )
     # Side panes
     @commands_pane = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
-    @se_pane = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
+    @se_pane       = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
     @particle_pane = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
     @keyframe_pane = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
     # TODO: Make more side panes for:
-    #       - colour/tone editor (accessed from commands_pane via a
+    #       - colour/tone editor (accessed from @commands_pane via a
     #         button; has Apply/Cancel buttons to only apply all its values at
     #         the end of editing them, although canvas will be updated in real
     #         time to show the changes)
-    #       - particle properties (that don't change during the animation; name,
-    #         focus...)
-    #       - SE particle properties (depends on keyframe)
     #       - effects particle properties (depends on keyframe; for screen
     #         shake, etc.)
-    #       - keyframe properties (shift all later particle commands forward/
-    #         backward).
-    # Play controls
-    @play_controls = UIControls::AnimationPlayControls.new(
-      PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT, @viewport
-    )
     # Timeline/particle list
-    @particle_list = UIControls::AnimationParticleList.new(
+    @particle_list = AnimationEditor::ParticleList.new(
       PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT, @viewport
     )
     @particle_list.set_interactive_rects
     @captured = nil
+    set_canvas_contents
     set_side_panes_contents
     set_particle_list_contents
     set_play_controls_contents
@@ -103,6 +100,7 @@ class AnimationEditor
     @play_controls.dispose
     @particle_list.dispose
     @viewport.dispose
+    @canvas_viewport.dispose
   end
 
   def keyframe
@@ -115,18 +113,22 @@ class AnimationEditor
 
   #-----------------------------------------------------------------------------
 
+  def set_canvas_contents
+    @canvas.bg_name = "indoor1"
+  end
+
   def set_commands_pane_contents
     # :frame (related to graphic) - If the graphic is user's sprite/target's
     # sprite, make this instead a choice of front/back/same as the main sprite/
     # opposite of the main sprite. Probably need two controls in the same space
     # and refresh_commands_pane makes the appropriate one visible.
-    @commands_pane.add_labelled_value_box(:x, _INTL("X"), -128, CANVAS_WIDTH + 128, 64)
-    @commands_pane.add_labelled_value_box(:y, _INTL("Y"), -128, CANVAS_HEIGHT + 128, 96)
+    @commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -128, CANVAS_WIDTH + 128, 64)
+    @commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -128, CANVAS_HEIGHT + 128, 96)
     @commands_pane.add_labelled_checkbox(:visible, _INTL("Visible"), true)
-    @commands_pane.add_labelled_slider(:opacity, _INTL("Opacity"), 0, 255, 255)
-    @commands_pane.add_labelled_value_box(:zoom_x, _INTL("Zoom X"), 0, 1000, 100)
-    @commands_pane.add_labelled_value_box(:zoom_y, _INTL("Zoom Y"), 0, 1000, 100)
-    @commands_pane.add_labelled_value_box(:angle, _INTL("Angle"), -1080, 1080, 0)
+    @commands_pane.add_labelled_number_slider(:opacity, _INTL("Opacity"), 0, 255, 255)
+    @commands_pane.add_labelled_number_text_box(:zoom_x, _INTL("Zoom X"), 0, 1000, 100)
+    @commands_pane.add_labelled_number_text_box(:zoom_y, _INTL("Zoom Y"), 0, 1000, 100)
+    @commands_pane.add_labelled_number_text_box(:angle, _INTL("Angle"), -1080, 1080, 0)
     @commands_pane.add_labelled_checkbox(:flip, _INTL("Flip"), false)
     @commands_pane.add_labelled_dropdown_list(:blending, _INTL("Blending"), {
       0 => _INTL("None"),

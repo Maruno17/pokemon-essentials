@@ -4,7 +4,7 @@
 #       scrollbar works, i.e. every visible @commands_sprites isn't redrawn each
 #       time the horizontal scrollbar changes.
 #===============================================================================
-class UIControls::AnimationParticleList < UIControls::BaseControl
+class AnimationEditor::ParticleList < UIControls::BaseControl
   VIEWPORT_SPACING     = 1
   TIMELINE_HEIGHT      = 24 - VIEWPORT_SPACING
   LIST_X               = 0

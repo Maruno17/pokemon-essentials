@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-class UIControls::ValueBox < UIControls::TextBox
+class UIControls::NumberTextBox < UIControls::TextBox
   attr_reader :min_value
   attr_reader :max_value
 

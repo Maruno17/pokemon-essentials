@@ -95,22 +95,22 @@ class UIControls::ControlsContainer
     add_text_box(id, value, true)
   end
 
-  def add_slider(id, min_value, max_value, value, has_label = false)
-    add_control(id, UIControls::Slider.new(*control_size(has_label), @viewport, min_value, max_value, value), has_label)
+  def add_number_slider(id, min_value, max_value, value, has_label = false)
+    add_control(id, UIControls::NumberSlider.new(*control_size(has_label), @viewport, min_value, max_value, value), has_label)
   end
 
-  def add_labelled_slider(id, label, min_value, max_value, value)
+  def add_labelled_number_slider(id, label, min_value, max_value, value)
     add_label(id, label)
-    add_slider(id, min_value, max_value, value, true)
+    add_number_slider(id, min_value, max_value, value, true)
   end
 
-  def add_value_box(id, min_value, max_value, value, has_label = false)
-    add_control(id, UIControls::ValueBox.new(*control_size(has_label), @viewport, min_value, max_value, value), has_label)
+  def add_number_text_box(id, min_value, max_value, value, has_label = false)
+    add_control(id, UIControls::NumberTextBox.new(*control_size(has_label), @viewport, min_value, max_value, value), has_label)
   end
 
-  def add_labelled_value_box(id, label, min_value, max_value, value)
+  def add_labelled_number_text_box(id, label, min_value, max_value, value)
     add_label(id, label)
-    add_value_box(id, min_value, max_value, value, true)
+    add_number_text_box(id, min_value, max_value, value, true)
   end
 
   def add_button(id, button_text, has_label = false)
