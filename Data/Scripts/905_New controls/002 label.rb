@@ -5,7 +5,7 @@ class UIControls::Label < UIControls::BaseControl
   attr_reader :label
 
   LABEL_END_X   = 80
-  TEXT_OFFSET_Y = 7
+  TEXT_OFFSET_Y = 5
 
   def initialize(width, height, viewport, label)
     super(width, height, viewport)

@@ -95,7 +95,8 @@ class AnimationEditorLoadScreen
     @load_button.set_fixed_size
     @load_button.set_interactive_rects
     @controls[:load] = @load_button
-    # TODO: "New animation" button, "Delete animation" button.
+    # TODO: "New animation" button, "Delete animation" button, "Duplicate
+    #       animation" button.
     repaint
   end
 

@@ -7,9 +7,9 @@
 #       through a line? Nah.
 #===============================================================================
 class UIControls::List < UIControls::BaseControl
-  LIST_X = 0
-  LIST_Y = 0
-  ROW_HEIGHT = 24
+  LIST_X         = 0
+  LIST_Y         = 0
+  ROW_HEIGHT     = 24
   TEXT_PADDING_X = 4
   TEXT_OFFSET_Y  = 3
 

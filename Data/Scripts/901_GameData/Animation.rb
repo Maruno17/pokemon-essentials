@@ -1,97 +1,141 @@
 module GameData
   class Animation
-    attr_reader :type       # :move, :opp_move, :common, :opp_common
-    attr_reader :move       # Either the move's ID or the common animation's name
-    attr_reader :version    # Hit number
-    attr_reader :name       # Shown in the sublist; cosmetic only
-    # TODO: Boolean for not played if target is on user's side.
-    attr_reader :particles
+    attr_reader :type         # :move, :opp_move, :common, :opp_common
+    attr_reader :move         # Either the move's ID or the common animation's name (both are strings)
+    attr_reader :version      # Hit number
+    attr_reader :name         # Shown in the sublist; cosmetic only
+    attr_reader :no_target    # Whether there is no "Target" particle (false by default)
     attr_reader :flags
-    attr_reader :pbs_path   # Whole path minus "PBS/Animations/" at start and ".txt" at end
+    attr_reader :pbs_path     # Whole path minus "PBS/Animations/" at start and ".txt" at end
+    attr_reader :particles
 
     DATA = {}
     DATA_FILENAME = "animations.dat"
     OPTIONAL = true
 
+    INTERPOLATION_TYPES = {
+      "None"     => :none,
+      "Linear"   => :linear,
+      "EaseIn"   => :ease_in,
+      "EaseOut"  => :ease_out,
+      "EaseBoth" => :ease_both
+    }
+
+    # Properties that apply to the animation in general, not to individual
+    # particles. They don't change during the animation.
     SCHEMA = {
       # TODO: Add support for overworld animations.
       "SectionName" => [:id,        "esU", {"Move" => :move, "OppMove" => :opp_move,
                                             "Common" => :common, "OppCommon" => :opp_common}],
       "Name"        => [:name,      "s"],
-      # TODO: Target (Screen, User, UserAndTarget, etc. Determines which focuses
-      #       a particle can be given and whether "Target" particle exists). Or
-      #       InvolvesTarget boolean (user and screen will always exist).
+      "NoTarget"    => [:no_target, "b"],
+      # TODO: Boolean for whether the animation will be played if the target is
+      #       on the same side as the user.
       # TODO: DamageFrame (keyframe at which the battle continues, i.e. damage
       #       animations start playing).
       "Flags"       => [:flags,     "*s"],
-      "Particle"    => [:particles, "s"]
+      "Particle"    => [:particles, "s"]   # Is a subheader line like <text>
     }
-    # For individual particles. All actions should have "^" in them.
+    # For individual particles. Any property whose schema begins with "^" can
+    # change during the animation.
     # TODO: If more "SetXYZ"/"MoveXYZ" properties are added, ensure the "SetXYZ"
     #       ones are given a duration of 0 in def validate_compiled_animation.
     #       Also add display names to def property_display_name.
     SUB_SCHEMA = {
       # These properties cannot be changed partway through the animation.
-      # TODO: "Name" isn't actually used; the name comes from the subsection
-      #       written between <these> and uses "Particle" above.
-#      "Name"        => [:name,     "s"],
-      "Focus"       => [:focus,    "e", {"User" => :user, "Target" => :target,
-                                         "UserAndTarget" => :user_and_target, "Screen" => :screen}],
-      # TODO FlipIfFoe, RotateIfFoe kinds of thing.
+      # NOTE: "Name" isn't a property here, because the particle's name comes
+      #       from the "Particle" property above.
+      # TODO: If more focus types are added, add ones that involve a target to
+      #       the Compiler's check relating to "NoTarget".
+      "Graphic"        => [:graphic,     "s"],
+      "Focus"          => [:focus,       "e", {"User" => :user, "Target" => :target,
+                                               "UserAndTarget" => :user_and_target,
+                                               "Screen" => :screen}],
+      # TODO: FlipIfFoe, RotateIfFoe kinds of thing.
 
-      # All properties below are "Set" or "Move". "Set" has the keyframe and the
-      # value, and "Move" has the keyframe, duration and the value. All are "^".
-      # "Set" is turned into "Move" with a duration (second value) of 0.
-      # TODO: The "MoveXYZ" commands will have optional easing (an enum).
-      "SetGraphic"  => [:graphic,  "^us"],
-      "SetFrame"    => [:frame,    "^uu"],   # Frame within the graphic if it's a spritesheet
-      "MoveFrame"   => [:frame,    "^uuu"],
-      "SetBlending" => [:blending, "^uu"],   # 0, 1 or 2
-      "SetFlip"     => [:flip,     "^ub"],
-      "SetX"        => [:x,        "^ui"],
-      "MoveX"       => [:x,        "^uui"],
-      "SetY"        => [:y,        "^ui"],
-      "MoveY"       => [:y,        "^uui"],
-      "SetZoomX"    => [:zoom_x,   "^uu"],
-      "MoveZoomX"   => [:zoom_x,   "^uuu"],
-      "SetZoomY"    => [:zoom_y,   "^uu"],
-      "MoveZoomY"   => [:zoom_y,   "^uuu"],
-      "SetAngle"    => [:angle,    "^ui"],
-      "MoveAngle"   => [:angle,    "^uui"],
-      # TODO: Remember that :visible defaults to false at the beginning for a
-      #       particle, and becomes true automatically when the first command
-      #       happens for that particle. For "User" and "Target", it defaults to
-      #       true at the beginning instead.
-      "SetVisible"  => [:visible,  "^ub"],
-      "SetOpacity"  => [:opacity,  "^uu"],
-      "MoveOpacity" => [:opacity,  "^uuu"]
-      # TODO: SetPriority should be an enum. There should also be a property
-      #       (set and move) for the sub-priority within that priority bracket.
-#      "SetPriority"
-      # TODO: Color.
-      # TODO: Tone.
+      # All properties below are "SetXYZ" or "MoveXYZ". "SetXYZ" has the
+      # keyframe and the value, and "MoveXYZ" has the keyframe, duration and the
+      # value. All are "^". "SetXYZ" is turned into "MoveXYZ" when compiling by
+      # inserting a duration (second value) of 0.
+      "SetFrame"       => [:frame,       "^uu"],   # Frame within the graphic if it's a spritesheet
+      "MoveFrame"      => [:frame,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetBlending"    => [:blending,    "^uu"],   # 0, 1 or 2
+      "SetFlip"        => [:flip,        "^ub"],
+      "SetX"           => [:x,           "^ui"],
+      "MoveX"          => [:x,           "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetY"           => [:y,           "^ui"],
+      "MoveY"          => [:y,           "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetZoomX"       => [:zoom_x,      "^uu"],
+      "MoveZoomX"      => [:zoom_x,      "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetZoomY"       => [:zoom_y,      "^uu"],
+      "MoveZoomY"      => [:zoom_y,      "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetAngle"       => [:angle,       "^ui"],
+      "MoveAngle"      => [:angle,       "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetVisible"     => [:visible,     "^ub"],
+      "SetOpacity"     => [:opacity,     "^uu"],
+      "MoveOpacity"    => [:opacity,     "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorRed"    => [:color_red,   "^ui"],
+      "MoveColorRed"   => [:color_red,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorGreen"  => [:color_green, "^ui"],
+      "MoveColorGreen" => [:color_green, "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorBlue"   => [:color_blue,  "^ui"],
+      "MoveColorBlue"  => [:color_blue,  "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorAlpha"  => [:color_alpha, "^ui"],
+      "MoveColorAlpha" => [:color_alpha, "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneRed"     => [:tone_red,    "^ui"],
+      "MoveToneRed"    => [:tone_red,    "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneGreen"   => [:tone_green,  "^ui"],
+      "MoveToneGreen"  => [:tone_green,  "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneBlue"    => [:tone_blue,   "^ui"],
+      "MoveToneBlue"   => [:tone_blue,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneGray"    => [:tone_gray,   "^ui"],
+      "MoveToneGray"   => [:tone_gray,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      # TODO: SetPriority should be an enum (above all, above user, etc.). There
+      #       should also be a property (set and move) for the sub-priority
+      #       within that priority bracket.
+      # TODO: Add "SetColor"/"SetTone" as shorthand for the above? They'd be
+      #       converted in the Compiler.
+      # TODO: Bitmap masking.
 
-      # TODO: Play, PlayUserCry, PlayTargetCry.
+      # These properties are specifically for the "SE" particle.
+      "Play"           => [:se,          "^usUU"],   # Filename, volume, pitch
+      "PlayUserCry"    => [:user_cry,    "^uUU"],   # Volume, pitch
+      "PlayTargetCry"  => [:target_cry,  "^uUU"]   # Volume, pitch
+
       # TODO: ScreenShake? Not sure how to work this yet. Edit def
       #       validate_compiled_animation like the "SE" particle does with the
       #       "Play"-type commands.
     }
     PARTICLE_DEFAULT_VALUES = {
-#      :name  => "",
-      :focus => :screen
+      :name    => "",
+      :graphic => "",
+      :focus   => :screen
     }
+    # NOTE: Particles are invisible until their first command, and automatically
+    #       become visible then. "User" and "Target" are visible from the start,
+    #       though.
     PARTICLE_KEYFRAME_DEFAULT_VALUES = {
-      :graphic  => nil,
-      :frame    => 0,
-      :blending => 0,
-      :flip     => false,
-      :x        => 0,
-      :y        => 0,
-      :zoom_x   => 100,
-      :zoom_y   => 100,
-      :angle    => 0,
-      :visible  => false,
-      :opacity  => 255
+      :frame       => 0,
+      :blending    => 0,
+      :flip        => false,
+      :x           => 0,
+      :y           => 0,
+      :zoom_x      => 100,
+      :zoom_y      => 100,
+      :angle       => 0,
+      :visible     => false,
+      :opacity     => 255,
+      :color_red   => 255,
+      :color_green => 255,
+      :color_blue  => 255,
+      :color_alpha => 0,
+      :tone_red    => 0,
+      :tone_green  => 0,
+      :tone_blue   => 0,
+      :tone_gray   => 0,
+      :se          => nil,
+      :user_cry    => nil,
+      :target_cry  => nil
     }
 
     @@cmd_to_pbs_name = nil   # USed for writing animation PBS files
@@ -135,13 +179,14 @@ module GameData
 
     def initialize(hash)
       # NOTE: hash has an :id entry, but it's unused here.
-      @type      = hash[:type]
-      @move      = hash[:move]
-      @version   = hash[:version]   || 0
-      @name      = hash[:name]
-      @particles = hash[:particles] || []
-      @flags     = hash[:flags]     || []
-      @pbs_path  = hash[:pbs_path]  || "#{@type} - #{@move}"
+      @type       = hash[:type]
+      @move       = hash[:move]
+      @version    = hash[:version]   || 0
+      @name       = hash[:name]
+      @no_target  = hash[:no_target] || false
+      @particles  = hash[:particles] || []
+      @flags      = hash[:flags]     || []
+      @pbs_path   = hash[:pbs_path]  || @move
     end
 
     # Returns a clone of the animation in a hash format, the same as created by
@@ -223,7 +268,8 @@ module GameData
           next if !val.is_a?(Array)
           val.each do |cmd|
             new_cmd = cmd.clone
-            if new_cmd[1] > 0
+            if @particles[index][:name] != "SE" && new_cmd[1] > 0
+              new_cmd.pop if new_cmd.last == :linear   # This is the default
               ret.push([@@cmd_to_pbs_name[key][1]] + new_cmd)   # ["MoveXYZ", keyframe, duration, value]
             else
               ret.push([@@cmd_to_pbs_name[key][0]] + new_cmd)   # ["SetXYZ", keyframe, duration, value]

@@ -10,7 +10,7 @@ class UIControls::TextBox < UIControls::BaseControl
   TEXT_BOX_WIDTH   = 172
   TEXT_BOX_HEIGHT  = 24
   TEXT_BOX_PADDING = 4   # Gap between sides of text box and text
-  TEXT_OFFSET_Y    = 7
+  TEXT_OFFSET_Y    = 5
 
   def initialize(width, height, viewport, value = "")
     super(width, height, viewport)
@@ -201,6 +201,7 @@ class UIControls::TextBox < UIControls::BaseControl
       @cursor_timer = System.uptime
       invalidate
     else
+      @value.strip! if @value.respond_to?("strip!")
       set_changed if @initial_value && @value != @initial_value
       reset_interaction
     end
@@ -220,6 +221,7 @@ class UIControls::TextBox < UIControls::BaseControl
     end
     # Released mouse button outside of text box, or initially clicked outside of
     # text box; end interaction with this control
+    @value.strip! if @value.respond_to?("strip!")
     set_changed if @initial_value && @value != @initial_value
     reset_interaction
     super   # Make this control not busy again
@@ -247,6 +249,7 @@ class UIControls::TextBox < UIControls::BaseControl
     # Return/Escape to end text input (Escape undoes the change)
     if Input.triggerex?(:RETURN) || Input.repeatex?(:RETURN) ||
        Input.triggerex?(:KP_ENTER) || Input.repeatex?(:KP_ENTER)
+      @value.strip! if @value.respond_to?("strip!")
       set_changed if @initial_value && @value != @initial_value
       reset_interaction
       @captured_area = nil

@@ -6,7 +6,7 @@ module AnimationEditor::ParticleDataHelper
     particles.each do |p|
       p.each_pair do |cmd, val|
         next if !val.is_a?(Array) || val.length == 0
-        max = val.last[0] + val.last[1]
+        max = val.last[0] + val.last[1]   # Keyframe + duration
         ret = max if ret < max
       end
     end
@@ -51,7 +51,6 @@ module AnimationEditor::ParticleDataHelper
       ret[0] = true if first_cmd >= 0 && first_cmd <= frame &&
                        (first_visible_cmd < 0 || frame < first_visible_cmd)
     end
-    echoln "here 2: #{ret}"
     return ret
   end
 
@@ -59,6 +58,14 @@ module AnimationEditor::ParticleDataHelper
     ret = {}
     GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.each_pair do |prop, default|
       ret[prop] = get_keyframe_particle_value(particle, frame, prop)
+    end
+    return ret
+  end
+
+  def get_all_particle_values(particle)
+    ret = {}
+    GameData::Animation::PARTICLE_DEFAULT_VALUES.each_pair do |prop, default|
+      ret[prop] = particle[prop] || default
     end
     return ret
   end
@@ -75,7 +82,7 @@ module AnimationEditor::ParticleDataHelper
                   property, particle[:name])
     end
     value = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[:visible]
-    value = true if ["User", "Target"].include?(particle[:name])
+    value = true if ["User", "Target", "SE"].include?(particle[:name])
     ret = []
     if particle[:visible]
       particle[:visible].each { |cmd| ret[cmd[0]] = cmd[2] }
@@ -112,8 +119,13 @@ module AnimationEditor::ParticleDataHelper
   #   0   - SetXYZ
   #   [+/- duration, interpolation type] --- MoveXYZ (duration's sign is whether
   #                                          it makes the value higher or lower)
-  def get_particle_property_commands_timeline(commands, property)
+  def get_particle_property_commands_timeline(particle, commands, property)
     return nil if !commands || commands.length == 0
+    if particle[:name] == "SE"
+      ret = []
+      commands.each { |cmd| ret[cmd[0]] = 0 }
+      return ret
+    end
     if !GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.include?(property)
       raise _INTL("No default value for property {1} in PARTICLE_KEYFRAME_DEFAULT_VALUES.", property)
     end
@@ -134,4 +146,66 @@ module AnimationEditor::ParticleDataHelper
     return ret
   end
 
+  #-----------------------------------------------------------------------------
+
+  def set_property(particle, property, value)
+    particle[property] = value
+  end
+
+  def add_command(particle, property, frame, value)
+    # Split particle[property] into values and interpolation arrays
+    set_points = []   # All SetXYZ commands (the values thereof)
+    end_points = []   # End points of MoveXYZ commands (the values thereof)
+    interps = []      # Interpolation type from a keyframe to the next point
+    if particle && particle[property]
+      particle[property].each do |cmd|
+        if cmd[1] == 0   # SetXYZ
+          set_points[cmd[0]] = cmd[2]
+        else
+          interps[cmd[0]] = cmd[3] || :linear
+          end_points[cmd[0] + cmd[1]] = cmd[2]
+        end
+      end
+    end
+    # Add new command to points (may replace an existing command)
+    interp = :none
+    (frame + 1).times do |i|
+      interp = :none if set_points[i] || end_points[i]
+      interp = interps[i] if interps[i]
+    end
+    interps[frame] = interp if interp != :none
+    set_points[frame] = value
+    # Convert points and interps back into particle[property]
+    ret = []
+    if !GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.include?(property)
+      raise _INTL("Couldn't get default value for property {1}.", property)
+    end
+    val = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[property]
+    val = true if property == :visible && ["User", "Target", "SE"].include?(particle[:name])
+    length = [set_points.length, end_points.length].max
+    length.times do |i|
+      if !set_points[i].nil? && set_points[i] != val
+        ret.push([i, 0, set_points[i]])
+        val = set_points[i]
+      end
+      if interps[i] && interps[i] != :none
+        ((i + 1)..length).each do |j|
+          next if set_points[j].nil? && end_points[j].nil?
+          if set_points[j].nil?
+            break if end_points[j] == val
+            ret.push([i, j - i, end_points[j], interps[i]])
+            val = end_points[j]
+            end_points[j] = nil
+          else
+            break if set_points[j] == val
+            ret.push([i, j - i, set_points[j], interps[i]])
+            val = set_points[j]
+            set_points[j] = nil
+          end
+          break
+        end
+      end
+    end
+    return (ret.empty?) ? nil : ret
+  end
 end

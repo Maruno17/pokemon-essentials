@@ -96,59 +96,84 @@ module Compiler
     hash[:type] = hash[:id][0]
     hash[:move] = hash[:id][1]
     hash[:version] = hash[:id][2] || 0
-    # TODO: raise if "Target" particle exists but animation's target doesn't
-    #       involve a target battler.
-    # Create "User" and "SE" particles if they don't exist
+    # Ensure there is no "Target" particle if "NoTarget" is set
+    if hash[:particles].any? { |particle| particle[:name] == "Target" } && hash[:no_target]
+      raise _INTL("Can't define a \"Target\" particle and also set property \"NoTarget\" to true.") + "\n" + FileLineData.linereport
+    end
+    # Create "User", "SE" and "Target" particles if they don't exist but should
     if hash[:particles].none? { |particle| particle[:name] == "User" }
       hash[:particles].push({:name => "User"})
+    end
+    if hash[:particles].none? { |particle| particle[:name] == "Target" } && !hash[:no_target]
+      hash[:particles].push({:name => "Target"})
     end
     if hash[:particles].none? { |particle| particle[:name] == "SE" }
       hash[:particles].push({:name => "SE"})
     end
-    # TODO: Create "Target" particle if it doesn't exist and animation's target
-    #       involves a target battler.
     # Go through each particle in turn
     hash[:particles].each do |particle|
-      # TODO: Ensure "Play", "PlayUserCry", "PlayTargetCry" are exclusively used
-      #       by the particle "SE", and that the "SE" particle can only use
-      #       those commands. Raise if problems found.
-      # Ensure all particles have a default focus if not given
-      if !particle[:focus]
-        if particle[:name] == "User"
-          particle[:focus] = :user
-        elsif particle[:name] == "Target"
-          particle[:focus] = :target
-        elsif particle[:name] != "SE"
-          particle[:focus] = :screen
+      # Ensure the "Play"-type commands are exclusive to the "SE" particle, and
+      # that the "SE" particle has no other commands
+      if particle[:name] == "SE"
+        particle.keys.each do |property|
+          next if [:name, :se, :user_cry, :target_cry].include?(property)
+          raise _INTL("Particle \"{1}\" has a command that isn't a \"Play\"-type command.",
+             particle[:name]) + "\n" + FileLineData.linereport
+        end
+      else
+        if particle[:se]
+          raise _INTL("Particle \"{1}\" has a \"Play\" command but shouldn't.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        elsif particle[:user_cry]
+          raise _INTL("Particle \"{1}\" has a \"PlayUserCry\" command but shouldn't.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        elsif particle[:target_cry]
+          raise _INTL("Particle \"{1}\" has a \"PlayTargetCry\" command but shouldn't.",
+                      particle[:name]) + "\n" + FileLineData.linereport
         end
       end
-      # TODO: Depending on hash[:target], ensure all particles have an
-      #       appropriate focus (i.e. can't be :user_and_target if hash[:target]
-      #       doesn't include a target). Raise if problems found.
+      # Ensure all particles have a default focus if not given
+      if !particle[:focus] && particle[:name] != "SE"
+        case particle[:name]
+        when "User"   then particle[:focus] = :user
+        when "Target" then particle[:focus] = :target
+        else               particle[:focus] = :screen
+        end
+      end
+      # Ensure that particles don't have a focus involving a target if the
+      # animation itself doesn't involve a target
+      if hash[:no_target] && [:target, :user_and_target].include?(particle[:focus])
+        raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a target if property \"NoTarget\" is set to true.",
+          particle[:name]) + "\n" + FileLineData.linereport
+      end
 
       # Convert all "SetXYZ" particle commands to "MoveXYZ" by giving them a
       # duration of 0 (even ones that can't have a "MoveXYZ" command)
       GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.keys.each do |prop|
         next if !particle[prop]
         particle[prop].each do |cmd|
-          cmd.insert(1, 0) if cmd.length == 2
+          cmd.insert(1, 0) if cmd.length == 2 || particle[:name] == "SE"
+          # Give default interpolation value of :linear to any "MoveXYZ" command
+          # that doesn't have one already
+          cmd.push(:linear) if cmd[1] > 0 && cmd.length < 4
         end
       end
       # Sort each particle's commands by their keyframe and duration
       particle.keys.each do |key|
         next if !particle[key].is_a?(Array)
         particle[key].sort! { |a, b| a[0] == b[0] ? a[1] == b[1] ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
+        next if particle[:name] == "SE"
         # Check for any overlapping particle commands
         last_frame = -1
         last_set_frame = -1
         particle[key].each do |cmd|
           if last_frame > cmd[0]
-            raise _INTL("Animation has overlapping commands for the {1} property.\n{2}",
-                        key.to_s.capitalize, FileLineData.linereport)
+            raise _INTL("Animation has overlapping commands for the {1} property.",
+                        key.to_s.capitalize) + "\n" + FileLineData.linereport
           end
-          if particle[:name] != "SE" && cmd[1] == 0 && last_set_frame >= cmd[0]
-            raise _INTL("Animation has multiple \"Set\" commands in the same keyframe for the {1} property.\n{2}",
-                        key.to_s.capitalize, FileLineData.linereport)
+          if cmd[1] == 0 && last_set_frame >= cmd[0]
+            raise _INTL("Animation has multiple \"Set\" commands in the same keyframe for the {1} property.",
+                        key.to_s.capitalize) + "\n" + FileLineData.linereport
           end
           last_frame = cmd[0] + cmd[1]
           last_set_frame = cmd[0] if cmd[1] == 0

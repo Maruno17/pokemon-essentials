@@ -10,7 +10,7 @@ class UIControls::BaseControl < BitmapSprite
 #  attr_accessor :disabled   # TODO: Make use of this.
 
   TEXT_COLOR    = Color.black
-  TEXT_SIZE     = 18   # Default is 22 if size isn't explicitly set
+  TEXT_SIZE     = 18           # Default is 22 if size isn't explicitly set
   HOVER_COLOR   = Color.cyan   # For clickable area when hovering over it
   CAPTURE_COLOR = Color.pink   # For area you clicked in but aren't hovering over
 

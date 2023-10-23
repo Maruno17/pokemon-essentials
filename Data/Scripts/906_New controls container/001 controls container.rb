@@ -19,8 +19,8 @@ class UIControls::ControlsContainer
   attr_reader :values
   attr_reader :visible
 
-  LINE_SPACING = 32
-  OFFSET_FROM_LABEL_X = 80
+  LINE_SPACING        = 28
+  OFFSET_FROM_LABEL_X = 90
   OFFSET_FROM_LABEL_Y = 0
 
   def initialize(x, y, width, height)
@@ -59,6 +59,15 @@ class UIControls::ControlsContainer
     @visible = value
     @controls.each { |c| c[1].visible = value }
     repaint if @visible
+  end
+
+  def get_control(id)
+    ret = nil
+    @controls.each do |c|
+      ret = c[1] if c[0] == id
+      break if ret
+    end
+    return ret
   end
 
   #-----------------------------------------------------------------------------

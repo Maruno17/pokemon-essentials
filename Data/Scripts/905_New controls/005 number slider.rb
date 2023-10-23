@@ -13,7 +13,7 @@ class UIControls::Slider < UIControls::BaseControl
   SLIDER_LENGTH = 128
   PLUS_X        = SLIDER_X + SLIDER_LENGTH + SLIDER_PADDING
   VALUE_X       = PLUS_X + PLUS_MINUS_SIZE + 5
-  TEXT_OFFSET_Y = 7
+  TEXT_OFFSET_Y = 5
 
   # TODO: Is there a better knob design than a big black rectangle? I'd rather
   #       it not be a different colour.

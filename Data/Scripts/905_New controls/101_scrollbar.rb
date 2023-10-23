@@ -4,11 +4,14 @@
 #       seem to be any lag at the moment with a tall scrollbar.
 #===============================================================================
 class UIControls::Scrollbar < UIControls::BaseControl
-  SLIDER_WIDTH  = 16
-  WIDTH_PADDING = 0
-  TRAY_COLOR    = Color.white
-  SLIDER_COLOR  = Color.black
-  GRAB_COLOR    = HOVER_COLOR   # Cyan
+  SLIDER_WIDTH    = 16
+  WIDTH_PADDING   = 0
+  SCROLL_DISTANCE = 16
+  TRAY_COLOR      = Color.white
+  SLIDER_COLOR    = Color.black
+  GRAB_COLOR      = HOVER_COLOR   # Cyan
+
+  attr_reader :slider_top
 
   def initialize(x, y, size, viewport, horizontal = false, always_visible = false)
     if horizontal
@@ -136,6 +139,16 @@ class UIControls::Scrollbar < UIControls::BaseControl
           self.slider_top = @slider_top - ((@tray_size - @slider_size) / 4.0).ceil
         else
           self.slider_top = @slider_top + ((@tray_size - @slider_size) / 4.0).ceil
+        end
+      end
+    else
+      mouse_x, mouse_y = mouse_pos
+      if mouse_x && mouse_y && @interactions[:slider_tray].contains?(mouse_x, mouse_y)
+        wheel_v = Input.scroll_v
+        if wheel_v > 0   # Scroll up
+          self.slider_top -= SCROLL_DISTANCE
+        elsif wheel_v < 0   # Scroll down
+          self.slider_top += SCROLL_DISTANCE
         end
       end
     end
