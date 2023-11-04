@@ -51,7 +51,6 @@ def pbPrintException(e)
   end
   # output to log
   errorlog = "errorlog.txt"
-  errorlog = RTP.getSaveFileName("errorlog.txt") if (Object.const_defined?(:RTP) rescue false)
   File.open(errorlog, "ab") do |f|
     f.write("\r\n=================\r\n\r\n[#{Time.now}]\r\n")
     f.write(message)

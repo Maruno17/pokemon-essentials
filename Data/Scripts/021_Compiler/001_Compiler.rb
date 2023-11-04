@@ -760,69 +760,57 @@ module Compiler
           end
         end
         file.write(",") if index > 0
-        if value.nil?
-          # do nothing
-        elsif value.is_a?(String)
-          if schema[1][i, 1].downcase == "q"
-            file.write(value)
-          else
-            file.write(csvQuote(value))
+        next if value.nil?
+        case schema[1][i, 1]
+        when "e", "E"   # Enumerable
+          enumer = schema[2 + i]
+          case enumer
+          when Array
+            file.write(enumer[value])
+          when Symbol, String
+            mod = Object.const_get(enumer.to_sym)
+            file.write(getConstantName(mod, value))
+          when Module
+            file.write(getConstantName(enumer, value))
+          when Hash
+            enumer.each_key do |key|
+              next if enumer[key] != value
+              file.write(key)
+              break
+            end
           end
-        elsif value.is_a?(Symbol)
-          file.write(csvQuote(value.to_s))
-        elsif value == true
-          file.write("true")
-        elsif value == false
-          file.write("false")
-        elsif value.is_a?(Numeric)
-          case schema[1][i, 1]
-          when "e", "E"   # Enumerable
-            enumer = schema[2 + i]
-            case enumer
-            when Array
-              file.write(enumer[value])
-            when Symbol, String
-              mod = Object.const_get(enumer.to_sym)
-              file.write(getConstantName(mod, value))
-            when Module
-              file.write(getConstantName(enumer, value))
-            when Hash
-              enumer.each_key do |key|
-                if enumer[key] == value
-                  file.write(key)
-                  break
-                end
-              end
+        when "y", "Y"   # Enumerable or integer
+          enumer = schema[2 + i]
+          case enumer
+          when Array
+            file.write((enumer[value].nil?) ? value : enumer[value])
+          when Symbol, String
+            mod = Object.const_get(enumer.to_sym)
+            file.write(getConstantNameOrValue(mod, value))
+          when Module
+            file.write(getConstantNameOrValue(enumer, value))
+          when Hash
+            hasenum = false
+            enumer.each_key do |key|
+              next if enumer[key] != value
+              file.write(key)
+              hasenum = true
+              break
             end
-          when "y", "Y"   # Enumerable or integer
-            enumer = schema[2 + i]
-            case enumer
-            when Array
-              if enumer[value].nil?
-                file.write(value)
-              else
-                file.write(enumer[value])
-              end
-            when Symbol, String
-              mod = Object.const_get(enumer.to_sym)
-              file.write(getConstantNameOrValue(mod, value))
-            when Module
-              file.write(getConstantNameOrValue(enumer, value))
-            when Hash
-              hasenum = false
-              enumer.each_key do |key|
-                next if enumer[key] != value
-                file.write(key)
-                hasenum = true
-                break
-              end
-              file.write(value) unless hasenum
-            end
-          else   # Any other record type
-            file.write(value.inspect)
+            file.write(value) unless hasenum
           end
         else
-          file.write(value.inspect)
+          if value.is_a?(String)
+            file.write((schema[1][i, 1].downcase == "q") ? value : csvQuote(value))
+          elsif value.is_a?(Symbol)
+            file.write(csvQuote(value.to_s))
+          elsif value == true
+            file.write("true")
+          elsif value == false
+            file.write("false")
+          else
+            file.write(value.inspect)
+          end
         end
       end
       break if start > 0 && index >= rec.length - 1

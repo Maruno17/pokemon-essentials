@@ -10,6 +10,7 @@ Data/*
 !Data/messages_core.dat
 
 # Files in the main project folder
+errorlog.txt
 Game.ini
 Game.rxproj
 RGSS*.dll
