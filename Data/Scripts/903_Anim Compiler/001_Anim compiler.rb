@@ -41,8 +41,6 @@ module Compiler
           # New subsection [particle_name]
           value = get_csv_record($~[1], schema["Particle"])
           current_particle = {
-            # TODO: If "Particle" is changed to be more than just a single
-            #       string, add more properties accordingly.
             :name => value
           }
           data_hash[schema["Particle"][0]].push(current_particle)

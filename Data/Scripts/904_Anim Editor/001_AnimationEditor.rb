@@ -118,6 +118,7 @@ class AnimationEditor
   end
 
   def set_commands_pane_contents
+    @commands_pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
     # :frame (related to graphic) - If the graphic is user's sprite/target's
     # sprite, make this instead a choice of front/back/same as the main sprite/
     # opposite of the main sprite. Probably need two controls in the same space
@@ -149,6 +150,7 @@ class AnimationEditor
   end
 
   def set_se_pane_contents
+    @se_pane.add_header_label(:header, _INTL("Edit sound effects at keyframe"))
     # TODO: A list containing all SE files that play this keyframe. Lists SE,
     #       user cry and target cry.
     @se_pane.add_button(:add, _INTL("Add"))
@@ -157,6 +159,7 @@ class AnimationEditor
   end
 
   def set_particle_pane_contents
+    @particle_pane.add_header_label(:header, _INTL("Edit particle properties"))
     # TODO: Name should blacklist certain names ("User", "Target", "SE") and
     #       should be disabled if the value is one of those.
     @particle_pane.add_labelled_text_box(:name, _INTL("Name"), _INTL("Untitled"))
@@ -178,7 +181,7 @@ class AnimationEditor
   end
 
   def set_keyframe_pane_contents
-    @keyframe_pane.add_label(:temp, _INTL("Keyframe pane"))
+    @keyframe_pane.add_header_label(:header, _INTL("Edit keyframe"))
     # TODO: Various command-shifting options.
   end
 
@@ -267,7 +270,7 @@ class AnimationEditor
         next if !new_vals.include?(ctrl[0])
         ctrl[1].value = new_vals[ctrl[0]] if ctrl[1].respond_to?("value=")
       end
-      # TODO: Disable the name and graphic controls for "User"/"Target".
+      # TODO: Disable the name, graphic and focus controls for "User"/"Target".
     end
   end
 

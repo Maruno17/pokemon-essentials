@@ -131,12 +131,12 @@ class AnimationEditor::AnimationSelector
       Input.update
       update
       # Open editor with animation
-      @load_animation_id = 2   # TODO: For quickstart testing purposes.
+#      @load_animation_id = 2   # TODO: For quickstart testing purposes.
       if @load_animation_id
         screen = AnimationEditor.new(@load_animation_id, GameData::Animation.get(@load_animation_id).clone_as_hash)
         screen.run
         @load_animation_id = nil
-        break   # TODO: For quickstart testing purposes.
+#        break   # TODO: For quickstart testing purposes.
         # Refresh list of animations, in case the edited one changed its type,
         # move, version or name
         generate_list

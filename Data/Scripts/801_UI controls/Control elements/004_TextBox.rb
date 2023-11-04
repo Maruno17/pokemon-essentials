@@ -4,6 +4,8 @@
 #       decide which characters are selected. Maybe? Note that this method
 #       is only triggered upon the initial mouse press, and isn't repeated
 #       while it's still held down.
+# TODO: Add a blacklist array. Can't type in any values in this array. Disable
+#       this control if @value is in this array.
 #===============================================================================
 class UIControls::TextBox < UIControls::BaseControl
   TEXT_BOX_X       = 2

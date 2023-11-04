@@ -77,6 +77,12 @@ class UIControls::ControlsContainer
     add_control(id, UIControls::Label.new(*control_size(has_label), @viewport, label), has_label)
   end
 
+  def add_header_label(id, label)
+    ctrl = UIControls::Label.new(*control_size, @viewport, label)
+    ctrl.header = true
+    add_control(id, ctrl)
+  end
+
   def add_checkbox(id, value, has_label = false)
     add_control(id, UIControls::Checkbox.new(*control_size(has_label), @viewport, value), has_label)
   end

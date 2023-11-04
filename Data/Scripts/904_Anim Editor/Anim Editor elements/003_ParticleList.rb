@@ -127,6 +127,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   end
 
   def particle_index
+    return -1 if @row_index < 0
     ret = @particle_list[@row_index]
     return (ret.is_a?(Array)) ? ret[0] : ret
   end

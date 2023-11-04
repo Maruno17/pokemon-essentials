@@ -46,6 +46,16 @@ class UIControls::BaseControl < BitmapSprite
     @interactions = {}
   end
 
+  def mouse_in_control?
+    return false if !@interactions || @interactions.empty?
+    mouse_x, mouse_y = mouse_pos
+    return false if !mouse_x || !mouse_y
+    @interactions.each_pair do |area, rect|
+      return true if rect.contains?(mouse_x, mouse_y)
+    end
+    return false
+  end
+
   #-----------------------------------------------------------------------------
 
   def invalid?

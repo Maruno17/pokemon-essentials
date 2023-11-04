@@ -43,6 +43,11 @@ class UIControls::List < UIControls::BaseControl
     @scrollbar.y = new_val + LIST_Y
   end
 
+  def z=(new_val)
+    super(new_val)
+    @scrollbar.z = new_val + 1
+  end
+
   # Each value in @values is an array: [id, text].
   def values=(new_vals)
     @values = new_vals
@@ -77,7 +82,18 @@ class UIControls::List < UIControls::BaseControl
   # Returns the ID of the selected row.
   def value
     return nil if @selected < 0
-    return @values[@selected][0]
+    if @values.is_a?(Array)
+      return (@values[@selected].is_a?(Array)) ? @values[@selected][0] : @selected
+    elsif @values.is_a?(Hash)
+      return @values.keys[@selected]
+    end
+    return nil
+  end
+
+  def mouse_in_control?
+    return true if super
+    return true if @scrollbar.mouse_in_control?
+    return false
   end
 
   def set_interactive_rects
@@ -202,6 +218,17 @@ class UIControls::List < UIControls::BaseControl
     # Set the selected row to the row the mouse is over, if clicked on
     if @captured_area
       @selected = @hover_area if @hover_area.is_a?(Integer)
+    elsif @hover_area
+      wheel_v = Input.scroll_v
+      if wheel_v > 0   # Scroll up
+        @scrollbar.slider_top -= UIControls::Scrollbar::SCROLL_DISTANCE
+      elsif wheel_v < 0   # Scroll down
+        @scrollbar.slider_top += UIControls::Scrollbar::SCROLL_DISTANCE
+      end
+      if wheel_v != 0
+        self.top_row = (@scrollbar.position.to_f / ROW_HEIGHT).round
+        update_hover_highlight
+      end
     end
   end
 end

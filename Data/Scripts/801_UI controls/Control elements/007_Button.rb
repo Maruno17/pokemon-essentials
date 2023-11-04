@@ -66,7 +66,7 @@ class UIControls::Button < UIControls::BaseControl
     # Change this control's value
     if @captured_area == :button
       mouse_x, mouse_y = mouse_pos
-      if mouse_x && mouse_y &&  @interactions[@captured_area].contains?(mouse_x, mouse_y)
+      if mouse_x && mouse_y && @interactions[@captured_area].contains?(mouse_x, mouse_y)
         set_changed
       end
     end

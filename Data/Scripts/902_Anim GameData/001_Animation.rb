@@ -34,6 +34,8 @@ module GameData
       # TODO: DamageFrame (keyframe at which the battle continues, i.e. damage
       #       animations start playing).
       "Flags"       => [:flags,     "*s"],
+      # TODO: If this is changed to be more than just a string, edit the
+      #       compiler's current_particle definition accordingly.
       "Particle"    => [:particles, "s"]   # Is a subheader line like <text>
     }
     # For individual particles. Any property whose schema begins with "^" can
