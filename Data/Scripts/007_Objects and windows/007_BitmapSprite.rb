@@ -59,7 +59,7 @@ class AnimatedSprite < Sprite
     self.frame = 0
   end
 
-  # Shorter version of AnimationSprite. All frames are placed on a single row
+  # Shorter version of AnimatedSprite. All frames are placed on a single row
   # of the bitmap, so that the width and height need not be defined beforehand.
   # frameskip is in 1/20ths of a second, and is the time between frame changes.
   def initializeShort(animname, framecount, frameskip)
