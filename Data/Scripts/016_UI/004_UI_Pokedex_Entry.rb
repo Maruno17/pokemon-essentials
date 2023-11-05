@@ -328,7 +328,7 @@ class PokemonPokedexInfo_Scene
       map_metadata = GameData::MapMetadata.try_get(enc_data.map)
       next if !map_metadata || map_metadata.has_flag?("HideEncountersInPokedex")
       mappos = map_metadata.town_map_position
-      next if mappos[0] != @region   # Map isn't in the region being shown
+      next if !mappos || mappos[0] != @region   # Map isn't in the region being shown
       # Get the size and shape of the map in the Town Map
       map_size = map_metadata.town_map_size
       map_width = 1

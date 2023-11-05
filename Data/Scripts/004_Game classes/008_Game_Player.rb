@@ -313,7 +313,7 @@ class Game_Player < Game_Character
     return result
   end
 
-  def pbCheckEventTriggerAfterTurning; end
+  def check_event_trigger_after_turning; end
 
   def pbCheckEventTriggerFromDistance(triggers)
     events = pbTriggeredTrainerEvents(triggers)

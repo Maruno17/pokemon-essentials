@@ -113,6 +113,8 @@ class Interpreter
         end
         @move_route_waiting = false
       end
+      # Do nothing if the player is jumping out of surfing
+      return if $game_temp.ending_surf
       # Do nothing while waiting
       if @wait_count > 0
         return if System.uptime - @wait_start < @wait_count
@@ -162,7 +164,7 @@ class Interpreter
       # Assemble error message
       err = "Script error in Interpreter\r\n"
       if $game_map
-        map_name = ($game_map.name rescue nil) || "???"
+        map_name = (pbGetBasicMapNameFromId($game_map.map_id) rescue nil) || "???"
         if event
           err = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name})\r\n"
         else
