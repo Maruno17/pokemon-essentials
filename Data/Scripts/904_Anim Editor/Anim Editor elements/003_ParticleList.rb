@@ -77,8 +77,8 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @commands_bg_sprites = []
     @commands_sprites = []
     # Scrollbar positions
-    @left_pos = 0
     @top_pos = 0
+    @left_pos = 0
     @duration = 0
     # Selected things
     @keyframe = 0
@@ -93,8 +93,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
 
   def draw_control_background
     self.bitmap.clear
-    # Background
-    self.bitmap.fill_rect(0, 0, width, height, Color.white)
     # Separator lines
     self.bitmap.fill_rect(0, TIMELINE_HEIGHT, width, VIEWPORT_SPACING, Color.black)
     self.bitmap.fill_rect(LIST_WIDTH, 0, VIEWPORT_SPACING, height, Color.black)
@@ -132,21 +130,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     return (ret.is_a?(Array)) ? ret[0] : ret
   end
 
-  def left_pos=(val)
-    old_val = @left_pos
-    total_width = (@duration * KEYFRAME_SPACING) + TIMELINE_LEFT_BUFFER + 1
-    if total_width <= @commands_viewport.rect.width
-      @left_pos = 0
-    else
-      @left_pos = val
-      @left_pos = @left_pos.clamp(0, total_width - @commands_viewport.rect.width)
-    end
-    if @left_pos != old_val
-      refresh_position_line
-      invalidate_time
-    end
-  end
-
   def top_pos=(val)
     old_val = @top_pos
     total_height = (@particle_list.length * ROW_HEIGHT) + 1
@@ -162,6 +145,21 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     if @top_pos != old_val
       invalidate_rows
       @old_top_pos = old_val
+    end
+  end
+
+  def left_pos=(val)
+    old_val = @left_pos
+    total_width = (@duration * KEYFRAME_SPACING) + TIMELINE_LEFT_BUFFER + 1
+    if total_width <= @commands_viewport.rect.width
+      @left_pos = 0
+    else
+      @left_pos = val
+      @left_pos = @left_pos.clamp(0, total_width - @commands_viewport.rect.width)
+    end
+    if @left_pos != old_val
+      refresh_position_line
+      invalidate_time
     end
   end
 
@@ -204,8 +202,8 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     # Set scrollbars to the correct lengths
     @list_scrollbar.range = (@particle_list.length * ROW_HEIGHT) + 1
     @time_scrollbar.range = (@duration * KEYFRAME_SPACING) + TIMELINE_LEFT_BUFFER + 1
-    self.left_pos = @left_pos
-    self.top_pos = @top_pos
+    self.top_pos = @list_scrollbar.position
+    self.left_pos = @time_scrollbar.position
     # Redraw all sprites
     invalidate
   end
@@ -576,6 +574,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   end
 
   def refresh
+    @old_top_pos = nil if @invalid
     draw_area_highlight
     refresh_timeline if @invalid || @invalid_time
     each_visible_particle do |i|
@@ -719,8 +718,8 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @time_scrollbar.update
     super
     # Refresh sprites if a scrollbar has been moved
-    self.left_pos = @time_scrollbar.position
     self.top_pos = @list_scrollbar.position
+    self.left_pos = @time_scrollbar.position
     # Update the current keyframe line's position
     refresh_position_line
 

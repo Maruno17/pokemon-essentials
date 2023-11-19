@@ -40,4 +40,22 @@ class AnimationEditor::Canvas < Sprite
     @message_bar_sprite.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_message")
     @message_bar_sprite.y = Settings::SCREEN_HEIGHT - @message_bar_sprite.height
   end
+
+  #-----------------------------------------------------------------------------
+
+  def busy?
+    return false
+  end
+
+  def changed?
+    return false
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def repaint
+  end
+
+  def refresh
+  end
 end

@@ -1,14 +1,11 @@
 # TODO: Should I split this code into visual and mechanical classes, a la the
 #       other UI screens?
 #===============================================================================
-# TODO: Need a way to recognise when text is being input into something
-#       (Input.text_input) and disable all keyboard shortcuts if so. If only
-#       this class has keyboard shortcuts in it, then it should be okay already.
 # TODO: When creating a new particle, blacklist the names "User", "Target" and
 #       "SE". Make particles with those names undeletable.
 # TODO: Remove the particle named "Target" if the animation's focus is changed
 #       to one that doesn't include a target, and vice versa. Do the same for
-#       "User".
+#       "User"(?).
 # TODO: Things that need pop-up windows (draws a semi-transparent grey over the
 #       whole screen behind the window):
 #       - graphic picker
@@ -25,13 +22,15 @@ class AnimationEditor
   WINDOW_WIDTH  = Settings::SCREEN_WIDTH + (32 * 10)
   WINDOW_HEIGHT = Settings::SCREEN_HEIGHT + (32 * 10)
 
-  TOP_BAR_HEIGHT = 30
-
   BORDER_THICKNESS = 4
-  CANVAS_X         = BORDER_THICKNESS
-  CANVAS_Y         = TOP_BAR_HEIGHT + BORDER_THICKNESS
-  CANVAS_WIDTH     = Settings::SCREEN_WIDTH
-  CANVAS_HEIGHT    = Settings::SCREEN_HEIGHT
+
+  MENU_BAR_WIDTH  = WINDOW_WIDTH
+  MENU_BAR_HEIGHT = 30
+
+  CANVAS_X      = BORDER_THICKNESS
+  CANVAS_Y      = MENU_BAR_HEIGHT + BORDER_THICKNESS
+  CANVAS_WIDTH  = Settings::SCREEN_WIDTH
+  CANVAS_HEIGHT = Settings::SCREEN_HEIGHT
 
   PLAY_CONTROLS_X      = CANVAS_X
   PLAY_CONTROLS_Y      = CANVAS_Y + CANVAS_HEIGHT + (BORDER_THICKNESS * 2)
@@ -48,9 +47,19 @@ class AnimationEditor
   PARTICLE_LIST_WIDTH  = WINDOW_WIDTH - (BORDER_THICKNESS * 2)
   PARTICLE_LIST_HEIGHT = WINDOW_HEIGHT - PARTICLE_LIST_Y - BORDER_THICKNESS
 
+  MESSAGE_BOX_WIDTH         = WINDOW_WIDTH * 3 / 4
+  MESSAGE_BOX_HEIGHT        = 160
+  MESSAGE_BOX_X             = (WINDOW_WIDTH - MESSAGE_BOX_WIDTH) / 2
+  MESSAGE_BOX_Y             = (WINDOW_HEIGHT - MESSAGE_BOX_HEIGHT) / 2
+  MESSAGE_BOX_BUTTON_WIDTH  = 150
+  MESSAGE_BOX_BUTTON_HEIGHT = 32
+  MESSAGE_BOX_SPACING       = 16
+
   def initialize(anim_id, anim)
     @anim_id = anim_id
     @anim = anim
+    @pbs_path = anim[:pbs_path]
+    @quit = false
     # Viewports
     @viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
     @viewport.z = 99999
@@ -58,31 +67,35 @@ class AnimationEditor
     @canvas_viewport.z = @viewport.z
     # Background sprite
     @screen_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
+    @screen_bitmap.z = -1
     draw_editor_background
+    @components = {}
+    # Menu bar
+    @components[:menu_bar] = AnimationEditor::MenuBar.new(0, 0, MENU_BAR_WIDTH, MENU_BAR_HEIGHT, @viewport)
     # Canvas
-    @canvas = AnimationEditor::Canvas.new(@canvas_viewport)
+    @components[:canvas] = AnimationEditor::Canvas.new(@canvas_viewport)
     # Play controls
-    @play_controls = AnimationEditor::PlayControls.new(
+    @components[:play_controls] = AnimationEditor::PlayControls.new(
       PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT, @viewport
     )
     # Side panes
-    @commands_pane = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
-    @se_pane       = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
-    @particle_pane = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
-    @keyframe_pane = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
+    [:commands_pane, :se_pane, :particle_pane, :keyframe_pane].each do |pane|
+      @components[pane] = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
+    end
     # TODO: Make more side panes for:
-    #       - colour/tone editor (accessed from @commands_pane via a
-    #         button; has Apply/Cancel buttons to only apply all its values at
+    #       - colour/tone editor (accessed from @components[:commands_pane] via
+    #         a button; has Apply/Cancel buttons to only apply all its values at
     #         the end of editing them, although canvas will be updated in real
     #         time to show the changes)
     #       - effects particle properties (depends on keyframe; for screen
     #         shake, etc.)
     # Timeline/particle list
-    @particle_list = AnimationEditor::ParticleList.new(
+    @components[:particle_list] = AnimationEditor::ParticleList.new(
       PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT, @viewport
     )
-    @particle_list.set_interactive_rects
+    @components[:particle_list].set_interactive_rects
     @captured = nil
+    set_menu_bar_contents
     set_canvas_contents
     set_side_panes_contents
     set_particle_list_contents
@@ -92,81 +105,109 @@ class AnimationEditor
 
   def dispose
     @screen_bitmap.dispose
-    @canvas.dispose
-    @commands_pane.dispose
-    @se_pane.dispose
-    @particle_pane.dispose
-    @keyframe_pane.dispose
-    @play_controls.dispose
-    @particle_list.dispose
+    @components.each_value { |c| c.dispose }
+    @components.clear
     @viewport.dispose
     @canvas_viewport.dispose
   end
 
   def keyframe
-    return @particle_list.keyframe
+    return @components[:particle_list].keyframe
   end
 
   def particle_index
-    return @particle_list.particle_index
+    return @components[:particle_list].particle_index
   end
 
   #-----------------------------------------------------------------------------
 
+  # Returns the animation's name for display in the menu bar and elsewhere.
+  def get_animation_display_name
+    ret = ""
+    case @anim[:type]
+    when :move       then ret += _INTL("[Move]")
+    when :opp_move   then ret += _INTL("[Foe Move]")
+    when :common     then ret += _INTL("[Common]")
+    when :opp_common then ret += _INTL("[Foe Common]")
+    else
+      raise _INTL("Unknown animation type.")
+    end
+    case @anim[:type]
+    when :move, :opp_move
+      move_data = GameData::Move.try_get(@anim[:move])
+      move_name = (move_data) ? move_data.name : @anim[:move]
+      ret += " " + move_name
+    when :common, :opp_common
+      ret += " " + @anim[:move]
+    end
+    ret += " (" + @anim[:version].to_s + ")" if @anim[:version] > 0
+    ret += " - " + @anim[:name] if @anim[:name]
+    return ret
+  end
+
+  def set_menu_bar_contents
+    @components[:menu_bar].add_button(:quit, _INTL("Quit"))
+    @components[:menu_bar].add_button(:save, _INTL("Save"))
+    @components[:menu_bar].add_name_button(:name, get_animation_display_name)
+  end
+
   def set_canvas_contents
-    @canvas.bg_name = "indoor1"
+    @components[:canvas].bg_name = "indoor1"
   end
 
   def set_commands_pane_contents
-    @commands_pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
+    commands_pane = @components[:commands_pane]
+    commands_pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
     # :frame (related to graphic) - If the graphic is user's sprite/target's
     # sprite, make this instead a choice of front/back/same as the main sprite/
     # opposite of the main sprite. Probably need two controls in the same space
-    # and refresh_commands_pane makes the appropriate one visible.
-    @commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -128, CANVAS_WIDTH + 128, 64)
-    @commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -128, CANVAS_HEIGHT + 128, 96)
-    @commands_pane.add_labelled_checkbox(:visible, _INTL("Visible"), true)
-    @commands_pane.add_labelled_number_slider(:opacity, _INTL("Opacity"), 0, 255, 255)
-    @commands_pane.add_labelled_number_text_box(:zoom_x, _INTL("Zoom X"), 0, 1000, 100)
-    @commands_pane.add_labelled_number_text_box(:zoom_y, _INTL("Zoom Y"), 0, 1000, 100)
-    @commands_pane.add_labelled_number_text_box(:angle, _INTL("Angle"), -1080, 1080, 0)
-    @commands_pane.add_labelled_checkbox(:flip, _INTL("Flip"), false)
-    @commands_pane.add_labelled_dropdown_list(:blending, _INTL("Blending"), {
+    # and refresh_component(:commands_pane) makes the appropriate one visible.
+    commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -128, CANVAS_WIDTH + 128, 64)
+    commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -128, CANVAS_HEIGHT + 128, 96)
+    commands_pane.add_labelled_checkbox(:visible, _INTL("Visible"), true)
+    commands_pane.add_labelled_number_slider(:opacity, _INTL("Opacity"), 0, 255, 255)
+    commands_pane.add_labelled_number_text_box(:zoom_x, _INTL("Zoom X"), 0, 1000, 100)
+    commands_pane.add_labelled_number_text_box(:zoom_y, _INTL("Zoom Y"), 0, 1000, 100)
+    commands_pane.add_labelled_number_text_box(:angle, _INTL("Angle"), -1080, 1080, 0)
+    commands_pane.add_labelled_checkbox(:flip, _INTL("Flip"), false)
+    commands_pane.add_labelled_dropdown_list(:blending, _INTL("Blending"), {
       0 => _INTL("None"),
       1 => _INTL("Additive"),
       2 => _INTL("Subtractive")
     }, 0)
-    @commands_pane.add_labelled_button(:color_tone, _INTL("Color/Tone"), _INTL("Edit"))
-    # @commands_pane.add_labelled_dropdown_list(:priority, _INTL("Priority"), {   # TODO: Include sub-priority.
+    commands_pane.add_labelled_button(:color_tone, _INTL("Color/Tone"), _INTL("Edit"))
+    # commands_pane.add_labelled_dropdown_list(:priority, _INTL("Priority"), {   # TODO: Include sub-priority.
     #   :behind_all  => _INTL("Behind all"),
     #   :behind_user => _INTL("Behind user"),
     #   :above_user  => _INTL("In front of user"),
     #   :above_all   => _INTL("In front of everything")
     # }, :above_user)
     # :sub_priority
-#    @commands_pane.add_labelled_button(:masking, _INTL("Masking"), _INTL("Edit"))
+#    commands_pane.add_labelled_button(:masking, _INTL("Masking"), _INTL("Edit"))
     # TODO: Add buttons that shift all commands from the current keyframe and
     #       later forwards/backwards in time?
   end
 
   def set_se_pane_contents
-    @se_pane.add_header_label(:header, _INTL("Edit sound effects at keyframe"))
+    se_pane = @components[:se_pane]
+    se_pane.add_header_label(:header, _INTL("Edit sound effects at keyframe"))
     # TODO: A list containing all SE files that play this keyframe. Lists SE,
     #       user cry and target cry.
-    @se_pane.add_button(:add, _INTL("Add"))
-    @se_pane.add_button(:edit, _INTL("Edit"))
-    @se_pane.add_button(:delete, _INTL("Delete"))
+    se_pane.add_button(:add, _INTL("Add"))
+    se_pane.add_button(:edit, _INTL("Edit"))
+    se_pane.add_button(:delete, _INTL("Delete"))
   end
 
   def set_particle_pane_contents
-    @particle_pane.add_header_label(:header, _INTL("Edit particle properties"))
+    particle_pane = @components[:particle_pane]
+    particle_pane.add_header_label(:header, _INTL("Edit particle properties"))
     # TODO: Name should blacklist certain names ("User", "Target", "SE") and
     #       should be disabled if the value is one of those.
-    @particle_pane.add_labelled_text_box(:name, _INTL("Name"), _INTL("Untitled"))
+    particle_pane.add_labelled_text_box(:name, _INTL("Name"), _INTL("Untitled"))
     # TODO: Graphic should show the graphic's name alongside a "Change" button.
     #       New kind of control that is a label plus a button?
-    @particle_pane.add_labelled_button(:graphic, _INTL("Graphic"), _INTL("Change"))
-    @particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {
+    particle_pane.add_labelled_button(:graphic, _INTL("Graphic"), _INTL("Change"))
+    particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {
       :user            => _INTL("User"),
       :target          => _INTL("Target"),
       :user_and_target => _INTL("User and target"),
@@ -181,7 +222,8 @@ class AnimationEditor
   end
 
   def set_keyframe_pane_contents
-    @keyframe_pane.add_header_label(:header, _INTL("Edit keyframe"))
+    keyframe_pane = @components[:keyframe_pane]
+    keyframe_pane.add_header_label(:header, _INTL("Edit keyframe"))
     # TODO: Various command-shifting options.
   end
 
@@ -193,80 +235,151 @@ class AnimationEditor
   end
 
   def set_particle_list_contents
-    @particle_list.set_particles(@anim[:particles])
+    @components[:particle_list].set_particles(@anim[:particles])
   end
 
   def set_play_controls_contents
-    @play_controls.duration = @particle_list.duration
+    @components[:play_controls].duration = @components[:particle_list].duration
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def message(text, *options)
+    msg_viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+    msg_viewport.z = @viewport.z + 50
+    msg_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, msg_viewport)
+    msg_bitmap.bitmap.font.color = Color.black
+    msg_bitmap.bitmap.font.size = 18
+    # Draw gray background
+    msg_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
+    # Draw message box border
+    BORDER_THICKNESS.times do |i|
+      col = (i.even?) ? Color.white : Color.black
+      msg_bitmap.bitmap.outline_rect(MESSAGE_BOX_X - i - 1, MESSAGE_BOX_Y - i - 1,
+                                     MESSAGE_BOX_WIDTH + (i * 2) + 2, MESSAGE_BOX_HEIGHT + (i * 2) + 2, col)
+    end
+    # Fill message box with white
+    msg_bitmap.bitmap.fill_rect(MESSAGE_BOX_X, MESSAGE_BOX_Y, MESSAGE_BOX_WIDTH, MESSAGE_BOX_HEIGHT, Color.white)
+    # Draw text
+    text_size = msg_bitmap.bitmap.text_size(text)
+    msg_bitmap.bitmap.draw_text(MESSAGE_BOX_X, (WINDOW_HEIGHT / 2) - MESSAGE_BOX_BUTTON_HEIGHT,
+                                MESSAGE_BOX_WIDTH, text_size.height, text, 1)
+    # Create buttons
+    buttons = []
+    options.each_with_index do |option, i|
+      btn = UIControls::Button.new(MESSAGE_BOX_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, msg_viewport, option[1])
+      btn.x = (WINDOW_WIDTH - (options.length * MESSAGE_BOX_BUTTON_WIDTH)) / 2 + (i * MESSAGE_BOX_BUTTON_WIDTH)
+      btn.y = MESSAGE_BOX_Y + MESSAGE_BOX_HEIGHT - MESSAGE_BOX_BUTTON_HEIGHT - MESSAGE_BOX_SPACING
+      btn.set_fixed_size
+      btn.set_interactive_rects
+      buttons.push([option[0], btn])
+    end
+    # Interaction loop
+    ret = nil
+    captured = nil
+    loop do
+      Graphics.update
+      Input.update
+      if captured
+        captured.update
+        captured = nil if !captured.busy?
+      else
+        buttons.each do |btn|
+          btn[1].update
+          captured = btn[1] if btn[1].busy?
+        end
+      end
+      buttons.each do |btn|
+        next if !btn[1].changed?
+        ret = btn[0]
+        break
+      end
+      ret = :cancel if Input.trigger?(Input::BACK)
+      break if ret
+      buttons.each { |btn| btn[1].repaint }
+    end
+    # Dispose and return
+    buttons.each { |btn| btn[1].dispose }
+    buttons.clear
+    msg_bitmap.dispose
+    msg_viewport.dispose
+    return ret
+  end
+
+  def confirm_message(text)
+    return message(text, [:yes, _INTL("Yes")], [:no, _INTL("No")]) == :yes
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def save
+    GameData::Animation.register(@anim, @anim_id)
+    Compiler.write_battle_animation_file(@anim[:pbs_path])
+    if @anim[:pbs_path] != @pbs_path
+      if GameData::Animation::DATA.any? { |_key, anim| anim.pbs_path == @pbs_path }
+        Compiler.write_battle_animation_file(@pbs_path)
+      elsif FileTest.exist?("PBS/Animations/" + @pbs_path + ".txt")
+        File.delete("PBS/Animations/" + @pbs_path + ".txt")
+      end
+      @pbs_path = @anim[:pbs_path]
+    end
   end
 
   #-----------------------------------------------------------------------------
 
   def draw_editor_background
-    # Fill the whole screen with black
-    @screen_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.black)
-    # Fill the top bar with white
-    @screen_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, TOP_BAR_HEIGHT, Color.white)
-    # Outline around canvas
-    @screen_bitmap.bitmap.outline_rect(CANVAS_X - 3, CANVAS_Y - 3, CANVAS_WIDTH + 6, CANVAS_HEIGHT + 6, Color.white)
-    @screen_bitmap.bitmap.outline_rect(CANVAS_X - 2, CANVAS_Y - 2, CANVAS_WIDTH + 4, CANVAS_HEIGHT + 4, Color.black)
-    @screen_bitmap.bitmap.outline_rect(CANVAS_X - 1, CANVAS_Y - 1, CANVAS_WIDTH + 2, CANVAS_HEIGHT + 2, Color.white)
-    # Outline around side pane
-    @screen_bitmap.bitmap.outline_rect(SIDE_PANE_X - 3, SIDE_PANE_Y - 3, SIDE_PANE_WIDTH + 6, SIDE_PANE_HEIGHT + 6, Color.white)
-    @screen_bitmap.bitmap.outline_rect(SIDE_PANE_X - 2, SIDE_PANE_Y - 2, SIDE_PANE_WIDTH + 4, SIDE_PANE_HEIGHT + 4, Color.black)
-    @screen_bitmap.bitmap.outline_rect(SIDE_PANE_X - 1, SIDE_PANE_Y - 1, SIDE_PANE_WIDTH + 2, SIDE_PANE_HEIGHT + 2, Color.white)
-    # Fill the side pane with white
-    @screen_bitmap.bitmap.fill_rect(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT, Color.white)
-    # Outline around play controls
-    @screen_bitmap.bitmap.outline_rect(PLAY_CONTROLS_X - 3, PLAY_CONTROLS_Y - 3, PLAY_CONTROLS_WIDTH + 6, PLAY_CONTROLS_HEIGHT + 6, Color.white)
-    @screen_bitmap.bitmap.outline_rect(PLAY_CONTROLS_X - 2, PLAY_CONTROLS_Y - 2, PLAY_CONTROLS_WIDTH + 4, PLAY_CONTROLS_HEIGHT + 4, Color.black)
-    @screen_bitmap.bitmap.outline_rect(PLAY_CONTROLS_X - 1, PLAY_CONTROLS_Y - 1, PLAY_CONTROLS_WIDTH + 2, PLAY_CONTROLS_HEIGHT + 2, Color.white)
-    # Fill the play controls with white
-    @screen_bitmap.bitmap.fill_rect(PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT, Color.white)
-    # Outline around timeline/particle list
-    @screen_bitmap.bitmap.outline_rect(PARTICLE_LIST_X - 3, PARTICLE_LIST_Y - 3, PARTICLE_LIST_WIDTH + 6, PARTICLE_LIST_HEIGHT + 6, Color.white)
-    @screen_bitmap.bitmap.outline_rect(PARTICLE_LIST_X - 2, PARTICLE_LIST_Y - 2, PARTICLE_LIST_WIDTH + 4, PARTICLE_LIST_HEIGHT + 4, Color.black)
-    @screen_bitmap.bitmap.outline_rect(PARTICLE_LIST_X - 1, PARTICLE_LIST_Y - 1, PARTICLE_LIST_WIDTH + 2, PARTICLE_LIST_HEIGHT + 2, Color.white)
+    draw_big_outline = lambda do |bitmap, x, y, width, height|
+      BORDER_THICKNESS.times do |i|
+        col = (i.even?) ? Color.white : Color.black
+        bitmap.outline_rect(x - i - 1, y - i - 1, width + (i * 2) + 2, height + (i * 2) + 2, col)
+      end
+    end
+    # Fill the whole screen with white
+    @screen_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.white)
+    # Outline around elements
+    draw_big_outline.call(@screen_bitmap.bitmap, CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT)
+    draw_big_outline.call(@screen_bitmap.bitmap, PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT)
+    draw_big_outline.call(@screen_bitmap.bitmap, SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
+    draw_big_outline.call(@screen_bitmap.bitmap, PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT)
   end
 
-  def refresh_canvas
+  def refresh_component_visibility(component_sym)
+    component = @components[component_sym]
+    # Panes are all mutually exclusive
+    case component_sym
+    when :commands_pane
+      component.visible = (keyframe >= 0 && particle_index >= 0 &&
+                          @anim[:particles][particle_index] &&
+                          @anim[:particles][particle_index][:name] != "SE")
+    when :se_pane
+      component.visible = (keyframe >= 0 && particle_index >= 0 &&
+                          @anim[:particles][particle_index] &&
+                          @anim[:particles][particle_index][:name] == "SE")
+    when :particle_pane
+      component.visible = (keyframe < 0 && particle_index >= 0)
+    when :keyframe_pane
+      component.visible = (keyframe >= 0 && particle_index < 0)
+    end
   end
 
-  def refresh_commands_pane
-    if keyframe < 0 || particle_index < 0 || !@anim[:particles][particle_index] ||
-       @anim[:particles][particle_index][:name] == "SE"
-      @commands_pane.visible = false
-    else
-      @commands_pane.visible = true
+  def refresh_component_values(component_sym)
+    component = @components[component_sym]
+    case component_sym
+    when :commands_pane
       new_vals = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(@anim[:particles][particle_index], keyframe)
       # TODO: Need to do something special for :color, :tone and :frame which
       #       all have button controls.
-      @commands_pane.controls.each do |ctrl|
+      component.controls.each do |ctrl|
         next if !new_vals.include?(ctrl[0])
         ctrl[1].value = new_vals[ctrl[0]][0] if ctrl[1].respond_to?("value=")
         # TODO: new_vals[ctrl[0]][1] is whether the value is being interpolated,
         #       which should be indicated somehow in ctrl[1].
       end
-    end
-  end
-
-  def refresh_se_pane
-    if keyframe < 0 || particle_index < 0 || !@anim[:particles][particle_index] ||
-       @anim[:particles][particle_index][:name] != "SE"
-      @se_pane.visible = false
-    else
-      @se_pane.visible = true
+    when :se_pane
       # TODO: Set list of SEs, activate/deactivate buttons accordingly.
-    end
-  end
-
-  def refresh_particle_pane
-    if keyframe >= 0 || particle_index < 0
-      @particle_pane.visible = false
-    else
-      @particle_pane.visible = true
+    when :particle_pane
       new_vals = AnimationEditor::ParticleDataHelper.get_all_particle_values(@anim[:particles][particle_index])
-      @particle_pane.controls.each do |ctrl|
+      component.controls.each do |ctrl|
         next if !new_vals.include?(ctrl[0])
         ctrl[1].value = new_vals[ctrl[0]] if ctrl[1].respond_to?("value=")
       end
@@ -274,179 +387,109 @@ class AnimationEditor
     end
   end
 
-  def refresh_keyframe_pane
-    if keyframe < 0 || particle_index >= 0
-      @keyframe_pane.visible = false
-    else
-      @keyframe_pane.visible = true
-    end
-  end
-
-  def refresh_particle_list
-    @particle_list.refresh
-  end
-
-  def refresh_play_controls
-    @play_controls.refresh
+  def refresh_component(component_sym)
+    refresh_component_visibility(component_sym)
+    return if !@components[component_sym].visible
+    refresh_component_values(component_sym)
+    @components[component_sym].refresh
   end
 
   def refresh
-    # Set canvas display
-    refresh_canvas
-    # Set all side pane controls to values from animation
-    refresh_commands_pane
-    refresh_se_pane
-    refresh_particle_pane
-    refresh_keyframe_pane
-    # Set particle list's contents
-    refresh_particle_list
-    # Set play controls' information
-    refresh_play_controls
+    @components.each_key { |sym| refresh_component(sym) }
   end
 
   #-----------------------------------------------------------------------------
 
-  def update_canvas
-    @canvas.update
-    # TODO: Detect and apply changes made in canvas, e.g. moving particle,
-    #       double-clicking to add particle, deleting particle.
-  end
-
-  def update_commands_pane
-    return if !@commands_pane.visible
-    @commands_pane.update
-    if @commands_pane.busy?
-      @captured = [@commands_pane, :update_commands_pane]
-    end
-    if @commands_pane.changed?
-      # TODO: Make undo/redo snapshot.
-      values = @commands_pane.values
-      values.each_pair do |property, value|
-        case property
-        when :color_tone   # Button
-          # TODO: Open the colour/tone side pane.
+  # TODO: Every component that contains a button, etc. should respond to
+  #       "values", which returns the changed elements.
+  def apply_changed_value(component_sym, property, value)
+    case component_sym
+    when :menu_bar
+      case property
+      when :quit
+        @quit = true
+      when :save
+        save
+      when :name
+        # TODO: Open the animation properties pop-up window.
+        echoln "animation name clicked"
+      end
+    when :canvas
+      # TODO: Detect and apply changes made in canvas, e.g. moving particle,
+      #       double-clicking to add particle, deleting particle.
+    when :commands_pane
+      case property
+      when :color_tone   # Button
+        # TODO: Open the colour/tone side pane.
+      else
+        particle = @anim[:particles][particle_index]
+        new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value)
+        if new_cmds
+          particle[property] = new_cmds
         else
-          particle = @anim[:particles][particle_index]
-          new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value)
-          if new_cmds
-            particle[property] = new_cmds
-          else
-            particle.delete(property)
-          end
-          @particle_list.change_particle_commands(particle_index)
-          @play_controls.duration = @particle_list.duration
-          refresh_commands_pane
+          particle.delete(property)
         end
+        @components[:particle_list].change_particle_commands(particle_index)
+        @components[:play_controls].duration = @components[:particle_list].duration
+        refresh_component(:commands_pane)
       end
-      @commands_pane.clear_changed
-    end
-  end
-
-  def update_se_pane
-    return if !@se_pane.visible
-    @se_pane.update
-    if @se_pane.busy?
-      @captured = [@se_pane, :update_se_pane]
-    end
-    # TODO: Enable the "Edit" and "Delete" controls only if an SE is selected.
-    if @se_pane.changed?
-      # TODO: Make undo/redo snapshot.
-      values = @se_pane.values
-      values.each_pair do |property, value|
-        case property
-        when :add   # Button
-        when :edit   # Button
-        when :delete   # Button
-        else
-          particle = @anim[:particles][particle_index]
-        end
+    when :se_pane
+      # TODO: Enable the "Edit" and "Delete" controls only if an SE is selected.
+      case property
+      when :add   # Button
+      when :edit   # Button
+      when :delete   # Button
+      else
+#        particle = @anim[:particles][particle_index]
       end
-      @se_pane.clear_changed
-    end
-  end
-
-  def update_particle_pane
-    return if !@particle_pane.visible
-    @particle_pane.update
-    if @particle_pane.busy?
-      @captured = [@particle_pane, :update_particle_pane]
-    end
-    if @particle_pane.changed?
-      # TODO: Make undo/redo snapshot.
-      values = @particle_pane.values
-      values.each_pair do |property, value|
-        case property
-        when :graphic   # Button
-          # TODO: Open the graphic chooser pop-up window.
-        else
-          particle = @anim[:particles][particle_index]
-          new_cmds = AnimationEditor::ParticleDataHelper.set_property(particle, property, value)
-          @particle_list.change_particle(particle_index)
-          refresh_particle_pane
-        end
+    when :particle_pane
+      case property
+      when :graphic   # Button
+        # TODO: Open the graphic chooser pop-up window.
+      else
+        particle = @anim[:particles][particle_index]
+        new_cmds = AnimationEditor::ParticleDataHelper.set_property(particle, property, value)
+        @components[:particle_list].change_particle(particle_index)
+        refresh_component(:particle_pane)
       end
-      @particle_pane.clear_changed
-    end
-  end
-
-  def update_keyframe_pane
-    return if !@keyframe_pane.visible
-    @keyframe_pane.update
-    if @keyframe_pane.busy?
-      @captured = [@keyframe_pane, :update_keyframe_pane]
-    end
-    if @keyframe_pane.changed?
-      # TODO: Make undo/redo snapshot.
-      values = @keyframe_pane.values
-      values.each_pair do |property, value|
-        # TODO: Stuff here once I decide what controls to add.
-      end
-      @keyframe_pane.clear_changed
-    end
-  end
-
-  def update_particle_list
-    old_keyframe = keyframe
-    old_particle_index = particle_index
-    @particle_list.update
-    if @particle_list.busy?
-      @captured = [@particle_list, :update_particle_list]
-    end
-    if @particle_list.changed?
-      refresh if keyframe != old_keyframe || particle_index != old_particle_index
+    when :keyframe_pane
+      # TODO: Stuff here once I decide what controls to add.
+    when :particle_list
+#      refresh if keyframe != old_keyframe || particle_index != old_particle_index
       # TODO: Lots of stuff here.
-      @particle_list.clear_changed
+    when :play_controls
+      # TODO: Will the play controls ever signal themselves as changed? I don't
+      #       think so.
     end
-    @particle_list.repaint
-  end
-
-  def update_play_controls
-    @play_controls.update
-    @play_controls.repaint
-    if @play_controls.busy?
-      @captured = [@play_controls, :update_play_controls]
-    end
-    # TODO: Will the play controls ever signal themselves as changed? I don't
-    #       think so.
-    if @play_controls.changed?
-      @play_controls.clear_changed
-    end
-    @play_controls.repaint
   end
 
   def update
-    if @captured
-      self.send(@captured[1])
-      @captured = nil if !@captured[0].busy?
-      return
+    old_keyframe = keyframe
+    old_particle_index = particle_index
+    @components.each_pair do |sym, component|
+      next if @captured && @captured != sym
+      next if !component.visible
+      component.update
+      @captured = sym if component.busy?
+      if component.changed?
+        if sym == :particle_list
+          refresh if keyframe != old_keyframe || particle_index != old_particle_index
+        end
+        if component.respond_to?("values")
+          # TODO: Make undo/redo snapshot.
+          values = component.values
+          values.each_pair do |property, value|
+            apply_changed_value(sym, property, value)
+          end
+        end
+        component.clear_changed
+      end
+      component.repaint if sym == :particle_list || sym == :menu_bar
+      if @captured
+        @captured = nil if !component.busy?
+        break
+      end
     end
-    update_canvas
-    update_commands_pane
-    update_se_pane
-    update_particle_pane
-    update_keyframe_pane
-    update_particle_list
-    update_play_controls
   end
 
   #-----------------------------------------------------------------------------
@@ -454,16 +497,22 @@ class AnimationEditor
   def run
     Input.text_input = false
     loop do
+      # TODO: Do we need to check for Input.text_input? I think just checking
+      #       @captured != nil will suffice.
       inputting_text = Input.text_input
       Graphics.update
       Input.update
       update
-      if !inputting_text
-        if Input.trigger?(Input::BACK)
-          # TODO: Ask to save/discard changes.
-          # TODO: When saving, add animation to GameData and rewrite animation's
-          #       parent PBS file (which could include multiple animations).
-          break
+      if !inputting_text && @captured.nil?
+        if @quit || Input.trigger?(Input::BACK)
+          case message(_INTL("Do you want to save changes to the animation?"),
+                       [:yes, _INTL("Yes")], [:no, _INTL("No")], [:cancel, _INTL("Cancel")])
+          when :yes
+            save
+          when :cancel
+            @quit = false
+          end
+          break if @quit
         end
       end
     end

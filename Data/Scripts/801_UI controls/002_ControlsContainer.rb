@@ -1,7 +1,6 @@
 #===============================================================================
-# Controls are arranged in a list in self's bitmap. Each control is given a
-# "self's bitmap's width" x LINE_SPACING area of self's bitmap to draw itself
-# in.
+# Controls are arranged in a list in self's bitmap. Each control is given an
+# area of size "self's bitmap's width" x LINE_SPACING to draw itself in.
 # TODO: The act of "capturing" a control makes other controls in this container
 #       not update themselves, i.e. they won't colour themselves with a hover
 #       highlight if the mouse happens to move over it while another control is
@@ -143,6 +142,8 @@ class UIControls::ControlsContainer
     @controls.each { |ctrl| ctrl[1].repaint }
   end
 
+  def refresh; end
+
   #-----------------------------------------------------------------------------
 
   def update
@@ -187,6 +188,7 @@ class UIControls::ControlsContainer
   def add_control(id, control, add_offset = false)
     i = @controls.length
     control_y = (add_offset ? @row_count - 1 : @row_count) * LINE_SPACING
+    # TODO: I don't think I need @control_rects.
     @control_rects[i] = Rect.new(0, control_y, control.width, control.height)
     control.x = @control_rects[i].x + (add_offset ? OFFSET_FROM_LABEL_X : 0)
     control.y = @control_rects[i].y + (add_offset ? OFFSET_FROM_LABEL_Y : 0)

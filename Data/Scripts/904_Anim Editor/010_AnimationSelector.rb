@@ -87,14 +87,14 @@ class AnimationEditor::AnimationSelector
     #       to? Animation's name, move's name (if there is one), what else?
     # TODO: Filter dropdown list to pick a move type? Other filter options?
     # "Load animation" button
-    @load_button = UIControls::Button.new(LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT, @viewport, "Load animation")
+    @load_button = UIControls::Button.new(LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT, @viewport, _INTL("Load animation"))
     @load_button.x = LOAD_BUTTON_X
     @load_button.y = LOAD_BUTTON_Y
     @load_button.set_fixed_size
     @load_button.set_interactive_rects
     @controls[:load] = @load_button
     # TODO: "New animation" button, "Delete animation" button, "Duplicate
-    #       animation" button.
+    #       animation" button, "Quit" button.
     repaint
   end
 

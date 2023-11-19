@@ -29,6 +29,13 @@ class UIControls::Button < UIControls::BaseControl
     }
   end
 
+  # TODO: This won't change the button's size. This is probably okay.
+  def set_text(val)
+    return if @text == val
+    @text = val
+    invalidate
+  end
+
   def set_changed
     @value = true
     super

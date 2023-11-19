@@ -13,7 +13,8 @@ class Bitmap
     end
   end
 
-  # TODO: Add more curve types once it's decided which ones they are.
+  # TODO: Add more curve types once it's decided which ones they are. See
+  #       INTERPOLATION_TYPES.
   def draw_interpolation_line(x, y, width, height, gradient, type, color)
     case type
     when :linear
