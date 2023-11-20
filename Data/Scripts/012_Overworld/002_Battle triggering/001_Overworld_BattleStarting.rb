@@ -189,7 +189,8 @@ module BattleCreationHelperMethods
       ally = NPCTrainer.new($PokemonGlobal.partner[1], $PokemonGlobal.partner[0])
       ally.id    = $PokemonGlobal.partner[2]
       ally.party = $PokemonGlobal.partner[3]
-      ally_items[1] = ally.items.clone
+      data = GameData::Trainer.try_get($PokemonGlobal.partner[0], $PokemonGlobal.partner[1], $PokemonGlobal.partner[2])
+      ally_items[1] = data&.items.clone || []
       trainer_array.push(ally)
       pokemon_array = []
       $player.party.each { |pkmn| pokemon_array.push(pkmn) }
