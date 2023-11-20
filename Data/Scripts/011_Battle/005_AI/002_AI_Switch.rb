@@ -633,6 +633,7 @@ Battle::AI::Handlers::ShouldNotSwitch.add(:lethal_entry_hazards,
 Battle::AI::Handlers::ShouldNotSwitch.add(:battler_has_super_effective_move,
   proc { |battler, reserves, ai, battle|
     next false if battler.effects[PBEffects::PerishSong] == 1
+    next false if battler.rough_end_of_round_damage >= battler.hp * 2 / 3
     next false if battle.rules["suddendeath"]
     has_super_effective_move = false
     battler.battler.eachMove do |move|
@@ -674,5 +675,31 @@ Battle::AI::Handlers::ShouldNotSwitch.add(:battler_has_very_raised_stats,
       next true
     end
     next false
+  }
+)
+
+#===============================================================================
+# Don't bother switching if the battler has Wonder Guard and is immune to the
+# foe's damaging attacks.
+#===============================================================================
+Battle::AI::Handlers::ShouldNotSwitch.add(:battler_is_immune_via_wonder_guard,
+  proc { |battler, reserves, ai, battle|
+    next false if battler.effects[PBEffects::PerishSong] == 1
+    next false if battler.rough_end_of_round_damage >= battler.hp / 2
+    next false if !battler.has_active_ability?(:WONDERGUARD)
+    super_effective_foe = false
+    ai.each_foe_battler(battler.side) do |b|
+      next if !b.check_for_move do |m|
+        next false if !m.damagingMove?
+        eff = battler.effectiveness_of_type_against_battler(m.pbCalcType(b.battler), b, m)
+        next Effectiveness.super_effective?(eff)
+      end
+      super_effective_foe = true
+      break
+    end
+    if !super_effective_foe
+      PBDebug.log_ai("#{battler.name} won't switch after all because it has Wonder Guard and can't be damaged by foes")
+    end
+    next !super_effective_foe
   }
 )

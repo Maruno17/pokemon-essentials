@@ -82,7 +82,7 @@ Weight = 3.8
 Color = Black
 Pokedex = With its incisors, it gnaws through doors and infiltrates people's homes. Then, with a twitch of its whiskers, it steals whatever food it finds.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = PECHABERRY
 Evolution = RATICATE,LevelNight,20
 #-------------------------------
@@ -97,7 +97,7 @@ Weight = 25.5
 Color = Black
 Pokedex = It forms a group of Rattata, which it assumes command of. Each group has its own territory, and disputes over food happen often.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = PECHABERRY
 #-------------------------------
 [RAICHU,1]
@@ -128,7 +128,7 @@ Weight = 40.0
 Color = White
 Pokedex = The skin on its back is as hard as steel. Predators go after its soft belly, so it clings to the ground desperately.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = SANDSLASH,Item,ICESTONE
 #-------------------------------
 [SANDSLASH,1]
@@ -144,7 +144,7 @@ Weight = 55.0
 Color = Blue
 Pokedex = It runs across snow-covered plains at high speeds. It developed thick, sharp claws to plow through the snow.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [VULPIX,1]
 FormName = Alolan
@@ -157,7 +157,7 @@ EggMoves = AGILITY,CHARM,DISABLE,ENCORE,EXTRASENSORY,FLAIL,FREEZEDRY,HOWL,HYPNOS
 Color = White
 Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and sprays them around to cool itself off.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = SNOWBALL
 Evolution = NINETALES,Item,ICESTONE
 #-------------------------------
@@ -173,7 +173,7 @@ TutorMoves = AQUATAIL,ATTRACT,AURORAVEIL,BLIZZARD,BODYSLAM,CALMMIND,CAPTIVATE,CO
 Color = Blue
 Pokedex = It lives on mountains perpetually covered in snow and is revered as a deity incarnate. It appears draped in a blizzard.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = SNOWBALL
 #-------------------------------
 [DIGLETT,1]
@@ -187,7 +187,7 @@ EggMoves = ANCIENTPOWER,BEATUP,ENDURE,FEINTATTACK,FINALGAMBIT,HEADBUTT,MEMENTO,M
 Weight = 1.0
 Pokedex = Its head sports an altered form of whiskers made of metal. When in communication with its comrades, its whiskers wobble to and fro.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [DUGTRIO,1]
 FormName = Alolan
@@ -200,7 +200,7 @@ TutorMoves = AERIALACE,ATTRACT,BODYSLAM,BULLDOZE,CAPTIVATE,CONFIDE,CUT,DIG,DOUBL
 Weight = 66.6
 Pokedex = Its shining gold hair provides it with protection. It's reputed that keeping any of its fallen hairs will bring bad luck.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [MEOWTH,1]
 FormName = Alolan
@@ -213,7 +213,7 @@ EggMoves = AMNESIA,ASSIST,CHARM,COVET,FLAIL,FLATTER,FOULPLAY,HYPNOSIS,PARTINGSHO
 Color = Blue
 Pokedex = It's impulsive, selfish, and fickle. It's very popular with some Trainers who like giving it the attention it needs.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = PERSIAN,Happiness
 #-------------------------------
 [PERSIAN,1]
@@ -229,7 +229,7 @@ Weight = 33.0
 Color = Blue
 Pokedex = Its round face is a symbol of wealth. Persian that have bigger, plumper faces are considered more beautiful.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [ALAKAZAM,1]
 FormName = Mega Alakazam
@@ -254,7 +254,7 @@ Weight = 20.3
 Color = Gray
 Pokedex = Geodude compete against each other with headbutts. The iron sand on their heads will stick to whichever one has stronger magnetism.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = CELLBATTERY
 #-------------------------------
 [GRAVELER,1]
@@ -268,7 +268,7 @@ Weight = 110.0
 Color = Gray
 Pokedex = They eat rocks and often get into a scrap over them. The shock of Graveler smashing together causes a flash of light and a booming noise.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = CELLBATTERY
 #-------------------------------
 [GOLEM,1]
@@ -283,7 +283,7 @@ Weight = 316.0
 Color = Gray
 Pokedex = It fires rocks charged with electricity. Even if the rock isn't fired that accurately, just grazing an opponent will cause numbness and fainting.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemCommon = CELLBATTERY
 #-------------------------------
 [SLOWBRO,1]
@@ -312,7 +312,7 @@ Weight = 42.0
 Color = Green
 Pokedex = A Grimer, which had been brought in to solve a problem with garbage, developed over time into this form.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [MUK,1]
 FormName = Alolan
@@ -326,7 +326,7 @@ Weight = 52.0
 Color = Green
 Pokedex = The garbage it eats causes continuous chemical changes in its body, which produce its exceedingly vivid coloration.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [GENGAR,1]
 FormName = Mega Gengar

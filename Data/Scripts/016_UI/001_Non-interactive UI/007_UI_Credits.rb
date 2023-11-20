@@ -88,7 +88,7 @@ class Scene_Credits
     ret.push("")
     ret.push(_INTL("\"mkxp-z\" by:"))
     add_names_to_credits(ret, [
-      "Roza",
+      "Anon",
       _INTL("Based on \"mkxp\" by Ancurio et al.")
     ])
     ret.push(_INTL("\"RPG Maker XP\" by:"))

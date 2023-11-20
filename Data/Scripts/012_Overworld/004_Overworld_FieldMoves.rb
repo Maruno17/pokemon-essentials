@@ -487,7 +487,6 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
     $game_temp.player_new_x         = $game_temp.fly_destination[1]
     $game_temp.player_new_y         = $game_temp.fly_destination[2]
     $game_temp.player_new_direction = 2
-    $game_temp.fly_destination = nil
     pbDismountBike
     $scene.transfer_player
     $game_map.autoplay
@@ -496,6 +495,7 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
     pbWait(0.25)
   end
   pbEraseEscapePoint
+  $game_temp.fly_destination = nil
   return true
 end
 

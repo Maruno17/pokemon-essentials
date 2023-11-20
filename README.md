@@ -33,10 +33,10 @@ You will need Ruby installed to run these scripts. The intention is to replace t
 
 The .gitignore file lists the files that will not be included in this repo. These are:
 
-* The Audio/, Graphics/ and Plugins/ folders and everything in them.
+* The Audio/, Graphics/, Plugins/ and Screenshots/ folders and everything in them.
 * Everything in the Data/ folder, except for:
   * The Data/Scripts/ folder and everything in there.
   * Scripts.rxdata (a special version that just loads the individual script files).
   * messages_core.dat, which contains common messages and is useful for translation projects.
-* A few files in the main project folder (two of the Game.xxx files, and the RGSS dll file).
+* A few files in the main project folder (two of the Game.xxx files, the RGSS dll file and errorlog.txt).
 * Temporary files.
