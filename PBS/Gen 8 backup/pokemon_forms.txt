@@ -82,7 +82,7 @@ Weight = 3.8
 Color = Black
 Pokedex = With its incisors, it gnaws through doors and infiltrates people's homes. Then, with a twitch of its whiskers, it steals whatever food it finds.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = PECHABERRY
 Evolution = RATICATE,LevelNight,20
 #-------------------------------
@@ -97,7 +97,7 @@ Weight = 25.5
 Color = Black
 Pokedex = It forms a group of Rattata, which it assumes command of. Each group has its own territory, and disputes over food happen often.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = PECHABERRY
 #-------------------------------
 [RAICHU,1]
@@ -128,7 +128,7 @@ Weight = 40.0
 Color = White
 Pokedex = The skin on its back is as hard as steel. Predators go after its soft belly, so it clings to the ground desperately.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = SANDSLASH,Item,ICESTONE
 #-------------------------------
 [SANDSLASH,1]
@@ -144,7 +144,7 @@ Weight = 55.0
 Color = Blue
 Pokedex = It runs across snow-covered plains at high speeds. It developed thick, sharp claws to plow through the snow.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [VULPIX,1]
 FormName = Alolan
@@ -157,7 +157,7 @@ EggMoves = AGILITY,CHARM,DISABLE,ENCORE,EXTRASENSORY,FLAIL,FREEZEDRY,HOWL,HYPNOS
 Color = White
 Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and sprays them around to cool itself off.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = SNOWBALL
 Evolution = NINETALES,Item,ICESTONE
 #-------------------------------
@@ -173,7 +173,7 @@ TutorMoves = AGILITY,AQUATAIL,ATTRACT,AURORAVEIL,AVALANCHE,BLIZZARD,BODYSLAM,CAL
 Color = Blue
 Pokedex = It lives on mountains perpetually covered in snow and is revered as a deity incarnate. It appears draped in a blizzard.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = SNOWBALL
 #-------------------------------
 [DIGLETT,1]
@@ -187,7 +187,7 @@ EggMoves = ANCIENTPOWER,BEATUP,ENDURE,FEINTATTACK,FINALGAMBIT,HEADBUTT,MEMENTO,M
 Weight = 1.0
 Pokedex = Its head sports an altered form of whiskers made of metal. When in communication with its comrades, its whiskers wobble to and fro.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [DUGTRIO,1]
 FormName = Alolan
@@ -200,7 +200,7 @@ TutorMoves = AERIALACE,AGILITY,ALLYSWITCH,ASSURANCE,ATTRACT,BEATUP,BODYSLAM,BULL
 Weight = 66.6
 Pokedex = Its shining gold hair provides it with protection. It's reputed that keeping any of its fallen hairs will bring bad luck.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [MEOWTH,1]
 FormName = Alolan
@@ -213,7 +213,7 @@ EggMoves = AMNESIA,ASSIST,CHARM,COVET,FLAIL,FLATTER,FOULPLAY,HYPNOSIS,PARTINGSHO
 Color = Blue
 Pokedex = It's impulsive, selfish, and fickle. It's very popular with some Trainers who like giving it the attention it needs.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = PERSIAN,Happiness
 #-------------------------------
 [MEOWTH,2]
@@ -229,7 +229,7 @@ Color = Brown
 Shape = BipedalTail
 Pokedex = Living with a savage, seafaring people has toughened this Pokémon's body so much that parts of it have turned to iron.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = PERRSERKER,Level,28
 #-------------------------------
 [PERSIAN,1]
@@ -245,7 +245,7 @@ Weight = 33.0
 Color = Blue
 Pokedex = Its round face is a symbol of wealth. Persian that have bigger, plumper faces are considered more beautiful.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [ALAKAZAM,1]
 FormName = Mega Alakazam
@@ -270,7 +270,7 @@ Weight = 20.3
 Color = Gray
 Pokedex = Geodude compete against each other with headbutts. The iron sand on their heads will stick to whichever one has stronger magnetism.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = CELLBATTERY
 #-------------------------------
 [GRAVELER,1]
@@ -284,7 +284,7 @@ Weight = 110.0
 Color = Gray
 Pokedex = They eat rocks and often get into a scrap over them. The shock of Graveler smashing together causes a flash of light and a booming noise.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemUncommon = CELLBATTERY
 #-------------------------------
 [GOLEM,1]
@@ -299,7 +299,7 @@ Weight = 316.0
 Color = Gray
 Pokedex = It fires rocks charged with electricity. Even if the rock isn't fired that accurately, just grazing an opponent will cause numbness and fainting.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemCommon = CELLBATTERY
 #-------------------------------
 [PONYTA,1]
@@ -315,7 +315,7 @@ Color = White
 Category = Unique Horn
 Pokedex = Its small horn hides a healing power. With a few rubs from this Pokémon's horn, any slight wound you have will be healed.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [RAPIDASH,1]
 FormName = Galarian
@@ -329,7 +329,7 @@ Color = White
 Category = Unique Horn
 Pokedex = Little can stand up to its psycho cut. Unleashed from this Pokémon's horn, the move will punch a hole right through a thick metal sheet.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [SLOWPOKE,1]
 FormName = Galarian
@@ -339,7 +339,7 @@ Moves = 1,TACKLE,1,CURSE,3,GROWL,6,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERP
 TutorMoves = AMNESIA,ATTRACT,BLIZZARD,BODYSLAM,BRINE,BULLDOZE,CALMMIND,CAPTIVATE,CONFIDE,DIG,DIVE,DOUBLEEDGE,DOUBLETEAM,EARTHQUAKE,ENDURE,EXPANDINGFORCE,FACADE,FIREBLAST,FLAMETHROWER,FOULPLAY,FRUSTRATION,FUTURESIGHT,GRASSKNOT,HAIL,HIDDENPOWER,HYDROPUMP,ICEBEAM,ICYWIND,IMPRISON,IRONTAIL,LIGHTSCREEN,LIQUIDATION,MIMIC,MUDSHOT,NATURALGIFT,PAYDAY,PROTECT,PSYCHIC,PSYCHICTERRAIN,PSYSHOCK,RAINDANCE,REST,RETURN,ROUND,SAFEGUARD,SCALD,SECRETPOWER,SHADOWBALL,SKILLSWAP,SLEEPTALK,SNORE,STOREDPOWER,SUBSTITUTE,SUNNYDAY,SURF,SWAGGER,SWIFT,THUNDERWAVE,TRIATTACK,TRICK,TRICKROOM,WEATHERBALL,WHIRLPOOL,WONDERROOM,ZENHEADBUTT
 Pokedex = Although this Pokémon is normally zoned out, its expression abruptly sharpens on occasion. The cause for this seems to lie in Slowpoke's diet.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = SLOWBRO,Item,GALARICACUFF
 Evolution = SLOWKING,Item,GALARICAWREATH
 #-------------------------------
@@ -353,7 +353,7 @@ TutorMoves = AMNESIA,ATTRACT,AVALANCHE,BLIZZARD,BODYSLAM,BRICKBREAK,BRINE,BRUTAL
 Weight = 70.5
 Pokedex = If this Pokémon squeezes the tongue of the Shellder biting it, the Shellder will launch a toxic liquid from the tip of its shell.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [SLOWBRO,2]
 FormName = Mega Slowbro
@@ -380,7 +380,7 @@ EggMoves = COUNTER,COVET,CURSE,DOUBLEEDGE,FEINT,FLAIL,NIGHTSLASH,QUICKATTACK,QUI
 Weight = 42.0
 Pokedex = The stalks of leeks are thicker and longer in the Galar region. Farfetch'd that adapted to these stalks took on a unique form.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 WildItemCommon = LEEK
 Evolution = SIRFETCHD,BattleDealCriticalHit,3
 #-------------------------------
@@ -397,7 +397,7 @@ Weight = 42.0
 Color = Green
 Pokedex = A Grimer, which had been brought in to solve a problem with garbage, developed over time into this form.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [MUK,1]
 FormName = Alolan
@@ -411,7 +411,7 @@ Weight = 52.0
 Color = Green
 Pokedex = The garbage it eats causes continuous chemical changes in its body, which produce its exceedingly vivid coloration.
 Generation = 7
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [GENGAR,1]
 FormName = Mega Gengar
@@ -491,7 +491,7 @@ Color = White
 Category = Dancing
 Pokedex = Its talent is tap-dancing. It can also manipulate temperatures to create a floor of ice, which this Pokémon can kick up to use as a barrier.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = MRRIME,Level,42
 #-------------------------------
 [PINSIR,1]
@@ -628,7 +628,7 @@ Height = 1.8
 Category = Hexpert
 Pokedex = While chanting strange spells, this Pokémon combines its internal toxins with what it's eaten, creating strange potions.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [UNOWN,1]
 FormName = B
@@ -761,7 +761,7 @@ Weight = 0.5
 Color = White
 Pokedex = Sudden climate change wiped out this ancient kind of Corsola. This Pokémon absorbs others' life-force through its branches.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = CURSOLA,Level,38
 #-------------------------------
 [HOUNDOOM,1]
@@ -827,7 +827,7 @@ EggMoves = KNOCKOFF,PARTINGSHOT,QUICKGUARD
 Color = White
 Pokedex = Its restlessness has it constantly running around. If it sees another Pokémon, it will purposely run into them in order to start a fight.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [LINOONE,1]
 FormName = Galarian
@@ -836,7 +836,7 @@ Moves = 0,NIGHTSLASH,1,SWITCHEROO,1,PINMISSILE,1,BABYDOLLEYES,1,TACKLE,1,LEER,1,
 TutorMoves = ASSURANCE,ATTRACT,BLIZZARD,BODYPRESS,BODYSLAM,CAPTIVATE,CONFIDE,DIG,DOUBLEEDGE,DOUBLETEAM,ENDURE,FACADE,FAKETEARS,FLING,FRUSTRATION,GIGAIMPACT,GRASSKNOT,GUNKSHOT,HELPINGHAND,HIDDENPOWER,HYPERBEAM,HYPERVOICE,ICEBEAM,ICYWIND,IRONTAIL,LASHOUT,MIMIC,MUDSHOT,NATURALGIFT,PAYBACK,PINMISSILE,PROTECT,RAINDANCE,REST,RETALIATE,RETURN,ROUND,SCARYFACE,SCREECH,SECRETPOWER,SEEDBOMB,SHADOWBALL,SHADOWCLAW,SLEEPTALK,SNARL,SNORE,STOMPINGTANTRUM,SUBSTITUTE,SUNNYDAY,SURF,SWAGGER,SWIFT,TAUNT,THIEF,THROATCHOP,THUNDER,THUNDERBOLT,THUNDERWAVE,TRICK,WHIRLPOOL,WORKUP
 Pokedex = It uses its long tongue to taunt opponents. Once the opposition is enraged, this Pokémon hurls itself at the opponent, tackling them forcefully.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = OBSTAGOON,LevelNight,35
 #-------------------------------
 [GARDEVOIR,1]
@@ -1340,7 +1340,7 @@ Weight = 40.0
 Color = White
 Pokedex = The colder they get, the more energetic they are. They freeze their breath to make snowballs, using them as ammo for playful snowball fights.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = DARMANITAN,Item,ICESTONE
 #-------------------------------
 [DARMANITAN,1]
@@ -1364,7 +1364,7 @@ Color = White
 Category = Zen Charm
 Pokedex = On days when blizzards blow through, it comes down to where people live. It stashes food in the snowball on its head, taking it home for later.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [DARMANITAN,3]
 FormName = Galarian Zen Mode
@@ -1391,7 +1391,7 @@ Moves = 1,ASTONISH,1,PROTECT,4,HAZE,8,NIGHTSHADE,12,DISABLE,16,BRUTALSWING,20,CR
 TutorMoves = ALLYSWITCH,ATTRACT,BRUTALSWING,CALMMIND,CAPTIVATE,CONFIDE,DARKPULSE,DOUBLEEDGE,DOUBLETEAM,EARTHPOWER,EARTHQUAKE,ENDURE,ENERGYBALL,FACADE,FAKETEARS,FRUSTRATION,HEX,HIDDENPOWER,IMPRISON,IRONDEFENSE,MIMIC,NASTYPLOT,NATURALGIFT,PAYBACK,POLTERGEIST,PROTECT,PSYCHIC,RAINDANCE,REST,RETURN,ROCKSLIDE,ROCKTOMB,ROUND,SAFEGUARD,SANDSTORM,SECRETPOWER,SHADOWBALL,SKILLSWAP,SLEEPTALK,SNORE,SUBSTITUTE,SWAGGER,THIEF,TOXIC,TOXICSPIKES,TRICK,TRICKROOM,WILLOWISP,WONDERROOM,ZENHEADBUTT
 Pokedex = A clay slab with cursed engravings took possession of a Yamask. The slab is said to be absorbing the Yamask's dark power.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 Evolution = RUNERIGUS,EventAfterDamageTaken,2
 #-------------------------------
 [DEERLING,1]
@@ -1428,7 +1428,7 @@ Weight = 20.5
 Color = Green
 Pokedex = Its conspicuous lips lure prey in as it lies in wait in the mud. When prey gets close, Stunfisk clamps its jagged steel fins down on them.
 Generation = 8
-Flags = InheritFormWithEverStone
+Flags = InheritFormWithEverstone
 #-------------------------------
 [TORNADUS,1]
 FormName = Therian Forme
