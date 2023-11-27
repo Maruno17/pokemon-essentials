@@ -139,16 +139,6 @@ class Game_Event < Game_Character
     return false
   end
 
-  def pbCheckEventTriggerAfterTurning
-    return if $game_system.map_interpreter.running? || @starting
-    return if @trigger != 2   # Event touch
-    return if !@event.name[/(?:sight|trainer)\((\d+)\)/i]
-    distance = $~[1].to_i
-    return if !pbEventCanReachPlayer?(self, $game_player, distance)
-    return if jumping? || over_trigger?
-    start
-  end
-
   def check_event_trigger_touch(dir)
     return if $game_system.map_interpreter.running?
     return if @trigger != 2   # Event touch
@@ -163,6 +153,32 @@ class Game_Event < Game_Character
       return if $game_player.y != @y - @height
     end
     return if !in_line_with_coordinate?($game_player.x, $game_player.y)
+    return if jumping? || over_trigger?
+    start
+  end
+
+  def check_event_trigger_after_turning
+    return if $game_system.map_interpreter.running? || @starting
+    return if @trigger != 2   # Not Event Touch
+    return if !self.name[/(?:sight|trainer)\((\d+)\)/i]
+    distance = $~[1].to_i
+    return if !pbEventCanReachPlayer?(self, $game_player, distance)
+    return if jumping? || over_trigger?
+    start
+  end
+
+  def check_event_trigger_after_moving
+    return if $game_system.map_interpreter.running? || @starting
+    return if @trigger != 2   # Not Event Touch
+    if self.name[/(?:sight|trainer)\((\d+)\)/i]
+      distance = $~[1].to_i
+      return if !pbEventCanReachPlayer?(self, $game_player, distance)
+    elsif self.name[/counter\((\d+)\)/i]
+      distance = $~[1].to_i
+      return if !pbEventFacesPlayer?(self, $game_player, distance)
+    else
+      return
+    end
     return if jumping? || over_trigger?
     start
   end
@@ -263,7 +279,7 @@ class Game_Event < Game_Character
     @moveto_happened = false
     last_moving = moving?
     super
-    $game_player.pbCheckEventTriggerFromDistance([2]) if !moving? && last_moving
+    check_event_trigger_after_moving if !moving? && last_moving
     if @need_refresh
       @need_refresh = false
       refresh

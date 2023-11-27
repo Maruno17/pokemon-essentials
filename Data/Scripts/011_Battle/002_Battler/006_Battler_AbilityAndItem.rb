@@ -8,12 +8,21 @@ class Battle::Battler
     end
     # Reset form
     @battle.peer.pbOnLeavingBattle(@battle, @pokemon, @battle.usedInBattle[idxOwnSide][@index / 2])
+    # Check for end of Neutralizing Gas/Unnerve
+    if hasActiveAbility?(:NEUTRALIZINGGAS)
+      # Treat self as fainted
+      @hp = 0
+      @fainted = true
+      pbAbilitiesOnNeutralizingGasEnding
+    elsif hasActiveAbility?([:UNNERVE, :ASONECHILLINGNEIGH, :ASONEGRIMNEIGH])
+      # Treat self as fainted
+      @hp = 0
+      @fainted = true
+      pbItemsOnUnnerveEnding
+    end
     # Treat self as fainted
     @hp = 0
     @fainted = true
-    # Check for end of Neutralizing Gas/Unnerve
-    pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
-    pbItemsOnUnnerveEnding if hasActiveAbility?([:UNNERVE, :ASONECHILLINGNEIGH, :ASONEGRIMNEIGH], true)
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
   end

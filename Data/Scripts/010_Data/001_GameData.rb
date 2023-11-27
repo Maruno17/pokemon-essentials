@@ -190,7 +190,7 @@ module GameData
       return self::DATA.keys
     end
 
-    # Yields all data in numberical order.
+    # Yields all data in numerical order.
     def each
       keys = self::DATA.keys.sort
       keys.each { |key| yield self::DATA[key] }

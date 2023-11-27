@@ -14,6 +14,7 @@ class LocationWindow
     @window.viewport.z = 99999
     @currentmap = $game_map.map_id
     @timer_start = System.uptime
+    @delayed = !$game_temp.fly_destination.nil?
   end
 
   def disposed?
@@ -25,7 +26,11 @@ class LocationWindow
   end
 
   def update
-    return if @window.disposed?
+    return if @window.disposed? || $game_temp.fly_destination
+    if @delayed
+      @timer_start = System.uptime
+      @delayed = false
+    end
     @window.update
     if $game_temp.message_window_showing || @currentmap != $game_map.map_id
       @window.dispose

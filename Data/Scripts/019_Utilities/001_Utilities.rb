@@ -611,7 +611,14 @@ end
 def pbScreenCapture
   t = Time.now
   filestart = t.strftime("[%Y-%m-%d] %H_%M_%S.%L")
-  capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
-  Graphics.screenshot(capturefile)
+  begin
+    folder_name = "Screenshots"
+    Dir.create(folder_name) if !Dir.safe?(folder_name)
+    capturefile = folder_name + "/" + sprintf("%s.png", filestart)
+    Graphics.screenshot(capturefile)
+  rescue
+    capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
+    Graphics.screenshot(capturefile)
+  end
   pbSEPlay("Pkmn exp full") if FileTest.audio_exist?("Audio/SE/Pkmn exp full")
 end

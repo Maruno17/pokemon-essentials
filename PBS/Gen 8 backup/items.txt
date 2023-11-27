@@ -523,7 +523,7 @@ Name = Big Nugget
 NamePlural = Big Nuggets
 Pocket = 1
 Price = 40000
-Flags = Fling_30
+Flags = Fling_130
 Description = A big nugget of pure gold that gives off a lustrous gleam. A maniac will buy it for a high price.
 #-------------------------------
 [HEARTSCALE]

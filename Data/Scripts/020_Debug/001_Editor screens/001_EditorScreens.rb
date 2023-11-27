@@ -348,7 +348,7 @@ def pbTrainerTypeEditor
     if tr_type
       case button
       when Input::ACTION
-        if tr_type.is_a?(Symbol) && pbConfirmMessageSerious("Delete this trainer type?")
+        if tr_type.is_a?(Symbol) && pbConfirmMessageSerious(_INTL("Delete this trainer type?"))
           GameData::TrainerType::DATA.delete(tr_type)
           GameData::TrainerType.save
           pbConvertTrainerData
@@ -481,7 +481,7 @@ def pbTrainerBattleEditor
     if trainer_id
       case button
       when Input::ACTION
-        if trainer_id.is_a?(Array) && pbConfirmMessageSerious("Delete this trainer battle?")
+        if trainer_id.is_a?(Array) && pbConfirmMessageSerious(_INTL("Delete this trainer battle?"))
           tr_data = GameData::Trainer::DATA[trainer_id]
           GameData::Trainer::DATA.delete(trainer_id)
           modified = true
@@ -825,7 +825,7 @@ def pbItemEditor
     if item
       case button
       when Input::ACTION
-        if item.is_a?(Symbol) && pbConfirmMessageSerious("Delete this item?")
+        if item.is_a?(Symbol) && pbConfirmMessageSerious(_INTL("Delete this item?"))
           GameData::Item::DATA.delete(item)
           GameData::Item.save
           Compiler.write_items
@@ -929,7 +929,7 @@ def pbPokemonEditor
     if species
       case button
       when Input::ACTION
-        if species.is_a?(Symbol) && pbConfirmMessageSerious("Delete this species?")
+        if species.is_a?(Symbol) && pbConfirmMessageSerious(_INTL("Delete this species?"))
           GameData::Species::DATA.delete(species)
           GameData::Species.save
           Compiler.write_pokemon

@@ -54,7 +54,7 @@ module Compiler
           # Validate and modify the compiled data
           yield false, data_hash if block_given?
           if game_data.exists?(data_hash[:id])
-            raise _INTL("Section name '{1}' is used twice.\n{2}", data_hash[:id], FileLineData.linereport)
+            raise _INTL("Section name '{1}' is used twice.", data_hash[:id]) + "\n" + FileLineData.linereport
           end
           # Add section's data to records
           game_data.register(data_hash)
@@ -116,19 +116,19 @@ module Compiler
         FileLineData.setLine(line, lineno)
         record = get_csv_record(line, schema)
         if !pbRgssExists?(sprintf("Data/Map%03d.rxdata", record[0]))
-          print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\n{2}", record[0], FileLineData.linereport)
+          print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.", record[0]) + "\n" + FileLineData.linereport
         elsif !pbRgssExists?(sprintf("Data/Map%03d.rxdata", record[3]))
-          print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\n{2}", record[3], FileLineData.linereport)
+          print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.", record[3]) + "\n" + FileLineData.linereport
         end
         case record[1]
         when "N"
-          raise _INTL("North side of first map must connect with south side of second map\n{1}", FileLineData.linereport) if record[4] != "S"
+          raise _INTL("North side of first map must connect with south side of second map.") + "\n" + FileLineData.linereport if record[4] != "S"
         when "S"
-          raise _INTL("South side of first map must connect with north side of second map\n{1}", FileLineData.linereport) if record[4] != "N"
+          raise _INTL("South side of first map must connect with north side of second map.") + "\n" + FileLineData.linereport if record[4] != "N"
         when "E"
-          raise _INTL("East side of first map must connect with west side of second map\n{1}", FileLineData.linereport) if record[4] != "W"
+          raise _INTL("East side of first map must connect with west side of second map.") + "\n" + FileLineData.linereport if record[4] != "W"
         when "W"
-          raise _INTL("West side of first map must connect with east side of second map\n{1}", FileLineData.linereport) if record[4] != "E"
+          raise _INTL("West side of first map must connect with east side of second map.") + "\n" + FileLineData.linereport if record[4] != "E"
         end
         records.push(record)
       end
@@ -159,15 +159,15 @@ module Compiler
       # Ensure all weaknesses/resistances/immunities are valid types
       type.weaknesses.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Weaknesses).", other_type.to_s, path, type.id)
+        raise _INTL("'{1}' is not a defined type (type {2}, Weaknesses).", other_type.to_s, type.id)
       end
       type.resistances.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Resistances).", other_type.to_s, path, type.id)
+        raise _INTL("'{1}' is not a defined type (type {2}, Resistances).", other_type.to_s, type.id)
       end
       type.immunities.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Immunities).", other_type.to_s, path, type.id)
+        raise _INTL("'{1}' is not a defined type (type {2}, Immunities).", other_type.to_s, type.id)
       end
       # Get type names for translating
       type_names.push(type.real_name)
@@ -210,11 +210,9 @@ module Compiler
 
   def validate_compiled_move(hash)
     if (hash[:category] || 2) == 2 && (hash[:power] || 0) != 0
-      raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\n{2}",
-                  hash[:real_name], FileLineData.linereport)
+      raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.", hash[:real_name]) + "\n" + FileLineData.linereport
     elsif (hash[:category] || 2) != 2 && (hash[:power] || 0) == 0
-      print _INTL("Warning: Move {1} is defined as Physical or Special but has a base damage of 0. Changing it to a Status move.\n{2}",
-                  hash[:real_name], FileLineData.linereport)
+      print _INTL("Warning: Move {1} is defined as Physical or Special but has a base damage of 0. Changing it to a Status move.", hash[:real_name]) + "\n" + FileLineData.linereport
       hash[:category] = 2
     end
   end
@@ -310,6 +308,16 @@ module Compiler
     # Convert height and weight to integer values of tenths of a unit
     hash[:height] = [(hash[:height] * 10).round, 1].max if hash[:height]
     hash[:weight] = [(hash[:weight] * 10).round, 1].max if hash[:weight]
+    # Ensure evolutions have a parameter if they need one (don't need to ensure
+    # the parameter makes sense; that happens below)
+    if hash[:evolutions]
+      hash[:evolutions].each do |evo|
+        FileLineData.setSection(hash[:id].to_s, "Evolution", "Evolution = #{evo[0]},#{evo[1]}")   # For error reporting
+        param_type = GameData::Evolution.get(evo[1]).parameter
+        next if evo[2] || param_type.nil?
+        raise _INTL("Evolution method {1} requires a parameter, but none was given.", evo[1]) + "\n" + FileLineData.linereport
+      end
+    end
     # Record all evolutions as not being prevolutions
     if hash[:evolutions].is_a?(Array)
       hash[:evolutions].each { |evo| evo[3] = false }
@@ -424,7 +432,7 @@ module Compiler
           # Validate and modify the compiled data
           validate_compiled_pokemon_form(data_hash)
           if GameData::Species.exists?(data_hash[:id])
-            raise _INTL("Section name '{1}' is used twice.\n{2}", data_hash[:id], FileLineData.linereport)
+            raise _INTL("Section name '{1}' is used twice.", data_hash[:id]) + "\n" + FileLineData.linereport
           end
           # Add section's data to records
           GameData::Species.register(data_hash)
@@ -443,9 +451,9 @@ module Compiler
     hash[:form] = hash[:id][1]
     hash[:id] = sprintf("%s_%d", hash[:species].to_s, hash[:form]).to_sym
     if !GameData::Species.exists?(hash[:species])
-      raise _INTL("Undefined species ID '{1}'.\n{3}", hash[:species], FileLineData.linereport)
+      raise _INTL("Undefined species ID '{1}'.", hash[:species]) + "\n" + FileLineData.linereport
     elsif GameData::Species.exists?(hash[:id])
-      raise _INTL("Form {1} for species ID {2} is defined twice.\n{3}", hash[:form], hash[:species], FileLineData.linereport)
+      raise _INTL("Form {1} for species ID '{2}' is defined twice.", hash[:form], hash[:species]) + "\n" + FileLineData.linereport
     end
     # Perform the same validations on this form as for a regular species
     validate_compiled_pokemon(hash)
@@ -592,11 +600,11 @@ module Compiler
         if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
           section = $~[1].to_i
           if dex_lists[section]
-            raise _INTL("Dex list number {1} is defined at least twice.\n{2}", section, FileLineData.linereport)
+            raise _INTL("Dex list number {1} is defined at least twice.", section) + "\n" + FileLineData.linereport
           end
           dex_lists[section] = []
         else
-          raise _INTL("Expected a section at the beginning of the file.\n{1}", FileLineData.linereport) if !section
+          raise _INTL("Expected a section at the beginning of the file.") + "\n" + FileLineData.linereport if !section
           species_list = line.split(",")
           species_list.each do |species|
             next if !species || species.empty?
@@ -613,7 +621,7 @@ module Compiler
       next if list == unique_list
       list.each_with_index do |s, i|
         next if unique_list[i] == s
-        raise _INTL("Dex list number {1} has species {2} listed twice.\n{3}", index, s, FileLineData.linereport)
+        raise _INTL("Dex list number {1} has species {2} listed twice.", index, s) + "\n" + FileLineData.linereport
       end
     end
     # Save all data
@@ -665,17 +673,17 @@ module Compiler
         if current_type && line[/^\d+,/]   # Species line
           values = line.split(",").collect! { |v| v.strip }
           if !values || values.length < 3
-            raise _INTL("Expected a species entry line for encounter type {1} for map '{2}', got \"{3}\" instead.\n{4}",
-                        GameData::EncounterType.get(current_type).real_name, encounter_hash[:map], line, FileLineData.linereport)
+            raise _INTL("Expected a species entry line for encounter type {1} for map {2}.",
+                        GameData::EncounterType.get(current_type).real_name, encounter_hash[:map]) + "\n" + FileLineData.linereport
           end
           values = get_csv_record(line, [nil, "vevV", nil, :Species])
           values[3] = values[2] if !values[3]
           if values[2] > max_level
-            raise _INTL("Level number {1} is not valid (max. {2}).\n{3}", values[2], max_level, FileLineData.linereport)
+            raise _INTL("Level number {1} is not valid (max. {2}).", values[2], max_level) + "\n" + FileLineData.linereport
           elsif values[3] > max_level
-            raise _INTL("Level number {1} is not valid (max. {2}).\n{3}", values[3], max_level, FileLineData.linereport)
+            raise _INTL("Level number {1} is not valid (max. {2}).", values[3], max_level) + "\n" + FileLineData.linereport
           elsif values[2] > values[3]
-            raise _INTL("Minimum level is greater than maximum level: {1}\n{2}", line, FileLineData.linereport)
+            raise _INTL("Minimum level is greater than maximum level.") + "\n" + FileLineData.linereport
           end
           encounter_hash[:types][current_type].push(values)
         elsif line[/^\[\s*(.+)\s*\]$/]   # Map ID line
@@ -704,7 +712,7 @@ module Compiler
           # Raise an error if a map/version combo is used twice
           key = sprintf("%s_%d", map_number, map_version).to_sym
           if GameData::Encounter::DATA[key]
-            raise _INTL("Encounters for map '{1}' are defined twice.\n{2}", map_number, FileLineData.linereport)
+            raise _INTL("Encounters for map '{1}' are defined twice.", map_number) + "\n" + FileLineData.linereport
           end
           step_chances = {}
           # Construct encounter hash
@@ -718,7 +726,7 @@ module Compiler
           }
           current_type = nil
         elsif !encounter_hash   # File began with something other than a map ID line
-          raise _INTL("Expected a map number, got \"{1}\" instead.\n{2}", line, FileLineData.linereport)
+          raise _INTL("Expected a map number, got \"{1}\" instead.", line) + "\n" + FileLineData.linereport
         else
           # Check if line is an encounter method name or not
           values = line.split(",").collect! { |v| v.strip }
@@ -728,8 +736,7 @@ module Compiler
             step_chances[current_type] ||= GameData::EncounterType.get(current_type).trigger_chance
             encounter_hash[:types][current_type] = []
           else
-            raise _INTL("Undefined encounter type \"{1}\" for map '{2}'.\n{3}",
-                        line, encounter_hash[:map], FileLineData.linereport)
+            raise _INTL("Undefined encounter type \"{1}\" for map '{2}'.", line, encounter_hash[:map]) + "\n" + FileLineData.linereport
           end
         end
       end
@@ -819,7 +826,7 @@ module Compiler
         elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
           # XXX=YYY lines
           if !data_hash
-            raise _INTL("Expected a section at the beginning of the file.\n{1}", FileLineData.linereport)
+            raise _INTL("Expected a section at the beginning of the file.") + "\n" + FileLineData.linereport
           end
           key = $~[1]
           if schema[key]   # Property of the trainer
@@ -835,7 +842,7 @@ module Compiler
             end
           elsif sub_schema[key]   # Property of a Pokémon
             if !current_pkmn
-              raise _INTL("Pokémon hasn't been defined yet!\n{1}", FileLineData.linereport)
+              raise _INTL("Pokémon hasn't been defined yet!") + "\n" + FileLineData.linereport
             end
             current_pkmn[sub_schema[key][0]] = get_csv_record($~[2], sub_schema[key])
           end
@@ -862,19 +869,18 @@ module Compiler
     hash[:version] = hash[:id][2]
     # Ensure the trainer has at least one Pokémon
     if hash[:pokemon].empty?
-      raise _INTL("Trainer with ID {1} has no Pokémon.\n{2}", hash[:id], FileLineData.linereport)
+      raise _INTL("Trainer with ID '{1}' has no Pokémon.", hash[:id]) + "\n" + FileLineData.linereport
     end
     max_level = GameData::GrowthRate.max_level
     hash[:pokemon].each do |pkmn|
       # Ensure valid level
       if pkmn[:level] > max_level
-        raise _INTL("Invalid Pokémon level {1} (must be 1-{2}).\n{3}",
-                    pkmn[:level], max_level, FileLineData.linereport)
+        raise _INTL("Invalid Pokémon level {1} (must be 1-{2}).", pkmn[:level], max_level) + "\n" + FileLineData.linereport
       end
       # Ensure valid name length
       if pkmn[:real_name] && pkmn[:real_name].length > Pokemon::MAX_NAME_SIZE
-        raise _INTL("Invalid Pokémon nickname: {1} (must be 1-{2} characters).\n{3}",
-                    pkmn[:real_name], Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
+        raise _INTL("Invalid Pokémon nickname: {1} (must be 1-{2} characters).",
+                    pkmn[:real_name], Pokemon::MAX_NAME_SIZE) + "\n" + FileLineData.linereport
       end
       # Ensure no duplicate moves
       pkmn[:moves].uniq! if pkmn[:moves]
@@ -885,8 +891,7 @@ module Compiler
           next if s.pbs_order < 0
           iv_hash[s.id] = pkmn[:iv][s.pbs_order] || pkmn[:iv][0]
           if iv_hash[s.id] > Pokemon::IV_STAT_LIMIT
-            raise _INTL("Invalid IV: {1} (must be 0-{2}).\n{3}",
-                        iv_hash[s.id], Pokemon::IV_STAT_LIMIT, FileLineData.linereport)
+            raise _INTL("Invalid IV: {1} (must be 0-{2}).", iv_hash[s.id], Pokemon::IV_STAT_LIMIT) + "\n" + FileLineData.linereport
           end
         end
         pkmn[:iv] = iv_hash
@@ -900,26 +905,24 @@ module Compiler
           ev_hash[s.id] = pkmn[:ev][s.pbs_order] || pkmn[:ev][0]
           ev_total += ev_hash[s.id]
           if ev_hash[s.id] > Pokemon::EV_STAT_LIMIT
-            raise _INTL("Invalid EV: {1} (must be 0-{2}).\n{3}",
-                        ev_hash[s.id], Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
+            raise _INTL("Invalid EV: {1} (must be 0-{2}).", ev_hash[s.id], Pokemon::EV_STAT_LIMIT) + "\n" + FileLineData.linereport
           end
         end
         pkmn[:ev] = ev_hash
         if ev_total > Pokemon::EV_LIMIT
-          raise _INTL("Invalid EV set (must sum to {1} or less).\n{2}",
-                      Pokemon::EV_LIMIT, FileLineData.linereport)
+          raise _INTL("Invalid EV set (must sum to {1} or less).", Pokemon::EV_LIMIT) + "\n" + FileLineData.linereport
         end
       end
       # Ensure valid happiness
       if pkmn[:happiness]
         if pkmn[:happiness] > 255
-          raise _INTL("Bad happiness: {1} (must be 0-255).\n{2}", pkmn[:happiness], FileLineData.linereport)
+          raise _INTL("Bad happiness: {1} (must be 0-255).", pkmn[:happiness]) + "\n" + FileLineData.linereport
         end
       end
       # Ensure valid Poké Ball
       if pkmn[:poke_ball]
         if !GameData::Item.get(pkmn[:poke_ball]).is_poke_ball?
-          raise _INTL("Value {1} isn't a defined Poké Ball.\n{2}", pkmn[:poke_ball], FileLineData.linereport)
+          raise _INTL("Value '{1}' isn't a defined Poké Ball.", pkmn[:poke_ball]) + "\n" + FileLineData.linereport
         end
       end
     end
@@ -984,10 +987,10 @@ module Compiler
           rsection[schema[0]] = record
         end
         if !rsection[0]
-          raise _INTL("No trainer data file given in section {1}.\n{2}", name, FileLineData.linereport)
+          raise _INTL("No trainer data file given in section {1}.", name) + "\n" + FileLineData.linereport
         end
         if !rsection[1]
-          raise _INTL("No trainer data file given in section {1}.\n{2}", name, FileLineData.linereport)
+          raise _INTL("No trainer data file given in section {1}.", name) + "\n" + FileLineData.linereport
         end
         rsection[3] = rsection[0]
         rsection[4] = rsection[1]
@@ -1116,12 +1119,12 @@ module Compiler
           if data_hash[:id] == 0
             validate_compiled_global_metadata(data_hash)
             if GameData::Metadata.exists?(data_hash[:id])
-              raise _INTL("Global metadata ID '{1}' is used twice.\n{2}", data_hash[:id], FileLineData.linereport)
+              raise _INTL("Global metadata ID '{1}' is used twice.", data_hash[:id]) + "\n" + FileLineData.linereport
             end
           else
             validate_compiled_player_metadata(data_hash)
             if GameData::PlayerMetadata.exists?(data_hash[:id])
-              raise _INTL("Player metadata ID '{1}' is used twice.\n{2}", data_hash[:id], FileLineData.linereport)
+              raise _INTL("Player metadata ID '{1}' is used twice.", data_hash[:id]) + "\n" + FileLineData.linereport
             end
           end
           # Add section's data to records
@@ -1142,7 +1145,7 @@ module Compiler
 
   def validate_compiled_global_metadata(hash)
     if hash[:home].nil?
-      raise _INTL("The entry 'Home' is required in metadata.txt section 0.\n{1}", FileLineData.linereport)
+      raise _INTL("The entry 'Home' is required in metadata.txt section 0.") + "\n" + FileLineData.linereport
     end
   end
 
@@ -1153,11 +1156,11 @@ module Compiler
   def validate_all_compiled_metadata
     # Ensure global metadata is defined
     if !GameData::Metadata.exists?(0)
-      raise _INTL("Global metadata is not defined in metadata.txt but should be.\n{1}", FileLineData.linereport)
+      raise _INTL("Global metadata is not defined in metadata.txt but should be.") + "\n" + FileLineData.linereport
     end
     # Ensure player character 1's metadata is defined
     if !GameData::PlayerMetadata.exists?(1)
-      raise _INTL("Metadata for player character 1 is not defined in metadata.txt but should be.\n{1}", FileLineData.linereport)
+      raise _INTL("Metadata for player character 1 is not defined in metadata.txt but should be.") + "\n" + FileLineData.linereport
     end
     # Get storage creator's name for translating
     storage_creator = [GameData::Metadata.get.real_storage_creator]
@@ -1221,7 +1224,7 @@ module Compiler
       hash[:id] = sprintf("%s_%d", hash[:area].to_s, hash[:version]).to_sym
     end
     if GameData::DungeonParameters.exists?(hash[:id])
-      raise _INTL("Version {1} of dungeon area {2} is defined twice.\n{3}", hash[:version], hash[:area], FileLineData.linereport)
+      raise _INTL("Version {1} of dungeon area {2} is defined twice.", hash[:version], hash[:area]) + "\n" + FileLineData.linereport
     end
   end
 

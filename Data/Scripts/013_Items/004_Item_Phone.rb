@@ -320,7 +320,7 @@ class Phone
     module_function
 
     def can_make?
-      return false if $game_map.metadata.has_flag?("NoPhoneSignal")
+      return false if $game_map.metadata&.has_flag?("NoPhoneSignal")
       return true
     end
 

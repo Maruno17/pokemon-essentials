@@ -817,7 +817,7 @@ class Game_Character
     oldDirection = @direction
     @direction = dir
     @stop_count = 0
-    pbCheckEventTriggerAfterTurning if dir != oldDirection
+    check_event_trigger_after_turning if dir != oldDirection
   end
 
   def turn_down;  turn_generic(2); end

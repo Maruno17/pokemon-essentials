@@ -115,7 +115,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("OHKO",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DamageTargetAlly",
   proc { |score, move, user, target, ai, battle|
     target.battler.allAllies.each do |b|
-      next if !b.near?(target.battler) || !b.battler.takesIndirectDamage?
+      next if !b.near?(target.battler) || !b.takesIndirectDamage?
       score += 10
       if ai.trainer.has_skill_flag?("HPAware")
         score += 10 if b.hp <= b.totalhp / 16

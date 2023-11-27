@@ -2,6 +2,7 @@
 Audio/
 Graphics/
 Plugins/
+Screenshots/
 
 # Data folder, but not Data/Scripts folder or messages_core.dat
 Data/*
@@ -10,6 +11,7 @@ Data/*
 !Data/messages_core.dat
 
 # Files in the main project folder
+errorlog.txt
 Game.ini
 Game.rxproj
 RGSS*.dll

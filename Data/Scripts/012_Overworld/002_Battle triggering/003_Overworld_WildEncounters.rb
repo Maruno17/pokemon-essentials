@@ -443,6 +443,7 @@ def pbGenerateWildPokemon(species, level, isRoamer = false)
     end
   end
   # Trigger events that may alter the generated Pokémon further
+  genwildpoke.form_simple = genwildpoke.form if MultipleForms.hasFunction?(genwildpoke.species, "getForm")
   EventHandlers.trigger(:on_wild_pokemon_created, genwildpoke)
   return genwildpoke
 end

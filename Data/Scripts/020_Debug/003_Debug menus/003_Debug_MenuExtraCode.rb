@@ -613,7 +613,7 @@ def pbImportAllAnimations
       Graphics.update
       audios = []
       files = Dir.glob(folder + "/*.*")
-      ["wav", "ogg", "mid", "wma"].each do |ext|   # mp3
+      ["wav", "ogg", "mp3", "midi", "mid", "wma"].each do |ext|
         upext = ext.upcase
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == ext })
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == upext })
