@@ -12,6 +12,38 @@ EventHandlers.add(:on_wild_pokemon_created, :make_shiny_switch,
   }
 )
 
+# In the Safari Zone and Bug-Catching Contests, wild Pokémon reroll their IVs up
+# to 4 times if they don't have a perfect IV.
+EventHandlers.add(:on_wild_pokemon_created, :reroll_ivs_in_safari_and_bug_contest,
+  proc { |pkmn|
+    next if !pbInSafari? && !pbInBugContest?
+    rerolled = false
+    4.times do
+      break if pkmn.iv.any? { |_stat, val| val == Pokemon::IV_STAT_LIMIT }
+      rerolled = true
+      GameData::Stat.each_main do |s|
+        pkmn.iv[s.id] = rand(Pokemon::IV_STAT_LIMIT + 1)
+      end
+    end
+    pkmn.calc_stats if rerolled
+  }
+)
+
+# In Gen 6 and later, Legendary/Mythical/Ultra Beast Pokémon are guaranteed to
+# have at least 3 perfect IVs.
+EventHandlers.add(:on_wild_pokemon_created, :some_perfect_ivs_for_legendaries,
+  proc { |pkmn|
+    next if !Settings::LEGENDARIES_HAVE_SOME_PERFECT_IVS
+    data = pkmn.species_data
+    next if !data.has_flag?("Legendary") && !data.has_flag?("Mythical") && !data.has_flag?("UltraBeast")
+    stats = []
+    GameData::Stat.each_main { |s| stats.push(s.id) }
+    perfect_stats = stats.sample(3)
+    perfect_stats.each { |s| pkmn.iv[s] = Pokemon::IV_STAT_LIMIT }
+    pkmn.calc_stats
+  }
+)
+
 # Used in the random dungeon map. Makes the levels of all wild Pokémon in that
 # map depend on the levels of Pokémon in the player's party.
 # This is a simple method, and can/should be modified to account for evolutions
