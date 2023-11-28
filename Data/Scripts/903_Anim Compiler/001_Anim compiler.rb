@@ -138,13 +138,21 @@ module Compiler
         else               particle[:focus] = :screen
         end
       end
+      # Ensure user/target particles have a default graphic if not given
+      if !particle[:graphic] && particle[:name] != "SE"
+        case particle[:name]
+        when "User"   then particle[:graphic] = "USER"
+        when "Target" then particle[:graphic] = "TARGET"
+        end
+      end
       # Ensure that particles don't have a focus involving a target if the
       # animation itself doesn't involve a target
       if hash[:no_target] && [:target, :user_and_target].include?(particle[:focus])
         raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a target if property \"NoTarget\" is set to true.",
           particle[:name]) + "\n" + FileLineData.linereport
       end
-
+      # TODO: For SE particle, ensure that it doesn't play two instances of the
+      #       same file in the same frame.
       # Convert all "SetXYZ" particle commands to "MoveXYZ" by giving them a
       # duration of 0 (even ones that can't have a "MoveXYZ" command)
       GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.keys.each do |prop|

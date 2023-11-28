@@ -81,7 +81,7 @@ class UIControls::NumberSlider < UIControls::BaseControl
       self.bitmap.fill_rect(SLIDER_X - 1 + (i * SLIDER_LENGTH / 4), (self.height / 2) - 2, 2, 4, self.bitmap.font.color)
     end
     # Draw slider knob
-    fraction = (self.value - self.min_value) / self.max_value.to_f
+    fraction = (self.value - self.min_value) / (self.max_value.to_f - self.min_value)
     knob_x = (SLIDER_LENGTH * fraction).to_i
     self.bitmap.fill_rect(SLIDER_X + knob_x - 4, (self.height / 2) - 6, 8, 12, SLIDER_KNOB_COLOR)
     # Draw plus button

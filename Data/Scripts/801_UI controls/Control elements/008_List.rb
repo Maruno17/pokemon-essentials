@@ -48,11 +48,16 @@ class UIControls::List < UIControls::BaseControl
     @scrollbar.z = new_val + 1
   end
 
+  def visible=(new_val)
+    super
+    @scrollbar.visible = new_val
+  end
+
   # Each value in @values is an array: [id, text].
   def values=(new_vals)
     @values = new_vals
     set_interactive_rects
-    @scrollbar.range = @values.length * ROW_HEIGHT
+    @scrollbar.range = [@values.length, 1].max * ROW_HEIGHT
     if @scrollbar.visible
       self.top_row = (@scrollbar.position.to_f / ROW_HEIGHT).round
     else
@@ -143,10 +148,11 @@ class UIControls::List < UIControls::BaseControl
            SELECTED_ROW_COLOR
          )
       end
+      txt = (val.is_a?(Array)) ? val[1] : val
       draw_text(self.bitmap,
                 @interactions[i].x + TEXT_PADDING_X,
                 @interactions[i].y + TEXT_OFFSET_Y - (@top_row * ROW_HEIGHT),
-                val[1])
+                txt)
     end
   end
 

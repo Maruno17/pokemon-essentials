@@ -17,6 +17,7 @@ class UIControls::ControlsContainer
   attr_reader :controls
   attr_reader :values
   attr_reader :visible
+  attr_reader :viewport
 
   LINE_SPACING        = 28
   OFFSET_FROM_LABEL_X = 90
@@ -30,8 +31,8 @@ class UIControls::ControlsContainer
     @width = width
     @height = height
     @controls = []
-    @control_rects = []
     @row_count = 0
+    @pixel_offset = 0
     @captured = nil
     @visible = true
   end
@@ -72,8 +73,13 @@ class UIControls::ControlsContainer
   #-----------------------------------------------------------------------------
 
   def add_label(id, label, has_label = false)
-    id = (id.to_s + "_label").to_sym
+    id = (id.to_s + "_label").to_sym if !has_label
     add_control(id, UIControls::Label.new(*control_size(has_label), @viewport, label), has_label)
+  end
+
+  def add_labelled_label(id, label, text)
+    add_label(id, label)
+    add_label(id, text, true)
   end
 
   def add_header_label(id, label)
@@ -127,6 +133,18 @@ class UIControls::ControlsContainer
     add_button(id, button_text, true)
   end
 
+  def add_list(id, rows, options, has_label = false)
+    size = control_size(has_label)
+    size[0] -= 8
+    size[1] = rows * UIControls::List::ROW_HEIGHT
+    add_control(id, UIControls::List.new(*size, @viewport, options), has_label, rows)
+  end
+
+  def add_labelled_list(id, label, rows, options)
+    add_label(id, label)
+    add_list(id, rows, options, true)
+  end
+
   def add_dropdown_list(id, options, value, has_label = false)
     add_control(id, UIControls::DropdownList.new(*control_size(has_label), @viewport, options, value), has_label)
   end
@@ -176,8 +194,6 @@ class UIControls::ControlsContainer
 
   #-----------------------------------------------------------------------------
 
-  private
-
   def control_size(has_label = false)
     if has_label
       return @width - OFFSET_FROM_LABEL_X, LINE_SPACING - OFFSET_FROM_LABEL_Y
@@ -185,16 +201,23 @@ class UIControls::ControlsContainer
     return @width, LINE_SPACING
   end
 
-  def add_control(id, control, add_offset = false)
-    i = @controls.length
-    control_y = (add_offset ? @row_count - 1 : @row_count) * LINE_SPACING
-    # TODO: I don't think I need @control_rects.
-    @control_rects[i] = Rect.new(0, control_y, control.width, control.height)
-    control.x = @control_rects[i].x + (add_offset ? OFFSET_FROM_LABEL_X : 0)
-    control.y = @control_rects[i].y + (add_offset ? OFFSET_FROM_LABEL_Y : 0)
+  def add_control_at(id, control, x, y)
+    control.x = x
+    control.y = y
     control.set_interactive_rects
-    @controls[i] = [id, control]
-    @row_count += 1 if !add_offset
+    @controls.push([id, control])
     repaint
+  end
+
+  def add_control(id, control, add_offset = false, rows = 1)
+    i = @controls.length
+    row_x = 0
+    row_y = (add_offset ? @row_count - 1 : @row_count) * LINE_SPACING
+    ctrl_x = row_x + (add_offset ? OFFSET_FROM_LABEL_X : 0)
+    ctrl_x += 4 if control.is_a?(UIControls::List)
+    ctrl_y = row_y + (add_offset ? OFFSET_FROM_LABEL_Y : 0) + @pixel_offset
+    add_control_at(id, control, ctrl_x, ctrl_y)
+    @row_count += rows if !add_offset
+    @pixel_offset -= (LINE_SPACING - UIControls::List::ROW_HEIGHT) * (rows - 1) if control.is_a?(UIControls::List)
   end
 end

@@ -211,4 +211,77 @@ module AnimationEditor::ParticleDataHelper
     end
     return (ret.empty?) ? nil : ret
   end
+
+  #-----------------------------------------------------------------------------
+
+  def get_se_display_text(property, value)
+    ret = ""
+    case property
+    when :user_cry
+      ret += _INTL("[[User's cry]]")
+    when :target_cry
+      ret += _INTL("[[Target's cry]]")
+    when :se
+      ret += value[2]
+    else
+      raise _INTL("Unhandled property {1} for SE particle found.", property)
+    end
+    volume = (property == :se) ? value[3] : value[2]
+    ret += " " + _INTL("(volume: {1})", volume) if volume && volume != 100
+    pitch = (property == :se) ? value[4] : value[3]
+    ret += " " + _INTL("(pitch: {1})", pitch) if pitch && pitch != 100
+    return ret
+  end
+
+  # Returns the volume and pitch of the SE to be played at the given frame
+  # of the given filename.
+  def get_se_values_from_filename_and_frame(particle, frame, filename)
+    return nil if !filename
+    case filename
+    when "USER", "TARGET"
+      property = (filename == "USER") ? :user_cry : :target_cry
+      slot = particle[property].select { |s| s[0] == frame }[0]
+      return nil if !slot
+      return slot[2] || 100, slot[3] || 100
+    else
+      slot = particle[:se].select { |s| s[0] == frame && s[2] == filename }[0]
+      return nil if !slot
+      return slot[3] || 100, slot[4] || 100
+    end
+    return nil
+  end
+
+  # Deletes an existing command that plays the same filename at the same frame,
+  # and adds the new one.
+  def add_se_command(particle, frame, filename, volume, pitch)
+    delete_se_command(particle, frame, filename)
+    case filename
+    when "USER", "TARGET"
+      property = (filename == "USER") ? :user_cry : :target_cry
+      particle[property] ||= []
+      particle[property].push([frame, 0, (volume == 100) ? nil : volume, (pitch == 100) ? nil : pitch])
+      particle[property].sort! { |a, b| a[0] <=> b[0] }
+    else
+      particle[:se] ||= []
+      particle[:se].push([frame, 0, filename, (volume == 100) ? nil : volume, (pitch == 100) ? nil : pitch])
+      particle[:se].sort! { |a, b| a[0] <=> b[0] }
+      particle[:se].sort! { |a, b| (a[0] == b[0]) ? a[2].downcase <=> b[2].downcase : a[0] <=> b[0] }
+    end
+  end
+
+  # Deletes an existing SE-playing command at the given frame of the given
+  # filename.
+  def delete_se_command(particle, frame, filename)
+    case filename
+    when "USER", "TARGET"
+      property = (filename == "USER") ? :user_cry : :target_cry
+      return if !particle[property] || particle[property].empty?
+      particle[property].delete_if { |s| s[0] == frame }
+      particle.delete(property) if particle[property].empty?
+    else
+      return if !particle[:se] || particle[:se].empty?
+      particle[:se].delete_if { |s| s[0] == frame && s[2] == filename }
+      particle.delete(:se) if particle[:se].empty?
+    end
+  end
 end

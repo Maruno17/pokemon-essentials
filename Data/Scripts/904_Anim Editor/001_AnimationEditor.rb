@@ -47,14 +47,6 @@ class AnimationEditor
   PARTICLE_LIST_WIDTH  = WINDOW_WIDTH - (BORDER_THICKNESS * 2)
   PARTICLE_LIST_HEIGHT = WINDOW_HEIGHT - PARTICLE_LIST_Y - BORDER_THICKNESS
 
-  MESSAGE_BOX_WIDTH         = WINDOW_WIDTH * 3 / 4
-  MESSAGE_BOX_HEIGHT        = 160
-  MESSAGE_BOX_X             = (WINDOW_WIDTH - MESSAGE_BOX_WIDTH) / 2
-  MESSAGE_BOX_Y             = (WINDOW_HEIGHT - MESSAGE_BOX_HEIGHT) / 2
-  MESSAGE_BOX_BUTTON_WIDTH  = 150
-  MESSAGE_BOX_BUTTON_HEIGHT = 32
-  MESSAGE_BOX_SPACING       = 16
-
   def initialize(anim_id, anim)
     @anim_id = anim_id
     @anim = anim
@@ -65,9 +57,17 @@ class AnimationEditor
     @viewport.z = 99999
     @canvas_viewport = Viewport.new(CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT)
     @canvas_viewport.z = @viewport.z
+    @pop_up_viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+    @pop_up_viewport.z = @viewport.z + 50
     # Background sprite
     @screen_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
-    @screen_bitmap.z = -1
+    @screen_bitmap.z = -100
+    @se_list_box_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
+    @se_list_box_bitmap.z = -90
+    @se_list_box_bitmap.visible = false
+    @pop_up_bg_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @pop_up_viewport)
+    @pop_up_bg_bitmap.z = -100
+    @pop_up_bg_bitmap.visible = false
     draw_editor_background
     @components = {}
     # Menu bar
@@ -105,6 +105,8 @@ class AnimationEditor
 
   def dispose
     @screen_bitmap.dispose
+    @se_list_box_bitmap.dispose
+    @pop_up_bg_bitmap.dispose
     @components.each_value { |c| c.dispose }
     @components.clear
     @viewport.dispose
@@ -191,11 +193,21 @@ class AnimationEditor
   def set_se_pane_contents
     se_pane = @components[:se_pane]
     se_pane.add_header_label(:header, _INTL("Edit sound effects at keyframe"))
-    # TODO: A list containing all SE files that play this keyframe. Lists SE,
-    #       user cry and target cry.
-    se_pane.add_button(:add, _INTL("Add"))
-    se_pane.add_button(:edit, _INTL("Edit"))
-    se_pane.add_button(:delete, _INTL("Delete"))
+    size = se_pane.control_size
+    size[0] -= 10
+    size[1] = UIControls::List::ROW_HEIGHT * 5   # 5 rows
+    list = UIControls::List.new(*size, se_pane.viewport, [])
+    se_pane.add_control_at(:list, list, 5, 30)
+    button_height = UIControls::ControlsContainer::LINE_SPACING
+    add = UIControls::Button.new(101, button_height, se_pane.viewport, _INTL("Add"))
+    add.set_fixed_size
+    se_pane.add_control_at(:add, add, 1, 154)
+    edit = UIControls::Button.new(100, button_height, se_pane.viewport, _INTL("Edit"))
+    edit.set_fixed_size
+    se_pane.add_control_at(:edit, edit, 102, 154)
+    delete = UIControls::Button.new(101, button_height, se_pane.viewport, _INTL("Delete"))
+    delete.set_fixed_size
+    se_pane.add_control_at(:delete, delete, 202, 154)
   end
 
   def set_particle_pane_contents
@@ -206,7 +218,8 @@ class AnimationEditor
     particle_pane.add_labelled_text_box(:name, _INTL("Name"), _INTL("Untitled"))
     # TODO: Graphic should show the graphic's name alongside a "Change" button.
     #       New kind of control that is a label plus a button?
-    particle_pane.add_labelled_button(:graphic, _INTL("Graphic"), _INTL("Change"))
+    particle_pane.add_labelled_label(:graphic_name, _INTL("Graphic"), "")
+    particle_pane.add_labelled_button(:graphic, "", _INTL("Change"))
     particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {
       :user            => _INTL("User"),
       :target          => _INTL("Target"),
@@ -244,74 +257,6 @@ class AnimationEditor
 
   #-----------------------------------------------------------------------------
 
-  def message(text, *options)
-    msg_viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
-    msg_viewport.z = @viewport.z + 50
-    msg_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, msg_viewport)
-    msg_bitmap.bitmap.font.color = Color.black
-    msg_bitmap.bitmap.font.size = 18
-    # Draw gray background
-    msg_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
-    # Draw message box border
-    BORDER_THICKNESS.times do |i|
-      col = (i.even?) ? Color.white : Color.black
-      msg_bitmap.bitmap.outline_rect(MESSAGE_BOX_X - i - 1, MESSAGE_BOX_Y - i - 1,
-                                     MESSAGE_BOX_WIDTH + (i * 2) + 2, MESSAGE_BOX_HEIGHT + (i * 2) + 2, col)
-    end
-    # Fill message box with white
-    msg_bitmap.bitmap.fill_rect(MESSAGE_BOX_X, MESSAGE_BOX_Y, MESSAGE_BOX_WIDTH, MESSAGE_BOX_HEIGHT, Color.white)
-    # Draw text
-    text_size = msg_bitmap.bitmap.text_size(text)
-    msg_bitmap.bitmap.draw_text(MESSAGE_BOX_X, (WINDOW_HEIGHT / 2) - MESSAGE_BOX_BUTTON_HEIGHT,
-                                MESSAGE_BOX_WIDTH, text_size.height, text, 1)
-    # Create buttons
-    buttons = []
-    options.each_with_index do |option, i|
-      btn = UIControls::Button.new(MESSAGE_BOX_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, msg_viewport, option[1])
-      btn.x = (WINDOW_WIDTH - (options.length * MESSAGE_BOX_BUTTON_WIDTH)) / 2 + (i * MESSAGE_BOX_BUTTON_WIDTH)
-      btn.y = MESSAGE_BOX_Y + MESSAGE_BOX_HEIGHT - MESSAGE_BOX_BUTTON_HEIGHT - MESSAGE_BOX_SPACING
-      btn.set_fixed_size
-      btn.set_interactive_rects
-      buttons.push([option[0], btn])
-    end
-    # Interaction loop
-    ret = nil
-    captured = nil
-    loop do
-      Graphics.update
-      Input.update
-      if captured
-        captured.update
-        captured = nil if !captured.busy?
-      else
-        buttons.each do |btn|
-          btn[1].update
-          captured = btn[1] if btn[1].busy?
-        end
-      end
-      buttons.each do |btn|
-        next if !btn[1].changed?
-        ret = btn[0]
-        break
-      end
-      ret = :cancel if Input.trigger?(Input::BACK)
-      break if ret
-      buttons.each { |btn| btn[1].repaint }
-    end
-    # Dispose and return
-    buttons.each { |btn| btn[1].dispose }
-    buttons.clear
-    msg_bitmap.dispose
-    msg_viewport.dispose
-    return ret
-  end
-
-  def confirm_message(text)
-    return message(text, [:yes, _INTL("Yes")], [:no, _INTL("No")]) == :yes
-  end
-
-  #-----------------------------------------------------------------------------
-
   def save
     GameData::Animation.register(@anim, @anim_id)
     Compiler.write_battle_animation_file(@anim[:pbs_path])
@@ -341,6 +286,11 @@ class AnimationEditor
     draw_big_outline.call(@screen_bitmap.bitmap, PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT)
     draw_big_outline.call(@screen_bitmap.bitmap, SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
     draw_big_outline.call(@screen_bitmap.bitmap, PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT)
+    # Draw box around SE list box in side pane
+    @se_list_box_bitmap.bitmap.outline_rect(SIDE_PANE_X + 3, SIDE_PANE_Y + 24 + 4,
+                                            SIDE_PANE_WIDTH - 6, (5 * UIControls::List::ROW_HEIGHT) + 4, Color.black)
+    # Make the pop-up background semi-transparent
+    @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
   end
 
   def refresh_component_visibility(component_sym)
@@ -355,6 +305,7 @@ class AnimationEditor
       component.visible = (keyframe >= 0 && particle_index >= 0 &&
                           @anim[:particles][particle_index] &&
                           @anim[:particles][particle_index][:name] == "SE")
+      @se_list_box_bitmap.visible = component.visible
     when :particle_pane
       component.visible = (keyframe < 0 && particle_index >= 0)
     when :keyframe_pane
@@ -376,13 +327,44 @@ class AnimationEditor
         #       which should be indicated somehow in ctrl[1].
       end
     when :se_pane
-      # TODO: Set list of SEs, activate/deactivate buttons accordingly.
+      # TODO: Activate/deactivate Edit/Delete buttons accordingly.
+      se_particle = @anim[:particles].select { |p| p[:name] == "SE" }[0]
+      kyfrm = keyframe
+      # Populate list of files
+      list = []
+      se_particle.each_pair do |property, values|
+        next if !values.is_a?(Array)
+        values.each do |val|
+          next if val[0] != kyfrm
+          text = AnimationEditor::ParticleDataHelper.get_se_display_text(property, val)
+          case property
+          when :user_cry   then list.push(["USER", text])
+          when :target_cry then list.push(["TARGET", text])
+          when :se         then list.push([val[2], text])
+          end
+        end
+      end
+      list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
+      component.get_control(:list).values = list
     when :particle_pane
       new_vals = AnimationEditor::ParticleDataHelper.get_all_particle_values(@anim[:particles][particle_index])
       component.controls.each do |ctrl|
         next if !new_vals.include?(ctrl[0])
         ctrl[1].value = new_vals[ctrl[0]] if ctrl[1].respond_to?("value=")
       end
+      graphic_name = @anim[:particles][particle_index][:graphic]
+      graphic_override_names = {
+        "USER"         => _INTL("[[User's sprite]]"),
+        "USER_OPP"     => _INTL("[[User's other side sprite]]"),
+        "USER_FRONT"   => _INTL("[[User's front sprite]]"),
+        "USER_BACK"    => _INTL("[[User's back sprite]]"),
+        "TARGET"       => _INTL("[[Target's sprite]]"),
+        "TARGET_OPP"   => _INTL("[[Target's other side sprite]]"),
+        "TARGET_FRONT" => _INTL("[[Target's front sprite]]"),
+        "TARGET_BACK"  => _INTL("[[Target's back sprite]]"),
+      }
+      graphic_name = graphic_override_names[graphic_name] if graphic_override_names[graphic_name]
+      component.get_control(:graphic_name).label = graphic_name
       # TODO: Disable the name, graphic and focus controls for "User"/"Target".
     end
   end
@@ -434,18 +416,54 @@ class AnimationEditor
         refresh_component(:commands_pane)
       end
     when :se_pane
-      # TODO: Enable the "Edit" and "Delete" controls only if an SE is selected.
       case property
       when :add   # Button
+        new_file, new_volume, new_pitch = choose_audio_file("", 100, 100)
+        if new_file != ""
+          particle = @anim[:particles][particle_index]
+          AnimationEditor::ParticleDataHelper.add_se_command(particle, keyframe, new_file, new_volume, new_pitch)
+          @components[:particle_list].change_particle_commands(particle_index)
+          @components[:play_controls].duration = @components[:particle_list].duration
+          refresh_component(:se_pane)
+        end
       when :edit   # Button
+        particle = @anim[:particles][particle_index]
+        list = @components[:se_pane].get_control(:list)
+        old_file = list.value
+        old_volume, old_pitch = AnimationEditor::ParticleDataHelper.get_se_values_from_filename_and_frame(particle, keyframe, old_file)
+        if old_file
+          new_file, new_volume, new_pitch = choose_audio_file(old_file, old_volume, old_pitch)
+          if new_file != old_file || new_volume != old_volume || new_pitch != old_pitch
+            AnimationEditor::ParticleDataHelper.delete_se_command(particle, keyframe, old_file)
+            AnimationEditor::ParticleDataHelper.add_se_command(particle, keyframe, new_file, new_volume, new_pitch)
+            @components[:particle_list].change_particle_commands(particle_index)
+            @components[:play_controls].duration = @components[:particle_list].duration
+            refresh_component(:se_pane)
+          end
+        end
       when :delete   # Button
+        particle = @anim[:particles][particle_index]
+        list = @components[:se_pane].get_control(:list)
+        old_file = list.value
+        if old_file
+          AnimationEditor::ParticleDataHelper.delete_se_command(particle, keyframe, old_file)
+          @components[:particle_list].change_particle_commands(particle_index)
+          @components[:play_controls].duration = @components[:particle_list].duration
+          refresh_component(:se_pane)
+        end
       else
 #        particle = @anim[:particles][particle_index]
       end
     when :particle_pane
       case property
       when :graphic   # Button
-        # TODO: Open the graphic chooser pop-up window.
+        p_index = particle_index
+        new_file = choose_graphic_file(@anim[:particles][p_index][:graphic])
+        if @anim[:particles][p_index][:graphic] != new_file
+          @anim[:particles][p_index][:graphic] = new_file
+          refresh_component(:particle_pane)
+          # TODO: refresh_component(:canvas)
+        end
       else
         particle = @anim[:particles][particle_index]
         new_cmds = AnimationEditor::ParticleDataHelper.set_property(particle, property, value)
@@ -503,17 +521,15 @@ class AnimationEditor
       Graphics.update
       Input.update
       update
-      if !inputting_text && @captured.nil?
-        if @quit || Input.trigger?(Input::BACK)
-          case message(_INTL("Do you want to save changes to the animation?"),
-                       [:yes, _INTL("Yes")], [:no, _INTL("No")], [:cancel, _INTL("Cancel")])
-          when :yes
-            save
-          when :cancel
-            @quit = false
-          end
-          break if @quit
+      if !inputting_text && @captured.nil? && @quit
+        case message(_INTL("Do you want to save changes to the animation?"),
+                     [:yes, _INTL("Yes")], [:no, _INTL("No")], [:cancel, _INTL("Cancel")])
+        when :yes
+          save
+        when :cancel
+          @quit = false
         end
+        break if @quit
       end
     end
     dispose

@@ -98,6 +98,7 @@ module GameData
       # TODO: Add "SetColor"/"SetTone" as shorthand for the above? They'd be
       #       converted in the Compiler.
       # TODO: Bitmap masking.
+      # TODO: Hue? I don't think so; color/tone do the same job.
 
       # These properties are specifically for the "SE" particle.
       "Play"           => [:se,          "^usUU"],   # Filename, volume, pitch
@@ -249,6 +250,14 @@ module GameData
         elsif ret
           ret = SUB_SCHEMA[key][2].key(ret)
         end
+      when "graphic"
+        # The User and Target particles have hardcoded graphics, so they don't
+        # need writing to PBS
+        ret = nil if ["User", "Target"].include?(@particles[index][:name])
+      when "Play"
+        # TODO: Turn volume/pitch of 100 into nil.
+      when "PlayUserCry", "PlayTargetCry"
+        # TODO: Turn volume/pitch of 100 into nil.
       when "AllCommands"
         # Get translations of all properties to their names as seen in PBS
         # animation files
