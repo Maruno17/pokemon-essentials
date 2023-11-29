@@ -87,6 +87,7 @@ class UIControls::Scrollbar < UIControls::BaseControl
       if @captured_area == :slider || (!@captured_area && @hover_area == :slider)
         bar_color = GRAB_COLOR
       end
+      bar_color = DISABLED_COLOR if disabled?
       self.bitmap.fill_rect(@slider.x, @slider.y, @slider.width, @slider.height, bar_color)
     end
   end
@@ -120,8 +121,6 @@ class UIControls::Scrollbar < UIControls::BaseControl
   def update
     return if !self.visible
     super
-    # TODO: Disabled control stuff.
-#    return if self.disabled
     if @captured_area == :slider
       # TODO: Have a display y position for the slider bar which is in pixels,
       #       and round it to the nearest row when setting @top_row? This is
@@ -141,7 +140,7 @@ class UIControls::Scrollbar < UIControls::BaseControl
           self.slider_top = @slider_top + ((@tray_size - @slider_size) / 4.0).ceil
         end
       end
-    else
+    elsif !disabled?
       mouse_x, mouse_y = mouse_pos
       if mouse_x && mouse_y && @interactions[:slider_tray].contains?(mouse_x, mouse_y)
         wheel_v = Input.scroll_v

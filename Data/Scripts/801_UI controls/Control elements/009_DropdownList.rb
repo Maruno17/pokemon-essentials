@@ -81,10 +81,16 @@ class UIControls::DropdownList < UIControls::BaseControl
   def refresh
     @dropdown_menu&.refresh
     super
+    # Draw disabled colour
+    if disabled?
+      self.bitmap.fill_rect(@button_rect.x, @button_rect.y,
+                            @button_rect.width, @button_rect.height,
+                            DISABLED_COLOR)
+    end
     # Draw button outline
     self.bitmap.outline_rect(@button_rect.x, @button_rect.y,
                              @button_rect.width, @button_rect.height,
-                             Color.black)
+                             self.bitmap.font.color)
     # Draw value
     draw_text(self.bitmap, @button_rect.x + TEXT_BOX_PADDING, TEXT_OFFSET_Y, @options[@value] || "???")
     # Draw down arrow
@@ -95,7 +101,7 @@ class UIControls::DropdownList < UIControls::BaseControl
     6.times do |i|
       self.bitmap.fill_rect(arrow_area_x + (arrow_area_width / 2) - 5 + i,
                             @button_rect.y + (arrow_area_width / 2) - 1 + i,
-                            11 - (2 * i), 1, Color.black)
+                            11 - (2 * i), 1, (disabled?) ? DISABLED_COLOR_DARK : self.bitmap.font.color)
     end
   end
 

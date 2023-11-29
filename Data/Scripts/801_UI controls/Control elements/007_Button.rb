@@ -50,6 +50,12 @@ class UIControls::Button < UIControls::BaseControl
 
   def refresh
     super
+    # Draw disabled colour
+    if disabled?
+      self.bitmap.fill_rect(@button_rect.x, @button_rect.y,
+                            @button_rect.width, @button_rect.height,
+                            DISABLED_COLOR)
+    end
     # Draw button outline
     self.bitmap.outline_rect(@button_rect.x, @button_rect.y,
                              @button_rect.width, @button_rect.height,

@@ -33,6 +33,12 @@ class UIControls::Checkbox < UIControls::BaseControl
 
   def refresh
     super
+    # Draw disabled colour
+    if disabled?
+      self.bitmap.fill_rect(@checkbox_rect.x, @checkbox_rect.y,
+                            @checkbox_rect.width, @checkbox_rect.height,
+                            DISABLED_COLOR)
+    end
     # Draw checkbox outline
     self.bitmap.outline_rect(@checkbox_rect.x, @checkbox_rect.y,
                              @checkbox_rect.width, @checkbox_rect.height,
@@ -40,12 +46,12 @@ class UIControls::Checkbox < UIControls::BaseControl
     # Draw checkbox fill
     if @value   # If checked
       self.bitmap.fill_rect(@checkbox_rect.x + @checkbox_rect.width - CHECKBOX_FILL_SIZE - 2, @checkbox_rect.y + 2,
-                            CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, CHECKED_COLOR)
+                            CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, (disabled?) ? DISABLED_COLOR_DARK : CHECKED_COLOR)
       self.bitmap.outline_rect(@checkbox_rect.x + @checkbox_rect.width - CHECKBOX_FILL_SIZE - 2, @checkbox_rect.y + 2,
                                CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, self.bitmap.font.color)
     else
       self.bitmap.fill_rect(@checkbox_rect.x + 2, @checkbox_rect.y + 2,
-                            CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, UNCHECKED_COLOR)
+                            CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, (disabled?) ? DISABLED_COLOR_DARK : UNCHECKED_COLOR)
       self.bitmap.outline_rect(@checkbox_rect.x + 2, @checkbox_rect.y + 2,
                                CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, self.bitmap.font.color)
     end

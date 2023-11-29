@@ -5,6 +5,7 @@
 #       any lag at the moment with a tall list.
 # TODO: Make a viewport for the list, and allow scrolling positions halfway
 #       through a line? Nah.
+# TODO: This control cannot be disabled.
 #===============================================================================
 class UIControls::List < UIControls::BaseControl
   LIST_X         = 0
@@ -217,8 +218,6 @@ class UIControls::List < UIControls::BaseControl
     return if !self.visible
     @scrollbar.update
     super
-    # TODO: Disabled control stuff.
-#    return if self.disabled
     # Refresh the list's position if changed by moving the scrollbar
     self.top_row = (@scrollbar.position.to_f / ROW_HEIGHT).round
     # Set the selected row to the row the mouse is over, if clicked on

@@ -8,8 +8,6 @@
 #       "User"(?).
 # TODO: Things that need pop-up windows (draws a semi-transparent grey over the
 #       whole screen behind the window):
-#       - graphic picker
-#       - SE file picker
 #       - animation properties (Move/OppMove/Common/OppCommon, move, version,
 #         extra name, target, filepath, flags, etc.)
 #       - editor settings (theme, canvas BG graphics, user/target graphics,
@@ -213,11 +211,8 @@ class AnimationEditor
   def set_particle_pane_contents
     particle_pane = @components[:particle_pane]
     particle_pane.add_header_label(:header, _INTL("Edit particle properties"))
-    # TODO: Name should blacklist certain names ("User", "Target", "SE") and
-    #       should be disabled if the value is one of those.
-    particle_pane.add_labelled_text_box(:name, _INTL("Name"), _INTL("Untitled"))
-    # TODO: Graphic should show the graphic's name alongside a "Change" button.
-    #       New kind of control that is a label plus a button?
+    particle_pane.add_labelled_text_box(:name, _INTL("Name"), "")
+    particle_pane.get_control(:name).set_blacklist("User", "Target", "SE")
     particle_pane.add_labelled_label(:graphic_name, _INTL("Graphic"), "")
     particle_pane.add_labelled_button(:graphic, "", _INTL("Change"))
     particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {
@@ -327,7 +322,6 @@ class AnimationEditor
         #       which should be indicated somehow in ctrl[1].
       end
     when :se_pane
-      # TODO: Activate/deactivate Edit/Delete buttons accordingly.
       se_particle = @anim[:particles].select { |p| p[:name] == "SE" }[0]
       kyfrm = keyframe
       # Populate list of files
@@ -346,7 +340,16 @@ class AnimationEditor
       end
       list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
       component.get_control(:list).values = list
+      # Enable/disable the "Edit" and "Delete" buttons
+      if list.length > 0 && component.get_control(:list).value
+        component.get_control(:edit).enable
+        component.get_control(:delete).enable
+      else
+        component.get_control(:edit).disable
+        component.get_control(:delete).disable
+      end
     when :particle_pane
+      # Display particle's graphic's name
       new_vals = AnimationEditor::ParticleDataHelper.get_all_particle_values(@anim[:particles][particle_index])
       component.controls.each do |ctrl|
         next if !new_vals.include?(ctrl[0])
@@ -365,7 +368,14 @@ class AnimationEditor
       }
       graphic_name = graphic_override_names[graphic_name] if graphic_override_names[graphic_name]
       component.get_control(:graphic_name).label = graphic_name
-      # TODO: Disable the name, graphic and focus controls for "User"/"Target".
+      # Enable/disable the Graphic and Focus controls for "User"/"Target"
+      if ["User", "Target"].include?(@anim[:particles][particle_index][:name])
+        component.get_control(:graphic).disable
+        component.get_control(:focus).disable
+      else
+        component.get_control(:graphic).enable
+        component.get_control(:focus).enable
+      end
     end
   end
 
@@ -394,7 +404,7 @@ class AnimationEditor
         save
       when :name
         # TODO: Open the animation properties pop-up window.
-        echoln "animation name clicked"
+        echoln "Animation's name button clicked"
       end
     when :canvas
       # TODO: Detect and apply changes made in canvas, e.g. moving particle,
@@ -403,6 +413,7 @@ class AnimationEditor
       case property
       when :color_tone   # Button
         # TODO: Open the colour/tone side pane.
+        echoln "Color/Tone button clicked"
       else
         particle = @anim[:particles][particle_index]
         new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value)
@@ -417,6 +428,8 @@ class AnimationEditor
       end
     when :se_pane
       case property
+      when :list   # List
+        refresh_component(:se_pane)
       when :add   # Button
         new_file, new_volume, new_pitch = choose_audio_file("", 100, 100)
         if new_file != ""
@@ -451,8 +464,6 @@ class AnimationEditor
           @components[:play_controls].duration = @components[:particle_list].duration
           refresh_component(:se_pane)
         end
-      else
-#        particle = @anim[:particles][particle_index]
       end
     when :particle_pane
       case property
@@ -474,7 +485,7 @@ class AnimationEditor
       # TODO: Stuff here once I decide what controls to add.
     when :particle_list
 #      refresh if keyframe != old_keyframe || particle_index != old_particle_index
-      # TODO: Lots of stuff here.
+      # TODO: Lots of stuff here when buttons are added to it.
     when :play_controls
       # TODO: Will the play controls ever signal themselves as changed? I don't
       #       think so.
@@ -515,13 +526,10 @@ class AnimationEditor
   def run
     Input.text_input = false
     loop do
-      # TODO: Do we need to check for Input.text_input? I think just checking
-      #       @captured != nil will suffice.
-      inputting_text = Input.text_input
       Graphics.update
       Input.update
       update
-      if !inputting_text && @captured.nil? && @quit
+      if @captured.nil? && @quit
         case message(_INTL("Do you want to save changes to the animation?"),
                      [:yes, _INTL("Yes")], [:no, _INTL("No")], [:cancel, _INTL("Cancel")])
         when :yes

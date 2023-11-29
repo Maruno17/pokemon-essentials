@@ -242,17 +242,9 @@ module GameData
       ret = @particles[index][SUB_SCHEMA[key][0]] if SUB_SCHEMA[key]
       ret = nil if ret == false || (ret.is_a?(Array) && ret.length == 0) || ret == ""
       case key
-      when "Focus"
-        # The User and Target particles are hardcoded to only have their
-        # corresponding foci, so they don't need writing to PBS
-        if ["User", "Target"].include?(@particles[index][:name])
-          ret = nil
-        elsif ret
-          ret = SUB_SCHEMA[key][2].key(ret)
-        end
-      when "graphic"
-        # The User and Target particles have hardcoded graphics, so they don't
-        # need writing to PBS
+      when "Graphic", "Focus"
+        # The User and Target particles have hardcoded graphics/foci, so they
+        # don't need writing to PBS
         ret = nil if ["User", "Target"].include?(@particles[index][:name])
       when "Play"
         # TODO: Turn volume/pitch of 100 into nil.

@@ -4,8 +4,6 @@
 #       decide which characters are selected. Maybe? Note that this method
 #       is only triggered upon the initial mouse press, and isn't repeated
 #       while it's still held down.
-# TODO: Add a blacklist array. Can't type in any values in this array. Disable
-#       this control if @value is in this array.
 #===============================================================================
 class UIControls::TextBox < UIControls::BaseControl
   TEXT_BOX_X       = 2
@@ -21,6 +19,7 @@ class UIControls::TextBox < UIControls::BaseControl
     @display_pos  = 0
     @cursor_timer = nil
     @cursor_shown = false
+    @blacklist    = []
   end
 
   def value=(new_value)
@@ -53,6 +52,11 @@ class UIControls::TextBox < UIControls::BaseControl
     invalidate
   end
 
+  def set_blacklist(*list)
+    @blacklist = list
+    invalidate
+  end
+
   def set_interactive_rects
     @text_box_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
                               [TEXT_BOX_WIDTH, width].min, TEXT_BOX_HEIGHT)
@@ -62,6 +66,12 @@ class UIControls::TextBox < UIControls::BaseControl
   end
 
   #-----------------------------------------------------------------------------
+
+  def disabled?
+    val = (@value.respond_to?("strip!")) ? @value.strip : @value
+    return true if @blacklist.include?(val)
+    return super
+  end
 
   def busy?
     return @cursor_pos >= 0 if @captured_area == :text_box
@@ -157,6 +167,12 @@ class UIControls::TextBox < UIControls::BaseControl
 
   def refresh
     super
+    # Draw disabled colour
+    if disabled?
+      self.bitmap.fill_rect(@text_box_rect.x, @text_box_rect.y,
+                            @text_box_rect.width, @text_box_rect.height,
+                            DISABLED_COLOR)
+    end
     # Draw text box outline
     self.bitmap.outline_rect(@text_box_rect.x, @text_box_rect.y,
                              @text_box_rect.width, @text_box_rect.height,
@@ -204,6 +220,7 @@ class UIControls::TextBox < UIControls::BaseControl
       invalidate
     else
       @value.strip! if @value.respond_to?("strip!")
+      @value = @initial_value if disabled?
       set_changed if @initial_value && @value != @initial_value
       reset_interaction
     end
@@ -224,6 +241,7 @@ class UIControls::TextBox < UIControls::BaseControl
     # Released mouse button outside of text box, or initially clicked outside of
     # text box; end interaction with this control
     @value.strip! if @value.respond_to?("strip!")
+    @value = @initial_value if disabled?
     set_changed if @initial_value && @value != @initial_value
     reset_interaction
     super   # Make this control not busy again
@@ -252,6 +270,7 @@ class UIControls::TextBox < UIControls::BaseControl
     if Input.triggerex?(:RETURN) || Input.repeatex?(:RETURN) ||
        Input.triggerex?(:KP_ENTER) || Input.repeatex?(:KP_ENTER)
       @value.strip! if @value.respond_to?("strip!")
+      @value = @initial_value if disabled?
       set_changed if @initial_value && @value != @initial_value
       reset_interaction
       @captured_area = nil
@@ -274,8 +293,6 @@ class UIControls::TextBox < UIControls::BaseControl
   def update
     return if !self.visible
     super
-    # TODO: Disabled control stuff.
-#    return if self.disabled
     # Make the cursor flash
     if @captured_area == :text_box
       cursor_to_show = ((System.uptime - @cursor_timer) / 0.35).to_i.even?

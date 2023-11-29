@@ -1,5 +1,6 @@
 #===============================================================================
-#
+# TODO: Is there a better knob design than a big black rectangle? I'd rather
+#       it not be a different colour.
 #===============================================================================
 class UIControls::NumberSlider < UIControls::BaseControl
   attr_reader :min_value
@@ -14,10 +15,6 @@ class UIControls::NumberSlider < UIControls::BaseControl
   PLUS_X        = SLIDER_X + SLIDER_LENGTH + SLIDER_PADDING
   VALUE_X       = PLUS_X + PLUS_MINUS_SIZE + 5
   TEXT_OFFSET_Y = 5
-
-  # TODO: Is there a better knob design than a big black rectangle? I'd rather
-  #       it not be a different colour.
-  SLIDER_KNOB_COLOR = Color.black
 
   def initialize(width, height, viewport, min_value, max_value, value)
     super(width, height, viewport)
@@ -72,8 +69,9 @@ class UIControls::NumberSlider < UIControls::BaseControl
 
   def refresh
     super
+    button_color = (disabled?) ? DISABLED_COLOR : self.bitmap.font.color
     # Draw minus button
-    self.bitmap.fill_rect(@minus_rect.x + 2, @minus_rect.y + (@minus_rect.height / 2) - 2, @minus_rect.width - 4, 4, self.bitmap.font.color)
+    self.bitmap.fill_rect(@minus_rect.x + 2, @minus_rect.y + (@minus_rect.height / 2) - 2, @minus_rect.width - 4, 4, button_color)
     # Draw slider bar
     self.bitmap.fill_rect(SLIDER_X, (self.height / 2) - 1, SLIDER_LENGTH, 2, self.bitmap.font.color)
     # Draw notches on slider bar
@@ -83,10 +81,10 @@ class UIControls::NumberSlider < UIControls::BaseControl
     # Draw slider knob
     fraction = (self.value - self.min_value) / (self.max_value.to_f - self.min_value)
     knob_x = (SLIDER_LENGTH * fraction).to_i
-    self.bitmap.fill_rect(SLIDER_X + knob_x - 4, (self.height / 2) - 6, 8, 12, SLIDER_KNOB_COLOR)
+    self.bitmap.fill_rect(SLIDER_X + knob_x - 4, (self.height / 2) - 6, 8, 12, button_color)
     # Draw plus button
-    self.bitmap.fill_rect(@plus_rect.x + 2, @plus_rect.y + (@plus_rect.height / 2) - 2, @plus_rect.width - 4, 4, self.bitmap.font.color)
-    self.bitmap.fill_rect(@plus_rect.x + (@plus_rect.width / 2) - 2, @plus_rect.y + 2, 4, @plus_rect.height - 4, self.bitmap.font.color)
+    self.bitmap.fill_rect(@plus_rect.x + 2, @plus_rect.y + (@plus_rect.height / 2) - 2, @plus_rect.width - 4, 4, button_color)
+    self.bitmap.fill_rect(@plus_rect.x + (@plus_rect.width / 2) - 2, @plus_rect.y + 2, 4, @plus_rect.height - 4, button_color)
     # Draw value text
     draw_text(self.bitmap, VALUE_X, TEXT_OFFSET_Y, self.value.to_s)
   end
@@ -108,8 +106,6 @@ class UIControls::NumberSlider < UIControls::BaseControl
   def update
     return if !self.visible
     super
-    # TODO: Disabled control stuff.
-#    return if self.disabled
     case @captured_area
     when :minus
       # Constant decrement of value while pressing the minus button

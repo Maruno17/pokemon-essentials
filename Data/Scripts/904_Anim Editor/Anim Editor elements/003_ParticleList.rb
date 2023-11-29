@@ -450,7 +450,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     if particle_data[:name] == "SE"
       bg_color = SE_CONTROL_BG
     else
-      bg_color = CONTROL_BG_COLORS[@particles[@particle_list[index][0]][:focus]] || Color.magenta
+      bg_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
     end
     # Draw hover highlight
     hover_color = nil
@@ -487,7 +487,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     if particle_data[:name] == "SE"
       bg_color = SE_CONTROL_BG
     else
-      bg_color = CONTROL_BG_COLORS[@particles[@particle_list[index][0]][:focus]] || Color.magenta
+      bg_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
     end
     # Get visibilities of particle for each keyframe
     visible_cmds = @visibilities[p_index]
