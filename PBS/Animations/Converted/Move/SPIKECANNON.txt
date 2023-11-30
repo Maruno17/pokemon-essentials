@@ -1,0 +1,376 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SPIKECANNON]
+Name = SPIKECANNON
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetX = 0,147
+    SetY = 0,211
+    SetVisible = 0,true
+    SetX = 1,217
+    SetY = 1,179
+    SetX = 2,294
+    SetY = 2,135
+    SetX = 3,358
+    SetY = 3,110
+    SetY = 4,104
+    SetX = 5,364
+    SetY = 5,123
+<Particle 3>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,262
+    SetY = 3,142
+    SetX = 4,345
+    SetY = 4,148
+    SetX = 5,320
+    SetY = 5,104
+<Particle 4>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,217
+    SetY = 2,205
+    SetX = 3,268
+    SetY = 3,179
+    SetX = 4,281
+    SetY = 4,129
+    SetX = 5,371
+    SetY = 5,110
+    SetOpacity = 5,50
+<Particle 5>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,153
+    SetY = 2,192
+    SetX = 3,198
+    SetY = 3,167
+    SetX = 4,371
+    SetY = 4,85
+    SetOpacity = 4,50
+    SetX = 5,332
+    SetY = 5,91
+<Particle 6>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,364
+    SetY = 3,98
+    SetOpacity = 3,50
+<SE>
+    Play = 0,Slash10,80,100
+    Play = 2,Slash10,80,100
+    Play = 4,Slash10,80,100
+#-------------------------------
+[Move,SPIKECANNON,1]
+Name = Spike Cannon hit 2
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 6>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,364
+    SetY = 3,98
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetX = 0,147
+    SetY = 0,211
+    SetVisible = 0,true
+    SetX = 1,217
+    SetY = 1,179
+    SetX = 2,294
+    SetY = 2,135
+    SetX = 3,358
+    SetY = 3,110
+    SetY = 4,104
+    SetX = 5,364
+    SetY = 5,123
+<Particle 3>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,262
+    SetY = 3,142
+    SetX = 4,345
+    SetY = 4,148
+    SetX = 5,320
+    SetY = 5,104
+<Particle 4>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,217
+    SetY = 2,205
+    SetX = 3,268
+    SetY = 3,179
+    SetX = 4,281
+    SetY = 4,129
+    SetX = 5,371
+    SetY = 5,110
+    SetOpacity = 5,50
+<Particle 5>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,153
+    SetY = 2,192
+    SetX = 3,198
+    SetY = 3,167
+    SetX = 4,371
+    SetY = 4,85
+    SetOpacity = 4,50
+    SetX = 5,332
+    SetY = 5,91
+<SE>
+    Play = 0,Slash10,80,100
+    Play = 2,Slash10,80,100
+    Play = 4,Slash10,80,100
+#-------------------------------
+[Move,SPIKECANNON,2]
+Name = Spike Cannon hit 3
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 5>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,153
+    SetY = 2,192
+    SetX = 3,198
+    SetY = 3,167
+    SetX = 4,371
+    SetY = 4,85
+    SetOpacity = 4,50
+    SetX = 5,332
+    SetY = 5,91
+<Particle 6>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,364
+    SetY = 3,98
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetX = 0,147
+    SetY = 0,211
+    SetVisible = 0,true
+    SetX = 1,217
+    SetY = 1,179
+    SetX = 2,294
+    SetY = 2,135
+    SetX = 3,358
+    SetY = 3,110
+    SetY = 4,104
+    SetX = 5,364
+    SetY = 5,123
+<Particle 3>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,262
+    SetY = 3,142
+    SetX = 4,345
+    SetY = 4,148
+    SetX = 5,320
+    SetY = 5,104
+<Particle 4>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,217
+    SetY = 2,205
+    SetX = 3,268
+    SetY = 3,179
+    SetX = 4,281
+    SetY = 4,129
+    SetX = 5,371
+    SetY = 5,110
+    SetOpacity = 5,50
+<SE>
+    Play = 0,Slash10,80,100
+    Play = 2,Slash10,80,100
+    Play = 4,Slash10,80,100
+#-------------------------------
+[Move,SPIKECANNON,3]
+Name = Spike Cannon hit 4
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 4>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,217
+    SetY = 2,205
+    SetX = 3,268
+    SetY = 3,179
+    SetX = 4,281
+    SetY = 4,129
+    SetX = 5,371
+    SetY = 5,110
+    SetOpacity = 5,50
+<Particle 5>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,153
+    SetY = 2,192
+    SetX = 3,198
+    SetY = 3,167
+    SetX = 4,371
+    SetY = 4,85
+    SetOpacity = 4,50
+    SetX = 5,332
+    SetY = 5,91
+<Particle 6>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,364
+    SetY = 3,98
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetX = 0,147
+    SetY = 0,211
+    SetVisible = 0,true
+    SetX = 1,217
+    SetY = 1,179
+    SetX = 2,294
+    SetY = 2,135
+    SetX = 3,358
+    SetY = 3,110
+    SetY = 4,104
+    SetX = 5,364
+    SetY = 5,123
+<Particle 3>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,262
+    SetY = 3,142
+    SetX = 4,345
+    SetY = 4,148
+    SetX = 5,320
+    SetY = 5,104
+<SE>
+    Play = 0,Slash10,80,100
+    Play = 2,Slash10,80,100
+    Play = 4,Slash10,80,100
+#-------------------------------
+[Move,SPIKECANNON,4]
+Name = Spike Cannon hit 5
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,262
+    SetY = 3,142
+    SetX = 4,345
+    SetY = 4,148
+    SetX = 5,320
+    SetY = 5,104
+<Particle 4>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,217
+    SetY = 2,205
+    SetX = 3,268
+    SetY = 3,179
+    SetX = 4,281
+    SetY = 4,129
+    SetX = 5,371
+    SetY = 5,110
+    SetOpacity = 5,50
+<Particle 5>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,153
+    SetY = 2,192
+    SetX = 3,198
+    SetY = 3,167
+    SetX = 4,371
+    SetY = 4,85
+    SetOpacity = 4,50
+    SetX = 5,332
+    SetY = 5,91
+<Particle 6>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,364
+    SetY = 3,98
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = poison3
+    Focus = UserAndTarget
+    SetX = 0,147
+    SetY = 0,211
+    SetVisible = 0,true
+    SetX = 1,217
+    SetY = 1,179
+    SetX = 2,294
+    SetY = 2,135
+    SetX = 3,358
+    SetY = 3,110
+    SetY = 4,104
+    SetX = 5,364
+    SetY = 5,123
+<SE>
+    Play = 0,Slash10,80,100
+    Play = 2,Slash10,80,100
+    Play = 4,Slash10,80,100

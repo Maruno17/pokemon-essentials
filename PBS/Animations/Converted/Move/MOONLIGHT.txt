@@ -1,0 +1,35 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MOONLIGHT]
+Name = MOONLIGHT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = normal2
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,206
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetVisible = 0,true
+    SetY = 1,190
+    SetY = 2,158
+    SetY = 3,110
+    SetY = 4,70
+    SetY = 5,38
+    SetY = 6,14
+    SetY = 7,-10
+    SetZoomX = 7,60
+    SetZoomY = 7,60
+    SetZoomX = 8,70
+    SetZoomY = 8,70
+    SetOpacity = 8,150
+    SetZoomX = 9,80
+    SetZoomY = 9,80
+    SetOpacity = 9,100
+<SE>
+    Play = 0,Saint6,80,100

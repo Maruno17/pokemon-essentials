@@ -1,0 +1,79 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SLUDGEBOMB]
+Name = SLUDGEBOMB
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = poison4
+    Focus = UserAndTarget
+    SetX = 0,140
+    SetY = 0,217
+    SetVisible = 0,true
+    SetX = 1,172
+    SetY = 1,211
+    SetX = 2,134
+    SetX = 3,179
+    SetY = 3,148
+    SetX = 4,243
+    SetY = 4,104
+    SetX = 5,294
+    SetY = 5,79
+    SetX = 6,256
+    SetY = 6,135
+<Particle 4>
+    Graphic = poison4
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,147
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,186
+    SetX = 3,262
+    SetY = 3,142
+    SetX = 4,326
+    SetY = 4,135
+    SetX = 5,236
+    SetY = 5,148
+<Particle 5>
+    Graphic = poison4
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,166
+    SetY = 2,186
+    SetX = 3,192
+    SetY = 3,167
+    SetX = 4,217
+    SetY = 4,154
+<Particle 2>
+    Graphic = poison4
+    Focus = UserAndTarget
+    SetX = 0,134
+    SetY = 0,211
+    SetVisible = 0,true
+    SetX = 1,166
+    SetY = 1,173
+    SetX = 2,198
+    SetY = 2,148
+    SetX = 3,281
+    SetY = 3,104
+    SetX = 4,358
+    SetY = 4,110
+    SetX = 5,345
+    SetX = 7,275
+    SetY = 7,123
+    SetX = 8,288
+    SetY = 8,116
+    SetX = 9,307
+    SetY = 9,110
+    SetX = 10,332
+    SetX = 11,352
+    SetX = 12,358
+<SE>
+    Play = 3,Poison,80,100
+    Play = 5,Poison,80,100
+    Play = 7,Poison,80,100

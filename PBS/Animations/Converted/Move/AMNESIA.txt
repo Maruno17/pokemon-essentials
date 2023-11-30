@@ -1,0 +1,22 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,AMNESIA]
+Name = AMNESIA
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = mixed
+    Focus = Target
+    SetX = 0,428
+    SetY = 0,80
+    SetVisible = 0,true
+    SetOpacity = 0,200
+    SetOpacity = 1,220
+    SetOpacity = 2,250
+    SetOpacity = 3,255
+<SE>
+    Play = 0,Yawn,100,100

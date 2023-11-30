@@ -1,0 +1,113 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,OVERHEAT]
+Name = OVERHEAT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fire4
+    Focus = UserAndTarget
+    SetX = 0,134
+    SetY = 0,179
+    SetVisible = 0,true
+    SetY = 1,173
+    SetY = 2,167
+    SetY = 3,161
+    SetY = 4,154
+    SetY = 5,148
+    SetY = 6,142
+    SetY = 7,135
+    SetY = 8,129
+    SetY = 9,123
+    SetY = 10,116
+    SetY = 11,110
+<Particle 3>
+    Graphic = fire4
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,172
+    SetY = 1,179
+    SetX = 2,179
+    SetY = 2,198
+    SetX = 4,313
+    SetY = 4,123
+    SetX = 5,364
+    SetY = 5,110
+    SetX = 6,140
+    SetY = 6,41
+    SetFlip = 7,true
+    SetX = 7,467
+    SetY = 7,211
+    SetOpacity = 7,100
+<Particle 4>
+    Graphic = fire4
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,211
+    SetY = 2,123
+    SetX = 3,243
+    SetY = 3,167
+    SetX = 4,51
+    SetY = 4,85
+    SetX = 5,32
+    SetY = 5,60
+    SetX = 6,377
+    SetY = 6,211
+<Particle 5>
+    Graphic = fire4
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,153
+    SetY = 2,224
+    SetX = 3,243
+    SetY = 3,79
+    SetX = 4,345
+    SetY = 4,224
+    SetX = 5,435
+    SetY = 5,230
+    SetOpacity = 5,100
+    SetFlip = 6,true
+    SetX = 6,288
+    SetY = 6,53
+    SetOpacity = 6,255
+<Particle 6>
+    Graphic = fire4
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,96
+    SetY = 3,167
+    SetX = 4,140
+    SetY = 4,129
+    SetY = 5,72
+<Particle 7>
+    Graphic = fire4
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,256
+    SetY = 3,217
+    SetX = 4,192
+    SetY = 4,198
+    SetX = 5,268
+    SetY = 5,205
+<Particle 8>
+    Graphic = fire4
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,83
+    SetY = 4,186
+    SetX = 5,32
+    SetY = 5,192
+<Particle 9>
+    Graphic = fire4
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,179
+    SetY = 4,135
+    SetX = 5,236
+    SetY = 5,79
+<SE>
+    Play = 0,Fire3,80,100

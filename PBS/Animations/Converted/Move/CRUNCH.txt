@@ -1,0 +1,90 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CRUNCH]
+Name = CRUNCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = teeth
+    Focus = Target
+    SetX = 0,396
+    SetY = 0,97
+    SetVisible = 0,true
+    SetX = 1,391
+    SetY = 1,98
+    SetX = 2,387
+    SetY = 2,99
+    SetY = 3,97
+    SetX = 4,381
+    SetY = 4,92
+    SetX = 5,389
+    SetX = 6,388
+    SetY = 6,96
+    SetX = 7,389
+    SetY = 7,99
+    SetX = 8,388
+    SetY = 8,93
+    SetX = 9,384
+    SetY = 9,94
+    SetX = 10,395
+    SetY = 10,98
+    SetX = 11,391
+    SetY = 11,93
+    SetX = 12,384
+    SetY = 12,97
+<Particle 3>
+    Graphic = teeth
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,444
+    SetY = 7,115
+    SetX = 8,418
+    SetY = 8,95
+    SetX = 9,379
+    SetY = 9,112
+    SetX = 10,331
+    SetY = 10,128
+<Particle 4>
+    Graphic = teeth
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,343
+    SetY = 7,94
+    SetX = 8,329
+    SetY = 8,104
+    SetX = 9,425
+    SetY = 9,119
+    SetX = 10,437
+    SetY = 10,116
+<Particle 5>
+    Graphic = teeth
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,343
+    SetY = 8,95
+    SetX = 9,327
+    SetY = 9,115
+    SetX = 10,387
+    SetY = 10,141
+<Particle 6>
+    Graphic = teeth
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,442
+    SetY = 8,99
+    SetX = 9,391
+    SetY = 9,152
+    SetX = 10,404
+    SetY = 10,114
+<Particle 7>
+    Graphic = teeth
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 10,325
+    SetY = 10,96
+<SE>
+    Play = 7,Super Fang,100,111

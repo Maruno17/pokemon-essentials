@@ -1,0 +1,36 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FIREPLEDGE]
+Name = FIREPLEDGE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = anim sheet.2
+    Focus = Target
+    SetX = 0,388
+    SetY = 0,135
+    SetZoomY = 0,30
+    SetVisible = 0,true
+    SetX = 1,387
+    SetY = 1,123
+    SetZoomY = 1,50
+    SetY = 2,111
+    SetZoomY = 2,75
+    SetX = 3,386
+    SetY = 3,100
+    SetZoomY = 3,100
+    SetX = 4,387
+    SetY = 4,111
+    SetZoomY = 4,75
+    SetX = 5,386
+    SetY = 5,100
+    SetZoomY = 5,100
+    SetX = 6,384
+    SetY = 6,98
+    SetY = 7,95
+<SE>
+    Play = 0,Mega Punch,100,100

@@ -1,0 +1,47 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDERWAVE]
+Name = THUNDERWAVE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = T. Shock
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 6,392
+    SetY = 6,114
+    SetX = 7,368
+    SetX = 8,408
+    SetX = 9,360
+    SetX = 12,344
+    SetX = 13,352
+    SetX = 14,360
+    SetX = 15,368
+<Particle 4>
+    Graphic = T. Shock
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 6,368
+    SetY = 6,114
+<Particle 2>
+    Graphic = T. Shock
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,392
+    SetY = 1,42
+    SetY = 2,58
+    SetY = 3,82
+    SetY = 4,98
+    SetY = 5,114
+    SetX = 6,408
+    SetX = 8,368
+    SetX = 9,416
+    SetX = 12,424
+    SetX = 13,432
+    SetX = 14,424
+<SE>
+    Play = 2,Paralyze1,80,100

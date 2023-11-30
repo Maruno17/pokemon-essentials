@@ -1,0 +1,60 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ENCORE]
+Name = ENCORE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = BABACOMETRO
+    Focus = UserAndTarget
+    SetX = 0,96
+    SetY = 0,186
+    SetVisible = 0,true
+    SetX = 1,108
+    SetX = 2,121
+    SetX = 3,160
+    SetX = 4,96
+    SetX = 5,108
+    SetX = 6,140
+    SetX = 7,108
+    SetX = 8,166
+    SetX = 9,108
+    SetX = 10,121
+    SetX = 11,160
+    SetX = 12,96
+    SetX = 13,108
+    SetX = 14,140
+    SetX = 15,108
+    SetX = 16,89
+    SetX = 17,115
+    SetX = 18,147
+<Particle 2>
+    Graphic = BABACOMETRO
+    Focus = UserAndTarget
+    SetX = 0,172
+    SetY = 0,186
+    SetVisible = 0,true
+    SetX = 1,160
+    SetX = 2,140
+    SetX = 3,108
+    SetX = 4,172
+    SetX = 5,160
+    SetX = 6,121
+    SetX = 7,160
+    SetX = 8,96
+    SetX = 9,153
+    SetX = 10,140
+    SetX = 11,108
+    SetX = 12,172
+    SetX = 13,160
+    SetX = 14,121
+    SetX = 15,160
+    SetX = 16,179
+    SetX = 17,160
+    SetX = 18,128
+<SE>
+    Play = 0,Applause,80,100

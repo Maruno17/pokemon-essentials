@@ -1,0 +1,93 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,REFLECT]
+Name = REFLECT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = normal2
+    Focus = Target
+    SetX = 0,376
+    SetY = 0,86
+    SetVisible = 0,true
+    SetOpacity = 0,75
+    SetOpacity = 1,100
+    SetOpacity = 2,150
+    SetOpacity = 3,255
+    SetOpacity = 6,150
+    SetOpacity = 7,100
+<Particle 3>
+    Graphic = normal2
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,328
+    SetY = 1,-18
+    SetX = 2,304
+    SetY = 2,22
+    SetX = 3,288
+    SetY = 3,86
+    SetOpacity = 3,200
+    SetX = 4,296
+    SetY = 4,158
+    SetOpacity = 4,255
+    SetX = 5,280
+    SetY = 5,214
+    SetX = 6,416
+    SetY = 6,238
+    SetX = 7,312
+    SetY = 7,222
+<Particle 4>
+    Graphic = normal2
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,464
+    SetY = 1,-10
+    SetX = 2,488
+    SetY = 2,38
+    SetX = 3,480
+    SetY = 3,94
+    SetX = 4,512
+    SetY = 4,158
+    SetX = 5,496
+    SetY = 5,230
+    SetX = 6,336
+    SetY = 6,150
+    SetX = 7,432
+    SetY = 7,230
+<Particle 5>
+    Graphic = normal2
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,392
+    SetY = 2,-18
+    SetY = 3,22
+    SetX = 4,424
+    SetY = 4,102
+    SetX = 5,376
+    SetY = 5,166
+    SetX = 6,464
+    SetY = 6,126
+<Particle 6>
+    Graphic = normal2
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,328
+    SetY = 3,-18
+    SetX = 4,352
+    SetY = 4,38
+    SetX = 5,320
+    SetY = 5,78
+<Particle 7>
+    Graphic = normal2
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,432
+    SetY = 4,-10
+    SetX = 5,400
+    SetY = 5,54
+<SE>
+    Play = 0,Saint7,80,100

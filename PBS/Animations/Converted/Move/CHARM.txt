@@ -1,0 +1,59 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CHARM]
+Name = CHARM
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = electric2
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,440
+    SetY = 2,142
+    SetX = 3,432
+    SetY = 3,134
+    SetX = 4,424
+    SetY = 4,126
+    SetY = 5,118
+    SetX = 6,352
+    SetY = 6,78
+    SetY = 7,70
+<Particle 4>
+    Graphic = electric2
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,376
+    SetY = 5,102
+<Particle 2>
+    Graphic = electric2
+    Focus = Target
+    SetX = 0,336
+    SetY = 0,126
+    SetVisible = 0,true
+    SetX = 1,344
+    SetY = 1,118
+    SetX = 2,352
+    SetY = 2,110
+    SetY = 3,102
+    SetY = 4,94
+    SetX = 5,344
+    SetY = 5,86
+    SetOpacity = 5,100
+    SetX = 6,424
+    SetY = 6,110
+    SetOpacity = 6,255
+    SetX = 7,432
+    SetY = 7,102
+    SetOpacity = 7,100
+    SetX = 8,352
+    SetY = 8,62
+    SetOpacity = 8,255
+    SetX = 9,344
+    SetY = 9,54
+    SetX = 10,336
+    SetY = 10,46
+    SetOpacity = 10,100

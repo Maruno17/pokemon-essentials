@@ -1,0 +1,68 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,POISONSTING]
+Name = POISONSTING
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = 003-Attack01
+    Focus = UserAndTarget
+    SetX = 0,128
+    SetY = 0,236
+    SetVisible = 0,true
+    SetX = 1,166
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,256
+    SetY = 3,142
+    SetX = 4,288
+    SetY = 4,123
+    SetX = 5,300
+    SetY = 5,129
+    SetX = 6,352
+    SetY = 6,110
+    SetX = 7,358
+<SE>
+    Play = 0,throw,80,100
+    Play = 6,Slash10,80,100
+#-------------------------------
+[OppMove,POISONSTING]
+Name = POISONSTING
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = 003-Attack01
+    Focus = UserAndTarget
+    SetX = 0,351
+    SetY = 0,139
+    SetAngle = 0,180
+    SetVisible = 0,true
+    SetX = 1,319
+    SetY = 1,154
+    SetX = 2,287
+    SetY = 2,168
+    SetX = 3,255
+    SetY = 3,183
+    SetX = 4,223
+    SetY = 4,197
+    SetX = 5,191
+    SetY = 5,211
+    SetX = 6,159
+    SetY = 6,226
+    SetX = 7,122
+    SetY = 7,221
+    SetAngle = 7,0
+    SetX = 8,128
+    SetY = 8,236
+<SE>
+    Play = 0,throw,80,100
+    Play = 6,Slash10,80,100

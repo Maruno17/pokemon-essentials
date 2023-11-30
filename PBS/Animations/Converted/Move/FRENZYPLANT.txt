@@ -1,0 +1,36 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FRENZYPLANT]
+Name = FRENZYPLANT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = grass2
+    Focus = UserAndTarget
+    SetX = 0,172
+    SetY = 0,192
+    SetVisible = 0,true
+    SetX = 1,192
+    SetY = 1,186
+    SetX = 2,217
+    SetY = 2,173
+    SetX = 3,256
+    SetY = 3,161
+    SetX = 4,281
+    SetY = 4,142
+    SetX = 5,313
+    SetY = 5,123
+    SetX = 6,332
+    SetY = 6,116
+    SetX = 7,384
+    SetY = 11,110
+    SetY = 12,104
+    SetY = 13,98
+    SetOpacity = 16,100
+<SE>
+    Play = 0,Earth4,80,100
+    Play = 8,Earth5,80,100

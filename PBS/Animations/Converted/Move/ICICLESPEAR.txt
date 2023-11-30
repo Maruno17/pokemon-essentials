@@ -1,0 +1,156 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ICICLESPEAR]
+Name = ICICLESPEAR
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetFlip = 0,true
+    SetX = 0,192
+    SetY = 0,192
+    SetAngle = 0,135
+    SetVisible = 0,true
+    SetX = 1,256
+    SetY = 1,173
+    SetX = 2,294
+    SetY = 2,142
+    SetX = 3,332
+    SetY = 3,135
+    SetX = 4,345
+    SetY = 4,129
+    SetX = 5,352
+    SetY = 5,123
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80,100
+#-------------------------------
+[Move,ICICLESPEAR,1]
+Name = Icicle Spear hit 2
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetFlip = 0,true
+    SetX = 0,192
+    SetY = 0,192
+    SetAngle = 0,135
+    SetVisible = 0,true
+    SetX = 1,256
+    SetY = 1,173
+    SetX = 2,294
+    SetY = 2,142
+    SetX = 3,332
+    SetY = 3,135
+    SetX = 4,345
+    SetY = 4,129
+    SetX = 5,352
+    SetY = 5,123
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80,100
+#-------------------------------
+[Move,ICICLESPEAR,2]
+Name = Icicle Spear hit 3
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetFlip = 0,true
+    SetX = 0,192
+    SetY = 0,192
+    SetAngle = 0,135
+    SetVisible = 0,true
+    SetX = 1,256
+    SetY = 1,173
+    SetX = 2,294
+    SetY = 2,142
+    SetX = 3,332
+    SetY = 3,135
+    SetX = 4,345
+    SetY = 4,129
+    SetX = 5,352
+    SetY = 5,123
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80,100
+#-------------------------------
+[Move,ICICLESPEAR,3]
+Name = Icicle Spear hit 4
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetFlip = 0,true
+    SetX = 0,192
+    SetY = 0,192
+    SetAngle = 0,135
+    SetVisible = 0,true
+    SetX = 1,256
+    SetY = 1,173
+    SetX = 2,294
+    SetY = 2,142
+    SetX = 3,332
+    SetY = 3,135
+    SetX = 4,345
+    SetY = 4,129
+    SetX = 5,352
+    SetY = 5,123
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80,100
+#-------------------------------
+[Move,ICICLESPEAR,4]
+Name = Icicle Spear hit 5
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetFlip = 0,true
+    SetX = 0,192
+    SetY = 0,192
+    SetAngle = 0,135
+    SetVisible = 0,true
+    SetX = 1,256
+    SetY = 1,173
+    SetX = 2,294
+    SetY = 2,142
+    SetX = 3,332
+    SetY = 3,135
+    SetX = 4,345
+    SetY = 4,129
+    SetX = 5,352
+    SetY = 5,123
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80,100

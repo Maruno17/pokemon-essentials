@@ -1,0 +1,41 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FAKEOUT]
+Name = FAKEOUT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Fakeout
+    Focus = Target
+    SetFlip = 0,true
+    SetX = 0,480
+    SetY = 0,102
+    SetVisible = 0,true
+    SetX = 6,464
+    SetX = 7,448
+    SetX = 8,400
+    SetX = 9,384
+    SetX = 12,400
+    SetX = 13,448
+    SetX = 14,464
+    SetX = 15,480
+<Particle 2>
+    Graphic = Fakeout
+    Focus = Target
+    SetX = 0,288
+    SetY = 0,102
+    SetVisible = 0,true
+    SetX = 6,304
+    SetX = 7,320
+    SetX = 8,368
+    SetX = 9,384
+    SetX = 12,368
+    SetX = 13,320
+    SetX = 14,304
+    SetX = 15,288
+<SE>
+    Play = 9,punch5,80,150

@@ -1,0 +1,53 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SCREECH]
+Name = SCREECH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Growl
+    Focus = UserAndTarget
+    SetX = 0,179
+    SetY = 0,142
+    SetVisible = 0,true
+    SetY = 1,135
+    SetY = 2,236
+    SetY = 3,135
+    SetY = 5,129
+    SetY = 6,135
+    SetY = 7,123
+    SetY = 8,129
+    SetY = 9,135
+<Particle 4>
+    Graphic = Growl
+    Focus = UserAndTarget
+    SetX = 0,179
+    SetY = 0,230
+    SetVisible = 0,true
+    SetY = 1,224
+    SetY = 2,129
+    SetY = 3,217
+    SetY = 4,236
+    SetY = 5,224
+    SetY = 6,230
+    SetY = 7,224
+    SetY = 9,230
+<Particle 2>
+    Graphic = Growl
+    Focus = UserAndTarget
+    SetX = 0,179
+    SetY = 0,186
+    SetVisible = 0,true
+    SetY = 1,179
+    SetY = 2,192
+    SetY = 3,179
+    SetY = 4,192
+    SetY = 6,179
+    SetY = 7,173
+    SetY = 9,179
+<SE>
+    PlayUserCry = 0,100,100

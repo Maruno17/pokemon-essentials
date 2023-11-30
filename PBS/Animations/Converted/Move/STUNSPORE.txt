@@ -1,0 +1,18 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,STUNSPORE]
+Name = STUNSPORE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Special5
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,94
+    SetVisible = 0,true
+<SE>
+    Play = 0,Sand,80,100

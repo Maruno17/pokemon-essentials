@@ -1,0 +1,36 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,POUND]
+Name = POUND
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = many
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,392
+    SetY = 3,94
+    SetOpacity = 4,100
+<Particle 2>
+    Graphic = many
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,94
+    SetVisible = 0,true
+    SetOpacity = 0,100
+    SetOpacity = 1,255
+    SetZoomX = 2,120
+    SetZoomY = 2,120
+    SetZoomX = 3,130
+    SetZoomY = 3,130
+    SetZoomX = 4,110
+    SetZoomY = 4,110
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetOpacity = 5,100
+<SE>
+    Play = 0,Blow1,80,100

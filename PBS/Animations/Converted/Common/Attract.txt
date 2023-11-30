@@ -1,0 +1,116 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Attract]
+Name = Attract
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = poi.hear.mus
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,355
+    SetY = 7,50
+    SetX = 8,341
+    SetY = 8,65
+    SetX = 9,350
+    SetY = 9,67
+    SetX = 10,376
+    SetY = 10,85
+    SetX = 11,361
+    SetY = 11,90
+    SetX = 12,377
+    SetY = 12,74
+    SetX = 13,390
+    SetY = 13,54
+    SetX = 14,404
+    SetY = 14,27
+    SetY = 15,19
+    SetOpacity = 15,192
+    SetY = 16,11
+    SetOpacity = 16,128
+    SetY = 17,3
+    SetOpacity = 17,64
+<Particle 4>
+    Graphic = poi.hear.mus
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,349
+    SetY = 8,50
+    SetX = 9,333
+    SetY = 9,61
+    SetX = 10,350
+    SetY = 10,86
+    SetX = 11,361
+    SetY = 11,88
+    SetX = 12,348
+    SetY = 12,90
+    SetX = 13,353
+    SetY = 13,71
+    SetX = 14,336
+    SetY = 14,50
+    SetY = 15,42
+    SetOpacity = 15,192
+    SetY = 16,34
+    SetOpacity = 16,128
+    SetY = 17,26
+    SetOpacity = 17,64
+<Particle 5>
+    Graphic = poi.hear.mus
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 12,397
+    SetY = 12,93
+    SetX = 13,411
+    SetY = 13,72
+    SetX = 14,412
+    SetY = 14,44
+    SetX = 15,414
+    SetY = 15,40
+    SetOpacity = 15,192
+    SetY = 16,32
+    SetOpacity = 16,128
+    SetY = 17,24
+    SetOpacity = 17,64
+<Particle 2>
+    Graphic = poi.hear.mus
+    Focus = Target
+    SetX = 0,374
+    SetY = 0,67
+    SetVisible = 0,true
+    SetX = 1,407
+    SetY = 1,65
+    SetX = 2,432
+    SetY = 2,60
+    SetX = 3,436
+    SetY = 3,49
+    SetX = 4,415
+    SetY = 4,32
+    SetX = 5,348
+    SetY = 5,36
+    SetX = 6,325
+    SetY = 6,42
+    SetX = 7,308
+    SetY = 7,68
+    SetX = 8,343
+    SetY = 8,79
+    SetX = 9,369
+    SetY = 9,85
+    SetX = 10,376
+    SetY = 10,73
+    SetX = 11,375
+    SetY = 11,64
+    SetY = 12,47
+    SetY = 13,31
+    SetY = 14,7
+    SetY = 15,-1
+    SetOpacity = 15,192
+    SetY = 16,-9
+    SetOpacity = 16,128
+    SetY = 17,-17
+    SetOpacity = 17,64
+<SE>
+    Play = 0,infatuated,100,100

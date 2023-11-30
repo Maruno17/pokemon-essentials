@@ -1,0 +1,111 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,StatUp]
+Name = StatUp
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = !
+    Focus = Target
+    SetX = 0,343
+    SetY = 0,234
+    SetVisible = 0,true
+    SetOpacity = 0,126
+    SetY = 1,210
+    SetY = 2,178
+    SetY = 3,146
+    SetY = 4,114
+    SetY = 5,82
+    SetY = 6,62
+    SetY = 7,42
+    SetY = 8,22
+    SetOpacity = 8,63
+    SetY = 9,2
+    SetOpacity = 9,0
+<Particle 3>
+    Graphic = !
+    Focus = Target
+    SetX = 0,391
+    SetY = 0,202
+    SetVisible = 0,true
+    SetOpacity = 0,126
+    SetY = 1,170
+    SetY = 2,138
+    SetY = 3,98
+    SetY = 4,66
+    SetY = 5,34
+    SetY = 6,14
+    SetY = 7,-6
+    SetY = 8,-26
+    SetOpacity = 8,63
+    SetY = 9,-46
+    SetOpacity = 9,0
+<Particle 4>
+    Graphic = !
+    Focus = Target
+    SetX = 0,439
+    SetY = 0,234
+    SetVisible = 0,true
+    SetOpacity = 0,126
+    SetY = 1,210
+    SetX = 2,447
+    SetY = 2,178
+    SetX = 3,439
+    SetY = 3,146
+    SetY = 4,114
+    SetY = 5,82
+    SetY = 6,62
+    SetY = 7,42
+    SetY = 8,22
+    SetOpacity = 8,63
+    SetY = 9,2
+    SetOpacity = 9,0
+<Particle 5>
+    Graphic = !
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,375
+    SetY = 2,234
+    SetOpacity = 2,126
+    SetY = 3,202
+    SetY = 4,170
+    SetY = 5,138
+    SetY = 6,118
+    SetY = 7,98
+    SetY = 8,78
+    SetOpacity = 8,63
+    SetY = 9,58
+    SetOpacity = 9,0
+<Particle 6>
+    Graphic = !
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,423
+    SetY = 3,234
+    SetOpacity = 3,126
+    SetY = 4,202
+    SetY = 5,170
+    SetY = 6,150
+    SetY = 7,130
+    SetY = 8,110
+    SetOpacity = 8,63
+    SetY = 9,90
+    SetOpacity = 9,0
+<Particle 7>
+    Graphic = !
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,359
+    SetY = 5,234
+    SetOpacity = 5,126
+    SetY = 6,194
+    SetY = 8,174
+    SetOpacity = 8,63
+    SetY = 9,154
+    SetOpacity = 9,0
+<SE>
+    Play = 0,increase,100,100

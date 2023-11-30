@@ -1,0 +1,53 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ACID]
+Name = ACID
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = poison2
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,147
+    SetY = 1,211
+    SetX = 2,172
+    SetY = 2,179
+    SetX = 3,217
+    SetY = 3,142
+    SetX = 4,275
+    SetY = 4,104
+    SetX = 5,326
+    SetY = 5,91
+    SetY = 6,85
+<Particle 4>
+    Graphic = poison2
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,153
+    SetY = 3,211
+    SetX = 4,204
+    SetY = 4,148
+    SetX = 5,268
+    SetY = 5,91
+<Particle 2>
+    Graphic = poison2
+    Focus = UserAndTarget
+    SetX = 0,147
+    SetY = 0,211
+    SetVisible = 0,true
+    SetX = 1,179
+    SetY = 1,161
+    SetX = 2,217
+    SetY = 2,129
+    SetX = 3,300
+    SetY = 3,104
+    SetX = 4,358
+    SetY = 4,110
+    SetOpacity = 12,100
+<SE>
+    Play = 0,throw,80,100
+    Play = 3,Poison,80,100

@@ -1,0 +1,105 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CHARGE]
+Name = CHARGE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = electric2
+    Focus = User
+    SetX = 0,328
+    SetY = 0,238
+    SetVisible = 0,true
+    SetX = 1,296
+    SetX = 2,216
+    SetY = 2,230
+    SetX = 3,184
+    SetX = 4,176
+    SetX = 6,72
+    SetY = 6,262
+    SetX = 7,168
+    SetY = 7,190
+    SetX = 8,24
+    SetX = 9,192
+    SetY = 9,174
+    SetX = 10,64
+    SetY = 10,294
+    SetOpacity = 11,100
+<Particle 3>
+    Graphic = electric2
+    Focus = User
+    SetVisible = 0,true
+    SetX = 1,-32
+    SetY = 1,230
+    SetX = 2,0
+    SetX = 3,40
+    SetX = 4,64
+    SetX = 5,72
+    SetY = 5,254
+    SetX = 6,168
+    SetY = 6,190
+    SetX = 7,24
+    SetX = 8,48
+    SetY = 8,302
+    SetX = 9,16
+    SetY = 9,198
+    SetOpacity = 10,100
+    SetX = 11,232
+    SetY = 11,222
+<Particle 4>
+    Graphic = electric2
+    Focus = User
+    SetVisible = 0,true
+    SetX = 3,328
+    SetY = 3,238
+    SetX = 4,280
+    SetX = 5,216
+    SetY = 5,230
+    SetX = 6,72
+    SetY = 6,238
+    SetX = 7,48
+    SetY = 7,302
+    SetX = 8,176
+    SetY = 8,222
+    SetX = 10,208
+    SetX = 11,200
+    SetY = 11,310
+<Particle 5>
+    Graphic = electric2
+    Focus = User
+    SetVisible = 0,true
+    SetX = 4,-72
+    SetY = 4,238
+    SetX = 5,-24
+    SetX = 6,56
+    SetY = 6,190
+    SetY = 7,238
+    SetX = 8,192
+    SetY = 8,174
+<Particle 6>
+    Graphic = electric2
+    Focus = User
+    SetVisible = 0,true
+    SetX = 5,344
+    SetY = 5,246
+    SetX = 6,304
+    SetX = 7,216
+    SetY = 7,238
+    SetX = 8,176
+    SetY = 8,278
+<Particle 7>
+    Graphic = electric2
+    Focus = User
+    SetVisible = 0,true
+    SetX = 7,176
+    SetY = 7,286
+<SE>
+    Play = 0,Thunder3,80,100
+    Play = 2,Thunder3,80,100
+    Play = 4,Thunder3,80,100
+    Play = 5,Thunder3,80,100
+    Play = 7,Thunder3,80,100

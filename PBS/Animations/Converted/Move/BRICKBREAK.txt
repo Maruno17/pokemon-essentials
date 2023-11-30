@@ -1,0 +1,36 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BRICKBREAK]
+Name = BRICKBREAK
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = many
+    Focus = Target
+    SetX = 0,296
+    SetY = 0,38
+    SetVisible = 0,true
+    SetX = 1,320
+    SetAngle = 1,345
+    SetX = 2,352
+    SetY = 2,62
+    SetAngle = 2,330
+    SetX = 3,384
+    SetY = 3,86
+    SetAngle = 3,315
+    SetX = 4,400
+    SetY = 4,118
+    SetAngle = 4,300
+    SetX = 5,416
+    SetY = 5,142
+    SetAngle = 5,285
+    SetX = 6,432
+    SetY = 6,158
+    SetX = 7,440
+    SetY = 7,166
+<SE>
+    Play = 4,Blow7,80,100

@@ -1,0 +1,20 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CUT]
+Name = CUT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = 004-Attack02
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,94
+    SetVisible = 0,true
+<SE>
+    Play = 0,Slash10,80,100
+    Play = 3,Slash2,80,100
+    Play = 6,Slash11,80,100

@@ -1,0 +1,63 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,TELEPORT]
+Name = TELEPORT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = !
+    Focus = User
+    SetX = 0,123
+    SetY = 0,374
+    SetVisible = 0,true
+    SetX = 1,114
+    SetY = 1,338
+    SetX = 2,119
+    SetY = 2,324
+    SetX = 3,112
+    SetY = 3,284
+    SetX = 4,116
+    SetY = 4,256
+    SetX = 5,123
+    SetY = 5,216
+    SetX = 6,124
+    SetY = 6,184
+<Particle 4>
+    Graphic = !
+    Focus = User
+    SetVisible = 0,true
+    SetX = 1,145
+    SetY = 1,363
+    SetX = 2,148
+    SetY = 2,300
+    SetX = 3,133
+    SetY = 3,255
+    SetX = 4,144
+    SetY = 4,214
+    SetX = 5,146
+    SetY = 5,203
+    SetX = 6,142
+    SetY = 6,135
+<Particle 2>
+    Graphic = !
+    Focus = User
+    SetX = 0,74
+    SetY = 0,358
+    SetVisible = 0,true
+    SetX = 1,87
+    SetY = 1,304
+    SetX = 2,93
+    SetY = 2,305
+    SetX = 3,91
+    SetY = 3,268
+    SetX = 4,94
+    SetY = 4,230
+    SetY = 5,182
+    SetX = 6,104
+    SetY = 6,153
+<SE>
+    Play = 0,Trump Card,80,100

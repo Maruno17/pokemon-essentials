@@ -1,0 +1,45 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,WATERPULSE]
+Name = WATERPULSE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+    SetToneBlue = 15,255
+    SetToneBlue = 18,0
+<Particle 2>
+    Graphic = Water pulse
+    Focus = UserAndTarget
+    SetX = 0,131
+    SetY = 0,229
+    SetVisible = 0,true
+    SetX = 1,208
+    SetY = 1,192
+    SetX = 2,232
+    SetY = 2,184
+    SetX = 3,240
+    SetY = 3,176
+    SetX = 4,264
+    SetY = 4,160
+    SetX = 5,280
+    SetY = 5,144
+    SetX = 6,304
+    SetY = 6,128
+    SetX = 7,337
+    SetY = 7,114
+    SetX = 8,361
+    SetY = 8,110
+    SetX = 9,356
+    SetY = 9,104
+    SetX = 10,350
+    SetY = 10,107
+    SetX = 11,354
+    SetY = 11,105
+    SetX = 12,349
+    SetY = 12,100
+    SetX = 13,350
+    SetY = 13,122
+    SetX = 14,344

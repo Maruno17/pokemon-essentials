@@ -1,0 +1,25 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,POISONTAIL]
+Name = POISONTAIL
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = firepoison
+    Focus = Target
+    SetX = 0,392
+    SetY = 0,94
+    SetVisible = 0,true
+    SetX = 1,384
+    SetY = 2,86
+    SetX = 4,376
+    SetZoomX = 7,110
+    SetZoomY = 7,110
+    SetOpacity = 7,100
+<SE>
+    Play = 0,Blow3,80,100
+    Play = 0,Poison,80,100

@@ -1,0 +1,124 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,METEORMASH]
+Name = METEORMASH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetX = 0,390
+    SetY = 0,98
+    SetVisible = 0,true
+    SetX = 1,395
+    SetY = 1,100
+    SetX = 2,390
+    SetY = 2,98
+    SetX = 6,395
+    SetY = 6,100
+    SetX = 7,390
+    SetY = 7,98
+<Particle 3>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,389
+    SetY = 1,150
+    SetX = 2,386
+    SetY = 2,151
+    SetX = 3,384
+    SetY = 3,150
+    SetX = 4,361
+    SetY = 4,59
+    SetX = 5,387
+    SetY = 5,134
+    SetX = 6,433
+    SetY = 6,115
+    SetX = 7,368
+    SetY = 7,143
+    SetX = 8,344
+    SetY = 8,38
+    SetX = 9,416
+    SetY = 9,141
+<Particle 4>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,340
+    SetY = 1,116
+    SetX = 2,334
+    SetY = 2,106
+    SetY = 3,103
+    SetX = 4,419
+    SetY = 4,142
+    SetX = 5,414
+    SetY = 5,129
+    SetX = 6,356
+    SetY = 6,141
+    SetX = 7,405
+    SetY = 7,58
+    SetX = 8,335
+    SetY = 8,83
+    SetX = 9,361
+    SetY = 9,149
+<Particle 5>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,419
+    SetY = 2,61
+    SetX = 3,412
+    SetY = 3,78
+    SetX = 4,421
+    SetY = 4,74
+    SetX = 5,409
+    SetY = 5,69
+    SetX = 6,347
+    SetY = 6,75
+    SetX = 7,427
+    SetY = 7,111
+    SetX = 8,411
+    SetY = 8,71
+    SetX = 9,402
+    SetY = 9,57
+<Particle 6>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,429
+    SetY = 2,131
+    SetY = 3,136
+    SetX = 4,386
+    SetY = 4,139
+    SetX = 5,440
+    SetY = 5,102
+    SetX = 6,356
+    SetY = 6,103
+    SetX = 7,346
+    SetY = 7,52
+<Particle 7>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,369
+    SetY = 3,68
+    SetX = 5,341
+    SetY = 5,105
+    SetX = 6,426
+    SetY = 6,96
+    SetX = 7,335
+    SetY = 7,85
+<Particle 8>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 5,371
+    SetY = 5,67
+    SetX = 6,385
+    SetY = 6,64
+<SE>
+    Play = 0,superdamage,100,100

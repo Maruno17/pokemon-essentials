@@ -1,0 +1,40 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDERBOLT]
+Name = THUNDERBOLT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = 017-Thunder01
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,384
+    SetY = 5,94
+    SetY = 6,54
+    SetOpacity = 6,100
+<Particle 2>
+    Graphic = 017-Thunder01
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,54
+    SetVisible = 0,true
+    SetFlip = 4,true
+    SetOpacity = 4,200
+    SetOpacity = 5,100
+    SetFlip = 6,false
+    SetY = 6,94
+    SetOpacity = 6,255
+    SetFlip = 7,true
+    SetFlip = 9,false
+    SetZoomX = 9,120
+    SetZoomY = 9,120
+    SetOpacity = 9,100
+    SetOpacity = 10,50
+    SetFlip = 11,true
+    SetOpacity = 11,20
+<SE>
+    Play = 0,Thunder9,80,100

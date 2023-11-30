@@ -1,0 +1,52 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ALLYSWITCH]
+Name = ALLYSWITCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = anim sheet
+    Focus = User
+    SetX = 0,137
+    SetY = 0,222
+    SetVisible = 0,true
+    SetX = 1,139
+    SetY = 1,224
+    SetX = 2,137
+    SetY = 2,222
+    SetZoomX = 3,110
+    SetZoomY = 3,110
+    SetY = 4,220
+    SetZoomX = 4,125
+    SetZoomY = 4,125
+    SetX = 5,141
+    SetY = 5,217
+    SetZoomX = 5,165
+    SetZoomY = 5,165
+    SetX = 6,142
+    SetY = 6,216
+    SetZoomX = 6,186
+    SetZoomY = 6,186
+    SetX = 7,143
+    SetY = 7,215
+    SetZoomX = 7,202
+    SetZoomY = 7,202
+    SetY = 8,213
+    SetZoomX = 8,230
+    SetZoomY = 8,230
+    SetX = 9,148
+    SetY = 9,207
+    SetZoomX = 9,300
+    SetZoomY = 9,300
+    SetOpacity = 14,212
+    SetOpacity = 15,170
+    SetOpacity = 16,127
+    SetOpacity = 17,85
+    SetOpacity = 18,42
+    SetOpacity = 19,0
+<SE>
+    Play = 0,Uproar,100,100

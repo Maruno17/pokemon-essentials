@@ -1,0 +1,87 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,COTTONGUARD]
+Name = COTTONGUARD
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = animsheet
+    Focus = User
+    SetX = 0,113
+    SetY = 0,263
+    SetVisible = 0,true
+    SetX = 1,123
+    SetY = 1,272
+    SetX = 2,135
+    SetY = 2,268
+    SetY = 3,223
+    SetX = 4,149
+    SetY = 4,210
+    SetX = 5,135
+    SetY = 5,267
+    SetX = 6,184
+    SetY = 6,233
+<Particle 3>
+    Graphic = animsheet
+    Focus = User
+    SetVisible = 0,true
+    SetX = 1,156
+    SetY = 1,258
+    SetX = 2,166
+    SetY = 2,247
+    SetX = 3,167
+    SetY = 3,243
+    SetX = 4,154
+    SetY = 4,234
+    SetX = 5,165
+    SetY = 5,256
+    SetX = 6,154
+    SetY = 6,217
+<Particle 4>
+    Graphic = animsheet
+    Focus = User
+    SetVisible = 0,true
+    SetX = 3,133
+    SetY = 3,263
+    SetX = 4,170
+    SetY = 4,259
+    SetX = 5,146
+    SetY = 5,237
+    SetX = 6,141
+    SetY = 6,252
+<Particle 5>
+    Graphic = animsheet
+    Focus = User
+    SetVisible = 0,true
+    SetX = 3,167
+    SetY = 3,266
+    SetX = 4,138
+    SetY = 4,269
+    SetX = 5,163
+    SetY = 5,214
+    SetX = 6,178
+    SetY = 6,265
+<Particle 6>
+    Graphic = animsheet
+    Focus = User
+    SetVisible = 0,true
+    SetX = 3,176
+    SetY = 3,220
+    SetX = 4,190
+    SetY = 4,236
+    SetX = 5,180
+    SetY = 5,232
+    SetX = 6,138
+    SetY = 6,269
+<Particle 7>
+    Graphic = animsheet
+    Focus = User
+    SetVisible = 0,true
+    SetX = 4,129
+    SetY = 4,237
+<SE>
+    Play = 0,Substitute,80,100

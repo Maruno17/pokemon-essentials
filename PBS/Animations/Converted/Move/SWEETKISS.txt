@@ -1,0 +1,75 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SWEETKISS]
+Name = SWEETKISS
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = electric2
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,368
+    SetY = 8,54
+    SetX = 9,376
+    SetY = 9,46
+    SetX = 10,384
+    SetY = 10,38
+    SetY = 11,30
+    SetFlip = 12,true
+    SetX = 12,296
+    SetY = 12,46
+    SetZoomX = 12,75
+    SetZoomY = 12,75
+<Particle 2>
+    Graphic = electric2
+    Focus = Target
+    SetX = 0,440
+    SetY = 0,134
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetVisible = 0,true
+    SetOpacity = 0,100
+    SetX = 1,416
+    SetY = 1,118
+    SetZoomX = 1,75
+    SetZoomY = 1,75
+    SetOpacity = 1,200
+    SetX = 2,384
+    SetY = 2,110
+    SetOpacity = 2,255
+    SetX = 3,368
+    SetY = 3,102
+    SetX = 4,352
+    SetY = 4,86
+    SetX = 5,328
+    SetY = 5,62
+    SetX = 6,312
+    SetY = 6,54
+    SetX = 7,304
+    SetFlip = 8,true
+    SetX = 8,296
+    SetY = 8,46
+    SetFlip = 12,false
+    SetX = 12,376
+    SetY = 12,22
+    SetZoomX = 12,100
+    SetZoomY = 12,100
+    SetX = 13,368
+    SetY = 13,14
+    SetY = 14,6
+    SetX = 15,376
+    SetY = 15,-2
+    SetX = 16,384
+    SetY = 16,-10
+    SetY = 17,-18
+    SetFlip = 18,true
+    SetX = 18,296
+    SetY = 18,46
+    SetZoomX = 18,75
+    SetZoomY = 18,75
+<SE>
+    Play = 4,Saint1,80,100

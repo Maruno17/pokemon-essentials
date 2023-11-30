@@ -1,0 +1,73 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DOUBLEKICK]
+Name = DOUBLEKICK
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = normal1
+    Focus = Target
+    SetX = 0,336
+    SetY = 0,94
+    SetZoomX = 0,110
+    SetZoomY = 0,110
+    SetVisible = 0,true
+    SetOpacity = 0,100
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetX = 3,440
+    SetY = 3,78
+    SetOpacity = 5,100
+<Particle 3>
+    Graphic = normal1
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,440
+    SetY = 2,78
+    SetZoomX = 2,110
+    SetZoomY = 2,110
+    SetOpacity = 2,100
+<SE>
+    Play = 1,Blow3,80,100
+    Play = 3,Blow3,80,100
+#-------------------------------
+[Move,DOUBLEKICK,1]
+Name = Double Kick hit 2
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = normal1
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,440
+    SetY = 2,78
+    SetZoomX = 2,110
+    SetZoomY = 2,110
+    SetOpacity = 2,100
+<Particle 2>
+    Graphic = normal1
+    Focus = Target
+    SetX = 0,336
+    SetY = 0,94
+    SetZoomX = 0,110
+    SetZoomY = 0,110
+    SetVisible = 0,true
+    SetOpacity = 0,100
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetX = 3,440
+    SetY = 3,78
+    SetOpacity = 5,100
+<SE>
+    Play = 1,Blow3,80,100
+    Play = 3,Blow3,80,100

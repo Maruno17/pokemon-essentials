@@ -1,0 +1,38 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DISABLE]
+Name = DISABLE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,385
+    SetY = 4,96
+    SetAngle = 4,45
+<Particle 4>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 6,388
+    SetY = 6,96
+<Particle 2>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetX = 0,385
+    SetY = 0,101
+    SetVisible = 0,true
+    SetX = 1,384
+    SetY = 1,98
+    SetY = 2,99
+    SetX = 3,385
+    SetY = 3,96
+    SetX = 4,387
+    SetY = 4,98
+<SE>
+    Play = 0,Sword2,80,121

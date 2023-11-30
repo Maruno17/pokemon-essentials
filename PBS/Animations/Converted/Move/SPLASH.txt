@@ -1,0 +1,69 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SPLASH]
+Name = SPLASH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = poison2
+    Focus = User
+    SetVisible = 0,true
+    SetFlip = 1,true
+    SetX = 1,56
+    SetY = 1,230
+    SetX = 3,40
+    SetY = 3,214
+    SetX = 4,32
+    SetY = 4,206
+    SetX = 5,16
+    SetY = 5,222
+    SetFlip = 6,false
+    SetX = 6,240
+    SetY = 6,206
+    SetFlip = 7,true
+    SetX = 7,48
+    SetX = 8,32
+    SetY = 8,198
+    SetX = 9,8
+<Particle 4>
+    Graphic = poison2
+    Focus = User
+    SetVisible = 0,true
+    SetX = 2,200
+    SetY = 2,222
+    SetX = 4,208
+    SetX = 5,224
+    SetY = 5,214
+    SetFlip = 6,true
+    SetX = 6,64
+<Particle 2>
+    Graphic = poison2
+    Focus = User
+    SetX = 0,184
+    SetY = 0,238
+    SetVisible = 0,true
+    SetX = 1,192
+    SetY = 1,230
+    SetFlip = 2,true
+    SetX = 2,48
+    SetY = 2,222
+    SetFlip = 3,false
+    SetX = 3,208
+    SetX = 4,224
+    SetY = 4,230
+    SetX = 5,232
+    SetY = 5,238
+    SetFlip = 6,true
+    SetX = 6,8
+    SetFlip = 7,false
+    SetX = 7,248
+    SetY = 7,198
+    SetX = 8,264
+    SetX = 9,272
+    SetY = 9,206
+<SE>
+    Play = 0,Water2,40,70

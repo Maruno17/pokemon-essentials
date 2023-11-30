@@ -1,0 +1,22 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ZAPCANNON]
+Name = ZAPCANNON
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Thunder2
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,86
+    SetVisible = 0,true
+    SetFlip = 6,true
+    SetAngle = 6,180
+    SetOpacity = 7,100
+    SetAngle = 8,18
+<SE>
+    Play = 0,Thunder9,80,100

@@ -1,0 +1,49 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Confusion]
+Name = Confusion
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = confused
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,63
+    SetVisible = 0,true
+    SetY = 1,64
+    SetY = 2,57
+    SetX = 3,385
+    SetY = 3,63
+    SetX = 4,384
+    SetY = 4,64
+    SetX = 5,388
+    SetY = 5,59
+    SetX = 6,389
+    SetY = 6,57
+    SetX = 7,391
+    SetX = 8,384
+    SetY = 8,55
+    SetX = 9,382
+    SetY = 9,59
+    SetX = 10,396
+    SetY = 10,56
+    SetX = 11,386
+    SetY = 11,53
+    SetX = 12,383
+    SetX = 13,386
+    SetY = 13,52
+    SetY = 14,45
+    SetX = 15,391
+    SetY = 15,42
+    SetX = 16,392
+    SetY = 16,41
+    SetOpacity = 16,233
+    SetX = 17,394
+    SetY = 17,39
+    SetOpacity = 17,154
+<SE>
+    Play = 0,throw,80,100

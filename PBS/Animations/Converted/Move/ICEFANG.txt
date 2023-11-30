@@ -1,0 +1,106 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ICEFANG]
+Name = ICEFANG
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = element fangs
+    Focus = Target
+    SetX = 0,395
+    SetY = 0,94
+    SetVisible = 0,true
+    SetX = 1,390
+    SetY = 1,92
+    SetX = 2,389
+    SetY = 2,97
+    SetX = 3,388
+    SetY = 3,94
+    SetX = 4,389
+    SetY = 4,88
+    SetX = 5,392
+    SetY = 5,101
+    SetX = 6,386
+    SetY = 6,94
+    SetX = 7,390
+    SetY = 7,95
+    SetX = 8,389
+    SetY = 8,90
+    SetX = 9,382
+    SetY = 9,92
+    SetX = 10,397
+    SetY = 10,99
+    SetX = 11,388
+    SetY = 11,94
+    SetX = 12,391
+    SetY = 12,95
+<Particle 3>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,330
+    SetY = 7,111
+    SetOpacity = 7,208
+    SetX = 8,328
+    SetY = 8,47
+    SetOpacity = 8,164
+    SetX = 9,353
+    SetY = 9,43
+    SetOpacity = 9,154
+    SetX = 10,354
+    SetY = 10,146
+    SetOpacity = 10,255
+    SetX = 11,443
+    SetY = 11,167
+    SetOpacity = 11,204
+<Particle 4>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,332
+    SetY = 8,111
+    SetOpacity = 8,133
+    SetX = 9,342
+    SetY = 9,137
+    SetOpacity = 9,159
+    SetX = 10,462
+    SetY = 10,48
+    SetOpacity = 10,234
+    SetX = 11,478
+    SetY = 11,106
+    SetOpacity = 11,224
+<Particle 5>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,473
+    SetY = 8,65
+    SetOpacity = 8,213
+    SetX = 9,410
+    SetY = 9,166
+    SetOpacity = 9,212
+    SetX = 10,402
+    SetY = 10,174
+    SetOpacity = 10,174
+<Particle 6>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 9,399
+    SetY = 9,30
+    SetOpacity = 9,144
+    SetX = 10,320
+    SetOpacity = 10,224
+<Particle 7>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 10,450
+    SetY = 10,90
+    SetOpacity = 10,154
+<SE>
+    Play = 6,Super Fang,80,100

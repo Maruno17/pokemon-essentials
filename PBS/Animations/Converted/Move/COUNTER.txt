@@ -1,0 +1,134 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,COUNTER]
+Name = COUNTER
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetX = 0,384
+    SetY = 0,98
+    SetVisible = 0,true
+    SetX = 1,408
+    SetY = 1,80
+    SetZoomX = 1,50
+    SetZoomY = 1,50
+    SetX = 2,384
+    SetY = 2,99
+    SetZoomX = 2,100
+    SetZoomY = 2,100
+    SetX = 3,392
+    SetY = 3,111
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetX = 4,352
+    SetY = 4,24
+    SetX = 5,416
+    SetY = 5,104
+<Particle 3>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,387
+    SetY = 1,99
+    SetX = 2,408
+    SetY = 2,70
+    SetZoomX = 2,50
+    SetZoomY = 2,50
+    SetX = 3,360
+    SetY = 3,115
+    SetX = 4,339
+    SetY = 4,22
+    SetX = 5,400
+    SetY = 5,92
+<Particle 4>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,352
+    SetY = 1,99
+    SetZoomX = 1,50
+    SetZoomY = 1,50
+    SetX = 2,360
+    SetY = 2,78
+    SetX = 3,368
+    SetY = 3,97
+    SetX = 4,376
+    SetY = 4,8
+    SetX = 5,416
+    SetY = 5,53
+<Particle 5>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,400
+    SetY = 2,101
+    SetZoomX = 2,50
+    SetZoomY = 2,50
+    SetX = 3,352
+    SetY = 3,63
+    SetY = 4,121
+    SetX = 5,377
+    SetY = 5,112
+<Particle 6>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,408
+    SetY = 3,85
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetX = 4,392
+    SetY = 4,61
+    SetX = 5,368
+    SetY = 5,54
+<Particle 7>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,386
+    SetY = 3,98
+    SetX = 4,384
+    SetZoomX = 4,50
+    SetZoomY = 4,50
+    SetX = 5,336
+    SetY = 5,10
+<Particle 8>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,384
+    SetY = 4,96
+    SetX = 5,400
+    SetY = 5,39
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+<Particle 9>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 5,352
+    SetY = 5,131
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+<Particle 10>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 5,376
+    SetY = 5,26
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+<Particle 11>
+    Graphic = punches
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 5,399
+    SetY = 5,92
+<SE>
+    Play = 0,MiningCollapse,80,100

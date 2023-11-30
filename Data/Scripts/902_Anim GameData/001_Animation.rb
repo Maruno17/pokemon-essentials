@@ -226,6 +226,10 @@ module GameData
       return [:common, :opp_common].include?(@type)
     end
 
+    def opposing_animation?
+      return [:opp_move, :opp_common].include?(@type)
+    end
+
     alias __new_anim__get_property_for_PBS get_property_for_PBS unless method_defined?(:__new_anim__get_property_for_PBS)
     def get_property_for_PBS(key)
       ret = __new_anim__get_property_for_PBS(key)

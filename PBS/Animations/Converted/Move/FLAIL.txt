@@ -1,0 +1,63 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FLAIL]
+Name = FLAIL
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = finger.spoon
+    Focus = UserAndTarget
+    SetX = 0,354
+    SetY = 0,117
+    SetVisible = 0,true
+    SetX = 1,374
+    SetY = 1,111
+    SetX = 2,415
+    SetY = 2,116
+    SetX = 3,396
+    SetY = 3,106
+    SetX = 4,398
+    SetY = 4,104
+    SetX = 5,417
+    SetY = 5,123
+    SetX = 6,355
+    SetY = 6,127
+    SetX = 7,377
+    SetY = 7,105
+    SetX = 8,381
+    SetY = 8,119
+    SetX = 9,354
+    SetY = 9,138
+    SetX = 10,410
+    SetY = 10,124
+    SetX = 11,387
+    SetY = 11,108
+    SetX = 12,409
+    SetY = 12,121
+    SetX = 13,374
+    SetY = 13,122
+    SetX = 14,421
+    SetY = 14,113
+    SetX = 15,388
+    SetY = 15,91
+    SetX = 16,414
+    SetY = 16,133
+    SetX = 17,412
+    SetY = 17,122
+    SetX = 18,413
+    SetX = 19,371
+    SetY = 19,119
+    SetX = 20,379
+    SetY = 20,117
+    SetX = 21,406
+    SetY = 21,104
+    SetX = 22,403
+    SetY = 22,96
+    SetX = 23,405
+    SetY = 23,95
+<SE>
+    Play = 0,Flail,100,100

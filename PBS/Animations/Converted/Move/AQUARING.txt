@@ -1,0 +1,66 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,AQUARING]
+Name = AQUARING
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,389
+    SetY = 2,108
+    SetX = 3,387
+    SetY = 3,100
+    SetX = 4,368
+    SetY = 4,96
+    SetX = 5,381
+    SetY = 5,93
+<Particle 4>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,396
+    SetY = 3,111
+    SetX = 4,374
+    SetY = 4,97
+    SetX = 5,386
+    SetY = 5,92
+<Particle 5>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,380
+    SetY = 4,94
+<Particle 6>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,386
+    SetY = 4,104
+<Particle 2>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetX = 0,394
+    SetY = 0,105
+    SetVisible = 0,true
+    SetX = 1,395
+    SetY = 1,107
+    SetX = 2,388
+    SetY = 2,94
+    SetZoomX = 2,110
+    SetZoomY = 2,110
+    SetX = 3,379
+    SetY = 3,98
+    SetZoomX = 3,100
+    SetZoomY = 3,100
+    SetX = 4,382
+    SetY = 4,100
+    SetX = 5,394
+    SetY = 5,104
+<SE>
+    Play = 0,Weatherball,80,100

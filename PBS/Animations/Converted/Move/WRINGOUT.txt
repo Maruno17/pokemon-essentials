@@ -1,0 +1,56 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,WRINGOUT]
+Name = WRINGOUT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Fakeout
+    Focus = Target
+    SetX = 0,273
+    SetY = 0,84
+    SetVisible = 0,true
+    SetX = 1,283
+    SetY = 1,139
+    SetX = 2,323
+    SetY = 2,177
+    SetX = 3,361
+    SetY = 3,183
+    SetX = 4,391
+    SetY = 4,168
+    SetX = 5,399
+    SetY = 5,127
+    SetX = 6,408
+    SetY = 6,104
+    SetX = 7,375
+    SetY = 7,75
+    SetX = 8,314
+    SetY = 8,66
+    SetX = 9,288
+    SetY = 9,118
+    SetX = 10,299
+    SetY = 10,166
+    SetX = 11,358
+    SetY = 11,178
+    SetX = 12,400
+    SetY = 12,153
+    SetX = 13,401
+    SetY = 13,108
+    SetX = 14,376
+    SetY = 14,79
+    SetX = 15,320
+    SetY = 15,73
+    SetX = 16,290
+    SetY = 16,115
+    SetX = 17,305
+    SetY = 17,158
+    SetX = 18,366
+    SetY = 18,185
+    SetX = 19,430
+    SetY = 19,161
+<SE>
+    Play = 0,Wring Out,100,100

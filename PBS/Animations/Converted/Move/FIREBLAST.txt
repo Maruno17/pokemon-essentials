@@ -1,0 +1,30 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FIREBLAST]
+Name = FIREBLAST
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fire blast
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,94
+    SetVisible = 0,true
+    SetY = 2,95
+    SetY = 3,92
+    SetX = 4,383
+    SetY = 4,91
+    SetX = 5,384
+    SetY = 5,98
+    SetY = 6,94
+    SetY = 7,96
+    SetX = 8,382
+    SetY = 8,92
+    SetX = 9,385
+    SetY = 9,89
+<SE>
+    Play = 0,Voltorb Flip Explosion,95,101

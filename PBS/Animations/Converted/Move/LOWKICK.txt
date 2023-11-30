@@ -1,0 +1,31 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LOWKICK]
+Name = LOWKICK
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = normal1
+    Focus = Target
+    SetX = 0,480
+    SetY = 0,158
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetVisible = 0,true
+    SetOpacity = 0,100
+    SetX = 1,424
+    SetY = 1,134
+    SetOpacity = 1,255
+    SetX = 2,400
+    SetY = 2,118
+    SetX = 3,392
+    SetY = 3,110
+    SetZoomX = 4,100
+    SetZoomY = 4,100
+    SetOpacity = 5,100
+<SE>
+    Play = 2,Blow1,80,100

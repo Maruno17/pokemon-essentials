@@ -1,0 +1,75 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ERUPTION]
+Name = ERUPTION
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,211
+    SetY = 2,167
+    SetAngle = 2,30
+    SetX = 3,268
+    SetY = 3,142
+    SetAngle = 3,15
+    SetX = 4,294
+    SetY = 4,123
+    SetX = 5,332
+    SetY = 5,110
+    SetAngle = 5,10
+    SetX = 6,364
+    SetAngle = 6,0
+    SetX = 7,262
+    SetY = 7,91
+    SetAngle = 7,10
+<Particle 4>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,147
+    SetY = 4,161
+    SetAngle = 4,30
+    SetX = 5,179
+    SetY = 5,142
+    SetAngle = 5,15
+    SetX = 6,204
+    SetY = 6,110
+<Particle 2>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetX = 0,160
+    SetY = 0,167
+    SetAngle = 0,30
+    SetVisible = 0,true
+    SetX = 1,198
+    SetY = 1,148
+    SetAngle = 1,15
+    SetX = 2,236
+    SetY = 2,116
+    SetX = 3,268
+    SetY = 3,98
+    SetAngle = 3,10
+    SetX = 4,313
+    SetAngle = 4,0
+    SetX = 5,358
+    SetY = 5,110
+    SetX = 6,364
+    SetX = 7,377
+    SetY = 7,116
+    SetX = 8,326
+    SetY = 8,91
+    SetX = 9,358
+    SetY = 9,104
+    SetX = 10,371
+    SetY = 10,123
+<SE>
+    Play = 0,Fire5,80,100
+    Play = 0,Fire2,80,100
+    Play = 3,Fire2,80,100
+    Play = 6,Fire2,80,100

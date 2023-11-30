@@ -1,0 +1,134 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LEECHSEED]
+Name = LEECHSEED
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 4>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,147
+    SetY = 4,205
+    SetX = 5,179
+    SetY = 5,148
+    SetX = 6,217
+    SetY = 6,116
+    SetX = 8,352
+    SetY = 8,91
+    SetX = 10,422
+    SetY = 10,129
+<Particle 2>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetX = 0,147
+    SetY = 0,205
+    SetVisible = 0,true
+    SetX = 1,198
+    SetY = 1,142
+    SetX = 2,249
+    SetY = 2,104
+    SetX = 3,300
+    SetY = 3,85
+    SetX = 4,339
+    SetX = 5,371
+    SetY = 5,104
+    SetX = 6,384
+    SetY = 6,129
+    SetX = 7,281
+    SetY = 7,91
+    SetX = 8,384
+    SetY = 8,129
+<Particle 3>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,147
+    SetY = 2,205
+    SetX = 3,185
+    SetY = 3,135
+    SetX = 4,230
+    SetY = 4,85
+    SetX = 5,268
+    SetY = 5,72
+    SetX = 6,300
+    SetY = 6,79
+    SetX = 7,332
+    SetY = 7,110
+    SetX = 8,345
+    SetY = 8,129
+    SetX = 9,390
+    SetY = 9,104
+    SetX = 10,345
+    SetY = 10,129
+#-------------------------------
+[OppMove,LEECHSEED]
+Name = LEECHSEED
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,384
+    SetY = 2,98
+    SetX = 3,352
+    SetY = 3,72
+    SetX = 4,307
+    SetY = 4,60
+    SetX = 5,256
+    SetY = 5,72
+    SetX = 6,185
+    SetY = 6,110
+    SetX = 7,121
+    SetY = 7,173
+    SetX = 8,128
+    SetY = 8,249
+<Particle 4>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,384
+    SetY = 4,98
+    SetX = 5,352
+    SetY = 5,79
+    SetX = 6,307
+    SetY = 6,72
+    SetX = 8,211
+    SetY = 8,142
+    SetX = 10,160
+    SetY = 10,249
+<Particle 2>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetX = 0,384
+    SetY = 0,98
+    SetVisible = 0,true
+    SetX = 1,352
+    SetY = 1,79
+    SetX = 2,313
+    SetY = 2,72
+    SetX = 3,256
+    SetY = 3,85
+    SetX = 4,211
+    SetY = 4,123
+    SetX = 5,160
+    SetY = 5,186
+    SetX = 6,128
+    SetY = 6,249
+    SetX = 7,249
+    SetY = 7,91
+    SetX = 8,89
+    SetY = 8,249
+    SetX = 9,179
+    SetY = 9,198
+    SetX = 10,96
+    SetY = 10,249

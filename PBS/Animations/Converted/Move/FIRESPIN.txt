@@ -1,0 +1,38 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FIRESPIN]
+Name = FIRESPIN
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = grass2
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,94
+    SetZoomX = 0,25
+    SetZoomY = 0,25
+    SetVisible = 0,true
+    SetOpacity = 0,100
+    SetZoomX = 1,50
+    SetZoomY = 1,50
+    SetOpacity = 1,150
+    SetY = 2,86
+    SetZoomX = 2,75
+    SetZoomY = 2,75
+    SetOpacity = 2,200
+    SetY = 3,78
+    SetZoomX = 3,100
+    SetZoomY = 3,100
+    SetOpacity = 3,255
+    SetZoomX = 10,75
+    SetZoomY = 10,75
+    SetOpacity = 10,150
+    SetZoomX = 11,50
+    SetZoomY = 11,50
+    SetOpacity = 11,100
+<SE>
+    Play = 0,Fire5,80,100

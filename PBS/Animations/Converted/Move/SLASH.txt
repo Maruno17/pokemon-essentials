@@ -1,0 +1,47 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SLASH]
+Name = SLASH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = zan03
+    Focus = Target
+    SetX = 0,280
+    SetY = 0,6
+    SetVisible = 0,true
+    SetX = 1,344
+    SetY = 1,54
+    SetX = 2,376
+    SetY = 2,70
+    SetX = 3,384
+    SetY = 3,94
+<Particle 4>
+    Graphic = zan03
+    Focus = Target
+    SetX = 0,304
+    SetY = 0,-26
+    SetVisible = 0,true
+    SetX = 1,320
+    SetY = 1,86
+    SetX = 2,336
+    SetX = 3,352
+    SetY = 3,118
+<Particle 2>
+    Graphic = zan03
+    Focus = Target
+    SetX = 0,256
+    SetY = 0,38
+    SetVisible = 0,true
+    SetX = 1,368
+    SetY = 1,30
+    SetX = 2,408
+    SetY = 2,54
+    SetX = 3,416
+    SetY = 3,78
+<SE>
+    Play = 0,Slash3,80,100

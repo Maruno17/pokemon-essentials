@@ -1,0 +1,43 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SWAGGER]
+Name = SWAGGER
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = mixed status
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,405
+    SetY = 4,40
+    SetX = 5,402
+    SetY = 5,38
+    SetX = 6,372
+    SetY = 6,68
+    SetX = 7,374
+    SetY = 7,72
+    SetX = 8,433
+    SetY = 8,66
+    SetX = 9,427
+    SetY = 9,63
+    SetX = 10,361
+    SetY = 10,46
+    SetX = 11,362
+    SetX = 12,407
+    SetY = 12,59
+    SetX = 13,405
+    SetY = 13,55
+    SetX = 14,367
+    SetY = 14,69
+    SetX = 15,374
+    SetY = 15,72
+    SetX = 16,409
+    SetY = 16,65
+    SetX = 17,411
+    SetY = 17,61
+<SE>
+    Play = 0,Swagger,100,100

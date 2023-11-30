@@ -1,0 +1,166 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,GIGADRAIN]
+Name = GIGADRAIN
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetX = 0,345
+    SetY = 0,91
+    SetVisible = 0,true
+    SetX = 1,294
+    SetY = 1,98
+    SetX = 2,211
+    SetY = 2,123
+    SetX = 3,160
+    SetY = 3,161
+    SetX = 4,128
+    SetY = 4,205
+    SetX = 5,134
+<Particle 3>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetX = 0,371
+    SetY = 0,110
+    SetVisible = 0,true
+    SetX = 1,396
+    SetY = 1,116
+    SetX = 2,358
+    SetY = 2,148
+    SetX = 3,307
+    SetY = 3,186
+    SetX = 4,217
+    SetY = 4,217
+    SetX = 5,147
+    SetY = 5,186
+    SetX = 6,172
+    SetY = 6,173
+    SetX = 7,160
+    SetY = 7,198
+    SetX = 9,166
+    SetY = 9,211
+<Particle 4>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,345
+    SetY = 1,142
+    SetX = 2,339
+    SetY = 2,104
+    SetX = 3,262
+    SetY = 3,135
+    SetX = 4,185
+    SetY = 4,167
+    SetX = 5,204
+    SetY = 5,192
+    SetX = 6,275
+    SetY = 6,173
+    SetX = 7,198
+    SetY = 7,192
+    SetX = 8,128
+    SetY = 8,173
+    SetX = 9,153
+    SetY = 9,198
+<Particle 5>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,339
+    SetY = 1,85
+    SetX = 2,268
+    SetY = 2,192
+    SetX = 3,371
+    SetY = 3,123
+    SetX = 4,320
+    SetY = 4,154
+    SetX = 5,256
+    SetY = 5,135
+    SetY = 6,98
+    SetX = 7,172
+    SetY = 7,135
+    SetX = 8,230
+    SetY = 8,192
+<Particle 6>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,288
+    SetY = 2,91
+    SetX = 3,371
+    SetX = 4,307
+    SetY = 4,110
+    SetX = 5,339
+    SetY = 5,135
+    SetX = 6,371
+    SetY = 6,91
+    SetX = 7,326
+    SetY = 7,135
+    SetX = 8,185
+    SetY = 8,198
+<Particle 7>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,377
+    SetY = 2,104
+    SetX = 3,166
+    SetY = 3,230
+    SetX = 4,377
+    SetY = 4,104
+    SetX = 5,352
+    SetY = 5,85
+    SetX = 6,256
+    SetY = 6,154
+    SetX = 7,185
+    SetY = 7,173
+<Particle 8>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,236
+    SetY = 3,116
+    SetX = 4,371
+    SetY = 4,85
+    SetX = 5,313
+    SetY = 5,116
+    SetX = 6,320
+    SetY = 6,167
+    SetX = 7,249
+    SetY = 7,186
+<Particle 9>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,326
+    SetY = 3,142
+    SetX = 4,166
+    SetY = 4,161
+    SetX = 5,140
+    SetY = 5,173
+<Particle 10>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,275
+    SetY = 4,167
+    SetX = 5,179
+    SetY = 5,192
+<Particle 11>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,396
+    SetY = 4,104
+    SetX = 5,371
+    SetY = 5,135
+<SE>
+    Play = 0,Absorb2,80,100
+    Play = 2,Absorb2,80,100
+    Play = 5,Absorb2,80,100
+    Play = 7,Absorb2,80,100

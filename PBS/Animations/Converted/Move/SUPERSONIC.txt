@@ -1,0 +1,103 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SUPERSONIC]
+Name = SUPERSONIC
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Struggle
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,147
+    SetY = 2,224
+    SetAngle = 2,20
+    SetX = 3,166
+    SetY = 3,205
+    SetZoomX = 3,120
+    SetZoomY = 3,120
+    SetX = 4,204
+    SetY = 4,179
+    SetZoomX = 4,130
+    SetZoomY = 4,130
+    SetX = 5,224
+    SetY = 5,173
+    SetZoomX = 5,120
+    SetZoomY = 5,120
+    SetX = 6,204
+    SetY = 6,186
+    SetX = 7,236
+    SetY = 7,161
+    SetZoomX = 7,130
+    SetZoomY = 7,130
+    SetX = 8,243
+    SetY = 8,167
+    SetZoomX = 8,120
+    SetZoomY = 8,120
+    SetX = 9,230
+    SetX = 10,236
+    SetY = 10,179
+    SetZoomX = 10,130
+    SetZoomY = 10,130
+<Particle 4>
+    Graphic = Struggle
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,160
+    SetY = 4,211
+    SetAngle = 4,20
+    SetX = 5,172
+    SetY = 5,205
+    SetX = 7,185
+    SetY = 7,192
+    SetX = 8,192
+    SetY = 8,198
+<Particle 2>
+    Graphic = Struggle
+    Focus = UserAndTarget
+    SetX = 0,128
+    SetY = 0,236
+    SetVisible = 0,true
+    SetAngle = 1,20
+    SetX = 2,172
+    SetY = 2,205
+    SetZoomX = 2,120
+    SetZoomY = 2,120
+    SetX = 3,211
+    SetY = 3,179
+    SetZoomX = 3,130
+    SetZoomY = 3,130
+    SetX = 4,256
+    SetY = 4,154
+    SetZoomX = 4,150
+    SetZoomY = 4,150
+    SetX = 5,281
+    SetY = 5,142
+    SetX = 6,256
+    SetY = 6,154
+    SetZoomX = 6,130
+    SetZoomY = 6,130
+    SetX = 7,294
+    SetY = 7,135
+    SetZoomX = 7,150
+    SetZoomY = 7,150
+    SetX = 8,300
+    SetX = 9,294
+    SetZoomX = 9,130
+    SetZoomY = 9,130
+    SetY = 10,142
+    SetZoomX = 10,150
+    SetZoomY = 10,150
+    SetX = 11,275
+    SetY = 11,161
+    SetX = 12,358
+    SetY = 12,110
+    SetZoomX = 12,100
+    SetZoomY = 12,100
+    SetAngle = 12,0
+    SetOpacity = 12,100
+<SE>
+    Play = 0,Twine,80,100

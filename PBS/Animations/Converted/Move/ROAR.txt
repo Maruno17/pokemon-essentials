@@ -1,0 +1,104 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ROAR]
+Name = ROAR
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 4>
+    Graphic = Growl
+    Focus = Target
+    SetX = 0,193
+    SetY = 0,215
+    SetAngle = 0,10
+    SetVisible = 0,true
+    SetX = 1,214
+    SetY = 1,194
+    SetX = 2,228
+    SetY = 2,176
+    SetX = 3,273
+    SetY = 3,153
+    SetX = 4,301
+    SetY = 4,155
+<Particle 2>
+    Graphic = Growl
+    Focus = Target
+    SetX = 0,176
+    SetY = 0,199
+    SetVisible = 0,true
+    SetX = 1,190
+    SetY = 1,170
+    SetX = 2,214
+    SetY = 2,142
+    SetX = 3,252
+    SetY = 3,112
+    SetX = 4,282
+    SetY = 4,89
+<Particle 3>
+    Graphic = Growl
+    Focus = Target
+    SetX = 0,182
+    SetY = 0,245
+    SetVisible = 0,true
+    SetX = 1,209
+    SetY = 1,238
+    SetAngle = 1,6
+    SetX = 2,223
+    SetY = 2,220
+    SetX = 3,258
+    SetY = 3,213
+    SetX = 4,292
+    SetY = 4,239
+<SE>
+    Play = 0,Wring Out,100,160
+#-------------------------------
+[OppMove,ROAR]
+Name = ROAR
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Growl
+    Focus = Target
+    SetFlip = 0,true
+    SetX = 0,352
+    SetY = 0,70
+    SetVisible = 0,true
+    SetX = 1,328
+    SetY = 1,66
+    SetX = 2,296
+    SetY = 2,41
+    SetX = 3,248
+    SetY = 3,35
+<Particle 4>
+    Graphic = Growl
+    Focus = Target
+    SetX = 0,352
+    SetY = 0,132
+    SetVisible = 0,true
+    SetX = 1,328
+    SetY = 1,145
+    SetX = 2,296
+    SetY = 2,164
+    SetX = 3,264
+    SetY = 3,200
+<Particle 2>
+    Graphic = Growl
+    Focus = Target
+    SetFlip = 0,true
+    SetX = 0,344
+    SetY = 0,100
+    SetVisible = 0,true
+    SetX = 1,312
+    SetX = 2,296
+    SetY = 2,92
+    SetX = 3,248
+    SetY = 3,108
+<SE>
+    Play = 0,Wring Out,100,160

@@ -1,0 +1,55 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,STRUGGLE]
+Name = STRUGGLE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Struggle
+    Focus = User
+    SetX = 0,168
+    SetY = 0,230
+    SetVisible = 0,true
+    SetX = 1,176
+    SetY = 1,238
+    SetY = 2,222
+    SetFlip = 3,true
+    SetY = 3,238
+    SetX = 4,184
+    SetY = 4,222
+    SetFlip = 5,false
+    SetX = 5,176
+    SetY = 5,230
+    SetY = 6,214
+    SetX = 7,168
+    SetY = 7,230
+    SetX = 8,80
+    SetY = 8,206
+    SetX = 9,72
+    SetY = 9,238
+<Particle 2>
+    Graphic = Struggle
+    Focus = User
+    SetX = 0,88
+    SetY = 0,230
+    SetVisible = 0,true
+    SetY = 1,246
+    SetX = 2,96
+    SetY = 2,230
+    SetFlip = 3,true
+    SetY = 3,222
+    SetX = 4,88
+    SetY = 4,238
+    SetFlip = 5,false
+    SetY = 5,222
+    SetX = 6,96
+    SetY = 6,206
+    SetX = 7,80
+    SetY = 7,230
+    SetX = 8,168
+    SetY = 8,214
+    SetY = 9,230

@@ -1,0 +1,52 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CONFUSERAY]
+Name = CONFUSERAY
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = estranho
+    Focus = UserAndTarget
+    SetX = 0,153
+    SetY = 0,211
+    SetVisible = 0,true
+    SetX = 1,166
+    SetY = 1,205
+    SetX = 2,172
+    SetY = 2,198
+    SetX = 3,185
+    SetY = 3,192
+    SetX = 4,198
+    SetY = 4,186
+    SetX = 5,211
+    SetY = 5,179
+    SetX = 6,224
+    SetY = 6,173
+    SetX = 7,236
+    SetY = 7,167
+    SetX = 8,249
+    SetY = 8,161
+    SetX = 9,262
+    SetY = 9,154
+    SetX = 10,275
+    SetY = 10,148
+    SetX = 11,288
+    SetY = 11,142
+    SetX = 12,300
+    SetY = 12,135
+    SetX = 13,313
+    SetY = 13,129
+    SetX = 14,326
+    SetY = 14,123
+    SetX = 15,339
+    SetY = 15,116
+    SetX = 16,358
+    SetY = 16,110
+    SetOpacity = 17,100
+<SE>
+    Play = 1,Twine,80,100
+    Play = 12,Confuse,80,100

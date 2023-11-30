@@ -1,0 +1,48 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DOUBLEEDGE]
+Name = DOUBLEEDGE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Divine_Smash
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,198
+    SetY = 1,236
+    SetY = 2,179
+    SetX = 3,96
+    SetY = 3,167
+    SetX = 8,358
+    SetY = 8,110
+<Particle 4>
+    Graphic = Divine_Smash
+    Focus = User
+    SetVisible = 0,true
+    SetX = 2,96
+    SetY = 2,230
+<Particle 2>
+    Graphic = Divine_Smash
+    Focus = Target
+    SetX = 0,128
+    SetY = 0,236
+    SetVisible = 0,true
+    SetY = 1,192
+    SetY = 2,129
+    SetX = 3,198
+    SetY = 3,116
+    SetX = 4,96
+    SetY = 4,129
+    SetX = 5,358
+    SetY = 5,110
+    SetOpacity = 5,50
+    SetOpacity = 7,255
+    SetX = 10,352
+    SetAngle = 10,90
+<SE>
+    Play = 0,throw,80,100
+    Play = 6,Damage1,80,100

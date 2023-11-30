@@ -1,0 +1,104 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BULLETPUNCH]
+Name = BULLETPUNCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = punches
+    Focus = Target
+    SetX = 0,386
+    SetY = 0,99
+    SetVisible = 0,true
+    SetX = 1,391
+    SetY = 1,95
+    SetX = 2,403
+    SetY = 2,98
+    SetOpacity = 2,64
+    SetX = 3,405
+    SetY = 3,72
+    SetOpacity = 3,255
+    SetX = 4,423
+    SetY = 4,73
+    SetOpacity = 4,64
+    SetX = 5,355
+    SetY = 5,131
+    SetOpacity = 5,255
+    SetX = 6,364
+    SetY = 6,128
+    SetOpacity = 6,107
+    SetX = 7,418
+    SetY = 7,135
+    SetOpacity = 7,255
+    SetX = 8,425
+    SetY = 8,131
+    SetOpacity = 8,108
+    SetX = 9,370
+    SetY = 9,107
+    SetOpacity = 9,255
+    SetX = 10,415
+    SetY = 10,88
+    SetOpacity = 10,84
+<Particle 4>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,426
+    SetY = 2,69
+    SetX = 4,372
+    SetY = 4,142
+    SetX = 6,446
+    SetY = 6,141
+    SetX = 8,395
+    SetY = 8,115
+<Particle 5>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,405
+    SetY = 2,67
+    SetX = 4,352
+    SetY = 4,133
+    SetX = 6,427
+    SetY = 6,135
+    SetX = 8,379
+    SetY = 8,109
+<Particle 2>
+    Graphic = punches
+    Focus = Target
+    SetX = 0,398
+    SetY = 0,100
+    SetVisible = 0,true
+    SetX = 1,406
+    SetY = 1,95
+    SetX = 2,384
+    SetY = 2,94
+    SetOpacity = 2,84
+    SetX = 3,420
+    SetY = 3,67
+    SetOpacity = 3,255
+    SetX = 4,406
+    SetY = 4,78
+    SetOpacity = 4,44
+    SetX = 5,368
+    SetY = 5,135
+    SetOpacity = 5,255
+    SetX = 6,351
+    SetY = 6,133
+    SetOpacity = 6,64
+    SetX = 7,432
+    SetOpacity = 7,255
+    SetX = 8,435
+    SetOpacity = 8,36
+    SetX = 9,387
+    SetY = 9,103
+    SetOpacity = 9,255
+    SetX = 10,396
+    SetY = 10,88
+    SetOpacity = 10,44
+<SE>
+    Play = 0,Comet Punch,100,59

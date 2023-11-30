@@ -1,0 +1,46 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ROLLINGKICK]
+Name = ROLLINGKICK
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = normal1
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,360
+    SetY = 4,78
+    SetOpacity = 4,50
+    SetX = 5,384
+    SetY = 5,94
+    SetX = 6,400
+    SetY = 6,110
+    SetOpacity = 6,25
+<Particle 2>
+    Graphic = normal1
+    Focus = Target
+    SetX = 0,232
+    SetY = 0,102
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetVisible = 0,true
+    SetX = 1,264
+    SetY = 1,54
+    SetX = 2,288
+    SetY = 2,22
+    SetX = 3,312
+    SetY = 3,30
+    SetX = 4,360
+    SetY = 4,78
+    SetX = 5,416
+    SetY = 5,126
+    SetX = 6,440
+    SetY = 6,150
+    SetX = 7,448
+    SetY = 7,158
+<SE>
+    Play = 4,Blow4,80,100

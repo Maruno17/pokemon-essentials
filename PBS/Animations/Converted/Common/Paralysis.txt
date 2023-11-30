@@ -1,0 +1,55 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Paralysis]
+Name = Paralysis
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Struggle
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,424
+    SetY = 1,102
+    SetX = 2,456
+    SetY = 2,86
+    SetX = 3,440
+    SetX = 4,336
+    SetX = 5,408
+    SetY = 5,110
+    SetX = 6,280
+    SetY = 6,102
+    SetX = 7,424
+    SetX = 8,456
+    SetY = 8,86
+    SetX = 9,440
+    SetX = 10,336
+    SetX = 11,408
+    SetY = 11,110
+<Particle 2>
+    Graphic = Struggle
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,336
+    SetY = 1,94
+    SetX = 2,304
+    SetY = 2,78
+    SetX = 3,328
+    SetY = 3,94
+    SetX = 4,448
+    SetX = 5,312
+    SetX = 6,456
+    SetY = 6,86
+    SetX = 7,336
+    SetY = 7,94
+    SetX = 8,304
+    SetY = 8,78
+    SetX = 9,328
+    SetY = 9,94
+    SetX = 10,448
+    SetX = 11,312
+<SE>
+    Play = 0,Paralyze3,80,100

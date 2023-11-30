@@ -1,0 +1,66 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,EXPLOSION]
+Name = EXPLOSION
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Fire3
+    Focus = Target
+    SetX = 0,424
+    SetY = 0,46
+    SetVisible = 0,true
+    SetOpacity = 0,50
+    SetX = 2,400
+    SetY = 2,142
+    SetOpacity = 2,255
+    SetX = 13,392
+    SetY = 13,78
+    SetX = 15,424
+    SetY = 15,46
+    SetOpacity = 15,150
+<Particle 4>
+    Graphic = Fire3
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,424
+    SetY = 2,46
+    SetOpacity = 2,100
+    SetOpacity = 3,255
+    SetX = 6,392
+    SetY = 6,78
+    SetOpacity = 6,100
+    SetOpacity = 7,255
+    SetX = 13,424
+    SetY = 13,46
+<Particle 5>
+    Graphic = Fire3
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 6,424
+    SetY = 6,46
+<Particle 2>
+    Graphic = Fire3
+    Focus = Target
+    SetX = 0,296
+    SetY = 0,94
+    SetVisible = 0,true
+    SetOpacity = 12,150
+    SetX = 13,400
+    SetY = 13,142
+    SetOpacity = 13,255
+    SetOpacity = 14,150
+    SetX = 15,392
+    SetY = 15,78
+    SetOpacity = 15,255
+    SetOpacity = 16,200
+    SetOpacity = 17,150
+<SE>
+    Play = 0,Explosion3,80,100
+    Play = 2,Explosion7,80,100
+    Play = 5,Explosion3,80,100
+    Play = 8,Explosion2,80,100

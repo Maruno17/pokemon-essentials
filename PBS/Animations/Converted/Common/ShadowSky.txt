@@ -1,0 +1,23 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,ShadowSky]
+Name = ShadowSky
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = weather
+    Focus = Screen
+    SetX = 0,258
+    SetY = 0,132
+    SetZoomX = 0,327
+    SetZoomY = 0,242
+    SetVisible = 0,true
+    SetOpacity = 0,128
+    SetOpacity = 1,192
+    SetOpacity = 2,249
+    SetOpacity = 8,192
+    SetOpacity = 9,128

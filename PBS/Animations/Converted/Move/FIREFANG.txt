@@ -1,0 +1,101 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FIREFANG]
+Name = FIREFANG
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = element fangs
+    Focus = Target
+    SetX = 0,391
+    SetY = 0,94
+    SetVisible = 0,true
+    SetX = 1,394
+    SetY = 1,96
+    SetX = 2,386
+    SetY = 2,93
+    SetX = 3,392
+    SetY = 3,99
+    SetX = 4,381
+    SetY = 4,98
+    SetX = 5,384
+    SetY = 5,94
+    SetX = 6,386
+    SetY = 6,96
+    SetX = 8,391
+    SetY = 8,95
+    SetX = 9,382
+    SetY = 9,87
+    SetX = 10,395
+    SetY = 10,96
+    SetX = 11,393
+    SetY = 11,98
+    SetY = 12,93
+<Particle 3>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,411
+    SetY = 7,88
+    SetY = 8,89
+    SetY = 9,82
+    SetX = 10,415
+    SetY = 10,89
+<Particle 4>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,418
+    SetY = 8,70
+    SetX = 9,414
+    SetY = 9,61
+    SetX = 10,420
+    SetY = 10,69
+<Particle 5>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,353
+    SetY = 8,73
+    SetX = 9,349
+    SetY = 9,40
+    SetX = 10,405
+    SetY = 10,53
+<Particle 6>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 9,359
+    SetY = 9,33
+    SetX = 10,348
+    SetY = 10,48
+<Particle 7>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 10,358
+    SetY = 10,44
+<Particle 8>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 10,375
+    SetY = 10,40
+<Particle 9>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 10,356
+    SetY = 10,104
+<Particle 10>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 10,365
+    SetY = 10,32
+<SE>
+    Play = 6,Vice Grip,100,114

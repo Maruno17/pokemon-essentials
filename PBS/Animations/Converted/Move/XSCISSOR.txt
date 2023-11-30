@@ -1,0 +1,40 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,XSCISSOR]
+Name = XSCISSOR
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = X-Scizzor
+    Focus = Target
+    SetX = 0,319
+    SetY = 0,36
+    SetVisible = 0,true
+    SetX = 1,351
+    SetY = 1,62
+    SetX = 2,384
+    SetY = 2,96
+    SetX = 3,347
+    SetY = 3,135
+    SetX = 4,455
+    SetY = 4,165
+<Particle 2>
+    Graphic = X-Scizzor
+    Focus = Target
+    SetX = 0,455
+    SetY = 0,37
+    SetVisible = 0,true
+    SetX = 1,420
+    SetY = 1,62
+    SetX = 2,384
+    SetY = 2,96
+    SetX = 3,418
+    SetY = 3,135
+    SetX = 4,307
+    SetY = 4,164
+<SE>
+    Play = 0,Slash,80,100

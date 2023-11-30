@@ -1,0 +1,69 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SPIDERWEB]
+Name = SPIDERWEB
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = ghost2
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetFlip = 3,true
+    SetX = 3,358
+    SetY = 3,98
+    SetOpacity = 3,20
+    SetFlip = 4,false
+    SetX = 4,281
+    SetY = 4,142
+    SetZoomX = 4,110
+    SetZoomY = 4,110
+    SetAngle = 4,330
+    SetOpacity = 4,255
+    SetX = 5,288
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetX = 6,307
+    SetY = 6,129
+    SetZoomX = 6,75
+    SetZoomY = 6,75
+    SetX = 7,320
+    SetY = 7,123
+    SetZoomX = 7,50
+    SetZoomY = 7,50
+<Particle 2>
+    Graphic = ghost2
+    Focus = UserAndTarget
+    SetX = 0,192
+    SetY = 0,205
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetAngle = 0,330
+    SetVisible = 0,true
+    SetX = 1,204
+    SetY = 1,192
+    SetZoomX = 1,75
+    SetZoomY = 1,75
+    SetX = 2,217
+    SetY = 2,179
+    SetZoomX = 2,100
+    SetZoomY = 2,100
+    SetX = 3,249
+    SetY = 3,161
+    SetZoomX = 3,110
+    SetZoomY = 3,110
+    SetFlip = 4,true
+    SetX = 4,358
+    SetY = 4,98
+    SetZoomX = 4,100
+    SetZoomY = 4,100
+    SetAngle = 4,0
+    SetOpacity = 4,50
+    SetOpacity = 5,255
+    SetOpacity = 8,150
+    SetOpacity = 9,50
+<SE>
+    Play = 0,throw,80,100

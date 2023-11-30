@@ -1,0 +1,22 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,STOMP]
+Name = STOMP
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = normal1
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,-18
+    SetVisible = 0,true
+    SetY = 1,22
+    SetY = 2,54
+    SetY = 3,70
+    SetY = 4,78
+<SE>
+    Play = 2,Blow6,80,100

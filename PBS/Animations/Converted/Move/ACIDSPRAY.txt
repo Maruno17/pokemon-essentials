@@ -1,0 +1,133 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ACIDSPRAY]
+Name = ACIDSPRAY
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fly copy
+    Focus = Target
+    SetX = 0,341
+    SetY = 0,8
+    SetZoomX = 0,85
+    SetZoomY = 0,85
+    SetVisible = 0,true
+    SetY = 1,17
+    SetX = 3,335
+    SetY = 3,48
+    SetX = 4,340
+    SetY = 4,76
+    SetX = 5,339
+    SetY = 5,93
+    SetX = 6,365
+    SetY = 6,104
+    SetAngle = 6,180
+    SetX = 7,330
+    SetY = 7,116
+    SetX = 8,413
+    SetY = 8,151
+    SetZoomX = 8,79
+    SetZoomY = 8,79
+<Particle 3>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,366
+    SetY = 1,8
+    SetZoomX = 1,85
+    SetZoomY = 1,85
+    SetX = 3,354
+    SetY = 3,30
+    SetX = 4,355
+    SetY = 4,55
+    SetY = 5,81
+    SetX = 6,338
+    SetY = 6,92
+    SetAngle = 6,180
+    SetX = 7,357
+    SetY = 7,125
+    SetX = 8,390
+    SetY = 8,128
+    SetZoomX = 8,79
+    SetZoomY = 8,79
+<Particle 4>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,394
+    SetY = 1,17
+    SetZoomX = 1,85
+    SetZoomY = 1,85
+    SetX = 3,384
+    SetY = 3,40
+    SetX = 4,376
+    SetY = 4,63
+    SetX = 6,382
+    SetY = 6,91
+    SetAngle = 6,180
+    SetX = 7,420
+    SetY = 7,129
+    SetX = 8,364
+    SetY = 8,134
+    SetZoomX = 8,79
+    SetZoomY = 8,79
+<Particle 5>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,418
+    SetY = 2,9
+    SetZoomX = 2,85
+    SetZoomY = 2,85
+    SetX = 3,408
+    SetY = 3,23
+    SetX = 4,402
+    SetY = 4,71
+    SetX = 5,401
+    SetY = 5,89
+    SetX = 6,407
+    SetY = 6,102
+    SetAngle = 6,180
+    SetX = 7,380
+    SetY = 7,127
+    SetX = 8,341
+    SetY = 8,129
+    SetZoomX = 8,79
+    SetZoomY = 8,79
+<Particle 6>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,441
+    SetY = 2,12
+    SetZoomX = 2,85
+    SetZoomY = 2,85
+    SetX = 3,438
+    SetY = 3,37
+    SetX = 4,431
+    SetY = 4,65
+    SetX = 5,430
+    SetY = 5,83
+    SetY = 6,101
+    SetAngle = 6,180
+    SetX = 7,399
+    SetY = 7,116
+    SetX = 8,306
+    SetY = 8,125
+    SetZoomX = 8,79
+    SetZoomY = 8,79
+<Particle 7>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,361
+    SetY = 5,86
+    SetZoomX = 5,85
+    SetZoomY = 5,85
+    SetAngle = 5,180
+<SE>
+    Play = 0,Substitute,80,100

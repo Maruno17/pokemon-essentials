@@ -1,0 +1,113 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FIREPUNCH]
+Name = FIREPUNCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = punches
+    Focus = Target
+    SetX = 0,387
+    SetY = 0,97
+    SetVisible = 0,true
+    SetX = 1,402
+    SetY = 1,88
+    SetX = 2,403
+    SetY = 2,96
+    SetX = 3,404
+    SetY = 3,104
+    SetX = 4,406
+    SetY = 4,107
+    SetX = 5,410
+    SetY = 5,101
+    SetX = 6,395
+    SetY = 6,74
+<Particle 3>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,390
+    SetY = 1,95
+    SetX = 2,384
+    SetY = 2,98
+    SetX = 3,366
+    SetY = 3,72
+    SetX = 4,363
+    SetY = 4,90
+    SetX = 5,395
+    SetY = 5,76
+    SetX = 6,413
+    SetY = 6,96
+<Particle 4>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,385
+    SetY = 3,101
+    SetX = 4,395
+    SetY = 4,69
+    SetX = 5,364
+    SetY = 5,91
+    SetX = 6,393
+    SetY = 6,113
+<Particle 5>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,384
+    SetY = 4,103
+    SetX = 5,381
+    SetY = 5,109
+    SetX = 6,370
+    SetY = 6,98
+<Particle 6>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,387
+    SetY = 5,104
+    SetX = 6,392
+    SetY = 6,106
+<Particle 7>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,403
+    SetY = 7,82
+<Particle 8>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,374
+    SetY = 8,81
+<Particle 9>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 9,398
+    SetY = 9,64
+<Particle 10>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 10,388
+    SetY = 10,102
+<Particle 11>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 11,403
+    SetY = 11,110
+<Particle 12>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 11,377
+    SetY = 11,115
+<SE>
+    Play = 0,Slam,100,115
+    Play = 1,Explosion,100,100

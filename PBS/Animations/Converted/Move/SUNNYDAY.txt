@@ -1,0 +1,41 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SUNNYDAY]
+Name = SUNNYDAY
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = weather
+    Focus = Screen
+    SetX = 0,64
+    SetY = 0,64
+    SetVisible = 0,true
+    SetOpacity = 0,64
+    SetX = 1,72
+    SetY = 1,72
+    SetOpacity = 1,128
+    SetX = 2,80
+    SetY = 2,80
+    SetOpacity = 2,192
+    SetX = 3,88
+    SetY = 3,88
+    SetOpacity = 3,224
+    SetX = 4,94
+    SetY = 4,94
+    SetOpacity = 4,255
+    SetX = 12,88
+    SetY = 12,88
+    SetOpacity = 12,224
+    SetX = 13,80
+    SetY = 13,80
+    SetOpacity = 13,192
+    SetX = 14,72
+    SetY = 14,72
+    SetOpacity = 14,128
+    SetX = 15,64
+    SetY = 15,64
+    SetOpacity = 15,64

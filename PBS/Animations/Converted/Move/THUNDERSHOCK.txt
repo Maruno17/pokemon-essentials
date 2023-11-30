@@ -1,0 +1,20 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDERSHOCK]
+Name = THUNDERSHOCK
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = electric1
+    Focus = Target
+    SetX = 0,376
+    SetY = 0,94
+    SetVisible = 0,true
+    SetFlip = 9,true
+    SetOpacity = 12,100
+<SE>
+    Play = 0,Thunder1,80,100

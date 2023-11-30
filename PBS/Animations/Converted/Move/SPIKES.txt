@@ -1,0 +1,84 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SPIKES]
+Name = SPIKES
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = normal2
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,128
+    SetY = 3,236
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetX = 4,153
+    SetY = 4,154
+    SetX = 5,185
+    SetY = 5,110
+    SetX = 6,128
+    SetY = 6,230
+    SetX = 7,147
+    SetY = 7,148
+    SetX = 8,371
+    SetY = 8,66
+    SetX = 9,409
+    SetY = 9,129
+    SetX = 10,307
+    SetX = 12,358
+    SetY = 12,110
+    SetX = 13,307
+    SetY = 13,129
+<Particle 4>
+    Graphic = normal2
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 6,243
+    SetY = 6,85
+    SetZoomX = 6,50
+    SetZoomY = 6,50
+    SetX = 7,307
+    SetY = 7,129
+    SetX = 8,204
+    SetY = 8,85
+    SetX = 9,307
+    SetY = 9,129
+    SetX = 10,409
+<Particle 2>
+    Graphic = normal2
+    Focus = UserAndTarget
+    SetX = 0,128
+    SetY = 0,211
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetVisible = 0,true
+    SetX = 1,140
+    SetY = 1,161
+    SetX = 2,166
+    SetY = 2,116
+    SetX = 3,211
+    SetY = 3,85
+    SetX = 4,268
+    SetY = 4,91
+    SetX = 5,307
+    SetY = 5,129
+    SetX = 7,288
+    SetY = 7,60
+    SetX = 8,307
+    SetY = 8,129
+    SetY = 9,47
+    SetX = 10,358
+    SetY = 10,110
+    SetX = 12,307
+    SetY = 12,129
+    SetX = 13,358
+    SetY = 13,110
+<SE>
+    Play = 1,throw,80,100
+    Play = 5,Sword1,80,100
+    Play = 8,Sword1,80,100
+    Play = 10,Sword1,80,100

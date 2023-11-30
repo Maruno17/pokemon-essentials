@@ -1,0 +1,716 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FURYSWIPES]
+Name = FURYSWIPES
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetX = 0,437
+    SetY = 0,65
+    SetVisible = 0,true
+    SetOpacity = 0,128
+    SetX = 1,424
+    SetY = 1,81
+    SetOpacity = 1,255
+    SetX = 2,416
+    SetY = 2,97
+    SetX = 3,408
+    SetY = 3,113
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,409
+    SetOpacity = 5,128
+    SetX = 8,362
+    SetY = 8,138
+    SetOpacity = 8,255
+    SetToneRed = 8,0
+    SetToneGreen = 8,0
+    SetToneBlue = 8,0
+    SetX = 9,308
+    SetY = 9,144
+    SetX = 10,275
+    SetY = 10,178
+<Particle 3>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,397
+    SetY = 2,125
+    SetX = 3,371
+    SetY = 3,137
+    SetX = 4,432
+    SetY = 4,158
+    SetFlip = 5,true
+    SetX = 5,320
+    SetY = 5,72
+    SetOpacity = 5,128
+    SetX = 6,336
+    SetY = 6,88
+    SetOpacity = 6,255
+    SetX = 7,352
+    SetY = 7,104
+    SetX = 8,360
+    SetY = 8,112
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+<Particle 4>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,403
+    SetY = 3,138
+    SetX = 4,366
+    SetY = 4,157
+    SetX = 5,362
+    SetY = 5,227
+    SetX = 7,370
+    SetY = 7,128
+    SetX = 8,393
+    SetY = 8,133
+    SetX = 9,367
+    SetY = 9,184
+    SetX = 10,374
+    SetY = 10,215
+<Particle 5>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,332
+    SetY = 4,127
+    SetX = 5,474
+    SetY = 5,228
+    SetX = 9,421
+    SetY = 9,184
+    SetX = 10,292
+    SetY = 10,215
+<Particle 6>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,439
+    SetY = 4,134
+    SetX = 5,507
+    SetY = 5,96
+    SetX = 9,445
+    SetY = 9,109
+    SetX = 10,430
+    SetY = 10,206
+<Particle 7>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,267
+    SetY = 5,180
+    SetX = 10,459
+    SetY = 10,164
+<Particle 8>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,337
+    SetY = 5,191
+    SetX = 10,480
+    SetY = 10,89
+<Particle 9>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,399
+    SetY = 5,177
+    SetX = 10,331
+    SetY = 10,188
+<Particle 10>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,457
+    SetY = 5,180
+<Particle 11>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,483
+    SetY = 5,143
+<SE>
+    Play = 0,Fury Swipes,100,100
+#-------------------------------
+[Move,FURYSWIPES,1]
+Name = Fury Swipes hit 2
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetX = 0,437
+    SetY = 0,65
+    SetVisible = 0,true
+    SetOpacity = 0,128
+    SetX = 1,424
+    SetY = 1,81
+    SetOpacity = 1,255
+    SetX = 2,416
+    SetY = 2,97
+    SetX = 3,408
+    SetY = 3,113
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,409
+    SetOpacity = 5,128
+    SetX = 8,362
+    SetY = 8,138
+    SetOpacity = 8,255
+    SetToneRed = 8,0
+    SetToneGreen = 8,0
+    SetToneBlue = 8,0
+    SetX = 9,308
+    SetY = 9,144
+    SetX = 10,275
+    SetY = 10,178
+<Particle 3>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,397
+    SetY = 2,125
+    SetX = 3,371
+    SetY = 3,137
+    SetX = 4,432
+    SetY = 4,158
+    SetFlip = 5,true
+    SetX = 5,320
+    SetY = 5,72
+    SetOpacity = 5,128
+    SetX = 6,336
+    SetY = 6,88
+    SetOpacity = 6,255
+    SetX = 7,352
+    SetY = 7,104
+    SetX = 8,360
+    SetY = 8,112
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+<Particle 4>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,403
+    SetY = 3,138
+    SetX = 4,366
+    SetY = 4,157
+    SetX = 5,362
+    SetY = 5,227
+    SetX = 7,370
+    SetY = 7,128
+    SetX = 8,393
+    SetY = 8,133
+    SetX = 9,367
+    SetY = 9,184
+    SetX = 10,374
+    SetY = 10,215
+<Particle 5>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,332
+    SetY = 4,127
+    SetX = 5,474
+    SetY = 5,228
+    SetX = 9,421
+    SetY = 9,184
+    SetX = 10,292
+    SetY = 10,215
+<Particle 6>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,439
+    SetY = 4,134
+    SetX = 5,507
+    SetY = 5,96
+    SetX = 9,445
+    SetY = 9,109
+    SetX = 10,430
+    SetY = 10,206
+<Particle 7>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,267
+    SetY = 5,180
+    SetX = 10,459
+    SetY = 10,164
+<Particle 8>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,337
+    SetY = 5,191
+    SetX = 10,480
+    SetY = 10,89
+<Particle 9>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,399
+    SetY = 5,177
+    SetX = 10,331
+    SetY = 10,188
+<Particle 10>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,457
+    SetY = 5,180
+<Particle 11>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,483
+    SetY = 5,143
+<SE>
+    Play = 0,Fury Swipes,100,100
+#-------------------------------
+[Move,FURYSWIPES,2]
+Name = Fury Swipes hit 3
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetX = 0,437
+    SetY = 0,65
+    SetVisible = 0,true
+    SetOpacity = 0,128
+    SetX = 1,424
+    SetY = 1,81
+    SetOpacity = 1,255
+    SetX = 2,416
+    SetY = 2,97
+    SetX = 3,408
+    SetY = 3,113
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,409
+    SetOpacity = 5,128
+    SetX = 8,362
+    SetY = 8,138
+    SetOpacity = 8,255
+    SetToneRed = 8,0
+    SetToneGreen = 8,0
+    SetToneBlue = 8,0
+    SetX = 9,308
+    SetY = 9,144
+    SetX = 10,275
+    SetY = 10,178
+<Particle 3>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,397
+    SetY = 2,125
+    SetX = 3,371
+    SetY = 3,137
+    SetX = 4,432
+    SetY = 4,158
+    SetFlip = 5,true
+    SetX = 5,320
+    SetY = 5,72
+    SetOpacity = 5,128
+    SetX = 6,336
+    SetY = 6,88
+    SetOpacity = 6,255
+    SetX = 7,352
+    SetY = 7,104
+    SetX = 8,360
+    SetY = 8,112
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+<Particle 4>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,403
+    SetY = 3,138
+    SetX = 4,366
+    SetY = 4,157
+    SetX = 5,362
+    SetY = 5,227
+    SetX = 7,370
+    SetY = 7,128
+    SetX = 8,393
+    SetY = 8,133
+    SetX = 9,367
+    SetY = 9,184
+    SetX = 10,374
+    SetY = 10,215
+<Particle 5>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,332
+    SetY = 4,127
+    SetX = 5,474
+    SetY = 5,228
+    SetX = 9,421
+    SetY = 9,184
+    SetX = 10,292
+    SetY = 10,215
+<Particle 6>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,439
+    SetY = 4,134
+    SetX = 5,507
+    SetY = 5,96
+    SetX = 9,445
+    SetY = 9,109
+    SetX = 10,430
+    SetY = 10,206
+<Particle 7>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,267
+    SetY = 5,180
+    SetX = 10,459
+    SetY = 10,164
+<Particle 8>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,337
+    SetY = 5,191
+    SetX = 10,480
+    SetY = 10,89
+<Particle 9>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,399
+    SetY = 5,177
+    SetX = 10,331
+    SetY = 10,188
+<Particle 10>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,457
+    SetY = 5,180
+<Particle 11>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,483
+    SetY = 5,143
+<SE>
+    Play = 0,Fury Swipes,100,100
+#-------------------------------
+[Move,FURYSWIPES,3]
+Name = Fury Swipes hit 4
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetX = 0,437
+    SetY = 0,65
+    SetVisible = 0,true
+    SetOpacity = 0,128
+    SetX = 1,424
+    SetY = 1,81
+    SetOpacity = 1,255
+    SetX = 2,416
+    SetY = 2,97
+    SetX = 3,408
+    SetY = 3,113
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,409
+    SetOpacity = 5,128
+    SetX = 8,362
+    SetY = 8,138
+    SetOpacity = 8,255
+    SetToneRed = 8,0
+    SetToneGreen = 8,0
+    SetToneBlue = 8,0
+    SetX = 9,308
+    SetY = 9,144
+    SetX = 10,275
+    SetY = 10,178
+<Particle 3>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,397
+    SetY = 2,125
+    SetX = 3,371
+    SetY = 3,137
+    SetX = 4,432
+    SetY = 4,158
+    SetFlip = 5,true
+    SetX = 5,320
+    SetY = 5,72
+    SetOpacity = 5,128
+    SetX = 6,336
+    SetY = 6,88
+    SetOpacity = 6,255
+    SetX = 7,352
+    SetY = 7,104
+    SetX = 8,360
+    SetY = 8,112
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+<Particle 4>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,403
+    SetY = 3,138
+    SetX = 4,366
+    SetY = 4,157
+    SetX = 5,362
+    SetY = 5,227
+    SetX = 7,370
+    SetY = 7,128
+    SetX = 8,393
+    SetY = 8,133
+    SetX = 9,367
+    SetY = 9,184
+    SetX = 10,374
+    SetY = 10,215
+<Particle 5>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,332
+    SetY = 4,127
+    SetX = 5,474
+    SetY = 5,228
+    SetX = 9,421
+    SetY = 9,184
+    SetX = 10,292
+    SetY = 10,215
+<Particle 6>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,439
+    SetY = 4,134
+    SetX = 5,507
+    SetY = 5,96
+    SetX = 9,445
+    SetY = 9,109
+    SetX = 10,430
+    SetY = 10,206
+<Particle 7>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,267
+    SetY = 5,180
+    SetX = 10,459
+    SetY = 10,164
+<Particle 8>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,337
+    SetY = 5,191
+    SetX = 10,480
+    SetY = 10,89
+<Particle 9>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,399
+    SetY = 5,177
+    SetX = 10,331
+    SetY = 10,188
+<Particle 10>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,457
+    SetY = 5,180
+<Particle 11>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,483
+    SetY = 5,143
+<SE>
+    Play = 0,Fury Swipes,100,100
+#-------------------------------
+[Move,FURYSWIPES,4]
+Name = Fury Swipes hit 5
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetX = 0,437
+    SetY = 0,65
+    SetVisible = 0,true
+    SetOpacity = 0,128
+    SetX = 1,424
+    SetY = 1,81
+    SetOpacity = 1,255
+    SetX = 2,416
+    SetY = 2,97
+    SetX = 3,408
+    SetY = 3,113
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,409
+    SetOpacity = 5,128
+    SetX = 8,362
+    SetY = 8,138
+    SetOpacity = 8,255
+    SetToneRed = 8,0
+    SetToneGreen = 8,0
+    SetToneBlue = 8,0
+    SetX = 9,308
+    SetY = 9,144
+    SetX = 10,275
+    SetY = 10,178
+<Particle 3>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,397
+    SetY = 2,125
+    SetX = 3,371
+    SetY = 3,137
+    SetX = 4,432
+    SetY = 4,158
+    SetFlip = 5,true
+    SetX = 5,320
+    SetY = 5,72
+    SetOpacity = 5,128
+    SetX = 6,336
+    SetY = 6,88
+    SetOpacity = 6,255
+    SetX = 7,352
+    SetY = 7,104
+    SetX = 8,360
+    SetY = 8,112
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+<Particle 4>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,403
+    SetY = 3,138
+    SetX = 4,366
+    SetY = 4,157
+    SetX = 5,362
+    SetY = 5,227
+    SetX = 7,370
+    SetY = 7,128
+    SetX = 8,393
+    SetY = 8,133
+    SetX = 9,367
+    SetY = 9,184
+    SetX = 10,374
+    SetY = 10,215
+<Particle 5>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,332
+    SetY = 4,127
+    SetX = 5,474
+    SetY = 5,228
+    SetX = 9,421
+    SetY = 9,184
+    SetX = 10,292
+    SetY = 10,215
+<Particle 6>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,439
+    SetY = 4,134
+    SetX = 5,507
+    SetY = 5,96
+    SetX = 9,445
+    SetY = 9,109
+    SetX = 10,430
+    SetY = 10,206
+<Particle 7>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,267
+    SetY = 5,180
+    SetX = 10,459
+    SetY = 10,164
+<Particle 8>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,337
+    SetY = 5,191
+    SetX = 10,480
+    SetY = 10,89
+<Particle 9>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,399
+    SetY = 5,177
+    SetX = 10,331
+    SetY = 10,188
+<Particle 10>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,457
+    SetY = 5,180
+<Particle 11>
+    Graphic = Scratch + Shadow Claw
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,483
+    SetY = 5,143
+<SE>
+    Play = 0,Fury Swipes,100,100

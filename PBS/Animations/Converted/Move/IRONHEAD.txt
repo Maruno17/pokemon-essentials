@@ -1,0 +1,63 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,IRONHEAD]
+Name = IRONHEAD
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Iron Head
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,384
+    SetY = 1,97
+    SetOpacity = 7,128
+<Particle 3>
+    Graphic = Iron Head
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,331
+    SetY = 2,114
+    SetX = 3,278
+    SetY = 3,128
+    SetX = 4,284
+    SetY = 4,178
+    SetOpacity = 4,128
+<Particle 4>
+    Graphic = Iron Head
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,437
+    SetY = 2,118
+    SetX = 3,485
+    SetY = 3,132
+    SetX = 4,507
+    SetY = 4,182
+    SetOpacity = 4,128
+<Particle 5>
+    Graphic = Iron Head
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,279
+    SetY = 3,82
+    SetX = 4,266
+    SetY = 4,27
+<Particle 6>
+    Graphic = Iron Head
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,461
+    SetY = 3,69
+    SetX = 4,513
+    SetY = 4,54
+<Particle 7>
+    Graphic = Iron Head
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,275
+    SetY = 3,33
+<SE>
+    Play = 0,Damage1,100,100

@@ -1,0 +1,229 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BEATUP]
+Name = BEATUP
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = many
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,86
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetVisible = 0,true
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<Particle 3>
+    Graphic = many
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,392
+    SetY = 1,86
+    SetOpacity = 1,100
+    SetX = 2,384
+    SetY = 2,94
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<SE>
+    Play = 0,Blow4,80,100
+#-------------------------------
+[Move,BEATUP,1]
+Name = Beat Up hit 2
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = many
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,392
+    SetY = 1,86
+    SetOpacity = 1,100
+    SetX = 2,384
+    SetY = 2,94
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = many
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,86
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetVisible = 0,true
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<SE>
+    Play = 0,Blow4,80,100
+#-------------------------------
+[Move,BEATUP,2]
+Name = Beat Up hit 3
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = many
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,86
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetVisible = 0,true
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<Particle 3>
+    Graphic = many
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,392
+    SetY = 1,86
+    SetOpacity = 1,100
+    SetX = 2,384
+    SetY = 2,94
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<SE>
+    Play = 0,Blow4,80,100
+#-------------------------------
+[Move,BEATUP,3]
+Name = Beat Up hit 4
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = many
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,392
+    SetY = 1,86
+    SetOpacity = 1,100
+    SetX = 2,384
+    SetY = 2,94
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = many
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,86
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetVisible = 0,true
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<SE>
+    Play = 0,Blow4,80,100
+#-------------------------------
+[Move,BEATUP,4]
+Name = Beat Up hit 5
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = many
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,86
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetVisible = 0,true
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<Particle 3>
+    Graphic = many
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,392
+    SetY = 1,86
+    SetOpacity = 1,100
+    SetX = 2,384
+    SetY = 2,94
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<SE>
+    Play = 0,Blow4,80,100
+#-------------------------------
+[Move,BEATUP,5]
+Name = Beat Up hit 6
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = many
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,392
+    SetY = 1,86
+    SetOpacity = 1,100
+    SetX = 2,384
+    SetY = 2,94
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = many
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,86
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetVisible = 0,true
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<SE>
+    Play = 0,Blow4,80,100

@@ -1,0 +1,132 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,FireSpin]
+Name = FireSpin
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fly copy
+    Focus = Target
+    SetX = 0,355
+    SetY = 0,136
+    SetVisible = 0,true
+<Particle 3>
+    Graphic = fly copy
+    Focus = Target
+    SetX = 0,393
+    SetY = 0,138
+    SetVisible = 0,true
+<Particle 4>
+    Graphic = fly copy
+    Focus = Target
+    SetX = 0,428
+    SetY = 0,137
+    SetVisible = 0,true
+<Particle 5>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,355
+    SetY = 1,121
+<Particle 6>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,394
+    SetY = 1,123
+<Particle 7>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,431
+    SetY = 1,122
+<Particle 8>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,359
+    SetY = 2,108
+<Particle 9>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,395
+    SetY = 2,107
+<Particle 10>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,433
+    SetY = 2,105
+<Particle 11>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,357
+    SetY = 3,92
+<Particle 12>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,396
+    SetY = 3,91
+<Particle 13>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,431
+    SetY = 3,89
+<Particle 14>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,356
+    SetY = 4,77
+<Particle 15>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,397
+    SetY = 4,78
+<Particle 16>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,435
+    SetY = 4,76
+<Particle 17>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,355
+    SetY = 5,62
+<Particle 18>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,397
+    SetY = 5,63
+<Particle 19>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,434
+    SetY = 5,61
+<Particle 20>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,374
+    SetY = 5,137
+<Particle 21>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,415
+    SetY = 5,138
+<SE>
+    Play = 0,throw,80,100

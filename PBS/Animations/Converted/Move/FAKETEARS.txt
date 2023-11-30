@@ -1,0 +1,84 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FAKETEARS]
+Name = FAKETEARS
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = poison2
+    Focus = User
+    SetVisible = 0,true
+    SetFlip = 1,true
+    SetX = 1,56
+    SetY = 1,230
+    SetX = 3,40
+    SetY = 3,214
+    SetX = 4,29
+    SetY = 4,209
+    SetX = 5,15
+    SetY = 5,225
+    SetFlip = 6,false
+    SetX = 6,240
+    SetY = 6,222
+    SetX = 7,7
+    SetY = 7,208
+    SetX = 8,-7
+    SetY = 8,214
+    SetX = 9,-16
+    SetY = 9,227
+<Particle 4>
+    Graphic = poison2
+    Focus = User
+    SetVisible = 0,true
+    SetX = 2,200
+    SetY = 2,222
+    SetX = 4,221
+    SetY = 4,217
+    SetX = 5,234
+    SetY = 5,216
+    SetFlip = 6,true
+    SetX = 6,-3
+    SetY = 6,203
+<Particle 5>
+    Graphic = poison2
+    Focus = User
+    SetVisible = 0,true
+    SetFlip = 5,true
+    SetX = 5,10
+    SetY = 5,204
+<Particle 2>
+    Graphic = poison2
+    Focus = User
+    SetX = 0,184
+    SetY = 0,238
+    SetVisible = 0,true
+    SetX = 1,192
+    SetY = 1,230
+    SetFlip = 2,true
+    SetX = 2,48
+    SetY = 2,222
+    SetFlip = 3,false
+    SetX = 3,211
+    SetY = 3,218
+    SetX = 4,224
+    SetY = 4,230
+    SetX = 5,232
+    SetY = 5,238
+    SetFlip = 6,true
+    SetX = 6,4
+    SetY = 6,233
+    SetFlip = 7,false
+    SetX = 7,248
+    SetY = 7,226
+    SetX = 8,258
+    SetY = 8,234
+    SetX = 9,270
+    SetY = 9,248
+<SE>
+    Play = 0,Water1,40,70
+    Play = 2,Water1,40,70
+    Play = 4,Water1,40,70

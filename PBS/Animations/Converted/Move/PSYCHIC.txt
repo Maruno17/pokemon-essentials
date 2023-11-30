@@ -1,0 +1,74 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,PSYCHIC]
+Name = PSYCHIC
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = efftest4
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,94
+    SetVisible = 0,true
+    SetZoomX = 5,160
+    SetZoomY = 5,160
+    SetOpacity = 5,180
+    SetZoomX = 6,190
+    SetZoomY = 6,190
+    SetZoomX = 7,250
+    SetZoomY = 7,250
+    SetZoomX = 8,300
+    SetZoomY = 8,300
+    SetZoomX = 9,100
+    SetZoomY = 9,100
+    SetOpacity = 9,255
+    SetZoomX = 12,300
+    SetZoomY = 12,300
+    SetOpacity = 12,180
+    SetX = 14,376
+    SetY = 14,86
+    SetY = 15,94
+    SetX = 17,384
+    SetZoomX = 17,100
+    SetZoomY = 17,100
+    SetOpacity = 17,75
+<Particle 4>
+    Graphic = efftest4
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 9,384
+    SetY = 9,94
+    SetZoomX = 9,300
+    SetZoomY = 9,300
+    SetOpacity = 9,180
+<Particle 2>
+    Graphic = efftest4
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,86
+    SetVisible = 0,true
+    SetY = 3,94
+    SetZoomX = 3,120
+    SetZoomY = 3,120
+    SetZoomX = 4,140
+    SetZoomY = 4,140
+    SetOpacity = 4,220
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetOpacity = 5,150
+    SetOpacity = 7,100
+    SetOpacity = 9,50
+    SetOpacity = 12,255
+    SetOpacity = 13,150
+    SetOpacity = 14,255
+    SetZoomX = 15,80
+    SetZoomY = 15,80
+    SetZoomX = 16,70
+    SetZoomY = 16,70
+    SetOpacity = 16,150
+<SE>
+    Play = 2,Darkness2,80,100

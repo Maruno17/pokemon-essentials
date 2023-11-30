@@ -1,0 +1,132 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,GROWL]
+Name = GROWL
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 4>
+    Graphic = Growl
+    Focus = User
+    SetFlip = 0,true
+    SetX = 0,185
+    SetY = 0,230
+    SetVisible = 0,true
+    SetX = 1,200
+    SetY = 1,240
+    SetX = 2,216
+    SetY = 2,250
+    SetX = 3,230
+    SetY = 3,261
+    SetX = 4,185
+    SetY = 4,230
+    SetX = 5,200
+    SetY = 5,240
+    SetX = 6,216
+    SetY = 6,250
+    SetX = 7,230
+    SetY = 7,261
+<Particle 2>
+    Graphic = Growl
+    Focus = User
+    SetX = 0,192
+    SetY = 0,211
+    SetVisible = 0,true
+    SetX = 1,209
+    SetX = 2,226
+    SetX = 3,243
+    SetX = 4,192
+    SetX = 5,209
+    SetX = 6,226
+    SetX = 7,243
+<Particle 3>
+    Graphic = Growl
+    Focus = User
+    SetX = 0,185
+    SetY = 0,205
+    SetVisible = 0,true
+    SetX = 1,200
+    SetY = 1,192
+    SetX = 2,216
+    SetY = 2,179
+    SetX = 3,230
+    SetY = 3,167
+    SetX = 4,185
+    SetY = 4,205
+    SetX = 5,200
+    SetY = 5,192
+    SetX = 6,216
+    SetY = 6,179
+    SetX = 7,230
+    SetY = 7,167
+<SE>
+    PlayUserCry = 0,100,100
+#-------------------------------
+[OppMove,GROWL]
+Name = GROWL
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Growl
+    Focus = Target
+    SetFlip = 0,true
+    SetX = 0,326
+    SetY = 0,98
+    SetVisible = 0,true
+    SetX = 1,313
+    SetY = 1,85
+    SetX = 2,300
+    SetY = 2,72
+    SetX = 3,288
+    SetY = 3,60
+    SetX = 4,326
+    SetY = 4,98
+    SetX = 5,313
+    SetY = 5,85
+    SetX = 6,300
+    SetY = 6,72
+    SetX = 7,288
+    SetY = 7,60
+<Particle 4>
+    Graphic = Growl
+    Focus = Target
+    SetX = 0,326
+    SetY = 0,135
+    SetVisible = 0,true
+    SetX = 1,313
+    SetY = 1,148
+    SetX = 2,300
+    SetY = 2,161
+    SetX = 3,288
+    SetY = 3,173
+    SetX = 4,326
+    SetY = 4,135
+    SetX = 5,313
+    SetY = 5,148
+    SetX = 6,300
+    SetY = 6,161
+    SetX = 7,288
+    SetY = 7,173
+<Particle 2>
+    Graphic = Growl
+    Focus = Target
+    SetFlip = 0,true
+    SetX = 0,326
+    SetY = 0,110
+    SetVisible = 0,true
+    SetX = 1,311
+    SetX = 2,296
+    SetX = 3,281
+    SetX = 4,326
+    SetX = 5,311
+    SetX = 6,296
+    SetX = 7,281
+<SE>
+    PlayUserCry = 0,100,100

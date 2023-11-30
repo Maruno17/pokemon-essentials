@@ -1,0 +1,71 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDERFANG]
+Name = THUNDERFANG
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 6,327
+    SetY = 6,73
+    SetX = 7,326
+    SetX = 8,327
+    SetY = 8,70
+<Particle 4>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,471
+    SetY = 7,67
+    SetX = 8,314
+    SetY = 8,124
+<Particle 5>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,481
+    SetY = 8,124
+<Particle 6>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,471
+    SetY = 8,60
+<Particle 2>
+    Graphic = element fangs
+    Focus = Target
+    SetX = 0,391
+    SetY = 0,96
+    SetVisible = 0,true
+    SetY = 1,90
+    SetX = 2,386
+    SetY = 2,92
+    SetX = 3,390
+    SetY = 3,98
+    SetX = 4,386
+    SetY = 4,95
+    SetX = 5,392
+    SetY = 5,101
+    SetX = 6,386
+    SetY = 6,100
+    SetX = 7,389
+    SetY = 7,99
+    SetX = 8,388
+    SetY = 8,92
+    SetX = 9,386
+    SetY = 9,100
+    SetX = 10,394
+    SetY = 10,95
+    SetX = 11,387
+    SetY = 11,94
+    SetX = 12,384
+    SetY = 12,97
+<SE>
+    Play = 6,Super Fang,100,100
+    Play = 7,Uproar,83,137

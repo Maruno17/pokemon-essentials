@@ -1,0 +1,72 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BULKUP]
+Name = BULKUP
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = animsheet
+    Focus = Target
+    SetX = 0,344
+    SetY = 0,102
+    SetVisible = 0,true
+    SetOpacity = 0,200
+    SetY = 1,94
+    SetOpacity = 1,150
+    SetY = 2,86
+    SetOpacity = 2,100
+    SetY = 3,78
+    SetOpacity = 3,50
+    SetY = 6,102
+    SetOpacity = 6,200
+    SetY = 7,94
+    SetOpacity = 7,150
+    SetY = 8,86
+    SetOpacity = 8,100
+    SetY = 9,78
+    SetOpacity = 9,50
+    SetY = 12,102
+    SetOpacity = 12,200
+    SetY = 13,94
+    SetOpacity = 13,150
+    SetY = 14,86
+    SetOpacity = 14,100
+    SetY = 15,78
+    SetOpacity = 15,50
+<Particle 2>
+    Graphic = animsheet
+    Focus = Target
+    SetX = 0,464
+    SetY = 0,102
+    SetVisible = 0,true
+    SetOpacity = 0,200
+    SetY = 1,94
+    SetOpacity = 1,150
+    SetY = 2,86
+    SetOpacity = 2,100
+    SetY = 3,78
+    SetOpacity = 3,50
+    SetY = 6,102
+    SetOpacity = 6,200
+    SetY = 7,94
+    SetOpacity = 7,150
+    SetY = 8,86
+    SetOpacity = 8,100
+    SetY = 9,78
+    SetOpacity = 9,50
+    SetY = 12,102
+    SetOpacity = 12,200
+    SetY = 13,94
+    SetOpacity = 13,150
+    SetY = 14,86
+    SetOpacity = 14,100
+    SetY = 15,78
+    SetOpacity = 15,50
+<SE>
+    Play = 0,fog2,80,150
+    Play = 6,fog2,80,150
+    Play = 12,fog2,80,150

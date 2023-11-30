@@ -1,0 +1,24 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,HYPERFANG]
+Name = HYPERFANG
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = normal2
+    Focus = Target
+    SetX = 0,376
+    SetY = 0,94
+    SetVisible = 0,true
+    SetX = 2,384
+    SetY = 2,102
+    SetX = 4,376
+    SetY = 4,110
+    SetOpacity = 6,150
+    SetOpacity = 7,100
+<SE>
+    Play = 0,Slash9,80,100

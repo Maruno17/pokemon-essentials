@@ -1,0 +1,87 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,AGILITY]
+Name = AGILITY
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = !
+    Focus = User
+    SetX = 0,30
+    SetY = 0,188
+    SetAngle = 0,90
+    SetVisible = 0,true
+    SetX = 1,55
+    SetX = 2,80
+    SetX = 3,110
+    SetX = 4,135
+    SetX = 5,160
+    SetX = 6,185
+    SetX = 7,210
+    SetX = 8,235
+    SetX = 9,260
+<Particle 4>
+    Graphic = !
+    Focus = User
+    SetX = 0,75
+    SetY = 0,131
+    SetAngle = 0,90
+    SetVisible = 0,true
+    SetX = 1,105
+    SetX = 2,140
+    SetX = 3,175
+    SetX = 4,210
+    SetX = 5,245
+    SetX = 6,280
+    SetX = 7,315
+<Particle 5>
+    Graphic = !
+    Focus = User
+    SetVisible = 0,true
+    SetX = 1,40
+    SetY = 1,273
+    SetAngle = 1,90
+    SetX = 2,65
+    SetX = 3,90
+    SetX = 4,115
+    SetX = 5,140
+    SetX = 6,165
+    SetX = 7,190
+    SetX = 8,215
+    SetX = 9,240
+<Particle 6>
+    Graphic = !
+    Focus = User
+    SetVisible = 0,true
+    SetX = 2,30
+    SetY = 2,144
+    SetAngle = 2,90
+    SetX = 3,65
+    SetX = 4,100
+    SetX = 5,135
+    SetX = 6,170
+    SetX = 7,205
+    SetX = 8,240
+    SetX = 9,275
+<Particle 2>
+    Graphic = !
+    Focus = User
+    SetX = 0,52
+    SetY = 0,237
+    SetAngle = 0,90
+    SetVisible = 0,true
+    SetX = 1,82
+    SetX = 2,112
+    SetX = 3,142
+    SetX = 4,172
+    SetX = 5,202
+    SetX = 6,232
+    SetX = 7,262
+    SetX = 8,292
+    SetX = 9,322
+<SE>
+    Play = 0,Psych Up,100,82

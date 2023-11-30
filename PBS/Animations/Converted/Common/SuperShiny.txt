@@ -1,0 +1,70 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,SuperShiny]
+Name = SuperShiny
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = leech-seed
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,440
+    SetY = 2,126
+    SetX = 4,327
+    SetY = 4,78
+    SetX = 6,366
+    SetY = 6,129
+    SetX = 7,416
+    SetY = 7,54
+    SetX = 8,368
+    SetY = 8,67
+    SetX = 9,416
+    SetY = 9,118
+<Particle 4>
+    Graphic = leech-seed
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,327
+    SetY = 3,78
+    SetX = 4,366
+    SetY = 4,129
+    SetX = 6,416
+    SetY = 6,54
+    SetX = 7,368
+    SetY = 7,67
+    SetX = 8,416
+    SetY = 8,118
+<Particle 5>
+    Graphic = leech-seed
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,416
+    SetY = 5,54
+    SetX = 6,368
+    SetY = 6,67
+    SetX = 7,416
+    SetY = 7,118
+<Particle 2>
+    Graphic = leech-seed
+    Focus = Target
+    SetX = 0,360
+    SetY = 0,110
+    SetVisible = 0,true
+    SetX = 4,440
+    SetY = 4,126
+    SetX = 6,327
+    SetY = 6,78
+    SetX = 7,366
+    SetY = 7,129
+    SetX = 8,416
+    SetY = 8,54
+    SetX = 9,368
+    SetY = 9,67
+    SetX = 10,416
+    SetY = 10,118
+<SE>
+    Play = 0,Shiny sparkle,100,100

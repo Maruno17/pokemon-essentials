@@ -1,0 +1,57 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SKETCH]
+Name = SKETCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = normal2
+    Focus = Target
+    SetX = 0,152
+    SetY = 0,30
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetVisible = 0,true
+    SetX = 1,184
+    SetY = 1,54
+    SetX = 2,224
+    SetY = 2,86
+    SetX = 3,288
+    SetY = 3,134
+    SetX = 4,368
+    SetY = 4,174
+    SetX = 5,464
+    SetY = 5,166
+    SetX = 6,424
+    SetY = 6,134
+    SetX = 7,320
+    SetY = 7,102
+    SetX = 8,224
+    SetY = 8,54
+    SetX = 9,216
+    SetY = 9,6
+    SetX = 10,272
+    SetY = 10,38
+    SetX = 11,320
+    SetY = 11,70
+    SetX = 12,400
+    SetY = 12,110
+    SetX = 13,480
+    SetY = 13,150
+    SetX = 14,504
+    SetY = 14,158
+    SetX = 15,488
+    SetY = 15,110
+    SetX = 16,424
+    SetY = 16,54
+    SetX = 17,344
+    SetY = 17,-18
+<SE>
+    Play = 0,Slash6,80,100
+    Play = 6,Slash6,80,100
+    Play = 10,Slash6,80,100
+    Play = 15,Slash6,80,100

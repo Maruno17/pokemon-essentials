@@ -1,0 +1,48 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,EMBER]
+Name = EMBER
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Flames
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,144
+    SetY = 1,204
+    SetFlip = 2,true
+    SetX = 2,164
+    SetY = 2,196
+    SetFlip = 3,false
+    SetX = 3,185
+    SetY = 3,180
+    SetFlip = 4,true
+    SetX = 4,206
+    SetY = 4,172
+    SetFlip = 5,false
+    SetX = 5,227
+    SetY = 5,164
+    SetFlip = 6,true
+    SetX = 6,248
+    SetY = 6,156
+    SetFlip = 7,false
+    SetX = 7,268
+    SetY = 7,148
+    SetX = 8,289
+    SetY = 8,132
+<Particle 2>
+    Graphic = Flames
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 9,310
+    SetY = 9,126
+    SetFlip = 10,true
+    SetX = 10,331
+    SetY = 10,116
+    SetFlip = 11,false
+<SE>
+    Play = 1,Fire2,80,100

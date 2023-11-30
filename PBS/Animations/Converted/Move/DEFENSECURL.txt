@@ -1,0 +1,34 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DEFENSECURL]
+Name = DEFENSECURL
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fly copy
+    Focus = User
+    SetX = 0,133
+    SetY = 0,224
+    SetVisible = 0,true
+    SetOpacity = 0,100
+    SetX = 1,131
+    SetY = 1,223
+    SetOpacity = 1,110
+    SetX = 2,134
+    SetY = 2,221
+    SetOpacity = 2,140
+    SetX = 3,131
+    SetOpacity = 3,170
+    SetY = 4,222
+    SetOpacity = 4,230
+    SetX = 5,127
+    SetY = 5,219
+    SetOpacity = 5,255
+    SetX = 6,132
+    SetOpacity = 6,233
+<SE>
+    Play = 0,Defense Curl,100,100

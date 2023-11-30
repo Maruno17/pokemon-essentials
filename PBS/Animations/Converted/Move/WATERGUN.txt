@@ -1,0 +1,209 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,WATERGUN]
+Name = WATERGUN
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetX = 0,160
+    SetY = 0,200
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetVisible = 0,true
+    SetOpacity = 0,235
+    SetX = 7,184
+    SetY = 7,184
+    SetX = 8,208
+    SetY = 8,168
+<Particle 3>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,184
+    SetY = 1,181
+    SetZoomX = 1,50
+    SetZoomY = 1,50
+    SetOpacity = 1,235
+    SetY = 2,190
+    SetX = 3,185
+    SetY = 3,181
+    SetX = 7,208
+    SetY = 7,165
+    SetX = 8,232
+    SetY = 8,149
+<Particle 4>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,208
+    SetY = 2,173
+    SetZoomX = 2,50
+    SetZoomY = 2,50
+    SetOpacity = 2,235
+    SetY = 3,162
+    SetX = 7,232
+    SetY = 7,146
+    SetX = 8,256
+    SetY = 8,122
+<Particle 5>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,232
+    SetY = 3,145
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetOpacity = 3,235
+    SetX = 7,256
+    SetY = 7,121
+    SetX = 8,280
+    SetY = 8,105
+<Particle 6>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,252
+    SetY = 4,124
+    SetZoomX = 4,50
+    SetZoomY = 4,50
+    SetOpacity = 4,235
+    SetX = 7,280
+    SetY = 7,108
+    SetX = 8,304
+    SetY = 8,100
+<Particle 7>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 5,280
+    SetY = 5,109
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+    SetOpacity = 5,235
+    SetX = 7,304
+    SetY = 7,101
+    SetX = 8,336
+    SetY = 8,93
+<Particle 8>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 6,305
+    SetY = 6,99
+    SetZoomX = 6,50
+    SetZoomY = 6,50
+    SetOpacity = 6,235
+    SetX = 7,336
+    SetY = 7,91
+    SetX = 8,368
+<Particle 9>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 8,380
+    SetY = 8,108
+    SetZoomX = 8,70
+    SetOpacity = 8,224
+<SE>
+    Play = 0,Yawn,88,100
+#-------------------------------
+[OppMove,WATERGUN]
+Name = WATERGUN
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetX = 0,352
+    SetY = 0,81
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetVisible = 0,true
+    SetOpacity = 0,235
+<Particle 3>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,328
+    SetY = 1,96
+    SetZoomX = 1,50
+    SetZoomY = 1,50
+    SetOpacity = 1,235
+<Particle 4>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,304
+    SetY = 2,118
+    SetZoomX = 2,50
+    SetZoomY = 2,50
+    SetOpacity = 2,235
+<Particle 5>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,280
+    SetY = 3,134
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetOpacity = 3,235
+<Particle 6>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,258
+    SetY = 4,161
+    SetZoomX = 4,50
+    SetZoomY = 4,50
+    SetOpacity = 4,235
+<Particle 7>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 5,232
+    SetY = 5,179
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+    SetOpacity = 5,235
+<Particle 8>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 6,202
+    SetY = 6,196
+    SetZoomX = 6,50
+    SetZoomY = 6,50
+    SetOpacity = 6,235
+<Particle 9>
+    Graphic = fly copy
+    Focus = User
+    SetVisible = 0,true
+    SetX = 7,167
+    SetY = 7,217
+    SetZoomX = 7,50
+    SetZoomY = 7,50
+    SetOpacity = 7,235
+    SetX = 9,129
+    SetY = 9,220
+    SetZoomX = 9,100
+    SetZoomY = 9,100
+    SetOpacity = 9,255
+<Particle 10>
+    Graphic = fly copy
+    Focus = User
+    SetVisible = 0,true
+    SetX = 8,128
+    SetY = 8,220
+    SetOpacity = 8,240
+<SE>
+    Play = 0,Yawn,88,100

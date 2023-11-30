@@ -1,0 +1,74 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MACHPUNCH]
+Name = MACHPUNCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,399
+    SetY = 2,95
+<Particle 2>
+    Graphic = punches
+    Focus = Target
+    SetX = 0,403
+    SetY = 0,97
+    SetZoomX = 0,80
+    SetZoomY = 0,80
+    SetVisible = 0,true
+    SetX = 1,400
+    SetY = 1,96
+    SetZoomX = 1,90
+    SetZoomY = 1,90
+    SetX = 2,388
+    SetY = 2,90
+    SetZoomX = 2,100
+    SetZoomY = 2,100
+    SetX = 3,403
+    SetY = 3,95
+    SetZoomX = 3,110
+    SetZoomY = 3,110
+    SetY = 4,92
+    SetZoomX = 4,120
+    SetZoomY = 4,120
+    SetX = 5,402
+    SetZoomX = 5,130
+    SetZoomY = 5,130
+    SetX = 6,404
+    SetY = 6,90
+    SetZoomX = 6,140
+    SetZoomY = 6,140
+    SetX = 7,401
+    SetY = 7,88
+    SetZoomX = 7,160
+    SetZoomY = 7,160
+    SetX = 8,399
+    SetZoomX = 8,170
+    SetZoomY = 8,170
+    SetX = 9,401
+    SetY = 9,85
+    SetZoomX = 9,180
+    SetZoomY = 9,180
+    SetOpacity = 9,220
+    SetY = 10,89
+    SetZoomX = 10,190
+    SetZoomY = 10,190
+    SetOpacity = 10,200
+    SetX = 11,406
+    SetY = 11,90
+    SetZoomX = 11,220
+    SetZoomY = 11,220
+    SetOpacity = 11,130
+    SetX = 12,415
+    SetY = 12,96
+    SetZoomX = 12,250
+    SetZoomY = 12,250
+    SetOpacity = 12,100
+<SE>
+    Play = 0,Mega Punch,100,94

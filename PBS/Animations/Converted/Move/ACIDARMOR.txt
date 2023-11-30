@@ -1,0 +1,24 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ACIDARMOR]
+Name = ACIDARMOR
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = poison3
+    Focus = Target
+    SetX = 0,392
+    SetY = 0,94
+    SetVisible = 0,true
+    SetX = 4,400
+    SetY = 4,86
+    SetX = 5,392
+    SetY = 6,78
+<SE>
+    Play = 0,throw,80,100
+    Play = 0,Sound2,80,100
+    Play = 0,Pollen,80,100

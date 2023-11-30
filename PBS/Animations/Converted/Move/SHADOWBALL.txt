@@ -1,0 +1,52 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SHADOWBALL]
+Name = SHADOWBALL
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = 009-Weapon04
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 7,263
+    SetY = 7,74
+    SetZoomX = 7,25
+    SetZoomY = 7,25
+<Particle 2>
+    Graphic = 009-Weapon04
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,144
+    SetY = 1,204
+    SetX = 2,154
+    SetY = 2,176
+    SetX = 3,175
+    SetY = 3,152
+    SetX = 4,201
+    SetY = 4,130
+    SetX = 5,227
+    SetY = 5,108
+    SetX = 6,248
+    SetY = 6,100
+    SetX = 8,294
+    SetY = 8,86
+    SetZoomX = 8,50
+    SetZoomY = 8,50
+    SetOpacity = 8,100
+    SetX = 9,315
+    SetY = 9,102
+    SetZoomX = 9,100
+    SetZoomY = 9,100
+    SetOpacity = 9,255
+    SetX = 10,320
+    SetY = 10,112
+    SetX = 11,331
+    SetY = 11,116
+    SetOpacity = 12,100
+    SetOpacity = 13,50
+<SE>
+    Play = 0,Collapse1,80,100

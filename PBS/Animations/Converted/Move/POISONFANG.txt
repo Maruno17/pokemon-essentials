@@ -1,0 +1,55 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,POISONFANG]
+Name = POISONFANG
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,354
+    SetY = 7,107
+    SetX = 8,359
+    SetY = 8,100
+<Particle 4>
+    Graphic = element fangs
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,450
+    SetY = 7,106
+    SetX = 8,444
+    SetY = 8,101
+<Particle 2>
+    Graphic = element fangs
+    Focus = Target
+    SetX = 0,390
+    SetY = 0,104
+    SetVisible = 0,true
+    SetY = 1,103
+    SetX = 2,389
+    SetY = 2,93
+    SetX = 3,386
+    SetY = 3,102
+    SetX = 4,385
+    SetY = 4,101
+    SetX = 5,392
+    SetY = 5,95
+    SetX = 6,390
+    SetY = 6,98
+    SetX = 7,392
+    SetY = 7,103
+    SetY = 8,93
+    SetX = 9,387
+    SetY = 9,97
+    SetX = 10,392
+    SetX = 11,389
+    SetY = 11,96
+    SetX = 12,391
+    SetY = 12,98
+<SE>
+    Play = 6,Voltorb Flip Mark,100,161

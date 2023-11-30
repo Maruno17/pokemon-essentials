@@ -1,0 +1,31 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ROCKTHROW]
+Name = ROCKTHROW
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Earth1
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,352
+    SetY = 3,110
+<Particle 2>
+    Graphic = Earth1
+    Focus = UserAndTarget
+    SetX = 0,128
+    SetY = 0,236
+    SetVisible = 0,true
+    SetX = 1,198
+    SetY = 1,186
+    SetX = 2,307
+    SetY = 2,123
+    SetX = 3,352
+    SetY = 3,110
+<SE>
+    Play = 0,throw,80,100
+    Play = 3,Earth1,80,100

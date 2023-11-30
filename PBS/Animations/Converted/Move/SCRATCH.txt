@@ -1,0 +1,25 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SCRATCH]
+Name = SCRATCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = scratchbattle
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,399
+    SetY = 1,74
+    SetX = 2,383
+    SetY = 2,90
+    SetX = 3,367
+    SetY = 3,106
+    SetX = 4,351
+    SetY = 4,122
+    SetY = 5,138
+<SE>
+    Play = 0,Slash10,80,100

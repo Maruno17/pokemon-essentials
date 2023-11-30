@@ -1,0 +1,36 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,HORNATTACK]
+Name = HORNATTACK
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Cosmo-01
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,390
+    SetY = 4,85
+    SetZoomX = 4,50
+    SetZoomY = 4,50
+    SetOpacity = 4,100
+<Particle 2>
+    Graphic = Cosmo-01
+    Focus = UserAndTarget
+    SetX = 0,128
+    SetY = 0,236
+    SetVisible = 0,true
+    SetX = 1,179
+    SetY = 1,192
+    SetX = 2,236
+    SetY = 2,154
+    SetX = 3,294
+    SetY = 3,135
+    SetX = 4,358
+    SetY = 4,110
+    SetOpacity = 5,25
+<SE>
+    Play = 3,normaldamage,80,100

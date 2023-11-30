@@ -1,0 +1,55 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FUTURESIGHT]
+Name = FUTURESIGHT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = face and eye
+    Focus = User
+    SetX = 0,145
+    SetY = 0,224
+    SetVisible = 0,true
+    SetX = 2,141
+    SetY = 2,222
+    SetX = 3,131
+    SetY = 3,221
+    SetX = 4,143
+    SetY = 4,219
+    SetX = 5,131
+    SetY = 5,220
+    SetOpacity = 8,192
+    SetOpacity = 9,96
+<SE>
+    Play = 0,Flash2,80,78
+#-------------------------------
+[Move,FUTURESIGHT,1]
+Name = Future Sight hit
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = face and eye
+    Focus = Target
+    SetX = 0,401
+    SetY = 0,96
+    SetVisible = 0,true
+    SetX = 2,397
+    SetY = 2,94
+    SetX = 3,387
+    SetY = 3,93
+    SetX = 4,399
+    SetY = 4,91
+    SetX = 5,387
+    SetY = 5,92
+    SetOpacity = 8,192
+    SetOpacity = 9,96
+<SE>
+    Play = 0,Flash2,80,78

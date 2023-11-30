@@ -1,0 +1,526 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BULLETSEED]
+Name = BULLETSEED
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetX = 0,160
+    SetY = 0,198
+    SetVisible = 0,true
+    SetX = 1,211
+    SetY = 1,173
+    SetX = 2,249
+    SetY = 2,148
+    SetX = 3,300
+    SetY = 3,129
+    SetX = 4,358
+    SetY = 4,104
+    SetX = 5,352
+    SetY = 5,85
+    SetX = 6,332
+    SetY = 6,66
+    SetOpacity = 6,100
+    SetX = 7,422
+    SetY = 7,60
+    SetX = 8,326
+    SetY = 8,47
+    SetX = 9,428
+    SetY = 9,98
+    SetX = 10,352
+    SetY = 10,47
+<Particle 3>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,256
+    SetY = 3,154
+    SetX = 4,307
+    SetY = 4,135
+    SetX = 5,358
+    SetY = 5,104
+    SetX = 6,403
+    SetY = 6,72
+    SetX = 7,345
+    SetY = 7,66
+    SetX = 8,416
+    SetY = 8,85
+    SetX = 9,364
+    SetY = 9,79
+<Particle 4>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,172
+    SetY = 2,198
+    SetX = 3,211
+    SetY = 3,179
+    SetX = 4,262
+    SetY = 4,167
+    SetX = 5,307
+    SetY = 5,135
+    SetX = 6,358
+    SetY = 6,98
+    SetX = 7,364
+    SetY = 8,110
+<Particle 5>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,172
+    SetY = 3,205
+    SetX = 4,217
+    SetY = 4,192
+    SetX = 5,262
+    SetY = 5,167
+    SetX = 6,307
+    SetY = 6,129
+    SetX = 7,313
+<Particle 6>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,179
+    SetY = 4,217
+    SetX = 5,217
+    SetY = 5,192
+    SetX = 6,256
+    SetY = 6,161
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,throw,80,100
+    Play = 5,throw,80,100
+    Play = 5,Knock,80,100
+    Play = 7,Knock,80,100
+    Play = 8,throw,80,100
+    Play = 9,Knock,80,100
+#-------------------------------
+[Move,BULLETSEED,1]
+Name = Bullet Seed hit 2
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 6>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,179
+    SetY = 4,217
+    SetX = 5,217
+    SetY = 5,192
+    SetX = 6,256
+    SetY = 6,161
+<Particle 2>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetX = 0,160
+    SetY = 0,198
+    SetVisible = 0,true
+    SetX = 1,211
+    SetY = 1,173
+    SetX = 2,249
+    SetY = 2,148
+    SetX = 3,300
+    SetY = 3,129
+    SetX = 4,358
+    SetY = 4,104
+    SetX = 5,352
+    SetY = 5,85
+    SetX = 6,332
+    SetY = 6,66
+    SetOpacity = 6,100
+    SetX = 7,422
+    SetY = 7,60
+    SetX = 8,326
+    SetY = 8,47
+    SetX = 9,428
+    SetY = 9,98
+    SetX = 10,352
+    SetY = 10,47
+<Particle 3>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,256
+    SetY = 3,154
+    SetX = 4,307
+    SetY = 4,135
+    SetX = 5,358
+    SetY = 5,104
+    SetX = 6,403
+    SetY = 6,72
+    SetX = 7,345
+    SetY = 7,66
+    SetX = 8,416
+    SetY = 8,85
+    SetX = 9,364
+    SetY = 9,79
+<Particle 4>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,172
+    SetY = 2,198
+    SetX = 3,211
+    SetY = 3,179
+    SetX = 4,262
+    SetY = 4,167
+    SetX = 5,307
+    SetY = 5,135
+    SetX = 6,358
+    SetY = 6,98
+    SetX = 7,364
+    SetY = 8,110
+<Particle 5>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,172
+    SetY = 3,205
+    SetX = 4,217
+    SetY = 4,192
+    SetX = 5,262
+    SetY = 5,167
+    SetX = 6,307
+    SetY = 6,129
+    SetX = 7,313
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,throw,80,100
+    Play = 5,throw,80,100
+    Play = 5,Knock,80,100
+    Play = 7,Knock,80,100
+    Play = 8,throw,80,100
+    Play = 9,Knock,80,100
+#-------------------------------
+[Move,BULLETSEED,2]
+Name = Bullet Seed hit 3
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 5>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,172
+    SetY = 3,205
+    SetX = 4,217
+    SetY = 4,192
+    SetX = 5,262
+    SetY = 5,167
+    SetX = 6,307
+    SetY = 6,129
+    SetX = 7,313
+<Particle 6>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,179
+    SetY = 4,217
+    SetX = 5,217
+    SetY = 5,192
+    SetX = 6,256
+    SetY = 6,161
+<Particle 2>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetX = 0,160
+    SetY = 0,198
+    SetVisible = 0,true
+    SetX = 1,211
+    SetY = 1,173
+    SetX = 2,249
+    SetY = 2,148
+    SetX = 3,300
+    SetY = 3,129
+    SetX = 4,358
+    SetY = 4,104
+    SetX = 5,352
+    SetY = 5,85
+    SetX = 6,332
+    SetY = 6,66
+    SetOpacity = 6,100
+    SetX = 7,422
+    SetY = 7,60
+    SetX = 8,326
+    SetY = 8,47
+    SetX = 9,428
+    SetY = 9,98
+    SetX = 10,352
+    SetY = 10,47
+<Particle 3>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,256
+    SetY = 3,154
+    SetX = 4,307
+    SetY = 4,135
+    SetX = 5,358
+    SetY = 5,104
+    SetX = 6,403
+    SetY = 6,72
+    SetX = 7,345
+    SetY = 7,66
+    SetX = 8,416
+    SetY = 8,85
+    SetX = 9,364
+    SetY = 9,79
+<Particle 4>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,172
+    SetY = 2,198
+    SetX = 3,211
+    SetY = 3,179
+    SetX = 4,262
+    SetY = 4,167
+    SetX = 5,307
+    SetY = 5,135
+    SetX = 6,358
+    SetY = 6,98
+    SetX = 7,364
+    SetY = 8,110
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,throw,80,100
+    Play = 5,throw,80,100
+    Play = 5,Knock,80,100
+    Play = 7,Knock,80,100
+    Play = 8,throw,80,100
+    Play = 9,Knock,80,100
+#-------------------------------
+[Move,BULLETSEED,3]
+Name = Bullet Seed hit 4
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 4>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,172
+    SetY = 2,198
+    SetX = 3,211
+    SetY = 3,179
+    SetX = 4,262
+    SetY = 4,167
+    SetX = 5,307
+    SetY = 5,135
+    SetX = 6,358
+    SetY = 6,98
+    SetX = 7,364
+    SetY = 8,110
+<Particle 5>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,172
+    SetY = 3,205
+    SetX = 4,217
+    SetY = 4,192
+    SetX = 5,262
+    SetY = 5,167
+    SetX = 6,307
+    SetY = 6,129
+    SetX = 7,313
+<Particle 6>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,179
+    SetY = 4,217
+    SetX = 5,217
+    SetY = 5,192
+    SetX = 6,256
+    SetY = 6,161
+<Particle 2>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetX = 0,160
+    SetY = 0,198
+    SetVisible = 0,true
+    SetX = 1,211
+    SetY = 1,173
+    SetX = 2,249
+    SetY = 2,148
+    SetX = 3,300
+    SetY = 3,129
+    SetX = 4,358
+    SetY = 4,104
+    SetX = 5,352
+    SetY = 5,85
+    SetX = 6,332
+    SetY = 6,66
+    SetOpacity = 6,100
+    SetX = 7,422
+    SetY = 7,60
+    SetX = 8,326
+    SetY = 8,47
+    SetX = 9,428
+    SetY = 9,98
+    SetX = 10,352
+    SetY = 10,47
+<Particle 3>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,256
+    SetY = 3,154
+    SetX = 4,307
+    SetY = 4,135
+    SetX = 5,358
+    SetY = 5,104
+    SetX = 6,403
+    SetY = 6,72
+    SetX = 7,345
+    SetY = 7,66
+    SetX = 8,416
+    SetY = 8,85
+    SetX = 9,364
+    SetY = 9,79
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,throw,80,100
+    Play = 5,throw,80,100
+    Play = 5,Knock,80,100
+    Play = 7,Knock,80,100
+    Play = 8,throw,80,100
+    Play = 9,Knock,80,100
+#-------------------------------
+[Move,BULLETSEED,4]
+Name = Bullet Seed hit 5
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,160
+    SetY = 1,198
+    SetX = 2,211
+    SetY = 2,173
+    SetX = 3,256
+    SetY = 3,154
+    SetX = 4,307
+    SetY = 4,135
+    SetX = 5,358
+    SetY = 5,104
+    SetX = 6,403
+    SetY = 6,72
+    SetX = 7,345
+    SetY = 7,66
+    SetX = 8,416
+    SetY = 8,85
+    SetX = 9,364
+    SetY = 9,79
+<Particle 4>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,172
+    SetY = 2,198
+    SetX = 3,211
+    SetY = 3,179
+    SetX = 4,262
+    SetY = 4,167
+    SetX = 5,307
+    SetY = 5,135
+    SetX = 6,358
+    SetY = 6,98
+    SetX = 7,364
+    SetY = 8,110
+<Particle 5>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,172
+    SetY = 3,205
+    SetX = 4,217
+    SetY = 4,192
+    SetX = 5,262
+    SetY = 5,167
+    SetX = 6,307
+    SetY = 6,129
+    SetX = 7,313
+<Particle 6>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,179
+    SetY = 4,217
+    SetX = 5,217
+    SetY = 5,192
+    SetX = 6,256
+    SetY = 6,161
+<Particle 2>
+    Graphic = leech-seed
+    Focus = UserAndTarget
+    SetX = 0,160
+    SetY = 0,198
+    SetVisible = 0,true
+    SetX = 1,211
+    SetY = 1,173
+    SetX = 2,249
+    SetY = 2,148
+    SetX = 3,300
+    SetY = 3,129
+    SetX = 4,358
+    SetY = 4,104
+    SetX = 5,352
+    SetY = 5,85
+    SetX = 6,332
+    SetY = 6,66
+    SetOpacity = 6,100
+    SetX = 7,422
+    SetY = 7,60
+    SetX = 8,326
+    SetY = 8,47
+    SetX = 9,428
+    SetY = 9,98
+    SetX = 10,352
+    SetY = 10,47
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,throw,80,100
+    Play = 5,throw,80,100
+    Play = 5,Knock,80,100
+    Play = 7,Knock,80,100
+    Play = 8,throw,80,100
+    Play = 9,Knock,80,100

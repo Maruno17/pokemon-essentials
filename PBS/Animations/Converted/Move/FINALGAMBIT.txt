@@ -1,0 +1,57 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FINALGAMBIT]
+Name = FINALGAMBIT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = finger.spoon
+    Focus = Target
+    SetX = 0,364
+    SetY = 0,126
+    SetVisible = 0,true
+    SetX = 1,362
+    SetY = 1,122
+    SetX = 2,391
+    SetY = 2,127
+    SetX = 3,396
+    SetY = 3,122
+    SetX = 4,367
+    SetY = 4,100
+    SetX = 5,388
+    SetY = 5,97
+    SetX = 6,387
+    SetY = 6,108
+    SetX = 7,356
+    SetY = 7,76
+    SetX = 8,405
+    SetY = 8,107
+    SetX = 9,404
+    SetY = 9,108
+    SetX = 10,377
+    SetY = 10,84
+    SetX = 11,386
+    SetY = 11,107
+    SetX = 12,411
+    SetY = 12,67
+    SetX = 13,414
+    SetY = 13,74
+    SetX = 14,400
+    SetY = 14,113
+    SetX = 15,387
+    SetY = 15,114
+    SetY = 16,137
+    SetX = 17,384
+    SetY = 17,136
+    SetX = 18,375
+    SetY = 18,76
+    SetX = 19,416
+    SetY = 19,89
+    SetX = 20,407
+    SetY = 20,108
+<SE>
+    Play = 0,MiningCollapse,100,100

@@ -1,0 +1,117 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SWIFT]
+Name = SWIFT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = 007-Weapon02
+    Focus = UserAndTarget
+    SetX = 0,128
+    SetY = 0,236
+    SetVisible = 0,true
+    SetX = 1,179
+    SetY = 1,211
+    SetX = 2,217
+    SetY = 2,186
+    SetX = 3,288
+    SetY = 3,142
+    SetX = 4,358
+    SetY = 4,110
+    SetX = 5,256
+    SetY = 5,116
+    SetX = 6,288
+    SetY = 6,98
+    SetX = 7,352
+    SetY = 7,79
+    SetX = 8,288
+    SetY = 8,91
+    SetX = 9,307
+    SetY = 9,135
+    SetX = 10,358
+    SetY = 10,104
+<Particle 3>
+    Graphic = 007-Weapon02
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,128
+    SetY = 1,236
+    SetX = 2,172
+    SetY = 2,211
+    SetX = 3,236
+    SetY = 3,173
+    SetX = 4,288
+    SetY = 4,135
+    SetX = 5,339
+    SetY = 5,110
+    SetX = 6,300
+    SetY = 6,135
+    SetX = 7,294
+    SetY = 7,85
+    SetX = 8,332
+    SetY = 8,110
+    SetX = 9,262
+    SetY = 9,148
+    SetX = 10,313
+    SetY = 10,123
+<Particle 4>
+    Graphic = 007-Weapon02
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,128
+    SetY = 2,217
+    SetX = 3,179
+    SetY = 3,179
+    SetX = 4,224
+    SetY = 4,148
+    SetX = 5,256
+    SetY = 5,186
+    SetX = 6,236
+    SetY = 6,135
+    SetX = 7,288
+    SetY = 7,142
+    SetX = 8,262
+    SetY = 8,167
+<Particle 5>
+    Graphic = 007-Weapon02
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,192
+    SetY = 3,224
+    SetX = 4,224
+    SetY = 4,205
+    SetX = 5,172
+    SetY = 5,161
+    SetX = 6,230
+    SetY = 6,173
+    SetX = 7,217
+    SetY = 7,186
+    SetX = 8,204
+<Particle 6>
+    Graphic = 007-Weapon02
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,115
+    SetY = 3,205
+    SetX = 4,147
+    SetY = 4,179
+    SetX = 5,179
+    SetY = 5,205
+    SetX = 6,185
+    SetY = 6,211
+    SetX = 7,166
+<Particle 7>
+    Graphic = 007-Weapon02
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,128
+    SetY = 4,242
+<SE>
+    Play = 0,Saint3,80,100
+    Play = 2,Saint3,80,100
+    Play = 5,Saint3,80,100
+    Play = 8,Saint3,80,100

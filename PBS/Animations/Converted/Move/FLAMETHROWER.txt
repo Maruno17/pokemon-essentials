@@ -1,0 +1,305 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FLAMETHROWER]
+Name = FLAMETHROWER
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Flames
+    Focus = Target
+    SetX = 0,165
+    SetY = 0,215
+    SetVisible = 0,true
+<Particle 3>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,183
+    SetY = 1,207
+<Particle 4>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,197
+    SetY = 2,193
+<Particle 5>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,223
+    SetY = 3,175
+<Particle 6>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,255
+    SetY = 4,153
+<Particle 7>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,285
+    SetY = 5,126
+<Particle 8>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 6,315
+    SetY = 6,104
+<Particle 9>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,352
+    SetY = 7,84
+<Particle 10>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,379
+    SetY = 8,72
+<SE>
+    Play = 0,Whirlwind,100,121
+#-------------------------------
+[OppMove,FLAMETHROWER]
+Name = FLAMETHROWER
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Flames
+    Focus = Target
+    SetX = 0,381
+    SetY = 0,98
+    SetVisible = 0,true
+    SetX = 1,384
+    SetX = 2,383
+    SetY = 2,95
+    SetX = 3,386
+    SetY = 3,94
+    SetX = 4,385
+    SetY = 4,99
+    SetX = 5,387
+    SetY = 5,101
+    SetX = 6,385
+    SetY = 6,99
+    SetX = 7,386
+    SetY = 7,103
+    SetX = 8,388
+    SetY = 8,100
+    SetX = 9,386
+    SetY = 9,94
+    SetX = 10,384
+    SetY = 10,87
+    SetX = 11,148
+    SetY = 11,218
+    SetX = 12,135
+    SetY = 12,214
+    SetX = 13,139
+    SetY = 13,216
+    SetX = 14,134
+    SetY = 14,220
+    SetX = 15,131
+    SetY = 15,215
+    SetX = 16,138
+    SetY = 16,216
+    SetX = 17,129
+    SetY = 17,215
+    SetX = 18,131
+    SetY = 18,218
+<Particle 3>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,361
+    SetY = 1,105
+    SetX = 2,362
+    SetY = 2,103
+    SetY = 3,102
+    SetX = 4,367
+    SetY = 4,107
+    SetY = 5,110
+    SetX = 6,366
+    SetY = 6,106
+    SetX = 7,363
+    SetX = 8,368
+    SetY = 8,108
+    SetX = 9,362
+    SetY = 9,109
+    SetX = 10,358
+    SetY = 10,98
+    SetX = 11,176
+    SetY = 11,190
+    SetX = 12,162
+    SetY = 12,192
+    SetX = 13,173
+    SetX = 14,167
+    SetY = 14,193
+    SetX = 15,158
+    SetY = 15,195
+    SetX = 16,193
+    SetY = 16,188
+    SetX = 17,174
+    SetY = 17,183
+<Particle 4>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,342
+    SetY = 2,112
+    SetX = 3,339
+    SetX = 4,347
+    SetY = 4,111
+    SetX = 5,348
+    SetY = 5,114
+    SetX = 6,343
+    SetY = 6,109
+    SetX = 7,337
+    SetY = 7,114
+    SetX = 8,350
+    SetY = 8,108
+    SetX = 9,335
+    SetY = 9,111
+    SetX = 10,331
+    SetY = 10,108
+    SetX = 11,205
+    SetY = 11,170
+    SetX = 12,196
+    SetY = 12,169
+    SetX = 13,207
+    SetY = 13,160
+    SetX = 14,199
+    SetY = 14,166
+    SetX = 15,189
+    SetY = 15,178
+    SetX = 16,234
+    SetY = 16,158
+<Particle 5>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,313
+    SetY = 3,120
+    SetX = 4,323
+    SetY = 4,128
+    SetX = 5,325
+    SetY = 5,119
+    SetX = 6,320
+    SetY = 6,123
+    SetX = 7,311
+    SetY = 7,122
+    SetX = 8,324
+    SetX = 9,299
+    SetY = 9,118
+    SetX = 10,306
+    SetY = 10,116
+    SetX = 11,237
+    SetY = 11,143
+    SetX = 12,238
+    SetY = 12,147
+    SetX = 13,242
+    SetY = 13,143
+    SetX = 14,238
+    SetY = 14,141
+    SetX = 15,229
+    SetY = 15,155
+<Particle 6>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,299
+    SetY = 4,137
+    SetX = 5,296
+    SetY = 5,127
+    SetY = 6,133
+    SetX = 7,278
+    SetY = 7,132
+    SetX = 8,289
+    SetY = 8,128
+    SetX = 9,266
+    SetY = 9,125
+    SetX = 10,272
+    SetY = 10,130
+    SetX = 11,269
+    SetY = 11,122
+    SetX = 12,275
+    SetY = 12,128
+    SetX = 13,274
+    SetY = 13,127
+    SetX = 14,278
+    SetY = 14,124
+<Particle 7>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,267
+    SetY = 5,134
+    SetY = 6,143
+    SetX = 7,247
+    SetY = 7,139
+    SetX = 8,255
+    SetY = 8,137
+    SetX = 9,230
+    SetY = 9,134
+    SetX = 10,237
+    SetY = 10,149
+    SetX = 11,304
+    SetY = 11,110
+    SetX = 12,311
+    SetX = 13,310
+    SetY = 13,115
+<Particle 8>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 6,238
+    SetY = 6,152
+    SetX = 7,215
+    SetY = 7,147
+    SetX = 8,220
+    SetY = 8,146
+    SetX = 9,196
+    SetY = 9,150
+    SetX = 10,209
+    SetY = 10,174
+    SetX = 11,332
+    SetY = 11,94
+    SetX = 12,349
+    SetY = 12,92
+<Particle 9>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,189
+    SetY = 8,164
+    SetX = 9,165
+    SetY = 9,163
+    SetX = 10,173
+    SetY = 10,190
+    SetX = 11,360
+    SetY = 11,87
+    SetX = 12,381
+    SetY = 12,81
+<Particle 10>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 9,136
+    SetY = 9,194
+    SetX = 10,143
+    SetY = 10,205
+<Particle 11>
+    Graphic = Flames
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 10,122
+    SetY = 10,227
+<SE>
+    Play = 0,Whirlwind,100,121

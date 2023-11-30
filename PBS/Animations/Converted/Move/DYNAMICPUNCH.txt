@@ -1,0 +1,55 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DYNAMICPUNCH]
+Name = DYNAMICPUNCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,389
+    SetY = 1,99
+    SetX = 2,386
+    SetX = 3,383
+    SetY = 3,107
+    SetX = 4,386
+    SetY = 4,99
+    SetX = 5,384
+    SetY = 5,108
+<Particle 2>
+    Graphic = punches
+    Focus = Target
+    SetX = 0,389
+    SetY = 0,98
+    SetVisible = 0,true
+    SetX = 1,386
+    SetY = 1,96
+    SetX = 2,389
+    SetY = 2,94
+    SetX = 3,384
+    SetY = 3,99
+    SetZoomX = 3,150
+    SetZoomY = 3,150
+    SetOpacity = 3,250
+    SetX = 4,386
+    SetY = 4,90
+    SetZoomX = 4,180
+    SetZoomY = 4,180
+    SetOpacity = 4,194
+    SetX = 5,388
+    SetY = 5,96
+    SetZoomX = 5,250
+    SetZoomY = 5,250
+    SetOpacity = 5,120
+    SetX = 7,390
+    SetY = 7,99
+    SetZoomX = 7,150
+    SetZoomY = 7,150
+    SetOpacity = 7,255
+<SE>
+    Play = 0,Take Down,100,104

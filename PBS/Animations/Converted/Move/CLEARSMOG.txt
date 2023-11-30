@@ -1,0 +1,26 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CLEARSMOG]
+Name = CLEARSMOG
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetX = 0,384
+    SetY = 0,98
+    SetVisible = 0,true
+    SetX = 2,385
+    SetY = 2,95
+    SetY = 3,98
+    SetX = 4,382
+    SetY = 4,97
+    SetX = 5,383
+    SetY = 5,101
+    SetX = 6,382
+<SE>
+    Play = 0,Snore,86,100

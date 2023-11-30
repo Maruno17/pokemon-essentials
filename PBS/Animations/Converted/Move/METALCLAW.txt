@@ -1,0 +1,30 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,METALCLAW]
+Name = METALCLAW
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = dragon claw
+    Focus = UserAndTarget
+    SetX = 0,387
+    SetY = 0,70
+    SetVisible = 0,true
+    SetX = 1,392
+    SetY = 1,73
+    SetX = 2,402
+    SetY = 2,79
+    SetX = 3,400
+    SetY = 3,98
+    SetX = 4,397
+    SetY = 4,91
+    SetY = 5,96
+    SetX = 6,392
+    SetX = 7,384
+<SE>
+    Play = 0,metal,100,110
+    Play = 4,metal,100,100

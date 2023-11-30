@@ -1,0 +1,84 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LIGHTSCREEN]
+Name = LIGHTSCREEN
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,442
+    SetY = 1,57
+    SetX = 2,446
+    SetY = 2,55
+    SetX = 3,434
+    SetY = 3,63
+    SetY = 4,62
+    SetX = 5,368
+    SetY = 5,111
+    SetX = 6,428
+    SetY = 6,61
+    SetX = 7,349
+    SetY = 7,131
+    SetX = 8,347
+    SetY = 8,145
+    SetX = 9,391
+    SetY = 9,46
+    SetX = 10,430
+    SetY = 10,57
+<Particle 4>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,368
+    SetY = 4,111
+    SetX = 5,412
+    SetY = 5,72
+    SetX = 6,357
+    SetY = 6,125
+    SetX = 7,430
+    SetY = 7,66
+    SetX = 8,450
+    SetY = 8,160
+    SetX = 9,339
+    SetY = 9,144
+    SetX = 10,377
+    SetY = 10,58
+<Particle 5>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,440
+    SetY = 7,160
+    SetX = 8,421
+    SetY = 8,72
+    SetX = 9,445
+    SetY = 9,162
+    SetX = 10,347
+    SetY = 10,135
+<Particle 6>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,384
+    SetY = 8,42
+    SetX = 9,421
+    SetY = 9,65
+    SetX = 10,448
+    SetY = 10,162
+<Particle 2>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetBlending = 1,1
+    SetX = 1,390
+    SetY = 1,95
+    SetOpacity = 1,154
+<SE>
+    Play = 3,Flash2,100,170
+    Play = 6,Flash2,100,180

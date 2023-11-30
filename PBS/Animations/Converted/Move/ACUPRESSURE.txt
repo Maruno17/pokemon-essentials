@@ -1,0 +1,97 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ACUPRESSURE]
+Name = ACUPRESSURE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = mixed status
+    Focus = Target
+    SetX = 0,399
+    SetY = 0,93
+    SetVisible = 0,true
+    SetX = 1,397
+    SetY = 1,94
+    SetX = 2,395
+    SetX = 3,394
+    SetY = 3,96
+    SetY = 4,93
+    SetX = 5,397
+    SetY = 5,94
+    SetX = 6,393
+    SetY = 6,92
+    SetX = 7,395
+    SetY = 7,95
+    SetX = 8,393
+    SetY = 8,92
+<Particle 3>
+    Graphic = mixed status
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,385
+    SetY = 4,84
+    SetX = 5,389
+    SetY = 5,88
+    SetX = 6,397
+    SetY = 7,90
+    SetX = 8,395
+    SetY = 8,80
+<Particle 4>
+    Graphic = mixed status
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,367
+    SetY = 5,127
+    SetX = 6,369
+    SetY = 6,124
+    SetX = 7,367
+    SetY = 7,125
+    SetX = 8,446
+    SetY = 8,116
+<Particle 5>
+    Graphic = mixed status
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 6,427
+    SetY = 6,92
+    SetX = 7,449
+    SetY = 7,119
+    SetX = 8,366
+    SetY = 8,121
+<Particle 6>
+    Graphic = mixed status
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,428
+    SetY = 7,91
+    SetY = 8,90
+<Particle 7>
+    Graphic = mixed status
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,430
+    SetY = 8,92
+<Particle 8>
+    Graphic = mixed status
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,445
+    SetY = 8,115
+<Particle 9>
+    Graphic = mixed status
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,368
+    SetY = 8,121
+<Particle 10>
+    Graphic = mixed status
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 8,395
+    SetY = 8,80
+<SE>
+    Play = 0,Acupressure,100,100

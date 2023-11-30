@@ -1,0 +1,23 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MEANLOOK]
+Name = MEANLOOK
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = face and eye
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,92
+    SetVisible = 0,true
+    SetY = 1,96
+    SetY = 2,94
+    SetX = 3,385
+    SetY = 3,95
+    SetX = 4,384
+    SetY = 4,93
+    SetY = 5,94

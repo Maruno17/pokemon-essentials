@@ -1,0 +1,70 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,WILLOWISP]
+Name = WILLOWISP
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = 015-Fire01
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetFlip = 1,true
+    SetX = 1,134
+    SetY = 1,179
+    SetAngle = 1,90
+    SetX = 2,172
+    SetY = 2,161
+    SetX = 3,243
+    SetY = 3,129
+    SetX = 4,332
+    SetY = 4,148
+    SetFlip = 5,false
+    SetX = 5,358
+    SetY = 5,110
+    SetAngle = 5,0
+<Particle 4>
+    Graphic = 015-Fire01
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetFlip = 2,true
+    SetX = 2,224
+    SetY = 2,186
+    SetAngle = 2,90
+    SetX = 3,288
+    SetY = 3,167
+    SetFlip = 4,false
+    SetX = 4,358
+    SetY = 4,110
+    SetAngle = 4,0
+<Particle 5>
+    Graphic = 015-Fire01
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,358
+    SetY = 3,110
+<Particle 2>
+    Graphic = 015-Fire01
+    Focus = UserAndTarget
+    SetFlip = 0,true
+    SetX = 0,160
+    SetY = 0,186
+    SetAngle = 0,90
+    SetVisible = 0,true
+    SetX = 1,198
+    SetY = 1,167
+    SetX = 2,262
+    SetY = 2,129
+    SetX = 3,320
+    SetY = 3,104
+    SetX = 4,300
+    SetX = 5,352
+    SetY = 5,110
+    SetFlip = 6,false
+    SetX = 6,358
+    SetAngle = 6,0
+<SE>
+    Play = 0,Fire2,80,100

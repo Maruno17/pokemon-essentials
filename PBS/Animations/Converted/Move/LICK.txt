@@ -1,0 +1,22 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LICK]
+Name = LICK
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = ghost1
+    Focus = Target
+    SetX = 0,400
+    SetY = 0,142
+    SetVisible = 0,true
+    SetY = 1,118
+    SetY = 2,94
+    SetY = 3,70
+    SetY = 4,54
+    SetY = 5,46
+    SetOpacity = 6,100

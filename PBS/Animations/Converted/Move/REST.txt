@@ -1,0 +1,34 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,REST]
+Name = REST
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fly copy
+    Focus = Target
+    SetX = 0,357
+    SetY = 0,67
+    SetVisible = 0,true
+    SetX = 1,338
+    SetY = 1,49
+    SetX = 2,320
+    SetY = 2,30
+    SetX = 3,307
+    SetY = 3,21
+    SetX = 4,317
+    SetY = 4,38
+    SetX = 5,294
+    SetY = 5,1
+    SetX = 6,348
+    SetY = 6,50
+    SetX = 7,330
+    SetY = 7,37
+    SetX = 8,308
+    SetY = 8,10
+<SE>
+    Play = 0,Refresh,80,100

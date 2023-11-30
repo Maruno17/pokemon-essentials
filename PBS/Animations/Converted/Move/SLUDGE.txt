@@ -1,0 +1,30 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SLUDGE]
+Name = SLUDGE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = State1
+    Focus = Target
+    SetX = 0,128
+    SetY = 0,236
+    SetVisible = 0,true
+    SetX = 1,172
+    SetY = 1,186
+    SetAngle = 1,325
+    SetX = 2,249
+    SetY = 2,148
+    SetX = 3,313
+    SetY = 3,129
+    SetX = 4,358
+    SetY = 4,91
+    SetY = 5,110
+    SetAngle = 5,0
+<SE>
+    Play = 0,throw,80,100
+    Play = 7,Poison,80,100

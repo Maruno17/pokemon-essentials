@@ -1,0 +1,104 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,GASTROACID]
+Name = GASTROACID
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,393
+    SetY = 1,120
+    SetZoomX = 1,85
+    SetZoomY = 1,85
+    SetOpacity = 1,200
+    SetX = 2,369
+    SetY = 2,60
+    SetX = 3,359
+    SetY = 3,108
+    SetX = 4,394
+    SetY = 4,93
+    SetX = 5,316
+    SetY = 5,72
+    SetX = 6,336
+    SetY = 6,80
+    SetX = 7,375
+    SetY = 7,96
+    SetX = 8,330
+    SetY = 8,64
+    SetX = 9,376
+    SetY = 9,91
+<Particle 4>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,363
+    SetY = 2,114
+    SetZoomX = 2,85
+    SetZoomY = 2,85
+    SetOpacity = 2,200
+    SetX = 3,315
+    SetY = 3,86
+    SetX = 4,337
+    SetY = 4,123
+    SetX = 6,343
+    SetY = 6,27
+    SetX = 7,301
+    SetY = 7,36
+    SetX = 9,348
+    SetY = 9,24
+<Particle 5>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,402
+    SetY = 3,119
+    SetZoomX = 3,85
+    SetZoomY = 3,85
+    SetOpacity = 3,200
+    SetX = 4,302
+    SetY = 4,69
+<Particle 6>
+    Graphic = fly copy
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,344
+    SetY = 4,23
+    SetZoomX = 4,85
+    SetZoomY = 4,85
+    SetOpacity = 4,200
+<Particle 2>
+    Graphic = fly copy
+    Focus = Target
+    SetX = 0,353
+    SetY = 0,110
+    SetZoomX = 0,85
+    SetZoomY = 0,85
+    SetVisible = 0,true
+    SetOpacity = 0,200
+    SetX = 1,352
+    SetY = 1,85
+    SetX = 2,315
+    SetY = 2,58
+    SetX = 3,342
+    SetY = 3,38
+    SetX = 4,358
+    SetY = 4,77
+    SetX = 5,364
+    SetY = 5,72
+    SetX = 6,380
+    SetY = 6,75
+    SetX = 7,381
+    SetY = 7,45
+    SetX = 8,390
+    SetY = 8,79
+    SetX = 9,310
+    SetY = 9,83
+    SetX = 10,365
+<SE>
+    Play = 0,Sweet Scent,100,100

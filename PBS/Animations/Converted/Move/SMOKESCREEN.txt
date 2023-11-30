@@ -1,0 +1,102 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SMOKESCREEN]
+Name = SMOKESCREEN
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Anima (2)
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,102
+    SetVisible = 0,true
+    SetFlip = 5,true
+    SetZoomX = 5,110
+    SetZoomY = 5,110
+    SetZoomX = 6,100
+    SetZoomY = 6,100
+    SetFlip = 10,false
+    SetX = 10,336
+    SetY = 10,78
+    SetX = 11,408
+    SetY = 11,62
+    SetX = 12,440
+    SetY = 12,110
+    SetOpacity = 14,150
+<Particle 3>
+    Graphic = Anima (2)
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,336
+    SetY = 2,78
+    SetX = 10,408
+    SetY = 10,62
+    SetX = 11,440
+    SetY = 11,110
+    SetX = 12,320
+    SetOpacity = 13,150
+<Particle 4>
+    Graphic = Anima (2)
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,408
+    SetY = 3,62
+    SetX = 10,440
+    SetY = 10,110
+    SetX = 11,320
+    SetFlip = 12,true
+    SetX = 12,352
+    SetY = 12,126
+    SetOpacity = 13,150
+<Particle 5>
+    Graphic = Anima (2)
+    Focus = Target
+    SetVisible = 0,true
+    SetFlip = 3,true
+    SetX = 3,352
+    SetY = 3,126
+    SetFlip = 4,false
+    SetX = 4,440
+    SetY = 4,110
+    SetFlip = 9,true
+    SetZoomX = 9,125
+    SetZoomY = 9,125
+    SetFlip = 10,false
+    SetX = 10,320
+    SetZoomX = 10,100
+    SetZoomY = 10,100
+    SetFlip = 11,true
+    SetX = 11,352
+    SetY = 11,126
+<Particle 6>
+    Graphic = Anima (2)
+    Focus = Target
+    SetVisible = 0,true
+    SetFlip = 4,true
+    SetX = 4,352
+    SetY = 4,126
+    SetFlip = 5,false
+    SetX = 5,320
+    SetY = 5,110
+    SetFlip = 10,true
+    SetX = 10,352
+    SetY = 10,126
+<Particle 7>
+    Graphic = Anima (2)
+    Focus = Target
+    SetVisible = 0,true
+    SetFlip = 5,true
+    SetX = 5,352
+    SetY = 5,126
+    SetFlip = 8,false
+    SetZoomX = 8,125
+    SetZoomY = 8,125
+    SetFlip = 9,true
+    SetZoomX = 9,100
+    SetZoomY = 9,100
+<SE>
+    Play = 0,Wind8,80,100

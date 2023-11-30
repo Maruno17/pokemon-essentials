@@ -1,0 +1,60 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,QUICKATTACK]
+Name = QUICKATTACK
+<User>
+    SetX = 0,128
+    SetY = 0,224
+    SetOpacity = 1,170
+    SetOpacity = 2,85
+    SetOpacity = 6,255
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Tackle_B
+    Focus = User
+    SetVisible = 0,true
+    SetX = 2,59
+    SetY = 2,258
+    SetOpacity = 3,170
+    SetOpacity = 4,85
+<Particle 4>
+    Graphic = Tackle_B
+    Focus = User
+    SetVisible = 0,true
+    SetX = 3,100
+    SetY = 3,272
+    SetOpacity = 4,170
+    SetOpacity = 5,85
+<Particle 5>
+    Graphic = Tackle_B
+    Focus = User
+    SetVisible = 0,true
+    SetX = 4,163
+    SetY = 4,259
+    SetOpacity = 5,170
+    SetOpacity = 6,85
+<Particle 6>
+    Graphic = Tackle_B
+    Focus = User
+    SetVisible = 0,true
+    SetX = 5,140
+    SetY = 5,230
+    SetOpacity = 6,170
+    SetOpacity = 7,85
+<Particle 2>
+    Graphic = Tackle_B
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,76
+    SetY = 1,230
+    SetOpacity = 2,170
+    SetOpacity = 3,85
+    SetX = 7,384
+    SetY = 7,96
+    SetOpacity = 7,128
+    SetOpacity = 8,255
+    SetOpacity = 11,128
+<SE>
+    Play = 7,Blow4,100,100

@@ -1,0 +1,127 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MAGICCOAT]
+Name = MAGICCOAT
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = anim sheet
+    Focus = Target
+    SetX = 0,385
+    SetY = 0,98
+    SetVisible = 0,true
+    SetOpacity = 0,37
+    SetOpacity = 1,74
+    SetOpacity = 9,72
+    SetOpacity = 10,37
+<Particle 3>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,388
+    SetY = 2,27
+    SetX = 3,372
+    SetY = 3,161
+    SetX = 4,446
+    SetY = 4,149
+    SetX = 5,335
+    SetY = 5,98
+    SetX = 6,351
+    SetY = 6,148
+    SetX = 7,385
+    SetY = 7,147
+    SetX = 8,392
+    SetY = 8,151
+    SetX = 9,352
+    SetY = 9,89
+    SetX = 10,390
+    SetY = 10,146
+<Particle 4>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,403
+    SetY = 2,46
+    SetX = 3,353
+    SetY = 3,99
+    SetX = 4,453
+    SetY = 4,137
+    SetX = 5,346
+    SetY = 5,105
+    SetX = 6,359
+    SetY = 6,143
+    SetX = 7,402
+    SetY = 7,151
+    SetX = 8,379
+    SetY = 8,154
+    SetX = 9,344
+    SetY = 9,100
+    SetX = 10,447
+    SetY = 10,55
+<Particle 5>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,428
+    SetY = 2,159
+    SetX = 3,340
+    SetY = 3,95
+    SetY = 4,169
+    SetX = 5,443
+    SetY = 5,88
+    SetX = 6,396
+    SetY = 6,52
+    SetX = 7,397
+    SetY = 7,69
+    SetX = 8,434
+    SetY = 8,64
+    SetX = 9,445
+    SetY = 9,110
+<Particle 6>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,405
+    SetY = 2,164
+    SetX = 3,417
+    SetY = 3,54
+    SetX = 4,329
+    SetY = 4,162
+    SetX = 5,443
+    SetY = 5,104
+    SetX = 6,409
+    SetY = 6,59
+    SetX = 7,386
+    SetY = 7,58
+    SetX = 8,436
+    SetY = 8,79
+<Particle 7>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,337
+    SetY = 2,147
+    SetX = 3,430
+    SetY = 3,71
+    SetX = 6,441
+    SetY = 6,151
+    SetX = 8,357
+    SetY = 8,77
+<Particle 8>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,337
+    SetY = 2,120
+    SetX = 6,453
+    SetY = 6,160
+    SetX = 8,369
+    SetY = 8,89
+<SE>
+    Play = 0,Sword2,80,100
+    Play = 0,Sword2,80,101
+    Play = 4,Sword2,80,100

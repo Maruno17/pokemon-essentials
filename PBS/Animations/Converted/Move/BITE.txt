@@ -1,0 +1,24 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BITE]
+Name = BITE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Crunch
+    Focus = Target
+    SetX = 0,386
+    SetY = 0,96
+    SetVisible = 0,true
+    SetOpacity = 0,128
+    SetOpacity = 2,192
+    SetX = 3,385
+    SetY = 3,97
+    SetOpacity = 3,255
+    SetOpacity = 13,128
+<SE>
+    Play = 9,Sword2,80,100

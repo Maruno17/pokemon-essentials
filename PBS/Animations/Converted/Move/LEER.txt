@@ -1,0 +1,49 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LEER]
+Name = LEER
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = leer
+    Focus = UserAndTarget
+    SetX = 0,147
+    SetY = 0,205
+    SetVisible = 0,true
+    SetY = 1,203
+    SetX = 2,148
+    SetY = 2,201
+    SetX = 3,144
+    SetY = 3,203
+    SetX = 4,153
+    SetY = 4,201
+<SE>
+    Play = 0,Saint9,100,100
+#-------------------------------
+[OppMove,LEER]
+Name = LEER
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = leer
+    Focus = UserAndTarget
+    SetX = 0,350
+    SetY = 0,79
+    SetVisible = 0,true
+    SetY = 1,77
+    SetX = 2,352
+    SetY = 2,75
+    SetX = 3,347
+    SetY = 3,77
+    SetX = 4,356
+    SetY = 4,75
+<SE>
+    Play = 0,Saint9,100,100

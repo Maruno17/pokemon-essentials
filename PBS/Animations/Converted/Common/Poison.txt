@@ -1,0 +1,18 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Poison]
+Name = Poison
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = State1
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,384
+    SetY = 1,86
+<SE>
+    Play = 0,Poison,80,100

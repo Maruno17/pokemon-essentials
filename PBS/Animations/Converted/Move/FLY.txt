@@ -1,0 +1,62 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FLY]
+Name = FLY
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fly copy
+    Focus = Target
+    SetX = 0,281
+    SetY = 0,-22
+    SetAngle = 0,207
+    SetVisible = 0,true
+    SetX = 1,312
+    SetY = 1,26
+    SetX = 2,335
+    SetY = 2,61
+    SetX = 3,356
+    SetY = 3,87
+    SetX = 4,379
+    SetY = 4,118
+    SetX = 5,424
+    SetY = 5,184
+    SetX = 6,401
+    SetY = 6,154
+<SE>
+    Play = 0,Take Down,80,110
+#-------------------------------
+[Move,FLY,1]
+Name = Fly charging
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fly copy
+    Focus = User
+    SetX = 0,134
+    SetY = 0,260
+    SetVisible = 0,true
+    SetX = 1,138
+    SetY = 1,247
+    SetX = 2,136
+    SetY = 2,258
+    SetX = 3,132
+    SetY = 3,238
+    SetX = 4,131
+    SetY = 4,233
+    SetX = 5,142
+    SetY = 5,225
+    SetX = 6,136
+    SetY = 6,194
+    SetX = 7,134
+    SetY = 7,166
+<SE>
+    Play = 0,Trump Card,100,100

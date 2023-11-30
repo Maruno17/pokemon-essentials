@@ -1,0 +1,36 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,TAILWHIP]
+Name = TAILWHIP
+<User>
+    SetX = 0,128
+    SetY = 0,224
+    SetX = 1,149
+    SetY = 1,227
+    SetX = 2,168
+    SetY = 2,235
+    SetX = 3,143
+    SetY = 3,238
+    SetX = 4,107
+    SetX = 5,84
+    SetY = 5,230
+    SetX = 6,106
+    SetY = 6,228
+    SetX = 7,128
+    SetY = 7,224
+    SetX = 9,149
+    SetY = 9,227
+    SetX = 10,168
+    SetY = 10,235
+    SetX = 11,143
+    SetY = 11,238
+    SetX = 12,107
+    SetX = 13,84
+    SetY = 13,230
+    SetX = 14,106
+    SetY = 14,228
+    SetX = 15,128
+    SetY = 15,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96

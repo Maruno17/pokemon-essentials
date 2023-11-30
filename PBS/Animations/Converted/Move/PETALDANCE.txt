@@ -1,0 +1,105 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,PETALDANCE]
+Name = PETALDANCE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Anima (1)
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,576
+    SetY = 2,-42
+    SetX = 3,544
+    SetY = 3,6
+    SetFlip = 4,true
+    SetX = 4,504
+    SetY = 4,62
+    SetX = 5,448
+    SetY = 5,126
+    SetX = 6,408
+    SetY = 6,166
+    SetX = 7,392
+    SetY = 7,222
+    SetFlip = 8,false
+    SetX = 8,552
+    SetY = 8,166
+    SetX = 9,400
+    SetY = 9,70
+    SetZoomX = 9,120
+    SetZoomY = 9,120
+<Particle 4>
+    Graphic = Anima (1)
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,344
+    SetY = 3,-50
+    SetX = 4,384
+    SetY = 4,-2
+    SetX = 5,416
+    SetY = 5,38
+    SetX = 6,464
+    SetY = 6,86
+    SetX = 7,512
+    SetY = 7,142
+    SetFlip = 8,true
+    SetX = 8,96
+    SetY = 8,62
+<Particle 5>
+    Graphic = Anima (1)
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,320
+    SetY = 5,-42
+    SetX = 6,280
+    SetY = 6,6
+    SetX = 7,192
+    SetY = 7,30
+    SetX = 8,360
+    SetY = 8,22
+<Particle 6>
+    Graphic = Anima (1)
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,320
+    SetY = 7,-58
+<Particle 2>
+    Graphic = Anima (1)
+    Focus = Target
+    SetX = 0,224
+    SetY = 0,-34
+    SetVisible = 0,true
+    SetX = 1,240
+    SetY = 1,6
+    SetX = 2,272
+    SetY = 2,38
+    SetX = 3,320
+    SetY = 3,94
+    SetFlip = 4,true
+    SetX = 4,376
+    SetX = 5,360
+    SetY = 5,102
+    SetX = 6,320
+    SetY = 6,126
+    SetX = 7,264
+    SetY = 7,174
+    SetX = 8,200
+    SetY = 8,222
+    SetX = 9,72
+    SetY = 9,86
+    SetFlip = 10,false
+    SetX = 10,464
+    SetY = 10,118
+    SetZoomX = 10,120
+    SetZoomY = 10,120
+    SetFlip = 11,true
+    SetX = 11,568
+    SetY = 11,182
+    SetZoomX = 11,100
+    SetZoomY = 11,100
+<SE>
+    Play = 0,Saint6,80,100

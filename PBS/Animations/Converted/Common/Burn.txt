@@ -1,0 +1,20 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Burn]
+Name = Burn
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = Flames
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,96
+    SetZoomX = 0,200
+    SetZoomY = 0,200
+    SetVisible = 0,true
+<SE>
+    Play = 0,Fire2,80,100

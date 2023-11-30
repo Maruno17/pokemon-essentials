@@ -1,0 +1,111 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDERPUNCH]
+Name = THUNDERPUNCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = punches
+    Focus = Target
+    SetX = 0,385
+    SetY = 0,97
+    SetVisible = 0,true
+    SetX = 1,384
+    SetY = 1,93
+    SetX = 2,395
+    SetY = 2,76
+    SetX = 3,429
+    SetY = 3,54
+    SetX = 4,381
+    SetY = 4,102
+    SetX = 5,363
+    SetY = 5,104
+    SetX = 6,474
+    SetY = 6,46
+    SetX = 7,410
+    SetY = 7,11
+    SetX = 8,343
+    SetY = 8,142
+    SetX = 9,487
+    SetY = 9,1
+<Particle 3>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,412
+    SetY = 2,82
+    SetX = 3,378
+    SetY = 3,108
+    SetX = 4,410
+    SetY = 4,105
+    SetX = 5,390
+    SetY = 5,126
+    SetX = 6,440
+    SetY = 6,16
+    SetX = 7,478
+    SetY = 7,55
+    SetX = 8,450
+    SetY = 8,47
+    SetX = 9,305
+    SetY = 9,184
+<Particle 4>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,385
+    SetY = 2,92
+    SetX = 3,386
+    SetY = 3,98
+    SetX = 4,429
+    SetY = 4,67
+    SetX = 5,391
+    SetY = 5,58
+    SetX = 6,311
+    SetY = 6,144
+    SetX = 7,317
+    SetY = 7,138
+    SetX = 8,386
+    SetY = 8,94
+    SetX = 9,383
+<Particle 5>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,387
+    SetY = 4,70
+    SetX = 5,443
+    SetY = 5,55
+    SetX = 6,357
+    SetY = 6,171
+    SetX = 7,358
+    SetY = 7,163
+<Particle 6>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,389
+    SetY = 4,99
+    SetX = 5,385
+    SetY = 5,93
+    SetY = 6,97
+    SetX = 7,424
+    SetY = 7,60
+<Particle 7>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,351
+    SetY = 7,135
+<Particle 8>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,384
+    SetY = 7,97
+<SE>
+    Play = 0,Mega Punch,100,89
+    Play = 0,Work Up,100,111

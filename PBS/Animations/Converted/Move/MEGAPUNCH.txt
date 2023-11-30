@@ -1,0 +1,64 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MEGAPUNCH]
+Name = MEGAPUNCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,396
+    SetY = 2,104
+    SetX = 3,397
+    SetX = 4,395
+    SetY = 4,101
+    SetX = 6,400
+    SetX = 7,397
+    SetY = 7,106
+    SetX = 8,395
+    SetY = 8,107
+    SetX = 9,399
+    SetY = 9,101
+    SetOpacity = 9,200
+<Particle 2>
+    Graphic = punches
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,95
+    SetVisible = 0,true
+    SetX = 1,385
+    SetY = 1,93
+    SetX = 2,384
+    SetY = 2,97
+    SetZoomX = 2,50
+    SetZoomY = 2,50
+    SetX = 3,386
+    SetY = 3,99
+    SetZoomX = 3,70
+    SetZoomY = 3,70
+    SetX = 4,385
+    SetY = 4,97
+    SetZoomX = 4,80
+    SetZoomY = 4,80
+    SetX = 6,386
+    SetY = 6,92
+    SetZoomX = 6,100
+    SetZoomY = 6,100
+    SetX = 7,385
+    SetY = 7,94
+    SetZoomX = 7,105
+    SetZoomY = 7,105
+    SetX = 8,383
+    SetZoomX = 8,120
+    SetZoomY = 8,120
+    SetX = 9,385
+    SetY = 9,91
+    SetZoomX = 9,140
+    SetZoomY = 9,140
+<SE>
+    Play = 0,Mega Punch,100,105

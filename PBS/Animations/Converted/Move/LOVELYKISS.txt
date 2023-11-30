@@ -1,0 +1,105 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LOVELYKISS]
+Name = LOVELYKISS
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = poi.hear.mus
+    Focus = UserAndTarget
+    SetX = 0,395
+    SetY = 0,130
+    SetVisible = 0,true
+    SetX = 1,383
+    SetY = 1,102
+    SetX = 2,382
+    SetY = 2,112
+    SetX = 3,351
+    SetY = 3,103
+    SetX = 4,349
+    SetY = 4,106
+    SetX = 5,359
+    SetY = 5,131
+    SetX = 6,368
+    SetX = 7,360
+    SetY = 7,134
+    SetX = 8,353
+    SetY = 8,108
+    SetX = 9,357
+    SetY = 9,106
+<Particle 3>
+    Graphic = poi.hear.mus
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,376
+    SetY = 1,94
+    SetX = 2,405
+    SetY = 2,120
+    SetX = 3,368
+    SetY = 3,116
+    SetY = 4,131
+    SetX = 5,377
+    SetY = 5,108
+    SetX = 6,340
+    SetY = 6,114
+    SetX = 7,332
+    SetY = 7,115
+    SetX = 8,372
+    SetY = 8,98
+    SetX = 9,366
+    SetY = 9,56
+<Particle 4>
+    Graphic = poi.hear.mus
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,407
+    SetY = 1,139
+    SetX = 2,372
+    SetY = 2,90
+    SetX = 3,361
+    SetY = 3,85
+    SetX = 4,363
+    SetY = 4,76
+    SetX = 5,349
+    SetY = 5,90
+    SetX = 6,364
+    SetY = 6,93
+    SetX = 7,367
+    SetY = 7,97
+    SetX = 8,356
+    SetY = 8,79
+    SetX = 9,370
+    SetY = 9,86
+<Particle 5>
+    Graphic = poi.hear.mus
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 5,370
+    SetY = 5,70
+    SetX = 6,337
+    SetY = 6,80
+    SetX = 7,332
+    SetX = 8,330
+    SetY = 8,73
+    SetX = 9,368
+    SetY = 9,72
+<Particle 6>
+    Graphic = poi.hear.mus
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 6,359
+    SetY = 6,56
+    SetX = 7,355
+    SetY = 7,60
+<Particle 7>
+    Graphic = poi.hear.mus
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 7,331
+    SetY = 7,59
+<SE>
+    Play = 0,Lovely Kiss,85,100

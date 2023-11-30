@@ -1,0 +1,44 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ACROBATICS]
+Name = ACROBATICS
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = finger.spoon
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,376
+    SetY = 2,133
+    SetZoomX = 2,41
+    SetZoomY = 2,41
+    SetZoomX = 3,39
+    SetZoomY = 3,39
+    SetZoomX = 5,62
+    SetZoomY = 5,62
+    SetX = 6,360
+    SetY = 6,131
+    SetZoomX = 6,84
+    SetZoomY = 6,84
+<Particle 2>
+    Graphic = finger.spoon
+    Focus = Target
+    SetX = 0,392
+    SetY = 0,86
+    SetZoomX = 0,25
+    SetZoomY = 0,25
+    SetVisible = 0,true
+    SetZoomX = 1,47
+    SetZoomY = 1,47
+    SetZoomX = 3,70
+    SetZoomY = 3,70
+    SetZoomX = 4,81
+    SetZoomY = 4,81
+    SetZoomX = 5,86
+    SetZoomY = 5,86
+<SE>
+    Play = 0,Take Down,100,112

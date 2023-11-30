@@ -1,0 +1,123 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LEECHLIFE]
+Name = LEECHLIFE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetX = 0,166
+    SetY = 0,224
+    SetVisible = 0,true
+    SetX = 1,224
+    SetY = 1,179
+    SetX = 2,294
+    SetY = 2,142
+    SetX = 3,358
+    SetY = 3,110
+    SetZoomX = 4,110
+    SetZoomY = 4,110
+    SetOpacity = 4,100
+    SetX = 5,281
+    SetY = 5,104
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetOpacity = 5,255
+    SetX = 6,211
+    SetY = 6,123
+    SetX = 7,140
+    SetY = 7,161
+    SetX = 8,121
+    SetY = 8,192
+    SetX = 9,179
+    SetY = 9,224
+    SetX = 10,102
+    SetY = 10,217
+    SetX = 11,147
+    SetY = 11,230
+<Particle 3>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,339
+    SetY = 4,98
+    SetX = 5,332
+    SetY = 5,192
+    SetX = 6,281
+    SetY = 6,230
+    SetX = 7,179
+    SetX = 8,153
+    SetY = 8,198
+    SetX = 9,108
+    SetY = 9,154
+    SetX = 10,243
+    SetY = 10,230
+    SetX = 11,96
+    SetY = 11,211
+<Particle 4>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 4,384
+    SetY = 4,154
+    SetX = 5,345
+    SetY = 5,91
+    SetX = 6,281
+    SetY = 6,123
+    SetX = 7,230
+    SetY = 7,154
+    SetX = 8,268
+    SetY = 8,192
+    SetX = 9,320
+    SetY = 9,205
+    SetX = 10,134
+    SetY = 10,167
+<Particle 5>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 6,384
+    SetY = 6,116
+    SetX = 7,326
+    SetY = 7,154
+    SetX = 8,166
+    SetY = 8,98
+    SetX = 9,217
+    SetY = 9,129
+<Particle 6>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 6,339
+    SetY = 6,79
+    SetX = 7,256
+    SetX = 8,384
+    SetY = 8,148
+<Particle 7>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 7,377
+    SetY = 7,85
+    SetX = 8,268
+<Particle 8>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 7,320
+    SetY = 7,79
+<Particle 9>
+    Graphic = rockice
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 7,396
+    SetY = 7,129
+<SE>
+    Play = 0,throw,80,100
+    Play = 2,Twine,80,100
+    Play = 3,Bow1,80,100

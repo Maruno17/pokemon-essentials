@@ -1,0 +1,112 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DRAGONBREATH]
+Name = DRAGONBREATH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetX = 0,153
+    SetY = 0,205
+    SetVisible = 0,true
+    SetX = 1,204
+    SetY = 1,186
+    SetX = 2,256
+    SetY = 2,167
+    SetX = 3,307
+    SetY = 3,142
+    SetX = 4,339
+    SetY = 4,123
+    SetX = 5,358
+    SetY = 5,110
+<Particle 3>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 1,179
+    SetY = 1,198
+    SetX = 2,217
+    SetX = 3,288
+    SetY = 3,179
+    SetX = 4,300
+    SetY = 4,173
+    SetZoomX = 4,75
+    SetZoomY = 4,75
+    SetX = 5,326
+    SetY = 5,167
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+<Particle 4>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetFlip = 2,true
+    SetX = 2,217
+    SetY = 2,186
+    SetFlip = 3,false
+    SetX = 3,268
+    SetY = 3,192
+    SetX = 4,281
+    SetY = 4,186
+    SetX = 5,307
+    SetY = 5,179
+    SetZoomX = 5,75
+    SetZoomY = 5,75
+<Particle 5>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetFlip = 2,true
+    SetX = 2,179
+    SetY = 2,205
+    SetX = 3,230
+    SetY = 3,198
+    SetX = 4,249
+    SetY = 4,192
+    SetZoomX = 4,75
+    SetZoomY = 4,75
+<Particle 6>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 2,236
+    SetY = 2,154
+    SetZoomX = 2,50
+    SetZoomY = 2,50
+    SetX = 3,230
+    SetY = 3,205
+    SetZoomX = 3,100
+    SetZoomY = 3,100
+<Particle 7>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetFlip = 3,true
+    SetX = 3,345
+    SetY = 3,154
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+<Particle 8>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetFlip = 3,true
+    SetX = 3,294
+    SetY = 3,142
+    SetZoomX = 3,40
+    SetZoomY = 3,40
+<Particle 9>
+    Graphic = fire5
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,211
+    SetY = 3,211
+    SetZoomX = 3,75
+    SetZoomY = 3,75
+<SE>
+    Play = 0,Fire4,80,100

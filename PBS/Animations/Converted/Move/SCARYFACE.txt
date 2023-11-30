@@ -1,0 +1,35 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SCARYFACE]
+Name = SCARYFACE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = normal2
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,102
+    SetVisible = 0,true
+    SetOpacity = 0,150
+    SetZoomX = 1,125
+    SetZoomY = 1,125
+    SetOpacity = 1,200
+    SetZoomX = 2,150
+    SetZoomY = 2,150
+    SetOpacity = 2,255
+    SetZoomX = 3,175
+    SetZoomY = 3,175
+    SetZoomX = 4,200
+    SetZoomY = 4,200
+    SetZoomX = 5,225
+    SetZoomY = 5,225
+    SetOpacity = 6,150
+    SetZoomX = 7,200
+    SetZoomY = 7,200
+    SetOpacity = 7,100
+<SE>
+    Play = 2,Stare,80,100

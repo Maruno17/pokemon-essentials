@@ -1,0 +1,56 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BARRIER]
+Name = BARRIER
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = anim sheet
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,356
+    SetY = 1,65
+    SetX = 2,437
+    SetX = 3,440
+    SetY = 3,63
+    SetX = 4,369
+    SetY = 4,126
+    SetX = 5,374
+    SetY = 5,130
+    SetX = 6,448
+    SetY = 6,74
+    SetX = 7,453
+    SetY = 7,66
+    SetX = 8,364
+    SetY = 8,89
+    SetX = 9,367
+<Particle 2>
+    Graphic = anim sheet
+    Focus = Target
+    SetX = 0,392
+    SetY = 0,95
+    SetVisible = 0,true
+    SetOpacity = 0,154
+    SetX = 1,393
+    SetY = 1,90
+    SetX = 2,392
+    SetY = 2,95
+    SetY = 3,91
+    SetX = 4,395
+    SetY = 4,92
+    SetX = 5,397
+    SetY = 5,88
+    SetX = 6,398
+    SetY = 6,92
+    SetX = 7,394
+    SetY = 7,90
+    SetX = 8,395
+    SetY = 8,97
+    SetX = 9,379
+    SetY = 9,85
+<SE>
+    Play = 0,Flash2,80,100

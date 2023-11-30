@@ -1,0 +1,59 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MISTBALL]
+Name = MISTBALL
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetVisible = 0,true
+    SetX = 3,386
+    SetY = 3,108
+    SetOpacity = 3,200
+    SetX = 4,388
+    SetY = 4,110
+    SetY = 5,109
+    SetOpacity = 5,143
+    SetX = 6,391
+    SetY = 6,110
+    SetOpacity = 6,69
+    SetX = 7,388
+    SetY = 7,101
+    SetOpacity = 7,144
+<Particle 2>
+    Graphic = fly copy
+    Focus = UserAndTarget
+    SetX = 0,385
+    SetY = 0,98
+    SetVisible = 0,true
+    SetOpacity = 0,200
+    SetX = 1,383
+    SetY = 1,99
+    SetX = 2,382
+    SetY = 2,100
+    SetX = 3,385
+    SetY = 3,97
+    SetOpacity = 3,255
+    SetX = 4,386
+    SetY = 4,96
+    SetZoomX = 4,110
+    SetZoomY = 4,110
+    SetX = 5,384
+    SetY = 5,97
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetX = 6,387
+    SetY = 6,99
+    SetX = 7,385
+    SetY = 7,98
+    SetX = 8,378
+    SetY = 8,92
+    SetX = 9,377
+    SetY = 9,101
+<SE>
+    Play = 5,Wring Out,80,100

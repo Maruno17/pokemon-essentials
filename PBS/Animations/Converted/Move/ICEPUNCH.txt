@@ -1,0 +1,172 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ICEPUNCH]
+Name = ICEPUNCH
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = punches
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,93
+    SetVisible = 0,true
+    SetY = 1,91
+    SetX = 2,409
+    SetY = 2,116
+    SetX = 3,385
+    SetY = 3,93
+    SetX = 4,392
+    SetY = 4,74
+    SetX = 5,373
+    SetY = 5,79
+    SetX = 6,412
+    SetY = 6,145
+    SetX = 8,349
+    SetY = 8,135
+    SetX = 9,387
+    SetY = 9,136
+    SetX = 10,361
+    SetY = 10,9
+<Particle 3>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,387
+    SetY = 1,96
+    SetX = 2,385
+    SetX = 3,431
+    SetY = 3,135
+    SetX = 4,327
+    SetY = 4,154
+    SetX = 5,420
+    SetY = 5,54
+    SetX = 6,325
+    SetY = 6,81
+    SetX = 8,409
+    SetY = 8,148
+    SetX = 9,313
+    SetY = 9,175
+    SetX = 10,400
+    SetY = 10,42
+<Particle 4>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,348
+    SetY = 2,107
+    SetX = 3,334
+    SetY = 3,124
+    SetX = 4,449
+    SetY = 4,159
+    SetX = 5,438
+    SetY = 5,120
+    SetX = 6,382
+    SetY = 6,5
+    SetX = 8,380
+    SetY = 8,77
+    SetX = 9,330
+    SetY = 9,54
+    SetX = 10,468
+    SetY = 10,177
+<Particle 5>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,383
+    SetY = 3,63
+    SetX = 4,393
+    SetY = 4,164
+    SetX = 5,347
+    SetY = 5,135
+    SetX = 6,317
+    SetY = 6,48
+    SetX = 8,338
+    SetY = 8,90
+    SetX = 9,435
+    SetY = 9,47
+<Particle 6>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 3,392
+    SetY = 3,118
+    SetX = 4,375
+    SetY = 4,103
+    SetX = 5,341
+    SetY = 5,88
+    SetX = 6,298
+    SetY = 6,131
+    SetX = 8,414
+    SetY = 8,111
+    SetX = 9,445
+    SetY = 9,117
+<Particle 7>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,408
+    SetY = 4,127
+    SetX = 5,391
+    SetY = 5,140
+    SetX = 6,432
+    SetY = 6,110
+    SetX = 8,393
+    SetY = 8,28
+    SetX = 9,384
+    SetY = 9,95
+<Particle 8>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 4,378
+    SetY = 4,99
+    SetX = 5,399
+    SetY = 5,103
+    SetX = 6,427
+    SetY = 6,77
+    SetX = 8,387
+    SetY = 8,117
+<Particle 9>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,332
+    SetY = 5,33
+    SetX = 6,380
+    SetY = 6,109
+    SetX = 8,459
+    SetY = 8,80
+<Particle 10>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 5,381
+    SetY = 5,93
+    SetX = 6,383
+    SetY = 6,101
+    SetX = 8,382
+    SetY = 8,92
+<Particle 11>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,392
+    SetY = 7,104
+<Particle 12>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,363
+    SetY = 7,85
+<Particle 13>
+    Graphic = punches
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 7,393
+    SetY = 7,83
+<SE>
+    Play = 0,Shell Smash,100,131

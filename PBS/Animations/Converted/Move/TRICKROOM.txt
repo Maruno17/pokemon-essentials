@@ -1,0 +1,33 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,TRICKROOM]
+Name = TRICKROOM
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = mixed status
+    Focus = UserAndTarget
+    SetX = 0,310
+    SetY = 0,210
+    SetZoomX = 0,446
+    SetZoomY = 0,273
+    SetVisible = 0,true
+    SetX = 1,311
+    SetY = 1,209
+    SetX = 3,313
+    SetY = 3,211
+    SetX = 4,311
+    SetX = 5,313
+    SetY = 5,212
+    SetX = 6,311
+    SetY = 7,211
+    SetX = 8,313
+    SetY = 8,213
+    SetX = 9,310
+    SetY = 9,211
+<SE>
+    Play = 0,MiningPing,100,84

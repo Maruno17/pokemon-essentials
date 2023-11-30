@@ -1,0 +1,64 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Frozen]
+Name = Frozen
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = 016-Ice01
+    Focus = Target
+    SetX = 0,328
+    SetY = 0,14
+    SetVisible = 0,true
+    SetX = 1,360
+    SetY = 1,30
+    SetX = 8,384
+    SetY = 8,38
+    SetX = 9,440
+    SetY = 9,102
+    SetX = 10,456
+    SetY = 10,134
+    SetX = 11,432
+    SetY = 11,14
+    SetX = 12,456
+    SetY = 12,46
+    SetX = 13,464
+    SetY = 13,94
+<Particle 4>
+    Graphic = 016-Ice01
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 1,384
+    SetY = 1,94
+    SetOpacity = 6,192
+    SetOpacity = 7,255
+    SetX = 9,432
+    SetY = 9,14
+    SetX = 10,408
+    SetY = 10,54
+    SetX = 11,344
+    SetY = 11,78
+    SetX = 12,328
+    SetY = 12,110
+    SetX = 13,352
+    SetY = 13,142
+<Particle 2>
+    Graphic = 016-Ice01
+    Focus = Target
+    SetX = 0,384
+    SetY = 0,94
+    SetVisible = 0,true
+    SetOpacity = 1,128
+    SetOpacity = 2,255
+    SetOpacity = 7,192
+    SetOpacity = 8,255
+    SetOpacity = 10,100
+    SetX = 14,408
+    SetY = 14,134
+    SetOpacity = 14,255
+<SE>
+    Play = 0,Ice5,80,100

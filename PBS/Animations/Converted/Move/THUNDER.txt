@@ -1,0 +1,66 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDER]
+Name = THUNDER
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 3>
+    Graphic = Trovao
+    Focus = Target
+    SetVisible = 0,true
+    SetFlip = 1,true
+    SetX = 1,376
+    SetY = 1,86
+    SetFlip = 2,false
+    SetY = 2,46
+    SetY = 3,78
+    SetX = 4,392
+    SetY = 4,54
+    SetX = 5,368
+    SetY = 5,86
+    SetX = 9,376
+    SetY = 9,102
+    SetOpacity = 9,100
+<Particle 4>
+    Graphic = Trovao
+    Focus = Target
+    SetVisible = 0,true
+    SetX = 2,400
+    SetY = 2,150
+    SetX = 3,376
+    SetX = 4,384
+    SetY = 4,110
+    SetX = 5,376
+    SetY = 5,118
+<Particle 2>
+    Graphic = Trovao
+    Focus = Target
+    SetFlip = 0,true
+    SetX = 0,392
+    SetY = 0,-58
+    SetVisible = 0,true
+    SetX = 1,352
+    SetFlip = 2,false
+    SetX = 2,376
+    SetY = 2,-66
+    SetX = 3,400
+    SetY = 3,-34
+    SetX = 4,384
+    SetY = 4,-42
+    SetX = 5,392
+    SetY = 5,-34
+    SetX = 6,376
+    SetY = 6,102
+    SetFlip = 9,true
+    SetFlip = 10,false
+    SetOpacity = 10,100
+    SetFlip = 11,true
+    SetZoomX = 11,150
+    SetZoomY = 11,150
+    SetOpacity = 11,20
+<SE>
+    Play = 0,Thunder1,80,100

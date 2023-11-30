@@ -1,0 +1,23 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CURSE]
+Name = CURSE
+<User>
+    SetX = 0,128
+    SetY = 0,224
+<Target>
+    SetX = 0,384
+    SetY = 0,96
+<Particle 2>
+    Graphic = ghost1
+    Focus = Target
+    SetX = 0,392
+    SetY = 0,14
+    SetAngle = 0,90
+    SetVisible = 0,true
+    SetY = 1,54
+    SetY = 2,70
+    SetY = 3,78
+    SetX = 4,384
+<SE>
+    Play = 2,Darkness6,80,100

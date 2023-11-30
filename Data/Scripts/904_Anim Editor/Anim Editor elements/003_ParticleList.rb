@@ -85,7 +85,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @row_index = 0
     # Particle information to display (one row each)
     @particles = []   # Reference to particle data from the editor scene
-    @expanded_particles = [0]   # Each element is index in @particles
+    @expanded_particles = []   # Each element is index in @particles
     @particle_list = []   # Each element is index in @particles or [index, property]
     @visibilities = []   # Per particle
     @commands = {}
